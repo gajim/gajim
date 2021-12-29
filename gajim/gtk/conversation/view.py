@@ -14,10 +14,11 @@
 
 from __future__ import annotations
 
-from typing import Dict
-from typing import Set
+from typing import Any
 from typing import Optional
+from typing import Union
 from typing import Generator
+from typing import cast
 
 import logging
 import time
@@ -38,6 +39,8 @@ from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_start_of_day
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.httpupload import HTTPFileTransfer
 
 from .rows.base import BaseRow
@@ -57,6 +60,8 @@ from .rows.muc_user_status import MUCUserStatus
 from ..util import scroll_to_end
 
 log = logging.getLogger('gajim.gui.conversation_view')
+
+ContactT = Union[BareContact, GroupchatContact, GroupchatParticipant]
 
 
 class ConversationView(Gtk.ListBox):
@@ -84,7 +89,7 @@ class ConversationView(Gtk.ListBox):
         ),
     }
 
-    def __init__(self, account, contact):
+    def __init__(self, account: str, contact: ContactT) -> None:
         Gtk.ListBox.__init__(self)
         self.set_selection_mode(Gtk.SelectionMode.NONE)
         self.set_sort_func(self._sort_func)
@@ -104,10 +109,10 @@ class ConversationView(Gtk.ListBox):
         self._max_row_count: int = 100
 
         # Keeps track of date rows we have added to the list
-        self._active_date_rows: Set[datetime] = set()
+        self._active_date_rows: set[datetime] = set()
 
         # message_id -> row mapping
-        self._message_id_row_map: Dict[str, MessageRow] = {}
+        self._message_id_row_map: dict[str, MessageRow] = {}
 
         app.settings.connect_signal('print_join_left',
                                     self._on_contact_setting_changed,
@@ -127,7 +132,10 @@ class ConversationView(Gtk.ListBox):
         self.add(self._scroll_hint_row)
         self.connect('destroy', self._on_destroy)
 
-    def _on_destroy(self, *args):
+    def get_row_at_index(self, index: int) -> BaseRow:
+        return cast(BaseRow, Gtk.ListBox.get_row_at_index(self, index))
+
+    def _on_destroy(self, *args: Any) -> None:
         self.set_filter_func(None)
         app.check_finalize(self)
 
@@ -169,12 +177,15 @@ class ConversationView(Gtk.ListBox):
         self._scroll_hint_row.set_history_complete(complete)
 
     @staticmethod
-    def _sort_func(row1, row2):
+    def _sort_func(row1: BaseRow, row2: BaseRow) -> int:
         if row1.timestamp == row2.timestamp:
             return 0
         return -1 if row1.timestamp < row2.timestamp else 1
 
-    def _filter_func(self, row):
+    def _filter_func(self, row: BaseRow) -> bool:
+        if not isinstance(self._contact, GroupchatContact):
+            return True
+
         if row.type in ('muc-user-joined', 'muc-user-left'):
             return self._contact.settings.get('print_join_left')
         if row.type == 'muc-user-status':
@@ -186,8 +197,11 @@ class ConversationView(Gtk.ListBox):
         subject = MUCSubject(self._account, text, nick, date)
         self._insert_message(subject)
 
-    def add_muc_user_left(self, nick: str, reason: str,
+    def add_muc_user_left(self,
+                          nick: str,
+                          reason: str,
                           error: bool = False) -> None:
+
         join_left = MUCJoinLeft('muc-user-left',
                                 self._account,
                                 nick,
@@ -273,7 +287,7 @@ class ConversationView(Gtk.ListBox):
 
         self._insert_message(message)
 
-    def _insert_message(self, message: MessageRow) -> None:
+    def _insert_message(self, message: BaseRow) -> None:
         self.add(message)
         self._add_date_row(message.timestamp)
         self._check_for_merge(message)
@@ -337,7 +351,7 @@ class ConversationView(Gtk.ListBox):
                 return row
         return None
 
-    def _update_descendants(self, message: MessageRow) -> None:
+    def _update_descendants(self, message: BaseRow) -> None:
         index = message.get_index()
         while True:
             index += 1
@@ -508,7 +522,7 @@ class ConversationView(Gtk.ListBox):
     def decline_call(self, event):
         self.emit('decline-call', event)
 
-    def _on_contact_setting_changed(self, *args):
+    def _on_contact_setting_changed(self, *args: Any) -> None:
         self.invalidate_filter()
 
     def remove(self, widget: Gtk.Widget) -> None:
