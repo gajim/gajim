@@ -361,6 +361,31 @@ AllAccountSettings = Literal[BoolAccountSettings,
                              IntAccountSettings,
                              StringAccountSettings]
 
+
+BoolGroupChatSettings = Literal[
+    'notify_on_all_messages',
+    'print_status',
+    'print_join_left',
+    'send_chatstate',
+    'send_marker',
+]
+
+StringGroupChatSettings = Literal[
+    'speller_language',
+    'encryption',
+]
+
+IntGroupChatSettings = Literal[
+    'sync_threshold',
+]
+
+
+AllGroupChatSettings = Literal[BoolGroupChatSettings,
+                               IntGroupChatSettings,
+                               StringGroupChatSettings]
+
+AllGroupChatSettingsT = Union[str, int, bool]
+
 ACCOUNT_SETTINGS = {
     'account': {
         'name': '',

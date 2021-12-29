@@ -12,12 +12,16 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Any, Literal
+from typing import Any
+from typing import Callable
+from typing import Literal
+from typing import NamedTuple
 from typing import Optional
 from typing import Dict
 from typing import List
 from typing import Union
 from typing import overload
+from typing import cast
 
 import sys
 import json
@@ -41,6 +45,11 @@ from gajim.common.helpers import get_muc_context
 from gajim.common.storage.base import Encoder
 from gajim.common.storage.base import json_decoder
 from gajim.common.setting_values import APP_SETTINGS
+from gajim.common.setting_values import AllGroupChatSettings
+from gajim.common.setting_values import AllGroupChatSettingsT
+from gajim.common.setting_values import BoolGroupChatSettings
+from gajim.common.setting_values import IntGroupChatSettings
+from gajim.common.setting_values import StringGroupChatSettings
 from gajim.common.setting_values import AllWorkspaceSettings
 from gajim.common.setting_values import AllWorkspaceSettingsT
 from gajim.common.setting_values import OpenChatSettingT
@@ -93,27 +102,35 @@ CREATE_SQL = '''
            json.dumps(INITAL_WORKSPACE))
 
 
+_SignalCallable = Callable[[Any, str, Optional[str], Optional[JID]], Any]
+_CallbackDict = dict[tuple[str, Optional[str], Optional[JID]],
+                     list[weakref.WeakMethod[_SignalCallable]]]
+
 class Settings:
     def __init__(self):
-        self._con = None
+        self._con = cast(sqlite3.Connection, None)
         self._commit_scheduled = None
 
         self._settings = {}
         self._account_settings = {}
 
-        self._callbacks = defaultdict(list)
+        self._callbacks: _CallbackDict = defaultdict(list)
 
-    def connect_signal(self, setting, func, account=None, jid=None):
+    def connect_signal(self,
+                       setting: str,
+                       func: _SignalCallable,
+                       account: Optional[str] = None,
+                       jid: Optional[JID] = None) -> None:
         if not inspect.ismethod(func):
             # static methods are not bound to an object so we can’t easily
             # remove the func once it should not be called anymore
             raise ValueError('Only bound methods can be connected')
 
 
-        func = weakref.WeakMethod(func)
-        self._callbacks[(setting, account, jid)].append(func)
+        weak_func = weakref.WeakMethod(func)
+        self._callbacks[(setting, account, jid)].append(weak_func)
 
-    def disconnect_signals(self, object_):
+    def disconnect_signals(self, object_: object) -> Any:
         for _, handlers in self._callbacks.items():
             for handler in list(handlers):
                 if isinstance(handler, tuple):
@@ -140,7 +157,12 @@ class Settings:
 
         widget.connect('destroy', _on_destroy)
 
-    def _notify(self, value, setting, account=None, jid=None):
+    def _notify(self,
+                value: Any,
+                setting: str,
+                account: Optional[str] = None,
+                jid: Optional[JID] = None) -> None:
+
         log.info('Signal: %s changed', setting)
 
         callbacks = self._callbacks[(setting, account, jid)]
@@ -190,9 +212,10 @@ class Settings:
             APP_SETTINGS['use_keyring'] = False
 
     @staticmethod
-    def _namedtuple_factory(cursor: Any, row: Any) -> Any:
+    def _namedtuple_factory(cursor: sqlite3.Cursor,
+                            row: tuple[Any, ...]) -> NamedTuple:
         fields = [col[0] for col in cursor.description]
-        return namedtuple("Row", fields)(*row)
+        return namedtuple("Row", fields)(*row)  # type: ignore
 
     def _connect_database(self) -> None:
         path = configpaths.get('SETTINGS')
@@ -374,7 +397,8 @@ class Settings:
                     jid]['encryption'] = encryption
             self._commit_account_settings(account)
 
-    def _split_encryption_config_key(self, key: str) -> Any:
+    def _split_encryption_config_key(self, key: str) -> tuple[Optional[str],
+                                                              Optional[str]]:
         for account in self._account_settings:
             if not key.startswith(account):
                 continue
@@ -448,7 +472,7 @@ class Settings:
         log.info('Close settings')
         self._con.commit()
         self._con.close()
-        self._con = None
+        self._con = cast(sqlite3.Connection, None)
 
     def _load_settings(self) -> None:
         settings = self._con.execute('SELECT * FROM settings').fetchall()
@@ -678,10 +702,32 @@ class Settings:
         self._commit_account_settings(account)
         self._notify(value, setting, account)
 
+    @overload
     def get_group_chat_setting(self,
                                account: str,
                                jid: Union[str, JID],
-                               setting: str) -> SETTING_TYPE:
+                               setting: IntGroupChatSettings
+                               ) -> int: ...
+
+    @overload
+    def get_group_chat_setting(self,
+                               account: str,
+                               jid: Union[str, JID],
+                               setting: BoolGroupChatSettings
+                               ) -> bool: ...
+
+    @overload
+    def get_group_chat_setting(self,
+                               account: str,
+                               jid: Union[str, JID],
+                               setting: StringGroupChatSettings
+                               ) -> str: ...
+
+    def get_group_chat_setting(self,
+                               account: str,
+                               jid: Union[str, JID],
+                               setting: AllGroupChatSettings
+                               ) -> AllGroupChatSettingsT:
 
         if account not in self._account_settings:
             raise ValueError(f'Account missing: {account}')
@@ -717,11 +763,32 @@ class Settings:
 
             return default
 
+    @overload
     def set_group_chat_setting(self,
                                account: str,
                                jid: str,
-                               setting: str,
-                               value: SETTING_TYPE) -> None:
+                               setting: StringGroupChatSettings,
+                               value: str) -> None: ...
+
+    @overload
+    def set_group_chat_setting(self,
+                               account: str,
+                               jid: str,
+                               setting: IntGroupChatSettings,
+                               value: int) -> None: ...
+
+    @overload
+    def set_group_chat_setting(self,
+                               account: str,
+                               jid: str,
+                               setting: BoolGroupChatSettings,
+                               value: bool) -> None: ...
+
+    def set_group_chat_setting(self,
+                               account: str,
+                               jid: str,
+                               setting: AllGroupChatSettings,
+                               value: AllGroupChatSettingsT) -> None:
 
         if account not in self._account_settings:
             raise ValueError(f'Account missing: {account}')
