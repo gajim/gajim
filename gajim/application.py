@@ -33,6 +33,16 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Any
+from typing import Callable
+from typing import Optional
+from typing import TextIO
+from typing import Type
+from typing import Union
+from typing import cast
+
 import os
 import sys
 from urllib.parse import unquote
@@ -49,13 +59,20 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common import configpaths
 from gajim.common import logging_helpers
+from gajim.common.client import Client
 from gajim.common.i18n import _
+from gajim.common.nec import NetworkEvent
 from gajim.common.task_manager import TaskManager
 from gajim.common.storage.cache import CacheStorage
 from gajim.common.storage.archive import MessageArchiveStorage
 from gajim.common.settings import Settings
 from gajim.common.settings import LegacyConfig
 from gajim.common.helpers import load_json
+
+
+ActionListT = list[tuple[str,
+                         Optional[str],
+                         Callable[[Gio.SimpleAction, GLib.Variant], Any]]]
 
 
 class GajimApplication(Gtk.Application):
@@ -175,7 +192,7 @@ class GajimApplication(Gtk.Application):
         option.short_name = 0
         return [option]
 
-    def _startup(self, _application):
+    def _startup(self, _application: GajimApplication) -> None:
         # Create and initialize Application Paths & Databases
         app.print_version()
         app.detect_dependencies()
@@ -203,8 +220,7 @@ class GajimApplication(Gtk.Application):
         app.app = self
         from gajim.gui.builder import get_builder
         builder = get_builder('application_menu.ui')
-        menubar = builder.get_object("menubar")
-        self.set_menubar(menubar)
+        self.set_menubar(cast(Gio.Menu, builder.get_object('menubar')))
 
         from gajim.gui_interface import Interface
         self.interface = Interface()
@@ -219,7 +235,7 @@ class GajimApplication(Gtk.Application):
                                        ged.CORE,
                                        self._on_feature_discovered)
 
-    def _open_uris(self, uris):
+    def _open_uris(self, uris: list[str]) -> None:
         accounts = list(app.connections.keys())
         if not accounts:
             return
@@ -272,14 +288,16 @@ class GajimApplication(Gtk.Application):
 
                 app.interface.start_chat_from_jid(accounts[0], jid, message)
 
-    def do_shutdown(self, *args):
+    def do_shutdown(self, *args: Any) -> None:
         Gtk.Application.do_shutdown(self)
 
         # Commit any outstanding SQL transactions
         app.storage.cache.shutdown()
         app.storage.archive.shutdown()
 
-    def _command_line(self, _application, command_line):
+    def _command_line(self,
+                      _application: GajimApplication,
+                      command_line: Gio.ApplicationCommandLine) -> int:
         options = command_line.get_options_dict()
 
         remote_commands = [
@@ -308,18 +326,23 @@ class GajimApplication(Gtk.Application):
         if options.contains('version'):
             print(gajim.__version__)
             return 0
-        if options.contains('profile'):
+
+        profile = options.lookup_value('profile')
+        if profile is not None:
             # Incorporate profile name into application id
             # to have a single app instance for each profile.
-            profile = options.lookup_value('profile').get_string()
+            profile = profile.get_string()
             app_id = '%s.%s' % (self.get_application_id(), profile)
             self.set_application_id(app_id)
             configpaths.set_profile(profile)
+
         if options.contains('separate'):
             configpaths.set_separation(True)
-        if options.contains('config-path'):
-            path = options.lookup_value('config-path').get_string()
-            configpaths.set_config_root(path)
+
+        config_path = options.lookup_value('config-path')
+        if config_path is not None:
+            config_path = config_path.get_string()
+            configpaths.set_config_root(config_path)
 
         configpaths.init()
 
@@ -330,23 +353,32 @@ class GajimApplication(Gtk.Application):
 
         if options.contains('quiet'):
             logging_helpers.set_quiet()
+
         if options.contains('verbose'):
             logging_helpers.set_verbose()
-        if options.contains('loglevel'):
-            loglevel = options.lookup_value('loglevel').get_string()
+
+        loglevel = options.lookup_value('loglevel')
+        if loglevel is not None:
+            loglevel = loglevel.get_string()
             logging_helpers.set_loglevels(loglevel)
+
         if options.contains('warnings'):
             self.show_warnings()
 
         return -1
 
     @staticmethod
-    def show_warnings():
+    def show_warnings() -> None:
         import traceback
         import warnings
 
-        def warn_with_traceback(message, category, filename, lineno,
-                                _file=None, line=None):
+        def warn_with_traceback(message: Union[Warning, str],
+                                category: Type[Warning],
+                                filename: str,
+                                lineno: int,
+                                _file: Optional[TextIO] = None,
+                                line: Optional[str] = None) -> None:
+
             traceback.print_stack(file=sys.stderr)
             sys.stderr.write(warnings.formatwarning(message, category,
                                                     filename, lineno, line))
@@ -354,27 +386,27 @@ class GajimApplication(Gtk.Application):
         warnings.showwarning = warn_with_traceback
         warnings.filterwarnings(action="always")
 
-    def add_actions(self):
+    def add_actions(self) -> None:
         ''' Build Application Actions '''
         from gajim import app_actions
 
         # General Stateful Actions
-        actions = [
-            ('quit', app_actions.on_quit),
-            ('add-account', app_actions.on_add_account),
-            ('add-contact', app_actions.on_add_contact),
-            ('manage-proxies', app_actions.on_manage_proxies),
-            ('history-manager', app_actions.on_history_manager),
-            ('preferences', app_actions.on_preferences),
-            ('plugins', app_actions.on_plugins),
-            ('xml-console', app_actions.on_xml_console),
-            ('file-transfer', app_actions.on_file_transfers),
-            ('shortcuts', app_actions.on_keyboard_shortcuts),
-            ('features', app_actions.on_features),
-            ('content', app_actions.on_contents),
-            ('about', app_actions.on_about),
-            ('faq', app_actions.on_faq),
-            ('ipython', app_actions.toggle_ipython),
+        actions: ActionListT = [
+            ('quit', None, app_actions.on_quit),
+            ('add-account', None,  app_actions.on_add_account),
+            ('add-contact', None,  app_actions.on_add_contact),
+            ('manage-proxies', None,  app_actions.on_manage_proxies),
+            ('history-manager', None,  app_actions.on_history_manager),
+            ('preferences', None,  app_actions.on_preferences),
+            ('plugins', None,  app_actions.on_plugins),
+            ('xml-console', None,  app_actions.on_xml_console),
+            ('file-transfer', None,  app_actions.on_file_transfers),
+            ('shortcuts', None,  app_actions.on_keyboard_shortcuts),
+            ('features', None,  app_actions.on_features),
+            ('content', None,  app_actions.on_contents),
+            ('about', None,  app_actions.on_about),
+            ('faq', None,  app_actions.on_faq),
+            ('ipython', None,  app_actions.toggle_ipython),
             ('start-chat', 's', app_actions.on_new_chat),
             ('accounts', 's', app_actions.on_accounts),
             ('add-contact', 's', app_actions.on_add_contact_jid),
@@ -387,11 +419,8 @@ class GajimApplication(Gtk.Application):
         ]
 
         for action in actions:
-            if len(action) == 2:
-                action_name, func = action
-                variant = None
-            else:
-                action_name, variant, func = action  # pylint: disable=unbalanced-tuple-unpacking
+            action_name, variant, func = action
+            if variant is not None:
                 variant = GLib.VariantType.new(variant)
 
             act = Gio.SimpleAction.new(action_name, variant)
@@ -408,7 +437,7 @@ class GajimApplication(Gtk.Application):
             self.add_account_actions(accounts_list[0])
 
     @staticmethod
-    def _get_account_actions(account):
+    def _get_account_actions(account: str) -> list[tuple[str, Any, str, str]]:
         from gajim import app_actions as a
 
         if account == 'Local':
@@ -435,11 +464,11 @@ class GajimApplication(Gtk.Application):
             ('-import-contacts', a.on_import_contacts, 'online', 's'),
         ]
 
-    def add_account_actions(self, account):
+    def add_account_actions(self, account: str) -> None:
         for action in self._get_account_actions(account):
             action_name, func, state, type_ = action
             action_name = account + action_name
-            if self.lookup_action(action_name):
+            if self.lookup_action(action_name) is not None:
                 # We already added this action
                 continue
             act = Gio.SimpleAction.new(
@@ -449,29 +478,37 @@ class GajimApplication(Gtk.Application):
                 act.set_enabled(False)
             self.add_action(act)
 
-    def remove_account_actions(self, account):
+    def remove_account_actions(self, account: str) -> None:
         for action in self._get_account_actions(account):
             action_name = account + action[0]
             self.remove_action(action_name)
 
-    def set_account_actions_state(self, account, new_state=False):
+    def set_action_state(self, action_name: str, state: bool) -> None:
+        action = self.lookup_action(action_name)
+        if action is None:
+            raise ValueError('Action %s does not exist' % action_name)
+        action.set_enabled(state)
+
+    def set_account_actions_state(self,
+                                  account: str,
+                                  new_state: bool = False) -> None:
         for action in self._get_account_actions(account):
             action_name, _, state, _ = action
             if not new_state and state in ('online', 'feature'):
                 # We go offline
-                self.lookup_action(account + action_name).set_enabled(False)
+                self.set_action_state(account + action_name, False)
             elif new_state and state == 'online':
                 # We go online
-                self.lookup_action(account + action_name).set_enabled(True)
+                self.set_action_state(account + action_name, True)
 
-    def update_app_actions_state(self):
+    def update_app_actions_state(self) -> None:
         active_accounts = bool(app.get_connected_accounts(exclude_local=True))
-        self.lookup_action('create-groupchat').set_enabled(active_accounts)
+        self.set_action_state('create-groupchat', active_accounts)
 
-        enabled_accounts = app.settings.get_active_accounts()
-        self.lookup_action('start-chat').set_enabled(enabled_accounts)
+        enabled_accounts = bool(app.settings.get_active_accounts())
+        self.set_action_state('start-chat', enabled_accounts)
 
-    def _load_shortcuts(self):
+    def _load_shortcuts(self) -> None:
         default_path = configpaths.get('DATA') / 'other' / 'shortcuts.json'
         shortcuts = load_json(default_path)
         assert shortcuts is not None
@@ -487,16 +524,16 @@ class GajimApplication(Gtk.Application):
         for action, accels in shortcuts.items():
             self.set_accels_for_action(action, accels)
 
-    def _on_feature_discovered(self, event):
+    def _on_feature_discovered(self, event: NetworkEvent) -> None:
         if event.feature == Namespace.MAM_2:
             action = '%s-archive' % event.account
-            self.lookup_action(action).set_enabled(True)
+            self.set_action_state(action, True)
         elif event.feature == Namespace.BLOCKING:
             action = '%s-blocking' % event.account
-            self.lookup_action(action).set_enabled(True)
+            self.set_action_state(action, True)
 
-    def start_shutdown(self, *args, **kwargs):
-        accounts_to_disconnect = {}
+    def start_shutdown(self, *args: Any, **kwargs: Any) -> None:
+        accounts_to_disconnect: dict[str, Client] = {}
 
         for account, client in app.connections.items():
             if app.account_is_available(account):
@@ -506,7 +543,7 @@ class GajimApplication(Gtk.Application):
             self.quit()
             return
 
-        def _on_disconnect(event):
+        def _on_disconnect(event: NetworkEvent) -> None:
             accounts_to_disconnect.pop(event.account)
             if not accounts_to_disconnect:
                 self.quit()

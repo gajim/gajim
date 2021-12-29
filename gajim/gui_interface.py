@@ -31,6 +31,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Dict
 from typing import Optional
 from typing import Union
@@ -1111,7 +1113,7 @@ class Interface:
         else:
             log.info('Gajim is up to date')
 
-    def run(self, _application):
+    def run(self, _application: Gtk.Application) -> None:
         if app.settings.get('trayicon') != 'never':
             self.show_systray()
 
