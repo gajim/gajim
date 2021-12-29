@@ -18,6 +18,7 @@ from typing import Any
 from typing import Iterator
 from typing import Optional
 from typing import Union
+from typing import overload
 
 import logging
 from functools import partial
@@ -31,6 +32,9 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.const import PresenceShowExt
 from gajim.common.const import SimpleClientState
+from gajim.common.setting_values import BoolGroupChatSettings
+from gajim.common.setting_values import IntGroupChatSettings
+from gajim.common.setting_values import StringGroupChatSettings
 from gajim.common.structs import UNKNOWN_PRESENCE
 from gajim.common.structs import PresenceData
 from gajim.common.structs import UNKNOWN_MUC_PRESENCE
@@ -41,15 +45,35 @@ from gajim.common.helpers import get_groupchat_name
 
 
 class ContactSettings:
-    def __init__(self, account, jid):
+    def __init__(self, account: str, jid: str) -> None:
         self.get = partial(app.settings.get_contact_setting, account, jid)
         self.set = partial(app.settings.set_contact_setting, account, jid)
 
 
 class GroupChatSettings:
-    def __init__(self, account, jid):
-        self.get = partial(app.settings.get_group_chat_setting, account, jid)
-        self.set = partial(app.settings.set_group_chat_setting, account, jid)
+    def __init__(self, account: str, jid: str) -> None:
+        self._account = account
+        self._jid = jid
+
+    @overload
+    def get(self, setting: StringGroupChatSettings) -> str: ...
+    @overload
+    def get(self, setting: BoolGroupChatSettings) -> bool: ...
+    @overload
+    def get(self, setting: IntGroupChatSettings) -> int: ...
+    def get(self, setting: Any) -> Any:
+        return app.settings.get_group_chat_setting(
+            self._account, self._jid, setting)
+
+    @overload
+    def set(self, setting: StringGroupChatSettings, value: str) -> None: ...
+    @overload
+    def set(self, setting: BoolGroupChatSettings, value: bool) -> None: ...
+    @overload
+    def set(self, setting: IntGroupChatSettings, value: int) -> None: ...
+    def set(self, setting: Any, value: Any) -> None:
+        app.settings.set_group_chat_setting(
+            self._account, str(self._jid), setting, value)
 
 
 class Contacts(BaseModule):
