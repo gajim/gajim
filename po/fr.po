@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-01 17:44+0100\n"
-"PO-Revision-Date: 2021-04-21 18:38+0000\n"
+"PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: pitchum <pitchum@gramaton.org>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/1-3/fr/>\n"
 "Language: fr\n"
@@ -29,7 +29,7 @@ msgstr "Afficher ce message d'aide et quitter"
 
 #: gajim/history_manager.py:83
 msgid "Choose folder for logfile"
-msgstr "Indiquer un répertoire pour le fichier de log"
+msgstr "Choisir le dossier pour le fichier journal"
 
 #: gajim/history_manager.py:113
 msgid "Cannot find history logs database"
@@ -84,9 +84,9 @@ msgid ""
 "Normally, the allocated database size will not be freed, it will just become "
 "reusable. This operation may take a while."
 msgstr ""
-"Ceci est FORTEMENT DÉCONSEILLÉ SI GAJIM EST EN TRAIN DE FONCTIONNER.\n"
-"Normalement la taille allouée à la base de donnée ne sera pas libérée, elle "
-"sera simplement ré-utilisable. Cette action pourrait prendre un certain "
+"Ceci est FORTEMENT NON RECOMMANDÉ SI GAJIM EST EN COURS D'EXÉCUTION.\n"
+"Normalement, la taille de la base de données allouée ne sera pas libérée, "
+"elle deviendra juste réutilisable. Cette opération peut prendre un certain "
 "temps."
 
 #: gajim/history_manager.py:262
@@ -174,7 +174,7 @@ msgstr "Salons de discussion"
 
 #: gajim/roster_window.py:1901 gajim/chat_control.py:1688
 msgid "Remote contact stopped transfer"
-msgstr "Le contact a interrompu le transfert"
+msgstr "Le contact distant à stoppé le transfert"
 
 #: gajim/roster_window.py:1903 gajim/chat_control.py:1690
 msgid "Error opening file"
@@ -191,12 +191,12 @@ msgstr "Désormais \"%s\" connaîtra votre état."
 
 #: gajim/roster_window.py:1987
 msgid "Subscription request has been sent"
-msgstr "La demande d’inscription a été envoyée"
+msgstr "La requête d’inscription a été envoyée"
 
 #: gajim/roster_window.py:1988
 #, python-format
 msgid "If \"%s\" accepts this request you will know their status."
-msgstr "Si \"%s\" accepte cette demande vous connaîtrez son état."
+msgstr "Si \"%s\" accepte cette requête vous connaîtrez son état."
 
 #: gajim/roster_window.py:2002
 msgid "Authorization removed"
@@ -242,7 +242,7 @@ msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
 msgstr ""
-"Si vous quittez maintenant, le transfert de fichiers en cours sera "
+"Si vous quittez maintenant, le transfert de fichier(s) en cours sera "
 "interrompu.\n"
 "Voulez-vous toujours quitter ?"
 
@@ -1004,7 +1004,7 @@ msgstr "Envoyer les accusés de lecture"
 
 #: gajim/gui_menu_builder.py:521 gajim/gtk/accounts.py:710
 msgid "Send Chatstate"
-msgstr "Envoyer l'état"
+msgstr "Envoyer le statut"
 
 #: gajim/gui_menu_builder.py:522 gajim/data/gui/groupchat_control.ui:307
 msgid "Invite Contacts…"
@@ -1519,7 +1519,7 @@ msgstr "montrer seulement les contacts du compte spécifié"
 
 #: gajim/gajim_remote.py:93
 msgid "Prints a list of registered accounts"
-msgstr "Affiche la liste des comptes enregistrés"
+msgstr "Affiche la liste des comptes inscrits"
 
 #: gajim/gajim_remote.py:97
 msgid "Changes the status of account(s)"
@@ -1876,7 +1876,7 @@ msgstr "Il n’y a aucune demande d’inscription en attente."
 
 #: gajim/vcard.py:403 gajim/vcard.py:453 gajim/vcard.py:549
 msgid " resource with priority "
-msgstr " ressource prioritaire "
+msgstr " ressource avec la priorité "
 
 #: gajim/conversation_textview.py:65
 msgid "Untrusted"
@@ -3434,7 +3434,7 @@ msgstr "État \"absent\""
 
 #: gajim/gtk/themes.py:49
 msgid "Chatstate Paused"
-msgstr "État \"en pause\""
+msgstr "Statut \"en pause\""
 
 #: gajim/gtk/themes.py:53
 msgid "Group Chat Tab New Directed Message"
@@ -3612,7 +3612,7 @@ msgstr "%(progress)s sur %(total)s"
 #: gajim/gtk/filetransfer_progress.py:130
 #, python-format
 msgid "%(minutes)s min %(seconds)s sec"
-msgstr "%(minutes)s mn %(seconds)s sec"
+msgstr "%(minutes)s min %(seconds)s sec"
 
 #: gajim/gtk/add_contact.py:32
 msgid "GG Number"
@@ -3819,7 +3819,7 @@ msgstr "Redirection"
 
 #: gajim/gtk/account_wizard.py:932
 msgid "Register on the Website"
-msgstr "S'enregistrer sur le site web"
+msgstr "S'inscrire via le site web"
 
 #: gajim/gtk/account_wizard.py:943
 msgid "Account Added"
@@ -3953,7 +3953,7 @@ msgstr "Cela supprimera votre compte de Gajim."
 #: gajim/gtk/remove_account.py:189
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
-msgstr "Voulez-vous supprimer votre compte sur <b>%s</b> également ?"
+msgstr "Voulez-vous également désinscrire votre compte sur <b>%s</b> ?"
 
 #: gajim/gtk/remove_account.py:198
 msgid "_Unregister account from service"
@@ -5606,7 +5606,7 @@ msgstr "Erreur !"
 #: gajim/gtk/service_registration.py:143 gajim/gtk/service_registration.py:157
 #: gajim/gtk/service_registration.py:164
 msgid "Register"
-msgstr "Souscrire"
+msgstr "S'inscrire"
 
 #: gajim/gtk/service_registration.py:193 gajim/gtk/service_registration.py:205
 msgid "Registration successful"
@@ -6076,8 +6076,8 @@ msgid ""
 "Ctrl+Tab switches to the next composing tab when there are no tabs with "
 "messages pending."
 msgstr ""
-"Ctrl+Tab bascule au prochain onglet en train d'écrire lorsqu'il n'y en a pas "
-"d'autres avec des messages non lus."
+"Ctrl+Tab bascule au prochain onglet en train de composer lorsqu'il n'y en a "
+"pas d'autres avec des messages non lus."
 
 #: gajim/common/setting_values.py:443 gajim/common/config.py:200
 msgid ""
@@ -6111,9 +6111,8 @@ msgid ""
 "If enabled, Gajim will show both the number of online and total contacts in "
 "account rows as well as in group rows."
 msgstr ""
-"Si cette option est activée, Gajim affichera à la fois le nombre de contacts "
-"en ligne et le nombre total de contacts dans les lignes de compte ainsi que "
-"dans les lignes de groupe."
+"Si cette case est cochée, Gajim montrera le nombre de contacts en ligne et "
+"totaux sur les lignes de compte ainsi que de groupe."
 
 #: gajim/common/setting_values.py:447 gajim/common/config.py:204
 msgid ""
@@ -6663,7 +6662,8 @@ msgstr "Si activé, la ligne des contacts est colorée selon l’état du contac
 msgid ""
 "If enabled, the tab is colored according to the current chat state of the "
 "contact."
-msgstr "Si activé, l’onglet est coloré selon l’état du contact."
+msgstr ""
+"Si cette case est cochée, l’onglet est coloré selon le statut du contact."
 
 #: gajim/common/config.py:231
 msgid ""
@@ -6676,9 +6676,9 @@ msgid ""
 "Chat state notifications that are sent to contacts. Possible values: all, "
 "composing_only, disabled"
 msgstr ""
-"Notifications d'état qui sont envoyées aux contacts. Peut être : \"tous\" "
-"(all), \"seulement en train d'écrire\" (composing_only) ou \"désactivé\" "
-"(disabled)"
+"Notifications d'état qui sont envoyées aux contacts. Peut être : \"all\" "
+"(tous), \"composing_only\" (seulement en train d'écrire) ou \"disabled\" "
+"(désactivé)"
 
 #: gajim/common/config.py:233
 msgid ""
@@ -6686,8 +6686,8 @@ msgid ""
 "'all', 'composing_only', 'disabled'"
 msgstr ""
 "Notifications d'état qui sont envoyées au salon de discussion. Peut être : "
-"\"tous\" (all), \"seulement en train d'écrire\" (composing_only) ou "
-"\"désactivé\" (disabled)"
+"\"all\" (tous), \"composing_only\" (seulement en train d'écrire) ou "
+"\"disabled\" (désactivé)"
 
 #: gajim/common/config.py:240
 msgid "Shows an info bar with helpful hints in the Start / Join Chat dialog"
@@ -8866,7 +8866,7 @@ msgstr "Ajouter une entrée"
 
 #: gajim/data/gui/profile.ui:410
 msgid "Update"
-msgstr "Mettre à jour"
+msgstr "_Mettre à jour"
 
 #: gajim/data/gui/manage_proxies.ui:12
 msgctxt "proxy configuration"
@@ -9311,7 +9311,7 @@ msgstr "Demander à voir _son état"
 
 #: gajim/data/gui/contact_context_menu.ui:131
 msgid "_Forbid contact to see my status"
-msgstr "_Interdire le contacts de voir mon état"
+msgstr "_Interdire au contact de voir mon état"
 
 #: gajim/data/gui/contact_context_menu.ui:159
 msgid "_Unignore"
@@ -10117,9 +10117,9 @@ msgid ""
 "with your friends or family, easily share pictures and thoughts or discuss "
 "the news with your groups."
 msgstr ""
-"Gajim se veut être un client XMPP facile à utiliser et complet. Discutez "
-"simplement avec vos amis ou votre famille, partagez facilement des photos et "
-"des pensées ou discutez des actualités avec vos groupes."
+"Gajim a pour vocation d'être un client XMPP complet et facile à utiliser. "
+"Discutez simplement avec vos amis ou votre famille, partagez facilement des "
+"photos et des idées, ou discutez des actualités avec votre entourage."
 
 #: data/org.gajim.Gajim.appdata.xml.in:14
 msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
@@ -10245,7 +10245,7 @@ msgstr "Gestionnaire d'extensions"
 
 #: data/org.gajim.Gajim.appdata.xml.in:61
 msgid "Gajim Team"
-msgstr "Thèmes de Gajim"
+msgstr "Équipe Gajim"
 
 #~ msgid "Could not request upload slot for HTTP File Upload"
 #~ msgstr "Impossible de demander l’envoi de fichier via HTTP"

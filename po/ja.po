@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-01 17:44+0100\n"
-"PO-Revision-Date: 2021-02-01 22:13+0000\n"
+"PO-Revision-Date: 2022-02-20 07:52+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/1-3/ja/>"
 "\n"
@@ -308,7 +308,7 @@ msgstr "本当にこの相手先を遮断しますか ?"
 msgid ""
 "You will appear offline for this contact and you will not receive further "
 "messages."
-msgstr "この相手先に対してオフラインと表示され、これ以上のメッセージを受け取りません。"
+msgstr "この相手先にはオフラインとみなされます。これ以上のメッセージを受け取りません。"
 
 #: gajim/roster_window.py:2666
 msgid "_Do not ask again"
@@ -1955,9 +1955,8 @@ msgid "Received"
 msgstr "受信"
 
 #: gajim/conversation_textview.py:1272
-#, fuzzy
 msgid "?Message state:Read"
-msgstr "Message スタンザを表示しない"
+msgstr "既読"
 
 #: gajim/groupchat_control.py:352
 #, python-format

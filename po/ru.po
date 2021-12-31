@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-01 17:44+0100\n"
-"PO-Revision-Date: 2021-01-10 23:38+0000\n"
+"PO-Revision-Date: 2021-09-27 12:23+0000\n"
 "Last-Translator: Elijah Draga <waytoroot@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/1-3/ru/>\n"
 "Language: ru\n"
@@ -1037,7 +1037,7 @@ msgstr "История"
 #: gajim/gtk/preferences.py:671 gajim/gtk/groupchat_settings.py:36
 #: gajim/gtk/accounts.py:682
 msgid "Disabled"
-msgstr "Отключены"
+msgstr "Отключено"
 
 #: gajim/gui_menu_builder.py:534 gajim/gtk/groupchat_settings.py:37
 #: gajim/gtk/accounts.py:681
@@ -1433,7 +1433,7 @@ msgstr "и НЕ аутентифицировано"
 #: gajim/chat_control_base.py:600
 #, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
-msgstr "%(type)s шифрование активно %(authenticated)s."
+msgstr "%(type)s шифрование активно %(authenticated)s"
 
 #: gajim/chat_control_base.py:715
 msgid "_Undo"
@@ -2140,7 +2140,7 @@ msgstr "Вы забанены{actor}{reason}"
 
 #: gajim/groupchat_control.py:1360 gajim/groupchat_control.py:1423
 msgid ": Affiliation changed"
-msgstr ": Принадлежность изменена"
+msgstr ": Роль изменена"
 
 #: gajim/groupchat_control.py:1366 gajim/groupchat_control.py:1428
 msgid ": Group chat configuration changed to members-only"
@@ -2582,8 +2582,8 @@ msgid ""
 "    Affiliation can be given as one of the following values:\n"
 "    owner, admin, member, outcast, none"
 msgstr ""
-"Установите принадлежность участника в групповом чате.\n"
-"Принадлежность может быть задана как одно из следующих значений:\n"
+"Установите роль участника в групповом чате.\n"
+"Роль может иметь следующие значения:\n"
 "владелец, администратор, участник, изгой, нет"
 
 #: gajim/command_system/implementation/standard.py:383
@@ -3173,7 +3173,7 @@ msgstr "Выполнять периодические проверки обно�
 
 #: gajim/gtk/preferences.py:1033
 msgid "Debug Logging"
-msgstr "Журнала отладки"
+msgstr "Журнал отладки"
 
 #: gajim/gtk/message_input.py:48
 msgid "Write a message…"
@@ -3682,7 +3682,7 @@ msgstr "Вход"
 #: gajim/gtk/account_wizard.py:67 gajim/gtk/remove_account.py:44
 #: gajim/gtk/change_password.py:45 gajim/gtk/accounts.py:384
 msgid "Back"
-msgstr "Скоро буду"
+msgstr "Назад"
 
 #: gajim/gtk/account_wizard.py:80
 msgid "An error occurred during account creation"
@@ -5073,7 +5073,7 @@ msgstr "Обратная связь"
 
 #: gajim/gtk/server_info.py:146
 msgid "Abuse"
-msgstr "Злоупотребление"
+msgstr "Жалобы"
 
 #: gajim/gtk/server_info.py:147
 msgid "Sales"
@@ -5168,7 +5168,7 @@ msgstr "Художники"
 
 #: gajim/gtk/about.py:65
 msgid "Last but not least"
-msgstr "Последний, но тем не менее важный"
+msgstr "Последнее, но не менее важное:"
 
 #: gajim/gtk/about.py:66
 msgid "we would like to thank all the package maintainers."
@@ -5744,7 +5744,7 @@ msgstr "ZZZZzzzzzZZZZZ"
 
 #: gajim/common/setting_values.py:306 gajim/common/config.py:357
 msgid "Back soon"
-msgstr "Скоро буду"
+msgstr "Вернусь позже"
 
 #: gajim/common/setting_values.py:307 gajim/common/config.py:357
 msgid "Back in some minutes."
@@ -6226,7 +6226,7 @@ msgstr "Соединяюсь"
 
 #: gajim/common/helpers.py:198
 msgid "A_way"
-msgstr "_Ушел"
+msgstr "О_тошел"
 
 #: gajim/common/helpers.py:203
 msgid "_Offline"
@@ -8459,7 +8459,7 @@ msgstr "_Тип"
 
 #: gajim/data/gui/account_wizard.ui:203
 msgid "Welcome"
-msgstr "Добро Пожаловать"
+msgstr "Добро пожаловать"
 
 #: gajim/data/gui/account_wizard.ui:219
 msgid "Please enter your credentials or Sign Up"
@@ -9839,11 +9839,11 @@ msgstr "Зарезервированное имя"
 
 #: gajim/data/gui/groupchat_config.ui:346
 msgid "Affiliation"
-msgstr "Принадлежность"
+msgstr "Роль"
 
 #: gajim/data/gui/groupchat_config.ui:377
 msgid "Affiliations"
-msgstr "Принадлежности"
+msgstr "Роли"
 
 #: gajim/data/gui/groupchat_config.ui:429
 msgid "Reason"
@@ -10024,7 +10024,7 @@ msgstr "Клиент XMPP-чата"
 
 #: data/org.gajim.Gajim.desktop.in:6 data/org.gajim.Gajim.appdata.xml.in:8
 msgid "A fully-featured XMPP chat client"
-msgstr "Полнофункциональный клиент XMPP-чата"
+msgstr "Полнофункциональный XMPP-клиент"
 
 #: data/org.gajim.Gajim.desktop.in:8
 msgid "chat;messaging;im;xmpp;bonjour;voip;"
@@ -10040,15 +10040,13 @@ msgid ""
 "with your friends or family, easily share pictures and thoughts or discuss "
 "the news with your groups."
 msgstr ""
-"Gajim стремится быть простым и и полнофункциональным XMPP-клиентом. Просто "
-"общайтесь с друзьями или семьей, легко делитесь фотографиями и мыслями или "
-"обсуждайте новости со своими группами."
+"Gajim стремится быть простым и полнофункциональным XMPP-клиентом. Общайтесь "
+"с друзьями или семьей, делитесь фотографиями и мыслями или обсуждайте "
+"новости со своими группами."
 
 #: data/org.gajim.Gajim.appdata.xml.in:14
 msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr ""
-"Безопасно общайтесь с помощью сквозного шифрования с помощью OMEMO или "
-"OpenPGP."
+msgstr "Чаты защищены сквозным шифрованием OMEMO или OpenPGP."
 
 #: data/org.gajim.Gajim.appdata.xml.in:15
 msgid ""
@@ -10159,9 +10157,8 @@ msgid "Plugin manager"
 msgstr "Менеджер плагинов"
 
 #: data/org.gajim.Gajim.appdata.xml.in:61
-#, fuzzy
 msgid "Gajim Team"
-msgstr "Темы Gajim"
+msgstr "Команда Gajim"
 
 #~ msgid "Retrieving profile…"
 #~ msgstr "Получение профиля…"

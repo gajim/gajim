@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gajim 0.13\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-01 17:44+0100\n"
-"PO-Revision-Date: 2021-04-01 06:04+0000\n"
+"PO-Revision-Date: 2022-03-05 07:50+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: German <https://translate.gajim.org/projects/gajim/1-3/de/>\n"
 "Language: de\n"
@@ -265,8 +265,8 @@ msgid ""
 "history is enabled and if the contact is in your contact list."
 msgstr ""
 "Nachrichten sind nur für das spätere Lesen verfügbar, wenn der "
-"Unterhaltungsverlauf aktiviert wurde und der Kontakt sich in der "
-"Kontaktliste befindet."
+"Nachrichtenverlauf gespeichert wird und der Kontakt sich in der Kontaktliste "
+"befindet."
 
 #: gajim/roster_window.py:2590
 msgid "You have unread messages"
@@ -647,8 +647,8 @@ msgstr "Nur kritische Fehler anzeigen"
 #: gajim/application.py:95
 msgid "Separate profile files completely (even history database and plugins)"
 msgstr ""
-"Profildateien vollständig trennen (auch die Datenbank für "
-"Unterhaltungsverläufe sowie Plugins)"
+"Profildateien vollständig trennen (auch die Datenbank für Nachrichtenverlauf "
+"sowie Plugins)"
 
 #: gajim/application.py:103
 msgid "Print XML stanzas and other debug information"
@@ -1125,7 +1125,7 @@ msgstr "Erweitert"
 
 #: gajim/gui_menu_builder.py:637 gajim/gtk/mam_preferences.py:100
 msgid "Archiving Preferences"
-msgstr "Archiveinstellungen bearbeiten"
+msgstr "Einstellungen für das Nachrichtenarchiv"
 
 #: gajim/gui_menu_builder.py:638
 msgid "Blocking List"
@@ -1141,7 +1141,7 @@ msgstr "PEP-Konfiguration"
 
 #: gajim/gui_menu_builder.py:641
 msgid "Synchronise History…"
-msgstr "Unterhaltungsverlauf synchronisieren…"
+msgstr "Nachrichtenverlauf synchronisieren…"
 
 #: gajim/gui_menu_builder.py:643 gajim/gtk/server_info.py:141
 #: gajim/data/gui/groupchat_config.ui:36
@@ -1213,7 +1213,7 @@ msgstr "Im E-Mail-Programm öffnen"
 
 #: gajim/gui_menu_builder.py:758
 msgid "Copy Location"
-msgstr "Standort kopieren"
+msgstr "kopiere Standort"
 
 #: gajim/gui_menu_builder.py:759 gajim/gtk/preferences.py:291
 msgid "Show Location"
@@ -1320,12 +1320,11 @@ msgstr "%(nickname)s aus dem Gruppenchat %(room_name)s"
 
 #: gajim/chat_control.py:1257
 msgid "Note: Chat history is disabled for this contact."
-msgstr ""
-"Hinweis: Für diesen Kontakt wird kein Unterhaltungsverlauf gespeichert."
+msgstr "Hinweis: Für diesen Kontakt wird kein Nachrichtenverlauf gespeichert."
 
 #: gajim/chat_control.py:1259
 msgid "Note: Chat history is disabled for this account."
-msgstr "Hinweis: Für dieses Konto wird kein Unterhaltungsverlauf gespeichert."
+msgstr "Hinweis: Für dieses Konto wird kein Nachrichtenverlauf gespeichert."
 
 #: gajim/chat_control.py:1260
 #, python-format
@@ -2057,11 +2056,11 @@ msgstr ""
 
 #: gajim/groupchat_control.py:1037 gajim/groupchat_control.py:1197
 msgid "Conversations are stored on the server"
-msgstr "Unterhaltungsverlauf wird auf dem Server gespeichert"
+msgstr "Nachrichtenverlauf wird auf dem Server gespeichert"
 
 #: gajim/groupchat_control.py:1040
 msgid "Conversations are not stored on the server"
-msgstr "Unterhaltungsverlauf wird nicht auf dem Server gespeichert"
+msgstr "Nachrichtenverlauf wird nicht auf dem Server gespeichert"
 
 #: gajim/groupchat_control.py:1043
 msgid "Group chat is now non-anonymous"
@@ -3242,12 +3241,11 @@ msgstr "An Status anpassen"
 
 #: gajim/gtk/history_sync.py:111 gajim/gtk/history_sync.py:193
 msgid "Synchronise History"
-msgstr "Unterhaltungsverlauf synchronisieren"
+msgstr "Nachrichtenverlauf synchronisieren"
 
 #: gajim/gtk/history_sync.py:205
 msgid "How far back should the chat history be synchronised?"
-msgstr ""
-"Für welchen Zeitraum soll der Unterhaltungsverlauf synchronisiert werden?"
+msgstr "Für welchen Zeitraum soll der Nachrichtenverlauf synchronisiert werden?"
 
 #: gajim/gtk/history_sync.py:210
 msgid "One Month"
@@ -3286,7 +3284,7 @@ msgid ""
 "Finished synchronising chat history:\n"
 "%s messages downloaded"
 msgstr ""
-"Synchronisierung des Unterhaltungsverlaufs abgeschlossen:\n"
+"Synchronisierung des Nachrichtenverlaufs abgeschlossen:\n"
 "%s Nachrichten heruntergeladen"
 
 #: gajim/gtk/history_sync.py:281
@@ -3329,19 +3327,19 @@ msgstr "%s konfigurieren"
 #: gajim/gtk/mam_preferences.py:42
 #, python-format
 msgid "Archiving Preferences for %s"
-msgstr "Archiveinstellungen für %s"
+msgstr "Einstellungen für das Nachrichtenarchiv von %s"
 
 #: gajim/gtk/mam_preferences.py:101
 msgid "Archiving Preferences Saved"
-msgstr "Archiveinstellungen gespeichert"
+msgstr "Einstellungen für das Nachrichtenarchiv gespeichert"
 
 #: gajim/gtk/mam_preferences.py:102
 msgid "Your archiving preferences have successfully been saved."
-msgstr "Archiveinstellungen wurden gespeichert."
+msgstr "Deine Einstellungen für das Nachrichtenarchiv wurden gespeichert."
 
 #: gajim/gtk/mam_preferences.py:109
 msgid "Archiving Preferences Error"
-msgstr "Fehler beim Festlegen der Archiveinstellungen"
+msgstr "Fehler beim Speichern der Einstellungen für das Nachrichtenarchiv"
 
 #: gajim/gtk/mam_preferences.py:110
 msgid "Error received: {}"
@@ -4573,7 +4571,7 @@ msgstr "Lesebestätigungen senden"
 
 #: gajim/gtk/groupchat_settings.py:77
 msgid "Let others know if you read up to this point"
-msgstr "Lasse andere Teilnehmer wissen, wie weit du gelesen hast"
+msgstr "Lasse deinen Kontakt wissen bis wohin du gelesen hast"
 
 #: gajim/gtk/groupchat_settings.py:80
 msgid "Sync Threshold"
@@ -4816,11 +4814,11 @@ msgstr "Beim Start verbinden"
 
 #: gajim/gtk/accounts.py:640 gajim/gtk/accounts.py:870
 msgid "Save conversations for all contacts"
-msgstr "Unterhaltungsverlauf für alle Kontakte dieses Kontos speichern"
+msgstr "Nachrichtenverlauf für alle Kontakte dieses Kontos speichern"
 
 #: gajim/gtk/accounts.py:642 gajim/gtk/accounts.py:872
 msgid "Store conversations on the harddrive"
-msgstr "Unterhaltungsverlauf auf diesem Gerät speichern"
+msgstr "Nachrichtenverlauf auf diesem Gerät speichern"
 
 #: gajim/gtk/accounts.py:644 gajim/gtk/accounts.py:874
 msgid "Global Status"
@@ -4935,11 +4933,11 @@ msgstr "Standard für Chats und private Gruppenchats"
 
 #: gajim/gtk/accounts.py:747
 msgid "Keep Chat History"
-msgstr "Unterhaltungsverlauf behalten"
+msgstr "Nachrichtenverlauf behalten"
 
 #: gajim/gtk/accounts.py:751
 msgid "How long Gajim should keep your chat history"
-msgstr "Wie lange Gajim deine Unterhaltungsverläufe behalten soll"
+msgstr "Wie lange Gajim deinen Nachrichtenverlauf behalten soll"
 
 #: gajim/gtk/accounts.py:787 gajim/data/gui/manage_proxies.ui:337
 msgid "Proxy"
@@ -5657,7 +5655,7 @@ msgstr "Dein öffentlicher Schlüssel oder Authentifizierungszertifikat"
 
 #: gajim/gtk/vcard_grid.py:59
 msgid "Post Office Box"
-msgstr "Postfach"
+msgstr "Postleitzahl"
 
 #: gajim/gtk/vcard_grid.py:60 gajim/data/gui/vcard_information_window.ui:489
 #: gajim/data/gui/vcard_information_window.ui:1179
@@ -5698,7 +5696,7 @@ msgstr "Weiblich"
 
 #: gajim/gtk/vcard_grid.py:113
 msgid "?Gender:Other"
-msgstr "Andere"
+msgstr "Weitere"
 
 #: gajim/gtk/vcard_grid.py:114
 msgid "?Gender:None"
@@ -5706,7 +5704,7 @@ msgstr "Keins"
 
 #: gajim/gtk/vcard_grid.py:121 gajim/gtk/vcard_grid.py:428
 msgid "Home"
-msgstr "Zuhause"
+msgstr "Privat"
 
 #: gajim/gtk/vcard_grid.py:122 gajim/gtk/vcard_grid.py:429
 #: gajim/data/gui/vcard_information_window.ui:1452
@@ -5933,7 +5931,7 @@ msgstr ""
 msgid ""
 "How far back in time (minutes) chat history is restored. -1 means no limit."
 msgstr ""
-"Wie weit zurück in der Zeit (in Minuten) der Unterhaltungsverlauf "
+"Wie weit zurück in der Zeit (in Minuten) der Nachrichtenverlauf "
 "wiederhergestellt werden soll. -1 bedeutet kein Limit."
 
 #: gajim/common/setting_values.py:406 gajim/common/config.py:143
@@ -6650,16 +6648,16 @@ msgid ""
 "Maximum history in days we request from a public group chat archive. 0: As "
 "much as possible."
 msgstr ""
-"Maximaler Unterhaltungsverlauf in Tagen, der aus dem Archiv eines "
-"öffentlichen Gruppenchats angefordert wird. 0: So viel wie möglich."
+"Maximale Anzahl von Tagen, die aus dem Nachrichtenarchiv eines öffentlichen "
+"Gruppenchats angefordert werden. 0: So viel wie möglich."
 
 #: gajim/common/config.py:227
 msgid ""
 "Maximum history in days we request from a private group chat archive. 0: As "
 "much as possible."
 msgstr ""
-"Maximaler Unterhaltungsverlauf in Tagen, der aus dem Archiv eines privaten "
-"Gruppenchats angefordert wird. 0: So viel wie möglich."
+"Maximale Anzahl von Tagen, die aus dem Nachrichtenarchiv des eines privaten "
+"Gruppenchats angefordert werden. 0: So viel wie möglich."
 
 #: gajim/common/config.py:228
 msgid ""
@@ -6755,8 +6753,8 @@ msgid ""
 "chat history for this account."
 msgstr ""
 "Durch Leerzeichen getrennte Liste von XMPP-Adressen, für die kein "
-"Unterhaltungsverlauf gespeichert werden soll. Du kannst auch einen "
-"Kontonamen verwenden, um für das gesamte Konto nichts zu speichern."
+"Nachrichtenverlauf gespeichert werden soll. Du kannst auch einen Kontonamen "
+"verwenden, um für das gesamte Konto nichts zu speichern."
 
 #: gajim/common/config.py:285
 msgid ""
@@ -8868,23 +8866,20 @@ msgstr "Profilbild und Name"
 
 #: gajim/data/gui/profile.ui:57
 msgid "Make your profile visible for everyone or just for your contacts."
-msgstr ""
-"Mache dein Profil für jeden sichtbar oder ausschließlich für deine Kontakte."
+msgstr "Mache dein Profil für jeden oder nur für deine Kontakte sichtbar."
 
 #: gajim/data/gui/profile.ui:179
 msgid "Remove your profile picture"
-msgstr "Dein Profilbild entfernen"
+msgstr "Entferne dein Profilbild"
 
 #: gajim/data/gui/profile.ui:198
 msgid "Change your profile picture"
-msgstr "Dein Profilbild ändern"
+msgstr "Ändere dein Profilbild"
 
 #: gajim/data/gui/profile.ui:229
 msgid ""
 "Enter your nickname. This is how your name is displayed to your contacts."
-msgstr ""
-"Gib deinen Spitznamen ein. Mit diesem Namen wirst du deinen Kontakten "
-"angezeigt."
+msgstr "Gib deinen Spitznamen ein. Deinen Kontakten wird dieser Name angezeigt."
 
 #: gajim/data/gui/profile.ui:298
 msgid "Add Entry"
@@ -8892,7 +8887,7 @@ msgstr "Eintrag hinzufügen"
 
 #: gajim/data/gui/profile.ui:410
 msgid "Update"
-msgstr "Aktualisieren"
+msgstr "Update"
 
 #: gajim/data/gui/manage_proxies.ui:12
 msgctxt "proxy configuration"
@@ -9865,7 +9860,7 @@ msgstr "Autor"
 
 #: gajim/data/gui/groupchat_info_scrolled.ui:137
 msgid "Discussion Logs"
-msgstr "Unterhaltungsverlauf"
+msgstr "Nachrichtenverlauf"
 
 #: gajim/data/gui/groupchat_info_scrolled.ui:199
 msgid "Group Chat Language"
@@ -10189,7 +10184,7 @@ msgstr "Benutze deine liebsten Emojis, lade dein eigenes Profilbild hoch"
 
 #: data/org.gajim.Gajim.appdata.xml.in:24
 msgid "Keep and manage all your chat history"
-msgstr "Behalte und verwalte alle deine Unterhaltungsverläufe"
+msgstr "Behalte und verwalte deinen Nachrichtenverlauf"
 
 #: data/org.gajim.Gajim.appdata.xml.in:25
 msgid "Organize your chats with tabs"
@@ -10259,7 +10254,7 @@ msgstr "Unterstützung von Gruppenchats"
 
 #: data/org.gajim.Gajim.appdata.xml.in:53
 msgid "Chat history"
-msgstr "Unterhaltungsverlauf"
+msgstr "Nachrichtenverlauf"
 
 #: data/org.gajim.Gajim.appdata.xml.in:57
 msgid "Plugin manager"

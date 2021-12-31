@@ -12,54 +12,51 @@ msgstr ""
 "Project-Id-Version: gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-01 17:44+0100\n"
-"PO-Revision-Date: 2009-08-19 23:46+0200\n"
-"Last-Translator: Stavros Giannouris <stavrosg@hellug.gr>\n"
-"Language-Team:  <>\n"
-"Language: \n"
+"PO-Revision-Date: 2022-02-11 17:45+0000\n"
+"Last-Translator: Gregory K <gk@makemagic.gr>\n"
+"Language-Team: Greek <https://translate.gajim.org/projects/gajim/1-3/el/>\n"
+"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: KBabel 1.10\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.1.1\n"
 "X-Poedit-Language: Greek\n"
 "X-Poedit-Country: GREECE\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,-1,-1,-1,-1,-1,623\n"
 
 #: gajim/history_manager.py:78
-#, fuzzy
 msgid "Usage:"
-msgstr "μήνυμα"
+msgstr "Χρήση:"
 
 #: gajim/history_manager.py:80
-#, fuzzy
 msgid "Options:"
-msgstr "Φατσούλες:"
+msgstr "Επιλογές:"
 
 #: gajim/history_manager.py:82
 msgid "Show this help message and exit"
-msgstr ""
+msgstr "Εμφάνιση αυτού του μηνύματος βοήθειας και έξοδος"
 
 #: gajim/history_manager.py:83
 msgid "Choose folder for logfile"
-msgstr ""
+msgstr "Επιλέξτε φάκελο για το αρχείο καταγραφής"
 
 #: gajim/history_manager.py:113
 msgid "Cannot find history logs database"
 msgstr "Δεν ήταν δυνατή η εύρεση της βάσης δεδομένων ιστορικού"
 
 #: gajim/history_manager.py:114
-#, fuzzy, python-format
+#, python-format
 msgid "%s does not exist."
-msgstr "Δεν υπάρχει τέτοια συζήτηση."
+msgstr "%s δεν υπάρχει."
 
 #: gajim/history_manager.py:147 gajim/history_manager.py:201
 #: gajim/gtk/add_contact.py:31 gajim/gtk/discovery.py:833
 #: gajim/gtk/accounts.py:892 gajim/data/gui/vcard_information_window.ui:55
 #: gajim/data/gui/bookmarks.ui:45 gajim/data/gui/blocking_list.ui:43
 #: gajim/data/gui/mam_preferences.ui:117
-#, fuzzy
 msgid "XMPP Address"
-msgstr "Αντιγραφή διεύθυνσης email"
+msgstr "XMPP Διεύθυνση"
 
 #: gajim/history_manager.py:160 gajim/history_manager.py:208
 #: gajim/gtk/history.py:108 gajim/data/gui/history_window.ui:89
@@ -70,7 +67,7 @@ msgstr "Ημερομηνία"
 #: gajim/data/gui/profile.ui:232 gajim/data/gui/vcard_information_window.ui:442
 #: gajim/data/gui/bookmarks.ui:84
 msgid "Nickname"
-msgstr "Όνομα χρήστη"
+msgstr "Υποκοριστικό (Nickname)"
 
 #: gajim/history_manager.py:178 gajim/history_manager.py:217
 #: gajim/gtk/history.py:117 gajim/data/gui/single_message_window.ui:266
@@ -85,25 +82,22 @@ msgstr "Θέμα"
 
 #: gajim/history_manager.py:254
 msgid "Database Cleanup"
-msgstr ""
+msgstr "Εκκαθάριση Βάσης Δεδομένων"
 
 #: gajim/history_manager.py:255
-#, fuzzy
 msgid "Clean up the database?"
-msgstr "δημιουργία βάσης δεδομένων ιστορικού"
+msgstr "Εκκαθάριση της βάσης δεδομένων;"
 
 #: gajim/history_manager.py:256
-#, fuzzy
 msgid ""
 "This is STRONGLY NOT RECOMMENDED IF GAJIM IS RUNNING.\n"
 "Normally, the allocated database size will not be freed, it will just become "
 "reusable. This operation may take a while."
 msgstr ""
-"Ο κατανεμημένος στη βάση δεδομένων χώρος δεν θα ελευθερωθεί, αλλά θα γίνει "
-"αξιοποιήσιμος πάλι. Αν πράγματι θέλετε να μειώσετε το μέγεθος της βάσης "
-"δεδομένων επιλέξτε ΝΑΙ, αλλιώς επιλέξτε ΟΧΙ.\n"
-"\n"
-"Σε περίπτωση που επιλέξατε ΝΑΙ, παρακαλώ περιμένετε..."
+"Αυτό ΔΕΝ ΣΥΝΙΣΤΑΤΑΙ ΑΝΕΠΙΦΥΛΑΚΤΙΚΑ ΑΝ ΤΡΕΧΕΙ ΤΟ GAJIM.\n"
+"Κανονικά, το εκχωρημένο μέγεθος βάσης δεδομένων δεν θα ελευθερωθεί, απλώς θα "
+"μπορεί να επαναχρησιμοποιηθεί. Αυτή η λειτουργία μπορεί να διαρκέσει για "
+"λίγο."
 
 #: gajim/history_manager.py:262
 #, fuzzy
