@@ -48,9 +48,6 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
 from gajim.common.const import PEPEventType
 
-from gajim.gui_menu_builder import get_encryption_menu
-from gajim.gui_menu_builder import get_singlechat_menu
-
 from gajim.gui.call_widget import CallWidget
 from gajim.gui.const import TARGET_TYPE_URI_LIST
 from gajim.gui.const import ControlType
@@ -62,6 +59,9 @@ from gajim.gui.util import open_window
 from gajim.command_system.implementation.hosts import ChatCommands
 from gajim.command_system.framework import CommandHost  # pylint: disable=unused-import
 from gajim.gui.controls.base import BaseControl
+
+from ..menus import get_encryption_menu
+from ..menus import get_singlechat_menu
 
 log = logging.getLogger('gajim.gui.controls.chat')
 

@@ -26,8 +26,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import _
 
-from gajim.gui_menu_builder import SearchMenu
-
+from .menus import SearchMenu
 from .dataform import DataFormWidget
 from .util import ensure_not_destroyed
 from .util import find_widget

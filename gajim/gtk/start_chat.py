@@ -36,8 +36,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import MUC_DISCO_ERRORS
 from gajim.common.modules.util import as_task
 
-from gajim.gui_menu_builder import get_start_chat_row_menu
-
+from .menus import get_start_chat_row_menu
 from .chat_filter import ChatFilter
 from .groupchat_info import GroupChatInfoScrolled
 from .groupchat_nick import NickChooser

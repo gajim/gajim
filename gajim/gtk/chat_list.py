@@ -44,8 +44,7 @@ from gajim.common.helpers import AdditionalDataDict
 from gajim.common.preview_helpers import filename_from_uri
 from gajim.common.preview_helpers import guess_simple_file_type
 
-from gajim.gui_menu_builder import get_chat_list_row_menu
-
+from .menus import get_chat_list_row_menu
 from .builder import get_builder
 from .util import EventHelper
 

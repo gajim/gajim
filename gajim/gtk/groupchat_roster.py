@@ -39,7 +39,7 @@ from gajim.common.const import StyleAttr
 from gajim.common.nec import NetworkEvent
 from gajim.common.modules.contacts import GroupchatContact
 
-from gajim.gui_menu_builder import get_groupchat_roster_menu
+from .menus import get_groupchat_roster_menu
 from .tooltips import GCTooltip
 from .builder import get_builder
 from .types import GroupchatControlType

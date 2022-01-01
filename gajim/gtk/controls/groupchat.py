@@ -46,9 +46,6 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gio
 
-from gajim.gui_menu_builder import get_encryption_menu
-from gajim.gui_menu_builder import get_groupchat_menu
-
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import helpers
@@ -82,6 +79,9 @@ from gajim.gui.groupchat_state import GroupchatState
 from gajim.gui.util import NickCompletionGenerator
 from gajim.gui.util import get_app_window
 from gajim.gui.util import open_window
+
+from ..menus import get_encryption_menu
+from ..menus import get_groupchat_menu
 
 log = logging.getLogger('gajim.gui.controls.groupchat')
 

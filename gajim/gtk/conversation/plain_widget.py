@@ -30,9 +30,8 @@ from gajim.common.helpers import parse_uri
 from gajim.common.structs import URI
 from gajim.common.styling import PlainBlock
 
-from gajim.gui_menu_builder import get_conv_action_context_menu
-from gajim.gui_menu_builder import get_conv_uri_context_menu
-
+from ..menus import get_conv_action_context_menu
+from ..menus import get_conv_uri_context_menu
 from ..emoji_data import emoji_pixbufs
 from ..emoji_data import get_emoji_pixbuf
 from ..util import get_cursor

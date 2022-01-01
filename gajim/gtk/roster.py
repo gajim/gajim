@@ -42,8 +42,7 @@ from gajim.common.helpers import event_filter
 from gajim.common.i18n import _
 from gajim.common.nec import NetworkEvent
 
-from gajim.gui_menu_builder import get_roster_menu
-
+from .menus import get_roster_menu
 from .dialogs import ConfirmationDialog
 from .dialogs import DialogButton
 from .tooltips import RosterTooltip

@@ -227,8 +227,8 @@ class GajimApplication(Gtk.Application):
         self.interface.run(self)
         self.add_actions()
         self._load_shortcuts()
-        from gajim import gui_menu_builder
-        gui_menu_builder.build_accounts_menu()
+        from gajim.gui import menus
+        menus.build_accounts_menu()
         self.update_app_actions_state()
 
         app.ged.register_event_handler('feature-discovered',

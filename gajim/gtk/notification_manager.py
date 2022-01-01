@@ -26,8 +26,7 @@ from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import get_muc_context
 
-from gajim.gui_menu_builder import get_subscription_menu
-
+from .menus import get_subscription_menu
 from .util import open_window
 
 

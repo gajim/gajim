@@ -61,7 +61,7 @@ from gajim.common import app
 from gajim.common.dbus import logind
 from gajim.common.dbus import music_track
 
-from gajim import gui_menu_builder
+from gajim.gui import menus
 from gajim.dialog_messages import get_dialog
 
 from gajim.common import idle
@@ -792,7 +792,7 @@ class Interface:
         app.block_signed_in_notifications[account] = True
 
         app.settings.set_account_setting(account, 'active', True)
-        gui_menu_builder.build_accounts_menu()
+        menus.build_accounts_menu()
         app.app.update_app_actions_state()
 
         app.nec.push_incoming_event(NetworkEvent(
@@ -814,7 +814,7 @@ class Interface:
 
         app.settings.set_account_setting(account, 'roster_version', '')
         app.settings.set_account_setting(account, 'active', False)
-        gui_menu_builder.build_accounts_menu()
+        menus.build_accounts_menu()
         app.app.update_app_actions_state()
 
         app.nec.push_incoming_event(NetworkEvent(
