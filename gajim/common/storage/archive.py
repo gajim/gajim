@@ -269,30 +269,6 @@ class MessageArchiveStorage(SqliteStorage):
     def get_jids_in_db(self) -> KeysView[JID]:
         return self._jid_ids.keys()
 
-    def jid_is_from_pm(self, jid: str) -> bool:
-        """
-        If jid is gajim@conf/nkour it's likely a pm one, how we know gajim@conf
-        is not a normal guy and nkour is not his resource?  we ask if gajim@conf
-        is already in jids (with type room jid) this fails if user disables
-        logging for room and only enables for pm (so highly unlikely) and if we
-        fail we do not go chaos (user will see the first pm as if it was message
-        in room's public chat) and after that all okay
-        """
-        if jid.find('/') > -1:
-            possible_room_jid = jid.split('/', 1)[0]
-            return self.jid_is_room_jid(possible_room_jid)
-        # it's not a full jid, so it's not a pm one
-        return False
-
-    def jid_is_room_jid(self, jid: str) -> Optional[bool]:
-        """
-        Return True if it's a room jid, False if it's not, None if we don't know
-        """
-        jid_ = self._jid_ids.get(jid)
-        if jid_ is None:
-            return None
-        return jid_.type == JIDConstant.ROOM_TYPE
-
     def get_account_id(self,
                        account: str,
                        type_: JIDConstant = JIDConstant.NORMAL_TYPE
