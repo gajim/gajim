@@ -92,7 +92,7 @@ log = logging.getLogger('gajim.c.storage.archive')
 class JidsTableRow(NamedTuple):
     jid_id: int
     jid: JID
-    type: str
+    type: JIDConstant
 
 
 class ConversationRow(NamedTuple):
@@ -346,8 +346,9 @@ class MessageArchiveStorage(SqliteStorage):
 
         sql = 'INSERT INTO jids (jid, type) VALUES (?, ?)'
         lastrowid = self._con.execute(sql, (jid, type_)).lastrowid
-        Row = namedtuple('Row', 'jid_id jid type')
-        self._jid_ids[jid] = Row(lastrowid, jid, type_)
+        self._jid_ids[jid] = JidsTableRow(jid_id=lastrowid,
+                                          jid=jid,
+                                          type=type_)
         self._delayed_commit()
         return lastrowid
 
@@ -1091,7 +1092,8 @@ class MessageArchiveStorage(SqliteStorage):
         if is_groupchat:
             type_ = JIDConstant.ROOM_TYPE
 
-        archive_id = self.get_jid_id(str(properties.jid.bare), type_=type_)
+        assert properties.jid is not None
+        archive_id = self.get_jid_id(properties.jid.bare, type_=type_)
         account_id = self.get_account_id(account)
 
         if is_groupchat:
@@ -1131,6 +1133,7 @@ class MessageArchiveStorage(SqliteStorage):
             additional_data = result.additional_data
 
         if properties.is_moderation:
+            assert properties.moderation is not None
             additional_data.set_value(
                 'retracted', 'by', properties.moderation.moderator_jid)
             additional_data.set_value(

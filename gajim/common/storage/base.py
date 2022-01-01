@@ -78,7 +78,7 @@ sqlite3.register_converter('jid', _jid_converter)
 sqlite3.register_adapter(JID, _jid_adapter)
 
 def _convert_disco_info(disco_info: bytes) -> DiscoInfo:
-    return parse_disco_info(Iq(node=disco_info))
+    return parse_disco_info(Iq(node=disco_info))  # type: ignore
 
 def _adapt_disco_info(disco_info: DiscoInfo) -> str:
     return str(disco_info.stanza)

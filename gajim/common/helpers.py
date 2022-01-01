@@ -836,7 +836,7 @@ class AdditionalDataDict(collections.UserDict):
             path_childs = full_path.split(':')
         return path_childs
 
-    def set_value(self, full_path: str, key: str, value: str) -> None:
+    def set_value(self, full_path: str, key: str, value: Optional[str]) -> None:
         path_childs = self._get_path_childs(full_path)
         _dict = self.data
         for path in path_childs:
