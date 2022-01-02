@@ -97,7 +97,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self.register_events([
             ('presence-received', ged.GUI1, self._on_event),
-            ('message-sent', ged.OUT_POSTCORE, self._on_event),
+            ('message-sent', ged.GUI1, self._on_event),
             ('message-received', ged.CORE, self._on_event),
             ('mam-message-received', ged.CORE, self._on_event),
             ('gc-message-received', ged.CORE, self._on_event),
