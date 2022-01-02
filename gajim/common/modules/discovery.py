@@ -21,7 +21,8 @@ from nbxmpp.errors import StanzaError
 from nbxmpp.errors import is_error
 
 from gajim.common import app
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import ServerDiscoReceived
+from gajim.common.events import MucDiscoUpdate
 from gajim.common.modules.util import as_task
 from gajim.common.modules.base import BaseModule
 
@@ -96,7 +97,7 @@ class Discovery(BaseModule):
         except nbxmpp.NodeProcessed:
             pass
 
-        app.nec.push_incoming_event(NetworkEvent('server-disco-received'))
+        app.ged.raise_event(ServerDiscoReceived())
 
     def discover_account_info(self):
         own_jid = self._con.get_own_jid().bare
@@ -228,8 +229,7 @@ class Discovery(BaseModule):
                 app.interface.avatar_storage.invalidate_cache(result.info.jid)
 
         self._con.get_module('VCardAvatars').muc_disco_info_update(result.info)
-        app.nec.push_incoming_event(NetworkEvent(
-            'muc-disco-update',
+        app.ged.raise_event(MucDiscoUpdate(
             account=self._account,
             jid=result.info.jid))
 

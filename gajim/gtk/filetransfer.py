@@ -21,7 +21,8 @@ import os
 import time
 import logging
 from functools import partial
-from enum import IntEnum, unique
+from enum import IntEnum
+from enum import unique
 from datetime import datetime
 
 from gi.repository import Gtk
@@ -32,6 +33,8 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import helpers
+from gajim.common.events import FileRequestSent
+from gajim.common.events import Notification
 from gajim.common.const import KindConstant
 from gajim.common.i18n import _
 from gajim.common.file_props import FilesProp
@@ -41,7 +44,6 @@ from gajim.common.helpers import AdditionalDataDict
 from gajim.common.modules.bytestream import is_transfer_active
 from gajim.common.modules.bytestream import is_transfer_paused
 from gajim.common.modules.bytestream import is_transfer_stopped
-from gajim.common.nec import NetworkEvent
 
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
@@ -183,9 +185,8 @@ class FileTransfersWindow:
         if not app.settings.get('notify_on_file_complete'):
             return
 
-        app.nec.push_incoming_event(
-            NetworkEvent('notification',
-                         account=event.account,
+        app.ged.raise_event(
+            Notification(account=event.account,
                          jid=event.jid,
                          notif_type='file-transfer',
                          notif_detail='file-completed',
@@ -206,9 +207,8 @@ class FileTransfersWindow:
         if app.window.is_chat_active(event.account, event.jid):
             return
 
-        app.nec.push_incoming_event(
-            NetworkEvent('notification',
-                         account=event.account,
+        app.ged.raise_event(
+            Notification(account=event.account,
                          jid=event.jid,
                          notif_type='file-transfer',
                          notif_detail='file-send-error',
@@ -234,9 +234,8 @@ class FileTransfersWindow:
             return
 
         text = _('File: %s') % event.file_props.name
-        app.nec.push_incoming_event(
-            NetworkEvent('notification',
-                         account=account,
+        app.ged.raise_event(
+            Notification(account=account,
                          jid=event.jid,
                          notif_type='file-transfer',
                          notif_detail=notif_detail,
@@ -262,9 +261,8 @@ class FileTransfersWindow:
             return
 
         text = _('%s wants to send you a file') % contact.name
-        app.nec.push_incoming_event(
-            NetworkEvent('notification',
-                         account=account,
+        app.ged.raise_event(
+            Notification(account=account,
                          jid=event.jid,
                          notif_type='file-transfer',
                          notif_detail='file-request-received',
@@ -420,11 +418,10 @@ class FileTransfersWindow:
         client = app.get_client(account)
         client.get_module('Jingle').start_file_transfer(
             str(resource_jid), file_props)
-        app.nec.push_incoming_event(
-            NetworkEvent('file-request-sent',
-                         file_props=file_props,
-                         account=account,
-                         jid=contact.jid))
+        app.ged.raise_event(
+            FileRequestSent(file_props=file_props,
+                            account=account,
+                            jid=contact.jid))
         self.add_transfer(account, contact, file_props)
 
         return True

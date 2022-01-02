@@ -17,7 +17,7 @@
 from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import LocationReceived
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import store_publish
@@ -51,12 +51,12 @@ class UserLocation(BaseModule):
         else:
             self._locations[properties.jid] = data
 
-        app.nec.push_incoming_event(
-            NetworkEvent('location-received',
-                         account=self._account,
-                         jid=properties.jid.bare,
-                         location=data,
-                         is_self_message=properties.is_self_message))
+        app.ged.raise_event(
+            LocationReceived(
+                account=self._account,
+                jid=properties.jid.bare,
+                location=data,
+                is_self_message=properties.is_self_message))
 
     @store_publish
     def set_location(self, location):

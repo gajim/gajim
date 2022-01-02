@@ -33,7 +33,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.exceptions import PluginsystemError
 from gajim.common.helpers import open_uri
-from gajim.common.nec import EventHelper
+from gajim.common.ged import EventHelper
 
 from gajim.plugins.helpers import GajimPluginActivateException
 from gajim.plugins.plugins_i18n import _

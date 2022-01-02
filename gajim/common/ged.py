@@ -10,17 +10,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
-
-'''
-Global Events Dispatcher module.
-
-:author: Mateusz Biliński <mateusz@bilinski.it>
-:since: 8th August 2008
-:copyright: Copyright (2008) Mateusz Biliński <mateusz@bilinski.it>
-:copyright: Copyright (2011) Yann Leboulanger <asterix@lagaule.org>
-:license: GPL
-'''
+# along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import annotations
 
@@ -33,7 +23,8 @@ import inspect
 
 from nbxmpp import NodeProcessed
 
-from gajim.common.nec import NetworkEvent
+from gajim.common import app
+from gajim.common.events import ApplicationEvent
 
 log = logging.getLogger('gajim.c.ged')
 
@@ -50,7 +41,8 @@ POSTGUI2 = 100
 POSTGUI = 110
 
 
-HandlerFuncT = Callable[[NetworkEvent], Any]
+HandlerFuncT = Callable[[ApplicationEvent], Any]
+EventHelperHandlersT = list[tuple[str, int, Callable[[ApplicationEvent], Any]]]
 
 
 class GlobalEventsDispatcher:
@@ -91,8 +83,8 @@ class GlobalEventsDispatcher:
                     registered as handler of event "%s". Couldn\'t remove.
                     Error: %s''', handler, priority, event_name, error)
 
-    def raise_event(self, event_name: str, event_obj: NetworkEvent) -> Any:
-
+    def raise_event(self, event_obj: ApplicationEvent) -> Any:
+        event_name = event_obj.name
         log.debug('Raise event: %s', event_name)
         if event_name in self.handlers:
             node_processed = False
@@ -116,3 +108,35 @@ class GlobalEventsDispatcher:
                     traceback.print_exc()
             if node_processed:
                 raise NodeProcessed
+
+
+class EventHelper:
+    def __init__(self):
+        self.__event_handlers: EventHelperHandlersT = []
+
+    def register_event(self,
+                       event_name: str,
+                       priority: int,
+                       handler: Callable[[ApplicationEvent], Any]) -> None:
+
+        self.__event_handlers.append((event_name, priority, handler))
+        app.ged.register_event_handler(event_name, priority, handler)
+
+    def register_events(self, events: EventHelperHandlersT) -> None:
+
+        for handler in events:
+            self.__event_handlers.append(handler)
+            app.ged.register_event_handler(*handler)
+
+    def unregister_event(self,
+                         event_name: str,
+                         priority: int,
+                         handler: Callable[[ApplicationEvent], Any]) -> None:
+
+        self.__event_handlers.remove((event_name, priority, handler))
+        app.ged.register_event_handler(event_name, priority, handler)
+
+    def unregister_events(self) -> None:
+        for handler in self.__event_handlers:
+            app.ged.remove_event_handler(*handler)
+        self.__event_handlers.clear()

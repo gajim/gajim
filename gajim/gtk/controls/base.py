@@ -51,8 +51,8 @@ from gajim.common import i18n
 from gajim.common.helpers import message_needs_highlight
 from gajim.common.helpers import get_file_path_from_dnd_dropped_uri
 from gajim.common.i18n import _
-from gajim.common.nec import EventHelper
-from gajim.common.nec import NetworkEvent
+from gajim.common.ged import EventHelper
+from gajim.common.events import Notification
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_retraction_text
 from gajim.common.const import KindConstant
@@ -1265,9 +1265,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             if text.startswith('/me') or text.startswith('/me\n'):
                 text = f'* {name} {text[3:]}'
 
-        app.nec.push_incoming_event(
-            NetworkEvent('notification',
-                         account=self.account,
+        app.ged.raise_event(
+            Notification(account=self.account,
                          jid=self.contact.jid,
                          notif_type='incoming-message',
                          notif_detail=msg_type,

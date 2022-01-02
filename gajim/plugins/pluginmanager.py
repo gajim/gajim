@@ -38,7 +38,8 @@ import gajim
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import modules
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import PluginAdded
+from gajim.common.events import PluginRemoved
 from gajim.common.i18n import _
 from gajim.common.exceptions import PluginsystemError
 from gajim.common.helpers import Singleton
@@ -302,8 +303,7 @@ class PluginManager(metaclass=Singleton):
         if activate:
             self.activate_plugin(plugin_obj)
 
-        app.nec.push_incoming_event(
-            NetworkEvent('plugin-added', plugin=plugin_obj))
+        app.ged.raise_event(PluginAdded(plugin=plugin_obj))
 
         return plugin_obj
 
@@ -730,8 +730,7 @@ class PluginManager(metaclass=Singleton):
 
         app.settings.remove_plugin(plugin.short_name)
 
-        app.nec.push_incoming_event(
-            NetworkEvent('plugin-removed', plugin=plugin))
+        app.ged.raise_event(PluginRemoved(plugin=plugin))
 
     def get_plugin_by_path(self, plugin_dir):
         for plugin in self.plugins:

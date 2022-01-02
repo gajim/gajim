@@ -34,7 +34,16 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common import modules
 from gajim.common import passwords
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import AccountConnected
+from gajim.common.events import MessageSent
+from gajim.common.events import AccountDisonnected
+from gajim.common.events import PasswordRequired
+from gajim.common.events import PlainConnection
+from gajim.common.events import ShowChanged
+from gajim.common.events import SignedIn
+from gajim.common.events import SimpleNotification
+from gajim.common.events import StanzaReceived
+from gajim.common.events import StanzaSent
 from gajim.common.const import ClientState
 from gajim.common.const import SimpleClientState
 from gajim.common.helpers import get_custom_host
@@ -195,8 +204,8 @@ class Client(Observable):
 
         log.info('Resume failed')
         self.notify('resume-failed')
-        app.nec.push_incoming_event(NetworkEvent(
-            'our-show', account=self._account, show='offline'))
+        app.ged.raise_event(ShowChanged(account=self._account,
+                                        show='offline'))
 
     def _on_resume_successful(self,
                               _client: NBXMPPClient,
@@ -212,17 +221,14 @@ class Client(Observable):
             # Normally show is updated when we receive a presence reflection.
             # On resume, if show has not changed while offline, we don’t send
             # a new presence so we have to trigger the event here.
-            app.nec.push_incoming_event(
-                NetworkEvent('our-show',
-                             account=self._account,
-                             show=self._status))
+            app.ged.raise_event(ShowChanged(account=self._account,
+                                            show=self._status))
 
         self.notify('state-changed', SimpleClientState.CONNECTED)
 
     def _set_client_available(self) -> None:
         self._set_state(ClientState.AVAILABLE)
-        app.nec.push_incoming_event(NetworkEvent('account-connected',
-                                                 account=self._account))
+        app.ged.raise_event(AccountConnected(account=self._account))
 
     def disconnect(self,
                    gracefully: bool,
@@ -282,26 +288,25 @@ class Client(Observable):
                     self._client.set_password(password)
                     self._prepare_for_connect()
 
-                app.nec.push_incoming_event(NetworkEvent(
-                    'password-required', conn=self, on_password=_on_password))
+                app.ged.raise_event(PasswordRequired(conn=self,
+                                                     on_password=_on_password))
 
-            app.nec.push_incoming_event(
-                NetworkEvent('simple-notification',
-                             account=self._account,
-                             notif_type='connection-failed',
-                             title=_('Authentication failed'),
-                             text=text or error))
+            app.ged.raise_event(
+                SimpleNotification(account=self._account,
+                                   notif_type='connection-failed',
+                                   title=_('Authentication failed'),
+                                   text=text or error))
 
         if self._reconnect:
             self._after_disconnect()
             self._schedule_reconnect()
-            app.nec.push_incoming_event(
-                NetworkEvent('our-show', account=self._account, show='error'))
+            app.ged.raise_event(ShowChanged(account=self._account,
+                                            show='error'))
             self.notify('state-changed', SimpleClientState.RESUME_IN_PREGRESS)
 
         else:
-            app.nec.push_incoming_event(NetworkEvent(
-                'our-show', account=self._account, show='offline'))
+            app.ged.raise_event(ShowChanged(account=self._account,
+                                            show='offline'))
             self._after_disconnect()
             self.notify('state-changed', SimpleClientState.DISCONNECTED)
 
@@ -317,8 +322,7 @@ class Client(Observable):
             self._destroy_client = False
             self._create_client()
 
-        app.nec.push_incoming_event(NetworkEvent('account-disconnected',
-                                                 account=self._account))
+        app.ged.raise_event(AccountDisonnected(account=self._account))
 
     def _on_connection_failed(self,
                               _client: NBXMPPClient,
@@ -339,18 +343,17 @@ class Client(Observable):
                         _signal_name: str,
                         stanza: Any) -> None:
 
-        app.nec.push_incoming_event(NetworkEvent('stanza-sent',
-                                                 account=self._account,
-                                                 stanza=stanza))
+        app.ged.raise_event(StanzaSent(account=self._account,
+                                       stanza=stanza))
 
     def _on_stanza_received(self,
                             _client: NBXMPPClient,
                             _signal_name: str,
                             stanza: Any) -> None:
 
-        app.nec.push_incoming_event(NetworkEvent('stanza-received',
-                                                 account=self._account,
-                                                 stanza=stanza))
+        app.ged.raise_event(StanzaReceived(account=self._account,
+                                           stanza=stanza))
+
     def get_own_jid(self) -> JID:
         """
         Return the last full JID we received on a bind event.
@@ -459,9 +462,7 @@ class Client(Observable):
 
         self.notify('state-changed', SimpleClientState.CONNECTED)
 
-        # Inform GUI we just signed in
-        app.nec.push_incoming_event(NetworkEvent(
-            'signed-in', account=self._account, conn=self))
+        app.ged.raise_event(SignedIn(account=self._account, conn=self))
         modules.send_stored_publish(self._account)
 
     def send_stanza(self, stanza):
@@ -501,8 +502,17 @@ class Client(Observable):
         message.set_sent_timestamp()
         message.message_id = self.send_stanza(message.stanza)
 
-        app.nec.push_incoming_event(
-            NetworkEvent('message-sent', jid=message.jid, **vars(message)))
+        app.ged.raise_event(
+            MessageSent(jid=message.jid,
+                        account=message.account,
+                        message=message.message,
+                        chatstate=message.chatstate,
+                        timestamp=message.timestamp,
+                        additional_data=message.additional_data,
+                        label=message.label,
+                        correct_id=message.correct_id,
+                        message_id=message.message_id,
+                        play_sound=message.play_sound))
 
         if message.is_groupchat:
             return
@@ -560,11 +570,9 @@ class Client(Observable):
 
         if warn_about_plain_connection(self._account,
                                        self._client.connection_types):
-            app.nec.push_incoming_event(NetworkEvent(
-                'plain-connection',
-                account=self._account,
-                connect=self._client.connect,
-                abort=self._abort_reconnect))
+            app.ged.raise_event(PlainConnection(account=self._account,
+                                                connect=self._client.connect,
+                                                abort=self._abort_reconnect))
             return
 
         self._client.connect()
@@ -578,8 +586,7 @@ class Client(Observable):
     def _abort_reconnect(self) -> None:
         self._set_state(ClientState.DISCONNECTED)
         self._disable_reconnect_timer()
-        app.nec.push_incoming_event(
-            NetworkEvent('our-show', account=self._account, show='offline'))
+        app.ged.raise_event(ShowChanged(account=self._account, show='offline'))
 
         if self._destroy_client:
             self._client.destroy()

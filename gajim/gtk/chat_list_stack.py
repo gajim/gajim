@@ -23,7 +23,7 @@ from gi.repository import GLib
 from nbxmpp import JID
 
 from gajim.common import app
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import ApplicationEvent
 
 from .chat_filter import ChatFilter
 from .chat_list import ChatList
@@ -288,7 +288,7 @@ class ChatListStack(Gtk.Stack):
         for chat_list in self._chat_lists.values():
             chat_list.mark_as_read(account, jid)
 
-    def process_event(self, event: NetworkEvent) -> None:
+    def process_event(self, event: ApplicationEvent) -> None:
         if event.name not in HANDLED_EVENTS:
             return
 

@@ -61,7 +61,7 @@ from gajim.common import logging_helpers
 from gajim.common.const import GAJIM_FAQ_URI
 from gajim.common.const import GAJIM_WIKI_URI
 from gajim.common.i18n import _
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import ApplicationEvent
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import load_json
 from gajim.common.exceptions import GajimGeneralException
@@ -486,7 +486,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
         for action, accels in shortcuts.items():
             self.set_accels_for_action(action, accels)
 
-    def _on_feature_discovered(self, event: NetworkEvent) -> None:
+    def _on_feature_discovered(self, event: ApplicationEvent) -> None:
         if event.feature == Namespace.MAM_2:
             action = '%s-archive' % event.account
             self.set_action_state(action, True)

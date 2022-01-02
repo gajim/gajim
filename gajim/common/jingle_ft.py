@@ -33,7 +33,7 @@ from gajim.common.jingle_content import contents, JingleContent
 from gajim.common.jingle_transport import JingleTransportSocks5, TransportType
 from gajim.common import helpers
 from gajim.common.helpers import AdditionalDataDict
-from gajim.common.connection_handlers_events import FileRequestReceivedEvent
+from gajim.common.events import FileRequestReceivedEvent
 from gajim.common.jingle_ftstates import (
     StateInitialized, StateCandSent, StateCandReceived, StateTransfering,
     StateCandSentAndRecv, StateTransportReplace)
@@ -131,9 +131,8 @@ class JingleFileTransfer(JingleContent):
 
     def __on_session_initiate(self, stanza, content, error, action):
         log.debug("Jingle FT request received")
-        app.nec.push_incoming_event(
-            FileRequestReceivedEvent(None,
-                                     conn=self.session.connection,
+        app.ged.raise_event(
+            FileRequestReceivedEvent(conn=self.session.connection,
                                      stanza=stanza,
                                      jingle_content=content,
                                      FT_content=self))

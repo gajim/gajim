@@ -60,6 +60,9 @@ from nbxmpp import JID
 from gajim.common import app
 from gajim.common.dbus import logind
 from gajim.common.dbus import music_track
+from gajim.common.events import AccountDisabled, AccountEnabled, FileCompleted, FileHashError
+from gajim.common.events import FileProgress
+from gajim.common.events import FileError
 
 from gajim.gui import menus
 from gajim.dialog_messages import get_dialog
@@ -72,18 +75,15 @@ from gajim.common import helpers
 from gajim.common import passwords
 from gajim.common.helpers import ask_for_status_message
 from gajim.common.structs import OutgoingMessage
-from gajim.common.nec import NetworkEvent
-from gajim.common.nec import NetworkEventsController
 from gajim.common.i18n import _
 from gajim.common.client import Client
 from gajim.common.preview import PreviewManager
 from gajim.common.const import Display
 from gajim.common.file_props import FileProp
-
-from gajim.common.connection_handlers_events import InformationEvent
+from gajim.common.events import InformationEvent
 
 from gajim.common import ged
-from gajim.common.exceptions import FileError
+from gajim.common import exceptions
 
 from gajim.gui.avatar import AvatarStorage
 from gajim.gui.notification import Notification
@@ -134,7 +134,6 @@ class Interface:
 
         app.proxy65_manager = proxy65_manager.Proxy65Manager(app.idlequeue)
 
-        app.nec = NetworkEventsController()
         app.notification = Notification()
 
         self._create_core_handlers_list()
@@ -500,8 +499,7 @@ class Interface:
             return
 
         self._last_ft_progress_update = time.time()
-        app.nec.push_incoming_event(
-            NetworkEvent('file-progress', file_props=file_props))
+        app.ged.raise_event(FileProgress(file_props=file_props))
 
     def handle_event_file_rcv_completed(self,
                                         account: str,
@@ -529,17 +527,15 @@ class Interface:
             else:
                 # We didn't get the hash, sender probably doesn't support that
                 if file_props.error == 0:
-                    app.nec.push_incoming_event(
-                        NetworkEvent('file-completed',
-                                     file_props=file_props,
-                                     account=account,
-                                     jid=jid.bare))
+                    app.ged.raise_event(
+                        FileCompleted(file_props=file_props,
+                                      account=account,
+                                      jid=jid.bare))
                 else:
-                    app.nec.push_incoming_event(
-                        NetworkEvent('file-error',
-                                     file_props=file_props,
-                                     account=account,
-                                     jid=jid.bare))
+                    app.ged.raise_event(
+                        FileError(file_props=file_props,
+                                  account=account,
+                                  jid=jid.bare))
 
                 # End jingle session
                 # TODO: Only if there are no other parallel downloads in
@@ -552,17 +548,15 @@ class Interface:
         else:  # We send a file
             app.socks5queue.remove_sender(file_props.sid, True, True)
             if file_props.error == 0:
-                app.nec.push_incoming_event(
-                    NetworkEvent('file-completed',
-                                 file_props=file_props,
-                                 account=account,
-                                 jid=jid.bare))
+                app.ged.raise_event(
+                    FileCompleted(file_props=file_props,
+                                  account=account,
+                                  jid=jid.bare))
             else:
-                app.nec.push_incoming_event(
-                    NetworkEvent('file-error',
-                                 file_props=file_props,
-                                 account=account,
-                                 jid=jid.bare))
+                app.ged.raise_event(
+                    FileError(file_props=file_props,
+                              account=account,
+                              jid=jid.bare))
 
     @staticmethod
     def __compare_hashes(account: str, file_props: FileProp) -> None:
@@ -577,19 +571,17 @@ class Interface:
         # File is corrupt if the calculated hash differs from the received hash
         jid = JID.from_string(file_props.sender)
         if file_props.hash_ == hash_:
-            app.nec.push_incoming_event(
-                NetworkEvent('file-completed',
-                             file_props=file_props,
-                             account=account,
-                             jid=jid.bare))
+            app.ged.raise_event(
+                FileCompleted(file_props=file_props,
+                              account=account,
+                              jid=jid.bare))
         else:
             # Wrong hash, we need to get the file again!
             file_props.error = -10
-            app.nec.push_incoming_event(
-                NetworkEvent('file-hash-error',
-                             file_props=file_props,
-                             account=account,
-                             jid=jid.bare))
+            app.ged.raise_event(
+                FileHashError(file_props=file_props,
+                              account=account,
+                              jid=jid.bare))
         # End jingle session
         client = app.get_client(account)
         session = client.get_module('Jingle').get_jingle_session(
@@ -619,12 +611,10 @@ class Interface:
                 chat_control.encryption,
                 chat_control.contact,
                 chat_control.is_groupchat)
-        except FileError as error:
-            app.nec.push_incoming_event(
-                InformationEvent(
-                    None,
-                    dialog_name='open-file-error2',
-                    args=error))
+        except exceptions.FileError as error:
+            app.ged.raise_event(
+                InformationEvent(dialog_name='open-file-error2',
+                                 args=error))
             return
 
         transfer.connect('cancel', self._on_cancel_upload)
@@ -795,9 +785,7 @@ class Interface:
         menus.build_accounts_menu()
         app.app.update_app_actions_state()
 
-        app.nec.push_incoming_event(NetworkEvent(
-            'account-enabled',
-            account=account))
+        app.ged.raise_event(AccountEnabled(account=account))
 
         app.connections[account].change_status('online', '')
         window = get_app_window('AccountsWindow')
@@ -817,9 +805,7 @@ class Interface:
         menus.build_accounts_menu()
         app.app.update_app_actions_state()
 
-        app.nec.push_incoming_event(NetworkEvent(
-            'account-disabled',
-            account=account))
+        app.ged.raise_event(AccountDisabled(account=account))
 
         if account == app.ZEROCONF_ACC_NAME:
             app.connections[account].disable_account()

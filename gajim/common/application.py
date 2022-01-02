@@ -23,7 +23,7 @@ import sys
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import configpaths
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import AccountDisonnected
 from gajim.common.client import Client
 from gajim.common.task_manager import TaskManager
 from gajim.common.settings import Settings
@@ -67,7 +67,7 @@ class CoreApplication:
             self._quit_app()
             return
 
-        def _on_disconnect(event: NetworkEvent) -> None:
+        def _on_disconnect(event: AccountDisonnected) -> None:
             accounts_to_disconnect.pop(event.account)
             if not accounts_to_disconnect:
                 self._quit_app()

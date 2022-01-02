@@ -33,8 +33,6 @@ import pickle
 
 from gajim.common import configpaths
 from gajim.common.types import PluginExtensionPoints  # pylint: disable=W0611
-from gajim.common.types import EventHandlersDict  # pylint: disable=W0611
-from gajim.common.types import PluginEvents  # pylint: disable=W0611
 
 from gajim.plugins.helpers import log
 from gajim.plugins.gui import GajimPluginConfigDialog
@@ -142,7 +140,7 @@ class GajimPlugin:
 
     :type: {} of 2-element tuples
     '''
-    events_handlers = {}  # type: EventHandlersDict
+    events_handlers = {}
     '''
     Dictionary with events handlers.
 
@@ -153,7 +151,7 @@ class GajimPlugin:
 
     :type: {} with 2-element tuples
     '''
-    events = []  # type: PluginEvents
+    events = []
     '''
     New network event classes to be registered in Network Events Controller.
 

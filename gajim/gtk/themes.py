@@ -26,9 +26,10 @@ from gi.repository import Gdk
 from gi.repository import Pango
 
 from gajim.common import app
-from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.const import StyleAttr
+from gajim.common.events import StyleChanged
+from gajim.common.events import ThemeUpdate
 
 from .dialogs import ErrorDialog
 from .dialogs import DialogButton
@@ -224,7 +225,7 @@ class Themes(Gtk.ApplicationWindow):
         self._ui.remove_theme_button.set_sensitive(True)
         self._load_options()
         self._apply_theme(theme)
-        app.nec.push_incoming_event(NetworkEvent('style-changed'))
+        app.ged.raise_event(StyleChanged())
 
     def _load_options(self) -> None:
         self._ui.option_listbox.foreach(self._remove_option)
@@ -293,7 +294,7 @@ class Themes(Gtk.ApplicationWindow):
     def _apply_theme(theme: str) -> None:
         app.settings.set('roster_theme', theme)
         app.css_config.change_theme(theme)
-        app.nec.push_incoming_event(NetworkEvent('theme-update'))
+        app.ged.raise_event(ThemeUpdate())
 
     @staticmethod
     def _update_preferences_window() -> None:
@@ -318,7 +319,7 @@ class Themes(Gtk.ApplicationWindow):
         def _remove_theme():
             if theme == app.settings.get('roster_theme'):
                 self._apply_theme('default')
-                app.nec.push_incoming_event(NetworkEvent('style-changed'))
+                app.ged.raise_event(StyleChanged())
 
             app.css_config.remove_theme(theme)
             self._update_preferences_window()
@@ -397,20 +398,20 @@ class Option(Gtk.ListBoxRow):
         color_string = color.to_string()
         app.css_config.set_value(
             self.option.selector, self.option.attr, color_string, pre=True)
-        app.nec.push_incoming_event(NetworkEvent('style-changed'))
+        app.ged.raise_event(StyleChanged())
         self.get_toplevel().reload_roster_theme()
 
     def _on_font_set(self, font_button: Gtk.FontButton) -> None:
         desc = font_button.get_font_desc()
         app.css_config.set_font(self.option.selector, desc, pre=True)
-        app.nec.push_incoming_event(NetworkEvent('style-changed'))
+        app.ged.raise_event(StyleChanged())
         self.get_toplevel().reload_roster_theme()
 
     def _on_remove(self, *args: Any) -> None:
         self.get_parent().remove(self)
         app.css_config.remove_value(
             self.option.selector, self.option.attr, pre=True)
-        app.nec.push_incoming_event(NetworkEvent('style-changed'))
+        app.ged.raise_event(StyleChanged())
         self.destroy()
 
     def __eq__(self, other):

@@ -30,7 +30,7 @@ from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.helpers import get_global_show
 from gajim.common.helpers import get_uf_show
-from gajim.common.nec import EventHelper
+from gajim.common.ged import EventHelper
 
 from .builder import get_builder
 from .util import get_icon_name

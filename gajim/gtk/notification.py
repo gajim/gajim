@@ -46,7 +46,7 @@ from gajim.common.helpers import allow_showing_notification
 from gajim.common.helpers import exec_command
 from gajim.common.helpers import play_sound
 from gajim.common.helpers import play_sound_file
-from gajim.common.nec import EventHelper
+from gajim.common.ged import EventHelper
 
 from .util import add_css_to_widget
 from .builder import get_builder

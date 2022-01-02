@@ -18,8 +18,10 @@ import nbxmpp
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
+from gajim.common.events import FileRequestError
+from gajim.common.events import FileSendError
+from gajim.common.events import IqErrorReceived
 from gajim.common.helpers import to_user_string
-from gajim.common.nec import NetworkEvent
 from gajim.common.file_props import FilesProp
 from gajim.common.modules.base import BaseModule
 
@@ -47,12 +49,12 @@ class Iq(BaseModule):
                     file_props.error = -3
                 else:
                     file_props.error = -4
-                app.nec.push_incoming_event(
-                    NetworkEvent('file-request-error',
-                                 conn=self._con,
-                                 jid=properties.jid.bare,
-                                 file_props=file_props,
-                                 error_msg=to_user_string(properties.error)))
+                app.ged.raise_event(
+                    FileRequestError(
+                        conn=self._con,
+                        jid=properties.jid.bare,
+                        file_props=file_props,
+                        error_msg=to_user_string(properties.error)))
                 self._con.get_module('Bytestream').disconnect_transfer(
                     file_props)
                 raise nbxmpp.NodeProcessed
@@ -61,19 +63,17 @@ class Iq(BaseModule):
             sid = self._get_sid(properties.id)
             file_props = FilesProp.getFileProp(self._account, sid)
             if file_props:
-                app.nec.push_incoming_event(
-                    NetworkEvent('file-send-error',
-                                 account=self._account,
-                                 jid=str(properties.jid),
-                                 file_props=file_props))
+                app.ged.raise_event(
+                    FileSendError(account=self._account,
+                                  jid=str(properties.jid),
+                                  file_props=file_props))
                 self._con.get_module('Bytestream').disconnect_transfer(
                     file_props)
                 raise nbxmpp.NodeProcessed
 
-        app.nec.push_incoming_event(
-            NetworkEvent('iq-error-received',
-                         account=self._account,
-                         properties=properties))
+        app.ged.raise_event(
+            IqErrorReceived(account=self._account,
+                            properties=properties))
         raise nbxmpp.NodeProcessed
 
     @staticmethod

@@ -27,7 +27,7 @@ from nbxmpp import JID
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import _
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import ApplicationEvent
 
 from .controls.chat import ChatControl
 from .controls.groupchat import GroupchatControl
@@ -128,7 +128,7 @@ class ChatStack(Gtk.Stack, EventHelper):
     def clear(self) -> None:
         self.set_visible_child_name('empty')
 
-    def process_event(self, event: NetworkEvent) -> None:
+    def process_event(self, event: ApplicationEvent) -> None:
         control = self.get_control(event.account, event.jid)
         control.process_event(event)
 

@@ -21,7 +21,9 @@ import time
 from nbxmpp.errors import is_error
 
 from gajim.common import app
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import PingError
+from gajim.common.events import PingReply
+from gajim.common.events import PingSent
 from gajim.common.types import ConnectionT
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import as_task
@@ -50,16 +52,13 @@ class Ping(BaseModule):
 
         self._log.info('Send ping to %s', str(jid))
 
-        app.nec.push_incoming_event(NetworkEvent('ping-sent',
-                                                 account=self._account,
-                                                 contact=contact))
+        app.ged.raise_event(PingSent(account=self._account, contact=contact))
 
         ping_time = time.time()
 
         response = yield self.ping(jid, timeout=10)
         if is_error(response):
-            app.nec.push_incoming_event(NetworkEvent(
-                'ping-error',
+            app.ged.raise_event(PingError(
                 account=self._account,
                 contact=contact,
                 error=str(response)))
@@ -69,7 +68,6 @@ class Ping(BaseModule):
         self._log.info('Received pong from %s after %s seconds',
                        response.jid, diff)
 
-        app.nec.push_incoming_event(NetworkEvent('ping-reply',
-                                                 account=self._account,
-                                                 contact=contact,
-                                                 seconds=diff))
+        app.ged.raise_event(PingReply(account=self._account,
+                                      contact=contact,
+                                      seconds=diff))

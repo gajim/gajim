@@ -18,7 +18,8 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import DisplayedReceived
+from gajim.common.events import ReadStateSync
 from gajim.common.modules.base import BaseModule
 from gajim.common.structs import OutgoingMessage
 
@@ -84,14 +85,20 @@ class ChatMarkers(BaseModule):
             properties.marker.id,
             'displayed')
 
-        app.nec.push_outgoing_event(
-            NetworkEvent(name,
-                         account=self._account,
-                         jid=jid,
-                         properties=properties,
-                         type=properties.type,
-                         is_muc_pm=properties.is_muc_pm,
-                         marker_id=properties.marker.id))
+        if name == 'read-state-sync':
+            event_class = ReadStateSync
+        elif name == 'displayed-received':
+            event_class = DisplayedReceived
+        else:
+            raise ValueError
+
+        app.ged.raise_event(
+            event_class(account=self._account,
+                        jid=jid,
+                        properties=properties,
+                        type=properties.type,
+                        is_muc_pm=properties.is_muc_pm,
+                        marker_id=properties.marker.id))
 
     def _send_marker(self, contact, marker, id_, type_):
         jid = contact.jid

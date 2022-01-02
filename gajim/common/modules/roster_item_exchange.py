@@ -20,8 +20,8 @@ from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
 from gajim.common import helpers
+from gajim.common.events import RosterItemExchangeEvent
 from gajim.common.i18n import _
-from gajim.common.nec import NetworkEvent
 from gajim.common.modules.base import BaseModule
 
 
@@ -86,8 +86,8 @@ class RosterItemExchange(BaseModule):
 
         self._log.info('Items: %s', exchange_items_list)
 
-        app.nec.push_incoming_event(RosterItemExchangeEvent(
-            None, conn=self._con,
+        app.ged.raise_event(RosterItemExchangeEvent(
+            conn=self._con,
             fjid=str(stanza.getFrom()),
             exchange_items_list=exchange_items_list,
             action=action))
@@ -118,7 +118,3 @@ class RosterItemExchange(BaseModule):
                                                'name': name})
             self._log.info('Send contact: %s %s', contact.jid, name)
         self._con.connection.send(stanza)
-
-
-class RosterItemExchangeEvent(NetworkEvent):
-    name = 'roster-item-exchange-received'

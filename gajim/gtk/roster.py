@@ -38,9 +38,9 @@ from gajim.common import types
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 from gajim.common.const import PresenceShowExt
+from gajim.common.events import ApplicationEvent
 from gajim.common.helpers import event_filter
 from gajim.common.i18n import _
-from gajim.common.nec import NetworkEvent
 
 from .menus import get_roster_menu
 from .dialogs import ConfirmationDialog
@@ -194,10 +194,10 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     def _get_contact(self, jid: str) -> types.BareContact:
         return self._client.get_module('Contacts').get_contact(jid)
 
-    def _on_account_state(self, _event: NetworkEvent) -> None:
+    def _on_account_state(self, _event: ApplicationEvent) -> None:
         self.update_actions()
 
-    def _on_theme_update(self, _event: NetworkEvent) -> None:
+    def _on_theme_update(self, _event: ApplicationEvent) -> None:
         self.redraw()
 
     @staticmethod
@@ -524,11 +524,11 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._draw_contact(contact)
 
     @event_filter(['account'])
-    def _on_roster_received(self, _event: NetworkEvent) -> None:
+    def _on_roster_received(self, _event: ApplicationEvent) -> None:
         self._reset_roster()
 
     @event_filter(['account'])
-    def _on_roster_push(self, event: NetworkEvent) -> None:
+    def _on_roster_push(self, event: ApplicationEvent) -> None:
         contact = self._get_contact(event.item.jid)
 
         if event.item.subscription == 'remove':
@@ -768,7 +768,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._group_refs.clear()
         self._store.clear()
 
-    def process_event(self, event: NetworkEvent) -> None:
+    def process_event(self, event: ApplicationEvent) -> None:
         if event.name not in HANDLED_EVENTS:
             return
 

@@ -32,7 +32,7 @@ from gajim.common.helpers import get_uf_affiliation
 from gajim.common.helpers import get_uf_role
 from gajim.common.helpers import get_uf_show
 from gajim.common.i18n import _
-from gajim.common.nec import EventHelper
+from gajim.common.ged import EventHelper
 
 from .dialogs import ConfirmationDialog
 from .dialogs import DialogButton

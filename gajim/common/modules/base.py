@@ -26,7 +26,7 @@ from nbxmpp.structs import StanzaHandler
 
 from gajim.common import types
 from gajim.common import app
-from gajim.common.nec import EventHelper
+from gajim.common.ged import EventHelper
 from gajim.common.modules.util import LogAdapter
 
 

@@ -36,7 +36,7 @@ from gajim.common.helpers import get_uf_affiliation
 from gajim.common.helpers import jid_is_blocked
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import ApplicationEvent
 from gajim.common.modules.contacts import GroupchatContact
 
 from .menus import get_groupchat_roster_menu
@@ -522,7 +522,7 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
             count += self._store.iter_n_children(group_row.iter)
         return count
 
-    def _on_theme_update(self, _event: NetworkEvent) -> None:
+    def _on_theme_update(self, _event: ApplicationEvent) -> None:
         self._redraw()
 
     def clear(self) -> None:

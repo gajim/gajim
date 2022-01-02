@@ -37,6 +37,7 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.util import generate_id
 
 from gajim.common import app
+from gajim.common import events
 from gajim.common.const import KindConstant
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.jingle_transport import get_jingle_transport
@@ -44,10 +45,19 @@ from gajim.common.jingle_transport import JingleTransportIBB
 from gajim.common.jingle_content import get_jingle_content
 from gajim.common.jingle_content import JingleContentSetupException
 from gajim.common.jingle_ft import State
-from gajim.common.connection_handlers_events import FilesProp
-from gajim.common.nec import NetworkEvent
+from gajim.common.file_props import FilesProp
+
 
 log = logging.getLogger("app.c.jingle_session")
+
+
+JINGLE_EVENTS = {
+    'jingle-connected-received': events.JingleConnectedReceived,
+    'jingle-disconnected-received': events.JingleDisconnectedReceived,
+    'jingle-request-received': events.JingleRequestReceived,
+    'jingle-ft-cancelled-received': events.JingleFtCancelledReceived,
+    'jingle-error-received': events.JingleErrorReceived
+}
 
 # FIXME: Move it to JingleSession.States?
 @unique
@@ -866,16 +876,18 @@ class JingleSession:
         self.collect_iq_id(stanza.getID())
         self.state = JingleStates.ACTIVE
 
-    def _raise_event(self, name, **kwargs):
+    def _raise_event(self, name: str, **kwargs):
         jid, resource = app.get_room_and_nick_from_fjid(
             str(self.peerjid))
-        app.nec.push_incoming_event(
-            NetworkEvent(name,
-                         conn=self.connection,
-                         account=self.connection.name,
-                         fjid=self.peerjid,
-                         jid=jid,
-                         sid=self.sid,
-                         resource=resource,
-                         jingle_session=self,
-                         **kwargs))
+
+        event_class = JINGLE_EVENTS[name]
+
+        app.ged.raise_event(
+            event_class(conn=self.connection,
+                        account=self.connection.name,
+                        fjid=self.peerjid,
+                        jid=jid,
+                        sid=self.sid,
+                        resource=resource,
+                        jingle_session=self,
+                        **kwargs))

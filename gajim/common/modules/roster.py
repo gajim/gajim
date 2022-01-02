@@ -19,7 +19,8 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import RosterReceived
+from gajim.common.events import RosterPush
 from gajim.common.modules.base import BaseModule
 
 
@@ -101,8 +102,7 @@ class Roster(BaseModule):
                                          'roster_version',
                                          roster.version)
 
-        app.nec.push_incoming_event(NetworkEvent('roster-received',
-                                                 account=self._account))
+        app.ged.raise_event(RosterReceived(account=self._account))
 
         self._con.connect_machine()
 
@@ -134,9 +134,8 @@ class Roster(BaseModule):
                                          'roster_version',
                                          properties.roster.version)
 
-        app.nec.push_incoming_event(NetworkEvent('roster-push',
-                                                 account=self._account,
-                                                 item=item))
+        app.ged.raise_event(RosterPush(account=self._account,
+                                       item=item))
 
         raise nbxmpp.NodeProcessed
 

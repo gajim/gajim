@@ -41,7 +41,7 @@ from nbxmpp.task import Task
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import helpers
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import StanzaReceived, StanzaSent
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import validate_jid
 from gajim.common.helpers import get_proxy
@@ -252,18 +252,16 @@ class AccountWizard(Assistant):
                         _signal_name: str,
                         stanza: Any
                         ) -> None:
-        app.nec.push_incoming_event(NetworkEvent('stanza-sent',
-                                                 account='AccountWizard',
-                                                 stanza=stanza))
+        app.ged.raise_event(StanzaSent(account='AccountWizard',
+                                       stanza=stanza))
 
     @staticmethod
     def _on_stanza_received(_client: Client,
                             _signal_name: str,
                             stanza: Any
                             ) -> None:
-        app.nec.push_incoming_event(NetworkEvent('stanza-received',
-                                                 account='AccountWizard',
-                                                 stanza=stanza))
+        app.ged.raise_event(StanzaReceived(account='AccountWizard',
+                                           stanza=stanza))
 
     def _test_credentials(self, ignore_all_errors: bool = False) -> None:
         self._show_progress_page(_('Connecting...'),

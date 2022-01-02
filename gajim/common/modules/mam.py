@@ -28,7 +28,11 @@ from nbxmpp.structs import StanzaHandler
 from nbxmpp.modules.util import raise_if_error
 
 from gajim.common import app
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import ArchivingIntervalFinished
+from gajim.common.events import FeatureDiscovered
+from gajim.common.events import MamMessageReceived
+from gajim.common.events import MessageUpdated
+from gajim.common.events import RawMamMessageReceived
 from gajim.common.const import ArchiveState
 from gajim.common.const import KindConstant
 from gajim.common.const import SyncThreshold
@@ -78,10 +82,9 @@ class MAM(BaseModule):
         self.available = True
         self._log.info('Discovered MAM: %s', info.jid)
 
-        app.nec.push_incoming_event(
-            NetworkEvent('feature-discovered',
-                         account=self._account,
-                         feature=Namespace.MAM_2))
+        app.ged.raise_event(
+            FeatureDiscovered(account=self._account,
+                              feature=Namespace.MAM_2))
 
     def _on_client_resume_failed(self, _client, _signal_name):
         self._reset_state()
@@ -170,11 +173,10 @@ class MAM(BaseModule):
         if not properties.is_mam_message:
             return
 
-        app.nec.push_incoming_event(
-            NetworkEvent('raw-mam-message-received',
-                         account=self._account,
-                         stanza=stanza,
-                         properties=properties))
+        app.ged.raise_event(
+            RawMamMessageReceived(account=self._account,
+                                  stanza=stanza,
+                                  properties=properties))
 
         if not self._from_valid_archive(stanza, properties):
             self._log.warning('Message from invalid archive %s',
@@ -270,11 +272,11 @@ class MAM(BaseModule):
 
         correct_id = parse_correction(properties)
         if correct_id is not None:
-            event_attr.update({
-                'correct_id': correct_id,
-            })
-            app.nec.push_incoming_event(
-                NetworkEvent('message-updated', **event_attr))
+            app.ged.raise_event(MessageUpdated(account=self._account,
+                                               jid=event_attr['jid'],
+                                               msgtxt=properties.body,
+                                               properties=properties,
+                                               correct_id=correct_id))
             app.storage.archive.store_message_correction(
                 self._account,
                 properties.jid.bare,
@@ -294,8 +296,7 @@ class MAM(BaseModule):
             stanza_id=stanza_id,
             message_id=properties.id)
 
-        app.nec.push_incoming_event(
-            NetworkEvent('mam-message-received', **event_attr))
+        app.ged.raise_event(MamMessageReceived(**event_attr))
 
     def _is_valid_request(self, properties):
         valid_id = self._mam_query_ids.get(properties.mam.archive, None)
@@ -531,8 +532,7 @@ class MAM(BaseModule):
                            result.jid, result.rsm.last)
             app.storage.archive.set_archive_infos(
                 result.jid, oldest_mam_timestamp=timestamp)
-            app.nec.push_incoming_event(NetworkEvent(
-                'archiving-interval-finished',
+            app.ged.raise_event(ArchivingIntervalFinished(
                 account=self._account,
                 query_id=queryid))
 

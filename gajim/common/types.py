@@ -40,15 +40,12 @@ if TYPE_CHECKING:
     from gajim.common.modules.contacts import ResourceContact
     from gajim.common.modules.contacts import GroupchatContact
     from gajim.common.modules.contacts import GroupchatParticipant
-    from gajim.common.nec import NetworkEvent
-    from gajim.common.nec import NetworkEventsController
 
     from gajim.gui_interface import Interface
     from gajim.common.settings import Settings
     from gajim.gtk.css_config import CSSConfig
 
 
-NetworkEventsControllerT = Union['NetworkEventsController']
 InterfaceT = Union['Interface']
 
 ConnectionT = Union['Client', 'ConnectionZeroconf']
@@ -61,9 +58,6 @@ PEPHandlersDict = Dict[str, List[PEPNotifyCallback]]
 # Plugins
 PluginExtensionPoints = Dict[str, Tuple[Optional[Callable[..., None]],
                                         Optional[Callable[..., None]]]]
-EventHandlersDict = Dict[
-    str, Tuple[int, Callable[['NetworkEvent'], Optional[bool]]]]
-PluginEvents = List['NetworkEvent']
 
 SettingsT = Union['Settings']
 

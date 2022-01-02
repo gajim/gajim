@@ -39,7 +39,7 @@ from gajim.common.jingle_transport import JingleTransportICEUDP
 from gajim.common.jingle_content import contents
 from gajim.common.jingle_content import JingleContent
 from gajim.common.jingle_content import JingleContentSetupException
-from gajim.common.connection_handlers_events import InformationEvent
+from gajim.common.events import InformationEvent
 from gajim.common.jingle_session import FailedApplication
 
 
@@ -125,9 +125,8 @@ class JingleRTPContent(JingleContent):
             gst_bin = Gst.parse_bin_from_description(pipeline, True)
             return gst_bin
         except GLib.GError as err:
-            app.nec.push_incoming_event(
+            app.ged.raise_event(
                 InformationEvent(
-                    None,
                     conn=self.session.connection,
                     level='error',
                     pri_txt=_('%s configuration error') % text,
@@ -245,9 +244,9 @@ class JingleRTPContent(JingleContent):
             log.error(gerror_msg)
             log.error(debug_msg)
             if not self.stream_failed_once:
-                app.nec.push_incoming_event(
+                app.ged.raise_event(
                     InformationEvent(
-                        None, dialog_name='gstreamer-error',
+                        dialog_name='gstreamer-error',
                         kwargs={'error': gerror_msg, 'debug': debug_msg}))
 
             sink_pad = self.p2psession.get_property('sink-pad')

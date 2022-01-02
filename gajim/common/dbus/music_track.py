@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
 import logging
 
 from gi.repository import Gio
@@ -26,7 +28,7 @@ from gi.repository import GLib
 from nbxmpp.structs import TuneData
 
 from gajim.common import app
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import MusicTrackChanged
 
 log = logging.getLogger('gajim.c.dbus.music_track')
 
@@ -48,13 +50,12 @@ class MusicTrackListener:
         self.connection = None
         self._current_tune = None
 
-    def _emit(self, info):
+    def _emit(self, info: Optional[TuneData]) -> None:
         self._current_tune = info
-        app.nec.push_incoming_event(
-            NetworkEvent('music-track-changed', info=info))
+        app.ged.raise_event(MusicTrackChanged(info=info))
 
     @property
-    def current_tune(self):
+    def current_tune(self) -> Optional[TuneData]:
         return self._current_tune
 
     def start(self):

@@ -22,7 +22,11 @@ from nbxmpp.structs import StanzaHandler
 from nbxmpp.util import generate_id
 
 from gajim.common import app
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import GcMessageReceived
+from gajim.common.events import MessageError
+from gajim.common.events import MessageReceived
+from gajim.common.events import MessageUpdated
+from gajim.common.events import RawMessageReceived
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import should_log
 from gajim.common.const import KindConstant
@@ -88,8 +92,7 @@ class Message(BaseModule):
 
         self._log.info('Received from %s', stanza.getFrom())
 
-        app.nec.push_incoming_event(NetworkEvent(
-            'raw-message-received',
+        app.ged.raise_event(RawMessageReceived(
             conn=self._con,
             stanza=stanza,
             account=self._account))
@@ -190,10 +193,13 @@ class Message(BaseModule):
 
         correct_id = parse_correction(properties)
         if correct_id is not None:
-            event_attr.update({
-                'correct_id': correct_id,
-            })
-            event = NetworkEvent('message-updated', **event_attr)
+            event = MessageUpdated(
+                        account=self._account,
+                        jid=event_attr['jid'],
+                        msgtxt=msgtxt,
+                        properties=properties,
+                        correct_id=correct_id)
+
             if should_log(self._account, jid):
                 app.storage.archive.store_message_correction(
                     self._account,
@@ -201,7 +207,7 @@ class Message(BaseModule):
                     correct_id,
                     msgtxt,
                     properties.type.is_groupchat)
-            app.nec.push_incoming_event(event)
+            app.ged.raise_event(event)
             return
 
         if type_.is_groupchat:
@@ -211,14 +217,13 @@ class Message(BaseModule):
             event_attr.update({
                 'room_jid': jid,
             })
-            event = NetworkEvent('gc-message-received', **event_attr)
-            app.nec.push_incoming_event(event)
+            event = GcMessageReceived(**event_attr)
+            app.ged.raise_event(event)
             # TODO: Some plugins modify msgtxt in the GUI event
             self._log_muc_message(event)
             return
 
-        app.nec.push_incoming_event(
-            NetworkEvent('message-received', **event_attr))
+        app.ged.raise_event(MessageReceived(**event_attr))
 
         log_type = KindConstant.CHAT_MSG_RECV
         if properties.is_sent_carbon:
@@ -251,9 +256,8 @@ class Message(BaseModule):
             properties.id,
             properties.error)
 
-        app.nec.push_incoming_event(
-            NetworkEvent('message-error',
-                         account=self._account,
+        app.ged.raise_event(
+            MessageError(account=self._account,
                          jid=jid,
                          room_jid=jid,
                          message_id=properties.id,

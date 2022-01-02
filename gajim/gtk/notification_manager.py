@@ -22,7 +22,7 @@ from nbxmpp import JID
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import Notification
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import get_muc_context
 
@@ -143,9 +143,8 @@ class NotificationManager(Gtk.ListBox):
                 event.jid)
             text = _('%s asks you to share your status') % contact.name
 
-            app.nec.push_incoming_event(
-                NetworkEvent('notification',
-                             account=self._account,
+            app.ged.raise_event(
+                Notification(account=self._account,
                              jid=event.jid,
                              notif_type='subscription-request',
                              title=_('Subscription Request'),
@@ -162,9 +161,8 @@ class NotificationManager(Gtk.ListBox):
                 event.jid)
             text = _('%s stopped sharing their status') % contact.name
 
-            app.nec.push_incoming_event(
-                NetworkEvent('notification',
-                             account=self._account,
+            app.ged.raise_event(
+                Notification(account=self._account,
                              jid=event.jid,
                              notif_type='unsubscribed',
                              title=_('Contact Unsubscribed'),
@@ -186,9 +184,8 @@ class NotificationManager(Gtk.ListBox):
                 'contact': contact.name,
                 'chat': event.info.muc_name}
 
-            app.nec.push_incoming_event(
-                NetworkEvent('notification',
-                             account=self._account,
+            app.ged.raise_event(
+                Notification(account=self._account,
                              jid=jid,
                              notif_type='group-chat-invitation',
                              title=_('Group Chat Invitation'),

@@ -39,16 +39,18 @@ from gajim.common import app
 from gajim.common import modules
 from gajim.common import helpers
 from gajim.common import idle
-from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.const import ClientState
 from gajim.common.zeroconf import client_zeroconf
 from gajim.common.zeroconf import zeroconf
 from gajim.common.zeroconf.connection_handlers_zeroconf import ConnectionHandlersZeroconf
-from gajim.common.connection_handlers_events import InformationEvent
+from gajim.common.events import InformationEvent
 
 log = logging.getLogger('gajim.c.connection_zeroconf')
 
+
+class NetworkEvent:
+    pass
 
 class OurShowEvent(NetworkEvent):
 
@@ -63,7 +65,7 @@ class ConnectionLostEvent(NetworkEvent):
     name = 'connection-lost'
 
     def generate(self):
-        app.nec.push_incoming_event(OurShowEvent(
+        app.ged.raise_event(OurShowEvent(
             None,
             conn=self.conn,
             show='offline'))
@@ -266,7 +268,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
             diffs = self.roster.getDiffs()
             for key in diffs:
                 self.roster.setItem(key)
-                app.nec.push_incoming_event(NetworkEvent(
+                app.ged.raise_event(NetworkEvent(
                     'roster-info', conn=self, jid=key,
                     nickname=self.roster.getName(key), sub='both',
                     ask='no', groups=self.roster.getGroups(key),
@@ -278,7 +280,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
     # callbacks called from zeroconf
     def _on_new_service(self, jid):
         self.roster.setItem(jid)
-        app.nec.push_incoming_event(NetworkEvent(
+        app.ged.raise_event(NetworkEvent(
             'roster-info', conn=self, jid=jid,
             nickname=self.roster.getName(jid), sub='both',
             ask='no', groups=self.roster.getGroups(jid),
@@ -325,7 +327,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
         self._update_contact(event_)
 
-        app.nec.push_incoming_event(event_)
+        app.ged.raise_event(event_)
 
     def _update_contact(self, event):
         jid = event.jid
@@ -370,41 +372,41 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
     def _on_name_conflictCB(self, alt_name):
         self.disconnect()
-        app.nec.push_incoming_event(OurShowEvent(None, conn=self,
+        app.ged.raise_event(OurShowEvent(None, conn=self,
             show='offline'))
-        app.nec.push_incoming_event(
+        app.ged.raise_event(
             NetworkEvent('zeroconf-name-conflict',
                          conn=self,
                          alt_name=alt_name))
 
     def _on_error(self, message):
-        app.nec.push_incoming_event(InformationEvent(
-            None, dialog_name='avahi-error', args=message))
+        app.ged.raise_event(InformationEvent(
+            dialog_name='avahi-error', args=message))
 
     def connect(self, show='online', msg=''):
         self.get_config_values_or_default()
         if not self.connection:
             self.connection = client_zeroconf.ClientZeroconf(self)
             if not zeroconf.test_zeroconf():
-                app.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                app.ged.raise_event(OurShowEvent(None, conn=self,
                     show='offline'))
                 self._status = 'offline'
-                app.nec.push_incoming_event(ConnectionLostEvent(None,
+                app.ged.raise_event(ConnectionLostEvent(None,
                     conn=self, title=_('Could not connect to "%s"') % self.name,
                     msg=_('Please check if Avahi or Bonjour is installed.')))
                 self.disconnect()
                 return
             result = self.connection.connect(show, msg)
             if not result:
-                app.nec.push_incoming_event(OurShowEvent(None, conn=self,
+                app.ged.raise_event(OurShowEvent(None, conn=self,
                     show='offline'))
                 self._status = 'offline'
                 if result is False:
-                    app.nec.push_incoming_event(ConnectionLostEvent(None,
+                    app.ged.raise_event(ConnectionLostEvent(None,
                         conn=self, title=_('Could not start local service'),
                         msg=_('Unable to bind to port %d.') % self.port))
                 else: # result is None
-                    app.nec.push_incoming_event(ConnectionLostEvent(None,
+                    app.ged.raise_event(ConnectionLostEvent(None,
                         conn=self, title=_('Could not start local service'),
                         msg=_('Please check if avahi/bonjour-daemon is running.')))
                 self.disconnect()
@@ -412,12 +414,12 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
         else:
             self.connection.announce()
         self.roster = self.connection.getRoster()
-        app.nec.push_incoming_event(NetworkEvent('roster-received', conn=self,
+        app.ged.raise_event(NetworkEvent('roster-received', conn=self,
             roster=self.roster.copy(), received_from_server=True))
 
         # display contacts already detected and resolved
         for jid in self.roster.keys():
-            app.nec.push_incoming_event(NetworkEvent(
+            app.ged.raise_event(NetworkEvent(
                 'roster-info', conn=self, jid=jid,
                 nickname=self.roster.getName(jid), sub='both',
                 ask='no', groups=self.roster.getGroups(jid),
@@ -444,12 +446,12 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
             self.connection = None
             # stop calling the timeout
             self.call_resolve_timeout = False
-        app.nec.push_incoming_event(OurShowEvent(None, conn=self,
+        app.ged.raise_event(OurShowEvent(None, conn=self,
             show='offline'))
 
     def _on_disconnect(self):
         self._set_state(ClientState.DISCONNECTED)
-        app.nec.push_incoming_event(OurShowEvent(None, conn=self,
+        app.ged.raise_event(OurShowEvent(None, conn=self,
             show='offline'))
 
     def reannounce(self):
@@ -490,29 +492,29 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
         # stay offline when zeroconf does something wrong
         if check:
             self._set_state(ClientState.CONNECTED)
-            app.nec.push_incoming_event(NetworkEvent('signed-in', conn=self))
-            app.nec.push_incoming_event(OurShowEvent(None, conn=self,
+            app.ged.raise_event(NetworkEvent('signed-in', conn=self))
+            app.ged.raise_event(OurShowEvent(None, conn=self,
                 show=show))
         else:
             # show notification that avahi or system bus is down
             self._set_state(ClientState.DISCONNECTED)
-            app.nec.push_incoming_event(OurShowEvent(None, conn=self,
+            app.ged.raise_event(OurShowEvent(None, conn=self,
                 show='offline'))
             self._status = 'offline'
-            app.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
+            app.ged.raise_event(ConnectionLostEvent(None, conn=self,
                 title=_('Could not change status of account "%s"') % self.name,
                 msg=_('Please check if avahi-daemon is running.')))
 
     def _update_status(self, show, msg, idle_time=None):
         if self.connection.set_show_msg(show, msg):
-            app.nec.push_incoming_event(OurShowEvent(None, conn=self,
+            app.ged.raise_event(OurShowEvent(None, conn=self,
                 show=show))
         else:
             # show notification that avahi or system bus is down
-            app.nec.push_incoming_event(OurShowEvent(None, conn=self,
+            app.ged.raise_event(OurShowEvent(None, conn=self,
                 show='offline'))
             self._status = 'offline'
-            app.nec.push_incoming_event(ConnectionLostEvent(None, conn=self,
+            app.ged.raise_event(ConnectionLostEvent(None, conn=self,
                 title=_('Could not change status of account "%s"') % self.name,
                 msg=_('Please check if avahi-daemon is running.')))
 
@@ -537,7 +539,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
     def _send_message(self, message):
         def on_send_ok(stanza_id):
-            app.nec.push_incoming_event(
+            app.ged.raise_event(
                     NetworkEvent('messasge-sent',
                                  jid=message.jid,
                                  **vars(message)))
@@ -545,7 +547,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
 
         def on_send_not_ok(reason):
             reason += ' ' + _('Your message could not be sent.')
-            app.nec.push_incoming_event(NetworkEvent(
+            app.ged.raise_event(NetworkEvent(
                 'zeroconf-error',
                 account=self.name,
                 jid=message.jid,
@@ -560,7 +562,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
             # Contact Offline
             error_message = _(
                 'Contact is offline. Your message could not be sent.')
-            app.nec.push_incoming_event(NetworkEvent(
+            app.ged.raise_event(NetworkEvent(
                 'zeroconf-error',
                 account=self.name,
                 jid=message.jid,
@@ -578,12 +580,12 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
     def _event_dispatcher(self, realm, event, data):
         if realm == '':
             if event == 'STANZA RECEIVED':
-                app.nec.push_incoming_event(
+                app.ged.raise_event(
                     NetworkEvent('stanza-received',
                                  conn=self,
                                  stanza_str=str(data)))
             elif event == 'DATA SENT':
-                app.nec.push_incoming_event(
+                app.ged.raise_event(
                     NetworkEvent('stanza-sent',
                                  conn=self,
                                  stanza_str=str(data)))
@@ -593,7 +595,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
                 error_message = _(
                     'Connection to host could not be established: '
                     'Timeout while sending data.')
-                app.nec.push_incoming_event(NetworkEvent(
+                app.ged.raise_event(NetworkEvent(
                     'zeroconf-error',
                     account=self.name,
                     jid=frm,

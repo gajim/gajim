@@ -18,7 +18,7 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.errors import is_error
 
 from gajim.common import app
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import SecCatalogReceived
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import as_task
 
@@ -57,10 +57,9 @@ class SecLabels(BaseModule):
 
         self._log.info('Received catalog: %s', jid)
 
-        app.nec.push_incoming_event(NetworkEvent('sec-catalog-received',
-                                                 account=self._account,
-                                                 jid=jid,
-                                                 catalog=catalog))
+        app.ged.raise_event(SecCatalogReceived(account=self._account,
+                                               jid=jid,
+                                               catalog=catalog))
 
     def get_catalog(self, jid):
         return self._catalogs.get(jid)

@@ -20,7 +20,7 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.modules.receipts import build_receipt
 
 from gajim.common import app
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import ReceiptReceived
 from gajim.common.modules.base import BaseModule
 
 
@@ -86,11 +86,11 @@ class Receipts(BaseModule):
                 properties.receipt.id,
                 'received')
 
-            app.nec.push_incoming_event(
-                NetworkEvent('receipt-received',
-                             account=self._account,
-                             jid=jid,
-                             receipt_id=properties.receipt.id))
+            app.ged.raise_event(
+                ReceiptReceived(
+                    account=self._account,
+                    jid=jid,
+                    receipt_id=properties.receipt.id))
 
             raise nbxmpp.NodeProcessed
 

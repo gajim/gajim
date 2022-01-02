@@ -52,7 +52,7 @@ from gajim.common.helpers import URL_REGEX
 from gajim.common.const import LOCATION_DATA
 from gajim.common.const import Display
 from gajim.common.const import StyleAttr
-from gajim.common.nec import EventHelper as CommonEventHelper
+from gajim.common.ged import EventHelper as CommonEventHelper
 from gajim.common.styling import PlainBlock
 
 from .const import GajimIconSet

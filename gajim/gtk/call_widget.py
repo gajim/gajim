@@ -34,7 +34,7 @@ from gajim.common.const import KindConstant
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.i18n import _
 from gajim.common.jingle_rtp import JingleAudio
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import Notification
 from gajim.common.helpers import play_sound
 from gajim.common import sound
 
@@ -244,9 +244,8 @@ class CallWidget(Gtk.Box):
             play_sound('incoming-call-sound', self._account, loop=True)
 
             self.emit('incoming-call', event)
-            app.nec.push_incoming_event(
-                NetworkEvent('notification',
-                             account=self._account,
+            app.ged.raise_event(
+                Notification(account=self._account,
                              jid=self._contact.jid,
                              notif_type='incoming-call',
                              title=_('Incoming Call'),

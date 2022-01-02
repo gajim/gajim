@@ -31,7 +31,7 @@ from nbxmpp.task import Task
 from gi.repository import GLib
 
 from gajim.common import app
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import BookmarksReceived
 from gajim.common.types import BookmarksDict
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
@@ -99,8 +99,8 @@ class Bookmarks(BaseModule):
         old_bookmarks = self._bookmarks.copy()
         self._bookmarks = bookmarks
         self._act_on_changed_bookmarks(old_bookmarks)
-        app.nec.push_incoming_event(
-            NetworkEvent('bookmarks-received', account=self._account))
+        app.ged.raise_event(
+            BookmarksReceived(account=self._account))
 
     @event_node(Namespace.BOOKMARKS_1)
     def _bookmark_1_event_received(self, _con, _stanza, properties):
@@ -134,8 +134,8 @@ class Bookmarks(BaseModule):
             self._bookmarks[new_bookmark.jid] = new_bookmark
 
         self._act_on_changed_bookmarks(old_bookmarks)
-        app.nec.push_incoming_event(
-            NetworkEvent('bookmarks-received', account=self._account))
+        app.ged.raise_event(
+            BookmarksReceived(account=self._account))
 
     def pass_disco(self, info):
         self._node_max = NODE_MAX_NS in info.features
@@ -220,8 +220,8 @@ class Bookmarks(BaseModule):
         self._request_in_progress = False
         self._bookmarks = self._convert_to_dict(bookmarks)
         self.auto_join_bookmarks(self.bookmarks)
-        app.nec.push_incoming_event(
-            NetworkEvent('bookmarks-received', account=self._account))
+        app.ged.raise_event(
+            BookmarksReceived(account=self._account))
 
     def store_bookmarks(self, bookmarks: List[BookmarkData]) -> None:
         if not app.account_is_available(self._account):
@@ -232,8 +232,8 @@ class Bookmarks(BaseModule):
 
         self._nbxmpp(self._bookmark_module()).store_bookmarks(bookmarks)
 
-        app.nec.push_incoming_event(
-            NetworkEvent('bookmarks-received', account=self._account))
+        app.ged.raise_event(
+            BookmarksReceived(account=self._account))
 
     def _join_with_timeout(self, bookmarks: List[BookmarkData]) -> None:
         self._join_timeouts.pop(0)

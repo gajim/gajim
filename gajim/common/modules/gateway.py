@@ -18,7 +18,8 @@ import nbxmpp
 from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import AgentRemoved
+from gajim.common.events import GatewayPromptReceived
 from gajim.common.modules.base import BaseModule
 
 
@@ -57,9 +58,8 @@ class Gateway(BaseModule):
                     # This way we'll really remove it
                     app.to_be_removed[self._account].remove(contact.jid)
 
-        app.nec.push_incoming_event(
-            NetworkEvent('agent-removed',
-                         conn=self._con,
+        app.ged.raise_event(
+            AgentRemoved(conn=self._con,
                          agent=agent,
                          jid_list=jid_list))
 
@@ -88,13 +88,12 @@ class Gateway(BaseModule):
             prompt = None
             prompt_jid = None
 
-        app.nec.push_incoming_event(
-            NetworkEvent('gateway-prompt-received',
-                         conn=self._con,
-                         fjid=fjid,
-                         jid=jid,
-                         resource=resource,
-                         desc=desc,
-                         prompt=prompt,
-                         prompt_jid=prompt_jid,
-                         stanza=stanza))
+        app.ged.raise_event(
+            GatewayPromptReceived(conn=self._con,
+                                  fjid=fjid,
+                                  jid=jid,
+                                  resource=resource,
+                                  desc=desc,
+                                  prompt=prompt,
+                                  prompt_jid=prompt_jid,
+                                  stanza=stanza))

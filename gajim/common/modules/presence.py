@@ -23,8 +23,13 @@ from nbxmpp.const import PresenceType
 
 from gajim.common import app
 from gajim.common import idle
+from gajim.common.events import PresenceReceived
+from gajim.common.events import RawPresenceReceived
+from gajim.common.events import ShowChanged
+from gajim.common.events import SubscribePresenceReceived
+from gajim.common.events import SubscribedPresenceReceived
+from gajim.common.events import UnsubscribedPresenceReceived
 from gajim.common.i18n import _
-from gajim.common.nec import NetworkEvent
 from gajim.common.helpers import should_log
 from gajim.common.structs import PresenceData
 from gajim.common.const import KindConstant
@@ -97,17 +102,14 @@ class Presence(BaseModule):
             return
 
         if self._account == 'Local':
-            app.nec.push_incoming_event(
-                NetworkEvent('raw-pres-received',
-                             conn=self._con,
-                             stanza=stanza))
+            app.ged.raise_event(
+                RawPresenceReceived(conn=self._con,
+                                    stanza=stanza))
             return
 
         if properties.is_self_presence:
-            app.nec.push_incoming_event(
-                NetworkEvent('our-show',
-                             account=self._account,
-                             show=properties.show.value))
+            app.ged.raise_event(ShowChanged(account=self._account,
+                                            show=properties.show.value))
             return
 
         jid = properties.jid.bare
@@ -146,8 +148,7 @@ class Presence(BaseModule):
             'contact': None,
         }
 
-        app.nec.push_incoming_event(
-            NetworkEvent('presence-received', **event_attrs))
+        app.ged.raise_event(PresenceReceived(**event_attrs))
 
         self._log_presence(properties)
 
@@ -188,8 +189,7 @@ class Presence(BaseModule):
         status = (properties.status or
                   _('I would like to add you to my roster.'))
 
-        app.nec.push_incoming_event(NetworkEvent(
-            'subscribe-presence-received',
+        app.ged.raise_event(SubscribePresenceReceived(
             conn=self._con,
             account=self._account,
             jid=jid,
@@ -207,8 +207,7 @@ class Presence(BaseModule):
             self.automatically_added.remove(jid)
             raise nbxmpp.NodeProcessed
 
-        app.nec.push_incoming_event(NetworkEvent(
-            'subscribed-presence-received',
+        app.ged.raise_event(SubscribedPresenceReceived(
             account=self._account,
             jid=properties.jid))
         raise nbxmpp.NodeProcessed
@@ -219,8 +218,7 @@ class Presence(BaseModule):
 
     def _unsubscribed_received(self, _con, _stanza, properties):
         self._log.info('Received Unsubscribed: %s', properties.jid)
-        app.nec.push_incoming_event(NetworkEvent(
-            'unsubscribed-presence-received',
+        app.ged.raise_event(UnsubscribedPresenceReceived(
             conn=self._con,
             account=self._account,
             jid=properties.jid.bare))

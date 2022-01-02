@@ -21,7 +21,7 @@ from nbxmpp.structs import StanzaHandler
 from nbxmpp.modules.util import raise_if_error
 
 from gajim.common import app
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import FeatureDiscovered
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import as_task
 
@@ -54,10 +54,9 @@ class Blocking(BaseModule):
             return
 
         self.supported = True
-        app.nec.push_incoming_event(
-            NetworkEvent('feature-discovered',
-                         account=self._account,
-                         feature=Namespace.BLOCKING))
+        app.ged.raise_event(
+            FeatureDiscovered(account=self._account,
+                              feature=Namespace.BLOCKING))
 
         self._log.info('Discovered blocking: %s', info.jid)
 

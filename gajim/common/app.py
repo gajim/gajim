@@ -73,7 +73,6 @@ app = None # type: GajimApplication
 window = None # type: MainWindow
 
 ged = ged_module.GlobalEventsDispatcher() # Global Events Dispatcher
-nec = cast(types.NetworkEventsControllerT, None)
 plugin_manager = None # Plugins Manager
 
 class Storage:

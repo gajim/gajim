@@ -32,12 +32,15 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.const import KindConstant
 from gajim.common.const import MUCJoinedState
+from gajim.common.events import MessageUpdated
+from gajim.common.events import MucAdded
+from gajim.common.events import MucDecline
+from gajim.common.events import MucInvitation
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_default_muc_config
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.structs import MUCData
 from gajim.common.structs import MUCPresenceData
-from gajim.common.nec import NetworkEvent
 from gajim.common.modules.bits_of_binary import store_bob_data
 from gajim.common.modules.base import BaseModule
 
@@ -247,10 +250,7 @@ class MUC(BaseModule):
         self._push_muc_added_event(jid)
 
     def _push_muc_added_event(self, jid):
-        app.nec.push_incoming_event(
-            NetworkEvent('muc-added',
-                         account=self._account,
-                         jid=jid))
+        app.ged.raise_event(MucAdded(account=self._account, jid=jid))
 
     def _on_disco_result(self, task):
         try:
@@ -611,11 +611,13 @@ class MUC(BaseModule):
             del self._join_timeouts[room_jid]
 
     def _raise_muc_event(self, event_name, properties):
-        app.nec.push_incoming_event(
-            NetworkEvent(event_name,
-                         account=self._account,
-                         jid=properties.jid.bare,
-                         properties=properties))
+        raise ValueError
+        # Not used Currently
+        # app.ged.raise_event(
+        #     NetworkEvent(event_name,
+        #                  account=self._account,
+        #                  jid=properties.jid.bare,
+        #                  properties=properties))
         self._log_muc_event(event_name, properties)
 
     def _log_muc_event(self, event_name, properties):
@@ -678,11 +680,10 @@ class MUC(BaseModule):
             app.storage.archive.update_additional_data(
                 self._account, properties.moderation.stanza_id, properties)
 
-            app.nec.push_incoming_event(
-                NetworkEvent('message-updated',
-                            account=self._account,
-                            jid=properties.jid,
-                            properties=properties))
+            app.ged.raise_event(
+                MessageUpdated(account=self._account,
+                               jid=properties.jid,
+                               properties=properties))
 
             raise nbxmpp.NodeProcessed
 
@@ -801,10 +802,9 @@ class MUC(BaseModule):
             self._log.info('Invite declined from: %s, reason: %s',
                            data.from_, data.reason)
 
-            app.nec.push_incoming_event(
-                NetworkEvent('muc-decline',
-                             account=self._account,
-                             **data._asdict()))
+            app.ged.raise_event(
+                MucDecline(account=self._account,
+                           **data._asdict()))
             raise nbxmpp.NodeProcessed
 
         if properties.muc_invite is not None:
@@ -836,11 +836,10 @@ class MUC(BaseModule):
             return
 
         invite_data = task.get_user_data()
-        app.nec.push_incoming_event(
-            NetworkEvent('muc-invitation',
-                         account=self._account,
-                         info=result.info,
-                         **invite_data._asdict()))
+        app.ged.raise_event(
+            MucInvitation(account=self._account,
+                          info=result.info,
+                          **invite_data._asdict()))
 
     def invite(self, room, jid, reason=None, continue_=False):
         type_ = InviteType.MEDIATED

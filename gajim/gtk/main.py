@@ -33,7 +33,7 @@ from gajim.common.const import Display
 from gajim.common.const import Direction
 from gajim.common.helpers import ask_for_status_message
 from gajim.common.i18n import _
-from gajim.common.nec import EventHelper
+from gajim.common.ged import EventHelper
 from gajim.common.modules.bytestream import is_transfer_active
 
 from .adhoc import AdHocCommand

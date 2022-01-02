@@ -22,12 +22,13 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import helpers
 from gajim.common.const import THRESHOLD_OPTIONS
-from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.helpers import open_file
 from gajim.common.multimedia_helpers import AudioInputManager
 from gajim.common.multimedia_helpers import AudioOutputManager
 from gajim.common.multimedia_helpers import VideoInputManager
+from gajim.common.events import StyleChanged
+from gajim.common.events import ThemeUpdate
 
 from .const import Setting
 from .const import SettingKind
@@ -645,13 +646,13 @@ class Themes(PreferenceBox):
     @staticmethod
     def _on_theme_changed(value, *args):
         app.css_config.change_theme(value)
-        app.nec.push_incoming_event(NetworkEvent('theme-update'))
-        app.nec.push_incoming_event(NetworkEvent('style-changed'))
+        app.ged.raise_event(ThemeUpdate())
+        app.ged.raise_event(StyleChanged())
 
     @staticmethod
     def _on_dark_theme(value, *args):
         app.css_config.set_dark_theme(int(value))
-        app.nec.push_incoming_event(NetworkEvent('style-changed'))
+        app.ged.raise_event(StyleChanged())
 
 
 class Emoji(PreferenceBox):

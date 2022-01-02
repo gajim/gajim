@@ -18,7 +18,9 @@ import nbxmpp
 from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
-from gajim.common.nec import NetworkEvent
+from gajim.common.events import SearchFormReceivedEvent
+from gajim.common.events import SearchResultReceivedEvent
+
 from gajim.common.modules.base import BaseModule
 
 
@@ -53,8 +55,8 @@ class Search(BaseModule):
         else:
             self._log.info('Error: %s', stanza.getError())
 
-        app.nec.push_incoming_event(
-            SearchFormReceivedEvent(None, conn=self._con,
+        app.ged.raise_event(
+            SearchFormReceivedEvent(conn=self._con,
                                     is_dataform=is_dataform,
                                     data=data))
 
@@ -94,15 +96,7 @@ class Search(BaseModule):
         else:
             self._log.info('Error: %s', stanza.getError())
 
-        app.nec.push_incoming_event(
-            SearchResultReceivedEvent(None, conn=self._con,
+        app.ged.raise_event(
+            SearchResultReceivedEvent(conn=self._con,
                                       is_dataform=is_dataform,
                                       data=data))
-
-
-class SearchFormReceivedEvent(NetworkEvent):
-    name = 'search-form-received'
-
-
-class SearchResultReceivedEvent(NetworkEvent):
-    name = 'search-result-received'
