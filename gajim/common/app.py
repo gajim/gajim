@@ -55,7 +55,7 @@ from gajim.common.const import Display
 
 if typing.TYPE_CHECKING:
     from gajim.gui.main import MainWindow
-    from gajim.application import GajimApplication
+    from gajim.gui.application import GajimApplication
     from gajim.common.storage.cache import CacheStorage
     from gajim.common.storage.archive import MessageArchiveStorage
 

@@ -114,7 +114,7 @@ def _init_gtk():
 
 
 def _run_app():
-    from gajim.application import GajimApplication
+    from gajim.gui.application import GajimApplication
     application = GajimApplication()
     _install_signal_handlers(application)
     application.run(sys.argv)
