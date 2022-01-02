@@ -29,7 +29,7 @@ from gajim.common.file_props import FilesProp
 log = logging.getLogger('gajim.c.connection_handlers_events')
 
 
-class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
+class FileRequestReceivedEvent(nec.NetworkEvent):
 
     name = 'file-request-received'
 
@@ -110,7 +110,7 @@ class FileRequestReceivedEvent(nec.NetworkIncomingEvent):
         return True
 
 
-class InformationEvent(nec.NetworkIncomingEvent):
+class InformationEvent(nec.NetworkEvent):
 
     name = 'information'
 

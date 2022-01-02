@@ -29,7 +29,6 @@ from nbxmpp.modules.util import raise_if_error
 
 from gajim.common import app
 from gajim.common.nec import NetworkEvent
-from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.const import ArchiveState
 from gajim.common.const import KindConstant
 from gajim.common.const import SyncThreshold
@@ -172,10 +171,10 @@ class MAM(BaseModule):
             return
 
         app.nec.push_incoming_event(
-            NetworkIncomingEvent('raw-mam-message-received',
-                                 account=self._account,
-                                 stanza=stanza,
-                                 properties=properties))
+            NetworkEvent('raw-mam-message-received',
+                         account=self._account,
+                         stanza=stanza,
+                         properties=properties))
 
         if not self._from_valid_archive(stanza, properties):
             self._log.warning('Message from invalid archive %s',

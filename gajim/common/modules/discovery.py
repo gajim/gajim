@@ -21,7 +21,6 @@ from nbxmpp.errors import StanzaError
 from nbxmpp.errors import is_error
 
 from gajim.common import app
-from gajim.common.nec import NetworkIncomingEvent
 from gajim.common.nec import NetworkEvent
 from gajim.common.modules.util import as_task
 from gajim.common.modules.base import BaseModule
@@ -97,8 +96,7 @@ class Discovery(BaseModule):
         except nbxmpp.NodeProcessed:
             pass
 
-        app.nec.push_incoming_event(
-            NetworkIncomingEvent('server-disco-received'))
+        app.nec.push_incoming_event(NetworkEvent('server-disco-received'))
 
     def discover_account_info(self):
         own_jid = self._con.get_own_jid().bare

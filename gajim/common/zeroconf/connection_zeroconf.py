@@ -39,7 +39,6 @@ from gajim.common import app
 from gajim.common import modules
 from gajim.common import helpers
 from gajim.common import idle
-from gajim.common import nec
 from gajim.common.nec import NetworkEvent
 from gajim.common.i18n import _
 from gajim.common.const import ClientState
@@ -51,7 +50,7 @@ from gajim.common.connection_handlers_events import InformationEvent
 log = logging.getLogger('gajim.c.connection_zeroconf')
 
 
-class OurShowEvent(nec.NetworkIncomingEvent):
+class OurShowEvent(NetworkEvent):
 
     name = 'our-show'
 
@@ -59,7 +58,7 @@ class OurShowEvent(nec.NetworkIncomingEvent):
         self.reconnect = False
 
 
-class ConnectionLostEvent(nec.NetworkIncomingEvent):
+class ConnectionLostEvent(NetworkEvent):
 
     name = 'connection-lost'
 

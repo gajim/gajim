@@ -18,7 +18,7 @@ import nbxmpp
 from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
-from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.nec import NetworkEvent
 from gajim.common.modules.base import BaseModule
 
 
@@ -100,9 +100,9 @@ class Search(BaseModule):
                                       data=data))
 
 
-class SearchFormReceivedEvent(NetworkIncomingEvent):
+class SearchFormReceivedEvent(NetworkEvent):
     name = 'search-form-received'
 
 
-class SearchResultReceivedEvent(NetworkIncomingEvent):
+class SearchResultReceivedEvent(NetworkEvent):
     name = 'search-result-received'

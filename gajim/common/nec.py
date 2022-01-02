@@ -27,125 +27,22 @@ from __future__ import annotations
 from typing import Any
 from typing import Optional
 from typing import Callable
-from typing import Type
 
 from gajim.common import app
 
 
 EventHelperHandlersT = list[tuple[str, int, Callable[['NetworkEvent'], Any]]]
 
-IncEventsGenT = dict[str, list[Type['NetworkIncomingEvent']]]
-OutEventsGenT = dict[str, list[Type['NetworkOutgoingEvent']]]
-
 
 class NetworkEventsController:
-    def __init__(self):
-        self.incoming_events_generators: IncEventsGenT = {}
-        '''
-        Keys: names of events
-        Values: list of class objects that are subclasses
-        of `NetworkIncomingEvent`
-        '''
-        self.outgoing_events_generators:OutEventsGenT = {}
-        '''
-        Keys: names of events
-        Values: list of class objects that are subclasses
-        of `NetworkOutgoingEvent`
-        '''
-
-    def register_incoming_event(self,
-                                event_class: Type[NetworkIncomingEvent]
-                                ) -> None:
-
-        for base_event_name in event_class.base_network_events:
-            event_list = self.incoming_events_generators.setdefault(
-                base_event_name, [])
-            if event_class not in event_list:
-                event_list.append(event_class)
-
-    def unregister_incoming_event(self,
-                                  event_class: Type[NetworkIncomingEvent]
-                                  ) -> None:
-
-        for base_event_name in event_class.base_network_events:
-            if base_event_name in self.incoming_events_generators:
-                self.incoming_events_generators[base_event_name].remove(
-                    event_class)
-
-    def register_outgoing_event(self,
-                                event_class: Type[NetworkOutgoingEvent]
-                                ) -> None:
-
-        for base_event_name in event_class.base_network_events:
-            event_list = self.outgoing_events_generators.setdefault(
-                base_event_name, [])
-            if event_class not in event_list:
-                event_list.append(event_class)
-
-    def unregister_outgoing_event(self,
-                                  event_class: Type[NetworkOutgoingEvent]
-                                  ) -> None:
-
-        for base_event_name in event_class.base_network_events:
-            if base_event_name in self.outgoing_events_generators:
-                self.outgoing_events_generators[base_event_name].remove(
-                    event_class)
 
     def push_incoming_event(self, event_object: NetworkEvent) -> None:
         if event_object.generate():
-            if not app.ged.raise_event(event_object.name, event_object):
-                self._generate_events_based_on_incoming_event(event_object)
+            app.ged.raise_event(event_object.name, event_object)
 
     def push_outgoing_event(self, event_object: NetworkEvent) -> None:
         if event_object.generate():
-            if not app.ged.raise_event(event_object.name, event_object):
-                self._generate_events_based_on_outgoing_event(event_object)
-
-    def _generate_events_based_on_incoming_event(self,
-                                                 event_object: NetworkEvent
-                                                 ) -> None:
-        '''
-        :return: True if even_object should be dispatched through Global
-        Events Dispatcher, False otherwise. This can be used to replace
-        base events with those that more data computed (easier to use
-        by handlers).
-        :note: replacing mechanism is not implemented currently, but will be
-        based on attribute in new network events object.
-        '''
-        base_event_name = event_object.name
-        if base_event_name in self.incoming_events_generators:
-            for new_event_class in self.incoming_events_generators[
-                    base_event_name]:
-                new_event_object = new_event_class(
-                    None, base_event=event_object)
-                if new_event_object.generate():
-                    if not app.ged.raise_event(new_event_object.name,
-                                               new_event_object):
-                        self._generate_events_based_on_incoming_event(
-                            new_event_object)
-
-    def _generate_events_based_on_outgoing_event(self,
-                                                 event_object: NetworkEvent
-                                                 ) -> None:
-        '''
-        :return: True if even_object should be dispatched through Global
-        Events Dispatcher, False otherwise. This can be used to replace
-        base events with those that more data computed (easier to use
-        by handlers).
-        :note: replacing mechanism is not implemented currently, but will be
-        based on attribute in new network events object.
-        '''
-        base_event_name = event_object.name
-        if base_event_name in self.outgoing_events_generators:
-            for new_event_class in self.outgoing_events_generators[
-                    base_event_name]:
-                new_event_object = new_event_class(
-                    None, base_event=event_object)
-                if new_event_object.generate():
-                    if not app.ged.raise_event(new_event_object.name,
-                                               new_event_object):
-                        self._generate_events_based_on_outgoing_event(
-                            new_event_object)
+            app.ged.raise_event(event_object.name, event_object)
 
 
 class EventHelper:
@@ -212,24 +109,10 @@ class NetworkEvent:
 
     def _set_kwargs_as_attributes(self, **kwargs: Any) -> None:
         for k, v in kwargs.items():
-            if k not in ('name', 'base_network_events'):
+            if k != 'name':
                 setattr(self, k, v)
 
     def _set_base_event_vars_as_attributes(self, event: NetworkEvent) -> None:
         for k, v in vars(event).items():
-            if k not in ('name', 'base_network_events'):
+            if k != 'name':
                 setattr(self, k, v)
-
-
-class NetworkIncomingEvent(NetworkEvent):
-    base_network_events: list[str] = []
-    '''
-    Names of base network events that new event is going to be generated on.
-    '''
-
-
-class NetworkOutgoingEvent(NetworkEvent):
-    base_network_events: list[str] = []
-    '''
-    Names of base network events that new event is going to be generated on.
-    '''

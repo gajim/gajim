@@ -28,7 +28,7 @@ from nbxmpp.util import generate_id
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
-from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.nec import NetworkEvent
 from gajim.common.modules.base import BaseModule
 
 
@@ -422,9 +422,9 @@ class AdHocCommands(BaseModule):
             self._log.info('Cancel successful')
 
 
-class AdHocCommandError(NetworkIncomingEvent):
+class AdHocCommandError(NetworkEvent):
     name = 'adhoc-command-error'
 
 
-class AdHocCommandActionResponse(NetworkIncomingEvent):
+class AdHocCommandActionResponse(NetworkEvent):
     name = 'adhoc-command-action-response'

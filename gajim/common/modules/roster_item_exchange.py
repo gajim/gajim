@@ -21,7 +21,7 @@ from nbxmpp.structs import StanzaHandler
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
-from gajim.common.nec import NetworkIncomingEvent
+from gajim.common.nec import NetworkEvent
 from gajim.common.modules.base import BaseModule
 
 
@@ -120,5 +120,5 @@ class RosterItemExchange(BaseModule):
         self._con.connection.send(stanza)
 
 
-class RosterItemExchangeEvent(NetworkIncomingEvent):
+class RosterItemExchangeEvent(NetworkEvent):
     name = 'roster-item-exchange-received'
