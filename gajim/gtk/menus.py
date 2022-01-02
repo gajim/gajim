@@ -364,7 +364,7 @@ def get_conv_uri_context_menu(account: str, uri: URI) -> Optional[Gtk.Menu]:
         else:
             context_menu = [
                 ('copy-text', _('Copy XMPP Address')),
-                ('-start-chat', _('Start Chat')),
+                ('-open-chat', _('Start Chat')),
                 ('-add-contact', _('Add to Contact List…')),
             ]
 
@@ -390,7 +390,7 @@ def get_conv_uri_context_menu(account: str, uri: URI) -> Optional[Gtk.Menu]:
         context_menu = [
             ('copy-text', _('Copy XMPP Address/Email')),
             ('open-mail', _('Open Email Composer')),
-            ('-start-chat', _('Start Chat')),
+            ('-open-chat', _('Start Chat')),
             ('groupchat-join', _('Join Groupchat')),
             ('-add-contact', _('Add to Contact List…')),
         ]

@@ -53,6 +53,7 @@ from nbxmpp.protocol import InvalidJid
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
+from gi.repository import Gdk
 
 import gajim
 from gajim.common import app
@@ -60,6 +61,8 @@ from gajim.common import ged
 from gajim.common import configpaths
 from gajim.common import logging_helpers
 from gajim.common.client import Client
+from gajim.common.const import GAJIM_FAQ_URI
+from gajim.common.const import GAJIM_WIKI_URI
 from gajim.common.i18n import _
 from gajim.common.nec import NetworkEvent
 from gajim.common.task_manager import TaskManager
@@ -67,12 +70,19 @@ from gajim.common.storage.cache import CacheStorage
 from gajim.common.storage.archive import MessageArchiveStorage
 from gajim.common.settings import Settings
 from gajim.common.settings import LegacyConfig
+from gajim.common.helpers import open_uri
 from gajim.common.helpers import load_json
 from gajim.common.cert_store import CertificateStore
+from gajim.common.exceptions import GajimGeneralException
 
-from gajim.gui.builder import get_builder
 from gajim.gui import menus
+from gajim.gui.builder import get_builder
 from gajim.gui.util import load_user_iconsets
+from gajim.gui.dialogs import ShortcutsWindow
+from gajim.gui.about import AboutDialog
+from gajim.gui.discovery import ServiceDiscoveryWindow
+from gajim.gui.util import open_window
+from gajim.gui.util import get_app_window
 
 
 ActionListT = list[tuple[str,
@@ -390,35 +400,30 @@ class GajimApplication(Gtk.Application):
         warnings.filterwarnings(action="always")
 
     def add_actions(self) -> None:
-        ''' Build Application Actions '''
-        from gajim import app_actions
-
-        # General Stateful Actions
         actions: ActionListT = [
-            ('quit', None, app_actions.on_quit),
-            ('add-account', None,  app_actions.on_add_account),
-            ('add-contact', None,  app_actions.on_add_contact),
-            ('manage-proxies', None,  app_actions.on_manage_proxies),
-            ('history-manager', None,  app_actions.on_history_manager),
-            ('preferences', None,  app_actions.on_preferences),
-            ('plugins', None,  app_actions.on_plugins),
-            ('xml-console', None,  app_actions.on_xml_console),
-            ('file-transfer', None,  app_actions.on_file_transfers),
-            ('shortcuts', None,  app_actions.on_keyboard_shortcuts),
-            ('features', None,  app_actions.on_features),
-            ('content', None,  app_actions.on_contents),
-            ('about', None,  app_actions.on_about),
-            ('faq', None,  app_actions.on_faq),
-            ('ipython', None,  app_actions.toggle_ipython),
-            ('start-chat', 's', app_actions.on_new_chat),
-            ('accounts', 's', app_actions.on_accounts),
-            ('add-contact', 's', app_actions.on_add_contact_jid),
-            ('copy-text', 's', app_actions.copy_text),
-            ('open-link', 'as', app_actions.open_link),
-            ('open-mail', 's', app_actions.open_mail),
-            ('create-groupchat', 's', app_actions.on_create_gc),
-            ('forget-groupchat', 'as', app_actions.forget_groupchat),
-            ('groupchat-join', 'as', app_actions.on_groupchat_join),
+            ('quit', None, self._on_quit_action),
+            ('add-account', None,  self._on_add_account_action),
+            ('manage-proxies', None,  self._on_manage_proxies_action),
+            ('history-manager', None,  self._on_history_manager_action),
+            ('preferences', None,  self._on_preferences_action),
+            ('plugins', None,  self._on_plugins_action),
+            ('xml-console', None,  self._on_xml_console_action),
+            ('file-transfer', None,  self._on_file_transfer_action),
+            ('shortcuts', None,  self._on_shortcuts_action),
+            ('features', None,  self._on_features_action),
+            ('content', None,  self._on_content_action),
+            ('about', None,  self._on_about_action),
+            ('faq', None,  self._on_faq_action),
+            ('ipython', None,  self._on_ipython_action),
+            ('start-chat', 's', self._on_new_chat_action),
+            ('accounts', 's', self._on_accounts_action),
+            ('add-contact', 's', self._on_add_contact_action),
+            ('copy-text', 's', self._on_copy_text_action),
+            ('open-link', 'as', self._on_open_link_action),
+            ('open-mail', 's', self._on_open_mail_action),
+            ('create-groupchat', 's', self._on_create_groupchat_action),
+            ('forget-groupchat', 'as', self._on_forget_groupchat_action),
+            ('groupchat-join', 'as', self._on_groupchat_join_action),
         ]
 
         for action in actions:
@@ -439,33 +444,33 @@ class GajimApplication(Gtk.Application):
         else:
             self.add_account_actions(accounts_list[0])
 
-    @staticmethod
-    def _get_account_actions(account: str) -> list[tuple[str, Any, str, str]]:
-        from gajim import app_actions as a
-
+    def _get_account_actions(self,
+                             account: str) -> list[tuple[str, Any, str, str]]:
         if account == 'Local':
             return []
 
+        # pylint: disable=line-too-long
         return [
-            ('-bookmarks', a.on_bookmarks, 'online', 's'),
-            ('-start-single-chat', a.on_single_message, 'online', 's'),
-            ('-start-chat', a.start_chat, 'online', 'as'),
-            ('-add-contact', a.on_add_contact, 'online', 'as'),
-            ('-services', a.on_service_disco, 'online', 's'),
-            ('-profile', a.on_profile, 'online', 's'),
-            ('-server-info', a.on_server_info, 'online', 's'),
-            ('-archive', a.on_mam_preferences, 'feature', 's'),
-            ('-pep-config', a.on_pep_config, 'online', 's'),
-            ('-sync-history', a.on_history_sync, 'online', 's'),
-            ('-blocking', a.on_blocking_list, 'feature', 's'),
-            ('-send-server-message', a.on_send_server_message, 'online', 's'),
-            ('-set-motd', a.on_set_motd, 'online', 's'),
-            ('-update-motd', a.on_update_motd, 'online', 's'),
-            ('-delete-motd', a.on_delete_motd, 'online', 's'),
-            ('-open-event', a.on_open_event, 'always', 'a{sv}'),
-            ('-mark-as-read', a.on_mark_as_read, 'always', 'a{sv}'),
-            ('-import-contacts', a.on_import_contacts, 'online', 's'),
+            ('-bookmarks', self._on_bookmarks_action, 'online', 's'),
+            ('-start-single-chat', self._on_start_single_message_action, 'online', 's'),
+            ('-open-chat', self._on_open_chat_action, 'online', 'as'),
+            ('-add-contact', self._on_add_contact_account_action, 'online', 'as'),
+            ('-services', self._on_services_action, 'online', 's'),
+            ('-profile', self._on_profile_action, 'online', 's'),
+            ('-server-info', self._on_server_info_action, 'online', 's'),
+            ('-archive', self._on_archive_action, 'feature', 's'),
+            ('-pep-config', self._on_pep_config_action, 'online', 's'),
+            ('-sync-history', self._on_sync_history_action, 'online', 's'),
+            ('-blocking', self._on_blocking_action, 'feature', 's'),
+            ('-send-server-message', self._on_send_server_message_action, 'online', 's'),
+            ('-set-motd', self._on_set_motd_action, 'online', 's'),
+            ('-update-motd', self._on_update_motd_action, 'online', 's'),
+            ('-delete-motd', self._on_delete_motd_action, 'online', 's'),
+            ('-open-event', self._on_open_event_action, 'always', 'a{sv}'),
+            ('-mark-as-read', self._on_mark_as_read_action, 'always', 'a{sv}'),
+            ('-import-contacts', self._on_import_contacts_action, 'online', 's'),
         ]
+        # pylint: enable=line-too-long
 
     def add_account_actions(self, account: str) -> None:
         for action in self._get_account_actions(account):
@@ -558,3 +563,286 @@ class GajimApplication(Gtk.Application):
 
         for client in accounts_to_disconnect.values():
             client.change_status('offline', kwargs.get('message', ''))
+
+    # Action Callbacks
+
+    @staticmethod
+    def _on_add_contact_action(_action: Gio.SimpleAction,
+                               param: GLib.Variant) -> None:
+        jid = param.get_string() or None
+        if jid is not None:
+            jid = JID.from_string(jid)
+        open_window('AddContact', account=None, jid=jid)
+
+    @staticmethod
+    def _on_preferences_action(_action: Gio.SimpleAction,
+                               _param: Optional[GLib.Variant]) -> None:
+        open_window('Preferences')
+
+    @staticmethod
+    def _on_plugins_action(_action: Gio.SimpleAction,
+                           _param: Optional[GLib.Variant]) -> None:
+        open_window('PluginsWindow')
+
+    @staticmethod
+    def _on_accounts_action(_action: Gio.SimpleAction,
+                            param: GLib.Variant) -> None:
+        window = open_window('AccountsWindow')
+        account = param.get_string()
+        if account:
+            window.select_account(account)
+
+    @staticmethod
+    def _on_history_manager_action(_action: Gio.SimpleAction,
+                                   _param: Optional[GLib.Variant]) -> None:
+        open_window('HistoryManager')
+
+    @staticmethod
+    def _on_bookmarks_action(_action: Gio.SimpleAction,
+                             param: GLib.Variant) -> None:
+        account = param.get_string()
+        open_window('Bookmarks', account=account)
+
+    @staticmethod
+    def _on_quit_action(_action: Gio.SimpleAction,
+                        _param: Optional[GLib.Variant]) -> None:
+        app.window.quit()
+
+    @staticmethod
+    def _on_new_chat_action(_action: Gio.SimpleAction,
+                            param: GLib.Variant) -> None:
+        window = open_window('StartChatDialog')
+        search_text = param.get_string()
+        if search_text:
+            window.set_search_text(search_text)
+
+    @staticmethod
+    def _on_profile_action(_action: Gio.SimpleAction,
+                           param: GLib.Variant) -> None:
+        account = param.get_string()
+        open_window('ProfileWindow', account=account)
+
+    @staticmethod
+    def _on_send_server_message_action(_action: Gio.SimpleAction,
+                                       param: GLib.Variant) -> None:
+        account = param.get_string()
+        server = app.settings.get_account_setting(account, 'hostname')
+        server += '/announce/online'
+        open_window('SingleMessageWindow', account=account, recipients=server)
+
+    @staticmethod
+    def _on_services_action(_action: Gio.SimpleAction,
+                            param: GLib.Variant) -> None:
+        account = param.get_string()
+        server_jid = app.settings.get_account_setting(account, 'hostname')
+        disco = app.interface.instances[account]['disco']
+        if server_jid in disco:
+            disco[server_jid].window.present()
+        else:
+            try:
+                # Object will add itself to the window dict
+                ServiceDiscoveryWindow(account, address_entry=True)
+            except GajimGeneralException:
+                pass
+
+    @staticmethod
+    def _on_create_groupchat_action(_action: Gio.SimpleAction,
+                                    param: GLib.Variant) -> None:
+        account = param.get_string()
+        open_window('CreateGroupchatWindow', account=account or None)
+
+    @staticmethod
+    def _on_add_contact_account_action(_action: Gio.SimpleAction,
+                                       param: GLib.Variant) -> None:
+        account, jid = param.get_strv()
+        if jid is not None:
+            jid = JID.from_string(jid)
+        open_window('AddContact', account=account or None, jid=jid or None)
+
+    @staticmethod
+    def _on_start_single_message_action(_action: Gio.SimpleAction,
+                                        param: GLib.Variant) -> None:
+        account = param.get_string()
+        open_window('SingleMessageWindow', account=account)
+
+    @staticmethod
+    def _on_add_account_action(_action: Gio.SimpleAction,
+                               _param: Optional[GLib.Variant]) -> None:
+        open_window('AccountWizard')
+
+    @staticmethod
+    def _on_import_contacts_action(_action: Gio.SimpleAction,
+                                   param: GLib.Variant) -> None:
+        open_window('SynchronizeAccounts', account=param.get_string())
+
+    @staticmethod
+    def _on_pep_config_action(_action: Gio.SimpleAction,
+                              param: GLib.Variant) -> None:
+        account = param.get_string()
+        open_window('PEPConfig', account=account)
+
+    @staticmethod
+    def _on_archive_action(_action: Gio.SimpleAction,
+                           param: GLib.Variant) -> None:
+        account = param.get_string()
+        open_window('MamPreferences', account=account)
+
+    @staticmethod
+    def _on_blocking_action(_action: Gio.SimpleAction,
+                            param: GLib.Variant) -> None:
+        account = param.get_string()
+        open_window('BlockingList', account=account)
+
+    @staticmethod
+    def _on_sync_history_action(_action: Gio.SimpleAction,
+                                param: GLib.Variant) -> None:
+        account = param.get_string()
+        open_window('HistorySyncAssistant',
+                    account=account)
+
+    @staticmethod
+    def _on_server_info_action(_action: Gio.SimpleAction,
+                               param: GLib.Variant) -> None:
+        account = param.get_string()
+        open_window('ServerInfo', account=account)
+
+    @staticmethod
+    def _on_xml_console_action(_action: Gio.SimpleAction,
+                               _param: Optional[GLib.Variant]) -> None:
+        open_window('XMLConsoleWindow')
+
+    @staticmethod
+    def _on_manage_proxies_action(_action: Gio.SimpleAction,
+                                  _param: Optional[GLib.Variant]) -> None:
+        open_window('ManageProxies')
+
+    @staticmethod
+    def _on_set_motd_action(_action: Gio.SimpleAction,
+                            param: GLib.Variant) -> None:
+        account = param.get_string()
+        server = app.settings.get_account_setting(account, 'hostname')
+        server += '/announce/motd'
+        open_window('SingleMessageWindow', account=account, recipients=server)
+
+    @staticmethod
+    def _on_update_motd_action(_action: Gio.SimpleAction,
+                               param: GLib.Variant) -> None:
+        account = param.get_string()
+        server = app.settings.get_account_setting(account, 'hostname')
+        server += '/announce/motd/update'
+        open_window('SingleMessageWindow', account=account, recipients=server)
+
+    @staticmethod
+    def _on_delete_motd_action(_action: Gio.SimpleAction,
+                               param: GLib.Variant) -> None:
+        account = param.get_string()
+        app.connections[account].get_module('Announce').delete_motd()
+
+    @staticmethod
+    def _on_content_action(_action: Gio.SimpleAction,
+                           _param: Optional[GLib.Variant]) -> None:
+        open_uri(GAJIM_WIKI_URI)
+
+    @staticmethod
+    def _on_faq_action(_action: Gio.SimpleAction,
+                       _param: Optional[GLib.Variant]) -> None:
+        open_uri(GAJIM_FAQ_URI)
+
+    @staticmethod
+    def _on_shortcuts_action(_action: Gio.SimpleAction,
+                             _param: Optional[GLib.Variant]) -> None:
+        ShortcutsWindow()
+
+    @staticmethod
+    def _on_features_action(_action: Gio.SimpleAction,
+                            _param: Optional[GLib.Variant]) -> None:
+        open_window('Features')
+
+    @staticmethod
+    def _on_about_action(_action: Gio.SimpleAction,
+                         _param: Optional[GLib.Variant]) -> None:
+        AboutDialog()
+
+    @staticmethod
+    def _on_file_transfer_action(_action: Gio.SimpleAction,
+                                 _param: Optional[GLib.Variant]) -> None:
+
+        ft = app.interface.instances['file_transfers']
+        if ft.window.get_property('visible'):
+            ft.window.present()
+        else:
+            ft.window.show_all()
+
+    @staticmethod
+    def _on_open_event_action(_action: Gio.SimpleAction,
+                              param: GLib.Variant) -> None:
+        dict_ = param.unpack()
+        app.interface.handle_event(
+            dict_['account'], dict_['jid'], dict_['notif_detail'])
+
+    @staticmethod
+    def _on_mark_as_read_action(_action: Gio.SimpleAction,
+                                param: GLib.Variant) -> None:
+        dict_ = param.unpack()
+        account, jid = dict_['account'], dict_['jid']
+        app.window.mark_as_read(account, JID.from_string(jid))
+
+    @staticmethod
+    def _on_ipython_action(_action: Gio.SimpleAction,
+                           _param: Optional[GLib.Variant]) -> None:
+        """
+        Show/hide the ipython window
+        """
+        win = app.ipython_window
+        if win and win.window.is_visible():
+            win.present()
+        else:
+            app.interface.create_ipython_window()
+
+    @staticmethod
+    def _on_open_mail_action(_action: Gio.SimpleAction,
+                             param: GLib.Variant) -> None:
+        uri = param.get_string()
+        if not uri.startswith('mailto:'):
+            uri = 'mailto:%s' % uri
+        open_uri(uri)
+
+    @staticmethod
+    def _on_open_link_action(_action: Gio.SimpleAction,
+                             param: GLib.Variant) -> None:
+        account, uri = param.get_strv()
+        open_uri(uri, account=account)
+
+    @staticmethod
+    def _on_copy_text_action(_action: Gio.SimpleAction,
+                             param: GLib.Variant) -> None:
+        text = param.get_string()
+        clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        clip.set_text(text, -1)
+
+    @staticmethod
+    def _on_open_chat_action(_action: Gio.SimpleAction,
+                             param: GLib.Variant) -> None:
+        account, jid = param.get_strv()
+        app.interface.start_chat_from_jid(account, jid)
+
+    @staticmethod
+    def _on_forget_groupchat_action(_action: Gio.SimpleAction,
+                                    param: GLib.Variant) -> None:
+        account, jid = param.unpack()
+        room_jid = JID.from_string(jid)
+        window = get_app_window('StartChatDialog')
+        window.remove_row(account, str(room_jid))
+
+        client = app.get_client(account)
+        client.get_module('MUC').leave(room_jid)
+        client.get_module('Bookmarks').remove(room_jid)
+
+        app.storage.archive.remove_chat_history(
+            account, str(room_jid), groupchat=True)
+
+    @staticmethod
+    def _on_groupchat_join_action(_action: Gio.SimpleAction,
+                                  param: GLib.Variant) -> None:
+        account, jid = param.get_strv()
+        open_window('GroupchatJoin', account=account, jid=jid)

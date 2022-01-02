@@ -895,6 +895,8 @@ SHOW_LIST = [
     'error'
 ]
 
+GAJIM_FAQ_URI = 'https://dev.gajim.org/gajim/gajim/wikis/help/gajimfaq'
+GAJIM_WIKI_URI = 'https://dev.gajim.org/gajim/gajim/wikis'
 
 URI_SCHEMES = {
     'aaa://',
