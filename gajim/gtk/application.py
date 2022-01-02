@@ -38,13 +38,10 @@ from __future__ import annotations
 from typing import Any
 from typing import Callable
 from typing import Optional
-from typing import TextIO
-from typing import Type
-from typing import Union
 from typing import cast
 
 import os
-import sys
+
 from urllib.parse import unquote
 
 from nbxmpp.namespaces import Namespace
@@ -60,20 +57,15 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common import configpaths
 from gajim.common import logging_helpers
-from gajim.common.client import Client
+
 from gajim.common.const import GAJIM_FAQ_URI
 from gajim.common.const import GAJIM_WIKI_URI
 from gajim.common.i18n import _
 from gajim.common.nec import NetworkEvent
-from gajim.common.task_manager import TaskManager
-from gajim.common.storage.cache import CacheStorage
-from gajim.common.storage.archive import MessageArchiveStorage
-from gajim.common.settings import Settings
-from gajim.common.settings import LegacyConfig
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import load_json
-from gajim.common.cert_store import CertificateStore
 from gajim.common.exceptions import GajimGeneralException
+from gajim.common.application import CoreApplication
 
 from gajim.gui import menus
 from gajim.gui.builder import get_builder
@@ -90,7 +82,7 @@ ActionListT = list[tuple[str,
                          Callable[[Gio.SimpleAction, GLib.Variant], Any]]]
 
 
-class GajimApplication(Gtk.Application):
+class GajimApplication(Gtk.Application, CoreApplication):
     '''Main class handling activation and command line.'''
 
     def __init__(self):
@@ -189,6 +181,7 @@ class GajimApplication(Gtk.Application):
         self.connect('handle-local-options', self._handle_local_options)
         self.connect('command-line', self._command_line)
         self.connect('startup', self._startup)
+        self.connect('shutdown', self._shutdown)
 
         self.interface = None
 
@@ -208,31 +201,12 @@ class GajimApplication(Gtk.Application):
         return [option]
 
     def _startup(self, _application: GajimApplication) -> None:
-        # Create and initialize Application Paths & Databases
-        app.print_version()
-        app.detect_dependencies()
-        configpaths.create_paths()
-
-        app.settings = Settings()
-        app.settings.init()
-
-        app.config = LegacyConfig() # type: ignore
-
-        app.storage.cache = CacheStorage()
-        app.storage.cache.init()
-
-        app.storage.archive = MessageArchiveStorage()
-        app.storage.archive.init()
+        self._init_core()
 
         icon_theme = Gtk.IconTheme.get_default()
         icon_theme.append_search_path(str(configpaths.get('ICONS')))
         load_user_iconsets()
 
-        app.cert_store = CertificateStore()
-        app.task_manager = TaskManager()
-
-        # Set Application Menu
-        app.app = self
         builder = get_builder('application_menu.ui')
         self.set_menubar(cast(Gio.Menu, builder.get_object('menubar')))
 
@@ -301,12 +275,11 @@ class GajimApplication(Gtk.Application):
 
                 app.interface.start_chat_from_jid(accounts[0], jid, message)
 
-    def do_shutdown(self, *args: Any) -> None:
-        Gtk.Application.do_shutdown(self)
+    def _shutdown(self, _application: GajimApplication) -> None:
+        self._shutdown_core()
 
-        # Commit any outstanding SQL transactions
-        app.storage.cache.shutdown()
-        app.storage.archive.shutdown()
+    def _quit_app(self) -> None:
+        self.quit()
 
     def _command_line(self,
                       _application: GajimApplication,
@@ -376,28 +349,9 @@ class GajimApplication(Gtk.Application):
             logging_helpers.set_loglevels(loglevel)
 
         if options.contains('warnings'):
-            self.show_warnings()
+            self._show_warnings()
 
         return -1
-
-    @staticmethod
-    def show_warnings() -> None:
-        import traceback
-        import warnings
-
-        def warn_with_traceback(message: Union[Warning, str],
-                                category: Type[Warning],
-                                filename: str,
-                                lineno: int,
-                                _file: Optional[TextIO] = None,
-                                line: Optional[str] = None) -> None:
-
-            traceback.print_stack(file=sys.stderr)
-            sys.stderr.write(warnings.formatwarning(message, category,
-                                                    filename, lineno, line))
-
-        warnings.showwarning = warn_with_traceback
-        warnings.filterwarnings(action="always")
 
     def add_actions(self) -> None:
         actions: ActionListT = [
@@ -539,30 +493,6 @@ class GajimApplication(Gtk.Application):
         elif event.feature == Namespace.BLOCKING:
             action = '%s-blocking' % event.account
             self.set_action_state(action, True)
-
-    def start_shutdown(self, *args: Any, **kwargs: Any) -> None:
-        accounts_to_disconnect: dict[str, Client] = {}
-
-        for account, client in app.connections.items():
-            if app.account_is_available(account):
-                accounts_to_disconnect[account] = client
-
-        if not accounts_to_disconnect:
-            self.quit()
-            return
-
-        def _on_disconnect(event: NetworkEvent) -> None:
-            accounts_to_disconnect.pop(event.account)
-            if not accounts_to_disconnect:
-                self.quit()
-                return
-
-        app.ged.register_event_handler('account-disconnected',
-                                       ged.CORE,
-                                       _on_disconnect)
-
-        for client in accounts_to_disconnect.values():
-            client.change_status('offline', kwargs.get('message', ''))
 
     # Action Callbacks
 
