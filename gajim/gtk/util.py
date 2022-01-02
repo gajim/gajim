@@ -58,10 +58,6 @@ from gajim.common.styling import PlainBlock
 from .const import GajimIconSet
 from .const import WINDOW_MODULES
 
-_icon_theme = Gtk.IconTheme.get_default()
-if _icon_theme is not None:
-    _icon_theme.append_search_path(str(configpaths.get('ICONS')))
-
 
 log = logging.getLogger('gajim.gui.util')
 
@@ -155,7 +151,7 @@ def set_urgency_hint(window: Any, setting: bool) -> None:
 
 
 def icon_exists(name: str) -> bool:
-    return _icon_theme.has_icon(name)
+    return Gtk.IconTheme.get_default().has_icon(name)
 
 
 def load_icon_info(icon_name: str,
@@ -170,14 +166,16 @@ def load_icon_info(icon_name: str,
         log.warning('Could not determine scale factor')
         scale = 1
 
+    icon_theme = Gtk.IconTheme.get_default()
+
     try:
-        iconinfo = _icon_theme.lookup_icon_for_scale(
+        iconinfo = icon_theme.lookup_icon_for_scale(
             icon_name, size, scale, flags)
         if iconinfo is None:
             log.info('No icon found for %s', icon_name)
             return None
         return iconinfo
-    except GLib.GError as error:
+    except GLib.Error as error:
         log.error('Unable to load icon %s: %s', icon_name, str(error))
     return None
 
@@ -240,11 +238,13 @@ def load_user_iconsets() -> None:
     if not iconsets_path.exists():
         return
 
+    icon_theme = Gtk.IconTheme.get_default()
+
     for path in iconsets_path.iterdir():
         if not path.is_dir():
             continue
         log.info('Found iconset: %s', path.stem)
-        _icon_theme.append_search_path(str(path))
+        icon_theme.append_search_path(str(path))
 
 
 def get_available_iconsets() -> List[str]:
@@ -405,8 +405,9 @@ def get_image_button(icon_name: str, tooltip: str,
 
 
 def get_image_from_icon_name(icon_name: str, scale: int) -> Any:
+    icon_theme = Gtk.IconTheme.get_default()
     icon = get_icon_name(icon_name)
-    surface = _icon_theme.load_surface(icon, 16, scale, None, 0)
+    surface = icon_theme.load_surface(icon, 16, scale, None, 0)
     return Gtk.Image.new_from_surface(surface)
 
 

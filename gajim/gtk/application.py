@@ -68,6 +68,11 @@ from gajim.common.storage.archive import MessageArchiveStorage
 from gajim.common.settings import Settings
 from gajim.common.settings import LegacyConfig
 from gajim.common.helpers import load_json
+from gajim.common.cert_store import CertificateStore
+
+from gajim.gui.builder import get_builder
+from gajim.gui import menus
+from gajim.gui.util import load_user_iconsets
 
 
 ActionListT = list[tuple[str,
@@ -209,16 +214,15 @@ class GajimApplication(Gtk.Application):
         app.storage.archive = MessageArchiveStorage()
         app.storage.archive.init()
 
-        from gajim.gui.util import load_user_iconsets
+        icon_theme = Gtk.IconTheme.get_default()
+        icon_theme.append_search_path(str(configpaths.get('ICONS')))
         load_user_iconsets()
 
-        from gajim.common.cert_store import CertificateStore
         app.cert_store = CertificateStore()
         app.task_manager = TaskManager()
 
         # Set Application Menu
         app.app = self
-        from gajim.gui.builder import get_builder
         builder = get_builder('application_menu.ui')
         self.set_menubar(cast(Gio.Menu, builder.get_object('menubar')))
 
@@ -227,7 +231,6 @@ class GajimApplication(Gtk.Application):
         self.interface.run(self)
         self.add_actions()
         self._load_shortcuts()
-        from gajim.gui import menus
         menus.build_accounts_menu()
         self.update_app_actions_state()
 
