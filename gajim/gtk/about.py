@@ -34,7 +34,7 @@ class AboutDialog(Gtk.AboutDialog):
         self.set_transient_for(app.window)
         self.set_name('Gajim')
         self.set_version(app.version)
-        self.set_copyright('Copyright © 2003-2021 Gajim Team')
+        self.set_copyright('Copyright © 2003-2022 Gajim Team')
         self.set_license_type(Gtk.License.GPL_3_0_ONLY)
         self.set_website('https://gajim.org/')
 

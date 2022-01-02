@@ -87,7 +87,7 @@ Execute gajim with `--verbose`
 
 That is all, **enjoy**!
 
-(C) 2003-2021
+(C) 2003-2022
 The Gajim Team
 [https://gajim.org](https://gajim.org)
 

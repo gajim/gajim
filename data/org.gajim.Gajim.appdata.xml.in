@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2017-2021 Gajim Team -->
+<!-- Copyright 2017-2022 Gajim Team -->
 <component type="desktop-application">
   <id>org.gajim.Gajim</id>
   <metadata_license>CC-BY-SA-3.0</metadata_license>
