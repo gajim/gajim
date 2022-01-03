@@ -383,8 +383,6 @@ class MessageReceived(ApplicationEvent):
     additional_data: 'AdditionalDataDict'
     unique_id: str
     stanza_id: str
-    archive_jid: str
-    kind: 'KindConstant'
     fjid: str
     resource: str
     session: Any
@@ -394,7 +392,7 @@ class MessageReceived(ApplicationEvent):
 
 
 @dataclass
-class GcMessageReceived(ApplicationEvent):
+class GcMessageReceived(MessageReceived):
     name: str = field(init=False, default='gc-message-received')
     room_jid: str
 
