@@ -610,16 +610,6 @@ class MUC(BaseModule):
             GLib.source_remove(id_)
             del self._join_timeouts[room_jid]
 
-    def _raise_muc_event(self, event_name, properties):
-        raise ValueError
-        # Not used Currently
-        # app.ged.raise_event(
-        #     NetworkEvent(event_name,
-        #                  account=self._account,
-        #                  jid=properties.jid.bare,
-        #                  properties=properties))
-        self._log_muc_event(event_name, properties)
-
     def _log_muc_event(self, event_name, properties):
         # TODO CURRENTLY NOT USED
         if event_name not in ['muc-user-joined',
