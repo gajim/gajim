@@ -297,7 +297,7 @@ class AgentRemoved(ApplicationEvent):
     conn: 'Client'
     agent: str
     jid_list: list[str]
- 
+
 
 @dataclass
 class GatewayPromptReceived(ApplicationEvent):
