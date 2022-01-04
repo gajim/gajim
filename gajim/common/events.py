@@ -14,6 +14,7 @@
 
 import typing
 from typing import Any
+from typing import Union
 from typing import Optional
 from typing import Callable
 
@@ -88,22 +89,13 @@ class PasswordRequired(ApplicationEvent):
 class Notification(ApplicationEvent):
     name: str = field(init=False, default='notification')
     account: str
-    jid: str
     notif_type: str
     title: str
     text: str
+    jid: Optional[Union[JID, str]] = None
     notif_detail: Optional[str] = None
     sound: Optional[str] = None
     icon_name: Optional[str] = None
-
-
-@dataclass
-class SimpleNotification(ApplicationEvent):
-    name: str = field(init=False, default='simple-notification')
-    account: str
-    notif_type: str
-    title: str
-    text: str
 
 
 @dataclass

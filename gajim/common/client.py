@@ -41,7 +41,7 @@ from gajim.common.events import PasswordRequired
 from gajim.common.events import PlainConnection
 from gajim.common.events import ShowChanged
 from gajim.common.events import SignedIn
-from gajim.common.events import SimpleNotification
+from gajim.common.events import Notification
 from gajim.common.events import StanzaReceived
 from gajim.common.events import StanzaSent
 from gajim.common.const import ClientState
@@ -292,10 +292,10 @@ class Client(Observable):
                                                      on_password=_on_password))
 
             app.ged.raise_event(
-                SimpleNotification(account=self._account,
-                                   notif_type='connection-failed',
-                                   title=_('Authentication failed'),
-                                   text=text or error))
+                Notification(account=self._account,
+                             notif_type='connection-failed',
+                             title=_('Authentication failed'),
+                             text=text or error))
 
         if self._reconnect:
             self._after_disconnect()

@@ -40,12 +40,11 @@ from gi.repository import GObject
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common import events
 from gajim.common.const import StyleAttr
 from gajim.common.i18n import _
 from gajim.common.helpers import allow_showing_notification
-from gajim.common.helpers import exec_command
 from gajim.common.helpers import play_sound
-from gajim.common.helpers import play_sound_file
 from gajim.common.ged import EventHelper
 
 from .util import add_css_to_widget
@@ -54,6 +53,7 @@ from .util import get_monitor_scale_factor
 from .util import get_total_screen_geometry
 
 log = logging.getLogger('gajim.gui.notification')
+
 
 NOTIFICATION_ICONS: Dict[str, str] = {
     'incoming-message': 'gajim-chat_msg_recv',
@@ -80,9 +80,7 @@ class Notification(EventHelper):
 
         self.register_events([
             ('notification', ged.GUI2, self._on_notification),
-            ('simple-notification', ged.GUI2, self._on_notification),
-            ('our-show', ged.GUI2, self._on_our_show),
-            ('connection-lost', ged.GUI2, self._on_connection_lost)
+            ('our-show', ged.GUI2, self._on_our_show)
         ])
 
     def _detect_dbus_caps(self) -> None:
@@ -116,42 +114,22 @@ class Notification(EventHelper):
                                   None,
                                   on_proxy_ready)
 
-    def _on_notification(self, event):
-        if hasattr(event, 'jid'):
+    def _on_notification(self, event: events.Notification) -> None:
+        if event.jid is not None:
             jid = str(event.jid)
-        else:
-            jid = None
-        if hasattr(event, 'command'):
-            # Used by Triggers plugin
-            try:
-                exec_command(event.command, use_shell=True)
-            except Exception:
-                pass
 
-        if hasattr(event, 'sound_file'):
-            # Allow override here, used by Triggers plugin
-            play_sound_file(event.sound_file)
-        elif hasattr(event, 'sound'):
+        if event.sound is not None:
             play_sound(event.sound, event.account)
 
-        if hasattr(event, 'show_notification'):
-            # Allow override here, used by Triggers plugin
-            if not event.show_notification:
-                return
-        else:
-            if not allow_showing_notification(event.account):
-                return
+        if not allow_showing_notification(event.account):
+            return
 
-        if hasattr(event, 'notif_detail'):
-            notif_detail = event.notif_detail
-        else:
-            notif_detail = event.notif_type
+        notif_detail = event.notif_detail or event.notif_type
 
-        if hasattr(event, 'icon_name'):
+        if event.icon_name is not None:
             icon_name = event.icon_name
         else:
-            icon_name = NOTIFICATION_ICONS.get(
-                notif_detail, 'mail-unread')
+            icon_name = NOTIFICATION_ICONS.get(notif_detail, 'mail-unread')
 
         self._issue_notification(
             event.notif_type,
@@ -162,32 +140,9 @@ class Notification(EventHelper):
             text=event.text,
             icon_name=icon_name)
 
-    def _on_simple_notification(self, event):
-        if not allow_showing_notification(event.account):
-            return
-
-        self._issue_notification(
-            event.notif_type,
-            event.account,
-            None,
-            title=event.title,
-            text=event.text)
-
-    def _on_our_show(self, event):
+    def _on_our_show(self, event: events.ShowChanged) -> None:
         if app.account_is_connected(event.account):
             self._withdraw('connection-failed', event.account)
-
-    def _on_connection_lost(self, event):
-        if not allow_showing_notification(event.conn.name):
-            return
-
-        self._issue_notification(
-            'connection-lost',
-            event.conn.name,
-            None,
-            title=event.title,
-            text=event.msg,
-            icon_name='gajim-connection_lost')
 
     def _issue_notification(self,
                             notif_type: str,
