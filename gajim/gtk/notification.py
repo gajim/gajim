@@ -24,9 +24,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Dict
+from __future__ import annotations
+
 from typing import Optional
-from typing import Tuple
 
 import sys
 import logging
@@ -36,7 +36,6 @@ from gi.repository import Gio
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Gtk
-from gi.repository import GObject
 
 from gajim.common import app
 from gajim.common import ged
@@ -55,7 +54,7 @@ from .util import get_total_screen_geometry
 log = logging.getLogger('gajim.gui.notification')
 
 
-NOTIFICATION_ICONS: Dict[str, str] = {
+NOTIFICATION_ICONS: dict[str, str] = {
     'incoming-message': 'gajim-chat_msg_recv',
     'group-chat-invitation': 'gajim-gc_invitation',
     'incoming-call': 'call-start-symbolic',
@@ -91,10 +90,8 @@ class Notification(EventHelper):
             self._dbus_available = True
             return
 
-        def on_proxy_ready(_source: GObject.Object,
-                           res: Gio.AsyncResult,
-                           _data: Optional[object] = None
-                           ) -> None:
+        def on_proxy_ready(_source: Gio.DBusProxy,
+                           res: Gio.AsyncResult) -> None:
             try:
                 proxy = Gio.DBusProxy.new_finish(res)
                 self._daemon_capabilities = proxy.GetCapabilities()
@@ -330,7 +327,7 @@ class PopupNotification(Gtk.Window):
             self._timeout_id = GLib.timeout_add_seconds(timeout, self.destroy)
 
     @staticmethod
-    def _get_window_pos() -> Tuple[int, int]:
+    def _get_window_pos() -> tuple[int, int]:
         pos_x = app.settings.get('notification_position_x')
         screen_w, screen_h = get_total_screen_geometry()
         if pos_x < 0:
@@ -352,6 +349,6 @@ class PopupNotification(Gtk.Window):
                 self._account, self._jid, self._notif_type)
         self.destroy()
 
-    def _on_destroy(self, *args):
+    def _on_destroy(self, _widget: Gtk.Window) -> None:
         if self._timeout_id is not None:
             GLib.source_remove(self._timeout_id)
