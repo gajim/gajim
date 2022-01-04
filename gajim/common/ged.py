@@ -41,8 +41,8 @@ POSTGUI2 = 100
 POSTGUI = 110
 
 
-HandlerFuncT = Callable[[ApplicationEvent], Any]
-EventHelperHandlersT = list[tuple[str, int, Callable[[ApplicationEvent], Any]]]
+HandlerFuncT = Callable[[Any], Any]
+EventHandlerT = tuple[str, int, HandlerFuncT]
 
 
 class GlobalEventsDispatcher:
@@ -112,18 +112,17 @@ class GlobalEventsDispatcher:
 
 class EventHelper:
     def __init__(self):
-        self.__event_handlers: EventHelperHandlersT = []
+        self.__event_handlers: list[EventHandlerT] = []
 
     def register_event(self,
                        event_name: str,
                        priority: int,
-                       handler: Callable[[ApplicationEvent], Any]) -> None:
+                       handler: HandlerFuncT) -> None:
 
         self.__event_handlers.append((event_name, priority, handler))
         app.ged.register_event_handler(event_name, priority, handler)
 
-    def register_events(self, events: EventHelperHandlersT) -> None:
-
+    def register_events(self, events: list[EventHandlerT]) -> None:
         for handler in events:
             self.__event_handlers.append(handler)
             app.ged.register_event_handler(*handler)
@@ -131,7 +130,7 @@ class EventHelper:
     def unregister_event(self,
                          event_name: str,
                          priority: int,
-                         handler: Callable[[ApplicationEvent], Any]) -> None:
+                         handler: HandlerFuncT) -> None:
 
         self.__event_handlers.remove((event_name, priority, handler))
         app.ged.register_event_handler(event_name, priority, handler)
