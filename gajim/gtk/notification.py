@@ -27,6 +27,7 @@
 from __future__ import annotations
 
 from typing import Optional
+from typing import Union
 
 import sys
 import logging
@@ -36,6 +37,7 @@ from gi.repository import Gio
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Gtk
+from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common import ged
@@ -112,9 +114,6 @@ class Notification(EventHelper):
                                   on_proxy_ready)
 
     def _on_notification(self, event: events.Notification) -> None:
-        if event.jid is not None:
-            jid = str(event.jid)
-
         if event.sound is not None:
             play_sound(event.sound, event.account)
 
@@ -131,7 +130,7 @@ class Notification(EventHelper):
         self._issue_notification(
             event.notif_type,
             event.account,
-            jid,
+            event.jid,
             notif_detail=notif_detail,
             title=event.title,
             text=event.text,
@@ -144,7 +143,7 @@ class Notification(EventHelper):
     def _issue_notification(self,
                             notif_type: str,
                             account: str,
-                            jid: Optional[str],
+                            jid: Optional[Union[str, JID]],
                             notif_detail: str = '',
                             title: str = '',
                             text: str = '',
@@ -155,6 +154,8 @@ class Notification(EventHelper):
         Notify a user of an event using GNotification and GApplication under
         Linux, Use PopupNotificationWindow under Windows
         """
+        if jid is not None:
+            jid = str(jid)
 
         if icon_name is None:
             icon_name = 'mail-message-new'
