@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import List
 from typing import Optional
 
@@ -19,6 +21,7 @@ from gi.repository import Gtk
 
 from gajim.common.const import AvatarSize
 from gajim.common import app
+from gajim.common import types
 from gajim.common.i18n import _
 
 
@@ -45,7 +48,7 @@ class AccountSideBar(Gtk.ListBox):
                 return
 
     @staticmethod
-    def _on_row_activated(_listbox, row):
+    def _on_row_activated(_listbox: AccountSideBar, row: Account) -> None:
         app.window.show_account_page(row.account)
 
     def activate_account_page(self, account: str) -> None:
@@ -112,10 +115,14 @@ class AccountAvatar(Gtk.Image):
         self.connect('destroy', self._on_destroy)
         self._update_image()
 
-    def _on_presence_update(self, _contact, _signal_name):
+    def _on_presence_update(self,
+                            _contact: types.BareContact,
+                            _signal_name: str) -> None:
         self._update_image()
 
-    def _on_avatar_update(self, _contact, _signal_name):
+    def _on_avatar_update(self,
+                          _contact: types.BareContact,
+                          _signal_name: str) -> None:
         self._update_image()
 
     def _update_image(self) -> None:
@@ -124,6 +131,6 @@ class AccountAvatar(Gtk.Image):
                                            style='circle')
         self.set_from_surface(surface)
 
-    def _on_destroy(self, *args):
+    def _on_destroy(self, _widget: Gtk.Image) -> None:
         self._contact.disconnect_all_from_obj(self)
         app.check_finalize(self)
