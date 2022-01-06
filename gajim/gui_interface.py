@@ -612,9 +612,7 @@ class Interface:
                 chat_control.contact,
                 chat_control.is_groupchat)
         except exceptions.FileError as error:
-            app.ged.raise_event(
-                InformationEvent(dialog_name='open-file-error2',
-                                 args=error))
+            ErrorDialog(_('Could not Open File'), error)
             return
 
         transfer.connect('cancel', self._on_cancel_upload)

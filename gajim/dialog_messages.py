@@ -27,61 +27,6 @@ from gajim.gui.dialogs import InformationDialog
 Message = namedtuple('Message', ['title', 'text', 'dialog'])
 
 messages = {
-    'invalid-jid-with-error': Message(
-        _('Invalid XMPP Address'),
-        '%s',
-        ErrorDialog),
-
-    'invalid-jid': Message(
-        _('Invalid XMPP Address'),
-        _('It is not possible to send a message '
-          'to %s. This XMPP Address is not valid.'),
-        ErrorDialog),
-
-    'unread-events-on-remove-account': Message(
-        _('Unread Events'),
-        _('Read or acknowledge all pending events before '
-          'removing this account.'),
-        ErrorDialog),
-
-    'invalid-form': Message(
-        _('Invalid Form'),
-        _('The form is not filled correctly.'),
-        ErrorDialog),
-
-    'not-connected-while-sending': Message(
-        _('No Connection Available'),
-        _('Your message can not be sent until you are connected.'),
-        ErrorDialog),
-
-    'jid-in-list': Message(
-        _('XMPP Address Already in List'),
-        _('The XMPP Address you entered is already in the list. '
-          'Please choose another one.'),
-        ErrorDialog),
-
-    'invalid-answer': Message(
-        _('Invalid Answer'),
-        _('Transport %(name)s answered wrongly to '
-          'register request: %(error)s'),
-        ErrorDialog),
-
-    'invalid-custom-hostname': Message(
-        _('Wrong Custom Hostname'),
-        _('Custom hostname "%s" is wrong. It will be ignored.'),
-        ErrorDialog),
-
-    'agent-register-success': Message(
-        _('Registration Succeeded'),
-        _('Registration with agent %s succeeded.'),
-        InformationDialog),
-
-    'agent-register-error': Message(
-        _('Registration Failed'),
-        _('Registration with agent %(agent)s failed with error %(error)s: '
-          '%(error_msg)s'),
-        ErrorDialog),
-
     'gstreamer-error': Message(
         _('GStreamer Error'),
         _('Error: %(error)s\nDebug: %(debug)s'),
@@ -96,12 +41,6 @@ messages = {
         _('Avahi Error'),
         _('%s\nLink-local messaging might not work properly.'),
         ErrorDialog),
-
-    'open-file-error2': Message(
-        _('Could not Open File'),
-        '%s',
-        ErrorDialog),
-
     }
 
 

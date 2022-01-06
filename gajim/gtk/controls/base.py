@@ -65,6 +65,7 @@ from gajim.gui.conversation.view import ConversationView
 from gajim.gui.conversation.scrolled import ScrolledView
 from gajim.gui.conversation.jump_to_end_button import JumpToEndButton
 from gajim.gui.dialogs import DialogButton
+from gajim.gui.dialogs import ErrorDialog
 from gajim.gui.dialogs import PastePreviewDialog
 from gajim.gui.message_input import MessageInputTextView
 from gajim.gui.util import get_hardware_key_codes
@@ -962,7 +963,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
             if not app.account_is_available(self.account):
                 # we are not connected
-                app.interface.raise_dialog('not-connected-while-sending')
+                ErrorDialog(
+                    _('No Connection Available'),
+                    _('Your message can not be sent until you are connected.'))
                 return True
 
             self._on_send_message()
