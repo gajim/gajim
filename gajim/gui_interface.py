@@ -80,7 +80,6 @@ from gajim.common.client import Client
 from gajim.common.preview import PreviewManager
 from gajim.common.const import Display
 from gajim.common.file_props import FileProp
-from gajim.common.events import InformationEvent
 
 from gajim.common import ged
 from gajim.common import exceptions
