@@ -109,6 +109,7 @@ IntSettings = Literal[
     'mainwin_width',
     'mainwin_x_position',
     'mainwin_y_position',
+    'notification_timeout',
     'notification_position_x',
     'notification_position_y',
     'preview_max_file_size',
