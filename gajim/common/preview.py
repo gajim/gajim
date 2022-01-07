@@ -200,10 +200,7 @@ class PreviewManager:
     def _accept_uri(urlparts: ParseResult,
                     uri: str,
                     additional_data: AdditionalDataDict) -> bool:
-        try:
-            oob_url = additional_data['gajim']['oob_url']
-        except (KeyError, AttributeError):
-            oob_url = None
+        oob_url = additional_data.get_value('gajim', 'oob_url')
 
         # geo
         if urlparts.scheme == 'geo':
