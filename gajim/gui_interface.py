@@ -57,32 +57,38 @@ from nbxmpp import idlequeue
 from nbxmpp import Hashes2
 from nbxmpp import JID
 
-from gajim.common import app
-from gajim.common.dbus import logind
-from gajim.common.dbus import music_track
-from gajim.common.events import AccountDisabled, AccountEnabled, FileCompleted, FileHashError
-from gajim.common.events import FileProgress
-from gajim.common.events import FileError
-
-from gajim.gui import menus
 from gajim.dialog_messages import get_dialog
 
+from gajim.common import app
+from gajim.common import ged
+from gajim.common import exceptions
 from gajim.common import idle
-from gajim.common.zeroconf import connection_zeroconf
 from gajim.common import proxy65_manager
 from gajim.common import socks5
 from gajim.common import helpers
 from gajim.common import passwords
+
+from gajim.common.dbus import logind
+from gajim.common.dbus import music_track
+from gajim.common.events import AccountEnabled
+from gajim.common.events import AccountDisabled
+from gajim.common.events import FileCompleted
+from gajim.common.events import FileHashError
+from gajim.common.events import FileProgress
+from gajim.common.events import FileError
+from gajim.common.zeroconf import connection_zeroconf
 from gajim.common.helpers import ask_for_status_message
 from gajim.common.structs import OutgoingMessage
 from gajim.common.i18n import _
 from gajim.common.client import Client
 from gajim.common.preview import PreviewManager
-from gajim.common.const import Display
+from gajim.common.const import Display, FTState
 from gajim.common.file_props import FileProp
 
-from gajim.common import ged
-from gajim.common import exceptions
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.httpupload import HTTPFileTransfer
 
 from gajim.gui.avatar import AvatarStorage
 from gajim.gui.notification import Notification
@@ -95,12 +101,16 @@ from gajim.gui.dialogs import InputDialog
 from gajim.gui.filechoosers import FileChooserDialog
 from gajim.gui.filetransfer import FileTransfersWindow
 from gajim.gui.main import MainWindow
+from gajim.gui.menus import build_accounts_menu
 from gajim.gui.util import get_app_window
 from gajim.gui.util import get_app_windows
 from gajim.gui.util import get_color_for_account
 from gajim.gui.util import open_window
+from gajim.gui.types import ControlType
 
 log = logging.getLogger('gajim.interface')
+
+ContactT = Union[BareContact, GroupchatContact, GroupchatParticipant]
 
 
 class Interface:
@@ -189,7 +199,7 @@ class Interface:
                                       self._network_status_changed)
         self._network_state: bool = self._network_monitor.get_network_available()
 
-    def _create_core_handlers_list(self):
+    def _create_core_handlers_list(self) -> None:
         # pylint: disable=line-too-long
         self.handlers = {
             'information': [self.handle_event_information],
@@ -209,7 +219,7 @@ class Interface:
         }
         # pylint: enable=line-too-long
 
-    def _register_core_handlers(self):
+    def _register_core_handlers(self) -> None:
         """
         Register core handlers in Global Events Dispatcher (GED).
 
@@ -297,7 +307,7 @@ class Interface:
     @staticmethod
     def handle_event_http_auth(event):
         # ('HTTP_AUTH', account, (method, url, transaction_id, iq_obj, msg))
-        def _response(_account, answer):
+        def _response(answer: str) -> None:
             event.conn.get_module('HTTPAuth').build_http_auth_answer(
                 event.stanza, answer)
 
@@ -321,10 +331,10 @@ class Interface:
             [DialogButton.make('Cancel',
                                text=_('_No'),
                                callback=_response,
-                               args=[event, 'no']),
+                               args=['no']),
              DialogButton.make('Accept',
                                callback=_response,
-                               args=[event, 'yes'])]).show()
+                               args=['yes'])]).show()
 
     @staticmethod
     def handle_event_client_cert_passphrase(event):
@@ -588,7 +598,10 @@ class Interface:
         if session:
             session.end_session()
 
-    def send_httpupload(self, chat_control, path=None):
+    def send_httpupload(self,
+                        chat_control: ControlType, 
+                        path: Optional[str] = None
+                        ) -> None:
         if path is not None:
             self._send_httpupload(chat_control, path)
             return
@@ -598,11 +611,14 @@ class Interface:
                           select_multiple=True,
                           transient_for=app.window)
 
-    def _on_file_dialog_ok(self, chat_control, paths):
+    def _on_file_dialog_ok(self,
+                           chat_control: ControlType,
+                           paths: list[str]
+                           ) -> None:
         for path in paths:
             self._send_httpupload(chat_control, path)
 
-    def _send_httpupload(self, chat_control, path):
+    def _send_httpupload(self, chat_control: ControlType, path: str) -> None:
         client = app.get_client(chat_control.account)
         try:
             transfer = client.get_module('HTTPUpload').make_transfer(
@@ -620,7 +636,11 @@ class Interface:
         chat_control.add_file_transfer(transfer)
         client.get_module('HTTPUpload').start_transfer(transfer)
 
-    def _on_http_upload_state_changed(self, transfer, _signal_name, state):
+    def _on_http_upload_state_changed(self,
+                                      transfer: HTTPFileTransfer,
+                                      _signal_name: str,
+                                      state: FTState
+                                      ) -> None:
         # Note: This has to be a bound method in order to connect the signal
         if state.is_finished:
             uri = transfer.get_transformed_uri()
@@ -638,7 +658,10 @@ class Interface:
             client = app.get_client(transfer.account)
             client.send_message(message)
 
-    def _on_cancel_upload(self, transfer, _signal_name):
+    def _on_cancel_upload(self,
+                          transfer: HTTPFileTransfer,
+                          _signal_name: str
+                          ) -> None:
         # Note: This has to be a bound method in order to connect the signal
         client = app.get_client(transfer.account)
         client.get_module('HTTPUpload').cancel_transfer(transfer)
@@ -648,7 +671,7 @@ class Interface:
                          room_jid: str,
                          config: Dict[str, Union[str, bool]]
                          ) -> None:
-        if app.window.chat_exists(account, room_jid):
+        if app.window.chat_exists(account, JID.from_string(room_jid)):
             log.error('Trying to create groupchat '
                       'which is already added as chat')
             return
@@ -667,18 +690,18 @@ class Interface:
             client.get_module('MUC').join(
                 jid, nick=nickname, password=password)
 
-        app.window.add_group_chat(account, jid, select=True)
+        app.window.add_group_chat(account, JID.from_string(jid), select=True)
 
     @staticmethod
     def start_chat_from_jid(account: str,
                             jid: str,
                             message: Optional[str] = None
                             ) -> None:
-        jid = JID.from_string(jid)
-        if app.window.chat_exists(account, jid):
-            app.window.select_chat(account, jid)
+        jid_ = JID.from_string(jid)
+        if app.window.chat_exists(account, jid_):
+            app.window.select_chat(account, jid_)
             if message is not None:
-                control = app.window.get_control(account, jid)
+                control = app.window.get_control(account, jid_)
                 if control is None:
                     return
                 control.msg_textview.insert_text(message)
@@ -779,7 +802,7 @@ class Interface:
         app.block_signed_in_notifications[account] = True
 
         app.settings.set_account_setting(account, 'active', True)
-        menus.build_accounts_menu()
+        build_accounts_menu()
         app.app.update_app_actions_state()
 
         app.ged.raise_event(AccountEnabled(account=account))
@@ -799,7 +822,7 @@ class Interface:
 
         app.settings.set_account_setting(account, 'roster_version', '')
         app.settings.set_account_setting(account, 'active', False)
-        menus.build_accounts_menu()
+        build_accounts_menu()
         app.app.update_app_actions_state()
 
         app.ged.raise_event(AccountDisabled(account=account))
@@ -954,12 +977,12 @@ class Interface:
         return self.avatar_storage.save_avatar(data)
 
     def get_avatar(self,
-                   contact,
-                   size,
-                   scale,
-                   show=None,
-                   pixbuf=False,
-                   style='circle'):
+                   contact: ContactT,
+                   size: int,
+                   scale: int,
+                   show: Optional[str] = None,
+                   pixbuf: bool = False,
+                   style: str = 'circle'):
         if pixbuf:
             return self.avatar_storage.get_pixbuf(
                 contact, size, scale, show, style=style)
@@ -1010,7 +1033,10 @@ class Interface:
         view.updateNamespace({'gajim': app})
         app.ipython_window = window
 
-    def _network_status_changed(self, monitor, _param):
+    def _network_status_changed(self,
+                                monitor: Gio.NetworkMonitor,
+                                _network_available: bool
+                                ) -> None:
         connected = monitor.get_network_available()
         if connected == self._network_state:
             return
