@@ -47,16 +47,16 @@ class CertificateDialog(Gtk.ApplicationWindow):
 
         self._clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
 
-        cert = convert_gio_to_openssl_cert(cert)
+        certificate = convert_gio_to_openssl_cert(cert)
         # Get data for labels and copy button
-        issuer = cert.get_issuer()
-        subject = cert.get_subject()
+        issuer = certificate.get_issuer()
+        subject = certificate.get_subject()
 
         self._headline = _('Certificate for \n%s') % self.account
         self._it_common_name = subject.commonName or ''
         self._it_organization = subject.organizationName or ''
         self._it_org_unit = subject.organizationalUnitName or ''
-        it_serial_no = str(cert.get_serial_number())
+        it_serial_no = str(certificate.get_serial_number())
         it_serial_no_half = int(len(it_serial_no) / 2)
         self._it_serial_number = '%s\n%s' % (
             it_serial_no[:it_serial_no_half],
@@ -64,15 +64,15 @@ class CertificateDialog(Gtk.ApplicationWindow):
         self._ib_common_name = issuer.commonName or ''
         self._ib_organization = issuer.organizationName or ''
         self._ib_org_unit = issuer.organizationalUnitName or ''
-        issued = datetime.strptime(cert.get_notBefore().decode('ascii'),
+        issued = datetime.strptime(certificate.get_notBefore().decode('ascii'),
                                    '%Y%m%d%H%M%SZ')
         self._issued = issued.strftime('%c %Z')
-        expires = datetime.strptime(cert.get_notAfter().decode('ascii'),
+        expires = datetime.strptime(certificate.get_notAfter().decode('ascii'),
                                     '%Y%m%d%H%M%SZ')
         self._expires = expires.strftime('%c %Z')
-        sha1 = cert.digest('sha1').decode('utf-8')
+        sha1 = certificate.digest('sha1').decode('utf-8')
         self._sha1 = '%s\n%s' % (sha1[:29], sha1[30:])
-        sha256 = cert.digest('sha256').decode('utf-8')
+        sha256 = certificate.digest('sha256').decode('utf-8')
         self._sha256 = '%s\n%s\n%s\n%s' % (
             sha256[:23], sha256[24:47], sha256[48:71], sha256[72:])
 
@@ -94,11 +94,11 @@ class CertificateDialog(Gtk.ApplicationWindow):
         self._ui.connect_signals(self)
         self.show_all()
 
-    def _on_key_press(self, _widget, event):
+    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
-    def _on_copy_cert_info_button_clicked(self, _widget):
+    def _on_copy_cert_info_button_clicked(self, _widget: Gtk.Button) -> None:
         clipboard_text = \
             self._headline + '\n\n' + \
             _('Issued to\n') + \
