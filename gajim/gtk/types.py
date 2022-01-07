@@ -18,6 +18,7 @@ from typing import Union
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from .controls.base import BaseControl
     from .controls.chat import ChatControl
     from .controls.private import PrivateChatControl
     from .controls.groupchat import GroupchatControl
@@ -38,6 +39,7 @@ if TYPE_CHECKING:
 
 
 ControlType = Union [
+    'BaseControl',
     'ChatControl',
     'PrivateChatControl',
     'GroupchatControl'
