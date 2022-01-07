@@ -42,6 +42,7 @@ from nbxmpp.protocol import JID
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import events
+from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 from gajim.common.i18n import _
 from gajim.common.helpers import allow_showing_notification
@@ -239,7 +240,8 @@ class Notification(EventHelper):
         scale = get_monitor_scale_factor()
         client = app.get_client(account)
         contact = client.get_module('Contacts').get_contact(jid)
-        return app.interface.get_avatar(contact, 32, scale, pixbuf=True)
+        return app.interface.get_avatar(
+            contact, AvatarSize.NOTIFICATION, scale, pixbuf=True)
 
     def _on_popup_destroy(self, *args):
         self._win32_active_popup = None
