@@ -12,12 +12,19 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
+
+from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
+from gajim.common.events import SubscribePresenceReceived
+from gajim.common.events import UnsubscribedPresenceReceived
+from gajim.common.events import MucInvitation
+from gajim.common.events import MucDecline
 from gajim.common.i18n import _
 
 from .roster import Roster
@@ -84,22 +91,22 @@ class AccountPage(Gtk.Box, EventHelper):
         self.show_all()
         self.connect('destroy', self._on_destroy)
 
-    def _on_destroy(self, *args):
+    def _on_destroy(self, *args: Any) -> None:
         app.check_finalize(self)
 
-    def _on_edit_profile(self, _button):
+    def _on_edit_profile(self, _button: Gtk.Button) -> None:
         open_window('ProfileWindow', account=self._account)
 
-    def _on_account_settings(self, _button):
+    def _on_account_settings(self, _button: Gtk.Button) -> None:
         window = open_window('AccountsWindow')
         window.select_account(self._account)
 
-    def _on_search_changed(self, widget):
+    def _on_search_changed(self, widget: Gtk.SearchEntry) -> None:
         text = widget.get_text().lower()
         self._roster.set_search_string(text)
 
     @staticmethod
-    def _on_button_release(paned, event):
+    def _on_button_release(paned: Gtk.Paned, event: Gdk.EventButton) -> None:
         if event.window != paned.get_handle_window():
             return
         position = paned.get_position()
@@ -120,22 +127,24 @@ class AccountPage(Gtk.Box, EventHelper):
 
         self._status_selector.update()
 
-    def _subscribe_received(self, event):
+    def _subscribe_received(self, event: SubscribePresenceReceived) -> None:
         if event.account != self._account:
             return
         self._notification_manager.add_subscription_request(event)
 
-    def _unsubscribed_received(self, event):
+    def _unsubscribed_received(self,
+                               event: UnsubscribedPresenceReceived
+                               ) -> None:
         if event.account != self._account:
             return
         self._notification_manager.add_unsubscribed(event)
 
-    def _muc_invitation_received(self, event):
+    def _muc_invitation_received(self, event: MucInvitation) -> None:
         if event.account != self._account:
             return
         self._notification_manager.add_invitation_received(event)
 
-    def _muc_invitation_declined(self, event):
+    def _muc_invitation_declined(self, event: MucDecline) -> None:
         if event.account != self._account:
             return
         self._notification_manager.add_invitation_declined(event)
