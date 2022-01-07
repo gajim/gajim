@@ -12,13 +12,20 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Any
 from typing import Dict
+from typing import Type
+from typing import TypeVar
 from typing import NamedTuple
 from typing import Optional
 from typing import Union
 
 import time
 from dataclasses import dataclass
+from dataclasses import fields
+from gi.repository import GLib
 
 from nbxmpp.protocol import JID
 from nbxmpp.const import Role
@@ -30,6 +37,9 @@ from gajim.common.const import KindConstant
 from gajim.common.const import PresenceShowExt
 from gajim.common.const import URIType
 from gajim.common.const import URIAction
+
+
+_T = TypeVar('_T')
 
 
 class URI(NamedTuple):
@@ -234,3 +244,68 @@ UNKNOWN_MUC_PRESENCE = MUCPresenceData(show=PresenceShowExt.OFFLINE,
                                        affiliation=Affiliation.NONE,
                                        role=Role.NONE,
                                        real_jid=None)
+
+class VariantMixin:
+
+    _type_to_variant_funcs = {
+        JID: str,
+    }
+
+    _variant_to_type_funcs = {
+        'JID': JID.from_string,
+    }
+
+    def _get_type_and_variant_string(self,
+                                     field_type: str) -> tuple[Type[Any], str]:
+        variant_str = ''
+        if 'Optional' in field_type:
+            variant_str = 'm'
+
+        if 'str' in field_type:
+            return str, f'{variant_str}s'
+
+        if 'int' in field_type:
+            return str, f'{variant_str}i'
+
+        if 'JID' in field_type:
+            return JID, f'{variant_str}s'
+
+        raise ValueError('unknown type: %s' % field_type)
+
+    def to_variant(self) -> GLib.Variant:
+        __types = {}
+        vdict = {}
+        for field in fields(self):
+            value = getattr(self, field.name)
+            field_t, variant_str = self._get_type_and_variant_string(field.type)
+            if value is None:
+                vdict[field.name] = GLib.Variant(variant_str, value)
+                continue
+
+            if not isinstance(value, field_t):
+                raise ValueError('invalid type: %s is not a %s' % (value,
+                                                                   field_t))
+
+            conversion_func = self._type_to_variant_funcs.get(field_t)
+            if conversion_func is not None:
+                value = conversion_func(value)
+                __types[field.name] = field_t.__name__
+
+            vdict[field.name] = GLib.Variant(variant_str, value)
+
+        if __types:
+            vdict['__types'] = GLib.Variant('a{ss}', __types)
+        return GLib.Variant('a{sv}', vdict)
+
+    @classmethod
+    def from_variant(cls: Type[_T], variant: GLib.Variant) -> _T:
+        vdict = variant.unpack()
+        __types = vdict.pop('__types', None)
+        if __types is not None:
+            for field_name, value_t_name in __types.items():
+                value = vdict[field_name]
+                conversion_func = cls._variant_to_type_funcs.get(value_t_name)
+                if conversion_func is None:
+                    raise ValueError('no conversion for: %s' % value_t_name)
+                vdict[field_name] = conversion_func(value)
+        return cls(**vdict)
