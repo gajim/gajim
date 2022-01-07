@@ -114,7 +114,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     A base class containing a banner, ConversationView, MessageInputTextView
     """
 
-    _type = None  # type: ControlType
+    _type: Optional[ControlType] = None
 
     def __init__(self, widget_name: str, account: str, jid: JID) -> None:
         EventHelper.__init__(self)
@@ -208,7 +208,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.msg_textview.connect('key-press-event',
                                   self._on_message_textview_key_press_event)
         self.msg_textview.connect('populate-popup',
-                                  self.on_msg_textview_populate_popup)
+                                  self._on_msg_textview_populate_popup)
         self.msg_textview.get_buffer().connect(
             'changed', self._on_message_tv_buffer_changed)
 
@@ -255,7 +255,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         # XEP-0172 User Nickname
         # TODO:
-        self.user_nick = None
+        self.user_nick: Optional[str] = None
 
         self.command_hits: List[str] = []
         self.last_key_tabs: bool = False
@@ -264,7 +264,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         self._client.get_module('Chatstate').set_active(self.contact)
 
-        self.encryption = self.get_encryption_state()
+        self.encryption: Optional[str] = self.get_encryption_state()
         self.conversation_view.encryption_enabled = self.encryption is not None
 
         # PluginSystem: adding GUI extension point for BaseControl
@@ -283,10 +283,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         # to properly use the super, because of the old code.
         CommandTools.__init__(self)
 
-    def _connect_contact_signals(self):
+    def _connect_contact_signals(self) -> None:
         raise NotImplementedError
 
-    def _get_action(self, name: str) -> Gio.Action:
+    def _get_action(self, name: str) -> Gio.SimpleAction:
         return app.window.lookup_action(f'{name}{self.control_id}')
 
     def process_event(self, event):
@@ -329,7 +329,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             self.conversation_view.show_message_retraction(
                 event.properties.moderation.stanza_id, text)
 
-    def _on_conversation_view_key_press(self, _listbox, event):
+    def _on_conversation_view_key_press(self,
+                                        _listbox: ConversationView,
+                                        event: Gdk.EventKey
+                                        ) -> int:
         if event.get_state() & Gdk.ModifierType.SHIFT_MASK:
             if event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up):
                 return Gdk.EVENT_PROPAGATE
@@ -395,7 +398,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         """
         on_response_yes(self)
 
-    def focus(self):
+    def focus(self) -> None:
         raise NotImplementedError
 
     def draw_banner(self) -> None:
@@ -432,21 +435,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         """
         self.draw_banner()
 
-    def _update_toolbar(self):
+    def _update_toolbar(self) -> None:
         """
         Derived types MAY implement this
         """
-
-    def get_tab_label(self, chatstate):
-        """
-        Return a suitable tab label string. Returns a tuple such as: (label_str,
-        color) either of which can be None if chatstate is given that means we
-        have HE SENT US a chatstate and we want it displayed
-
-        Derivded classes MUST implement this.
-        """
-        # Return a markup'd label and optional Gtk.Color in a tuple like:
-        # return (label_str, None)
 
     def set_session(self, session):
         oldsession = None
@@ -577,7 +569,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 self._type)
             self.last_msg_id = None
 
-    def change_encryption(self, action, param):
+    def change_encryption(self,
+                          action: Gio.SimpleAction,
+                          param: GLib.Variant
+                          ) -> None:
         encryption = param.get_string()
         if encryption == 'disabled':
             encryption = None
@@ -622,16 +617,16 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.xml.authentication_button.set_visible(visible)
         self.xml.lock_image.set_sensitive(visible)
 
-    def _on_authentication_button_clicked(self, _button):
+    def _on_authentication_button_clicked(self, _button: Gtk.Button) -> None:
         app.plugin_manager.extension_point(
             'encryption_dialog' + self.encryption, self)
 
-    def set_encryption_state(self, encryption):
+    def set_encryption_state(self, encryption: Optional[str]) -> None:
         self.encryption = encryption
         self.conversation_view.encryption_enabled = encryption is not None
         self.contact.settings.set('encryption', self.encryption or '')
 
-    def get_encryption_state(self):
+    def get_encryption_state(self) -> Optional[str]:
         state = self.contact.settings.get('encryption')
         if not state:
             return None
@@ -668,7 +663,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         spell_checker.connect('notify::language', self.on_language_changed)
 
-    def get_speller_language(self):
+    def get_speller_language(self) -> Optional[Gspell.Language]:
         lang = self.contact.settings.get('speller_language')
         if not lang:
             # use the default one
@@ -680,7 +675,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             gspell_lang = Gspell.language_get_default()
         return gspell_lang
 
-    def on_language_changed(self, checker, _param):
+    def on_language_changed(self, checker: Gspell.Checker, _param: Any) -> None:
         gspell_lang = checker.get_language()
         self.contact.settings.set('speller_language', gspell_lang.get_code())
 
@@ -716,7 +711,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         self.unregister_events()
 
-    def on_msg_textview_populate_popup(self, _textview, menu):
+    def _on_msg_textview_populate_popup(self,
+                                        _textview: MessageInputTextView,
+                                        menu: Gtk.Widget
+                                        ) -> None:
         """
         Override the default context menu and we prepend an option to switch
         languages
@@ -754,17 +752,19 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             return
         self.insert_as_quote(text)
 
-    def on_quote(self, _widget, text):
+    def on_quote(self, _widget: Gtk.Widget, text: str) -> None:
         self.insert_as_quote(text)
 
-    def on_mention(self, _widget, name):
+    def on_mention(self, _widget: Gtk.Widget, name: str) -> None:
         gc_refer_to_nick_char = app.settings.get('gc_refer_to_nick_char')
         text = f'{name}{gc_refer_to_nick_char} '
         message_buffer = self.msg_textview.get_buffer()
         message_buffer.insert_at_cursor(text)
         GLib.idle_add(self.msg_textview.grab_focus)
 
-    def _on_message_textview_paste_event(self, _texview):
+    def _on_message_textview_paste_event(self,
+                                         _texview: MessageInputTextView
+                                         ) -> None:
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         image = clipboard.wait_for_image()
         if image is not None:
@@ -824,7 +824,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             return 'jingle'
         return None
 
-    def _start_filetransfer(self, path):
+    def _start_filetransfer(self, path: str) -> None:
         method = self._get_pref_ft_method()
         if method is None:
             return
@@ -836,7 +836,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             app.interface.instances['file_transfers'].send_file(
                 self.account, self.contact, path)
 
-    def _on_send_file(self, action, _param):
+    def _on_send_file(self,
+                      action: Gio.SimpleAction,
+                      _param: Optional[GLib.Variant]
+                      ) -> None:
         name = action.get_name()
         if 'httpupload' in name:
             app.interface.send_httpupload(self)
@@ -857,7 +860,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             app.interface.instances['file_transfers'].show_file_send_request(
                 self.account, self.contact)
 
-    def _on_message_textview_key_press_event(self, textview, event):
+    def _on_message_textview_key_press_event(self,
+                                             textview: MessageInputTextView,
+                                             event: Gdk.EventKey
+                                             ) -> bool:
         # pylint: disable=too-many-nested-blocks
         if event.keyval == Gdk.KEY_space:
             self.space_pressed = True
@@ -978,7 +984,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         return False
 
-    def _on_autoscroll_changed(self, _widget, autoscroll):
+    def _on_autoscroll_changed(self,
+                               _widget: ScrolledView,
+                               autoscroll: bool
+                               ) -> None:
         if not autoscroll:
             self._jump_to_end_button.toggle(True)
             return
@@ -986,23 +995,41 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self._jump_to_end_button.toggle(False)
         app.window.mark_as_read(self.account, self.contact.jid)
 
-    def _on_jump_to_end(self, _button):
+    def _on_jump_to_end(self, _button: Gtk.Button) -> None:
         self.scroll_to_end(force=True)
         self._jump_to_end_button.reset_unread_count()
 
-    def _on_drag_data_received(self, widget, context, x_coord, y_coord,
-                               selection, target_type, timestamp):
+    def _on_drag_data_received(self,
+                               widget: Gtk.Widget,
+                               context: Gdk.DragContext,
+                               x_coord: int,
+                               y_coord: int,
+                               selection: Gtk.SelectionData,
+                               target_type: int,
+                               timestamp: int
+                               ) -> None:
         """
         Derived types SHOULD implement this
         """
 
-    def _on_drag_leave(self, *args):
+    def _on_drag_leave(self,
+                       _widget: Gtk.Widget,
+                       _context: Gdk.DragContext,
+                       _time: int
+                        ) -> None:
         self.xml.drop_area.set_no_show_all(True)
         self.xml.drop_area.hide()
 
-    def _on_drag_motion(self, *args):
+    def _on_drag_motion(self,
+                        _widget: Gtk.Widget,
+                        _context: Gdk.DragContext,
+                        _x_coord: int,
+                        _y_coord: int,
+                        _time: int
+                        ) -> bool:
         self.xml.drop_area.set_no_show_all(False)
         self.xml.drop_area.show_all()
+        return True
 
     def drag_data_file_transfer(self, selection: Gtk.SelectionData) -> None:
         # we may have more than one file dropped
@@ -1017,7 +1044,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
             self._start_filetransfer(path)
 
-    def get_seclabel(self):
+    def get_seclabel(self) -> Optional[str]:
         idx = self.xml.label_selector.get_active()
         if idx == -1:
             return None
@@ -1032,7 +1059,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def get_our_nick(self) -> str:
         return app.nicks[self.account]
 
-    def _on_send_message(self, *args):
+    def _on_send_message(self, *args: Any) -> None:
         self.msg_textview.replace_emojis()
         message = self.msg_textview.get_text()
         self.send_message(message)
@@ -1086,7 +1113,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         self.msg_textview.clear()
 
-    def _on_message_tv_buffer_changed(self, textbuffer):
+    def _on_message_tv_buffer_changed(self,
+                                      textbuffer: Gtk.TextBuffer
+                                      ) -> None:
         has_text = self.msg_textview.has_text()
         app.window.lookup_action(
             f'send-message-{self.control_id}').set_enabled(has_text)
@@ -1095,7 +1124,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             app.plugin_manager.extension_point(
                 'typing' + self.encryption, self)
 
-        self._client.get_module('Chatstate').set_keyboard_activity(self.contact)
+        self._client.get_module('Chatstate').set_keyboard_activity(
+            self.contact)
         if not has_text:
             self._client.get_module('Chatstate').set_chatstate_delayed(
                 self.contact, Chatstate.ACTIVE)
@@ -1301,7 +1331,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.xml.emoticons_button.connect('clicked',
                                           self._on_emoticon_button_clicked)
 
-    def _on_emoticon_button_clicked(self, _widget):
+    def _on_emoticon_button_clicked(self, _widget: Gtk.Button) -> None:
         # Present GTK emoji chooser (not cross platform compatible)
         self.msg_textview.emit('insert-emoji')
         self.xml.emoticons_button.set_property('active', False)
@@ -1315,7 +1345,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def _style_changed(self, *args):
         self.update_text_tags()
 
-    def update_text_tags(self):
+    def update_text_tags(self) -> None:
         self.conversation_view.update_text_tags()
 
     def set_control_active(self, state: bool) -> None:
