@@ -74,7 +74,7 @@ from nbxmpp.errors import StanzaError
 from nbxmpp.structs import ProxyData
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import InvalidJid
-from OpenSSL.crypto import load_certificate
+from OpenSSL.crypto import X509, load_certificate
 from OpenSSL.crypto import FILETYPE_PEM
 from gi.repository import Gio
 from gi.repository import GLib
@@ -116,20 +116,20 @@ class InvalidFormat(Exception):
     pass
 
 
-def parse_jid(jidstring):
+def parse_jid(jidstring: str) -> str:
     try:
         return str(validate_jid(jidstring))
     except Exception as error:
         raise InvalidFormat(error)
 
-def idn_to_ascii(host):
+def idn_to_ascii(host: str) -> str:
     """
     Convert IDN (Internationalized Domain Names) to ACE (ASCII-compatible
     encoding)
     """
     from encodings import idna
     labels = idna.dots.split(host)
-    converted_labels = []
+    converted_labels: list[str] = []
     for label in labels:
         if label:
             converted_labels.append(idna.ToASCII(label).decode('utf-8'))
@@ -137,19 +137,19 @@ def idn_to_ascii(host):
             converted_labels.append('')
     return ".".join(converted_labels)
 
-def ascii_to_idn(host):
+def ascii_to_idn(host: str) -> str:
     """
     Convert ACE (ASCII-compatible encoding) to IDN (Internationalized Domain
     Names)
     """
     from encodings import idna
     labels = idna.dots.split(host)
-    converted_labels = []
+    converted_labels: list[str] = []
     for label in labels:
         converted_labels.append(idna.ToUnicode(label))
     return ".".join(converted_labels)
 
-def puny_encode_url(url):
+def puny_encode_url(url: str) -> Optional[str]:
     _url = url
     if '//' not in _url:
         _url = '//' + _url
@@ -158,10 +158,10 @@ def puny_encode_url(url):
         p_loc = idn_to_ascii(o.hostname)
     except Exception:
         log.debug('urlparse failed: %s', url)
-        return False
+        return None
     return url.replace(o.hostname, p_loc)
 
-def parse_resource(resource):
+def parse_resource(resource: str) -> Optional[str]:
     """
     Perform stringprep on resource and return it
     """
@@ -260,48 +260,43 @@ def get_uf_role(role: Union[Role, str], plural: bool = False) -> str:
         role = role.value
 
     if role == 'none':
-        role_name = Q_('?Group Chat Contact Role:None')
-    elif role == 'moderator':
+        return Q_('?Group Chat Contact Role:None')
+    if role == 'moderator':
         if plural:
-            role_name = _('Moderators')
-        else:
-            role_name = _('Moderator')
-    elif role == 'participant':
+            return _('Moderators')
+        return _('Moderator')
+    if role == 'participant':
         if plural:
-            role_name = _('Participants')
-        else:
-            role_name = _('Participant')
-    elif role == 'visitor':
+            return _('Participants')
+        return _('Participant')
+    if role == 'visitor':
         if plural:
-            role_name = _('Visitors')
-        else:
-            role_name = _('Visitor')
-    return role_name
+            return _('Visitors')
+        return _('Visitor')
+    return ''
 
 def get_uf_affiliation(affiliation: Union[Affiliation, str],
-                       plural: bool = False) -> str:
+                       plural: bool = False
+                       ) -> str:
     '''Get a nice and translated affilition for muc'''
     if not isinstance(affiliation, str):
         affiliation = affiliation.value
 
     if affiliation == 'none':
-        affiliation_name = Q_('?Group Chat Contact Affiliation:None')
-    elif affiliation == 'owner':
+        return Q_('?Group Chat Contact Affiliation:None')
+    if affiliation == 'owner':
         if plural:
-            affiliation_name = _('Owners')
-        else:
-            affiliation_name = _('Owner')
-    elif affiliation == 'admin':
+            return _('Owners')
+        return _('Owner')
+    if affiliation == 'admin':
         if plural:
-            affiliation_name = _('Administrators')
-        else:
-            affiliation_name = _('Administrator')
-    elif affiliation == 'member':
+            return _('Administrators')
+        return _('Administrator')
+    if affiliation == 'member':
         if plural:
-            affiliation_name = _('Members')
-        else:
-            affiliation_name = _('Member')
-    return affiliation_name
+            return _('Members')
+        return _('Member')
+    return ''
 
 def get_uf_relative_time(timestamp: int) -> str:
     date_time = datetime.fromtimestamp(timestamp)
@@ -389,23 +384,23 @@ def exec_command(command: str,
         process = subprocess.Popen(args)
         app.thread_interface(process.wait)
 
-def build_command(executable, parameter):
+def build_command(executable: str, parameter: str) -> str:
     # we add to the parameter (can hold path with spaces)
     # "" so we have good parsing from shell
-    parameter = parameter.replace('"', '\\"') # but first escape "
+    parameter = parameter.replace('"', '\\"')  # but first escape "
     command = f'{executable} "{parameter}"'
     return command
 
 def get_file_path_from_dnd_dropped_uri(uri: str) -> str:
-    path = urllib.parse.unquote(uri) # escape special chars
-    path = path.strip('\r\n\x00') # remove \r\n and NULL
+    path = urllib.parse.unquote(uri)  # escape special chars
+    path = path.strip('\r\n\x00')  # remove \r\n and NULL
     # get the path to file
-    if re.match('^file:///[a-zA-Z]:/', path): # windows
-        path = path[8:] # 8 is len('file:///')
-    elif path.startswith('file://'): # nautilus, rox
-        path = path[7:] # 7 is len('file://')
-    elif path.startswith('file:'): # xffm
-        path = path[5:] # 5 is len('file:')
+    if re.match('^file:///[a-zA-Z]:/', path):  # windows
+        path = path[8:]  # 8 is len('file:///')
+    elif path.startswith('file://'):  # nautilus, rox
+        path = path[7:]  # 7 is len('file://')
+    elif path.startswith('file:'):  # xffm
+        path = path[5:]  # 5 is len('file:')
     return path
 
 def sanitize_filename(filename: str) -> str:
@@ -437,7 +432,7 @@ def reduce_chars_newlines(text: str, max_chars: int = 0,
     If any of the params is not present (None or 0) the action on it is not
     performed
     """
-    def _cut_if_long(string_):
+    def _cut_if_long(string_: str) -> str:
         if len(string_) > max_chars:
             string_ = string_[:max_chars - 3] + '…'
         return string_
@@ -458,12 +453,12 @@ def reduce_chars_newlines(text: str, max_chars: int = 0,
     return reduced_text
 
 
-def get_contact_dict_for_account(account: str) -> Dict[str, types.BareContact]:
+def get_contact_dict_for_account(account: str) -> dict[str, types.BareContact]:
     """
     Creates a dict of jid -> contact with all contacts of account
     Can be used for completion lists
     """
-    contacts_dict = {}
+    contacts_dict: dict[str, types.BareContact] = {}
     client = app.get_client(account)
     for contact in client.get_module('Roster').iter_contacts():
         contacts_dict[str(contact.jid)] = contact
@@ -572,6 +567,7 @@ def get_global_show() -> str:
 
 def get_global_status_message() -> str:
     maxi = 0
+    status_message = ''
     for account, con in app.connections.items():
         if not app.settings.get_account_setting(account,
                                                 'sync_with_global_status'):
@@ -614,14 +610,14 @@ def get_jid_from_iq(iq_obj):
     jid = get_full_jid_from_iq(iq_obj)
     return app.get_jid_without_resource(jid)
 
-def get_auth_sha(sid, initiator, target):
+def get_auth_sha(sid: str, initiator: str, target: str) -> str:
     """
     Return sha of sid + initiator + target used for proxy auth
     """
     return hashlib.sha1(
         (f'{sid}{initiator}{target}').encode('utf-8')).hexdigest()
 
-def remove_invalid_xml_chars(string_):
+def remove_invalid_xml_chars(string_: str) -> str:
     if string_:
         string_ = re.sub(INVALID_XML_CHARS_REGEX, '', string_)
     return string_
@@ -771,7 +767,7 @@ def get_proxy(proxy_name: str) -> Optional[ProxyData]:
                      username=username,
                      password=password)
 
-def version_condition(current_version, required_version):
+def version_condition(current_version: str, required_version: str) -> bool:
     if V(current_version) < V(required_version):
         return False
     return True
@@ -1327,9 +1323,8 @@ def load_file_async(path: Path,
     file.load_contents_async(None, _on_load_finished)
 
 
-def convert_gio_to_openssl_cert(cert):
-    cert = load_certificate(FILETYPE_PEM, cert.props.certificate_pem.encode())
-    return cert
+def convert_gio_to_openssl_cert(cert: Gio.TlsCertificate) -> X509:
+    return load_certificate(FILETYPE_PEM, cert.props.certificate_pem.encode())
 
 
 def get_custom_host(account: str) -> Optional[Tuple[str,
@@ -1403,7 +1398,7 @@ def ask_for_status_message(status: str, signin: bool = False) -> bool:
     return app.settings.get('always_ask_for_status_message')
 
 
-def get_group_chat_nick(account: str, room_jid: str) -> str:
+def get_group_chat_nick(account: str, room_jid: Union[JID, str]) -> str:
     nick = app.nicks[account]
 
     client = app.get_client(account)
@@ -1416,7 +1411,7 @@ def get_group_chat_nick(account: str, room_jid: str) -> str:
     return nick
 
 
-def get_muc_context(jid: str) -> str:
+def get_muc_context(jid: Union[JID, str]) -> Optional[str]:
     disco_info = app.storage.cache.get_last_disco_info(jid)
     if disco_info is None:
         return None
