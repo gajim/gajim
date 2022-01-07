@@ -100,6 +100,12 @@ class MessageRow(BaseRow):
         # Keep original text for message correction
         self._original_text: str = text
 
+        if self._is_groupchat:
+            our_nick = get_group_chat_nick(self._account, self._contact.jid)
+            is_self = name == our_nick
+        else:
+            is_self = kind == 'outgoing'
+
         is_previewable = False
         if additional_data is not None:
             is_previewable = app.interface.preview_manager.is_previewable(
@@ -110,7 +116,7 @@ class MessageRow(BaseRow):
                 context = get_muc_context(self._contact.jid)
             self._message_widget = PreviewWidget(account)
             app.interface.preview_manager.create_preview(
-                text, self._message_widget, context)
+                text, self._message_widget, is_self, context)
         else:
             self._message_widget = MessageWidget(account)
             self._message_widget.add_with_styling(text, nickname=name)
@@ -119,12 +125,6 @@ class MessageRow(BaseRow):
                     self._account, self._contact.jid)
                 if name != our_nick:
                     self._check_for_highlight(text)
-
-        if self._is_groupchat:
-            our_nick = get_group_chat_nick(self._account, self._contact.jid)
-            is_self = name == our_nick
-        else:
-            is_self = kind == 'outgoing'
 
         if self._contact.jid == self._client.get_own_jid().bare:
             name = _('Me')

@@ -258,6 +258,7 @@ class PreviewManager:
     def create_preview(self,
                        uri: str,
                        widget: Any,
+                       is_self: bool,
                        context: Optional[str] = None
                        ) -> None:
         if uri.startswith('geo:'):
@@ -268,7 +269,7 @@ class PreviewManager:
         preview = self._process_web_uri(uri, widget, context)
 
         if not preview.orig_exists():
-            if context is not None:
+            if context is not None and not is_self:
                 allow_in_public = app.settings.get('preview_anonymous_muc')
                 if context == 'public' and not allow_in_public:
                     preview.update_widget()
