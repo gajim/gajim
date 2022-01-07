@@ -76,6 +76,7 @@ from gajim.common.events import FileCompleted
 from gajim.common.events import FileHashError
 from gajim.common.events import FileProgress
 from gajim.common.events import FileError
+from gajim.common.events import MucAdded
 from gajim.common.zeroconf import connection_zeroconf
 from gajim.common.helpers import ask_for_status_message
 from gajim.common.structs import OutgoingMessage
@@ -599,7 +600,7 @@ class Interface:
             session.end_session()
 
     def send_httpupload(self,
-                        chat_control: ControlType, 
+                        chat_control: ControlType,
                         path: Optional[str] = None
                         ) -> None:
         if path is not None:
@@ -711,11 +712,11 @@ class Interface:
         app.app.activate_action('start-chat', GLib.Variant('s', str(jid)))
 
     @staticmethod
-    def _on_muc_added(event):
-        if app.window.chat_exists(event.account, event.jid):
+    def _on_muc_added(event: MucAdded) -> None:
+        if app.window.chat_exists(event.account, JID.from_string(event.jid)):
             return
 
-        app.window.add_group_chat(event.account, event.jid)
+        app.window.add_group_chat(event.account, JID.from_string(event.jid))
 
     @staticmethod
     def create_account(account: str,
