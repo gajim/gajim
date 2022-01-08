@@ -89,11 +89,11 @@ class PasswordRequired(ApplicationEvent):
 class Notification(ApplicationEvent):
     name: str = field(init=False, default='notification')
     account: str
-    notif_type: str
+    type: str
     title: str
     text: str
     jid: Optional[Union[JID, str]] = None
-    notif_detail: Optional[str] = None
+    sub_type: Optional[str] = None
     sound: Optional[str] = None
     icon_name: Optional[str] = None
 

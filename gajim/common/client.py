@@ -293,7 +293,7 @@ class Client(Observable):
 
             app.ged.raise_event(
                 Notification(account=self._account,
-                             notif_type='connection-failed',
+                             type='connection-failed',
                              title=_('Authentication failed'),
                              text=text or error))
 

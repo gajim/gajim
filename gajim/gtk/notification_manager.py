@@ -173,7 +173,7 @@ class NotificationManager(Gtk.ListBox):
             app.ged.raise_event(
                 Notification(account=self._account,
                              jid=event.jid,
-                             notif_type='subscription-request',
+                             type='subscription-request',
                              title=_('Subscription Request'),
                              text=text))
         elif row.type == 'unsubscribed':
@@ -193,7 +193,7 @@ class NotificationManager(Gtk.ListBox):
             app.ged.raise_event(
                 Notification(account=self._account,
                              jid=event.jid,
-                             notif_type='unsubscribed',
+                             type='unsubscribed',
                              title=_('Contact Unsubscribed'),
                              text=text))
         elif row.type == 'subscribe':
@@ -216,7 +216,7 @@ class NotificationManager(Gtk.ListBox):
             app.ged.raise_event(
                 Notification(account=self._account,
                              jid=jid,
-                             notif_type='group-chat-invitation',
+                             type='group-chat-invitation',
                              title=_('Group Chat Invitation'),
                              text=text))
 

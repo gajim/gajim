@@ -1301,8 +1301,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         app.ged.raise_event(
             Notification(account=self.account,
                          jid=self.contact.jid,
-                         notif_type='incoming-message',
-                         notif_detail=msg_type,
+                         type='incoming-message',
+                         sub_type=msg_type,
                          title=title,
                          text=text,
                          sound=sound))

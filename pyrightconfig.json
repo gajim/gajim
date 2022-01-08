@@ -35,6 +35,7 @@
         "gajim/gtk/conversation/rows/scroll_hint.py",
         "gajim/gtk/conversation/rows/widgets.py",
         "gajim/gtk/conversation/scrolled.py",
+        "gajim/gtk/notification.py",
         "gajim/gtk/status_message_selector.py",
         "gajim/gtk/status_selector.py",
     ],

@@ -188,8 +188,8 @@ class FileTransfersWindow:
         app.ged.raise_event(
             Notification(account=event.account,
                          jid=event.jid,
-                         notif_type='file-transfer',
-                         notif_detail='file-completed',
+                         type='file-transfer',
+                         sub_type='file-completed',
                          title=_('File Transfer Completed'),
                          text=_('File: %s') % event.file_props.name))
 
@@ -210,8 +210,8 @@ class FileTransfersWindow:
         app.ged.raise_event(
             Notification(account=event.account,
                          jid=event.jid,
-                         notif_type='file-transfer',
-                         notif_detail='file-send-error',
+                         type='file-transfer',
+                         sub_type='file-send-error',
                          title=_('File Transfer Failed'),
                          text=_('File: %s') % event.file_props.name))
 
@@ -226,9 +226,9 @@ class FileTransfersWindow:
             return
 
         if errno in (-4, -5):
-            notif_detail = 'file-error'
+            sub_type = 'file-error'
         else:
-            notif_detail = 'file-request-error'
+            sub_type = 'file-request-error'
 
         if app.window.is_chat_active(account, event.jid):
             return
@@ -237,8 +237,8 @@ class FileTransfersWindow:
         app.ged.raise_event(
             Notification(account=account,
                          jid=event.jid,
-                         notif_type='file-transfer',
-                         notif_detail=notif_detail,
+                         type='file-transfer',
+                         sub_type=sub_type,
                          title=_('File Transfer Failed'),
                          text=text))
 
@@ -264,8 +264,8 @@ class FileTransfersWindow:
         app.ged.raise_event(
             Notification(account=account,
                          jid=event.jid,
-                         notif_type='file-transfer',
-                         notif_detail='file-request-received',
+                         type='file-transfer',
+                         sub_type='file-request-received',
                          title=_('File Offered'),
                          text=text))
 

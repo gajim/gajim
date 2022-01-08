@@ -247,7 +247,7 @@ class CallWidget(Gtk.Box):
             app.ged.raise_event(
                 Notification(account=self._account,
                              jid=self._contact.jid,
-                             notif_type='incoming-call',
+                             type='incoming-call',
                              title=_('Incoming Call'),
                              text=_('%s is calling') % self._contact.name))
 

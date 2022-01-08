@@ -26,6 +26,7 @@
 
 from __future__ import annotations
 
+from typing import Any
 from typing import Optional
 from typing import Union
 
@@ -49,10 +50,11 @@ from gajim.common.helpers import allow_showing_notification
 from gajim.common.helpers import play_sound
 from gajim.common.ged import EventHelper
 
-from .util import add_css_to_widget
 from .builder import get_builder
+from .util import add_css_to_widget
 from .util import get_monitor_scale_factor
 from .util import get_total_screen_geometry
+from .structs import OpenEventActionParams
 
 log = logging.getLogger('gajim.gui.notification')
 
@@ -68,51 +70,16 @@ NOTIFICATION_ICONS: dict[str, str] = {
 }
 
 
-class Notification(EventHelper):
-    """
-    Handle notifications
-    """
+_notification_backend = None
+
+class NotificationBackend(EventHelper):
     def __init__(self) -> None:
         EventHelper.__init__(self)
-        self._dbus_available: bool = False
-        self._daemon_capabilities = ['actions']
-        self._win32_active_popup = None
-
-        self._detect_dbus_caps()
 
         self.register_events([
             ('notification', ged.GUI2, self._on_notification),
             ('our-show', ged.GUI2, self._on_our_show)
         ])
-
-    def _detect_dbus_caps(self) -> None:
-        if sys.platform in ('win32', 'darwin'):
-            return
-
-        if app.is_flatpak():
-            self._dbus_available = True
-            return
-
-        def on_proxy_ready(_source: Gio.DBusProxy,
-                           res: Gio.AsyncResult) -> None:
-            try:
-                proxy = Gio.DBusProxy.new_finish(res)
-                self._daemon_capabilities = proxy.GetCapabilities()
-            except GLib.Error as error:
-                log.warning('Notifications D-Bus not available: %s', error)
-            else:
-                self._dbus_available = True
-                log.info('Notifications D-Bus connected')
-
-        log.info('Connecting to Notifications D-Bus')
-        Gio.DBusProxy.new_for_bus(Gio.BusType.SESSION,
-                                  Gio.DBusProxyFlags.DO_NOT_CONNECT_SIGNALS,
-                                  None,
-                                  'org.freedesktop.Notifications',
-                                  '/org/freedesktop/Notifications',
-                                  'org.freedesktop.Notifications',
-                                  None,
-                                  on_proxy_ready)
 
     def _on_notification(self, event: events.Notification) -> None:
         if event.sound is not None:
@@ -121,154 +88,62 @@ class Notification(EventHelper):
         if not allow_showing_notification(event.account):
             return
 
-        notif_detail = event.notif_detail or event.notif_type
-
-        if event.icon_name is not None:
-            icon_name = event.icon_name
-        else:
-            icon_name = NOTIFICATION_ICONS.get(notif_detail, 'mail-unread')
-
-        self._issue_notification(
-            event.notif_type,
-            event.account,
-            event.jid,
-            notif_detail=notif_detail,
-            title=event.title,
-            text=event.text,
-            icon_name=icon_name)
+        self._send(event)
 
     def _on_our_show(self, event: events.ShowChanged) -> None:
-        if app.account_is_connected(event.account):
-            self._withdraw('connection-failed', event.account)
-
-    def _issue_notification(self,
-                            notif_type: str,
-                            account: str,
-                            jid: Optional[Union[str, JID]],
-                            notif_detail: str = '',
-                            title: str = '',
-                            text: str = '',
-                            icon_name: Optional[str] = None,
-                            timeout: int = -1
-                            ) -> None:
-        """
-        Notify a user of an event using GNotification and GApplication under
-        Linux, Use PopupNotificationWindow under Windows
-        """
-        if jid is not None:
-            jid = str(jid)
-
-        if icon_name is None:
-            icon_name = 'mail-message-new'
-
-        if timeout < 0:
-            timeout = app.settings.get('notification_timeout')
-
-        title = GLib.markup_escape_text(title)
-        text = GLib.markup_escape_text(text)
-
-        if sys.platform == 'win32':
-            self._withdraw()
-            self._win32_active_popup = PopupNotification(
-                notif_type,
-                account,
-                jid,
-                notif_detail,
-                title,
-                text,
-                icon_name,
-                timeout)
-            self._win32_active_popup.connect('destroy', self._on_popup_destroy)
+        if not app.account_is_connected(event.account):
             return
+        self._withdraw(['connection-failed', event.account])
 
-        if not self._dbus_available:
-            return
+    def _send(self, event: events.Notification) -> None:
+        raise NotImplementedError
 
-        icon = Gio.ThemedIcon.new(icon_name)
+    def _withdraw(self, details: list[Any]) -> None:
+        raise NotImplementedError
 
-        notification = Gio.Notification()
-        if title is not None:
-            notification.set_title(title)
-        if text is not None:
-            notification.set_body(text)
-        notif_id = None
-        if notif_type in (
-                'incoming-message',
-                'file-transfer',
-                'group-chat-invitation',
-                'subscription-request',
-                'unsubscribed',
-                'incoming-call',
-                'connection-failed'):
-            if 'actions' in self._daemon_capabilities:
-                # Create Variant Dict
-                dict_ = {'account': GLib.Variant('s', account),
-                         'jid': GLib.Variant('s', jid),
-                         'notif_detail': GLib.Variant('s', notif_detail)}
-                variant_dict = GLib.Variant('a{sv}', dict_)
 
-                # Add 'Open' action button to notification
-                action = f'app.{account}-open-event'
-                notification.add_button_with_target(
-                    _('Open'), action, variant_dict)
-                notification.set_default_action_and_target(
-                    action, variant_dict)
+class DummyBackend(NotificationBackend):
 
-                if notif_type == 'incoming-message':
-                    # Add 'Mark as Read' action button to notification
-                    action = f'app.{account}-mark-as-read'
-                    notification.add_button_with_target(
-                        _('Mark as Read'), action, variant_dict)
+    def _send(self, event: events.Notification) -> None:
+        pass
 
-            # Only one notification per JID
-            if notif_type == 'connection-failed':
-                notif_id = self._make_id('connection-failed', account)
-            elif notif_type == 'incoming-message':
-                if app.desktop_env == 'gnome':
-                    icon = self._get_avatar_for_notification(account, jid)
-                notif_id = self._make_id('new-message', account, jid)
+    def _withdraw(self, details: list[Any]) -> None:
+        pass
 
-        notification.set_icon(icon)
-        notification.set_priority(Gio.NotificationPriority.NORMAL)
 
-        app.app.send_notification(notif_id, notification)
+class Windows(NotificationBackend):
+    def __init__(self):
+        NotificationBackend.__init__(self)
+        self._active_notification = None
 
-    @staticmethod
-    def _get_avatar_for_notification(account: str,
-                                     jid: str
-                                     ) -> GdkPixbuf.Pixbuf:
-        scale = get_monitor_scale_factor()
-        client = app.get_client(account)
-        contact = client.get_module('Contacts').get_contact(jid)
-        return app.interface.get_avatar(
-            contact, AvatarSize.NOTIFICATION, scale, pixbuf=True)
+    def _send(self, event: events.Notification) -> None:
+        timeout = app.settings.get('notification_timeout')
+        self._withdraw()
+        self._win32_active_popup = PopupNotification(event, timeout)
 
-    def _on_popup_destroy(self, *args):
-        self._win32_active_popup = None
+        def _on_popup_destroy(_widget: Gtk.Window) -> None:
+            self._win32_active_popup = None
 
-    def _withdraw(self, *args):
-        if sys.platform == 'win32':
-            if self._win32_active_popup is not None:
-                self._win32_active_popup.destroy()
-        elif self._dbus_available:
-            app.app.withdraw_notification(self._make_id(*args))
+        self._win32_active_popup.connect('destroy', _on_popup_destroy)
 
-    @staticmethod
-    def _make_id(*args):
-        return ','.join(map(str, args))
+    def _withdraw(self, *args: Any) -> None:
+        if self._win32_active_popup is not None:
+            self._win32_active_popup.destroy()
 
 
 class PopupNotification(Gtk.Window):
-    def __init__(self,
-                 notif_type: str,
-                 account: str,
-                 jid: Optional[str],
-                 notif_detail: str,
-                 title: str,
-                 text: str,
-                 icon_name: str,
-                 timeout: int
-                 ) -> None:
+
+    _background_class = {
+        'incoming-message': '.gajim-notify-message',
+        'file-error': '.gajim-notify-error',
+        'file-send-error': '.gajim-notify-error',
+        'file-request-error': '.gajim-notify-error',
+        'file-completed': '.gajim-notify-success',
+        'file-stopped': '.gajim-notify-success',
+        'group-chat-invitation': '.gajim-notify-invite',
+    }
+
+    def __init__(self, event: events.Notification, timeout: int) -> None:
         Gtk.Window.__init__(self)
         self.set_type_hint(Gdk.WindowTypeHint.NOTIFICATION)
         self.set_focus_on_map(False)
@@ -277,48 +152,19 @@ class PopupNotification(Gtk.Window):
         self.set_decorated(False)
 
         self._timeout_id: Optional[int] = None
-        self._account = account
-        self._jid = jid
-        self._notif_type = notif_type
+        self._event = event
 
         self._ui = get_builder('popup_notification_window.ui')
         self.add(self._ui.eventbox)
 
-        if notif_detail == 'incoming-message':
-            bg_color = app.css_config.get_value('.gajim-notify-message',
-                                                StyleAttr.COLOR)
-        elif notif_detail in ('file-error',
-                              'file-send-error',
-                              'file-request-error'):
-            bg_color = app.css_config.get_value('.gajim-notify-error',
-                                                StyleAttr.COLOR)
-        elif notif_detail in ('file-completed', 'file-stopped'):
-            bg_color = app.css_config.get_value('.gajim-notify-success',
-                                                StyleAttr.COLOR)
-        elif notif_detail == 'group-chat-invitation':
-            bg_color = app.css_config.get_value('.gajim-notify-invite',
-                                                StyleAttr.COLOR)
-        else:
-            bg_color = app.css_config.get_value('.gajim-notify-other',
-                                                StyleAttr.COLOR)
-
-        bar_class = '''
-            .popup-bar {
-                background-color: %s
-            }''' % bg_color
-        add_css_to_widget(self._ui.color_bar, bar_class)
-        self._ui.color_bar.get_style_context().add_class('popup-bar')
-
-        self._ui.event_type_label.set_markup(title)
-
-        if not text:
-            client = app.get_client(account)
-            contact = client.get_module('Contacts').get_contact(jid)
-            text = contact.name
-        escaped_text = GLib.markup_escape_text(text)
-        self._ui.event_description_label.set_markup(escaped_text)
-
+        self._add_background_color(event)
+        icon_name = self._get_icon_name(event)
         self._ui.image.set_from_icon_name(icon_name, Gtk.IconSize.DIALOG)
+        self._ui.event_type_label.set_text(event.title)
+        self._ui.event_description_label.set_text(event.text)
+
+        if timeout > 0:
+            self._timeout_id = GLib.timeout_add_seconds(timeout, self.destroy)
 
         self.move(*self._get_window_pos())
 
@@ -326,8 +172,24 @@ class PopupNotification(Gtk.Window):
         self.connect('button-press-event', self._on_button_press)
         self.connect('destroy', self._on_destroy)
         self.show_all()
-        if timeout > 0:
-            self._timeout_id = GLib.timeout_add_seconds(timeout, self.destroy)
+
+    def _get_icon_name(self, event: events.Notification) -> str:
+        if event.icon_name is not None:
+            return event.icon_name
+        icon_name = event.sub_type or event.type
+        return NOTIFICATION_ICONS.get(icon_name, 'mail-unread')
+
+    def _add_background_color(self, event: events.Notification) -> None:
+        event_type = event.sub_type or event.type
+        css_class = self._background_class.get(event_type,
+                                               '.gajim-notify-other')
+        bg_color = app.css_config.get_value(css_class, StyleAttr.COLOR)
+        bar_class = '''
+            .popup-bar {
+                background-color: %s
+            }''' % bg_color
+        add_css_to_widget(self._ui.color_bar, bar_class)
+        self._ui.color_bar.get_style_context().add_class('popup-bar')
 
     @staticmethod
     def _get_window_pos() -> tuple[int, int]:
@@ -348,10 +210,169 @@ class PopupNotification(Gtk.Window):
                          event: Gdk.EventButton
                          ) -> None:
         if event.button == 1:
-            app.interface.handle_event(
-                self._account, self._jid, self._notif_type)
+            jid = self._event.jid
+            if jid is not None and isinstance(jid, str):
+                jid = JID.from_string(jid)
+
+            params = OpenEventActionParams(type=self._event.type,
+                                           sub_type=self._event.sub_type,
+                                           account=self._event.account,
+                                           jid=jid)
+            app.app.activate_action(f'app.{self._event.account}-open-event',
+                                    params.to_variant())
+
         self.destroy()
 
     def _on_destroy(self, _widget: Gtk.Window) -> None:
         if self._timeout_id is not None:
             GLib.source_remove(self._timeout_id)
+
+
+class Linux(NotificationBackend):
+
+    _action_types = [
+        'connection-failed',
+        'file-transfer',
+        'group-chat-invitation',
+        'incoming-call',
+        'incoming-message',
+        'subscription-request',
+        'unsubscribed',
+    ]
+
+    def __init__(self):
+        NotificationBackend.__init__(self)
+        self._dbus_available: bool = False
+        self._daemon_capabilities = ['actions']
+        self._detect_dbus_caps()
+
+    def _detect_dbus_caps(self) -> None:
+        if app.is_flatpak():
+            self._dbus_available = True
+            return
+
+        def on_proxy_ready(_source: Gio.DBusProxy,
+                           res: Gio.AsyncResult) -> None:
+            try:
+                proxy = Gio.DBusProxy.new_finish(res)
+                self._daemon_capabilities = proxy.GetCapabilities()  # type: ignore
+            except GLib.Error as error:
+                log.warning('Notifications D-Bus not available: %s', error)
+            else:
+                self._dbus_available = True
+                log.info('Notifications D-Bus connected')
+
+        log.info('Connecting to Notifications D-Bus')
+        Gio.DBusProxy.new_for_bus(Gio.BusType.SESSION,
+                                  Gio.DBusProxyFlags.DO_NOT_CONNECT_SIGNALS,
+                                  None,
+                                  'org.freedesktop.Notifications',
+                                  '/org/freedesktop/Notifications',
+                                  'org.freedesktop.Notifications',
+                                  None,
+                                  on_proxy_ready)
+
+    def _send(self, event: events.Notification) -> None:
+        if not self._dbus_available:
+            return
+
+        notification = Gio.Notification()
+        if event.title is not None:
+            notification.set_title(GLib.markup_escape_text(event.title))
+        notification.set_body(GLib.markup_escape_text(event.text))
+        notification.set_priority(Gio.NotificationPriority.NORMAL)
+
+        icon = self._make_icon(event)
+        notification.set_icon(icon)
+
+        self._add_actions(event, notification)
+        notification_id = self._make_notification_id(event)
+
+        app.app.send_notification(notification_id, notification)
+
+    def _add_actions(self,
+                     event: events.Notification,
+                     notification: Gio.Notification) -> None:
+
+        if event.type not in self._action_types:
+            return
+
+        if 'actions' not in self._daemon_capabilities:
+            return
+
+        jid = event.jid
+        if jid is not None and isinstance(jid, str):
+            jid = JID.from_string(jid)
+
+        params = OpenEventActionParams(type=event.type,
+                                       sub_type=event.sub_type,
+                                       account=event.account,
+                                       jid=jid)
+
+        action = f'app.{event.account}-open-event'
+        notification.add_button_with_target(
+            _('Open'), action, params.to_variant())
+        notification.set_default_action_and_target(
+            action, params.to_variant())
+
+        if event.type == 'incoming-message':
+            action = f'app.{event.account}-mark-as-read'
+            notification.add_button_with_target(
+                _('Mark as Read'), action, params.to_variant())
+
+    def _make_notification_id(self,
+                              event: events.Notification) -> Optional[str]:
+        if event.type == 'connection-failed':
+            return self._make_id(['connection-failed', event.account])
+
+        if event.type == 'incoming-message':
+            return self._make_id(['new-message', event.account, str(event.jid)])
+
+        return None
+
+    @staticmethod
+    def _get_avatar_for_notification(account: str,
+                                     jid: Union[JID, str]) -> GdkPixbuf.Pixbuf:
+        scale = get_monitor_scale_factor()
+        client = app.get_client(account)
+        contact = client.get_module('Contacts').get_contact(jid)
+        return app.interface.get_avatar(contact,
+                                        AvatarSize.NOTIFICATION,
+                                        scale,
+                                        pixbuf=True)
+
+    def _make_icon(self, event: events.Notification) -> Gio.Icon:
+        if (event.type == 'incoming-message' and app.desktop_env == 'gnome'):
+            assert event.jid is not None
+            return self._get_avatar_for_notification(event.account, event.jid)
+
+        if event.icon_name is not None:
+            return Gio.ThemedIcon.new(event.icon_name)
+
+        icon_name = event.sub_type or event.type
+        icon_name = NOTIFICATION_ICONS.get(icon_name, 'mail-unread')
+        return Gio.ThemedIcon.new(icon_name)
+
+    def _withdraw(self, details: list[Any]) -> None:
+        if not self._dbus_available:
+            return
+        notification_id = self._make_id(details)
+        app.app.withdraw_notification(notification_id)
+
+    @staticmethod
+    def _make_id(details: list[Any]) -> str:
+        return ','.join(map(str, details))
+
+
+def get_notification_backend() -> NotificationBackend:
+    if sys.platform == 'win32':
+        return Windows()
+
+    if sys.platform == 'darwin':
+        return DummyBackend()
+    return Linux()
+
+
+def init() -> None:
+    global _notification_backend  # pylint: disable=global-statement
+    _notification_backend = get_notification_backend()

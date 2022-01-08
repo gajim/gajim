@@ -70,11 +70,12 @@ from gajim.common.application import CoreApplication
 from gajim.gui import menus
 from gajim.gui.builder import get_builder
 from gajim.gui.util import load_user_iconsets
+from gajim.gui.util import open_window
+from gajim.gui.util import get_app_window
 from gajim.gui.dialogs import ShortcutsWindow
 from gajim.gui.about import AboutDialog
 from gajim.gui.discovery import ServiceDiscoveryWindow
-from gajim.gui.util import open_window
-from gajim.gui.util import get_app_window
+from gajim.gui.structs import OpenEventActionParams
 
 
 ActionListT = list[tuple[str,
@@ -210,7 +211,11 @@ class GajimApplication(Gtk.Application, CoreApplication):
         builder = get_builder('application_menu.ui')
         self.set_menubar(cast(Gio.Menu, builder.get_object('menubar')))
 
+        from gajim.gui import notification
+        notification.init()
+
         from gajim.gui_interface import Interface
+
         self.interface = Interface()
         self.interface.run(self)
         self.add_actions()
@@ -706,9 +711,23 @@ class GajimApplication(Gtk.Application, CoreApplication):
     @staticmethod
     def _on_open_event_action(_action: Gio.SimpleAction,
                               param: GLib.Variant) -> None:
-        dict_ = param.unpack()
-        app.interface.handle_event(
-            dict_['account'], dict_['jid'], dict_['notif_detail'])
+        params = OpenEventActionParams.from_variant(param)
+
+        if params.type in ('connection-failed',
+                           'subscription-request',
+                           'unsubscribed',
+                           'group-chat-invitation'):
+
+            app.window.show_account_page(params.account)
+
+        elif params.type in ('incoming-message',
+                             'incoming-call',
+                             'file-transfer'):
+
+            assert params.jid is not None
+            app.window.select_chat(params.account, params.jid)
+
+        app.window.present_with_time(Gtk.get_current_event_time())
 
     @staticmethod
     def _on_mark_as_read_action(_action: Gio.SimpleAction,

@@ -33,6 +33,7 @@
 
 from __future__ import annotations
 
+from typing import Any
 from typing import Dict
 from typing import Optional
 from typing import Union
@@ -92,7 +93,6 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.httpupload import HTTPFileTransfer
 
 from gajim.gui.avatar import AvatarStorage
-from gajim.gui.notification import Notification
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ErrorDialog
 from gajim.gui.dialogs import WarningDialog
@@ -143,8 +143,6 @@ class Interface:
         self._last_ft_progress_update: float = 0
 
         app.proxy65_manager = proxy65_manager.Proxy65Manager(app.idlequeue)
-
-        app.notification = Notification()
 
         self._create_core_handlers_list()
         self._register_core_handlers()
@@ -236,26 +234,6 @@ class Interface:
                     event_name,
                     prio,
                     event_handler)
-
-    def handle_event(self, account: str, jid: str, notif_detail: str) -> None:
-        jid = JID.from_string(jid)
-
-        if notif_detail in ('connection-lost', 'connection-failed'):
-            app.window.show_account_page(account)
-        elif notif_detail == 'private-chat-message':
-            app.window.select_chat(account, jid)
-        elif notif_detail in ('chat-message', 'group-chat-message'):
-            app.window.select_chat(account, jid.bare)
-        elif notif_detail == 'incoming-call':
-            app.window.select_chat(account, jid.bare)
-        elif notif_detail == 'file-request-received':
-            app.window.select_chat(account, jid.bare)
-        elif notif_detail in ('subscription-request',
-                              'unsubscribed',
-                              'group-chat-invitation'):
-            app.window.show_account_page(account)
-
-        app.window.present_with_time(Gtk.get_current_event_time())
 
     @staticmethod
     def handle_event_information(event):
@@ -983,7 +961,7 @@ class Interface:
                    scale: int,
                    show: Optional[str] = None,
                    pixbuf: bool = False,
-                   style: str = 'circle'):
+                   style: str = 'circle') -> Any:
         if pixbuf:
             return self.avatar_storage.get_pixbuf(
                 contact, size, scale, show, style=style)
