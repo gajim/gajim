@@ -16,6 +16,7 @@
         "gajim/common/regex.py",
         "gajim/common/sound.py",
         "gajim/common/storage/",
+        "gajim/gtk/account_page.py",
         "gajim/gtk/app_side_bar.py",
         "gajim/gtk/chat_filter.py",
         "gajim/gtk/chat_page.py",

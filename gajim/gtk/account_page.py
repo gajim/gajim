@@ -12,7 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Any
+from __future__ import annotations
 
 from gi.repository import Gdk
 from gi.repository import Gio
@@ -21,6 +21,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
+from gajim.common.events import ApplicationEvent
 from gajim.common.events import SubscribePresenceReceived
 from gajim.common.events import UnsubscribedPresenceReceived
 from gajim.common.events import MucInvitation
@@ -34,6 +35,7 @@ from .notification_manager import NotificationManager
 from .builder import get_builder
 from .util import open_window
 from .util import EventHelper
+
 
 ROSTER_MENU_DICT = {
     'show-offline': _('Show Offline Contacts'),
@@ -91,7 +93,7 @@ class AccountPage(Gtk.Box, EventHelper):
         self.show_all()
         self.connect('destroy', self._on_destroy)
 
-    def _on_destroy(self, *args: Any) -> None:
+    def _on_destroy(self, _widget: AccountPage) -> None:
         app.check_finalize(self)
 
     def _on_edit_profile(self, _button: Gtk.Button) -> None:
@@ -149,5 +151,5 @@ class AccountPage(Gtk.Box, EventHelper):
             return
         self._notification_manager.add_invitation_declined(event)
 
-    def process_event(self, event):
+    def process_event(self, event: ApplicationEvent) -> None:
         self._roster.process_event(event)
