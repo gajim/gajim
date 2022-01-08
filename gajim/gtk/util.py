@@ -774,7 +774,7 @@ def get_app_window(name: str,
     return None
 
 
-def open_window(name: str, **kwargs: Any) -> Gtk.Window:
+def open_window(name: str, **kwargs: Any) -> Any:
     window = get_app_window(name,
                             kwargs.get('account'),
                             kwargs.get('jid'))
