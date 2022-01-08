@@ -384,8 +384,11 @@ class BareContact(CommonContact):
         return self._get_roster_attr('subscription')
 
     @property
-    def groups(self):
-        return self._get_roster_attr('groups')
+    def groups(self) -> list[str]:
+        groups = self._get_roster_attr('groups')
+        if groups is None:
+            return []
+        return groups
 
     @property
     def is_subscribed(self) -> bool:
