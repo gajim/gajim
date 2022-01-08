@@ -12,6 +12,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Any
+
 import sys
 import locale
 import logging
@@ -42,7 +46,7 @@ log = logging.getLogger('gajim.gui.accounts')
 
 
 class AccountsWindow(Gtk.ApplicationWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -74,7 +78,10 @@ class AccountsWindow(Gtk.ApplicationWindow):
 
         self.show_all()
 
-    def _on_menu_activated(self, _listbox, account, name):
+    def _on_menu_activated(self,
+                           _listbox: Gtk.ListBox,
+                           account: str,
+                           name: str) -> None:
         if name == 'back':
             self._settings.set_page('add-account')
             self._check_relogin()
@@ -83,21 +90,23 @@ class AccountsWindow(Gtk.ApplicationWindow):
         else:
             self._settings.set_page(name)
 
-    def _on_key_press(self, _widget, event):
+    def _on_key_press(self,
+                      _widget: AccountsWindow,
+                      event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
-    def _on_destroy(self, *args):
+    def _on_destroy(self, _widget: AccountsWindow) -> None:
         self._check_relogin()
 
-    def update_account_label(self, account):
+    def update_account_label(self, account: str) -> None:
         self._accounts[account].update_account_label()
 
-    def update_proxy_list(self):
+    def update_proxy_list(self) -> None:
         for account in self._accounts:
             self._settings.update_proxy_list(account)
 
-    def _check_relogin(self):
+    def _check_relogin(self) -> None:
         for account, r_settings in self._need_relogin.items():
             settings = self._get_relogin_settings(account)
             active = app.settings.get_account_setting(account, 'active')
@@ -107,7 +116,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
                     self._relog(account)
                 break
 
-    def _relog(self, account):
+    def _relog(self, account: str) -> None:
         if not app.account_is_connected(account):
             return
 
@@ -132,7 +141,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
             transient_for=self).show()
 
     @staticmethod
-    def _get_relogin_settings(account):
+    def _get_relogin_settings(account: str) -> list[Any]:
         if account == app.ZEROCONF_ACC_NAME:
             settings = ['zeroconf_first_name', 'zeroconf_last_name',
                         'zeroconf_jabber_id', 'zeroconf_email']
@@ -140,37 +149,37 @@ class AccountsWindow(Gtk.ApplicationWindow):
             settings = ['client_cert', 'proxy', 'resource',
                         'use_custom_host', 'custom_host', 'custom_port']
 
-        values = []
+        values: list[Any] = []
         for setting in settings:
             values.append(app.settings.get_account_setting(account, setting))
         return values
 
     @staticmethod
-    def on_remove_account(account):
+    def on_remove_account(account: str) -> None:
         if app.settings.get_account_setting(account, 'is_zeroconf'):
             # Should never happen as button is insensitive
             return
 
         open_window('RemoveAccount', account=account)
 
-    def remove_account(self, account):
+    def remove_account(self, account: str) -> None:
         del self._need_relogin[account]
         self._accounts[account].remove()
 
-    def add_account(self, account, initial=False):
+    def add_account(self, account: str, initial: bool = False) -> None:
         self._need_relogin[account] = self._get_relogin_settings(account)
         self._accounts[account] = Account(account, self._menu, self._settings)
         if not initial:
             self._accounts[account].show()
 
-    def select_account(self, account):
+    def select_account(self, account: str) -> None:
         try:
             self._accounts[account].select()
         except KeyError:
             log.warning('select_account() failed, account %s not found',
                         account)
 
-    def enable_account(self, account, state):
+    def enable_account(self, account: str, state: bool) -> None:
         self._accounts[account].enable_account(state)
 
 
