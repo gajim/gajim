@@ -32,6 +32,10 @@ from gajim.common.i18n import _
 from gajim.common.i18n import Q_
 
 
+STOP_EVENT = True
+PROPAGATE_EVENT = False
+
+
 class EncryptionData(NamedTuple):
     additional_data: Any = None
 
