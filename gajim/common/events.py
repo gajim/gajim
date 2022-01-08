@@ -641,15 +641,6 @@ class UnsubscribedPresenceReceived(ApplicationEvent):
 
 
 @dataclass
-class InformationEvent(ApplicationEvent):
-    name: str = field(init=False, default='information-event')
-    dialog_name: str
-    args: Optional[Any] = None
-    kwargs: Optional[dict[str, Any]] = None
-    popup: bool = False
-
-
-@dataclass
 class FileRequestReceivedEvent(ApplicationEvent):
     name: str = field(init=False, default='file-request-received')
     conn: 'Client'

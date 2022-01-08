@@ -44,7 +44,6 @@ from gajim.common.const import ClientState
 from gajim.common.zeroconf import client_zeroconf
 from gajim.common.zeroconf import zeroconf
 from gajim.common.zeroconf.connection_handlers_zeroconf import ConnectionHandlersZeroconf
-from gajim.common.events import InformationEvent
 
 log = logging.getLogger('gajim.c.connection_zeroconf')
 
@@ -380,8 +379,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
                          alt_name=alt_name))
 
     def _on_error(self, message):
-        app.ged.raise_event(InformationEvent(
-            dialog_name='avahi-error', args=message))
+        log.warning('avahi error: %s', message)
 
     def connect(self, show='online', msg=''):
         self.get_config_values_or_default()

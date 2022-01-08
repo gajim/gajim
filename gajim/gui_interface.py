@@ -58,8 +58,6 @@ from nbxmpp import idlequeue
 from nbxmpp import Hashes2
 from nbxmpp import JID
 
-from gajim.dialog_messages import get_dialog
-
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import exceptions
@@ -95,8 +93,6 @@ from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.gui.avatar import AvatarStorage
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ErrorDialog
-from gajim.gui.dialogs import WarningDialog
-from gajim.gui.dialogs import InformationDialog
 from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.dialogs import InputDialog
 from gajim.gui.filechoosers import FileChooserDialog
@@ -201,7 +197,6 @@ class Interface:
     def _create_core_handlers_list(self) -> None:
         # pylint: disable=line-too-long
         self.handlers = {
-            'information': [self.handle_event_information],
             'iq-error-received': [self.handle_event_iq_error],
             'plain-connection': [self.handle_event_plain_connection],
             'http-auth-received': [self.handle_event_http_auth],
@@ -234,30 +229,6 @@ class Interface:
                     event_name,
                     prio,
                     event_handler)
-
-    @staticmethod
-    def handle_event_information(event):
-        if not event.popup:
-            return
-
-        if event.dialog_name is not None:
-            get_dialog(event.dialog_name, *event.args, **event.kwargs)
-            return
-
-        if event.level == 'error':
-            cls = ErrorDialog
-        elif event.level == 'warn':
-            cls = WarningDialog
-        elif event.level == 'info':
-            cls = InformationDialog
-        else:
-            return
-
-        cls(event.pri_txt, GLib.markup_escape_text(event.sec_txt))
-
-    @staticmethod
-    def raise_dialog(name, *args, **kwargs):
-        get_dialog(name, *args, **kwargs)
 
     @staticmethod
     def handle_event_iq_error(event):

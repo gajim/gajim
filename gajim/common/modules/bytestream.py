@@ -38,7 +38,6 @@ from gajim.common import jingle_xtls
 from gajim.common.events import FileRequestError
 from gajim.common.file_props import FilesProp
 from gajim.common.socks5 import Socks5SenderClient
-from gajim.common.events import InformationEvent
 from gajim.common.modules.base import BaseModule
 
 
@@ -323,7 +322,7 @@ class Bytestream(BaseModule):
             port = app.settings.get('file_transfers_port')
             self._add_streamhosts_to_query(query, sender, port, my_ips)
         except socket.gaierror:
-            app.ged.raise_event(InformationEvent(dialog_name='wrong-host'))
+            log.error('wrong host, invalid local address?')
 
     def _add_addiditional_streamhosts_to_query(self, query, file_props):
         sender = file_props.sender

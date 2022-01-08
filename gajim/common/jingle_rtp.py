@@ -39,7 +39,6 @@ from gajim.common.jingle_transport import JingleTransportICEUDP
 from gajim.common.jingle_content import contents
 from gajim.common.jingle_content import JingleContent
 from gajim.common.jingle_content import JingleContentSetupException
-from gajim.common.events import InformationEvent
 from gajim.common.jingle_session import FailedApplication
 
 
@@ -125,17 +124,9 @@ class JingleRTPContent(JingleContent):
             gst_bin = Gst.parse_bin_from_description(pipeline, True)
             return gst_bin
         except GLib.Error as err:
-            app.ged.raise_event(
-                InformationEvent(
-                    conn=self.session.connection,
-                    level='error',
-                    pri_txt=_('%s configuration error') % text,
-                    sec_txt=_('Couldn’t set up %(text)s. Check your '
-                              'configuration.\nPipeline:\n%(pipeline)s\n'
-                              'Error:\n%(error)s') % {
-                                  'text': text,
-                                  'pipeline': pipeline,
-                                  'error': str(err)}))
+            log.error('Couldn’t set up %s. Check your '
+                      'configuration. Pipeline: %s'
+                      'Error: %s', text, pipeline, err)
             raise JingleContentSetupException
 
     def add_remote_candidates(self, candidates):
@@ -235,6 +226,7 @@ class JingleRTPContent(JingleContent):
                 log.error('Farstream error #%d!\nMessage: %s',
                           message.get_structure().get_value('error-no'),
                           message.get_structure().get_value('error-msg'))
+
         elif message.type == Gst.MessageType.ERROR:
             # TODO: Fix it to fallback to videotestsrc anytime an error occur,
             # or raise an error, Jingle way
@@ -243,12 +235,6 @@ class JingleRTPContent(JingleContent):
             debug_msg = message.get_structure().get_value('debug')
             log.error(gerror_msg)
             log.error(debug_msg)
-            if not self.stream_failed_once:
-                app.ged.raise_event(
-                    InformationEvent(
-                        dialog_name='gstreamer-error',
-                        kwargs={'error': gerror_msg, 'debug': debug_msg}))
-
             sink_pad = self.p2psession.get_property('sink-pad')
 
             # Remove old source
