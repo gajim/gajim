@@ -145,7 +145,7 @@ class NickCompletionGenerator:
         return matches + other_nicks
 
 
-def set_urgency_hint(window: Any, setting: bool) -> None:
+def set_urgency_hint(window: Gtk.Window, setting: bool) -> None:
     if app.settings.get('use_urgency_hint'):
         window.set_urgency_hint(setting)
 
@@ -205,9 +205,9 @@ def load_icon_pixbuf(icon_name: str,
     return icon_info.load_icon()
 
 
-def get_app_icon_list(scale_widget: Any) -> List[GdkPixbuf.Pixbuf]:
+def get_app_icon_list(scale_widget: Gtk.Widget) -> list[GdkPixbuf.Pixbuf]:
     scale = scale_widget.get_scale_factor()
-    pixbufs = []
+    pixbufs: list[GdkPixbuf.Pixbuf] = []
     for size in (16, 32, 48, 64, 128):
         pixbuf = load_icon_pixbuf('org.gajim.Gajim', size=size, scale=scale)
         if pixbuf is not None:
@@ -247,8 +247,8 @@ def load_user_iconsets() -> None:
         icon_theme.append_search_path(str(path))
 
 
-def get_available_iconsets() -> List[str]:
-    iconsets = []
+def get_available_iconsets() -> list[str]:
+    iconsets: list[str] = []
     for iconset in GajimIconSet:
         iconsets.append(iconset.value)
 
@@ -263,7 +263,7 @@ def get_available_iconsets() -> List[str]:
     return iconsets
 
 
-def get_total_screen_geometry() -> Tuple[int, int]:
+def get_total_screen_geometry() -> tuple[int, int]:
     total_width = 0
     total_height = 0
     display = Gdk.Display.get_default()
@@ -630,7 +630,7 @@ def get_pixbuf_from_data(file_data: bytes) -> Optional[GdkPixbuf.Pixbuf]:
         pixbufloader.write(file_data)
         pixbufloader.close()
         pixbuf = pixbufloader.get_pixbuf()
-    except GLib.GError:
+    except GLib.Error:
         pixbufloader.close()
 
         log.warning('loading avatar using pixbufloader failed, trying to '
@@ -686,7 +686,7 @@ def load_pixbuf(path: Union[str, Path],
         return GdkPixbuf.Pixbuf.new_from_file_at_scale(
             str(path), size, size, True)
 
-    except GLib.GError:
+    except GLib.Error:
         try:
             with open(path, 'rb') as im_handle:
                 img = Image.open(im_handle)
