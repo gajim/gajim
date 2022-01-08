@@ -124,7 +124,7 @@ class JingleRTPContent(JingleContent):
         try:
             gst_bin = Gst.parse_bin_from_description(pipeline, True)
             return gst_bin
-        except GLib.GError as err:
+        except GLib.Error as err:
             app.ged.raise_event(
                 InformationEvent(
                     conn=self.session.connection,

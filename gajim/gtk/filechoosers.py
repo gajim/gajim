@@ -77,7 +77,7 @@ class BaseFileChooser:
         try:
             pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
                 path_to_file, *self._preivew_size)
-        except GLib.GError:
+        except GLib.Error:
             preview.clear()
             return
         filechooser.get_preview_widget().set_from_pixbuf(pixbuf)
