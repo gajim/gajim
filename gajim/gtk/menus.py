@@ -41,6 +41,8 @@ from gajim.common.const import URIType
 from gajim.common.const import URIAction
 from gajim.common.structs import URI
 
+from gajim.gui.structs import ForgetGroupchatActionParams
+from gajim.gui.structs import RemoveHistoryActionParams
 from gajim.gui.const import ControlType
 
 
@@ -52,7 +54,7 @@ def get_singlechat_menu(control_id: str,
     client = app.get_client(account)
     is_self_contact = jid.bare == client.get_own_jid().bare
 
-    singlechat_menu: List[Any] = [
+    singlechat_menu: list[tuple[str, Any]] = [
         (_('Send File'), [
             ('win.send-file-httpupload-', _('Upload File…')),
             ('win.send-file-jingle-', _('Send File Directly…'))
@@ -66,7 +68,8 @@ def get_singlechat_menu(control_id: str,
         ('win.add-to-roster-', _('Add to Contact List…')),
         ('win.block-contact-', _('Block Contact…')),
         ('win.start-call-', _('Start Call…')),
-        ('win.information-', _('Information'))
+        ('win.information-', _('Information')),
+        ('app.remove-history', _('Remove History'))
     ]
 
     if is_self_contact:
@@ -90,7 +93,7 @@ def get_singlechat_menu(control_id: str,
             menu.append(label, action)
         return menu
 
-    def build_menu(preset):
+    def build_menu(preset: list[tuple[str, Any]]):
         menu = Gio.Menu()
         for item in preset:
             if isinstance(item[1], str):
@@ -116,6 +119,12 @@ def get_singlechat_menu(control_id: str,
                     menuitem.set_action_and_target_value(action_name,
                                                          variant_dict)
                     menu.append_item(menuitem)
+                elif action_name == 'app.remove-history':
+                    params = RemoveHistoryActionParams(account=account, jid=jid)
+                    menuitem = Gio.MenuItem.new(label, action_name)
+                    menuitem.set_action_and_target_value(action_name,
+                                                         params.to_variant())
+                    menu.append_item(menuitem)
                 else:
                     menu.append(label, action_name + control_id)
             else:
@@ -130,7 +139,7 @@ def get_singlechat_menu(control_id: str,
     return build_menu(singlechat_menu)
 
 
-def get_groupchat_menu(control_id: str, account: str, jid: str) -> Gio.Menu:
+def get_groupchat_menu(control_id: str, account: str, jid: JID) -> Gio.Menu:
     groupchat_menu = [
         ('win.information-', _('Information')),
         ('win.groupchat-settings-', _('Settings…')),
@@ -140,6 +149,7 @@ def get_groupchat_menu(control_id: str, account: str, jid: str) -> Gio.Menu:
         ('win.request-voice-', _('Request Voice')),
         ('win.execute-command-', _('Execute Command…')),
         ('win.search-history', _('Search…')),
+        ('app.remove-history', _('Remove History'))
     ]
 
     def build_menu(preset: list[tuple[str, str]]) -> Gio.Menu:
@@ -154,7 +164,7 @@ def get_groupchat_menu(control_id: str, account: str, jid: str) -> Gio.Menu:
             elif action_name == 'app.browse-history':
                 menuitem = Gio.MenuItem.new(label, action_name)
                 dict_ = {'account': GLib.Variant('s', account),
-                            'jid': GLib.Variant('s', jid)}
+                         'jid': GLib.Variant('s', str(jid))}
                 variant_dict = GLib.Variant('a{sv}', dict_)
                 menuitem.set_action_and_target_value(
                     action_name, variant_dict)
@@ -165,6 +175,13 @@ def get_groupchat_menu(control_id: str, account: str, jid: str) -> Gio.Menu:
                 menuitem = Gio.MenuItem.new(label, action_name)
                 menuitem.set_action_and_target_value(
                     action_name, GLib.Variant('s', ''))
+                menu.append_item(menuitem)
+
+            elif action_name == 'app.remove-history':
+                params = RemoveHistoryActionParams(account=account, jid=jid)
+                menuitem = Gio.MenuItem.new(label, action_name)
+                menuitem.set_action_and_target_value(action_name,
+                                                     params.to_variant())
                 menu.append_item(menuitem)
             else:
                 menu.append(label, action_name + control_id)
@@ -485,10 +502,7 @@ def get_subscription_menu(account: str, jid: str) -> Gio.Menu:
     return menu
 
 
-def get_start_chat_row_menu(account: str,
-                            jid: Union[JID, str]
-                            ) -> Gio.Menu:
-    jid = str(jid)
+def get_start_chat_row_menu(account: str, jid: JID) -> Gio.Menu:
     menu_items: List[Tuple[str, str]] = [
         ('forget-groupchat', _('Forget this Group Chat')),
     ]
@@ -497,8 +511,8 @@ def get_start_chat_row_menu(account: str,
         action, label = item
         action = f'app.{action}'
         menuitem = Gio.MenuItem.new(label, action)
-        variant_list = GLib.Variant('as', [account, jid])
-        menuitem.set_action_and_target_value(action, variant_list)
+        params = ForgetGroupchatActionParams(account=account, jid=jid)
+        menuitem.set_action_and_target_value(action, params.to_variant())
         menu.append_item(menuitem)
     return menu
 

@@ -29,3 +29,15 @@ class OpenEventActionParams(VariantMixin):
     sub_type: Optional[str]
     account: str
     jid: Optional[JID]
+
+
+@dataclass
+class RemoveHistoryActionParams(VariantMixin):
+    account: str
+    jid: Optional[JID] = None
+
+
+@dataclass
+class ForgetGroupchatActionParams(VariantMixin):
+    account: str
+    jid: JID

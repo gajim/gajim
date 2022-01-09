@@ -1349,13 +1349,9 @@ class MessageArchiveStorage(SqliteStorage):
         log.info('Reset message archive info: %s', jid)
         self._delayed_commit()
 
-    def remove_chat_history(self,
-                            account: str,
-                            jid: str,
-                            groupchat: bool = False
-                            ) -> None:
+    def remove_history(self, account: str, jid: JID) -> None:
         """
-        Remove chat history for a specific chat.
+        Remove history for a specific chat.
         If it's a group chat, remove last MAM ID as well.
         """
         account_id = self.get_account_id(account)
@@ -1363,15 +1359,19 @@ class MessageArchiveStorage(SqliteStorage):
         sql = 'DELETE FROM logs WHERE account_id = ? AND jid_id = ?'
         self._con.execute(sql, (account_id, jid_id))
 
+        self._delayed_commit()
+        log.info('Removed history for: %s', jid)
+
+    def forget_jid_data(self, account: str, jid: JID) -> None:
+        jid_id = self.get_jid_id(jid)
         sql = 'DELETE FROM jids WHERE jid_id = ?'
         self._con.execute(sql, (jid_id,))
 
-        if groupchat:
-            sql = 'DELETE FROM last_archive_message WHERE jid_id = ?'
-            self._con.execute(sql, (jid_id,))
+        sql = 'DELETE FROM last_archive_message WHERE jid_id = ?'
+        self._con.execute(sql, (jid_id,))
 
         self._delayed_commit()
-        log.info('Removed chat history for: %s', jid)
+        log.info('Forgot data for: %s', jid)
 
     def _cleanup_chat_history(self) -> None:
         """

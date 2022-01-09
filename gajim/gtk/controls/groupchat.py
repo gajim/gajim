@@ -191,7 +191,7 @@ class GroupchatControl(BaseControl):
 
         self.control_menu = get_groupchat_menu(self.control_id,
                                                self.account,
-                                               self.room_jid)
+                                               self.contact.jid)
 
         self.xml.settings_menu.set_menu_model(self.control_menu)
 

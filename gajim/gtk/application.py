@@ -75,7 +75,9 @@ from gajim.gui.util import get_app_window
 from gajim.gui.dialogs import ShortcutsWindow
 from gajim.gui.about import AboutDialog
 from gajim.gui.discovery import ServiceDiscoveryWindow
+from gajim.gui.structs import ForgetGroupchatActionParams
 from gajim.gui.structs import OpenEventActionParams
+from gajim.gtk.structs import RemoveHistoryActionParams
 
 
 ActionListT = list[tuple[str,
@@ -380,8 +382,9 @@ class GajimApplication(Gtk.Application, CoreApplication):
             ('copy-text', 's', self._on_copy_text_action),
             ('open-link', 'as', self._on_open_link_action),
             ('open-mail', 's', self._on_open_mail_action),
+            ('remove-history', 'a{sv}', self._on_remove_history_action),
             ('create-groupchat', 's', self._on_create_groupchat_action),
-            ('forget-groupchat', 'as', self._on_forget_groupchat_action),
+            ('forget-groupchat', 'a{sv}', self._on_forget_groupchat_action),
             ('groupchat-join', 'as', self._on_groupchat_join_action),
         ]
 
@@ -776,19 +779,34 @@ class GajimApplication(Gtk.Application, CoreApplication):
         app.interface.start_chat_from_jid(account, jid)
 
     @staticmethod
+    def _on_remove_history_action(_action: Gio.SimpleAction,
+                                  param: GLib.Variant) -> None:
+
+        params = RemoveHistoryActionParams.from_variant(param)
+
+        if params.jid is not None:
+            app.storage.archive.remove_history(params.account, params.jid)
+            control = app.window.get_control(params.account, params.jid)
+            if control is not None:
+                control.reset_view()
+        else:
+            for control in app.window.get_controls(params.account):
+                control.reset_view()
+
+    @staticmethod
     def _on_forget_groupchat_action(_action: Gio.SimpleAction,
                                     param: GLib.Variant) -> None:
-        account, jid = param.unpack()
-        room_jid = JID.from_string(jid)
+
+        params = ForgetGroupchatActionParams.from_variant(param)
         window = get_app_window('StartChatDialog')
-        window.remove_row(account, str(room_jid))
+        window.remove_row(params.account, str(params.jid))
 
-        client = app.get_client(account)
-        client.get_module('MUC').leave(room_jid)
-        client.get_module('Bookmarks').remove(room_jid)
+        client = app.get_client(params.account)
+        client.get_module('MUC').leave(params.jid)
+        client.get_module('Bookmarks').remove(params.jid)
 
-        app.storage.archive.remove_chat_history(
-            account, str(room_jid), groupchat=True)
+        app.storage.archive.remove_history(params.account, params.jid)
+        app.storage.archive.forget_jid_data(params.account, params.jid)
 
     @staticmethod
     def _on_groupchat_join_action(_action: Gio.SimpleAction,
