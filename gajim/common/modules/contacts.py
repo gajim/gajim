@@ -213,6 +213,9 @@ class CommonContact(Observable):
     def is_pm_contact(self) -> bool:
         return False
 
+    def get_address(self, _prefer_real: bool = True) -> JID:
+        return self._jid
+
     def force_chatstate_update(self) -> None:
         for contact in self._resources.values():
             contact.notify('chatstate-update')
@@ -418,6 +421,10 @@ class ResourceContact(CommonContact):
         return CommonContact.supports(self, requested_feature)
 
     @property
+    def resource(self) -> str:
+        return self._jid.resource
+
+    @property
     def identity_type(self) -> Optional[str]:
         disco_info = app.storage.cache.get_last_disco_info(self._jid)
         if disco_info is None:
@@ -592,6 +599,16 @@ class GroupchatParticipant(CommonContact):
 
         self._presence = UNKNOWN_MUC_PRESENCE
 
+    @property
+    def resource(self) -> str:
+        return self._jid.resource
+
+    def get_address(self, prefer_real: bool = True) -> JID:
+        jid = self._presence.real_jid
+        if jid is None or not prefer_real:
+            return self._jid
+        return jid
+
     def supports(self, requested_feature: str) -> bool:
         if not self.is_available:
             return False
@@ -637,6 +654,12 @@ class GroupchatParticipant(CommonContact):
     @property
     def real_jid(self) -> Optional[JID]:
         return self._presence.real_jid
+
+    def get_real_contact(self) -> Optional[BareContact]:
+        jid = self._presence.real_jid
+        if jid is None:
+            return None
+        return self._client.get_module('Contacts').get_contact(jid)
 
     @property
     def affiliation(self) -> Affiliation:
