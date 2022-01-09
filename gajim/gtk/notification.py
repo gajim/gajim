@@ -72,6 +72,7 @@ NOTIFICATION_ICONS: dict[str, str] = {
 
 _notification_backend = None
 
+
 class NotificationBackend(EventHelper):
     def __init__(self) -> None:
         EventHelper.__init__(self)
@@ -94,6 +95,7 @@ class NotificationBackend(EventHelper):
         if not app.account_is_connected(event.account):
             return
         self._withdraw(['connection-failed', event.account])
+        self._withdraw(['server-shutdown', event.account])
 
     def _send(self, event: events.Notification) -> None:
         raise NotImplementedError
@@ -232,6 +234,7 @@ class Linux(NotificationBackend):
 
     _action_types = [
         'connection-failed',
+        'server-shutdown',
         'file-transfer',
         'group-chat-invitation',
         'incoming-call',
@@ -322,8 +325,8 @@ class Linux(NotificationBackend):
 
     def _make_notification_id(self,
                               event: events.Notification) -> Optional[str]:
-        if event.type == 'connection-failed':
-            return self._make_id(['connection-failed', event.account])
+        if event.type in ('connection-failed', 'server-shutdown'):
+            return self._make_id([event.type, event.account])
 
         if event.type == 'incoming-message':
             return self._make_id(['new-message', event.account, str(event.jid)])

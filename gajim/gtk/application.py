@@ -719,7 +719,8 @@ class GajimApplication(Gtk.Application, CoreApplication):
         if params.type in ('connection-failed',
                            'subscription-request',
                            'unsubscribed',
-                           'group-chat-invitation'):
+                           'group-chat-invitation',
+                           'server-shutdown'):
 
             app.window.show_account_page(params.account)
 
