@@ -53,12 +53,14 @@ from .dialogs import ConfirmationDialog
 from .dialogs import ConfirmationCheckDialog
 from .types import ControlType
 from .builder import get_builder
+from .util import get_key_theme
 from .util import resize_window
 from .util import restore_main_window_position
 from .util import save_main_window_position
 from .util import open_window
 from .util import set_urgency_hint
 from .const import UNLOAD_CHAT_TIME
+from .structs import AddChatActionParams
 
 log = logging.getLogger('gajim.gui.main')
 
@@ -236,8 +238,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             'close-tab'
         )
 
-        key_theme = Gtk.Settings.get_default().get_property(
-            'gtk-key-theme-name')
+        key_theme = get_key_theme()
 
         for action in actions:
             if key_theme == 'Emacs' and action in disabled_for_emacs:
@@ -370,7 +371,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _add_workspace(self,
                        _action: Gio.SimpleAction,
-                       param: Optional[GLib.Variant]) -> None:
+                       param: GLib.Variant) -> None:
 
         workspace_id = param.get_string()
         if workspace_id is not None:
@@ -416,7 +417,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _activate_workspace(self,
                             _action: Gio.SimpleAction,
-                            param: Optional[GLib.Variant]) -> None:
+                            param: GLib.Variant) -> None:
 
         workspace_id = param.get_string()
         if workspace_id is not None:
@@ -456,10 +457,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _add_chat(self,
                   _action: Gio.SimpleAction,
-                  param: Optional[GLib.Variant]) -> None:
+                  param: GLib.Variant) -> None:
 
-        account, jid, type_, select = param.unpack()
-        self.add_chat(account, JID.from_string(jid), type_, select)
+        params = AddChatActionParams.from_variant(param)
+        self.add_chat(params.account, params.jid, params.type, params.select)
 
     def add_chat(self,
                  account: str,
@@ -518,7 +519,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     @staticmethod
     def _add_to_roster(_action: Gio.SimpleAction,
-                       param: Optional[GLib.Variant]) -> None:
+                       param: GLib.Variant) -> None:
 
         _workspace, account, jid = param.unpack()
         open_window('AddContact', account=account, jid=JID.from_string(jid))

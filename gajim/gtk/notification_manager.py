@@ -299,7 +299,7 @@ class SubscriptionRequestRow(NotificationRow):
         more_button = Gtk.MenuButton()
         more_button.set_valign(Gtk.Align.CENTER)
         more_button.add(more_image)
-        subscription_menu = get_subscription_menu(self._account, str(self.jid))
+        subscription_menu = get_subscription_menu(self._account, self.jid)
         more_button.set_menu_model(subscription_menu)
         self.grid.attach(more_button, 4, 1, 1, 2)
 

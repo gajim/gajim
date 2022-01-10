@@ -41,3 +41,11 @@ class RemoveHistoryActionParams(VariantMixin):
 class ForgetGroupchatActionParams(VariantMixin):
     account: str
     jid: JID
+
+
+@dataclass
+class AddChatActionParams(VariantMixin):
+    account: str
+    jid: JID
+    type: str
+    select: bool

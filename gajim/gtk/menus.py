@@ -40,6 +40,7 @@ from gajim.common.i18n import get_short_lang_code
 from gajim.common.const import URIType
 from gajim.common.const import URIAction
 from gajim.common.structs import URI
+from gajim.gtk.structs import AddChatActionParams
 
 from gajim.gui.structs import ForgetGroupchatActionParams
 from gajim.gui.structs import RemoveHistoryActionParams
@@ -475,19 +476,16 @@ def get_roster_menu(account: str, jid: str, gateway: bool = False) -> Gio.Menu:
     return menu
 
 
-def get_subscription_menu(account: str, jid: str) -> Gio.Menu:
+def get_subscription_menu(account: str, jid: JID) -> Gio.Menu:
     menu = Gio.Menu()
 
-    action_name = 'win.add-chat'
-    add_chat = Gio.MenuItem.new(_('Start Chat'), action_name)
-    dict_ = {
-        'account': GLib.Variant('s', account),
-        'jid': GLib.Variant('s', str(jid)),
-        'type_': GLib.Variant('s', 'contact'),
-        'select': GLib.Variant.new_boolean(True),
-    }
-    variant_dict = GLib.Variant('a{sv}', dict_)
-    add_chat.set_action_and_target_value(action_name, variant_dict)
+    add_chat = Gio.MenuItem.new(_('Start Chat'))
+    params = AddChatActionParams(account=account,
+                                 jid=jid,
+                                 type='contact',
+                                 select=True)
+
+    add_chat.set_action_and_target_value('win.add-chat', params.to_variant())
     menu.append_item(add_chat)
 
     menu_items = [

@@ -894,3 +894,10 @@ def get_style_attribute_with_name(name: str) -> Pango.Attribute:
         return Pango.attr_family_new('monospace')
 
     raise ValueError('unknown attribute %s' % name)
+
+
+def get_key_theme() -> Optional[str]:
+    settings = Gtk.Settings.get_default()
+    if settings is None:
+        return None
+    return settings.get_property('gtk-key-theme-name')
