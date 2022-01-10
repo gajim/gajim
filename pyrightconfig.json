@@ -36,6 +36,7 @@
         "gajim/gtk/conversation/rows/scroll_hint.py",
         "gajim/gtk/conversation/rows/widgets.py",
         "gajim/gtk/conversation/scrolled.py",
+        "gajim/gtk/main_stack.py",
         "gajim/gtk/notification.py",
         "gajim/gtk/side_bar_switcher.py",
         "gajim/gtk/status_icon.py",

@@ -12,17 +12,25 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Union
+from typing import cast
+
 from nbxmpp.protocol import JID
 
 from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common.events import ApplicationEvent
-from gajim.gtk.chat_list import ChatList
 
 from .app_page import AppPage
+from .chat_list import ChatList
 from .chat_page import ChatPage
 from .account_page import AccountPage
+
+
+PageT = Union[ChatPage, AccountPage, AppPage]
 
 
 class MainStack(Gtk.Stack):
@@ -82,7 +90,8 @@ class MainStack(Gtk.Stack):
 
     def process_event(self, event: ApplicationEvent) -> None:
         empty_box = self.get_child_by_name('empty')
-        for page in self.get_children():
+        pages = cast(list[PageT], self.get_children())
+        for page in pages:
             if page is empty_box:
                 continue
             page.process_event(event)
