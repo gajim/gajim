@@ -53,6 +53,7 @@ def get_singlechat_menu(control_id: str,
                         ) -> Gio.Menu:
     client = app.get_client(account)
     is_self_contact = jid.bare == client.get_own_jid().bare
+    contact = client.get_module('Contacts').get_contact(jid)
 
     singlechat_menu: list[tuple[str, Any]] = [
         (_('Send File'), [
@@ -61,16 +62,20 @@ def get_singlechat_menu(control_id: str,
         ])
     ]
 
-    additional_menu = [
+    additional_menu: list[tuple[str, Any]] = [
         ('win.send-marker-', _('Send Read Markers')),
         (_('Send Chatstate'), ['chatstate']),
-        ('win.invite-contacts-', _('Invite Contacts…')),
-        ('win.add-to-roster-', _('Add to Contact List…')),
         ('win.block-contact-', _('Block Contact…')),
         ('win.start-call-', _('Start Call…')),
         ('win.information-', _('Information')),
         ('app.remove-history', _('Remove History'))
     ]
+
+    if not contact.is_in_roster:
+        if (type_.is_chat or
+                (type_.is_privatechat and contact.real_jid is not None)):
+            additional_menu.append(
+                ('win.add-to-roster-', _('Add to Contact List…')))
 
     if is_self_contact:
         singlechat_menu.append(('profile', _('Profile')))
