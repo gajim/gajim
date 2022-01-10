@@ -595,6 +595,18 @@ class ChatPanedBuilder(Builder):
 
 
 class ContactInfoBuilder(Builder):
+    devices_grid: Gtk.Grid
+    priority_label: Gtk.Label
+    software_label: Gtk.Label
+    system_label: Gtk.Label
+    time_label: Gtk.Label
+    status_value: Gtk.Label
+    priority_value: Gtk.Label
+    software_value: Gtk.Label
+    system_value: Gtk.Label
+    time_value: Gtk.Label
+    resource_box: Gtk.Box
+    resource_label: Gtk.Label
     groups_model: Gtk.ListStore
     main_grid: Gtk.Grid
     header_revealer: Gtk.Revealer
@@ -627,8 +639,7 @@ class ContactInfoBuilder(Builder):
     scrolledwindow_annotation: Gtk.ScrolledWindow
     textview_annotation: Gtk.TextView
     devices_stack: Gtk.Stack
-    devices_grid: Gtk.Grid
-    devices_spinner: Gtk.Spinner
+    devices_box: Gtk.Box
 
 
 class GroupchatInfoScrolledBuilder(Builder):

@@ -2,6 +2,174 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
+  <!-- n-columns=2 n-rows=6 -->
+  <object class="GtkGrid" id="devices_grid">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="row-spacing">6</property>
+    <property name="column-spacing">12</property>
+    <property name="column-homogeneous">True</property>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes">Status</property>
+        <property name="xalign">1</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="priority_label">
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
+        <property name="label" translatable="yes">Priority</property>
+        <property name="xalign">1</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="software_label">
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
+        <property name="label" translatable="yes">Software</property>
+        <property name="xalign">1</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="system_label">
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
+        <property name="label" translatable="yes">Operating System</property>
+        <property name="xalign">1</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">4</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="time_label">
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
+        <property name="label" translatable="yes">Local Time</property>
+        <property name="xalign">1</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">5</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="status_value">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="xalign">0</property>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="priority_value">
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
+        <property name="xalign">0</property>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="software_value">
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
+        <property name="xalign">0</property>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="system_value">
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
+        <property name="xalign">0</property>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">4</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="time_value">
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
+        <property name="xalign">0</property>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">5</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="resource_box">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="margin-bottom">12</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkLabel" id="resource_label">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <style>
+              <class name="bold16"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">0</property>
+        <property name="width">2</property>
+      </packing>
+    </child>
+  </object>
   <object class="GtkListStore" id="groups_model">
     <columns>
       <!-- column-name is_in_group -->
@@ -20,6 +188,8 @@
         <property name="height-request">450</property>
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkRevealer" id="header_revealer">
@@ -171,8 +341,7 @@
                           <object class="GtkGrid" id="group_chat_grid">
                             <property name="can-focus">False</property>
                             <property name="no-show-all">True</property>
-                            <property name="halign">center</property>
-                            <property name="row-spacing">6</property>
+                            <property name="row-spacing">12</property>
                             <property name="column-spacing">12</property>
                             <property name="column-homogeneous">True</property>
                             <child>
@@ -180,6 +349,7 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="halign">end</property>
+                                <property name="margin-end">18</property>
                                 <property name="label" translatable="yes">Role</property>
                                 <style>
                                   <class name="dim-label"/>
@@ -206,6 +376,7 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="halign">end</property>
+                                <property name="margin-end">18</property>
                                 <property name="label" translatable="yes">Affiliation</property>
                                 <style>
                                   <class name="dim-label"/>
@@ -711,42 +882,15 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <child>
-                          <object class="GtkBox">
+                          <object class="GtkBox" id="devices_box">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">center</property>
                             <property name="border-width">18</property>
-                            <property name="spacing">12</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">24</property>
                             <child>
-                              <!-- n-columns=1 n-rows=1 -->
-                              <object class="GtkGrid" id="devices_grid">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="row-spacing">6</property>
-                                <property name="column-spacing">12</property>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSpinner" id="devices_spinner">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="halign">end</property>
-                                <property name="valign">start</property>
-                                <property name="active">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                           </object>
                         </child>
