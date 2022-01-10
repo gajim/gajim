@@ -349,7 +349,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._account_side_bar.activate_account_page(account)
         self._main_stack.show_account(account)
 
-    def get_active_workspace(self) -> Optional[Workspace]:
+    def get_active_workspace(self) -> Optional[str]:
         return self._workspace_side_bar.get_active_workspace()
 
     def is_chat_active(self, account: str, jid: JID) -> bool:
@@ -458,6 +458,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                  workspace: str = 'default') -> None:
         if workspace == 'current':
             workspace_id = self.get_active_workspace()
+            if workspace_id is None:
+                workspace_id = self._workspace_side_bar.get_first_workspace()
         else:
             workspace_id = self._workspace_side_bar.get_first_workspace()
         self._chat_page.add_chat_for_workspace(workspace_id,
@@ -466,11 +468,18 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                                type_,
                                                select=select)
 
-    def add_private_chat(self, account: str, jid: JID,
+    def add_private_chat(self,
+                         account: str,
+                         jid: JID,
                          select: bool = False) -> None:
-        workspace_id = self.get_active_workspace()
-        if workspace_id is None:
+        # Try to add private chat to the same workspace the MUC resides in
+        chat_list_stack = self._chat_page.get_chat_list_stack()
+        chat_list = chat_list_stack.find_chat(account, jid.new_as_bare())
+        if chat_list is not None:
+            workspace_id = chat_list.workspace_id
+        else:
             workspace_id = self._workspace_side_bar.get_first_workspace()
+
         self._chat_page.add_chat_for_workspace(workspace_id,
                                                account,
                                                jid,
@@ -659,8 +668,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                     return
                 if event.properties.is_muc_pm:
                     self.add_private_chat(event.account,
-                                          event.properties.jid,
-                                          'pm')
+                                          event.properties.jid)
                 else:
                     jid = event.properties.jid.new_as_bare()
                     self.add_chat(event.account, jid, 'contact')

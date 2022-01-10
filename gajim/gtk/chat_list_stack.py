@@ -182,7 +182,7 @@ class ChatListStack(Gtk.Stack):
         chat_list.add_chat(account, jid, type_, pinned)
 
     def select_chat(self, account: str, jid: JID) -> None:
-        chat_list = self._find_chat(account, jid)
+        chat_list = self.find_chat(account, jid)
         if chat_list is None:
             return
 
@@ -241,7 +241,7 @@ class ChatListStack(Gtk.Stack):
             chat_list.remove_chats_for_account(account)
             self.store_open_chats(workspace_id)
 
-    def _find_chat(self, account: str, jid: JID) -> Optional[ChatList]:
+    def find_chat(self, account: str, jid: JID) -> Optional[ChatList]:
         for chat_list in self._chat_lists.values():
             if chat_list.contains_chat(account, jid):
                 return chat_list
@@ -292,7 +292,7 @@ class ChatListStack(Gtk.Stack):
         if event.name not in HANDLED_EVENTS:
             return
 
-        chat_list = self._find_chat(event.account, event.jid)
+        chat_list = self.find_chat(event.account, event.jid)
         if chat_list is None:
             return
         chat_list.process_event(event)
