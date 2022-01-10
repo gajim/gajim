@@ -12,9 +12,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from nbxmpp.protocol import JID
+
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.common.events import ApplicationEvent
+from gajim.gtk.chat_list import ChatList
 
 from .app_page import AppPage
 from .chat_page import ChatPage
@@ -22,7 +26,7 @@ from .account_page import AccountPage
 
 
 class MainStack(Gtk.Stack):
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.Stack.__init__(self)
 
         self.add_named(Gtk.Box(), 'empty')
@@ -52,7 +56,9 @@ class MainStack(Gtk.Stack):
         self.set_visible_child_name('app')
 
     def get_app_page(self) -> AppPage:
-        return self.get_child_by_name('app')
+        app_page = self.get_child_by_name('app')
+        assert isinstance(app_page, AppPage)
+        return app_page
 
     def show_chats(self, workspace_id: str) -> None:
         self._chat_page.show_workspace_chats(workspace_id)
@@ -65,17 +71,25 @@ class MainStack(Gtk.Stack):
         self.set_visible_child_name(account)
 
     def get_account_page(self, account: str) -> AccountPage:
-        return self.get_child_by_name(account)
+        account_page = self.get_child_by_name(account)
+        assert isinstance(account_page, AccountPage)
+        return account_page
 
     def get_chat_page(self) -> ChatPage:
-        return self.get_child_by_name('chats')
+        chat_page = self.get_child_by_name('chats')
+        assert isinstance(chat_page, ChatPage)
+        return chat_page
 
-    def process_event(self, event):
+    def process_event(self, event: ApplicationEvent) -> None:
         empty_box = self.get_child_by_name('empty')
         for page in self.get_children():
             if page is empty_box:
                 continue
             page.process_event(event)
 
-    def _on_chat_selected(self, *args):
+    def _on_chat_selected(self,
+                          _chat_list: ChatList,
+                          _workspace_id: str,
+                          _account: str,
+                          _jid: JID) -> None:
         self.set_visible_child_name('chats')
