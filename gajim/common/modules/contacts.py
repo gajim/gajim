@@ -659,7 +659,8 @@ class GroupchatParticipant(CommonContact):
         jid = self._presence.real_jid
         if jid is None:
             return None
-        return self._client.get_module('Contacts').get_contact(jid)
+        return self._client.get_module('Contacts').get_contact(
+            jid.new_as_bare())
 
     @property
     def affiliation(self) -> Affiliation:
