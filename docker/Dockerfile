@@ -8,6 +8,7 @@ RUN apt-get install -y appstream-util
 RUN apt-get install -y libgirepository1.0-dev
 RUN apt-get install -y gir1.2-gtk-3.0
 RUN apt-get install -y gir1.2-soup-2.4
+RUN apt-get install -y gir1.2-ayatanaappindicator3-0.1
 RUN apt-get install -y gettext
 RUN apt-get install -y nodejs
 RUN apt-get install -y npm
