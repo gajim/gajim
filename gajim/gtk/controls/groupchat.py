@@ -875,10 +875,15 @@ class GroupchatControl(BaseControl):
         elif event.name == 'ping-error':
             self.add_info_message(event.error)
 
+    def _set_message_input_sensitive(self, state: bool) -> None:
+        self.xml.formattings_button.set_sensitive(state)
+        self.msg_textview.set_sensitive(state)
+        self.msg_textview.set_editable(state)
+
     def _set_control_active(self) -> None:
-        self.xml.formattings_button.set_sensitive(True)
-        self.msg_textview.set_sensitive(True)
-        self.msg_textview.set_editable(True)
+        contact = self.contact.get_self()
+        if not contact.role.is_visitor:
+            self._set_message_input_sensitive(True)
 
         self.roster.initial_draw()
         self.conversation_view.update_avatars()
@@ -886,9 +891,7 @@ class GroupchatControl(BaseControl):
         self.update_actions()
 
     def _set_control_inactive(self) -> None:
-        self.xml.formattings_button.set_sensitive(False)
-        self.msg_textview.set_sensitive(False)
-        self.msg_textview.set_editable(False)
+        self._set_message_input_sensitive(False)
 
         self.roster.enable_sort(False)
         self.roster.clear()
@@ -1013,6 +1016,7 @@ class GroupchatControl(BaseControl):
         actor = '' if actor is None else _(' by {actor}').format(actor=actor)
 
         if properties.is_muc_self_presence:
+            self._set_message_input_sensitive(not user_contact.role.is_visitor)
             message = _('** Your Role has been set to '
                         '{role}{actor}{reason}').format(role=role,
                                                         actor=actor,
