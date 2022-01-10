@@ -1,7 +1,7 @@
 PyGObject
 pycairo>=1.20
 mypy
-pylint
+pylint==2.12.2
 codespell
 coverage
 css-parser
