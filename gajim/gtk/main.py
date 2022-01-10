@@ -14,6 +14,7 @@
 
 from __future__ import annotations
 
+from typing import Any
 from typing import Optional
 from typing import Generator
 
@@ -31,6 +32,11 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import Display
 from gajim.common.const import Direction
+from gajim.common.events import ApplicationEvent
+from gajim.common.events import AccountEnabled
+from gajim.common.events import AccountDisabled
+from gajim.common.events import ShowChanged
+from gajim.common.events import SignedIn
 from gajim.common.helpers import ask_for_status_message
 from gajim.common.i18n import _
 from gajim.common.ged import EventHelper
@@ -39,7 +45,6 @@ from gajim.common.modules.bytestream import is_transfer_active
 from .adhoc import AdHocCommand
 from .account_side_bar import AccountSideBar
 from .app_side_bar import AppSideBar
-from .workspace_side_bar import Workspace
 from .workspace_side_bar import WorkspaceSideBar
 from .main_stack import MainStack
 from .chat_list import ChatList
@@ -59,7 +64,7 @@ log = logging.getLogger('gajim.gui.main')
 
 
 class MainWindow(Gtk.ApplicationWindow, EventHelper):
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
         self.set_application(app.app)
@@ -134,7 +139,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             app.interface.systray.connect_unread_changed(
                 self._chat_page.get_chat_list_stack())
 
-    def _start_timers(self):
+    def _start_timers(self) -> None:
         GLib.timeout_add_seconds(UNLOAD_CHAT_TIME,
                                  self._chat_page.unload_idle_chats)
 
@@ -159,11 +164,11 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                     app.settings.get('trayicon') != 'always'):
                 self.show_all()
 
-    def _on_account_enabled(self, event):
+    def _on_account_enabled(self, event: AccountEnabled) -> None:
         self._account_side_bar.add_account(event.account)
         self._main_stack.add_account_page(event.account)
 
-    def _on_account_disabled(self, event):
+    def _on_account_disabled(self, event: AccountDisabled) -> None:
         workspace_id = self._workspace_side_bar.get_first_workspace()
         self.activate_workspace(workspace_id)
         self._account_side_bar.remove_account(event.account)
@@ -171,17 +176,17 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._main_stack.remove_chats_for_account(event.account)
 
     @staticmethod
-    def _on_our_show(event):
+    def _on_our_show(event: ShowChanged) -> None:
         if event.show == 'offline':
             app.app.set_account_actions_state(event.account)
             app.app.update_app_actions_state()
 
     @staticmethod
-    def _on_signed_in(event):
+    def _on_signed_in(event: SignedIn) -> None:
         app.app.set_account_actions_state(event.account, True)
         app.app.update_app_actions_state()
 
-    def _add_actions(self):
+    def _add_actions(self) -> None:
         actions = [
             ('add-workspace', 's', self._add_workspace),
             ('edit-workspace', 's', self._edit_workspace),
@@ -200,7 +205,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             act.connect('activate', func)
             self.add_action(act)
 
-    def _add_actions2(self):
+    def _add_actions2(self) -> None:
         actions = [
             'change-nickname',
             'change-subject',
@@ -243,7 +248,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _on_action(self,
                    action: Gio.SimpleAction,
-                   _param: Optional[GLib.Variant]) -> None:
+                   _param: Optional[GLib.Variant]) -> Optional[int]:
 
         control = self.get_active_control()
         if control is None:
@@ -287,7 +292,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         return None
 
-    def _on_window_motion_notify(self, _widget, _event):
+    def _on_window_motion_notify(self,
+                                 _widget: Gtk.ApplicationWindow,
+                                 _event: Gdk.EventMotion
+                                 ) -> None:
         control = self.get_active_control()
         if control is None:
             return
@@ -297,7 +305,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             client.get_module('Chatstate').set_mouse_activity(
                 control.contact, control.msg_textview.has_text())
 
-    def _on_window_delete(self, _widget, _event):
+    def _on_window_delete(self,
+                          _widget: Gtk.ApplicationWindow,
+                          _event: Gdk.Event
+                          ) -> bool:
         # Main window X button was clicked
         if app.settings.get('quit_on_main_window_x_button'):
             self.quit()
@@ -313,7 +324,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                     self.iconify()
                 return True
 
-            def _on_ok(is_checked):
+            def _on_ok(is_checked: bool) -> None:
                 if is_checked:
                     app.settings.set('quit_on_main_window_x_button', True)
                 self.quit()
@@ -329,7 +340,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                    callback=_on_ok)]).show()
         return True
 
-    def _set_startup_finished(self):
+    def _set_startup_finished(self) -> None:
         self._startup_finished = True
         self._chat_page.set_startup_finished()
 
@@ -563,7 +574,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         chat_list_stack = self._chat_page.get_chat_list_stack()
         chat_list_stack.mark_as_read(account, jid)
 
-    def _on_window_active(self, window, _param):
+    def _on_window_active(self,
+                          window: Gtk.ApplicationWindow,
+                          _param: Any
+                          ) -> None:
         is_active = window.get_property('is-active')
         if not is_active:
             return
@@ -596,7 +610,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             return
 
         # TODO: Keep "confirm_block" setting?
-        def _block_contact(report=None):
+        def _block_contact(report: Optional[str] = None) -> None:
             client.get_module('Blocking').block([contact.jid], report)
             self._chat_page.remove_chat(account, contact.jid)
 
@@ -657,7 +671,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._set_startup_finished()
 
-    def _on_event(self, event):
+    def _on_event(self, event: ApplicationEvent) -> None:
         if event.name == 'update-roster-avatar':
             return
 
@@ -688,7 +702,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._main_stack.process_event(event)
 
-    def quit(self):
+    def quit(self) -> None:
         accounts = list(app.connections.keys())
         get_msg = False
         for acct in accounts:
@@ -704,7 +718,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             'last_main_window_visible', self.get_property('visible'))
         app.settings.save()
 
-        def on_continue2(message):
+        def on_continue2(message: Optional[str]) -> None:
             if 'file_transfers' not in app.interface.instances:
                 app.app.start_shutdown(message=message)
                 return
@@ -733,7 +747,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 return
             app.app.start_shutdown(message=message)
 
-        def on_continue(message):
+        def on_continue(message: Optional[str]) -> None:
             if message is None:
                 # user pressed Cancel to change status message dialog
                 return
