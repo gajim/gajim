@@ -295,15 +295,8 @@ class GajimRemote(Server):
             self.on_account_created)
         app.ged.register_event_handler('vcard-received', ged.POSTGUI,
             self.on_vcard_received)
-        app.ged.register_event_handler('chatstate-received', ged.POSTGUI,
-            self.on_chatstate_received)
         app.ged.register_event_handler('message-sent', ged.POSTGUI,
             self.on_message_sent)
-
-    def on_chatstate_received(self, event):
-        self.raise_signal(
-            'ChatState',
-            (event.account, [event.contact.jid, event.contact.chatstate]))
 
     def on_message_sent(self, obj):
         try:
