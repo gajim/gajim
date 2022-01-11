@@ -286,9 +286,14 @@ class ChatControl(BaseControl):
 
         return Gdk.EVENT_PROPAGATE
 
-    def _on_add_to_roster(self, _action, _param):
-        open_window('AddContact', account=self.account,
-                    jid=self.contact.jid)
+    def _on_add_to_roster(self,
+                          _action: Gio.SimpleAction,
+                          _param: Optional[GLib.Variant]
+                          ) -> None:
+        jid = self.contact.jid
+        if self.type.is_privatechat and self.contact.real_jid is not None:
+            jid = self.contact.real_jid
+        open_window('AddContact', account=self.account, jid=jid)
 
     def _on_block_contact(self, _action, _param):
         app.window.block_contact(self.account, self.contact.jid)
