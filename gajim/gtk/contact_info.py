@@ -272,7 +272,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
             result = task.finish()
         except Exception as err:
             log.warning('Could not retrieve software version: %s', err)
-            return
+            result = None
 
         resource = task.get_user_data()
         device_grid = self._devices[resource]
@@ -285,7 +285,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
             entity_time = task.finish()
         except Exception as err:
             log.warning('Could not retrieve entity time: %s', err)
-            return
+            entity_time = None
 
         resource = task.get_user_data()
 
@@ -464,22 +464,24 @@ class DeviceGrid:
     def widget(self) -> Gtk.Grid:
         return self._ui.devices_grid
 
-    def set_entity_time(self, entity_time: str) -> None:
-        self._ui.time_value.set_text(entity_time)
-        self._ui.time_value.show()
-        self._ui.time_label.show()
+    def set_entity_time(self, entity_time: Optional[str]) -> None:
+        if entity_time is not None:
+            self._ui.time_value.set_text(entity_time)
+            self._ui.time_value.show()
+            self._ui.time_label.show()
 
         self._check_complete()
 
-    def set_software(self, software: SoftwareVersionResult) -> None:
-        software_string = '%s %s' % (software.name, software.version)
-        self._ui.software_value.set_text(software_string)
-        self._ui.software_value.show()
-        self._ui.software_label.show()
-        if software.os is not None:
-            self._ui.system_value.set_text(software.os)
-            self._ui.system_value.show()
-            self._ui.system_label.show()
+    def set_software(self, software: Optional[SoftwareVersionResult]) -> None:
+        if software is not None:
+            software_string = '%s %s' % (software.name, software.version)
+            self._ui.software_value.set_text(software_string)
+            self._ui.software_value.show()
+            self._ui.software_label.show()
+            if software.os is not None:
+                self._ui.system_value.set_text(software.os)
+                self._ui.system_value.show()
+                self._ui.system_label.show()
 
         self._check_complete()
 
