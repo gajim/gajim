@@ -12,7 +12,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List
 from typing import Optional
 
 import time
@@ -168,7 +167,6 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         else:
             client = app.get_client(self._account)
             name = get_groupchat_name(client, info.jid)
-        
             contact = client.get_module('Contacts').get_contact(
                 info.jid, groupchat=True)
             surface = contact.get_avatar(
