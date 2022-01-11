@@ -13,12 +13,13 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import annotations
+
 from typing import List
 from typing import Optional
 
 import locale
 
-from gi.repository import Gdk
+from gi.repository import Gdk, GdkPixbuf
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -110,6 +111,7 @@ class ContactRow(Gtk.ListBoxRow):
 
         scale = self.get_scale_factor()
         surface = contact.get_avatar(AvatarSize.ROSTER, scale)
+        assert not isinstance(surface, GdkPixbuf.Pixbuf)
         return Gtk.Image.new_from_surface(surface)
 
     def update_jid(self, jid: str) -> None:
@@ -233,10 +235,10 @@ class GroupChatInviter(Gtk.Box):
             client = app.get_client(account)
             contact = client.get_module('Contacts').get_contact(jid)
             row = ContactRow(account,
-                            contact,
-                            str(contact.jid),
-                            contact.name,
-                            show_account)
+                             contact,
+                             str(contact.jid),
+                             contact.name,
+                             show_account)
             self._ui.contacts_listbox.add(row)
         self._ui.search_entry.grab_focus()
         self.emit('listbox-changed', flowbox.has_contacts())
