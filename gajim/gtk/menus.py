@@ -407,29 +407,25 @@ def get_conv_uri_context_menu(account: str, uri: URI) -> Optional[Gtk.Menu]:
 
 
 def get_roster_menu(account: str, jid: str, gateway: bool = False) -> Gio.Menu:
+
+    block_label = _('Block…')
     if jid_is_blocked(account, jid):
         block_label = _('Unblock')
-    else:
-        block_label = _('Block…')
-    menu_items = [
-        ('contact-info', _('Information')),
-        ('execute-command', _('Execute Command…')),
-        ('block-contact', block_label),
-        ('remove-contact', _('Remove…')),
+
+    value = f'"{jid}"'
+
+    menuitems: MenuItemListT = [
+        (_('Information'), f'win.contact-info-{account}', value),
+        (_('Execute Command…'), f'win.execute-command-{account}', value),
+        (block_label, f'win.block-contact-{account}', value),
+        (_('Remove…'), f'win.remove-contact-{account}', value),
     ]
+
     if gateway:
-        menu_items.insert(1, ('modify-gateway', _('Modify Gateway…')))
+        menuitems.insert(
+            1, (_('Modify Gateway…'), f'win.modify-gateway-{account}', value))
 
-    menu = Gio.Menu()
-    for item in menu_items:
-        action, label = item
-        action = f'win.{action}-{account}'
-        menuitem = Gio.MenuItem.new(label, action)
-        variant = GLib.Variant('s', jid)
-        menuitem.set_action_and_target_value(action, variant)
-        menu.append_item(menuitem)
-
-    return menu
+    return make_menu(menuitems)
 
 
 def get_subscription_menu(account: str, jid: JID) -> Gio.Menu:
