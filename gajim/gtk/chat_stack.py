@@ -12,8 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Dict
-from typing import Tuple
+from typing import Any
 from typing import Optional
 from typing import Generator
 
@@ -55,7 +54,7 @@ class ChatStack(Gtk.Stack, EventHelper):
         ])
 
         self.show_all()
-        self._controls: Dict[Tuple[str, JID], ControlType] = {}
+        self._controls: dict[tuple[str, JID], ControlType] = {}
 
     def get_control(self, account: str, jid: JID) -> Optional[ControlType]:
         try:
@@ -138,7 +137,7 @@ class ChatStack(Gtk.Stack, EventHelper):
                 continue
             self.remove_chat(account, jid)
 
-    def _on_account_changed(self, *args):
+    def _on_account_changed(self, *args: Any) -> None:
         for control in self._controls.values():
             control.update_account_badge()
 
@@ -153,7 +152,7 @@ class ChatPlaceholderBox(Gtk.Box):
             'org.gajim.Gajim-symbolic',
             100,
             self.get_scale_factor(),
-            0)
+            Gtk.IconLookupFlags.FORCE_SIZE)
         image = Gtk.Image.new_from_pixbuf(pixbuf)
         image.get_style_context().add_class('dim-label')
         self.add(image)
@@ -163,5 +162,5 @@ class ChatPlaceholderBox(Gtk.Box):
         button.connect('clicked', self._on_start_chatting)
         self.add(button)
 
-    def _on_start_chatting(self, _button):
+    def _on_start_chatting(self, _button: Gtk.Button) -> None:
         app.app.activate_action('start-chat', GLib.Variant('s', ''))

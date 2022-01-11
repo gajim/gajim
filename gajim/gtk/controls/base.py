@@ -147,7 +147,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         self.xml = get_builder(f'{widget_name}.ui')
         self.xml.connect_signals(self)
-        self.widget = self.xml.get_object(f'{widget_name}_hbox')
+        self.widget: Gtk.Box = self.xml.get_object(f'{widget_name}_hbox')
 
         self._account_badge = AccountBadge(self.account)
         self.xml.account_badge_box.add(self._account_badge)
