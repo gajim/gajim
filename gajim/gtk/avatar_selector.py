@@ -110,7 +110,7 @@ class AvatarSelector(Gtk.Box):
         self._crop_area.show()
 
     def _on_load_clicked(self, _button: Gtk.Button) -> None:
-        def _on_file_selected(path):
+        def _on_file_selected(path: str) -> None:
             self.prepare_crop_area(path)
 
         AvatarChooserDialog(_on_file_selected,
@@ -240,8 +240,8 @@ class CropArea(Gtk.DrawingArea):
 
         self._crop.width = 2 * self._base_width
         self._crop.height = 2 * self._base_height
-        self._crop.x = abs((width - self._crop.width) / 2)
-        self._crop.y = abs((height - self._crop.height) / 2)
+        self._crop.x = int(abs((width - self._crop.width) / 2))
+        self._crop.y = int(abs((height - self._crop.height) / 2))
 
         self._scale = 0.0
         self._image.x = 0
@@ -570,10 +570,10 @@ class CropArea(Gtk.DrawingArea):
                 top = self._crop.y
                 bottom = self._crop.y + self._crop.height - 1
 
-        self._crop.x = left
-        self._crop.y = top
-        self._crop.width = right - left + 1
-        self._crop.height = bottom - top + 1
+        self._crop.x = int(left)
+        self._crop.y = int(top)
+        self._crop.width = int(right - left + 1)
+        self._crop.height = int(bottom - top + 1)
 
         damage = self._crop_to_widget()
         self.queue_draw_area(
@@ -590,8 +590,8 @@ class CropArea(Gtk.DrawingArea):
         if scale * width > allocation.width:
             scale = allocation.width / float(width)
 
-        dest_width = width * scale
-        dest_height = height * scale
+        dest_width = int(width * scale)
+        dest_height = int(height * scale)
 
         if (self._pixbuf is None or
                 self._pixbuf.get_width != allocation.width or
@@ -628,25 +628,25 @@ class CropArea(Gtk.DrawingArea):
                     (dest_height / self._base_height)))
                 crop_scale = float(min(scale_to_80, scale_to_image))
 
-                self._crop.width = crop_scale * self._base_width / scale
-                self._crop.height = crop_scale * self._base_height / scale
-                self._crop.x = (
-                    self._browse_pixbuf.get_width() - self._crop.width) / 2
-                self._crop.y = (
-                    self._browse_pixbuf.get_height() - self._crop.height) / 2
+                self._crop.width = int(crop_scale * self._base_width / scale)
+                self._crop.height = int(crop_scale * self._base_height / scale)
+                self._crop.x = int((
+                    self._browse_pixbuf.get_width() - self._crop.width) / 2)
+                self._crop.y = int((
+                    self._browse_pixbuf.get_height() - self._crop.height) / 2)
 
             self._scale = scale
-            self._image.x = (allocation.width - dest_width) / 2
-            self._image.y = (allocation.height - dest_height) / 2
+            self._image.x = int((allocation.width - dest_width) / 2)
+            self._image.y = int((allocation.height - dest_height) / 2)
             self._image.width = dest_width
             self._image.height = dest_height
 
     def _crop_to_widget(self) -> Gdk.Rectangle:
         crop = Gdk.Rectangle()
-        crop.x = self._image.x + self._crop.x * self._scale
-        crop.y = self._image.y + self._crop.y * self._scale
-        crop.width = self._crop.width * self._scale
-        crop.height = self._crop.height * self._scale
+        crop.x = int(self._image.x + self._crop.x * self._scale)
+        crop.y = int(self._image.y + self._crop.y * self._scale)
+        crop.width = int(self._crop.width * self._scale)
+        crop.height = int(self._crop.height * self._scale)
         return crop
 
     def _update_cursor(self, x_coord: float, y_coord: float) -> None:
