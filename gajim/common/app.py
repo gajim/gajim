@@ -58,6 +58,7 @@ if typing.TYPE_CHECKING:
     from gajim.gui.application import GajimApplication
     from gajim.common.storage.cache import CacheStorage
     from gajim.common.storage.archive import MessageArchiveStorage
+    from gajim.common.cert_store import CertificateStore
 
 
 interface = cast(types.InterfaceT, None)
@@ -111,7 +112,7 @@ block_signed_in_notifications: dict[str, bool] = {}
 
 proxy65_manager = None
 
-cert_store = None
+cert_store = cast('CertificateStore', None)
 
 task_manager = None
 
