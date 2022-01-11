@@ -26,24 +26,24 @@ from gi.repository import GLib
 from nbxmpp import JID
 
 from gajim.common import app
-from gajim.common.events import ApplicationEvent
+from gajim.common import events
 
 from . import structs
 from .chat_filter import ChatFilter
 from .chat_list import ChatList
 from .chat_list import ChatRow
 
-HANDLED_EVENTS = [
-    'message-received',
-    'mam-message-received',
-    'gc-message-received',
-    'message-updated',
-    'presence-received',
-    'message-sent',
-    'chatstate-received',
-    'jingle-request-received',
-    'file-request-received'
-]
+
+HANDLED_EVENTS = (
+    events.MessageReceived,
+    events.MamMessageReceived,
+    events.GcMessageReceived,
+    events.MessageUpdated,
+    events.PresenceReceived,
+    events.MessageSent,
+    events.JingleRequestReceived,
+    events.FileRequestReceivedEvent
+)
 
 
 class ChatListStack(Gtk.Stack):
@@ -296,11 +296,13 @@ class ChatListStack(Gtk.Stack):
         for chat_list in self._chat_lists.values():
             chat_list.mark_as_read(account, jid)
 
-    def process_event(self, event: ApplicationEvent) -> None:
-        if event.name not in HANDLED_EVENTS:
+    def process_event(self, event: events.ApplicationEvent) -> None:
+        if not isinstance(event, HANDLED_EVENTS):
             return
 
-        chat_list = self.find_chat(event.account, event.jid)
+        jid = JID.from_string(event.jid)
+
+        chat_list = self.find_chat(event.account, jid)
         if chat_list is None:
             return
         chat_list.process_event(event)
