@@ -39,7 +39,7 @@
         "gajim/gtk/main_stack.py",
         "gajim/gtk/notification.py",
         "gajim/gtk/structs.py",
-        "gajim/gtk/side_bar_switcher.py",
+        "gajim/gtk/sidebar_switcher.py",
         "gajim/gtk/status_icon.py",
         "gajim/gtk/status_message_selector.py",
         "gajim/gtk/status_selector.py",
