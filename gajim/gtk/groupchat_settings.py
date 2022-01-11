@@ -24,7 +24,7 @@ from .settings import SettingsBox
 
 
 class GroupChatSettings(SettingsBox):
-    def __init__(self, account, jid):
+    def __init__(self, account: str, jid: str) -> None:
         SettingsBox.__init__(self, account, jid)
 
         self.get_style_context().add_class('settings-border')
@@ -38,7 +38,7 @@ class GroupChatSettings(SettingsBox):
             'all': _('All Chat States')
         }
 
-        settings = [
+        settings: list[Setting] = [
             Setting(SettingKind.SWITCH,
                     _('Show Join/Leave'),
                     SettingType.GROUP_CHAT,
