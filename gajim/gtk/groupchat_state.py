@@ -57,8 +57,8 @@ class GroupchatState(Gtk.Box):
     def set_fetching(self):
         self._ui.groupchat_state.set_visible_child_name('fetching')
 
-    def _on_join_clicked(self, _button):
+    def _on_join_clicked(self, _button: Gtk.Button) -> None:
         self.emit('join-clicked')
 
-    def _on_abort_clicked(self, _button):
+    def _on_abort_clicked(self, _button: Gtk.Button) -> None:
         self.emit('abort-clicked')
