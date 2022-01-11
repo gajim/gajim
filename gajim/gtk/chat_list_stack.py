@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Dict
 from typing import Optional
 from typing import cast
@@ -26,6 +28,7 @@ from nbxmpp import JID
 from gajim.common import app
 from gajim.common.events import ApplicationEvent
 
+from . import structs
 from .chat_filter import ChatFilter
 from .chat_list import ChatList
 from .chat_list import ChatRow
@@ -85,7 +88,7 @@ class ChatListStack(Gtk.Stack):
     def _add_actions(self) -> None:
         actions = [
             ('toggle-chat-pinned', 'as', self._toggle_chat_pinned),
-            ('move-chat-to-workspace', 'as', self._move_chat_to_workspace),
+            ('move-chat-to-workspace', 'a{sv}', self._move_chat_to_workspace),
             ('mark-as-read', 'as', self._mark_as_read),
         ]
 
@@ -210,23 +213,22 @@ class ChatListStack(Gtk.Stack):
         chat_list.toggle_chat_pinned(account, jid)
         self.store_open_chats(workspace_id)
 
+    @structs.actionmethod
     def _move_chat_to_workspace(self,
                                 _action: Gio.SimpleAction,
-                                param: GLib.Variant
+                                params: structs.MoveChatToWorkspaceAP
                                 ) -> None:
-        new_workspace_id, account, jid = param.unpack()
-        jid = JID.from_string(jid)
 
         current_chatlist = cast(ChatList, self.get_visible_child())
-        type_ = current_chatlist.get_chat_type(account, jid)
+        type_ = current_chatlist.get_chat_type(params.account, params.jid)
         if type_ is None:
             return
-        current_chatlist.remove_chat(account, jid)
+        current_chatlist.remove_chat(params.account, params.jid)
 
-        new_chatlist = self.get_chatlist(new_workspace_id)
-        new_chatlist.add_chat(account, jid, type_)
+        new_chatlist = self.get_chatlist(params.workspace_id)
+        new_chatlist.add_chat(params.account, params.jid, type_)
         self.store_open_chats(current_chatlist.workspace_id)
-        self.store_open_chats(new_workspace_id)
+        self.store_open_chats(params.workspace_id)
 
     def _mark_as_read(self,
                       _action: Gio.SimpleAction,

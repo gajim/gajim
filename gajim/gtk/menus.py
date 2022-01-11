@@ -15,7 +15,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import annotations
-from typing import Tuple
+
 from typing import List
 from typing import Union
 from typing import Any
@@ -40,11 +40,19 @@ from gajim.common.i18n import get_short_lang_code
 from gajim.common.const import URIType
 from gajim.common.const import URIAction
 from gajim.common.structs import URI
-from gajim.gtk.structs import AddChatActionParams
+from gajim.common.structs import VariantMixin
 
+from gajim.gui.structs import AddChatActionParams
 from gajim.gui.structs import ForgetGroupchatActionParams
+from gajim.gui.structs import MoveChatToWorkspaceAP
 from gajim.gui.structs import RemoveHistoryActionParams
+from gajim.gui.util import make_menu_item
+from gajim.gui.util import make_menu
 from gajim.gui.const import ControlType
+
+
+MenuValueT = Union[None, str, GLib.Variant, VariantMixin]
+MenuItemListT = list[tuple[str, str, MenuValueT]]
 
 
 def get_singlechat_menu(control_id: str,
@@ -477,55 +485,37 @@ def get_roster_menu(account: str, jid: str, gateway: bool = False) -> Gio.Menu:
 
 
 def get_subscription_menu(account: str, jid: JID) -> Gio.Menu:
-    menu = Gio.Menu()
-
-    add_chat = Gio.MenuItem.new(_('Start Chat'))
     params = AddChatActionParams(account=account,
                                  jid=jid,
                                  type='contact',
                                  select=True)
-
-    add_chat.set_action_and_target_value('win.add-chat', params.to_variant())
-    menu.append_item(add_chat)
-
-    menu_items = [
-        ('contact-info', _('Information')),
-        ('subscription-block', _('Block')),
-        ('subscription-report', _('Report')),
-        ('subscription-deny', _('Deny')),
+    value = f's("{jid}")'
+    menuitems: MenuItemListT = [
+        (_('Start Chat'), 'win.add-chat', params),
+        (_('Information'), f'win.contact-info-{account}', value),
+        (_('Block'), f'win.subscription-block-{account}', value),
+        (_('Report'), f'win.subscription-report-{account}', value),
+        (_('Deny'), f'win.subscription-deny-{account}', value),
     ]
-    for item in menu_items:
-        action, label = item
-        action = f'win.{action}-{account}'
-        menuitem = Gio.MenuItem.new(label, action)
-        variant = GLib.Variant('s', str(jid))
-        menuitem.set_action_and_target_value(action, variant)
-        menu.append_item(menuitem)
 
-    return menu
+    return make_menu(menuitems)
 
 
 def get_start_chat_row_menu(account: str, jid: JID) -> Gio.Menu:
-    menu_items: List[Tuple[str, str]] = [
-        ('forget-groupchat', _('Forget this Group Chat')),
+    params = ForgetGroupchatActionParams(account=account, jid=jid)
+    menuitems: MenuItemListT = [
+        (_('Forget this Group Chat'), 'app.forget-groupchat', params),
     ]
-    menu = Gio.Menu()
-    for item in menu_items:
-        action, label = item
-        action = f'app.{action}'
-        menuitem = Gio.MenuItem.new(label, action)
-        params = ForgetGroupchatActionParams(account=account, jid=jid)
-        menuitem.set_action_and_target_value(action, params.to_variant())
-        menu.append_item(menuitem)
-    return menu
+
+    return make_menu(menuitems)
 
 
 def get_chat_list_row_menu(workspace_id: str,
                            account: str,
-                           jid: Union[JID, str],
+                           jid: JID,
                            pinned: bool
                            ) -> Gio.Menu:
-    jid = str(jid)
+
     client = app.get_client(account)
     contact = client.get_module('Contacts').get_contact(jid)
 
@@ -560,7 +550,7 @@ def get_chat_list_row_menu(workspace_id: str,
             action = f'win.{action}'
             menuitem = Gio.MenuItem.new(label, action)
             variant_list = GLib.Variant(
-                'as', [workspace_id, account, jid])
+                'as', [workspace_id, account, str(jid)])
             menuitem.set_action_and_target_value(action, variant_list)
             menu.append_item(menuitem)
         else:
@@ -575,18 +565,19 @@ def get_chat_list_row_menu(workspace_id: str,
 
 def build_workspaces_submenu(current_workspace_id: str,
                              account: str,
-                             jid: str
+                             jid: JID
                              ) -> Gio.Menu:
     submenu = Gio.Menu()
     for workspace_id in app.settings.get_workspaces():
         if workspace_id == current_workspace_id:
             continue
         name = app.settings.get_workspace_setting(workspace_id, 'name')
-        action = 'win.move-chat-to-workspace'
-        menuitem = Gio.MenuItem.new(name, action)
-        variant_list = GLib.Variant('as', [workspace_id, account, jid])
-        menuitem.set_action_and_target_value(action, variant_list)
-        submenu.append_item(menuitem)
+        params = MoveChatToWorkspaceAP(workspace_id=workspace_id,
+                                       account=account,
+                                       jid=jid)
+
+        item = make_menu_item(name, 'win.move-chat-to-workspace', params)
+        submenu.append_item(item)
     return submenu
 
 

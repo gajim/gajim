@@ -25,6 +25,7 @@ from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
+from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
@@ -32,6 +33,7 @@ from gajim.common.i18n import _
 
 from .chat_list_stack import ChatListStack
 from .chat_page import ChatPage
+from .structs import MoveChatToWorkspaceAP
 from .util import open_window
 
 log = logging.getLogger('gajim.gui.workspace_sidebar')
@@ -148,9 +150,11 @@ class WorkspaceSideBar(Gtk.ListBox):
         if workspace_row.workspace_id == 'add':
             return
 
-        app.window.activate_action(
-            'move-chat-to-workspace',
-            GLib.Variant('as', [workspace_row.workspace_id, account, jid]))
+        params = MoveChatToWorkspaceAP(workspace_id=workspace_row.workspace_id,
+                                       account=account,
+                                       jid=JID.from_string(jid))
+        app.window.activate_action('move-chat-to-workspace',
+                                   params.to_variant())
 
     def _get_row_before(self, row):
         return self.get_row_at_index(row.get_index() - 1)

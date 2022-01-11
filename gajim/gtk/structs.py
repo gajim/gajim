@@ -57,6 +57,13 @@ class AddChatActionParams(VariantMixin):
     select: bool
 
 
+@dataclass
+class MoveChatToWorkspaceAP(VariantMixin):
+    workspace_id: str
+    account: str
+    jid: JID
+
+
 def get_params_class(func: Callable[..., Any]) -> Any:
     module = sys.modules[__name__]
     params = inspect.signature(func).parameters
