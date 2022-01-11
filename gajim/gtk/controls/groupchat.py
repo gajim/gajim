@@ -40,6 +40,7 @@ from nbxmpp.const import Affiliation
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules.security_labels import Displaymarking
 from nbxmpp.modules.vcard_temp import VCard
+from nbxmpp.structs import PresenceProperties
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -55,6 +56,8 @@ from gajim.common.helpers import to_user_string
 from gajim.common.const import AvatarSize
 
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.structs import OutgoingMessage
 
 from gajim.gui.controls.base import BaseControl
@@ -310,7 +313,7 @@ class GroupchatControl(BaseControl):
             act.connect("activate", func)
             app.window.add_action(act)
 
-    def update_actions(self, *args):
+    def update_actions(self, *args: Any) -> None:
         joined = self.contact.is_joined
         if joined:
             contact = self.contact.get_self()
@@ -564,10 +567,17 @@ class GroupchatControl(BaseControl):
             return
         GroupchatConfig(self.account, result.jid, 'owner', result.form)
 
-    def _on_request_voice(self, _action, _param):
-        """
-        Request voice in the current room
-        """
+    def _on_request_voice_clicked(self, _button: Gtk.Button) -> None:
+        self._request_voice()
+        self.xml.visitor_popover.popdown()
+
+    def _on_request_voice(self,
+                          _action: Gio.SimpleAction,
+                          _param: Optional[GLib.Variant]
+                          ) -> None:
+        self._request_voice()
+
+    def _request_voice(self) -> None:
         self._client.get_module('MUC').request_voice(self.room_jid)
 
     def _on_execute_command(self, _action, param):
@@ -882,7 +892,9 @@ class GroupchatControl(BaseControl):
 
     def _set_control_active(self) -> None:
         contact = self.contact.get_self()
-        if not contact.role.is_visitor:
+        if contact.role.is_visitor:
+            self.xml.visitor_box.show()
+        else:
             self._set_message_input_sensitive(True)
 
         self.roster.initial_draw()
@@ -892,6 +904,7 @@ class GroupchatControl(BaseControl):
 
     def _set_control_inactive(self) -> None:
         self._set_message_input_sensitive(False)
+        self.xml.visitor_box.hide()
 
         self.roster.enable_sort(False)
         self.roster.clear()
@@ -971,10 +984,11 @@ class GroupchatControl(BaseControl):
             properties.is_muc_self_presence)
 
     def _on_user_affiliation_changed(self,
-                                     _contact,
-                                     _signal_name,
-                                     user_contact,
-                                     properties):
+                                     _contact: GroupchatContact,
+                                     _signal_name: str,
+                                     user_contact: GroupchatParticipant,
+                                     properties: PresenceProperties
+                                     ) -> None:
         affiliation = helpers.get_uf_affiliation(user_contact.affiliation)
         nick = user_contact.name
         reason = properties.muc_user.reason
@@ -1002,10 +1016,11 @@ class GroupchatControl(BaseControl):
         self.update_actions()
 
     def _on_user_role_changed(self,
-                              _contact,
-                              _signal_name,
-                              user_contact,
-                              properties):
+                              _contact: GroupchatContact,
+                              _signal_name: str,
+                              user_contact: GroupchatParticipant,
+                              properties: PresenceProperties
+                              ) -> None:
         role = helpers.get_uf_role(user_contact.role)
         nick = user_contact.name
         reason = properties.muc_user.reason
@@ -1016,6 +1031,10 @@ class GroupchatControl(BaseControl):
         actor = '' if actor is None else _(' by {actor}').format(actor=actor)
 
         if properties.is_muc_self_presence:
+            if user_contact.role.is_visitor:
+                self.xml.visitor_box.show()
+            else:
+                self.xml.visitor_box.hide()
             self._set_message_input_sensitive(not user_contact.role.is_visitor)
             message = _('** Your Role has been set to '
                         '{role}{actor}{reason}').format(role=role,
