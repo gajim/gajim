@@ -165,52 +165,41 @@ def get_groupchat_menu(control_id: str, account: str, jid: JID) -> Gio.Menu:
 
 
 def get_account_menu(account: str) -> Gio.Menu:
-    '''
-    [(action, label/sub_menu)]
-        action: string
-        label: string
-        sub menu: list
-    '''
-    account_menu: list[tuple[str, Union[str, list[tuple[str, str]]]]] = [
-        ('-profile', _('Profile')),
-        ('-start-single-chat', _('Send Single Message…')),
-        ('-services', _('Discover Services…')),
-        ('-server-info', _('Server Info')),
-        (_('Advanced'), [
-            ('-archive', _('Archiving Preferences')),
-            ('-blocking', _('Blocking List')),
-            ('-pep-config', _('PEP Configuration')),
-            ('-sync-history', _('Synchronise History…')),
-        ]),
-        (_('Admin'), [
-            ('-send-server-message', _('Send Server Message…')),
-            ('-set-motd', _('Set MOTD…')),
-            ('-update-motd', _('Update MOTD…')),
-            ('-delete-motd', _('Delete MOTD…'))
-        ]),
+
+    val = f's("{account}")'
+
+    menuitems: MenuItemListT = [
+        (_('Profile'), f'app.{account}-profile', val),
+        (_('Send Single Message…'), f'app.{account}-start-single-chat', val),
+        (_('Discover Services…'), f'app.{account}-services', val),
+        (_('Server Info'), f'app.{account}-server-info', val),
+    ]
+
+    menu = make_menu(menuitems)
+
+    advanced_menuitems: MenuItemListT = [
+        (_('Archiving Preferences'), f'app.{account}-archive', val),
+        (_('Blocking List'), f'app.{account}-blocking', val),
+        (_('PEP Configuration'), f'app.{account}-pep-config', val),
+        (_('Synchronise History…'), f'app.{account}-sync-history', val),
     ]
 
     if app.settings.get('developer_modus'):
-        account_menu[5][1].append(('-bookmarks', _('Bookmarks')))
+        advanced_menuitems.append(
+            (_('Bookmarks'), f'app.{account}-bookmarks', val))
 
-    def build_menu(preset: list[tuple[str, Union[str, list[tuple[str, str]]]]]):
-        menu = Gio.Menu()
-        for item in preset:
-            if isinstance(item[1], str):
-                action, label = item
-                action = f'app.{account}{action}'
-                menuitem = Gio.MenuItem.new(label, action)
-                variant = GLib.Variant('s', account)
-                menuitem.set_action_and_target_value(action, variant)
-                menu.append_item(menuitem)
-            else:
-                label, sub_menu = item
-                # This is a submenu
-                submenu = build_menu(sub_menu)
-                menu.append_submenu(label, submenu)
-        return menu
+    menu.append_submenu(_('Advanced'), make_menu(advanced_menuitems))
 
-    return build_menu(account_menu)
+    admin_menuitems: MenuItemListT = [
+        (_('Send Server Message…'), f'app.{account}-send-server-message', val),
+        (_('Set MOTD…'), f'app.{account}-set-motd', val),
+        (_('Update MOTD…'), f'app.{account}-update-motd', val),
+        (_('Delete MOTD…'), f'app.{account}-delete-motd', val)
+    ]
+
+    menu.append_submenu(_('Admin'), make_menu(admin_menuitems))
+
+    return menu
 
 
 def build_accounts_menu() -> None:
