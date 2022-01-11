@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Any
 from typing import List
 from typing import Tuple
@@ -36,6 +38,7 @@ except Exception:
     pass
 
 from gi.repository import Gdk
+from gi.repository import Gio
 from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Pango
@@ -54,12 +57,16 @@ from gajim.common.const import Display
 from gajim.common.const import StyleAttr
 from gajim.common.ged import EventHelper as CommonEventHelper
 from gajim.common.styling import PlainBlock
+from gajim.common.structs import VariantMixin
 
 from .const import GajimIconSet
 from .const import WINDOW_MODULES
 
 
 log = logging.getLogger('gajim.gui.util')
+
+
+MenuValueT = Union[None, str, GLib.Variant, VariantMixin]
 
 
 class NickCompletionGenerator:
@@ -901,3 +908,28 @@ def get_key_theme() -> Optional[str]:
     if settings is None:
         return None
     return settings.get_property('gtk-key-theme-name')
+
+
+def make_menu_item(label: str,
+                   action: str,
+                   value: MenuValueT = None) -> Gio.MenuItem:
+
+    if value is None:
+        return Gio.MenuItem.new(label, action)
+
+    item = Gio.MenuItem.new(label)
+    if isinstance(value, str):
+        item.set_detailed_action(f'{action}::value')
+    elif isinstance(value, VariantMixin):
+        item.set_action_and_target_value(action, value.to_variant())
+    else:
+        item.set_action_and_target_value(action, value)
+    return item
+
+
+def make_menu(menuitems: list[tuple[str, str, MenuValueT]]) -> Gio.Menu:
+    menu = Gio.Menu()
+    for item in menuitems:
+        menuitem = make_menu_item(*item)
+        menu.append_item(menuitem)
+    return menu

@@ -75,9 +75,7 @@ from gajim.gui.util import get_app_window
 from gajim.gui.dialogs import ShortcutsWindow
 from gajim.gui.about import AboutDialog
 from gajim.gui.discovery import ServiceDiscoveryWindow
-from gajim.gui.structs import ForgetGroupchatActionParams
-from gajim.gui.structs import OpenEventActionParams
-from gajim.gtk.structs import RemoveHistoryActionParams
+from gajim.gui import structs
 
 
 ActionListT = list[tuple[str,
@@ -712,9 +710,9 @@ class GajimApplication(Gtk.Application, CoreApplication):
             ft.window.show_all()
 
     @staticmethod
+    @structs.actionfunction
     def _on_open_event_action(_action: Gio.SimpleAction,
-                              param: GLib.Variant) -> None:
-        params = OpenEventActionParams.from_variant(param)
+                              params: structs.OpenEventActionParams) -> None:
 
         if params.type in ('connection-failed',
                            'subscription-request',
@@ -780,10 +778,10 @@ class GajimApplication(Gtk.Application, CoreApplication):
         app.interface.start_chat_from_jid(account, jid)
 
     @staticmethod
+    @structs.actionfunction
     def _on_remove_history_action(_action: Gio.SimpleAction,
-                                  param: GLib.Variant) -> None:
-
-        params = RemoveHistoryActionParams.from_variant(param)
+                                  params: structs.RemoveHistoryActionParams
+                                  ) -> None:
 
         if params.jid is not None:
             app.storage.archive.remove_history(params.account, params.jid)
@@ -795,10 +793,11 @@ class GajimApplication(Gtk.Application, CoreApplication):
                 control.reset_view()
 
     @staticmethod
+    @structs.actionfunction
     def _on_forget_groupchat_action(_action: Gio.SimpleAction,
-                                    param: GLib.Variant) -> None:
+                                    params: structs.ForgetGroupchatActionParams
+                                    ) -> None:
 
-        params = ForgetGroupchatActionParams.from_variant(param)
         window = get_app_window('StartChatDialog')
         window.remove_row(params.account, str(params.jid))
 

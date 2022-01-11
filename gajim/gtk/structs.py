@@ -14,9 +14,15 @@
 
 from __future__ import annotations
 
+from typing import Any
+from typing import Callable
 from typing import Optional
 
+import sys
+import inspect
+import functools
 from dataclasses import dataclass
+from gi.repository import GLib, Gio
 
 from nbxmpp.protocol import JID
 
@@ -49,3 +55,34 @@ class AddChatActionParams(VariantMixin):
     jid: JID
     type: str
     select: bool
+
+
+def get_params_class(func: Callable[..., Any]) -> Any:
+    module = sys.modules[__name__]
+    params = inspect.signature(func).parameters
+    cls_string = params['params'].annotation
+    cls_string = cls_string.rsplit('.', maxsplit=1)[-1]
+    return getattr(module, cls_string)
+
+
+def actionmethod(func: Callable[[Any, Gio.SimpleAction, Any], None]
+                 ) -> Callable[[Any, Gio.SimpleAction, GLib.Variant], None]:
+    @functools.wraps(func)
+    def method_wrapper(obj: Any,
+                       action: Gio.SimpleAction,
+                       param: GLib.Variant) -> None:
+        params_cls = get_params_class(func)
+        params = params_cls.from_variant(param)
+        return func(obj, action, params)
+    return method_wrapper
+
+
+def actionfunction(func: Callable[[Gio.SimpleAction, Any], None]
+                   ) -> Callable[[Gio.SimpleAction, GLib.Variant], None]:
+    @functools.wraps(func)
+    def func_wrapper(action: Gio.SimpleAction,
+                     param: GLib.Variant) -> None:
+        params_cls = get_params_class(func)
+        params = params_cls.from_variant(param)
+        return func(action, params)
+    return func_wrapper
