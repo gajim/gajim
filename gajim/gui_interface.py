@@ -76,6 +76,7 @@ from gajim.common.events import FileHashError
 from gajim.common.events import FileProgress
 from gajim.common.events import FileError
 from gajim.common.events import MucAdded
+from gajim.common.events import PasswordRequired
 from gajim.common.zeroconf import connection_zeroconf
 from gajim.common.helpers import ask_for_status_message
 from gajim.common.structs import OutgoingMessage
@@ -291,7 +292,7 @@ class Interface:
         open_window('PasswordDialog', account=event.conn.name, event=event)
 
     @staticmethod
-    def handle_event_password_required(event):
+    def handle_event_password_required(event: PasswordRequired) -> None:
         open_window('PasswordDialog', account=event.conn.name, event=event)
 
     @staticmethod

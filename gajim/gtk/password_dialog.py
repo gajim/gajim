@@ -18,6 +18,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 
 from gajim.common import app
+from gajim.common.events import PasswordRequired
 from gajim.common.i18n import _
 from gajim.common.passwords import save_password
 from gajim.common.passwords import KEYRING_AVAILABLE
@@ -28,7 +29,7 @@ log = logging.getLogger('gajim.gui.pass_dialog')
 
 
 class PasswordDialog(Gtk.ApplicationWindow):
-    def __init__(self, account, event):
+    def __init__(self, account: str, event: PasswordRequired) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
         self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
@@ -43,7 +44,7 @@ class PasswordDialog(Gtk.ApplicationWindow):
 
         self.account = account
         self._client = app.get_client(account)
-        self.event = event
+        self._event = event
 
         self.connect('key-press-event', self._on_key_press)
         self._ui.connect_signals(self)
@@ -52,16 +53,16 @@ class PasswordDialog(Gtk.ApplicationWindow):
 
         self._process_event()
 
-    def _on_key_press(self, _widget, event):
+    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
-    def _process_event(self):
+    def _process_event(self) -> None:
         own_jid = self._client.get_own_jid().bare
         account_name = app.settings.get_account_setting(
             self.account, 'name')
 
-        if self.event.name == 'password-required':
+        if self._event.name == 'password-required':
             self._ui.header.set_text(_('Password Required'))
             self._ui.message_label.set_text(
                 _('Please enter your password for\n'
@@ -74,7 +75,7 @@ class PasswordDialog(Gtk.ApplicationWindow):
             if not KEYRING_AVAILABLE:
                 self._ui.keyring_hint.show()
 
-        if self.event.name == 'client-cert-passphrase':
+        if self._event.name == 'client-cert-passphrase':
             self._ui.header.set_text(_('Certificate Password Required'))
             self._ui.message_label.set_text(
                 _('Please enter your certificate password for '
@@ -82,32 +83,32 @@ class PasswordDialog(Gtk.ApplicationWindow):
                     'jid': own_jid,
                     'account': account_name})
 
-    def _on_ok(self, _button):
+    def _on_ok(self, _button: Gtk.Button) -> None:
         password = self._ui.pass_entry.get_text()
 
-        if self.event.name == 'password-required':
+        if self._event.name == 'password-required':
             app.settings.set_account_setting(
                 self.account,
                 'savepass',
                 self._ui.save_pass_checkbutton.get_active())
             save_password(self.account, password)
-            self.event.on_password(password)
+            self._event.on_password(password)
             self.destroy()
 
-        if self.event.name == 'client-cert-passphrase':
-            self.event.conn.on_client_cert_passphrase(
+        if self._event.name == 'client-cert-passphrase':
+            self._event.conn.on_client_cert_passphrase(
                 password,
-                self.event.con,
-                self.event.port,
-                self.event.secure_tuple)
+                self._event.con,
+                self._event.port,
+                self._event.secure_tuple)
             self.destroy()
 
-    def _on_cancel(self, _button):
-        if self.event.name == 'client-cert-passphrase':
-            self.event.conn.on_client_cert_passphrase(
+    def _on_cancel(self, _button: Gtk.Button) -> None:
+        if self._event.name == 'client-cert-passphrase':
+            self._event.conn.on_client_cert_passphrase(
                 '',
-                self.event.con,
-                self.event.port,
-                self.event.secure_tuple)
+                self._event.con,
+                self._event.port,
+                self._event.secure_tuple)
 
         self.destroy()
