@@ -14,6 +14,7 @@
 
 from typing import Dict
 from typing import Optional
+from typing import cast
 
 from gi.repository import Gtk
 from gi.repository import GObject
@@ -101,9 +102,12 @@ class ChatListStack(Gtk.Stack):
             return
 
         if self._last_visible_child_name != 'default':
-            child = self.get_child_by_name(self._last_visible_child_name)
-            child.set_filter_text('')
-        self._last_visible_child_name = self.get_visible_child_name()
+            chat_list = cast(
+                ChatList,
+                self.get_child_by_name(self._last_visible_child_name))
+            chat_list.set_filter_text('')
+        last_child = self.get_visible_child_name() or 'default'
+        self._last_visible_child_name = last_child
 
     def get_chatlist(self, workspace_id: str) -> ChatList:
         return self._chat_lists[workspace_id]
@@ -116,7 +120,7 @@ class ChatListStack(Gtk.Stack):
 
     def get_current_chat_list(self) -> Optional[ChatList]:
         workspace_id = self.get_visible_child_name()
-        if workspace_id == 'empty':
+        if workspace_id == 'empty' or workspace_id is None:
             return None
 
         return self._chat_lists[workspace_id]
@@ -130,11 +134,11 @@ class ChatListStack(Gtk.Stack):
         return chat.is_active
 
     def _on_filter_changed(self, _filter: ChatFilter, name: str) -> None:
-        chat_list = self.get_visible_child()
+        chat_list = cast(ChatList, self.get_visible_child())
         chat_list.set_filter(name)
 
     def _on_search_changed(self, search_entry: Gtk.SearchEntry) -> None:
-        chat_list = self.get_visible_child()
+        chat_list = cast(ChatList, self.get_visible_child())
         chat_list.set_filter_text(search_entry.get_text())
 
     def add_chat_list(self, workspace_id: str) -> ChatList:
@@ -165,12 +169,12 @@ class ChatListStack(Gtk.Stack):
         self.emit('chat-selected', row.workspace_id, row.account, row.jid)
 
     def show_chat_list(self, workspace_id: str) -> None:
-        current_workspace_id = self.get_visible_child_name()
-        if current_workspace_id == workspace_id:
+        cur_workspace_id = self.get_visible_child_name()
+        if cur_workspace_id == workspace_id:
             return
 
-        if current_workspace_id != 'default':
-            self._chat_lists[current_workspace_id].unselect_all()
+        if cur_workspace_id != 'default' and cur_workspace_id is not None:
+            self._chat_lists[cur_workspace_id].unselect_all()
 
         self.set_visible_child_name(workspace_id)
 
@@ -213,8 +217,10 @@ class ChatListStack(Gtk.Stack):
         new_workspace_id, account, jid = param.unpack()
         jid = JID.from_string(jid)
 
-        current_chatlist = self.get_visible_child()
+        current_chatlist = cast(ChatList, self.get_visible_child())
         type_ = current_chatlist.get_chat_type(account, jid)
+        if type_ is None:
+            return
         current_chatlist.remove_chat(account, jid)
 
         new_chatlist = self.get_chatlist(new_workspace_id)
