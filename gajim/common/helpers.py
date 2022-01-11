@@ -1053,7 +1053,7 @@ def open_uri(uri: Union[URI, str], account: Optional[str] = None) -> None:
 
 
 @catch_exceptions
-def open_file(path: str) -> None:
+def open_file(path: Union[str, Path]) -> None:
     if os.name == 'nt':
         os.startfile(path)
     else:

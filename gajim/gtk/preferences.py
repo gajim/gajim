@@ -12,6 +12,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+from typing import Any
+from typing import Optional
+from typing import cast
+
 import logging
 import sys
 
@@ -49,7 +54,7 @@ log = logging.getLogger('gajim.gui.preferences')
 
 
 class Preferences(Gtk.ApplicationWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -61,7 +66,7 @@ class Preferences(Gtk.ApplicationWindow):
 
         self._ui = get_builder('preferences.ui')
 
-        self._video_preview = None
+        self._video_preview: Optional[VideoPreview] = None
         self._prefs = {}
 
         side_bar_switcher = SideBarSwitcher()
@@ -116,44 +121,46 @@ class Preferences(Gtk.ApplicationWindow):
             pref_box.add(pref)
             self._prefs[ui_name] = pref
 
-    def _add_video_preview(self):
+    def _add_video_preview(self) -> None:
         if sys.platform == 'win32':
             return
         self._video_preview = VideoPreview()
         self._ui.video.add(self._video_preview.widget)
 
-    def _on_key_press(self, _widget, event):
+    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
-    def get_video_preview(self):
+    def get_video_preview(self) -> Optional[VideoPreview]:
         return self._video_preview
 
     @staticmethod
-    def _on_features_clicked(_widget, _response):
+    def _on_features_clicked(_widget: Gtk.InfoBar,
+                             _response: Gtk.ResponseType
+                             ) -> None:
         open_window('Features')
 
-    def update_theme_list(self):
+    def update_theme_list(self) -> None:
         self._prefs['themes'].update_theme_list()
 
-    def update_proxy_list(self):
+    def update_proxy_list(self) -> None:
         self._prefs['miscellaneous'].update_proxy_list()
 
     @staticmethod
-    def _check_emoji_theme():
+    def _check_emoji_theme() -> None:
         # Ensure selected emoji theme is valid
         emoji_themes = helpers.get_available_emoticon_themes()
         settings_theme = app.settings.get('emoticons_theme')
         if settings_theme not in emoji_themes:
             app.settings.set('emoticons_theme', 'font')
 
-    def _on_destroy(self, _widget):
+    def _on_destroy(self, _widget: Gtk.Widget) -> None:
         self._prefs.clear()
         app.check_finalize(self)
 
 
 class PreferenceBox(SettingsBox):
-    def __init__(self, settings):
+    def __init__(self, settings: list[Setting]) -> None:
         SettingsBox.__init__(self, None)
         self.get_style_context().add_class('settings-border')
         self.set_selection_mode(Gtk.SelectionMode.NONE)
@@ -166,7 +173,7 @@ class PreferenceBox(SettingsBox):
 
 
 class WindowBehaviour(PreferenceBox):
-    def __init__(self, *args):
+    def __init__(self, *args: Any) -> None:
 
         main_window_on_startup_items = {
             'always': _('Always'),
@@ -193,7 +200,7 @@ class WindowBehaviour(PreferenceBox):
 
 
 class Chats(PreferenceBox):
-    def __init__(self, *args):
+    def __init__(self, *args: Any) -> None:
 
         speller_desc = None
         if not app.is_installed('GSPELL'):
@@ -243,11 +250,11 @@ class Chats(PreferenceBox):
         PreferenceBox.__init__(self, settings)
 
     @staticmethod
-    def _speller_available():
+    def _speller_available() -> bool:
         return app.is_installed('GSPELL')
 
     @staticmethod
-    def _on_use_speller(value, *args):
+    def _on_use_speller(value: bool, *args: Any) -> None:
         if not value:
             return
 
@@ -261,7 +268,7 @@ class Chats(PreferenceBox):
 
 
 class GroupChats(PreferenceBox):
-    def __init__(self, *args):
+    def __init__(self, *args: Any) -> None:
 
         settings = [
             Setting(SettingKind.POPOVER,
@@ -320,30 +327,30 @@ class GroupChats(PreferenceBox):
         PreferenceBox.__init__(self, settings)
 
     @staticmethod
-    def _on_sort_by_show_in_muc(*args):
+    def _on_sort_by_show_in_muc(_value: bool, *args: Any) -> None:
         for ctrl in app.window.get_controls():
             if ctrl.is_groupchat:
                 ctrl.roster.invalidate_sort()
 
     @staticmethod
-    def _on_show_status_in_roster(*args):
+    def _on_show_status_in_roster(_value: bool, *args: Any) -> None:
         for ctrl in app.window.get_controls():
             if ctrl.is_groupchat:
                 ctrl.roster.draw_contacts()
 
     @staticmethod
-    def _reset_join_left(button):
+    def _reset_join_left(button: Gtk.Button) -> None:
         button.set_sensitive(False)
         app.settings.set_group_chat_settings('print_join_left', None)
 
     @staticmethod
-    def _reset_print_status(button):
+    def _reset_print_status(button: Gtk.Button) -> None:
         button.set_sensitive(False)
         app.settings.set_group_chat_settings('print_status', None)
 
 
 class FilePreview(PreferenceBox):
-    def __init__(self, *args):
+    def __init__(self, *args: Any) -> None:
         sizes = {
             262144: '256 KiB',
             524288: '512 KiB',
@@ -407,7 +414,7 @@ class FilePreview(PreferenceBox):
 
 
 class VisualNotifications(PreferenceBox):
-    def __init__(self, *args):
+    def __init__(self, *args: Any) -> None:
         trayicon_items = {
             'never': _('Hide icon'),
             'on_event': _('Only show for pending events'),
@@ -431,7 +438,7 @@ class VisualNotifications(PreferenceBox):
         PreferenceBox.__init__(self, settings)
 
     @staticmethod
-    def _on_trayicon(value, *args):
+    def _on_trayicon(value: str, *args: Any) -> None:
         if value == 'never':
             app.interface.hide_systray()
         elif value == 'on_event':
@@ -441,7 +448,7 @@ class VisualNotifications(PreferenceBox):
 
 
 class NotificationsDialog(SettingsDialog):
-    def __init__(self, account, parent):
+    def __init__(self, account: str, parent: Preferences) -> None:
 
         settings = [
             Setting(SettingKind.SWITCH,
@@ -463,7 +470,7 @@ class NotificationsDialog(SettingsDialog):
 
 
 class Sounds(PreferenceBox):
-    def __init__(self, *args):
+    def __init__(self, *args: Any) -> None:
 
         settings = [
             Setting(SettingKind.SWITCH,
@@ -484,12 +491,12 @@ class Sounds(PreferenceBox):
 
         PreferenceBox.__init__(self, settings)
 
-    def _on_manage_sounds(self, *args):
+    def _on_manage_sounds(self, _button: Gtk.Button) -> None:
         open_window('ManageSounds', transient_for=self.get_toplevel())
 
 
 class StatusMessage(PreferenceBox):
-    def __init__(self, *args):
+    def __init__(self, *args: Any) -> None:
 
         settings = [
             Setting(SettingKind.SWITCH,
@@ -512,7 +519,7 @@ class StatusMessage(PreferenceBox):
 
 
 class AutomaticStatus(PreferenceBox):
-    def __init__(self, *args):
+    def __init__(self, *args: Any) -> None:
 
         settings = [
             Setting(SettingKind.AUTO_AWAY,
@@ -534,16 +541,16 @@ class AutomaticStatus(PreferenceBox):
         PreferenceBox.__init__(self, settings)
 
     @staticmethod
-    def _get_auto_away():
+    def _get_auto_away() -> bool:
         return app.settings.get('autoaway')
 
     @staticmethod
-    def _get_auto_xa():
+    def _get_auto_xa() -> bool:
         return app.settings.get('autoxa')
 
 
 class AutoAwayDialog(SettingsDialog):
-    def __init__(self, account, parent):
+    def __init__(self, account: str, parent: Preferences) -> None:
 
         settings = [
             Setting(SettingKind.SWITCH,
@@ -571,7 +578,7 @@ class AutoAwayDialog(SettingsDialog):
 
 
 class AutoExtendedAwayDialog(SettingsDialog):
-    def __init__(self, account, parent):
+    def __init__(self, account: str, parent: Preferences) -> None:
 
         settings = [
             Setting(SettingKind.SWITCH,
@@ -599,7 +606,7 @@ class AutoExtendedAwayDialog(SettingsDialog):
 
 
 class Themes(PreferenceBox):
-    def __init__(self, *args):
+    def __init__(self, *args: Any) -> None:
 
         theme_items = self._get_theme_items()
 
@@ -631,37 +638,37 @@ class Themes(PreferenceBox):
         PreferenceBox.__init__(self, settings)
 
     @staticmethod
-    def _get_theme_items():
+    def _get_theme_items() -> list[str]:
         theme_items = ['default']
         for settings_theme in app.css_config.themes:
             theme_items.append(settings_theme)
         return theme_items
 
-    def update_theme_list(self):
+    def update_theme_list(self) -> None:
         self.get_setting('roster_theme').update_entries(self._get_theme_items())
 
-    def _on_edit_themes(self, *args):
+    def _on_edit_themes(self, _button: Gtk.Button) -> None:
         open_window('Themes', transient=self.get_toplevel())
 
     @staticmethod
-    def _on_theme_changed(value, *args):
+    def _on_theme_changed(value: str, *args: Any) -> None:
         app.css_config.change_theme(value)
         app.ged.raise_event(ThemeUpdate())
         app.ged.raise_event(StyleChanged())
 
     @staticmethod
-    def _on_dark_theme(value, *args):
+    def _on_dark_theme(value: str, *args: Any) -> None:
         app.css_config.set_dark_theme(int(value))
         app.ged.raise_event(StyleChanged())
 
 
 class Emoji(PreferenceBox):
-    def __init__(self, *args):
+    def __init__(self, *args: Any) -> None:
         if sys.platform not in ('win32', 'darwin'):
             PreferenceBox.__init__(self, [])
             return
 
-        emoji_themes_items = []
+        emoji_themes_items: list[str] = []
         for theme in helpers.get_available_emoticon_themes():
             emoji_themes_items.append(theme)
 
@@ -677,18 +684,18 @@ class Emoji(PreferenceBox):
 
         PreferenceBox.__init__(self, settings)
 
-    def _on_emoticons_theme(self, *args):
+    def _on_emoticons_theme(self, *args: Any) -> None:
         emoji_chooser.load()
         self._toggle_emoticons()
 
     @staticmethod
-    def _toggle_emoticons():
+    def _toggle_emoticons() -> None:
         for ctrl in app.window.get_controls():
             ctrl.toggle_emoticons()
 
 
 class Server(PreferenceBox):
-    def __init__(self, *args):
+    def __init__(self, *args: Any) -> None:
 
         settings = [
 
@@ -705,7 +712,7 @@ class Server(PreferenceBox):
 
 
 class StunServerDialog(SettingsDialog):
-    def __init__(self, account, parent):
+    def __init__(self, account: str, parent: Preferences) -> None:
 
         settings = [
             Setting(SettingKind.SWITCH,
@@ -725,7 +732,7 @@ class StunServerDialog(SettingsDialog):
 
 
 class Audio(PreferenceBox):
-    def __init__(self, *args):
+    def __init__(self, *args: Any) -> None:
 
         deps_installed = app.is_installed('AV')
 
@@ -760,18 +767,18 @@ class Audio(PreferenceBox):
         self.set_sensitive(deps_installed)
 
     @staticmethod
-    def _create_av_combo_items(items_dict):
+    def _create_av_combo_items(items_dict: dict[str, str]) -> dict[str, str]:
         items = enumerate(sorted(
             items_dict.items(),
             key=lambda x: '' if x[1].startswith('auto') else x[0].lower()))
-        combo_items = {}
+        combo_items: dict[str, str] = {}
         for _index, (name, value) in items:
             combo_items[value] = name
         return combo_items
 
 
 class Video(PreferenceBox):
-    def __init__(self, *args):
+    def __init__(self, *args: Any) -> None:
 
         deps_installed = app.is_installed('AV')
 
@@ -836,31 +843,33 @@ class Video(PreferenceBox):
         self.set_sensitive(deps_installed)
 
     @staticmethod
-    def _on_video_input_changed(_value, *args):
-        preview = get_app_window('Preferences').get_video_preview()
+    def _on_video_input_changed(_value: str, *args: Any) -> None:
+        pref_win = cast(Preferences, get_app_window('Preferences'))
+        preview = pref_win.get_video_preview()
         if preview is None or not preview.is_active:
             # changed signal gets triggered when we fill the combobox
             return
         preview.refresh()
 
     @staticmethod
-    def _toggle_live_preview(value, *args):
-        preview = get_app_window('Preferences').get_video_preview()
+    def _toggle_live_preview(value: bool, *args: Any) -> None:
+        pref_win = cast(Preferences, get_app_window('Preferences'))
+        preview = pref_win.get_video_preview()
         preview.toggle_preview(value)
 
     @staticmethod
-    def _create_av_combo_items(items_dict):
+    def _create_av_combo_items(items_dict: dict[str, str]) -> dict[str, str]:
         items = enumerate(sorted(
             items_dict.items(),
             key=lambda x: '' if x[1].startswith('auto') else x[0].lower()))
-        combo_items = {}
+        combo_items: dict[str, str] = {}
         for _index, (name, value) in items:
             combo_items[value] = name
         return combo_items
 
 
 class Miscellaneous(PreferenceBox):
-    def __init__(self, pref_window):
+    def __init__(self, pref_window: Preferences) -> None:
         self._hints_list = [
             'start_chat',
         ]
@@ -898,30 +907,30 @@ class Miscellaneous(PreferenceBox):
         reset_button.set_sensitive(self._check_hints_reset)
 
     @staticmethod
-    def _get_proxies():
+    def _get_proxies() -> dict[str, str]:
         return {proxy: proxy for proxy in app.settings.get_proxies()}
 
     @staticmethod
-    def _on_proxy_edit(*args):
+    def _on_proxy_edit(*args: Any) -> None:
         open_window('ManageProxies')
 
-    def update_proxy_list(self):
+    def update_proxy_list(self) -> None:
         self.get_setting('global_proxy').update_entries(self._get_proxies())
 
-    def _check_hints_reset(self):
+    def _check_hints_reset(self) -> bool:
         for hint in self._hints_list:
-            if app.settings.get('show_help_%s' % hint) is False:
+            if app.settings.get(f'show_help_{hint}') is False:
                 return True
         return False
 
-    def _on_reset_hints(self, button):
+    def _on_reset_hints(self, button: Gtk.Button) -> None:
         for hint in self._hints_list:
-            app.settings.set('show_help_%s' % hint, True)
+            app.settings.set(f'show_help_{hint}', True)
         button.set_sensitive(False)
 
 
 class Advanced(PreferenceBox):
-    def __init__(self, pref_window):
+    def __init__(self, pref_window: Preferences) -> None:
 
         settings = [
             Setting(SettingKind.SWITCH,
@@ -939,13 +948,13 @@ class Advanced(PreferenceBox):
             'clicked', self._on_advanced_config_editor)
 
     @staticmethod
-    def _on_debug_logging(value, *args):
+    def _on_debug_logging(value: bool, *args: Any) -> None:
         app.set_debug_mode(value)
 
     @staticmethod
-    def _on_open_debug_logs(*args):
+    def _on_open_debug_logs(*args: Any) -> None:
         open_file(configpaths.get('DEBUG'))
 
     @staticmethod
-    def _on_advanced_config_editor(*args):
+    def _on_advanced_config_editor(*args: Any) -> None:
         open_window('AdvancedConfig')

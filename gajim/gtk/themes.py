@@ -16,8 +16,10 @@
 
 from __future__ import annotations
 from typing import NamedTuple
+from typing import Optional
 from typing import Any
 from typing import Union
+from typing import cast
 
 from enum import IntEnum
 
@@ -35,6 +37,7 @@ from .dialogs import ErrorDialog
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
 from .builder import get_builder
+from .preferences import Preferences
 from .util import get_app_window
 
 
@@ -239,7 +242,7 @@ class Themes(Gtk.ApplicationWindow):
             row = Option(option, value)
             self._ui.option_listbox.add(row)
 
-    def _add_option(self, _listbox: Gtk.ListBox, row: Gtk.ListBoxRow) -> None:
+    def _add_option(self, _listbox: Gtk.ListBox, row: Option) -> None:
         # Add theme if there is none
         store, _ = self._ui.theme_treeview.get_selection().get_selected()
         first = store.get_iter_first()
@@ -298,7 +301,7 @@ class Themes(Gtk.ApplicationWindow):
 
     @staticmethod
     def _update_preferences_window() -> None:
-        window = get_app_window('Preferences')
+        window = cast(Optional[Preferences], get_app_window('Preferences'))
         if window is not None:
             window.update_theme_list()
 
