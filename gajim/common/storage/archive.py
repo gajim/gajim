@@ -453,7 +453,7 @@ class MessageArchiveStorage(SqliteStorage):
     def get_last_conversation_line(self,
                                    account: str,
                                    jid: JID
-                                   ) -> list[LastConversationRow]:
+                                   ) -> LastConversationRow:
         """
         Load the last line of a conversation with jid for account.
         Loads messages, but no status messages or error messages.

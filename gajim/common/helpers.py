@@ -298,7 +298,7 @@ def get_uf_affiliation(affiliation: Union[Affiliation, str],
         return _('Member')
     return ''
 
-def get_uf_relative_time(timestamp: int) -> str:
+def get_uf_relative_time(timestamp: float) -> str:
     date_time = datetime.fromtimestamp(timestamp)
     now = datetime.now()
     timespan = now - date_time
