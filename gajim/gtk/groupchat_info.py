@@ -104,8 +104,8 @@ MUC_FEATURES = {
 class GroupChatInfoScrolled(Gtk.ScrolledWindow):
     def __init__(self,
                  account: Optional[str] = None,
-                 width: Optional[int] = 300,
-                 minimal: Optional[bool] = False
+                 width: int = 300,
+                 minimal: bool = False
                  ) -> None:
         Gtk.ScrolledWindow.__init__(self)
         self.set_size_request(width, -1)
@@ -131,7 +131,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         self._ui.connect_signals(self)
         self.show_all()
 
-    def get_account(self) -> str:
+    def get_account(self) -> Optional[str]:
         return self._account
 
     def set_account(self, account: str) -> None:
@@ -166,19 +166,18 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         if self._account is None:
             name = info.muc_name
         else:
-            con = app.connections[self._account]
-            name = get_groupchat_name(con, info.jid)
+            client = app.get_client(self._account)
+            name = get_groupchat_name(client, info.jid)
+        
+            contact = client.get_module('Contacts').get_contact(
+                info.jid, groupchat=True)
+            surface = contact.get_avatar(
+                AvatarSize.GROUP_INFO,
+                self.get_scale_factor())
+            self._ui.avatar_image.set_from_surface(surface)
+
         self._ui.name.set_text(name)
         self._ui.name.set_visible(True)
-
-        # Set avatar
-        client = app.get_client(self._account)
-        contact = client.get_module('Contacts').get_contact(
-            info.jid, groupchat=True)
-        surface = contact.get_avatar(
-            AvatarSize.GROUP_INFO,
-            self.get_scale_factor())
-        self._ui.avatar_image.set_from_surface(surface)
 
         # Set description
         has_desc = bool(info.muc_description)
@@ -230,7 +229,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
 
         self._add_features(info.features)
 
-    def _add_features(self, features: List[str]) -> None:
+    def _add_features(self, features: list[str]) -> None:
         grid = self._ui.info_grid
         for row in range(30, 9, -1):
             # Remove everything from row 30 to 10
@@ -260,23 +259,23 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         clipboard.set_text(f'xmpp:{self._info.jid}?join', -1)
 
     @staticmethod
-    def _on_activate_log_link(button):
+    def _on_activate_log_link(button: Gtk.LinkButton) -> int:
         open_uri(button.get_uri())
         return Gdk.EVENT_STOP
 
-    def _on_activate_contact_link(self, button):
+    def _on_activate_contact_link(self, button: Gtk.LinkButton) -> int:
         open_uri(f'xmpp:{button.get_uri()}?message', account=self._account)
         return Gdk.EVENT_STOP
 
     @staticmethod
-    def _on_activate_subject_link(_label, uri):
+    def _on_activate_subject_link(_label: Gtk.Label, uri: str) -> int:
         # We have to use this, because the default GTK handler
         # is not cross-platform compatible
         open_uri(uri)
         return Gdk.EVENT_STOP
 
     @staticmethod
-    def _get_feature_icon(icon, tooltip: str) -> Gtk.Image:
+    def _get_feature_icon(icon: str, tooltip: str) -> Gtk.Image:
         image = Gtk.Image.new_from_icon_name(icon, Gtk.IconSize.MENU)
         image.set_valign(Gtk.Align.CENTER)
         image.set_halign(Gtk.Align.END)
@@ -291,7 +290,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         return label
 
     def _get_contact_button(self, contact: str) -> Gtk.Button:
-        button = Gtk.LinkButton.new(contact)
+        button = Gtk.LinkButton(label=contact)
         button.set_halign(Gtk.Align.START)
         button.get_style_context().add_class('link-button')
         button.connect('activate-link', self._on_activate_contact_link)
