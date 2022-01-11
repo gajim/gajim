@@ -294,12 +294,14 @@ class GroupChatInviter(Gtk.Box):
             return
 
         for row in self._new_contact_rows.values():
-            self._ui.contacts_listbox.remove(row)
+            if row is not None:
+                self._ui.contacts_listbox.remove(row)
         self._new_contact_row_visible = False
 
     def _update_new_contact_rows(self, search_text: str) -> None:
         for row in self._new_contact_rows.values():
-            row.update_jid(search_text)
+            if row is not None:
+                row.update_jid(search_text)
 
     def _select_new_match(self,
                           _entry: Gtk.SearchEntry,
@@ -367,7 +369,7 @@ class GroupChatInviter(Gtk.Box):
         return locale.strcoll(name1.lower(), name2.lower())
 
     def _reset(self) -> None:
-        def _remove(row):
+        def _remove(row: Gtk.ListBoxRow) -> None:
             self.remove(row)
             row.destroy()
         self._ui.contacts_listbox.foreach(_remove)
