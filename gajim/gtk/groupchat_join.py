@@ -12,6 +12,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import cast
+from typing import Any
+
 import logging
 
 from gi.repository import Gtk
@@ -19,6 +22,7 @@ from gi.repository import Gdk
 from gi.repository import Pango
 
 from nbxmpp.errors import StanzaError
+from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common.i18n import _
@@ -35,7 +39,7 @@ log = logging.getLogger('gajim.gui.groupchat_join')
 
 
 class GroupchatJoin(Gtk.ApplicationWindow):
-    def __init__(self, account, jid):
+    def __init__(self, account: str, jid: str) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_name('GroupchatJoin')
         self.set_application(app.app)
@@ -61,7 +65,8 @@ class GroupchatJoin(Gtk.ApplicationWindow):
         self._stack.add_named(ErrorPage(), 'error')
 
         self._stack.set_visible_child_name('progress')
-        self._stack.get_visible_child().start()
+        progress_page = cast(ProgressPage, self._stack.get_visible_child())
+        progress_page.start()
 
         self._stack.connect('notify::visible-child-name',
                             self._on_page_changed)
@@ -84,7 +89,7 @@ class GroupchatJoin(Gtk.ApplicationWindow):
 
         self._main_box.add(join_box)
 
-        self.connect('key-press-event', self._on_key_press_event)
+        self.connect('key-press-event', self._on_key_press)
         self.connect('destroy', self._on_destroy)
 
         self.add(self._main_box)
@@ -97,13 +102,13 @@ class GroupchatJoin(Gtk.ApplicationWindow):
             request_vcard=True,
             callback=self._disco_info_received)
 
-    def _on_page_changed(self, stack, _param):
+    def _on_page_changed(self, stack: Gtk.Stack, _param: Any) -> None:
         name = stack.get_visible_child_name()
         self._join_button.set_sensitive(name == 'info')
         self._nick_chooser.set_sensitive(name == 'info')
 
     @ensure_not_destroyed
-    def _disco_info_received(self, task):
+    def _disco_info_received(self, task: Task) -> None:
         try:
             result = task.finish()
         except StanzaError as error:
@@ -124,11 +129,12 @@ class GroupchatJoin(Gtk.ApplicationWindow):
         else:
             self._set_error_from_code('not-muc-service')
 
-    def _show_error_page(self, text):
-        self._stack.get_child_by_name('error').set_text(text)
+    def _show_error_page(self, text: str) -> None:
+        error_page = cast(ErrorPage, self._stack.get_child_by_name('error'))
+        error_page.set_text(text)
         self._stack.set_visible_child_name('error')
 
-    def _set_error(self, error):
+    def _set_error(self, error: StanzaError) -> None:
         text = MUC_DISCO_ERRORS.get(error.condition, to_user_string(error))
         if error.condition == 'gone':
             reason = error.get_text(get_rfc5646_lang())
@@ -136,26 +142,26 @@ class GroupchatJoin(Gtk.ApplicationWindow):
                 text = '%s:\n%s' % (text, reason)
         self._show_error_page(text)
 
-    def _set_error_from_code(self, error_code):
+    def _set_error_from_code(self, error_code: str) -> None:
         self._show_error_page(MUC_DISCO_ERRORS[error_code])
 
-    def _on_join(self, *args):
+    def _on_join(self, _button: Gtk.Button) -> None:
         nickname = self._nick_chooser.get_text()
 
         app.interface.show_add_join_groupchat(
             self.account, self.jid, nickname=nickname)
         self.destroy()
 
-    def _on_destroy(self, *args):
+    def _on_destroy(self, _widget: Gtk.Widget) -> None:
         self._destroyed = True
 
-    def _on_key_press_event(self, _widget, event):
+    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
 
 class ErrorPage(Gtk.Box):
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.Box.__init__(self,
                          orientation=Gtk.Orientation.VERTICAL,
                          spacing=18)
@@ -177,12 +183,12 @@ class ErrorPage(Gtk.Box):
         self.add(self._error_label)
         self.show_all()
 
-    def set_text(self, text):
+    def set_text(self, text: str) -> None:
         self._error_label.set_text(text)
 
 
 class ProgressPage(Gtk.Box):
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.Box.__init__(self,
                          orientation=Gtk.Orientation.VERTICAL,
                          spacing=18)
@@ -193,8 +199,8 @@ class ProgressPage(Gtk.Box):
         self.add(self._spinner)
         self.show_all()
 
-    def start(self):
+    def start(self) -> None:
         self._spinner.start()
 
-    def stop(self):
+    def stop(self) -> None:
         self._spinner.stop()
