@@ -21,6 +21,8 @@ def cleanup_dir(target_dir: Path) -> None:
     for path in target_dir.iterdir():
         if path.name in IGNORED_FILES:
             continue
+        if path.name in IGNORED_DIRS:
+            continue
         path.unlink()
 
 
