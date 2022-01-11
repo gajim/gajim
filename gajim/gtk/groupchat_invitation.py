@@ -16,6 +16,7 @@ from gi.repository import Gdk
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.common.events import MucInvitation
 from gajim.common.i18n import _
 from gajim.common.helpers import get_group_chat_nick
 
@@ -25,7 +26,7 @@ from .util import AccountBadge
 
 
 class GroupChatInvitation(Gtk.ApplicationWindow):
-    def __init__(self, account, event):
+    def __init__(self, account: str, event: MucInvitation) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_name('GroupChatInvitation')
         self.set_application(app.app)
@@ -100,7 +101,7 @@ class GroupChatInvitation(Gtk.ApplicationWindow):
 
         main_box.add(button_box)
 
-        self.connect('key-press-event', self._on_key_press_event)
+        self.connect('key-press-event', self._on_key_press)
 
         self.add(main_box)
 
@@ -109,16 +110,16 @@ class GroupChatInvitation(Gtk.ApplicationWindow):
 
         self.show_all()
 
-    def _on_key_press_event(self, _widget, event):
+    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
-    def _on_join(self, _widget):
+    def _on_join(self, _button: Gtk.Button) -> None:
         nickname = self._nick_chooser.get_text()
         app.interface.show_add_join_groupchat(
             self.account, self._room_jid, nickname=nickname)
         self.destroy()
 
-    def _on_decline(self, _widget):
+    def _on_decline(self, _button: Gtk.Button) -> None:
         self._client.get_module('MUC').decline(self._room_jid, self._from)
         self.destroy()
