@@ -146,46 +146,22 @@ def get_singlechat_menu(control_id: str,
 
 
 def get_groupchat_menu(control_id: str, account: str, jid: JID) -> Gio.Menu:
-    groupchat_menu = [
-        ('win.information-', _('Information')),
-        ('win.groupchat-settings-', _('Settings…')),
-        ('win.groupchat-manage-', _('Manage…')),
-        ('win.rename-groupchat-', _('Rename Chat…')),
-        ('win.change-nickname-', _('Change Nickname…')),
-        ('win.request-voice-', _('Request Voice')),
-        ('win.execute-command-', _('Execute Command…')),
-        ('win.search-history', _('Search…')),
-        ('app.remove-history', _('Remove History'))
+
+    params = RemoveHistoryActionParams(account=account, jid=jid)
+
+    menulist: MenuItemListT = [
+        (_('Information'), f'win.information-{control_id}', None),
+        (_('Settings…'), f'win.groupchat-settings-{control_id}', None),
+        (_('Manage…'), f'win.groupchat-manage-{control_id}', None),
+        (_('Rename Chat…'), f'win.rename-groupchat-{control_id}', None),
+        (_('Change Nickname…'), f'win.change-nickname-{control_id}', None),
+        (_('Request Voice'), f'win.request-voice-{control_id}', None),
+        (_('Execute Command…'), f'win.execute-command-{control_id}', 's("")'),
+        (_('Search…'), 'win.search-history', None),
+        (_('Remove History'), 'app.remove-history', params)
     ]
 
-    def build_menu(preset: list[tuple[str, str]]) -> Gio.Menu:
-        menu = Gio.Menu()
-        for item in preset:
-            action_name, label = item
-            if action_name == 'win.search-history':
-                menuitem = Gio.MenuItem.new(label, action_name)
-                menuitem.set_action_and_target_value(action_name, None)
-                menu.append_item(menuitem)
-
-            elif action_name == 'win.execute-command-':
-                action_name = action_name + control_id
-                menuitem = Gio.MenuItem.new(label, action_name)
-                menuitem.set_action_and_target_value(
-                    action_name, GLib.Variant('s', ''))
-                menu.append_item(menuitem)
-
-            elif action_name == 'app.remove-history':
-                params = RemoveHistoryActionParams(account=account, jid=jid)
-                menuitem = Gio.MenuItem.new(label, action_name)
-                menuitem.set_action_and_target_value(action_name,
-                                                     params.to_variant())
-                menu.append_item(menuitem)
-            else:
-                menu.append(label, action_name + control_id)
-
-        return menu
-
-    return build_menu(groupchat_menu)
+    return make_menu(menulist)
 
 
 def get_account_menu(account: str) -> Gio.Menu:
