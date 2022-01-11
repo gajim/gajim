@@ -74,16 +74,18 @@ class SSLErrorDialog(Gtk.ApplicationWindow):
             self._ui.connect_button.set_no_show_all(True)
             self._ui.connect_button.hide()
 
-    def _on_view_cert_clicked(self, _button):
+    def _on_view_cert_clicked(self, _button: Gtk.Button) -> None:
         open_window('CertificateDialog',
                     account=self.account,
                     transient_for=self,
                     cert=self._cert)
 
-    def _on_add_certificate_toggled(self, checkbutton):
+    def _on_add_certificate_toggled(self,
+                                    checkbutton: Gtk.CheckButton
+                                    ) -> None:
         self._ui.connect_button.set_sensitive(checkbutton.get_active())
 
-    def _on_connect_clicked(self, _button):
+    def _on_connect_clicked(self, _button: Gtk.Button) -> None:
         if self._ui.add_certificate_checkbutton.get_active():
             app.cert_store.add_certificate(self._cert)
 
