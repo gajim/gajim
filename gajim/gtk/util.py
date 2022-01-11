@@ -919,7 +919,7 @@ def make_menu_item(label: str,
 
     item = Gio.MenuItem.new(label)
     if isinstance(value, str):
-        item.set_detailed_action(f'{action}::value')
+        item.set_detailed_action(f'{action}({value})')
     elif isinstance(value, VariantMixin):
         item.set_action_and_target_value(action, value.to_variant())
     else:

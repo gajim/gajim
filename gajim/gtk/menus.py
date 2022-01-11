@@ -156,7 +156,7 @@ def get_groupchat_menu(control_id: str, account: str, jid: JID) -> Gio.Menu:
         (_('Rename Chat…'), f'win.rename-groupchat-{control_id}', None),
         (_('Change Nickname…'), f'win.change-nickname-{control_id}', None),
         (_('Request Voice'), f'win.request-voice-{control_id}', None),
-        (_('Execute Command…'), f'win.execute-command-{control_id}', 's("")'),
+        (_('Execute Command…'), f'win.execute-command-{control_id}', '""'),
         (_('Search…'), 'win.search-history', None),
         (_('Remove History'), 'app.remove-history', params)
     ]
@@ -166,7 +166,7 @@ def get_groupchat_menu(control_id: str, account: str, jid: JID) -> Gio.Menu:
 
 def get_account_menu(account: str) -> Gio.Menu:
 
-    val = f's("{account}")'
+    val = f'"{account}"'
 
     menuitems: MenuItemListT = [
         (_('Profile'), f'app.{account}-profile', val),
@@ -437,7 +437,7 @@ def get_subscription_menu(account: str, jid: JID) -> Gio.Menu:
                                  jid=jid,
                                  type='contact',
                                  select=True)
-    value = f's("{jid}")'
+    value = f'"{jid}"'
     menuitems: MenuItemListT = [
         (_('Start Chat'), 'win.add-chat', params),
         (_('Information'), f'win.contact-info-{account}', value),
