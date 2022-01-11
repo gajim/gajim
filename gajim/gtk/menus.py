@@ -125,14 +125,6 @@ def get_singlechat_menu(control_id: str,
                     variant = GLib.Variant('s', account)
                     menuitem.set_action_and_target_value(action, variant)
                     menu.append_item(menuitem)
-                elif action_name == 'app.browse-history':
-                    menuitem = Gio.MenuItem.new(label, action_name)
-                    dict_ = {'account': GLib.Variant('s', account),
-                             'jid': GLib.Variant('s', str(jid))}
-                    variant_dict = GLib.Variant('a{sv}', dict_)
-                    menuitem.set_action_and_target_value(action_name,
-                                                         variant_dict)
-                    menu.append_item(menuitem)
                 elif action_name == 'app.remove-history':
                     params = RemoveHistoryActionParams(account=account, jid=jid)
                     menuitem = Gio.MenuItem.new(label, action_name)
@@ -173,15 +165,6 @@ def get_groupchat_menu(control_id: str, account: str, jid: JID) -> Gio.Menu:
             if action_name == 'win.search-history':
                 menuitem = Gio.MenuItem.new(label, action_name)
                 menuitem.set_action_and_target_value(action_name, None)
-                menu.append_item(menuitem)
-
-            elif action_name == 'app.browse-history':
-                menuitem = Gio.MenuItem.new(label, action_name)
-                dict_ = {'account': GLib.Variant('s', account),
-                         'jid': GLib.Variant('s', str(jid))}
-                variant_dict = GLib.Variant('a{sv}', dict_)
-                menuitem.set_action_and_target_value(
-                    action_name, variant_dict)
                 menu.append_item(menuitem)
 
             elif action_name == 'win.execute-command-':
