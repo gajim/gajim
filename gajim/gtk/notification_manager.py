@@ -16,6 +16,7 @@ from __future__ import annotations
 from typing import Any
 from typing import Optional
 from typing import Union
+from typing import cast
 
 from gi.repository import Gio
 from gi.repository import GLib
@@ -153,7 +154,8 @@ class NotificationManager(Gtk.ListBox):
         self._client.get_module('Presence').unsubscribed(jid)
 
     def _get_notification_row(self, jid: str) -> Optional[NotificationRow]:
-        for row in self.get_children():
+        rows = cast(list[NotificationRow], self.get_children())
+        for row in rows:
             if row.jid == jid:
                 return row
         return None
@@ -291,7 +293,7 @@ class SubscriptionRequestRow(NotificationRow):
         accept_button.set_valign(Gtk.Align.CENTER)
         accept_button.set_action_name(
             f'win.subscription-accept-{self._account}')
-        accept_button.set_action_target_value(GLib.Variant('s', str(self.jid)))
+        accept_button.set_action_target_value(GLib.Variant('s', self.jid))
         self.grid.attach(accept_button, 3, 1, 1, 2)
 
         more_image = Gtk.Image.new_from_icon_name(
@@ -299,7 +301,8 @@ class SubscriptionRequestRow(NotificationRow):
         more_button = Gtk.MenuButton()
         more_button.set_valign(Gtk.Align.CENTER)
         more_button.add(more_image)
-        subscription_menu = get_subscription_menu(self._account, self.jid)
+        subscription_menu = get_subscription_menu(
+            self._account, JID.from_string(self.jid))
         more_button.set_menu_model(subscription_menu)
         self.grid.attach(more_button, 4, 1, 1, 2)
 
