@@ -155,7 +155,7 @@ class JingleRTPContent(JingleContent):
         else:
             self._dtmf_running = False
 
-    def start_dtmf(self, key):
+    def start_dtmf(self, key: str) -> None:
         if key == 'star':
             event = Farstream.DTMFEvent.STAR
         elif key == 'pound':
@@ -344,13 +344,13 @@ class JingleAudio(JingleRTPContent):
         JingleRTPContent.__init__(self, session, 'audio', transport)
         self.setup_stream()
 
-    def set_mic_volume(self, vol):
+    def set_mic_volume(self, vol: float) -> None:
         """
         vol must be between 0 and 1
         """
         self.mic_volume.set_property('volume', vol)
 
-    def set_out_volume(self, vol):
+    def set_out_volume(self, vol: float) -> None:
         """
         vol must be between 0 and 1
         """

@@ -12,34 +12,48 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Optional
+from typing import cast
+from typing import TYPE_CHECKING
 
 import time
 from datetime import datetime
 
+from gi.repository import GdkPixbuf
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
+from gajim.common.events import JingleRequestReceived
 from gajim.common.i18n import _
 from gajim.common.jingle_session import JingleSession
+from gajim.common.storage.archive import ConversationRow
 
 from .widgets import SimpleLabel
 from .base import BaseRow
 
+if TYPE_CHECKING:
+    from gajim.gui.conversation.view import ConversationView
+
 
 class CallRow(BaseRow):
-    def __init__(self, account, contact, event=None, db_message=None):
+    def __init__(self,
+                 account: str,
+                 contact: types.BareContact,
+                 event: Optional[JingleRequestReceived] = None,
+                 db_message: Optional[ConversationRow] = None
+                 ) -> None:
         BaseRow.__init__(self, account)
 
         self.type = 'call'
 
         self._client = app.get_client(account)
 
-        is_from_db = bool(db_message is not None)
-
-        if is_from_db:
+        if db_message is not None:
             timestamp = db_message.time
         else:
             timestamp = time.time()
@@ -52,7 +66,7 @@ class CallRow(BaseRow):
 
         self._session: Optional[JingleSession] = None
 
-        if is_from_db:
+        if db_message is not None:
             sid = db_message.additional_data.get_value('gajim', 'sid')
             module = self._client.get_module('Jingle')
             self._session = module.get_jingle_session(self._contact.jid, sid)
@@ -87,36 +101,39 @@ class CallRow(BaseRow):
     def _on_accept(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
         self._decline_button.set_sensitive(False)
+        view = cast('ConversationView', self.get_parent())
         if self._event is not None:
             session = self._client.get_module('Jingle').get_jingle_session(
                 self._event.fjid, self._event.sid)
-            self.get_parent().accept_call(session)
+            view.accept_call(session)
         else:
-            self.get_parent().accept_call(self._session)
+            assert self._session is not None
+            view.accept_call(self._session)
 
     def _on_decline(self, _button: Gtk.Button) -> None:
+        view = cast('ConversationView', self.get_parent())
         if self._event is not None:
             session = self._client.get_module('Jingle').get_jingle_session(
                 self._event.fjid, self._event.sid)
-            self.get_parent().decline_call(session)
+            view.decline_call(session)
         else:
-            self.get_parent().decline_call(self._session)
+            assert self._session is not None
+            view.decline_call(self._session)
         self._session = None
 
     def _add_history_call_widget(self) -> None:
+        contact = self._client.get_module('Contacts').get_contact(
+            str(self._client.get_own_jid().bare))
+        is_self = True
         if self._db_message is not None:
             if self._db_message.kind == KindConstant.CALL_INCOMING:
                 contact = self._contact
                 is_self = True
             else:
-                contact = self._client.get_module('Contacts').get_contact(
-                    str(self._client.get_own_jid().bare))
                 is_self = False
 
         if self._event is not None:
             if self._event == 'incoming-call':
-                contact = self._client.get_module('Contacts').get_contact(
-                    str(self._client.get_own_jid().bare))
                 is_self = False
             else:
                 contact = self._contact
@@ -124,6 +141,7 @@ class CallRow(BaseRow):
 
         scale = self.get_scale_factor()
         avatar = contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
+        assert not isinstance(avatar, GdkPixbuf.Pixbuf)
         avatar_image = Gtk.Image.new_from_surface(avatar)
         self._avatar_placeholder.add(avatar_image)
 
@@ -157,10 +175,11 @@ class CallRow(BaseRow):
             AvatarSize.CALL,
             scale,
             add_show=False)
+        assert not isinstance(avatar, GdkPixbuf.Pixbuf)
         avatar_image = Gtk.Image.new_from_surface(avatar)
         self._call_box.add(avatar_image)
 
-        content_types = []
+        content_types: list[str] = []
         if self._event is not None:
             for item in self._event.contents:
                 content_types.append(item.media)

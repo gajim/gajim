@@ -54,6 +54,7 @@ from gajim.common.helpers import message_needs_highlight
 from gajim.common.helpers import get_file_path_from_dnd_dropped_uri
 from gajim.common.i18n import _
 from gajim.common.ged import EventHelper
+from gajim.common.events import JingleRequestReceived
 from gajim.common.events import Notification
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_retraction_text
@@ -61,6 +62,7 @@ from gajim.common.const import KindConstant
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.preview_helpers import filename_from_uri
 from gajim.common.preview_helpers import guess_simple_file_type
+from gajim.common.storage.archive import ConversationRow
 from gajim.common.structs import OutgoingMessage
 
 from gajim.gui.conversation.view import ConversationView
@@ -1175,7 +1177,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         if self._allow_add_message():
             self.conversation_view.add_jingle_file_transfer(event)
 
-    def add_call_message(self, event):
+    def add_call_message(self, event: JingleRequestReceived) -> None:
         if self._allow_add_message():
             self.conversation_view.add_call_message(event=event)
 
@@ -1451,7 +1453,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         self.conversation_view.unlock()
 
-    def add_messages(self, messages):
+    def add_messages(self, messages: list[ConversationRow]):
         for msg in messages:
             if msg.kind in (KindConstant.FILE_TRANSFER_INCOMING,
                             KindConstant.FILE_TRANSFER_OUTGOING):

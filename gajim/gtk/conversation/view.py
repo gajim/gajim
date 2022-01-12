@@ -35,13 +35,16 @@ from nbxmpp.modules.security_labels import Displaymarking
 
 from gajim.common import app
 from gajim.common.client import Client
+from gajim.common.events import JingleRequestReceived
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_start_of_day
+from gajim.common.jingle_session import JingleSession
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.httpupload import HTTPFileTransfer
+from gajim.common.storage.archive import ConversationRow
 
 from .rows.base import BaseRow
 from .rows.read_marker import ReadMarkerRow
@@ -233,7 +236,11 @@ class ConversationView(Gtk.ListBox):
             self._account, self._contact, event=event, db_message=db_message)
         self._insert_message(jingle_transfer_row)
 
-    def add_call_message(self, event=None, db_message=None):
+    def add_call_message(self,
+                         event: Optional[JingleRequestReceived] = None,
+                         db_message: Optional[ConversationRow] = None
+                         ) -> None:
+        assert isinstance(self._contact, BareContact)
         call_row = CallRow(
             self._account, self._contact, event=event, db_message=db_message)
         self._insert_message(call_row)
@@ -455,8 +462,9 @@ class ConversationView(Gtk.ListBox):
             yield row
 
     def update_call_rows(self) -> None:
-        for row in self.get_children():
-            if row.type == 'call':
+        rows = cast(list[BaseRow], self.get_children())
+        for row in rows:
+            if isinstance(row, CallRow):
                 row.update()
 
     def set_read_marker(self, id_: str) -> None:
@@ -516,11 +524,11 @@ class ConversationView(Gtk.ListBox):
     def on_mention(self, name: str) -> None:
         self.emit('mention', name)
 
-    def accept_call(self, event):
-        self.emit('accept-call', event)
+    def accept_call(self, session: JingleSession) -> None:
+        self.emit('accept-call', session)
 
-    def decline_call(self, event):
-        self.emit('decline-call', event)
+    def decline_call(self, session: JingleSession) -> None:
+        self.emit('decline-call', session)
 
     def _on_contact_setting_changed(self, *args: Any) -> None:
         self.invalidate_filter()

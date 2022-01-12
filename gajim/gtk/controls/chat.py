@@ -23,6 +23,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import ClassVar  # pylint: disable=unused-import
 from typing import Type  # pylint: disable=unused-import
 from typing import Optional
@@ -42,13 +44,17 @@ from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common import helpers
+from gajim.common.events import JingleRequestReceived
 from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
 from gajim.common.const import PEPEventType
+from gajim.common.jingle_session import JingleSession
 
 from gajim.gui.call_widget import CallWidget
+from gajim.gui.controls.base import BaseControl
+from gajim.gui.conversation.view import ConversationView
 from gajim.gui.const import TARGET_TYPE_URI_LIST
 from gajim.gui.const import ControlType
 from gajim.gui.dialogs import DialogButton
@@ -58,7 +64,6 @@ from gajim.gui.util import open_window
 
 from gajim.command_system.implementation.hosts import ChatCommands
 from gajim.command_system.framework import CommandHost  # pylint: disable=unused-import
-from gajim.gui.controls.base import BaseControl
 
 from ..menus import get_encryption_menu
 from ..menus import get_singlechat_menu
@@ -475,16 +480,25 @@ class ChatControl(BaseControl):
     def _process_jingle_av_event(self, event):
         self._call_widget.process_event(event)
 
-    def _on_accept_call(self, _view, session):
+    def _on_accept_call(self,
+                        _view: ConversationView,
+                        session: JingleSession
+                        ) -> None:
         self._call_widget.accept_call(session)
 
-    def _on_decline_call(self, _view, session):
+    def _on_decline_call(self,
+                         _view: ConversationView,
+                         session: JingleSession
+                         ) -> None:
         self._call_widget.decline_call(session)
 
-    def _on_call_ended(self, _call_widget):
+    def _on_call_ended(self, _call_widget: CallWidget) -> None:
         self.conversation_view.update_call_rows()
 
-    def _add_incoming_call(self, _call_widget, event):
+    def _add_incoming_call(self,
+                           _call_widget: CallWidget,
+                           event: JingleRequestReceived
+                           ) -> None:
         self.add_call_message(event)
 
     def on_location_eventbox_button_release_event(self, _widget, _event):
