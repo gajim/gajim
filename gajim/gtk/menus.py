@@ -525,107 +525,92 @@ def build_workspaces_submenu(current_workspace_id: str,
     return submenu
 
 
+def get_groupchat_admin_menu(control_id: str,
+                             self_contact: types.GroupchatParticipant,
+                             contact: types.GroupchatParticipant) -> Gio.Menu:
+
+    adminitems: MenuItemListT = []
+
+    action = f'win.change-affiliation-{control_id}'
+
+    if is_affiliation_change_allowed(self_contact, contact, 'owner'):
+        value = f'["{contact.real_jid}", "owner"]'
+        adminitems.append((_('Make Owner'), action, value))
+
+    if is_affiliation_change_allowed(self_contact, contact, 'admin'):
+        value = f'["{contact.real_jid}", "admin"]'
+        adminitems.append((_('Make Admin'), action, value))
+
+    if is_affiliation_change_allowed(self_contact, contact, 'member'):
+        value = f'["{contact.real_jid}", "member"]'
+        adminitems.append((_('Make Member'), action, value))
+
+    if is_affiliation_change_allowed(self_contact, contact, 'none'):
+        value = f'["{contact.real_jid}", "none"]'
+        adminitems.append((_('Revoke Member'), action, value))
+
+    if is_affiliation_change_allowed(self_contact, contact, 'outcast'):
+        value = f'"{contact.real_jid}"'
+        adminitems.append((_('Ban…'), f'win.ban-{control_id}', value))
+
+    if not adminitems:
+        adminitems.append((_('Not Available'), 'dummy', None))
+
+    return make_menu(adminitems)
+
+
+def get_groupchat_mod_menu(control_id: str,
+                           self_contact: types.GroupchatParticipant,
+                           contact: types.GroupchatParticipant
+                           ) -> Gio.Menu:
+
+    moditems: MenuItemListT = []
+
+    if is_role_change_allowed(self_contact, contact):
+        value = f'"{contact.name}"'
+        moditems.append((_('Kick…'), f'win.kick-{control_id}', value))
+
+    action = f'win.change-role-{control_id}'
+
+    if is_role_change_allowed(self_contact, contact):
+        if contact.role.is_visitor:
+            value = f'["{contact.name}", "participant"]'
+            moditems.append((_('Grant Voice'), action, value))
+        else:
+            value = f'["{contact.name}", "visitor"]'
+            moditems.append((_('Revoke Voice'), action, value))
+
+    if not moditems:
+        moditems.append((_('Not Available'), 'dummy', None))
+
+    return make_menu(moditems)
+
+
 def get_groupchat_roster_menu(account: str,
                               control_id: str,
                               self_contact: types.GroupchatParticipant,
                               contact: types.GroupchatParticipant
-                              ) -> Gtk.Menu:
-    menu = Gtk.Menu()
-    real_jid = ''
-    if contact.real_jid is not None:
-        real_jid = contact.real_jid.bare
+                              ) -> Gio.Menu:
 
-    item = Gtk.MenuItem(label=_('Information'))
-    action = f'win.contact-information-{control_id}::{contact.name}'
-    item.set_detailed_action_name(action)
-    menu.append(item)
+    value = f'"{contact.name}"'
 
-    item = Gtk.MenuItem(label=_('Add to Contact List…'))
-    action = f'app.{account}-add-contact(["{account}", "{real_jid}"])'
-    if contact.real_jid is None:
-        item.set_sensitive(False)
-    else:
-        item.set_detailed_action_name(action)
-    menu.append(item)
+    general_items: MenuItemListT = [
+        (_('Information'), f'win.contact-information-{control_id}', value),
+        (_('Execute Command…'), f'win.execute-command-{control_id}', value),
+    ]
 
-    item = Gtk.MenuItem(label=_('Execute Command…'))
-    action = f'win.execute-command-{control_id}::{contact.name}'
-    item.set_detailed_action_name(action)
-    menu.append(item)
+    real_contact = contact.get_real_contact()
+    if real_contact is not None and not real_contact.is_in_roster:
+        value = f'["{account}", "{real_contact.jid}"]'
+        action = f'app.{account}-add-contact'
+        general_items.insert(1, (_('Add to Contact List…'), action, value))
 
-    menu.append(Gtk.SeparatorMenuItem())
+    mod_menu = get_groupchat_mod_menu(control_id, self_contact, contact)
+    admin_menu = get_groupchat_admin_menu(control_id, self_contact, contact)
 
-    item = Gtk.MenuItem(label=_('Kick'))
-    action = f'win.kick-{control_id}::{contact.name}'
-    if is_role_change_allowed(self_contact, contact):
-        item.set_detailed_action_name(action)
-    else:
-        item.set_sensitive(False)
-    menu.append(item)
-
-    item = Gtk.MenuItem(label=_('Ban'))
-    action = f'win.ban-{control_id}::{real_jid}'
-    if is_affiliation_change_allowed(self_contact, contact, 'outcast'):
-        item.set_detailed_action_name(action)
-    else:
-        item.set_sensitive(False)
-    menu.append(item)
-
-    menu.append(Gtk.SeparatorMenuItem())
-
-    item = Gtk.MenuItem(label=_('Make Owner'))
-    action = (f'win.change-affiliation-{control_id}'
-              f'(["{contact.real_jid}", "owner"])')
-    if is_affiliation_change_allowed(self_contact, contact, 'owner'):
-        item.set_detailed_action_name(action)
-    else:
-        item.set_sensitive(False)
-    menu.append(item)
-
-    item = Gtk.MenuItem(label=_('Make Admin'))
-    action = (f'win.change-affiliation-{control_id}'
-              f'(["{contact.real_jid}", "admin"])')
-    if is_affiliation_change_allowed(self_contact, contact, 'admin'):
-        item.set_detailed_action_name(action)
-    else:
-        item.set_sensitive(False)
-    menu.append(item)
-
-    item = Gtk.MenuItem(label=_('Make Member'))
-    action = (f'win.change-affiliation-{control_id}'
-              f'(["{contact.real_jid}", "member"])')
-    if is_affiliation_change_allowed(self_contact, contact, 'member'):
-        item.set_detailed_action_name(action)
-    else:
-        item.set_sensitive(False)
-    menu.append(item)
-
-    item = Gtk.MenuItem(label=_('Revoke Member'))
-    action = (f'win.change-affiliation-{control_id}'
-              f'(["{contact.real_jid}", "none"])')
-    if is_affiliation_change_allowed(self_contact, contact, 'none'):
-        item.set_detailed_action_name(action)
-    else:
-        item.set_sensitive(False)
-    menu.append(item)
-
-    if contact.role.is_visitor:
-        label = _('Grant Voice')
-        role = 'participant'
-    else:
-        label = _('Revoke Voice')
-        role = 'visitor'
-
-    item = Gtk.MenuItem(label=label)
-    action = (f'win.change-role-{control_id}'
-              f'(["{contact.name}", "{role}"])')
-    if is_role_change_allowed(self_contact, contact):
-        item.set_detailed_action_name(action)
-    else:
-        item.set_sensitive(False)
-    menu.append(item)
-
-    menu.show_all()
+    menu = make_menu(general_items)
+    menu.append_section(_('Moderation'), mod_menu)
+    menu.append_section(_('Administration'), admin_menu)
     return menu
 
 

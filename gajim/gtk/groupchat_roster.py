@@ -365,27 +365,31 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
             return
 
         if event.button == 3:  # right click
-            self._show_contact_menu(nick)
+            rec = Gdk.Rectangle()
+            rec.x, rec.y = int(event.x), int(event.y)
+            rec.height, rec.width = 1, 1
+            self._show_contact_menu(nick, rec)
 
         if event.button == 2:  # middle click
             self.emit('row-activated', nick)
 
-    def _show_contact_menu(self, nick: str) -> None:
+    def _show_contact_menu(self, nick: str, rect: Gdk.Rectangle) -> None:
         self_contact = self._group_chat_contact.get_self()
+        assert self_contact is not None
         contact = self._group_chat_contact.get_resource(nick)
         menu = get_groupchat_roster_menu(self._account,
                                          self._control_id,
                                          self_contact,
                                          contact)
 
-        def destroy(menu: Gtk.Menu, _pspec: GObject.ParamSpec) -> None:
-            visible = menu.get_property('visible')
-            if not visible:
-                GLib.idle_add(menu.destroy)
+        def destroy(popover: Gtk.Popover) -> None:
+            app.check_finalize(popover)
+            GLib.idle_add(popover.set_relative_to, None)
 
-        menu.attach_to_widget(self, None)
-        menu.connect('notify::visible', destroy)
-        menu.popup_at_pointer()
+        popover = Gtk.Popover.new_from_model(self, menu)
+        popover.set_pointing_to(rect)
+        popover.connect('closed', destroy)
+        popover.popup()
 
     def _tree_compare_iters(self,
                             model: Gtk.TreeModel,
