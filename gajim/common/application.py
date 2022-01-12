@@ -18,6 +18,7 @@ from typing import Union
 from typing import Type
 from typing import TextIO
 
+import os
 import sys
 
 from gajim.common import app
@@ -92,6 +93,7 @@ class CoreApplication:
     def _show_warnings() -> None:
         import traceback
         import warnings
+        os.environ['GAJIM_LEAK'] = 'true'
 
         def warn_with_traceback(message: Union[Warning, str],
                                 category: Type[Warning],
