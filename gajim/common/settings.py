@@ -73,7 +73,7 @@ from gajim.common.setting_values import StringAccountSettings
 from gajim.common.setting_values import BoolSettings
 from gajim.common.setting_values import BoolAccountSettings
 
-SETTING_TYPE = Union[bool, int, str, object, list]
+SETTING_TYPE = Union[bool, int, str, object]
 
 
 log = logging.getLogger('gajim.c.settings')
