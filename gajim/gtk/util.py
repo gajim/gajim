@@ -67,6 +67,7 @@ log = logging.getLogger('gajim.gui.util')
 
 
 MenuValueT = Union[None, str, GLib.Variant, VariantMixin]
+MenuItemListT = list[tuple[str, str, MenuValueT]]
 
 
 class NickCompletionGenerator:
@@ -911,7 +912,7 @@ def get_key_theme() -> Optional[str]:
 
 
 def make_menu_item(label: str,
-                   action: str,
+                   action: Optional[str] = None,
                    value: MenuValueT = None) -> Gio.MenuItem:
 
     if value is None:
@@ -927,7 +928,7 @@ def make_menu_item(label: str,
     return item
 
 
-def make_menu(menuitems: list[tuple[str, str, MenuValueT]]) -> Gio.Menu:
+def make_menu(menuitems: MenuItemListT) -> Gio.Menu:
     menu = Gio.Menu()
     for item in menuitems:
         menuitem = make_menu_item(*item)
