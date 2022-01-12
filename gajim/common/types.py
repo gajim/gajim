@@ -34,12 +34,15 @@ from nbxmpp.structs import BookmarkData
 if TYPE_CHECKING:
     # pylint: disable=unused-import
     from gajim.common.client import Client
+    from nbxmpp.client import Client as xmppClient
     from gajim.common.zeroconf.connection_zeroconf import ConnectionZeroconf
     from gajim.common.modules.contacts import CommonContact
     from gajim.common.modules.contacts import BareContact
     from gajim.common.modules.contacts import ResourceContact
     from gajim.common.modules.contacts import GroupchatContact
     from gajim.common.modules.contacts import GroupchatParticipant
+
+    ChatContacts = Union[BareContact, GroupchatContact, GroupchatParticipant]
 
     from gajim.gui_interface import Interface
     from gajim.common.settings import Settings
