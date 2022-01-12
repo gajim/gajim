@@ -11,7 +11,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List
+from __future__ import annotations
+
+from typing import cast
 
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -69,7 +71,8 @@ class ContactItem(Gtk.FlowBoxChild):
         self.show_all()
 
     def _on_remove(self, _button: Gtk.Button) -> None:
-        self.get_parent().on_contact_removed(self)
+        flow_box = cast(ContactsFlowBox, self.get_parent())
+        flow_box.on_contact_removed(self)
 
 
 class ContactsFlowBox(Gtk.FlowBox):
@@ -91,7 +94,7 @@ class ContactsFlowBox(Gtk.FlowBox):
         self.show_all()
 
     def clear(self) -> None:
-        def _remove(item):
+        def _remove(item: Gtk.FlowBoxChild):
             self.remove(item)
             item.destroy()
         self.foreach(_remove)
@@ -107,9 +110,10 @@ class ContactsFlowBox(Gtk.FlowBox):
     def has_contacts(self) -> bool:
         return bool(self.get_child_at_index(0) is not None)
 
-    def get_contact_jids(self) -> List[str]:
-        contacts = []
-        for contact in self.get_children():
+    def get_contact_jids(self) -> list[str]:
+        contacts: list[str] = []
+        contact_items = cast(list[ContactItem], self.get_children())
+        for contact in contact_items:
             contacts.append(contact.jid)
         return contacts
 
