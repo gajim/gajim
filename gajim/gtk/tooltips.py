@@ -44,6 +44,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import PEPEventType
 from gajim.common.i18n import Q_
 from gajim.common.i18n import _
+from gajim.common.file_props import FileProp
 
 from .avatar import get_show_circle
 from .builder import get_builder
@@ -120,7 +121,7 @@ class GCTooltip:
         app.plugin_manager.gui_extension_point(
             'gc_tooltip_populate', self, contact, self._ui.tooltip_grid)
 
-    def destroy(self):
+    def destroy(self) -> None:
         self._ui.tooltip_grid.destroy()
 
 
@@ -262,7 +263,7 @@ class RosterTooltip:
             self._ui.location.show()
             self._ui.location_label.show()
 
-    def destroy(self):
+    def destroy(self) -> None:
         self.clear_tooltip()
 
 
@@ -279,52 +280,54 @@ class FileTransfersTooltip:
         self.sid = None
         self.widget = None
 
-    def get_tooltip(self, file_props, sid) -> tuple[bool, Gtk.Widget]:
+    def get_tooltip(self,
+                    file_prop: FileProp,
+                    sid: str
+                    ) -> tuple[bool, Gtk.Widget]:
         if self.sid == sid:
+            assert self.widget is not None
             return True, self.widget
 
-        self.widget = self._create_tooltip(file_props, sid)
+        self.widget = self._create_tooltip(file_prop, sid)
         self.sid = sid
         return False, self.widget
 
-    def _create_tooltip(self, file_props, _sid) -> None:
-        ft_grid = Gtk.Grid.new()
+    def _create_tooltip(self, file_prop: FileProp, _sid: str) -> Gtk.Grid:
+        ft_grid = Gtk.Grid(row_spacing=6, column_spacing=12)
         ft_grid.insert_column(0)
-        ft_grid.set_row_spacing(6)
-        ft_grid.set_column_spacing(12)
         current_row = 0
-        properties = []
-        name = file_props.name
-        if file_props.type_ == 'r':
-            file_name = os.path.split(file_props.file_name)[1]
+        properties: list[tuple[str, str]] = []
+        name = file_prop.name
+        if file_prop.type_ == 'r':
+            file_name = os.path.split(file_prop.file_name)[1]
         else:
-            file_name = file_props.name
+            file_name = file_prop.name
         properties.append((_('File Name: '),
                            GLib.markup_escape_text(file_name)))
 
-        client = app.get_client(file_props.tt_account)
-        if file_props.type_ == 'r':
+        client = app.get_client(file_prop.tt_account)
+        if file_prop.type_ == 'r':
             type_ = Q_('?Noun:Download')
             actor = _('Sender: ')
-            sender = JID.from_string(file_props.sender)
+            sender = JID.from_string(file_prop.sender)
             name = client.get_module('Contacts').get_contact(sender.bare).name
         else:
             type_ = Q_('?Noun:Upload')
             actor = _('Recipient: ')
-            receiver = JID.from_string(file_props.receiver)
+            receiver = JID.from_string(file_prop.receiver)
             name = client.get_module('Contacts').get_contact(
                 receiver.bare).name
         properties.append((Q_('?transfer type:Type: '), type_))
         properties.append((actor, GLib.markup_escape_text(name)))
 
-        transfered_len = file_props.received_len
+        transfered_len = file_prop.received_len
         if not transfered_len:
             transfered_len = 0
         properties.append((Q_('?transfer status:Transferred: '),
                            GLib.format_size_full(transfered_len, self.units)))
-        status = self._get_current_status(file_props)
+        status = self._get_current_status(file_prop)
         properties.append((Q_('?transfer status:Status: '), status))
-        file_desc = file_props.desc or ''
+        file_desc = file_prop.desc or ''
         properties.append((_('Description: '),
                            GLib.markup_escape_text(file_desc)))
 
@@ -347,19 +350,19 @@ class FileTransfersTooltip:
         return ft_grid
 
     @staticmethod
-    def _get_current_status(file_props) -> None:
-        if file_props.stopped:
+    def _get_current_status(file_prop: FileProp) -> str:
+        if file_prop.stopped:
             return Q_('?transfer status:Aborted')
-        if file_props.completed:
+        if file_prop.completed:
             return Q_('?transfer status:Completed')
-        if file_props.paused:
+        if file_prop.paused:
             return Q_('?transfer status:Paused')
-        if file_props.stalled:
+        if file_prop.stalled:
             # stalled is not paused. it is like 'frozen' it stopped alone
             return Q_('?transfer status:Stalled')
 
-        if file_props.connected:
-            if file_props.started:
+        if file_prop.connected:
+            if file_prop.started:
                 return Q_('?transfer status:Transferring')
             return Q_('?transfer status:Not started')
         return Q_('?transfer status:Not started')
