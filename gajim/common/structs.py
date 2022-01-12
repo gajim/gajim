@@ -25,6 +25,7 @@ from typing import Union
 import time
 from dataclasses import dataclass
 from dataclasses import fields
+
 from gi.repository import GLib
 
 from nbxmpp.protocol import JID
@@ -49,7 +50,12 @@ class URI(NamedTuple):
 
 
 class MUCData:
-    def __init__(self, room_jid, nick, password, config=None):
+    def __init__(self,
+                 room_jid: str,
+                 nick: str,
+                 password: str,
+                 config=None) -> None:
+
         self._room_jid = JID.from_string(room_jid)
         self._config = config
         self.nick = nick
@@ -60,11 +66,11 @@ class MUCData:
         self.subject = None
 
     @property
-    def jid(self):
+    def jid(self) -> JID:
         return self._room_jid
 
     @property
-    def occupant_jid(self):
+    def occupant_jid(self) -> JID:
         return self._room_jid.new_with(resource=self.nick)
 
     @property
@@ -74,23 +80,23 @@ class MUCData:
 
 class OutgoingMessage:
     def __init__(self,
-                 account,
+                 account: str,
                  contact,
-                 message,
-                 type_,
-                 subject=None,
+                 message: Optional[str],
+                 type_: str,
+                 subject: Optional[str] = None,
                  chatstate=None,
-                 marker=None,
-                 resource=None,
-                 user_nick=None,
-                 label=None,
+                 marker: Optional[tuple[str, str]] = None,
+                 resource: Optional[str] = None,
+                 user_nick: Optional[str] = None,
+                 label: Optional[str] = None,
                  control=None,
-                 attention=None,
-                 correct_id=None,
-                 oob_url=None,
+                 attention: Optional[bool] = None,
+                 correct_id: Optional[str] = None,
+                 oob_url: Optional[str] = None,
                  xhtml=None,
                  nodes=None,
-                 play_sound=True):
+                 play_sound: bool = True):
 
         if type_ not in ('chat', 'groupchat', 'normal', 'headline'):
             raise ValueError('Unknown message type: %s' % type_)
@@ -157,37 +163,37 @@ class OutgoingMessage:
         return message
 
     @property
-    def jid(self):
+    def jid(self) -> JID:
         return self.contact.jid
 
     @property
-    def is_groupchat(self):
+    def is_groupchat(self) -> bool:
         return self.type_ == 'groupchat'
 
     @property
-    def is_chat(self):
+    def is_chat(self) -> bool:
         return self.type_ == 'chat'
 
     @property
-    def is_normal(self):
+    def is_normal(self) -> bool:
         return self.type_ == 'normal'
 
-    def set_sent_timestamp(self):
+    def set_sent_timestamp(self) -> None:
         if self.is_groupchat:
             return
         self.timestamp = time.time()
 
     @property
-    def is_encrypted(self):
+    def is_encrypted(self) -> bool:
         return bool(self.additional_data.get_value('encrypted', 'name', False))
 
     @property
-    def msg_iq(self):
+    def msg_iq(self) -> Any:
         # Backwards compatibility for plugins
         return self.stanza
 
     @msg_iq.setter
-    def msg_iq(self, value):
+    def msg_iq(self, value: Any) -> None:
         # Backwards compatibility for plugins
         self.stanza = value
 
@@ -244,6 +250,7 @@ UNKNOWN_MUC_PRESENCE = MUCPresenceData(show=PresenceShowExt.OFFLINE,
                                        affiliation=Affiliation.NONE,
                                        role=Role.NONE,
                                        real_jid=None)
+
 
 class VariantMixin:
 
