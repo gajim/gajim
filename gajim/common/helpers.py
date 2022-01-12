@@ -1175,9 +1175,11 @@ def get_groupchat_name(client: types.Client, jid: Union[str, JID]) -> str:
 
 def is_affiliation_change_allowed(self_contact: types.GroupchatParticipant,
                                   contact: types.GroupchatParticipant,
-                                  target_aff: Affiliation) -> bool:
+                                  target_aff: Union[str, Affiliation]) -> bool:
+    if isinstance(target_aff, str):
+        target_aff = Affiliation(target_aff)
 
-    if contact.affiliation.value == target_aff:
+    if contact.affiliation == target_aff:
         # Contact has already the target affiliation
         return False
 
@@ -1187,9 +1189,10 @@ def is_affiliation_change_allowed(self_contact: types.GroupchatParticipant,
     if not self_contact.affiliation.is_admin:
         return False
 
-    if target_aff in ('admin', 'owner'):
+    if target_aff in (Affiliation.OWNER, Affiliation.ADMIN):
         # Admin can’t edit admin/owner list
         return False
+
     return self_contact.affiliation > contact.affiliation
 
 
