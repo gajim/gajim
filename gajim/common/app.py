@@ -223,12 +223,11 @@ def detect_dependencies() -> None:
         gi.require_version('Farstream', '0.2')
         from gi.repository import Farstream
         _dependencies['FARSTREAM'] = True
-    except Exception:
-        pass
+    except Exception as error:
+        log('gajim').warning('AV dependency test failed: %s', error)
 
     try:
         if _dependencies['GST'] and _dependencies['FARSTREAM']:
-            Gst.init(None)
             conference = Gst.ElementFactory.make('fsrtpconference', None)
             conference.new_session(Farstream.MediaType.AUDIO)
             from gajim.gui.gstreamer import create_gtk_widget
@@ -412,7 +411,7 @@ def get_enabled_accounts_with_labels(
     Returns a list with [account, account_label] entries.
     Order by account_label
     """
-    accounts = []
+    accounts: list[list[str]] = []
     for acc in connections:
         if exclude_local and account_is_zeroconf(acc):
             continue
