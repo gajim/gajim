@@ -705,27 +705,27 @@ class Settings:
     @overload
     def get_group_chat_setting(self,
                                account: str,
-                               jid: Union[str, JID],
+                               jid: JID,
                                setting: IntGroupChatSettings
                                ) -> int: ...
 
     @overload
     def get_group_chat_setting(self,
                                account: str,
-                               jid: Union[str, JID],
+                               jid: JID,
                                setting: BoolGroupChatSettings
                                ) -> bool: ...
 
     @overload
     def get_group_chat_setting(self,
                                account: str,
-                               jid: Union[str, JID],
+                               jid: JID,
                                setting: StringGroupChatSettings
                                ) -> str: ...
 
     def get_group_chat_setting(self,
                                account: str,
-                               jid: Union[str, JID],
+                               jid: JID,
                                setting: AllGroupChatSettings
                                ) -> AllGroupChatSettingsT:
 
@@ -766,27 +766,27 @@ class Settings:
     @overload
     def set_group_chat_setting(self,
                                account: str,
-                               jid: str,
+                               jid: JID,
                                setting: StringGroupChatSettings,
                                value: str) -> None: ...
 
     @overload
     def set_group_chat_setting(self,
                                account: str,
-                               jid: str,
+                               jid: JID,
                                setting: IntGroupChatSettings,
                                value: int) -> None: ...
 
     @overload
     def set_group_chat_setting(self,
                                account: str,
-                               jid: str,
+                               jid: JID,
                                setting: BoolGroupChatSettings,
                                value: bool) -> None: ...
 
     def set_group_chat_setting(self,
                                account: str,
-                               jid: str,
+                               jid: JID,
                                setting: AllGroupChatSettings,
                                value: AllGroupChatSettingsT) -> None:
 
@@ -851,7 +851,7 @@ class Settings:
 
     def get_contact_setting(self,
                             account: str,
-                            jid: str,
+                            jid: JID,
                             setting: str) -> SETTING_TYPE:
 
         if account not in self._account_settings:
@@ -874,7 +874,7 @@ class Settings:
 
     def set_contact_setting(self,
                             account: str,
-                            jid: str,
+                            jid: JID,
                             setting: str,
                             value: SETTING_TYPE) -> None:
 

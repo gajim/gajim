@@ -1414,7 +1414,7 @@ def get_group_chat_nick(account: str, room_jid: Union[JID, str]) -> str:
     return nick
 
 
-def get_muc_context(jid: Union[JID, str]) -> Optional[str]:
+def get_muc_context(jid: JID) -> Optional[str]:
     disco_info = app.storage.cache.get_last_disco_info(jid)
     if disco_info is None:
         return None

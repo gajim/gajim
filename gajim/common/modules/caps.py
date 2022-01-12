@@ -106,8 +106,9 @@ class Caps(BaseModule):
             self._queue_task(task)
             return
 
-        jid = str(properties.jid)
-        app.storage.cache.set_last_disco_info(jid, disco_info, cache_only=True)
+        app.storage.cache.set_last_disco_info(properties.jid,
+                                              disco_info,
+                                              cache_only=True)
 
         contact = self._con.get_module('Contacts').get_contact(properties.jid)
         contact.notify('caps-update')
@@ -145,7 +146,7 @@ class Caps(BaseModule):
             return
 
         app.storage.cache.add_caps_entry(
-            str(disco_info.jid),
+            disco_info.jid,
             task.entity.method,
             disco_info.get_caps_hash(),
             disco_info)

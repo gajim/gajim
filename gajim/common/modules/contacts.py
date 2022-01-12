@@ -45,13 +45,13 @@ from gajim.common.helpers import get_groupchat_name
 
 
 class ContactSettings:
-    def __init__(self, account: str, jid: str) -> None:
+    def __init__(self, account: str, jid: JID) -> None:
         self.get = partial(app.settings.get_contact_setting, account, jid)
         self.set = partial(app.settings.set_contact_setting, account, jid)
 
 
 class GroupChatSettings:
-    def __init__(self, account: str, jid: str) -> None:
+    def __init__(self, account: str, jid: JID) -> None:
         self._account = account
         self._jid = jid
 
@@ -73,7 +73,7 @@ class GroupChatSettings:
     def set(self, setting: IntGroupChatSettings, value: int) -> None: ...
     def set(self, setting: Any, value: Any) -> None:
         app.settings.set_group_chat_setting(
-            self._account, str(self._jid), setting, value)
+            self._account, self._jid, setting, value)
 
 
 class Contacts(BaseModule):
@@ -228,7 +228,7 @@ class BareContact(CommonContact):
     def __init__(self, logger: logging.Logger, jid: JID, account: str) -> None:
         CommonContact.__init__(self, logger, jid, account)
 
-        self.settings = ContactSettings(account, str(jid))
+        self.settings = ContactSettings(account, jid)
 
         self._avatar_sha = app.storage.cache.get_contact(jid, 'avatar')
 
@@ -474,7 +474,7 @@ class GroupchatContact(CommonContact):
     def __init__(self, logger: logging.Logger, jid: JID, account: str) -> None:
         CommonContact.__init__(self, logger, jid, account)
 
-        self.settings = GroupChatSettings(account, str(jid))
+        self.settings = GroupChatSettings(account, jid)
 
     @property
     def is_groupchat(self) -> bool:

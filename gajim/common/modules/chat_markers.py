@@ -103,7 +103,7 @@ class ChatMarkers(BaseModule):
     def _send_marker(self, contact, marker, id_, type_):
         jid = contact.jid
         if contact.is_pm_contact:
-            jid = contact.jid.bare
+            jid = contact.jid.new_as_bare()
 
         if type_ in ('gc', 'pm'):
             if not app.settings.get_group_chat_setting(
