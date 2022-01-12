@@ -17,7 +17,7 @@ from __future__ import annotations
 from typing import Any
 from typing import List
 from typing import Optional
-from typing import Union
+from typing import cast
 
 import logging
 
@@ -25,6 +25,7 @@ from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
+
 from nbxmpp.protocol import JID
 
 from gajim.common import app
@@ -63,8 +64,8 @@ class WorkspaceSideBar(Gtk.ListBox):
             Gdk.DragAction.MOVE)
 
         self.drag_row: Optional[Workspace] = None
-        self.row_before: Optional[Workspace] = None
-        self.row_after: Union[Workspace, AddWorkspace, None] = None
+        self.row_before: Optional[CommonWorkspace] = None
+        self.row_after: Optional[CommonWorkspace] = None
 
         self.connect('drag-motion', self._on_drag_motion)
         self.connect('drag-data-received', self._on_drag_data_received)
@@ -86,7 +87,7 @@ class WorkspaceSideBar(Gtk.ListBox):
                         y_coord: int,
                         _time: int
                         ) -> bool:
-        row = self.get_row_at_y(y_coord)
+        row = cast(CommonWorkspace, self.get_row_at_y(y_coord))
 
         if row:
             alloc = row.get_allocation()
@@ -128,7 +129,9 @@ class WorkspaceSideBar(Gtk.ListBox):
     def _process_workspace_drop(self, workspace_id: str) -> None:
         row = self.get_workspace_by_id(workspace_id)
 
-        if row in (self.row_after, None):
+        if row == self.row_after:
+            return
+        if row is None:
             return
 
         self.remove(row)
@@ -146,7 +149,7 @@ class WorkspaceSideBar(Gtk.ListBox):
 
     def _process_chat_list_drop(self, identifier: str, y_coord: int) -> None:
         account, jid = identifier.split()
-        workspace_row = self.get_row_at_y(y_coord)
+        workspace_row = cast(Workspace, self.get_row_at_y(y_coord))
         if workspace_row.workspace_id == 'add':
             return
 
@@ -156,15 +159,25 @@ class WorkspaceSideBar(Gtk.ListBox):
         app.window.activate_action('move-chat-to-workspace',
                                    params.to_variant())
 
-    def _get_row_before(self, row):
-        return self.get_row_at_index(row.get_index() - 1)
+    def _get_row_before(self,
+                        row: CommonWorkspace
+                        ) -> Optional[CommonWorkspace]:
+        workspace = cast(
+            CommonWorkspace, self.get_row_at_index(row.get_index() - 1))
+        return workspace
 
-    def _get_row_after(self, row):
-        return self.get_row_at_index(row.get_index() + 1)
+    def _get_row_after(self,
+                       row: CommonWorkspace
+                       ) -> Optional[CommonWorkspace]:
+        workspace = cast(
+            CommonWorkspace, self.get_row_at_index(row.get_index() + 1))
+        return workspace
 
     def _get_last_workspace_row(self) -> Workspace:
         # Calling len(children) would include AddWorkspace
-        return self.get_row_at_index(len(self.get_children()) - 1)
+        last_workspace = cast(
+            Workspace, self.get_row_at_index(len(self.get_children()) - 1))
+        return last_workspace
 
     def set_drag_row(self, row: Workspace) -> None:
         self.drag_row = row
@@ -185,7 +198,7 @@ class WorkspaceSideBar(Gtk.ListBox):
 
     @staticmethod
     def _on_row_activated(_listbox: Gtk.ListBox,
-                          row: Union[Workspace, AddWorkspace]
+                          row: CommonWorkspace
                           ) -> None:
         if row.workspace_id == 'add':
             open_window('WorkspaceDialog')
@@ -199,7 +212,9 @@ class WorkspaceSideBar(Gtk.ListBox):
         self.insert(row, len(self.get_children()) - 1)
 
     def store_workspace_order(self) -> None:
-        order = [row.workspace_id for row in self.get_children()]
+        workspaces: list[CommonWorkspace] = cast(
+            list[CommonWorkspace], self.get_children())
+        order: list[str] = [row.workspace_id for row in workspaces]
         order.remove('add')
         app.settings.set_app_setting('workspace_order', order)
 
@@ -211,7 +226,7 @@ class WorkspaceSideBar(Gtk.ListBox):
         return True
 
     def activate_workspace(self, workspace_id: str) -> None:
-        row = self.get_selected_row()
+        row = cast(CommonWorkspace, self.get_selected_row())
         if row is not None and row.workspace_id == workspace_id:
             return
 
@@ -219,17 +234,24 @@ class WorkspaceSideBar(Gtk.ListBox):
         self.select_row(row)
 
     def get_active_workspace(self) -> Optional[str]:
-        row = self.get_selected_row()
+        row = cast(CommonWorkspace, self.get_selected_row())
         if row is None:
             return None
         return row.workspace_id
 
     def get_first_workspace(self) -> str:
-        for row in self.get_children():
+        workspaces: list[CommonWorkspace] = cast(
+            list[CommonWorkspace], self.get_children())
+        for row in workspaces:
             return row.workspace_id
+        return ''
 
-    def get_workspace_by_id(self, workspace_id: str) -> Optional[Workspace]:
-        for row in self.get_children():
+    def get_workspace_by_id(self,
+                            workspace_id: str
+                            ) -> Optional[CommonWorkspace]:
+        workspaces: list[CommonWorkspace] = cast(
+            list[CommonWorkspace], self.get_children())
+        for row in workspaces:
             if row.workspace_id == workspace_id:
                 return row
         return None
@@ -296,8 +318,8 @@ class Workspace(CommonWorkspace):
         menu = self._get_workspace_menu()
 
         rectangle = Gdk.Rectangle()
-        rectangle.x = event.x
-        rectangle.y = event.y
+        rectangle.x = int(event.x)
+        rectangle.y = int(event.y)
         rectangle.width = rectangle.height = 1
 
         popover = Gtk.Popover.new_from_model(self, menu)
@@ -337,9 +359,10 @@ class Workspace(CommonWorkspace):
         scale = self.get_scale_factor()
         surface = app.interface.avatar_storage.get_workspace_surface(
             self.workspace_id, AvatarSize.WORKSPACE, scale)
-        Gtk.drag_set_icon_surface(drag_context, surface)
+        if surface is not None:
+            Gtk.drag_set_icon_surface(drag_context, surface)
 
-        listbox = self.get_parent()
+        listbox = cast(WorkspaceSideBar, self.get_parent())
         listbox.set_drag_row(self)
 
     def _on_drag_data_get(self,
