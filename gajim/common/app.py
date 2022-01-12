@@ -44,6 +44,7 @@ import nbxmpp
 from nbxmpp.idlequeue import IdleQueue
 from gi.repository import Gdk
 from gi.repository import GLib
+from gi.repository import GObject
 
 import gajim
 from gajim.common import types
@@ -669,6 +670,15 @@ def check_finalize(obj: Any) -> None:
     logger = logging.getLogger('gajim.leak')
     finalizer = weakref.finalize(obj, logger.info, f'{name} has been finalized')
 
+    g_objects: list[str] = []
+    if isinstance(obj, GObject.Object):
+        g_objects.append(name)
+
+        def g_object_finalized():
+            g_objects.remove(name)
+
+        obj.weak_ref(g_object_finalized)
+
     def is_finalizer_ref(ref):
         try:
             return isinstance(ref[2][0], str)
@@ -677,6 +687,11 @@ def check_finalize(obj: Any) -> None:
 
     def check_finalized():
         gc.collect()
+        gc.collect()
+
+        if g_objects:
+            logger.warning('GObject not finalized: %s', name)
+
         tup = finalizer.peek()
         if tup is None:
             return
