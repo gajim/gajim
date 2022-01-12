@@ -12,6 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
 from typing import Optional
 
 from gi.repository import Gtk
@@ -79,18 +80,19 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
 
         self._ui.connect_signals(self)
 
-        self.connect('key-press-event', self._on_key_press_event)
+        self.connect('key-press-event', self._on_key_press)
         self.show_all()
 
-    def _on_key_press_event(self, _widget, event):
+    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
-    def _on_remove_workspace(self, _button):
+    def _on_remove_workspace(self, _button: Gtk.Button) -> None:
         def _on_remove():
+            assert self._workspace_id is not None
             app.window.remove_workspace(self._workspace_id)
             self.destroy()
-
+        assert self._workspace_id is not None
         chat_list = app.window.get_chat_list(self._workspace_id)
         open_chats = chat_list.get_open_chats()
         if len(open_chats) > 0:
@@ -106,22 +108,24 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         # No chats in chat list, it is save to remove workspace
         _on_remove()
 
-    def _on_cancel(self, _button):
+    def _on_cancel(self, _button: Gtk.Button) -> None:
         self.destroy()
 
-    def _on_color_set(self, _button):
+    def _on_color_set(self, _button: Gtk.ColorButton) -> None:
         self._update_avatar()
 
-    def _on_text_changed(self, entry, _param):
+    def _on_text_changed(self, entry: Gtk.Entry, _param: Any) -> None:
         self._ui.save_button.set_sensitive(bool(entry.get_text()))
         self._update_avatar()
 
-    def _on_image_switch_toggled(self, switch, *args):
+    def _on_image_switch_toggled(self, switch: Gtk.Switch, *args: Any) -> None:
         if switch.get_active():
             self._ui.style_stack.set_visible_child_name('image')
             if self._workspace_id is not None:
                 self._avatar_sha = app.settings.get_workspace_setting(
                     self._workspace_id, 'avatar_sha')
+                if self._avatar_sha == '':
+                    self._avatar_sha = None
         else:
             self._ui.style_stack.set_visible_child_name('color')
             self._avatar_sha = None
@@ -132,6 +136,7 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         rgba = self._ui.color_chooser.get_rgba()
         scale = self.get_scale_factor()
         if self._avatar_sha is not None:
+            assert self._workspace_id is not None
             surface = app.interface.avatar_storage.get_workspace_surface(
                 self._workspace_id,
                 AvatarSize.WORKSPACE_EDIT,
@@ -154,7 +159,7 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
 
         return data
 
-    def _on_save(self, _button):
+    def _on_save(self, _button: Gtk.Button) -> None:
         name = self._ui.entry.get_text()
         rgba = self._ui.color_chooser.get_rgba()
         use_image = self._ui.image_switch.get_active()
