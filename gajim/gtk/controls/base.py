@@ -570,7 +570,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             self._client.get_module('ChatMarkers').send_displayed_marker(
                 self.contact,
                 self.last_msg_id,
-                self._type)
+                str(self._type))
             self.last_msg_id = None
 
     def change_encryption(self,

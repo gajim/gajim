@@ -14,10 +14,15 @@
 
 # Chat Markers (XEP-0333)
 
+from __future__ import annotations
+
+from typing import Any
+
 from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.events import DisplayedReceived
 from gajim.common.events import ReadStateSync
 from gajim.common.modules.base import BaseModule
@@ -28,8 +33,8 @@ class ChatMarkers(BaseModule):
 
     _nbxmpp_extends = 'ChatMarkers'
 
-    def __init__(self, con):
-        BaseModule.__init__(self, con)
+    def __init__(self, client: types.Client):
+        BaseModule.__init__(self, client)
 
         self.handlers = [
             StanzaHandler(name='message',
@@ -38,7 +43,11 @@ class ChatMarkers(BaseModule):
                           priority=47),
         ]
 
-    def _process_chat_marker(self, _con, _stanza, properties):
+    def _process_chat_marker(self,
+                             _client: types.xmppClient,
+                             _stanza: Any,
+                             properties: Any) -> None:
+
         if not properties.is_marker or not properties.marker.is_displayed:
             return
 
@@ -46,7 +55,7 @@ class ChatMarkers(BaseModule):
             return
 
         if properties.type.is_groupchat:
-            contact = self._con.get_module('Contacts').get_contact(
+            contact = self._client.get_module('Contacts').get_contact(
                 properties.muc_jid,
                 groupchat=True)
             if not contact.is_joined:
@@ -64,12 +73,12 @@ class ChatMarkers(BaseModule):
             return
 
         if properties.is_mam_message:
-            if properties.from_.bare_match(self._con.get_own_jid()):
+            if properties.from_.bare_match(self._client.get_own_jid()):
                 return
 
         self._raise_event('displayed-received', properties)
 
-    def _raise_event(self, name, properties):
+    def _raise_event(self, name: str, properties: Any) -> None:
         self._log.info('%s: %s %s',
                        name,
                        properties.jid,
@@ -100,7 +109,12 @@ class ChatMarkers(BaseModule):
                         is_muc_pm=properties.is_muc_pm,
                         marker_id=properties.marker.id))
 
-    def _send_marker(self, contact, marker, id_, type_):
+    def _send_marker(self,
+                     contact: types.ChatContacts,
+                     marker: str,
+                     id_: str,
+                     type_: str) -> None:
+
         jid = contact.jid
         if contact.is_pm_contact:
             jid = contact.jid.new_as_bare()
@@ -121,8 +135,11 @@ class ChatMarkers(BaseModule):
                                   type_=typ,
                                   marker=(marker, id_),
                                   play_sound=False)
-        self._con.send_message(message)
+        self._client.send_message(message)
         self._log.info('Send %s: %s', marker, contact.jid)
 
-    def send_displayed_marker(self, contact, id_, type_):
-        self._send_marker(contact, 'displayed', id_, str(type_))
+    def send_displayed_marker(self,
+                              contact: types.ChatContacts,
+                              id_: str,
+                              type_: str) -> None:
+        self._send_marker(contact, 'displayed', id_, type_)
