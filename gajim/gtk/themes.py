@@ -326,6 +326,8 @@ class Themes(Gtk.ApplicationWindow):
 
             app.css_config.remove_theme(theme)
             self._update_preferences_window()
+            assert isinstance(store, Gtk.TreeStore)
+            assert iter_ is not None
             store.remove(iter_)
 
             first = store.get_iter_first()
@@ -364,8 +366,10 @@ class Option(Gtk.ListBoxRow):
         self._box.add(label)
 
         if option.attr in (StyleAttr.COLOR, StyleAttr.BACKGROUND):
+            assert not isinstance(value, Pango.FontDescription)
             self._init_color(value)
         elif option.attr == StyleAttr.FONT:
+            assert not isinstance(value, str)
             self._init_font(value)
 
         remove_button = Gtk.Button.new_from_icon_name(
@@ -378,7 +382,7 @@ class Option(Gtk.ListBoxRow):
         self.add(self._box)
         self.show_all()
 
-    def _init_color(self, color: str) -> None:
+    def _init_color(self, color: Optional[str]) -> None:
         color_button = Gtk.ColorButton()
         if color is not None:
             rgba = Gdk.RGBA()
@@ -388,7 +392,7 @@ class Option(Gtk.ListBoxRow):
         color_button.connect('color-set', self._on_color_set)
         self._box.add(color_button)
 
-    def _init_font(self, desc: Pango.FontDescription) -> None:
+    def _init_font(self, desc: Optional[Pango.FontDescription]) -> None:
         font_button = Gtk.FontButton()
         if desc is not None:
             font_button.set_font_desc(desc)
@@ -402,24 +406,29 @@ class Option(Gtk.ListBoxRow):
         app.css_config.set_value(
             self.option.selector, self.option.attr, color_string, pre=True)
         app.ged.raise_event(StyleChanged())
-        self.get_toplevel().reload_roster_theme()
+        themes_win = cast(Themes, self.get_toplevel())
+        themes_win.reload_roster_theme()
 
     def _on_font_set(self, font_button: Gtk.FontButton) -> None:
         desc = font_button.get_font_desc()
+        if desc is None:
+            return
         app.css_config.set_font(self.option.selector, desc, pre=True)
         app.ged.raise_event(StyleChanged())
-        self.get_toplevel().reload_roster_theme()
+        themes_win = cast(Themes, self.get_toplevel())
+        themes_win.reload_roster_theme()
 
     def _on_remove(self, *args: Any) -> None:
-        self.get_parent().remove(self)
+        listbox = cast(Gtk.ListBox, self.get_parent())
+        listbox.remove(self)
         app.css_config.remove_value(
             self.option.selector, self.option.attr, pre=True)
         app.ged.raise_event(StyleChanged())
         self.destroy()
 
-    def __eq__(self, other):
-        if isinstance(other, ChooseOption):
-            return other.option == self.option
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, ChooseOption):
+            raise NotImplementedError
         return other.option == self.option
 
 
