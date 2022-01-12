@@ -70,13 +70,14 @@ class VideoPreview:
             self._set_error_text()
             return
 
-        sink, widget, name = create_gtk_widget()
-        if sink is None:
+        gtk_widget = create_gtk_widget()
+        if gtk_widget is None:
             log.error('Failed to obtain a working Gstreamer GTK+ sink, '
                       'video support will be disabled')
             self._set_error_text()
             return
 
+        sink, widget, name = gtk_widget
         self._set_sink_text(name)
 
         if self._av_pipeline is None:
@@ -94,6 +95,7 @@ class VideoPreview:
         self._ui.video_preview_box.pack_end(widget, True, True, 0)
         self._av_widget = widget
 
+        assert self._av_src is not None
         self._av_pipeline.add(self._av_src)
         self._av_src.link(self._av_sink)
         self._av_pipeline.set_state(Gst.State.PLAYING)

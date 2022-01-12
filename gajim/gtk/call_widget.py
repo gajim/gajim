@@ -471,8 +471,10 @@ class CallWidget(Gtk.Box):
                 self._ui.outgoing_viewport.set_no_show_all(True)
                 self._ui.outgoing_viewport.hide()
 
-            sink_other, self._video_widget_other, _name = create_gtk_widget()
-            sink_self, self._video_widget_self, _name = create_gtk_widget()
+            other_gtk_widget = create_gtk_widget()
+            self_gtk_widget = create_gtk_widget()
+            sink_other, self._video_widget_other, _name = other_gtk_widget
+            sink_self, self._video_widget_self, _name = self_gtk_widget
             self._ui.incoming_viewport.add(self._video_widget_other)
             self._ui.outgoing_viewport.add(self._video_widget_self)
 

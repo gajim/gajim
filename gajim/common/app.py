@@ -231,8 +231,8 @@ def detect_dependencies() -> None:
             conference = Gst.ElementFactory.make('fsrtpconference', None)
             conference.new_session(Farstream.MediaType.AUDIO)
             from gajim.gui.gstreamer import create_gtk_widget
-            sink, _, _ = create_gtk_widget()
-            if sink is not None:
+            gtk_widget = create_gtk_widget()
+            if gtk_widget is not None:
                 _dependencies['AV'] = True
     except Exception as error:
         log('gajim').warning('AV dependency test failed: %s', error)
