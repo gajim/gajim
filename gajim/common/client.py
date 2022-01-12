@@ -55,6 +55,7 @@ from gajim.common.helpers import Observable
 from gajim.common.idle import Monitor
 from gajim.common.idle import IdleMonitorManager
 from gajim.common.i18n import _
+from gajim.common.structs import OutgoingMessage
 
 from gajim.gui.util import open_window
 
@@ -471,13 +472,13 @@ class Client(Observable):
         app.ged.raise_event(SignedIn(account=self._account, conn=self))
         modules.send_stored_publish(self._account)
 
-    def send_stanza(self, stanza):
+    def send_stanza(self, stanza: Any) -> None:
         """
         Send a stanza untouched
         """
         return self._client.send_stanza(stanza)
 
-    def send_message(self, message):
+    def send_message(self, message: OutgoingMessage) -> None:
         if not self._state.is_available:
             log.warning('Trying to send message while offline')
             return
@@ -504,7 +505,7 @@ class Client(Observable):
                                            message,
                                            self._send_message)
 
-    def _send_message(self, message):
+    def _send_message(self, message: OutgoingMessage) -> None:
         message.set_sent_timestamp()
         message.message_id = self.send_stanza(message.stanza)
 
@@ -525,7 +526,7 @@ class Client(Observable):
 
         self.get_module('Message').log_message(message)
 
-    def send_messages(self, jids, message):
+    def send_messages(self, jids: list[JID], message: OutgoingMessage) -> None:
         if not self._state.is_available:
             log.warning('Trying to send message while offline')
             return
