@@ -43,6 +43,7 @@ class BaseModule(EventHelper):
 
         EventHelper.__init__(self)
         self._con = con
+        self._client = con
         self._account = con.account
         self._log = self._set_logger(plugin)
         self._nbxmpp_callbacks: dict[str, Any] = {}
