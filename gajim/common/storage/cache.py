@@ -17,7 +17,6 @@ from __future__ import annotations
 from typing import Any
 from typing import NamedTuple
 from typing import Optional
-from typing import Union
 
 import json
 import time
@@ -101,7 +100,7 @@ class CacheStorage(SqliteStorage):
                                CACHE_SQL_STATEMENT)
 
         self._entity_caps_cache: dict[tuple[str, str], DiscoInfo] = {}
-        self._disco_info_cache: dict[Union[JID, str], DiscoInfo] = {}
+        self._disco_info_cache: dict[JID, DiscoInfo] = {}
         self._muc_cache: dict[JID, dict[str, Any]] = defaultdict(dict)
         self._contact_cache: dict[JID, dict[str, Any]] = defaultdict(dict)
 
@@ -181,7 +180,7 @@ class CacheStorage(SqliteStorage):
     @timeit
     def _fill_disco_info_cache(self) -> None:
         sql = '''SELECT disco_info as "disco_info [disco_info]",
-                 jid, last_seen FROM
+                 jid as "jid [jid]", last_seen FROM
                  last_seen_disco_info'''
         rows = self._con.execute(sql).fetchall()
         for row in rows:
@@ -190,7 +189,7 @@ class CacheStorage(SqliteStorage):
         log.info('%d DiscoInfo entries loaded', len(rows))
 
     def get_last_disco_info(self,
-                            jid: Union[str, JID],
+                            jid: JID,
                             max_age: int = 0) -> Optional[DiscoInfo]:
         """
         Get last disco info from jid
@@ -210,7 +209,7 @@ class CacheStorage(SqliteStorage):
 
     @timeit
     def set_last_disco_info(self,
-                            jid: Union[str, JID],
+                            jid: JID,
                             disco_info: DiscoInfo,
                             cache_only: bool = False) -> None:
         """
