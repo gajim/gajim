@@ -25,7 +25,7 @@ from .builder import get_builder
 
 
 class SynchronizeAccounts(Gtk.ApplicationWindow):
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -82,15 +82,16 @@ class SynchronizeAccounts(Gtk.ApplicationWindow):
 
         self.show_all()
 
-    def _on_key_press(self, _widget, event):
+    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
-    def _init_accounts(self):
+    def _init_accounts(self) -> None:
         """
         Initialize listStore with existing accounts
         """
         model = self._ui.accounts_treeview.get_model()
+        assert isinstance(model, Gtk.ListStore)
         model.clear()
         for remote_account in app.connections:
             if remote_account == self.account:
@@ -104,15 +105,13 @@ class SynchronizeAccounts(Gtk.ApplicationWindow):
                 1,
                 app.get_hostname_from_account(remote_account))
 
-    def _on_next_clicked(self, _widget):
+    def _on_next_clicked(self, _button: Gtk.Button) -> None:
         selection = self._ui.accounts_treeview.get_selection()
         (model, iter_) = selection.get_selected()
         if not iter_:
             return
 
         self._remote_account = model.get_value(iter_, 0)
-        self._remote_client = app.get_client(self._remote_account)
-
         if not app.account_is_available(self._remote_account):
             ErrorDialog(
                 _('This account is not connected to the server'),
@@ -120,24 +119,27 @@ class SynchronizeAccounts(Gtk.ApplicationWindow):
                   'connected.'))
             return
 
+        self._remote_client = app.get_client(self._remote_account)
         self._init_contacts()
         self._ui.stack.set_visible_child_full(
             'contacts', Gtk.StackTransitionType.SLIDE_LEFT)
 
-    def _on_back_clicked(self, _button):
+    def _on_back_clicked(self, _button: Gtk.Button) -> None:
         self._ui.stack.set_visible_child_full(
             'accounts', Gtk.StackTransitionType.SLIDE_RIGHT)
 
     def _init_contacts(self):
         model = self._ui.contacts_treeview.get_model()
+        assert isinstance(model, Gtk.ListStore)
         model.clear()
 
         # recover local contacts
-        local_jid_list = []
+        local_jid_list: list[str] = []
         for contact in self._local_client.get_module('Roster').iter_contacts():
             local_jid_list.append(str(contact.jid))
 
-        remote_jid_list = []
+        remote_jid_list: list[str] = []
+        assert self._remote_client is not None
         for contact in self._remote_client.get_module('Roster').iter_contacts():
             remote_jid_list.append(str(contact.jid))
 
@@ -146,22 +148,26 @@ class SynchronizeAccounts(Gtk.ApplicationWindow):
                 iter_ = model.append()
                 model.set(iter_, 0, True, 1, remote_jid)
 
-    def _on_sync_toggled(self, cell, path):
+    def _on_sync_toggled(self, cell: Gtk.CellRendererToggle, path: str) -> None:
         model = self._ui.contacts_treeview.get_model()
+        assert isinstance(model, Gtk.ListStore)
         iter_ = model.get_iter(path)
         model[iter_][0] = not cell.get_active()
 
-    def _on_sync_clicked(self, _widget):
+    def _on_sync_clicked(self, _button: Gtk.Button) -> None:
+        assert self._remote_account is not None
+        assert self._remote_client is not None
         model = self._ui.contacts_treeview.get_model()
+        assert isinstance(model, Gtk.ListStore)
         iter_ = model.get_iter_first()
         while iter_:
             if model[iter_][0]:
                 # it is selected
                 remote_jid = model[iter_][1]
+                hostname = app.get_hostname_from_account(self._remote_account)
                 message = _('I’m synchronizing my contacts from my account at '
                             '"%s". Could you please add this address to your '
-                            'contact list?' % app.get_hostname_from_account(
-                                self._remote_account))
+                            'contact list?' % hostname)
                 remote_contact = self._remote_client.get_module(
                     'Contacts').get_contact(remote_jid)
 
