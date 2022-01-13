@@ -27,7 +27,7 @@ log = logging.getLogger('gajim.gui.bookmarks')
 
 
 class Bookmarks(Gtk.ApplicationWindow):
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -55,10 +55,13 @@ class Bookmarks(Gtk.ApplicationWindow):
 
         self.show_all()
 
-    def _on_key_press(self, _widget, event):
+    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
     @staticmethod
-    def _search_func(model, _column, search_text, iter_):
+    def _search_func(model: Gtk.TreeModel,
+                     _column: int,
+                     search_text: str,
+                     iter_: Gtk.TreeIter):
         return search_text.lower() not in model[iter_][0].lower()
