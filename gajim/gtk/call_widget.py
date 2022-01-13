@@ -553,7 +553,7 @@ class CallWidget(Gtk.Box):
 
     def _stop_jingle(self,
                      sid: Optional[str] = None,
-                     _reason: Optional[str] = None
+                     reason: Optional[str] = None
                      ) -> None:
         audio_sid = self._jingle['audio'].sid
         video_sid = self._jingle['video'].sid
