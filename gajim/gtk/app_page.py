@@ -12,7 +12,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Optional
+from typing import cast
 
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -103,7 +106,8 @@ class AppMessageListBox(Gtk.ListBox):
 
     def remove_app_message(self, row: Gtk.ListBoxRow) -> None:
         self.remove(row)
-        self.get_parent().remove_app_message()
+        app_page = cast(AppPage, self.get_parent())
+        app_page.remove_app_message()
 
 
 class AppMessageRow(Gtk.ListBoxRow):
@@ -124,15 +128,19 @@ class AppMessageRow(Gtk.ListBoxRow):
 
     def _on_check_clicked(self, _button: Gtk.Button) -> None:
         app.interface.get_latest_release()
-        self.get_parent().remove_app_message(self)
+        list_box = cast(AppMessageListBox, self.get_parent())
+        list_box.remove_app_message(self)
 
     def _on_dismiss_check_clicked(self, _button: Gtk.Button) -> None:
         app.settings.set('check_for_update', False)
-        self.get_parent().remove_app_message(self)
+        list_box = cast(AppMessageListBox, self.get_parent())
+        list_box.remove_app_message(self)
 
     def _on_visit_website_clicked(self, _button: Gtk.Button) -> None:
         open_uri('https://gajim.org/download')
-        self.get_parent().remove_app_message(self)
+        list_box = cast(AppMessageListBox, self.get_parent())
+        list_box.remove_app_message(self)
 
     def _on_dismiss_update_clicked(self, _button: Gtk.Button) -> None:
-        self.get_parent().remove_app_message(self)
+        list_box = cast(AppMessageListBox, self.get_parent())
+        list_box.remove_app_message(self)
