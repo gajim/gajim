@@ -272,7 +272,7 @@ class VariantMixin:
             return str, f'{variant_str}s'
 
         if 'int' in field_type:
-            return str, f'{variant_str}i'
+            return int, f'{variant_str}i'
 
         if 'bool' in field_type:
             return bool, f'{variant_str}b'
