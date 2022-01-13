@@ -274,6 +274,9 @@ class VariantMixin:
         if 'int' in field_type:
             return str, f'{variant_str}i'
 
+        if 'bool' in field_type:
+            return bool, f'{variant_str}b'
+
         if 'JID' in field_type:
             return JID, f'{variant_str}s'
 
