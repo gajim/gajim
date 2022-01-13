@@ -466,13 +466,14 @@ def get_contact_dict_for_account(account: str) -> dict[str, types.BareContact]:
 
 
 def play_sound(sound_event: str,
-               account: str,
+               account: Optional[str] = None,
                force: bool = False,
                loop: bool = False) -> None:
 
     if sound_event is None:
         return
-    if force or allow_sound_notification(account, sound_event):
+    if (force or account is None or
+            allow_sound_notification(account, sound_event)):
         play_sound_file(
             app.settings.get_soundevent_settings(sound_event)['path'], loop)
 
