@@ -14,8 +14,8 @@
 
 from __future__ import annotations
 
-from typing import List
 from typing import Optional
+from typing import cast
 
 from gi.repository import Gtk
 
@@ -34,7 +34,7 @@ class AccountSideBar(Gtk.ListBox):
         self.get_style_context().add_class('account-sidebar')
         self.connect('row-activated', self._on_row_activated)
 
-        self._accounts: List[str] = list(app.connections.keys())
+        self._accounts: list[str] = list(app.connections.keys())
         for account in self._accounts:
             self.add_account(account)
 
@@ -42,7 +42,8 @@ class AccountSideBar(Gtk.ListBox):
         self.add(Account(account))
 
     def remove_account(self, account: str) -> None:
-        for row in self.get_children():
+        accounts = cast(list[Account], self.get_children())
+        for row in accounts:
             if row.account == account:
                 row.destroy()
                 return
@@ -52,7 +53,7 @@ class AccountSideBar(Gtk.ListBox):
         app.window.show_account_page(row.account)
 
     def activate_account_page(self, account: str) -> None:
-        row = self.get_selected_row()
+        row = cast(Account, self.get_selected_row())
         if row is not None and row.account == account:
             return
 
