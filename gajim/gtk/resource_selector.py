@@ -14,7 +14,7 @@
 
 from __future__ import annotations
 from typing import Optional
-from typing import Tuple
+from typing import cast
 
 import locale
 import logging
@@ -23,7 +23,6 @@ from gi.repository import GObject
 from gi.repository import Gtk
 
 from nbxmpp import JID
-from nbxmpp.namespaces import _Namespaces
 from nbxmpp.structs import DiscoInfo
 
 from gajim.common import app
@@ -46,7 +45,7 @@ class ResourceSelector(Gtk.ScrolledWindow):
 
     def __init__(self,
                  contact: BareContact,
-                 constraints: Optional[list[_Namespaces]] = None) -> None:
+                 constraints: Optional[list[str]] = None) -> None:
         Gtk.ScrolledWindow.__init__(self)
         self.set_shadow_type(Gtk.ShadowType.IN)
         self.set_size_request(-1, 200)
@@ -61,7 +60,7 @@ class ResourceSelector(Gtk.ScrolledWindow):
         self._contact.connect('presence-update', self._on_update)
         self._contact.connect('caps-update', self._on_update)
 
-        # Constraints include Namespaces a resource has to support
+        # Constraints include nbxmpp Namespaces a resource has to support
         self._constraints = constraints or []
 
         self._set_placeholder()
@@ -106,13 +105,14 @@ class ResourceSelector(Gtk.ScrolledWindow):
         self._add_entries()
 
     def get_jid(self) -> JID:
-        return self._listbox.get_selected_row().jid
+        resource_row = cast(ResourceRow, self._listbox.get_selected_row())
+        return resource_row.jid
 
 
 class ResourceRow(Gtk.ListBoxRow):
     def __init__(self,
                  resource_contact: ResourceContact,
-                 constraints: list[_Namespaces]
+                 constraints: list[str]
                  ) -> None:
         Gtk.ListBoxRow.__init__(self)
 
@@ -145,7 +145,7 @@ class ResourceRow(Gtk.ListBoxRow):
         box.add(name_label)
 
         for constraint in constraints:
-            if not resource_contact.supports(str(constraint)):
+            if not resource_contact.supports(constraint):
                 self.set_sensitive(False)
                 self.set_tooltip_text(_('This devices is not compatible.'))
 
@@ -154,7 +154,7 @@ class ResourceRow(Gtk.ListBoxRow):
 
     @staticmethod
     def _get_client_identity(disco_info: DiscoInfo
-                             ) -> Tuple[Optional[str], Optional[str]]:
+                             ) -> tuple[Optional[str], Optional[str]]:
         for identity in disco_info.identities:
             if identity.category == 'client':
                 return identity.name, identity.type
