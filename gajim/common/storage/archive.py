@@ -121,6 +121,8 @@ class LastConversationRow(NamedTuple):
 
 
 class SearchLogRow(NamedTuple):
+    account_id: int
+    jid_id: int
     contact_name: str
     time: float
     kind: int
@@ -675,8 +677,8 @@ class MessageArchiveStorage(SqliteStorage):
             users_query_string = 'AND UPPER(contact_name) IN (?)'
 
         sql = '''
-            SELECT contact_name, time, kind, show, message, subject,
-                   additional_data, log_line_id
+            SELECT account_id, jid_id, contact_name, time, kind, show, message,
+                   subject, additional_data, log_line_id
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
             AND message LIKE like(?)
             AND kind NOT IN ({kinds})

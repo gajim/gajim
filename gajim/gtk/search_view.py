@@ -35,6 +35,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
 from gajim.common.const import FILE_CATEGORIES
 from gajim.common.i18n import _
+from gajim.common.storage.archive import SearchLogRow
 
 from .conversation.message_widget import MessageWidget
 from .builder import get_builder
@@ -56,8 +57,8 @@ class SearchView(Gtk.Box):
 
         self._account: Optional[str] = None
         self._jid: Optional[JID] = None
-        self._results: list[str] = []
-        self._scope: Optional[str] = None
+        self._results: list[SearchLogRow] = []
+        self._scope: str = 'everywhere'
 
         self._ui = get_builder('search_view.ui')
         self._ui.results_listbox.set_header_func(self._header_func)
@@ -86,6 +87,9 @@ class SearchView(Gtk.Box):
             else:
                 row.set_header(RowHeader(row.account, row.jid, row.time))
         else:
+            if isinstance(row, CounterRow):
+                row.set_header(None)
+                return
             date1 = time.strftime('%x', time.localtime(row.time))
             date2 = time.strftime('%x', time.localtime(before.time))
             if before.jid != row.jid:
@@ -184,13 +188,13 @@ class SearchView(Gtk.Box):
 
     def _filter_results_for_files(self, filetypes: list[str]) -> None:
         if 'file' in filetypes:
-            results = []
+            results: list[SearchLogRow] = []
             for result in self._results:
                 if result.additional_data.get_value('gajim', 'oob_url'):
                     results.append(result)
             self._results = results
         else:
-            results = []
+            results: list[SearchLogRow] = []
             for result in self._results:
                 url = result.additional_data.get_value('gajim', 'oob_url')
                 if url is None:
@@ -223,11 +227,14 @@ class SearchView(Gtk.Box):
         accounts = self._get_accounts()
         for msg in self._results[:25]:
             if self._scope == 'everywhere':
+                archive_jid = app.storage.archive.get_jid_from_id(msg.jid_id)
                 result_row = ResultRow(
                     msg,
-                    accounts.get(msg.account_id),
-                    app.storage.archive.get_jid_from_id(msg.jid_id).jid)
+                    accounts[msg.account_id],
+                    archive_jid.jid)
             else:
+                assert self._account is not None
+                assert self._jid is not None
                 result_row = ResultRow(msg, self._account, self._jid)
 
             self._ui.results_listbox.add(result_row)
@@ -242,8 +249,8 @@ class SearchView(Gtk.Box):
         self._add_results()
 
     @staticmethod
-    def _get_accounts() -> dict[str, str]:
-        accounts: dict[str, str] = {}
+    def _get_accounts() -> dict[int, str]:
+        accounts: dict[int, str] = {}
         for account in app.settings.get_accounts():
             account_id = app.storage.archive.get_account_id(account)
             accounts[account_id] = account
