@@ -79,6 +79,7 @@ class AudioWidget(Gtk.Box):
         self.show_all()
 
     def _setup_audio_player(self, file_path: Path) -> None:
+        assert self._playbin is not None
         self._playbin.set_property('uri', f'file://{file_path}')
         state_return = self._playbin.set_state(Gst.State.PAUSED)
         if state_return == Gst.StateChangeReturn.FAILURE:
@@ -93,13 +94,17 @@ class AudioWidget(Gtk.Box):
         bus.connect('message', self._on_bus_message)
 
     def _on_bus_message(self, _bus: Gst.Bus, message: Gst.Message) -> None:
+        assert self._playbin is not None
         if message.type == Gst.MessageType.EOS:
             self._set_pause(True)
             self._playbin.seek_simple(
                 Gst.Format.TIME, Gst.SeekFlags.FLUSH, 0)
         elif message.type == Gst.MessageType.STATE_CHANGED:
-            _success, duration = self._playbin.query_duration(
+            success, duration = self._playbin.query_duration(
                 Gst.Format.TIME)
+            if not success:
+                return
+            assert duration is not None
             if duration > 0:
                 self._seek_bar.set_range(0.0, duration)
 
@@ -114,6 +119,7 @@ class AudioWidget(Gtk.Box):
                  _scroll: Gtk.ScrollType,
                  value: float
                  ) -> bool:
+        assert self._playbin is not None
         self._playbin.seek_simple(
             Gst.Format.TIME, Gst.SeekFlags.FLUSH, int(value))
         return False
@@ -122,13 +128,16 @@ class AudioWidget(Gtk.Box):
         self._set_pause(not self._get_paused())
 
     def _on_destroy(self, _widget: Gtk.Widget) -> None:
+        assert self._playbin is not None
         self._playbin.set_state(Gst.State.NULL)
 
     def _get_paused(self) -> bool:
+        assert self._playbin is not None
         _, state, _ = self._playbin.get_state(20)
         return state == Gst.State.PAUSED
 
     def _set_pause(self, paused: bool) -> None:
+        assert self._playbin is not None
         if paused:
             self._playbin.set_state(Gst.State.PAUSED)
             self._play_icon.set_from_icon_name(
@@ -145,6 +154,7 @@ class AudioWidget(Gtk.Box):
             self._has_timeout = False
             return False
 
+        assert self._playbin is not None
         if self._playbin.query(self._query):
             _fmt, cur_pos = self._query.parse_position()
             if cur_pos is not None:
@@ -167,4 +177,6 @@ class AudioWidget(Gtk.Box):
 
     @staticmethod
     def _on_realize(event_box: Gtk.EventBox) -> None:
-        event_box.get_window().set_cursor(get_cursor('pointer'))
+        window = event_box.get_window()
+        if window is not None:
+            window.set_cursor(get_cursor('pointer'))
