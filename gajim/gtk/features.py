@@ -20,7 +20,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import NamedTuple
-from typing import List
+from typing import Optional
 
 import os
 import sys
@@ -38,7 +38,7 @@ class Feature(NamedTuple):
     tooltip: str
     dependency_u: str
     dependency_w: str
-    enabled: bool
+    enabled: Optional[bool]
 
 
 class Features(Gtk.ApplicationWindow):
@@ -77,7 +77,7 @@ class Features(Gtk.ApplicationWindow):
 
     def _on_key_press(self,
                       _widget: Gtk.Widget,
-                      event: Gdk.EventButton) -> None:
+                      event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
@@ -85,7 +85,7 @@ class Features(Gtk.ApplicationWindow):
         item = FeatureItem(feature)
         self.feature_listbox.add(item)
 
-    def _get_features(self) -> List[Feature]:
+    def _get_features(self) -> list[Feature]:
         notification_sounds_available: bool = (
             app.is_installed('GSOUND') or sys.platform in ('win32', 'darwin'))
         notification_sounds_enabled: bool = app.settings.get('sounds_on')
@@ -210,7 +210,7 @@ class FeatureItem(Gtk.Grid):
         self.add(self._icon)
         self.add(self._box)
 
-    def _set_feature(self, available: bool, enabled: bool) -> None:
+    def _set_feature(self, available: bool, enabled: Optional[bool]) -> None:
         self._icon.get_style_context().remove_class('error-color')
         self._icon.get_style_context().remove_class('warning-color')
         self._icon.get_style_context().remove_class('success-color')
@@ -219,7 +219,9 @@ class FeatureItem(Gtk.Grid):
             self._icon.set_from_icon_name(
                 'window-close-symbolic', Gtk.IconSize.MENU)
             self._icon.get_style_context().add_class('error-color')
-        elif enabled is False:
+            return
+
+        if enabled is not None and not enabled:
             self._icon.set_from_icon_name(
                 'dialog-warning-symbolic', Gtk.IconSize.MENU)
             self._box.pack_start(self._label_disabled, True, True, 0)
