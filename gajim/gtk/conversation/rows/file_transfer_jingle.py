@@ -243,8 +243,7 @@ class FileTransferJingleRow(BaseRow):
         elif isinstance(event, FileHashError):
             self._ui.action_stack.set_visible_child_name('hash-error')
             self._ui.transfer_action.set_text(_('File Verification Failed'))
-        elif (isinstance(event, FileRequestError) or
-                isinstance(event, FileSendError)):
+        elif isinstance(event, (FileRequestError, FileSendError)):
             self._ui.action_stack.set_visible_child_name('error')
             self._ui.transfer_action.set_text(_('File Transfer Cancelled'))
             error_text = _('Connection with %s could not be '
