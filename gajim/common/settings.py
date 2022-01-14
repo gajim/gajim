@@ -106,6 +106,7 @@ _SignalCallable = Callable[[Any, str, Optional[str], Optional[JID]], Any]
 _CallbackDict = dict[tuple[str, Optional[str], Optional[JID]],
                      list[weakref.WeakMethod[_SignalCallable]]]
 
+
 class Settings:
     def __init__(self):
         self._con = cast(sqlite3.Connection, None)
@@ -830,7 +831,7 @@ class Settings:
 
         group_chat_settings = self._account_settings[account]['group_chat']
         if jid not in group_chat_settings:
-            group_chat_settings[jid] = {setting: value}
+            group_chat_settings[str(jid)] = {setting: value}
         else:
             group_chat_settings[jid][setting] = value
 
@@ -909,7 +910,7 @@ class Settings:
 
         contact_settings = self._account_settings[account]['contact']
         if jid not in contact_settings:
-            contact_settings[jid] = {setting: value}
+            contact_settings[str(jid)] = {setting: value}
         else:
             contact_settings[jid][setting] = value
 
