@@ -29,6 +29,7 @@ from typing import Any
 from typing import Dict
 from typing import List
 from typing import Optional
+from typing import Union
 
 import os
 import logging
@@ -54,7 +55,10 @@ from gajim.common.helpers import message_needs_highlight
 from gajim.common.helpers import get_file_path_from_dnd_dropped_uri
 from gajim.common.i18n import _
 from gajim.common.ged import EventHelper
+from gajim.common.events import ApplicationEvent
 from gajim.common.events import JingleRequestReceived
+from gajim.common.events import FileRequestReceivedEvent
+from gajim.common.events import FileRequestSent
 from gajim.common.events import Notification
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_retraction_text
@@ -293,7 +297,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def _get_action(self, name: str) -> Gio.SimpleAction:
         return app.window.lookup_action(f'{name}{self.control_id}')
 
-    def process_event(self, event):
+    def process_event(self, event: ApplicationEvent) -> None:
         if event.account != self.account:
             return
 
@@ -311,6 +315,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             if event.name in jingle_av_events:
                 self._process_jingle_av_event(event)
                 return
+
             if event.name in ('file-request-received', 'file-request-sent'):
                 self.add_jingle_file_transfer(event=event)
                 return
@@ -1173,7 +1178,12 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def add_file_transfer(self, transfer: HTTPFileTransfer) -> None:
         self.conversation_view.add_file_transfer(transfer)
 
-    def add_jingle_file_transfer(self, event):
+    def add_jingle_file_transfer(self,
+                                 event: Union[
+                                     FileRequestReceivedEvent,
+                                     FileRequestSent,
+                                     None]
+                                 ) -> None:
         if self._allow_add_message():
             self.conversation_view.add_jingle_file_transfer(event)
 

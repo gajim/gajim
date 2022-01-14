@@ -30,6 +30,8 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Pango
 
+from nbxmpp.protocol import JID
+
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import helpers
@@ -38,12 +40,14 @@ from gajim.common.events import Notification
 from gajim.common.const import KindConstant
 from gajim.common.i18n import _
 from gajim.common.file_props import FilesProp
+from gajim.common.file_props import FileProp
 from gajim.common.helpers import open_file
 from gajim.common.helpers import file_is_locked
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.modules.bytestream import is_transfer_active
 from gajim.common.modules.bytestream import is_transfer_paused
 from gajim.common.modules.bytestream import is_transfer_stopped
+from gajim.common.modules.contacts import BareContact
 
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
@@ -343,7 +347,11 @@ class FileTransfersWindow:
         ErrorDialog(_('File transfer stopped'), sectext)
         self._ui.transfers_list.get_selection().unselect_all()
 
-    def show_hash_error(self, jid, file_props, account):
+    def show_hash_error(self,
+                        jid: JID,
+                        file_props: FileProp,
+                        account: str
+                        ) -> None:
         def _on_yes():
             # Delete old file
             os.remove(file_props.file_name)
@@ -436,7 +444,11 @@ class FileTransfersWindow:
         client = app.get_client(account)
         client.get_module('Bytestream').send_file_approval(file_props)
 
-    def on_file_request_accepted(self, account, contact, file_props):
+    def on_file_request_accepted(self,
+                                 account: str,
+                                 contact: BareContact,
+                                 file_props: FileProp
+                                 ) -> None:
         def _on_accepted(account, contact, file_props, file_path):
             if os.path.exists(file_path):
                 app.settings.set('last_save_dir', os.path.dirname(file_path))
@@ -887,10 +899,10 @@ class FileTransfersWindow:
         file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
         self.cancel_transfer(file_props)
 
-    def cancel_transfer(self, file_props):
+    def cancel_transfer(self, file_props: FileProp) -> None:
         # TODO: does not cancel transfer somehow
         account = file_props.tt_account
-        if account not in app.connections:
+        if account is None or account not in app.connections:
             return
         client = app.get_client(account)
         # Check if we are in a IBB transfer

@@ -12,11 +12,17 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Union
+from typing import Optional
+
 import logging
 import os
 import time
 from datetime import datetime
 
+from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Gtk
 
@@ -24,27 +30,44 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
+from gajim.common.events import FileRequestReceivedEvent
+from gajim.common.events import FileRequestSent
+from gajim.common.events import FileCompleted
+from gajim.common.events import FileProgress
+from gajim.common.events import FileError
+from gajim.common.events import FileHashError
+from gajim.common.events import FileSendError
+from gajim.common.events import FileRequestError
+from gajim.common.events import JingleErrorReceived
+from gajim.common.events import JingleFtCancelledReceived
 from gajim.common.file_props import FileProp
 from gajim.common.file_props import FilesProp
 from gajim.common.helpers import open_file
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import BareContact
+from gajim.common.storage.archive import ConversationRow
 
 from .base import BaseRow
 from ...builder import get_builder
 from ...util import format_eta
 
+TransferEventT = Union[FileRequestReceivedEvent, FileRequestSent]
+
 log = logging.getLogger('gajim.gui.conversation.rows.file_transfer_jingle')
 
 
 class FileTransferJingleRow(BaseRow):
-    def __init__(self, account, contact, event=None, db_message=None):
+    def __init__(self,
+                 account: str,
+                 contact: BareContact,
+                 event: Optional[TransferEventT] = None,
+                 db_message: Optional[ConversationRow] = None
+                 ) -> None:
         BaseRow.__init__(self, account)
 
         self.type = 'file-transfer'
 
-        is_from_db = bool(db_message is not None)
-
-        if is_from_db:
+        if db_message is not None:
             timestamp = db_message.time
         else:
             timestamp = time.time()
@@ -53,12 +76,14 @@ class FileTransferJingleRow(BaseRow):
 
         self._contact = contact
 
-        if is_from_db:
+        if db_message is not None:
             sid = db_message.additional_data.get_value('gajim', 'sid')
+            assert sid is not None
             self._file_props = FilesProp.getFilePropBySid(sid)
             if self._file_props is None:
-                log.debug('File props not found for SID: %s', sid)
+                log.debug('File prop not found for SID: %s', sid)
         else:
+            assert event is not None
             self._file_props = event.file_props
         self._start_time = 0
 
@@ -72,7 +97,7 @@ class FileTransferJingleRow(BaseRow):
         avatar_placeholder.set_valign(Gtk.Align.START)
         self.grid.attach(avatar_placeholder, 0, 0, 1, 1)
 
-        if is_from_db:
+        if db_message is not None:
             if db_message.kind == KindConstant.FILE_TRANSFER_INCOMING:
                 contact = self._contact
                 is_self = True
@@ -81,7 +106,7 @@ class FileTransferJingleRow(BaseRow):
                     str(self._client.get_own_jid().bare))
                 is_self = False
         else:
-            if event.name == 'file-request-sent':
+            if isinstance(event, FileRequestSent):
                 contact = self._client.get_module('Contacts').get_contact(
                     str(self._client.get_own_jid().bare))
                 is_self = False
@@ -91,6 +116,7 @@ class FileTransferJingleRow(BaseRow):
 
         scale = self.get_scale_factor()
         avatar = contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
+        assert not isinstance(avatar, GdkPixbuf.Pixbuf)
         avatar_image = Gtk.Image.new_from_surface(avatar)
         avatar_placeholder.add(avatar_image)
 
@@ -112,9 +138,10 @@ class FileTransferJingleRow(BaseRow):
 
         self.show_all()
 
-        if is_from_db:
+        if db_message is not None:
             self._reconstruct_transfer()
         else:
+            assert event is not None
             self._display_transfer_info(event.name)
 
         if self._file_props is None:
@@ -170,7 +197,7 @@ class FileTransferJingleRow(BaseRow):
             self._ui.file_size.hide()
             return
 
-        file_name = GLib.markup_escape_text(self._file_props.name)
+        file_name = GLib.markup_escape_text(str(self._file_props.name))
         if self._file_props.mime_type:
             file_name = f'{file_name} ({self._file_props.mime_type})'
         self._ui.file_name.set_text(file_name)
@@ -186,8 +213,8 @@ class FileTransferJingleRow(BaseRow):
         self._ui.file_size.set_text(
             GLib.format_size_full(self._file_props.size, self._units))
 
-    def process_event(self, event):
-        if event.name == 'jingle-error-received':
+    def process_event(self, event: TransferEventT) -> None:
+        if isinstance(event, JingleErrorReceived):
             if event.sid != self._file_props.sid:
                 return
             self._ui.action_stack.set_visible_child_name('error')
@@ -195,7 +222,7 @@ class FileTransferJingleRow(BaseRow):
             self._ui.error_label.set_text(event.reason)
             return
 
-        if event.name == 'jingle-ft-cancelled-received':
+        if isinstance(event, JingleFtCancelledReceived):
             if event.sid != self._file_props.sid:
                 return
             self._ui.action_stack.set_visible_child_name('error')
@@ -209,14 +236,15 @@ class FileTransferJingleRow(BaseRow):
         if event.file_props.sid != self._file_props.sid:
             return
 
-        if event.name == 'file-completed':
+        if isinstance(event, FileCompleted):
             self._show_completed()
-        elif event.name == 'file-error':
+        elif isinstance(event, FileError):
             self._show_error(event.file_props)
-        elif event.name == 'file-hash-error':
+        elif isinstance(event, FileHashError):
             self._ui.action_stack.set_visible_child_name('hash-error')
             self._ui.transfer_action.set_text(_('File Verification Failed'))
-        elif event.name in ('file-request-error', 'file-send-error'):
+        elif (isinstance(event, FileRequestError) or
+                isinstance(event, FileSendError)):
             self._ui.action_stack.set_visible_child_name('error')
             self._ui.transfer_action.set_text(_('File Transfer Cancelled'))
             error_text = _('Connection with %s could not be '
@@ -225,7 +253,7 @@ class FileTransferJingleRow(BaseRow):
                 error_text = f'{error_text} ({event.error_msg})'
             self._ui.error_label.set_text(error_text)
 
-        elif event.name == 'file-progress':
+        elif isinstance(event, FileProgress):
             self._update_progress(event.file_props)
 
     def _update_progress(self, file_props: FileProp) -> None:

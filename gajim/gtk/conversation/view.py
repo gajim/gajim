@@ -36,6 +36,8 @@ from nbxmpp.modules.security_labels import Displaymarking
 from gajim.common import app
 from gajim.common.client import Client
 from gajim.common.events import JingleRequestReceived
+from gajim.common.events import FileRequestReceivedEvent
+from gajim.common.events import FileRequestSent
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_start_of_day
@@ -231,7 +233,14 @@ class ConversationView(Gtk.ListBox):
         transfer_row = FileTransferRow(self._account, transfer)
         self._insert_message(transfer_row)
 
-    def add_jingle_file_transfer(self, event=None, db_message=None):
+    def add_jingle_file_transfer(self,
+                                 event: Union[
+                                     FileRequestReceivedEvent,
+                                     FileRequestSent,
+                                     None] = None,
+                                 db_message: Optional[ConversationRow] = None
+                                 ) -> None:
+        assert isinstance(self._contact, BareContact)
         jingle_transfer_row = FileTransferJingleRow(
             self._account, self._contact, event=event, db_message=db_message)
         self._insert_message(jingle_transfer_row)

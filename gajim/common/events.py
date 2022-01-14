@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import typing
 from typing import Any
 from typing import Union
@@ -29,11 +31,13 @@ from nbxmpp.structs import TuneData
 from nbxmpp.const import InviteType
 
 from gajim.common import app
+from gajim.common.file_props import FileProp
 
 if typing.TYPE_CHECKING:
     from gajim.common.helpers import AdditionalDataDict
     from gajim.common.const import KindConstant
     from gajim.common.client import Client
+    from gajim.common.jingle_session import JingleSession
 
 
 @dataclass
@@ -167,14 +171,14 @@ class AdHocCommandActionResponse(ApplicationEvent):
 @dataclass
 class FileProgress(ApplicationEvent):
     name: str = field(init=False, default='file-progress')
-    file_props: Any
+    file_props: FileProp
 
 
 @dataclass
 class FileCompleted(ApplicationEvent):
     name: str = field(init=False, default='file-completed')
     account: str
-    file_props: Any
+    file_props: FileProp
     jid: str
 
 
@@ -182,7 +186,7 @@ class FileCompleted(ApplicationEvent):
 class FileError(ApplicationEvent):
     name: str = field(init=False, default='file-error')
     account: str
-    file_props: Any
+    file_props: FileProp
     jid: str
 
 
@@ -190,7 +194,7 @@ class FileError(ApplicationEvent):
 class FileHashError(ApplicationEvent):
     name: str = field(init=False, default='file-hash-error')
     account: str
-    file_props: Any
+    file_props: FileProp
     jid: str
 
 
@@ -198,7 +202,7 @@ class FileHashError(ApplicationEvent):
 class FileRequestSent(ApplicationEvent):
     name: str = field(init=False, default='file-request-sent')
     account: str
-    file_props: Any
+    file_props: FileProp
     jid: str
 
 
@@ -206,7 +210,7 @@ class FileRequestSent(ApplicationEvent):
 class FileRequestError(ApplicationEvent):
     name: str = field(init=False, default='file-request-error')
     conn: 'Client'
-    file_props: Any
+    file_props: FileProp
     jid: str
     error_msg: str = ''
 
@@ -215,8 +219,9 @@ class FileRequestError(ApplicationEvent):
 class FileSendError(ApplicationEvent):
     name: str = field(init=False, default='file-send-error')
     account: str
-    file_props: Any
+    file_props: FileProp
     jid: str
+    error_msg: str = ''
 
 
 @dataclass
@@ -484,7 +489,7 @@ class JingleEvent(ApplicationEvent):
     jid: str
     sid: str
     resource: str
-    jingle_session: Any
+    jingle_session: JingleSession
 
 
 @dataclass
@@ -651,7 +656,7 @@ class FileRequestReceivedEvent(ApplicationEvent):
     fjid: str = field(init=False)
     account: str = field(init=False)
     jid: str = field(init=False)
-    file_props: Any = field(init=False)
+    file_props: FileProp = field(init=False)
 
     def __post_init__(self):
         from gajim.common.jingle_transport import JingleTransportSocks5

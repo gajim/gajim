@@ -66,7 +66,8 @@ class Iq(BaseModule):
                 app.ged.raise_event(
                     FileSendError(account=self._account,
                                   jid=str(properties.jid),
-                                  file_props=file_props))
+                                  file_props=file_props,
+                                  error_msg=''))
                 self._con.get_module('Bytestream').disconnect_transfer(
                     file_props)
                 raise nbxmpp.NodeProcessed
