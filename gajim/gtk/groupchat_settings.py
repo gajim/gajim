@@ -13,6 +13,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from gi.repository import Gtk
+from nbxmpp.protocol import JID
 
 from gajim.common.const import THRESHOLD_OPTIONS
 from gajim.common.i18n import _
@@ -24,7 +25,7 @@ from .settings import SettingsBox
 
 
 class GroupChatSettings(SettingsBox):
-    def __init__(self, account: str, jid: str) -> None:
+    def __init__(self, account: str, jid: JID) -> None:
         SettingsBox.__init__(self, account, jid)
 
         self.get_style_context().add_class('settings-border')

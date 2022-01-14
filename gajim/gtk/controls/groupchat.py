@@ -459,7 +459,7 @@ class GroupchatControl(BaseControl):
             self._groupchat_settings_box.destroy()
 
         self._groupchat_settings_box = GroupChatSettings(
-            self.account, self.room_jid)
+            self.account, self.contact.jid)
         self._groupchat_settings_box.show_all()
         self.xml.settings_scrolled_box.add(self._groupchat_settings_box)
         self._show_page('muc-settings')
