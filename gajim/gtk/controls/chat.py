@@ -82,7 +82,7 @@ class ChatControl(BaseControl):
 
     # Set a command host to bound to. Every command given through a chat will be
     # processed with this command host.
-    COMMAND_HOST: ClassVar[Type[CommandHost]] = ChatCommands 
+    COMMAND_HOST: ClassVar[Type[CommandHost]] = ChatCommands
 
     def __init__(self, account: str, jid: JID) -> None:
         BaseControl.__init__(self,
