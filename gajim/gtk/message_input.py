@@ -17,17 +17,17 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Dict
-from typing import List
-from typing import Tuple
+from typing import Any
 
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common.styling import process
+from gajim.common.styling import PlainBlock
 
 from .util import scroll_to_end
 
@@ -36,7 +36,7 @@ if app.is_installed('GSPELL'):
 
 UNDO_LIMIT: int = 20
 
-FORMAT_CHARS: Dict[str, str] = {
+FORMAT_CHARS: dict[str, str] = {
     'bold': '*',
     'italic': '_',
     'strike': '~',
@@ -63,7 +63,7 @@ class MessageInputTextView(Gtk.TextView):
 
         self.drag_dest_unset()
 
-        self._undo_list: List[str] = []
+        self._undo_list: list[str] = []
         self.undo_pressed: bool = False
 
         self.get_buffer().create_tag('strong', weight=Pango.Weight.BOLD)
@@ -77,7 +77,7 @@ class MessageInputTextView(Gtk.TextView):
         self.connect('focus-out-event', self._on_focus_out)
         self.connect('destroy', self._on_destroy)
 
-    def _on_destroy(self, *args):
+    def _on_destroy(self, _widget: Gtk.Widget) -> None:
         # We restore the TextView’s drag destination to avoid a GTK warning
         # when closing the control. BaseControl.shutdown() calls destroy()
         # on the control’s main box, causing GTK to recursively destroy the
@@ -88,13 +88,19 @@ class MessageInputTextView(Gtk.TextView):
             None,
             Gdk.DragAction.DEFAULT)
 
-    def _on_focus_in(self, _widget, _event):
+    def _on_focus_in(self,
+                     _widget: Gtk.Widget,
+                     _event: Gdk.EventFocus
+                     ) -> bool:
         self.toggle_speller(True)
         scrolled = self.get_parent()
         scrolled.get_style_context().add_class('message-input-focus')
         return False
 
-    def _on_focus_out(self, _widget, _event):
+    def _on_focus_out(self,
+                      _widget: Gtk.Widget,
+                      _event: Gdk.EventFocus
+                      ) -> bool:
         scrolled = self.get_parent()
         scrolled.get_style_context().remove_class('message-input-focus')
         if not self.has_text():
@@ -114,7 +120,7 @@ class MessageInputTextView(Gtk.TextView):
         self._clear_tags()
         result = process(text)
         for block in result.blocks:
-            if block.name == 'plain':
+            if isinstance(block, PlainBlock):
                 for span in block.spans:
                     start_iter = buf.get_iter_at_offset(span.start)
                     end_iter = buf.get_iter_at_offset(span.end)
@@ -156,7 +162,7 @@ class MessageInputTextView(Gtk.TextView):
         if iter_.get_offset() == buf.get_end_iter().get_offset():
             GLib.idle_add(scroll_to_end, textview.get_parent())
 
-    def _get_active_iters(self) -> Tuple[Gtk.TextIter, Gtk.TextIter]:
+    def _get_active_iters(self) -> tuple[Gtk.TextIter, Gtk.TextIter]:
         buf = self.get_buffer()
         return_val = buf.get_selection_bounds()
         if return_val:  # if something is selected
@@ -213,7 +219,7 @@ class MessageInputTextView(Gtk.TextView):
         if not theme or theme == 'font':
             return
 
-        def _replace(anchor):
+        def _replace(anchor: Gtk.TextChildAnchor) -> None:
             if anchor is None:
                 return
             image = anchor.get_widgets()[0]
@@ -228,14 +234,17 @@ class MessageInputTextView(Gtk.TextView):
         while iter_.forward_char():
             _replace(iter_.get_child_anchor())
 
-    def _replace_char_at_iter(self, iter_, new_char):
+    def _replace_char_at_iter(self,
+                              iter_: Gtk.TextIter,
+                              new_char: str
+                              ) -> None:
         buf = self.get_buffer()
         iter_2 = iter_.copy()
         iter_2.forward_char()
         buf.delete(iter_, iter_2)
         buf.insert(iter_, new_char)
 
-    def insert_emoji(self, codepoint, pixbuf):
+    def insert_emoji(self, codepoint: str, pixbuf: GdkPixbuf.Pixbuf) -> None:
         buf = self.get_buffer()
         if buf.get_char_count():
             # buffer contains text
@@ -254,7 +263,7 @@ class MessageInputTextView(Gtk.TextView):
             self.add_child_at_anchor(image, anchor)
         buf.insert_at_cursor(' ')
 
-    def clear(self, *args):
+    def clear(self, *args: Any) -> None:
         buf = self.get_buffer()
         start, end = buf.get_bounds()
         buf.delete(start, end)
@@ -265,7 +274,7 @@ class MessageInputTextView(Gtk.TextView):
             del self._undo_list[0]
         self.undo_pressed = False
 
-    def undo(self, *args):
+    def undo(self, *args: Any) -> None:
         buf = self.get_buffer()
         if self._undo_list:
             buf.set_text(self._undo_list.pop())
