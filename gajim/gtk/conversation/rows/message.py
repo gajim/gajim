@@ -86,7 +86,7 @@ class MessageRow(BaseRow):
                  marker: Optional[str] = None,
                  error: Optional[StanzaError] = None,
                  encryption_enabled: bool = False,
-                 log_line_id: Optional[str] = None) -> None:
+                 log_line_id: Optional[int] = None) -> None:
 
         BaseRow.__init__(self, account)
         self.type = 'chat'

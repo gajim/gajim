@@ -267,7 +267,7 @@ class ConversationView(Gtk.ListBox):
                     kind: str,
                     name: str,
                     timestamp: float,
-                    log_line_id: Optional[str] = None,
+                    log_line_id: Optional[int] = None,
                     message_id: Optional[str] = None,
                     stanza_id: Optional[str] = None,
                     display_marking: Optional[Displaymarking] = None,

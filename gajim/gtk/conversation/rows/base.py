@@ -36,7 +36,7 @@ class BaseRow(Gtk.ListBoxRow):
         self.kind: str = ''
         self.name: str = ''
         self.message_id: Optional[str] = None
-        self.log_line_id: Optional[str] = None
+        self.log_line_id: Optional[int] = None
         self.stanza_id: Optional[str] = None
         self.text: str = ''
         self._merged: bool = False
