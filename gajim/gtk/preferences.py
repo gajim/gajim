@@ -16,6 +16,7 @@ from __future__ import annotations
 from typing import Any
 from typing import Optional
 from typing import cast
+from typing import Type
 
 import logging
 import sys
@@ -77,7 +78,7 @@ class Preferences(Gtk.ApplicationWindow):
 
         self._check_emoji_theme()
 
-        prefs = [
+        prefs: list[tuple[str, Type[PreferenceBox]]] = [
             ('window_behaviour', WindowBehaviour),
             ('chats', Chats),
             ('group_chats', GroupChats),
@@ -111,7 +112,7 @@ class Preferences(Gtk.ApplicationWindow):
     def get_ui(self):
         return self._ui
 
-    def _add_prefs(self, prefs):
+    def _add_prefs(self, prefs: list[tuple[str, Type[PreferenceBox]]]):
         for ui_name, klass in prefs:
             pref_box = getattr(self._ui, ui_name)
             if ui_name == 'video' and sys.platform == 'win32':
@@ -262,6 +263,8 @@ class Chats(PreferenceBox):
         gspell_lang = Gspell.language_lookup(lang)
         if gspell_lang is None:
             gspell_lang = Gspell.language_get_default()
+        if gspell_lang is None:
+            return
         app.settings.set('speller_language', gspell_lang.get_code())
         for ctrl in app.window.get_controls():
             ctrl.set_speller()
@@ -855,7 +858,8 @@ class Video(PreferenceBox):
     def _toggle_live_preview(value: bool, *args: Any) -> None:
         pref_win = cast(Preferences, get_app_window('Preferences'))
         preview = pref_win.get_video_preview()
-        preview.toggle_preview(value)
+        if preview is not None:
+            preview.toggle_preview(value)
 
     @staticmethod
     def _create_av_combo_items(items_dict: dict[str, str]) -> dict[str, str]:
