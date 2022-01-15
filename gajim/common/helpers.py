@@ -847,7 +847,7 @@ class AdditionalDataDict(collections.UserDict):
     def get_value(self,
                   full_path: str,
                   key: str,
-                  default: Optional[str] = None) -> Optional[str]:
+                  default: Optional[str] = None) -> Optional[Any]:
 
         path_childs = self._get_path_childs(full_path)
         _dict = self.data
