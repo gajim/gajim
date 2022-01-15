@@ -26,8 +26,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Dict
-from typing import List
 from typing import Optional
 from typing import Union
 
@@ -49,20 +47,16 @@ from nbxmpp.const import Chatstate
 from nbxmpp.modules.security_labels import Displaymarking
 
 from gajim.common import app
+from gajim.common import events
 from gajim.common import ged
 from gajim.common import i18n
 from gajim.common.helpers import message_needs_highlight
 from gajim.common.helpers import get_file_path_from_dnd_dropped_uri
 from gajim.common.i18n import _
 from gajim.common.ged import EventHelper
-from gajim.common.events import ApplicationEvent
-from gajim.common.events import JingleRequestReceived
-from gajim.common.events import FileRequestReceivedEvent
-from gajim.common.events import FileRequestSent
-from gajim.common.events import Notification
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_retraction_text
-from gajim.common.const import KindConstant
+from gajim.common.const import Direction, KindConstant
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.preview_helpers import filename_from_uri
 from gajim.common.preview_helpers import guess_simple_file_type
@@ -131,7 +125,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         # Initialize it to True so empty textview is saved in undo list
         self.space_pressed: bool = True
 
-        self.handlers: Dict[str, Any] = {}
+        self.handlers: dict[int, Any] = {}
 
         self.account = account
 
@@ -245,9 +239,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self._chat_loaded: bool = False
 
         # the following vars are used to keep history of user's messages
-        self.sent_history: List[str] = []
+        self.sent_history: list[str] = []
         self.sent_history_pos: int = 0
-        self.received_history: List[str] = []
+        self.received_history: list[str] = []
         self.received_history_pos: int = 0
         self.orig_msg: Optional[str] = None
 
@@ -267,7 +261,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         # TODO:
         self.user_nick: Optional[str] = None
 
-        self.command_hits: List[str] = []
+        self.command_hits: list[str] = []
         self.last_key_tabs: bool = False
 
         self.sendmessage: bool = True
@@ -299,26 +293,30 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def _get_action(self, name: str) -> Gio.SimpleAction:
         return app.window.lookup_action(f'{name}{self.control_id}')
 
-    def process_event(self, event: ApplicationEvent) -> None:
+    def process_event(self, event: events.ApplicationEvent) -> None:
         if event.account != self.account:
             return
 
         if event.jid not in (self.contact.jid, self.contact.jid.bare):
             return
 
-        jingle_av_events = [
-            'jingle-request-received',
-            'jingle-connected-received',
-            'jingle-disconnected-received',
-            'jingle-error-received'
-        ]
+        jingle_av_events = (
+            events.JingleRequestReceived,
+            events.JingleConnectedReceived,
+            events.JingleDisconnectedReceived,
+            events.JingleErrorReceived
+        )
+        file_transfer_events = (
+            events.FileRequestReceivedEvent,
+            events.FileRequestSent
+        )
 
         if self.is_chat:
-            if event.name in jingle_av_events:
+            if isinstance(event, jingle_av_events):
                 self._process_jingle_av_event(event)
                 return
 
-            if event.name in ('file-request-received', 'file-request-sent'):
+            if isinstance(event, file_transfer_events):
                 self.add_jingle_file_transfer(event=event)
                 return
 
@@ -326,7 +324,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         method_name = f'_on_{method_name}'
         getattr(self, method_name)(event)
 
-    def _on_message_updated(self, event):
+    def _on_message_updated(self, event: events.MessageUpdated) -> None:
         if hasattr(event, 'correct_id'):
             self.conversation_view.correct_message(
                 event.correct_id, event.msgtxt)
@@ -490,7 +488,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         if self._client.get_module('SecLabels').supported:
             self._client.get_module('SecLabels').request_catalog(jid)
 
-    def _sec_labels_received(self, event):
+    def _sec_labels_received(self, event: events.SecCatalogReceived) -> None:
         if event.account != self.account:
             return
 
@@ -688,7 +686,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
     def on_language_changed(self, checker: Gspell.Checker, _param: Any) -> None:
         gspell_lang = checker.get_language()
-        self.contact.settings.set('speller_language', gspell_lang.get_code())
+        if gspell_lang is not None:
+            self.contact.settings.set('speller_language', gspell_lang.get_code())
 
     def shutdown(self) -> None:
         # remove_gui_extension_point() is called on shutdown, but also when
@@ -730,12 +729,13 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         Override the default context menu and we prepend an option to switch
         languages
         """
+        assert isinstance(menu, Gtk.Menu)
         item = Gtk.MenuItem.new_with_mnemonic(_('_Undo'))
         menu.prepend(item)
         id_ = item.connect('activate', self.msg_textview.undo)
         self.handlers[id_] = item
 
-        item = Gtk.SeparatorMenuItem.new()
+        item = Gtk.SeparatorMenuItem()
         menu.prepend(item)
 
         item = Gtk.MenuItem.new_with_mnemonic(_('_Clear'))
@@ -800,7 +800,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
     def _paste_event_confirmed(self,
                                is_checked: bool,
-                               image: Optional[GdkPixbuf.Pixbuf]
+                               image: GdkPixbuf.Pixbuf
                                ) -> None:
         if is_checked:
             app.settings.set('confirm_paste_image', False)
@@ -904,7 +904,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         if event.get_state() & Gdk.ModifierType.SHIFT_MASK:
             if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and
                     event.keyval == Gdk.KEY_ISO_Left_Tab):
-                app.window.select_next_chat(False, unread_first=True)
+                app.window.select_next_chat(Direction.PREV, unread_first=True)
                 return True
 
             if event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up):
@@ -913,7 +913,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         if event.get_state() & Gdk.ModifierType.CONTROL_MASK:
             if event.keyval == Gdk.KEY_Tab:
-                app.window.select_next_chat(True, unread_first=True)
+                app.window.select_next_chat(Direction.NEXT, unread_first=True)
                 return True
 
         message_buffer = self.msg_textview.get_buffer()
@@ -1185,14 +1185,14 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
     def add_jingle_file_transfer(self,
                                  event: Union[
-                                     FileRequestReceivedEvent,
-                                     FileRequestSent,
+                                     events.FileRequestReceivedEvent,
+                                     events.FileRequestSent,
                                      None]
                                  ) -> None:
         if self._allow_add_message():
             self.conversation_view.add_jingle_file_transfer(event)
 
-    def add_call_message(self, event: JingleRequestReceived) -> None:
+    def add_call_message(self, event: events.JingleRequestReceived) -> None:
         if self._allow_add_message():
             self.conversation_view.add_call_message(event=event)
 
@@ -1203,7 +1203,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                     tim: float,
                     notify: bool,
                     displaymarking: Optional[Displaymarking] = None,
-                    msg_log_id: Optional[str] = None,
+                    msg_log_id: Optional[int] = None,
                     message_id: Optional[str] = None,
                     stanza_id: Optional[str]  =None,
                     additional_data: Optional[AdditionalDataDict] = None
@@ -1287,6 +1287,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 text = f'{file_type} ({file_name})'
 
         sound: Optional[str] = None
+        msg_type = 'chat-message'
         if self.is_chat:
             msg_type = 'chat-message'
             sound = 'first_message_received'
@@ -1318,13 +1319,13 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 text = f'* {name} {text[3:]}'
 
         app.ged.raise_event(
-            Notification(account=self.account,
-                         jid=self.contact.jid,
-                         type='incoming-message',
-                         sub_type=msg_type,
-                         title=title,
-                         text=text,
-                         sound=sound))
+            events.Notification(account=self.account,
+                                jid=self.contact.jid,
+                                type='incoming-message',
+                                sub_type=msg_type,
+                                title=title,
+                                text=text,
+                                sound=sound))
 
     def toggle_emoticons(self) -> None:
         """
@@ -1353,7 +1354,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def _on_emoticon_button_clicked(self, _widget: Gtk.Button) -> None:
         # Present GTK emoji chooser (not cross platform compatible)
         self.msg_textview.emit('insert-emoji')
-        self.xml.emoticons_button.set_property('active', False)
+        self.xml.emoticons_button.set_active(False)
 
     def _on_formatting_menuitem_activate(self,
                                          menu_item: Gtk.CheckMenuItem
@@ -1361,7 +1362,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         formatting = menu_item.get_name()
         self.msg_textview.apply_formatting(formatting)
 
-    def _style_changed(self, *args):
+    def _style_changed(self, _event: events.StyleChanged) -> None:
         self.update_text_tags()
 
     def update_text_tags(self) -> None:
@@ -1493,6 +1494,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             message_text = msg.message
 
             contact_name = msg.contact_name
+            kind = 'incoming'
             if msg.kind in (
                     KindConstant.SINGLE_MSG_RECV, KindConstant.CHAT_MSG_RECV):
                 kind = 'incoming'
@@ -1593,7 +1595,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
 
 class ScrolledWindow(Gtk.ScrolledWindow):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         Gtk.ScrolledWindow.__init__(self, *args, **kwargs)
 
         self.set_overlay_scrolling(False)

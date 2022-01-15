@@ -25,8 +25,8 @@
 
 from __future__ import annotations
 
-from typing import ClassVar  # pylint: disable=unused-import
-from typing import Type  # pylint: disable=unused-import
+from typing import ClassVar
+from typing import Type
 from typing import Optional
 
 import time
@@ -43,11 +43,14 @@ from nbxmpp.modules.security_labels import Displaymarking
 from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
+from gajim.common import events
 from gajim.common import helpers
-from gajim.common.events import JingleRequestReceived
+from gajim.common import types
+from gajim.common.client import Client
 from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.const import AvatarSize
+from gajim.common.const import SimpleClientState
 from gajim.common.const import KindConstant
 from gajim.common.const import PEPEventType
 from gajim.common.jingle_session import JingleSession
@@ -63,7 +66,7 @@ from gajim.gui.util import get_cursor
 from gajim.gui.util import open_window
 
 from gajim.command_system.implementation.hosts import ChatCommands
-from gajim.command_system.framework import CommandHost  # pylint: disable=unused-import
+from gajim.command_system.framework import CommandHost
 
 from ..menus import get_encryption_menu
 from ..menus import get_singlechat_menu
@@ -79,7 +82,7 @@ class ChatControl(BaseControl):
 
     # Set a command host to bound to. Every command given through a chat will be
     # processed with this command host.
-    COMMAND_HOST = ChatCommands  # type: ClassVar[Type[CommandHost]]
+    COMMAND_HOST: ClassVar[Type[CommandHost]] = ChatCommands 
 
     def __init__(self, account: str, jid: JID) -> None:
         BaseControl.__init__(self,
@@ -300,20 +303,35 @@ class ChatControl(BaseControl):
             jid = self.contact.real_jid
         open_window('AddContact', account=self.account, jid=jid)
 
-    def _on_block_contact(self, _action, _param):
+    def _on_block_contact(self,
+                          _action: Gio.SimpleAction,
+                          _param: Optional[GLib.Variant]
+                          ) -> None:
         app.window.block_contact(self.account, self.contact.jid)
 
-    def _on_information(self, _action, _param):
+    def _on_information(self,
+                        _action: Gio.SimpleAction,
+                        _param: Optional[GLib.Variant]
+                        ) -> None:
         app.window.contact_info(self.account, self.contact.jid)
 
-    def _on_invite_contacts(self, _action, _param):
+    def _on_invite_contacts(self,
+                            _action: Gio.SimpleAction,
+                            _param: Optional[GLib.Variant]
+                            ) -> None:
         open_window('AdhocMUC', account=self.account, contact=self.contact)
 
-    def _on_send_chatstate(self, action, param):
+    def _on_send_chatstate(self,
+                           action: Gio.SimpleAction,
+                           param: GLib.Variant
+                           ) -> None:
         action.set_state(param)
         self.contact.settings.set('send_chatstate', param.get_string())
 
-    def _on_send_marker(self, action, param):
+    def _on_send_marker(self,
+                        action: Gio.SimpleAction,
+                        param: GLib.Variant
+                        ) -> None:
         action.set_state(param)
         self.contact.settings.set('send_marker', param.get_boolean())
 
@@ -348,10 +366,10 @@ class ChatControl(BaseControl):
             return self.xml.location_image
         return None
 
-    def _on_tune_received(self, _event):
+    def _on_tune_received(self, _event: events.TuneReceived) -> None:
         self._update_pep(PEPEventType.TUNE)
 
-    def _on_location_received(self, _event):
+    def _on_location_received(self, _event: events.LocationReceived) -> None:
         self._update_pep(PEPEventType.LOCATION)
 
     def _on_nickname_received(self, _event):
@@ -364,19 +382,31 @@ class ChatControl(BaseControl):
             return
         self.xml.phone_image.set_visible(contact.uses_phone)
 
-    def _on_chatstate_update(self, *args):
+    def _on_chatstate_update(self,
+                             _contact: types.BareContact,
+                             _signal_name: str
+                             ) -> None:
         self.draw_banner_text()
 
-    def _on_nickname_update(self, _contact, _signal_name):
+    def _on_nickname_update(self,
+                            _contact: types.BareContact,
+                            _signal_name: str
+                            ) -> None:
         self.draw_banner_text()
 
-    def _on_presence_update(self, _contact, _signal_name):
+    def _on_presence_update(self,
+                            _contact: types.BareContact,
+                            _signal_name: str
+                            ) -> None:
         self._update_avatar()
 
-    def _on_caps_update(self, _contact, _signal_name):
+    def _on_caps_update(self,
+                        _contact: types.BareContact,
+                        _signal_name: str
+                        ) -> None:
         self.update_ui()
 
-    def _on_mam_message_received(self, event):
+    def _on_mam_message_received(self, event: events.MamMessageReceived) -> None:
         if event.properties.is_muc_pm:
             if not event.properties.jid == self.contact.jid:
                 return
@@ -396,7 +426,7 @@ class ChatControl(BaseControl):
                          additional_data=event.additional_data,
                          notify=False)
 
-    def _on_message_received(self, event):
+    def _on_message_received(self, event: events.MessageReceived) -> None:
         if not event.msgtxt:
             return
 
@@ -416,10 +446,10 @@ class ChatControl(BaseControl):
         if kind == 'outgoing':
             self.conversation_view.set_read_marker(event.properties.id)
 
-    def _on_message_error(self, event):
+    def _on_message_error(self, event: events.MessageError) -> None:
         self.conversation_view.show_error(event.message_id, event.error)
 
-    def _on_message_sent(self, event):
+    def _on_message_sent(self, event: events.MessageSent) -> None:
         if not event.message:
             return
 
@@ -453,21 +483,21 @@ class ChatControl(BaseControl):
                          message_id=message_id,
                          additional_data=event.additional_data)
 
-    def _on_receipt_received(self, event):
+    def _on_receipt_received(self, event: events.ReceiptReceived) -> None:
         self.conversation_view.show_receipt(event.receipt_id)
 
-    def _on_displayed_received(self, event):
+    def _on_displayed_received(self, event: events.DisplayedReceived) -> None:
         self.conversation_view.set_read_marker(event.marker_id)
 
-    def _nec_ping(self, event):
+    def _nec_ping(self, event: events.ApplicationEvent):
         if self.contact != event.contact:
             return
-        if event.name == 'ping-sent':
+        if isinstance(event, events.PingSent):
             self.add_info_message(_('Ping?'))
-        elif event.name == 'ping-reply':
+        elif isinstance(event, events.PingReply):
             self.add_info_message(
                 _('Pong! (%s seconds)') % event.seconds)
-        elif event.name == 'ping-error':
+        elif isinstance(event, events.PingError):
             self.add_info_message(event.error)
 
     # Jingle AV calls
@@ -477,7 +507,7 @@ class ChatControl(BaseControl):
                        ) -> None:
         self._call_widget.start_call()
 
-    def _process_jingle_av_event(self, event):
+    def _process_jingle_av_event(self, event: events.JingleEvent) -> None:
         self._call_widget.process_event(event)
 
     def _on_call_accepted(self,
@@ -497,7 +527,7 @@ class ChatControl(BaseControl):
 
     def _add_incoming_call(self,
                            _call_widget: CallWidget,
-                           event: JingleRequestReceived
+                           event: events.JingleRequestReceived
                            ) -> None:
         self.add_call_message(event)
 
@@ -523,7 +553,6 @@ class ChatControl(BaseControl):
         app.window.get_window().set_cursor(cursor)
 
     def update_ui(self) -> None:
-        # The name banner is drawn here
         BaseControl.update_ui(self)
         self.update_toolbar()
         self._update_avatar()
@@ -595,9 +624,9 @@ class ChatControl(BaseControl):
     def add_message(self,
                     text: str,
                     kind: str,
-                    tim: Optional[float] = None,
+                    tim: float,
                     displaymarking: Optional[Displaymarking] = None,
-                    msg_log_id: Optional[str] = None,
+                    msg_log_id: Optional[int] = None,
                     stanza_id: Optional[str] = None,
                     message_id: Optional[str] = None,
                     additional_data: Optional[AdditionalDataDict] = None,
@@ -671,7 +700,10 @@ class ChatControl(BaseControl):
             return
         on_yes(self)
 
-    def _on_avatar_update(self, _contact, _signal_name):
+    def _on_avatar_update(self,
+                          _contact: types.BareContact,
+                          _signal_name: str
+                          ) -> None:
         self._update_avatar()
 
     def _update_avatar(self) -> None:
@@ -679,8 +711,15 @@ class ChatControl(BaseControl):
         surface = self.contact.get_avatar(AvatarSize.CHAT, scale)
         self.xml.avatar_image.set_from_surface(surface)
 
-    def _on_drag_data_received(self, _widget, _context, _x_coord, _y_coord,
-                               selection, target_type, _timestamp):
+    def _on_drag_data_received(self,
+                               _widget: Gtk.Widget,
+                               _context: Gdk.DragContext,
+                               _x_coord: int,
+                               _y_coord: int,
+                               selection: Gtk.SelectionData,
+                               target_type: int,
+                               _timestamp: int
+                               ) -> None:
         if not selection.get_data():
             return
 
@@ -691,7 +730,10 @@ class ChatControl(BaseControl):
             # File drag and drop (handled in chat_control_base)
             self.drag_data_file_transfer(selection)
 
-    def _on_client_state_changed(self, _client, _signal_name, state):
+    def _on_client_state_changed(self,
+                                 _client: Client,
+                                 _signal_name: str,
+                                 state: SimpleClientState):
         self.msg_textview.set_sensitive(state.is_connected)
         self.msg_textview.set_editable(state.is_connected)
 
@@ -700,7 +742,7 @@ class ChatControl(BaseControl):
         self.draw_banner()
         self.update_actions()
 
-    def _on_presence_received(self, event):
+    def _on_presence_received(self, event: events.PresenceReceived) -> None:
         uf_show = helpers.get_uf_show(event.show)
         name = self.contact.name
 
