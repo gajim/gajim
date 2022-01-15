@@ -12,12 +12,17 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
+from typing import Optional
+
 import datetime
 
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import GObject
+
+from nbxmpp.modules.vcard4 import VCard
 
 from gajim.common.i18n import _
 from gajim.common.i18n import Q_
@@ -66,7 +71,7 @@ ADR_PLACEHOLDER_TEXT = {
 }
 
 
-DEFAULT_KWARGS = {
+DEFAULT_KWARGS: dict[str, Any] = {
     'fn': {'value': ''},
     'bday': {'value': '', 'value_type': 'date'},
     'gender': {'sex': '', 'identity': ''},
@@ -126,7 +131,7 @@ TYPE_VALUES = {
 
 
 class VCardGrid(Gtk.Grid):
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
         Gtk.Grid.__init__(self)
 
         self._callbacks = {
@@ -152,15 +157,15 @@ class VCardGrid(Gtk.Grid):
         self.set_halign(Gtk.Align.CENTER)
 
         self._account = account
-        self._row_count = 0
-        self._vcard = None
+        self._row_count: int = 0
+        self._vcard: Optional[VCard] = None
         self._props = []
 
-    def set_editable(self, enabled):
+    def set_editable(self, enabled: bool) -> None:
         for prop in self._props:
             prop.set_editable(enabled)
 
-    def set_vcard(self, vcard):
+    def set_vcard(self, vcard: VCard) -> None:
         self.clear()
         self._vcard = vcard
 
@@ -171,16 +176,16 @@ class VCardGrid(Gtk.Grid):
 
                 self.add_property(prop)
 
-    def get_vcard(self):
+    def get_vcard(self) -> Optional[VCard]:
         return self._vcard
 
-    def validate(self):
+    def validate(self) -> None:
         for prop in list(self._props):
             base_prop = prop.get_base_property()
             if base_prop.is_empty:
                 self.remove_property(prop)
 
-    def add_new_property(self, name):
+    def add_new_property(self, name: str) -> None:
         kwargs = DEFAULT_KWARGS[name]
         prop = self._vcard.add_property(name, **kwargs)
         self.add_property(prop, editable=True)
@@ -201,7 +206,7 @@ class VCardGrid(Gtk.Grid):
         self._props.remove(prop)
         self._vcard.remove_property(prop.get_base_property())
 
-    def clear(self):
+    def clear(self) -> None:
         self._vcard = None
         self._row_count = 0
         for prop in list(self._props):
@@ -209,12 +214,12 @@ class VCardGrid(Gtk.Grid):
 
         self._props = []
 
-    def sort(self):
+    def sort(self) -> None:
         self.set_vcard(self._vcard)
 
 
 class DescriptionLabel(Gtk.Label):
-    def __init__(self, value):
+    def __init__(self, value: str) -> None:
         Gtk.Label.__init__(self, label=LABEL_DICT[value])
         if value == 'adr':
             self.set_valign(Gtk.Align.START)
@@ -231,7 +236,7 @@ class ValueLabel(Gtk.Label):
     def __init__(self, prop, account):
         Gtk.Label.__init__(self)
         self._prop = prop
-        self._uri = None
+        self._uri: Optional[str] = None
         self._account = account
         self.set_selectable(True)
         self.set_xalign(0)
@@ -245,7 +250,7 @@ class ValueLabel(Gtk.Label):
         else:
             self.set_value(prop.value)
 
-    def set_value(self, value):
+    def set_value(self, value: str) -> None:
         if self._prop.name == 'email':
             self._uri = URI(type=URIType.MAIL, data=value)
             self.set_markup(value)
@@ -257,7 +262,7 @@ class ValueLabel(Gtk.Label):
         else:
             self.set_text(value)
 
-    def set_markup(self, text):
+    def set_markup(self, text: str) -> None:
         if not text:
             self.set_text('')
             return
@@ -265,7 +270,7 @@ class ValueLabel(Gtk.Label):
             GLib.markup_escape_text(text),
             GLib.markup_escape_text(text)))
 
-    def _on_activate_link(self, _label, _value):
+    def _on_activate_link(self, _label: Gtk.Label, _value: str) -> int:
         open_uri(self._uri, self._account)
         return Gdk.EVENT_STOP
 
@@ -283,7 +288,7 @@ class SexLabel(Gtk.Label):
 
         self.set_text(prop.sex)
 
-    def set_text(self, value):
+    def set_text(self, value: str) -> None:
         if not value or value == '-':
             super().set_text('')
         else:
@@ -303,7 +308,7 @@ class IdentityLabel(Gtk.Label):
 
         self.set_text(prop.identity)
 
-    def set_text(self, value):
+    def set_text(self, value: str) -> None:
         super().set_text('' if not value else value)
 
 
@@ -359,7 +364,11 @@ class AdrBox(Gtk.Box):
 
         self.show_all()
 
-    def _on_text_changed(self, entry, _param, field):
+    def _on_text_changed(self,
+                         entry: Gtk.Entry,
+                         _param: Any,
+                         field: str
+                         ) -> None:
         self.emit('field-changed', field, entry.get_text())
 
 
@@ -378,7 +387,7 @@ class AdrLabel(Gtk.Label):
             value = values[0]
         self.set_text(value)
 
-    def set_text(self, value):
+    def set_text(self, value: str) -> None:
         self.set_visible(bool(value))
         super().set_text(value)
 
@@ -387,14 +396,14 @@ class AdrBoxReadOnly(Gtk.Box):
     def __init__(self, prop):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=6)
 
-        self._labels = {}
+        self._labels: dict[str, AdrLabel] = {}
 
         for field in ADR_FIELDS:
             label = AdrLabel(prop, field)
             self._labels[field] = label
             self.add(label)
 
-    def set_field(self, field, value):
+    def set_field(self, field: str, value: str) -> None:
         self._labels[field].set_text(value)
 
 
@@ -414,11 +423,11 @@ class ValueTextView(Gtk.TextView):
         self.get_buffer().set_text(prop.value)
         self.get_buffer().connect('notify::text', self._on_text_changed)
 
-    def get_text(self):
+    def get_text(self) -> str:
         start_iter, end_iter = self.get_buffer().get_bounds()
         return self.get_buffer().get_text(start_iter, end_iter, False)
 
-    def _on_text_changed(self, _buffer, _param):
+    def _on_text_changed(self, _buffer: Gtk.TextBuffer, _param: Any) -> None:
         self._prop.value = self.get_text()
 
 
@@ -443,7 +452,10 @@ class TypeComboBox(Gtk.ComboBoxText):
 
         self.connect('notify::active-id', self._on_active_id_changed)
 
-    def _on_active_id_changed(self, _combobox, _param):
+    def _on_active_id_changed(self,
+                              _combobox: Gtk.ComboBox,
+                              _param: Any
+                              ) -> None:
         type_ = self.get_active_id()
         if type_ == '-':
             self._parameters.remove_types(['work', 'home'])
@@ -456,7 +468,7 @@ class TypeComboBox(Gtk.ComboBoxText):
             self._parameters.add_types(['home'])
             self._parameters.remove_types(['work'])
 
-    def get_text(self):
+    def get_text(self) -> str:
         type_value = self.get_active_id()
         if type_value == '-':
             return ''
@@ -496,15 +508,15 @@ class VCardProperty:
     def __init__(self, prop):
         self._prop = prop
 
-        self._second_column = []
-        self._third_column = []
+        self._second_column: list[Gtk.Widget] = []
+        self._third_column: list[Gtk.Widget] = []
 
         self._desc_label = DescriptionLabel(prop.name)
         self._remove_button = RemoveButton()
         self._remove_button.connect('clicked', self._on_remove_clicked)
 
-        self._edit_widgets = [self._remove_button]
-        self._read_widgets = []
+        self._edit_widgets: list[Gtk.Widget] = [self._remove_button]
+        self._read_widgets: list[Gtk.Widget] = []
 
         if prop.name in PROPERTIES_WITH_TYPE:
             self._type_combobox = TypeComboBox(prop.parameters)
@@ -525,38 +537,38 @@ class VCardProperty:
             self._second_column.extend([self._type_combobox, self._type_image])
 
     @staticmethod
-    def _get_icon_name(type_):
+    def _get_icon_name(type_: str) -> Optional[str]:
         if type_ == 'home':
             return 'feather-home'
         if type_ == 'work':
             return 'feather-briefcase'
         return None
 
-    def _on_type_changed(self, _combobox, _param):
+    def _on_type_changed(self, _combobox: Gtk.ComboBox, _param: Any) -> None:
         type_ = self._type_combobox.get_active_id()
         icon_name = self._get_icon_name(type_)
         self._type_image.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
         self._type_image.set_tooltip_text(TYPE_VALUES[type_])
 
-    def _on_remove_clicked(self, button):
+    def _on_remove_clicked(self, button: Gtk.Button) -> None:
         button.get_parent().remove_property(self)
 
     @property
-    def row_number(self):
+    def row_number(self) -> int:
         grid = self._desc_label.get_parent()
         return grid.child_get_property(self._desc_label, 'top-attach')
 
     def get_base_property(self):
         return self._prop
 
-    def set_editable(self, enabled):
+    def set_editable(self, enabled: bool) -> None:
         for widget in self._edit_widgets:
             widget.set_visible(enabled)
 
         for widget in self._read_widgets:
             widget.set_visible(not enabled)
 
-    def add_to_grid(self, grid, row_number):
+    def add_to_grid(self, grid: Gtk.Grid, row_number: int) -> None:
         # child, left, top, width, height
         grid.attach(self._desc_label, 0, row_number, 1, 1)
 
@@ -583,7 +595,7 @@ class TextEntryProperty(VCardProperty):
 
         self._third_column = [self._value_entry, self._value_label]
 
-    def _on_text_changed(self, entry, _param):
+    def _on_text_changed(self, entry: Gtk.Entry, _param: Any) -> None:
         text = entry.get_text()
         if self._prop.name == 'org':
             self._prop.values = [text]
@@ -662,12 +674,12 @@ class DateProperty(VCardProperty):
 
         self._third_column = [self._box, self._value_label]
 
-    def _on_text_changed(self, entry, _param):
+    def _on_text_changed(self, entry: Gtk.Entry, _param: Any) -> None:
         text = entry.get_text()
         self._prop.value = text
         self._value_label.set_value(text)
 
-    def _on_calendar_button_clicked(self, _widget):
+    def _on_calendar_button_clicked(self, _button: Gtk.Button) -> None:
         birthday = self._value_entry.get_text()
         if not birthday:
             return
@@ -679,8 +691,8 @@ class DateProperty(VCardProperty):
         self.calendar.select_month(month, date.year)
         self.calendar.select_day(date.day)
 
-    def _on_calendar_day_selected(self, _widget):
-        year, month, day = self.calendar.get_date()  # Integers
+    def _on_calendar_day_selected(self, _calendar: Gtk.Calendar) -> None:
+        year, month, day = self.calendar.get_date()
         month = python_month(month)
         date_str = datetime.date(year, month, day).strftime('%Y-%m-%d')
         self._value_entry.set_text(date_str)
@@ -712,7 +724,7 @@ class KeyProperty(VCardProperty):
 
         self._third_column = [self._scrolled_window, self._copy_button]
 
-    def _on_copy_clicked(self, _button):
+    def _on_copy_clicked(self, _button: Gtk.Button) -> None:
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         clipboard.set_text(self._value_text_view.get_text(), -1)
 
@@ -748,14 +760,18 @@ class GenderProperty(VCardProperty):
 
         self._third_column = [value_box, label_box]
 
-    def _on_text_changed(self, entry, _param):
+    def _on_text_changed(self, entry: Gtk.Entry, _param: Any) -> None:
         text = entry.get_text()
         self._prop.identity = text
         self._identity_label.set_text(text)
 
-    def _on_active_id_changed(self, combobox, _param):
+    def _on_active_id_changed(self,
+                              combobox: Gtk.ComboBox,
+                              _param: Any
+                              ) -> None:
         sex = combobox.get_active_id()
         self._prop.sex = None if sex == '-' else sex
+        assert sex is not None
         self._sex_label.set_text(sex)
 
 
