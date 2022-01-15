@@ -14,8 +14,8 @@
 
 from __future__ import annotations
 
-import typing
 from typing import Union
+from typing import Any
 
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -29,10 +29,6 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 
 from ...util import wrap_with_event_box
-
-if typing.TYPE_CHECKING:
-    from .message import MessageRow
-
 
 ContactT = Union[BareContact, GroupchatContact, GroupchatParticipant]
 
@@ -49,7 +45,7 @@ class SimpleLabel(Gtk.Label):
 @wrap_with_event_box
 class MoreMenuButton(Gtk.Button):
     def __init__(self,
-                 row: MessageRow,
+                 row: Any,
                  contact: ContactT,
                  name: str
                  ) -> None:

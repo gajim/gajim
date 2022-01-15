@@ -42,11 +42,12 @@ from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_start_of_day
 from gajim.common.jingle_session import JingleSession
-from gajim.common.modules.contacts import GroupchatParticipant
-from gajim.common.modules.contacts import GroupchatContact
-from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive import ConversationRow
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.types import ChatContactT
 
 from .rows.base import BaseRow
 from .rows.read_marker import ReadMarkerRow
@@ -62,11 +63,7 @@ from .rows.muc_subject import MUCSubject
 from .rows.muc_join_left import MUCJoinLeft
 from .rows.muc_user_status import MUCUserStatus
 
-from ..util import scroll_to_end
-
 log = logging.getLogger('gajim.gui.conversation_view')
-
-ContactT = Union[BareContact, GroupchatContact, GroupchatParticipant]
 
 
 class ConversationView(Gtk.ListBox):
@@ -82,19 +79,24 @@ class ConversationView(Gtk.ListBox):
             None,
             (str, )
         ),
-        'accept-call': (
+        'scroll-to-end': (
+            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
+            None,
+            ()
+        ),
+        'call-accepted': (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
             None,
             (object, )
         ),
-        'decline-call': (
+        'call-declined': (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
             None,
             (object, )
         ),
     }
 
-    def __init__(self, account: str, contact: ContactT) -> None:
+    def __init__(self, account: str, contact: ChatContactT) -> None:
         Gtk.ListBox.__init__(self)
         self.set_selection_mode(Gtk.SelectionMode.NONE)
         self.set_sort_func(self._sort_func)
@@ -152,7 +154,7 @@ class ConversationView(Gtk.ListBox):
 
     def clear(self) -> None:
         for row in self.get_children()[2:]:
-            if row.type == 'read_marker':
+            if isinstance(row, ReadMarkerRow):
                 continue
             self.remove(row)
             row.destroy()
@@ -252,6 +254,8 @@ class ConversationView(Gtk.ListBox):
         assert isinstance(self._contact, BareContact)
         call_row = CallRow(
             self._account, self._contact, event=event, db_message=db_message)
+        call_row.connect('call-accepted', self._on_call_accepted)
+        call_row.connect('call-declined', self._on_call_declined)
         self._insert_message(call_row)
 
     def add_command_output(self, text: str, is_error: bool) -> None:
@@ -274,7 +278,7 @@ class ConversationView(Gtk.ListBox):
         if not timestamp:
             timestamp = time.time()
 
-        message = MessageRow(
+        message_row = MessageRow(
             self._account,
             self._contact,
             message_id,
@@ -289,19 +293,20 @@ class ConversationView(Gtk.ListBox):
             error=error,
             encryption_enabled=self.encryption_enabled,
             log_line_id=log_line_id)
+        message_row.connect('mention', self._on_mention)
+        message_row.connect('quote', self._on_quote)
 
-        if message.type == 'chat':
-            if message_id is not None:
-                self._message_id_row_map[message_id] = message
+        if message_id is not None:
+            self._message_id_row_map[message_id] = message_row
 
-            if kind == 'incoming':
-                self._read_marker_row.set_last_incoming_timestamp(
-                    message.timestamp)
-            if (marker is not None and marker == 'displayed'
-                    and message_id is not None):
-                self.set_read_marker(message_id)
+        if kind == 'incoming':
+            self._read_marker_row.set_last_incoming_timestamp(
+                message_row.timestamp)
+        if (marker is not None and marker == 'displayed'
+                and message_id is not None):
+            self.set_read_marker(message_id)
 
-        self._insert_message(message)
+        self._insert_message(message_row)
 
     def _insert_message(self, message: BaseRow) -> None:
         self.add(message)
@@ -327,13 +332,13 @@ class ConversationView(Gtk.ListBox):
         if row is None:
             return
 
-        if row.type != 'chat':
+        if not isinstance(row, MessageRow):
             return
 
         row.set_merged(False)
 
     def _check_for_merge(self, message: BaseRow) -> None:
-        if message.type != 'chat':
+        if not isinstance(message, MessageRow):
             return
 
         if not app.settings.get('chat_merge_consecutive_nickname'):
@@ -354,10 +359,10 @@ class ConversationView(Gtk.ListBox):
             if row is None:
                 return None
 
-            if row.type == 'read_marker':
+            if isinstance(row, ReadMarkerRow):
                 continue
 
-            if row.type != 'chat':
+            if not isinstance(row, MessageRow):
                 return None
 
             if not message.is_same_sender(row):
@@ -367,7 +372,7 @@ class ConversationView(Gtk.ListBox):
                 return row
         return None
 
-    def _update_descendants(self, message: BaseRow) -> None:
+    def _update_descendants(self, message: MessageRow) -> None:
         index = message.get_index()
         while True:
             index += 1
@@ -375,10 +380,10 @@ class ConversationView(Gtk.ListBox):
             if row is None:
                 return
 
-            if row.type == 'read_marker':
+            if isinstance(row, ReadMarkerRow):
                 continue
 
-            if row.type != 'chat':
+            if not isinstance(row, MessageRow):
                 return
 
             if message.is_mergeable(row):
@@ -437,7 +442,7 @@ class ConversationView(Gtk.ListBox):
 
     def scroll_to_message_and_highlight(self, log_line_id: str) -> None:
         highlight_row = None
-        for row in self.get_children():
+        for row in cast(list[BaseRow], self.get_children()):
             row.get_style_context().remove_class(
                 'conversation-search-highlight')
             if row.log_line_id == log_line_id:
@@ -453,26 +458,27 @@ class ConversationView(Gtk.ListBox):
         return self._message_id_row_map.get(id_)
 
     def get_row_by_log_line_id(self, log_line_id: str) -> Optional[MessageRow]:
-        for row in self.get_children():
+        for row in cast(list[BaseRow], self.get_children()):
+            if not isinstance(row, MessageRow):
+                continue
             if row.log_line_id == log_line_id:
                 return row
         return None
 
     def get_row_by_stanza_id(self, stanza_id: str) -> Optional[MessageRow]:
-        for row in self.get_children():
-            if row.type != 'chat':
+        for row in cast(list[BaseRow], self.get_children()):
+            if not isinstance(row, MessageRow):
                 continue
             if row.stanza_id == stanza_id:
                 return row
         return None
 
     def iter_rows(self) -> Generator[BaseRow, None, None]:
-        for row in self.get_children():
+        for row in cast(list[BaseRow], self.get_children()):
             yield row
 
     def update_call_rows(self) -> None:
-        rows = cast(list[BaseRow], self.get_children())
-        for row in rows:
+        for row in cast(list[BaseRow], self.get_children()):
             if isinstance(row, CallRow):
                 row.update()
 
@@ -493,17 +499,18 @@ class ConversationView(Gtk.ListBox):
         self._read_marker_row.set_timestamp(timestamp)
 
     def update_avatars(self) -> None:
-        for row in self.get_children():
-            if row.type == 'chat':
+        for row in cast(list[BaseRow], self.get_children()):
+            if isinstance(row, MessageRow):
                 row.update_avatar()
 
     def update_text_tags(self) -> None:
-        for row in self.get_children():
-            row.update_text_tags()
+        for row in cast(list[BaseRow], self.get_children()):
+            if isinstance(row, MessageRow):
+                row.update_text_tags()
 
     def scroll_to_end(self, force: bool = False) -> None:
         if self.autoscroll or force:
-            GLib.idle_add(scroll_to_end, self.get_parent().get_parent())
+            GLib.idle_add(self.emit, 'scroll-to-end')
 
     def correct_message(self, correct_id: str, text: str) -> None:
         message_row = self._get_row_by_message_id(correct_id)
@@ -527,17 +534,23 @@ class ConversationView(Gtk.ListBox):
             message_row.set_error(to_user_string(error))
             message_row.set_merged(False)
 
-    def on_quote(self, text: str) -> None:
+    def _on_quote(self, _message_row: MessageRow, text: str) -> None:
         self.emit('quote', text)
 
-    def on_mention(self, name: str) -> None:
+    def _on_mention(self, _message_row: MessageRow, name: str) -> None:
         self.emit('mention', name)
 
-    def accept_call(self, session: JingleSession) -> None:
-        self.emit('accept-call', session)
+    def _on_call_accepted(self,
+                          _call_row: CallRow,
+                          session: JingleSession
+                          ) -> None:
+        self.emit('call-accepted', session)
 
-    def decline_call(self, session: JingleSession) -> None:
-        self.emit('decline-call', session)
+    def _on_call_declined(self,
+                          _call_row: CallRow,
+                          session: JingleSession
+                          ) -> None:
+        self.emit('call-declined', session)
 
     def _on_contact_setting_changed(self, *args: Any) -> None:
         self.invalidate_filter()

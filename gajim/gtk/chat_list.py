@@ -13,6 +13,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import annotations
+
 from typing import Optional
 from typing import Any
 from typing import cast
@@ -52,11 +53,9 @@ from gajim.common.helpers import get_retraction_text
 from gajim.common.helpers import get_uf_relative_time
 from gajim.common.helpers import message_needs_highlight
 from gajim.common.helpers import AdditionalDataDict
-from gajim.common.modules.contacts import BareContact
-from gajim.common.modules.contacts import GroupchatContact
-from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.preview_helpers import filename_from_uri
 from gajim.common.preview_helpers import guess_simple_file_type
+from gajim.common.types import ChatContactT
 
 from .menus import get_chat_list_row_menu
 from .builder import get_builder
@@ -65,7 +64,6 @@ from .util import EventHelper
 log = logging.getLogger('gajim.gui.chatlist')
 
 MessageEventT = Union[MessageReceived, GcMessageReceived, MamMessageReceived]
-ContactT = Union[BareContact, GroupchatContact, GroupchatParticipant]
 
 
 class ChatList(Gtk.ListBox, EventHelper):
@@ -746,13 +744,13 @@ class ChatRow(Gtk.ListBoxRow):
         self._pinned = not self._pinned
 
     def _on_presence_update(self,
-                            _contact: ContactT,
+                            _contact: ChatContactT,
                             _signal_name: str
                             ) -> None:
         self.update_avatar()
 
     def _on_avatar_update(self,
-                          _contact: ContactT,
+                          _contact: ChatContactT,
                           _signal_name: str
                           ) -> None:
         self.update_avatar()
@@ -781,7 +779,7 @@ class ChatRow(Gtk.ListBoxRow):
         self._ui.account_identifier.set_visible(show)
 
     def _on_chatstate_update(self,
-                             contact: ContactT,
+                             contact: ChatContactT,
                              _signal_name: str
                              ) -> None:
         if contact.chatstate is None:
@@ -790,7 +788,7 @@ class ChatRow(Gtk.ListBoxRow):
             self._ui.chatstate_image.set_visible(contact.chatstate.is_composing)
 
     def _on_nickname_update(self,
-                            _contact: ContactT,
+                            _contact: ChatContactT,
                             _signal_name: str
                             ) -> None:
         self.update_name()

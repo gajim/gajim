@@ -42,8 +42,6 @@ if TYPE_CHECKING:
     from gajim.common.modules.contacts import GroupchatContact
     from gajim.common.modules.contacts import GroupchatParticipant
 
-    ChatContacts = Union[BareContact, GroupchatContact, GroupchatParticipant]
-
     from gajim.gui_interface import Interface
     from gajim.common.settings import Settings
     from gajim.gtk.css_config import CSSConfig
@@ -70,3 +68,6 @@ GdkPixbufType = Union[GdkPixbuf.Pixbuf, GdkPixbuf.PixbufAnimation]
 
 AnyCallableT = Callable[..., Any]
 ObservableCbDict = dict[str, list[weakref.WeakMethod[AnyCallableT]]]
+
+ChatContactT = Union['BareContact', 'GroupchatContact', 'GroupchatParticipant']
+GroupchatContactT = Union['GroupchatContact']

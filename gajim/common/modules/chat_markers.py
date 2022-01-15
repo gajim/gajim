@@ -110,7 +110,7 @@ class ChatMarkers(BaseModule):
                         marker_id=properties.marker.id))
 
     def _send_marker(self,
-                     contact: types.ChatContacts,
+                     contact: types.ChatContactT,
                      marker: str,
                      id_: str,
                      type_: str) -> None:
@@ -139,7 +139,7 @@ class ChatMarkers(BaseModule):
         self._log.info('Send %s: %s', marker, contact.jid)
 
     def send_displayed_marker(self,
-                              contact: types.ChatContacts,
+                              contact: types.ChatContactT,
                               id_: str,
                               type_: str) -> None:
         self._send_marker(contact, 'displayed', id_, type_)

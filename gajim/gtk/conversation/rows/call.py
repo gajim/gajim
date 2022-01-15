@@ -15,14 +15,13 @@
 from __future__ import annotations
 
 from typing import Optional
-from typing import cast
-from typing import TYPE_CHECKING
 
 import time
 from datetime import datetime
 
 from gi.repository import GdkPixbuf
 from gi.repository import Gtk
+from gi.repository import GObject
 
 from gajim.common import app
 from gajim.common import types
@@ -36,11 +35,22 @@ from gajim.common.storage.archive import ConversationRow
 from .widgets import SimpleLabel
 from .base import BaseRow
 
-if TYPE_CHECKING:
-    from gajim.gui.conversation.view import ConversationView
-
 
 class CallRow(BaseRow):
+
+    __gsignals__ = {
+        'call-accepted': (
+            GObject.SignalFlags.RUN_LAST,
+            None,
+            (object,)
+        ),
+        'call-declined': (
+            GObject.SignalFlags.RUN_LAST,
+            None,
+            (object,)
+        ),
+    }
+
     def __init__(self,
                  account: str,
                  contact: types.BareContact,
@@ -101,24 +111,22 @@ class CallRow(BaseRow):
     def _on_accept(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
         self._decline_button.set_sensitive(False)
-        view = cast('ConversationView', self.get_parent())
         if self._event is not None:
             session = self._client.get_module('Jingle').get_jingle_session(
                 self._event.fjid, self._event.sid)
-            view.accept_call(session)
+            self.emit('call-accepted', session)
         else:
             assert self._session is not None
-            view.accept_call(self._session)
+            self.emit('call-accepted', self._session)
 
     def _on_decline(self, _button: Gtk.Button) -> None:
-        view = cast('ConversationView', self.get_parent())
         if self._event is not None:
             session = self._client.get_module('Jingle').get_jingle_session(
                 self._event.fjid, self._event.sid)
-            view.decline_call(session)
+            self.emit('call-declined', session)
         else:
             assert self._session is not None
-            view.decline_call(self._session)
+            self.emit('call-declined', self._session)
         self._session = None
 
     def _add_history_call_widget(self) -> None:

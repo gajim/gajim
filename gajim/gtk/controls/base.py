@@ -79,8 +79,9 @@ from gajim.gui.message_input import MessageInputTextView
 from gajim.gui.util import get_hardware_key_codes
 from gajim.gui.builder import get_builder
 from gajim.gui.util import set_urgency_hint
+from gajim.gui.util import scroll_to_end
 from gajim.gui.util import AccountBadge
-from gajim.gui.const import ControlType  # pylint: disable=unused-import
+from gajim.gui.const import ControlType
 from gajim.gui.const import TARGET_TYPE_URI_LIST
 from gajim.gui.emoji_chooser import emoji_chooser
 
@@ -188,8 +189,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         # Create ConversationView and connect signals
         self.conversation_view = ConversationView(self.account, self.contact)
-        self.conversation_view.connect('quote', self.on_quote)
-        self.conversation_view.connect('mention', self.on_mention)
+        self.conversation_view.connect('quote', self._on_quote)
+        self.conversation_view.connect('mention', self._on_mention)
+        self.conversation_view.connect('scroll-to-end', self._on_scroll_to_end)
 
         id_ = self.conversation_view.connect(
             'key-press-event', self._on_conversation_view_key_press)
@@ -761,15 +763,18 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             return
         self.insert_as_quote(text)
 
-    def on_quote(self, _widget: Gtk.Widget, text: str) -> None:
+    def _on_quote(self, _view: ConversationView, text: str) -> None:
         self.insert_as_quote(text)
 
-    def on_mention(self, _widget: Gtk.Widget, name: str) -> None:
+    def _on_mention(self, _view: ConversationView, name: str) -> None:
         gc_refer_to_nick_char = app.settings.get('gc_refer_to_nick_char')
         text = f'{name}{gc_refer_to_nick_char} '
         message_buffer = self.msg_textview.get_buffer()
         message_buffer.insert_at_cursor(text)
         GLib.idle_add(self.msg_textview.grab_focus)
+
+    def _on_scroll_to_end(self, _view: ConversationView) -> None:
+        scroll_to_end(self._scrolled_view)
 
     def _on_message_textview_paste_event(self,
                                          _texview: MessageInputTextView

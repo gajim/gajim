@@ -33,10 +33,11 @@ class BaseRow(Gtk.ListBoxRow):
         self._client = app.get_client(account)
         self.type: str = ''
         self.timestamp: datetime = datetime.fromtimestamp(0)
-        self.kind: Optional[str] = None
-        self.name: Optional[str] = None
+        self.kind: str = ''
+        self.name: str = ''
         self.message_id: Optional[str] = None
         self.log_line_id: Optional[str] = None
+        self.stanza_id: Optional[str] = None
         self.text: str = ''
         self._merged: bool = False
 

@@ -15,14 +15,15 @@
 from __future__ import annotations
 
 from typing import Optional
-from typing import Union
 
 from datetime import datetime
 from datetime import timedelta
 
 from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Gtk
+from gi.repository import GObject
 
 import cairo
 
@@ -30,7 +31,6 @@ from nbxmpp.errors import StanzaError
 from nbxmpp.modules.security_labels import Displaymarking
 
 from gajim.common import app
-from gajim.common import types
 from gajim.common.const import AvatarSize
 from gajim.common.const import Trust
 from gajim.common.const import TRUST_SYMBOL_DATA
@@ -42,6 +42,8 @@ from gajim.common.helpers import reduce_chars_newlines
 from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
 from gajim.common.i18n import Q_
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.types import ChatContactT
 
 from .base import BaseRow
 from .widgets import MoreMenuButton
@@ -52,16 +54,27 @@ from ...preview import PreviewWidget
 from ...util import format_fingerprint
 from ...util import get_cursor
 
-
 MERGE_TIMEFRAME = timedelta(seconds=120)
 
 
 class MessageRow(BaseRow):
+
+    __gsignals__ = {
+        'mention': (
+            GObject.SignalFlags.RUN_LAST,
+            None,
+            (str,)
+        ),
+        'quote': (
+            GObject.SignalFlags.RUN_LAST,
+            None,
+            (str,)
+        ),
+    }
+
     def __init__(self,
                  account: str,
-                 contact: Union[types.BareContact,
-                                types.GroupchatContact,
-                                types.GroupchatParticipant],
+                 contact: ChatContactT,
                  message_id: Optional[str],
                  stanza_id: Optional[str],
                  timestamp: float,
@@ -83,7 +96,7 @@ class MessageRow(BaseRow):
         self.stanza_id = stanza_id
         self.log_line_id = log_line_id
         self.kind = kind
-        self.name = name or ''
+        self.name = name
         self.text = text
         self.additional_data = additional_data
 
@@ -216,6 +229,10 @@ class MessageRow(BaseRow):
             self._message_widget.update_text_tags()
 
     def _check_for_highlight(self, text: str) -> None:
+        assert isinstance(self._contact, GroupchatContact)
+        if self._contact.nickname is None:
+            return
+
         needs_highlight = message_needs_highlight(
             text,
             self._contact.nickname,
@@ -224,12 +241,12 @@ class MessageRow(BaseRow):
             self.get_style_context().add_class(
                 'gajim-mention-highlight')
 
-    def _get_avatar(self, kind: str, name: str) -> Optional[cairo.Surface]:
+    def _get_avatar(self, kind: str, name: str) -> Optional[cairo.ImageSurface]:
         if self._contact is None:
             return None
 
         scale = self.get_scale_factor()
-        if self._is_groupchat:
+        if isinstance(self._contact, GroupchatContact):
             contact = self._contact.get_resource(name)
             return contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
 
@@ -239,7 +256,9 @@ class MessageRow(BaseRow):
         else:
             contact = self._contact
 
-        return contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
+        avatar = contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
+        assert not isinstance(avatar, GdkPixbuf.Pixbuf)
+        return avatar
 
     def _on_avatar_clicked(self,
                            _widget: Gtk.Widget,
@@ -247,21 +266,31 @@ class MessageRow(BaseRow):
                            name: str
                            ) -> int:
         if event.type == Gdk.EventType.BUTTON_PRESS and event.button == 1:
-            self.get_parent().on_mention(name)
+            self.emit('mention', name)
         return Gdk.EVENT_STOP
 
     @staticmethod
     def _on_realize(event_box: Gtk.EventBox) -> None:
-        event_box.get_window().set_cursor(get_cursor('pointer'))
+        window = event_box.get_window()
+        if window is not None:
+            window.set_cursor(get_cursor('pointer'))
 
     def is_same_sender(self, message: MessageRow) -> bool:
         return message.name == self.name
 
     def is_same_encryption(self, message: MessageRow) -> bool:
-        message_details = self._get_encryption_details(message.additional_data)
-        own_details = self._get_encryption_details(self.additional_data)
+        m_add_data = message.additional_data
+        if m_add_data is None:
+            m_add_data = AdditionalDataDict()
+        s_add_data = self.additional_data
+        if s_add_data is None:
+            s_add_data = AdditionalDataDict()
+
+        message_details = self._get_encryption_details(m_add_data)
+        own_details = self._get_encryption_details(s_add_data)
         if message_details is None and own_details is None:
             return True
+
         if message_details is not None and own_details is not None:
             # *_details contains encryption method's name, fingerprint, trust
             m_name, _, m_trust = message_details
@@ -270,7 +299,7 @@ class MessageRow(BaseRow):
                 return True
         return False
 
-    def is_mergeable(self, message: BaseRow) -> bool:
+    def is_mergeable(self, message: MessageRow) -> bool:
         if message.type != self.type:
             return False
         if not self.is_same_sender(message):
@@ -286,7 +315,7 @@ class MessageRow(BaseRow):
         clip.set_text(f'{timestamp} - {self.name}: {text}', -1)
 
     def on_quote_message(self, _widget: Gtk.Widget) -> None:
-        self.get_parent().on_quote(self._message_widget.get_text())
+        self.emit('quote', self._message_widget.get_text())
 
     def on_retract_message(self, _widget: Gtk.Widget) -> None:
         def _on_retract(reason: str) -> None:
@@ -324,7 +353,7 @@ class MessageRow(BaseRow):
                 icon = 'channel-secure-symbolic'
                 color = 'encrypted-color'
             else:
-                icon, trust_tooltip, color = TRUST_SYMBOL_DATA[trust]
+                icon, trust_tooltip, color = TRUST_SYMBOL_DATA[Trust(trust)]
                 tooltip = f'{tooltip}\n{trust_tooltip}'
             if fingerprint is not None:
                 fingerprint = format_fingerprint(fingerprint)
@@ -338,13 +367,15 @@ class MessageRow(BaseRow):
 
     @staticmethod
     def _get_encryption_details(additional_data: AdditionalDataDict
-                                ) -> Optional[tuple[str, str, Trust]]:
+                                ) -> Optional[tuple[
+                                    str, Optional[str], Optional[Trust]]]:
         name = additional_data.get_value('encrypted', 'name')
         if name is None:
             return None
 
         fingerprint = additional_data.get_value('encrypted', 'fingerprint')
-        trust = additional_data.get_value('encrypted', 'trust')
+        trust_data = additional_data.get_value('encrypted', 'trust')
+        trust = Trust(trust_data)
         return name, fingerprint, trust
 
     @property

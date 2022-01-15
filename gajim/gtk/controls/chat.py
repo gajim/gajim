@@ -110,8 +110,8 @@ class ChatControl(BaseControl):
         self._call_widget.connect('call-ended', self._on_call_ended)
         self.xml.paned1.add2(self._call_widget)
 
-        self.conversation_view.connect('accept-call', self._on_accept_call)
-        self.conversation_view.connect('decline-call', self._on_decline_call)
+        self.conversation_view.connect('call-accepted', self._on_call_accepted)
+        self.conversation_view.connect('call-declined', self._on_call_declined)
 
         # Menu for the HeaderBar
         self.control_menu = get_singlechat_menu(
@@ -480,16 +480,16 @@ class ChatControl(BaseControl):
     def _process_jingle_av_event(self, event):
         self._call_widget.process_event(event)
 
-    def _on_accept_call(self,
-                        _view: ConversationView,
-                        session: JingleSession
-                        ) -> None:
+    def _on_call_accepted(self,
+                          _view: ConversationView,
+                          session: JingleSession
+                          ) -> None:
         self._call_widget.accept_call(session)
 
-    def _on_decline_call(self,
-                         _view: ConversationView,
-                         session: JingleSession
-                         ) -> None:
+    def _on_call_declined(self,
+                          _view: ConversationView,
+                          session: JingleSession
+                          ) -> None:
         self._call_widget.decline_call(session)
 
     def _on_call_ended(self, _call_widget: CallWidget) -> None:

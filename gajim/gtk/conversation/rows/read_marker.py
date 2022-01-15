@@ -19,14 +19,14 @@ from datetime import timedelta
 
 from gi.repository import Gtk
 
-from gajim.common import types
 from gajim.common.i18n import _
+from gajim.common.types import ChatContactT
 
 from .base import BaseRow
 
 
 class ReadMarkerRow(BaseRow):
-    def __init__(self, account: str, contact: types.BareContact) -> None:
+    def __init__(self, account: str, contact: ChatContactT) -> None:
         BaseRow.__init__(self, account, widget='label')
         self.set_activatable(False)
         self.type = 'read_marker'
@@ -46,7 +46,7 @@ class ReadMarkerRow(BaseRow):
         self.set_no_show_all(True)
 
     def _on_nickname_update(self,
-                            contact: types.BareContact,
+                            contact: ChatContactT,
                             _signal_name: str
                             ) -> None:
         text = _('%s has read up to this point') % contact.name
