@@ -18,8 +18,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import List
-from typing import Tuple
 from typing import Optional
 from typing import Union
 
@@ -31,6 +29,7 @@ from importlib import import_module
 from functools import wraps
 from functools import lru_cache
 from pathlib import Path
+from re import Match
 
 try:
     from PIL import Image
@@ -73,8 +72,8 @@ MenuItemListT = list[tuple[str, str, MenuValueT]]
 class NickCompletionGenerator:
     def __init__(self, self_nick: str) -> None:
         self.nick = self_nick
-        self.sender_list: List[str] = []
-        self.attention_list: List[str] = []
+        self.sender_list: list[str] = []
+        self.attention_list: list[str] = []
 
     def change_nick(self, new_nick: str) -> None:
         self.nick = new_nick
@@ -116,8 +115,8 @@ class NickCompletionGenerator:
                 if contact == contact_old:
                     lst[idx] = contact_new
 
-    def generate_suggestions(self, nicks: List[str],
-                             beginning: str) -> List[str]:
+    def generate_suggestions(self, nicks: list[str],
+                             beginning: str) -> list[str]:
         """
         Generate the order of suggested MUC autocompletions
 
@@ -442,13 +441,13 @@ def convert_rgb_to_hex(rgb_string: str) -> str:
 
 
 @lru_cache(maxsize=1024)
-def convert_rgb_string_to_float(rgb_string: str) -> Tuple[float, float, float]:
+def convert_rgb_string_to_float(rgb_string: str) -> tuple[float, float, float]:
     rgba = Gdk.RGBA()
     rgba.parse(rgb_string)
     return (rgba.red, rgba.green, rgba.blue)
 
 
-def rgba_to_float(rgba: Gdk.RGBA) -> Tuple[float, float, float]:
+def rgba_to_float(rgba: Gdk.RGBA) -> tuple[float, float, float]:
     return (rgba.red, rgba.green, rgba.blue)
 
 
@@ -475,8 +474,9 @@ def get_primary_accel_mod() -> Optional[Gdk.ModifierType]:
     return Gtk.accelerator_parse("<Primary>")[1]
 
 
-def get_hardware_key_codes(keyval: int) -> List[int]:
-    keymap = Gdk.Keymap.get_for_display(Gdk.Display.get_default())
+def get_hardware_key_codes(keyval: int) -> list[int]:
+    display = Gdk.Display.get_default()
+    keymap = Gdk.Keymap.get_for_display(display)
 
     valid, key_map_keys = keymap.get_entries_for_keyval(keyval)
     if not valid:
@@ -556,7 +556,7 @@ def format_fingerprint(fingerprint: str) -> str:
     return buf.rstrip().upper()
 
 
-def find_widget(name: str, container: Gtk.Widget) -> Optional[Gtk.Widget]:
+def find_widget(name: str, container: Gtk.Container) -> Optional[Gtk.Widget]:
     for child in container.get_children():
         if Gtk.Buildable.get_name(child) == name:
             return child
@@ -566,7 +566,7 @@ def find_widget(name: str, container: Gtk.Widget) -> Optional[Gtk.Widget]:
 
 
 class MultiLineLabel(Gtk.Label):
-    def __init__(self, *args: Any, **kwargs: any) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         Gtk.Label.__init__(self, *args, **kwargs)
         self.set_line_wrap(True)
         self.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
@@ -583,7 +583,7 @@ class MaxWidthComboBoxText(Gtk.ComboBoxText):
     def set_max_size(self, size: int) -> None:
         self._max_width = size
 
-    def do_get_preferred_width(self) -> Tuple[int, int]:
+    def do_get_preferred_width(self) -> tuple[int, int]:
         minimum_width, natural_width = Gtk.ComboBoxText.do_get_preferred_width(
             self)
 
@@ -594,7 +594,7 @@ class MaxWidthComboBoxText(Gtk.ComboBoxText):
         return minimum_width, natural_width
 
 
-def text_to_color(text: str) -> Tuple[float, float, float]:
+def text_to_color(text: str) -> tuple[float, float, float]:
     if app.css_config.prefer_dark:
         background = (0, 0, 0)  # RGB (0, 0, 0) black
     else:
@@ -658,7 +658,7 @@ def get_pixbuf_from_data(file_data: bytes) -> Optional[GdkPixbuf.Pixbuf]:
     return pixbuf
 
 
-def scale_with_ratio(size: int, width: int, height: int) -> Tuple[int, int]:
+def scale_with_ratio(size: int, width: int, height: int) -> tuple[int, int]:
     if height == width:
         return size, size
     if height > width:
@@ -721,7 +721,7 @@ def load_pixbuf(path: Union[str, Path],
         return None
 
 
-def get_thumbnail_size(pixbuf: GdkPixbuf.Pixbuf, size: int) -> Tuple[int, int]:
+def get_thumbnail_size(pixbuf: GdkPixbuf.Pixbuf, size: int) -> tuple[int, int]:
     # Calculates the new thumbnail size while preserving the aspect ratio
     image_width = pixbuf.get_width()
     image_height = pixbuf.get_height()
@@ -742,9 +742,10 @@ def get_thumbnail_size(pixbuf: GdkPixbuf.Pixbuf, size: int) -> Tuple[int, int]:
 
 def make_href_markup(string: str) -> str:
     url_color = app.css_config.get_value('.gajim-url', StyleAttr.COLOR)
+    assert isinstance(url_color, str)
     color = convert_rgb_to_hex(url_color)
 
-    def _to_href(match):
+    def _to_href(match: Match) -> str:
         url = match.group()
         if '://' not in url:
             url = 'https://' + url
@@ -754,8 +755,8 @@ def make_href_markup(string: str) -> str:
     return URL_REGEX.sub(_to_href, string)
 
 
-def get_app_windows(account: str) -> List[Gtk.Window]:
-    windows = []
+def get_app_windows(account: str) -> list[Gtk.Window]:
+    windows: list[Gtk.Window] = []
     for win in app.app.get_windows():
         if hasattr(win, 'account'):
             if win.account == account:
@@ -800,12 +801,12 @@ class EventHelper(CommonEventHelper):
         CommonEventHelper.__init__(self)
         self.connect('destroy', self.__on_destroy)  # pylint: disable=no-member
 
-    def __on_destroy(self, *args):
+    def __on_destroy(self, *args: Any) -> None:
         self.unregister_events()
 
 
-def check_destroy(widget):
-    def _destroy(*args):
+def check_destroy(widget: Gtk.Widget) -> None:
+    def _destroy(*args: Any) -> None:
         print('DESTROYED', args)
     widget.connect('destroy', _destroy)
 
