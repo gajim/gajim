@@ -13,9 +13,8 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
-from typing import List
 from typing import Optional
-from typing import Tuple
+from typing import Union
 
 import time
 
@@ -27,6 +26,8 @@ from gi.repository import GtkSource
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common.events import StanzaReceived
+from gajim.common.events import StanzaSent
 from gajim.common.const import Direction
 from gajim.common.i18n import _
 
@@ -237,15 +238,17 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.input_entry.grab_focus()
 
     def _on_input(self, button: Gtk.ToggleButton) -> None:
+        child2 = self._ui.paned.get_child2()
+        assert child2 is not None
         if button.get_active():
-            self._ui.paned.get_child2().show()
+            child2.show()
             self._ui.send.show()
             self._ui.paste.show()
             self._combo.show()
             self._ui.menubutton.show()
             self._ui.input_entry.grab_focus()
         else:
-            self._ui.paned.get_child2().hide()
+            child2.hide()
             self._ui.send.hide()
             self._ui.paste.hide()
             self._combo.hide()
@@ -303,9 +306,9 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self.last_search = search_str
 
     @staticmethod
-    def _get_accounts() -> List[Tuple[str, str]]:
+    def _get_accounts() -> list[tuple[Optional[str], str]]:
         accounts = app.get_accounts_sorted()
-        combo_accounts = []
+        combo_accounts: list[tuple[Optional[str], str]] = []
         for account in accounts:
             label = app.get_account_label(account)
             combo_accounts.append((account, label))
@@ -368,6 +371,8 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         value = not value
         table = self._ui.sourceview.get_buffer().get_tag_table()
         tag = table.lookup(data)
+        if tag is None:
+            return
         if data in ('incoming', 'outgoing'):
             if value:
                 tag.set_priority(table.get_size() - 1)
@@ -375,19 +380,22 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
                 tag.set_priority(0)
         tag.set_property('invisible', value)
 
-    def _nec_stanza_received(self, event):
+    def _nec_stanza_received(self, event: StanzaReceived):
         if self.selected_account is not None:
             if event.account != self.selected_account:
                 return
         self._print_stanza(event, 'incoming')
 
-    def _nec_stanza_sent(self, event):
+    def _nec_stanza_sent(self, event: StanzaSent):
         if self.selected_account is not None:
             if event.account != self.selected_account:
                 return
         self._print_stanza(event, 'outgoing')
 
-    def _print_stanza(self, event, kind):
+    def _print_stanza(self,
+                      event: Union[StanzaReceived, StanzaSent],
+                      kind: str
+                      ) -> None:
         if event.account == 'AccountWizard':
             account_label = 'Account Wizard'
         else:
