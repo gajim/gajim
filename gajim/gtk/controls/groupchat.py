@@ -1465,12 +1465,12 @@ class GroupchatControl(BaseControl):
                                              ) -> bool:
         # pylint: disable=too-many-nested-blocks
         res = BaseControl._on_message_textview_key_press_event(
-            self, widget, event)
+            self, textview, event)
         if res:
             return True
 
         if event.keyval == Gdk.KEY_Tab:  # TAB
-            message_buffer = widget.get_buffer()
+            message_buffer = textview.get_buffer()
             start_iter, end_iter = message_buffer.get_bounds()
             cursor_position = message_buffer.get_insert()
             end_iter = message_buffer.get_iter_at_mark(cursor_position)
