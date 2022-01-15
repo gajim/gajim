@@ -19,8 +19,7 @@ from typing import Optional
 from gi.repository import Gtk
 from gi.repository import GObject
 
-from .view import ConversationView
-
+from ..types import ConversationViewT
 
 class ScrolledView(Gtk.ScrolledWindow):
 
@@ -72,7 +71,7 @@ class ScrolledView(Gtk.ScrolledWindow):
     def get_autoscroll(self) -> bool:
         return self._autoscroll
 
-    def get_view(self) -> ConversationView:
+    def get_view(self) -> ConversationViewT:
         return self.get_child().get_child()
 
     def reset(self) -> None:

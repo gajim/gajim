@@ -23,6 +23,7 @@ if TYPE_CHECKING:
     from .controls.private import PrivateChatControl
     from .controls.groupchat import GroupchatControl
     from .conversation.message_widget import MessageWidget
+    from .conversation.view import ConversationView
     from .conversation.rows.call import CallRow
     from .conversation.rows.command_output import CommandOutputRow
     from .conversation.rows.date import DateRow
@@ -46,3 +47,5 @@ ControlType = Union [
 ]
 
 GroupchatControlType = Union['GroupchatControl']
+
+ConversationViewT = Union['ConversationView']
