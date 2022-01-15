@@ -39,13 +39,13 @@ if TYPE_CHECKING:
 
 
 
-ControlType = Union [
+ControlT = Union [
     'BaseControl',
     'ChatControl',
     'PrivateChatControl',
     'GroupchatControl'
 ]
 
-GroupchatControlType = Union['GroupchatControl']
+GroupchatControlT = Union['GroupchatControl']
 
 ConversationViewT = Union['ConversationView']

@@ -32,7 +32,7 @@ from .controls.chat import ChatControl
 from .controls.groupchat import GroupchatControl
 from .controls.private import PrivateChatControl
 
-from .types import ControlType
+from .types import ControlT
 from .util import EventHelper
 
 log = logging.getLogger('gajim.gui.chatstack')
@@ -54,16 +54,16 @@ class ChatStack(Gtk.Stack, EventHelper):
         ])
 
         self.show_all()
-        self._controls: dict[tuple[str, JID], ControlType] = {}
+        self._controls: dict[tuple[str, JID], ControlT] = {}
 
-    def get_control(self, account: str, jid: JID) -> Optional[ControlType]:
+    def get_control(self, account: str, jid: JID) -> Optional[ControlT]:
         try:
             return self._controls[(account, jid)]
         except KeyError:
             return None
 
     def get_controls(self, account: Optional[str]
-                     ) -> Generator[ControlType, None, None]:
+                     ) -> Generator[ControlT, None, None]:
         if account is None:
             for control in self._controls.values():
                 yield control

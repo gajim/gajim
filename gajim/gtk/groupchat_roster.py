@@ -42,7 +42,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from .menus import get_groupchat_roster_menu
 from .tooltips import GCTooltip
 from .builder import get_builder
-from .types import GroupchatControlType
+from .types import GroupchatControlT
 from .util import EventHelper
 
 
@@ -75,7 +75,7 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
     def __init__(self,
                  account: str,
                  room_jid: str,
-                 control: GroupchatControlType
+                 control: GroupchatControlT
                  ) -> None:
         Gtk.ScrolledWindow.__init__(self)
         EventHelper.__init__(self)

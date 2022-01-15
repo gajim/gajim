@@ -104,7 +104,7 @@ from gajim.gui.util import get_app_window
 from gajim.gui.util import get_app_windows
 from gajim.gui.util import get_color_for_account
 from gajim.gui.util import open_window
-from gajim.gui.types import ControlType
+from gajim.gui.types import ControlT
 
 log = logging.getLogger('gajim.interface')
 
@@ -550,7 +550,7 @@ class Interface:
             session.end_session()
 
     def send_httpupload(self,
-                        chat_control: ControlType,
+                        chat_control: ControlT,
                         path: Optional[str] = None
                         ) -> None:
         if path is not None:
@@ -563,13 +563,13 @@ class Interface:
                           transient_for=app.window)
 
     def _on_file_dialog_ok(self,
-                           chat_control: ControlType,
+                           chat_control: ControlT,
                            paths: list[str]
                            ) -> None:
         for path in paths:
             self._send_httpupload(chat_control, path)
 
-    def _send_httpupload(self, chat_control: ControlType, path: str) -> None:
+    def _send_httpupload(self, chat_control: ControlT, path: str) -> None:
         client = app.get_client(chat_control.account)
         try:
             transfer = client.get_module('HTTPUpload').make_transfer(

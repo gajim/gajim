@@ -51,7 +51,7 @@ from .chat_list import ChatList
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
 from .dialogs import ConfirmationCheckDialog
-from .types import ControlType
+from .types import ControlT
 from .builder import get_builder
 from .util import get_key_theme
 from .util import resize_window
@@ -533,14 +533,14 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                         message: Optional[str] = None) -> None:
         self._app_page.add_app_message(category, message)
 
-    def get_control(self, account: str, jid: JID) -> Optional[ControlType]:
+    def get_control(self, account: str, jid: JID) -> Optional[ControlT]:
         return self._chat_page.get_control(account, jid)
 
     def get_controls(self, account: Optional[str] = None
-                     ) -> Generator[ControlType, None, None]:
+                     ) -> Generator[ControlT, None, None]:
         return self._chat_page.get_controls(account)
 
-    def get_active_control(self) -> Optional[ControlType]:
+    def get_active_control(self) -> Optional[ControlT]:
         return self._chat_page.get_active_control()
 
     def is_chat_loaded(self, account: str, jid: JID) -> bool:
