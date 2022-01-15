@@ -23,6 +23,8 @@ from gi.repository import Gtk
 
 from gajim.common.styling import process
 from gajim.common.styling import ParsingResult
+from gajim.common.styling import PlainBlock
+from gajim.common.styling import PreBlock
 from gajim.common.styling import QuoteBlock
 
 from .code_widget import CodeWidget
@@ -67,19 +69,19 @@ class MessageWidget(Gtk.Box):
         self.clear()
         self._content = content
         for block in content.blocks:
-            if block.name == 'plain':
+            if isinstance(block, PlainBlock):
                 widget = PlainWidget(self._account, self._selectable)
                 widget.add_content(block)
                 self.add(widget)
                 continue
 
-            if block.name == 'pre':
+            if isinstance(block, PreBlock):
                 widget = CodeWidget(self._account)
                 widget.add_content(block)
                 self.add(widget)
                 continue
 
-            if block.name == 'quote':
+            if isinstance(block, QuoteBlock):
                 message_widget = MessageWidget(self._account, self._selectable)
                 message_widget.add_content(block)
                 widget = QuoteWidget(self._account)
@@ -93,6 +95,6 @@ class MessageWidget(Gtk.Box):
         self.foreach(self.remove)
 
     def update_text_tags(self, *args: Any) -> None:
-        for widget in self.get_children():
+        for widget in cast(list[MessageWidget], self.get_children()):
             if not isinstance(widget, CodeWidget):
                 widget.update_text_tags()
