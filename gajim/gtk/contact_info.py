@@ -16,12 +16,14 @@ from __future__ import annotations
 
 from typing import Optional
 from typing import Union
+from typing import cast
 
 import logging
 from enum import IntEnum
 
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 from gi.repository import GObject
 
 from nbxmpp.task import Task
@@ -210,6 +212,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
             return
 
         model = self._ui.groups_treeview.get_model()
+        assert isinstance(model, Gtk.ListStore)
         model.set_sort_column_id(Column.GROUP_NAME, Gtk.SortType.ASCENDING)
         groups = self._client.get_module('Roster').get_groups()
         for group in groups:
@@ -247,7 +250,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
 
     def _on_vcard_received(self, task: Task) -> None:
         try:
-            vcard = task.finish()
+            vcard = cast(VCard, task.finish())
         except StanzaError as err:
             log.info('Error loading VCard: %s', err)
             vcard = VCard()
@@ -262,6 +265,8 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         surface_2 = self.contact.get_avatar(AvatarSize.VCARD_HEADER,
                                             scale,
                                             add_show=False)
+        assert not isinstance(surface_1, GdkPixbuf.Pixbuf)
+        assert not isinstance(surface_2, GdkPixbuf.Pixbuf)
         self._ui.avatar_image.set_from_surface(surface_1)
         self._ui.header_image.set_from_surface(surface_2)
 
@@ -269,7 +274,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         self._tasks.remove(task)
 
         try:
-            result = task.finish()
+            result = cast(SoftwareVersionResult, task.finish())
         except Exception as err:
             log.warning('Could not retrieve software version: %s', err)
             result = None
@@ -282,7 +287,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         self._tasks.remove(task)
 
         try:
-            entity_time = task.finish()
+            entity_time = cast(str, task.finish())
         except Exception as err:
             log.warning('Could not retrieve entity time: %s', err)
             entity_time = None
@@ -373,13 +378,15 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
 
         model = self._ui.groups_treeview.get_model()
         assert model is not None
+        assert isinstance(model, Gtk.ListStore)
         selected_iter_ = model.get_iter(path)
         old_name = model[selected_iter_][Column.GROUP_NAME]
 
         # Check if group already exists
         iter_ = model.get_iter_first()
         while iter_:
-            if model.get_value(iter_, Column.GROUP_NAME) == new_name:
+            group_name = model.get_value(iter_, Column.GROUP_NAME).get_string()
+            if group_name == new_name:
                 return
             iter_ = model.iter_next(iter_)
 
@@ -418,7 +425,9 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         iter_ = model.get_iter_first()
         while iter_:
             if model.get_value(iter_, Column.IN_GROUP):
-                groups.add(model.get_value(iter_, Column.GROUP_NAME))
+                group_name = model.get_value(
+                    iter_, Column.GROUP_NAME).get_string()
+                groups.add(group_name)
             iter_ = model.iter_next(iter_)
 
         self._client.get_module('Roster').set_groups(self.contact.jid, groups)
@@ -427,11 +436,13 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         default_name = _('New Group')
         model = self._ui.groups_treeview.get_model()
         assert model is not None
+        assert isinstance(model, Gtk.ListStore)
 
         # Check if default_name group already exists
         iter_ = model.get_iter_first()
         while iter_:
-            if model.get_value(iter_, Column.GROUP_NAME) == default_name:
+            group_name = model.get_value(iter_, Column.GROUP_NAME).get_string()
+            if group_name == default_name:
                 default_name += '_'
             iter_ = model.iter_next(iter_)
 
