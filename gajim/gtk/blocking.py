@@ -12,12 +12,17 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import cast
+
 import logging
 
-from nbxmpp.errors import StanzaError
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
+
+from nbxmpp.errors import StanzaError
+from nbxmpp.protocol import JID
+from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common.i18n import _
@@ -30,7 +35,7 @@ log = logging.getLogger('gajim.gui.blocking_list')
 
 
 class BlockingList(Gtk.ApplicationWindow):
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -40,8 +45,8 @@ class BlockingList(Gtk.ApplicationWindow):
         self.connect_after('key-press-event', self._on_key_press)
 
         self.account = account
-        self._con = app.connections[account]
-        self._prev_blocked_jids = set()
+        self._client = app.get_client(account)
+        self._prev_blocked_jids: set[JID] = set()
 
         self._ui = get_builder('blocking_list.ui')
         self.add(self._ui.blocking_grid)
@@ -55,36 +60,36 @@ class BlockingList(Gtk.ApplicationWindow):
 
         self._activate_spinner()
 
-        self._con.get_module('Blocking').request_blocking_list(
+        self._client.get_module('Blocking').request_blocking_list(
             callback=self._on_blocking_list_received)
 
-    def _show_error(self, error):
+    def _show_error(self, error: str) -> None:
         dialog = HigDialog(
             self, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
             _('Error!'),
             GLib.markup_escape_text(error))
         dialog.popup()
 
-    def _on_blocking_list_received(self, task):
+    def _on_blocking_list_received(self, task: Task) -> None:
         try:
-            blocking_list = task.finish()
+            blocking_list = cast(set[JID], task.finish())
         except StanzaError as error:
             self._set_grid_state(False)
             self._show_error(to_user_string(error))
             return
 
-        self._prev_blocked_jids = set(blocking_list)
+        self._prev_blocked_jids = blocking_list
         self._ui.blocking_store.clear()
 
         for jid in blocking_list:
-            self._ui.blocking_store.append((str(jid),))
+            self._ui.blocking_store.append([str(jid)])
 
         self._set_grid_state(True)
         self._disable_spinner()
 
-    def _on_save_result(self, task):
+    def _on_save_result(self, task: Task):
         try:
-            _successful = task.finish()
+            _successful = cast(bool, task.finish())
         except StanzaError as error:
             self._show_error(to_user_string(error))
             self._disable_spinner()
@@ -93,44 +98,51 @@ class BlockingList(Gtk.ApplicationWindow):
 
         self.destroy()
 
-    def _set_grid_state(self, state):
+    def _set_grid_state(self, state: bool) -> None:
         self._ui.blocking_grid.set_sensitive(state)
 
-    def _jid_edited(self, _renderer, path, new_text):
+    def _jid_edited(self,
+                    _renderer: Gtk.CellRendererText,
+                    path: str,
+                    new_text: str
+                    ) -> None:
         iter_ = self._ui.blocking_store.get_iter(path)
         self._ui.blocking_store.set_value(iter_, 0, new_text)
 
-    def _on_add(self, _button):
+    def _on_add(self, _button: Gtk.ToolButton) -> None:
         self._ui.blocking_store.append([''])
 
-    def _on_remove(self, _button):
-        mod, paths = self._ui.block_view.get_selection().get_selected_rows()
+    def _on_remove(self, _button: Gtk.ToolButton) -> None:
+        selected_rows = self._ui.block_view.get_selection().get_selected_rows()
+        if selected_rows is None:
+            return
+        mod, paths = selected_rows
         for path in paths:
             iter_ = mod.get_iter(path)
             self._ui.blocking_store.remove(iter_)
 
-    def _on_save(self, _button):
+    def _on_save(self, _button: Gtk.Button) -> None:
         self._activate_spinner()
         self._set_grid_state(False)
 
-        blocked_jids = set()
+        blocked_jids: set[JID] = set()
         for item in self._ui.blocking_store:
-            blocked_jids.add(item[0].lower())
+            blocked_jids.add(JID.from_string(item[0].lower()))
 
         unblock_jids = self._prev_blocked_jids - blocked_jids
         block_jids = blocked_jids - self._prev_blocked_jids
 
-        self._con.get_module('Blocking').update_blocking_list(
+        self._client.get_module('Blocking').update_blocking_list(
             block_jids, unblock_jids, callback=self._on_save_result)
 
-    def _activate_spinner(self):
+    def _activate_spinner(self) -> None:
         self._spinner.show()
         self._spinner.start()
 
-    def _disable_spinner(self):
+    def _disable_spinner(self) -> None:
         self._spinner.hide()
         self._spinner.stop()
 
-    def _on_key_press(self, _widget, event):
+    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
