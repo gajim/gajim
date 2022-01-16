@@ -32,20 +32,11 @@ from nbxmpp import JID
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common import events
 from gajim.common.const import AvatarSize
 from gajim.common.const import Direction
 from gajim.common.const import KindConstant
 from gajim.common.const import RowHeaderType
-from gajim.common.events import ApplicationEvent
-from gajim.common.events import BookmarksReceived
-from gajim.common.events import FileRequestReceivedEvent
-from gajim.common.events import JingleRequestReceived
-from gajim.common.events import MessageUpdated
-from gajim.common.events import MessageSent
-from gajim.common.events import MessageReceived
-from gajim.common.events import MamMessageReceived
-from gajim.common.events import GcMessageReceived
-from gajim.common.events import PresenceReceived
 from gajim.common.i18n import _
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import get_group_chat_nick
@@ -63,7 +54,9 @@ from .util import EventHelper
 
 log = logging.getLogger('gajim.gui.chatlist')
 
-MessageEventT = Union[MessageReceived, GcMessageReceived, MamMessageReceived]
+MessageEventT = Union[events.MessageReceived,
+                      events.GcMessageReceived,
+                      events.MamMessageReceived]
 
 
 class ChatList(Gtk.ListBox, EventHelper):
@@ -375,20 +368,20 @@ class ChatList(Gtk.ListBox, EventHelper):
         for _key, row in self._chats.items():
             row.update_time()
 
-    def process_event(self, event: ApplicationEvent) -> None:
-        if event.name in ('message-received',
-                          'mam-message-received',
-                          'gc-message-received'):
+    def process_event(self, event: events.ApplicationEvent) -> None:
+        if isinstance(event, (events.MessageReceived,
+                              events.MamMessageReceived,
+                              events.GcMessageReceived)):
             self._on_message_received(event)
-        elif event.name == 'message-updated':
+        elif isinstance(event, events.MessageUpdated):
             self._on_message_updated(event)
-        elif event.name == 'presence-received':
+        elif isinstance(event, events.PresenceReceived):
             self._on_presence_received(event)
-        elif event.name == 'message-sent':
+        elif isinstance(event, events.MessageSent):
             self._on_message_sent(event)
-        elif event.name == 'jingle-request-received':
+        elif isinstance(event, events.JingleRequestReceived):
             self._on_jingle_request_received(event)
-        elif event.name == 'file-request-received':
+        elif isinstance(event, events.FileRequestReceivedEvent):
             self._on_file_request_received(event)
         else:
             log.warning('Unhandled Event: %s', event.name)
@@ -434,7 +427,7 @@ class ChatList(Gtk.ListBox, EventHelper):
                 nick = ''
         return nick
 
-    def _on_message_updated(self, event: MessageUpdated) -> None:
+    def _on_message_updated(self, event: events.MessageUpdated) -> None:
         row = self._chats.get((event.account, JID.from_string(event.jid)))
         if row is None:
             return
@@ -451,7 +444,7 @@ class ChatList(Gtk.ListBox, EventHelper):
                     event.properties.moderation.reason)
                 row.set_message_text(text)
 
-    def _on_message_sent(self, event: MessageSent) -> None:
+    def _on_message_sent(self, event: events.MessageSent) -> None:
         msgtext = event.message
         if not msgtext:
             return
@@ -477,14 +470,14 @@ class ChatList(Gtk.ListBox, EventHelper):
             additional_data=event.additional_data)
         self.invalidate_sort()
 
-    def _on_presence_received(self, event: PresenceReceived) -> None:
+    def _on_presence_received(self, event: events.PresenceReceived) -> None:
         row = self._chats.get((event.account, JID.from_string(event.jid)))
         if row is None:
             return
         row.update_avatar()
 
     def _on_jingle_request_received(self,
-                                    event: JingleRequestReceived
+                                    event: events.JingleRequestReceived
                                     ) -> None:
         content_types: list[str] = []
         for item in event.contents:
@@ -500,7 +493,7 @@ class ChatList(Gtk.ListBox, EventHelper):
                 _('Call'), icon_name='call-start-symbolic')
 
     def _on_file_request_received(self,
-                                  event: FileRequestReceivedEvent
+                                  event: events.FileRequestReceivedEvent
                                   ) -> None:
         row = self._chats.get((event.account, JID.from_string(event.jid)))
         if row is None:
@@ -534,7 +527,7 @@ class ChatList(Gtk.ListBox, EventHelper):
         for row in rows:
             row.update_account_identifier()
 
-    def _on_bookmarks_received(self, _event: BookmarksReceived) -> None:
+    def _on_bookmarks_received(self, _event: events.BookmarksReceived) -> None:
         rows = cast(list[ChatRow], self.get_children())
         for row in rows:
             row.update_name()
@@ -674,7 +667,7 @@ class ChatRow(Gtk.ListBoxRow):
         return header.type
 
     @header.setter
-    def header(self, type_: RowHeaderType) -> None:
+    def header(self, type_: Optional[RowHeaderType]) -> None:
         if type_ == self.header:
             return
         if type_ is None:
@@ -822,7 +815,7 @@ class ChatRow(Gtk.ListBoxRow):
 
     def add_unread(self, text: str) -> None:
         control = app.window.get_control(self.account, self.jid)
-        if self.is_active and control.get_autoscroll():
+        if self.is_active and control is not None and control.get_autoscroll():
             return
 
         self._unread_count += 1
