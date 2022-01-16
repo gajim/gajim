@@ -86,5 +86,5 @@ class Builder:
         return self._builder.get_object(name)
 
 
-def get_builder(file_name, widgets=None):
+def get_builder(file_name: str, widgets: Optional[list[str]] = None) -> Builder:
     return Builder(file_name, widgets)
