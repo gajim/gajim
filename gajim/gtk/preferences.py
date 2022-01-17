@@ -35,11 +35,14 @@ from gajim.common.multimedia_helpers import AudioOutputManager
 from gajim.common.multimedia_helpers import VideoInputManager
 from gajim.common.events import StyleChanged
 from gajim.common.events import ThemeUpdate
+from gajim.common.setting_values import AllSettings
 
 from .const import Setting
 from .const import SettingKind
 from .const import SettingType
+from .controls.groupchat import GroupchatControl
 from .emoji_chooser import emoji_chooser
+from .settings import PopoverSetting
 from .settings import SettingsBox
 from .settings import SettingsDialog
 from .sidebar_switcher import SideBarSwitcher
@@ -68,7 +71,7 @@ class Preferences(Gtk.ApplicationWindow):
         self._ui = get_builder('preferences.ui')
 
         self._video_preview: Optional[VideoPreview] = None
-        self._prefs = {}
+        self._prefs: dict[str, PreferenceBox] = {}
 
         side_bar_switcher = SideBarSwitcher()
         side_bar_switcher.set_stack(self._ui.stack)
@@ -142,10 +145,12 @@ class Preferences(Gtk.ApplicationWindow):
         open_window('Features')
 
     def update_theme_list(self) -> None:
-        self._prefs['themes'].update_theme_list()
+        themes = cast(Themes, self._prefs['themes'])
+        themes.update_theme_list()
 
     def update_proxy_list(self) -> None:
-        self._prefs['miscellaneous'].update_proxy_list()
+        miscellaneous = cast(Miscellaneous, self._prefs['miscellaneous'])
+        miscellaneous.update_proxy_list()
 
     @staticmethod
     def _check_emoji_theme() -> None:
@@ -333,13 +338,17 @@ class GroupChats(PreferenceBox):
     def _on_sort_by_show_in_muc(_value: bool, *args: Any) -> None:
         for ctrl in app.window.get_controls():
             if ctrl.is_groupchat:
-                ctrl.roster.invalidate_sort()
+                assert isinstance(ctrl, GroupchatControl)
+                if ctrl.roster is not None:
+                    ctrl.roster.invalidate_sort()
 
     @staticmethod
     def _on_show_status_in_roster(_value: bool, *args: Any) -> None:
         for ctrl in app.window.get_controls():
             if ctrl.is_groupchat:
-                ctrl.roster.draw_contacts()
+                assert isinstance(ctrl, GroupchatControl)
+                if ctrl.roster is not None:
+                    ctrl.roster.draw_contacts()
 
     @staticmethod
     def _reset_join_left(button: Gtk.Button) -> None:
@@ -648,7 +657,8 @@ class Themes(PreferenceBox):
         return theme_items
 
     def update_theme_list(self) -> None:
-        self.get_setting('roster_theme').update_entries(self._get_theme_items())
+        popover_row = cast(PopoverSetting, self.get_setting('roster_theme'))
+        popover_row.update_entries(self._get_theme_items())
 
     def _on_edit_themes(self, _button: Gtk.Button) -> None:
         open_window('Themes', transient=self.get_toplevel())
@@ -874,8 +884,8 @@ class Video(PreferenceBox):
 
 class Miscellaneous(PreferenceBox):
     def __init__(self, pref_window: Preferences) -> None:
-        self._hints_list = [
-            'start_chat',
+        self._hints_list: list[AllSettings] = [
+            'show_help_start_chat',
         ]
 
         settings = [
@@ -919,17 +929,18 @@ class Miscellaneous(PreferenceBox):
         open_window('ManageProxies')
 
     def update_proxy_list(self) -> None:
-        self.get_setting('global_proxy').update_entries(self._get_proxies())
+        popover_row = cast(PopoverSetting, self.get_setting('global_proxy'))
+        popover_row.update_entries(self._get_proxies())
 
     def _check_hints_reset(self) -> bool:
         for hint in self._hints_list:
-            if app.settings.get(f'show_help_{hint}') is False:
+            if app.settings.get(hint) is False:
                 return True
         return False
 
     def _on_reset_hints(self, button: Gtk.Button) -> None:
         for hint in self._hints_list:
-            app.settings.set(f'show_help_{hint}', True)
+            app.settings.set(hint, True)
         button.set_sensitive(False)
 
 
