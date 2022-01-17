@@ -217,6 +217,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         self.avatar_storage = AvatarStorage()
 
+        app.load_css_config()
         from gajim.gui_interface import Interface
 
         self.interface = Interface()

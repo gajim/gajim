@@ -118,9 +118,6 @@ class Interface:
 
         self.preview_manager = PreviewManager()
 
-        # Load CSS files
-        app.load_css_config()
-
         for account in app.settings.get_accounts():
             if app.settings.get_account_setting(account, 'is_zeroconf'):
                 app.ZEROCONF_ACC_NAME = account
