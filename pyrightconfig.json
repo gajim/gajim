@@ -3,6 +3,7 @@
     "pythonVersion": "3.9",
     "typeCheckingMode": "strict",
     "include": [
+        "gajim/common/application.py",
         "gajim/common/cert_store.py",
         "gajim/common/configpaths.py",
         "gajim/common/const.py",

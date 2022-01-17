@@ -51,7 +51,6 @@ from packaging.version import Version as V
 
 from gi.repository import Gtk
 from gi.repository import GLib
-from gi.repository import Gio
 from gi.repository import Soup
 
 from nbxmpp import idlequeue
@@ -189,11 +188,6 @@ class Interface:
         if sys.platform in ('win32', 'darwin'):
             from gajim.gui.emoji_chooser import emoji_chooser
             emoji_chooser.load()
-
-        self._network_monitor = Gio.NetworkMonitor.get_default()
-        self._network_monitor.connect('notify::network-available',
-                                      self._network_status_changed)
-        self._network_state: bool = self._network_monitor.get_network_available()
 
     def _create_core_handlers_list(self) -> None:
         # pylint: disable=line-too-long
@@ -983,24 +977,6 @@ class Interface:
         window.connect('delete_event', _on_delete)
         view.updateNamespace({'gajim': app})
         app.ipython_window = window
-
-    def _network_status_changed(self,
-                                monitor: Gio.NetworkMonitor,
-                                _network_available: bool
-                                ) -> None:
-        connected = monitor.get_network_available()
-        if connected == self._network_state:
-            return
-
-        self._network_state = connected
-        if connected:
-            log.info('Network connection available')
-        else:
-            log.info('Network connection lost')
-            for connection in app.connections.values():
-                if (connection.state.is_connected or
-                        connection.state.is_available):
-                    connection.disconnect(gracefully=False, reconnect=True)
 
     def create_zeroconf_default_config(self) -> None:
         if app.settings.get_account_setting(app.ZEROCONF_ACC_NAME, 'name'):

@@ -21,6 +21,8 @@ from typing import TextIO
 import os
 import sys
 
+from gi.repository import Gio
+
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import configpaths
@@ -35,7 +37,6 @@ from gajim.common.storage.archive import MessageArchiveStorage
 
 
 class CoreApplication:
-
     def _init_core(self) -> None:
         # Create and initialize Application Paths & Databases
         app.app = self
@@ -46,7 +47,7 @@ class CoreApplication:
         app.settings = Settings()
         app.settings.init()
 
-        app.config = LegacyConfig() # type: ignore
+        app.config = LegacyConfig()
 
         app.storage.cache = CacheStorage()
         app.storage.cache.init()
@@ -56,6 +57,11 @@ class CoreApplication:
 
         app.cert_store = CertificateStore()
         app.task_manager = TaskManager()
+
+        self._network_monitor = Gio.NetworkMonitor.get_default()
+        self._network_monitor.connect('notify::network-available',
+                                      self._network_status_changed)
+        self._network_state = self._network_monitor.get_network_available()
 
     def start_shutdown(self, *args: Any, **kwargs: Any) -> None:
         accounts_to_disconnect: dict[str, Client] = {}
@@ -108,3 +114,21 @@ class CoreApplication:
 
         warnings.showwarning = warn_with_traceback
         warnings.filterwarnings(action="always")
+
+    def _network_status_changed(self,
+                                monitor: Gio.NetworkMonitor,
+                                _network_available: bool
+                                ) -> None:
+        connected = monitor.get_network_available()
+        if connected == self._network_state:
+            return
+
+        self._network_state = connected
+        if connected:
+            app.log('gajim.application').info('Network connection available')
+        else:
+            app.log('gajim.application').info('Network connection lost')
+            for connection in app.connections.values():
+                if (connection.state.is_connected or
+                        connection.state.is_available):
+                    connection.disconnect(gracefully=False, reconnect=True)
