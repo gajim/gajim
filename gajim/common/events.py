@@ -23,21 +23,18 @@ from typing import Callable
 from dataclasses import dataclass
 from dataclasses import field
 
-from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.structs import LocationData
 from nbxmpp.structs import RosterItem
 from nbxmpp.structs import TuneData
 from nbxmpp.const import InviteType
 
-from gajim.common import app
 from gajim.common.file_props import FileProp
+from gajim.common.const import KindConstant
+from gajim.common.helpers import AdditionalDataDict
 
 if typing.TYPE_CHECKING:
-    from gajim.common.helpers import AdditionalDataDict
-    from gajim.common.const import KindConstant
     from gajim.common.client import Client
-    from gajim.common.jingle_session import JingleSession
 
 
 @dataclass
@@ -138,7 +135,7 @@ class MessageSent(ApplicationEvent):
     message_id: str
     chatstate: Optional[str]
     timestamp: float
-    additional_data: 'AdditionalDataDict'
+    additional_data: AdditionalDataDict
     label: Optional[str]
     correct_id: Optional[str]
     play_sound: bool
@@ -361,11 +358,11 @@ class MamMessageReceived(ApplicationEvent):
     jid: str
     msgtxt: str
     properties: Any
-    additional_data: 'AdditionalDataDict'
+    additional_data: AdditionalDataDict
     unique_id: str
     stanza_id: str
     archive_jid: str
-    kind: 'KindConstant'
+    kind: KindConstant
 
 
 @dataclass
@@ -377,7 +374,7 @@ class MessageReceived(ApplicationEvent):
     jid: str
     msgtxt: str
     properties: Any
-    additional_data: 'AdditionalDataDict'
+    additional_data: AdditionalDataDict
     unique_id: str
     stanza_id: str
     fjid: str
@@ -489,7 +486,7 @@ class JingleEvent(ApplicationEvent):
     jid: str
     sid: str
     resource: str
-    jingle_session: JingleSession
+    jingle_session: Any
 
 
 @dataclass
@@ -650,83 +647,8 @@ class FileRequestReceivedEvent(ApplicationEvent):
     name: str = field(init=False, default='file-request-received')
     conn: 'Client'
     stanza: Any
-    jingle_content: Any
-    FT_content: Any
-    id_: str = field(init=False)
-    fjid: str = field(init=False)
-    account: str = field(init=False)
-    jid: str = field(init=False)
-    file_props: FileProp = field(init=False)
-
-    def __post_init__(self):
-        from gajim.common.jingle_transport import JingleTransportSocks5
-        from gajim.common.file_props import FilesProp
-        self.id_ = self.stanza.getID()
-        self.fjid = self.conn.get_module('Bytestream')._ft_get_from(
-            self.stanza)
-        self.account = self.conn.name
-        self.jid = app.get_jid_without_resource(self.fjid)
-        if not self.jingle_content:
-            return
-        secu = self.jingle_content.getTag('security')
-        self.FT_content.use_security = bool(secu)
-        if secu:
-            fingerprint = secu.getTag('fingerprint')
-            if fingerprint:
-                self.FT_content.x509_fingerprint = fingerprint.getData()
-        if not self.FT_content.transport:
-            self.FT_content.transport = JingleTransportSocks5()
-            self.FT_content.transport.set_our_jid(
-                self.FT_content.session.ourjid)
-            self.FT_content.transport.set_connection(
-                self.FT_content.session.connection)
-        sid = self.stanza.getTag('jingle').getAttr('sid')
-        self.file_props = FilesProp.getNewFileProp(self.conn.name, sid)
-        self.file_props.transport_sid = self.FT_content.transport.sid
-        self.FT_content.file_props = self.file_props
-        self.FT_content.transport.set_file_props(self.file_props)
-        self.file_props.streamhosts.extend(
-            self.FT_content.transport.remote_candidates)
-        for host in self.file_props.streamhosts:
-            host['initiator'] = self.FT_content.session.initiator
-            host['target'] = self.FT_content.session.responder
-        self.file_props.session_type = 'jingle'
-        self.file_props.stream_methods = Namespace.BYTESTREAM
-        desc = self.jingle_content.getTag('description')
-        if self.jingle_content.getAttr('creator') == 'initiator':
-            file_tag = desc.getTag('file')
-            self.file_props.sender = self.fjid
-            self.file_props.receiver = self.conn.get_own_jid()
-        else:
-            file_tag = desc.getTag('file')
-            hash_ = file_tag.getTag('hash')
-            hash_ = hash_.getData() if hash_ else None
-            file_name = file_tag.getTag('name')
-            file_name = file_name.getData() if file_name else None
-            pjid = app.get_jid_without_resource(self.fjid)
-            file_info = self.conn.get_module('Jingle').get_file_info(
-                pjid, hash_=hash_, name=file_name, account=self.conn.name)
-            self.file_props.file_name = file_info['file-name']
-            self.file_props.sender = self.conn.get_own_jid()
-            self.file_props.receiver = self.fjid
-            self.file_props.type_ = 's'
-        for child in file_tag.getChildren():
-            name = child.getName()
-            val = child.getData()
-            if val is None:
-                continue
-            if name == 'name':
-                self.file_props.name = val
-            if name == 'size':
-                self.file_props.size = int(val)
-            if name == 'hash':
-                self.file_props.algo = child.getAttr('algo')
-                self.file_props.hash_ = val
-            if name == 'date':
-                self.file_props.date = val
-
-        self.file_props.request_id = self.id_
-        file_desc_tag = file_tag.getTag('desc')
-        if file_desc_tag is not None:
-            self.file_props.desc = file_desc_tag.getData()
-        self.file_props.transfered_size = []
+    id_: str
+    fjid: str
+    account: str
+    jid: str
+    file_props: FileProp

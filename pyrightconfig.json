@@ -6,6 +6,7 @@
         "gajim/common/cert_store.py",
         "gajim/common/configpaths.py",
         "gajim/common/const.py",
+        "gajim/common/events.py",
         "gajim/common/exceptions.py",
         "gajim/common/filetransfer.py",
         "gajim/common/ged.py",

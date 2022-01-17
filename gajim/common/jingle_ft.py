@@ -16,6 +16,11 @@
 Handles  Jingle File Transfer (XEP 0234)
 """
 
+from __future__ import annotations
+
+import typing
+from typing import Optional
+
 import logging
 import threading
 import time
@@ -27,16 +32,27 @@ from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common import configpaths
-from gajim.common.const import KindConstant
 from gajim.common import jingle_xtls
-from gajim.common.jingle_content import contents, JingleContent
-from gajim.common.jingle_transport import JingleTransportSocks5, TransportType
 from gajim.common import helpers
+from gajim.common.const import KindConstant
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.events import FileRequestReceivedEvent
-from gajim.common.jingle_ftstates import (
-    StateInitialized, StateCandSent, StateCandReceived, StateTransfering,
-    StateCandSentAndRecv, StateTransportReplace)
+from gajim.common.file_props import FileProp
+from gajim.common.file_props import FilesProp
+from gajim.common.jingle_content import contents
+from gajim.common.jingle_content import JingleContent
+from gajim.common.jingle_transport import JingleTransportSocks5
+from gajim.common.jingle_transport import TransportType
+from gajim.common.jingle_ftstates import StateInitialized
+from gajim.common.jingle_ftstates import StateCandSent
+from gajim.common.jingle_ftstates import StateCandReceived
+from gajim.common.jingle_ftstates import StateTransfering
+from gajim.common.jingle_ftstates import StateCandSentAndRecv
+from gajim.common.jingle_ftstates import StateTransportReplace
+
+if typing.TYPE_CHECKING:
+    from gajim.common.jingle_session import JingleSession
+    from gajim.common.jingle_transport import JingleTransport
 
 log = logging.getLogger('gajim.c.jingle_ft')
 
@@ -59,8 +75,13 @@ class State(IntEnum):
 
 class JingleFileTransfer(JingleContent):
 
-    def __init__(self, session, transport=None, file_props=None,
-                 use_security=False, senders=None):
+    def __init__(self,
+                 session: JingleSession,
+                 transport: Optional[JingleTransport] = None,
+                 file_props: Optional[FileProp] = None,
+                 use_security: bool = False,
+                 senders: Optional[str] = None):
+
         JingleContent.__init__(self, session, transport, senders)
         log.info("transport value: %s", transport)
         # events we might be interested in
@@ -131,11 +152,7 @@ class JingleFileTransfer(JingleContent):
 
     def __on_session_initiate(self, stanza, content, error, action):
         log.debug("Jingle FT request received")
-        app.ged.raise_event(
-            FileRequestReceivedEvent(conn=self.session.connection,
-                                     stanza=stanza,
-                                     jingle_content=content,
-                                     FT_content=self))
+        self._raise_event(stanza, content)
 
         account = self.session.connection.name
         jid = self.session.connection.get_module('Bytestream')._ft_get_from(
@@ -157,6 +174,89 @@ class JingleFileTransfer(JingleContent):
             # accept the request
             self.session.approve_content(self.media, self.name)
             self.session.accept_session()
+
+    def _raise_event(self, stanza, content):
+        con = self.session.connection
+        id_ = stanza.getID()
+        fjid = con.get_module('Bytestream')._ft_get_from(stanza)
+        account = con.name
+        jid = app.get_jid_without_resource(fjid)
+
+        if not content:
+            return
+
+        secu = content.getTag('security')
+        self.use_security = bool(secu)
+        if secu:
+            fingerprint = secu.getTag('fingerprint')
+            if fingerprint:
+                self.x509_fingerprint = fingerprint.getData()
+
+        if not self.transport:
+            self.transport = JingleTransportSocks5()
+            self.transport.set_our_jid(self.session.ourjid)
+            self.transport.set_connection(con)
+
+        sid = stanza.getTag('jingle').getAttr('sid')
+        file_props = FilesProp.getNewFileProp(account, sid)
+        file_props.transport_sid = self.transport.sid
+
+        self.transport.set_file_props(file_props)
+        file_props.streamhosts.extend(self.transport.remote_candidates)
+
+        for host in file_props.streamhosts:
+            host['initiator'] = self.session.initiator
+            host['target'] = self.session.responder
+
+        file_props.session_type = 'jingle'
+        desc = content.getTag('description')
+        if content.getAttr('creator') == 'initiator':
+            file_tag = desc.getTag('file')
+            file_props.sender = fjid
+            file_props.receiver = str(con.get_own_jid())
+        else:
+            file_tag = desc.getTag('file')
+            hash_ = file_tag.getTag('hash')
+            hash_ = hash_.getData() if hash_ else None
+            file_name = file_tag.getTag('name')
+            file_name = file_name.getData() if file_name else None
+            pjid = app.get_jid_without_resource(fjid)
+            file_info = con.get_module('Jingle').get_file_info(
+                pjid, hash_=hash_, name=file_name, account=account)
+            file_props.file_name = file_info['file-name']
+            file_props.sender = str(con.get_own_jid())
+            file_props.receiver = fjid
+            file_props.type_ = 's'
+
+        for child in file_tag.getChildren():
+            name = child.getName()
+            val = child.getData()
+            if val is None:
+                continue
+            if name == 'name':
+                file_props.name = val
+            if name == 'size':
+                file_props.size = int(val)
+            if name == 'hash':
+                file_props.algo = child.getAttr('algo')
+                file_props.hash_ = val
+            if name == 'date':
+                file_props.date = val
+
+        file_props.request_id = id_
+        file_desc_tag = file_tag.getTag('desc')
+        if file_desc_tag is not None:
+            file_props.desc = file_desc_tag.getData()
+        file_props.transfered_size = []
+
+        app.ged.raise_event(FileRequestReceivedEvent(
+            conn=con,
+            stanza=stanza,
+            id_=id_,
+            fjid=fjid,
+            account=account,
+            jid=jid,
+            file_props=file_props))
 
     def __on_session_initiate_sent(self, stanza, content, error, action):
         pass
