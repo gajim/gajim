@@ -247,8 +247,7 @@ class FileTransfersWindow:
                          text=text))
 
     def _file_request_received(self, event):
-        account = event.conn.name
-        client = app.get_client(account)
+        client = app.get_client(event.account)
         contact = client.get_module('Contacts').get_contact(event.jid)
 
         if event.file_props.session_type == 'jingle':
@@ -258,7 +257,7 @@ class FileTransfersWindow:
             request = description.getTag('request')
             if request:
                 # If we get a request instead
-                self.add_transfer(account, contact, event.file_props)
+                self.add_transfer(event.account, contact, event.file_props)
                 return
 
         if app.window.is_chat_active(event.account, event.jid):
@@ -266,7 +265,7 @@ class FileTransfersWindow:
 
         text = _('%s wants to send you a file') % contact.name
         app.ged.raise_event(
-            Notification(account=account,
+            Notification(account=event.account,
                          jid=event.jid,
                          type='file-transfer',
                          sub_type='file-request-received',
