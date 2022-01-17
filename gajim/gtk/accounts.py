@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import cast
 
 import sys
 import locale
@@ -29,16 +30,20 @@ from gi.repository import GObject
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import passwords
+from gajim.common.events import AccountDisonnected
 from gajim.common.i18n import _
 from gajim.common.i18n import Q_
+from gajim.common.zeroconf.connection_zeroconf import ConnectionZeroconf
 
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
 from .const import Setting
 from .const import SettingKind
 from .const import SettingType
+from .controls.base import BaseControl
 from .settings import SettingsDialog
 from .settings import SettingsBox
+from .settings import PopoverSetting
 from .util import open_window
 
 
@@ -55,8 +60,8 @@ class AccountsWindow(Gtk.ApplicationWindow):
         self.set_default_size(700, 550)
         self.set_resizable(True)
         self.set_title(_('Accounts'))
-        self._need_relogin = {}
-        self._accounts = {}
+        self._need_relogin: dict[str, list[str]] = {}
+        self._accounts: dict[str, Account] = {}
 
         self._menu = AccountMenu()
         self._settings = Settings()
@@ -121,7 +126,9 @@ class AccountsWindow(Gtk.ApplicationWindow):
             return
 
         if account == app.ZEROCONF_ACC_NAME:
-            app.connections[app.ZEROCONF_ACC_NAME].update_details()
+            zeroconf_conn = cast(
+                ConnectionZeroconf, app.connections[app.ZEROCONF_ACC_NAME])
+            zeroconf_conn.update_details()
             return
 
         def relog():
@@ -141,13 +148,23 @@ class AccountsWindow(Gtk.ApplicationWindow):
             transient_for=self).show()
 
     @staticmethod
-    def _get_relogin_settings(account: str) -> list[Any]:
+    def _get_relogin_settings(account: str) -> list[str]:
         if account == app.ZEROCONF_ACC_NAME:
-            settings = ['zeroconf_first_name', 'zeroconf_last_name',
-                        'zeroconf_jabber_id', 'zeroconf_email']
+            settings = [
+                'zeroconf_first_name',
+                'zeroconf_last_name',
+                'zeroconf_jabber_id',
+                'zeroconf_email'
+            ]
         else:
-            settings = ['client_cert', 'proxy', 'resource',
-                        'use_custom_host', 'custom_host', 'custom_port']
+            settings = [
+                'client_cert',
+                'proxy',
+                'resource',
+                'use_custom_host',
+                'custom_host',
+                'custom_port'
+            ]
 
         values: list[Any] = []
         for setting in settings:
@@ -195,18 +212,18 @@ class Settings(Gtk.ScrolledWindow):
         self.get_style_context().add_class('accounts-settings')
 
         self.add(self._stack)
-        self._page_signal_ids = {}
-        self._pages = defaultdict(list)
+        self._page_signal_ids: dict[GenericSettingPage, int] = {}
+        self._pages: dict[str, list[GenericSettingPage]] = defaultdict(list)
 
-    def add_page(self, page):
+    def add_page(self, page: GenericSettingPage) -> None:
         self._pages[page.account].append(page)
-        self._stack.add_named(page, '%s-%s' % (page.account, page.name))
+        self._stack.add_named(page, f'{page.account}-{page.name}')
         self._page_signal_ids[page] = page.connect_signal(self._stack)
 
-    def set_page(self, name):
+    def set_page(self, name: str) -> None:
         self._stack.set_visible_child_name(name)
 
-    def remove_account(self, account):
+    def remove_account(self, account: str) -> None:
         for page in self._pages[account]:
             signal_id = self._page_signal_ids[page]
             del self._page_signal_ids[page]
@@ -215,10 +232,11 @@ class Settings(Gtk.ScrolledWindow):
             page.destroy()
         del self._pages[account]
 
-    def update_proxy_list(self, account):
+    def update_proxy_list(self, account: str) -> None:
         for page in self._pages[account]:
             if page.name != 'connection':
                 continue
+            assert isinstance(page, ConnectionPage)
             page.update_proxy_entries()
 
 
@@ -228,7 +246,7 @@ class AccountMenu(Gtk.Box):
         'menu-activated': (GObject.SignalFlags.RUN_FIRST, None, (str, str)),
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.Box.__init__(self)
         self.set_hexpand(False)
         self.set_size_request(160, -1)
@@ -251,33 +269,42 @@ class AccountMenu(Gtk.Box):
         self.add(self._stack)
 
     @staticmethod
-    def _sort_func(row1, row2):
+    def _sort_func(row1: AccountRow, row2: AccountRow) -> int:
         if row1.label == 'Local':
             return -1
         return locale.strcoll(row1.label.lower(), row2.label.lower())
 
-    def add_account(self, row):
+    def add_account(self, row: AccountRow) -> None:
         self._accounts_listbox.add(row)
         sub_menu = AccountSubMenu(row.account)
-        self._stack.add_named(sub_menu, '%s-menu' % row.account)
+        self._stack.add_named(sub_menu, f'{row.account}-menu')
 
         sub_menu.connect('row-activated', self._on_sub_menu_row_activated)
 
-    def remove_account(self, row):
+    def remove_account(self, row: AccountRow) -> None:
         if self._stack.get_visible_child_name() != 'accounts':
             # activate 'back' button
-            self._stack.get_visible_child().get_row_at_index(1).emit('activate')
+            listbox = cast(Gtk.ListBox, self._stack.get_visible_child())
+            back_row = cast(Gtk.ListBoxRow, listbox.get_row_at_index(1))
+            back_row.emit('activate')
         self._accounts_listbox.remove(row)
         sub_menu = self._stack.get_child_by_name('%s-menu' % row.account)
         self._stack.remove(sub_menu)
         row.destroy()
         sub_menu.destroy()
 
-    def _on_account_row_activated(self, _listbox, row):
+    def _on_account_row_activated(self,
+                                  _listbox: Gtk.ListBox,
+                                  row: AccountRow
+                                  ) -> None:
         self._stack.set_visible_child_name('%s-menu' % row.account)
-        self._stack.get_visible_child().get_row_at_index(2).emit('activate')
+        listbox = cast(Gtk.ListBox, self._stack.get_visible_child())
+        listbox_row = cast(Gtk.ListBoxRow, listbox.get_row_at_index(2))
+        listbox_row.emit('activate')
 
-    def _on_sub_menu_row_activated(self, listbox, row):
+    def _on_sub_menu_row_activated(self,
+                                   listbox: AccountSubMenu,
+                                   row: MenuItem) -> None:
         if row.name == 'back':
             self._stack.set_visible_child_full(
                 'accounts', Gtk.StackTransitionType.OVER_RIGHT)
@@ -288,11 +315,12 @@ class AccountMenu(Gtk.Box):
         else:
             self.emit('menu-activated',
                       listbox.account,
-                      '%s-%s' % (listbox.account, row.name))
+                      f'{listbox.account}-{row.name}')
 
-    def update_account_label(self, account):
+    def update_account_label(self, account: str) -> None:
         self._accounts_listbox.invalidate_sort()
-        sub_menu = self._stack.get_child_by_name('%s-menu' % account)
+        sub_menu = cast(
+            AccountSubMenu, self._stack.get_child_by_name(f'{account}-menu'))
         sub_menu.update()
 
 
@@ -302,7 +330,7 @@ class AccountSubMenu(Gtk.ListBox):
         'update': (GObject.SignalFlags.RUN_FIRST, None, (str,))
     }
 
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
         Gtk.ListBox.__init__(self)
         self.set_vexpand(True)
         self.set_hexpand(True)
@@ -320,15 +348,15 @@ class AccountSubMenu(Gtk.ListBox):
             self.add(RemoveMenuItem())
 
     @property
-    def account(self):
+    def account(self) -> str:
         return self._account
 
-    def update(self):
+    def update(self) -> None:
         self.emit('update', self._account)
 
 
 class MenuItem(Gtk.ListBoxRow):
-    def __init__(self, name):
+    def __init__(self, name: str) -> None:
         Gtk.ListBoxRow.__init__(self)
         self._name = name
         self._box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL,
@@ -338,12 +366,12 @@ class MenuItem(Gtk.ListBoxRow):
         self.add(self._box)
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self._name
 
 
 class RemoveMenuItem(MenuItem):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__('remove')
         self._label.set_text(_('Remove'))
         image = Gtk.Image.new_from_icon_name('user-trash-symbolic',
@@ -357,7 +385,7 @@ class RemoveMenuItem(MenuItem):
 
 
 class AccountLabelMenuItem(MenuItem):
-    def __init__(self, parent, account):
+    def __init__(self, parent: AccountSubMenu, account: str) -> None:
         super().__init__('account-label')
         self._update_account_label(parent, account)
 
@@ -378,13 +406,16 @@ class AccountLabelMenuItem(MenuItem):
 
         parent.connect('update', self._update_account_label)
 
-    def _update_account_label(self, _listbox, account):
+    def _update_account_label(self,
+                              _listbox: Gtk.ListBox,
+                              account: str
+                              ) -> None:
         account_label = app.get_account_label(account)
         self._label.set_text(account_label)
 
 
 class BackMenuItem(MenuItem):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__('back')
         self.set_selectable(False)
 
@@ -399,7 +430,7 @@ class BackMenuItem(MenuItem):
 
 
 class PageMenuItem(MenuItem):
-    def __init__(self, name, label):
+    def __init__(self, name: str, label: str) -> None:
         super().__init__(name)
 
         if name == 'general':
@@ -421,7 +452,11 @@ class PageMenuItem(MenuItem):
 
 
 class Account:
-    def __init__(self, account, menu, settings):
+    def __init__(self,
+                 account: str,
+                 menu: AccountMenu,
+                 settings: Settings
+                 ) -> None:
         self._account = account
         self._menu = menu
         self._settings = settings
@@ -437,40 +472,40 @@ class Account:
         self._account_row = AccountRow(account)
         self._menu.add_account(self._account_row)
 
-    def select(self):
+    def select(self) -> None:
         self._account_row.emit('activate')
 
-    def show(self):
+    def show(self) -> None:
         self._menu.show_all()
         self._settings.show_all()
         self.select()
 
-    def remove(self):
+    def remove(self) -> None:
         self._menu.remove_account(self._account_row)
         self._settings.remove_account(self._account)
 
-    def update_account_label(self):
+    def update_account_label(self) -> None:
         self._account_row.update_account_label()
         self._menu.update_account_label(self._account)
 
-    def enable_account(self, state):
+    def enable_account(self, state: bool) -> None:
         self._account_row.enable_account(state)
 
     @property
-    def menu(self):
+    def menu(self) -> AccountMenu:
         return self._menu
 
     @property
-    def account(self):
+    def account(self) -> str:
         return self._account
 
     @property
-    def settings(self):
+    def settings(self) -> str:
         return self._account
 
 
 class AccountRow(Gtk.ListBoxRow):
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
         Gtk.ListBoxRow.__init__(self)
         self.set_selectable(False)
 
@@ -522,26 +557,30 @@ class AccountRow(Gtk.ListBoxRow):
         self.add(box)
 
     @property
-    def account(self):
+    def account(self) -> str:
         return self._account
 
     @property
-    def label(self):
+    def label(self) -> str:
         return self._label.get_text()
 
-    def update_account_label(self):
+    def update_account_label(self) -> None:
         self._label.set_text(app.get_account_label(self._account))
 
-    def enable_account(self, state):
+    def enable_account(self, state: bool) -> None:
         self._switch.set_state(state)
         self._set_label(state)
 
-    def _set_label(self, active):
+    def _set_label(self, active: bool) -> None:
         text = Q_('?switch:On') if active else Q_('?switch:Off')
         self._switch_state_label.set_text(text)
 
-    def _on_enable_switch(self, switch, state, account):
-        def _on_disconnect(event):
+    def _on_enable_switch(self,
+                          switch: Gtk.Switch,
+                          state: bool,
+                          account: str
+                          ) -> int:
+        def _on_disconnect(event: AccountDisonnected) -> None:
             if event.account != account:
                 return
             app.ged.remove_event_handler('account-disconnected',
@@ -549,7 +588,7 @@ class AccountRow(Gtk.ListBoxRow):
                                          _on_disconnect)
             app.interface.disable_account(account)
 
-        def _disable():
+        def _disable() -> None:
             app.ged.register_event_handler('account-disconnected',
                                            ged.CORE,
                                            _on_disconnect)
@@ -564,6 +603,7 @@ class AccountRow(Gtk.ListBoxRow):
         if (account in app.connections and
                 not app.connections[account].state.is_disconnected):
             # Connecting or connected
+            window = cast(Gtk.Window, self.get_toplevel())
             ConfirmationDialog(
                 _('Disable Account'),
                 _('Account %s is still connected') % account,
@@ -573,7 +613,7 @@ class AccountRow(Gtk.ListBoxRow):
                  DialogButton.make('Remove',
                                    text=_('_Disable Account'),
                                    callback=_disable)],
-                transient_for=self.get_toplevel()).show()
+                transient_for=window).show()
             return Gdk.EVENT_STOP
 
         if state:
@@ -585,7 +625,7 @@ class AccountRow(Gtk.ListBoxRow):
 
 
 class AddNewAccountPage(Gtk.Box):
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.Box.__init__(self,
                          orientation=Gtk.Orientation.VERTICAL,
                          spacing=18)
@@ -597,7 +637,7 @@ class AddNewAccountPage(Gtk.Box):
             'org.gajim.Gajim-symbolic',
             100,
             self.get_scale_factor(),
-            0)
+            Gtk.IconLookupFlags.FORCE_SIZE)
         self.add(Gtk.Image.new_from_pixbuf(pixbuf))
 
         button = Gtk.Button(label=_('Add Account'))
@@ -608,7 +648,10 @@ class AddNewAccountPage(Gtk.Box):
 
 
 class GenericSettingPage(Gtk.Box):
-    def __init__(self, account, settings):
+
+    name = ''
+
+    def __init__(self, account: str, settings: list[Setting]) -> None:
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=12)
         self.set_valign(Gtk.Align.START)
         self.set_vexpand(True)
@@ -626,11 +669,11 @@ class GenericSettingPage(Gtk.Box):
 
         self.pack_end(self.listbox, True, True, 0)
 
-    def connect_signal(self, stack):
+    def connect_signal(self, stack: Gtk.Stack) -> int:
         return stack.connect('notify::visible-child',
                              self._on_visible_child_changed)
 
-    def _on_visible_child_changed(self, stack, _param):
+    def _on_visible_child_changed(self, stack: Gtk.Stack, _param: Any) -> None:
         if self == stack.get_visible_child():
             self.listbox.update_states()
 
@@ -639,7 +682,7 @@ class GeneralPage(GenericSettingPage):
 
     name = 'general'
 
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
 
         settings = [
             Setting(SettingKind.ENTRY, _('Label'),
@@ -689,15 +732,16 @@ class GeneralPage(GenericSettingPage):
         ]
         GenericSettingPage.__init__(self, account, settings)
 
-    def _on_account_name_change(self, *args):
-        self.get_toplevel().update_account_label(self.account)
+    def _on_account_name_change(self, *args: Any) -> None:
+        window = cast(AccountsWindow, self.get_toplevel())
+        window.update_account_label(self.account)
 
 
 class PrivacyPage(GenericSettingPage):
 
     name = 'privacy'
 
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
         self._account = account
 
         history_max_age = {
@@ -792,27 +836,28 @@ class PrivacyPage(GenericSettingPage):
         GenericSettingPage.__init__(self, account, settings)
 
     @staticmethod
-    def _reset_send_chatstate(button):
+    def _reset_send_chatstate(button: Gtk.Button) -> None:
         button.set_sensitive(False)
         app.settings.set_contact_settings('send_chatstate', None)
 
     @staticmethod
-    def _reset_gc_send_chatstate(button):
+    def _reset_gc_send_chatstate(button: Gtk.Button) -> None:
         button.set_sensitive(False)
         app.settings.set_group_chat_settings('send_chatstate', None)
 
-    def _send_read_marker(self, state, _data):
+    def _send_read_marker(self, state: bool, _data: Any) -> None:
         app.settings.set_account_setting(
             self._account, 'send_marker_default', state)
         app.settings.set_account_setting(
             self._account, 'gc_send_marker_private_default', state)
 
-    def _reset_send_read_marker(self, button):
+    def _reset_send_read_marker(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
         app.settings.set_contact_settings('send_marker', None)
         app.settings.set_group_chat_settings(
             'send_marker', None, context='private')
         for ctrl in app.window.get_controls(account=self._account):
+            assert not isinstance(ctrl, BaseControl)
             ctrl.update_actions()
 
 
@@ -820,7 +865,7 @@ class ConnectionPage(GenericSettingPage):
 
     name = 'connection'
 
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
 
         settings = [
             Setting(SettingKind.POPOVER, _('Proxy'),
@@ -853,22 +898,23 @@ class ConnectionPage(GenericSettingPage):
         GenericSettingPage.__init__(self, account, settings)
 
     @staticmethod
-    def _get_proxies():
+    def _get_proxies() -> dict[str, str]:
         return {proxy: proxy for proxy in app.settings.get_proxies()}
 
     @staticmethod
-    def _on_proxy_edit(*args):
+    def _on_proxy_edit(*args: Any) -> None:
         open_window('ManageProxies')
 
-    def update_proxy_entries(self):
-        self.listbox.get_setting('proxy').update_entries(self._get_proxies())
+    def update_proxy_entries(self) -> None:
+        popover_row = cast(PopoverSetting, self.listbox.get_setting('proxy'))
+        popover_row.update_entries(self._get_proxies())
 
 
 class AdvancedPage(GenericSettingPage):
 
     name = 'advanced'
 
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
 
         settings = [
             Setting(SettingKind.SWITCH, _('Contact Information'),
@@ -897,7 +943,7 @@ class ZeroConfPage(GenericSettingPage):
 
     name = 'general'
 
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
 
         settings = [
             Setting(SettingKind.DIALOG, _('Profile'),
@@ -922,7 +968,7 @@ class ZeroConfPage(GenericSettingPage):
 
 
 class ZeroconfProfileDialog(SettingsDialog):
-    def __init__(self, account, parent):
+    def __init__(self, account: str, parent: Gtk.Window) -> None:
 
         settings = [
             Setting(SettingKind.ENTRY, _('First Name'),
@@ -943,7 +989,7 @@ class ZeroconfProfileDialog(SettingsDialog):
 
 
 class PriorityDialog(SettingsDialog):
-    def __init__(self, account, parent):
+    def __init__(self, account: str, parent: Gtk.Window) -> None:
 
         neg_priority = app.settings.get('enable_negative_priority')
         if neg_priority:
@@ -969,7 +1015,7 @@ class PriorityDialog(SettingsDialog):
 
         self.connect('destroy', self.on_destroy)
 
-    def on_destroy(self, *args):
+    def on_destroy(self, *args: Any) -> None:
         # Update priority
         if self.account not in app.connections:
             return
@@ -979,7 +1025,7 @@ class PriorityDialog(SettingsDialog):
 
 
 class CutstomHostnameDialog(SettingsDialog):
-    def __init__(self, account, parent):
+    def __init__(self, account: str, parent: Gtk.Window) -> None:
 
         type_values = ('START TLS', 'DIRECT TLS', 'PLAIN')
 
@@ -1008,7 +1054,7 @@ class CutstomHostnameDialog(SettingsDialog):
 
 
 class CertificateDialog(SettingsDialog):
-    def __init__(self, account, parent):
+    def __init__(self, account: str, parent: Gtk.Window) -> None:
 
         settings = [
             Setting(SettingKind.FILECHOOSER, _('Client Certificate'),
@@ -1024,7 +1070,7 @@ class CertificateDialog(SettingsDialog):
 
 
 class LoginDialog(SettingsDialog):
-    def __init__(self, account, parent):
+    def __init__(self, account: str, parent: Gtk.Window) -> None:
 
         settings = [
             Setting(SettingKind.ENTRY, _('Password'),
@@ -1033,7 +1079,8 @@ class LoginDialog(SettingsDialog):
 
             Setting(SettingKind.SWITCH, _('Save Password'),
                     SettingType.ACCOUNT_CONFIG, 'savepass',
-                    enabled_func=lambda: not app.settings.get('use_keyring') or passwords.KEYRING_AVAILABLE),
+                    enabled_func=(lambda: not app.settings.get('use_keyring')
+                                  or passwords.KEYRING_AVAILABLE)),
 
             Setting(SettingKind.CHANGEPASSWORD, _('Change Password'),
                     SettingType.DIALOG, callback=self.on_password_change,
@@ -1048,10 +1095,10 @@ class LoginDialog(SettingsDialog):
 
         self.connect('destroy', self.on_destroy)
 
-    def on_password_change(self, new_password, _data):
+    def on_password_change(self, new_password: str, _data: Any) -> None:
         passwords.save_password(self.account, new_password)
 
-    def on_destroy(self, *args):
+    def on_destroy(self, *args: Any) -> None:
         savepass = app.settings.get_account_setting(self.account, 'savepass')
         if not savepass:
             passwords.delete_password(self.account)

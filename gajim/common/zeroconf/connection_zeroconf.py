@@ -465,7 +465,7 @@ class ConnectionZeroconf(ConnectionHandlersZeroconf):
                 app.ZEROCONF_ACC_NAME, 'zeroconf_email')
             self.connection.reannounce(txt)
 
-    def update_details(self):
+    def update_details(self) -> None:
         if self.connection:
             port = app.settings.get_account_setting(app.ZEROCONF_ACC_NAME,
                                                     'custom_port')
