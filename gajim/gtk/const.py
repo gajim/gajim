@@ -14,16 +14,36 @@
 
 # Constants for the gtk module
 
+from __future__ import annotations
+
+from typing import Any
+from typing import Callable
+from typing import NamedTuple
+from typing import Optional
+
 from collections import namedtuple
 from enum import Enum
 from enum import IntEnum
 from enum import unique
 
+from gajim.common.setting_values import AllSettingsT
+
 Filter = namedtuple('Filter', 'name pattern default')
 
-Setting = namedtuple('Setting', 'kind label type value name callback data desc '
-                                'bind inverted enabled_func props')
-Setting.__new__.__defaults__ = (None,) * len(Setting._fields)  # type: ignore
+
+class Setting(NamedTuple):
+    kind: SettingKind
+    label: str
+    type: SettingType
+    value: Optional[AllSettingsT] = None
+    name: Optional[str] = None
+    callback: Optional[Callable[..., None]] = None
+    data: Optional[Any] = None
+    desc: Optional[str] = None
+    bind: Optional[str] = None
+    inverted: Optional[bool] = None
+    enabled_func: Optional[Callable[..., bool]] = None
+    props: Optional[dict[str, Any]] = None
 
 
 DEFAULT_WORKSPACE_COLOR = 'rgb(191,15,167)'
