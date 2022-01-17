@@ -486,7 +486,7 @@ class GroupchatControl(BaseControl):
                              _action: Gio.SimpleAction,
                              _param: Optional[GLib.Variant]
                              ) -> None:
-        surface = app.interface.avatar_storage.get_muc_surface(
+        surface = app.app.avatar_storage.get_muc_surface(
             self.account,
             self.contact.jid,
             AvatarSize.GROUP_INFO,
@@ -657,7 +657,7 @@ class GroupchatControl(BaseControl):
             self.add_info_message(_('Loading avatar failed'))
             return
 
-        sha = app.interface.avatar_storage.save_avatar(data)
+        sha = app.app.avatar_storage.save_avatar(data)
         if sha is None:
             self.add_info_message(_('Loading avatar failed'))
             return

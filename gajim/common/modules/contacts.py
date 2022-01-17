@@ -328,7 +328,7 @@ class BareContact(CommonContact):
                     break
 
         if pixbuf:
-            return app.interface.avatar_storage.get_pixbuf(
+            return app.app.avatar_storage.get_pixbuf(
                 self,
                 size,
                 scale,
@@ -336,7 +336,7 @@ class BareContact(CommonContact):
                 default=default,
                 transport_icon=transport_icon,
                 style=style)
-        return app.interface.avatar_storage.get_surface(
+        return app.app.avatar_storage.get_surface(
             self,
             size,
             scale,
@@ -357,7 +357,7 @@ class BareContact(CommonContact):
         self._avatar_sha = sha
 
         app.storage.cache.set_contact(self._jid, 'avatar', sha)
-        app.interface.avatar_storage.invalidate_cache(self._jid)
+        app.app.avatar_storage.invalidate_cache(self._jid)
         self.notify('avatar-update')
 
     def _get_roster_attr(self, attr: str):
@@ -515,7 +515,7 @@ class GroupchatContact(CommonContact):
                 if identity.type == 'irc':
                     transport_icon = 'gajim-agent-irc'
                 break
-        return app.interface.avatar_storage.get_muc_surface(
+        return app.app.avatar_storage.get_muc_surface(
             self._account,
             self._jid,
             size,
@@ -528,7 +528,7 @@ class GroupchatContact(CommonContact):
         self.notify(signal_name, contact, *args)
 
     def update_avatar(self, *args) -> None:
-        app.interface.avatar_storage.invalidate_cache(self._jid)
+        app.app.avatar_storage.invalidate_cache(self._jid)
         self.notify('avatar-update')
 
     def get_self(self) -> Optional[GroupchatParticipant]:
@@ -685,7 +685,7 @@ class GroupchatParticipant(CommonContact):
                    style: str = 'circle') -> cairo.ImageSurface:
 
         show = self.show if add_show else None
-        return app.interface.avatar_storage.get_surface(
+        return app.app.avatar_storage.get_surface(
             self, size, scale, show, style=style)
 
     def update_presence(self,
@@ -726,5 +726,5 @@ class GroupchatParticipant(CommonContact):
         self.notify(state)
 
     def update_avatar(self, *args) -> None:
-        app.interface.avatar_storage.invalidate_cache(self._jid)
+        app.app.avatar_storage.invalidate_cache(self._jid)
         self.notify('user-avatar-update')

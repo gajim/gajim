@@ -314,7 +314,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
                         _('Failed to generate avatar.'))
             return
 
-        sha = app.interface.avatar_storage.save_avatar(data)
+        sha = app.app.avatar_storage.save_avatar(data)
         if sha is None:
             self._ui.profile_stack.set_visible_child_name('profile')
             ErrorDialog(_('Error while processing image'),
@@ -325,7 +325,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._new_avatar.add_image_source(data, 'image/png', height, width)
 
         scale = self.get_scale_factor()
-        surface = app.interface.avatar_storage.surface_from_filename(
+        surface = app.app.avatar_storage.surface_from_filename(
             sha, AvatarSize.VCARD, scale)
 
         self._ui.avatar_image.set_from_surface(clip_circle(surface))

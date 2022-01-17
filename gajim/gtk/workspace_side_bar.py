@@ -357,7 +357,7 @@ class Workspace(CommonWorkspace):
                        drag_context: Gdk.DragContext
                        ) -> None:
         scale = self.get_scale_factor()
-        surface = app.interface.avatar_storage.get_workspace_surface(
+        surface = app.app.avatar_storage.get_workspace_surface(
             self.workspace_id, AvatarSize.WORKSPACE, scale)
         if surface is not None:
             Gtk.drag_set_icon_surface(drag_context, surface)
@@ -401,9 +401,9 @@ class WorkspaceAvatar(Gtk.Image):
         self.update()
 
     def update(self) -> None:
-        app.interface.avatar_storage.invalidate_cache(self._workspace_id)
+        app.app.avatar_storage.invalidate_cache(self._workspace_id)
         scale = self.get_scale_factor()
-        surface = app.interface.avatar_storage.get_workspace_surface(
+        surface = app.app.avatar_storage.get_workspace_surface(
             self._workspace_id, AvatarSize.WORKSPACE, scale)
         self.set_from_surface(surface)
         name = app.settings.get_workspace_setting(self._workspace_id, 'name')

@@ -90,7 +90,6 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.httpupload import HTTPFileTransfer
 
-from gajim.gui.avatar import AvatarStorage
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ErrorDialog
 from gajim.gui.dialogs import ConfirmationDialog
@@ -117,7 +116,6 @@ class Interface:
 
         self.handlers = {}
 
-        self.avatar_storage = AvatarStorage()
         self.preview_manager = PreviewManager()
 
         # Load CSS files
@@ -919,7 +917,7 @@ class Interface:
         app.settings.save()
 
     def save_avatar(self, data: bytes) -> Optional[str]:
-        return self.avatar_storage.save_avatar(data)
+        return app.app.avatar_storage.save_avatar(data)
 
     def get_avatar(self,
                    contact: ContactT,
@@ -929,13 +927,13 @@ class Interface:
                    pixbuf: bool = False,
                    style: str = 'circle') -> Any:
         if pixbuf:
-            return self.avatar_storage.get_pixbuf(
+            return app.app.avatar_storage.get_pixbuf(
                 contact, size, scale, show, style=style)
-        return self.avatar_storage.get_surface(
+        return app.app.avatar_storage.get_surface(
             contact, size, scale, show, style=style)
 
     def avatar_exists(self, filename: str) -> bool:
-        return self.avatar_storage.get_avatar_path(filename) is not None
+        return app.app.avatar_storage.get_avatar_path(filename) is not None
 
     @staticmethod
     def create_ipython_window() -> None:

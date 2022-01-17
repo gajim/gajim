@@ -137,7 +137,7 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         scale = self.get_scale_factor()
         if self._avatar_sha is not None:
             assert self._workspace_id is not None
-            surface = app.interface.avatar_storage.get_workspace_surface(
+            surface = app.app.avatar_storage.get_workspace_surface(
                 self._workspace_id,
                 AvatarSize.WORKSPACE_EDIT,
                 scale)

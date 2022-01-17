@@ -68,14 +68,15 @@ from gajim.common.exceptions import GajimGeneralException
 from gajim.common.application import CoreApplication
 
 from gajim.gui import menus
+from gajim.gui import structs
+from gajim.gui.about import AboutDialog
+from gajim.gui.avatar import AvatarStorage
 from gajim.gui.builder import get_builder
+from gajim.gui.dialogs import ShortcutsWindow
+from gajim.gui.discovery import ServiceDiscoveryWindow
+from gajim.gui.util import get_app_window
 from gajim.gui.util import load_user_iconsets
 from gajim.gui.util import open_window
-from gajim.gui.util import get_app_window
-from gajim.gui.dialogs import ShortcutsWindow
-from gajim.gui.about import AboutDialog
-from gajim.gui.discovery import ServiceDiscoveryWindow
-from gajim.gui import structs
 
 
 ActionListT = list[tuple[str,
@@ -213,6 +214,8 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         from gajim.gui import notification
         notification.init()
+
+        self.avatar_storage = AvatarStorage()
 
         from gajim.gui_interface import Interface
 
