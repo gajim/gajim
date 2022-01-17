@@ -16,8 +16,11 @@
 Handles Jingle contents (XEP 0166)
 """
 
-from typing import Any  # pylint: disable=unused-import
-from typing import Dict  # pylint: disable=unused-import
+from __future__ import annotations
+
+import typing
+from typing import Any
+from typing import Optional
 
 import nbxmpp
 from nbxmpp.namespaces import Namespace
@@ -27,7 +30,13 @@ from gajim.common import configpaths
 from gajim.common.jingle_xtls import SELF_SIGNED_CERTIFICATE
 from gajim.common.jingle_xtls import load_cert_file
 
-contents = {}  # type: Dict[str, Any]
+if typing.TYPE_CHECKING:
+    from gajim.common.jingle_transport import JingleTransport
+    from gajim.common.jingle_session import JingleSession
+
+
+contents: dict[str, Any] = {}
+
 
 def get_jingle_content(node):
     namespace = node.getNamespace()
@@ -46,7 +55,11 @@ class JingleContent:
     An abstraction of content in Jingle sessions
     """
 
-    def __init__(self, session, transport, senders):
+    def __init__(self,
+                 session: JingleSession,
+                 transport: Optional[JingleTransport],
+                 senders: Optional[str]) -> None:
+
         self.session = session
         self.transport = transport
         # will be filled by JingleSession.add_content()
@@ -68,7 +81,7 @@ class JingleContent:
 
         # These were found by the Politie
         self.file_props = None
-        self.use_security = None
+        self.use_security: Optional[bool] = None
 
         self.callbacks = {
             # these are called when *we* get stanzas
