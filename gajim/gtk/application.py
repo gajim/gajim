@@ -41,6 +41,7 @@ from typing import Optional
 from typing import cast
 
 import os
+import sys
 
 from urllib.parse import unquote
 
@@ -54,18 +55,18 @@ from gi.repository import Gdk
 
 import gajim
 from gajim.common import app
-from gajim.common import ged
 from gajim.common import configpaths
+from gajim.common import ged
+from gajim.common import idle
 from gajim.common import logging_helpers
-
+from gajim.common.application import CoreApplication
 from gajim.common.const import GAJIM_FAQ_URI
 from gajim.common.const import GAJIM_WIKI_URI
-from gajim.common.i18n import _
 from gajim.common.events import ApplicationEvent
-from gajim.common.helpers import open_uri
-from gajim.common.helpers import load_json
 from gajim.common.exceptions import GajimGeneralException
-from gajim.common.application import CoreApplication
+from gajim.common.helpers import load_json
+from gajim.common.helpers import open_uri
+from gajim.common.i18n import _
 
 from gajim.gui import menus
 from gajim.gui import structs
@@ -218,6 +219,14 @@ class GajimApplication(Gtk.Application, CoreApplication):
         self.avatar_storage = AvatarStorage()
 
         app.load_css_config()
+
+        idle.Monitor.set_interval(app.settings.get('autoawaytime') * 60,
+                                  app.settings.get('autoxatime') * 60)
+
+        if sys.platform in ('win32', 'darwin'):
+            from gajim.gui.emoji_chooser import emoji_chooser
+            emoji_chooser.load()
+
         from gajim.gui_interface import Interface
 
         self.interface = Interface()
@@ -230,6 +239,9 @@ class GajimApplication(Gtk.Application, CoreApplication):
         app.ged.register_event_handler('feature-discovered',
                                        ged.CORE,
                                        self._on_feature_discovered)
+
+        from gajim.gui.main import MainWindow
+        MainWindow()
 
     def _open_uris(self, uris: list[str]) -> None:
         accounts = list(app.connections.keys())

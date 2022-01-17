@@ -60,7 +60,6 @@ from nbxmpp import JID
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import exceptions
-from gajim.common import idle
 from gajim.common import proxy65_manager
 from gajim.common import socks5
 from gajim.common import helpers
@@ -96,7 +95,6 @@ from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.dialogs import InputDialog
 from gajim.gui.filechoosers import FileChooserDialog
 from gajim.gui.filetransfer import FileTransfersWindow
-from gajim.gui.main import MainWindow
 from gajim.gui.menus import build_accounts_menu
 from gajim.gui.util import get_app_window
 from gajim.gui.util import get_app_windows
@@ -171,18 +169,11 @@ class Interface:
         else:
             GLib.timeout_add_seconds(20, self.check_for_updates)
 
-        idle.Monitor.set_interval(app.settings.get('autoawaytime') * 60,
-                                  app.settings.get('autoxatime') * 60)
-
         self.systray_enabled: bool = False
 
         if not app.is_display(Display.WAYLAND):
             from gajim.gui.status_icon import StatusIcon
             self.systray = StatusIcon()
-
-        if sys.platform in ('win32', 'darwin'):
-            from gajim.gui.emoji_chooser import emoji_chooser
-            emoji_chooser.load()
 
     def _create_core_handlers_list(self) -> None:
         # pylint: disable=line-too-long
@@ -1078,7 +1069,6 @@ class Interface:
                 except Exception:
                     pass
         GLib.timeout_add_seconds(5, remote_init)
-        MainWindow()
 
 
 class ThreadInterface:
