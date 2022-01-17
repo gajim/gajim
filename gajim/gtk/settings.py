@@ -375,7 +375,7 @@ class GenericSetting(Gtk.ListBoxRow):
         self.set_activatable(enabled_func_value)
         self.set_sensitive(enabled_func_value)
 
-    def _add_action_button(self, 
+    def _add_action_button(self,
                            kwargs: dict[str, Union[str,
                                                    Callable[..., None],
                                                    None]]
