@@ -20,13 +20,21 @@ from typing import TextIO
 
 import os
 import sys
+import json
+import logging
+from datetime import datetime
+from packaging.version import Version as V
 
 from gi.repository import Gio
+from gi.repository import GLib
+from gi.repository import Soup
 
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import configpaths
 from gajim.common.events import AccountDisonnected
+from gajim.common.events import AllowGajimUpdateCheck
+from gajim.common.events import GajimUpdateAvailable
 from gajim.common.client import Client
 from gajim.common.task_manager import TaskManager
 from gajim.common.settings import Settings
@@ -62,6 +70,13 @@ class CoreApplication:
         self._network_monitor.connect('notify::network-available',
                                       self._network_status_changed)
         self._network_state = self._network_monitor.get_network_available()
+
+        if sys.platform in ('win32', 'darwin'):
+            GLib.timeout_add_seconds(20, self._check_for_updates)
+
+    @property
+    def _log(self) -> logging.Logger:
+        return app.log('gajim.application')
 
     def start_shutdown(self, *args: Any, **kwargs: Any) -> None:
         accounts_to_disconnect: dict[str, Client] = {}
@@ -125,10 +140,55 @@ class CoreApplication:
 
         self._network_state = connected
         if connected:
-            app.log('gajim.application').info('Network connection available')
+            self._log.info('Network connection available')
         else:
-            app.log('gajim.application').info('Network connection lost')
+            self._log.info('Network connection lost')
             for connection in app.connections.values():
                 if (connection.state.is_connected or
                         connection.state.is_available):
                     connection.disconnect(gracefully=False, reconnect=True)
+
+    def _check_for_updates(self) -> None:
+        if not app.settings.get('check_for_update'):
+            return
+
+        now = datetime.now()
+        last_check = app.settings.get('last_update_check')
+        if not last_check:
+            app.ged.raise_event(AllowGajimUpdateCheck())
+            return
+
+        last_check_time = datetime.strptime(last_check, '%Y-%m-%d %H:%M')
+        if (now - last_check_time).days < 7:
+            return
+
+        self.check_for_gajim_updates()
+
+    def check_for_gajim_updates(self) -> None:
+        self._log.info('Checking for Gajim updates')
+        session = Soup.Session()
+        session.props.user_agent = f'Gajim {app.version}'
+        message = Soup.Message.new(
+            'GET', 'https://gajim.org/current-version.json')
+        session.queue_message(message, self._on_update_response)
+
+    def _on_update_response(self,
+                            _session: Soup.Session,
+                            message: Soup.Message) -> None:
+
+        now = datetime.now()
+        app.settings.set('last_update_check', now.strftime('%Y-%m-%d %H:%M'))
+
+        response_body = message.props.response_body
+        if response_body is None or not response_body.data:
+            self._log.warning('Could not reach gajim.org for update check')
+            return
+
+        data = json.loads(response_body.data)
+        latest_version = data['current_version']
+
+        if V(latest_version) > V(app.version):
+            app.ged.raise_event(GajimUpdateAvailable(version=latest_version))
+            return
+
+        self._log.info('Gajim is up to date')

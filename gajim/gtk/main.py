@@ -33,6 +33,8 @@ from gajim.common import ged
 from gajim.common.const import Display
 from gajim.common.const import Direction
 from gajim.common.events import ApplicationEvent
+from gajim.common.events import AllowGajimUpdateCheck
+from gajim.common.events import GajimUpdateAvailable
 from gajim.common.events import AccountEnabled
 from gajim.common.events import AccountDisabled
 from gajim.common.events import ShowChanged
@@ -126,6 +128,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('signed-in', ged.GUI1, self._on_signed_in),
             ('account-enabled', ged.GUI1, self._on_account_enabled),
             ('account-disabled', ged.GUI1, self._on_account_disabled),
+            ('allow-gajim-update-check', ged.GUI1, self._on_allow_gajim_update),
+            ('gajim-update-available', ged.GUI1, self._on_gajim_update_available),
         ])
 
         self._check_for_account()
@@ -187,6 +191,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def _on_signed_in(event: SignedIn) -> None:
         app.app.set_account_actions_state(event.account, True)
         app.app.update_app_actions_state()
+
+    def _on_allow_gajim_update(self, event: AllowGajimUpdateCheck) -> None:
+        self.add_app_message(event.name)
+
+    def _on_gajim_update_available(self, event: GajimUpdateAvailable) -> None:
+        self.add_app_message(event.name, event.version)
 
     def _add_actions(self) -> None:
         actions = [
@@ -529,7 +539,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._workspace_side_bar.unselect_all()
         self._main_stack.show_app_page()
 
-    def add_app_message(self, category: str,
+    def add_app_message(self,
+                        category: str,
                         message: Optional[str] = None) -> None:
         self._app_page.add_app_message(category, message)
 

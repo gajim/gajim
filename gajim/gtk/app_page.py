@@ -115,10 +115,10 @@ class AppMessageRow(Gtk.ListBoxRow):
         Gtk.ListBoxRow.__init__(self)
         self._ui = get_builder('app_page.ui')
 
-        if category == 'gajim-update-check':
+        if category == 'allow-gajim-update-check':
             self.add(self._ui.gajim_update_check)
 
-        if category == 'gajim-update':
+        if category == 'gajim-update-available':
             self.add(self._ui.gajim_update)
             text = _('Version %s is available') % message
             self._ui.update_message.set_text(text)
@@ -127,7 +127,7 @@ class AppMessageRow(Gtk.ListBoxRow):
         self.show_all()
 
     def _on_check_clicked(self, _button: Gtk.Button) -> None:
-        app.interface.get_latest_release()
+        app.app.check_for_gajim_updates()
         list_box = cast(AppMessageListBox, self.get_parent())
         list_box.remove_app_message(self)
 

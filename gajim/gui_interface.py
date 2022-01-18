@@ -41,17 +41,13 @@ from typing import Union
 import os
 import sys
 import time
-import json
 import logging
 from functools import partial
 from threading import Thread
-from datetime import datetime
 from importlib.util import find_spec
-from packaging.version import Version as V
 
 from gi.repository import Gtk
 from gi.repository import GLib
-from gi.repository import Soup
 
 from nbxmpp import idlequeue
 from nbxmpp import Hashes2
@@ -166,8 +162,6 @@ class Interface:
         if sys.platform not in ('win32', 'darwin'):
             logind.enable()
             music_track.enable()
-        else:
-            GLib.timeout_add_seconds(20, self.check_for_updates)
 
         self.systray_enabled: bool = False
 
@@ -993,47 +987,6 @@ class Interface:
         app.settings.set_account_setting(app.ZEROCONF_ACC_NAME,
                                          'active',
                                          False)
-
-    def check_for_updates(self) -> None:
-        if not app.settings.get('check_for_update'):
-            return
-
-        now = datetime.now()
-        last_check = app.settings.get('last_update_check')
-        if not last_check:
-            app.window.add_app_message('gajim-update-check')
-            return
-
-        last_check_time = datetime.strptime(last_check, '%Y-%m-%d %H:%M')
-        if (now - last_check_time).days < 7:
-            return
-
-        self.get_latest_release()
-
-    def get_latest_release(self) -> None:
-        log.info('Checking for Gajim updates')
-        session = Soup.Session()
-        session.props.user_agent = f'Gajim {app.version}'
-        message = Soup.Message.new(
-            'GET', 'https://gajim.org/current-version.json')
-        session.queue_message(message, self._on_update_checked)
-
-    def _on_update_checked(self, _session, message):
-        now = datetime.now()
-        app.settings.set('last_update_check', now.strftime('%Y-%m-%d %H:%M'))
-
-        body = message.props.response_body.data
-        if not body:
-            log.warning('Could not reach gajim.org for update check')
-            return
-
-        data = json.loads(body)
-        latest_version = data['current_version']
-
-        if V(latest_version) > V(app.version):
-            app.window.add_app_message('gajim-update', latest_version)
-        else:
-            log.info('Gajim is up to date')
 
     def run(self, _application: Gtk.Application) -> None:
         if app.settings.get('trayicon') != 'never':

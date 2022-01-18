@@ -652,3 +652,14 @@ class FileRequestReceivedEvent(ApplicationEvent):
     account: str
     jid: str
     file_props: FileProp
+
+
+@dataclass
+class AllowGajimUpdateCheck(ApplicationEvent):
+    name: str = field(init=False, default='allow-gajim-update-check')
+
+
+@dataclass
+class GajimUpdateAvailable(ApplicationEvent):
+    name: str = field(init=False, default='gajim-update-available')
+    version: str
