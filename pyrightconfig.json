@@ -60,6 +60,7 @@
         "gajim/gtk/manage_sounds.py",
         "gajim/gtk/notification.py",
         "gajim/gtk/preview_audio.py",
+        "gajim/gtk/proxies.py",
         "gajim/gtk/resource_selector.py",
         "gajim/gtk/search_view.py",
         "gajim/gtk/sidebar_switcher.py",
