@@ -41,6 +41,8 @@ from .const import Setting
 from .const import SettingKind
 from .const import SettingType
 from .controls.groupchat import GroupchatControl
+from .dialogs import DialogButton
+from .dialogs import ConfirmationDialog
 from .emoji_chooser import emoji_chooser
 from .settings import PopoverSetting
 from .settings import SettingsBox
@@ -920,6 +922,9 @@ class Miscellaneous(PreferenceBox):
         reset_button.connect('clicked', self._on_reset_hints)
         reset_button.set_sensitive(self._check_hints_reset)
 
+        purge_history_button = pref_window.get_ui().purge_history_button
+        purge_history_button.connect('clicked', self._on_purge_history_clicked)
+
     @staticmethod
     def _get_proxies() -> dict[str, str]:
         return {proxy: proxy for proxy in app.settings.get_proxies()}
@@ -943,6 +948,23 @@ class Miscellaneous(PreferenceBox):
             app.settings.set(hint, True)
         button.set_sensitive(False)
 
+    @staticmethod
+    def _on_purge_history_clicked(button: Gtk.Button) -> None:
+        def _purge() -> None:
+            button.set_sensitive(False)
+            app.storage.archive.remove_all_history()
+            app.window.quit()
+
+        ConfirmationDialog(
+            _('Purge all Chat History'),
+            _('Purge all Chat History'),
+            _('Do you really want to remove all chat messages from Gajim?\n'
+              'Warning: This can’t be undone!\n'
+              'Gajim will quit afterwards.'),
+            [DialogButton.make('Cancel'),
+             DialogButton.make('Remove',
+                               text=_('_Purge'),
+                               callback=_purge)]).show()
 
 class Advanced(PreferenceBox):
     def __init__(self, pref_window: Preferences) -> None:

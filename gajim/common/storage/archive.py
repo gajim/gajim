@@ -1375,6 +1375,18 @@ class MessageArchiveStorage(SqliteStorage):
         self._delayed_commit()
         log.info('Forgot data for: %s', jid)
 
+    def remove_all_history(self) -> None:
+        """
+        Remove all messages for all accounts
+        """
+        statements = [
+            'DELETE FROM logs',
+            'DELETE FROM jids',
+            'DELETE FROM last_archive_message'
+        ]
+        self._execute_multiple(statements)
+        log.info('Removed all chat history')
+
     def _cleanup_chat_history(self) -> None:
         """
         Remove messages from account where messages are older than max_age
