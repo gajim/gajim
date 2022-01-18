@@ -1280,7 +1280,8 @@ def write_file_async(
         user_data: Optional[Any] = None):
 
     def _on_write_finished(outputstream: Gio.OutputStream,
-                           result: Gio.AsyncResult) -> None:
+                           result: Gio.AsyncResult,
+                           _data: bytes) -> None:
         try:
             successful, _bytes_written = outputstream.write_all_finish(result)
         except GLib.Error as error:
@@ -1295,10 +1296,14 @@ def write_file_async(
             callback(False, error, user_data)
             return
 
+        # Pass data as user_data to the callback, because
+        # write_all_async() takes no reference to the data
+        # and python gc collects it before the data is written
         outputstream.write_all_async(data,
                                      GLib.PRIORITY_DEFAULT,
                                      None,
-                                     _on_write_finished)
+                                     _on_write_finished,
+                                     data)
 
     file = Gio.File.new_for_path(str(path))
     file.create_async(Gio.FileCreateFlags.PRIVATE,
