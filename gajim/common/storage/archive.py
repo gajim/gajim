@@ -140,6 +140,14 @@ class LastArchiveMessageRow(NamedTuple):
     last_muc_timestamp: str
 
 
+class MessageExportRow(NamedTuple):
+    jid: str
+    contact_name: str
+    time: float
+    kind: int
+    message: str
+
+
 class MessageArchiveStorage(SqliteStorage):
     def __init__(self):
         SqliteStorage.__init__(self,
@@ -790,7 +798,7 @@ class MessageArchiveStorage(SqliteStorage):
             days=days, hours=23, minutes=59, seconds=59, microseconds=999999)
 
         sql = """
-            SELECT DISTINCT 
+            SELECT DISTINCT
             CAST(strftime('%d', time, 'unixepoch', 'localtime') AS INTEGER)
             AS day FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
             AND time BETWEEN ? AND ?
@@ -1350,6 +1358,17 @@ class MessageArchiveStorage(SqliteStorage):
         self._con.execute(sql, (jid_id,))
         log.info('Reset message archive info: %s', jid)
         self._delayed_commit()
+
+    def get_messages_for_export(self,
+                                account: str
+                                ) -> list[MessageExportRow]:
+        account_id = self.get_account_id(account)
+        sql = '''SELECT jid, time, kind, message, contact_name
+                 FROM logs
+                 NATURAL JOIN jids jid_id
+                 WHERE account_id = ?
+                 ORDER BY jid_id, time'''
+        return self._con.execute(sql, (account_id, )).fetchall()
 
     def remove_history(self, account: str, jid: JID) -> None:
         """

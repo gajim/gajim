@@ -164,4 +164,5 @@ WINDOW_MODULES = {
     'SynchronizeAccounts': 'gajim.gui.synchronize_accounts',
     'AdhocMUC': 'gajim.gui.adhoc_muc',
     'PasswordDialog': 'gajim.gui.password_dialog',
+    'HistoryExport': 'gajim.gui.history_export',
 }

@@ -445,6 +445,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
             ('-open-event', self._on_open_event_action, 'always', 'a{sv}'),
             ('-mark-as-read', self._on_mark_as_read_action, 'always', 'a{sv}'),
             ('-import-contacts', self._on_import_contacts_action, 'online', 's'),
+            ('-export-history', self._on_export_history, 'always', 's'),
         ]
         # pylint: enable=line-too-long
 
@@ -626,6 +627,11 @@ class GajimApplication(Gtk.Application, CoreApplication):
     def _on_import_contacts_action(_action: Gio.SimpleAction,
                                    param: GLib.Variant) -> None:
         open_window('SynchronizeAccounts', account=param.get_string())
+
+    @staticmethod
+    def _on_export_history(_action: Gio.SimpleAction,
+                           param: GLib.Variant) -> None:
+        open_window('HistoryExport', account=param.get_string())
 
     @staticmethod
     def _on_pep_config_action(_action: Gio.SimpleAction,

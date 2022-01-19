@@ -15,6 +15,7 @@
 from __future__ import annotations
 from typing import Any
 from typing import Dict
+from typing import Callable
 from typing import Optional
 from typing import Tuple
 
@@ -118,7 +119,7 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
             button, _ = self._buttons[button_name]
             button.show()
 
-    def set_button_visible_func(self, func):
+    def set_button_visible_func(self, func: Callable[..., list[str]]) -> None:
         self._button_visible_func = func
 
     def set_default_button(self, button_name: str) -> None:

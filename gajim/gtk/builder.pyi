@@ -262,6 +262,7 @@ class PreferencesBuilder(Builder):
     video: Gtk.Grid
     miscellaneous: Gtk.Grid
     reset_button: Gtk.Button
+    purge_history_button: Gtk.Button
     advanced: Gtk.Grid
     ace_button: Gtk.Button
 
@@ -816,6 +817,13 @@ class SearchViewBuilder(Builder):
     placeholder: Gtk.Box
 
 
+class HistoryExportBuilder(Builder):
+    account_liststore: Gtk.ListStore
+    select_account_box: Gtk.Box
+    account_combo: Gtk.ComboBox
+    file_chooser_button: Gtk.FileChooserButton
+
+
 class GroupsPostWindowBuilder(Builder):
     textbuffer1: Gtk.TextBuffer
     groups_post_window: Gtk.Window
@@ -1084,6 +1092,8 @@ def get_builder(file_name: Literal['popup_notification_window.ui'], widgets: lis
 def get_builder(file_name: Literal['synchronize_accounts.ui'], widgets: list[str] = ...) -> SynchronizeAccountsBuilder: ...
 @overload
 def get_builder(file_name: Literal['search_view.ui'], widgets: list[str] = ...) -> SearchViewBuilder: ...
+@overload
+def get_builder(file_name: Literal['history_export.ui'], widgets: list[str] = ...) -> HistoryExportBuilder: ...
 @overload
 def get_builder(file_name: Literal['groups_post_window.ui'], widgets: list[str] = ...) -> GroupsPostWindowBuilder: ...
 @overload
