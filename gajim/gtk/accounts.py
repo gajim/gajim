@@ -832,7 +832,7 @@ class PrivacyPage(GenericSettingPage):
                     'chat_history_max_age',
                     props={'entries': history_max_age},
                     desc=_('How long Gajim should keep your chat history')),
-            
+
             Setting(SettingKind.ACTION,
                     _('Export Chat History'),
                     SettingType.ACTION,
