@@ -15,7 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import List
+from __future__ import annotations
+
+from typing import cast
+from typing import Any
+from typing import Callable
+from typing import Optional
+from typing import Union
 
 import os
 import sys
@@ -42,7 +48,12 @@ def _require_native() -> bool:
 # Notes: Adding mime types to Gtk.FileFilter forces non-native dialogs
 
 class BaseFileChooser:
-    def _on_response(self, dialog, response, accept_cb, cancel_cb):
+    def _on_response(self,
+                     dialog: Union[Gtk.FileChooser, Gtk.FileChooserNative],
+                     response: Gtk.ResponseType,
+                     accept_cb: Callable[..., Any],
+                     cancel_cb: Optional[Callable[..., Any]]
+                     ) -> None:
         if response == Gtk.ResponseType.ACCEPT:
             if self.get_select_multiple():
                 accept_cb(dialog.get_filenames())
@@ -54,7 +65,7 @@ class BaseFileChooser:
             if cancel_cb is not None:
                 cancel_cb()
 
-    def _add_filters(self, filters):
+    def _add_filters(self, filters: list[Filter]) -> None:
         for filterinfo in filters:
             filter_ = Gtk.FileFilter()
             filter_.set_name(filterinfo.name)
@@ -67,9 +78,9 @@ class BaseFileChooser:
             if filterinfo.default:
                 self.set_filter(filter_)
 
-    def _update_preview(self, filechooser):
+    def _update_preview(self, filechooser: Gtk.FileChooser) -> None:
         path_to_file = filechooser.get_preview_filename()
-        preview = filechooser.get_preview_widget()
+        preview = cast(Gtk.Image, filechooser.get_preview_widget())
         if path_to_file is None or os.path.isdir(path_to_file):
             # nothing to preview
             preview.clear()
@@ -80,7 +91,7 @@ class BaseFileChooser:
         except GLib.Error:
             preview.clear()
             return
-        filechooser.get_preview_widget().set_from_pixbuf(pixbuf)
+        preview.set_from_pixbuf(pixbuf)
 
 
 class BaseFileOpenDialog:
@@ -107,12 +118,18 @@ class BaseAvatarChooserDialog:
 class NativeFileChooserDialog(Gtk.FileChooserNative, BaseFileChooser):
 
     _title = ''
-    _filters: List[Filter] = []
+    _filters: list[Filter] = []
     _action = Gtk.FileChooserAction.OPEN
 
-    def __init__(self, accept_cb, cancel_cb=None, transient_for=None,
-                 path=None, file_name=None, select_multiple=False,
-                 modal=False):
+    def __init__(self,
+                 accept_cb: Callable[..., Any],
+                 cancel_cb: Optional[Callable[..., Any]] = None,
+                 transient_for: Optional[Gtk.Window] = None,
+                 path: Optional[str] = None,
+                 file_name: Optional[str] = None,
+                 select_multiple: bool = False,
+                 modal: bool = False
+                 ) -> None:
 
         if transient_for is None:
             transient_for = app.app.get_active_window()
@@ -159,13 +176,20 @@ class NativeAvatarChooserDialog(BaseAvatarChooserDialog, NativeFileChooserDialog
 class GtkFileChooserDialog(Gtk.FileChooserDialog, BaseFileChooser):
 
     _title = ''
-    _filters: List[Filter] = []
+    _filters: list[Filter] = []
     _action = Gtk.FileChooserAction.OPEN
     _preivew_size = (200, 200)
 
-    def __init__(self, accept_cb, cancel_cb=None, transient_for=None,
-                 path=None, file_name=None, select_multiple=False,
-                 preview=True, modal=False):
+    def __init__(self,
+                 accept_cb: Callable[..., Any],
+                 cancel_cb: Optional[Callable[..., Any]] = None,
+                 transient_for: Optional[Gtk.Window] = None,
+                 path: Optional[str] = None,
+                 file_name: Optional[str] = None,
+                 select_multiple: bool = False,
+                 preview: bool = True,
+                 modal: bool = False
+                 ) -> None:
 
         if transient_for is None:
             transient_for = app.app.get_active_window()
@@ -196,7 +220,7 @@ class GtkFileChooserDialog(Gtk.FileChooserDialog, BaseFileChooser):
         self.connect('response', self._on_response, accept_cb, cancel_cb)
         self.show()
 
-    def _on_response(self, *args):
+    def _on_response(self, *args: Any) -> None:
         super()._on_response(*args)
         self.destroy()
 
@@ -209,13 +233,18 @@ class GtkAvatarChooserDialog(BaseAvatarChooserDialog, GtkFileChooserDialog):
     pass
 
 
-def FileChooserDialog(*args, **kwargs):
+def FileChooserDialog(*args: Any,
+                      **kwargs: Any
+                      ) -> Union[NativeFileOpenDialog, GtkFileOpenDialog]:
     if _require_native():
         return NativeFileOpenDialog(*args, **kwargs)
     return GtkFileOpenDialog(*args, **kwargs)
 
 
-def AvatarChooserDialog(*args, **kwargs):
+def AvatarChooserDialog(*args: Any,
+                        **kwargs: Any
+                        ) -> Union[NativeAvatarChooserDialog,
+                                   GtkAvatarChooserDialog]:
     if _require_native():
         return NativeAvatarChooserDialog(*args, **kwargs)
     return GtkAvatarChooserDialog(*args, **kwargs)
