@@ -20,15 +20,19 @@ from typing import Any
 from typing import Callable
 from typing import NamedTuple
 from typing import Optional
+from typing import Union
 
-from collections import namedtuple
 from enum import Enum
 from enum import IntEnum
 from enum import unique
 
 from gajim.common.setting_values import AllSettingsT
 
-Filter = namedtuple('Filter', 'name pattern default')
+
+class Filter(NamedTuple):
+    name: str
+    pattern: Union[str, list[str]]
+    default: bool
 
 
 class Setting(NamedTuple):
@@ -128,40 +132,40 @@ class ControlType(Enum):
 
 WINDOW_MODULES = {
     'AccountsWindow': 'gajim.gui.accounts',
-    'HistorySyncAssistant': 'gajim.gui.history_sync',
-    'ServerInfo': 'gajim.gui.server_info',
-    'MamPreferences': 'gajim.gui.mam_preferences',
-    'Preferences': 'gajim.gui.preferences',
-    'CreateGroupchatWindow': 'gajim.gui.groupchat_creation',
-    'StartChatDialog': 'gajim.gui.start_chat',
-    'AddContact': 'gajim.gui.add_contact',
-    'SingleMessageWindow': 'gajim.gui.single_message',
-    'Bookmarks': 'gajim.gui.bookmarks',
     'AccountWizard': 'gajim.gui.account_wizard',
+    'AddContact': 'gajim.gui.add_contact',
+    'AdhocMUC': 'gajim.gui.adhoc_muc',
+    'AdvancedConfig': 'gajim.gui.advanced_config',
+    'BlockingList': 'gajim.gui.blocking',
+    'Bookmarks': 'gajim.gui.bookmarks',
+    'CertificateDialog': 'gajim.gui.certificate_dialog',
+    'ChangePassword': 'gajim.gui.change_password',
+    'ContactInfo': 'gajim.gui.contact_info',
+    'CreateGroupchatWindow': 'gajim.gui.groupchat_creation',
+    'Features': 'gajim.gui.features',
+    'GroupchatConfig': 'gajim.gui.groupchat_config',
+    'GroupChatInvitation': 'gajim.gui.groupchat_invitation',
+    'GroupchatJoin': 'gajim.gui.groupchat_join',
+    'HistoryExport': 'gajim.gui.history_export',
+    'HistorySyncAssistant': 'gajim.gui.history_sync',
+    'MamPreferences': 'gajim.gui.mam_preferences',
     'ManageProxies': 'gajim.gui.proxies',
     'ManageSounds': 'gajim.gui.manage_sounds',
-    'ServiceDiscoveryWindow': 'gajim.gui.discovery',
-    'BlockingList': 'gajim.gui.blocking',
-    'XMLConsoleWindow': 'gajim.gui.xml_console',
-    'GroupchatJoin': 'gajim.gui.groupchat_join',
-    'PEPConfig': 'gajim.gui.pep_config',
-    'GroupchatConfig': 'gajim.gui.groupchat_config',
-    'ProfileWindow': 'gajim.gui.profile',
-    'SSLErrorDialog': 'gajim.gui.ssl_error_dialog',
-    'Themes': 'gajim.gui.themes',
-    'AdvancedConfig': 'gajim.gui.advanced_config',
-    'CertificateDialog': 'gajim.gui.certificate_dialog',
-    'RemoveAccount': 'gajim.gui.remove_account',
-    'ChangePassword': 'gajim.gui.change_password',
-    'PluginsWindow': 'gajim.plugins.gui',
-    'Features': 'gajim.gui.features',
-    'GroupChatInvitation': 'gajim.gui.groupchat_invitation',
-    'ContactInfo': 'gajim.gui.contact_info',
-    'WorkspaceDialog': 'gajim.gui.workspace_dialog',
-    'RosterItemExchange': 'gajim.gui.roster_item_exchange',
-    'ServiceRegistration': 'gajim.gui.service_registration',
-    'SynchronizeAccounts': 'gajim.gui.synchronize_accounts',
-    'AdhocMUC': 'gajim.gui.adhoc_muc',
     'PasswordDialog': 'gajim.gui.password_dialog',
-    'HistoryExport': 'gajim.gui.history_export',
+    'PEPConfig': 'gajim.gui.pep_config',
+    'PluginsWindow': 'gajim.plugins.gui',
+    'Preferences': 'gajim.gui.preferences',
+    'ProfileWindow': 'gajim.gui.profile',
+    'RemoveAccount': 'gajim.gui.remove_account',
+    'RosterItemExchange': 'gajim.gui.roster_item_exchange',
+    'ServerInfo': 'gajim.gui.server_info',
+    'ServiceDiscoveryWindow': 'gajim.gui.discovery',
+    'ServiceRegistration': 'gajim.gui.service_registration',
+    'SingleMessageWindow': 'gajim.gui.single_message',
+    'SSLErrorDialog': 'gajim.gui.ssl_error_dialog',
+    'StartChatDialog': 'gajim.gui.start_chat',
+    'SynchronizeAccounts': 'gajim.gui.synchronize_accounts',
+    'Themes': 'gajim.gui.themes',
+    'WorkspaceDialog': 'gajim.gui.workspace_dialog',
+    'XMLConsoleWindow': 'gajim.gui.xml_console',
 }
