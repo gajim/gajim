@@ -13,7 +13,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
-from typing import List
+from typing import cast
 
 import logging
 
@@ -32,6 +32,7 @@ from gajim.common.helpers import to_user_string
 from .assistant import Assistant
 from .assistant import Page
 from .assistant import ErrorPage
+from .assistant import ProgressPage
 from .assistant import SuccessPage
 from .dataform import DataFormWidget
 from .util import ensure_not_destroyed
@@ -57,7 +58,7 @@ class ChangePassword(Assistant):
                         'error': Error(),
                         'success': Success()})
 
-        progress = self.add_default_page('progress')
+        progress = cast(ProgressPage, self.add_default_page('progress'))
         progress.set_title(_('Changing Password...'))
         progress.set_text(_('Trying to change password...'))
 
@@ -83,11 +84,13 @@ class ChangePassword(Assistant):
 
     def _on_apply(self, next_stage: bool = False) -> None:
         if next_stage:
-            form = self.get_page('next_stage').get_submit_form()
+            next_stage_page = cast(NextStage, self.get_page('next_stage'))
+            form = next_stage_page.get_submit_form()
             self._client.get_module('Register').change_password_with_form(
                 form, callback=self._on_change_password)
         else:
-            password = self.get_page('password').get_password()
+            password_page = cast(EnterPassword, self.get_page('password'))
+            password = password_page.get_password()
             self._client.get_module('Register').change_password(
                 password, callback=self._on_change_password)
 
@@ -96,16 +99,19 @@ class ChangePassword(Assistant):
         try:
             task.finish()
         except ChangePasswordStanzaError as error:
-            self.get_page('next_stage').set_form(error.get_form())
+            next_stage_page = cast(NextStage, self.get_page('next_stage'))
+            next_stage_page.set_form(error.get_form())
             self.show_page('next_stage', Gtk.StackTransitionType.SLIDE_LEFT)
 
         except StanzaError as error:
             error_text = to_user_string(error)
-            self.get_page('error').set_text(error_text)
+            error_page = cast(Error, self.get_page('error'))
+            error_page.set_text(error_text)
             self.show_page('error', Gtk.StackTransitionType.SLIDE_LEFT)
 
         else:
-            password = self.get_page('password').get_password()
+            password_page = cast(EnterPassword, self.get_page('password'))
+            password = password_page.get_password()
             passwords.save_password(self.account, password)
             self.show_page('success')
 
@@ -190,7 +196,7 @@ class EnterPassword(Page):
     def get_password(self) -> str:
         return self._password1_entry.get_text()
 
-    def get_visible_buttons(self) -> List[str]:
+    def get_visible_buttons(self) -> list[str]:
         return ['apply']
 
 
@@ -219,9 +225,10 @@ class NextStage(Page):
         self._current_form.show_all()
 
     def get_submit_form(self) -> SimpleDataForm:
+        assert self._current_form is not None
         return self._current_form.get_submit_form()
 
-    def get_visible_buttons(self) -> List[str]:
+    def get_visible_buttons(self) -> list[str]:
         return ['apply']
 
 
@@ -233,7 +240,7 @@ class Error(ErrorPage):
         self.set_text(
             _('An error occurred while trying to change your password.'))
 
-    def get_visible_buttons(self) -> List[str]:
+    def get_visible_buttons(self) -> list[str]:
         return ['back']
 
 
@@ -244,5 +251,5 @@ class Success(SuccessPage):
         self.set_heading(_('Password Changed'))
         self.set_text(_('Your password has successfully been changed.'))
 
-    def get_visible_buttons(self) -> List[str]:
+    def get_visible_buttons(self) -> list[str]:
         return ['close']
