@@ -114,19 +114,16 @@ class Bytestream(BaseModule):
                 default=self._account, testit=testit)
             raise nbxmpp.NodeProcessed
 
-    def _ft_get_receiver_jid(self, file_props):
-        if self._account == 'Local':
-            return file_props.receiver.jid
+    @staticmethod
+    def _ft_get_receiver_jid(file_props):
         return file_props.receiver.jid + '/' + file_props.receiver.resource
 
-    def _ft_get_from(self, iq_obj):
-        if self._account == 'Local':
-            return iq_obj.getFrom()
+    @staticmethod
+    def _ft_get_from(iq_obj):
         return helpers.get_full_jid_from_iq(iq_obj)
 
-    def _ft_get_streamhost_jid_attr(self, streamhost):
-        if self._account == 'Local':
-            return streamhost.getAttr('jid')
+    @staticmethod
+    def _ft_get_streamhost_jid_attr(streamhost):
         return helpers.parse_jid(streamhost.getAttr('jid'))
 
     def send_file_approval(self, file_props):

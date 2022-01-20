@@ -35,7 +35,6 @@ if TYPE_CHECKING:
     # pylint: disable=unused-import
     from gajim.common.client import Client
     from nbxmpp.client import Client as xmppClient
-    from gajim.common.zeroconf.connection_zeroconf import ConnectionZeroconf
     from gajim.common.modules.contacts import CommonContact
     from gajim.common.modules.contacts import BareContact
     from gajim.common.modules.contacts import ResourceContact
@@ -49,7 +48,7 @@ if TYPE_CHECKING:
 
 InterfaceT = Union['Interface']
 
-ConnectionT = Union['Client', 'ConnectionZeroconf']
+ConnectionT = Union['Client']
 CSSConfigT = Union['CSSConfig']
 
 # PEP

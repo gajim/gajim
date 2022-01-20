@@ -226,9 +226,7 @@ def build_accounts_menu() -> None:
         acc_menu.append_item(add_contact_item)
         for acc in accounts_list:
             label = escape_mnemonic(app.get_account_label(acc))
-            if acc != 'Local':
-                acc_menu.append_submenu(
-                    label, get_account_menu(acc))
+            acc_menu.append_submenu(label, get_account_menu(acc))
     else:
         acc_menu = get_account_menu(accounts_list[0])
         modify_account_item = Gio.MenuItem.new(_('_Modify Account…'),
@@ -243,7 +241,6 @@ def build_accounts_menu() -> None:
 
 def get_encryption_menu(control_id: str,
                         control_type: ControlType,
-                        zeroconf: bool = False
                         ) -> Optional[Gio.Menu]:
     menu = Gio.Menu()
     menu.append(
@@ -254,9 +251,6 @@ def get_encryption_menu(control_id: str,
                 continue
         if control_type.is_privatechat:
             if not hasattr(plugin, 'allow_privatechat'):
-                continue
-        if zeroconf:
-            if not hasattr(plugin, 'allow_zeroconf'):
                 continue
         menu_action = f'win.set-encryption-{control_id}::{name}'
         menu.append(name, menu_action)

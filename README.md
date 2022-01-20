@@ -21,7 +21,6 @@
 ### Optional Runtime Requirements
 
 - python3-pil (pillow) for support of webp avatars
-- gir1.2-avahi-0.6 for zeroconf on Linux or [pybonjour](https://dev.gajim.org/lovetox/pybonjour-python3) on Windows/macOS
 - gir1.2-gspell-1 and hunspell-LANG where lang is your locale eg. en, fr etc
 - gir1.2-secret-1 for GNOME Keyring or KDE support as password storage
 - D-Bus running to have gajim-remote working

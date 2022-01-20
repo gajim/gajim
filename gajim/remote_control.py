@@ -797,15 +797,10 @@ class GajimRemote(Server):
             accounts = app.connections.keys()
             for acct in accounts:
                 if app.account_is_available(acct):
-                    if not app.connections[acct].is_zeroconf:
-                        account = acct
-                        break
+                    account = acct
+                    break
             if not account:
                 return
-
-        if app.connections[account].is_zeroconf:
-            # zeroconf not support groupchats
-            return
 
         app.interface.show_add_join_groupchat(account,
                                               room_jid,

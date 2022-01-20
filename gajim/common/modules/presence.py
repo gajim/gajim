@@ -24,7 +24,6 @@ from nbxmpp.const import PresenceType
 from gajim.common import app
 from gajim.common import idle
 from gajim.common.events import PresenceReceived
-from gajim.common.events import RawPresenceReceived
 from gajim.common.events import ShowChanged
 from gajim.common.events import SubscribePresenceReceived
 from gajim.common.events import SubscribedPresenceReceived
@@ -99,12 +98,6 @@ class Presence(BaseModule):
 
         if properties.type == PresenceType.ERROR:
             self._log.info('Error: %s %s', properties.jid, properties.error)
-            return
-
-        if self._account == 'Local':
-            app.ged.raise_event(
-                RawPresenceReceived(conn=self._con,
-                                    stanza=stanza))
             return
 
         if properties.is_self_presence:

@@ -131,40 +131,6 @@ class BookmarksBuilder(Builder):
     autojoin: Gtk.CellRendererToggle
 
 
-class ZeroconfInformationWindowBuilder(Builder):
-    zeroconf_information_window: Gtk.Window
-    vbox1: Gtk.Box
-    nickname_label: Gtk.Label
-    information_notebook: Gtk.Notebook
-    hbox3: Gtk.Box
-    grid1: Gtk.Grid
-    label51: Gtk.Label
-    label53: Gtk.Label
-    label54: Gtk.Label
-    log_history_checkbutton: Gtk.CheckButton
-    local_jid_label: Gtk.Label
-    resource_prio_label_eventbox: Gtk.EventBox
-    resource_prio_label: Gtk.Label
-    status_label_eventbox: Gtk.EventBox
-    status_label: Gtk.Label
-    vbox2: Gtk.Box
-    PHOTO_eventbox: Gtk.EventBox
-    PHOTO_image: Gtk.Image
-    label3: Gtk.Label
-    grid2: Gtk.Grid
-    label59: Gtk.Label
-    label58: Gtk.Label
-    label55: Gtk.Label
-    label56: Gtk.Label
-    first_name_label: Gtk.Label
-    last_name_label: Gtk.Label
-    jabber_id_label: Gtk.Label
-    email_label: Gtk.Label
-    label57: Gtk.Label
-    hbuttonbox1: Gtk.ButtonBox
-    close_button: Gtk.Button
-
-
 class EmojiChooserBuilder(Builder):
     box: Gtk.Box
     search: Gtk.SearchEntry
@@ -987,8 +953,6 @@ def get_builder(file_name: Literal['workspace_dialog.ui'], widgets: list[str] = 
 def get_builder(file_name: Literal['profile.ui'], widgets: list[str] = ...) -> ProfileBuilder: ...
 @overload
 def get_builder(file_name: Literal['bookmarks.ui'], widgets: list[str] = ...) -> BookmarksBuilder: ...
-@overload
-def get_builder(file_name: Literal['zeroconf_information_window.ui'], widgets: list[str] = ...) -> ZeroconfInformationWindowBuilder: ...
 @overload
 def get_builder(file_name: Literal['emoji_chooser.ui'], widgets: list[str] = ...) -> EmojiChooserBuilder: ...
 @overload

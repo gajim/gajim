@@ -183,7 +183,8 @@ class GtkMenuBackend(EventHelper):
 
         if not app.settings.get('main_window_skip_taskbar'):
             app.window.set_property('skip-taskbar-hint', False)
-        app.window.present_with_time(Gtk.get_current_event_time())
+        # app.window.present_with_time(Gtk.get_current_event_time())
+        app.app.activate()
 
     @staticmethod
     def _on_preferences(_widget: Gtk.MenuItem) -> None:

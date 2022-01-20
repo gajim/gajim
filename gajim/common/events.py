@@ -583,13 +583,6 @@ class SecCatalogReceived(ApplicationEvent):
 
 
 @dataclass
-class RawPresenceReceived(ApplicationEvent):
-    name: str = field(init=False, default='raw-pres-received')
-    conn: 'Client'
-    stanza: Any
-
-
-@dataclass
 class PresenceReceived(ApplicationEvent):
     name: str = field(init=False, default='presence-received')
     account: str

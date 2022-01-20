@@ -196,9 +196,6 @@ class StandardCommonChatCommands(CommandContainer):
     @command
     @doc(_("Send a ping to the contact"))
     def ping(self):
-        if self.account == app.ZEROCONF_ACC_NAME:
-            raise CommandError(
-                _('Command is not supported for zeroconf accounts'))
         app.connections[self.account].get_module('Ping').send_ping(self.contact)
 
     @command
@@ -451,10 +448,6 @@ class StandardGroupChatCommands(CommandContainer):
     @command
     @doc(_("Send a ping to the contact"))
     def ping(self, nick):
-        if self.account == app.ZEROCONF_ACC_NAME:
-            raise CommandError(
-                _('Command is not supported for zeroconf accounts'))
-
         client = app.get_client(self.account)
         groupchat_contact = client.get_module('Contacts').get_contact(
             self.room_jid, groupchat=True)

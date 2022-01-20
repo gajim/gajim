@@ -118,14 +118,6 @@ class Features(Gtk.ApplicationWindow):
                     _('Requires: libxss'),
                     _('No additional requirements'),
                     auto_status_enabled),
-            Feature(_('Bonjour / Zeroconf (Serverless Chat)'),
-                    app.is_installed('ZEROCONF'),
-                    _('Enables Gajim to automatically detected clients in a '
-                      'local network for serverless chats'),
-                    _('Requires: gir1.2-avahi-0.6'),
-                    _('Requires: pybonjour and bonjour SDK running (%(url)s)')
-                    % {'url': 'https://developer.apple.com/opensource/)'},
-                    None),
             Feature(_('Location detection'),
                     app.is_installed('GEOCLUE'),
                     _('Enables Gajim to be location-aware, if the user decides '

@@ -425,9 +425,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
     def _get_account_actions(self,
                              account: str) -> list[tuple[str, Any, str, str]]:
-        if account == 'Local':
-            return []
-
         # pylint: disable=line-too-long
         return [
             ('-bookmarks', self._on_bookmarks_action, 'online', 's'),

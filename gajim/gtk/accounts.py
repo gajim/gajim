@@ -17,7 +17,6 @@ from __future__ import annotations
 from typing import Any
 from typing import cast
 
-import sys
 import locale
 import logging
 from collections import defaultdict
@@ -33,7 +32,6 @@ from gajim.common import passwords
 from gajim.common.events import AccountDisonnected
 from gajim.common.i18n import _
 from gajim.common.i18n import Q_
-from gajim.common.zeroconf.connection_zeroconf import ConnectionZeroconf
 
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
@@ -72,9 +70,6 @@ class AccountsWindow(Gtk.ApplicationWindow):
         self.add(box)
 
         for account in app.get_accounts_sorted():
-            if account == 'Local':
-                # Disable zeroconf support until its working again
-                continue
             self.add_account(account, initial=True)
 
         self._menu.connect('menu-activated', self._on_menu_activated)
@@ -125,12 +120,6 @@ class AccountsWindow(Gtk.ApplicationWindow):
         if not app.account_is_connected(account):
             return
 
-        if account == app.ZEROCONF_ACC_NAME:
-            zeroconf_conn = cast(
-                ConnectionZeroconf, app.connections[app.ZEROCONF_ACC_NAME])
-            zeroconf_conn.update_details()
-            return
-
         def relog():
             app.connections[account].disconnect(gracefully=True,
                                                 reconnect=True,
@@ -149,22 +138,14 @@ class AccountsWindow(Gtk.ApplicationWindow):
 
     @staticmethod
     def _get_relogin_settings(account: str) -> list[str]:
-        if account == app.ZEROCONF_ACC_NAME:
-            settings = [
-                'zeroconf_first_name',
-                'zeroconf_last_name',
-                'zeroconf_jabber_id',
-                'zeroconf_email'
-            ]
-        else:
-            settings = [
-                'client_cert',
-                'proxy',
-                'resource',
-                'use_custom_host',
-                'custom_host',
-                'custom_port'
-            ]
+        settings = [
+            'client_cert',
+            'proxy',
+            'resource',
+            'use_custom_host',
+            'custom_host',
+            'custom_port'
+        ]
 
         values: list[Any] = []
         for setting in settings:
@@ -173,10 +154,6 @@ class AccountsWindow(Gtk.ApplicationWindow):
 
     @staticmethod
     def on_remove_account(account: str) -> None:
-        if app.settings.get_account_setting(account, 'is_zeroconf'):
-            # Should never happen as button is insensitive
-            return
-
         open_window('RemoveAccount', account=account)
 
     def remove_account(self, account: str) -> None:
@@ -270,8 +247,6 @@ class AccountMenu(Gtk.Box):
 
     @staticmethod
     def _sort_func(row1: AccountRow, row2: AccountRow) -> int:
-        if row1.label == 'Local':
-            return -1
         return locale.strcoll(row1.label.lower(), row2.label.lower())
 
     def add_account(self, row: AccountRow) -> None:
@@ -341,11 +316,10 @@ class AccountSubMenu(Gtk.ListBox):
         self.add(AccountLabelMenuItem(self, self._account))
         self.add(BackMenuItem())
         self.add(PageMenuItem('general', _('General')))
-        if account != 'Local':
-            self.add(PageMenuItem('privacy', _('Privacy')))
-            self.add(PageMenuItem('connection', _('Connection')))
-            self.add(PageMenuItem('advanced', _('Advanced')))
-            self.add(RemoveMenuItem())
+        self.add(PageMenuItem('privacy', _('Privacy')))
+        self.add(PageMenuItem('connection', _('Connection')))
+        self.add(PageMenuItem('advanced', _('Advanced')))
+        self.add(RemoveMenuItem())
 
     @property
     def account(self) -> str:
@@ -461,13 +435,10 @@ class Account:
         self._menu = menu
         self._settings = settings
 
-        if account == app.ZEROCONF_ACC_NAME:
-            self._settings.add_page(ZeroConfPage(account))
-        else:
-            self._settings.add_page(GeneralPage(account))
-            self._settings.add_page(ConnectionPage(account))
-            self._settings.add_page(PrivacyPage(account))
-            self._settings.add_page(AdvancedPage(account))
+        self._settings.add_page(GeneralPage(account))
+        self._settings.add_page(ConnectionPage(account))
+        self._settings.add_page(PrivacyPage(account))
+        self._settings.add_page(AdvancedPage(account))
 
         self._account_row = AccountRow(account)
         self._menu.add_account(self._account_row)
@@ -534,17 +505,6 @@ class AccountRow(Gtk.ListBoxRow):
         self._switch_state_label.set_xalign(1)
         self._switch_state_label.set_valign(Gtk.Align.CENTER)
         self._set_label(account_enabled)
-
-        if (self._account == app.ZEROCONF_ACC_NAME and
-                not app.is_installed('ZEROCONF')):
-            self._switch.set_active(False)
-            self.set_activatable(False)
-            self.set_sensitive(False)
-            if sys.platform in ('win32', 'darwin'):
-                tooltip = _('Please check if Bonjour is installed.')
-            else:
-                tooltip = _('Please check if Avahi is installed.')
-            self.set_tooltip_text(tooltip)
 
         self._switch.connect(
             'state-set', self._on_enable_switch, self._account)
@@ -944,55 +904,6 @@ class AdvancedPage(GenericSettingPage):
                            'messages, if the server supports XEP-0258'))
         ]
         GenericSettingPage.__init__(self, account, settings)
-
-
-class ZeroConfPage(GenericSettingPage):
-
-    name = 'general'
-
-    def __init__(self, account: str) -> None:
-
-        settings = [
-            Setting(SettingKind.DIALOG, _('Profile'),
-                    SettingType.DIALOG,
-                    props={'dialog': ZeroconfProfileDialog}),
-
-            Setting(SettingKind.SWITCH, _('Connect on startup'),
-                    SettingType.ACCOUNT_CONFIG, 'autoconnect',
-                    desc=_('Use environment variable')),
-
-            Setting(SettingKind.SWITCH,
-                    _('Save conversations for all contacts'),
-                    SettingType.ACCOUNT_CONFIG, 'no_log_for',
-                    desc=_('Store conversations on the harddrive')),
-
-            Setting(SettingKind.SWITCH, _('Global Status'),
-                    SettingType.ACCOUNT_CONFIG, 'sync_with_global_status',
-                    desc=_('Synchronize the status of all accounts')),
-        ]
-
-        GenericSettingPage.__init__(self, account, settings)
-
-
-class ZeroconfProfileDialog(SettingsDialog):
-    def __init__(self, account: str, parent: Gtk.Window) -> None:
-
-        settings = [
-            Setting(SettingKind.ENTRY, _('First Name'),
-                    SettingType.ACCOUNT_CONFIG, 'zeroconf_first_name'),
-
-            Setting(SettingKind.ENTRY, _('Last Name'),
-                    SettingType.ACCOUNT_CONFIG, 'zeroconf_last_name'),
-
-            Setting(SettingKind.ENTRY, _('XMPP Address'),
-                    SettingType.ACCOUNT_CONFIG, 'zeroconf_jabber_id'),
-
-            Setting(SettingKind.ENTRY, _('Email'),
-                    SettingType.ACCOUNT_CONFIG, 'zeroconf_email'),
-        ]
-
-        SettingsDialog.__init__(self, parent, _('Profile'),
-                                Gtk.DialogFlags.MODAL, settings, account)
 
 
 class PriorityDialog(SettingsDialog):

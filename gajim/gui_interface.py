@@ -71,7 +71,6 @@ from gajim.common.events import FileProgress
 from gajim.common.events import FileError
 from gajim.common.events import MucAdded
 from gajim.common.events import PasswordRequired
-from gajim.common.zeroconf import connection_zeroconf
 from gajim.common.helpers import ask_for_status_message
 from gajim.common.structs import OutgoingMessage
 from gajim.common.i18n import _
@@ -88,7 +87,6 @@ from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ErrorDialog
 from gajim.gui.dialogs import ConfirmationDialog
-from gajim.gui.dialogs import InputDialog
 from gajim.gui.filechoosers import FileChooserDialog
 from gajim.gui.filetransfer import FileTransfersWindow
 from gajim.gui.menus import build_accounts_menu
@@ -112,11 +110,6 @@ class Interface:
 
         self.preview_manager = PreviewManager()
 
-        for account in app.settings.get_accounts():
-            if app.settings.get_account_setting(account, 'is_zeroconf'):
-                app.ZEROCONF_ACC_NAME = account
-                break
-
         app.idlequeue = idlequeue.get_idlequeue()
         # resolve and keep current record of resolved hosts
         app.socks5queue = socks5.SocksQueue(
@@ -132,15 +125,8 @@ class Interface:
         self._create_core_handlers_list()
         self._register_core_handlers()
 
-        # self.create_zeroconf_default_config()
-        # if app.settings.get_account_setting(app.ZEROCONF_ACC_NAME, 'active') \
-        # and app.is_installed('ZEROCONF'):
-        #     app.connections[app.ZEROCONF_ACC_NAME] = \
-        #         connection_zeroconf.ConnectionZeroconf(app.ZEROCONF_ACC_NAME)
-
         for account in app.settings.get_accounts():
-            if (not app.settings.get_account_setting(account, 'is_zeroconf') and
-                    app.settings.get_account_setting(account, 'active')):
+            if app.settings.get_account_setting(account, 'active'):
                 client = Client(account)
                 app.connections[account] = client
                 app.ged.register_event_handler(
@@ -171,7 +157,6 @@ class Interface:
             'http-auth-received': [self.handle_event_http_auth],
             'password-required': [self.handle_event_password_required],
             'client-cert-passphrase': [self.handle_event_client_cert_passphrase],
-            'zeroconf-name-conflict': [self.handle_event_zc_name_conflict],
             'signed-in': [self.handle_event_signed_in],
             'presence-received': [self.handle_event_presence],
             'our-show': [self.handle_event_status],
@@ -262,29 +247,6 @@ class Interface:
     @staticmethod
     def handle_event_password_required(event: PasswordRequired) -> None:
         open_window('PasswordDialog', account=event.conn.name, event=event)
-
-    @staticmethod
-    def handle_event_zc_name_conflict(event):
-        def _on_ok(new_name):
-            app.settings.set_account_setting(event.conn.name, 'name', new_name)
-            event.conn.username = new_name
-            event.conn.change_status(
-                event.conn.status, event.conn.status_message)
-
-        def _on_cancel(*args):
-            event.conn.change_status('offline', '')
-
-        InputDialog(
-            _('Username Conflict'),
-            _('Username Conflict'),
-            _('Please enter a new username for your local account'),
-            [DialogButton.make('Cancel',
-                               callback=_on_cancel),
-             DialogButton.make('Accept',
-                               text=_('_OK'),
-                               callback=_on_ok)],
-            input_str=event.alt_name,
-            transient_for=app.window).show()
 
     @staticmethod
     def handle_event_signed_in(event):
@@ -692,11 +654,7 @@ class Interface:
             window.add_account(account)
 
     def enable_account(self, account: str) -> None:
-        if account == app.ZEROCONF_ACC_NAME:
-            app.connections[account] = connection_zeroconf.ConnectionZeroconf(
-                account)
-        else:
-            app.connections[account] = Client(account)
+        app.connections[account] = Client(account)
 
         app.plugin_manager.register_modules_for_account(
             app.connections[account])
@@ -713,10 +671,7 @@ class Interface:
         app.automatic_rooms[account] = {}
         app.newly_added[account] = []
         app.to_be_removed[account] = []
-        if account == app.ZEROCONF_ACC_NAME:
-            app.nicks[account] = app.ZEROCONF_ACC_NAME
-        else:
-            app.nicks[account] = app.settings.get_account_setting(account,
+        app.nicks[account] = app.settings.get_account_setting(account,
                                                                   'name')
         app.block_signed_in_notifications[account] = True
 
@@ -746,8 +701,6 @@ class Interface:
 
         app.ged.raise_event(AccountDisabled(account=account))
 
-        if account == app.ZEROCONF_ACC_NAME:
-            app.connections[account].disable_account()
         app.connections[account].cleanup()
         del app.connections[account]
         del self.instances[account]
@@ -941,36 +894,6 @@ class Interface:
         window.connect('delete_event', _on_delete)
         view.updateNamespace({'gajim': app})
         app.ipython_window = window
-
-    def create_zeroconf_default_config(self) -> None:
-        if app.settings.get_account_setting(app.ZEROCONF_ACC_NAME, 'name'):
-            return
-        log.info('Creating zeroconf account')
-        app.settings.add_account(app.ZEROCONF_ACC_NAME)
-        app.settings.set_account_setting(app.ZEROCONF_ACC_NAME,
-                                         'autoconnect',
-                                         True)
-        app.settings.set_account_setting(app.ZEROCONF_ACC_NAME,
-                                         'no_log_for',
-                                         '')
-        app.settings.set_account_setting(app.ZEROCONF_ACC_NAME,
-                                         'password',
-                                         'zeroconf')
-        app.settings.set_account_setting(app.ZEROCONF_ACC_NAME,
-                                         'sync_with_global_status',
-                                         True)
-        app.settings.set_account_setting(app.ZEROCONF_ACC_NAME,
-                                         'custom_port',
-                                         5298)
-        app.settings.set_account_setting(app.ZEROCONF_ACC_NAME,
-                                         'is_zeroconf',
-                                         True)
-        app.settings.set_account_setting(app.ZEROCONF_ACC_NAME,
-                                         'use_ft_proxies',
-                                         False)
-        app.settings.set_account_setting(app.ZEROCONF_ACC_NAME,
-                                         'active',
-                                         False)
 
     def run(self, _application: Gtk.Application) -> None:
         # Creating plugin manager

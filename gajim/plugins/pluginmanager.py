@@ -500,8 +500,6 @@ class PluginManager(metaclass=Singleton):
             return
         for con in app.connections.values():
             for module in plugin.modules:
-                if not module.zeroconf and con.name == 'Local':
-                    continue
                 instance, name = module.get_instance(con)
                 modules.register_single_module(con, instance, name)
 
@@ -613,8 +611,6 @@ class PluginManager(metaclass=Singleton):
 
             for module in plugin.modules:
                 instance, name = module.get_instance(con)
-                if not module.zeroconf and con.name == 'Local':
-                    continue
                 modules.register_single_module(con, instance, name)
 
                 for handler in instance.handlers:

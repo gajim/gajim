@@ -74,8 +74,6 @@ class AdhocMUC(Gtk.ApplicationWindow):
     def _add_possible_invitees(self):
         for acc in app.settings.get_active_accounts():
             client = app.get_client(acc)
-            if client.is_zeroconf:
-                continue
             for contact in client.get_module('Roster').iter_contacts():
                 jid = str(contact.jid)
                 # Add contact if it can be invited
@@ -92,7 +90,7 @@ class AdhocMUC(Gtk.ApplicationWindow):
 
     def _is_invitable(self, contact):
         # All contacts BUT the following can be invited:
-        # ourself, gateway contacts, zeroconf contacts
+        # ourself, gateway contacts
         return (str(contact.jid) != str(self.jid) and
                 contact.jid != str(self._client.get_own_jid().bare) and
                 str(contact.jid) != app.get_jid_from_account(self.account) and

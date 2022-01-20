@@ -145,7 +145,7 @@ class ChatControl(BaseControl):
         self.set_lock_image()
 
         self.xml.encryption_menu.set_menu_model(get_encryption_menu(
-            self.control_id, self._type, self.account == 'Local'))
+            self.control_id, self._type))
         self.set_encryption_menu_icon()
         self.msg_textview.grab_focus()
 
@@ -253,11 +253,8 @@ class ChatControl(BaseControl):
         self._get_action('send-marker-').change_state(state)
 
         # Convert to GC
-        if app.settings.get_account_setting(self.account, 'is_zeroconf'):
-            self._get_action('invite-contacts-').set_enabled(False)
-        else:
-            enabled = self.contact.supports(Namespace.MUC) and online
-            self._get_action('invite-contacts-').set_enabled(enabled)
+        enabled = self.contact.supports(Namespace.MUC) and online
+        self._get_action('invite-contacts-').set_enabled(enabled)
 
         # Information
         self._get_action('information-').set_enabled(online)

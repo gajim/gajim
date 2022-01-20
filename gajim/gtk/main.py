@@ -663,9 +663,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     @staticmethod
     def _check_for_account() -> None:
         accounts = app.settings.get_accounts()
-        if (not accounts or accounts == ['Local'] and
-                not app.settings.get_account_setting('Local', 'active')):
-            # Either no account configured or only disabled Local account
+        if not accounts:
             def _open_wizard():
                 open_window('AccountWizard')
 

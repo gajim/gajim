@@ -30,7 +30,6 @@
       <li>Support for multiple accounts</li>
       <li>Group multiple contacts from one friend to a single Meta-Contact</li>
       <li>XML console to see what's happening on the protocol layer</li>
-      <li>Serverless messaging (Bonjour/Zeroconf)</li>
       <li>Support for service discovery including nodes and search for users</li>
       <li>Even more features via plugins</li>
     </ul>

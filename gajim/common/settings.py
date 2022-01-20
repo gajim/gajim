@@ -310,6 +310,9 @@ class Settings:
                                              group_chat_settings)
 
         for account, settings in account_settings.items():
+            if account == 'Local':
+                # Zeroconf support was dropped so don’t migrate the account
+                continue
             self.add_account(account)
             self._account_settings[account]['account'] = settings
             self._account_settings[account]['contact'] = contact_settings

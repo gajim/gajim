@@ -117,9 +117,6 @@ cert_store = cast('CertificateStore', None)
 
 task_manager = None
 
-# zeroconf account name
-ZEROCONF_ACC_NAME = 'Local'
-
 # These will be set in app.gui_interface.
 idlequeue = cast(IdleQueue, None)
 socks5queue = None
@@ -129,8 +126,6 @@ gupnp_igd = None
 gsound_ctx = None
 
 _dependencies = {
-    'AVAHI': False,
-    'PYBONJOUR': False,
     'FARSTREAM': False,
     'GST': False,
     'AV': False,
@@ -161,9 +156,6 @@ def get_client(account: str) -> types.Client:
 
 
 def is_installed(dependency: str) -> bool:
-    if dependency == 'ZEROCONF':
-        # Alias for checking zeroconf libs
-        return _dependencies['AVAHI'] or _dependencies['PYBONJOUR']
     return _dependencies[dependency]
 
 
@@ -194,20 +186,6 @@ def disable_dependency(dependency: str) -> None:
 
 def detect_dependencies() -> None:
     import gi
-
-    # ZEROCONF
-    try:
-        import pybonjour  # pylint: disable=unused-import
-        _dependencies['PYBONJOUR'] = True
-    except Exception:
-        pass
-
-    try:
-        gi.require_version('Avahi', '0.6')
-        from gi.repository import Avahi  # pylint: disable=unused-import
-        _dependencies['AVAHI'] = True
-    except Exception:
-        pass
 
     try:
         gi.require_version('Gst', '1.0')
@@ -397,14 +375,10 @@ def get_accounts_sorted() -> list[str]:
     '''
     account_list = settings.get_accounts()
     account_list.sort(key=str.lower)
-    if 'Local' in account_list:
-        account_list.remove('Local')
-        account_list.insert(0, 'Local')
     return account_list
 
 
 def get_enabled_accounts_with_labels(
-        exclude_local: bool = True,
         connected_only: bool = False,
         private_storage_only: bool = False) -> list[list[str]]:
     """
@@ -413,8 +387,6 @@ def get_enabled_accounts_with_labels(
     """
     accounts: list[list[str]] = []
     for acc in connections:
-        if exclude_local and account_is_zeroconf(acc):
-            continue
         if connected_only and not account_is_connected(acc):
             continue
         if private_storage_only and not account_supports_private_storage(acc):
@@ -428,10 +400,6 @@ def get_enabled_accounts_with_labels(
 
 def get_account_label(account: str) -> str:
     return settings.get_account_setting(account, 'account_label') or account
-
-
-def account_is_zeroconf(account: str) -> bool:
-    return connections[account].is_zeroconf
 
 
 def account_supports_private_storage(account: str) -> bool:
@@ -455,11 +423,6 @@ def account_is_available(account: str) -> bool:
 
 def account_is_disconnected(account: str) -> bool:
     return not account_is_connected(account)
-
-
-def zeroconf_is_connected() -> bool:
-    return account_is_connected(ZEROCONF_ACC_NAME) and \
-            settings.get_account_setting(ZEROCONF_ACC_NAME, 'is_zeroconf')
 
 
 def get_transport_name_from_jid(
