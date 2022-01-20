@@ -742,7 +742,7 @@ class GroupchatControl(BaseControl):
         if not self.is_anonymous and muc_prefer_direct_msg:
             participant = self.contact.get_resource(nick)
             app.window.add_chat(self.account,
-                                participant.real_jid.bare,
+                                participant.real_jid,
                                 'contact',
                                 select=True,
                                 workspace='current')
