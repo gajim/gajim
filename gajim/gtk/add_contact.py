@@ -12,11 +12,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Any
-from typing import Dict
-from typing import List
+from typing import cast
 from typing import Optional
-from typing import Tuple
 from typing import Union
 
 import logging
@@ -40,6 +40,7 @@ from .adhoc import AdHocCommand
 from .assistant import Assistant
 from .assistant import Page
 from .assistant import ErrorPage
+from .assistant import ProgressPage
 from .groupchat_info import GroupChatInfoScrolled
 from .builder import get_builder
 from .util import open_window
@@ -75,7 +76,7 @@ class AddContact(Assistant):
             'gateway': Gateway(),
         })
 
-        progress = self.add_default_page('progress')
+        progress = cast(ProgressPage, self.add_default_page('progress'))
         progress.set_title(_('Gathering information…'))
         progress.set_text(_('Trying to gather information on this address…'))
 
@@ -92,8 +93,8 @@ class AddContact(Assistant):
                            button_name: str
                            ) -> None:
         page = self.get_current_page()
-        account, _ = self.get_page('address').get_account_and_jid()
-        assert account is not None
+        address_page = cast(Address, self.get_page('address'))
+        account, _ = address_page.get_account_and_jid()
 
         if button_name == 'next':
             self._start_disco()
@@ -102,13 +103,14 @@ class AddContact(Assistant):
         if button_name == 'back':
             self.show_page('address',
                            Gtk.StackTransitionType.SLIDE_RIGHT)
-            self.get_page('address').focus()
+            address_page.focus()
             return
 
         if button_name == 'add':
             client = app.get_client(account)
             if page == 'contact':
-                data = self.get_page('contact').get_subscription_data()
+                contact_page = cast(Contact, self.get_page('contact'))
+                data = contact_page.get_subscription_data()
                 client.get_module('Presence').subscribe(
                     self._result.jid,
                     msg=data['message'],
@@ -124,7 +126,7 @@ class AddContact(Assistant):
             return
 
         if button_name == 'join':
-            _, jid = self.get_page('address').get_account_and_jid()
+            _, jid = address_page.get_account_and_jid()
             open_window('GroupchatJoin', account=account, jid=jid)
             self.destroy()
 
@@ -132,22 +134,25 @@ class AddContact(Assistant):
         self._result = None
         self.show_page('progress', Gtk.StackTransitionType.SLIDE_LEFT)
 
-        account, jid = self.get_page('address').get_account_and_jid()
+        address_page = cast(Address, self.get_page('address'))
+        account, jid = address_page.get_account_and_jid()
         assert account is not None
         self._disco_info(account, jid)
 
     @as_task
-    def _disco_info(self, account: str, address: str) -> None:
+    def _disco_info(self, account: str, address: str) -> Any:
         _task = yield
 
         client = app.get_client(account)
 
         result = yield client.get_module('Discovery').disco_info(address)
         if is_error(result):
+            assert isinstance(result, StanzaError)
             self._process_error(account, result)
             raise result
 
         log.info('Disco Info received: %s', address)
+        assert isinstance(result, DiscoInfo)
         self._process_info(account, result)
 
     def _process_error(self, account: str, result: StanzaError) -> None:
@@ -160,10 +165,12 @@ class AddContact(Assistant):
         ]
         if result.condition in contact_conditions:
             # It seems to be a contact
-            self.get_page('contact').prepare(account, result)
+            address_page = cast(Contact, self.get_page('contact'))
+            address_page.prepare(account, result)
             self.show_page('contact', Gtk.StackTransitionType.SLIDE_LEFT)
         else:
-            self.get_page('error').set_text(result.get_text())
+            error_page = cast(ErrorPage, self.get_page('error'))
+            error_page.set_text(result.get_text())
             self.show_page('error', Gtk.StackTransitionType.SLIDE_LEFT)
 
     def _process_info(self, account: str, result: DiscoInfo) -> None:
@@ -175,7 +182,8 @@ class AddContact(Assistant):
                 if identity.type == 'text' and result.jid.is_domain:
                     # It's a group chat component advertising
                     # category 'conference'
-                    self.get_page('error').set_text(
+                    error_page = cast(ErrorPage, self.get_page('error'))
+                    error_page.set_text(
                         _('This address does not seem to offer any gateway '
                           'service.'))
                     self.show_page('error')
@@ -183,21 +191,25 @@ class AddContact(Assistant):
 
                 if identity.type == 'irc' and result.jid.is_domain:
                     # It's an IRC gateway advertising category 'conference'
-                    self.get_page('gateway').prepare(account, result)
+                    gateway_page = cast(Gateway, self.get_page('gateway'))
+                    gateway_page.prepare(account, result)
                     self.show_page(
                         'gateway', Gtk.StackTransitionType.SLIDE_LEFT)
                     return
 
-            self.get_page('groupchat').prepare(account, result)
+            groupchat_page = cast(GroupChat, self.get_page('groupchat'))
+            groupchat_page.prepare(account, result)
             self.show_page('groupchat', Gtk.StackTransitionType.SLIDE_LEFT)
             return
 
         if result.is_gateway:
-            self.get_page('gateway').prepare(account, result)
+            gateway_page = cast(Gateway, self.get_page('gateway'))
+            gateway_page.prepare(account, result)
             self.show_page('gateway', Gtk.StackTransitionType.SLIDE_LEFT)
             return
 
-        self.get_page('contact').prepare(account, result)
+        contact_page = cast(Contact, self.get_page('contact'))
+        contact_page.prepare(account, result)
         self.show_page('contact', Gtk.StackTransitionType.SLIDE_LEFT)
 
 
@@ -217,6 +229,7 @@ class Address(Page):
 
         accounts = app.get_enabled_accounts_with_labels(connected_only=True)
         liststore = self._ui.account_combo.get_model()
+        assert isinstance(liststore, Gtk.ListStore)
         for acc in accounts:
             liststore.append(acc)
 
@@ -238,13 +251,14 @@ class Address(Page):
 
         self.show_all()
 
-    def get_visible_buttons(self) -> List[str]:
+    def get_visible_buttons(self) -> list[str]:
         return ['next']
 
     def get_default_button(self) -> str:
         return 'next'
 
-    def get_account_and_jid(self) -> Tuple[str, str]:
+    def get_account_and_jid(self) -> tuple[str, str]:
+        assert self._account is not None
         return self._account, self._ui.address_entry.get_text()
 
     def focus(self) -> None:
@@ -316,7 +330,7 @@ class Error(ErrorPage):
         self.set_title(_('Add Contact'))
         self.set_heading(_('An Error Occurred'))
 
-    def get_visible_buttons(self) -> List[str]:
+    def get_visible_buttons(self) -> list[str]:
         return ['back']
 
     def get_default_button(self) -> str:
@@ -339,7 +353,7 @@ class Contact(Page):
 
         self.show_all()
 
-    def get_visible_buttons(self) -> List[str]:
+    def get_visible_buttons(self) -> list[str]:
         return ['back', 'add']
 
     def get_default_button(self) -> str:
@@ -357,7 +371,9 @@ class Contact(Page):
         self._ui.contact_grid.set_sensitive(True)
 
     def _update_groups(self, account: str) -> None:
-        self._ui.group_combo.get_model().clear()
+        model = self._ui.group_combo.get_model()
+        assert isinstance(model, Gtk.ListStore)
+        model.clear()
         client = app.get_client(account)
         for group in client.get_module('Roster').get_groups():
             self._ui.group_combo.append_text(group)
@@ -366,7 +382,7 @@ class Contact(Page):
         open_window(
             'ContactInfo', account=self._account, contact=self._contact)
 
-    def get_subscription_data(self) -> Dict[str, Union[str, List[str], bool]]:
+    def get_subscription_data(self) -> dict[str, Union[str, list[str], bool]]:
         group = self._ui.group_combo.get_child().get_text()
         groups = [group] if group else []
         return {
@@ -392,7 +408,7 @@ class Gateway(Page):
 
         self.show_all()
 
-    def get_visible_buttons(self) -> List[str]:
+    def get_visible_buttons(self) -> list[str]:
         return ['back', 'add']
 
     def get_default_button(self) -> str:
@@ -482,7 +498,7 @@ class GroupChat(Page):
 
         self.show_all()
 
-    def get_visible_buttons(self) -> List[str]:
+    def get_visible_buttons(self) -> list[str]:
         return ['back', 'join']
 
     def get_default_button(self) -> str:
