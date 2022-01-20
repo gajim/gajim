@@ -13,11 +13,11 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import annotations
+
 from typing import Any
-from typing import Dict
 from typing import Callable
 from typing import Optional
-from typing import Tuple
+from typing import cast
 
 from gi.repository import Gdk
 from gi.repository import Gtk
@@ -58,8 +58,8 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
         self.set_transient_for(transient_for)
         self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 
-        self._pages: Dict[str, Page] = {}
-        self._buttons: Dict[str, Tuple[Gtk.Button, bool]] = {}
+        self._pages: dict[str, Page] = {}
+        self._buttons: dict[str, tuple[Gtk.Button, bool]] = {}
         self._button_visible_func = None
 
         self._ui = get_builder('assistant.ui')
@@ -84,13 +84,14 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
             self.destroy()
 
     def _update_page_complete(self, *args: Any) -> None:
-        page_widget = self._ui.stack.get_visible_child()
+        page_widget = cast(Page, self._ui.stack.get_visible_child())
         for button, complete in self._buttons.values():
             if complete:
                 button.set_sensitive(page_widget.complete)
 
     def update_title(self) -> None:
-        self.set_title(self._ui.stack.get_visible_child().title)
+        page_widget = cast(Page, self._ui.stack.get_visible_child())
+        self.set_title(page_widget.title)
 
     def _hide_buttons(self) -> None:
         for button, _ in self._buttons.values():
@@ -98,6 +99,7 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
 
     def _set_buttons_visible(self) -> None:
         page_name = self._ui.stack.get_visible_child_name()
+        assert page_name is not None
         if self._button_visible_func is None:
             buttons = self.get_page(page_name).get_visible_buttons()
             if buttons is not None:
@@ -105,8 +107,8 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
                     default = buttons[0]
                 else:
                     default = self.get_page(page_name).get_default_button()
-
-                self.set_default_button(default)
+                if default is not None:
+                    self.set_default_button(default)
         else:
             buttons = self._button_visible_func(self, page_name)
 
@@ -141,7 +143,7 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
         self._buttons[name] = (button, complete)
         self._ui.action_area.pack_end(button, False, False, 0)
 
-    def add_pages(self, pages: Dict[str, Page]):
+    def add_pages(self, pages: dict[str, Page]):
         self._pages = pages
         for name, widget in pages.items():
             widget.connect('update-page-complete', self._update_page_complete)
@@ -162,7 +164,9 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
         return page
 
     def get_current_page(self) -> str:
-        return self._ui.stack.get_visible_child_name()
+        name = self._ui.stack.get_visible_child_name()
+        assert name is not None
+        return name
 
     def show_page(self,
                   name: str,
@@ -198,7 +202,7 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
 
 class Page(Gtk.Box):
 
-    __gsignals__: dict = {
+    __gsignals__ = {
         'update-page-complete': (GObject.SignalFlags.RUN_LAST, None, ()),
     }
 
@@ -210,10 +214,10 @@ class Page(Gtk.Box):
         self.title: str = ''
         self.complete: bool = True
 
-    def get_visible_buttons(self) -> None:
+    def get_visible_buttons(self) -> Optional[list[str]]:
         return None
 
-    def get_default_button(self) -> None:
+    def get_default_button(self) -> Optional[str]:
         return None
 
     def update_page_complete(self) -> None:
