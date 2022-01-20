@@ -379,7 +379,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
             ('quit', None, self._on_quit_action),
             ('add-account', None,  self._on_add_account_action),
             ('manage-proxies', None,  self._on_manage_proxies_action),
-            ('history-manager', None,  self._on_history_manager_action),
             ('preferences', None,  self._on_preferences_action),
             ('plugins', None,  self._on_plugins_action),
             ('xml-console', None,  self._on_xml_console_action),
@@ -544,11 +543,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
         account = param.get_string()
         if account:
             window.select_account(account)
-
-    @staticmethod
-    def _on_history_manager_action(_action: Gio.SimpleAction,
-                                   _param: Optional[GLib.Variant]) -> None:
-        open_window('HistoryManager')
 
     @staticmethod
     def _on_bookmarks_action(_action: Gio.SimpleAction,

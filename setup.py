@@ -16,7 +16,7 @@ from pathlib import Path
 
 pos = Path('po').glob('*.po')
 ALL_LINGUAS = sorted([x.stem for x in pos])
-MAN_FILES = ['gajim.1', 'gajim-history-manager.1', 'gajim-remote.1']
+MAN_FILES = ['gajim.1', 'gajim-remote.1']
 META_FILES = [('data/org.gajim.Gajim.desktop', 'share/applications', '--desktop'),
               ('data/org.gajim.Gajim.appdata.xml', 'share/metainfo', '--xml')]
 cwd = Path(__file__).resolve().parent
@@ -209,7 +209,6 @@ setup(
         ],
         'gui_scripts': [
             'gajim = gajim.gajim:main',
-            'gajim-history-manager = gajim.history_manager:main',
         ]
     },
     data_files=data_files

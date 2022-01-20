@@ -513,25 +513,6 @@ class GroupchatControlBuilder(Builder):
     visitor_popover: Gtk.Popover
 
 
-class HistoryManagerBuilder(Builder):
-    context_menu: Gtk.Menu
-    export_menuitem: Gtk.MenuItem
-    delete_menuitem: Gtk.MenuItem
-    history_manager_window: Gtk.Window
-    jids_scrolledwindow: Gtk.ScrolledWindow
-    jids_listview: Gtk.TreeView
-    treeview_selection1: Gtk.TreeSelection
-    welcome_box: Gtk.Box
-    logs_scrolledwindow: Gtk.ScrolledWindow
-    logs_listview: Gtk.TreeView
-    treeview_selection2: Gtk.TreeSelection
-    search_results_scrolledwindow: Gtk.ScrolledWindow
-    search_results_listview: Gtk.TreeView
-    treeview_selection3: Gtk.TreeSelection
-    search_entry: Gtk.Entry
-    search_db_button: Gtk.Button
-
-
 class XmlConsoleBuilder(Builder):
     headerbar: Gtk.HeaderBar
     search_toggle: Gtk.ToggleButton
@@ -1054,8 +1035,6 @@ def get_builder(file_name: Literal['server_info.ui'], widgets: list[str] = ...) 
 def get_builder(file_name: Literal['main.ui'], widgets: list[str] = ...) -> MainBuilder: ...
 @overload
 def get_builder(file_name: Literal['groupchat_control.ui'], widgets: list[str] = ...) -> GroupchatControlBuilder: ...
-@overload
-def get_builder(file_name: Literal['history_manager.ui'], widgets: list[str] = ...) -> HistoryManagerBuilder: ...
 @overload
 def get_builder(file_name: Literal['xml_console.ui'], widgets: list[str] = ...) -> XmlConsoleBuilder: ...
 @overload

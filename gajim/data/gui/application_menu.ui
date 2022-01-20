@@ -15,10 +15,6 @@
           <attribute name="target"></attribute>
         </item>
         <item>
-          <attribute name="label" translatable="yes">_History Manager</attribute>
-          <attribute name="action">app.history-manager</attribute>
-        </item>
-        <item>
           <attribute name="label" translatable="yes">Pl_ugins</attribute>
           <attribute name="action">app.plugins</attribute>
         </item>

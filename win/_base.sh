@@ -191,7 +191,7 @@ function cleanup_install {
         fi
     done
 
-    KEEP="gajim|gajim-debug|python3|gajim-history-manager|gdbus|gspawn-win32-helper|gspawn-win64-helper"
+    KEEP="gajim|gajim-debug|python3|gdbus|gspawn-win32-helper|gspawn-win64-helper"
 
     echo "deleting .exe files"
     find "${MINGW_ROOT}" -regextype "posix-extended" -name "*.exe" -and ! \

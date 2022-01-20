@@ -145,7 +145,6 @@ WINDOW_MODULES = {
     'XMLConsoleWindow': 'gajim.gui.xml_console',
     'GroupchatJoin': 'gajim.gui.groupchat_join',
     'PEPConfig': 'gajim.gui.pep_config',
-    'HistoryManager': 'gajim.history_manager',
     'GroupchatConfig': 'gajim.gui.groupchat_config',
     'ProfileWindow': 'gajim.gui.profile',
     'SSLErrorDialog': 'gajim.gui.ssl_error_dialog',
