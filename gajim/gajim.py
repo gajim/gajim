@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from types import FrameType
+from typing import Optional
 
 import os
 import sys
@@ -35,13 +37,13 @@ _MIN_PYGOBJECT_VER = '3.32.0'
 _MIN_GLIB_VER = '2.60.0'
 
 
-def check_version(dep_name, current_ver, min_ver):
+def check_version(dep_name: str, current_ver: str, min_ver: str) -> None:
     if V(current_ver) < V(min_ver):
         sys.exit('Gajim needs %s >= %s (found %s) to run. '
                  'Quitting...' % (dep_name, min_ver, current_ver))
 
 
-def _check_required_deps():
+def _check_required_deps() -> None:
     error_message = 'Gajim needs %s to run. Quitting… (Error: %s)'
 
     try:
@@ -88,12 +90,12 @@ def _check_required_deps():
     check_version('glib', glib_ver, _MIN_GLIB_VER)
 
 
-def _init_gui(gui):
+def _init_gui(gui: str) -> None:
     if gui == 'GTK':
         _init_gtk()
 
 
-def _disable_csd():
+def _disable_csd() -> None:
     if sys.platform != 'win32':
         return
 
@@ -104,7 +106,7 @@ def _disable_csd():
     os.environ['GTK_CSD'] = '0'
 
 
-def _init_gtk():
+def _init_gtk() -> None:
     gajim.gui.init('gtk')
 
     from gajim.gui import exception
@@ -113,14 +115,14 @@ def _init_gtk():
     i18n.initialize_direction_mark()
 
 
-def _run_app():
+def _run_app() -> None:
     from gajim.gui.application import GajimApplication
     application = GajimApplication()
     _install_signal_handlers(application)
     application.run(sys.argv)
 
 
-def _set_proc_title():
+def _set_proc_title() -> None:
     sysname = platform.system()
     if sysname in ('Linux', 'FreeBSD', 'OpenBSD', 'NetBSD'):
         libc = CDLL(find_library('c'))
@@ -139,7 +141,7 @@ def _set_proc_title():
 
 
 def _install_signal_handlers(application):
-    def sigint_cb(num, stack):
+    def sigint_cb(num: int, stack: Optional[FrameType]):
         print(' SIGINT/SIGTERM received')
         application.quit()
     # ^C exits the application normally
@@ -149,7 +151,7 @@ def _install_signal_handlers(application):
         signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
 
-def main():
+def main() -> None:
     if sys.platform != 'win32':
         if os.geteuid() == 0:
             sys.exit('You must not launch gajim as root, it is insecure.')
