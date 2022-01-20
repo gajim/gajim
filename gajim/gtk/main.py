@@ -30,7 +30,6 @@ from nbxmpp import JID
 
 from gajim.common import app
 from gajim.common import ged
-from gajim.common.const import Display
 from gajim.common.const import Direction
 from gajim.common.events import ApplicationEvent
 from gajim.common.events import AllowGajimUpdateCheck
@@ -141,9 +140,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._prepare_window()
         self._start_timers()
 
-        if not app.is_display(Display.WAYLAND):
-            app.interface.systray.connect_unread_changed(
-                self._chat_page.get_chat_list_stack())
+        chat_list_stack = self._chat_page.get_chat_list_stack()
+        app.app.systray.connect_unread_widget(chat_list_stack,
+                                              'unread-count-changed')
 
     def _start_timers(self) -> None:
         GLib.timeout_add_seconds(UNLOAD_CHAT_TIME,
@@ -325,8 +324,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self.quit()
         else:
             if (app.settings.get('allow_hide_roster') or
-                    (app.interface.systray_enabled and
-                     app.settings.get('trayicon') != 'on_event')):
+                    app.app.systray.is_visible()):
                 save_main_window_position()
                 if (os.name == 'nt' or
                         app.settings.get('hide_on_main_window_x_button')):

@@ -440,8 +440,7 @@ class VisualNotifications(PreferenceBox):
                     _('Notification Area Icon'),
                     SettingType.CONFIG,
                     'trayicon',
-                    props={'entries': trayicon_items},
-                    callback=self._on_trayicon),
+                    props={'entries': trayicon_items}),
 
             Setting(SettingKind.NOTIFICATIONS,
                     _('Show Notifications'),
@@ -450,15 +449,6 @@ class VisualNotifications(PreferenceBox):
         ]
 
         PreferenceBox.__init__(self, settings)
-
-    @staticmethod
-    def _on_trayicon(value: str, *args: Any) -> None:
-        if value == 'never':
-            app.interface.hide_systray()
-        elif value == 'on_event':
-            app.interface.show_systray()
-        else:
-            app.interface.show_systray()
 
 
 class NotificationsDialog(SettingsDialog):

@@ -77,7 +77,7 @@ from gajim.common.structs import OutgoingMessage
 from gajim.common.i18n import _
 from gajim.common.client import Client
 from gajim.common.preview import PreviewManager
-from gajim.common.const import Display, FTState
+from gajim.common.const import FTState
 from gajim.common.file_props import FileProp
 
 from gajim.common.modules.contacts import GroupchatContact
@@ -162,12 +162,6 @@ class Interface:
         if sys.platform not in ('win32', 'darwin'):
             logind.enable()
             music_track.enable()
-
-        self.systray_enabled: bool = False
-
-        if not app.is_display(Display.WAYLAND):
-            from gajim.gui.status_icon import StatusIcon
-            self.systray = StatusIcon()
 
     def _create_core_handlers_list(self) -> None:
         # pylint: disable=line-too-long
@@ -857,16 +851,6 @@ class Interface:
 
         client.change_status(status, message)
 
-    def show_systray(self) -> None:
-        if not app.is_display(Display.WAYLAND):
-            self.systray_enabled = True
-            self.systray.show_icon()
-
-    def hide_systray(self) -> None:
-        if not app.is_display(Display.WAYLAND):
-            self.systray_enabled = False
-            self.systray.hide_icon()
-
     def process_connections(self) -> bool:
         """
         Called each foo (200) milliseconds. Check for idlequeue timeouts
@@ -989,9 +973,6 @@ class Interface:
                                          False)
 
     def run(self, _application: Gtk.Application) -> None:
-        if app.settings.get('trayicon') != 'never':
-            self.show_systray()
-
         # Creating plugin manager
         from gajim import plugins
         app.plugin_manager = plugins.PluginManager()

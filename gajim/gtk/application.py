@@ -231,6 +231,10 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         self.interface = Interface()
         self.interface.run(self)
+
+        from gajim.gui.status_icon import StatusIcon
+        self.systray = StatusIcon()
+
         self.add_actions()
         self._load_shortcuts()
         menus.build_accounts_menu()
