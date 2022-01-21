@@ -1486,11 +1486,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             if not msg.message:
                 continue
 
-            if msg.kind in (KindConstant.STATUS,
-                            KindConstant.GCSTATUS):
-                self.conversation_view.add_info_message(msg.message)
-                continue
-
             message_text = msg.message
 
             contact_name = msg.contact_name

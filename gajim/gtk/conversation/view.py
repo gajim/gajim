@@ -46,7 +46,6 @@ from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive import ConversationRow
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
-from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.types import ChatContactT
 
 from .rows.base import BaseRow
@@ -61,7 +60,7 @@ from .rows.file_transfer import FileTransferRow
 from .rows.file_transfer_jingle import FileTransferJingleRow
 from .rows.muc_subject import MUCSubject
 from .rows.muc_join_left import MUCJoinLeft
-from .rows.muc_user_status import MUCUserStatus
+from .rows.user_status import UserStatus
 
 log = logging.getLogger('gajim.gui.conversation_view')
 
@@ -222,9 +221,8 @@ class ConversationView(Gtk.ListBox):
                                 nick)
         self._insert_message(join_left)
 
-    def add_muc_user_status(self, user_contact: GroupchatParticipant,
-                            is_self: bool) -> None:
-        user_status = MUCUserStatus(self._account, user_contact, is_self)
+    def add_user_status(self, name: str, show: str, status: str) -> None:
+        user_status = UserStatus(self._account, name, show, status)
         self._insert_message(user_status)
 
     def add_info_message(self, text: str) -> None:

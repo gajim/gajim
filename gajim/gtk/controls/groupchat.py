@@ -1064,9 +1064,9 @@ class GroupchatControl(BaseControl):
                                      properties: MessageProperties
                                      ) -> None:
 
-        self.conversation_view.add_muc_user_status(
-            user_contact,
-            properties.is_muc_self_presence)
+        self.conversation_view.add_user_status(user_contact.name,
+                                               user_contact.show.value,
+                                               user_contact.status)
 
     def _on_user_affiliation_changed(self,
                                      _contact: GroupchatContact,

@@ -12,27 +12,32 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Optional
+
 import time
 from datetime import datetime
 
 from gi.repository import Gtk
 
-from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
 from gajim.common.helpers import get_uf_show
 
 from .widgets import SimpleLabel
 from .base import BaseRow
-
 from ..message_widget import MessageWidget
-
 from ...avatar import get_show_circle
 
 
-class MUCUserStatus(BaseRow):
-    def __init__(self, account: str, user_contact: GroupchatParticipant,
-                 is_self: bool) -> None:
+class UserStatus(BaseRow):
+    def __init__(self,
+                 account: str,
+                 name: str,
+                 show: str,
+                 status: Optional[str]) -> None:
+
         BaseRow.__init__(self, account)
 
         self.type = 'muc-user-status'
@@ -46,22 +51,23 @@ class MUCUserStatus(BaseRow):
 
         show_icon = Gtk.Image()
         show_icon.set_opacity(0.6)
-        surface = get_show_circle(
-            user_contact.show.value,
-            16,
-            self.get_scale_factor())
+        surface = get_show_circle(show, 16, self.get_scale_factor())
         show_icon.set_from_surface(surface)
         self.grid.attach(show_icon, 1, 0, 1, 1)
 
+        show = get_uf_show(show)
+
+        message = _('{nick} is now {show}').format(nick=name, show=show)
+
         self._label = SimpleLabel()
-        self._label.set_text(self._make_show_text(user_contact, is_self))
+        self._label.set_text(message)
         self._label.get_style_context().add_class('gajim-status-message')
         self.grid.attach(self._label, 2, 0, 1, 1)
 
-        if user_contact.status is not None:
+        if status is not None:
             message_widget = MessageWidget(account)
             message_widget.get_style_context().add_class('gajim-status-message')
-            message_widget.add_with_styling(user_contact.status)
+            message_widget.add_with_styling(status)
             self.grid.attach(message_widget, 2, 1, 1, 1)
 
         timestamp_widget = self.create_timestamp_widget(self.timestamp)
@@ -71,17 +77,3 @@ class MUCUserStatus(BaseRow):
         self.grid.attach(timestamp_widget, 3, 0, 1, 1)
 
         self.show_all()
-
-    @staticmethod
-    def _make_show_text(user_contact: GroupchatParticipant,
-                        is_self: bool) -> str:
-        nick = user_contact.name
-        show = get_uf_show(user_contact.show.value)
-
-        if is_self:
-            message = _('You are now {show}').format(show=show)
-
-        else:
-            message = _('{nick} is now {show}').format(nick=nick,
-                                                       show=show)
-        return message

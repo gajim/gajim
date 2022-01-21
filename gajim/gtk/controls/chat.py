@@ -740,15 +740,12 @@ class ChatControl(BaseControl):
         self.update_actions()
 
     def _on_presence_received(self, event: events.PresenceReceived) -> None:
-        uf_show = helpers.get_uf_show(event.show)
-        name = self.contact.name
-
         self.update_ui()
 
         if not app.settings.get('print_status_in_chats'):
             return
 
-        status = f'- {event.status}' if event.status else ''
-        status_line = _('%(name)s is now %(show)s %(status)s') % {
-            'name': name, 'show': uf_show, 'status': status}
-        self.add_info_message(status_line)
+        contact = self._client.get_module('Contacts').get_contact(event.fjid)
+        self.conversation_view.add_user_status(self.contact.name,
+                                               contact.show.value,
+                                               contact.status)

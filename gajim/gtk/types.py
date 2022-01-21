@@ -33,7 +33,7 @@ if TYPE_CHECKING:
     from .conversation.rows.message import MessageRow
     from .conversation.rows.muc_join_left import MUCJoinLeft
     from .conversation.rows.muc_subject import MUCSubject
-    from .conversation.rows.muc_user_status import MUCUserStatus
+    from .conversation.rows.user_status import UserStatus
     from .conversation.rows.read_marker import ReadMarkerRow
     from .conversation.rows.scroll_hint import ScrollHintRow
 

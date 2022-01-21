@@ -386,7 +386,8 @@ class MessageArchiveStorage(SqliteStorage):
         """
         jids = [jid]
         account_id = self.get_account_id(account)
-        kinds = map(str, [KindConstant.ERROR])
+        kinds = map(str, [KindConstant.ERROR,
+                          KindConstant.STATUS])
 
         if before:
             time_order = 'AND time < ? ORDER BY time DESC, log_line_id DESC'
