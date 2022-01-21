@@ -649,6 +649,7 @@ ADVANCED_SETTINGS = {
         'gc_notify_on_all_messages_public_default': '',
         'developer_modus': '',
         'use_libappindicator': _('Enables libappindicator, an alternative tray icon provider'),
+        'log_contact_status_changes': '',
     },
 }
 
