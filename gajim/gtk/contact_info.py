@@ -137,7 +137,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
 
     def _on_stack_child_changed(self,
                                 _widget: Gtk.Stack,
-                                pspec: GObject.ParamSpec) -> None:
+                                _pspec: GObject.ParamSpec) -> None:
 
         name = self._ui.main_stack.get_visible_child_name()
         self._ui.header_revealer.set_reveal_child(name != 'information')
@@ -235,7 +235,8 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         self._switcher.set_row_visible('devices', True)
 
     def _query_device(self, contact: ResourceContact) -> None:
-        task = self._client.get_module('SoftwareVersion').request_software_version(
+        software_module = self._client.get_module('SoftwareVersion')
+        task = software_module.request_software_version(
             contact.jid,
             callback=self._set_os_info,
             user_data=contact.resource)
@@ -484,7 +485,7 @@ class DeviceGrid:
 
     def set_software(self, software: Optional[SoftwareVersionResult]) -> None:
         if software is not None:
-            software_string = '%s %s' % (software.name, software.version)
+            software_string = f'{software.name} {software.version}'
             self._ui.software_value.set_text(software_string)
             self._ui.software_value.show()
             self._ui.software_label.show()

@@ -200,7 +200,7 @@ class OutgoingMessage:
 
 @dataclass(frozen=True)
 class PresenceData:
-    show: str
+    show: PresenceShow
     status: str
     priority: int
     idle_time: Optional[float]
