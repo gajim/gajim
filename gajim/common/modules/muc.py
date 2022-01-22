@@ -655,7 +655,7 @@ class MUC(BaseModule):
             self._log.warning('No MUCData found for %s', room_jid)
             return
 
-        muc_data.subject = properties.subject
+        muc_data.subject = properties.muc_subject
         room = self._get_contact(room_jid)
         room.notify('room-subject', properties)
 

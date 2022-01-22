@@ -27,6 +27,7 @@ import cairo
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Role
 from nbxmpp.protocol import JID
+from nbxmpp.structs import MucSubject
 
 from gajim.common import app
 from gajim.common import types
@@ -552,6 +553,13 @@ class GroupchatContact(CommonContact):
         return muc_data.occupant_jid
 
     @property
+    def subject(self) -> Optional[MucSubject]:
+        muc_data = self._module('MUC').get_muc_data(self._jid)
+        if muc_data is None:
+            return None
+        return muc_data.subject
+
+    @property
     def is_joined(self) -> bool:
         muc_data = self._module('MUC').get_muc_data(self._jid)
         if muc_data is None:
@@ -580,7 +588,7 @@ class GroupchatContact(CommonContact):
         client = app.get_client(self._account)
         return client.get_module('MUC').get_joined_users(self._jid)
 
-    def get_disco(self, max_age=0):
+    def get_disco(self, max_age: int = 0):
         return app.storage.cache.get_last_disco_info(self.jid, max_age=max_age)
 
     def can_notify(self) -> bool:
