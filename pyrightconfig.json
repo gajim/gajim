@@ -54,6 +54,7 @@
         "gajim/gtk/conversation/view.py",
         "gajim/gtk/features.py",
         "gajim/gtk/file_transfer_send.py",
+        "gajim/gtk/groupchat_details.py",
         "gajim/gtk/groupchat_invitation.py",
         "gajim/gtk/groupchat_inviter.py",
         "gajim/gtk/groupchat_nick.py",

@@ -150,7 +150,7 @@ def get_groupchat_menu(control_id: str, account: str, jid: JID) -> Gio.Menu:
     params = RemoveHistoryActionParams(account=account, jid=jid)
 
     menulist: MenuItemListT = [
-        (_('Information'), f'win.information-{control_id}', None),
+        (_('Details'), f'win.groupchat-details-{control_id}', None),
         (_('Settings…'), f'win.groupchat-settings-{control_id}', None),
         (_('Manage…'), f'win.groupchat-manage-{control_id}', None),
         (_('Rename Chat…'), f'win.rename-groupchat-{control_id}', None),

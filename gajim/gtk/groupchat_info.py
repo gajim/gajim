@@ -23,6 +23,7 @@ from gi.repository import Gtk
 from nbxmpp import JID
 from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import DiscoInfo
+from nbxmpp.structs import MucSubject
 
 from gajim.common import app
 from gajim.common.i18n import _
@@ -139,22 +140,22 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
     def get_jid(self) -> Optional[JID]:
         return self._info.jid
 
-    def set_author(self,
-                   author: Optional[str],
-                   epoch_timestamp: Optional[float] = None
-                   ) -> None:
+    def set_subject(self, muc_subject: Optional[MucSubject]) -> None:
+        if muc_subject is None:
+            return
+
+        author = muc_subject.author
         has_author = bool(author)
-        if has_author and epoch_timestamp is not None:
-            time_ = time.strftime('%c', time.localtime(epoch_timestamp))
-            author = f'{author} - {time_}'
+        if has_author and muc_subject.timestamp is not None:
+            time_ = time.strftime('%c', time.localtime(muc_subject.timestamp))
+            author = f'{muc_subject.author} - {time_}'
 
         self._ui.author.set_text(author or '')
         self._ui.author.set_visible(has_author)
         self._ui.author_label.set_visible(has_author)
 
-    def set_subject(self, subject: str) -> None:
-        has_subject = bool(subject)
-        subject = GLib.markup_escape_text(subject or '')
+        has_subject = bool(muc_subject.text)
+        subject = GLib.markup_escape_text(muc_subject.text)
         self._ui.subject.set_markup(make_href_markup(subject))
         self._ui.subject.set_visible(has_subject)
         self._ui.subject_label.set_visible(has_subject)

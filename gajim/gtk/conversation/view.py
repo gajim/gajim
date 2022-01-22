@@ -32,6 +32,7 @@ from gi.repository import Gtk
 
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules.security_labels import Displaymarking
+from nbxmpp.structs import MucSubject
 
 from gajim.common import app
 from gajim.common.client import Client
@@ -198,9 +199,9 @@ class ConversationView(Gtk.ListBox):
 
         return True
 
-    def add_muc_subject(self, text: str, nick: str, date: str) -> None:
-        subject = MUCSubject(self._account, text, nick, date)
-        self._insert_message(subject)
+    def add_muc_subject(self, subject: MucSubject) -> None:
+        muc_subject = MUCSubject(self._account, subject)
+        self._insert_message(muc_subject)
 
     def add_muc_user_left(self,
                           nick: str,

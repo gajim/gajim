@@ -17,6 +17,7 @@
 
 import logging
 from collections import defaultdict
+import time
 
 import nbxmpp
 from nbxmpp.namespaces import Namespace
@@ -655,9 +656,13 @@ class MUC(BaseModule):
             self._log.warning('No MUCData found for %s', room_jid)
             return
 
-        muc_data.subject = properties.muc_subject
+        muc_subject = properties.muc_subject
+        if muc_subject is not None and muc_subject.timestamp is None:
+            muc_subject = muc_subject._replace(timestamp=time.time())
+
+        muc_data.subject = muc_subject
         room = self._get_contact(room_jid)
-        room.notify('room-subject', properties)
+        room.notify('room-subject', muc_subject)
 
         if muc_data.state == MUCJoinedState.JOINING:
             self._room_join_complete(muc_data)

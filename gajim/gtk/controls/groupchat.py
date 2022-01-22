@@ -27,7 +27,6 @@
 from typing import Any
 from typing import Optional
 
-import time
 import logging
 
 from nbxmpp import JID
@@ -41,6 +40,7 @@ from nbxmpp.modules.security_labels import Displaymarking
 from nbxmpp.modules.vcard_temp import VCard
 from nbxmpp.structs import PresenceProperties
 from nbxmpp.structs import MessageProperties
+from nbxmpp.structs import MucSubject
 from nbxmpp.task import Task
 
 from gi.repository import Gtk
@@ -77,7 +77,6 @@ from gajim.gui.filechoosers import AvatarChooserDialog
 from gajim.gui.groupchat_config import GroupchatConfig
 from gajim.gui.avatar_selector import AvatarSelector
 from gajim.gui.dataform import DataFormWidget
-from gajim.gui.groupchat_info import GroupChatInfoScrolled
 from gajim.gui.groupchat_inviter import GroupChatInviter
 from gajim.gui.groupchat_settings import GroupChatSettings
 from gajim.gui.groupchat_roster import GroupchatRoster
@@ -171,10 +170,7 @@ class GroupchatControl(BaseControl):
         # Holds CaptchaRequest widget
         self._captcha_request: Optional[DataFormWidget] = None
 
-        # MUC Info
-        self._subject_data = None
-        self._muc_info_box = GroupChatInfoScrolled(self.account)
-        self.xml.info_box.add(self._muc_info_box)
+        self._subject_text = ''
 
         # Groupchat settings
         self._groupchat_settings_box: Optional[GroupChatSettings] = None
@@ -287,12 +283,6 @@ class GroupchatControl(BaseControl):
         return self.__nick_completion
 
     @property
-    def subject(self) -> str:
-        if self._subject_data is None:
-            return ''
-        return self._subject_data.subject
-
-    @property
     def disco_info(self):
         return app.storage.cache.get_last_disco_info(self.contact.jid)
 
@@ -306,7 +296,7 @@ class GroupchatControl(BaseControl):
             ('destroy-', None, self._on_destroy_room),
             ('configure-', None, self._on_configure_room),
             ('request-voice-', None, self._on_request_voice),
-            ('information-', None, self._on_information),
+            ('groupchat-details-', None, self._on_details),
             ('invite-', None, self._on_invite),
             ('contact-information-', 's', self._on_contact_information),
             ('execute-command-', 's', self._on_execute_command),
@@ -406,7 +396,7 @@ class GroupchatControl(BaseControl):
             'destroy-',
             'configure-',
             'request-voice-',
-            'information-',
+            'groupchat-details-',
             'invite-',
             'contact-information-',
             'execute-command-',
@@ -441,11 +431,6 @@ class GroupchatControl(BaseControl):
         if name == 'groupchat':
             transition = Gtk.StackTransitionType.SLIDE_UP
             self.msg_textview.grab_focus()
-        if name == 'muc-info':
-            # Set focus on the close button, otherwise one of
-            # the selectable labels of the GroupchatInfo box gets focus,
-            # which means it is fully selected
-            self.xml.info_close_button.grab_focus()
         self.xml.stack.set_visible_child_full(name, transition)
 
     def _get_current_page(self) -> str:
@@ -456,16 +441,11 @@ class GroupchatControl(BaseControl):
         self.draw_banner_text()
 
     # Actions
-    def _on_information(self,
-                        _action: Gio.SimpleAction,
-                        _param: Optional[GLib.Variant]
-                        ) -> None:
-        self._muc_info_box.set_from_disco_info(self.disco_info)
-        if self._subject_data is not None:
-            self._muc_info_box.set_subject(self._subject_data.subject)
-            self._muc_info_box.set_author(self._subject_data.muc_nickname,
-                                          self._subject_data.user_timestamp)
-        self._show_page('muc-info')
+    def _on_details(self,
+                    _action: Gio.SimpleAction,
+                    _param: Optional[GLib.Variant]
+                    ) -> None:
+        open_window('GroupchatDetails', contact=self.contact)
 
     def _on_groupchat_settings(self,
                                _action: Gio.SimpleAction,
@@ -872,23 +852,21 @@ class GroupchatControl(BaseControl):
     def _on_room_subject(self,
                          _contact: GroupchatContact,
                          _signal_name: str,
-                         properties: MessageProperties
+                         subject: Optional[MucSubject]
                          ) -> None:
-        if self.subject == properties.subject:
+
+        if subject is None:
+            return
+
+        if self._subject_text == subject.text:
             # Probably a rejoin, we already showed that subject
             return
 
-        self._subject_data = properties
-
-        date = ''
-        if properties.user_timestamp:
-            date = time.strftime('%c',
-                                 time.localtime(properties.user_timestamp))
+        self._subject_text = subject.text
 
         if (app.settings.get('show_subject_on_join') or
                 not self.contact.is_joining):
-            self.conversation_view.add_muc_subject(
-                properties.subject, properties.muc_nickname, date)
+            self.conversation_view.add_muc_subject(subject)
 
     def _on_room_config_changed(self,
                                 _contact: GroupchatContact,
@@ -1594,8 +1572,6 @@ class GroupchatControl(BaseControl):
                 self._on_password_cancel_clicked()
             elif self._get_current_page() == 'captcha':
                 self._on_captcha_cancel_clicked()
-            elif self._get_current_page() == 'muc-info':
-                self._on_page_cancel_clicked()
             elif self._get_current_page() in ('error', 'captcha-error'):
                 self._on_page_close_clicked()
             else:
@@ -1609,7 +1585,7 @@ class GroupchatControl(BaseControl):
 
         if action == 'show-contact-info':
             app.window.lookup_action(
-                f'information-{self.control_id}').activate()
+                f'groupchat-details-{self.control_id}').activate()
             return Gdk.EVENT_STOP
 
         return Gdk.EVENT_PROPAGATE
@@ -1650,8 +1626,6 @@ class GroupchatControl(BaseControl):
         page_name = stack.get_visible_child_name()
         if page_name == 'groupchat':
             pass
-        elif page_name == 'muc-info':
-            self.xml.info_close_button.grab_default()
         elif page_name == 'password':
             self.xml.password_entry.set_text('')
             self.xml.password_entry.grab_focus()
@@ -1730,7 +1704,7 @@ class GroupchatControl(BaseControl):
     def _on_change_subject(self, _button: Gtk.Button) -> None:
         if self._get_current_page() not in ('groupchat', 'muc-manage'):
             return
-        self.xml.subject_textview.get_buffer().set_text(self.subject)
+        self.xml.subject_textview.get_buffer().set_text(self._subject_text)
         self.xml.subject_textview.grab_focus()
         self._show_page('subject')
 

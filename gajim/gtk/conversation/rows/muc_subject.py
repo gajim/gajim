@@ -16,6 +16,7 @@ import time
 from datetime import datetime
 
 from gi.repository import Gtk
+from nbxmpp.structs import MucSubject
 
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
@@ -28,7 +29,7 @@ class MUCSubject(BaseRow):
 
     type = 'muc-subject'
 
-    def __init__(self, account: str, text: str, nick: str, date: str) -> None:
+    def __init__(self, account: str, subject: MucSubject) -> None:
         BaseRow.__init__(self, account)
 
         timestamp = time.time()
@@ -48,16 +49,21 @@ class MUCSubject(BaseRow):
         title.get_style_context().add_class('bold')
         subject_box.add(title)
 
-        meta_str = _('Changed by %s') % nick
-        if date is not None:
-            meta_str = f'{meta_str} ({date})'
+        author = _('Changed by %s') % (subject.author or _('Unknown'))
+
+        date = ''
+        if subject.timestamp is not None:
+            time_str = time.strftime("%c", time.localtime(subject.timestamp))
+            date = f' ({time_str})'
+
+        meta_str = f'{author}{date}'
         meta = Gtk.Label(label=meta_str)
         meta.set_halign(Gtk.Align.START)
         meta.get_style_context().add_class('small-label')
         subject_box.add(meta)
 
         message_widget = MessageWidget(account)
-        message_widget.add_with_styling(text)
+        message_widget.add_with_styling(subject.text)
         subject_box.add(message_widget)
         self.grid.attach(subject_box, 1, 0, 1, 1)
 

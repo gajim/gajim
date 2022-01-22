@@ -145,6 +145,7 @@ WINDOW_MODULES = {
     'CreateGroupchatWindow': 'gajim.gui.groupchat_creation',
     'Features': 'gajim.gui.features',
     'GroupchatConfig': 'gajim.gui.groupchat_config',
+    'GroupchatDetails': 'gajim.gui.groupchat_details',
     'GroupChatInvitation': 'gajim.gui.groupchat_invitation',
     'GroupchatJoin': 'gajim.gui.groupchat_join',
     'HistoryExport': 'gajim.gui.history_export',
