@@ -75,7 +75,6 @@ from gajim.gui.dialogs import ConfirmationCheckDialog
 from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.filechoosers import AvatarChooserDialog
 from gajim.gui.groupchat_config import GroupchatConfig
-from gajim.gui.adhoc import AdHocCommand
 from gajim.gui.avatar_selector import AvatarSelector
 from gajim.gui.dataform import DataFormWidget
 from gajim.gui.groupchat_info import GroupChatInfoScrolled
@@ -618,7 +617,7 @@ class GroupchatControl(BaseControl):
         nick = param.get_string()
         if nick:
             jid += '/' + nick
-        AdHocCommand(self.account, jid)
+        open_window('AdHocCommands', account=self.account, jid=jid)
 
     def _on_change_avatar(self, _button: Gtk.Button) -> None:
         def _on_accept(path: str) -> None:

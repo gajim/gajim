@@ -58,7 +58,6 @@ from gajim.common import helpers
 from gajim.common.i18n import _
 from gajim.common.const import StyleAttr
 
-from .adhoc import AdHocCommand
 from .dialogs import ErrorDialog
 from .search import Search
 from .util import icon_exists
@@ -1332,7 +1331,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         if not iter_:
             return
         service = model[iter_][0]
-        AdHocCommand(self.account, service)
+        open_window('AdHocCommands', account=self.account, jid=service)
 
     def _on_register_button_clicked(self, widget=None):
         """

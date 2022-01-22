@@ -36,7 +36,6 @@ from gajim.common.helpers import validate_jid
 from gajim.common.i18n import _
 from gajim.common.modules.util import as_task
 
-from .adhoc import AdHocCommand
 from .assistant import Assistant
 from .assistant import Page
 from .assistant import ErrorPage
@@ -475,7 +474,9 @@ class Gateway(Page):
             address=self._result.jid)
 
     def _on_command_clicked(self, _button: Gtk.Button) -> None:
-        AdHocCommand(self._account, self._result.jid)
+        assert self._result is not None
+        open_window(
+            'AdHocCommand', account=self._account, jid=str(self._result.jid))
 
 
 class GroupChat(Page):

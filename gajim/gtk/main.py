@@ -43,7 +43,6 @@ from gajim.common.i18n import _
 from gajim.common.ged import EventHelper
 from gajim.common.modules.bytestream import is_transfer_active
 
-from .adhoc import AdHocCommand
 from .account_side_bar import AccountSideBar
 from .app_side_bar import AppSideBar
 from .workspace_side_bar import WorkspaceSideBar
@@ -609,7 +608,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     @staticmethod
     def execute_command(account: str, jid: str) -> None:
         # TODO: Resource?
-        AdHocCommand(account, jid)
+        open_window('AdHocCommands', account=account, jid=jid)
 
     def block_contact(self, account: str, jid: str) -> None:
         client = app.get_client(account)

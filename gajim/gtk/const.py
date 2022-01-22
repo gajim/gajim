@@ -134,6 +134,7 @@ WINDOW_MODULES = {
     'AccountsWindow': 'gajim.gui.accounts',
     'AccountWizard': 'gajim.gui.account_wizard',
     'AddContact': 'gajim.gui.add_contact',
+    'AdHocCommands': 'gajim.gui.adhoc',
     'AdhocMUC': 'gajim.gui.adhoc_muc',
     'AdvancedConfig': 'gajim.gui.advanced_config',
     'BlockingList': 'gajim.gui.blocking',
