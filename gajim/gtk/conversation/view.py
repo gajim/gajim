@@ -155,7 +155,6 @@ class ConversationView(Gtk.ListBox):
         for row in self.get_children()[2:]:
             if isinstance(row, ReadMarkerRow):
                 continue
-            self.remove(row)
             row.destroy()
 
         self._reset_conversation_view()
@@ -418,25 +417,25 @@ class ConversationView(Gtk.ListBox):
         if row1.type == row2.type == 'date':
             # First two rows are date rows,
             # it’s safe to remove the fist row
-            self.remove(row1)
+            row1.destroy()
             success = True
 
         if row1.type == 'date' and row2.type != 'date':
             # First one is a date row, keep it and
             # remove the second row instead
-            self.remove(row2)
+            row2.destroy()
             success = True
 
         if row1.type != 'date':
             # Not a date row, safe to remove
-            self.remove(row1)
+            row1.destroy()
             success = True
 
         return success
 
     def _reduce_messages_after(self) -> None:
         row = self.get_row_at_index(len(self.get_children()) - 1)
-        self.remove(row)
+        row.destroy()
 
     def scroll_to_message_and_highlight(self, log_line_id: str) -> None:
         highlight_row = None
