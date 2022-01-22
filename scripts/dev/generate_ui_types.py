@@ -16,6 +16,7 @@ in_path = cwd / 'gajim' / 'data' / 'gui'
 out_path = cwd / 'gajim' / 'gtk' / 'builder.pyi'
 
 paths = list(in_path.iterdir())
+paths.sort()
 
 IMPORTS = '''
 from typing import Literal
