@@ -52,7 +52,6 @@ from gajim.common.helpers import AdditionalDataDict
 from gajim.common.const import AvatarSize
 from gajim.common.const import SimpleClientState
 from gajim.common.const import KindConstant
-from gajim.common.const import PEPEventType
 from gajim.common.jingle_session import JingleSession
 from gajim.common.modules.contacts import BareContact
 
@@ -63,7 +62,6 @@ from gajim.gui.const import TARGET_TYPE_URI_LIST
 from gajim.gui.const import ControlType
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
-from gajim.gui.util import get_cursor
 from gajim.gui.util import open_window
 
 from gajim.command_system.implementation.hosts import ChatCommands
@@ -125,20 +123,7 @@ class ChatControl(BaseControl):
         self.xml.settings_menu.set_menu_model(self.control_menu)
 
         self.update_toolbar()
-        self.update_all_pep_types()
         self._update_avatar()
-
-        # Hook up signals
-        widget = self.xml.location_eventbox
-        id_ = widget.connect('button-release-event',
-                             self.on_location_eventbox_button_release_event)
-        self.handlers[id_] = widget
-        id_ = widget.connect('enter-notify-event',
-                             self.on_location_eventbox_enter_notify_event)
-        self.handlers[id_] = widget
-        id_ = widget.connect('leave-notify-event',
-                             self.on_location_eventbox_leave_notify_event)
-        self.handlers[id_] = widget
 
         self.setup_seclabel()
         self.add_actions()
@@ -333,43 +318,6 @@ class ChatControl(BaseControl):
         action.set_state(param)
         self.contact.settings.set('send_marker', param.get_boolean())
 
-    def update_all_pep_types(self) -> None:
-        self._update_pep(PEPEventType.LOCATION)
-        self._update_pep(PEPEventType.TUNE)
-
-    def _update_pep(self, type_: PEPEventType) -> None:
-        return
-        # TODO
-        # image = self._get_pep_widget(type_)
-        # data = self.contact.pep.get(type_)
-        # if data is None:
-        #     image.hide()
-        #     return
-
-        # if type_ == PEPEventType.TUNE:
-        #     icon = 'audio-x-generic'
-        #     formated_text = format_tune(*data)
-        # elif type_ == PEPEventType.LOCATION:
-        #     icon = 'applications-internet'
-        #     formated_text = format_location(data)
-
-        # image.set_from_icon_name(icon, Gtk.IconSize.MENU)
-        # image.set_tooltip_markup(formated_text)
-        # image.show()
-
-    def _get_pep_widget(self, type_: PEPEventType) -> Optional[Gtk.Image]:
-        if type_ == PEPEventType.TUNE:
-            return self.xml.tune_image
-        if type_ == PEPEventType.LOCATION:
-            return self.xml.location_image
-        return None
-
-    def _on_tune_received(self, _event: events.TuneReceived) -> None:
-        self._update_pep(PEPEventType.TUNE)
-
-    def _on_location_received(self, _event: events.LocationReceived) -> None:
-        self._update_pep(PEPEventType.LOCATION)
-
     def _on_nickname_received(self, _event):
         self.update_ui()
 
@@ -528,27 +476,6 @@ class ChatControl(BaseControl):
                            event: events.JingleRequestReceived
                            ) -> None:
         self.add_call_message(event)
-
-    def on_location_eventbox_button_release_event(self, _widget, _event):
-        return
-        # TODO
-        # if 'geoloc' in self.contact.pep:
-        #     location = self.contact.pep['geoloc'].data
-        #     if 'lat' in location and 'lon' in location:
-        #         uri = geo_provider_from_location(location['lat'],
-        #                                          location['lon'])
-        #         open_uri(uri)
-
-    def on_location_eventbox_leave_notify_event(self, _widget, _event):
-        """
-        Just moved the mouse so show the cursor
-        """
-        cursor = get_cursor('default')
-        app.window.get_window().set_cursor(cursor)
-
-    def on_location_eventbox_enter_notify_event(self, _widget, _event):
-        cursor = get_cursor('pointer')
-        app.window.get_window().set_cursor(cursor)
 
     def update_ui(self) -> None:
         BaseControl.update_ui(self)

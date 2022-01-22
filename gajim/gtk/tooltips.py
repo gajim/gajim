@@ -41,7 +41,6 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common import helpers
 from gajim.common.const import AvatarSize
-from gajim.common.const import PEPEventType
 from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 from gajim.common.file_props import FileProp
@@ -174,9 +173,7 @@ class RosterTooltip:
             self._ui.sub.show()
             self._ui.sub_label.show()
 
-        # PEP info
-        # TODO
-        # self._append_pep_info(contact)
+        self._append_pep_info(contact)
 
         app.plugin_manager.gui_extension_point(
             'roster_tooltip_populate', self, contact)
@@ -251,15 +248,17 @@ class RosterTooltip:
         self._ui.resources_box.show_all()
 
     def _append_pep_info(self, contact: types.BareContact) -> None:
-        if PEPEventType.TUNE in contact.pep:
-            tune = format_tune(*contact.pep[PEPEventType.TUNE])
-            self._ui.tune.set_markup(tune)
+        tune = contact.get_tune()
+        if tune is not None:
+            tune_str = format_tune(tune)
+            self._ui.tune.set_markup(tune_str)
             self._ui.tune.show()
             self._ui.tune_label.show()
 
-        if PEPEventType.LOCATION in contact.pep:
-            location = format_location(contact.pep[PEPEventType.LOCATION])
-            self._ui.location.set_markup(location)
+        location = contact.get_location()
+        if location is not None:
+            location_str = format_location(location)
+            self._ui.location.set_markup(location_str)
             self._ui.location.show()
             self._ui.location_label.show()
 

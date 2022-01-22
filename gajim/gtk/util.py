@@ -46,6 +46,7 @@ import cairo
 import nbxmpp
 from nbxmpp import JID
 from nbxmpp.structs import LocationData
+from nbxmpp.structs import TuneData
 
 from gajim.common import app
 from gajim.common import configpaths
@@ -493,11 +494,10 @@ def ensure_not_destroyed(func):
     return func_wrapper
 
 
-def format_tune(artist: str, _length: str, _rating: str, source: str,
-                title: str, _track: str, _uri: str) -> str:
-    artist = GLib.markup_escape_text(artist or _('Unknown Artist'))
-    title = GLib.markup_escape_text(title or _('Unknown Title'))
-    source = GLib.markup_escape_text(source or _('Unknown Source'))
+def format_tune(data: TuneData) -> str:
+    artist = GLib.markup_escape_text(data.artist or _('Unknown Artist'))
+    title = GLib.markup_escape_text(data.title or _('Unknown Title'))
+    source = GLib.markup_escape_text(data.source or _('Unknown Source'))
 
     tune_string = _('<b>"%(title)s"</b> by <i>%(artist)s</i>\n'
                     'from <i>%(source)s</i>') % {'title': title,

@@ -22,6 +22,7 @@ from functools import partial
 from unittest.mock import Mock
 
 from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import JID
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import types
@@ -39,7 +40,7 @@ class BaseModule(EventHelper):
                  con: types.Client,
                  *args: Any,
                  plugin: bool = False,
-                 **kwargs: Any):
+                 **kwargs: Any) -> None:
 
         EventHelper.__init__(self)
         self._con = con
@@ -89,7 +90,7 @@ class BaseModule(EventHelper):
             return self._con.connection
         return self._con.connection.get_module(module_name)
 
-    def _register_callback(self, method, callback):
+    def _register_callback(self, method, callback) -> None:
         self._nbxmpp_callbacks[method] = callback
 
     def _register_pubsub_handler(self, callback: types.AnyCallableT):
@@ -105,7 +106,9 @@ class BaseModule(EventHelper):
         self._log.info('Send stored publish')
         self._stored_publish()  # pylint: disable=not-callable
 
-    def _get_contact(self, jid, groupchat: bool = False):
+    def _get_contact(self,
+                     jid: JID,
+                     groupchat: bool = False) -> types.ContactT:
         return self._con.get_module('Contacts').get_contact(
             jid, groupchat=groupchat)
 

@@ -14,11 +14,16 @@
 
 # XEP-0118: User Tune
 
+from __future__ import annotations
+
+from typing import Optional
+
 from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import JID
+from nbxmpp.structs import TuneData
 
 from gajim.common import app
 from gajim.common import ged
-from gajim.common.events import TuneReceived
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import store_publish
@@ -36,16 +41,19 @@ class UserTune(BaseModule):
     def __init__(self, con):
         BaseModule.__init__(self, con)
         self._register_pubsub_handler(self._tune_received)
-        self._tune_data = None
-        self._tunes = {}
+        self._current_tune: Optional[TuneData] = None
+        self._contact_tunes: dict[JID, TuneData] = {}
 
         self.register_events([
             ('music-track-changed', ged.CORE, self._on_music_track_changed),
             ('signed-in', ged.CORE, self._on_signed_in),
         ])
 
-    def get_current_tune(self):
-        return self._tune_data
+    def get_current_tune(self) -> Optional[TuneData]:
+        return self._current_tune
+
+    def get_contact_tune(self, jid: JID) -> Optional[TuneData]:
+        return self._contact_tunes.get(jid)
 
     @event_node(Namespace.TUNE)
     def _tune_received(self, _con, _stanza, properties):
@@ -54,15 +62,12 @@ class UserTune(BaseModule):
 
         data = properties.pubsub_event.data
         if properties.is_self_message:
-            self._tune_data = data
-        else:
-            self._tunes[properties.jid] = data
+            self._current_tune = data
 
-        app.ged.raise_event(TuneReceived(
-            account=self._account,
-            jid=properties.jid.bare,
-            tune=data,
-            is_self_message=properties.is_self_message))
+        self._contact_tunes[properties.jid] = data
+
+        contact = self._get_contact(properties.jid)
+        contact.notify('tune-update', data)
 
     @store_publish
     def set_tune(self, tune):
@@ -72,10 +77,10 @@ class UserTune(BaseModule):
         if not app.settings.get_account_setting(self._account, 'publish_tune'):
             return
 
-        if tune == self._tune_data:
+        if tune == self._current_tune:
             return
 
-        self._tune_data = tune
+        self._current_tune = tune
 
         self._log.info('Send %s', tune)
         self._nbxmpp('Tune').set_tune(tune)
@@ -101,7 +106,7 @@ class UserTune(BaseModule):
         self._publish_current_tune()
 
     def _on_music_track_changed(self, event):
-        if self._tune_data == event.info:
+        if self._current_tune == event.info:
             return
 
         self.set_tune(event.info)

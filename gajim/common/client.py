@@ -81,7 +81,6 @@ class Client(Observable):
         self._connect_machine_calls = 0
         self.addressing_supported = False
 
-        self.pep = {}
         self.roster_supported = True
 
         self._state = ClientState.DISCONNECTED

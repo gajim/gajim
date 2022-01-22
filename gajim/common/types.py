@@ -45,6 +45,11 @@ if TYPE_CHECKING:
     from gajim.common.settings import Settings
     from gajim.gtk.css_config import CSSConfig
 
+    ContactT = Union[BareContact,
+                     ResourceContact,
+                     GroupchatContact,
+                     GroupchatParticipant]
+
 
 InterfaceT = Union['Interface']
 

@@ -28,6 +28,8 @@ from nbxmpp.const import Affiliation
 from nbxmpp.const import Role
 from nbxmpp.protocol import JID
 from nbxmpp.structs import DiscoInfo
+from nbxmpp.structs import LocationData
+from nbxmpp.structs import TuneData
 from nbxmpp.structs import MucSubject
 
 from gajim.common import app
@@ -119,10 +121,7 @@ class Contacts(BaseModule):
 
     def get_contact(self,
                     jid: Union[str, JID],
-                    groupchat: bool = False) -> Union[BareContact,
-                                                      ResourceContact,
-                                                      GroupchatContact,
-                                                      GroupchatParticipant]:
+                    groupchat: bool = False) -> types.ContactT:
 
         if isinstance(jid, str):
             jid = JID.from_string(jid)
@@ -300,6 +299,12 @@ class BareContact(CommonContact):
         if self._jid.is_domain:
             return self._jid.domain
         return self._jid.localpart
+
+    def get_tune(self) -> Optional[TuneData]:
+        return self._module('UserTune').get_contact_tune(self._jid)
+
+    def get_location(self) -> Optional[LocationData]:
+        return self._module('UserLocation').get_contact_location(self._jid)
 
     @property
     def avatar_sha(self) -> Optional[str]:

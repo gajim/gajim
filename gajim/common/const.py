@@ -14,7 +14,8 @@
 
 from __future__ import annotations
 
-from typing import Any, Union
+from typing import Any
+from typing import Union
 from typing import NamedTuple
 
 from enum import IntEnum
@@ -176,19 +177,6 @@ class IdleState(Enum):
     XA = 'xa'
     AWAY = 'away'
     AWAKE = 'online'
-
-
-@unique
-class PEPEventType(IntEnum):
-    ABSTRACT = 0
-    ACTIVITY = 1
-    TUNE = 2
-    MOOD = 3
-    LOCATION = 4
-    NICKNAME = 5
-    AVATAR = 6
-    ATOM = 7
-    BOOKMARKS = 8
 
 
 class SyncThreshold(IntEnum):

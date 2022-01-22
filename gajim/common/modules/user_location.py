@@ -14,10 +14,14 @@
 
 # XEP-0080: User Location
 
-from nbxmpp.namespaces import Namespace
+from __future__ import annotations
 
-from gajim.common import app
-from gajim.common.events import LocationReceived
+from typing import Optional
+
+from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import JID
+from nbxmpp.structs import LocationData
+
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import store_publish
@@ -30,15 +34,18 @@ class UserLocation(BaseModule):
         'set_location',
     ]
 
-    def __init__(self, con):
+    def __init__(self, con) -> None:
         BaseModule.__init__(self, con)
         self._register_pubsub_handler(self._location_received)
 
-        self._current_location = None
-        self._locations = {}
+        self._current_location: Optional[LocationData] = None
+        self._contact_locations: dict[JID, LocationData] = {}
 
-    def get_current_location(self):
+    def get_current_location(self) -> Optional[LocationData]:
         return self._current_location
+
+    def get_contact_location(self, jid: JID) -> Optional[LocationData]:
+        return self._contact_locations.get(jid)
 
     @event_node(Namespace.LOCATION)
     def _location_received(self, _con, _stanza, properties):
@@ -48,15 +55,11 @@ class UserLocation(BaseModule):
         data = properties.pubsub_event.data
         if properties.is_self_message:
             self._current_location = data
-        else:
-            self._locations[properties.jid] = data
 
-        app.ged.raise_event(
-            LocationReceived(
-                account=self._account,
-                jid=properties.jid.bare,
-                location=data,
-                is_self_message=properties.is_self_message))
+        self._contact_locations[properties.jid] = data
+
+        contact = self._get_contact(properties.jid)
+        contact.notify('location-update', data)
 
     @store_publish
     def set_location(self, location):

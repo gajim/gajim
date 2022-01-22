@@ -210,10 +210,6 @@ class ChatControlBuilder(Builder):
     banner_label: Gtk.Label
     phone_image: Gtk.Image
     account_badge_box: Gtk.Box
-    hbox2: Gtk.Box
-    tune_image: Gtk.Image
-    location_eventbox: Gtk.EventBox
-    location_image: Gtk.Image
     conv_view_overlay: Gtk.Overlay
     hbox: Gtk.Box
     emoticons_button: Gtk.MenuButton

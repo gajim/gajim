@@ -24,7 +24,6 @@ from dataclasses import dataclass
 from dataclasses import field
 
 from nbxmpp.protocol import JID
-from nbxmpp.structs import LocationData
 from nbxmpp.structs import RosterItem
 from nbxmpp.structs import TuneData
 from nbxmpp.const import InviteType
@@ -433,24 +432,6 @@ class PluginAdded(ApplicationEvent):
 class PluginRemoved(ApplicationEvent):
     name: str = field(init=False, default='plugin-removed')
     plugin: Any
-
-
-@dataclass
-class TuneReceived(ApplicationEvent):
-    name: str = field(init=False, default='tune-received')
-    account: str
-    jid: str
-    tune: TuneData
-    is_self_message: bool
-
-
-@dataclass
-class LocationReceived(ApplicationEvent):
-    name: str = field(init=False, default='location-received')
-    account: str
-    jid: str
-    location: LocationData
-    is_self_message: bool
 
 
 @dataclass
