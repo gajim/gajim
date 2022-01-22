@@ -27,6 +27,7 @@ import cairo
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Role
 from nbxmpp.protocol import JID
+from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import MucSubject
 
 from gajim.common import app
@@ -584,11 +585,11 @@ class GroupchatContact(CommonContact):
         for contact in self._resources.values():
             contact.update_presence(UNKNOWN_MUC_PRESENCE, notify=False)
 
-    def get_user_nicknames(self):
+    def get_user_nicknames(self) -> list[str]:
         client = app.get_client(self._account)
         return client.get_module('MUC').get_joined_users(self._jid)
 
-    def get_disco(self, max_age: int = 0):
+    def get_disco(self, max_age: int = 0) -> Optional[DiscoInfo]:
         return app.storage.cache.get_last_disco_info(self.jid, max_age=max_age)
 
     def can_notify(self) -> bool:
