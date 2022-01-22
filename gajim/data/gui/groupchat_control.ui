@@ -1334,9 +1334,6 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
-            </child>
-            <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -1460,7 +1457,7 @@
               </object>
               <packing>
                 <property name="name">kick</property>
-                <property name="position">8</property>
+                <property name="position">7</property>
               </packing>
             </child>
             <child>
@@ -1587,7 +1584,7 @@
               </object>
               <packing>
                 <property name="name">ban</property>
-                <property name="position">9</property>
+                <property name="position">8</property>
               </packing>
             </child>
             <child>
@@ -1747,7 +1744,7 @@
               </object>
               <packing>
                 <property name="name">destroy</property>
-                <property name="position">10</property>
+                <property name="position">9</property>
               </packing>
             </child>
             <child>
@@ -1855,7 +1852,7 @@
               </object>
               <packing>
                 <property name="name">rename</property>
-                <property name="position">11</property>
+                <property name="position">10</property>
               </packing>
             </child>
             <child>
@@ -1934,119 +1931,11 @@
               </object>
               <packing>
                 <property name="name">invite</property>
-                <property name="position">12</property>
+                <property name="position">11</property>
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <!-- n-columns=1 n-rows=3 -->
-                  <object class="GtkGrid" id="settings_grid">
-                    <property name="name">settings_grid</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="row-spacing">12</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">center</property>
-                        <property name="margin-top">6</property>
-                        <property name="spacing">12</property>
-                        <child>
-                          <object class="GtkButton">
-                            <property name="label" translatable="yes">_Close</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="use-underline">True</property>
-                            <signal name="clicked" handler="_on_page_cancel_clicked" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes">Settings for This Chat</property>
-                        <style>
-                          <class name="bold16"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkScrolledWindow">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="hscrollbar-policy">never</property>
-                        <property name="shadow-type">in</property>
-                        <property name="overlay-scrolling">False</property>
-                        <child>
-                          <object class="GtkViewport">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <child>
-                              <object class="GtkBox" id="settings_scrolled_box">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
-                                <property name="orientation">vertical</property>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <style>
-                                  <class name="margin-18"/>
-                                </style>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <style>
-                          <class name="scrolled-no-border"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <style>
-                      <class name="margin-18"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="name">muc-settings</property>
-                <property name="position">13</property>
-              </packing>
+              <placeholder/>
             </child>
             <child>
               <object class="GtkBox">
@@ -2259,7 +2148,7 @@
               </object>
               <packing>
                 <property name="name">muc-manage</property>
-                <property name="position">14</property>
+                <property name="position">13</property>
               </packing>
             </child>
             <child>
@@ -2368,7 +2257,7 @@
               </object>
               <packing>
                 <property name="name">avatar-selector</property>
-                <property name="position">15</property>
+                <property name="position">14</property>
               </packing>
             </child>
           </object>

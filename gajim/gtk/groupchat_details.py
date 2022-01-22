@@ -22,6 +22,7 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 
 from .groupchat_info import GroupChatInfoScrolled
+from .groupchat_settings import GroupChatSettings
 from .sidebar_switcher import SideBarSwitcher
 
 
@@ -47,6 +48,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         main_box.add(self._stack)
 
         self._add_groupchat_info()
+        self._add_groupchat_settings()
 
         self._side_bar_switcher.set_stack(self._stack)
 
@@ -66,6 +68,15 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         groupchat_info.set_subject(self._contact.subject)
 
         self._stack.add_titled(groupchat_info, 'info', _('Information'))
+
+    def _add_groupchat_settings(self) -> None:
+        scrolled_window = Gtk.ScrolledWindow()
+        scrolled_window.set_policy(Gtk.PolicyType.NEVER,
+                                   Gtk.PolicyType.AUTOMATIC)
+
+        settings_box = GroupChatSettings(self.account, self._contact.jid)
+        scrolled_window.add(settings_box)
+        self._stack.add_titled(scrolled_window, 'settings', _('Settings'))
 
     def _on_key_press(self,
                       _widget: GroupchatDetails,

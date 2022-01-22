@@ -78,7 +78,6 @@ from gajim.gui.groupchat_config import GroupchatConfig
 from gajim.gui.avatar_selector import AvatarSelector
 from gajim.gui.dataform import DataFormWidget
 from gajim.gui.groupchat_inviter import GroupChatInviter
-from gajim.gui.groupchat_settings import GroupChatSettings
 from gajim.gui.groupchat_roster import GroupchatRoster
 from gajim.gui.groupchat_state import GroupchatState
 from gajim.gui.message_input import MessageInputTextView
@@ -171,9 +170,6 @@ class GroupchatControl(BaseControl):
         self._captcha_request: Optional[DataFormWidget] = None
 
         self._subject_text = ''
-
-        # Groupchat settings
-        self._groupchat_settings_box: Optional[GroupChatSettings] = None
 
         # Holds the room’s config form, which is requested when managing
         # the room
@@ -289,7 +285,6 @@ class GroupchatControl(BaseControl):
     def add_actions(self) -> None:
         super().add_actions()
         actions = [
-            ('groupchat-settings-', None, self._on_groupchat_settings),
             ('groupchat-manage-', None, self._on_groupchat_manage),
             ('rename-groupchat-', None, self._on_rename_groupchat),
             ('change-nickname-', None, self._on_change_nick),
@@ -389,7 +384,6 @@ class GroupchatControl(BaseControl):
     def remove_actions(self) -> None:
         super().remove_actions()
         actions = [
-            'groupchat-settings-',
             'groupchat-manage-',
             'rename-groupchat-',
             'change-nickname-',
@@ -446,20 +440,6 @@ class GroupchatControl(BaseControl):
                     _param: Optional[GLib.Variant]
                     ) -> None:
         open_window('GroupchatDetails', contact=self.contact)
-
-    def _on_groupchat_settings(self,
-                               _action: Gio.SimpleAction,
-                               _param: Optional[GLib.Variant]
-                               ) -> None:
-        if self._groupchat_settings_box is not None:
-            self.xml.settings_scrolled_box.remove(self._groupchat_settings_box)
-            self._groupchat_settings_box.destroy()
-
-        self._groupchat_settings_box = GroupChatSettings(
-            self.account, self.contact.jid)
-        self._groupchat_settings_box.show_all()
-        self.xml.settings_scrolled_box.add(self._groupchat_settings_box)
-        self._show_page('muc-settings')
 
     def _on_groupchat_manage(self,
                              _action: Gio.SimpleAction,

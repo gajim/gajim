@@ -26,7 +26,7 @@ from .settings import SettingsBox
 
 class GroupChatSettings(SettingsBox):
     def __init__(self, account: str, jid: JID) -> None:
-        SettingsBox.__init__(self, account, jid)
+        SettingsBox.__init__(self, account, str(jid))
 
         self.get_style_context().add_class('settings-border')
         self.set_selection_mode(Gtk.SelectionMode.NONE)

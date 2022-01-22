@@ -151,7 +151,6 @@ def get_groupchat_menu(control_id: str, account: str, jid: JID) -> Gio.Menu:
 
     menulist: MenuItemListT = [
         (_('Details'), f'win.groupchat-details-{control_id}', None),
-        (_('Settings…'), f'win.groupchat-settings-{control_id}', None),
         (_('Manage…'), f'win.groupchat-manage-{control_id}', None),
         (_('Rename Chat…'), f'win.rename-groupchat-{control_id}', None),
         (_('Change Nickname…'), f'win.change-nickname-{control_id}', None),
