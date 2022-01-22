@@ -158,7 +158,6 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
 
     def _fill_information_page(self, contact: ContactT) -> None:
         self._vcard_grid = VCardGrid(self.account)
-        self._vcard_grid.set_column_homogeneous(True)
         self._ui.vcard_box.add(self._vcard_grid)
         self._client.get_module('VCard4').request_vcard(
             jid=self.contact.jid,
