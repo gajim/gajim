@@ -54,6 +54,7 @@ from gajim.common.const import SimpleClientState
 from gajim.common.const import KindConstant
 from gajim.common.const import PEPEventType
 from gajim.common.jingle_session import JingleSession
+from gajim.common.modules.contacts import BareContact
 
 from gajim.gui.call_widget import CallWidget
 from gajim.gui.controls.base import BaseControl
@@ -746,6 +747,8 @@ class ChatControl(BaseControl):
             return
 
         contact = self._client.get_module('Contacts').get_contact(event.fjid)
+        if isinstance(contact, BareContact):
+            return
         self.conversation_view.add_user_status(self.contact.name,
                                                contact.show.value,
                                                contact.status)
