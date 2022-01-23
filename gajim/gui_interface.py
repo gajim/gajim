@@ -144,7 +144,6 @@ class Interface:
         # pylint: disable=line-too-long
         self.handlers = {
             'iq-error-received': [self.handle_event_iq_error],
-            'plain-connection': [self.handle_event_plain_connection],
             'http-auth-received': [self.handle_event_http_auth],
             'password-required': [self.handle_event_password_required],
             'client-cert-passphrase': [self.handle_event_client_cert_passphrase],
@@ -179,24 +178,6 @@ class Interface:
         ctrl = app.window.get_control(event.account, event.properties.jid.bare)
         if ctrl and ctrl.is_groupchat:
             ctrl.add_info_message(f'Error: {event.properties.error}')
-
-    @staticmethod
-    def handle_event_plain_connection(event):
-        ConfirmationDialog(
-            _('Insecure Connection'),
-            _('Insecure Connection'),
-            _('You are about to connect to the account %(account)s '
-              '(%(server)s) using an insecure connection method. This means '
-              'conversations will not be encrypted. Connecting PLAIN is '
-              'strongly discouraged.') % {
-                  'account': event.account,
-                  'server': app.get_hostname_from_account(event.account)},
-            [DialogButton.make('Cancel',
-                               text=_('_Abort'),
-                               callback=event.abort),
-             DialogButton.make('Remove',
-                               text=_('_Connect Anyway'),
-                               callback=event.connect)]).show()
 
     @staticmethod
     def handle_event_http_auth(event):

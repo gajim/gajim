@@ -32,6 +32,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import Direction
 from gajim.common.events import ApplicationEvent
+from gajim.common.events import PlainConnection
 from gajim.common.events import RosterItemExchangeEvent
 from gajim.common.events import AllowGajimUpdateCheck
 from gajim.common.events import GajimUpdateAvailable
@@ -130,6 +131,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('allow-gajim-update-check', ged.GUI1, self._on_allow_gajim_update),
             ('gajim-update-available', ged.GUI1, self._on_gajim_update_available),
             ('roster-item-exchange', ged.GUI1, self._on_roster_item_exchange),
+            ('plain-connection', ged.GUI1, self._on_plain_connection),
         ])
 
         self._check_for_account()
@@ -205,6 +207,24 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                     action=event.action,
                     exchange_list=event.exchange_items_list,
                     jid_from=event.jid)
+
+    @staticmethod
+    def _on_plain_connection(event: PlainConnection) -> None:
+        ConfirmationDialog(
+            _('Insecure Connection'),
+            _('Insecure Connection'),
+            _('You are about to connect to the account %(account)s '
+              '(%(server)s) using an insecure connection method. This means '
+              'conversations will not be encrypted. Connecting PLAIN is '
+              'strongly discouraged.') % {
+                  'account': event.account,
+                  'server': app.get_hostname_from_account(event.account)},
+            [DialogButton.make('Cancel',
+                               text=_('_Abort'),
+                               callback=event.abort),
+             DialogButton.make('Remove',
+                               text=_('_Connect Anyway'),
+                               callback=event.connect)]).show()
 
     def _add_actions(self) -> None:
         actions = [
