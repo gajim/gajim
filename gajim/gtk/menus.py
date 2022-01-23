@@ -77,7 +77,7 @@ def get_singlechat_menu(control_id: str,
         ('win.block-contact-', _('Block Contact…')),
         ('win.start-call-', _('Start Call…')),
         ('win.information-', _('Information')),
-        ('app.remove-history', _('Remove History'))
+        ('app.remove-history', _('Remove History…'))
     ]
 
     if not contact.is_in_roster:
@@ -157,7 +157,7 @@ def get_groupchat_menu(control_id: str, account: str, jid: JID) -> Gio.Menu:
         (_('Request Voice'), f'win.request-voice-{control_id}', None),
         (_('Execute Command…'), f'win.execute-command-{control_id}', '""'),
         (_('Search…'), 'win.search-history', None),
-        (_('Remove History'), 'app.remove-history', params)
+        (_('Remove History…'), 'app.remove-history', params)
     ]
 
     return make_menu(menulist)

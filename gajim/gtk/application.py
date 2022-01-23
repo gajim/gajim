@@ -74,6 +74,8 @@ from gajim.gui import structs
 from gajim.gui.about import AboutDialog
 from gajim.gui.avatar import AvatarStorage
 from gajim.gui.builder import get_builder
+from gajim.gui.dialogs import DialogButton
+from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.dialogs import ShortcutsWindow
 from gajim.gui.discovery import ServiceDiscoveryWindow
 from gajim.gui.util import get_app_window
@@ -803,15 +805,23 @@ class GajimApplication(Gtk.Application, CoreApplication):
     def _on_remove_history_action(_action: Gio.SimpleAction,
                                   params: structs.RemoveHistoryActionParams
                                   ) -> None:
-
-        if params.jid is not None:
-            app.storage.archive.remove_history(params.account, params.jid)
-            control = app.window.get_control(params.account, params.jid)
-            if control is not None:
-                control.reset_view()
-        else:
-            for control in app.window.get_controls(params.account):
-                control.reset_view()
+        def _remove() -> None:
+            if params.jid is not None:
+                app.storage.archive.remove_history(params.account, params.jid)
+                control = app.window.get_control(params.account, params.jid)
+                if control is not None:
+                    control.reset_view()
+            else:
+                for control in app.window.get_controls(params.account):
+                    control.reset_view()
+        ConfirmationDialog(
+            _('Remove Chat History'),
+            _('Remove Chat History?'),
+            _('Do you really want to remove your chat history for this chat?'),
+            [DialogButton.make('Cancel'),
+             DialogButton.make('Remove',
+                               callback=_remove)],
+            transient_for=app.window).show()
 
     @staticmethod
     @structs.actionfunction
