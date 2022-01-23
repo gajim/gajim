@@ -29,7 +29,7 @@ log = logging.getLogger('gajim.gui.pass_dialog')
 
 
 class PasswordDialog(Gtk.ApplicationWindow):
-    def __init__(self, account: str, event: PasswordRequired) -> None:
+    def __init__(self, event: PasswordRequired) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
         self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
@@ -42,8 +42,8 @@ class PasswordDialog(Gtk.ApplicationWindow):
         self._ui = get_builder('password_dialog.ui')
         self.add(self._ui.pass_box)
 
-        self.account = account
-        self._client = app.get_client(account)
+        self.account = event.client.account
+        self._client = app.get_client(event.client.account)
         self._event = event
 
         self.connect('key-press-event', self._on_key_press)

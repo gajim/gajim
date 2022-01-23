@@ -68,7 +68,6 @@ from gajim.common.events import FileHashError
 from gajim.common.events import FileProgress
 from gajim.common.events import FileError
 from gajim.common.events import MucAdded
-from gajim.common.events import PasswordRequired
 from gajim.common.helpers import ask_for_status_message
 from gajim.common.structs import OutgoingMessage
 from gajim.common.i18n import _
@@ -145,7 +144,6 @@ class Interface:
         self.handlers = {
             'iq-error-received': [self.handle_event_iq_error],
             'http-auth-received': [self.handle_event_http_auth],
-            'password-required': [self.handle_event_password_required],
             'client-cert-passphrase': [self.handle_event_client_cert_passphrase],
             'signed-in': [self.handle_event_signed_in],
             'presence-received': [self.handle_event_presence],
@@ -213,11 +211,7 @@ class Interface:
 
     @staticmethod
     def handle_event_client_cert_passphrase(event):
-        open_window('PasswordDialog', account=event.conn.name, event=event)
-
-    @staticmethod
-    def handle_event_password_required(event: PasswordRequired) -> None:
-        open_window('PasswordDialog', account=event.conn.name, event=event)
+        open_window('PasswordDialog', event=event)
 
     @staticmethod
     def handle_event_signed_in(event):

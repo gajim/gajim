@@ -32,6 +32,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import Direction
 from gajim.common.events import ApplicationEvent
+from gajim.common.events import PasswordRequired
 from gajim.common.events import PlainConnection
 from gajim.common.events import RosterItemExchangeEvent
 from gajim.common.events import AllowGajimUpdateCheck
@@ -132,6 +133,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('gajim-update-available', ged.GUI1, self._on_gajim_update_available),
             ('roster-item-exchange', ged.GUI1, self._on_roster_item_exchange),
             ('plain-connection', ged.GUI1, self._on_plain_connection),
+            ('password-required', ged.GUI1, self._on_password_required),
         ])
 
         self._check_for_account()
@@ -225,6 +227,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
              DialogButton.make('Remove',
                                text=_('_Connect Anyway'),
                                callback=event.connect)]).show()
+
+    @staticmethod
+    def _on_password_required(event: PasswordRequired) -> None:
+        open_window('PasswordDialog', event=event)
 
     def _add_actions(self) -> None:
         actions = [

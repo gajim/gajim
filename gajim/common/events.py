@@ -81,7 +81,7 @@ class PlainConnection(ApplicationEvent):
 @dataclass
 class PasswordRequired(ApplicationEvent):
     name: str = field(init=False, default='password-required')
-    conn: 'Client'
+    client: 'Client'
     on_password: Callable[..., Any]
 
 
