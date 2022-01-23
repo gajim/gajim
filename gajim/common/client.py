@@ -293,7 +293,7 @@ class Client(Observable):
                     self._client.set_password(password)
                     self._prepare_for_connect()
 
-                app.ged.raise_event(PasswordRequired(conn=self,
+                app.ged.raise_event(PasswordRequired(client=self,
                                                      on_password=_on_password))
 
             app.ged.raise_event(
