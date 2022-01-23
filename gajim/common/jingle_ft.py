@@ -181,7 +181,7 @@ class JingleFileTransfer(JingleContent):
         fjid = con.get_module('Bytestream')._ft_get_from(stanza)
         account = con.name
         jid = app.get_jid_without_resource(fjid)
-
+        jid = JID.from_string(jid)
         if not content:
             return
 

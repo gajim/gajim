@@ -495,7 +495,7 @@ class ChatList(Gtk.ListBox, EventHelper):
     def _on_file_request_received(self,
                                   event: events.FileRequestReceivedEvent
                                   ) -> None:
-        row = self._chats.get((event.account, JID.from_string(event.jid)))
+        row = self._chats.get((event.account, event.jid))
         if row is None:
             return
         row.set_timestamp(time.time())

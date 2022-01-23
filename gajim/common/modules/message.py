@@ -179,7 +179,7 @@ class Message(BaseModule):
             'account': self._account,
             'additional_data': additional_data,
             'fjid': fjid,
-            'jid': fjid if properties.is_muc_pm else jid,
+            'jid': from_ if properties.is_muc_pm else from_.new_as_bare(),
             'resource': resource,
             'stanza_id': stanza_id,
             'unique_id': stanza_id or message_id,

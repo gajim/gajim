@@ -125,7 +125,7 @@ class Presence(BaseModule):
             'need_add_in_roster': False,
             'popup': False,
             'ptype': properties.type.value,
-            'jid': properties.jid.bare,
+            'jid': properties.jid.new_as_bare(),
             'resource': properties.jid.resource,
             'id_': properties.id,
             'fjid': str(properties.jid),

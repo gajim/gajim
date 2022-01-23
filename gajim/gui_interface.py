@@ -118,7 +118,7 @@ class Interface:
         self._create_core_handlers_list()
         self._register_core_handlers()
 
-        self.instances = {}
+        self.instances: dict[str, Any] = {}
 
         for acc in app.connections:
             self.instances[acc] = {

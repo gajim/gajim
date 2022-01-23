@@ -37,6 +37,21 @@ if typing.TYPE_CHECKING:
     from gajim.common.client import Client
 
 
+MainEventT = Union['PresenceReceived',
+                   'MessageSent',
+                   'MamMessageReceived',
+                   'GcMessageReceived',
+                   'MessageUpdated',
+                   'ReceiptReceived',
+                   'DisplayedReceived',
+                   'MessageError',
+                   'MucDiscoUpdate',
+                   'JingleConnectedReceived',
+                   'JingleDisconnectedReceived',
+                   'JingleErrorReceived',
+                   'FileRequestSent']
+
+
 @dataclass
 class ApplicationEvent:
     name: str
@@ -130,7 +145,7 @@ class MusicTrackChanged(ApplicationEvent):
 class MessageSent(ApplicationEvent):
     name: str = field(init=False, default='message-sent')
     account: str
-    jid: str
+    jid: JID
     message: str
     message_id: str
     chatstate: Optional[str]
@@ -200,7 +215,7 @@ class FileRequestSent(ApplicationEvent):
     name: str = field(init=False, default='file-request-sent')
     account: str
     file_props: FileProp
-    jid: str
+    jid: JID
 
 
 @dataclass
@@ -342,7 +357,7 @@ class ArchivingIntervalFinished(ApplicationEvent):
 class MessageUpdated(ApplicationEvent):
     name: str = field(init=False, default='message-updated')
     account: str
-    jid: str
+    jid: JID
     msgtxt: str
     properties: Any
     correct_id: str
@@ -352,7 +367,7 @@ class MessageUpdated(ApplicationEvent):
 class MamMessageReceived(ApplicationEvent):
     name: str = field(init=False, default='mam-message-received')
     account: str
-    jid: str
+    jid: JID
     msgtxt: str
     properties: Any
     additional_data: AdditionalDataDict
@@ -368,7 +383,7 @@ class MessageReceived(ApplicationEvent):
     conn: 'Client'
     stanza: Any
     account: str
-    jid: str
+    jid: JID
     msgtxt: str
     properties: Any
     additional_data: AdditionalDataDict
@@ -392,7 +407,7 @@ class GcMessageReceived(MessageReceived):
 class MessageError(ApplicationEvent):
     name: str = field(init=False, default='message-error')
     account: str
-    jid: str
+    jid: JID
     room_jid: str
     message_id: str
     error: Any
@@ -452,7 +467,7 @@ class SearchResultReceivedEvent(ApplicationEvent):
 class ReceiptReceived(ApplicationEvent):
     name: str = field(init=False, default='receipt-received')
     account: str
-    jid: str
+    jid: JID
     receipt_id: str
 
 
@@ -462,7 +477,7 @@ class JingleEvent(ApplicationEvent):
     conn: 'Client'
     account: str
     fjid: str
-    jid: str
+    jid: JID
     sid: str
     resource: str
     jingle_session: Any
@@ -571,7 +586,7 @@ class PresenceReceived(ApplicationEvent):
     need_add_in_roster: bool
     popup: bool
     ptype: str
-    jid: str
+    jid: JID
     resource: str
     id_: str
     fjid: str
@@ -622,7 +637,7 @@ class FileRequestReceivedEvent(ApplicationEvent):
     id_: str
     fjid: str
     account: str
-    jid: str
+    jid: JID
     file_props: FileProp
 
 

@@ -260,7 +260,7 @@ class MAM(BaseModule):
 
         event_attr = {
             'account': self._account,
-            'jid': str(properties.jid.bare),
+            'jid': properties.jid.new_as_bare(),
             'msgtxt': properties.body,
             'properties': properties,
             'additional_data': additional_data,

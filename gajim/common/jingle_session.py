@@ -902,7 +902,7 @@ class JingleSession:
     def _raise_event(self, name: str, **kwargs):
         jid, resource = app.get_room_and_nick_from_fjid(
             str(self.peerjid))
-
+        jid = JID.from_string(jid)
         event_class = JINGLE_EVENTS[name]
 
         app.ged.raise_event(

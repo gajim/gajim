@@ -31,7 +31,10 @@ from nbxmpp import JID
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import Direction
-from gajim.common.events import ApplicationEvent
+from gajim.common import events
+from gajim.common.events import FileRequestReceivedEvent
+from gajim.common.events import JingleRequestReceived
+from gajim.common.events import MessageReceived
 from gajim.common.events import MucAdded
 from gajim.common.events import HttpAuth
 from gajim.common.events import PasswordRequired
@@ -110,22 +113,19 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self.register_events([
             ('presence-received', ged.GUI1, self._on_event),
             ('message-sent', ged.GUI1, self._on_event),
-            ('message-received', ged.CORE, self._on_event),
+            ('message-received', ged.CORE, self._on_message_received),
             ('mam-message-received', ged.CORE, self._on_event),
             ('gc-message-received', ged.CORE, self._on_event),
             ('message-updated', ged.CORE, self._on_event),
             ('receipt-received', ged.GUI1, self._on_event),
             ('displayed-received', ged.GUI1, self._on_event),
             ('message-error', ged.GUI1, self._on_event),
-            ('muc-creation-failed', ged.GUI1, self._on_event),
-            ('muc-self-presence', ged.GUI1, self._on_event),
-            ('muc-voice-request', ged.GUI1, self._on_event),
             ('muc-disco-update', ged.GUI1, self._on_event),
-            ('jingle-request-received', ged.GUI1, self._on_event),
+            ('jingle-request-received', ged.GUI1, self._on_jingle_request),
             ('jingle-connected-received', ged.GUI1, self._on_event),
             ('jingle-disconnected-received', ged.GUI1, self._on_event),
             ('jingle-error-received', ged.GUI1, self._on_event),
-            ('file-request-received', ged.GUI1, self._on_event),
+            ('file-request-received', ged.GUI1, self._on_file_request),
             ('file-request-sent', ged.GUI1, self._on_event),
             ('our-show', ged.GUI1, self._on_our_show),
             ('signed-in', ged.GUI1, self._on_signed_in),
@@ -523,7 +523,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _add_group_chat(self,
                         _action: Gio.SimpleAction,
-                        param: Optional[GLib.Variant]) -> None:
+                        param: GLib.Variant) -> None:
 
         account, jid, select = param.unpack()
         self.add_group_chat(account, JID.from_string(jid), select)
@@ -755,34 +755,40 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._set_startup_finished()
 
-    def _on_event(self, event: ApplicationEvent) -> None:
-        if event.name == 'update-roster-avatar':
+    def _on_event(self, event: events.MainEventT) -> None:
+        if not self.chat_exists(event.account, event.jid):
             return
 
+        self._main_stack.process_event(event)
+
+    def _on_message_received(self, event: MessageReceived) -> None:
         if not self.chat_exists(event.account, event.jid):
-            if event.name == 'message-received':
-                if not event.properties.body:
-                    # Don’t open control on chatstate etc.
-                    return
-                if event.properties.is_muc_pm:
-                    self.add_private_chat(event.account,
-                                          event.properties.jid)
-                else:
-                    jid = event.properties.jid.new_as_bare()
-                    self.add_chat(event.account, jid, 'contact')
-            elif event.name == 'jingle-request-received':
-                content_types = []
-                for item in event.contents:
-                    content_types.append(item.media)
-                if 'audio' in content_types or 'video' in content_types:
-                    # AV Call received, open chat control
-                    self.add_chat(event.account, event.jid, 'contact')
-            elif event.name == 'file-request-received':
-                # Jingle file transfer, open chat control
-                self.add_chat(event.account, event.jid, 'contact')
-            else:
-                # No chat is open, dont handle any gui events
+            if not event.properties.body:
+                # Don’t open control on chatstate etc.
                 return
+
+            if event.properties.is_muc_pm:
+                self.add_private_chat(event.account,
+                                      event.properties.jid)
+
+            else:
+                jid = event.properties.jid.new_as_bare()
+                self.add_chat(event.account, jid, 'contact')
+
+        self._main_stack.process_event(event)
+
+    def _on_jingle_request(self, event: JingleRequestReceived) -> None:
+        if not self.chat_exists(event.account, event.jid):
+            for item in event.contents:
+                if item.media in ('audio', 'video'):
+                    self.add_chat(event.account, event.jid, 'contact')
+                    break
+
+        self._main_stack.process_event(event)
+
+    def _on_file_request(self, event: FileRequestReceivedEvent) -> None:
+        if not self.chat_exists(event.account, event.jid):
+            self.add_chat(event.account, event.jid, 'contact')
 
         self._main_stack.process_event(event)
 
@@ -807,8 +813,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 app.app.start_shutdown(message=message)
                 return
             # check if there is an active file transfer
-            files_props = app.interface.instances['file_transfers'].\
-                files_props
+            files_props = app.interface.instances['file_transfers'].files_props
             transfer_active = False
             for x in files_props:
                 for y in files_props[x]:
