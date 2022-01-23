@@ -206,10 +206,12 @@ def get_account_menu(account: str) -> Gio.Menu:
 
 def build_accounts_menu() -> None:
     menubar = app.app.get_menubar()
+    assert isinstance(menubar, Gio.Menu)
     # Accounts Submenu
     menu_position = 1
 
     acc_menu = menubar.get_item_link(menu_position, 'submenu')
+    assert isinstance(acc_menu, Gio.Menu)
     acc_menu.remove_all()
 
     accounts_list = sorted(app.settings.get_active_accounts())
@@ -261,7 +263,9 @@ def get_encryption_menu(control_id: str,
     return menu
 
 
-def get_conv_action_context_menu(account: str, selected_text: str) -> Gtk.MenuItem:
+def get_conv_action_context_menu(account: str,
+                                 selected_text: str
+                                 ) -> Gtk.MenuItem:
     selected_text_short = reduce_chars_newlines(selected_text, 10, 1)
 
     action_menu_item = Gtk.MenuItem.new_with_mnemonic(
