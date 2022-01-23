@@ -19,7 +19,7 @@ from nbxmpp.structs import StanzaHandler
 from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
-from gajim.common.events import HttpAuthReceived
+from gajim.common.events import HttpAuth
 from gajim.common.modules.base import BaseModule
 
 
@@ -51,12 +51,12 @@ class HTTPAuth(BaseModule):
             raise nbxmpp.NodeProcessed
 
         app.ged.raise_event(
-            HttpAuthReceived(conn=self._con,
-                             iq_id=properties.http_auth.id,
-                             method=properties.http_auth.method,
-                             url=properties.http_auth.url,
-                             msg=properties.http_auth.body,
-                             stanza=stanza))
+            HttpAuth(client=self._con,
+                     iq_id=properties.http_auth.id,
+                     method=properties.http_auth.method,
+                     url=properties.http_auth.url,
+                     msg=properties.http_auth.body,
+                     stanza=stanza))
         raise nbxmpp.NodeProcessed
 
     def build_http_auth_answer(self, stanza, answer):

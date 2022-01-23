@@ -81,9 +81,7 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.httpupload import HTTPFileTransfer
 
-from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ErrorDialog
-from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.filechoosers import FileChooserDialog
 from gajim.gui.filetransfer import FileTransfersWindow
 from gajim.gui.menus import build_accounts_menu
@@ -142,7 +140,6 @@ class Interface:
         # pylint: disable=line-too-long
         self.handlers = {
             'iq-error-received': [self.handle_event_iq_error],
-            'http-auth-received': [self.handle_event_http_auth],
             'signed-in': [self.handle_event_signed_in],
             'presence-received': [self.handle_event_presence],
             'our-show': [self.handle_event_status],
@@ -174,38 +171,6 @@ class Interface:
         ctrl = app.window.get_control(event.account, event.properties.jid.bare)
         if ctrl and ctrl.is_groupchat:
             ctrl.add_info_message(f'Error: {event.properties.error}')
-
-    @staticmethod
-    def handle_event_http_auth(event):
-        # ('HTTP_AUTH', account, (method, url, transaction_id, iq_obj, msg))
-        def _response(answer: str) -> None:
-            event.conn.get_module('HTTPAuth').build_http_auth_answer(
-                event.stanza, answer)
-
-        account = event.conn.name
-        message = _('HTTP (%(method)s) Authorization '
-                    'for %(url)s (ID: %(id)s)') % {
-                        'method': event.method,
-                        'url': event.url,
-                        'id': event.iq_id}
-        sec_msg = _('Do you accept this request?')
-        if app.get_number_of_connected_accounts() > 1:
-            sec_msg = _('Do you accept this request (account: %s)?') % account
-        if event.msg:
-            sec_msg = event.msg + '\n' + sec_msg
-        message = message + '\n' + sec_msg
-
-        ConfirmationDialog(
-            _('Authorization Request'),
-            _('HTTP Authorization Request'),
-            message,
-            [DialogButton.make('Cancel',
-                               text=_('_No'),
-                               callback=_response,
-                               args=['no']),
-             DialogButton.make('Accept',
-                               callback=_response,
-                               args=['yes'])]).show()
 
     @staticmethod
     def handle_event_signed_in(event):

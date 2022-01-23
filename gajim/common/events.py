@@ -274,9 +274,9 @@ class IqErrorReceived(ApplicationEvent):
 
 
 @dataclass
-class HttpAuthReceived(ApplicationEvent):
-    name: str = field(init=False, default='http-auth-received')
-    conn: 'Client'
+class HttpAuth(ApplicationEvent):
+    name: str = field(init=False, default='http-auth')
+    client: 'Client'
     iq_id: str
     method: str
     url: str

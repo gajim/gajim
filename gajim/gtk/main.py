@@ -32,6 +32,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import Direction
 from gajim.common.events import ApplicationEvent
+from gajim.common.events import HttpAuth
 from gajim.common.events import PasswordRequired
 from gajim.common.events import PlainConnection
 from gajim.common.events import RosterItemExchangeEvent
@@ -134,6 +135,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('roster-item-exchange', ged.GUI1, self._on_roster_item_exchange),
             ('plain-connection', ged.GUI1, self._on_plain_connection),
             ('password-required', ged.GUI1, self._on_password_required),
+            ('http-auth', ged.GUI1, self._on_http_auth),
         ])
 
         self._check_for_account()
@@ -231,6 +233,37 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     @staticmethod
     def _on_password_required(event: PasswordRequired) -> None:
         open_window('PasswordDialog', event=event)
+
+    @staticmethod
+    def _on_http_auth(event: HttpAuth) -> None:
+        def _response(answer: str) -> None:
+            event.client.get_module('HTTPAuth').build_http_auth_answer(
+                event.stanza, answer)
+
+        account = event.client.account
+        message = _('HTTP (%(method)s) Authorization '
+                    'for %(url)s (ID: %(id)s)') % {
+                        'method': event.method,
+                        'url': event.url,
+                        'id': event.iq_id}
+        sec_msg = _('Do you accept this request?')
+        if app.get_number_of_connected_accounts() > 1:
+            sec_msg = _('Do you accept this request (account: %s)?') % account
+        if event.msg:
+            sec_msg = event.msg + '\n' + sec_msg
+        message = message + '\n' + sec_msg
+
+        ConfirmationDialog(
+            _('Authorization Request'),
+            _('HTTP Authorization Request'),
+            message,
+            [DialogButton.make('Cancel',
+                               text=_('_No'),
+                               callback=_response,
+                               args=['no']),
+             DialogButton.make('Accept',
+                               callback=_response,
+                               args=['yes'])]).show()
 
     def _add_actions(self) -> None:
         actions = [
