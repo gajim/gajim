@@ -34,6 +34,10 @@
 - python3-setuptools
 - gettext
 
+### Running Tests
+
+`python -m unittest discover -s test`
+
 ### Installation Procedure
 
 #### Packages
