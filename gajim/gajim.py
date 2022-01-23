@@ -118,7 +118,17 @@ def _init_gtk() -> None:
 def _run_app() -> None:
     from gajim.gui.application import GajimApplication
     application = GajimApplication()
-    _install_signal_handlers(application)
+
+    def sigint_cb(num: int, stack: Optional[FrameType]) -> None:
+        print(' SIGINT/SIGTERM received')
+        application.quit()
+
+    # ^C exits the application normally
+    signal.signal(signal.SIGINT, sigint_cb)
+    signal.signal(signal.SIGTERM, sigint_cb)
+    if sys.platform != 'win32':
+        signal.signal(signal.SIGPIPE, signal.SIG_DFL)
+
     application.run(sys.argv)
 
 
@@ -138,17 +148,6 @@ def _set_proc_title() -> None:
             libc.prctl(PR_SET_NAME, byref(buff), 0, 0, 0)
         elif sysname in ('FreeBSD', 'OpenBSD', 'NetBSD'):
             libc.setproctitle('gajim')
-
-
-def _install_signal_handlers(application):
-    def sigint_cb(num: int, stack: Optional[FrameType]):
-        print(' SIGINT/SIGTERM received')
-        application.quit()
-    # ^C exits the application normally
-    signal.signal(signal.SIGINT, sigint_cb)
-    signal.signal(signal.SIGTERM, sigint_cb)
-    if sys.platform != 'win32':
-        signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
 
 def main() -> None:
