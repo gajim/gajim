@@ -475,6 +475,17 @@ class GroupchatCreationBuilder(Builder):
     create_button: Gtk.Button
 
 
+class GroupchatDetailsBuilder(Builder):
+    main_grid: Gtk.Grid
+    header_revealer: Gtk.Revealer
+    header_image: Gtk.Image
+    name_entry: Gtk.Entry
+    edit_name_button: Gtk.ToggleButton
+    main_stack: Gtk.Stack
+    info_box: Gtk.Box
+    settings_box: Gtk.Box
+
+
 class GroupchatInfoScrolledBuilder(Builder):
     info_grid: Gtk.Grid
     address_label: Gtk.Label
@@ -982,6 +993,8 @@ def get_builder(file_name: Literal['groupchat_config.ui'], widgets: list[str] = 
 def get_builder(file_name: Literal['groupchat_control.ui'], widgets: list[str] = ...) -> GroupchatControlBuilder: ...
 @overload
 def get_builder(file_name: Literal['groupchat_creation.ui'], widgets: list[str] = ...) -> GroupchatCreationBuilder: ...
+@overload
+def get_builder(file_name: Literal['groupchat_details.ui'], widgets: list[str] = ...) -> GroupchatDetailsBuilder: ...
 @overload
 def get_builder(file_name: Literal['groupchat_info_scrolled.ui'], widgets: list[str] = ...) -> GroupchatInfoScrolledBuilder: ...
 @overload

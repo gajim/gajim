@@ -14,20 +14,28 @@
 
 from __future__ import annotations
 
+from typing import Optional
+
 from gi.repository import Gdk
+from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 
+from .builder import get_builder
 from .groupchat_info import GroupChatInfoScrolled
 from .groupchat_settings import GroupChatSettings
 from .sidebar_switcher import SideBarSwitcher
 
 
 class GroupchatDetails(Gtk.ApplicationWindow):
-    def __init__(self, contact: GroupchatContact) -> None:
+    def __init__(self,
+                 contact: GroupchatContact,
+                 page: Optional[str] = None
+                 ) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -38,26 +46,54 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self.set_title(_('Groupchat Details'))
 
         self.account = contact.account
+        self._client = app.get_client(contact.account)
         self._contact = contact
 
-        main_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        self._stack = Gtk.Stack()
-        self._side_bar_switcher = SideBarSwitcher()
+        self._ui = get_builder('groupchat_details.ui')
+        self._ui.connect_signals(self)
 
-        main_box.add(self._side_bar_switcher)
-        main_box.add(self._stack)
+        self._switcher = SideBarSwitcher()
+        self._switcher.set_stack(self._ui.main_stack, rows_visible=False)
+        self._ui.main_grid.attach(self._switcher, 0, 0, 1, 1)
+        self._ui.main_stack.connect('notify::visible-child-name',
+                                    self._on_stack_child_changed)
+        self.add(self._ui.main_grid)
 
         self._add_groupchat_info()
         self._add_groupchat_settings()
 
-        self._side_bar_switcher.set_stack(self._stack)
+        self._load_avatar()
+        self._ui.name_entry.set_text(contact.name)
 
-        self.add(main_box)
+        if page is not None:
+            self._switcher.set_row(page)
 
         self.connect('key-press-event', self._on_key_press)
         self.connect('destroy', self._on_destroy)
 
         self.show_all()
+
+    def _on_stack_child_changed(self,
+                                _widget: Gtk.Stack,
+                                _pspec: GObject.ParamSpec) -> None:
+
+        name = self._ui.main_stack.get_visible_child_name()
+        self._ui.header_revealer.set_reveal_child(name != 'information')
+
+    def _on_edit_name_toggled(self, widget: Gtk.ToggleButton) -> None:
+        active = widget.get_active()
+        self._ui.name_entry.set_sensitive(active)
+        if active:
+            self._ui.name_entry.grab_focus()
+
+        name = self._ui.name_entry.get_text()
+        self._client.get_module('Bookmarks').modify(
+            self._contact.jid, name=name)
+
+    def _load_avatar(self) -> None:
+        scale = self.get_scale_factor()
+        surface = self._contact.get_avatar(AvatarSize.VCARD_HEADER, scale)
+        self._ui.header_image.set_from_surface(surface)
 
     def _add_groupchat_info(self) -> None:
         groupchat_info = GroupChatInfoScrolled(self._contact.account, width=600)
@@ -66,17 +102,19 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         assert disco_info is not None
         groupchat_info.set_from_disco_info(disco_info)
         groupchat_info.set_subject(self._contact.subject)
-
-        self._stack.add_titled(groupchat_info, 'info', _('Information'))
+        self._ui.info_box.add(groupchat_info)
+        self._switcher.set_row_visible('information', True)
 
     def _add_groupchat_settings(self) -> None:
         scrolled_window = Gtk.ScrolledWindow()
+        scrolled_window.set_vexpand(True)
         scrolled_window.set_policy(Gtk.PolicyType.NEVER,
                                    Gtk.PolicyType.AUTOMATIC)
 
         settings_box = GroupChatSettings(self.account, self._contact.jid)
         scrolled_window.add(settings_box)
-        self._stack.add_titled(scrolled_window, 'settings', _('Settings'))
+        self._ui.settings_box.add(scrolled_window)
+        self._switcher.set_row_visible('settings', True)
 
     def _on_key_press(self,
                       _widget: GroupchatDetails,
