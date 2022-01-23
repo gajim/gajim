@@ -64,34 +64,35 @@ def get_singlechat_menu(control_id: str,
     is_self_contact = jid.bare == client.get_own_jid().bare
     contact = client.get_module('Contacts').get_contact(jid)
 
-    singlechat_menu: list[tuple[str, Any]] = [
+    self_contact_menu: list[tuple[str, Any]] = [
+        ('profile', _('Profile')),
         (_('Send File'), [
             ('win.send-file-httpupload-', _('Upload File…')),
             ('win.send-file-jingle-', _('Send File Directly…'))
-        ])
+        ]),
+        ('app.remove-history', _('Remove History…')),
+        ('win.search-history', _('Search…'))
     ]
 
-    additional_menu: list[tuple[str, Any]] = [
+    singlechat_menu: list[tuple[str, Any]] = [
+        ('win.information-', _('Details')),
         ('win.send-marker-', _('Send Read Markers')),
         (_('Send Chatstate'), ['chatstate']),
         ('win.block-contact-', _('Block Contact…')),
+        (_('Send File'), [
+            ('win.send-file-httpupload-', _('Upload File…')),
+            ('win.send-file-jingle-', _('Send File Directly…'))
+        ]),
         ('win.start-call-', _('Start Call…')),
-        ('win.information-', _('Information')),
-        ('app.remove-history', _('Remove History…'))
+        ('app.remove-history', _('Remove History…')),
+        ('win.search-history', _('Search…'))
     ]
 
     if not contact.is_in_roster:
         if (type_.is_chat or
                 (type_.is_privatechat and contact.real_jid is not None)):
-            additional_menu.append(
+            singlechat_menu.append(
                 ('win.add-to-roster-', _('Add to Contact List…')))
-
-    if is_self_contact:
-        singlechat_menu.append(('profile', _('Profile')))
-    else:
-        singlechat_menu.extend(additional_menu)
-
-    singlechat_menu.append(('win.search-history', _('Search…')))
 
     def build_chatstate_menu() -> Gio.Menu:
         menu = Gio.Menu()
@@ -112,7 +113,7 @@ def get_singlechat_menu(control_id: str,
         for item in preset:
             if isinstance(item[1], str):
                 action_name, label = item
-                if action_name == 'win.send-marker-' and type_ == 'pm':
+                if action_name == 'win.send-marker-' and type_.is_privatechat:
                     continue
 
                 if action_name == 'win.search-history':
@@ -142,6 +143,9 @@ def get_singlechat_menu(control_id: str,
                 menu.append_submenu(label, submenu)
         return menu
 
+    if is_self_contact:
+        return build_menu(self_contact_menu)
+
     return build_menu(singlechat_menu)
 
 
@@ -155,8 +159,8 @@ def get_groupchat_menu(control_id: str, account: str, jid: JID) -> Gio.Menu:
         (_('Change Nickname…'), f'win.change-nickname-{control_id}', None),
         (_('Request Voice'), f'win.request-voice-{control_id}', None),
         (_('Execute Command…'), f'win.execute-command-{control_id}', '""'),
-        (_('Search…'), 'win.search-history', None),
-        (_('Remove History…'), 'app.remove-history', params)
+        (_('Remove History…'), 'app.remove-history', params),
+        (_('Search…'), 'win.search-history', None)
     ]
 
     return make_menu(menulist)
@@ -407,7 +411,7 @@ def get_roster_menu(account: str, jid: str, gateway: bool = False) -> Gio.Menu:
     value = f'"{jid}"'
 
     menuitems: MenuItemListT = [
-        (_('Information'), f'win.contact-info-{account}', value),
+        (_('Details'), f'win.contact-info-{account}', value),
         (_('Execute Command…'), f'win.execute-command-{account}', value),
         (block_label, f'win.block-contact-{account}', value),
         (_('Remove…'), f'win.remove-contact-{account}', value),
@@ -428,7 +432,7 @@ def get_subscription_menu(account: str, jid: JID) -> Gio.Menu:
     value = f'"{jid}"'
     menuitems: MenuItemListT = [
         (_('Start Chat'), 'win.add-chat', params),
-        (_('Information'), f'win.contact-info-{account}', value),
+        (_('Details'), f'win.contact-info-{account}', value),
         (_('Block'), f'win.subscription-block-{account}', value),
         (_('Report'), f'win.subscription-report-{account}', value),
         (_('Deny'), f'win.subscription-deny-{account}', value),
@@ -587,7 +591,7 @@ def get_groupchat_roster_menu(account: str,
     value = f'"{contact.name}"'
 
     general_items: MenuItemListT = [
-        (_('Information'), f'win.contact-information-{control_id}', value),
+        (_('Details'), f'win.contact-information-{control_id}', value),
         (_('Execute Command…'), f'win.execute-command-{control_id}', value),
     ]
 
