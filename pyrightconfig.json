@@ -63,6 +63,7 @@
         "gajim/gtk/main_stack.py",
         "gajim/gtk/manage_sounds.py",
         "gajim/gtk/notification.py",
+        "gajim/gtk/password_dialog.py",
         "gajim/gtk/preview_audio.py",
         "gajim/gtk/proxies.py",
         "gajim/gtk/remove_account.py",
