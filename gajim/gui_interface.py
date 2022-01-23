@@ -126,7 +126,6 @@ class Interface:
                 'disco': {}
             }
             app.automatic_rooms[acc] = {}
-            app.newly_added[acc] = []
             app.to_be_removed[acc] = []
             app.nicks[acc] = app.settings.get_account_setting(acc, 'name')
 
@@ -531,7 +530,6 @@ class Interface:
         }
 
         app.automatic_rooms[account] = {}
-        app.newly_added[account] = []
         app.to_be_removed[account] = []
         app.nicks[account] = app.settings.get_account_setting(account, 'name')
         app.settings.set_account_setting(account, 'active', True)
@@ -566,7 +564,6 @@ class Interface:
         del app.nicks[account]
         del app.automatic_rooms[account]
         del app.to_be_removed[account]
-        del app.newly_added[account]
 
     def remove_account(self, account: str) -> None:
         if app.settings.get_account_setting(account, 'active'):

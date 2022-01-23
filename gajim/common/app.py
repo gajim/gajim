@@ -93,9 +93,6 @@ transport_type: dict[str, str] = {}
 # {account: {room_jid: {'invities': []}}}
 automatic_rooms: dict[str, dict[str, dict[str, list[str]]]] = {}
 
-# list of contacts that has just signed in
-newly_added: dict[str, list[str]] = {}
-
 # list of contacts that has just signed out
 to_be_removed: dict[str, list[str]] = {}
 
