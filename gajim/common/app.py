@@ -104,13 +104,6 @@ notification = None
 # list of our nick names in each account
 nicks: dict[str, str] = {}
 
-# should we block 'contact signed in' notifications for this account?
-# this is only for the first 30 seconds after we change our show
-# to something else than offline
-# can also contain account/transport_jid to block notifications for contacts
-# from this transport
-block_signed_in_notifications: dict[str, bool] = {}
-
 proxy65_manager = None
 
 cert_store = cast('CertificateStore', None)

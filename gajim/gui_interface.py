@@ -134,7 +134,6 @@ class Interface:
             app.newly_added[acc] = []
             app.to_be_removed[acc] = []
             app.nicks[acc] = app.settings.get_account_setting(acc, 'name')
-            app.block_signed_in_notifications[acc] = True
 
     def _create_core_handlers_list(self) -> None:
         # pylint: disable=line-too-long
@@ -142,7 +141,6 @@ class Interface:
             'iq-error-received': [self.handle_event_iq_error],
             'signed-in': [self.handle_event_signed_in],
             'presence-received': [self.handle_event_presence],
-            'our-show': [self.handle_event_status],
             'message-sent': [self.handle_event_msgsent],
             'message-not-sent': [self.handle_event_msgnotsent],
             'read-state-sync': [self.handle_event_read_state_sync],
@@ -183,7 +181,6 @@ class Interface:
         # Add our own JID into the DB
         app.storage.archive.insert_jid(event.conn.get_own_jid().bare)
         account = event.conn.name
-        app.block_signed_in_notifications[account] = True
 
         pep_supported = event.conn.get_module('PEP').supported
 
@@ -200,47 +197,12 @@ class Interface:
             app.window.show_account_page(account)
 
     def handle_event_presence(self, event):
-        # TODO:
-        # 'NOTIFY' (account, (jid, status, status message, resource,
-        # priority, timestamp))
-        #
-        # Contact changed show
         account = event.conn.name
         jid = event.jid
-
-        if app.jid_is_transport(jid):
-            # It must be an agent
-
-            # transport just signed in/out, don't show
-            # popup notifications for 30s
-            account_jid = account + '/' + jid
-            app.block_signed_in_notifications[account_jid] = True
-            GLib.timeout_add_seconds(30, self._unblock_signed_in_notifications,
-                                     account_jid)
 
         ctrl = app.window.get_control(account, jid)
         if ctrl and ctrl.session and len(event.contact_list) > 1:
             ctrl.remove_session(ctrl.session)
-
-    def handle_event_status(self, event):
-        if event.show in ('offline', 'error'):
-            # TODO: Close all account windows
-            pass
-
-        if event.show == 'offline':
-            app.block_signed_in_notifications[event.account] = True
-        else:
-            # 30 seconds after we change our status to sth else than offline
-            # we stop blocking notifications of any kind
-            # this prevents from getting the roster items as 'just signed in'
-            # contacts. 30 seconds should be enough time
-            GLib.timeout_add_seconds(30,
-                                     self._unblock_signed_in_notifications,
-                                     event.account)
-
-    @staticmethod
-    def _unblock_signed_in_notifications(account: str) -> None:
-        app.block_signed_in_notifications[account] = False
 
     @staticmethod
     def handle_event_msgsent(event):
@@ -586,10 +548,7 @@ class Interface:
         app.automatic_rooms[account] = {}
         app.newly_added[account] = []
         app.to_be_removed[account] = []
-        app.nicks[account] = app.settings.get_account_setting(account,
-                                                                  'name')
-        app.block_signed_in_notifications[account] = True
-
+        app.nicks[account] = app.settings.get_account_setting(account, 'name')
         app.settings.set_account_setting(account, 'active', True)
         build_accounts_menu()
         app.app.update_app_actions_state()
@@ -620,7 +579,6 @@ class Interface:
         del app.connections[account]
         del self.instances[account]
         del app.nicks[account]
-        del app.block_signed_in_notifications[account]
         del app.automatic_rooms[account]
         del app.to_be_removed[account]
         del app.newly_added[account]
