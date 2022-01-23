@@ -198,8 +198,21 @@ class PreviewWidget(Gtk.Box):
         open_file(self._preview.orig_path)
 
     def _on_save_as(self, _menu: Gtk.Menu) -> None:
-        def _on_ok(target_path):
-            dirname = Path(target_path).parent
+        assert self._preview is not None
+
+        def _on_ok(target: str) -> None:
+            assert self._preview is not None
+            assert self._preview.orig_path is not None
+
+            target_path = Path(target)
+            orig_ext = self._preview.orig_path.suffix
+            new_ext = target_path.suffix
+            if orig_ext != new_ext:
+                # Windows file chooser selects the full file name including
+                # extension. Starting to type will overwrite the extension
+                # as well. Restore the extension if it's lost.
+                target_path = target_path.with_suffix(orig_ext)
+            dirname = target_path.parent
             if not os.access(dirname, os.W_OK):
                 ErrorDialog(
                     _('Directory \'%s\' is not writable') % dirname,
