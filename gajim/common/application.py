@@ -74,6 +74,9 @@ class CoreApplication:
         if sys.platform in ('win32', 'darwin'):
             GLib.timeout_add_seconds(20, self._check_for_updates)
 
+        for account in app.settings.get_active_accounts():
+            app.connections[account] = Client(account)
+
     @property
     def _log(self) -> logging.Logger:
         return app.log('gajim.application')

@@ -62,6 +62,8 @@ from gajim.common import logging_helpers
 from gajim.common.application import CoreApplication
 from gajim.common.const import GAJIM_FAQ_URI
 from gajim.common.const import GAJIM_WIKI_URI
+from gajim.common.dbus import logind
+from gajim.common.dbus import music_track
 from gajim.common.events import ApplicationEvent
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common.helpers import load_json
@@ -234,6 +236,9 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         from gajim.gui.status_icon import StatusIcon
         self.systray = StatusIcon()
+
+        if sys.platform not in ('win32', 'darwin'):
+            music_track.enable()
 
         self.add_actions()
         self._load_shortcuts()

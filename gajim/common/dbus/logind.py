@@ -145,5 +145,10 @@ class LogindListener:
 
 
 def enable():
+    # Module should be rewritten
+    # Its not useful to know when the computer goes to sleep.
+    # Because of stream management we don’t need to do anything in that case.
+    # It would be useful to know when the computer powers off, in this case
+    # Gajim is shutdown and we should correctly disconnect.
     return
     # LogindListener.get()

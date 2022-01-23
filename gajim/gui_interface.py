@@ -61,8 +61,6 @@ from gajim.common import socks5
 from gajim.common import helpers
 from gajim.common import passwords
 
-from gajim.common.dbus import logind
-from gajim.common.dbus import music_track
 from gajim.common.events import AccountEnabled
 from gajim.common.events import AccountDisabled
 from gajim.common.events import FileCompleted
@@ -125,12 +123,9 @@ class Interface:
         self._create_core_handlers_list()
         self._register_core_handlers()
 
-        for account in app.settings.get_accounts():
-            if app.settings.get_account_setting(account, 'active'):
-                client = Client(account)
-                app.connections[account] = client
-                app.ged.register_event_handler(
-                    'muc-added', ged.CORE, self._on_muc_added)
+        app.ged.register_event_handler('muc-added',
+                                       ged.CORE,
+                                       self._on_muc_added)
 
         self.instances = {}
 
@@ -144,10 +139,6 @@ class Interface:
             app.to_be_removed[acc] = []
             app.nicks[acc] = app.settings.get_account_setting(acc, 'name')
             app.block_signed_in_notifications[acc] = True
-
-        if sys.platform not in ('win32', 'darwin'):
-            logind.enable()
-            music_track.enable()
 
     def _create_core_handlers_list(self) -> None:
         # pylint: disable=line-too-long
