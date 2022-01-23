@@ -56,6 +56,7 @@ from gi.repository import Gdk
 import gajim
 from gajim.common import app
 from gajim.common import configpaths
+from gajim.common import events
 from gajim.common import ged
 from gajim.common import idle
 from gajim.common import logging_helpers
@@ -63,7 +64,6 @@ from gajim.common.application import CoreApplication
 from gajim.common.const import GAJIM_FAQ_URI
 from gajim.common.const import GAJIM_WIKI_URI
 from gajim.common.dbus import music_track
-from gajim.common.events import ApplicationEvent
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common.helpers import load_json
 from gajim.common.helpers import open_uri
@@ -78,6 +78,7 @@ from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.dialogs import ShortcutsWindow
 from gajim.gui.discovery import ServiceDiscoveryWindow
+from gajim.gui.start_chat import StartChatDialog
 from gajim.gui.util import get_app_window
 from gajim.gui.util import load_user_iconsets
 from gajim.gui.util import open_window
@@ -515,7 +516,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
         for action, accels in shortcuts.items():
             self.set_accels_for_action(action, accels)
 
-    def _on_feature_discovered(self, event: ApplicationEvent) -> None:
+    def _on_feature_discovered(self, event: events.FeatureDiscovered) -> None:
         if event.feature == Namespace.MAM_2:
             action = '%s-archive' % event.account
             self.set_action_state(action, True)
@@ -767,8 +768,8 @@ class GajimApplication(Gtk.Application, CoreApplication):
         """
         Show/hide the ipython window
         """
-        win = app.ipython_window
-        if win and win.window.is_visible():
+        win = cast(Gtk.Window, app.ipython_window)
+        if win and win.is_visible():
             win.present()
         else:
             app.interface.create_ipython_window()
@@ -829,7 +830,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
                                     params: structs.ForgetGroupchatActionParams
                                     ) -> None:
 
-        window = get_app_window('StartChatDialog')
+        window = cast(StartChatDialog, get_app_window('StartChatDialog'))
         window.remove_row(params.account, str(params.jid))
 
         client = app.get_client(params.account)
