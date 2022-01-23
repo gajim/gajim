@@ -286,7 +286,6 @@ class GroupchatControl(BaseControl):
         super().add_actions()
         actions = [
             ('groupchat-manage-', None, self._on_groupchat_manage),
-            ('rename-groupchat-', None, self._on_rename_groupchat),
             ('change-nickname-', None, self._on_change_nick),
             ('destroy-', None, self._on_destroy_room),
             ('configure-', None, self._on_configure_room),
@@ -385,7 +384,6 @@ class GroupchatControl(BaseControl):
         super().remove_actions()
         actions = [
             'groupchat-manage-',
-            'rename-groupchat-',
             'change-nickname-',
             'destroy-',
             'configure-',
@@ -1578,8 +1576,6 @@ class GroupchatControl(BaseControl):
             self.xml.password_entry.grab_focus_without_selecting()
         elif page_name == 'nickname':
             self.xml.nickname_entry.grab_focus_without_selecting()
-        elif page_name == 'rename':
-            self.xml.name_entry.grab_focus_without_selecting()
         elif page_name == 'subject':
             self.xml.subject_textview.grab_focus()
         elif page_name == 'captcha':
@@ -1643,23 +1639,6 @@ class GroupchatControl(BaseControl):
     def _on_nickname_change_clicked(self, _button: Gtk.Button) -> None:
         new_nick = self.xml.nickname_entry.get_text()
         self._client.get_module('MUC').change_nick(self.room_jid, new_nick)
-        self._show_page('groupchat')
-
-    def _on_rename_groupchat(self,
-                             _action: Gio.SimpleAction,
-                             _param: Optional[GLib.Variant]
-                             ) -> None:
-        if self._get_current_page() != 'groupchat':
-            return
-        self.xml.name_entry.set_text(self.contact.name)
-        self.xml.name_entry.grab_focus()
-        self.xml.rename_button.grab_default()
-        self._show_page('rename')
-
-    def _on_rename_clicked(self, _button: Gtk.Button) -> None:
-        new_name = self.xml.name_entry.get_text()
-        self._client.get_module('Bookmarks').modify(
-            self.room_jid, name=new_name)
         self._show_page('groupchat')
 
     def _on_manage_save_clicked(self, _button: Gtk.Button) -> None:
