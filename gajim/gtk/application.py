@@ -62,7 +62,6 @@ from gajim.common import logging_helpers
 from gajim.common.application import CoreApplication
 from gajim.common.const import GAJIM_FAQ_URI
 from gajim.common.const import GAJIM_WIKI_URI
-from gajim.common.dbus import logind
 from gajim.common.dbus import music_track
 from gajim.common.events import ApplicationEvent
 from gajim.common.exceptions import GajimGeneralException
