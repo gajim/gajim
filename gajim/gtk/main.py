@@ -29,26 +29,12 @@ from gi.repository import Gio
 from nbxmpp import JID
 
 from gajim.common import app
+from gajim.common import events
 from gajim.common import ged
 from gajim.common.const import Direction
-from gajim.common import events
-from gajim.common.events import FileRequestReceivedEvent
-from gajim.common.events import JingleRequestReceived
-from gajim.common.events import MessageReceived
-from gajim.common.events import MucAdded
-from gajim.common.events import HttpAuth
-from gajim.common.events import PasswordRequired
-from gajim.common.events import PlainConnection
-from gajim.common.events import RosterItemExchangeEvent
-from gajim.common.events import AllowGajimUpdateCheck
-from gajim.common.events import GajimUpdateAvailable
-from gajim.common.events import AccountEnabled
-from gajim.common.events import AccountDisabled
-from gajim.common.events import ShowChanged
-from gajim.common.events import SignedIn
+from gajim.common.ged import EventHelper
 from gajim.common.helpers import ask_for_status_message
 from gajim.common.i18n import _
-from gajim.common.ged import EventHelper
 from gajim.common.modules.bytestream import is_transfer_active
 
 from .account_side_bar import AccountSideBar
@@ -178,11 +164,11 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                     app.settings.get('trayicon') != 'always'):
                 self.show_all()
 
-    def _on_account_enabled(self, event: AccountEnabled) -> None:
+    def _on_account_enabled(self, event: events.AccountEnabled) -> None:
         self._account_side_bar.add_account(event.account)
         self._main_stack.add_account_page(event.account)
 
-    def _on_account_disabled(self, event: AccountDisabled) -> None:
+    def _on_account_disabled(self, event: events.AccountDisabled) -> None:
         workspace_id = self._workspace_side_bar.get_first_workspace()
         self.activate_workspace(workspace_id)
         self._account_side_bar.remove_account(event.account)
@@ -190,24 +176,26 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._main_stack.remove_chats_for_account(event.account)
 
     @staticmethod
-    def _on_our_show(event: ShowChanged) -> None:
+    def _on_our_show(event: events.ShowChanged) -> None:
         if event.show == 'offline':
             app.app.set_account_actions_state(event.account)
             app.app.update_app_actions_state()
 
     @staticmethod
-    def _on_signed_in(event: SignedIn) -> None:
+    def _on_signed_in(event: events.SignedIn) -> None:
         app.app.set_account_actions_state(event.account, True)
         app.app.update_app_actions_state()
 
-    def _on_allow_gajim_update(self, event: AllowGajimUpdateCheck) -> None:
+    def _on_allow_gajim_update(self,
+                               event: events.AllowGajimUpdateCheck) -> None:
         self.add_app_message(event.name)
 
-    def _on_gajim_update_available(self, event: GajimUpdateAvailable) -> None:
+    def _on_gajim_update_available(self,
+                                   event: events.GajimUpdateAvailable) -> None:
         self.add_app_message(event.name, event.version)
 
     @staticmethod
-    def _on_roster_item_exchange(event: RosterItemExchangeEvent) -> None:
+    def _on_roster_item_exchange(event: events.RosterItemExchangeEvent) -> None:
         open_window('RosterItemExchange',
                     account=event.client.account,
                     action=event.action,
@@ -215,7 +203,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                     jid_from=event.jid)
 
     @staticmethod
-    def _on_plain_connection(event: PlainConnection) -> None:
+    def _on_plain_connection(event: events.PlainConnection) -> None:
         ConfirmationDialog(
             _('Insecure Connection'),
             _('Insecure Connection'),
@@ -233,11 +221,11 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                callback=event.connect)]).show()
 
     @staticmethod
-    def _on_password_required(event: PasswordRequired) -> None:
+    def _on_password_required(event: events.PasswordRequired) -> None:
         open_window('PasswordDialog', event=event)
 
     @staticmethod
-    def _on_http_auth(event: HttpAuth) -> None:
+    def _on_http_auth(event: events.HttpAuth) -> None:
         def _response(answer: str) -> None:
             event.client.get_module('HTTPAuth').build_http_auth_answer(
                 event.stanza, answer)
@@ -267,7 +255,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                callback=_response,
                                args=['yes'])]).show()
 
-    def _on_muc_added(self, event: MucAdded) -> None:
+    def _on_muc_added(self, event: events.MucAdded) -> None:
         if self.chat_exists(event.account, event.jid):
             return
 
@@ -761,7 +749,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._main_stack.process_event(event)
 
-    def _on_message_received(self, event: MessageReceived) -> None:
+    def _on_message_received(self, event: events.MessageReceived) -> None:
         if not self.chat_exists(event.account, event.jid):
             if not event.properties.body:
                 # Don’t open control on chatstate etc.
@@ -777,7 +765,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._main_stack.process_event(event)
 
-    def _on_jingle_request(self, event: JingleRequestReceived) -> None:
+    def _on_jingle_request(self, event: events.JingleRequestReceived) -> None:
         if not self.chat_exists(event.account, event.jid):
             for item in event.contents:
                 if item.media in ('audio', 'video'):
@@ -786,7 +774,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._main_stack.process_event(event)
 
-    def _on_file_request(self, event: FileRequestReceivedEvent) -> None:
+    def _on_file_request(self, event: events.FileRequestReceivedEvent) -> None:
         if not self.chat_exists(event.account, event.jid):
             self.add_chat(event.account, event.jid, 'contact')
 
