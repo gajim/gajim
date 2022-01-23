@@ -39,7 +39,7 @@ class RosterItemExchange(BaseModule):
                           ns=Namespace.ROSTERX),
         ]
 
-    def received_item(self, _con, stanza, _properties):
+    def received_item(self, _con, stanza, properties):
         # stanza can be a message or a iq
 
         self._log.info('Received roster items from %s', stanza.getFrom())
@@ -87,8 +87,8 @@ class RosterItemExchange(BaseModule):
         self._log.info('Items: %s', exchange_items_list)
 
         app.ged.raise_event(RosterItemExchangeEvent(
-            conn=self._con,
-            fjid=str(stanza.getFrom()),
+            client=self._con,
+            jid=properties.jid,
             exchange_items_list=exchange_items_list,
             action=action))
 

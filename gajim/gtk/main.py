@@ -32,6 +32,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import Direction
 from gajim.common.events import ApplicationEvent
+from gajim.common.events import RosterItemExchangeEvent
 from gajim.common.events import AllowGajimUpdateCheck
 from gajim.common.events import GajimUpdateAvailable
 from gajim.common.events import AccountEnabled
@@ -128,6 +129,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('account-disabled', ged.GUI1, self._on_account_disabled),
             ('allow-gajim-update-check', ged.GUI1, self._on_allow_gajim_update),
             ('gajim-update-available', ged.GUI1, self._on_gajim_update_available),
+            ('roster-item-exchange', ged.GUI1, self._on_roster_item_exchange),
         ])
 
         self._check_for_account()
@@ -195,6 +197,14 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _on_gajim_update_available(self, event: GajimUpdateAvailable) -> None:
         self.add_app_message(event.name, event.version)
+
+    @staticmethod
+    def _on_roster_item_exchange(event: RosterItemExchangeEvent) -> None:
+        open_window('RosterItemExchange',
+                    account=event.client.account,
+                    action=event.action,
+                    exchange_list=event.exchange_items_list,
+                    jid_from=event.jid)
 
     def _add_actions(self) -> None:
         actions = [

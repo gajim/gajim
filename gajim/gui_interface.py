@@ -154,7 +154,6 @@ class Interface:
             'message-sent': [self.handle_event_msgsent],
             'message-not-sent': [self.handle_event_msgnotsent],
             'read-state-sync': [self.handle_event_read_state_sync],
-            'roster-item-exchange-received': [self.handle_event_roster_item_exchange],
         }
         # pylint: enable=line-too-long
 
@@ -355,15 +354,6 @@ class Interface:
             return
 
         app.window.mark_as_read(event.account, jid, send_marker=False)
-
-    @staticmethod
-    def handle_event_roster_item_exchange(event):
-        # data = (action in [add, delete, modify], exchange_list, jid_from)
-        open_window('RosterItemExchange',
-                    account=event.conn.name,
-                    action=event.action,
-                    exchange_list=event.exchange_items_list,
-                    jid_from=event.fjid)
 
     # Jingle File Transfer
     @staticmethod

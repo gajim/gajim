@@ -402,9 +402,9 @@ class MessageError(ApplicationEvent):
 
 @dataclass
 class RosterItemExchangeEvent(ApplicationEvent):
-    name: str = field(init=False, default='roster-item-exchange-received')
-    conn: 'Client'
-    fjid: str
+    name: str = field(init=False, default='roster-item-exchange')
+    client: 'Client'
+    jid: JID
     exchange_items_list: list[str]
     action: str
 
