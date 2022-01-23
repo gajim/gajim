@@ -291,6 +291,7 @@ class Linux(NotificationBackend):
         self._add_actions(event, notification)
         notification_id = self._make_notification_id(event)
 
+        log.info('Sending notification: %s', notification_id)
         app.app.send_notification(notification_id, notification)
 
     def _add_actions(self,
@@ -360,6 +361,8 @@ class Linux(NotificationBackend):
         if not self._dbus_available:
             return
         notification_id = self._make_id(details)
+
+        log.info('Withdraw notification: %s', notification_id)
         app.app.withdraw_notification(notification_id)
 
     @staticmethod
