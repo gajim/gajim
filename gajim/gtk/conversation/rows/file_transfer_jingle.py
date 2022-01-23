@@ -210,10 +210,13 @@ class FileTransferJingleRow(BaseRow):
         else:
             self._ui.file_description.hide()
 
+        assert self._file_props.size is not None
         self._ui.file_size.set_text(
             GLib.format_size_full(self._file_props.size, self._units))
 
     def process_event(self, event: TransferEventT) -> None:
+        assert self._file_props is not None
+
         if isinstance(event, JingleErrorReceived):
             if event.sid != self._file_props.sid:
                 return
@@ -261,6 +264,7 @@ class FileTransferJingleRow(BaseRow):
 
         time_now = time.time()
         full_size = file_props.size
+        assert full_size is not None
 
         if file_props.type_ == 's':
             # We're sending a file
@@ -273,6 +277,7 @@ class FileTransferJingleRow(BaseRow):
         else:
             # We're receiving a file
             transferred_size = file_props.received_len
+            assert transferred_size is not None
 
         if full_size == 0:
             return
@@ -321,15 +326,20 @@ class FileTransferJingleRow(BaseRow):
     def _on_reject_file_request(self, _button: Gtk.Button) -> None:
         self._client.get_module('Bytestream').send_file_rejection(
             self._file_props)
+        assert self._file_props is not None
         self._file_props.stopped = True
         self._ui.action_stack.set_visible_child_name('rejected')
         self._ui.transfer_action.set_text(_('File Transfer Cancelled'))
 
     def _on_open_file(self, _button: Gtk.Button) -> None:
+        assert self._file_props is not None
+        assert self._file_props.file_name is not None
         if os.path.exists(self._file_props.file_name):
             open_file(self._file_props.file_name)
 
     def _on_open_folder(self, _button: Gtk.Button) -> None:
+        assert self._file_props is not None
+        assert self._file_props.file_name is not None
         path = os.path.split(self._file_props.file_name)[0]
         if os.path.exists(path) and os.path.isdir(path):
             open_file(path)
