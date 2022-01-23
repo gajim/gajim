@@ -504,7 +504,7 @@ class JingleErrorReceived(JingleEvent):
 class MucAdded(ApplicationEvent):
     name: str = field(init=False, default='muc-added')
     account: str
-    jid: str
+    jid: JID
 
 
 @dataclass

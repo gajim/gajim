@@ -67,7 +67,6 @@ from gajim.common.events import FileCompleted
 from gajim.common.events import FileHashError
 from gajim.common.events import FileProgress
 from gajim.common.events import FileError
-from gajim.common.events import MucAdded
 from gajim.common.helpers import ask_for_status_message
 from gajim.common.structs import OutgoingMessage
 from gajim.common.i18n import _
@@ -118,10 +117,6 @@ class Interface:
 
         self._create_core_handlers_list()
         self._register_core_handlers()
-
-        app.ged.register_event_handler('muc-added',
-                                       ged.CORE,
-                                       self._on_muc_added)
 
         self.instances = {}
 
@@ -469,13 +464,6 @@ class Interface:
         app.app.activate_action('start-chat', GLib.Variant('s', str(jid)))
 
     @staticmethod
-    def _on_muc_added(event: MucAdded) -> None:
-        if app.window.chat_exists(event.account, JID.from_string(event.jid)):
-            return
-
-        app.window.add_group_chat(event.account, JID.from_string(event.jid))
-
-    @staticmethod
     def create_account(account: str,
                        username: str,
                        domain: str,
@@ -535,9 +523,6 @@ class Interface:
 
         app.plugin_manager.register_modules_for_account(
             app.connections[account])
-
-        app.ged.register_event_handler(
-            'muc-added', ged.CORE, self._on_muc_added)
 
         # update variables
         self.instances[account] = {

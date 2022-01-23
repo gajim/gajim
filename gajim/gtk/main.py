@@ -32,6 +32,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import Direction
 from gajim.common.events import ApplicationEvent
+from gajim.common.events import MucAdded
 from gajim.common.events import HttpAuth
 from gajim.common.events import PasswordRequired
 from gajim.common.events import PlainConnection
@@ -136,6 +137,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('plain-connection', ged.GUI1, self._on_plain_connection),
             ('password-required', ged.GUI1, self._on_password_required),
             ('http-auth', ged.GUI1, self._on_http_auth),
+            ('muc-added', ged.GUI1, self._on_muc_added),
         ])
 
         self._check_for_account()
@@ -264,6 +266,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
              DialogButton.make('Accept',
                                callback=_response,
                                args=['yes'])]).show()
+
+    def _on_muc_added(self, event: MucAdded) -> None:
+        if self.chat_exists(event.account, event.jid):
+            return
+
+        self.add_group_chat(event.account, event.jid)
 
     def _add_actions(self) -> None:
         actions = [

@@ -24,6 +24,7 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.const import InviteType
 from nbxmpp.const import PresenceType
 from nbxmpp.const import StatusCode
+from nbxmpp.protocol import JID
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.errors import StanzaError
 
@@ -250,8 +251,9 @@ class MUC(BaseModule):
         self._create(muc_data)
         self._push_muc_added_event(jid)
 
-    def _push_muc_added_event(self, jid):
-        app.ged.raise_event(MucAdded(account=self._account, jid=jid))
+    def _push_muc_added_event(self, jid: str) -> None:
+        app.ged.raise_event(MucAdded(account=self._account,
+                                     jid=JID.from_string(jid)))
 
     def _on_disco_result(self, task):
         try:
