@@ -90,7 +90,6 @@ from gajim.gui.menus import build_accounts_menu
 from gajim.gui.util import get_app_window
 from gajim.gui.util import get_app_windows
 from gajim.gui.util import get_color_for_account
-from gajim.gui.util import open_window
 from gajim.gui.types import ControlT
 
 log = logging.getLogger('gajim.interface')
@@ -144,7 +143,6 @@ class Interface:
         self.handlers = {
             'iq-error-received': [self.handle_event_iq_error],
             'http-auth-received': [self.handle_event_http_auth],
-            'client-cert-passphrase': [self.handle_event_client_cert_passphrase],
             'signed-in': [self.handle_event_signed_in],
             'presence-received': [self.handle_event_presence],
             'our-show': [self.handle_event_status],
@@ -208,10 +206,6 @@ class Interface:
              DialogButton.make('Accept',
                                callback=_response,
                                args=['yes'])]).show()
-
-    @staticmethod
-    def handle_event_client_cert_passphrase(event):
-        open_window('PasswordDialog', event=event)
 
     @staticmethod
     def handle_event_signed_in(event):

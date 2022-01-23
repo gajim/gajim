@@ -62,53 +62,28 @@ class PasswordDialog(Gtk.ApplicationWindow):
         account_name = app.settings.get_account_setting(
             self.account, 'name')
 
-        if self._event.name == 'password-required':
-            self._ui.header.set_text(_('Password Required'))
-            self._ui.message_label.set_text(
-                _('Please enter your password for\n'
-                  '%(jid)s\n(Account: %(account)s)') % {
-                    'jid': own_jid,
-                    'account': account_name})
-            self._ui.save_pass_checkbutton.show()
-            self._ui.save_pass_checkbutton.set_sensitive(
-                not app.settings.get('use_keyring') or KEYRING_AVAILABLE)
-            if not KEYRING_AVAILABLE:
-                self._ui.keyring_hint.show()
-
-        if self._event.name == 'client-cert-passphrase':
-            self._ui.header.set_text(_('Certificate Password Required'))
-            self._ui.message_label.set_text(
-                _('Please enter your certificate password for '
-                  '%(jid)s (%(account)s)') % {
-                    'jid': own_jid,
-                    'account': account_name})
+        self._ui.header.set_text(_('Password Required'))
+        self._ui.message_label.set_text(
+            _('Please enter your password for\n'
+              '%(jid)s\n(Account: %(account)s)') % {
+                'jid': own_jid,
+                'account': account_name})
+        self._ui.save_pass_checkbutton.show()
+        self._ui.save_pass_checkbutton.set_sensitive(
+            not app.settings.get('use_keyring') or KEYRING_AVAILABLE)
+        if not KEYRING_AVAILABLE:
+            self._ui.keyring_hint.show()
 
     def _on_ok(self, _button: Gtk.Button) -> None:
         password = self._ui.pass_entry.get_text()
 
-        if self._event.name == 'password-required':
-            app.settings.set_account_setting(
-                self.account,
-                'savepass',
-                self._ui.save_pass_checkbutton.get_active())
-            save_password(self.account, password)
-            self._event.on_password(password)
-            self.destroy()
-
-        if self._event.name == 'client-cert-passphrase':
-            self._event.conn.on_client_cert_passphrase(
-                password,
-                self._event.con,
-                self._event.port,
-                self._event.secure_tuple)
-            self.destroy()
+        app.settings.set_account_setting(
+            self.account,
+            'savepass',
+            self._ui.save_pass_checkbutton.get_active())
+        save_password(self.account, password)
+        self._event.on_password(password)
+        self.destroy()
 
     def _on_cancel(self, _button: Gtk.Button) -> None:
-        if self._event.name == 'client-cert-passphrase':
-            self._event.conn.on_client_cert_passphrase(
-                '',
-                self._event.con,
-                self._event.port,
-                self._event.secure_tuple)
-
         self.destroy()
