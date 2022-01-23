@@ -52,10 +52,7 @@ class HTTPAuth(BaseModule):
 
         app.ged.raise_event(
             HttpAuth(client=self._con,
-                     iq_id=properties.http_auth.id,
-                     method=properties.http_auth.method,
-                     url=properties.http_auth.url,
-                     msg=properties.http_auth.body,
+                     data=properties.http_auth,
                      stanza=stanza))
         raise nbxmpp.NodeProcessed
 

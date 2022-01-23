@@ -243,14 +243,14 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         account = event.client.account
         message = _('HTTP (%(method)s) Authorization '
                     'for %(url)s (ID: %(id)s)') % {
-                        'method': event.method,
-                        'url': event.url,
-                        'id': event.iq_id}
+                        'method': event.data.method,
+                        'url': event.data.url,
+                        'id': event.data.id}
         sec_msg = _('Do you accept this request?')
         if app.get_number_of_connected_accounts() > 1:
             sec_msg = _('Do you accept this request (account: %s)?') % account
-        if event.msg:
-            sec_msg = event.msg + '\n' + sec_msg
+        if event.data.body:
+            sec_msg = event.data.body + '\n' + sec_msg
         message = message + '\n' + sec_msg
 
         ConfirmationDialog(

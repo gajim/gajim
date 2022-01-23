@@ -24,6 +24,7 @@ from dataclasses import dataclass
 from dataclasses import field
 
 from nbxmpp.protocol import JID
+from nbxmpp.structs import HTTPAuthData
 from nbxmpp.structs import RosterItem
 from nbxmpp.structs import TuneData
 from nbxmpp.const import InviteType
@@ -277,10 +278,7 @@ class IqErrorReceived(ApplicationEvent):
 class HttpAuth(ApplicationEvent):
     name: str = field(init=False, default='http-auth')
     client: 'Client'
-    iq_id: str
-    method: str
-    url: str
-    msg: str
+    data: HTTPAuthData
     stanza: Any
 
 
