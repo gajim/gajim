@@ -528,7 +528,7 @@ class PluginManager(metaclass=Singleton):
             return
         for client in app.connections.values():
             for module in plugin.modules:
-                instance = con.get_module(module.name)
+                instance = client.get_module(module.name)
                 modules.unregister_single_module(client, module.name)
 
                 for handler in instance.handlers:
