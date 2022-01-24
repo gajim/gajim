@@ -24,6 +24,7 @@ from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.gtk.groupchat_affiliation import GroupchatAffiliation
 
 from .builder import get_builder
 from .groupchat_info import GroupChatInfoScrolled
@@ -53,7 +54,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self._ui.connect_signals(self)
 
         self._switcher = SideBarSwitcher()
-        self._switcher.set_stack(self._ui.main_stack, rows_visible=False)
+        self._switcher.set_stack(self._ui.main_stack)
         self._ui.main_grid.attach(self._switcher, 0, 0, 1, 1)
         self._ui.main_stack.connect('notify::visible-child-name',
                                     self._on_stack_child_changed)
@@ -61,6 +62,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
 
         self._add_groupchat_info()
         self._add_groupchat_settings()
+        self._add_affiliations()
 
         self._load_avatar()
         self._ui.name_entry.set_text(contact.name)
@@ -103,7 +105,6 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         groupchat_info.set_from_disco_info(disco_info)
         groupchat_info.set_subject(self._contact.subject)
         self._ui.info_box.add(groupchat_info)
-        self._switcher.set_row_visible('information', True)
 
     def _add_groupchat_settings(self) -> None:
         scrolled_window = Gtk.ScrolledWindow()
@@ -114,7 +115,10 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         settings_box = GroupChatSettings(self.account, self._contact.jid)
         scrolled_window.add(settings_box)
         self._ui.settings_box.add(scrolled_window)
-        self._switcher.set_row_visible('settings', True)
+
+    def _add_affiliations(self) -> None:
+        affiliations = GroupchatAffiliation(self._client, self._contact)
+        self._ui.affiliation_box.add(affiliations)
 
     def _on_key_press(self,
                       _widget: GroupchatDetails,

@@ -366,6 +366,22 @@ class FiletransfersBuilder(Builder):
     file_transfers_window_atkobject: Atk.Object
 
 
+class GroupchatAffiliationBuilder(Builder):
+    affiliation_store: Gtk.ListStore
+    combo_store: Gtk.ListStore
+    main_box: Gtk.Box
+    affiliation_scrolled: Gtk.ScrolledWindow
+    affiliation_treeview: Gtk.TreeView
+    reserved_name_column: Gtk.TreeViewColumn
+    button_box: Gtk.Box
+    add_remove_button_box: Gtk.Box
+    add_button: Gtk.Button
+    remove_button: Gtk.Button
+    status_image: Gtk.Image
+    spinner: Gtk.Spinner
+    apply_button: Gtk.Button
+
+
 class GroupchatConfigBuilder(Builder):
     affiliation_store: Gtk.ListStore
     combo_store: Gtk.ListStore
@@ -446,8 +462,6 @@ class GroupchatControlBuilder(Builder):
     destroy_button: Gtk.Button
     destroy_alternate_entry: Gtk.Entry
     destroy_reason_entry: Gtk.Entry
-    name_entry: Gtk.Entry
-    rename_button: Gtk.Button
     invite_grid: Gtk.Grid
     invite_button: Gtk.Button
     avatar_button_image: Gtk.Image
@@ -484,6 +498,7 @@ class GroupchatDetailsBuilder(Builder):
     main_stack: Gtk.Stack
     info_box: Gtk.Box
     settings_box: Gtk.Box
+    affiliation_box: Gtk.Box
 
 
 class GroupchatInfoScrolledBuilder(Builder):
@@ -987,6 +1002,8 @@ def get_builder(file_name: Literal['file_transfer_jingle.ui'], widgets: list[str
 def get_builder(file_name: Literal['file_transfer_send.ui'], widgets: list[str] = ...) -> FileTransferSendBuilder: ...
 @overload
 def get_builder(file_name: Literal['filetransfers.ui'], widgets: list[str] = ...) -> FiletransfersBuilder: ...
+@overload
+def get_builder(file_name: Literal['groupchat_affiliation.ui'], widgets: list[str] = ...) -> GroupchatAffiliationBuilder: ...
 @overload
 def get_builder(file_name: Literal['groupchat_config.ui'], widgets: list[str] = ...) -> GroupchatConfigBuilder: ...
 @overload

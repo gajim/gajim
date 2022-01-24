@@ -128,6 +128,24 @@
                 <property name="position">1</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkBox" id="affiliation_box">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <placeholder/>
+                </child>
+                <style>
+                  <class name="padding-18"/>
+                </style>
+              </object>
+              <packing>
+                <property name="name">affiliations</property>
+                <property name="title" translatable="yes">Affiliations</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
             <style>
               <class name="stack-border"/>
             </style>

@@ -204,8 +204,8 @@ class ErrorDialog(HigDialog):
     """
 
     def __init__(self,
-                 pritext,
-                 sectext='',
+                 pritext: str,
+                 sectext: str = '',
                  on_response_ok=None,
                  on_response_cancel=None,
                  transient_for=None):
