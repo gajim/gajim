@@ -12,10 +12,19 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import cast
+from typing import Any
+from typing import Generator
+from typing import Optional
+from typing import Union
+
 import locale
 from enum import IntEnum
 
 from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Pango
@@ -25,8 +34,13 @@ from nbxmpp.errors import is_error
 from nbxmpp.errors import StanzaError
 from nbxmpp.errors import TimeoutStanzaError
 from nbxmpp.errors import CancelledError
+from nbxmpp.structs import DiscoInfo
+from nbxmpp.structs import MuclumbusItem
+from nbxmpp.structs import MuclumbusResult
+from nbxmpp.task import Task
 
 from gajim.common import app
+from gajim.common.const import Direction
 from gajim.common.helpers import validate_jid
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_group_chat_nick
@@ -35,6 +49,8 @@ from gajim.common.i18n import get_rfc5646_lang
 from gajim.common.const import AvatarSize
 from gajim.common.const import MUC_DISCO_ERRORS
 from gajim.common.modules.util import as_task
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
 
 from .menus import get_start_chat_row_menu
 from .chat_filter import ChatFilter
@@ -44,6 +60,8 @@ from .builder import get_builder
 from .util import get_icon_name
 from .util import AccountBadge
 
+ContactT = Union[BareContact, GroupchatContact]
+
 
 class Search(IntEnum):
     CONTACT = 0
@@ -51,7 +69,7 @@ class Search(IntEnum):
 
 
 class StartChatDialog(Gtk.ApplicationWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_name('StartChatDialog')
         self.set_application(app.app)
@@ -61,12 +79,12 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.set_default_size(-1, 600)
         self.ready_to_destroy = False
-        self._parameter_form = None
-        self._keywords = []
+        self._parameter_form: Optional[MuclumbusResult] = None
+        self._keywords: list[str] = []
         self._destroyed = False
         self._search_stopped = False
         self._redirected = False
-        self._source_id = None
+        self._source_id: Optional[int] = None
 
         self._ui = get_builder('start_chat_dialog.ui')
         self.add(self._ui.stack)
@@ -75,23 +93,23 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._ui.join_box.pack_start(self._nick_chooser, True, False, 0)
 
         # Helper for the case where we don't receive a disco info
-        self._new_chat_row = None
+        self._new_chat_row: Optional[ContactRow] = None
 
         self.new_contact_row_visible = False
-        self.new_contact_rows = {}
+        self.new_contact_rows: dict[str, Optional[ContactRow]] = {}
         self._accounts = app.get_enabled_accounts_with_labels()
 
-        rows = []
+        rows: list[ContactRow] = []
         self._add_accounts()
         self._add_contacts(rows)
         self._add_groupchats(rows)
 
-        self._ui.search_entry.connect('search-changed',
-                                      self._on_search_changed)
-        self._ui.search_entry.connect('next-match',
-                                      self._select_new_match, 'next')
-        self._ui.search_entry.connect('previous-match',
-                                      self._select_new_match, 'prev')
+        self._ui.search_entry.connect(
+            'search-changed', self._on_search_changed)
+        self._ui.search_entry.connect(
+            'next-match', self._select_new_match, Direction.NEXT)
+        self._ui.search_entry.connect(
+            'previous-match', self._select_new_match, Direction.PREV)
         self._ui.search_entry.connect(
             'stop-search', lambda *args: self._ui.search_entry.set_text(''))
 
@@ -125,23 +143,23 @@ class StartChatDialog(Gtk.ApplicationWindow):
         if rows:
             self._load_contacts(rows)
 
-    def set_search_text(self, text):
+    def set_search_text(self, text: str) -> None:
         self._ui.search_entry.set_text(text)
 
     def remove_row(self, account: str, jid: str) -> None:
-        for row in self._ui.listbox.get_children():
+        for row in cast(list[ContactRow], self._ui.listbox.get_children()):
             if row.account == account and row.jid == jid:
                 row.destroy()
                 return
 
-    def _global_search_active(self):
+    def _global_search_active(self) -> bool:
         return self._ui.global_search_toggle.get_active()
 
-    def _add_accounts(self):
+    def _add_accounts(self) -> None:
         for account in self._accounts:
             self._ui.account_store.append([None, *account])
 
-    def _add_contacts(self, rows):
+    def _add_contacts(self, rows: list[ContactRow]):
         show_account = len(self._accounts) > 1
         for account, _label in self._accounts:
             self.new_contact_rows[account] = None
@@ -161,7 +179,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
                                    _('Note to myself'),
                                    show_account))
 
-    def _add_groupchats(self, rows):
+    def _add_groupchats(self, rows: list[ContactRow]) -> None:
         show_account = len(self._accounts) > 1
         for account, _label in self._accounts:
             client = app.get_client(account)
@@ -176,12 +194,14 @@ class StartChatDialog(Gtk.ApplicationWindow):
                                        show_account,
                                        groupchat=True))
 
-    def _load_contacts(self, rows):
+    def _load_contacts(self, rows: list[ContactRow]) -> None:
         generator = self._incremental_add(rows)
         self._source_id = GLib.idle_add(lambda: next(generator, False),
                                         priority=GLib.PRIORITY_LOW)
 
-    def _incremental_add(self, rows):
+    def _incremental_add(self,
+                         rows: list[ContactRow]
+                         ) -> Generator[bool, None, None]:
         for row in rows:
             self._ui.listbox.add(row)
             yield True
@@ -189,23 +209,26 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._ui.listbox.set_sort_func(self._sort_func, None)
         self._source_id = None
 
-    def _on_page_changed(self, stack, _param):
+    def _on_page_changed(self, stack: Gtk.Stack, _param: Any) -> None:
         if stack.get_visible_child_name() == 'account':
             self._ui.account_view.grab_focus()
 
-    def _on_row_activated(self, _listbox, row):
+    def _on_row_activated(self,
+                          _listbox: Gtk.ListBox,
+                          row: ContactRow
+                          ) -> None:
         if self._current_listbox_is(Search.GLOBAL):
             self._select_muc()
         else:
             self._start_new_chat(row)
 
-    def _select_muc(self):
+    def _select_muc(self) -> None:
         if len(self._accounts) > 1:
             self._ui.stack.set_visible_child_name('account')
         else:
             self._on_select_clicked()
 
-    def _on_key_press(self, _widget, event):
+    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> int:
         is_search = self._ui.stack.get_visible_child_name() == 'search'
         if event.keyval in (Gdk.KEY_Down, Gdk.KEY_Tab):
             if not is_search:
@@ -295,25 +318,28 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self._ui.search_entry.grab_focus_without_selecting()
         return Gdk.EVENT_PROPAGATE
 
-    def _on_infobar_response(self, _widget, response):
+    def _on_infobar_response(self,
+                             _widget: Gtk.InfoBar,
+                             response: Gtk.ResponseType
+                             ) -> None:
         if response == Gtk.ResponseType.CLOSE:
             self._ui.infobar.set_revealed(False)
             app.settings.set('show_help_start_chat', False)
 
-    def _on_filter_bar_toggled(self, toggle_button):
+    def _on_filter_bar_toggled(self, toggle_button: Gtk.ToggleButton) -> None:
         active = toggle_button.get_active()
         self._ui.filter_bar_revealer.set_reveal_child(active)
 
-    def _on_chat_filter_changed(self, _filter, name):
+    def _on_chat_filter_changed(self, _filter: ChatFilter, name: str) -> None:
         self._current_filter = name
         self._ui.listbox.invalidate_filter()
 
-    def _start_new_chat(self, row):
-        if row.new:
+    def _start_new_chat(self, row: ContactRow) -> None:
+        if row.is_new:
             try:
                 validate_jid(row.jid)
             except ValueError as error:
-                self._show_error_page(error)
+                self._show_error_page(str(error))
                 return
 
             self._disco_info(row)
@@ -334,7 +360,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
             self.ready_to_destroy = False
             self._redirected = False
-            self._disco_muc(row.account, jid, request_vcard=row.new)
+            self._disco_muc(row.account, jid, request_vcard=row.is_new)
 
         else:
             app.window.add_chat(
@@ -346,7 +372,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self.ready_to_destroy = True
             self.destroy()
 
-    def _disco_info(self, row):
+    def _disco_info(self, row: ContactRow) -> None:
         if not app.account_is_available(row.account):
             # Account is disconnected: offer to open 1:1 chat anyway
             self._new_chat_row = row
@@ -361,10 +387,10 @@ class StartChatDialog(Gtk.ApplicationWindow):
             user_data=row,
             timeout=10)
 
-    def _disco_info_received(self, task):
-        row = task.get_user_data()
+    def _disco_info_received(self, task: Task) -> None:
+        row = cast(ContactRow, task.get_user_data())
         try:
-            result = task.finish()
+            result = cast(DiscoInfo, task.finish())
         except StanzaError as error:
             contact_conditions = [
                 'service-unavailable',  # Prosody
@@ -393,11 +419,12 @@ class StartChatDialog(Gtk.ApplicationWindow):
             row.update_chat_type()
         self._start_new_chat(row)
 
-    def _on_no_disco_continue(self, _button):
+    def _on_no_disco_continue(self, _button: Gtk.Button) -> None:
+        assert self._new_chat_row
         self._new_chat_row.update_chat_type()
         self._start_new_chat(self._new_chat_row)
 
-    def _disco_muc(self, account, jid, request_vcard):
+    def _disco_muc(self, account: str, jid: JID, request_vcard: bool) -> None:
         self._ui.stack.set_visible_child_name('progress')
         client = app.get_client(account)
         client.get_module('Discovery').disco_muc(
@@ -407,9 +434,9 @@ class StartChatDialog(Gtk.ApplicationWindow):
             callback=self._muc_disco_info_received,
             user_data=account)
 
-    def _muc_disco_info_received(self, task):
+    def _muc_disco_info_received(self, task: Task) -> None:
         try:
-            result = task.finish()
+            result = cast(DiscoInfo, task.finish())
         except StanzaError as error:
             self._set_error(error)
             return
@@ -426,35 +453,36 @@ class StartChatDialog(Gtk.ApplicationWindow):
         else:
             self._set_error_from_code('not-muc-service')
 
-    def _set_error(self, error):
+    def _set_error(self, error: StanzaError) -> None:
         text = MUC_DISCO_ERRORS.get(error.condition, to_user_string(error))
         if error.condition == 'gone':
             reason = error.get_text(get_rfc5646_lang())
             if reason:
-                text = '%s:\n%s' % (text, reason)
+                text = f'{text}:\n{reason}'
         self._show_error_page(text)
 
-    def _set_error_from_code(self, error_code):
+    def _set_error_from_code(self, error_code: str) -> None:
         self._show_error_page(MUC_DISCO_ERRORS[error_code])
 
-    def _show_error_page(self, text):
+    def _show_error_page(self, text: str) -> None:
         self._ui.error_label.set_text(str(text))
         self._ui.stack.set_visible_child_name('error')
 
-    def _on_join_clicked(self, _button=None):
+    def _on_join_clicked(self, *args: Any) -> None:
         account = self._muc_info_box.get_account()
         jid = self._muc_info_box.get_jid()
         nickname = self._nick_chooser.get_text()
-
-        app.interface.show_add_join_groupchat(account, jid, nickname=nickname)
+        assert account
+        app.interface.show_add_join_groupchat(
+            account, str(jid), nickname=nickname)
 
         self.ready_to_destroy = True
         self.destroy()
 
-    def _on_back_clicked(self, _button=None):
+    def _on_back_clicked(self, *args: Any) -> None:
         self._ui.stack.set_visible_child_name('search')
 
-    def _on_select_clicked(self, *args):
+    def _on_select_clicked(self, *args: Any) -> None:
         model, iter_ = self._ui.account_view.get_selection().get_selected()
         if iter_ is not None:
             account = model[iter_][1]
@@ -463,7 +491,8 @@ class StartChatDialog(Gtk.ApplicationWindow):
         else:
             return
 
-        selected_row = self._global_search_listbox.get_selected_row()
+        selected_row = cast(
+            ResultRow, self._global_search_listbox.get_selected_row())
         if selected_row is None:
             return
 
@@ -475,7 +504,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._redirected = False
         self._disco_muc(account, selected_row.jid, request_vcard=True)
 
-    def _set_listbox(self, listbox):
+    def _set_listbox(self, listbox: Gtk.ListBox):
         if self._current_listbox == listbox:
             return
         viewport = self._ui.scrolledwindow.get_child()
@@ -484,12 +513,12 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._ui.scrolledwindow.add(listbox)
         self._current_listbox = listbox
 
-    def _current_listbox_is(self, box):
+    def _current_listbox_is(self, box: Search) -> bool:
         if self._current_listbox == self._ui.listbox:
             return box == Search.CONTACT
         return box == Search.GLOBAL
 
-    def _on_global_search_toggle(self, button):
+    def _on_global_search_toggle(self, button: Gtk.ToggleButton) -> None:
         self._ui.search_entry.grab_focus()
         image_style_context = button.get_children()[0].get_style_context()
         if button.get_active():
@@ -508,7 +537,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self._set_listbox(self._ui.listbox)
             self._global_search_listbox.remove_all()
 
-    def _on_search_changed(self, entry):
+    def _on_search_changed(self, entry: Gtk.SearchEntry) -> None:
         if self._global_search_active():
             return
 
@@ -520,37 +549,43 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self._remove_new_jid_row()
         self._ui.listbox.invalidate_filter()
 
-    def _add_new_jid_row(self):
+    def _add_new_jid_row(self) -> None:
         if self.new_contact_row_visible:
             return
         for account in self.new_contact_rows:
             show_account = len(self._accounts) > 1
-            row = ContactRow(account, None, '', None, show_account)
+            row = ContactRow(account, None, None, None, show_account)
             self.new_contact_rows[account] = row
             self._ui.listbox.add(row)
-            row.get_parent().show_all()
+            listbox = cast(Gtk.ListBox, row.get_parent())
+            listbox.show_all()
         self.new_contact_row_visible = True
 
-    def _remove_new_jid_row(self):
+    def _remove_new_jid_row(self) -> None:
         if not self.new_contact_row_visible:
             return
 
         for row in self.new_contact_rows.values():
-            self._ui.listbox.remove(row)
+            if row is not None:
+                row.destroy()
         self.new_contact_row_visible = False
 
-    def _update_new_jid_rows(self, search_text):
+    def _update_new_jid_rows(self, search_text: str) -> None:
         for row in self.new_contact_rows.values():
-            row.update_jid(search_text)
+            if row is not None:
+                row.update_jid(JID.from_string(search_text))
 
-    def _select_new_match(self, _entry, direction):
+    def _select_new_match(self,
+                          _entry: Gtk.Entry,
+                          direction: Direction
+                          ) -> None:
         selected_row = self._ui.listbox.get_selected_row()
         if selected_row is None:
             return
 
         index = selected_row.get_index()
 
-        if direction == 'next':
+        if direction == Direction.NEXT:
             index += 1
         else:
             index -= 1
@@ -563,19 +598,19 @@ class StartChatDialog(Gtk.ApplicationWindow):
                 self._ui.listbox.select_row(new_selected_row)
                 new_selected_row.grab_focus()
                 return
-            if direction == 'next':
+            if direction == Direction.NEXT:
                 index += 1
             else:
                 index -= 1
 
-    def select_first_row(self):
+    def select_first_row(self) -> None:
         first_row = self._ui.listbox.get_row_at_y(0)
         self._ui.listbox.select_row(first_row)
 
-    def _scroll_to_first_row(self):
+    def _scroll_to_first_row(self) -> None:
         self._ui.scrolledwindow.get_vadjustment().set_value(0)
 
-    def _filter_func(self, row, _user_data):
+    def _filter_func(self, row: ContactRow, _user_data: Any) -> bool:
         search_text = self._ui.search_entry.get_text().lower()
         search_text_list = search_text.split()
         row_text = row.get_search_text().lower()
@@ -589,20 +624,20 @@ class StartChatDialog(Gtk.ApplicationWindow):
         for text in search_text_list:
             if text not in row_text:
                 GLib.timeout_add(50, self.select_first_row)
-                return None
+                return False
         GLib.timeout_add(50, self.select_first_row)
         return True
 
     @staticmethod
-    def _sort_func(row1, row2, _user_data):
+    def _sort_func(row1: ContactRow, row2: ContactRow, _user_data: Any) -> int:
         name1 = row1.get_search_text()
         name2 = row2.get_search_text()
         account1 = row1.account
         account2 = row2.account
         is_groupchat1 = row1.groupchat
         is_groupchat2 = row2.groupchat
-        new1 = row1.new
-        new2 = row2.new
+        new1 = row1.is_new
+        new2 = row2.is_new
 
         result = locale.strcoll(account1.lower(), account2.lower())
         if result != 0:
@@ -616,27 +651,27 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
         return locale.strcoll(name1.lower(), name2.lower())
 
-    def _start_search(self):
+    def _start_search(self) -> None:
         self._search_stopped = False
         accounts = app.get_connected_accounts()
         if not accounts:
             return
-        con = app.connections[accounts[0]].connection
+        client = app.connections[accounts[0]].connection
 
         text = self._ui.search_entry.get_text().strip()
         self._global_search_listbox.start_search()
 
         if app.settings.get('muclumbus_api_pref') == 'http':
-            self._start_http_search(con, text)
+            self._start_http_search(client, text)
         else:
-            self._start_iq_search(con, text)
+            self._start_iq_search(client, text)
 
     @as_task
-    def _start_iq_search(self, con, text):
+    def _start_iq_search(self, client, text):
         _task = yield
 
         if self._parameter_form is None:
-            result = yield con.get_module('Muclumbus').request_parameters(
+            result = yield client.get_module('Muclumbus').request_parameters(
                 app.settings.get('muclumbus_api_jid'))
 
             self._process_search_result(result, parameters=True)
@@ -646,14 +681,14 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
         self._parameter_form.vars['q'].value = text
 
-        result = yield con.get_module('Muclumbus').set_search(
+        result = yield client.get_module('Muclumbus').set_search(
             app.settings.get('muclumbus_api_jid'),
             self._parameter_form)
 
         self._process_search_result(result)
 
         while not result.end:
-            result = yield con.get_module('Muclumbus').set_search(
+            result = yield client.get_module('Muclumbus').set_search(
                 app.settings.get('muclumbus_api_jid'),
                 self._parameter_form,
                 items_per_page=result.max,
@@ -664,18 +699,18 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._global_search_listbox.end_search()
 
     @as_task
-    def _start_http_search(self, con, text):
+    def _start_http_search(self, client, text):
         _task = yield
 
         self._keywords = text.split(' ')
-        result = yield con.get_module('Muclumbus').set_http_search(
+        result = yield client.get_module('Muclumbus').set_http_search(
             app.settings.get('muclumbus_api_http_uri'),
             self._keywords)
 
         self._process_search_result(result)
 
         while not result.end:
-            result = yield con.get_module('Muclumbus').set_http_search(
+            result = yield client.get_module('Muclumbus').set_http_search(
                 app.settings.get('muclumbus_api_http_uri'),
                 self._keywords,
                 after=result.last)
@@ -684,11 +719,15 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
         self._global_search_listbox.end_search()
 
-    def _process_search_result(self, result, parameters=False):
+    def _process_search_result(self,
+                               result: MuclumbusResult,
+                               parameters: bool = False
+                               ) -> None:
         if self._search_stopped:
             raise CancelledError()
 
         if is_error(result):
+            assert isinstance(result, StanzaError)
             self._global_search_listbox.remove_progress()
             self._show_error_page(to_user_string(result))
             raise result
@@ -699,7 +738,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         for item in result.items:
             self._global_search_listbox.add(ResultRow(item))
 
-    def _destroy(self, *args):
+    def _destroy(self, *args: Any) -> None:
         if self._source_id is not None:
             GLib.source_remove(self._source_id)
         self._destroyed = True
@@ -707,8 +746,14 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
 
 class ContactRow(Gtk.ListBoxRow):
-    def __init__(self, account, contact, jid, name, show_account,
-                 groupchat=False):
+    def __init__(self,
+                 account: str,
+                 contact: Optional[ContactT],
+                 jid: Optional[JID],
+                 name: Optional[str],
+                 show_account: bool,
+                 groupchat: bool = False
+                 ) -> None:
         Gtk.ListBoxRow.__init__(self)
         self.get_style_context().add_class('start-chat-row')
         self.account = account
@@ -718,7 +763,7 @@ class ContactRow(Gtk.ListBoxRow):
         self.contact = contact
         self.name = name
         self.groupchat = groupchat
-        self.new = jid == ''
+        self.is_new = bool(jid is None)
 
         grid = Gtk.Grid()
         grid.set_column_spacing(12)
@@ -767,7 +812,10 @@ class ContactRow(Gtk.ListBoxRow):
         self.add(eventbox)
         self.show_all()
 
-    def _popup_menu(self, _widget, event):
+    def _popup_menu(self,
+                    _widget: Gtk.EventBox,
+                    event: Gdk.EventButton
+                    ) -> None:
         if not self.groupchat:
             return
 
@@ -777,8 +825,8 @@ class ContactRow(Gtk.ListBoxRow):
         menu = get_start_chat_row_menu(self.account, self.jid)
 
         rectangle = Gdk.Rectangle()
-        rectangle.x = event.x
-        rectangle.y = event.y
+        rectangle.x = int(event.x)
+        rectangle.y = int(event.y)
         rectangle.width = rectangle.height = 1
 
         popover = Gtk.Popover.new_from_model(self, menu)
@@ -787,8 +835,8 @@ class ContactRow(Gtk.ListBoxRow):
         popover.set_pointing_to(rectangle)
         popover.popup()
 
-    def _get_avatar_image(self, contact):
-        if self.new:
+    def _get_avatar_image(self, contact: ContactT) -> Gtk.Image:
+        if self.is_new:
             icon_name = 'avatar-default'
             if self.groupchat:
                 icon_name = get_icon_name('muc-inactive')
@@ -796,34 +844,35 @@ class ContactRow(Gtk.ListBoxRow):
 
         scale = self.get_scale_factor()
         surface = contact.get_avatar(AvatarSize.CHAT, scale)
+        assert not isinstance(surface, GdkPixbuf.Pixbuf)
         return Gtk.Image.new_from_surface(surface)
 
-    def update_jid(self, jid):
+    def update_jid(self, jid: JID) -> None:
         self.jid = jid
-        self.jid_label.set_text(jid)
+        self.jid_label.set_text(str(jid))
 
-    def update_chat_type(self, groupchat=False):
-        self.new = False
+    def update_chat_type(self, groupchat: bool = False) -> None:
+        self.is_new = False
         self.groupchat = groupchat
 
-    def get_search_text(self):
+    def get_search_text(self) -> str:
         if self.contact is None and not self.groupchat:
             return str(self.jid)
         if self.show_account:
-            return '%s %s %s' % (self.name, self.jid, self.account_label)
-        return '%s %s' % (self.name, self.jid)
+            return f'{self.name} {self.jid} {self.account_label}'
+        return f'{self.name} {self.jid}'
 
 
 class GlobalSearch(Gtk.ListBox):
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.ListBox.__init__(self)
         self.set_has_tooltip(True)
         self.set_activate_on_single_click(False)
-        self._progress = None
+        self._progress: Optional[ProgressRow] = None
         self._add_placeholder()
         self.show_all()
 
-    def _add_placeholder(self):
+    def _add_placeholder(self) -> None:
         placeholder = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
         placeholder.set_halign(Gtk.Align.CENTER)
         placeholder.set_valign(Gtk.Align.CENTER)
@@ -840,39 +889,41 @@ class GlobalSearch(Gtk.ListBox):
         placeholder.show_all()
         self.set_placeholder(placeholder)
 
-    def remove_all(self):
-        def remove(row):
-            self.remove(row)
+    def remove_all(self) -> None:
+        def remove(row: Gtk.ListBoxRow) -> None:
             row.destroy()
         self.foreach(remove)
 
-    def remove_progress(self):
+    def remove_progress(self) -> None:
+        assert self._progress
         self.remove(self._progress)
         self._progress.destroy()
 
-    def start_search(self):
+    def start_search(self) -> None:
         self._progress = ProgressRow()
         super().add(self._progress)
 
-    def end_search(self):
+    def end_search(self) -> None:
+        assert self._progress
         self._progress.stop()
 
-    def add(self, row):
+    def add(self, row: ResultRow) -> None:
         super().add(row)
         if self.get_selected_row() is None:
-            row = self.get_row_at_index(1)
-            if row is not None:
-                self.select_row(row)
-                row.grab_focus()
+            row_ = self.get_row_at_index(1)
+            if row_ is not None:
+                self.select_row(row_)
+                row_.grab_focus()
+        assert self._progress
         self._progress.update()
 
-    def _select(self, direction):
+    def _select(self, direction: Direction) -> None:
         selected_row = self.get_selected_row()
         if selected_row is None:
             return
 
         index = selected_row.get_index()
-        if direction == 'next':
+        if direction == Direction.NEXT:
             index += 1
         else:
             index -= 1
@@ -884,20 +935,20 @@ class GlobalSearch(Gtk.ListBox):
         self.select_row(new_selected_row)
         new_selected_row.grab_focus()
 
-    def select_next(self):
-        self._select('next')
+    def select_next(self) -> None:
+        self._select(Direction.NEXT)
 
-    def select_prev(self):
-        self._select('prev')
+    def select_prev(self) -> None:
+        self._select(Direction.PREV)
 
 
 class ResultRow(Gtk.ListBoxRow):
-    def __init__(self, item):
+    def __init__(self, item: MuclumbusItem) -> None:
         Gtk.ListBoxRow.__init__(self)
         self.set_activatable(True)
         self.get_style_context().add_class('start-chat-row')
-        self.new = False
-        self.jid = item.jid
+        self.is_new = False
+        self.jid = JID.from_string(item.jid)
         self.groupchat = True
 
         name_label = Gtk.Label(label=item.name)
@@ -918,7 +969,7 @@ class ResultRow(Gtk.ListBoxRow):
 
 
 class ProgressRow(Gtk.ListBoxRow):
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.ListBoxRow.__init__(self)
         self.set_selectable(False)
         self.set_activatable(False)
@@ -942,11 +993,11 @@ class ProgressRow(Gtk.ListBoxRow):
         self.add(box)
         self.show_all()
 
-    def update(self):
+    def update(self) -> None:
         self._count += 1
         self._count_label.set_text(self._text % self._count)
 
-    def stop(self):
+    def stop(self) -> None:
         self._spinner.stop()
         self._spinner.hide()
         self._finished_image.show()
