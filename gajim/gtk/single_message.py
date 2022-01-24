@@ -12,8 +12,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
+from typing import Optional
+
 from gi.repository import Gdk
 from gi.repository import Gtk
+
+from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common.helpers import get_contact_dict_for_account
@@ -31,7 +36,10 @@ if app.is_installed('GSPELL'):
 
 
 class SingleMessageWindow(Gtk.ApplicationWindow):
-    def __init__(self, account, recipients=None):
+    def __init__(self,
+                 account: str,
+                 recipients: Optional[str] = None
+                 ) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -54,10 +62,7 @@ class SingleMessageWindow(Gtk.ApplicationWindow):
         self._message_buffer = self._ui.message_textview.get_buffer()
         self._message_buffer.connect('changed', self._update_char_counter)
 
-        if isinstance(recipients, list):
-            jids = ', '.join([contact.jid for contact in recipients])
-            self._ui.recipients_entry.set_text(jids)
-        elif recipients is not None:
+        if recipients is not None:
             self._ui.recipients_entry.set_text(recipients)
 
         if (app.settings.get('use_speller') and
@@ -85,28 +90,28 @@ class SingleMessageWindow(Gtk.ApplicationWindow):
         if self._recipients is not None:
             self._ui.message_textview.grab_focus()
 
-        self.connect('key-press-event', self._on_key_press_event)
+        self.connect('key-press-event', self._on_key_press)
         self._ui.connect_signals(self)
 
         self.show_all()
 
-    def _on_key_press_event(self, _widget, event):
+    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
-    def _on_changed(self, *args):
+    def _on_changed(self, *args: Any) -> None:
         recipients = self._ui.recipients_entry.get_text()
         begin, end = self._message_buffer.get_bounds()
         message = self._message_buffer.get_text(begin, end, True)
-        self._ui.send_button.set_sensitive(recipients and message)
+        self._ui.send_button.set_sensitive(bool(recipients and message))
 
-    def _update_char_counter(self, _widget):
+    def _update_char_counter(self, _widget: Gtk.TextView) -> None:
         characters_no = self._message_buffer.get_char_count()
         self._ui.count_chars_label.set_text(
             _('Characters typed: %s') % str(characters_no))
         self._on_changed()
 
-    def _on_send_clicked(self, _widget):
+    def _on_send_clicked(self, _widget: Gtk.Button) -> None:
         if not app.account_is_available(self.account):
             ErrorDialog(_('Not Connected'),
                         _('Please make sure you are connected with "%s".') %
@@ -118,7 +123,7 @@ class SingleMessageWindow(Gtk.ApplicationWindow):
         begin, end = self._message_buffer.get_bounds()
         message = self._message_buffer.get_text(begin, end, True)
 
-        recipient_list = []
+        recipient_list: list[JID] = []
         for jid in jids.split(','):
             try:
                 jid = validate_jid(jid.strip())
