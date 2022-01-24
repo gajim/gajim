@@ -31,6 +31,7 @@ import time
 import logging
 from datetime import datetime
 
+from gi.repository import GdkPixbuf
 from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import Pango
@@ -152,6 +153,7 @@ class RosterTooltip:
 
         # Avatar
         surface = contact.get_avatar(AvatarSize.TOOLTIP, scale)
+        assert not isinstance(surface, GdkPixbuf.Pixbuf)
         self._ui.avatar.set_from_surface(surface)
         self._ui.avatar.show()
 
@@ -181,6 +183,8 @@ class RosterTooltip:
         # This sets the bottom-most widget to expand, in case the avatar
         # takes more space than the labels
         row_count = 1
+        last_widget = self._ui.tooltip_grid.get_child_at(1, 1)
+        assert last_widget is not None
         while row_count < 6:
             widget = self._ui.tooltip_grid.get_child_at(1, row_count)
             if widget and widget.get_visible():
@@ -202,6 +206,7 @@ class RosterTooltip:
             show_image.set_halign(Gtk.Align.START)
             show_image.set_valign(Gtk.Align.CENTER)
 
+            assert resource.jid.resource is not None
             resource_string = GLib.markup_escape_text(resource.jid.resource)
             resource_label = Gtk.Label()
             resource_label.set_halign(Gtk.Align.START)
@@ -298,12 +303,15 @@ class FileTransfersTooltip:
         properties: list[tuple[str, str]] = []
         name = file_prop.name
         if file_prop.type_ == 'r':
+            assert file_prop.file_name is not None
             file_name = os.path.split(file_prop.file_name)[1]
         else:
+            assert file_prop.name is not None
             file_name = file_prop.name
         properties.append((_('File Name: '),
                            GLib.markup_escape_text(file_name)))
 
+        assert file_prop.tt_account is not None
         client = app.get_client(file_prop.tt_account)
         if file_prop.type_ == 'r':
             type_ = Q_('?Noun:Download')
