@@ -212,12 +212,13 @@ class PopupNotification(Gtk.Window):
                          event: Gdk.EventButton
                          ) -> None:
         if event.button == 1:
-            jid = self._event.jid
-            if jid is not None and isinstance(jid, str):
-                jid = JID.from_string(jid)
+
+            jid = ''
+            if self._event.jid is not None:
+                jid = str(self._event.jid)
 
             params = OpenEventActionParams(type=self._event.type,
-                                           sub_type=self._event.sub_type,
+                                           sub_type=self._event.sub_type or '',
                                            account=self._event.account,
                                            jid=jid)
             app.app.activate_action(f'app.{self._event.account}-open-event',
@@ -304,12 +305,12 @@ class Linux(NotificationBackend):
         if 'actions' not in self._daemon_capabilities:
             return
 
-        jid = event.jid
-        if jid is not None and isinstance(jid, str):
-            jid = JID.from_string(jid)
+        jid = ''
+        if event.jid is not None:
+            jid = str(event.jid)
 
         params = OpenEventActionParams(type=event.type,
-                                       sub_type=event.sub_type,
+                                       sub_type=event.sub_type or '',
                                        account=event.account,
                                        jid=jid)
 

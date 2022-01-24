@@ -750,8 +750,9 @@ class GajimApplication(Gtk.Application, CoreApplication):
                              'incoming-call',
                              'file-transfer'):
 
-            assert params.jid is not None
-            app.window.select_chat(params.account, params.jid)
+            assert params.jid
+            jid = JID.from_string(params.jid)
+            app.window.select_chat(params.account, jid)
 
         app.window.present_with_time(Gtk.get_current_event_time())
 

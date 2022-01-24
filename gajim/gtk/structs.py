@@ -31,10 +31,12 @@ from gajim.common.structs import VariantMixin
 
 @dataclass
 class OpenEventActionParams(VariantMixin):
+    # Event which is used for Notifications and gets sent over DBus
+    # Don’t use Optional types here because DBus does not support "None"
     type: str
-    sub_type: Optional[str]
+    sub_type: str
     account: str
-    jid: Optional[JID]
+    jid: str
 
 
 @dataclass
