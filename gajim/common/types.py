@@ -45,6 +45,8 @@ if TYPE_CHECKING:
     from gajim.common.settings import Settings
     from gajim.gtk.css_config import CSSConfig
 
+    from gajim.plugins.pluginmanager import PluginManager
+
     ContactT = Union[BareContact,
                      ResourceContact,
                      GroupchatContact,
@@ -52,6 +54,7 @@ if TYPE_CHECKING:
 
 
 InterfaceT = Union['Interface']
+PluginManagerT = Union['PluginManager']
 
 ConnectionT = Union['Client']
 CSSConfigT = Union['CSSConfig']

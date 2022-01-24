@@ -23,7 +23,8 @@ Helper code related to plug-ins management system.
 
 __all__ = ['log', 'log_calls']
 
-from typing import List
+from pathlib import Path
+from typing import Optional
 
 import logging
 import functools
@@ -56,7 +57,7 @@ class log_calls:
     called, even though `log_calls` decorator is used.
     '''
 
-    def __init__(self, classname=''):
+    def __init__(self, classname: str = '') -> None:
         '''
         :Keywords:
           classname : str
@@ -117,14 +118,14 @@ class log_calls:
         return wrapper
 
 
-def get_builder(file_name: str, widgets: List[str] = None) -> Builder:
+def get_builder(file_name: str, widgets: Optional[list[str]] = None) -> Builder:
     return Builder(file_name,
                    widgets,
                    domain=plugins_i18n.DOMAIN,
                    gettext_=plugins_i18n._)
 
 
-def is_shipped_plugin(path):
+def is_shipped_plugin(path: Path) -> bool:
     base = configpaths.get('PLUGINS_BASE')
     if not base.exists():
         return False

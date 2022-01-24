@@ -75,7 +75,7 @@ app = None # type: GajimApplication
 window = None # type: MainWindow
 
 ged = ged_module.GlobalEventsDispatcher() # Global Events Dispatcher
-plugin_manager = None # Plugins Manager
+plugin_manager = cast(types.PluginManagerT, None)  # Plugins Manager
 
 class Storage:
     def __init__(self):
