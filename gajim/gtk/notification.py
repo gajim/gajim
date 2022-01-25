@@ -247,11 +247,13 @@ class Linux(NotificationBackend):
     def __init__(self):
         NotificationBackend.__init__(self)
         self._dbus_available: bool = False
-        self._daemon_capabilities = ['actions']
+        self._caps: list[str] = []
         self._detect_dbus_caps()
+        log.info('Detected notification capabilities: %s', self._caps)
 
     def _detect_dbus_caps(self) -> None:
-        if app.is_flatpak():
+        if app.is_flatpak() or app.desktop_env == 'gnome':
+            self._caps = ['actions']
             self._dbus_available = True
             return
 
@@ -259,7 +261,7 @@ class Linux(NotificationBackend):
                            res: Gio.AsyncResult) -> None:
             try:
                 proxy = Gio.DBusProxy.new_finish(res)
-                self._daemon_capabilities = proxy.GetCapabilities()  # type: ignore
+                self._caps = proxy.GetCapabilities()  # type: ignore
             except GLib.Error as error:
                 log.warning('Notifications D-Bus not available: %s', error)
             else:
@@ -282,8 +284,13 @@ class Linux(NotificationBackend):
 
         notification = Gio.Notification()
         if event.title is not None:
-            notification.set_title(GLib.markup_escape_text(event.title))
-        notification.set_body(GLib.markup_escape_text(event.text))
+            notification.set_title(event.title)
+
+        text = event.text
+        if 'body-markup' in self._caps:
+            text = GLib.markup_escape_text(event.text)
+
+        notification.set_body(text)
         notification.set_priority(Gio.NotificationPriority.NORMAL)
 
         icon = self._make_icon(event)
@@ -302,7 +309,7 @@ class Linux(NotificationBackend):
         if event.type not in self._action_types:
             return
 
-        if 'actions' not in self._daemon_capabilities:
+        if 'actions' not in self._caps:
             return
 
         jid = ''
