@@ -27,6 +27,7 @@
         "gajim/gtk/app_page.py",
         "gajim/gtk/app_side_bar.py",
         "gajim/gtk/application.py",
+        "gajim/gtk/certificate_dialog.py",
         "gajim/gtk/blocking.py",
         "gajim/gtk/bookmarks.py",
         "gajim/gtk/builder.py",

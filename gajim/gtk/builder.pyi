@@ -175,7 +175,7 @@ class CallWidgetBuilder(Builder):
     av_cam_image: Gtk.Image
 
 
-class CertificateDialogBuilder(Builder):
+class CertificateBuilder(Builder):
     certificate_box: Gtk.Box
     label_cert_for_account: Gtk.Label
     data_it_common_name: Gtk.Label
@@ -981,7 +981,7 @@ def get_builder(file_name: Literal['bookmarks.ui'], widgets: list[str] = ...) ->
 @overload
 def get_builder(file_name: Literal['call_widget.ui'], widgets: list[str] = ...) -> CallWidgetBuilder: ...
 @overload
-def get_builder(file_name: Literal['certificate_dialog.ui'], widgets: list[str] = ...) -> CertificateDialogBuilder: ...
+def get_builder(file_name: Literal['certificate.ui'], widgets: list[str] = ...) -> CertificateBuilder: ...
 @overload
 def get_builder(file_name: Literal['chat_control.ui'], widgets: list[str] = ...) -> ChatControlBuilder: ...
 @overload

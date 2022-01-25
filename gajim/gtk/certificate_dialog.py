@@ -31,28 +31,41 @@ class CertificateDialog(Gtk.ApplicationWindow):
                  account: str,
                  cert: Gio.TlsCertificate
                  ) -> None:
+
         Gtk.ApplicationWindow.__init__(self)
         self.account = account
         self.set_name('CertificateDialog')
         self.set_application(app.app)
         self.set_show_menubar(False)
-        self.set_resizable(False)
+        self.set_resizable(True)
         self.set_position(Gtk.WindowPosition.CENTER)
+        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.set_title(_('Certificate'))
 
-        self._ui = get_builder('certificate_dialog.ui')
-        self.add(self._ui.certificate_box)
+        self.add(CertificateBox(account, cert))
 
         self.connect('key-press-event', self._on_key_press)
 
-        self._clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        self.set_transient_for(transient_for)
+        self.show_all()
+
+    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
+        if event.keyval == Gdk.KEY_Escape:
+            self.destroy()
+
+
+class CertificateBox(Gtk.Box):
+    def __init__(self, account: str, cert: Gio.TlsCertificate) -> None:
+        Gtk.Box.__init__(self)
+
+        self._ui = get_builder('certificate.ui')
 
         certificate = convert_gio_to_openssl_cert(cert)
-        # Get data for labels and copy button
+
         issuer = certificate.get_issuer()
         subject = certificate.get_subject()
 
-        self._headline = _('Certificate for \n%s') % self.account
+        self._headline = _('Certificate for \n%s') % account
         self._it_common_name = subject.commonName or ''
         self._it_organization = subject.organizationName or ''
         self._it_org_unit = subject.organizationalUnitName or ''
@@ -64,19 +77,28 @@ class CertificateDialog(Gtk.ApplicationWindow):
         self._ib_common_name = issuer.commonName or ''
         self._ib_organization = issuer.organizationName or ''
         self._ib_org_unit = issuer.organizationalUnitName or ''
-        issued = datetime.strptime(certificate.get_notBefore().decode('ascii'),
-                                   '%Y%m%d%H%M%SZ')
-        self._issued = issued.strftime('%c %Z')
-        expires = datetime.strptime(certificate.get_notAfter().decode('ascii'),
-                                    '%Y%m%d%H%M%SZ')
-        self._expires = expires.strftime('%c %Z')
-        sha1 = certificate.digest('sha1').decode('utf-8')
+
+        before = certificate.get_notBefore()
+        if before is None:
+            self._issued = ''
+        else:
+            issued = datetime.strptime(before.decode('ascii'), '%Y%m%d%H%M%SZ')
+            self._issued = issued.strftime('%c %Z')
+
+        after = certificate.get_notAfter()
+        if after is None:
+            self._expires = ''
+        else:
+            expires = datetime.strptime(after.decode('ascii'), '%Y%m%d%H%M%SZ')
+            self._expires = expires.strftime('%c %Z')
+
+        sha1 = certificate.digest('sha1').decode('utf-8')  # type: ignore
         self._sha1 = '%s\n%s' % (sha1[:29], sha1[30:])
-        sha256 = certificate.digest('sha256').decode('utf-8')
+
+        sha256 = certificate.digest('sha256').decode('utf-8')  # type: ignore
         self._sha256 = '%s\n%s\n%s\n%s' % (
             sha256[:23], sha256[24:47], sha256[48:71], sha256[72:])
 
-        # Set labels
         self._ui.label_cert_for_account.set_text(self._headline)
         self._ui.data_it_common_name.set_text(self._it_common_name)
         self._ui.data_it_organization.set_text(self._it_organization)
@@ -90,13 +112,9 @@ class CertificateDialog(Gtk.ApplicationWindow):
         self._ui.data_sha1.set_text(self._sha1)
         self._ui.data_sha256.set_text(self._sha256)
 
-        self.set_transient_for(transient_for)
-        self._ui.connect_signals(self)
-        self.show_all()
+        self.add(self._ui.certificate_box)
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
-        if event.keyval == Gdk.KEY_Escape:
-            self.destroy()
+        self._ui.connect_signals(self)
 
     def _on_copy_cert_info_button_clicked(self, _widget: Gtk.Button) -> None:
         clipboard_text = \
@@ -117,4 +135,6 @@ class CertificateDialog(Gtk.ApplicationWindow):
             self._sha1 + '\n' + \
             _('SHA-256:') + '\n' + \
             self._sha256 + '\n'
-        self._clipboard.set_text(clipboard_text, -1)
+
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        clipboard.set_text(clipboard_text, -1)
