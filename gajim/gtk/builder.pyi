@@ -819,7 +819,7 @@ class ServerInfoBuilder(Builder):
     ip_port: Gtk.Label
     websocket: Gtk.Label
     features: Gtk.Box
-    features_scrolled: Gtk.ScrolledWindow
+    features_listbox: Gtk.ListBox
     clipboard_button: Gtk.Button
 
 
