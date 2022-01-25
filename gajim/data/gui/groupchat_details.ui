@@ -143,6 +143,7 @@
               <packing>
                 <property name="name">affiliations</property>
                 <property name="title" translatable="yes">Affiliations</property>
+                <property name="icon-name">system-users-symbolic</property>
                 <property name="position">2</property>
               </packing>
             </child>
