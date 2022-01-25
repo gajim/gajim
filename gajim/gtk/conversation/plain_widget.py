@@ -86,6 +86,7 @@ class MessageLabel(Gtk.Label):
         self.get_style_context().add_class('gajim-conversation-text')
 
         self.connect('populate-popup', self._on_populate_popup)
+        self.connect('activate-link', self._on_activate_link)
 
     def _on_populate_popup(self, label: Gtk.Label, menu: Gtk.Menu) -> None:
         selected, start, end = label.get_selection_bounds()
@@ -117,6 +118,10 @@ class MessageLabel(Gtk.Label):
 
     def update_text_tags(self) -> None:
         pass
+
+    def _on_activate_link(self, _label: Gtk.Label, uri: str) -> int:
+        open_uri(uri, self._account)
+        return Gdk.EVENT_STOP
 
 
 class MessageTextview(Gtk.TextView):
