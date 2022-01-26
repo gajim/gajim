@@ -16,7 +16,9 @@ import logging
 
 from gi.repository import Gdk
 from gi.repository import Gtk
+
 from nbxmpp.errors import StanzaError
+from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common.i18n import _
@@ -32,7 +34,7 @@ log = logging.getLogger('gajim.gui.pep')
 
 
 class PEPConfig(Gtk.ApplicationWindow):
-    def __init__(self, account):
+    def __init__(self, account: str) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -47,21 +49,23 @@ class PEPConfig(Gtk.ApplicationWindow):
 
         self.account = account
         self.set_title(_('PEP Service Configuration (%s)') % self.account)
-        self._con = app.connections[self.account]
+        self._client = app.get_client(account)
 
         self._init_services()
         self._ui.services_treeview.get_selection().connect(
             'changed', self._on_services_selection_changed)
 
         self.show_all()
-        self.connect('key-press-event', self._on_key_press_event)
+        self.connect('key-press-event', self._on_key_press)
         self._ui.connect_signals(self)
 
-    def _on_key_press_event(self, _widget, event):
+    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
-    def _on_services_selection_changed(self, _selection):
+    def _on_services_selection_changed(self,
+                                       _selection: Gtk.TreeSelection
+                                       ) -> None:
         self._ui.configure_button.set_sensitive(True)
         self._ui.delete_button.set_sensitive(True)
 
@@ -79,11 +83,11 @@ class PEPConfig(Gtk.ApplicationWindow):
         col.pack_start(cellrenderer_text, True)
         col.add_attribute(cellrenderer_text, 'text', 0)
 
-        jid = self._con.get_own_jid().bare
-        self._con.get_module('Discovery').disco_items(
+        jid = self._client.get_own_jid().bare
+        self._client.get_module('Discovery').disco_items(
             jid, callback=self._items_received)
 
-    def _items_received(self, task):
+    def _items_received(self, task: Task) -> None:
         try:
             result = task.finish()
         except StanzaError as error:
@@ -95,7 +99,7 @@ class PEPConfig(Gtk.ApplicationWindow):
             if item.jid == jid and item.node is not None:
                 self.treestore.append([item.node])
 
-    def _on_node_delete(self, task):
+    def _on_node_delete(self, task: Task) -> None:
         node = task.get_user_data()
 
         try:
@@ -104,10 +108,12 @@ class PEPConfig(Gtk.ApplicationWindow):
             WarningDialog(
                 _('PEP node was not removed'),
                 _('PEP node %(node)s was not removed:\n%(message)s') % {
-                    'node': node, 'message': error})
+                    'node': node,
+                    'message': error})
             return
 
         model = self._ui.services_treeview.get_model()
+        assert isinstance(model, Gtk.ListStore)
         iter_ = model.get_iter_first()
         while iter_:
             if model[iter_][0] == node:
@@ -115,35 +121,37 @@ class PEPConfig(Gtk.ApplicationWindow):
                 break
             iter_ = model.iter_next(iter_)
 
-    def _on_delete_button_clicked(self, _widget):
+    def _on_delete_button_clicked(self, _widget: Gtk.Button) -> None:
         selection = self._ui.services_treeview.get_selection()
         if not selection:
             return
         model, iter_ = selection.get_selected()
+        assert isinstance(model, Gtk.ListStore)
+        assert iter_
         node = model[iter_][0]
 
-        con = app.connections[self.account]
-        con.get_module('PubSub').delete(node,
-                                        callback=self._on_node_delete,
-                                        user_data=node)
+        self._client.get_module('PubSub').delete(
+            node,
+            callback=self._on_node_delete,
+            user_data=node)
 
-    def _on_configure_button_clicked(self, _widget):
+    def _on_configure_button_clicked(self, _button: Gtk.Button) -> None:
         selection = self._ui.services_treeview.get_selection()
         if not selection:
             return
         model, iter_ = selection.get_selected()
+        assert isinstance(model, Gtk.ListStore)
+        assert iter_
         node = model[iter_][0]
 
-        con = app.connections[self.account]
-        con.get_module('PubSub').get_node_configuration(
+        self._client.get_module('PubSub').get_node_configuration(
             node,
             callback=self._nec_pep_config_received)
 
     def _on_config_submit(self, form, node):
-        con = app.connections[self.account]
-        con.get_module('PubSub').set_node_configuration(node, form)
+        self._client.get_module('PubSub').set_node_configuration(node, form)
 
-    def _nec_pep_config_received(self, task):
+    def _nec_pep_config_received(self, task: Task) -> None:
         try:
             result = task.finish()
         except Exception:
