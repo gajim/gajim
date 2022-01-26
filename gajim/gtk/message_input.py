@@ -94,6 +94,7 @@ class MessageInputTextView(Gtk.TextView):
                      ) -> bool:
         self.toggle_speller(True)
         scrolled = self.get_parent()
+        assert scrolled
         scrolled.get_style_context().add_class('message-input-focus')
         return False
 
@@ -102,6 +103,7 @@ class MessageInputTextView(Gtk.TextView):
                       _event: Gdk.EventFocus
                       ) -> bool:
         scrolled = self.get_parent()
+        assert scrolled
         scrolled.get_style_context().remove_class('message-input-focus')
         if not self.has_text():
             self.toggle_speller(False)
@@ -225,7 +227,8 @@ class MessageInputTextView(Gtk.TextView):
             image = anchor.get_widgets()[0]
             if hasattr(image, 'codepoint'):
                 # found emoji
-                self._replace_char_at_iter(iter_, image.codepoint)
+                codepoint = getattr(image, 'codepoint')
+                self._replace_char_at_iter(iter_, codepoint)
                 image.destroy()
 
         iter_ = self.get_buffer().get_start_iter()
@@ -258,7 +261,7 @@ class MessageInputTextView(Gtk.TextView):
         else:
             anchor = buf.create_child_anchor(insert_iter)
             image = Gtk.Image.new_from_pixbuf(pixbuf)
-            image.codepoint = codepoint
+            setattr(image, 'codepoint', codepoint)
             image.show()
             self.add_child_at_anchor(image, anchor)
         buf.insert_at_cursor(' ')
