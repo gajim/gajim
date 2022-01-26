@@ -83,8 +83,8 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         col = Gtk.TreeViewColumn(Q_('?config:Preference Name'),
                                  renderer_text, text=0)
         treeview.insert_column(col, -1)
-        col.props.expand = True
-        col.props.sizing = Gtk.TreeViewColumnSizing.FIXED
+        col.set_expand(True)
+        col.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
         col.set_resizable(True)
 
         self.renderer_text = Gtk.CellRendererText()
@@ -95,14 +95,14 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         treeview.insert_column(col, -1)
         col.set_cell_data_func(self.renderer_text,
                                self._value_column_data_callback)
-        col.props.expand = True
-        col.props.sizing = Gtk.TreeViewColumnSizing.FIXED
+        col.set_expand(True)
+        col.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
         col.set_resizable(True)
 
         renderer_text = Gtk.CellRendererText()
         col = Gtk.TreeViewColumn(Q_('?config:Type'), renderer_text, text=2)
         treeview.insert_column(col, -1)
-        col.props.sizing = Gtk.TreeViewColumnSizing.FIXED
+        col.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
 
         treeview.set_model(self.modelfilter)
 
@@ -149,6 +149,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
                                    _column: Gtk.TreeViewColumn
                                    ) -> None:
         modelpath = self.modelfilter.convert_path_to_child_path(path)
+        assert modelpath
         modelrow = self.model[modelpath]
         setting = modelrow[Column.NAME]
 
@@ -166,8 +167,9 @@ class AdvancedConfig(Gtk.ApplicationWindow):
                           path: str,
                           text: str
                           ) -> None:
-        path = Gtk.TreePath.new_from_string(path)
-        modelpath = self.modelfilter.convert_path_to_child_path(path)
+        treepath = Gtk.TreePath.new_from_string(path)
+        modelpath = self.modelfilter.convert_path_to_child_path(treepath)
+        assert modelpath
         modelrow = self.model[modelpath]
         setting = modelrow[Column.NAME]
 
@@ -194,7 +196,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         app.settings.set(setting, default)
         button.set_sensitive(False)
 
-    def _fill_model(self, parent=None) -> None:
+    def _fill_model(self) -> None:
         for category, settings in ADVANCED_SETTINGS.items():
             if category != 'app':
                 continue
@@ -215,7 +217,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
                 else:
                     raise ValueError
 
-                self.model.append(parent, [setting, value, type_])
+                self.model.append(None, [setting, value, type_])
 
     def _visible_func(self,
                       model: Gtk.TreeModel,
