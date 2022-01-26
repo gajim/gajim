@@ -41,6 +41,7 @@ class BaseRow(Gtk.ListBoxRow):
         self.text: str = ''
         self._merged: bool = False
 
+        self.set_can_focus(False)
         self.get_style_context().add_class('conversation-row')
 
         self.grid = Gtk.Grid(row_spacing=3, column_spacing=12)
