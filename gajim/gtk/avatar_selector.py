@@ -104,6 +104,10 @@ class AvatarSelector(Gtk.Box):
 
     def prepare_crop_area(self, path: str) -> None:
         pixbuf = self._get_pixbuf_from_path(path)
+        if pixbuf is None:
+            log.info('Could not load from path %s', path)
+            return
+
         self._crop_area.set_pixbuf(pixbuf)
         self._load_button.hide()
         self._helper_label.hide()
@@ -272,6 +276,7 @@ class CropArea(Gtk.DrawingArea):
 
         self._update_pixbufs()
 
+        assert self._pixbuf
         width = self._pixbuf.get_width()
         height = self._pixbuf.get_height()
         crop = self._crop_to_widget()
@@ -583,6 +588,7 @@ class CropArea(Gtk.DrawingArea):
 
     def _update_pixbufs(self) -> None:
         allocation = self.get_allocation()
+        assert self._browse_pixbuf
         width = self._browse_pixbuf.get_width()
         height = self._browse_pixbuf.get_height()
 
@@ -603,6 +609,9 @@ class CropArea(Gtk.DrawingArea):
                 8,
                 dest_width,
                 dest_height)
+            if self._pixbuf is None:
+                return
+
             self._pixbuf.fill(0x0)
 
             self._browse_pixbuf.scale(
@@ -677,10 +686,15 @@ class CropArea(Gtk.DrawingArea):
             cursor_type = Gdk.CursorType.LEFT_PTR
 
         if cursor_type is not self._current_cursor:
+            default_display = Gdk.Display.get_default()
+            if default_display is None:
+                return
             cursor = Gdk.Cursor.new_for_display(
-                Gdk.Display.get_default(),
+                default_display,
                 cursor_type)
-            self.get_window().set_cursor(cursor)
+            window = self.get_window()
+            assert window
+            window.set_cursor(cursor)
             self._current_cursor = cursor_type
 
     @staticmethod
@@ -735,6 +749,7 @@ class CropArea(Gtk.DrawingArea):
 
     def _generate_color_shifted_pixbuf(self) -> None:
         # pylint: disable=no-member
+        assert self._pixbuf
         surface = cairo.ImageSurface(
             cairo.Format.ARGB32,
             self._pixbuf.get_width(),
