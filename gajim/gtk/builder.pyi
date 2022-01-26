@@ -818,6 +818,7 @@ class ServerInfoBuilder(Builder):
     dns: Gtk.Label
     ip_port: Gtk.Label
     websocket: Gtk.Label
+    cert_scrolled: Gtk.ScrolledWindow
     features: Gtk.Box
     features_listbox: Gtk.ListBox
     clipboard_button: Gtk.Button

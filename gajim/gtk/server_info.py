@@ -40,8 +40,8 @@ from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 
 from .builder import get_builder
+from .certificate_dialog import CertificateBox
 from .util import EventHelper
-from .util import open_window
 
 log = logging.getLogger('gajim.gui.server_info')
 
@@ -99,6 +99,9 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         self._cert = self._client.certificate
         self._add_connection_info()
 
+        cert_box = CertificateBox(account, self._cert)
+        self._ui.cert_scrolled.add(cert_box)
+
         for feature in self._get_features():
             self._add_feature(feature)
         self._clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
@@ -128,8 +131,6 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
             self._ui.proxy_type.set_text(proxy.type)
             self._ui.proxy_host.set_text(proxy.host)
 
-        self._ui.cert_button.set_sensitive(self._cert)
-
         self._ui.domain.set_text(address.domain)
 
         visible = address.service is not None
@@ -146,12 +147,6 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         self._ui.websocket_label.set_visible(visible)
         self._ui.websocket.set_visible(visible)
         self._ui.websocket.set_text(address.uri or '')
-
-    def _on_cert_button_clicked(self, _button: Gtk.Button) -> None:
-        open_window('CertificateDialog',
-                    account=self.account,
-                    transient_for=self,
-                    cert=self._cert)
 
     def _add_contact_addresses(self, dataforms: list[SimpleDataForm]) -> None:
         fields = {
@@ -342,6 +337,7 @@ class FeatureItem(Gtk.ListBoxRow):
 
         self._icon = Gtk.Image()
         self._feature_label = Gtk.Label()
+        self._feature_label.set_halign(Gtk.Align.START)
         self._additional_label = Gtk.Label()
         self._additional_label.set_halign(Gtk.Align.START)
         self._additional_label.set_no_show_all(True)
