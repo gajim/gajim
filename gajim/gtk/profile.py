@@ -1,3 +1,23 @@
+#
+# This file is part of Gajim.
+#
+# Gajim is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation; version 3 only.
+#
+# Gajim is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+
+from typing import cast
+from typing import Any
+from typing import Optional
+from typing import Union
+
 import logging
 
 from gi.repository import Gio
@@ -5,10 +25,13 @@ from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GLib
 
+import cairo
+
 from nbxmpp.errors import StanzaError
 from nbxmpp.namespaces import Namespace
 from nbxmpp.modules.vcard4 import VCard
 from nbxmpp.modules.user_avatar import Avatar
+from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
@@ -43,7 +66,7 @@ MENU_DICT = {
 
 
 class ProfileWindow(Gtk.ApplicationWindow):
-    def __init__(self, account, *args):
+    def __init__(self, account: str) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -70,15 +93,15 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._ui.add_entry_button.set_menu_model(menu)
         self._add_actions()
 
-        self._avatar_selector = None
-        self._current_avatar = None
-        self._current_vcard = None
-        self._avatar_nick_public = None
+        self._avatar_selector: Optional[AvatarSelector] = None
+        self._current_avatar: Optional[cairo.Surface] = None
+        self._current_vcard: Optional[VCard] = None
+        self._avatar_nick_public: Optional[bool] = None
 
         # False  - no change to avatar
         # None   - we want to delete the avatar
         # Avatar - upload new avatar
-        self._new_avatar = False
+        self._new_avatar: Union[None, bool, Avatar] = False
 
         self._ui.nickname_entry.set_text(app.nicks[account])
 
@@ -115,14 +138,14 @@ class ProfileWindow(Gtk.ApplicationWindow):
             user_data=Namespace.NICK)
 
         self._ui.connect_signals(self)
-        self.connect('key-press-event', self._on_key_press_event)
+        self.connect('key-press-event', self._on_key_press)
 
         self.connect('destroy', self._on_destroy)
 
-    def _on_destroy(self, *args):
+    def _on_destroy(self, *args: Any) -> None:
         app.check_finalize(self)
 
-    def _on_access_model_received(self, task):
+    def _on_access_model_received(self, task: Task) -> None:
         namespace = task.get_user_data()
 
         try:
@@ -142,11 +165,12 @@ class ProfileWindow(Gtk.ApplicationWindow):
             else:
                 self._avatar_nick_public = (self._avatar_nick_public or
                                             access_model)
+            assert self._avatar_nick_public
             self._set_avatar_nick_access_switch(self._avatar_nick_public)
 
-    def _on_vcard_received(self, task):
+    def _on_vcard_received(self, task: Task):
         try:
-            self._current_vcard = task.finish()
+            self._current_vcard = cast(VCard, task.finish())
         except StanzaError as error:
             log.info('Error loading VCard: %s', error)
             self._current_vcard = VCard()
@@ -159,7 +183,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._ui.profile_stack.set_visible_child_name('profile')
         self._ui.spinner.stop()
 
-    def _load_avatar(self):
+    def _load_avatar(self) -> None:
         scale = self.get_scale_factor()
         self._current_avatar = self._contact.get_avatar(AvatarSize.VCARD,
                                                         scale,
@@ -167,24 +191,27 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._ui.avatar_image.set_from_surface(self._current_avatar)
         self._ui.avatar_image.show()
 
-    def _on_key_press_event(self, _widget, event):
+    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
-    def _add_actions(self):
+    def _add_actions(self) -> None:
         for action in MENU_DICT:
             action_name = 'add-' + action.lower()
             act = Gio.SimpleAction.new(action_name, None)
             act.connect('activate', self._on_action)
             self.add_action(act)
 
-    def _on_action(self, action, _param):
+    def _on_action(self,
+                   action: Gio.SimpleAction,
+                   _param: Optional[GLib.Variant]
+                   ) -> None:
         name = action.get_name()
         key = name.split('-')[1]
         self._vcard_grid.add_new_property(key)
         GLib.idle_add(scroll_to_end, self._ui.scrolled)
 
-    def _on_edit_clicked(self, *args):
+    def _on_edit_clicked(self, *args: Any) -> None:
         self._vcard_grid.set_editable(True)
         self._ui.edit_button.hide()
         self._ui.add_entry_button.set_no_show_all(False)
@@ -196,7 +223,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._ui.nickname_entry.set_sensitive(True)
         self._ui.privacy_button.show()
 
-    def _on_cancel_clicked(self, _widget):
+    def _on_cancel_clicked(self, _button: Gtk.Button) -> None:
         self._vcard_grid.set_editable(False)
         self._ui.edit_button.show()
         self._ui.add_entry_button.hide()
@@ -211,7 +238,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._vcard_grid.set_vcard(self._current_vcard.copy())
         self._new_avatar = False
 
-    def _on_save_clicked(self, _widget):
+    def _on_save_clicked(self, _button: Gtk.Button) -> None:
         self._ui.spinner.start()
         self._ui.profile_stack.set_visible_child_name('spinner')
         self._ui.add_entry_button.hide()
@@ -256,7 +283,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
                 self.account, 'name')
         app.nicks[self.account] = nick
 
-    def _on_set_avatar(self, task):
+    def _on_set_avatar(self, task: Task) -> None:
         try:
             task.finish()
         except StanzaError as error:
@@ -278,7 +305,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
             self._new_avatar = False
             return
 
-    def _on_remove_avatar(self, _button):
+    def _on_remove_avatar(self, _button: Gtk.Button) -> None:
         scale = self.get_scale_factor()
         surface = self._contact.get_avatar(AvatarSize.VCARD,
                                            scale,
@@ -289,8 +316,8 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._ui.remove_avatar_button.hide()
         self._new_avatar = None
 
-    def _on_edit_avatar(self, button):
-        def _on_file_selected(path):
+    def _on_edit_avatar(self, button: Gtk.Button) -> None:
+        def _on_file_selected(path: str) -> None:
             if self._avatar_selector is None:
                 self._avatar_selector = AvatarSelector()
                 self._ui.avatar_selector_box.add(self._avatar_selector)
@@ -303,10 +330,11 @@ class ProfileWindow(Gtk.ApplicationWindow):
         AvatarChooserDialog(_on_file_selected,
                             transient_for=button.get_toplevel())
 
-    def _on_cancel_update_avatar(self, _button):
+    def _on_cancel_update_avatar(self, _button: Gtk.Button) -> None:
         self._ui.profile_stack.set_visible_child_name('profile')
 
-    def _on_update_avatar(self, _button):
+    def _on_update_avatar(self, _button: Gtk.Button) -> None:
+        assert self._avatar_selector
         success, data, width, height = self._avatar_selector.get_avatar_bytes()
         if not success:
             self._ui.profile_stack.set_visible_child_name('profile')
@@ -314,6 +342,9 @@ class ProfileWindow(Gtk.ApplicationWindow):
                         _('Failed to generate avatar.'))
             return
 
+        assert data
+        assert height
+        assert width
         sha = app.app.avatar_storage.save_avatar(data)
         if sha is None:
             self._ui.profile_stack.set_visible_child_name('profile')
@@ -327,29 +358,31 @@ class ProfileWindow(Gtk.ApplicationWindow):
         scale = self.get_scale_factor()
         surface = app.app.avatar_storage.surface_from_filename(
             sha, AvatarSize.VCARD, scale)
+        if surface is None:
+            return
 
         self._ui.avatar_image.set_from_surface(clip_circle(surface))
         self._ui.remove_avatar_button.show()
         self._ui.profile_stack.set_visible_child_name('profile')
 
-    def _set_vcard_access_switch(self, state):
+    def _set_vcard_access_switch(self, state: bool) -> None:
         self._ui.vcard_access.set_active(state)
         self._ui.vcard_access_label.set_text(
             _('Everyone') if state else _('Contacts'))
 
-    def _set_avatar_nick_access_switch(self, state):
+    def _set_avatar_nick_access_switch(self, state: bool) -> None:
         self._ui.avatar_nick_access.set_active(state)
         self._ui.avatar_nick_access_label.set_text(
             _('Everyone') if state else _('Contacts'))
 
-    def _access_switch_toggled(self, *args):
+    def _access_switch_toggled(self, *args: Any) -> None:
         state = self._ui.vcard_access.get_active()
         self._set_vcard_access_switch(state)
 
         state = self._ui.avatar_nick_access.get_active()
         self._set_avatar_nick_access_switch(state)
 
-    def _on_save_finished(self, task):
+    def _on_save_finished(self, task: Task) -> None:
         try:
             task.finish()
         except StanzaError as err:
