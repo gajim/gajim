@@ -30,7 +30,7 @@ from gi.repository import GLib
 from gi.repository import Gtk
 
 from nbxmpp import JID
-from nbxmpp import Namespace
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common import ged
@@ -39,6 +39,8 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 from gajim.common.const import PresenceShowExt
 from gajim.common.events import ApplicationEvent
+from gajim.common.events import RosterPush
+from gajim.common.events import RosterReceived
 from gajim.common.helpers import event_filter
 from gajim.common.i18n import _
 
@@ -358,11 +360,12 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
                 if contact.jid.domain == selected_contact.jid.domain:
                     has_transport_contacts = True
                     break
-            if has_transport_contacts:
-                def _on_remove():
-                    self._client.get_module('Gateway').unsubscribe(
-                        selected_contact.jid)
 
+            def _on_remove():
+                self._client.get_module('Gateway').unsubscribe(
+                    selected_contact.jid)
+
+            if has_transport_contacts:
                 ConfirmationDialog(
                     _('Remove Transport'),
                     _('Transport \'%s\' will be '
@@ -406,6 +409,9 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             return
 
         path, _, _, _ = pos
+        if path is None:
+            return
+
         path = self._modelfilter.convert_path_to_child_path(path)
         assert path is not None
         iter_ = self._store.get_iter(path)
@@ -524,12 +530,12 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._draw_contact(contact)
 
     @event_filter(['account'])
-    def _on_roster_received(self, _event: ApplicationEvent) -> None:
+    def _on_roster_received(self, _event: RosterReceived) -> None:
         self._reset_roster()
 
     @event_filter(['account'])
-    def _on_roster_push(self, event: ApplicationEvent) -> None:
-        contact = self._get_contact(event.item.jid)
+    def _on_roster_push(self, event: RosterPush) -> None:
+        contact = self._get_contact(str(event.item.jid))
 
         if event.item.subscription == 'remove':
             contact.disconnect(self)
@@ -718,15 +724,15 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         has_parent = bool(model.iter_parent(iter_))
         style = 'contact' if has_parent else 'group'
 
-        bgcolor = app.css_config.get_value('.gajim-%s-row' % style,
+        bgcolor = app.css_config.get_value(f'.gajim-{style}-row',
                                            StyleAttr.BACKGROUND)
         renderer.set_property('cell-background', bgcolor)
 
-        color = app.css_config.get_value('.gajim-%s-row' % style,
+        color = app.css_config.get_value(f'.gajim-{style}-row',
                                          StyleAttr.COLOR)
         renderer.set_property('foreground', color)
 
-        desc = app.css_config.get_font('.gajim-%s-row' % style)
+        desc = app.css_config.get_font(f'.gajim-{style}-row')
         renderer.set_property('font-desc', desc)
 
         if not has_parent:
