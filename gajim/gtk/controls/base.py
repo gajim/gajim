@@ -1436,20 +1436,12 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         else:
             timestamp = row.db_timestamp
 
-        if self.is_groupchat:
-            messages = app.storage.archive.get_conversation_muc_before_after(
-                self.account,
-                self.contact.jid,
-                before,
-                timestamp,
-                n_lines)
-        else:
-            messages = app.storage.archive.get_conversation_before_after(
-                self.account,
-                self.contact.jid,
-                before,
-                timestamp,
-                n_lines)
+        messages = app.storage.archive.get_conversation_before_after(
+            self.account,
+            self.contact.jid,
+            before,
+            timestamp,
+            n_lines)
 
         self._chat_loaded = True
 

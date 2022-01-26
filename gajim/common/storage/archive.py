@@ -414,53 +414,6 @@ class MessageArchiveStorage(SqliteStorage):
             tuple(jids) + (timestamp, n_lines)).fetchall()
 
     @timeit
-    def get_conversation_muc_before_after(self,
-                                          _account: str,
-                                          jid: JID,
-                                          before: bool,
-                                          timestamp: float,
-                                          n_lines: int
-                                          ) -> list[ConversationRow]:
-        """
-        Load n_lines lines of conversation with jid before or after timestamp
-
-        :param account:         The account
-
-        :param jid:             The jid for which we request the conversation
-
-        :param before:          bool for direction (before or after timestamp)
-
-        :param timestamp:       timestamp
-
-        returns a list of namedtuples
-        """
-        jids = [jid]
-        if before:
-            time_order = 'AND time < ? ORDER BY time DESC, log_line_id DESC'
-        else:
-            time_order = 'AND time > ? ORDER BY time ASC, log_line_id ASC'
-
-        # TODO: this does not load messages correctly when account_id is set
-        # account_id = self.get_account_id(account, type_=JIDConstant.ROOM_TYPE)
-
-        sql = '''
-            SELECT contact_name, time, kind, show, message, subject,
-                   additional_data, log_line_id, message_id, stanza_id,
-                   error as "error [common_error]",
-                   marker as "marker [marker]"
-            FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
-            AND kind = {kind}
-            {time_order}
-            LIMIT ?
-            '''.format(jids=', '.join('?' * len(jids)),
-                       kind=KindConstant.GC_MSG,
-                       time_order=time_order)
-
-        return self._con.execute(
-            sql,
-            tuple(jids) + (timestamp, n_lines)).fetchall()
-
-    @timeit
     def get_last_conversation_line(self,
                                    account: str,
                                    jid: JID
