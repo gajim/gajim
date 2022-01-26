@@ -82,10 +82,10 @@ class MamPreferences(Gtk.ApplicationWindow, EventHelper):
         self._ui.default_combo.set_active_id(result.default)
         self._ui.preferences_store.clear()
         for jid in result.always:
-            self._ui.preferences_store.append((str(jid), True))
+            self._ui.preferences_store.append([str(jid), True])
 
         for jid in result.never:
-            self._ui.preferences_store.append((str(jid), False))
+            self._ui.preferences_store.append([str(jid), False])
 
     def _mam_prefs_saved(self, task: Task) -> None:
         try:
