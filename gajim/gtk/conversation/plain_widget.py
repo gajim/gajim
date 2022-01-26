@@ -80,6 +80,7 @@ class MessageLabel(Gtk.Label):
         self.set_xalign(0)
         self.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
         self.set_track_visited_links(False)
+        self.set_can_focus(False)
 
         self._account = account
 
