@@ -25,6 +25,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.gtk.groupchat_affiliation import GroupchatAffiliation
+from gajim.gtk.groupchat_outcasts import GroupchatOutcasts
 
 from .builder import get_builder
 from .groupchat_info import GroupChatInfoScrolled
@@ -63,6 +64,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self._add_groupchat_info()
         self._add_groupchat_settings()
         self._add_affiliations()
+        self._add_outcasts()
 
         self._load_avatar()
         self._ui.name_entry.set_text(contact.name)
@@ -119,6 +121,10 @@ class GroupchatDetails(Gtk.ApplicationWindow):
     def _add_affiliations(self) -> None:
         affiliations = GroupchatAffiliation(self._client, self._contact)
         self._ui.affiliation_box.add(affiliations)
+
+    def _add_outcasts(self) -> None:
+        affiliations = GroupchatOutcasts(self._client, self._contact)
+        self._ui.outcasts_box.add(affiliations)
 
     def _on_key_press(self,
                       _widget: GroupchatDetails,

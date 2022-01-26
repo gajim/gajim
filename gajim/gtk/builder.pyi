@@ -499,6 +499,7 @@ class GroupchatDetailsBuilder(Builder):
     info_box: Gtk.Box
     settings_box: Gtk.Box
     affiliation_box: Gtk.Box
+    outcasts_box: Gtk.Box
 
 
 class GroupchatInfoScrolledBuilder(Builder):
@@ -538,6 +539,22 @@ class GroupchatNickChooserBuilder(Builder):
     label: Gtk.Label
     popover: Gtk.Popover
     entry: Gtk.Entry
+    apply_button: Gtk.Button
+
+
+class GroupchatOutcastBuilder(Builder):
+    info_popover: Gtk.Popover
+    outcast_store: Gtk.ListStore
+    main_box: Gtk.Box
+    outcast_scrolled: Gtk.ScrolledWindow
+    outcast_treeview: Gtk.TreeView
+    button_box: Gtk.Box
+    add_remove_button_box: Gtk.Box
+    add_button: Gtk.Button
+    remove_button: Gtk.Button
+    info_button: Gtk.MenuButton
+    status_image: Gtk.Image
+    spinner: Gtk.Spinner
     apply_button: Gtk.Button
 
 
@@ -808,7 +825,6 @@ class ServerInfoBuilder(Builder):
     no_addresses_label: Gtk.Label
     connection_type: Gtk.Label
     proxy_type: Gtk.Label
-    cert_button: Gtk.Button
     proxy_host: Gtk.Label
     domain_label: Gtk.Label
     dns_label: Gtk.Label
@@ -1019,6 +1035,8 @@ def get_builder(file_name: Literal['groupchat_info_scrolled.ui'], widgets: list[
 def get_builder(file_name: Literal['groupchat_inviter.ui'], widgets: list[str] = ...) -> GroupchatInviterBuilder: ...
 @overload
 def get_builder(file_name: Literal['groupchat_nick_chooser.ui'], widgets: list[str] = ...) -> GroupchatNickChooserBuilder: ...
+@overload
+def get_builder(file_name: Literal['groupchat_outcast.ui'], widgets: list[str] = ...) -> GroupchatOutcastBuilder: ...
 @overload
 def get_builder(file_name: Literal['groupchat_roster.ui'], widgets: list[str] = ...) -> GroupchatRosterBuilder: ...
 @overload

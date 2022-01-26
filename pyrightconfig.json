@@ -46,6 +46,7 @@
         "gajim/gtk/groupchat_invitation.py",
         "gajim/gtk/groupchat_inviter.py",
         "gajim/gtk/groupchat_nick.py",
+        "gajim/gtk/groupchat_outcasts.py",
         "gajim/gtk/groupchat_settings.py",
         "gajim/gtk/groupchat_state.py",
         "gajim/gtk/main.py",
