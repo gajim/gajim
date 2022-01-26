@@ -418,7 +418,7 @@ class RosterItemExchangeEvent(ApplicationEvent):
     name: str = field(init=False, default='roster-item-exchange')
     client: 'Client'
     jid: JID
-    exchange_items_list: list[str]
+    exchange_items_list: dict[str, list[str]]
     action: str
 
 
