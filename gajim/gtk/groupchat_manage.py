@@ -26,10 +26,12 @@ from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
+from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 
 from .avatar_selector import AvatarSelector
 from .builder import get_builder
+from .dialogs import ErrorDialog
 from .filechoosers import AvatarChooserDialog
 
 log = logging.getLogger('gajim.gui.groupchat_manage')
@@ -201,26 +203,21 @@ class GroupchatManage(Gtk.Box):
         try:
             task.finish()
         except Exception as error:
-            print(error)
-            pass
-            # self.add_info_message(_('Avatar upload failed: %s') % error)
-
-        else:
-            pass
-            # self.add_info_message(_('Avatar upload successful'))
+            ErrorDialog(_('Uploading Avatar Failed'),
+                        _('Uploading avatar image failed: %s' % error))
 
     def _on_avatar_update_clicked(self, _button: Gtk.Button) -> None:
-        success, data, _, _ = self._avatar_selector.get_avatar_bytes()
+        success, data, _w, _h = self._avatar_selector.get_avatar_bytes()
         if not success:
-            pass
-            # self.add_info_message(_('Loading avatar failed'))
+            ErrorDialog(_('Loading Avatar Failed'),
+                        _('Loading avatar image failed'))
             return
 
         assert data
         sha = app.app.avatar_storage.save_avatar(data)
         if sha is None:
-            pass
-            # self.add_info_message(_('Loading avatar failed'))
+            ErrorDialog(_('Saving Avatar Failed'),
+                        _('Saving avatar image failed'))
             return
 
         vcard = VCard()
