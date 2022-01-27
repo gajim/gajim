@@ -437,7 +437,9 @@ class GroupchatControl(BaseControl):
                     _action: Gio.SimpleAction,
                     _param: Optional[GLib.Variant]
                     ) -> None:
-        open_window('GroupchatDetails', contact=self.contact)
+        open_window('GroupchatDetails',
+                    contact=self.contact,
+                    subject=self._subject_text)
 
     def _on_groupchat_manage(self,
                              _action: Gio.SimpleAction,

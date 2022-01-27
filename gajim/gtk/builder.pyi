@@ -500,6 +500,9 @@ class GroupchatDetailsBuilder(Builder):
     settings_box: Gtk.Box
     affiliation_box: Gtk.Box
     outcasts_box: Gtk.Box
+    subject_box: Gtk.Box
+    subject_textview: Gtk.TextView
+    subject_change_button: Gtk.Button
 
 
 class GroupchatInfoScrolledBuilder(Builder):
