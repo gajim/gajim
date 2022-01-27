@@ -86,30 +86,6 @@
         <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkButton" id="manage_change_subject_button">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <signal name="clicked" handler="_on_change_subject" swapped="no"/>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes">Change Subject…</property>
-              </object>
-            </child>
-            <style>
-              <class name="flat"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkButton" id="manage_advanced_button">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
@@ -771,121 +747,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <!-- n-columns=1 n-rows=3 -->
-                  <object class="GtkGrid">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="row-spacing">12</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes">Change Subject</property>
-                        <property name="xalign">0</property>
-                        <style>
-                          <class name="bold16"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="homogeneous">True</property>
-                        <child>
-                          <object class="GtkButton">
-                            <property name="label" translatable="yes">_Cancel</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="halign">start</property>
-                            <property name="valign">start</property>
-                            <property name="use-underline">True</property>
-                            <signal name="clicked" handler="_on_page_cancel_clicked" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="subject_change_button">
-                            <property name="label" translatable="yes">Ch_ange</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="can-default">True</property>
-                            <property name="receives-default">True</property>
-                            <property name="halign">end</property>
-                            <property name="valign">start</property>
-                            <property name="use-underline">True</property>
-                            <signal name="clicked" handler="_on_subject_change_clicked" swapped="no"/>
-                            <style>
-                              <class name="suggested-action"/>
-                            </style>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkScrolledWindow">
-                        <property name="width-request">450</property>
-                        <property name="height-request">250</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="hscrollbar-policy">never</property>
-                        <property name="shadow-type">in</property>
-                        <child>
-                          <object class="GtkTextView" id="subject_textview">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="wrap-mode">word-char</property>
-                            <property name="left-margin">3</property>
-                            <property name="right-margin">3</property>
-                            <property name="top-margin">3</property>
-                            <property name="bottom-margin">3</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="name">subject</property>
-                <property name="position">2</property>
-              </packing>
+              <placeholder/>
             </child>
             <child>
               <object class="GtkBox">
@@ -1748,9 +1610,6 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
-            </child>
-            <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -1826,7 +1685,7 @@
               </object>
               <packing>
                 <property name="name">invite</property>
-                <property name="position">11</property>
+                <property name="position">10</property>
               </packing>
             </child>
             <child>
@@ -2040,7 +1899,7 @@
               </object>
               <packing>
                 <property name="name">muc-manage</property>
-                <property name="position">12</property>
+                <property name="position">11</property>
               </packing>
             </child>
             <child>
@@ -2149,7 +2008,7 @@
               </object>
               <packing>
                 <property name="name">avatar-selector</property>
-                <property name="position">13</property>
+                <property name="position">12</property>
               </packing>
             </child>
           </object>

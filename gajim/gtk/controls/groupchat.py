@@ -362,9 +362,6 @@ class GroupchatControl(BaseControl):
                 contact.affiliation.is_owner):
             self.xml.avatar_select_button.show()
 
-        self.xml.manage_change_subject_button.set_sensitive(
-            joined and self._is_subject_change_allowed())
-
         self.xml.manage_advanced_button.set_sensitive(
             joined and contact.affiliation in (Affiliation.ADMIN,
                                                Affiliation.OWNER))
@@ -405,18 +402,6 @@ class GroupchatControl(BaseControl):
         if self.disco_info is None:
             return False
         return self.disco_info.is_irc
-
-    def _is_subject_change_allowed(self) -> Optional[Any]:
-        contact = self.contact.get_self()
-        if contact is None:
-            return False
-
-        if contact.affiliation in (Affiliation.OWNER, Affiliation.ADMIN):
-            return True
-
-        if self.disco_info is None:
-            return False
-        return self.disco_info.muc_subjectmod or False
 
     def _show_page(self, name: str) -> None:
         transition = Gtk.StackTransitionType.SLIDE_DOWN
@@ -1559,8 +1544,10 @@ class GroupchatControl(BaseControl):
             return Gdk.EVENT_STOP
 
         if action == 'change-subject':
-            control_action = f'{action}-{self.control_id}'
-            app.window.lookup_action(control_action).activate()
+            open_window('GroupchatDetails',
+                contact=self.contact,
+                subject=self._subject_text,
+                page='subject')
             return Gdk.EVENT_STOP
 
         if action == 'show-contact-info':
@@ -1578,8 +1565,6 @@ class GroupchatControl(BaseControl):
             self.xml.password_entry.grab_focus_without_selecting()
         elif page_name == 'nickname':
             self.xml.nickname_entry.grab_focus_without_selecting()
-        elif page_name == 'subject':
-            self.xml.subject_textview.grab_focus()
         elif page_name == 'captcha':
             self._captcha_request.focus_first_entry()
         elif page_name == 'invite':
@@ -1660,21 +1645,6 @@ class GroupchatControl(BaseControl):
             con.get_module('MUC').set_config(
                 self.room_jid, self._room_config_form)
 
-        self._show_page('groupchat')
-
-    def _on_change_subject(self, _button: Gtk.Button) -> None:
-        if self._get_current_page() not in ('groupchat', 'muc-manage'):
-            return
-        self.xml.subject_textview.get_buffer().set_text(self._subject_text)
-        self.xml.subject_textview.grab_focus()
-        self._show_page('subject')
-
-    def _on_subject_change_clicked(self, _button: Gtk.Button) -> None:
-        buffer_ = self.xml.subject_textview.get_buffer()
-        subject = buffer_.get_text(buffer_.get_start_iter(),
-                                   buffer_.get_end_iter(),
-                                   False)
-        self._client.get_module('MUC').set_subject(self.room_jid, subject)
         self._show_page('groupchat')
 
     def _on_password_set_clicked(self, _button: Gtk.Button) -> None:
