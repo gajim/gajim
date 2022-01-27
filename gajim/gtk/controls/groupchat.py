@@ -30,14 +30,11 @@ from typing import Optional
 import logging
 
 from nbxmpp import JID
-from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import InvalidJid
 from nbxmpp.protocol import validate_resourcepart
 from nbxmpp.const import StatusCode
-from nbxmpp.const import Affiliation
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules.security_labels import Displaymarking
-from nbxmpp.modules.vcard_temp import VCard
 from nbxmpp.structs import PresenceProperties
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import MucSubject
@@ -73,9 +70,7 @@ from gajim.gui.const import TARGET_TYPE_URI_LIST
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationCheckDialog
 from gajim.gui.dialogs import ConfirmationDialog
-from gajim.gui.filechoosers import AvatarChooserDialog
 from gajim.gui.groupchat_config import GroupchatConfig
-from gajim.gui.avatar_selector import AvatarSelector
 from gajim.gui.dataform import DataFormWidget
 from gajim.gui.groupchat_inviter import GroupChatInviter
 from gajim.gui.groupchat_roster import GroupchatRoster
@@ -171,10 +166,6 @@ class GroupchatControl(BaseControl):
 
         self._subject_text = ''
 
-        # Holds the room’s config form, which is requested when managing
-        # the room
-        self._room_config_form = None
-
         # Groupchat invite
         self.xml.quick_invite_button.set_action_name(
             f'win.invite-{self.control_id}')
@@ -182,11 +173,6 @@ class GroupchatControl(BaseControl):
         self._invite_box = GroupChatInviter(self.room_jid)
         self.xml.invite_grid.attach(self._invite_box, 0, 0, 1, 1)
         self._invite_box.connect('listbox-changed', self._on_invite_ready)
-
-        # Avatar selector
-        self._avatar_selector = AvatarSelector()
-        self._avatar_selector.set_size_request(400, 400)
-        self.xml.avatar_selector_grid.attach(self._avatar_selector, 0, 1, 1, 1)
 
         self.control_menu = get_groupchat_menu(self.control_id,
                                                self.account,
@@ -285,7 +271,6 @@ class GroupchatControl(BaseControl):
     def add_actions(self) -> None:
         super().add_actions()
         actions = [
-            ('groupchat-manage-', None, self._on_groupchat_manage),
             ('change-nickname-', None, self._on_change_nick),
             ('destroy-', None, self._on_destroy_room),
             ('configure-', None, self._on_configure_room),
@@ -345,30 +330,6 @@ class GroupchatControl(BaseControl):
             tooltip_text = _('No File Transfer available')
         self.xml.sendfile_button.set_tooltip_text(tooltip_text)
 
-        # Manage chat
-        self._get_action('groupchat-manage-').set_enabled(
-            joined and contact.affiliation in (Affiliation.ADMIN,
-                                               Affiliation.OWNER))
-
-        vcard_support = False
-        if self.disco_info is not None:
-            vcard_support = self.disco_info.supports(Namespace.VCARD)
-
-            self.xml.muc_name_entry.set_text(self.disco_info.muc_name or '')
-            self.xml.muc_description_entry.set_text(
-                self.disco_info.muc_description or '')
-
-        if (joined and vcard_support and
-                contact.affiliation.is_owner):
-            self.xml.avatar_select_button.show()
-
-        self.xml.manage_advanced_button.set_sensitive(
-            joined and contact.affiliation in (Affiliation.ADMIN,
-                                               Affiliation.OWNER))
-
-        self.xml.manage_destroy_button.set_sensitive(
-            joined and contact.affiliation.is_owner)
-
         self._get_action('contact-information-').set_enabled(joined)
 
         self._get_action('execute-command-').set_enabled(joined)
@@ -380,7 +341,6 @@ class GroupchatControl(BaseControl):
     def remove_actions(self) -> None:
         super().remove_actions()
         actions = [
-            'groupchat-manage-',
             'change-nickname-',
             'destroy-',
             'configure-',
@@ -425,38 +385,6 @@ class GroupchatControl(BaseControl):
         open_window('GroupchatDetails',
                     contact=self.contact,
                     subject=self._subject_text)
-
-    def _on_groupchat_manage(self,
-                             _action: Gio.SimpleAction,
-                             _param: Optional[GLib.Variant]
-                             ) -> None:
-        surface = app.app.avatar_storage.get_muc_surface(
-            self.account,
-            self.contact.jid,
-            AvatarSize.GROUP_INFO,
-            self.scale_factor)
-        self.xml.avatar_button_image.set_from_surface(surface)
-
-        self._show_page('muc-manage')
-        self.xml.manage_save_button.grab_default()
-
-        contact = self.contact.get_self()
-        if contact.affiliation.is_owner:
-            con = app.connections[self.account]
-            con.get_module('MUC').request_config(
-                self.room_jid, callback=self._on_manage_form_received)
-
-    def _on_manage_form_received(self, task: Task) -> None:
-        try:
-            result = task.finish()
-        except StanzaError as error:
-            log.info(error)
-            return
-
-        self.xml.muc_name_entry.set_sensitive(True)
-        self.xml.muc_description_entry.set_sensitive(True)
-        self.xml.manage_save_button.set_sensitive(True)
-        self._room_config_form = result.form
 
     def _on_invite(self,
                    _action: Gio.SimpleAction,
@@ -515,8 +443,6 @@ class GroupchatControl(BaseControl):
         self._show_page('groupchat')
 
     def _on_configure_room(self, _button: Gtk.Button) -> None:
-        self.xml.manage_popover.popdown()
-
         win = get_app_window('GroupchatConfig', self.account, self.room_jid)
         if win is not None:
             win.present()
@@ -563,58 +489,6 @@ class GroupchatControl(BaseControl):
         if nick:
             jid += '/' + nick
         open_window('AdHocCommands', account=self.account, jid=jid)
-
-    def _on_change_avatar(self, _button: Gtk.Button) -> None:
-        def _on_accept(path: str) -> None:
-            self._avatar_selector.prepare_crop_area(path)
-            self.xml.avatar_update_button.set_sensitive(
-                self._avatar_selector.get_prepared())
-            self._show_page('avatar-selector')
-            self.xml.avatar_update_button.grab_default()
-
-        AvatarChooserDialog(_on_accept,
-                            transient_for=app.window,
-                            modal=True)
-
-    def _on_avatar_select_file_clicked(self, _button: Gtk.Button) -> None:
-        def _on_accept(path: str) -> None:
-            self._avatar_selector.prepare_crop_area(path)
-            self.xml.avatar_update_button.set_sensitive(
-                self._avatar_selector.get_prepared())
-
-        AvatarChooserDialog(_on_accept,
-                            transient_for=app.window,
-                            modal=True)
-
-    def _on_upload_avatar_result(self, task: Task) -> None:
-        try:
-            task.finish()
-        except Exception as error:
-            self.add_info_message(_('Avatar upload failed: %s') % error)
-
-        else:
-            self.add_info_message(_('Avatar upload successful'))
-
-    def _on_avatar_update_clicked(self, _button: Gtk.Button) -> None:
-        success, data, _, _ = self._avatar_selector.get_avatar_bytes()
-        if not success:
-            self.add_info_message(_('Loading avatar failed'))
-            return
-
-        sha = app.app.avatar_storage.save_avatar(data)
-        if sha is None:
-            self.add_info_message(_('Loading avatar failed'))
-            return
-
-        vcard = VCard()
-        vcard.set_avatar(data, 'image/png')
-
-        client = app.get_client(self.account)
-        client.get_module('VCardTemp').set_vcard(
-            vcard,
-            jid=self.room_jid,
-            callback=self._on_upload_avatar_result)
-        self._show_page('groupchat')
 
     def _on_contact_information(self,
                                 _action: Gio.SimpleAction,
@@ -1547,7 +1421,7 @@ class GroupchatControl(BaseControl):
             open_window('GroupchatDetails',
                 contact=self.contact,
                 subject=self._subject_text,
-                page='subject')
+                page='manage')
             return Gdk.EVENT_STOP
 
         if action == 'show-contact-info':
@@ -1626,25 +1500,6 @@ class GroupchatControl(BaseControl):
     def _on_nickname_change_clicked(self, _button: Gtk.Button) -> None:
         new_nick = self.xml.nickname_entry.get_text()
         self._client.get_module('MUC').change_nick(self.room_jid, new_nick)
-        self._show_page('groupchat')
-
-    def _on_manage_save_clicked(self, _button: Gtk.Button) -> None:
-        if self._room_config_form is not None:
-            name = self.xml.muc_name_entry.get_text()
-            desc = self.xml.muc_description_entry.get_text()
-            try:
-                name_field = self._room_config_form['muc#roomconfig_roomname']
-                desc_field = self._room_config_form['muc#roomconfig_roomdesc']
-            except KeyError:
-                pass
-            else:
-                name_field.value = name
-                desc_field.value = desc
-
-            con = app.connections[self.account]
-            con.get_module('MUC').set_config(
-                self.room_jid, self._room_config_form)
-
         self._show_page('groupchat')
 
     def _on_password_set_clicked(self, _button: Gtk.Button) -> None:

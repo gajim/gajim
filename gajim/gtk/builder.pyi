@@ -408,7 +408,6 @@ class GroupchatControlBuilder(Builder):
     italic: Gtk.MenuItem
     strike: Gtk.MenuItem
     manage_popover: Gtk.Popover
-    manage_change_subject_button: Gtk.Button
     manage_advanced_button: Gtk.Button
     manage_destroy_button: Gtk.Button
     groupchat_control_hbox: Gtk.Box
@@ -439,8 +438,6 @@ class GroupchatControlBuilder(Builder):
     roster_revealer: Gtk.Revealer
     nickname_entry: Gtk.Entry
     nickname_change_button: Gtk.Button
-    subject_change_button: Gtk.Button
-    subject_textview: Gtk.TextView
     password_set_button: Gtk.Button
     password_entry: Gtk.Entry
     captcha_set_button: Gtk.Button
@@ -498,11 +495,9 @@ class GroupchatDetailsBuilder(Builder):
     main_stack: Gtk.Stack
     info_box: Gtk.Box
     settings_box: Gtk.Box
+    manage_box: Gtk.Box
     affiliation_box: Gtk.Box
     outcasts_box: Gtk.Box
-    subject_box: Gtk.Box
-    subject_textview: Gtk.TextView
-    subject_change_button: Gtk.Button
 
 
 class GroupchatInfoScrolledBuilder(Builder):
@@ -535,6 +530,20 @@ class GroupchatInviterBuilder(Builder):
     contacts_listbox: Gtk.ListBox
     contacts_placeholder: Gtk.Box
     invitees_scrolled: Gtk.ScrolledWindow
+
+
+class GroupchatManageBuilder(Builder):
+    stack: Gtk.Stack
+    avatar_button_image: Gtk.Image
+    avatar_select_button: Gtk.Button
+    muc_description_entry: Gtk.Entry
+    muc_name_entry: Gtk.Entry
+    manage_save_button: Gtk.Button
+    subject_textview: Gtk.TextView
+    subject_change_button: Gtk.Button
+    avatar_selector_grid: Gtk.Grid
+    avatar_update_button: Gtk.Button
+    subject_buffer: Gtk.TextBuffer
 
 
 class GroupchatNickChooserBuilder(Builder):
@@ -1036,6 +1045,8 @@ def get_builder(file_name: Literal['groupchat_details.ui'], widgets: list[str] =
 def get_builder(file_name: Literal['groupchat_info_scrolled.ui'], widgets: list[str] = ...) -> GroupchatInfoScrolledBuilder: ...
 @overload
 def get_builder(file_name: Literal['groupchat_inviter.ui'], widgets: list[str] = ...) -> GroupchatInviterBuilder: ...
+@overload
+def get_builder(file_name: Literal['groupchat_manage.ui'], widgets: list[str] = ...) -> GroupchatManageBuilder: ...
 @overload
 def get_builder(file_name: Literal['groupchat_nick_chooser.ui'], widgets: list[str] = ...) -> GroupchatNickChooserBuilder: ...
 @overload

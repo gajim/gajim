@@ -1,0 +1,241 @@
+#
+# Gajim is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published
+# by the Free Software Foundation; version 3 only.
+#
+# Gajim is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+
+from typing import Optional
+
+import logging
+
+from gi.repository import Gtk
+
+from nbxmpp.const import Affiliation
+from nbxmpp.task import Task
+from nbxmpp.errors import StanzaError
+from nbxmpp.structs import MucSubject
+from nbxmpp.modules.vcard_temp import VCard
+from nbxmpp.namespaces import Namespace
+
+from gajim.common import app
+from gajim.common.const import AvatarSize
+from gajim.common.modules.contacts import GroupchatContact
+
+from .avatar_selector import AvatarSelector
+from .builder import get_builder
+from .filechoosers import AvatarChooserDialog
+
+log = logging.getLogger('gajim.gui.groupchat_manage')
+
+
+class GroupchatManage(Gtk.Box):
+    def __init__(self,
+                 account: str,
+                 contact: GroupchatContact,
+                 subject: str
+                 ) -> None:
+        Gtk.Box.__init__(self)
+        self._account = account
+        self._client = app.get_client(account)
+        self._contact = contact
+        self._contact.connect('room-subject', self._on_room_subject)
+
+        self._subject_text = subject
+
+        self._room_config_form = None
+
+        self._ui = get_builder('groupchat_manage.ui')
+        self.add(self._ui.stack)
+        self._ui.connect_signals(self)
+
+        self._avatar_selector = AvatarSelector()
+        self._avatar_selector.set_size_request(500, 500)
+        self._ui.avatar_selector_grid.attach(self._avatar_selector, 0, 1, 1, 1)
+
+        self._prepare_subject()
+        self._prepare_manage()
+
+        self.show_all()
+
+    @property
+    def disco_info(self):
+        return app.storage.cache.get_last_disco_info(self._contact.jid)
+
+    def _prepare_subject(self) -> None:
+        self._ui.subject_textview.get_buffer().set_text(self._subject_text)
+
+        joined = self._contact.is_joined
+        change_allowed = self._is_subject_change_allowed()
+        self._ui.subject_textview.set_sensitive(joined and change_allowed)
+
+    def _is_subject_change_allowed(self) -> bool:
+        contact = self._contact.get_self()
+        if contact is None:
+            return False
+
+        if contact.affiliation in (Affiliation.OWNER, Affiliation.ADMIN):
+            return True
+
+        if self.disco_info is None:
+            return False
+        return self.disco_info.muc_subjectmod or False
+
+    def _on_subject_text_changed(self, buffer_: Gtk.TextBuffer) -> None:
+        text = buffer_.get_text(buffer_.get_start_iter(),
+                                buffer_.get_end_iter(),
+                                False)
+        self._ui.subject_change_button.set_sensitive(
+            text != self._subject_text)
+
+    def _on_subject_change_clicked(self, _button: Gtk.Button) -> None:
+        buffer_ = self._ui.subject_textview.get_buffer()
+        subject = buffer_.get_text(buffer_.get_start_iter(),
+                                   buffer_.get_end_iter(),
+                                   False)
+        self._client.get_module('MUC').set_subject(self._contact.jid, subject)
+
+    def _on_room_subject(self,
+                         _contact: GroupchatContact,
+                         _signal_name: str,
+                         subject: Optional[MucSubject]
+                         ) -> None:
+        if subject is None:
+            return
+
+        self._subject_text = subject.text
+        self._ui.subject_textview.get_buffer().set_text(subject.text)
+
+    def _prepare_manage(self) -> None:
+        joined = self._contact.is_joined
+        vcard_support = False
+        self_contact = self._contact.get_self()
+        assert self_contact
+
+        if self.disco_info is not None:
+            vcard_support = self.disco_info.supports(Namespace.VCARD)
+
+            self._ui.muc_name_entry.set_text(self.disco_info.muc_name or '')
+            self._ui.muc_description_entry.set_text(
+                self.disco_info.muc_description or '')
+
+        if (joined and vcard_support and
+                self_contact.affiliation.is_owner):
+            self._ui.avatar_select_button.show()
+
+        self.update_avatar()
+
+        if self_contact.affiliation.is_owner:
+            self._client.get_module('MUC').request_config(
+                self._contact.jid, callback=self._on_manage_form_received)
+
+    def _on_manage_form_received(self, task: Task) -> None:
+        try:
+            result = task.finish()
+        except StanzaError as error:
+            log.info(error)
+            return
+
+        self._ui.muc_name_entry.set_sensitive(True)
+        self._ui.muc_description_entry.set_sensitive(True)
+        self._room_config_form = result.form
+
+    def _on_name_desc_changed(self, _entry: Gtk.Entry) -> None:
+        if self.disco_info is not None:
+            disco_name = self.disco_info.muc_name or ''
+            disco_desc = self.disco_info.muc_description or ''
+            name = self._ui.muc_name_entry.get_text()
+            desc = self._ui.muc_description_entry.get_text()
+
+            self._ui.manage_save_button.set_sensitive(
+                desc != disco_desc or name != disco_name)
+
+    def _on_manage_save_clicked(self, _button: Gtk.Button) -> None:
+        if self._room_config_form is not None:
+            name = self._ui.muc_name_entry.get_text()
+            desc = self._ui.muc_description_entry.get_text()
+            try:
+                name_field = self._room_config_form['muc#roomconfig_roomname']
+                desc_field = self._room_config_form['muc#roomconfig_roomdesc']
+            except KeyError:
+                pass
+            else:
+                name_field.value = name
+                desc_field.value = desc
+
+            self._client.get_module('MUC').set_config(
+                self._contact.jid, self._room_config_form)
+
+    def _on_avatar_cancel_clicked(self, _button: Gtk.Button) -> None:
+        self._ui.stack.set_visible_child_name('manage')
+
+    def _on_change_avatar_clicked(self, _button: Gtk.Button) -> None:
+        def _on_accept(path: str) -> None:
+            self._avatar_selector.prepare_crop_area(path)
+            self._ui.avatar_update_button.set_sensitive(
+                self._avatar_selector.get_prepared())
+            self._ui.stack.set_visible_child_name('avatar')
+            self._ui.avatar_update_button.grab_default()
+
+        AvatarChooserDialog(_on_accept,
+                            transient_for=self.get_toplevel(),
+                            modal=True)
+
+    def _on_avatar_select_file_clicked(self, _button: Gtk.Button) -> None:
+        def _on_accept(path: str) -> None:
+            self._avatar_selector.prepare_crop_area(path)
+            self._ui.avatar_update_button.set_sensitive(
+                self._avatar_selector.get_prepared())
+
+        AvatarChooserDialog(_on_accept,
+                            transient_for=self.get_toplevel(),
+                            modal=True)
+
+    def _on_upload_avatar_result(self, task: Task) -> None:
+        try:
+            task.finish()
+        except Exception as error:
+            print(error)
+            pass
+            # self.add_info_message(_('Avatar upload failed: %s') % error)
+
+        else:
+            pass
+            # self.add_info_message(_('Avatar upload successful'))
+
+    def _on_avatar_update_clicked(self, _button: Gtk.Button) -> None:
+        success, data, _, _ = self._avatar_selector.get_avatar_bytes()
+        if not success:
+            pass
+            # self.add_info_message(_('Loading avatar failed'))
+            return
+
+        assert data
+        sha = app.app.avatar_storage.save_avatar(data)
+        if sha is None:
+            pass
+            # self.add_info_message(_('Loading avatar failed'))
+            return
+
+        vcard = VCard()
+        vcard.set_avatar(data, 'image/png')
+
+        self._client.get_module('VCardTemp').set_vcard(
+            vcard,
+            jid=self._contact.jid,
+            callback=self._on_upload_avatar_result)
+        self._ui.stack.set_visible_child_name('manage')
+
+    def update_avatar(self):
+        surface = app.app.avatar_storage.get_muc_surface(
+            self._account,
+            self._contact.jid,
+            AvatarSize.GROUP_INFO,
+            self.get_scale_factor())
+        self._ui.avatar_button_image.set_from_surface(surface)

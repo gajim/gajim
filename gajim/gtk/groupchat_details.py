@@ -20,11 +20,10 @@ from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Gtk
 
-from nbxmpp.const import Affiliation
-from nbxmpp.structs import MucSubject
-
 from gajim.common import app
+from gajim.common import ged
 from gajim.common.const import AvatarSize
+from gajim.common.events import MucDiscoUpdate
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.gtk.groupchat_affiliation import GroupchatAffiliation
@@ -32,6 +31,7 @@ from gajim.gtk.groupchat_outcasts import GroupchatOutcasts
 
 from .builder import get_builder
 from .groupchat_info import GroupChatInfoScrolled
+from .groupchat_manage import GroupchatManage
 from .groupchat_settings import GroupChatSettings
 from .sidebar_switcher import SideBarSwitcher
 
@@ -55,8 +55,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self._client = app.get_client(contact.account)
         self._subject_text = subject
         self._contact = contact
-        self._contact.connect(
-            'room-subject', self._on_room_subject)
+        self._contact.connect('avatar-update', self._on_avatar_update)
 
         self._ui = get_builder('groupchat_details.ui')
         self._ui.connect_signals(self)
@@ -68,26 +67,30 @@ class GroupchatDetails(Gtk.ApplicationWindow):
                                     self._on_stack_child_changed)
         self.add(self._ui.main_grid)
 
+        self._groupchat_manage: Optional[GroupchatManage] = None
+
         self._add_groupchat_info()
         self._add_groupchat_settings()
+        self._add_groupchat_manage()
         self._add_affiliations()
         self._add_outcasts()
 
-        self._prepare_subject()
         self._load_avatar()
         self._ui.name_entry.set_text(contact.name)
 
         if page is not None:
             self._switcher.set_row(page)
 
+        app.ged.register_event_handler(
+            'muc-disco-update', ged.GUI1, self._on_muc_disco_update)
+
         self.connect('key-press-event', self._on_key_press)
         self.connect('destroy', self._on_destroy)
 
         self.show_all()
 
-    @property
-    def disco_info(self):
-        return app.storage.cache.get_last_disco_info(self._contact.jid)
+    def _on_muc_disco_update(self, event: MucDiscoUpdate) -> None:
+        self._ui.name_entry.set_text(self._contact.name)
 
     def _on_stack_child_changed(self,
                                 _widget: Gtk.Stack,
@@ -111,51 +114,22 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         surface = self._contact.get_avatar(AvatarSize.VCARD_HEADER, scale)
         self._ui.header_image.set_from_surface(surface)
 
-    def _prepare_subject(self) -> None:
-        self._ui.subject_textview.get_buffer().set_text(self._subject_text)
+    def _on_avatar_update(self,
+                          _contact: GroupchatContact,
+                          _signal_name: str
+                          ) -> None:
+        self._load_avatar()
+        assert self._groupchat_manage
+        self._groupchat_manage.update_avatar()
 
-        joined = self._contact.is_joined
-        change_allowed = self._is_subject_change_allowed()
-        self._ui.subject_textview.set_sensitive(joined and change_allowed)
-
-    def _is_subject_change_allowed(self) -> bool:
-        contact = self._contact.get_self()
-        if contact is None:
-            return False
-
-        if contact.affiliation in (Affiliation.OWNER, Affiliation.ADMIN):
-            return True
-
-        if self.disco_info is None:
-            return False
-        return self.disco_info.muc_subjectmod or False
-
-    def _on_subject_text_changed(self, buffer_: Gtk.TextBuffer) -> None:
-        text = buffer_.get_text(buffer_.get_start_iter(),
-                                buffer_.get_end_iter(),
-                                False)
-        self._ui.subject_change_button.set_sensitive(
-            text != self._subject_text)
-
-    def _on_subject_change_clicked(self, _button: Gtk.Button) -> None:
-        buffer_ = self._ui.subject_textview.get_buffer()
-        subject = buffer_.get_text(buffer_.get_start_iter(),
-                                   buffer_.get_end_iter(),
-                                   False)
-        self._client.get_module('MUC').set_subject(self._contact.jid, subject)
-
-    def _on_room_subject(self,
-                         _contact: GroupchatContact,
-                         _signal_name: str,
-                         subject: Optional[MucSubject]
-                         ) -> None:
-        if subject is None:
-            return
-
-        self._subject_text = subject.text
-        self._ui.subject_textview.get_buffer().set_text(subject.text)
+    def _add_groupchat_manage(self) -> None:
+        self._groupchat_manage = GroupchatManage(self.account,
+                                           self._contact,
+                                           self._subject_text)
+        self._ui.manage_box.add(self._groupchat_manage)
 
     def _add_groupchat_info(self) -> None:
+        # TODO: Update avatar on update
         groupchat_info = GroupChatInfoScrolled(self._contact.account, width=600)
         groupchat_info.set_halign(Gtk.Align.FILL)
         disco_info = self._contact.get_disco()
