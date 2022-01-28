@@ -1007,7 +1007,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             return
 
         self._jump_to_end_button.toggle(False)
-        app.window.mark_as_read(self.account, self.contact.jid)
+        if app.window.is_chat_active(self.account, self.contact.jid):
+            app.window.mark_as_read(self.account, self.contact.jid)
 
     def _on_jump_to_end(self, _button: Gtk.Button) -> None:
         self.scroll_to_end(force=True)
@@ -1212,6 +1213,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         if additional_data is None:
             additional_data = AdditionalDataDict()
 
+        chat_active = app.window.is_chat_active(
+            self.account, self.contact.jid)
+
         if self._allow_add_message():
             self.conversation_view.add_message(
                 text,
@@ -1246,9 +1250,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             if notify:
                 self._notify(name, text, tim, additional_data)
 
-            chat_active = app.window.is_chat_active(
-                self.account, self.contact.jid)
-
             if not chat_active:
                 if self.is_groupchat:
                     needs_highlight = message_needs_highlight(
@@ -1262,7 +1263,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
             if chat_active and self._scrolled_view.get_autoscroll():
                 # Send chat marker if we’re actively following the chat
-                app.window.mark_as_read(self.account, self.contact.jid)
+                pass
+                #app.window.mark_as_read(self.account, self.contact.jid)
 
     def _notify(self,
                 name: str,
