@@ -337,8 +337,9 @@ row:backdrop { transition: none; }
     color: @theme_text_color;
 }
 .chatlist-row button {
-    min-width: 16px;
-    min-height: 20px;
+    min-width: 25px;
+    min-height: 25px;
+    padding: 0px
 }
 .chatlist-row:selected button {
 	color: @theme_fg_color;
