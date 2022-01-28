@@ -225,7 +225,6 @@ class ChatControlBuilder(Builder):
 
 class ChatListRowBuilder(Builder):
     eventbox: Gtk.EventBox
-    overlay: Gtk.Overlay
     account_identifier: Gtk.Box
     avatar_image: Gtk.Image
     group_chat_indicator: Gtk.Image
@@ -407,9 +406,6 @@ class GroupchatControlBuilder(Builder):
     bold: Gtk.MenuItem
     italic: Gtk.MenuItem
     strike: Gtk.MenuItem
-    manage_popover: Gtk.Popover
-    manage_advanced_button: Gtk.Button
-    manage_destroy_button: Gtk.Button
     groupchat_control_hbox: Gtk.Box
     overlay: Gtk.Overlay
     stack: Gtk.Stack
@@ -461,13 +457,6 @@ class GroupchatControlBuilder(Builder):
     destroy_reason_entry: Gtk.Entry
     invite_grid: Gtk.Grid
     invite_button: Gtk.Button
-    avatar_button_image: Gtk.Image
-    avatar_select_button: Gtk.Button
-    muc_description_entry: Gtk.Entry
-    muc_name_entry: Gtk.Entry
-    manage_save_button: Gtk.Button
-    avatar_selector_grid: Gtk.Grid
-    avatar_update_button: Gtk.Button
     visitor_popover: Gtk.Popover
 
 
@@ -533,6 +522,7 @@ class GroupchatInviterBuilder(Builder):
 
 
 class GroupchatManageBuilder(Builder):
+    subject_buffer: Gtk.TextBuffer
     stack: Gtk.Stack
     avatar_button_image: Gtk.Image
     avatar_select_button: Gtk.Button
@@ -543,7 +533,6 @@ class GroupchatManageBuilder(Builder):
     subject_change_button: Gtk.Button
     avatar_selector_grid: Gtk.Grid
     avatar_update_button: Gtk.Button
-    subject_buffer: Gtk.TextBuffer
 
 
 class GroupchatNickChooserBuilder(Builder):
