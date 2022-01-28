@@ -91,6 +91,9 @@ class GroupchatDetails(Gtk.ApplicationWindow):
 
     def _on_muc_disco_update(self, event: MucDiscoUpdate) -> None:
         self._ui.name_entry.set_text(self._contact.name)
+        disco_info = self._contact.get_disco()
+        assert disco_info is not None
+        self._groupchat_info.set_from_disco_info(disco_info)
 
     def _on_stack_child_changed(self,
                                 _widget: Gtk.Stack,
@@ -129,14 +132,14 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self._ui.manage_box.add(self._groupchat_manage)
 
     def _add_groupchat_info(self) -> None:
-        # TODO: Update avatar on update
-        groupchat_info = GroupChatInfoScrolled(self._contact.account, width=600)
-        groupchat_info.set_halign(Gtk.Align.FILL)
+        self._groupchat_info = GroupChatInfoScrolled(
+            self._contact.account, width=600)
+        self._groupchat_info.set_halign(Gtk.Align.FILL)
         disco_info = self._contact.get_disco()
         assert disco_info is not None
-        groupchat_info.set_from_disco_info(disco_info)
-        groupchat_info.set_subject(self._contact.subject)
-        self._ui.info_box.add(groupchat_info)
+        self._groupchat_info.set_from_disco_info(disco_info)
+        self._groupchat_info.set_subject(self._contact.subject)
+        self._ui.info_box.add(self._groupchat_info)
 
     def _add_groupchat_settings(self) -> None:
         scrolled_window = Gtk.ScrolledWindow()
