@@ -6,91 +6,67 @@
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <child>
-      <object class="GtkOverlay" id="overlay">
+      <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <child>
+          <object class="GtkBox" id="account_identifier">
+            <property name="width-request">6</property>
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="margin-end">6</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <placeholder/>
+            </child>
+            <style>
+              <class name="account-identifier-bar"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="avatar_image">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-end">12</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <child>
-              <object class="GtkBox" id="account_identifier">
-                <property name="width-request">6</property>
-                <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="margin-end">6</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <placeholder/>
-                </child>
-                <style>
-                  <class name="account-identifier-bar"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkImage" id="avatar_image">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-end">12</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
+            <property name="margin-end">12</property>
+            <property name="hexpand">True</property>
+            <property name="orientation">vertical</property>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
                 <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="spacing">6</property>
+                    <property name="spacing">3</property>
                     <child>
-                      <object class="GtkBox">
-                        <property name="visible">True</property>
+                      <object class="GtkImage" id="group_chat_indicator">
                         <property name="can-focus">False</property>
-                        <property name="spacing">3</property>
-                        <child>
-                          <object class="GtkImage" id="group_chat_indicator">
-                            <property name="can-focus">False</property>
-                            <property name="no-show-all">True</property>
-                            <property name="icon-name">feather-users-symbolic</property>
-                            <property name="icon_size">1</property>
-                            <style>
-                              <class name="dim-label"/>
-                            </style>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="name_label">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="ellipsize">end</property>
-                            <property name="single-line-mode">True</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
+                        <property name="no-show-all">True</property>
+                        <property name="icon-name">feather-users-symbolic</property>
+                        <property name="icon_size">1</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -99,36 +75,18 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkImage" id="chatstate_image">
+                      <object class="GtkLabel" id="name_label">
+                        <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="no-show-all">True</property>
-                        <property name="valign">end</property>
-                        <property name="icon-name">content-loading-symbolic</property>
-                        <style>
-                          <class name="chatstate-icon"/>
-                        </style>
+                        <property name="halign">start</property>
+                        <property name="ellipsize">end</property>
+                        <property name="single-line-mode">True</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="timestamp_label">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="valign">end</property>
-                        <style>
-                          <class name="small-label"/>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="pack-type">end</property>
-                        <property name="position">2</property>
                       </packing>
                     </child>
                   </object>
@@ -139,73 +97,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
+                  <object class="GtkImage" id="chatstate_image">
                     <property name="can-focus">False</property>
-                    <property name="spacing">3</property>
-                    <child>
-                      <object class="GtkLabel" id="nick_label">
-                        <property name="can-focus">False</property>
-                        <property name="no-show-all">True</property>
-                        <property name="halign">start</property>
-                        <property name="ellipsize">end</property>
-                        <property name="single-line-mode">True</property>
-                        <property name="xalign">0</property>
-                        <style>
-                          <class name="small-label"/>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkImage" id="message_icon">
-                        <property name="can-focus">False</property>
-                        <property name="no-show-all">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="message_label">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="ellipsize">end</property>
-                        <property name="single-line-mode">True</property>
-                        <property name="xalign">0</property>
-                        <style>
-                          <class name="small-label"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="unread_label">
-                        <property name="can-focus">False</property>
-                        <property name="no-show-all">True</property>
-                        <style>
-                          <class name="unread-counter"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="pack-type">end</property>
-                        <property name="position">3</property>
-                      </packing>
-                    </child>
+                    <property name="no-show-all">True</property>
+                    <property name="valign">end</property>
+                    <property name="icon-name">content-loading-symbolic</property>
+                    <style>
+                      <class name="chatstate-icon"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -213,24 +112,118 @@
                     <property name="position">1</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkLabel" id="timestamp_label">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="valign">end</property>
+                    <style>
+                      <class name="small-label"/>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="pack-type">end</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
               </object>
               <packing>
-                <property name="expand">True</property>
+                <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkLabel" id="nick_label">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="halign">start</property>
+                    <property name="ellipsize">end</property>
+                    <property name="single-line-mode">True</property>
+                    <property name="xalign">0</property>
+                    <style>
+                      <class name="small-label"/>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage" id="message_icon">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="message_label">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="ellipsize">end</property>
+                    <property name="single-line-mode">True</property>
+                    <property name="xalign">0</property>
+                    <style>
+                      <class name="small-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="unread_label">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <style>
+                      <class name="unread-counter"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="pack-type">end</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="index">-1</property>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
           </packing>
         </child>
-        <child type="overlay">
+        <child>
           <object class="GtkRevealer" id="revealer">
             <property name="can-focus">False</property>
             <property name="halign">end</property>
-            <property name="transition-type">crossfade</property>
-            <property name="transition-duration">50</property>
+            <property name="transition-type">slide-right</property>
+            <property name="transition-duration">100</property>
             <child>
               <object class="GtkButton" id="close_button">
                 <property name="visible">True</property>
@@ -248,6 +241,11 @@
               </object>
             </child>
           </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
         </child>
       </object>
     </child>

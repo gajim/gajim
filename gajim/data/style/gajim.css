@@ -319,7 +319,7 @@ row:backdrop { transition: none; }
 }
 .chatlist-row {
     transition: none;
-    padding: 0px;
+    padding: 6px 0px 6px 6px;
     margin-left: 12px;
     margin-right: 12px;
     margin-bottom: 3px;
@@ -337,7 +337,8 @@ row:backdrop { transition: none; }
     color: @theme_text_color;
 }
 .chatlist-row button {
-    padding: 3px;
+    min-width: 16px;
+    min-height: 20px;
 }
 .chatlist-row:selected button {
 	color: @theme_fg_color;
@@ -346,9 +347,7 @@ row:backdrop { transition: none; }
 .chatlist-row:selected image {
 	color: @theme_fg_color;
 }
-.chatlist-row overlay > box {
-	padding: 6px;
-}
+
 @keyframes composing {
     0%  {
 	    -gtk-icon-transform: translate(0px, 2px);
