@@ -152,6 +152,7 @@ class PopupNotification(Gtk.Window):
         self.set_accept_focus(False)
         self.set_skip_taskbar_hint(True)
         self.set_decorated(False)
+        self.set_keep_above(True)
 
         self._timeout_id: Optional[int] = None
         self._event = event
@@ -221,6 +222,9 @@ class PopupNotification(Gtk.Window):
                                            sub_type=self._event.sub_type or '',
                                            account=self._event.account,
                                            jid=jid)
+            # present_with_time needs to be called at this instant in order to
+            # work on Windows
+            app.window.present_with_time(event.time)
             app.app.activate_action(f'app.{self._event.account}-open-event',
                                     params.to_variant())
 
