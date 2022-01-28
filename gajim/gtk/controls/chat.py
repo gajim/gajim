@@ -558,9 +558,6 @@ class ChatControl(BaseControl):
                     notify: bool = True
                     ) -> None:
 
-        if additional_data is None:
-            additional_data = AdditionalDataDict()
-
         if kind == 'incoming':
             name = self.contact.name
         else:
