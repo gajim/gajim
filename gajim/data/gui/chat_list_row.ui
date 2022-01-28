@@ -45,7 +45,7 @@
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="margin-end">12</property>
+            <property name="margin-end">6</property>
             <property name="hexpand">True</property>
             <property name="orientation">vertical</property>
             <child>
