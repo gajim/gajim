@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Any
 
 import logging
@@ -80,7 +82,6 @@ class MessageLabel(Gtk.Label):
         self.set_xalign(0)
         self.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
         self.set_track_visited_links(False)
-        self.set_can_focus(False)
 
         self._account = account
 
@@ -88,6 +89,7 @@ class MessageLabel(Gtk.Label):
 
         self.connect('populate-popup', self._on_populate_popup)
         self.connect('activate-link', self._on_activate_link)
+        self.connect('focus-out-event', self._on_focus_out)
 
     def _on_populate_popup(self, label: Gtk.Label, menu: Gtk.Menu) -> None:
         selected, start, end = label.get_selection_bounds()
@@ -123,6 +125,11 @@ class MessageLabel(Gtk.Label):
     def _on_activate_link(self, _label: Gtk.Label, uri: str) -> int:
         open_uri(uri, self._account)
         return Gdk.EVENT_STOP
+
+    def _on_focus_out(self,
+                      widget: MessageLabel,
+                      event: Gdk.EventFocus) -> None:
+        self.select_region(0, 0)
 
 
 class MessageTextview(Gtk.TextView):
