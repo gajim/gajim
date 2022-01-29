@@ -15,9 +15,8 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Dict
+from typing import cast
 from typing import NamedTuple
-from typing import List
 from typing import Optional
 
 from gi.repository import Gtk
@@ -80,7 +79,7 @@ class DialogButton(NamedTuple):
                 default_kwargs['text'] = _('_Remove')
                 default_kwargs['action'] = ButtonAction.DESTRUCTIVE
             else:
-                raise ValueError('Unknown button type: %s ' % type_)
+                raise ValueError(f'Unknown button type: {type_} ')
 
         default_kwargs.update(kwargs)
         return cls(**default_kwargs)
@@ -88,15 +87,16 @@ class DialogButton(NamedTuple):
 
 class HigDialog(Gtk.MessageDialog):
     def __init__(self,
-                 parent,
-                 type_,
-                 buttons,
-                 pritext,
-                 sectext,
-                 on_response_ok=None,
-                 on_response_cancel=None,
-                 on_response_yes=None,
-                 on_response_no=None):
+                 parent: Gtk.Window,
+                 type_: Gtk.MessageType,
+                 buttons: Gtk.ButtonsType,
+                 pritext: str,
+                 sectext: str,
+                 on_response_ok: Optional[Any] = None,
+                 on_response_cancel: Optional[Any] = None,
+                 on_response_yes: Optional[Any] = None,
+                 on_response_no: Optional[Any] = None
+                 ) -> None:
         self.call_cancel_on_destroy = True
         Gtk.MessageDialog.__init__(self,
                                    transient_for=parent,
@@ -108,7 +108,7 @@ class HigDialog(Gtk.MessageDialog):
 
         self.format_secondary_markup(sectext)
 
-        self.possible_responses = {
+        self.possible_responses: dict[Gtk.ResponseType, Any] = {
             Gtk.ResponseType.OK: on_response_ok,
             Gtk.ResponseType.CANCEL: on_response_cancel,
             Gtk.ResponseType.YES: on_response_yes,
@@ -118,7 +118,10 @@ class HigDialog(Gtk.MessageDialog):
         self.connect('response', self.on_response)
         self.connect('destroy', self.on_dialog_destroy)
 
-    def on_response(self, dialog, response_id):
+    def on_response(self,
+                    dialog: Gtk.MessageDialog,
+                    response_id: Gtk.ResponseType
+                    ) -> None:
         if response_id not in self.possible_responses:
             return
         if not self.possible_responses[response_id]:
@@ -132,7 +135,7 @@ class HigDialog(Gtk.MessageDialog):
         else:
             self.possible_responses[response_id](dialog)
 
-    def on_dialog_destroy(self, _widget):
+    def on_dialog_destroy(self, _widget: Gtk.Widget) -> Optional[bool]:
         if not self.call_cancel_on_destroy:
             return None
         cancel_handler = self.possible_responses[Gtk.ResponseType.CANCEL]
@@ -144,13 +147,14 @@ class HigDialog(Gtk.MessageDialog):
             cancel_handler(None)
         return None
 
-    def popup(self):
+    def popup(self) -> None:
         """
         Show dialog
         """
-        vb = self.get_children()[0].get_children()[0]  # Give focus to top vbox
-        # vb.set_flags(Gtk.CAN_FOCUS)
-        vb.grab_focus()
+        # Give focus to top vbox
+        box = cast(Gtk.Box, self.get_children()[0])
+        inner_box = cast(Gtk.Box, box.get_children()[0])
+        inner_box.grab_focus()
         self.show_all()
 
 
@@ -166,6 +170,7 @@ class WarningDialog(HigDialog):
                  ) -> None:
         if transient_for is None:
             transient_for = app.app.get_active_window()
+            assert transient_for
         HigDialog.__init__(self,
                            transient_for,
                            Gtk.MessageType.WARNING,
@@ -188,6 +193,7 @@ class InformationDialog(HigDialog):
                  ) -> None:
         if transient_for is None:
             transient_for = app.app.get_active_window()
+            assert transient_for
         HigDialog.__init__(self,
                            transient_for,
                            Gtk.MessageType.INFO,
@@ -206,11 +212,13 @@ class ErrorDialog(HigDialog):
     def __init__(self,
                  pritext: str,
                  sectext: str = '',
-                 on_response_ok=None,
-                 on_response_cancel=None,
-                 transient_for=None):
+                 on_response_ok: Optional[Any] = None,
+                 on_response_cancel: Optional[Any] = None,
+                 transient_for: Optional[Gtk.Window] = None
+                 ) -> None:
         if transient_for is None:
             transient_for = app.app.get_active_window()
+            assert transient_for
         HigDialog.__init__(self,
                            transient_for,
                            Gtk.MessageType.ERROR,
@@ -227,7 +235,7 @@ class ConfirmationDialog(Gtk.MessageDialog):
                  title: str,
                  text: str,
                  sec_text: str,
-                 buttons: List[DialogButton],
+                 buttons: list[DialogButton],
                  modal: bool = True,
                  transient_for: Optional[Gtk.Window] = None
                  ) -> None:
@@ -242,7 +250,7 @@ class ConfirmationDialog(Gtk.MessageDialog):
 
         self.get_style_context().add_class('confirmation-dialog')
 
-        self._buttons: Dict[Gtk.ResponseType, DialogButton] = {}
+        self._buttons: dict[Gtk.ResponseType, DialogButton] = {}
 
         for button in buttons:
             self._buttons[button.response] = button
@@ -250,7 +258,8 @@ class ConfirmationDialog(Gtk.MessageDialog):
             if button.is_default:
                 self.set_default_response(button.response)
             if button.action is not None:
-                widget = self.get_widget_for_response(button.response)
+                widget = cast(
+                    Gtk.Button, self.get_widget_for_response(button.response))
                 widget.get_style_context().add_class(button.action.value)
 
         self.format_secondary_markup(sec_text)
@@ -290,7 +299,7 @@ class ConfirmationCheckDialog(ConfirmationDialog):
                  text: str,
                  sec_text: str,
                  check_text: str,
-                 buttons: List[DialogButton],
+                 buttons: list[DialogButton],
                  modal: bool = True,
                  transient_for: Optional[Gtk.Window] = None
                  ) -> None:
@@ -335,7 +344,7 @@ class PastePreviewDialog(ConfirmationCheckDialog):
                  sec_text: str,
                  check_text: str,
                  image: GdkPixbuf.Pixbuf,
-                 buttons: List[DialogButton],
+                 buttons: list[DialogButton],
                  modal: bool = True,
                  transient_for: Optional[Gtk.Window] = None
                  ) -> None:
@@ -373,7 +382,7 @@ class InputDialog(ConfirmationDialog):
                  title: str,
                  text: str,
                  sec_text: str,
-                 buttons: List[DialogButton],
+                 buttons: list[DialogButton],
                  input_str: Optional[str] = None,
                  modal: bool = True,
                  transient_for: Optional[Gtk.Window] = None,
@@ -410,12 +419,13 @@ class InputDialog(ConfirmationDialog):
 class ShortcutsWindow:
     def __init__(self):
         transient = app.app.get_active_window()
+        assert transient
         builder = get_builder('shortcuts_window.ui')
-        self.window = builder.get_object('shortcuts_window')
+        self.window = cast(Gtk.Window, builder.get_object('shortcuts_window'))
         self.window.connect('destroy', self._on_window_destroy)
         self.window.set_transient_for(transient)
         self.window.show_all()
         self.window.present()
 
-    def _on_window_destroy(self, _widget):
+    def _on_window_destroy(self, _widget: Gtk.Widget) -> None:
         self.window = None
