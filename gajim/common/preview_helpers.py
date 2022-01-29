@@ -201,19 +201,18 @@ def create_thumbnail_with_pil(data: bytes, size: int) -> Optional[bytes]:
         output_file.close()
         return data
 
-    if image.format == 'GIF' and image.n_frames > 1:
-        resize_gif(image, output_file, (size, size))
-    else:
-        try:
+    try:
+        if image.format == 'GIF' and image.n_frames > 1:
+            resize_gif(image, output_file, (size, size))
+        else:
             image.thumbnail((size, size))
-            image.save(
-                output_file,
-                format=image.format,
-                exif=image.info.get('exif', b''),
-                optimize=True)
-        except OSError as error:
-            log.warning('saving pil thumbnail failed: %s', error)
-            return None
+            image.save(output_file,
+                       format=image.format,
+                       exif=image.info.get('exif', b''),
+                       optimize=True)
+    except Exception as error:
+        log.warning('saving pil thumbnail failed: %s', error)
+        return None
 
     bytes_ = output_file.getvalue()
 
