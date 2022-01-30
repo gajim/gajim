@@ -376,9 +376,6 @@ class GroupchatAffiliationBuilder(Builder):
     add_remove_button_box: Gtk.Box
     add_button: Gtk.Button
     remove_button: Gtk.Button
-    status_image: Gtk.Image
-    spinner: Gtk.Spinner
-    apply_button: Gtk.Button
 
 
 class GroupchatConfigBuilder(Builder):
@@ -554,9 +551,6 @@ class GroupchatOutcastBuilder(Builder):
     add_button: Gtk.Button
     remove_button: Gtk.Button
     info_button: Gtk.MenuButton
-    status_image: Gtk.Image
-    spinner: Gtk.Spinner
-    apply_button: Gtk.Button
 
 
 class GroupchatRosterBuilder(Builder):

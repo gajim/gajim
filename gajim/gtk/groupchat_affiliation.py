@@ -30,6 +30,7 @@ from gajim.common.client import Client
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 
+from gajim.gui.apply_button_box import ApplyButtonBox
 from gajim.gui.builder import get_builder
 from gajim.gui.dialogs import ErrorDialog
 
@@ -68,6 +69,9 @@ class GroupchatAffiliation(Gtk.Box):
         self._store = self._ui.affiliation_store
 
         self.add(self._ui.main_box)
+        self._apply_button = ApplyButtonBox(_('Apply'),
+                                            on_clicked=self._on_apply)
+        self._ui.button_box.pack_end(self._apply_button, False, False, 0)
 
         if self._own_affiliation in ('admin', 'owner'):
             self._ui.add_button.set_sensitive(True)
@@ -87,16 +91,10 @@ class GroupchatAffiliation(Gtk.Box):
         self._set_affiliations()
 
     def _begin_progress(self) -> None:
-        self._ui.spinner.show()
-        self._ui.spinner.start()
-        self._ui.apply_button.set_sensitive(False)
         self._ui.affiliation_scrolled.set_sensitive(False)
         self._ui.add_remove_button_box.set_sensitive(False)
 
-    def _end_progress(self, result: str) -> None:
-        self._ui.spinner.stop()
-        self._ui.spinner.hide()
-        self._ui.apply_button.set_sensitive(result == 'error')
+    def _end_progress(self) -> None:
         self._ui.affiliation_scrolled.set_sensitive(True)
         self._ui.add_remove_button_box.set_sensitive(True)
 
@@ -228,8 +226,7 @@ class GroupchatAffiliation(Gtk.Box):
         if self._own_affiliation not in ('admin', 'owner'):
             return
         new_rows = self._get_new_rows()
-        self._ui.apply_button.set_sensitive(new_rows != self._current_rows)
-        self._ui.status_image.hide()
+        self._apply_button.set_button_state(new_rows != self._current_rows)
 
     def _allowed_to_edit(self, affiliation: str) -> tuple[bool, bool]:
         if self._own_affiliation == 'owner':
@@ -293,13 +290,13 @@ class GroupchatAffiliation(Gtk.Box):
             task.finish()
         except StanzaError as error:
             log.info('Error while setting affiliations: %s', error)
-            self._end_progress('error')
-            self._set_status_image('error', tooltip_text=str(error))
+            self._end_progress()
+            self._apply_button.set_error(str(error))
             return
 
         self._current_rows = self._get_new_rows()
-        self._set_status_image('success')
-        self._end_progress('success')
+        self._end_progress()
+        self._apply_button.set_success()
 
     def _on_affiliations_received(self, task: Task) -> None:
         affiliation = task.get_user_data()
@@ -325,19 +322,6 @@ class GroupchatAffiliation(Gtk.Box):
             self._current_rows.add(AffiliationRow(jid=jid,
                                                   nick=nick,
                                                   affiliation=affiliation))
-
-    def _set_status_image(self, state: str, tooltip_text: str = '') -> None:
-        icon_name = 'feather-check-symbolic'
-        css_class = 'success-color'
-
-        if state == 'error':
-            icon_name = 'dialog-warning-symbolic'
-            css_class = 'warning-color'
-
-        self._ui.status_image.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
-        self._ui.status_image.get_style_context().add_class(css_class)
-        self._ui.status_image.set_tooltip_text(tooltip_text)
-        self._ui.status_image.show()
 
     @staticmethod
     def _raise_error() -> None:
