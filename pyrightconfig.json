@@ -24,6 +24,7 @@
         "gajim/gtk/about.py",
         "gajim/gtk/account_page.py",
         "gajim/gtk/account_side_bar.py",
+        "gajim/gtk/apply_button_box.py",
         "gajim/gtk/app_page.py",
         "gajim/gtk/app_side_bar.py",
         "gajim/gtk/application.py",
