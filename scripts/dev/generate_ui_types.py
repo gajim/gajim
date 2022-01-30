@@ -85,6 +85,9 @@ with out_path.open(mode='w') as file:
     for path in paths:
         if path.name.endswith('~'):
             continue
+
+        if path.name.startswith('#'):
+            continue
         name = parse(path, file)
         builder_names.append((name, path.name))
 
