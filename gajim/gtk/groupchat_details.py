@@ -31,6 +31,7 @@ from gajim.gtk.groupchat_outcasts import GroupchatOutcasts
 
 from .builder import get_builder
 from .groupchat_info import GroupChatInfoScrolled
+from .groupchat_config import GroupchatConfig
 from .groupchat_manage import GroupchatManage
 from .groupchat_settings import GroupChatSettings
 from .sidebar_switcher import SideBarSwitcher
@@ -74,6 +75,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self._add_groupchat_manage()
         self._add_affiliations()
         self._add_outcasts()
+        self._add_configuration()
 
         self._load_avatar()
         self._ui.name_entry.set_text(contact.name)
@@ -90,6 +92,8 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self.show_all()
 
     def _on_muc_disco_update(self, event: MucDiscoUpdate) -> None:
+        if event.jid != self._contact.jid:
+            return
         self._ui.name_entry.set_text(self._contact.name)
         disco_info = self._contact.get_disco()
         assert disco_info is not None
@@ -127,8 +131,8 @@ class GroupchatDetails(Gtk.ApplicationWindow):
 
     def _add_groupchat_manage(self) -> None:
         self._groupchat_manage = GroupchatManage(self.account,
-                                           self._contact,
-                                           self._subject_text)
+                                                 self._contact,
+                                                 self._subject_text)
         self._ui.manage_box.add(self._groupchat_manage)
 
     def _add_groupchat_info(self) -> None:
@@ -158,6 +162,10 @@ class GroupchatDetails(Gtk.ApplicationWindow):
     def _add_outcasts(self) -> None:
         affiliations = GroupchatOutcasts(self._client, self._contact)
         self._ui.outcasts_box.add(affiliations)
+
+    def _add_configuration(self) -> None:
+        config = GroupchatConfig(self._client, self._contact)
+        self._ui.configuration_box.add(config)
 
     def _on_key_press(self,
                       _widget: GroupchatDetails,

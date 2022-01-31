@@ -129,9 +129,6 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
-            </child>
-            <child>
               <object class="GtkBox" id="manage_box">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -153,7 +150,7 @@
                 <property name="name">manage</property>
                 <property name="title" translatable="yes">Manage</property>
                 <property name="icon-name">preferences-other-symbolic</property>
-                <property name="position">3</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -172,7 +169,7 @@
                 <property name="name">affiliations</property>
                 <property name="title" translatable="yes">Affiliations</property>
                 <property name="icon-name">system-users-symbolic</property>
-                <property name="position">4</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -191,6 +188,22 @@
                 <property name="name">outcasts</property>
                 <property name="title" translatable="yes">Outcasts</property>
                 <property name="icon-name">system-users-symbolic</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="configuration_box">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="name">config</property>
+                <property name="title" translatable="yes">Configuration</property>
+                <property name="icon-name">document-properties-symbolic</property>
                 <property name="position">5</property>
               </packing>
             </child>

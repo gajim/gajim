@@ -379,22 +379,12 @@ class GroupchatAffiliationBuilder(Builder):
 
 
 class GroupchatConfigBuilder(Builder):
-    affiliation_store: Gtk.ListStore
-    combo_store: Gtk.ListStore
-    info_popover: Gtk.Popover
-    outcast_store: Gtk.ListStore
-    grid: Gtk.Grid
-    treeview_buttonbox: Gtk.Box
-    info_button: Gtk.MenuButton
-    add_button: Gtk.Button
-    remove_button: Gtk.Button
-    ok_button: Gtk.Button
     stack: Gtk.Stack
-    config_grid: Gtk.Grid
-    affiliation_treeview: Gtk.TreeView
-    reserved_name_column: Gtk.TreeViewColumn
-    role_column: Gtk.TreeViewColumn
-    outcast_treeview: Gtk.TreeView
+    loading_box: Gtk.Box
+    config_box: Gtk.Box
+    error_box: Gtk.Box
+    error_image: Gtk.Image
+    error_label: Gtk.Label
 
 
 class GroupchatControlBuilder(Builder):
@@ -484,6 +474,7 @@ class GroupchatDetailsBuilder(Builder):
     manage_box: Gtk.Box
     affiliation_box: Gtk.Box
     outcasts_box: Gtk.Box
+    configuration_box: Gtk.Box
 
 
 class GroupchatInfoScrolledBuilder(Builder):

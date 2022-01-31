@@ -1,481 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
-  <requires lib="gtk+" version="3.22"/>
-  <object class="GtkListStore" id="affiliation_store">
-    <columns>
-      <!-- column-name jabberid -->
-      <column type="gchararray"/>
-      <!-- column-name nickname -->
-      <column type="gchararray"/>
-      <!-- column-name role -->
-      <column type="gchararray"/>
-      <!-- column-name affiliation -->
-      <column type="gchararray"/>
-      <!-- column-name affiliation-text -->
-      <column type="gchararray"/>
-      <!-- column-name editable-affiliation -->
-      <column type="gboolean"/>
-      <!-- column-name editable-jid -->
-      <column type="gboolean"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="combo_store">
-    <columns>
-      <!-- column-name affiliation -->
-      <column type="gchararray"/>
-      <!-- column-name affiliation-text -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Owner</col>
-        <col id="1">owner</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Admin</col>
-        <col id="1">admin</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Member</col>
-        <col id="1">member</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkPopover" id="info_popover">
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkLabel">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">&lt;b&gt;XMPP Address&lt;/b&gt;
-&amp;lt;user@domain/resource&amp;gt; (only that resource matches)
-&amp;lt;user@domain&amp;gt; (any resource matches)
-&amp;lt;domain/resource&amp;gt; (only that resource matches)
-&amp;lt;domain&amp;gt; (the domain itself matches, as does any user@domain or domain/resource)
-</property>
-        <property name="use_markup">True</property>
-        <style>
-          <class name="padding-6"/>
-        </style>
-      </object>
-    </child>
-  </object>
-  <object class="GtkListStore" id="outcast_store">
-    <columns>
-      <!-- column-name jabberid -->
-      <column type="gchararray"/>
-      <!-- column-name reason -->
-      <column type="gchararray"/>
-      <!-- column-name dummy -->
-      <column type="gchararray"/>
-      <!-- column-name affiliation -->
-      <column type="gchararray"/>
-      <!-- column-name dummy1 -->
-      <column type="gchararray"/>
-      <!-- column-name dummy2 -->
-      <column type="gboolean"/>
-      <!-- column-name editable-jid -->
-      <column type="gboolean"/>
-    </columns>
-  </object>
-  <object class="GtkGrid" id="grid">
-    <property name="name">GroupchatConfig</property>
-    <property name="width_request">700</property>
-    <property name="height_request">500</property>
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkStack" id="stack">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
     <child>
-      <object class="GtkBox">
+      <object class="GtkBox" id="loading_box">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
+        <property name="valign">center</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
-          <object class="GtkBox" id="treeview_buttonbox">
+          <object class="GtkLabel">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="valign">start</property>
-            <property name="vexpand">False</property>
-            <property name="spacing">6</property>
-            <child>
-              <object class="GtkMenuButton" id="info_button">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="popover">info_popover</property>
-                <child>
-                  <object class="GtkImage">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="icon_name">dialog-information-symbolic</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="add_button">
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Only Admins and Owners can modify the affiliation</property>
-                <property name="halign">start</property>
-                <signal name="clicked" handler="_on_add" swapped="no"/>
-                <child>
-                  <object class="GtkImage">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="icon_name">list-add-symbolic</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="remove_button">
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Only Admins and Owners can modify the affiliation</property>
-                <signal name="clicked" handler="_on_remove" swapped="no"/>
-                <child>
-                  <object class="GtkImage">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="icon_name">list-remove-symbolic</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="ok_button">
-            <property name="label">_Apply</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="_on_ok" swapped="no"/>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Loading…</property>
             <style>
-              <class name="suggested-action"/>
+              <class name="bold24"/>
+              <class name="dim-label"/>
             </style>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="pack_type">end</property>
-            <property name="position">2</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkButton">
-            <property name="label">_Cancel</property>
+          <object class="GtkSpinner">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="_on_cancel" swapped="no"/>
+            <property name="can-focus">False</property>
+            <property name="active">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="pack_type">end</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-        <style>
-          <class name="margin-12"/>
-        </style>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkStack" id="stack">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
-        <property name="transition_type">crossfade</property>
-        <signal name="notify::visible-child-name" handler="_on_switch_page" swapped="no"/>
-        <child>
-          <object class="GtkGrid" id="config_grid">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="name">config</property>
-            <property name="title" translatable="yes">Configuration</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkGrid">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkScrolledWindow">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="hscrollbar_policy">never</property>
-                <property name="shadow_type">in</property>
-                <child>
-                  <object class="GtkTreeView" id="affiliation_treeview">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="model">affiliation_store</property>
-                    <property name="search_column">0</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection">
-                        <property name="mode">multiple</property>
-                        <signal name="changed" handler="_on_selection_changed" swapped="no"/>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn">
-                        <property name="resizable">True</property>
-                        <property name="sizing">autosize</property>
-                        <property name="title">XMPP Address</property>
-                        <property name="expand">True</property>
-                        <property name="sort_indicator">True</property>
-                        <property name="sort_column_id">0</property>
-                        <child>
-                          <object class="GtkCellRendererText">
-                            <property name="placeholder_text">user@example.org</property>
-                            <signal name="edited" handler="_on_jid_edited" swapped="no"/>
-                          </object>
-                          <attributes>
-                            <attribute name="editable">6</attribute>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="reserved_name_column">
-                        <property name="resizable">True</property>
-                        <property name="sizing">autosize</property>
-                        <property name="title" translatable="yes">Reserved Name</property>
-                        <property name="sort_indicator">True</property>
-                        <property name="sort_column_id">1</property>
-                        <child>
-                          <object class="GtkCellRendererText">
-                            <property name="placeholder_text">Name</property>
-                            <signal name="edited" handler="_on_nick_edited" swapped="no"/>
-                          </object>
-                          <attributes>
-                            <attribute name="editable">6</attribute>
-                            <attribute name="text">1</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn" id="role_column">
-                        <property name="visible">False</property>
-                        <property name="resizable">True</property>
-                        <property name="sizing">autosize</property>
-                        <property name="min_width">100</property>
-                        <property name="title" translatable="yes">Role</property>
-                        <property name="sort_indicator">True</property>
-                        <property name="sort_column_id">2</property>
-                        <child>
-                          <object class="GtkCellRendererText"/>
-                          <attributes>
-                            <attribute name="text">2</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn">
-                        <property name="resizable">True</property>
-                        <property name="sizing">autosize</property>
-                        <property name="min_width">120</property>
-                        <property name="title" translatable="yes">Affiliation</property>
-                        <property name="sort_indicator">True</property>
-                        <property name="sort_column_id">3</property>
-                        <child>
-                          <object class="GtkCellRendererCombo">
-                            <property name="has_entry">False</property>
-                            <property name="model">combo_store</property>
-                            <property name="text_column">0</property>
-                            <signal name="changed" handler="_on_affiliation_changed" swapped="no"/>
-                          </object>
-                          <attributes>
-                            <attribute name="editable">5</attribute>
-                            <attribute name="text">4</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <style>
-                  <class name="margin-12"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="name">affiliation</property>
-            <property name="title" translatable="yes">Affiliations</property>
+            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
+      </object>
+      <packing>
+        <property name="name">loading</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="config_box">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
         <child>
-          <object class="GtkGrid">
-            <property name="can_focus">False</property>
-            <property name="no_show_all">True</property>
-            <child>
-              <object class="GtkScrolledWindow">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="shadow_type">in</property>
-                <child>
-                  <object class="GtkTreeView" id="outcast_treeview">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="model">outcast_store</property>
-                    <property name="search_column">0</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection">
-                        <property name="mode">multiple</property>
-                        <signal name="changed" handler="_on_selection_changed" swapped="no"/>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn">
-                        <property name="resizable">True</property>
-                        <property name="sizing">autosize</property>
-                        <property name="title">XMPP Address</property>
-                        <property name="expand">True</property>
-                        <property name="sort_indicator">True</property>
-                        <property name="sort_column_id">0</property>
-                        <child>
-                          <object class="GtkCellRendererText">
-                            <property name="placeholder_text">user@example.org</property>
-                            <signal name="edited" handler="_on_outcast_jid_edited" swapped="no"/>
-                          </object>
-                          <attributes>
-                            <attribute name="editable">6</attribute>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn">
-                        <property name="resizable">True</property>
-                        <property name="sizing">autosize</property>
-                        <property name="min_width">250</property>
-                        <property name="title" translatable="yes">Reason</property>
-                        <property name="sort_indicator">True</property>
-                        <property name="sort_column_id">1</property>
-                        <child>
-                          <object class="GtkCellRendererText">
-                            <property name="placeholder_text">Spam</property>
-                            <signal name="edited" handler="_on_reason_edited" swapped="no"/>
-                          </object>
-                          <attributes>
-                            <attribute name="editable">6</attribute>
-                            <attribute name="text">1</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <style>
-                  <class name="margin-12"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+      <packing>
+        <property name="name">config</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="error_box">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="halign">center</property>
+        <property name="valign">center</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkImage" id="error_image">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="stock">gtk-missing-image</property>
           </object>
           <packing>
-            <property name="name">outcast</property>
-            <property name="title" translatable="yes">Ban List</property>
-            <property name="position">2</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="error_label">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="justify">center</property>
+            <property name="wrap">True</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
           </packing>
         </child>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkStackSidebar">
-        <property name="width_request">140</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="stack">stack</property>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
-        <property name="height">2</property>
+        <property name="name">error</property>
+        <property name="position">2</property>
       </packing>
     </child>
   </object>

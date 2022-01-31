@@ -70,7 +70,6 @@ from gajim.gui.const import TARGET_TYPE_URI_LIST
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationCheckDialog
 from gajim.gui.dialogs import ConfirmationDialog
-from gajim.gui.groupchat_config import GroupchatConfig
 from gajim.gui.dataform import DataFormWidget
 from gajim.gui.groupchat_inviter import GroupChatInviter
 from gajim.gui.groupchat_roster import GroupchatRoster
@@ -273,7 +272,6 @@ class GroupchatControl(BaseControl):
         actions = [
             ('change-nickname-', None, self._on_change_nick),
             ('destroy-', None, self._on_destroy_room),
-            ('configure-', None, self._on_configure_room),
             ('request-voice-', None, self._on_request_voice),
             ('groupchat-details-', None, self._on_details),
             ('invite-', None, self._on_invite),
@@ -441,31 +439,6 @@ class GroupchatControl(BaseControl):
         jid = self.xml.destroy_alternate_entry.get_text()
         self._client.get_module('MUC').destroy(self.room_jid, reason, jid)
         self._show_page('groupchat')
-
-    def _on_configure_room(self, _button: Gtk.Button) -> None:
-        win = get_app_window('GroupchatConfig', self.account, self.room_jid)
-        if win is not None:
-            win.present()
-            return
-
-        contact = self.contact.get_self()
-        if contact.affiliation.is_owner:
-            self._client.get_module('MUC').request_config(
-                self.room_jid, callback=self._on_configure_form_received)
-
-        elif contact.affiliation.is_admin:
-            GroupchatConfig(self.account,
-                            self.room_jid,
-                            contact.affiliation.value)
-        self._show_page('groupchat')
-
-    def _on_configure_form_received(self, task: Task) -> None:
-        try:
-            result = task.finish()
-        except StanzaError as error:
-            log.info(error)
-            return
-        GroupchatConfig(self.account, result.jid, 'owner', result.form)
 
     def _on_request_voice_clicked(self, _button: Gtk.Button) -> None:
         self._request_voice()
