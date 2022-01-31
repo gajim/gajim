@@ -147,7 +147,7 @@ class ResourceRow(Gtk.ListBoxRow):
         for constraint in constraints:
             if not resource_contact.supports(constraint):
                 self.set_sensitive(False)
-                self.set_tooltip_text(_('This devices is not compatible.'))
+                self.set_tooltip_text(_('This device is not compatible.'))
 
         self.add(box)
         self.show_all()
