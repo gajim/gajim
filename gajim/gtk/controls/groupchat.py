@@ -38,7 +38,6 @@ from nbxmpp.modules.security_labels import Displaymarking
 from nbxmpp.structs import PresenceProperties
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import MucSubject
-from nbxmpp.task import Task
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -76,7 +75,6 @@ from gajim.gui.groupchat_roster import GroupchatRoster
 from gajim.gui.groupchat_state import GroupchatState
 from gajim.gui.message_input import MessageInputTextView
 from gajim.gui.util import NickCompletionGenerator
-from gajim.gui.util import get_app_window
 from gajim.gui.util import open_window
 
 from ..menus import get_encryption_menu
