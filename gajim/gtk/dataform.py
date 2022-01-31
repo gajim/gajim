@@ -315,7 +315,7 @@ class Field:
             self._form_grid.validate(is_valid)
             self._validate_source_id = None
 
-        self._validate_source_id = GLib.timeout_add(500, _start_validation)
+        self._validate_source_id = GLib.timeout_add(200, _start_validation)
 
 
 class BooleanField(Field):
