@@ -59,6 +59,7 @@ class DataFormWidget(Gtk.ScrolledWindow):
 
         self._form_node = form_node
         self._form_grid = FormGrid(form_node, options)
+        self._original_form_hash = self.get_form_hash()
 
         self.add(self._form_grid)
 
@@ -79,6 +80,15 @@ class DataFormWidget(Gtk.ScrolledWindow):
     def get_submit_form(self):
         self._form_node.type_ = 'submit'
         return self._form_node
+
+    def get_form_hash(self):
+        return hash(str(self._form_node))
+
+    def was_modified(self):
+        return self._original_form_hash != self.get_form_hash()
+
+    def reset_form_hash(self):
+        self._original_form_hash = self.get_form_hash()
 
     def focus_first_entry(self):
         for row in range(0, self._form_grid.row_count):
