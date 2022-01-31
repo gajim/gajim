@@ -334,6 +334,7 @@ class BooleanField(Field):
 
     def _toggled(self, _widget):
         self._field.value = self._widget.get_active()
+        self._validate()
 
 
 class FixedField(Field):
