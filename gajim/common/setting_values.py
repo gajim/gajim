@@ -59,7 +59,7 @@ BoolSettings = Literal[
     'notify_on_file_complete',
     'positive_184_ack',
     'preview_allow_all_images',
-    'preview_anonymous_muc'
+    'preview_anonymous_muc',
     'preview_verify_https',
     'print_status_in_chats',
     'quit_on_main_window_x_button',
