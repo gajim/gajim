@@ -307,7 +307,7 @@ class Client(Observable):
             self._schedule_reconnect()
             app.ged.raise_event(ShowChanged(account=self._account,
                                             show='error'))
-            self.notify('state-changed', SimpleClientState.RESUME_IN_PREGRESS)
+            self.notify('state-changed', SimpleClientState.RESUME_IN_PROGRESS)
 
         else:
             app.ged.raise_event(ShowChanged(account=self._account,
