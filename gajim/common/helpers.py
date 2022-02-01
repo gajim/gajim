@@ -319,8 +319,8 @@ def get_uf_relative_time(timestamp: float) -> str:
         return ngettext('%i min ago',
                         '%i mins ago',
                         minutes,
-                        str(minutes),
-                        str(minutes))
+                        minutes,
+                        minutes)
     return _('Just now')
 
 def get_sorted_keys(adict):
