@@ -12,6 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
 from typing import Optional
 
 import logging
@@ -147,7 +148,7 @@ class PreviewWidget(Gtk.Box):
         self._ui.file_name.set_tooltip_text(preview.filename)
 
     def _get_context_menu(self) -> Gtk.Menu:
-        def _destroy(menu, _pspec):
+        def _destroy(menu: Gtk.Menu, _pspec: Any) -> None:
             visible = menu.get_property('visible')
             if not visible:
                 GLib.idle_add(menu.destroy)
@@ -156,6 +157,7 @@ class PreviewWidget(Gtk.Box):
         menu.connect_signals(self)
         menu.context_menu.connect('notify::visible', _destroy)
 
+        assert self._preview
         if self._preview.is_aes_encrypted:
             menu.open_link_in_browser.hide()
 
@@ -195,6 +197,7 @@ class PreviewWidget(Gtk.Box):
                 self._preview, force=True)
             return
 
+        assert self._preview.orig_path
         open_file(self._preview.orig_path)
 
     def _on_save_as(self, _menu: Gtk.Menu) -> None:
@@ -233,21 +236,26 @@ class PreviewWidget(Gtk.Box):
                        transient_for=app.app.get_active_window())
 
     def _on_open_folder(self, _menu: Gtk.Menu) -> None:
+        assert self._preview
         if not self._preview.orig_exists():
             app.interface.preview_manager.download_content(
                 self._preview, force=True)
             return
+        assert self._preview.orig_path
         open_file(self._preview.orig_path.parent)
 
     def _on_copy_link_location(self, _menu: Gtk.Menu) -> None:
         clipboard = Gtk.Clipboard.get_default(Gdk.Display.get_default())
+        assert self._preview
         clipboard.set_text(self._preview.uri, -1)
 
     def _on_open_link_in_browser(self, _menu: Gtk.Menu) -> None:
+        assert self._preview
         if self._preview.is_aes_encrypted:
             if self._preview.is_geo_uri:
                 open_uri(self._preview.uri)
                 return
+            assert self._preview.orig_path
             open_file(self._preview.orig_path)
         else:
             open_uri(self._preview.uri)
@@ -268,4 +276,6 @@ class PreviewWidget(Gtk.Box):
 
     @staticmethod
     def _on_realize(event_box: Gtk.EventBox) -> None:
-        event_box.get_window().set_cursor(get_cursor('pointer'))
+        window = event_box.get_window()
+        assert window
+        window.set_cursor(get_cursor('pointer'))
