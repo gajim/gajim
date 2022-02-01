@@ -29,10 +29,7 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Callable
-from typing import Dict
 from typing import Optional
-from typing import List
-from typing import Tuple
 from typing import Union
 
 import sys
@@ -74,10 +71,14 @@ from nbxmpp.errors import StanzaError
 from nbxmpp.structs import ProxyData
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import InvalidJid
+from nbxmpp.protocol import Iq
+
 from OpenSSL.crypto import X509, load_certificate
 from OpenSSL.crypto import FILETYPE_PEM
+
 from gi.repository import Gio
 from gi.repository import GLib
+
 import precis_i18n.codec  # pylint: disable=unused-import
 
 from gajim.common import app
@@ -318,8 +319,8 @@ def get_uf_relative_time(timestamp: float) -> str:
         return ngettext('%i min ago',
                         '%i mins ago',
                         minutes,
-                        minutes,
-                        minutes)
+                        str(minutes),
+                        str(minutes))
     return _('Just now')
 
 def get_sorted_keys(adict):
@@ -478,7 +479,9 @@ def play_sound(sound_event: str,
             app.settings.get_soundevent_settings(sound_event)['path'], loop)
 
 
-def check_soundfile_path(file_, dirs=None):
+def check_soundfile_path(file_: str,
+                         dirs: Optional[list[Path]] = None
+                         ) -> Optional[Path]:
     """
     Check if the sound file exists
 
@@ -532,8 +535,8 @@ def strip_soundfile_path(file_, dirs=None, abs_=True):
             return name
     return file_
 
-def play_sound_file(path_to_soundfile: str, loop: bool = False) -> None:
-    path_to_soundfile = check_soundfile_path(path_to_soundfile)
+def play_sound_file(str_path_to_soundfile: str, loop: bool = False) -> None:
+    path_to_soundfile = check_soundfile_path(str_path_to_soundfile)
     if path_to_soundfile is None:
         return
 
@@ -595,7 +598,7 @@ def statuses_unified() -> bool:
     return True
 
 
-def get_full_jid_from_iq(iq_obj):
+def get_full_jid_from_iq(iq_obj: Iq) -> Optional[str]:
     """
     Return the full jid (with resource) from an iq
     """
@@ -604,11 +607,13 @@ def get_full_jid_from_iq(iq_obj):
         return None
     return parse_jid(str(iq_obj.getFrom()))
 
-def get_jid_from_iq(iq_obj):
+def get_jid_from_iq(iq_obj: Iq) -> Optional[str]:
     """
     Return the jid (without resource) from an iq
     """
     jid = get_full_jid_from_iq(iq_obj)
+    if jid is None:
+        return None
     return app.get_jid_without_resource(jid)
 
 def get_auth_sha(sid: str, initiator: str, target: str) -> str:
@@ -697,8 +702,8 @@ def allow_sound_notification(account: str, sound_event: str) -> bool:
     return False
 
 
-def get_optional_features(account: str) -> List[Namespace]:
-    features = []
+def get_optional_features(account: str) -> list[Namespace]:
+    features: list[str] = []
 
     if app.settings.get_account_setting(account, 'request_user_data'):
         features.append(Namespace.TUNE + '+notify')
@@ -764,7 +769,7 @@ def get_proxy(proxy_name: str) -> Optional[ProxyData]:
         username, password = settings['user'], settings['pass']
 
     return ProxyData(type=settings['type'],
-                     host='%s:%s' % (settings['host'], settings['port']),
+                     host=f"{settings['host']}:{settings['port']}",
                      username=username,
                      password=password)
 
@@ -773,8 +778,8 @@ def version_condition(current_version: str, required_version: str) -> bool:
         return False
     return True
 
-def get_available_emoticon_themes() -> List[str]:
-    files = []
+def get_available_emoticon_themes() -> list[str]:
+    files: list[Path] = []
     for folder in configpaths.get('EMOTICONS').iterdir():
         if not folder.is_dir():
             continue
@@ -879,8 +884,10 @@ class AdditionalDataDict(collections.UserDict):
 
 
 class Singleton(type):
-    _instances = {}  # type: Dict[Any, Any]
-    def __call__(cls, *args, **kwargs):
+
+    _instances: dict[Any, Any] = {}
+
+    def __call__(cls, *args: Any, **kwargs: Any):
         if cls not in cls._instances:
             cls._instances[cls] = super(Singleton, cls).__call__(
                 *args, **kwargs)
@@ -938,7 +945,7 @@ def catch_exceptions(func):
     return func_wrapper
 
 
-def parse_uri_actions(uri: str) -> Tuple[str, Dict[str, str]]:
+def parse_uri_actions(uri: str) -> tuple[str, dict[str, str]]:
     uri = uri[5:]
     if '?' not in uri:
         return 'message', {'jid': uri}
@@ -1065,7 +1072,7 @@ def open_file(path: Union[str, Path]) -> None:
         Gio.AppInfo.launch_default_for_uri(path)
 
 
-def file_is_locked(path_to_file):
+def file_is_locked(path_to_file: str) -> bool:
     """
     Return True if file is locked
     NOTE: Windows only.
@@ -1112,7 +1119,7 @@ def get_resource(account: str) -> Optional[str]:
     return resource
 
 
-def get_default_muc_config() -> Dict[str, Union[bool, str]]:
+def get_default_muc_config() -> dict[str, Union[bool, str]]:
     return {
         # XEP-0045 options
         'muc#roomconfig_allowinvites': True,
@@ -1147,7 +1154,7 @@ def validate_jid(jid: Union[str, JID], type_: Optional[str] = None) -> JID:
     if type_ == 'domain' and jid.is_domain:
         return jid
 
-    raise ValueError('Not a %s JID' % type_)
+    raise ValueError(f'Not a {type_} JID')
 
 
 def to_user_string(error: StanzaError) -> str:
@@ -1161,7 +1168,7 @@ def to_user_string(error: StanzaError) -> str:
     return condition
 
 
-def get_groupchat_name(client: types.Client, jid: Union[str, JID]) -> str:
+def get_groupchat_name(client: types.Client, jid: JID) -> str:
     name = client.get_module('Bookmarks').get_name_from_bookmark(jid)
     if name:
         return name
@@ -1336,7 +1343,7 @@ def convert_gio_to_openssl_cert(cert: Gio.TlsCertificate) -> X509:
     return load_certificate(FILETYPE_PEM, cert.props.certificate_pem.encode())
 
 
-def get_custom_host(account: str) -> Optional[Tuple[str,
+def get_custom_host(account: str) -> Optional[tuple[str,
                                                     ConnectionProtocol,
                                                     ConnectionType]]:
     if not app.settings.get_account_setting(account, 'use_custom_host'):
@@ -1355,7 +1362,7 @@ def get_custom_host(account: str) -> Optional[Tuple[str,
 
 
 def warn_about_plain_connection(account: str,
-                                connection_types: List[ConnectionType]
+                                connection_types: list[ConnectionType]
                                 ) -> bool:
     warn = app.settings.get_account_setting(
         account, 'confirm_unencrypted_connection')
