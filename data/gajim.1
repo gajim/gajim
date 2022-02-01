@@ -3,7 +3,7 @@
 .Os UNIX
 .Sh NAME
 .Nm gajim
-.Nd a Jabber/XMPP client
+.Nd A fully-featured XMPP chat client
 .Sh SYNOPSIS
 .Nm
 .Fl h
@@ -17,18 +17,19 @@
 .Op Fl c Ar directory
 .Sh DESCRIPTION
 .Nm
-is a Jabber/XMPP client written in Python and GTK+.
+aims to be an easy to use and fully-featured XMPP client.
+Just chat with your friends or family, easily share pictures and thoughts or
+discuss the news with your groups.
+Chat securely with End-to-End encryption via OMEMO or OpenPGP.
 .Nm
-works nicely with GNOME, yet it does not require it to run.
-.Nm
-is designed for novice and advanced users as one, as well for XMPP
-server admins.
+integrates well with your other devices:
+simply continue conversations on your mobile device.
 .Pp
 XMPP is the Extensible Messaging and Presence Protocol, a set of open
 technologies for instant messaging, presence, multi-party chat, voice
 and video calls, collaboration, lightweight middleware, content
 syndication, and generalized routing of XML data. For more information
-on the XMPP protocol see <https://xmpp.org/about-xmpp/>.
+on the XMPP protocol see <https://xmpp.org/about/>.
 .Sh OPTIONS
 .Bl -tag -width Ds
 .It Fl h Fl Fl help
@@ -44,10 +45,11 @@ Show all GTK warnings with traceback
 .It Fl l Fl Fl loglevel Em subsystem=level Bq , Em subsystem=level Bq Em ...
 Configure logging system.
 Subsystem can be
-.Em gajim.interface ,
-.Em gajim.c.connection ,
-.Em .nbxmpp.client_nb ,
+.Em gajim.c.preview ,
+.Em gajim.gui.preview ,
+.Em .nbxmpp.stream ,
 etc.
+.Pp
 Level can be
 .Em DEBUG ,
 .Em INFO ,
@@ -70,8 +72,6 @@ Where to look for configuration files
 Cache database file of transports, caps, roster entry, and roster group.
 .It $XDG_CACHE_HOME/gajim/avatars/
 Cache directory of avatars.
-.It $XDG_CACHE_HOME/gajim/vcards/
-Cache directory of vCards (virtual cards).
 .It $XDG_CONFIG_HOME/gajim/
 The config-path used when
 .Op Fl c
@@ -130,9 +130,8 @@ https://lists.gajim.org/cgi-bin/listinfo
 Please submit bugs at
 .Bd -literal -offset indent
 https://dev.gajim.org/gajim/gajim/issues
-https://dev.gajim.org/gajim/gajim-plugins
-https://dev.gajim.org/gajim/python-nbxmpp
+https://dev.gajim.org/gajim/gajim-plugins/issues
+https://dev.gajim.org/gajim/python-nbxmpp/issues
 .Ed
 .Sh SEE ALSO
 .Xr gajim-remote 1
-.Xr gajim-history-manager 1
