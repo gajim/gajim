@@ -307,6 +307,8 @@ class Client(Observable):
             self._schedule_reconnect()
             app.ged.raise_event(ShowChanged(account=self._account,
                                             show='error'))
+            if not self._client.resumeable:
+                self.notify('state-changed', SimpleClientState.DISCONNECTED)
             self.notify('state-changed', SimpleClientState.RESUME_IN_PROGRESS)
 
         else:
