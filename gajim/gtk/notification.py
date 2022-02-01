@@ -43,7 +43,9 @@ from nbxmpp.protocol import JID
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import events
+from gajim.common.client import Client
 from gajim.common.const import AvatarSize
+from gajim.common.const import SimpleClientState
 from gajim.common.const import StyleAttr
 from gajim.common.i18n import _
 from gajim.common.helpers import allow_showing_notification
@@ -79,8 +81,12 @@ class NotificationBackend(EventHelper):
 
         self.register_events([
             ('notification', ged.GUI2, self._on_notification),
-            ('our-show', ged.GUI2, self._on_our_show)
+            ('account-enabled', ged.GUI2, self._on_account_enabled)
         ])
+
+        for client in app.get_clients():
+            client.connect_signal('state-changed',
+                                  self._on_client_state_changed)
 
     def _on_notification(self, event: events.Notification) -> None:
         if event.sound is not None:
@@ -91,11 +97,19 @@ class NotificationBackend(EventHelper):
 
         self._send(event)
 
-    def _on_our_show(self, event: events.ShowChanged) -> None:
-        if not app.account_is_connected(event.account):
+    def _on_account_enabled(self, event: events.AccountEnabled) -> None:
+        client = app.get_client(event.account)
+        client.connect_signal('state-changed', self._on_client_state_changed)
+
+    def _on_client_state_changed(self,
+                                 client: Client,
+                                 _signal_name: str,
+                                 state: SimpleClientState) -> None:
+
+        if not state.is_connected:
             return
-        self._withdraw(['connection-failed', event.account])
-        self._withdraw(['server-shutdown', event.account])
+        self._withdraw(['connection-failed', client.account])
+        self._withdraw(['server-shutdown', client.account])
 
     def _send(self, event: events.Notification) -> None:
         raise NotImplementedError

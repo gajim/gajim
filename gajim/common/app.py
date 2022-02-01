@@ -145,6 +145,10 @@ def get_client(account: str) -> types.Client:
     return connections[account]
 
 
+def get_clients() -> list[types.Client]:
+    return list(connections.values())
+
+
 def is_installed(dependency: str) -> bool:
     return _dependencies[dependency]
 

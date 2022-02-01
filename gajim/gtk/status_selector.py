@@ -12,15 +12,20 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Any, Optional
+from __future__ import annotations
+
+from typing import Optional
 
 from gi.repository import Gtk
 from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common import events
+from gajim.common.client import Client
 from gajim.common.const import AvatarSize
-from gajim.common.helpers import get_connection_status
+from gajim.common.const import SimpleClientState
+from gajim.common.helpers import get_client_status
 from gajim.common.helpers import get_uf_show
 from gajim.common.helpers import get_global_show
 from gajim.common.helpers import statuses_unified
@@ -55,7 +60,29 @@ class StatusSelector(Gtk.MenuButton):
             box.show_all()
         self.add(box)
 
-        app.ged.register_event_handler('our-show', ged.POSTGUI, self.update)
+        app.ged.register_event_handler('our-show',
+                                       ged.POSTGUI,
+                                       self._on_our_show)
+        app.ged.register_event_handler('account-enabled',
+                                       ged.POSTGUI,
+                                       self._on_account_enabled)
+
+        for client in app.get_clients():
+            client.connect_signal('state-changed',
+                                  self._on_client_state_changed)
+
+    def _on_our_show(self, event: events.ShowChanged) -> None:
+        self.update()
+
+    def _on_account_enabled(self, event: events.AccountEnabled) -> None:
+        client = app.get_client(event.account)
+        client.connect_signal('state-changed', self._on_client_state_changed)
+
+    def _on_client_state_changed(self,
+                                 client: Client,
+                                 _signal_name: str,
+                                 state: SimpleClientState) -> None:
+        self.update()
 
     def _create_popover(self) -> None:
         popover_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
@@ -105,11 +132,11 @@ class StatusSelector(Gtk.MenuButton):
         new_status = button.get_name()
         app.interface.change_status(status=new_status, account=self._account)
 
-    def update(self, *args: Any, **kwargs: Any) -> None:
+    def update(self) -> None:
         if self._account is None:
             show = get_global_show()
         else:
-            show = get_connection_status(self._account)
+            show = get_client_status(self._account)
 
         surface = get_show_circle(
             show, AvatarSize.SHOW_CIRCLE, self.get_scale_factor())

@@ -31,7 +31,9 @@ from nbxmpp import JID
 from gajim.common import app
 from gajim.common import events
 from gajim.common import ged
+from gajim.common.client import Client
 from gajim.common.const import Direction
+from gajim.common.const import SimpleClientState
 from gajim.common.ged import EventHelper
 from gajim.common.helpers import ask_for_status_message
 from gajim.common.i18n import _
@@ -113,8 +115,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('jingle-error-received', ged.GUI1, self._on_event),
             ('file-request-received', ged.GUI1, self._on_file_request),
             ('file-request-sent', ged.GUI1, self._on_event),
-            ('our-show', ged.GUI1, self._on_our_show),
-            ('signed-in', ged.GUI1, self._on_signed_in),
             ('account-enabled', ged.GUI1, self._on_account_enabled),
             ('account-disabled', ged.GUI1, self._on_account_disabled),
             ('allow-gajim-update-check', ged.GUI1, self._on_allow_gajim_update),
@@ -138,6 +138,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         chat_list_stack = self._chat_page.get_chat_list_stack()
         app.app.systray.connect_unread_widget(chat_list_stack,
                                               'unread-count-changed')
+
+        for client in app.get_clients():
+            client.connect_signal('state-changed',
+                                  self._on_client_state_changed)
 
     def _start_timers(self) -> None:
         GLib.timeout_add_seconds(UNLOAD_CHAT_TIME,
@@ -167,6 +171,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def _on_account_enabled(self, event: events.AccountEnabled) -> None:
         self._account_side_bar.add_account(event.account)
         self._main_stack.add_account_page(event.account)
+        client = app.get_client(event.account)
+        client.connect_signal('state-changed', self._on_client_state_changed)
 
     def _on_account_disabled(self, event: events.AccountDisabled) -> None:
         workspace_id = self._workspace_side_bar.get_first_workspace()
@@ -175,15 +181,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._main_stack.remove_account_page(event.account)
         self._main_stack.remove_chats_for_account(event.account)
 
-    @staticmethod
-    def _on_our_show(event: events.ShowChanged) -> None:
-        if event.show == 'offline':
-            app.app.set_account_actions_state(event.account)
-            app.app.update_app_actions_state()
+    def _on_client_state_changed(self,
+                                 client: Client,
+                                 _signal_name: str,
+                                 state: SimpleClientState) -> None:
 
-    @staticmethod
-    def _on_signed_in(event: events.SignedIn) -> None:
-        app.app.set_account_actions_state(event.account, True)
+        app.app.set_account_actions_state(client.account, state.is_connected)
         app.app.update_app_actions_state()
 
     def _on_allow_gajim_update(self,

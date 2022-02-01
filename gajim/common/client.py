@@ -39,7 +39,6 @@ from gajim.common.events import MessageSent
 from gajim.common.events import AccountDisonnected
 from gajim.common.events import PasswordRequired
 from gajim.common.events import PlainConnection
-from gajim.common.events import ShowChanged
 from gajim.common.events import SignedIn
 from gajim.common.events import Notification
 from gajim.common.events import StanzaReceived
@@ -203,8 +202,6 @@ class Client(Observable):
 
         log.info('Resume failed')
         self.notify('resume-failed')
-        app.ged.raise_event(ShowChanged(account=self._account,
-                                        show='offline'))
 
     def _on_resume_successful(self,
                               _client: NBXMPPClient,
@@ -216,12 +213,6 @@ class Client(Observable):
         if self._status_sync_on_resume:
             self._status_sync_on_resume = False
             self.update_presence()
-        else:
-            # Normally show is updated when we receive a presence reflection.
-            # On resume, if show has not changed while offline, we don’t send
-            # a new presence so we have to trigger the event here.
-            app.ged.raise_event(ShowChanged(account=self._account,
-                                            show=self._status))
 
         self.notify('state-changed', SimpleClientState.CONNECTED)
 
@@ -305,15 +296,11 @@ class Client(Observable):
         if self._reconnect:
             self._after_disconnect()
             self._schedule_reconnect()
-            app.ged.raise_event(ShowChanged(account=self._account,
-                                            show='error'))
             if not self._client.resumeable:
                 self.notify('state-changed', SimpleClientState.DISCONNECTED)
             self.notify('state-changed', SimpleClientState.RESUME_IN_PROGRESS)
 
         else:
-            app.ged.raise_event(ShowChanged(account=self._account,
-                                            show='offline'))
             self._after_disconnect()
             self.notify('state-changed', SimpleClientState.DISCONNECTED)
 
@@ -593,7 +580,7 @@ class Client(Observable):
     def _abort_reconnect(self) -> None:
         self._set_state(ClientState.DISCONNECTED)
         self._disable_reconnect_timer()
-        app.ged.raise_event(ShowChanged(account=self._account, show='offline'))
+        self.notify('state-changed', SimpleClientState.DISCONNECTED)
 
         if self._destroy_client:
             self._client.destroy()

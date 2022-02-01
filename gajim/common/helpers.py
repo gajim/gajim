@@ -87,7 +87,8 @@ from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
 from gajim.common.i18n import get_rfc5646_lang
-from gajim.common.const import ShowConstant
+from gajim.common.const import SHOW_STRING
+from gajim.common.const import SHOW_STRING_MNEMONIC
 from gajim.common.const import URIType
 from gajim.common.const import URIAction
 from gajim.common.const import GIO_TLS_ERRORS
@@ -179,57 +180,10 @@ def windowsify(word: str) -> str:
         return word.capitalize()
     return word
 
-def get_uf_show(show: Union[ShowConstant, str],
-                use_mnemonic: bool = False) -> str:
-    """
-    Return a userfriendly string for dnd/xa/chat and make all strings
-    translatable
-
-    If use_mnemonic is True, it adds _ so GUI should call with True for
-    accessibility issues
-    """
-    if isinstance(show, ShowConstant):
-        show = show.name.lower()
-
-    if show == 'dnd':
-        if use_mnemonic:
-            uf_show = _('_Busy')
-        else:
-            uf_show = _('Busy')
-    elif show == 'xa':
-        if use_mnemonic:
-            uf_show = _('_Not Available')
-        else:
-            uf_show = _('Not Available')
-    elif show == 'chat':
-        if use_mnemonic:
-            uf_show = _('_Free for Chat')
-        else:
-            uf_show = _('Free for Chat')
-    elif show == 'online':
-        if use_mnemonic:
-            uf_show = Q_('?user status:_Available')
-        else:
-            uf_show = Q_('?user status:Available')
-    elif show == 'connecting':
-        uf_show = _('Connecting')
-    elif show == 'away':
-        if use_mnemonic:
-            uf_show = _('A_way')
-        else:
-            uf_show = _('Away')
-    elif show == 'offline':
-        if use_mnemonic:
-            uf_show = _('_Offline')
-        else:
-            uf_show = _('Offline')
-    elif show == 'not in roster':
-        uf_show = _('Not in contact list')
-    elif show == 'requested':
-        uf_show = Q_('?contact has status:Unknown')
-    else:
-        uf_show = Q_('?contact has status:Has errors')
-    return uf_show
+def get_uf_show(show: str, use_mnemonic: bool = False) -> str:
+    if use_mnemonic:
+        return SHOW_STRING_MNEMONIC[show]
+    return SHOW_STRING[show]
 
 def get_uf_sub(sub: str) -> str:
     if sub == 'none':
@@ -543,19 +497,17 @@ def play_sound_file(str_path_to_soundfile: str, loop: bool = False) -> None:
     from gajim.common import sound
     sound.play(path_to_soundfile, loop)
 
-def get_connection_status(account: str) -> str:
-    if not app.account_is_available(account):
-        return 'error'
-    con = app.connections[account]
-    if con.state.is_reconnect_scheduled:
-        return 'error'
+def get_client_status(account: str) -> str:
+    client = app.get_client(account)
+    if client.state.is_disconnected:
+        return 'offline'
 
-    if con.state.is_connecting or con.state.is_connected:
+    if (client.state.is_reconnect_scheduled or
+            client.state.is_connecting or
+            client.state.is_connected):
         return 'connecting'
 
-    if con.state.is_disconnected:
-        return 'offline'
-    return con.status
+    return client.status
 
 def get_global_show() -> str:
     maxi = 0
@@ -563,7 +515,7 @@ def get_global_show() -> str:
         if not app.settings.get_account_setting(account,
                                                 'sync_with_global_status'):
             continue
-        status = get_connection_status(account)
+        status = get_client_status(account)
         index = SHOW_LIST.index(status)
         if index > maxi:
             maxi = index
@@ -587,13 +539,15 @@ def statuses_unified() -> bool:
     Test if all statuses are the same
     """
     reference = None
-    for account, con in app.connections.items():
+    for account in app.connections:
         if not app.settings.get_account_setting(account,
                                                 'sync_with_global_status'):
             continue
+
         if reference is None:
-            reference = con.status
-        elif reference != con.status:
+            reference = get_client_status(account)
+
+        elif reference != get_client_status(account):
             return False
     return True
 

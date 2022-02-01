@@ -879,13 +879,32 @@ COMMON_FEATURES = [
 SHOW_LIST = [
     'offline',
     'connecting',
-    'online',
-    'chat',
     'away',
     'xa',
+    'chat',
+    'online',
     'dnd',
-    'error'
 ]
+
+SHOW_STRING = {
+    'dnd': _('Busy'),
+    'xa': _('Not Available'),
+    'chat': _('Free for Chat'),
+    'online': Q_('?user status:Available'),
+    'connecting': _('Connecting'),
+    'away': _('Away'),
+    'offline': _('Offline'),
+}
+
+SHOW_STRING_MNEMONIC = {
+    'dnd': _('_Busy'),
+    'xa': _('_Not Available'),
+    'chat': _('_Free for Chat'),
+    'online': Q_('?user status:_Available'),
+    'connecting': _('Connecting'),
+    'away': _('A_way'),
+    'offline': _('_Offline'),
+}
 
 GAJIM_FAQ_URI = 'https://dev.gajim.org/gajim/gajim/wikis/help/gajimfaq'
 GAJIM_WIKI_URI = 'https://dev.gajim.org/gajim/gajim/wikis'

@@ -31,11 +31,11 @@ from gi.repository import GLib
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import ged
+from gajim.common import events
+from gajim.common.client import Client
 from gajim.common.const import Display
+from gajim.common.const import SimpleClientState
 from gajim.common.i18n import _
-from gajim.common.events import AccountConnected
-from gajim.common.events import AccountDisonnected
-from gajim.common.events import ShowChanged
 from gajim.common.helpers import get_global_show
 from gajim.common.helpers import get_uf_show
 from gajim.common.ged import EventHelper
@@ -119,9 +119,14 @@ class GtkMenuBackend(EventHelper):
 
         self.register_events([
             ('our-show', ged.GUI1, self._on_our_show),
+            ('account-enabled', ged.GUI1, self._on_account_enabled),
             ('account-connected', ged.CORE, self._on_account_state),
             ('account-disconnected', ged.CORE, self._on_account_state),
         ])
+
+        for client in app.get_clients():
+            client.connect_signal('state-changed',
+                                  self._on_client_state_changed)
 
     def update_state(self, count: int = 0) -> None:
         raise NotImplementedError
@@ -149,11 +154,22 @@ class GtkMenuBackend(EventHelper):
         self._popup_menus.append(sub_menu)
         self._ui.status_menu.set_submenu(sub_menu)
 
-    def _on_our_show(self, _event: ShowChanged) -> None:
+    def _on_account_enabled(self, event: events.AccountEnabled) -> None:
+        client = app.get_client(event.account)
+        client.connect_signal('state-changed', self._on_client_state_changed)
+
+    def _on_client_state_changed(self,
+                                 _client: Client,
+                                 _signal_name: str,
+                                 _state: SimpleClientState) -> None:
+        self.update_state()
+
+    def _on_our_show(self, _event: events.ShowChanged) -> None:
         self.update_state()
 
     def _on_account_state(self,
-                          _event: Union[AccountConnected, AccountDisonnected]
+                          _event: Union[events.AccountConnected,
+                                        events.AccountDisonnected]
                           ) -> None:
         account_connected = bool(app.get_number_of_connected_accounts() > 0)
         self._ui.start_chat_menuitem.set_sensitive(account_connected)

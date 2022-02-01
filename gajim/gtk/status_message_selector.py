@@ -19,6 +19,9 @@ from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common import events
+from gajim.common.client import Client
+from gajim.common.const import SimpleClientState
 from gajim.common.helpers import get_global_status_message
 from gajim.common.helpers import to_one_line
 from gajim.common.i18n import _
@@ -44,7 +47,30 @@ class StatusMessageSelector(Gtk.Box):
         self.add(self._entry)
         self.add(self._button)
         self.show_all()
-        app.ged.register_event_handler('our-show', ged.POSTGUI, self.update)
+
+        app.ged.register_event_handler('our-show',
+                                       ged.POSTGUI,
+                                       self._on_our_show)
+        app.ged.register_event_handler('account-enabled',
+                                       ged.POSTGUI,
+                                       self._on_account_enabled)
+
+        for client in app.get_clients():
+            client.connect_signal('state-changed',
+                                  self._on_client_state_changed)
+
+    def _on_our_show(self, event: events.ShowChanged) -> None:
+        self.update()
+
+    def _on_account_enabled(self, event: events.AccountEnabled) -> None:
+        client = app.get_client(event.account)
+        client.connect_signal('state-changed', self._on_client_state_changed)
+
+    def _on_client_state_changed(self,
+                                 client: Client,
+                                 _signal_name: str,
+                                 state: SimpleClientState) -> None:
+        self.update()
 
     def _on_changed(self, _entry: Gtk.Entry) -> None:
         self._button.set_sensitive(True)
@@ -64,7 +90,7 @@ class StatusMessageSelector(Gtk.Box):
                 client = app.get_client(account)
                 client.change_status(client.status, message)
 
-    def update(self, *args: Any) -> None:
+    def update(self) -> None:
         if self._account is None:
             message = get_global_status_message()
         else:
