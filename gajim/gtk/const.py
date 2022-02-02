@@ -162,7 +162,6 @@ WINDOW_MODULES = {
     'ServerInfo': 'gajim.gui.server_info',
     'ServiceDiscoveryWindow': 'gajim.gui.discovery',
     'ServiceRegistration': 'gajim.gui.service_registration',
-    'SingleMessageWindow': 'gajim.gui.single_message',
     'SSLErrorDialog': 'gajim.gui.ssl_error_dialog',
     'StartChatDialog': 'gajim.gui.start_chat',
     'SynchronizeAccounts': 'gajim.gui.synchronize_accounts',

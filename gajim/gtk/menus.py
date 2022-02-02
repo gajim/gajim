@@ -171,7 +171,6 @@ def get_account_menu(account: str) -> Gio.Menu:
 
     menuitems: MenuItemListT = [
         (_('Profile'), f'app.{account}-profile', val),
-        (_('Send Single Message…'), f'app.{account}-start-single-chat', val),
         (_('Discover Services…'), f'app.{account}-services', val),
         (_('Server Info'), f'app.{account}-server-info', val),
     ]

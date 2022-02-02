@@ -435,7 +435,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
         # pylint: disable=line-too-long
         return [
             ('-bookmarks', self._on_bookmarks_action, 'online', 's'),
-            ('-start-single-chat', self._on_start_single_message_action, 'online', 's'),
             ('-open-chat', self._on_open_chat_action, 'online', 'as'),
             ('-add-contact', self._on_add_contact_account_action, 'online', 'as'),
             ('-services', self._on_services_action, 'online', 's'),
@@ -601,12 +600,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
         if jid is not None:
             jid = JID.from_string(jid)
         open_window('AddContact', account=account or None, jid=jid or None)
-
-    @staticmethod
-    def _on_start_single_message_action(_action: Gio.SimpleAction,
-                                        param: GLib.Variant) -> None:
-        account = param.get_string()
-        open_window('SingleMessageWindow', account=account)
 
     @staticmethod
     def _on_add_account_action(_action: Gio.SimpleAction,

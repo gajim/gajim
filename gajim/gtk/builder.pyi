@@ -848,17 +848,6 @@ class ShortcutsWindowBuilder(Builder):
     shortcuts_window: Gtk.ShortcutsWindow
 
 
-class SingleMessageWindowBuilder(Builder):
-    box: Gtk.Box
-    message_grid: Gtk.Grid
-    recipients_entry: Gtk.Entry
-    subject_entry: Gtk.Entry
-    message_scrolledwindow: Gtk.ScrolledWindow
-    message_textview: Gtk.TextView
-    count_chars_label: Gtk.Label
-    send_button: Gtk.Button
-
-
 class SslErrorDialogBuilder(Builder):
     ssl_error_box: Gtk.Box
     intro_text: Gtk.Label
@@ -1073,8 +1062,6 @@ def get_builder(file_name: Literal['server_info.ui'], widgets: list[str] = ...) 
 def get_builder(file_name: Literal['service_discovery_window.ui'], widgets: list[str] = ...) -> ServiceDiscoveryWindowBuilder: ...
 @overload
 def get_builder(file_name: Literal['shortcuts_window.ui'], widgets: list[str] = ...) -> ShortcutsWindowBuilder: ...
-@overload
-def get_builder(file_name: Literal['single_message_window.ui'], widgets: list[str] = ...) -> SingleMessageWindowBuilder: ...
 @overload
 def get_builder(file_name: Literal['ssl_error_dialog.ui'], widgets: list[str] = ...) -> SslErrorDialogBuilder: ...
 @overload
