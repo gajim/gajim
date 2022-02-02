@@ -32,11 +32,13 @@ from gajim.common.helpers import statuses_unified
 from gajim.common.i18n import _
 
 from .avatar import get_show_circle
+from .util import EventHelper
 
 
-class StatusSelector(Gtk.MenuButton):
+class StatusSelector(Gtk.MenuButton, EventHelper):
     def __init__(self, account: Optional[str] = None, compact: bool = False):
         Gtk.MenuButton.__init__(self)
+        EventHelper.__init__(self)
         self.set_direction(Gtk.ArrowType.UP)
         self._account = account
         self._compact = compact
@@ -60,12 +62,12 @@ class StatusSelector(Gtk.MenuButton):
             box.show_all()
         self.add(box)
 
-        app.ged.register_event_handler('our-show',
-                                       ged.POSTGUI,
-                                       self._on_our_show)
-        app.ged.register_event_handler('account-enabled',
-                                       ged.POSTGUI,
-                                       self._on_account_enabled)
+        self.connect('destroy', self._on_destroy)
+
+        self.register_event('our-show', ged.GUI1, self._on_our_show)
+        self.register_event('account-enabled',
+                            ged.GUI1,
+                            self._on_account_enabled)
 
         for client in app.get_clients():
             client.connect_signal('state-changed',
@@ -153,3 +155,7 @@ class StatusSelector(Gtk.MenuButton):
                 _('Status: %s') % show_label)
             if not self._compact:
                 self._current_show_label.set_text(show_label)
+
+    def _on_destroy(self, widget: StatusSelector) -> None:
+        self._status_popover.destroy()
+        app.check_finalize(self)
