@@ -14,14 +14,15 @@
 
 from __future__ import annotations
 
+from typing import Any
 from typing import Optional
 from typing import cast
 
 from gi.repository import Gtk
 
-from gajim.common.const import AvatarSize
 from gajim.common import app
-from gajim.common import types
+from gajim.common.const import AvatarSize
+from gajim.common.helpers import get_client_status
 from gajim.common.i18n import _
 
 
@@ -105,33 +106,34 @@ class Account(Gtk.ListBoxRow):
 class AccountAvatar(Gtk.Image):
     def __init__(self, account: str) -> None:
         Gtk.Image.__init__(self)
+
         self._account = account
 
         jid = app.get_jid_from_account(self._account)
-        client = app.get_client(self._account)
-        self._contact = client.get_module('Contacts').get_contact(jid)
-        self._contact.connect('avatar-update', self._on_avatar_update)
-        self._contact.connect('presence-update', self._on_presence_update)
+        self._client = app.get_client(self._account)
+
+        self._client.connect_signal('state-changed', self._on_event)
+
+        self._contact = self._client.get_module('Contacts').get_contact(jid)
+        self._contact.connect('avatar-update', self._on_event)
+        self._contact.connect('presence-update', self._on_event)
 
         self.connect('destroy', self._on_destroy)
         self._update_image()
 
-    def _on_presence_update(self,
-                            _contact: types.BareContact,
-                            _signal_name: str) -> None:
-        self._update_image()
-
-    def _on_avatar_update(self,
-                          _contact: types.BareContact,
-                          _signal_name: str) -> None:
+    def _on_event(self, *args: Any) -> None:
         self._update_image()
 
     def _update_image(self) -> None:
-        surface = self._contact.get_avatar(AvatarSize.ACCOUNT_SIDE_BAR,
-                                           self.get_scale_factor(),
-                                           style='circle')
+        status = get_client_status(self._account)
+        surface = app.app.avatar_storage.get_surface(
+            self._contact,
+            AvatarSize.ACCOUNT_SIDE_BAR,
+            self.get_scale_factor(),
+            status)
         self.set_from_surface(surface)
 
     def _on_destroy(self, _widget: Gtk.Image) -> None:
         self._contact.disconnect_all_from_obj(self)
+        self._client.disconnect_all_from_obj(self)
         app.check_finalize(self)
