@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Any
 from typing import Optional
 
@@ -26,10 +28,13 @@ from gajim.common.helpers import get_global_status_message
 from gajim.common.helpers import to_one_line
 from gajim.common.i18n import _
 
+from .util import EventHelper
 
-class StatusMessageSelector(Gtk.Box):
+
+class StatusMessageSelector(Gtk.Box, EventHelper):
     def __init__(self, account: Optional[str] = None) -> None:
         Gtk.Box.__init__(self)
+        EventHelper.__init__(self)
         self.get_style_context().add_class('linked')
         self._account = account
 
@@ -46,14 +51,15 @@ class StatusMessageSelector(Gtk.Box):
         self._button.connect('clicked', self._set_status_message)
         self.add(self._entry)
         self.add(self._button)
+
+        self.connect('destroy', self._on_destroy)
+
         self.show_all()
 
-        app.ged.register_event_handler('our-show',
-                                       ged.POSTGUI,
-                                       self._on_our_show)
-        app.ged.register_event_handler('account-enabled',
-                                       ged.POSTGUI,
-                                       self._on_account_enabled)
+        self.register_event('our-show', ged.GUI1, self._on_our_show)
+        self.register_event('account-enabled',
+                            ged.GUI1,
+                            self._on_account_enabled)
 
         for client in app.get_clients():
             client.connect_signal('state-changed',
@@ -100,3 +106,6 @@ class StatusMessageSelector(Gtk.Box):
             message = client.status_message
 
         self._entry.set_text(message)
+
+    def _on_destroy(self, widget: StatusMessageSelector) -> None:
+        app.check_finalize(self)
