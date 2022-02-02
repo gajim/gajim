@@ -371,10 +371,9 @@ class Linux(NotificationBackend):
         scale = get_monitor_scale_factor()
         client = app.get_client(account)
         contact = client.get_module('Contacts').get_contact(jid)
-        return app.interface.get_avatar(contact,
-                                        AvatarSize.NOTIFICATION,
-                                        scale,
-                                        pixbuf=True)
+        return contact.get_avatar(AvatarSize.NOTIFICATION,
+                                  scale,
+                                  pixbuf=True)
 
     def _make_icon(self, event: events.Notification) -> Gio.Icon:
         if (event.type == 'incoming-message' and app.desktop_env == 'gnome'):

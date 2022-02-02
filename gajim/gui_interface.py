@@ -75,9 +75,6 @@ from gajim.common.preview import PreviewManager
 from gajim.common.const import FTState
 from gajim.common.file_props import FileProp
 
-from gajim.common.modules.contacts import GroupchatContact
-from gajim.common.modules.contacts import GroupchatParticipant
-from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.httpupload import HTTPFileTransfer
 
 from gajim.gui.dialogs import ErrorDialog
@@ -90,8 +87,6 @@ from gajim.gui.util import get_color_for_account
 from gajim.gui.types import ControlT
 
 log = logging.getLogger('gajim.interface')
-
-ContactT = Union[BareContact, GroupchatContact, GroupchatParticipant]
 
 
 class Interface:
@@ -692,19 +687,6 @@ class Interface:
 
     def save_avatar(self, data: bytes) -> Optional[str]:
         return app.app.avatar_storage.save_avatar(data)
-
-    def get_avatar(self,
-                   contact: ContactT,
-                   size: int,
-                   scale: int,
-                   show: Optional[str] = None,
-                   pixbuf: bool = False,
-                   style: str = 'circle') -> Any:
-        if pixbuf:
-            return app.app.avatar_storage.get_pixbuf(
-                contact, size, scale, show, style=style)
-        return app.app.avatar_storage.get_surface(
-            contact, size, scale, show, style=style)
 
     def avatar_exists(self, filename: str) -> bool:
         return app.app.avatar_storage.get_avatar_path(filename) is not None
