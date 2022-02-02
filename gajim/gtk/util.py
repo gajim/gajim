@@ -275,9 +275,11 @@ def get_total_screen_geometry() -> tuple[int, int]:
     total_width = 0
     total_height = 0
     display = Gdk.Display.get_default()
+    assert display is not None
     monitors = display.get_n_monitors()
     for num in range(0, monitors):
         monitor = display.get_monitor(num)
+        assert monitor is not None
         geometry = monitor.get_geometry()
         total_width += geometry.width
         total_height = max(total_height, geometry.height)
@@ -358,6 +360,7 @@ def get_completion_liststore(entry: Gtk.Entry) -> Gtk.ListStore:
 
 def get_cursor(name: str) -> Gdk.Cursor:
     display = Gdk.Display.get_default()
+    assert display is not None
     cursor = Gdk.Cursor.new_from_name(display, name)
     if cursor is not None:
         return cursor
@@ -460,6 +463,7 @@ def make_rgba(color_string: str) -> Gdk.RGBA:
 
 def get_monitor_scale_factor() -> int:
     display = Gdk.Display.get_default()
+    assert display is not None
     monitor = display.get_primary_monitor()
     if monitor is None:
         log.warning('Could not determine scale factor')
@@ -477,6 +481,7 @@ def get_primary_accel_mod() -> Optional[Gdk.ModifierType]:
 
 def get_hardware_key_codes(keyval: int) -> list[int]:
     display = Gdk.Display.get_default()
+    assert display is not None
     keymap = Gdk.Keymap.get_for_display(display)
 
     valid, key_map_keys = keymap.get_entries_for_keyval(keyval)
@@ -485,9 +490,9 @@ def get_hardware_key_codes(keyval: int) -> list[int]:
     return [key.keycode for key in key_map_keys]
 
 
-def ensure_not_destroyed(func):
+def ensure_not_destroyed(func: Any) -> Any:
     @wraps(func)
-    def func_wrapper(self, *args, **kwargs):
+    def func_wrapper(self: Any, *args: Any, **kwargs: Any):
         if self._destroyed:  # pylint: disable=protected-access
             return None
         return func(self, *args, **kwargs)
@@ -513,9 +518,9 @@ def get_account_tune_icon_name(account: str) -> Optional[str]:
 
 
 def format_location(location: LocationData) -> str:
-    location = location._asdict()
+    location_dict = location._asdict()
     location_string = ''
-    for attr, value in location.items():
+    for attr, value in location_dict.items():
         if value is None:
             continue
         text = GLib.markup_escape_text(value)
@@ -599,7 +604,7 @@ def text_to_color(text: str) -> tuple[float, float, float]:
         background = (0, 0, 0)  # RGB (0, 0, 0) black
     else:
         background = (1, 1, 1)  # RGB (255, 255, 255) white
-    return nbxmpp.util.text_to_color(text, background)
+    return nbxmpp.util.text_to_color(text, background)  # type: ignore
 
 
 def get_color_for_account(account: str) -> str:
@@ -646,7 +651,7 @@ def get_pixbuf_from_data(file_data: bytes) -> Optional[GdkPixbuf.Pixbuf]:
                     'convert avatar image using pillow')
         try:
             avatar = Image.open(BytesIO(file_data)).convert("RGBA")
-            array = GLib.Bytes.new(avatar.tobytes())
+            array = GLib.Bytes.new(avatar.tobytes())  # type: ignore
             width, height = avatar.size
             pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
                 array, GdkPixbuf.Colorspace.RGB,
@@ -683,6 +688,7 @@ def scale_pixbuf_from_data(data: bytes,
                            size: int
                            ) -> Optional[GdkPixbuf.Pixbuf]:
     pixbuf = get_pixbuf_from_data(data)
+    assert pixbuf is not None
     return scale_pixbuf(pixbuf, size)
 
 
@@ -705,7 +711,7 @@ def load_pixbuf(path: Union[str, Path],
             log.debug('Error', exc_info=True)
             return None
 
-        array = GLib.Bytes.new(avatar.tobytes())
+        array = GLib.Bytes.new(avatar.tobytes())  # type: ignore
         width, height = avatar.size
         pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
             array, GdkPixbuf.Colorspace.RGB, True,
@@ -746,7 +752,7 @@ def make_href_markup(string: str) -> str:
     assert isinstance(url_color, str)
     color = convert_rgb_to_hex(url_color)
 
-    def _to_href(match: Match) -> str:
+    def _to_href(match: Match[str]) -> str:
         url = match.group()
         if '://' not in url:
             url = 'https://' + url
@@ -760,7 +766,7 @@ def get_app_windows(account: str) -> list[Gtk.Window]:
     windows: list[Gtk.Window] = []
     for win in app.app.get_windows():
         if hasattr(win, 'account'):
-            if win.account == account:
+            if win.account == account:  # type: ignore
                 windows.append(win)
     return windows
 
@@ -774,11 +780,11 @@ def get_app_window(name: str,
             continue
 
         if account is not None:
-            if account != win.account:
+            if account != win.account:  # type: ignore
                 continue
 
         if jid is not None:
-            if jid != win.jid:
+            if jid != win.jid:  # type: ignore
                 continue
         return win
     return None
@@ -800,7 +806,7 @@ def open_window(name: str, **kwargs: Any) -> Any:
 class EventHelper(CommonEventHelper):
     def __init__(self):
         CommonEventHelper.__init__(self)
-        self.connect('destroy', self.__on_destroy)  # pylint: disable=no-member
+        self.connect('destroy', self.__on_destroy)  # type: ignore
 
     def __on_destroy(self, *args: Any) -> None:
         self.unregister_events()
@@ -812,7 +818,12 @@ def check_destroy(widget: Gtk.Widget) -> None:
     widget.connect('destroy', _destroy)
 
 
-def _connect_destroy(sender, func, detailed_signal, handler, *args, **kwargs):
+def _connect_destroy(sender: Any,
+                     func: Any,
+                     detailed_signal: str,
+                     handler: Any,
+                     *args: Any,
+                     **kwargs: Any) -> int:
     """Connect a bound method to a foreign object signal and disconnect
     if the object the method is bound to emits destroy (Gtk.Widget subclass).
     Also works if the handler is a nested function in a method and
@@ -834,25 +845,27 @@ def _connect_destroy(sender, func, detailed_signal, handler, *args, **kwargs):
 
     handler_id = func(detailed_signal, handler, *args, **kwargs)
 
-    def disconnect_cb(*args):
+    def disconnect_cb(*args: Any) -> None:
         sender.disconnect(handler_id)
 
     obj.connect('destroy', disconnect_cb)
     return handler_id
 
 
-def connect_destroy(sender, *args, **kwargs):
+def connect_destroy(sender: Any, *args: Any, **kwargs: Any) -> int:
     return _connect_destroy(sender, sender.connect, *args, **kwargs)
 
 
-def wrap_with_event_box(klass):
+def wrap_with_event_box(klass: Any) -> Any:
     @wraps(klass)
-    def klass_wrapper(*args, **kwargs):
+    def klass_wrapper(*args: Any, **kwargs: Any) -> Gtk.EventBox:
         widget = klass(*args, **kwargs)
         event_box = Gtk.EventBox()
 
-        def _on_realize(*args):
-            event_box.get_window().set_cursor(get_cursor('pointer'))
+        def _on_realize(*args: Any) -> None:
+            window = event_box.get_window()
+            assert window is not None
+            window.set_cursor(get_cursor('pointer'))
 
         event_box.connect_after('realize', _on_realize)
         event_box.add(widget)
