@@ -616,7 +616,8 @@ def get_css_show_class(show: str) -> str:
         return '.gajim-status-away'
     if show in ('dnd', 'xa'):
         return '.gajim-status-dnd'
-    # 'offline', 'not in roster', 'requested'
+    if show == 'connecting':
+        return '.gajim-status-connecting'
     return '.gajim-status-offline'
 
 

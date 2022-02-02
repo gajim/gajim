@@ -69,3 +69,6 @@
 .gajim-status-offline {
     color: rgb(154, 154, 154);
 }
+.gajim-status-connecting {
+    color: rgb(77, 166, 255);
+}
