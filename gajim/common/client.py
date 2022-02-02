@@ -473,11 +473,6 @@ class Client(Observable):
         stanza = self.get_module('Message').build_message_stanza(message)
         message.stanza = stanza
 
-        if message.contact is None:
-            # Only Single Message should have no contact
-            self._send_message(message)
-            return
-
         method = message.contact.settings.get('encryption')
         if not method:
             self._send_message(message)
@@ -512,17 +507,6 @@ class Client(Observable):
             return
 
         self.get_module('Message').log_message(message)
-
-    def send_messages(self, jids: list[JID], message: OutgoingMessage) -> None:
-        if not self._state.is_available:
-            log.warning('Trying to send message while offline')
-            return
-
-        # for jid in jids:
-        #     message = message.copy()
-        #     stanza = self.get_module('Message').build_message_stanza(message)
-        #     message.stanza = stanza
-        #     self._send_message(message)
 
     def _prepare_for_connect(self) -> None:
         custom_host = get_custom_host(self._account)
