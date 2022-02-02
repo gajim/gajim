@@ -318,7 +318,7 @@ class BareContact(CommonContact):
                    default: bool = False,
                    style: str = 'circle'):
 
-        show = self.show if add_show else None
+        show = self.show.value if add_show else None
 
         transport_icon = None
         if self.is_gateway:
@@ -698,7 +698,7 @@ class GroupchatParticipant(CommonContact):
                    add_show: bool = True,
                    style: str = 'circle') -> cairo.ImageSurface:
 
-        show = self.show if add_show else None
+        show = self.show.value if add_show else None
         return app.app.avatar_storage.get_surface(
             self, size, scale, show, style=style)
 

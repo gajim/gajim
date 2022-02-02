@@ -127,7 +127,7 @@ def make_workspace_avatar(letter: str,
 
 
 def add_status_to_avatar(surface: cairo.ImageSurface,
-                         show) -> cairo.ImageSurface:
+                         show: str) -> cairo.ImageSurface:
 
     width = surface.get_width()
     height = surface.get_height()
@@ -154,7 +154,7 @@ def add_status_to_avatar(surface: cairo.ImageSurface,
     context.arc(center_x, center_y, clip_radius, 0, 2 * pi)
     context.fill()
 
-    css_color = get_css_show_class(show.value)
+    css_color = get_css_show_class(show)
     color = convert_rgb_string_to_float(
         app.css_config.get_value(css_color, StyleAttr.COLOR))
 
@@ -165,7 +165,7 @@ def add_status_to_avatar(surface: cairo.ImageSurface,
     context.arc(center_x, center_y, show_radius, 0, 2 * pi)
     context.fill()
 
-    if show.value == 'dnd':
+    if show == 'dnd':
         line_length = clip_radius / 2
         context.move_to(center_x - line_length, center_y)
         context.line_to(center_x + line_length, center_y)
