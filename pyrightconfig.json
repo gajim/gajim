@@ -71,6 +71,7 @@
         "gajim/gtk/structs.py",
         "gajim/gtk/themes.py",
         "gajim/gtk/tooltips.py",
+        "gajim/gtk/util.py",
         "gajim/gtk/video_preview.py",
         "gajim/gtk/workspace_dialog.py",
     ],
