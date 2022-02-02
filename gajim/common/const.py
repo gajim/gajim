@@ -304,17 +304,22 @@ class ClientState(IntEnum):
 
 
 class SimpleClientState(Enum):
+    CONNECTING = 'connecting'
     DISCONNECTED = 'disconnected'
     CONNECTED = 'connected'
     RESUME_IN_PROGRESS = 'resume-in-progress'
 
     @property
-    def is_disconnected(self):
-        return self == SimpleClientState.DISCONNECTED
+    def is_connecting(self):
+        return self == SimpleClientState.CONNECTING
 
     @property
     def is_connected(self):
         return self == SimpleClientState.CONNECTED
+
+    @property
+    def is_disconnected(self):
+        return self == SimpleClientState.DISCONNECTED
 
     @property
     def is_resume_in_progress(self):

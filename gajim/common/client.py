@@ -561,6 +561,7 @@ class Client(Observable):
         self._reconnect = True
         self._disable_reconnect_timer()
         self._set_state(ClientState.CONNECTING)
+        self.notify('state-changed', SimpleClientState.CONNECTING)
 
         if warn_about_plain_connection(self._account,
                                        self._client.connection_types):
