@@ -191,15 +191,6 @@ def get_account_menu(account: str) -> Gio.Menu:
 
     menu.append_submenu(_('Advanced'), make_menu(advanced_menuitems))
 
-    admin_menuitems: MenuItemListT = [
-        (_('Send Server Message…'), f'app.{account}-send-server-message', val),
-        (_('Set MOTD…'), f'app.{account}-set-motd', val),
-        (_('Update MOTD…'), f'app.{account}-update-motd', val),
-        (_('Delete MOTD…'), f'app.{account}-delete-motd', val)
-    ]
-
-    menu.append_submenu(_('Admin'), make_menu(admin_menuitems))
-
     return menu
 
 

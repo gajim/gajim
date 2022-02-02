@@ -445,10 +445,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
             ('-pep-config', self._on_pep_config_action, 'online', 's'),
             ('-sync-history', self._on_sync_history_action, 'online', 's'),
             ('-blocking', self._on_blocking_action, 'feature', 's'),
-            ('-send-server-message', self._on_send_server_message_action, 'online', 's'),
-            ('-set-motd', self._on_set_motd_action, 'online', 's'),
-            ('-update-motd', self._on_update_motd_action, 'online', 's'),
-            ('-delete-motd', self._on_delete_motd_action, 'online', 's'),
             ('-open-event', self._on_open_event_action, 'always', 'a{sv}'),
             ('-mark-as-read', self._on_mark_as_read_action, 'always', 'a{sv}'),
             ('-import-contacts', self._on_import_contacts_action, 'online', 's'),
@@ -578,14 +574,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
         open_window('ProfileWindow', account=account)
 
     @staticmethod
-    def _on_send_server_message_action(_action: Gio.SimpleAction,
-                                       param: GLib.Variant) -> None:
-        account = param.get_string()
-        server = app.settings.get_account_setting(account, 'hostname')
-        server += '/announce/online'
-        open_window('SingleMessageWindow', account=account, recipients=server)
-
-    @staticmethod
     def _on_services_action(_action: Gio.SimpleAction,
                             param: GLib.Variant) -> None:
         account = param.get_string()
@@ -675,28 +663,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
     def _on_manage_proxies_action(_action: Gio.SimpleAction,
                                   _param: Optional[GLib.Variant]) -> None:
         open_window('ManageProxies')
-
-    @staticmethod
-    def _on_set_motd_action(_action: Gio.SimpleAction,
-                            param: GLib.Variant) -> None:
-        account = param.get_string()
-        server = app.settings.get_account_setting(account, 'hostname')
-        server += '/announce/motd'
-        open_window('SingleMessageWindow', account=account, recipients=server)
-
-    @staticmethod
-    def _on_update_motd_action(_action: Gio.SimpleAction,
-                               param: GLib.Variant) -> None:
-        account = param.get_string()
-        server = app.settings.get_account_setting(account, 'hostname')
-        server += '/announce/motd/update'
-        open_window('SingleMessageWindow', account=account, recipients=server)
-
-    @staticmethod
-    def _on_delete_motd_action(_action: Gio.SimpleAction,
-                               param: GLib.Variant) -> None:
-        account = param.get_string()
-        app.connections[account].get_module('Announce').delete_motd()
 
     @staticmethod
     def _on_content_action(_action: Gio.SimpleAction,
