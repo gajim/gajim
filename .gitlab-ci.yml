@@ -8,8 +8,8 @@ include:
 pyright:
   stage: test
   script:
-    - pip3 install -I git+https://dev.gajim.org/gajim/python-nbxmpp.git@$NBXMPP_BRANCH
-    - pip3 install -I git+https://github.com/pygobject/pygobject-stubs.git
+    - pip3 install git+https://dev.gajim.org/gajim/python-nbxmpp.git@$NBXMPP_BRANCH
+    - pip3 install git+https://github.com/pygobject/pygobject-stubs.git
     - npm install pyright
     - python3 -V
     - python3 scripts/ci/link-gtk.py
