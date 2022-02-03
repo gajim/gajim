@@ -174,4 +174,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
             self.destroy()
 
     def _on_destroy(self, _widget: GroupchatDetails) -> None:
+        app.ged.remove_event_handler('muc-disco-update',
+                                     ged.GUI1,
+                                     self._on_muc_disco_update)
         app.check_finalize(self)
