@@ -134,7 +134,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._ui.filter_bar_revealer.add(self._chat_filter)
 
         self.connect('key-press-event', self._on_key_press)
-        self.connect('destroy', self._destroy)
+        self.connect('destroy', self._on_destroy)
 
         self.select_first_row()
         self._ui.connect_signals(self)
@@ -738,11 +738,14 @@ class StartChatDialog(Gtk.ApplicationWindow):
         for item in result.items:
             self._global_search_listbox.add(ResultRow(item))
 
-    def _destroy(self, *args: Any) -> None:
+    def _on_destroy(self, *args: Any) -> None:
+        self._ui.listbox.set_filter_func(None)
+        self._ui.listbox.destroy()
         if self._source_id is not None:
             GLib.source_remove(self._source_id)
         self._destroyed = True
         app.cancel_tasks(self)
+        app.check_finalize(self)
 
 
 class ContactRow(Gtk.ListBoxRow):
