@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
 from typing import Optional
-from typing import Tuple
 
 import os
 import logging
@@ -29,6 +29,7 @@ from gi.repository import GLib
 from gi.repository import Gtk
 import cairo
 
+from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 from gajim.common.helpers import get_file_path_from_dnd_dropped_uri
@@ -78,6 +79,7 @@ class AvatarSelector(Gtk.Box):
             Gdk.DragAction.COPY | Gdk.DragAction.MOVE)
         self.drag_dest_set_target_list(dst_targets)
         self.connect('drag-data-received', self._on_drag_data_received)
+        self.connect('destroy', self._on_destroy)
 
         self._crop_area = CropArea()
         self._crop_area.set_vexpand(True)
@@ -101,6 +103,9 @@ class AvatarSelector(Gtk.Box):
         self.add(self._helper_label)
 
         self.show_all()
+
+    def _on_destroy(self, *args: Any) -> None:
+        app.check_finalize(self)
 
     def prepare_crop_area(self, path: str) -> None:
         pixbuf = self._get_pixbuf_from_path(path)
@@ -154,7 +159,7 @@ class AvatarSelector(Gtk.Box):
 
     @staticmethod
     def _scale_for_publish(pixbuf: GdkPixbuf.Pixbuf
-                           ) -> Tuple[GdkPixbuf.Pixbuf, int, int]:
+                           ) -> tuple[GdkPixbuf.Pixbuf, int, int]:
         width = pixbuf.get_width()
         height = pixbuf.get_height()
         if width > AvatarSize.PUBLISH or height > AvatarSize.PUBLISH:
@@ -165,7 +170,7 @@ class AvatarSelector(Gtk.Box):
                                          GdkPixbuf.InterpType.BILINEAR)
         return pixbuf, width, height
 
-    def get_avatar_surface(self) -> Optional[Tuple[cairo.Surface, int, int]]:
+    def get_avatar_surface(self) -> Optional[tuple[cairo.Surface, int, int]]:
         pixbuf = self._crop_area.get_pixbuf()
         if pixbuf is None:
             return None
@@ -174,7 +179,7 @@ class AvatarSelector(Gtk.Box):
         return Gdk.cairo_surface_create_from_pixbuf(
             scaled, self.get_scale_factor()), width, height
 
-    def get_avatar_bytes(self) -> Tuple[bool, Optional[bytes], int, int]:
+    def get_avatar_bytes(self) -> tuple[bool, Optional[bytes], int, int]:
         pixbuf = self._crop_area.get_pixbuf()
         if pixbuf is None:
             return False, None, 0, 0
