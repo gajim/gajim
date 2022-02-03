@@ -1250,7 +1250,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             if notify:
                 self._notify(name, text, tim, additional_data)
 
-            if not chat_active:
+            if not chat_active and notify:
                 if self.is_groupchat:
                     needs_highlight = message_needs_highlight(
                         text,
