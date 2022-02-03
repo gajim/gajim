@@ -99,6 +99,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self.show_all()
 
         self.connect('key_press_event', self._on_key_press)
+        self.connect('destroy', self._on_destroy)
         self._ui.connect_signals(self)
 
         self.register_events([
@@ -106,6 +107,10 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
             ('stanza-sent', ged.GUI1, self._nec_stanza_sent),
             ('style-changed', ged.GUI1, self._on_style_changed)
         ])
+
+    def _on_destroy(self, *args: Any) -> None:
+        self._ui.popover.destroy()
+        app.check_finalize(self)
 
     def _get_style_scheme(self) -> Optional[GtkSource.StyleScheme]:
         if app.css_config.prefer_dark:
@@ -227,7 +232,8 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
                 # stream management
                 node = nbxmpp.Protocol(node=stanza,
                                        attrs={'xmlns': 'jabber:client'})
-            app.connections[self._selected_send_account].connection.send(node)
+            client = app.get_client(self._selected_send_account)
+            client.connection.send(node)
             self.last_stanza = stanza
             buffer_.set_text('')
 
