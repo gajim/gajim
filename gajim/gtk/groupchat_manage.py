@@ -11,6 +11,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
 from typing import Optional
 
 import logging
@@ -63,8 +64,13 @@ class GroupchatManage(Gtk.Box):
 
         self._prepare_subject()
         self._prepare_manage()
+        self.connect('destroy', self._on_destroy)
 
         self.show_all()
+
+    def _on_destroy(self, *args: Any) -> None:
+        self._avatar_selector = None
+        app.check_finalize(self)
 
     @property
     def disco_info(self):
