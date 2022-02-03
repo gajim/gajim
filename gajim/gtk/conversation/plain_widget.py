@@ -55,10 +55,10 @@ class PlainWidget(Gtk.Box):
         # We use a Gtk.Textview on Windows, since there is no support for
         # rendering color fonts (Emojis) on Windows yet, see:
         # https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/244
-        if os.name == 'nt':
-            self._text_widget = MessageTextview(self._account)
-        else:
+        if app.settings.get('dev_use_message_label'):
             self._text_widget = MessageLabel(self._account, selectable)
+        else:
+            self._text_widget = MessageTextview(self._account)
         self.add(self._text_widget)
 
     def add_content(self, block: PlainBlock) -> None:

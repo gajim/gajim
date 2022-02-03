@@ -212,6 +212,9 @@ class Settings:
         if IS_PORTABLE:
             APP_SETTINGS['use_keyring'] = False
 
+        if sys.platform == 'win32':
+            APP_SETTINGS['dev_use_message_label'] = False
+
     @staticmethod
     def _namedtuple_factory(cursor: sqlite3.Cursor,
                             row: tuple[Any, ...]) -> NamedTuple:
