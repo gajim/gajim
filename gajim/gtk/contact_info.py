@@ -385,7 +385,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         # Check if group already exists
         iter_ = model.get_iter_first()
         while iter_:
-            group_name = model.get_value(iter_, Column.GROUP_NAME).get_string()
+            group_name = model.get_value(iter_, Column.GROUP_NAME)
             if group_name == new_name:
                 return
             iter_ = model.iter_next(iter_)
@@ -425,8 +425,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         iter_ = model.get_iter_first()
         while iter_:
             if model.get_value(iter_, Column.IN_GROUP):
-                group_name = model.get_value(
-                    iter_, Column.GROUP_NAME).get_string()
+                group_name = model.get_value(iter_, Column.GROUP_NAME)
                 groups.add(group_name)
             iter_ = model.iter_next(iter_)
 
@@ -441,7 +440,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         # Check if default_name group already exists
         iter_ = model.get_iter_first()
         while iter_:
-            group_name = model.get_value(iter_, Column.GROUP_NAME).get_string()
+            group_name = model.get_value(iter_, Column.GROUP_NAME)
             if group_name == default_name:
                 default_name += '_'
             iter_ = model.iter_next(iter_)
