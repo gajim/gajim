@@ -49,6 +49,7 @@ from gajim.common import events
 from gajim.common import ged
 from gajim.common import helpers
 from gajim.common.client import Client
+from gajim.common.config import Option
 from gajim.common.const import AvatarSize
 from gajim.common.const import SimpleClientState
 from gajim.common.helpers import AdditionalDataDict
@@ -1160,7 +1161,7 @@ class GroupchatControl(BaseControl):
     def _on_message_error(self, event: events.MessageError) -> None:
         self.conversation_view.show_error(event.message_id, event.error)
 
-    def shutdown(self, reason=None):
+    def shutdown(self, reason: Optional[str] = None) -> None:
         app.settings.disconnect_signals(self)
         self.contact.disconnect(self)
 
