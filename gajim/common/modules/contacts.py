@@ -26,6 +26,7 @@ from functools import partial
 import cairo
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Role
+from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import LocationData
@@ -414,6 +415,12 @@ class BareContact(CommonContact):
 
     def set_unblocked(self) -> None:
         self.notify('blocking-update')
+
+    @property
+    def is_jingle_available(self) -> bool:
+        if not self.supports(Namespace.JINGLE_FILE_TRANSFER_5):
+            return False
+        return self.is_available
 
 
 class ResourceContact(CommonContact):

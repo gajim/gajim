@@ -215,12 +215,8 @@ class ChatControl(BaseControl):
                                self._client.get_module('HTTPUpload').available)
 
         # Send file (Jingle)
-        jingle_support = self.contact.supports(Namespace.JINGLE_FILE_TRANSFER_5)
-        jingle_conditions = bool(jingle_support and
-                                 self.contact.is_available and
-                                 not self.contact.is_pm_contact)
         jingle = self._get_action('send-file-jingle-')
-        jingle.set_enabled(online and jingle_conditions)
+        jingle.set_enabled(online and self.contact.is_jingle_available)
 
         # Send file
         self._get_action('send-file-').set_enabled(jingle.get_enabled() or
