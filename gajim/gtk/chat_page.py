@@ -96,7 +96,6 @@ class ChatPage(Gtk.Box):
         self._ui.paned.set_position(app.settings.get('chat_handle_position'))
         self._ui.paned.connect('button-release-event', self._on_button_release)
 
-        self._last_control: Optional[ControlT] = None
         self._startup_finished: bool = False
 
         self._add_actions()
@@ -182,16 +181,6 @@ class ChatPage(Gtk.Box):
         self._search_view.set_context(account, jid)
         self.emit('chat-selected', workspace_id, account, jid)
         self._reset_chat_idle_time(account, jid)
-
-        control = self.get_control(account, jid)
-        if control is None:
-            return
-
-        if control != self._last_control:
-            if self._last_control is not None:
-                self._last_control.set_control_active(False)
-            control.set_control_active(True)
-        self._last_control = control
 
     def _on_chat_unselected(self, _chat_list_stack: ChatListStack) -> None:
         self._chat_stack.clear()
@@ -321,7 +310,6 @@ class ChatPage(Gtk.Box):
     def _on_chat_removed(self, _chat_list: ChatList, account: str, jid: JID,
                          type_: str) -> None:
         self._chat_stack.remove_chat(account, jid)
-        self._last_control = None
         if type_ == 'groupchat':
             client = app.get_client(account)
             client.get_module('MUC').leave(jid)

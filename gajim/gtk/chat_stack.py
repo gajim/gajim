@@ -55,6 +55,7 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         self.show_all()
         self._controls: dict[tuple[str, JID], ControlT] = {}
+        self._current_control = None
 
     def get_control(self, account: str, jid: JID) -> Optional[ControlT]:
         try:
@@ -104,12 +105,24 @@ class ChatStack(Gtk.Stack, EventHelper):
         control.shutdown()
 
     def show_chat(self, account: str, jid: JID) -> None:
-        self.set_visible_child_name(f'{account}:{jid}')
+        new_name = f'{account}:{jid}'
+        current_name = self.get_visible_child_name()
+        assert current_name is not None
+
+        if current_name == new_name:
+            return
+
         control = self.get_control(account, jid)
         if control is None:
             log.warning('No Control found for %s, %s', account, jid)
             return
 
+        if self._current_control is not None:
+            self._current_control.set_control_active(False)
+        control.set_control_active(True)
+        self._current_control = control
+
+        self.set_visible_child_name(new_name)
         GLib.idle_add(control.focus)
 
     def is_chat_loaded(self, account: str, jid: JID) -> bool:
@@ -126,6 +139,7 @@ class ChatStack(Gtk.Stack, EventHelper):
 
     def clear(self) -> None:
         self.set_visible_child_name('empty')
+        self._current_control = None
 
     def process_event(self, event: ApplicationEvent) -> None:
         control = self.get_control(event.account, event.jid)
