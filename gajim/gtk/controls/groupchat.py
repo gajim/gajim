@@ -49,7 +49,6 @@ from gajim.common import events
 from gajim.common import ged
 from gajim.common import helpers
 from gajim.common.client import Client
-from gajim.common.config import Option
 from gajim.common.const import AvatarSize
 from gajim.common.const import SimpleClientState
 from gajim.common.helpers import AdditionalDataDict
