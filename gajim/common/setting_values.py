@@ -261,7 +261,7 @@ APP_SETTINGS = {
     'groupchat_roster_width': 210,
     'dev_force_bookmark_2': False,
     'developer_modus': False,
-    'dev_use_message_label': False,
+    'dev_use_message_label': True,
     'use_libappindicator': True,
     'show_help_start_chat': True,
     'gc_notify_on_all_messages_private_default': True,
