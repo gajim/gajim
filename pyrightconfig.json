@@ -58,6 +58,7 @@
         "gajim/gtk/manage_sounds.py",
         "gajim/gtk/message_input.py",
         "gajim/gtk/notification.py",
+        "gajim/gtk/notification_manager.py",
         "gajim/gtk/password_dialog.py",
         "gajim/gtk/preview_audio.py",
         "gajim/gtk/proxies.py",
