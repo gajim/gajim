@@ -60,6 +60,11 @@ class AccountSideBar(Gtk.ListBox):
 
         self.select_row(row)
 
+    def update_unread_count(self, account: str, count: int) -> None:
+        for row in cast(list[Account], self.get_children()):
+            if row.account == account:
+                row.set_unread_count(count)
+                break
 
 class Account(Gtk.ListBoxRow):
     def __init__(self, account: str) -> None:
@@ -75,6 +80,13 @@ class Account(Gtk.ListBoxRow):
 
         self._image = AccountAvatar(account)
 
+        self._unread_label = Gtk.Label()
+        self._unread_label.get_style_context().add_class(
+            'unread-counter')
+        self._unread_label.set_no_show_all(True)
+        self._unread_label.set_halign(Gtk.Align.END)
+        self._unread_label.set_valign(Gtk.Align.START)
+
         self._account_color_bar = Gtk.Box()
         self._account_color_bar.set_size_request(6, -1)
         self._account_color_bar.get_style_context().add_class(
@@ -88,7 +100,11 @@ class Account(Gtk.ListBoxRow):
         account_box.add(self._account_color_bar)
         self._update_account_color()
 
-        self.add(account_box)
+        overlay = Gtk.Overlay()
+        overlay.add(account_box)
+        overlay.add_overlay(self._unread_label)
+
+        self.add(overlay)
         self.show_all()
 
     def _update_account_color(self) -> None:
@@ -98,6 +114,13 @@ class Account(Gtk.ListBoxRow):
 
         self._account_class = app.css_config.get_dynamic_class(self.account)
         context.add_class(self._account_class)
+
+    def set_unread_count(self, count: int) -> None:
+        if count < 1000:
+            self._unread_label.set_text(str(count))
+        else:
+            self._unread_label.set_text('999+')
+        self._unread_label.set_visible(bool(count))
 
     def update(self) -> None:
         self._update_account_color()

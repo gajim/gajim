@@ -181,6 +181,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._main_stack.remove_account_page(event.account)
         self._main_stack.remove_chats_for_account(event.account)
 
+    def update_account_unread_count(self, account: str, count: int) -> None:
+        self._account_side_bar.update_unread_count(account, count)
+
     def _on_client_state_changed(self,
                                  client: Client,
                                  _signal_name: str,
