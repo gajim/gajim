@@ -510,17 +510,20 @@ class GroupchatInviterBuilder(Builder):
 
 
 class GroupchatManageBuilder(Builder):
-    subject_buffer: Gtk.TextBuffer
     stack: Gtk.Stack
     avatar_button_image: Gtk.Image
     avatar_select_button: Gtk.Button
     muc_description_entry: Gtk.Entry
     muc_name_entry: Gtk.Entry
     manage_save_button: Gtk.Button
+    destroy_muc_button: Gtk.Button
     subject_textview: Gtk.TextView
     subject_change_button: Gtk.Button
     avatar_selector_grid: Gtk.Grid
     avatar_update_button: Gtk.Button
+    destroy_reason_entry: Gtk.Entry
+    destroy_alternate_entry: Gtk.Entry
+    destroy_button: Gtk.Button
 
 
 class GroupchatNickChooserBuilder(Builder):

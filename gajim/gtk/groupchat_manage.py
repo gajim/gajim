@@ -27,6 +27,7 @@ from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
+from gajim.common.helpers import validate_jid
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 
@@ -64,12 +65,15 @@ class GroupchatManage(Gtk.Box):
 
         self._prepare_subject()
         self._prepare_manage()
+
+        self._ui.subject_textview.get_buffer().connect(
+            'changed', self._on_subject_text_changed)
         self.connect('destroy', self._on_destroy)
 
         self.show_all()
 
     def _on_destroy(self, *args: Any) -> None:
-        self._avatar_selector = None
+        del self._avatar_selector
         app.check_finalize(self)
 
     @property
@@ -142,6 +146,7 @@ class GroupchatManage(Gtk.Box):
         if self_contact.affiliation.is_owner:
             self._client.get_module('MUC').request_config(
                 self._contact.jid, callback=self._on_manage_form_received)
+            self._ui.destroy_muc_button.set_sensitive(True)
 
     def _on_manage_form_received(self, task: Task) -> None:
         try:
@@ -242,3 +247,37 @@ class GroupchatManage(Gtk.Box):
             AvatarSize.GROUP_INFO,
             self.get_scale_factor())
         self._ui.avatar_button_image.set_from_surface(surface)
+
+    def _on_destroy_clicked(self, _button: Gtk.Button) -> None:
+        self._ui.stack.set_visible_child_name('destroy')
+        self._ui.destroy_reason_entry.grab_focus()
+        self._ui.destroy_button.grab_default()
+
+    def _on_destroy_alternate_changed(self, entry: Gtk.Entry) -> None:
+        jid = entry.get_text()
+        if jid:
+            try:
+                jid = validate_jid(jid)
+            except Exception:
+                icon = 'dialog-warning-symbolic'
+                text = _('Invalid XMPP Address')
+                self._ui.destroy_alternate_entry.set_icon_from_icon_name(
+                    Gtk.EntryIconPosition.SECONDARY, icon)
+                self._ui.destroy_alternate_entry.set_icon_tooltip_text(
+                    Gtk.EntryIconPosition.SECONDARY, text)
+                self._ui.destroy_button.set_sensitive(False)
+                return
+        self._ui.destroy_alternate_entry.set_icon_from_icon_name(
+            Gtk.EntryIconPosition.SECONDARY, None)
+        self._ui.destroy_button.set_sensitive(True)
+
+    def _on_destroy_confirmed(self, _button: Gtk.Button) -> None:
+        reason = self._ui.destroy_reason_entry.get_text()
+        alternate_jid = self._ui.destroy_alternate_entry.get_text()
+        self._client.get_module('MUC').destroy(
+            self._contact.jid, reason, alternate_jid)
+        window = self.get_toplevel()
+        window.destroy()
+
+    def _on_destroy_cancelled(self, _button: Gtk.Button) -> None:
+        self._ui.stack.set_visible_child_name('manage')
