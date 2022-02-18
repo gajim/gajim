@@ -215,6 +215,10 @@ class CommonContact(Observable):
     def is_pm_contact(self) -> bool:
         return False
 
+    @property
+    def is_jingle_available(self) -> bool:
+        return False
+
     def get_address(self, _prefer_real: bool = True) -> JID:
         return self._jid
 
