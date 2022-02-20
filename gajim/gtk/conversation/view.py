@@ -33,6 +33,7 @@ from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules.security_labels import Displaymarking
 from nbxmpp.structs import MucSubject
+from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common.client import Client
@@ -46,7 +47,6 @@ from gajim.common.jingle_session import JingleSession
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive import ConversationRow
 from gajim.common.modules.contacts import BareContact
-from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.types import ChatContactT
 
 from .rows.base import BaseRow
@@ -100,7 +100,6 @@ class ConversationView(Gtk.ListBox):
         Gtk.ListBox.__init__(self)
         self.set_selection_mode(Gtk.SelectionMode.NONE)
         self.set_sort_func(self._sort_func)
-        self.set_filter_func(self._filter_func)
         self._account = account
         self._client: Optional[Client] = None
         if account is not None:
@@ -143,7 +142,6 @@ class ConversationView(Gtk.ListBox):
         return cast(BaseRow, Gtk.ListBox.get_row_at_index(self, index))
 
     def _on_destroy(self, *args: Any) -> None:
-        self.set_filter_func(None)
         app.check_finalize(self)
 
     def lock(self) -> None:
@@ -188,17 +186,6 @@ class ConversationView(Gtk.ListBox):
             return 0
         return -1 if row1.timestamp < row2.timestamp else 1
 
-    def _filter_func(self, row: BaseRow) -> bool:
-        if not isinstance(self._contact, GroupchatContact):
-            return True
-
-        if row.type in ('muc-user-joined', 'muc-user-left'):
-            return self._contact.settings.get('print_join_left')
-        if row.type == 'muc-user-status':
-            return self._contact.settings.get('print_status')
-
-        return True
-
     def add_muc_subject(self, subject: MucSubject) -> None:
         muc_subject = MUCSubject(self._account, subject)
         self._insert_message(muc_subject)
@@ -207,7 +194,8 @@ class ConversationView(Gtk.ListBox):
                           nick: str,
                           reason: str,
                           error: bool = False) -> None:
-
+        if not self._contact.settings.get('print_join_left'):
+            return
         join_left = MUCJoinLeft('muc-user-left',
                                 self._account,
                                 nick,
@@ -216,12 +204,16 @@ class ConversationView(Gtk.ListBox):
         self._insert_message(join_left)
 
     def add_muc_user_joined(self, nick: str) -> None:
+        if not self._contact.settings.get('print_join_left'):
+            return
         join_left = MUCJoinLeft('muc-user-joined',
                                 self._account,
                                 nick)
         self._insert_message(join_left)
 
     def add_user_status(self, name: str, show: str, status: str) -> None:
+        if not self._contact.settings.get('print_status'):
+            return
         user_status = UserStatus(self._account, name, show, status)
         self._insert_message(user_status)
 
@@ -475,6 +467,11 @@ class ConversationView(Gtk.ListBox):
         for row in cast(list[BaseRow], self.get_children()):
             yield row
 
+    def remove_rows_by_type(self, type: str) -> None:
+        for row in self.iter_rows():
+            if row.type == type:
+                row.destroy()
+
     def update_call_rows(self) -> None:
         for row in cast(list[BaseRow], self.get_children()):
             if isinstance(row, CallRow):
@@ -550,8 +547,21 @@ class ConversationView(Gtk.ListBox):
                           ) -> None:
         self.emit('call-declined', session)
 
-    def _on_contact_setting_changed(self, *args: Any) -> None:
-        self.invalidate_filter()
+    def _on_contact_setting_changed(self,
+                                    value: Any,
+                                    setting: str,
+                                    _account: Optional[str],
+                                    _jid: Optional[JID]) -> None:
+        if setting == 'print_join_left':
+            if value:
+                return
+            self.remove_rows_by_type('muc-user-joined')
+            self.remove_rows_by_type('muc-user-left')
+
+        if setting == 'print_status':
+            if value:
+                return
+            self.remove_rows_by_type('muc-user-status')
 
     def remove(self, widget: Gtk.Widget) -> None:
         super().remove(widget)
