@@ -165,7 +165,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
             else:
                 self._avatar_nick_public = (self._avatar_nick_public or
                                             access_model)
-            assert self._avatar_nick_public
+            assert self._avatar_nick_public is not None
             self._set_avatar_nick_access_switch(self._avatar_nick_public)
 
     def _on_vcard_received(self, task: Task):
