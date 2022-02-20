@@ -51,9 +51,10 @@ class PlainWidget(Gtk.Box):
 
         self._account = account
 
-        # We use a Gtk.Textview on Windows, since there is no support for
-        # rendering color fonts (Emojis) on Windows yet, see:
+        # We use a Gtk.Textview on Windows and MacOS, since there is no support
+        # for rendering color fonts (Emojis) on Windows/MacOS yet, see:
         # https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/244
+        # https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/9
         if app.settings.get('dev_use_message_label'):
             self._text_widget = MessageLabel(self._account, selectable)
         else:

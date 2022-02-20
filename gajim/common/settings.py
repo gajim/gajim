@@ -212,7 +212,9 @@ class Settings:
         if IS_PORTABLE:
             APP_SETTINGS['use_keyring'] = False
 
-        if sys.platform == 'win32':
+        if sys.platform in ('win32', 'darwin'):
+            # Cairo does not support color emojis fonts on
+            # Windows and MacOS
             APP_SETTINGS['dev_use_message_label'] = False
 
     @staticmethod
