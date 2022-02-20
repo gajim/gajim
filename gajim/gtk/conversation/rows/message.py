@@ -35,6 +35,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import Trust
 from gajim.common.const import TRUST_SYMBOL_DATA
 from gajim.common.helpers import AdditionalDataDict
+from gajim.common.helpers import from_one_line
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_muc_context
 from gajim.common.helpers import message_needs_highlight
@@ -309,10 +310,12 @@ class MessageRow(BaseRow):
         return abs(message.timestamp - self.timestamp) < MERGE_TIMEFRAME
 
     def on_copy_message(self, _widget: Gtk.Widget) -> None:
-        timestamp = self.timestamp.strftime('%x, %X')
+        time_format = from_one_line(app.settings.get('chat_timestamp_format'))
+        timestamp_formatted = self.timestamp.strftime(time_format)
+
         clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         text = self._message_widget.get_text()
-        clip.set_text(f'{timestamp} - {self.name}: {text}', -1)
+        clip.set_text(f'{timestamp_formatted} - {self.name}: {text}', -1)
 
     def on_quote_message(self, _widget: Gtk.Widget) -> None:
         self.emit('quote', self._message_widget.get_text())
