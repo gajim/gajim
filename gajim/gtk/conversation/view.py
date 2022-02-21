@@ -467,9 +467,9 @@ class ConversationView(Gtk.ListBox):
         for row in cast(list[BaseRow], self.get_children()):
             yield row
 
-    def remove_rows_by_type(self, type: str) -> None:
+    def remove_rows_by_type(self, row_type: str) -> None:
         for row in self.iter_rows():
-            if row.type == type:
+            if row.type == row_type:
                 row.destroy()
 
     def update_call_rows(self) -> None:
