@@ -737,6 +737,7 @@ class PrivacyPage(GenericSettingPage):
 
             Setting(SettingKind.SWITCH, _('Media Playback'),
                     SettingType.ACCOUNT_CONFIG, 'publish_tune',
+                    callback=self._publish_tune,
                     desc=_('Disclose information about media that is '
                            'currently being played on your system.')),
 
@@ -811,6 +812,9 @@ class PrivacyPage(GenericSettingPage):
     def _reset_gc_send_chatstate(button: Gtk.Button) -> None:
         button.set_sensitive(False)
         app.settings.set_group_chat_settings('send_chatstate', None)
+
+    def _publish_tune(self, state: bool, _data: Any) -> None:
+        app.connections[self._account].get_module('UserTune').set_enabled(state)
 
     def _send_read_marker(self, state: bool, _data: Any) -> None:
         app.settings.set_account_setting(

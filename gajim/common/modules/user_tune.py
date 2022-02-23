@@ -70,11 +70,12 @@ class UserTune(BaseModule):
         contact.notify('tune-update', data)
 
     @store_publish
-    def set_tune(self, tune):
+    def set_tune(self, tune, force=False):
         if not self._con.get_module('PEP').supported:
             return
 
-        if not app.settings.get_account_setting(self._account, 'publish_tune'):
+        if not force and not app.settings.get_account_setting(
+                self._account, 'publish_tune'):
             return
 
         if tune == self._current_tune:
@@ -87,16 +88,9 @@ class UserTune(BaseModule):
 
     def set_enabled(self, enable):
         if enable:
-            app.settings.set_account_setting(self._account,
-                                             'publish_tune',
-                                             True)
             self._publish_current_tune()
-
         else:
-            self.set_tune(None)
-            app.settings.set_account_setting(self._account,
-                                             'publish_tune',
-                                             False)
+            self.set_tune(None, force=True)
 
     def _publish_current_tune(self):
         self.set_tune(MusicTrackListener.get().current_tune)
