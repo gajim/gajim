@@ -19,6 +19,8 @@ from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import GObject
 
+import cairo
+
 from gajim.common import app
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
@@ -46,15 +48,20 @@ class AboutDialog(Gtk.AboutDialog):
         glib_ver = '.'.join(map(str, [GLib.MAJOR_VERSION,
                                       GLib.MINOR_VERSION,
                                       GLib.MICRO_VERSION]))
+        cairo_ver = cairo.cairo_version_string()
+        python_cairo_ver = cairo.version
 
         comments: list[str] = []
-        comments.append(_('A GTK XMPP client'))
+        comments.append(_('A fully-featured XMPP chat client'))
+        comments.append('')
         comments.append(_('GTK Version: %s') % gtk_ver)
         comments.append(_('GLib Version: %s') % glib_ver)
         comments.append(_('PyGObject Version: %s') % gobject_ver)
+        comments.append(_('Cairo Version: %s') % cairo_ver)
+        comments.append(_('python-cairo Version: %s') % python_cairo_ver)
         comments.append(_('python-nbxmpp Version: %s') % nbxmpp.__version__)
 
-        self.set_comments("\n".join(comments))
+        self.set_comments('\n'.join(comments))
 
         self.add_credit_section(_('Current Developers'), DEVS_CURRENT)
         self.add_credit_section(_('Past Developers'), DEVS_PAST)
