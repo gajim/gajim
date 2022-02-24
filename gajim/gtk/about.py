@@ -70,6 +70,7 @@ class AboutDialog(Gtk.AboutDialog):
         self.set_logo_icon_name('org.gajim.Gajim')
 
         self.connect('activate-link', self._on_activate_link)
+        self.connect('response', self._on_response)
         self.show()
 
     @staticmethod
@@ -78,3 +79,10 @@ class AboutDialog(Gtk.AboutDialog):
         # is not cross-platform compatible
         open_uri(uri)
         return Gdk.EVENT_STOP
+
+    def _on_response(self,
+                     _dialog: Gtk.AboutDialog,
+                     response: Gtk.ResponseType
+                     ) -> None:
+        if response == Gtk.ResponseType.DELETE_EVENT:
+            self.destroy()
