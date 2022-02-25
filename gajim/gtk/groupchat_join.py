@@ -196,6 +196,7 @@ class ProgressPage(Gtk.Box):
         self.set_vexpand(True)
         self.set_homogeneous(True)
         self._spinner = Gtk.Spinner()
+        self._spinner.set_halign(Gtk.Align.CENTER)
 
         self.add(self._spinner)
         self.show_all()
