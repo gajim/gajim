@@ -537,17 +537,39 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self._set_listbox(self._ui.listbox)
             self._global_search_listbox.remove_all()
 
-    def _on_search_changed(self, entry: Gtk.SearchEntry) -> None:
+    def _on_search_changed(self, search_entry: Gtk.SearchEntry) -> None:
+        self._show_search_entry_error(False)
+
         if self._global_search_active():
             return
 
-        search_text = entry.get_text()
+        search_text = search_entry.get_text()
+        if not search_text:
+            self._remove_new_jid_row()
+            return
+
+        try:
+            validate_jid(search_text)
+        except ValueError:
+            self._show_search_entry_error(True)
+            self._remove_new_jid_row()
+            return
+
         if '@' in search_text:
             self._add_new_jid_row()
             self._update_new_jid_rows(search_text)
         else:
             self._remove_new_jid_row()
         self._ui.listbox.invalidate_filter()
+
+    def _show_search_entry_error(self, state: bool):
+        icon_name = 'dialog-warning-symbolic' if state else None
+        self._ui.search_entry.set_icon_from_icon_name(
+            Gtk.EntryIconPosition.SECONDARY,
+            icon_name)
+        self._ui.search_entry.set_icon_tooltip_text(
+            Gtk.EntryIconPosition.SECONDARY,
+            _('Invalid Address'))
 
     def _add_new_jid_row(self) -> None:
         if self.new_contact_row_visible:
