@@ -31,6 +31,7 @@ from typing import Any
 from typing import Callable
 from typing import Optional
 from typing import Union
+from typing import TYPE_CHECKING
 
 import sys
 import re
@@ -97,6 +98,8 @@ from gajim.common.regex import INVALID_XML_CHARS_REGEX
 from gajim.common.regex import STH_AT_STH_DOT_STH_REGEX
 from gajim.common.structs import URI
 from gajim.common import types
+if TYPE_CHECKING:
+    from gajim.common.modules.util import LogAdapter
 
 HAS_PYWIN32 = False
 if os.name == 'nt':
@@ -1182,7 +1185,7 @@ def get_tls_error_phrase(tls_error: Gio.TlsCertificateFlags) -> str:
 
 
 class Observable:
-    def __init__(self, log_: Optional[logging.Logger] = None):
+    def __init__(self, log_: Union[logging.Logger, LogAdapter, None] = None):
         self._log = log_
         self._callbacks: types.ObservableCbDict = defaultdict(list)
 
