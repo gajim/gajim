@@ -89,6 +89,7 @@ class MessageLabel(Gtk.Label):
 
         self.connect('populate-popup', self._on_populate_popup)
         self.connect('activate-link', self._on_activate_link)
+        self.connect('focus-in-event', self._on_focus_in)
         self.connect('focus-out-event', self._on_focus_out)
 
     def _on_populate_popup(self, label: Gtk.Label, menu: Gtk.Menu) -> None:
@@ -126,10 +127,17 @@ class MessageLabel(Gtk.Label):
         open_uri(uri, self._account)
         return Gdk.EVENT_STOP
 
-    def _on_focus_out(self,
-                      widget: MessageLabel,
-                      event: Gdk.EventFocus) -> None:
-        self.select_region(0, 0)
+    @staticmethod
+    def _on_focus_in(widget: MessageLabel,
+                     _event: Gdk.EventFocus
+                     ) -> None:
+        widget.get_style_context().remove_class('transparent-selection')
+
+    @staticmethod
+    def _on_focus_out(widget: MessageLabel,
+                      _event: Gdk.EventFocus
+                      ) -> None:
+        widget.get_style_context().add_class('transparent-selection')
 
 
 class MessageTextview(Gtk.TextView):

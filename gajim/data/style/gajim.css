@@ -32,6 +32,11 @@
     border-radius: 4px;
 }
 
+.transparent-selection > selection {
+    background-color: transparent;
+    color: @theme_fg_color;
+}
+
 row:backdrop { transition: none; }
 
 .conversation-row:hover button {
