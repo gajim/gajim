@@ -374,9 +374,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
     def _disco_info(self, row: ContactRow) -> None:
         if not app.account_is_available(row.account):
-            # Account is disconnected: offer to open 1:1 chat anyway
-            self._new_chat_row = row
-            self._ui.stack.set_visible_child_name('no-disco')
+            self._show_error_page(_('You are offline.'))
             return
 
         self._ui.stack.set_visible_child_name('progress')
@@ -407,10 +405,9 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self._show_error_page(error.get_text())
             return
         except TimeoutStanzaError:
-            # We reached the 10s timeout, but we should
-            # offer to open a chat anyway
-            self._new_chat_row = row
-            self._ui.stack.set_visible_child_name('no-disco')
+            # We reached the 10s timeout and we cannot
+            # assume which kind contact this is.
+            self._show_error_page(_('This address is not reachable.'))
             return
 
         if result.is_muc:
