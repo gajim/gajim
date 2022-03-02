@@ -186,6 +186,10 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
             self._ui.textview_annotation.get_buffer().set_text(note.data)
 
         if app.account_supports_private_storage(self.account):
+            # Hide the Notes page if private storage is not available, because
+            # roster notes cannot be stored without.
+            # Since there is no disco mechanism for private storage, we rely on
+            # Delimiter as a "proxy" for the availability of private storage.
             self._switcher.set_row_visible('notes', True)
 
     def _fill_settings_page(self, contact: BareContact) -> None:
