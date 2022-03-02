@@ -334,11 +334,12 @@ class StandardGroupChatCommands(CommandContainer):
             'groupchat-join',
             GLib.Variant('as', [self.account, jid]))
 
-    @command('part', 'close', raw=True, empty=True)
-    @doc(_("Leave the group chat, optionally giving a reason, and close tab or "
-           "window"))
-    def leave(self, reason):
-        self.leave(reason=reason)
+    @command('part', 'close')
+    @doc(_("Leave the group chat"))
+    def leave(self):
+        # Use idle_add to let command system finish printing
+        variant = GLib.Variant('as', [self.account, str(self.room_jid)])
+        GLib.idle_add(app.window.activate_action, 'remove-chat', variant)
 
     @command(raw=True, empty=True)
     @doc(_("""
