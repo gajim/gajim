@@ -20,7 +20,8 @@ declarative way.
 """
 
 from types import FunctionType
-from inspect import getargspec, getdoc
+from inspect import getfullargspec
+from inspect import getdoc
 
 from gajim.command_system.dispatcher import Host
 from gajim.command_system.dispatcher import Container
@@ -221,7 +222,8 @@ class Command:
         Extract handler's arguments specification, as it was defined
         preserving their order.
         """
-        names, var_args, var_kwargs, defaults = getargspec(self.handler)  # pylint: disable=W1505
+        names, var_args, var_kwargs, defaults, _, _, _ = getfullargspec(
+            self.handler)
 
         # Behavior of this code need to be checked. Might yield
         # incorrect results on some rare occasions.
