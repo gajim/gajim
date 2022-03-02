@@ -60,17 +60,18 @@ class Iq(BaseModule):
                 raise nbxmpp.NodeProcessed
 
         if properties.error.condition == 'item-not-found':
-            sid = self._get_sid(properties.id)
-            file_props = FilesProp.getFileProp(self._account, sid)
-            if file_props:
-                app.ged.raise_event(
-                    FileSendError(account=self._account,
-                                  jid=str(properties.jid),
-                                  file_props=file_props,
-                                  error_msg=''))
-                self._con.get_module('Bytestream').disconnect_transfer(
-                    file_props)
-                raise nbxmpp.NodeProcessed
+            if not properties.is_pubsub:
+                sid = self._get_sid(properties.id)
+                file_props = FilesProp.getFileProp(self._account, sid)
+                if file_props:
+                    app.ged.raise_event(
+                        FileSendError(account=self._account,
+                                    jid=str(properties.jid),
+                                    file_props=file_props,
+                                    error_msg=''))
+                    self._con.get_module('Bytestream').disconnect_transfer(
+                        file_props)
+                    raise nbxmpp.NodeProcessed
 
         app.ged.raise_event(
             IqErrorReceived(account=self._account,
