@@ -185,7 +185,8 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         if note is not None:
             self._ui.textview_annotation.get_buffer().set_text(note.data)
 
-        self._switcher.set_row_visible('notes', True)
+        if app.account_supports_private_storage(self.account):
+            self._switcher.set_row_visible('notes', True)
 
     def _fill_settings_page(self, contact: BareContact) -> None:
         if not contact.is_in_roster:
