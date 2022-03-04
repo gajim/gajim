@@ -35,6 +35,7 @@ from .groupchat_config import GroupchatConfig
 from .groupchat_manage import GroupchatManage
 from .groupchat_settings import GroupChatSettings
 from .sidebar_switcher import SideBarSwitcher
+from .structs import RemoveHistoryActionParams
 
 
 class GroupchatDetails(Gtk.ApplicationWindow):
@@ -146,13 +147,28 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self._ui.info_box.add(self._groupchat_info)
 
     def _add_groupchat_settings(self) -> None:
+        main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=24)
+
+        settings_box = GroupChatSettings(self.account, self._contact.jid)
+        main_box.add(settings_box)
+
+        remove_history_button = Gtk.Button(label=_('Remove History…'))
+        remove_history_button.set_halign(Gtk.Align.START)
+        remove_history_button.get_style_context().add_class(
+            'destructive-action')
+        params = RemoveHistoryActionParams(
+            account=self.account, jid=self._contact.jid)
+        remove_history_button.set_action_name('app.remove-history')
+        remove_history_button.set_action_target_value(
+            params.to_variant())
+        main_box.add(remove_history_button)
+
         scrolled_window = Gtk.ScrolledWindow()
         scrolled_window.set_vexpand(True)
         scrolled_window.set_policy(Gtk.PolicyType.NEVER,
                                    Gtk.PolicyType.AUTOMATIC)
+        scrolled_window.add(main_box)
 
-        settings_box = GroupChatSettings(self.account, self._contact.jid)
-        scrolled_window.add(settings_box)
         self._ui.settings_box.add(scrolled_window)
 
     def _add_affiliations(self) -> None:
