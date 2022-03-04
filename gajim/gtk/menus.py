@@ -16,7 +16,6 @@
 
 from __future__ import annotations
 
-from typing import List
 from typing import Union
 from typing import Any
 from typing import Optional
@@ -76,15 +75,12 @@ def get_singlechat_menu(control_id: str,
 
     singlechat_menu: list[tuple[str, Any]] = [
         ('win.information-', _('Details')),
-        ('win.send-marker-', _('Send Read Markers')),
-        (_('Send Chatstate'), ['chatstate']),
         ('win.block-contact-', _('Block Contact…')),
         (_('Send File'), [
             ('win.send-file-httpupload-', _('Upload File…')),
             ('win.send-file-jingle-', _('Send File Directly…'))
         ]),
         ('win.start-call-', _('Start Call…')),
-        ('app.remove-history', _('Remove History…')),
         ('win.search-history', _('Search…'))
     ]
 
@@ -94,28 +90,11 @@ def get_singlechat_menu(control_id: str,
             singlechat_menu.append(
                 ('win.add-to-roster-', _('Add to Contact List…')))
 
-    def build_chatstate_menu() -> Gio.Menu:
-        menu = Gio.Menu()
-        entries = [
-            (_('Disabled'), 'disabled'),
-            (_('Composing Only'), 'composing_only'),
-            (_('All Chat States'), 'all')
-        ]
-
-        for entry in entries:
-            label, setting = entry
-            action = f'win.send-chatstate-{control_id}::{setting}'
-            menu.append(label, action)
-        return menu
-
     def build_menu(preset: list[tuple[str, Any]]):
         menu = Gio.Menu()
         for item in preset:
             if isinstance(item[1], str):
                 action_name, label = item
-                if action_name == 'win.send-marker-' and type_.is_privatechat:
-                    continue
-
                 if action_name == 'win.search-history':
                     menuitem = Gio.MenuItem.new(label, action_name)
                     menuitem.set_action_and_target_value(action_name, None)
@@ -136,10 +115,7 @@ def get_singlechat_menu(control_id: str,
                     menu.append(label, action_name + control_id)
             else:
                 label, sub_menu = item
-                if 'chatstate' in sub_menu:
-                    submenu = build_chatstate_menu()
-                else:
-                    submenu = build_menu(sub_menu)
+                submenu = build_menu(sub_menu)
                 menu.append_submenu(label, submenu)
         return menu
 
@@ -150,15 +126,11 @@ def get_singlechat_menu(control_id: str,
 
 
 def get_groupchat_menu(control_id: str, account: str, jid: JID) -> Gio.Menu:
-
-    params = RemoveHistoryActionParams(account=account, jid=jid)
-
     menulist: MenuItemListT = [
         (_('Details'), f'win.groupchat-details-{control_id}', None),
         (_('Change Nickname…'), f'win.change-nickname-{control_id}', None),
         (_('Request Voice'), f'win.request-voice-{control_id}', None),
         (_('Execute Command…'), f'win.execute-command-{control_id}', '""'),
-        (_('Remove History…'), 'app.remove-history', params),
         (_('Search…'), 'win.search-history', None)
     ]
 
@@ -454,7 +426,7 @@ def get_chat_list_row_menu(workspace_id: str,
 
     toggle_label = _('Unpin Chat') if pinned else _('Pin Chat')
 
-    menu_items: List[Any] = [
+    menu_items: list[Any] = [
         ('toggle-chat-pinned', toggle_label),
     ]
 
