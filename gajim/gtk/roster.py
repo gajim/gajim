@@ -85,7 +85,8 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._ui.roster_treeview.set_model(None)
         self.add(self._ui.roster_treeview)
 
-        self._contact_refs: dict[JID, list[Gtk.TreeRowReference]] = defaultdict(list)
+        self._contact_refs: dict[
+            JID, list[Gtk.TreeRowReference]] = defaultdict(list)
         self._group_refs: dict[str, Gtk.TreeRowReference] = {}
 
         self._store = self._ui.contact_store
