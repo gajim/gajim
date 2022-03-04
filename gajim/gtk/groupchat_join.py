@@ -136,7 +136,8 @@ class GroupchatJoin(Gtk.ApplicationWindow):
         self._stack.set_visible_child_name('error')
 
     def _set_error(self, error: StanzaError) -> None:
-        text = MUC_DISCO_ERRORS.get(error.condition, to_user_string(error))
+        text = MUC_DISCO_ERRORS.get(
+            error.condition or '', to_user_string(error))
         if error.condition == 'gone':
             reason = error.get_text(get_rfc5646_lang())
             if reason:
