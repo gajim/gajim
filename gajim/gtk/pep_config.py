@@ -18,6 +18,8 @@ from gi.repository import Gdk
 from gi.repository import Gtk
 
 from nbxmpp.errors import StanzaError
+from nbxmpp.modules.dataforms import SimpleDataForm
+from nbxmpp.simplexml import Node
 from nbxmpp.task import Task
 
 from gajim.common import app
@@ -148,7 +150,10 @@ class PEPConfig(Gtk.ApplicationWindow):
             node,
             callback=self._nec_pep_config_received)
 
-    def _on_config_submit(self, form, node):
+    def _on_config_submit(self,
+                          form: SimpleDataForm,
+                          node: Node
+                          ) -> None:
         self._client.get_module('PubSub').set_node_configuration(node, form)
 
     def _nec_pep_config_received(self, task: Task) -> None:
