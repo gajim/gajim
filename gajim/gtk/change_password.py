@@ -100,7 +100,8 @@ class ChangePassword(Assistant):
             task.finish()
         except ChangePasswordStanzaError as error:
             next_stage_page = cast(NextStage, self.get_page('next_stage'))
-            next_stage_page.set_form(error.get_form())
+            form = cast(SimpleDataForm, error.get_form())
+            next_stage_page.set_form(form)
             self.show_page('next_stage', Gtk.StackTransitionType.SLIDE_LEFT)
 
         except StanzaError as error:
