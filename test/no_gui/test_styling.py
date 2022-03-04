@@ -325,6 +325,14 @@ URLS = [
 EMAILS = [
     'asd@asd.at',
     'asd@asd.asd.at',
+    'mailto:foo@bar.com.uk',
+]
+
+EMAILS_WITH_TEXT = [
+    ('write to my email mailto:foo@bar.com.uk (but not to mailto:bar@foo.com)',
+     ['mailto:foo@bar.com.uk', 'mailto:bar@foo.com']),
+    ('write to my email mailtomailto:foo@bar.com.uk (but not to mailto:bar@foo.com)',
+     ['foo@bar.com.uk', 'mailto:bar@foo.com']),
 ]
 
 
@@ -359,6 +367,13 @@ class Test(unittest.TestCase):
             start = match.start()
             end = match.end()
             self.assertTrue(email[start:end] == email)
+
+    def test_emails_with_text(self):
+        for text, result in EMAILS_WITH_TEXT:
+            match = ADDRESS_RX.findall(text)
+            self.assertIsNotNone(match)
+            for i, res in enumerate(result):
+                self.assertTrue(match[i][0] == res)
 
     def test_url_with_text(self):
         for text, result in URL_WITH_TEXT:

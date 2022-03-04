@@ -46,7 +46,7 @@ UNQUOTE_RX = re.compile(r'^> |^>', re.M)
 URI_RX = r'((?P<protocol>[\w-]+://?|www[.])[\S()<>]+?(?=[,]?(\s|\Z)+))'
 URI_RX = re.compile(URI_RX)
 
-ADDRESS_RX = r'(\b(?P<protocol>(xmpp|mailto)+:)?[\w-]*@(.*?\.)+[\w]+([\?].*?(?=([\s\),]|$)))?)'
+ADDRESS_RX = r'(\b(?P<protocol>(xmpp|mailto):)?[\w-]*@(\w*?\.)+[\w]+([\?].*?(?=([\s\),]|$)))?)'
 ADDRESS_RX = re.compile(ADDRESS_RX)
 
 EMOJI_RX = emoji_data.get_regex()
