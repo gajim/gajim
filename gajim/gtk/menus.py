@@ -16,9 +16,10 @@
 
 from __future__ import annotations
 
-from typing import Union
 from typing import Any
+from typing import cast
 from typing import Optional
+from typing import Union
 
 from urllib.parse import quote
 
@@ -288,7 +289,7 @@ def get_conv_action_context_menu(account: str,
     item.set_action_target_value(value)
     submenu.append(item)
 
-    for item in submenu:
+    for item in cast(list[Gtk.MenuItem], submenu):
         item.set_action_name('app.open-link')
 
     return action_menu_item
