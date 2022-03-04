@@ -21,10 +21,11 @@ from typing import cast
 import logging
 from enum import IntEnum
 
-from gi.repository import Gtk
+
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GObject
+from gi.repository import Gtk
 
 from nbxmpp.task import Task
 from nbxmpp.errors import StanzaError
@@ -52,6 +53,7 @@ from .sidebar_switcher import SideBarSwitcher
 from .builder import get_builder
 from .util import connect_destroy
 from .vcard_grid import VCardGrid
+from .structs import RemoveHistoryActionParams
 
 log = logging.getLogger('gajim.gui.contact_info')
 
@@ -213,6 +215,12 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         self._switcher.set_row_visible('settings', True)
         contact_settings = ContactSettings(self.account, contact.jid)
         self._ui.contact_settings_box.add(contact_settings)
+
+        params = RemoveHistoryActionParams(
+            account=self.account, jid=self.contact.jid)
+        self._ui.remove_history_button.set_action_name('app.remove-history')
+        self._ui.remove_history_button.set_action_target_value(
+            params.to_variant())
 
     def _fill_groups_page(self, contact: BareContact) -> None:
         if not contact.is_in_roster:

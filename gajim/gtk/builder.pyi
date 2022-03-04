@@ -282,6 +282,7 @@ class ContactInfoBuilder(Builder):
     group_chat_grid: Gtk.Grid
     role_label: Gtk.Label
     affiliation_label: Gtk.Label
+    settings_scrolled: Gtk.ScrolledWindow
     settings_box: Gtk.Box
     subscription_listbox: Gtk.ListBox
     from_subscription_switch: Gtk.Switch
@@ -289,6 +290,7 @@ class ContactInfoBuilder(Builder):
     request_stack: Gtk.Stack
     to_subscription_button: Gtk.Button
     contact_settings_box: Gtk.Box
+    remove_history_button: Gtk.Button
     groups_page_box: Gtk.Box
     groups_treeview: Gtk.TreeView
     tree_selection: Gtk.TreeSelection
