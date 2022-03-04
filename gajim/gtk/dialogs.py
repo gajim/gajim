@@ -272,8 +272,8 @@ class ConfirmationDialog(Gtk.MessageDialog):
                      ) -> None:
         if response == Gtk.ResponseType.DELETE_EVENT:
             # Look if DELETE_EVENT is mapped to another response
-            response = self._buttons.get(response, None)
-            if response is None:
+            button = self._buttons.get(response, None)
+            if button is None:
                 # If DELETE_EVENT was not mapped we assume CANCEL
                 response = Gtk.ResponseType.CANCEL
 
