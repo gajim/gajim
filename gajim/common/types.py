@@ -77,4 +77,5 @@ AnyCallableT = Callable[..., Any]
 ObservableCbDict = dict[str, list[weakref.WeakMethod[AnyCallableT]]]
 
 ChatContactT = Union['BareContact', 'GroupchatContact', 'GroupchatParticipant']
+OneOnOneContactT = Union['BareContact', 'GroupchatParticipant']
 GroupchatContactT = Union['GroupchatContact']

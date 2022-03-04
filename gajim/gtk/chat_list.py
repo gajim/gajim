@@ -47,6 +47,7 @@ from gajim.common.helpers import AdditionalDataDict
 from gajim.common.preview_helpers import filename_from_uri
 from gajim.common.preview_helpers import guess_simple_file_type
 from gajim.common.types import ChatContactT
+from gajim.common.types import OneOnOneContactT
 
 from .menus import get_chat_list_row_menu
 from .builder import get_builder
@@ -772,7 +773,7 @@ class ChatRow(Gtk.ListBoxRow):
         self._ui.account_identifier.set_visible(show)
 
     def _on_chatstate_update(self,
-                             contact: ChatContactT,
+                             contact: OneOnOneContactT,
                              _signal_name: str
                              ) -> None:
         if contact.chatstate is None:
