@@ -45,6 +45,7 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ResourceContact
 from gajim.common.modules.contacts import GroupchatParticipant
 
+from .contact_settings import ContactSettings
 from .dialogs import ConfirmationDialog
 from .dialogs import DialogButton
 from .sidebar_switcher import SideBarSwitcher
@@ -210,6 +211,8 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
             self._ui.request_stack.set_visible_child_name('cross')
 
         self._switcher.set_row_visible('settings', True)
+        contact_settings = ContactSettings(self.account, contact.jid)
+        self._ui.contact_settings_box.add(contact_settings)
 
     def _fill_groups_page(self, contact: BareContact) -> None:
         if not contact.is_in_roster:

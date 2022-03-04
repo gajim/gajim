@@ -288,6 +288,7 @@ class ContactInfoBuilder(Builder):
     to_subscription_stack: Gtk.Stack
     request_stack: Gtk.Stack
     to_subscription_button: Gtk.Button
+    contact_settings_box: Gtk.Box
     groups_page_box: Gtk.Box
     groups_treeview: Gtk.TreeView
     tree_selection: Gtk.TreeSelection
