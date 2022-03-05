@@ -723,15 +723,18 @@ class PrivacyPage(GenericSettingPage):
         settings = [
             Setting(SettingKind.SWITCH, _('Idle Time'),
                     SettingType.ACCOUNT_CONFIG, 'send_idle_time',
+                    callback=self._send_idle_time,
                     desc=_('Disclose the time of your last activity')),
 
             Setting(SettingKind.SWITCH, _('Local System Time'),
                     SettingType.ACCOUNT_CONFIG, 'send_time_info',
+                    callback=self._send_time_info,
                     desc=_('Disclose the local system time of the '
                            'device Gajim runs on')),
 
             Setting(SettingKind.SWITCH, _('Client / Operating System'),
                     SettingType.ACCOUNT_CONFIG, 'send_os_info',
+                    callback=self._send_os_info,
                     desc=_('Disclose information about the client '
                            'and operating system you currently use')),
 
@@ -812,6 +815,15 @@ class PrivacyPage(GenericSettingPage):
     def _reset_gc_send_chatstate(button: Gtk.Button) -> None:
         button.set_sensitive(False)
         app.settings.set_group_chat_settings('send_chatstate', None)
+
+    def _send_idle_time(self, state: bool, _data: Any) -> None:
+        app.connections[self._account].get_module('LastActivity').set_enabled(state)
+
+    def _send_time_info(self, state: bool, _data: Any) -> None:
+        app.connections[self._account].get_module('EntityTime').set_enabled(state)
+
+    def _send_os_info(self, state: bool, _data: Any) -> None:
+        app.connections[self._account].get_module('SoftwareVersion').set_enabled(state)
 
     def _publish_tune(self, state: bool, _data: Any) -> None:
         app.connections[self._account].get_module('UserTune').set_enabled(state)
