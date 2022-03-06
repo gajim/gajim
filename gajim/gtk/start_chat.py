@@ -532,6 +532,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         search_text = search_entry.get_text()
         if not search_text:
             self._remove_new_jid_row()
+            self._ui.listbox.invalidate_filter()
             return
 
         try:
