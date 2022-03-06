@@ -82,6 +82,7 @@ class CodeWidget(Gtk.Box):
 
     @staticmethod
     def _prepare_code(text: str) -> Tuple[str, Optional[str]]:
+        text = text.strip()
         code_start = text.partition('\n')[0]
         lang = None
         if len(code_start) > 3:
