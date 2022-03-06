@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import cast
 from typing import Any
-from typing import Generator
 from typing import Optional
 from typing import Union
 
@@ -84,7 +83,6 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._destroyed = False
         self._search_stopped = False
         self._redirected = False
-        self._source_id: Optional[int] = None
 
         self._ui = get_builder('start_chat_dialog.ui')
         self.add(self._ui.stack)
@@ -136,12 +134,12 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self.connect('key-press-event', self._on_key_press)
         self.connect('destroy', self._on_destroy)
 
+        if rows:
+            self._load_contacts(rows)
+
         self.select_first_row()
         self._ui.connect_signals(self)
         self.show_all()
-
-        if rows:
-            self._load_contacts(rows)
 
     def set_search_text(self, text: str) -> None:
         self._ui.search_entry.set_text(text)
@@ -195,19 +193,10 @@ class StartChatDialog(Gtk.ApplicationWindow):
                                        groupchat=True))
 
     def _load_contacts(self, rows: list[ContactRow]) -> None:
-        generator = self._incremental_add(rows)
-        self._source_id = GLib.idle_add(lambda: next(generator, False),
-                                        priority=GLib.PRIORITY_LOW)
-
-    def _incremental_add(self,
-                         rows: list[ContactRow]
-                         ) -> Generator[bool, None, None]:
         for row in rows:
             self._ui.listbox.add(row)
-            yield True
 
         self._ui.listbox.set_sort_func(self._sort_func, None)
-        self._source_id = None
 
     def _on_page_changed(self, stack: Gtk.Stack, _param: Any) -> None:
         if stack.get_visible_child_name() == 'account':
@@ -760,8 +749,6 @@ class StartChatDialog(Gtk.ApplicationWindow):
     def _on_destroy(self, *args: Any) -> None:
         self._ui.listbox.set_filter_func(None)
         self._ui.listbox.destroy()
-        if self._source_id is not None:
-            GLib.source_remove(self._source_id)
         self._destroyed = True
         app.cancel_tasks(self)
         app.check_finalize(self)
