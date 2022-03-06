@@ -92,8 +92,8 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
         # Helper for the case where we don't receive a disco info
         self._new_chat_row: Optional[ContactRow] = None
+        self._search_is_valid_jid = False
 
-        self.new_contact_row_visible = False
         self.new_contact_rows: dict[str, Optional[ContactRow]] = {}
         self._accounts = app.get_enabled_accounts_with_labels()
 
@@ -101,6 +101,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._add_accounts()
         self._add_contacts(rows)
         self._add_groupchats(rows)
+        self._add_new_contact_rows(rows)
 
         self._ui.search_entry.connect(
             'search-changed', self._on_search_changed)
@@ -160,7 +161,6 @@ class StartChatDialog(Gtk.ApplicationWindow):
     def _add_contacts(self, rows: list[ContactRow]):
         show_account = len(self._accounts) > 1
         for account, _label in self._accounts:
-            self.new_contact_rows[account] = None
             client = app.get_client(account)
             for jid, _data in client.get_module('Roster').iter():
                 contact = client.get_module('Contacts').get_contact(jid)
@@ -191,6 +191,13 @@ class StartChatDialog(Gtk.ApplicationWindow):
                                        contact.name,
                                        show_account,
                                        groupchat=True))
+
+    def _add_new_contact_rows(self, rows: list[ContactRow]) -> None:
+        for account, _ in self._accounts:
+            show_account = len(self._accounts) > 1
+            row = ContactRow(account, None, None, None, show_account)
+            self.new_contact_rows[account] = row
+            rows.append(row)
 
     def _load_contacts(self, rows: list[ContactRow]) -> None:
         for row in rows:
@@ -514,7 +521,6 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self._set_listbox(self._global_search_listbox)
             if self._ui.search_entry.get_text():
                 self._start_search()
-            self._remove_new_jid_row()
             self._ui.listbox.invalidate_filter()
         else:
             self._ui.filter_bar_toggle.set_sensitive(True)
@@ -525,28 +531,21 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
     def _on_search_changed(self, search_entry: Gtk.SearchEntry) -> None:
         self._show_search_entry_error(False)
+        self._search_is_valid_jid = False
 
         if self._global_search_active():
             return
 
         search_text = search_entry.get_text()
-        if not search_text:
-            self._remove_new_jid_row()
-            self._ui.listbox.invalidate_filter()
-            return
-
-        try:
-            validate_jid(search_text)
-        except ValueError:
-            self._show_search_entry_error(True)
-            self._remove_new_jid_row()
-            return
-
         if '@' in search_text:
-            self._add_new_jid_row()
-            self._update_new_jid_rows(search_text)
-        else:
-            self._remove_new_jid_row()
+            try:
+                validate_jid(search_text)
+            except ValueError:
+                self._show_search_entry_error(True)
+            else:
+                self._update_new_contact_rows(search_text)
+                self._search_is_valid_jid = True
+
         self._ui.listbox.invalidate_filter()
 
     def _show_search_entry_error(self, state: bool):
@@ -558,28 +557,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
             Gtk.EntryIconPosition.SECONDARY,
             _('Invalid Address'))
 
-    def _add_new_jid_row(self) -> None:
-        if self.new_contact_row_visible:
-            return
-        for account in self.new_contact_rows:
-            show_account = len(self._accounts) > 1
-            row = ContactRow(account, None, None, None, show_account)
-            self.new_contact_rows[account] = row
-            self._ui.listbox.add(row)
-            listbox = cast(Gtk.ListBox, row.get_parent())
-            listbox.show_all()
-        self.new_contact_row_visible = True
-
-    def _remove_new_jid_row(self) -> None:
-        if not self.new_contact_row_visible:
-            return
-
-        for row in self.new_contact_rows.values():
-            if row is not None:
-                row.destroy()
-        self.new_contact_row_visible = False
-
-    def _update_new_jid_rows(self, search_text: str) -> None:
+    def _update_new_contact_rows(self, search_text: str) -> None:
         for row in self.new_contact_rows.values():
             if row is not None:
                 row.update_jid(JID.from_string(search_text))
@@ -620,6 +598,10 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._ui.scrolledwindow.get_vadjustment().set_value(0)
 
     def _filter_func(self, row: ContactRow, _user_data: Any) -> bool:
+        if row.contact is None:
+            # new contact row
+            return self._search_is_valid_jid
+
         search_text = self._ui.search_entry.get_text().lower()
         search_text_list = search_text.split()
         row_text = row.get_search_text().lower()
