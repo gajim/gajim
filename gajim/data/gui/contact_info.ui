@@ -429,6 +429,7 @@
                       <object class="GtkBox" id="settings_box">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="halign">center</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">24</property>
                         <child>
