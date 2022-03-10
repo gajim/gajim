@@ -21,6 +21,7 @@ import logging
 from gi.repository import Gtk
 from gi.repository import Pango
 from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import GObject
 
@@ -65,7 +66,7 @@ class PlainWidget(Gtk.Box):
         self._text_widget.print_text_with_styling(block)
 
     def add_action_phrase(self, text: str, nickname: str) -> None:
-        text = text.replace('/me', '* %s' % nickname, 1)
+        text = text.replace('/me', f'* {nickname}', 1)
         text = GLib.markup_escape_text(text)
         self._text_widget.add_action_phrase(text)
 
@@ -255,6 +256,25 @@ class MessageTextview(Gtk.TextView):
                 emoji_pixbufs.append_marks(
                     self, start_mark, end_mark, emoji.text)
 
+    def replace_emoji(self,
+                      start_mark: Gtk.TextMark,
+                      end_mark: Gtk.TextMark,
+                      pixbuf: GdkPixbuf.Pixbuf,
+                      codepoint: str
+                      ) -> None:
+        buffer_ = self.get_buffer()
+        start_iter = buffer_.get_iter_at_mark(start_mark)
+        end_iter = buffer_.get_iter_at_mark(end_mark)
+        buffer_.delete(start_iter, end_iter)
+
+        anchor = buffer_.create_child_anchor(start_iter)
+        anchor.plaintext = codepoint  # type: ignore
+        img = Gtk.Image.new_from_pixbuf(pixbuf)
+        img.show()
+        self.add_child_at_anchor(img, anchor)
+        buffer_.delete_mark(start_mark)
+        buffer_.delete_mark(end_mark)
+
     def add_action_phrase(self, text: str) -> None:
         buffer_ = self.get_buffer()
         buffer_.insert(buffer_.get_start_iter(), text.strip())
@@ -268,7 +288,7 @@ class MessageTextview(Gtk.TextView):
                        x_pos: int,
                        y_pos: int,
                        _keyboard_mode: bool,
-                       tooltip: Gtk.Tooltip
+                       _tooltip: Gtk.Tooltip
                        ) -> bool:
 
         window = widget.get_window(Gtk.TextWindowType.TEXT)

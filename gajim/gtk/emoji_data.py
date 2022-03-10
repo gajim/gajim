@@ -154,7 +154,7 @@ class EmojiPixbufs(dict):
                 pixbuf = pixbuf.scale_simple(Emoji.TEXT_SIZE,
                                              Emoji.TEXT_SIZE,
                                              GdkPixbuf.InterpType.HYPER)
-                textview.replace_emojis(
+                textview.replace_emoji(
                     start(), end(), pixbuf.copy(), codepoint)
 
 
