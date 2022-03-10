@@ -14,12 +14,15 @@
 
 # pylint: disable=too-many-lines
 
+from typing import Optional
+
 import re
 import weakref
 from enum import IntEnum
 from collections import OrderedDict
 
 from gi.repository import GdkPixbuf
+from gi.repository import Gtk
 
 _MODIFIERS = ['\U0001F3FB',
               '\U0001F3FC',
@@ -36,7 +39,7 @@ class Emoji(IntEnum):
     PARSE_COLUMNS = 20
 
 
-def is_emoji(codepoints):
+def is_emoji(codepoints: str) -> bool:
     if codepoints in emoji_data:
         return True
     if codepoints in emoji_ascii_data:
@@ -44,7 +47,7 @@ def is_emoji(codepoints):
     return False
 
 
-def get_emoji_pixbuf(codepoints):
+def get_emoji_pixbuf(codepoints: str) -> Optional[GdkPixbuf.Pixbuf]:
     ascii_codepoint = emoji_ascii_data.get(codepoints, None)
     if ascii_codepoint is not None:
         codepoints = ascii_codepoint
@@ -75,7 +78,7 @@ class EmojiData(OrderedDict):
         except KeyError:
             return False
 
-    def get_regex(self):
+    def get_regex(self) -> str:
         emojis = []
         for codepoint, attrs in self.items():
             if attrs.get('variations', False):
@@ -92,38 +95,49 @@ class EmojiPixbufs(dict):
 
     def __init__(self):
         dict.__init__(self)
-        self._marks = weakref.WeakKeyDictionary()
+        self._marks: weakref.WeakKeyDictionary[
+            Gtk.TextView,
+            list[tuple[
+                weakref.ReferenceType[Gtk.TextMark],
+                weakref.ReferenceType[Gtk.TextMark],
+                str]]
+            ] = weakref.WeakKeyDictionary()
 
     @property
-    def complete(self):
+    def complete(self) -> bool:
         return self._complete
 
     @complete.setter
-    def complete(self, value):
-        if value is True:
+    def complete(self, value: bool) -> None:
+        if value:
             self._replace_emojis()
             self._marks.clear()
         self._complete = value
 
-    def clear(self):
+    def clear(self) -> None:
         self.complete = False
         self._marks.clear()
         dict.clear(self)
 
-    def append_marks(self, textview, start, end, codepoint):
+    def append_marks(self,
+                     textview: Gtk.TextView,
+                     start: Gtk.TextMark,
+                     end: Gtk.TextMark,
+                     codepoint: str
+                     ) -> None:
         # We have to assign some dummy data to the mark, or else
         # pygobject will not keep the python wrapper alive, which in turn
         # makes the weakref invalid as soon as the method ends
-        start.dummy = 'x'
-        start = weakref.ref(start)
-        end.dummy = 'x'
-        end = weakref.ref(end)
+        start.dummy = 'x'  # type: ignore
+        start_ref = weakref.ref(start)
+        end.dummy = 'x'  # type: ignore
+        end_ref = weakref.ref(end)
         if textview in self._marks:
-            self._marks[textview].append((start, end, codepoint))
+            self._marks[textview].append((start_ref, end_ref, codepoint))
         else:
-            self._marks[textview] = [(start, end, codepoint)]
+            self._marks[textview] = [(start_ref, end_ref, codepoint)]
 
-    def _replace_emojis(self):
+    def _replace_emojis(self) -> None:
         for textview, emojis in self._marks.items():
             for emoji in emojis:
                 start, end, codepoint = emoji
@@ -148,7 +162,7 @@ emoji_pixbufs = EmojiPixbufs()
 
 # pylint: disable=line-too-long
 
-emoji_ascii_data = dict([
+emoji_ascii_data: dict[str, str] = dict([
     ("':-D", '\U0001F605'),
     (':)', '\U0001F642'),
     (':-O', '\U0001F62e'),
