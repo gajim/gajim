@@ -122,7 +122,13 @@ class CacheStorage(SqliteStorage):
         return Row(*row)
 
     def _migrate(self) -> None:
-        user_version = self.user_version
+        try:
+            user_version = self.user_version
+        except sqlite3.DatabaseError as error:
+            log.error('Database error: %s', error)
+            self._reinit_storage()
+            return
+
         if user_version > CURRENT_USER_VERSION:
             # Gajim was downgraded, reinit the storage
             self._reinit_storage()
