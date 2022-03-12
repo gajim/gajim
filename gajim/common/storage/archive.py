@@ -597,7 +597,7 @@ class MessageArchiveStorage(SqliteStorage):
                    from_users: Optional[list[str]] = None,
                    before: Optional[datetime.datetime] = None,
                    after: Optional[datetime.datetime] = None
-                   ) -> list[SearchLogRow]:
+                   ) -> Iterator[SearchLogRow]:
         """
         Search the conversation log for messages containing the `query` string.
 
@@ -653,12 +653,28 @@ class MessageArchiveStorage(SqliteStorage):
                        users_query=users_query_string)
 
         if from_users is None:
-            return self._con.execute(
-                sql, tuple(jids) + (query, after_ts, before_ts)).fetchall()
+
+            cursor = self._con.execute(
+                sql, tuple(jids) + (query, after_ts, before_ts))
+            while True:
+                results = cursor.fetchmany(25)
+                if not results:
+                    break
+                for result in results:
+                    yield result
+            return
 
         users = ','.join([user.upper() for user in from_users])
-        return self._con.execute(sql, tuple(jids) + (
-            query, users, after_ts, before_ts)).fetchall()
+
+        cursor = self._con.execute(
+            sql, tuple(jids) + (query, users, after_ts, before_ts))
+        while True:
+            results = cursor.fetchmany(25)
+            if not results:
+                break
+            for result in results:
+                yield result
+
 
     @timeit
     def search_all_logs(self,
@@ -666,7 +682,7 @@ class MessageArchiveStorage(SqliteStorage):
                         from_users: Optional[list[str]] = None,
                         before: Optional[datetime.datetime] = None,
                         after: Optional[datetime.datetime] = None
-                        ) -> list[SearchLogRow]:
+                        ) -> Iterator[SearchLogRow]:
         """
         Search all conversation logs for messages containing the `query`
         string.
@@ -714,12 +730,23 @@ class MessageArchiveStorage(SqliteStorage):
                        users_query=users_query_string)
 
         if from_users is None:
-            return self._con.execute(
-                sql, (query, after_ts, before_ts)).fetchall()
+            cursor = self._con.execute(sql, (query, after_ts, before_ts))
+            while True:
+                results = cursor.fetchmany(25)
+                if not results:
+                    break
+                for result in results:
+                    yield result
+            return
 
         users = ','.join([user.upper() for user in from_users])
-        return self._con.execute(
-            sql, (query, users, after_ts, before_ts)).fetchall()
+        cursor = self._con.execute(sql, (query, users, after_ts, before_ts))
+        while True:
+            results = cursor.fetchmany(25)
+            if not results:
+                break
+            for result in results:
+                yield result
 
     @timeit
     def get_days_with_logs(self,

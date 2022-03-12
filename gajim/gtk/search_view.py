@@ -15,10 +15,11 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Union
+from typing import Iterator
 from typing import Optional
 
 import datetime
+import itertools
 import logging
 import time
 import re
@@ -33,8 +34,6 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
-from gajim.common.const import FILE_CATEGORIES
-from gajim.common.i18n import _
 from gajim.common.storage.archive import SearchLogRow
 
 from .conversation.message_widget import MessageWidget
@@ -57,7 +56,7 @@ class SearchView(Gtk.Box):
 
         self._account: Optional[str] = None
         self._jid: Optional[JID] = None
-        self._results: list[SearchLogRow] = []
+        self._results_iterator: Optional[Iterator[SearchLogRow]] = None
         self._scope: str = 'everywhere'
 
         self._ui = get_builder('search_view.ui')
@@ -78,18 +77,10 @@ class SearchView(Gtk.Box):
         self.clear()
 
     @staticmethod
-    def _header_func(row: Union[CounterRow, ResultRow],
-                     before: Optional[Union[CounterRow, ResultRow]]) -> None:
-
+    def _header_func(row: ResultRow, before: ResultRow) -> None:
         if before is None:
-            if isinstance(row, CounterRow):
-                row.set_header(None)
-            else:
-                row.set_header(RowHeader(row.account, row.jid, row.time))
+            row.set_header(RowHeader(row.account, row.jid, row.time))
         else:
-            if isinstance(row, CounterRow):
-                row.set_header(None)
-                return
             date1 = time.strftime('%x', time.localtime(row.time))
             date2 = time.strftime('%x', time.localtime(before.time))
             if before.jid != row.jid:
@@ -101,6 +92,7 @@ class SearchView(Gtk.Box):
 
     def _on_hide_clicked(self, _button: Gtk.Button) -> None:
         self.emit('hide-search')
+        self.clear()
 
     def clear(self) -> None:
         self._ui.search_entry.set_text('')
@@ -149,22 +141,19 @@ class SearchView(Gtk.Box):
                 self._ui.date_hint.show()
                 return
 
-        # has:'file'|'img'|'video'|filetype
-        text, has_filters = self._strip_filters(text, 'has')
-
         everywhere = self._ui.search_checkbutton.get_active()
         context = self._account is not None and self._jid is not None
 
         if not context or everywhere:
             self._scope = 'everywhere'
-            self._results = app.storage.archive.search_all_logs(
+            self._results_iterator = app.storage.archive.search_all_logs(
                 text,
                 from_users=from_filters,
                 before=before_filters,
                 after=after_filters)
         else:
             self._scope = 'contact'
-            self._results = app.storage.archive.search_log(
+            self._results_iterator = app.storage.archive.search_log(
                 self._account,
                 self._jid,
                 text,
@@ -172,37 +161,7 @@ class SearchView(Gtk.Box):
                 before=before_filters,
                 after=after_filters)
 
-        if has_filters is not None:
-            filetypes: list[str] = []
-            for filetype in has_filters:
-                types = FILE_CATEGORIES.get(filetype)
-                if types is None:
-                    filetypes.append(filetype)
-                else:
-                    for type_ in types:
-                        filetypes.append(type_)
-            self._filter_results_for_files(filetypes)
-
-        self._add_counter()
         self._add_results()
-
-    def _filter_results_for_files(self, filetypes: list[str]) -> None:
-        if 'file' in filetypes:
-            results: list[SearchLogRow] = []
-            for result in self._results:
-                if result.additional_data.get_value('gajim', 'oob_url'):
-                    results.append(result)
-            self._results = results
-        else:
-            results: list[SearchLogRow] = []
-            for result in self._results:
-                url = result.additional_data.get_value('gajim', 'oob_url')
-                if url is None:
-                    continue
-                extension = str(url).rsplit('.', maxsplit=1)[-1]
-                if extension in filetypes:
-                    results.append(result)
-            self._results = results
 
     @staticmethod
     def _strip_filters(text: str,
@@ -218,14 +177,10 @@ class SearchView(Gtk.Box):
         new_text += text[start:]
         return new_text, filters or None
 
-    def _add_counter(self) -> None:
-        results_count = len(self._results)
-        if results_count:
-            self._ui.results_listbox.add(CounterRow(results_count))
-
     def _add_results(self) -> None:
         accounts = self._get_accounts()
-        for msg in self._results[:25]:
+        assert self._results_iterator is not None
+        for msg in itertools.islice(self._results_iterator, 25):
             if self._scope == 'everywhere':
                 archive_jid = app.storage.archive.get_jid_from_id(msg.jid_id)
                 result_row = ResultRow(
@@ -238,7 +193,6 @@ class SearchView(Gtk.Box):
                 result_row = ResultRow(msg, self._account, self._jid)
 
             self._ui.results_listbox.add(result_row)
-        self._results = self._results[25:]
 
     def _on_edge_reached(self,
                          _scrolledwin: Gtk.ScrolledWindow,
@@ -297,24 +251,6 @@ class RowHeader(Gtk.Box):
         date = time.strftime('%x', local_time)
         self._ui.header_date_label.set_text(date)
 
-        self.show_all()
-
-
-class CounterRow(Gtk.ListBoxRow):
-    def __init__(self, count: int) -> None:
-        Gtk.ListBoxRow.__init__(self)
-        self.set_activatable(False)
-        self.type = 'counter'
-        self.jid = ''  # Has to be there for header_func
-        self.time = 0.0
-        self.get_style_context().add_class('search-view-counter')
-
-        if count == 1:
-            counter_text = _('1 result')
-        else:
-            counter_text = _('%s results') % count
-        label = Gtk.Label(label=counter_text)
-        self.add(label)
         self.show_all()
 
 
