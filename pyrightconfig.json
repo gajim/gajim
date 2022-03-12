@@ -57,6 +57,7 @@
         "gajim/gtk/groupchat_outcasts.py",
         "gajim/gtk/groupchat_settings.py",
         "gajim/gtk/groupchat_state.py",
+        "gajim/gtk/history_export.py",
         "gajim/gtk/main_stack.py",
         "gajim/gtk/main.py",
         "gajim/gtk/mam_preferences.py",

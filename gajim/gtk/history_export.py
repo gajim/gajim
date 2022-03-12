@@ -28,6 +28,7 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.const import KindConstant
 from gajim.common.i18n import _
+from gajim.common.storage.archive import MessageExportRow
 
 from .assistant import Assistant
 from .assistant import Page
@@ -102,40 +103,45 @@ class HistoryExport(Assistant):
     def _on_export(self) -> None:
         start_page = cast(SelectAccountDir, self.get_page('start'))
         account, directory = start_page.get_account_and_directory()
-        messages = app.storage.archive.get_messages_for_export(account)
 
         current_time = datetime.now()
         time_str = current_time.strftime('%Y-%m-%d-%H-%M-%S')
-        filename = Path(directory) / f'export_{time_str}.txt'
+        path = Path(directory) / f'export_{time_str}'
+        path.mkdir()
 
-        with open(filename, 'w', encoding='utf-8') as out_file:
-            conversation = ''
-            for message in messages:
-                if message.kind in (KindConstant.SINGLE_MSG_RECV,
-                                    KindConstant.CHAT_MSG_RECV):
-                    name = message.jid
-                elif message.kind in (KindConstant.SINGLE_MSG_SENT,
-                                      KindConstant.CHAT_MSG_SENT):
-                    name = _('You')
-                elif message.kind == KindConstant.GC_MSG:
-                    name = message.contact_name
-                else:
-                    continue
+        jids = app.storage.archive.get_conversation_jids(account)
 
-                timestamp = ''
-                try:
-                    timestamp = time.strftime(
-                        '%Y-%m-%d %H:%M:%S', time.localtime(message.time))
-                except ValueError:
-                    pass
+        for jid in jids:
+            messages = app.storage.archive.get_messages_for_export(account, jid)
+            if not messages:
+                continue
 
-                if conversation != message.jid:
-                    # Different conversation
-                    out_file.write(f'\n{"=" * 80}\n{message.jid}\n\n')
-                    conversation = message.jid
-                out_file.write(f'{timestamp} {name}: {message.message}\n')
+            with open(path / f'{jid}.txt', 'w', encoding='utf-8') as file:
+                for message in messages:
+                    file.write(self._get_export_line(message))
 
         self.show_page('success', Gtk.StackTransitionType.SLIDE_LEFT)
+
+    def _get_export_line(self, message: MessageExportRow) -> str:
+        if message.kind in (KindConstant.SINGLE_MSG_RECV,
+                            KindConstant.CHAT_MSG_RECV):
+            name = message.jid
+        elif message.kind in (KindConstant.SINGLE_MSG_SENT,
+                              KindConstant.CHAT_MSG_SENT):
+            name = _('You')
+        elif message.kind == KindConstant.GC_MSG:
+            name = message.contact_name
+        else:
+            raise ValueError('Unknown kind: %s' % message.kind)
+
+        timestamp = ''
+        try:
+            timestamp = time.strftime(
+                '%Y-%m-%d %H:%M:%S', time.localtime(message.time))
+        except ValueError:
+            pass
+
+        return f'{timestamp} {name}: {message.message}\n'
 
 
 class SelectAccountDir(Page):
@@ -178,7 +184,9 @@ class SelectAccountDir(Page):
         self.update_page_complete()
 
     def _on_file_set(self, button: Gtk.FileChooserButton) -> None:
-        self._export_directory = button.get_current_folder()
+        uri = button.get_uri()
+        assert uri is not None
+        self._export_directory = uri.removeprefix('file://')
 
     def get_account_and_directory(self) -> tuple[str, str]:
         assert self._account is not None

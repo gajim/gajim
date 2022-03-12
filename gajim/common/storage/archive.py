@@ -22,6 +22,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
+from typing import Iterator
 from typing import KeysView
 from typing import NamedTuple
 from typing import Optional
@@ -1313,16 +1314,39 @@ class MessageArchiveStorage(SqliteStorage):
         log.info('Reset message archive info: %s', jid)
         self._delayed_commit()
 
+    def get_conversation_jids(self, account: str) -> list[JID]:
+        account_id = self.get_account_id(account)
+        sql = '''SELECT DISTINCT jid as "jid [jid]"
+                 FROM logs
+                 NATURAL JOIN jids jid_id
+                 WHERE account_id = ?'''
+        rows = self._con.execute(sql, (account_id, )).fetchall()
+        return [row.jid for row in rows]
+
     def get_messages_for_export(self,
-                                account: str
-                                ) -> list[MessageExportRow]:
+                                account: str,
+                                jid: JID
+                                ) -> Iterator[MessageExportRow]:
+
+        kinds = map(str, [KindConstant.CHAT_MSG_RECV,
+                          KindConstant.SINGLE_MSG_SENT,
+                          KindConstant.CHAT_MSG_SENT,
+                          KindConstant.GC_MSG])
+
         account_id = self.get_account_id(account)
         sql = '''SELECT jid, time, kind, message, contact_name
                  FROM logs
                  NATURAL JOIN jids jid_id
-                 WHERE account_id = ?
-                 ORDER BY jid_id, time'''
-        return self._con.execute(sql, (account_id, )).fetchall()
+                 WHERE account_id = ? AND kind in ({kinds}) AND jid = ?
+                 ORDER BY time'''.format(kinds=', '.join(kinds))
+
+        cursor = self._con.execute(sql, (account_id, jid))
+        while True:
+            results = cursor.fetchmany(10)
+            if not results:
+                break
+            for result in results:
+                yield result
 
     def remove_history(self, account: str, jid: JID) -> None:
         """
