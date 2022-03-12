@@ -319,7 +319,7 @@ class CounterRow(Gtk.ListBoxRow):
 
 
 class ResultRow(Gtk.ListBoxRow):
-    def __init__(self, msg: Any, account: str, jid: JID) -> None:
+    def __init__(self, msg: SearchLogRow, account: str, jid: JID) -> None:
         Gtk.ListBoxRow.__init__(self)
         self.account = account
         self.jid = jid

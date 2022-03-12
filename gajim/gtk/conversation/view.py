@@ -430,7 +430,7 @@ class ConversationView(Gtk.ListBox):
         row = self.get_row_at_index(len(self.get_children()) - 1)
         row.destroy()
 
-    def scroll_to_message_and_highlight(self, log_line_id: str) -> None:
+    def scroll_to_message_and_highlight(self, log_line_id: int) -> None:
         highlight_row = None
         for row in cast(list[BaseRow], self.get_children()):
             row.get_style_context().remove_class(
@@ -447,7 +447,7 @@ class ConversationView(Gtk.ListBox):
     def _get_row_by_message_id(self, id_: str) -> Optional[MessageRow]:
         return self._message_id_row_map.get(id_)
 
-    def get_row_by_log_line_id(self, log_line_id: str) -> Optional[MessageRow]:
+    def get_row_by_log_line_id(self, log_line_id: int) -> Optional[MessageRow]:
         for row in cast(list[BaseRow], self.get_children()):
             if not isinstance(row, MessageRow):
                 continue

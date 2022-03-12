@@ -1404,7 +1404,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.reset_view()
         self.conversation_view.scroll_to_end(force)
 
-    def scroll_to_message(self, log_line_id: str, timestamp: float) -> None:
+    def scroll_to_message(self, log_line_id: int, timestamp: float) -> None:
         row = self.conversation_view.get_row_by_log_line_id(log_line_id)
         if row is None:
             # Clear view and reload conversation around timestamp
