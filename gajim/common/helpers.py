@@ -1399,3 +1399,16 @@ def get_start_of_day(date_time: datetime) -> datetime:
                              minute=0,
                              second=0,
                              microsecond=0)
+
+
+def make_path_from_jid(base_path: Path, jid: JID) -> Path:
+    assert jid.domain is not None
+    domain = jid.domain[:50]
+
+    if jid.localpart is None:
+        return base_path / domain
+
+    path = base_path / domain / jid.localpart[:50]
+    if jid.resource is not None:
+        return path / jid.resource[:30]
+    return path

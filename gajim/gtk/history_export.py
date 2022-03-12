@@ -27,6 +27,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.const import KindConstant
+from gajim.common.helpers import make_path_from_jid
 from gajim.common.i18n import _
 from gajim.common.storage.archive import MessageExportRow
 
@@ -106,8 +107,7 @@ class HistoryExport(Assistant):
 
         current_time = datetime.now()
         time_str = current_time.strftime('%Y-%m-%d-%H-%M-%S')
-        path = Path(directory) / f'export_{time_str}'
-        path.mkdir()
+        export_dir = Path(directory) / f'export_{time_str}'
 
         jids = app.storage.archive.get_conversation_jids(account)
 
@@ -116,7 +116,10 @@ class HistoryExport(Assistant):
             if not messages:
                 continue
 
-            with open(path / f'{jid}.txt', 'w', encoding='utf-8') as file:
+            file_path = make_path_from_jid(export_dir, jid)
+            file_path.mkdir(parents=True, exist_ok=True)
+            with open(file_path / 'history.txt', 'w', encoding='utf-8') as file:
+                file.write(f'History for {jid}\n\n')
                 for message in messages:
                     file.write(self._get_export_line(message))
 
