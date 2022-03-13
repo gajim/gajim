@@ -32,15 +32,13 @@ class SoftwareVersion(BaseModule):
         BaseModule.__init__(self, con)
 
     def set_enabled(self, enabled):
-        if not enabled:
-            self._nbxmpp('SoftwareVersion').disable()
-            return
-
-        if not app.settings.get_account_setting(self._account, 'send_os_info'):
-            return
-
+        if enabled and app.settings.get_account_setting(self._account,
+                                                        'send_os_info'):
+            os_info = get_os_info()
+        else:
+            os_info = None
         self._nbxmpp('SoftwareVersion').set_software_version(
-            'Gajim', app.version, get_os_info())
+            'Gajim', app.version, os_info)
         self._nbxmpp('SoftwareVersion').set_allow_reply_func(self._allow_reply)
 
     def _allow_reply(self, jid):
