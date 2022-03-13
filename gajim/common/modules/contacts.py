@@ -308,10 +308,10 @@ class BareContact(CommonContact):
 
     @property
     def name(self) -> str:
-        roster_name = self._get_roster_attr('name')
-        if roster_name:
-            assert isinstance(roster_name, str)
-            return roster_name
+        item = self._module('Roster').get_item(self._jid)
+        if item is not None and item.name:
+            return item.name
+
         nickname = app.storage.cache.get_contact(self._jid, 'nickname')
         if nickname:
             return nickname
@@ -390,12 +390,6 @@ class BareContact(CommonContact):
         app.app.avatar_storage.invalidate_cache(self._jid)
         self.notify('avatar-update')
 
-    def _get_roster_attr(self, attr: str) -> Union[list[str], str, None]:
-        item = self._module('Roster').get_item(self._jid)
-        if item is None:
-            return None
-        return getattr(item, attr)
-
     @property
     def is_in_roster(self) -> bool:
         item = self._module('Roster').get_item(self._jid)
@@ -409,25 +403,25 @@ class BareContact(CommonContact):
         return disco_info.is_gateway
 
     @property
-    def ask(self) -> str:
-        ask = self._get_roster_attr('ask')
-        assert isinstance(ask, str)
-        return ask
+    def ask(self) -> Optional[str]:
+        item = self._module('Roster').get_item(self._jid)
+        if item is None:
+            return None
+        return item.ask
 
     @property
-    def subscription(self) -> str:
-        subscription = self._get_roster_attr('subscription')
-        assert isinstance(subscription, str)
-        return subscription
+    def subscription(self) -> Optional[str]:
+        item = self._module('Roster').get_item(self._jid)
+        if item is None:
+            return None
+        return item.subscription
 
     @property
     def groups(self) -> set[str]:
-        groups = self._get_roster_attr('groups')
-        if groups is None:
+        item = self._module('Roster').get_item(self._jid)
+        if item is None:
             return set()
-
-        assert isinstance(groups, set)
-        return groups
+        return item.groups
 
     @property
     def is_subscribed(self) -> bool:
