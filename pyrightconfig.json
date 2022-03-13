@@ -3,6 +3,7 @@
     "pythonVersion": "3.9",
     "typeCheckingMode": "strict",
     "reportImportCycles": "none",
+    "reportImplicitStringConcatenation": "none",
     "include": [
         "gajim/gajim.py",
         "gajim/common/application.py",
