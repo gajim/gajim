@@ -57,73 +57,68 @@ MenuValueT = Union[None, str, GLib.Variant, VariantMixin]
 MenuItemListT = list[tuple[str, str, MenuValueT]]
 
 
+def get_self_contact_menu(control_id: str,
+                          contact: types.BareContact) -> GajimMenu:
+    account = contact.account
+    jid = contact.jid
+
+    menu = GajimMenu()
+
+    menu.add_item(_('Profile'), f'app.{account}-profile', f'"{account}"')
+    submenu = get_send_file_submenu(control_id)
+    menu.append_submenu(_('Send File'), submenu)
+
+    params = RemoveHistoryActionParams(account=account, jid=jid)
+    menu.add_item(_('Remove History…'), 'app.remove-history', params)
+    menu.add_item(_('Search…'), 'win.search-history', None)
+    return menu
+
+
 def get_singlechat_menu(control_id: str,
-                        account: str,
-                        jid: JID,
-                        type_: ControlType
-                        ) -> Gio.Menu:
-    client = app.get_client(account)
-    is_self_contact = jid.bare == client.get_own_jid().bare
-    contact = client.get_module('Contacts').get_contact(jid)
+                        contact: Union[types.BareContact,
+                                       types.GroupchatParticipant]
+                        ) -> GajimMenu:
 
-    self_contact_menu: list[tuple[str, Any]] = [
-        ('profile', _('Profile')),
-        (_('Send File'), [
-            ('win.send-file-httpupload-', _('Upload File…')),
-            ('win.send-file-jingle-', _('Send File Directly…'))
-        ]),
-        ('app.remove-history', _('Remove History…')),
-        ('win.search-history', _('Search…'))
-    ]
+    menu = GajimMenu()
+    menu.add_item(_('Details'), f'win.information-{control_id}')
+    menu.add_item(_('Block Contact…'), f'win.block-contact-{control_id}')
 
-    singlechat_menu: list[tuple[str, Any]] = [
-        ('win.information-', _('Details')),
-        ('win.block-contact-', _('Block Contact…')),
-        (_('Send File'), [
-            ('win.send-file-httpupload-', _('Upload File…')),
-            ('win.send-file-jingle-', _('Send File Directly…'))
-        ]),
-        ('win.start-call-', _('Start Call…')),
-        ('win.search-history', _('Search…'))
-    ]
+    submenu = get_send_file_submenu(control_id)
+    menu.append_submenu(_('Send File'), submenu)
+
+    menu.add_item(_('Start Call…'), f'win.start-call-{control_id}')
+    menu.add_item(_('Search…'), 'win.search-history')
 
     if can_add_to_roster(contact):
-        singlechat_menu.append(('win.add-to-roster-',
-                               _('Add to Contact List…')))
+        menu.append(_('Add to Contact List…'),
+                    f'win.add-to-roster-{control_id}')
 
-    def build_menu(preset: list[tuple[str, Any]]):
-        menu = Gio.Menu()
-        for item in preset:
-            if isinstance(item[1], str):
-                action_name, label = item
-                if action_name == 'win.search-history':
-                    menuitem = Gio.MenuItem.new(label, action_name)
-                    menuitem.set_action_and_target_value(action_name, None)
-                    menu.append_item(menuitem)
-                elif action_name == 'profile':
-                    action = f'app.{account}-{action_name}'
-                    menuitem = Gio.MenuItem.new(label, action)
-                    variant = GLib.Variant('s', account)
-                    menuitem.set_action_and_target_value(action, variant)
-                    menu.append_item(menuitem)
-                elif action_name == 'app.remove-history':
-                    params = RemoveHistoryActionParams(account=account, jid=jid)
-                    menuitem = Gio.MenuItem.new(label, action_name)
-                    menuitem.set_action_and_target_value(action_name,
-                                                         params.to_variant())
-                    menu.append_item(menuitem)
-                else:
-                    menu.append(label, action_name + control_id)
-            else:
-                label, sub_menu = item
-                submenu = build_menu(sub_menu)
-                menu.append_submenu(label, submenu)
-        return menu
+    return menu
 
-    if is_self_contact:
-        return build_menu(self_contact_menu)
 
-    return build_menu(singlechat_menu)
+def get_private_chat_menu(control_id: str,
+                          contact: types.GroupchatParticipant
+                          ) -> GajimMenu:
+
+    menu = GajimMenu()
+    menu.add_item(_('Details'), f'win.information-{control_id}')
+    menu.add_item(_('Upload File…'), f'win.send-file-httpupload-{control_id}')
+    menu.add_item(_('Search…'), 'win.search-history')
+
+    if can_add_to_roster(contact):
+        menu.append(_('Add to Contact List…'),
+                    f'win.add-to-roster-{control_id}')
+
+    return menu
+
+
+def get_send_file_submenu(control_id: str) -> GajimMenu:
+    menu = GajimMenu()
+
+    menu.add_item(_('Upload File…'), f'win.send-file-httpupload-{control_id}')
+    menu.add_item(_('Send File Directly…'),
+                  f'win.send-file-jingle-{control_id}')
+    return menu
 
 
 def get_groupchat_menu(control_id: str, account: str, jid: JID) -> GajimMenu:
@@ -207,10 +202,10 @@ def build_accounts_menu() -> None:
 
 def get_encryption_menu(control_id: str,
                         control_type: ControlType,
-                        ) -> Optional[Gio.Menu]:
-    menu = Gio.Menu()
-    menu.append(
-        _('Disabled'), f'win.set-encryption-{control_id}::disabled')
+                        ) -> Optional[GajimMenu]:
+    menu = GajimMenu()
+    action = f'win.set-encryption-{control_id}'
+    menu.add_item(_('Disabled'), action, '"disabled"')
     for name, plugin in app.plugin_manager.encryption_plugins.items():
         if control_type.is_groupchat:
             if not hasattr(plugin, 'allow_groupchat'):
@@ -218,8 +213,8 @@ def get_encryption_menu(control_id: str,
         if control_type.is_privatechat:
             if not hasattr(plugin, 'allow_privatechat'):
                 continue
-        menu_action = f'win.set-encryption-{control_id}::{name}'
-        menu.append(name, menu_action)
+        menu.add_item(name, action, f'"{name}"')
+
     if menu.get_n_items() == 1:
         return None
     return menu

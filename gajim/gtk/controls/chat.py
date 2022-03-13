@@ -68,6 +68,8 @@ from gajim.command_system.implementation.hosts import ChatCommands
 from gajim.command_system.framework import CommandHost
 
 from ..menus import get_encryption_menu
+from ..menus import get_private_chat_menu
+from ..menus import get_self_contact_menu
 from ..menus import get_singlechat_menu
 
 log = logging.getLogger('gajim.gui.controls.chat')
@@ -116,8 +118,16 @@ class ChatControl(BaseControl):
         self.conversation_view.connect('call-declined', self._on_call_declined)
 
         # Menu for the HeaderBar
-        self.control_menu = get_singlechat_menu(
-            self.control_id, self.account, self.contact.jid, self._type)
+        if self._type == ControlType.CHAT:
+            if self.contact.is_self:
+                self.control_menu = get_self_contact_menu(self.control_id,
+                                                          self.contact)
+            else:
+                self.control_menu = get_singlechat_menu(self.control_id,
+                                                        self.contact)
+        else:
+            self.control_menu = get_private_chat_menu(self.control_id,
+                                                      self.contact)
 
         # Settings menu
         self.xml.settings_menu.set_menu_model(self.control_menu)
