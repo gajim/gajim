@@ -99,6 +99,4 @@ class Receipts(BaseModule):
             return True
 
         contact = self._get_contact(properties.jid.bare)
-        if contact.subscription not in ('to', 'none'):
-            return True
-        return False
+        return contact.is_subscribed
