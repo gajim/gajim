@@ -59,7 +59,6 @@ from gajim.common.ged import EventHelper as CommonEventHelper
 from gajim.common.styling import PlainBlock
 from gajim.common.structs import VariantMixin
 
-from .const import GajimIconSet
 from .const import WINDOW_MODULES
 
 
@@ -253,22 +252,6 @@ def load_user_iconsets() -> None:
             continue
         log.info('Found iconset: %s', path.stem)
         icon_theme.append_search_path(str(path))
-
-
-def get_available_iconsets() -> list[str]:
-    iconsets: list[str] = []
-    for iconset in GajimIconSet:
-        iconsets.append(iconset.value)
-
-    iconsets_path = configpaths.get('MY_ICONSETS')
-    if not iconsets_path.exists():
-        return iconsets
-
-    for path in iconsets_path.iterdir():
-        if not path.is_dir():
-            continue
-        iconsets.append(path.stem)
-    return iconsets
 
 
 def get_total_screen_geometry() -> tuple[int, int]:

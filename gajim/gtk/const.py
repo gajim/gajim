@@ -65,17 +65,6 @@ class Theme(IntEnum):
     SYSTEM = 2
 
 
-class GajimIconSet(Enum):
-    BRUNO = 'bruno'
-    DCRAVEN = 'dcraven'
-    GNOME = 'gnome'
-    GOOJIM = 'goojim'
-    GOTA = 'gota'
-    JABBERBULB = 'jabberbulb'
-    SUN = 'sun'
-    WROOP = 'wroop'
-
-
 @unique
 class SettingKind(IntEnum):
     ENTRY = 0
