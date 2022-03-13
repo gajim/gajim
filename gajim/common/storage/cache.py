@@ -36,7 +36,7 @@ from gajim.common.storage.base import Encoder
 from gajim.common.storage.base import json_decoder
 
 
-CURRENT_USER_VERSION = 8
+CURRENT_USER_VERSION = 9
 
 CACHE_SQL_STATEMENT = '''
     CREATE TABLE caps_cache (
@@ -128,7 +128,7 @@ class CacheStorage(SqliteStorage):
             self._reinit_storage()
             return
 
-        if user_version < 8:
+        if user_version < 9:
             self._reinit_storage()
             return
 

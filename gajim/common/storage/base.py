@@ -114,6 +114,7 @@ def json_decoder(dct: dict[str, Any]) -> Any:
                           name=dct['name'],
                           ask=dct['ask'],
                           subscription=dct['subscription'],
+                          approved=dct['approved'],
                           groups=set(dct['groups']))
     return dct
 
