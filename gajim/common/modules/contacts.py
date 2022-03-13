@@ -785,3 +785,18 @@ class GroupchatParticipant(CommonContact):
     def update_avatar(self, *args: Any) -> None:
         app.app.avatar_storage.invalidate_cache(self._jid)
         self.notify('user-avatar-update')
+
+
+def can_add_to_roster(contact: Union[BareContact,
+                                     GroupchatContact,
+                                     GroupchatParticipant]) -> bool:
+
+    if isinstance(contact, GroupchatContact):
+        return False
+
+    if isinstance(contact, GroupchatParticipant):
+        return contact.real_jid is not None
+
+    if contact.is_self:
+        return False
+    return not contact.is_in_roster
