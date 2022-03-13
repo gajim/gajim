@@ -925,3 +925,17 @@ def make_menu(menuitems: MenuItemListT) -> Gio.Menu:
         menuitem = make_menu_item(*item)
         menu.append_item(menuitem)
     return menu
+
+
+class GajimMenu(Gio.Menu):
+    def __init__(self):
+        Gio.Menu.__init__(self)
+
+    def add_item(self, label: str, action: str, value: MenuValueT) -> None:
+        item = make_menu_item(label, action, value)
+        self.append_item(item)
+
+    def add_submenu(self, label: str) -> GajimMenu:
+        menu = GajimMenu()
+        self.append_submenu(label, menu)
+        return menu
