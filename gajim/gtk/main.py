@@ -57,6 +57,7 @@ from .util import open_window
 from .util import set_urgency_hint
 from .const import UNLOAD_CHAT_TIME
 from .structs import AddChatActionParams
+from .structs import AddToRosterParams
 
 log = logging.getLogger('gajim.gui.main')
 
@@ -275,7 +276,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('activate-workspace', 's', self._activate_workspace),
             ('add-chat', 'a{sv}', self._add_chat),
             ('add-group-chat', 'as', self._add_group_chat),
-            ('add-to-roster', 'as', self._add_to_roster),
+            ('add-to-roster', 'a{sv}', self._add_to_roster),
         ]
 
         for action in actions:
@@ -599,8 +600,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def _add_to_roster(_action: Gio.SimpleAction,
                        param: GLib.Variant) -> None:
 
-        _workspace, account, jid = param.unpack()
-        open_window('AddContact', account=account, jid=JID.from_string(jid))
+        params = AddToRosterParams.from_variant(param)
+        open_window('AddContact', account=params.account, jid=params.jid)
 
     def show_app_page(self) -> None:
         self._account_side_bar.unselect_all()

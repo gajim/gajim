@@ -17,6 +17,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import Iterator
 from typing import cast
 from typing import Optional
 from typing import Union
@@ -44,11 +45,12 @@ from gajim.common.structs import VariantMixin
 from gajim.common.modules.contacts import can_add_to_roster
 
 from gajim.gui.structs import AddChatActionParams
+from gajim.gui.structs import AddToRosterParams
 from gajim.gui.structs import ForgetGroupchatActionParams
 from gajim.gui.structs import MoveChatToWorkspaceAP
 from gajim.gui.structs import RemoveHistoryActionParams
-from gajim.gui.util import make_menu_item
 from gajim.gui.util import make_menu
+from gajim.gui.util import GajimMenu
 from gajim.gui.const import ControlType
 
 
@@ -88,7 +90,7 @@ def get_singlechat_menu(control_id: str,
 
     if can_add_to_roster(contact):
         singlechat_menu.append(('win.add-to-roster-',
-                                _('Add to Contact List…')))
+                               _('Add to Contact List…')))
 
     def build_menu(preset: list[tuple[str, Any]]):
         menu = Gio.Menu()
@@ -419,63 +421,46 @@ def get_chat_list_row_menu(workspace_id: str,
                            account: str,
                            jid: JID,
                            pinned: bool
-                           ) -> Gio.Menu:
+                           ) -> GajimMenu:
 
     client = app.get_client(account)
     contact = client.get_module('Contacts').get_contact(jid)
 
-    toggle_label = _('Unpin Chat') if pinned else _('Pin Chat')
+    menu = GajimMenu()
 
-    menu_items: list[Any] = [
-        ('toggle-chat-pinned', toggle_label),
-    ]
+    toggle_label = _('Unpin Chat') if pinned else _('Pin Chat')
+    menu.add_item(toggle_label, 'win.toggle-chat-pinned', None)
 
     workspaces = app.settings.get_workspaces()
     if len(workspaces) > 1:
-        menu_items.append((_('Move Chat'), []))
+        submenu = menu.add_submenu(_('Move Chat'))
 
-    if can_add_to_roster(contact):
-        menu_items.append(('add-to-roster', _('Add to Contact List…')))
-
-    if app.window.get_chat_unread_count(account, jid, include_silent=True):
-        menu_items.append(('mark-as-read', _('Mark as read')))
-
-    menu = Gio.Menu()
-    for item in menu_items:
-        if isinstance(item[1], str):
-            action, label = item
-            action = f'win.{action}'
-            menuitem = Gio.MenuItem.new(label, action)
-            variant_list = GLib.Variant(
-                'as', [workspace_id, account, str(jid)])
-            menuitem.set_action_and_target_value(action, variant_list)
-            menu.append_item(menuitem)
-        else:
-            # This is a submenu
-            if len(workspaces) > 1:
-                submenu = build_workspaces_submenu(
-                    workspace_id, account, jid)
-                menu.append_submenu(item[0], submenu)
-
-    return menu
-
-
-def build_workspaces_submenu(current_workspace_id: str,
-                             account: str,
-                             jid: JID
-                             ) -> Gio.Menu:
-    submenu = Gio.Menu()
-    for workspace_id in app.settings.get_workspaces():
-        if workspace_id == current_workspace_id:
-            continue
-        name = app.settings.get_workspace_setting(workspace_id, 'name')
         params = MoveChatToWorkspaceAP(workspace_id=workspace_id,
                                        account=account,
                                        jid=jid)
 
-        item = make_menu_item(name, 'win.move-chat-to-workspace', params)
-        submenu.append_item(item)
-    return submenu
+        for name in get_workspace_names(workspace_id, account, jid):
+            submenu.add_item(name, 'win.move-chat-to-workspace', params)
+
+    if can_add_to_roster(contact):
+        params = AddToRosterParams(account=account, jid=jid)
+        menu.add_item(_('Add to Contact List…'), 'win.add-to-roster', params)
+
+    if app.window.get_chat_unread_count(account, jid, include_silent=True):
+        menu.add_item(_('Mark as read'), 'win.mark-as-read', None)
+
+    return menu
+
+
+def get_workspace_names(current_workspace_id: str,
+                        account: str,
+                        jid: JID
+                        ) -> Iterator[str]:
+
+    for workspace_id in app.settings.get_workspaces():
+        if workspace_id == current_workspace_id:
+            continue
+        yield app.settings.get_workspace_setting(workspace_id, 'name')
 
 
 def get_groupchat_admin_menu(control_id: str,

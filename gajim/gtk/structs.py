@@ -66,6 +66,12 @@ class MoveChatToWorkspaceAP(VariantMixin):
     jid: JID
 
 
+@dataclass
+class AddToRosterParams(VariantMixin):
+    account: str
+    jid: JID
+
+
 def get_params_class(func: Callable[..., Any]) -> Any:
     module = sys.modules[__name__]
     params = inspect.signature(func).parameters
