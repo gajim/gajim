@@ -14,14 +14,27 @@
 
 # Roster
 
+from __future__ import annotations
+
+from typing import Iterable
+from typing import Iterator
+from typing import Optional
+from typing import cast
+
 import nbxmpp
 from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import JID
+from nbxmpp.structs import RosterData
+from nbxmpp.structs import RosterItem
 from nbxmpp.structs import StanzaHandler
+from nbxmpp.task import Task
 
 from gajim.common import app
+from gajim.common.client import Client
 from gajim.common.events import RosterReceived
 from gajim.common.events import RosterPush
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.contacts import BareContact
 
 
 class Roster(BaseModule):
@@ -32,8 +45,8 @@ class Roster(BaseModule):
         'set_item',
     ]
 
-    def __init__(self, con):
-        BaseModule.__init__(self, con)
+    def __init__(self, client: Client) -> None:
+        BaseModule.__init__(self, client)
 
         self.handlers = [
             # StanzaHandler(name='presence',
@@ -44,12 +57,12 @@ class Roster(BaseModule):
                           ns=Namespace.ROSTER),
         ]
 
-        self._roster = {}
+        self._roster: dict[JID, RosterItem] = {}
 
         # Groups cache for performance
         self._groups = None
 
-    def load_roster(self):
+    def load_roster(self) -> None:
         self._log.info('Load from database')
         roster = app.storage.cache.load_roster(self._account)
         if not roster:
@@ -63,13 +76,13 @@ class Roster(BaseModule):
 
         self._roster = roster
 
-    def _store_roster(self):
+    def _store_roster(self) -> None:
         app.storage.cache.store_roster(self._account, self._roster)
 
-    def get_size(self):
+    def get_size(self) -> int:
         return len(self._roster)
 
-    def request_roster(self):
+    def request_roster(self) -> None:
         version = app.settings.get_account_setting(self._account,
                                                    'roster_version')
 
@@ -77,9 +90,9 @@ class Roster(BaseModule):
         self._nbxmpp('Roster').request_roster(
             version, callback=self._on_request_roster)
 
-    def _on_request_roster(self, task):
+    def _on_request_roster(self, task: Task) -> None:
         try:
-            roster = task.finish()
+            roster = cast(RosterData, task.finish())
         except Exception as error:
             self._log.warning(error)
             return
@@ -96,6 +109,7 @@ class Roster(BaseModule):
             # ---------------
             # Roster versioning supported but
             # server opted to send us the whole roster
+            assert roster.items is not None
             self._set_roster_from_data(roster.items)
 
         app.settings.set_account_setting(self._account,
@@ -106,7 +120,7 @@ class Roster(BaseModule):
 
         self._con.connect_machine()
 
-    def _set_roster_from_data(self, items):
+    def _set_roster_from_data(self, items: list[RosterItem]) -> None:
         self._roster.clear()
         self._groups = None
 
@@ -139,52 +153,55 @@ class Roster(BaseModule):
 
         raise nbxmpp.NodeProcessed
 
-    def get_item(self, jid):
+    def get_item(self, jid: JID) -> Optional[RosterItem]:
         return self._roster.get(jid)
 
-    def set_groups(self, jid, groups):
+    def set_groups(self, jid: JID, groups: Optional[Iterable[str]]) -> None:
         if groups is not None:
             groups = set(groups)
         item = self.get_item(jid)
+        assert item is not None
         self._nbxmpp('Roster').set_item(jid, item.name, groups)
 
-    def get_groups(self):
+    def get_groups(self) -> set[str]:
         if self._groups is not None:
             return set(self._groups)
 
-        groups = set()
+        groups: set[str] = set()
         for item in self._roster.values():
             groups.update(item.groups)
         self._groups = groups
         return set(groups)
 
-    def _get_items_with_group(self, group):
-        return filter(lambda item: group in item.groups, self._roster.values())
+    def _get_items_with_group(self, group: str) -> list[RosterItem]:
+        return list(filter(lambda item: group in item.groups,
+                           self._roster.values()))
 
-    def remove_group(self, group):
+    def remove_group(self, group: str) -> None:
         items = self._get_items_with_group(group)
         for item in items:
             new_groups = item.groups - set([group])
             self.set_groups(item.jid, new_groups)
 
-    def rename_group(self, group, new_group):
+    def rename_group(self, group: str, new_group: str) -> None:
         items = self._get_items_with_group(group)
         for item in items:
             new_groups = item.groups - set([group])
             new_groups.add(new_group)
             self.set_groups(item.jid, new_groups)
 
-    def change_group(self, jid, old_group, new_group):
+    def change_group(self, jid: JID, old_group: str, new_group: str) -> None:
         item = self.get_item(jid)
+        assert item is not None
         groups = set(item.groups)
         groups.discard(old_group)
         groups.add(new_group)
         self._nbxmpp('Roster').set_item(jid, item.name, groups)
 
-    def iter(self):
+    def iter(self) -> Iterator[tuple[JID, RosterItem]]:
         for jid, data in self._roster.items():
             yield jid, data
 
-    def iter_contacts(self):
+    def iter_contacts(self) -> Iterator[BareContact]:
         for jid in self._roster:
             yield self._get_contact(jid)
