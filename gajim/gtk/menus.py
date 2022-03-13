@@ -49,7 +49,6 @@ from gajim.gui.structs import AddToRosterParams
 from gajim.gui.structs import ForgetGroupchatActionParams
 from gajim.gui.structs import MoveChatToWorkspaceAP
 from gajim.gui.structs import RemoveHistoryActionParams
-from gajim.gui.util import make_menu
 from gajim.gui.util import GajimMenu
 from gajim.gui.const import ControlType
 
@@ -127,8 +126,8 @@ def get_singlechat_menu(control_id: str,
     return build_menu(singlechat_menu)
 
 
-def get_groupchat_menu(control_id: str, account: str, jid: JID) -> Gio.Menu:
-    menulist: MenuItemListT = [
+def get_groupchat_menu(control_id: str, account: str, jid: JID) -> GajimMenu:
+    menuitems: MenuItemListT = [
         (_('Details'), f'win.groupchat-details-{control_id}', None),
         (_('Change Nickname…'), f'win.change-nickname-{control_id}', None),
         (_('Request Voice'), f'win.request-voice-{control_id}', None),
@@ -136,10 +135,10 @@ def get_groupchat_menu(control_id: str, account: str, jid: JID) -> Gio.Menu:
         (_('Search…'), 'win.search-history', None)
     ]
 
-    return make_menu(menulist)
+    return GajimMenu.from_list(menuitems)
 
 
-def get_account_menu(account: str) -> Gio.Menu:
+def get_account_menu(account: str) -> GajimMenu:
 
     val = f'"{account}"'
 
@@ -149,7 +148,7 @@ def get_account_menu(account: str) -> Gio.Menu:
         (_('Server Info'), f'app.{account}-server-info', val),
     ]
 
-    menu = make_menu(menuitems)
+    menu = GajimMenu.from_list(menuitems)
 
     advanced_menuitems: MenuItemListT = [
         (_('Archiving Preferences'), f'app.{account}-archive', val),
@@ -162,7 +161,7 @@ def get_account_menu(account: str) -> Gio.Menu:
         advanced_menuitems.append(
             (_('Bookmarks'), f'app.{account}-bookmarks', val))
 
-    menu.append_submenu(_('Advanced'), make_menu(advanced_menuitems))
+    menu.append_submenu(_('Advanced'), GajimMenu.from_list(advanced_menuitems))
 
     return menu
 
@@ -369,7 +368,7 @@ def get_conv_uri_context_menu(account: str, uri: URI) -> Optional[Gtk.Menu]:
     return menu
 
 
-def get_roster_menu(account: str, jid: str, gateway: bool = False) -> Gio.Menu:
+def get_roster_menu(account: str, jid: str, gateway: bool = False) -> GajimMenu:
 
     block_label = _('Block…')
     if jid_is_blocked(account, jid):
@@ -388,10 +387,10 @@ def get_roster_menu(account: str, jid: str, gateway: bool = False) -> Gio.Menu:
         menuitems.insert(
             1, (_('Modify Gateway…'), f'win.modify-gateway-{account}', value))
 
-    return make_menu(menuitems)
+    return GajimMenu.from_list(menuitems)
 
 
-def get_subscription_menu(account: str, jid: JID) -> Gio.Menu:
+def get_subscription_menu(account: str, jid: JID) -> GajimMenu:
     params = AddChatActionParams(account=account,
                                  jid=jid,
                                  type='contact',
@@ -405,16 +404,16 @@ def get_subscription_menu(account: str, jid: JID) -> Gio.Menu:
         (_('Deny'), f'win.subscription-deny-{account}', value),
     ]
 
-    return make_menu(menuitems)
+    return GajimMenu.from_list(menuitems)
 
 
-def get_start_chat_row_menu(account: str, jid: JID) -> Gio.Menu:
+def get_start_chat_row_menu(account: str, jid: JID) -> GajimMenu:
     params = ForgetGroupchatActionParams(account=account, jid=jid)
     menuitems: MenuItemListT = [
         (_('Forget this Group Chat'), 'app.forget-groupchat', params),
     ]
 
-    return make_menu(menuitems)
+    return GajimMenu.from_list(menuitems)
 
 
 def get_chat_list_row_menu(workspace_id: str,
@@ -465,70 +464,70 @@ def get_workspace_names(current_workspace_id: str,
 
 def get_groupchat_admin_menu(control_id: str,
                              self_contact: types.GroupchatParticipant,
-                             contact: types.GroupchatParticipant) -> Gio.Menu:
+                             contact: types.GroupchatParticipant) -> GajimMenu:
 
-    adminitems: MenuItemListT = []
+    menu = GajimMenu()
 
     action = f'win.change-affiliation-{control_id}'
 
     if is_affiliation_change_allowed(self_contact, contact, 'owner'):
         value = f'["{contact.real_jid}", "owner"]'
-        adminitems.append((_('Make Owner'), action, value))
+        menu.add_item(_('Make Owner'), action, value)
 
     if is_affiliation_change_allowed(self_contact, contact, 'admin'):
         value = f'["{contact.real_jid}", "admin"]'
-        adminitems.append((_('Make Admin'), action, value))
+        menu.add_item(_('Make Admin'), action, value)
 
     if is_affiliation_change_allowed(self_contact, contact, 'member'):
         value = f'["{contact.real_jid}", "member"]'
-        adminitems.append((_('Make Member'), action, value))
+        menu.add_item(_('Make Member'), action, value)
 
     if is_affiliation_change_allowed(self_contact, contact, 'none'):
         value = f'["{contact.real_jid}", "none"]'
-        adminitems.append((_('Revoke Member'), action, value))
+        menu.add_item(_('Revoke Member'), action, value)
 
     if is_affiliation_change_allowed(self_contact, contact, 'outcast'):
         value = f'"{contact.real_jid}"'
-        adminitems.append((_('Ban…'), f'win.ban-{control_id}', value))
+        menu.add_item(_('Ban…'), f'win.ban-{control_id}', value)
 
-    if not adminitems:
-        adminitems.append((_('Not Available'), 'dummy', None))
+    if not menu.get_n_items():
+        menu.add_item(_('Not Available'), 'dummy', None)
 
-    return make_menu(adminitems)
+    return menu
 
 
 def get_groupchat_mod_menu(control_id: str,
                            self_contact: types.GroupchatParticipant,
                            contact: types.GroupchatParticipant
-                           ) -> Gio.Menu:
+                           ) -> GajimMenu:
 
-    moditems: MenuItemListT = []
+    menu = GajimMenu()
 
     if is_role_change_allowed(self_contact, contact):
         value = f'"{contact.name}"'
-        moditems.append((_('Kick…'), f'win.kick-{control_id}', value))
+        menu.add_item(_('Kick…'), f'win.kick-{control_id}', value)
 
     action = f'win.change-role-{control_id}'
 
     if is_role_change_allowed(self_contact, contact):
         if contact.role.is_visitor:
             value = f'["{contact.name}", "participant"]'
-            moditems.append((_('Grant Voice'), action, value))
+            menu.add_item(_('Grant Voice'), action, value)
         else:
             value = f'["{contact.name}", "visitor"]'
-            moditems.append((_('Revoke Voice'), action, value))
+            menu.add_item(_('Revoke Voice'), action, value)
 
-    if not moditems:
-        moditems.append((_('Not Available'), 'dummy', None))
+    if not menu.get_n_items():
+        menu.add_item(_('Not Available'), 'dummy', None)
 
-    return make_menu(moditems)
+    return menu
 
 
 def get_groupchat_roster_menu(account: str,
                               control_id: str,
                               self_contact: types.GroupchatParticipant,
                               contact: types.GroupchatParticipant
-                              ) -> Gio.Menu:
+                              ) -> GajimMenu:
 
     value = f'"{contact.name}"'
 
@@ -538,7 +537,7 @@ def get_groupchat_roster_menu(account: str,
     ]
 
     real_contact = contact.get_real_contact()
-    if real_contact is not None and not real_contact.is_in_roster:
+    if real_contact is not None and can_add_to_roster(real_contact):
         value = f'["{account}", "{real_contact.jid}"]'
         action = f'app.{account}-add-contact'
         general_items.insert(1, (_('Add to Contact List…'), action, value))
@@ -546,7 +545,7 @@ def get_groupchat_roster_menu(account: str,
     mod_menu = get_groupchat_mod_menu(control_id, self_contact, contact)
     admin_menu = get_groupchat_admin_menu(control_id, self_contact, contact)
 
-    menu = make_menu(general_items)
+    menu = GajimMenu.from_list(general_items)
     menu.append_section(_('Moderation'), mod_menu)
     menu.append_section(_('Administration'), admin_menu)
     return menu
