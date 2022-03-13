@@ -931,7 +931,10 @@ class GajimMenu(Gio.Menu):
             menu.append_item(menuitem)
         return menu
 
-    def add_item(self, label: str, action: str, value: MenuValueT) -> None:
+    def add_item(self,
+                 label: str,
+                 action: str,
+                 value: Optional[MenuValueT] = None) -> None:
         item = make_menu_item(label, action, value)
         self.append_item(item)
 
