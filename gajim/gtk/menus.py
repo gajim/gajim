@@ -41,6 +41,7 @@ from gajim.common.const import URIType
 from gajim.common.const import URIAction
 from gajim.common.structs import URI
 from gajim.common.structs import VariantMixin
+from gajim.common.modules.contacts import can_add_to_roster
 
 from gajim.gui.structs import AddChatActionParams
 from gajim.gui.structs import ForgetGroupchatActionParams
@@ -85,11 +86,9 @@ def get_singlechat_menu(control_id: str,
         ('win.search-history', _('Search…'))
     ]
 
-    if not contact.is_in_roster:
-        if (type_.is_chat or
-                (type_.is_privatechat and contact.real_jid is not None)):
-            singlechat_menu.append(
-                ('win.add-to-roster-', _('Add to Contact List…')))
+    if can_add_to_roster(contact):
+        singlechat_menu.append(('win.add-to-roster-',
+                                _('Add to Contact List…')))
 
     def build_menu(preset: list[tuple[str, Any]]):
         menu = Gio.Menu()
@@ -435,14 +434,8 @@ def get_chat_list_row_menu(workspace_id: str,
     if len(workspaces) > 1:
         menu_items.append((_('Move Chat'), []))
 
-    is_self_contact = contact.jid.bare == client.get_own_jid().bare
-    if (not contact.is_groupchat and not contact.is_in_roster and
-            not is_self_contact):
-        if contact.is_pm_contact:
-            if contact.real_jid is not None:
-                menu_items.append(('add-to-roster', _('Add to Contact List…')))
-        else:
-            menu_items.append(('add-to-roster', _('Add to Contact List…')))
+    if can_add_to_roster(contact):
+        menu_items.append(('add-to-roster', _('Add to Contact List…')))
 
     unread_count = app.window.get_chat_unread_count(
         account, jid, include_silent=True)
