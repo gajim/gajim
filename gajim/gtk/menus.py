@@ -433,12 +433,7 @@ def get_chat_list_row_menu(workspace_id: str,
     workspaces = app.settings.get_workspaces()
     if len(workspaces) > 1:
         submenu = menu.add_submenu(_('Move Chat'))
-
-        params = MoveChatToWorkspaceAP(workspace_id=workspace_id,
-                                       account=account,
-                                       jid=jid)
-
-        for name in get_workspace_names(workspace_id, account, jid):
+        for name, params in get_workspace_params(workspace_id, account, jid):
             submenu.add_item(name, 'win.move-chat-to-workspace', params)
 
     if can_add_to_roster(contact):
@@ -451,15 +446,19 @@ def get_chat_list_row_menu(workspace_id: str,
     return menu
 
 
-def get_workspace_names(current_workspace_id: str,
-                        account: str,
-                        jid: JID
-                        ) -> Iterator[str]:
+def get_workspace_params(current_workspace_id: str,
+                         account: str,
+                         jid: JID
+                         ) -> Iterator[tuple[str, MoveChatToWorkspaceAP]]:
 
     for workspace_id in app.settings.get_workspaces():
         if workspace_id == current_workspace_id:
             continue
-        yield app.settings.get_workspace_setting(workspace_id, 'name')
+        name = app.settings.get_workspace_setting(workspace_id, 'name')
+        params = MoveChatToWorkspaceAP(workspace_id=workspace_id,
+                                       account=account,
+                                       jid=jid)
+        yield name, params
 
 
 def get_groupchat_admin_menu(control_id: str,
