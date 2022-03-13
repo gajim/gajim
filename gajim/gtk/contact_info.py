@@ -199,8 +199,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         if not contact.is_in_roster:
             return
 
-        if contact.subscription in ('from', 'both'):
-            self._ui.from_subscription_switch.set_state(True)
+        self._ui.from_subscription_switch.set_state(contact.is_subscribed)
 
         if contact.subscription in ('to', 'both'):
             self._ui.to_subscription_stack.set_visible_child_name('checkmark')
