@@ -931,6 +931,14 @@ class GajimMenu(Gio.Menu):
     def __init__(self):
         Gio.Menu.__init__(self)
 
+    @classmethod
+    def from_list(cls, menulist: MenuItemListT) -> GajimMenu:
+        menu = cls()
+        for item in menulist:
+            menuitem = make_menu_item(*item)
+            menu.append_item(menuitem)
+        return menu
+
     def add_item(self, label: str, action: str, value: MenuValueT) -> None:
         item = make_menu_item(label, action, value)
         self.append_item(item)
