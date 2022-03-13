@@ -246,6 +246,11 @@ class BareContact(CommonContact):
 
         self._avatar_sha = app.storage.cache.get_contact(jid, 'avatar')
 
+    @property
+    def is_self(self):
+        own_jid = app.get_client(self._account).get_own_jid().new_as_bare()
+        return own_jid == self.jid
+
     def supports(self, requested_feature: str) -> bool:
         for resource in self.iter_resources():
             if resource.supports(requested_feature):
