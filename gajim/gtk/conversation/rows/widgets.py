@@ -86,12 +86,20 @@ class MoreMenuButton(Gtk.Button):
         menu_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         menu_box.get_style_context().add_class('padding-6')
 
+        quote_enabled = True
+        if isinstance(self._contact, GroupchatContact):
+            if self._contact.is_joined:
+                self_contact = self._contact.get_self()
+                assert self_contact is not None
+                quote_enabled = not self_contact.role.is_visitor
+
         quote_button = Gtk.ModelButton()
         quote_button.set_halign(Gtk.Align.START)
         quote_button.connect('clicked', self._row.on_quote_message)
         quote_button.set_label(_('Quote…'))
         quote_button.set_image(Gtk.Image.new_from_icon_name(
             'mail-reply-sender-symbolic', Gtk.IconSize.MENU))
+        quote_button.set_sensitive(quote_enabled)
         menu_box.add(quote_button)
 
         copy_button = Gtk.ModelButton()
