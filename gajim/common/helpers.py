@@ -94,6 +94,8 @@ from gajim.common.const import URIType
 from gajim.common.const import URIAction
 from gajim.common.const import GIO_TLS_ERRORS
 from gajim.common.const import SHOW_LIST
+from gajim.common.const import CONSONANTS
+from gajim.common.const import VOWELS
 from gajim.common.regex import INVALID_XML_CHARS_REGEX
 from gajim.common.regex import STH_AT_STH_DOT_STH_REGEX
 from gajim.common.structs import URI
@@ -1392,6 +1394,19 @@ def get_muc_context(jid: JID) -> Optional[str]:
     if (disco_info.muc_is_members_only and disco_info.muc_is_nonanonymous):
         return 'private'
     return 'public'
+
+
+def get_random_muc_localpart() -> str:
+    rand = random.randrange(4)
+    is_vowel = bool(random.getrandbits(1))
+    result = ''
+    for _ in range(rand * 2 + (5 - rand)):
+        if is_vowel:
+            result = f'{result}{VOWELS[random.randrange(len(VOWELS))]}'
+        else:
+            result = f'{result}{CONSONANTS[random.randrange(len(CONSONANTS))]}'
+        is_vowel = not is_vowel
+    return result
 
 
 def get_start_of_day(date_time: datetime) -> datetime:

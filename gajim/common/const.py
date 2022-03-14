@@ -448,6 +448,12 @@ SSLError = {
 }
 
 
+VOWELS = 'aeiou'
+
+
+CONSONANTS = 'bcdfghjklmnpqrstvwxyz'
+
+
 THANKS = u"""\
 Alexander Futász
 Alexander V. Butenko
