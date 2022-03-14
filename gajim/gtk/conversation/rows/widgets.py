@@ -69,6 +69,10 @@ class MoreMenuButton(Gtk.Button):
     def _on_click(self, _button: Gtk.Button) -> None:
         show_retract = False
         if isinstance(self._contact, GroupchatContact):
+            if not self._contact.is_joined:
+                self._create_popover(False)
+                return
+
             disco_info = app.storage.cache.get_last_disco_info(
                 self._contact.jid)
             assert disco_info is not None
@@ -92,6 +96,8 @@ class MoreMenuButton(Gtk.Button):
                 self_contact = self._contact.get_self()
                 assert self_contact is not None
                 quote_enabled = not self_contact.role.is_visitor
+            else:
+                quote_enabled = False
 
         quote_button = Gtk.ModelButton()
         quote_button.set_halign(Gtk.Align.START)
