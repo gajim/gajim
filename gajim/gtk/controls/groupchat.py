@@ -328,11 +328,15 @@ class GroupchatControl(BaseControl):
 
         self._get_action('contact-information-').set_enabled(joined)
 
+        self._get_action('groupchat-details-').set_enabled(joined)
+
         self._get_action('execute-command-').set_enabled(joined)
 
         self._get_action('ban-').set_enabled(joined)
 
         self._get_action('kick-').set_enabled(joined)
+
+        self._get_action('invite-').set_enabled(joined)
 
     def remove_actions(self) -> None:
         super().remove_actions()
