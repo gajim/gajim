@@ -12,7 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Any
+from typing import Optional
+from typing import Union
 
 import logging
 import random
@@ -24,11 +25,16 @@ from nbxmpp.errors import StanzaError
 from nbxmpp.task import Task
 
 from gajim.common import app
+from gajim.common import ged
 from gajim.common.const import MUC_CREATION_EXAMPLES
 from gajim.common.const import MUC_DISCO_ERRORS
-from gajim.common.i18n import _
+from gajim.common.events import AccountConnected
+from gajim.common.events import AccountDisonnected
+from gajim.common.ged import EventHelper
+from gajim.common.helpers import get_random_muc_localpart
 from gajim.common.helpers import validate_jid
 from gajim.common.helpers import to_user_string
+from gajim.common.i18n import _
 
 from .dialogs import ErrorDialog
 from .builder import get_builder
@@ -37,9 +43,10 @@ from .util import ensure_not_destroyed
 log = logging.getLogger('gajim.gui.groupchat_creation')
 
 
-class CreateGroupchatWindow(Gtk.ApplicationWindow):
-    def __init__(self, account: str) -> None:
+class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
+    def __init__(self, account: Optional[str]) -> None:
         Gtk.ApplicationWindow.__init__(self)
+        EventHelper.__init__(self)
         self.set_name('CreateGroupchat')
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -54,37 +61,53 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
 
         self._destroyed: bool = False
 
-        self._account = self._fill_account_combo(account)
-
         self._create_entry_completion()
-        self._fill_placeholders()
 
         self._ui.connect_signals(self)
         self.connect('key-press-event', self._on_key_press)
         self.connect('destroy', self._on_destroy)
 
+        self.register_events([
+            ('account-connected', ged.GUI2, self._on_account_state),
+            ('account-disconnected', ged.GUI2, self._on_account_state)
+        ])
+
         self.show_all()
+
+        if app.get_number_of_connected_accounts() == 0:
+            # This can happen under rare circumstances
+            self._ui.no_connection_box.show()
+            return
+
+        self._account = self._update_accounts(account)
+
         self.set_focus(self._ui.address_entry)
 
-    def _get_muc_service_jid(self) -> str:
-        client = app.get_client(self._account)
-        return str(client.get_module('MUC').service_jid or 'muc.example.com')
+    def _on_account_state(self,
+                          _event: Union[AccountConnected, AccountDisonnected]
+                          ) -> None:
+        any_account_connected = app.get_number_of_connected_accounts() > 0
+        self._ui.no_connection_box.set_visible(not any_account_connected)
+        if any_account_connected:
+            self._account = self._update_accounts()
 
-    def _fill_account_combo(self, account: str) -> str:
+    def _update_accounts(self, account: Optional[str] = None) -> str:
         accounts = app.get_enabled_accounts_with_labels(connected_only=True)
         account_liststore = self._ui.account_combo.get_model()
+        assert isinstance(account_liststore, Gtk.ListStore)
+        account_liststore.clear()
+
         for acc in accounts:
             account_liststore.append(acc)
 
-        # Hide account combobox if there is only one account
-        if len(accounts) == 1:
-            self._ui.account_combo.hide()
-            self._ui.account_label.hide()
+        self._ui.account_combo.set_visible(len(accounts) != 1)
+        self._ui.account_label.set_visible(len(accounts) != 1)
 
         if account is None:
             account = accounts[0][0]
 
         self._ui.account_combo.set_active_id(account)
+        self._fill_placeholders()
         return account
 
     def _create_entry_completion(self) -> None:
@@ -109,24 +132,24 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
         self._ui.address_entry.set_placeholder_text(
             f'{placeholder[2]}@{server}')
 
+    def _get_muc_service_jid(self) -> str:
+        assert self._account is not None
+        client = app.get_client(self._account)
+        return str(client.get_module('MUC').service_jid or 'muc.example.com')
+
     def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
     def _on_account_combo_changed(self, combo: Gtk.ComboBox) -> None:
         self._account = combo.get_active_id()
+        if self._account is None:
+            model = combo.get_model()
+            iter_ = model.get_iter_first()
+            if not iter_:
+                return
+            self._account = model[iter_][0]
         self._fill_placeholders()
-
-    def _update_entry_completion(self, entry: Gtk.Entry, text: str) -> None:
-        text = entry.get_text()
-        if '@' in text:
-            text = text.split('@', 1)[0]
-
-        model = entry.get_completion().get_model()
-        model.clear()
-
-        server = self._get_muc_service_jid()
-        model.append([f'{text}@{server}'])
 
     def _validate_jid(self, text: str) -> None:
         if not text:
@@ -168,7 +191,7 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
         self._ui.create_button.set_sensitive(False)
 
     def _set_warning_from_error(self, error: StanzaError) -> None:
-        condition = error.condition
+        condition = error.condition or ''
         if condition == 'gone':
             condition = 'already-exists'
         text = MUC_DISCO_ERRORS.get(condition, to_user_string(error))
@@ -177,22 +200,49 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
     def _set_warning_from_error_code(self, error_code: str) -> None:
         self._set_warning(MUC_DISCO_ERRORS[error_code])
 
+    def _on_name_entry_changed(self, entry: Gtk.Entry) -> None:
+        if self._ui.private_radio.get_active():
+            return
+
+        name = entry.get_text()
+        server = self._get_muc_service_jid()
+        self._ui.address_entry.set_text(f'{name.lower()}@{server}')
+
     def _on_address_entry_changed(self, entry: Gtk.Entry) -> None:
         text = entry.get_text()
         self._update_entry_completion(entry, text)
         self._validate_jid(text)
 
-    def _on_address_entry_activate(self, _entry: Gtk.Entry) -> None:
-        self._on_create_clicked()
+    def _update_entry_completion(self, entry: Gtk.Entry, text: str) -> None:
+        text = entry.get_text()
+        if '@' in text:
+            text = text.split('@', 1)[0]
 
-    def _on_create_clicked(self, *args: Any) -> None:
+        model = entry.get_completion().get_model()
+        assert isinstance(model, Gtk.ListStore)
+        model.clear()
+
+        server = self._get_muc_service_jid()
+        model.append([f'{text}@{server}'])
+
+    def _on_public_private_toggled(self, _radiobutton: Gtk.RadioButton) -> None:
+        is_public = self._ui.public_radio.get_active()
+        self._ui.address_label.set_visible(is_public)
+        self._ui.address_entry.set_visible(is_public)
+
+    def _on_create_clicked(self, _button: Gtk.Button) -> None:
+        assert self._account is not None
         if not app.account_is_available(self._account):
             ErrorDialog(
                 _('Not Connected'),
                 _('You have to be connected to create a group chat.'))
             return
 
-        room_jid = self._ui.address_entry.get_text()
+        if self._ui.public_radio.get_active():
+            room_jid = self._ui.address_entry.get_text()
+        else:
+            server = self._get_muc_service_jid()
+            room_jid = f'{get_random_muc_localpart()}@{server}'
 
         self._set_processing_state(True)
         client = app.get_client(self._account)
@@ -205,6 +255,7 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
             result = task.finish()
         except StanzaError as error:
             if error.condition == 'item-not-found':
+                assert error.jid is not None
                 self._create_muc(error.jid)
                 return
             self._set_warning_from_error(error)
@@ -218,7 +269,7 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
     def _create_muc(self, room_jid: str) -> None:
         name = self._ui.name_entry.get_text()
         description = self._ui.description_entry.get_text()
-        is_public = self._ui.public_switch.get_active()
+        is_public = self._ui.public_radio.get_active()
 
         config = {
             # XEP-0045 options
@@ -234,6 +285,7 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
         }
 
         # Create new group chat by joining
+        assert self._account is not None
         app.interface.create_groupchat(
             self._account,
             str(room_jid),
@@ -243,3 +295,5 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow):
 
     def _on_destroy(self, _widget: Gtk.Widget) -> None:
         self._destroyed = True
+        self.unregister_events()
+        app.check_finalize(self)

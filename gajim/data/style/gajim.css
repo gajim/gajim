@@ -17,6 +17,10 @@
 
 #MessageWindow, #RosterWindow paned { background-color:  @theme_base_color; }
 
+.solid-background {
+    background-color: @theme_base_color;
+}
+
 #DropArea {background-color: @theme_base_color;}
 
 .chatcontrol-separator-top {margin-top: 5px;}
