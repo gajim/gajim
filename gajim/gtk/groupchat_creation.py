@@ -57,8 +57,9 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
         self.set_title(_('Create Group Chat'))
 
         self._ui = get_builder('groupchat_creation.ui')
-        self.add(self._ui.create_group_chat)
+        self.add(self._ui.stack)
 
+        self._account = account
         self._destroyed: bool = False
 
         self._create_entry_completion()
@@ -76,10 +77,10 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
 
         if app.get_number_of_connected_accounts() == 0:
             # This can happen under rare circumstances
-            self._ui.no_connection_box.show()
+            self._ui.stack.set_visible_child_name('no-connection')
             return
 
-        self._account = self._update_accounts(account)
+        self._update_accounts(account)
 
         self.set_focus(self._ui.address_entry)
 
@@ -87,11 +88,13 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
                           _event: Union[AccountConnected, AccountDisonnected]
                           ) -> None:
         any_account_connected = app.get_number_of_connected_accounts() > 0
-        self._ui.no_connection_box.set_visible(not any_account_connected)
         if any_account_connected:
-            self._account = self._update_accounts()
+            self._ui.stack.set_visible_child_name('create')
+            self._update_accounts()
+        else:
+            self._ui.stack.set_visible_child_name('no-connection')
 
-    def _update_accounts(self, account: Optional[str] = None) -> str:
+    def _update_accounts(self, account: Optional[str] = None) -> None:
         accounts = app.get_enabled_accounts_with_labels(connected_only=True)
         account_liststore = self._ui.account_combo.get_model()
         assert isinstance(account_liststore, Gtk.ListStore)
@@ -107,8 +110,8 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
             account = accounts[0][0]
 
         self._ui.account_combo.set_active_id(account)
+        self._account = account
         self._fill_placeholders()
-        return account
 
     def _create_entry_completion(self) -> None:
         entry_completion = Gtk.EntryCompletion()
@@ -126,9 +129,9 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
         server = self._get_muc_service_jid()
 
         self._ui.name_entry.set_placeholder_text(
-            placeholder[0] + _(' (optional)...'))
+            _('e.g. %s') % placeholder[0])
         self._ui.description_entry.set_placeholder_text(
-            placeholder[1] + _(' (optional)...'))
+            _('e.g. %s' % placeholder[1]))
         self._ui.address_entry.set_placeholder_text(
             f'{placeholder[2]}@{server}')
 

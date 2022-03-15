@@ -452,7 +452,7 @@ class GroupchatControlBuilder(Builder):
 
 class GroupchatCreationBuilder(Builder):
     account_liststore: Gtk.ListStore
-    create_group_chat: Gtk.Overlay
+    stack: Gtk.Stack
     grid: Gtk.Grid
     name_entry: Gtk.Entry
     description_entry: Gtk.Entry
@@ -464,7 +464,6 @@ class GroupchatCreationBuilder(Builder):
     public_radio: Gtk.RadioButton
     spinner: Gtk.Spinner
     create_button: Gtk.Button
-    no_connection_box: Gtk.Box
 
 
 class GroupchatDetailsBuilder(Builder):

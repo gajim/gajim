@@ -10,7 +10,7 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkOverlay" id="create_group_chat">
+  <object class="GtkStack" id="stack">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <child>
@@ -350,20 +350,22 @@
         </child>
       </object>
       <packing>
-        <property name="index">-1</property>
+        <property name="name">create</property>
       </packing>
     </child>
-    <child type="overlay">
-      <object class="GtkBox" id="no_connection_box">
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="no-show-all">True</property>
-        <property name="opacity">0.90</property>
+        <property name="opacity">0.9019607843137255</property>
         <child>
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="label" translatable="yes">You are not connected</property>
+            <property name="justify">center</property>
             <property name="wrap">True</property>
+            <property name="max-width-chars">30</property>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -371,10 +373,11 @@
             <property name="position">0</property>
           </packing>
         </child>
-        <style>
-          <class name="solid-background"/>
-        </style>
       </object>
+      <packing>
+        <property name="name">no-connection</property>
+        <property name="position">1</property>
+      </packing>
     </child>
   </object>
 </interface>
