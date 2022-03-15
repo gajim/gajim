@@ -295,9 +295,6 @@ class ConfirmationDialog(Gtk.MessageDialog):
         self.show_all()
 
 
-NewConfirmationDialog = ConfirmationDialog
-
-
 class ConfirmationCheckDialog(ConfirmationDialog):
     def __init__(self,
                  title: str,
@@ -337,9 +334,6 @@ class ConfirmationCheckDialog(ConfirmationDialog):
         if button is not None:
             button.args.insert(0, self._checkbutton.get_active())
         super()._on_response(_dialog, response)
-
-
-NewConfirmationCheckDialog = ConfirmationCheckDialog
 
 
 class PastePreviewDialog(ConfirmationCheckDialog):
