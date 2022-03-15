@@ -253,6 +253,11 @@ class ConfirmationDialog(Gtk.MessageDialog):
         self._buttons: dict[Gtk.ResponseType, DialogButton] = {}
 
         for button in buttons:
+            if button.response == Gtk.ResponseType.CANCEL:
+                # Map CANCEL to DELETE_EVENT. Otherwise, button args for
+                # CANCEL will not be propagated (i.e. checkbutton state)
+                self._buttons[Gtk.ResponseType.DELETE_EVENT] = button
+
             self._buttons[button.response] = button
             self.add_button(button.text, button.response)
             if button.is_default:
