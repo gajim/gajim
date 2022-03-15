@@ -220,6 +220,7 @@ class GtkStatusIcon(GtkMenuBackend):
         self._hide_menuitem_added = False
 
         self._status_icon = Gtk.StatusIcon()
+        self._status_icon.set_tooltip_text('Gajim')  # Needed for Windows
         self._status_icon.connect('activate', self._on_activate)
         self._status_icon.connect('popup-menu', self._on_popup_menu)
         self._status_icon.connect('size-changed', self._on_size_changed)
