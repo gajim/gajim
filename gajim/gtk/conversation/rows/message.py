@@ -100,6 +100,7 @@ class MessageRow(BaseRow):
         self.name = name
         self.text = text
         self.additional_data = additional_data
+        self.display_marking = display_marking
 
         self._account = account
         self._contact = contact
@@ -300,12 +301,23 @@ class MessageRow(BaseRow):
                 return True
         return False
 
+    def is_same_display_marking(self, message: MessageRow) -> bool:
+        if message.display_marking == self.display_marking:
+            return True
+        if (message.display_marking is not None and
+                self.display_marking is not None):
+            if message.display_marking.name == self.display_marking.name:
+                return True
+        return False
+
     def is_mergeable(self, message: MessageRow) -> bool:
         if message.type != self.type:
             return False
         if not self.is_same_sender(message):
             return False
         if not self.is_same_encryption(message):
+            return False
+        if not self.is_same_display_marking(message):
             return False
         return abs(message.timestamp - self.timestamp) < MERGE_TIMEFRAME
 
