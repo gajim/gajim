@@ -54,7 +54,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self.set_show_menubar(False)
         self.set_name('XMLConsoleWindow')
 
-        self.selected_account: Optional[str] = None
+        self.selected_account = 'AllAccounts'
         self._selected_send_account: Optional[str] = None
         self.presence = True
         self.message = True
@@ -98,7 +98,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
 
         self.show_all()
 
-        self.connect('key_press_event', self._on_key_press)
+        self.connect('key-press-event', self._on_key_press)
         self.connect('destroy', self._on_destroy)
         self._ui.connect_signals(self)
 
@@ -130,8 +130,10 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._selected_send_account = combo.get_active_id()
 
     def _set_titlebar(self) -> None:
-        if self.selected_account is None:
+        if self.selected_account == 'AllAccounts':
             title = _('All Accounts')
+        elif self.selected_account == 'AccountWizard':
+            title = _('Account Wizard')
         else:
             title = app.get_jid_from_account(self.selected_account)
         self._ui.headerbar.set_subtitle(title)
@@ -154,14 +156,14 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
                 self._ui.search_revealer.set_reveal_child(False)
                 return
             self.destroy()
-        if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and
+        if (event.state & Gdk.ModifierType.CONTROL_MASK and
                 event.keyval == Gdk.KEY_Return or
                 event.keyval == Gdk.KEY_KP_Enter):
             self._on_send()
-        if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and
+        if (event.state & Gdk.ModifierType.CONTROL_MASK and
                 event.keyval == Gdk.KEY_Up):
             self._on_paste_last()
-        if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and
+        if (event.state & Gdk.ModifierType.CONTROL_MASK and
                 event.keyval == Gdk.KEY_f):
             self._ui.search_toggle.set_active(
                 not self._ui.search_revealer.get_child_revealed())
@@ -233,7 +235,8 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
                 node = nbxmpp.Protocol(node=stanza,
                                        attrs={'xmlns': 'jabber:client'})
             client = app.get_client(self._selected_send_account)
-            client.connection.send(node)
+            assert isinstance(node, nbxmpp.Protocol)
+            client.connection.send_stanza(node)
             self.last_stanza = stanza
             buffer_.set_text('')
 
@@ -327,7 +330,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
             return
 
         combo_accounts = self._get_accounts()
-        combo_accounts.insert(0, (None, _('All Accounts')))
+        combo_accounts.insert(0, ('AllAccounts', _('All Accounts')))
 
         settings = [
             Setting(SettingKind.COMBO, _('Account'),
@@ -357,9 +360,11 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
                     callback=self._on_setting, data='outgoing'),
         ]
 
-        self.filter_dialog = SettingsDialog(self, _('Filter'),
+        self.filter_dialog = SettingsDialog(self,
+                                            _('Filter'),
                                             Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                                            settings, self.selected_account)
+                                            settings,
+                                            self.selected_account or 'AllAccounts')
         self.filter_dialog.connect('destroy', self._on_filter_destroyed)
 
     def _on_filter_destroyed(self, _widget: Gtk.Widget) -> None:
@@ -387,13 +392,13 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         tag.set_property('invisible', value)
 
     def _nec_stanza_received(self, event: StanzaReceived):
-        if self.selected_account is not None:
+        if self.selected_account != 'AllAccounts':
             if event.account != self.selected_account:
                 return
         self._print_stanza(event, 'incoming')
 
     def _nec_stanza_sent(self, event: StanzaSent):
-        if self.selected_account is not None:
+        if self.selected_account != 'AllAccounts':
             if event.account != self.selected_account:
                 return
         self._print_stanza(event, 'outgoing')
