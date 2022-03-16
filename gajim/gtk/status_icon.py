@@ -294,8 +294,6 @@ class AppIndicator(GtkMenuBackend):
             'dcraven-online',
             appindicator.IndicatorCategory.COMMUNICATIONS)
         self._status_icon.set_icon_theme_path(str(configpaths.get('ICONS')))
-        self._status_icon.set_attention_icon_full('dcraven-message-new',
-                                                  'New Message')
         self._status_icon.set_status(appindicator.IndicatorStatus.ACTIVE)
         self._status_icon.set_menu(self._ui.systray_context_menu)
         self._status_icon.set_secondary_activate_target(
