@@ -714,7 +714,9 @@ def get_retraction_text(account: str, moderator_jid: str,
 def get_user_proxy(account: str) -> Optional[ProxyData]:
     proxy_name = app.settings.get_account_setting(account, 'proxy')
     if not proxy_name:
-        return None
+        proxy_name = app.settings.get('global_proxy')
+        if not proxy_name:
+            return None
     return get_proxy(proxy_name)
 
 def get_proxy(proxy_name: str) -> Optional[ProxyData]:
