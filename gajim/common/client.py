@@ -46,7 +46,7 @@ from gajim.common.events import StanzaSent
 from gajim.common.const import ClientState
 from gajim.common.const import SimpleClientState
 from gajim.common.helpers import get_custom_host
-from gajim.common.helpers import get_user_proxy
+from gajim.common.helpers import get_account_proxy
 from gajim.common.helpers import warn_about_plain_connection
 from gajim.common.helpers import get_resource
 from gajim.common.helpers import get_idle_status_message
@@ -527,7 +527,7 @@ class Client(Observable):
                                             'use_plain_connection'):
             self._client.set_connection_types([ConnectionType.PLAIN])
 
-        proxy = get_user_proxy(self._account)
+        proxy = get_account_proxy(self._account)
         if proxy is not None:
             self._client.set_proxy(proxy)
 

@@ -717,7 +717,7 @@ def get_global_proxy() -> Optional[ProxyData]:
         return None
     return get_proxy(proxy_name)
 
-def get_user_proxy(account: str) -> Optional[ProxyData]:
+def get_account_proxy(account: str) -> Optional[ProxyData]:
     proxy_name = app.settings.get_account_setting(account, 'proxy')
     if not proxy_name:
         return get_global_proxy()

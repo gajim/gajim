@@ -31,7 +31,7 @@ from gi.repository import Soup
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.helpers import get_tls_error_phrase
-from gajim.common.helpers import get_user_proxy
+from gajim.common.helpers import get_account_proxy
 from gajim.common.const import FTState
 from gajim.common.filetransfer import FileTransfer
 from gajim.common.modules.base import BaseModule
@@ -57,7 +57,7 @@ class HTTPUpload(BaseModule):
         self._session.props.user_agent = 'Gajim %s' % app.version
 
     def _set_proxy_if_available(self):
-        proxy = get_user_proxy(self._account)
+        proxy = get_account_proxy(self._account)
         if proxy is None:
             self._proxy_resolver = None
             self._session.props.proxy_resolver = None

@@ -34,7 +34,7 @@ from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import load_file_async
 from gajim.common.helpers import write_file_async
 from gajim.common.helpers import get_tls_error_phrase
-from gajim.common.helpers import get_user_proxy
+from gajim.common.helpers import get_account_proxy
 from gajim.common.preview_helpers import aes_decrypt
 from gajim.common.preview_helpers import filename_from_uri
 from gajim.common.preview_helpers import parse_fragment
@@ -187,7 +187,7 @@ class PreviewManager:
         session.props.https_aliases = ['aesgcm']
         session.props.ssl_strict = False
 
-        proxy = get_user_proxy(account)
+        proxy = get_account_proxy(account)
         if proxy is None:
             resolver = None
         else:
