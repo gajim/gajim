@@ -159,19 +159,6 @@ def ascii_to_idn(host: str) -> str:
     return ".".join(converted_labels)
 
 
-def puny_encode_url(url: str) -> Optional[str]:
-    _url = url
-    if '//' not in _url:
-        _url = '//' + _url
-    try:
-        o = urllib.parse.urlparse(_url)
-        p_loc = idn_to_ascii(o.hostname)
-    except Exception:
-        log.debug('urlparse failed: %s', url)
-        return None
-    return url.replace(o.hostname, p_loc)
-
-
 def parse_resource(resource: str) -> Optional[str]:
     """
     Perform stringprep on resource and return it
