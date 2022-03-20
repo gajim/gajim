@@ -185,12 +185,6 @@ def parse_resource(resource: str) -> Optional[str]:
         raise InvalidFormat('Invalid character in resource.')
 
 
-def windowsify(word: str) -> str:
-    if os.name == 'nt':
-        return word.capitalize()
-    return word
-
-
 def get_uf_show(show: str, use_mnemonic: bool = False) -> str:
     if use_mnemonic:
         return SHOW_STRING_MNEMONIC[show]
@@ -294,11 +288,6 @@ def get_uf_relative_time(timestamp: float) -> str:
     return _('Just now')
 
 
-def get_sorted_keys(adict):
-    keys = sorted(adict.keys())
-    return keys
-
-
 def to_one_line(msg: str) -> str:
     msg = msg.replace('\\', '\\\\')
     msg = msg.replace('\n', '\\n')
@@ -337,7 +326,7 @@ def get_uf_chatstate(chatstate: str) -> str:
     if chatstate == 'composing':
         return _('is composing a message…')
     if chatstate == 'paused':
-        #paused means he or she was composing but has stopped for a while
+        # paused means he or she was composing but has stopped for a while
         return _('paused composing a message')
     if chatstate == 'gone':
         return _('has closed the chat window or tab')
