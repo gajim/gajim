@@ -54,7 +54,6 @@ import inspect
 import string
 import webbrowser
 from string import Template
-import urllib
 from datetime import datetime
 from datetime import timedelta
 from urllib.parse import unquote
