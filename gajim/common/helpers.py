@@ -129,6 +129,7 @@ def parse_jid(jidstring: str) -> str:
     except Exception as error:
         raise InvalidFormat(error)
 
+
 def idn_to_ascii(host: str) -> str:
     """
     Convert IDN (Internationalized Domain Names) to ACE (ASCII-compatible
@@ -144,6 +145,7 @@ def idn_to_ascii(host: str) -> str:
             converted_labels.append('')
     return ".".join(converted_labels)
 
+
 def ascii_to_idn(host: str) -> str:
     """
     Convert ACE (ASCII-compatible encoding) to IDN (Internationalized Domain
@@ -155,6 +157,7 @@ def ascii_to_idn(host: str) -> str:
     for label in labels:
         converted_labels.append(idna.ToUnicode(label))
     return ".".join(converted_labels)
+
 
 def puny_encode_url(url: str) -> Optional[str]:
     _url = url
@@ -168,6 +171,7 @@ def puny_encode_url(url: str) -> Optional[str]:
         return None
     return url.replace(o.hostname, p_loc)
 
+
 def parse_resource(resource: str) -> Optional[str]:
     """
     Perform stringprep on resource and return it
@@ -180,15 +184,18 @@ def parse_resource(resource: str) -> Optional[str]:
     except UnicodeError:
         raise InvalidFormat('Invalid character in resource.')
 
+
 def windowsify(word: str) -> str:
     if os.name == 'nt':
         return word.capitalize()
     return word
 
+
 def get_uf_show(show: str, use_mnemonic: bool = False) -> str:
     if use_mnemonic:
         return SHOW_STRING_MNEMONIC[show]
     return SHOW_STRING[show]
+
 
 def get_uf_sub(sub: str) -> str:
     if sub == 'none':
@@ -204,6 +211,7 @@ def get_uf_sub(sub: str) -> str:
 
     return uf_sub
 
+
 def get_uf_ask(ask: Union[str, None]) -> str:
     if ask is None:
         uf_ask = Q_('?Ask (for Subscription):None')
@@ -213,6 +221,7 @@ def get_uf_ask(ask: Union[str, None]) -> str:
         uf_ask = ask
 
     return uf_ask
+
 
 def get_uf_role(role: Union[Role, str], plural: bool = False) -> str:
     ''' plural determines if you get Moderators or Moderator'''
@@ -234,6 +243,7 @@ def get_uf_role(role: Union[Role, str], plural: bool = False) -> str:
             return _('Visitors')
         return _('Visitor')
     return ''
+
 
 def get_uf_affiliation(affiliation: Union[Affiliation, str],
                        plural: bool = False
@@ -257,6 +267,7 @@ def get_uf_affiliation(affiliation: Union[Affiliation, str],
             return _('Members')
         return _('Member')
     return ''
+
 
 def get_uf_relative_time(timestamp: float) -> str:
     date_time = datetime.fromtimestamp(timestamp)
@@ -282,9 +293,11 @@ def get_uf_relative_time(timestamp: float) -> str:
                         minutes)
     return _('Just now')
 
+
 def get_sorted_keys(adict):
     keys = sorted(adict.keys())
     return keys
+
 
 def to_one_line(msg: str) -> str:
     msg = msg.replace('\\', '\\\\')
@@ -295,6 +308,7 @@ def to_one_line(msg: str) -> str:
     # s12
     # 'test\\ntest\\\\ntest'
     return msg
+
 
 def from_one_line(msg: str) -> str:
     # (?<!\\) is a lookbehind assertion which asks anything but '\'
@@ -310,6 +324,7 @@ def from_one_line(msg: str) -> str:
     # s14
     # 'test\ntest\\ntest'
     return msg
+
 
 def get_uf_chatstate(chatstate: str) -> str:
     """
@@ -328,6 +343,7 @@ def get_uf_chatstate(chatstate: str) -> str:
         return _('has closed the chat window or tab')
     return ''
 
+
 def exec_command(command: str,
                  use_shell: bool = False,
                  posix: bool = True
@@ -344,12 +360,14 @@ def exec_command(command: str,
         process = subprocess.Popen(args)
         app.thread_interface(process.wait)
 
+
 def build_command(executable: str, parameter: str) -> str:
     # we add to the parameter (can hold path with spaces)
     # "" so we have good parsing from shell
     parameter = parameter.replace('"', '\\"')  # but first escape "
     command = f'{executable} "{parameter}"'
     return command
+
 
 def get_file_path_from_dnd_dropped_uri(uri: str) -> str:
     path = urllib.parse.unquote(uri)  # escape special chars
@@ -362,6 +380,7 @@ def get_file_path_from_dnd_dropped_uri(uri: str) -> str:
     elif path.startswith('file:'):  # xffm
         path = path[5:]  # 5 is len('file:')
     return path
+
 
 def sanitize_filename(filename: str) -> str:
     """
@@ -382,6 +401,7 @@ def sanitize_filename(filename: str) -> str:
                 .replace('*', '_').replace('<', '_').replace('>', '_')
 
     return filename
+
 
 def reduce_chars_newlines(text: str, max_chars: int = 0,
                           max_lines: int = 0) -> str:
@@ -464,6 +484,7 @@ def check_soundfile_path(file_: str,
             return dir_
     return None
 
+
 def strip_soundfile_path(file_, dirs=None, abs_=True):
     """
     Remove knowns paths from a sound file
@@ -494,6 +515,7 @@ def strip_soundfile_path(file_, dirs=None, abs_=True):
             return name
     return file_
 
+
 def play_sound_file(str_path_to_soundfile: str, loop: bool = False) -> None:
     path_to_soundfile = check_soundfile_path(str_path_to_soundfile)
     if path_to_soundfile is None:
@@ -501,6 +523,7 @@ def play_sound_file(str_path_to_soundfile: str, loop: bool = False) -> None:
 
     from gajim.common import sound
     sound.play(path_to_soundfile, loop)
+
 
 def get_client_status(account: str) -> str:
     client = app.get_client(account)
@@ -514,6 +537,7 @@ def get_client_status(account: str) -> str:
 
     return client.status
 
+
 def get_global_show() -> str:
     maxi = 0
     for account in app.connections:
@@ -525,6 +549,7 @@ def get_global_show() -> str:
         if index > maxi:
             maxi = index
     return SHOW_LIST[maxi]
+
 
 def get_global_status_message() -> str:
     maxi = 0
@@ -538,6 +563,7 @@ def get_global_status_message() -> str:
             maxi = index
             status_message = con.status_message
     return status_message
+
 
 def statuses_unified() -> bool:
     """
@@ -566,6 +592,7 @@ def get_full_jid_from_iq(iq_obj: Iq) -> Optional[str]:
         return None
     return parse_jid(str(iq_obj.getFrom()))
 
+
 def get_jid_from_iq(iq_obj: Iq) -> Optional[str]:
     """
     Return the jid (without resource) from an iq
@@ -575,6 +602,7 @@ def get_jid_from_iq(iq_obj: Iq) -> Optional[str]:
         return None
     return app.get_jid_without_resource(jid)
 
+
 def get_auth_sha(sid: str, initiator: str, target: str) -> str:
     """
     Return sha of sid + initiator + target used for proxy auth
@@ -582,10 +610,12 @@ def get_auth_sha(sid: str, initiator: str, target: str) -> str:
     return hashlib.sha1(
         (f'{sid}{initiator}{target}').encode('utf-8')).hexdigest()
 
+
 def remove_invalid_xml_chars(string_: str) -> str:
     if string_:
         string_ = re.sub(INVALID_XML_CHARS_REGEX, '', string_)
     return string_
+
 
 def get_random_string(count: int = 16) -> str:
     """
@@ -684,9 +714,11 @@ def get_optional_features(account: str) -> list[Namespace]:
     app.plugin_manager.extension_point('update_caps', account, features)
     return features
 
+
 def jid_is_blocked(account: str, jid: str) -> bool:
     con = app.connections[account]
     return jid in con.get_module('Blocking').blocked
+
 
 def get_subscription_request_msg(account: Optional[str] = None) -> str:
     message = _('I would like to add you to my contact list.')
@@ -701,6 +733,7 @@ def get_subscription_request_msg(account: Optional[str] = None) -> str:
     message = _('Hello, I am $name. %s') % message
     return Template(message).safe_substitute({'name': app.nicks[account]})
 
+
 def get_retraction_text(account: str, moderator_jid: str,
                         reason: Optional[str]) -> str:
     client = app.get_client(account)
@@ -711,11 +744,13 @@ def get_retraction_text(account: str, moderator_jid: str,
         text += ' ' + _('Reason: %s') % reason
     return text
 
+
 def get_global_proxy() -> Optional[ProxyData]:
     proxy_name = app.settings.get('global_proxy')
     if not proxy_name:
         return None
     return get_proxy(proxy_name)
+
 
 def get_account_proxy(account: str, fallback=True) -> Optional[ProxyData]:
     proxy_name = app.settings.get_account_setting(account, 'proxy')
@@ -725,6 +760,7 @@ def get_account_proxy(account: str, fallback=True) -> Optional[ProxyData]:
     if fallback:
         return get_global_proxy()
     return None
+
 
 def get_proxy(proxy_name: str) -> Optional[ProxyData]:
     try:
@@ -741,10 +777,12 @@ def get_proxy(proxy_name: str) -> Optional[ProxyData]:
                      username=username,
                      password=password)
 
+
 def version_condition(current_version: str, required_version: str) -> bool:
     if V(current_version) < V(required_version):
         return False
     return True
+
 
 def get_available_emoticon_themes() -> list[str]:
     files: list[Path] = []
@@ -761,6 +799,7 @@ def get_available_emoticon_themes() -> list[str]:
     emoticons_themes += [file.stem for file in files if file.suffix == '.png']
     return sorted(emoticons_themes)
 
+
 def call_counter(func):
     def helper(self, restart=False):
         if restart:
@@ -768,6 +807,7 @@ def call_counter(func):
         self._connect_machine_calls += 1
         return func(self)
     return helper
+
 
 def load_json(path: Path,
               key: Optional[str] = None,
