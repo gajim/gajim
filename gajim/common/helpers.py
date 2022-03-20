@@ -461,7 +461,9 @@ def check_soundfile_path(file_: str,
     return None
 
 
-def strip_soundfile_path(file_, dirs=None, abs_=True):
+def strip_soundfile_path(file_: Union[Path, str],
+                         dirs: Optional[list[Path]] = None,
+                         abs_: bool = True):
     """
     Remove knowns paths from a sound file
 
@@ -667,7 +669,7 @@ def allow_sound_notification(account: str, sound_event: str) -> bool:
     return False
 
 
-def get_optional_features(account: str) -> list[Namespace]:
+def get_optional_features(account: str) -> list[str]:
     features: list[str] = []
 
     if app.settings.get_account_setting(account, 'request_user_data'):
@@ -710,8 +712,10 @@ def get_subscription_request_msg(account: Optional[str] = None) -> str:
     return Template(message).safe_substitute({'name': app.nicks[account]})
 
 
-def get_retraction_text(account: str, moderator_jid: str,
+def get_retraction_text(account: str,
+                        moderator_jid: str,
                         reason: Optional[str]) -> str:
+
     client = app.get_client(account)
     contact = client.get_module('Contacts').get_contact(
         moderator_jid, groupchat=True)
