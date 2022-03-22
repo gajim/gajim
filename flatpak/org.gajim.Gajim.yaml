@@ -1,6 +1,6 @@
 app-id: org.gajim.Gajim.Devel
 runtime: org.gnome.Platform
-runtime-version: '41'
+runtime-version: '42'
 sdk: org.gnome.Sdk
 command: gajim-devel
 tags:
@@ -97,11 +97,11 @@ modules:
   - name: python3-asn1crypto
     buildsystem: simple
     build-commands:
-      - pip3 install asn1crypto-1.4.0-py2.py3-none-any.whl
+      - pip3 install asn1crypto-1.5.1-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/a/asn1crypto/asn1crypto-1.4.0-py2.py3-none-any.whl
-        sha256: 4bcdf33c861c7d40bdcd74d8e4dd7661aac320fcdf40b9a3f95b4ee12fde2fa8
+        url: https://files.pythonhosted.org/packages/py2.py3/a/asn1crypto/asn1crypto-1.5.1-py2.py3-none-any.whl
+        sha256: db4e40728b728508912cbb3d44f19ce188f218e9eba635821bb4b68564f8fd67
 
   - name: python3-idna
     buildsystem: simple
@@ -117,22 +117,22 @@ modules:
     only-arches:
       - aarch64
     build-commands:
-      - pip3 install cryptography-36.0.1-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+      - pip3 install cryptography-36.0.2-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp36/c/cryptography/cryptography-36.0.1-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
-        sha256: 5d59a9d55027a8b88fd9fd2826c4392bd487d74bf628bb9d39beecc62a644c12
+        url: https://files.pythonhosted.org/packages/cp36/c/cryptography/cryptography-36.0.2-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+        sha256: 8241cac0aae90b82d6b5c443b853723bcc66963970c67e56e71a2609dc4b5eaf
 
   - name: python3-cryptography
     buildsystem: simple
     only-arches:
       - x86_64
     build-commands:
-      - pip3 install cryptography-36.0.1-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+      - pip3 install cryptography-36.0.2-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp36/c/cryptography/cryptography-36.0.1-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-        sha256: 0a817b961b46894c5ca8a66b599c745b9a3d9f822725221f0e0fe49dc043a3a3
+        url: https://files.pythonhosted.org/packages/cp36/c/cryptography/cryptography-36.0.2-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+        sha256: 7b2d54e787a884ffc6e187262823b6feb06c338084bbe80d45166a1cb1c6c5bf
 
   - name: python3-pyopenssl
     buildsystem: simple
@@ -183,13 +183,13 @@ modules:
   - name: python3-importlib-metadata
     buildsystem: simple
     build-commands:
-      - pip3 install importlib_metadata-4.11.0-py3-none-any.whl
+      - pip3 install importlib_metadata-4.11.3-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/i/importlib_metadata/importlib_metadata-4.11.0-py3-none-any.whl
-        sha256: 6affcdb3aec542dd98df8211e730bba6c5f2bec8288d47bacacde898f548c9ad
+        url: https://files.pythonhosted.org/packages/py3/i/importlib_metadata/importlib_metadata-4.11.3-py3-none-any.whl
+        sha256: 1208431ca90a8cca1a6b8af391bb53c1a2db74e5d1cef6ddced95d4b2062edc6
 
   - name: python3-keyring
     buildsystem: simple
@@ -236,8 +236,8 @@ modules:
       - pip3 install .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/g/gssapi/gssapi-1.7.2.tar.gz
-        sha256: 748efbcf7cfb31183cd75e5314493e79fe3521b3ec00d090a77e23f7c75fa59d
+        url: https://files.pythonhosted.org/packages/source/g/gssapi/gssapi-1.7.3.tar.gz
+        sha256: c69b9f633a0c03c1b84ba14c73b0ec132f6323056e675702c1a5f75f316e06fb
 
   # GSound dependency
   - name: libcanberra
