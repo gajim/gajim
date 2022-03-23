@@ -732,11 +732,11 @@ class PrivacyPage(GenericSettingPage):
                     desc=_('Disclose the local system time of the '
                            'device Gajim runs on')),
 
-            Setting(SettingKind.SWITCH, _('Client / Operating System'),
+            Setting(SettingKind.SWITCH, _('Operating System'),
                     SettingType.ACCOUNT_CONFIG, 'send_os_info',
                     callback=self._send_os_info,
-                    desc=_('Disclose information about the client '
-                           'and operating system you currently use')),
+                    desc=_('Disclose information about the '
+                           'operating system you currently use')),
 
             Setting(SettingKind.SWITCH, _('Media Playback'),
                     SettingType.ACCOUNT_CONFIG, 'publish_tune',
