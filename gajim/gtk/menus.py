@@ -44,9 +44,8 @@ from gajim.common.structs import VariantMixin
 from gajim.common.modules.contacts import can_add_to_roster
 
 from gajim.gui.structs import AddChatActionParams
-from gajim.gui.structs import AddToRosterParams
-from gajim.gui.structs import ForgetGroupchatActionParams
-from gajim.gui.structs import MoveChatToWorkspaceAP
+from gajim.gui.structs import AccountJidParam
+from gajim.gui.structs import ChatListEntryParam
 from gajim.gui.structs import RemoveHistoryActionParams
 from gajim.gui.util import GajimMenu
 from gajim.gui.const import ControlType
@@ -402,7 +401,7 @@ def get_subscription_menu(account: str, jid: JID) -> GajimMenu:
 
 
 def get_start_chat_row_menu(account: str, jid: JID) -> GajimMenu:
-    params = ForgetGroupchatActionParams(account=account, jid=jid)
+    params = AccountJidParam(account=account, jid=jid)
     menuitems: MenuItemListT = [
         (_('Forget this Group Chat'), 'app.forget-groupchat', params),
     ]
@@ -421,8 +420,12 @@ def get_chat_list_row_menu(workspace_id: str,
 
     menu = GajimMenu()
 
+    params = ChatListEntryParam(workspace_id=workspace_id,
+                                account=account,
+                                jid=jid)
+
     toggle_label = _('Unpin Chat') if pinned else _('Pin Chat')
-    menu.add_item(toggle_label, 'win.toggle-chat-pinned', None)
+    menu.add_item(toggle_label, 'win.toggle-chat-pinned', params)
 
     workspaces = app.settings.get_workspaces()
     if len(workspaces) > 1:
@@ -431,11 +434,12 @@ def get_chat_list_row_menu(workspace_id: str,
             submenu.add_item(name, 'win.move-chat-to-workspace', params)
 
     if can_add_to_roster(contact):
-        params = AddToRosterParams(account=account, jid=jid)
+        params = AccountJidParam(account=account, jid=jid)
         menu.add_item(_('Add to Contact List…'), 'win.add-to-roster', params)
 
     if app.window.get_chat_unread_count(account, jid, include_silent=True):
-        menu.add_item(_('Mark as read'), 'win.mark-as-read', None)
+        params = AccountJidParam(account=account, jid=jid)
+        menu.add_item(_('Mark as read'), 'win.mark-as-read', params)
 
     return menu
 
@@ -443,15 +447,15 @@ def get_chat_list_row_menu(workspace_id: str,
 def get_workspace_params(current_workspace_id: str,
                          account: str,
                          jid: JID
-                         ) -> Iterator[tuple[str, MoveChatToWorkspaceAP]]:
+                         ) -> Iterator[tuple[str, ChatListEntryParam]]:
 
     for workspace_id in app.settings.get_workspaces():
         if workspace_id == current_workspace_id:
             continue
         name = app.settings.get_workspace_setting(workspace_id, 'name')
-        params = MoveChatToWorkspaceAP(workspace_id=workspace_id,
-                                       account=account,
-                                       jid=jid)
+        params = ChatListEntryParam(workspace_id=workspace_id,
+                                    account=account,
+                                    jid=jid)
         yield name, params
 
 

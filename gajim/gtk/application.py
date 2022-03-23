@@ -715,12 +715,12 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         app.window.present_with_time(Gtk.get_current_event_time())
 
-    @staticmethod
-    def _on_mark_as_read_action(_action: Gio.SimpleAction,
-                                param: GLib.Variant) -> None:
-        dict_ = param.unpack()
-        account, jid = dict_['account'], dict_['jid']
-        app.window.mark_as_read(account, JID.from_string(jid))
+    @structs.actionmethod
+    def _on_mark_as_read_action(self,
+                                _action: Gio.SimpleAction,
+                                params: structs.AccountJidParam) -> None:
+
+        app.window.mark_as_read(params.account, params.jid)
 
     @staticmethod
     def _on_ipython_action(_action: Gio.SimpleAction,
@@ -787,7 +787,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
     @staticmethod
     @structs.actionfunction
     def _on_forget_groupchat_action(_action: Gio.SimpleAction,
-                                    params: structs.ForgetGroupchatActionParams
+                                    params: structs.AccountJidParam
                                     ) -> None:
 
         window = cast(StartChatDialog, get_app_window('StartChatDialog'))

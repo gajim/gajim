@@ -46,12 +46,6 @@ class RemoveHistoryActionParams(VariantMixin):
 
 
 @dataclass
-class ForgetGroupchatActionParams(VariantMixin):
-    account: str
-    jid: JID
-
-
-@dataclass
 class AddChatActionParams(VariantMixin):
     account: str
     jid: JID
@@ -60,14 +54,14 @@ class AddChatActionParams(VariantMixin):
 
 
 @dataclass
-class MoveChatToWorkspaceAP(VariantMixin):
+class ChatListEntryParam(VariantMixin):
     workspace_id: str
     account: str
     jid: JID
 
 
 @dataclass
-class AddToRosterParams(VariantMixin):
+class AccountJidParam(VariantMixin):
     account: str
     jid: JID
 

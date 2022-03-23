@@ -56,6 +56,7 @@ from .builder import get_builder
 from .util import add_css_to_widget
 from .util import get_monitor_scale_factor
 from .util import get_total_screen_geometry
+from .structs import AccountJidParam
 from .structs import OpenEventActionParams
 
 log = logging.getLogger('gajim.gui.notification')
@@ -352,6 +353,8 @@ class Linux(NotificationBackend):
 
         if event.type == 'incoming-message':
             action = f'app.{event.account}-mark-as-read'
+            params = AccountJidParam(account=event.account,
+                                     jid=JID.from_string(jid))
             notification.add_button_with_target(
                 _('Mark as Read'), action, params.to_variant())
 

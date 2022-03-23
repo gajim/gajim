@@ -56,8 +56,9 @@ from .util import save_main_window_position
 from .util import open_window
 from .util import set_urgency_hint
 from .const import UNLOAD_CHAT_TIME
+from .structs import AccountJidParam
 from .structs import AddChatActionParams
-from .structs import AddToRosterParams
+from .structs import actionmethod
 
 log = logging.getLogger('gajim.gui.main')
 
@@ -596,11 +597,11 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         if chat_list is not None:
             chat_list.select_chat_number(number)
 
-    @staticmethod
-    def _add_to_roster(_action: Gio.SimpleAction,
-                       param: GLib.Variant) -> None:
+    @actionmethod
+    def _add_to_roster(self,
+                       _action: Gio.SimpleAction,
+                       params: AccountJidParam) -> None:
 
-        params = AddToRosterParams.from_variant(param)
         open_window('AddContact', account=params.account, jid=params.jid)
 
     def show_app_page(self) -> None:

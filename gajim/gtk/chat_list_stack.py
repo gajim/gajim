@@ -87,9 +87,9 @@ class ChatListStack(Gtk.Stack):
 
     def _add_actions(self) -> None:
         actions = [
-            ('toggle-chat-pinned', 'as', self._toggle_chat_pinned),
+            ('toggle-chat-pinned', 'a{sv}', self._toggle_chat_pinned),
             ('move-chat-to-workspace', 'a{sv}', self._move_chat_to_workspace),
-            ('mark-as-read', 'as', self._mark_as_read),
+            ('mark-as-read', 'a{sv}', self._mark_as_read),
         ]
 
         for action in actions:
@@ -202,21 +202,20 @@ class ChatListStack(Gtk.Stack):
         app.settings.set_workspace_setting(
             workspace_id, 'open_chats', open_chats)
 
+    @structs.actionmethod
     def _toggle_chat_pinned(self,
                             _action: Gio.SimpleAction,
-                            param: GLib.Variant
+                            params: structs.ChatListEntryParam
                             ) -> None:
-        workspace_id, account, jid = param.unpack()
-        jid = JID.from_string(jid)
 
-        chat_list = self._chat_lists[workspace_id]
-        chat_list.toggle_chat_pinned(account, jid)
-        self.store_open_chats(workspace_id)
+        chat_list = self._chat_lists[params.workspace_id]
+        chat_list.toggle_chat_pinned(params.account, params.jid)
+        self.store_open_chats(params.workspace_id)
 
     @structs.actionmethod
     def _move_chat_to_workspace(self,
                                 _action: Gio.SimpleAction,
-                                params: structs.MoveChatToWorkspaceAP
+                                params: structs.ChatListEntryParam
                                 ) -> None:
 
         current_chatlist = cast(ChatList, self.get_visible_child())
@@ -230,12 +229,13 @@ class ChatListStack(Gtk.Stack):
         self.store_open_chats(current_chatlist.workspace_id)
         self.store_open_chats(params.workspace_id)
 
+    @structs.actionmethod
     def _mark_as_read(self,
                       _action: Gio.SimpleAction,
-                      param: GLib.Variant
+                      params: structs.AccountJidParam
                       ) -> None:
-        _workspace_id, account, jid = param.unpack()
-        self.mark_as_read(account, JID.from_string(jid))
+
+        self.mark_as_read(params.account, params.jid)
 
     def remove_chat(self, workspace_id: str, account: str, jid: JID) -> None:
         chat_list = self._chat_lists[workspace_id]

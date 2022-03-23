@@ -34,7 +34,7 @@ from gajim.common.i18n import _
 
 from .chat_list_stack import ChatListStack
 from .chat_page import ChatPage
-from .structs import MoveChatToWorkspaceAP
+from .structs import ChatListEntryParam
 from .util import open_window
 
 log = logging.getLogger('gajim.gui.workspace_sidebar')
@@ -153,9 +153,9 @@ class WorkspaceSideBar(Gtk.ListBox):
         if workspace_row.workspace_id == 'add':
             return
 
-        params = MoveChatToWorkspaceAP(workspace_id=workspace_row.workspace_id,
-                                       account=account,
-                                       jid=JID.from_string(jid))
+        params = ChatListEntryParam(workspace_id=workspace_row.workspace_id,
+                                    account=account,
+                                    jid=JID.from_string(jid))
         app.window.activate_action('move-chat-to-workspace',
                                    params.to_variant())
 
