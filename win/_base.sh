@@ -112,6 +112,7 @@ python-gnupg
 python-axolotl
 qrcode
 css_parser
+sentry-sdk
 "
 
     build_pip install $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])

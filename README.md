@@ -21,6 +21,7 @@
 ### Optional Runtime Requirements
 
 - python3-pil (pillow) for support of webp avatars
+- python3-sentry-sdk for Sentry error reporting to dev.gajim.org (users decide whether to send reports or not)
 - gir1.2-gspell-1 and hunspell-LANG where lang is your locale eg. en, fr etc
 - gir1.2-secret-1 for GNOME Keyring or KDE support as password storage
 - D-Bus running to have gajim-remote working

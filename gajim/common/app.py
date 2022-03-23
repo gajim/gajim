@@ -126,6 +126,7 @@ _dependencies = {
     'IDLE': False,
     'APPINDICATOR': False,
     'AYATANA_APPINDICATOR': False,
+    'SENTRY_SDK': False,
 }
 
 _tasks: dict[int, list[Any]] = defaultdict(list)
@@ -275,6 +276,13 @@ def detect_dependencies() -> None:
         from gi.repository import AyatanaAppIndicator3  # pylint: disable=unused-import
         _dependencies['AYATANA_APPINDICATOR'] = True
     except (ImportError, ValueError):
+        pass
+
+    # SENTRY SDK
+    try:
+        import sentry_sdk  # pylint: disable=unused-import
+        _dependencies['SENTRY_SDK'] = True
+    except ImportError:
         pass
 
     # Print results

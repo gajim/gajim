@@ -779,6 +779,14 @@ def open_window(name: str, **kwargs: Any) -> Any:
     return window
 
 
+def get_gtk_version() -> str:
+    gtk_ver = '%i.%i.%i' % (
+        Gtk.get_major_version(),
+        Gtk.get_minor_version(),
+        Gtk.get_micro_version())
+    return gtk_ver
+
+
 class EventHelper(CommonEventHelper):
     def __init__(self):
         CommonEventHelper.__init__(self)

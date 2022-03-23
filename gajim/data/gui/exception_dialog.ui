@@ -1,30 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
-  <requires lib="gtk+" version="3.22"/>
-  <object class="GtkApplicationWindow" id="exception_dialog">
-    <property name="can_focus">False</property>
-    <property name="window_position">center</property>
-    <property name="type_hint">dialog</property>
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkBox" id="exception_box">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="orientation">vertical</property>
     <child>
-      <object class="GtkBox">
+      <object class="GtkInfoBar" id="infobar">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="border_width">18</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
-        <child>
+        <property name="can-focus">False</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox">
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child internal-child="content_area">
           <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkImage">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="valign">center</property>
-                <property name="icon_name">dialog-error</property>
-                <property name="icon_size">6</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">dialog-information-symbolic</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -33,48 +41,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">Sorry, that should not have happened</property>
-                    <property name="wrap">True</property>
-                    <property name="max_width_chars">30</property>
-                    <property name="xalign">0</property>
-                    <style>
-                      <class name="large-header"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">Gajim encountered an error. A report is shown below.
-By reporting this bug you might help people to fix this.</property>
-                    <property name="wrap">True</property>
-                    <property name="max_width_chars">60</property>
-                    <property name="lines">3</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">Install &lt;tt&gt;sentry-sdk&lt;/tt&gt; to make reporting issues easier.</property>
+                <property name="use-markup">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -89,80 +60,226 @@ By reporting this bug you might help people to fix this.</property>
             <property name="position">0</property>
           </packing>
         </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="border-width">18</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">24</property>
         <child>
-          <object class="GtkButtonBox">
+          <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
+            <property name="orientation">vertical</property>
             <property name="spacing">6</property>
-            <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="close_btn">
-                <property name="label">_Close</property>
+              <object class="GtkImage">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
-                <signal name="clicked" handler="on_close_clicked" swapped="no"/>
+                <property name="can-focus">False</property>
+                <property name="valign">start</property>
+                <property name="icon-name">face-embarrassed</property>
+                <property name="icon_size">6</property>
               </object>
               <packing>
-                <property name="expand">True</property>
+                <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="report_btn">
-                <property name="label" translatable="yes">_Report Bug</property>
+              <object class="GtkLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
-                <signal name="clicked" handler="on_report_clicked" swapped="no"/>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">Sorry, that should not have happened</property>
+                <property name="justify">center</property>
+                <property name="wrap">True</property>
+                <property name="max-width-chars">50</property>
                 <style>
-                  <class name="suggested-action"/>
+                  <class name="large-header"/>
                 </style>
               </object>
               <packing>
-                <property name="expand">True</property>
+                <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">Gajim encountered an error.
+Please help us fixing this issue by sending this report.</property>
+                <property name="justify">center</property>
+                <property name="wrap">True</property>
+                <property name="max-width-chars">60</property>
+                <property name="lines">3</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="height-request">200</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="margin-top">6</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkTextView" id="exception_view">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="editable">False</property>
+                    <property name="left-margin">4</property>
+                    <property name="right-margin">4</property>
+                    <property name="top-margin">4</property>
+                    <property name="bottom-margin">4</property>
+                    <property name="accepts-tab">False</property>
+                    <property name="monospace">True</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="user_feedback_box">
+                <property name="can-focus">False</property>
+                <property name="halign">center</property>
+                <property name="margin-top">6</property>
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">What happened</property>
+                    <property name="wrap">True</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="user_feedback_entry">
+                    <property name="width-request">400</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="halign">start</property>
+                    <property name="activates-default">True</property>
+                    <property name="placeholder-text" translatable="yes">Add some details…</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">1</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkScrolledWindow">
-            <property name="height_request">200</property>
+          <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="vexpand">True</property>
-            <property name="shadow_type">in</property>
+            <property name="can-focus">False</property>
+            <property name="spacing">12</property>
             <child>
-              <object class="GtkTextView" id="exception_view">
+              <object class="GtkButton" id="close_button">
+                <property name="label" translatable="yes">_Close</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="editable">False</property>
-                <property name="left_margin">4</property>
-                <property name="right_margin">4</property>
-                <property name="accepts_tab">False</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <signal name="clicked" handler="_on_close_clicked" swapped="no"/>
               </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="pack-type">end</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="report_button">
+                <property name="label" translatable="yes">Send _Report</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
+                <signal name="clicked" handler="_on_report_clicked" swapped="no"/>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="pack-type">end</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinner" id="report_spinner">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="pack-type">end</property>
+                <property name="position">2</property>
+              </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="pack-type">end</property>
+            <property name="position">4</property>
           </packing>
         </child>
       </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
     </child>
   </object>
 </interface>

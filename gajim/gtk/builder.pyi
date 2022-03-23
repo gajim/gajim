@@ -313,10 +313,14 @@ class EmojiChooserBuilder(Builder):
 
 
 class ExceptionDialogBuilder(Builder):
-    exception_dialog: Gtk.ApplicationWindow
-    close_btn: Gtk.Button
-    report_btn: Gtk.Button
+    exception_box: Gtk.Box
+    infobar: Gtk.InfoBar
     exception_view: Gtk.TextView
+    user_feedback_box: Gtk.Box
+    user_feedback_entry: Gtk.Entry
+    close_button: Gtk.Button
+    report_button: Gtk.Button
+    report_spinner: Gtk.Spinner
 
 
 class FileTransferBuilder(Builder):

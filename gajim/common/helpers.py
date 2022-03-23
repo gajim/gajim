@@ -78,6 +78,8 @@ from OpenSSL.crypto import FILETYPE_PEM
 
 from gi.repository import Gio
 from gi.repository import GLib
+from gi.repository import GObject
+from gi.repository import Soup
 
 import precis_i18n.codec  # pylint: disable=unused-import
 
@@ -755,6 +757,18 @@ def get_proxy(proxy_name: str) -> Optional[ProxyData]:
                      host=f"{settings['host']}:{settings['port']}",
                      username=username,
                      password=password)
+
+
+def is_proxy_in_use() -> bool:
+    return get_global_proxy() is not None or is_account_proxy_in_use()
+
+
+def is_account_proxy_in_use() -> bool:
+    for client in app.get_clients():
+        account_proxy = get_account_proxy(client.account, fallback=False)
+        if account_proxy is not None:
+            return True
+    return False
 
 
 def version_condition(current_version: str, required_version: str) -> bool:
@@ -1444,6 +1458,42 @@ def get_start_of_day(date_time: datetime) -> datetime:
                              microsecond=0)
 
 
+def get_os_name() -> str:
+    if sys.platform in ('win32', 'darwin'):
+        return platform.system()
+    if os.name == 'posix':
+        try:
+            import distro
+            return distro.name(pretty=True)
+        except ImportError:
+            return platform.system()
+    return ''
+
+
+def get_os_version() -> str:
+    if sys.platform in ('win32', 'darwin'):
+        return platform.release()
+    if os.name == 'posix':
+        try:
+            import distro
+            return distro.version(pretty=True)
+        except ImportError:
+            return platform.release()
+    return ''
+
+
+def get_gobject_version() -> str:
+    gobject_ver = '.'.join(map(str, GObject.pygobject_version))
+    return gobject_ver
+
+
+def get_glib_version() -> str:
+    glib_ver = '.'.join(map(str, [GLib.MAJOR_VERSION,
+                                  GLib.MINOR_VERSION,
+                                  GLib.MICRO_VERSION]))
+    return glib_ver
+
+
 def make_path_from_jid(base_path: Path, jid: JID) -> Path:
     assert jid.domain is not None
     domain = jid.domain[:50]
@@ -1455,3 +1505,21 @@ def make_path_from_jid(base_path: Path, jid: JID) -> Path:
     if jid.resource is not None:
         return path / jid.resource[:30]
     return path
+
+
+def make_http_request(uri: str, callback: Any) -> None:
+    proxy = get_global_proxy()
+    if proxy is None:
+        if is_account_proxy_in_use():
+            raise ValueError('No global proxy found, '
+                             'but account proxies are in use')
+        resolver = None
+
+    else:
+        resolver = proxy.get_resolver()
+
+    session = Soup.Session()
+    session.props.proxy_resolver = resolver
+    session.props.user_agent = f'Gajim {app.version}'
+    message = Soup.Message.new('GET', uri)
+    session.queue_message(message, callback)
