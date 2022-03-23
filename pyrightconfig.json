@@ -47,6 +47,7 @@
         "gajim/gtk/contact_settings.py",
         "gajim/gtk/conversation",
         "gajim/gtk/dialogs.py",
+        "gajim/gtk/exception.py",
         "gajim/gtk/features.py",
         "gajim/gtk/file_transfer_send.py",
         "gajim/gtk/groupchat_affiliation.py",
