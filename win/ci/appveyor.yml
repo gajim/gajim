@@ -1,0 +1,57 @@
+version: 1.1.{build}
+
+image: Visual Studio 2019
+
+environment:
+  matrix:
+    - MSYSTEM: MINGW64
+      MSYS_ARCH: "x86_64"
+      ARCH: "64bit"
+
+    - MSYSTEM: MINGW32
+      MSYS_ARCH: "i686"
+      ARCH: "32bit"
+
+branches:
+  only:
+    - master
+
+clone_depth: 1
+
+# init:
+#   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
+install:
+  - set PATH=C:\msys64\usr\bin;%PATH%
+  - bash -lc "pacman --needed --noconfirm -Syu"
+  # This is needed because without killing all processes -Su will fail
+  - ps: Get-Process | Where-Object {$_.path -like 'C:\msys64*'} | Stop-Process
+  - bash -lc "pacman -Sydd --noconfirm filesystem"
+  - bash -lc "pacman --needed --noconfirm -Su"
+
+build_script:
+
+  - ps: |
+        $filename = "Gajim-$($env:GAJIM_VERSION)-$($env:ARCH)"
+        $filename_portable = "Gajim-$($env:GAJIM_VERSION)-Portable-$($env:ARCH)"
+
+        if ($env:GAJIM_VERSION -eq "Nightly") {
+            $time_string=(get-date -UFormat "%Y-%m-%d").ToString()
+            $filename = $filename + "-" + $time_string
+            $filename_portable = $filename_portable + "-" + $time_string
+        }
+
+        $buildroot="C:\msys64\home\appveyor\gajim\win\_build_root"
+
+        function bash($command) {
+          Write-Host $command -NoNewline
+          C:\msys64\usr\bin\sh.exe --login -c $command
+        }
+
+        bash "git clone C:/projects/gajim C:/msys64/home/appveyor/gajim"
+        bash "C:/msys64/home/appveyor/gajim/win/build.sh $($env:MSYS_ARCH)"
+        Push-AppveyorArtifact "$($buildroot)/Gajim.exe" -FileName "$($filename).exe"
+        Push-AppveyorArtifact "$($buildroot)/Gajim-Portable.exe" -FileName "$($filename_portable).exe"
+
+# on_finish:
+#   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))

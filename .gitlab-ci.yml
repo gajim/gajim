@@ -1,14 +1,19 @@
 image: ci-gajim:master
 
-include:
-- project: 'gajim/ci'
-  ref: master
-  file: '.gajim-ci.yml'
+workflow:
+  rules:
+    - if: $GAJIM_NIGHTLY_BUILD
+    - if: $CI_PIPELINE_SOURCE == "push"
+
+stages:
+  - test
+  - build
+  - deploy
 
 pyright:
   stage: test
   script:
-    - pip3 install git+https://dev.gajim.org/gajim/python-nbxmpp.git@$NBXMPP_BRANCH
+    - pip3 install git+https://dev.gajim.org/gajim/python-nbxmpp.git
     - pip3 install git+https://github.com/pygobject/pygobject-stubs.git
     - npm install pyright
     - python3 -V
@@ -16,8 +21,77 @@ pyright:
     - $(npm bin)/pyright --version
     - $(npm bin)/pyright
   interruptible: true
-  allow_failure: false
 
-variables:
-  NBXMPP_BRANCH: master
-  PLUGINS_BRANCH: master
+code-quality:
+  stage: test
+  script:
+    - python3 -V
+    - pip3 install -I git+https://dev.gajim.org/gajim/python-nbxmpp.git
+    - scripts/ci/pylint.sh --jobs=2 gajim
+    - coverage run --source=gajim -m unittest discover -s test -v
+    - coverage report -mi
+    - coverage xml -i
+    - codespell -I codespell.conf --skip="*__pycache__*,gajim/data/icons,gajim/data/sounds,gajim/data/emoticons" gajim
+    - python3 setup.py build
+    - appstream-util validate build/data/org.gajim.Gajim.appdata.xml
+  coverage: "/TOTAL.+ ([0-9]{1,3}%)/"
+  artifacts:
+    reports:
+      cobertura: coverage.xml
+  interruptible: true
+
+build-linux:
+  stage: build
+  rules:
+    - if: '$GAJIM_NIGHTLY_BUILD'
+    - if: '$CI_COMMIT_TAG'
+      when: manual
+  script:
+    - python3 ./scripts/ci/sdist.py
+
+  artifacts:
+    name: "gajim-$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA"
+    expire_in: 1 week
+    paths:
+      - dist/gajim-*.tar.gz
+
+build-windows:
+  stage: build
+  rules:
+    - if: '$GAJIM_NIGHTLY_BUILD'
+    - if: '$CI_COMMIT_TAG'
+  script:
+    - python3 ./win/ci/appveyor_build.py
+
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - build/Gajim-*.exe
+
+deploy-windows:
+  stage: deploy
+  needs: ['build-windows']
+  rules:
+    - if: '$GAJIM_NIGHTLY_BUILD'
+    - if: '$CI_COMMIT_TAG'
+      when: manual
+  variables:
+    DEPLOY_TYPE: "windows"
+  script:
+    - python3 ./scripts/ci/deploy.py build
+
+deploy-flatpak:
+  stage: deploy
+  needs: []
+  rules:
+    - if: '$CI_COMMIT_TAG'
+  when: manual
+  script:
+    - git clone https://github.com/flathub/org.gajim.Gajim.git
+    - cd org.gajim.Gajim
+    - git config user.email "ci@gajim.org"
+    - git config user.name "CI Deploy"
+    - mv ../flatpak/org.gajim.Gajim.yaml org.gajim.Gajim.yaml
+    - git diff
+    - git add org.gajim.Gajim.yaml
+    - git commit -m "$CI_COMMIT_TAG"
