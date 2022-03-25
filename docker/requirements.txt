@@ -12,3 +12,5 @@ precis-i18n
 pyOpenSSL
 types-pkg_resources
 requests
+sentry-sdk
+rich
