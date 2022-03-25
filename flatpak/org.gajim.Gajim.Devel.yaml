@@ -1,8 +1,15 @@
-app-id: org.gajim.Gajim
+app-id: org.gajim.Gajim.Devel
 runtime: org.gnome.Platform
 runtime-version: '42'
 sdk: org.gnome.Sdk
-command: gajim
+command: gajim-devel
+tags:
+  - devel
+  - development
+  - nightly
+rename-icon: org.gajim.Gajim
+rename-desktop-file: org.gajim.Gajim.desktop
+rename-appdata-file: org.gajim.Gajim.appdata.xml
 finish-args:
   - --share=ipc
   - --share=network
@@ -27,7 +34,7 @@ finish-args:
   - --env=GI_TYPELIB_PATH=/app/lib/girepository-1.0:/app/plugins/lib/girepository-1.0
 
 add-extensions:
-  org.gajim.Gajim.Plugin:
+  org.gajim.Gajim.Devel.Plugin:
     directory: plugins
     merge-dirs: lib;site-packages
     add-ld-path: lib
@@ -299,21 +306,26 @@ modules:
   - name: python3-nbxmpp
     buildsystem: simple
     build-commands:
-      - pip3 install nbxmpp-2.0.6-py3-none-any.whl
+      - pip3 install .
     sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-2.0.6-py3-none-any.whl
-        sha256: 6abbd51538d44bf6b004f140e1453f9a21f1fb53dfeed498a31519d2167e6b92
+      - type: git
+        url: https://dev.gajim.org/gajim/python-nbxmpp.git
 
   - name: gajim
     buildsystem: simple
     build-commands:
       - pip3 install .
       - touch /app/share/run-as-flatpak
+      - echo -e '#!/bin/sh\ngajim --gapplication-app-id=org.gajim.Gajim.Devel "$@"' > /app/bin/gajim-devel
+      - chmod 755 /app/bin/gajim-devel
     sources:
       - type: git
         url: https://dev.gajim.org/gajim/gajim.git
-        tag: gajim-1.3.3
-        commit: b5b2ad4aee92074184b181ec97fbf1f900d5f4fb
+      - type: shell
+        commands:
+          - sed -i "s+<id>org.gajim.Gajim</id>+<id>org.gajim.Gajim.Devel</id>+" data/org.gajim.Gajim.appdata.xml.in
+          - sed -i "s+<name>Gajim</name>+<name>Gajim (Nightly)</name>+" data/org.gajim.Gajim.appdata.xml.in
+          - sed -i "s+Exec=gajim+Exec=gajim-devel+" data/org.gajim.Gajim.desktop.in
+          - mv gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim{.Devel,}.svg
     post-install:
       - install -d /app/plugins
