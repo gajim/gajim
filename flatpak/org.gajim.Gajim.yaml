@@ -56,7 +56,7 @@ cleanup:
   - '*.la'
 
 modules:
-  - modules/libappindicator/libappindicator-gtk3-introspection-12.10.json
+  - shared-modules/libappindicator/libappindicator-gtk3-introspection-12.10.json
 
   - name: python3-pyparsing
     buildsystem: simple
@@ -240,15 +240,7 @@ modules:
         sha256: c69b9f633a0c03c1b84ba14c73b0ec132f6323056e675702c1a5f75f316e06fb
 
   # GSound dependency
-  - name: libcanberra
-    sources:
-      - type: archive
-        url: http://0pointer.de/lennart/projects/libcanberra/libcanberra-0.30.tar.xz
-        sha256: c2b671e67e0c288a69fc33dc1b6f1b534d07882c2aceed37004bf48c601afa72
-    config-opts:
-      - "--disable-alsa"
-      - "--disable-null"
-      - "--disable-oss"
+  - shared-modules/libcanberra/libcanberra.json
 
   - name: gsound
     buildsystem: meson
