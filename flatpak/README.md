@@ -64,7 +64,7 @@ In this example, we do a `git clone` of the repository, so you need to have `git
 Alternatively, you can also download the sources from our Gitlab via web browser.
 
 ```bash
-git clone https://dev.gajim.org/gajim/gajim.git ~/Gajim
+git clone --recurse-submodules https://dev.gajim.org/gajim/gajim.git ~/Gajim
 cd ~/Gajim
 ```
 
