@@ -51,6 +51,7 @@ def start_build() -> str:
         'accountName': ACCOUNT,
         'projectSlug': PROJECT_SLUG,
         'branch': BRANCH,
+        'commitId': os.environ['CI_COMMIT_SHA'],
         'environmentVariables': {
            'GAJIM_VERSION': get_gajim_version(),
         }
