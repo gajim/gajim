@@ -1,6 +1,6 @@
 import os
 import sys
-from ftplib import FTP_TLS, ftpcp
+from ftplib import FTP_TLS
 from pathlib import Path
 import functools
 from typing import Any

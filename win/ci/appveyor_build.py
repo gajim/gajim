@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-from typing import Iterator
-
 import os
 import requests
 import time
