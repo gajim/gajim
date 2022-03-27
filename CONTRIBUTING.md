@@ -16,6 +16,7 @@ A good article regarding [good commit messages](https://chris.beams.io/posts/git
 
 Every commit message must be prefixed with one of the following tags:
 
+- ci
 - feat
 - fix
 - perf
