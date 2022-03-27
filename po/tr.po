@@ -8,14 +8,16 @@ msgstr ""
 "Project-Id-Version: Gajim - A Jabber Instant Messager 0.13.10.2-dev\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-22 02:05+0000\n"
-"PO-Revision-Date: 2010-03-24 22:29+0100\n"
-"Last-Translator: Ferdi Kunzmann <shegman@tablatures.de>\n"
-"Language-Team: Turkish\n"
-"Language: \n"
+"PO-Revision-Date: 2022-01-13 21:17+0000\n"
+"Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
+"Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
+">\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.1.1\n"
 "X-Poedit-Bookmarks: -1,-1,66,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: gajim/chat_control_base.py:147 gajim/gtk/start_chat.py:643
@@ -4885,7 +4887,7 @@ msgstr "Üye"
 
 #: gajim/common/helpers.py:325
 msgid "is paying attention to the conversation"
-msgstr "sobete dikkat veriyor"
+msgstr "sohbete dikkat veriyor"
 
 #: gajim/common/helpers.py:327
 msgid "is doing something else"

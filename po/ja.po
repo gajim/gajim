@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-08 22:39+0200\n"
-"PO-Revision-Date: 2020-08-27 21:19+0000\n"
+"PO-Revision-Date: 2022-02-20 07:52+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
 "ja/>\n"
@@ -1049,11 +1049,10 @@ msgid "Really block this contact?"
 msgstr "本当にこの相手先を遮断しますか ?"
 
 #: gajim/chat_control.py:400 gajim/roster_window.py:2782
-#, fuzzy
 msgid ""
 "You will appear offline for this contact and you will not receive further "
 "messages."
-msgstr "メッセージを受け取りたい相手先の XMPP アドレス"
+msgstr "この相手先にはオフラインとみなされます。これ以上のメッセージを受け取りません。"
 
 #: gajim/chat_control.py:404 gajim/roster_window.py:2787
 msgid "_Report Spam"
@@ -1640,7 +1639,7 @@ msgstr "オブザーバー"
 
 #: gajim/roster_window.py:5164
 msgid "Observers can see your status, but you are not allowed to see theirs"
-msgstr ""
+msgstr "観測者はあなたの在席状況を見ることができますが、あなたが彼らの状況を見ることはできません"
 
 #: gajim/conversation_textview.py:63
 msgid "Untrusted"
@@ -5585,7 +5584,7 @@ msgstr "閉鎖の理由"
 
 #: gajim/data/gui/groupchat_control.ui:1694
 msgid "Where participants should go"
-msgstr ""
+msgstr "参加者が向かうべきは"
 
 #: gajim/data/gui/groupchat_control.ui:1735
 msgid "Enter a new name for this group chat"
@@ -7311,7 +7310,7 @@ msgstr "作者"
 
 #: gajim/data/gui/groupchat_info_scrolled.ui:151
 msgid "Discussion Logs"
-msgstr ""
+msgstr "議論の記録"
 
 #: gajim/data/gui/groupchat_info_scrolled.ui:230
 msgid "Group Chat Language"
