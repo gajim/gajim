@@ -109,7 +109,7 @@ def deploy_windows_release(ftp: FTP_TLS, filedir: Path) -> None:
 def deploy_linux_nightly(ftp: FTP_TLS, filedir: Path) -> None:
     ftp.cwd(LINUX_NIGHTLY_FOLDER)
     filepath = find_linux_tarball(filedir)
-    filename = f'gajim-{date.today().isoformat()}.tar.gz'
+    filename = f'gajim-{date.today().isoformat()}-test.tar.gz'
     upload_file(ftp, filepath, name=filename)
 
 
