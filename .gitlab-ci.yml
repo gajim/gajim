@@ -10,7 +10,15 @@ stages:
   - build
   - deploy
 
-pyright:
+test-other:
+  stage: test
+  script:
+    - codespell -I codespell.conf --skip="*__pycache__*,gajim/data/icons,gajim/data/sounds,gajim/data/emoticons" gajim
+    - python3 setup.py build
+    - appstream-util validate build/data/org.gajim.Gajim.appdata.xml
+  interruptible: true
+
+test-pyright:
   stage: test
   rules:
     - changes:
@@ -19,24 +27,28 @@ pyright:
     - pip3 install git+https://dev.gajim.org/gajim/python-nbxmpp.git
     - pip3 install git+https://github.com/pygobject/pygobject-stubs.git
     - npm install pyright
-    - python3 -V
     - python3 .ci/link-gtk.py
     - $(npm bin)/pyright --version
     - $(npm bin)/pyright
   interruptible: true
 
-code-quality:
+test-pylint:
   stage: test
+  rules:
+    - changes:
+      - "**/*.py"
   script:
-    - python3 -V
     - pip3 install -I git+https://dev.gajim.org/gajim/python-nbxmpp.git
     - .ci/pylint.sh --jobs=2 gajim
+  interruptible: true
+
+test-unittest:
+  stage: test
+  script:
+    - pip3 install -I git+https://dev.gajim.org/gajim/python-nbxmpp.git
     - coverage run --source=gajim -m unittest discover -s test -v
     - coverage report -mi
     - coverage xml -i
-    - codespell -I codespell.conf --skip="*__pycache__*,gajim/data/icons,gajim/data/sounds,gajim/data/emoticons" gajim
-    - python3 setup.py build
-    - appstream-util validate build/data/org.gajim.Gajim.appdata.xml
   coverage: "/TOTAL.+ ([0-9]{1,3}%)/"
   artifacts:
     reports:
