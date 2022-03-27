@@ -9,7 +9,7 @@ flatpak-builder \
     --disable-rofiles-fuse \
     --force-clean gajim-fp \
     --gpg-sign=9FDE1F4FA30E8019342B36279A569BF2B79EE905 \
-    --repo=/home/ftp/flatpak/ flatpak/org.gajim.Gajim.yaml &> /tmp/flatpak_build
+    --repo=/home/ftp/flatpak/ flatpak/org.gajim.Gajim.Devel.yaml &> /tmp/flatpak_build
 
 cd ../gajim-plugins
 
