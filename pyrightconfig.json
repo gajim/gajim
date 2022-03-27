@@ -4,7 +4,12 @@
     "typeCheckingMode": "strict",
     "reportImportCycles": "none",
     "reportImplicitStringConcatenation": "none",
+    "exclude": [
+        "**/__pycache__",
+        ".git"
+    ],
     "include": [
+        ".ci/*",
         "gajim/gajim.py",
         "gajim/common/application.py",
         "gajim/common/cert_store.py",

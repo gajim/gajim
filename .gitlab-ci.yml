@@ -45,7 +45,6 @@ build-linux:
   rules:
     - if: '$GAJIM_NIGHTLY_BUILD'
     - if: '$CI_COMMIT_TAG'
-      when: manual
   script:
     - python3 .ci/sdist.py
 
@@ -67,6 +66,18 @@ build-windows:
     expire_in: 1 day
     paths:
       - build/Gajim-*.exe
+
+deploy-linux:
+  stage: deploy
+  needs: ['build-linux']
+  rules:
+    - if: '$GAJIM_NIGHTLY_BUILD'
+    - if: '$CI_COMMIT_TAG'
+      when: manual
+  variables:
+    DEPLOY_TYPE: "linux"
+  script:
+    - python3 .ci/deploy.py sdist
 
 deploy-windows:
   stage: deploy
