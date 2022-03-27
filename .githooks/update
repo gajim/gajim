@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from __future__ import annotations
 
@@ -33,7 +33,12 @@ def get_commit_shas(start_ref: str, end_ref: str) -> List[str]:
 
 
 def enforce_message_rules(subject: str) -> None:
-    tag, subject = subject.split(': ', maxsplit=1)
+    try:
+        tag, subject = subject.split(': ', maxsplit=1)
+    except ValueError:
+        print('Unknown commit message tag:', subject)
+        sys.exit(1)
+
     if tag not in ALLOWED_TAGS:
         print('Unknown commit message tag:', tag)
         sys.exit(1)
