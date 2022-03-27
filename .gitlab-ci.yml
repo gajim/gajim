@@ -77,7 +77,7 @@ deploy-linux:
   variables:
     DEPLOY_TYPE: "linux"
   script:
-    - python3 .ci/deploy.py sdist
+    - python3 .ci/deploy.py dist
 
 deploy-windows:
   stage: deploy
