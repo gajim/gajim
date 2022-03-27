@@ -36,7 +36,7 @@ def get_gajim_version() -> str:
 
 def push_yaml_to_project() -> None:
     console.print('Push settings ...')
-    with open('./win/ci/appveyor.yml', 'r') as file:
+    with open('.ci/appveyor.yml', 'r') as file:
         yaml = file.read()
 
     req = requests.put(SETTINGS_API_URL, data=yaml, headers=HEADERS)
