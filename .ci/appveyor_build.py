@@ -85,19 +85,20 @@ def get_artifacts(build_id: str) -> None:
 
         console.print('Build status:', build['status'])
 
+    build_folder = Path.cwd() / 'build'
+    build_folder.mkdir()
+
     for job in build['jobs']:
-        download_job_artifacts(job['jobId'])
+        download_job_artifacts(job['jobId'], build_folder)
 
     console.print('All artifacts downloaded!')
 
 
-def download_job_artifacts(job_id: str) -> None:
+def download_job_artifacts(job_id: str, target_folder: Path) -> None:
     artifacts_api_url = f'{BASE_URL}/buildjobs/{job_id}/artifacts'
     req = requests.get(artifacts_api_url, headers=HEADERS)
     req.raise_for_status()
     response = req.json()
-
-    build_folder = Path.cwd() / 'build'
 
     for artifact in response:
         filename = artifact['fileName']
@@ -105,7 +106,7 @@ def download_job_artifacts(job_id: str) -> None:
         file_url = f'{artifacts_api_url}/{filename}'
         req = requests.get(file_url, headers=HEADERS)
         req.raise_for_status()
-        with open(build_folder / filename, 'wb') as file:
+        with open(target_folder / filename, 'wb') as file:
             file.write(req.content)
 
 
