@@ -1,91 +1,138 @@
 #!/usr/bin/env python3
 
+from __future__ import annotations
+
 import os
 import sys
 
 if sys.version_info < (3, 9):
     sys.exit('Gajim needs Python 3.9+')
 
-from setuptools import setup, find_packages
+import re
+import subprocess
+from pathlib import Path
+
+from setuptools import setup
 from setuptools import Command
 from setuptools.command.build_py import build_py as _build
 from setuptools.command.install import install as _install
 from distutils import log
-from distutils.util import newer
-from pathlib import Path
-
-pos = Path('po').glob('*.po')
-ALL_LINGUAS = sorted([x.stem for x in pos])
-MAN_FILES = ['gajim.1', 'gajim-remote.1']
-META_FILES = [('data/org.gajim.Gajim.desktop', 'share/applications', '--desktop'),
-              ('data/org.gajim.Gajim.appdata.xml', 'share/metainfo', '--xml')]
-cwd = Path(__file__).resolve().parent
-build_dir = cwd / 'build'
+from distutils.dep_util import newer
 
 
-def update_trans():
-    '''
-    Update translation files
-    '''
-    template = Path('po') / 'gajim.pot'
-    files = list(Path('gajim').rglob('*.py'))
-    files.extend(Path('gajim').rglob('*.ui'))
-    files.append(Path('data') / 'org.gajim.Gajim.desktop.in')
-    files.append(Path('data') / 'org.gajim.Gajim.appdata.xml.in')
-    cmd = 'xgettext -c# --from-code=utf-8 --keyword=Q_ -o %s %s' % (
-        template, ' '.join([str(f) for f in files]))
-    if os.system(cmd) != 0:
-        msg = f'ERROR: {template} could not be created!\n'
-        raise SystemExit(msg)
+MAN_FILES = [
+    'gajim.1',
+    'gajim-remote.1'
+]
+META_FILES = [
+    ('data/org.gajim.Gajim.desktop', 'share/applications', '--desktop'),
+    ('data/org.gajim.Gajim.appdata.xml', 'share/metainfo', '--xml')]
+TRANSLATABLE_FILES = [
+    'gajim/**/*.py',
+    'gajim/**/*.ui',
+    'data/org.gajim.Gajim.desktop.in',
+    'data/org.gajim.Gajim.appdata.xml.in',
+]
 
+TRANS_DIR = Path('po')
+TRANS_TEMPLATE = TRANS_DIR / 'gajim.pot'
+REPO_DIR = Path(__file__).resolve().parent
+BUILD_DIR = REPO_DIR / 'build'
+
+ALL_LINGUAS = sorted([lang.stem for lang in TRANS_DIR.glob('*.po')])
+
+
+def template_is_equal(old_template_path: Path, new_template: str) -> bool:
+    with open(old_template_path, 'r') as f:
+        old_template = f.read()
+
+    pattern = r'"POT-Creation-Date: .*\n"'
+
+    old_template = re.sub(pattern, '', old_template, count=1)
+    new_template = re.sub(pattern, '', new_template, count=1)
+
+    return old_template == new_template
+
+
+def update_translation_template() -> bool:
+    paths: list[Path] = []
+    for file_path in TRANSLATABLE_FILES:
+        paths += list(REPO_DIR.rglob(file_path))
+
+    cmd = [
+        'xgettext',
+        '-o', '-',
+        '-c#',
+        '--from-code=utf-8',
+        '--keyword=Q_',
+        '--no-location',
+        '--sort-output',
+        '--package-name=Gajim'
+    ]
+
+    for path in paths:
+        cmd.append(str(path))
+
+    result = subprocess.run(cmd,
+                            cwd=REPO_DIR,
+                            text=True,
+                            check=True,
+                            capture_output=True)
+
+    template = result.stdout
+
+    if (TRANS_TEMPLATE.exists() and
+            template_is_equal(TRANS_TEMPLATE, template)):
+        # No new strings were discovered
+        return False
+
+    with open(TRANS_TEMPLATE, 'w') as f:
+        f.write(template)
+    return True
+
+
+def update_translation_files() -> None:
+    for file in TRANS_DIR.glob('*.po'):
+        subprocess.run(['msgmerge',
+                        '-U',
+                        '--sort-output',
+                        str(file),
+                        TRANS_TEMPLATE],
+                       cwd=REPO_DIR,
+                       check=True)
+
+
+def build_translation() -> None:
     for lang in ALL_LINGUAS:
-        po_file = Path('po') / (lang + '.po')
-        cmd = f'msgmerge -U {po_file} {template}'
-        if os.system(cmd) != 0:
-            msg = 'ERROR: Updating language translation file failed.'
-            ask = msg + '\n Continue updating y/n [n] '
-            reply = input(ask)
-            if reply in ['n', 'N']:
-                raise SystemExit(msg)
-        log.info('Updating %s', po_file)
-
-
-def build_trans(build_cmd):
-    '''
-    Translate the language files into gajim.mo
-    '''
-    for lang in ALL_LINGUAS:
-        po_file = Path('po') / (lang + '.po')
-        mo_file = build_dir / 'mo' / lang / 'LC_MESSAGES' / 'gajim.mo'
+        po_file = TRANS_DIR / f'{lang}.po'
+        mo_file = BUILD_DIR / 'mo' / lang / 'LC_MESSAGES' / 'gajim.mo'
         mo_dir = mo_file.parent
         if not (mo_dir.is_dir() or mo_dir.is_symlink()):
             mo_dir.mkdir(parents=True)
 
-        if newer(po_file, mo_file):
-            cmd = f'msgfmt {po_file} -o {mo_file}'
-            if os.system(cmd) != 0:
-                mo_file.unlink()
-                msg = 'ERROR: Building language translation files failed.'
-                ask = msg + '\n Continue building y/n [n] '
-                reply = input(ask)
-                if reply in ['n', 'N']:
-                    raise SystemExit(msg)
+        if newer(str(po_file), str(mo_file)):
+            subprocess.run(['msgfmt',
+                            str(po_file),
+                            '-o',
+                            str(mo_file)],
+                           cwd=REPO_DIR,
+                           check=True)
+
             log.info('Compiling %s >> %s', po_file, mo_file)
 
 
-def install_trans(install_cmd):
-    data_files = install_cmd.distribution.data_files
+def install_trans(data_files) -> None:
     for lang in ALL_LINGUAS:
-        mo_file = str(build_dir / 'mo' / lang / 'LC_MESSAGES' / 'gajim.mo')
+        mo_file = str(BUILD_DIR / 'mo' / lang / 'LC_MESSAGES' / 'gajim.mo')
         target = f'share/locale/{lang}/LC_MESSAGES'
         data_files.append((target, [mo_file]))
 
 
-def build_man(build_cmd):
+def build_man() -> None:
     '''
     Compress Gajim manual files
     '''
-    newdir = build_dir / 'man'
+    newdir = BUILD_DIR / 'man'
     if not (newdir.is_dir() or newdir.is_symlink()):
         newdir.mkdir()
 
@@ -106,9 +153,8 @@ def build_man(build_cmd):
             log.info('Compiling %s >> %s', filename, man_file_gz)
 
 
-def install_man(install_cmd):
-    data_files = install_cmd.distribution.data_files
-    man_dir = build_dir / 'man'
+def install_man(data_files) -> None:
+    man_dir = BUILD_DIR / 'man'
     target = 'share/man/man1'
 
     for man in MAN_FILES:
@@ -116,11 +162,11 @@ def install_man(install_cmd):
         data_files.append((target, [man_file_gz]))
 
 
-def build_intl(build_cmd):
+def build_intl() -> None:
     '''
     Merge translation files into desktop and mime files
     '''
-    base = build_dir
+    base = BUILD_DIR
 
     for filename, _, option in META_FILES:
         newfile = base / filename
@@ -130,14 +176,12 @@ def build_intl(build_cmd):
         merge(Path(filename + '.in'), newfile, option)
 
 
-def install_intl(install_cmd):
-    data_files = install_cmd.distribution.data_files
-
+def install_intl(data_files) -> None:
     for filename, target, _ in META_FILES:
-        data_files.append((target, [str(build_dir / filename)]))
+        data_files.append((target, [str(BUILD_DIR / filename)]))
 
 
-def merge(in_file, out_file, option, po_dir='po'):
+def merge(in_file, out_file, option, po_dir: str = 'po') -> None:
     '''
     Run the msgfmt command.
     '''
@@ -157,24 +201,25 @@ def merge(in_file, out_file, option, po_dir='po'):
 
 class build(_build):
     def run(self):
-        build_trans(self)
+        build_translation()
         if sys.platform != 'win32':
-            build_man(self)
-            build_intl(self)
+            build_man()
+            build_intl()
         _build.run(self)
 
 
 class install(_install):
     def run(self):
-        install_trans(self)
+        data_files = self.distribution.data_files
+        install_trans(data_files)
         if sys.platform != 'win32':
-            install_man(self)
-            install_intl(self)
+            install_man(data_files)
+            install_intl(data_files)
         _install.run(self)
 
 
-class update_po(Command):
-    description = "Update po files"
+class update_translations(Command):
+    description = "Update translation"
     user_options = []
 
     def initialize_options(self):
@@ -184,7 +229,8 @@ class update_po(Command):
         pass
 
     def run(self):
-        update_trans()
+        update_translation_template()
+        update_translation_files()
 
 
 # only install subdirectories of data
@@ -201,7 +247,7 @@ setup(
     cmdclass={
         'build_py': build,
         'install': install,
-        'update_po': update_po,
+        'update_translations': update_translations,
     },
     entry_points={
         'console_scripts': [
