@@ -69,18 +69,19 @@ build-linux:
     paths:
       - dist/gajim-*.tar.gz
 
-build-windows:
+build-and-deploy-windows:
   stage: build
   rules:
     - if: '$GAJIM_NIGHTLY_BUILD'
     - if: '$CI_COMMIT_TAG'
   script:
     - python3 .ci/appveyor_build.py
+    - python3 .ci/deploy.py build
 
-  artifacts:
-    expire_in: 1 day
-    paths:
-      - build/Gajim-*.exe
+  # artifacts:
+  #   expire_in: 1 day
+  #   paths:
+  #     - build/Gajim-*.exe
 
 deploy-linux:
   stage: deploy
@@ -94,17 +95,17 @@ deploy-linux:
   script:
     - python3 .ci/deploy.py dist
 
-deploy-windows:
-  stage: deploy
-  needs: ['build-windows']
-  rules:
-    - if: '$GAJIM_NIGHTLY_BUILD'
-    - if: '$CI_COMMIT_TAG'
-      when: manual
-  variables:
-    DEPLOY_TYPE: "windows"
-  script:
-    - python3 .ci/deploy.py build
+# deploy-windows:
+#   stage: deploy
+#   needs: ['build-windows']
+#   rules:
+#     - if: '$GAJIM_NIGHTLY_BUILD'
+#     - if: '$CI_COMMIT_TAG'
+#       when: manual
+#   variables:
+#     DEPLOY_TYPE: "windows"
+#   script:
+#     - python3 .ci/deploy.py build
 
 deploy-flatpak:
   stage: deploy
