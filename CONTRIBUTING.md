@@ -4,14 +4,14 @@ If you want to create a fork and use an external account (Github, Google) drop u
 
 ## Versioning
 
-┌────── Major (Will not change unless we switch GTK version)
-│ ┌───── Minor (Changes when new features are introduced
-│ │ ┌───  Micro (Used for hotfixes and small changes)
-│ │ │ ┌─── Only used while developing
-│ │ │ │ 
-│ │ │ │ 
-│ │ │ │
-│ │ │ │
+┌────── Major (Will not change unless we switch GTK version)  
+│ ┌───── Minor (Changes when new features are introduced  
+│ │ ┌──── Micro (Used for hotfixes and small changes)  
+│ │ │ ┌─── Only used while developing  
+│ │ │ │  
+│ │ │ │  
+│ │ │ │  
+│ │ │ │  
 1.3.3-dev1
 
 ## Branches
