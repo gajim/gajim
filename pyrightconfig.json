@@ -4,6 +4,7 @@
     "typeCheckingMode": "strict",
     "reportImportCycles": "none",
     "reportImplicitStringConcatenation": "none",
+    "reportMissingModuleSource": "none",
     "exclude": [
         "**/__pycache__",
         ".git"
