@@ -212,4 +212,3 @@ class MusicTrackListener:
                    -1,
                    None,
                    proxy_call_finished)
-
