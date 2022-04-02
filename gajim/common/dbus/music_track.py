@@ -22,6 +22,7 @@
 from typing import Optional
 
 import logging
+import sys
 
 from gi.repository import Gio
 from gi.repository import GLib
@@ -49,6 +50,10 @@ class MusicTrackListener:
         self.players = {}
         self.connection = None
         self._current_tune = None
+        self._running = False
+
+        if sys.platform not in ('win32', 'darwin'):
+            self.start()
 
     def _emit(self, info: Optional[TuneData]) -> None:
         self._current_tune = info
@@ -59,6 +64,9 @@ class MusicTrackListener:
         return self._current_tune
 
     def start(self):
+        if self._running:
+            return
+
         proxy = Gio.DBusProxy.new_for_bus_sync(
             Gio.BusType.SESSION,
             Gio.DBusProxyFlags.NONE,
@@ -95,6 +103,8 @@ class MusicTrackListener:
 
         for name in list(self.players):
             self._get_playing_track(name)
+
+        self._running = True
 
     def stop(self):
         for name in list(self.players):
@@ -203,7 +213,3 @@ class MusicTrackListener:
                    None,
                    proxy_call_finished)
 
-
-def enable():
-    listener = MusicTrackListener.get()
-    listener.start()

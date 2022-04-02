@@ -44,11 +44,6 @@ class UserTune(BaseModule):
         self._current_tune: Optional[TuneData] = None
         self._contact_tunes: dict[JID, TuneData] = {}
 
-        self.register_events([
-            ('music-track-changed', ged.CORE, self._on_music_track_changed),
-            ('signed-in', ged.CORE, self._on_signed_in),
-        ])
-
     def get_current_tune(self) -> Optional[TuneData]:
         return self._current_tune
 
@@ -88,8 +83,13 @@ class UserTune(BaseModule):
 
     def set_enabled(self, enable):
         if enable:
+            self.register_events([
+                ('music-track-changed', ged.CORE, self._on_music_track_changed),
+                ('signed-in', ged.CORE, self._on_signed_in),
+            ])
             self._publish_current_tune()
         else:
+            self.unregister_events()
             self.set_tune(None, force=True)
 
     def _publish_current_tune(self):

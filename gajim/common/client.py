@@ -454,6 +454,9 @@ class Client(Observable):
         self.get_module('Annotations').request_annotations()
         self.get_module('Blocking').get_blocking_list()
 
+        if app.settings.get_account_setting(self._account, 'publish_tune'):
+            self.get_module('UserTune').set_enabled(True)
+
         self.notify('state-changed', SimpleClientState.CONNECTED)
 
         app.ged.raise_event(SignedIn(account=self._account, conn=self))
