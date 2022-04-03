@@ -28,6 +28,7 @@ import os
 import sys
 import locale
 import signal
+import warnings
 
 from gajim.common import exceptions
 from gajim.common.i18n import _
@@ -54,6 +55,16 @@ try:
 except Exception:
     print(_('D-Bus is not present on this machine or python module is missing'))
     sys.exit(1)
+
+if not sys.warnoptions:
+    warnings.simplefilter("default")
+
+warnings.warn(
+    "gajim-remote is deprecated, use Gajim's DBus interface instead. "
+    "For further information see "
+    "https://dev.gajim.org/gajim/gajim/-/wikis/help/GajimDBus.",
+     DeprecationWarning
+)
 
 OBJ_PATH = '/org/gajim/dbus/RemoteObject'
 INTERFACE = 'org.gajim.dbus.RemoteInterface'
