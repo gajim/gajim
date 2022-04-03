@@ -17,6 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Any
 from typing import Type
 from types import TracebackType
 
@@ -25,6 +28,7 @@ import json
 import traceback
 import threading
 import webbrowser
+import pprint
 from io import StringIO
 from urllib.parse import urlencode
 
@@ -221,12 +225,16 @@ class ExceptionDialog(Gtk.ApplicationWindow):
             dsn=endpoint,
             traces_sample_rate=0.0,
             max_breadcrumbs=0,
-            release=gajim.__version__)
+            release=gajim.__version__,
+            default_integrations=False,
+            shutdown_timeout=0,
+            auto_session_tracking=False,
+            before_send=self._before_send)
+
         sentry_sdk.set_context('os', {
             'name': get_os_name(),
             'version': get_os_version()})
-        sentry_sdk.set_context('app', {
-            'app_version': gajim.__version__})
+
         sentry_sdk.set_context('software', {
             'python-nbxmpp': nbxmpp.__version__,
             'GTK': get_gtk_version(),
@@ -234,9 +242,15 @@ class ExceptionDialog(Gtk.ApplicationWindow):
             'GLib': get_glib_version()})
 
     def _capture_exception(self) -> None:
-        sentry_sdk.set_context('user feedback', {
+        sentry_sdk.set_context('user_feedback', {
             'Feedback': self._ui.user_feedback_entry.get_text()})
         sentry_sdk.capture_exception(self._traceback_data)
+
+    def _before_send(self, event: dict[str, Any], hint: Any) -> dict[str, Any]:
+        # Remove the hostname of the machine
+        event['server_name'] = ''
+        pprint.pprint(event)
+        return event
 
 
 def init() -> None:
