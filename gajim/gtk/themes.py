@@ -326,7 +326,7 @@ class Themes(Gtk.ApplicationWindow):
 
             app.css_config.remove_theme(theme)
             self._update_preferences_window()
-            assert isinstance(store, Gtk.TreeStore)
+            assert isinstance(store, Gtk.ListStore)
             assert iter_ is not None
             store.remove(iter_)
 
