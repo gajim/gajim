@@ -16,7 +16,6 @@ finish-args:
   - --socket=fallback-x11
   - --socket=wayland
   - --socket=pulseaudio
-  - --system-talk-name=org.freedesktop.GeoClue2
   - --system-talk-name=org.freedesktop.login1
   - --talk-name=org.mpris.MediaPlayer2.*
   # Automatic status

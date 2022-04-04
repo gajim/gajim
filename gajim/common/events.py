@@ -25,6 +25,7 @@ from dataclasses import field
 
 from nbxmpp.protocol import JID
 from nbxmpp.structs import HTTPAuthData
+from nbxmpp.structs import LocationData
 from nbxmpp.structs import RosterItem
 from nbxmpp.structs import TuneData
 from nbxmpp.const import InviteType
@@ -134,6 +135,10 @@ class SignedIn(ApplicationEvent):
     account: str
     conn: 'Client'
 
+@dataclass
+class LocationChanged(ApplicationEvent):
+    name: str = field(init=False, default='location-changed')
+    info: Optional[LocationData]
 
 @dataclass
 class MusicTrackChanged(ApplicationEvent):

@@ -22,9 +22,13 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.structs import LocationData
 
+from gajim.common import app
+from gajim.common import ged
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import store_publish
+from gajim.common.dbus.location import LocationListener
+from gajim.common.helpers import event_filter
 
 
 class UserLocation(BaseModule):
@@ -62,7 +66,41 @@ class UserLocation(BaseModule):
         contact.notify('location-update', data)
 
     @store_publish
-    def set_location(self, location):
+    def set_location(self, location, force=False):
+        if not self._con.get_module('PEP').supported:
+            return
+
+        if not force and not app.settings.get_account_setting(
+                self._account, 'publish_location'):
+            return
+
+        if location == self._current_location:
+            return
+
         self._current_location = location
         self._log.info('Send %s', location)
         self._nbxmpp('Location').set_location(location)
+
+    def set_enabled(self, enable):
+        if enable:
+            self.register_events([
+                ('location-changed', ged.CORE, self._on_location_changed),
+                ('signed-in', ged.CORE, self._on_signed_in),
+            ])
+            self._publish_current_location()
+        else:
+            self.unregister_events()
+            self.set_location(None, force=True)
+
+    def _publish_current_location(self):
+        self.set_location(LocationListener.get().current_location)
+
+    @event_filter(['account'])
+    def _on_signed_in(self, _event):
+        self._publish_current_location()
+
+    def _on_location_changed(self, event):
+        if self._current_location == event.info:
+            return
+
+        self.set_location(event.info)

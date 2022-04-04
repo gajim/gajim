@@ -171,16 +171,8 @@ class Interface:
         app.storage.archive.insert_jid(event.conn.get_own_jid().bare)
         account = event.conn.name
 
-        pep_supported = event.conn.get_module('PEP').supported
-
         if event.conn.get_module('MAM').available:
             event.conn.get_module('MAM').request_archive_on_signin()
-
-        # enable location listener
-        if (pep_supported and app.is_installed('GEOCLUE') and
-                app.settings.get_account_setting(account, 'publish_location')):
-            pass
-            # location.enable()
 
         if ask_for_status_message(event.conn.status, signin=True):
             app.window.show_account_page(account)
