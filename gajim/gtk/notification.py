@@ -372,11 +372,13 @@ class Linux(NotificationBackend):
     def _get_avatar_for_notification(account: str,
                                      jid: Union[JID, str]) -> GdkPixbuf.Pixbuf:
         scale = get_monitor_scale_factor()
+        size = AvatarSize.NOTIFICATION
         client = app.get_client(account)
         contact = client.get_module('Contacts').get_contact(jid)
-        return contact.get_avatar(AvatarSize.NOTIFICATION,
-                                  scale,
-                                  pixbuf=True)
+        avatar_surface = contact.get_avatar(size, scale)
+        pixbuf = Gdk.pixbuf_get_from_surface(avatar_surface, 0, 0, size, size)
+        assert pixbuf is not None
+        return pixbuf
 
     def _make_icon(self, event: events.Notification) -> Gio.Icon:
         if (event.type == 'incoming-message' and app.desktop_env == 'gnome'):
