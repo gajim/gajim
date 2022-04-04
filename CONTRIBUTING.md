@@ -34,12 +34,12 @@ A good article regarding [good commit messages](https://chris.beams.io/posts/git
 
 Every commit message must be prefixed with one of the following tags:
 
-- ci
-- feat
-- fix
-- perf
-- refactor
-- chore
+- ci        (ci related changes)
+- feat      (functionality of the application was changed)
+- fix       (something was fixed)
+- perf      (performance related changes)
+- refactor  (code was changed, but the end user will not notice)
+- chore     (reoccuring tasks which need to be done)
 - other
 
 Further the first letter after the tag must be upper case
