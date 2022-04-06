@@ -3,7 +3,7 @@
 <component type="desktop-application">
   <id>org.gajim.Gajim</id>
   <metadata_license>CC-BY-SA-3.0</metadata_license>
-  <project_license>GPL-3.0</project_license>
+  <project_license>GPL-3.0-only</project_license>
   <name>Gajim</name>
   <summary>Fully-featured XMPP chat client</summary>
   <description>
