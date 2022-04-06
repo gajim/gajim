@@ -24,6 +24,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
+
 from nbxmpp import JID
 
 from gajim.common import app
@@ -122,18 +124,18 @@ class PrivateChatControl(ChatControl):
     # def _on_disconnected(self, event):
     #     if event.properties.jid != self.contact.jid:
     #         return
-    #     self.got_disconnected()
+    #     self.set_message_input_state(False)
 
-    def _on_user_left(self, *args):
-        self.got_disconnected()
+    def _on_user_left(self, *args: Any) -> None:
+        self.set_message_input_state(False)
 
-    def _on_user_joined(self, *args):
-        self.got_connected()
+    def _on_user_joined(self, *args: Any) -> None:
+        self.set_message_input_state(True)
 
-    def _on_room_joined(self, *args):
+    def _on_room_joined(self, *args: Any) -> None:
         if not self.contact.is_available:
             return
-        self.got_connected()
+        self.set_message_input_state(True)
 
     def send_message(self,
                      message: str,

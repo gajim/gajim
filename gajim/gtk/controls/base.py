@@ -1387,6 +1387,11 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             self._client.get_module('Chatstate').set_chatstate(
                 self.contact, Chatstate.INACTIVE)
 
+    def set_message_input_state(self, state: bool) -> None:
+        self.xml.formattings_button.set_sensitive(state)
+        self.msg_textview.set_sensitive(state)
+        self.msg_textview.set_editable(state)
+
     @property
     def is_chat_loaded(self) -> bool:
         return self._chat_loaded

@@ -662,8 +662,7 @@ class ChatControl(BaseControl):
                                  _client: Client,
                                  _signal_name: str,
                                  state: SimpleClientState):
-        self.msg_textview.set_sensitive(state.is_connected)
-        self.msg_textview.set_editable(state.is_connected)
+        self.set_message_input_state(state.is_connected)
 
         self._update_avatar()
         self.update_toolbar()

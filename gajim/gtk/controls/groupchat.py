@@ -744,17 +744,12 @@ class GroupchatControl(BaseControl):
         elif isinstance(event, events.PingError):
             self.add_info_message(event.error)
 
-    def _set_message_input_sensitive(self, state: bool) -> None:
-        self.xml.formattings_button.set_sensitive(state)
-        self.msg_textview.set_sensitive(state)
-        self.msg_textview.set_editable(state)
-
     def _set_control_active(self) -> None:
         contact = self.contact.get_self()
         if contact.role.is_visitor:
             self.xml.visitor_box.show()
         else:
-            self._set_message_input_sensitive(True)
+            self.set_message_input_state(True)
 
         self.roster.initial_draw()
         self.conversation_view.update_avatars()
@@ -762,7 +757,7 @@ class GroupchatControl(BaseControl):
         self.update_actions()
 
     def _set_control_inactive(self) -> None:
-        self._set_message_input_sensitive(False)
+        self.set_message_input_state(False)
         self.xml.visitor_box.hide()
 
         self.roster.enable_sort(False)
@@ -911,7 +906,7 @@ class GroupchatControl(BaseControl):
                 self.xml.visitor_box.show()
             else:
                 self.xml.visitor_box.hide()
-            self._set_message_input_sensitive(not user_contact.role.is_visitor)
+            self.set_message_input_state(not user_contact.role.is_visitor)
             message = _('** Your Role has been set to '
                         '{role}{actor}{reason}').format(role=role,
                                                         actor=actor,
