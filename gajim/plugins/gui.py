@@ -112,8 +112,6 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
                                  activatable=Column.ACTIVATABLE)
         self._ui.installed_plugins_treeview.append_column(col)
 
-        self.def_icon = load_icon_pixbuf('preferences-desktop')
-
         # connect signal for selection change
         selection = self._ui.installed_plugins_treeview.get_selection()
         selection.connect(
@@ -216,10 +214,11 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
     def _get_plugin_icon(self, plugin: GajimPlugin) -> GdkPixbuf.Pixbuf:
         icon_file = os.path.join(
             plugin.__path__, os.path.split(plugin.__path__)[1]) + '.png'
-        assert self.def_icon is not None
-        icon = self.def_icon
         if os.path.isfile(icon_file):
             icon = GdkPixbuf.Pixbuf.new_from_file_at_size(icon_file, 16, 16)
+        else:
+            icon = load_icon_pixbuf('applications-utilities')
+        assert icon is not None
         return icon
 
     def _installed_plugin_toggled(self,
