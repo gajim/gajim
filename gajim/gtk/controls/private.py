@@ -27,10 +27,14 @@
 from typing import Any
 
 from nbxmpp import JID
+from nbxmpp.structs import MessageProperties
+from nbxmpp.structs import PresenceProperties
 
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 
 from gajim.gui.controls.chat import ChatControl
 from gajim.command_system.implementation.hosts import PrivateChatCommands
@@ -78,11 +82,11 @@ class PrivateChatControl(ChatControl):
         return muc_data.nick
 
     def _on_user_nickname_changed(self,
-                                  _contact,
-                                  _signal_name,
-                                  _user_contact,
-                                  properties):
-
+                                  _user_contact: GroupchatParticipant,
+                                  _signal_name: str,
+                                  properties: PresenceProperties,
+                                  ) -> None:
+        # TODO
         nick = properties.muc_nickname
         new_nick = properties.muc_user.nick
         if properties.is_muc_self_presence:
@@ -97,13 +101,14 @@ class PrivateChatControl(ChatControl):
         self.update_ui()
 
     def _on_user_status_show_changed(self,
-                                     _contact,
-                                     _signal_name,
-                                     _user_contact,
-                                     properties):
+                                     _user_contact: GroupchatParticipant,
+                                     _signal_name: str,
+                                     properties: PresenceProperties
+                                     ) -> None:
         nick = properties.muc_nickname
         status = properties.status
-        status = '' if status is None else f' - {status}'
+        status = '' if not status else f' - {status}'
+        assert properties.show is not None
         show = helpers.get_uf_show(properties.show.value)
 
         if not self._room_contact.settings.get('print_status'):
@@ -126,13 +131,24 @@ class PrivateChatControl(ChatControl):
     #         return
     #     self.set_message_input_state(False)
 
-    def _on_user_left(self, *args: Any) -> None:
+    def _on_user_left(self,
+                      _user_contact: GroupchatParticipant,
+                      _signal_name: str,
+                      _properties: MessageProperties
+                      ) -> None:
         self.set_message_input_state(False)
 
-    def _on_user_joined(self, *args: Any) -> None:
+    def _on_user_joined(self,
+                        _user_contact: GroupchatParticipant,
+                        _signal_name: str,
+                        _properties: MessageProperties
+                        ) -> None:
         self.set_message_input_state(True)
 
-    def _on_room_joined(self, *args: Any) -> None:
+    def _on_room_joined(self,
+                        _contact: GroupchatContact,
+                        _signal_name: str
+                        ) -> None:
         if not self.contact.is_available:
             return
         self.set_message_input_state(True)
@@ -160,12 +176,13 @@ class PrivateChatControl(ChatControl):
                       'nick': self.contact.name})
             return
 
-        ChatControl.send_message(self, message,
+        ChatControl.send_message(self,
+                                 message,
                                  process_commands=process_commands,
                                  attention=attention)
 
     def update_ui(self) -> None:
         ChatControl.update_ui(self)
 
-    def _on_user_avatar_update(self, *args):
+    def _on_user_avatar_update(self, *args: Any) -> None:
         self._update_avatar()
