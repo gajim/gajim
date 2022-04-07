@@ -58,18 +58,15 @@ log = logging.getLogger('gajim.gui.statusicon')
 
 class StatusIcon:
     def __init__(self) -> None:
-        if app.is_display(Display.WAYLAND):
-            self._backend = NoneBackend()
-            log.info('Not supported on Wayland')
-            return
-
-        app.settings.connect_signal('trayicon', self._on_setting_changed)
-
         if self._can_use_libindicator():
+            app.settings.connect_signal('trayicon', self._on_setting_changed)
             self._backend = AppIndicator()
             log.info('Use AppIndicator3 backend')
-
+        elif app.is_display(Display.WAYLAND):
+            self._backend = NoneBackend()
+            log.info('libappindicator not found or disabled')
         else:
+            app.settings.connect_signal('trayicon', self._on_setting_changed)
             self._backend = GtkStatusIcon()
             log.info('Use GtkStatusIcon backend')
 
