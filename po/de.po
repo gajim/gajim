@@ -8,21 +8,22 @@
 # Nico Gulden <cilugnedon@gmx.de>, 2007, 2008, 2009, 2010.
 # Niklas Hambüchen <nh2@deditus.de>, 2009.
 # Dominik George <nik@naturalnet.de>, 2014.
+# Daniel Brötzmann <mailtrash@posteo.de>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-29 23:34+0200\n"
-"PO-Revision-Date: 2022-03-25 17:15+0000\n"
+"PO-Revision-Date: 2022-04-09 16:28+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
-"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/"
-">\n"
+"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
+"\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.1.1\n"
+"X-Generator: Weblate 4.11.2\n"
 
 msgid ""
 "\n"
@@ -825,7 +826,7 @@ msgid "Affiliations"
 msgstr "Gruppenzugehörigkeiten"
 
 msgid "All"
-msgstr "Allen"
+msgstr "Alle"
 
 msgid "All Accounts"
 msgstr "Alle Konten"
