@@ -43,7 +43,7 @@ from gajim.common.modules.base import BaseModule
 
 log = logging.getLogger('gajim.c.m.bytestream')
 
-def is_transfer_paused(file_props):
+def is_transfer_paused(file_props: FilesProp) -> bool:
     if file_props.stopped:
         return False
     if file_props.completed:
@@ -52,7 +52,7 @@ def is_transfer_paused(file_props):
         return False
     return file_props.paused
 
-def is_transfer_active(file_props):
+def is_transfer_active(file_props: FilesProp) -> bool:
     if file_props.stopped:
         return False
     if file_props.completed:
@@ -63,7 +63,7 @@ def is_transfer_active(file_props):
         return True
     return not file_props.paused
 
-def is_transfer_stopped(file_props):
+def is_transfer_stopped(file_props: FilesProp) -> bool:
     if not file_props:
         return True
     if file_props.error:
