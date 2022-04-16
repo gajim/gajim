@@ -16,8 +16,6 @@ from setuptools import setup
 from setuptools import Command
 from setuptools.command.build_py import build_py as _build
 from setuptools.command.install import install as _install
-from distutils import log
-from distutils.dep_util import newer
 
 
 MAN_FILES = [
@@ -40,6 +38,19 @@ REPO_DIR = Path(__file__).resolve().parent
 BUILD_DIR = REPO_DIR / 'build'
 
 ALL_LINGUAS = sorted([lang.stem for lang in TRANS_DIR.glob('*.po')])
+
+
+def newer(source: Path, target: Path) -> bool:
+    if not source.exists():
+        raise ValueError("file '%s' does not exist" % source.resolve())
+    if not target.exists():
+        return True
+
+    from stat import ST_MTIME
+    mtime1 = source.stat()[ST_MTIME]
+    mtime2 = target.stat()[ST_MTIME]
+
+    return mtime1 > mtime2
 
 
 def template_is_equal(old_template_path: Path, new_template: str) -> bool:
@@ -110,7 +121,7 @@ def build_translation() -> None:
         if not (mo_dir.is_dir() or mo_dir.is_symlink()):
             mo_dir.mkdir(parents=True)
 
-        if newer(str(po_file), str(mo_file)):
+        if newer(po_file, mo_file):
             subprocess.run(['msgfmt',
                             str(po_file),
                             '-o',
@@ -118,7 +129,7 @@ def build_translation() -> None:
                            cwd=REPO_DIR,
                            check=True)
 
-            log.info('Compiling %s >> %s', po_file, mo_file)
+            print('Compiling %s >> %s', po_file, mo_file)
 
 
 def install_trans(data_files) -> None:
@@ -150,7 +161,7 @@ def build_man() -> None:
         with open(filename, 'rb') as f_in,\
                 gzip.open(man_file_gz, 'wb') as f_out:
             f_out.writelines(f_in)
-            log.info('Compiling %s >> %s', filename, man_file_gz)
+            print('Compiling %s >> %s', filename, man_file_gz)
 
 
 def install_man(data_files) -> None:
@@ -196,7 +207,7 @@ def merge(in_file, out_file, option, po_dir: str = 'po') -> None:
             msg = ('ERROR: %s was not merged into the translation files!\n' %
                    out_file)
             raise SystemExit(msg)
-        log.info('Compiling %s >> %s', in_file, out_file)
+        print('Compiling %s >> %s', in_file, out_file)
 
 
 class build(_build):
