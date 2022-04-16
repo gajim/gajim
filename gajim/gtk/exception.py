@@ -229,7 +229,8 @@ class ExceptionDialog(Gtk.ApplicationWindow):
             default_integrations=False,
             shutdown_timeout=0,
             auto_session_tracking=False,
-            before_send=self._before_send)
+            before_send=self._before_send,
+            debug=False)
 
         sentry_sdk.set_context('os', {
             'name': get_os_name(),
@@ -247,6 +248,16 @@ class ExceptionDialog(Gtk.ApplicationWindow):
         sentry_sdk.capture_exception(self._traceback_data)
 
     def _before_send(self, event: dict[str, Any], hint: Any) -> dict[str, Any]:
+        # Make sure the exception value is set, GitLab needs it.
+        # The value is the arg which is passed to the Exception.
+        # e.g. raise Exception('Error')
+        try:
+            value = event['exception']['values'][0].get('value')
+            if not value:
+                event['exception']['values'][0]['value'] = 'Unknown'
+        except Exception:
+            pass
+
         # Remove the hostname of the machine
         event['server_name'] = ''
         pprint.pprint(event)
