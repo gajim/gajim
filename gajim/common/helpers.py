@@ -913,10 +913,10 @@ def delay_execution(milliseconds):
     return delay_execution_decorator
 
 
-def event_filter(filter_):
-    def event_filter_decorator(func):
+def event_filter(filter_: Any):
+    def event_filter_decorator(func: Any) -> Any:
         @wraps(func)
-        def func_wrapper(self, event, *args, **kwargs):
+        def func_wrapper(self, event: Any, *args: Any, **kwargs: Any) -> Any:
             for attr in filter_:
                 if '=' in attr:
                     attr1, attr2 = attr.split('=')
