@@ -14,7 +14,6 @@ data/org.gajim.Gajim.desktop
 libtool
 po/.intltool-merge-cache
 data/gajim-remote.desktop
-po/gajim.pot
 po/POTFILES
 po/stamp-it
 stamp-h1

@@ -1,0 +1,5991 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Gajim package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Gajim\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-03-30 21:15+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+msgid ""
+"\n"
+"    Ban user by a nick or a JID from a groupchat\n"
+"\n"
+"    If given nickname is not found it will be treated as a JID.\n"
+"    "
+msgstr ""
+
+msgid ""
+"\n"
+"    Set the current status\n"
+"\n"
+"    Status can be given as one of the following values:\n"
+"    online, away, chat, xa, dnd.\n"
+"    "
+msgstr ""
+
+msgid " (Video Call)"
+msgstr ""
+
+msgid " (Voice Call)"
+msgstr ""
+
+#, python-brace-format
+msgid " by {actor}"
+msgstr ""
+
+msgid "$S (Away: Idle more than $T min)"
+msgstr ""
+
+msgid "$S (Not available: Idle more than $T min)"
+msgstr ""
+
+msgid ""
+"$S will be replaced by current status message, $T by the 'autoawaytime' "
+"value."
+msgstr ""
+
+msgid ""
+"$S will be replaced by current status message, $T by the 'autoxatime' value."
+msgstr ""
+
+#, python-format
+msgid "%(contact)s declined your invitation to %(chat)s"
+msgstr ""
+
+#, python-format
+msgid "%(contact)s invited you to %(chat)s"
+msgstr ""
+
+#, python-format
+msgid "%(days)s days, %(hours)s hours"
+msgstr ""
+
+#, python-format
+msgid "%(minutes)s min %(seconds)s s"
+msgstr ""
+
+#, python-format
+msgid "%(name)s %(jid)s suggested me to add you to my contact list."
+msgstr ""
+
+#, python-format
+msgid ""
+"%(name)s (%(jid)s) would like to add some contacts to your contact list."
+msgstr ""
+
+#, python-format
+msgid ""
+"%(name)s (%(jid)s) would like to delete some contacts from your contact list."
+msgstr ""
+
+#, python-format
+msgid ""
+"%(name)s (%(jid)s) would like to modify some contacts in your contact list."
+msgstr ""
+
+#, python-format
+msgid "%(name)s cancelled the transfer (%(reason)s)"
+msgstr ""
+
+#, python-format
+msgid "%(nickname)s:"
+msgstr ""
+
+#, python-format
+msgid "%(owner_or_admin_or_member)s of this group chat"
+msgstr ""
+
+#, python-format
+msgid "%(progress)s %% (%(time)s remaining)"
+msgstr ""
+
+#, python-format
+msgid "%(received)s of %(max)s"
+msgstr ""
+
+#, python-format
+msgid "%(type)s encryption is active %(authenticated)s."
+msgstr ""
+
+#, python-format
+msgid "%i min ago"
+msgid_plural "%i mins ago"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
+msgid "%s (desynced)"
+msgstr ""
+
+#, python-format
+msgid "%s asks you to share your status"
+msgstr ""
+
+#, python-format
+msgid "%s group chats found"
+msgstr ""
+
+#, python-format
+msgid "%s has been invited to this group chat"
+msgstr ""
+
+#, python-format
+msgid "%s has joined"
+msgstr ""
+
+#, python-format
+msgid "%s has read up to this point"
+msgstr ""
+
+#, python-format
+msgid "%s is a file but it should be a directory"
+msgstr ""
+
+#, python-format
+msgid "%s is already in your contact list"
+msgstr ""
+
+#, python-format
+msgid "%s is calling"
+msgstr ""
+
+#, python-format
+msgid "%s is not a valid loglevel"
+msgstr ""
+
+#, python-format
+msgid "%s is not a valid tone"
+msgstr ""
+
+#, python-format
+msgid ""
+"%s is online with multiple devices.\n"
+"Choose the device you would like to send the file to."
+msgstr ""
+
+#, python-format
+msgid "%s not found"
+msgstr ""
+
+#, python-format
+msgid "%s s"
+msgstr ""
+
+#, python-format
+msgid "%s stopped sharing their status"
+msgstr ""
+
+#, python-format
+msgid "%s stopped the transfer"
+msgstr ""
+
+#, python-format
+msgid "%s wants to send you a file"
+msgstr ""
+
+#, python-format
+msgid "%s: Nothing found"
+msgstr ""
+
+#, python-format
+msgid ""
+"'%s' is not in your contact list.\n"
+"Please specify account for sending the message."
+msgstr ""
+
+#, python-format
+msgid "(%(filesize_unit)s/s)"
+msgstr ""
+
+#, python-brace-format
+msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "** Role of {nick} has been set to {role}{actor}{reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "** Your Role has been set to {role}{actor}{reason}"
+msgstr ""
+
+msgid "1 Day"
+msgstr ""
+
+msgid "1 Month"
+msgstr ""
+
+msgid "1 Week"
+msgstr ""
+
+msgid "1 Year"
+msgstr ""
+
+msgid "2 Days"
+msgstr ""
+
+msgid "2: System, 1: Enabled, 0: Disabled"
+msgstr ""
+
+msgid "3 Months"
+msgstr ""
+
+msgid "6 Months"
+msgstr ""
+
+msgid ": Affiliation changed"
+msgstr ""
+
+msgid ": Group chat configuration changed to members-only"
+msgstr ""
+
+msgid "<Description>"
+msgstr ""
+
+msgid "<Plugin Name>"
+msgstr ""
+
+msgid ""
+"<a href='https://conversations.im/compliance/'>conversations.im/compliance</"
+"a>"
+msgstr ""
+
+msgid ""
+"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
+msgstr ""
+
+#, python-format
+msgid ""
+"<b>\"%(title)s\"</b> by <i>%(artist)s</i>\n"
+"from <i>%(source)s</i>"
+msgstr ""
+
+msgid "<b>#</b>"
+msgstr ""
+
+#, python-format
+msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
+msgstr ""
+
+msgid "<b>*</b>"
+msgstr ""
+
+msgid "<b>0</b>"
+msgstr ""
+
+msgid "<b>1</b>"
+msgstr ""
+
+msgid "<b>2</b> abc"
+msgstr ""
+
+msgid "<b>3</b> def"
+msgstr ""
+
+msgid "<b>4</b> ghi"
+msgstr ""
+
+msgid "<b>5</b> jkl"
+msgstr ""
+
+msgid "<b>6</b> mno"
+msgstr ""
+
+msgid "<b>7</b> pqrs"
+msgstr ""
+
+msgid "<b>8</b> tuv"
+msgstr ""
+
+msgid "<b>9</b> wxyz"
+msgstr ""
+
+msgid ""
+"<b>XMPP Address</b>\n"
+"&lt;user@domain/resource&gt; (only that resource matches)\n"
+"&lt;user@domain&gt; (any resource matches)\n"
+"&lt;domain/resource&gt; (only that resource matches)\n"
+"&lt;domain&gt; (the domain itself matches, as does any user@domain or domain/"
+"resource)\n"
+msgstr ""
+
+msgid "<empty>"
+msgstr ""
+
+msgid "<error>"
+msgstr ""
+
+msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
+msgstr ""
+
+msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
+msgstr ""
+
+msgid "?Ask (for Subscription):None"
+msgstr ""
+
+msgid "?CLI:account"
+msgstr ""
+
+msgid "?CLI:message"
+msgstr ""
+
+msgid "?CLI:priority"
+msgstr ""
+
+msgid "?CLI:status"
+msgstr ""
+
+msgid "?Gender:None"
+msgstr ""
+
+msgid "?Gender:Other"
+msgstr ""
+
+msgid "?Group Chat Contact Affiliation:None"
+msgstr ""
+
+msgid "?Group Chat Contact Role:None"
+msgstr ""
+
+msgid "?Group chat address:family"
+msgstr ""
+
+msgid "?Group chat address:news"
+msgstr ""
+
+msgid "?Group chat address:repairs"
+msgstr ""
+
+msgid "?Group chat address:team"
+msgstr ""
+
+msgid "?Group chat address:vacation"
+msgstr ""
+
+msgid "?Group chat description:Local help group"
+msgstr ""
+
+msgid "?Group chat description:Local news and reports"
+msgstr ""
+
+msgid "?Group chat description:Project discussion"
+msgstr ""
+
+msgid "?Group chat description:Spring gathering"
+msgstr ""
+
+msgid "?Group chat description:Trip planning"
+msgstr ""
+
+msgid "?Group chat feature:Archiving"
+msgstr ""
+
+msgid "?Group chat feature:Hidden"
+msgstr ""
+
+msgid "?Group chat feature:Members Only"
+msgstr ""
+
+msgid "?Group chat feature:Moderated"
+msgstr ""
+
+msgid "?Group chat feature:No Password Required"
+msgstr ""
+
+msgid "?Group chat feature:Not Anonymous"
+msgstr ""
+
+msgid "?Group chat feature:Not Moderated"
+msgstr ""
+
+msgid "?Group chat feature:Open"
+msgstr ""
+
+msgid "?Group chat feature:Password Required"
+msgstr ""
+
+msgid "?Group chat feature:Persistent"
+msgstr ""
+
+msgid "?Group chat feature:Public"
+msgstr ""
+
+msgid "?Group chat feature:Semi-Anonymous"
+msgstr ""
+
+msgid "?Group chat feature:Temporary"
+msgstr ""
+
+msgid "?Group chat name:Family"
+msgstr ""
+
+msgid "?Group chat name:News"
+msgstr ""
+
+msgid "?Group chat name:Repairs"
+msgstr ""
+
+msgid "?Group chat name:Team"
+msgstr ""
+
+msgid "?Group chat name:Vacation"
+msgstr ""
+
+msgid "?Message state:Received"
+msgstr ""
+
+msgid "?Noun:Download"
+msgstr ""
+
+msgid "?Noun:Upload"
+msgstr ""
+
+msgid "?Subscription we already have:None"
+msgstr ""
+
+msgid "?config description:None"
+msgstr ""
+
+msgid "?config type:Boolean"
+msgstr ""
+
+msgid "?config type:Integer"
+msgstr ""
+
+msgid "?config type:Text"
+msgstr ""
+
+msgid "?config:Preference Name"
+msgstr ""
+
+msgid "?config:Type"
+msgstr ""
+
+msgid "?config:Value"
+msgstr ""
+
+msgid "?profile:Address"
+msgstr ""
+
+msgid "?profile:Full Name"
+msgstr ""
+
+msgid "?profile:Gender"
+msgstr ""
+
+msgid "?profile:IM Address"
+msgstr ""
+
+msgid "?profile:Note"
+msgstr ""
+
+msgid "?profile:Organisation"
+msgstr ""
+
+msgid "?profile:Public Encryption Key"
+msgstr ""
+
+msgid "?profile:Role"
+msgstr ""
+
+msgid "?profile:Title"
+msgstr ""
+
+msgid "?switch:Off"
+msgstr ""
+
+msgid "?switch:On"
+msgstr ""
+
+msgid "?transfer status:Aborted"
+msgstr ""
+
+msgid "?transfer status:Completed"
+msgstr ""
+
+msgid "?transfer status:Not started"
+msgstr ""
+
+msgid "?transfer status:Paused"
+msgstr ""
+
+msgid "?transfer status:Stalled"
+msgstr ""
+
+msgid "?transfer status:Status: "
+msgstr ""
+
+msgid "?transfer status:Transferred: "
+msgstr ""
+
+msgid "?transfer status:Transferring"
+msgstr ""
+
+msgid "?transfer type:Type: "
+msgstr ""
+
+msgid "?user status:Available"
+msgstr ""
+
+msgid "?user status:_Available"
+msgstr ""
+
+msgid "A Feature Comparison of Various Servers"
+msgstr ""
+
+msgid "A Group Chat needs at least one Owner"
+msgstr ""
+
+msgid ""
+"A file with this name already exists and you do not have permission to "
+"overwrite it."
+msgstr ""
+
+msgid "A fully-featured XMPP chat client"
+msgstr ""
+
+msgid "A list of active, completed and stopped file transfers"
+msgstr ""
+
+msgid ""
+"A list of words (semicolon separated) that will be highlighted in group "
+"chats."
+msgstr ""
+
+msgid "A new group chat has been created"
+msgstr ""
+
+msgid "A restart may be required for some settings to take effect"
+msgstr ""
+
+msgid "A setting not related to privacy has been changed"
+msgstr ""
+
+#, python-format
+msgid "ALSA: %s"
+msgstr ""
+
+msgid "API Preferences. Possible values: 'http', 'iq'"
+msgstr ""
+
+msgid "A_way"
+msgstr ""
+
+msgid "Abort"
+msgstr ""
+
+msgid "Abuse"
+msgstr ""
+
+msgid "Accept"
+msgstr ""
+
+msgid "Accept all Contact Requests"
+msgstr ""
+
+msgid "Account"
+msgstr ""
+
+#, python-format
+msgid "Account %s is still connected"
+msgstr ""
+
+msgid "Account Added"
+msgstr ""
+
+msgid "Account Name..."
+msgstr ""
+
+msgid "Account Removal Failed"
+msgstr ""
+
+msgid "Account Removed"
+msgstr ""
+
+msgid "Account Settings…"
+msgstr ""
+
+msgid "Account Wizard"
+msgstr ""
+
+msgid "Account disabled"
+msgstr ""
+
+msgid "Account has been added successfully"
+msgstr ""
+
+msgid "Account has to be connected"
+msgstr ""
+
+msgid "Account is being created"
+msgstr ""
+
+msgid ""
+"Account to which the XML will be sent; if not specified, XML will be sent to "
+"all accounts"
+msgstr ""
+
+#, python-format
+msgid "Account: %s"
+msgstr ""
+
+msgid "Accounts"
+msgstr ""
+
+msgid "Action when left-clicking a preview"
+msgstr ""
+
+msgid "Activated"
+msgstr ""
+
+msgid "Active"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Add Account"
+msgstr ""
+
+msgid "Add Contact"
+msgstr ""
+
+msgid "Add Entry"
+msgstr ""
+
+msgid "Add Files"
+msgstr ""
+
+msgid "Add Group…"
+msgstr ""
+
+msgid "Add Proxy"
+msgstr ""
+
+msgid "Add Setting"
+msgstr ""
+
+msgid "Add Workspace"
+msgstr ""
+
+msgid "Add _Contact…"
+msgstr ""
+
+msgid "Add a checkmark to received messages"
+msgstr ""
+
+msgid "Add a name and color for your account"
+msgstr ""
+
+msgid "Add a setting you would like to change"
+msgstr ""
+
+msgid "Add new Theme"
+msgstr ""
+
+msgid "Add new line"
+msgstr ""
+
+msgid "Add some details…"
+msgstr ""
+
+msgid "Add this certificate to the list of _trusted certificates"
+msgstr ""
+
+msgid "Add to Contact List…"
+msgstr ""
+
+#, python-format
+msgid "Added %d contact"
+msgid_plural "Added %d contacts"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Address"
+msgstr ""
+
+msgid "Address does not belong to a group chat server"
+msgstr ""
+
+msgid "Adhoc Group Chat"
+msgstr ""
+
+msgid "Adjust to Status"
+msgstr ""
+
+msgid "Adjust to status"
+msgstr ""
+
+msgid "Admin"
+msgstr ""
+
+msgid "Administration"
+msgstr ""
+
+msgid "Administrator"
+msgstr ""
+
+msgid "Administrators"
+msgstr ""
+
+msgid "Advanced"
+msgstr ""
+
+msgid "Advanced Configuration Editor (ACE)"
+msgstr ""
+
+msgid "Advanced Configuration Editor… "
+msgstr ""
+
+msgid "Advanced Settings"
+msgstr ""
+
+msgid "Advanced settings"
+msgstr ""
+
+msgid "Affiliation"
+msgstr ""
+
+msgid "Affiliations"
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "All Accounts"
+msgstr ""
+
+msgid "All Chat States"
+msgstr ""
+
+msgid "All chat and group chat windows will be closed."
+msgstr ""
+
+msgid "All files"
+msgstr ""
+
+msgid "All other group chat participants can see your XMPP address"
+msgstr ""
+
+msgid ""
+"Allow Gajim to send information about the operating system you are running."
+msgstr ""
+
+msgid "Allow Gajim to send your local time."
+msgstr ""
+
+msgid "Allow a participant to send you public or private messages"
+msgstr ""
+
+msgid "Allow certificate verification with POSH."
+msgstr ""
+
+msgid ""
+"Allow to hide the contact list window even if the notification area icon is "
+"not shown."
+msgstr ""
+
+msgid "Allowed File Size"
+msgstr ""
+
+msgid "Alternate venue (optional)..."
+msgstr ""
+
+msgid "Always"
+msgstr ""
+
+msgid "Always show icon"
+msgstr ""
+
+msgid "An Error Occurred"
+msgstr ""
+
+msgid "An entry with this XMPP Address already exists"
+msgstr ""
+
+msgid "An error occurred"
+msgstr ""
+
+msgid "An error occurred during account creation"
+msgstr ""
+
+msgid "An error occurred while exporting your messages"
+msgstr ""
+
+msgid "An error occurred while trying to change your password."
+msgstr ""
+
+msgid "Anonymous login not supported"
+msgstr ""
+
+msgid "Another process is using this file."
+msgstr ""
+
+msgid "Any participant is allowed to see your full XMPP Address"
+msgstr ""
+
+msgid "Anyone can join"
+msgstr ""
+
+msgid "Anyone can join this group chat"
+msgstr ""
+
+msgid "App Indicator Icon"
+msgstr ""
+
+msgid "Application verification failure"
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "Archive"
+msgstr ""
+
+msgid "Archive corrupted"
+msgstr ""
+
+msgid "Archive empty"
+msgstr ""
+
+msgid "Archive is malformed"
+msgstr ""
+
+msgid "Archiving Preferences"
+msgstr ""
+
+msgid "Archiving Preferences Error"
+msgstr ""
+
+msgid "Archiving Preferences Saved"
+msgstr ""
+
+#, python-format
+msgid "Archiving Preferences for %s"
+msgstr ""
+
+msgid "Are you sure you want to leave this group chat?"
+msgstr ""
+
+msgid ""
+"Are you sure you want to paste your clipboard's image into the chat window?"
+msgstr ""
+
+msgid "Are you sure you want to quit Gajim?"
+msgstr ""
+
+#, python-format
+msgid ""
+"Argument \"%(arg)s\" is not specified. \n"
+"Type \"%(basename)s help %(command)s\" for more info"
+msgstr ""
+
+msgid "Arguments:"
+msgstr ""
+
+msgid "Artists"
+msgstr ""
+
+msgid "Ask For Status Message on…"
+msgstr ""
+
+msgid "Ask before closing a group chat tab/window."
+msgstr ""
+
+msgid ""
+"Ask before closing tabbed chat window if there are chats that can lose data "
+"(chat, private chat)."
+msgstr ""
+
+msgid "Ask before pasting an image."
+msgstr ""
+
+msgid "Attention Message Received"
+msgstr ""
+
+msgid "Audio"
+msgstr ""
+
+msgid "Audio / Video"
+msgstr ""
+
+msgid "Audio File"
+msgstr ""
+
+msgid "Audio Input Device"
+msgstr ""
+
+msgid "Audio Output Device"
+msgstr ""
+
+msgid "Audio preview is not available"
+msgstr ""
+
+msgid "Audio test"
+msgstr ""
+
+msgid "Audio/Video"
+msgstr ""
+
+msgid "Authentication aborted"
+msgstr ""
+
+msgid "Authentication currently not possible"
+msgstr ""
+
+msgid "Authentication failed"
+msgstr ""
+
+msgid "Authentication mechanism not supported"
+msgstr ""
+
+msgid "Authentication mechanism too weak"
+msgstr ""
+
+msgid "Author"
+msgstr ""
+
+msgid "Authority and issuer serial number mismatch"
+msgstr ""
+
+msgid "Authority and subject key identifier mismatch"
+msgstr ""
+
+msgid "Authorization Request"
+msgstr ""
+
+msgid "Authors"
+msgstr ""
+
+msgid "Auto Away"
+msgstr ""
+
+msgid "Auto Away Settings"
+msgstr ""
+
+msgid "Auto Extended Away Settings"
+msgstr ""
+
+msgid "Auto Not Available"
+msgstr ""
+
+msgid "Autodetect"
+msgstr ""
+
+msgid "Autojoin"
+msgstr ""
+
+msgid "Automatic Status"
+msgstr ""
+
+msgid "Automatic Status Change"
+msgstr ""
+
+msgid "Automatic preview disabled"
+msgstr ""
+
+msgid "Automatic spell-checking for your messages"
+msgstr ""
+
+msgid "Automatically accept all contact requests"
+msgstr ""
+
+msgid "Available"
+msgstr ""
+
+msgid "Avatar file size too big"
+msgstr ""
+
+msgid "Away"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+msgid "Back in some minutes."
+msgstr ""
+
+msgid "Back soon"
+msgstr ""
+
+#, python-format
+msgid "Ban %s"
+msgstr ""
+
+msgid "Ban Participant"
+msgstr ""
+
+msgid "Ban…"
+msgstr ""
+
+msgid "Behaviour of Windows & Tabs"
+msgstr ""
+
+msgid "Birthday"
+msgstr ""
+
+msgid "Block"
+msgstr ""
+
+msgid "Block Contact"
+msgstr ""
+
+msgid "Block Contact…"
+msgstr ""
+
+msgid "Blocking List"
+msgstr ""
+
+#, python-format
+msgid "Blocking List for %s"
+msgstr ""
+
+msgid "Block…"
+msgstr ""
+
+msgid "Bold"
+msgstr ""
+
+msgid "Bookmarks"
+msgstr ""
+
+#, python-format
+msgid "Bookmarks for %s"
+msgstr ""
+
+msgid "Both"
+msgstr ""
+
+msgid "Browse"
+msgstr ""
+
+#, python-format
+msgid "Browsing %(address)s using account %(account)s"
+msgstr ""
+
+msgid "Busy"
+msgstr ""
+
+msgid "CRL has expired"
+msgstr ""
+
+msgid "CRL is not yet valid"
+msgstr ""
+
+msgid "CRL signature failure"
+msgstr ""
+
+#, python-format
+msgid "Cairo Version: %s"
+msgstr ""
+
+msgid "Call"
+msgstr ""
+
+msgid "Call Incoming"
+msgstr ""
+
+msgid "Call Outgoing"
+msgstr ""
+
+msgid "Calling (Video)…"
+msgstr ""
+
+msgid "Calling…"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Cancel the selected file transfer and remove incomplete files"
+msgstr ""
+
+#, python-format
+msgid "Cannot overwrite existing file '%s'"
+msgstr ""
+
+msgid "Certificate"
+msgstr ""
+
+msgid "Certificate Settings"
+msgstr ""
+
+msgid "Certificate Verification Failed"
+msgstr ""
+
+msgid "Certificate chain too long"
+msgstr ""
+
+#, python-format
+msgid ""
+"Certificate for \n"
+"%s"
+msgstr ""
+
+msgid "Certificate has expired"
+msgstr ""
+
+msgid "Certificate is not yet valid"
+msgstr ""
+
+msgid "Certificate not trusted"
+msgstr ""
+
+msgid "Certificate rejected"
+msgstr ""
+
+msgid "Certificate revoked"
+msgstr ""
+
+msgid "Certificate signature failure"
+msgstr ""
+
+msgid "Ch_ange"
+msgstr ""
+
+msgid "Ch_ange Subject"
+msgstr ""
+
+msgid "Change"
+msgstr ""
+
+msgid "Change Nickname"
+msgstr ""
+
+msgid "Change Nickname…"
+msgstr ""
+
+msgid "Change Password"
+msgstr ""
+
+msgid "Change Subject"
+msgstr ""
+
+msgid "Change status"
+msgstr ""
+
+msgid "Change status information"
+msgstr ""
+
+msgid "Change your account’s password, etc."
+msgstr ""
+
+msgid "Change your nickname in a group chat"
+msgstr ""
+
+msgid "Change your profile picture"
+msgstr ""
+
+msgid "Change your status to 'Away' after a certain amount of time"
+msgstr ""
+
+msgid "Change your status to 'Not Available' after a certain amount of time"
+msgstr ""
+
+#, python-format
+msgid "Changed by %s"
+msgstr ""
+
+msgid "Changes the priority of account(s)"
+msgstr ""
+
+msgid "Changes the status of account(s)"
+msgstr ""
+
+msgid "Changing Password..."
+msgstr ""
+
+msgid ""
+"Character to add after nickname when using nickname completion (tab) in "
+"group chat."
+msgstr ""
+
+msgid "Chat"
+msgstr ""
+
+msgid "Chat Banner: Background Color"
+msgstr ""
+
+msgid "Chat Banner: Foreground Color"
+msgstr ""
+
+msgid "Chat Banner: Text Font"
+msgstr ""
+
+msgid "Chat history"
+msgstr ""
+
+msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
+msgstr ""
+
+msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
+msgstr ""
+
+msgid ""
+"Chat state notifications that are sent to contacts. Possible values: 'all', "
+"'composing_only', 'disabled'"
+msgstr ""
+
+msgid ""
+"Chat state notifications that are sent to contacts. Possible values: all, "
+"composing_only, disabled"
+msgstr ""
+
+msgid ""
+"Chat state notifications that are sent to the group chat. Possible values: "
+"'all', 'composing_only' or 'disabled'."
+msgstr ""
+
+msgid ""
+"Chat state notifications that are sent to the group chat. Possible values: "
+"'all', 'composing_only', 'disabled'"
+msgstr ""
+
+msgid "Chats"
+msgstr ""
+
+msgid "Check For Updates"
+msgstr ""
+
+msgid "Check for Gajim updates periodically"
+msgstr ""
+
+msgid "Check if Gajim is running"
+msgstr ""
+
+msgid "Checking file…"
+msgstr ""
+
+msgid "Choose Archive"
+msgstr ""
+
+msgid "Choose Avatar…"
+msgstr ""
+
+msgid "Choose Device"
+msgstr ""
+
+msgid "Choose File to Send…"
+msgstr ""
+
+msgid "Choose History Export Directory"
+msgstr ""
+
+msgid "Choose Sound"
+msgstr ""
+
+msgid "Choose a File to Send…"
+msgstr ""
+
+msgid "Choose a color or select an image"
+msgstr ""
+
+msgid "Choose a group…"
+msgstr ""
+
+msgid "Choose encryption"
+msgstr ""
+
+msgid "Choose from various emoji styles"
+msgstr ""
+
+msgid "Choose the contact's groups"
+msgstr ""
+
+msgid "City"
+msgstr ""
+
+msgid "Clear"
+msgstr ""
+
+msgid "Clear File"
+msgstr ""
+
+msgid "Clear Sound"
+msgstr ""
+
+msgid "Clear chat window"
+msgstr ""
+
+msgid "Clear message entry"
+msgstr ""
+
+msgid "Clear the text window"
+msgstr ""
+
+msgid "Click on contacts you would like to invite to this group chat."
+msgstr ""
+
+msgid "Click to view Gajim's wiki page on how to install plugins in Flatpak."
+msgstr ""
+
+msgid "Click to view location"
+msgstr ""
+
+msgid "Client Certificate"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Close Search"
+msgstr ""
+
+msgid "Close chat"
+msgstr ""
+
+msgid "Code snippet"
+msgstr ""
+
+#, python-format
+msgid "Code snippet (%s)"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+msgid "Command List"
+msgstr ""
+
+msgid ""
+"Command disabled. This command can be enabled by setting "
+"'command_system_execute' to True in ACE (Advanced Configuration Editor)."
+msgstr ""
+
+msgid "Commands"
+msgstr ""
+
+msgid "Common Name (CN)"
+msgstr ""
+
+msgid "Common Name (CN): "
+msgstr ""
+
+msgid "Complete"
+msgstr ""
+
+msgid "Complete a command or a nickname"
+msgstr ""
+
+msgid "Completed"
+msgstr ""
+
+msgid "Composing Only"
+msgstr ""
+
+msgid "Computer"
+msgstr ""
+
+msgid "Configuration"
+msgstr ""
+
+msgid "Configure"
+msgstr ""
+
+#, python-format
+msgid "Configure %s"
+msgstr ""
+
+msgid "Configure logging system"
+msgstr ""
+
+msgid "Confirm Unencrypted Connection"
+msgstr ""
+
+msgid "Confirm new password..."
+msgstr ""
+
+msgid "Connect"
+msgstr ""
+
+msgid "Connect on startup"
+msgstr ""
+
+msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
+msgstr ""
+
+msgid "Connecting"
+msgstr ""
+
+msgid "Connecting to server..."
+msgstr ""
+
+msgid "Connecting..."
+msgstr ""
+
+msgid "Connection"
+msgstr ""
+
+msgid "Connection Error"
+msgstr ""
+
+msgid "Connection Settings"
+msgstr ""
+
+msgid "Connection failed"
+msgstr ""
+
+msgid "Connection not available"
+msgstr ""
+
+#, python-format
+msgid "Connection with %s could not be established."
+msgstr ""
+
+msgid "ConnectionType: START TLS, DIRECT TLS or PLAIN"
+msgstr ""
+
+msgid "Contact"
+msgstr ""
+
+msgid "Contact Addresses"
+msgstr ""
+
+msgid "Contact Connected"
+msgstr ""
+
+msgid "Contact Disconnected"
+msgstr ""
+
+msgid "Contact Information"
+msgstr ""
+
+msgid "Contact Infos"
+msgstr ""
+
+msgid "Contact List"
+msgstr ""
+
+msgid "Contact List Exchange"
+msgstr ""
+
+msgid "Contact List: Contact Background Color"
+msgstr ""
+
+msgid "Contact List: Contact Font"
+msgstr ""
+
+msgid "Contact List: Contact Foreground Color"
+msgstr ""
+
+msgid "Contact List: Group Background Color"
+msgstr ""
+
+msgid "Contact List: Group Font"
+msgstr ""
+
+msgid "Contact List: Group Foreground Color"
+msgstr ""
+
+msgid "Contact Unsubscribed"
+msgstr ""
+
+msgid "Contact information"
+msgstr ""
+
+msgid "Contact list"
+msgstr ""
+
+msgid "Contacts"
+msgstr ""
+
+msgid ""
+"Controls the window where new messages are placed.\n"
+"'always' - All messages are sent to a single window.\n"
+"'always_with_roster' - Like 'always' but the messages are in a single window "
+"along with the contact list.\n"
+"'never' - All messages get their own window.\n"
+"'peracct' - Messages for each account are sent to a specific window.\n"
+"'pertype' - Each message type (e.g. chats vs. group chats) is sent to a "
+"specific window."
+msgstr ""
+
+msgid "Conversation: Nickname Color (Incoming)"
+msgstr ""
+
+msgid "Conversation: Nickname Color (Outgoing)"
+msgstr ""
+
+msgid "Conversation: Text Color"
+msgstr ""
+
+msgid "Conversation: Text Font"
+msgstr ""
+
+msgid "Conversation: URL Color"
+msgstr ""
+
+msgid "Conversations"
+msgstr ""
+
+msgid "Conversations are not stored on the server"
+msgstr ""
+
+msgid "Conversations are stored on the server"
+msgstr ""
+
+msgid "Copy"
+msgstr ""
+
+msgid "Copy Address"
+msgstr ""
+
+msgid "Copy Certificate Information"
+msgstr ""
+
+msgid "Copy Email Address"
+msgstr ""
+
+msgid "Copy Link Location"
+msgstr ""
+
+msgid "Copy Location"
+msgstr ""
+
+msgid "Copy XMPP Address"
+msgstr ""
+
+msgid "Copy XMPP Address/Email"
+msgstr ""
+
+msgid "Copy code snippet"
+msgstr ""
+
+msgid "Copy info to clipboard"
+msgstr ""
+
+msgid "Could not Open File"
+msgstr ""
+
+msgid "Could not access file"
+msgstr ""
+
+msgid "Country"
+msgstr ""
+
+msgid "Create Account"
+msgstr ""
+
+msgid "Create Group Chat"
+msgstr ""
+
+msgid "Create New Account"
+msgstr ""
+
+msgid "Create _Group Chat…"
+msgstr ""
+
+msgid "Create new group chat"
+msgstr ""
+
+msgid "Create new post"
+msgstr ""
+
+msgid "Creating Account..."
+msgstr ""
+
+msgid "Credentials expired"
+msgstr ""
+
+msgid ""
+"Ctrl+Tab switches to the next composing tab when there are no tabs with "
+"messages pending."
+msgstr ""
+
+msgid "Current Developers"
+msgstr ""
+
+msgid "D-Bus is not present on this machine or python module is missing"
+msgstr ""
+
+msgid "Dark Theme"
+msgstr ""
+
+msgid "Date of the last update check"
+msgstr ""
+
+msgid "Deactivated"
+msgstr ""
+
+msgid "Debug Logging"
+msgstr ""
+
+msgid "Decline"
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid ""
+"Default Setting: Show a status message for all status changes (away, dnd, "
+"etc.) of users in a group chat."
+msgstr ""
+
+msgid ""
+"Default Setting: Show a status message for every join or leave in a group "
+"chat."
+msgstr ""
+
+msgid "Default Sync Threshold"
+msgstr ""
+
+msgid "Default device"
+msgstr ""
+
+msgid "Default for chats"
+msgstr ""
+
+msgid "Default for chats and private group chats"
+msgstr ""
+
+msgid "Default for group chats"
+msgstr ""
+
+msgid "Default for new group chats"
+msgstr ""
+
+msgid "Default for new public group chats"
+msgstr ""
+
+msgid ""
+"Define the position of avatars in the contact list. Can be 'left' or 'right'."
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Delete Theme"
+msgstr ""
+
+msgid "Deny"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Description: "
+msgstr ""
+
+msgid "Destroy Groupchat…"
+msgstr ""
+
+msgid "Destroy This Chat"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+#, python-format
+msgid "Device \"%s\""
+msgstr ""
+
+msgid "Devices"
+msgstr ""
+
+#, python-format
+msgid "Dictionary URL is missing a \"%s\""
+msgstr ""
+
+msgid "Direct Messages"
+msgstr ""
+
+msgid "Directory"
+msgstr ""
+
+#, python-format
+msgid "Directory '%s' is not writable"
+msgstr ""
+
+msgid "Disable Account"
+msgstr ""
+
+msgid "Disabled"
+msgstr ""
+
+msgid "Disabled in Preferences"
+msgstr ""
+
+msgid ""
+"Disclose information about media that is currently being played on your "
+"system."
+msgstr ""
+
+msgid "Disclose information about the operating system you currently use"
+msgstr ""
+
+msgid "Disclose the local system time of the device Gajim runs on"
+msgstr ""
+
+msgid "Disclose the time of your last activity"
+msgstr ""
+
+msgid "Disconnect from the network"
+msgstr ""
+
+msgid "Discover Services…"
+msgstr ""
+
+msgid "Discussion Logs"
+msgstr ""
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "Display names of all group chat participants"
+msgstr ""
+
+msgid "Display or change a group chat topic"
+msgstr ""
+
+msgid "Do not disturb"
+msgstr ""
+
+#, python-format
+msgid "Do you accept this request (account: %s)?"
+msgstr ""
+
+msgid "Do you accept this request?"
+msgstr ""
+
+#, python-format
+msgid "Do you really want to remove \"%s\"?"
+msgstr ""
+
+msgid ""
+"Do you really want to remove all chat messages from Gajim?\n"
+"Warning: This can’t be undone!\n"
+"Gajim will quit afterwards."
+msgstr ""
+
+msgid "Do you really want to remove your chat history for this chat?"
+msgstr ""
+
+msgid "Do you want to delete this theme?"
+msgstr ""
+
+msgid "Do you want to overwrite the currently installed version?"
+msgstr ""
+
+#, python-format
+msgid "Do you want to unregister your account on <b>%s</b> as well?"
+msgstr ""
+
+msgid "Don't show contact list window in the system taskbar."
+msgstr ""
+
+msgid "Don’t show main window in the system taskbar."
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+#, python-format
+msgid "Downloaded %s messages"
+msgstr ""
+
+msgid "Drop Files or Contacts"
+msgstr ""
+
+msgid "Drop files or contacts"
+msgstr ""
+
+msgid "Easily send pictures, videos or other files to friends and groups"
+msgstr ""
+
+msgid "Eating"
+msgstr ""
+
+msgid "Edit Name…"
+msgstr ""
+
+msgid "Edit Profile…"
+msgstr ""
+
+msgid "Edit workspace…"
+msgstr ""
+
+msgid "Edit…"
+msgstr ""
+
+#, python-format
+msgid ""
+"Either a custom URL with %%s in it (where %%s is the word/phrase) or "
+"'WIKTIONARY' (which means use Wikitionary)."
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Emoji"
+msgstr ""
+
+msgid "Emoji Theme"
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+msgid "Enabled"
+msgstr ""
+
+msgid ""
+"Enables Gajim to be location-aware, if the user decides to publish the "
+"device’s location"
+msgstr ""
+
+msgid ""
+"Enables Gajim to measure your computer's idle time in order to set your "
+"Status automatically"
+msgstr ""
+
+msgid "Enables Gajim to play sounds for various notifications"
+msgstr ""
+
+msgid "Enables Gajim to provide Audio and Video chats"
+msgstr ""
+
+msgid "Enables Gajim to provide a system notification area icon"
+msgstr ""
+
+msgid ""
+"Enables Gajim to request your router to forward ports for file transfers"
+msgstr ""
+
+msgid "Enables Gajim to spell check your messages while composing"
+msgstr ""
+
+msgid ""
+"Enables Gajim to store Passwords securely instead of storing them in "
+"plaintext"
+msgstr ""
+
+msgid "Enables libappindicator, an alternative tray icon provider"
+msgstr ""
+
+#, python-format
+msgid "Encrypted (%s)"
+msgstr ""
+
+msgid "Encrypted Certificate"
+msgstr ""
+
+msgid "Encrypting file…"
+msgstr ""
+
+msgid "Encryption required"
+msgstr ""
+
+msgid "End call"
+msgstr ""
+
+msgid "Enter Nickname"
+msgstr ""
+
+msgid "Enter Password"
+msgstr ""
+
+msgid "Enter new password..."
+msgstr ""
+
+msgid ""
+"Enter your nickname. This is how your name is displayed to your contacts."
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "Error during command execution!"
+msgstr ""
+
+#, python-format
+msgid "Error message: %s"
+msgstr ""
+
+msgid "Error opening file"
+msgstr ""
+
+msgid "Error received: {}"
+msgstr ""
+
+msgid "Error while Exporting"
+msgstr ""
+
+msgid "Error while processing image"
+msgstr ""
+
+msgid "Error while uploading avatar"
+msgstr ""
+
+msgid "Error!"
+msgstr ""
+
+#, python-format
+msgid "Error: %s"
+msgstr ""
+
+msgid "Error: Could not process image"
+msgstr ""
+
+#, python-format
+msgid "Error: cannot open %s for reading"
+msgstr ""
+
+msgid "Even more features via plugins"
+msgstr ""
+
+msgid "Event"
+msgstr ""
+
+msgid "Everyone"
+msgstr ""
+
+msgid "Everything"
+msgstr ""
+
+msgid "Execute"
+msgstr ""
+
+msgid "Execute Command…"
+msgstr ""
+
+msgid "Execute expression inside a shell, send output"
+msgstr ""
+
+msgid "Execute expression inside a shell, show output"
+msgstr ""
+
+msgid "Executing…"
+msgstr ""
+
+msgid "Expires on"
+msgstr ""
+
+msgid "Expires on: "
+msgstr ""
+
+msgid "Export"
+msgstr ""
+
+msgid "Export Chat History"
+msgstr ""
+
+msgid "Export Finished"
+msgstr ""
+
+msgid "Export your chat history from Gajim"
+msgstr ""
+
+msgid "Exporting History..."
+msgstr ""
+
+msgid "Exporting your messages..."
+msgstr ""
+
+msgid "Extended Address"
+msgstr ""
+
+msgid "Extended away"
+msgstr ""
+
+msgid "FA_Q (Online)"
+msgstr ""
+
+msgid "Failed to Configure Group Chat"
+msgstr ""
+
+msgid "Failed to Create Group Chat"
+msgstr ""
+
+msgid "Failed to Join Group Chat"
+msgstr ""
+
+msgid "Failed to generate avatar."
+msgstr ""
+
+msgid "Fake audio output"
+msgstr ""
+
+msgid "Feature is not available under Windows"
+msgstr ""
+
+msgid "Feature not available under Windows"
+msgstr ""
+
+msgid "Features"
+msgstr ""
+
+msgid "Features:"
+msgstr ""
+
+msgid "Feedback"
+msgstr ""
+
+msgid "Female"
+msgstr ""
+
+msgid "Fetching messages…"
+msgstr ""
+
+msgid "File"
+msgstr ""
+
+msgid "File Name: "
+msgstr ""
+
+msgid "File Offered"
+msgstr ""
+
+msgid "File Offered…"
+msgstr ""
+
+msgid "File Preview"
+msgstr ""
+
+msgid "File Transfer"
+msgstr ""
+
+msgid "File Transfer Cancelled"
+msgstr ""
+
+msgid "File Transfer Completed"
+msgstr ""
+
+msgid "File Transfer Error"
+msgstr ""
+
+msgid "File Transfer Failed"
+msgstr ""
+
+msgid "File Transfer Stopped"
+msgstr ""
+
+msgid "File Transfers"
+msgstr ""
+
+msgid "File Verification Failed"
+msgstr ""
+
+msgid "File corrupted during transfer"
+msgstr ""
+
+msgid "File does not exist"
+msgstr ""
+
+msgid "File error"
+msgstr ""
+
+msgid "File is empty"
+msgstr ""
+
+#, python-format
+msgid "File is too large, maximum allowed file size is: %s"
+msgstr ""
+
+msgid "File path"
+msgstr ""
+
+msgid "File size unknown"
+msgstr ""
+
+msgid "File transfer stopped"
+msgstr ""
+
+msgid "File transfers"
+msgstr ""
+
+msgid "File: "
+msgstr ""
+
+#, python-format
+msgid "File: %s"
+msgstr ""
+
+#, python-format
+msgid "Filename: %s"
+msgstr ""
+
+msgid "Files to send"
+msgstr ""
+
+msgid "Filetransfer Preference"
+msgstr ""
+
+msgid "Filter"
+msgstr ""
+
+msgid "Filter Chats"
+msgstr ""
+
+msgid "Filter Chats…"
+msgstr ""
+
+msgid "Fingerprints"
+msgstr ""
+
+#, python-format
+msgid ""
+"Finished synchronising chat history:\n"
+"%s messages downloaded"
+msgstr ""
+
+msgid "For example: \"Julia is now online\""
+msgstr ""
+
+msgid "Forbid a participant to send you public or private messages"
+msgstr ""
+
+msgid "Force Bookmark 2 usage"
+msgstr ""
+
+msgid "Forever"
+msgstr ""
+
+msgid "Forget this Group Chat"
+msgstr ""
+
+msgid "Format error in CRL's lastUpdate field"
+msgstr ""
+
+msgid "Format error in CRL's nextUpdate field"
+msgstr ""
+
+msgid "Format error in certificate's notAfter field"
+msgstr ""
+
+msgid "Format error in certificate's notBefore field"
+msgstr ""
+
+msgid "Format your message"
+msgstr ""
+
+msgid "Format your message…"
+msgstr ""
+
+msgid "Free for Chat"
+msgstr ""
+
+msgid "Free for chat"
+msgstr ""
+
+msgid "From"
+msgstr ""
+
+msgid "Full Name"
+msgstr ""
+
+#, python-format
+msgid "GLib Version: %s"
+msgstr ""
+
+#, python-format
+msgid "GTK Version: %s"
+msgstr ""
+
+msgid "Gajim"
+msgstr ""
+
+msgid "Gajim - Error"
+msgstr ""
+
+msgid "Gajim Team"
+msgstr ""
+
+msgid "Gajim Themes"
+msgstr ""
+
+msgid "Gajim Update"
+msgstr ""
+
+msgid ""
+"Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
+"with your friends or family, easily share pictures and thoughts or discuss "
+"the news with your groups."
+msgstr ""
+
+msgid "Gajim can not read this file"
+msgstr ""
+
+msgid ""
+"Gajim encountered an error.\n"
+"Please help us fixing this issue by sending this report."
+msgstr ""
+
+msgid ""
+"Gajim integrates well with your other devices: simply continue conversations "
+"on your mobile device."
+msgstr ""
+
+msgid "Gajim is fully synchronised with the archive."
+msgstr ""
+
+msgid ""
+"Gajim was not able to reach the server. Make sure your XMPP address is "
+"correct."
+msgstr ""
+
+msgid "Gajim will not try to join this group chat again"
+msgstr ""
+
+msgid "Gajim will now exit"
+msgstr ""
+
+msgid "Gajim: IPython Console"
+msgstr ""
+
+msgid "Gathering information…"
+msgstr ""
+
+msgid "Gender"
+msgstr ""
+
+msgid "General"
+msgstr ""
+
+msgid ""
+"Generate preview automatically in public group chats (may disclose your data)"
+msgstr ""
+
+msgid "Generate preview for any URLs containing images (may be unsafe)"
+msgstr ""
+
+msgid "Gets detailed info on a account"
+msgstr ""
+
+msgid "Gets detailed info on a contact"
+msgstr ""
+
+msgid "Global Group Chat Search"
+msgstr ""
+
+msgid "Global Proxy"
+msgstr ""
+
+msgid "Global Status"
+msgstr ""
+
+msgid "Go"
+msgstr ""
+
+msgid "Grant Voice"
+msgstr ""
+
+msgid "Group"
+msgstr ""
+
+msgid "Group Chat"
+msgstr ""
+
+msgid "Group Chat Invitation"
+msgstr ""
+
+msgid "Group Chat Invitation Declined"
+msgstr ""
+
+msgid "Group Chat Invitation Received"
+msgstr ""
+
+msgid "Group Chat Language"
+msgstr ""
+
+msgid "Group Chat Message Highlight"
+msgstr ""
+
+msgid "Group Chat Message Received"
+msgstr ""
+
+msgid "Group Chats"
+msgstr ""
+
+msgid "Group chat already exists"
+msgstr ""
+
+msgid "Group chat can be found via search"
+msgstr ""
+
+msgid "Group chat does not exist"
+msgstr ""
+
+msgid "Group chat has been destroyed"
+msgstr ""
+
+msgid "Group chat is closed"
+msgstr ""
+
+msgid "Group chat is now fully anonymous"
+msgstr ""
+
+msgid "Group chat is now non-anonymous"
+msgstr ""
+
+msgid "Group chat is now semi-anonymous"
+msgstr ""
+
+msgid "Group chat now does not show unavailable members"
+msgstr ""
+
+msgid "Group chat now shows unavailable members"
+msgstr ""
+
+msgid "Group chat support"
+msgstr ""
+
+msgid "Group multiple contacts from one friend to a single Meta-Contact"
+msgstr ""
+
+msgid "Groupchat Details"
+msgstr ""
+
+msgid "Groups"
+msgstr ""
+
+msgctxt "proxy configuration"
+msgid "HTTP"
+msgstr ""
+
+#, python-format
+msgid "HTTP (%(method)s) Authorization for %(url)s (ID: %(id)s)"
+msgstr ""
+
+msgid "HTTP Authorization Request"
+msgstr ""
+
+msgid "HTTPS Verification"
+msgstr ""
+
+#, python-format
+msgid "Hello, I am $name. %s"
+msgstr ""
+
+msgid "Helps to establish calls through firewalls"
+msgstr ""
+
+msgid "Hide icon"
+msgstr ""
+
+msgid "Hide this menu"
+msgstr ""
+
+msgid "Hides the banner in a 1:1 chat window."
+msgstr ""
+
+msgid "Hides the banner in a group chat window."
+msgstr ""
+
+msgid "Hides the group chat participants list in a group chat window."
+msgstr ""
+
+msgid "Home"
+msgstr ""
+
+msgid "Homepage"
+msgstr ""
+
+msgid "Hostname"
+msgstr ""
+
+msgid ""
+"How far back in time (minutes) chat history is restored. -1 means no limit."
+msgstr ""
+
+msgid "How far back should the chat history be synchronised?"
+msgstr ""
+
+msgid "How long Gajim should keep your chat history"
+msgstr ""
+
+msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
+msgstr ""
+
+msgid "I can see contact's online status"
+msgstr ""
+
+msgid "I would like to add you to my contact list."
+msgstr ""
+
+msgid "I would like to add you to my roster."
+msgstr ""
+
+msgid "I'm eating."
+msgstr ""
+
+msgid "I'm on the phone."
+msgstr ""
+
+msgid "I'm out enjoying life."
+msgstr ""
+
+msgid "I'm watching a movie."
+msgstr ""
+
+msgid "I'm working."
+msgstr ""
+
+msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
+msgstr ""
+
+msgid "IM Address"
+msgstr ""
+
+msgid "Id"
+msgstr ""
+
+msgid "Identified Error"
+msgstr ""
+
+msgid "Idle Time"
+msgstr ""
+
+#, python-format
+msgid "Idle since: %s"
+msgstr ""
+
+msgid "If checked, Gajim can be controlled remotely using gajim-remote."
+msgstr ""
+
+msgid ""
+"If disabled, Gajim will no longer print status messages in chats when a "
+"contact changes their status (and/or their status message)."
+msgstr ""
+
+msgid ""
+"If disabled, this account will be disabled and will not appear in the "
+"contact list window."
+msgstr ""
+
+msgid ""
+"If enabled, Gajim hides the contact list window when pressing the X button "
+"instead of minimizing into the notification area."
+msgstr ""
+
+msgid ""
+"If enabled, Gajim hides the main window when pressing the X button instead "
+"of minimizing into the notification area."
+msgstr ""
+
+msgid ""
+"If enabled, Gajim makes the window flash (the default behaviour in most "
+"Window Managers) when holding pending events."
+msgstr ""
+
+msgid ""
+"If enabled, Gajim quits when clicking the X button of your Window Manager. "
+"This setting is taken into account only if the notification area icon is "
+"used."
+msgstr ""
+
+msgid ""
+"If enabled, Gajim shows the group chat subject in the chat window when "
+"joining."
+msgstr ""
+
+msgid "If enabled, Gajim will add * and [n] in contact list window title."
+msgstr ""
+
+msgid "If enabled, Gajim will answer to message receipt requests."
+msgstr ""
+
+msgid ""
+"If enabled, Gajim will display an icon to show that sent messages have been "
+"received by your contact."
+msgstr ""
+
+msgid ""
+"If enabled, Gajim will display the status message (if not empty) underneath "
+"the contact name in the contact list window."
+msgstr ""
+
+msgid "If enabled, Gajim will execute XEP-0146 Commands."
+msgstr ""
+
+msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
+msgstr ""
+
+msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
+msgstr ""
+
+msgid ""
+"If enabled, Gajim will reopen chat windows that were opened last time Gajim "
+"was closed."
+msgstr ""
+
+msgid ""
+"If enabled, Gajim will save the contact list window position when hiding it, "
+"and restore it when showing the contact list window again."
+msgstr ""
+
+msgid ""
+"If enabled, Gajim will save the main window position when hiding it, and "
+"restore it when showing the window again."
+msgstr ""
+
+msgid ""
+"If enabled, Gajim will send your local IP so your contact can connect to "
+"your machine for file transfers."
+msgstr ""
+
+msgid ""
+"If enabled, Gajim will show both the number of online and total contacts in "
+"account rows as well as in group rows."
+msgstr ""
+
+msgid ""
+"If enabled, Gajim will test file transfer proxies on startup to be sure they "
+"work. Openfire's proxies are known to fail this test even if they work."
+msgstr ""
+
+msgid ""
+"If enabled, Gajim will try to use a STUN server when using Jingle. The one "
+"in 'stun_server' option, or the one given by the XMPP server."
+msgstr ""
+
+msgid ""
+"If enabled, Gajim will use the System's Keyring to store account passwords."
+msgstr ""
+
+msgid ""
+"If enabled, Gajim will use your IP and proxies defined in "
+"'file_transfer_proxies' option for file transfers."
+msgstr ""
+
+msgid ""
+"If enabled, a notification is created for every message in this group chat."
+msgstr ""
+
+msgid ""
+"If enabled, completion in group chats will be like a shell auto-completion."
+msgstr ""
+
+msgid ""
+"If enabled, contacts requesting authorization will be accepted automatically."
+msgstr ""
+
+msgid ""
+"If enabled, do not remove */_ . So *abc* will be bold but with * * not "
+"removed."
+msgstr ""
+
+msgid ""
+"If enabled, plugins will be activated on startup (this is saved when exiting "
+"Gajim). This option SHOULD NOT be used to (de)activate plugins. Use the "
+"plugin window instead."
+msgstr ""
+
+msgid "If enabled, pressing Esc closes a tab/window."
+msgstr ""
+
+msgid ""
+"If enabled, the contact row is colored according to the current chat state "
+"of the contact."
+msgstr ""
+
+msgid "If enabled, the last status will be restored."
+msgstr ""
+
+msgid ""
+"If enabled, the tab is colored according to the current chat state of the "
+"contact."
+msgstr ""
+
+msgid ""
+"If enabled, you will be able to set a negative priority to your account in "
+"the Accounts window. BE CAREFUL, when you are logged in with a negative "
+"priority, you will NOT receive any message from your server."
+msgstr ""
+
+msgid "If enabled, you will see your webcam's video stream as well."
+msgstr ""
+
+#, python-format
+msgid "If you close this window, you will leave '%s'."
+msgstr ""
+
+msgid ""
+"If you quit now, the file(s) being transferred will be lost.\n"
+"Do you still want to quit?"
+msgstr ""
+
+msgid "Ignore Unknown Contacts"
+msgstr ""
+
+msgid "Ignore everything from contacts not in your Roster"
+msgstr ""
+
+msgid "Image"
+msgstr ""
+
+msgid "Images"
+msgstr ""
+
+msgid "Import Contacts"
+msgstr ""
+
+msgid ""
+"In a chat, show the nickname at the beginning of a line only when it's not "
+"the same person talking as in the previous message."
+msgstr ""
+
+msgid ""
+"In order to write messages in this chat, you need to request voice first.\n"
+"A moderator will process your request."
+msgstr ""
+
+msgid "Incoming Call"
+msgstr ""
+
+msgid "Incoming Call (Video)"
+msgstr ""
+
+msgid "Information"
+msgstr ""
+
+msgid "Insecure Connection"
+msgstr ""
+
+msgid "Insert Emoji"
+msgstr ""
+
+msgid "Install <tt>sentry-sdk</tt> to make reporting issues easier."
+msgstr ""
+
+msgid "Install Plugin from ZIP-File"
+msgstr ""
+
+msgid "Install a keyring to store passwords on your system."
+msgstr ""
+
+msgid "Install from File…"
+msgstr ""
+
+msgid "Installation failed"
+msgstr ""
+
+msgid "Installed"
+msgstr ""
+
+msgid "Invalid Address"
+msgstr ""
+
+msgid "Invalid CA certificate"
+msgstr ""
+
+msgid "Invalid File"
+msgstr ""
+
+msgid "Invalid Name"
+msgstr ""
+
+msgid "Invalid Node"
+msgstr ""
+
+msgid "Invalid Server Name"
+msgstr ""
+
+msgid "Invalid XMPP Address"
+msgstr ""
+
+msgid "Invalid affiliation given"
+msgstr ""
+
+msgid "Invalid domain name"
+msgstr ""
+
+msgid "Invalid nickname"
+msgstr ""
+
+msgid "Invalid role given"
+msgstr ""
+
+msgid "Invite Contacts"
+msgstr ""
+
+msgid "Invite Contacts…"
+msgstr ""
+
+msgid "Invite New Contact"
+msgstr ""
+
+msgid "Invite a user to a group chat for a reason"
+msgstr ""
+
+msgid "Invite friends to group chats or join one"
+msgstr ""
+
+#, python-format
+msgid "Invite someone to your chat with %s"
+msgstr ""
+
+msgid "Invitees"
+msgstr ""
+
+msgid "Issued by"
+msgstr ""
+
+msgid "Issued by\n"
+msgstr ""
+
+msgid "Issued on"
+msgstr ""
+
+msgid "Issued on: "
+msgstr ""
+
+msgid "Issued to"
+msgstr ""
+
+msgid "Issued to\n"
+msgstr ""
+
+msgid "It is not possible to send empty files"
+msgstr ""
+
+msgid "It seems Gajim is not running. So you can't use gajim-remote."
+msgstr ""
+
+msgid "Italic"
+msgstr ""
+
+msgid "I’m eating."
+msgstr ""
+
+msgid "I’m out enjoying life."
+msgstr ""
+
+#, python-format
+msgid ""
+"I’m synchronizing my contacts from my account at \"%s\". Could you please "
+"add this address to your contact list?"
+msgstr ""
+
+msgid "I’m watching a movie."
+msgstr ""
+
+msgid "I’m working."
+msgstr ""
+
+msgid "JID"
+msgstr ""
+
+msgid "JPEG files"
+msgstr ""
+
+msgid "Join"
+msgstr ""
+
+msgid "Join Group Chat"
+msgstr ""
+
+msgid "Join Group Chat as…"
+msgstr ""
+
+msgid "Join Group Chat?"
+msgstr ""
+
+msgid "Join Groupchat"
+msgstr ""
+
+msgid "Join a group chat given by an XMPP Address"
+msgstr ""
+
+msgid "Joining…"
+msgstr ""
+
+msgid "Join…"
+msgstr ""
+
+msgid "Just now"
+msgstr ""
+
+msgid "Keep Chat History"
+msgstr ""
+
+msgid "Keep and manage all your chat history"
+msgstr ""
+
+msgid "Key usage does not include certificate signing"
+msgstr ""
+
+#, python-format
+msgid "Kick %s"
+msgstr ""
+
+msgid "Kick Participant"
+msgstr ""
+
+msgid "Kick user from group chat by nickname"
+msgstr ""
+
+msgid "Kick…"
+msgstr ""
+
+msgid "Label"
+msgstr ""
+
+msgid "Language used for spell checking."
+msgstr ""
+
+msgid "Last but not least"
+msgstr ""
+
+#, python-format
+msgid "Lat: %s Lon: %s"
+msgstr ""
+
+msgid "Leave Group Chat"
+msgstr ""
+
+msgid "Leave the group chat"
+msgstr ""
+
+msgid "Left Click Action"
+msgstr ""
+
+msgid "Let others know if you read up to this point"
+msgstr ""
+
+msgid "Limit must be an integer"
+msgstr ""
+
+msgid ""
+"List of XMPP Addresses (space separated) for which the chat window will be "
+"re-opened on next startup."
+msgstr ""
+
+msgid ""
+"List of XMPP Addresses (space separated) for which you do not want to store "
+"chat history. You can also add the name of an account to disable storing "
+"chat history for this account."
+msgstr ""
+
+msgid ""
+"List of rows (accounts and groups) that are collapsed (space separated)."
+msgstr ""
+
+msgid ""
+"List of send hosts (comma separated) in addition to local interfaces for "
+"file transfers (in case of address translation/port forwarding)."
+msgstr ""
+
+msgid "Listing of Servers"
+msgstr ""
+
+msgid "Lists all contacts in the contact list, one for each line"
+msgstr ""
+
+msgid "Live Preview"
+msgstr ""
+
+msgid "Load Image"
+msgstr ""
+
+msgid "Loading Avatar Failed"
+msgstr ""
+
+msgid "Loading avatar image failed"
+msgstr ""
+
+msgid "Loading…"
+msgstr ""
+
+msgid "Local System Time"
+msgstr ""
+
+msgid "Local Time"
+msgstr ""
+
+msgid "Location"
+msgstr ""
+
+#, python-format
+msgid "Location at Lat: %s Lon: %s"
+msgstr ""
+
+msgid "Location detection"
+msgstr ""
+
+msgid "Location:"
+msgstr ""
+
+msgid "Log In"
+msgstr ""
+
+msgid "Log in with your credentials"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "Login Settings"
+msgstr ""
+
+msgid "Look it up in _Dictionary"
+msgstr ""
+
+msgid ""
+"Lookup things on Wikipedia, dictionaries or other search engines directly "
+"from the chat window"
+msgstr ""
+
+msgid "Machine is going to sleep"
+msgstr ""
+
+msgid "Make Admin"
+msgstr ""
+
+msgid "Make Member"
+msgstr ""
+
+msgid "Make Owner"
+msgstr ""
+
+msgid "Make your profile visible for everyone or just for your contacts."
+msgstr ""
+
+msgid "Male"
+msgstr ""
+
+msgid "Manage"
+msgstr ""
+
+msgid "Manage Proxies"
+msgstr ""
+
+msgid "Manage Proxies..."
+msgstr ""
+
+msgid "Manage Sounds"
+msgstr ""
+
+msgid "Manually set the hostname for the server"
+msgstr ""
+
+msgid "Mark as Read"
+msgstr ""
+
+msgid "Mark as read"
+msgstr ""
+
+msgid "Maximum file size for preview generation"
+msgstr ""
+
+msgid ""
+"Maximum history in days we request from a private group chat archive. 0: As "
+"much as possible."
+msgstr ""
+
+msgid ""
+"Maximum history in days we request from a public group chat archive. 0: As "
+"much as possible."
+msgstr ""
+
+msgid ""
+"Maximum number of lines that are printed in conversations. Oldest lines are "
+"cleared."
+msgstr ""
+
+msgid "Me"
+msgstr ""
+
+msgid "Media Playback"
+msgstr ""
+
+msgid "Member"
+msgstr ""
+
+msgid "Members"
+msgstr ""
+
+msgid "Mention: Message Background Color"
+msgstr ""
+
+msgid "Message"
+msgstr ""
+
+msgid "Message Correction: Background Color"
+msgstr ""
+
+msgid "Message Receipts (✔)"
+msgstr ""
+
+msgid "Message Received"
+msgstr ""
+
+msgid "Message Sent"
+msgstr ""
+
+msgid "Message composition"
+msgstr ""
+
+#, python-format
+msgid ""
+"Message corrected. Original message:\n"
+"%s"
+msgstr ""
+
+msgid "Message that is sent to contacts you want to add."
+msgstr ""
+
+msgid "Messages are archived on the server"
+msgstr ""
+
+msgid ""
+"Messages will only be available for reading them later if storing chat "
+"history is enabled and if the contact is in your contact list."
+msgstr ""
+
+msgid "Microphone & Camera"
+msgstr ""
+
+msgid "Minutes until your status gets changed"
+msgstr ""
+
+msgid "Miscellaneous"
+msgstr ""
+
+msgid "Missing argument \"contact_jid\""
+msgstr ""
+
+msgid "Missing arguments"
+msgstr ""
+
+msgid "Missing dependencies for Audio/Video"
+msgstr ""
+
+msgid "Moderation"
+msgstr ""
+
+msgid "Moderator"
+msgstr ""
+
+msgid "Moderators"
+msgstr ""
+
+msgid "Modify"
+msgstr ""
+
+msgid "Modify Gateway…"
+msgstr ""
+
+msgid "Move Chat"
+msgstr ""
+
+msgid "Movie"
+msgstr ""
+
+msgid "Must be a port number"
+msgstr ""
+
+msgid "Mute Sounds"
+msgstr ""
+
+msgid "My Workspace"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Name <b>default</b> is not allowed"
+msgstr ""
+
+msgid "Name of the account"
+msgstr ""
+
+msgid "Needs gspell to be installed"
+msgstr ""
+
+msgid "Never"
+msgstr ""
+
+msgid "Never miss a message, keep all your chat clients synchronized"
+msgstr ""
+
+msgid "New Contact"
+msgstr ""
+
+msgid "New Group"
+msgstr ""
+
+msgid "New Message"
+msgstr ""
+
+msgid "New Search"
+msgstr ""
+
+#, python-format
+msgid "New message from %s"
+msgstr ""
+
+msgid "Next"
+msgstr ""
+
+msgid "Next sent messages"
+msgstr ""
+
+msgid "Nickname"
+msgstr ""
+
+msgid "Nickname not found"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "No Connection Available"
+msgstr ""
+
+msgid "No File Transfer available"
+msgstr ""
+
+msgid "No Notifications"
+msgstr ""
+
+msgid "No Proxy"
+msgstr ""
+
+msgid "No Results Found"
+msgstr ""
+
+msgid "No Sync"
+msgstr ""
+
+msgid "No Threshold"
+msgstr ""
+
+msgid "No additional requirements"
+msgstr ""
+
+msgid "No commands available"
+msgstr ""
+
+msgid "No contact addresses published for this server."
+msgstr ""
+
+msgid ""
+"No contacts found\n"
+"You can also type an XMPP address"
+msgstr ""
+
+msgid ""
+"No contacts left.\n"
+"You can also type an XMPP address."
+msgstr ""
+
+msgid "No devices online"
+msgstr ""
+
+msgid "No info available"
+msgstr ""
+
+msgid "No open voice chats with the contact"
+msgstr ""
+
+msgid "No proxy used"
+msgstr ""
+
+msgid "No results"
+msgstr ""
+
+msgid "No results found"
+msgstr ""
+
+msgid "No updates available"
+msgstr ""
+
+msgid "Node"
+msgstr ""
+
+msgid "Not Available"
+msgstr ""
+
+msgid "Not Connected"
+msgstr ""
+
+msgid "Not available"
+msgstr ""
+
+msgid "Not encrypted"
+msgstr ""
+
+msgid "Note to myself"
+msgstr ""
+
+msgid "Note: Anonymous accounts are not possible on all servers"
+msgstr ""
+
+msgid "Note: Chat history is disabled for this account."
+msgstr ""
+
+msgid "Note: Chat history is disabled for this contact."
+msgstr ""
+
+msgid "Notes"
+msgstr ""
+
+msgid "Notification Area Icon"
+msgstr ""
+
+msgid "Notification Sounds"
+msgstr ""
+
+msgid "Notifications"
+msgstr ""
+
+msgid "Notifications When Away"
+msgstr ""
+
+msgid "Notify of events in the notification area."
+msgstr ""
+
+msgid "Notify on all Messages"
+msgstr ""
+
+msgid "OK"
+msgstr ""
+
+msgid "Offline"
+msgstr ""
+
+msgid "Offline - disconnect"
+msgstr ""
+
+msgid "One Month"
+msgstr ""
+
+msgid "One Year"
+msgstr ""
+
+msgid "Online"
+msgstr ""
+
+msgid "Online Status"
+msgstr ""
+
+msgid "Only Admins and Owners can modify the affiliation"
+msgstr ""
+
+msgid "Only moderators can see your XMPP address"
+msgstr ""
+
+msgid "Only show for pending events"
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "Open Email Composer"
+msgstr ""
+
+msgid "Open Folder"
+msgstr ""
+
+msgid "Open IPython shell"
+msgstr ""
+
+msgid "Open Link in Browser"
+msgstr ""
+
+msgid "Open Link in _Browser"
+msgstr ""
+
+msgid "Open _Folder"
+msgstr ""
+
+msgid "Open a private chat window with a specified participant"
+msgstr ""
+
+msgid ""
+"Open a private chat window with a specified participant and send him a "
+"message"
+msgstr ""
+
+msgid "Open as _Link"
+msgstr ""
+
+msgid "Open folder"
+msgstr ""
+
+msgid "Open search bar"
+msgstr ""
+
+msgid "Operating System"
+msgstr ""
+
+msgid "Optionally fix Jingle output video framerate. Example: 10/1 or 25/2."
+msgstr ""
+
+msgid "Optionally resize Jingle output video. Example: 320x240."
+msgstr ""
+
+msgid "Organisation"
+msgstr ""
+
+msgid "Organization (O)"
+msgstr ""
+
+msgid "Organization (O): "
+msgstr ""
+
+msgid "Organizational Unit (OU)"
+msgstr ""
+
+msgid "Organizational Unit (OU): "
+msgstr ""
+
+msgid "Organize your chats with tabs"
+msgstr ""
+
+msgid "Others"
+msgstr ""
+
+msgid "Out"
+msgstr ""
+
+msgid "Out of memory"
+msgstr ""
+
+msgid "Outcasts"
+msgstr ""
+
+msgid "Overwrite Plugin?"
+msgstr ""
+
+msgid "Owner"
+msgstr ""
+
+msgid "Owners"
+msgstr ""
+
+msgid "PEP Configuration"
+msgstr ""
+
+#, python-format
+msgid "PEP Service Configuration (%s)"
+msgstr ""
+
+#, python-format
+msgid ""
+"PEP node %(node)s was not removed:\n"
+"%(message)s"
+msgstr ""
+
+msgid "PEP node was not removed"
+msgstr ""
+
+msgid "PKCS12 Files"
+msgstr ""
+
+msgid "PNG files"
+msgstr ""
+
+msgid "Pa_use/Resume"
+msgstr ""
+
+msgid "Participant"
+msgstr ""
+
+msgid "Participants"
+msgstr ""
+
+msgid "Participants entering this group chat are allowed to send messages"
+msgstr ""
+
+msgid ""
+"Participants entering this group chat need to request permission to send "
+"messages"
+msgstr ""
+
+msgid "Pass_word"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Password Change Failed"
+msgstr ""
+
+msgid "Password Changed"
+msgstr ""
+
+msgid "Password Required"
+msgstr ""
+
+msgid "Passwords do not match"
+msgstr ""
+
+msgid "Past Developers"
+msgstr ""
+
+msgid "Paste Image"
+msgstr ""
+
+msgid "Paste Last Input"
+msgstr ""
+
+msgid "Paste as quote"
+msgstr ""
+
+msgid "Path length constraint exceeded"
+msgstr ""
+
+msgid "Pause or resume file transfer"
+msgstr ""
+
+msgid "Pending Event"
+msgstr ""
+
+msgid "Personal notes about this contact"
+msgstr ""
+
+msgid "Phone"
+msgstr ""
+
+msgid "Phone No."
+msgstr ""
+
+msgid "Picture and Name"
+msgstr ""
+
+msgid "Pin Chat"
+msgstr ""
+
+msgid "Ping?"
+msgstr ""
+
+#, python-format
+msgid "Ping? (%s)"
+msgstr ""
+
+msgid "Pinned"
+msgstr ""
+
+msgid "Pipewire"
+msgstr ""
+
+msgid "Pl_ugins"
+msgstr ""
+
+msgid "Place the contact list on the right in single window mode"
+msgstr ""
+
+msgid "Play Sound"
+msgstr ""
+
+msgid "Play Sounds"
+msgstr ""
+
+msgid "Play sound even when being busy."
+msgstr ""
+
+msgid "Play sounds even when you are Away, Busy, etc."
+msgstr ""
+
+msgid "Play sounds to notify about events"
+msgstr ""
+
+msgid "Please choose an account"
+msgstr ""
+
+msgid "Please enter an XMPP address"
+msgstr ""
+
+msgid "Please enter your credentials or Sign Up"
+msgstr ""
+
+msgid "Please enter your new password."
+msgstr ""
+
+#, python-format
+msgid ""
+"Please enter your password for\n"
+"%(jid)s\n"
+"(Account: %(account)s)"
+msgstr ""
+
+#, python-format
+msgid "Please make sure you are connected with '%s'."
+msgstr ""
+
+msgid ""
+"Please select one of your accounts.\n"
+"Gajim will export all messages from the selected account to a directory of "
+"your choice."
+msgstr ""
+
+msgid "Please use these settings with caution!"
+msgstr ""
+
+msgid "Please use yyyy-mm-dd"
+msgstr ""
+
+msgid ""
+"Plug-in description should be displayed here. This text will be erased "
+"during PluginsWindow initialization."
+msgstr ""
+
+msgid "Plugin"
+msgstr ""
+
+msgid "Plugin Settings"
+msgstr ""
+
+msgid "Plugin already exists"
+msgstr ""
+
+msgid "Plugin failed"
+msgstr ""
+
+msgid "Plugin manager"
+msgstr ""
+
+msgid "Plugins"
+msgstr ""
+
+#, python-format
+msgid "Pong! (%(nick)s %(delay)s s.)"
+msgstr ""
+
+#, python-format
+msgid "Pong! (%s seconds)"
+msgstr ""
+
+msgid "Port"
+msgstr ""
+
+msgid "Port must be a number between 0 and 65535"
+msgstr ""
+
+msgid "Post Office Box"
+msgstr ""
+
+msgid "Postal Code"
+msgstr ""
+
+msgid "Prefer direct messages in private group chats "
+msgstr ""
+
+msgid "Preferences"
+msgstr ""
+
+msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
+msgstr ""
+
+msgid ""
+"Preferred file transfer mechanism for file drag&drop on a chat window. Can "
+"be 'httpupload' (default) or 'jingle'."
+msgstr ""
+
+msgid "Presence description:"
+msgstr ""
+
+msgid "Presets"
+msgstr ""
+
+msgid "Preview Size"
+msgstr ""
+
+msgid "Preview all Image URLs"
+msgstr ""
+
+msgid "Preview in Public Group Chats"
+msgstr ""
+
+msgid "Preview new messages in notification popup?"
+msgstr ""
+
+msgid "Previous"
+msgstr ""
+
+msgid "Previously sent message"
+msgstr ""
+
+msgid "Print XML stanzas and other debug information"
+msgstr ""
+
+msgid "Prints a list of registered accounts"
+msgstr ""
+
+msgid "Priority"
+msgstr ""
+
+msgid ""
+"Priority will change automatically according to your status. Priorities are "
+"defined in 'autopriority_*' options."
+msgstr ""
+
+msgid "Privacy"
+msgstr ""
+
+msgid "Private"
+msgstr ""
+
+msgid "Profile"
+msgstr ""
+
+msgid "Progress"
+msgstr ""
+
+msgid "Prox_y"
+msgstr ""
+
+msgid "Proxy"
+msgstr ""
+
+msgid "Proxy Host"
+msgstr ""
+
+msgid "Proxy Type"
+msgstr ""
+
+msgid ""
+"Proxy used for all outgoing connections if the account does not have a "
+"specific proxy configured."
+msgstr ""
+
+msgid "Proxy, custom hostname and port"
+msgstr ""
+
+msgid "Public"
+msgstr ""
+
+#, python-format
+msgid "Pulse: %s"
+msgstr ""
+
+msgid "Purge Chat History…"
+msgstr ""
+
+msgid "Purge all Chat History"
+msgstr ""
+
+#, python-format
+msgid "PyGObject Version: %s"
+msgstr ""
+
+msgid "Quit Gajim"
+msgstr ""
+
+msgid "Quit Gajim on Close"
+msgstr ""
+
+msgid "Quit when closing Gajim’s window"
+msgstr ""
+
+msgid "Quote next message"
+msgstr ""
+
+msgid "Quote previous message"
+msgstr ""
+
+msgid "Quote…"
+msgstr ""
+
+msgid "Re-Login"
+msgstr ""
+
+msgid "Re-Login now?"
+msgstr ""
+
+msgid "Re_gister"
+msgstr ""
+
+msgid "Read _Wikipedia Article"
+msgstr ""
+
+msgid "Really block this contact?"
+msgstr ""
+
+msgid "Reason"
+msgstr ""
+
+msgid "Reason (optional)"
+msgstr ""
+
+msgid "Reason (optional)..."
+msgstr ""
+
+msgid "Reason for destruction"
+msgstr ""
+
+#, python-format
+msgid "Reason: %s"
+msgstr ""
+
+msgid "Recent history"
+msgstr ""
+
+msgid "Recipient: "
+msgstr ""
+
+#, python-format
+msgid "Recipient: %s"
+msgstr ""
+
+msgid "Recognize your account by color"
+msgstr ""
+
+msgid "Redirect"
+msgstr ""
+
+msgid "Register"
+msgstr ""
+
+msgid "Register on the Website"
+msgstr ""
+
+msgid "Registration failed"
+msgstr ""
+
+msgid "Registration successful"
+msgstr ""
+
+msgid "Reject file transfer"
+msgstr ""
+
+msgid "Remember Last Status"
+msgstr ""
+
+msgid "Remote server not found"
+msgstr ""
+
+msgid "Remote server timeout"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "Remove Account"
+msgstr ""
+
+msgid "Remove Chat History"
+msgstr ""
+
+msgid "Remove Chat History?"
+msgstr ""
+
+msgid "Remove Contact"
+msgstr ""
+
+msgid "Remove Files"
+msgstr ""
+
+msgid "Remove Group"
+msgstr ""
+
+msgid "Remove Group..."
+msgstr ""
+
+msgid "Remove History…"
+msgstr ""
+
+msgid "Remove Notification"
+msgstr ""
+
+msgid "Remove Proxy"
+msgstr ""
+
+msgid "Remove Setting"
+msgstr ""
+
+msgid "Remove Theme"
+msgstr ""
+
+msgid "Remove Transport"
+msgstr ""
+
+msgid "Remove Workspace"
+msgstr ""
+
+msgid "Remove completed, cancelled and failed file transfers from the list"
+msgstr ""
+
+msgid "Remove contact from contact list"
+msgstr ""
+
+msgid "Remove this workspace"
+msgstr ""
+
+msgid "Remove your profile picture"
+msgstr ""
+
+#, python-format
+msgid "Removed %d contact"
+msgid_plural "Removed %d contacts"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Removes contact from contact list"
+msgstr ""
+
+msgid "Remove…"
+msgstr ""
+
+msgid "Removing Account..."
+msgstr ""
+
+msgid "Render XHTML styles (colors, etc.) of incoming messages"
+msgstr ""
+
+msgid "Report"
+msgstr ""
+
+msgid "Request Search Form"
+msgstr ""
+
+msgid "Request Voice"
+msgstr ""
+
+msgid "Request contact information (Tune, Location)"
+msgstr ""
+
+msgid "Request to see this contact's online status"
+msgstr ""
+
+msgid "Requesting Command List"
+msgstr ""
+
+msgid "Requesting HTTP File Upload Slot…"
+msgstr ""
+
+msgid "Required"
+msgstr ""
+
+msgid "Requires: Gspell"
+msgstr ""
+
+msgid "Requires: geoclue"
+msgstr ""
+
+msgid ""
+"Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
+"base, gstreamer1.0-plugins-ugly, gstreamer1.0-libav, and gstreamer1.0-gtk3"
+msgstr ""
+
+msgid "Requires: gir1.2-gupnpigd-1.0"
+msgstr ""
+
+msgid "Requires: gnome-keyring or kwallet"
+msgstr ""
+
+msgid "Requires: gsound"
+msgstr ""
+
+msgid "Requires: libappindicator3"
+msgstr ""
+
+msgid "Requires: libxss"
+msgstr ""
+
+msgid "Reserved Name"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset Hints"
+msgstr ""
+
+msgid "Reset all chats to the current default value"
+msgstr ""
+
+msgid "Reset all group chats to the current default value"
+msgstr ""
+
+msgid "Resets value to default"
+msgstr ""
+
+msgid "Resource"
+msgstr ""
+
+msgid "Restore last state"
+msgstr ""
+
+msgid "Restore status and status message of your last session"
+msgstr ""
+
+msgid "Retract"
+msgstr ""
+
+msgid "Retract Message"
+msgstr ""
+
+msgid "Retract message?"
+msgstr ""
+
+msgid "Returns current status (the global one unless account is specified)"
+msgstr ""
+
+msgid ""
+"Returns current status message (the global one unless account is specified)"
+msgstr ""
+
+msgid "Returns number of unread messages"
+msgstr ""
+
+msgid "Revoke Member"
+msgstr ""
+
+msgid "Revoke Voice"
+msgstr ""
+
+msgid "Role"
+msgstr ""
+
+msgid "SHA-1"
+msgstr ""
+
+msgid "SHA-1:"
+msgstr ""
+
+msgid "SHA-256"
+msgstr ""
+
+msgid "SHA-256:"
+msgstr ""
+
+msgctxt "proxy configuration"
+msgid "SOCKS5"
+msgstr ""
+
+msgid "SSL Certificate Verification Error"
+msgstr ""
+
+msgid "SSL certificate error"
+msgstr ""
+
+msgid "STUN Server"
+msgstr ""
+
+msgid "STUN Server Settings"
+msgstr ""
+
+msgid "STUN server to use when using Jingle"
+msgstr ""
+
+msgid "SVG files"
+msgstr ""
+
+msgid "Sales"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Save As…"
+msgstr ""
+
+msgid "Save File as…"
+msgstr ""
+
+msgid "Save Password"
+msgstr ""
+
+msgid "Save as..."
+msgstr ""
+
+msgid "Save conversations for all contacts"
+msgstr ""
+
+msgid "Saving Avatar Failed"
+msgstr ""
+
+msgid "Saving avatar image failed"
+msgstr ""
+
+msgid "Say hi to your new contact…"
+msgstr ""
+
+#, python-format
+msgid "Scanning %(current)d / %(total)d ..."
+msgstr ""
+
+msgid "Scroll down"
+msgstr ""
+
+msgid "Scroll up"
+msgstr ""
+
+msgid "Scroll up to load more chat history…"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Search Result"
+msgstr ""
+
+msgid "Search all Chats"
+msgstr ""
+
+msgid "Search contacts..."
+msgstr ""
+
+msgid "Search for Gajim updates periodically?"
+msgstr ""
+
+msgid ""
+"Search for group chats globally\n"
+"(press Return to start search)"
+msgstr ""
+
+msgid "Search…"
+msgstr ""
+
+msgid "Secure Password Storage"
+msgstr ""
+
+msgid "Security"
+msgstr ""
+
+msgid "Security Labels"
+msgstr ""
+
+msgid "Security Warning"
+msgstr ""
+
+msgid "Select Account"
+msgstr ""
+
+msgid "Select File…"
+msgstr ""
+
+msgid "Select an audio output (e.g. speakers, headphones)"
+msgstr ""
+
+msgid "Select an emoji"
+msgstr ""
+
+msgid "Select the account with which you want to synchronise"
+msgstr ""
+
+msgid "Select the contacts you want to synchronise"
+msgstr ""
+
+msgid "Select your audio input (e.g. microphone)"
+msgstr ""
+
+msgid "Select your video input device (e.g. webcam, screen capture)"
+msgstr ""
+
+msgid "Self signed certificate"
+msgstr ""
+
+msgid "Self signed certificate in certificate chain"
+msgstr ""
+
+msgid "Send Chat Markers"
+msgstr ""
+
+msgid "Send Chat State"
+msgstr ""
+
+msgid "Send Chatstate"
+msgstr ""
+
+msgid "Send Chatstate in Group Chats"
+msgstr ""
+
+msgid "Send DTMF sequence through an open voice chat"
+msgstr ""
+
+msgid "Send File"
+msgstr ""
+
+#, python-format
+msgid "Send File (max. %s)…"
+msgstr ""
+
+msgid "Send File Directly…"
+msgstr ""
+
+msgid "Send Files Directly"
+msgstr ""
+
+msgid "Send File…"
+msgstr ""
+
+msgid "Send Message"
+msgstr ""
+
+msgid "Send Message Receipts"
+msgstr ""
+
+msgid "Send Read Markers"
+msgstr ""
+
+msgid "Send _Report"
+msgstr ""
+
+msgid "Send a disco info request"
+msgstr ""
+
+msgid "Send a message to the contact"
+msgstr ""
+
+msgid "Send a message to the contact that will attract their attention"
+msgstr ""
+
+msgid "Send a ping to the contact"
+msgstr ""
+
+msgid "Send action (in the third person) to the current chat"
+msgstr ""
+
+msgid "Send message on Ctrl+Enter and make a new line with Enter."
+msgstr ""
+
+msgid "Send the message"
+msgstr ""
+
+msgid "Sender: "
+msgstr ""
+
+msgid "Sending private message failed"
+msgstr ""
+
+msgid ""
+"Sends a chat message to someone on your contact list. Account is optional."
+msgstr ""
+
+msgid "Sends custom XML"
+msgstr ""
+
+msgid "Sends file to a contact"
+msgstr ""
+
+msgid ""
+"Sends new chat message to a contact in the contact list. Account is optional."
+msgstr ""
+
+msgid "Sends new message to a group chat you've joined."
+msgstr ""
+
+#, python-format
+msgid "Sent contact: \"%(jid)s\" (%(name)s)"
+msgstr ""
+
+msgid "Sent contacts:"
+msgstr ""
+
+msgid "Separate profile files completely (even history database and plugins)"
+msgstr ""
+
+msgid "Serial Number"
+msgstr ""
+
+msgid "Serial Number: "
+msgstr ""
+
+msgid "Server"
+msgstr ""
+
+msgid "Server Info"
+msgstr ""
+
+msgid "Server Shutdown"
+msgstr ""
+
+msgid "Server Software"
+msgstr ""
+
+#, python-format
+msgid "Server Software: %s\n"
+msgstr ""
+
+msgid "Server Uptime"
+msgstr ""
+
+msgid "Service"
+msgstr ""
+
+msgid "Service Discovery"
+msgstr ""
+
+#, python-format
+msgid "Service Discovery using account %s"
+msgstr ""
+
+msgid "Service Gateway"
+msgstr ""
+
+msgid "Service not available: Gajim is not running, or remote_control is False"
+msgstr ""
+
+#, python-format
+msgid ""
+"Session bus is not available.\n"
+"Try reading %(url)s"
+msgstr ""
+
+msgid "Set configuration directory"
+msgstr ""
+
+msgid ""
+"Set participant affiliation in group chat.\n"
+"    Affiliation can be given as one of the following values:\n"
+"    owner, admin, member, outcast, none"
+msgstr ""
+
+msgid ""
+"Set participant role in group chat.\n"
+"    Role can be given as one of the following values:\n"
+"    moderator, participant, visitor, none"
+msgstr ""
+
+msgid "Set status message"
+msgstr ""
+
+msgid "Set the current status to away"
+msgstr ""
+
+msgid "Set the current status to online"
+msgstr ""
+
+msgid "Set the presence type and description"
+msgstr ""
+
+msgid ""
+"Set your activity, tune, and mood to show your friends how you are feeling"
+msgstr ""
+
+msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Share Status"
+msgstr ""
+
+msgid "Share my online status"
+msgstr ""
+
+msgid "Show"
+msgstr ""
+
+msgid "Show Chat State In Banner"
+msgstr ""
+
+msgid "Show Commands"
+msgstr ""
+
+msgid "Show Contact Infos"
+msgstr ""
+
+msgid "Show Gajim on Startup"
+msgstr ""
+
+msgid "Show Join/Leave"
+msgstr ""
+
+msgid "Show Joined / Left"
+msgstr ""
+
+msgid "Show Location"
+msgstr ""
+
+msgid "Show My Video Stream"
+msgstr ""
+
+msgid "Show Notifications"
+msgstr ""
+
+msgid "Show Offline Contacts"
+msgstr ""
+
+msgid "Show Send Message Button"
+msgstr ""
+
+msgid "Show Status Changes"
+msgstr ""
+
+msgid "Show Subject"
+msgstr ""
+
+msgid "Show Transfers"
+msgstr ""
+
+msgid "Show XML console"
+msgstr ""
+
+msgid "Show _Features"
+msgstr ""
+
+msgid "Show a confirmation dialog before connecting unencrypted"
+msgstr ""
+
+msgid ""
+"Show a confirmation dialog to block a contact? Empty string means never show "
+"the dialog."
+msgstr ""
+
+msgid "Show a list of emojis"
+msgstr ""
+
+msgid "Show a live preview to test your video source"
+msgstr ""
+
+msgid ""
+"Show a status message for all status changes (away, dnd, etc.) of users in a "
+"group chat."
+msgstr ""
+
+msgid "Show a status message for every join or leave in a group chat."
+msgstr ""
+
+msgid "Show all warnings"
+msgstr ""
+
+msgid "Show close button in tab?"
+msgstr ""
+
+msgid ""
+"Show contact list window on startup.\n"
+"'always' - Always show contact list window.\n"
+"'never' - Never show contact list window.\n"
+"'last_state' - Restore last state of the contact list window."
+msgstr ""
+
+msgid ""
+"Show help on a given command or a list of available commands if -a is given"
+msgstr ""
+
+msgid ""
+"Show labels describing confidentiality of messages, if the server supports "
+"XEP-0258"
+msgstr ""
+
+msgid "Show logged messages which mention given text"
+msgstr ""
+
+msgid ""
+"Show message meta data (avatar, nickname, timestamp) only once, if there are "
+"multiple messages from the same sender within a specific timespan."
+msgstr ""
+
+msgid "Show notifications even if you are Away, Busy, etc."
+msgstr ""
+
+msgid "Show only critical errors"
+msgstr ""
+
+msgid "Show only online and free for chat contacts in the contact list."
+msgstr ""
+
+msgid "Show tab when only one conversation?"
+msgstr ""
+
+msgid "Show tabbed notebook border in chat windows?"
+msgstr ""
+
+msgid "Show the application's version"
+msgstr ""
+
+msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
+msgstr ""
+
+msgid "Show window when starting Gajim"
+msgstr ""
+
+msgid "Show your own video stream in calls"
+msgstr ""
+
+msgid "Show/Hide Window"
+msgstr ""
+
+msgid "Shows a help on specific command"
+msgstr ""
+
+msgid "Shows a list of file transfers between you and your contacts"
+msgstr ""
+
+msgid ""
+"Shows a text in the banner that describes the current chat state of the "
+"contact."
+msgstr ""
+
+msgid "Shows an info bar with helpful hints in the Start / Join Chat dialog"
+msgstr ""
+
+msgid "Sign In"
+msgstr ""
+
+msgid "Sign Out"
+msgstr ""
+
+msgid "Sign Up"
+msgstr ""
+
+msgid "Sign up Anonymously"
+msgstr ""
+
+msgid "Sign up for a new account on a server of your choice"
+msgstr ""
+
+msgid "Signup not allowed"
+msgstr ""
+
+msgid "Size of preview image"
+msgstr ""
+
+msgid "Sleeping"
+msgstr ""
+
+msgid "Software"
+msgstr ""
+
+msgid "Something went wrong. Video feature disabled."
+msgstr ""
+
+msgid "Sorry, that should not have happened"
+msgstr ""
+
+msgid "Sort Participant List by Status"
+msgstr ""
+
+msgid "Sort by Status"
+msgstr ""
+
+msgid ""
+"Sound to play when a group chat message contains one of the words in "
+"'muc_highlight_words' or your nickname is mentioned."
+msgstr ""
+
+msgid "Sound to play when any group chat message arrives."
+msgstr ""
+
+msgid "Sounds"
+msgstr ""
+
+msgid "Sounds When Away"
+msgstr ""
+
+msgid "Spaces are not allowed"
+msgstr ""
+
+msgid "Spam"
+msgstr ""
+
+#, python-format
+msgid "Speed: %s"
+msgstr ""
+
+msgid "Spell Checker"
+msgstr ""
+
+msgid "Spell Checking"
+msgstr ""
+
+msgid "Sta_tus"
+msgstr ""
+
+msgid "Stage"
+msgstr ""
+
+msgid "Start / Join Chat"
+msgstr ""
+
+msgid "Start Call…"
+msgstr ""
+
+msgid "Start Chat"
+msgstr ""
+
+msgid "Start Chatting…"
+msgstr ""
+
+msgid "Start New Chat"
+msgstr ""
+
+msgid "Start Search..."
+msgstr ""
+
+msgid "Start Video"
+msgstr ""
+
+msgid "Start a new chat"
+msgstr ""
+
+msgid ""
+"Start a new chat, join a group chat or search for new group chats globally. "
+"You can also enter an XMPP address."
+msgstr ""
+
+msgid "Start/stop playback"
+msgstr ""
+
+msgid "State"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Status Change"
+msgstr ""
+
+msgid "Status Message"
+msgstr ""
+
+msgid "Status Message: Text Color"
+msgstr ""
+
+msgid "Status Message: Text Font"
+msgstr ""
+
+msgid "Status Messages in Participants List"
+msgstr ""
+
+msgid "Status and status message for all accounts"
+msgstr ""
+
+msgid "Status message…"
+msgstr ""
+
+#, python-format
+msgid "Status: %s"
+msgstr ""
+
+msgid "Status: Away Color"
+msgstr ""
+
+msgid "Status: DND Color"
+msgstr ""
+
+msgid "Status: Offline Color"
+msgstr ""
+
+msgid "Status: Online Color"
+msgstr ""
+
+msgid "Stop File Transfers"
+msgstr ""
+
+msgid "Stop sharing online status?"
+msgstr ""
+
+msgid "Stopped sharing their status with you"
+msgstr ""
+
+msgid "Store conversations on the harddrive"
+msgstr ""
+
+msgid "Street"
+msgstr ""
+
+msgid "Strike"
+msgstr ""
+
+msgid "Style"
+msgstr ""
+
+msgid "Subject"
+msgstr ""
+
+msgid "Subject issuer mismatch"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "Subscribe"
+msgstr ""
+
+msgid "Subscribed"
+msgstr ""
+
+msgid "Subscription Request"
+msgstr ""
+
+msgid "Subscription:"
+msgstr ""
+
+msgid "Support"
+msgstr ""
+
+msgid "Support for multiple accounts"
+msgstr ""
+
+msgid "Support for service discovery including nodes and search for users"
+msgstr ""
+
+msgid "Switch to the first - ninth tab"
+msgstr ""
+
+msgid "Switch to the next tab"
+msgstr ""
+
+msgid "Switch to the next unread tab"
+msgstr ""
+
+msgid "Switch to the previous tab"
+msgstr ""
+
+msgid "Switch to the previous unread tab"
+msgstr ""
+
+msgid "Sync Threshold"
+msgstr ""
+
+msgid "Synchronise"
+msgstr ""
+
+msgid "Synchronise History"
+msgstr ""
+
+msgid "Synchronise History…"
+msgstr ""
+
+msgid "Synchronise the status of all accounts"
+msgstr ""
+
+msgid "Synchronize Accounts"
+msgstr ""
+
+msgid "System"
+msgstr ""
+
+msgid "T_ry Again"
+msgstr ""
+
+msgid "Tabbed chat window"
+msgstr ""
+
+msgid "Tabs"
+msgstr ""
+
+msgid "Tell your contacts if you received a message"
+msgstr ""
+
+msgid "Text File"
+msgstr ""
+
+msgid "Thanks"
+msgstr ""
+
+msgid "The certificate does not match the expected identity of the site"
+msgstr ""
+
+msgid "The certificate has been revoked"
+msgstr ""
+
+msgid "The certificate has expired"
+msgstr ""
+
+msgid "The certificate’s activation time is in the future"
+msgstr ""
+
+msgid "The certificate’s algorithm is insecure"
+msgstr ""
+
+msgid ""
+"The contact will be informed that you stopped sharing your status. Please "
+"note that this can have other side effects."
+msgstr ""
+
+msgid "The currently active encryption for that contact."
+msgstr ""
+
+#, python-format
+msgid ""
+"The file %s has been received, but it seems to have been damaged along the "
+"way.\n"
+"Do you want to download it again?"
+msgstr ""
+
+#, python-format
+msgid "The following file could not be accessed and was not uploaded: %s"
+msgstr ""
+
+msgid ""
+"The following warnings came up while trying to verify the server's "
+"certificate"
+msgstr ""
+
+msgid "The last message was written on a mobile client"
+msgstr ""
+
+msgid "The same as using a doc-string, except it supports translation"
+msgstr ""
+
+msgid "The server has assigned or modified your nickname in this group chat"
+msgstr ""
+
+msgid "The server rejected the registration without an error message"
+msgstr ""
+
+msgid "The server returned an insecure transport (HTTP)."
+msgstr ""
+
+msgid "The server was shut down."
+msgstr ""
+
+msgid "The service could not be found"
+msgstr ""
+
+msgid "The service is not browsable"
+msgstr ""
+
+msgid "The signing certificate authority is not known"
+msgstr ""
+
+msgid "The status has been changed."
+msgstr ""
+
+msgid "Theme"
+msgstr ""
+
+msgid "Themes"
+msgstr ""
+
+msgid ""
+"There are plenty of servers to choose from.\n"
+"Creating an account on one server allows you to communicate with contacts "
+"from other servers as well."
+msgstr ""
+
+msgid "There is already a synchronisation in progress. Please try again later."
+msgstr ""
+
+msgid "There is no encryption method available for the chosen encryption."
+msgstr ""
+
+msgid "There is no more history"
+msgstr ""
+
+msgid ""
+"There is no service at the address you entered, or it is not responding. "
+"Check the address and try again."
+msgstr ""
+
+#, python-format
+msgid ""
+"There was an error while attempting to verify the SSL certificate of your "
+"XMPP server (%s)."
+msgstr ""
+
+msgid "This account is not connected to the server"
+msgstr ""
+
+msgid "This address does not seem to offer any gateway service."
+msgstr ""
+
+msgid "This address is not reachable."
+msgstr ""
+
+msgid "This device is not compatible."
+msgstr ""
+
+msgid "This gateway does not support Ad-Hoc Commands."
+msgstr ""
+
+msgid "This gateway does not support direct registering."
+msgstr ""
+
+msgid "This group chat can not be found via search"
+msgstr ""
+
+msgid "This group chat does not require a password upon entry"
+msgstr ""
+
+msgid "This group chat does require a password upon entry"
+msgstr ""
+
+msgid "This group chat is restricted to members only"
+msgstr ""
+
+msgid "This group chat persists even if there are no participants"
+msgstr ""
+
+msgid "This group chat will be destroyed once the last participant left"
+msgstr ""
+
+msgid ""
+"This is the theme you are currently using.\n"
+"Do you want to delete this theme?"
+msgstr ""
+
+#, python-format
+msgid "This message has been retracted by %s."
+msgstr ""
+
+#, python-format
+msgid "This message was encrypted with %s and could not be decrypted."
+msgstr ""
+
+msgid ""
+"This message was encrypted with Legacy OpenPGP and could not be decrypted. "
+"You can install the PGP plugin to handle those messages."
+msgstr ""
+
+msgid "This message was encrypted with OTR and could not be decrypted."
+msgstr ""
+
+msgid ""
+"This message was encrypted with OpenPGP for XMPP and could not be decrypted. "
+"You can install the OpenPGP plugin to handle those messages."
+msgstr ""
+
+msgid ""
+"This option lets you customize the timestamp that is printed in "
+"conversation. For example '[%H:%M] ' will show '[hour:minute] '. See python "
+"doc on strftime for full documentation (https://docs.python.org/3/library/"
+"time.html#time.strftime)."
+msgstr ""
+
+msgid "This server does not allow signup."
+msgstr ""
+
+msgid "This server does not support anonymous login."
+msgstr ""
+
+msgid ""
+"This service could not respond with detailed information.\n"
+"It is most likely a legacy service or broken."
+msgstr ""
+
+msgid "This service does not contain any items to browse."
+msgstr ""
+
+msgid "This service has not yet responded with detailed information"
+msgstr ""
+
+msgid "This type of service does not contain any items to browse."
+msgstr ""
+
+msgid "This will remove your account from Gajim."
+msgstr ""
+
+msgid "This will reset all introduction hints"
+msgstr ""
+
+msgid "This workspace contains chats. Remove anyway?"
+msgstr ""
+
+msgid "Three Months"
+msgstr ""
+
+msgid "Time"
+msgstr ""
+
+msgid "Time Until Away"
+msgstr ""
+
+msgid "Time Until Not Available"
+msgstr ""
+
+msgid "Time in minutes, after which your status changes to away."
+msgstr ""
+
+msgid "Time in minutes, after which your status changes to not available."
+msgstr ""
+
+msgid "Time of inactivity needed before the change status window closes down."
+msgstr ""
+
+msgid "To"
+msgstr ""
+
+msgid "To apply all changes instantly, you have to re-login."
+msgstr ""
+
+msgid "Toggle Video Chat"
+msgstr ""
+
+msgid "Toggle Voice Chat"
+msgstr ""
+
+msgid "Toggle participants list"
+msgstr ""
+
+msgid "Too many arguments"
+msgstr ""
+
+#, python-format
+msgid ""
+"Too many arguments. \n"
+"Type \"%(basename)s help %(command)s\" for more info"
+msgstr ""
+
+msgid "Topic"
+msgstr ""
+
+msgid "Tor"
+msgstr ""
+
+msgid "Transferring File…"
+msgstr ""
+
+#, python-format
+msgid "Transport '%s' will be removed"
+msgstr ""
+
+msgid "Transports"
+msgstr ""
+
+msgid "Treat * / _ pairs as possible formatting characters."
+msgstr ""
+
+msgid "Trust Not Decided"
+msgstr ""
+
+msgid "Try Again"
+msgstr ""
+
+msgid "Trying to change password..."
+msgstr ""
+
+msgid "Trying to create account..."
+msgstr ""
+
+msgid "Trying to gather information on this address…"
+msgstr ""
+
+msgid "Trying to remove account..."
+msgstr ""
+
+msgid "Tune:"
+msgstr ""
+
+msgid "Turn Camera off"
+msgstr ""
+
+msgid "Turn Camera on"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Type to search for values..."
+msgstr ""
+
+msgid "UPnP-IGD Port Forwarding"
+msgstr ""
+
+msgid "URI"
+msgstr ""
+
+msgid "URL"
+msgstr ""
+
+msgid "Unable to decode issuer public key"
+msgstr ""
+
+msgid "Unable to decrypt CRL's signature"
+msgstr ""
+
+msgid "Unable to decrypt certificate's signature"
+msgstr ""
+
+msgid "Unable to get certificate CRL"
+msgstr ""
+
+msgid "Unable to get issuer certificate"
+msgstr ""
+
+msgid "Unable to get local issuer certificate"
+msgstr ""
+
+msgid "Unable to properly remove the plugin"
+msgstr ""
+
+msgid "Unable to verify the first certificate"
+msgstr ""
+
+msgid "Unblock"
+msgstr ""
+
+msgid "Uninstall Plugin"
+msgstr ""
+
+msgid "Unknown"
+msgstr ""
+
+msgid "Unknown Artist"
+msgstr ""
+
+#, python-format
+msgid "Unknown SSL error '%s'"
+msgstr ""
+
+msgid "Unknown Source"
+msgstr ""
+
+#, python-format
+msgid "Unknown TLS error '%s'"
+msgstr ""
+
+msgid "Unknown Title"
+msgstr ""
+
+msgid "Unknown nickname"
+msgstr ""
+
+msgid "Unknown validation error"
+msgstr ""
+
+msgid "Unpin Chat"
+msgstr ""
+
+msgid "Unread Messages"
+msgstr ""
+
+msgid "Unsupported certificate purpose"
+msgstr ""
+
+msgid "Untrusted"
+msgstr ""
+
+msgid "Unverified"
+msgstr ""
+
+msgid "Update"
+msgstr ""
+
+msgid "Update Avatar"
+msgstr ""
+
+msgid "Update Check"
+msgstr ""
+
+msgid "Updates"
+msgstr ""
+
+msgid "Upload Files"
+msgstr ""
+
+msgid "Upload File…"
+msgstr ""
+
+msgid "Uploading Avatar Failed"
+msgstr ""
+
+#, python-format
+msgid "Uploading avatar image failed: %s"
+msgstr ""
+
+msgid "Uploading via HTTP File Upload…"
+msgstr ""
+
+#, python-format
+msgid ""
+"Usage:\n"
+"  %s command [arguments]\n"
+"\n"
+"Command is one of:\n"
+msgstr ""
+
+#, python-format
+msgid ""
+"Usage: %(basename)s %(command)s %(arguments)s \n"
+"\t %(help)s"
+msgstr ""
+
+msgid "Use GSSAPI"
+msgstr ""
+
+msgid "Use Image"
+msgstr ""
+
+msgid "Use STUN Server"
+msgstr ""
+
+msgid "Use System Keyring"
+msgstr ""
+
+msgid "Use Unencrypted Connection"
+msgstr ""
+
+msgid "Use an unencrypted connection to the server"
+msgstr ""
+
+msgid "Use defined profile in configuration directory"
+msgstr ""
+
+msgid "Use file transfer proxies"
+msgstr ""
+
+msgid "Use proxy auth_entication"
+msgstr ""
+
+msgid "Use your favorite emoticons, set your own profile picture"
+msgstr ""
+
+msgid "Use your system’s keyring to store passwords"
+msgstr ""
+
+msgid "Users"
+msgstr ""
+
+#, python-format
+msgid "V4L2: %s"
+msgstr ""
+
+msgid ""
+"Valid URI schemes. Only schemes in this list will be accepted as 'real' URI "
+"(mailto and xmpp are handled separately)."
+msgstr ""
+
+msgid "Validity"
+msgstr ""
+
+msgid "Validity\n"
+msgstr ""
+
+msgid "Verified"
+msgstr ""
+
+msgid "Version"
+msgstr ""
+
+#, python-format
+msgid "Version %s is available"
+msgstr ""
+
+msgid "Video"
+msgstr ""
+
+msgid "Video Framerate"
+msgstr ""
+
+msgid "Video Input Device"
+msgstr ""
+
+msgid "Video Resolution"
+msgstr ""
+
+msgid "Video chats are not available"
+msgstr ""
+
+msgid "Video test"
+msgstr ""
+
+msgid "Visit Server's Website"
+msgstr ""
+
+msgid "Visit Website"
+msgstr ""
+
+msgid "Visitor"
+msgstr ""
+
+msgid "Visitors"
+msgstr ""
+
+msgid "Visual Notifications"
+msgstr ""
+
+msgid "Voice Request"
+msgstr ""
+
+msgid "Voice chats are not available"
+msgstr ""
+
+msgid "Waiting…"
+msgstr ""
+
+#, python-format
+msgid "Warning: %s"
+msgstr ""
+
+msgid "Wav Sounds"
+msgstr ""
+
+#, python-format
+msgid "Web Search URL is missing a \"%s\""
+msgstr ""
+
+msgid "Web _Search for it"
+msgstr ""
+
+msgid "Website"
+msgstr ""
+
+msgid "Welcome"
+msgstr ""
+
+msgid "What does this mean?"
+msgstr ""
+
+msgid "What happened"
+msgstr ""
+
+msgid ""
+"When to show the notification area icon. Can be 'never', 'on_event', and "
+"'always'."
+msgstr ""
+
+msgid "Where participants should go"
+msgstr ""
+
+msgid "Whether to check for a valid certificate"
+msgstr ""
+
+msgid "Which server should I choose?"
+msgstr ""
+
+msgid "Why do you want to retract this message?"
+msgstr ""
+
+msgid "Width of group chat roster in pixel"
+msgstr ""
+
+msgid "Windows"
+msgstr ""
+
+msgid "Windows Credential Vault is used for secure password storage"
+msgstr ""
+
+msgid "With Microphone"
+msgstr ""
+
+msgid "Without a connection, you can not browse available services"
+msgstr ""
+
+msgid "Work"
+msgstr ""
+
+msgid "Working"
+msgstr ""
+
+msgid "Workspace Settings"
+msgstr ""
+
+msgid "X11"
+msgstr ""
+
+msgid "XHTML Formatting"
+msgstr ""
+
+msgid "XML Console"
+msgstr ""
+
+msgid "XML console to see what's happening on the protocol layer"
+msgstr ""
+
+msgid "XML to send"
+msgstr ""
+
+msgid "XMPP Address"
+msgstr ""
+
+msgid "XMPP Address of the contact"
+msgstr ""
+
+msgid "XMPP Address of the contact that will receive the message"
+msgstr ""
+
+msgid "XMPP Address of the group chat that will receive the message"
+msgstr ""
+
+msgid "XMPP Address…"
+msgstr ""
+
+msgid "XMPP Chat Client"
+msgstr ""
+
+msgid "YYYY-MM-DD"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "Yesterday"
+msgstr ""
+
+msgid "You"
+msgstr ""
+
+#, python-format
+msgid "You (%s) joined the group chat"
+msgstr ""
+
+msgid "You are a visitor"
+msgstr ""
+
+#, python-format
+msgid ""
+"You are about to connect to the account %(account)s (%(server)s) using an "
+"insecure connection method. This means conversations will not be encrypted. "
+"Connecting PLAIN is strongly discouraged."
+msgstr ""
+
+msgid "You are about to quit Gajim"
+msgstr ""
+
+#, python-format
+msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
+msgstr ""
+
+#, python-format
+msgid ""
+"You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
+msgstr ""
+
+msgid "You are not allowed to modify the affiliation of Admins and Owners"
+msgstr ""
+
+msgid "You are not connected"
+msgstr ""
+
+msgid "You are not connected to the server"
+msgstr ""
+
+#, python-format
+msgid "You are now known as %s"
+msgstr ""
+
+#, python-brace-format
+msgid "You are now {show}{status}"
+msgstr ""
+
+msgid "You are offline."
+msgstr ""
+
+msgid "You are trying to paste an image"
+msgstr ""
+
+#, python-format
+msgid "You can join this group chat instead: xmpp:%s?join"
+msgstr ""
+
+msgid "You can not join a group chat unless you are connected."
+msgstr ""
+
+msgid "You can see the contact's online status"
+msgstr ""
+
+msgid "You cancelled the transfer"
+msgstr ""
+
+msgid "You cannot add yourself to your contact list."
+msgstr ""
+
+msgid "You cannot see this contact's online status"
+msgstr ""
+
+msgid "You cannot synchronize with an account unless it is connected."
+msgstr ""
+
+msgid "You do not have permissions to create files in this directory."
+msgstr ""
+
+msgid ""
+"You do not have the proper permissions to create files in this directory."
+msgstr ""
+
+#, python-brace-format
+msgid "You have been banned{actor}{reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "You have been kicked{actor}{reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "You have been removed from the group chat{actor}{reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "You have left due to an error{reason}"
+msgstr ""
+
+msgid "You have no active account"
+msgstr ""
+
+msgid "You have to be connected to create a group chat."
+msgstr ""
+
+msgid "You have to invite people so they can join"
+msgstr ""
+
+#, python-format
+msgid ""
+"You just received a new message from %s.\n"
+"Do you want to close this tab?"
+msgstr ""
+
+msgid "You left this group chat"
+msgstr ""
+
+msgid "You need Owner permission to change the configuration"
+msgstr ""
+
+msgid "You requested to see this contact's online status"
+msgstr ""
+
+msgid "You still have running file transfers"
+msgstr ""
+
+msgid "You still have unread messages"
+msgstr ""
+
+msgid ""
+"You will appear offline for this contact and you will not receive further "
+"messages."
+msgstr ""
+
+msgid ""
+"You will no longer be able to send and receive messages from and to contacts "
+"using this transport."
+msgstr ""
+
+msgid "Your Nickname"
+msgstr ""
+
+msgid "Your XMPP address (e.g. user@example.org)"
+msgstr ""
+
+msgid "Your account has has been removed successfully."
+msgstr ""
+
+msgid "Your archiving preferences have successfully been saved."
+msgstr ""
+
+msgid "Your message can not be sent until you are connected."
+msgstr ""
+
+msgid "Your messages have been exported successfully"
+msgstr ""
+
+msgid "Your password"
+msgstr ""
+
+msgid "Your password has successfully been changed."
+msgstr ""
+
+msgid "Your public key or authentication certificate"
+msgstr ""
+
+msgid "ZIP files"
+msgstr ""
+
+msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "_Abort"
+msgstr ""
+
+msgid "_About"
+msgstr ""
+
+msgid "_Accept"
+msgstr ""
+
+msgid "_Account"
+msgstr ""
+
+msgid "_Accounts"
+msgstr ""
+
+#, python-format
+msgid "_Actions for \"%s\""
+msgstr ""
+
+msgid "_Add Account…"
+msgstr ""
+
+msgid "_Add to Trusted Certificates"
+msgstr ""
+
+msgid "_Address"
+msgstr ""
+
+msgid "_Advanced Settings"
+msgstr ""
+
+msgid "_Always quit when closing Gajim"
+msgstr ""
+
+msgid "_Approve"
+msgstr ""
+
+msgid "_Back"
+msgstr ""
+
+msgid "_Ban"
+msgstr ""
+
+msgid "_Block"
+msgstr ""
+
+msgid "_Busy"
+msgstr ""
+
+msgid "_Cancel"
+msgstr ""
+
+msgid "_Clear"
+msgstr ""
+
+msgid "_Close"
+msgstr ""
+
+msgid "_Command"
+msgstr ""
+
+msgid "_Connect"
+msgstr ""
+
+msgid "_Connect Anyway"
+msgstr ""
+
+msgid "_Copy Link"
+msgstr ""
+
+msgid "_Create"
+msgstr ""
+
+msgid "_Decline"
+msgstr ""
+
+msgid "_Default"
+msgstr ""
+
+msgid "_Delete"
+msgstr ""
+
+msgid "_Description"
+msgstr ""
+
+msgid "_Destroy"
+msgstr ""
+
+msgid "_Disable Account"
+msgstr ""
+
+msgid "_Do not ask me again"
+msgstr ""
+
+msgid "_Download"
+msgstr ""
+
+msgid "_Download Again"
+msgstr ""
+
+msgid "_Edit"
+msgstr ""
+
+msgid "_Features"
+msgstr ""
+
+msgid "_File Transfer"
+msgstr ""
+
+msgid "_Forget Group Chat"
+msgstr ""
+
+msgid "_Free for Chat"
+msgstr ""
+
+msgid "_Help"
+msgstr ""
+
+msgid "_Host"
+msgstr ""
+
+msgid "_Hostname"
+msgstr ""
+
+msgid "_Invite"
+msgstr ""
+
+msgid "_Join"
+msgstr ""
+
+msgid "_Keyboard Shortcuts"
+msgstr ""
+
+msgid "_Kick"
+msgstr ""
+
+msgid "_Later"
+msgstr ""
+
+msgid "_Leave"
+msgstr ""
+
+msgid "_Log In"
+msgstr ""
+
+msgid "_Login"
+msgstr ""
+
+msgid "_Modify Accounts…"
+msgstr ""
+
+msgid "_Modify Account…"
+msgstr ""
+
+msgid "_Name"
+msgstr ""
+
+msgid "_New post"
+msgstr ""
+
+msgid "_No"
+msgstr ""
+
+msgid "_Not Available"
+msgstr ""
+
+msgid "_OK"
+msgstr ""
+
+msgid "_Offline"
+msgstr ""
+
+msgid "_Open"
+msgstr ""
+
+msgid "_Open Folder"
+msgstr ""
+
+msgid "_Overwrite"
+msgstr ""
+
+msgid "_Paste"
+msgstr ""
+
+msgid "_Please choose a server"
+msgstr ""
+
+msgid "_Port"
+msgstr ""
+
+msgid "_Preferences"
+msgstr ""
+
+msgid "_Purge"
+msgstr ""
+
+msgid "_Quit"
+msgstr ""
+
+msgid "_Re-Login"
+msgstr ""
+
+msgid "_Remove"
+msgstr ""
+
+msgid "_Report Spam"
+msgstr ""
+
+msgid "_Request"
+msgstr ""
+
+msgid "_Reset Value"
+msgstr ""
+
+msgid "_Retract"
+msgstr ""
+
+msgid "_Save"
+msgstr ""
+
+msgid "_Save as"
+msgstr ""
+
+msgid "_Search"
+msgstr ""
+
+msgid "_Select"
+msgstr ""
+
+msgid "_Send"
+msgstr ""
+
+msgid "_Send Files"
+msgstr ""
+
+msgid "_Show Certificate"
+msgstr ""
+
+msgid "_Show notification when file transfer is complete"
+msgstr ""
+
+msgid "_Sign Up"
+msgstr ""
+
+msgid "_Start / Join Chat…"
+msgstr ""
+
+msgid "_Start Chat..."
+msgstr ""
+
+msgid "_Stop Sharing"
+msgstr ""
+
+msgid "_Subscribe"
+msgstr ""
+
+msgid "_Try Again"
+msgstr ""
+
+msgid "_Type"
+msgstr ""
+
+msgid "_Undo"
+msgstr ""
+
+msgid "_Unregister account from service"
+msgstr ""
+
+msgid "_Unsubscribe"
+msgstr ""
+
+msgid "_Username"
+msgstr ""
+
+msgid "_View"
+msgstr ""
+
+msgid "_View Certificate"
+msgstr ""
+
+msgid "_Wiki (Online)"
+msgstr ""
+
+msgid "_XML Console"
+msgstr ""
+
+msgid "accuracy"
+msgstr ""
+
+msgid "alt"
+msgstr ""
+
+msgid "and NOT authenticated"
+msgstr ""
+
+msgid "and authenticated"
+msgstr ""
+
+msgid "area"
+msgstr ""
+
+msgid "audio input"
+msgstr ""
+
+msgid "audio output"
+msgstr ""
+
+msgid "bearing"
+msgstr ""
+
+msgid "building"
+msgstr ""
+
+msgid ""
+"change status of account \"account\". If not specified, try to change status "
+"of all accounts that have \"sync with global status\" option set"
+msgstr ""
+
+msgid ""
+"change the priority of the given account. If not specified, change status of "
+"all accounts that have \"sync with global status\" option set"
+msgstr ""
+
+msgid "chat;messaging;im;xmpp;voip;"
+msgstr ""
+
+msgid "column"
+msgstr ""
+
+msgid "command"
+msgstr ""
+
+msgid "country"
+msgstr ""
+
+msgid "countrycode"
+msgstr ""
+
+msgid "datum"
+msgstr ""
+
+msgid "description"
+msgstr ""
+
+#, python-format
+msgid "e.g. %s"
+msgstr ""
+
+msgid "error"
+msgstr ""
+
+#, python-format
+msgid "error while sending %(message)s ( %(error)s )"
+msgstr ""
+
+msgid "example.org"
+msgstr ""
+
+msgid "file"
+msgstr ""
+
+msgid "file transfers list"
+msgstr ""
+
+msgid "floor"
+msgstr ""
+
+msgid "has closed the chat window or tab"
+msgstr ""
+
+msgid ""
+"has invited you to a group chat.\n"
+"Do you want to join?"
+msgstr ""
+
+msgid "if specified, contact is taken from the contact list of this account"
+msgstr ""
+
+msgid "if specified, file will be sent using this account"
+msgstr ""
+
+msgid "if specified, the message will be sent using this account"
+msgstr ""
+
+msgid "is composing a message…"
+msgstr ""
+
+msgid "is doing something else"
+msgstr ""
+
+msgid "is paying attention to the conversation"
+msgstr ""
+
+msgid "lat"
+msgstr ""
+
+msgid "locality"
+msgstr ""
+
+msgid "lon"
+msgstr ""
+
+msgid "macOS"
+msgstr ""
+
+msgid "message contents"
+msgstr ""
+
+msgid "message subject"
+msgstr ""
+
+msgid ""
+"one of: offline, online, chat, away, xa, dnd. If not set, use account's "
+"previous status"
+msgstr ""
+
+msgid "or"
+msgstr ""
+
+msgid "paused composing a message"
+msgstr ""
+
+msgid "postalcode"
+msgstr ""
+
+msgid "priority you want to give to the account"
+msgstr ""
+
+#, python-format
+msgid "python-cairo Version: %s"
+msgstr ""
+
+#, python-format
+msgid "python-nbxmpp Version: %s"
+msgstr ""
+
+msgid "region"
+msgstr ""
+
+msgid "room"
+msgstr ""
+
+msgid "show help on command"
+msgstr ""
+
+msgid "show only contacts of the given account"
+msgstr ""
+
+msgid "speed"
+msgstr ""
+
+msgid "status message"
+msgstr ""
+
+msgid "street"
+msgstr ""
+
+msgid "subject"
+msgstr ""
+
+msgid "text"
+msgstr ""
+
+msgid "timestamp"
+msgstr ""
+
+msgid "translator-credits"
+msgstr ""
+
+msgid "user@example.org"
+msgstr ""
+
+msgid "video input"
+msgstr ""
+
+msgid "we would like to thank all the package maintainers."
+msgstr ""
+
+#, python-brace-format
+msgid "{nick} has been banned{actor}{reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "{nick} has been kicked{actor}{reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "{nick} has been removed from the group chat{by}{reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "{nick} has left due to an error{reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "{nick} has left{reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "{nick} is now known as {new_nick}"
+msgstr ""
+
+#, python-brace-format
+msgid "{nick} is now {show}"
+msgstr ""
+
+#, python-brace-format
+msgid "{nick} is now {show}{status}"
+msgstr ""
+
+msgid "…or drop it here"
+msgstr ""
