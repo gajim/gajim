@@ -14,14 +14,15 @@ Execute with the build python, will figure out the rest.
 import subprocess
 import os
 import sys
+from typing import Optional
 
 import gi
 gi.require_version("GIRepository", "2.0")
 from gi.repository import GIRepository
 
 
-def get_required_by_typelibs():
-    deps = set()
+def get_required_by_typelibs() -> set[str]:
+    deps: set[str] = set()
     repo = GIRepository.Repository()
     for tl in os.listdir(repo.get_search_path()[0]):
         namespace, version = os.path.splitext(tl)[0].split("-", 1)
@@ -33,7 +34,8 @@ def get_required_by_typelibs():
 
 
 EXTENSIONS = [".exe", ".pyd", ".dll"]
-SYSTEM_LIBS = ['advapi32.dll',
+SYSTEM_LIBS = [
+    "advapi32.dll",
     "cabinet.dll", "comctl32.dll", "comdlg32.dll", "crypt32.dll", "d3d9.dll",
     "dnsapi.dll", "dsound.dll", "dwmapi.dll", "gdi32.dll", "imm32.dll",
     "iphlpapi.dll", "kernel32.dll", "ksuser.dll", "msi.dll", "msimg32.dll",
@@ -44,8 +46,8 @@ SYSTEM_LIBS = ['advapi32.dll',
 ]
 
 
-def get_dependencies(filename):
-    deps = []
+def get_dependencies(filename: str) -> list[str]:
+    deps: list[str] = []
     try:
         data = subprocess.getoutput("objdump -p %s" % filename)
     except Exception as error:
@@ -59,7 +61,7 @@ def get_dependencies(filename):
     return deps
 
 
-def find_lib(root, name):
+def find_lib(root: str, name: str) -> Optional[str]:
     search_path = os.path.join(root, "bin")
     if os.path.exists(os.path.join(search_path, name)):
         return os.path.join(search_path, name)
@@ -67,9 +69,9 @@ def find_lib(root, name):
         return name
 
 
-def get_things_to_delete(root):
-    all_libs = set()
-    needed = set()
+def get_things_to_delete(root: str) -> list[Optional[str]]:
+    all_libs: set[str] = set()
+    needed: set[str] = set()
     for base, dirs, files in os.walk(root):
         for f in files:
             path = os.path.join(base, f)
@@ -95,7 +97,7 @@ def get_things_to_delete(root):
     return [find_lib(root, l) for l in not_needed]
 
 
-def main():
+def main() -> None:
     libs = get_things_to_delete(sys.prefix)
     while libs:
         for l in libs:
