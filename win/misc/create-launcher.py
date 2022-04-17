@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+
 # Copyright 2016 Christoph Reiter
 #
 # This program is free software; you can redistribute it and/or modify
@@ -9,7 +9,7 @@
 
 """Creates simple Python .exe launchers for gui and cli apps
 
-./create-launcher.py "3.8.0" <target-dir>
+./create-launcher.py "1.4.0" <target-dir>
 """
 
 import os
@@ -19,10 +19,9 @@ import shlex
 import tempfile
 import shutil
 import struct
-from distutils.spawn import find_executable
 
 
-def build_resource(rc_path, out_path):
+def build_resource(rc_path: str, out_path: str) -> None:
     """Raises subprocess.CalledProcessError"""
 
     def is_64bit():
@@ -34,7 +33,7 @@ def build_resource(rc_path, out_path):
          "-o", out_path])
 
 
-def get_build_args():
+def get_build_args() -> list[str]:
     python_name = os.path.splitext(os.path.basename(sys.executable))[0]
     python_config = os.path.join(
         os.path.dirname(sys.executable), python_name + "-config")
@@ -49,7 +48,11 @@ def get_build_args():
     return shlex.split(cflags) + shlex.split(libs)
 
 
-def build_exe(source_path, resource_path, is_gui, out_path):
+def build_exe(source_path: str,
+              resource_path: str,
+              is_gui: bool,
+              out_path: str) -> None:
+
     args = ["gcc", "-s"]
     if is_gui:
         args.append("-mwindows")
@@ -58,7 +61,7 @@ def build_exe(source_path, resource_path, is_gui, out_path):
     subprocess.check_call(args)
 
 
-def get_launcher_code(debug):
+def get_launcher_code(debug: bool) -> str:
     template = """\
 #include "Python.h"
 #define WIN32_LEAN_AND_MEAN
@@ -104,8 +107,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     return template
 
 
-def get_resouce_code(filename, file_version, file_desc, icon_path,
-                     product_name, product_version, company_name):
+def get_resouce_code(filename: str,
+                     file_version: str,
+                     file_desc: str,
+                     icon_path: str,
+                     product_name: str,
+                     product_version: str,
+                     company_name: str) -> str:
 
     template = """\
 1 ICON "%(icon_path)s"
@@ -135,7 +143,7 @@ BEGIN
 END
 """
 
-    def to_ver_list(v):
+    def to_ver_list(v: str) -> str:
         v = v.split("-")[0]
         return ",".join(map(str, (list(map(int, v.split("."))) + [0] * 4)[:4]))
 
@@ -152,8 +160,14 @@ END
     }
 
 
-def build_launcher(out_path, icon_path, file_desc, product_name, product_version,
-                   company_name, is_gui, debug=False):
+def build_launcher(out_path: str,
+                   icon_path: str,
+                   file_desc: str,
+                   product_name: str,
+                   product_version: str,
+                   company_name: str,
+                   is_gui: bool,
+                   debug: bool = False) -> None:
 
     src_ico = os.path.abspath(icon_path)
     target = os.path.abspath(out_path)
@@ -179,7 +193,7 @@ def build_launcher(out_path, icon_path, file_desc, product_name, product_version
         shutil.rmtree(temp)
 
 
-def main():
+def main() -> None:
     argv = sys.argv
 
     version = argv[1]
@@ -202,6 +216,7 @@ def main():
     #     os.path.join(target, "history_manager.exe"),
     #     os.path.join(misc, "gajim.ico"), "History Manager", "History Manager",
     #     version, company_name, 'history_manager.py', True)
+
 
 if __name__ == "__main__":
     main()
