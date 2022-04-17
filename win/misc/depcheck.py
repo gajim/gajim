@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2016 Christoph Reiter
 #
 # This program is free software; you can redistribute it and/or modify
@@ -8,7 +7,6 @@
 
 """
 Deletes unneeded DLLs and checks DLL dependencies.
-Execute with the build python, will figure out the rest.
 """
 
 import subprocess
@@ -69,10 +67,10 @@ def find_lib(root: str, name: str) -> Optional[str]:
         return name
 
 
-def get_things_to_delete(root: str) -> list[Optional[str]]:
+def get_things_to_delete(root: str) -> list[str]:
     all_libs: set[str] = set()
     needed: set[str] = set()
-    for base, dirs, files in os.walk(root):
+    for base, _, files in os.walk(root):
         for f in files:
             path = os.path.join(base, f)
             if os.path.splitext(path)[-1].lower() in EXTENSIONS:
@@ -80,29 +78,36 @@ def get_things_to_delete(root: str) -> list[Optional[str]]:
                 for lib in get_dependencies(path):
                     all_libs.add(lib)
                     needed.add(lib)
-                    if not find_lib(root, lib):
+                    if find_lib(root, lib) is None:
                         print("MISSING:", path, lib)
 
     for lib in get_required_by_typelibs():
         needed.add(lib)
-        if not find_lib(root, lib):
-            print("MISSING:", path, lib)
+        if find_lib(root, lib) is None:
+            print("MISSING:", lib)
 
-    # get rid of things not in the search path,
-    # maybe loaded through other means?
-    not_needed = filter(
-        lambda l: find_lib(root, l) and \
-            os.path.splitext(l)[-1].lower() != ".exe", all_libs - needed)
+    result: list[str] = []
+    libs = all_libs - needed
+    for lib in libs:
+        _, ext = os.path.splitext(lib)
+        if ext == ".exe":
+            continue
 
-    return [find_lib(root, l) for l in not_needed]
+        name = find_lib(root, lib)
+        if name is None:
+            continue
+
+        result.append(name)
+
+    return result
 
 
 def main() -> None:
     libs = get_things_to_delete(sys.prefix)
     while libs:
-        for l in libs:
-            print("DELETE:", l)
-            os.unlink(l)
+        for lib in libs:
+            print("DELETE:", lib)
+            os.unlink(lib)
         libs = get_things_to_delete(sys.prefix)
 
 
