@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -2047,11 +2047,6 @@ msgid "Enabled"
 msgstr ""
 
 msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-
-msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
 "Status automatically"
 msgstr ""
@@ -2241,9 +2236,6 @@ msgstr "Grups de xat"
 msgid "Fake audio output"
 msgstr ""
 
-msgid "Feature is not available under Windows"
-msgstr ""
-
 msgid "Feature not available under Windows"
 msgstr ""
 
@@ -2426,6 +2418,9 @@ msgstr ""
 msgid "Full Name"
 msgstr "Nom:"
 
+msgid "Fully-featured XMPP chat client"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "GLib Version: %s"
 msgstr "Versió:"
@@ -2439,10 +2434,6 @@ msgstr "Gajim"
 
 msgid "Gajim - Error"
 msgstr ""
-
-#, fuzzy
-msgid "Gajim Team"
-msgstr "Personalització Temes Gajim"
 
 #, fuzzy
 msgid "Gajim Themes"
@@ -3208,10 +3199,6 @@ msgstr "_Copia la ubicació de l'enllaç"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr ""
-
-#, fuzzy
-msgid "Location detection"
-msgstr "Connexió"
 
 msgid "Location:"
 msgstr ""
@@ -4267,10 +4254,6 @@ msgstr "requereix"
 
 msgid "Requires: Gspell"
 msgstr ""
-
-#, fuzzy
-msgid "Requires: geoclue"
-msgstr "Sol.licita Veu"
 
 msgid ""
 "Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
@@ -6480,6 +6463,9 @@ msgstr ""
 msgid "or"
 msgstr "otr"
 
+msgid "org.gajim.Gajim"
+msgstr ""
+
 msgid "paused composing a message"
 msgstr ""
 
@@ -6583,7 +6569,6 @@ msgstr ""
 #~ msgid "#"
 #~ msgstr "#"
 
-#, python-format
 #~ msgid "%(nickname)s Signed In"
 #~ msgstr "%(nickname)s han entrat"
 
@@ -6984,7 +6969,7 @@ msgstr ""
 #~ msgid "Create Metacontact"
 #~ msgstr "Crea nou missatge"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Creating %s"
 #~ msgstr "Crea nou missatge"
 
@@ -7103,6 +7088,10 @@ msgstr ""
 
 #~ msgid "Gajim History Logs Manager"
 #~ msgstr "Gajim Gestor Històric Registres"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Personalització Temes Gajim"
 
 #~ msgid "Gajim: Account Creation Wizard"
 #~ msgstr "Gaim: Ajuda a Creació de Compte"
@@ -7297,6 +7286,10 @@ msgstr ""
 
 #~ msgid "Last modified:"
 #~ msgstr "Última modificació:"
+
+#, fuzzy
+#~ msgid "Location detection"
+#~ msgstr "Connexió"
 
 #~ msgid "MUC server"
 #~ msgstr "Servidor MUC"
@@ -7510,11 +7503,11 @@ msgstr ""
 #~ msgid "Rename Group Chat"
 #~ msgstr "Grups de xat"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename contact %s?"
 #~ msgstr "Convida _Contactes"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename group %s?"
 #~ msgstr "Grups de xat"
 
@@ -7525,6 +7518,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Replace _File"
 #~ msgstr "Fitxer de Certificat de Client:"
+
+#, fuzzy
+#~ msgid "Requires: geoclue"
+#~ msgstr "Sol.licita Veu"
 
 #, fuzzy
 #~ msgid "Requires: gpg.exe in your PATH environment variable"
@@ -8117,7 +8114,7 @@ msgstr ""
 #~ msgid "forbid"
 #~ msgstr "prohibeix"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from group chat %s"
 #~ msgstr "Afegeix aquesta sala a les adreces d'interès"
 

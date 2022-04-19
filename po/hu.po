@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2010-11-28 12:15+0100\n"
 "Last-Translator: Gabriel Papp <gabriel.papp@gmx.com>\n"
 "Language-Team: -\n"
@@ -2217,11 +2217,6 @@ msgstr "Engedélyezve"
 msgid "Enabled"
 msgstr "Engedélyezve"
 
-msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
@@ -2430,10 +2425,6 @@ msgid "Fake audio output"
 msgstr "Nem létező hangkimenet"
 
 #, fuzzy
-msgid "Feature is not available under Windows"
-msgstr "Ez a funkció nem elérhető Windowson."
-
-#, fuzzy
 msgid "Feature not available under Windows"
 msgstr "Ez a funkció nem elérhető Windowson."
 
@@ -2625,6 +2616,9 @@ msgstr "Feladó"
 msgid "Full Name"
 msgstr "<b>Teljes Név</b>"
 
+msgid "Fully-featured XMPP chat client"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "GLib Version: %s"
 msgstr "GTK+ Verzió:"
@@ -2638,10 +2632,6 @@ msgstr "Gajim"
 
 #, fuzzy
 msgid "Gajim - Error"
-msgstr "Gajim - %s"
-
-#, fuzzy
-msgid "Gajim Team"
 msgstr "Gajim - %s"
 
 #, fuzzy
@@ -3516,10 +3506,6 @@ msgstr "Tartózkodási hely: %s"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr ""
-
-#, fuzzy
-msgid "Location detection"
-msgstr "Kapcsolat"
 
 #, fuzzy
 msgid "Location:"
@@ -4641,10 +4627,6 @@ msgstr "Jelszó szükséges"
 
 #, fuzzy
 msgid "Requires: Gspell"
-msgstr "libgtkspell szükséges hozzá."
-
-#, fuzzy
-msgid "Requires: geoclue"
 msgstr "libgtkspell szükséges hozzá."
 
 msgid ""
@@ -7048,6 +7030,9 @@ msgstr ""
 msgid "or"
 msgstr "neki"
 
+msgid "org.gajim.Gajim"
+msgstr ""
+
 msgid "paused composing a message"
 msgstr "üzenetet fogalmaz, de nem gépel"
 
@@ -7209,7 +7194,7 @@ msgstr ""
 #~ msgid "%(1)s o'clock"
 #~ msgstr "%(1)s óra"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "%(contact)s wants to start a %(type)s chat with you. Do you want to "
 #~ "answer the call?"
@@ -7217,11 +7202,11 @@ msgstr ""
 #~ "%(contact)s wants to start %(type)s session with you. Do you want to "
 #~ "answer the call?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(filename)s received from %(name)s."
 #~ msgstr "File transfer of %(filename)s from %(name)s stopped."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #~ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
@@ -7229,15 +7214,14 @@ msgstr ""
 #~ msgid "%(jid)s has been invited in this room"
 #~ msgstr "%(nick)s el lettek távolítva a szobából (%(reason)s)"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s (%(jid)s) has removed subscription from you"
 #~ msgstr "Contact \"%s\" removed subscription from you"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s is now %(show)s %(status)s"
 #~ msgstr "%(name)s mostantól %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s Changed Status"
 #~ msgstr "%(nick)s megváltoztatta állapotát"
 
@@ -7249,27 +7233,24 @@ msgstr ""
 #~ msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 #~ msgstr "%(nick)s has been kicked by %(who)s: %(reason)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(nick)s has set the subject to %(subject)s"
 #~ msgstr "%(jid)s has set the subject to %(subject)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s"
 #~ msgstr "%(nick)s mostantól %(status)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(nick)s is now %(status)s: %(status_msg)s"
 #~ msgstr "%(nick)s is now %(status)s: %(status_msg)s"
 
-#, python-format
 #~ msgid "%(nickname)s Signed In"
 #~ msgstr "%(nickname)s bejelentkezett"
 
-#, python-format
 #~ msgid "%(nickname)s Signed Out"
 #~ msgstr "%(nickname)s kijelentkezett"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(nickname)s from group chat %(room_name)s"
 #~ msgstr "%(nickname)ek a csoportos beszélgetésből %(room_name)ek"
 
@@ -7287,27 +7268,24 @@ msgstr ""
 #~ "%(type)ok titkosítás %(status)ok aktív %(authenticated)s.\n"
 #~ "A beszélgetési munkamenet %(logged)k naplózot(ak)."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(type)s state : %(state)s, reason: %(reason)s"
 #~ msgstr "%(type)ok állapot : %(state)ok, indok: %(reason)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(who)s on %(time)s said: %(message)s\n"
 #~ msgstr "%(who)s on %(time)s said: %(message)s\n"
 
-#, python-format
 #~ msgid "%d event pending"
 #~ msgid_plural "%d events pending"
 #~ msgstr[0] "%d függő esemény"
 #~ msgstr[1] "%d függő események"
 
-#, python-format
 #~ msgid "%d message pending"
 #~ msgid_plural "%d messages pending"
 #~ msgstr[0] "%d függő üzenet"
 #~ msgstr[1] "%d függő üzenetek"
 
-#, python-format
 #~ msgid ""
 #~ "%s\n"
 #~ "Link-local messaging might not work properly."
@@ -7344,23 +7322,20 @@ msgstr ""
 #~ msgid "%s MiB/s"
 #~ msgstr "%s MiB"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s Missing"
 #~ msgstr "%s MiB"
 
-#, python-format
 #~ msgid "%s Status Message"
 #~ msgstr "%s Állapot üzenet"
 
-#, python-format
 #~ msgid "%s configuration error"
 #~ msgstr "%s konfiguráció hiba"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s does not exist."
 #~ msgstr "A file nem létezik"
 
-#, python-format
 #~ msgid "%s is a directory but should be a file"
 #~ msgstr "%s egy könyvtár de lehetne egy file is"
 
@@ -7375,18 +7350,15 @@ msgstr ""
 #~ msgid "%s or %s is a directory but should be a file"
 #~ msgstr "%s egy könyvtár de lehetne egy file is"
 
-#, python-format
 #~ msgid "%s wants to send you a file."
 #~ msgstr "%s egy filet szeretne küldeni neked."
 
 #~ msgid "%s wants to send you a file:"
 #~ msgstr "%s egy filet szeretne küldeni neked:"
 
-#, python-format
 #~ msgid "%s wants to start a voice chat."
 #~ msgstr "%s szeretne élőszóban beszélni veled."
 
-#, python-format
 #~ msgid "%s wrote:\n"
 #~ msgstr "%s írta:\n"
 
@@ -8377,7 +8349,7 @@ msgstr ""
 #~ msgid "Buying Groceries"
 #~ msgstr "Bevásárol"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "By removing the following contacts, you will also remove authorization. "
 #~ "This means they will see you as offline:\n"
@@ -8540,7 +8512,7 @@ msgstr ""
 #~ msgid "Characters that are printed before the nickname in conversations."
 #~ msgstr "Characters that are printed before the nickname in conversations"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Characters typed: %s"
 #~ msgstr "Nem megengedett karakter"
 
@@ -8649,7 +8621,6 @@ msgstr ""
 #~ msgid "Command line Control"
 #~ msgstr "Parancssor"
 
-#, python-format
 #~ msgid "Comment: %s"
 #~ msgstr "Megjegyzés: %s"
 
@@ -8778,7 +8749,6 @@ msgstr ""
 #~ msgid "Contact name"
 #~ msgstr "Partner neve"
 
-#, python-format
 #~ msgid "Contact name: <i>%s</i>"
 #~ msgstr "Partner neve: <i>%s</i>"
 
@@ -8842,7 +8812,6 @@ msgstr ""
 #~ msgid "Could not Upload File"
 #~ msgstr "Nem lehet a képet betölteni"
 
-#, python-format
 #~ msgid "Could not change status of account \"%s\""
 #~ msgstr "Nem lehet megváltoztatni ennek a fióknak az állapotát \"%s\""
 
@@ -8854,7 +8823,6 @@ msgstr ""
 #~ msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 #~ msgstr "Nem lehet csatlakozni ide: \"%s\""
 
-#, python-format
 #~ msgid "Could not connect to \"%s\""
 #~ msgstr "Nem lehet csatlakozni ide: \"%s\""
 
@@ -8875,7 +8843,7 @@ msgstr ""
 #~ msgid "Could not write to %s. Session Management support will not work"
 #~ msgstr "Could not write to %s. Session Management support will not work"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Couldn’t set up %(text)s. Check your configuration.\n"
 #~ "\n"
@@ -8903,7 +8871,7 @@ msgstr ""
 #~ msgid "Create Metacontact"
 #~ msgstr "Rename Contact"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Creating %s"
 #~ msgstr "%s törlése"
 
@@ -8923,7 +8891,7 @@ msgstr ""
 #~ msgid "Custom applications"
 #~ msgstr "Always use KDE default applications"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Custom hostname \"%s\" is wrong. It will be ignored."
 #~ msgstr "Egyéni hostnév/port használata"
 
@@ -9021,7 +8989,6 @@ msgstr ""
 #~ msgid "Description:"
 #~ msgstr "Leírás: "
 
-#, python-format
 #~ msgid "Description: %s"
 #~ msgstr "Leírás: %s"
 
@@ -9049,7 +9016,7 @@ msgstr ""
 #~ msgid "Detached contact list with single chat"
 #~ msgstr "Külön főablak egy közös beszélgetőablakkal"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 #~ msgstr "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 
@@ -9128,13 +9095,13 @@ msgstr ""
 #~ msgid "Do you want to continue?"
 #~ msgstr "Do you want to continue?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to permanently delete this conversation with <b>%s</b>?"
 #~ msgid_plural "Do you want to permanently delete these conversations?"
 #~ msgstr[0] "Biztosan szeretnéd törölni a kiválasztott üzenetet?"
 #~ msgstr[1] "Biztosan szeretnéd törölni a kiválasztott üzenetet?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to remove %s from the contact list?"
 #~ msgstr "Do you want to remove group %s from the roster?"
 
@@ -9274,7 +9241,7 @@ msgstr ""
 #~ msgid "Enter name / JID of contact or groupchat"
 #~ msgstr "Írja be a Jabber azonosítót, vagy a partner nevét"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Enter the certificate passphrase for account %s"
 #~ msgstr "Enter GPG key passphrase for key %(keyid)s (account %(account)s)."
 
@@ -9311,14 +9278,13 @@ msgstr ""
 #~ msgid "Error verifying SSL certificate"
 #~ msgstr "Hiba az SSL tanusítvány ellenőrzése közben"
 
-#, python-format
 #~ msgid "Error while adding service. %s"
 #~ msgstr "Hiba a szolgáltatás hozzáadása közben. %s"
 
 #~ msgid "Error."
 #~ msgstr "Hiba."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Error: %(error)s\n"
 #~ "Debug: %(debug)s"
@@ -9388,6 +9354,10 @@ msgstr ""
 #~ msgstr "Funkció"
 
 #, fuzzy
+#~ msgid "Feature is not available under Windows"
+#~ msgstr "Ez a funkció nem elérhető Windowson."
+
+#, fuzzy
 #~ msgid "Feature not available, see Help->Features"
 #~ msgstr "Ez a funkció nem elérhető Windowson."
 
@@ -9411,7 +9381,7 @@ msgstr ""
 #~ msgid "File already exists"
 #~ msgstr "Ez a file már létezik"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File name: %s"
 #~ msgstr "Filenév: %s"
 
@@ -9426,19 +9396,19 @@ msgstr ""
 #~ msgid "File transfer error notification color."
 #~ msgstr "Fileátvitel megszakítva"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s from %(name)s failed."
 #~ msgstr "File transfer of %(filename)s from %(name)s stopped."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s from %(name)s stopped."
 #~ msgstr "File transfer of %(filename)s from %(name)s stopped."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s to %(name)s failed."
 #~ msgstr "File transfer of %(filename)s to %(name)s stopped."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s to %(name)s stopped."
 #~ msgstr "File transfer of %(filename)s to %(name)s stopped."
 
@@ -9526,6 +9496,10 @@ msgstr ""
 
 #~ msgid "Gajim Instant Messenger"
 #~ msgstr "Gajim Azonnali Üzenetküldő"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim - %s"
 
 #, fuzzy
 #~ msgid "Gajim Themes Customization"
@@ -9895,7 +9869,7 @@ msgstr ""
 #~ msgid "Idle for:"
 #~ msgstr "Idle for %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "If \"%s\" accepts this request you will know their status."
 #~ msgstr "If \"%s\" accepts this request you will know his or her status."
 
@@ -10250,7 +10224,7 @@ msgstr ""
 #~ "Ha bezárod ezt a fület és a beszélgetésnaplózás funkció ki van kapcsolva, "
 #~ "akkor ez az üzenet el fog veszni."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "If you send a file to <b>%s</b>, your real XMPP address will be revealed."
 #~ msgstr ""
@@ -10437,11 +10411,11 @@ msgstr ""
 #~ msgid "Invite contacts to the conversation (Ctrl+G)"
 #~ msgstr "figyeli a beszélgetést"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Invited %(jid)s to %(room_jid)s"
 #~ msgstr "Send %s to %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s, this XMPP Address is not "
 #~ "valid."
@@ -10449,7 +10423,7 @@ msgstr ""
 #~ "Nem lehetséges az üzenetküldés neki: %s. Ez a Jabber Azonosító nem "
 #~ "érvényes."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s. This XMPP Address is not "
 #~ "valid."
@@ -10605,6 +10579,10 @@ msgstr ""
 #~ msgstr "Kilistáz minden beállítást és azok értékeit"
 
 #, fuzzy
+#~ msgid "Location detection"
+#~ msgstr "Kapcsolat"
+
+#, fuzzy
 #~ msgid "Log _encrypted chat session"
 #~ msgstr "Log _encrypted chat session"
 
@@ -10649,11 +10627,11 @@ msgstr ""
 #~ msgid "Mail _client"
 #~ msgstr "_Levelezőkliens:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Make %(contact1)s and %(contact2)s metacontacts"
 #~ msgstr "Make %s and %s metacontacts"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Make %s first contact"
 #~ msgstr "Make %s and %s metacontacts"
 
@@ -10993,7 +10971,7 @@ msgstr ""
 #~ msgid "Notify on new _GMail email"
 #~ msgstr "Notify on new _GMail email"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Now \"%s\" will always see you as offline."
 #~ msgstr "Now \"%s\" will always see you as offline."
 
@@ -11121,11 +11099,9 @@ msgstr ""
 #~ msgid "Order:"
 #~ msgstr "Sorrend:"
 
-#, python-format
 #~ msgid "Order: %(order)s, action: %(action)s"
 #~ msgstr "Sorrend: %(order)s, művelet: %(action)s"
 
-#, python-format
 #~ msgid ""
 #~ "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 #~ msgstr ""
@@ -11295,7 +11271,6 @@ msgstr ""
 #~ "Kérlek győződj meg róla hgy a Pywin32 fel van telepítve a számítógépedre. "
 #~ "Ezen a címen érheted el: %s"
 
-#, python-format
 #~ msgid "Please make sure you are connected with \"%s\"."
 #~ msgstr "Győződj meg róla, hogy ezzel vagy csatlakozva: \"%s\"."
 
@@ -11408,25 +11383,22 @@ msgstr ""
 #~ msgid "Privacy List"
 #~ msgstr "Magánéleti lista"
 
-#, python-format
 #~ msgid "Privacy List <b><i>%s</i></b>"
 #~ msgstr "Magánéleti lista <b><i>%s</i></b>"
 
-#, python-format
 #~ msgid "Privacy List for %s"
 #~ msgstr "Magánéleti lista ehhez: %s"
 
 #~ msgid "Privacy Lists"
 #~ msgstr "Magánéleti listák"
 
-#, python-format
 #~ msgid "Privacy Lists for %s"
 #~ msgstr "Magánéleti listák ehhez: %s"
 
 #~ msgid "Privacy Lists:"
 #~ msgstr "Magánéleti listák:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Privacy list %s has not been removed. It is probably active in one of "
 #~ "your connected resources. Please deactivate it and try again."
@@ -11462,7 +11434,6 @@ msgstr ""
 #~ msgid "PyCURL is not installed"
 #~ msgstr "CRL még nem érvényes"
 
-#, python-format
 #~ msgid "RE: %s"
 #~ msgstr "RE: %s"
 
@@ -11496,7 +11467,6 @@ msgstr ""
 #~ msgid "Received"
 #~ msgstr "Fogadott %s"
 
-#, python-format
 #~ msgid "Received %s"
 #~ msgstr "Fogadott %s"
 
@@ -11529,7 +11499,6 @@ msgstr ""
 #~ msgid "Registration information for transport %s has not arrived in time"
 #~ msgstr "Registration information for transport %s has not arrived in time"
 
-#, python-format
 #~ msgid ""
 #~ "Registration with agent %(agent)s failed with error %(error)s: "
 #~ "%(error_msg)s"
@@ -11537,7 +11506,7 @@ msgstr ""
 #~ "Registration with agent %(agent)s failed with error %(error)s: "
 #~ "%(error_msg)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Registration with agent %s succeeded."
 #~ msgstr "Registration with agent %s succeeded"
 
@@ -11622,11 +11591,11 @@ msgstr ""
 #~ msgid "Rename contact"
 #~ msgstr "Rename Contact"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename contact %s?"
 #~ msgstr "Rename Contact"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename group %s?"
 #~ msgstr "Rename Group"
 
@@ -11706,6 +11675,10 @@ msgstr ""
 #~ msgstr "python-dbus szükséges hozzá."
 
 #, fuzzy
+#~ msgid "Requires: geoclue"
+#~ msgstr "libgtkspell szükséges hozzá."
+
+#, fuzzy
 #~ msgid "Requires: gir1.2-avahi-0.6"
 #~ msgstr "python-gnome2 szükséges hozzá."
 
@@ -11717,7 +11690,7 @@ msgstr ""
 #~ msgid "Requires: gpg.exe in your PATH environment variable"
 #~ msgstr "HTTP__PROXY környezeti változójának _használata"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Requires: pybonjour and bonjour SDK running (%(url)s)"
 #~ msgstr "gpg és python-GnuPGInterface szükséges hozzá."
 
@@ -11844,7 +11817,6 @@ msgstr ""
 #~ msgid "Save status as preset"
 #~ msgstr "Mentés Sablonként..."
 
-#, python-format
 #~ msgid "Saved in: %s"
 #~ msgstr "Elmentve ebbe: %s"
 
@@ -11877,11 +11849,10 @@ msgstr ""
 #~ msgid "Send"
 #~ msgstr "_Küld"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send %(from)s to %(to)s"
 #~ msgstr "Send %s to %s"
 
-#, python-format
 #~ msgid "Send %s"
 #~ msgstr "Elküldött %s"
 
@@ -11927,7 +11898,7 @@ msgstr ""
 #~ msgid "Send message and close window"
 #~ msgstr "Üzenet küldése és az ablak bezárása"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send this file to %s:\n"
 #~ msgid_plural "Send these files to %s:\n"
 #~ msgstr[0] "Szeretnéd ezt a fájlt elküldeni neki(k)? %s:"
@@ -12227,11 +12198,9 @@ msgstr ""
 #~ msgid "Single Message"
 #~ msgstr "Levél"
 
-#, python-format
 #~ msgid "Single Message in account %s"
 #~ msgstr "Levél ebben a fiókban %s"
 
-#, python-format
 #~ msgid "Single Message using account %s"
 #~ msgstr "Levél ezzel a fiókkal: %s"
 
@@ -12242,7 +12211,6 @@ msgstr ""
 #~ msgid "Size"
 #~ msgstr "Méret: %s"
 
-#, python-format
 #~ msgid "Size: %s"
 #~ msgstr "Méret: %s"
 
@@ -12324,11 +12292,9 @@ msgstr ""
 #~ msgid "Status Preset"
 #~ msgstr "Állapot üzenet"
 
-#, python-format
 #~ msgid "Status is now: %(status)s"
 #~ msgstr "Az állapot mostantól: %(status)s"
 
-#, python-format
 #~ msgid "Status is now: %(status)s: %(status_msg)s"
 #~ msgstr "Az állapot mostantól: %(status)s: %(status_msg)s"
 
@@ -12386,7 +12352,6 @@ msgstr ""
 #~ msgid "Subject:"
 #~ msgstr "Tárgy:"
 
-#, python-format
 #~ msgid ""
 #~ "Subject: %(subject)s\n"
 #~ "%(message)s"
@@ -12397,7 +12362,6 @@ msgstr ""
 #~ msgid "Subject: %s"
 #~ msgstr "Tárgy: %s"
 
-#, python-format
 #~ msgid "Subject: %s\n"
 #~ msgstr "Tárgy: %s\n"
 
@@ -12412,13 +12376,11 @@ msgstr ""
 #~ msgid "Subscription request"
 #~ msgstr "Feliratkozási kérelem"
 
-#, python-format
 #~ msgid "Subscription request for account %(account)s from %(jid)s"
 #~ msgstr ""
 #~ "Feliratkozási kérelem ehhez a fiókhoz: %(account)s, e(zek)től a "
 #~ "felhasználó(k)tól %(jid)s"
 
-#, python-format
 #~ msgid "Subscription request from %s"
 #~ msgstr "Feliratkozási kérelem tőle: %s"
 
@@ -12461,7 +12423,6 @@ msgstr ""
 #~ msgid "Synchronize the status of all accounts"
 #~ msgstr "Megváltoztatja az állapotát egy fióknak vagy több fióknak"
 
-#, python-format
 #~ msgid ""
 #~ "System bus is not available.\n"
 #~ "Try reading %(url)s"
@@ -12555,7 +12516,7 @@ msgstr ""
 #~ "$S will be replaced by previous status message\n"
 #~ "$T will be replaced by auto-not-available timeout"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "The contact \"%s\" has authorized you to see their status."
 #~ msgstr "The contact \"%s\" has authorised you to see his or her status."
 
@@ -12573,7 +12534,7 @@ msgstr ""
 #~ msgid "The contact's key (%s) does not match the key assigned in Gajim."
 #~ msgstr "A partner kulcsa (%s) nem egyezik a Gajimban hozzárendelt kulccsal."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "The database file (%s) cannot be read. Try to repair it (see https://dev."
 #~ "gajim.org/gajim/gajim/wikis/help/DatabaseBackup) or remove it (all "
@@ -12670,7 +12631,7 @@ msgstr ""
 #~ msgid "Thirsty"
 #~ msgstr "Szomjas"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "This account %s doesn't support invisibility."
 #~ msgstr "Account %s doesn't support invisibility."
 
@@ -12857,7 +12818,6 @@ msgstr ""
 #~ msgid "Transform LaTeX expressions between $$ $$."
 #~ msgstr "Transform LaTeX expressions between $$ $$."
 
-#, python-format
 #~ msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 #~ msgstr ""
 #~ "Transzport %(name)s rosszul lettek megválaszolva a kérés "
@@ -12885,7 +12845,6 @@ msgstr ""
 #~ msgid "Type: "
 #~ msgstr "Típus: "
 
-#, python-format
 #~ msgid "Type: %s"
 #~ msgstr "Típus: %s"
 
@@ -12896,7 +12855,6 @@ msgstr ""
 #~ msgid "URL Color"
 #~ msgstr "Szín"
 
-#, python-format
 #~ msgid "Unable to bind to port %d."
 #~ msgstr "Nem lehet a porthoz kötni %d."
 
@@ -13303,7 +13261,7 @@ msgstr ""
 #~ msgid "You are invited to a groupchat"
 #~ msgstr "Meghívtak közös társalgásba"
 
-#, fuzzy, python-brace-format
+#, fuzzy
 #~ msgid "You are invited to {room} by {user}"
 #~ msgstr "Meghívtak közös társalgásba"
 
@@ -13497,7 +13455,7 @@ msgstr ""
 #~ msgid "You successfully received %(filename)s from %(name)s."
 #~ msgstr "Sikeresen fogadtad a filet %(filename)s tőle: %(name)s."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "You successfully sent %(filename)s to %(name)s."
 #~ msgstr "You successfully sent %(filename)s to %(name)s."
 
@@ -13512,7 +13470,7 @@ msgstr ""
 #~ msgid "You will be connected to %s without OpenPGP."
 #~ msgstr "Csatlakoztatva leszel hozzá: %s, OpenPGP nélkül."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "You will no longer be able to send and receive messages from and to "
 #~ "contacts using these transports:\n"
@@ -14140,11 +14098,11 @@ msgstr ""
 #~ msgid "from"
 #~ msgstr "tól/től"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from %s"
 #~ msgstr " tól/től %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from group chat %s"
 #~ msgstr "_csoportos beszélgetésekben"
 
@@ -14152,7 +14110,7 @@ msgstr ""
 #~ msgid "from room %s"
 #~ msgstr " szobából %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from user %s"
 #~ msgstr " felhasználótól %s"
 
@@ -14342,7 +14300,6 @@ msgstr ""
 #~ msgid "using %s account"
 #~ msgstr "using %s account"
 
-#, python-format
 #~ msgid "using account %s"
 #~ msgstr "%s fiók használatával"
 

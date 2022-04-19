@@ -13,11 +13,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2022-04-09 16:28+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
-"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
-"\n"
+"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/"
+">\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1967,13 +1967,6 @@ msgid "Enabled"
 msgstr "Aktiviert"
 
 msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-"Ermöglicht Gajim die Ermittlung des Standorts, falls der Nutzer sich zur "
-"Veröffentlichung des Gerätestandorts entscheidet"
-
-msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
 "Status automatically"
 msgstr ""
@@ -2155,9 +2148,6 @@ msgstr "Konnte das Profilbild nicht erstellen."
 msgid "Fake audio output"
 msgstr "Simulierte Audioausgabe"
 
-msgid "Feature is not available under Windows"
-msgstr "Funktion unter Windows nicht verfügbar"
-
 msgid "Feature not available under Windows"
 msgstr "Funktion unter Windows nicht verfügbar"
 
@@ -2326,6 +2316,10 @@ msgstr "Von"
 msgid "Full Name"
 msgstr "Vollständiger Name"
 
+#, fuzzy
+msgid "Fully-featured XMPP chat client"
+msgstr "Ein vollwertiger XMPP-Chatclient"
+
 #, python-format
 msgid "GLib Version: %s"
 msgstr "GLib-Version: %s"
@@ -2339,10 +2333,6 @@ msgstr "Gajim"
 
 msgid "Gajim - Error"
 msgstr "Gajim - Fehler"
-
-# TODO mark as do not translate?
-msgid "Gajim Team"
-msgstr "Gajim-Team"
 
 # TODO mark as do not translate?
 msgid "Gajim Themes"
@@ -3170,9 +3160,6 @@ msgstr "Standort"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr "Standort bei Breite: %s Länge: %s"
-
-msgid "Location detection"
-msgstr "Standortermittlung"
 
 msgid "Location:"
 msgstr "Standort:"
@@ -4169,9 +4156,6 @@ msgstr "Benötigt"
 
 msgid "Requires: Gspell"
 msgstr "Benötigt: Gspell"
-
-msgid "Requires: geoclue"
-msgstr "Benötigt: geoclue"
 
 msgid ""
 "Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
@@ -6356,6 +6340,10 @@ msgstr ""
 
 msgid "or"
 msgstr "oder"
+
+# Don't translate icon file name.
+msgid "org.gajim.Gajim"
+msgstr "org.gajim.Gajim"
 
 msgid "paused composing a message"
 msgstr "schreibt nicht mehr"
@@ -8887,6 +8875,13 @@ msgstr "… oder hierher ziehen"
 #~ "Ermöglicht Gajim die automatische Erkennung anderer Chat-Clients in einem "
 #~ "lokalen Netzwerk, um serverlos zu chatten"
 
+#~ msgid ""
+#~ "Enables Gajim to be location-aware, if the user decides to publish the "
+#~ "device’s location"
+#~ msgstr ""
+#~ "Ermöglicht Gajim die Ermittlung des Standorts, falls der Nutzer sich zur "
+#~ "Veröffentlichung des Gerätestandorts entscheidet"
+
 #~ msgid "Enables Gajim to encrypt chat messages with OpenPGP"
 #~ msgstr "Ermöglicht Gajim die Verschlüsselung von Nachrichten per OpenPGP"
 
@@ -9056,6 +9051,9 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Feature"
 #~ msgstr "Feature"
 
+#~ msgid "Feature is not available under Windows"
+#~ msgstr "Funktion unter Windows nicht verfügbar"
+
 #~ msgid "Feature not available, see Help->Features"
 #~ msgstr "Funktion nicht verfügbar. Mehr Information unter Hilfe->Funktionen"
 
@@ -9200,6 +9198,10 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Gajim Instant Messenger"
 #~ msgstr "Gajim Instant Messenger"
+
+# TODO mark as do not translate?
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim-Team"
 
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Gajim-Design-Einstellungen"
@@ -10536,6 +10538,9 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Local jid:"
 #~ msgstr "Lokale JID:"
 
+#~ msgid "Location detection"
+#~ msgstr "Standortermittlung"
+
 #~ msgid "Location: "
 #~ msgstr "Position: "
 
@@ -11802,6 +11807,9 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Requires upower and python-dbus."
 #~ msgstr "Benötigt upower und python-dbus."
+
+#~ msgid "Requires: geoclue"
+#~ msgstr "Benötigt: geoclue"
 
 #~ msgid "Requires: gir1.2-avahi-0.6"
 #~ msgstr "Benötigt: gir1.2-avahi-0.6"
@@ -14751,10 +14759,6 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "oppose"
 #~ msgstr "entgegnen"
-
-# Don't translate icon file name.
-#~ msgid "org.gajim.Gajim"
-#~ msgstr "org.gajim.Gajim"
 
 #~ msgid "otr"
 #~ msgstr "OTR"

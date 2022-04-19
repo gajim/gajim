@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2022-02-20 07:52+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -2032,12 +2032,6 @@ msgid "Enabled"
 msgstr "有効"
 
 msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-"ユーザーが位置情報を通知すると決定すれば、Gajim は位置認識を可能にします"
-
-msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
 "Status automatically"
 msgstr "在席状況を自動的に変更するため、操作のない時間を計測します"
@@ -2224,9 +2218,6 @@ msgstr "談話室の作成に失敗しました"
 msgid "Fake audio output"
 msgstr "偽の音声出力"
 
-msgid "Feature is not available under Windows"
-msgstr "Windows ではこの機能は無効です"
-
 msgid "Feature not available under Windows"
 msgstr "Windows ではこの機能は無効です"
 
@@ -2412,6 +2403,9 @@ msgstr "こちらが承認"
 msgid "Full Name"
 msgstr "名前(フルネーム)"
 
+msgid "Fully-featured XMPP chat client"
+msgstr ""
+
 #, python-format
 msgid "GLib Version: %s"
 msgstr "GLib バージョン: %s"
@@ -2426,10 +2420,6 @@ msgstr "Gajim"
 #, fuzzy
 msgid "Gajim - Error"
 msgstr "Gajim - %s"
-
-#, fuzzy
-msgid "Gajim Team"
-msgstr "Gajim テーマ"
 
 msgid "Gajim Themes"
 msgstr "Gajim テーマ"
@@ -3234,9 +3224,6 @@ msgstr "位置:"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr ""
-
-msgid "Location detection"
-msgstr "位置の検出"
 
 msgid "Location:"
 msgstr "位置:"
@@ -4276,9 +4263,6 @@ msgstr "require(必須)"
 
 msgid "Requires: Gspell"
 msgstr "Gspell が必要です"
-
-msgid "Requires: geoclue"
-msgstr "geoclue が必要です"
 
 #, fuzzy
 msgid ""
@@ -6540,6 +6524,9 @@ msgstr ""
 msgid "or"
 msgstr "または"
 
+msgid "org.gajim.Gajim"
+msgstr "org.gajim.Gajim"
+
 msgid "paused composing a message"
 msgstr "さんは書く手をちょっと止めています"
 
@@ -6705,7 +6692,6 @@ msgstr ""
 #~ msgid "%(1)s o'clock"
 #~ msgstr "%(1)s 時"
 
-#, python-format
 #~ msgid ""
 #~ "%(contact)s wants to start a %(type)s chat with you. Do you want to "
 #~ "answer the call?"
@@ -6713,30 +6699,24 @@ msgstr ""
 #~ "%(contact)s さんは、%(type)s でチャットを始めようとしています。呼び出しに"
 #~ "応じますか ?"
 
-#, python-format
 #~ msgid "%(filename)s received from %(name)s."
 #~ msgstr "%(name)s さんからのファイル %(filename)s を受け取りました。"
 
-#, python-format
 #~ msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #~ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
-#, python-format
 #~ msgid "%(jid)s declined the invitation"
 #~ msgstr "%(jid)s は招待を断りました"
 
 #~ msgid "%(jid)s has been invited in this room"
 #~ msgstr "%(jid)s は既にこの談話室に招待されています"
 
-#, python-format
 #~ msgid "%(name)s (%(jid)s) has removed subscription from you"
 #~ msgstr "%(name)s (%(jid)s) は、あなたからの申し込みを削除しました"
 
-#, python-format
 #~ msgid "%(name)s is now %(show)s %(status)s"
 #~ msgstr "%(name)s さんは現在、%(show)s %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s Changed Status"
 #~ msgstr "%(nick)s さんの在席状況が変わりました"
 
@@ -6746,27 +6726,21 @@ msgstr ""
 #~ msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 #~ msgstr "%(nick)s は %(who)s によって蹴り出されました: %(reason)s"
 
-#, python-format
 #~ msgid "%(nick)s has set the subject to %(subject)s"
 #~ msgstr "%(nick)s さんは題を %(subject)s に設定しました"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s"
 #~ msgstr "%(nick)s さんは現在 %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s: %(status_msg)s"
 #~ msgstr "%(nick)s さんは現在、%(status)s: %(status_msg)s"
 
-#, python-format
 #~ msgid "%(nickname)s Signed In"
 #~ msgstr "%(nickname)s さんがサインインしました"
 
-#, python-format
 #~ msgid "%(nickname)s Signed Out"
 #~ msgstr "%(nickname)s さんがサインアウトしました"
 
-#, python-format
 #~ msgid "%(nickname)s from group chat %(room_name)s"
 #~ msgstr "%(nickname)s さん (談話室 %(room_name)s より)"
 
@@ -6790,34 +6764,28 @@ msgstr ""
 #~ msgid "%(type)s encryption is active %(authenticated)s"
 #~ msgstr "%(type)s の暗号化は有効 %(authenticated)s。"
 
-#, python-format
 #~ msgid "%(type)s state : %(state)s, reason: %(reason)s"
 #~ msgstr "%(type)s の状態: %(state)s 理由: %(reason)s"
 
-#, python-format
 #~ msgid "%(who)s on %(time)s said: %(message)s\n"
 #~ msgstr "%(time)s 、%(who)s さんは言いました: %(message)s\n"
 
-#, python-format
 #~ msgid "%d event pending"
 #~ msgid_plural "%d events pending"
 #~ msgstr[0] "保留イベント %d 件"
 #~ msgstr[1] "保留イベント %d 件"
 
 # (Mako)これと、次の "from room %s" は連続して表示される
-#, python-format
 #~ msgid "%d message pending"
 #~ msgid_plural "%d messages pending"
 #~ msgstr[0] "保留メッセージ %d 件"
 #~ msgstr[1] "保留メッセージ %d 件"
 
-#, python-format
 #~ msgid "%i day"
 #~ msgid_plural "%i days"
 #~ msgstr[0] "%i日"
 #~ msgstr[1] "%i日"
 
-#, python-format
 #~ msgid ""
 #~ "%s\n"
 #~ "Link-local messaging might not work properly."
@@ -6853,23 +6821,18 @@ msgstr ""
 #~ msgid "%s MiB/s"
 #~ msgstr "%s MiB"
 
-#, python-format
 #~ msgid "%s Missing"
 #~ msgstr "%s がありません"
 
-#, python-format
 #~ msgid "%s Status Message"
 #~ msgstr "%s の状況メッセージ"
 
-#, python-format
 #~ msgid "%s configuration error"
 #~ msgstr "%s 設定エラー"
 
-#, python-format
 #~ msgid "%s does not exist."
 #~ msgstr "%s がありません。"
 
-#, python-format
 #~ msgid "%s is a directory but should be a file"
 #~ msgstr "%s はディレクトリです。ファイルでなければなりません"
 
@@ -6881,18 +6844,15 @@ msgstr ""
 #~ msgid "%s or %s is a directory but should be a file"
 #~ msgstr "%s はディレクトリです。ファイルでなければなりません"
 
-#, python-format
 #~ msgid "%s wants to send you a file."
 #~ msgstr "%s さんがファイルを転送したがっています。"
 
 #~ msgid "%s wants to send you a file:"
 #~ msgstr "%s さんがファイルを転送したがっています:"
 
-#, python-format
 #~ msgid "%s wants to start a voice chat."
 #~ msgstr "%s さんがファイルを音声チャットを始めたがっています。"
 
-#, python-format
 #~ msgid "%s wrote:\n"
 #~ msgstr "%s wrote:\n"
 
@@ -6942,7 +6902,6 @@ msgstr ""
 #~ msgid "5222"
 #~ msgstr "5222"
 
-#, python-format
 #~ msgid ""
 #~ "<b>%(contact)s</b> has invited you to the group chat <b>%(room_jid)s</b>"
 #~ msgstr ""
@@ -7877,7 +7836,6 @@ msgstr ""
 #~ msgid "Buying Groceries"
 #~ msgstr "買い物"
 
-#, python-format
 #~ msgid ""
 #~ "By removing the following contacts, you will also remove authorization. "
 #~ "This means they will see you as offline:\n"
@@ -8022,7 +7980,6 @@ msgstr ""
 #~ msgid "Characters that are printed before the nickname in conversations."
 #~ msgstr "会話の中で、ニックネームの前に表示される文字列。"
 
-#, python-format
 #~ msgid "Characters typed: %s"
 #~ msgstr "入力文字数: %s"
 
@@ -8130,7 +8087,6 @@ msgstr ""
 #~ msgid "Command line Control"
 #~ msgstr "コマンド行"
 
-#, python-format
 #~ msgid "Comment: %s"
 #~ msgstr "コメント: %s"
 
@@ -8248,7 +8204,6 @@ msgstr ""
 #~ msgid "Contact name"
 #~ msgstr "名前"
 
-#, python-format
 #~ msgid "Contact name: <i>%s</i>"
 #~ msgstr "相手先名: <i>%s</i>"
 
@@ -8316,7 +8271,6 @@ msgstr ""
 #~ msgid "Could not Upload File"
 #~ msgstr "ファイルをアップロードできませんでした"
 
-#, python-format
 #~ msgid "Could not change status of account \"%s\""
 #~ msgstr "アカウント \"%s\" の在席状況を変更できませんでした"
 
@@ -8326,7 +8280,6 @@ msgstr ""
 #~ msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 #~ msgstr "\"%(proxy)s\" 経由で \"%(host)s\" に接続できませんでした"
 
-#, python-format
 #~ msgid "Could not connect to \"%s\""
 #~ msgstr "%s に接続できませんでした"
 
@@ -8345,7 +8298,6 @@ msgstr ""
 #~ msgid "Could not write to %s. Session Management support will not work"
 #~ msgstr "%s に書き込めませんでした。セッション管理サポートは機能しません"
 
-#, python-format
 #~ msgid ""
 #~ "Couldn’t set up %(text)s. Check your configuration.\n"
 #~ "\n"
@@ -8372,7 +8324,6 @@ msgstr ""
 #~ msgid "Create Metacontact"
 #~ msgstr "メタ相手先を作成"
 
-#, python-format
 #~ msgid "Creating %s"
 #~ msgstr "%s を作成中"
 
@@ -8393,7 +8344,6 @@ msgstr ""
 #~ msgid "Custom applications"
 #~ msgstr "デフォルトのアプリケーションを使う"
 
-#, python-format
 #~ msgid "Custom hostname \"%s\" is wrong. It will be ignored."
 #~ msgstr "カスタムホスト名 \"%s\" が正しくありません。これを無視します。"
 
@@ -8479,7 +8429,6 @@ msgstr ""
 #~ msgid "Description:"
 #~ msgstr "説明:"
 
-#, python-format
 #~ msgid "Description: %s"
 #~ msgstr "説明: %s"
 
@@ -8501,7 +8450,6 @@ msgstr ""
 #~ msgid "Detached contact list with single chat"
 #~ msgstr "相手先一覧は別ウィンドウ、チャットはひとつにまとめたウィンドウ"
 
-#, python-format
 #~ msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 #~ msgstr ""
 #~ "辞書の URL に \"%s\" が含まれていません。また、WIKTIONARY でもありません"
@@ -8566,12 +8514,10 @@ msgstr ""
 #~ msgid "Do you want to continue?"
 #~ msgstr "続けますか ?"
 
-#, python-format
 #~ msgid "Do you want to permanently delete this conversation with <b>%s</b>?"
 #~ msgid_plural "Do you want to permanently delete these conversations?"
 #~ msgstr[0] "これらの会話を完全に削除しますか ?"
 
-#, python-format
 #~ msgid "Do you want to remove %s from the contact list?"
 #~ msgstr "相手先一覧から %s を削除しますか ?"
 
@@ -8667,6 +8613,12 @@ msgstr ""
 #~ "ローカルなネットワークで自動検出されたクライアントと、サーバーなしのチャッ"
 #~ "トができます"
 
+#~ msgid ""
+#~ "Enables Gajim to be location-aware, if the user decides to publish the "
+#~ "device’s location"
+#~ msgstr ""
+#~ "ユーザーが位置情報を通知すると決定すれば、Gajim は位置認識を可能にします"
+
 #, fuzzy
 #~ msgid "Enables Gajim to encrypt chat messages with OpenPGP"
 #~ msgstr "チャットメッセージを OpenPGP 鍵で暗号化できます。"
@@ -8708,7 +8660,6 @@ msgstr ""
 #~ msgid "Enter name / JID of contact or groupchat"
 #~ msgstr "相手先またはグループチャットの名前 / JID を入力してください"
 
-#, python-format
 #~ msgid "Enter the certificate passphrase for account %s"
 #~ msgstr "アカウント %s の証明書のパスフレーズを入力してください"
 
@@ -8739,14 +8690,12 @@ msgstr ""
 #~ msgid "Error verifying SSL certificate"
 #~ msgstr "SSL 証明書の検証エラー"
 
-#, python-format
 #~ msgid "Error while adding service. %s"
 #~ msgstr "サービスの追加中のエラーです。%s"
 
 #~ msgid "Error."
 #~ msgstr "エラーです。"
 
-#, python-format
 #~ msgid ""
 #~ "Error: %(error)s\n"
 #~ "Debug: %(debug)s"
@@ -8811,6 +8760,9 @@ msgstr ""
 #~ msgid "Feature"
 #~ msgstr "機能"
 
+#~ msgid "Feature is not available under Windows"
+#~ msgstr "Windows ではこの機能は無効です"
+
 #~ msgid "Feature not available, see Help->Features"
 #~ msgstr "この機能は無効です。ヘルプ->機能を見てください。"
 
@@ -8832,7 +8784,6 @@ msgstr ""
 #~ msgid "File already exists"
 #~ msgstr "そのファイルは既に存在しています"
 
-#, python-format
 #~ msgid "File name: %s"
 #~ msgstr "ファイル名: %s"
 
@@ -8845,19 +8796,15 @@ msgstr ""
 #~ msgid "File transfer error notification color."
 #~ msgstr "ファイル転送エラーの通知の色。"
 
-#, python-format
 #~ msgid "File transfer of %(filename)s from %(name)s failed."
 #~ msgstr "%(name)s さんからのファイル %(filename)s の転送に失敗しました。"
 
-#, python-format
 #~ msgid "File transfer of %(filename)s from %(name)s stopped."
 #~ msgstr "%(name)s さんからのファイル %(filename)s の転送を中断しました。"
 
-#, python-format
 #~ msgid "File transfer of %(filename)s to %(name)s failed."
 #~ msgstr "%(name)s さんへのファイル %(filename)s の転送に失敗しました。"
 
-#, python-format
 #~ msgid "File transfer of %(filename)s to %(name)s stopped."
 #~ msgstr "%(name)s さんへのファイル %(filename)s の転送を中断しました。"
 
@@ -8938,6 +8885,10 @@ msgstr ""
 
 #~ msgid "Gajim History Logs Manager"
 #~ msgstr "Gajim 履歴記録管理"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim テーマ"
 
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Gajim テーマのカスタマイズ"
@@ -9116,7 +9067,6 @@ msgstr ""
 #~ msgid "HTTP File Upload: Enable HTTPS Verification."
 #~ msgstr "HTTP ファイルアップロード: HTTPS 検証を有効化。"
 
-#, python-format
 #~ msgid "HTTP response code from server: %s"
 #~ msgstr "サーバーからの HTTP 応答コード: %s"
 
@@ -9292,7 +9242,6 @@ msgstr ""
 #~ msgid "Idle for:"
 #~ msgstr "操作のない状態(期間):"
 
-#, python-format
 #~ msgid "If \"%s\" accepts this request you will know their status."
 #~ msgstr ""
 #~ "\"%s\" さんがこの申し込みを承認したら、相手先の在席状況を知ることができま"
@@ -9656,7 +9605,6 @@ msgstr ""
 #~ "もし複数のサーバーのアカウントを持っていて、いつも友人や家族と連絡をとりた"
 #~ "いと思っているなら、Gajim はそれにもってこいです。"
 
-#, python-format
 #~ msgid ""
 #~ "If you send a file to <b>%s</b>, your real XMPP address will be revealed."
 #~ msgstr ""
@@ -9853,13 +9801,11 @@ msgstr ""
 #~ msgid "Iq"
 #~ msgstr "Iq"
 
-#, python-format
 #~ msgid ""
 #~ "It is not possible to send a message to %s, this XMPP Address is not "
 #~ "valid."
 #~ msgstr "%s さんにメッセージを送れません。XMPP アドレスが正しくありません。"
 
-#, python-format
 #~ msgid ""
 #~ "It is not possible to send a message to %s. This XMPP Address is not "
 #~ "valid."
@@ -10044,6 +9990,9 @@ msgstr ""
 #~ msgid "Local jid:"
 #~ msgstr "ローカル jid:"
 
+#~ msgid "Location detection"
+#~ msgstr "位置の検出"
+
 #~ msgid "Log _encrypted chat session"
 #~ msgstr "暗号化チャットを記録する (_E)"
 
@@ -10092,11 +10041,9 @@ msgstr ""
 #~ msgstr "主要部"
 
 # (Mako) よくわからない。Make [c_source.get_shown_name()] and [c_dest.get_shown_name()] metacontacts
-#, python-format
 #~ msgid "Make %(contact1)s and %(contact2)s metacontacts"
 #~ msgstr "%(contact1)s と %(contact2)s をメタ相手先とする"
 
-#, python-format
 #~ msgid "Make %s first contact"
 #~ msgstr "%s を優先の相手先とする"
 
@@ -10414,7 +10361,6 @@ msgstr ""
 #~ msgid "Notify on new _GMail email"
 #~ msgstr "新しい GMail メールを通知する (_G)"
 
-#, python-format
 #~ msgid "Now \"%s\" will always see you as offline."
 #~ msgstr "\"%s\" さんは常にあなたをオフラインとして見ることになります。"
 
@@ -10717,7 +10663,6 @@ msgstr ""
 #~ msgid "Please first choose another theme as your current theme."
 #~ msgstr "まず、現在のテーマとして別のものを選んでください。"
 
-#, python-format
 #~ msgid "Please make sure you are connected with \"%s\"."
 #~ msgstr "\"%s\" に接続していることを確認してください。"
 
@@ -10867,7 +10812,6 @@ msgstr ""
 #~ msgid "Quit"
 #~ msgstr "終了"
 
-#, python-format
 #~ msgid "RE: %s"
 #~ msgstr "RE: %s"
 
@@ -10903,7 +10847,6 @@ msgstr ""
 #~ msgid "Received"
 #~ msgstr "受信"
 
-#, python-format
 #~ msgid "Received %s"
 #~ msgstr "%s を受信"
 
@@ -10931,13 +10874,11 @@ msgstr ""
 #~ msgid "Registration information for transport %s has not arrived in time"
 #~ msgstr "中継先 %s の登録情報が一定時間内に到達しませんでした"
 
-#, python-format
 #~ msgid ""
 #~ "Registration with agent %(agent)s failed with error %(error)s: "
 #~ "%(error_msg)s"
 #~ msgstr "%(agent)s の登録は失敗しました。%(error)s: %(error_msg)s"
 
-#, python-format
 #~ msgid "Registration with agent %s succeeded."
 #~ msgstr "エージェント %s の登録は成功しました。"
 
@@ -11012,11 +10953,9 @@ msgstr ""
 #~ msgid "Rename contact"
 #~ msgstr "相手先の名前を変更"
 
-#, python-format
 #~ msgid "Rename contact %s?"
 #~ msgstr "相手先 %s の名前を変更しますか ?"
 
-#, python-format
 #~ msgid "Rename group %s?"
 #~ msgstr "グループ %s の名前を変更しますか ?"
 
@@ -11065,6 +11004,9 @@ msgstr ""
 #~ msgid "Requires python2.5."
 #~ msgstr "python2.5 が必要です。"
 
+#~ msgid "Requires: geoclue"
+#~ msgstr "geoclue が必要です"
+
 # …
 #~ msgid "Requires: gir1.2-avahi-0.6"
 #~ msgstr "gir1.2-avahi-0.6 が必要です"
@@ -11084,7 +11026,6 @@ msgstr ""
 #~ "libsecret と、GNOME Keyring や KSecretService のようなプロバイダーが必要で"
 #~ "す"
 
-#, python-format
 #~ msgid "Requires: pybonjour and bonjour SDK running (%(url)s)"
 #~ msgstr "pybonjour と実行中の bonjour SDK が必要です (%(url)s)"
 
@@ -11210,7 +11151,6 @@ msgstr ""
 #~ msgid "Save this message as a preset"
 #~ msgstr "このメッセージを事前設定として保存します"
 
-#, python-format
 #~ msgid "Saved in: %s"
 #~ msgstr "保存場所: %s"
 
@@ -11250,11 +11190,9 @@ msgstr ""
 #~ msgid "Send"
 #~ msgstr "送信"
 
-#, python-format
 #~ msgid "Send %(from)s to %(to)s"
 #~ msgstr "%(from)s を %(to)s に送信"
 
-#, python-format
 #~ msgid "Send %s"
 #~ msgstr "%s を送信"
 
@@ -11295,7 +11233,6 @@ msgstr ""
 #~ msgid "Send message and close window"
 #~ msgstr "メッセージを送信してウィンドウを閉じる"
 
-#, python-format
 #~ msgid "Send this file to %s:\n"
 #~ msgid_plural "Send these files to %s:\n"
 #~ msgstr[0] "このファイルを %s さんに転送します:\n"
@@ -11599,11 +11536,9 @@ msgstr ""
 #~ msgid "Single Message"
 #~ msgstr "単発メッセージ"
 
-#, python-format
 #~ msgid "Single Message in account %s"
 #~ msgstr "アカウント %s で単発メッセージ"
 
-#, python-format
 #~ msgid "Single Message using account %s"
 #~ msgstr "アカウント %s で単発メッセージ"
 
@@ -11613,7 +11548,6 @@ msgstr ""
 #~ msgid "Size"
 #~ msgstr "サイズ"
 
-#, python-format
 #~ msgid "Size: %s"
 #~ msgstr "サイズ: %s"
 
@@ -11694,11 +11628,9 @@ msgstr ""
 #~ msgid "Status Preset"
 #~ msgstr "状況の事前設定"
 
-#, python-format
 #~ msgid "Status is now: %(status)s"
 #~ msgstr "現在の状況: %(status)s"
 
-#, python-format
 #~ msgid "Status is now: %(status)s: %(status_msg)s"
 #~ msgstr "現在の状況: %(status)s: %(status_msg)s"
 
@@ -11757,7 +11689,6 @@ msgstr ""
 #~ msgid "Subject:"
 #~ msgstr "件名:"
 
-#, python-format
 #~ msgid ""
 #~ "Subject: %(subject)s\n"
 #~ "%(message)s"
@@ -11765,7 +11696,6 @@ msgstr ""
 #~ "件名: %(subject)s\n"
 #~ "%(message)s"
 
-#, python-format
 #~ msgid "Subject: %s\n"
 #~ msgstr "件名: %s\n"
 
@@ -11778,12 +11708,10 @@ msgstr ""
 #~ msgid "Subscription request"
 #~ msgstr "在席通知申込"
 
-#, python-format
 #~ msgid "Subscription request for account %(account)s from %(jid)s"
 #~ msgstr ""
 #~ "アカウント %(account)s に対して、%(jid)s さんからの在席通知の申し込み"
 
-#, python-format
 #~ msgid "Subscription request from %s"
 #~ msgstr "%s さんから在席通知の申し込み"
 
@@ -11823,7 +11751,6 @@ msgstr ""
 #~ msgid "Synchronize the status of all accounts"
 #~ msgstr "すべてのアカウントの在席状況を同期します"
 
-#, python-format
 #~ msgid ""
 #~ "System bus is not available.\n"
 #~ "Try reading %(url)s"
@@ -11917,7 +11844,6 @@ msgstr ""
 #~ "$S は前の状況メッセージに置き換えられます。\n"
 #~ "$T は自動不在の設定時間に置き換えられます。"
 
-#, python-format
 #~ msgid "The contact \"%s\" has authorized you to see their status."
 #~ msgstr "相手先 \"%s\" は、あなたが在席状況を見ることを承認しました。"
 
@@ -11932,7 +11858,6 @@ msgstr ""
 #~ msgid "The contact's key (%s) does not match the key assigned in Gajim."
 #~ msgstr "相手先の鍵 (%s) は、Gajim で割り当てられている鍵と合致しません。"
 
-#, python-format
 #~ msgid ""
 #~ "The database file (%s) cannot be read. Try to repair it (see https://dev."
 #~ "gajim.org/gajim/gajim/wikis/help/DatabaseBackup) or remove it (all "
@@ -12069,7 +11994,6 @@ msgstr ""
 #~ "はあなたが在席状況を変更するまでの間です。その後はあなたの全体の在席状況を"
 #~ "見ることになります。"
 
-#, python-format
 #~ msgid ""
 #~ "This error occurred while adding a contact for transport %(transport)s:\n"
 #~ "\n"
@@ -12224,7 +12148,6 @@ msgstr ""
 #~ msgid "Transferred: "
 #~ msgstr "転送: "
 
-#, python-format
 #~ msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 #~ msgstr "中継先 %(name)s は登録要求に対してエラーを返しました: %(error)s"
 
@@ -12255,7 +12178,6 @@ msgstr ""
 #~ msgid "Type: "
 #~ msgstr "種類: "
 
-#, python-format
 #~ msgid "Type: %s"
 #~ msgstr "種類: %s"
 
@@ -12271,7 +12193,6 @@ msgstr ""
 #~ msgid "URL Color"
 #~ msgstr "URL の色"
 
-#, python-format
 #~ msgid "Unable to bind to port %d."
 #~ msgstr "ポート %d を開けません。"
 
@@ -12557,7 +12478,6 @@ msgstr ""
 #~ msgid "XMPP Address:"
 #~ msgstr "XMPP アドレス:"
 
-#, python-format
 #~ msgid "XMPP Address: <i>%s</i>"
 #~ msgstr "XMPP アドレス: <i>%s</i>"
 
@@ -12649,7 +12569,6 @@ msgstr ""
 #~ msgid "You are invited to a groupchat"
 #~ msgstr "グループチャットへの招待を受けました"
 
-#, python-brace-format
 #~ msgid "You are invited to {room} by {user}"
 #~ msgstr "{user} さんより、{room} へ招待されました"
 
@@ -12800,7 +12719,6 @@ msgstr ""
 #~ msgid "You must read them before removing this transport."
 #~ msgstr "この中継先を削除する前に、それらを読んでください。"
 
-#, python-format
 #~ msgid "You must supply the %s of the new contact."
 #~ msgstr "新しい相手先の %s を入力してください。"
 
@@ -12826,7 +12744,6 @@ msgstr ""
 #~ msgid "You successfully received %(filename)s from %(name)s."
 #~ msgstr "%(name)s さんからファイル %(filename)s を受け取りました。"
 
-#, python-format
 #~ msgid "You successfully sent %(filename)s to %(name)s."
 #~ msgstr "%(name)s さんへファイル %(filename)s を送りました。"
 
@@ -12840,7 +12757,6 @@ msgstr ""
 #~ msgid "You will be connected to %s without OpenPGP."
 #~ msgstr "OpenPGP なしに、%s さんに接続します。"
 
-#, python-format
 #~ msgid ""
 #~ "You will no longer be able to send and receive messages from and to "
 #~ "contacts using these transports:\n"
@@ -13416,18 +13332,15 @@ msgstr ""
 #~ msgid "from"
 #~ msgstr "こちらが承認"
 
-#, python-format
 #~ msgid "from %s"
 #~ msgstr "- %s"
 
-#, python-format
 #~ msgid "from group chat %s"
 #~ msgstr "談話室 %s より"
 
 #~ msgid "from room %s"
 #~ msgstr " - 談話室 \"%s\""
 
-#, python-format
 #~ msgid "from user %s"
 #~ msgstr "- ユーザー %s"
 
@@ -13517,9 +13430,6 @@ msgstr ""
 
 #~ msgid "oppose"
 #~ msgstr "oppose(反対)"
-
-#~ msgid "org.gajim.Gajim"
-#~ msgstr "org.gajim.Gajim"
 
 #~ msgid "otr"
 #~ msgstr "オフレコ"
@@ -13629,7 +13539,6 @@ msgstr ""
 #~ msgid "using %s account"
 #~ msgstr "アカウント %s で"
 
-#, python-format
 #~ msgid "using account %s"
 #~ msgstr "アカウント %s で"
 

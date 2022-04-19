@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -2183,11 +2183,6 @@ msgid "Enabled"
 msgstr "Ενεργοποίηση"
 
 msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-
-msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
 "Status automatically"
 msgstr ""
@@ -2388,10 +2383,6 @@ msgid "Fake audio output"
 msgstr ""
 
 #, fuzzy
-msgid "Feature is not available under Windows"
-msgstr "Αυτόματο μήνυμα για κατάσταση μη διαθέσιμος"
-
-#, fuzzy
 msgid "Feature not available under Windows"
 msgstr "Αυτόματο μήνυμα για κατάσταση μη διαθέσιμος"
 
@@ -2583,6 +2574,9 @@ msgstr "Από"
 msgid "Full Name"
 msgstr "<b>Ιστορικό</b>"
 
+msgid "Fully-featured XMPP chat client"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "GLib Version: %s"
 msgstr "Έκδοση GTK+:"
@@ -2596,10 +2590,6 @@ msgstr "Gajim"
 
 #, fuzzy
 msgid "Gajim - Error"
-msgstr "Gajim - %s"
-
-#, fuzzy
-msgid "Gajim Team"
 msgstr "Gajim - %s"
 
 #, fuzzy
@@ -3454,10 +3444,6 @@ msgstr "Τροποποίηση λογαριασμού"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr ""
-
-#, fuzzy
-msgid "Location detection"
-msgstr "Σύνδεση"
 
 #, fuzzy
 msgid "Location:"
@@ -4569,10 +4555,6 @@ msgstr "Απαιτείται κωδικός"
 
 msgid "Requires: Gspell"
 msgstr ""
-
-#, fuzzy
-msgid "Requires: geoclue"
-msgstr "_Φωνή"
 
 msgid ""
 "Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
@@ -6956,6 +6938,9 @@ msgstr ""
 msgid "or"
 msgstr "Προς"
 
+msgid "org.gajim.Gajim"
+msgstr ""
+
 msgid "paused composing a message"
 msgstr "σταμάτησε για λίγο να γράφει ένα μήνυμα"
 
@@ -7280,7 +7265,7 @@ msgstr ""
 #~ msgid "%s or %s is a directory but should be a file"
 #~ msgstr "Το %s είναι κατάλογος αλλά θα έπρεπε να είναι αρχείο"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s results"
 #~ msgstr "μη υπαρκτό %s"
 
@@ -9151,6 +9136,10 @@ msgstr ""
 #~ msgstr "Χαρακτηριστικά διακομιστή"
 
 #, fuzzy
+#~ msgid "Feature is not available under Windows"
+#~ msgstr "Αυτόματο μήνυμα για κατάσταση μη διαθέσιμος"
+
+#, fuzzy
 #~ msgid "Feed name:"
 #~ msgstr "Όνομα εικονιδίου"
 
@@ -9296,6 +9285,10 @@ msgstr ""
 
 #~ msgid "Gajim Instant Messenger"
 #~ msgstr "Gajim Instant Messenger"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim - %s"
 
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Προσαρμογή θεμάτων Gajim"
@@ -10232,6 +10225,10 @@ msgstr ""
 
 #~ msgid "Lists all preferences and their values"
 #~ msgstr "Εμφανίζει όλες τις προτιμήσεις και τις τιμές τους"
+
+#, fuzzy
+#~ msgid "Location detection"
+#~ msgstr "Σύνδεση"
 
 #~ msgid "Log _off"
 #~ msgstr "_Αποσύνδεση"
@@ -11174,6 +11171,10 @@ msgstr ""
 
 #~ msgid "Reply to this message"
 #~ msgstr "Απάντηση σε αυτό το μήνυμα"
+
+#, fuzzy
+#~ msgid "Requires: geoclue"
+#~ msgstr "_Φωνή"
 
 #, fuzzy
 #~ msgid "Requires: gpg.exe in your PATH environment variable"

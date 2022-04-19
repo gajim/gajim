@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2009-11-20 20:49+1100\n"
 "Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: English <en_gb@li.org>\n"
@@ -2200,11 +2200,6 @@ msgstr "Enable"
 msgid "Enabled"
 msgstr "Enabled"
 
-msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
@@ -2406,10 +2401,6 @@ msgid "Fake audio output"
 msgstr ""
 
 #, fuzzy
-msgid "Feature is not available under Windows"
-msgstr "Feature not available under Windows."
-
-#, fuzzy
 msgid "Feature not available under Windows"
 msgstr "Feature not available under Windows."
 
@@ -2597,6 +2588,9 @@ msgstr "From"
 msgid "Full Name"
 msgstr "<b>Full Name</b>"
 
+msgid "Fully-featured XMPP chat client"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "GLib Version: %s"
 msgstr "GTK+ Version:"
@@ -2611,10 +2605,6 @@ msgstr "Gajim"
 #, fuzzy
 msgid "Gajim - Error"
 msgstr "Gajim - %s"
-
-#, fuzzy
-msgid "Gajim Team"
-msgstr "gajim-remote"
 
 #, fuzzy
 msgid "Gajim Themes"
@@ -3478,10 +3468,6 @@ msgstr "Notification"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr ""
-
-#, fuzzy
-msgid "Location detection"
-msgstr "Connection"
 
 #, fuzzy
 msgid "Location:"
@@ -4599,10 +4585,6 @@ msgstr "Password Required"
 
 #, fuzzy
 msgid "Requires: Gspell"
-msgstr "Requires libgtkspell."
-
-#, fuzzy
-msgid "Requires: geoclue"
 msgstr "Requires libgtkspell."
 
 msgid ""
@@ -6982,6 +6964,9 @@ msgstr "one of: offline, online, chat, away, xa, dnd, invisible "
 msgid "or"
 msgstr "To"
 
+msgid "org.gajim.Gajim"
+msgstr ""
+
 msgid "paused composing a message"
 msgstr "paused composing a message"
 
@@ -7163,11 +7148,10 @@ msgstr ""
 #~ msgid "%(1)s o'clock"
 #~ msgstr "%(1)s o'clock"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(filename)s received from %(name)s."
 #~ msgstr "File transfer of %(filename)s from %(name)s stopped."
 
-#, python-format
 #~ msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #~ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
@@ -7175,15 +7159,14 @@ msgstr ""
 #~ msgid "%(jid)s has been invited in this room"
 #~ msgstr "%(nick)s has been removed from the room (%(reason)s)"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s (%(jid)s) has removed subscription from you"
 #~ msgstr "Contact \"%s\" removed subscription from you"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s is now %(show)s %(status)s"
 #~ msgstr "%(name)s is now %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s Changed Status"
 #~ msgstr "%(nick)s Changed Status"
 
@@ -7193,27 +7176,22 @@ msgstr ""
 #~ msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 #~ msgstr "%(nick)s has been kicked by %(who)s: %(reason)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(nick)s has set the subject to %(subject)s"
 #~ msgstr "%(jid)s has set the subject to %(subject)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s"
 #~ msgstr "%(nick)s is now %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s: %(status_msg)s"
 #~ msgstr "%(nick)s is now %(status)s: %(status_msg)s"
 
-#, python-format
 #~ msgid "%(nickname)s Signed In"
 #~ msgstr "%(nickname)s Signed In"
 
-#, python-format
 #~ msgid "%(nickname)s Signed Out"
 #~ msgstr "%(nickname)s Signed Out"
 
-#, python-format
 #~ msgid "%(nickname)s from group chat %(room_name)s"
 #~ msgstr "%(nickname)s from group chat %(room_name)s"
 
@@ -7237,29 +7215,25 @@ msgstr ""
 #~ msgid "%(type)s encryption is active %(authenticated)s"
 #~ msgstr "%(type)s encryption is active %(authenticated)s."
 
-#, python-format
 #~ msgid "%(who)s on %(time)s said: %(message)s\n"
 #~ msgstr "%(who)s on %(time)s said: %(message)s\n"
 
-#, python-format
 #~ msgid "%d event pending"
 #~ msgid_plural "%d events pending"
 #~ msgstr[0] "%d event pending"
 #~ msgstr[1] "%d events pending"
 
-#, python-format
 #~ msgid "%d message pending"
 #~ msgid_plural "%d messages pending"
 #~ msgstr[0] "%d message pending"
 #~ msgstr[1] "%d messages pending"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%i day"
 #~ msgid_plural "%i days"
 #~ msgstr[0] "%i days ago"
 #~ msgstr[1] "%i days ago"
 
-#, python-format
 #~ msgid ""
 #~ "%s\n"
 #~ "Link-local messaging might not work properly."
@@ -7298,15 +7272,14 @@ msgstr ""
 #~ msgid "%s MiB/s"
 #~ msgstr "%s MiB"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s Missing"
 #~ msgstr "%s MiB"
 
-#, python-format
 #~ msgid "%s Status Message"
 #~ msgstr "%s Status Message"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s configuration error"
 #~ msgstr "Room Configuration"
 
@@ -7319,14 +7292,13 @@ msgstr ""
 #~ msgid "%s does not appear to be a valid JID"
 #~ msgstr "%s does not appear to be a valid JID"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s does not exist."
 #~ msgstr "File does not exist"
 
 #~ msgid "%s has not broadcast an OpenPGP key, nor has one been assigned"
 #~ msgstr "%s has not broadcast an OpenPGP key, nor has one been assigned"
 
-#, python-format
 #~ msgid "%s is a directory but should be a file"
 #~ msgstr "%s is a directory but should be a file"
 
@@ -7347,18 +7319,16 @@ msgstr ""
 #~ msgid "%s or %s is a directory but should be a file"
 #~ msgstr "%s is a directory but should be a file"
 
-#, python-format
 #~ msgid "%s wants to send you a file."
 #~ msgstr "%s wants to send you a file."
 
 #~ msgid "%s wants to send you a file:"
 #~ msgstr "%s wants to send you a file:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s wants to start a voice chat."
 #~ msgstr "%s wants to send you a file."
 
-#, python-format
 #~ msgid "%s wrote:\n"
 #~ msgstr "%s wrote:\n"
 
@@ -8404,7 +8374,7 @@ msgstr ""
 #~ msgid "Buying Groceries"
 #~ msgstr "Buying Groceries"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "By removing the following contacts, you will also remove authorization. "
 #~ "This means they will see you as offline:\n"
@@ -8568,7 +8538,7 @@ msgstr ""
 #~ msgid "Characters that are printed before the nickname in conversations."
 #~ msgstr "Characters that are printed before the nickname in conversations"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Characters typed: %s"
 #~ msgstr "Character not allowed"
 
@@ -8691,7 +8661,6 @@ msgstr ""
 #~ msgid "Command line Control"
 #~ msgstr "Command line"
 
-#, python-format
 #~ msgid "Comment: %s"
 #~ msgstr "Comment: %s"
 
@@ -8833,7 +8802,6 @@ msgstr ""
 #~ msgid "Contact name"
 #~ msgstr "Contact name"
 
-#, python-format
 #~ msgid "Contact name: <i>%s</i>"
 #~ msgstr "Contact name: <i>%s</i>"
 
@@ -8907,7 +8875,6 @@ msgstr ""
 #~ msgid "Could not Upload File"
 #~ msgstr "Could not load image"
 
-#, python-format
 #~ msgid "Could not change status of account \"%s\""
 #~ msgstr "Could not change status of account \"%s\""
 
@@ -8919,7 +8886,6 @@ msgstr ""
 #~ msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 #~ msgstr "Could not connect to \"%s\""
 
-#, python-format
 #~ msgid "Could not connect to \"%s\""
 #~ msgstr "Could not connect to \"%s\""
 
@@ -8949,7 +8915,7 @@ msgstr ""
 #~ msgid "Create Metacontact"
 #~ msgstr "Rename Contact"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Creating %s"
 #~ msgstr "Destroying %s"
 
@@ -8969,7 +8935,7 @@ msgstr ""
 #~ msgid "Custom applications"
 #~ msgstr "Always use OS/X default applications"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Custom hostname \"%s\" is wrong. It will be ignored."
 #~ msgstr "Use custom hostname/port"
 
@@ -9065,7 +9031,6 @@ msgstr ""
 #~ msgid "Description:"
 #~ msgstr "Description: "
 
-#, python-format
 #~ msgid "Description: %s"
 #~ msgstr "Description: %s"
 
@@ -9103,7 +9068,6 @@ msgstr ""
 #~ "Chat message\n"
 #~ "Single message"
 
-#, python-format
 #~ msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 #~ msgstr "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 
@@ -9178,13 +9142,13 @@ msgstr ""
 #~ msgid "Do you want to continue?"
 #~ msgstr "Do you want to continue?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to permanently delete this conversation with <b>%s</b>?"
 #~ msgid_plural "Do you want to permanently delete these conversations?"
 #~ msgstr[0] "Do you really want to delete the selected message?"
 #~ msgstr[1] "Do you really want to delete the selected message?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to remove %s from the contact list?"
 #~ msgstr "Do you want to remove group %s from the roster?"
 
@@ -9344,7 +9308,7 @@ msgstr ""
 #~ msgid "Enter name / JID of contact or groupchat"
 #~ msgstr "Contact name"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Enter the certificate passphrase for account %s"
 #~ msgstr "Enter GPG key passphrase for key %(keyid)s (account %(account)s)."
 
@@ -9380,14 +9344,13 @@ msgstr ""
 #~ msgid "Error verifying SSL certificate"
 #~ msgstr "Error verifying SSL certificate"
 
-#, python-format
 #~ msgid "Error while adding service. %s"
 #~ msgstr "Error while adding service. %s"
 
 #~ msgid "Error."
 #~ msgstr "Error."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Error: %(error)s\n"
 #~ "Debug: %(debug)s"
@@ -9457,6 +9420,10 @@ msgstr ""
 #~ msgstr "Feature"
 
 #, fuzzy
+#~ msgid "Feature is not available under Windows"
+#~ msgstr "Feature not available under Windows."
+
+#, fuzzy
 #~ msgid "Feature not available, see Help->Features"
 #~ msgstr "Feature not available under Windows."
 
@@ -9481,7 +9448,7 @@ msgstr ""
 #~ msgid "File already exists"
 #~ msgstr "This file already exists"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File name: %s"
 #~ msgstr "Filename: %s"
 
@@ -9496,19 +9463,17 @@ msgstr ""
 #~ msgid "File transfer error notification color."
 #~ msgstr "File transfer cancelled"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s from %(name)s failed."
 #~ msgstr "File transfer of %(filename)s from %(name)s stopped."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s from %(name)s stopped."
 #~ msgstr "File transfer of %(filename)s from %(name)s stopped."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s to %(name)s failed."
 #~ msgstr "File transfer of %(filename)s to %(name)s stopped."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s to %(name)s stopped."
 #~ msgstr "File transfer of %(filename)s to %(name)s stopped."
 
@@ -9603,6 +9568,10 @@ msgstr ""
 
 #~ msgid "Gajim Instant Messenger"
 #~ msgstr "Gajim Instant Messenger"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "gajim-remote"
 
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Gajim Themes Customisation"
@@ -9988,7 +9957,7 @@ msgstr ""
 #~ msgid "Idle for:"
 #~ msgstr "Idle for:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "If \"%s\" accepts this request you will know their status."
 #~ msgstr "If \"%s\" accepts this request you will know his or her status."
 
@@ -10369,7 +10338,7 @@ msgstr ""
 #~ "If you have two or more accounts and this is ticked, Gajim will list all "
 #~ "contacts as if you had one account"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "If you send a file to <b>%s</b>, your real XMPP address will be revealed."
 #~ msgstr "If you send a file to %s, he/she will know your real Jabber ID."
@@ -10565,7 +10534,7 @@ msgstr ""
 #~ msgid "Invite contacts to the conversation (Ctrl+G)"
 #~ msgstr "Invite contacts to the conversation (Ctrl+G)"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Invited %(jid)s to %(room_jid)s"
 #~ msgstr "Invited %(contact_jid)s to %(room_jid)s."
 
@@ -10573,13 +10542,13 @@ msgstr ""
 #~ msgid "Invited %s to %s"
 #~ msgstr "Send %s to %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s, this XMPP Address is not "
 #~ "valid."
 #~ msgstr "It is not possible to send a message to %s, this JID is not valid."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s. This XMPP Address is not "
 #~ "valid."
@@ -10732,6 +10701,10 @@ msgstr ""
 #~ msgid "Lists all preferences and their values"
 #~ msgstr "Lists all preferences and their values"
 
+#, fuzzy
+#~ msgid "Location detection"
+#~ msgstr "Connection"
+
 #~ msgid "Log _encrypted chat session"
 #~ msgstr "Log _encrypted chat session"
 
@@ -10778,11 +10751,11 @@ msgstr ""
 #~ msgid "Mail _client"
 #~ msgstr "_Mail client:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Make %(contact1)s and %(contact2)s metacontacts"
 #~ msgstr "Make %s and %s metacontacts"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Make %s first contact"
 #~ msgstr "Make %s and %s metacontacts"
 
@@ -11145,7 +11118,6 @@ msgstr ""
 #~ msgid "Notify on new _GMail email"
 #~ msgstr "Notify on new _GMail email"
 
-#, python-format
 #~ msgid "Now \"%s\" will always see you as offline."
 #~ msgstr "Now \"%s\" will always see you as offline."
 
@@ -11278,11 +11250,9 @@ msgstr ""
 #~ msgid "Order:"
 #~ msgstr "Order:"
 
-#, python-format
 #~ msgid "Order: %(order)s, action: %(action)s"
 #~ msgstr "Order: %(order)s, action: %(action)s"
 
-#, python-format
 #~ msgid ""
 #~ "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 #~ msgstr ""
@@ -11452,7 +11422,6 @@ msgstr ""
 #~ "Please make sure that Pywin32 is installed on your system. You can get it "
 #~ "at %s"
 
-#, python-format
 #~ msgid "Please make sure you are connected with \"%s\"."
 #~ msgstr "Please make sure you are connected with \"%s\"."
 
@@ -11588,25 +11557,22 @@ msgstr ""
 #~ msgid "Privacy List"
 #~ msgstr "Privacy List"
 
-#, python-format
 #~ msgid "Privacy List <b><i>%s</i></b>"
 #~ msgstr "Privacy List <b><i>%s</i></b>"
 
-#, python-format
 #~ msgid "Privacy List for %s"
 #~ msgstr "Privacy List for %s"
 
 #~ msgid "Privacy Lists"
 #~ msgstr "Privacy Lists"
 
-#, python-format
 #~ msgid "Privacy Lists for %s"
 #~ msgstr "Privacy Lists for %s"
 
 #~ msgid "Privacy Lists:"
 #~ msgstr "Privacy Lists:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Privacy list %s has not been removed. It is probably active in one of "
 #~ "your connected resources. Please deactivate it and try again."
@@ -11653,7 +11619,6 @@ msgstr ""
 #~ msgid "Quit"
 #~ msgstr "_Quit"
 
-#, python-format
 #~ msgid "RE: %s"
 #~ msgstr "RE: %s"
 
@@ -11705,7 +11670,6 @@ msgstr ""
 #~ msgid "Received"
 #~ msgstr "Received %s"
 
-#, python-format
 #~ msgid "Received %s"
 #~ msgstr "Received %s"
 
@@ -11738,7 +11702,6 @@ msgstr ""
 #~ msgid "Registration information for transport %s has not arrived in time"
 #~ msgstr "Registration information for transport %s has not arrived in time"
 
-#, python-format
 #~ msgid ""
 #~ "Registration with agent %(agent)s failed with error %(error)s: "
 #~ "%(error_msg)s"
@@ -11746,7 +11709,7 @@ msgstr ""
 #~ "Registration with agent %(agent)s failed with error %(error)s: "
 #~ "%(error_msg)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Registration with agent %s succeeded."
 #~ msgstr "Registration with agent %s succeeded"
 
@@ -11830,11 +11793,11 @@ msgstr ""
 #~ msgid "Rename contact"
 #~ msgstr "Rename Contact"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename contact %s?"
 #~ msgstr "Rename Contact"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename group %s?"
 #~ msgstr "Rename Group"
 
@@ -11946,6 +11909,10 @@ msgstr ""
 #~ msgstr "Requires python-dbus."
 
 #, fuzzy
+#~ msgid "Requires: geoclue"
+#~ msgstr "Requires libgtkspell."
+
+#, fuzzy
 #~ msgid "Requires: gir1.2-avahi-0.6"
 #~ msgstr "Requires python-gnome2."
 
@@ -11957,7 +11924,7 @@ msgstr ""
 #~ msgid "Requires: gpg.exe in your PATH environment variable"
 #~ msgstr "_use HTTP__PROXY environment variable"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Requires: pybonjour and bonjour SDK running (%(url)s)"
 #~ msgstr "Requires gpg and python-GnuPGInterface."
 
@@ -12094,7 +12061,6 @@ msgstr ""
 #~ msgid "Save status as preset"
 #~ msgstr "Save as Preset..."
 
-#, python-format
 #~ msgid "Saved in: %s"
 #~ msgstr "Saved in: %s"
 
@@ -12129,11 +12095,10 @@ msgstr ""
 #~ msgid "Send"
 #~ msgstr "_Send"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send %(from)s to %(to)s"
 #~ msgstr "Send %s to %s"
 
-#, python-format
 #~ msgid "Send %s"
 #~ msgstr "Send %s"
 
@@ -12185,7 +12150,7 @@ msgstr ""
 #~ msgid "Send message and close window"
 #~ msgstr "Send message and close window"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send this file to %s:\n"
 #~ msgid_plural "Send these files to %s:\n"
 #~ msgstr[0] "Do you want to send this file to %s:"
@@ -12491,18 +12456,15 @@ msgstr ""
 #~ msgid "Single Message"
 #~ msgstr "Single Message"
 
-#, python-format
 #~ msgid "Single Message in account %s"
 #~ msgstr "Single Message in account %s"
 
-#, python-format
 #~ msgid "Single Message using account %s"
 #~ msgstr "Single Message using account %s"
 
 #~ msgid "Size"
 #~ msgstr "Size"
 
-#, python-format
 #~ msgid "Size: %s"
 #~ msgstr "Size: %s"
 
@@ -12577,11 +12539,9 @@ msgstr ""
 #~ msgid "Status Preset"
 #~ msgstr "Status Message"
 
-#, python-format
 #~ msgid "Status is now: %(status)s"
 #~ msgstr "Status is now: %(status)s"
 
-#, python-format
 #~ msgid "Status is now: %(status)s: %(status_msg)s"
 #~ msgstr "Status is now: %(status)s: %(status_msg)s"
 
@@ -12639,7 +12599,6 @@ msgstr ""
 #~ msgid "Subject:"
 #~ msgstr "Subject:"
 
-#, python-format
 #~ msgid ""
 #~ "Subject: %(subject)s\n"
 #~ "%(message)s"
@@ -12650,7 +12609,6 @@ msgstr ""
 #~ msgid "Subject: %s"
 #~ msgstr "Subject: %s"
 
-#, python-format
 #~ msgid "Subject: %s\n"
 #~ msgstr "Subject: %s\n"
 
@@ -12665,11 +12623,9 @@ msgstr ""
 #~ msgid "Subscription request"
 #~ msgstr "Subscription request"
 
-#, python-format
 #~ msgid "Subscription request for account %(account)s from %(jid)s"
 #~ msgstr "Subscription request for account %(account)s from %(jid)s"
 
-#, python-format
 #~ msgid "Subscription request from %s"
 #~ msgstr "Subscription request from %s"
 
@@ -12715,7 +12671,7 @@ msgstr ""
 #~ msgid "Synchronize the status of all accounts"
 #~ msgstr "Changes the status of account or accounts"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "System bus is not available.\n"
 #~ "Try reading %(url)s"
@@ -12813,7 +12769,7 @@ msgstr ""
 #~ "$S will be replaced by previous status message\n"
 #~ "$T will be replaced by auto-not-available timeout"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "The contact \"%s\" has authorized you to see their status."
 #~ msgstr "The contact \"%s\" has authorised you to see his or her status."
 
@@ -12830,7 +12786,7 @@ msgstr ""
 #~ msgid "The contact's key (%s) does not match the key assigned in Gajim."
 #~ msgstr "The contact's key (%s) does not match the key assigned in Gajim."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "The database file (%s) cannot be read. Try to repair it (see https://dev."
 #~ "gajim.org/gajim/gajim/wikis/help/DatabaseBackup) or remove it (all "
@@ -12944,7 +12900,7 @@ msgstr ""
 #~ msgid "Thirsty"
 #~ msgstr "Thirsty"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "This account %s doesn't support invisibility."
 #~ msgstr "Account %s doesn't support invisibility."
 
@@ -13147,7 +13103,6 @@ msgstr ""
 #~ msgid "Transform LaTeX expressions between $$ $$."
 #~ msgstr "Transform LaTeX expressions between $$ $$."
 
-#, python-format
 #~ msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 #~ msgstr "Transport %(name)s answered wrongly to register request: %(error)s"
 
@@ -13172,7 +13127,6 @@ msgstr ""
 #~ msgid "Type: "
 #~ msgstr "Type: "
 
-#, python-format
 #~ msgid "Type: %s"
 #~ msgstr "Type: %s"
 
@@ -13183,7 +13137,6 @@ msgstr ""
 #~ msgid "URL Color"
 #~ msgstr "Colour"
 
-#, python-format
 #~ msgid "Unable to bind to port %d."
 #~ msgstr "Unable to bind to port %d."
 
@@ -13684,7 +13637,7 @@ msgstr ""
 #~ msgid "You are invited to a groupchat"
 #~ msgstr "You are invited to a groupchat"
 
-#, fuzzy, python-brace-format
+#, fuzzy
 #~ msgid "You are invited to {room} by {user}"
 #~ msgstr "You are invited to a groupchat"
 
@@ -13852,7 +13805,7 @@ msgstr ""
 #~ msgid "You must read them before removing this transport."
 #~ msgstr "You must read them before removing this transport."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "You must supply the %s of the new contact."
 #~ msgstr "You must enter a password for the new account."
 
@@ -13880,7 +13833,6 @@ msgstr ""
 #~ msgid "You successfully received %(filename)s from %(name)s."
 #~ msgstr "You successfully received %(filename)s from %(name)s."
 
-#, python-format
 #~ msgid "You successfully sent %(filename)s to %(name)s."
 #~ msgstr "You successfully sent %(filename)s to %(name)s."
 
@@ -13898,7 +13850,7 @@ msgstr ""
 #~ msgid "You will be connected to %s without OpenPGP."
 #~ msgstr "You will be connected to %s without OpenPGP."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "You will no longer be able to send and receive messages from and to "
 #~ "contacts using these transports:\n"
@@ -14555,11 +14507,11 @@ msgstr ""
 #~ msgid "from"
 #~ msgstr "From"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from %s"
 #~ msgstr " from %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from group chat %s"
 #~ msgstr "in _group chats"
 
@@ -14567,7 +14519,7 @@ msgstr ""
 #~ msgid "from room %s"
 #~ msgstr " from room %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from user %s"
 #~ msgstr " from user %s"
 
@@ -14805,7 +14757,6 @@ msgstr ""
 #~ msgid "using %s account"
 #~ msgstr "using %s account"
 
-#, python-format
 #~ msgid "using account %s"
 #~ msgstr "using account %s"
 

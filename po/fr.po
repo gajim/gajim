@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2022-02-06 20:35+0000\n"
 "Last-Translator: pitchum <pitchum@gramaton.org>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
@@ -1981,11 +1981,6 @@ msgid "Enabled"
 msgstr "Activé"
 
 msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr "Autorise Gajim à publier la géolocalisation si l'utilisateur le décide"
-
-msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
 "Status automatically"
 msgstr ""
@@ -2169,9 +2164,6 @@ msgstr "La génération d'avatar a échoué."
 msgid "Fake audio output"
 msgstr "Sortie audio feinte"
 
-msgid "Feature is not available under Windows"
-msgstr "Fonctionnalité indisponible sous Windows"
-
 msgid "Feature not available under Windows"
 msgstr "Fonctionnalité indisponible sous Windows"
 
@@ -2340,6 +2332,10 @@ msgstr "De"
 msgid "Full Name"
 msgstr "Nom complet"
 
+#, fuzzy
+msgid "Fully-featured XMPP chat client"
+msgstr "Un client de chat XMPP complet"
+
 #, python-format
 msgid "GLib Version: %s"
 msgstr "Version de GLib : %s"
@@ -2354,10 +2350,6 @@ msgstr "Gajim"
 #, fuzzy
 msgid "Gajim - Error"
 msgstr "Gajim - %s"
-
-#, fuzzy
-msgid "Gajim Team"
-msgstr "Thèmes de Gajim"
 
 msgid "Gajim Themes"
 msgstr "Thèmes de Gajim"
@@ -3184,9 +3176,6 @@ msgstr "Géolocalisation"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr "Localisé à Lat : %s Lon : %s"
-
-msgid "Location detection"
-msgstr "Géolocalisation"
 
 msgid "Location:"
 msgstr "Emplacement :"
@@ -4193,9 +4182,6 @@ msgstr "Requis"
 
 msgid "Requires: Gspell"
 msgstr "Nécessite : Gspell"
-
-msgid "Requires: geoclue"
-msgstr "Nécessite : geoclue"
 
 msgid ""
 "Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
@@ -6381,6 +6367,9 @@ msgstr ""
 msgid "or"
 msgstr "ou bien"
 
+msgid "org.gajim.Gajim"
+msgstr "org.gajim.Gajim"
+
 msgid "paused composing a message"
 msgstr "a arrêté d'écrire un message"
 
@@ -6711,7 +6700,6 @@ msgstr "... ou bien déposez ici"
 #~ msgid "%s or %s is a directory but should be a file"
 #~ msgstr "%s est un répertoire mais devrait être un fichier"
 
-#, python-format
 #~ msgid "%s results"
 #~ msgstr "%s résultats"
 
@@ -7879,7 +7867,6 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Characters that are printed before the nickname in conversations."
 #~ msgstr "Caractères affichés avant le surnom dans les conversations."
 
-#, python-format
 #~ msgid "Characters typed: %s"
 #~ msgstr "Caractères saisis : %s"
 
@@ -8560,6 +8547,12 @@ msgstr "... ou bien déposez ici"
 #~ "Autorise Gajim à détecter automatiquement les clients joignables sur le "
 #~ "réseau local pour les discussions sans serveur"
 
+#~ msgid ""
+#~ "Enables Gajim to be location-aware, if the user decides to publish the "
+#~ "device’s location"
+#~ msgstr ""
+#~ "Autorise Gajim à publier la géolocalisation si l'utilisateur le décide"
+
 #~ msgid "Enables Gajim to encrypt chat messages with OpenPGP"
 #~ msgstr "Autorise Gajim à chiffrer les messages avec OpenPGP."
 
@@ -8706,6 +8699,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Feature"
 #~ msgstr "Fonctionnalité"
 
+#~ msgid "Feature is not available under Windows"
+#~ msgstr "Fonctionnalité indisponible sous Windows"
+
 #~ msgid "Feature not available, see Help->Features"
 #~ msgstr "Fonctionnalité indisponible, voir Aide->Fonctionnalités"
 
@@ -8833,6 +8829,10 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Gajim History Logs Manager"
 #~ msgstr "Gestionnaire d'historique de Gajim"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Thèmes de Gajim"
 
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Personnalisation des thèmes de Gajim"
@@ -10006,6 +10006,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Local jid:"
 #~ msgstr "Identifiant local :"
 
+#~ msgid "Location detection"
+#~ msgstr "Géolocalisation"
+
 #~ msgid "Log _encrypted chat session"
 #~ msgstr "Archiver les conversations _chiffrées"
 
@@ -10718,7 +10721,6 @@ msgstr "... ou bien déposez ici"
 #~ "Veuillez tout d'abord appliquer un autre thème avant de supprimer celui-"
 #~ "ci."
 
-#, python-format
 #~ msgid "Please make sure you are connected with \"%s\"."
 #~ msgstr "Vérifiez que vous êtes connecté avec \"%s\"."
 
@@ -11065,6 +11067,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Requires python2.5."
 #~ msgstr "Nécessite python2.5"
+
+#~ msgid "Requires: geoclue"
+#~ msgstr "Nécessite : geoclue"
 
 #~ msgid "Requires: gir1.2-avahi-0.6"
 #~ msgstr "Nécessite : gir1.2-avahi-0.6"
@@ -11650,7 +11655,6 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Single Message"
 #~ msgstr "Message simple"
 
-#, python-format
 #~ msgid "Single Message (%s)"
 #~ msgstr "Message simple (%s)"
 
@@ -12639,7 +12643,6 @@ msgstr "... ou bien déposez ici"
 #~ msgid "XML console interface"
 #~ msgstr "Console XML"
 
-#, python-format
 #~ msgid ""
 #~ "XMPP Address \"%(jid)s\" is invalid.\n"
 #~ "%(error)s"
@@ -13639,9 +13642,6 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "oppose"
 #~ msgstr "opposer"
-
-#~ msgid "org.gajim.Gajim"
-#~ msgstr "org.gajim.Gajim"
 
 #~ msgid "otr"
 #~ msgstr "otr"

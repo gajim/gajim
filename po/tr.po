@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2022-01-13 21:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -2152,11 +2152,6 @@ msgid "Enabled"
 msgstr "Etkin"
 
 msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-
-msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
 "Status automatically"
 msgstr ""
@@ -2355,9 +2350,6 @@ msgstr "Tam-Ekrandan Çık"
 msgid "Fake audio output"
 msgstr "Ses çıkış aygıtı"
 
-msgid "Feature is not available under Windows"
-msgstr ""
-
 msgid "Feature not available under Windows"
 msgstr ""
 
@@ -2546,6 +2538,9 @@ msgstr "Gönderen"
 msgid "Full Name"
 msgstr "<b>Bütün isim</b>"
 
+msgid "Fully-featured XMPP chat client"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "GLib Version: %s"
 msgstr "GTK+ Runtime Sürümü"
@@ -2559,10 +2554,6 @@ msgstr "Gajim"
 
 #, fuzzy
 msgid "Gajim - Error"
-msgstr "Gajim - %s"
-
-#, fuzzy
-msgid "Gajim Team"
 msgstr "Gajim - %s"
 
 #, fuzzy
@@ -3362,10 +3353,6 @@ msgstr "Yer:"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr ""
-
-#, fuzzy
-msgid "Location detection"
-msgstr "Bağlantı"
 
 #, fuzzy
 msgid "Location:"
@@ -4479,10 +4466,6 @@ msgstr "Şifre gerekli"
 
 #, fuzzy
 msgid "Requires: Gspell"
-msgstr " (yetki gerektirir)"
-
-#, fuzzy
-msgid "Requires: geoclue"
 msgstr " (yetki gerektirir)"
 
 msgid ""
@@ -6825,6 +6808,9 @@ msgstr ""
 msgid "or"
 msgstr "Kime"
 
+msgid "org.gajim.Gajim"
+msgstr ""
+
 msgid "paused composing a message"
 msgstr "ilet yazarken durdu"
 
@@ -6974,35 +6960,30 @@ msgstr ""
 #~ msgid "%(1)s o'clock"
 #~ msgstr "Saat"
 
-#, python-format
 #~ msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #~ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s (%(jid)s) has removed subscription from you"
 #~ msgstr "\"%s\" kişi listesinden silincek"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s is now %(show)s %(status)s"
 #~ msgstr "%(nick)s durumu şimdi %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s Changed Status"
 #~ msgstr "%(nick)s Durumu değiştirdi"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(nick)s has set the subject to %(subject)s"
 #~ msgstr "Değerin maskenin sğında fazladan bitler var."
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s"
 #~ msgstr "%(nick)s durumu şimdi %(status)s"
 
-#, python-format
 #~ msgid "%(nickname)s Signed In"
 #~ msgstr "%(nickname)s Girdi"
 
-#, python-format
 #~ msgid "%(nickname)s Signed Out"
 #~ msgstr "%(nickname)s Çıktı"
 
@@ -7012,16 +6993,16 @@ msgstr ""
 #~ msgid "%(nickname)s: %(message)s"
 #~ msgstr "%(nickname)s: %(message)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(type)s state : %(state)s, reason: %(reason)s"
 #~ msgstr "Sohbet durum haberleri _göster:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%d event pending"
 #~ msgid_plural "%d events pending"
 #~ msgstr[0] "Kişi listesindeki olayları göster"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%d message pending"
 #~ msgid_plural "%d messages pending"
 #~ msgstr[0] "Ileti alınıyor"
@@ -7055,19 +7036,19 @@ msgstr ""
 #~ msgid "%s MiB/s"
 #~ msgstr "%s MiB"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s Missing"
 #~ msgstr "%s MiB"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s Status Message"
 #~ msgstr "durum ileti"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s configuration error"
 #~ msgstr "Hata açıklaması…"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s does not exist."
 #~ msgstr "Dosya mevcut değil"
 
@@ -7075,14 +7056,13 @@ msgstr ""
 #~ msgid "%s is not a group chat server"
 #~ msgstr "%s mevcut bir grubun ismi değil"
 
-#, python-format
 #~ msgid "%s wants to send you a file."
 #~ msgstr "%s size bir dosya göndermek istiyor."
 
 #~ msgid "%s wants to send you a file:"
 #~ msgstr "%s size bir dosya göndermek istiyor:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s wrote:\n"
 #~ msgstr "Yazıldı: %s\n"
 
@@ -7926,7 +7906,7 @@ msgstr ""
 #~ msgid "Character not allowed"
 #~ msgstr "Rahatsız etmeyin"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Characters typed: %s"
 #~ msgstr "Rahatsız etmeyin"
 
@@ -8021,7 +8001,7 @@ msgstr ""
 #~ msgid "Command line Control"
 #~ msgstr "Bir komut y_ürüt"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Comment: %s"
 #~ msgstr "Yorum:"
 
@@ -8131,7 +8111,7 @@ msgstr ""
 #~ msgid "Contact name"
 #~ msgstr "İlk Ad:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Contact name: <i>%s</i>"
 #~ msgstr "İlk Ad:"
 
@@ -8194,7 +8174,7 @@ msgstr ""
 #~ msgid "Could not Upload File"
 #~ msgstr "Resim acılamadı"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Could not change status of account \"%s\""
 #~ msgstr "Durum satırı okunamadı"
 
@@ -8206,7 +8186,7 @@ msgstr ""
 #~ msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 #~ msgstr "Resim acılamadı"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Could not connect to \"%s\""
 #~ msgstr "Resim acılamadı"
 
@@ -8232,7 +8212,7 @@ msgstr ""
 #~ msgid "Create Metacontact"
 #~ msgstr "Kişiyi yeniden adlandır"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Creating %s"
 #~ msgstr "Yaratıcı"
 
@@ -8252,7 +8232,7 @@ msgstr ""
 #~ msgid "Custom applications"
 #~ msgstr "Herzaman öntanımlı KDE uygulamaları kullan"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Custom hostname \"%s\" is wrong. It will be ignored."
 #~ msgstr "Kendi bir makine adı/portu kullan"
 
@@ -8326,7 +8306,6 @@ msgstr ""
 #~ msgid "Description:"
 #~ msgstr "Açıklama: "
 
-#, python-format
 #~ msgid "Description: %s"
 #~ msgstr "Açıklama: %s"
 
@@ -8383,12 +8362,12 @@ msgstr ""
 #~ msgid "Do you want to continue?"
 #~ msgstr "Devam etmek istiyor musunuz?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to permanently delete this conversation with <b>%s</b>?"
 #~ msgid_plural "Do you want to permanently delete these conversations?"
 #~ msgstr[0] "Seçilen anahtarları gerçekten silmek istiyor musunuz? "
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to remove %s from the contact list?"
 #~ msgstr "%s grupu kişi listesinden silmek istiyor musun?"
 
@@ -8507,7 +8486,7 @@ msgstr ""
 #~ msgid "Enter name / JID of contact or groupchat"
 #~ msgstr "JID veya Kişi adı girdir"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Enter the certificate passphrase for account %s"
 #~ msgstr "Gadu-Gudu hesabı için parola değiştir"
 
@@ -8547,14 +8526,14 @@ msgstr ""
 #~ msgid "Error verifying SSL certificate"
 #~ msgstr "      --sslcert     ssl istemci sertifikası\n"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Error while adding service. %s"
 #~ msgstr "Eklentilerin etkinleştirilmesinde hata #%d."
 
 #~ msgid "Error."
 #~ msgstr "Hata."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Error: %(error)s\n"
 #~ "Debug: %(debug)s"
@@ -8646,7 +8625,7 @@ msgstr ""
 #~ msgid "File already exists"
 #~ msgstr "Dosyası zaten var"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File name: %s"
 #~ msgstr "Dosya adı: %s"
 
@@ -8662,7 +8641,7 @@ msgstr ""
 #~ msgid "File transfer error notification color."
 #~ msgstr "Dosya Gönderme Tamamlandı"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s to %(name)s failed."
 #~ msgstr "Gönderdiğiniz iletide yazacak adın rengi."
 
@@ -8746,6 +8725,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Gajim Instant Messenger"
 #~ msgstr "Gajim'den gerçekten çıkılsın mı?"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim - %s"
 
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Gajim Tema Uyarlamak"
@@ -9251,7 +9234,7 @@ msgstr ""
 #~ msgid "Invite contacts to the conversation (Ctrl+G)"
 #~ msgstr "sobete dikkat veriyor"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Invited %(jid)s to %(room_jid)s"
 #~ msgstr "Bunu %s buna %s gönder"
 
@@ -9340,6 +9323,10 @@ msgstr ""
 #~ msgid "Leave Groupchats"
 #~ msgstr "Tam-Ekrandan Çık"
 
+#, fuzzy
+#~ msgid "Location detection"
+#~ msgstr "Bağlantı"
+
 #~ msgid "Log _encrypted chat session"
 #~ msgstr "Şifrelenmiş sohbet oturumu kaygıtla"
 
@@ -9380,11 +9367,11 @@ msgstr ""
 #~ msgid "Mail _client"
 #~ msgstr "?Client:Bilinmez"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Make %(contact1)s and %(contact2)s metacontacts"
 #~ msgstr "bir ses ve video"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Make %s first contact"
 #~ msgstr "bir ses ve video"
 
@@ -9746,11 +9733,11 @@ msgstr ""
 #~ msgid "Order:"
 #~ msgstr "Sıralama:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Order: %(order)s, action: %(action)s"
 #~ msgstr "Desteklenmeyen eylem '%s'"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 #~ msgstr "  Etiket     Tip                          İsim/Değer\n"
@@ -9946,11 +9933,11 @@ msgstr ""
 #~ msgid "Privacy List"
 #~ msgstr "Geçersiz Liste İsmi"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Privacy List <b><i>%s</i></b>"
 #~ msgstr "Geçersiz Liste İsmi"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Privacy List for %s"
 #~ msgstr "Sohbet için Hazır"
 
@@ -9958,7 +9945,7 @@ msgstr ""
 #~ msgid "Privacy Lists"
 #~ msgstr "Kişisel Gizlilik Listesini biçimle"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Privacy Lists for %s"
 #~ msgstr "Kişisel Gizlilik Listesini biçimle"
 
@@ -9992,7 +9979,7 @@ msgstr ""
 #~ msgid "PyCURL is not installed"
 #~ msgstr "Sertifika henüz geçerli değil"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "RE: %s"
 #~ msgstr "Adı _değiştir"
 
@@ -10023,7 +10010,6 @@ msgstr ""
 #~ msgid "Received"
 #~ msgstr "Alındı %s"
 
-#, python-format
 #~ msgid "Received %s"
 #~ msgstr "Alındı %s"
 
@@ -10055,7 +10041,7 @@ msgstr ""
 #~ msgid "Registration Succeeded"
 #~ msgstr "Onay başarılı oldu."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Registration with agent %s succeeded."
 #~ msgstr "%s ajanı ile kayıt başarılı"
 
@@ -10131,11 +10117,11 @@ msgstr ""
 #~ msgid "Rename contact"
 #~ msgstr "Kişiyi yeniden adlandır"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename contact %s?"
 #~ msgstr "Kişiyi yeniden adlandır"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename group %s?"
 #~ msgstr "Grupu yeniden adlandır"
 
@@ -10183,6 +10169,10 @@ msgstr ""
 #~ msgstr " (yetki gerektirir)"
 
 #, fuzzy
+#~ msgid "Requires: geoclue"
+#~ msgstr " (yetki gerektirir)"
+
+#, fuzzy
 #~ msgid "Requires: gir1.2-avahi-0.6"
 #~ msgstr "Python Programlama Dili"
 
@@ -10194,7 +10184,7 @@ msgstr ""
 #~ msgid "Requires: gpg.exe in your PATH environment variable"
 #~ msgstr "sistemin HTTP vekil ayarları kullanılır"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Requires: pybonjour and bonjour SDK running (%(url)s)"
 #~ msgstr "Dbus Denetim Altyapısı"
 
@@ -10295,7 +10285,7 @@ msgstr ""
 #~ msgid "Save status as preset"
 #~ msgstr "Önceden hazırlanmış olarak kaydet:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Saved in: %s"
 #~ msgstr "ben burdaysam"
 
@@ -10328,11 +10318,10 @@ msgstr ""
 #~ msgid "Send"
 #~ msgstr "_Gönder"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send %(from)s to %(to)s"
 #~ msgstr "Bunu %s buna %s gönder"
 
-#, python-format
 #~ msgid "Send %s"
 #~ msgstr "Gönder %s"
 
@@ -10379,7 +10368,7 @@ msgstr ""
 #~ msgid "Send message and close window"
 #~ msgstr "Bu ileti gönder ve pencereyi kapat"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send this file to %s:\n"
 #~ msgid_plural "Send these files to %s:\n"
 #~ msgstr[0] "Yapmak istediğiniz şey bu mu?"
@@ -10574,11 +10563,10 @@ msgstr ""
 #~ msgid "Single Message"
 #~ msgstr "Tek Bir İleti Gönder…"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Single Message in account %s"
 #~ msgstr "Ileti cevap da içerilsin mi?"
 
-#, python-format
 #~ msgid "Single Message using account %s"
 #~ msgstr "%s Hesabını Kullanarak Tekli Mesaj"
 
@@ -10590,7 +10578,7 @@ msgstr ""
 #~ msgid "Size"
 #~ msgstr "%1 (boyut %2)"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Size: %s"
 #~ msgstr "%1 (boyut %2)"
 
@@ -10653,11 +10641,11 @@ msgstr ""
 #~ msgid "Status Preset"
 #~ msgstr "durum ileti"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Status is now: %(status)s"
 #~ msgstr "%(nick)s durumu şimdi %(status)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Status is now: %(status)s: %(status_msg)s"
 #~ msgstr "%(nick)s durumu şimdi %(status)s"
 
@@ -10707,7 +10695,7 @@ msgstr ""
 #~ msgid "Subject:"
 #~ msgstr "Konu:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Subject: %(subject)s\n"
 #~ "%(message)s"
@@ -10718,7 +10706,6 @@ msgstr ""
 #~ msgid "Subject: %s"
 #~ msgstr "Konu: %s"
 
-#, python-format
 #~ msgid "Subject: %s\n"
 #~ msgstr "Konu: %s\n"
 
@@ -10733,7 +10720,7 @@ msgstr ""
 #~ msgid "Subscription request"
 #~ msgstr "Üyelik isteği"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Subscription request from %s"
 #~ msgstr "Dosya Gönderme Soru"
 
@@ -10860,7 +10847,7 @@ msgstr ""
 #~ msgid "Thirsty"
 #~ msgstr "Susamış"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "This account %s doesn't support invisibility."
 #~ msgstr "%s hesabı görünmezliği desteklemiyor."
 
@@ -10933,7 +10920,7 @@ msgstr ""
 #~ msgid "Type: "
 #~ msgstr "_Türü:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Type: %s"
 #~ msgstr "_Türü:"
 
@@ -10945,7 +10932,7 @@ msgstr ""
 #~ msgid "URL Color"
 #~ msgstr "Renk"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Unable to bind to port %d."
 #~ msgstr "PORT komutu gönderilemiyor"
 
@@ -11240,7 +11227,7 @@ msgstr ""
 #~ "Şuraya bir yorum gönderiyorsunuz:\n"
 #~ "  "
 
-#, fuzzy, python-brace-format
+#, fuzzy
 #~ msgid "You are invited to {room} by {user}"
 #~ msgstr ""
 #~ "Şuraya bir yorum gönderiyorsunuz:\n"
@@ -11302,7 +11289,7 @@ msgstr ""
 #~ msgid "You still have open chats in your account %s"
 #~ msgstr "Bir hesap seçmek zorundasınız."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "You successfully sent %(filename)s to %(name)s."
 #~ msgstr "Gönderdiğiniz iletide yazacak adın rengi."
 
@@ -11836,11 +11823,11 @@ msgstr ""
 #~ msgid "from"
 #~ msgstr "gönderen"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from %s"
 #~ msgstr " gönderen %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from group chat %s"
 #~ msgstr "grupdaki herkez"
 
@@ -11848,7 +11835,7 @@ msgstr ""
 #~ msgid "from room %s"
 #~ msgstr " gönderen oda %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from user %s"
 #~ msgstr " gönderen kişi %s"
 
@@ -12042,7 +12029,6 @@ msgstr ""
 #~ msgid "using %s account"
 #~ msgstr "%s hesapı kullanıp"
 
-#, python-format
 #~ msgid "using account %s"
 #~ msgstr "%s hesapı kullanıp"
 

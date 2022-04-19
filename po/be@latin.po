@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -2193,11 +2193,6 @@ msgid "Enabled"
 msgstr "Ukluč"
 
 msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-
-msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
 "Status automatically"
 msgstr ""
@@ -2397,10 +2392,6 @@ msgid "Fake audio output"
 msgstr ""
 
 #, fuzzy
-msgid "Feature is not available under Windows"
-msgstr "Aŭtamatyčnaje paviedamleńnie statusu \"Niedastupny\""
-
-#, fuzzy
 msgid "Feature not available under Windows"
 msgstr "Aŭtamatyčnaje paviedamleńnie statusu \"Niedastupny\""
 
@@ -2592,6 +2583,9 @@ msgstr "Ad"
 msgid "Full Name"
 msgstr "<b>Asablivy</b>"
 
+msgid "Fully-featured XMPP chat client"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "GLib Version: %s"
 msgstr "Versija GTK+:"
@@ -2605,10 +2599,6 @@ msgstr "Gajim"
 
 #, fuzzy
 msgid "Gajim - Error"
-msgstr "Gajim - %s"
-
-#, fuzzy
-msgid "Gajim Team"
 msgstr "Gajim - %s"
 
 #, fuzzy
@@ -3472,10 +3462,6 @@ msgstr "Madyfikacyja kontu"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr ""
-
-#, fuzzy
-msgid "Location detection"
-msgstr "Złučeńnie"
 
 #, fuzzy
 msgid "Location:"
@@ -4590,10 +4576,6 @@ msgstr "Vymahaje parolu"
 
 msgid "Requires: Gspell"
 msgstr ""
-
-#, fuzzy
-msgid "Requires: geoclue"
-msgstr "_Daj hołas"
 
 msgid ""
 "Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
@@ -6963,6 +6945,9 @@ msgstr "adno z: offline, online, chat, away, xa, dnd, invisible "
 msgid "or"
 msgstr "Da"
 
+msgid "org.gajim.Gajim"
+msgstr ""
+
 msgid "paused composing a message"
 msgstr "pierastaŭ pisać"
 
@@ -7108,11 +7093,10 @@ msgstr ""
 #~ msgid "%(1)s o'clock"
 #~ msgstr "%(1)s hadzinaŭ"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(filename)s received from %(name)s."
 #~ msgstr "Pieradača fajłu %(filename)s ad %(name)s spyniena."
 
-#, python-format
 #~ msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #~ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
@@ -7120,15 +7104,14 @@ msgstr ""
 #~ msgid "%(jid)s has been invited in this room"
 #~ msgstr "%(who)s vypchnuŭ %(nick)s: %(reason)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s (%(jid)s) has removed subscription from you"
 #~ msgstr "Kantakt \"%s\" anulavaŭ tvaju aŭtaryzacyju"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s is now %(show)s %(status)s"
 #~ msgstr "%(nick)s maje ciapier status %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s Changed Status"
 #~ msgstr "%(nick)s źmianiŭ status"
 
@@ -7138,27 +7121,22 @@ msgstr ""
 #~ msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 #~ msgstr "%(who)s vypchnuŭ %(nick)s: %(reason)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(nick)s has set the subject to %(subject)s"
 #~ msgstr "%(nick)s vypchnuty z pakoju: %(reason)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s"
 #~ msgstr "%(nick)s maje ciapier status %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s: %(status_msg)s"
 #~ msgstr "%(nick)s maje ciapier status %(status)s: %(status_msg)s"
 
-#, python-format
 #~ msgid "%(nickname)s Signed In"
 #~ msgstr "%(nickname)s dałučyŭsia"
 
-#, python-format
 #~ msgid "%(nickname)s Signed Out"
 #~ msgstr "%(nickname)s adłučyŭsia"
 
-#, python-format
 #~ msgid "%(nickname)s from group chat %(room_name)s"
 #~ msgstr "%(nickname)s z pakoju %(room_name)s"
 
@@ -7174,25 +7152,23 @@ msgstr ""
 #~ "from %(source)s"
 #~ msgstr "\"%(title)s\" ŭ vykanańni %(artist)s"
 
-#, python-format
 #~ msgid "%(who)s on %(time)s said: %(message)s\n"
 #~ msgstr "%(who)s a %(time)s napisaŭ: %(message)s\n"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%d message pending"
 #~ msgid_plural "%d messages pending"
 #~ msgstr[0] "Dašli paviedamleńnie"
 #~ msgstr[1] "Dašli paviedamleńnie"
 #~ msgstr[2] "Dašli paviedamleńnie"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%i day"
 #~ msgid_plural "%i days"
 #~ msgstr[0] "%i dzion tamu"
 #~ msgstr[1] "%i dzion tamu"
 #~ msgstr[2] "%i dzion tamu"
 
-#, python-format
 #~ msgid ""
 #~ "%s\n"
 #~ "Link-local messaging might not work properly."
@@ -7232,15 +7208,14 @@ msgstr ""
 #~ msgid "%s MiB/s"
 #~ msgstr "%s MiB"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s Missing"
 #~ msgstr "%s MiB"
 
-#, python-format
 #~ msgid "%s Status Message"
 #~ msgstr "Paviedamleńnie statusu %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s configuration error"
 #~ msgstr "Kanfihuracyja pakoju"
 
@@ -7254,7 +7229,7 @@ msgstr ""
 #~ msgid "%s does not appear to be a valid JID"
 #~ msgstr "%s nia jość pravilnym JIDam"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s does not exist."
 #~ msgstr "Takoha pakoju niama."
 
@@ -7263,7 +7238,6 @@ msgstr ""
 #~ "%s nie dasłaŭ svajho kluča OpenPGP, a ty taksama nie pryznačyŭ na jaho "
 #~ "kluča"
 
-#, python-format
 #~ msgid "%s is a directory but should be a file"
 #~ msgstr "%s jość kataloham, ale musiŭ być fajł"
 
@@ -7284,18 +7258,16 @@ msgstr ""
 #~ msgid "%s or %s is a directory but should be a file"
 #~ msgstr "%s jość kataloham, ale musiŭ być fajł"
 
-#, python-format
 #~ msgid "%s wants to send you a file."
 #~ msgstr "%s choča dasłać tabie fajł."
 
 #~ msgid "%s wants to send you a file:"
 #~ msgstr "%s choča dasłać tabie fajł:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s wants to start a voice chat."
 #~ msgstr "%s choča dasłać tabie fajł."
 
-#, python-format
 #~ msgid "%s wrote:\n"
 #~ msgstr "%s napisaŭ:\n"
 
@@ -8235,7 +8207,7 @@ msgstr ""
 #~ msgid "Busy "
 #~ msgstr "Zaniaty"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "By removing the following contacts, you will also remove authorization. "
 #~ "This means they will see you as offline:\n"
@@ -8394,7 +8366,7 @@ msgstr ""
 #~ msgid "Characters that are printed before the nickname in conversations."
 #~ msgstr "Znaki, što pakazvajucca ŭ razmovie pierad mianuškaj"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Characters typed: %s"
 #~ msgstr "Mianuška nie dazvolenaja: %s"
 
@@ -8509,7 +8481,6 @@ msgstr ""
 #~ msgid "Command line Control"
 #~ msgstr "Zahady: %s"
 
-#, python-format
 #~ msgid "Comment: %s"
 #~ msgstr "Kamentar: %s"
 
@@ -8651,7 +8622,6 @@ msgstr ""
 #~ msgid "Contact name"
 #~ msgstr "Nazva kantaktu"
 
-#, python-format
 #~ msgid "Contact name: <i>%s</i>"
 #~ msgstr "Nazva kantaktu: <i>%s</i>"
 
@@ -8724,7 +8694,6 @@ msgstr ""
 #~ msgid "Could not Upload File"
 #~ msgstr "Niemahčyma adčytać vyjavu"
 
-#, python-format
 #~ msgid "Could not change status of account \"%s\""
 #~ msgstr "Niemahčyma źmianić status kontu \"%s\""
 
@@ -8736,7 +8705,6 @@ msgstr ""
 #~ msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 #~ msgstr "Niemahčyma złučycca z \"%s\""
 
-#, python-format
 #~ msgid "Could not connect to \"%s\""
 #~ msgstr "Niemahčyma złučycca z \"%s\""
 
@@ -8761,7 +8729,7 @@ msgstr ""
 #~ msgid "Create Metacontact"
 #~ msgstr "Źmiani nazvu kantaktu"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Creating %s"
 #~ msgstr "Apisańnie: %s"
 
@@ -8780,7 +8748,7 @@ msgstr ""
 #~ msgid "Custom"
 #~ msgstr "<b>Asablivy</b>"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Custom hostname \"%s\" is wrong. It will be ignored."
 #~ msgstr "Skarystaj admysłovy host/port"
 
@@ -8862,7 +8830,6 @@ msgstr ""
 #~ msgid "Description:"
 #~ msgstr "Apisańnie: %s"
 
-#, python-format
 #~ msgid "Description: %s"
 #~ msgstr "Apisańnie: %s"
 
@@ -8887,7 +8854,6 @@ msgstr ""
 #~ "Razmova\n"
 #~ "Asobnaje paviedamleńnie"
 
-#, python-format
 #~ msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 #~ msgstr "U adrasie słoŭnika nie staje \"%s\", i heta nia Wiktionary"
 
@@ -8955,14 +8921,14 @@ msgstr ""
 #~ msgid "Do you want to continue?"
 #~ msgstr "Što chočaš zrabić?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to permanently delete this conversation with <b>%s</b>?"
 #~ msgid_plural "Do you want to permanently delete these conversations?"
 #~ msgstr[0] "Sapraŭdy chočaš vydalić zaznačanaje paviedamleńnie?"
 #~ msgstr[1] "Sapraŭdy chočaš vydalić zaznačanaje paviedamleńnie?"
 #~ msgstr[2] "Sapraŭdy chočaš vydalić zaznačanaje paviedamleńnie?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to remove %s from the contact list?"
 #~ msgstr "Chočaš vydalić hrupu %s sa śpisu kantaktaŭ?"
 
@@ -9087,7 +9053,7 @@ msgstr ""
 #~ msgid "Enter name / JID of contact or groupchat"
 #~ msgstr "Nazva kantaktu"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Enter the certificate passphrase for account %s"
 #~ msgstr "Vyznač parol GPG dla kontu %s."
 
@@ -9116,7 +9082,6 @@ msgstr ""
 #~ msgid "Error reading file:"
 #~ msgstr "Pamyłka adčytańnia fajłu:"
 
-#, python-format
 #~ msgid "Error while adding service. %s"
 #~ msgstr "Pamyłka dadańnia servisu. %s"
 
@@ -9124,7 +9089,7 @@ msgstr ""
 #~ msgid "Error."
 #~ msgstr "Pamyłka Avahi"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Error: %(error)s\n"
 #~ "Debug: %(debug)s"
@@ -9193,6 +9158,10 @@ msgstr ""
 #~ msgid "Feature"
 #~ msgstr "Zdolnaści serveraŭ"
 
+#, fuzzy
+#~ msgid "Feature is not available under Windows"
+#~ msgstr "Aŭtamatyčnaje paviedamleńnie statusu \"Niedastupny\""
+
 #~ msgid "Feed name:"
 #~ msgstr "Nazva kanału:"
 
@@ -9214,7 +9183,7 @@ msgstr ""
 #~ msgid "File already exists"
 #~ msgstr "Hety fajł užo isnuje"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File name: %s"
 #~ msgstr "Nazva fajłu: %s"
 
@@ -9229,19 +9198,17 @@ msgstr ""
 #~ msgid "File transfer error notification color."
 #~ msgstr "Pieradača fajłu anulavana"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s from %(name)s failed."
 #~ msgstr "Pieradača fajłu %(filename)s ad %(name)s spyniena."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s from %(name)s stopped."
 #~ msgstr "Pieradača fajłu %(filename)s ad %(name)s spyniena."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s to %(name)s failed."
 #~ msgstr "Pieradača fajłu %(filename)s da %(name)s spynienaja."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s to %(name)s stopped."
 #~ msgstr "Pieradača fajłu %(filename)s da %(name)s spynienaja."
 
@@ -9328,6 +9295,10 @@ msgstr ""
 
 #~ msgid "Gajim Instant Messenger"
 #~ msgstr "Kamunikatar Gajim"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim - %s"
 
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Kanfihuracyja temy Gajim"
@@ -9636,7 +9607,7 @@ msgstr ""
 #~ msgid "Idle for:"
 #~ msgstr "Kansol XML dla %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "If \"%s\" accepts this request you will know their status."
 #~ msgstr "Kali \"%s\" zadavolić tvoj zapyt, ty zmožaš bačyć jahony status."
 
@@ -10114,7 +10085,7 @@ msgstr ""
 #~ msgid "Invite contacts to the conversation (Ctrl+G)"
 #~ msgstr "sočyć za razmovaj"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Invited %(jid)s to %(room_jid)s"
 #~ msgstr "%(contact_jid)s zaprošany ŭ %(room_jid)s."
 
@@ -10122,13 +10093,13 @@ msgstr ""
 #~ msgid "Invited %s to %s"
 #~ msgstr "Dašli %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s, this XMPP Address is not "
 #~ "valid."
 #~ msgstr "Niemahčyma dasyłać pustyja fajły"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s. This XMPP Address is not "
 #~ "valid."
@@ -10254,6 +10225,10 @@ msgstr ""
 #~ msgid "Lists all preferences and their values"
 #~ msgstr "Pakazvaje ŭsie nałady i ichnyja vartaści"
 
+#, fuzzy
+#~ msgid "Location detection"
+#~ msgstr "Złučeńnie"
+
 #~ msgid "Log _off"
 #~ msgstr "_Adłučysia"
 
@@ -10298,11 +10273,11 @@ msgstr ""
 #~ msgid "Mail _client"
 #~ msgstr "_Paštovaja prahrama:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Make %(contact1)s and %(contact2)s metacontacts"
 #~ msgstr "Zrabi z %s i %s metakantakt"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Make %s first contact"
 #~ msgstr "Zrabi z %s i %s metakantakt"
 
@@ -10615,7 +10590,6 @@ msgstr ""
 #~ msgid "Notify on new _GMail email"
 #~ msgstr "Paviedamlaj mnie ab novych listach u skryni _Gmail"
 
-#, python-format
 #~ msgid "Now \"%s\" will always see you as offline."
 #~ msgstr "Ciapier \"%s\" budzie zaŭsiody bačyć ciabie jak adłučanaha."
 
@@ -10723,11 +10697,11 @@ msgstr ""
 #~ msgid "Order:"
 #~ msgstr "Paradak:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Order: %(order)s, action: %(action)s"
 #~ msgstr "Paradak: %s, dziejańnie: %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 #~ msgstr "Paradak: %s, dziejańnie: %s, typ: %s, vartaść: %s"
@@ -10882,7 +10856,6 @@ msgstr ""
 #~ "kali łaska, pravier, ci instalavanaja biblijateka Pywin32. Jaje možna "
 #~ "ściahnuć z %s"
 
-#, python-format
 #~ msgid "Please make sure you are connected with \"%s\"."
 #~ msgstr "Kali łaska, pravier, ci jość złučeńnie z \"%s\"."
 
@@ -11015,25 +10988,22 @@ msgstr ""
 #~ msgid "Privacy List"
 #~ msgstr "Śpis pryvatnaści"
 
-#, python-format
 #~ msgid "Privacy List <b><i>%s</i></b>"
 #~ msgstr "Śpis pryvatnaści <b><i>%s</i></b>"
 
-#, python-format
 #~ msgid "Privacy List for %s"
 #~ msgstr "Śpis pryvatnaści dla %s"
 
 #~ msgid "Privacy Lists"
 #~ msgstr "Śpisy pryvatnaści"
 
-#, python-format
 #~ msgid "Privacy Lists for %s"
 #~ msgstr "Śpisy pryvatnaści dla %s"
 
 #~ msgid "Privacy Lists:"
 #~ msgstr "Śpisy pryvatnaści:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Privacy list %s has not been removed. It is probably active in one of "
 #~ "your connected resources. Please deactivate it and try again."
@@ -11075,7 +11045,6 @@ msgstr ""
 #~ msgid "Quit"
 #~ msgstr "_Skonč pracu"
 
-#, python-format
 #~ msgid "RE: %s"
 #~ msgstr "RE: %s"
 
@@ -11122,7 +11091,6 @@ msgstr ""
 #~ msgid "Received"
 #~ msgstr "Atrymana %s"
 
-#, python-format
 #~ msgid "Received %s"
 #~ msgstr "Atrymana %s"
 
@@ -11155,7 +11123,7 @@ msgstr ""
 #~ msgid "Registration information for transport %s has not arrived in time"
 #~ msgstr "Źviestki rehistracyi dla transpartu %s nie pryjšli ŭ čas"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Registration with agent %s succeeded."
 #~ msgstr "Zarehistrujsia na %s"
 
@@ -11226,11 +11194,11 @@ msgstr ""
 #~ msgid "Rename contact"
 #~ msgstr "Źmiani nazvu kantaktu"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename contact %s?"
 #~ msgstr "Źmiani nazvu kantaktu"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename group %s?"
 #~ msgstr "Źmiani nazvu hrupy"
 
@@ -11244,6 +11212,10 @@ msgstr ""
 
 #~ msgid "Reply to this message"
 #~ msgstr "Adkažy na hetaje paviedamleńnie"
+
+#, fuzzy
+#~ msgid "Requires: geoclue"
+#~ msgstr "_Daj hołas"
 
 #, fuzzy
 #~ msgid "Requires: gpg.exe in your PATH environment variable"
@@ -11352,7 +11324,6 @@ msgstr ""
 #~ msgid "Save status as preset"
 #~ msgstr "Zachavaj jak šablon..."
 
-#, python-format
 #~ msgid "Saved in: %s"
 #~ msgstr "Zapisany ŭ: %s"
 
@@ -11386,11 +11357,10 @@ msgstr ""
 #~ msgid "Send"
 #~ msgstr "_Vyšli"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send %(from)s to %(to)s"
 #~ msgstr "Dašli %s"
 
-#, python-format
 #~ msgid "Send %s"
 #~ msgstr "Dašli %s"
 
@@ -11443,7 +11413,7 @@ msgstr ""
 #~ msgid "Send message and close window"
 #~ msgstr "Dašli paviedamleńnie i začyni akno"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send this file to %s:\n"
 #~ msgid_plural "Send these files to %s:\n"
 #~ msgstr[0] "%s choča dasłać tabie fajł:"
@@ -11693,11 +11663,9 @@ msgstr ""
 #~ msgid "Single Message"
 #~ msgstr "Asobnaje paviedamleńnie"
 
-#, python-format
 #~ msgid "Single Message in account %s"
 #~ msgstr "Asobnaje paviedamleńnie z kontu %s"
 
-#, python-format
 #~ msgid "Single Message using account %s"
 #~ msgstr "Asobnaje paviedamleńnie z kontu %s"
 
@@ -11705,7 +11673,6 @@ msgstr ""
 #~ msgid "Size"
 #~ msgstr "Pamier: %s"
 
-#, python-format
 #~ msgid "Size: %s"
 #~ msgstr "Pamier: %s"
 
@@ -11773,11 +11740,9 @@ msgstr ""
 #~ msgid "Status Preset"
 #~ msgstr "Paviedamleńnie statusu"
 
-#, python-format
 #~ msgid "Status is now: %(status)s"
 #~ msgstr "Dziejny status: %(status)s"
 
-#, python-format
 #~ msgid "Status is now: %(status)s: %(status_msg)s"
 #~ msgstr "Dziejny status: %(status)s: %(status_msg)s"
 
@@ -11818,7 +11783,7 @@ msgstr ""
 #~ msgid "Subject:"
 #~ msgstr "Tema:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Subject: %(subject)s\n"
 #~ "%(message)s"
@@ -11829,7 +11794,6 @@ msgstr ""
 #~ msgid "Subject: %s"
 #~ msgstr "Tema: %s"
 
-#, python-format
 #~ msgid "Subject: %s\n"
 #~ msgstr "Tema: %s\n"
 
@@ -11845,11 +11809,10 @@ msgstr ""
 #~ msgid "Subscription request"
 #~ msgstr "Zapyt aŭtaryzacyi"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Subscription request for account %(account)s from %(jid)s"
 #~ msgstr "Zapyt aŭtaryzacyi dla kontu %s ad %s"
 
-#, python-format
 #~ msgid "Subscription request from %s"
 #~ msgstr "Zapyt aŭtaryzacyi ad %s"
 
@@ -11893,7 +11856,7 @@ msgstr ""
 #~ msgid "Synchronize the status of all accounts"
 #~ msgstr "Źmianiaje status kontu albo kontaŭ"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "System bus is not available.\n"
 #~ "Try reading %(url)s"
@@ -11938,7 +11901,7 @@ msgstr ""
 #~ msgid "The auto away status message"
 #~ msgstr "Aŭtamatyčnaje paviedamleńnie statusu \"Adyjšoŭ\""
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "The contact \"%s\" has authorized you to see their status."
 #~ msgstr ""
 #~ "Kantakt \"%s\" aŭtaryzavaŭ ciabie, i ciapier ty možaš bačyć jaho status."
@@ -12000,7 +11963,7 @@ msgstr ""
 #~ msgid "Thinking"
 #~ msgstr "Pracuju"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "This account %s doesn't support invisibility."
 #~ msgstr "Śpis dziejnych, skončanych i spynienych pieradačaŭ fajłaŭ"
 
@@ -12120,7 +12083,7 @@ msgstr ""
 #~ msgid "Transferred: "
 #~ msgstr "Pierasłany: "
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 #~ msgstr "Transpart %s niapravilna adkazaŭ na zapyt rehistracyi: %s"
 
@@ -12149,7 +12112,6 @@ msgstr ""
 #~ msgid "Type: "
 #~ msgstr "Typ: "
 
-#, python-format
 #~ msgid "Type: %s"
 #~ msgstr "Typ: %s"
 
@@ -12157,7 +12119,6 @@ msgstr ""
 #~ msgid "URL Color"
 #~ msgstr "Koler"
 
-#, python-format
 #~ msgid "Unable to bind to port %d."
 #~ msgstr "Niemahčyma dałučycca da portu %d."
 
@@ -12577,7 +12538,7 @@ msgstr ""
 #~ msgid "You are invited to a groupchat"
 #~ msgstr "Ty nie dałučyŭsia da pakoju."
 
-#, fuzzy, python-brace-format
+#, fuzzy
 #~ msgid "You are invited to {room} by {user}"
 #~ msgstr "Ty nie dałučyŭsia da pakoju."
 
@@ -12731,7 +12692,7 @@ msgstr ""
 #~ msgid "You must read them before removing this transport."
 #~ msgstr "Musiš pračytać ich pierad vydaleńniem hetaha transpartu."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "You must supply the %s of the new contact."
 #~ msgstr "Treba ŭvieści parol dla novaha kontu."
 
@@ -12754,7 +12715,6 @@ msgstr ""
 #~ msgid "You successfully received %(filename)s from %(name)s."
 #~ msgstr "Atrymany fajł %(filename)s ad %(name)s."
 
-#, python-format
 #~ msgid "You successfully sent %(filename)s to %(name)s."
 #~ msgstr "Fajł %(filename)s paśpiachova dasłany da %(name)s."
 
@@ -12765,7 +12725,7 @@ msgstr ""
 #~ msgid "You will be connected to %s without OpenPGP."
 #~ msgstr "Ty dałučyśsia da %s biaz OpenPGP."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "You will no longer be able to send and receive messages from and to "
 #~ "contacts using these transports:\n"
@@ -13376,11 +13336,11 @@ msgstr ""
 #~ msgid "from"
 #~ msgstr "Ad"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from %s"
 #~ msgstr "Ad"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from group chat %s"
 #~ msgstr "Dałučysia da _pakoju"
 
@@ -13590,7 +13550,6 @@ msgstr ""
 #~ msgid "using %s account"
 #~ msgstr "praz kont %s"
 
-#, python-format
 #~ msgid "using account %s"
 #~ msgstr "praz kont %s"
 

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2009-10-29 10:21+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -2190,11 +2190,6 @@ msgid "Enabled"
 msgstr "Aktiverad"
 
 msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-
-msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
 "Status automatically"
 msgstr ""
@@ -2395,10 +2390,6 @@ msgid "Fake audio output"
 msgstr ""
 
 #, fuzzy
-msgid "Feature is not available under Windows"
-msgstr "Funktionen är inte tillgänglig under Windows."
-
-#, fuzzy
 msgid "Feature not available under Windows"
 msgstr "Funktionen är inte tillgänglig under Windows."
 
@@ -2586,6 +2577,9 @@ msgstr "Från"
 msgid "Full Name"
 msgstr "<b>Fullständigt namn</b>"
 
+msgid "Fully-featured XMPP chat client"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "GLib Version: %s"
 msgstr "GTK+ version:"
@@ -2600,10 +2594,6 @@ msgstr "Gajim"
 #, fuzzy
 msgid "Gajim - Error"
 msgstr "Gajim - %s"
-
-#, fuzzy
-msgid "Gajim Team"
-msgstr "gajim-remote"
 
 #, fuzzy
 msgid "Gajim Themes"
@@ -3448,10 +3438,6 @@ msgstr "Notifiering"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr ""
-
-#, fuzzy
-msgid "Location detection"
-msgstr "Anslutning"
 
 #, fuzzy
 msgid "Location:"
@@ -4568,10 +4554,6 @@ msgstr "Lösenord krävs"
 
 #, fuzzy
 msgid "Requires: Gspell"
-msgstr "Kräver libgtkspell."
-
-#, fuzzy
-msgid "Requires: geoclue"
 msgstr "Kräver libgtkspell."
 
 msgid ""
@@ -6952,6 +6934,9 @@ msgstr "en av: offline, online, chat, away, xa, dnd, invisible "
 msgid "or"
 msgstr "Till"
 
+msgid "org.gajim.Gajim"
+msgstr ""
+
 msgid "paused composing a message"
 msgstr "tog en paus i skrivandet"
 
@@ -7155,11 +7140,10 @@ msgstr ""
 #~ msgid "%(1)s o'clock"
 #~ msgstr "%(1)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(filename)s received from %(name)s."
 #~ msgstr "Överföringen av %(filename)s från %(name)s har stannat."
 
-#, python-format
 #~ msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #~ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
@@ -7167,15 +7151,14 @@ msgstr ""
 #~ msgid "%(jid)s has been invited in this room"
 #~ msgstr "%(nick)s har tagits bort från rummet (%(reason)s)"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s (%(jid)s) has removed subscription from you"
 #~ msgstr "Kontakten \"%s\" tog bort prenumerationen från dig"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s is now %(show)s %(status)s"
 #~ msgstr "%(name)s är nu %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s Changed Status"
 #~ msgstr "%(nick)s ändrade status"
 
@@ -7185,27 +7168,22 @@ msgstr ""
 #~ msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 #~ msgstr "%(nick)s har blivit sparkad av %(who)s: %(reason)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(nick)s has set the subject to %(subject)s"
 #~ msgstr "%(jid)s har ställt in ämnet till %(subject)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s"
 #~ msgstr "%(nick)s är nu %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s: %(status_msg)s"
 #~ msgstr "%(nick)s är nu %(status)s:%(status_msg)s"
 
-#, python-format
 #~ msgid "%(nickname)s Signed In"
 #~ msgstr "%(nickname)s loggade in"
 
-#, python-format
 #~ msgid "%(nickname)s Signed Out"
 #~ msgstr "%(nickname)s loggade ut"
 
-#, python-format
 #~ msgid "%(nickname)s from group chat %(room_name)s"
 #~ msgstr "%(nickname)s från gruppchatten %(room_name)s"
 
@@ -7231,29 +7209,25 @@ msgstr ""
 #~ "%(type)s-kryptering %(status)s aktiv %(authenticated)s.\n"
 #~ "Din chattsession %(logged)s att loggas."
 
-#, python-format
 #~ msgid "%(who)s on %(time)s said: %(message)s\n"
 #~ msgstr "%(who)s på %(time)s sa: %(message)s\n"
 
-#, python-format
 #~ msgid "%d event pending"
 #~ msgid_plural "%d events pending"
 #~ msgstr[0] "%d väntande händelse"
 #~ msgstr[1] "%d väntande händelser"
 
-#, python-format
 #~ msgid "%d message pending"
 #~ msgid_plural "%d messages pending"
 #~ msgstr[0] "%d meddelande väntar"
 #~ msgstr[1] "%d meddelanden väntar"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%i day"
 #~ msgid_plural "%i days"
 #~ msgstr[0] "%i dagar sen"
 #~ msgstr[1] "%i dagar sen"
 
-#, python-format
 #~ msgid ""
 #~ "%s\n"
 #~ "Link-local messaging might not work properly."
@@ -7289,15 +7263,14 @@ msgstr ""
 #~ msgid "%s MiB/s"
 #~ msgstr "%s MiB"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s Missing"
 #~ msgstr "%s MiB"
 
-#, python-format
 #~ msgid "%s Status Message"
 #~ msgstr "Statusmeddelande för %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s configuration error"
 #~ msgstr "Rumkonfiguration"
 
@@ -7310,7 +7283,7 @@ msgstr ""
 #~ msgid "%s does not appear to be a valid JID"
 #~ msgstr "%s verkar inte vara ett giltigt JID"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s does not exist."
 #~ msgstr "Filen finns inte"
 
@@ -7321,7 +7294,6 @@ msgstr ""
 #~ msgid "%s has sent you a new message."
 #~ msgstr "%s har skickat dig ett nytt meddelande."
 
-#, python-format
 #~ msgid "%s is a directory but should be a file"
 #~ msgstr "%s är en katalog men den borde vara en fil"
 
@@ -7345,18 +7317,16 @@ msgstr ""
 #~ msgid "%s or %s is a directory but should be a file"
 #~ msgstr "%s är en katalog men den borde vara en fil"
 
-#, python-format
 #~ msgid "%s wants to send you a file."
 #~ msgstr "%s vill skicka en fil till dig."
 
 #~ msgid "%s wants to send you a file:"
 #~ msgstr "%s vill skicka en fil till dig:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s wants to start a voice chat."
 #~ msgstr "%s vill skicka en fil till dig."
 
-#, python-format
 #~ msgid "%s wrote:\n"
 #~ msgstr "%s skrev:\n"
 
@@ -8409,7 +8379,7 @@ msgstr ""
 #~ msgid "Buying Groceries"
 #~ msgstr "Handlar mat"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "By removing the following contacts, you will also remove authorization. "
 #~ "This means they will see you as offline:\n"
@@ -8558,7 +8528,7 @@ msgstr ""
 #~ msgid "Characters that are printed before the nickname in conversations."
 #~ msgstr "Tecken som skrivs ut före smeknamnet i konversationer"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Characters typed: %s"
 #~ msgstr "Tecknet tillåts inte"
 
@@ -8692,7 +8662,6 @@ msgstr ""
 #~ msgid "Command line Control"
 #~ msgstr "Kommandorad"
 
-#, python-format
 #~ msgid "Comment: %s"
 #~ msgstr "Kommentar: %s"
 
@@ -8839,7 +8808,6 @@ msgstr ""
 #~ msgid "Contact name"
 #~ msgstr "Kontaktnamn"
 
-#, python-format
 #~ msgid "Contact name: <i>%s</i>"
 #~ msgstr "Kontaktens namn: <i>%s</i>"
 
@@ -8916,7 +8884,6 @@ msgstr ""
 #~ msgid "Could not Upload File"
 #~ msgstr "Kunde inte läsa in bild"
 
-#, python-format
 #~ msgid "Could not change status of account \"%s\""
 #~ msgstr "Kunde inte ändra status för kontot \"%s\""
 
@@ -8928,7 +8895,6 @@ msgstr ""
 #~ msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 #~ msgstr "Kunde inte ansluta till \"%s\""
 
-#, python-format
 #~ msgid "Could not connect to \"%s\""
 #~ msgstr "Kunde inte ansluta till \"%s\""
 
@@ -8959,7 +8925,7 @@ msgstr ""
 #~ msgid "Create Metacontact"
 #~ msgstr "Byt namn på kontakt"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Creating %s"
 #~ msgstr "Förstör %s"
 
@@ -8979,7 +8945,7 @@ msgstr ""
 #~ msgid "Custom applications"
 #~ msgstr "Använd alltid OS/X standardprogram"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Custom hostname \"%s\" is wrong. It will be ignored."
 #~ msgstr "Använd anpassat värdnamn/port"
 
@@ -9075,7 +9041,6 @@ msgstr ""
 #~ msgid "Description:"
 #~ msgstr "Beskrivning: "
 
-#, python-format
 #~ msgid "Description: %s"
 #~ msgstr "Beskrivning: %s"
 
@@ -9104,7 +9069,6 @@ msgstr ""
 #~ "Frikopplad kontaktlista med chatt, grupperad efter konto\n"
 #~ "Frikopplad kontaktlista med chatt, grupperad efter typ"
 
-#, python-format
 #~ msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 #~ msgstr "URL för uppslagsbok saknar ett \"%s\" och det är inte en WIKTIONARY"
 
@@ -9162,13 +9126,13 @@ msgstr ""
 #~ msgid "Do you want to continue?"
 #~ msgstr "Vill du fortsätta?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to permanently delete this conversation with <b>%s</b>?"
 #~ msgid_plural "Do you want to permanently delete these conversations?"
 #~ msgstr[0] "Vill du verkligen ta bort det valda meddelandet?"
 #~ msgstr[1] "Vill du verkligen ta bort det valda meddelandet?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to remove %s from the contact list?"
 #~ msgstr "Vill du ta bort gruppen %s från kontaktlistan?"
 
@@ -9327,7 +9291,7 @@ msgstr ""
 #~ msgid "Enter name / JID of contact or groupchat"
 #~ msgstr "Kontaktnamn"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Enter the certificate passphrase for account %s"
 #~ msgstr ""
 #~ "Ange GPG-nyckelns lösenfras för nyckeln %(keyid)s (kontot %(account)s)."
@@ -9361,14 +9325,13 @@ msgstr ""
 #~ msgid "Error verifying SSL certificate"
 #~ msgstr "Fel vid verifiering av SSL-certifikat"
 
-#, python-format
 #~ msgid "Error while adding service. %s"
 #~ msgstr "Fel när tjänsten lades till. %s"
 
 #~ msgid "Error."
 #~ msgstr "Fel."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Error: %(error)s\n"
 #~ "Debug: %(debug)s"
@@ -9438,6 +9401,10 @@ msgstr ""
 #~ msgstr "Funktion"
 
 #, fuzzy
+#~ msgid "Feature is not available under Windows"
+#~ msgstr "Funktionen är inte tillgänglig under Windows."
+
+#, fuzzy
 #~ msgid "Feature not available, see Help->Features"
 #~ msgstr "Funktionen är inte tillgänglig under Windows."
 
@@ -9459,7 +9426,7 @@ msgstr ""
 #~ msgid "File already exists"
 #~ msgstr "Den här filen finns redan"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File name: %s"
 #~ msgstr "Filnamn: %s"
 
@@ -9478,19 +9445,17 @@ msgstr ""
 #~ msgid "File transfer error notification color."
 #~ msgstr "Filöverföringen avbruten"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s from %(name)s failed."
 #~ msgstr "Överföringen av %(filename)s från %(name)s har stannat."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s from %(name)s stopped."
 #~ msgstr "Överföringen av %(filename)s från %(name)s har stannat."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s to %(name)s failed."
 #~ msgstr "Överföringen av %(filename)s till %(name)s har stannat."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s to %(name)s stopped."
 #~ msgstr "Överföringen av %(filename)s till %(name)s har stannat."
 
@@ -9590,6 +9555,10 @@ msgstr ""
 
 #~ msgid "Gajim Instant Messenger"
 #~ msgstr "Snabbmeddelandeklienten Gajim"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "gajim-remote"
 
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Gajims temaanpassare"
@@ -9960,7 +9929,7 @@ msgstr ""
 #~ msgid "Idle for:"
 #~ msgstr "XML-konsol för %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "If \"%s\" accepts this request you will know their status."
 #~ msgstr ""
 #~ "Om \"%s\" accepterar din förfrågan kommer du att känna till hans eller "
@@ -10289,7 +10258,7 @@ msgstr ""
 #~ "Om du har två eller fler konton och det här är kryssat kommer Gajim lista "
 #~ "alla kontakter som om du hade ett konto"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "If you send a file to <b>%s</b>, your real XMPP address will be revealed."
 #~ msgstr ""
@@ -10493,7 +10462,7 @@ msgstr ""
 #~ msgid "Invite contacts to the conversation (Ctrl+G)"
 #~ msgstr "Bjud in kontakter till konversationen (Ctrl+G)"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Invited %(jid)s to %(room_jid)s"
 #~ msgstr "Bjöd in %(contact_jid)s till %(room_jid)s."
 
@@ -10501,14 +10470,14 @@ msgstr ""
 #~ msgid "Invited %s to %s"
 #~ msgstr "Skicka %s till %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s, this XMPP Address is not "
 #~ "valid."
 #~ msgstr ""
 #~ "Det gick inte att skicka ett meddelande till %s, denna JID är inte giltig."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s. This XMPP Address is not "
 #~ "valid."
@@ -10672,6 +10641,10 @@ msgstr ""
 #~ msgid "Lists all preferences and their values"
 #~ msgstr "Listar alla inställningar och deras värden"
 
+#, fuzzy
+#~ msgid "Location detection"
+#~ msgstr "Anslutning"
+
 #~ msgid "Log _encrypted chat session"
 #~ msgstr "Logga kr_ypterad chattsession"
 
@@ -10736,11 +10709,11 @@ msgstr ""
 #~ msgid "Mail _client"
 #~ msgstr "_E-postklient:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Make %(contact1)s and %(contact2)s metacontacts"
 #~ msgstr "Gör %s till en metakontakt för %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Make %s first contact"
 #~ msgstr "Gör %s till en metakontakt för %s"
 
@@ -11090,7 +11063,6 @@ msgstr ""
 #~ msgid "Notify on new _GMail email"
 #~ msgstr "Notifiera vid ny _Gmail-e-post"
 
-#, python-format
 #~ msgid "Now \"%s\" will always see you as offline."
 #~ msgstr "Nu kommer \"%s\" alltid se dig som offline."
 
@@ -11218,11 +11190,9 @@ msgstr ""
 #~ msgid "Order:"
 #~ msgstr "Ordning:"
 
-#, python-format
 #~ msgid "Order: %(order)s, action: %(action)s"
 #~ msgstr "Ordning: %(order)s, åtgärd: %(action)s"
 
-#, python-format
 #~ msgid ""
 #~ "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 #~ msgstr ""
@@ -11378,7 +11348,6 @@ msgstr ""
 #~ "Kontrollera att Pywin32 är installerat på ditt system. Du kan hämta det "
 #~ "på %s"
 
-#, python-format
 #~ msgid "Please make sure you are connected with \"%s\"."
 #~ msgstr "Kontrollera att du är ansluten med \"%s\"."
 
@@ -11503,18 +11472,15 @@ msgstr ""
 #~ msgid "Privacy List"
 #~ msgstr "Integritetslista"
 
-#, python-format
 #~ msgid "Privacy List <b><i>%s</i></b>"
 #~ msgstr "Privat identitetslista <b><i>%s</i></b>"
 
-#, python-format
 #~ msgid "Privacy List for %s"
 #~ msgstr "Privat integritetslista för %s"
 
 #~ msgid "Privacy Lists"
 #~ msgstr "Integritetslistor"
 
-#, python-format
 #~ msgid "Privacy Lists for %s"
 #~ msgstr "Privata integritetslistor för %s"
 
@@ -11560,7 +11526,6 @@ msgstr ""
 #~ msgid "Quit"
 #~ msgstr "A_vsluta"
 
-#, python-format
 #~ msgid "RE: %s"
 #~ msgstr "SV: %s"
 
@@ -11618,7 +11583,6 @@ msgstr ""
 #~ msgid "Received"
 #~ msgstr "Mottog %s"
 
-#, python-format
 #~ msgid "Received %s"
 #~ msgstr "Mottog %s"
 
@@ -11652,7 +11616,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Registreringsinformation för transporten %s har inte kommit fram i tid"
 
-#, python-format
 #~ msgid ""
 #~ "Registration with agent %(agent)s failed with error %(error)s: "
 #~ "%(error_msg)s"
@@ -11660,7 +11623,7 @@ msgstr ""
 #~ "Registrering med agenten %(agent)s misslyckades med fel %(error)s: "
 #~ "%(error_msg)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Registration with agent %s succeeded."
 #~ msgstr "Registrering med agenten %s lyckades"
 
@@ -11744,11 +11707,11 @@ msgstr ""
 #~ msgid "Rename contact"
 #~ msgstr "Byt namn på kontakt"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename contact %s?"
 #~ msgstr "Byt namn på kontakt"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename group %s?"
 #~ msgstr "Byt namn på grupp"
 
@@ -11849,6 +11812,10 @@ msgstr ""
 #~ msgstr "Kräver python-dbus."
 
 #, fuzzy
+#~ msgid "Requires: geoclue"
+#~ msgstr "Kräver libgtkspell."
+
+#, fuzzy
 #~ msgid "Requires: gir1.2-avahi-0.6"
 #~ msgstr "Kräver python-gnome2."
 
@@ -11860,7 +11827,7 @@ msgstr ""
 #~ msgid "Requires: gpg.exe in your PATH environment variable"
 #~ msgstr "_Använd miljövariabeln HTTP__PROXY"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Requires: pybonjour and bonjour SDK running (%(url)s)"
 #~ msgstr "Kräver gpg och python-GnuPGInterface."
 
@@ -12000,7 +11967,6 @@ msgstr ""
 #~ msgid "Save status as preset"
 #~ msgstr "Spara som förval..."
 
-#, python-format
 #~ msgid "Saved in: %s"
 #~ msgstr "Sparad i: %s"
 
@@ -12035,11 +12001,10 @@ msgstr ""
 #~ msgid "Send"
 #~ msgstr "Sänd"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send %(from)s to %(to)s"
 #~ msgstr "Skicka %s till %s"
 
-#, python-format
 #~ msgid "Send %s"
 #~ msgstr "Skicka %s"
 
@@ -12101,7 +12066,7 @@ msgstr ""
 #~ msgid "Send message and close window"
 #~ msgstr "Skicka meddelande och stäng fönster"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send this file to %s:\n"
 #~ msgid_plural "Send these files to %s:\n"
 #~ msgstr[0] "Vill du skicka denna fil till %s:"
@@ -12395,11 +12360,9 @@ msgstr ""
 #~ msgid "Single Message"
 #~ msgstr "Enstaka meddelande"
 
-#, python-format
 #~ msgid "Single Message in account %s"
 #~ msgstr "Ett meddelande i kontot %s"
 
-#, python-format
 #~ msgid "Single Message using account %s"
 #~ msgstr "Ett meddelande med kontot %s"
 
@@ -12407,7 +12370,6 @@ msgstr ""
 #~ msgid "Size"
 #~ msgstr "Storlek: "
 
-#, python-format
 #~ msgid "Size: %s"
 #~ msgstr "Storlek: %s"
 
@@ -12492,11 +12454,9 @@ msgstr ""
 #~ msgid "Status Preset"
 #~ msgstr "Statusmeddelande"
 
-#, python-format
 #~ msgid "Status is now: %(status)s"
 #~ msgstr "Status är nu: %(status)s"
 
-#, python-format
 #~ msgid "Status is now: %(status)s: %(status_msg)s"
 #~ msgstr "Status är nu: %(status)s: %(status_msg)s"
 
@@ -12549,7 +12509,6 @@ msgstr ""
 #~ msgid "Subject:"
 #~ msgstr "Ämne:"
 
-#, python-format
 #~ msgid ""
 #~ "Subject: %(subject)s\n"
 #~ "%(message)s"
@@ -12560,7 +12519,6 @@ msgstr ""
 #~ msgid "Subject: %s"
 #~ msgstr "Ämne: %s"
 
-#, python-format
 #~ msgid "Subject: %s\n"
 #~ msgstr "Ämne: %s\n"
 
@@ -12575,11 +12533,9 @@ msgstr ""
 #~ msgid "Subscription request"
 #~ msgstr "Prenumerationsbegäran"
 
-#, python-format
 #~ msgid "Subscription request for account %(account)s from %(jid)s"
 #~ msgstr "Prenumerationsbegäran för kontot %(account)s från %(jid)s"
 
-#, python-format
 #~ msgid "Subscription request from %s"
 #~ msgstr "Prenumerationsförfrågan från %s"
 
@@ -12628,7 +12584,7 @@ msgstr ""
 #~ msgid "Synchronize the status of all accounts"
 #~ msgstr "Ändrar status för konto eller konton"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "System bus is not available.\n"
 #~ "Try reading %(url)s"
@@ -12693,7 +12649,7 @@ msgstr ""
 #~ msgid "The auto not available status message"
 #~ msgstr "Det automatiska statusmeddelandet när du inte är tillgänglig"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "The contact \"%s\" has authorized you to see their status."
 #~ msgstr ""
 #~ "Kontakten \"%s\" har auktoriserat dig att se hans eller hennes status."
@@ -12702,7 +12658,7 @@ msgstr ""
 #~ msgid "The contact and you want to exchange presence information"
 #~ msgstr "Du och kontakten är intresserade av varandras närvaroinformation"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "The database file (%s) cannot be read. Try to repair it (see https://dev."
 #~ "gajim.org/gajim/gajim/wikis/help/DatabaseBackup) or remove it (all "
@@ -12807,7 +12763,7 @@ msgstr ""
 #~ msgid "Thirsty"
 #~ msgstr "Törstig"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "This account %s doesn't support invisibility."
 #~ msgstr "Kontot %s saknar stöd för osynlighet."
 
@@ -12962,7 +12918,6 @@ msgstr ""
 #~ msgid "Transform LaTeX expressions between $$ $$."
 #~ msgstr "Transformera LaTeX-uttryck mellan $$ $$."
 
-#, python-format
 #~ msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 #~ msgstr ""
 #~ "Transporten %(name)s svarade felaktigt på en registreringsbegäran: "
@@ -12992,7 +12947,6 @@ msgstr ""
 #~ msgid "Type: "
 #~ msgstr "Typ: "
 
-#, python-format
 #~ msgid "Type: %s"
 #~ msgstr "Typ: %s"
 
@@ -13003,7 +12957,6 @@ msgstr ""
 #~ msgid "URL Color"
 #~ msgstr "Färg"
 
-#, python-format
 #~ msgid "Unable to bind to port %d."
 #~ msgstr "Kunde inte binda till port %d."
 
@@ -13497,7 +13450,7 @@ msgstr ""
 #~ msgid "You are invited to a groupchat"
 #~ msgstr "Du är inbjuden till en gruppchatt"
 
-#, fuzzy, python-brace-format
+#, fuzzy
 #~ msgid "You are invited to {room} by {user}"
 #~ msgstr "Du är inbjuden till en gruppchatt"
 
@@ -13670,7 +13623,7 @@ msgstr ""
 #~ msgid "You must read them before removing this transport."
 #~ msgstr "Du måste läsa dem innan du tar bort denna transport."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "You must supply the %s of the new contact."
 #~ msgstr "Du måste skriva in ett lösenord för det nya kontot."
 
@@ -13697,7 +13650,6 @@ msgstr ""
 #~ msgid "You successfully received %(filename)s from %(name)s."
 #~ msgstr "%(filename)s har mattagits från %(name)s."
 
-#, python-format
 #~ msgid "You successfully sent %(filename)s to %(name)s."
 #~ msgstr "%(filename)s har skickats till %(name)s."
 
@@ -13715,7 +13667,7 @@ msgstr ""
 #~ msgid "You will be connected to %s without OpenPGP."
 #~ msgstr "Du kommer ansluta till %s utan OpenPGP."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "You will no longer be able to send and receive messages from and to "
 #~ "contacts using these transports:\n"
@@ -14434,11 +14386,11 @@ msgstr ""
 #~ msgid "from"
 #~ msgstr "Från"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from %s"
 #~ msgstr " från %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from group chat %s"
 #~ msgstr "i _gruppchattar"
 
@@ -14446,7 +14398,7 @@ msgstr ""
 #~ msgid "from room %s"
 #~ msgstr " från rummet %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from user %s"
 #~ msgstr " från användaren %s"
 
@@ -14689,7 +14641,6 @@ msgstr ""
 #~ msgid "using account "
 #~ msgstr "använder konto "
 
-#, python-format
 #~ msgid "using account %s"
 #~ msgstr "använder kontot %s"
 

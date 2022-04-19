@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2020-07-22 17:59+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -2163,11 +2163,6 @@ msgstr "Қосу"
 msgid "Enabled"
 msgstr "Қосулы"
 
-msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
@@ -2368,10 +2363,6 @@ msgid "Fake audio output"
 msgstr "Жалған аудио шығысы"
 
 #, fuzzy
-msgid "Feature is not available under Windows"
-msgstr "Бұл мүмкіндік Windows-та қолжетерсіз."
-
-#, fuzzy
 msgid "Feature not available under Windows"
 msgstr "Бұл мүмкіндік Windows-та қолжетерсіз."
 
@@ -2556,6 +2547,9 @@ msgstr "Одан"
 msgid "Full Name"
 msgstr "Аты-жөні"
 
+msgid "Fully-featured XMPP chat client"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "GLib Version: %s"
 msgstr "GTK+ нұсқасы:"
@@ -2569,10 +2563,6 @@ msgstr "Gajim"
 
 #, fuzzy
 msgid "Gajim - Error"
-msgstr "Gajim - %s"
-
-#, fuzzy
-msgid "Gajim Team"
 msgstr "Gajim - %s"
 
 #, fuzzy
@@ -3434,10 +3424,6 @@ msgstr "Орналасу:"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr ""
-
-#, fuzzy
-msgid "Location detection"
-msgstr "Байланыс"
 
 msgid "Location:"
 msgstr "Орналасу:"
@@ -4528,10 +4514,6 @@ msgstr "require"
 
 #, fuzzy
 msgid "Requires: Gspell"
-msgstr "Талап етеді: libgtkspell."
-
-#, fuzzy
-msgid "Requires: geoclue"
 msgstr "Талап етеді: libgtkspell."
 
 msgid ""
@@ -6867,6 +6849,9 @@ msgstr ""
 msgid "or"
 msgstr "немесе"
 
+msgid "org.gajim.Gajim"
+msgstr ""
+
 msgid "paused composing a message"
 msgstr "хабарлама жазуды аялдатқан"
 
@@ -7023,7 +7008,6 @@ msgstr ""
 #~ msgid "%(1)s o'clock"
 #~ msgstr "сағат %(1)s"
 
-#, python-format
 #~ msgid ""
 #~ "%(contact)s wants to start a %(type)s chat with you. Do you want to "
 #~ "answer the call?"
@@ -7031,11 +7015,10 @@ msgstr ""
 #~ "%(contact)s сізбен %(type)s чатын бастағысы келеді. Қоңырауға жауап "
 #~ "бересіз бе?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(filename)s received from %(name)s."
 #~ msgstr "%(name)s жіберген %(filename)s файлын алу тоқтатылды."
 
-#, python-format
 #~ msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #~ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
@@ -7043,15 +7026,14 @@ msgstr ""
 #~ msgid "%(jid)s has been invited in this room"
 #~ msgstr "%(nick)s бөлімнен шығарылған (%(reason)s)"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s (%(jid)s) has removed subscription from you"
 #~ msgstr "\"%s\" контакты сізден өзіне жазылуды өшіріп тастаған"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s is now %(show)s %(status)s"
 #~ msgstr "%(name)s қазір %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s Changed Status"
 #~ msgstr "%(nick)s күйін өзгерткен"
 
@@ -7061,27 +7043,21 @@ msgstr ""
 #~ msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 #~ msgstr "%(who)s қазір %(nick)s қатысушысын тепкен: %(reason)s"
 
-#, python-format
 #~ msgid "%(nick)s has set the subject to %(subject)s"
 #~ msgstr "%(nick)s тақырыпты %(subject)s етіп орнатқан"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s"
 #~ msgstr "%(nick)s қазір %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s: %(status_msg)s"
 #~ msgstr "%(nick)s қазір %(status)s: %(status_msg)s"
 
-#, python-format
 #~ msgid "%(nickname)s Signed In"
 #~ msgstr "%(nickname)s желіге кірді"
 
-#, python-format
 #~ msgid "%(nickname)s Signed Out"
 #~ msgstr "%(nickname)s желіден шықты"
 
-#, python-format
 #~ msgid "%(nickname)s from group chat %(room_name)s"
 #~ msgstr "%(nickname)s, %(room_name)s топ чатынан"
 
@@ -7097,33 +7073,27 @@ msgstr ""
 #~ "%(type)s түрдегі шифрлену %(status)s және %(authenticated)s.\n"
 #~ "Сөйлесу сессия тарихыңыз %(logged)s."
 
-#, python-format
 #~ msgid "%(type)s state : %(state)s, reason: %(reason)s"
 #~ msgstr "%(type)s қалып-күйі : %(state)s, себебі: %(reason)s"
 
-#, python-format
 #~ msgid "%(who)s on %(time)s said: %(message)s\n"
 #~ msgstr "%(time)s уақытында %(who)s айтқан: %(message)s\n"
 
-#, python-format
 #~ msgid "%d event pending"
 #~ msgid_plural "%d events pending"
 #~ msgstr[0] "%d оқиға кезекте бар"
 #~ msgstr[1] "%d оқиға кезекте бар"
 
-#, python-format
 #~ msgid "%d message pending"
 #~ msgid_plural "%d messages pending"
 #~ msgstr[0] "%d хабарлама кезекте бар"
 #~ msgstr[1] "%d хабарлама кезекте бар"
 
-#, python-format
 #~ msgid "%i day"
 #~ msgid_plural "%i days"
 #~ msgstr[0] "%i күн"
 #~ msgstr[1] "%i күн"
 
-#, python-format
 #~ msgid ""
 #~ "%s\n"
 #~ "Link-local messaging might not work properly."
@@ -7160,15 +7130,13 @@ msgstr ""
 #~ msgid "%s MiB/s"
 #~ msgstr "%s МиБ"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s Missing"
 #~ msgstr "%s МиБ"
 
-#, python-format
 #~ msgid "%s Status Message"
 #~ msgstr "%s күй хабарламасы"
 
-#, python-format
 #~ msgid "%s configuration error"
 #~ msgstr "%s баптау қатесі"
 
@@ -7178,11 +7146,9 @@ msgstr ""
 #~ msgstr[0] "%i күн бұрын"
 #~ msgstr[1] "%i күн бұрын"
 
-#, python-format
 #~ msgid "%s does not exist."
 #~ msgstr "%s жоқ болып тұр."
 
-#, python-format
 #~ msgid "%s is a directory but should be a file"
 #~ msgstr "%s бума екен, алайда файл болуы керек еді"
 
@@ -7197,18 +7163,15 @@ msgstr ""
 #~ msgid "%s or %s is a directory but should be a file"
 #~ msgstr "%s бума екен, алайда файл болуы керек еді"
 
-#, python-format
 #~ msgid "%s wants to send you a file."
 #~ msgstr "%s сізге файлды жібергісі келеді."
 
 #~ msgid "%s wants to send you a file:"
 #~ msgstr "%s сізге файлды жібергісі келеді:"
 
-#, python-format
 #~ msgid "%s wants to start a voice chat."
 #~ msgstr "%s сізбен дауыс чатын бастағысы келеді."
 
-#, python-format
 #~ msgid "%s wrote:\n"
 #~ msgstr "%s жазған:\n"
 
@@ -7289,7 +7252,6 @@ msgstr ""
 #~ msgid "9"
 #~ msgstr "9"
 
-#, python-format
 #~ msgid ""
 #~ "<b>%(contact)s</b> has invited you to the group chat <b>%(room_jid)s</b>"
 #~ msgstr ""
@@ -8220,7 +8182,6 @@ msgstr ""
 #~ msgid "Buying Groceries"
 #~ msgstr "Тамақты сатып алуда"
 
-#, python-format
 #~ msgid ""
 #~ "By removing the following contacts, you will also remove authorization. "
 #~ "This means they will see you as offline:\n"
@@ -8378,7 +8339,7 @@ msgstr ""
 #~ msgid "Characters that are printed before the nickname in conversations."
 #~ msgstr "Сөйлесулерде ник атына дейін қойылатын таңбалар."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Characters typed: %s"
 #~ msgstr "Таңба рұқсат етілмеген"
 
@@ -8490,7 +8451,6 @@ msgstr ""
 #~ msgid "Command line Control"
 #~ msgstr "Командалық жол"
 
-#, python-format
 #~ msgid "Comment: %s"
 #~ msgstr "Түсіндірме: %s"
 
@@ -8615,7 +8575,6 @@ msgstr ""
 #~ msgid "Contact name"
 #~ msgstr "Контакт аты"
 
-#, python-format
 #~ msgid "Contact name: <i>%s</i>"
 #~ msgstr "Контакт аты: <i>%s</i>"
 
@@ -8688,7 +8647,6 @@ msgstr ""
 #~ msgid "Could not Upload File"
 #~ msgstr "Суретті жүктеу мүмкін емес"
 
-#, python-format
 #~ msgid "Could not change status of account \"%s\""
 #~ msgstr "\"%s\" тіркелгісінің күйін өзгерту мүмкін емес"
 
@@ -8700,7 +8658,6 @@ msgstr ""
 #~ msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 #~ msgstr "\"%s\" үшін байланыс орнату мүмкін емес"
 
-#, python-format
 #~ msgid "Could not connect to \"%s\""
 #~ msgstr "\"%s\" үшін байланыс орнату мүмкін емес"
 
@@ -8720,7 +8677,7 @@ msgstr ""
 #~ msgid "Could not write to %s. Session Management support will not work"
 #~ msgstr "%s ішіне жазу мүмкін емес. Сессияларды басқару енді жұмыс істемейді"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Couldn’t set up %(text)s. Check your configuration.\n"
 #~ "\n"
@@ -8748,7 +8705,7 @@ msgstr ""
 #~ msgid "Create Metacontact"
 #~ msgstr "Контакт атын ауыстыру"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Creating %s"
 #~ msgstr "Өшірілуде %s"
 
@@ -8768,7 +8725,7 @@ msgstr ""
 #~ msgid "Custom applications"
 #~ msgstr "Негізгі қолданбаларды қолдану"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Custom hostname \"%s\" is wrong. It will be ignored."
 #~ msgstr "Пайдаланушы хост аты/порт қолдану"
 
@@ -8857,7 +8814,6 @@ msgstr ""
 #~ msgid "Description:"
 #~ msgstr "Анықтамасы:"
 
-#, python-format
 #~ msgid "Description: %s"
 #~ msgstr "Анықтамасы: %s"
 
@@ -8900,7 +8856,6 @@ msgstr ""
 #~ "Бөлек ростер мен контакт б/ша топталған чаттар\n"
 #~ "Бөлек ростер мен түрі б/ша топталған чаттар"
 
-#, python-format
 #~ msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 #~ msgstr "\"%s\" сөздіктен іздеу сілтемесі емес және ол WIKTIONARY емес"
 
@@ -8975,13 +8930,12 @@ msgstr ""
 #~ msgid "Do you want to continue?"
 #~ msgstr "Жалғастыруды қалайсыз ба?"
 
-#, python-format
 #~ msgid "Do you want to permanently delete this conversation with <b>%s</b>?"
 #~ msgid_plural "Do you want to permanently delete these conversations?"
 #~ msgstr[0] "<b>%s</b> контактімен бұл сөйлесуді өшіруді қалайсыз ба?"
 #~ msgstr[1] "Бұл сөйлесулерді өшіруді шынымен қалайсыз ба?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to remove %s from the contact list?"
 #~ msgstr "Сіз ростерден %s тобын өшіруді қалайсыз ба?"
 
@@ -9130,7 +9084,6 @@ msgstr ""
 #~ msgid "Enter name / JID of contact or groupchat"
 #~ msgstr "JID не контакт атын енгізіңіз"
 
-#, python-format
 #~ msgid "Enter the certificate passphrase for account %s"
 #~ msgstr "%s тіркелгісі үшін сертификатының кілттік фразасын енгізіңіз"
 
@@ -9166,14 +9119,13 @@ msgstr ""
 #~ msgid "Error verifying SSL certificate"
 #~ msgstr "SSL сертификатын растау қатесі"
 
-#, python-format
 #~ msgid "Error while adding service. %s"
 #~ msgstr "Қызметті қосу қатесі. %s"
 
 #~ msgid "Error."
 #~ msgstr "Қате."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Error: %(error)s\n"
 #~ "Debug: %(debug)s"
@@ -9245,6 +9197,10 @@ msgstr ""
 #~ msgstr "Мүмкіндік"
 
 #, fuzzy
+#~ msgid "Feature is not available under Windows"
+#~ msgstr "Бұл мүмкіндік Windows-та қолжетерсіз."
+
+#, fuzzy
 #~ msgid "Feature not available, see Help->Features"
 #~ msgstr "Бұл мүмкіндік Windows-та қолжетерсіз."
 
@@ -9268,7 +9224,7 @@ msgstr ""
 #~ msgid "File already exists"
 #~ msgstr "Бұл файл бар болып тұр"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File name: %s"
 #~ msgstr "Файл аты: %s"
 
@@ -9283,19 +9239,17 @@ msgstr ""
 #~ msgid "File transfer error notification color."
 #~ msgstr "Файлдармен алмасу тоқтатылды"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s from %(name)s failed."
 #~ msgstr "%(name)s жіберген %(filename)s файлын алу тоқтатылды."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s from %(name)s stopped."
 #~ msgstr "%(name)s жіберген %(filename)s файлын алу тоқтатылды."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s to %(name)s failed."
 #~ msgstr "%(filename)s файлын %(name)s үшін жіберу тоқтатылды."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s to %(name)s stopped."
 #~ msgstr "%(filename)s файлын %(name)s үшін жіберу тоқтатылды."
 
@@ -9391,6 +9345,10 @@ msgstr ""
 
 #~ msgid "Gajim Instant Messenger"
 #~ msgstr "Gajim жедел хабарласу"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim - %s"
 
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Gajim темаларын басқару"
@@ -9747,7 +9705,7 @@ msgstr ""
 #~ msgid "Idle for:"
 #~ msgstr "Белсенді еместік уақыты - %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "If \"%s\" accepts this request you will know their status."
 #~ msgstr ""
 #~ "Егер \"%s\" сіздің сұранымыңызды қабылдаса, сіз оның қалып-күйін біле "
@@ -10084,7 +10042,6 @@ msgstr ""
 #~ "Егер сіз бұл бетті жауып, тарихты сақтау сөндірілген болса, бұл хабарлама "
 #~ "жоғалтылады."
 
-#, python-format
 #~ msgid ""
 #~ "If you send a file to <b>%s</b>, your real XMPP address will be revealed."
 #~ msgstr ""
@@ -10283,13 +10240,13 @@ msgstr ""
 #~ msgid "Invited %(jid)s to %(room_jid)s"
 #~ msgstr "%s қазір %s үшін жіберу"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s, this XMPP Address is not "
 #~ "valid."
 #~ msgstr "%s үшін хабарламаны жіберу мүмкін емес, бұл JID дұрыс емес."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s. This XMPP Address is not "
 #~ "valid."
@@ -10453,6 +10410,10 @@ msgstr ""
 #~ msgid "Lists all preferences and their values"
 #~ msgstr "Барлық баптаулар мен олардың мәндерін тізіп шығу"
 
+#, fuzzy
+#~ msgid "Location detection"
+#~ msgstr "Байланыс"
+
 #~ msgid "Log _encrypted chat session"
 #~ msgstr "_Шифрленген чат тарихын жазу"
 
@@ -10499,11 +10460,10 @@ msgstr ""
 #~ msgid "Main"
 #~ msgstr "Негізгі"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Make %(contact1)s and %(contact2)s metacontacts"
 #~ msgstr "%s және %s метаконтакт жасау"
 
-#, python-format
 #~ msgid "Make %s first contact"
 #~ msgstr "%s бірінші контакт қылу"
 
@@ -10836,7 +10796,6 @@ msgstr ""
 #~ msgid "Notify on new _GMail email"
 #~ msgstr "Жаңа GMail по_штасы туралы хабарлау"
 
-#, python-format
 #~ msgid "Now \"%s\" will always see you as offline."
 #~ msgstr "\"%s\" енді сізді әрқашан желіде емес күйінде көреді."
 
@@ -11132,7 +11091,6 @@ msgstr ""
 #~ "Жүйеңізде Pywin32 орнатылғанына көз жеткізіңіз. Оны %s жерінен алуға "
 #~ "болады"
 
-#, python-format
 #~ msgid "Please make sure you are connected with \"%s\"."
 #~ msgstr "\"%s\" үшін байланыс орнатылғанына көз жеткізіңіз."
 
@@ -11314,7 +11272,6 @@ msgstr ""
 #~ msgid "Quit"
 #~ msgstr "_Шығу"
 
-#, python-format
 #~ msgid "RE: %s"
 #~ msgstr "RE: %s"
 
@@ -11348,7 +11305,6 @@ msgstr ""
 #~ msgid "Received"
 #~ msgstr "Алынған %s"
 
-#, python-format
 #~ msgid "Received %s"
 #~ msgstr "Алынған %s"
 
@@ -11380,7 +11336,6 @@ msgstr ""
 #~ msgid "Registration information for transport %s has not arrived in time"
 #~ msgstr "%s транспорты үшін тіркелу ақпараты уақытында келмеген"
 
-#, python-format
 #~ msgid ""
 #~ "Registration with agent %(agent)s failed with error %(error)s: "
 #~ "%(error_msg)s"
@@ -11388,7 +11343,6 @@ msgstr ""
 #~ "%(agent)s агенті көмегімен тіркелу %(error)s қатесімен аяқталды: "
 #~ "%(error_msg)s"
 
-#, python-format
 #~ msgid "Registration with agent %s succeeded."
 #~ msgstr "%s агенті көмегімен тіркелу сәтті аяқталды."
 
@@ -11471,11 +11425,9 @@ msgstr ""
 #~ msgid "Rename contact"
 #~ msgstr "Контакт атын ауыстыру"
 
-#, python-format
 #~ msgid "Rename contact %s?"
 #~ msgstr "%s контакт атын ауыстыру керек пе?"
 
-#, python-format
 #~ msgid "Rename group %s?"
 #~ msgstr "%s топ атын ауыстыру керек пе?"
 
@@ -11569,6 +11521,10 @@ msgstr ""
 #~ msgstr "python-dbus талап етеді."
 
 #, fuzzy
+#~ msgid "Requires: geoclue"
+#~ msgstr "Талап етеді: libgtkspell."
+
+#, fuzzy
 #~ msgid "Requires: gir1.2-avahi-0.6"
 #~ msgstr "Талап етеді: python-gnome2."
 
@@ -11580,7 +11536,7 @@ msgstr ""
 #~ msgid "Requires: gpg.exe in your PATH environment variable"
 #~ msgstr "PATH ішінен gpg.exe талап етеді."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Requires: pybonjour and bonjour SDK running (%(url)s)"
 #~ msgstr "Талап етеді: gpg мен python-GnuPGInterface."
 
@@ -11722,7 +11678,6 @@ msgstr ""
 #~ msgid "Save status as preset"
 #~ msgstr "Орнатылған етіп сақтау..."
 
-#, python-format
 #~ msgid "Saved in: %s"
 #~ msgstr "Сақталған: %s"
 
@@ -11753,11 +11708,10 @@ msgstr ""
 #~ msgid "Send"
 #~ msgstr "Жіберу"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send %(from)s to %(to)s"
 #~ msgstr "%s қазір %s үшін жіберу"
 
-#, python-format
 #~ msgid "Send %s"
 #~ msgstr "Жіберу %s"
 
@@ -11803,7 +11757,6 @@ msgstr ""
 #~ msgid "Send message and close window"
 #~ msgstr "Хабарламаны жіберу мен терезені жабу"
 
-#, python-format
 #~ msgid "Send this file to %s:\n"
 #~ msgid_plural "Send these files to %s:\n"
 #~ msgstr[0] "Бұл файлды %s үшін жіберу:\n"
@@ -12106,11 +12059,9 @@ msgstr ""
 #~ msgid "Single Message"
 #~ msgstr "Дара хабарлама"
 
-#, python-format
 #~ msgid "Single Message in account %s"
 #~ msgstr "%s тіркелгісінде дара хабарлама"
 
-#, python-format
 #~ msgid "Single Message using account %s"
 #~ msgstr "%s тіркелгісін қолданып, дара хабарлама"
 
@@ -12121,7 +12072,6 @@ msgstr ""
 #~ msgid "Size"
 #~ msgstr "Өлшемі: %s"
 
-#, python-format
 #~ msgid "Size: %s"
 #~ msgstr "Өлшемі: %s"
 
@@ -12203,11 +12153,9 @@ msgstr ""
 #~ msgid "Status Preset"
 #~ msgstr "Күй хабарламасы"
 
-#, python-format
 #~ msgid "Status is now: %(status)s"
 #~ msgstr "Қазір қалып-күйі: %(status)s"
 
-#, python-format
 #~ msgid "Status is now: %(status)s: %(status_msg)s"
 #~ msgstr "Қазір қалып-күйі: %(status)s: %(status_msg)s"
 
@@ -12266,7 +12214,6 @@ msgstr ""
 #~ msgid "Subject:"
 #~ msgstr "Тақырыбы:"
 
-#, python-format
 #~ msgid ""
 #~ "Subject: %(subject)s\n"
 #~ "%(message)s"
@@ -12277,7 +12224,6 @@ msgstr ""
 #~ msgid "Subject: %s"
 #~ msgstr "Тақырыбы: %s"
 
-#, python-format
 #~ msgid "Subject: %s\n"
 #~ msgstr "Тақырыбы: %s\n"
 
@@ -12291,11 +12237,9 @@ msgstr ""
 #~ msgid "Subscription request"
 #~ msgstr "Жазылуға сұраным"
 
-#, python-format
 #~ msgid "Subscription request for account %(account)s from %(jid)s"
 #~ msgstr "%(account)s тіркелгісінен жазылуға сұраным түсті, кімнен: %(jid)s"
 
-#, python-format
 #~ msgid "Subscription request from %s"
 #~ msgstr "%s жіберген жазылуға сұраным"
 
@@ -12337,7 +12281,6 @@ msgstr ""
 #~ msgid "Synchronize the status of all accounts"
 #~ msgstr "Тіркелгі не тіркелгілердің қалып-күйін өзгерту"
 
-#, python-format
 #~ msgid ""
 #~ "System bus is not available.\n"
 #~ "Try reading %(url)s"
@@ -12428,7 +12371,7 @@ msgstr ""
 #~ "$S алдыңғы күй хабарласымен, ал\n"
 #~ "$T авто қолжетерсіз уақыт шамасымен алмастырылады"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "The contact \"%s\" has authorized you to see their status."
 #~ msgstr "\"%s\" контакты өз қалып-күйін көруге сізге авторизация берген."
 
@@ -12444,7 +12387,7 @@ msgstr ""
 #~ msgstr ""
 #~ "Контакт кілті (%s) оған Gajim-дағы көрсетілген кілтке сәйкес келмейді."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "The database file (%s) cannot be read. Try to repair it (see https://dev."
 #~ "gajim.org/gajim/gajim/wikis/help/DatabaseBackup) or remove it (all "
@@ -12732,7 +12675,6 @@ msgstr ""
 #~ msgid "Transform LaTeX expressions between $$ $$."
 #~ msgstr "$$ $$ арасында LaTeX өрнектерін түрлендіру."
 
-#, python-format
 #~ msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 #~ msgstr "%(name)s қызметі тіркелуге сұранымына қате жауап берген: %(error)s"
 
@@ -12757,7 +12699,6 @@ msgstr ""
 #~ msgid "Type: "
 #~ msgstr "Түрі: "
 
-#, python-format
 #~ msgid "Type: %s"
 #~ msgstr "Түрі: %s"
 
@@ -12768,7 +12709,6 @@ msgstr ""
 #~ msgid "URL Color"
 #~ msgstr "Түс"
 
-#, python-format
 #~ msgid "Unable to bind to port %d."
 #~ msgstr "%d портын басқару мүмкін емес."
 
@@ -13074,7 +13014,6 @@ msgstr ""
 #~ msgid "XMPP Address:"
 #~ msgstr "AIM адресі:"
 
-#, python-format
 #~ msgid "XMPP Address: <i>%s</i>"
 #~ msgstr "XMPP адресі: <i>%s</i>"
 
@@ -13171,7 +13110,7 @@ msgstr ""
 #~ msgid "You are invited to a groupchat"
 #~ msgstr "Сізді топтық чатқа шақырған"
 
-#, fuzzy, python-brace-format
+#, fuzzy
 #~ msgid "You are invited to {room} by {user}"
 #~ msgstr "Сізді топтық чатқа шақырған"
 
@@ -13354,7 +13293,6 @@ msgstr ""
 #~ msgid "You successfully received %(filename)s from %(name)s."
 #~ msgstr "%(name)s жіберген %(filename)s сәтті қабылдадыңыз."
 
-#, python-format
 #~ msgid "You successfully sent %(filename)s to %(name)s."
 #~ msgstr "Сіз %(filename)s файлын %(name)s үшін сәтті жібердіңіз."
 
@@ -13369,7 +13307,6 @@ msgstr ""
 #~ msgid "You will be connected to %s without OpenPGP."
 #~ msgstr "Сіз %s үшін OpenPGP-сіз байланыс орнатасыз."
 
-#, python-format
 #~ msgid ""
 #~ "You will no longer be able to send and receive messages from and to "
 #~ "contacts using these transports:\n"
@@ -14010,11 +13947,11 @@ msgstr ""
 #~ msgid "from"
 #~ msgstr "одан"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from %s"
 #~ msgstr ", қайдан: %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from group chat %s"
 #~ msgstr "_чат бөлмелерінде"
 
@@ -14022,7 +13959,6 @@ msgstr ""
 #~ msgid "from room %s"
 #~ msgstr " %s бөлмесінен"
 
-#, python-format
 #~ msgid "from user %s"
 #~ msgstr "%s пайдаланушысынан"
 
@@ -14241,7 +14177,6 @@ msgstr ""
 #~ msgid "using %s account"
 #~ msgstr "%s тіркелгісін қолданып"
 
-#, python-format
 #~ msgid "using account %s"
 #~ msgstr "%s тіркелгісін қолданып"
 

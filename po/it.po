@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2020-12-28 12:14+0000\n"
 "Last-Translator: pjammo <adrianoghr@hotmail.it>\n"
 "Language-Team: Italian <https://translate.gajim.org/projects/gajim/master/it/"
@@ -2016,13 +2016,6 @@ msgid "Enabled"
 msgstr "Attivo"
 
 msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-"Permette di rilevare la posizione del dispositivo, in caso l'utente "
-"decidesse di pubblicarla"
-
-msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
 "Status automatically"
 msgstr ""
@@ -2214,9 +2207,6 @@ msgstr "Impossibile Creare Conversazione di Gruppo"
 msgid "Fake audio output"
 msgstr "Uscita audio fasulla"
 
-msgid "Feature is not available under Windows"
-msgstr "Funzione non disponibile per Windows"
-
 msgid "Feature not available under Windows"
 msgstr "Funzione non disponibile per Windows"
 
@@ -2395,6 +2385,10 @@ msgstr "Da"
 msgid "Full Name"
 msgstr "Nome Completo"
 
+#, fuzzy
+msgid "Fully-featured XMPP chat client"
+msgstr "Un client di messaggistica XMPP completo"
+
 #, python-format
 msgid "GLib Version: %s"
 msgstr "Versione GLib: %s"
@@ -2409,10 +2403,6 @@ msgstr "Gajim"
 #, fuzzy
 msgid "Gajim - Error"
 msgstr "Gajim - %s"
-
-#, fuzzy
-msgid "Gajim Team"
-msgstr "Temi di Gajim"
 
 msgid "Gajim Themes"
 msgstr "Temi di Gajim"
@@ -3239,9 +3229,6 @@ msgstr "Posizione:"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr ""
-
-msgid "Location detection"
-msgstr "Rilevamento posizione"
 
 msgid "Location:"
 msgstr "Posizione:"
@@ -4284,9 +4271,6 @@ msgstr "Richiesto"
 
 msgid "Requires: Gspell"
 msgstr "Richiede: Gspell"
-
-msgid "Requires: geoclue"
-msgstr "Richiede: geoclue"
 
 #, fuzzy
 msgid ""
@@ -6541,6 +6525,9 @@ msgstr ""
 msgid "or"
 msgstr "oppure"
 
+msgid "org.gajim.Gajim"
+msgstr "org.gajim.Gajim"
+
 msgid "paused composing a message"
 msgstr "ha smesso di scrivere"
 
@@ -6754,30 +6741,24 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ "answer the call?"
 #~ msgstr "%(contact)s vuole iniziare una conversazione %(type)s. Rispondere?"
 
-#, python-format
 #~ msgid "%(filename)s received from %(name)s."
 #~ msgstr "%(filename)s ricevuto da %(name)s."
 
-#, python-format
 #~ msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #~ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
-#, python-format
 #~ msgid "%(jid)s declined the invitation"
 #~ msgstr "%(jid)s ha rifiutato l'invito"
 
 #~ msgid "%(jid)s has been invited in this room"
 #~ msgstr "%(jid)s è stato invitato in questa stanza"
 
-#, python-format
 #~ msgid "%(name)s (%(jid)s) has removed subscription from you"
 #~ msgstr "%(name)s (%(jid)s) non è più iscritto"
 
-#, python-format
 #~ msgid "%(name)s is now %(show)s %(status)s"
 #~ msgstr "%(name)s ora è %(show)s %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s Changed Status"
 #~ msgstr "%(nick)s ha Cambiato Stato"
 
@@ -6787,15 +6768,12 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 #~ msgstr "%(nick)s è stato cacciato da %(who)s : %(reason)s"
 
-#, python-format
 #~ msgid "%(nick)s has set the subject to %(subject)s"
 #~ msgstr "%(nick)s ha impostato l'argomento a %(subject)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s"
 #~ msgstr "%(nick)s è ora %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s: %(status_msg)s"
 #~ msgstr "%(nick)s ora è %(status)s: %(status_msg)s"
 
@@ -6805,7 +6783,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "%(nickname)s Signed Out"
 #~ msgstr "%(nickname)s si è Disconnesso"
 
-#, python-format
 #~ msgid "%(nickname)s from group chat %(room_name)s"
 #~ msgstr "%(nickname)s dalla conversazione di gruppo %(room_name)s"
 
@@ -6833,17 +6810,14 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "%(type)s state : %(state)s, reason: %(reason)s"
 #~ msgstr "%(type)s stato : %(state)s, motivo : %(reason)s"
 
-#, python-format
 #~ msgid "%(who)s on %(time)s said: %(message)s\n"
 #~ msgstr "%(who)s alle %(time)s ha detto: %(message)s\n"
 
-#, python-format
 #~ msgid "%d event pending"
 #~ msgid_plural "%d events pending"
 #~ msgstr[0] "%d evento in attesa"
 #~ msgstr[1] "%d eventi in attesa"
 
-#, python-format
 #~ msgid "%d message pending"
 #~ msgid_plural "%d messages pending"
 #~ msgstr[0] "%d messaggio in attesa"
@@ -6854,7 +6828,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgstr[0] "%i giorno fa"
 #~ msgstr[1] "%i giorni fa"
 
-#, python-format
 #~ msgid ""
 #~ "%s\n"
 #~ "Link-local messaging might not work properly."
@@ -6893,14 +6866,12 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "%s MiB/s"
 #~ msgstr "%s MiB"
 
-#, python-format
 #~ msgid "%s Missing"
 #~ msgstr "%s Mancante"
 
 #~ msgid "%s Status Message"
 #~ msgstr "%s Messaggio di Stato"
 
-#, python-format
 #~ msgid "%s configuration error"
 #~ msgstr "Errore configurazione %s"
 
@@ -6912,11 +6883,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "%s does not appear to be a valid JID"
 #~ msgstr "%s non sembra essere un JID valido"
 
-#, python-format
 #~ msgid "%s does not exist."
 #~ msgstr "%s non esiste."
 
-#, python-format
 #~ msgid "%s has joined the group chat"
 #~ msgstr "%s si è unito alla conversazione di gruppo"
 
@@ -6960,7 +6929,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ "possibile disabilitare l'invio di pacchetti keep-alive modificando questo "
 #~ "account."
 
-#, python-format
 #~ msgid "%s wants to send you a file."
 #~ msgstr "%s vuole inviarti un file."
 
@@ -6970,7 +6938,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "%s wants to start a voice chat."
 #~ msgstr "%s vuole iniziare una conversazione vocale."
 
-#, python-format
 #~ msgid "%s wrote:\n"
 #~ msgstr "%s ha scritto:\n"
 
@@ -8046,7 +8013,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Avahi Error"
 #~ msgstr "Errore Avahi"
 
-#, python-format
 #~ msgid "Avatar upload failed: %s"
 #~ msgstr "Caricamento avatar fallito: %s"
 
@@ -8162,7 +8128,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Buying Groceries"
 #~ msgstr "Faccio la Spesa"
 
-#, python-format
 #~ msgid ""
 #~ "By removing the following contacts, you will also remove authorization. "
 #~ "This means they will see you as offline:\n"
@@ -8329,7 +8294,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Characters that are printed before the nickname in conversations."
 #~ msgstr "Caratteri stampati prima del soprannome nelle conversazioni."
 
-#, python-format
 #~ msgid "Characters typed: %s"
 #~ msgstr "Caratteri digitati: %s"
 
@@ -8619,7 +8583,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Contact name"
 #~ msgstr "Nome del contatto"
 
-#, python-format
 #~ msgid "Contact name: <i>%s</i>"
 #~ msgstr "Nome contatto: <i>%s</i>"
 
@@ -8690,7 +8653,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Could not Upload File"
 #~ msgstr "Impossibile Caricare File"
 
-#, python-format
 #~ msgid "Could not change status of account \"%s\""
 #~ msgstr "Impossibile cambiare lo stato dell'account \"%s\""
 
@@ -8701,7 +8663,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgstr ""
 #~ "Impossibile connettersi a \"%(host)s\" tramite il proxy \"%(proxy)s\""
 
-#, python-format
 #~ msgid "Could not connect to \"%s\""
 #~ msgstr "Non è possibile connettersi a \"%s\""
 
@@ -8722,7 +8683,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ "Non si è potuto scrivere su %s. Il supporto gestione sessioni non "
 #~ "funzionerà"
 
-#, python-format
 #~ msgid ""
 #~ "Couldn’t set up %(text)s. Check your configuration.\n"
 #~ "Pipeline:\n"
@@ -8767,7 +8727,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Custom applications"
 #~ msgstr "Applicazioni personalizzate"
 
-#, python-format
 #~ msgid "Custom hostname \"%s\" is wrong. It will be ignored."
 #~ msgstr "Il nome dell'host personalizzato \"%s\" è errato. Sarà ignorato."
 
@@ -8861,7 +8820,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Description:"
 #~ msgstr "Descrizione: "
 
-#, python-format
 #~ msgid "Description: %s"
 #~ msgstr "Descrizione: %s"
 
@@ -8898,7 +8856,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ "Messaggio di chat\n"
 #~ "Messaggio singolo"
 
-#, python-format
 #~ msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 #~ msgstr "Nell'URL del Dizionario manca un \"%s\" e non è WIKTIONARY"
 
@@ -8990,13 +8947,11 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Do you want to continue?"
 #~ msgstr "Vuoi continuare?"
 
-#, python-format
 #~ msgid "Do you want to permanently delete this conversation with <b>%s</b>?"
 #~ msgid_plural "Do you want to permanently delete these conversations?"
 #~ msgstr[0] "Eliminare definitivamente la conversazione con <b>%s</b>?"
 #~ msgstr[1] "Eliminare definitivamente queste conversazioni?"
 
-#, python-format
 #~ msgid "Do you want to remove %s from the contact list?"
 #~ msgstr "Rimuovere %s dalla lista contatti?"
 
@@ -9114,6 +9069,13 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ "Permette di individuare automaticamente i client nella rete locale, per "
 #~ "poter conversare senza server"
 
+#~ msgid ""
+#~ "Enables Gajim to be location-aware, if the user decides to publish the "
+#~ "device’s location"
+#~ msgstr ""
+#~ "Permette di rilevare la posizione del dispositivo, in caso l'utente "
+#~ "decidesse di pubblicarla"
+
 #, fuzzy
 #~ msgid "Enables Gajim to encrypt chat messages with OpenPGP"
 #~ msgstr "Cifratura dei messaggi con le chiavi OpenPGP."
@@ -9170,7 +9132,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Enter name / JID of contact or groupchat"
 #~ msgstr "Inserire il JID o il nome del contatto"
 
-#, python-format
 #~ msgid "Enter the certificate passphrase for account %s"
 #~ msgstr "Inserire la frase di accesso per il certificato per l'account %s"
 
@@ -9208,14 +9169,12 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Error verifying SSL certificate"
 #~ msgstr "Errore nel verificare il certificato SSL"
 
-#, python-format
 #~ msgid "Error while adding service. %s"
 #~ msgstr "Errore durante la creazione del servizio. %s"
 
 #~ msgid "Error."
 #~ msgstr "Errore."
 
-#, python-format
 #~ msgid ""
 #~ "Error: %(error)s\n"
 #~ "Debug: %(debug)s"
@@ -9291,6 +9250,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Feature"
 #~ msgstr "Funzionalità"
 
+#~ msgid "Feature is not available under Windows"
+#~ msgstr "Funzione non disponibile per Windows"
+
 #~ msgid "Feature not available, see Help->Features"
 #~ msgstr "Funzionalità non disponibile, consulta Aiuto->Funzionalità"
 
@@ -9315,7 +9277,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "File already exists"
 #~ msgstr "Il file esiste già"
 
-#, python-format
 #~ msgid "File name: %s"
 #~ msgstr "Nome file: %s"
 
@@ -9332,19 +9293,15 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "File transfer error notification color."
 #~ msgstr "Colore della notifica di un errore nel trasferimento file."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s from %(name)s failed."
 #~ msgstr "Trasferimento del file %(filename)s da %(name)s fallito."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s from %(name)s stopped."
 #~ msgstr "Trasferimento del file %(filename)s da %(name)s interrotto."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s to %(name)s failed."
 #~ msgstr "Trasferimento del file %(filename)s a %(name)s fallito."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s to %(name)s stopped."
 #~ msgstr "Trasferimento del file %(filename)s a %(name)s interrotto."
 
@@ -9455,6 +9412,10 @@ msgstr "Seleziona un'immagine o trascinala qui"
 
 #~ msgid "Gajim Instant Messenger"
 #~ msgstr "Messaggistica istantanea Gajim"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Temi di Gajim"
 
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Personalizzazione dei temi di Gajim"
@@ -9890,7 +9851,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Idle for:"
 #~ msgstr "Inattivo per %s"
 
-#, python-format
 #~ msgid "If \"%s\" accepts this request you will know their status."
 #~ msgstr "Se \"%s\" accetta la richiesta potrai conoscere il suo stato."
 
@@ -10390,7 +10350,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ "Se marcato e se sono presenti 2 o più account, Gajim mostrerà tutti i "
 #~ "contatti come se ci fosse un unico account"
 
-#, python-format
 #~ msgid ""
 #~ "If you send a file to <b>%s</b>, your real XMPP address will be revealed."
 #~ msgstr ""
@@ -10620,14 +10579,12 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Invited %s to %s"
 #~ msgstr "Invitato %s a %s"
 
-#, python-format
 #~ msgid ""
 #~ "It is not possible to send a message to %s, this XMPP Address is not "
 #~ "valid."
 #~ msgstr ""
 #~ "Impossibile inviare il messaggio a %s, questo Indirizzo XMPP non è valido."
 
-#, python-format
 #~ msgid ""
 #~ "It is not possible to send a message to %s. This XMPP Address is not "
 #~ "valid."
@@ -10845,6 +10802,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Local jid:"
 #~ msgstr "JID locale:"
 
+#~ msgid "Location detection"
+#~ msgstr "Rilevamento posizione"
+
 #~ msgid "Log _encrypted chat session"
 #~ msgstr "Registra la sessione di conversazione cifrat_a"
 
@@ -10912,11 +10872,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Main"
 #~ msgstr "Principale"
 
-#, python-format
 #~ msgid "Make %(contact1)s and %(contact2)s metacontacts"
 #~ msgstr "Imposta %(contact1)s e %(contact2)s come metacontatti"
 
-#, python-format
 #~ msgid "Make %s first contact"
 #~ msgstr "Imposta %s come contatto principale"
 
@@ -11305,7 +11263,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Notify on new _GMail email"
 #~ msgstr "Notifica le nuove e-mail su _Gmail"
 
-#, python-format
 #~ msgid "Now \"%s\" will always see you as offline."
 #~ msgstr "\"%s\" ti vedrà sempre non in linea."
 
@@ -11642,7 +11599,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ "Assicurarsi che Pywin32 sia installato sul tuo sistema. Lo si può trovare "
 #~ "su %s"
 
-#, python-format
 #~ msgid "Please make sure you are connected with \"%s\"."
 #~ msgstr "Assicurati di essere connesso con \"%s\"."
 
@@ -11841,7 +11797,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Quit when closing contact list"
 #~ msgstr "Esci da Gajim alla chiusura della lista contatti"
 
-#, python-format
 #~ msgid "RE: %s"
 #~ msgstr "RE: %s"
 
@@ -11897,7 +11852,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Received"
 #~ msgstr "Ricevuto"
 
-#, python-format
 #~ msgid "Received %s"
 #~ msgstr "Ricevuto %s"
 
@@ -11929,7 +11883,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ "Le informazioni di registrazione per il transport %s non sono arrivate in "
 #~ "tempo"
 
-#, python-format
 #~ msgid ""
 #~ "Registration with agent %(agent)s failed with error %(error)s: "
 #~ "%(error_msg)s"
@@ -11937,7 +11890,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ "Registrazione con l'agente %(agent)s fallita con errore %(error)s: "
 #~ "%(error_msg)s"
 
-#, python-format
 #~ msgid "Registration with agent %s succeeded."
 #~ msgstr "Registrazione con l'agente %s riuscita."
 
@@ -12017,11 +11969,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Rename contact"
 #~ msgstr "Rinomina contatto"
 
-#, python-format
 #~ msgid "Rename contact %s?"
 #~ msgstr "Rinominare il contatto %s?"
 
-#, python-format
 #~ msgid "Rename group %s?"
 #~ msgstr "Rinominare il gruppo %s?"
 
@@ -12132,6 +12082,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Requires upower and python-dbus."
 #~ msgstr "Richiede upower e python-dbus."
 
+#~ msgid "Requires: geoclue"
+#~ msgstr "Richiede: geoclue"
+
 #~ msgid "Requires: gir1.2-avahi-0.6"
 #~ msgstr "Richiede: gir1.2-avahi-0.6"
 
@@ -12143,7 +12096,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Requires: gpg.exe in your PATH environment variable"
 #~ msgstr "Richiede gpg.exe in PATH."
 
-#, python-format
 #~ msgid "Requires: pybonjour and bonjour SDK running (%(url)s)"
 #~ msgstr "Richiede: pybonjour e SDK bonjour in esecuzione (%(url)s)"
 
@@ -12305,7 +12257,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Save this message as a preset"
 #~ msgstr "Salva questo messaggio tra quelli personalizzati"
 
-#, python-format
 #~ msgid "Saved in: %s"
 #~ msgstr "Salvato in: %s"
 
@@ -12348,11 +12299,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Send"
 #~ msgstr "Invia"
 
-#, python-format
 #~ msgid "Send %(from)s to %(to)s"
 #~ msgstr "Invia %(from)s a %(to)s"
 
-#, python-format
 #~ msgid "Send %s"
 #~ msgstr "Invia %s"
 
@@ -12407,7 +12356,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Send message and close window"
 #~ msgstr "Invia messaggio e chiudi la finestra"
 
-#, python-format
 #~ msgid "Send this file to %s:\n"
 #~ msgid_plural "Send these files to %s:\n"
 #~ msgstr[0] "Invia questo file a %s:\n"
@@ -12791,11 +12739,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Single Message"
 #~ msgstr "Messaggio Singolo"
 
-#, python-format
 #~ msgid "Single Message in account %s"
 #~ msgstr "Messaggio Singolo nell'account %s"
 
-#, python-format
 #~ msgid "Single Message using account %s"
 #~ msgstr "Messaggio Singolo tramite l'account %s"
 
@@ -12805,7 +12751,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Size"
 #~ msgstr "Dimensione"
 
-#, python-format
 #~ msgid "Size: %s"
 #~ msgstr "Dimensione: %s"
 
@@ -12909,11 +12854,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Status changed notification background color"
 #~ msgstr "Colore dello sfondo della notifica di un cambiamento di stato."
 
-#, python-format
 #~ msgid "Status is now: %(status)s"
 #~ msgstr "Lo stato ora è: %(status)s"
 
-#, python-format
 #~ msgid "Status is now: %(status)s: %(status_msg)s"
 #~ msgstr "Lo stato ora è: %(status)s: %(status_msg)s"
 
@@ -12974,7 +12917,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Subject:"
 #~ msgstr "Soggetto:"
 
-#, python-format
 #~ msgid ""
 #~ "Subject: %(subject)s\n"
 #~ "%(message)s"
@@ -12985,7 +12927,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Subject: %s"
 #~ msgstr "Soggetto: %s"
 
-#, python-format
 #~ msgid "Subject: %s\n"
 #~ msgstr "Soggetto: %s\n"
 
@@ -12998,12 +12939,10 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Subscription request"
 #~ msgstr "Richiesta d'iscrizione"
 
-#, python-format
 #~ msgid "Subscription request for account %(account)s from %(jid)s"
 #~ msgstr ""
 #~ "Richiesta di iscrizione per l'account %(account)s da parte di %(jid)s"
 
-#, python-format
 #~ msgid "Subscription request from %s"
 #~ msgstr "Richiesta d'iscrizione da parte di %s"
 
@@ -13050,7 +12989,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Synchronize the status of all accounts"
 #~ msgstr "Sincronizza lo stato di tutti gli account"
 
-#, python-format
 #~ msgid ""
 #~ "System bus is not available.\n"
 #~ "Try reading %(url)s"
@@ -13150,7 +13088,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ "$T sarà sostituito dal tempo impostato per la non disponibilità "
 #~ "automatica."
 
-#, python-format
 #~ msgid "The contact \"%(jid)s\" has authorized you to see their status."
 #~ msgstr "Il contatto \"%(jid)s\" ti ha autorizzato a vedere il suo stato."
 
@@ -13167,7 +13104,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgstr ""
 #~ "La chiave (%s) del contatto non coincide con la chiave assegnata in Gajim."
 
-#, python-format
 #~ msgid ""
 #~ "The database file (%s) cannot be read. Try to repair it (see https://dev."
 #~ "gajim.org/gajim/gajim/wikis/help/DatabaseBackup) or remove it (all "
@@ -13270,7 +13206,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "There is an error with the form"
 #~ msgstr "C'è un errore con il modulo"
 
-#, python-format
 #~ msgid "There is an update available for Gajim (latest version: %s)"
 #~ msgstr "È disponibile un aggiornamento per Gajim (ultima versione: %s)"
 
@@ -13341,7 +13276,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ "Questo contatto ti vedrà temporaneamente come %(status)s, ma solo finché "
 #~ "cambi di nuovo il tuo stato. Dopo lui/lei vedrà il tuo stato globale."
 
-#, python-format
 #~ msgid ""
 #~ "This error occurred while adding a contact for transport %(transport)s:\n"
 #~ "\n"
@@ -13518,7 +13452,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Transform LaTeX expressions between $$ $$."
 #~ msgstr "Trasforma le espressioni LaTeX comprese in $$ $$."
 
-#, python-format
 #~ msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 #~ msgstr ""
 #~ "Il transport %(name)s ha risposto in maniera errata alla richiesta di "
@@ -13551,7 +13484,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Type: "
 #~ msgstr "Tipo: "
 
-#, python-format
 #~ msgid "Type: %s"
 #~ msgstr "Tipo: %s"
 
@@ -13570,7 +13502,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "URL Color"
 #~ msgstr "URL - Colore"
 
-#, python-format
 #~ msgid "Unable to bind to port %d."
 #~ msgstr "Impossibile collegarsi alla porta %d."
 
@@ -14029,7 +13960,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "XMPP Address:"
 #~ msgstr "Indirizzo XMPP:"
 
-#, python-format
 #~ msgid "XMPP Address: <i>%s</i>"
 #~ msgstr "Indirizzo XMPP: <i>%s</i>"
 
@@ -14309,7 +14239,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "You must read them before removing this transport."
 #~ msgstr "Devi leggerli prima di rimuovere questo transport."
 
-#, python-format
 #~ msgid "You must supply the %s of the new contact."
 #~ msgstr "È necessario inserire %s del nuovo contatto."
 
@@ -14341,7 +14270,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "You successfully received %(filename)s from %(name)s."
 #~ msgstr "%(filename)s ricevuto con successo da %(name)s."
 
-#, python-format
 #~ msgid "You successfully sent %(filename)s to %(name)s."
 #~ msgstr "Invio di %(filename)s a %(name)s effettuato con successo."
 
@@ -14358,7 +14286,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "You will be connected to %s without OpenPGP."
 #~ msgstr "Ti connetterai a %s senza OpenPGP."
 
-#, python-format
 #~ msgid ""
 #~ "You will no longer be able to send and receive messages from and to "
 #~ "contacts using these transports:\n"
@@ -15121,11 +15048,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "from"
 #~ msgstr "da"
 
-#, python-format
 #~ msgid "from %s"
 #~ msgstr "da %s"
 
-#, python-format
 #~ msgid "from group chat %s"
 #~ msgstr "dalla conversazione di gruppo %s"
 
@@ -15133,7 +15058,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "from room %s"
 #~ msgstr " dalla stanza %s"
 
-#, python-format
 #~ msgid "from user %s"
 #~ msgstr "dall'utente %s"
 
@@ -15273,9 +15197,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "oppose"
 #~ msgstr "opponi"
 
-#~ msgid "org.gajim.Gajim"
-#~ msgstr "org.gajim.Gajim"
-
 #~ msgid "otr"
 #~ msgstr "otr"
 
@@ -15404,7 +15325,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "using account "
 #~ msgstr "usando l'account "
 
-#, python-format
 #~ msgid "using account %s"
 #~ msgstr "usando l'account %s"
 

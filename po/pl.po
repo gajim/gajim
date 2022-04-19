@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2022-02-02 22:34+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/"
@@ -2039,13 +2039,6 @@ msgid "Enabled"
 msgstr "Włączone"
 
 msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-"Umożliwia Gajimowi obsługę lokalizacji, jeśli użytkownik zdecyduje się na "
-"jej publikowanie"
-
-msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
 "Status automatically"
 msgstr ""
@@ -2239,9 +2232,6 @@ msgstr "Nie udało się utworzyć nowego czatu grupowego"
 msgid "Fake audio output"
 msgstr "Udawane wyjście dźwięku"
 
-msgid "Feature is not available under Windows"
-msgstr "Funkcjonalność niedostępna pod Windows"
-
 msgid "Feature not available under Windows"
 msgstr "Funkcjonalność niedostępna pod Windows"
 
@@ -2421,6 +2411,9 @@ msgstr "Od"
 msgid "Full Name"
 msgstr "Pełne imię i nazwisko"
 
+msgid "Fully-featured XMPP chat client"
+msgstr ""
+
 #, python-format
 msgid "GLib Version: %s"
 msgstr "Wersja GLib: %s"
@@ -2435,10 +2428,6 @@ msgstr "Gajim"
 #, fuzzy
 msgid "Gajim - Error"
 msgstr "Gajim - %s"
-
-#, fuzzy
-msgid "Gajim Team"
-msgstr "Motywy Gajima"
 
 msgid "Gajim Themes"
 msgstr "Motywy Gajima"
@@ -3258,9 +3247,6 @@ msgstr "Powiadomienia"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr ""
-
-msgid "Location detection"
-msgstr "Wykrywanie położenia"
 
 msgid "Location:"
 msgstr "Lokalizacja:"
@@ -4303,9 +4289,6 @@ msgstr "Wymagane"
 
 msgid "Requires: Gspell"
 msgstr "Wymaga: Gspell"
-
-msgid "Requires: geoclue"
-msgstr "Wymaga: geoclue"
 
 #, fuzzy
 msgid ""
@@ -6574,6 +6557,9 @@ msgstr ""
 msgid "or"
 msgstr "lub"
 
+msgid "org.gajim.Gajim"
+msgstr "org.gajim.Gajim"
+
 msgid "paused composing a message"
 msgstr "przerwał pisanie wiadomości"
 
@@ -6958,7 +6944,7 @@ msgstr ""
 #~ msgid "%s or %s is a directory but should be a file"
 #~ msgstr "%s jest katalogiem choć powinien być plikiem"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s results"
 #~ msgstr "Brak wyników"
 
@@ -8259,7 +8245,6 @@ msgstr ""
 #~ msgid "Characters that are printed before the nickname in conversations."
 #~ msgstr "Znaki, które wyświetlane są podczas rozmowy przed nazwą użytkownika"
 
-#, python-format
 #~ msgid "Characters typed: %s"
 #~ msgstr "Użyte znaki: %s"
 
@@ -9028,6 +9013,13 @@ msgstr ""
 #~ "Rozmowy w sieci lokalnej, bez pośrednictwa serwera i z automatycznym "
 #~ "wykrywaniem klientów."
 
+#~ msgid ""
+#~ "Enables Gajim to be location-aware, if the user decides to publish the "
+#~ "device’s location"
+#~ msgstr ""
+#~ "Umożliwia Gajimowi obsługę lokalizacji, jeśli użytkownik zdecyduje się na "
+#~ "jej publikowanie"
+
 #, fuzzy
 #~ msgid "Enables Gajim to encrypt chat messages with OpenPGP"
 #~ msgstr "Możliwość Szyfrowania wiadomości kluczami GPG."
@@ -9212,6 +9204,9 @@ msgstr ""
 #~ msgid "Feature"
 #~ msgstr "Możliwości"
 
+#~ msgid "Feature is not available under Windows"
+#~ msgstr "Funkcjonalność niedostępna pod Windows"
+
 #, fuzzy
 #~ msgid "Feature not available, see Help->Features"
 #~ msgstr "Funkcjonalność niedostępna dla systemu Windows."
@@ -9365,6 +9360,10 @@ msgstr ""
 
 #~ msgid "Gajim Instant Messenger"
 #~ msgstr "Komunikator Gajim"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Motywy Gajima"
 
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Wybieranie motywów dla Gajim"
@@ -10604,6 +10603,9 @@ msgstr ""
 #~ msgid "Lists all preferences and their values"
 #~ msgstr "Wypisuje wszystkie opcje i ich wartości"
 
+#~ msgid "Location detection"
+#~ msgstr "Wykrywanie położenia"
+
 #~ msgid "Log _encrypted chat session"
 #~ msgstr "Loguj _zaszyfrowane wiadomości"
 
@@ -11355,7 +11357,6 @@ msgstr ""
 #~ "Proszę upewnić się, że zainstalowany jest pakiet Pywin32. Możesz go "
 #~ "pobrać spod adresu %s"
 
-#, python-format
 #~ msgid "Please make sure you are connected with \"%s\"."
 #~ msgstr "Sprawdź, czy jesteś połączony z „%s”."
 
@@ -11838,6 +11839,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Requires upower and python-dbus."
 #~ msgstr "Wymaga python-dbus"
+
+#~ msgid "Requires: geoclue"
+#~ msgstr "Wymaga: geoclue"
 
 #, fuzzy
 #~ msgid "Requires: gir1.2-avahi-0.6"
@@ -12443,7 +12447,7 @@ msgstr ""
 #~ msgid "Single Message"
 #~ msgstr "Pojedyncza wiadomość"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Single Message (%s)"
 #~ msgstr "Pojedyncza wiadomość"
 
@@ -14786,9 +14790,6 @@ msgstr ""
 #~ msgstr ""
 #~ "jeden z: rozłączony, dostępny, chętny do rozmowy, zaraz wracam, "
 #~ "nieobecny, zajęty, niewidoczny "
-
-#~ msgid "org.gajim.Gajim"
-#~ msgstr "org.gajim.Gajim"
 
 #~ msgid "otr"
 #~ msgstr "otr"

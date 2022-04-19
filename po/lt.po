@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -2150,11 +2150,6 @@ msgid "Enabled"
 msgstr "Įjungtas"
 
 msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-
-msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
 "Status automatically"
 msgstr ""
@@ -2353,10 +2348,6 @@ msgid "Fake audio output"
 msgstr ""
 
 #, fuzzy
-msgid "Feature is not available under Windows"
-msgstr "Automatinio nebuvimo būklės žinutė"
-
-#, fuzzy
 msgid "Feature not available under Windows"
 msgstr "Automatinio nebuvimo būklės žinutė"
 
@@ -2545,6 +2536,9 @@ msgstr "Nuo"
 msgid "Full Name"
 msgstr "<b>Pilnas Vardas</b>"
 
+msgid "Fully-featured XMPP chat client"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "GLib Version: %s"
 msgstr "GTK+ Version:"
@@ -2558,10 +2552,6 @@ msgstr "Gajim"
 
 #, fuzzy
 msgid "Gajim - Error"
-msgstr "Gajim - %s"
-
-#, fuzzy
-msgid "Gajim Team"
 msgstr "Gajim - %s"
 
 #, fuzzy
@@ -3403,10 +3393,6 @@ msgstr "Padėtis:"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr ""
-
-#, fuzzy
-msgid "Location detection"
-msgstr "Prisijungimas"
 
 #, fuzzy
 msgid "Location:"
@@ -4510,10 +4496,6 @@ msgstr "Password Required"
 
 msgid "Requires: Gspell"
 msgstr ""
-
-#, fuzzy
-msgid "Requires: geoclue"
-msgstr "_Balsas"
 
 msgid ""
 "Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
@@ -6845,6 +6827,9 @@ msgstr "one of: offline, online, chat, away, xa, dnd, invisible "
 msgid "or"
 msgstr "Kam"
 
+msgid "org.gajim.Gajim"
+msgstr ""
+
 msgid "paused composing a message"
 msgstr "paused composing a message"
 
@@ -6987,23 +6972,21 @@ msgstr ""
 #~ msgid "%(1)s o'clock"
 #~ msgstr "%(1)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(filename)s received from %(name)s."
 #~ msgstr "File transfer of %(filename)s from %(name)s stopped."
 
-#, python-format
 #~ msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #~ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s (%(jid)s) has removed subscription from you"
 #~ msgstr "Contact \"%s\" removed subscription from you"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s is now %(show)s %(status)s"
 #~ msgstr "%(name)s dabar %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s Changed Status"
 #~ msgstr "%(nick)s Changed Status"
 
@@ -7013,23 +6996,19 @@ msgstr ""
 #~ msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 #~ msgstr "%(nick)s has been kicked by %(who)s: %(reason)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(nick)s has set the subject to %(subject)s"
 #~ msgstr "%(nick)s has been banned: %(reason)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s"
 #~ msgstr "%(nick)s is now %(status)s"
 
-#, python-format
 #~ msgid "%(nickname)s Signed In"
 #~ msgstr "%(nickname)s Signed In"
 
-#, python-format
 #~ msgid "%(nickname)s Signed Out"
 #~ msgstr "%(nickname)s Signed Out"
 
-#, python-format
 #~ msgid "%(nickname)s from group chat %(room_name)s"
 #~ msgstr "%(nickname)s from group chat %(room_name)s"
 
@@ -7045,19 +7024,17 @@ msgstr ""
 #~ "from %(source)s"
 #~ msgstr "\"%(title)s\" by %(artist)s"
 
-#, python-format
 #~ msgid "%d message pending"
 #~ msgid_plural "%d messages pending"
 #~ msgstr[0] "%d žinutė laukia"
 #~ msgstr[1] "%d žinutės laukia"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%i day"
 #~ msgid_plural "%i days"
 #~ msgstr[0] "%i days ago"
 #~ msgstr[1] "%i days ago"
 
-#, python-format
 #~ msgid ""
 #~ "%s\n"
 #~ "Link-local messaging might not work properly."
@@ -7097,15 +7074,14 @@ msgstr ""
 #~ msgid "%s MiB/s"
 #~ msgstr "%s MiB"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s Missing"
 #~ msgstr "%s MiB"
 
-#, python-format
 #~ msgid "%s Status Message"
 #~ msgstr "%s Status Message"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s configuration error"
 #~ msgstr "Kambario nustatymai"
 
@@ -7118,14 +7094,13 @@ msgstr ""
 #~ msgid "%s does not appear to be a valid JID"
 #~ msgstr "%s does not appear to be a valid JID"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s does not exist."
 #~ msgstr "Tokios grupės pokalbis %s neegzistuoja."
 
 #~ msgid "%s has not broadcast an OpenPGP key, nor has one been assigned"
 #~ msgstr "%s has not broadcast an OpenPGP key, nor has one been assigned"
 
-#, python-format
 #~ msgid "%s is a directory but should be a file"
 #~ msgstr "%s is a directory but should be a file"
 
@@ -7146,18 +7121,16 @@ msgstr ""
 #~ msgid "%s or %s is a directory but should be a file"
 #~ msgstr "%s is a directory but should be a file"
 
-#, python-format
 #~ msgid "%s wants to send you a file."
 #~ msgstr "%s wants to send you a file."
 
 #~ msgid "%s wants to send you a file:"
 #~ msgstr "%s wants to send you a file:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s wants to start a voice chat."
 #~ msgstr "%s wants to send you a file."
 
-#, python-format
 #~ msgid "%s wrote:\n"
 #~ msgstr "%s wrote:\n"
 
@@ -8218,7 +8191,6 @@ msgstr ""
 #~ msgid "Contact name"
 #~ msgstr "Contact name"
 
-#, python-format
 #~ msgid "Contact name: <i>%s</i>"
 #~ msgstr "Contact name: <i>%s</i>"
 
@@ -8271,7 +8243,6 @@ msgstr ""
 #~ msgid "Could not Upload File"
 #~ msgstr "Could not load image"
 
-#, python-format
 #~ msgid "Could not change status of account \"%s\""
 #~ msgstr "Could not change status of account \"%s\""
 
@@ -8283,7 +8254,6 @@ msgstr ""
 #~ msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 #~ msgstr "Could not connect to \"%s\""
 
-#, python-format
 #~ msgid "Could not connect to \"%s\""
 #~ msgstr "Could not connect to \"%s\""
 
@@ -8304,7 +8274,7 @@ msgstr ""
 #~ msgid "Create Metacontact"
 #~ msgstr "Pervadinti Prieigą"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Creating %s"
 #~ msgstr "creating %s directory"
 
@@ -8312,7 +8282,7 @@ msgstr ""
 #~ msgid "Custom"
 #~ msgstr "<b>Kitaip</b>"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Custom hostname \"%s\" is wrong. It will be ignored."
 #~ msgstr "Naudoti parinktą serverio adresą/prievadą"
 
@@ -8378,7 +8348,6 @@ msgstr ""
 #~ msgid "Description:"
 #~ msgstr "Aprašymas: "
 
-#, python-format
 #~ msgid "Description: %s"
 #~ msgstr "Description: %s"
 
@@ -8399,7 +8368,6 @@ msgstr ""
 #~ "Pokalbio žinutė\n"
 #~ "Atskira žinutė"
 
-#, python-format
 #~ msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 #~ msgstr "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 
@@ -8508,7 +8476,7 @@ msgstr ""
 #~ msgid "Enter name / JID of contact or groupchat"
 #~ msgstr "Contact name"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Enter the certificate passphrase for account %s"
 #~ msgstr "Enter your password for account %s"
 
@@ -8523,7 +8491,6 @@ msgstr ""
 #~ msgid "Error description..."
 #~ msgstr "Klaidos aprašymas..."
 
-#, python-format
 #~ msgid "Error while adding service. %s"
 #~ msgstr "Error while adding service. %s"
 
@@ -8531,7 +8498,7 @@ msgstr ""
 #~ msgid "Error."
 #~ msgstr "Avahi error"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Error: %(error)s\n"
 #~ "Debug: %(debug)s"
@@ -8591,6 +8558,10 @@ msgstr ""
 #~ msgid "Feature"
 #~ msgstr "Savybė"
 
+#, fuzzy
+#~ msgid "Feature is not available under Windows"
+#~ msgstr "Automatinio nebuvimo būklės žinutė"
+
 #~ msgid "Feed name:"
 #~ msgstr "Kanalo pavadinimas:"
 
@@ -8612,7 +8583,7 @@ msgstr ""
 #~ msgid "File already exists"
 #~ msgstr "This file already exists"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File name: %s"
 #~ msgstr "Filename: %s"
 
@@ -8628,19 +8599,17 @@ msgstr ""
 #~ msgid "File transfer error notification color."
 #~ msgstr "File transfer cancelled"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s from %(name)s failed."
 #~ msgstr "File transfer of %(filename)s from %(name)s stopped."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s from %(name)s stopped."
 #~ msgstr "File transfer of %(filename)s from %(name)s stopped."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s to %(name)s failed."
 #~ msgstr "File transfer of %(filename)s to %(name)s stopped."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s to %(name)s stopped."
 #~ msgstr "File transfer of %(filename)s to %(name)s stopped."
 
@@ -8719,6 +8688,10 @@ msgstr ""
 
 #~ msgid "Gajim Instant Messenger"
 #~ msgstr "Gajim Greitųjų žinučių programa"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim - %s"
 
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Gajim temų keitimas"
@@ -8958,7 +8931,7 @@ msgstr ""
 #~ msgid "Idle for:"
 #~ msgstr "XML Console for %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "If \"%s\" accepts this request you will know their status."
 #~ msgstr "If \"%s\" accepts this request you will know his or her status."
 
@@ -9335,7 +9308,7 @@ msgstr ""
 #~ msgid "Invite contacts to the conversation (Ctrl+G)"
 #~ msgstr "Pakviesti kontaktus į pokalbį (Ctrl+G)"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Invited %(jid)s to %(room_jid)s"
 #~ msgstr "Invited %(contact_jid)s to %(room_jid)s."
 
@@ -9447,6 +9420,10 @@ msgstr ""
 #~ msgstr "Lists all preferences and their values"
 
 #, fuzzy
+#~ msgid "Location detection"
+#~ msgstr "Prisijungimas"
+
+#, fuzzy
 #~ msgid "Login Options"
 #~ msgstr "Šyp_senėlės:"
 
@@ -9477,7 +9454,7 @@ msgstr ""
 #~ msgid "Mail _client"
 #~ msgstr "_El. pašto programa:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Make %s first contact"
 #~ msgstr "Sends file to a contact"
 
@@ -9719,7 +9696,6 @@ msgstr ""
 #~ msgid "Notify on new _GMail email"
 #~ msgstr "Pranešk apie naujus _GMail laiškus"
 
-#, python-format
 #~ msgid "Now \"%s\" will always see you as offline."
 #~ msgstr "Now \"%s\" will always see you as offline."
 
@@ -9922,7 +9898,6 @@ msgstr ""
 #~ "Please make sure that Pywin32 is installed on your system. You can get it "
 #~ "at %s"
 
-#, python-format
 #~ msgid "Please make sure you are connected with \"%s\"."
 #~ msgstr "Please make sure you are connected with \"%s\"."
 
@@ -10022,11 +9997,9 @@ msgstr ""
 #~ msgid "Privacy List"
 #~ msgstr "Privatus sąrašas"
 
-#, python-format
 #~ msgid "Privacy List <b><i>%s</i></b>"
 #~ msgstr "Privacy List <b><i>%s</i></b>"
 
-#, python-format
 #~ msgid "Privacy List for %s"
 #~ msgstr "Privacy List for %s"
 
@@ -10055,7 +10028,6 @@ msgstr ""
 #~ msgid "Quit"
 #~ msgstr "_Išjungti"
 
-#, python-format
 #~ msgid "RE: %s"
 #~ msgstr "RE: %s"
 
@@ -10101,7 +10073,6 @@ msgstr ""
 #~ msgid "Received"
 #~ msgstr "Received %s"
 
-#, python-format
 #~ msgid "Received %s"
 #~ msgstr "Received %s"
 
@@ -10134,7 +10105,7 @@ msgstr ""
 #~ msgid "Registration information for transport %s has not arrived in time"
 #~ msgstr "Registration information for transport %s has not arrived in time"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Registration with agent %s succeeded."
 #~ msgstr "Registracija sėkminga"
 
@@ -10190,11 +10161,11 @@ msgstr ""
 #~ msgid "Rename contact"
 #~ msgstr "Pervadinti Prieigą"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename contact %s?"
 #~ msgstr "Pervadinti Prieigą"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename group %s?"
 #~ msgstr "Leave Groupchats"
 
@@ -10208,6 +10179,10 @@ msgstr ""
 
 #~ msgid "Reply to this message"
 #~ msgstr "Atsakyti šiai žinutei"
+
+#, fuzzy
+#~ msgid "Requires: geoclue"
+#~ msgstr "_Balsas"
 
 #, fuzzy
 #~ msgid "Requires: gpg.exe in your PATH environment variable"
@@ -10291,7 +10266,6 @@ msgstr ""
 #~ msgid "Save status as preset"
 #~ msgstr "Išsaugoti kaip nustatytą..."
 
-#, python-format
 #~ msgid "Saved in: %s"
 #~ msgstr "Saved in: %s"
 
@@ -10317,7 +10291,6 @@ msgstr ""
 #~ msgid "Send"
 #~ msgstr "_Siųsti"
 
-#, python-format
 #~ msgid "Send %s"
 #~ msgstr "Send %s"
 
@@ -10363,7 +10336,7 @@ msgstr ""
 #~ msgid "Send message and close window"
 #~ msgstr "Išsiųsti žinutę ir uždaryti langą"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send this file to %s:\n"
 #~ msgid_plural "Send these files to %s:\n"
 #~ msgstr[0] "Sends file to a contact"
@@ -10577,11 +10550,9 @@ msgstr ""
 #~ msgid "Single Message"
 #~ msgstr "Single Message"
 
-#, python-format
 #~ msgid "Single Message in account %s"
 #~ msgstr "Single Message in account %s"
 
-#, python-format
 #~ msgid "Single Message using account %s"
 #~ msgstr "Single Message using account %s"
 
@@ -10589,7 +10560,6 @@ msgstr ""
 #~ msgid "Size"
 #~ msgstr "Size: %s"
 
-#, python-format
 #~ msgid "Size: %s"
 #~ msgstr "Size: %s"
 
@@ -10660,7 +10630,6 @@ msgstr ""
 #~ msgid "Subject:"
 #~ msgstr "Tema:"
 
-#, python-format
 #~ msgid ""
 #~ "Subject: %(subject)s\n"
 #~ "%(message)s"
@@ -10671,7 +10640,6 @@ msgstr ""
 #~ msgid "Subject: %s"
 #~ msgstr "Subject: %s"
 
-#, python-format
 #~ msgid "Subject: %s\n"
 #~ msgstr "Subject: %s\n"
 
@@ -10686,7 +10654,6 @@ msgstr ""
 #~ msgid "Subscription request"
 #~ msgstr "Sutikimo užklausimas"
 
-#, python-format
 #~ msgid "Subscription request from %s"
 #~ msgstr "Subscription request from %s"
 
@@ -10717,7 +10684,7 @@ msgstr ""
 #~ msgid "Synchronize the status of all accounts"
 #~ msgstr "Changes the status of account or accounts"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "System bus is not available.\n"
 #~ "Try reading %(url)s"
@@ -10752,7 +10719,7 @@ msgstr ""
 #~ msgid "The auto away status message"
 #~ msgstr "Automatinio nuėjimo būklės pranešimas"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "The contact \"%s\" has authorized you to see their status."
 #~ msgstr "The contact \"%s\" has authorised you to see his or her status."
 
@@ -10788,7 +10755,7 @@ msgstr ""
 #~ "There was an error while publishing your personal information, try again "
 #~ "later."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "This account %s doesn't support invisibility."
 #~ msgstr "Šis kontaktas neturi failų siuntimo funkcijos."
 
@@ -10869,7 +10836,6 @@ msgstr ""
 #~ msgid "Top"
 #~ msgstr "Kam"
 
-#, python-format
 #~ msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 #~ msgstr ""
 #~ "Pernaša %(name)s atsiuntė klaidingą atsakymą į registravimo užklausą: "
@@ -10890,7 +10856,6 @@ msgstr ""
 #~ msgid "Type User ID"
 #~ msgstr "User ID:"
 
-#, python-format
 #~ msgid "Type: %s"
 #~ msgstr "Type: %s"
 
@@ -10898,7 +10863,6 @@ msgstr ""
 #~ msgid "URL Color"
 #~ msgstr "Colour"
 
-#, python-format
 #~ msgid "Unable to bind to port %d."
 #~ msgstr "Unable to bind to port %d."
 
@@ -11363,7 +11327,7 @@ msgstr ""
 #~ msgid "You must provide a username to configure this account."
 #~ msgstr "You must provide a username to configure this account."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "You must supply the %s of the new contact."
 #~ msgstr "You must enter a password for the new account."
 
@@ -11387,7 +11351,6 @@ msgstr ""
 #~ msgid "You successfully received %(filename)s from %(name)s."
 #~ msgstr "You successfully received %(filename)s from %(name)s."
 
-#, python-format
 #~ msgid "You successfully sent %(filename)s to %(name)s."
 #~ msgstr "You successfully sent %(filename)s to %(name)s."
 
@@ -11917,11 +11880,11 @@ msgstr ""
 #~ msgid "from"
 #~ msgstr "Nuo"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from %s"
 #~ msgstr "Nuo"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from group chat %s"
 #~ msgstr "pokalbiuose _grupėje"
 

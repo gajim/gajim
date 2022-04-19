@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -2191,11 +2191,6 @@ msgid "Enabled"
 msgstr "Aktibatu"
 
 msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-
-msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
 "Status automatically"
 msgstr ""
@@ -2395,10 +2390,6 @@ msgid "Fake audio output"
 msgstr ""
 
 #, fuzzy
-msgid "Feature is not available under Windows"
-msgstr "Automatikoki ez erabilgarriko egoera mezua"
-
-#, fuzzy
 msgid "Feature not available under Windows"
 msgstr "Automatikoki ez erabilgarriko egoera mezua"
 
@@ -2591,6 +2582,9 @@ msgstr "-etik"
 msgid "Full Name"
 msgstr "<b>Bezeroak</b>"
 
+msgid "Fully-featured XMPP chat client"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "GLib Version: %s"
 msgstr "GTK+ Bertsioa:"
@@ -2604,10 +2598,6 @@ msgstr "Gajim"
 
 #, fuzzy
 msgid "Gajim - Error"
-msgstr "Gajim - %s"
-
-#, fuzzy
-msgid "Gajim Team"
 msgstr "Gajim - %s"
 
 #, fuzzy
@@ -3454,10 +3444,6 @@ msgstr "Kontu Eraldaketa"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr ""
-
-#, fuzzy
-msgid "Location detection"
-msgstr "Konektatu"
 
 #, fuzzy
 msgid "Location:"
@@ -4572,10 +4558,6 @@ msgstr "Pasahitza behar da"
 
 msgid "Requires: Gspell"
 msgstr ""
-
-#, fuzzy
-msgid "Requires: geoclue"
-msgstr "_Ahotsa"
 
 msgid ""
 "Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
@@ -6938,6 +6920,9 @@ msgstr "hauetako bat: offline, online, chat, away, xa, dnd, invisible "
 msgid "or"
 msgstr "Norentzat"
 
+msgid "org.gajim.Gajim"
+msgstr ""
+
 msgid "paused composing a message"
 msgstr "mezuaren sorrera gelditua"
 
@@ -7089,12 +7074,11 @@ msgstr ""
 #~ msgid "%(1)s o'clock"
 #~ msgstr "%(1)s ordu batak"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(filename)s received from %(name)s."
 #~ msgstr ""
 #~ "%(name)s -eko %(filename)s -ren fitxero trasferentzia gelditua izan da."
 
-#, python-format
 #~ msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #~ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
@@ -7102,15 +7086,14 @@ msgstr ""
 #~ msgid "%(jid)s has been invited in this room"
 #~ msgstr "%(nick)s botata izan da %(who)s -engatik: %(reason)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s (%(jid)s) has removed subscription from you"
 #~ msgstr "\"%s\" kontaktuak harpidetza ezabatu dizu"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s is now %(show)s %(status)s"
 #~ msgstr "%(nick)s orain dago %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s Changed Status"
 #~ msgstr "%(nick)s Egoera Aldatu du"
 
@@ -7120,27 +7103,22 @@ msgstr ""
 #~ msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 #~ msgstr "%(nick)s botata izan da %(who)s -engatik: %(reason)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(nick)s has set the subject to %(subject)s"
 #~ msgstr "%(nick)s botata izan da%(reason)s -engatik: "
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s"
 #~ msgstr "%(nick)s orain dago %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s: %(status_msg)s"
 #~ msgstr "%(nick)s orain %(status)s dago: %(status_msg)s"
 
-#, python-format
 #~ msgid "%(nickname)s Signed In"
 #~ msgstr "%(nickname)s Konektatuta"
 
-#, python-format
 #~ msgid "%(nickname)s Signed Out"
 #~ msgstr "%(nickname)s Deskonektatuta"
 
-#, python-format
 #~ msgid "%(nickname)s from group chat %(room_name)s"
 #~ msgstr "%(nickname)s  %(room_name)s gelatik"
 
@@ -7157,23 +7135,21 @@ msgstr ""
 #~ "from %(source)s"
 #~ msgstr "\"%(title)s\" by %(artist)s"
 
-#, python-format
 #~ msgid "%(who)s on %(time)s said: %(message)s\n"
 #~ msgstr "%(who)s %(time)s-ean esan du: %(message)s\n"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%d message pending"
 #~ msgid_plural "%d messages pending"
 #~ msgstr[0] "Bidali mezua"
 #~ msgstr[1] "Bidali mezua"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%i day"
 #~ msgid_plural "%i days"
 #~ msgstr[0] "%i egun lehenago"
 #~ msgstr[1] "%i egun lehenago"
 
-#, python-format
 #~ msgid ""
 #~ "%s\n"
 #~ "Link-local messaging might not work properly."
@@ -7213,15 +7189,14 @@ msgstr ""
 #~ msgid "%s MiB/s"
 #~ msgstr "%s MiB"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s Missing"
 #~ msgstr "%s MiB"
 
-#, python-format
 #~ msgid "%s Status Message"
 #~ msgstr "%s Egoera Mezua"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s configuration error"
 #~ msgstr "Gelaren Konfigurazioa"
 
@@ -7234,14 +7209,14 @@ msgstr ""
 #~ msgid "%s does not appear to be a valid JID"
 #~ msgstr "%s ez du ematen baliozko JID bat denik"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s does not exist."
 #~ msgstr "Honako gela honek ez du existitzen."
 
 #~ msgid "%s has not broadcast an OpenPGP key, nor has one been assigned"
 #~ msgstr "%s-ak ez du trasmititu OpenPGP kode bat ez behintzat ezarritakorik"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s is a directory but should be a file"
 #~ msgstr "%s direktorio bat da baina fitxero bat izan daiteke"
 
@@ -7262,18 +7237,16 @@ msgstr ""
 #~ msgid "%s or %s is a directory but should be a file"
 #~ msgstr "%s direktorio bat da baina fitxero bat izan daiteke"
 
-#, python-format
 #~ msgid "%s wants to send you a file."
 #~ msgstr "%s fitxero bat bidali nahi dizu"
 
 #~ msgid "%s wants to send you a file:"
 #~ msgstr "%s fitxero bat bidali nahi dizu:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s wants to start a voice chat."
 #~ msgstr "%s fitxero bat bidali nahi dizu"
 
-#, python-format
 #~ msgid "%s wrote:\n"
 #~ msgstr "%s idatzia:\n"
 
@@ -8216,7 +8189,7 @@ msgstr ""
 #~ msgid "Busy "
 #~ msgstr "Lanpetuta"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "By removing the following contacts, you will also remove authorization. "
 #~ "This means they will see you as offline:\n"
@@ -8353,7 +8326,7 @@ msgstr ""
 #~ "Izengoitiaren ondoren jartzeko proposatzen den karakterea, txat taldean "
 #~ "beste pertsona batek izengoiti berbera badu."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Characters typed: %s"
 #~ msgstr "Baimenik gabeko izengoitia: %s"
 
@@ -8461,7 +8434,6 @@ msgstr ""
 #~ msgid "Command line Control"
 #~ msgstr "Azalpenak: %s"
 
-#, python-format
 #~ msgid "Comment: %s"
 #~ msgstr "Azalpenak: %s"
 
@@ -8603,7 +8575,6 @@ msgstr ""
 #~ msgid "Contact name"
 #~ msgstr "Kontaturen izena"
 
-#, python-format
 #~ msgid "Contact name: <i>%s</i>"
 #~ msgstr "Kontaktuaren izena: <i>%s</i>"
 
@@ -8676,7 +8647,6 @@ msgstr ""
 #~ msgid "Could not Upload File"
 #~ msgstr "Ezin izan da irudia kargatu"
 
-#, python-format
 #~ msgid "Could not change status of account \"%s\""
 #~ msgstr "Ezin izan da \"%s\" -ren egoera aldatu"
 
@@ -8688,7 +8658,6 @@ msgstr ""
 #~ msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 #~ msgstr "Ezin izan da konektatu \"%s\" -rekin"
 
-#, python-format
 #~ msgid "Could not connect to \"%s\""
 #~ msgstr "Ezin izan da konektatu \"%s\" -rekin"
 
@@ -8718,7 +8687,7 @@ msgstr ""
 #~ msgid "Create your own Privacy Lists"
 #~ msgstr "Zure Debekatze Zerrenda egin"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Creating %s"
 #~ msgstr "Deskribapena: %s"
 
@@ -8733,7 +8702,7 @@ msgstr ""
 #~ msgid "Custom"
 #~ msgstr "<b>Bezeroak</b>"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Custom hostname \"%s\" is wrong. It will be ignored."
 #~ msgstr "Erabili bezeroaren hostname/portua"
 
@@ -8814,7 +8783,6 @@ msgstr ""
 #~ msgid "Description:"
 #~ msgstr "Deskribapena: %s"
 
-#, python-format
 #~ msgid "Description: %s"
 #~ msgstr "Deskribapena: %s"
 
@@ -8830,7 +8798,6 @@ msgstr ""
 #~ msgid "Destroy…"
 #~ msgstr "Deskribapena: %s"
 
-#, python-format
 #~ msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 #~ msgstr "URL hiztegia galdu egin da \"%s\" -an eta ez dago WIKTIONARY-an"
 
@@ -8897,13 +8864,13 @@ msgstr ""
 #~ msgid "Do you want to continue?"
 #~ msgstr "Zer nahi duzu egitea?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to permanently delete this conversation with <b>%s</b>?"
 #~ msgid_plural "Do you want to permanently delete these conversations?"
 #~ msgstr[0] "Ziur al zaude hautaturiko mezua ezabatu nahi duzula?"
 #~ msgstr[1] "Ziur al zaude hautaturiko mezua ezabatu nahi duzula?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to remove %s from the contact list?"
 #~ msgstr "Ezabatu nahi al duzu %s taldea zerrendatik?"
 
@@ -9034,7 +9001,7 @@ msgstr ""
 #~ msgid "Enter name / JID of contact or groupchat"
 #~ msgstr "Kontaturen izena"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Enter the certificate passphrase for account %s"
 #~ msgstr "Sartu GPG kodearen pasa-esaldia %s konturako."
 
@@ -9059,7 +9026,6 @@ msgstr ""
 #~ msgid "Error reading file:"
 #~ msgstr "Errorea fitxeroa irakurtzean:"
 
-#, python-format
 #~ msgid "Error while adding service. %s"
 #~ msgstr "Errorea zerbitzarian sartzean.%s"
 
@@ -9067,7 +9033,7 @@ msgstr ""
 #~ msgid "Error."
 #~ msgstr "Avahi error"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Error: %(error)s\n"
 #~ "Debug: %(debug)s"
@@ -9132,6 +9098,10 @@ msgstr ""
 #~ msgid "Feature"
 #~ msgstr "Zerbitzariaren Ezaugarriak:"
 
+#, fuzzy
+#~ msgid "Feature is not available under Windows"
+#~ msgstr "Automatikoki ez erabilgarriko egoera mezua"
+
 #~ msgid "Feed name:"
 #~ msgstr "Emandako izena:"
 
@@ -9153,7 +9123,7 @@ msgstr ""
 #~ msgid "File already exists"
 #~ msgstr "Fitxero hau jadanik badago"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File name: %s"
 #~ msgstr "Fitxeroaren izena: %s"
 
@@ -9168,22 +9138,20 @@ msgstr ""
 #~ msgid "File transfer error notification color."
 #~ msgstr "Fitxero transferentzia ezeztatua"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s from %(name)s failed."
 #~ msgstr ""
 #~ "%(name)s -eko %(filename)s -ren fitxero trasferentzia gelditua izan da."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s from %(name)s stopped."
 #~ msgstr ""
 #~ "%(name)s -eko %(filename)s -ren fitxero trasferentzia gelditua izan da."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s to %(name)s failed."
 #~ msgstr ""
 #~ "Fitxero transferentzia %(filename)s -rena %(name)s -entzat gelditua."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s to %(name)s stopped."
 #~ msgstr ""
 #~ "Fitxero transferentzia %(filename)s -rena %(name)s -entzat gelditua."
@@ -9277,6 +9245,10 @@ msgstr ""
 
 #~ msgid "Gajim Instant Messenger"
 #~ msgstr "Gajim Behealako Mezularitza"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim - %s"
 
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Gajim-en Gaien Kustomizatazailea"
@@ -9567,7 +9539,7 @@ msgstr ""
 #~ msgid "Idle for:"
 #~ msgstr "XML Konsola %s-rena"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "If \"%s\" accepts this request you will know their status."
 #~ msgstr ""
 #~ "\"%s\" harpidetza onartzen baduzu bere egoera ikus ahal izango duzu."
@@ -10026,7 +9998,7 @@ msgstr ""
 #~ msgid "Invite contacts to the conversation (Ctrl+G)"
 #~ msgstr "arreta jartzen ari da elkarrizketara"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Invited %(jid)s to %(room_jid)s"
 #~ msgstr "Gonbidatu  %(contact_jid)s %(room_jid)s. gelara."
 
@@ -10034,13 +10006,13 @@ msgstr ""
 #~ msgid "Invited %s to %s"
 #~ msgstr "Bidali %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s, this XMPP Address is not "
 #~ "valid."
 #~ msgstr "Ez da posible hutsik dauden artxiboak bidaltzea"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s. This XMPP Address is not "
 #~ "valid."
@@ -10173,6 +10145,10 @@ msgstr ""
 #~ msgid "Lists all preferences and their values"
 #~ msgstr "Erakutsi preferentzia eta balio guztiak"
 
+#, fuzzy
+#~ msgid "Location detection"
+#~ msgstr "Konektatu"
+
 #~ msgid "Log _off"
 #~ msgstr "Log _desaktibatua"
 
@@ -10217,11 +10193,11 @@ msgstr ""
 #~ msgid "Mail _client"
 #~ msgstr "_Email bezeroa"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Make %(contact1)s and %(contact2)s metacontacts"
 #~ msgstr "Egin %s eta %s metacontacts"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Make %s first contact"
 #~ msgstr "Egin %s eta %s metacontacts"
 
@@ -10545,7 +10521,6 @@ msgstr ""
 #~ msgid "Notify on new _GMail email"
 #~ msgstr "_Gmail-eko E-posta berri batez jakinarazi"
 
-#, python-format
 #~ msgid "Now \"%s\" will always see you as offline."
 #~ msgstr "Orain \"%s\" deskonektatuta ikusiko zaitu beti."
 
@@ -10648,11 +10623,11 @@ msgstr ""
 #~ msgid "Order:"
 #~ msgstr "Ordena:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Order: %(order)s, action: %(action)s"
 #~ msgstr "Agindu: %s, ekintza: %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 #~ msgstr "Agindua: %s, akzioa: %s, mota %s, balorea %s"
@@ -10806,7 +10781,6 @@ msgstr ""
 #~ "Mesedez begiratu Pywin32 instalatuta dagoela sisteman. %s-etin lortu "
 #~ "dezakezu hau."
 
-#, python-format
 #~ msgid "Please make sure you are connected with \"%s\"."
 #~ msgstr "Mesedez begiratu \"%s\" -rekin konektatuta zauden."
 
@@ -10938,18 +10912,15 @@ msgstr ""
 #~ msgid "Privacy List"
 #~ msgstr "Debekatze Zerrenda"
 
-#, python-format
 #~ msgid "Privacy List <b><i>%s</i></b>"
 #~ msgstr "Debekatze Zerrenda <b><i>%s</i></b>"
 
-#, python-format
 #~ msgid "Privacy List for %s"
 #~ msgstr "Debekatze Zerrenda %s-entzat"
 
 #~ msgid "Privacy Lists"
 #~ msgstr "Debekatze Zerrenda"
 
-#, python-format
 #~ msgid "Privacy Lists for %s"
 #~ msgstr "Debekatze Zerrenda %s-entzat"
 
@@ -10990,7 +10961,6 @@ msgstr ""
 #~ msgid "Quit"
 #~ msgstr "At_era"
 
-#, python-format
 #~ msgid "RE: %s"
 #~ msgstr "RE: %s"
 
@@ -11041,7 +11011,6 @@ msgstr ""
 #~ msgid "Received"
 #~ msgstr "Jasoa %s"
 
-#, python-format
 #~ msgid "Received %s"
 #~ msgstr "Jasoa %s"
 
@@ -11075,7 +11044,7 @@ msgstr ""
 #~ msgstr ""
 #~ "Erregistroaren informazioa transporteetarako %s ez da denboran iritsi"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Registration with agent %s succeeded."
 #~ msgstr "vCard argitarapena egina"
 
@@ -11146,11 +11115,11 @@ msgstr ""
 #~ msgid "Rename contact"
 #~ msgstr "Berridatzi Kontaktua"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename contact %s?"
 #~ msgstr "Berridatzi Kontaktua"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename group %s?"
 #~ msgstr "Berrrizenpetu Taldea"
 
@@ -11164,6 +11133,10 @@ msgstr ""
 
 #~ msgid "Reply to this message"
 #~ msgstr "Erantzun mezu honi"
+
+#, fuzzy
+#~ msgid "Requires: geoclue"
+#~ msgstr "_Ahotsa"
 
 #, fuzzy
 #~ msgid "Requires: gpg.exe in your PATH environment variable"
@@ -11277,7 +11250,6 @@ msgstr ""
 #~ msgid "Save status as preset"
 #~ msgstr "Gorde Ezarritako Bezala...."
 
-#, python-format
 #~ msgid "Saved in: %s"
 #~ msgstr "%s gordea"
 
@@ -11307,11 +11279,10 @@ msgstr ""
 #~ msgid "Send"
 #~ msgstr "_Bidali"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send %(from)s to %(to)s"
 #~ msgstr "Bidali %s"
 
-#, python-format
 #~ msgid "Send %s"
 #~ msgstr "Bidali %s"
 
@@ -11364,7 +11335,7 @@ msgstr ""
 #~ msgid "Send message and close window"
 #~ msgstr "Bidali mezua eta itxi leihoa"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send this file to %s:\n"
 #~ msgid_plural "Send these files to %s:\n"
 #~ msgstr[0] "%s fitxero bat bidali nahi dizu:"
@@ -11620,11 +11591,9 @@ msgstr ""
 #~ msgid "Single Message"
 #~ msgstr "Mezu Bakarra"
 
-#, python-format
 #~ msgid "Single Message in account %s"
 #~ msgstr "Mezu Bakarra %s Kontuan"
 
-#, python-format
 #~ msgid "Single Message using account %s"
 #~ msgstr "Mezu Bakarra %s Kontua erabiliz"
 
@@ -11632,7 +11601,6 @@ msgstr ""
 #~ msgid "Size"
 #~ msgstr "Tamaina: %s"
 
-#, python-format
 #~ msgid "Size: %s"
 #~ msgstr "Tamaina: %s"
 
@@ -11706,11 +11674,9 @@ msgstr ""
 #~ msgid "Status Preset"
 #~ msgstr "Egoera Mezua"
 
-#, python-format
 #~ msgid "Status is now: %(status)s"
 #~ msgstr "Egoera orain da: %(status)s"
 
-#, python-format
 #~ msgid "Status is now: %(status)s: %(status_msg)s"
 #~ msgstr "Egoera orain da: %(status)s: %(status_msg)s"
 
@@ -11751,7 +11717,7 @@ msgstr ""
 #~ msgid "Subject:"
 #~ msgstr "Gaia:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Subject: %(subject)s\n"
 #~ "%(message)s"
@@ -11762,7 +11728,6 @@ msgstr ""
 #~ msgid "Subject: %s"
 #~ msgstr "Gaia: %s"
 
-#, python-format
 #~ msgid "Subject: %s\n"
 #~ msgstr "Gaia: %s\n"
 
@@ -11778,11 +11743,10 @@ msgstr ""
 #~ msgid "Subscription request"
 #~ msgstr "Harpidetza Eskaria"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Subscription request for account %(account)s from %(jid)s"
 #~ msgstr "Harpidetza baimena %s kontutik %s kontura"
 
-#, python-format
 #~ msgid "Subscription request from %s"
 #~ msgstr "Harpidetza baimena %s kontutik"
 
@@ -11826,7 +11790,7 @@ msgstr ""
 #~ msgid "Synchronize the status of all accounts"
 #~ msgstr "Aldatu kontaktuaren edo kontaktuen egoera"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "System bus is not available.\n"
 #~ "Try reading %(url)s"
@@ -11868,7 +11832,7 @@ msgstr ""
 #~ msgid "The auto away status message"
 #~ msgstr "Automatikoki kanpoko egoera mezua"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "The contact \"%s\" has authorized you to see their status."
 #~ msgstr "\"%s\" kontaktuak baimendu dizu bere egoera ikusteko."
 
@@ -11929,7 +11893,7 @@ msgstr ""
 #~ msgid "Thinking"
 #~ msgstr "Lanean"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "This account %s doesn't support invisibility."
 #~ msgstr ""
 #~ "Fitxategi tranferentzia aktiboen, bukatutakoen eta gelditutakoen lista"
@@ -12061,7 +12025,7 @@ msgstr ""
 #~ msgid "Transferred: "
 #~ msgstr "Transferitua:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 #~ msgstr "%s transporteak harpidetza baimenari errore batez erantzun dio: %s"
 
@@ -12087,11 +12051,9 @@ msgstr ""
 #~ msgid "Type: "
 #~ msgstr "Mota: "
 
-#, python-format
 #~ msgid "Type: %s"
 #~ msgstr "Mota: %s"
 
-#, python-format
 #~ msgid "Unable to bind to port %d."
 #~ msgstr "Unable to bind to port %d."
 
@@ -12509,7 +12471,7 @@ msgstr ""
 #~ msgid "You are invited to a groupchat"
 #~ msgstr "Gela honetan ukatua izan zara."
 
-#, fuzzy, python-brace-format
+#, fuzzy
 #~ msgid "You are invited to {room} by {user}"
 #~ msgstr "Gela honetan ukatua izan zara."
 
@@ -12665,7 +12627,7 @@ msgstr ""
 #~ msgid "You must read them before removing this transport."
 #~ msgstr "Irakurri behar dituzu transporte hau ezabatu baino lehen."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "You must supply the %s of the new contact."
 #~ msgstr "Kontu berrirako pasahitz bat sartu behar duzu."
 
@@ -12688,7 +12650,6 @@ msgstr ""
 #~ msgid "You successfully received %(filename)s from %(name)s."
 #~ msgstr "Ondo jasoa izan da  %(name)s-ren %(filename)s  fitxeroa."
 
-#, python-format
 #~ msgid "You successfully sent %(filename)s to %(name)s."
 #~ msgstr "Jadanik bidalia izan da %(filename)s   %(name)s -ri."
 
@@ -12698,7 +12659,7 @@ msgstr ""
 #~ msgid "You will be connected to %s without OpenPGP."
 #~ msgstr "%s konektatu behar zara OpenPGP-rik gabe."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "You will no longer be able to send and receive messages from and to "
 #~ "contacts using these transports:\n"
@@ -13317,11 +13278,11 @@ msgstr ""
 #~ msgid "from"
 #~ msgstr "-etik"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from %s"
 #~ msgstr "-etik"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from group chat %s"
 #~ msgstr "Txat Taldean _Sartu"
 
@@ -13528,7 +13489,6 @@ msgstr ""
 #~ msgid "using %s account"
 #~ msgstr "%s kontua erabiliz"
 
-#, python-format
 #~ msgid "using account %s"
 #~ msgstr "%s kontua erabiliz "
 

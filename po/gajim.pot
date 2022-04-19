@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-30 21:15+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1846,11 +1846,6 @@ msgid "Enabled"
 msgstr ""
 
 msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-
-msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
 "Status automatically"
 msgstr ""
@@ -2022,9 +2017,6 @@ msgstr ""
 msgid "Fake audio output"
 msgstr ""
 
-msgid "Feature is not available under Windows"
-msgstr ""
-
 msgid "Feature not available under Windows"
 msgstr ""
 
@@ -2190,6 +2182,9 @@ msgstr ""
 msgid "Full Name"
 msgstr ""
 
+msgid "Fully-featured XMPP chat client"
+msgstr ""
+
 #, python-format
 msgid "GLib Version: %s"
 msgstr ""
@@ -2202,9 +2197,6 @@ msgid "Gajim"
 msgstr ""
 
 msgid "Gajim - Error"
-msgstr ""
-
-msgid "Gajim Team"
 msgstr ""
 
 msgid "Gajim Themes"
@@ -2914,9 +2906,6 @@ msgstr ""
 
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
-msgstr ""
-
-msgid "Location detection"
 msgstr ""
 
 msgid "Location:"
@@ -3866,9 +3855,6 @@ msgid "Required"
 msgstr ""
 
 msgid "Requires: Gspell"
-msgstr ""
-
-msgid "Requires: geoclue"
 msgstr ""
 
 msgid ""
@@ -5894,6 +5880,9 @@ msgid ""
 msgstr ""
 
 msgid "or"
+msgstr ""
+
+msgid "org.gajim.Gajim"
 msgstr ""
 
 msgid "paused composing a message"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2009-11-18 15:50+0100\n"
 "Last-Translator: Stian B. Barmen <stian@barmen.nu>\n"
 "Language-Team: <>\n"
@@ -2175,11 +2175,6 @@ msgstr "Slå på"
 msgid "Enabled"
 msgstr "Påslått"
 
-msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
@@ -2385,10 +2380,6 @@ msgid "Fake audio output"
 msgstr "Falsk lydutdata"
 
 #, fuzzy
-msgid "Feature is not available under Windows"
-msgstr "Funksjonen er ikke tilgjengelig på Windows."
-
-#, fuzzy
 msgid "Feature not available under Windows"
 msgstr "Funksjonen er ikke tilgjengelig på Windows."
 
@@ -2575,6 +2566,9 @@ msgstr "Fra"
 msgid "Full Name"
 msgstr "Fullt navn"
 
+msgid "Fully-featured XMPP chat client"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "GLib Version: %s"
 msgstr "GTK+versjon: %s"
@@ -2589,10 +2583,6 @@ msgstr "Gajim"
 #, fuzzy
 msgid "Gajim - Error"
 msgstr "Gajim - %s"
-
-#, fuzzy
-msgid "Gajim Team"
-msgstr "gajim-remote"
 
 #, fuzzy
 msgid "Gajim Themes"
@@ -3497,10 +3487,6 @@ msgstr "Plassering:"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr ""
-
-#, fuzzy
-msgid "Location detection"
-msgstr "Tilkoblingsvalg"
 
 msgid "Location:"
 msgstr "Plassering:"
@@ -4611,10 +4597,6 @@ msgstr "Passord påkrevd"
 
 #, fuzzy
 msgid "Requires: Gspell"
-msgstr "Krever Gspell"
-
-#, fuzzy
-msgid "Requires: geoclue"
 msgstr "Krever Gspell"
 
 #, fuzzy
@@ -7027,6 +7009,9 @@ msgstr ""
 msgid "or"
 msgstr "Tor"
 
+msgid "org.gajim.Gajim"
+msgstr ""
+
 msgid "paused composing a message"
 msgstr "tok pause i meldingsskrivingen"
 
@@ -7215,7 +7200,7 @@ msgstr ""
 #~ msgid "%(1)s o'clock"
 #~ msgstr "%(1)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "%(contact)s wants to start a %(type)s chat with you. Do you want to "
 #~ "answer the call?"
@@ -7223,30 +7208,25 @@ msgstr ""
 #~ "%(contact)s ønsker å starte %(type)s økt med deg. Ønsker du å besvare "
 #~ "denne forespørselen?"
 
-#, python-format
 #~ msgid "%(filename)s received from %(name)s."
 #~ msgstr "%(filename)s mottatt fra %(name)s."
 
-#, python-format
 #~ msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #~ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
-#, python-format
 #~ msgid "%(jid)s declined the invitation"
 #~ msgstr "%(jid)s avslo invitasjonen"
 
 #~ msgid "%(jid)s has been invited in this room"
 #~ msgstr "%(jid)s har blitt invitert til dette rommet"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s (%(jid)s) has removed subscription from you"
 #~ msgstr "Kontakten \"%s\" abonnerer ikke lengre på deg"
 
-#, python-format
 #~ msgid "%(name)s is now %(show)s %(status)s"
 #~ msgstr "%(name)s er nå %(show)s %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s Changed Status"
 #~ msgstr "%(nick)s endret status"
 
@@ -7256,27 +7236,21 @@ msgstr ""
 #~ msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 #~ msgstr "%(nick)s har blitt kastet ut av %(who)s: %(reason)s"
 
-#, python-format
 #~ msgid "%(nick)s has set the subject to %(subject)s"
 #~ msgstr "%(nick)s satt temaet til %(subject)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s"
 #~ msgstr "%(nick)s er nå %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s: %(status_msg)s"
 #~ msgstr "%(nick)s er %(status)s nå: %(status_msg)s"
 
-#, python-format
 #~ msgid "%(nickname)s Signed In"
 #~ msgstr "%(nickname)s logget inn"
 
-#, python-format
 #~ msgid "%(nickname)s Signed Out"
 #~ msgstr "%(nickname)s logget ut"
 
-#, python-format
 #~ msgid "%(nickname)s from group chat %(room_name)s"
 #~ msgstr "%(nickname)s fra gruppesamtale %(room_name)s"
 
@@ -7310,33 +7284,28 @@ msgstr ""
 #~ msgid "%(type)s encryption is active %(authenticated)s"
 #~ msgstr "%(type)s kryptering er aktiv %(authenticated)s."
 
-#, python-format
 #~ msgid "%(type)s state : %(state)s, reason: %(reason)s"
 #~ msgstr "%(type)s tilstand : %(state)s, grunn: %(reason)s"
 
-#, python-format
 #~ msgid "%(who)s on %(time)s said: %(message)s\n"
 #~ msgstr "%(who)s sa: %(message)s %(time)s\n"
 
-#, python-format
 #~ msgid "%d event pending"
 #~ msgid_plural "%d events pending"
 #~ msgstr[0] "%d hendelse venter"
 #~ msgstr[1] "%d hendelser venter"
 
-#, python-format
 #~ msgid "%d message pending"
 #~ msgid_plural "%d messages pending"
 #~ msgstr[0] "%d melding venter"
 #~ msgstr[1] "%d meldinger venter"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%i day"
 #~ msgid_plural "%i days"
 #~ msgstr[0] "%i dager siden"
 #~ msgstr[1] "%i dager siden"
 
-#, python-format
 #~ msgid ""
 #~ "%s\n"
 #~ "Link-local messaging might not work properly."
@@ -7375,15 +7344,13 @@ msgstr ""
 #~ msgid "%s MiB/s"
 #~ msgstr "%s MiB"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s Missing"
 #~ msgstr "%s MiB"
 
-#, python-format
 #~ msgid "%s Status Message"
 #~ msgstr "%s Statusmelding"
 
-#, python-format
 #~ msgid "%s configuration error"
 #~ msgstr "%s oppsettsfeil"
 
@@ -7396,7 +7363,7 @@ msgstr ""
 #~ msgid "%s does not appear to be a valid JID"
 #~ msgstr "%s ser ikke ut til å være en gyldig JID"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s does not exist."
 #~ msgstr "Fila finnes ikke"
 
@@ -7406,7 +7373,6 @@ msgstr ""
 #~ msgid "%s has sent you a new message."
 #~ msgstr "%s har sendt deg en ny melding."
 
-#, python-format
 #~ msgid "%s is a directory but should be a file"
 #~ msgstr "%s er en katalog men skulle vært ei fil"
 
@@ -7427,18 +7393,15 @@ msgstr ""
 #~ msgid "%s or %s is a directory but should be a file"
 #~ msgstr "%s er en katalog men skulle vært ei fil"
 
-#, python-format
 #~ msgid "%s wants to send you a file."
 #~ msgstr "%s ønsker å sende deg ei fil."
 
 #~ msgid "%s wants to send you a file:"
 #~ msgstr "%s ønsker å sende deg ei fil:"
 
-#, python-format
 #~ msgid "%s wants to start a voice chat."
 #~ msgstr "%s ønsker å starte en lydsamtale."
 
-#, python-format
 #~ msgid "%s wrote:\n"
 #~ msgstr "%s skrev:\n"
 
@@ -8576,7 +8539,7 @@ msgstr ""
 #~ msgid "Buying Groceries"
 #~ msgstr "Kjøper mat"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "By removing the following contacts, you will also remove authorization. "
 #~ "This means they will see you as offline:\n"
@@ -8736,7 +8699,7 @@ msgstr ""
 #~ msgid "Characters that are printed before the nickname in conversations."
 #~ msgstr "Tegn som skrives før kallenavnet i samtaler"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Characters typed: %s"
 #~ msgstr "Ulovlig tegn"
 
@@ -8879,7 +8842,6 @@ msgstr ""
 #~ msgid "Command line Control"
 #~ msgstr "Kommandolinje"
 
-#, python-format
 #~ msgid "Comment: %s"
 #~ msgstr "Kommentar: %s"
 
@@ -9016,7 +8978,6 @@ msgstr ""
 #~ msgid "Contact name"
 #~ msgstr "Kontaktnavn"
 
-#, python-format
 #~ msgid "Contact name: <i>%s</i>"
 #~ msgstr "Kontaktnavn: <i>%s</i>"
 
@@ -9086,7 +9047,6 @@ msgstr ""
 #~ msgid "Could not Upload File"
 #~ msgstr "Kunne ikke laste opp fil"
 
-#, python-format
 #~ msgid "Could not change status of account \"%s\""
 #~ msgstr "Kunne ikke endre statusen tilhørende kontoen \"%s\""
 
@@ -9096,7 +9056,6 @@ msgstr ""
 #~ msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 #~ msgstr "Kunne ikke koble til \"%(host)s\" via mellomtjeneren \"%(proxy)s\""
 
-#, python-format
 #~ msgid "Could not connect to \"%s\""
 #~ msgstr "Kunne ikke koble til \"%s\""
 
@@ -9116,7 +9075,7 @@ msgstr ""
 #~ msgid "Could not write to %s. Session Management support will not work"
 #~ msgstr "Kunne ikke skrive til %s. Støtte for øktbehandling vil utgå"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Couldn’t set up %(text)s. Check your configuration.\n"
 #~ "\n"
@@ -9144,7 +9103,7 @@ msgstr ""
 #~ msgid "Create Metacontact"
 #~ msgstr "Gi kontakt nytt navn"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Creating %s"
 #~ msgstr "Ødelegger %s"
 
@@ -9164,7 +9123,7 @@ msgstr ""
 #~ msgid "Custom applications"
 #~ msgstr "Alltid bruk forvalgte programmer"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Custom hostname \"%s\" is wrong. It will be ignored."
 #~ msgstr "Feil egendefinert vertsnavn \"%s\". Ignorerer."
 
@@ -9260,7 +9219,6 @@ msgstr ""
 #~ msgid "Description:"
 #~ msgstr "Beskrivelse:"
 
-#, python-format
 #~ msgid "Description: %s"
 #~ msgstr "Beskrivelse: %s"
 
@@ -9313,7 +9271,6 @@ msgstr ""
 #~ "Samtale melding\n"
 #~ "Enkel melding"
 
-#, python-format
 #~ msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 #~ msgstr "Ordboks-URL-en mangler en \"%s\" og er ikke WIKTIONARY"
 
@@ -9385,13 +9342,13 @@ msgstr ""
 #~ msgid "Do you want to continue?"
 #~ msgstr "Ønsker du å fortsette?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to permanently delete this conversation with <b>%s</b>?"
 #~ msgid_plural "Do you want to permanently delete these conversations?"
 #~ msgstr[0] "Ønsker du å slette valgt melding?"
 #~ msgstr[1] "Ønsker du å slette valgt melding?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to remove %s from the contact list?"
 #~ msgstr "Ønsker du å fjerne gruppen %s fra kontaktlista?"
 
@@ -9562,7 +9519,6 @@ msgstr ""
 #~ msgid "Enter name / JID of contact or groupchat"
 #~ msgstr "Skriv inn navnet / JID-en tilhørende kontakt eller gruppesludring"
 
-#, python-format
 #~ msgid "Enter the certificate passphrase for account %s"
 #~ msgstr "Skriv in sertifikatspassordet for kontoen %s"
 
@@ -9601,14 +9557,12 @@ msgstr ""
 #~ msgid "Error verifying SSL certificate"
 #~ msgstr "Feil ved bekreftelse av SSL-sertifikat"
 
-#, python-format
 #~ msgid "Error while adding service. %s"
 #~ msgstr "Feil ved tilføying av tjeneste. %s"
 
 #~ msgid "Error."
 #~ msgstr "Feil."
 
-#, python-format
 #~ msgid ""
 #~ "Error: %(error)s\n"
 #~ "Debug: %(debug)s"
@@ -9679,6 +9633,10 @@ msgstr ""
 #~ msgid "Feature"
 #~ msgstr "Funksjonalitet"
 
+#, fuzzy
+#~ msgid "Feature is not available under Windows"
+#~ msgstr "Funksjonen er ikke tilgjengelig på Windows."
+
 #~ msgid "Feature not available, see Help->Features"
 #~ msgstr "Funksjon ikke tilgjengelig, se Hjelp → Funksjoner"
 
@@ -9703,7 +9661,7 @@ msgstr ""
 #~ msgid "File already exists"
 #~ msgstr "Denne fila finnes allerede"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File name: %s"
 #~ msgstr "Filnavn: %s"
 
@@ -9719,19 +9677,15 @@ msgstr ""
 #~ msgid "File transfer error notification color."
 #~ msgstr "Merknadsfarge for filoverføringsfeil."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s from %(name)s failed."
 #~ msgstr "Filoverføringen %(filename)s fra %(name)s mislyktes."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s from %(name)s stopped."
 #~ msgstr "Filoverføringen %(filename)s fra %(name)s stoppet."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s to %(name)s failed."
 #~ msgstr "Filoverføringen %(filename)s til %(name)s mislyktes."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s to %(name)s stopped."
 #~ msgstr "Filoverføringen %(filename)s til %(name)s har stoppet."
 
@@ -9831,6 +9785,10 @@ msgstr ""
 
 #~ msgid "Gajim Instant Messenger"
 #~ msgstr "Gajim Instant Messenger"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "gajim-remote"
 
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Egentilpasning av draktvalg for Gajim"
@@ -10077,7 +10035,6 @@ msgstr ""
 #~ msgid "HTTP File Upload: Enable HTTPS Verification."
 #~ msgstr "HTTP-opplasting: Skru på HTTPS-bekrefting"
 
-#, python-format
 #~ msgid "HTTP response code from server: %s"
 #~ msgstr "HTTP-svarkode fra tjener: %s"
 
@@ -10262,7 +10219,7 @@ msgstr ""
 #~ msgid "Idle for:"
 #~ msgstr "XML Konsoll for %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "If \"%s\" accepts this request you will know their status."
 #~ msgstr ""
 #~ "Hvis \"%s\" godtar denne forespørselen vil du få kjennskap til "
@@ -10686,7 +10643,7 @@ msgstr ""
 #~ "Hvis du har forskjellige kontoer på forskjellige tjenere, eller ønsker "
 #~ "kontakt med venner og familie, er Gajim for deg."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "If you send a file to <b>%s</b>, your real XMPP address will be revealed."
 #~ msgstr ""
@@ -10893,20 +10850,19 @@ msgstr ""
 #~ msgid "Invite contacts to the conversation (Ctrl+G)"
 #~ msgstr "Inviter kontakter til samtalen (Ctrl+G)"
 
-#, python-format
 #~ msgid "Invited %(jid)s to %(room_jid)s"
 #~ msgstr "Inviterte %(jid)s til %(room_jid)s"
 
 #~ msgid "Invited %s to %s"
 #~ msgstr "Inviterte %s til %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s, this XMPP Address is not "
 #~ "valid."
 #~ msgstr "Det er ikke mulig å sende en melding til %s, JID-en er ikke gyldig."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s. This XMPP Address is not "
 #~ "valid."
@@ -11088,6 +11044,10 @@ msgstr ""
 #~ msgid "Lists all preferences and their values"
 #~ msgstr "Lister alle innstillinger og deres verdier"
 
+#, fuzzy
+#~ msgid "Location detection"
+#~ msgstr "Tilkoblingsvalg"
+
 #~ msgid "Log _encrypted chat session"
 #~ msgstr "Loggfør _krypterte samtaleøkter"
 
@@ -11135,11 +11095,9 @@ msgstr ""
 #~ msgid "Mail _client"
 #~ msgstr "_E-post-klient:"
 
-#, python-format
 #~ msgid "Make %(contact1)s and %(contact2)s metacontacts"
 #~ msgstr "Gjør %(contact1)s og %(contact2)s til metakontakter"
 
-#, python-format
 #~ msgid "Make %s first contact"
 #~ msgstr "Gjør %s til første kontakt"
 
@@ -11528,7 +11486,6 @@ msgstr ""
 #~ msgid "Notify on new _GMail email"
 #~ msgstr "Meld fra om ny e-post i _Gmail"
 
-#, python-format
 #~ msgid "Now \"%s\" will always see you as offline."
 #~ msgstr "Nå vil \"%s\" se deg som frakoblet."
 
@@ -11665,11 +11622,9 @@ msgstr ""
 #~ msgid "Order:"
 #~ msgstr "Rekkefølge:"
 
-#, python-format
 #~ msgid "Order: %(order)s, action: %(action)s"
 #~ msgstr "Rekkefølge: %(order)s, handling: %(action)s"
 
-#, python-format
 #~ msgid ""
 #~ "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 #~ msgstr ""
@@ -11855,7 +11810,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Husk at Pywin32 er installert på ditt system. Du kan hente det på %s"
 
-#, python-format
 #~ msgid "Please make sure you are connected with \"%s\"."
 #~ msgstr "Sjekk at du er tilkoblet \"%s\"."
 
@@ -11987,25 +11941,22 @@ msgstr ""
 #~ msgid "Privacy List"
 #~ msgstr "Personverns-liste"
 
-#, python-format
 #~ msgid "Privacy List <b><i>%s</i></b>"
 #~ msgstr "Personvernsliste <b><i>%s</i></b>"
 
-#, python-format
 #~ msgid "Privacy List for %s"
 #~ msgstr "Personvernsliste for %s"
 
 #~ msgid "Privacy Lists"
 #~ msgstr "Personvernslister"
 
-#, python-format
 #~ msgid "Privacy Lists for %s"
 #~ msgstr "Personvernslister tilhørende %s"
 
 #~ msgid "Privacy Lists:"
 #~ msgstr "Personverns-lister:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Privacy list %s has not been removed. It is probably active in one of "
 #~ "your connected resources. Please deactivate it and try again."
@@ -12049,7 +12000,6 @@ msgstr ""
 #~ msgid "Quit"
 #~ msgstr "Avslutt"
 
-#, python-format
 #~ msgid "RE: %s"
 #~ msgstr "SV: %s"
 
@@ -12101,7 +12051,6 @@ msgstr ""
 #~ msgid "Received"
 #~ msgstr "Mottatt %s"
 
-#, python-format
 #~ msgid "Received %s"
 #~ msgstr "Mottatt %s"
 
@@ -12132,7 +12081,6 @@ msgstr ""
 #~ msgid "Registration information for transport %s has not arrived in time"
 #~ msgstr "Registreringsinformasjon for transporten %s kom ikke tidsnok"
 
-#, python-format
 #~ msgid ""
 #~ "Registration with agent %(agent)s failed with error %(error)s: "
 #~ "%(error_msg)s"
@@ -12140,7 +12088,7 @@ msgstr ""
 #~ "Registrering med agenten %(agent)s feilet med meldingen %(error)s: "
 #~ "%(error_msg)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Registration with agent %s succeeded."
 #~ msgstr "Vellykket registrering med agenten %s"
 
@@ -12220,11 +12168,11 @@ msgstr ""
 #~ msgid "Rename contact"
 #~ msgstr "Gi kontakt nytt navn"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename contact %s?"
 #~ msgstr "Gi kontakt nytt navn"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename group %s?"
 #~ msgstr "Gi gruppe nytt navn"
 
@@ -12331,6 +12279,10 @@ msgstr ""
 #~ msgstr "Krever upower og python-dbus."
 
 #, fuzzy
+#~ msgid "Requires: geoclue"
+#~ msgstr "Krever Gspell"
+
+#, fuzzy
 #~ msgid "Requires: gir1.2-avahi-0.6"
 #~ msgstr "Krever gir1.2-gupnpigd-1.0."
 
@@ -12350,7 +12302,7 @@ msgstr ""
 #~ "Krever libsecret og en tilbyder (som GNOME-nøkkelringen og "
 #~ "KSecretService)."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Requires: pybonjour and bonjour SDK running (%(url)s)"
 #~ msgstr "Krever at pybonjour og bonjour-SDK kjører (%(url)s)"
 
@@ -12507,7 +12459,6 @@ msgstr ""
 #~ msgid "Save this message as a preset"
 #~ msgstr "Vis denne hjelpemeldingen og avslutt"
 
-#, python-format
 #~ msgid "Saved in: %s"
 #~ msgstr "Lagret i: %s"
 
@@ -12551,11 +12502,9 @@ msgstr ""
 #~ msgid "Send"
 #~ msgstr "Send"
 
-#, python-format
 #~ msgid "Send %(from)s to %(to)s"
 #~ msgstr "Send %(from)s til %(to)s"
 
-#, python-format
 #~ msgid "Send %s"
 #~ msgstr "Send %s"
 
@@ -12607,7 +12556,7 @@ msgstr ""
 #~ msgid "Send message and close window"
 #~ msgstr "Send melding for så å lukke vinduet"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send this file to %s:\n"
 #~ msgid_plural "Send these files to %s:\n"
 #~ msgstr[0] "Ønsker du å sende denne fila til %s:"
@@ -12942,11 +12891,9 @@ msgstr ""
 #~ msgid "Single Message"
 #~ msgstr "Enkeltmelding"
 
-#, python-format
 #~ msgid "Single Message in account %s"
 #~ msgstr "Enkeltmelding i kontoen %s"
 
-#, python-format
 #~ msgid "Single Message using account %s"
 #~ msgstr "Enkeltmelding ved bruk av kontoen %s"
 
@@ -12956,7 +12903,6 @@ msgstr ""
 #~ msgid "Size"
 #~ msgstr "Størrelse"
 
-#, python-format
 #~ msgid "Size: %s"
 #~ msgstr "Størrelse: %s"
 
@@ -13059,11 +13005,9 @@ msgstr ""
 #~ msgid "Status Preset"
 #~ msgstr "Statusmelding"
 
-#, python-format
 #~ msgid "Status is now: %(status)s"
 #~ msgstr "Statusen er nå: %(status)s"
 
-#, python-format
 #~ msgid "Status is now: %(status)s: %(status_msg)s"
 #~ msgstr "Statusen er nå: %(status)s: %(status_msg)s"
 
@@ -13128,7 +13072,6 @@ msgstr ""
 #~ msgid "Subject:"
 #~ msgstr "Tema:"
 
-#, python-format
 #~ msgid ""
 #~ "Subject: %(subject)s\n"
 #~ "%(message)s"
@@ -13139,7 +13082,6 @@ msgstr ""
 #~ msgid "Subject: %s"
 #~ msgstr "Tittel: %s"
 
-#, python-format
 #~ msgid "Subject: %s\n"
 #~ msgstr "Tema: %s\n"
 
@@ -13154,11 +13096,9 @@ msgstr ""
 #~ msgid "Subscription request"
 #~ msgstr "Abonnementsforespørsel"
 
-#, python-format
 #~ msgid "Subscription request for account %(account)s from %(jid)s"
 #~ msgstr "Abonnementsforespørsel for konto %(account)s fra %(jid)s"
 
-#, python-format
 #~ msgid "Subscription request from %s"
 #~ msgstr "Abonneringsønske fra %s"
 
@@ -13208,7 +13148,6 @@ msgstr ""
 #~ msgid "Synchronize the status of all accounts"
 #~ msgstr "Synkroniser statusen for alle kontoer"
 
-#, python-format
 #~ msgid ""
 #~ "System bus is not available.\n"
 #~ "Try reading %(url)s"
@@ -13310,7 +13249,7 @@ msgstr ""
 #~ "$S vil byttes ut av forrige status melding\n"
 #~ "$T vil byttes ut av automatisk 'Ikke-tilgjengelig'-tidsavbrudd"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "The contact \"%s\" has authorized you to see their status."
 #~ msgstr "Kontakten \"%s\" har godkjent at du kan se vedkommendes status."
 
@@ -13326,7 +13265,6 @@ msgstr ""
 #~ msgid "The contact's key (%s) does not match the key assigned in Gajim."
 #~ msgstr "Kontaktens nøkkel (%s) samsvarer ikke med nøkkelen tildelt i Gajim."
 
-#, python-format
 #~ msgid ""
 #~ "The database file (%s) cannot be read. Try to repair it (see https://dev."
 #~ "gajim.org/gajim/gajim/wikis/help/DatabaseBackup) or remove it (all "
@@ -13425,7 +13363,7 @@ msgstr ""
 #~ msgid "Thirsty"
 #~ msgstr "Tørst"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "This account %s doesn't support invisibility."
 #~ msgstr "%s-kontoen støtter ikke usynlighet."
 
@@ -13474,7 +13412,7 @@ msgstr ""
 #~ "Denne kontakten vil midlertidig se deg som %(status)s, men bare til du "
 #~ "endrer status igjen. Da vil vedkommende se din nye globale status."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "This error occurred while adding a contact for transport %(transport)s:\n"
 #~ "\n"
@@ -13653,7 +13591,6 @@ msgstr ""
 #~ msgid "Transform LaTeX expressions between $$ $$."
 #~ msgstr "Transformer LaTeX uttrykk mellom $$ $$."
 
-#, python-format
 #~ msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 #~ msgstr ""
 #~ "Transporten %(name)s svarte feil på registreringsforespørselen: %(error)s"
@@ -13687,7 +13624,6 @@ msgstr ""
 #~ msgid "Type: "
 #~ msgstr "Type: "
 
-#, python-format
 #~ msgid "Type: %s"
 #~ msgstr "Type: %s"
 
@@ -13701,7 +13637,6 @@ msgstr ""
 #~ msgid "URL Color"
 #~ msgstr "Farge"
 
-#, python-format
 #~ msgid "Unable to bind to port %d."
 #~ msgstr "Klarer ikke å binde til port %d."
 
@@ -14221,7 +14156,6 @@ msgstr ""
 #~ msgid "You are invited to a groupchat"
 #~ msgstr "Du er invitert til en gruppesamtale"
 
-#, python-brace-format
 #~ msgid "You are invited to {room} by {user}"
 #~ msgstr "Du er invitert {room} av {user}"
 
@@ -14390,7 +14324,6 @@ msgstr ""
 #~ msgid "You must read them before removing this transport."
 #~ msgstr "Du må lese dem før du fjerner denne transporten."
 
-#, python-format
 #~ msgid "You must supply the %s of the new contact."
 #~ msgstr "Du må skrive inn %s for den nye kontoen"
 
@@ -14416,7 +14349,6 @@ msgstr ""
 #~ msgid "You successfully received %(filename)s from %(name)s."
 #~ msgstr "Du har mottatt %(filename)s fra %(name)s."
 
-#, python-format
 #~ msgid "You successfully sent %(filename)s to %(name)s."
 #~ msgstr "Du har sendt %(filename)s til %(name)s."
 
@@ -14434,7 +14366,7 @@ msgstr ""
 #~ msgid "You will be connected to %s without OpenPGP."
 #~ msgstr "Du vil bli tilsluttet %s uten OpenPGP."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "You will no longer be able to send and receive messages from and to "
 #~ "contacts using these transports:\n"
@@ -15112,18 +15044,16 @@ msgstr ""
 #~ msgid "from"
 #~ msgstr "fra"
 
-#, python-format
 #~ msgid "from %s"
 #~ msgstr "fra %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from group chat %s"
 #~ msgstr "i _gruppesamtaler"
 
 #~ msgid "from room %s"
 #~ msgstr "fra rommet %s"
 
-#, python-format
 #~ msgid "from user %s"
 #~ msgstr "fra brukeren %s"
 
@@ -15375,7 +15305,6 @@ msgstr ""
 #~ msgid "using account "
 #~ msgstr "bruker konto"
 
-#, python-format
 #~ msgid "using account %s"
 #~ msgstr "bruker kontoen %s"
 

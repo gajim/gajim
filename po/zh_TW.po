@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -2180,11 +2180,6 @@ msgstr "啟用"
 msgid "Enabled"
 msgstr "啟用"
 
-msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
@@ -2392,10 +2387,6 @@ msgid "Fake audio output"
 msgstr "偽裝音訊輸出"
 
 #, fuzzy
-msgid "Feature is not available under Windows"
-msgstr "特性在 Windows 下無法使用。"
-
-#, fuzzy
 msgid "Feature not available under Windows"
 msgstr "特性在 Windows 下無法使用。"
 
@@ -2583,6 +2574,9 @@ msgstr "From"
 msgid "Full Name"
 msgstr "<b>全名稱</b>"
 
+msgid "Fully-featured XMPP chat client"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "GLib Version: %s"
 msgstr "GTK+ 版本:"
@@ -2596,10 +2590,6 @@ msgstr "Gajim"
 
 #, fuzzy
 msgid "Gajim - Error"
-msgstr "Gajim - %s"
-
-#, fuzzy
-msgid "Gajim Team"
 msgstr "Gajim - %s"
 
 #, fuzzy
@@ -3452,10 +3442,6 @@ msgstr "位置: %s"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr ""
-
-#, fuzzy
-msgid "Location detection"
-msgstr "連線"
 
 #, fuzzy
 msgid "Location:"
@@ -4562,10 +4548,6 @@ msgstr "require"
 
 #, fuzzy
 msgid "Requires: Gspell"
-msgstr "需要 libgtkspell。"
-
-#, fuzzy
-msgid "Requires: geoclue"
 msgstr "需要 libgtkspell。"
 
 msgid ""
@@ -6938,6 +6920,9 @@ msgstr ""
 msgid "or"
 msgstr "To"
 
+msgid "org.gajim.Gajim"
+msgstr ""
+
 msgid "paused composing a message"
 msgstr "暫停輸入訊息"
 
@@ -7099,17 +7084,16 @@ msgstr ""
 #~ msgid "%(1)s o'clock"
 #~ msgstr "%(1)s點"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "%(contact)s wants to start a %(type)s chat with you. Do you want to "
 #~ "answer the call?"
 #~ msgstr "%(contact)s 想要與您發起一個 %(type)s 作業階段。您要回應嗎?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(filename)s received from %(name)s."
 #~ msgstr "從 %(name)s 傳輸的檔案 %(filename)s 被停止。"
 
-#, python-format
 #~ msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #~ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
@@ -7117,15 +7101,14 @@ msgstr ""
 #~ msgid "%(jid)s has been invited in this room"
 #~ msgstr "%(nick)s 已經被從這個聊天室移除(%(reason)s)"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s (%(jid)s) has removed subscription from you"
 #~ msgstr "聯絡人\"%s\"移除了對您的認證"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s is now %(show)s %(status)s"
 #~ msgstr "%(name)s 的狀態是 %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s Changed Status"
 #~ msgstr "%(nick)s 變更了狀態"
 
@@ -7135,27 +7118,21 @@ msgstr ""
 #~ msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 #~ msgstr "%(nick)s 被 %(who)s 踢出: %(reason)s"
 
-#, python-format
 #~ msgid "%(nick)s has set the subject to %(subject)s"
 #~ msgstr "%(nick)s 將主題設定為 %(subject)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s"
 #~ msgstr "%(nick)s 的狀態是 %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s: %(status_msg)s"
 #~ msgstr "%(nick)s 的狀態是 %(status)s: %(status_msg)s"
 
-#, python-format
 #~ msgid "%(nickname)s Signed In"
 #~ msgstr "%(nickname)s 上線了"
 
-#, python-format
 #~ msgid "%(nickname)s Signed Out"
 #~ msgstr "%(nickname)s 離開了"
 
-#, python-format
 #~ msgid "%(nickname)s from group chat %(room_name)s"
 #~ msgstr "聊天室 %(room_name)s 的 %(nickname)s"
 
@@ -7171,25 +7148,20 @@ msgstr ""
 #~ "%(type)s 加密 %(status)s 活動 %(authenticated)s。\n"
 #~ "您的聊天作業階段 %(logged)s 將被記錄。"
 
-#, python-format
 #~ msgid "%(type)s state : %(state)s, reason: %(reason)s"
 #~ msgstr "%(type)s 狀態: %(state)s，原因: %(reason)s"
 
-#, python-format
 #~ msgid "%(who)s on %(time)s said: %(message)s\n"
 #~ msgstr "%(who)s 在 %(time)s 時說:  %(message)s\n"
 
-#, python-format
 #~ msgid "%d event pending"
 #~ msgid_plural "%d events pending"
 #~ msgstr[0] "%d 個未處理事件"
 
-#, python-format
 #~ msgid "%d message pending"
 #~ msgid_plural "%d messages pending"
 #~ msgstr[0] "%d 條訊息未處理"
 
-#, python-format
 #~ msgid ""
 #~ "%s\n"
 #~ "Link-local messaging might not work properly."
@@ -7226,23 +7198,20 @@ msgstr ""
 #~ msgid "%s MiB/s"
 #~ msgstr "%s MiB"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s Missing"
 #~ msgstr "%s MiB"
 
-#, python-format
 #~ msgid "%s Status Message"
 #~ msgstr " %s 狀態訊息"
 
-#, python-format
 #~ msgid "%s configuration error"
 #~ msgstr "%s 設定錯誤"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s does not exist."
 #~ msgstr "檔案不存在"
 
-#, python-format
 #~ msgid "%s is a directory but should be a file"
 #~ msgstr "%s 是一個目錄但它應該是一個檔案"
 
@@ -7257,18 +7226,15 @@ msgstr ""
 #~ msgid "%s or %s is a directory but should be a file"
 #~ msgstr "%s 是一個目錄但它應該是一個檔案"
 
-#, python-format
 #~ msgid "%s wants to send you a file."
 #~ msgstr "%s 想傳送給您一個檔案。"
 
 #~ msgid "%s wants to send you a file:"
 #~ msgstr "%s 想傳送給您一個檔案:"
 
-#, python-format
 #~ msgid "%s wants to start a voice chat."
 #~ msgstr "%s 想要發起語音聊天。"
 
-#, python-format
 #~ msgid "%s wrote:\n"
 #~ msgstr "%s 寫道: \n"
 
@@ -8236,7 +8202,7 @@ msgstr ""
 #~ msgid "Buying Groceries"
 #~ msgstr "買雜貨"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "By removing the following contacts, you will also remove authorization. "
 #~ "This means they will see you as offline:\n"
@@ -8385,7 +8351,7 @@ msgstr ""
 #~ msgid "Characters that are printed before the nickname in conversations."
 #~ msgstr "在對話中顯示在暱稱前的字元"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Characters typed: %s"
 #~ msgstr "不允許的字元"
 
@@ -8488,7 +8454,6 @@ msgstr ""
 #~ msgid "Command line Control"
 #~ msgstr "命令列"
 
-#, python-format
 #~ msgid "Comment: %s"
 #~ msgstr "註釋: %s"
 
@@ -8612,7 +8577,6 @@ msgstr ""
 #~ msgid "Contact name"
 #~ msgstr "聯絡人名稱"
 
-#, python-format
 #~ msgid "Contact name: <i>%s</i>"
 #~ msgstr "聯絡人名稱: <i>%s</i>"
 
@@ -8674,7 +8638,6 @@ msgstr ""
 #~ msgid "Could not Upload File"
 #~ msgstr "無法讀取圖片"
 
-#, python-format
 #~ msgid "Could not change status of account \"%s\""
 #~ msgstr "無法變更帳號\"%s\"的狀態"
 
@@ -8686,7 +8649,6 @@ msgstr ""
 #~ msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 #~ msgstr "沒有能夠連線到\"%s\""
 
-#, python-format
 #~ msgid "Could not connect to \"%s\""
 #~ msgstr "沒有能夠連線到\"%s\""
 
@@ -8706,7 +8668,7 @@ msgstr ""
 #~ msgid "Could not write to %s. Session Management support will not work"
 #~ msgstr "不能寫入到 %s 。作業階段管理支援功能未啟用"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Couldn’t set up %(text)s. Check your configuration.\n"
 #~ "\n"
@@ -8734,7 +8696,7 @@ msgstr ""
 #~ msgid "Create Metacontact"
 #~ msgstr "重新命名聯絡人"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Creating %s"
 #~ msgstr "正在銷毀 %s"
 
@@ -8754,7 +8716,7 @@ msgstr ""
 #~ msgid "Custom applications"
 #~ msgstr "使用預設的應用程式"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Custom hostname \"%s\" is wrong. It will be ignored."
 #~ msgstr "使用自訂的主機名稱/連接埠"
 
@@ -8843,7 +8805,6 @@ msgstr ""
 #~ msgid "Description:"
 #~ msgstr "描述:"
 
-#, python-format
 #~ msgid "Description: %s"
 #~ msgstr "描述:  %s"
 
@@ -8871,7 +8832,6 @@ msgstr ""
 #~ msgid "Detached contact list with single chat"
 #~ msgstr "單一聊天視窗，與聯絡人清單分離"
 
-#, python-format
 #~ msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 #~ msgstr "字典位址中缺少 \"%s\" 並且它不是 \"WIKTIONARY\""
 
@@ -8943,12 +8903,12 @@ msgstr ""
 #~ msgid "Do you want to continue?"
 #~ msgstr "您要繼續嗎?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to permanently delete this conversation with <b>%s</b>?"
 #~ msgid_plural "Do you want to permanently delete these conversations?"
 #~ msgstr[0] "您確定要刪除所選取的訊息?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to remove %s from the contact list?"
 #~ msgstr "您想從聯絡人清單中刪除組 %s ?"
 
@@ -9080,7 +9040,7 @@ msgstr ""
 #~ msgid "Enter name / JID of contact or groupchat"
 #~ msgstr "輸入 JID 或是聯絡人名稱"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Enter the certificate passphrase for account %s"
 #~ msgstr "輸入密語用於帳號憑證 %s"
 
@@ -9116,14 +9076,13 @@ msgstr ""
 #~ msgid "Error verifying SSL certificate"
 #~ msgstr "驗證 SSL 證書發生錯誤"
 
-#, python-format
 #~ msgid "Error while adding service. %s"
 #~ msgstr "加入服務錯誤。 %s"
 
 #~ msgid "Error."
 #~ msgstr "錯誤。"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Error: %(error)s\n"
 #~ "Debug: %(debug)s"
@@ -9196,6 +9155,10 @@ msgstr ""
 #~ msgstr "特性"
 
 #, fuzzy
+#~ msgid "Feature is not available under Windows"
+#~ msgstr "特性在 Windows 下無法使用。"
+
+#, fuzzy
 #~ msgid "Feature not available, see Help->Features"
 #~ msgstr "特性在 Windows 下無法使用。"
 
@@ -9216,7 +9179,7 @@ msgstr ""
 #~ msgid "File already exists"
 #~ msgstr "檔案已經存在"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File name: %s"
 #~ msgstr "檔案名稱:  %s"
 
@@ -9231,19 +9194,17 @@ msgstr ""
 #~ msgid "File transfer error notification color."
 #~ msgstr "檔案傳輸已取消"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s from %(name)s failed."
 #~ msgstr "從 %(name)s 傳輸的檔案 %(filename)s 被停止。"
 
-#, python-format
 #~ msgid "File transfer of %(filename)s from %(name)s stopped."
 #~ msgstr "從 %(name)s 傳輸的檔案 %(filename)s 被停止。"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s to %(name)s failed."
 #~ msgstr "到 %(name)s 的檔案傳輸 %(filename)s 被停止。"
 
-#, python-format
 #~ msgid "File transfer of %(filename)s to %(name)s stopped."
 #~ msgstr "到 %(name)s 的檔案傳輸 %(filename)s 被停止。"
 
@@ -9331,6 +9292,10 @@ msgstr ""
 
 #~ msgid "Gajim Instant Messenger"
 #~ msgstr "Gajim 即時訊息軟體"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim - %s"
 
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Gajim 主題自訂"
@@ -9668,7 +9633,7 @@ msgstr ""
 #~ msgid "Idle for:"
 #~ msgstr "閒置了 %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "If \"%s\" accepts this request you will know their status."
 #~ msgstr "如果\"%s\"接受此請求，您將知道他/她的狀態。"
 
@@ -9950,7 +9915,7 @@ msgstr ""
 #~ "will be lost."
 #~ msgstr "如果您關閉此標籤並且停用了命令歷程，此訊息會丟失。"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "If you send a file to <b>%s</b>, your real XMPP address will be revealed."
 #~ msgstr "如果您想 %s 傳送檔案，他/她會獲知您的真實 Jabber ID。"
@@ -10135,17 +10100,17 @@ msgstr ""
 #~ msgid "Invite contacts to the conversation (Ctrl+G)"
 #~ msgstr "邀請聯絡人參與對話(Ctrl+G)"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Invited %(jid)s to %(room_jid)s"
 #~ msgstr "傳送 %s 給 %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s, this XMPP Address is not "
 #~ "valid."
 #~ msgstr "不能向 %s 傳送訊息，無效的 JID。"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s. This XMPP Address is not "
 #~ "valid."
@@ -10292,6 +10257,10 @@ msgstr ""
 #~ msgid "Lists all preferences and their values"
 #~ msgstr "列出所有的參數及它們的值"
 
+#, fuzzy
+#~ msgid "Location detection"
+#~ msgstr "連線"
+
 #~ msgid "Log _encrypted chat session"
 #~ msgstr "記錄加密的作業階段(_E)"
 
@@ -10335,11 +10304,10 @@ msgstr ""
 #~ msgid "Mail _client"
 #~ msgstr "郵件客戶端(_M):"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Make %(contact1)s and %(contact2)s metacontacts"
 #~ msgstr "將 %s 與 %s 設為中繼聯絡人"
 
-#, python-format
 #~ msgid "Make %s first contact"
 #~ msgstr "將 %s 設為第一聯絡人"
 
@@ -10659,7 +10627,6 @@ msgstr ""
 #~ msgid "Notify on new _GMail email"
 #~ msgstr "新 Gmail 郵件通知"
 
-#, python-format
 #~ msgid "Now \"%s\" will always see you as offline."
 #~ msgstr "\"%s\" 將一直看到您的狀態為離線。"
 
@@ -10775,11 +10742,9 @@ msgstr ""
 #~ msgid "Order:"
 #~ msgstr "Order:"
 
-#, python-format
 #~ msgid "Order: %(order)s, action: %(action)s"
 #~ msgstr "順序: %(order)s，動作: %(action)s"
 
-#, python-format
 #~ msgid ""
 #~ "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 #~ msgstr "順序: %(order)s，動作: %(action)s，類型: %(type)s，值: %(value)s"
@@ -10938,7 +10903,6 @@ msgstr ""
 #~ "at %s"
 #~ msgstr "請確認 Pywin32 已經安裝在您的系統中。您可以從 %s 獲得得它"
 
-#, python-format
 #~ msgid "Please make sure you are connected with \"%s\"."
 #~ msgstr "請確認您已經連線到 \"%s\"。"
 
@@ -11048,25 +11012,22 @@ msgstr ""
 #~ msgid "Privacy List"
 #~ msgstr "隱私策略清單"
 
-#, python-format
 #~ msgid "Privacy List <b><i>%s</i></b>"
 #~ msgstr "隱私策略清單 <b><i>%s</i></b>"
 
-#, python-format
 #~ msgid "Privacy List for %s"
 #~ msgstr "%s 的隱私策略清單"
 
 #~ msgid "Privacy Lists"
 #~ msgstr "隱私策略清單"
 
-#, python-format
 #~ msgid "Privacy Lists for %s"
 #~ msgstr "%s 的隱私策略清單"
 
 #~ msgid "Privacy Lists:"
 #~ msgstr "隱私策略清單:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Privacy list %s has not been removed. It is probably active in one of "
 #~ "your connected resources. Please deactivate it and try again."
@@ -11099,7 +11060,6 @@ msgstr ""
 #~ msgid "PyCURL is not installed"
 #~ msgstr "證書吊銷清單還未生效"
 
-#, python-format
 #~ msgid "RE: %s"
 #~ msgstr "回復: %s"
 
@@ -11132,7 +11092,6 @@ msgstr ""
 #~ msgid "Received"
 #~ msgstr "已接收 %s"
 
-#, python-format
 #~ msgid "Received %s"
 #~ msgstr "已接收 %s"
 
@@ -11165,13 +11124,12 @@ msgstr ""
 #~ msgid "Registration information for transport %s has not arrived in time"
 #~ msgstr "代理 %s 的註冊資訊未按時抵達"
 
-#, python-format
 #~ msgid ""
 #~ "Registration with agent %(agent)s failed with error %(error)s: "
 #~ "%(error_msg)s"
 #~ msgstr "註冊失敗，agent %(agent)s，錯誤 %(error)s: %(error_msg)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Registration with agent %s succeeded."
 #~ msgstr "註冊成功，agent %s"
 
@@ -11252,11 +11210,11 @@ msgstr ""
 #~ msgid "Rename contact"
 #~ msgstr "重新命名聯絡人"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename contact %s?"
 #~ msgstr "重新命名聯絡人"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename group %s?"
 #~ msgstr "重新命名群組"
 
@@ -11344,6 +11302,10 @@ msgstr ""
 #~ "中將 'use_latex' 設定為真。"
 
 #, fuzzy
+#~ msgid "Requires: geoclue"
+#~ msgstr "需要 libgtkspell。"
+
+#, fuzzy
 #~ msgid "Requires: gir1.2-avahi-0.6"
 #~ msgstr "需要 python-gupnp-igd。"
 
@@ -11355,7 +11317,7 @@ msgstr ""
 #~ msgid "Requires: gpg.exe in your PATH environment variable"
 #~ msgstr "PATH 中要有 gpg.exe。"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Requires: pybonjour and bonjour SDK running (%(url)s)"
 #~ msgstr "需要 python-dbus。"
 
@@ -11485,7 +11447,6 @@ msgstr ""
 #~ msgid "Save status as preset"
 #~ msgstr "另存為…"
 
-#, python-format
 #~ msgid "Saved in: %s"
 #~ msgstr "儲存在: %s"
 
@@ -11517,11 +11478,10 @@ msgstr ""
 #~ msgid "Send"
 #~ msgstr "傳送(_S)"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send %(from)s to %(to)s"
 #~ msgstr "傳送 %s 給 %s"
 
-#, python-format
 #~ msgid "Send %s"
 #~ msgstr "傳送 %s"
 
@@ -11567,7 +11527,7 @@ msgstr ""
 #~ msgid "Send message and close window"
 #~ msgstr "傳送訊息並關閉視窗"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send this file to %s:\n"
 #~ msgid_plural "Send these files to %s:\n"
 #~ msgstr[0] "您想要將檔案傳送給 %s 嗎:"
@@ -11850,11 +11810,9 @@ msgstr ""
 #~ msgid "Single Message"
 #~ msgstr "單條訊息"
 
-#, python-format
 #~ msgid "Single Message in account %s"
 #~ msgstr "單條訊息，在帳號 %s"
 
-#, python-format
 #~ msgid "Single Message using account %s"
 #~ msgstr "單條訊息，使用帳號 %s"
 
@@ -11865,7 +11823,6 @@ msgstr ""
 #~ msgid "Size"
 #~ msgstr "大小:  %s"
 
-#, python-format
 #~ msgid "Size: %s"
 #~ msgstr "大小:  %s"
 
@@ -11942,11 +11899,9 @@ msgstr ""
 #~ msgid "Status Preset"
 #~ msgstr "狀態訊息"
 
-#, python-format
 #~ msgid "Status is now: %(status)s"
 #~ msgstr "現在狀態:  %(status)s "
 
-#, python-format
 #~ msgid "Status is now: %(status)s: %(status_msg)s"
 #~ msgstr "現在狀態: %(status)s: %(status_msg)s"
 
@@ -12008,7 +11963,6 @@ msgstr ""
 #~ msgid "Subject:"
 #~ msgstr "主題:"
 
-#, python-format
 #~ msgid ""
 #~ "Subject: %(subject)s\n"
 #~ "%(message)s"
@@ -12016,7 +11970,6 @@ msgstr ""
 #~ "主題: %(subject)s\n"
 #~ "%(message)s"
 
-#, python-format
 #~ msgid "Subject: %s\n"
 #~ msgstr "主題: %s\n"
 
@@ -12031,11 +11984,9 @@ msgstr ""
 #~ msgid "Subscription request"
 #~ msgstr "認證請求"
 
-#, python-format
 #~ msgid "Subscription request for account %(account)s from %(jid)s"
 #~ msgstr "%(jid)s 對帳號 %(account)s 的認證請求"
 
-#, python-format
 #~ msgid "Subscription request from %s"
 #~ msgstr "%s 的認證請求"
 
@@ -12078,7 +12029,6 @@ msgstr ""
 #~ msgid "Synchronize the status of all accounts"
 #~ msgstr "變更一個或多個帳號狀態"
 
-#, python-format
 #~ msgid ""
 #~ "System bus is not available.\n"
 #~ "Try reading %(url)s"
@@ -12163,7 +12113,7 @@ msgstr ""
 #~ "$S會被上個狀態訊息替換\n"
 #~ "$T會被自動無法使用的逾時時間替換"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "The contact \"%s\" has authorized you to see their status."
 #~ msgstr "聯絡人\"%s\"已授權您檢視他/她的狀態。"
 
@@ -12178,7 +12128,7 @@ msgstr ""
 #~ msgid "The contact's key (%s) does not match the key assigned in Gajim."
 #~ msgstr "聯絡人的密鑰(%s)與 Gajim 中指定的密鑰不匹配"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "The database file (%s) cannot be read. Try to repair it (see https://dev."
 #~ "gajim.org/gajim/gajim/wikis/help/DatabaseBackup) or remove it (all "
@@ -12269,7 +12219,7 @@ msgstr ""
 #~ msgid "Thirsty"
 #~ msgstr "渴"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "This account %s doesn't support invisibility."
 #~ msgstr "帳號 %s 不支援隱身"
 
@@ -12444,7 +12394,6 @@ msgstr ""
 #~ msgid "Transform LaTeX expressions between $$ $$."
 #~ msgstr "轉換 $$ $$ 之間的 LaTeX 運算式。"
 
-#, python-format
 #~ msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 #~ msgstr "服務代理 %(name)s 對註冊請求的回應有誤: %(error)s"
 
@@ -12469,7 +12418,6 @@ msgstr ""
 #~ msgid "Type: "
 #~ msgstr "類型: "
 
-#, python-format
 #~ msgid "Type: %s"
 #~ msgstr "類型: %s"
 
@@ -12483,7 +12431,6 @@ msgstr ""
 #~ msgid "URL Color"
 #~ msgstr "Color"
 
-#, python-format
 #~ msgid "Unable to bind to port %d."
 #~ msgstr "無法繫結連接埠 %d。"
 
@@ -12864,7 +12811,7 @@ msgstr ""
 #~ msgid "You are invited to a groupchat"
 #~ msgstr "您被邀請到一個聊天室"
 
-#, fuzzy, python-brace-format
+#, fuzzy
 #~ msgid "You are invited to {room} by {user}"
 #~ msgstr "您被邀請到一個聊天室"
 
@@ -13038,7 +12985,6 @@ msgstr ""
 #~ msgid "You successfully received %(filename)s from %(name)s."
 #~ msgstr "您成功的從 %(name)s 收到檔案  %(filename)s。"
 
-#, python-format
 #~ msgid "You successfully sent %(filename)s to %(name)s."
 #~ msgstr "您成功的給 %(name)s 傳送了檔案 %(filename)s。"
 
@@ -13053,7 +12999,7 @@ msgstr ""
 #~ msgid "You will be connected to %s without OpenPGP."
 #~ msgstr "您將在無 OpenPGP 情況下連線到 %s。"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "You will no longer be able to send and receive messages from and to "
 #~ "contacts using these transports:\n"
@@ -13622,11 +13568,11 @@ msgstr ""
 #~ msgid "from"
 #~ msgstr "from"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from %s"
 #~ msgstr " 來自 %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from group chat %s"
 #~ msgstr "在多人聊天視窗中(_G)"
 
@@ -13634,7 +13580,7 @@ msgstr ""
 #~ msgid "from room %s"
 #~ msgstr " 來自聊天室 %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from user %s"
 #~ msgstr " 來自使用者 %s"
 
@@ -13830,7 +13776,6 @@ msgstr ""
 #~ msgid "using %s account"
 #~ msgstr "使用 %s 帳號"
 
-#, python-format
 #~ msgid "using account %s"
 #~ msgstr "使用帳號 %s"
 

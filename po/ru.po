@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2020-12-28 12:14+0000\n"
 "Last-Translator: Uber <study-kbt@yandex.ru>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -2008,13 +2008,6 @@ msgid "Enabled"
 msgstr "Включено"
 
 msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-"Позвольте Gajim'у определять местоположение, если пользователь решит "
-"поделиться местоположением устройства"
-
-msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
 "Status automatically"
 msgstr ""
@@ -2205,9 +2198,6 @@ msgstr "Не удалось создать групповой чат"
 msgid "Fake audio output"
 msgstr "Виртуальный аудио выход"
 
-msgid "Feature is not available under Windows"
-msgstr "Функция недоступна в Windows"
-
 msgid "Feature not available under Windows"
 msgstr "Функция недоступна в Windows"
 
@@ -2386,6 +2376,10 @@ msgstr "От"
 msgid "Full Name"
 msgstr "Имя"
 
+#, fuzzy
+msgid "Fully-featured XMPP chat client"
+msgstr "Полнофункциональный клиент XMPP-чата"
+
 #, python-format
 msgid "GLib Version: %s"
 msgstr "Версия GLib: %s"
@@ -2400,10 +2394,6 @@ msgstr "Gajim"
 #, fuzzy
 msgid "Gajim - Error"
 msgstr "Gajim — %s"
-
-#, fuzzy
-msgid "Gajim Team"
-msgstr "Темы Gajim"
 
 msgid "Gajim Themes"
 msgstr "Темы Gajim"
@@ -3222,9 +3212,6 @@ msgstr "Местоположение:"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr ""
-
-msgid "Location detection"
-msgstr "Определение местоположения"
 
 msgid "Location:"
 msgstr "Местоположение:"
@@ -4258,9 +4245,6 @@ msgstr "Требуемый"
 
 msgid "Requires: Gspell"
 msgstr "Требуется: Gspell"
-
-msgid "Requires: geoclue"
-msgstr "Требуется: geoclue"
 
 #, fuzzy
 msgid ""
@@ -6495,6 +6479,9 @@ msgstr ""
 msgid "or"
 msgstr "или"
 
+msgid "org.gajim.Gajim"
+msgstr "org.gajim.Gajim"
+
 msgid "paused composing a message"
 msgstr "перестал печатать сообщение"
 
@@ -6675,30 +6662,24 @@ msgstr "Выберите изображение или перетащите ег
 #~ "answer the call?"
 #~ msgstr "%(contact)s хочет начать %(type)s сеанс с вами. Вы хотите ответить?"
 
-#, python-format
 #~ msgid "%(filename)s received from %(name)s."
 #~ msgstr "%(filename)s получен от %(name)s."
 
-#, python-format
 #~ msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #~ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
-#, python-format
 #~ msgid "%(jid)s declined the invitation"
 #~ msgstr "%(jid)s отклонил приглашение"
 
 #~ msgid "%(jid)s has been invited in this room"
 #~ msgstr "%(jid)s был приглашен в комнату"
 
-#, python-format
 #~ msgid "%(name)s (%(jid)s) has removed subscription from you"
 #~ msgstr "%(name)s (%(jid)s) отменил свою подписку на Вас"
 
-#, python-format
 #~ msgid "%(name)s is now %(show)s %(status)s"
 #~ msgstr "%(name)s теперь %(show)s %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s Changed Status"
 #~ msgstr "%(nick)s меняет статус"
 
@@ -6708,15 +6689,12 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 #~ msgstr "%(who)s выгнал %(nick)s из комнаты: %(reason)s"
 
-#, python-format
 #~ msgid "%(nick)s has set the subject to %(subject)s"
 #~ msgstr "%(nick)s установил(а) тему: %(subject)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s"
 #~ msgstr "%(nick)s теперь %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s: %(status_msg)s"
 #~ msgstr "%(nick)s теперь %(status)s: %(status_msg)s"
 
@@ -6726,7 +6704,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "%(nickname)s Signed Out"
 #~ msgstr "%(nickname)s отключается"
 
-#, python-format
 #~ msgid "%(nickname)s from group chat %(room_name)s"
 #~ msgstr "%(nickname)s из группового чата %(room_name)s"
 
@@ -6753,18 +6730,15 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "%(type)s state : %(state)s, reason: %(reason)s"
 #~ msgstr "%(type)s состояние : %(state)s, причина: %(reason)s"
 
-#, python-format
 #~ msgid "%(who)s on %(time)s said: %(message)s\n"
 #~ msgstr "%(who)s в %(time)s сказал: %(message)s\n"
 
-#, python-format
 #~ msgid "%d event pending"
 #~ msgid_plural "%d events pending"
 #~ msgstr[0] "%d событие пропущено"
 #~ msgstr[1] "%d события пропущено"
 #~ msgstr[2] "%d событий пропущено"
 
-#, python-format
 #~ msgid "%d message pending"
 #~ msgid_plural "%d messages pending"
 #~ msgstr[0] "%d пропущенное сообщение"
@@ -6779,7 +6753,6 @@ msgstr "Выберите изображение или перетащите ег
 
 # link-local это вроде не просто локальный. http://en.wikipedia.org/wiki/Link-
 # local_address
-#, python-format
 #~ msgid ""
 #~ "%s\n"
 #~ "Link-local messaging might not work properly."
@@ -6818,22 +6791,18 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "%s MiB/s"
 #~ msgstr "%s MiB"
 
-#, python-format
 #~ msgid "%s Missing"
 #~ msgstr "%s Отсутствует"
 
 #~ msgid "%s Status Message"
 #~ msgstr "Сообщение о статусе %s"
 
-#, python-format
 #~ msgid "%s configuration error"
 #~ msgstr "ошибка конфигурации %s"
 
-#, python-format
 #~ msgid "%s does not exist."
 #~ msgstr "Файл %s не существует."
 
-#, python-format
 #~ msgid "%s has joined the group chat"
 #~ msgstr "%s зашёл в комнату"
 
@@ -6857,7 +6826,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "%s or %s is a directory but should be a file"
 #~ msgstr "%s должен быть файлом, а не директорией"
 
-#, python-format
 #~ msgid "%s wants to send you a file."
 #~ msgstr "%s хочет отправить вам файл."
 
@@ -6867,7 +6835,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "%s wants to start a voice chat."
 #~ msgstr "%s хочет начать видео сеанс."
 
-#, python-format
 #~ msgid "%s wrote:\n"
 #~ msgstr "%s написал:\n"
 
@@ -7892,7 +7859,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Avahi Error"
 #~ msgstr "Ошибка Avahi"
 
-#, python-format
 #~ msgid "Avatar upload failed: %s"
 #~ msgstr "Не удалось загрузить аватар: %s"
 
@@ -8013,7 +7979,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Buying Groceries"
 #~ msgstr "Покупаю продукты"
 
-#, python-format
 #~ msgid ""
 #~ "By removing the following contacts, you will also remove authorization. "
 #~ "This means they will see you as offline:\n"
@@ -8168,7 +8133,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Characters that are printed before the nickname in conversations."
 #~ msgstr "Символы, которые будут отображаться перед никами в чатах."
 
-#, python-format
 #~ msgid "Characters typed: %s"
 #~ msgstr "Введённые символы: %s"
 
@@ -8460,7 +8424,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Contact name"
 #~ msgstr "Имя контакта"
 
-#, python-format
 #~ msgid "Contact name: <i>%s</i>"
 #~ msgstr "Имя контакта: <i>%s</i>"
 
@@ -8532,7 +8495,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Could not Upload File"
 #~ msgstr "Не удалось загрузить файл"
 
-#, python-format
 #~ msgid "Could not change status of account \"%s\""
 #~ msgstr "Не могу изменить статус учётной записи «%s»"
 
@@ -8543,7 +8505,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 #~ msgstr "Не могу соединиться с \"%(host)s\" через прокси \"%(proxy)s\""
 
-#, python-format
 #~ msgid "Could not connect to \"%s\""
 #~ msgstr "Не могу соединиться с «%s»"
 
@@ -8562,7 +8523,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Could not write to %s. Session Management support will not work"
 #~ msgstr "Не могу писать в %s. Управление сеансами будет недоступно"
 
-#, python-format
 #~ msgid ""
 #~ "Couldn’t set up %(text)s. Check your configuration.\n"
 #~ "Pipeline:\n"
@@ -8611,7 +8571,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Custom applications"
 #~ msgstr "Использовать приложения по умолчанию"
 
-#, python-format
 #~ msgid "Custom hostname \"%s\" is wrong. It will be ignored."
 #~ msgstr "Имя хоста \"%s\" неверное и будет проигнорировано."
 
@@ -8698,7 +8657,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Description:"
 #~ msgstr "Описание: "
 
-#, python-format
 #~ msgid "Description: %s"
 #~ msgstr "Описание: %s"
 
@@ -8737,7 +8695,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ "Отдельно ростер и окна чатов сгруппированных по учетной записи\n"
 #~ "Отдельно ростер и окна чатов сгруппированных по типу"
 
-#, python-format
 #~ msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 #~ msgstr "В URL словаря отсутствует «%s» и это не WIKTIONARY"
 
@@ -8827,14 +8784,12 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Do you want to continue?"
 #~ msgstr "Продолжить?"
 
-#, python-format
 #~ msgid "Do you want to permanently delete this conversation with <b>%s</b>?"
 #~ msgid_plural "Do you want to permanently delete these conversations?"
 #~ msgstr[0] "Вы хотите навсегда удалить беседу с <b>%s</b>?"
 #~ msgstr[1] "Вы хотите навсегда удалить эти беседы?"
 #~ msgstr[2] "Вы хотите навсегда удалить эти беседы?"
 
-#, python-format
 #~ msgid "Do you want to remove %s from the contact list?"
 #~ msgstr "Вы хотите удалить %s из списка контактов?"
 
@@ -8949,6 +8904,13 @@ msgstr "Выберите изображение или перетащите ег
 #~ "Позволяет Gajim автоматически обнаруживать клиентов в локальной сети для "
 #~ "бессерверных чатов"
 
+#~ msgid ""
+#~ "Enables Gajim to be location-aware, if the user decides to publish the "
+#~ "device’s location"
+#~ msgstr ""
+#~ "Позвольте Gajim'у определять местоположение, если пользователь решит "
+#~ "поделиться местоположением устройства"
+
 #, fuzzy
 #~ msgid "Enables Gajim to encrypt chat messages with OpenPGP"
 #~ msgstr "Шифрование сообщений при помощи OpenPGP ключей."
@@ -9001,7 +8963,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Enter name / JID of contact or groupchat"
 #~ msgstr "Введите JID или имя контакта"
 
-#, python-format
 #~ msgid "Enter the certificate passphrase for account %s"
 #~ msgstr "Введите ключевую фразу сертификата для учетной записи %s"
 
@@ -9039,14 +9000,12 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Error verifying SSL certificate"
 #~ msgstr "Ошибка при проверке SSL сертификата"
 
-#, python-format
 #~ msgid "Error while adding service. %s"
 #~ msgstr "Ошибка при добавлении службы. %s"
 
 #~ msgid "Error."
 #~ msgstr "Ошибка."
 
-#, python-format
 #~ msgid ""
 #~ "Error: %(error)s\n"
 #~ "Debug: %(debug)s"
@@ -9123,6 +9082,9 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Feature"
 #~ msgstr "Функции"
 
+#~ msgid "Feature is not available under Windows"
+#~ msgstr "Функция недоступна в Windows"
+
 #~ msgid "Feature not available, see Help->Features"
 #~ msgstr "Эта возможность отсутствует, смотрите Помощь->Возможности"
 
@@ -9147,7 +9109,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "File already exists"
 #~ msgstr "Файл уже существует"
 
-#, python-format
 #~ msgid "File name: %s"
 #~ msgstr "Имя файла: %s"
 
@@ -9162,19 +9123,15 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "File transfer error notification color."
 #~ msgstr "Передача отменена"
 
-#, python-format
 #~ msgid "File transfer of %(filename)s from %(name)s failed."
 #~ msgstr "Передача файла %(filename)s от %(name)s не удалась."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s from %(name)s stopped."
 #~ msgstr "Передача файла %(filename)s от %(name)s приостановлена."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s to %(name)s failed."
 #~ msgstr "Передача файла %(filename)s к %(name)s не удалась."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s to %(name)s stopped."
 #~ msgstr "Передача файла %(filename)s к %(name)s приостановлена."
 
@@ -9270,6 +9227,10 @@ msgstr "Выберите изображение или перетащите ег
 
 #~ msgid "Gajim Instant Messenger"
 #~ msgstr "Клиент для мгновенных сообщений Gajim"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Темы Gajim"
 
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Настройка тем для Gajim"
@@ -9662,7 +9623,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Idle for:"
 #~ msgstr "Время бездействия %s"
 
-#, python-format
 #~ msgid "If \"%s\" accepts this request you will know their status."
 #~ msgstr "Если \"%s\" примет этот запрос, Вы будете знать его статус."
 
@@ -10095,7 +10055,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ "Если вы закроете эту вкладку и у вас отключена функция ведения истории "
 #~ "сообщений, то это сообщение будет утеряно."
 
-#, python-format
 #~ msgid ""
 #~ "If you send a file to <b>%s</b>, your real XMPP address will be revealed."
 #~ msgstr "Если Вы отправите файл <b>%s</b>, ваш XMPP-адрес станет известен."
@@ -10301,13 +10260,11 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Invited %s to %s"
 #~ msgstr "Приглашен %s в %s"
 
-#, python-format
 #~ msgid ""
 #~ "It is not possible to send a message to %s, this XMPP Address is not "
 #~ "valid."
 #~ msgstr "Невозможно отправить сообщение %s, этот XMPP-адрес неверен."
 
-#, python-format
 #~ msgid ""
 #~ "It is not possible to send a message to %s. This XMPP Address is not "
 #~ "valid."
@@ -10504,6 +10461,9 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Local jid:"
 #~ msgstr "Локальный JID:"
 
+#~ msgid "Location detection"
+#~ msgstr "Определение местоположения"
+
 #~ msgid "Log _encrypted chat session"
 #~ msgstr "Записывать в лог _шифрованные сообщения"
 
@@ -10551,11 +10511,9 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Main"
 #~ msgstr "Основная"
 
-#, python-format
 #~ msgid "Make %(contact1)s and %(contact2)s metacontacts"
 #~ msgstr "Объединить %(contact1)s и %(contact2)s в метаконтакт"
 
-#, python-format
 #~ msgid "Make %s first contact"
 #~ msgstr "Сделать %s первым контактом"
 
@@ -10942,7 +10900,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Notify on new _GMail email"
 #~ msgstr "Сообщать о новых письмах в _Gmail"
 
-#, python-format
 #~ msgid "Now \"%s\" will always see you as offline."
 #~ msgstr "Теперь «%s» всегда будет видеть Вас как offline."
 
@@ -11271,7 +11228,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ "Удостоверьтесь, что в вашей системе установлен Pywin32. Вы можете "
 #~ "получить его на сайте: %s"
 
-#, python-format
 #~ msgid "Please make sure you are connected with \"%s\"."
 #~ msgstr "Удостоверьтесь, что вы подключены к «%s»."
 
@@ -11466,7 +11422,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Quit when closing contact list"
 #~ msgstr "Выйти при закрытии списка контактов"
 
-#, python-format
 #~ msgid "RE: %s"
 #~ msgstr "RE: %s"
 
@@ -11520,7 +11475,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Received"
 #~ msgstr "Получено"
 
-#, python-format
 #~ msgid "Received %s"
 #~ msgstr "Получено %s"
 
@@ -11551,7 +11505,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Registration information for transport %s has not arrived in time"
 #~ msgstr "Данные о регистрации для транспорта %s не пришли вовремя."
 
-#, python-format
 #~ msgid ""
 #~ "Registration with agent %(agent)s failed with error %(error)s: "
 #~ "%(error_msg)s"
@@ -11559,7 +11512,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ "Регистрация сервиса %(agent)s завершилась ошибкой: %(error)s: "
 #~ "%(error_msg)s"
 
-#, python-format
 #~ msgid "Registration with agent %s succeeded."
 #~ msgstr "Регистрация сервиса %s успешно завершена."
 
@@ -11640,11 +11592,9 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Rename contact"
 #~ msgstr "Переименовать контакт"
 
-#, python-format
 #~ msgid "Rename contact %s?"
 #~ msgstr "Переименовать контакт %s?"
 
-#, python-format
 #~ msgid "Rename group %s?"
 #~ msgstr "Переименовать группу %s?"
 
@@ -11757,6 +11707,9 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Requires upower and python-dbus."
 #~ msgstr "Требует upower и python-dbus."
 
+#~ msgid "Requires: geoclue"
+#~ msgstr "Требуется: geoclue"
+
 #~ msgid "Requires: gir1.2-avahi-0.6"
 #~ msgstr "Требуется: gir1.2-avahi-0.6"
 
@@ -11776,7 +11729,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ "Требует libsecret и какой-либо менеджер ключей(GNOME Keyring или "
 #~ "KSecretService)."
 
-#, python-format
 #~ msgid "Requires: pybonjour and bonjour SDK running (%(url)s)"
 #~ msgstr "Требуется: pybonjour и запущенный bonjour SDK (%(url)s)"
 
@@ -11929,7 +11881,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Save this message as a preset"
 #~ msgstr "Сохранить это сообщение как предустановку"
 
-#, python-format
 #~ msgid "Saved in: %s"
 #~ msgstr "Сохранено в: %s"
 
@@ -11968,11 +11919,9 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Send"
 #~ msgstr "Отправить"
 
-#, python-format
 #~ msgid "Send %(from)s to %(to)s"
 #~ msgstr "Отправить %(from)s %(to)s"
 
-#, python-format
 #~ msgid "Send %s"
 #~ msgstr "Отправить %s"
 
@@ -12023,7 +11972,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Send message and close window"
 #~ msgstr "Отправить сообщение и закрыть окно"
 
-#, python-format
 #~ msgid "Send this file to %s:\n"
 #~ msgid_plural "Send these files to %s:\n"
 #~ msgstr[0] "Хотите отправить файл %s:\n"
@@ -12361,11 +12309,9 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Single Message"
 #~ msgstr "Сообщение"
 
-#, python-format
 #~ msgid "Single Message in account %s"
 #~ msgstr "Новое сообщение для учетной записи %s"
 
-#, python-format
 #~ msgid "Single Message using account %s"
 #~ msgstr "Новое сообщение с учетной записи %s"
 
@@ -12375,7 +12321,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Size"
 #~ msgstr "Размер"
 
-#, python-format
 #~ msgid "Size: %s"
 #~ msgstr "Размер: %s"
 
@@ -12468,11 +12413,9 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Status Presets…"
 #~ msgstr "Предустановки статуса…"
 
-#, python-format
 #~ msgid "Status is now: %(status)s"
 #~ msgstr "Статус установлен в: %(status)s"
 
-#, python-format
 #~ msgid "Status is now: %(status)s: %(status_msg)s"
 #~ msgstr "Статус установлен в: %(status)s: %(status_msg)s"
 
@@ -12530,7 +12473,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Subject:"
 #~ msgstr "Тема:"
 
-#, python-format
 #~ msgid ""
 #~ "Subject: %(subject)s\n"
 #~ "%(message)s"
@@ -12541,7 +12483,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Subject: %s"
 #~ msgstr "Тема: %s"
 
-#, python-format
 #~ msgid "Subject: %s\n"
 #~ msgstr "Тема: %s\n"
 
@@ -12554,11 +12495,9 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Subscription request"
 #~ msgstr "Запрос подписки"
 
-#, python-format
 #~ msgid "Subscription request for account %(account)s from %(jid)s"
 #~ msgstr "Запрос на подписку для учетной записи %(account)s от %(jid)s"
 
-#, python-format
 #~ msgid "Subscription request from %s"
 #~ msgstr "Запрос на подписку от %s"
 
@@ -12602,7 +12541,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Synchronize the status of all accounts"
 #~ msgstr "Синхронизировать статус всех аккаунтов"
 
-#, python-format
 #~ msgid ""
 #~ "System bus is not available.\n"
 #~ "Try reading %(url)s"
@@ -12698,7 +12636,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ "$T заменяется на время срабатывания автоматического сообщения о статусе "
 #~ "«Недоступен»"
 
-#, python-format
 #~ msgid "The contact \"%(jid)s\" has authorized you to see their status."
 #~ msgstr "Контакт \"%(jid)s\" разрешил Вам видеть его статус."
 
@@ -12713,7 +12650,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "The contact's key (%s) does not match the key assigned in Gajim."
 #~ msgstr "Ключ (%s) контакта не соответствует ключу, присвоенному в Gajim."
 
-#, python-format
 #~ msgid ""
 #~ "The database file (%s) cannot be read. Try to repair it (see https://dev."
 #~ "gajim.org/gajim/gajim/wikis/help/DatabaseBackup) or remove it (all "
@@ -12824,7 +12760,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "There is an error with the form"
 #~ msgstr "%d вкладка с ошибками"
 
-#, python-format
 #~ msgid "There is an update available for Gajim (latest version: %s)"
 #~ msgstr "Доступно обновление для Gajim (последняя версия: %s)"
 
@@ -12897,7 +12832,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ "пока вы не измените свой глобальный статус. Тогда этому контакту станет "
 #~ "виден глобальный статус."
 
-#, python-format
 #~ msgid ""
 #~ "This error occurred while adding a contact for transport %(transport)s:\n"
 #~ "\n"
@@ -13062,7 +12996,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Transform LaTeX expressions between $$ $$."
 #~ msgstr "Преобразовывать LaTeX выражения, заключенные в $$ $$"
 
-#, python-format
 #~ msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 #~ msgstr ""
 #~ "Транспорт %(name)s неверно ответил на запрос о регистрации: %(error)s"
@@ -13091,7 +13024,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Type: "
 #~ msgstr "Тип: "
 
-#, python-format
 #~ msgid "Type: %s"
 #~ msgstr "Тип: %s"
 
@@ -13110,7 +13042,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "URL Color"
 #~ msgstr "Цвет URL"
 
-#, python-format
 #~ msgid "Unable to bind to port %d."
 #~ msgstr "Не могу использовать порт %d."
 
@@ -13538,7 +13469,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "XMPP Address:"
 #~ msgstr "XMPP-адрес:"
 
-#, python-format
 #~ msgid "XMPP Address: <i>%s</i>"
 #~ msgstr "XMPP-адрес: <i>%s</i>"
 
@@ -13796,7 +13726,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "You must read them before removing this transport."
 #~ msgstr "Просмотрите все ожидающие события перед удалением транспорта."
 
-#, python-format
 #~ msgid "You must supply the %s of the new contact."
 #~ msgstr "Необходимо указать %s нового контакта."
 
@@ -13826,7 +13755,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "You successfully received %(filename)s from %(name)s."
 #~ msgstr "Успешно получен файл %(filename)s от %(name)s."
 
-#, python-format
 #~ msgid "You successfully sent %(filename)s to %(name)s."
 #~ msgstr "%(name)s успешно получил(а) отправленный вами файл %(filename)s."
 
@@ -13840,7 +13768,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "You will be connected to %s without OpenPGP."
 #~ msgstr "Вы будете подключены к %s без использования OpenPGP."
 
-#, python-format
 #~ msgid ""
 #~ "You will no longer be able to send and receive messages from and to "
 #~ "contacts using these transports:\n"
@@ -14505,11 +14432,9 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "from"
 #~ msgstr "от"
 
-#, python-format
 #~ msgid "from %s"
 #~ msgstr "от %s"
 
-#, python-format
 #~ msgid "from group chat %s"
 #~ msgstr "в комнатах %s"
 
@@ -14517,7 +14442,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "from room %s"
 #~ msgstr " в комнате %s"
 
-#, python-format
 #~ msgid "from user %s"
 #~ msgstr "от пользователя %s"
 
@@ -14666,9 +14590,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ "один из: отключен, в сети, готов поболтать, отошел, недоступен, не "
 #~ "беспокоить, невидимка."
 
-#~ msgid "org.gajim.Gajim"
-#~ msgstr "org.gajim.Gajim"
-
 #, fuzzy
 #~ msgid "otr"
 #~ msgstr "другое"
@@ -14785,7 +14706,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "using %s account"
 #~ msgstr "учетной записи %s"
 
-#, python-format
 #~ msgid "using account %s"
 #~ msgstr "используя учетную запись %s"
 

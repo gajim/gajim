@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -2213,11 +2213,6 @@ msgstr "Активиране"
 msgid "Enabled"
 msgstr "Включено"
 
-msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
@@ -2423,9 +2418,6 @@ msgstr "Излизане от стаите"
 msgid "Fake audio output"
 msgstr ""
 
-msgid "Feature is not available under Windows"
-msgstr ""
-
 msgid "Feature not available under Windows"
 msgstr ""
 
@@ -2618,6 +2610,9 @@ msgstr "От"
 msgid "Full Name"
 msgstr "<b>Име</b>"
 
+msgid "Fully-featured XMPP chat client"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "GLib Version: %s"
 msgstr "Версия на GTK+:"
@@ -2632,10 +2627,6 @@ msgstr "Gajim"
 #, fuzzy
 msgid "Gajim - Error"
 msgstr "Gajim - %s"
-
-#, fuzzy
-msgid "Gajim Team"
-msgstr "gajim-remote"
 
 #, fuzzy
 msgid "Gajim Themes"
@@ -3509,10 +3500,6 @@ msgstr "Уведомления"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr ""
-
-#, fuzzy
-msgid "Location detection"
-msgstr "Свързване"
 
 #, fuzzy
 msgid "Location:"
@@ -4630,10 +4617,6 @@ msgstr "Необходима е парола"
 
 #, fuzzy
 msgid "Requires: Gspell"
-msgstr "Изисква python-sexy."
-
-#, fuzzy
-msgid "Requires: geoclue"
 msgstr "Изисква python-sexy."
 
 msgid ""
@@ -7028,6 +7011,9 @@ msgstr ""
 msgid "or"
 msgstr "За"
 
+msgid "org.gajim.Gajim"
+msgstr ""
+
 msgid "paused composing a message"
 msgstr "спря да пише съобщение"
 
@@ -7191,11 +7177,10 @@ msgstr ""
 #~ msgid "%(1)s o'clock"
 #~ msgstr "%(1)s часа"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(filename)s received from %(name)s."
 #~ msgstr "Файловият трансфер на %(filename)s от %(name)s прекъсна."
 
-#, python-format
 #~ msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #~ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
@@ -7203,15 +7188,14 @@ msgstr ""
 #~ msgid "%(jid)s has been invited in this room"
 #~ msgstr "%(nick)s беше изритан от стаята (%(reason)s)"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s (%(jid)s) has removed subscription from you"
 #~ msgstr "Контактът „%s“ премахна записването за вас"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s is now %(show)s %(status)s"
 #~ msgstr "%(name)s вече е %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s Changed Status"
 #~ msgstr "%(nick)s промени състоянието си"
 
@@ -7221,27 +7205,22 @@ msgstr ""
 #~ msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 #~ msgstr "%(nick)s беше изритан от %(who)s: %(reason)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(nick)s has set the subject to %(subject)s"
 #~ msgstr "%(jid)s зададе темата на %(subject)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s"
 #~ msgstr "%(nick)s вече е %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s: %(status_msg)s"
 #~ msgstr "%(nick)s вече е %(status)s: %(status_msg)s"
 
-#, python-format
 #~ msgid "%(nickname)s Signed In"
 #~ msgstr "%(nickname)s се включи"
 
-#, python-format
 #~ msgid "%(nickname)s Signed Out"
 #~ msgstr "%(nickname)s се изключи"
 
-#, python-format
 #~ msgid "%(nickname)s from group chat %(room_name)s"
 #~ msgstr "%(nickname)s от стая %(room_name)s"
 
@@ -7264,29 +7243,25 @@ msgstr ""
 #~ "Шифрирането чрез %(type)s %(status)s включено %(authenticated)s.\n"
 #~ "%(logged)s се запазва дневник за сесията."
 
-#, python-format
 #~ msgid "%(who)s on %(time)s said: %(message)s\n"
 #~ msgstr "%(who)s каза в %(time)s: %(message)s\n"
 
-#, python-format
 #~ msgid "%d event pending"
 #~ msgid_plural "%d events pending"
 #~ msgstr[0] "%d чакащо събитие"
 #~ msgstr[1] "%d чакащи събития"
 
-#, python-format
 #~ msgid "%d message pending"
 #~ msgid_plural "%d messages pending"
 #~ msgstr[0] "%d непрочетено съобщение"
 #~ msgstr[1] "%d непрочетени съобщения"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%i day"
 #~ msgid_plural "%i days"
 #~ msgstr[0] "Преди %i дни"
 #~ msgstr[1] "Преди %i дни"
 
-#, python-format
 #~ msgid ""
 #~ "%s\n"
 #~ "Link-local messaging might not work properly."
@@ -7324,15 +7299,14 @@ msgstr ""
 #~ msgid "%s MiB/s"
 #~ msgstr "%s MiB"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s Missing"
 #~ msgstr "%s MiB"
 
-#, python-format
 #~ msgid "%s Status Message"
 #~ msgstr "Съобщение за състояние „%s“"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s configuration error"
 #~ msgstr "Настройки на стаята"
 
@@ -7342,11 +7316,10 @@ msgstr ""
 #~ msgstr[0] "Преди %i дни"
 #~ msgstr[1] "Преди %i дни"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s does not exist."
 #~ msgstr "Файлът не съществува"
 
-#, python-format
 #~ msgid "%s is a directory but should be a file"
 #~ msgstr "%s e папка, а би трябвало да е файл"
 
@@ -7361,18 +7334,16 @@ msgstr ""
 #~ msgid "%s or %s is a directory but should be a file"
 #~ msgstr "%s e папка, а би трябвало да е файл"
 
-#, python-format
 #~ msgid "%s wants to send you a file."
 #~ msgstr "%s иска да ви изпрати файл."
 
 #~ msgid "%s wants to send you a file:"
 #~ msgstr "%s иска да ви изпрати файл:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s wants to start a voice chat."
 #~ msgstr "%s иска да ви изпрати файл."
 
-#, python-format
 #~ msgid "%s wrote:\n"
 #~ msgstr "%s написа:\n"
 
@@ -8345,7 +8316,7 @@ msgstr ""
 #~ msgid "Buying Groceries"
 #~ msgstr "Купувам хранителни продукти"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "By removing the following contacts, you will also remove authorization. "
 #~ "This means they will see you as offline:\n"
@@ -8508,7 +8479,7 @@ msgstr ""
 #~ msgid "Characters that are printed before the nickname in conversations."
 #~ msgstr "Знаци, които се изобразяват в разговори преди псевдонима"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Characters typed: %s"
 #~ msgstr "Псевдонимът не е позволен: %s"
 
@@ -8633,7 +8604,6 @@ msgstr ""
 #~ msgid "Command line Control"
 #~ msgstr "Команди: %s"
 
-#, python-format
 #~ msgid "Comment: %s"
 #~ msgstr "Коментар: %s"
 
@@ -8762,7 +8732,6 @@ msgstr ""
 #~ msgid "Contact name"
 #~ msgstr "Име на контакта"
 
-#, python-format
 #~ msgid "Contact name: <i>%s</i>"
 #~ msgstr "Име на контакта: <i>%s</i>"
 
@@ -8836,7 +8805,6 @@ msgstr ""
 #~ msgid "Could not Upload File"
 #~ msgstr "Неуспех при зареждането на изображението"
 
-#, python-format
 #~ msgid "Could not change status of account \"%s\""
 #~ msgstr "Неуспех при промяната на състоянието на акаунт „%s“"
 
@@ -8848,7 +8816,6 @@ msgstr ""
 #~ msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 #~ msgstr "Неуспех при свързване с „%s“"
 
-#, python-format
 #~ msgid "Could not connect to \"%s\""
 #~ msgstr "Неуспех при свързване с „%s“"
 
@@ -8880,7 +8847,7 @@ msgstr ""
 #~ msgid "Create Metacontact"
 #~ msgstr "Преименуване на контакт"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Creating %s"
 #~ msgstr "Унищожаване на %s"
 
@@ -8896,7 +8863,7 @@ msgstr ""
 #~ msgid "Custom"
 #~ msgstr "Персонални"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Custom hostname \"%s\" is wrong. It will be ignored."
 #~ msgstr "Използване на нестандартен хост/порт"
 
@@ -8989,7 +8956,6 @@ msgstr ""
 #~ msgid "Description:"
 #~ msgstr "Описание: "
 
-#, python-format
 #~ msgid "Description: %s"
 #~ msgstr "Описание: %s"
 
@@ -9018,7 +8984,6 @@ msgstr ""
 #~ "Отделен списък и разговори, групирани по акаунт\n"
 #~ "Отделен списък и разговори, групирани по вид"
 
-#, python-format
 #~ msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 #~ msgstr "Липсва „%s“ в адреса на речника и не е WIKTIONARY"
 
@@ -9093,13 +9058,13 @@ msgstr ""
 #~ msgid "Do you want to continue?"
 #~ msgstr "Искате ли да продължите?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to permanently delete this conversation with <b>%s</b>?"
 #~ msgid_plural "Do you want to permanently delete these conversations?"
 #~ msgstr[0] "Наистина ли искате да изтриете избраното съобщение?"
 #~ msgstr[1] "Наистина ли искате да изтриете избраното съобщение?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to remove %s from the contact list?"
 #~ msgstr "Искате ли да премахнете групата „%s“ от списъка?"
 
@@ -9250,7 +9215,7 @@ msgstr ""
 #~ msgid "Enter name / JID of contact or groupchat"
 #~ msgstr "Име на контакта"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Enter the certificate passphrase for account %s"
 #~ msgstr "Въведете парола за ключ на GPG %(keyid)s (акаунт „%(account)s“)."
 
@@ -9286,14 +9251,13 @@ msgstr ""
 #~ msgid "Error verifying SSL certificate"
 #~ msgstr "Грешка при проверка на сертификата на SSL"
 
-#, python-format
 #~ msgid "Error while adding service. %s"
 #~ msgstr "Грешка при добавянето на услугата. %s"
 
 #~ msgid "Error."
 #~ msgstr "Грешка."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Error: %(error)s\n"
 #~ "Debug: %(debug)s"
@@ -9380,7 +9344,7 @@ msgstr ""
 #~ msgid "File already exists"
 #~ msgstr "Този файл вече съществува"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File name: %s"
 #~ msgstr "Име на файл: %s"
 
@@ -9396,19 +9360,17 @@ msgstr ""
 #~ msgid "File transfer error notification color."
 #~ msgstr "Файловият трансфер е прекъснат"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s from %(name)s failed."
 #~ msgstr "Файловият трансфер на %(filename)s от %(name)s прекъсна."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s from %(name)s stopped."
 #~ msgstr "Файловият трансфер на %(filename)s от %(name)s прекъсна."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s to %(name)s failed."
 #~ msgstr "Файловият трансфер на %(filename)s до %(name)s прекъсна."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s to %(name)s stopped."
 #~ msgstr "Файловият трансфер на %(filename)s до %(name)s прекъсна."
 
@@ -9500,6 +9462,10 @@ msgstr ""
 
 #~ msgid "Gajim Instant Messenger"
 #~ msgstr "Моментни съобщения (Gajim)"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "gajim-remote"
 
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Персонализиране на темите на Gajim"
@@ -9843,7 +9809,7 @@ msgstr ""
 #~ msgid "Idle for:"
 #~ msgstr "XML конзола за %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "If \"%s\" accepts this request you will know their status."
 #~ msgstr "Ако „%s“ приеме това запитване, ще знаете за състоянието му."
 
@@ -10179,7 +10145,7 @@ msgstr ""
 #~ "Ако затворите този прозорец и нямате включена опция за запазване на "
 #~ "историята, съобщението ще бъде загубено."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "If you send a file to <b>%s</b>, your real XMPP address will be revealed."
 #~ msgstr "Ако изпратите файл на %s, той/тя ще разбере истинския ви Jabber ID."
@@ -10370,7 +10336,7 @@ msgstr ""
 #~ msgid "Invite contacts to the conversation (Ctrl+G)"
 #~ msgstr "Покана на контакти в разговора (Ctrl+G)"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Invited %(jid)s to %(room_jid)s"
 #~ msgstr "%(contact_jid)s е поканен в %(room_jid)s."
 
@@ -10378,13 +10344,13 @@ msgstr ""
 #~ msgid "Invited %s to %s"
 #~ msgstr "Изпращане на %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s, this XMPP Address is not "
 #~ "valid."
 #~ msgstr "Не е възможно да бъдат изпращани празни файлове"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s. This XMPP Address is not "
 #~ "valid."
@@ -10537,6 +10503,10 @@ msgstr ""
 #~ msgid "Lists all preferences and their values"
 #~ msgstr "Показва всички настройки и техните стойности"
 
+#, fuzzy
+#~ msgid "Location detection"
+#~ msgstr "Свързване"
+
 #~ msgid "Log _encrypted chat session"
 #~ msgstr "Запазване на дневник на _шифрираната сесия"
 
@@ -10580,11 +10550,11 @@ msgstr ""
 #~ msgid "Mail _client"
 #~ msgstr "_Програма за е-поща:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Make %(contact1)s and %(contact2)s metacontacts"
 #~ msgstr "Изпращане на файл до контакт"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Make %s first contact"
 #~ msgstr "Изпращане на файл до контакт"
 
@@ -10910,7 +10880,6 @@ msgstr ""
 #~ msgid "Notify on new _GMail email"
 #~ msgstr "Уведомяване при нова поща от _GMail"
 
-#, python-format
 #~ msgid "Now \"%s\" will always see you as offline."
 #~ msgstr "„%s“ винаги ще ви вижда като изключен."
 
@@ -11041,11 +11010,9 @@ msgstr ""
 #~ msgid "Order:"
 #~ msgstr "Ред:"
 
-#, python-format
 #~ msgid "Order: %(order)s, action: %(action)s"
 #~ msgstr "Ред: %(order)s, действие: %(action)s"
 
-#, python-format
 #~ msgid ""
 #~ "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 #~ msgstr ""
@@ -11210,7 +11177,6 @@ msgstr ""
 #~ "Уверете се, че Pywin32 е инсталиран на системата. Може да го изтеглите от "
 #~ "%s"
 
-#, python-format
 #~ msgid "Please make sure you are connected with \"%s\"."
 #~ msgstr "Уверете се, че сте свързани към „%s“."
 
@@ -11338,25 +11304,22 @@ msgstr ""
 #~ msgid "Privacy List"
 #~ msgstr "Филтър за уединение"
 
-#, python-format
 #~ msgid "Privacy List <b><i>%s</i></b>"
 #~ msgstr "Филтър за уединение <b><i>%s</i></b>"
 
-#, python-format
 #~ msgid "Privacy List for %s"
 #~ msgstr "Филтър за уединение за %s"
 
 #~ msgid "Privacy Lists"
 #~ msgstr "Филтри за уединение"
 
-#, python-format
 #~ msgid "Privacy Lists for %s"
 #~ msgstr "Филтри за уединение за %s"
 
 #~ msgid "Privacy Lists:"
 #~ msgstr "Филтри за уединение:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Privacy list %s has not been removed. It is probably active in one of "
 #~ "your connected resources. Please deactivate it and try again."
@@ -11400,7 +11363,6 @@ msgstr ""
 #~ msgid "Quit"
 #~ msgstr "_Изход"
 
-#, python-format
 #~ msgid "RE: %s"
 #~ msgstr "Относно: %s"
 
@@ -11449,7 +11411,6 @@ msgstr ""
 #~ msgid "Received"
 #~ msgstr "Получено %s"
 
-#, python-format
 #~ msgid "Received %s"
 #~ msgstr "Получено %s"
 
@@ -11482,7 +11443,7 @@ msgstr ""
 #~ msgid "Registration information for transport %s has not arrived in time"
 #~ msgstr "Информацията за регистрация за транспорт %s не пристигна навреме"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Registration with agent %s succeeded."
 #~ msgstr "Регистриране в %s"
 
@@ -11566,11 +11527,11 @@ msgstr ""
 #~ msgid "Rename contact"
 #~ msgstr "Преименуване на контакт"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename contact %s?"
 #~ msgstr "Преименуване на контакт"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename group %s?"
 #~ msgstr "Преименуване на група"
 
@@ -11661,6 +11622,10 @@ msgstr ""
 #~ msgstr "Изисква python-dbus."
 
 #, fuzzy
+#~ msgid "Requires: geoclue"
+#~ msgstr "Изисква python-sexy."
+
+#, fuzzy
 #~ msgid "Requires: gir1.2-avahi-0.6"
 #~ msgstr "Изисква python-gnome2."
 
@@ -11672,7 +11637,7 @@ msgstr ""
 #~ msgid "Requires: gpg.exe in your PATH environment variable"
 #~ msgstr "Използване на променливата на обкръжението „HTTP_PROXY“"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Requires: pybonjour and bonjour SDK running (%(url)s)"
 #~ msgstr "Изисква gpg и python-GnuPGInterface."
 
@@ -11800,7 +11765,6 @@ msgstr ""
 #~ msgid "Save status as preset"
 #~ msgstr "Запазване като настроено…"
 
-#, python-format
 #~ msgid "Saved in: %s"
 #~ msgstr "Запазен в: %s"
 
@@ -11836,11 +11800,10 @@ msgstr ""
 #~ msgid "Send"
 #~ msgstr "_Изпращане"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send %(from)s to %(to)s"
 #~ msgstr "Изпращане на %s"
 
-#, python-format
 #~ msgid "Send %s"
 #~ msgstr "Изпращане на %s"
 
@@ -11893,7 +11856,7 @@ msgstr ""
 #~ msgid "Send message and close window"
 #~ msgstr "Изпращане на съобщението и затваряне на прозореца"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send this file to %s:\n"
 #~ msgid_plural "Send these files to %s:\n"
 #~ msgstr[0] "Искате ли да изпратите този файл на %s:"
@@ -12200,11 +12163,9 @@ msgstr ""
 #~ msgid "Single Message"
 #~ msgstr "Еднократно съобщение"
 
-#, python-format
 #~ msgid "Single Message in account %s"
 #~ msgstr "Еднократно съобщение за акаунт „%s“"
 
-#, python-format
 #~ msgid "Single Message using account %s"
 #~ msgstr "Еднократно съобщение с акаунт „%s“"
 
@@ -12212,7 +12173,6 @@ msgstr ""
 #~ msgid "Size"
 #~ msgstr "Размер: %s"
 
-#, python-format
 #~ msgid "Size: %s"
 #~ msgstr "Размер: %s"
 
@@ -12286,11 +12246,9 @@ msgstr ""
 #~ msgid "Status Preset"
 #~ msgstr "Съобщение за състояние"
 
-#, python-format
 #~ msgid "Status is now: %(status)s"
 #~ msgstr "Сегашното състояние е: %(status)s"
 
-#, python-format
 #~ msgid "Status is now: %(status)s: %(status_msg)s"
 #~ msgstr "Сегашното състояние е: %(status)s: %(status_msg)s"
 
@@ -12350,7 +12308,6 @@ msgstr ""
 #~ msgid "Subject:"
 #~ msgstr "Тема:"
 
-#, python-format
 #~ msgid ""
 #~ "Subject: %(subject)s\n"
 #~ "%(message)s"
@@ -12361,7 +12318,6 @@ msgstr ""
 #~ msgid "Subject: %s"
 #~ msgstr "Тема: %s"
 
-#, python-format
 #~ msgid "Subject: %s\n"
 #~ msgstr "Тема: %s\n"
 
@@ -12377,11 +12333,9 @@ msgstr ""
 #~ msgid "Subscription request"
 #~ msgstr "Искане за записване"
 
-#, python-format
 #~ msgid "Subscription request for account %(account)s from %(jid)s"
 #~ msgstr "Искане за записване за акаунт „%(account)s“ от %(jid)s"
 
-#, python-format
 #~ msgid "Subscription request from %s"
 #~ msgstr "Искане за записване от %s"
 
@@ -12425,7 +12379,7 @@ msgstr ""
 #~ msgid "Synchronize the status of all accounts"
 #~ msgstr "Промяна на състоянието на акаунта или акаунтите"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "System bus is not available.\n"
 #~ "Try reading %(url)s"
@@ -12512,7 +12466,7 @@ msgstr ""
 #~ "Съобщение за автоматично състояние „Не съм на разположение“. Ако е "
 #~ "празно, няма да се сменя текущото съобщение."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "The contact \"%s\" has authorized you to see their status."
 #~ msgstr "Контактът „%s“ ви упълномощи да виждате състоянието му."
 
@@ -12528,7 +12482,7 @@ msgstr ""
 #~ msgid "The contact's key (%s) does not match the key assigned in Gajim."
 #~ msgstr "Ключът на контакта (%s) не съвпада със зададения в Gajim."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "The database file (%s) cannot be read. Try to repair it (see https://dev."
 #~ "gajim.org/gajim/gajim/wikis/help/DatabaseBackup) or remove it (all "
@@ -12627,7 +12581,7 @@ msgstr ""
 #~ msgid "Thirsty"
 #~ msgstr "Жаден"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "This account %s doesn't support invisibility."
 #~ msgstr "Акаунтът „%s“ не поддържа невидимост."
 
@@ -12813,7 +12767,6 @@ msgstr ""
 #~ msgid "Transform LaTeX expressions between $$ $$."
 #~ msgstr "Трансформира изрази на LaTex, разграничени с $$ $$."
 
-#, python-format
 #~ msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 #~ msgstr ""
 #~ "Транспортът „%(name)s“ отговори погрешно на запитването за регистрация: "
@@ -12840,7 +12793,6 @@ msgstr ""
 #~ msgid "Type: "
 #~ msgstr "Тип: "
 
-#, python-format
 #~ msgid "Type: %s"
 #~ msgstr "Тип: %s"
 
@@ -12851,7 +12803,6 @@ msgstr ""
 #~ msgid "URL Color"
 #~ msgstr "Цвят"
 
-#, python-format
 #~ msgid "Unable to bind to port %d."
 #~ msgstr "Неуспех при свързването с порт %d."
 
@@ -13307,7 +13258,7 @@ msgstr ""
 #~ msgid "You are invited to a groupchat"
 #~ msgstr "Поканени сте в стая."
 
-#, fuzzy, python-brace-format
+#, fuzzy
 #~ msgid "You are invited to {room} by {user}"
 #~ msgstr "Поканени сте в стая."
 
@@ -13499,7 +13450,6 @@ msgstr ""
 #~ msgid "You successfully received %(filename)s from %(name)s."
 #~ msgstr "Успешно получихте %(filename)s от %(name)s."
 
-#, python-format
 #~ msgid "You successfully sent %(filename)s to %(name)s."
 #~ msgstr "Успешно изпратихте %(filename)s на %(name)s."
 
@@ -13514,7 +13464,7 @@ msgstr ""
 #~ msgid "You will be connected to %s without OpenPGP."
 #~ msgstr "Ще бъдете свързани към „%s“ без OpenPGP."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "You will no longer be able to send and receive messages from and to "
 #~ "contacts using these transports:\n"
@@ -14135,11 +14085,11 @@ msgstr ""
 #~ msgid "from"
 #~ msgstr "От"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from %s"
 #~ msgstr " от %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from group chat %s"
 #~ msgstr "в _стаи"
 
@@ -14147,7 +14097,7 @@ msgstr ""
 #~ msgid "from room %s"
 #~ msgstr " от стая %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from user %s"
 #~ msgstr " от потребител %s"
 
@@ -14381,7 +14331,6 @@ msgstr ""
 #~ msgid "using %s account"
 #~ msgstr "за акаунт „%s“"
 
-#, python-format
 #~ msgid "using account %s"
 #~ msgstr "от акаунт „%s“"
 

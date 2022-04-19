@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -2163,11 +2163,6 @@ msgid "Enabled"
 msgstr "Enaouiñ"
 
 msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-
-msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
 "Status automatically"
 msgstr ""
@@ -2366,10 +2361,6 @@ msgid "Fake audio output"
 msgstr ""
 
 #, fuzzy
-msgid "Feature is not available under Windows"
-msgstr "An emc'hemennadenn evit ar stad \"Dihegerz\""
-
-#, fuzzy
 msgid "Feature not available under Windows"
 msgstr "An emc'hemennadenn evit ar stad \"Dihegerz\""
 
@@ -2562,6 +2553,9 @@ msgstr "Digant"
 msgid "Full Name"
 msgstr "<b>Personelaet</b>"
 
+msgid "Fully-featured XMPP chat client"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "GLib Version: %s"
 msgstr "Taolennadur: %s"
@@ -2575,10 +2569,6 @@ msgstr "Gajim"
 
 #, fuzzy
 msgid "Gajim - Error"
-msgstr "Gajim - %s"
-
-#, fuzzy
-msgid "Gajim Team"
 msgstr "Gajim - %s"
 
 #, fuzzy
@@ -3394,10 +3384,6 @@ msgstr "Kemmañ ar gont"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr ""
-
-#, fuzzy
-msgid "Location detection"
-msgstr "Kevreadenn"
 
 #, fuzzy
 msgid "Location:"
@@ -4508,9 +4494,6 @@ msgid "Required"
 msgstr "Ger-kuzh ret"
 
 msgid "Requires: Gspell"
-msgstr ""
-
-msgid "Requires: geoclue"
 msgstr ""
 
 msgid ""
@@ -6853,6 +6836,9 @@ msgstr "unan eus: offline, online, chat, away, xa, dnd, invisible "
 msgid "or"
 msgstr "Da"
 
+msgid "org.gajim.Gajim"
+msgstr ""
+
 msgid "paused composing a message"
 msgstr "a zo paouezet da skrivañ ar gemennadenn"
 
@@ -6987,11 +6973,10 @@ msgstr ""
 #~ msgid " since %s"
 #~ msgstr "dibaoe %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(filename)s received from %(name)s."
 #~ msgstr "Arsavet eo an treuskas eus %(filename)s digant %(name)s."
 
-#, python-format
 #~ msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #~ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
@@ -6999,15 +6984,15 @@ msgstr ""
 #~ msgid "%(jid)s has been invited in this room"
 #~ msgstr "%(nick)s a zo bet skarzhet gant %(who)s : %(reason)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s (%(jid)s) has removed subscription from you"
 #~ msgstr "Dilamet eo bet ho aotre digant \"%s\""
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s is now %(show)s %(status)s"
 #~ msgstr "%(nick)s a zo bremañ %(status)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(nick)s Changed Status"
 #~ msgstr "%(nick)s a zo bremañ %(status)s"
 
@@ -7017,27 +7002,23 @@ msgstr ""
 #~ msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 #~ msgstr "%(nick)s a zo bet skarzhet gant %(who)s : %(reason)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(nick)s has set the subject to %(subject)s"
 #~ msgstr "%(nick)s a zo bet skarzhet : %(reason)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s"
 #~ msgstr "%(nick)s a zo bremañ %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s: %(status_msg)s"
 #~ msgstr "%(nick)s a zo bremañ %(status)s : %(status_msg)s"
 
-#, python-format
 #~ msgid "%(nickname)s Signed In"
 #~ msgstr "Emañ %(nickname)s o paouez lugañ"
 
-#, python-format
 #~ msgid "%(nickname)s Signed Out"
 #~ msgstr "Emañ %(nickname)s o paouez dilugañ"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(nickname)s from group chat %(room_name)s"
 #~ msgstr "%(nickname)s : %(message)s"
 
@@ -7052,17 +7033,16 @@ msgstr ""
 #~ msgid "%(nickname)s: %(message)s"
 #~ msgstr "%(nickname)s : %(message)s"
 
-#, python-format
 #~ msgid "%(who)s on %(time)s said: %(message)s\n"
 #~ msgstr "%(time)s e lâras %(who)s: %(message)s\n"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%d message pending"
 #~ msgid_plural "%d messages pending"
 #~ msgstr[0] "Kas ur gemennadenn"
 #~ msgstr[1] "Kas ur gemennadenn"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%i day"
 #~ msgid_plural "%i days"
 #~ msgstr[0] "%i devezh 'zo"
@@ -7096,15 +7076,14 @@ msgstr ""
 #~ msgid "%s MiB/s"
 #~ msgstr "%s Mo"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s Missing"
 #~ msgstr "%s Mo"
 
-#, python-format
 #~ msgid "%s Status Message"
 #~ msgstr "Titour-stad %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s configuration error"
 #~ msgstr "Kefluniañ ar webgaoz"
 
@@ -7117,7 +7096,7 @@ msgstr ""
 #~ msgid "%s does not appear to be a valid JID"
 #~ msgstr "%s ne seblant ket bezañ ur JID a-feson"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s does not exist."
 #~ msgstr "Ce salon n'existe pas."
 
@@ -7129,7 +7108,7 @@ msgstr ""
 #~ msgid "%s has sent you a new message."
 #~ msgstr "%s vous a envoyé un nouveau message."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s is a directory but should be a file"
 #~ msgstr "ur renkell eo %s met rankout a rafe bezañ ur restr"
 
@@ -7151,18 +7130,16 @@ msgstr ""
 #~ msgid "%s or %s is a directory but should be a file"
 #~ msgstr "ur renkell eo %s met rankout a rafe bezañ ur restr"
 
-#, python-format
 #~ msgid "%s wants to send you a file."
 #~ msgstr "Fellout a ra da %s kas deoc'h ur restr."
 
 #~ msgid "%s wants to send you a file:"
 #~ msgstr "Fellout a ra da %s kas deoc'h ur restr:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s wants to start a voice chat."
 #~ msgstr "Fellout a ra da %s kas deoc'h ur restr."
 
-#, python-format
 #~ msgid "%s wrote:\n"
 #~ msgstr "%s a skrivas:\n"
 
@@ -7955,7 +7932,7 @@ msgstr ""
 #~ msgid "Build custom query"
 #~ msgstr "Krouiñ ur goulenn personelaet"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "By removing the following contacts, you will also remove authorization. "
 #~ "This means they will see you as offline:\n"
@@ -8068,7 +8045,7 @@ msgstr ""
 #~ msgid "Character not allowed"
 #~ msgstr "N'eus ket bet kavet al lesanv : %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Characters typed: %s"
 #~ msgstr "N'eus ket bet kavet al lesanv : %s"
 
@@ -8166,7 +8143,6 @@ msgstr ""
 #~ msgid "Command line Control"
 #~ msgstr "Urzhioù: %s"
 
-#, python-format
 #~ msgid "Comment: %s"
 #~ msgstr "Evezhiadenn: %s"
 
@@ -8297,7 +8273,7 @@ msgstr ""
 #~ msgid "Contact name"
 #~ msgstr "Anv an darempred"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Contact name: <i>%s</i>"
 #~ msgstr "Anv an darempred: <i>%s</i>"
 
@@ -8371,7 +8347,7 @@ msgstr ""
 #~ msgid "Could not Upload File"
 #~ msgstr "Dibosupl eo kargañ ar skeudenn"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Could not change status of account \"%s\""
 #~ msgstr "Dibosupl eo en em lugañ da \"%s\""
 
@@ -8383,7 +8359,6 @@ msgstr ""
 #~ msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 #~ msgstr "Dibosupl eo en em lugañ da \"%s\""
 
-#, python-format
 #~ msgid "Could not connect to \"%s\""
 #~ msgstr "Dibosupl eo en em lugañ da \"%s\""
 
@@ -8410,7 +8385,7 @@ msgstr ""
 #~ msgid "Create Metacontact"
 #~ msgstr "Darempredoù"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Creating %s"
 #~ msgstr "Taolennadur: %s"
 
@@ -8426,7 +8401,7 @@ msgstr ""
 #~ msgid "Custom"
 #~ msgstr "<b>Personelaet</b>"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Custom hostname \"%s\" is wrong. It will be ignored."
 #~ msgstr "Implij un anv ostiz/porzh personelaet"
 
@@ -8504,7 +8479,6 @@ msgstr ""
 #~ msgid "Description:"
 #~ msgstr "Taolennadur: %s"
 
-#, python-format
 #~ msgid "Description: %s"
 #~ msgstr "Taolennadur: %s"
 
@@ -8520,7 +8494,6 @@ msgstr ""
 #~ msgid "Destroy…"
 #~ msgstr "Taolennadur: %s"
 
-#, python-format
 #~ msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 #~ msgstr ""
 #~ "Mankout a ra un \"%s\" e-barzh URL ar geriaoueg, ha n'eo ket WIKTIONARY"
@@ -8576,13 +8549,13 @@ msgstr ""
 #~ msgid "Do you want to continue?"
 #~ msgstr "Petra a fell deoc'h ober?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to permanently delete this conversation with <b>%s</b>?"
 #~ msgid_plural "Do you want to permanently delete these conversations?"
 #~ msgstr[0] "Ha fellout a ra deoc'h da vat diverkañ ar gemennadenn ziuzet?"
 #~ msgstr[1] "Ha fellout a ra deoc'h da vat diverkañ ar gemennadenn ziuzet?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to remove %s from the contact list?"
 #~ msgstr "Fellout a ra din emezelañ evit krouiñ ur gont"
 
@@ -8688,7 +8661,7 @@ msgstr ""
 #~ msgid "Enter name / JID of contact or groupchat"
 #~ msgstr "Anv an darempred"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Enter the certificate passphrase for account %s"
 #~ msgstr "Roit ho ker-kuzh GPG evit ar gont %s."
 
@@ -8711,7 +8684,7 @@ msgstr ""
 #~ msgid "Error reading file:"
 #~ msgstr "Fazi en ur lenn ar restr:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Error while adding service. %s"
 #~ msgstr "fazi en ur gas %s ( %s )"
 
@@ -8719,7 +8692,7 @@ msgstr ""
 #~ msgid "Error."
 #~ msgstr "Fazi en ur lenn ar restr:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Error: %(error)s\n"
 #~ "Debug: %(debug)s"
@@ -8780,6 +8753,10 @@ msgstr ""
 #~ msgstr "Perzhioù ar servijerien"
 
 #, fuzzy
+#~ msgid "Feature is not available under Windows"
+#~ msgstr "An emc'hemennadenn evit ar stad \"Dihegerz\""
+
+#, fuzzy
 #~ msgid "Feed name:"
 #~ msgstr "anv ar gwiskadur"
 
@@ -8801,7 +8778,7 @@ msgstr ""
 #~ msgid "File already exists"
 #~ msgstr "Bez ez eus eus ar restr-mañ dija"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File name: %s"
 #~ msgstr "Anv ar restr: %s"
 
@@ -8820,19 +8797,17 @@ msgstr ""
 #~ msgid "File transfer error notification color."
 #~ msgstr "Nullet eo bet an treuzkas"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s from %(name)s failed."
 #~ msgstr "Arsavet eo an treuskas eus %(filename)s digant %(name)s."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s from %(name)s stopped."
 #~ msgstr "Arsavet eo an treuskas eus %(filename)s digant %(name)s."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s to %(name)s failed."
 #~ msgstr "Arsavet eo an treuzkas eus %(filename)s da %(name)s."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s to %(name)s stopped."
 #~ msgstr "Arsavet eo an treuzkas eus %(filename)s da %(name)s."
 
@@ -8918,6 +8893,10 @@ msgstr ""
 
 #~ msgid "Gajim Instant Messenger"
 #~ msgstr "Flaperez Gajim"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim - %s"
 
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Personelaat gwiskadurioù Gajim"
@@ -9207,7 +9186,7 @@ msgstr ""
 #~ msgid "I'm not available."
 #~ msgstr "Dihegerz"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "If \"%s\" accepts this request you will know their status."
 #~ msgstr "Ma asant \"%s\" ar c'houmanant e weloc'h he/e stad."
 
@@ -9568,7 +9547,7 @@ msgstr ""
 #~ msgid "Invite contacts to the conversation (Ctrl+G)"
 #~ msgstr "a zo aketus d'ar gaozeadenn"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Invited %(jid)s to %(room_jid)s"
 #~ msgstr "Darempred %(contact_jid)s bet pedet e-barzh %(room_jid)s."
 
@@ -9576,13 +9555,13 @@ msgstr ""
 #~ msgid "Invited %s to %s"
 #~ msgstr "Kas %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s, this XMPP Address is not "
 #~ "valid."
 #~ msgstr "N'eus ket tu da gas restroù goullo"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s. This XMPP Address is not "
 #~ "valid."
@@ -9708,6 +9687,10 @@ msgstr ""
 #~ msgid "Lists all preferences and their values"
 #~ msgstr "Roll an holl zibaboù hag o zalvoudoù"
 
+#, fuzzy
+#~ msgid "Location detection"
+#~ msgstr "Kevreadenn"
+
 #~ msgid "Log _off"
 #~ msgstr "_Dilugañ"
 
@@ -9756,11 +9739,11 @@ msgstr ""
 #~ msgid "Mail _client"
 #~ msgstr "_Meziant posteliñ:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Make %(contact1)s and %(contact2)s metacontacts"
 #~ msgstr "Strollañ %s ha %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Make %s first contact"
 #~ msgstr "Strollañ %s ha %s"
 
@@ -10041,7 +10024,6 @@ msgstr ""
 #~ msgid "Notify on new _GMail email"
 #~ msgstr "Ma c'helaouiñ evit ar c'hemennadennoù _Gmail nevez"
 
-#, python-format
 #~ msgid "Now \"%s\" will always see you as offline."
 #~ msgstr ""
 #~ "Adalek bremañ e welo ac'hanoc'h \"%s\" atav evel pa vefec'h ezlinenn."
@@ -10138,7 +10120,7 @@ msgstr ""
 #~ msgid "Order:"
 #~ msgstr "Servijer:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Order: %(order)s, action: %(action)s"
 #~ msgstr "Taolennadur: %s"
 
@@ -10263,7 +10245,6 @@ msgstr ""
 #~ msgid "Please first choose another theme as your current theme."
 #~ msgstr "Dibabit ur gwiskadur all da gentañ."
 
-#, python-format
 #~ msgid "Please make sure you are connected with \"%s\"."
 #~ msgstr "Gwiriekait oc'h luget gant \"%s\"."
 
@@ -10409,7 +10390,6 @@ msgstr ""
 #~ msgid "Quit"
 #~ msgstr "_Kuitaat"
 
-#, python-format
 #~ msgid "RE: %s"
 #~ msgstr "RE: %s"
 
@@ -10437,7 +10417,6 @@ msgstr ""
 #~ msgid "Received"
 #~ msgstr "%s resevet"
 
-#, python-format
 #~ msgid "Received %s"
 #~ msgstr "%s resevet"
 
@@ -10469,7 +10448,7 @@ msgstr ""
 #~ "L'information d'enregistrement pour la passerelle %s n'est pas arrivée à "
 #~ "temps"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Registration with agent %s succeeded."
 #~ msgstr "Gant berzh eo bet embannet ar vCard"
 
@@ -10546,11 +10525,11 @@ msgstr ""
 #~ msgid "Rename contact"
 #~ msgstr "Darempredoù"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename contact %s?"
 #~ msgstr "Darempredoù"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename group %s?"
 #~ msgstr "_Adenvel"
 
@@ -10635,7 +10614,6 @@ msgstr ""
 #~ msgid "Save status as preset"
 #~ msgstr "Enrollañ evel raklakaet..."
 
-#, python-format
 #~ msgid "Saved in: %s"
 #~ msgstr "Enrollet e-barzh: %s"
 
@@ -10665,11 +10643,10 @@ msgstr ""
 #~ msgid "Send"
 #~ msgstr "Envoyer"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send %(from)s to %(to)s"
 #~ msgstr "Kas %s"
 
-#, python-format
 #~ msgid "Send %s"
 #~ msgstr "Kas %s"
 
@@ -10726,7 +10703,7 @@ msgstr ""
 #~ msgid "Send message and close window"
 #~ msgstr "Kas ar gemennadenn ha serriñ ar prenestr"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send this file to %s:\n"
 #~ msgid_plural "Send these files to %s:\n"
 #~ msgstr[0] "Fellout a ra da %s kas deoc'h ur restr:"
@@ -10952,11 +10929,11 @@ msgstr ""
 #~ msgid "Single Message"
 #~ msgstr "Kemennadenn simpl"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Single Message in account %s"
 #~ msgstr "Kemennadenn simpl gant ar gont %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Single Message using account %s"
 #~ msgstr "Kemennadenn simpl gant ar gont %s"
 
@@ -10964,7 +10941,6 @@ msgstr ""
 #~ msgid "Size"
 #~ msgstr "Taille : "
 
-#, python-format
 #~ msgid "Size: %s"
 #~ msgstr "Ment: %s"
 
@@ -11010,11 +10986,9 @@ msgstr ""
 #~ msgid "Status Preset"
 #~ msgstr "Titour-stad"
 
-#, python-format
 #~ msgid "Status is now: %(status)s"
 #~ msgstr "Ar stad a zo bremañ: %(status)s"
 
-#, python-format
 #~ msgid "Status is now: %(status)s: %(status_msg)s"
 #~ msgstr "Ar stad a zo bremañ: %(status)s: %(status_msg)s"
 
@@ -11058,7 +11032,7 @@ msgstr ""
 #~ msgid "Subject:"
 #~ msgstr "Titl:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Subject: %(subject)s\n"
 #~ "%(message)s"
@@ -11070,7 +11044,6 @@ msgstr ""
 #~ msgid "Subject: %s"
 #~ msgstr "Sujed: %s\n"
 
-#, python-format
 #~ msgid "Subject: %s\n"
 #~ msgstr "Sujed: %s\n"
 
@@ -11086,11 +11059,10 @@ msgstr ""
 #~ msgid "Subscription request"
 #~ msgstr "Goulenn koumanantiñ"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Subscription request for account %(account)s from %(jid)s"
 #~ msgstr "Goulenn enskrivañ evit ar gont %s digant %s"
 
-#, python-format
 #~ msgid "Subscription request from %s"
 #~ msgstr "Goulenn enskrivañ digant %s"
 
@@ -11127,7 +11099,7 @@ msgstr ""
 #~ msgid "Synchronize the status of all accounts"
 #~ msgstr "A cheñch stad ar gont pe ar c'hontoù"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "System bus is not available.\n"
 #~ "Try reading %(url)s"
@@ -11174,7 +11146,7 @@ msgstr ""
 #~ msgid "The auto away status message"
 #~ msgstr "An emc'hemennadenn evit ar stad \"Ezvezant\""
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "The contact \"%s\" has authorized you to see their status."
 #~ msgstr "Aotreet oc'h bet gant \"%s\" da welet e stad."
 
@@ -11231,7 +11203,7 @@ msgstr ""
 #~ msgid "Thinking"
 #~ msgstr "O labourat"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "This account %s doesn't support invisibility."
 #~ msgstr "Ur roll eus an treuzkasoù oberiant, echu pe arsavet"
 
@@ -11328,7 +11300,7 @@ msgstr ""
 #~ msgid "Transferred: "
 #~ msgstr "Treuzkaset:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 #~ msgstr "Respontet fall he deus an nor %s d'ar goulenn emezelañ."
 
@@ -11355,11 +11327,10 @@ msgstr ""
 #~ msgid "Type: "
 #~ msgstr "Doare:"
 
-#, python-format
 #~ msgid "Type: %s"
 #~ msgstr "Doare: %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Unable to bind to port %d."
 #~ msgstr "Impossible de rejoindre le salon"
 
@@ -11755,7 +11726,7 @@ msgstr ""
 #~ msgid "You are invited to a groupchat"
 #~ msgstr "Vous êtes banni de ce salon."
 
-#, fuzzy, python-brace-format
+#, fuzzy
 #~ msgid "You are invited to {room} by {user}"
 #~ msgstr "Vous êtes banni de ce salon."
 
@@ -11863,7 +11834,7 @@ msgstr ""
 #~ msgid "You must read them before removing this transport."
 #~ msgstr "Lennit an holl zarvoudoù a-raok lemel ar gont-mañ."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "You must supply the %s of the new contact."
 #~ msgstr "Rankout a rit reiñ ur ger-kuzh evit enrollañ ar gont nevez."
 
@@ -11886,7 +11857,6 @@ msgstr ""
 #~ msgid "You successfully received %(filename)s from %(name)s."
 #~ msgstr "Gant berzh ho peus resevet %(filename)s digant %(name)s."
 
-#, python-format
 #~ msgid "You successfully sent %(filename)s to %(name)s."
 #~ msgstr "Gant berzh ho peus kaset %(filename)s da %(name)s."
 
@@ -11896,7 +11866,7 @@ msgstr ""
 #~ msgid "You will be connected to %s without OpenPGP."
 #~ msgstr "Luget e voc'h da %s hep OpenPGP."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "You will no longer be able to send and receive messages from and to "
 #~ "contacts using these transports:\n"
@@ -12481,11 +12451,11 @@ msgstr ""
 #~ msgid "from"
 #~ msgstr "Digant"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from %s"
 #~ msgstr "De %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from group chat %s"
 #~ msgstr "Ebarzhiñ ur _webgaoz"
 
@@ -12493,7 +12463,7 @@ msgstr ""
 #~ msgid "from room %s"
 #~ msgstr "De %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from user %s"
 #~ msgstr "De %s"
 
@@ -12687,7 +12657,6 @@ msgstr ""
 #~ msgid "using account "
 #~ msgstr "en utilisant le compte "
 
-#, python-format
 #~ msgid "using account %s"
 #~ msgstr "en ur implij ar gont %s"
 

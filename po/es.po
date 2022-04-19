@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2022-03-25 17:15+0000\n"
 "Last-Translator: El gran Pirujo <boina@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
@@ -1946,13 +1946,6 @@ msgid "Enabled"
 msgstr "Activado"
 
 msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-"Permite a Gajim conocer la ubicación, si el usuario decide publicar la "
-"ubicación del dispositivo"
-
-msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
 "Status automatically"
 msgstr ""
@@ -2132,9 +2125,6 @@ msgstr "Fallo al generar avatar."
 msgid "Fake audio output"
 msgstr "Salida de audio falso"
 
-msgid "Feature is not available under Windows"
-msgstr "Característica no disponible en Windows"
-
 msgid "Feature not available under Windows"
 msgstr "Característica no disponible en Windows"
 
@@ -2302,6 +2292,10 @@ msgstr "De"
 msgid "Full Name"
 msgstr "Nombre completo"
 
+#, fuzzy
+msgid "Fully-featured XMPP chat client"
+msgstr "Un cliente de chat XMPP con todas las caraterísticas"
+
 #, python-format
 msgid "GLib Version: %s"
 msgstr "Versión GLib: %s"
@@ -2315,9 +2309,6 @@ msgstr "Gajim"
 
 msgid "Gajim - Error"
 msgstr "Gajim - Error"
-
-msgid "Gajim Team"
-msgstr "Equipo Gajim"
 
 msgid "Gajim Themes"
 msgstr "Temas Gajim"
@@ -3130,9 +3121,6 @@ msgstr "Ubicación"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr "Ubicación en Lat: %s Lon: %s"
-
-msgid "Location detection"
-msgstr "Detección de ubicación"
 
 msgid "Location:"
 msgstr "Ubicación:"
@@ -4129,9 +4117,6 @@ msgstr "Requerido"
 
 msgid "Requires: Gspell"
 msgstr "Requiere: Gspell"
-
-msgid "Requires: geoclue"
-msgstr "Requiere: geoclue"
 
 msgid ""
 "Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
@@ -6268,6 +6253,9 @@ msgstr ""
 
 msgid "or"
 msgstr "o"
+
+msgid "org.gajim.Gajim"
+msgstr "org.gajim.Gajim"
 
 msgid "paused composing a message"
 msgstr "ha parado de escribir"
@@ -8717,6 +8705,13 @@ msgstr "…o soltarla aqui"
 #~ "Habilita a Gajim para detectar automáticamente clientes en una red local "
 #~ "para charla sin servidor"
 
+#~ msgid ""
+#~ "Enables Gajim to be location-aware, if the user decides to publish the "
+#~ "device’s location"
+#~ msgstr ""
+#~ "Permite a Gajim conocer la ubicación, si el usuario decide publicar la "
+#~ "ubicación del dispositivo"
+
 #, fuzzy
 #~ msgid "Enables Gajim to encrypt chat messages with OpenPGP"
 #~ msgstr "Posibilidad de cifrar mensajes de chat con OpenPGP."
@@ -8888,6 +8883,9 @@ msgstr "…o soltarla aqui"
 #~ msgid "Feature"
 #~ msgstr "Característica"
 
+#~ msgid "Feature is not available under Windows"
+#~ msgstr "Característica no disponible en Windows"
+
 #, fuzzy
 #~ msgid "Feature not available, see Help->Features"
 #~ msgstr "Característica no disponible en Windows."
@@ -9045,6 +9043,9 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "Gajim Instant Messenger"
 #~ msgstr "Mensajero Gajim"
+
+#~ msgid "Gajim Team"
+#~ msgstr "Equipo Gajim"
 
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Personalización de temas de Gajim"
@@ -10359,6 +10360,9 @@ msgstr "…o soltarla aqui"
 #~ msgid "Local jid:"
 #~ msgstr "JID local:"
 
+#~ msgid "Location detection"
+#~ msgstr "Detección de ubicación"
+
 #~ msgid "Log _encrypted chat session"
 #~ msgstr "R_egistrar conversación cifrada"
 
@@ -11594,6 +11598,9 @@ msgstr "…o soltarla aqui"
 #, fuzzy
 #~ msgid "Requires upower and python-dbus."
 #~ msgstr "Requiere python-dbus."
+
+#~ msgid "Requires: geoclue"
+#~ msgstr "Requiere: geoclue"
 
 #~ msgid "Requires: gir1.2-avahi-0.6"
 #~ msgstr "Requiere: gir1.2-avahi-0.6"
@@ -14640,9 +14647,6 @@ msgstr "…o soltarla aqui"
 #~ msgstr ""
 #~ "uno de: desconectado, en línea, libre para hablar, ausente, no "
 #~ "disponible, ocupado, invisible"
-
-#~ msgid "org.gajim.Gajim"
-#~ msgstr "org.gajim.Gajim"
 
 #, fuzzy
 #~ msgid "otr"

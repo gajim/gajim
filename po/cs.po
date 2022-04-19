@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 23:34+0200\n"
+"POT-Creation-Date: 2022-04-19 16:30+0000\n"
 "PO-Revision-Date: 2010-01-22 14:35+0100\n"
 "Last-Translator: Petr Menšík <pihhan@cipis.net>\n"
 "Language-Team: <>\n"
@@ -2221,11 +2221,6 @@ msgstr "Povolit"
 msgid "Enabled"
 msgstr "Povolit"
 
-msgid ""
-"Enables Gajim to be location-aware, if the user decides to publish the "
-"device’s location"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "Enables Gajim to measure your computer's idle time in order to set your "
@@ -2430,10 +2425,6 @@ msgid "Fake audio output"
 msgstr ""
 
 #, fuzzy
-msgid "Feature is not available under Windows"
-msgstr "Vlastnost není k dispozici pod Windows."
-
-#, fuzzy
 msgid "Feature not available under Windows"
 msgstr "Vlastnost není k dispozici pod Windows."
 
@@ -2620,6 +2611,9 @@ msgstr "Odesílatel"
 msgid "Full Name"
 msgstr "Celé jméno"
 
+msgid "Fully-featured XMPP chat client"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "GLib Version: %s"
 msgstr "GTK+ verze: "
@@ -2634,10 +2628,6 @@ msgstr "Gajim"
 #, fuzzy
 msgid "Gajim - Error"
 msgstr "Gajim - %s"
-
-#, fuzzy
-msgid "Gajim Team"
-msgstr "gajim-remote"
 
 #, fuzzy
 msgid "Gajim Themes"
@@ -3502,10 +3492,6 @@ msgstr "Upozornění"
 #, python-format
 msgid "Location at Lat: %s Lon: %s"
 msgstr ""
-
-#, fuzzy
-msgid "Location detection"
-msgstr "Spojení"
 
 #, fuzzy
 msgid "Location:"
@@ -4627,10 +4613,6 @@ msgstr "Vyžadováno heslo"
 
 #, fuzzy
 msgid "Requires: Gspell"
-msgstr "Vyžaduje libgtkspell."
-
-#, fuzzy
-msgid "Requires: geoclue"
 msgstr "Vyžaduje libgtkspell."
 
 msgid ""
@@ -7013,6 +6995,9 @@ msgstr ""
 msgid "or"
 msgstr "Příjemce"
 
+msgid "org.gajim.Gajim"
+msgstr ""
+
 msgid "paused composing a message"
 msgstr "pozastavil(a) psaní zprávy"
 
@@ -7187,18 +7172,17 @@ msgstr ""
 #~ msgid "%(1)s o'clock"
 #~ msgstr "%(1)s hodin"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "%(contact)s wants to start a %(type)s chat with you. Do you want to "
 #~ "answer the call?"
 #~ msgstr ""
 #~ "%(contact)s chce zahájit %(type) sezení. Chcete na volání odpovědět?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(filename)s received from %(name)s."
 #~ msgstr "Přenos souboru %(filename)s od %(name)s byl zastaven."
 
-#, python-format
 #~ msgid "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 #~ msgstr "%(hours)02.d:%(minutes)02.d:%(seconds)02.d"
 
@@ -7206,15 +7190,14 @@ msgstr ""
 #~ msgid "%(jid)s has been invited in this room"
 #~ msgstr "%(nick)s byli vyhozeni z místnosti: %(reason)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s (%(jid)s) has removed subscription from you"
 #~ msgstr "Kontakt \"%s\" Vám odebral autorizaci"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(name)s is now %(show)s %(status)s"
 #~ msgstr "%(name)s je nyní %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s Changed Status"
 #~ msgstr "%(nick)s Změnil(a) stav"
 
@@ -7224,27 +7207,22 @@ msgstr ""
 #~ msgid "%(nick)s has been kicked by %(who)s: %(reason)s"
 #~ msgstr "%(nick)s byli vyhozeni od %(who)s: %(reason)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%(nick)s has set the subject to %(subject)s"
 #~ msgstr "%(jid)s nastavil předmět na %(subject)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s"
 #~ msgstr "%(nick)s je nyní %(status)s"
 
-#, python-format
 #~ msgid "%(nick)s is now %(status)s: %(status_msg)s"
 #~ msgstr "%(nick)s je nyní %(status)s: %(status_msg)s"
 
-#, python-format
 #~ msgid "%(nickname)s Signed In"
 #~ msgstr "%(nickname)s se přihlásil"
 
-#, python-format
 #~ msgid "%(nickname)s Signed Out"
 #~ msgstr "%(nickname)s se odhlásil"
 
-#, python-format
 #~ msgid "%(nickname)s from group chat %(room_name)s"
 #~ msgstr "%(nickname)s z diskuze %(room_name)s"
 
@@ -7267,36 +7245,31 @@ msgstr ""
 #~ "Šifrování %(type)s %(status)s aktivní %(authenticated)s.\n"
 #~ "Váš rozhovor %(logged)s zaznamenáván."
 
-#, python-format
 #~ msgid "%(type)s state : %(state)s, reason: %(reason)s"
 #~ msgstr "%(type)s stav: %(state)s, důvod: %(reason)s"
 
-#, python-format
 #~ msgid "%(who)s on %(time)s said: %(message)s\n"
 #~ msgstr "%(who)s v %(time)s řekl(a): %(message)s\n"
 
-#, python-format
 #~ msgid "%d event pending"
 #~ msgid_plural "%d events pending"
 #~ msgstr[0] "Čeká %d událost"
 #~ msgstr[1] "Čekají %d události"
 #~ msgstr[2] "Čeká %d událostí"
 
-#, python-format
 #~ msgid "%d message pending"
 #~ msgid_plural "%d messages pending"
 #~ msgstr[0] "Čeká %d zpráva"
 #~ msgstr[1] "Čekají %d zprávy"
 #~ msgstr[2] "Čeká %d zpráv"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%i day"
 #~ msgid_plural "%i days"
 #~ msgstr[0] "před %i dny"
 #~ msgstr[1] "před %i dny"
 #~ msgstr[2] "před %i dny"
 
-#, python-format
 #~ msgid ""
 #~ "%s\n"
 #~ "Link-local messaging might not work properly."
@@ -7333,15 +7306,14 @@ msgstr ""
 #~ msgid "%s MiB/s"
 #~ msgstr "%s MiB"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s Missing"
 #~ msgstr "%s MiB"
 
-#, python-format
 #~ msgid "%s Status Message"
 #~ msgstr "Text stavu %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s configuration error"
 #~ msgstr "Nastavení místnosti"
 
@@ -7352,11 +7324,10 @@ msgstr ""
 #~ msgstr[1] "před %i dny"
 #~ msgstr[2] "před %i dny"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "%s does not exist."
 #~ msgstr "Soubor neexistuje"
 
-#, python-format
 #~ msgid "%s is a directory but should be a file"
 #~ msgstr "%s je adresář, ale měl by to být soubor"
 
@@ -7380,7 +7351,6 @@ msgstr ""
 #~ msgid "%s or %s is a directory but should be a file"
 #~ msgstr "%s je adresář, ale měl by to být soubor"
 
-#, python-format
 #~ msgid "%s wants to send you a file."
 #~ msgstr "%s Vám chce poslat soubor."
 
@@ -7391,11 +7361,9 @@ msgstr ""
 #~ msgid "%s wants to send you a file:"
 #~ msgstr "%s Vám chce poslat soubor:"
 
-#, python-format
 #~ msgid "%s wants to start a voice chat."
 #~ msgstr "%s chce zahájit hlasový rozhovor. "
 
-#, python-format
 #~ msgid "%s wrote:\n"
 #~ msgstr "%s napsal(a):\n"
 
@@ -8454,7 +8422,7 @@ msgstr ""
 #~ msgid "Buying Groceries"
 #~ msgstr "Nakupuji potraviny"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "By removing the following contacts, you will also remove authorization. "
 #~ "This means they will see you as offline:\n"
@@ -8616,7 +8584,7 @@ msgstr ""
 #~ msgid "Characters that are printed before the nickname in conversations."
 #~ msgstr "Znaky, které budou vypisovány před přezdívkou v rozhovorech"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Characters typed: %s"
 #~ msgstr "Znak nebyl povolen"
 
@@ -8748,7 +8716,6 @@ msgstr ""
 #~ msgid "Command line Control"
 #~ msgstr "Příkazový řádek"
 
-#, python-format
 #~ msgid "Comment: %s"
 #~ msgstr "Komentář: %s"
 
@@ -8888,7 +8855,6 @@ msgstr ""
 #~ msgid "Contact name"
 #~ msgstr "Jméno kontaktu"
 
-#, python-format
 #~ msgid "Contact name: <i>%s</i>"
 #~ msgstr "Jméno kontaktu: <i>%s</i>"
 
@@ -8962,7 +8928,6 @@ msgstr ""
 #~ msgid "Could not Upload File"
 #~ msgstr "Nezdařilo se načtení obrázku"
 
-#, python-format
 #~ msgid "Could not change status of account \"%s\""
 #~ msgstr "Nemůžu změnit stav účtu \"%s\""
 
@@ -8974,7 +8939,6 @@ msgstr ""
 #~ msgid "Could not connect to \"%(host)s\" via proxy \"%(proxy)s\""
 #~ msgstr "Nemůžu se připojit k \"%s\""
 
-#, python-format
 #~ msgid "Could not connect to \"%s\""
 #~ msgstr "Nemůžu se připojit k \"%s\""
 
@@ -9008,7 +8972,7 @@ msgstr ""
 #~ msgid "Create Passphrase"
 #~ msgstr "Vytvořit heslo"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Creating %s"
 #~ msgstr "Jím"
 
@@ -9028,7 +8992,7 @@ msgstr ""
 #~ msgid "Custom applications"
 #~ msgstr "Vždy použít OS/X výchozí aplikace"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Custom hostname \"%s\" is wrong. It will be ignored."
 #~ msgstr "Použít vlastní jméno počítače/port"
 
@@ -9123,7 +9087,6 @@ msgstr ""
 #~ msgid "Description:"
 #~ msgstr "Popis:"
 
-#, python-format
 #~ msgid "Description: %s"
 #~ msgstr "Popis: %s"
 
@@ -9152,7 +9115,6 @@ msgstr ""
 #~ "Samostatný roster a samostatná okna pro diskuze pro každý účet\n"
 #~ "Samostatný roster s diskuzními okny podle typu"
 
-#, python-format
 #~ msgid "Dictionary URL is missing an \"%s\" and it is not WIKTIONARY"
 #~ msgstr "URL slovníku chybí \"%s\" a není to WIKTIONARY"
 
@@ -9225,14 +9187,14 @@ msgstr ""
 #~ msgid "Do you want to continue?"
 #~ msgstr "Chcete pokračovat?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to permanently delete this conversation with <b>%s</b>?"
 #~ msgid_plural "Do you want to permanently delete these conversations?"
 #~ msgstr[0] "Vážně chcete smazat vybranou zprávu?"
 #~ msgstr[1] "Vážně chcete smazat vybranou zprávu?"
 #~ msgstr[2] "Vážně chcete smazat vybranou zprávu?"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Do you want to remove %s from the contact list?"
 #~ msgstr "Chceš smazat skupinu %s z rosteru?"
 
@@ -9389,7 +9351,7 @@ msgstr ""
 #~ msgid "Enter name / JID of contact or groupchat"
 #~ msgstr "Jméno kontaktu"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Enter the certificate passphrase for account %s"
 #~ msgstr "Zadej heslo GPG klíče pro účet %(keyid)s (účet %(account)s)."
 
@@ -9428,14 +9390,13 @@ msgstr ""
 #~ msgid "Error verifying SSL certificate"
 #~ msgstr "Chyba ověřování SSL certifikátu"
 
-#, python-format
 #~ msgid "Error while adding service. %s"
 #~ msgstr "Chyba při přidávání služby. %s"
 
 #~ msgid "Error."
 #~ msgstr "Chyba."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Error: %(error)s\n"
 #~ "Debug: %(debug)s"
@@ -9506,6 +9467,10 @@ msgstr ""
 #~ msgstr "Vlastnost"
 
 #, fuzzy
+#~ msgid "Feature is not available under Windows"
+#~ msgstr "Vlastnost není k dispozici pod Windows."
+
+#, fuzzy
 #~ msgid "Feature not available, see Help->Features"
 #~ msgstr "Vlastnost není k dispozici pod Windows."
 
@@ -9529,7 +9494,7 @@ msgstr ""
 #~ msgid "File already exists"
 #~ msgstr "Tento soubor už existuje"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File name: %s"
 #~ msgstr "Soubor: %s"
 
@@ -9544,19 +9509,17 @@ msgstr ""
 #~ msgid "File transfer error notification color."
 #~ msgstr "Přenos souboru zrušen"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s from %(name)s failed."
 #~ msgstr "Přenos souboru %(filename)s od %(name)s byl zastaven."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s from %(name)s stopped."
 #~ msgstr "Přenos souboru %(filename)s od %(name)s byl zastaven."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "File transfer of %(filename)s to %(name)s failed."
 #~ msgstr "Přenos souboru %(filename)s pro %(name)s byl zastaven."
 
-#, python-format
 #~ msgid "File transfer of %(filename)s to %(name)s stopped."
 #~ msgstr "Přenos souboru %(filename)s pro %(name)s byl zastaven."
 
@@ -9656,6 +9619,10 @@ msgstr ""
 
 #~ msgid "Gajim Instant Messenger"
 #~ msgstr "Gajim Instant Messenger"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "gajim-remote"
 
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Úprava témat Gajimu"
@@ -10035,7 +10002,7 @@ msgstr ""
 #~ msgid "Idle for:"
 #~ msgstr "XML Konzole pro %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "If \"%s\" accepts this request you will know their status."
 #~ msgstr ""
 #~ "Pokud \"%s\" povolí Vaši žádost o autorizaci, budete vidět jeho stav."
@@ -10380,7 +10347,7 @@ msgstr ""
 #~ msgstr ""
 #~ "Pokud zavřete toto okno a historie je vypnutá, tato zpráva bude ztracena."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "If you send a file to <b>%s</b>, your real XMPP address will be revealed."
 #~ msgstr "Pokud odešlete soubor %s, tak bude znát vaše skutečné Jabber ID."
@@ -10577,7 +10544,7 @@ msgstr ""
 #~ msgid "Invite contacts to the conversation (Ctrl+G)"
 #~ msgstr "Pozvat kontakty k rozhovoru (Ctrl+G)"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Invited %(jid)s to %(room_jid)s"
 #~ msgstr "Pozval(a) %(contact_jid)s do %(room_jid)s."
 
@@ -10585,13 +10552,13 @@ msgstr ""
 #~ msgid "Invited %s to %s"
 #~ msgstr "Odeslat %s %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s, this XMPP Address is not "
 #~ "valid."
 #~ msgstr "Není možné poslat zprávu kontaktu %s, takové JID není platné."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "It is not possible to send a message to %s. This XMPP Address is not "
 #~ "valid."
@@ -10743,6 +10710,10 @@ msgstr ""
 #~ msgid "Lists all preferences and their values"
 #~ msgstr "Vypíše všechna nastavení a jejich hodnoty"
 
+#, fuzzy
+#~ msgid "Location detection"
+#~ msgstr "Spojení"
+
 #~ msgid "Log _encrypted chat session"
 #~ msgstr "Logovat šifrované rozhovory"
 
@@ -10786,11 +10757,11 @@ msgstr ""
 #~ msgid "Mail _client"
 #~ msgstr "E-_mailový klient:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Make %(contact1)s and %(contact2)s metacontacts"
 #~ msgstr "Udělej %s a %s metakontaktem"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Make %s first contact"
 #~ msgstr "Udělej %s a %s metakontaktem"
 
@@ -11136,7 +11107,6 @@ msgstr ""
 #~ msgid "Notify on new _GMail email"
 #~ msgstr "Upozorni při novém _GMail emailu"
 
-#, python-format
 #~ msgid "Now \"%s\" will always see you as offline."
 #~ msgstr "Nyní Vás \"%s\" uvidí vždy jako odpojeného."
 
@@ -11272,11 +11242,9 @@ msgstr ""
 #~ msgid "Order:"
 #~ msgstr "Pořadí:"
 
-#, python-format
 #~ msgid "Order: %(order)s, action: %(action)s"
 #~ msgstr "Pořadí: %(order)s, akce: %(action)s"
 
-#, python-format
 #~ msgid ""
 #~ "Order: %(order)s, action: %(action)s, type: %(type)s, value: %(value)s"
 #~ msgstr ""
@@ -11447,7 +11415,6 @@ msgstr ""
 #~ "Prosím ujistěte se, že Pywin32 je nainstalován na vašem počítači. Můžete "
 #~ "jej získat na %s"
 
-#, python-format
 #~ msgid "Please make sure you are connected with \"%s\"."
 #~ msgstr "Prosím ujistěte se že jste připojen s účtem \"%s\"."
 
@@ -11580,25 +11547,22 @@ msgstr ""
 #~ msgid "Privacy List"
 #~ msgstr "Nastavení Soukromí"
 
-#, python-format
 #~ msgid "Privacy List <b><i>%s</i></b>"
 #~ msgstr "Soukromý seznam <b><i>%s</i></b>"
 
-#, python-format
 #~ msgid "Privacy List for %s"
 #~ msgstr "Soukromý seznam pro %s"
 
 #~ msgid "Privacy Lists"
 #~ msgstr "Soukromý Seznam"
 
-#, python-format
 #~ msgid "Privacy Lists for %s"
 #~ msgstr "Soukromý seznam pro %s"
 
 #~ msgid "Privacy Lists:"
 #~ msgstr "Nastavení Soukromí:"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "Privacy list %s has not been removed. It is probably active in one of "
 #~ "your connected resources. Please deactivate it and try again."
@@ -11642,7 +11606,6 @@ msgstr ""
 #~ msgid "Quit"
 #~ msgstr "_Konec"
 
-#, python-format
 #~ msgid "RE: %s"
 #~ msgstr "RE: %s"
 
@@ -11697,7 +11660,6 @@ msgstr ""
 #~ msgid "Received"
 #~ msgstr "Přijaté %s"
 
-#, python-format
 #~ msgid "Received %s"
 #~ msgstr "Přijaté %s"
 
@@ -11730,14 +11692,13 @@ msgstr ""
 #~ msgid "Registration information for transport %s has not arrived in time"
 #~ msgstr "Registrační informace pro transport %s nedorazily včas"
 
-#, python-format
 #~ msgid ""
 #~ "Registration with agent %(agent)s failed with error %(error)s: "
 #~ "%(error_msg)s"
 #~ msgstr ""
 #~ "Registrace s agentem %(agent)s failed with error %(error)s: %(error_msg)s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Registration with agent %s succeeded."
 #~ msgstr "Registrace k agentu %s uspěla"
 
@@ -11824,11 +11785,11 @@ msgstr ""
 #~ msgid "Rename contact"
 #~ msgstr "Přejmenovat kontakt"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename contact %s?"
 #~ msgstr "Přejmenovat kontakt"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Rename group %s?"
 #~ msgstr "Přejmenovat skupinu"
 
@@ -11938,6 +11899,10 @@ msgstr ""
 #~ msgstr "Je potřeba python-dbus."
 
 #, fuzzy
+#~ msgid "Requires: geoclue"
+#~ msgstr "Vyžaduje libgtkspell."
+
+#, fuzzy
 #~ msgid "Requires: gir1.2-avahi-0.6"
 #~ msgstr "Je potřeba python-gnome2."
 
@@ -11949,7 +11914,7 @@ msgstr ""
 #~ msgid "Requires: gpg.exe in your PATH environment variable"
 #~ msgstr "_použít proměnnou prostředí HTTP_PROXY"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Requires: pybonjour and bonjour SDK running (%(url)s)"
 #~ msgstr "Je potřeba gpg a python-GnuPGInterface."
 
@@ -12079,7 +12044,6 @@ msgstr ""
 #~ msgid "Save status as preset"
 #~ msgstr "Uložit stav..."
 
-#, python-format
 #~ msgid "Saved in: %s"
 #~ msgstr "Uloženo do: %s"
 
@@ -12114,11 +12078,10 @@ msgstr ""
 #~ msgid "Send"
 #~ msgstr "Ode_slat"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send %(from)s to %(to)s"
 #~ msgstr "Odeslat %s %s"
 
-#, python-format
 #~ msgid "Send %s"
 #~ msgstr "Odeslat %s"
 
@@ -12170,7 +12133,7 @@ msgstr ""
 #~ msgid "Send message and close window"
 #~ msgstr "Odeslat zprávu a zavřít okno"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "Send this file to %s:\n"
 #~ msgid_plural "Send these files to %s:\n"
 #~ msgstr[0] "Chcete poslat %s tento soubor:"
@@ -12473,11 +12436,9 @@ msgstr ""
 #~ msgid "Single Message"
 #~ msgstr "Jednoduchá zpráva"
 
-#, python-format
 #~ msgid "Single Message in account %s"
 #~ msgstr "Jednoduchá zpráva z účtu %s"
 
-#, python-format
 #~ msgid "Single Message using account %s"
 #~ msgstr "Jednoduchá zpráva z účtu %s"
 
@@ -12485,7 +12446,6 @@ msgstr ""
 #~ msgid "Size"
 #~ msgstr "Velikost: %s"
 
-#, python-format
 #~ msgid "Size: %s"
 #~ msgstr "Velikost: %s"
 
@@ -12557,11 +12517,9 @@ msgstr ""
 #~ msgid "Status Preset"
 #~ msgstr "Text stavu"
 
-#, python-format
 #~ msgid "Status is now: %(status)s"
 #~ msgstr "Stav je nyní %(status)s"
 
-#, python-format
 #~ msgid "Status is now: %(status)s: %(status_msg)s"
 #~ msgstr "Stav je nyní %(status)s: %(status_msg)s"
 
@@ -12619,7 +12577,6 @@ msgstr ""
 #~ msgid "Subject:"
 #~ msgstr "Předmět:"
 
-#, python-format
 #~ msgid ""
 #~ "Subject: %(subject)s\n"
 #~ "%(message)s"
@@ -12630,7 +12587,6 @@ msgstr ""
 #~ msgid "Subject: %s"
 #~ msgstr "Předmět: %s"
 
-#, python-format
 #~ msgid "Subject: %s\n"
 #~ msgstr "Předmět: %s\n"
 
@@ -12652,11 +12608,9 @@ msgstr ""
 #~ msgid "Subscription request"
 #~ msgstr "Žádost o autorizaci"
 
-#, python-format
 #~ msgid "Subscription request for account %(account)s from %(jid)s"
 #~ msgstr "Žádost o autorizaci na účtu %(account)s od %(jid)s"
 
-#, python-format
 #~ msgid "Subscription request from %s"
 #~ msgstr "Žádost o autorizaci od %s"
 
@@ -12702,7 +12656,7 @@ msgstr ""
 #~ msgid "Synchronize the status of all accounts"
 #~ msgstr "Změní stav účtu nebo účtů"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "System bus is not available.\n"
 #~ "Try reading %(url)s"
@@ -12793,7 +12747,7 @@ msgstr ""
 #~ "$S se nahradí za předchozí popis stavu\n"
 #~ "$T se nahradí dobou nečinnosti před zapnutím stavu Nedostupný"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "The contact \"%s\" has authorized you to see their status."
 #~ msgstr "Kontakt \"%s\" Vás autorizoval k zobrazení jeho stavu."
 
@@ -12809,7 +12763,7 @@ msgstr ""
 #~ msgid "The contact's key (%s) does not match the key assigned in Gajim."
 #~ msgstr "Klíč kontaktu (%s) se neshoduje s klíčem v Gajimu."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "The database file (%s) cannot be read. Try to repair it (see https://dev."
 #~ "gajim.org/gajim/gajim/wikis/help/DatabaseBackup) or remove it (all "
@@ -12909,7 +12863,7 @@ msgstr ""
 #~ msgid "Thirsty"
 #~ msgstr "Žíznivý"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "This account %s doesn't support invisibility."
 #~ msgstr "Účet %s nepodporuje neviditelnost."
 
@@ -13114,7 +13068,6 @@ msgstr ""
 #~ msgid "Transform LaTeX expressions between $$ $$."
 #~ msgstr "Převede LaTeX výraz mezi $$ $$."
 
-#, python-format
 #~ msgid "Transport %(name)s answered wrongly to register request: %(error)s"
 #~ msgstr ""
 #~ "Transport %(name)s odpověděl chybně na požadavek registrace: %(error)s"
@@ -13143,7 +13096,6 @@ msgstr ""
 #~ msgid "Type: "
 #~ msgstr "Typ: "
 
-#, python-format
 #~ msgid "Type: %s"
 #~ msgstr "Typ: %s"
 
@@ -13154,7 +13106,6 @@ msgstr ""
 #~ msgid "URL Color"
 #~ msgstr "Barva"
 
-#, python-format
 #~ msgid "Unable to bind to port %d."
 #~ msgstr "Nemůžu naslouchat na portu %d."
 
@@ -13642,7 +13593,7 @@ msgstr ""
 #~ msgid "You are invited to a groupchat"
 #~ msgstr "Jste pozván do diskuze"
 
-#, fuzzy, python-brace-format
+#, fuzzy
 #~ msgid "You are invited to {room} by {user}"
 #~ msgstr "Jste pozván do diskuze"
 
@@ -13829,7 +13780,6 @@ msgstr ""
 #~ msgid "You successfully received %(filename)s from %(name)s."
 #~ msgstr "Soubor %(filename)s od %(name)s byl úspěsně přijat."
 
-#, python-format
 #~ msgid "You successfully sent %(filename)s to %(name)s."
 #~ msgstr "Soubor %(filename)s byl uspěšně odeslán %(name)s."
 
@@ -13844,7 +13794,7 @@ msgstr ""
 #~ msgid "You will be connected to %s without OpenPGP."
 #~ msgstr "Budete připojen(a) k %s bez OpenPGP."
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid ""
 #~ "You will no longer be able to send and receive messages from and to "
 #~ "contacts using these transports:\n"
@@ -14506,11 +14456,11 @@ msgstr ""
 #~ msgid "from"
 #~ msgstr "Odesílatel"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from %s"
 #~ msgstr "od %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from group chat %s"
 #~ msgstr "v _diskuzích"
 
@@ -14518,7 +14468,7 @@ msgstr ""
 #~ msgid "from room %s"
 #~ msgstr "z místností %s"
 
-#, fuzzy, python-format
+#, fuzzy
 #~ msgid "from user %s"
 #~ msgstr "od uživatele %s"
 
@@ -14806,7 +14756,6 @@ msgstr ""
 #~ msgid "using %s account"
 #~ msgstr "pomocí účtu %s"
 
-#, python-format
 #~ msgid "using account %s"
 #~ msgstr "pomocí účtu %s"
 
