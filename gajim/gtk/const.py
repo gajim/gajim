@@ -143,7 +143,7 @@ WINDOW_MODULES = {
     'ManageSounds': 'gajim.gui.manage_sounds',
     'PasswordDialog': 'gajim.gui.password_dialog',
     'PEPConfig': 'gajim.gui.pep_config',
-    'PluginsWindow': 'gajim.plugins.gui',
+    'PluginsWindow': 'gajim.gui.plugins',
     'Preferences': 'gajim.gui.preferences',
     'ProfileWindow': 'gajim.gui.profile',
     'RemoveAccount': 'gajim.gui.remove_account',
