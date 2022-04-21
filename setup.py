@@ -62,7 +62,7 @@ def build_translation() -> None:
                            cwd=REPO_DIR,
                            check=True)
 
-            print('Compiling %s >> %s', po_file, mo_file)
+            print('Compiling %s >> %s' % (po_file, mo_file))
 
 
 def install_trans(data_files) -> None:
@@ -94,7 +94,7 @@ def build_man() -> None:
         with open(filename, 'rb') as f_in,\
                 gzip.open(man_file_gz, 'wb') as f_out:
             f_out.writelines(f_in)
-            print('Compiling %s >> %s', filename, man_file_gz)
+            print('Compiling %s >> %s' % (filename, man_file_gz))
 
 
 def install_man(data_files) -> None:
@@ -140,7 +140,7 @@ def merge(in_file, out_file, option, po_dir: str = 'po') -> None:
             msg = ('ERROR: %s was not merged into the translation files!\n' %
                    out_file)
             raise SystemExit(msg)
-        print('Compiling %s >> %s', in_file, out_file)
+        print('Compiling %s >> %s' % (in_file, out_file))
 
 
 class build(_build):
