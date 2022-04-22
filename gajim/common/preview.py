@@ -216,6 +216,10 @@ class PreviewManager:
         # http/https
         if urlparts.scheme in ('https', 'http'):
             if app.settings.get('preview_allow_all_images'):
+                mime_type = guess_mime_type(uri)
+                if (mime_type not in MIME_TYPES or
+                        mime_type == 'application/octet-stream'):
+                    return False
                 return True
 
             if oob_url is None:
