@@ -114,12 +114,14 @@ class AddContact(Assistant):
                     self._result.jid,
                     msg=data['message'],
                     groups=data['groups'],
-                    auto_auth=data['auto_auth'])
+                    auto_auth=data['auto_auth'],
+                    name=self._nick)
             else:
                 client.get_module('Presence').subscribe(
                     self._result.jid,
                     name=self._result.gateway_name,
-                    auto_auth=True)
+                    auto_auth=True,
+                    name=self._nick)
             app.window.show_account_page(account)
             self.destroy()
             return
