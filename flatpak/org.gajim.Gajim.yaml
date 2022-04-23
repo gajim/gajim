@@ -313,6 +313,5 @@ modules:
       - type: git
         url: https://dev.gajim.org/gajim/gajim.git
         tag: gajim-1.3.3
-        commit: b5b2ad4aee92074184b181ec97fbf1f900d5f4fb
     post-install:
       - install -d /app/plugins
