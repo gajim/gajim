@@ -67,12 +67,12 @@ class PreviewWidget(Gtk.Box):
         return self._preview.uri
 
     def update_progress(self, _preview: Preview, progress: float) -> None:
-        self._ui.progressbar.show()
+        self._ui.progress_box.show()
         self._ui.progressbar.set_fraction(progress)
 
     def update(self, preview: Preview, data: Optional[GdkPixbufType]) -> None:
         self._preview = preview
-        self._ui.progressbar.hide()
+        self._ui.progress_box.hide()
 
         if preview.is_geo_uri:
             data = load_icon_pixbuf('map', size=preview.size)
@@ -273,6 +273,10 @@ class PreviewWidget(Gtk.Box):
             # Right click
             menu = self._get_context_menu()
             menu.popup_at_pointer(event)
+
+    def _on_cancel_download_clicked(self, _button: Gtk.Button) -> None:
+        assert self._preview is not None
+        app.interface.preview_manager.cancel_download(self._preview)
 
     @staticmethod
     def _on_realize(event_box: Gtk.EventBox) -> None:

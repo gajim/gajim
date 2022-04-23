@@ -80,6 +80,8 @@ class Preview:
         self.file_size: int = 0
         self._received_size: int = 0
 
+        self._soup_message: Optional[Soup.Message] = None
+
         self.key: Optional[bytes] = None
         self.iv: Optional[bytes] = None
         if self.is_aes_encrypted and urlparts is not None:
@@ -113,6 +115,10 @@ class Preview:
     @property
     def filename(self) -> str:
         return self._filename
+
+    @property
+    def soup_message(self) -> Soup.Message:
+        return self._soup_message
 
     @property
     def request_uri(self) -> Optional[str]:
@@ -150,7 +156,8 @@ class Preview:
     def update_widget(self, data: Optional[GdkPixbufType] = None) -> None:
         self._widget.update(self, data)
 
-    def update_progress(self, size: int) -> None:
+    def update_progress(self, size: int, message: Soup.Message) -> None:
+        self._soup_message = message
         self._received_size += size
         if self.file_size == 0 or self._received_size == 0:
             return
@@ -420,11 +427,11 @@ class PreviewManager:
         preview.update_widget()
 
     def _on_got_chunk(self,
-                      _message: Soup.Message,
+                      message: Soup.Message,
                       chunk: Soup.Buffer,
                       preview: Preview
                       ) -> None:
-        preview.update_progress(len(chunk.get_data()))
+        preview.update_progress(len(chunk.get_data()), message)
 
     def _on_finished(self,
                      _session: Soup.Session,
@@ -507,3 +514,7 @@ class PreviewManager:
             return
 
         preview.update_widget(data=pixbuf)
+
+    def cancel_download(self, preview: Preview) -> None:
+        session = self._get_session(preview.account)
+        session.cancel_message(preview.soup_message, Soup.Status.CANCELLED)
