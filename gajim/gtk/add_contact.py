@@ -120,8 +120,7 @@ class AddContact(Assistant):
                 client.get_module('Presence').subscribe(
                     self._result.jid,
                     name=self._result.gateway_name,
-                    auto_auth=True,
-                    name=self._nick)
+                    auto_auth=True)
             app.window.show_account_page(account)
             self.destroy()
             return
@@ -427,7 +426,7 @@ class Gateway(Page):
                 icon_name = 'gajim-agent-irc'
             self._ui.gateway_image.set_from_icon_name(
                 icon_name, Gtk.IconSize.DIALOG)
-            gateway_name = result.gateway_name or self._result.jid
+            gateway_name = result.gateway_name or str(self._result.jid)
             if not result.gateway_type:
                 self._ui.gateway_label.set_text(gateway_name)
             else:
@@ -439,11 +438,11 @@ class Gateway(Page):
             for identity in result.identities:
                 if identity.type == 'sms':
                     icon_name = 'gajim-agent-sms'
-                    identity_name = identity.name or self._result.jid
+                    identity_name = identity.name or str(self._result.jid)
                     identity_type = identity.type
                 if identity.type == 'irc':
                     icon_name = 'gajim-agent-irc'
-                    identity_name = identity.name or self._result.jid
+                    identity_name = identity.name or str(self._result.jid)
                     identity_type = identity.type
             self._ui.gateway_image.set_from_icon_name(
                 icon_name, Gtk.IconSize.DIALOG)
