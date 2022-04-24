@@ -12,6 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import cast
 from typing import Any
 from typing import Optional
 
@@ -24,6 +25,7 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Gtk
+from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common.helpers import open_file
@@ -121,6 +123,13 @@ class PreviewWidget(Gtk.Box):
             file_size_string = GLib.format_size_full(
                 preview.file_size, self._units)
 
+        self._ui.link_button.set_uri(preview.uri)
+        self._ui.link_button.set_tooltip_text(preview.uri)
+        self._ui.link_button.set_label(preview.uri)
+        label = cast(Gtk.Label, self._ui.link_button.get_children()[0])
+        label.set_ellipsize(Pango.EllipsizeMode.END)
+        label.set_max_width_chars(32)
+
         if preview.orig_exists():
             self._ui.download_button.hide()
             self._ui.open_folder_button.show()
@@ -133,7 +142,11 @@ class PreviewWidget(Gtk.Box):
                 self._ui.right_box.pack_end(audio_widget, False, True, 0)
                 self._ui.right_box.reorder_child(audio_widget, 1)
         else:
-            self._ui.download_button.show()
+            if preview.file_size == 0:
+                self._ui.download_button.hide()
+                self._ui.link_button.show()
+            else:
+                self._ui.download_button.show()
             self._ui.save_as_button.hide()
             self._ui.open_folder_button.hide()
             allow_in_public = app.settings.get('preview_anonymous_muc')

@@ -716,8 +716,9 @@ class PreviewBuilder(Builder):
     icon_event_box: Gtk.EventBox
     icon_button: Gtk.Button
     right_box: Gtk.Box
-    image_event_box: Gtk.EventBox
+    content_box: Gtk.Box
     image_button: Gtk.Button
+    link_button: Gtk.LinkButton
     progress_box: Gtk.Box
     progressbar: Gtk.ProgressBar
     button_box: Gtk.Box

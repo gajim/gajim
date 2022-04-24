@@ -416,10 +416,14 @@ class PreviewManager:
             session.cancel_message(message, Soup.Status.CANCELLED)
             return
 
-        max_file_size = app.settings.get('preview_max_file_size')
-        if file_size == 0 or file_size > int(max_file_size):
+        if file_size == 0:
+            log.info('File size is unknown (zero) for URL: \'%s\'',  uri)
+            session.cancel_message(message, Soup.Status.CANCELLED)
+            return
+
+        if file_size > int(app.settings.get('preview_max_file_size')):
             log.info(
-                'File size (%s) too big or unknown (zero) for URL: \'%s\'',
+                'File size (%s) too big for URL: \'%s\'',
                 file_size, uri)
             if not force:
                 session.cancel_message(message, Soup.Status.CANCELLED)
