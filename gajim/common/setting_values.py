@@ -105,6 +105,9 @@ BoolSettings = Literal[
     'use_stun_server',
     'use_urgency_hint',
     'video_see_self',
+    'plugins_update_check',
+    'plugins_auto_update',
+    'plugins_notify_after_update',
 ]
 
 IntSettings = Literal[
@@ -294,6 +297,9 @@ APP_SETTINGS = {
     'preview_leftclick_action': 'open',
     'preview_verify_https': True,
     'preview_anonymous_muc': False,
+    'plugins_update_check': True,
+    'plugins_auto_update': False,
+    'plugins_notify_after_update': True,
 }
 
 BoolAccountSettings = Literal[

@@ -36,6 +36,7 @@ from gajim.common.helpers import AdditionalDataDict
 
 if typing.TYPE_CHECKING:
     from gajim.common.client import Client
+    from gajim.plugins.pluginmanager import PluginManifest
 
 
 MainEventT = Union['PresenceReceived',
@@ -443,13 +444,13 @@ class RosterPush(ApplicationEvent):
 @dataclass
 class PluginAdded(ApplicationEvent):
     name: str = field(init=False, default='plugin-added')
-    plugin: Any
+    manifest: PluginManifest
 
 
 @dataclass
 class PluginRemoved(ApplicationEvent):
     name: str = field(init=False, default='plugin-removed')
-    plugin: Any
+    manifest: PluginManifest
 
 
 @dataclass

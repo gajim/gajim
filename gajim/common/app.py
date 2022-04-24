@@ -76,6 +76,7 @@ window = None # type: MainWindow
 
 ged = ged_module.GlobalEventsDispatcher() # Global Events Dispatcher
 plugin_manager = cast(types.PluginManagerT, None)  # Plugins Manager
+plugin_repository = cast(types.PluginRepositoryT, None)
 
 class Storage:
     def __init__(self):

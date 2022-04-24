@@ -1515,7 +1515,10 @@ def make_path_from_jid(base_path: Path, jid: JID) -> Path:
     return path
 
 
-def make_http_request(uri: str, callback: Any) -> None:
+def make_http_request(uri: str,
+                      callback: Any,
+                      user_data: Optional[Any] = None) -> None:
+
     proxy = determine_proxy()
     if proxy is None:
         resolver = None
@@ -1527,4 +1530,7 @@ def make_http_request(uri: str, callback: Any) -> None:
     session.props.proxy_resolver = resolver
     session.props.user_agent = f'Gajim {app.version}'
     message = Soup.Message.new('GET', uri)
-    session.queue_message(message, callback)
+    if user_data is None:
+        session.queue_message(message, callback)
+    else:
+        session.queue_message(message, callback, user_data)

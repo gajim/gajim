@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.38.2 -->
+<interface>
+  <requires lib="gtk+" version="3.20"/>
+  <object class="GtkListStore" id="liststore">
+    <columns>
+      <!-- column-name icon -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+      <!-- column-name version -->
+      <column type="gchararray"/>
+      <!-- column-name installed -->
+      <column type="gboolean"/>
+      <!-- column-name download -->
+      <column type="gboolean"/>
+      <!-- column-name update_available -->
+      <column type="gboolean"/>
+      <!-- column-name restart -->
+      <column type="gboolean"/>
+      <!-- column-name has_error -->
+      <column type="gboolean"/>
+      <!-- column-name error_text -->
+      <column type="gchararray"/>
+      <!-- column-name plugin -->
+      <column type="PyObject"/>
+    </columns>
+  </object>
+  <object class="GtkBox" id="plugins_box">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">18</property>
+    <property name="spacing">18</property>
+    <child>
+      <object class="GtkBox">
+        <property name="width-request">200</property>
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="hscrollbar-policy">never</property>
+            <property name="shadow-type">out</property>
+            <child>
+              <object class="GtkTreeView" id="plugins_treeview">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="model">liststore</property>
+                <property name="search-column">1</property>
+                <property name="enable-grid-lines">horizontal</property>
+                <signal name="query-tooltip" handler="_on_query_tooltip" swapped="no"/>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="treeview_selection">
+                    <signal name="changed" handler="_selection_changed" swapped="no"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn">
+                    <child>
+                      <object class="GtkCellRendererPixbuf"/>
+                      <attributes>
+                        <attribute name="pixbuf">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn">
+                    <property name="title" translatable="yes">Name</property>
+                    <property name="sort-column-id">1</property>
+                    <child>
+                      <object class="GtkCellRendererText"/>
+                      <attributes>
+                        <attribute name="text">1</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn">
+                    <property name="title" translatable="yes">Version</property>
+                    <child>
+                      <object class="GtkCellRendererText"/>
+                      <attributes>
+                        <attribute name="text">2</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn">
+                    <property name="title" translatable="yes">Installed</property>
+                    <child>
+                      <object class="GtkCellRendererPixbuf">
+                        <property name="icon-name">feather-check-symbolic</property>
+                      </object>
+                      <attributes>
+                        <attribute name="visible">3</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="enabled_column">
+                    <property name="title" translatable="yes">Enabled</property>
+                    <child>
+                      <object class="GtkCellRendererToggle" id="enabled_renderer">
+                        <signal name="toggled" handler="_on_enabled_toggled" swapped="no"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn">
+                    <property name="min-width">40</property>
+                    <property name="max-width">40</property>
+                    <child>
+                      <object class="GtkCellRendererPixbuf">
+                        <property name="icon-name">software-update-available-symbolic</property>
+                      </object>
+                      <attributes>
+                        <attribute name="visible">5</attribute>
+                      </attributes>
+                    </child>
+                    <child>
+                      <object class="GtkCellRendererPixbuf">
+                        <property name="icon-name">dialog-warning-symbolic</property>
+                      </object>
+                      <attributes>
+                        <attribute name="visible">7</attribute>
+                      </attributes>
+                    </child>
+                    <child>
+                      <object class="GtkCellRendererSpinner">
+                        <property name="active">True</property>
+                      </object>
+                      <attributes>
+                        <attribute name="visible">4</attribute>
+                      </attributes>
+                    </child>
+                    <child>
+                      <object class="GtkCellRendererPixbuf">
+                        <property name="icon-name">system-reboot-symbolic</property>
+                      </object>
+                      <attributes>
+                        <attribute name="visible">6</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <style>
+                  <class name="space"/>
+                </style>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToolbar" id="toolbar">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="toolbar-style">both-horiz</property>
+            <property name="show-arrow">False</property>
+            <property name="icon_size">1</property>
+            <child>
+              <object class="GtkToolButton" id="install_from_zip_button">
+                <property name="can-focus">False</property>
+                <property name="tooltip-text" translatable="yes">Install Plugin from ZIP-File</property>
+                <property name="label" translatable="yes">Install from File…</property>
+                <property name="use-underline">True</property>
+                <property name="icon-name">system-software-install-symbolic</property>
+                <signal name="clicked" handler="_on_install_plugin_from_zip" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="uninstall_plugin_button">
+                <property name="can-focus">False</property>
+                <property name="tooltip-text" translatable="yes">Uninstall Plugin</property>
+                <property name="use-underline">True</property>
+                <property name="icon-name">edit-delete-symbolic</property>
+                <signal name="clicked" handler="_on_uninstall_plugin" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="download_button">
+                <property name="can-focus">False</property>
+                <property name="halign">end</property>
+                <property name="use-underline">True</property>
+                <property name="icon-name">folder-download-symbolic</property>
+                <signal name="clicked" handler="_on_download_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="help_button">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="tooltip-text" translatable="yes">Click to view Gajim's wiki page on how to install plugins in Flatpak.</property>
+                <property name="label" translatable="yes">help</property>
+                <property name="use-underline">True</property>
+                <property name="icon-name">help-faq-symbolic</property>
+                <signal name="clicked" handler="_on_help_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <style>
+              <class name="inline-toolbar"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="width-request">400</property>
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="hexpand">True</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">18</property>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="hexpand">False</property>
+            <property name="spacing">18</property>
+            <child>
+              <object class="GtkLabel" id="plugin_name_label">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">&lt;Plugin Name&gt;</property>
+                <property name="selectable">True</property>
+                <style>
+                  <class name="large-header"/>
+                </style>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="configure_plugin_button">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes">Plugin Settings</property>
+                <signal name="clicked" handler="_on_configure_plugin" swapped="no"/>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">applications-system-symbolic</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="pack-type">end</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="description">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">&lt;Description&gt;</property>
+            <property name="wrap">True</property>
+            <property name="wrap-mode">word-char</property>
+            <property name="selectable">True</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <!-- n-columns=3 n-rows=3 -->
+          <object class="GtkGrid">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">12</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">end</property>
+                <property name="valign">start</property>
+                <property name="label" translatable="yes">Version</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="plugin_version_label">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="label">&lt;empty&gt;</property>
+                <property name="wrap">True</property>
+                <property name="wrap-mode">word-char</property>
+                <property name="selectable">True</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">end</property>
+                <property name="valign">start</property>
+                <property name="label" translatable="yes">Authors</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="plugin_authors_label">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="label">&lt;empty&gt;</property>
+                <property name="wrap">True</property>
+                <property name="wrap-mode">word-char</property>
+                <property name="selectable">True</property>
+                <property name="lines">10</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">end</property>
+                <property name="valign">start</property>
+                <property name="label" translatable="yes">Homepage</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="plugin_homepage_linkbutton">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">&lt;empty&gt;</property>
+                <property name="wrap">True</property>
+                <property name="wrap-mode">word-char</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+  </object>
+</interface>

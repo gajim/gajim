@@ -38,6 +38,8 @@ from gajim.common.ged import EventHelper
 from gajim.common.helpers import ask_for_status_message
 from gajim.common.i18n import _
 from gajim.common.modules.bytestream import is_transfer_active
+from gajim.plugins.pluginmanager import PluginManifest
+from gajim.plugins.repository import PluginRepository
 
 from .account_side_bar import AccountSideBar
 from .app_side_bar import AppSideBar
@@ -127,6 +129,11 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('http-auth', ged.GUI1, self._on_http_auth),
             ('muc-added', ged.GUI1, self._on_muc_added),
         ])
+
+        app.plugin_repository.connect('plugin-updates-available',
+                                      self._on_plugin_updates_available)
+        app.plugin_repository.connect('auto-update-finished',
+                                      self._on_plugin_auto_update_finished)
 
         self._check_for_account()
         self._load_chats()
@@ -858,3 +865,44 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             on_continue('')  # status message here
         else:
             on_continue('')
+
+    def _on_plugin_updates_available(self,
+                                     _repository: PluginRepository,
+                                     _signal_name: str,
+                                     manifests: list[PluginManifest]) -> None:
+
+        def _open_update(is_checked: bool):
+            if is_checked:
+                app.settings.set('plugins_auto_update', True)
+            app.plugin_repository.download_plugins(manifests)
+
+        plugins_str = '\n'
+        plugins_str += '\n'.join([manifest.name for manifest in manifests])
+        ConfirmationCheckDialog(
+            _('Plugin Updates'),
+            _('Plugin Updates Available'),
+            _('There are updates for your plugins:\n'
+              '<b>%s</b>') % plugins_str,
+            _('Update plugins automatically next time'),
+            [DialogButton.make('Cancel'),
+             DialogButton.make('Accept',
+                               text=_('_Update'),
+                               is_default=True,
+                               callback=_open_update)]).show()
+
+    def _on_plugin_auto_update_finished(self,
+                                        _repository: PluginRepository,
+                                        _signal_name: str) -> None:
+
+        def _on_ok(is_checked: bool) -> None:
+            if is_checked:
+                app.settings.set('plugins_notify_after_update', False)
+
+        ConfirmationCheckDialog(
+            _('Plugins Updated'),
+            _('Plugins Updated'),
+            _('Plugin updates have successfully been downloaded.\n'
+              'Updates will be installed next time Gajim is started.'),
+            _('Do not show this message again'),
+            [DialogButton.make('OK',
+                               callback=_on_ok)]).show()

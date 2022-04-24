@@ -658,21 +658,24 @@ class PasswordDialogBuilder(Builder):
     keyring_hint: Gtk.Label
 
 
-class PluginsWindowBuilder(Builder):
-    plugins_notebook: Gtk.Notebook
-    installed_plugins_treeview: Gtk.TreeView
+class PluginsBuilder(Builder):
+    liststore: Gtk.ListStore
+    plugins_box: Gtk.Box
+    plugins_treeview: Gtk.TreeView
     treeview_selection: Gtk.TreeSelection
-    install_plugin_button: Gtk.ToolButton
+    enabled_column: Gtk.TreeViewColumn
+    enabled_renderer: Gtk.CellRendererToggle
+    toolbar: Gtk.Toolbar
+    install_from_zip_button: Gtk.ToolButton
     uninstall_plugin_button: Gtk.ToolButton
+    download_button: Gtk.ToolButton
+    help_button: Gtk.ToolButton
     plugin_name_label: Gtk.Label
     configure_plugin_button: Gtk.Button
-    available_text: Gtk.InfoBar
-    available_text_label: Gtk.Label
     description: Gtk.Label
     plugin_version_label: Gtk.Label
     plugin_authors_label: Gtk.Label
     plugin_homepage_linkbutton: Gtk.Label
-    textbuffer1: Gtk.TextBuffer
 
 
 class PopupNotificationWindowBuilder(Builder):
@@ -688,6 +691,7 @@ class PreferencesBuilder(Builder):
     grid: Gtk.Grid
     stack: Gtk.Stack
     window_behaviour: Gtk.Grid
+    plugins: Gtk.Grid
     chats: Gtk.Grid
     group_chats: Gtk.Grid
     file_preview: Gtk.Grid
@@ -1049,7 +1053,7 @@ def get_builder(file_name: Literal['manage_sounds.ui'], widgets: list[str] = ...
 @overload
 def get_builder(file_name: Literal['password_dialog.ui'], widgets: list[str] = ...) -> PasswordDialogBuilder: ...
 @overload
-def get_builder(file_name: Literal['plugins_window.ui'], widgets: list[str] = ...) -> PluginsWindowBuilder: ...
+def get_builder(file_name: Literal['plugins.ui'], widgets: list[str] = ...) -> PluginsBuilder: ...
 @overload
 def get_builder(file_name: Literal['popup_notification_window.ui'], widgets: list[str] = ...) -> PopupNotificationWindowBuilder: ...
 @overload

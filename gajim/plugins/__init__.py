@@ -12,15 +12,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
-'''
-Main file of plugins package.
-
-:author: Mateusz Biliński <mateusz@bilinski.it>
-:since: 05/30/2008
-:copyright: Copyright (2008) Mateusz Biliński <mateusz@bilinski.it>
-:license: GPL
-'''
-
 from gajim.plugins.pluginmanager import PluginManager
 from gajim.plugins.gajimplugin import GajimPlugin
 

@@ -85,6 +85,7 @@ class Preferences(Gtk.ApplicationWindow):
 
         prefs: list[tuple[str, Type[PreferenceBox]]] = [
             ('window_behaviour', WindowBehaviour),
+            ('plugins', Plugins),
             ('chats', Chats),
             ('group_chats', GroupChats),
             ('file_preview', FilePreview),
@@ -201,6 +202,35 @@ class WindowBehaviour(PreferenceBox):
                     SettingType.CONFIG,
                     'quit_on_main_window_x_button',
                     desc=_('Quit when closing Gajim’s window')),
+        ]
+
+        PreferenceBox.__init__(self, settings)
+
+
+class Plugins(PreferenceBox):
+    def __init__(self, *args: Any) -> None:
+
+        settings = [
+
+            Setting(SettingKind.SWITCH,
+                    _('Check for updates'),
+                    SettingType.CONFIG,
+                    'plugins_update_check',
+                    desc=_('Check for updates periodically')),
+
+            Setting(SettingKind.SWITCH,
+                    _('Update automatically'),
+                    SettingType.CONFIG,
+                    'plugins_auto_update',
+                    desc=_('Update plugins automatically')),
+
+            Setting(SettingKind.SWITCH,
+                    _('Notify after update'),
+                    SettingType.CONFIG,
+                    'plugins_notify_after_update',
+                    desc=_('Notify me when the automatic '
+                           'update was successful')),
+
         ]
 
         PreferenceBox.__init__(self, settings)

@@ -212,6 +212,7 @@ class ConfigPaths:
             # Data paths
             ('LOG_DB', 'logs.db', PathLocation.DATA, PathType.FILE),
             ('PLUGINS_DOWNLOAD', 'plugins_download', PathLocation.CACHE, PathType.FOLDER),
+            ('PLUGINS_IMAGES', 'plugins_images', PathLocation.CACHE, PathType.FOLDER),
             ('PLUGINS_USER', 'plugins', PathLocation.DATA, PathType.FOLDER),
             ('MY_EMOTS',
              'emoticons', PathLocation.DATA, PathType.FOLDER_OPTIONAL),

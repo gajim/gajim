@@ -12,15 +12,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
-'''
-Base class for implementing plugin.
-
-:author: Mateusz Biliński <mateusz@bilinski.it>
-:since: 1st June 2008
-:copyright: Copyright (2008) Mateusz Biliński <mateusz@bilinski.it>
-:license: GPL
-'''
-
 from __future__ import annotations
 
 from typing import Any
@@ -34,9 +25,6 @@ from gajim.common.events import ApplicationEvent
 from gajim.common.ged import HandlerFuncT
 from gajim.common.types import PluginExtensionPoints
 
-from gajim.plugins.helpers import log
-from gajim.plugins.gui import GajimPluginConfigDialog
-
 
 log = logging.getLogger('gajim.p.plugin')
 
@@ -45,65 +33,12 @@ class GajimPlugin:
     '''
     Base class for implementing Gajim plugins.
     '''
+
     __path__: str = ''
 
+    encryption_name: str = ''
+    manifest: Any
 
-    name = ''
-    '''
-    Name of plugin.
-
-    Will be shown in plugins management GUI.
-
-    '''
-    short_name = ''
-    '''
-    Short name of plugin.
-
-    Used for quick identification of plugin.
-
-    :todo: decide whether we really need this one, because class name (with
-            module name) can act as such short name
-    '''
-    encryption_name = ''
-    '''
-    Name of the encryption scheme.
-
-    The name that Gajim displays in the encryption menu.
-    Leave empty if the plugin is not an encryption plugin.
-
-    '''
-    version = ''
-    '''
-    Version of plugin.
-
-    :todo: decide how to compare version between each other (which one
-            is higher). Also rethink: do we really need to compare versions
-            of plugins between each other? This would be only useful if we detect
-            same plugin class but with different version and we want only the newest
-            one to be active - is such policy good?
-    '''
-    description = ''
-    '''
-    Plugin description.
-
-    :todo: should be allow rich text here (like HTML or reStructuredText)?
-    '''
-    authors = ''
-    '''
-    Plugin authors.
-
-    :todo: should we decide on any particular format of author strings?
-            Especially: should we force format of giving author's e-mail?
-    '''
-    homepage = ''
-    '''
-    URL to plug-in's homepage.
-
-    :type: str
-
-    :todo: should we check whether provided string is valid URI? (Maybe
-    using 'property')
-    '''
     gui_extension_points: PluginExtensionPoints = {}
     '''
     Extension points that plugin wants to connect with and handlers to be used.
@@ -129,8 +64,6 @@ class GajimPlugin:
     be anything (this is the advantage of using shelve/pickle instead of
     custom-made     config I/O handling); the second one should be str (gettext
     can be used if need and/or translation is planned).
-
-    :type: {} of 2-element tuples
     '''
     events_handlers: dict[str, tuple[int, HandlerFuncT]] = {}
     '''
@@ -140,8 +73,6 @@ class GajimPlugin:
     priority as first element and reference to handler function as second
     element. Priority is integer. See `ged` module for predefined priorities
     like `ged.PRECORE`, `ged.CORE` or `ged.POSTCORE`.
-
-    :type: {} with 2-element tuples
     '''
     events: list[ApplicationEvent] = []
     '''
@@ -151,18 +82,11 @@ class GajimPlugin:
 
     def __init__(self) -> None:
         self.config = GajimPluginConfig(self)
-        '''
-        Plug-in configuration dictionary.
-
-        Automatically saved and loaded and plug-in (un)load.
-
-        :type: `plugins.plugin.GajimPluginConfig`
-        '''
         self.activatable = True
         self.active = False
         self.available_text = ''
         self.load_config()
-        self.config_dialog = GajimPluginConfigDialog(self)
+        self.config_dialog = None
         self.init()
 
     def save_config(self) -> None:
@@ -171,17 +95,11 @@ class GajimPlugin:
     def load_config(self) -> None:
         self.config.load()
 
-    def __eq__(self, plugin: object) -> bool:
-        if self.short_name == plugin.short_name:
-            return True
+    def __eq__(self, plugin: Any) -> bool:
+        return self.manifest.short_name == plugin.manifest.short_name
 
-        return False
-
-    def __ne__(self, plugin: object) -> bool:
-        if self.short_name != plugin.short_name:
-            return True
-
-        return False
+    def __ne__(self, plugin: Any) -> bool:
+        return self.manifest.short_name != plugin.manifest.short_name
 
     def local_file_path(self, file_name: str) -> str:
         return os.path.join(self.__path__, file_name)
@@ -200,11 +118,11 @@ class GajimPluginConfig:
     def __init__(self, plugin: GajimPlugin) -> None:
         self.plugin = plugin
         self.FILE_PATH = (configpaths.get('PLUGINS_CONFIG_DIR') /
-                          self.plugin.short_name)
+                          self.plugin.manifest.short_name)
         self.data: dict[str, Any] = {}
 
     def __getitem__(self, key: str) -> None:
-        if not key in self.data:
+        if key not in self.data:
             self.data[key] = self.plugin.config_default_values[key][0]
             self.save()
 
@@ -258,7 +176,7 @@ class GajimPluginConfig:
                     log.warning(
                         '%s plugin config file not readable. Saving it as '
                         '%s and creating a new one',
-                        self.plugin.short_name, filepath_bak)
+                        self.plugin.manifest.short_name, filepath_bak)
                     if filepath_bak.exists():
                         filepath_bak.unlink()
 

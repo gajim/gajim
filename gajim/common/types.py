@@ -46,6 +46,7 @@ if TYPE_CHECKING:
     from gajim.gtk.css_config import CSSConfig
 
     from gajim.plugins.pluginmanager import PluginManager
+    from gajim.plugins.repository import PluginRepository
 
     ContactT = Union[BareContact,
                      ResourceContact,
@@ -55,6 +56,7 @@ if TYPE_CHECKING:
 
 InterfaceT = Union['Interface']
 PluginManagerT = Union['PluginManager']
+PluginRepositoryT = Union['PluginRepository']
 
 ConnectionT = Union['Client']
 CSSConfigT = Union['CSSConfig']

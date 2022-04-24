@@ -85,6 +85,7 @@ from gajim.gui.util import get_app_window
 from gajim.gui.util import get_app_windows
 from gajim.gui.util import get_color_for_account
 from gajim.gui.types import ControlT
+from gajim.plugins.repository import PluginRepository
 
 log = logging.getLogger('gajim.interface')
 
@@ -729,6 +730,8 @@ class Interface:
         from gajim import plugins
         app.plugin_manager = plugins.PluginManager()
         app.plugin_manager.init_plugins()
+
+        app.plugin_repository = PluginRepository()
 
         for con in app.connections.values():
             con.get_module('Roster').load_roster()
