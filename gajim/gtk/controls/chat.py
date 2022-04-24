@@ -135,7 +135,6 @@ class ChatControl(BaseControl):
         self.update_toolbar()
         self._update_avatar()
 
-        self.setup_seclabel()
         self.add_actions()
         self.update_ui()
         self.set_lock_image()

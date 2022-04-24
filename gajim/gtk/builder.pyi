@@ -214,7 +214,6 @@ class ChatControlBuilder(Builder):
     hbox: Gtk.Box
     emoticons_button: Gtk.MenuButton
     formattings_button: Gtk.MenuButton
-    label_selector: Gtk.ComboBox
     settings_menu: Gtk.MenuButton
     authentication_button: Gtk.Button
     lock_image: Gtk.Image
@@ -424,7 +423,6 @@ class GroupchatControlBuilder(Builder):
     emoticons_button: Gtk.MenuButton
     send_message_button: Gtk.Button
     formattings_button: Gtk.MenuButton
-    label_selector: Gtk.ComboBox
     roster_revealer: Gtk.Revealer
     nickname_entry: Gtk.Entry
     nickname_change_button: Gtk.Button

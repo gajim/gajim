@@ -70,6 +70,7 @@ from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ErrorDialog
 from gajim.gui.dialogs import PastePreviewDialog
 from gajim.gui.message_input import MessageInputTextView
+from gajim.gui.security_label_selector import SecurityLabelSelector
 from gajim.gui.util import get_hardware_key_codes
 from gajim.gui.builder import get_builder
 from gajim.gui.util import set_urgency_hint
@@ -206,6 +207,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self._scrolled_view.connect('request-history',
                                     self.fetch_n_lines_history, 20)
 
+        self._security_label_selector = SecurityLabelSelector(
+            account, self.contact)
+        self.xml.hbox.pack_start(self._security_label_selector, False, True, 0)
+
         self.msg_textview = MessageInputTextView()
         self.msg_textview.connect('paste-clipboard',
                                   self._on_message_textview_paste_event)
@@ -279,7 +284,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             ('ping-sent', ged.GUI1, self._nec_ping),
             ('ping-reply', ged.GUI1, self._nec_ping),
             ('ping-error', ged.GUI1, self._nec_ping),
-            ('sec-catalog-received', ged.GUI1, self._sec_labels_received),
             ('style-changed', ged.GUI1, self._style_changed),
         ])
 
@@ -473,48 +477,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
     def _nec_ping(self, obj):
         raise NotImplementedError
-
-    def setup_seclabel(self) -> None:
-        self.xml.label_selector.hide()
-        self.xml.label_selector.set_no_show_all(True)
-        lb = Gtk.ListStore(str)
-        self.xml.label_selector.set_model(lb)
-        cell = Gtk.CellRendererText()
-        cell.set_property('xpad', 5)  # padding for status text
-        self.xml.label_selector.pack_start(cell, True)
-        # text to show is in in first column of liststore
-        self.xml.label_selector.add_attribute(cell, 'text', 0)
-        jid = self.contact.jid.bare
-        if self._client.get_module('SecLabels').supported:
-            self._client.get_module('SecLabels').request_catalog(jid)
-
-    def _sec_labels_received(self, event: events.SecCatalogReceived) -> None:
-        if event.account != self.account:
-            return
-
-        jid = self.contact.jid.bare
-
-        if event.jid != jid:
-            return
-
-        if not app.settings.get_account_setting(
-                event.account, 'enable_security_labels'):
-            return
-
-        model = self.xml.label_selector.get_model()
-        model.clear()
-
-        sel = 0
-        labellist = event.catalog.get_label_names()
-        default = event.catalog.default
-        for index, label in enumerate(labellist):
-            model.append([label])
-            if label == default:
-                sel = index
-
-        self.xml.label_selector.set_active(sel)
-        self.xml.label_selector.set_no_show_all(False)
-        self.xml.label_selector.show_all()
 
     def delegate_action(self, action: str) -> int:
         if action == 'clear-chat':
@@ -1060,16 +1022,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             self._start_filetransfer(path)
 
     def get_seclabel(self) -> Optional[str]:
-        idx = self.xml.label_selector.get_active()
-        if idx == -1:
-            return None
-
-        jid = self.contact.jid.bare
-        catalog = self._client.get_module('SecLabels').get_catalog(jid)
-        labels, label_list = catalog.labels, catalog.get_label_names()
-        lname = label_list[idx]
-        label = labels[lname]
-        return label
+        return self._security_label_selector.get_seclabel()
 
     def get_our_nick(self) -> str:
         return app.nicks[self.account]

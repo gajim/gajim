@@ -143,8 +143,6 @@ class GroupchatControl(BaseControl):
         self.__nick_completion: Optional[NickCompletionGenerator] = None
         self.last_key_tabs: bool = False
 
-        self.setup_seclabel()
-
         # Send file
         self.xml.sendfile_button.set_action_name(
             f'win.send-file-{self.control_id}')

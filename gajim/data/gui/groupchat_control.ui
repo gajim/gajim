@@ -529,18 +529,6 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBox" id="label_selector">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="no-show-all">True</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">8</property>
-                          </packing>
-                        </child>
-                        <child>
                           <placeholder/>
                         </child>
                       </object>
