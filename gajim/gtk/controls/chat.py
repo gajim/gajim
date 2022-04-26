@@ -31,6 +31,7 @@ from typing import Optional
 
 import time
 import logging
+import sys
 
 from gi.repository import Gtk
 from gi.repository import Gio
@@ -212,7 +213,8 @@ class ChatControl(BaseControl):
         audio_available = self._call_widget.get_jingle_available('audio')
         video_available = self._call_widget.get_jingle_available('video')
         self._get_action('start-call-').set_enabled(
-            online and (audio_available or video_available))
+            online and (audio_available or video_available)
+            and sys.platform != 'win32')
 
         # Send message
         has_text = self.msg_textview.has_text()
