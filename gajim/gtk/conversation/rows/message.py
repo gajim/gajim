@@ -24,6 +24,7 @@ from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import GObject
+from gi.repository import Pango
 
 import cairo
 
@@ -164,12 +165,15 @@ class MessageRow(BaseRow):
                 account, 'enable_security_labels'):
             label_text = GLib.markup_escape_text(display_marking.name)
             if label_text:
+                display_marking_label = Gtk.Label()
+                display_marking_label.set_ellipsize(Pango.EllipsizeMode.END)
+                display_marking_label.set_max_width_chars(30)
+                display_marking_label.set_tooltip_text(label_text)
                 bgcolor = display_marking.bgcolor
                 fgcolor = display_marking.fgcolor
                 label_text = (
                     f'<span size="small" bgcolor="{bgcolor}" '
-                    f'fgcolor="{fgcolor}"><tt>[{label_text}]</tt></span>')
-                display_marking_label = Gtk.Label()
+                    f'fgcolor="{fgcolor}"><tt>{label_text}</tt></span>')
                 display_marking_label.set_markup(label_text)
                 self._meta_box.add(display_marking_label)
 

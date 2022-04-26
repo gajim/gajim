@@ -47,6 +47,7 @@ class SecurityLabelSelector(Gtk.ComboBox):
         app.ged.register_event_handler(
             'sec-catalog-received', ged.GUI1, self._sec_labels_received)
 
+        self.connect('changed', self._on_changed)
         self.connect('destroy', self._on_destroy)
         jid = self._contact.jid.bare
         if self._client.get_module('SecLabels').supported:
@@ -56,6 +57,16 @@ class SecurityLabelSelector(Gtk.ComboBox):
         app.ged.remove_event_handler('sec-catalog-received',
                                      ged.GUI1,
                                      self._sec_labels_received)
+
+    def _on_changed(self, _combo: Gtk.ComboBox) -> None:
+        iter_ = self.get_active_iter()
+        if iter_ is None:
+            return
+
+        model = self.get_model()
+        label_text = model.get_value(iter_, 0)
+        self.set_tooltip_text(
+            _('Selected security label: %s') % f'\n{label_text}')
 
     def _sec_labels_received(self, event: SecCatalogReceived) -> None:
         if event.account != self._account:
