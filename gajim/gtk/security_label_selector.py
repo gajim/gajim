@@ -19,8 +19,12 @@ from typing import Optional
 from gi.repository import Gtk
 from gi.repository import Pango
 
+from nbxmpp.protocol import JID
+
 from gajim.common import app
 from gajim.common import ged
+from gajim.common.client import Client
+from gajim.common.const import SimpleClientState
 from gajim.common.events import SecCatalogReceived
 from gajim.common.types import ChatContactT
 from gajim.common.i18n import _
@@ -47,16 +51,20 @@ class SecurityLabelSelector(Gtk.ComboBox):
         app.ged.register_event_handler(
             'sec-catalog-received', ged.GUI1, self._sec_labels_received)
 
+        app.settings.connect_signal(
+            'enable_security_labels',
+            self._on_setting_changed,
+            account=self._account)
+        self._client.connect_signal(
+            'state-changed', self._on_client_state_changed)
         self.connect('changed', self._on_changed)
         self.connect('destroy', self._on_destroy)
-        jid = self._contact.jid.bare
-        if self._client.get_module('SecLabels').supported:
-            self._client.get_module('SecLabels').request_catalog(jid)
 
     def _on_destroy(self, _widget: SecurityLabelSelector) -> None:
         app.ged.remove_event_handler('sec-catalog-received',
                                      ged.GUI1,
                                      self._sec_labels_received)
+        app.check_finalize(self)
 
     def _on_changed(self, _combo: Gtk.ComboBox) -> None:
         iter_ = self.get_active_iter()
@@ -67,6 +75,24 @@ class SecurityLabelSelector(Gtk.ComboBox):
         label_text = model.get_value(iter_, 0)
         self.set_tooltip_text(
             _('Selected security label: %s') % f'\n{label_text}')
+
+    def _on_client_state_changed(self,
+                                 _client: Client,
+                                 _signal_name: str,
+                                 _state: SimpleClientState):
+        self.update()
+
+    def _on_setting_changed(self,
+                            state: bool,
+                            _name: str,
+                            account: str,
+                            _jid: Optional[JID]
+                            ) -> None:
+        self.set_no_show_all(not state)
+        if state:
+            self.show_all()
+        else:
+            self.hide()
 
     def _sec_labels_received(self, event: SecCatalogReceived) -> None:
         if event.account != self._account:
@@ -101,7 +127,17 @@ class SecurityLabelSelector(Gtk.ComboBox):
 
         jid = self._contact.jid.bare
         catalog = self._client.get_module('SecLabels').get_catalog(jid)
+        if catalog is None:
+            return None
+
         labels, label_list = catalog.labels, catalog.get_label_names()
         label_name = label_list[index]
         label = labels[label_name]
         return label
+
+    def update(self) -> None:
+        chat_active = app.window.is_chat_active(
+            self._account, self._contact.jid)
+        if chat_active:
+            self._client.get_module('SecLabels').get_catalog(
+                self._contact.jid.bare)

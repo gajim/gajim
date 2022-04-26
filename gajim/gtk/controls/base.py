@@ -1329,6 +1329,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         if state:
             self.set_emoticon_popover()
+            self._security_label_selector.update()
 
             if self.msg_textview.has_text():
                 self._client.get_module('Chatstate').set_chatstate(
