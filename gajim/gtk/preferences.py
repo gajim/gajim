@@ -104,7 +104,11 @@ class Preferences(Gtk.ApplicationWindow):
         self._add_prefs(prefs)
         self._add_video_preview()
 
-        self._ui.audio_video_info_bar.set_revealed(not app.is_installed('AV'))
+        self._ui.av_info_bar.set_revealed(
+            not app.is_installed('AV') or sys.platform == 'win32')
+        if sys.platform == 'win32':
+            self._ui.av_info_bar_label.set_text(
+                _('Video calls are not available on Windows'))
 
         self.connect('key-press-event', self._on_key_press)
         self.connect('destroy', self._on_destroy)
@@ -120,16 +124,11 @@ class Preferences(Gtk.ApplicationWindow):
     def _add_prefs(self, prefs: list[tuple[str, Type[PreferenceBox]]]):
         for ui_name, klass in prefs:
             pref_box = getattr(self._ui, ui_name)
-            if ui_name == 'video' and sys.platform == 'win32':
-                continue
-
             pref = klass(self)
             pref_box.add(pref)
             self._prefs[ui_name] = pref
 
     def _add_video_preview(self) -> None:
-        if sys.platform == 'win32':
-            return
         self._video_preview = VideoPreview()
         self._ui.video.add(self._video_preview.widget)
 

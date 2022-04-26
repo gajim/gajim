@@ -697,8 +697,9 @@ class PreferencesBuilder(Builder):
     automatic_status: Gtk.Grid
     themes: Gtk.Grid
     emoji: Gtk.Grid
-    audio_video_info_bar: Gtk.InfoBar
+    av_info_bar: Gtk.InfoBar
     button1: Gtk.Button
+    av_info_bar_label: Gtk.Label
     server: Gtk.Grid
     audio: Gtk.Grid
     video: Gtk.Grid

@@ -719,7 +719,7 @@
                         <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkInfoBar" id="audio_video_info_bar">
+                          <object class="GtkInfoBar" id="av_info_bar">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="message-type">warning</property>
@@ -764,7 +764,7 @@
                                   <placeholder/>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel">
+                                  <object class="GtkLabel" id="av_info_bar_label">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
                                     <property name="label" translatable="yes">Missing dependencies for Audio/Video</property>
