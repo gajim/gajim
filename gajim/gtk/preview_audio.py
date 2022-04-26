@@ -80,7 +80,7 @@ class AudioWidget(Gtk.Box):
 
     def _setup_audio_player(self, file_path: Path) -> None:
         assert self._playbin is not None
-        self._playbin.set_property('uri', f'file://{file_path}')
+        self._playbin.set_property('uri', file_path.as_uri())
         state_return = self._playbin.set_state(Gst.State.PAUSED)
         if state_return == Gst.StateChangeReturn.FAILURE:
             log.debug('Could not setup GST playbin')

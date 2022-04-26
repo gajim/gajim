@@ -375,7 +375,7 @@ def contains_audio_streams(file_path: Path) -> bool:
     has_audio = False
     discoverer = GstPbutils.Discoverer()
     try:
-        info = discoverer.discover_uri(f'file://{file_path}')
+        info = discoverer.discover_uri(file_path.as_uri())
         has_audio = bool(info.get_audio_streams())
     except GLib.Error as err:
         log.error('Error while reading %s: %s', str(file_path), err)
@@ -404,7 +404,7 @@ def guess_mime_type(file_path: Union[Path, str],
                     data: Optional[bytes] = None
                     ) -> str:
     file_path = str(file_path)
-    mime_type, _ = mimetypes.MimeTypes().guess_type(file_path)
+    mime_type, _ = mimetypes.guess_type(file_path)
     if mime_type is None:
         # Try to guess MIME type by file name
         mime_type, _ = Gio.content_type_guess(file_path, data)
