@@ -246,10 +246,9 @@ class MAM(BaseModule):
             self._log.debug(stanza.getProperties())
             return
 
-        with_ = properties.jid.bare
+        jid = properties.jid.new_as_bare()
         if properties.is_muc_pm:
-            # we store the message with the full JID
-            with_ = str(with_)
+            jid = properties.jid
 
         if properties.is_self_message:
             # Self messages can only be deduped with origin-id
@@ -260,7 +259,7 @@ class MAM(BaseModule):
 
         event_attr = {
             'account': self._account,
-            'jid': properties.jid.new_as_bare(),
+            'jid': jid,
             'msgtxt': properties.body,
             'properties': properties,
             'additional_data': additional_data,
@@ -273,13 +272,13 @@ class MAM(BaseModule):
         correct_id = parse_correction(properties)
         if correct_id is not None:
             app.ged.raise_event(MessageUpdated(account=self._account,
-                                               jid=event_attr['jid'],
+                                               jid=jid,
                                                msgtxt=properties.body,
                                                properties=properties,
                                                correct_id=correct_id))
             app.storage.archive.store_message_correction(
                 self._account,
-                properties.jid.bare,
+                jid,
                 correct_id,
                 properties.body,
                 properties.type.is_groupchat)
@@ -287,7 +286,7 @@ class MAM(BaseModule):
 
         app.storage.archive.insert_into_logs(
             self._account,
-            with_,
+            jid,
             properties.mam.timestamp,
             kind,
             message=msgtxt,
