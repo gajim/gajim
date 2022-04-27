@@ -198,9 +198,9 @@ function cleanup_install {
         -iregex ".*/(${KEEP})\.exe" -exec rm -f {} \; -print
 
     rm -Rf "${MINGW_ROOT}"/libexec
-    rm -Rf "${MINGW_ROOT}"/share/gtk-doc
     rm -Rf "${MINGW_ROOT}"/include
     rm -Rf "${MINGW_ROOT}"/var
+    rm -Rf "${MINGW_ROOT}"/share/gtk-doc
     rm -Rf "${MINGW_ROOT}"/share/zsh
     rm -Rf "${MINGW_ROOT}"/share/pixmaps
     rm -Rf "${MINGW_ROOT}"/share/gnome-shell
@@ -230,6 +230,7 @@ function cleanup_install {
     rm -Rf "${MINGW_ROOT}"/share/gettext-*
     rm -Rf "${MINGW_ROOT}"/share/terminfo
     rm -Rf "${MINGW_ROOT}"/share/OGRE
+    rm -Rf "${MINGW_ROOT}"/share/opencv4
 
     find "${MINGW_ROOT}"/share/glib-2.0 -type f ! \
         -name "*.compiled" -exec rm -f {} \;
@@ -247,6 +248,7 @@ function cleanup_install {
     rm -Rf "${MINGW_ROOT}"/lib/installed-tests
     rm -Rf "${MINGW_ROOT}"/lib/tabset
     rm -Rf "${MINGW_ROOT}"/lib/libthai
+    rm -Rf "${MINGW_ROOT}"/lib/OGRE
 
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstvpx.dll
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstdaala.dll
@@ -258,10 +260,17 @@ function cleanup_install {
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstmxf.dll
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstfaac.dll
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstschro.dll
+    rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstcacasink.dll
 
     rm -f "${MINGW_ROOT}"/bin/libharfbuzz-icu-0.dll
+    rm -f "${MINGW_ROOT}"/bin/libopencv_wechat_qrcode455.dll
+    rm -f "${MINGW_ROOT}"/bin/OgreMain.dll
+    rm -f "${MINGW_ROOT}"/bin/OgreOverlay.dll
+    rm -f "${MINGW_ROOT}"/bin/OgreRTShaderSystem.dll
+    rm -f "${MINGW_ROOT}"/bin/OgreBites.dll
+    rm -f "${MINGW_ROOT}"/bin/xvidcore.dll
+
     rm -f "${MINGW_ROOT}"/lib/"${PYTHON_ID}".*/lib-dynload/_tkinter*
-    rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstcacasink.dll
 
     rm -Rf "${MINGW_ROOT}"/lib/python2.*
 
