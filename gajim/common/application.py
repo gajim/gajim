@@ -36,6 +36,7 @@ from gajim.common.events import AccountDisonnected
 from gajim.common.events import AllowGajimUpdateCheck
 from gajim.common.events import GajimUpdateAvailable
 from gajim.common.client import Client
+from gajim.common.helpers import make_http_request
 from gajim.common.task_manager import TaskManager
 from gajim.common.settings import Settings
 from gajim.common.settings import LegacyConfig
@@ -169,11 +170,8 @@ class CoreApplication:
 
     def check_for_gajim_updates(self) -> None:
         self._log.info('Checking for Gajim updates')
-        session = Soup.Session()
-        session.props.user_agent = f'Gajim {app.version}'
-        message = Soup.Message.new(
-            'GET', 'https://gajim.org/current-version.json')
-        session.queue_message(message, self._on_update_response)
+        make_http_request('https://gajim.org/current-version.json',
+                          self._on_update_response)
 
     def _on_update_response(self,
                             _session: Soup.Session,
