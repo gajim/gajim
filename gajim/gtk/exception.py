@@ -44,7 +44,7 @@ from gajim.common.helpers import get_glib_version
 from gajim.common.helpers import get_gobject_version
 from gajim.common.helpers import get_os_name
 from gajim.common.helpers import get_os_version
-from gajim.common.helpers import is_proxy_in_use
+from gajim.common.helpers import determine_proxy
 from gajim.common.helpers import make_http_request
 from gajim.common.i18n import _
 
@@ -132,7 +132,7 @@ class ExceptionDialog(Gtk.ApplicationWindow):
             self._ui.user_feedback_entry.grab_focus()
 
     def _on_report_clicked(self, _button: Gtk.Button) -> None:
-        if self._sentry_available and not is_proxy_in_use():
+        if self._sentry_available and determine_proxy() is not None:
             # sentry-sdk supports a http-proxy arg but for now only use
             # sentry when no proxy is set, because we never tested if this
             # works. It's not worth it to potentially leak users identity just

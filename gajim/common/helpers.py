@@ -759,16 +759,24 @@ def get_proxy(proxy_name: str) -> Optional[ProxyData]:
                      password=password)
 
 
-def is_proxy_in_use() -> bool:
-    return get_global_proxy() is not None or is_account_proxy_in_use()
+def determine_proxy() -> Optional[ProxyData]:
+    # Use this method to find a proxy for non-account related http requests
+    # When there is no global proxy and at least one active account does
+    # not use a proxy, we assume no proxy is necessary.
 
+    global_proxy = get_global_proxy()
+    if global_proxy is not None:
+        return global_proxy
 
-def is_account_proxy_in_use() -> bool:
+    proxies: list[ProxyData] = []
     for client in app.get_clients():
         account_proxy = get_account_proxy(client.account, fallback=False)
-        if account_proxy is not None:
-            return True
-    return False
+        if account_proxy is None:
+            return None
+
+        proxies.append(account_proxy)
+
+    return proxies[0]
 
 
 def version_condition(current_version: str, required_version: str) -> bool:
@@ -1508,11 +1516,8 @@ def make_path_from_jid(base_path: Path, jid: JID) -> Path:
 
 
 def make_http_request(uri: str, callback: Any) -> None:
-    proxy = get_global_proxy()
+    proxy = determine_proxy()
     if proxy is None:
-        if is_account_proxy_in_use():
-            raise ValueError('No global proxy found, '
-                             'but account proxies are in use')
         resolver = None
 
     else:
