@@ -143,6 +143,8 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self.connect('destroy', self._on_destroy)
 
     def _on_destroy(self, *args: Any) -> None:
+        self._avatar_selector = None
+        self._ui.privacy_popover.destroy()
         app.check_finalize(self)
 
     def _on_access_model_received(self, task: Task) -> None:
