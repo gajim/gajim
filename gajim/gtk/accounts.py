@@ -98,6 +98,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
 
     def _on_destroy(self, _widget: AccountsWindow) -> None:
         self._check_relogin()
+        app.check_finalize(self)
 
     def update_account_label(self, account: str) -> None:
         self._accounts[account].update_account_label()

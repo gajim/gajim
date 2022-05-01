@@ -83,6 +83,10 @@ class SettingsDialog(Gtk.ApplicationWindow):
 
         self.show_all()
         self.connect_after('key-press-event', self.on_key_press)
+        self.connect_after('destroy', self.__on_destroy)
+
+    def __on_destroy(self, widget: SettingsDialog) -> None:
+        app.check_finalize(self)
 
     def on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
