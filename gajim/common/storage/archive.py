@@ -178,6 +178,7 @@ class MessageArchiveStorage(SqliteStorage):
                             cursor: sqlite.Cursor,
                             row: tuple[Any, ...]) -> NamedTuple:
 
+        assert cursor.description is not None
         fields = [col[0] for col in cursor.description]
         Row = namedtuple("Row", fields)  # type: ignore
         named_row = Row(*row)
@@ -333,6 +334,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         sql = 'INSERT INTO jids (jid, type) VALUES (?, ?)'
         lastrowid = self._con.execute(sql, (jid, type_)).lastrowid
+        assert lastrowid is not None
         self._jid_ids[jid] = JidsTableRow(jid_id=lastrowid,
                                           jid=jid,
                                           type=type_)
@@ -1188,6 +1190,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         lastrowid = self._con.execute(
             sql, (account_id, jid_id, time_, kind) + tuple(kwargs.values())).lastrowid
+        assert lastrowid is not None
 
         log.info('Insert into DB: jid: %s, time: %s, kind: %s, stanza_id: %s',
                  jid, time_, kind, kwargs.get('stanza_id', None))

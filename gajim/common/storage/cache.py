@@ -117,6 +117,8 @@ class CacheStorage(SqliteStorage):
     @staticmethod
     def _namedtuple_factory(cursor: sqlite3.Cursor,
                             row: tuple[Any, ...]) -> NamedTuple:
+
+        assert cursor.description is not None
         fields = [col[0] for col in cursor.description]
         Row = namedtuple('Row', fields)  # type: ignore
         return Row(*row)
