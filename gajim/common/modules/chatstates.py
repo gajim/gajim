@@ -129,11 +129,14 @@ class Chatstate(BaseModule):
         contact.notify('chatstate-update')
 
     def _process_chatstate(self, _con, _stanza, properties):
+        if properties.type.is_error:
+            return
+
         if not properties.has_chatstate:
             return
 
         if (properties.is_self_message or
-                properties.type.is_groupchat or
+                not properties.type.is_chat or
                 properties.is_mam_message or
                 properties.is_carbon_message and properties.carbon.is_sent):
             return
