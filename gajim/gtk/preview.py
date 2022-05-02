@@ -134,6 +134,7 @@ class PreviewWidget(Gtk.Box):
             self._ui.download_button.hide()
             self._ui.open_folder_button.show()
             self._ui.save_as_button.show()
+            self._ui.link_button.hide()
             if (preview.orig_path is not None and preview.is_audio and
                     app.is_installed('GST') and
                     contains_audio_streams(preview.orig_path)):
@@ -154,6 +155,7 @@ class PreviewWidget(Gtk.Box):
                 image = Gtk.Image.new_from_icon_name(
                     'dialog-question', Gtk.IconSize.DIALOG)
                 self._ui.icon_button.set_image(image)
+                self._ui.download_button.show()
                 file_size_string = _('Automatic preview disabled')
 
         self._ui.file_size.set_text(file_size_string)
