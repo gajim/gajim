@@ -5,14 +5,14 @@
 # wwld <wwld@radio.lzusiyu.org>, 2005.
 # kangkang <kanger@gamil.com>, 2005.
 # Guanhao Yin <yinguanhao@gmail.com>, 2010.
-#
+# lovetox <philipp@hoerist.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-01 17:44+0100\n"
-"PO-Revision-Date: 2022-03-26 18:27+0000\n"
-"Last-Translator: andy Z <andy.baker@dismail.de>\n"
+"PO-Revision-Date: 2022-05-02 19:31+0000\n"
+"Last-Translator: lovetox <philipp@hoerist.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
 "gajim/1-3/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.1.1\n"
+"X-Generator: Weblate 4.11.2\n"
 
 #: gajim/history_manager.py:78
 msgid "Usage:"
@@ -1485,7 +1485,7 @@ msgstr "列出联系人列表中所有联系人。每个联系人一行"
 #: gajim/gajim_remote.py:171 gajim/gajim_remote.py:180
 #: gajim/gajim_remote.py:187
 msgid "?CLI:account"
-msgstr "？CLI：account"
+msgstr ""
 
 #: gajim/gajim_remote.py:87
 msgid "show only contacts of the given account"
@@ -1501,7 +1501,7 @@ msgstr "改变一个或多个账户状态"
 
 #: gajim/gajim_remote.py:100
 msgid "?CLI:status"
-msgstr "？CLI：status"
+msgstr ""
 
 #: gajim/gajim_remote.py:100
 msgid ""
@@ -1513,7 +1513,7 @@ msgstr ""
 #: gajim/gajim_remote.py:101 gajim/gajim_remote.py:121
 #: gajim/gajim_remote.py:132 gajim/gajim_remote.py:141
 msgid "?CLI:message"
-msgstr "？CLI：message"
+msgstr ""
 
 #: gajim/gajim_remote.py:101
 msgid "status message"
@@ -1531,7 +1531,7 @@ msgstr "改变一个或多个账户的优先级"
 
 #: gajim/gajim_remote.py:110
 msgid "?CLI:priority"
-msgstr "？CLI：priority"
+msgstr ""
 
 #: gajim/gajim_remote.py:110
 msgid "priority you want to give to the account"
@@ -2672,11 +2672,11 @@ msgstr "高级配置编辑器 (ACE)"
 
 #: gajim/gtk/advanced_config.py:80
 msgid "?config:Preference Name"
-msgstr "?config：首选项名称"
+msgstr "首选项名称"
 
 #: gajim/gtk/advanced_config.py:91
 msgid "?config:Value"
-msgstr "?config：值"
+msgstr "值"
 
 #: gajim/gtk/advanced_config.py:100
 msgid "?config:Type"
@@ -2684,7 +2684,7 @@ msgstr ""
 
 #: gajim/gtk/advanced_config.py:133
 msgid "?config description:None"
-msgstr "?config description：无"
+msgstr "无"
 
 #: gajim/gtk/preferences.py:63 gajim/data/gui/shortcuts_window.ui:31
 msgid "Preferences"
@@ -3799,7 +3799,7 @@ msgstr "文件名： %s"
 
 #: gajim/gtk/tooltips.py:533
 msgid "?Noun:Download"
-msgstr "?名词：下载"
+msgstr "下载"
 
 #: gajim/gtk/tooltips.py:534 gajim/gtk/filetransfer.py:747
 msgid "Sender: "
@@ -3807,7 +3807,7 @@ msgstr "发送者： "
 
 #: gajim/gtk/tooltips.py:539
 msgid "?Noun:Upload"
-msgstr "?名词：上传"
+msgstr "上传"
 
 #: gajim/gtk/tooltips.py:540 gajim/gtk/filetransfer.py:240
 #: gajim/gtk/filetransfer.py:749
@@ -3816,50 +3816,43 @@ msgstr "接收者： "
 
 #: gajim/gtk/tooltips.py:546
 msgid "?transfer type:Type: "
-msgstr "?传输类型：类型： "
+msgstr "类型： "
 
 #: gajim/gtk/tooltips.py:552
-#, fuzzy
 msgid "?transfer status:Transferred: "
-msgstr "？transfer status：暂停"
+msgstr "暂停 "
 
 #: gajim/gtk/tooltips.py:555
-#, fuzzy
 msgid "?transfer status:Status: "
-msgstr "？transfer status：暂停"
+msgstr "暂停 "
 
 #: gajim/gtk/tooltips.py:557
 msgid "Description: "
 msgstr "描述： "
 
 #: gajim/gtk/tooltips.py:581
-#, fuzzy
 msgid "?transfer status:Aborted"
-msgstr "？transfer status：暂停"
+msgstr "暂停"
 
 #: gajim/gtk/tooltips.py:583
-#, fuzzy
 msgid "?transfer status:Completed"
-msgstr "？transfer status：暂停"
+msgstr "暂停"
 
 #: gajim/gtk/tooltips.py:585
 msgid "?transfer status:Paused"
-msgstr "？transfer status：暂停"
+msgstr "暂停"
 
 #: gajim/gtk/tooltips.py:588
-#, fuzzy
 msgid "?transfer status:Stalled"
-msgstr "？transfer status：暂停"
+msgstr "暂停"
 
 #: gajim/gtk/tooltips.py:592
-#, fuzzy
 msgid "?transfer status:Transferring"
-msgstr "？transfer status：暂停"
+msgstr "暂停"
 
 #: gajim/gtk/tooltips.py:593 gajim/gtk/tooltips.py:594
-#, fuzzy
 msgid "?transfer status:Not started"
-msgstr "？transfer status：暂停"
+msgstr "暂停"
 
 #: gajim/gtk/remove_account.py:42 gajim/gtk/accounts.py:341
 msgid "Remove"
@@ -4545,7 +4538,7 @@ msgstr "收到的群聊消息"
 
 #: gajim/gtk/groupchat_info.py:38
 msgid "?Group chat feature:Open"
-msgstr "?群聊功能：打开"
+msgstr "打开"
 
 #: gajim/gtk/groupchat_info.py:39
 #, fuzzy
@@ -4581,7 +4574,7 @@ msgstr ""
 
 #: gajim/gtk/groupchat_info.py:56
 msgid "?Group chat feature:Moderated"
-msgstr "?群聊功能：受管制的"
+msgstr "受管制的"
 
 #: gajim/gtk/groupchat_info.py:57
 msgid ""
@@ -4609,7 +4602,7 @@ msgstr ""
 
 #: gajim/gtk/groupchat_info.py:70
 msgid "?Group chat feature:Hidden"
-msgstr "?群聊功能：隐藏"
+msgstr "隐藏"
 
 #: gajim/gtk/groupchat_info.py:71
 msgid "This group chat can not be found via search"
@@ -4644,7 +4637,7 @@ msgstr ""
 
 #: gajim/gtk/groupchat_info.py:89
 msgid "?Group chat feature:Temporary"
-msgstr "?群聊功能：临时"
+msgstr "临时"
 
 #: gajim/gtk/groupchat_info.py:90
 msgid "This group chat will be destroyed once the last participant left"
@@ -5241,9 +5234,8 @@ msgid ""
 msgstr "允许 Gajim 自动检测本地网络中的客户端以便进行无服务器聊天"
 
 #: gajim/gtk/features.py:108
-#, fuzzy
 msgid "Requires: gir1.2-avahi-0.6"
-msgstr "需要： gir1.2-gupnpigd-1.0"
+msgstr "需要： gir1.2-avahi-0.6"
 
 #: gajim/gtk/features.py:109
 #, python-format
@@ -5462,7 +5454,7 @@ msgstr ""
 
 #: gajim/gtk/profile.py:37 gajim/gtk/vcard_grid.py:42
 msgid "?profile:Role"
-msgstr "?个人资料：角色"
+msgstr "角色"
 
 #: gajim/gtk/profile.py:38 gajim/gtk/vcard_grid.py:45
 msgid "URL"
@@ -5562,7 +5554,7 @@ msgstr "组织"
 
 #: gajim/gtk/vcard_grid.py:44
 msgid "?profile:Note"
-msgstr "?个人资料：附注"
+msgstr "附注"
 
 #: gajim/gtk/vcard_grid.py:51
 msgid "Your public key or authentication certificate"
@@ -6216,7 +6208,7 @@ msgstr "访客"
 
 #: gajim/common/helpers.py:268
 msgid "?Group Chat Contact Affiliation:None"
-msgstr "？群聊联系人阶级：None"
+msgstr ""
 
 #: gajim/common/helpers.py:271
 msgid "Owners"
@@ -6747,7 +6739,7 @@ msgstr "%(nick)s 改变了状态"
 
 #: gajim/common/const.py:287
 msgid "?Group chat name:Team"
-msgstr "?群聊名称：团队"
+msgstr "团队"
 
 #: gajim/common/const.py:288
 msgid "?Group chat description:Project discussion"
@@ -6787,7 +6779,7 @@ msgstr "群聊邀请"
 
 #: gajim/common/const.py:296
 msgid "?Group chat name:Repairs"
-msgstr "?群聊名称：修理"
+msgstr "修理"
 
 #: gajim/common/const.py:297
 msgid "?Group chat description:Local help group"
@@ -6800,7 +6792,7 @@ msgstr "群聊支持"
 
 #: gajim/common/const.py:299
 msgid "?Group chat name:News"
-msgstr "?群聊名称：新闻"
+msgstr "新闻"
 
 #: gajim/common/const.py:300
 #, fuzzy
