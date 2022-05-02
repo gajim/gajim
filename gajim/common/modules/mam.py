@@ -128,6 +128,12 @@ class MAM(BaseModule):
         # A message we received
         return properties.mam.id, None
 
+    @staticmethod
+    def _get_stanza_id(properties, archive_jid):
+        for stanza_id in properties.stanza_ids:
+            if stanza_id.by == archive_jid:
+                return stanza_id
+
     def _set_message_archive_info(self, _con, _stanza, properties):
         if (properties.is_mam_message or
                 properties.is_pubsub or
@@ -155,10 +161,11 @@ class MAM(BaseModule):
             archive_jid = self._con.get_own_jid().bare
             timestamp = None
 
-        if properties.stanza_id is None:
+        if not properties.stanza_ids:
             return
 
-        if not archive_jid == properties.stanza_id.by:
+        stanza_id = self._get_stanza_id(properties, archive_jid)
+        if stanza_id is None:
             return
 
         if not self.is_catch_up_finished(archive_jid):
@@ -166,7 +173,7 @@ class MAM(BaseModule):
 
         app.storage.archive.set_archive_infos(
             archive_jid,
-            last_mam_id=properties.stanza_id.id,
+            last_mam_id=stanza_id.id,
             last_muc_timestamp=timestamp)
 
     def _mam_message_received(self, _con, stanza, properties):

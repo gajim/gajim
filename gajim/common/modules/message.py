@@ -292,7 +292,7 @@ class Message(BaseModule):
             # Deduplicate self message with message-id
             return None, properties.id
 
-        if properties.stanza_id is None:
+        if not properties.stanza_ids:
             return None, None
 
         if properties.type.is_groupchat:
@@ -309,8 +309,10 @@ class Message(BaseModule):
 
             archive = self._con.get_own_jid()
 
-        if archive.bare_match(properties.stanza_id.by):
-            return properties.stanza_id.id, None
+        for stanza_id in properties.stanza_ids:
+            if archive.bare_match(stanza_id.by):
+                return stanza_id.id, None
+
         # stanza-id not added by the archive, ignore it.
         return None, None
 

@@ -612,15 +612,13 @@ class GroupchatControl(BaseControl):
         else:
             if event.properties.muc_nickname == self.contact.nickname:
                 self.last_sent_txt = event.msgtxt
-            stanza_id = None
-            if event.properties.stanza_id:
-                stanza_id = event.properties.stanza_id.id
+
             self.add_message(event.msgtxt,
                              contact=event.properties.muc_nickname,
                              tim=event.properties.timestamp,
                              displaymarking=event.displaymarking,
                              message_id=event.properties.id,
-                             stanza_id=stanza_id,
+                             stanza_id=event.stanza_id,
                              additional_data=event.additional_data)
         event.needs_highlight = helpers.message_needs_highlight(
             event.msgtxt,
