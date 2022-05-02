@@ -133,6 +133,7 @@ class MAM(BaseModule):
         for stanza_id in properties.stanza_ids:
             if stanza_id.by == archive_jid:
                 return stanza_id
+        return None
 
     def _set_message_archive_info(self, _con, _stanza, properties):
         if (properties.is_mam_message or
