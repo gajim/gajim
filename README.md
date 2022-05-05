@@ -64,7 +64,7 @@ see [README](./flatpak/README.md)
 
 #### Mac
 
-see [Wiki](https://dev.gajim.org/gajim/gajim/wikis/help/gajimmacosx#python3brew)
+see [Wiki](https://dev.gajim.org/gajim/gajim/-/wikis/help/Gajim-on-macOS)
 
 #### Developing
 
