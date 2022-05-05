@@ -366,7 +366,7 @@ class Interface:
                 chat_control.contact,
                 chat_control.is_groupchat)
         except exceptions.FileError as error:
-            ErrorDialog(_('Could not Open File'), error)
+            ErrorDialog(_('Could not Open File'), str(error))
             return
 
         transfer.connect('cancel', self._on_cancel_upload)
