@@ -71,7 +71,7 @@ class PluginRepository(Observable):
                                 message: Soup.Message) -> None:
 
         if message.status_code != Soup.Status.OK:
-            log.warning('Repository retrival failed')
+            log.warning('Repository retrieval failed')
             log.warning(Soup.Status.get_phrase(message.status_code))
             return
 
@@ -121,7 +121,7 @@ class PluginRepository(Observable):
                             package_index: dict[str, Any]
                             ) -> dict[str, PluginManifest]:
 
-        suiteable_plugins: dict[str, PluginManifest] = {}
+        suitable_plugins: dict[str, PluginManifest] = {}
         plugins = package_index['plugins']
         for name, versions in plugins.items():
             for version, manifest in versions.items():
@@ -134,16 +134,16 @@ class PluginRepository(Observable):
                     continue
 
                 if not manifest.is_usable:
-                    log.info('Ignore not suiteable plugin: %s %s',
+                    log.info('Ignore not suitable plugin: %s %s',
                              manifest.short_name, manifest.version)
                     continue
 
-                last_plugin = suiteable_plugins.get(manifest.short_name)
+                last_plugin = suitable_plugins.get(manifest.short_name)
                 if (last_plugin is None or
                         last_plugin.version < manifest.version):
-                    suiteable_plugins[manifest.short_name] = manifest
+                    suitable_plugins[manifest.short_name] = manifest
 
-        return suiteable_plugins
+        return suitable_plugins
 
     def _refresh_plugin_index(self, callback: Optional[Any] = None) -> None:
         log.info('Refresh index')
