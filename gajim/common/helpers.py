@@ -776,7 +776,7 @@ def determine_proxy() -> Optional[ProxyData]:
 
         proxies.append(account_proxy)
 
-    return proxies[0]
+    return proxies[0] if proxies else None
 
 
 def version_condition(current_version: str, required_version: str) -> bool:
