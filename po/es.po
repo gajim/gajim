@@ -1,12 +1,13 @@
 # Copyright (C) Gajim Team
 # This file is distributed under the same license as the Gajim package.
 #
+# El gran Pirujo <boina@disroot.org>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 16:30+0000\n"
-"PO-Revision-Date: 2022-03-25 17:15+0000\n"
+"PO-Revision-Date: 2022-04-19 20:28+0000\n"
 "Last-Translator: El gran Pirujo <boina@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
@@ -15,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Weblate 4.1.1\n"
+"X-Generator: Weblate 4.11.2\n"
 
 msgid ""
 "\n"
@@ -964,7 +965,7 @@ msgid ""
 "(chat, private chat)."
 msgstr ""
 "Preguntar antes de cerrar la ventana de chat con pestañas si hay chats que "
-"pueden perder datos (chat, chat privado)."
+"pueden perder datos (chat, conversación privada)."
 
 msgid "Ask before pasting an image."
 msgstr "Preguntar antes de pegar una imagen."
@@ -2292,9 +2293,8 @@ msgstr "De"
 msgid "Full Name"
 msgstr "Nombre completo"
 
-#, fuzzy
 msgid "Fully-featured XMPP chat client"
-msgstr "Un cliente de chat XMPP con todas las caraterísticas"
+msgstr "Cliente de chat XMPP con todas las características"
 
 #, python-format
 msgid "GLib Version: %s"

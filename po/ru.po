@@ -4,13 +4,14 @@
 # <nebulam51@gmail.com>, 2005.
 # Yakov Bezrukov <nebulam51@gmail.com>, 2005, 2006, 2007.
 # Dmitry Korzhevin <dkorzhevin@lsupport.net>, 2010.
+# bodqhrohro <bodqhrohro@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 16:30+0000\n"
-"PO-Revision-Date: 2020-12-28 12:14+0000\n"
-"Last-Translator: Uber <study-kbt@yandex.ru>\n"
+"PO-Revision-Date: 2022-04-22 21:28+0000\n"
+"Last-Translator: bodqhrohro <bodqhrohro@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
 ">\n"
 "Language: ru\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.1.1\n"
+"X-Generator: Weblate 4.11.2\n"
 "X-Poedit-Basepath: /home/test/gajim\n"
 
 msgid ""
@@ -1094,7 +1095,7 @@ msgid "Away"
 msgstr "Ушел"
 
 msgid "Back"
-msgstr "Скоро буду"
+msgstr "Назад"
 
 msgid "Back in some minutes."
 msgstr "Вернусь через несколько минут."

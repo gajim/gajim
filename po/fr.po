@@ -1,21 +1,22 @@
 # Copyright (C) Gajim Team
 # This file is distributed under the same license as the Gajim package.
 #
+# pitchum <pitchum@gramaton.org>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 16:30+0000\n"
-"PO-Revision-Date: 2022-02-06 20:35+0000\n"
+"PO-Revision-Date: 2022-04-20 14:28+0000\n"
 "Last-Translator: pitchum <pitchum@gramaton.org>\n"
-"Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
-">\n"
+"Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/>"
+"\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.1.1\n"
+"X-Generator: Weblate 4.11.2\n"
 "X-Pootle-Path: /fr/gajim/fr.po\n"
 "X-Pootle-Revision: 1011\n"
 
@@ -668,9 +669,8 @@ msgstr "Compte supprimé"
 msgid "Account Settings…"
 msgstr "Paramètres de compte…"
 
-#, fuzzy
 msgid "Account Wizard"
-msgstr "Compte désactivé"
+msgstr "Assistant de configuration de compte"
 
 msgid "Account disabled"
 msgstr "Compte désactivé"
@@ -752,9 +752,8 @@ msgstr "Ajouter un nouveau thème"
 msgid "Add new line"
 msgstr "Crée une nouvelle ligne"
 
-#, fuzzy
 msgid "Add some details…"
-msgstr "Ajouter à la liste de contacts …"
+msgstr "Ajouter quelques détails…"
 
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr "Ajouter ce certificat à la liste des certificats de confiance"
@@ -774,9 +773,8 @@ msgstr "Adresse"
 msgid "Address does not belong to a group chat server"
 msgstr "L’adresse n’est pas un serveur de salons de discussion"
 
-#, fuzzy
 msgid "Adhoc Group Chat"
-msgstr "Rejoindre un salon de discussion"
+msgstr "Salon Adhoc"
 
 msgid "Adjust to Status"
 msgstr "Ajuster selon l’état"
@@ -903,9 +901,8 @@ msgid "Any participant is allowed to see your full XMPP Address"
 msgstr ""
 "N’importe quel occupant est autorisé à voir votre adresse XMPP complète"
 
-#, fuzzy
 msgid "Anyone can join"
-msgstr "N’importe qui pourra rejoindre ce salon de discussion"
+msgstr "N’importe qui peut rejoindre ce salon"
 
 msgid "Anyone can join this group chat"
 msgstr "N’importe qui pourra rejoindre ce salon de discussion"
@@ -916,9 +913,8 @@ msgstr "Icône App Indicator"
 msgid "Application verification failure"
 msgstr "Echec de la vérification de l'application"
 
-#, fuzzy
 msgid "Apply"
-msgstr "_Appliquer"
+msgstr "Appliquer"
 
 msgid "Archive"
 msgstr "Archiver"
@@ -1163,9 +1159,9 @@ msgstr "CRL n'est pas encore valide"
 msgid "CRL signature failure"
 msgstr "Échec de la signature CRL"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Cairo Version: %s"
-msgstr "Version de GLib : %s"
+msgstr "Version de Cairo : %s"
 
 msgid "Call"
 msgstr "Appel"
@@ -1801,9 +1797,8 @@ msgstr "Description"
 msgid "Description: "
 msgstr "Description : "
 
-#, fuzzy
 msgid "Destroy Groupchat…"
-msgstr "Détruire le salon de discussion"
+msgstr "Détruire le salon…"
 
 msgid "Destroy This Chat"
 msgstr "Détruire ce salon"
@@ -1848,11 +1843,10 @@ msgstr ""
 "Divulguer des informations à propos des médias actuellement en cours de "
 "lecture sur votre système."
 
-#, fuzzy
 msgid "Disclose information about the operating system you currently use"
 msgstr ""
-"Divulguer des informations à propos du client et du système d’exploitation "
-"que vous utilisez actuellement"
+"Divulguer des informations à propos du système d’exploitation que vous "
+"utilisez actuellement"
 
 msgid "Disclose the local system time of the device Gajim runs on"
 msgstr ""
@@ -1870,7 +1864,6 @@ msgstr "Découvrir des services…"
 msgid "Discussion Logs"
 msgstr "Journaux de discussion"
 
-#, fuzzy
 msgid "Dismiss"
 msgstr "Ignorer"
 
@@ -2313,7 +2306,6 @@ msgstr "Erreur de format dans le champ notAfter du certificat"
 msgid "Format error in certificate's notBefore field"
 msgstr "Erreur de format dans le champ notBefore du certificat"
 
-#, fuzzy
 msgid "Format your message"
 msgstr "Formater votre message"
 
@@ -2332,7 +2324,6 @@ msgstr "De"
 msgid "Full Name"
 msgstr "Nom complet"
 
-#, fuzzy
 msgid "Fully-featured XMPP chat client"
 msgstr "Un client de chat XMPP complet"
 
@@ -2347,9 +2338,8 @@ msgstr "Version de GTK+ : %s"
 msgid "Gajim"
 msgstr "Gajim"
 
-#, fuzzy
 msgid "Gajim - Error"
-msgstr "Gajim - %s"
+msgstr "Gajim - Erreur"
 
 msgid "Gajim Themes"
 msgstr "Thèmes de Gajim"
@@ -2373,6 +2363,8 @@ msgid ""
 "Gajim encountered an error.\n"
 "Please help us fixing this issue by sending this report."
 msgstr ""
+"Gajim a rencontré une erreur.\n"
+"Merci de nous aider à corriger ce problème en envoyant ce rapport."
 
 msgid ""
 "Gajim integrates well with your other devices: simply continue conversations "
@@ -2576,9 +2568,8 @@ msgstr ""
 "Nombre de lignes à stocker pour Ctrl+flèche du haut (messages précédemment "
 "envoyés)."
 
-#, fuzzy
 msgid "I can see contact's online status"
-msgstr "Demander à voir _son état"
+msgstr "Je peux voir l'état de connexion du contact"
 
 msgid "I would like to add you to my contact list."
 msgstr "Je souhaiterais vous ajouter à ma liste de contacts."
@@ -2905,7 +2896,7 @@ msgid "Insert Emoji"
 msgstr "Insérer un émoji"
 
 msgid "Install <tt>sentry-sdk</tt> to make reporting issues easier."
-msgstr ""
+msgstr "Installer <tt>sentry-sdk</tt> pour faciliter les rapports d'erreur."
 
 msgid "Install Plugin from ZIP-File"
 msgstr "Installer une extension depuis un fichier ZIP"
@@ -3099,9 +3090,8 @@ msgstr "Lat : %s Lon : %s"
 msgid "Leave Group Chat"
 msgstr "Quitter le salon de discussion"
 
-#, fuzzy
 msgid "Leave the group chat"
-msgstr "Créer un salon de discussion"
+msgstr "Quitter le salon"
 
 msgid "Left Click Action"
 msgstr "Action du clic gauche"
@@ -3138,7 +3128,7 @@ msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
 "file transfers (in case of address translation/port forwarding)."
 msgstr ""
-"Liste d'hôtes que nous envoyons (séparées par des espaces), en plus des "
+"Liste d'hôtes que nous envoyons (séparées par des virgules), en plus des "
 "interfaces locales, pour les transferts de fichiers (dans le cas de "
 "traduction d'adresse / redirection de port)."
 
@@ -3160,9 +3150,8 @@ msgstr "Le chargement d'avatar a échoué"
 msgid "Loading avatar image failed"
 msgstr "Le chargement d'image d'avatar a échoué"
 
-#, fuzzy
 msgid "Loading…"
-msgstr "Chargement"
+msgstr "Chargement…"
 
 msgid "Local System Time"
 msgstr "Heure locale du système"
@@ -3278,9 +3267,8 @@ msgstr "Membre"
 msgid "Members"
 msgstr "Membres"
 
-#, fuzzy
 msgid "Mention: Message Background Color"
-msgstr "Couleur d'arrière plan de la bannière"
+msgstr "Mention : Couleur d'arrière plan du message"
 
 msgid "Message"
 msgstr "Message"
@@ -3554,9 +3542,8 @@ msgstr "Un an"
 msgid "Online"
 msgstr "En ligne"
 
-#, fuzzy
 msgid "Online Status"
-msgstr "Nouvel état"
+msgstr "État de connexion"
 
 msgid "Only Admins and Owners can modify the affiliation"
 msgstr ""
@@ -3939,9 +3926,8 @@ msgstr ""
 msgid "Privacy"
 msgstr "Confidentialité"
 
-#, fuzzy
 msgid "Private"
-msgstr "Confidentialité"
+msgstr "Privé"
 
 msgid "Profile"
 msgstr "Profil"
@@ -3971,9 +3957,8 @@ msgstr ""
 msgid "Proxy, custom hostname and port"
 msgstr "Serveur mandataire, nom d'hôte et port personnalisés"
 
-#, fuzzy
 msgid "Public"
-msgstr "_Publique"
+msgstr "Public"
 
 #, python-format
 msgid "Pulse: %s"
@@ -4167,9 +4152,8 @@ msgid "Request contact information (Tune, Location)"
 msgstr ""
 "Réclamer des informations du contact (Morceau de musique, Géolocalisation)"
 
-#, fuzzy
 msgid "Request to see this contact's online status"
-msgstr "Demander à voir _son état"
+msgstr "Requête pour voir l'état de connexion de ce contact"
 
 msgid "Requesting Command List"
 msgstr "Récupération de la liste des commandes"
@@ -4370,9 +4354,8 @@ msgstr "Stockage de mots de passe sécurisé"
 msgid "Security"
 msgstr "Sécurité"
 
-#, fuzzy
 msgid "Security Labels"
-msgstr "Sécurité"
+msgstr "Labels de sécurité"
 
 msgid "Security Warning"
 msgstr "Avertissement de sécurité"
@@ -4449,9 +4432,8 @@ msgstr "Émettre les accusés de réception"
 msgid "Send Read Markers"
 msgstr "Envoyer les accusés de lecture"
 
-#, fuzzy
 msgid "Send _Report"
-msgstr "Signaler"
+msgstr "Envoyer un rapport"
 
 msgid "Send a disco info request"
 msgstr "Envoyer une requête \"disco info\""
@@ -4610,13 +4592,11 @@ msgstr ""
 msgid "Settings"
 msgstr "Paramètres"
 
-#, fuzzy
 msgid "Share Status"
-msgstr "Modifier l'état"
+msgstr "Partager l'état"
 
-#, fuzzy
 msgid "Share my online status"
-msgstr "Modifier le statut"
+msgstr "Partager mon état de connexion"
 
 msgid "Show"
 msgstr "Afficher"
@@ -4630,9 +4610,8 @@ msgstr "Afficher les commandes"
 msgid "Show Contact Infos"
 msgstr "Afficher les informations du contact"
 
-#, fuzzy
 msgid "Show Gajim on Startup"
-msgstr "Liste de contacts au démarrage"
+msgstr "Afficher Gajim au démarrage"
 
 msgid "Show Join/Leave"
 msgstr "Montrer connecté/parti"
@@ -4766,9 +4745,8 @@ msgstr ""
 "Afficher l'état du contact (ex. \"en train d'écrire\") dans la bannière de "
 "la discussion"
 
-#, fuzzy
 msgid "Show window when starting Gajim"
-msgstr "Montrer la liste de contacts lorsque Gajim démarre"
+msgstr "Montrer la fenêtre lorsque Gajim démarre"
 
 msgid "Show your own video stream in calls"
 msgstr "Montrer votre propre flux vidéo dans les appels"
@@ -5177,11 +5155,9 @@ msgstr "Ce compte est connecté au serveur"
 msgid "This address does not seem to offer any gateway service."
 msgstr "Cette adresse ne semble pas proposer de service de type passerelle."
 
-#, fuzzy
 msgid "This address is not reachable."
-msgstr "Cet appareil n'est pas compatible."
+msgstr "Cette adresse n'est pas joignable."
 
-#, fuzzy
 msgid "This device is not compatible."
 msgstr "Cet appareil n'est pas compatible."
 
@@ -5618,7 +5594,7 @@ msgid "Visual Notifications"
 msgstr "Notifications visuelles"
 
 msgid "Voice Request"
-msgstr "Requête de voix"
+msgstr "Demande de parole"
 
 msgid "Voice chats are not available"
 msgstr "Les sessions vidéo ne sont pas disponibles"
@@ -5650,7 +5626,7 @@ msgid "What does this mean?"
 msgstr "Qu'est-ce que ça signifie ?"
 
 msgid "What happened"
-msgstr ""
+msgstr "Ce qu'il s'est passé"
 
 msgid ""
 "When to show the notification area icon. Can be 'never', 'on_event', and "
@@ -5781,9 +5757,8 @@ msgstr ""
 "Vous n'êtes pas autorisé à modifier l'affiliation des administrateurs et des "
 "propriétaires"
 
-#, fuzzy
 msgid "You are not connected"
-msgstr "Vous n’êtes pas connecté au serveur"
+msgstr "Vous n’êtes pas connecté"
 
 msgid "You are not connected to the server"
 msgstr "Vous n’êtes pas connecté au serveur"
@@ -5797,7 +5772,7 @@ msgid "You are now {show}{status}"
 msgstr "Vous êtes désormais {show}{status}"
 
 msgid "You are offline."
-msgstr ""
+msgstr "Vous êtes hors-ligne."
 
 msgid "You are trying to paste an image"
 msgstr "Vous essayez de coller une image"
@@ -5811,9 +5786,8 @@ msgstr ""
 "Vous ne pouvez joindre un salon de discussion tant que vous n'êtes pas "
 "connecté."
 
-#, fuzzy
 msgid "You can see the contact's online status"
-msgstr "Autoriser ce contact à voir votre état en ligne"
+msgstr "Vous pouvez voir l'état de connexion de ce contact"
 
 msgid "You cancelled the transfer"
 msgstr "Vous avez annulé le transfert"
@@ -5821,9 +5795,8 @@ msgstr "Vous avez annulé le transfert"
 msgid "You cannot add yourself to your contact list."
 msgstr "Vous ne pouvez pas vous ajouter vous-même à votre liste de contacts."
 
-#, fuzzy
 msgid "You cannot see this contact's online status"
-msgstr "Autoriser ce contact à voir votre état en ligne"
+msgstr "Vous ne pouvez pas voir l'état de connexion de ce contact"
 
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr ""
@@ -5864,6 +5837,7 @@ msgstr "Vous devez être connecté pour pouvoir créer un salon de discussion."
 
 msgid "You have to invite people so they can join"
 msgstr ""
+"Vous devez inviter des personnes pour qu'elles puissent rejoindre le salon"
 
 #, python-format
 msgid ""
@@ -5877,11 +5851,10 @@ msgid "You left this group chat"
 msgstr "Vous avez quitté ce salon de discussion"
 
 msgid "You need Owner permission to change the configuration"
-msgstr ""
+msgstr "Vous devez être propriétaire du salon pour modifier la configuration"
 
-#, fuzzy
 msgid "You requested to see this contact's online status"
-msgstr "Demander à voir _son état"
+msgstr "Vous avez demander à ce contact de voir son état de connexion"
 
 msgid "You still have running file transfers"
 msgstr "Vous avez encore des transferts de fichiers en cours"
@@ -6290,7 +6263,7 @@ msgstr "description"
 
 #, python-format
 msgid "e.g. %s"
-msgstr ""
+msgstr "par ex. %s"
 
 msgid "error"
 msgstr "erreur"
@@ -6379,9 +6352,9 @@ msgstr "code postal"
 msgid "priority you want to give to the account"
 msgstr "priorité que vous voulez donner au compte"
 
-#, fuzzy, python-format
+#, python-format
 msgid "python-cairo Version: %s"
-msgstr "python-nbxmpp Version : %s"
+msgstr "Version de python-cairo : %s"
 
 #, python-format
 msgid "python-nbxmpp Version: %s"
