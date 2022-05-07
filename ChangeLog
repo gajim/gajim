@@ -1,4 +1,241 @@
-Gajim 1.3.0-beta1 (TBA)
+Gajim 1.4.0 (TBA)
+
+  New
+
+  * Rework GUI (Main Window and Chat)
+  * Integrate Plugin Installer
+  * Integrate Image Preview Plugin
+  * Integrate Syntax Highlight Plugin
+  * Integrate AppIndicator Plugin
+  * Allow customizing Shortcuts
+  * Support Message Moderation in Group Chats
+
+  Changes
+
+  * Drop zeroconf support
+  * Remove History Manager
+  * Remove Single Message Dialog
+  * Group Chat: Move many menu options into details dialog
+
+  Bug fixes / Closed issues
+
+  * #5671  File transfer in history
+  * #7381  Wrong presence displayed if there are multiple resources with the same priority
+  * #7857  Click-able Email address and Telephone number
+  * #8353  Roster sort items with activity to top
+  * #8412  Save and restore tab positions
+  * #8584  Display vcard-temp JABBERIDs somewhere
+  * #8631  Vertical tabs can not be adjusted in width in latest master
+  * #8742  Integrate the Appindicator plugin into Gajim
+  * #8745  Allow successive bookmarked MUC autojoins (in oposite to concurrent)
+  * #8849  Error when disabling an account: Account iter of <the server> could not be found
+  * #8897  Roster filter crashes
+  * #8898  Roster tree elements have wrong collapse state during and after roster filtering
+  * #8900  Black bar artifact below the conversation text
+  * #9041  HTTPUpload: Add upload button to contact right-click menu
+  * #9046  Add a "Minimize on close" in Preferences for all MUC rooms
+  * #9145  Roster not showing number of contacts logged in per group
+  * #9164  Chatstates: Color of tab as "typing/composing" indicator get's lost on focus
+  * #9174  Changing status results in an error
+  * #9202  No context menu on MUC's tab
+  * #9321  Cannot allow contact to see my status
+  * #9360  Allow disabling keyboard shorcut ctrl+L (clear chat window)
+  * #9457  Add global search in History window
+  * #9501  Mark corrected messages (LMC) in history browser
+  * #9596  Add UI to search history from contact/chat window
+  * #9615  Corrected messages (LMC) sporadically overlapped in the chat window
+  * #9681  Highlight quotes in chat
+  * #9683  Dynamically load history when scrolling to top
+  * #9694  AttributeError: 'NoneType' object has no attribute 'room_jid'
+  * #9695  Jingle file transfer does not work in LAN
+  * #9709  Roster remove request?
+  * #9712  Show multiple subscription requests in a single window
+  * #9750  Command line flag to start in tray icon?
+  * #9767  GDBus.Error:org.freedesktop.login1.OperationInProgress: The operation inhibition has been requested for is already running (36)
+  * #9846  AttributeError in reconfig() when changing window mode: 'NoneType' object has no attribute 'contact'
+  * #9847  Showing avatars disabled but avatars displayed in group chats
+  * #9887  Scrolling performance issue with ConversationTextview
+  * #9933  Contact missing for predefined roster after deleting history
+  * #9940  Show maximized group chats in contact list
+  * #9992  TypeError: unknown type (null) in on_modelfilter_row_has_child_toggled
+  * #10000 Transport in roster not being discovered
+  * #10108 Self contact is not always shown
+  * #10123 error sending file with jingle through gajim
+  * #10133 Account Wizard: Let user choose account label
+  * #10166 AttributeError: 'NoneType' object has no attribute 'show'
+  * #10205 Restoring conversation tabs fails if JID contains comma
+  * #10236 MUC: Error in update_actions when clicking on tray notification
+  * #10242 Bug with roster:  Repeating error message: "too many values to unpack (exptected 2)"
+  * #10248 logind timeout error (24) in _inhibit_sleep
+  * #10249 StatusIcon: Show connection lost icon when at least one account is not connected
+  * #10279 error after wake-up from hibernation
+  * #10281 Last message correction doesn't work correctly with HTTP upload
+  * #10450 Clicking a link in the message window can cause Gajim 1.3 to crash
+  * #10452 Various contact list issues
+  * #10455 App crashing if quit from tray in Windows
+  * #10461 TypeError: can only concatenate str (not "NoneType") to str when receving bare jid presence from localpart@component.domain.tld
+  * #10472 ConfirmationCheckDialog: DELETE_EVENT does not propagate checkbox state
+  * #10483 Don't interrupt onboarding with update dialog
+  * #10490 Gajim does not send XHTML in MUC
+  * #10493 Gajim’s minimum width is constrained by group chat window’s minimum width
+  * #10496 Accounts: Login settings not accessible
+  * #10506 Clicking "information" after right-click my friend causes error
+  * #10512 Setting MOTD without text triggers error
+  * #10513 Window management: AttributeError: 'NoneType' object has no attribute 'set_control_active'
+  * #10525 Sending an empty file creates errors
+  * #10526 Chat-to-MUC dialog: Contact name not shown sometimes
+  * #10531 Right-click popup menu appears, but also serves me this error reporting dialog that's annoying
+  * #10550 Joining a conference room: `AttributeError: 'NoneType' object has no attribute 'parent_win'` with `gc_ctrl` object.
+  * #10555 Crash on start with broken OMEMO archived message
+  * #10562 UnicodeDecodeError: 'utf-8' codec can't decode byte 0xfc in position 100: invalid start byte
+  * #10575 AttributeError 'NoneType' object has no attribute 'parent_win' while trying to join group chat
+  * #10578 Disabling account should retract status icon events
+  * #10586 Answering PM from Bot leads to 'NoneType' object has no attribute 'get_full_jid'
+  * #10599 MUC notifications: add sender's nickname
+  * #10608 Non-square shaped avatars are not displayed properly
+  * #10635 Groupchat mention notifications produce sound in do-not-disturb although settings are set not to do so
+  * #10644 Notification: Error in handle_event when clicking button (login failed)
+  * #10658 Account wizard stuck on spinner when connected to broken server
+  * #10666 Creating a new groupchat fails if there is no network connection
+  * #10667 Show username/JID in password request dialog
+  * #10669 mumble:// URIs are not linkified and can't be clicked to open
+  * #10676 Files containing %20 do not download/upload correctly
+  * #10677 Jingle: file-sent-error not handled correctly
+  * #10678 Invalid version error when launching from a repository checked into Git
+  * #10692 ValueError: no kind attribute
+  * #10695 MUC Participant Information Dialog Device Page
+  * #10696 Clicking Avatar in MUC should focus Message Input
+  * #10697 AttributeError
+  * #10710 Click on found history item causes AttributeError: 'Row' object has no attribute 'stanza_id'
+  * #10713 Gajim UI unresponsive during history search
+  * #10715 Clean up GStreamer libraries
+  * #10716 Invalid type error in group chat settings
+  * #10721 No image preview with special image
+  * #10724 Entering emoji in contact list
+  * #10726 Code widget error
+  * #10734 Preview: Generating fails with gdk-pixbuf-error-quark: Unrecognized image file format (3)
+  * #10736 Preview Generating with PIL fails with OSError: encoder error -2 when writing image file
+  * #10741 Remove History Manager
+  * #10744 Preview own uploads
+  * #10745 error when hiding notification area icon
+  * #10751 Inconsistent notifications behavior in 1.4 nightlies
+  * #10773 Failure to store roster notes not reported
+  * #10774 AppIndicator should be used for the tray icon on Wayland
+  * #10813 Receiving a notification creates exception
+  * #10814 Unable to delete custom theme
+  * #10815 Improve Security Labels (XEP-0258) feature
+  * #10816 AttributeError: PrivateChatControl object has no attribute
+  * #10822 Exception when running contact info on a contact that stop sending status updates
+  * #10841 HTTPUpload: Error not shown when filesize limit is reached
+
+
+Gajim 1.3.3 (10 October 2021)
+
+  New
+
+  * Profile: Add NOTE entry
+
+  Changes
+
+  * Port AdHocCommand window to new Assistant
+  * Update API JID for search.jabber.network integration
+  * Build with Python 3.9
+  * Provider list: Remove blabber.im
+
+  Bug fixes
+
+  * #10638 Depend on nbxmpp>=2.0.4 (CVE-2021-41055)
+  * #10560 HTTPUpload: Raise FileError if path is not accessible
+  * #10558 Fix spell checking
+  * #10551 Check for gstreamer GTK plugin for AV support
+  * #10545 Jingle: Fix UnboundLocalError for transports variable
+  * #10540 Windows: Add GSSAPI dependency
+  * #10539 Stop gdbus.exe when running uninstaller
+  * #10478 Fix test_gui_interface testsuite
+  * #10477 Migration routine for portable installer
+  * #10441 Reload CSS after switching dark/light theme
+  * #10150 Dead key improvements
+  * Fix starting History Manager in standalone mode
+
+Gajim 1.3.2 (24 April 2021)
+
+  New
+
+  * Accounts: Add account switch description
+
+  Changes
+
+  * MessageInput: Remove custom placeholder
+  * MessageInput: Add focus borders
+
+  Bug fixes
+
+  * #10010 Only convert domain name to ASCII
+  * #10342 UnicodeDecodeError related to avatars
+  * #10428 Roster: Handle missing avatar_sha
+
+
+Gajim 1.3.1 (01 March 2021)
+
+  New
+
+  * Add setting for GSSAPI authentication
+
+  Changes
+
+  * #10416 Remove conversion of ASCII emojis
+
+  Bug fixes
+
+  * #10273 VcardWindow: Fix resource string if resource is missing
+  * #10424 GroupChatInvitation: Show account badge
+  * #10430 Preferences: Check for pipeline before removing elements
+  * #10436 Stop early when handling connection-failed in handle_event
+  * #10438 Set account window stack as non-vhomogeneous
+  * #10443 ServiceRegistration: Use nbxmpp register methods
+  * #10445 Change dataform to href markup URLs in fixed field
+  * #10450 Workaround for crash on clicking links
+  * AvatarSelector: Improve error handling
+  * Profile: Show error if avatar upload fails
+  * UserAvatar: Handle empty data nodes
+  * StatusIcon: Only hide application when its focused
+
+
+Gajim 1.3.0 (08 February 2021)
+
+  New
+
+  * Add --gdebug option
+
+  Bug fixes
+
+  * Search also in user data dir for translations
+  * AV: Fix closing chat window while in call
+  * Chat: Don’t unselect text after key press
+  * Profile: Correctly handle not existing vcard
+  * Fix display problems with feather icons
+  * Bookmarks: Check for config-node-max feature
+  * #10401 Fix race condition when removing an account
+  * #10421 Chat: Fix race condition when closing with ESC
+
+
+Gajim 1.3.0-beta2 (10 January 2021)
+
+  Changes
+
+  * Use direct messages in non-anonymous group chats instead of PM
+
+  Bug fixes
+
+  * Fix a problem with the Gajim symbolic icon when opening the Accounts dialog
+  * Make Gajim connect even if the Private XML Storage extension is not available on the server
+  * #10235 Roster tooltip error
+  * #10342 Add Workaround for UnicodeDecodingError popups
+  * #10377 Profile: Make adding a Organisation entry work
+  * #10384 Make the HistoryManager work again in standalone mode
+
+
+Gajim 1.3.0-beta1 (29 December 2020)
 
   New
 
