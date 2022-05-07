@@ -305,7 +305,7 @@ modules:
   - name: python3-nbxmpp
     buildsystem: simple
     build-commands:
-      - pip3 install .
+      - pip3 install --no-build-isolation .
     sources:
       - type: git
         url: https://dev.gajim.org/gajim/python-nbxmpp.git
