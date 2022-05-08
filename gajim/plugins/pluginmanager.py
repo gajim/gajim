@@ -96,7 +96,7 @@ class PluginManifest:
 
     @classmethod
     def from_path(cls, path: Path) -> PluginManifest:
-        manifest_path = path / 'manifest.json'
+        manifest_path = path / 'plugin-manifest.json'
         if not manifest_path.exists():
             manifest_path = path / 'manifest.ini'
             if not manifest_path.exists():
@@ -108,7 +108,7 @@ class PluginManifest:
         if manifest_path.name == 'manifest.ini':
             return cls.from_manifest_ini(manifest_path)
 
-        if manifest_path.name == 'manifest.json':
+        if manifest_path.name == 'plugin-manifest.json':
             with manifest_path.open() as f:
                 try:
                     manifest = json.load(f)
@@ -725,7 +725,7 @@ class PluginManager(metaclass=Singleton):
                 raise PluginsystemError(_('Archive is malformed'))
             if filename.endswith('/') and filename.find('/', 0, -1) < 0:
                 dirs.append(filename.strip('/'))
-            if 'manifest.json' in filename.split('/')[1]:
+            if 'plugin-manifest.json' in filename.split('/')[1]:
                 manifest = True
         if not manifest:
             return None
