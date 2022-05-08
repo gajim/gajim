@@ -60,11 +60,11 @@ modules:
   - name: python3-pyparsing
     buildsystem: simple
     build-commands:
-      - pip3 install pyparsing-3.0.7-py3-none-any.whl
+      - pip3 install pyparsing-3.0.8-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/pyparsing/pyparsing-3.0.7-py3-none-any.whl
-        sha256: a6c06a88f252e6c322f65faf8f418b16213b51bdfaece0524c1c1bc30c63c484
+        url: https://files.pythonhosted.org/packages/py3/p/pyparsing/pyparsing-3.0.8-py3-none-any.whl
+        sha256: ef7b523f6356f763771559412c0d7134753f037822dad1b16945b7b846f7ad06
 
   - name: python3-packaging
     buildsystem: simple
@@ -116,22 +116,22 @@ modules:
     only-arches:
       - aarch64
     build-commands:
-      - pip3 install cryptography-36.0.2-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+      - pip3 install cryptography-37.0.2-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp36/c/cryptography/cryptography-36.0.2-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
-        sha256: 8241cac0aae90b82d6b5c443b853723bcc66963970c67e56e71a2609dc4b5eaf
+        url: https://files.pythonhosted.org/packages/cp36/c/cryptography/cryptography-37.0.2-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+        sha256: 093cb351031656d3ee2f4fa1be579a8c69c754cf874206be1d4cf3b542042804
 
   - name: python3-cryptography
     buildsystem: simple
     only-arches:
       - x86_64
     build-commands:
-      - pip3 install cryptography-36.0.2-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+      - pip3 install cryptography-37.0.2-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp36/c/cryptography/cryptography-36.0.2-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-        sha256: 7b2d54e787a884ffc6e187262823b6feb06c338084bbe80d45166a1cb1c6c5bf
+        url: https://files.pythonhosted.org/packages/cp36/c/cryptography/cryptography-37.0.2-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+        sha256: 59b281eab51e1b6b6afa525af2bd93c16d49358404f814fe2c2410058623928c
 
   - name: python3-pyopenssl
     buildsystem: simple
@@ -154,29 +154,29 @@ modules:
   - name: python3-jeepney
     buildsystem: simple
     build-commands:
-      - pip3 install jeepney-0.7.1-py3-none-any.whl
+      - pip3 install jeepney-0.8.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/j/jeepney/jeepney-0.7.1-py3-none-any.whl
-        sha256: 1b5a0ea5c0e7b166b2f5895b91a08c14de8915afda4407fb5022a195224958ac
+        url: https://files.pythonhosted.org/packages/py3/j/jeepney/jeepney-0.8.0-py3-none-any.whl
+        sha256: c0a454ad016ca575060802ee4d590dd912e35c122fa04e70306de3d076cce755
 
   - name: python3-secretstorage
     buildsystem: simple
     build-commands:
-      - pip3 install SecretStorage-3.3.1-py3-none-any.whl
+      - pip3 install SecretStorage-3.3.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/S/SecretStorage/SecretStorage-3.3.1-py3-none-any.whl
-        sha256: 422d82c36172d88d6a0ed5afdec956514b189ddbfb72fefab0c8a1cee4eaf71f
+        url: https://files.pythonhosted.org/packages/py3/S/SecretStorage/SecretStorage-3.3.2-py3-none-any.whl
+        sha256: 755dc845b6ad76dcbcbc07ea3da75ae54bb1ea529eb72d15f83d26499a5df319
 
   - name: python3-zipp
     buildsystem: simple
     build-commands:
-      - pip3 install zipp-3.7.0-py3-none-any.whl
+      - pip3 install zipp-3.8.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/z/zipp/zipp-3.7.0-py3-none-any.whl
-        sha256: b47250dd24f92b7dd6a0a8fc5244da14608f3ca90a5efcd37a3b1642fac9a375
+        url: https://files.pythonhosted.org/packages/py3/z/zipp/zipp-3.8.0-py3-none-any.whl
+        sha256: c4f6e5bbf48e74f7a38e7cc5b0480ff42b0ae5178957d564d18932525d5cf099
 
   # keyring dependency
   - name: python3-importlib-metadata
@@ -253,8 +253,8 @@ modules:
       - /bin
     sources:
       - type: archive
-        url: https://download.gnome.org/sources/gspell/1.8/gspell-1.8.4.tar.xz
-        sha256: cf4d16a716e813449bd631405dc1001ea89537b8cdae2b8abfb3999212bd43b4
+        url: https://download.gnome.org/sources/gspell/1.10/gspell-1.10.0.tar.xz
+        sha256: 803bb884c0215d3fd22a85d7f30423aff88d9792f05a5199d8a489a2ffaae1da
 
   - name: farstream
     rm-configure: true
@@ -271,8 +271,8 @@ modules:
       - pip3 install .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/p/pillow/Pillow-9.0.1.tar.gz
-        sha256: 6c8bc8238a7dfdaf7a75f5ec5a663f4173f8c367e5a39f87e720495e1eed75fa
+        url: https://files.pythonhosted.org/packages/source/p/pillow/Pillow-9.1.0.tar.gz
+        sha256: f401ed2bbb155e1ade150ccc63db1a4f6c1909d3d378f7d1235a44e90d75fb97
 
   # sentry-sdk dependency
   - name: python3-urllib3
@@ -296,11 +296,11 @@ modules:
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-1.5.8-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-1.5.11-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.5.8-py2.py3-none-any.whl
-        sha256: 32af1a57954576709242beb8c373b3dbde346ac6bd616921def29d68846fb8c3
+        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.5.11-py2.py3-none-any.whl
+        sha256: c17179183cac614e900cbd048dab03f49a48e2820182ec686c25e7ce46f8548f
 
   - name: python3-nbxmpp
     buildsystem: simple
