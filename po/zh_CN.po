@@ -6,13 +6,14 @@
 # Guanhao Yin <yinguanhao@gmail.com>, 2010.
 # SAIHAZE <saihaze@outlook.com>, 2022.
 # Tommy He <lovenemesis@gmail.com>, 2022.
+# andy baker <andy.baker@dismail.de>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-19 16:30+0000\n"
-"PO-Revision-Date: 2022-05-07 11:16+0000\n"
-"Last-Translator: Tommy He <lovenemesis@gmail.com>\n"
+"PO-Revision-Date: 2022-05-08 05:29+0000\n"
+"Last-Translator: andy baker <andy.baker@dismail.de>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
 "gajim/master/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -612,7 +613,7 @@ msgid "ALSA: %s"
 msgstr "ALSA: %s"
 
 msgid "API Preferences. Possible values: 'http', 'iq'"
-msgstr "API 首选项。可能的值为: 'http', 'iq'"
+msgstr "API设置，可能的值：'http', 'iq'"
 
 msgid "A_way"
 msgstr "离开(_W)"
@@ -828,7 +829,7 @@ msgstr "允许使用 POSH 验证证书。"
 msgid ""
 "Allow to hide the contact list window even if the notification area icon is "
 "not shown."
-msgstr "允许隐藏联系人列表窗口包括通知栏区域不显示的时候。"
+msgstr "允许以在提醒区域图标未显示时隐藏联系人列表窗口"
 
 msgid "Allowed File Size"
 msgstr "可允许的文件尺寸"
@@ -945,7 +946,7 @@ msgid ""
 msgstr "在关闭可能会丢失数据（聊天、私信）的标签式聊天窗口前询问。"
 
 msgid "Ask before pasting an image."
-msgstr "粘贴图片前询问。"
+msgstr "在粘贴图片前询问"
 
 msgid "Attention Message Received"
 msgstr "收到关注的消息"
@@ -2257,7 +2258,8 @@ msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
 "the news with your groups."
-msgstr "Gajim 的目标是提供一个易于使用且功能完备的 XMPP 客户端。尽情的与您的朋友和家"
+msgstr ""
+"Gajim 的目标是提供一个易于使用且功能完备的 XMPP 客户端。尽情的与您的朋友和家"
 "人聊天，轻松分享图片和想法，或者和您的群组讨论新闻。"
 
 msgid "Gajim can not read this file"
@@ -2327,7 +2329,7 @@ msgid "Go"
 msgstr "转到"
 
 msgid "Grant Voice"
-msgstr "授予麦克风权限"
+msgstr "授予语音"
 
 msgid "Group"
 msgstr "群组"
@@ -2516,8 +2518,7 @@ msgstr "如过禁用，该帐户将被禁用且不会出现在联系人列表窗
 msgid ""
 "If enabled, Gajim hides the contact list window when pressing the X button "
 "instead of minimizing into the notification area."
-msgstr ""
-"如果启用，Gajim 将在点按关闭按钮时隐藏联系人列表窗口而不是最小化到通知区域。"
+msgstr "如果开启该选项，按下X按钮时Gajim将隐藏联系人列表窗口而不是最小化至消息提醒区"
 
 msgid ""
 "If enabled, Gajim hides the main window when pressing the X button instead "
@@ -2563,10 +2564,10 @@ msgstr ""
 "空）。"
 
 msgid "If enabled, Gajim will execute XEP-0146 Commands."
-msgstr "如果启用，Gajim 将执行 XEP-1046 指令。"
+msgstr "如启用，Gajim执行XEP-0146中规定的命令."
 
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
-msgstr "如果启用，Gajim 将执行指令(/show, /sh, /execute, /exec)。"
+msgstr "如启用，Gajim将执行命令(/show, /sh, /execute, /exec)。"
 
 msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
 msgstr "如果启用，Gajim 将忽略发送来的关注请求('wizz')。"
@@ -2574,14 +2575,12 @@ msgstr "如果启用，Gajim 将忽略发送来的关注请求('wizz')。"
 msgid ""
 "If enabled, Gajim will reopen chat windows that were opened last time Gajim "
 "was closed."
-msgstr "如果启用，Gajim 将会再次打开 Gajim 上次关闭时打开的聊天窗口。"
+msgstr "如启用，Gajim将打开上次关闭时的聊天窗口"
 
 msgid ""
 "If enabled, Gajim will save the contact list window position when hiding it, "
 "and restore it when showing the contact list window again."
-msgstr ""
-"如果启用，Gajim 将保存隐藏联系人窗口列表时的位置，然后在下次展示联系人窗口列"
-"表时重新恢复。"
+msgstr "如果开启, Gajim将在联系人列表窗口隐藏时保存位置，并在显示时恢复"
 
 msgid ""
 "If enabled, Gajim will save the main window position when hiding it, and "
@@ -2671,7 +2670,8 @@ msgid ""
 "If enabled, you will be able to set a negative priority to your account in "
 "the Accounts window. BE CAREFUL, when you are logged in with a negative "
 "priority, you will NOT receive any message from your server."
-msgstr "如果启用， 您可以在账户窗口中为你的账户可以设置一个负的优先级。注意！当您使用"
+msgstr ""
+"如果启用， 您可以在账户窗口中为你的账户可以设置一个负的优先级。注意！当您使用"
 "负的优先级账户登入时，您将不会从服务器收到任何消息。"
 
 msgid "If enabled, you will see your webcam's video stream as well."
@@ -2706,8 +2706,9 @@ msgstr "导入联系人"
 msgid ""
 "In a chat, show the nickname at the beginning of a line only when it's not "
 "the same person talking as in the previous message."
-msgstr "在聊天中，只有当聊天对象不是前一条信息中的同一个人时，才在一行的开头显示昵称"
-"。"
+msgstr ""
+"在聊天中，只有当聊天对象不是前一条信息中的同一个人时，才在一行的开头显示昵"
+"称。"
 
 msgid ""
 "In order to write messages in this chat, you need to request voice first.\n"
@@ -2841,7 +2842,8 @@ msgstr "我正在享受户外生活。"
 msgid ""
 "I’m synchronizing my contacts from my account at \"%s\". Could you please "
 "add this address to your contact list?"
-msgstr "我正在从我位于“%s”的账户同步我的联系人。可以请您将这个地址加入到您的联系人列"
+msgstr ""
+"我正在从我位于“%s”的账户同步我的联系人。可以请您将这个地址加入到您的联系人列"
 "表吗？"
 
 msgid "I’m watching a movie."
@@ -2942,8 +2944,9 @@ msgid ""
 "List of XMPP Addresses (space separated) for which you do not want to store "
 "chat history. You can also add the name of an account to disable storing "
 "chat history for this account."
-msgstr "您不想保存聊天记录的 XMPP "
-"地址列表(以空格隔开)。您也可以添加账户名称从而禁用该账户的聊天记录保存。"
+msgstr ""
+"您不想保存聊天记录的 XMPP 地址列表(以空格隔开)。您也可以添加账户名称从而禁用"
+"该账户的聊天记录保存。"
 
 msgid ""
 "List of rows (accounts and groups) that are collapsed (space separated)."
@@ -2952,7 +2955,8 @@ msgstr "需要折叠的行(账户和分组)列表(以空格隔开)。"
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
 "file transfers (in case of address translation/port forwarding)."
-msgstr "除了本地端口以外用于文件传输(在需要地址翻译/端开转发的情况下)的主机列表(以逗"
+msgstr ""
+"除了本地端口以外用于文件传输(在需要地址翻译/端开转发的情况下)的主机列表(以逗"
 "号隔开)。"
 
 msgid "Listing of Servers"
@@ -3119,7 +3123,8 @@ msgstr "被归档到服务器上的消息"
 msgid ""
 "Messages will only be available for reading them later if storing chat "
 "history is enabled and if the contact is in your contact list."
-msgstr "除非你启用了历史记录而且向你发送消息的联系人在你的联系人列表中，你才能在以后"
+msgstr ""
+"除非你启用了历史记录而且向你发送消息的联系人在你的联系人列表中，你才能在以后"
 "读到这些消息。"
 
 msgid "Microphone & Camera"
@@ -3560,7 +3565,7 @@ msgid "Pl_ugins"
 msgstr "插件(_U)"
 
 msgid "Place the contact list on the right in single window mode"
-msgstr "在单窗口模式时将联系人列表放置在右侧"
+msgstr "单一窗口模式下放置联系人列表在右"
 
 msgid "Play Sound"
 msgstr "播放声音"
@@ -3672,8 +3677,9 @@ msgstr "在聊天窗口中进行文件拖放时首选的文件传输机制"
 msgid ""
 "Preferred file transfer mechanism for file drag&drop on a chat window. Can "
 "be 'httpupload' (default) or 'jingle'."
-msgstr "在聊天窗口中进行文件拖放时首选的文件传输机制 。可以是 'httpupload'（默认）"
-"或者 'jingle'。"
+msgstr ""
+"在聊天窗口中进行文件拖放时首选的文件传输机制 。可以是 'httpupload'（默认）或"
+"者 'jingle'。"
 
 msgid "Presence description:"
 msgstr "预设描述:"
@@ -4189,7 +4195,7 @@ msgid "Send DTMF sequence through an open voice chat"
 msgstr "通过开放的语音聊天发送 DTMF 序列"
 
 msgid "Send File"
-msgstr "发送文件"
+msgstr "发送文件(&F)"
 
 #, python-format
 msgid "Send File (max. %s)…"
@@ -4473,8 +4479,9 @@ msgstr "显示提到指定文本的日志信息"
 msgid ""
 "Show message meta data (avatar, nickname, timestamp) only once, if there are "
 "multiple messages from the same sender within a specific timespan."
-msgstr "如果在指定时间范围内有多条来自同一个发送者的消息的话，只显示一次消息元数据（"
-"头像、昵称、时间戳）。"
+msgstr ""
+"如果在指定时间范围内有多条来自同一个发送者的消息的话，只显示一次消息元数据"
+"（头像、昵称、时间戳）。"
 
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "哪怕您离开或忙碌等时候依然显示通知。"
@@ -4562,8 +4569,9 @@ msgstr "按状态排序"
 msgid ""
 "Sound to play when a group chat message contains one of the words in "
 "'muc_highlight_words' or your nickname is mentioned."
-msgstr "当收到的聊天室的消息包含 'muc_highlight_words' "
-"内的词或提及您昵称时播放的声音。"
+msgstr ""
+"当收到的聊天室的消息包含 'muc_highlight_words' 内的词或提及您昵称时播放的声"
+"音。"
 
 msgid "Sound to play when any group chat message arrives."
 msgstr "当任何群聊消息到达时播放的声音。"
@@ -4935,7 +4943,8 @@ msgstr "该消息已使用 %s 加密且无法解密。"
 msgid ""
 "This message was encrypted with Legacy OpenPGP and could not be decrypted. "
 "You can install the PGP plugin to handle those messages."
-msgstr "该消息使用过时的 OpenPGP 加密且无法解密。您可以安装 PGP 插件来处理这类消息。"
+msgstr ""
+"该消息使用过时的 OpenPGP 加密且无法解密。您可以安装 PGP 插件来处理这类消息。"
 
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr "该消息已使用 OTR 加密且无法解密。"
@@ -4943,8 +4952,9 @@ msgstr "该消息已使用 OTR 加密且无法解密。"
 msgid ""
 "This message was encrypted with OpenPGP for XMPP and could not be decrypted. "
 "You can install the OpenPGP plugin to handle those messages."
-msgstr "该消息已使用 XMPP 专用 OpenPGP 加密且无法解密。您可以安装 OpenPGP "
-"插件以处理这类消息。"
+msgstr ""
+"该消息已使用 XMPP 专用 OpenPGP 加密且无法解密。您可以安装 OpenPGP 插件以处理"
+"这类消息。"
 
 msgid ""
 "This option lets you customize the timestamp that is printed in "
@@ -4952,9 +4962,9 @@ msgid ""
 "doc on strftime for full documentation (https://docs.python.org/3/library/"
 "time.html#time.strftime)."
 msgstr ""
-"这个选项允许您自定义对话中显示的时间戳格式。比如\"[%H:%M]\"会显示为\""
-"[小时:分钟]\"。请参考 Python 文档关于 strftime 的完整文档(https://docs.python"
-".org/3/library/time.html#time.strftime)。"
+"这个选项允许您自定义对话中显示的时间戳格式。比如\"[%H:%M]\"会显示为\"[小时:分"
+"钟]\"。请参考 Python 文档关于 strftime 的完整文档(https://docs.python.org/3/"
+"library/time.html#time.strftime)。"
 
 msgid "This server does not allow signup."
 msgstr "该服务器不允许注册。"
@@ -5257,8 +5267,9 @@ msgstr "V4L2: %s"
 msgid ""
 "Valid URI schemes. Only schemes in this list will be accepted as 'real' URI "
 "(mailto and xmpp are handled separately)."
-msgstr "有效的 URI Scheme。只有这个列表中的 Scheme 会被接受为 \"真正的\" URI。("
-"mailto 和 xmpp 被分开处理)。"
+msgstr ""
+"有效的 URI Scheme。只有这个列表中的 Scheme 会被接受为 \"真正的\" URI。"
+"(mailto 和 xmpp 被分开处理)。"
 
 msgid "Validity"
 msgstr "有效性"
@@ -5443,9 +5454,8 @@ msgid ""
 "insecure connection method. This means conversations will not be encrypted. "
 "Connecting PLAIN is strongly discouraged."
 msgstr ""
-"您将通过一种不安全的连接方式连接到帐户 %(account)s "
-"(%(server)s)。这意味着您的所有对话都不会被加密。强烈不建议使用 PLAIN "
-"方式连接。"
+"您将通过一种不安全的连接方式连接到帐户 %(account)s (%(server)s)。这意味着您的"
+"所有对话都不会被加密。强烈不建议使用 PLAIN 方式连接。"
 
 msgid "You are about to quit Gajim"
 msgstr "您即将退出 Gajim"
@@ -5813,108 +5823,92 @@ msgstr "报告垃圾信息 (_R)"
 msgid "_Request"
 msgstr "请求(_R)"
 
-#, fuzzy
 msgid "_Reset Value"
-msgstr "恢复为默认颜色设置(_R)"
+msgstr "恢复为默认值(_R)"
 
 msgid "_Retract"
-msgstr ""
+msgstr "撤回"
 
 msgid "_Save"
 msgstr "保存(_S)"
 
-#, fuzzy
 msgid "_Save as"
-msgstr "保存(_S)"
+msgstr "另存为(_S)"
 
 msgid "_Search"
 msgstr "查找(_S)"
 
-#, fuzzy
 msgid "_Select"
-msgstr "清洁"
+msgstr "选择(_S)"
 
 msgid "_Send"
 msgstr "发送(_S)"
 
-#, fuzzy
 msgid "_Send Files"
-msgstr "发送文件(_F)"
+msgstr "发送文件(_S)"
 
-#, fuzzy
 msgid "_Show Certificate"
-msgstr "查看证书…"
+msgstr "显示证书(_S)"
 
-#, fuzzy
 msgid "_Show notification when file transfer is complete"
-msgstr "文件传输完成时提醒我(_N)"
+msgstr "文件传输完成时通知(_N)"
 
-#, fuzzy
 msgid "_Sign Up"
-msgstr "登录(I)"
+msgstr "注册(_S)"
 
-#, fuzzy
 msgid "_Start / Join Chat…"
-msgstr "开始聊天"
+msgstr "开始/加入聊天"
 
 msgid "_Start Chat..."
 msgstr "开始聊天(_S)"
 
 msgid "_Stop Sharing"
-msgstr ""
+msgstr "停止共享"
 
 msgid "_Subscribe"
 msgstr "订阅(_S)"
 
-#, fuzzy
 msgid "_Try Again"
-msgstr "重新验证"
+msgstr "重试(_T)"
 
-#, fuzzy
 msgid "_Type"
-msgstr "类型(_T): "
+msgstr "类型(_T)"
 
 msgid "_Undo"
 msgstr "撤销(_U)"
 
 msgid "_Unregister account from service"
-msgstr ""
+msgstr "从服务中注销账户(_U)"
 
 msgid "_Unsubscribe"
 msgstr "退订(_S)"
 
-#, fuzzy
 msgid "_Username"
-msgstr "用户名(_U): "
+msgstr "用户名(_U)"
 
-#, fuzzy
 msgid "_View"
-msgstr "视图(_V)"
+msgstr "查看(_V)"
 
-#, fuzzy
 msgid "_View Certificate"
-msgstr "查看证书…"
+msgstr "查看证书(_V)"
 
-#, fuzzy
 msgid "_Wiki (Online)"
-msgstr "在线"
+msgstr "Wiki(在线)"
 
-#, fuzzy
 msgid "_XML Console"
-msgstr "XML 控制台"
+msgstr "XML 控制台(_X)"
 
 msgid "accuracy"
-msgstr ""
+msgstr "准确性"
 
-#, fuzzy
 msgid "alt"
-msgstr "默认"
+msgstr "alt"
 
 msgid "and NOT authenticated"
-msgstr "且未被认证"
+msgstr "未被认证"
 
 msgid "and authenticated"
-msgstr "且已被认证"
+msgstr "已被认证"
 
 msgid "area"
 msgstr "区域"
@@ -5925,13 +5919,11 @@ msgstr "音频输入"
 msgid "audio output"
 msgstr "音频输出"
 
-#, fuzzy
 msgid "bearing"
-msgstr "海洋"
+msgstr "负载中"
 
-#, fuzzy
 msgid "building"
-msgstr "藏起来"
+msgstr "建立"
 
 msgid ""
 "change status of account \"account\". If not specified, try to change status "
@@ -5946,10 +5938,10 @@ msgstr ""
 "户"
 
 msgid "chat;messaging;im;xmpp;voip;"
-msgstr ""
+msgstr "对话;信息;及时消息;xmpp协议;voip"
 
 msgid "column"
-msgstr ""
+msgstr "列"
 
 msgid "command"
 msgstr "命令"
@@ -5961,7 +5953,7 @@ msgid "countrycode"
 msgstr "国家代码"
 
 msgid "datum"
-msgstr ""
+msgstr "日期"
 
 msgid "description"
 msgstr "描述"
@@ -5987,19 +5979,18 @@ msgid "file transfers list"
 msgstr "文件传输列表"
 
 msgid "floor"
-msgstr ""
+msgstr "层"
 
 msgid "has closed the chat window or tab"
 msgstr "关闭了聊天窗口或标签"
 
-#, fuzzy
 msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
-msgstr "选择您想要离开的聊天室"
+msgstr "你被邀请加入群组聊天，想要加入吗？"
 
 msgid "if specified, contact is taken from the contact list of this account"
-msgstr "如指定, 将从此帐户列表下移出联系人"
+msgstr "如指定, 将从此帐户列表下取得联系人"
 
 msgid "if specified, file will be sent using this account"
 msgstr "如指定, 文件将被用此账户发送"
@@ -6017,17 +6008,16 @@ msgid "is paying attention to the conversation"
 msgstr "正关注此对话"
 
 msgid "lat"
-msgstr ""
+msgstr "纬度"
 
 msgid "locality"
-msgstr ""
+msgstr "地区"
 
-#, fuzzy
 msgid "lon"
-msgstr "一"
+msgstr "经度"
 
 msgid "macOS"
-msgstr "macOS"
+msgstr "苹果macOS"
 
 msgid "message contents"
 msgstr "消息内容"
@@ -6035,26 +6025,24 @@ msgstr "消息内容"
 msgid "message subject"
 msgstr "消息标题"
 
-#, fuzzy
 msgid ""
 "one of: offline, online, chat, away, xa, dnd. If not set, use account's "
 "previous status"
 msgstr ""
-"下列之一: offline, online, chat, away, xa, dnd, invisible。如果没有设置, 使用"
-"账户先前的状态"
+"下列状态之一: offline, online, chat, away, xa, dnd, invisible。如果没有设置, "
+"使用账户先前的状态"
 
-#, fuzzy
 msgid "or"
-msgstr "To"
+msgstr "或者"
 
 msgid "org.gajim.Gajim"
-msgstr ""
+msgstr "org.gajim.Gajim"
 
 msgid "paused composing a message"
 msgstr "暂停输入消息"
 
 msgid "postalcode"
-msgstr ""
+msgstr "邮政编码"
 
 msgid "priority you want to give to the account"
 msgstr "您想要给予这个账户的优先级"
@@ -6068,7 +6056,7 @@ msgid "python-nbxmpp Version: %s"
 msgstr "python-nbxmpp 版本：%s"
 
 msgid "region"
-msgstr ""
+msgstr "地区"
 
 msgid "room"
 msgstr "聊天室"
@@ -6080,26 +6068,26 @@ msgid "show only contacts of the given account"
 msgstr "只显示指定帐户的联系人"
 
 msgid "speed"
-msgstr ""
+msgstr "速度"
 
 msgid "status message"
 msgstr "状态信息"
 
-#, fuzzy
 msgid "street"
-msgstr "stream"
+msgstr "街道"
 
 msgid "subject"
 msgstr "标题"
 
 msgid "text"
-msgstr ""
+msgstr "文字"
 
 msgid "timestamp"
 msgstr "时间戳"
 
 msgid "translator-credits"
-msgstr "翻译者-贡献"
+msgstr "这些文字用于提及每种语言的个人翻译人员，例如：社区成员（2020）乐于助人的贡献"
+"者（2019）随机人员（2018）"
 
 msgid "user@example.org"
 msgstr "user@example.org"
@@ -6118,9 +6106,9 @@ msgstr "{nick}被封禁{actor}{reason}"
 msgid "{nick} has been kicked{actor}{reason}"
 msgstr "{nick} 被踢出{actor}{reason}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{nick} has been removed from the group chat{by}{reason}"
-msgstr "{nick} 已从聊天室移除{by}{reason}"
+msgstr "{nick} 被从群组聊天移除{by}{reason}"
 
 #, python-brace-format
 msgid "{nick} has left due to an error{reason}"
@@ -6143,7 +6131,7 @@ msgid "{nick} is now {show}{status}"
 msgstr "{nick} 现在状态是 {show}{status}"
 
 msgid "…or drop it here"
-msgstr ""
+msgstr "或者在这里卸下"
 
 #~ msgid ""
 #~ "\n"
