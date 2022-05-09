@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
 "PO-Revision-Date: 2022-02-20 07:52+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -1382,6 +1382,13 @@ msgstr ""
 msgid "Check for Gajim updates periodically"
 msgstr ""
 
+#, fuzzy
+msgid "Check for updates"
+msgstr "起動時に更新をチェック"
+
+msgid "Check for updates periodically"
+msgstr ""
+
 msgid "Check if Gajim is running"
 msgstr "Gajim が起動しているかチェックします"
 
@@ -1930,6 +1937,10 @@ msgstr "談話室の題を表示または変更します"
 msgid "Do not disturb"
 msgstr "邪魔しないでください"
 
+#, fuzzy
+msgid "Do not show this message again"
+msgstr "次回から質問しない (_D)"
+
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "この申し込み(アカウント %s)を承認しますか ?"
@@ -1971,6 +1982,14 @@ msgstr "システムのタスクバーに相手先一覧ウィンドウを表示
 #, fuzzy
 msgid "Download"
 msgstr "ダウンロード"
+
+#, fuzzy
+msgid "Download Update"
+msgstr "ダウンロード"
+
+#, fuzzy
+msgid "Download and Install"
+msgstr "再ダウンロード (_D)"
 
 #, python-format
 msgid "Downloaded %s messages"
@@ -3588,6 +3607,12 @@ msgstr "通知"
 msgid "Notifications When Away"
 msgstr "通知"
 
+msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when the automatic update was successful"
+msgstr ""
+
 msgid "Notify of events in the notification area."
 msgstr "システムの通知エリアでイベントを通知します。"
 
@@ -3895,18 +3920,16 @@ msgstr "注意: これらのオプションの取扱には注意してくださ�
 msgid "Please use yyyy-mm-dd"
 msgstr ""
 
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr ""
-"プラグインの説明がここに表示されます。この文はプラグインウィンドウの初期化の"
-"際に消去されます。"
-
-msgid "Plugin"
-msgstr "プラグイン"
-
 msgid "Plugin Settings"
 msgstr "プラグインの設定"
+
+#, fuzzy
+msgid "Plugin Updates"
+msgstr "プラグインの更新"
+
+#, fuzzy
+msgid "Plugin Updates Available"
+msgstr "アカウントがありません"
 
 msgid "Plugin already exists"
 msgstr "プラグインは既に存在しています"
@@ -3917,8 +3940,17 @@ msgstr "プラグインに失敗しました"
 msgid "Plugin manager"
 msgstr "プラグイン管理"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+
 msgid "Plugins"
 msgstr "プラグイン"
+
+#, fuzzy
+msgid "Plugins Updated"
+msgstr "プラグインの更新"
 
 #, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4313,6 +4345,10 @@ msgstr "値をデフォルトに戻します"
 msgid "Resource"
 msgstr "リソース"
 
+#, fuzzy
+msgid "Restart Gajim for changes to take affect"
+msgstr "設定を有効にするには Gajim を再起動してください"
+
 # 起動時に名簿を表示するか
 #, fuzzy
 msgid "Restore last state"
@@ -4491,6 +4527,9 @@ msgstr "アカウントを選択"
 msgid "Select File…"
 msgstr "ファイルを送信…"
 
+msgid "Select a security label for your message…"
+msgstr ""
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
@@ -4508,6 +4547,10 @@ msgstr ""
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Selected security label: %s"
+msgstr "セキュリティ"
 
 msgid "Self signed certificate"
 msgstr "自己署名証明書"
@@ -5277,6 +5320,12 @@ msgstr ""
 "ひとつのサーバーにアカウントを作成すれば、他のサーバーの相手先と通信できま"
 "す。"
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr "ただいま同期の作業中です。後で試してください。"
 
@@ -5617,6 +5666,21 @@ msgstr "アバターをアップロード…"
 msgid "Update Check"
 msgstr "スペルチェッカー"
 
+#, fuzzy
+msgid "Update automatically"
+msgstr "自動で参加"
+
+#, fuzzy
+msgid "Update available"
+msgstr "アカウントがありません"
+
+#, fuzzy
+msgid "Update plugins automatically"
+msgstr "自動で参加"
+
+msgid "Update plugins automatically next time"
+msgstr ""
+
 msgid "Updates"
 msgstr ""
 
@@ -5739,6 +5803,10 @@ msgstr "ビデオ入力デバイス (_V)"
 msgid "Video Resolution"
 msgstr "ビデオ会話"
 
+#, fuzzy
+msgid "Video calls are not available on Windows"
+msgstr "ビデオチャットは有効ではありません"
+
 msgid "Video chats are not available"
 msgstr "ビデオチャットは有効ではありません"
 
@@ -5770,10 +5838,6 @@ msgstr "音声チャットは有効ではありません"
 #, fuzzy
 msgid "Waiting…"
 msgstr "執筆中"
-
-#, python-format
-msgid "Warning: %s"
-msgstr "警告: %s"
 
 msgid "Wav Sounds"
 msgstr "WAV サウンド"
@@ -6365,6 +6429,10 @@ msgstr "サービスからアカウントを抹消する (_U)"
 msgid "_Unsubscribe"
 msgstr "継読の取り消し (_U)"
 
+#, fuzzy
+msgid "_Update"
+msgstr "MOTD を更新…"
+
 msgid "_Username"
 msgstr "ユーザー名 (_U)"
 
@@ -6475,6 +6543,9 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "理由を添えて、談話室に招待します"
+
+msgid "help"
+msgstr ""
 
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "指定した場合、相手先はこのアカウントの相手先一覧から選択します"
@@ -8021,9 +8092,6 @@ msgstr ""
 #~ msgstr ""
 #~ "チェックをつけると、Gajim は安全でない接続でパスワードを送信する前に確認を"
 #~ "求めてきます。"
-
-#~ msgid "Check update after start"
-#~ msgstr "起動時に更新をチェック"
 
 #~ msgid "Check your connection or try again later."
 #~ msgstr "設定を確認するか、あとで試してください。"
@@ -9887,9 +9955,6 @@ msgstr ""
 #~ msgid "Jingle File Transfer"
 #~ msgstr "Jingle ファイル転送"
 
-#~ msgid "Join Automatically"
-#~ msgstr "自動で参加"
-
 #~ msgid "Join Group Chat with account %s"
 #~ msgstr "アカウント %s でグループチャットに参加"
 
@@ -10699,8 +10764,15 @@ msgstr ""
 #~ msgid "Please wait..."
 #~ msgstr "しばらくお待ちください..."
 
-#~ msgid "Plugins updates"
-#~ msgstr "プラグインの更新"
+#~ msgid ""
+#~ "Plug-in description should be displayed here. This text will be erased "
+#~ "during PluginsWindow initialization."
+#~ msgstr ""
+#~ "プラグインの説明がここに表示されます。この文はプラグインウィンドウの初期化"
+#~ "の際に消去されます。"
+
+#~ msgid "Plugin"
+#~ msgstr "プラグイン"
 
 #~ msgid "Pop it up"
 #~ msgstr "ポップアップする"
@@ -12351,6 +12423,9 @@ msgstr ""
 
 #~ msgid "Warning"
 #~ msgstr "警告"
+
+#~ msgid "Warning: %s"
+#~ msgstr "警告: %s"
 
 #~ msgid "Watching TV"
 #~ msgstr "テレビ"

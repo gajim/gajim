@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
 "PO-Revision-Date: 2010-01-22 14:35+0100\n"
 "Last-Translator: Petr Menšík <pihhan@cipis.net>\n"
 "Language-Team: <>\n"
@@ -1515,6 +1515,12 @@ msgstr ""
 msgid "Check for Gajim updates periodically"
 msgstr ""
 
+msgid "Check for updates"
+msgstr ""
+
+msgid "Check for updates periodically"
+msgstr ""
+
 msgid "Check if Gajim is running"
 msgstr "Zkontrolujte, zda Gajim již běží."
 
@@ -2117,6 +2123,10 @@ msgstr "Ptát se před zavřením oken/záložek diskuzí."
 msgid "Do not disturb"
 msgstr "Nerušit"
 
+#, fuzzy
+msgid "Do not show this message again"
+msgstr "Příště _nezobrazovat"
+
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Chcete přijmout tuto žádost na účtě %s?"
@@ -2161,6 +2171,14 @@ msgstr "Nezobrazuj roster v liště úloh."
 #, fuzzy
 msgid "Download"
 msgstr "Stáhnout"
+
+#, fuzzy
+msgid "Download Update"
+msgstr "Stáhnout"
+
+#, fuzzy
+msgid "Download and Install"
+msgstr "Příště _nezobrazovat"
 
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
@@ -3878,6 +3896,12 @@ msgstr "Upozornění"
 msgid "Notifications When Away"
 msgstr "Upozornění"
 
+msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when the automatic update was successful"
+msgstr ""
+
 #, fuzzy
 msgid "Notify of events in the notification area."
 msgstr "Upozorni na události v systémovém trayi."
@@ -4210,18 +4234,17 @@ msgstr ""
 msgid "Please use yyyy-mm-dd"
 msgstr ""
 
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr ""
-
-#, fuzzy
-msgid "Plugin"
-msgstr "P_luginy"
-
 #, fuzzy
 msgid "Plugin Settings"
 msgstr "Registrace selhala"
+
+#, fuzzy
+msgid "Plugin Updates"
+msgstr "Registrace selhala"
+
+#, fuzzy
+msgid "Plugin Updates Available"
+msgstr "Žádný účet není dostupný"
 
 #, fuzzy
 msgid "Plugin already exists"
@@ -4235,8 +4258,17 @@ msgstr "Registrace selhala"
 msgid "Plugin manager"
 msgstr "Registrace selhala"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+
 msgid "Plugins"
 msgstr ""
+
+#, fuzzy
+msgid "Plugins Updated"
+msgstr "Registrace selhala"
 
 #, fuzzy, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4666,6 +4698,12 @@ msgid "Resource"
 msgstr "Zdroj:"
 
 #, fuzzy
+msgid "Restart Gajim for changes to take affect"
+msgstr ""
+"<b>POZNÁMKA:</b> Měl(a) by jste restartovat gajim, aby se projevila všechna "
+"nastavení"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Poslední stav: %s"
 
@@ -4845,6 +4883,9 @@ msgstr "Odstraňuju účet %s"
 msgid "Select File…"
 msgstr "Odeslat _Soubor"
 
+msgid "Select a security label for your message…"
+msgstr ""
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
@@ -4862,6 +4903,10 @@ msgstr ""
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Selected security label: %s"
+msgstr "Zakazuji %s"
 
 msgid "Self signed certificate"
 msgstr "Sám sebou podepsaný certifikát"
@@ -5660,6 +5705,12 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr ""
 
@@ -6010,6 +6061,20 @@ msgstr "Vyberte obrázek"
 msgid "Update Check"
 msgstr "Kontrola Pravopisu"
 
+#, fuzzy
+msgid "Update automatically"
+msgstr "Vyberte obrázek"
+
+#, fuzzy
+msgid "Update available"
+msgstr "Žádný účet není dostupný"
+
+msgid "Update plugins automatically"
+msgstr ""
+
+msgid "Update plugins automatically next time"
+msgstr ""
+
 msgid "Updates"
 msgstr ""
 
@@ -6138,6 +6203,10 @@ msgid "Video Resolution"
 msgstr "Velikost videa"
 
 #, fuzzy
+msgid "Video calls are not available on Windows"
+msgstr "Spojení není dostupné"
+
+#, fuzzy
 msgid "Video chats are not available"
 msgstr "Spojení není dostupné"
 
@@ -6171,10 +6240,6 @@ msgstr "Spojení není dostupné"
 #, fuzzy
 msgid "Waiting…"
 msgstr "Píši"
-
-#, fuzzy, python-format
-msgid "Warning: %s"
-msgstr "Zakazuji %s"
 
 msgid "Wav Sounds"
 msgstr "Waw soubory"
@@ -6823,6 +6888,10 @@ msgid "_Unsubscribe"
 msgstr "_Zrušit autorizaci"
 
 #, fuzzy
+msgid "_Update"
+msgstr "Upravit MOTD"
+
+#, fuzzy
 msgid "_Username"
 msgstr "_Uživatel:"
 
@@ -6945,6 +7014,9 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "Vyber diskuze, které chceš opustit"
+
+msgid "help"
+msgstr ""
 
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "pokud uvedeno, kontakt bude vzít ze seznamu kontaktů pro tento účet"
@@ -11459,8 +11531,8 @@ msgstr ""
 #~ msgstr "Prosím čekejte..."
 
 #, fuzzy
-#~ msgid "Plugins updates"
-#~ msgstr "Registrace selhala"
+#~ msgid "Plugin"
+#~ msgstr "P_luginy"
 
 #~ msgid "Polish"
 #~ msgstr "Polština"
@@ -13357,6 +13429,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Warning"
+#~ msgstr "Zakazuji %s"
+
+#, fuzzy
+#~ msgid "Warning: %s"
 #~ msgstr "Zakazuji %s"
 
 #~ msgid "Watching TV"

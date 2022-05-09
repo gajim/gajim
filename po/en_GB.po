@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
 "PO-Revision-Date: 2009-11-20 20:49+1100\n"
 "Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: English <en_gb@li.org>\n"
@@ -1491,6 +1491,12 @@ msgstr ""
 msgid "Check for Gajim updates periodically"
 msgstr ""
 
+msgid "Check for updates"
+msgstr ""
+
+msgid "Check for updates periodically"
+msgstr ""
+
 msgid "Check if Gajim is running"
 msgstr "Check if Gajim is running"
 
@@ -2096,6 +2102,10 @@ msgstr "Ask before closing a group chat tab/window."
 msgid "Do not disturb"
 msgstr "Do not disturb"
 
+#, fuzzy
+msgid "Do not show this message again"
+msgstr "Do _not ask me again"
+
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Do you accept this request on account %s?"
@@ -2140,6 +2150,14 @@ msgstr "Don't show roster in the system taskbar."
 #, fuzzy
 msgid "Download"
 msgstr "Download"
+
+#, fuzzy
+msgid "Download Update"
+msgstr "Download"
+
+#, fuzzy
+msgid "Download and Install"
+msgstr "Do _not ask me again"
 
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
@@ -3855,6 +3873,12 @@ msgstr "Notifications"
 msgid "Notifications When Away"
 msgstr "Notifications"
 
+msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when the automatic update was successful"
+msgstr ""
+
 #, fuzzy
 msgid "Notify of events in the notification area."
 msgstr "Notify of events in the system trayicon."
@@ -4184,17 +4208,17 @@ msgstr ""
 msgid "Please use yyyy-mm-dd"
 msgstr ""
 
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr ""
-
-msgid "Plugin"
-msgstr ""
-
 #, fuzzy
 msgid "Plugin Settings"
 msgstr "Registration failed"
+
+#, fuzzy
+msgid "Plugin Updates"
+msgstr "Registration failed"
+
+#, fuzzy
+msgid "Plugin Updates Available"
+msgstr "No account available"
 
 #, fuzzy
 msgid "Plugin already exists"
@@ -4208,8 +4232,17 @@ msgstr "Registration failed"
 msgid "Plugin manager"
 msgstr "Registration failed"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+
 msgid "Plugins"
 msgstr ""
+
+#, fuzzy
+msgid "Plugins Updated"
+msgstr "Registration failed"
 
 #, fuzzy, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4638,6 +4671,10 @@ msgid "Resource"
 msgstr "Resource:"
 
 #, fuzzy
+msgid "Restart Gajim for changes to take affect"
+msgstr "<b>NOTE:</b> You should restart Gajim for some settings to take effect"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Last state"
 
@@ -4818,6 +4855,9 @@ msgstr "Removing %s account"
 msgid "Select File…"
 msgstr "Send _File"
 
+msgid "Select a security label for your message…"
+msgstr ""
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
@@ -4835,6 +4875,10 @@ msgstr ""
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Selected security label: %s"
+msgstr "Banning %s"
 
 msgid "Self signed certificate"
 msgstr "Self signed certificate"
@@ -5634,6 +5678,12 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr ""
 
@@ -5985,6 +6035,20 @@ msgstr "Choose Image"
 msgid "Update Check"
 msgstr "Spell Checker"
 
+#, fuzzy
+msgid "Update automatically"
+msgstr "Choose Image"
+
+#, fuzzy
+msgid "Update available"
+msgstr "No account available"
+
+msgid "Update plugins automatically"
+msgstr ""
+
+msgid "Update plugins automatically next time"
+msgstr ""
+
 msgid "Updates"
 msgstr ""
 
@@ -6112,6 +6176,10 @@ msgid "Video Resolution"
 msgstr "Private Chat"
 
 #, fuzzy
+msgid "Video calls are not available on Windows"
+msgstr "Connection not available"
+
+#, fuzzy
 msgid "Video chats are not available"
 msgstr "Connection not available"
 
@@ -6145,10 +6213,6 @@ msgstr "Connection not available"
 #, fuzzy
 msgid "Waiting…"
 msgstr "Writing"
-
-#, fuzzy, python-format
-msgid "Warning: %s"
-msgstr "Banning %s"
 
 msgid "Wav Sounds"
 msgstr "Wav Sounds"
@@ -6796,6 +6860,10 @@ msgid "_Unsubscribe"
 msgstr "_Unsubscribe"
 
 #, fuzzy
+msgid "_Update"
+msgstr "Update MOTD..."
+
+#, fuzzy
 msgid "_Username"
 msgstr "_Username:"
 
@@ -6915,6 +6983,9 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "Choose the groupchats you want to leave"
+
+msgid "help"
+msgstr ""
 
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "if specified, contact is taken from the contact list of this account"
@@ -13382,6 +13453,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Warning"
+#~ msgstr "Banning %s"
+
+#, fuzzy
+#~ msgid "Warning: %s"
 #~ msgstr "Banning %s"
 
 #~ msgid "Watching TV"

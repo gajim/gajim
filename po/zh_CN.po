@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
-"PO-Revision-Date: 2022-05-08 05:29+0000\n"
-"Last-Translator: andy baker <andy.baker@dismail.de>\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"PO-Revision-Date: 2022-05-09 05:29+0000\n"
+"Last-Translator: Tommy He <lovenemesis@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
 "gajim/master/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -1300,6 +1300,12 @@ msgstr "检查更新"
 msgid "Check for Gajim updates periodically"
 msgstr "时常检查 Gajim 的更新"
 
+msgid "Check for updates"
+msgstr "检查更新"
+
+msgid "Check for updates periodically"
+msgstr "定期检查 Gajim 的更新"
+
 msgid "Check if Gajim is running"
 msgstr "请检查 Gajim 是否正在运行"
 
@@ -1799,6 +1805,9 @@ msgstr "显示或更改群聊话题"
 msgid "Do not disturb"
 msgstr "请勿打扰"
 
+msgid "Do not show this message again"
+msgstr "不再显示此消息"
+
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "是否接受这个请求(账户: %s)?"
@@ -1840,6 +1849,12 @@ msgstr "不要在系统任务栏中显示主窗口。"
 
 msgid "Download"
 msgstr "下载"
+
+msgid "Download Update"
+msgstr "下载更新"
+
+msgid "Download and Install"
+msgstr "下载并安装"
 
 #, python-format
 msgid "Downloaded %s messages"
@@ -2518,7 +2533,8 @@ msgstr "如过禁用，该帐户将被禁用且不会出现在联系人列表窗
 msgid ""
 "If enabled, Gajim hides the contact list window when pressing the X button "
 "instead of minimizing into the notification area."
-msgstr "如果开启该选项，按下X按钮时Gajim将隐藏联系人列表窗口而不是最小化至消息提醒区"
+msgstr ""
+"如果开启该选项，按下X按钮时Gajim将隐藏联系人列表窗口而不是最小化至消息提醒区"
 
 msgid ""
 "If enabled, Gajim hides the main window when pressing the X button instead "
@@ -3331,6 +3347,12 @@ msgstr "通知"
 msgid "Notifications When Away"
 msgstr "离开时通知"
 
+msgid "Notify after update"
+msgstr "更新后通知"
+
+msgid "Notify me when the automatic update was successful"
+msgstr "当自动更新成功时通知我"
+
 msgid "Notify of events in the notification area."
 msgstr "在通知区域中提示事件。"
 
@@ -3622,16 +3644,14 @@ msgstr "请小心使用这些设定！"
 msgid "Please use yyyy-mm-dd"
 msgstr "请使用 年-月-日 的格式"
 
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr "插件的描述会在这里显示。这些文字将在插件窗口初始化时被擦除。"
-
-msgid "Plugin"
-msgstr "插件"
-
 msgid "Plugin Settings"
 msgstr "插件设定"
+
+msgid "Plugin Updates"
+msgstr "插件更新"
+
+msgid "Plugin Updates Available"
+msgstr "有可用的插件更新"
 
 msgid "Plugin already exists"
 msgstr "插件已经存在"
@@ -3642,8 +3662,18 @@ msgstr "插件失败"
 msgid "Plugin manager"
 msgstr "插件管理器"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+"插件更新已经成功下载。\n"
+"更新将在下一次 Gajim 启动时安装。"
+
 msgid "Plugins"
 msgstr "插件"
+
+msgid "Plugins Updated"
+msgstr "插件已更新"
 
 #, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4001,6 +4031,9 @@ msgstr "重置所有值为默认"
 msgid "Resource"
 msgstr "资源"
 
+msgid "Restart Gajim for changes to take affect"
+msgstr "需要重新启动 Gajim 来使得变更生效"
+
 msgid "Restore last state"
 msgstr "恢复上次状态"
 
@@ -4155,6 +4188,9 @@ msgstr "选择账户"
 msgid "Select File…"
 msgstr "选择文件…"
 
+msgid "Select a security label for your message…"
+msgstr "为您的消息选择一个安全标签…"
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr "选择音频输出（比如扬声器、耳机）"
 
@@ -4172,6 +4208,10 @@ msgstr "选择您的音频输入（例如麦克风）"
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr "选择您的视频输入设备（例如网络摄像头、屏幕录制）"
+
+#, python-format
+msgid "Selected security label: %s"
+msgstr "选定的安全标签: %s"
 
 msgid "Self signed certificate"
 msgstr "自签名的证书"
@@ -4869,6 +4909,14 @@ msgstr ""
 "有大量服务器可供选择。\n"
 "在一个服务器上创建账户亦可允许您和其他服务器上的联系人沟通。"
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+"您的插件有更新:\n"
+"<b>%s</b>"
+
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr "已经有一个同步正在进行中。请稍后再试。"
 
@@ -5185,6 +5233,18 @@ msgstr "更新头像"
 msgid "Update Check"
 msgstr "检查更新"
 
+msgid "Update automatically"
+msgstr "自动更新"
+
+msgid "Update available"
+msgstr "有可用的更新"
+
+msgid "Update plugins automatically"
+msgstr "自动更新插件"
+
+msgid "Update plugins automatically next time"
+msgstr "下一次自动更新插件"
+
 msgid "Updates"
 msgstr "更新"
 
@@ -5299,6 +5359,9 @@ msgstr "视频输入设备"
 msgid "Video Resolution"
 msgstr "视频分辨率"
 
+msgid "Video calls are not available on Windows"
+msgstr "视频聊天在 Windows 系统不可用"
+
 msgid "Video chats are not available"
 msgstr "视频聊天不可用"
 
@@ -5328,10 +5391,6 @@ msgstr "语音聊天不可用"
 
 msgid "Waiting…"
 msgstr "等待中…"
-
-#, python-format
-msgid "Warning: %s"
-msgstr "警告: %s"
 
 msgid "Wav Sounds"
 msgstr "Wav 声音"
@@ -5827,7 +5886,7 @@ msgid "_Reset Value"
 msgstr "恢复为默认值(_R)"
 
 msgid "_Retract"
-msgstr "撤回"
+msgstr "撤回(_R)"
 
 msgid "_Save"
 msgstr "保存(_S)"
@@ -5836,7 +5895,7 @@ msgid "_Save as"
 msgstr "另存为(_S)"
 
 msgid "_Search"
-msgstr "查找(_S)"
+msgstr "搜索(_S)"
 
 msgid "_Select"
 msgstr "选择(_S)"
@@ -5851,19 +5910,19 @@ msgid "_Show Certificate"
 msgstr "显示证书(_S)"
 
 msgid "_Show notification when file transfer is complete"
-msgstr "文件传输完成时通知(_N)"
+msgstr "文件传输完成时显示通知(_S)"
 
 msgid "_Sign Up"
 msgstr "注册(_S)"
 
 msgid "_Start / Join Chat…"
-msgstr "开始/加入聊天"
+msgstr "开始/加入聊天(_S)…"
 
 msgid "_Start Chat..."
-msgstr "开始聊天(_S)"
+msgstr "开始聊天(_S)…"
 
 msgid "_Stop Sharing"
-msgstr "停止共享"
+msgstr "停止共享(_S)"
 
 msgid "_Subscribe"
 msgstr "订阅(_S)"
@@ -5872,7 +5931,7 @@ msgid "_Try Again"
 msgstr "重试(_T)"
 
 msgid "_Type"
-msgstr "类型(_T)"
+msgstr "输入(_T)"
 
 msgid "_Undo"
 msgstr "撤销(_U)"
@@ -5881,7 +5940,10 @@ msgid "_Unregister account from service"
 msgstr "从服务中注销账户(_U)"
 
 msgid "_Unsubscribe"
-msgstr "退订(_S)"
+msgstr "退订(_U)"
+
+msgid "_Update"
+msgstr "更新(_U)"
 
 msgid "_Username"
 msgstr "用户名(_U)"
@@ -5893,7 +5955,7 @@ msgid "_View Certificate"
 msgstr "查看证书(_V)"
 
 msgid "_Wiki (Online)"
-msgstr "Wiki(在线)"
+msgstr "Wiki(在线)(_W)"
 
 msgid "_XML Console"
 msgstr "XML 控制台(_X)"
@@ -5905,10 +5967,10 @@ msgid "alt"
 msgstr "alt"
 
 msgid "and NOT authenticated"
-msgstr "未被认证"
+msgstr "且未被认证"
 
 msgid "and authenticated"
-msgstr "已被认证"
+msgstr "且已被认证"
 
 msgid "area"
 msgstr "区域"
@@ -5920,25 +5982,24 @@ msgid "audio output"
 msgstr "音频输出"
 
 msgid "bearing"
-msgstr "负载中"
+msgstr "方向"
 
 msgid "building"
-msgstr "建立"
+msgstr "楼宇"
 
 msgid ""
 "change status of account \"account\". If not specified, try to change status "
 "of all accounts that have \"sync with global status\" option set"
-msgstr "改变账户的状态。如果不指明, 将改变设置\"与全局同步\"选项的账户"
+msgstr "改变账户的状态。如果不指明，将改变所有设置了\"与全局同步\"选项的账户"
 
 msgid ""
 "change the priority of the given account. If not specified, change status of "
 "all accounts that have \"sync with global status\" option set"
-msgstr ""
-"改变指定账户的优先级。如果不指明, 将改变所有设置了\"与全局状态同步\"选项的账"
-"户"
+msgstr "改变指定账户的优先级。如果不指明，将改变所有设置了\"与全局状态同步"
+"\"选项的账户"
 
 msgid "chat;messaging;im;xmpp;voip;"
-msgstr "对话;信息;及时消息;xmpp协议;voip"
+msgstr "chat;messaging;im;xmpp;voip;"
 
 msgid "column"
 msgstr "列"
@@ -5953,7 +6014,7 @@ msgid "countrycode"
 msgstr "国家代码"
 
 msgid "datum"
-msgstr "日期"
+msgstr "数据"
 
 msgid "description"
 msgstr "描述"
@@ -5987,22 +6048,27 @@ msgstr "关闭了聊天窗口或标签"
 msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
-msgstr "你被邀请加入群组聊天，想要加入吗？"
+msgstr ""
+"邀请您加入群聊。\n"
+"您想要加入吗？"
+
+msgid "help"
+msgstr "帮助"
 
 msgid "if specified, contact is taken from the contact list of this account"
-msgstr "如指定, 将从此帐户列表下取得联系人"
+msgstr "如指定，将从此帐户联系人列表下获取联系人"
 
 msgid "if specified, file will be sent using this account"
-msgstr "如指定, 文件将被用此账户发送"
+msgstr "如指定，文件将使用此账户发送"
 
 msgid "if specified, the message will be sent using this account"
-msgstr "如指定, 消息将被用此账户发送"
+msgstr "如指定，消息将使用此账户发送"
 
 msgid "is composing a message…"
-msgstr "正在输入消息……"
+msgstr "正在输入消息…"
 
 msgid "is doing something else"
-msgstr "在做其他事情"
+msgstr "正在做其他事情"
 
 msgid "is paying attention to the conversation"
 msgstr "正关注此对话"
@@ -6017,7 +6083,7 @@ msgid "lon"
 msgstr "经度"
 
 msgid "macOS"
-msgstr "苹果macOS"
+msgstr "macOS"
 
 msgid "message contents"
 msgstr "消息内容"
@@ -6028,9 +6094,8 @@ msgstr "消息标题"
 msgid ""
 "one of: offline, online, chat, away, xa, dnd. If not set, use account's "
 "previous status"
-msgstr ""
-"下列状态之一: offline, online, chat, away, xa, dnd, invisible。如果没有设置, "
-"使用账户先前的状态"
+msgstr "下列状态之一: offline, online, chat, away, xa, "
+"dnd。如果没有设置，将使用账户先前的状态"
 
 msgid "or"
 msgstr "或者"
@@ -6059,7 +6124,7 @@ msgid "region"
 msgstr "地区"
 
 msgid "room"
-msgstr "聊天室"
+msgstr "群聊"
 
 msgid "show help on command"
 msgstr "为命令显示帮助"
@@ -6086,8 +6151,7 @@ msgid "timestamp"
 msgstr "时间戳"
 
 msgid "translator-credits"
-msgstr "这些文字用于提及每种语言的个人翻译人员，例如：社区成员（2020）乐于助人的贡献"
-"者（2019）随机人员（2018）"
+msgstr "翻译者-贡献"
 
 msgid "user@example.org"
 msgstr "user@example.org"
@@ -6116,7 +6180,7 @@ msgstr "一个错误导致{nick}离开{reason}"
 
 #, python-brace-format
 msgid "{nick} has left{reason}"
-msgstr "{nick}已离开{reason}"
+msgstr "{nick} 已离开{reason}"
 
 #, python-brace-format
 msgid "{nick} is now known as {new_nick}"
@@ -10106,9 +10170,13 @@ msgstr "或者在这里卸下"
 #~ msgid "Please wait..."
 #~ msgstr "请稍等..."
 
-#, fuzzy
-#~ msgid "Plugins updates"
-#~ msgstr "注册失败"
+#~ msgid ""
+#~ "Plug-in description should be displayed here. This text will be erased "
+#~ "during PluginsWindow initialization."
+#~ msgstr "插件的描述会在这里显示。这些文字将在插件窗口初始化时被擦除。"
+
+#~ msgid "Plugin"
+#~ msgstr "插件"
 
 #~ msgid "Polish"
 #~ msgstr "波兰语"
@@ -11776,6 +11844,9 @@ msgstr "或者在这里卸下"
 
 #~ msgid "Warning"
 #~ msgstr "警告"
+
+#~ msgid "Warning: %s"
+#~ msgstr "警告: %s"
 
 #~ msgid "Watching TV"
 #~ msgstr "看电视"

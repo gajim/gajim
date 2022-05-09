@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
 "PO-Revision-Date: 2022-02-02 22:34+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/"
@@ -1385,6 +1385,12 @@ msgstr ""
 msgid "Check for Gajim updates periodically"
 msgstr ""
 
+msgid "Check for updates"
+msgstr ""
+
+msgid "Check for updates periodically"
+msgstr ""
+
 msgid "Check if Gajim is running"
 msgstr "Proszę sprawdzić czy Gajim jest uruchomiony."
 
@@ -1938,6 +1944,10 @@ msgstr "Wyświetl lub zmień temat czatu grupowego"
 msgid "Do not disturb"
 msgstr "Nie przeszkadzać."
 
+#, fuzzy
+msgid "Do not show this message again"
+msgstr "_Nie pytaj mnie ponownie"
+
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Akceptujesz tę prośbę (konto: %s)?"
@@ -1979,6 +1989,14 @@ msgstr "Nie pokazuj okna rostera na pasku zadań."
 #, fuzzy
 msgid "Download"
 msgstr "Pobieranie"
+
+#, fuzzy
+msgid "Download Update"
+msgstr "Pobieranie"
+
+#, fuzzy
+msgid "Download and Install"
+msgstr "_Pobierz ponownie"
 
 #, python-format
 msgid "Downloaded %s messages"
@@ -3617,6 +3635,12 @@ msgstr "Powiadomienia"
 msgid "Notifications When Away"
 msgstr "Powiadomienia"
 
+msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when the automatic update was successful"
+msgstr ""
+
 msgid "Notify of events in the notification area."
 msgstr "Powiadamiaj o zdarzeniach w obszarze powiadamiania."
 
@@ -3925,18 +3949,16 @@ msgstr ""
 msgid "Please use yyyy-mm-dd"
 msgstr ""
 
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr ""
-"Tu powinien się pojawić opis wtyczki. Ten tekst zostanie wyczyszczony "
-"w trakcie inicjalizacji okna wtyczek."
-
-msgid "Plugin"
-msgstr "Wtyczka"
-
 msgid "Plugin Settings"
 msgstr "Ustawienia wtyczki"
+
+#, fuzzy
+msgid "Plugin Updates"
+msgstr "Rejestracja nie powiodła się"
+
+#, fuzzy
+msgid "Plugin Updates Available"
+msgstr "Żadne konto nie jest dostępne"
 
 msgid "Plugin already exists"
 msgstr "Wtyczka już istnieje"
@@ -3947,8 +3969,17 @@ msgstr "Wtyczka ma problem"
 msgid "Plugin manager"
 msgstr "Menedżer wtyczek"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+
 msgid "Plugins"
 msgstr "Wtyczki"
+
+#, fuzzy
+msgid "Plugins Updated"
+msgstr "Rejestracja nie powiodła się"
 
 #, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4337,6 +4368,12 @@ msgid "Resource"
 msgstr "Zasób"
 
 #, fuzzy
+msgid "Restart Gajim for changes to take affect"
+msgstr ""
+"UWAGA: Powinieneś ponownie uruchomić program by zastosować ostatnie "
+"ustawienia"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Ostatni status"
 
@@ -4505,6 +4542,9 @@ msgstr "Wybierz konto"
 msgid "Select File…"
 msgstr "Wyślij plik…"
 
+msgid "Select a security label for your message…"
+msgstr ""
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
@@ -4522,6 +4562,10 @@ msgstr ""
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Selected security label: %s"
+msgstr "Ostrzeżenie"
 
 msgid "Self signed certificate"
 msgstr "Certyfikat podpisany przez wystawcę"
@@ -5303,6 +5347,12 @@ msgstr ""
 "Utworzenie konta na jednym serwerze pozwoli ci również na komunikację "
 "z kontaktami z innych serwerów."
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr "Synchronizacja już trwa. Spróbuj ponownie później."
 
@@ -5653,6 +5703,20 @@ msgstr "Wstaw awatar…"
 msgid "Update Check"
 msgstr "Słownik"
 
+#, fuzzy
+msgid "Update automatically"
+msgstr "Wstaw awatar…"
+
+#, fuzzy
+msgid "Update available"
+msgstr "Żadne konto nie jest dostępne"
+
+msgid "Update plugins automatically"
+msgstr ""
+
+msgid "Update plugins automatically next time"
+msgstr ""
+
 msgid "Updates"
 msgstr ""
 
@@ -5776,6 +5840,10 @@ msgstr "Wejście video"
 msgid "Video Resolution"
 msgstr "Video test"
 
+#, fuzzy
+msgid "Video calls are not available on Windows"
+msgstr "Czaty wideo nie są dostępne"
+
 msgid "Video chats are not available"
 msgstr "Czaty wideo nie są dostępne"
 
@@ -5806,10 +5874,6 @@ msgstr "Czaty głosowe nie są dostępne"
 #, fuzzy
 msgid "Waiting…"
 msgstr "Piszę"
-
-#, python-format
-msgid "Warning: %s"
-msgstr "Uwaga: %s"
 
 msgid "Wav Sounds"
 msgstr "Dźwięki w Wav"
@@ -6398,6 +6462,10 @@ msgstr "_Wyrejestruj konto z usługi"
 msgid "_Unsubscribe"
 msgstr "_Cofnij autoryzację"
 
+#, fuzzy
+msgid "_Update"
+msgstr "Uaktualnij MOTD..."
+
 msgid "_Username"
 msgstr "_Nazwa użytkownika"
 
@@ -6508,6 +6576,9 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "Wybierz pokoje, które chcesz opuścić"
+
+msgid "help"
+msgstr ""
 
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr ""
@@ -11402,9 +11473,15 @@ msgstr ""
 #~ msgid "Please wait..."
 #~ msgstr "Proszę czekać..."
 
-#, fuzzy
-#~ msgid "Plugins updates"
-#~ msgstr "Rejestracja nie powiodła się"
+#~ msgid ""
+#~ "Plug-in description should be displayed here. This text will be erased "
+#~ "during PluginsWindow initialization."
+#~ msgstr ""
+#~ "Tu powinien się pojawić opis wtyczki. Ten tekst zostanie wyczyszczony "
+#~ "w trakcie inicjalizacji okna wtyczek."
+
+#~ msgid "Plugin"
+#~ msgstr "Wtyczka"
 
 #~ msgid "Polish"
 #~ msgstr "polski"
@@ -13452,6 +13529,9 @@ msgstr ""
 
 #~ msgid "Warning"
 #~ msgstr "Ostrzeżenie"
+
+#~ msgid "Warning: %s"
+#~ msgstr "Uwaga: %s"
 
 #~ msgid "Watching TV"
 #~ msgstr "Oglądam TV"

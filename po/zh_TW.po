@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -1479,6 +1479,12 @@ msgstr ""
 msgid "Check for Gajim updates periodically"
 msgstr ""
 
+msgid "Check for updates"
+msgstr ""
+
+msgid "Check for updates periodically"
+msgstr ""
+
 msgid "Check if Gajim is running"
 msgstr "請檢查 Gajim 是否正在執行"
 
@@ -2076,6 +2082,10 @@ msgstr "關閉多人聊天標籤/視窗前詢問。"
 msgid "Do not disturb"
 msgstr "請無打擾"
 
+#, fuzzy
+msgid "Do not show this message again"
+msgstr "不要再問我了(_D)"
+
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "是否接受這個對帳號 %s 的請求?"
@@ -2120,6 +2130,14 @@ msgstr "不要將聯絡人清單視窗顯示在系統的工作列中。"
 #, fuzzy
 msgid "Download"
 msgstr "下載"
+
+#, fuzzy
+msgid "Download Update"
+msgstr "下載"
+
+#, fuzzy
+msgid "Download and Install"
+msgstr "不要再問我了(_D)"
 
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
@@ -3825,6 +3843,12 @@ msgstr "通知"
 msgid "Notifications When Away"
 msgstr "通知"
 
+msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when the automatic update was successful"
+msgstr ""
+
 msgid "Notify of events in the notification area."
 msgstr "在通知區域中提示事件"
 
@@ -4151,17 +4175,16 @@ msgid "Please use yyyy-mm-dd"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr "外掛程式的描述會被顯示在這裡。這些文字在外掛程式視窗初始化時將被去除"
-
-msgid "Plugin"
+msgid "Plugin Settings"
 msgstr "外掛程式"
 
 #, fuzzy
-msgid "Plugin Settings"
-msgstr "外掛程式"
+msgid "Plugin Updates"
+msgstr "外掛程式失敗"
+
+#, fuzzy
+msgid "Plugin Updates Available"
+msgstr "沒有有效帳號"
 
 msgid "Plugin already exists"
 msgstr "外掛程式已經存在"
@@ -4173,8 +4196,17 @@ msgstr "外掛程式失敗"
 msgid "Plugin manager"
 msgstr "外掛程式失敗"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+
 msgid "Plugins"
 msgstr "外掛程式"
+
+#, fuzzy
+msgid "Plugins Updated"
+msgstr "外掛程式失敗"
 
 #, fuzzy, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4601,6 +4633,10 @@ msgid "Resource"
 msgstr "資源:"
 
 #, fuzzy
+msgid "Restart Gajim for changes to take affect"
+msgstr "<b>注意:</b>您必須重新啟動 gajim 以使某些設定生效"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "最後狀態"
 
@@ -4782,6 +4818,9 @@ msgstr "移除帳號 %s"
 msgid "Select File…"
 msgstr "傳送檔案(_F)"
 
+msgid "Select a security label for your message…"
+msgstr ""
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
@@ -4799,6 +4838,10 @@ msgstr ""
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Selected security label: %s"
+msgstr "將封禁 %s"
 
 msgid "Self signed certificate"
 msgstr "自簽名的證書"
@@ -5594,6 +5637,12 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr ""
 
@@ -5943,6 +5992,20 @@ msgstr "選擇歸檔檔案"
 msgid "Update Check"
 msgstr "拼寫檢查工具"
 
+#, fuzzy
+msgid "Update automatically"
+msgstr "選擇歸檔檔案"
+
+#, fuzzy
+msgid "Update available"
+msgstr "沒有有效帳號"
+
+msgid "Update plugins automatically"
+msgstr ""
+
+msgid "Update plugins automatically next time"
+msgstr ""
+
 msgid "Updates"
 msgstr ""
 
@@ -6071,6 +6134,10 @@ msgid "Video Resolution"
 msgstr "視訊測試"
 
 #, fuzzy
+msgid "Video calls are not available on Windows"
+msgstr "連線無法使用"
+
+#, fuzzy
 msgid "Video chats are not available"
 msgstr "連線無法使用"
 
@@ -6104,10 +6171,6 @@ msgstr "連線無法使用"
 #, fuzzy
 msgid "Waiting…"
 msgstr "寫作"
-
-#, fuzzy, python-format
-msgid "Warning: %s"
-msgstr "將封禁 %s"
 
 msgid "Wav Sounds"
 msgstr "Wav聲音"
@@ -6752,6 +6815,10 @@ msgid "_Unsubscribe"
 msgstr "退訂(_S)"
 
 #, fuzzy
+msgid "_Update"
+msgstr "更新 MOTD…"
+
+#, fuzzy
 msgid "_Username"
 msgstr "使用者名稱(_U):"
 
@@ -6869,6 +6936,9 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "選擇您想要離開的聊天室"
+
+msgid "help"
+msgstr ""
 
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "如指定，將從此帳號清單下移出聯絡人"
@@ -10940,8 +11010,14 @@ msgstr ""
 #~ msgstr "請稍等…"
 
 #, fuzzy
-#~ msgid "Plugins updates"
-#~ msgstr "外掛程式失敗"
+#~ msgid ""
+#~ "Plug-in description should be displayed here. This text will be erased "
+#~ "during PluginsWindow initialization."
+#~ msgstr ""
+#~ "外掛程式的描述會被顯示在這裡。這些文字在外掛程式視窗初始化時將被去除"
+
+#~ msgid "Plugin"
+#~ msgstr "外掛程式"
 
 #~ msgid "Polish"
 #~ msgstr "波蘭語"
@@ -12595,6 +12671,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Warning"
+#~ msgstr "將封禁 %s"
+
+#, fuzzy
+#~ msgid "Warning: %s"
 #~ msgstr "將封禁 %s"
 
 #~ msgid "Watching TV"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -1477,6 +1477,12 @@ msgstr ""
 msgid "Check for Gajim updates periodically"
 msgstr ""
 
+msgid "Check for updates"
+msgstr ""
+
+msgid "Check for updates periodically"
+msgstr ""
+
 #, fuzzy
 msgid "Check if Gajim is running"
 msgstr "Праверце, ці працуе avahi-daemon."
@@ -2083,6 +2089,10 @@ msgstr "Пытацца пацверджання закрыцця групаво�
 msgid "Do not disturb"
 msgstr "Не турбаваць"
 
+#, fuzzy
+msgid "Do not show this message again"
+msgstr "_Больш не пытацца"
+
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Хочаце задаволіць гэты запыт?"
@@ -2127,6 +2137,14 @@ msgstr "Не паказваць галоўнае вакно на панэлі з
 #, fuzzy
 msgid "Download"
 msgstr "Сцягнуць"
+
+#, fuzzy
+msgid "Download Update"
+msgstr "Сцягнуць"
+
+#, fuzzy
+msgid "Download and Install"
+msgstr "_Больш не пытацца"
 
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
@@ -3838,6 +3856,12 @@ msgstr "Змяненне рахунка"
 msgid "Notifications When Away"
 msgstr "Змяненне рахунка"
 
+msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when the automatic update was successful"
+msgstr ""
+
 #, fuzzy
 msgid "Notify of events in the notification area."
 msgstr "Нагадваць аб падзеях праз значку прасторы паведамленняў."
@@ -4162,17 +4186,17 @@ msgstr ""
 msgid "Please use yyyy-mm-dd"
 msgstr ""
 
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr ""
-
-msgid "Plugin"
-msgstr ""
-
 #, fuzzy
 msgid "Plugin Settings"
 msgstr "Памылка злучэння"
+
+#, fuzzy
+msgid "Plugin Updates"
+msgstr "Памылка злучэння"
+
+#, fuzzy
+msgid "Plugin Updates Available"
+msgstr "Рахункаў няма"
 
 #, fuzzy
 msgid "Plugin already exists"
@@ -4186,8 +4210,17 @@ msgstr "Памылка злучэння"
 msgid "Plugin manager"
 msgstr "Памылка злучэння"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+
 msgid "Plugins"
 msgstr ""
+
+#, fuzzy
+msgid "Plugins Updated"
+msgstr "Памылка злучэння"
 
 #, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4612,6 +4645,10 @@ msgid "Resource"
 msgstr "Рэсурс:"
 
 #, fuzzy
+msgid "Restart Gajim for changes to take affect"
+msgstr "<b>Увага:</b> Каб ужыць некаторыя змены, трэба перазапусціць Gajim"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Апошняе паведамленне: %s"
 
@@ -4792,6 +4829,9 @@ msgstr "Выдаленне рахунка %s"
 msgid "Select File…"
 msgstr "Адправіць _файл"
 
+msgid "Select a security label for your message…"
+msgstr ""
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
@@ -4810,6 +4850,10 @@ msgstr ""
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Selected security label: %s"
+msgstr "Забарона казання для %s"
 
 msgid "Self signed certificate"
 msgstr ""
@@ -5607,6 +5651,12 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr ""
 
@@ -5954,6 +6004,20 @@ msgstr "Выберыце малюнак"
 msgid "Update Check"
 msgstr ""
 
+#, fuzzy
+msgid "Update automatically"
+msgstr "Выберыце малюнак"
+
+#, fuzzy
+msgid "Update available"
+msgstr "Рахункаў няма"
+
+msgid "Update plugins automatically"
+msgstr ""
+
+msgid "Update plugins automatically next time"
+msgstr ""
+
 msgid "Updates"
 msgstr ""
 
@@ -6076,6 +6140,10 @@ msgid "Video Resolution"
 msgstr "Прыватная размова"
 
 #, fuzzy
+msgid "Video calls are not available on Windows"
+msgstr "Няма злучэння"
+
+#, fuzzy
 msgid "Video chats are not available"
 msgstr "Няма злучэння"
 
@@ -6109,10 +6177,6 @@ msgstr "Няма злучэння"
 #, fuzzy
 msgid "Waiting…"
 msgstr "Працую"
-
-#, fuzzy, python-format
-msgid "Warning: %s"
-msgstr "Забарона казання для %s"
 
 msgid "Wav Sounds"
 msgstr "Файлы Wav"
@@ -6757,6 +6821,10 @@ msgid "_Unsubscribe"
 msgstr "_Адпісацца"
 
 #, fuzzy
+msgid "_Update"
+msgstr "Абнавіць MOTD"
+
+#, fuzzy
 msgid "_Username"
 msgstr "_Імя карыстальніка:"
 
@@ -6879,6 +6947,9 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "Выберыце групавыя размовы, з якіх Вы хочаце сысці"
+
+msgid "help"
+msgstr ""
 
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "Калі вызначана, то імя чалавека выбіраецца з спіса гэтага рахунка"
@@ -12291,6 +12362,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Warning"
+#~ msgstr "Забарона казання для %s"
+
+#, fuzzy
+#~ msgid "Warning: %s"
 #~ msgstr "Забарона казання для %s"
 
 #, fuzzy

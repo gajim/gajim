@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1396,6 +1396,12 @@ msgstr ""
 msgid "Check for Gajim updates periodically"
 msgstr ""
 
+msgid "Check for updates"
+msgstr ""
+
+msgid "Check for updates periodically"
+msgstr ""
+
 msgid "Check if Gajim is running"
 msgstr ""
 
@@ -1952,6 +1958,9 @@ msgstr ""
 msgid "Do not disturb"
 msgstr ""
 
+msgid "Do not show this message again"
+msgstr ""
+
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr ""
@@ -1989,6 +1998,12 @@ msgid "Don’t show main window in the system taskbar."
 msgstr ""
 
 msgid "Download"
+msgstr ""
+
+msgid "Download Update"
+msgstr ""
+
+msgid "Download and Install"
 msgstr ""
 
 #, fuzzy, python-format
@@ -3564,6 +3579,12 @@ msgstr ""
 msgid "Notifications When Away"
 msgstr "Afegeix _Notificació Especial..."
 
+msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when the automatic update was successful"
+msgstr ""
+
 msgid "Notify of events in the notification area."
 msgstr ""
 
@@ -3876,19 +3897,16 @@ msgid "Please use yyyy-mm-dd"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr ""
-"La descripció del plugin s'hauria de mostrar aquí. Aquest text s'esborrarà "
-"durant la inicialització PluginsWindow."
-
-msgid "Plugin"
-msgstr ""
-
-#, fuzzy
 msgid "Plugin Settings"
 msgstr "Connectors"
+
+#, fuzzy
+msgid "Plugin Updates"
+msgstr "Connectors"
+
+#, fuzzy
+msgid "Plugin Updates Available"
+msgstr "Transferència de Fitxers"
 
 msgid "Plugin already exists"
 msgstr ""
@@ -3899,7 +3917,16 @@ msgstr ""
 msgid "Plugin manager"
 msgstr ""
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+
 msgid "Plugins"
+msgstr "Connectors"
+
+#, fuzzy
+msgid "Plugins Updated"
 msgstr "Connectors"
 
 #, python-format
@@ -4300,6 +4327,12 @@ msgstr "_Reinicia a configuració per defecte"
 msgid "Resource"
 msgstr "Recurs:"
 
+#, fuzzy
+msgid "Restart Gajim for changes to take affect"
+msgstr ""
+"<b>NOTA:</b> Hauries de reiniciar Gajim per a que la configuració tingui "
+"efecte"
+
 msgid "Restore last state"
 msgstr ""
 
@@ -4472,6 +4505,9 @@ msgstr "Fusiona comptes"
 msgid "Select File…"
 msgstr "Envia _Fitxer"
 
+msgid "Select a security label for your message…"
+msgstr ""
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
@@ -4488,6 +4524,10 @@ msgid "Select your audio input (e.g. microphone)"
 msgstr ""
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
+msgstr ""
+
+#, python-format
+msgid "Selected security label: %s"
 msgstr ""
 
 msgid "Self signed certificate"
@@ -5229,6 +5269,12 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr ""
 
@@ -5548,6 +5594,20 @@ msgstr "Esborra"
 msgid "Update Check"
 msgstr ""
 
+#, fuzzy
+msgid "Update automatically"
+msgstr "Esborra"
+
+#, fuzzy
+msgid "Update available"
+msgstr "Transferència de Fitxers"
+
+msgid "Update plugins automatically"
+msgstr ""
+
+msgid "Update plugins automatically next time"
+msgstr ""
+
 msgid "Updates"
 msgstr ""
 
@@ -5664,6 +5724,10 @@ msgid "Video Resolution"
 msgstr "Disponible per parlar"
 
 #, fuzzy
+msgid "Video calls are not available on Windows"
+msgstr "Transferència de Fitxers"
+
+#, fuzzy
 msgid "Video chats are not available"
 msgstr "Transferència de Fitxers"
 
@@ -5695,10 +5759,6 @@ msgid "Voice chats are not available"
 msgstr "Transferència de Fitxers"
 
 msgid "Waiting…"
-msgstr ""
-
-#, python-format
-msgid "Warning: %s"
 msgstr ""
 
 msgid "Wav Sounds"
@@ -6310,6 +6370,10 @@ msgid "_Unsubscribe"
 msgstr ""
 
 #, fuzzy
+msgid "_Update"
+msgstr "Esborra"
+
+#, fuzzy
 msgid "_Username"
 msgstr "_Nom d'usuari:"
 
@@ -6416,6 +6480,9 @@ msgstr ""
 msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
+msgstr ""
+
+msgid "help"
 msgstr ""
 
 msgid "if specified, contact is taken from the contact list of this account"
@@ -7413,6 +7480,14 @@ msgstr ""
 
 #~ msgid "Please wait..."
 #~ msgstr "Espereu…"
+
+#, fuzzy
+#~ msgid ""
+#~ "Plug-in description should be displayed here. This text will be erased "
+#~ "during PluginsWindow initialization."
+#~ msgstr ""
+#~ "La descripció del plugin s'hauria de mostrar aquí. Aquest text "
+#~ "s'esborrarà durant la inicialització PluginsWindow."
 
 #, fuzzy
 #~ msgid "Position"

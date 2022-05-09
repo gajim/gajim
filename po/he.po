@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -1537,6 +1537,12 @@ msgstr ""
 msgid "Check for Gajim updates periodically"
 msgstr ""
 
+msgid "Check for updates"
+msgstr ""
+
+msgid "Check for updates periodically"
+msgstr ""
+
 #, fuzzy
 msgid "Check if Gajim is running"
 msgstr "cli"
@@ -2148,6 +2154,10 @@ msgstr "הצגה או שינוי נושא של שיחת קבוצה"
 msgid "Do not disturb"
 msgstr "נא לא להפריע"
 
+#, fuzzy
+msgid "Do not show this message again"
+msgstr "אל ת_שאל אותי שוב"
+
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "האם לקבל את בקשה זו בחשבון %s?"
@@ -2192,6 +2202,14 @@ msgstr "אל תציג את הרשימה בתוך שורת המשימות של ה
 #, fuzzy
 msgid "Download"
 msgstr "הורדה"
+
+#, fuzzy
+msgid "Download Update"
+msgstr "הורדה"
+
+#, fuzzy
+msgid "Download and Install"
+msgstr "אל ת_שאל אותי שוב"
 
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
@@ -3989,6 +4007,12 @@ msgstr "התראות"
 msgid "Notifications When Away"
 msgstr "התראות"
 
+msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when the automatic update was successful"
+msgstr ""
+
 msgid "Notify of events in the notification area."
 msgstr "הודע על אירועים באזור ההתראה."
 
@@ -4320,19 +4344,17 @@ msgstr ""
 msgid "Please use yyyy-mm-dd"
 msgstr ""
 
-# בעת התחלת
-#, fuzzy
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr "תיאור תוסף צריך להיות מוצג כאן. תמליל זה ימחק בעת אתחול PluginsWindow."
-
-msgid "Plugin"
-msgstr "תוסף"
-
 #, fuzzy
 msgid "Plugin Settings"
 msgstr "תוספים"
+
+#, fuzzy
+msgid "Plugin Updates"
+msgstr "כשל תוסף"
+
+#, fuzzy
+msgid "Plugin Updates Available"
+msgstr "אין חשבון זמין"
 
 msgid "Plugin already exists"
 msgstr "תוסף כבר ישנו"
@@ -4344,8 +4366,17 @@ msgstr "כשל תוסף"
 msgid "Plugin manager"
 msgstr "כשל תוסף"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+
 msgid "Plugins"
 msgstr "תוספים"
+
+#, fuzzy
+msgid "Plugins Updated"
+msgstr "כשל תוסף"
 
 #, fuzzy, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4799,6 +4830,10 @@ msgstr "_אפס לברירת מחדל"
 msgid "Resource"
 msgstr "משאב:"
 
+#, fuzzy
+msgid "Restart Gajim for changes to take affect"
+msgstr "<b>הערה:</b> עליך לאתחל את Gajim כדי שהגדרות מסוימות ייכנסו לתוקף"
+
 # By last state
 #, fuzzy
 msgid "Restore last state"
@@ -4986,6 +5021,9 @@ msgstr "הסרת חשבון ‫%s"
 msgid "Select File…"
 msgstr "שלח _קובץ"
 
+msgid "Select a security label for your message…"
+msgstr ""
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
@@ -5003,6 +5041,10 @@ msgstr ""
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Selected security label: %s"
+msgstr "אזהרה: %s"
 
 msgid "Self signed certificate"
 msgstr "תעודה חתומה באופן עצמי"
@@ -5843,6 +5885,12 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr ""
 
@@ -6197,6 +6245,20 @@ msgstr "בחירת ארכיון"
 msgid "Update Check"
 msgstr "בדיקת איות"
 
+#, fuzzy
+msgid "Update automatically"
+msgstr "בחירת ארכיון"
+
+#, fuzzy
+msgid "Update available"
+msgstr "אין חשבון זמין"
+
+msgid "Update plugins automatically"
+msgstr ""
+
+msgid "Update plugins automatically next time"
+msgstr ""
+
 msgid "Updates"
 msgstr ""
 
@@ -6322,6 +6384,10 @@ msgid "Video Resolution"
 msgstr "בדיקת וידאו"
 
 #, fuzzy
+msgid "Video calls are not available on Windows"
+msgstr "סשנים חזותיים אינם זמינים"
+
+#, fuzzy
 msgid "Video chats are not available"
 msgstr "סשנים חזותיים אינם זמינים"
 
@@ -6355,10 +6421,6 @@ msgstr "סשנים חזותיים אינם זמינים"
 #, fuzzy
 msgid "Waiting…"
 msgstr "כותב"
-
-#, python-format
-msgid "Warning: %s"
-msgstr "אזהרה: %s"
 
 msgid "Wav Sounds"
 msgstr "צלילי Wav"
@@ -7032,6 +7094,10 @@ msgid "_Unsubscribe"
 msgstr "_בטל הרשמה"
 
 #, fuzzy
+msgid "_Update"
+msgstr "עדכן MOTD..."
+
+#, fuzzy
 msgid "_Username"
 msgstr "שם _משתמש:"
 
@@ -7148,6 +7214,9 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "הזמנת משתמש לחדר עם ציון סיבה"
+
+msgid "help"
+msgstr ""
 
 #, fuzzy
 msgid "if specified, contact is taken from the contact list of this account"
@@ -11374,9 +11443,16 @@ msgstr ""
 #~ msgid "Please wait..."
 #~ msgstr "אנא המתן..."
 
+# בעת התחלת
 #, fuzzy
-#~ msgid "Plugins updates"
-#~ msgstr "כשל תוסף"
+#~ msgid ""
+#~ "Plug-in description should be displayed here. This text will be erased "
+#~ "during PluginsWindow initialization."
+#~ msgstr ""
+#~ "תיאור תוסף צריך להיות מוצג כאן. תמליל זה ימחק בעת אתחול PluginsWindow."
+
+#~ msgid "Plugin"
+#~ msgstr "תוסף"
 
 #~ msgid "Pop it up"
 #~ msgstr "הקפץ אותו"
@@ -13115,6 +13191,9 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Warning"
+#~ msgstr "אזהרה: %s"
+
+#~ msgid "Warning: %s"
 #~ msgstr "אזהרה: %s"
 
 #~ msgid "Watching TV"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
 "PO-Revision-Date: 2013-08-30 12:04+0300\n"
 "Last-Translator: Sergiy Yegorov <prapor@unixzone.org.ua>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
@@ -1509,6 +1509,12 @@ msgstr ""
 msgid "Check for Gajim updates periodically"
 msgstr ""
 
+msgid "Check for updates"
+msgstr ""
+
+msgid "Check for updates periodically"
+msgstr ""
+
 msgid "Check if Gajim is running"
 msgstr "Перевірити, чи запущено Gajim"
 
@@ -2111,6 +2117,10 @@ msgstr "Показати або змінити тему групової бал�
 msgid "Do not disturb"
 msgstr "Не турбувати"
 
+#, fuzzy
+msgid "Do not show this message again"
+msgstr "Більше _не питати мене"
+
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Чи приймаєте ви запит щодо облікового запису %s?"
@@ -2155,6 +2165,14 @@ msgstr "Не показувати реєстр на системній пане�
 #, fuzzy
 msgid "Download"
 msgstr "Звантажити"
+
+#, fuzzy
+msgid "Download Update"
+msgstr "Звантажити"
+
+#, fuzzy
+msgid "Download and Install"
+msgstr "Більше _не питати мене"
 
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
@@ -3923,6 +3941,12 @@ msgstr "Сповіщення"
 msgid "Notifications When Away"
 msgstr "Сповіщення"
 
+msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when the automatic update was successful"
+msgstr ""
+
 msgid "Notify of events in the notification area."
 msgstr "Сповіщення про події у зоні сповіщень."
 
@@ -4257,19 +4281,16 @@ msgid "Please use yyyy-mm-dd"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr ""
-"Тут має бути показано опис додатка. Цей текст буде видалено при "
-"ініціалізації вікна додатків."
-
-msgid "Plugin"
+msgid "Plugin Settings"
 msgstr "Додатки"
 
 #, fuzzy
-msgid "Plugin Settings"
-msgstr "Додатки"
+msgid "Plugin Updates"
+msgstr "Активація додатка невдалаДодаток"
+
+#, fuzzy
+msgid "Plugin Updates Available"
+msgstr "Немає жодного облікового запису"
 
 msgid "Plugin already exists"
 msgstr "Додаток вже встановлено"
@@ -4281,8 +4302,17 @@ msgstr "Активація додатка невдалаДодаток"
 msgid "Plugin manager"
 msgstr "Активація додатка невдалаДодаток"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+
 msgid "Plugins"
 msgstr "Додатки"
+
+#, fuzzy
+msgid "Plugins Updated"
+msgstr "Активація додатка невдалаДодаток"
 
 #, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4713,6 +4743,10 @@ msgid "Resource"
 msgstr "Ресурс:"
 
 #, fuzzy
+msgid "Restart Gajim for changes to take affect"
+msgstr "Ви маєте перезавантажити Gajim, щоб деякі з параметрів набули чинності"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Попередній стан: %"
 
@@ -4897,6 +4931,9 @@ msgstr "Виберіть обліковий запис"
 msgid "Select File…"
 msgstr "Надіслати файл…"
 
+msgid "Select a security label for your message…"
+msgstr ""
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
@@ -4914,6 +4951,10 @@ msgstr ""
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Selected security label: %s"
+msgstr "Попередження"
 
 msgid "Self signed certificate"
 msgstr "Сертифікат є самопідписаним"
@@ -5726,6 +5767,12 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr ""
 
@@ -6081,6 +6128,20 @@ msgstr "Вивантажити аватар…"
 msgid "Update Check"
 msgstr "Перевірка правопису"
 
+#, fuzzy
+msgid "Update automatically"
+msgstr "Вивантажити аватар…"
+
+#, fuzzy
+msgid "Update available"
+msgstr "Немає жодного облікового запису"
+
+msgid "Update plugins automatically"
+msgstr ""
+
+msgid "Update plugins automatically next time"
+msgstr ""
+
 msgid "Updates"
 msgstr ""
 
@@ -6210,6 +6271,10 @@ msgid "Video Resolution"
 msgstr "Тест відео"
 
 #, fuzzy
+msgid "Video calls are not available on Windows"
+msgstr "Відео сесія недоступна"
+
+#, fuzzy
 msgid "Video chats are not available"
 msgstr "Відео сесія недоступна"
 
@@ -6242,10 +6307,6 @@ msgstr "Відео сесія недоступна"
 #, fuzzy
 msgid "Waiting…"
 msgstr "Пишу"
-
-#, python-format
-msgid "Warning: %s"
-msgstr "Попередження: %s"
 
 msgid "Wav Sounds"
 msgstr "Звуки wav"
@@ -6902,6 +6963,10 @@ msgid "_Unsubscribe"
 msgstr "_Скасувати підписку"
 
 #, fuzzy
+msgid "_Update"
+msgstr "Оновити «Повідомлення дня»..."
+
+#, fuzzy
 msgid "_Username"
 msgstr "_Користувач:"
 
@@ -7017,6 +7082,9 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "Запросити користувача в кімнату вказавши причину"
+
+msgid "help"
+msgstr ""
 
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr ""
@@ -11433,8 +11501,15 @@ msgstr ""
 #~ msgstr "Зачекайте, будь ласка..."
 
 #, fuzzy
-#~ msgid "Plugins updates"
-#~ msgstr "Активація додатка невдалаДодаток"
+#~ msgid ""
+#~ "Plug-in description should be displayed here. This text will be erased "
+#~ "during PluginsWindow initialization."
+#~ msgstr ""
+#~ "Тут має бути показано опис додатка. Цей текст буде видалено при "
+#~ "ініціалізації вікна додатків."
+
+#~ msgid "Plugin"
+#~ msgstr "Додатки"
 
 #~ msgid "Polish"
 #~ msgstr "Польська"
@@ -13234,6 +13309,9 @@ msgstr ""
 
 #~ msgid "Warning"
 #~ msgstr "Попередження"
+
+#~ msgid "Warning: %s"
+#~ msgstr "Попередження: %s"
 
 #~ msgid "Watching TV"
 #~ msgstr "Дивлюся телевізор"

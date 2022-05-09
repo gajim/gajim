@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
 "PO-Revision-Date: 2020-07-22 17:59+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -1479,6 +1479,12 @@ msgstr ""
 msgid "Check for Gajim updates periodically"
 msgstr ""
 
+msgid "Check for updates"
+msgstr ""
+
+msgid "Check for updates periodically"
+msgstr ""
+
 msgid "Check if Gajim is running"
 msgstr "Gajim қосулы тұрғанына көз жеткізіңіз"
 
@@ -2059,6 +2065,10 @@ msgstr "Топ чат беті/терезесін жабу алдында сұр
 msgid "Do not disturb"
 msgstr "Мазамды алмаңыз"
 
+#, fuzzy
+msgid "Do not show this message again"
+msgstr "М_ені қайта сұрамау"
+
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "%s тіркелгісіндегі бұл сұранымды қабылдайсыз ба?"
@@ -2103,6 +2113,14 @@ msgstr "Ростерді жүйелік есептер панелінде көр
 #, fuzzy
 msgid "Download"
 msgstr "Беру"
+
+#, fuzzy
+msgid "Download Update"
+msgstr "Беру"
+
+#, fuzzy
+msgid "Download and Install"
+msgstr "М_ені қайта сұрамау"
 
 #, python-format
 msgid "Downloaded %s messages"
@@ -3805,6 +3823,12 @@ msgstr "Хабарламалар"
 msgid "Notifications When Away"
 msgstr "Хабарламалар"
 
+msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when the automatic update was successful"
+msgstr ""
+
 msgid "Notify of events in the notification area."
 msgstr "Оқиғалар жөнінде жүйелік сөреде хабарлау."
 
@@ -4123,18 +4147,16 @@ msgstr ""
 msgid "Please use yyyy-mm-dd"
 msgstr ""
 
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr ""
-"Плагин анықтамасы осында болу керек. PluginsWindow іске қосылған кезде бұл "
-"мәтін өшірілетін болады."
-
-msgid "Plugin"
-msgstr "Плагин"
-
 msgid "Plugin Settings"
 msgstr "Плагин баптаулары"
+
+#, fuzzy
+msgid "Plugin Updates"
+msgstr "Плагин сәтсіз"
+
+#, fuzzy
+msgid "Plugin Updates Available"
+msgstr "Бірде-бір тіркелгі қолжетерсіз"
 
 msgid "Plugin already exists"
 msgstr "Плагин бар болып тұр"
@@ -4146,8 +4168,17 @@ msgstr "Плагин сәтсіз"
 msgid "Plugin manager"
 msgstr "Плагин сәтсіз"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+
 msgid "Plugins"
 msgstr "Плагиндер"
+
+#, fuzzy
+msgid "Plugins Updated"
+msgstr "Плагин сәтсіз"
 
 #, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4566,6 +4597,11 @@ msgid "Resource"
 msgstr "Ресурс"
 
 #, fuzzy
+msgid "Restart Gajim for changes to take affect"
+msgstr ""
+"<b>ЕСКЕРТУ:</b> Кейбір баптаулар іске асу үшін, Gajim-ді қайта қосуыңыз керек"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Соңғы қалып-күйі: %s"
 
@@ -4743,6 +4779,9 @@ msgstr "Тіркелгіні таңдау"
 msgid "Select File…"
 msgstr "Файлды жіберу…"
 
+msgid "Select a security label for your message…"
+msgstr ""
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
@@ -4760,6 +4799,10 @@ msgstr ""
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Selected security label: %s"
+msgstr "%s банға жіберу"
 
 msgid "Self signed certificate"
 msgstr "Өздігінен қолтаңбасы бар сертификат"
@@ -5546,6 +5589,12 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr ""
 
@@ -5893,6 +5942,21 @@ msgstr "Аватарды жүктеп жіберу…"
 msgid "Update Check"
 msgstr "Емлені тексеру"
 
+#, fuzzy
+msgid "Update automatically"
+msgstr "Автоматты түрде қосылу"
+
+#, fuzzy
+msgid "Update available"
+msgstr "Бірде-бір тіркелгі қолжетерсіз"
+
+#, fuzzy
+msgid "Update plugins automatically"
+msgstr "Автоматты түрде қосылу"
+
+msgid "Update plugins automatically next time"
+msgstr ""
+
 msgid "Updates"
 msgstr ""
 
@@ -6021,6 +6085,10 @@ msgid "Video Resolution"
 msgstr "Видео сынау"
 
 #, fuzzy
+msgid "Video calls are not available on Windows"
+msgstr "Байланыс қолжетерсіз"
+
+#, fuzzy
 msgid "Video chats are not available"
 msgstr "Байланыс қолжетерсіз"
 
@@ -6053,10 +6121,6 @@ msgstr "Байланыс қолжетерсіз"
 #, fuzzy
 msgid "Waiting…"
 msgstr "Жазуда"
-
-#, fuzzy, python-format
-msgid "Warning: %s"
-msgstr "%s банға жіберу"
 
 msgid "Wav Sounds"
 msgstr "Wav дыбыстары"
@@ -6683,6 +6747,10 @@ msgstr ""
 msgid "_Unsubscribe"
 msgstr "Жа_зылудан бас тарту"
 
+#, fuzzy
+msgid "_Update"
+msgstr "MOTD жаңарту…"
+
 msgid "_Username"
 msgstr "_Пайдаланушы аты"
 
@@ -6799,6 +6867,9 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "Шығу үшін топ чаттарын таңдаңыз"
+
+msgid "help"
+msgstr ""
 
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "көрсетілсе, контакттар бұл тіркелгінің тізімінен алынады"
@@ -10331,9 +10402,6 @@ msgstr ""
 #~ msgid "Jingle File Transfer"
 #~ msgstr "Файлдармен алмасу"
 
-#~ msgid "Join Automatically"
-#~ msgstr "Автоматты түрде қосылу"
-
 #~ msgid "Join Group Chat with account %s"
 #~ msgstr "%s тіркелгісімен топтық чатқа кіру"
 
@@ -11129,9 +11197,15 @@ msgstr ""
 #~ msgid "Please wait..."
 #~ msgstr "Күте тұрыңыз..."
 
-#, fuzzy
-#~ msgid "Plugins updates"
-#~ msgstr "Плагин сәтсіз"
+#~ msgid ""
+#~ "Plug-in description should be displayed here. This text will be erased "
+#~ "during PluginsWindow initialization."
+#~ msgstr ""
+#~ "Плагин анықтамасы осында болу керек. PluginsWindow іске қосылған кезде "
+#~ "бұл мәтін өшірілетін болады."
+
+#~ msgid "Plugin"
+#~ msgstr "Плагин"
 
 #~ msgid "Polish"
 #~ msgstr "Поляк"
@@ -12879,6 +12953,10 @@ msgstr ""
 
 #~ msgid "Warning"
 #~ msgstr "Ескерту"
+
+#, fuzzy
+#~ msgid "Warning: %s"
+#~ msgstr "%s банға жіберу"
 
 #~ msgid "Watching TV"
 #~ msgstr "ТВ көруде"

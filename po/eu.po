@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -1481,6 +1481,12 @@ msgstr ""
 msgid "Check for Gajim updates periodically"
 msgstr ""
 
+msgid "Check for updates"
+msgstr ""
+
+msgid "Check for updates periodically"
+msgstr ""
+
 #, fuzzy
 msgid "Check if Gajim is running"
 msgstr "Mesedez begiratu avahi-daemon martxan dagoen."
@@ -2085,6 +2091,10 @@ msgstr "Galdetu leiho bat itxi baino lehen."
 msgid "Do not disturb"
 msgstr "Ez nahasi."
 
+#, fuzzy
+msgid "Do not show this message again"
+msgstr "E_z galdetu berriro  "
+
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Baimen hau onartzen al duzu?"
@@ -2129,6 +2139,14 @@ msgstr "ez erakutsi zerrenda sistemako zeregin barran."
 #, fuzzy
 msgid "Download"
 msgstr "Deskargatu"
+
+#, fuzzy
+msgid "Download Update"
+msgstr "Deskargatu"
+
+#, fuzzy
+msgid "Download and Install"
+msgstr "E_z galdetu berriro  "
 
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
@@ -3829,6 +3847,12 @@ msgstr "Kontu Eraldaketa"
 msgid "Notifications When Away"
 msgstr "Kontu Eraldaketa"
 
+msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when the automatic update was successful"
+msgstr ""
+
 #, fuzzy
 msgid "Notify of events in the notification area."
 msgstr "Jakin arazi gertaerak system trayicon-ean."
@@ -4156,17 +4180,17 @@ msgstr ""
 msgid "Please use yyyy-mm-dd"
 msgstr ""
 
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr ""
-
-msgid "Plugin"
-msgstr ""
-
 #, fuzzy
 msgid "Plugin Settings"
 msgstr "Konexioak huts egin du"
+
+#, fuzzy
+msgid "Plugin Updates"
+msgstr "Konexioak huts egin du"
+
+#, fuzzy
+msgid "Plugin Updates Available"
+msgstr "Ez dago konturik erabilgarri"
 
 #, fuzzy
 msgid "Plugin already exists"
@@ -4180,8 +4204,17 @@ msgstr "Konexioak huts egin du"
 msgid "Plugin manager"
 msgstr "Konexioak huts egin du"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+
 msgid "Plugins"
 msgstr ""
+
+#, fuzzy
+msgid "Plugins Updated"
+msgstr "Konexioak huts egin du"
 
 #, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4607,6 +4640,12 @@ msgid "Resource"
 msgstr "Baliabidea:"
 
 #, fuzzy
+msgid "Restart Gajim for changes to take affect"
+msgstr ""
+"<b>OHARRA:</b> Gajim berriro abiarazi beharko duzu aldagai batzuek efektua "
+"sor dezaten"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Azken egoera: %s"
 
@@ -4788,6 +4827,9 @@ msgstr "%s kontua ezabatzen"
 msgid "Select File…"
 msgstr "Bidali _Fitxeroa"
 
+msgid "Select a security label for your message…"
+msgstr ""
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
@@ -4806,6 +4848,10 @@ msgstr ""
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Selected security label: %s"
+msgstr "Debekatzen %s"
 
 msgid "Self signed certificate"
 msgstr ""
@@ -5601,6 +5647,12 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr ""
 
@@ -5945,6 +5997,20 @@ msgstr "Aukeratu Irudia"
 msgid "Update Check"
 msgstr ""
 
+#, fuzzy
+msgid "Update automatically"
+msgstr "Aukeratu Irudia"
+
+#, fuzzy
+msgid "Update available"
+msgstr "Ez dago konturik erabilgarri"
+
+msgid "Update plugins automatically"
+msgstr ""
+
+msgid "Update plugins automatically next time"
+msgstr ""
+
 msgid "Updates"
 msgstr ""
 
@@ -6067,6 +6133,10 @@ msgid "Video Resolution"
 msgstr "Txat Pribatua"
 
 #, fuzzy
+msgid "Video calls are not available on Windows"
+msgstr "Konexioa ez erablgarri"
+
+#, fuzzy
 msgid "Video chats are not available"
 msgstr "Konexioa ez erablgarri"
 
@@ -6100,10 +6170,6 @@ msgstr "Konexioa ez erablgarri"
 #, fuzzy
 msgid "Waiting…"
 msgstr "Lanean"
-
-#, fuzzy, python-format
-msgid "Warning: %s"
-msgstr "Debekatzen %s"
 
 msgid "Wav Sounds"
 msgstr "Wav Soinuak"
@@ -6747,6 +6813,10 @@ msgid "_Unsubscribe"
 msgstr "Harpidetza ezabat_u"
 
 #, fuzzy
+msgid "_Update"
+msgstr "MOTD Gaurkotu"
+
+#, fuzzy
 msgid "_Username"
 msgstr "_Izena"
 
@@ -6871,6 +6941,9 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "Mesedez bete sartu nahi duzun kontaktuaren informazioa"
+
+msgid "help"
+msgstr ""
 
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "hautatua badago, kontaktua kontu honen kontaktu listatik lortuko da."
@@ -12277,6 +12350,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Warning"
+#~ msgstr "Debekatzen %s"
+
+#, fuzzy
+#~ msgid "Warning: %s"
 #~ msgstr "Debekatzen %s"
 
 #, fuzzy

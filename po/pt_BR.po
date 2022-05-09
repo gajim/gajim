@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
 "PO-Revision-Date: 2020-09-06 18:19+0000\n"
 "Last-Translator: Antonio Morais <antonio@alfa67.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -1496,6 +1496,12 @@ msgstr ""
 msgid "Check for Gajim updates periodically"
 msgstr ""
 
+msgid "Check for updates"
+msgstr ""
+
+msgid "Check for updates periodically"
+msgstr ""
+
 msgid "Check if Gajim is running"
 msgstr "Checar se o Gajim está rodando"
 
@@ -2078,6 +2084,10 @@ msgstr "Exibir ou alterar um tópico de chat em grupo"
 msgid "Do not disturb"
 msgstr "Não perturbe"
 
+#, fuzzy
+msgid "Do not show this message again"
+msgstr "_Não me pergunte novamente"
+
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Você aceita esse pedido (conta: %s)?"
@@ -2121,6 +2131,14 @@ msgstr "Não exibir a lista de contatos na bandeja do sistema."
 #, fuzzy
 msgid "Download"
 msgstr "Download"
+
+#, fuzzy
+msgid "Download Update"
+msgstr "Download"
+
+#, fuzzy
+msgid "Download and Install"
+msgstr "_Não me pergunte novamente"
 
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
@@ -3856,6 +3874,12 @@ msgstr "Notificações"
 msgid "Notifications When Away"
 msgstr "Notificações"
 
+msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when the automatic update was successful"
+msgstr ""
+
 msgid "Notify of events in the notification area."
 msgstr "Notificar eventos no ícone da bandeja do sistema."
 
@@ -4187,19 +4211,16 @@ msgstr "Atenção: Por favor, use essas opções com cautela!"
 msgid "Please use yyyy-mm-dd"
 msgstr ""
 
-#, fuzzy
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr ""
-"A decrição do plug-in deve ser exibida aqui. Este texto será apagado durante "
-"a inicialização do PluginsWindow."
-
-msgid "Plugin"
-msgstr "Plugin"
-
 msgid "Plugin Settings"
 msgstr "Configurações do plugin"
+
+#, fuzzy
+msgid "Plugin Updates"
+msgstr "Falha ao registrar"
+
+#, fuzzy
+msgid "Plugin Updates Available"
+msgstr "Conta não disponível"
 
 #, fuzzy
 msgid "Plugin already exists"
@@ -4212,8 +4233,17 @@ msgstr "Falha ao registrar"
 msgid "Plugin manager"
 msgstr "Gerenciador de Plugins"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+
 msgid "Plugins"
 msgstr "Plugins"
+
+#, fuzzy
+msgid "Plugins Updated"
+msgstr "Falha ao registrar"
 
 #, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4631,6 +4661,11 @@ msgid "Resource"
 msgstr "Adicional"
 
 #, fuzzy
+msgid "Restart Gajim for changes to take affect"
+msgstr ""
+"Você deve reiniciar o Gajim para que algumas configurações tenham efeito"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Último estado"
 
@@ -4814,6 +4849,9 @@ msgstr "Selecionar Conta"
 msgid "Select File…"
 msgstr "Enviar Arquivo…"
 
+msgid "Select a security label for your message…"
+msgstr ""
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
@@ -4832,6 +4870,10 @@ msgstr ""
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Selected security label: %s"
+msgstr "Segurança"
 
 msgid "Self signed certificate"
 msgstr "Certificado próprio"
@@ -5643,6 +5685,12 @@ msgstr ""
 "Criar uma conta em um servidor também permite que você se comunique com "
 "contatos de outros servidores."
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+
 #, fuzzy
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr ""
@@ -6011,6 +6059,21 @@ msgstr "Carregar Avatar…"
 msgid "Update Check"
 msgstr "Verificador ortográfico"
 
+#, fuzzy
+msgid "Update automatically"
+msgstr "Junte-se automaticamente"
+
+#, fuzzy
+msgid "Update available"
+msgstr "Conta não disponível"
+
+#, fuzzy
+msgid "Update plugins automatically"
+msgstr "Junte-se automaticamente"
+
+msgid "Update plugins automatically next time"
+msgstr ""
+
 msgid "Updates"
 msgstr ""
 
@@ -6135,6 +6198,10 @@ msgid "Video Resolution"
 msgstr "Alternar sessão de vídeo"
 
 #, fuzzy
+msgid "Video calls are not available on Windows"
+msgstr "Conexão não disponível"
+
+#, fuzzy
 msgid "Video chats are not available"
 msgstr "Conexão não disponível"
 
@@ -6167,10 +6234,6 @@ msgstr "Conexão não disponível"
 #, fuzzy
 msgid "Waiting…"
 msgstr "Escrevendo"
-
-#, python-format
-msgid "Warning: %s"
-msgstr "Aviso:%s"
 
 msgid "Wav Sounds"
 msgstr "Sons wav"
@@ -6795,6 +6858,10 @@ msgstr "_Cancelar o registro da conta do serviço"
 msgid "_Unsubscribe"
 msgstr "_Desinscrever"
 
+#, fuzzy
+msgid "_Update"
+msgstr "Atualizar MOTD…"
+
 msgid "_Username"
 msgstr "Nome de _Usuário"
 
@@ -6917,6 +6984,9 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "Convide um usuário para um bate-papo em grupo por uma razão"
+
+msgid "help"
+msgstr ""
 
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "se especificado, o contato é feito da lista de contatos desta conta"
@@ -10920,10 +10990,6 @@ msgstr ""
 #~ msgid "Jingle File Transfer"
 #~ msgstr "Transferência de arquivos"
 
-#, fuzzy
-#~ msgid "Join Automatically"
-#~ msgstr "Junte-se automaticamente"
-
 #~ msgid "Join Group Chat with account %s"
 #~ msgstr "Ingressar numa conferência com a conta %s"
 
@@ -11823,8 +11889,15 @@ msgstr ""
 #~ msgstr "Por favor aguarde..."
 
 #, fuzzy
-#~ msgid "Plugins updates"
-#~ msgstr "Falha ao registrar"
+#~ msgid ""
+#~ "Plug-in description should be displayed here. This text will be erased "
+#~ "during PluginsWindow initialization."
+#~ msgstr ""
+#~ "A decrição do plug-in deve ser exibida aqui. Este texto será apagado "
+#~ "durante a inicialização do PluginsWindow."
+
+#~ msgid "Plugin"
+#~ msgstr "Plugin"
 
 #~ msgid "Polish"
 #~ msgstr "Polonês"
@@ -13835,6 +13908,9 @@ msgstr ""
 
 #~ msgid "Warning"
 #~ msgstr "Aviso"
+
+#~ msgid "Warning: %s"
+#~ msgstr "Aviso:%s"
 
 #~ msgid "Watching TV"
 #~ msgstr "Assitindo TV"

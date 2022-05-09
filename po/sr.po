@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1506,6 +1506,12 @@ msgstr ""
 msgid "Check for Gajim updates periodically"
 msgstr ""
 
+msgid "Check for updates"
+msgstr ""
+
+msgid "Check for updates periodically"
+msgstr ""
+
 msgid "Check if Gajim is running"
 msgstr "Молимо проверите да ли је Гајим покренут"
 
@@ -2112,6 +2118,10 @@ msgstr "Питај пре затварања прозора/језичка гр�
 msgid "Do not disturb"
 msgstr "Не сметај"
 
+#, fuzzy
+msgid "Do not show this message again"
+msgstr "_Не питај ме више"
+
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Прихватате ли овај захтев на налогу %s?"
@@ -2156,6 +2166,14 @@ msgstr "Не приказуј листу контаката у системск�
 #, fuzzy
 msgid "Download"
 msgstr "Скидање"
+
+#, fuzzy
+msgid "Download Update"
+msgstr "Скидање"
+
+#, fuzzy
+msgid "Download and Install"
+msgstr "_Не питај ме више"
 
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
@@ -3874,6 +3892,12 @@ msgstr "Обавештења"
 msgid "Notifications When Away"
 msgstr "Обавештења"
 
+msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when the automatic update was successful"
+msgstr ""
+
 #, fuzzy
 msgid "Notify of events in the notification area."
 msgstr "Обавести ме о свим догађајима у икони системске касете."
@@ -4199,17 +4223,17 @@ msgstr ""
 msgid "Please use yyyy-mm-dd"
 msgstr ""
 
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr ""
-
-msgid "Plugin"
-msgstr ""
-
 #, fuzzy
 msgid "Plugin Settings"
 msgstr "Регистрација неуспела"
+
+#, fuzzy
+msgid "Plugin Updates"
+msgstr "Регистрација неуспела"
+
+#, fuzzy
+msgid "Plugin Updates Available"
+msgstr "Нема доступних налога"
 
 #, fuzzy
 msgid "Plugin already exists"
@@ -4223,8 +4247,17 @@ msgstr "Регистрација неуспела"
 msgid "Plugin manager"
 msgstr "Регистрација неуспела"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+
 msgid "Plugins"
 msgstr ""
+
+#, fuzzy
+msgid "Plugins Updated"
+msgstr "Регистрација неуспела"
 
 #, fuzzy, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4653,6 +4686,12 @@ msgid "Resource"
 msgstr "Ресурс:"
 
 #, fuzzy
+msgid "Restart Gajim for changes to take affect"
+msgstr ""
+"<b>НАПОМЕНА:</b> Требало би да поново покренете Гајим да би неке измене "
+"подешавања постале примењене"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Последњи статус: %s"
 
@@ -4833,6 +4872,9 @@ msgstr "Уклањање рачуна %s"
 msgid "Select File…"
 msgstr "Пошаљи _датотеку"
 
+msgid "Select a security label for your message…"
+msgstr ""
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
@@ -4850,6 +4892,10 @@ msgstr ""
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Selected security label: %s"
+msgstr "Забрањујем %s"
 
 msgid "Self signed certificate"
 msgstr "Самопотписани сертификат"
@@ -5651,6 +5697,12 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr ""
 
@@ -6004,6 +6056,20 @@ msgstr "Одаберите слику"
 msgid "Update Check"
 msgstr "Провера правописа"
 
+#, fuzzy
+msgid "Update automatically"
+msgstr "Одаберите слику"
+
+#, fuzzy
+msgid "Update available"
+msgstr "Нема доступних налога"
+
+msgid "Update plugins automatically"
+msgstr ""
+
+msgid "Update plugins automatically next time"
+msgstr ""
+
 msgid "Updates"
 msgstr ""
 
@@ -6132,6 +6198,10 @@ msgid "Video Resolution"
 msgstr "Приватни Разговори"
 
 #, fuzzy
+msgid "Video calls are not available on Windows"
+msgstr "Веза није доступна"
+
+#, fuzzy
 msgid "Video chats are not available"
 msgstr "Веза није доступна"
 
@@ -6165,10 +6235,6 @@ msgstr "Веза није доступна"
 #, fuzzy
 msgid "Waiting…"
 msgstr "Пише"
-
-#, fuzzy, python-format
-msgid "Warning: %s"
-msgstr "Забрањујем %s"
 
 msgid "Wav Sounds"
 msgstr "Wav Звукови"
@@ -6818,6 +6884,10 @@ msgid "_Unsubscribe"
 msgstr "_Укини претплату"
 
 #, fuzzy
+msgid "_Update"
+msgstr "Освежи поруку дана..."
+
+#, fuzzy
 msgid "_Username"
 msgstr "_Корисничко име:"
 
@@ -6938,6 +7008,9 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "Одаберите групне разговоре које желите да напустите"
+
+msgid "help"
+msgstr ""
 
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "ако је назначено, контакт се узима са листе контаката овог налога"
@@ -12318,6 +12391,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Warning"
+#~ msgstr "Забрањујем %s"
+
+#, fuzzy
+#~ msgid "Warning: %s"
 #~ msgstr "Забрањујем %s"
 
 #~ msgid "Watching TV"

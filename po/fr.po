@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
-"PO-Revision-Date: 2022-04-20 14:28+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"PO-Revision-Date: 2022-05-09 07:29+0000\n"
 "Last-Translator: pitchum <pitchum@gramaton.org>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/>"
 "\n"
@@ -1353,6 +1353,12 @@ msgstr "Vérifier mises à jour"
 msgid "Check for Gajim updates periodically"
 msgstr "Vérifier régulièrement les mises à jour Gajim"
 
+msgid "Check for updates"
+msgstr "Vérifier la présence de mises à jour"
+
+msgid "Check for updates periodically"
+msgstr "Vérifier régulièrement la présence de mises à jour"
+
 msgid "Check if Gajim is running"
 msgstr "Vérifie si Gajim est lancé"
 
@@ -1876,6 +1882,9 @@ msgstr "Affiche ou modifie le sujet d'un salon de discussion"
 msgid "Do not disturb"
 msgstr "Ne pas déranger"
 
+msgid "Do not show this message again"
+msgstr "Ne plus afficher ce message"
+
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Acceptez vous cette requête (compte : %s) ?"
@@ -1919,6 +1928,12 @@ msgstr ""
 
 msgid "Download"
 msgstr "Télécharger"
+
+msgid "Download Update"
+msgstr "Télécharger mise à jour"
+
+msgid "Download and Install"
+msgstr "Télécharger et installer"
 
 #, python-format
 msgid "Downloaded %s messages"
@@ -3518,6 +3533,12 @@ msgstr "Notifications"
 msgid "Notifications When Away"
 msgstr "Notifications en cas d'absence"
 
+msgid "Notify after update"
+msgstr "Notifier après mise à jour"
+
+msgid "Notify me when the automatic update was successful"
+msgstr "Me notifier lorsqu'une mise à jour automatique a réussi"
+
 msgid "Notify of events in the notification area."
 msgstr "M'alerter à l'aide de l'icône dans la zone de notifications."
 
@@ -3820,18 +3841,15 @@ msgstr "Utilisez ces paramètres avec précaution !"
 msgid "Please use yyyy-mm-dd"
 msgstr "Veuillez utiliser aaaa-mm-jj"
 
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr ""
-"La description de l'extension devrait s'afficher ici. Ce texte sera effacé "
-"lors de l'initialisation de la fenêtre des extensions."
-
-msgid "Plugin"
-msgstr "Extension"
-
 msgid "Plugin Settings"
 msgstr "Paramètres de l'extension"
+
+#, fuzzy
+msgid "Plugin Updates"
+msgstr "Mises à jour des extensions"
+
+msgid "Plugin Updates Available"
+msgstr "Des mises à jour d'extensions sont disponibles"
 
 msgid "Plugin already exists"
 msgstr "L'extension existe déjà"
@@ -3842,8 +3860,18 @@ msgstr "Extension en échec"
 msgid "Plugin manager"
 msgstr "Gestionnaire d'extensions"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+"Les mises à jour d'extensions ont bien été téléchargées.\n"
+"Les mises à jour seront appliquées la prochaine fois que Gajim sera démarré."
+
 msgid "Plugins"
 msgstr "Extensions"
+
+msgid "Plugins Updated"
+msgstr "Extensions mises à jour"
 
 #, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4210,6 +4238,9 @@ msgstr "Rétablit la valeur par défaut"
 msgid "Resource"
 msgstr "Ressource"
 
+msgid "Restart Gajim for changes to take affect"
+msgstr "Redémarrez Gajim pour que les changements soient pris en compte"
+
 msgid "Restore last state"
 msgstr "Rétablir le dernier état"
 
@@ -4366,6 +4397,9 @@ msgstr "Sélectionner un compte"
 msgid "Select File…"
 msgstr "Choisir un fichier …"
 
+msgid "Select a security label for your message…"
+msgstr "Sélectionnez un label de sécurité pour votre message…"
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 "Sélectionnez un périphérique de sortie audio (ex : haut-parleurs, écouteurs)"
@@ -4385,6 +4419,10 @@ msgstr "Sélectionnez votre source audio (ex : microphone)"
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 "Sélectionnez votre périphérique d'entrée vidéo (ex : webcam, capture d'écran)"
+
+#, python-format
+msgid "Selected security label: %s"
+msgstr "Label de sécurité sélectionné : %s"
 
 msgid "Self signed certificate"
 msgstr "Certificat auto-signé"
@@ -5124,6 +5162,14 @@ msgstr ""
 "Créer un compte sur un serveur vous permettra de communiquer avec des "
 "contacts même s'ils sont sur d'autres serveurs."
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+"Il y a des mises à jour pour vos extensions :\n"
+"<b>%s</b>"
+
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr "Une synchronisation est déjà en cours. Veuillez réessayer plus tard."
 
@@ -5456,6 +5502,18 @@ msgstr "Mettre à jour l'avatar"
 msgid "Update Check"
 msgstr "Vérification de Mise à Jour"
 
+msgid "Update automatically"
+msgstr "Mettre à jour automatiquement"
+
+msgid "Update available"
+msgstr "Mise à jour disponible"
+
+msgid "Update plugins automatically"
+msgstr "Mettre à jour les extensions automatiquement"
+
+msgid "Update plugins automatically next time"
+msgstr "Mettre à jour les extensions automatiquement la prochaine fois"
+
 msgid "Updates"
 msgstr "Mises à jour"
 
@@ -5572,6 +5630,9 @@ msgstr "Périphérique d'entrée vidéo"
 msgid "Video Resolution"
 msgstr "Définition vidéo"
 
+msgid "Video calls are not available on Windows"
+msgstr "Les appels vidéo ne sont pas disponibles sous Windows"
+
 msgid "Video chats are not available"
 msgstr "Les sessions vidéo ne sont pas disponibles"
 
@@ -5601,10 +5662,6 @@ msgstr "Les sessions vidéo ne sont pas disponibles"
 
 msgid "Waiting…"
 msgstr "En attente…"
-
-#, python-format
-msgid "Warning: %s"
-msgstr "Avertissement : %s"
 
 msgid "Wav Sounds"
 msgstr "Sons wav"
@@ -6182,6 +6239,10 @@ msgstr "_Désinscrire le compte auprès du service"
 msgid "_Unsubscribe"
 msgstr "_Désinscrire"
 
+#, fuzzy
+msgid "_Update"
+msgstr "_Mettre à jour"
+
 msgid "_Username"
 msgstr "_Nom d'utilisateur"
 
@@ -6293,6 +6354,10 @@ msgid ""
 msgstr ""
 "vous a intivé dans un salon de discussion.\n"
 "Voulez-vous rejoindre ?"
+
+#, fuzzy
+msgid "help"
+msgstr "Aide"
 
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "Si spécifié, le contact est pris dans la liste de contact de ce compte"
@@ -8810,9 +8875,6 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Personnalisation des thèmes de Gajim"
 
-#~ msgid "Gajim Update Available"
-#~ msgstr "Une Mise à Jour de Gajim est Disponible"
-
 #~ msgid "Gajim aims to be an easy to use and fully-featured XMPP client."
 #~ msgstr ""
 #~ "Gajim se veut être un client XMPP à la fois facile d'utilisation et "
@@ -9874,9 +9936,6 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Jogging"
 #~ msgstr "Fait un jogging"
 
-#~ msgid "Join Automatically"
-#~ msgstr "Rejoindre automatiquement"
-
 #~ msgid "Join Group Chat with account %s"
 #~ msgstr "Rejoindre un salon de discussion en tant que %s"
 
@@ -10731,8 +10790,15 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Please wait..."
 #~ msgstr "Veuillez patienter..."
 
-#~ msgid "Plugins updates"
-#~ msgstr "Mises à jour des plugins"
+#~ msgid ""
+#~ "Plug-in description should be displayed here. This text will be erased "
+#~ "during PluginsWindow initialization."
+#~ msgstr ""
+#~ "La description de l'extension devrait s'afficher ici. Ce texte sera "
+#~ "effacé lors de l'initialisation de la fenêtre des extensions."
+
+#~ msgid "Plugin"
+#~ msgstr "Extension"
 
 #~ msgid "Pop it up"
 #~ msgstr "Faire surgir un pop up"
@@ -12488,6 +12554,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Warning"
 #~ msgstr "Avertissement"
 
+#~ msgid "Warning: %s"
+#~ msgstr "Avertissement : %s"
+
 #~ msgid "Watching TV"
 #~ msgstr "Regarde la télé"
 
@@ -13163,9 +13232,6 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "_Do not ask again"
 #~ msgstr "_Ne plus me poser la question"
-
-#~ msgid "_Do not show again"
-#~ msgstr "_Ne plus montrer"
 
 #~ msgid "_Edit Personal Information..."
 #~ msgstr "_Éditer les informations personnelles…"

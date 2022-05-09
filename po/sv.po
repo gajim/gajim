@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
 "PO-Revision-Date: 2009-10-29 10:21+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -1482,6 +1482,12 @@ msgstr ""
 msgid "Check for Gajim updates periodically"
 msgstr ""
 
+msgid "Check for updates"
+msgstr ""
+
+msgid "Check for updates periodically"
+msgstr ""
+
 msgid "Check if Gajim is running"
 msgstr "Kontrollera om Gajim är igång"
 
@@ -2085,6 +2091,10 @@ msgstr "Fråga innan gruppchattflik eller -fönster stängs."
 msgid "Do not disturb"
 msgstr "Stör inte"
 
+#, fuzzy
+msgid "Do not show this message again"
+msgstr "Fråga mig i_nte igen"
+
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Accepterar du den här begäran på kontot %s?"
@@ -2129,6 +2139,14 @@ msgstr "Visa inte kontaktlista i systemets fönsterlista."
 #, fuzzy
 msgid "Download"
 msgstr "Hämta"
+
+#, fuzzy
+msgid "Download Update"
+msgstr "Hämta"
+
+#, fuzzy
+msgid "Download and Install"
+msgstr "Fråga mig i_nte igen"
 
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
@@ -3823,6 +3841,12 @@ msgstr "Notifieringar"
 msgid "Notifications When Away"
 msgstr "Notifieringar"
 
+msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when the automatic update was successful"
+msgstr ""
+
 #, fuzzy
 msgid "Notify of events in the notification area."
 msgstr "Notifiera om händelser in systemets statusikon."
@@ -4155,17 +4179,17 @@ msgstr ""
 msgid "Please use yyyy-mm-dd"
 msgstr ""
 
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr ""
-
-msgid "Plugin"
-msgstr ""
-
 #, fuzzy
 msgid "Plugin Settings"
 msgstr "Registreringen misslyckades"
+
+#, fuzzy
+msgid "Plugin Updates"
+msgstr "Registreringen misslyckades"
+
+#, fuzzy
+msgid "Plugin Updates Available"
+msgstr "Inget konto tillgängligt"
 
 #, fuzzy
 msgid "Plugin already exists"
@@ -4179,8 +4203,17 @@ msgstr "Registreringen misslyckades"
 msgid "Plugin manager"
 msgstr "Registreringen misslyckades"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+
 msgid "Plugins"
 msgstr ""
+
+#, fuzzy
+msgid "Plugins Updated"
+msgstr "Registreringen misslyckades"
 
 #, fuzzy, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4607,6 +4640,12 @@ msgid "Resource"
 msgstr "Resurs:"
 
 #, fuzzy
+msgid "Restart Gajim for changes to take affect"
+msgstr ""
+"<b>OBSERVERA:</b> Du bör starta om Gajim för att vissa inställningar ska bli "
+"aktiva"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Senaste status: %s"
 
@@ -4789,6 +4828,9 @@ msgstr "Tar bort %s konto"
 msgid "Select File…"
 msgstr "Skicka _fil"
 
+msgid "Select a security label for your message…"
+msgstr ""
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
@@ -4807,6 +4849,10 @@ msgstr ""
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Selected security label: %s"
+msgstr "Bannlyser %s"
 
 msgid "Self signed certificate"
 msgstr "Självsignerat certifikat"
@@ -5601,6 +5647,12 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr ""
 
@@ -5952,6 +6004,20 @@ msgstr "Välj Bild"
 msgid "Update Check"
 msgstr "Stavningskontroll"
 
+#, fuzzy
+msgid "Update automatically"
+msgstr "Välj Bild"
+
+#, fuzzy
+msgid "Update available"
+msgstr "Inget konto tillgängligt"
+
+msgid "Update plugins automatically"
+msgstr ""
+
+msgid "Update plugins automatically next time"
+msgstr ""
+
 msgid "Updates"
 msgstr ""
 
@@ -6076,6 +6142,10 @@ msgid "Video Resolution"
 msgstr "Privat Chatt"
 
 #, fuzzy
+msgid "Video calls are not available on Windows"
+msgstr "Sessionsbus inte tillgänglig"
+
+#, fuzzy
 msgid "Video chats are not available"
 msgstr "Sessionsbus inte tillgänglig"
 
@@ -6109,10 +6179,6 @@ msgstr "Sessionsbus inte tillgänglig"
 #, fuzzy
 msgid "Waiting…"
 msgstr "Skriver"
-
-#, fuzzy, python-format
-msgid "Warning: %s"
-msgstr "Bannlyser %s"
 
 msgid "Wav Sounds"
 msgstr "Wav-ljud"
@@ -6764,6 +6830,10 @@ msgid "_Unsubscribe"
 msgstr "Säg _upp prenumeration"
 
 #, fuzzy
+msgid "_Update"
+msgstr "Uppdatera MOTD..."
+
+#, fuzzy
 msgid "_Username"
 msgstr "_Användarnamn:"
 
@@ -6884,6 +6954,9 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "Välj de gruppchattar som du vill lämna"
+
+msgid "help"
+msgstr ""
 
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr ""
@@ -13218,6 +13291,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Warning"
+#~ msgstr "Bannlyser %s"
+
+#, fuzzy
+#~ msgid "Warning: %s"
 #~ msgstr "Bannlyser %s"
 
 #~ msgid "Watching TV"

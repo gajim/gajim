@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -1487,6 +1487,13 @@ msgstr ""
 msgid "Check for Gajim updates periodically"
 msgstr ""
 
+#, fuzzy
+msgid "Check for updates"
+msgstr "Controleren op updates bij opstarten"
+
+msgid "Check for updates periodically"
+msgstr ""
+
 msgid "Check if Gajim is running"
 msgstr "Controleer of Gajim wordt uitgevoerd"
 
@@ -2073,6 +2080,10 @@ msgstr "Onderwerp van groepsgesprek weergeven of wijzigen"
 msgid "Do not disturb"
 msgstr "Niet storen"
 
+#, fuzzy
+msgid "Do not show this message again"
+msgstr "Vraag mij _dit niet nogmaals"
+
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Accepteer je dit verzoek op account %s?"
@@ -2117,6 +2128,14 @@ msgstr "Rooster niet weergeven in systeemvak."
 #, fuzzy
 msgid "Download"
 msgstr "?Znw:Download"
+
+#, fuzzy
+msgid "Download Update"
+msgstr "?Znw:Download"
+
+#, fuzzy
+msgid "Download and Install"
+msgstr "Vraag mij _dit niet nogmaals"
 
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
@@ -3887,6 +3906,12 @@ msgstr "Meldingen"
 msgid "Notifications When Away"
 msgstr "Meldingen"
 
+msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when the automatic update was successful"
+msgstr ""
+
 msgid "Notify of events in the notification area."
 msgstr "Meldingen van gebeurtenissen weergeven in het systeemvak."
 
@@ -4216,19 +4241,16 @@ msgstr "Let op: wees voorzichtig in het gebruik van deze opties!"
 msgid "Please use yyyy-mm-dd"
 msgstr ""
 
-#, fuzzy
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr ""
-"Hier wordt een beschrijving van de plug-in weergegeven. Deze tekst wordt "
-"gewist tijdens initialisatie van het plug-invenster."
-
-msgid "Plugin"
-msgstr "Plug-in"
-
 msgid "Plugin Settings"
 msgstr "Plug-in-instellingen"
+
+#, fuzzy
+msgid "Plugin Updates"
+msgstr "Updates voor plug-ins"
+
+#, fuzzy
+msgid "Plugin Updates Available"
+msgstr "Geen account beschikbaar"
 
 msgid "Plugin already exists"
 msgstr "Plug-in bestaat al"
@@ -4239,8 +4261,17 @@ msgstr "Plug-in mislukt"
 msgid "Plugin manager"
 msgstr "Plug-inbeheer"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+
 msgid "Plugins"
 msgstr "Plug-ins"
+
+#, fuzzy
+msgid "Plugins Updated"
+msgstr "Updates voor plug-ins"
 
 #, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4660,6 +4691,11 @@ msgid "Resource"
 msgstr "Bron"
 
 #, fuzzy
+msgid "Restart Gajim for changes to take affect"
+msgstr ""
+"Je moet Gajim herstarten vooraleer sommige instellingen in werking treden"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Laatste toestand"
 
@@ -4844,6 +4880,9 @@ msgstr "Account %s wordt verwijderd"
 msgid "Select File…"
 msgstr "Bestand verzenden…"
 
+msgid "Select a security label for your message…"
+msgstr ""
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
@@ -4861,6 +4900,10 @@ msgstr ""
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Selected security label: %s"
+msgstr "Waarschuwing"
 
 msgid "Self signed certificate"
 msgstr "Zelfgetekend certificaat"
@@ -5666,6 +5709,12 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+
 #, fuzzy
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr ""
@@ -6029,6 +6078,20 @@ msgstr "Avatar uploaden…"
 msgid "Update Check"
 msgstr "Spellingscontrole"
 
+#, fuzzy
+msgid "Update automatically"
+msgstr "Avatar uploaden…"
+
+#, fuzzy
+msgid "Update available"
+msgstr "Geen account beschikbaar"
+
+msgid "Update plugins automatically"
+msgstr ""
+
+msgid "Update plugins automatically next time"
+msgstr ""
+
 msgid "Updates"
 msgstr ""
 
@@ -6156,6 +6219,10 @@ msgid "Video Resolution"
 msgstr "Videosessie"
 
 #, fuzzy
+msgid "Video calls are not available on Windows"
+msgstr "Videosessies zijn niet beschikbaar"
+
+#, fuzzy
 msgid "Video chats are not available"
 msgstr "Videosessies zijn niet beschikbaar"
 
@@ -6188,10 +6255,6 @@ msgstr "Videosessies zijn niet beschikbaar"
 #, fuzzy
 msgid "Waiting…"
 msgstr "Schrijven"
-
-#, python-format
-msgid "Warning: %s"
-msgstr "Waarschuwing: %s"
 
 msgid "Wav Sounds"
 msgstr "WAV-geluiden"
@@ -6853,6 +6916,10 @@ msgstr ""
 msgid "_Unsubscribe"
 msgstr "Abonnement _opzeggen"
 
+#, fuzzy
+msgid "_Update"
+msgstr "MOTD bijwerken…"
+
 msgid "_Username"
 msgstr "Gebr_uikersnaam"
 
@@ -6969,6 +7036,9 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "Nodig een gebruiker uit in een groepsgesprek voor een reden"
+
+msgid "help"
+msgstr ""
 
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr ""
@@ -8729,9 +8799,6 @@ msgstr ""
 #~ "5223. Let op, deze functionaliteit werkt mogelijk alleen bij oudere "
 #~ "servers. Gajim gebruikt standaard al TLS waar mogelijk. Deze optie "
 #~ "schakelt TLS echter uit."
-
-#~ msgid "Check update after start"
-#~ msgstr "Controleren op updates bij opstarten"
 
 #~ msgid "Check your connection or try again later"
 #~ msgstr "Controleer je verbinding of probeer later nogmaals"
@@ -11842,8 +11909,16 @@ msgstr ""
 #~ msgid "Please wait..."
 #~ msgstr "Even geduld…"
 
-#~ msgid "Plugins updates"
-#~ msgstr "Updates voor plug-ins"
+#, fuzzy
+#~ msgid ""
+#~ "Plug-in description should be displayed here. This text will be erased "
+#~ "during PluginsWindow initialization."
+#~ msgstr ""
+#~ "Hier wordt een beschrijving van de plug-in weergegeven. Deze tekst wordt "
+#~ "gewist tijdens initialisatie van het plug-invenster."
+
+#~ msgid "Plugin"
+#~ msgstr "Plug-in"
 
 #, fuzzy
 #~ msgid "Polish"
@@ -13804,6 +13879,9 @@ msgstr ""
 
 #~ msgid "Warning"
 #~ msgstr "Waarschuwing"
+
+#~ msgid "Warning: %s"
+#~ msgstr "Waarschuwing: %s"
 
 #~ msgid "Watching TV"
 #~ msgstr "TV kijken"

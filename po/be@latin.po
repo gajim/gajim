@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -1480,6 +1480,12 @@ msgstr ""
 msgid "Check for Gajim updates periodically"
 msgstr ""
 
+msgid "Check for updates"
+msgstr ""
+
+msgid "Check for updates periodically"
+msgstr ""
+
 #, fuzzy
 msgid "Check if Gajim is running"
 msgstr "Kali łaska, pravier, ci pracuje avahi-daemon."
@@ -2087,6 +2093,10 @@ msgstr "Pytajsia paćvierdžańnia pierad začynieńniem kartki/akna razmovy."
 msgid "Do not disturb"
 msgstr "Nie turbavać"
 
+#, fuzzy
+msgid "Do not show this message again"
+msgstr "_Bolš nie pytajsia"
+
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Prymaješ hety zapyt?"
@@ -2131,6 +2141,14 @@ msgstr "Nie pakazvaj śpis kantaktaŭ na paneli zadańniaŭ."
 #, fuzzy
 msgid "Download"
 msgstr "Ściahni"
+
+#, fuzzy
+msgid "Download Update"
+msgstr "Ściahni"
+
+#, fuzzy
+msgid "Download and Install"
+msgstr "_Bolš nie pytajsia"
 
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
@@ -3849,6 +3867,12 @@ msgstr "Madyfikacyja kontu"
 msgid "Notifications When Away"
 msgstr "Madyfikacyja kontu"
 
+msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when the automatic update was successful"
+msgstr ""
+
 #, fuzzy
 msgid "Notify of events in the notification area."
 msgstr "Nahadvaj ab padziejach ikonaj pola nahadvańnia."
@@ -4175,17 +4199,17 @@ msgstr ""
 msgid "Please use yyyy-mm-dd"
 msgstr ""
 
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr ""
-
-msgid "Plugin"
-msgstr ""
-
 #, fuzzy
 msgid "Plugin Settings"
 msgstr "Niemahvyma dałučycca"
+
+#, fuzzy
+msgid "Plugin Updates"
+msgstr "Niemahvyma dałučycca"
+
+#, fuzzy
+msgid "Plugin Updates Available"
+msgstr "Konty niedastupnyja"
 
 #, fuzzy
 msgid "Plugin already exists"
@@ -4199,8 +4223,17 @@ msgstr "Niemahvyma dałučycca"
 msgid "Plugin manager"
 msgstr "Niemahvyma dałučycca"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+
 msgid "Plugins"
 msgstr ""
+
+#, fuzzy
+msgid "Plugins Updated"
+msgstr "Niemahvyma dałučycca"
 
 #, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4625,6 +4658,10 @@ msgid "Resource"
 msgstr "Krynica:"
 
 #, fuzzy
+msgid "Restart Gajim for changes to take affect"
+msgstr "<b>UVAHA:</b> Kab ubačyć niekatoryja źmieny, uruchom Gajim"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Apošni status: %s"
 
@@ -4806,6 +4843,9 @@ msgstr "Vydalajecca kont %s"
 msgid "Select File…"
 msgstr "Vyšli _fajł"
 
+msgid "Select a security label for your message…"
+msgstr ""
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
@@ -4824,6 +4864,10 @@ msgstr ""
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Selected security label: %s"
+msgstr "Blakavańnie %s"
 
 msgid "Self signed certificate"
 msgstr ""
@@ -5621,6 +5665,12 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr ""
 
@@ -5968,6 +6018,20 @@ msgstr "Abiary vyjavu"
 msgid "Update Check"
 msgstr ""
 
+#, fuzzy
+msgid "Update automatically"
+msgstr "Abiary vyjavu"
+
+#, fuzzy
+msgid "Update available"
+msgstr "Konty niedastupnyja"
+
+msgid "Update plugins automatically"
+msgstr ""
+
+msgid "Update plugins automatically next time"
+msgstr ""
+
 msgid "Updates"
 msgstr ""
 
@@ -6090,6 +6154,10 @@ msgid "Video Resolution"
 msgstr "Прыватная размова"
 
 #, fuzzy
+msgid "Video calls are not available on Windows"
+msgstr "Złučeńnia niama"
+
+#, fuzzy
 msgid "Video chats are not available"
 msgstr "Złučeńnia niama"
 
@@ -6123,10 +6191,6 @@ msgstr "Złučeńnia niama"
 #, fuzzy
 msgid "Waiting…"
 msgstr "Pracuju"
-
-#, fuzzy, python-format
-msgid "Warning: %s"
-msgstr "Blakavańnie %s"
 
 msgid "Wav Sounds"
 msgstr "Fajły ŭ Wav"
@@ -6772,6 +6836,10 @@ msgid "_Unsubscribe"
 msgstr "_Anuluj aŭtaryzacyju"
 
 #, fuzzy
+msgid "_Update"
+msgstr "Aktualizuj MOTD"
+
+#, fuzzy
 msgid "_Username"
 msgstr "_Imia karystalnika:"
 
@@ -6896,6 +6964,9 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "Zaznač pakoji, jakija chočaš pakinuć"
+
+msgid "help"
+msgstr ""
 
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "Kali akreślena, kantakt biarecca sa śpisu kantaktaŭ hetaha kontu"
@@ -12340,6 +12411,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Warning"
+#~ msgstr "Blakavańnie %s"
+
+#, fuzzy
+#~ msgid "Warning: %s"
 #~ msgstr "Blakavańnie %s"
 
 #, fuzzy

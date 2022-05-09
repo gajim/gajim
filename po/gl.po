@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
 "PO-Revision-Date: 2009-08-19 23:51+0200\n"
 "Last-Translator: Iván Méndez López <>\n"
 "Language-Team:  <softwarelibre@udc.es>\n"
@@ -1482,6 +1482,12 @@ msgstr ""
 msgid "Check for Gajim updates periodically"
 msgstr ""
 
+msgid "Check for updates"
+msgstr ""
+
+msgid "Check for updates periodically"
+msgstr ""
+
 #, fuzzy
 msgid "Check if Gajim is running"
 msgstr "Por favor, comprobe se o avahi-daemon está en execución."
@@ -2088,6 +2094,10 @@ msgstr "Preguntar antes de pechar unha fiestra/separador da sala de charla."
 msgid "Do not disturb"
 msgstr "Non molestar."
 
+#, fuzzy
+msgid "Do not show this message again"
+msgstr "_Non me preguntar outra vez"
+
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Acepta esta solicitude?"
@@ -2132,6 +2142,14 @@ msgstr "Non amosar a listaxe na barra de tarefas."
 #, fuzzy
 msgid "Download"
 msgstr "Descarga"
+
+#, fuzzy
+msgid "Download Update"
+msgstr "Descarga"
+
+#, fuzzy
+msgid "Download and Install"
+msgstr "_Non me preguntar outra vez"
 
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
@@ -3840,6 +3858,12 @@ msgstr "Modificar a conta"
 msgid "Notifications When Away"
 msgstr "Modificar a conta"
 
+msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when the automatic update was successful"
+msgstr ""
+
 #, fuzzy
 msgid "Notify of events in the notification area."
 msgstr "Notifica acontecementos na área de notificación."
@@ -4165,17 +4189,17 @@ msgstr ""
 msgid "Please use yyyy-mm-dd"
 msgstr ""
 
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr ""
-
-msgid "Plugin"
-msgstr ""
-
 #, fuzzy
 msgid "Plugin Settings"
 msgstr "Fallou a conexión"
+
+#, fuzzy
+msgid "Plugin Updates"
+msgstr "Fallou a conexión"
+
+#, fuzzy
+msgid "Plugin Updates Available"
+msgstr "A conta non está dispoñíbel"
 
 #, fuzzy
 msgid "Plugin already exists"
@@ -4189,8 +4213,17 @@ msgstr "Fallou a conexión"
 msgid "Plugin manager"
 msgstr "Fallou a conexión"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+
 msgid "Plugins"
 msgstr ""
+
+#, fuzzy
+msgid "Plugins Updated"
+msgstr "Fallou a conexión"
 
 #, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4614,6 +4647,11 @@ msgid "Resource"
 msgstr "Recurso:"
 
 #, fuzzy
+msgid "Restart Gajim for changes to take affect"
+msgstr ""
+"<b>NOTA:</b> Debe reiniciar o Gajim para que algúns cambios teñan efecto"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Último estado: %s"
 
@@ -4796,6 +4834,9 @@ msgstr "A eliminar a conta %s"
 msgid "Select File…"
 msgstr "Enviar ficheiro"
 
+msgid "Select a security label for your message…"
+msgstr ""
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
@@ -4814,6 +4855,10 @@ msgstr ""
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Selected security label: %s"
+msgstr "A expulsar %s"
 
 msgid "Self signed certificate"
 msgstr ""
@@ -5612,6 +5657,12 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr ""
 
@@ -5957,6 +6008,20 @@ msgstr "Elixir unha imaxe"
 msgid "Update Check"
 msgstr ""
 
+#, fuzzy
+msgid "Update automatically"
+msgstr "Elixir unha imaxe"
+
+#, fuzzy
+msgid "Update available"
+msgstr "A conta non está dispoñíbel"
+
+msgid "Update plugins automatically"
+msgstr ""
+
+msgid "Update plugins automatically next time"
+msgstr ""
+
 msgid "Updates"
 msgstr ""
 
@@ -6079,6 +6144,10 @@ msgid "Video Resolution"
 msgstr "Charla privada"
 
 #, fuzzy
+msgid "Video calls are not available on Windows"
+msgstr "Conexión non dispoñíbel"
+
+#, fuzzy
 msgid "Video chats are not available"
 msgstr "Conexión non dispoñíbel"
 
@@ -6112,10 +6181,6 @@ msgstr "Conexión non dispoñíbel"
 #, fuzzy
 msgid "Waiting…"
 msgstr "A traballar"
-
-#, fuzzy, python-format
-msgid "Warning: %s"
-msgstr "A expulsar %s"
 
 msgid "Wav Sounds"
 msgstr "Sons Wav"
@@ -6759,6 +6824,10 @@ msgid "_Unsubscribe"
 msgstr "_Eliminar"
 
 #, fuzzy
+msgid "_Update"
+msgstr "Actualizar a MDD"
+
+#, fuzzy
 msgid "_Username"
 msgstr "_Nome de usuario:"
 
@@ -6883,6 +6952,9 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "Por favor, cubra a información do contacto que quere engadir"
+
+msgid "help"
+msgstr ""
 
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "se se especifica, o contacto obtense da listaxe desta conta"
@@ -12240,6 +12312,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Warning"
+#~ msgstr "A expulsar %s"
+
+#, fuzzy
+#~ msgid "Warning: %s"
 #~ msgstr "A expulsar %s"
 
 #, fuzzy

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
 "PO-Revision-Date: 2022-01-13 21:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -1462,6 +1462,12 @@ msgstr ""
 msgid "Check for Gajim updates periodically"
 msgstr ""
 
+msgid "Check for updates"
+msgstr ""
+
+msgid "Check for updates periodically"
+msgstr ""
+
 #, fuzzy
 msgid "Check if Gajim is running"
 msgstr "Paket sisteminin kilitli olup olmadığını kontrol edin."
@@ -2049,6 +2055,10 @@ msgstr "%s mevcut bir grubun ismi değil"
 msgid "Do not disturb"
 msgstr "Rahatsız etmeyin"
 
+#, fuzzy
+msgid "Do not show this message again"
+msgstr "Bu iletişim kutusunu bir daha _gösterme"
+
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Ricayı kabul ediyor musunuz?"
@@ -2091,6 +2101,14 @@ msgstr ""
 #, fuzzy
 msgid "Download"
 msgstr "Yükleme"
+
+#, fuzzy
+msgid "Download Update"
+msgstr "Yükleme"
+
+#, fuzzy
+msgid "Download and Install"
+msgstr "Bu iletişim kutusunu bir daha _gösterme"
 
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
@@ -3737,6 +3755,12 @@ msgstr "Bildirimler"
 msgid "Notifications When Away"
 msgstr "Bildirimler"
 
+msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when the automatic update was successful"
+msgstr ""
+
 msgid "Notify of events in the notification area."
 msgstr ""
 
@@ -4065,17 +4089,17 @@ msgstr ""
 msgid "Please use yyyy-mm-dd"
 msgstr ""
 
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr ""
-
-msgid "Plugin"
-msgstr ""
-
 #, fuzzy
 msgid "Plugin Settings"
 msgstr "Bağlantı Kurulamıyor"
+
+#, fuzzy
+msgid "Plugin Updates"
+msgstr "Bağlantı Kurulamıyor"
+
+#, fuzzy
+msgid "Plugin Updates Available"
+msgstr "Hiç bir hesap bulunmiyor"
 
 #, fuzzy
 msgid "Plugin already exists"
@@ -4089,8 +4113,17 @@ msgstr "Bağlantı Kurulamıyor"
 msgid "Plugin manager"
 msgstr "Bağlantı Kurulamıyor"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+
 msgid "Plugins"
 msgstr ""
+
+#, fuzzy
+msgid "Plugins Updated"
+msgstr "Bağlantı Kurulamıyor"
 
 #, fuzzy, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4518,6 +4551,9 @@ msgstr "Öntanımlı değerlerine geri al"
 msgid "Resource"
 msgstr "Kaynak:"
 
+msgid "Restart Gajim for changes to take affect"
+msgstr ""
+
 #, fuzzy
 msgid "Restore last state"
 msgstr "Son durum: %s"
@@ -4699,6 +4735,9 @@ msgstr "XMPP hesabı %s@%s"
 msgid "Select File…"
 msgstr "_Dosya Gönder…"
 
+msgid "Select a security label for your message…"
+msgstr ""
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
@@ -4717,6 +4756,10 @@ msgstr ""
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Selected security label: %s"
+msgstr "ben burdaysam"
 
 #, fuzzy
 msgid "Self signed certificate"
@@ -5507,6 +5550,12 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr ""
 
@@ -5846,6 +5895,20 @@ msgstr "Resim seç"
 msgid "Update Check"
 msgstr "Tamamlanmamış yazım denetimi kaydı"
 
+#, fuzzy
+msgid "Update automatically"
+msgstr "Resim seç"
+
+#, fuzzy
+msgid "Update available"
+msgstr "Hiç bir hesap bulunmiyor"
+
+msgid "Update plugins automatically"
+msgstr ""
+
+msgid "Update plugins automatically next time"
+msgstr ""
+
 msgid "Updates"
 msgstr ""
 
@@ -5969,6 +6032,10 @@ msgid "Video Resolution"
 msgstr "Video testi"
 
 #, fuzzy
+msgid "Video calls are not available on Windows"
+msgstr "Hiç bir hesap bulunmiyor"
+
+#, fuzzy
 msgid "Video chats are not available"
 msgstr "Hiç bir hesap bulunmiyor"
 
@@ -6002,10 +6069,6 @@ msgstr "Hiç bir hesap bulunmiyor"
 #, fuzzy
 msgid "Waiting…"
 msgstr "%s yazılıyor..."
-
-#, fuzzy, python-format
-msgid "Warning: %s"
-msgstr "ben burdaysam"
 
 msgid "Wav Sounds"
 msgstr "Wav Sesleri"
@@ -6644,6 +6707,10 @@ msgid "_Unsubscribe"
 msgstr "_Üyelikten çık"
 
 #, fuzzy
+msgid "_Update"
+msgstr "MOTD'yi yenileştir"
+
+#, fuzzy
 msgid "_Username"
 msgstr "_Kullanıcı ismi"
 
@@ -6760,6 +6827,9 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "Lütfen göstermek istediğiniz kaynak dosyasındaki satırı seçiniz:"
+
+msgid "help"
+msgstr ""
 
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr ""
@@ -11082,6 +11152,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Warning"
+#~ msgstr "ben burdaysam"
+
+#, fuzzy
+#~ msgid "Warning: %s"
 #~ msgstr "ben burdaysam"
 
 #, fuzzy

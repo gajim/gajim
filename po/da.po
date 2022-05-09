@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -1511,6 +1511,12 @@ msgstr ""
 msgid "Check for Gajim updates periodically"
 msgstr ""
 
+msgid "Check for updates"
+msgstr ""
+
+msgid "Check for updates periodically"
+msgstr ""
+
 msgid "Check if Gajim is running"
 msgstr "Kontroller om Gajim kører"
 
@@ -2114,6 +2120,10 @@ msgstr "Spørg før et gruppesamtale vindue/faneblad lukkes."
 msgid "Do not disturb"
 msgstr "Forstyr ikke"
 
+#, fuzzy
+msgid "Do not show this message again"
+msgstr "_Spørg mig ikke igen"
+
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Accepterer du denne forespørgsel for konto %s?"
@@ -2158,6 +2168,14 @@ msgstr "Ikke hvis kontaktvindue i vindueslisten."
 #, fuzzy
 msgid "Download"
 msgstr "Hent"
+
+#, fuzzy
+msgid "Download Update"
+msgstr "Hent"
+
+#, fuzzy
+msgid "Download and Install"
+msgstr "Ikke spørg mig ige_n"
 
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
@@ -3880,6 +3898,12 @@ msgstr "Påmindelser"
 msgid "Notifications When Away"
 msgstr "Påmindelser"
 
+msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when the automatic update was successful"
+msgstr ""
+
 #, fuzzy
 msgid "Notify of events in the notification area."
 msgstr "Vis påmindelse af hændelser i statusfelt ikonet."
@@ -4207,17 +4231,17 @@ msgstr ""
 msgid "Please use yyyy-mm-dd"
 msgstr ""
 
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr ""
-
-msgid "Plugin"
-msgstr ""
-
 #, fuzzy
 msgid "Plugin Settings"
 msgstr "Tilslutning fejlede"
+
+#, fuzzy
+msgid "Plugin Updates"
+msgstr "Tilslutning fejlede"
+
+#, fuzzy
+msgid "Plugin Updates Available"
+msgstr "Ingen konto tilgængelig"
 
 #, fuzzy
 msgid "Plugin already exists"
@@ -4231,8 +4255,17 @@ msgstr "Tilslutning fejlede"
 msgid "Plugin manager"
 msgstr "Tilslutning fejlede"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+
 msgid "Plugins"
 msgstr ""
+
+#, fuzzy
+msgid "Plugins Updated"
+msgstr "Tilslutning fejlede"
 
 #, fuzzy, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4660,6 +4693,12 @@ msgid "Resource"
 msgstr "Resource:"
 
 #, fuzzy
+msgid "Restart Gajim for changes to take affect"
+msgstr ""
+"<b>NOTE:</b> Du skal genstarte Gajim for at nogle af ændringerne kan træde i "
+"kraft"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Sidste status: %s"
 
@@ -4842,6 +4881,9 @@ msgstr "Fjerne kontoen med navnet %s"
 msgid "Select File…"
 msgstr "Send _Fil"
 
+msgid "Select a security label for your message…"
+msgstr ""
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
@@ -4859,6 +4901,10 @@ msgstr ""
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Selected security label: %s"
+msgstr "Advarsel"
 
 msgid "Self signed certificate"
 msgstr "Selvsigneret certifikat"
@@ -5660,6 +5706,12 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr ""
 
@@ -6013,6 +6065,20 @@ msgstr "Vælg Billede"
 msgid "Update Check"
 msgstr "Stavekontrol"
 
+#, fuzzy
+msgid "Update automatically"
+msgstr "Vælg Billede"
+
+#, fuzzy
+msgid "Update available"
+msgstr "Ingen konto tilgængelig"
+
+msgid "Update plugins automatically"
+msgstr ""
+
+msgid "Update plugins automatically next time"
+msgstr ""
+
 msgid "Updates"
 msgstr ""
 
@@ -6141,6 +6207,10 @@ msgid "Video Resolution"
 msgstr "Lyd / Billede"
 
 #, fuzzy
+msgid "Video calls are not available on Windows"
+msgstr "Tilslutning er ikke tilgængelig"
+
+#, fuzzy
 msgid "Video chats are not available"
 msgstr "Tilslutning er ikke tilgængelig"
 
@@ -6174,10 +6244,6 @@ msgstr "Tilslutning er ikke tilgængelig"
 #, fuzzy
 msgid "Waiting…"
 msgstr "Skriver"
-
-#, fuzzy, python-format
-msgid "Warning: %s"
-msgstr "Udeluk %s"
 
 msgid "Wav Sounds"
 msgstr "Wav Lyde"
@@ -6825,6 +6891,10 @@ msgid "_Unsubscribe"
 msgstr "_Frameld abonnement"
 
 #, fuzzy
+msgid "_Update"
+msgstr "Opdater MOTD..."
+
+#, fuzzy
 msgid "_Username"
 msgstr "_Brugernavn:"
 
@@ -6945,6 +7015,9 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "Vælg de gruppesamtaler du vil forlade"
+
+msgid "help"
+msgstr ""
 
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr ""
@@ -12985,6 +13058,10 @@ msgstr ""
 
 #~ msgid "Warning"
 #~ msgstr "Advarsel"
+
+#, fuzzy
+#~ msgid "Warning: %s"
+#~ msgstr "Udeluk %s"
 
 #~ msgid "Watching TV"
 #~ msgstr "Ser TV"

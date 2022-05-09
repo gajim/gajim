@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
 "PO-Revision-Date: 2020-12-28 12:14+0000\n"
 "Last-Translator: pjammo <adrianoghr@hotmail.it>\n"
 "Language-Team: Italian <https://translate.gajim.org/projects/gajim/master/it/"
@@ -1375,6 +1375,14 @@ msgstr "Controlla Aggiornamenti"
 msgid "Check for Gajim updates periodically"
 msgstr "Controllo periodico degli aggiornamenti di Gajim"
 
+#, fuzzy
+msgid "Check for updates"
+msgstr "Controlla Aggiornamenti"
+
+#, fuzzy
+msgid "Check for updates periodically"
+msgstr "Controllo periodico degli aggiornamenti di Gajim"
+
 msgid "Check if Gajim is running"
 msgstr "Controlla se Gajim è in esecuzione"
 
@@ -1918,6 +1926,10 @@ msgstr "Mostra o modifica l'argomento di una conversazione di gruppo"
 msgid "Do not disturb"
 msgstr "Non disturbare"
 
+#, fuzzy
+msgid "Do not show this message again"
+msgstr "_Non mostrare di nuovo"
+
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Accettare questa richiesta (account: %s)?"
@@ -1959,6 +1971,14 @@ msgstr "Non mostrare la lista contatti nella barra delle applicazioni."
 #, fuzzy
 msgid "Download"
 msgstr "?Noun:Scaricato"
+
+#, fuzzy
+msgid "Download Update"
+msgstr "?Noun:Scaricato"
+
+#, fuzzy
+msgid "Download and Install"
+msgstr "_Scarica Ancora"
 
 #, python-format
 msgid "Downloaded %s messages"
@@ -3595,6 +3615,12 @@ msgstr "Notifiche"
 msgid "Notifications When Away"
 msgstr "Notifiche Quando Assente"
 
+msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when the automatic update was successful"
+msgstr ""
+
 msgid "Notify of events in the notification area."
 msgstr "Notifica gli eventi nell'area di notifica."
 
@@ -3904,18 +3930,16 @@ msgstr "Usare queste impostazioni con cautela!"
 msgid "Please use yyyy-mm-dd"
 msgstr ""
 
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr ""
-"La descrizione dell'estensione dovrebbe essere visualizzata qui. Questo "
-"testo sarà cancellato durante l'inizializzazione di PluginsWindow."
-
-msgid "Plugin"
-msgstr "Estensione"
-
 msgid "Plugin Settings"
 msgstr "Impostazioni Estensioni"
+
+#, fuzzy
+msgid "Plugin Updates"
+msgstr "Plugin fallito"
+
+#, fuzzy
+msgid "Plugin Updates Available"
+msgstr "Aggiornamento di Gajim disponibile"
 
 msgid "Plugin already exists"
 msgstr "L'estensione esiste già"
@@ -3926,8 +3950,17 @@ msgstr "Estensione fallita"
 msgid "Plugin manager"
 msgstr "Gestione delle estensioni"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+
 msgid "Plugins"
 msgstr "Estensioni"
+
+#, fuzzy
+msgid "Plugins Updated"
+msgstr "Plugin fallito"
 
 #, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4318,6 +4351,10 @@ msgstr "Ripristina il valore predefinito"
 msgid "Resource"
 msgstr "Risorsa"
 
+#, fuzzy
+msgid "Restart Gajim for changes to take affect"
+msgstr "Alcune modifiche avranno effetto solo dopo aver riavviato il programma"
+
 msgid "Restore last state"
 msgstr "Ripristina Ultimo Stato"
 
@@ -4491,6 +4528,9 @@ msgstr "Seleziona Account"
 msgid "Select File…"
 msgstr "Invia File…"
 
+msgid "Select a security label for your message…"
+msgstr ""
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr "Seleziona l'uscita audio (es. altoparlanti, cuffie)"
 
@@ -4508,6 +4548,10 @@ msgstr "Seleziona l'ingresso audio (es. microfono)"
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr "Seleziona l'ingresso video (es. webcam, condivisione schermo)"
+
+#, fuzzy, python-format
+msgid "Selected security label: %s"
+msgstr "Sicurezza"
 
 msgid "Self signed certificate"
 msgstr "Certificato autofirmato"
@@ -5280,6 +5324,12 @@ msgstr ""
 "Creando un account su un server potrai comunicare anche con i contatti degli "
 "altri server."
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr "C'è già una sincronizzazione in corso. Riprovare più tardi."
 
@@ -5626,6 +5676,21 @@ msgid "Update Check"
 msgstr "Controllo per la presenza di aggiornamenti"
 
 #, fuzzy
+msgid "Update automatically"
+msgstr "Unisciti Automaticamente"
+
+#, fuzzy
+msgid "Update available"
+msgstr "Aggiornamento disponibile"
+
+#, fuzzy
+msgid "Update plugins automatically"
+msgstr "Unisciti Automaticamente"
+
+msgid "Update plugins automatically next time"
+msgstr ""
+
+#, fuzzy
 msgid "Updates"
 msgstr "_Aggiorna ora"
 
@@ -5743,6 +5808,10 @@ msgstr "Dispositivo Ingresso Video"
 msgid "Video Resolution"
 msgstr "Risoluzione Video"
 
+#, fuzzy
+msgid "Video calls are not available on Windows"
+msgstr "Conversazioni video non disponibili"
+
 msgid "Video chats are not available"
 msgstr "Conversazioni video non disponibili"
 
@@ -5773,10 +5842,6 @@ msgstr "Conversazioni vocali non disponibili"
 #, fuzzy
 msgid "Waiting…"
 msgstr "Scrivo"
-
-#, python-format
-msgid "Warning: %s"
-msgstr "Avviso: %s"
 
 msgid "Wav Sounds"
 msgstr "Audio WAV"
@@ -6365,6 +6430,10 @@ msgstr "_Disiscriviti dal servizio"
 msgid "_Unsubscribe"
 msgstr "_Disiscriviti"
 
+#, fuzzy
+msgid "_Update"
+msgstr "_Aggiorna ora"
+
 msgid "_Username"
 msgstr "_Nome Utente"
 
@@ -6477,6 +6546,9 @@ msgid ""
 msgstr ""
 "ti ha invitato a una conversazione di gruppo.\n"
 "Vuoi unirti?"
+
+msgid "help"
+msgstr ""
 
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr ""
@@ -9420,9 +9492,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Gajim Themes Customization"
 #~ msgstr "Personalizzazione dei temi di Gajim"
 
-#~ msgid "Gajim Update Available"
-#~ msgstr "Aggiornamento di Gajim disponibile"
-
 #~ msgid "Gajim account %s"
 #~ msgstr "Account di Gajim %s"
 
@@ -10694,9 +10763,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Jogging"
 #~ msgstr "Faccio Jogging"
 
-#~ msgid "Join Automatically"
-#~ msgstr "Unisciti Automaticamente"
-
 #~ msgid "Join Group Chat with account %s"
 #~ msgstr "Unisciti a una conversazione di gruppo con l'account %s"
 
@@ -11642,9 +11708,15 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Please wait..."
 #~ msgstr "Attendi, per paicere..."
 
-#, fuzzy
-#~ msgid "Plugins updates"
-#~ msgstr "Plugin fallito"
+#~ msgid ""
+#~ "Plug-in description should be displayed here. This text will be erased "
+#~ "during PluginsWindow initialization."
+#~ msgstr ""
+#~ "La descrizione dell'estensione dovrebbe essere visualizzata qui. Questo "
+#~ "testo sarà cancellato durante l'inizializzazione di PluginsWindow."
+
+#~ msgid "Plugin"
+#~ msgstr "Estensione"
 
 #~ msgid "Polish"
 #~ msgstr "Polacco"
@@ -13784,6 +13856,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Warning"
 #~ msgstr "Attenzione"
 
+#~ msgid "Warning: %s"
+#~ msgstr "Avviso: %s"
+
 #~ msgid "Watching TV"
 #~ msgstr "Guardo la TV"
 
@@ -14574,9 +14649,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 
 #~ msgid "_Do not ask again"
 #~ msgstr "_Non chiederlo più"
-
-#~ msgid "_Do not show again"
-#~ msgstr "_Non mostrare di nuovo"
 
 #~ msgid "_Earliest"
 #~ msgstr "Più _vecchi"

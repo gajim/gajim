@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 16:30+0000\n"
+"POT-Creation-Date: 2022-05-08 13:41+0000\n"
 "PO-Revision-Date: 2020-08-19 19:27+0000\n"
 "Last-Translator: Vincent L <vincent.laporte+gajim@mailbox.org>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -1478,6 +1478,12 @@ msgstr ""
 msgid "Check for Gajim updates periodically"
 msgstr ""
 
+msgid "Check for updates"
+msgstr ""
+
+msgid "Check for updates periodically"
+msgstr ""
+
 #, fuzzy
 msgid "Check if Gajim is running"
 msgstr "Bonvolu certiĝi ke avahi-demono estas aktiva."
@@ -2081,6 +2087,10 @@ msgstr "Demandi antaŭ fermi babilejan fenestron/slipon."
 msgid "Do not disturb"
 msgstr "Ne malhelpu."
 
+#, fuzzy
+msgid "Do not show this message again"
+msgstr "_Ne plu demandi"
+
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Ĉu vi akceptas tiun peton?"
@@ -2125,6 +2135,14 @@ msgstr "Ne montri kontaktliston en la sistema taskostrio."
 #, fuzzy
 msgid "Download"
 msgstr "Elŝuti"
+
+#, fuzzy
+msgid "Download Update"
+msgstr "Elŝuti"
+
+#, fuzzy
+msgid "Download and Install"
+msgstr "_Ne plu demandi"
 
 #, fuzzy, python-format
 msgid "Downloaded %s messages"
@@ -3830,6 +3848,12 @@ msgstr "Konta korektado"
 msgid "Notifications When Away"
 msgstr "Konta korektado"
 
+msgid "Notify after update"
+msgstr ""
+
+msgid "Notify me when the automatic update was successful"
+msgstr ""
+
 #, fuzzy
 msgid "Notify of events in the notification area."
 msgstr "Avizi eventojn en la sistema taskopleta bildeto."
@@ -4157,17 +4181,17 @@ msgstr ""
 msgid "Please use yyyy-mm-dd"
 msgstr ""
 
-msgid ""
-"Plug-in description should be displayed here. This text will be erased "
-"during PluginsWindow initialization."
-msgstr ""
-
-msgid "Plugin"
-msgstr ""
-
 #, fuzzy
 msgid "Plugin Settings"
 msgstr "Konektado malsukcesis"
+
+#, fuzzy
+msgid "Plugin Updates"
+msgstr "Konektado malsukcesis"
+
+#, fuzzy
+msgid "Plugin Updates Available"
+msgstr "Nedisponebla"
 
 #, fuzzy
 msgid "Plugin already exists"
@@ -4181,8 +4205,17 @@ msgstr "Konektado malsukcesis"
 msgid "Plugin manager"
 msgstr "Konektado malsukcesis"
 
+msgid ""
+"Plugin updates have successfully been downloaded.\n"
+"Updates will be installed next time Gajim is started."
+msgstr ""
+
 msgid "Plugins"
 msgstr ""
+
+#, fuzzy
+msgid "Plugins Updated"
+msgstr "Konektado malsukcesis"
 
 #, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -4609,6 +4642,11 @@ msgid "Resource"
 msgstr "Risurco:"
 
 #, fuzzy
+msgid "Restart Gajim for changes to take affect"
+msgstr ""
+"<b>RIMARKU:</b> Vi devas relanĉi gajim por efektigi kelkajn parametrojn"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Lasta stato: %s"
 
@@ -4788,6 +4826,9 @@ msgstr "Forigado de konto %s"
 msgid "Select File…"
 msgstr "Sendi _dosieron"
 
+msgid "Select a security label for your message…"
+msgstr ""
+
 msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
@@ -4806,6 +4847,10 @@ msgstr ""
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Selected security label: %s"
+msgstr "Malpermesas %s"
 
 msgid "Self signed certificate"
 msgstr ""
@@ -5600,6 +5645,12 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
+#, python-format
+msgid ""
+"There are updates for your plugins:\n"
+"<b>%s</b>"
+msgstr ""
+
 msgid "There is already a synchronisation in progress. Please try again later."
 msgstr ""
 
@@ -5947,6 +5998,20 @@ msgstr "Nedisponebla"
 msgid "Update Check"
 msgstr ""
 
+#, fuzzy
+msgid "Update automatically"
+msgstr "Nedisponebla"
+
+#, fuzzy
+msgid "Update available"
+msgstr "Nedisponebla"
+
+msgid "Update plugins automatically"
+msgstr ""
+
+msgid "Update plugins automatically next time"
+msgstr ""
+
 msgid "Updates"
 msgstr ""
 
@@ -6069,6 +6134,10 @@ msgid "Video Resolution"
 msgstr "Privata interparolo"
 
 #, fuzzy
+msgid "Video calls are not available on Windows"
+msgstr "Konekto mankas"
+
+#, fuzzy
 msgid "Video chats are not available"
 msgstr "Konekto mankas"
 
@@ -6102,10 +6171,6 @@ msgstr "Konekto mankas"
 #, fuzzy
 msgid "Waiting…"
 msgstr "Laboras"
-
-#, fuzzy, python-format
-msgid "Warning: %s"
-msgstr "Malpermesas %s"
 
 msgid "Wav Sounds"
 msgstr "Wav-sonoj"
@@ -6749,6 +6814,10 @@ msgid "_Unsubscribe"
 msgstr "_Malaboni"
 
 #, fuzzy
+msgid "_Update"
+msgstr "Renovigi tagmesaĝon"
+
+#, fuzzy
 msgid "_Username"
 msgstr "_Salutnomo:"
 
@@ -6871,6 +6940,9 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "Bonvolu pleni la datumon pri kontakto, kiun vi volas aldoni"
+
+msgid "help"
+msgstr ""
 
 msgid "if specified, contact is taken from the contact list of this account"
 msgstr "Se specifita, kontakto estos prenata el kontaktlisto de tiu ĉi konto"
@@ -12344,6 +12416,10 @@ msgstr ""
 #~ msgstr "Malpermesas %s"
 
 #, fuzzy
+#~ msgid "Warning: %s"
+#~ msgstr "Malpermesas %s"
+
+#, fuzzy
 #~ msgid "Watching a Movie"
 #~ msgstr "Mi spektas filmon."
 
@@ -12950,10 +13026,6 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "_Do not ask again"
-#~ msgstr "_Ne plu demandi"
-
-#, fuzzy
-#~ msgid "_Do not show again"
 #~ msgstr "_Ne plu demandi"
 
 #, fuzzy
