@@ -14,3 +14,4 @@ types-pkg_resources
 requests
 sentry-sdk
 rich
+twine
