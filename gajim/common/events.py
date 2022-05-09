@@ -289,13 +289,6 @@ class DisplayedReceived(BaseChatMarkerEvent):
 
 
 @dataclass
-class IqErrorReceived(ApplicationEvent):
-    name: str = field(init=False, default='iq-error-received')
-    account: str
-    properties: Any
-
-
-@dataclass
 class HttpAuth(ApplicationEvent):
     name: str = field(init=False, default='http-auth')
     client: 'Client'

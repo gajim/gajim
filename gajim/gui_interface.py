@@ -128,7 +128,6 @@ class Interface:
     def _create_core_handlers_list(self) -> None:
         # pylint: disable=line-too-long
         self.handlers = {
-            'iq-error-received': [self.handle_event_iq_error],
             'signed-in': [self.handle_event_signed_in],
             'presence-received': [self.handle_event_presence],
             'message-sent': [self.handle_event_msgsent],
@@ -153,12 +152,6 @@ class Interface:
                     event_name,
                     prio,
                     event_handler)
-
-    @staticmethod
-    def handle_event_iq_error(event):
-        ctrl = app.window.get_control(event.account, event.properties.jid.bare)
-        if ctrl and ctrl.is_groupchat:
-            ctrl.add_info_message(f'Error: {event.properties.error}')
 
     @staticmethod
     def handle_event_signed_in(event):

@@ -121,6 +121,7 @@ Gajim 1.4.0 (TBA)
   * #10751 Inconsistent notifications behavior in 1.4 nightlies
   * #10773 Failure to store roster notes not reported
   * #10774 AppIndicator should be used for the tray icon on Wayland
+  * #10801 Unknown IQ errors shown in chat
   * #10813 Receiving a notification creates exception
   * #10814 Unable to delete custom theme
   * #10815 Improve Security Labels (XEP-0258) feature
