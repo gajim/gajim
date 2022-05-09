@@ -298,11 +298,11 @@ modules:
   - name: python3-nbxmpp
     buildsystem: simple
     build-commands:
-      - pip3 install nbxmpp-2.0.6-py3-none-any.whl
+      - pip3 install nbxmpp-3.0.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-2.0.6-py3-none-any.whl
-        sha256: 6abbd51538d44bf6b004f140e1453f9a21f1fb53dfeed498a31519d2167e6b92
+        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-3.0.1-py3-none-any.whl
+        sha256: debfa3b13008c041b13b73f78f61ce49987770bf49d0e105898a176525cab7fc
 
   - name: gajim
     buildsystem: simple
