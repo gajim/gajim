@@ -106,6 +106,8 @@ _SignalCallable = Callable[[Any, str, Optional[str], Optional[JID]], Any]
 _CallbackDict = dict[tuple[str, Optional[str], Optional[JID]],
                      list[weakref.WeakMethod[_SignalCallable]]]
 
+OVERRIDES_PATH = Path('/etc/gajim/app-overrides.json')
+
 
 class Settings:
     def __init__(self):
@@ -113,6 +115,7 @@ class Settings:
         self._commit_scheduled = None
 
         self._settings = {}
+        self._app_overrides: dict[str, AllSettingsT] = {}
         self._account_settings = {}
 
         self._callbacks: _CallbackDict = defaultdict(list)
@@ -206,6 +209,7 @@ class Settings:
             self._migrate_old_config()
             self._commit()
         self._migrate_database()
+        self._load_app_overrides()
 
     @staticmethod
     def _setup_installation_defaults() -> None:
@@ -216,6 +220,19 @@ class Settings:
             # Cairo does not support color emojis fonts on
             # Windows and MacOS
             APP_SETTINGS['dev_use_message_label'] = False
+
+    def _load_app_overrides(self) -> None:
+        if not OVERRIDES_PATH.exists():
+            return
+
+        with OVERRIDES_PATH.open() as f:
+            try:
+                self._app_overrides = json.load(f)
+            except Exception:
+                log.exception('Failed to load overrides')
+                return
+
+        self._settings['app'].update(self._app_overrides)
 
     @staticmethod
     def _namedtuple_factory(cursor: sqlite3.Cursor,
@@ -517,6 +534,9 @@ class Settings:
 
         self._commit(schedule=schedule)
 
+    def has_app_override(self, setting: str) -> bool:
+        return setting in self._app_overrides
+
     @overload
     def get_app_setting(self, setting: BoolSettings) -> bool: ...
     @overload
@@ -543,6 +563,11 @@ class Settings:
     def set_app_setting(self, setting: str, value: Optional[AllSettingsT]) -> None:
         if setting not in APP_SETTINGS:
             raise ValueError(f'Invalid app setting: {setting}')
+
+        if setting in self._app_overrides:
+            log.warning('Changing %s is not allowed because there exists an '
+                        'override', setting)
+            return
 
         default = APP_SETTINGS[setting]
         if not isinstance(value, type(default)) and value is not None:
