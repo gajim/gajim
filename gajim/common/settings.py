@@ -225,7 +225,7 @@ class Settings:
         if not OVERRIDES_PATH.exists():
             return
 
-        with OVERRIDES_PATH.open() as f:
+        with OVERRIDES_PATH.open(encoding='utf8') as f:
             try:
                 self._app_overrides = json.load(f)
             except Exception:
