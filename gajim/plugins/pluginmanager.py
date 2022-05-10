@@ -284,8 +284,9 @@ class PluginManager(metaclass=Singleton):
 
             try:
                 self.activate_plugin(plugin)
-            except GajimPluginActivateException:
-                pass
+            except GajimPluginActivateException as error:
+                plugin.activatable = False
+                plugin.available_text = str(error)
 
     def _load_plugin_module(self,
                             manifest: PluginManifest
