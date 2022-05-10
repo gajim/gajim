@@ -176,8 +176,15 @@ class PopupNotification(Gtk.Window):
         self.add(self._ui.eventbox)
 
         self._add_background_color(event)
-        icon_name = self._get_icon_name(event)
-        self._ui.image.set_from_icon_name(icon_name, Gtk.IconSize.DIALOG)
+
+        if event.type == 'incoming-message':
+            assert event.jid is not None
+            pixbuf = _get_avatar_for_notification(
+                event.account, event.jid)
+            self._ui.image.set_from_pixbuf(pixbuf)
+        else:
+            icon_name = self._get_icon_name(event)
+            self._ui.image.set_from_icon_name(icon_name, Gtk.IconSize.DIALOG)
         self._ui.event_type_label.set_text(event.title)
         self._ui.event_description_label.set_text(event.text)
 
@@ -191,11 +198,12 @@ class PopupNotification(Gtk.Window):
         self.connect('destroy', self._on_destroy)
         self.show_all()
 
-    def _get_icon_name(self, event: events.Notification) -> str:
+    @staticmethod
+    def _get_icon_name(event: events.Notification) -> str:
         if event.icon_name is not None:
             return event.icon_name
         icon_name = event.sub_type or event.type
-        return NOTIFICATION_ICONS.get(icon_name, 'mail-unread')
+        return NOTIFICATION_ICONS.get(icon_name, 'gajim-chat_msg_recv')
 
     def _add_background_color(self, event: events.Notification) -> None:
         event_type = event.sub_type or event.type
@@ -368,22 +376,10 @@ class Linux(NotificationBackend):
 
         return None
 
-    @staticmethod
-    def _get_avatar_for_notification(account: str,
-                                     jid: Union[JID, str]) -> GdkPixbuf.Pixbuf:
-        scale = get_monitor_scale_factor()
-        size = AvatarSize.NOTIFICATION
-        client = app.get_client(account)
-        contact = client.get_module('Contacts').get_contact(jid)
-        avatar_surface = contact.get_avatar(size, scale)
-        pixbuf = Gdk.pixbuf_get_from_surface(avatar_surface, 0, 0, size, size)
-        assert pixbuf is not None
-        return pixbuf
-
     def _make_icon(self, event: events.Notification) -> Gio.Icon:
         if (event.type == 'incoming-message' and app.desktop_env == 'gnome'):
             assert event.jid is not None
-            return self._get_avatar_for_notification(event.account, event.jid)
+            return _get_avatar_for_notification(event.account, event.jid)
 
         if event.icon_name is not None:
             return Gio.ThemedIcon.new(event.icon_name)
@@ -403,6 +399,18 @@ class Linux(NotificationBackend):
     @staticmethod
     def _make_id(details: list[Any]) -> str:
         return ','.join(map(str, details))
+
+
+def _get_avatar_for_notification(account: str,
+                                 jid: Union[JID, str]) -> GdkPixbuf.Pixbuf:
+    scale = get_monitor_scale_factor()
+    size = AvatarSize.NOTIFICATION
+    client = app.get_client(account)
+    contact = client.get_module('Contacts').get_contact(jid)
+    avatar_surface = contact.get_avatar(size, scale)
+    pixbuf = Gdk.pixbuf_get_from_surface(avatar_surface, 0, 0, size, size)
+    assert pixbuf is not None
+    return pixbuf
 
 
 def get_notification_backend() -> NotificationBackend:
