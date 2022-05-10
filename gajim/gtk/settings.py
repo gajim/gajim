@@ -204,6 +204,16 @@ class GenericSetting(Gtk.ListBoxRow):
         self.enabled_func = enabled_func
         self.setting_value = self.get_value()
 
+        self._locked_icon = Gtk.Image.new_from_icon_name(
+            'feather-lock-symbolic',
+            Gtk.IconSize.MENU)
+        self._locked_icon.set_visible(False)
+        self._locked_icon.set_no_show_all(True)
+        self._locked_icon.set_halign(Gtk.Align.END)
+        self._locked_icon.set_tooltip_text(_('Setting is locked by the system'))
+
+        self._grid.add(self._locked_icon)
+
         description_box = Gtk.Box(
             orientation=Gtk.Orientation.VERTICAL, spacing=0)
         description_box.set_valign(Gtk.Align.CENTER)
@@ -372,6 +382,13 @@ class GenericSetting(Gtk.ListBoxRow):
         raise NotImplementedError
 
     def update_activatable(self) -> None:
+        if self.type_ == SettingType.CONFIG:
+            if app.settings.has_app_override(self.value):
+                self.set_activatable(False)
+                self.set_sensitive(False)
+                self._locked_icon.show()
+                return
+
         if self.enabled_func is None:
             return
 
