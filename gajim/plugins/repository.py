@@ -59,8 +59,9 @@ class PluginRepository(Observable):
 
         self._download_queue: set[PluginManifest] = set()
 
-        make_http_request('https://gajim.org/updates.json',
-                          self._on_repository_received)
+        if app.settings.get('plugins_repository_enabled'):
+            make_http_request('https://gajim.org/updates.json',
+                              self._on_repository_received)
 
     @property
     def available(self):
