@@ -148,14 +148,9 @@ function install_gajim {
     build_python "${MISC}"/create-launcher.py \
         "${QL_VERSION}" "${MINGW_ROOT}"/bin
 
-    # Install plugin installer
-    curl -o "${BUILD_ROOT}"/plugin_installer.zip https://ftp.gajim.org/plugins_master_zip/plugin_installer.zip
-    mkdir "${PACKAGE_DIR}"/gajim/data/plugins
-    7z x -o"${PACKAGE_DIR}"/gajim/data/plugins "${BUILD_ROOT}"/plugin_installer.zip
-
     # Install omemo plugin
-    curl -o "${BUILD_ROOT}"/omemo.zip https://ftp.gajim.org/plugins_master_zip/omemo.zip
-    7z x -o"${PACKAGE_DIR}"/gajim/data/plugins "${BUILD_ROOT}"/omemo.zip
+    curl -o "${BUILD_ROOT}"/omemo.zip https://ftp.gajim.org/plugins/master/omemo/omemo_2.8.14.zip
+    7z x -o"${PACKAGE_DIR}"/gajim/data/plugins "${BUILD_ROOT}"/omemo_2.8.14.zip
 
     # Install language dicts
     curl -o "${BUILD_ROOT}"/speller_dicts.zip https://gajim.org/downloads/snap/win/build/speller_dicts.zip
