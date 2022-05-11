@@ -9,7 +9,17 @@ import sys
 import subprocess
 
 
-ALLOWED_TAGS = ['ci', 'feat', 'fix', 'perf', 'refactor', 'chore', 'other']
+ALLOWED_TAGS = [
+    'ci',
+    'feat',
+    'fix',
+    'perf',
+    'refactor',
+    'chore',
+    'release',
+    'other',
+]
+
 
 
 def parse_args() -> Tuple[str, str]:
