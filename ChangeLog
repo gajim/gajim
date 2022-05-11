@@ -1,4 +1,4 @@
-Gajim 1.4.0 (TBA)
+Gajim 1.4.0 (11 May 2022)
 
   New
 
@@ -9,6 +9,7 @@ Gajim 1.4.0 (TBA)
   * Integrate AppIndicator Plugin
   * Allow customizing Shortcuts
   * Support Message Moderation in Group Chats
+  * Allow administrators to define setting overrides
 
   Changes
 
