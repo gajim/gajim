@@ -53,6 +53,11 @@ def enforce_message_rules(subject: str) -> None:
         print('Unknown commit message tag:', tag)
         sys.exit(1)
 
+    if tag == 'release':
+        if not subject[0].isdigit():
+            print('Release commits should be of the form "release: X.X.X"')
+            sys.exit(1)
+
     if not subject[0].isupper():
         print('First letter after tag must be uppercase')
         sys.exit(1)
