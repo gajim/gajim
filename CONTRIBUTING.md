@@ -40,6 +40,7 @@ Every commit message must be prefixed with one of the following tags:
 - perf      (performance related changes)
 - refactor  (code was changed, but the end user will not notice)
 - chore     (reoccuring tasks which need to be done)
+- release   (only used for release commits)
 - other
 
 Further the first letter after the tag must be upper case
