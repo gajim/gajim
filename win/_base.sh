@@ -150,7 +150,7 @@ function install_gajim {
 
     # Install omemo plugin
     curl -o "${BUILD_ROOT}"/omemo.zip https://ftp.gajim.org/plugins/master/omemo/omemo_2.8.14.zip
-    7z x -o"${PACKAGE_DIR}"/gajim/data/plugins "${BUILD_ROOT}"/omemo_2.8.14.zip
+    7z x -o"${PACKAGE_DIR}"/gajim/data/plugins "${BUILD_ROOT}"/omemo.zip
 
     # Install language dicts
     curl -o "${BUILD_ROOT}"/speller_dicts.zip https://gajim.org/downloads/snap/win/build/speller_dicts.zip
