@@ -117,7 +117,19 @@ class HistoryExport(Assistant):
                 continue
 
             file_path = make_path_from_jid(export_dir, jid)
-            file_path.mkdir(parents=True, exist_ok=True)
+            try:
+                file_path.mkdir(parents=True, exist_ok=True)
+            except OSError as err:
+                error_page = cast(ErrorPage, self.get_page('error'))
+                error_page.set_text(
+                    _('An error occurred while trying to create a '
+                      'file at %(path)s: %(error)s') % {
+                          'path': file_path,
+                          'error': str(err)
+                          })
+                self.show_page('error', Gtk.StackTransitionType.SLIDE_LEFT)
+                return
+
             with open(file_path / 'history.txt', 'w', encoding='utf-8') as file:
                 file.write(f'History for {jid}\n\n')
                 for message in messages:
