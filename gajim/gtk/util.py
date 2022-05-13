@@ -223,21 +223,14 @@ def get_app_icon_list(scale_widget: Gtk.Widget) -> list[GdkPixbuf.Pixbuf]:
 
 
 def get_icon_name(name: str,
-                  iconset: Optional[str] = None,
                   transport: Optional[str] = None) -> str:
     if name == 'not in roster':
         name = 'notinroster'
 
-    if iconset is not None:
-        return f'{iconset}-{name}'
-
     if transport is not None:
         return f'{transport}-{name}'
 
-    iconset = app.settings.get('iconset')
-    if not iconset:
-        iconset = 'dcraven'
-    return f'{iconset}-{name}'
+    return f'dcraven-{name}'
 
 
 def load_user_iconsets() -> None:
