@@ -3,14 +3,14 @@ version: 1.1.{build}
 image: Visual Studio 2019
 
 environment:
-  matrix:
-    - MSYSTEM: MINGW64
-      MSYS_ARCH: "x86_64"
-      ARCH: "64bit"
+  # matrix:
+    MSYSTEM: MINGW64
+    MSYS_ARCH: "x86_64"
+    ARCH: "64bit"
 
-    - MSYSTEM: MINGW32
-      MSYS_ARCH: "i686"
-      ARCH: "32bit"
+  #  - MSYSTEM: MINGW32
+  #    MSYS_ARCH: "i686"
+  #    ARCH: "32bit"
 
 branches:
   only:
