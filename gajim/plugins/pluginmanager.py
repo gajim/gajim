@@ -189,7 +189,7 @@ class PluginManifest:
             description=p_(manifest['description']),
             authors=manifest['authors'],
             homepage=manifest['homepage'],
-            config_dialog=manifest.get('config_dialog') or True,
+            config_dialog=manifest['config_dialog'],
             version=V(manifest['version']),
             requirements=[Requirement(r) for r in manifest['requirements']],
             platforms=manifest['platforms'],
