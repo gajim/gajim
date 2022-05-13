@@ -109,7 +109,7 @@ class PluginManifest:
             return cls.from_manifest_ini(manifest_path)
 
         if manifest_path.name == 'plugin-manifest.json':
-            with manifest_path.open() as f:
+            with manifest_path.open(encoding='utf8') as f:
                 try:
                     manifest = json.load(f)
                 except Exception as error:
@@ -124,7 +124,7 @@ class PluginManifest:
         conf = configparser.ConfigParser()
         conf.remove_section('info')
 
-        with path.open() as conf_file:
+        with path.open(encoding='utf8') as conf_file:
             try:
                 conf.read_file(conf_file)
             except configparser.Error as error:

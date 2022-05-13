@@ -80,7 +80,7 @@ def parse(path, file):
 
 builder_names = []
 
-with out_path.open(mode='w') as file:
+with out_path.open(mode='w', encoding='utf8') as file:
     file.write(IMPORTS)
     for path in paths:
         if path.name.endswith('~'):

@@ -21,7 +21,7 @@ TRANSLATABLE_FILES = [
 
 
 def template_is_equal(old_template_path: Path, new_template: str) -> bool:
-    with open(old_template_path, 'r') as f:
+    with open(old_template_path, 'r', encoding='utf8') as f:
         old_template = f.read()
 
     pattern = r'"POT-Creation-Date: .*\n"'
@@ -64,7 +64,7 @@ def update_translation_template() -> bool:
         # No new strings were discovered
         return False
 
-    with open(TRANS_TEMPLATE, 'w') as f:
+    with open(TRANS_TEMPLATE, 'w', encoding='utf8') as f:
         f.write(template)
     return True
 

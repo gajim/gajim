@@ -814,7 +814,7 @@ def load_json(path: Path,
               key: Optional[str] = None,
               default: Optional[Any] = None) -> Any:
     try:
-        with path.open('r') as file:
+        with path.open('r', encoding='utf8') as file:
             json_dict = json.loads(file.read())
     except Exception:
         log.exception('Parsing error')

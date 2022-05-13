@@ -11,7 +11,7 @@ def get_gajim_dir():
 def load_style(filename, priority):
     path = get_gajim_dir() / 'data' / 'style' / filename
     try:
-        with open(str(path), "r") as file:
+        with open(str(path), 'r', encoding='utf8') as file:
             css = file.read()
     except Exception as exc:
         print(exc)
