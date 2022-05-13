@@ -394,8 +394,10 @@ class MessageRow(BaseRow):
 
         fingerprint = additional_data.get_value('encrypted', 'fingerprint')
         trust_data = additional_data.get_value('encrypted', 'trust')
-        trust = Trust(trust_data)
-        return name, fingerprint, trust
+
+        if trust_data is not None:
+            trust_data = Trust(trust_data)
+        return name, fingerprint, trust_data
 
     @property
     def has_receipt(self) -> bool:
