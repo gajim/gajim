@@ -35,6 +35,7 @@ import sys
 import time
 import uuid
 import tempfile
+from functools import partial
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -69,6 +70,7 @@ from gajim.gui.conversation.jump_to_end_button import JumpToEndButton
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ErrorDialog
 from gajim.gui.dialogs import PastePreviewDialog
+from gajim.gui.file_transfer_send import SendFileDialog
 from gajim.gui.message_input import MessageInputTextView
 from gajim.gui.security_label_selector import SecurityLabelSelector
 from gajim.gui.util import get_hardware_key_codes
@@ -807,10 +809,12 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         if method == 'httpupload':
             app.interface.send_httpupload(self, path)
-
         else:
-            app.interface.instances['file_transfers'].send_file(
-                self.account, self.contact, path)
+            send_callback = partial(
+                app.interface.instances['file_transfers'].send_file,
+                self.account,
+                self.contact)
+            SendFileDialog(self.contact, send_callback, app.window, [path])
 
     def _on_send_file(self,
                       action: Gio.SimpleAction,

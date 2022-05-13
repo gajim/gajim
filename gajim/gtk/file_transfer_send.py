@@ -21,6 +21,7 @@ from __future__ import annotations
 
 from typing import Callable
 from typing import cast
+from typing import Optional
 
 from pathlib import Path
 
@@ -44,7 +45,8 @@ class SendFileDialog(Gtk.ApplicationWindow):
     def __init__(self,
                  contact: BareContact,
                  send_callback: Callable[..., bool],
-                 transient_for: Gtk.Window
+                 transient_for: Gtk.Window,
+                 files: Optional[list[str]] = None
                  ) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
@@ -74,6 +76,9 @@ class SendFileDialog(Gtk.ApplicationWindow):
             'selection-changed', self._on_resource_selection)
         self._ui.resource_box.pack_start(
             self._resource_selector, True, False, 0)
+
+        if files is not None:
+            self.set_files(files)
 
         self.connect('key-press-event', self._on_key_press)
         self._ui.connect_signals(self)
@@ -110,7 +115,7 @@ class SendFileDialog(Gtk.ApplicationWindow):
         self.destroy()
 
     def _select_files(self, _button: Gtk.Button) -> None:
-        FileChooserDialog(self._set_files,
+        FileChooserDialog(self.set_files,
                           select_multiple=True,
                           transient_for=self,
                           path=app.settings.get('last_send_dir'))
@@ -120,7 +125,7 @@ class SendFileDialog(Gtk.ApplicationWindow):
         for item in selected:
             self._ui.listbox.remove(item)
 
-    def _set_files(self, file_names: str) -> None:
+    def set_files(self, file_names: list[str]) -> None:
         last_dir = ''
         for file in file_names:
             row = FileRow(file)
@@ -130,6 +135,7 @@ class SendFileDialog(Gtk.ApplicationWindow):
             self._ui.listbox.add(row)
         self._ui.listbox.show_all()
         app.settings.set('last_send_dir', str(last_dir))
+        self._ui.files_send.set_sensitive(True)
 
     def _get_description(self) -> str:
         buffer_ = self._ui.description.get_buffer()
