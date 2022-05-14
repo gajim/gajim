@@ -663,6 +663,11 @@ class GajimApplication(Gtk.Application, CoreApplication):
     @staticmethod
     def _on_join_support_chat(_action: Gio.SimpleAction,
                               _param: Optional[GLib.Variant]) -> None:
+        accounts = list(app.connections.keys())
+        if len(accounts) == 1:
+            app.interface.show_add_join_groupchat(
+                accounts[0], GAJIM_SUPPORT_JID)
+            return
         open_window('StartChatDialog', jid=GAJIM_SUPPORT_JID)
 
     @staticmethod
