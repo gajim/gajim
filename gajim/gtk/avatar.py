@@ -467,9 +467,13 @@ class AvatarStorage(metaclass=Singleton):
             workspace_id, 'avatar_sha')
         if avatar_sha:
             surface = self._load_surface_from_storage(avatar_sha, size, scale)
-            if surface is None:
-                return None
-            return clip(surface, 'round-corners')
+            if surface is not None:
+                return clip(surface, 'round-corners')
+            else:
+                # avatar_sha set, but image is missing
+                # (e.g. avatar cache deleted)
+                app.settings.set_workspace_setting(
+                    workspace_id, 'avatar_sha', '')
 
         rgba = make_rgba(color or DEFAULT_WORKSPACE_COLOR)
         letter = name[:1].upper()
