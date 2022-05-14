@@ -557,6 +557,7 @@ class ChatRow(Gtk.ListBoxRow):
         self.stanza_id: Optional[str] = None
         self.message_id: Optional[str] = None
         self._unread_count: int = 0
+        self._needs_muc_highlight: bool = False
         self._pinned: bool = pinned
 
         self.get_style_context().add_class('chatlist-row')
@@ -788,7 +789,8 @@ class ChatRow(Gtk.ListBoxRow):
 
     @property
     def unread_count(self) -> int:
-        if self.contact.is_groupchat and not self.contact.can_notify():
+        if (self.contact.is_groupchat and not self.contact.can_notify() and
+                not self._needs_muc_highlight):
             return 0
         return self._unread_count
 
@@ -817,8 +819,6 @@ class ChatRow(Gtk.ListBoxRow):
 
         self._unread_count += 1
         self._update_unread()
-        chat_list = cast(ChatList, self.get_parent())
-        chat_list.emit_unread_changed()
         app.storage.cache.set_unread_count(
             self.account,
             self.jid,
@@ -832,10 +832,15 @@ class ChatRow(Gtk.ListBoxRow):
                 self.contact.nickname,
                 self._client.get_own_jid().bare)
             if needs_highlight:
+                self._needs_muc_highlight = True
                 self._ui.unread_label.get_style_context().remove_class(
                     'unread-counter-silent')
 
+        chat_list = cast(ChatList, self.get_parent())
+        chat_list.emit_unread_changed()
+
     def reset_unread(self) -> None:
+        self._needs_muc_highlight = False
         self._unread_count = 0
         self._update_unread()
         chat_list = cast(ChatList, self.get_parent())
