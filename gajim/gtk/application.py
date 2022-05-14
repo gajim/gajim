@@ -63,6 +63,7 @@ from gajim.common import logging_helpers
 from gajim.common.application import CoreApplication
 from gajim.common.const import GAJIM_FAQ_URI
 from gajim.common.const import GAJIM_WIKI_URI
+from gajim.common.const import GAJIM_SUPPORT_JID
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common.helpers import load_json
 from gajim.common.helpers import open_uri
@@ -393,6 +394,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
             ('shortcuts', None,  self._on_shortcuts_action),
             ('features', None,  self._on_features_action),
             ('content', None,  self._on_content_action),
+            ('join-support-chat', None, self._on_join_support_chat),
             ('about', None,  self._on_about_action),
             ('faq', None,  self._on_faq_action),
             ('ipython', None,  self._on_ipython_action),
@@ -657,6 +659,11 @@ class GajimApplication(Gtk.Application, CoreApplication):
     def _on_content_action(_action: Gio.SimpleAction,
                            _param: Optional[GLib.Variant]) -> None:
         open_uri(GAJIM_WIKI_URI)
+
+    @staticmethod
+    def _on_join_support_chat(_action: Gio.SimpleAction,
+                              _param: Optional[GLib.Variant]) -> None:
+        open_window('StartChatDialog', jid=GAJIM_SUPPORT_JID)
 
     @staticmethod
     def _on_faq_action(_action: Gio.SimpleAction,

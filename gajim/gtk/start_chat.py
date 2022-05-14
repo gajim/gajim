@@ -68,7 +68,7 @@ class Search(IntEnum):
 
 
 class StartChatDialog(Gtk.ApplicationWindow):
-    def __init__(self) -> None:
+    def __init__(self, jid: Optional[str] = None) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_name('StartChatDialog')
         self.set_application(app.app)
@@ -137,6 +137,9 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
         if rows:
             self._load_contacts(rows)
+
+        if jid is not None:
+            self.set_search_text(jid)
 
         self.select_first_row()
         self._ui.connect_signals(self)
