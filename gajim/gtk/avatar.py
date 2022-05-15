@@ -439,11 +439,14 @@ class AvatarStorage(metaclass=Singleton):
             avatar_sha = app.storage.cache.get_muc(jid, 'avatar')
             if avatar_sha is not None:
                 surface = self.surface_from_filename(avatar_sha, size, scale)
-                if surface is None:
-                    return None
-                surface = clip(surface, style)
-                self._cache[jid][(size, scale)] = surface
-                return surface
+                if surface is not None:
+                    surface = clip(surface, style)
+                    self._cache[jid][(size, scale)] = surface
+                    return surface
+
+                # avatar_sha set, but image is missing
+                # (e.g. avatar cache deleted)
+                app.storage.cache.set_muc(jid, 'avatar', None)
 
         con = app.connections[account]
         name = get_groupchat_name(con, jid)
