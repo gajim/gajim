@@ -34,6 +34,7 @@ from gajim.common import app
 from gajim.common.events import BookmarksReceived
 from gajim.common.types import BookmarksDict
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.util import event_node
 
 
@@ -218,10 +219,23 @@ class Bookmarks(BaseModule):
             bookmarks = []
 
         self._request_in_progress = False
+
+        self._cleanup_bookmarks(bookmarks)
         self._bookmarks = self._convert_to_dict(bookmarks)
         self.auto_join_bookmarks(self.bookmarks)
         app.ged.raise_event(
             BookmarksReceived(account=self._account))
+
+    def _cleanup_bookmarks(self, bookmarks: list[BookmarkData]) -> None:
+        for bookmark in list(bookmarks):
+            contact = self._client.get_module('Contacts').get_contact(
+                bookmark.jid, groupchat=True)
+            if not isinstance(contact, GroupchatContact):
+                # The contact exists probably in the roster and is therefore
+                # assumed to not be a MUC
+                self._log.warning('Received bookmark but jid is not '
+                                  'a groupchat: %s', bookmark.jid)
+                bookmarks.remove(bookmark)
 
     def store_bookmarks(self, bookmarks: List[BookmarkData]) -> None:
         if not app.account_is_available(self._account):
