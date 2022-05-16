@@ -267,6 +267,11 @@ class ChatControl(BaseControl):
             app.window.remove_action(f'{action}{self.control_id}')
 
     def focus(self) -> None:
+        if not hasattr(self, 'msg_textview'):
+            # focus() is called sometimes with GLib.idle_add()
+            # This means there is the possibility that shutdown() was called
+            # before focus is executed.
+            return
         self.msg_textview.grab_focus()
 
     def delegate_action(self, action: str) -> int:
