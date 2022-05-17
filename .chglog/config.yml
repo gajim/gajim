@@ -1,0 +1,33 @@
+style: gitlab
+template: CHANGELOG.tpl.md
+info:
+  title: CHANGELOG
+  repository_url: https://dev.gajim.org/gajim/gajim
+options:
+  commits:
+    filters:
+      Type:
+        - feat
+        - perf
+        - fix
+  commit_groups:
+    sort_by: Custom
+    title_order:
+      - feat
+      - perf
+      - fix
+    title_maps:
+      feat: New
+      perf: Performance Improvements
+      fix: Bug Fixes
+  header:
+    pattern: "^(\\w*)\\:\\s(.*)$"
+    pattern_maps:
+      - Type
+      - Subject
+  issues:
+    prefix:
+      - "#"
+  refs:
+    actions:
+      - Fixes
