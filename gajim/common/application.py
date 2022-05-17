@@ -83,6 +83,8 @@ class CoreApplication:
         return app.log('gajim.application')
 
     def start_shutdown(self, *args: Any, **kwargs: Any) -> None:
+        app.app.systray.shutdown()
+
         accounts_to_disconnect: dict[str, Client] = {}
 
         for account, client in app.connections.items():

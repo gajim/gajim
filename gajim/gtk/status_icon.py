@@ -93,6 +93,9 @@ class StatusIcon:
     def is_visible(self) -> bool:
         return self._backend.is_visible()
 
+    def shutdown(self) -> None:
+        self._backend.shutdown()
+
 
 class NoneBackend:
     def update_state(self, count: int = 0) -> None:
@@ -100,6 +103,9 @@ class NoneBackend:
 
     def is_visible(self) -> bool:
         return False
+
+    def shutdown(self) -> None:
+        pass
 
 
 class GtkMenuBackend(EventHelper):
@@ -215,6 +221,7 @@ class GtkStatusIcon(GtkMenuBackend):
     def __init__(self) -> None:
         GtkMenuBackend.__init__(self)
         self._hide_menuitem_added = False
+        self._shutdown = False
 
         self._status_icon = Gtk.StatusIcon()
         self._status_icon.set_tooltip_text('Gajim')  # Needed for Windows
@@ -225,6 +232,10 @@ class GtkStatusIcon(GtkMenuBackend):
         self.update_state()
 
     def update_state(self, count: int = 0) -> None:
+        if self._shutdown:
+            # Shutdown in progress, don't update icon
+            return
+
         if app.settings.get('trayicon') == 'never':
             self._status_icon.set_visible(False)
             return
@@ -241,6 +252,11 @@ class GtkStatusIcon(GtkMenuBackend):
 
     def is_visible(self) -> bool:
         return self._status_icon.get_visible()
+
+    def shutdown(self) -> None:
+        # Necessary on Windows in order to remove icon from tray on shutdown
+        self._shutdown = True
+        self._status_icon.set_visible(False)
 
     def _on_size_changed(self,
                          _status_icon: Gtk.StatusIcon,
@@ -317,3 +333,6 @@ class AppIndicator(GtkMenuBackend):
     def is_visible(self) -> bool:
         status = self._status_icon.get_status()
         return status == appindicator.IndicatorStatus.ACTIVE
+
+    def shutdown(self) -> None:
+        pass
