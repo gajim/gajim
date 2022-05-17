@@ -168,13 +168,13 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         if app.settings.get('show_main_window_on_startup') == 'always':
             self.show_all()
         elif app.settings.get('show_main_window_on_startup') == 'never':
-            if app.settings.get('trayicon') != 'always':
+            if not app.settings.get('show_trayicon'):
                 # Without trayicon, we have to show the main window
                 self.show_all()
                 app.settings.set('last_main_window_visible', True)
         else:
             if (app.settings.get('last_main_window_visible') or
-                    app.settings.get('trayicon') != 'always'):
+                    not app.settings.get('show_trayicon')):
                 self.show_all()
 
     def _on_account_enabled(self, event: events.AccountEnabled) -> None:

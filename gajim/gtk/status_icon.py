@@ -59,14 +59,16 @@ log = logging.getLogger('gajim.gui.statusicon')
 class StatusIcon:
     def __init__(self) -> None:
         if self._can_use_libindicator():
-            app.settings.connect_signal('trayicon', self._on_setting_changed)
+            app.settings.connect_signal('show_trayicon',
+                                        self._on_setting_changed)
             self._backend = AppIndicator()
             log.info('Use AppIndicator3 backend')
         elif app.is_display(Display.WAYLAND):
             self._backend = NoneBackend()
             log.info('libappindicator not found or disabled')
         else:
-            app.settings.connect_signal('trayicon', self._on_setting_changed)
+            app.settings.connect_signal('show_trayicon',
+                                        self._on_setting_changed)
             self._backend = GtkStatusIcon()
             log.info('Use GtkStatusIcon backend')
 
@@ -236,7 +238,7 @@ class GtkStatusIcon(GtkMenuBackend):
             # Shutdown in progress, don't update icon
             return
 
-        if app.settings.get('trayicon') == 'never':
+        if not app.settings.get('show_trayicon'):
             self._status_icon.set_visible(False)
             return
 
@@ -315,7 +317,7 @@ class AppIndicator(GtkMenuBackend):
         self.update_state()
 
     def update_state(self, count: int = 0) -> None:
-        if app.settings.get('trayicon') == 'never':
+        if not app.settings.get('show_trayicon'):
             self._status_icon.set_status(appindicator.IndicatorStatus.PASSIVE)
             return
 

@@ -458,18 +458,12 @@ class FilePreview(PreferenceBox):
 
 class VisualNotifications(PreferenceBox):
     def __init__(self, *args: Any) -> None:
-        trayicon_items = {
-            'never': _('Hide icon'),
-            'on_event': _('Only show for pending events'),
-            'always': _('Always show icon'),
-        }
 
         settings = [
-            Setting(SettingKind.POPOVER,
+            Setting(SettingKind.SWITCH,
                     _('Notification Area Icon'),
                     SettingType.CONFIG,
-                    'trayicon',
-                    props={'entries': trayicon_items}),
+                    'show_trayicon'),
 
             Setting(SettingKind.NOTIFICATIONS,
                     _('Show Notifications'),
