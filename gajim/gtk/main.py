@@ -99,6 +99,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self.connect('motion-notify-event', self._on_window_motion_notify)
         self.connect('notify::is-active', self._on_window_active)
         self.connect('delete-event', self._on_window_delete)
+        self.connect('window-state-event', self._on_window_state_changed)
 
         self._ui.connect_signals(self)
 
@@ -164,18 +165,17 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         window_width = app.settings.get('mainwin_width')
         window_height = app.settings.get('mainwin_height')
         resize_window(self, window_width, window_height)
+        self.show_all()
 
-        if app.settings.get('show_main_window_on_startup') == 'always':
-            self.show_all()
-        elif app.settings.get('show_main_window_on_startup') == 'never':
-            if not app.settings.get('show_trayicon'):
-                # Without trayicon, we have to show the main window
-                self.show_all()
-                app.settings.set('last_main_window_visible', True)
-        else:
-            if (app.settings.get('last_main_window_visible') or
-                    not app.settings.get('show_trayicon')):
-                self.show_all()
+        show_main_window = app.settings.get('show_main_window_on_startup')
+        if (show_main_window == 'always' or
+                not app.settings.get('show_trayicon')):
+            # Without trayicon, we have to show the main window
+            return
+
+        if (show_main_window == 'never' or
+                not app.settings.get('last_main_window_visible')):
+            self.hide()
 
     def _on_account_enabled(self, event: events.AccountEnabled) -> None:
         self._account_side_bar.add_account(event.account)
@@ -427,6 +427,15 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                    text=_('_Quit'),
                                    callback=_on_ok)]).show()
         return True
+
+    def _on_window_state_changed(self,
+                                 window: MainWindow,
+                                 event: Gdk.EventWindowState) -> None:
+
+        iconified = bool(Gdk.WindowState.ICONIFIED & event.new_window_state)
+        hidden = bool(Gdk.WindowState.WITHDRAWN & event.new_window_state)
+        visible = not (iconified or hidden)
+        app.settings.set('last_main_window_visible', visible)
 
     def _set_startup_finished(self) -> None:
         self._startup_finished = True
@@ -807,8 +816,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         window_width, window_height = self.get_size()
         app.settings.set('mainwin_width', window_width)
         app.settings.set('mainwin_height', window_height)
-        app.settings.set(
-            'last_main_window_visible', self.get_property('visible'))
         app.settings.save()
 
         def on_continue2(message: Optional[str]) -> None:
