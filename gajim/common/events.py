@@ -32,6 +32,7 @@ from nbxmpp.structs import TuneData
 from nbxmpp.const import InviteType
 
 from gajim.common.file_props import FileProp
+from gajim.common.const import JingleState
 from gajim.common.const import KindConstant
 from gajim.common.helpers import AdditionalDataDict
 
@@ -477,6 +478,30 @@ class ReceiptReceived(ApplicationEvent):
     account: str
     jid: JID
     receipt_id: str
+
+
+@dataclass
+class CallStarted(ApplicationEvent):
+    name: str = field(init=False, default='call-started')
+    account: str
+    resource_jid: JID
+
+
+@dataclass
+class CallStopped(ApplicationEvent):
+    name: str = field(init=False, default='call-stopped')
+    account: str
+    jid: JID
+
+
+@dataclass
+class CallUpdated(ApplicationEvent):
+    name: str = field(init=False, default='call-updated')
+    jingle_type: str
+    audio_state: JingleState
+    video_state: JingleState
+    audio_sid: Optional[str]
+    video_sid: Optional[str]
 
 
 @dataclass

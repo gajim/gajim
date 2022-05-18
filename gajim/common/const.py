@@ -65,6 +65,7 @@ class AvatarSize(IntEnum):
     CHAT = 48
     NOTIFICATION = 48
     CALL = 100
+    CALL_BIG = 200
     GROUP_INFO = 100
     TOOLTIP = 100
     ACCOUNT_PAGE = 150
@@ -335,6 +336,11 @@ class JingleState(Enum):
 
     def __str__(self):
         return self.value
+
+
+class CallType(Enum):
+    AUDIO = 'audio'
+    VIDEO = 'video'
 
 
 MUC_CREATION_EXAMPLES = [

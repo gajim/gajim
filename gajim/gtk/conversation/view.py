@@ -43,7 +43,6 @@ from gajim.common.events import FileRequestSent
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_start_of_day
-from gajim.common.jingle_session import JingleSession
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive import ConversationRow
 from gajim.common.modules.contacts import BareContact
@@ -83,16 +82,6 @@ class ConversationView(Gtk.ListBox):
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
             None,
             ()
-        ),
-        'call-accepted': (
-            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
-            None,
-            (object, )
-        ),
-        'call-declined': (
-            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
-            None,
-            (object, )
         ),
     }
 
@@ -244,8 +233,6 @@ class ConversationView(Gtk.ListBox):
         assert isinstance(self._contact, BareContact)
         call_row = CallRow(
             self._account, self._contact, event=event, db_message=db_message)
-        call_row.connect('call-accepted', self._on_call_accepted)
-        call_row.connect('call-declined', self._on_call_declined)
         self._insert_message(call_row)
 
     def add_command_output(self, text: str, is_error: bool) -> None:
@@ -534,18 +521,6 @@ class ConversationView(Gtk.ListBox):
 
     def _on_mention(self, _message_row: MessageRow, name: str) -> None:
         self.emit('mention', name)
-
-    def _on_call_accepted(self,
-                          _call_row: CallRow,
-                          session: JingleSession
-                          ) -> None:
-        self.emit('call-accepted', session)
-
-    def _on_call_declined(self,
-                          _call_row: CallRow,
-                          session: JingleSession
-                          ) -> None:
-        self.emit('call-declined', session)
 
     def _on_contact_setting_changed(self,
                                     value: Any,

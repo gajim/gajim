@@ -135,7 +135,7 @@ class BookmarksBuilder(Builder):
     autojoin: Gtk.CellRendererToggle
 
 
-class CallWidgetBuilder(Builder):
+class CallWindowBuilder(Builder):
     adjustment1: Gtk.Adjustment
     adjustment2: Gtk.Adjustment
     dtmf_popover: Gtk.Popover
@@ -156,13 +156,13 @@ class CallWidgetBuilder(Builder):
     video_box: Gtk.Box
     outgoing_viewport: Gtk.Viewport
     incoming_viewport: Gtk.Viewport
-    av_start_box: Gtk.Box
-    av_start_mic_button: Gtk.Button
-    av_start_mic_cam_button: Gtk.Button
+    avatar_image: Gtk.Image
     jingle_audio_state: Gtk.Image
     jingle_connection_state: Gtk.Label
     jingle_connection_spinner: Gtk.Spinner
     answer_video_button: Gtk.Button
+    av_cam_button: Gtk.Button
+    av_cam_image: Gtk.Image
     audio_buttons_box: Gtk.Box
     mic_hscale: Gtk.VolumeButton
     volumebutton_plus_button2: Gtk.Button
@@ -171,8 +171,6 @@ class CallWidgetBuilder(Builder):
     volumebutton_plus_button1: Gtk.Button
     volumebutton_minus_button1: Gtk.Button
     dtmf_button: Gtk.MenuButton
-    av_cam_button: Gtk.Button
-    av_cam_image: Gtk.Image
 
 
 class CertificateBuilder(Builder):
@@ -201,7 +199,6 @@ class ChatControlBuilder(Builder):
     strike: Gtk.MenuItem
     chat_control_hbox: Gtk.Box
     overlay: Gtk.Overlay
-    paned1: Gtk.Paned
     textview_box: Gtk.Box
     banner_eventbox: Gtk.EventBox
     avatar_eventbox: Gtk.EventBox
@@ -990,7 +987,7 @@ def get_builder(file_name: Literal['blocking_list.ui'], widgets: list[str] = ...
 @overload
 def get_builder(file_name: Literal['bookmarks.ui'], widgets: list[str] = ...) -> BookmarksBuilder: ...
 @overload
-def get_builder(file_name: Literal['call_widget.ui'], widgets: list[str] = ...) -> CallWidgetBuilder: ...
+def get_builder(file_name: Literal['call_window.ui'], widgets: list[str] = ...) -> CallWindowBuilder: ...
 @overload
 def get_builder(file_name: Literal['certificate.ui'], widgets: list[str] = ...) -> CertificateBuilder: ...
 @overload

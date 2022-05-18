@@ -306,24 +306,23 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         if event.jid not in (self.contact.jid, self.contact.jid.bare):
             return
 
-        jingle_av_events = (
-            events.JingleRequestReceived,
-            events.JingleConnectedReceived,
-            events.JingleDisconnectedReceived,
-            events.JingleErrorReceived
-        )
         file_transfer_events = (
             events.FileRequestReceivedEvent,
             events.FileRequestSent
         )
 
         if self.is_chat:
-            if isinstance(event, jingle_av_events):
-                self._process_jingle_av_event(event)
-                return
-
             if isinstance(event, file_transfer_events):
                 self.add_jingle_file_transfer(event=event)
+                return
+            if isinstance(event, events.JingleRequestReceived):
+                active_jid = app.app.call_manager.get_active_call_jid()
+                # Don't add a second row if contact upgrades to video
+                if active_jid is None:
+                    self.add_call_message(event=event)
+                return
+            if isinstance(event, events.CallStopped):
+                self.conversation_view.update_call_rows()
                 return
 
         method_name = event.name.replace('-', '_')

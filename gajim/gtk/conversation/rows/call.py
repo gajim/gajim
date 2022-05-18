@@ -21,7 +21,6 @@ from datetime import datetime
 
 from gi.repository import GdkPixbuf
 from gi.repository import Gtk
-from gi.repository import GObject
 
 from gajim.common import app
 from gajim.common import types
@@ -37,20 +36,6 @@ from .base import BaseRow
 
 
 class CallRow(BaseRow):
-
-    __gsignals__ = {
-        'call-accepted': (
-            GObject.SignalFlags.RUN_LAST,
-            None,
-            (object,)
-        ),
-        'call-declined': (
-            GObject.SignalFlags.RUN_LAST,
-            None,
-            (object,)
-        ),
-    }
-
     def __init__(self,
                  account: str,
                  contact: types.BareContact,
@@ -109,19 +94,23 @@ class CallRow(BaseRow):
         if self._event is not None:
             session = self._client.get_module('Jingle').get_jingle_session(
                 self._event.fjid, self._event.sid)
-            self.emit('call-accepted', session)
+            if session is not None:
+                app.app.call_manager.accept_call(session)
         else:
             assert self._session is not None
-            self.emit('call-accepted', self._session)
+            app.app.call_manager.accept_call(self._session)
 
-    def _on_decline(self, _button: Gtk.Button) -> None:
+    def _on_decline(self, button: Gtk.Button) -> None:
+        button.set_sensitive(False)
+        self._accept_button.set_sensitive(False)
         if self._event is not None:
             session = self._client.get_module('Jingle').get_jingle_session(
                 self._event.fjid, self._event.sid)
-            self.emit('call-declined', session)
+            if session is not None:
+                app.app.call_manager.decline_call(session)
         else:
             assert self._session is not None
-            self.emit('call-declined', self._session)
+            app.app.call_manager.decline_call(self._session)
         self._session = None
 
     def _add_history_call_widget(self) -> None:
@@ -136,7 +125,7 @@ class CallRow(BaseRow):
                 is_self = False
 
         if self._event is not None:
-            if self._event == 'incoming-call':
+            if self._event is not None:
                 is_self = False
             else:
                 contact = self._contact

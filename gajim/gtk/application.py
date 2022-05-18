@@ -61,6 +61,7 @@ from gajim.common import ged
 from gajim.common import idle
 from gajim.common import logging_helpers
 from gajim.common.application import CoreApplication
+from gajim.common.call_manager import CallManager
 from gajim.common.const import GAJIM_FAQ_URI
 from gajim.common.const import GAJIM_WIKI_URI
 from gajim.common.const import GAJIM_SUPPORT_JID
@@ -238,6 +239,8 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         from gajim.gui.status_icon import StatusIcon
         self.systray = StatusIcon()
+
+        self.call_manager = CallManager()
 
         self.add_actions()
         self._load_shortcuts()

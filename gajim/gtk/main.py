@@ -45,12 +45,14 @@ from .account_side_bar import AccountSideBar
 from .app_side_bar import AppSideBar
 from .workspace_side_bar import WorkspaceSideBar
 from .main_stack import MainStack
+from .call_window import CallWindow
 from .chat_list import ChatList
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
 from .dialogs import ConfirmationCheckDialog
 from .types import ControlT
 from .builder import get_builder
+from .util import get_app_window
 from .util import get_key_theme
 from .util import resize_window
 from .util import restore_main_window_position
@@ -115,10 +117,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('read-state-sync', ged.GUI1, self._on_read_state_sync),
             ('message-error', ged.GUI1, self._on_event),
             ('muc-disco-update', ged.GUI1, self._on_event),
+            ('call-started', ged.GUI1, self._on_call_started),
+            ('call-stopped', ged.GUI1, self._on_event),
             ('jingle-request-received', ged.GUI1, self._on_jingle_request),
-            ('jingle-connected-received', ged.GUI1, self._on_event),
-            ('jingle-disconnected-received', ged.GUI1, self._on_event),
-            ('jingle-error-received', ged.GUI1, self._on_event),
             ('file-request-received', ged.GUI1, self._on_file_request),
             ('file-request-sent', ged.GUI1, self._on_event),
             ('account-enabled', ged.GUI1, self._on_account_enabled),
@@ -800,12 +801,20 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self.mark_as_read(event.account, jid, send_marker=False)
 
+    def _on_call_started(self, event: events.CallStarted) -> None:
+        # Make sure there is only one window
+        win = get_app_window('CallWindow')
+        if win is not None:
+            win.destroy()
+        CallWindow(event.account, event.resource_jid)
+
     def _on_jingle_request(self, event: events.JingleRequestReceived) -> None:
         if not self.chat_exists(event.account, event.jid):
             for item in event.contents:
-                if item.media in ('audio', 'video'):
-                    self.add_chat(event.account, event.jid, 'contact')
-                    break
+                if item.media not in ('audio', 'video'):
+                    return
+                self.add_chat(event.account, event.jid, 'contact')
+                break
 
         self._main_stack.process_event(event)
 

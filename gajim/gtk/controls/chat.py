@@ -50,14 +50,12 @@ from gajim.common.client import Client
 from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.const import AvatarSize
+from gajim.common.const import CallType
 from gajim.common.const import SimpleClientState
 from gajim.common.const import KindConstant
-from gajim.common.jingle_session import JingleSession
 from gajim.common.modules.contacts import BareContact
 
-from gajim.gui.call_widget import CallWidget
 from gajim.gui.controls.base import BaseControl
-from gajim.gui.conversation.view import ConversationView
 from gajim.gui.const import TARGET_TYPE_URI_LIST
 from gajim.gui.const import ControlType
 from gajim.gui.util import open_window
@@ -106,14 +104,6 @@ class ChatControl(BaseControl):
 
         self.xml.sendfile_button.set_action_name(
             f'win.send-file-{self.control_id}')
-
-        self._call_widget = CallWidget(self.account, self.contact)
-        self._call_widget.connect('incoming-call', self._add_incoming_call)
-        self._call_widget.connect('call-ended', self._on_call_ended)
-        self.xml.paned1.add2(self._call_widget)
-
-        self.conversation_view.connect('call-accepted', self._on_call_accepted)
-        self.conversation_view.connect('call-declined', self._on_call_declined)
 
         # Menu for the HeaderBar
         if self._type == ControlType.CHAT:
@@ -167,7 +157,8 @@ class ChatControl(BaseControl):
             ('add-to-roster-', self._on_add_to_roster),
             ('block-contact-', self._on_block_contact),
             ('information-', self._on_information),
-            ('start-call-', self._on_start_call),
+            ('start-voice-call-', self._on_start_voice_call),
+            ('start-video-call-', self._on_start_video_call),
         ]
 
         for action in actions:
@@ -206,11 +197,11 @@ class ChatControl(BaseControl):
             online and self._client.get_module('Blocking').supported)
 
         # Jingle AV
-        self._call_widget.detect_av()
-        audio_available = self._call_widget.get_jingle_available('audio')
-        video_available = self._call_widget.get_jingle_available('video')
-        self._get_action('start-call-').set_enabled(
-            online and (audio_available or video_available)
+        self._get_action('start-voice-call-').set_enabled(
+            online and self.contact.supports_audio()
+            and sys.platform != 'win32')
+        self._get_action('start-video-call-').set_enabled(
+            online and self.contact.supports_video()
             and sys.platform != 'win32')
 
         # Send message
@@ -256,7 +247,8 @@ class ChatControl(BaseControl):
             'add-to-roster-',
             'block-contact-',
             'information-',
-            'start-call-',
+            'start-voice-call-',
+            'start-video-call-',
             'send-chatstate-',
             'send-marker-',
         ]
@@ -455,36 +447,17 @@ class ChatControl(BaseControl):
         elif isinstance(event, events.PingError):
             self.add_info_message(event.error)
 
-    # Jingle AV calls
-    def _on_start_call(self,
-                       _action: Gio.SimpleAction,
-                       _param: Optional[GLib.Variant]
-                       ) -> None:
-        self._call_widget.start_call()
+    def _on_start_voice_call(self,
+                             _action: Gio.SimpleAction,
+                             _param: Optional[GLib.Variant]
+                             ) -> None:
+        app.app.call_manager.start_call(self.account, self.jid, CallType.AUDIO)
 
-    def _process_jingle_av_event(self, event: events.JingleEvent) -> None:
-        self._call_widget.process_event(event)
-
-    def _on_call_accepted(self,
-                          _view: ConversationView,
-                          session: JingleSession
-                          ) -> None:
-        self._call_widget.accept_call(session)
-
-    def _on_call_declined(self,
-                          _view: ConversationView,
-                          session: JingleSession
-                          ) -> None:
-        self._call_widget.decline_call(session)
-
-    def _on_call_ended(self, _call_widget: CallWidget) -> None:
-        self.conversation_view.update_call_rows()
-
-    def _add_incoming_call(self,
-                           _call_widget: CallWidget,
-                           event: events.JingleRequestReceived
-                           ) -> None:
-        self.add_call_message(event)
+    def _on_start_video_call(self,
+                             _action: Gio.SimpleAction,
+                             _param: Optional[GLib.Variant]
+                             ) -> None:
+        app.app.call_manager.start_call(self.account, self.jid, CallType.VIDEO)
 
     def update_ui(self) -> None:
         BaseControl.update_ui(self)

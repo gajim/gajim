@@ -84,7 +84,8 @@ def get_singlechat_menu(control_id: str,
     submenu = get_send_file_submenu(control_id)
     menu.append_submenu(_('Send File'), submenu)
 
-    menu.add_item(_('Start Call…'), f'win.start-call-{control_id}')
+    menu.add_item(_('Start Voice Call…'), f'win.start-voice-call-{control_id}')
+    menu.add_item(_('Start Video Call…'), f'win.start-video-call-{control_id}')
     menu.add_item(_('Search…'), 'win.search-history')
 
     if can_add_to_roster(contact):

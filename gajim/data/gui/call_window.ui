@@ -294,8 +294,6 @@
   <object class="GtkBox" id="av_box">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="hexpand">True</property>
-    <property name="vexpand">True</property>
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
     <child>
@@ -349,56 +347,10 @@
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
-          <object class="GtkBox" id="av_start_box">
+          <object class="GtkImage" id="avatar_image">
+            <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="no-show-all">True</property>
-            <property name="halign">center</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">18</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">Start Call…</property>
-                <style>
-                  <class name="bold"/>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="av_start_mic_button">
-                <property name="label" translatable="yes">With Microphone</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <signal name="clicked" handler="_on_call_with_mic" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="av_start_mic_cam_button">
-                <property name="label" translatable="yes">Microphone &amp; Camera</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <signal name="clicked" handler="_on_call_with_mic_and_cam" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
+            <property name="margin-bottom">24</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -410,7 +362,7 @@
           <object class="GtkImage" id="jingle_audio_state">
             <property name="can-focus">False</property>
             <property name="no-show-all">True</property>
-            <property name="pixel-size">100</property>
+            <property name="pixel-size">50</property>
             <property name="icon-name">audio-input-microphone-symbolic</property>
             <style>
               <class name="dim-label"/>
@@ -454,12 +406,12 @@
         </child>
         <child>
           <object class="GtkButton" id="answer_video_button">
-            <property name="label" translatable="yes">Start Video</property>
+            <property name="label" translatable="yes">Share Video</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
             <property name="no-show-all">True</property>
             <property name="halign">center</property>
-            <signal name="clicked" handler="_on_answer_video_clicked" swapped="no"/>
+            <signal name="clicked" handler="_on_upgrade_to_video_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -479,27 +431,62 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="spacing">6</property>
-        <child>
-          <object class="GtkButton">
-            <property name="width-request">70</property>
+        <child type="center">
+          <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">End call</property>
-            <property name="halign">center</property>
-            <signal name="clicked" handler="_on_end_call_clicked" swapped="no"/>
+            <property name="can-focus">False</property>
+            <property name="spacing">12</property>
             <child>
-              <object class="GtkImage">
+              <object class="GtkButton" id="av_cam_button">
+                <property name="width-request">70</property>
                 <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon-name">call-stop</property>
+                <property name="sensitive">False</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes">Turn Camera on</property>
+                <signal name="clicked" handler="_on_enable_video_clicked" swapped="no"/>
+                <child>
+                  <object class="GtkImage" id="av_cam_image">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">feather-camera-symbolic</property>
+                  </object>
+                </child>
               </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="width-request">70</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes">End call</property>
+                <property name="halign">center</property>
+                <signal name="clicked" handler="_on_end_call_clicked" swapped="no"/>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">call-stop</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="position">3</property>
           </packing>
         </child>
         <child>
@@ -512,7 +499,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="focus-on-click">False</property>
-                <property name="receives-default">True</property>
+                <property name="receives-default">False</property>
                 <property name="has-tooltip">True</property>
                 <property name="relief">none</property>
                 <property name="orientation">vertical</property>
@@ -536,9 +523,6 @@ microphone-sensitivity-high-symbolic</property>
                     <property name="receives-default">False</property>
                   </object>
                 </child>
-                <style>
-                  <class name="chatcontrol-actionbar-button"/>
-                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -551,7 +535,7 @@ microphone-sensitivity-high-symbolic</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="focus-on-click">False</property>
-                <property name="receives-default">True</property>
+                <property name="receives-default">False</property>
                 <property name="has-tooltip">True</property>
                 <property name="relief">none</property>
                 <property name="orientation">vertical</property>
@@ -575,9 +559,6 @@ audio-volume-high-symbolic</property>
                     <property name="receives-default">False</property>
                   </object>
                 </child>
-                <style>
-                  <class name="chatcontrol-actionbar-button"/>
-                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -601,9 +582,6 @@ audio-volume-high-symbolic</property>
                     <property name="icon_size">1</property>
                   </object>
                 </child>
-                <style>
-                  <class name="chatcontrol-actionbar-button"/>
-                </style>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -619,32 +597,6 @@ audio-volume-high-symbolic</property>
             <property name="position">1</property>
           </packing>
         </child>
-        <child>
-          <object class="GtkButton" id="av_cam_button">
-            <property name="visible">True</property>
-            <property name="sensitive">False</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Turn Camera on</property>
-            <property name="relief">none</property>
-            <signal name="clicked" handler="_on_video" swapped="no"/>
-            <child>
-              <object class="GtkImage" id="av_cam_image">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon-name">feather-camera-symbolic</property>
-              </object>
-            </child>
-            <style>
-              <class name="chatcontrol-actionbar-button"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -653,5 +605,8 @@ audio-volume-high-symbolic</property>
         <property name="position">2</property>
       </packing>
     </child>
+    <style>
+      <class name="padding-18"/>
+    </style>
   </object>
 </interface>
