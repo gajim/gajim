@@ -18,14 +18,15 @@ ALLOWED_TAGS = [
     'chore',
     'release',
     'other',
+    'imprv',
 ]
 
 
-
-def parse_args() -> Tuple[str, str]:
+def parse_args() -> Tuple[str, str, str]:
+    ref_name = sys.argv[1]
     old_ref = sys.argv[2]
     new_ref = sys.argv[3]
-    return old_ref, new_ref
+    return ref_name, old_ref, new_ref
 
 
 def get_commit_subject(sha: str) -> str:
@@ -64,8 +65,12 @@ def enforce_message_rules(subject: str) -> None:
         sys.exit(1)
 
 
-def main(args: Tuple[str, str]) -> None:
-    shas = get_commit_shas(*args)
+def main(args: Tuple[str, str, str]) -> None:
+    ref_name, old_ref, new_ref = args
+    if 'refs/tags' in ref_name:
+        return
+
+    shas = get_commit_shas(old_ref, new_ref)
     for sha in shas:
         subject = get_commit_subject(sha)
         enforce_message_rules(subject)
