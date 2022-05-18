@@ -66,6 +66,10 @@ class BaseRow(Gtk.ListBoxRow):
     @staticmethod
     def create_timestamp_widget(timestamp: datetime) -> Gtk.Label:
         time_format = from_one_line(app.settings.get('chat_timestamp_format'))
+        if timestamp.date() < datetime.today().date():
+            date_format = from_one_line(
+                app.settings.get('date_timestamp_format'))
+            time_format = f'{time_format} - {date_format}'
         timestamp_formatted = timestamp.strftime(time_format)
         label = Gtk.Label(label=timestamp_formatted)
         label.set_halign(Gtk.Align.START)
