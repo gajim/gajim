@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -942,9 +942,6 @@ msgstr "您也可以輸入一個可選的替代地點:"
 msgid "Always"
 msgstr "總是"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "<b>發生了一個錯誤:</b>"
@@ -965,6 +962,10 @@ msgstr "建立帳號期間發生錯誤"
 
 #, fuzzy
 msgid "An error occurred while trying to change your password."
+msgstr "建立帳號期間發生錯誤"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "建立帳號期間發生錯誤"
 
 msgid "Anonymous login not supported"
@@ -2807,10 +2808,6 @@ msgstr "您好，我是$name"
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "隱藏本選單"
-
 msgid "Hide this menu"
 msgstr "隱藏本選單"
 
@@ -3321,6 +3318,10 @@ msgstr "加入多人聊天"
 
 #, fuzzy
 msgid "Join Groupchat"
+msgstr "加入多人聊天"
+
+#, fuzzy
+msgid "Join Support Chat"
 msgstr "加入多人聊天"
 
 #, fuzzy
@@ -3884,10 +3885,6 @@ msgstr ""
 
 msgid "Only moderators can see your XMPP address"
 msgstr ""
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr "僅當有未處理的事件時"
 
 #, fuzzy
 msgid "Open"
@@ -5057,6 +5054,9 @@ msgid ""
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 #, fuzzy
@@ -9602,6 +9602,10 @@ msgstr ""
 #~ msgid "Hide all buttons in chat windows"
 #~ msgstr "在聊天視窗中隱藏所有按鈕"
 
+#, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "隱藏本選單"
+
 #~ msgid "Hides the banner in two persons chat window"
 #~ msgstr "在雙人聊天視窗中隱藏標語"
 
@@ -10744,6 +10748,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "您有未讀訊息"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr "僅當有未處理的事件時"
 
 #, fuzzy
 #~ msgid "Open _Containing Folder"

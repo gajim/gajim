@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2010-11-28 12:15+0100\n"
 "Last-Translator: Gabriel Papp <gabriel.papp@gmx.com>\n"
 "Language-Team: -\n"
@@ -960,9 +960,6 @@ msgstr "Ha szeretnél, beírhatsz egy alternatív értéket:"
 msgid "Always"
 msgstr "Mindig"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "<b>Hiba lépett fel:</b>"
@@ -983,6 +980,10 @@ msgstr "Hiba lépett fel a fiók létrehozása közben"
 
 #, fuzzy
 msgid "An error occurred while trying to change your password."
+msgstr "Hiba lépett fel a fiók létrehozása közben"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Hiba lépett fel a fiók létrehozása közben"
 
 msgid "Anonymous login not supported"
@@ -2851,10 +2852,6 @@ msgstr "Szia! Én $name vagyok."
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "Elrejti ezt a menüt"
-
 msgid "Hide this menu"
 msgstr "Elrejti ezt a menüt"
 
@@ -3382,6 +3379,10 @@ msgstr "Csatlakozás Csoportos Beszélgetéshez"
 
 #, fuzzy
 msgid "Join Groupchat"
+msgstr "Csatlakozás Csoportos Beszélgetéshez"
+
+#, fuzzy
+msgid "Join Support Chat"
 msgstr "Csatlakozás Csoportos Beszélgetéshez"
 
 #, fuzzy
@@ -3953,10 +3954,6 @@ msgstr ""
 
 msgid "Only moderators can see your XMPP address"
 msgstr ""
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr "Csak függő eseményeknél"
 
 #, fuzzy
 msgid "Open"
@@ -5147,6 +5144,9 @@ msgid ""
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 #, fuzzy
@@ -9833,6 +9833,10 @@ msgstr ""
 #~ msgstr "Összes gomb elrejtése a beszélgetőablakokban"
 
 #, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "Elrejti ezt a menüt"
+
+#, fuzzy
 #~ msgid "Hides the banner in two persons chat window"
 #~ msgstr "Hides the banner in two persons chat window"
 
@@ -11101,6 +11105,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "You have unread messages"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr "Csak függő eseményeknél"
 
 #, fuzzy
 #~ msgid "Open _Containing Folder"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2009-11-18 15:50+0100\n"
 "Last-Translator: Stian B. Barmen <stian@barmen.nu>\n"
 "Language-Team: <>\n"
@@ -951,9 +951,6 @@ msgstr "Du kan også skrive inn et alternativt møtested:"
 msgid "Always"
 msgstr "Alltid"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "<b>En feil har inntruffet:</b>"
@@ -974,6 +971,10 @@ msgstr "Det skjedde en feil under oppretting av kontoen"
 
 #, fuzzy
 msgid "An error occurred while trying to change your password."
+msgstr "Det skjedde en feil under oppretting av kontoen"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Det skjedde en feil under oppretting av kontoen"
 
 msgid "Anonymous login not supported"
@@ -2802,10 +2803,6 @@ msgstr "Hei, jeg er $name."
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "Trayicon"
-
 msgid "Hide this menu"
 msgstr "Skjul denne menyen"
 
@@ -3360,6 +3357,10 @@ msgstr "Ta del i gruppesamtale"
 
 msgid "Join Groupchat"
 msgstr "Ta del i gruppesludring"
+
+#, fuzzy
+msgid "Join Support Chat"
+msgstr "Ta del i gruppesamtale"
 
 #, fuzzy
 msgid "Join a group chat given by an XMPP Address"
@@ -3927,10 +3928,6 @@ msgstr ""
 
 msgid "Only moderators can see your XMPP address"
 msgstr ""
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr "Bare ved utestående hendelser"
 
 msgid "Open"
 msgstr "Åpne"
@@ -5117,6 +5114,9 @@ msgid ""
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 #, fuzzy
@@ -10159,6 +10159,10 @@ msgstr ""
 #~ msgid "Hide all buttons in chat windows"
 #~ msgstr "Gjem alle knappene i samtalevinduer"
 
+#, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "Trayicon"
+
 #~ msgid "Hide the chat buttons"
 #~ msgstr "Gjem samtaleknappene"
 
@@ -11627,6 +11631,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "Du har uleste meldinger"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr "Bare ved utestående hendelser"
 
 #~ msgid "Open _Containing Folder"
 #~ msgstr "Åpne _inneholdende mappe"

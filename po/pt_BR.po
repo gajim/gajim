@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2020-09-06 18:19+0000\n"
 "Last-Translator: Antonio Morais <antonio@alfa67.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -971,9 +971,6 @@ msgstr "Ponto de Referência (opcional)..."
 msgid "Always"
 msgstr "Sempre"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "Ocorreu um erro"
@@ -994,6 +991,10 @@ msgid "An error occurred while exporting your messages"
 msgstr "Ocorreu um erro ao alterar sua senha."
 
 msgid "An error occurred while trying to change your password."
+msgstr "Ocorreu um erro ao alterar sua senha."
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Ocorreu um erro ao alterar sua senha."
 
 msgid "Anonymous login not supported"
@@ -2798,10 +2799,6 @@ msgstr "Olá, estou $name."
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "Ícone da bandeja"
-
 msgid "Hide this menu"
 msgstr "Esconder este menu"
 
@@ -3345,6 +3342,10 @@ msgstr "Ingressar numa conferência"
 
 msgid "Join Groupchat"
 msgstr "Entrar em um bate-papo em grupo"
+
+#, fuzzy
+msgid "Join Support Chat"
+msgstr "Ingressar numa conferência"
 
 #, fuzzy
 msgid "Join a group chat given by an XMPP Address"
@@ -3915,10 +3916,6 @@ msgstr "Somente administradores e proprietários podem modificar a afiliação"
 #, fuzzy
 msgid "Only moderators can see your XMPP address"
 msgstr "Somente os moderadores podem ver seu endereço XMPP"
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr "Apenas para eventos pendentes"
 
 msgid "Open"
 msgstr "Abrir"
@@ -5096,6 +5093,9 @@ msgstr ""
 "você está se sentindo"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 msgid "Settings"
@@ -10097,6 +10097,10 @@ msgstr ""
 #~ msgstr "Esconder todos os botões nas janelas de conversa"
 
 #, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "Ícone da bandeja"
+
+#, fuzzy
 #~ msgid "Hide the chat buttons"
 #~ msgstr "Uso: /%s, esconde os botões do bate-papo."
 
@@ -11588,6 +11592,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "Você tem mensagens não lidas"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr "Apenas para eventos pendentes"
 
 #, fuzzy
 #~ msgid "Open _Containing Folder"

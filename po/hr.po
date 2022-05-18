@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2009-10-31 20:49+0100\n"
 "Last-Translator: Adrian C. <anrxc@sysphere.org>\n"
 "Language-Team: Croatian\n"
@@ -966,9 +966,6 @@ msgstr "Također možete unjeti alternativno mjesto sastanka:"
 msgid "Always"
 msgstr "Odsutan"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "<b>Pojavila se greška:</b>"
@@ -989,6 +986,10 @@ msgstr "Pojavila se greška pri stvaranju računa"
 
 #, fuzzy
 msgid "An error occurred while trying to change your password."
+msgstr "Pojavila se greška pri stvaranju računa"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Pojavila se greška pri stvaranju računa"
 
 msgid "Anonymous login not supported"
@@ -2843,10 +2844,6 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "Trayicon"
-
 msgid "Hide this menu"
 msgstr "Sakrij ovaj izbornik"
 
@@ -3370,6 +3367,10 @@ msgstr "Pridružiti se Grupnom Razgovoru"
 
 #, fuzzy
 msgid "Join Groupchat"
+msgstr "Pridružiti se Grupnom Razgovoru"
+
+#, fuzzy
+msgid "Join Support Chat"
 msgstr "Pridružiti se Grupnom Razgovoru"
 
 #, fuzzy
@@ -3940,13 +3941,6 @@ msgstr ""
 
 msgid "Only moderators can see your XMPP address"
 msgstr ""
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr ""
-"Nikad\n"
-"Samo kod događaja na čekanju\n"
-"Uvijek"
 
 #, fuzzy
 msgid "Open"
@@ -5127,6 +5121,9 @@ msgid ""
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 #, fuzzy
@@ -9986,6 +9983,10 @@ msgstr ""
 #~ msgstr "Sakrij dugmad u prozoru razgovora."
 
 #, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "Trayicon"
+
+#, fuzzy
 #~ msgid "Hide the chat buttons"
 #~ msgstr "Uporaba: /%s, sakriva dugmadi."
 
@@ -11318,6 +11319,13 @@ msgstr ""
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "Imte nepročitane poruke"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr ""
+#~ "Nikad\n"
+#~ "Samo kod događaja na čekanju\n"
+#~ "Uvijek"
 
 #, fuzzy
 #~ msgid "Open _Containing Folder"

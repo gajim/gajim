@@ -13,11 +13,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
-"PO-Revision-Date: 2022-05-08 21:29+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"PO-Revision-Date: 2022-05-17 07:30+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
-"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
-"\n"
+"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/"
+">\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -873,9 +873,6 @@ msgstr "Alternativer Gruppenchat (optional)..."
 msgid "Always"
 msgstr "Immer"
 
-msgid "Always show icon"
-msgstr "Icon immer anzeigen"
-
 msgid "An Error Occurred"
 msgstr "Es ist ein Fehler aufgetreten"
 
@@ -894,6 +891,12 @@ msgstr ""
 
 msgid "An error occurred while trying to change your password."
 msgstr "Bei dem Versuch dein Passwort zu ändern ist ein Fehler aufgetreten."
+
+#, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
+msgstr ""
+"Es ist ein Fehler aufgetreten beim Speichern einer Datei unter  %(path)s:"
+"%(error)s"
 
 msgid "Anonymous login not supported"
 msgstr "Anonyme Anmeldung wird nicht unterstützt"
@@ -2532,9 +2535,6 @@ msgstr "Hallo, Ich bin $name. %s"
 msgid "Helps to establish calls through firewalls"
 msgstr "Hilf beim Rufaufbau durch Firewalls hindurch"
 
-msgid "Hide icon"
-msgstr "Icon verstecken"
-
 msgid "Hide this menu"
 msgstr "Dieses Menü ausblenden"
 
@@ -3044,6 +3044,9 @@ msgstr "Gruppenchat beitreten?"
 
 msgid "Join Groupchat"
 msgstr "Gruppenchat beitreten"
+
+msgid "Join Support Chat"
+msgstr "Chat zur Online-Hilfe beitreten"
 
 msgid "Join a group chat given by an XMPP Address"
 msgstr "Gruppenchat über die angegebene XMPP-Adresse beitreten"
@@ -3561,9 +3564,6 @@ msgstr ""
 
 msgid "Only moderators can see your XMPP address"
 msgstr "Nur Moderatoren können deine XMPP-Adresse sehen"
-
-msgid "Only show for pending events"
-msgstr "Nur bei anstehenden Ereignissen anzeigen"
 
 msgid "Open"
 msgstr "Öffnen"
@@ -4612,6 +4612,9 @@ msgstr ""
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
 "Legt eine Umgebungsvariable fest, sodass GLib Debug Messages gezeigt werden"
+
+msgid "Setting is locked by the system"
+msgstr "Einstellung ist durch das System gesperrt"
 
 msgid "Settings"
 msgstr "Einstellungen"
@@ -7775,6 +7778,9 @@ msgstr "… oder hierher ziehen"
 #~ msgstr ""
 #~ "Immer beim Programmstart prüfen, ob Gajim der Standard-Jabber-Client ist"
 
+#~ msgid "Always show icon"
+#~ msgstr "Icon immer anzeigen"
+
 #~ msgid "Always use GNOME default applications"
 #~ msgstr "Immer GNOME Standardanwendungen verwenden"
 
@@ -9577,6 +9583,9 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Hide all buttons in chat windows"
 #~ msgstr "Versteckt alle Schaltflächen im Chatfenster"
 
+#~ msgid "Hide icon"
+#~ msgstr "Icon verstecken"
+
 #~ msgid "Hide the chat buttons"
 #~ msgstr "Chat-Schaltflächen verstecken"
 
@@ -11093,6 +11102,9 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Only enter/leave messages"
 #~ msgstr "Nur Status-Benachrichtigungen zum Beitreten/Verlassen"
+
+#~ msgid "Only show for pending events"
+#~ msgstr "Nur bei anstehenden Ereignissen anzeigen"
 
 #~ msgid "Open Events"
 #~ msgstr "Ereignisse öffnen"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2022-02-02 22:34+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/"
@@ -886,9 +886,6 @@ msgstr "Alternatywne miejsce spotkań (opcjonalne)…"
 msgid "Always"
 msgstr "Zawsze"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "Wystąpił błąd"
@@ -907,6 +904,10 @@ msgid "An error occurred while exporting your messages"
 msgstr "Wystąpił błąd w trakcie tworzenia konta"
 
 msgid "An error occurred while trying to change your password."
+msgstr "Wystąpił błąd w trakcie próby zmiany twojego hasła."
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Wystąpił błąd w trakcie próby zmiany twojego hasła."
 
 msgid "Anonymous login not supported"
@@ -2625,10 +2626,6 @@ msgstr "Cześć, jestem $name."
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "Ikona w obszarze powiadamiania"
-
 msgid "Hide this menu"
 msgstr "Ukryj to menu"
 
@@ -3129,6 +3126,10 @@ msgstr "Dołącz do pokoju"
 
 msgid "Join Groupchat"
 msgstr "Dołącz do czatu grupowego"
+
+#, fuzzy
+msgid "Join Support Chat"
+msgstr "Dołącz do pokoju"
 
 msgid "Join a group chat given by an XMPP Address"
 msgstr "Dołącz do czatu grupowego pod zadanym adresem XMPP"
@@ -3674,10 +3675,6 @@ msgstr "Tylko administratorzy i właściciele mogą modyfikować afiliację"
 
 msgid "Only moderators can see your XMPP address"
 msgstr "Tylko moderatorzy mogą zobaczyć twój adres XMPP"
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr "Tylko, kiedy wystąpią jakieś zdarzenia"
 
 msgid "Open"
 msgstr "Otwórz"
@@ -4778,6 +4775,9 @@ msgstr ""
 "znajomym, jak się czujesz"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 msgid "Settings"
@@ -9730,6 +9730,10 @@ msgstr ""
 #~ msgstr "Ukryj przyciski w oknie rozmowy"
 
 #, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "Ikona w obszarze powiadamiania"
+
+#, fuzzy
 #~ msgid "Hide the chat buttons"
 #~ msgstr "Użycie: /%s ukrywa przyciski czatu."
 
@@ -11175,6 +11179,10 @@ msgstr ""
 
 #~ msgid "Only enter/leave messages"
 #~ msgstr "Tylko wiadomości dołączył(a)/opuścił(a)"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr "Tylko, kiedy wystąpią jakieś zdarzenia"
 
 #, fuzzy
 #~ msgid "Open _Containing Folder"

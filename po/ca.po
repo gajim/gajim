@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -896,9 +896,6 @@ msgstr ""
 msgid "Always"
 msgstr "Sempre"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "<b>Hi ha hagut un error:</b>"
@@ -919,6 +916,10 @@ msgstr "Cliqui per a canviar la contrasenya del compte"
 
 #, fuzzy
 msgid "An error occurred while trying to change your password."
+msgstr "Cliqui per a canviar la contrasenya del compte"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Cliqui per a canviar la contrasenya del compte"
 
 msgid "Anonymous login not supported"
@@ -2643,9 +2644,6 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-msgid "Hide icon"
-msgstr ""
-
 msgid "Hide this menu"
 msgstr ""
 
@@ -3090,6 +3088,10 @@ msgstr "Uneix-te al xat en grup"
 
 #, fuzzy
 msgid "Join Groupchat"
+msgstr "Uneix-te al xat en grup"
+
+#, fuzzy
+msgid "Join Support Chat"
 msgstr "Uneix-te al xat en grup"
 
 msgid "Join a group chat given by an XMPP Address"
@@ -3619,10 +3621,6 @@ msgstr ""
 
 msgid "Only moderators can see your XMPP address"
 msgstr ""
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr "Només en esdeveniments pendents"
 
 msgid "Open"
 msgstr ""
@@ -4729,6 +4727,9 @@ msgid ""
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 #, fuzzy
@@ -7447,6 +7448,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Off"
 #~ msgstr "Desconnectat"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr "Només en esdeveniments pendents"
 
 #, fuzzy
 #~ msgid "OpenPGP Key"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -960,9 +960,6 @@ msgstr "Може да въведете и друго място за срещи:
 msgid "Always"
 msgstr "Отсъствам"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "<b>Възникна грешка:</b>"
@@ -983,6 +980,10 @@ msgstr "Възникна грешка при създаването на ака�
 
 #, fuzzy
 msgid "An error occurred while trying to change your password."
+msgstr "Възникна грешка при създаването на акаунта"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Възникна грешка при създаването на акаунта"
 
 msgid "Anonymous login not supported"
@@ -2844,10 +2845,6 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "Икона в областта за уведомяване"
-
 msgid "Hide this menu"
 msgstr "Скриване на това меню"
 
@@ -3375,6 +3372,10 @@ msgstr "Влизане в стая"
 
 #, fuzzy
 msgid "Join Groupchat"
+msgstr "Влизане в стая"
+
+#, fuzzy
+msgid "Join Support Chat"
 msgstr "Влизане в стая"
 
 #, fuzzy
@@ -3948,10 +3949,6 @@ msgstr ""
 
 msgid "Only moderators can see your XMPP address"
 msgstr ""
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr "Показване на всички _чакащи събития"
 
 #, fuzzy
 msgid "Open"
@@ -5133,6 +5130,9 @@ msgid ""
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 #, fuzzy
@@ -9786,6 +9786,10 @@ msgstr ""
 #~ msgstr "Скриване на всички бутони в прозорците за разговор."
 
 #, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "Икона в областта за уведомяване"
+
+#, fuzzy
 #~ msgid "Hide the chat buttons"
 #~ msgstr "Употреба: /%s, скрива бутоните за разговор."
 
@@ -11008,6 +11012,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "Имате непрочетени съобщения"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr "Показване на всички _чакащи събития"
 
 #, fuzzy
 #~ msgid "Open _Containing Folder"

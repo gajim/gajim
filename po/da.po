@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -964,9 +964,6 @@ msgstr "Du kan også indtaste et alternativt mødested:"
 msgid "Always"
 msgstr "Borte"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "<b>En fejl er opstået:</b>"
@@ -987,6 +984,10 @@ msgstr "Under oprettelsen af kontoen opstod der en fejl"
 
 #, fuzzy
 msgid "An error occurred while trying to change your password."
+msgstr "Under oprettelsen af kontoen opstod der en fejl"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Under oprettelsen af kontoen opstod der en fejl"
 
 msgid "Anonymous login not supported"
@@ -2840,10 +2841,6 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "Statusikon"
-
 msgid "Hide this menu"
 msgstr "Skjul denne menu"
 
@@ -3368,6 +3365,10 @@ msgstr "Bliv med i en Gruppe Samtale"
 
 #, fuzzy
 msgid "Join Groupchat"
+msgstr "Bliv med i en Gruppe Samtale"
+
+#, fuzzy
+msgid "Join Support Chat"
 msgstr "Bliv med i en Gruppe Samtale"
 
 #, fuzzy
@@ -3940,13 +3941,6 @@ msgstr ""
 
 msgid "Only moderators can see your XMPP address"
 msgstr ""
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr ""
-"Aldrig\n"
-"Kun ved ventende hændelser\n"
-"Altid"
 
 #, fuzzy
 msgid "Open"
@@ -5123,6 +5117,9 @@ msgid ""
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 #, fuzzy
@@ -9765,6 +9762,10 @@ msgstr ""
 #~ msgid "Hide all buttons in chat windows"
 #~ msgstr "Skjul alle knapperne i samtale vinduer."
 
+#, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "Statusikon"
+
 #~ msgid "Hides the banner in two persons chat window"
 #~ msgstr "Skjuler banneret i et to personers samtalevindue"
 
@@ -11013,6 +11014,13 @@ msgstr ""
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "Du har ulæste beskeder"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr ""
+#~ "Aldrig\n"
+#~ "Kun ved ventende hændelser\n"
+#~ "Altid"
 
 #, fuzzy
 #~ msgid "Open _Containing Folder"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -985,9 +985,6 @@ msgstr "באפשרותך להזין זירה אלטרנטיבית:"
 msgid "Always"
 msgstr "תמיד"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "<b>אירעה שגיאה:</b>"
@@ -1008,6 +1005,10 @@ msgstr "אירעה שגיאה בעת מהלך יצירת חשבון"
 
 #, fuzzy
 msgid "An error occurred while trying to change your password."
+msgstr "אירעה שגיאה בעת מהלך יצירת חשבון"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "אירעה שגיאה בעת מהלך יצירת חשבון"
 
 msgid "Anonymous login not supported"
@@ -2907,10 +2908,6 @@ msgstr "שלום, שמי $name."
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "הסתר תפריט זה"
-
 msgid "Hide this menu"
 msgstr "הסתר תפריט זה"
 
@@ -3467,6 +3464,10 @@ msgstr "הצטרף לשיחת קבוצה"
 
 #, fuzzy
 msgid "Join Groupchat"
+msgstr "הצטרף לשיחת קבוצה"
+
+#, fuzzy
+msgid "Join Support Chat"
 msgstr "הצטרף לשיחת קבוצה"
 
 #, fuzzy
@@ -4049,10 +4050,6 @@ msgstr ""
 
 msgid "Only moderators can see your XMPP address"
 msgstr ""
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr "רק כאשר ישנם אירועים ממתינים"
 
 #, fuzzy
 msgid "Open"
@@ -5281,6 +5278,9 @@ msgid ""
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 #, fuzzy
@@ -9894,6 +9894,10 @@ msgstr ""
 #~ msgid "Hide all buttons in chat windows"
 #~ msgstr "הסתרת כל הלחצנים בחלונות שיחה"
 
+#, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "הסתר תפריט זה"
+
 #~ msgid "Hide the chat buttons"
 #~ msgstr "הסתרת לחצני שיחה"
 
@@ -11161,6 +11165,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "נותרו הודעות אשר לא נקראו"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr "רק כאשר ישנם אירועים ממתינים"
 
 #, fuzzy
 #~ msgid "Open _Containing Folder"

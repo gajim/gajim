@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -936,9 +936,6 @@ msgstr ""
 msgid "Always"
 msgstr "Ezvezant"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "Une erreur de protocole s'est produite :"
@@ -960,6 +957,10 @@ msgstr "Bez ez eus bet ur fazi en ur grouiñ ar gont"
 
 #, fuzzy
 msgid "An error occurred while trying to change your password."
+msgstr "Bez ez eus bet ur fazi en ur grouiñ ar gont"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Bez ez eus bet ur fazi en ur grouiñ ar gont"
 
 msgid "Anonymous login not supported"
@@ -2786,10 +2787,6 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "Kuzhat ar meuziad-mañ"
-
 msgid "Hide this menu"
 msgstr "Kuzhat ar meuziad-mañ"
 
@@ -3268,6 +3265,10 @@ msgstr "Ebarzhiñ ur sal-flapiñ"
 
 #, fuzzy
 msgid "Join Groupchat"
+msgstr "Ebarzhiñ ur sal-flapiñ"
+
+#, fuzzy
+msgid "Join Support Chat"
 msgstr "Ebarzhiñ ur sal-flapiñ"
 
 #, fuzzy
@@ -3832,10 +3833,6 @@ msgstr ""
 
 msgid "Only moderators can see your XMPP address"
 msgstr ""
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr "Diskouez an holl _zarvoudoù o c'hortoz"
 
 #, fuzzy
 msgid "Open"
@@ -5005,6 +5002,9 @@ msgid ""
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 #, fuzzy
@@ -9180,6 +9180,10 @@ msgstr ""
 #~ msgstr "A guzha an nozelennoù er prenestroù webgaoz"
 
 #, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "Kuzhat ar meuziad-mañ"
+
+#, fuzzy
 #~ msgid "Hide the chat buttons"
 #~ msgstr "Usage: /%s, cache les boutons de discussion."
 
@@ -10141,6 +10145,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "Kemennadennoù nevez ho peus"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr "Diskouez an holl _zarvoudoù o c'hortoz"
 
 #, fuzzy
 #~ msgid "Open _Containing Folder"

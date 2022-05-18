@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2022-04-22 21:28+0000\n"
 "Last-Translator: bodqhrohro <bodqhrohro@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -875,9 +875,6 @@ msgstr "Альтернативное место (необязательно) ...
 msgid "Always"
 msgstr "Всегда"
 
-msgid "Always show icon"
-msgstr "Всегда показывать иконку"
-
 msgid "An Error Occurred"
 msgstr "Произошла ошибка"
 
@@ -896,6 +893,10 @@ msgid "An error occurred while exporting your messages"
 msgstr "Произошла ошибка при попытке изменить Ваш пароль."
 
 msgid "An error occurred while trying to change your password."
+msgstr "Произошла ошибка при попытке изменить Ваш пароль."
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Произошла ошибка при попытке изменить Ваш пароль."
 
 msgid "Anonymous login not supported"
@@ -2598,9 +2599,6 @@ msgstr "Привет, я $name."
 msgid "Helps to establish calls through firewalls"
 msgstr "Помогает устанавливать звонки через брандмауэры"
 
-msgid "Hide icon"
-msgstr "Скрыть иконку"
-
 msgid "Hide this menu"
 msgstr "Скрыть это меню"
 
@@ -3100,6 +3098,10 @@ msgstr "Войти в комнату"
 
 msgid "Join Groupchat"
 msgstr "Присоединиться к групповому чату"
+
+#, fuzzy
+msgid "Join Support Chat"
+msgstr "Войти в комнату"
 
 msgid "Join a group chat given by an XMPP Address"
 msgstr "Присоединиться к групповому чату по XMPP-адресу"
@@ -3633,9 +3635,6 @@ msgstr "Только администраторы и владельцы могу
 
 msgid "Only moderators can see your XMPP address"
 msgstr "Только модераторы могут видеть ваш адрес XMPP"
-
-msgid "Only show for pending events"
-msgstr "Показывать только ожидающие события"
 
 msgid "Open"
 msgstr "Открыть"
@@ -4732,6 +4731,9 @@ msgstr ""
 "Укажите статус и настроение, чтобы показать друзьям, как Вы себя чувствуете"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 msgid "Settings"
@@ -7802,6 +7804,9 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgstr ""
 #~ "Всегда проверять при запуске является ли Gajim основным jabber-клиентом"
 
+#~ msgid "Always show icon"
+#~ msgstr "Всегда показывать иконку"
+
 #~ msgid "Always use GNOME default applications"
 #~ msgstr "Всегда использовать приложения GNOME по умолчанию"
 
@@ -9575,6 +9580,9 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Hide all buttons in chat windows"
 #~ msgstr "Не показывать кнопки в окнах чата"
 
+#~ msgid "Hide icon"
+#~ msgstr "Скрыть иконку"
+
 #~ msgid "Hide the chat buttons"
 #~ msgstr "Скрыть кнопки в окне беседы"
 
@@ -11043,6 +11051,9 @@ msgstr "Выберите изображение или перетащите ег
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "У вас есть непрочитанные сообщения"
+
+#~ msgid "Only show for pending events"
+#~ msgstr "Показывать только ожидающие события"
 
 #~ msgid "Open Events"
 #~ msgstr "Открыть события"

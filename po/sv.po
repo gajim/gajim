@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2009-10-29 10:21+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -952,9 +952,6 @@ msgstr ""
 msgid "Always"
 msgstr "Frånvarande"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "<b>Ett fel har inträffat:</b>"
@@ -975,6 +972,10 @@ msgstr "Ett fel uppstod när kontot skapades"
 
 #, fuzzy
 msgid "An error occurred while trying to change your password."
+msgstr "Ett fel uppstod när kontot skapades"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Ett fel uppstod när kontot skapades"
 
 msgid "Anonymous login not supported"
@@ -2810,10 +2811,6 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "Aktivitetsikon"
-
 msgid "Hide this menu"
 msgstr "Dölj denna meny"
 
@@ -3317,6 +3314,10 @@ msgstr "Gå in i gruppchatt"
 
 #, fuzzy
 msgid "Join Groupchat"
+msgstr "Gå in i gruppchatt"
+
+#, fuzzy
+msgid "Join Support Chat"
 msgstr "Gå in i gruppchatt"
 
 #, fuzzy
@@ -3883,13 +3884,6 @@ msgstr ""
 
 msgid "Only moderators can see your XMPP address"
 msgstr ""
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr ""
-"Aldrig\n"
-"Endast vid väntande händelser\n"
-"Alltid"
 
 #, fuzzy
 msgid "Open"
@@ -5070,6 +5064,9 @@ msgid ""
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 #, fuzzy
@@ -9902,6 +9899,10 @@ msgstr ""
 #~ msgstr "Dölj alla knappar i chattfönster"
 
 #, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "Aktivitetsikon"
+
+#, fuzzy
 #~ msgid "Hide the chat buttons"
 #~ msgstr "Användning: /%s, döljer chattknapparna."
 
@@ -11187,6 +11188,13 @@ msgstr ""
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "Du har olästa meddelanden"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr ""
+#~ "Aldrig\n"
+#~ "Endast vid väntande händelser\n"
+#~ "Alltid"
 
 #~ msgid "Open Download Page"
 #~ msgstr "Öppna nerladdningssida"

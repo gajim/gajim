@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -941,9 +941,6 @@ msgstr ""
 msgid "Always"
 msgstr "Kanpoan"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "<b>Akats bat gertatu da:</b>"
@@ -965,6 +962,10 @@ msgstr "Errore bat gertatu da kontua sortzen zen bitartean"
 
 #, fuzzy
 msgid "An error occurred while trying to change your password."
+msgstr "Errore bat gertatu da kontua sortzen zen bitartean"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Errore bat gertatu da kontua sortzen zen bitartean"
 
 msgid "Anonymous login not supported"
@@ -2815,10 +2816,6 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "Ezkutatu Menua"
-
 msgid "Hide this menu"
 msgstr "Ezkutatu Menua"
 
@@ -3321,6 +3318,10 @@ msgstr "Txat Taldean Sartu"
 
 #, fuzzy
 msgid "Join Groupchat"
+msgstr "Txat Taldean Sartu"
+
+#, fuzzy
+msgid "Join Support Chat"
 msgstr "Txat Taldean Sartu"
 
 #, fuzzy
@@ -3890,10 +3891,6 @@ msgstr ""
 
 msgid "Only moderators can see your XMPP address"
 msgstr ""
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr "Ikusi Gabeko _Gertaerak"
 
 #, fuzzy
 msgid "Open"
@@ -5071,6 +5068,9 @@ msgid ""
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 #, fuzzy
@@ -9530,6 +9530,10 @@ msgstr ""
 #~ msgstr "Ezkutatu botoiak txat taldeko leihoan."
 
 #, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "Ezkutatu Menua"
+
+#, fuzzy
 #~ msgid "Hide the chat buttons"
 #~ msgstr "Erabilera:/%s, ezkutatu txat-eko botoilak."
 
@@ -10643,6 +10647,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "Irakurri gabeko mezu bat duzu"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr "Ikusi Gabeko _Gertaerak"
 
 #, fuzzy
 #~ msgid "Open _Containing Folder"

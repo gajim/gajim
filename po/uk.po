@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2013-08-30 12:04+0300\n"
 "Last-Translator: Sergiy Yegorov <prapor@unixzone.org.ua>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
@@ -967,9 +967,6 @@ msgstr "Ви також можете вказати альтернативне �
 msgid "Always"
 msgstr "Завжди"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "<b>Сталася помилка:</b>"
@@ -990,6 +987,10 @@ msgstr "Під час спроби створення облікового за�
 
 #, fuzzy
 msgid "An error occurred while trying to change your password."
+msgstr "Під час спроби створення облікового запису сталася помилка"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Під час спроби створення облікового запису сталася помилка"
 
 msgid "Anonymous login not supported"
@@ -2842,10 +2843,6 @@ msgstr "Привіт, я $name."
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "Сховати це меню"
-
 msgid "Hide this menu"
 msgstr "Сховати це меню"
 
@@ -3405,6 +3402,10 @@ msgstr "Приєднатись до групової балачки"
 
 #, fuzzy
 msgid "Join Groupchat"
+msgstr "Приєднатись до групової балачки"
+
+#, fuzzy
+msgid "Join Support Chat"
 msgstr "Приєднатись до групової балачки"
 
 #, fuzzy
@@ -3982,10 +3983,6 @@ msgstr ""
 
 msgid "Only moderators can see your XMPP address"
 msgstr ""
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr "Лише події, що очікують уваги"
 
 #, fuzzy
 msgid "Open"
@@ -5179,6 +5176,9 @@ msgid ""
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 #, fuzzy
@@ -9896,6 +9896,10 @@ msgstr ""
 #~ msgid "Hide all buttons in chat windows"
 #~ msgstr "Сховати усі кнопки у вікнах балачок"
 
+#, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "Сховати це меню"
+
 #~ msgid "Hide the chat buttons"
 #~ msgstr "Сховати кнопки балачки"
 
@@ -11208,6 +11212,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "У вас є непрочитані повідомлення"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr "Лише події, що очікують уваги"
 
 #, fuzzy
 #~ msgid "Open _Containing Folder"

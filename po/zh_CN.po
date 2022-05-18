@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
-"PO-Revision-Date: 2022-05-09 05:29+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"PO-Revision-Date: 2022-05-17 15:29+0000\n"
 "Last-Translator: Tommy He <lovenemesis@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
 "gajim/master/zh_Hans/>\n"
@@ -840,9 +840,6 @@ msgstr "替代地点(可选)…"
 msgid "Always"
 msgstr "总是"
 
-msgid "Always show icon"
-msgstr "总是显示图标"
-
 msgid "An Error Occurred"
 msgstr "发生了一个错误"
 
@@ -860,6 +857,10 @@ msgstr "在导出您的消息时发生了一个错误"
 
 msgid "An error occurred while trying to change your password."
 msgstr "在更改您的密码时发生了一个错误。"
+
+#, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
+msgstr "在尝试创建位于 %(path)s 的文件时发生错误: %(error)s"
 
 msgid "Anonymous login not supported"
 msgstr "不支持匿名登录"
@@ -2436,9 +2437,6 @@ msgstr "你好，我是 $name. %s"
 msgid "Helps to establish calls through firewalls"
 msgstr "帮助穿透防火墙以建立通话"
 
-msgid "Hide icon"
-msgstr "隐藏图标"
-
 msgid "Hide this menu"
 msgstr "隐藏本菜单"
 
@@ -2888,6 +2886,9 @@ msgstr "加入群聊吗？"
 
 msgid "Join Groupchat"
 msgstr "加入群聊"
+
+msgid "Join Support Chat"
+msgstr "加入支持聊天"
 
 msgid "Join a group chat given by an XMPP Address"
 msgstr "加入 XMPP 地址给出的群聊"
@@ -3385,9 +3386,6 @@ msgstr "只有管理员和所有者可以修改从属关系"
 
 msgid "Only moderators can see your XMPP address"
 msgstr "只有主持人可以看到您的 XMPP 地址"
-
-msgid "Only show for pending events"
-msgstr "仅显示未处理的事件"
 
 msgid "Open"
 msgstr "打开"
@@ -4404,6 +4402,9 @@ msgstr "设置您的活动、曲调和心境来向您的朋友展示您的感觉
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr "设置一个环境变量从而打印 GLib 调试信息"
+
+msgid "Setting is locked by the system"
+msgstr "设定被系统锁定"
 
 msgid "Settings"
 msgstr "设定"
@@ -5995,8 +5996,9 @@ msgstr "改变账户的状态。如果不指明，将改变所有设置了\"与�
 msgid ""
 "change the priority of the given account. If not specified, change status of "
 "all accounts that have \"sync with global status\" option set"
-msgstr "改变指定账户的优先级。如果不指明，将改变所有设置了\"与全局状态同步"
-"\"选项的账户"
+msgstr ""
+"改变指定账户的优先级。如果不指明，将改变所有设置了\"与全局状态同步\"选项的账"
+"户"
 
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "chat;messaging;im;xmpp;voip;"
@@ -6094,8 +6096,9 @@ msgstr "消息标题"
 msgid ""
 "one of: offline, online, chat, away, xa, dnd. If not set, use account's "
 "previous status"
-msgstr "下列状态之一: offline, online, chat, away, xa, "
-"dnd。如果没有设置，将使用账户先前的状态"
+msgstr ""
+"下列状态之一: offline, online, chat, away, xa, dnd。如果没有设置，将使用账户"
+"先前的状态"
 
 msgid "or"
 msgstr "或者"
@@ -7162,6 +7165,9 @@ msgstr "或者在这里卸下"
 
 #~ msgid "Always check to see if Gajim is the default Jabber client on startup"
 #~ msgstr "总是在启动时检测 Gajim 是否是默认的 Jabber 客户端"
+
+#~ msgid "Always show icon"
+#~ msgstr "总是显示图标"
 
 #~ msgid "Always use this nickname when there is a conflict"
 #~ msgstr "在发生冲突时总是使用这个昵称"
@@ -8747,6 +8753,9 @@ msgstr "或者在这里卸下"
 #~ msgid "Hide all buttons in chat windows"
 #~ msgstr "在聊天窗口中隐藏所有按钮"
 
+#~ msgid "Hide icon"
+#~ msgstr "隐藏图标"
+
 #~ msgid "Hides the banner in two persons chat window"
 #~ msgstr "在双人聊天窗口中隐藏标语"
 
@@ -9898,6 +9907,9 @@ msgstr "或者在这里卸下"
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "您有未读消息"
+
+#~ msgid "Only show for pending events"
+#~ msgstr "仅显示未处理的事件"
 
 #, fuzzy
 #~ msgid "Open _Containing Folder"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2020-07-22 17:59+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -936,9 +936,6 @@ msgstr "Басқа кездесу орны (міндетті емес)..."
 msgid "Always"
 msgstr "Әрқашан"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "<b>Қате орын алды:</b>"
@@ -959,6 +956,10 @@ msgstr "Жасау кезінде қате кетті"
 
 #, fuzzy
 msgid "An error occurred while trying to change your password."
+msgstr "Жасау кезінде қате кетті"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Жасау кезінде қате кетті"
 
 msgid "Anonymous login not supported"
@@ -2776,10 +2777,6 @@ msgstr "Сәлем, мен - $name."
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "Бұл мәзірді жасыру"
-
 msgid "Hide this menu"
 msgstr "Бұл мәзірді жасыру"
 
@@ -3302,6 +3299,10 @@ msgid "Join Group Chat?"
 msgstr "Бөлмеге кіру"
 
 msgid "Join Groupchat"
+msgstr "Бөлмеге кіру"
+
+#, fuzzy
+msgid "Join Support Chat"
 msgstr "Бөлмеге кіру"
 
 #, fuzzy
@@ -3863,10 +3864,6 @@ msgstr ""
 
 msgid "Only moderators can see your XMPP address"
 msgstr ""
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr "Оқиғалар бар болса ғана"
 
 msgid "Open"
 msgstr "Ашу"
@@ -5014,6 +5011,9 @@ msgid ""
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 msgid "Settings"
@@ -9669,6 +9669,10 @@ msgstr ""
 #~ msgid "Hide all buttons in chat windows"
 #~ msgstr "Чат терезесіндегі барлық батырмаларды жасыру"
 
+#, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "Бұл мәзірді жасыру"
+
 #~ msgid "Hides the banner in two persons chat window"
 #~ msgstr "Екі адам чат терезесінде тақырыпты жасырады"
 
@@ -10922,6 +10926,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "Сізде оқылмаған хабарламалар бар"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr "Оқиғалар бар болса ғана"
 
 #, fuzzy
 #~ msgid "Open _Containing Folder"

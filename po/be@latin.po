@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -945,9 +945,6 @@ msgstr ""
 msgid "Always"
 msgstr "Adyjšoŭ"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "<b>Adbyłasia pamyłka:</b>"
@@ -968,6 +965,10 @@ msgstr "Adbyłasia pamyłka padčas stvareńnia kontu"
 
 #, fuzzy
 msgid "An error occurred while trying to change your password."
+msgstr "Adbyłasia pamyłka padčas stvareńnia kontu"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Adbyłasia pamyłka padčas stvareńnia kontu"
 
 msgid "Anonymous login not supported"
@@ -2818,10 +2819,6 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "Schavaj hetaje menu"
-
 msgid "Hide this menu"
 msgstr "Schavaj hetaje menu"
 
@@ -3340,6 +3337,10 @@ msgstr "Dałučysia da pakoju"
 
 #, fuzzy
 msgid "Join Groupchat"
+msgstr "Dałučysia da pakoju"
+
+#, fuzzy
+msgid "Join Support Chat"
 msgstr "Dałučysia da pakoju"
 
 #, fuzzy
@@ -3909,10 +3910,6 @@ msgstr ""
 
 msgid "Only moderators can see your XMPP address"
 msgstr ""
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr "Pakažy ŭsie niahledžanyja _padzieji"
 
 #, fuzzy
 msgid "Open"
@@ -5087,6 +5084,9 @@ msgid ""
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 #, fuzzy
@@ -9596,6 +9596,10 @@ msgstr ""
 #~ msgstr "Chavaje knopki ŭ aknie pakoju."
 
 #, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "Schavaj hetaje menu"
+
+#, fuzzy
 #~ msgid "Hide the chat buttons"
 #~ msgstr "Užyvańnie: /%s, chavaje knopki razmovy."
 
@@ -10715,6 +10719,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "Jość niečytanyja paviedamleńni"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr "Pakažy ŭsie niahledžanyja _padzieji"
 
 #, fuzzy
 #~ msgid "Open _Containing Folder"

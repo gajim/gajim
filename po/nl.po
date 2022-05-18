@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -948,9 +948,6 @@ msgstr "Je kan ook een andere locatie opgeven:"
 msgid "Always"
 msgstr "Altijd"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "<b>Er is een fout opgetreden:</b>"
@@ -972,6 +969,10 @@ msgstr "Er is een fout opgetreden bij het aanmaken van de account"
 
 #, fuzzy
 msgid "An error occurred while trying to change your password."
+msgstr "Er is een fout opgetreden bij het aanmaken van de account"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Er is een fout opgetreden bij het aanmaken van de account"
 
 msgid "Anonymous login not supported"
@@ -2809,10 +2810,6 @@ msgstr "Hallo, ik ben $name."
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "Verberg dit menu"
-
 msgid "Hide this menu"
 msgstr "Verberg dit menu"
 
@@ -3371,6 +3368,10 @@ msgid "Join Group Chat?"
 msgstr "Deelnemen aan groepsgesprek"
 
 msgid "Join Groupchat"
+msgstr "Deelnemen aan groepsgesprek"
+
+#, fuzzy
+msgid "Join Support Chat"
 msgstr "Deelnemen aan groepsgesprek"
 
 #, fuzzy
@@ -3950,10 +3951,6 @@ msgid "Only moderators can see your XMPP address"
 msgstr ""
 "Semi-anoniem\n"
 "<span size=\"small\">(Enkel moderators kunnen je XMPP-adres zien)</span>"
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr "Alleen bij lopende gebeurtenissen"
 
 msgid "Open"
 msgstr "Openen"
@@ -5126,6 +5123,9 @@ msgstr ""
 "voelt"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 msgid "Settings"
@@ -10111,6 +10111,10 @@ msgstr ""
 #~ msgid "Hide all buttons in chat windows"
 #~ msgstr "Verberg alle knoppen in gespreksvensters"
 
+#, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "Verberg dit menu"
+
 #~ msgid "Hide the chat buttons"
 #~ msgstr "Gespreksknoppen verbergen"
 
@@ -11607,6 +11611,10 @@ msgstr ""
 
 #~ msgid "Only enter/leave messages"
 #~ msgstr "Enkel berichten over deelnemen/verlaten"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr "Alleen bij lopende gebeurtenissen"
 
 #~ msgid "Open URI using Gajim"
 #~ msgstr "URI openen met Gajim"

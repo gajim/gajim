@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -948,9 +948,6 @@ msgstr ""
 msgid "Always"
 msgstr "Απομακρυσμένος"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "Δημιουργήθηκε σφάλμα κατά την αφαίρεση της εργασίας !"
@@ -972,6 +969,10 @@ msgstr "Σφάλμα κατά τη διάρκεια δημιουργίας λο�
 
 #, fuzzy
 msgid "An error occurred while trying to change your password."
+msgstr "Σφάλμα κατά τη διάρκεια δημιουργίας λογαριασμού"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Σφάλμα κατά τη διάρκεια δημιουργίας λογαριασμού"
 
 msgid "Anonymous login not supported"
@@ -2809,10 +2810,6 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "Απόκρυψη αυτού του μενού"
-
 msgid "Hide this menu"
 msgstr "Απόκρυψη αυτού του μενού"
 
@@ -3321,6 +3318,10 @@ msgstr "Συμμετοχή σε ομαδική κουβέντα"
 
 #, fuzzy
 msgid "Join Groupchat"
+msgstr "Συμμετοχή σε ομαδική κουβέντα"
+
+#, fuzzy
+msgid "Join Support Chat"
 msgstr "Συμμετοχή σε ομαδική κουβέντα"
 
 #, fuzzy
@@ -3889,10 +3890,6 @@ msgstr ""
 
 msgid "Only moderators can see your XMPP address"
 msgstr ""
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr "Εμφάνιση όλων των γεγονότων που εκκρεμούν"
 
 #, fuzzy
 msgid "Open"
@@ -5073,6 +5070,9 @@ msgid ""
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 #, fuzzy
@@ -9580,6 +9580,10 @@ msgstr ""
 #~ msgstr "Αποκρύπτει τα κουμπιά σε παράθυρο ομαδικής κουβέντας"
 
 #, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "Απόκρυψη αυτού του μενού"
+
+#, fuzzy
 #~ msgid "Hide the chat buttons"
 #~ msgstr "Χρήση: /%s, αποκρύπτει τα κουμπιά της κουβέντας."
 
@@ -10716,6 +10720,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "Έχετε μη-αναγνωσμένα μηνύματα"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr "Εμφάνιση όλων των γεγονότων που εκκρεμούν"
 
 #~ msgid "Open Download Page"
 #~ msgstr "Άνοιγμα Σελίδας Λήψης"

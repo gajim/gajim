@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2009-11-20 20:49+1100\n"
 "Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: English <en_gb@li.org>\n"
@@ -951,9 +951,6 @@ msgstr "You may also enter an alternate venue:"
 msgid "Always"
 msgstr "Away"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "<b>An error has occurred:</b>"
@@ -974,6 +971,10 @@ msgstr "An error occurred during account creation"
 
 #, fuzzy
 msgid "An error occurred while trying to change your password."
+msgstr "An error occurred during account creation"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "An error occurred during account creation"
 
 msgid "Anonymous login not supported"
@@ -2821,10 +2822,6 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "Trayicon"
-
 msgid "Hide this menu"
 msgstr "Hide this menu"
 
@@ -3345,6 +3342,10 @@ msgstr "Join Group Chat"
 
 #, fuzzy
 msgid "Join Groupchat"
+msgstr "Join Group Chat"
+
+#, fuzzy
+msgid "Join Support Chat"
 msgstr "Join Group Chat"
 
 #, fuzzy
@@ -3915,10 +3916,6 @@ msgstr ""
 
 msgid "Only moderators can see your XMPP address"
 msgstr ""
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr "Only when pending events"
 
 #, fuzzy
 msgid "Open"
@@ -5097,6 +5094,9 @@ msgid ""
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 #, fuzzy
@@ -9913,6 +9913,10 @@ msgstr ""
 #~ msgid "Hide all buttons in chat windows"
 #~ msgstr "Hide all buttons in chat windows"
 
+#, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "Trayicon"
+
 #~ msgid "Hide the chat buttons"
 #~ msgstr "Hide the chat buttons"
 
@@ -11247,6 +11251,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "You have unread messages"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr "Only when pending events"
 
 #, fuzzy
 #~ msgid "Open _Containing Folder"

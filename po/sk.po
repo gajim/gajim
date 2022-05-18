@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -950,9 +950,6 @@ msgstr ""
 msgid "Always"
 msgstr "Preč"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "<b>Vyskytla sa chyba:</b>"
@@ -973,6 +970,10 @@ msgstr "Vyskytla sa chyba počas tvorby účtu"
 
 #, fuzzy
 msgid "An error occurred while trying to change your password."
+msgstr "Vyskytla sa chyba počas tvorby účtu"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Vyskytla sa chyba počas tvorby účtu"
 
 msgid "Anonymous login not supported"
@@ -2824,10 +2825,6 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "Trayikona"
-
 msgid "Hide this menu"
 msgstr "Skryť toto menu"
 
@@ -3345,6 +3342,10 @@ msgstr "Pripojiť sa k diskusnej skupine"
 
 #, fuzzy
 msgid "Join Groupchat"
+msgstr "Pripojiť sa k diskusnej skupine"
+
+#, fuzzy
+msgid "Join Support Chat"
 msgstr "Pripojiť sa k diskusnej skupine"
 
 #, fuzzy
@@ -3912,13 +3913,6 @@ msgstr ""
 
 msgid "Only moderators can see your XMPP address"
 msgstr ""
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr ""
-"Nikdy\n"
-"Len ak čakajú udalosti\n"
-"Vždy"
 
 #, fuzzy
 msgid "Open"
@@ -5099,6 +5093,9 @@ msgid ""
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 #, fuzzy
@@ -9750,6 +9747,10 @@ msgstr ""
 #~ msgstr "Skryje všetky tlačidlá v oknách rozhovorov"
 
 #, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "Trayikona"
+
+#, fuzzy
 #~ msgid "Hide the chat buttons"
 #~ msgstr "Použitie: /%s, skryje tlačidlá rozhovoru."
 
@@ -10908,6 +10909,13 @@ msgstr ""
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "Máte neprečítané správy"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr ""
+#~ "Nikdy\n"
+#~ "Len ak čakajú udalosti\n"
+#~ "Vždy"
 
 #, fuzzy
 #~ msgid "Open _Containing Folder"

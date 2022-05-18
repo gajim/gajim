@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -943,9 +943,6 @@ msgstr ""
 msgid "Always"
 msgstr "Сышоў"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "<b>Адбылася памылка:</b>"
@@ -966,6 +963,10 @@ msgstr "Адбылася памылка ў часе стварэння раху�
 
 #, fuzzy
 msgid "An error occurred while trying to change your password."
+msgstr "Адбылася памылка ў часе стварэння рахунка"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Адбылася памылка ў часе стварэння рахунка"
 
 msgid "Anonymous login not supported"
@@ -2814,10 +2815,6 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "Схаваць гэтае меню"
-
 msgid "Hide this menu"
 msgstr "Схаваць гэтае меню"
 
@@ -3329,6 +3326,10 @@ msgstr "Удзельнічаць у групавой размове"
 
 #, fuzzy
 msgid "Join Groupchat"
+msgstr "Удзельнічаць у групавой размове"
+
+#, fuzzy
+msgid "Join Support Chat"
 msgstr "Удзельнічаць у групавой размове"
 
 #, fuzzy
@@ -3898,10 +3899,6 @@ msgstr ""
 
 msgid "Only moderators can see your XMPP address"
 msgstr ""
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr "Паказаць нягледжаныя _падзеі"
 
 #, fuzzy
 msgid "Open"
@@ -5072,6 +5069,9 @@ msgid ""
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 #, fuzzy
@@ -9573,6 +9573,10 @@ msgstr ""
 #~ msgstr "Схаваць кнопкі групавой размовы."
 
 #, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "Схаваць гэтае меню"
+
+#, fuzzy
 #~ msgid "Hide the chat buttons"
 #~ msgstr "Карыстанне: /%s, хавае кнопкі размовы."
 
@@ -10678,6 +10682,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "Ёсць нечытаныя паведамленні"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr "Паказаць нягледжаныя _падзеі"
 
 #, fuzzy
 #~ msgid "Open _Containing Folder"

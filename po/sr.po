@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -959,9 +959,6 @@ msgstr "Можете такође унети и алтернативну лок�
 msgid "Always"
 msgstr "Одсутан"
 
-msgid "Always show icon"
-msgstr ""
-
 #, fuzzy
 msgid "An Error Occurred"
 msgstr "<b>Догодила се грешка:</b>"
@@ -982,6 +979,10 @@ msgstr "Појавила се грешка при креирању налога"
 
 #, fuzzy
 msgid "An error occurred while trying to change your password."
+msgstr "Појавила се грешка при креирању налога"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Појавила се грешка при креирању налога"
 
 msgid "Anonymous login not supported"
@@ -2841,10 +2842,6 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "Сакриј овај мени"
-
 msgid "Hide this menu"
 msgstr "Сакриј овај мени"
 
@@ -3365,6 +3362,10 @@ msgstr "Придружи се групном разговору"
 
 #, fuzzy
 msgid "Join Groupchat"
+msgstr "Придружи се групном разговору"
+
+#, fuzzy
+msgid "Join Support Chat"
 msgstr "Придружи се групном разговору"
 
 #, fuzzy
@@ -3934,10 +3935,6 @@ msgstr ""
 
 msgid "Only moderators can see your XMPP address"
 msgstr ""
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr "Само за догађаје на чекању"
 
 #, fuzzy
 msgid "Open"
@@ -5115,6 +5112,9 @@ msgid ""
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 #, fuzzy
@@ -9436,6 +9436,10 @@ msgstr ""
 #~ msgstr "Сакриј сву дугмад у прозору разговора"
 
 #, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "Сакриј овај мени"
+
+#, fuzzy
 #~ msgid "Hide the chat buttons"
 #~ msgstr "Начин коришћења: /%s, сакрива дугмад."
 
@@ -10565,6 +10569,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "Имате непрочитаних порука"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr "Само за догађаје на чекању"
 
 #, fuzzy
 #~ msgid "Open _Containing Folder"

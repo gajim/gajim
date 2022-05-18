@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-08 13:41+0000\n"
+"POT-Creation-Date: 2022-05-17 21:36+0000\n"
 "PO-Revision-Date: 2020-08-19 19:27+0000\n"
 "Last-Translator: Vincent L <vincent.laporte+gajim@mailbox.org>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -939,9 +939,6 @@ msgstr ""
 msgid "Always"
 msgstr "Fora"
 
-msgid "Always show icon"
-msgstr ""
-
 msgid "An Error Occurred"
 msgstr ""
 
@@ -960,6 +957,10 @@ msgstr "Eraro okazis dum kreado de konto"
 
 #, fuzzy
 msgid "An error occurred while trying to change your password."
+msgstr "Eraro okazis dum kreado de konto"
+
+#, fuzzy, python-format
+msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Eraro okazis dum kreado de konto"
 
 msgid "Anonymous login not supported"
@@ -2810,10 +2811,6 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-#, fuzzy
-msgid "Hide icon"
-msgstr "Kaŝi tiun ĉi menuon"
-
 msgid "Hide this menu"
 msgstr "Kaŝi tiun ĉi menuon"
 
@@ -3323,6 +3320,10 @@ msgstr "Eniri babilejen"
 
 #, fuzzy
 msgid "Join Groupchat"
+msgstr "Eniri babilejen"
+
+#, fuzzy
+msgid "Join Support Chat"
 msgstr "Eniri babilejen"
 
 #, fuzzy
@@ -3891,10 +3892,6 @@ msgstr ""
 
 msgid "Only moderators can see your XMPP address"
 msgstr ""
-
-#, fuzzy
-msgid "Only show for pending events"
-msgstr "Montri ĉiujn nelegitajn _eventojn"
 
 #, fuzzy
 msgid "Open"
@@ -5069,6 +5066,9 @@ msgid ""
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
+msgstr ""
+
+msgid "Setting is locked by the system"
 msgstr ""
 
 #, fuzzy
@@ -9576,6 +9576,10 @@ msgstr ""
 #~ msgstr "Kaŝas la butonojn en babileja fenestro."
 
 #, fuzzy
+#~ msgid "Hide icon"
+#~ msgstr "Kaŝi tiun ĉi menuon"
+
+#, fuzzy
 #~ msgid "Hide the chat buttons"
 #~ msgstr "Uzado: /%s, - kaŝas la babiladajn butonojn."
 
@@ -10699,6 +10703,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Only enter/leave messages"
 #~ msgstr "Vi havas nelegitajn mesaĝojn"
+
+#, fuzzy
+#~ msgid "Only show for pending events"
+#~ msgstr "Montri ĉiujn nelegitajn _eventojn"
 
 #, fuzzy
 #~ msgid "Open _Containing Folder"
