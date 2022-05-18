@@ -38,8 +38,8 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 
 from .const import DEFAULT_WORKSPACE_COLOR
+from .util import load_icon_surface
 from .util import load_pixbuf
-from .util import load_icon_pixbuf
 from .util import text_to_color
 from .util import scale_with_ratio
 from .util import get_css_show_class
@@ -173,30 +173,6 @@ def add_status_to_avatar(surface: cairo.ImageSurface,
         context.set_source_rgb(255, 255, 255)
         context.set_line_width(clip_radius / 4)
         context.stroke()
-
-    return context.get_target()
-
-
-def get_icon_avatar(size: int,
-                    scale: int,
-                    icon_name: str) -> cairo.ImageSurface:
-    width = size
-    height = size
-
-    surface = cairo.ImageSurface(
-        cairo.Format.ARGB32,
-        width * scale,
-        height * scale)
-    surface.set_device_scale(scale, scale)
-    context = cairo.Context(surface)
-
-    pixbuf = load_icon_pixbuf(icon_name, size=size, scale=1)
-    Gdk.cairo_set_source_pixbuf(
-        context,
-        pixbuf,
-        0,
-        0)
-    context.paint()
 
     return context.get_target()
 
@@ -388,7 +364,7 @@ class AvatarStorage(metaclass=Singleton):
         jid = contact.jid
 
         if transport_icon is not None:
-            surface = get_icon_avatar(size, scale, transport_icon)
+            surface = load_icon_surface(transport_icon, size, scale)
             if show is not None:
                 surface = add_status_to_avatar(surface, show)
             self._cache[jid][(size, scale, show)] = surface
@@ -427,7 +403,7 @@ class AvatarStorage(metaclass=Singleton):
                         style: str = 'circle') -> Optional[cairo.ImageSurface]:
 
         if transport_icon is not None:
-            surface = get_icon_avatar(size, scale, transport_icon)
+            surface = load_icon_surface(transport_icon, size, scale)
             self._cache[jid][(size, scale)] = surface
             return surface
 
