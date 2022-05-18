@@ -123,16 +123,20 @@ class FileTransferJingleRow(BaseRow):
         name_widget = self.create_name_widget(contact.name, is_self)
         name_widget.set_halign(Gtk.Align.START)
         name_widget.set_valign(Gtk.Align.START)
-        self.grid.attach(name_widget, 1, 0, 1, 1)
 
         timestamp_widget = self.create_timestamp_widget(self.timestamp)
         timestamp_widget.set_hexpand(True)
-        timestamp_widget.set_halign(Gtk.Align.END)
         timestamp_widget.set_valign(Gtk.Align.START)
-        self.grid.attach(timestamp_widget, 2, 0, 1, 1)
+
+        meta_box = Gtk.Box()
+        meta_box.set_spacing(6)
+        meta_box.add(name_widget)
+        meta_box.add(timestamp_widget)
+        self.grid.attach(meta_box, 1, 0, 1, 1)
 
         self._ui = get_builder('file_transfer_jingle.ui')
         self.grid.attach(self._ui.transfer_box, 1, 1, 1, 1)
+        self._ui.transfer_box.set_halign(Gtk.Align.START)
 
         self._ui.connect_signals(self)
 

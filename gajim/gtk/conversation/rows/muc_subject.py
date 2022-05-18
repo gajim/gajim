@@ -36,11 +36,14 @@ class MUCSubject(BaseRow):
         self.timestamp = datetime.fromtimestamp(timestamp)
         self.db_timestamp = timestamp
 
+        self.grid.set_halign(Gtk.Align.START)
+
         avatar_placeholder = Gtk.Box()
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
         self.grid.attach(avatar_placeholder, 0, 0, 1, 2)
 
         subject_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        subject_box.set_halign(Gtk.Align.START)
         subject_box.get_style_context().add_class('conversation-subject-box')
         subject_box.get_style_context().add_class('gajim-subject-message')
 

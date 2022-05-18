@@ -43,6 +43,11 @@ class CommandOutputRow(BaseRow):
         avatar_placeholder.add(icon)
         self.grid.attach(avatar_placeholder, 0, 0, 1, 1)
 
+        timestamp_widget = self.create_timestamp_widget(self.timestamp)
+        timestamp_widget.set_valign(Gtk.Align.START)
+        timestamp_widget.set_margin_start(0)
+        self.grid.attach(timestamp_widget, 1, 0, 1, 1)
+
         text = GLib.markup_escape_text(text)
         markup = f'<tt>{text}</tt>'
         self._label = SimpleLabel()
@@ -51,12 +56,6 @@ class CommandOutputRow(BaseRow):
         else:
             self._label.get_style_context().add_class('gajim-command-output')
         self._label.set_markup(markup)
-        self.grid.attach(self._label, 1, 0, 1, 1)
-
-        timestamp_widget = self.create_timestamp_widget(self.timestamp)
-        timestamp_widget.set_hexpand(True)
-        timestamp_widget.set_halign(Gtk.Align.END)
-        timestamp_widget.set_valign(Gtk.Align.START)
-        self.grid.attach(timestamp_widget, 3, 0, 1, 1)
+        self.grid.attach(self._label, 1, 1, 1, 1)
 
         self.show_all()

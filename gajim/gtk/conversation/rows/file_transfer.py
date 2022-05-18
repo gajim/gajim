@@ -63,13 +63,12 @@ class FileTransferRow(BaseRow, EventHelper):
         self.grid.attach(avatar_placeholder, 0, 0, 1, 1)
 
         timestamp_widget = self.create_timestamp_widget(self.timestamp)
-        timestamp_widget.set_hexpand(True)
-        timestamp_widget.set_halign(Gtk.Align.END)
+        timestamp_widget.set_halign(Gtk.Align.START)
         timestamp_widget.set_valign(Gtk.Align.START)
-        self.grid.attach(timestamp_widget, 2, 0, 1, 1)
+        self.grid.attach(timestamp_widget, 1, 0, 1, 1)
 
         self._ui = get_builder('file_transfer.ui')
-        self.grid.attach(self._ui.transfer_box, 1, 0, 1, 1)
+        self.grid.attach(self._ui.transfer_box, 1, 1, 1, 1)
         self._ui.file_name.set_text(transfer.filename)
 
         self.connect('destroy', self._on_destroy)

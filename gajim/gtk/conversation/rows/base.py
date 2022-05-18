@@ -70,7 +70,8 @@ class BaseRow(Gtk.ListBoxRow):
         label = Gtk.Label(label=timestamp_formatted)
         label.set_halign(Gtk.Align.START)
         label.set_valign(Gtk.Align.END)
-        label.set_margin_end(6)
+        label.set_margin_start(6)
+        label.set_margin_end(3)
         label.get_style_context().add_class('conversation-meta')
         label.set_tooltip_text(timestamp.strftime('%a, %d %b %Y - %X'))
         return label

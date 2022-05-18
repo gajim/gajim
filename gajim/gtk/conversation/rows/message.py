@@ -151,15 +151,14 @@ class MessageRow(BaseRow):
         self._meta_box.set_hexpand(True)
         self._meta_box.pack_start(name_widget, False, True, 0)
         timestamp_label = self.create_timestamp_widget(self.timestamp)
-        timestamp_label.set_margin_start(6)
-        self._meta_box.pack_end(timestamp_label, False, True, 0)
+        self._meta_box.pack_start(timestamp_label, False, True, 0)
 
         if kind in ('incoming', 'incoming_queue', 'outgoing'):
             if additional_data is not None:
                 encryption_img = self._get_encryption_image(
                     additional_data, encryption_enabled)
                 if encryption_img:
-                    self._meta_box.pack_end(encryption_img, False, True, 0)
+                    self._meta_box.pack_start(encryption_img, False, True, 0)
 
         if display_marking and app.settings.get_account_setting(
                 account, 'enable_security_labels'):
@@ -201,7 +200,7 @@ class MessageRow(BaseRow):
             if marker in ('received', 'displayed'):
                 self.set_receipt()
 
-        self._meta_box.pack_end(self._message_icons, False, True, 0)
+        self._meta_box.pack_start(self._message_icons, False, True, 0)
         avatar = self._get_avatar(kind, name)
         self._avatar_image = Gtk.Image.new_from_surface(avatar)
 
