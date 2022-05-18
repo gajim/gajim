@@ -1384,7 +1384,11 @@ class MessageArchiveStorage(SqliteStorage):
         If it's a group chat, remove last MAM ID as well.
         """
         account_id = self.get_account_id(account)
-        jid_id = self.get_jid_id(jid)
+        try:
+            jid_id = self.get_jid_id(jid)
+        except ValueError:
+            log.info('No history entries for: %s', jid)
+            return
         sql = 'DELETE FROM logs WHERE account_id = ? AND jid_id = ?'
         self._con.execute(sql, (account_id, jid_id))
 
@@ -1392,7 +1396,11 @@ class MessageArchiveStorage(SqliteStorage):
         log.info('Removed history for: %s', jid)
 
     def forget_jid_data(self, account: str, jid: JID) -> None:
-        jid_id = self.get_jid_id(jid)
+        try:
+            jid_id = self.get_jid_id(jid)
+        except ValueError:
+            log.info('No history entries for: %s', jid)
+            return
         sql = 'DELETE FROM jids WHERE jid_id = ?'
         self._con.execute(sql, (jid_id,))
 
