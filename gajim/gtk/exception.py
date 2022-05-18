@@ -113,6 +113,7 @@ class ExceptionDialog(Gtk.ApplicationWindow):
 
         if not self._sentry_available:
             self._ui.user_feedback_box.set_no_show_all(True)
+            self._ui.infobar.set_no_show_all(False)
             self._ui.infobar.set_revealed(True)
 
         self._ui.report_button.grab_focus()
