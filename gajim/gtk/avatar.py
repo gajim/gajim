@@ -180,17 +180,17 @@ def add_status_to_avatar(surface: cairo.ImageSurface,
 def get_icon_avatar(size: int,
                     scale: int,
                     icon_name: str) -> cairo.ImageSurface:
-
-    if scale is not None:
-        size = size * scale
-
     width = size
     height = size
 
-    surface = cairo.ImageSurface(cairo.Format.ARGB32, width, height)
+    surface = cairo.ImageSurface(
+        cairo.Format.ARGB32,
+        width * scale,
+        height * scale)
+    surface.set_device_scale(scale, scale)
     context = cairo.Context(surface)
 
-    pixbuf = load_icon_pixbuf(icon_name, size=size, scale=scale)
+    pixbuf = load_icon_pixbuf(icon_name, size=size, scale=1)
     Gdk.cairo_set_source_pixbuf(
         context,
         pixbuf,
