@@ -222,14 +222,16 @@ class Plugins(PreferenceBox):
                     _('Update automatically'),
                     SettingType.CONFIG,
                     'plugins_auto_update',
-                    desc=_('Update plugins automatically')),
+                    desc=_('Update plugins automatically'),
+                    bind='plugins_update_check'),
 
             Setting(SettingKind.SWITCH,
                     _('Notify after update'),
                     SettingType.CONFIG,
                     'plugins_notify_after_update',
                     desc=_('Notify me when the automatic '
-                           'update was successful')),
+                           'update was successful'),
+                    bind='plugins_auto_update'),
 
         ]
 
