@@ -16,9 +16,11 @@ options:
       - feat
       - perf
       - fix
+      - imprv
     title_maps:
       feat: New
-      perf: Performance Improvements
+      imprv: Improvements
+      perf: Performance
       fix: Bug Fixes
   header:
     pattern: "^(\\w*)\\:\\s(.*)$"

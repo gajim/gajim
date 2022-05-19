@@ -38,6 +38,7 @@ Every commit message must be prefixed with one of the following tags:
 - feat      (functionality of the application was changed)
 - fix       (something was fixed)
 - perf      (performance related changes)
+- imprv     (improvements)
 - refactor  (code was changed, but the end user will not notice)
 - chore     (reoccuring tasks which need to be done)
 - release   (only used for release commits)
