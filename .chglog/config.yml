@@ -10,13 +10,14 @@ options:
         - feat
         - perf
         - fix
+        - imprv
   commit_groups:
     sort_by: Custom
     title_order:
       - feat
+      - imprv
       - perf
       - fix
-      - imprv
     title_maps:
       feat: New
       imprv: Improvements
