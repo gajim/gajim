@@ -149,7 +149,7 @@ function install_gajim {
         "${QL_VERSION}" "${MINGW_ROOT}"/bin
 
     # Install omemo plugin
-    curl -o "${BUILD_ROOT}"/omemo.zip https://ftp.gajim.org/plugins/master/omemo/omemo_2.8.14.zip
+    curl -o "${BUILD_ROOT}"/omemo.zip https://ftp.gajim.org/plugins/master/omemo/omemo_2.8.15.zip
     7z x -o"${PACKAGE_DIR}"/gajim/data/plugins/omemo "${BUILD_ROOT}"/omemo.zip
 
     # Install language dicts
