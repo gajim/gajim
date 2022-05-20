@@ -1,3 +1,40 @@
+Gajim 1.4.1 (21 May 2022)
+
+  New
+
+  * Add 'Join Support Chat' help item
+
+  Improvements
+
+  * ConversationView: Add date for timestamps older than current date
+  * SearchView: Add margins and border-radius to ResultRow
+  * ConversationView: Move timestamp widget to the left
+
+  Bug Fixes
+
+  * Access jingle transport values fallback correctly
+  * Avatar: Fallback to default avatar when image is missing
+  * Draw icon avatars with correct size and scale
+  * ExceptionDialog: Effectively hide sentry-sdk hint on Windows
+  * HistoryExport: Process folder URI correctly on Windows
+  * HistoryExport: Show error if creating path fails
+  * Improve joining support chat if single account is online
+  * Jingle: Use SendFileDialog for DND and paste events
+  * Trayicon: Remove obsolete config option
+  * #10552 Chat: Handle race condition when calling focus()
+  * #10781 Bookmarks: Ignore bookmarks for roster contacts
+  * #10810 Update unread counter on mention in public MUCs
+  * #10833 Add workspace avatar fallback for missing images
+  * #10849 Set encoding when calling open()
+  * #10850 PluginManager: Make config_dialog required
+  * #10851 Remove iconset leftovers
+  * #10856 Handle missing trust data when displaying messages
+  * #10862 Windows: Hide status icon on shutdown
+  * #10865 Main: Show window correctly on startup
+  * #10880 Don't fail when trying to remove chat history
+  * #10883 Preferences: Add plugin settings binding for better usability
+
+
 Gajim 1.4.0 (11 May 2022)
 
   New
