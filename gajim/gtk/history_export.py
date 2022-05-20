@@ -21,6 +21,7 @@ import logging
 import time
 from datetime import datetime
 from pathlib import Path
+import sys
 
 from gi.repository import Gtk
 
@@ -201,7 +202,11 @@ class SelectAccountDir(Page):
     def _on_file_set(self, button: Gtk.FileChooserButton) -> None:
         uri = button.get_uri()
         assert uri is not None
-        self._export_directory = uri.removeprefix('file://')
+
+        if sys.platform == 'win32':
+            self._export_directory = uri.removeprefix('file:///')
+        else:
+            self._export_directory = uri.removeprefix('file://')
 
     def get_account_and_directory(self) -> tuple[str, str]:
         assert self._account is not None
