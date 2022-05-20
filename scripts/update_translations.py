@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
+
 # File needs to stay compatible to Python 3.7
 # because its run on the Gajim webserver
 
-
+import argparse
 import re
 import subprocess
 from pathlib import Path
@@ -80,6 +82,25 @@ def update_translation_files() -> None:
                        check=True)
 
 
+def cleanup_translations() -> None:
+    for po_file in TRANS_DIR.glob('*.po'):
+        subprocess.run(['msgattrib',
+                        '--output-file',
+                        str(po_file),
+                        '--no-obsolete',
+                        str(po_file)],
+                       cwd=REPO_DIR,
+                       check=True)
+
+
 if __name__ == '__main__':
-    update_translation_template()
-    update_translation_files()
+    parser = argparse.ArgumentParser(description='Update Translations')
+    parser.add_argument('command', choices=['update', 'build', 'cleanup'])
+    args = parser.parse_args()
+
+    if args.command == 'cleanup':
+        cleanup_translations()
+
+    elif args.command == 'update':
+        update_translation_template()
+        update_translation_files()
