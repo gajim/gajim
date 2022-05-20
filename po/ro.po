@@ -4235,7 +4235,8 @@ msgid "Retract message?"
 msgstr "Retragerea mesajului?"
 
 msgid "Returns current status (the global one unless account is specified)"
-msgstr "Returnează starea curentă (cea globală, dacă nu este specificat contul)"
+msgstr ""
+"Returnează starea curentă (cea globală, dacă nu este specificat contul)"
 
 msgid ""
 "Returns current status message (the global one unless account is specified)"
@@ -6344,12 +6345,3 @@ msgstr ""
 
 msgid "…or drop it here"
 msgstr ""
-
-#~ msgid "Always show icon"
-#~ msgstr "Afișați întotdeauna pictograma"
-
-#~ msgid "Hide icon"
-#~ msgstr "Ascundeți pictograma"
-
-#~ msgid "Only show for pending events"
-#~ msgstr "Se afișează numai pentru evenimentele în așteptare"
