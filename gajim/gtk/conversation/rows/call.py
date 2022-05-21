@@ -80,6 +80,7 @@ class CallRow(BaseRow):
             sid = db_message.additional_data.get_value('gajim', 'sid')
             module = self._client.get_module('Jingle')
             self._session = module.get_jingle_session(self._contact.jid, sid)
+            self.log_line_id = db_message.log_line_id
 
         self._avatar_placeholder = Gtk.Box()
         self._avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)

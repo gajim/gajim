@@ -82,6 +82,7 @@ class FileTransferJingleRow(BaseRow):
             self._file_props = FilesProp.getFilePropBySid(sid)
             if self._file_props is None:
                 log.debug('File prop not found for SID: %s', sid)
+            self.log_line_id = db_message.log_line_id
         else:
             assert event is not None
             self._file_props = event.file_props
