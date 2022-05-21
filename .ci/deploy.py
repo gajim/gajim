@@ -44,7 +44,7 @@ def get_gajim_tag() -> str:
     tag = os.environ.get('CI_COMMIT_TAG')
     if tag is None:
         exit('No tag found')
-    return tag.removeprefix('gajim-')
+    return tag
 
 
 def find_linux_tarball(filedir: Path) -> Path:

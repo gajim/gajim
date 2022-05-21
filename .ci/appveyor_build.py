@@ -31,7 +31,7 @@ def get_gajim_version() -> str:
     tag = os.environ.get('CI_COMMIT_TAG')
     if tag is None:
         exit('No tag found')
-    return tag.removesuffix('gajim-')
+    return tag
 
 
 def push_yaml_to_project() -> None:
