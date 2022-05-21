@@ -8,7 +8,7 @@
 * [ ] Merge translations from Weblate
 * [ ] Update `ChangeLog`
 * [ ] Run `./scripts/bump_version.py x.x.x`
-* [ ] Push release tag `gajim-x.x.x`
+* [ ] Push release tag `x.x.x`
 * [ ] Update Debian repository on gajim.org
 
 ## Update
