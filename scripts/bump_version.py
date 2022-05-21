@@ -39,8 +39,8 @@ def bump_flatpak(current_version: str, new_version: str) -> None:
     with FLATPAK.open('r', encoding='utf8') as f:
         content = f.read()
 
-    content = content.replace(f'gajim-{current_version}',
-                              f'gajim-{new_version}', 1)
+    content = content.replace(f'tag: {current_version}',
+                              f'tag: {new_version}', 1)
 
     with FLATPAK.open('w', encoding='utf8') as f:
         f.write(content)
