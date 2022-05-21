@@ -134,6 +134,15 @@ class SearchLogRow(NamedTuple):
     log_line_id: int
 
 
+class HistoryDayRow(NamedTuple):
+    day: int
+
+
+class MessageMetaRow(NamedTuple):
+    log_line_id: int
+    time: float
+
+
 class LastArchiveMessageRow(NamedTuple):
     id: int
     last_mam_id: str
@@ -552,46 +561,6 @@ class MessageArchiveStorage(SqliteStorage):
             tuple(jids) + (before, after)).fetchall()
 
     @timeit
-    def get_messages_for_date(self,
-                              account: str,
-                              jid: str,
-                              date: datetime.datetime):
-        """
-        Load the complete conversation with a given jid on a specific date
-
-        :param account: The account
-
-        :param jid:     The jid for which we request the conversation
-
-        :param date:    datetime.datetime instance
-                        example: datetime.datetime(year, month, day)
-
-        returns a list of namedtuples
-        """
-
-        jids = [jid]
-        account_id = self.get_account_id(account)
-
-        delta = datetime.timedelta(
-            hours=23, minutes=59, seconds=59, microseconds=999999)
-        date_ts = date.timestamp()
-        delta_ts = (date + delta).timestamp()
-
-        sql = '''
-            SELECT contact_name, time, kind, show, message, subject,
-                   additional_data, log_line_id
-            FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
-            AND account_id = {account_id}
-            AND time BETWEEN ? AND ?
-            ORDER BY time DESC, log_line_id DESC
-            '''.format(jids=', '.join('?' * len(jids)),
-                       account_id=account_id)
-
-        return self._con.execute(
-            sql,
-            tuple(jids) + (date_ts, delta_ts)).fetchall()
-
-    @timeit
     def search_log(self,
                    _account: str,
                    jid: JID,
@@ -751,27 +720,17 @@ class MessageArchiveStorage(SqliteStorage):
                 yield result
 
     @timeit
-    def get_days_with_logs(self,
-                           _account: str,
-                           jid: str,
-                           year: int,
-                           month: int) -> Any:
+    def get_days_with_history(self,
+                              account: str,
+                              jid: str,
+                              year: int,
+                              month: int
+                              ) -> list[HistoryDayRow]:
         """
-        Request the days in a month where we received messages
-        for a given `jid`.
-
-        :param account: The account
-
-        :param jid:     The jid for which we request the days
-
-        :param year:    The year
-
-        :param month:   The month
-
-        returns a list of namedtuples
+        Get days in month where messages for 'jid' exist
         """
         jids = [jid]
-
+        account_id = self.get_account_id(account)
         kinds = map(str, [KindConstant.STATUS,
                           KindConstant.GCSTATUS])
 
@@ -785,10 +744,12 @@ class MessageArchiveStorage(SqliteStorage):
             SELECT DISTINCT
             CAST(strftime('%d', time, 'unixepoch', 'localtime') AS INTEGER)
             AS day FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+            AND account_id = {account_id}
             AND time BETWEEN ? AND ?
             AND kind NOT IN ({kinds})
             ORDER BY time
             """.format(jids=', '.join('?' * len(jids)),
+                       account_id=account_id,
                        kinds=', '.join(kinds))
 
         return self._con.execute(sql, tuple(jids) +
@@ -796,26 +757,25 @@ class MessageArchiveStorage(SqliteStorage):
                                       (date + delta).timestamp())).fetchall()
 
     @timeit
-    def get_last_date_that_has_logs(self, _account: str, jid: str) -> Any:
+    def get_last_history_timestamp(self,
+                                   account: str,
+                                   jid: str
+                                   ) -> Optional[float]:
         """
-        Get the timestamp of the last message we received for the jid.
-
-        :param account: The account
-
-        :param jid:     The jid for which we request the last timestamp
-
-        returns a timestamp or None
+        Get the timestamp of the last message we received for the jid
         """
         jids = [jid]
-
+        account_id = self.get_account_id(account)
         kinds = map(str, [KindConstant.STATUS,
                           KindConstant.GCSTATUS])
 
         sql = '''
             SELECT MAX(time) as time FROM logs
             NATURAL JOIN jids WHERE jid IN ({jids})
+            AND account_id = {account_id}
             AND kind NOT IN ({kinds})
-            '''.format(jids=', '.join('?' * len(jids)),
+            '''.format(account_id=account_id,
+                       jids=', '.join('?' * len(jids)),
                        kinds=', '.join(kinds))
 
         # fetchone() returns always at least one Row with all
@@ -823,26 +783,25 @@ class MessageArchiveStorage(SqliteStorage):
         return self._con.execute(sql, tuple(jids)).fetchone().time
 
     @timeit
-    def get_first_date_that_has_logs(self, _account: str, jid: str) -> Any:
+    def get_first_history_timestamp(self,
+                                    account: str,
+                                    jid: str
+                                    ) -> Optional[float]:
         """
-        Get the timestamp of the first message we received for the jid.
-
-        :param account: The account
-
-        :param jid:     The jid for which we request the first timestamp
-
-        returns a timestamp or None
+        Get the timestamp of the first message we received for the jid
         """
         jids = [jid]
-
+        account_id = self.get_account_id(account)
         kinds = map(str, [KindConstant.STATUS,
                           KindConstant.GCSTATUS])
 
         sql = '''
             SELECT MIN(time) as time FROM logs
             NATURAL JOIN jids WHERE jid IN ({jids})
+            AND account_id = {account_id}
             AND kind NOT IN ({kinds})
             '''.format(jids=', '.join('?' * len(jids)),
+                       account_id=account_id,
                        kinds=', '.join(kinds))
 
         # fetchone() returns always at least one Row with all
@@ -850,25 +809,17 @@ class MessageArchiveStorage(SqliteStorage):
         return self._con.execute(sql, tuple(jids)).fetchone().time
 
     @timeit
-    def get_date_has_logs(self,
-                          _account: str,
-                          jid: str,
-                          date: datetime.datetime) -> Any:
+    def date_has_history(self,
+                         account: str,
+                         jid: str,
+                         date: datetime.datetime
+                         ) -> Optional[float]:
         """
-        Get single timestamp of a message we received for the jid
-        in the time range of one day.
-
-        :param account: The account
-
-        :param jid:     The jid for which we request the first timestamp
-
-        :param date:    datetime.datetime instance
-                        example: datetime.datetime(year, month, day)
-
-        returns a timestamp or None
+        Get a single timestamp of a message for 'jid'
+        in time range of one day
         """
         jids = [jid]
-
+        account_id = self.get_account_id(account)
         delta = datetime.timedelta(
             hours=23, minutes=59, seconds=59, microseconds=999999)
 
@@ -878,11 +829,43 @@ class MessageArchiveStorage(SqliteStorage):
         sql = '''
             SELECT time
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+            AND account_id = {account_id}
             AND time BETWEEN ? AND ?
-            '''.format(jids=', '.join('?' * len(jids)))
+            '''.format(jids=', '.join('?' * len(jids)),
+                       account_id=account_id)
 
         return self._con.execute(
             sql, tuple(jids) + (start, end)).fetchone()
+
+    @timeit
+    def get_first_message_meta_for_date(self,
+                                        account: str,
+                                        jid: str,
+                                        date: datetime.datetime
+                                        ) -> Optional[MessageMetaRow]:
+        """
+        Load meta data for the first message of a specific date
+        """
+        jids = [jid]
+        account_id = self.get_account_id(account)
+
+        delta = datetime.timedelta(
+            hours=23, minutes=59, seconds=59, microseconds=999999)
+        date_ts = date.timestamp()
+        delta_ts = (date + delta).timestamp()
+
+        sql = '''
+            SELECT time, log_line_id
+            FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+            AND account_id = {account_id}
+            AND time BETWEEN ? AND ?
+            ORDER BY time ASC, log_line_id ASC
+            '''.format(jids=', '.join('?' * len(jids)),
+                       account_id=account_id)
+
+        return self._con.execute(
+            sql,
+            tuple(jids) + (date_ts, delta_ts)).fetchone()
 
     @timeit
     def deduplicate_muc_message(self,

@@ -18,7 +18,8 @@ from typing import Any
 from typing import Iterator
 from typing import Optional
 
-import datetime
+from datetime import datetime
+from datetime import timedelta
 import itertools
 import logging
 import time
@@ -33,11 +34,14 @@ from nbxmpp import JID
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
+from gajim.common.const import Direction
 from gajim.common.const import KindConstant
 from gajim.common.storage.archive import SearchLogRow
 
 from .conversation.message_widget import MessageWidget
 from .builder import get_builder
+from .util import gtk_month
+from .util import python_month
 
 log = logging.getLogger('gajim.gui.search_view')
 
@@ -59,6 +63,9 @@ class SearchView(Gtk.Box):
         self._results_iterator: Optional[Iterator[SearchLogRow]] = None
         self._scope: str = 'everywhere'
 
+        self._first_date: Optional[datetime] = None
+        self._last_date: Optional[datetime] = None
+
         self._ui = get_builder('search_view.ui')
         self._ui.results_listbox.set_header_func(self._header_func)
         self.add(self._ui.search_box)
@@ -71,6 +78,7 @@ class SearchView(Gtk.Box):
         app.ged.register_event_handler('account-disabled',
                                        ged.GUI1,
                                        self._on_account_state)
+        self._update_calendar()
         self.show_all()
 
     def _on_account_state(self, _event: Any) -> None:
@@ -119,7 +127,7 @@ class SearchView(Gtk.Box):
         text, before_filters = self._strip_filters(text, 'before')
         if before_filters is not None:
             try:
-                before_filters = min([datetime.datetime.fromisoformat(date) for
+                before_filters = min([datetime.fromisoformat(date) for
                                       date in before_filters])
             except ValueError:
                 self._ui.date_hint.show()
@@ -129,14 +137,14 @@ class SearchView(Gtk.Box):
         text, after_filters = self._strip_filters(text, 'after')
         if after_filters is not None:
             try:
-                after_filters = min([datetime.datetime.fromisoformat(date) for
+                after_filters = min([datetime.fromisoformat(date) for
                                      date in after_filters])
                 # if only the day is specified, we want to look after the
                 # end of that day.
                 # if precision is increased,we do want to look during the
                 # day as well.
                 if after_filters.hour == after_filters.minute == 0:
-                    after_filters += datetime.timedelta(days=1)
+                    after_filters += timedelta(days=1)
             except ValueError:
                 self._ui.date_hint.show()
                 return
@@ -202,6 +210,120 @@ class SearchView(Gtk.Box):
 
         self._add_results()
 
+    def _update_calendar(self) -> None:
+        if self._scope == 'everywhere':
+            self._ui.calendar_button.set_sensitive(False)
+        else:
+            self._ui.calendar_button.set_sensitive(True)
+
+            first_log = app.storage.archive.get_first_history_timestamp(
+                self._account, self._jid)
+            if first_log is None:
+                return
+            self._first_date = self._get_date_from_timestamp(first_log)
+            last_log = app.storage.archive.get_last_history_timestamp(
+                self._account, self._jid)
+            if last_log is None:
+                return
+            self._last_date = self._get_date_from_timestamp(last_log)
+
+            month = gtk_month(self._last_date.month)
+            self._ui.calendar.select_month(month, self._last_date.year)
+
+    def _on_month_changed(self, calendar: Gtk.Calendar) -> None:
+        # Mark days with history in calendar
+        year, month, _day = calendar.get_date()
+        if year < 1900:
+            calendar.select_month(0, 1900)
+            calendar.select_day(1)
+            return
+
+        calendar.clear_marks()
+        month = python_month(month)
+
+        history_days = app.storage.archive.get_days_with_history(
+            self._account, self._jid, year, month)
+        for date in history_days:
+            calendar.mark_day(date.day)
+
+    def _on_date_selected(self, calendar: Gtk.Calendar) -> None:
+        year, month, day = calendar.get_date()
+        py_m = python_month(month)
+        date = datetime(year, py_m, day)
+        self._scroll_to_date(date)
+
+    def _on_first_date_selected(self, _button: Gtk.Button) -> None:
+        assert self._first_date is not None
+        gtk_m = gtk_month(self._first_date.month)
+        self._ui.calendar.select_month(gtk_m, self._first_date.year)
+        self._ui.calendar.select_day(self._first_date.day)
+
+    def _on_last_date_selected(self, _button: Gtk.Button) -> None:
+        assert self._last_date is not None
+        gtk_m = gtk_month(self._last_date.month)
+        self._ui.calendar.select_month(gtk_m, self._last_date.year)
+        self._ui.calendar.select_day(self._last_date.day)
+
+    def _on_previous_date_selected(self, _button: Gtk.Button) -> None:
+        delta = timedelta(days=-1)
+        assert self._first_date is not None
+        self._select_date(delta, self._first_date, Direction.NEXT)
+
+    def _on_next_date_selected(self, _button: Gtk.Button) -> None:
+        delta = timedelta(days=1)
+        assert self._last_date is not None
+        self._select_date(delta, self._last_date, Direction.PREV)
+
+    def _select_date(self,
+                     delta: timedelta,
+                     end_date: datetime,
+                     direction: Direction
+                     ) -> None:
+        # Iterate through days until history entry found or
+        # supplied end_date (first_date/last_date) reached
+        year, month, day = self._ui.calendar.get_date()
+        py_m = python_month(month)
+        date = datetime(year, py_m, day)
+
+        history = None
+        while history is None:
+            if direction == Direction.PREV:
+                if end_date <= date:
+                    return
+            else:
+                if end_date >= date:
+                    return
+
+            date = date + delta
+            if date == end_date:
+                break
+            history = app.storage.archive.date_has_history(
+                self._account, self._jid, date)
+
+        gtk_m = gtk_month(date.month)
+        self._ui.calendar.select_month(gtk_m, date.year)
+        self._ui.calendar.select_day(date.day)
+
+    def _scroll_to_date(self, date: datetime) -> None:
+        control = app.window.get_active_control()
+        if control is None:
+            return
+        if control.contact.jid == self._jid:
+            meta_row = app.storage.archive.get_first_message_meta_for_date(
+                self._account, self._jid, date)
+            if meta_row is None:
+                return
+            control.scroll_to_message(
+                meta_row.log_line_id,
+                meta_row.time)
+
+    @staticmethod
+    def _get_date_from_timestamp(timestamp: float) -> datetime:
+        localtime = time.localtime(timestamp)
+        year, month, day = localtime[0], localtime[1], localtime[2]
+        date = datetime(year, month, day)
+        return date
+
     @staticmethod
     def _get_accounts() -> dict[int, str]:
         accounts: dict[int, str] = {}
@@ -232,7 +354,14 @@ class SearchView(Gtk.Box):
     def set_context(self, account: Optional[str], jid: Optional[JID]) -> None:
         self._account = account
         self._jid = jid
-        self._ui.search_checkbutton.set_active(jid is None)
+        everywhere = bool(jid is None)
+        self._ui.search_checkbutton.set_active(everywhere)
+        context = account is not None and jid is not None
+        if not context or everywhere:
+            self._scope = 'everywhere'
+        else:
+            self._scope = 'contact'
+        self._update_calendar()
 
 
 class RowHeader(Gtk.Box):

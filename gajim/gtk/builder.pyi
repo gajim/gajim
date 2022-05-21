@@ -803,6 +803,15 @@ class RosterTooltipBuilder(Builder):
 
 
 class SearchViewBuilder(Builder):
+    calendar_popover: Gtk.Popover
+    calendar: Gtk.Calendar
+    search_box: Gtk.Box
+    calendar_button: Gtk.MenuButton
+    search_entry: Gtk.SearchEntry
+    search_checkbutton: Gtk.CheckButton
+    date_hint: Gtk.Label
+    results_listbox: Gtk.ListBox
+    placeholder: Gtk.Box
     header_box: Gtk.Box
     header_name_label: Gtk.Label
     header_date_label: Gtk.Label
@@ -810,12 +819,6 @@ class SearchViewBuilder(Builder):
     row_avatar: Gtk.Image
     row_time_label: Gtk.Label
     row_name_label: Gtk.Label
-    search_box: Gtk.Box
-    search_entry: Gtk.SearchEntry
-    search_checkbutton: Gtk.CheckButton
-    date_hint: Gtk.Label
-    results_listbox: Gtk.ListBox
-    placeholder: Gtk.Box
 
 
 class ServerInfoBuilder(Builder):
