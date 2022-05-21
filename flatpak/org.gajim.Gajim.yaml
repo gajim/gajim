@@ -312,6 +312,6 @@ modules:
     sources:
       - type: git
         url: https://dev.gajim.org/gajim/gajim.git
-        tag: gajim-1.4.0
+        tag: gajim-1.4.1
     post-install:
       - install -d /app/plugins
