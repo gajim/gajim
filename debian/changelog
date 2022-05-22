@@ -1,6 +1,5 @@
-gajim-svn (20060820) unstable; urgency=low
+gajim-nightly ({DATE}) unstable; urgency=low
 
-  * daily snapshot
+  * https://dev.gajim.org/gajim/gajim/-/commits/master
 
- -- Yann Le Boulanger <asterix@lagaule.org>  Sun, 20 Aug 2006 01:30:01 +0200
-
+ -- Gajim CI <ci@gajim.org>  {DATE_TIME}

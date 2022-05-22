@@ -1,4 +1,4 @@
-Source: gajim-default-nightly
+Source: gajim-nightly
 Section: net
 Priority: optional
 Maintainer: Yann Leboulanger <asterix@lagaule.org>
@@ -12,7 +12,7 @@ Homepage: https://gajim.org
 Vcs-Git: https://dev.gajim.org/gajim/gajim.git
 Vcs-Browser: https://dev.gajim.org/gajim/gajim/tree/master
 
-Package: gajim-default-nightly
+Package: gajim-nightly
 Architecture: all
 Depends:
     python3 (>= 3.9),
