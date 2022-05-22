@@ -28,6 +28,8 @@ Handles the jingle signalling protocol
 #   * config:
 #     - codecs
 
+from typing import Optional
+
 import logging
 
 import nbxmpp
@@ -36,8 +38,8 @@ from nbxmpp.structs import StanzaHandler
 
 from gajim.common import helpers
 from gajim.common import jingle_xtls
+from gajim.common.file_props import FileProp
 from gajim.common.modules.base import BaseModule
-
 from gajim.common.jingle_session import JingleSession
 from gajim.common.jingle_session import JingleStates
 from gajim.common.jingle_ft import JingleFileTransfer
@@ -74,14 +76,14 @@ class Jingle(BaseModule):
         ]
 
         # dictionary: sessionid => JingleSession object
-        self._sessions = {}
+        self._sessions: dict[str, JingleSession] = {}
 
         # dictionary: (jid, iq stanza id) => JingleSession object,
         # one time callbacks
         self.__iq_responses = {}
         self.files = []
 
-    def delete_jingle_session(self, sid):
+    def delete_jingle_session(self, sid: str) -> None:
         """
         Remove a jingle session from a jingle stanza dispatcher
         """
@@ -204,7 +206,11 @@ class Jingle(BaseModule):
         jingle_session.start_session()
         return jingle_session.sid
 
-    def start_file_transfer(self, jid, file_props, request=False):
+    def start_file_transfer(self,
+                            jid: str,
+                            file_props: FileProp,
+                            request: bool = False
+                            ) -> Optional[str]:
         logger.info("start file transfer with file: %s", file_props)
         contact = self._con.get_module('Contacts').get_contact(jid)
         use_security = contact.supports(Namespace.JINGLE_XTLS)
