@@ -17,6 +17,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Optional
+
 import os
 import time
 import logging
@@ -48,6 +52,7 @@ from gajim.common.modules.bytestream import is_transfer_active
 from gajim.common.modules.bytestream import is_transfer_paused
 from gajim.common.modules.bytestream import is_transfer_stopped
 from gajim.common.modules.contacts import BareContact
+from gajim.common import types
 
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
@@ -390,12 +395,20 @@ class FileTransfersWindow:
                                text=_('_Download Again'),
                                callback=_on_yes)]).show()
 
-    def show_file_send_request(self, account, contact):
+    def show_file_send_request(self,
+                               account: str,
+                               contact: types.BareContact
+                               ) -> None:
         send_callback = partial(self.send_file, account, contact)
         SendFileDialog(contact, send_callback, self.window)
 
-    def send_file(self, account, contact, resource_jid, file_path,
-                  file_desc=''):
+    def send_file(self,
+                  account: str,
+                  contact: types.BareContact,
+                  resource_jid: JID,
+                  file_path: str,
+                  file_desc: str = ''
+                  ) -> bool:
         """
         Start the real transfer(upload) of the file
         """
@@ -403,11 +416,15 @@ class FileTransfersWindow:
             pritext = _('Gajim can not read this file')
             sextext = _('Another process is using this file.')
             ErrorDialog(pritext, sextext)
-            return
+            return False
 
         file_name = os.path.split(file_path)[1]
-        file_props = self.get_send_file_props(account, contact, file_path,
-                                              file_name, file_desc)
+        file_props = self.get_send_file_props(
+            account,
+            resource_jid,
+            file_path,
+            file_name,
+            file_desc)
         if file_props is None:
             return False
 
@@ -682,13 +699,19 @@ class FileTransfersWindow:
                 return iter_
             iter_ = self.model.iter_next(iter_)
 
-    def __convert_date(self, epoch):
+    @staticmethod
+    def __convert_date(epoch: float) -> str:
         # Converts date-time from seconds from epoch to iso 8601
         dt = datetime.utcfromtimestamp(epoch)
         return dt.isoformat() + 'Z'
 
-    def get_send_file_props(self, account, contact, file_path, file_name,
-                            file_desc=''):
+    def get_send_file_props(self,
+                            account: str,
+                            resource_jid: JID,
+                            file_path: str,
+                            file_name: str,
+                            file_desc: str = ''
+                            ) -> Optional[FileProp]:
         """
         Create new file_props object and set initial file transfer
         properties in it
@@ -696,15 +719,20 @@ class FileTransfersWindow:
         if os.path.isfile(file_path):
             stat = os.stat(file_path)
         else:
-            ErrorDialog(_('Invalid File'), _('File: ') + file_path)
+            ErrorDialog(
+                _('Invalid File'),
+                _('File: %s') % file_path)
             return None
+
         if stat[6] == 0:
             ErrorDialog(
                 _('Invalid File'),
                 _('It is not possible to send empty files'))
             return None
+
         file_props = FilesProp.getNewFileProp(
-            account, sid=helpers.get_random_string())
+            account,
+            sid=helpers.get_random_string())
         mod_date = os.path.getmtime(file_path)
         file_props.file_name = file_path
         file_props.name = file_name
@@ -714,7 +742,7 @@ class FileTransfersWindow:
         file_props.elapsed_time = 0
         file_props.size = stat[6]
         file_props.sender = account
-        file_props.receiver = contact
+        file_props.receiver = str(resource_jid)
         file_props.tt_account = account
         return file_props
 
