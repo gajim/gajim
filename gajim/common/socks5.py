@@ -689,9 +689,12 @@ class Socks5:
                 raise e
             except OpenSSL.SSL.SysCallError:
                 return self._on_send_exception()
-            except Exception as e:
+            except socket.error as err:
                 if e.errno not in (EINTR, ENOBUFS, EWOULDBLOCK):
                     return self._on_send_exception()
+            except Exception as err:
+                return self._on_send_exception()
+
             self.size += lenn
             current_time = time.time()
             self.file_props.elapsed_time += current_time - \
