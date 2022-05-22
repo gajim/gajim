@@ -74,13 +74,13 @@ class State(IntEnum):
 
 
 class JingleFileTransfer(JingleContent):
-
     def __init__(self,
                  session: JingleSession,
+                 file_props: FileProp,
                  transport: Optional[JingleTransport] = None,
-                 file_props: Optional[FileProp] = None,
                  use_security: bool = False,
-                 senders: Optional[str] = None):
+                 senders: Optional[str] = None
+                 ) -> None:
 
         JingleContent.__init__(self, session, transport, senders)
         log.info("transport value: %s", transport)
@@ -99,29 +99,31 @@ class JingleFileTransfer(JingleContent):
         self.callbacks['transport-reject'] += [self.__on_transport_reject]
         self.callbacks['transport-info'] += [self.__on_transport_info]
         self.callbacks['iq-result'] += [self.__on_iq_result]
+
         self.use_security = use_security
         self.x509_fingerprint = None
         self.file_props = file_props
         self.weinitiate = self.session.weinitiate
         self.werequest = self.session.werequest
-        if self.file_props is not None:
-            if self.session.werequest:
-                self.file_props.sender = self.session.peerjid
-                self.file_props.receiver = self.session.ourjid
-            else:
-                self.file_props.sender = self.session.ourjid
-                self.file_props.receiver = self.session.peerjid
-            self.file_props.session_type = 'jingle'
-            self.file_props.sid = session.sid
-            self.file_props.transfered_size = []
-            self.file_props.transport_sid = self.transport.sid
-        log.info("FT request: %s", file_props)
+
         if transport is None:
             self.transport = JingleTransportSocks5()
         self.transport.set_connection(session.connection)
         self.transport.set_file_props(self.file_props)
         self.transport.set_our_jid(session.ourjid)
         log.info('ourjid: %s', session.ourjid)
+
+        if self.session.werequest:
+            self.file_props.sender = self.session.peerjid
+            self.file_props.receiver = self.session.ourjid
+        else:
+            self.file_props.sender = self.session.ourjid
+            self.file_props.receiver = self.session.peerjid
+        self.file_props.session_type = 'jingle'
+        self.file_props.sid = session.sid
+        self.file_props.transfered_size = []
+        self.file_props.transport_sid = self.transport.sid
+
         self.session = session
         self.media = 'file'
         self.nominated_cand = {}
