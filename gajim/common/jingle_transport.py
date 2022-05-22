@@ -16,8 +16,8 @@
 Handles Jingle Transports (currently only ICE-UDP)
 """
 
-from typing import Any  # pylint: disable=unused-import
-from typing import Dict  # pylint: disable=unused-import
+from typing import Any
+from typing import Optional
 
 import logging
 import socket
@@ -29,11 +29,13 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.util import generate_id
 
 from gajim.common import app
+from gajim.common.client import Client
+from gajim.common.file_props import FileProp
 
 log = logging.getLogger('gajim.c.jingle_transport')
 
+transports: dict[str, Any] = {}
 
-transports = {}  # type: Dict[str, Any]
 
 def get_jingle_transport(node):
     namespace = node.getNamespace()
@@ -59,15 +61,15 @@ class JingleTransport:
     __slots__ = ['type_', 'candidates', 'remote_candidates', 'connection',
                  'file_props', 'ourjid', 'sid']
 
-    def __init__(self, type_):
+    def __init__(self, type_: TransportType) -> None:
         self.type_ = type_
         self.candidates = []
         self.remote_candidates = []
 
-        self.connection = None
-        self.file_props = None
-        self.ourjid = None
-        self.sid = None
+        self.connection: Optional[Client] = None
+        self.file_props: Optional[FileProp] = None
+        self.ourjid: Optional[str] = None
+        self.sid: Optional[str] = None
 
     def _iter_candidates(self):
         for candidate in self.candidates:
@@ -96,19 +98,20 @@ class JingleTransport:
         """
         return []
 
-    def set_connection(self, conn):
+    def set_connection(self, conn: Client) -> None:
         self.connection = conn
         if not self.sid:
             self.sid = generate_id()
 
-    def set_file_props(self, file_props):
+    def set_file_props(self, file_props: FileProp) -> None:
         self.file_props = file_props
 
-    def set_our_jid(self, jid):
+    def set_our_jid(self, jid: str) -> None:
         self.ourjid = jid
 
-    def set_sid(self, sid):
+    def set_sid(self, sid: str) -> None:
         self.sid = sid
+
 
 class JingleTransportSocks5(JingleTransport):
     """
