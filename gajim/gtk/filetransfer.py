@@ -905,8 +905,8 @@ class FileTransfersWindow:
         if is_transfer_paused(file_props):
             file_props.last_time = time.time()
             file_props.paused = False
-            types = {'r': 'download', 's': 'upload'}
-            self.set_status(file_props, types[sid[0]])
+            status_types = {'r': 'download', 's': 'upload'}
+            self.set_status(file_props, status_types[sid[0]])
             self._toggle_pause_continue(True)
             if file_props.continue_cb:
                 file_props.continue_cb()
