@@ -230,7 +230,7 @@ class Jingle(BaseModule):
         else:
             logger.error('No suitable transport method available for %s',
                          contact.jid)
-            return
+            return None
 
         senders = 'initiator'
         if request:
