@@ -63,6 +63,7 @@ build-linux:
     - if: '$CI_COMMIT_TAG'
   script:
     - python3 setup.py sdist
+    - python3 .ci/debian_build.py "$(find dist/gajim-*)"
 
   artifacts:
     name: "gajim-$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA"
