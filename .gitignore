@@ -20,6 +20,7 @@ stamp-h1
 Makefile
 __pycache__/
 .mypy_cache/
+debian_build/
 build/
 dist/
 gajim.egg-info/
