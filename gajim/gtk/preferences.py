@@ -260,12 +260,12 @@ class Chats(PreferenceBox):
                     'positive_184_ack',
                     desc=_('Add a checkmark to received messages')),
 
-            Setting(SettingKind.SWITCH,
-                    _('XHTML Formatting'),
-                    SettingType.CONFIG,
-                    'show_xhtml',
-                    desc=_('Render XHTML styles (colors, etc.) of incoming '
-                           'messages')),
+            # Setting(SettingKind.SWITCH,
+            #         _('XHTML Formatting'),
+            #         SettingType.CONFIG,
+            #         'show_xhtml',
+            #         desc=_('Render XHTML styles (colors, etc.) of incoming '
+            #                'messages')),
 
             Setting(SettingKind.SWITCH,
                     _('Show Send Message Button'),
