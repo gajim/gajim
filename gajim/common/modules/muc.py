@@ -145,6 +145,9 @@ class MUC(BaseModule):
         return self._muc_service_jid
 
     def pass_disco(self, info):
+        if info.is_gateway:
+            return
+
         for identity in info.identities:
             if identity.category != 'conference':
                 continue
