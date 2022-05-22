@@ -376,6 +376,8 @@ class ChatList(Gtk.ListBox, EventHelper):
             self._on_message_received(event)
         elif isinstance(event, events.MessageUpdated):
             self._on_message_updated(event)
+        elif isinstance(event, events.MessageModerated):
+            self._on_message_moderated(event)
         elif isinstance(event, events.PresenceReceived):
             self._on_presence_received(event)
         elif isinstance(event, events.MessageSent):
@@ -429,17 +431,20 @@ class ChatList(Gtk.ListBox, EventHelper):
         if row is None:
             return
 
-        if hasattr(event, 'correct_id'):
-            if event.correct_id == row.message_id:
-                row.set_message_text(event.msgtxt)
+        if event.correct_id == row.message_id:
+            row.set_message_text(event.msgtxt)
 
-        if event.properties.is_moderation:
-            if event.properties.moderation.stanza_id == row.stanza_id:
-                text = get_retraction_text(
-                    event.account,
-                    event.properties.moderation.moderator_jid,
-                    event.properties.moderation.reason)
-                row.set_message_text(text)
+    def _on_message_moderated(self, event: events.MessageModerated) -> None:
+        row = self._chats.get((event.account, event.jid))
+        if row is None:
+            return
+
+        if event.moderation.stanza_id == row.stanza_id:
+            text = get_retraction_text(
+                event.account,
+                event.moderation.moderator_jid,
+                event.moderation.reason)
+            row.set_message_text(text)
 
     def _on_message_sent(self, event: events.MessageSent) -> None:
         msgtext = event.message

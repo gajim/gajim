@@ -34,7 +34,7 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common.const import KindConstant
 from gajim.common.const import MUCJoinedState
-from gajim.common.events import MessageUpdated
+from gajim.common.events import MessageModerated
 from gajim.common.events import MucAdded
 from gajim.common.events import MucDecline
 from gajim.common.events import MucInvitation
@@ -89,7 +89,8 @@ class MUC(BaseModule):
                           typ='groupchat',
                           priority=49),
             StanzaHandler(name='message',
-                          callback=self._on_update_message,
+                          callback=self._on_moderation,
+                          ns=Namespace.FASTEN,
                           typ='groupchat',
                           priority=49),
             StanzaHandler(name='message',
@@ -671,17 +672,19 @@ class MUC(BaseModule):
 
         raise nbxmpp.NodeProcessed
 
-    def _on_update_message(self, _con, _stanza, properties):
-        if properties.is_moderation:
-            app.storage.archive.update_additional_data(
-                self._account, properties.moderation.stanza_id, properties)
+    def _on_moderation(self, _con, _stanza, properties):
+        if not properties.is_moderation:
+            return
 
-            app.ged.raise_event(
-                MessageUpdated(account=self._account,
-                               jid=properties.jid,
-                               properties=properties))
+        app.storage.archive.update_additional_data(
+            self._account, properties.moderation.stanza_id, properties)
 
-            raise nbxmpp.NodeProcessed
+        app.ged.raise_event(
+            MessageModerated(account=self._account,
+                             jid=properties.jid,
+                             moderation=properties.moderation))
+
+        raise nbxmpp.NodeProcessed
 
     def _fake_subject_change(self, room_jid):
         # This is for servers which don’t send empty subjects as part of the

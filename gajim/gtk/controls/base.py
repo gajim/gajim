@@ -331,18 +331,15 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         getattr(self, method_name)(event)
 
     def _on_message_updated(self, event: events.MessageUpdated) -> None:
-        if hasattr(event, 'correct_id'):
-            self.conversation_view.correct_message(
-                event.correct_id, event.msgtxt)
-            return
+        self.conversation_view.correct_message(event.correct_id, event.msgtxt)
 
-        if event.properties.is_moderation:
-            text = get_retraction_text(
-                self.account,
-                event.properties.moderation.moderator_jid,
-                event.properties.moderation.reason)
-            self.conversation_view.show_message_retraction(
-                event.properties.moderation.stanza_id, text)
+    def _on_message_moderated(self, event: events.MessageModerated) -> None:
+        text = get_retraction_text(
+            self.account,
+            event.moderation.moderator_jid,
+            event.moderation.reason)
+        self.conversation_view.show_message_retraction(
+            event.moderation.stanza_id, text)
 
     def _on_conversation_view_key_press(self,
                                         _listbox: ConversationView,

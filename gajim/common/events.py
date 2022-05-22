@@ -25,6 +25,7 @@ from dataclasses import field
 
 from nbxmpp.protocol import JID
 from nbxmpp.structs import HTTPAuthData
+from nbxmpp.structs import ModerationData
 from nbxmpp.structs import LocationData
 from nbxmpp.structs import RosterItem
 from nbxmpp.structs import TuneData
@@ -360,6 +361,14 @@ class MessageUpdated(ApplicationEvent):
     msgtxt: str
     properties: Any
     correct_id: str
+
+
+@dataclass
+class MessageModerated(ApplicationEvent):
+    name: str = field(init=False, default='message-moderated')
+    account: str
+    jid: JID
+    moderation: ModerationData
 
 
 @dataclass

@@ -39,6 +39,7 @@ HANDLED_EVENTS = (
     events.MamMessageReceived,
     events.GcMessageReceived,
     events.MessageUpdated,
+    events.MessageModerated,
     events.PresenceReceived,
     events.MessageSent,
     events.JingleRequestReceived,

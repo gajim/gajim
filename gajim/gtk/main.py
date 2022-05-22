@@ -110,6 +110,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('mam-message-received', ged.CORE, self._on_event),
             ('gc-message-received', ged.CORE, self._on_event),
             ('message-updated', ged.CORE, self._on_event),
+            ('message-moderated', ged.CORE, self._on_event),
             ('receipt-received', ged.GUI1, self._on_event),
             ('displayed-received', ged.GUI1, self._on_event),
             ('message-error', ged.GUI1, self._on_event),
