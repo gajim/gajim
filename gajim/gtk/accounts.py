@@ -674,11 +674,6 @@ class GeneralPage(GenericSettingPage):
             Setting(SettingKind.SWITCH, _('Connect on startup'),
                     SettingType.ACCOUNT_CONFIG, 'autoconnect'),
 
-            Setting(SettingKind.SWITCH,
-                    _('Save conversations for all contacts'),
-                    SettingType.ACCOUNT_CONFIG, 'no_log_for',
-                    desc=_('Store conversations on the harddrive')),
-
             Setting(SettingKind.SWITCH, _('Global Status'),
                     SettingType.ACCOUNT_CONFIG, 'sync_with_global_status',
                     desc=_('Synchronise the status of all accounts')),

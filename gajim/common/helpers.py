@@ -1395,20 +1395,6 @@ def get_idle_status_message(state: str, status_message: str) -> str:
     return message
 
 
-def should_log(account: str, jid: str) -> bool:
-    """
-    Should conversations between a local account and a remote jid be logged?
-    """
-    no_log_for = app.settings.get_account_setting(account, 'no_log_for')
-
-    if not no_log_for:
-        no_log_for = ''
-
-    no_log_for = no_log_for.split()
-
-    return (account not in no_log_for) and (jid not in no_log_for)
-
-
 def ask_for_status_message(status: str, signin: bool = False) -> bool:
     if status is None:
         # We try to change the message

@@ -29,7 +29,6 @@ from gajim.common.events import SubscribePresenceReceived
 from gajim.common.events import SubscribedPresenceReceived
 from gajim.common.events import UnsubscribedPresenceReceived
 from gajim.common.i18n import _
-from gajim.common.helpers import should_log
 from gajim.common.structs import PresenceData
 from gajim.common.const import KindConstant
 from gajim.common.const import ShowConstant
@@ -147,8 +146,6 @@ class Presence(BaseModule):
 
     def _log_presence(self, properties):
         if not app.settings.get('log_contact_status_changes'):
-            return
-        if not should_log(self._account, properties.jid.bare):
             return
 
         show = ShowConstant[properties.show.name]

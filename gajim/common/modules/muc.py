@@ -620,8 +620,7 @@ class MUC(BaseModule):
                               'muc-user-status-show-changed']:
             return
 
-        if (not app.settings.get('log_contact_status_changes') or
-                not helpers.should_log(self._account, properties.jid)):
+        if not app.settings.get('log_contact_status_changes'):
             return
 
         additional_data = AdditionalDataDict()

@@ -326,10 +326,6 @@ class GenericSetting(Gtk.ListBoxRow):
         if type_ == SettingType.ACCOUNT_CONFIG:
             if value == 'password':
                 return passwords.get_password(account)
-            if value == 'no_log_for':
-                no_log = app.settings.get_account_setting(
-                    account, 'no_log_for').split()
-                return account not in no_log
             return app.settings.get_account_setting(account, value)
 
         if type_ == SettingType.ACTION:
@@ -348,9 +344,6 @@ class GenericSetting(Gtk.ListBoxRow):
             if self.value == 'password':
                 assert isinstance(state, str)
                 passwords.save_password(self.account, state)
-            if self.value == 'no_log_for':
-                assert isinstance(state, bool)
-                self.set_no_log_for(self.account, state)
             else:
                 app.settings.set_account_setting(self.account,
                                                  self.value,
@@ -366,17 +359,6 @@ class GenericSetting(Gtk.ListBoxRow):
 
         if self.callback is not None:
             self.callback(state, self.data)
-
-    @staticmethod
-    def set_no_log_for(account: str, state: bool) -> None:
-        no_log = app.settings.get_account_setting(account, 'no_log_for').split()
-        if state and account in no_log:
-            no_log.remove(account)
-        elif not state and account not in no_log:
-            no_log.append(account)
-        app.settings.set_account_setting(account,
-                                         'no_log_for',
-                                         ' '.join(no_log))
 
     def on_row_activated(self) -> None:
         raise NotImplementedError

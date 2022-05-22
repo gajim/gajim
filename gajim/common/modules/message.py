@@ -28,7 +28,6 @@ from gajim.common.events import MessageReceived
 from gajim.common.events import MessageUpdated
 from gajim.common.events import RawMessageReceived
 from gajim.common.helpers import AdditionalDataDict
-from gajim.common.helpers import should_log
 from gajim.common.const import KindConstant
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import get_eme_message
@@ -200,13 +199,12 @@ class Message(BaseModule):
                         properties=properties,
                         correct_id=correct_id)
 
-            if should_log(self._account, jid):
-                app.storage.archive.store_message_correction(
-                    self._account,
-                    jid,
-                    correct_id,
-                    msgtxt,
-                    properties.type.is_groupchat)
+            app.storage.archive.store_message_correction(
+                self._account,
+                jid,
+                correct_id,
+                msgtxt,
+                properties.type.is_groupchat)
             app.ged.raise_event(event)
             return
 
@@ -229,7 +227,7 @@ class Message(BaseModule):
         if properties.is_sent_carbon:
             log_type = KindConstant.CHAT_MSG_SENT
 
-        if not should_log(self._account, jid) or not msgtxt:
+        if not msgtxt:
             return
 
         app.storage.archive.insert_into_logs(
@@ -266,11 +264,7 @@ class Message(BaseModule):
     def _log_muc_message(self, event):
         self._check_for_mam_compliance(event.room_jid, event.stanza_id)
 
-        if (should_log(self._account, event.jid) and
-                event.msgtxt and event.properties.muc_nickname):
-            # if not event.nick, it means message comes from room itself
-            # usually it hold description and can be send at each connection
-            # so don't store it in logs
+        if event.msgtxt and event.properties.muc_nickname:
             app.storage.archive.insert_into_logs(
                 self._account,
                 event.jid,
@@ -392,9 +386,6 @@ class Message(BaseModule):
 
     def log_message(self, message):
         if not message.is_loggable:
-            return
-
-        if not should_log(self._account, message.jid):
             return
 
         if message.message is None:

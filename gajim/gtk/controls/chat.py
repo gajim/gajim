@@ -29,7 +29,6 @@ from typing import ClassVar
 from typing import Type
 from typing import Optional
 
-import time
 import logging
 import sys
 
@@ -61,8 +60,6 @@ from gajim.gui.controls.base import BaseControl
 from gajim.gui.conversation.view import ConversationView
 from gajim.gui.const import TARGET_TYPE_URI_LIST
 from gajim.gui.const import ControlType
-from gajim.gui.dialogs import DialogButton
-from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.util import open_window
 
 from gajim.command_system.implementation.hosts import ChatCommands
@@ -602,36 +599,6 @@ class ChatControl(BaseControl):
         app.check_finalize(self)
 
     def allow_shutdown(self, _method, on_yes, on_no):
-        row = self.conversation_view.get_last_message_row()
-        if row is None:
-            on_yes(self)
-            return
-
-        if time.time() - row.timestamp < 2:
-            # Under 2 seconds since last message
-            no_log_for = app.settings.get_account_setting(
-                self.account, 'no_log_for').split()
-            more = ''
-            if self.contact.jid in no_log_for:
-                more = _('Note: Chat history is disabled for this contact.')
-            if self.account in no_log_for:
-                more = _('Note: Chat history is disabled for this account.')
-            text = _('You just received a new message from %s.\n'
-                     'Do you want to close this tab?') % self.contact.name
-            if more:
-                text += '\n' + more
-
-            ConfirmationDialog(
-                _('Close'),
-                _('New Message'),
-                text,
-                [DialogButton.make('Cancel',
-                                   callback=lambda: on_no(self)),
-                 DialogButton.make('Remove',
-                                   text=_('_Close'),
-                                   callback=lambda: on_yes(self))],
-                transient_for=app.window).show()
-            return
         on_yes(self)
 
     def _on_avatar_update(self,
