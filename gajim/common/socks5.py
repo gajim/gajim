@@ -683,16 +683,18 @@ class Socks5:
             lenn = 0
             try:
                 lenn = self._send(buff)
-            except (OpenSSL.SSL.WantReadError, OpenSSL.SSL.WantWriteError,
-            OpenSSL.SSL.WantX509LookupError) as e:
-                log.info('SSL rehandshake request: %s', repr(e))
-                raise e
+            except (OpenSSL.SSL.WantReadError,
+                    OpenSSL.SSL.WantWriteError,
+                    OpenSSL.SSL.WantX509LookupError) as err:
+                log.info('SSL rehandshake request: %s', repr(err))
+                raise err
             except OpenSSL.SSL.SysCallError:
                 return self._on_send_exception()
             except socket.error as err:
-                if e.errno not in (EINTR, ENOBUFS, EWOULDBLOCK):
+                if err.errno not in (EINTR, ENOBUFS, EWOULDBLOCK):
                     return self._on_send_exception()
             except Exception as err:
+                log.error(err)
                 return self._on_send_exception()
 
             self.size += lenn
