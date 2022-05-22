@@ -228,7 +228,9 @@ class Jingle(BaseModule):
         elif contact.supports(Namespace.JINGLE_IBB):
             transport = JingleTransportIBB()
         else:
-            transport = None
+            logger.error('No suitable transport method available for %s',
+                         contact.jid)
+            return
 
         senders = 'initiator'
         if request:
