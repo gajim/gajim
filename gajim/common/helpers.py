@@ -1137,6 +1137,7 @@ def get_default_muc_config() -> dict[str, Union[bool, str]]:
         'muc#roomconfig_persistentroom': True,
         'muc#roomconfig_whois': 'anyone',
         'muc#roomconfig_moderatedroom': False,
+        'muc#roomconfig_enablelogging': True,
 
         # Ejabberd options
         'allow_voice_requests': False,
