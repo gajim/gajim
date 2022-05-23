@@ -113,6 +113,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('message-moderated', ged.CORE, self._on_event),
             ('receipt-received', ged.GUI1, self._on_event),
             ('displayed-received', ged.GUI1, self._on_event),
+            ('read-state-sync', ged.GUI1, self._on_read_state_sync),
             ('message-error', ged.GUI1, self._on_event),
             ('muc-disco-update', ged.GUI1, self._on_event),
             ('jingle-request-received', ged.GUI1, self._on_jingle_request),
@@ -789,6 +790,21 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 self.add_chat(event.account, jid, 'contact')
 
         self._main_stack.process_event(event)
+
+    def _on_read_state_sync(self, event: events.ReadStateSync) -> None:
+        if event.is_muc_pm:
+            jid = JID.from_string(event.jid.bare)
+        else:
+            jid = event.jid
+
+        control = self.get_control(event.account, jid)
+        if control is None:
+            return
+
+        if event.marker_id != control.last_msg_id:
+            return
+
+        self.mark_as_read(event.account, jid, send_marker=False)
 
     def _on_jingle_request(self, event: events.JingleRequestReceived) -> None:
         if not self.chat_exists(event.account, event.jid):

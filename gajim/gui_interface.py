@@ -132,7 +132,6 @@ class Interface:
             'presence-received': [self.handle_event_presence],
             'message-sent': [self.handle_event_msgsent],
             'message-not-sent': [self.handle_event_msgnotsent],
-            'read-state-sync': [self.handle_event_read_state_sync],
         }
         # pylint: enable=line-too-long
 
@@ -208,23 +207,6 @@ class Interface:
             event.time_,
             event.conn.name,
             msg_type='error')
-
-    @staticmethod
-    def handle_event_read_state_sync(event):
-        if event.type.is_groupchat:
-            jid = event.jid.bare
-        else:
-            jid = event.jid
-
-        control = app.window.get_control(event.account, jid)
-        if control is None:
-            log.warning('No ChatControl found')
-            return
-
-        if event.marker_id != control.last_msg_id:
-            return
-
-        app.window.mark_as_read(event.account, jid, send_marker=False)
 
     # Jingle File Transfer
     @staticmethod
