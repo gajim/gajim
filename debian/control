@@ -20,6 +20,7 @@ Depends:
     python3-gi (>=3.32.0),
     python3-gi-cairo,
     gir1.2-gtk-3.0 (>=3.22),
+    gir1.2-gtksource-4,
     python3-nbxmpp-nightly (>= 20160905),
     python3-openssl,
     python3-keyring,
