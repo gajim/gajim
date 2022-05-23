@@ -371,6 +371,15 @@ class Client(Observable):
         if show != 'offline':
             self._status = show
 
+            app.settings.set_account_setting(
+                self._account,
+                'last_status',
+                show)
+            app.settings.set_account_setting(
+                self._account,
+                'last_status_msg',
+                helpers.to_one_line(message))
+
         if self._state.is_disconnecting:
             log.warning('Can\'t change status while '
                         'disconnect is in progress')

@@ -626,12 +626,6 @@ class Interface:
     def _change_status(account: str, status: str) -> None:
         client = app.get_client(account)
         message = client.status_message
-        if status != 'offline':
-            app.settings.set_account_setting(account, 'last_status', status)
-            app.settings.set_account_setting(
-                account,
-                'last_status_msg',
-                helpers.to_one_line(message))
 
         if status == 'offline':
             # TODO delete pep
