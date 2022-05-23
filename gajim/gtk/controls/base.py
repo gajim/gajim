@@ -413,6 +413,11 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def focus(self) -> None:
         raise NotImplementedError
 
+    def update_actions(self) -> None:
+        """
+        Derived types MAY implement this
+        """
+
     def draw_banner(self) -> None:
         """
         Draw the fat line at the top of the window

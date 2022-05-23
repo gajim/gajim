@@ -32,18 +32,17 @@ from gajim.common import passwords
 from gajim.common.events import AccountDisonnected
 from gajim.common.i18n import _
 from gajim.common.i18n import Q_
+from gajim.common.settings import AllSettingsT
 
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
 from .const import Setting
 from .const import SettingKind
 from .const import SettingType
-from .controls.base import BaseControl
 from .settings import SettingsDialog
 from .settings import SettingsBox
 from .settings import PopoverSetting
 from .util import open_window
-
 
 log = logging.getLogger('gajim.gui.accounts')
 
@@ -58,7 +57,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
         self.set_default_size(700, 550)
         self.set_resizable(True)
         self.set_title(_('Accounts'))
-        self._need_relogin: dict[str, list[str]] = {}
+        self._need_relogin: dict[str, list[AllSettingsT]] = {}
         self._accounts: dict[str, Account] = {}
 
         self._menu = AccountMenu()
@@ -122,9 +121,10 @@ class AccountsWindow(Gtk.ApplicationWindow):
             return
 
         def relog():
-            app.connections[account].disconnect(gracefully=True,
-                                                reconnect=True,
-                                                destroy_client=True)
+            client = app.get_client(account)
+            client.disconnect(gracefully=True,
+                              reconnect=True,
+                              destroy_client=True)
 
         ConfirmationDialog(
             _('Re-Login'),
@@ -138,19 +138,16 @@ class AccountsWindow(Gtk.ApplicationWindow):
             transient_for=self).show()
 
     @staticmethod
-    def _get_relogin_settings(account: str) -> list[str]:
-        settings = [
-            'client_cert',
-            'proxy',
-            'resource',
-            'use_custom_host',
-            'custom_host',
-            'custom_port'
-        ]
-
-        values: list[Any] = []
-        for setting in settings:
-            values.append(app.settings.get_account_setting(account, setting))
+    def _get_relogin_settings(account: str) -> list[AllSettingsT]:
+        values: list[AllSettingsT] = []
+        values.append(
+            app.settings.get_account_setting(account, 'client_cert'))
+        values.append(app.settings.get_account_setting(account, 'proxy'))
+        values.append(app.settings.get_account_setting(account, 'resource'))
+        values.append(
+            app.settings.get_account_setting(account, 'use_custom_host'))
+        values.append(app.settings.get_account_setting(account, 'custom_host'))
+        values.append(app.settings.get_account_setting(account, 'custom_port'))
         return values
 
     @staticmethod
@@ -264,7 +261,7 @@ class AccountMenu(Gtk.Box):
             back_row = cast(Gtk.ListBoxRow, listbox.get_row_at_index(1))
             back_row.emit('activate')
         self._accounts_listbox.remove(row)
-        sub_menu = self._stack.get_child_by_name('%s-menu' % row.account)
+        sub_menu = self._stack.get_child_by_name(f'{row.account}-menu')
         self._stack.remove(sub_menu)
         row.destroy()
         sub_menu.destroy()
@@ -273,7 +270,7 @@ class AccountMenu(Gtk.Box):
                                   _listbox: Gtk.ListBox,
                                   row: AccountRow
                                   ) -> None:
-        self._stack.set_visible_child_name('%s-menu' % row.account)
+        self._stack.set_visible_child_name(f'{row.account}-menu')
         listbox = cast(Gtk.ListBox, self._stack.get_visible_child())
         listbox_row = cast(Gtk.ListBoxRow, listbox.get_row_at_index(2))
         listbox_row.emit('activate')
@@ -553,7 +550,8 @@ class AccountRow(Gtk.ListBoxRow):
             app.ged.register_event_handler('account-disconnected',
                                            ged.CORE,
                                            _on_disconnect)
-            app.connections[account].change_status('offline', 'offline')
+            client = app.get_client(account)
+            client.change_status('offline', 'offline')
             switch.set_state(state)
             self._set_label(state)
 
@@ -646,12 +644,16 @@ class GeneralPage(GenericSettingPage):
     def __init__(self, account: str) -> None:
 
         settings = [
-            Setting(SettingKind.ENTRY, _('Label'),
-                    SettingType.ACCOUNT_CONFIG, 'account_label',
+            Setting(SettingKind.ENTRY,
+                    _('Label'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'account_label',
                     callback=self._on_account_name_change),
 
-            Setting(SettingKind.COLOR, _('Color'),
-                    SettingType.ACCOUNT_CONFIG, 'account_color',
+            Setting(SettingKind.COLOR,
+                    _('Color'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'account_color',
                     desc=_('Recognize your account by color')),
 
             Setting(SettingKind.LOGIN,
@@ -662,29 +664,41 @@ class GeneralPage(GenericSettingPage):
                     inverted=True,
                     props={'dialog': LoginDialog}),
 
-            Setting(SettingKind.ACTION, _('Import Contacts'),
-                    SettingType.ACTION, '-import-contacts',
+            Setting(SettingKind.ACTION,
+                    _('Import Contacts'),
+                    SettingType.ACTION,
+                    '-import-contacts',
                     props={'account': account}),
 
             # Currently not supported by nbxmpp
             #
-            # Setting(SettingKind.DIALOG, _('Client Certificate'),
-            #         SettingType.DIALOG, props={'dialog': CertificateDialog}),
+            # Setting(SettingKind.DIALOG,
+            #         _('Client Certificate'),
+            #         SettingType.DIALOG,
+            #         props={'dialog': CertificateDialog}),
 
-            Setting(SettingKind.SWITCH, _('Connect on startup'),
-                    SettingType.ACCOUNT_CONFIG, 'autoconnect'),
+            Setting(SettingKind.SWITCH,
+                    _('Connect on startup'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'autoconnect'),
 
-            Setting(SettingKind.SWITCH, _('Global Status'),
-                    SettingType.ACCOUNT_CONFIG, 'sync_with_global_status',
+            Setting(SettingKind.SWITCH,
+                    _('Global Status'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'sync_with_global_status',
                     desc=_('Synchronise the status of all accounts')),
 
-            Setting(SettingKind.SWITCH, _('Remember Last Status'),
-                    SettingType.ACCOUNT_CONFIG, 'restore_last_status',
+            Setting(SettingKind.SWITCH,
+                    _('Remember Last Status'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'restore_last_status',
                     desc=_('Restore status and status message of your '
                            'last session')),
 
-            Setting(SettingKind.SWITCH, _('Use file transfer proxies'),
-                    SettingType.ACCOUNT_CONFIG, 'use_ft_proxies'),
+            Setting(SettingKind.SWITCH,
+                    _('Use file transfer proxies'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'use_ft_proxies'),
         ]
         GenericSettingPage.__init__(self, account, settings)
 
@@ -699,6 +713,7 @@ class PrivacyPage(GenericSettingPage):
 
     def __init__(self, account: str) -> None:
         self._account = account
+        self._client = app.get_client(account)
 
         history_max_age = {
             -1: _('Forever'),
@@ -717,36 +732,48 @@ class PrivacyPage(GenericSettingPage):
         }
 
         settings = [
-            Setting(SettingKind.SWITCH, _('Idle Time'),
-                    SettingType.ACCOUNT_CONFIG, 'send_idle_time',
+            Setting(SettingKind.SWITCH,
+                    _('Idle Time'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'send_idle_time',
                     callback=self._send_idle_time,
                     desc=_('Disclose the time of your last activity')),
 
-            Setting(SettingKind.SWITCH, _('Local System Time'),
-                    SettingType.ACCOUNT_CONFIG, 'send_time_info',
+            Setting(SettingKind.SWITCH,
+                    _('Local System Time'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'send_time_info',
                     callback=self._send_time_info,
                     desc=_('Disclose the local system time of the '
                            'device Gajim runs on')),
 
-            Setting(SettingKind.SWITCH, _('Operating System'),
-                    SettingType.ACCOUNT_CONFIG, 'send_os_info',
+            Setting(SettingKind.SWITCH, 
+                    _('Operating System'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'send_os_info',
                     callback=self._send_os_info,
                     desc=_('Disclose information about the '
                            'operating system you currently use')),
 
-            Setting(SettingKind.SWITCH, _('Media Playback'),
-                    SettingType.ACCOUNT_CONFIG, 'publish_tune',
+            Setting(SettingKind.SWITCH,
+                    _('Media Playback'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'publish_tune',
                     callback=self._publish_tune,
                     desc=_('Disclose information about media that is '
                            'currently being played on your system.')),
 
-            Setting(SettingKind.SWITCH, _('Ignore Unknown Contacts'),
-                    SettingType.ACCOUNT_CONFIG, 'ignore_unknown_contacts',
+            Setting(SettingKind.SWITCH,
+                    _('Ignore Unknown Contacts'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'ignore_unknown_contacts',
                     desc=_('Ignore everything from contacts not in your '
-                           'Roster')),
+                           'contact list')),
 
-            Setting(SettingKind.SWITCH, _('Send Message Receipts'),
-                    SettingType.ACCOUNT_CONFIG, 'answer_receipts',
+            Setting(SettingKind.SWITCH,
+                    _('Send Message Receipts'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'answer_receipts',
                     desc=_('Tell your contacts if you received a message')),
 
             Setting(SettingKind.POPOVER,
@@ -813,16 +840,16 @@ class PrivacyPage(GenericSettingPage):
         app.settings.set_group_chat_settings('send_chatstate', None)
 
     def _send_idle_time(self, state: bool, _data: Any) -> None:
-        app.connections[self._account].get_module('LastActivity').set_enabled(state)
+        self._client.get_module('LastActivity').set_enabled(state)
 
     def _send_time_info(self, state: bool, _data: Any) -> None:
-        app.connections[self._account].get_module('EntityTime').set_enabled(state)
+        self._client.get_module('EntityTime').set_enabled(state)
 
     def _send_os_info(self, state: bool, _data: Any) -> None:
-        app.connections[self._account].get_module('SoftwareVersion').set_enabled(state)
+        self._client.get_module('SoftwareVersion').set_enabled(state)
 
     def _publish_tune(self, state: bool, _data: Any) -> None:
-        app.connections[self._account].get_module('UserTune').set_enabled(state)
+        self._client.get_module('UserTune').set_enabled(state)
 
     def _send_read_marker(self, state: bool, _data: Any) -> None:
         app.settings.set_account_setting(
@@ -836,7 +863,6 @@ class PrivacyPage(GenericSettingPage):
         app.settings.set_group_chat_settings(
             'send_marker', None, context='private')
         for ctrl in app.window.get_controls(account=self._account):
-            assert not isinstance(ctrl, BaseControl)
             ctrl.update_actions()
 
 
@@ -847,28 +873,40 @@ class ConnectionPage(GenericSettingPage):
     def __init__(self, account: str) -> None:
 
         settings = [
-            Setting(SettingKind.POPOVER, _('Proxy'),
-                    SettingType.ACCOUNT_CONFIG, 'proxy', name='proxy',
+            Setting(SettingKind.POPOVER,
+                    _('Proxy'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'proxy',
+                    name='proxy',
                     props={'entries': self._get_proxies(),
                            'default-text': _('System'),
                            'button-icon-name': 'preferences-system-symbolic',
                            'button-callback': self._on_proxy_edit}),
 
-            Setting(SettingKind.HOSTNAME, _('Hostname'), SettingType.DIALOG,
+            Setting(SettingKind.HOSTNAME,
+                    _('Hostname'),
+                    SettingType.DIALOG,
                     desc=_('Manually set the hostname for the server'),
                     props={'dialog': CutstomHostnameDialog}),
 
-            Setting(SettingKind.ENTRY, _('Resource'),
-                    SettingType.ACCOUNT_CONFIG, 'resource'),
+            Setting(SettingKind.ENTRY,
+                    _('Resource'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'resource'),
 
-            Setting(SettingKind.PRIORITY, _('Priority'),
-                    SettingType.DIALOG, props={'dialog': PriorityDialog}),
+            Setting(SettingKind.PRIORITY,
+                    _('Priority'),
+                    SettingType.DIALOG,
+                    props={'dialog': PriorityDialog}),
 
-            Setting(SettingKind.SWITCH, _('Use Unencrypted Connection'),
-                    SettingType.ACCOUNT_CONFIG, 'use_plain_connection',
+            Setting(SettingKind.SWITCH,
+                    _('Use Unencrypted Connection'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'use_plain_connection',
                     desc=_('Use an unencrypted connection to the server')),
 
-            Setting(SettingKind.SWITCH, _('Confirm Unencrypted Connection'),
+            Setting(SettingKind.SWITCH,
+                    _('Confirm Unencrypted Connection'),
                     SettingType.ACCOUNT_CONFIG,
                     'confirm_unencrypted_connection',
                     desc=_('Show a confirmation dialog before connecting '
@@ -896,22 +934,30 @@ class AdvancedPage(GenericSettingPage):
     def __init__(self, account: str) -> None:
 
         settings = [
-            Setting(SettingKind.SWITCH, _('Contact Information'),
-                    SettingType.ACCOUNT_CONFIG, 'request_user_data',
+            Setting(SettingKind.SWITCH,
+                    _('Contact Information'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'request_user_data',
                     desc=_('Request contact information (Tune, Location)')),
 
-            Setting(SettingKind.SWITCH, _('Accept all Contact Requests'),
-                    SettingType.ACCOUNT_CONFIG, 'autoauth',
+            Setting(SettingKind.SWITCH,
+                    _('Accept all Contact Requests'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'autoauth',
                     desc=_('Automatically accept all contact requests')),
 
-            Setting(SettingKind.POPOVER, _('Filetransfer Preference'),
-                    SettingType.ACCOUNT_CONFIG, 'filetransfer_preference',
+            Setting(SettingKind.POPOVER,
+                    _('Filetransfer Preference'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'filetransfer_preference',
                     props={'entries': {'httpupload': _('Upload Files'),
                                        'jingle': _('Send Files Directly')}},
                     desc=_('Preferred file transfer mechanism for '
                            'file drag&drop on a chat window')),
-            Setting(SettingKind.SWITCH, _('Security Labels'),
-                    SettingType.ACCOUNT_CONFIG, 'enable_security_labels',
+            Setting(SettingKind.SWITCH,
+                    _('Security Labels'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'enable_security_labels',
                     desc=_('Show labels describing confidentiality of '
                            'messages, if the server supports XEP-0258'))
         ]
@@ -928,11 +974,13 @@ class PriorityDialog(SettingsDialog):
             range_ = (0, 127)
 
         settings = [
-            Setting(SettingKind.SWITCH, _('Adjust to status'),
+            Setting(SettingKind.SWITCH,
+                    _('Adjust to status'),
                     SettingType.ACCOUNT_CONFIG,
                     'adjust_priority_with_status'),
 
-            Setting(SettingKind.SPIN, _('Priority'),
+            Setting(SettingKind.SPIN,
+                    _('Priority'),
                     SettingType.ACCOUNT_CONFIG,
                     'priority',
                     bind='account::adjust_priority_with_status',
@@ -949,9 +997,10 @@ class PriorityDialog(SettingsDialog):
         # Update priority
         if self.account not in app.connections:
             return
-        show = app.connections[self.account].status
-        status = app.connections[self.account].status_message
-        app.connections[self.account].change_status(show, status)
+        client = app.get_client(self.account)
+        show = client.status
+        status = client.status_message
+        client.change_status(show, status)
 
 
 class CutstomHostnameDialog(SettingsDialog):
@@ -960,21 +1009,28 @@ class CutstomHostnameDialog(SettingsDialog):
         type_values = ('START TLS', 'DIRECT TLS', 'PLAIN')
 
         settings = [
-            Setting(SettingKind.SWITCH, _('Enable'),
+            Setting(SettingKind.SWITCH,
+                    _('Enable'),
                     SettingType.ACCOUNT_CONFIG,
                     'use_custom_host'),
 
-            Setting(SettingKind.ENTRY, _('Hostname'),
-                    SettingType.ACCOUNT_CONFIG, 'custom_host',
+            Setting(SettingKind.ENTRY,
+                    _('Hostname'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'custom_host',
                     bind='account::use_custom_host'),
 
-            Setting(SettingKind.SPIN, _('Port'),
-                    SettingType.ACCOUNT_CONFIG, 'custom_port',
+            Setting(SettingKind.SPIN,
+                    _('Port'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'custom_port',
                     bind='account::use_custom_host',
                     props={'range_': (0, 65535)},),
 
-            Setting(SettingKind.COMBO, _('Type'),
-                    SettingType.ACCOUNT_CONFIG, 'custom_type',
+            Setting(SettingKind.COMBO,
+                    _('Type'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'custom_type',
                     bind='account::use_custom_host',
                     props={'combo_items': type_values}),
         ]
@@ -987,12 +1043,16 @@ class CertificateDialog(SettingsDialog):
     def __init__(self, account: str, parent: Gtk.Window) -> None:
 
         settings = [
-            Setting(SettingKind.FILECHOOSER, _('Client Certificate'),
-                    SettingType.ACCOUNT_CONFIG, 'client_cert',
+            Setting(SettingKind.FILECHOOSER,
+                    _('Client Certificate'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'client_cert',
                     props={'filefilter': (_('PKCS12 Files'), '*.p12')}),
 
-            Setting(SettingKind.SWITCH, _('Encrypted Certificate'),
-                    SettingType.ACCOUNT_CONFIG, 'client_cert_encrypted'),
+            Setting(SettingKind.SWITCH,
+                    _('Encrypted Certificate'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'client_cert_encrypted'),
         ]
 
         SettingsDialog.__init__(self, parent, _('Certificate Settings'),
@@ -1003,21 +1063,29 @@ class LoginDialog(SettingsDialog):
     def __init__(self, account: str, parent: Gtk.Window) -> None:
 
         settings = [
-            Setting(SettingKind.ENTRY, _('Password'),
-                    SettingType.ACCOUNT_CONFIG, 'password',
+            Setting(SettingKind.ENTRY,
+                    _('Password'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'password',
                     bind='account::savepass'),
 
-            Setting(SettingKind.SWITCH, _('Save Password'),
-                    SettingType.ACCOUNT_CONFIG, 'savepass',
+            Setting(SettingKind.SWITCH,
+                    _('Save Password'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'savepass',
                     enabled_func=(lambda: not app.settings.get('use_keyring')
                                   or passwords.KEYRING_AVAILABLE)),
 
-            Setting(SettingKind.CHANGEPASSWORD, _('Change Password'),
-                    SettingType.DIALOG, callback=self.on_password_change,
+            Setting(SettingKind.CHANGEPASSWORD,
+                    _('Change Password'),
+                    SettingType.DIALOG,
+                    callback=self.on_password_change,
                     props={'dialog': None}),
 
-            Setting(SettingKind.SWITCH, _('Use GSSAPI'),
-                    SettingType.ACCOUNT_CONFIG, 'enable_gssapi'),
+            Setting(SettingKind.SWITCH,
+                    _('Use GSSAPI'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'enable_gssapi'),
         ]
 
         SettingsDialog.__init__(self, parent, _('Login Settings'),
