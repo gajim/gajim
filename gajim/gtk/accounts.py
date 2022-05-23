@@ -747,7 +747,7 @@ class PrivacyPage(GenericSettingPage):
                     desc=_('Disclose the local system time of the '
                            'device Gajim runs on')),
 
-            Setting(SettingKind.SWITCH, 
+            Setting(SettingKind.SWITCH,
                     _('Operating System'),
                     SettingType.ACCOUNT_CONFIG,
                     'send_os_info',
