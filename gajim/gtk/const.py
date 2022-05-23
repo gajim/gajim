@@ -55,8 +55,6 @@ DEFAULT_WORKSPACE_COLOR = 'rgb(191,15,167)'
 # Drag and drop target type URI list (for dropped files)
 TARGET_TYPE_URI_LIST = 80
 
-UNLOAD_CHAT_TIME = 300  # seconds
-
 
 @unique
 class Theme(IntEnum):

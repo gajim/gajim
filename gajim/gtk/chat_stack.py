@@ -118,6 +118,8 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         if self._current_control is not None:
             self._current_control.set_control_active(False)
+            self._current_control.reset_view()
+
         control.set_control_active(True)
         self._current_control = control
 
@@ -129,12 +131,6 @@ class ChatStack(Gtk.Stack, EventHelper):
         if control is None:
             return False
         return control.is_chat_loaded
-
-    def unload_chat(self, account: str, jid: JID) -> None:
-        control = self.get_control(account, jid)
-        if control is None:
-            return
-        control.reset_view()
 
     def clear(self) -> None:
         self.set_visible_child_name('empty')

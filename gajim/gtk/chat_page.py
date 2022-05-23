@@ -17,7 +17,6 @@ from typing import Literal
 from typing import Optional
 from typing import Generator
 
-import time
 import logging
 
 from gi.repository import Gdk
@@ -38,7 +37,6 @@ from .chat_list_stack import ChatListStack
 from .chat_stack import ChatStack
 from .search_view import SearchView
 from .types import ControlT
-from .const import UNLOAD_CHAT_TIME
 
 
 log = logging.getLogger('gajim.gui.chat_page')
@@ -54,8 +52,6 @@ class ChatPage(Gtk.Box):
 
     def __init__(self):
         Gtk.Box.__init__(self)
-
-        self._chat_idle_time: dict[tuple[str, JID], Optional[float]] = {}
 
         self._ui = get_builder('chat_paned.ui')
         self.add(self._ui.paned)
@@ -146,31 +142,6 @@ class ChatPage(Gtk.Box):
     def _on_edit_workspace_clicked(_button: Gtk.Button) -> None:
         app.window.activate_action('edit-workspace', GLib.Variant('s', ''))
 
-    def _reset_chat_idle_time(self, account: str, jid: JID) -> None:
-        # Set the idle time of the current chat to None
-        # and start the timer for the last one
-        for chat, idle_time in self._chat_idle_time.items():
-            if idle_time is None:
-                self._chat_idle_time[chat] = time.time()
-
-        self._chat_idle_time[(account, jid)] = None
-
-    def unload_idle_chats(self) -> bool:
-        log.debug('Unload idle chats')
-        for chat, idle_time in list(self._chat_idle_time.items()):
-            if idle_time is None:
-                continue
-
-            if time.time() - UNLOAD_CHAT_TIME > idle_time:
-                account, jid = chat
-                self._chat_stack.unload_chat(account, jid)
-                self._chat_idle_time.pop(chat)
-                log.debug('Chat %s:%s unloaded', account, jid)
-
-        # Return true because we call this method with
-        # GLib.timeout_add_seconds()
-        return True
-
     def _on_chat_selected(self,
                           _chat_list_stack: ChatListStack,
                           workspace_id: str,
@@ -180,7 +151,6 @@ class ChatPage(Gtk.Box):
         self._chat_stack.show_chat(account, jid)
         self._search_view.set_context(account, jid)
         self.emit('chat-selected', workspace_id, account, jid)
-        self._reset_chat_idle_time(account, jid)
 
     def _on_chat_unselected(self, _chat_list_stack: ChatListStack) -> None:
         self._chat_stack.clear()

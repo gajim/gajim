@@ -57,7 +57,6 @@ from .util import restore_main_window_position
 from .util import save_main_window_position
 from .util import open_window
 from .util import set_urgency_hint
-from .const import UNLOAD_CHAT_TIME
 from .structs import AccountJidParam
 from .structs import AddChatActionParams
 from .structs import actionmethod
@@ -145,7 +144,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._add_actions2()
 
         self._prepare_window()
-        self._start_timers()
 
         chat_list_stack = self._chat_page.get_chat_list_stack()
         app.app.systray.connect_unread_widget(chat_list_stack,
@@ -154,10 +152,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         for client in app.get_clients():
             client.connect_signal('state-changed',
                                   self._on_client_state_changed)
-
-    def _start_timers(self) -> None:
-        GLib.timeout_add_seconds(UNLOAD_CHAT_TIME,
-                                 self._chat_page.unload_idle_chats)
 
     def _prepare_window(self) -> None:
         if app.settings.get('main_window_skip_taskbar'):
