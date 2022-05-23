@@ -33,7 +33,7 @@ build_script:
 
   - ps: |
         $filename = "Gajim-$($env:GAJIM_VERSION)-$($env:ARCH)"
-        $filename_portable = "Gajim-$($env:GAJIM_VERSION)-Portable-$($env:ARCH)"
+        $filename_portable = "Gajim-Portable-$($env:GAJIM_VERSION)-$($env:ARCH)"
 
         if ($env:GAJIM_VERSION -eq "Nightly") {
             $time_string=(get-date -UFormat "%Y-%m-%d").ToString()
