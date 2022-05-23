@@ -26,19 +26,21 @@ DATE_TIME = datetime.now(tz=timezone.utc).strftime('%a, %d %b %Y %T %z')
 class ReleaseContext:
     app: str
     pkg_name: str
+    rev: str
     release_name: str
     release_dir: Path
     tarball: Path
 
     @classmethod
-    def from_tarball(cls, path: str) -> ReleaseContext:
+    def from_tarball(cls, path: str, prefix: str, rev: str) -> ReleaseContext:
         tarball = Path(path)
         app = tarball.name.split('-', maxsplit=1)[0]
-        pkg_name = f'{app}-nightly'
+        pkg_name = f'{prefix}{app}-nightly'
         release_name = f'{pkg_name}_{DATE}'
         release_dir = BUILD_DIR / release_name
         return cls(app=app,
                    pkg_name=pkg_name,
+                   rev=rev,
                    release_name=release_name,
                    release_dir=release_dir,
                    tarball=tarball)
@@ -69,7 +71,7 @@ def prepare_changelog(context: ReleaseContext) -> None:
     log.info('Prepare Changelog')
     changelog = context.release_dir / 'debian' / 'changelog'
     content = changelog.read_text()
-    content = content.replace('{DATE}', DATE)
+    content = content.replace('{DATE}', f'{DATE}-{context.rev}')
     content = content.replace('{DATE_TIME}', DATE_TIME)
     changelog.write_text(content)
 
@@ -89,9 +91,14 @@ def build(context: ReleaseContext) -> None:
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Build debian package')
     parser.add_argument('tarball', help='Path to tarball e.g. app.tar.gz')
+    parser.add_argument('rev', help='The package revision e.g. 1')
+    parser.add_argument('--pkgprefix', default='', required=False,
+                        help='Prefix for the package name e.g. python3-')
     args = parser.parse_args()
 
-    context = ReleaseContext.from_tarball(args.tarball)
+    context = ReleaseContext.from_tarball(args.tarball,
+                                          args.pkgprefix,
+                                          args.rev)
 
     clean_build_dir()
     prepare_package_dir(context)
