@@ -16,6 +16,7 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
+from typing import Optional
 
 import locale
 import logging
@@ -33,6 +34,7 @@ from gajim.common.events import AccountDisonnected
 from gajim.common.i18n import _
 from gajim.common.i18n import Q_
 from gajim.common.settings import AllSettingsT
+from gajim.common import types
 
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
@@ -713,7 +715,9 @@ class PrivacyPage(GenericSettingPage):
 
     def __init__(self, account: str) -> None:
         self._account = account
-        self._client = app.get_client(account)
+        self._client: Optional[types.Client] = None
+        if app.account_is_connected(account):
+            self._client = app.get_client(account)
 
         history_max_age = {
             -1: _('Forever'),
@@ -840,16 +844,20 @@ class PrivacyPage(GenericSettingPage):
         app.settings.set_group_chat_settings('send_chatstate', None)
 
     def _send_idle_time(self, state: bool, _data: Any) -> None:
-        self._client.get_module('LastActivity').set_enabled(state)
+        if self._client is not None:
+            self._client.get_module('LastActivity').set_enabled(state)
 
     def _send_time_info(self, state: bool, _data: Any) -> None:
-        self._client.get_module('EntityTime').set_enabled(state)
+        if self._client is not None:
+            self._client.get_module('EntityTime').set_enabled(state)
 
     def _send_os_info(self, state: bool, _data: Any) -> None:
-        self._client.get_module('SoftwareVersion').set_enabled(state)
+        if self._client is not None:
+            self._client.get_module('SoftwareVersion').set_enabled(state)
 
     def _publish_tune(self, state: bool, _data: Any) -> None:
-        self._client.get_module('UserTune').set_enabled(state)
+        if self._client is not None:
+            self._client.get_module('UserTune').set_enabled(state)
 
     def _send_read_marker(self, state: bool, _data: Any) -> None:
         app.settings.set_account_setting(
