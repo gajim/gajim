@@ -609,19 +609,6 @@ class Interface:
 
             self._change_status(acc, status)
 
-    def change_account_status(self, account: str, status: str) -> None:
-        ask = ask_for_status_message(status)
-
-        client = app.get_client(account)
-        if status is None:
-            status = client.status
-
-        if ask:
-            app.window.show_account_page(account)
-            return
-
-        self._change_status(account, status)
-
     @staticmethod
     def _change_status(account: str, status: str) -> None:
         client = app.get_client(account)
