@@ -23,7 +23,6 @@ import sys
 import json
 import zipfile
 import logging
-import configparser
 from shutil import rmtree, move
 from dataclasses import dataclass
 from pathlib import Path
@@ -98,80 +97,18 @@ class PluginManifest:
     def from_path(cls, path: Path) -> PluginManifest:
         manifest_path = path / 'plugin-manifest.json'
         if not manifest_path.exists():
-            manifest_path = path / 'manifest.ini'
-            if not manifest_path.exists():
-                raise ValueError(f'Not a plugin path: {path}')
+            raise ValueError(f'Not a plugin path: {path}')
 
         if manifest_path.is_dir():
             raise ValueError(f'Not a plugin path: {path}')
 
-        if manifest_path.name == 'manifest.ini':
-            return cls.from_manifest_ini(manifest_path)
-
-        if manifest_path.name == 'plugin-manifest.json':
-            with manifest_path.open(encoding='utf8') as f:
-                try:
-                    manifest = json.load(f)
-                except Exception as error:
-                    raise ValueError(f'Error while parsing manifest: '
-                                     f'{path}, {error}')
-            return cls.from_manifest_json(manifest, manifest_path)
-
-        raise ValueError(f'Not a plugin path: {path}')
-
-    @classmethod
-    def from_manifest_ini(cls, path: Path) -> PluginManifest:
-        conf = configparser.ConfigParser()
-        conf.remove_section('info')
-
-        with path.open(encoding='utf8') as conf_file:
+        with manifest_path.open(encoding='utf8') as f:
             try:
-                conf.read_file(conf_file)
-            except configparser.Error as error:
+                manifest = json.load(f)
+            except Exception as error:
                 raise ValueError(f'Error while parsing manifest: '
-                                 f'{path.name}, {error}')
-
-        for field in FIELDS:
-            try:
-                value = conf.get('info', field, fallback=None)
-            except configparser.Error as error:
-                raise ValueError(f'Error while parsing manifest: '
-                                 f'{path.name}, {error}')
-
-            if value is None:
-                raise ValueError(f'No {field} found for {path.name}')
-
-        name = conf.get('info', 'name')
-        short_name = conf.get('info', 'short_name')
-        description = p_(conf.get('info', 'description'))
-        authors = conf.get('info', 'authors')
-        homepage = conf.get('info', 'homepage')
-        version = V(conf.get('info', 'version'))
-        min_gajim_version = V(conf.get('info', 'min_gajim_version'))
-        max_gajim_version = V(conf.get('info', 'max_gajim_version'))
-
-        if not min_gajim_version <= V(GAJIM_VERSION) <= max_gajim_version:
-            raise ValueError(
-                f'Plugin {path.name} not loaded, '
-                f'newer version of gajim required: '
-                f'{min_gajim_version} <= {GAJIM_VERSION} <= {max_gajim_version}'
-            )
-
-        requirements = [Requirement(f'gajim>={min_gajim_version}')]
-
-        # Field did not exist in manifest.ini, assume everything is supported
-        platforms = ['linux', 'darwin', 'win32']
-
-        return cls(name=name,
-                   short_name=short_name,
-                   description=description,
-                   authors=authors.split('\n'),
-                   homepage=homepage,
-                   config_dialog=False,
-                   version=version,
-                   requirements=requirements,
-                   platforms=platforms,
-                   path=path.parent)
+                                 f'{path}, {error}')
+        return cls.from_manifest_json(manifest, manifest_path)
 
     def _check_requirements(self) -> bool:
         for req in self.requirements:
