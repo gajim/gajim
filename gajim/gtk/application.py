@@ -61,7 +61,6 @@ from gajim.common import ged
 from gajim.common import idle
 from gajim.common import logging_helpers
 from gajim.common.application import CoreApplication
-from gajim.common.call_manager import CallManager
 from gajim.common.const import GAJIM_FAQ_URI
 from gajim.common.const import GAJIM_WIKI_URI
 from gajim.common.const import GAJIM_SUPPORT_JID
