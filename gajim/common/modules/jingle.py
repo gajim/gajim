@@ -153,7 +153,7 @@ class Jingle(BaseModule):
             self.delete_jingle_session(sid)
         raise nbxmpp.NodeProcessed
 
-    def start_audio(self, jid):
+    def start_audio(self, jid: str) -> str:
         if self.get_jingle_session(jid, media='audio'):
             return self.get_jingle_session(jid, media='audio').sid
         jingle = self.get_jingle_session(jid, media='video')
@@ -166,7 +166,7 @@ class Jingle(BaseModule):
             jingle.start_session()
         return jingle.sid
 
-    def start_video(self, jid):
+    def start_video(self, jid: str) -> str:
         if self.get_jingle_session(jid, media='video'):
             return self.get_jingle_session(jid, media='video').sid
         jingle = self.get_jingle_session(jid, media='audio')
@@ -181,9 +181,11 @@ class Jingle(BaseModule):
             jingle.start_session()
         return jingle.sid
 
-    def start_audio_video(self, jid):
-        if self.get_jingle_session(jid, media='video'):
-            return self.get_jingle_session(jid, media='video').sid
+    def start_audio_video(self, jid: str) -> str:
+        video_session = self.get_jingle_session(jid, media='video')
+        if video_session is not None:
+            return video_session.sid
+
         audio_session = self.get_jingle_session(jid, media='audio')
         video_session = self.get_jingle_session(jid, media='video')
         if audio_session and video_session:
@@ -291,12 +293,16 @@ class Jingle(BaseModule):
                     return file
         return None
 
-    def get_jingle_session(self, jid, sid=None, media=None):
-        if sid:
+    def get_jingle_session(self,
+                           jid: str,
+                           sid: Optional[str] = None,
+                           media: Optional[str] = None
+                           ) -> Optional[JingleSession]:
+        if sid is not None:
             if sid in self._sessions:
                 return self._sessions[sid]
             return None
-        if media:
+        if media is not None:
             if media not in ('audio', 'video', 'file'):
                 return None
             for session in self._sessions.values():
