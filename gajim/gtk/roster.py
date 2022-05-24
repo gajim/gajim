@@ -30,6 +30,7 @@ from gi.repository import GLib
 from gi.repository import Gtk
 
 from nbxmpp import JID
+from nbxmpp.const import PresenceShow
 from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
@@ -762,6 +763,10 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             contact2 = self._get_contact(model[iter2][Column.JID_OR_GROUP])
 
             if contact1.show != contact2.show:
+                if contact1.show == PresenceShow.DND:
+                    return 1
+                if contact2.show == PresenceShow.DND:
+                    return -1
                 return -1 if contact1.show > contact2.show else 1
 
             return locale.strcoll(name1.lower(), name2.lower())
