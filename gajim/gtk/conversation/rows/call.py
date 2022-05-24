@@ -95,10 +95,10 @@ class CallRow(BaseRow):
             session = self._client.get_module('Jingle').get_jingle_session(
                 self._event.fjid, self._event.sid)
             if session is not None:
-                app.app.call_manager.accept_call(session)
+                app.call_manager.accept_call(session)
         else:
             assert self._session is not None
-            app.app.call_manager.accept_call(self._session)
+            app.call_manager.accept_call(self._session)
 
     def _on_decline(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
@@ -107,10 +107,10 @@ class CallRow(BaseRow):
             session = self._client.get_module('Jingle').get_jingle_session(
                 self._event.fjid, self._event.sid)
             if session is not None:
-                app.app.call_manager.decline_call(session)
+                app.call_manager.decline_call(session)
         else:
             assert self._session is not None
-            app.app.call_manager.decline_call(self._session)
+            app.call_manager.decline_call(self._session)
         self._session = None
 
     def _add_history_call_widget(self) -> None:

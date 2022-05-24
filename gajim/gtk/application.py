@@ -240,8 +240,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
         from gajim.gui.status_icon import StatusIcon
         self.systray = StatusIcon()
 
-        self.call_manager = CallManager()
-
         self.add_actions()
         self._load_shortcuts()
         menus.build_accounts_menu()

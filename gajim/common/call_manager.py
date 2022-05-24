@@ -27,7 +27,7 @@ log = logging.getLogger('gajim.c.call_manager')
 
 
 class CallManager(EventHelper):
-    def __init__(self):
+    def __init__(self) -> None:
         EventHelper.__init__(self)
         self._account: Optional[str] = None
         self._resource_jid: Optional[JID] = None

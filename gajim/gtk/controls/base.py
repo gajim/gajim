@@ -316,7 +316,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 self.add_jingle_file_transfer(event=event)
                 return
             if isinstance(event, events.JingleRequestReceived):
-                active_jid = app.app.call_manager.get_active_call_jid()
+                active_jid = app.call_manager.get_active_call_jid()
                 # Don't add a second row if contact upgrades to video
                 if active_jid is None:
                     self.add_call_message(event=event)

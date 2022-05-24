@@ -79,7 +79,7 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
         ])
 
     def _on_destroy(self, *args: Any) -> None:
-        app.app.call_manager.stop_call(
+        app.call_manager.stop_call(
             self._account,
             self._resource_contact)
 
@@ -92,18 +92,18 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
         GLib.timeout_add_seconds(timeout, self.destroy)
 
     def _on_upgrade_to_video_clicked(self, button: Gtk.Button) -> None:
-        app.app.call_manager.upgrade_to_video_call()
+        app.call_manager.upgrade_to_video_call()
         button.hide()
 
     def _on_end_call_clicked(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
-        app.app.call_manager.stop_call(
+        app.call_manager.stop_call(
             self._account,
             self._resource_contact)
         self._close_with_timeout(timeout=1)
 
     def _on_enable_video_clicked(self, _button: Gtk.Button) -> None:
-        app.app.call_manager.start_call(
+        app.call_manager.start_call(
             self._account, self._contact.jid, CallType.VIDEO)
 
     def _on_num_button_press(self,
@@ -112,28 +112,28 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
                              ) -> None:
         button_id = Gtk.Buildable.get_name(button)
         key = button_id.split('_')[1]
-        app.app.call_manager.start_dtmf(
+        app.call_manager.start_dtmf(
             self._account, self._resource_contact.jid, key)
 
     def _on_num_button_release(self,
                                _button: Gtk.Button,
                                _event: Gdk.EventButton
                                ) -> None:
-        app.app.call_manager.stop_dtmf(
+        app.call_manager.stop_dtmf(
             self._account, self._resource_contact.jid)
 
     def _on_mic_volume_changed(self,
                                _button: Gtk.VolumeButton,
                                value: float
                                ) -> None:
-        app.app.call_manager.mic_volume_changed(
+        app.call_manager.mic_volume_changed(
             self._account, self._resource_contact.jid, int(value))
 
     def _on_output_volume_changed(self,
                                   _button: Gtk.VolumeButton,
                                   value: float
                                   ) -> None:
-        app.app.call_manager.output_volume_changed(
+        app.call_manager.output_volume_changed(
             self._account, self._resource_contact.jid, int(value))
 
     def _on_call_updated(self, event: CallUpdated) -> None:

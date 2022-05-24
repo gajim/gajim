@@ -35,6 +35,7 @@ from gajim.common import configpaths
 from gajim.common.events import AccountDisonnected
 from gajim.common.events import AllowGajimUpdateCheck
 from gajim.common.events import GajimUpdateAvailable
+from gajim.common.call_manager import CallManager
 from gajim.common.client import Client
 from gajim.common.helpers import make_http_request
 from gajim.common.task_manager import TaskManager
@@ -66,6 +67,8 @@ class CoreApplication:
 
         app.cert_store = CertificateStore()
         app.task_manager = TaskManager()
+
+        app.call_manager = CallManager()
 
         self._network_monitor = Gio.NetworkMonitor.get_default()
         self._network_monitor.connect('notify::network-available',

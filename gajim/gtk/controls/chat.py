@@ -448,13 +448,13 @@ class ChatControl(BaseControl):
                              _action: Gio.SimpleAction,
                              _param: Optional[GLib.Variant]
                              ) -> None:
-        app.app.call_manager.start_call(self.account, self.jid, CallType.AUDIO)
+        app.call_manager.start_call(self.account, self.jid, CallType.AUDIO)
 
     def _on_start_video_call(self,
                              _action: Gio.SimpleAction,
                              _param: Optional[GLib.Variant]
                              ) -> None:
-        app.app.call_manager.start_call(self.account, self.jid, CallType.VIDEO)
+        app.call_manager.start_call(self.account, self.jid, CallType.VIDEO)
 
     def update_ui(self) -> None:
         BaseControl.update_ui(self)

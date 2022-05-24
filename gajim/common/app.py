@@ -60,6 +60,7 @@ if typing.TYPE_CHECKING:
     from gajim.common.storage.cache import CacheStorage
     from gajim.common.storage.archive import MessageArchiveStorage
     from gajim.common.cert_store import CertificateStore
+    from gajim.common.call_manager import CallManager
 
 
 interface = cast(types.InterfaceT, None)
@@ -105,6 +106,8 @@ nicks: dict[str, str] = {}
 proxy65_manager = None
 
 cert_store = cast('CertificateStore', None)
+
+call_manager = cast('CallManager', None)
 
 task_manager = None
 
