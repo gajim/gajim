@@ -1219,11 +1219,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 else:
                     set_urgency_hint(app.window, True)
 
-            if chat_active and self._scrolled_view.get_autoscroll():
-                # Send chat marker if we’re actively following the chat
-                pass
-                #app.window.mark_as_read(self.account, self.contact.jid)
-
     def _notify(self,
                 name: str,
                 text: str,

@@ -390,9 +390,6 @@ class ChatControl(BaseControl):
                          stanza_id=event.stanza_id,
                          additional_data=event.additional_data)
 
-        if kind == 'outgoing':
-            self.conversation_view.set_read_marker(event.properties.id)
-
     def _on_message_error(self, event: events.MessageError) -> None:
         self.conversation_view.show_error(event.message_id, event.error)
 
