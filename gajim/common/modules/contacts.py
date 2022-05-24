@@ -257,6 +257,18 @@ class BareContact(CommonContact):
                 return True
         return False
 
+    def supports_audio(self) -> bool:
+        if (self.supports(Namespace.JINGLE_ICE_UDP) and
+                app.is_installed('FARSTREAM')):
+            return self.supports(Namespace.JINGLE_RTP_AUDIO)
+        return False
+
+    def supports_video(self) -> bool:
+        if (self.supports(Namespace.JINGLE_ICE_UDP) and
+                app.is_installed('FARSTREAM')):
+            return self.supports(Namespace.JINGLE_RTP_VIDEO)
+        return False
+
     def add_resource(self, resource: str) -> ResourceContact:
         jid = self._jid.new_with(resource=resource)
         assert isinstance(self._log, LogAdapter)
