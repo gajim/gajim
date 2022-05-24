@@ -71,7 +71,6 @@ from gajim.common.helpers import ask_for_status_message
 from gajim.common.structs import OutgoingMessage
 from gajim.common.i18n import _
 from gajim.common.client import Client
-from gajim.common.preview import PreviewManager
 from gajim.common.const import FTState
 from gajim.common.file_props import FileProp
 
@@ -96,8 +95,6 @@ class Interface:
         app.thread_interface = ThreadInterface
 
         self.handlers = {}
-
-        self.preview_manager = PreviewManager()
 
         app.idlequeue = idlequeue.get_idlequeue()
         # resolve and keep current record of resolved hosts

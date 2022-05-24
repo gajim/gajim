@@ -38,6 +38,7 @@ from gajim.common.events import GajimUpdateAvailable
 from gajim.common.call_manager import CallManager
 from gajim.common.client import Client
 from gajim.common.helpers import make_http_request
+from gajim.common.preview import PreviewManager
 from gajim.common.task_manager import TaskManager
 from gajim.common.settings import Settings
 from gajim.common.settings import LegacyConfig
@@ -69,6 +70,8 @@ class CoreApplication:
         app.task_manager = TaskManager()
 
         app.call_manager = CallManager()
+
+        app.preview_manager = PreviewManager()
 
         self._network_monitor = Gio.NetworkMonitor.get_default()
         self._network_monitor.connect('notify::network-available',

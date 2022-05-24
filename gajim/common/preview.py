@@ -13,9 +13,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
-from typing import Dict
 from typing import Optional
-from typing import Tuple
 
 import logging
 import os
@@ -168,9 +166,9 @@ class Preview:
 
 class PreviewManager:
     def __init__(self) -> None:
-        self._sessions: Dict[
+        self._sessions: dict[
             str,
-            Tuple[Soup.Session, Optional[Gio.SimpleProxyResolver]]] = {}
+            tuple[Soup.Session, Optional[Gio.SimpleProxyResolver]]] = {}
 
         self._orig_dir = Path(configpaths.get('MY_DATA')) / 'downloads'
         self._thumb_dir = Path(configpaths.get('MY_CACHE')) / 'downloads.thumb'
@@ -187,7 +185,7 @@ class PreviewManager:
         return self._sessions[account][0]
 
     @staticmethod
-    def _create_session(account: str) -> Tuple[
+    def _create_session(account: str) -> tuple[
             Soup.Session, Optional[Gio.SimpleProxyResolver]]:
         session = Soup.Session()
         session.add_feature_by_type(Soup.ContentSniffer)

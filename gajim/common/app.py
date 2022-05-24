@@ -61,6 +61,7 @@ if typing.TYPE_CHECKING:
     from gajim.common.storage.archive import MessageArchiveStorage
     from gajim.common.cert_store import CertificateStore
     from gajim.common.call_manager import CallManager
+    from gajim.common.preview import PreviewManager
 
 
 interface = cast(types.InterfaceT, None)
@@ -108,6 +109,8 @@ proxy65_manager = None
 cert_store = cast('CertificateStore', None)
 
 call_manager = cast('CallManager', None)
+
+preview_manager = cast('PreviewManager', None)
 
 task_manager = None
 

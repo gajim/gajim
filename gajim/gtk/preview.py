@@ -196,8 +196,7 @@ class PreviewWidget(Gtk.Box):
         if self._preview is None:
             return
         if not self._preview.orig_exists():
-            app.interface.preview_manager.download_content(
-                self._preview, force=True)
+            app.preview_manager.download_content(self._preview, force=True)
 
     def _on_open(self, _menu: Gtk.Menu) -> None:
         if self._preview is None:
@@ -208,8 +207,7 @@ class PreviewWidget(Gtk.Box):
             return
 
         if not self._preview.orig_exists():
-            app.interface.preview_manager.download_content(
-                self._preview, force=True)
+            app.preview_manager.download_content(self._preview, force=True)
             return
 
         assert self._preview.orig_path
@@ -241,8 +239,7 @@ class PreviewWidget(Gtk.Box):
             shutil.copyfile(str(self._preview.orig_path), target_path)
 
         if not self._preview.orig_exists():
-            app.interface.preview_manager.download_content(
-                self._preview, force=True)
+            app.preview_manager.download_content(self._preview, force=True)
             return
 
         FileSaveDialog(_on_ok,
@@ -253,8 +250,7 @@ class PreviewWidget(Gtk.Box):
     def _on_open_folder(self, _menu: Gtk.Menu) -> None:
         assert self._preview
         if not self._preview.orig_exists():
-            app.interface.preview_manager.download_content(
-                self._preview, force=True)
+            app.preview_manager.download_content(self._preview, force=True)
             return
         assert self._preview.orig_path
         open_file(self._preview.orig_path.parent)
@@ -291,7 +287,7 @@ class PreviewWidget(Gtk.Box):
 
     def _on_cancel_download_clicked(self, _button: Gtk.Button) -> None:
         assert self._preview is not None
-        app.interface.preview_manager.cancel_download(self._preview)
+        app.preview_manager.cancel_download(self._preview)
 
     @staticmethod
     def _on_realize(event_box: Gtk.EventBox) -> None:

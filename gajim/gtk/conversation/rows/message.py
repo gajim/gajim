@@ -124,14 +124,14 @@ class MessageRow(BaseRow):
 
         is_previewable = False
         if additional_data is not None:
-            is_previewable = app.interface.preview_manager.is_previewable(
+            is_previewable = app.preview_manager.is_previewable(
                 text, additional_data)
         if is_previewable:
             context = None
             if self._is_groupchat:
                 context = get_muc_context(self._contact.jid)
             self._message_widget = PreviewWidget(account)
-            app.interface.preview_manager.create_preview(
+            app.preview_manager.create_preview(
                 text, self._message_widget, is_self, context)
         else:
             self._message_widget = MessageWidget(account)
