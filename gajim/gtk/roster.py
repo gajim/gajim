@@ -529,6 +529,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
                            _signal_name: str) -> None:
 
         self._draw_contact(contact)
+        self._refilter()
 
     @event_filter(['account'])
     def _on_roster_received(self, _event: RosterReceived) -> None:
