@@ -9,7 +9,6 @@
 * [ ] Update `ChangeLog`
 * [ ] Run `./scripts/bump_version.py x.x.x`
 * [ ] Push release tag `x.x.x`
-* [ ] Update Debian repository on gajim.org
 
 ## Update
 * [ ] Website: Write announcement post with changelog
