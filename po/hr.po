@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: 2009-10-31 20:49+0100\n"
 "Last-Translator: Adrian C. <anrxc@sysphere.org>\n"
 "Language-Team: Croatian\n"
@@ -18,8 +18,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 msgid ""
 "\n"
@@ -1287,6 +1287,9 @@ msgstr "Oboje"
 msgid "Browse"
 msgstr "_Pregled"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Pregled %(address)s koristeći račun %(account)s"
@@ -1314,6 +1317,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2537,9 +2547,6 @@ msgstr "Razmjena datoteka zaustavljena"
 msgid "File transfers"
 msgstr "Prijenosi Datoteka"
 
-msgid "File: "
-msgstr "Datoteka: "
-
 #, python-format
 msgid "File: %s"
 msgstr "Datoteka: %s"
@@ -3163,7 +3170,7 @@ msgid "Ignore Unknown Contacts"
 msgstr "Pozovi _Kontakte"
 
 #, fuzzy
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "_Ignoriraj događaje od kontakata koji nisu na listi kontakata"
 
 #, fuzzy
@@ -3666,9 +3673,6 @@ msgstr ""
 "Poruke će biti dostupne za čitanje i kasnije ukoliko imate omogućenu "
 "povijest i kontakt je na vašoj listi."
 
-msgid "Microphone & Camera"
-msgstr ""
-
 #, fuzzy
 msgid "Minutes until your status gets changed"
 msgstr "_Pamti promjene statusa kontakata"
@@ -3747,9 +3751,6 @@ msgstr "Dodaj Novi Kontakt"
 #, fuzzy
 msgid "New Group"
 msgstr "Novi Grupni Razgovor"
-
-msgid "New Message"
-msgstr "Nova Poruka"
 
 #, fuzzy
 msgid "New Search"
@@ -3873,13 +3874,6 @@ msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr ""
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-
-#, fuzzy
-msgid "Note: Chat history is disabled for this contact."
-msgstr "Ignoriraj ovu grešku za ovaj certifikat."
 
 msgid "Notes"
 msgstr ""
@@ -4605,9 +4599,6 @@ msgstr "_Ukloni"
 msgid "Removing Account..."
 msgstr "Uklanjanje %s računa"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 #, fuzzy
 msgid "Report"
 msgstr "_Prijavi Grešku"
@@ -4798,10 +4789,6 @@ msgstr "Spremiti lozinku"
 #, fuzzy
 msgid "Save as..."
 msgstr "Imam "
-
-#, fuzzy
-msgid "Save conversations for all contacts"
-msgstr "Spremaj _povijest razgovora za sve kontakte"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -5134,6 +5121,9 @@ msgstr "Registracija nije uspijela"
 msgid "Share Status"
 msgstr "Status"
 
+msgid "Share Video"
+msgstr ""
+
 #, fuzzy
 msgid "Share my online status"
 msgstr "Promjeni status"
@@ -5412,10 +5402,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "Započeti Razgovor"
 
-#, fuzzy
-msgid "Start Call…"
-msgstr "Započeti Razgovor"
-
 msgid "Start Chat"
 msgstr "Započeti Razgovor"
 
@@ -5431,8 +5417,13 @@ msgstr "Započeti Razgovor"
 msgid "Start Search..."
 msgstr "_Novi Razgovor..."
 
-msgid "Start Video"
-msgstr ""
+#, fuzzy
+msgid "Start Video Call…"
+msgstr "Započeti Razgovor"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Započeti Razgovor"
 
 #, fuzzy
 msgid "Start a new chat"
@@ -5509,9 +5500,6 @@ msgid "Stop sharing online status?"
 msgstr "da mi prikaže status"
 
 msgid "Stopped sharing their status with you"
-msgstr ""
-
-msgid "Store conversations on the harddrive"
 msgstr ""
 
 #, fuzzy
@@ -6300,9 +6288,6 @@ msgstr ""
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr "Ukoliko niste spojeni nećete moći pregledati dostupne usluge"
 
@@ -6318,10 +6303,6 @@ msgstr "Napredne Akcije"
 
 msgid "X11"
 msgstr ""
-
-#, fuzzy
-msgid "XHTML Formatting"
-msgstr "Prikaži popis formata"
 
 msgid "XML Console"
 msgstr "XML Konzola"
@@ -6485,12 +6466,6 @@ msgstr "Niste se  pridružili grupnom razgovoru"
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr "Upravo ste primili novu poruku od \"%s\""
 
 #, fuzzy
 msgid "You left this group chat"
@@ -7175,3 +7150,27 @@ msgstr "%(nick)s je trenutno %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "File: "
+#~ msgstr "Datoteka: "
+
+#~ msgid "New Message"
+#~ msgstr "Nova Poruka"
+
+#, fuzzy
+#~ msgid "Note: Chat history is disabled for this contact."
+#~ msgstr "Ignoriraj ovu grešku za ovaj certifikat."
+
+#, fuzzy
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Spremaj _povijest razgovora za sve kontakte"
+
+#, fuzzy
+#~ msgid "XHTML Formatting"
+#~ msgstr "Prikaži popis formata"
+
+#, fuzzy
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr "Upravo ste primili novu poruku od \"%s\""

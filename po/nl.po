@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -1259,6 +1259,9 @@ msgstr "Beide"
 msgid "Browse"
 msgstr "Bladeren"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Bladeren op %(address)s met account %(account)s"
@@ -1286,6 +1289,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2492,9 +2502,6 @@ msgstr "Bestandsoverdracht gestopt"
 msgid "File transfers"
 msgstr "Bestandsoverdrachten"
 
-msgid "File: "
-msgstr "Bestand: "
-
 #, python-format
 msgid "File: %s"
 msgstr "Bestand: %s"
@@ -3167,7 +3174,7 @@ msgid "Ignore Unknown Contacts"
 msgstr "Contacten uitnodigen"
 
 #, fuzzy
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "_Negeer gebeurtenissen van contacten die niet op mijn rooster staan"
 
 msgid "Image"
@@ -3684,9 +3691,6 @@ msgstr ""
 "Berichten zullen alleen voor later beschikbaar zijn als je geschiedenis "
 "ingeschakeld hebt en het contact in je rooster staat."
 
-msgid "Microphone & Camera"
-msgstr ""
-
 #, fuzzy
 msgid "Minutes until your status gets changed"
 msgstr "Statusveranderingen tonen"
@@ -3761,9 +3765,6 @@ msgstr "Nieuw contact"
 #, fuzzy
 msgid "New Group"
 msgstr "Nieuw groepsgesprek"
-
-msgid "New Message"
-msgstr "Nieuw bericht"
 
 #, fuzzy
 msgid "New Search"
@@ -3881,13 +3882,6 @@ msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr ""
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-
-#, fuzzy
-msgid "Note: Chat history is disabled for this contact."
-msgstr "Versleuteling wordt gebruikt voor dit contact."
 
 msgid "Notes"
 msgstr ""
@@ -4603,9 +4597,6 @@ msgstr "Verwijderen"
 msgid "Removing Account..."
 msgstr "Account %s wordt verwijderd"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 #, fuzzy
 msgid "Report"
 msgstr "_Fout melden"
@@ -4799,9 +4790,6 @@ msgstr "Wachtwoord opslaan"
 #, fuzzy
 msgid "Save as..."
 msgstr "Opslaan _als"
-
-msgid "Save conversations for all contacts"
-msgstr "Gesprekken opslaan voor alle contacten"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -5136,6 +5124,10 @@ msgid "Share Status"
 msgstr "Status"
 
 #, fuzzy
+msgid "Share Video"
+msgstr "een video-"
+
+#, fuzzy
 msgid "Share my online status"
 msgstr "Status veranderen"
 
@@ -5419,10 +5411,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "Gesprek beginnen"
 
-#, fuzzy
-msgid "Start Call…"
-msgstr "Gesprek beginnen"
-
 msgid "Start Chat"
 msgstr "Gesprek beginnen"
 
@@ -5439,8 +5427,12 @@ msgid "Start Search..."
 msgstr "Gesprek beginnen…"
 
 #, fuzzy
-msgid "Start Video"
-msgstr "een video-"
+msgid "Start Video Call…"
+msgstr "Gesprek beginnen"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Gesprek beginnen"
 
 msgid "Start a new chat"
 msgstr "Nieuw gesprek beginnen"
@@ -5516,9 +5508,6 @@ msgstr "mij status te sturen"
 
 msgid "Stopped sharing their status with you"
 msgstr ""
-
-msgid "Store conversations on the harddrive"
-msgstr "Berichten opslaan op harde schijf"
 
 msgid "Street"
 msgstr "Straat"
@@ -6314,9 +6303,6 @@ msgstr ""
 "Windows-aanmeldingsgegevensbeheer wordt gebruikt voor veilige "
 "wachtwoordopslag"
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr ""
 "Zonder verbinding is het niet mogelijk te bladeren door aangeboden diensten"
@@ -6333,10 +6319,6 @@ msgstr "Gea_vanceerde Acties"
 
 msgid "X11"
 msgstr ""
-
-#, fuzzy
-msgid "XHTML Formatting"
-msgstr "Toon een lijst van opmaakstijlen"
 
 msgid "XML Console"
 msgstr "XML-console"
@@ -6511,12 +6493,6 @@ msgstr "Je neemt niet deel aan een groepsgesprek."
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr "Je hebt zonet een nieuw bericht ontvangen van %s"
 
 #, fuzzy
 msgid "You left this group chat"
@@ -7189,3 +7165,29 @@ msgstr "{nick} is nu {show}{status}"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "File: "
+#~ msgstr "Bestand: "
+
+#~ msgid "New Message"
+#~ msgstr "Nieuw bericht"
+
+#, fuzzy
+#~ msgid "Note: Chat history is disabled for this contact."
+#~ msgstr "Versleuteling wordt gebruikt voor dit contact."
+
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Gesprekken opslaan voor alle contacten"
+
+#~ msgid "Store conversations on the harddrive"
+#~ msgstr "Berichten opslaan op harde schijf"
+
+#, fuzzy
+#~ msgid "XHTML Formatting"
+#~ msgstr "Toon een lijst van opmaakstijlen"
+
+#, fuzzy
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr "Je hebt zonet een nieuw bericht ontvangen van %s"

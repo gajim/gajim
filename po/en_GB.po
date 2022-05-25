@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: 2009-11-20 20:49+1100\n"
 "Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: English <en_gb@li.org>\n"
@@ -1271,6 +1271,9 @@ msgstr "Both"
 msgid "Browse"
 msgstr "_Browse"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Browsing %(address)s using account %(account)s"
@@ -1298,6 +1301,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2516,9 +2526,6 @@ msgstr "File transfer stopped"
 msgid "File transfers"
 msgstr "File Transfers"
 
-msgid "File: "
-msgstr "File: "
-
 #, python-format
 msgid "File: %s"
 msgstr "File: %s"
@@ -3138,7 +3145,7 @@ msgid "Ignore Unknown Contacts"
 msgstr "Invite _Contacts"
 
 #, fuzzy
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "_Ignore events from contacts not in the roster"
 
 #, fuzzy
@@ -3642,9 +3649,6 @@ msgstr ""
 "Messages will only be available for reading them later if you have history "
 "enabled and contact is in your roster."
 
-msgid "Microphone & Camera"
-msgstr ""
-
 #, fuzzy
 msgid "Minutes until your status gets changed"
 msgstr "_Log status changes of contacts"
@@ -3723,9 +3727,6 @@ msgstr "Add New Contact"
 #, fuzzy
 msgid "New Group"
 msgstr "New Group Chat"
-
-msgid "New Message"
-msgstr "New Message"
 
 #, fuzzy
 msgid "New Search"
@@ -3848,13 +3849,6 @@ msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr ""
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-
-#, fuzzy
-msgid "Note: Chat history is disabled for this contact."
-msgstr "Ignore this error for this certificate."
 
 msgid "Notes"
 msgstr ""
@@ -4580,9 +4574,6 @@ msgstr "_Remove"
 msgid "Removing Account..."
 msgstr "Removing %s account"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 #, fuzzy
 msgid "Report"
 msgstr "_Report Bug"
@@ -4772,10 +4763,6 @@ msgstr "Save password"
 #, fuzzy
 msgid "Save as..."
 msgstr "Have "
-
-#, fuzzy
-msgid "Save conversations for all contacts"
-msgstr "Save conversation _logs for all contacts"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -5107,6 +5094,9 @@ msgstr "Registration failed"
 msgid "Share Status"
 msgstr "Status"
 
+msgid "Share Video"
+msgstr ""
+
 #, fuzzy
 msgid "Share my online status"
 msgstr "Change status"
@@ -5384,10 +5374,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "Start Chat"
 
-#, fuzzy
-msgid "Start Call…"
-msgstr "Start Chat"
-
 msgid "Start Chat"
 msgstr "Start Chat"
 
@@ -5403,8 +5389,13 @@ msgstr "Start Chat"
 msgid "Start Search..."
 msgstr "_Start Chat..."
 
-msgid "Start Video"
-msgstr ""
+#, fuzzy
+msgid "Start Video Call…"
+msgstr "Start Chat"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Start Chat"
 
 #, fuzzy
 msgid "Start a new chat"
@@ -5481,9 +5472,6 @@ msgid "Stop sharing online status?"
 msgstr "to send me status"
 
 msgid "Stopped sharing their status with you"
-msgstr ""
-
-msgid "Store conversations on the harddrive"
 msgstr ""
 
 #, fuzzy
@@ -6266,9 +6254,6 @@ msgstr ""
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr "Without a connection, you can not browse available services"
 
@@ -6284,10 +6269,6 @@ msgstr "Advanced Actions"
 
 msgid "X11"
 msgstr ""
-
-#, fuzzy
-msgid "XHTML Formatting"
-msgstr "Show a list of formattings"
 
 msgid "XML Console"
 msgstr "XML Console"
@@ -6451,12 +6432,6 @@ msgstr "You have not joined a groupchat."
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr "You just received a new message from \"%s\""
 
 #, fuzzy
 msgid "You left this group chat"
@@ -7133,3 +7108,27 @@ msgstr "%(nick)s is now %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "File: "
+#~ msgstr "File: "
+
+#~ msgid "New Message"
+#~ msgstr "New Message"
+
+#, fuzzy
+#~ msgid "Note: Chat history is disabled for this contact."
+#~ msgstr "Ignore this error for this certificate."
+
+#, fuzzy
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Save conversation _logs for all contacts"
+
+#, fuzzy
+#~ msgid "XHTML Formatting"
+#~ msgstr "Show a list of formattings"
+
+#, fuzzy
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr "You just received a new message from \"%s\""

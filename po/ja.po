@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
-"PO-Revision-Date: 2022-05-17 15:29+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
+"PO-Revision-Date: 2022-05-25 02:29+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
 "ja/>\n"
@@ -1129,6 +1129,9 @@ msgstr "相互に承認"
 msgid "Browse"
 msgstr "一覧"
 
+msgid "Browse history by date"
+msgstr "閲覧履歴(日付順)"
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "アカウント %(account)s で %(address)s を閲覧"
@@ -1157,6 +1160,13 @@ msgstr "通話 着信"
 
 msgid "Call Outgoing"
 msgstr "通話 発信"
+
+msgid "Call ended"
+msgstr "終了した通話"
+
+#, python-format
+msgid "Call with %s"
+msgstr "%s さんと通話"
 
 msgid "Calling (Video)…"
 msgstr "通話(ビデオ)…"
@@ -2207,9 +2217,6 @@ msgstr "ファイルの転送が中断しました"
 msgid "File transfers"
 msgstr "ファイル転送"
 
-msgid "File: "
-msgstr "ファイル: "
-
 #, python-format
 msgid "File: %s"
 msgstr "ファイル: %s"
@@ -2780,7 +2787,7 @@ msgstr ""
 msgid "Ignore Unknown Contacts"
 msgstr "未知の相手先を無視"
 
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "相手先一覧にない相手先からのすべてを無視します"
 
 msgid "Image"
@@ -2934,7 +2941,8 @@ msgstr "出かけています。"
 msgid ""
 "I’m synchronizing my contacts from my account at \"%s\". Could you please "
 "add this address to your contact list?"
-msgstr ""
+msgstr "私はアカウントの相手先を \"%s\" に同期しています。"
+"このアドレスをあなたの相手先一覧に追加していただけますか ?"
 
 msgid "I’m watching a movie."
 msgstr "ただいま映画鑑賞中です。"
@@ -3124,7 +3132,7 @@ msgid "Make Owner"
 msgstr "主宰者にする"
 
 msgid "Make your profile visible for everyone or just for your contacts."
-msgstr ""
+msgstr "自分のプロフィールを誰にでもまたは自分の相手先だけに見えるようにします。"
 
 msgid "Male"
 msgstr "男性"
@@ -3168,12 +3176,11 @@ msgid ""
 "cleared."
 msgstr "表示された会話の最大行数。古いほうから削除されます。"
 
-#, fuzzy
 msgid "Me"
-msgstr "Me"
+msgstr "私"
 
 msgid "Media Playback"
-msgstr ""
+msgstr "メディアの再生"
 
 # (Mako)「会員」では排他的なニュアンスが強いのでしかたなくカタカナ語で
 msgid "Member"
@@ -3224,9 +3231,6 @@ msgid ""
 msgstr ""
 "履歴が有効になっていて、かつ相手先が相手先一覧にあれば、メッセージは後で読め"
 "ます。"
-
-msgid "Microphone & Camera"
-msgstr "マイクロフォンとカメラ"
 
 msgid "Minutes until your status gets changed"
 msgstr "在籍状況を変更するまでの時間(分)"
@@ -3297,9 +3301,6 @@ msgstr "新しい相手先"
 
 msgid "New Group"
 msgstr "新しいグループ"
-
-msgid "New Message"
-msgstr "新着メッセージ"
 
 msgid "New Search"
 msgstr "新しい検索"
@@ -3405,16 +3406,10 @@ msgid "Not encrypted"
 msgstr "暗号化されていません"
 
 msgid "Note to myself"
-msgstr ""
+msgstr "自分自身へのメモ"
 
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr "注意: 匿名アカウントはすべてのサーバーで可能というわけではありません"
-
-msgid "Note: Chat history is disabled for this account."
-msgstr "注意: このアカウントの会話履歴は無効になっています。"
-
-msgid "Note: Chat history is disabled for this contact."
-msgstr "注意: この相手先の会話履歴は無効になっています。"
 
 msgid "Notes"
 msgstr "備考"
@@ -3721,6 +3716,9 @@ msgid ""
 "Gajim will export all messages from the selected account to a directory of "
 "your choice."
 msgstr ""
+"自分のアカウントを1つ選択してください。\n"
+"Gajim "
+"は選択したアカウントのすべてのメッセージを選んだディレクトリに書き出します。"
 
 msgid "Please use these settings with caution!"
 msgstr "これらの設定には注意してください。"
@@ -4052,9 +4050,6 @@ msgstr "削除…"
 msgid "Removing Account..."
 msgstr "アカウントを削除…"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr "受信メッセージの XHTML スタイル (色など) をレンダリングします"
-
 msgid "Report"
 msgstr "報告"
 
@@ -4221,9 +4216,6 @@ msgstr "パスワードを保存"
 
 msgid "Save as..."
 msgstr "名前を付けて保存…"
-
-msgid "Save conversations for all contacts"
-msgstr "すべての相手先の会話記録を保存する"
 
 msgid "Saving Avatar Failed"
 msgstr "アバターの保存に失敗しました"
@@ -4510,7 +4502,7 @@ msgid ""
 msgstr "友人にどうしているかを知らせるため、動向・聴いている楽曲・気分を設定"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
-msgstr ""
+msgstr "GLib デバッグのメッセージが出力されるように環境変数を設定"
 
 msgid "Setting is locked by the system"
 msgstr "設定はシステムによって制限されています"
@@ -4520,6 +4512,10 @@ msgstr "設定"
 
 msgid "Share Status"
 msgstr "在席状況を通知"
+
+#, fuzzy
+msgid "Share Video"
+msgstr "ビデオ通話を開始"
 
 msgid "Share my online status"
 msgstr "在席状況を知らせる"
@@ -4635,7 +4631,8 @@ msgstr "記録されたメッセージから、検索語句を含むものを表
 msgid ""
 "Show message meta data (avatar, nickname, timestamp) only once, if there are "
 "multiple messages from the same sender within a specific timespan."
-msgstr ""
+msgstr "一定時間内に同一送信者からのメッセージがあった場合、メタデータ(アバター、ニッ"
+"クネーム、時刻)は一度だけ表示します。"
 
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "離席や取り込み中などでも通知を表示します"
@@ -4766,9 +4763,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "チャットを開始"
 
-msgid "Start Call…"
-msgstr "通話を開始…"
-
 msgid "Start Chat"
 msgstr "チャットを開始"
 
@@ -4781,8 +4775,11 @@ msgstr "新しいチャットを開始"
 msgid "Start Search..."
 msgstr "検索を開始..."
 
-msgid "Start Video"
-msgstr "ビデオ通話を開始"
+msgid "Start Video Call…"
+msgstr "ビデオ通話を開始…"
+
+msgid "Start Voice Call…"
+msgstr "音声通話を開始…"
 
 msgid "Start a new chat"
 msgstr "新しいチャットを開始"
@@ -4795,7 +4792,7 @@ msgstr ""
 "スを入力することもできます。"
 
 msgid "Start/stop playback"
-msgstr ""
+msgstr "再生を開始/停止"
 
 msgid "State"
 msgstr "州(県)"
@@ -4848,9 +4845,6 @@ msgstr "在席状況を知らせるのをやめますか ?"
 
 msgid "Stopped sharing their status with you"
 msgstr "在席状況を知らせることをやめました"
-
-msgid "Store conversations on the harddrive"
-msgstr "ハードドライブに会話を保存します"
 
 msgid "Street"
 msgstr "町丁名・番地"
@@ -5576,9 +5570,6 @@ msgstr "Windows"
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr "安全なパスワード保存に Windows Credential Vault を使用します"
 
-msgid "With Microphone"
-msgstr "マイクロフォン"
-
 msgid "Without a connection, you can not browse available services"
 msgstr "接続しないと、サービスを見ることはできません"
 
@@ -5593,9 +5584,6 @@ msgstr "作業空間の設定"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XHTML Formatting"
-msgstr "XHTML 装飾"
 
 msgid "XML Console"
 msgstr "XML コンソール"
@@ -5744,14 +5732,6 @@ msgstr "談話室を作成するには、接続されている必要がありま
 
 msgid "You have to invite people so they can join"
 msgstr "他の人が参加できるよう招待する必要があります"
-
-#, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr ""
-"\"%s\" さんから新しいメッセージを受信しました。\n"
-"このタブを閉じますか ?"
 
 msgid "You left this group chat"
 msgstr "このグループチャットから退出しました"
@@ -6351,3 +6331,40 @@ msgstr "{nick} は現在 {show}{status}"
 
 msgid "…or drop it here"
 msgstr "…またはここにドロップ"
+
+#~ msgid "File: "
+#~ msgstr "ファイル: "
+
+#~ msgid "Microphone & Camera"
+#~ msgstr "マイクロフォンとカメラ"
+
+#~ msgid "New Message"
+#~ msgstr "新着メッセージ"
+
+#~ msgid "Note: Chat history is disabled for this account."
+#~ msgstr "注意: このアカウントの会話履歴は無効になっています。"
+
+#~ msgid "Note: Chat history is disabled for this contact."
+#~ msgstr "注意: この相手先の会話履歴は無効になっています。"
+
+#~ msgid "Render XHTML styles (colors, etc.) of incoming messages"
+#~ msgstr "受信メッセージの XHTML スタイル (色など) をレンダリングします"
+
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "すべての相手先の会話記録を保存する"
+
+#~ msgid "Store conversations on the harddrive"
+#~ msgstr "ハードドライブに会話を保存します"
+
+#~ msgid "With Microphone"
+#~ msgstr "マイクロフォン"
+
+#~ msgid "XHTML Formatting"
+#~ msgstr "XHTML 装飾"
+
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr ""
+#~ "\"%s\" さんから新しいメッセージを受信しました。\n"
+#~ "このタブを閉じますか ?"

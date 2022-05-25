@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
-"PO-Revision-Date: 2022-05-17 15:29+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
+"PO-Revision-Date: 2022-05-23 05:30+0000\n"
 "Last-Translator: Tommy He <lovenemesis@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
 "gajim/master/zh_Hans/>\n"
@@ -1108,6 +1108,9 @@ msgstr "两者"
 msgid "Browse"
 msgstr "浏览"
 
+msgid "Browse history by date"
+msgstr "按照日期浏览记录"
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "用账户 %(account)s 浏览 %(address)s"
@@ -1136,6 +1139,13 @@ msgstr "通话来电"
 
 msgid "Call Outgoing"
 msgstr "通话去电"
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
+msgstr ""
 
 msgid "Calling (Video)…"
 msgstr "通话中(视频)…"
@@ -2165,9 +2175,6 @@ msgstr "文件传输已停止"
 msgid "File transfers"
 msgstr "文件传输"
 
-msgid "File: "
-msgstr "文件: "
-
 #, python-format
 msgid "File: %s"
 msgstr "文件: %s"
@@ -2705,7 +2712,8 @@ msgstr ""
 msgid "Ignore Unknown Contacts"
 msgstr "忽略未知联系人"
 
-msgid "Ignore everything from contacts not in your Roster"
+#, fuzzy
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "忽略不在你花名册上联系人的一切活动"
 
 msgid "Image"
@@ -3144,9 +3152,6 @@ msgstr ""
 "除非你启用了历史记录而且向你发送消息的联系人在你的联系人列表中，你才能在以后"
 "读到这些消息。"
 
-msgid "Microphone & Camera"
-msgstr "麦克风和摄像头"
-
 msgid "Minutes until your status gets changed"
 msgstr "过多少分钟自动更改你的状态"
 
@@ -3215,9 +3220,6 @@ msgstr "新联系人"
 
 msgid "New Group"
 msgstr "新群组"
-
-msgid "New Message"
-msgstr "新消息"
 
 msgid "New Search"
 msgstr "新搜索"
@@ -3326,12 +3328,6 @@ msgstr "给自己的备注"
 
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr "注意: 匿名账户并非在所有服务器有效"
-
-msgid "Note: Chat history is disabled for this account."
-msgstr "注意：当前账户的聊天记录已停用。"
-
-msgid "Note: Chat history is disabled for this contact."
-msgstr "注意：当前联系人的聊天记录已禁用。"
 
 msgid "Notes"
 msgstr "备注"
@@ -3956,9 +3952,6 @@ msgstr "移除…"
 msgid "Removing Account..."
 msgstr "移除账户…"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr "为传入消息渲染 XHTML 风格(颜色等)"
-
 msgid "Report"
 msgstr "报告"
 
@@ -4118,9 +4111,6 @@ msgstr "保存密码"
 msgid "Save as..."
 msgstr "另存为…"
 
-msgid "Save conversations for all contacts"
-msgstr "保存与所有联系人的对话"
-
 msgid "Saving Avatar Failed"
 msgstr "保存头像失败"
 
@@ -4233,7 +4223,7 @@ msgid "Send DTMF sequence through an open voice chat"
 msgstr "通过开放的语音聊天发送 DTMF 序列"
 
 msgid "Send File"
-msgstr "发送文件(&F)"
+msgstr "发送文件"
 
 #, python-format
 msgid "Send File (max. %s)…"
@@ -4411,6 +4401,10 @@ msgstr "设定"
 
 msgid "Share Status"
 msgstr "分享状态"
+
+#, fuzzy
+msgid "Share Video"
+msgstr "开启视频"
 
 msgid "Share my online status"
 msgstr "分享我的在线状态"
@@ -4648,9 +4642,6 @@ msgstr "阶段"
 msgid "Start / Join Chat"
 msgstr "开始/加入聊天"
 
-msgid "Start Call…"
-msgstr "开始通话…"
-
 msgid "Start Chat"
 msgstr "开始聊天"
 
@@ -4663,8 +4654,13 @@ msgstr "开始新聊天"
 msgid "Start Search..."
 msgstr "开始搜索…"
 
-msgid "Start Video"
-msgstr "开启视频"
+#, fuzzy
+msgid "Start Video Call…"
+msgstr "开始通话…"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "开始通话…"
 
 msgid "Start a new chat"
 msgstr "开始新聊天"
@@ -4728,9 +4724,6 @@ msgstr "停止分享在线状态？"
 
 msgid "Stopped sharing their status with you"
 msgstr "已停止与您分享他们的状态"
-
-msgid "Store conversations on the harddrive"
-msgstr "在硬盘存储对话"
 
 msgid "Street"
 msgstr "街道"
@@ -5441,9 +5434,6 @@ msgstr "窗口"
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr "Windows 凭据保险箱被用来安全的保存密码"
 
-msgid "With Microphone"
-msgstr "使用麦克风"
-
 msgid "Without a connection, you can not browse available services"
 msgstr "没有连接的话，您无法浏览可用的服务"
 
@@ -5458,9 +5448,6 @@ msgstr "工作区设定"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XHTML Formatting"
-msgstr "XHTML 格式"
 
 msgid "XML Console"
 msgstr "XML 控制台"
@@ -5605,14 +5592,6 @@ msgstr "您必须要连接来创建一个群聊。"
 
 msgid "You have to invite people so they can join"
 msgstr "您必须要邀请人员使得他们可以加入"
-
-#, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr ""
-"您刚刚收到一条来自 \"%s\" 的消息。\n"
-"您想要关闭该标签页？"
 
 msgid "You left this group chat"
 msgstr "您离开了该群聊"
@@ -6154,7 +6133,9 @@ msgid "timestamp"
 msgstr "时间戳"
 
 msgid "translator-credits"
-msgstr "翻译者-贡献"
+msgstr ""
+"SAIHAZE <saihaze@outlook.com>, 2022\n"
+"Tommy He <lovenemesis@gmail.com>, 2022"
 
 msgid "user@example.org"
 msgstr "user@example.org"
@@ -6199,3 +6180,40 @@ msgstr "{nick} 现在状态是 {show}{status}"
 
 msgid "…or drop it here"
 msgstr "或者在这里卸下"
+
+#~ msgid "File: "
+#~ msgstr "文件: "
+
+#~ msgid "Microphone & Camera"
+#~ msgstr "麦克风和摄像头"
+
+#~ msgid "New Message"
+#~ msgstr "新消息"
+
+#~ msgid "Note: Chat history is disabled for this account."
+#~ msgstr "注意：当前账户的聊天记录已停用。"
+
+#~ msgid "Note: Chat history is disabled for this contact."
+#~ msgstr "注意：当前联系人的聊天记录已禁用。"
+
+#~ msgid "Render XHTML styles (colors, etc.) of incoming messages"
+#~ msgstr "为传入消息渲染 XHTML 风格(颜色等)"
+
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "保存与所有联系人的对话"
+
+#~ msgid "Store conversations on the harddrive"
+#~ msgstr "在硬盘存储对话"
+
+#~ msgid "With Microphone"
+#~ msgstr "使用麦克风"
+
+#~ msgid "XHTML Formatting"
+#~ msgstr "XHTML 格式"
+
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr ""
+#~ "您刚刚收到一条来自 \"%s\" 的消息。\n"
+#~ "您想要关闭该标签页？"

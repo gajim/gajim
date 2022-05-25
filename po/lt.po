@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -1240,6 +1240,9 @@ msgstr "Abu"
 msgid "Browse"
 msgstr "_Browse"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr ""
@@ -1267,6 +1270,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2464,9 +2474,6 @@ msgstr "Failo siuntimas sustabdytas"
 msgid "File transfers"
 msgstr "Failų siuntimai"
 
-msgid "File: "
-msgstr "File: "
-
 #, python-format
 msgid "File: %s"
 msgstr "File: %s"
@@ -3068,7 +3075,7 @@ msgid "Ignore Unknown Contacts"
 msgstr "Kviesti Kontaktus"
 
 #, fuzzy
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "_Ignoruoti įvykius nuo asmenų nesančių kontaktų sąraše"
 
 #, fuzzy
@@ -3562,9 +3569,6 @@ msgid ""
 "history is enabled and if the contact is in your contact list."
 msgstr ""
 
-msgid "Microphone & Camera"
-msgstr ""
-
 #, fuzzy
 msgid "Minutes until your status gets changed"
 msgstr "_Registruoti asmenų būklės pakitimus"
@@ -3643,9 +3647,6 @@ msgstr "Prijungti naują asmenį"
 #, fuzzy
 msgid "New Group"
 msgstr "New Group Chat"
-
-msgid "New Message"
-msgstr "New Message"
 
 #, fuzzy
 msgid "New Search"
@@ -3767,12 +3768,6 @@ msgid "Note to myself"
 msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
-msgstr ""
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-
-msgid "Note: Chat history is disabled for this contact."
 msgstr ""
 
 msgid "Notes"
@@ -4491,9 +4486,6 @@ msgstr "_Trinti"
 msgid "Removing Account..."
 msgstr "Gajim account %s"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 #, fuzzy
 msgid "Report"
 msgstr "Eksportuoti"
@@ -4679,10 +4671,6 @@ msgstr "Save password"
 #, fuzzy
 msgid "Save as..."
 msgstr "Turiu "
-
-#, fuzzy
-msgid "Save conversations for all contacts"
-msgstr "Saugoti visų asmenų pokalbių žurnalus"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -5013,6 +5001,9 @@ msgstr "Registracija nesėkminga"
 msgid "Share Status"
 msgstr "Būklė"
 
+msgid "Share Video"
+msgstr ""
+
 #, fuzzy
 msgid "Share my online status"
 msgstr "Change status"
@@ -5287,10 +5278,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "Start Chat"
 
-#, fuzzy
-msgid "Start Call…"
-msgstr "Start Chat"
-
 msgid "Start Chat"
 msgstr "Start Chat"
 
@@ -5306,8 +5293,13 @@ msgstr "Start Chat"
 msgid "Start Search..."
 msgstr "_Pradėti pokalbį..."
 
-msgid "Start Video"
-msgstr ""
+#, fuzzy
+msgid "Start Video Call…"
+msgstr "Start Chat"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Start Chat"
 
 #, fuzzy
 msgid "Start a new chat"
@@ -5384,9 +5376,6 @@ msgid "Stop sharing online status?"
 msgstr "informavimui mane, apie būklę"
 
 msgid "Stopped sharing their status with you"
-msgstr ""
-
-msgid "Store conversations on the harddrive"
 msgstr ""
 
 #, fuzzy
@@ -6143,9 +6132,6 @@ msgstr ""
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr "Without a connection, you can not browse available services"
 
@@ -6161,10 +6147,6 @@ msgstr "Išplėstiniai veiksmai"
 
 msgid "X11"
 msgstr ""
-
-#, fuzzy
-msgid "XHTML Formatting"
-msgstr "Rodyti formatavimo sąrašą"
 
 msgid "XML Console"
 msgstr "XML Console"
@@ -6324,12 +6306,6 @@ msgstr "You have not joined a groupchat."
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr "You just received a new message from \"%s\""
 
 #, fuzzy
 msgid "You left this group chat"
@@ -6997,3 +6973,23 @@ msgstr "%(nick)s is now %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "File: "
+#~ msgstr "File: "
+
+#~ msgid "New Message"
+#~ msgstr "New Message"
+
+#, fuzzy
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Saugoti visų asmenų pokalbių žurnalus"
+
+#, fuzzy
+#~ msgid "XHTML Formatting"
+#~ msgstr "Rodyti formatavimo sąrašą"
+
+#, fuzzy
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr "You just received a new message from \"%s\""

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1280,6 +1280,9 @@ msgstr "Обоје"
 msgid "Browse"
 msgstr "_Преглед"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Претражујем %(address)s користећи налог %(account)s"
@@ -1307,6 +1310,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2535,9 +2545,6 @@ msgstr "Пренос датотеке заустављен"
 msgid "File transfers"
 msgstr "Преноси датотека"
 
-msgid "File: "
-msgstr "Датотека: "
-
 #, python-format
 msgid "File: %s"
 msgstr "Датотека: %s"
@@ -3158,7 +3165,7 @@ msgid "Ignore Unknown Contacts"
 msgstr "Позови контакте"
 
 #, fuzzy
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "_Игнориши догађаје од контаката који нису на листи"
 
 #, fuzzy
@@ -3661,9 +3668,6 @@ msgstr ""
 "Поруке ће бити доступне за читање и касније ако имате омогућен историјат и "
 "тај контакт у листи."
 
-msgid "Microphone & Camera"
-msgstr ""
-
 #, fuzzy
 msgid "Minutes until your status gets changed"
 msgstr "_Записуј у дневник статусне промене контаката"
@@ -3741,9 +3745,6 @@ msgstr "Додај нови контакт"
 #, fuzzy
 msgid "New Group"
 msgstr "Нови групни разговор"
-
-msgid "New Message"
-msgstr "Нова Порука"
 
 #, fuzzy
 msgid "New Search"
@@ -3867,13 +3868,6 @@ msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr ""
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-
-#, fuzzy
-msgid "Note: Chat history is disabled for this contact."
-msgstr "Игнориши ову грешку за овај сертификат."
 
 msgid "Notes"
 msgstr ""
@@ -4596,9 +4590,6 @@ msgstr "_Уклони"
 msgid "Removing Account..."
 msgstr "Уклањање рачуна %s"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 #, fuzzy
 msgid "Report"
 msgstr "Извези"
@@ -4789,10 +4780,6 @@ msgstr "Сачувај лозинку"
 #, fuzzy
 msgid "Save as..."
 msgstr "Имам "
-
-#, fuzzy
-msgid "Save conversations for all contacts"
-msgstr "Сними дневник разговора за све контакте"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -5125,6 +5112,9 @@ msgstr "Регистрација неуспела"
 msgid "Share Status"
 msgstr "Статус"
 
+msgid "Share Video"
+msgstr ""
+
 #, fuzzy
 msgid "Share my online status"
 msgstr "Измени статус"
@@ -5402,10 +5392,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "Започни разговор"
 
-#, fuzzy
-msgid "Start Call…"
-msgstr "Започни разговор"
-
 msgid "Start Chat"
 msgstr "Започни разговор"
 
@@ -5421,8 +5407,13 @@ msgstr "Започни разговор"
 msgid "Start Search..."
 msgstr "_Започни разговор"
 
-msgid "Start Video"
-msgstr ""
+#, fuzzy
+msgid "Start Video Call…"
+msgstr "Започни разговор"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Започни разговор"
 
 #, fuzzy
 msgid "Start a new chat"
@@ -5499,9 +5490,6 @@ msgid "Stop sharing online status?"
 msgstr "да ми пошаље статус"
 
 msgid "Stopped sharing their status with you"
-msgstr ""
-
-msgid "Store conversations on the harddrive"
 msgstr ""
 
 #, fuzzy
@@ -6290,9 +6278,6 @@ msgstr ""
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr "Без успостављене везе, не можете разгледати доступне услуге"
 
@@ -6308,10 +6293,6 @@ msgstr "Регистрација неуспела"
 
 msgid "X11"
 msgstr ""
-
-#, fuzzy
-msgid "XHTML Formatting"
-msgstr "Прикажи листу форматирања"
 
 msgid "XML Console"
 msgstr "XML Конзола"
@@ -6477,12 +6458,6 @@ msgstr "Ппридружили сте се групном разговору."
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr "\"%s\" Вам је управо послао поруку"
 
 #, fuzzy
 msgid "You left this group chat"
@@ -6942,8 +6917,8 @@ msgid ""
 "of all accounts that have \"sync with global status\" option set"
 msgstr ""
 "измена статуса налога \"налог\". Ако није одређен, покушај промене статуса "
-"свих налога који имају укључену опцију \"синхронизација са глобалним "
-"статусом\""
+"свих налога који имају укључену опцију \"синхронизација са глобалним статусом"
+"\""
 
 msgid ""
 "change the priority of the given account. If not specified, change status of "
@@ -7161,3 +7136,27 @@ msgstr "%(nick)s је тренутно %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "File: "
+#~ msgstr "Датотека: "
+
+#~ msgid "New Message"
+#~ msgstr "Нова Порука"
+
+#, fuzzy
+#~ msgid "Note: Chat history is disabled for this contact."
+#~ msgstr "Игнориши ову грешку за овај сертификат."
+
+#, fuzzy
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Сними дневник разговора за све контакте"
+
+#, fuzzy
+#~ msgid "XHTML Formatting"
+#~ msgstr "Прикажи листу форматирања"
+
+#, fuzzy
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr "\"%s\" Вам је управо послао поруку"

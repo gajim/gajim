@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: 2020-07-22 17:59+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -1251,6 +1251,9 @@ msgstr "Екеуі де"
 msgid "Browse"
 msgstr "Қара_п шығу"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "%(address)s қарау, %(account)s тіркелгісі"
@@ -1278,6 +1281,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2477,9 +2487,6 @@ msgstr "Файлдармен алмасу тоқтатылды"
 msgid "File transfers"
 msgstr "Файлдармен алмасу"
 
-msgid "File: "
-msgstr "Файл: "
-
 #, python-format
 msgid "File: %s"
 msgstr "Файл: %s"
@@ -3102,7 +3109,7 @@ msgid "Ignore Unknown Contacts"
 msgstr "Контакттарды _шақыру"
 
 #, fuzzy
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "_Ростердегі емес контакттардан оқиғаларды елемеу"
 
 #, fuzzy
@@ -3592,9 +3599,6 @@ msgstr ""
 "Кейінірек оқу үшін хабарламалар тек тарихыңыз қосулы және контакт "
 "ростеріңізде болса ғана қолжетерлік болады."
 
-msgid "Microphone & Camera"
-msgstr ""
-
 #, fuzzy
 msgid "Minutes until your status gets changed"
 msgstr "К_онтакттардың күй өзгерісін тарихқа жазу"
@@ -3672,9 +3676,6 @@ msgstr "Жаңа контакт қосу"
 #, fuzzy
 msgid "New Group"
 msgstr "Жаңа чат бөлмесі"
-
-msgid "New Message"
-msgstr "Жаңа хабарлама"
 
 #, fuzzy
 msgid "New Search"
@@ -3798,13 +3799,6 @@ msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr ""
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-
-#, fuzzy
-msgid "Note: Chat history is disabled for this contact."
-msgstr "Бұл сертификат үшін осы қатені елемеу."
 
 msgid "Notes"
 msgstr ""
@@ -4508,9 +4502,6 @@ msgstr "Өші_ру"
 msgid "Removing Account..."
 msgstr "%s тіркелгісі өшірілуде"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 #, fuzzy
 msgid "Report"
 msgstr "Ақаулық жөнінде хаба_рлау"
@@ -4698,10 +4689,6 @@ msgstr "Парольді сақтау"
 #, fuzzy
 msgid "Save as..."
 msgstr "Бар "
-
-#, fuzzy
-msgid "Save conversations for all contacts"
-msgstr "Барлық к_онтакттар үшін хабарламалар тарихын сақтау"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -5024,6 +5011,10 @@ msgid "Share Status"
 msgstr "Жаңа қалып-күй"
 
 #, fuzzy
+msgid "Share Video"
+msgstr "видео"
+
+#, fuzzy
 msgid "Share my online status"
 msgstr "Қалып-күйді өзгерту"
 
@@ -5296,10 +5287,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "Чатты бастау"
 
-#, fuzzy
-msgid "Start Call…"
-msgstr "Чатты бастау"
-
 msgid "Start Chat"
 msgstr "Чатты бастау"
 
@@ -5316,8 +5303,12 @@ msgid "Start Search..."
 msgstr "_Чатты бастау..."
 
 #, fuzzy
-msgid "Start Video"
-msgstr "видео"
+msgid "Start Video Call…"
+msgstr "Чатты бастау"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Чатты бастау"
 
 #, fuzzy
 msgid "Start a new chat"
@@ -5395,9 +5386,6 @@ msgid "Stop sharing online status?"
 msgstr "маған қалып-күйлерін жіберуге"
 
 msgid "Stopped sharing their status with you"
-msgstr ""
-
-msgid "Store conversations on the harddrive"
 msgstr ""
 
 msgid "Street"
@@ -6176,9 +6164,6 @@ msgstr ""
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr "Байланысты орнатпасаңыз, қолжетерлік қызметтерді қарай алмайсыз"
 
@@ -6194,10 +6179,6 @@ msgstr "Кеңейтілген әрекеттер"
 
 msgid "X11"
 msgstr ""
-
-#, fuzzy
-msgid "XHTML Formatting"
-msgstr "Пішімдеулер тізімін көрсету"
 
 msgid "XML Console"
 msgstr "XML консолі"
@@ -6359,14 +6340,6 @@ msgstr "Сіз топтық чатқа кірген жоқсыз."
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr ""
-"Сіз \"%s\" жіберген жаңа хабарламаны алдыңыз.\n"
-"Бұл бетті жабуды қалайсыз ба?"
 
 #, fuzzy
 msgid "You left this group chat"
@@ -7017,3 +6990,28 @@ msgstr "{nick} енді {show}{status}"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "File: "
+#~ msgstr "Файл: "
+
+#~ msgid "New Message"
+#~ msgstr "Жаңа хабарлама"
+
+#, fuzzy
+#~ msgid "Note: Chat history is disabled for this contact."
+#~ msgstr "Бұл сертификат үшін осы қатені елемеу."
+
+#, fuzzy
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Барлық к_онтакттар үшін хабарламалар тарихын сақтау"
+
+#, fuzzy
+#~ msgid "XHTML Formatting"
+#~ msgstr "Пішімдеулер тізімін көрсету"
+
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr ""
+#~ "Сіз \"%s\" жіберген жаңа хабарламаны алдыңыз.\n"
+#~ "Бұл бетті жабуды қалайсыз ба?"

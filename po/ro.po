@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
-"PO-Revision-Date: 2022-05-18 19:29+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
+"PO-Revision-Date: 2022-05-22 17:06+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
 "ro/>\n"
@@ -1140,6 +1140,9 @@ msgstr "Atât"
 msgid "Browse"
 msgstr "Răsfoiți"
 
+msgid "Browse history by date"
+msgstr "Răsfoiți istoricul după dată"
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Navigarea pe %(address)s utilizând contul %(account)s"
@@ -1168,6 +1171,13 @@ msgstr "Apel de intrare"
 
 msgid "Call Outgoing"
 msgstr "Apel de ieșire"
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
+msgstr ""
 
 msgid "Calling (Video)…"
 msgstr "Apelare (Video)…"
@@ -2245,9 +2255,6 @@ msgstr "Transfer de fișiere oprit"
 msgid "File transfers"
 msgstr "Transferuri de fișiere"
 
-msgid "File: "
-msgstr "Fișier: "
-
 #, python-format
 msgid "File: %s"
 msgstr "Fișier: %s"
@@ -2848,7 +2855,8 @@ msgstr ""
 msgid "Ignore Unknown Contacts"
 msgstr "Ignoră contactele necunoscute"
 
-msgid "Ignore everything from contacts not in your Roster"
+#, fuzzy
+msgid "Ignore everything from contacts not in your contact list"
 msgstr ""
 "Ignorați totul de la contactele care nu se află în lista dumneavoastră de "
 "contacte"
@@ -3309,9 +3317,6 @@ msgstr ""
 "activată stocarea istoricului conversațiilor și dacă persoana de contact se "
 "află în lista dumneavoastră de contacte."
 
-msgid "Microphone & Camera"
-msgstr "Microfon și cameră foto"
-
 msgid "Minutes until your status gets changed"
 msgstr "Minute până când statutul tău se schimbă"
 
@@ -3381,9 +3386,6 @@ msgstr "Contact nou"
 
 msgid "New Group"
 msgstr "Grup nou"
-
-msgid "New Message"
-msgstr "Mesaj nou"
 
 msgid "New Search"
 msgstr "Căutare nouă"
@@ -3492,12 +3494,6 @@ msgstr "Notă pentru mine însumi"
 
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr "Notă: Conturile anonime nu sunt posibile pe toate serverele"
-
-msgid "Note: Chat history is disabled for this account."
-msgstr "Notă: Istoricul conversațiilor este dezactivat pentru acest cont."
-
-msgid "Note: Chat history is disabled for this contact."
-msgstr "Notă: Istoricul conversațiilor este dezactivat pentru acest contact."
 
 msgid "Notes"
 msgstr "Note"
@@ -4143,9 +4139,6 @@ msgstr "Eliminați…"
 msgid "Removing Account..."
 msgstr "Eliminarea contului..."
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr "Redarea stilurilor XHTML (culori, etc.) ale mesajelor primite"
-
 msgid "Report"
 msgstr "Raport"
 
@@ -4307,9 +4300,6 @@ msgstr "Salvați parola"
 
 msgid "Save as..."
 msgstr "Salvați ca..."
-
-msgid "Save conversations for all contacts"
-msgstr "Salvați conversațiile pentru toate contactele"
 
 msgid "Saving Avatar Failed"
 msgstr "Salvarea Avatarului a eșuat"
@@ -4548,25 +4538,31 @@ msgid "Service Discovery using account %s"
 msgstr "Service Discovery utilizând contul %s"
 
 msgid "Service Gateway"
-msgstr ""
+msgstr "Portal de servicii"
 
 msgid "Service not available: Gajim is not running, or remote_control is False"
 msgstr ""
+"Serviciul nu este disponibil: Gajim nu rulează, sau remote_control este False"
 
 #, python-format
 msgid ""
 "Session bus is not available.\n"
 "Try reading %(url)s"
 msgstr ""
+"Busul de sesiune nu este disponibil.\n"
+"Încercați să citiți %(url)s"
 
 msgid "Set configuration directory"
-msgstr ""
+msgstr "Setați directorul de configurare"
 
 msgid ""
 "Set participant affiliation in group chat.\n"
 "    Affiliation can be given as one of the following values:\n"
 "    owner, admin, member, outcast, none"
 msgstr ""
+"Setați afilierea participanților în chat-ul de grup.\n"
+"    Afilierea poate fi dată ca una dintre următoarele valori:\n"
+"proprietar, administrator, membru, proscris, niciunul"
 
 msgid ""
 "Set participant role in group chat.\n"
@@ -4600,6 +4596,9 @@ msgid "Settings"
 msgstr ""
 
 msgid "Share Status"
+msgstr ""
+
+msgid "Share Video"
 msgstr ""
 
 msgid "Share my online status"
@@ -4830,9 +4829,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr ""
 
-msgid "Start Call…"
-msgstr ""
-
 msgid "Start Chat"
 msgstr ""
 
@@ -4845,8 +4841,13 @@ msgstr ""
 msgid "Start Search..."
 msgstr ""
 
-msgid "Start Video"
-msgstr ""
+#, fuzzy
+msgid "Start Video Call…"
+msgstr " (Apel video)"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr " (Apel vocal)"
 
 msgid "Start a new chat"
 msgstr ""
@@ -4909,9 +4910,6 @@ msgid "Stop sharing online status?"
 msgstr ""
 
 msgid "Stopped sharing their status with you"
-msgstr ""
-
-msgid "Store conversations on the harddrive"
 msgstr ""
 
 msgid "Street"
@@ -5597,9 +5595,6 @@ msgstr ""
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr ""
 
@@ -5613,9 +5608,6 @@ msgid "Workspace Settings"
 msgstr ""
 
 msgid "X11"
-msgstr ""
-
-msgid "XHTML Formatting"
 msgstr ""
 
 msgid "XML Console"
@@ -5758,12 +5750,6 @@ msgid "You have to be connected to create a group chat."
 msgstr ""
 
 msgid "You have to invite people so they can join"
-msgstr ""
-
-#, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
 msgstr ""
 
 msgid "You left this group chat"
@@ -6345,3 +6331,25 @@ msgstr ""
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "File: "
+#~ msgstr "Fișier: "
+
+#~ msgid "Microphone & Camera"
+#~ msgstr "Microfon și cameră foto"
+
+#~ msgid "New Message"
+#~ msgstr "Mesaj nou"
+
+#~ msgid "Note: Chat history is disabled for this account."
+#~ msgstr "Notă: Istoricul conversațiilor este dezactivat pentru acest cont."
+
+#~ msgid "Note: Chat history is disabled for this contact."
+#~ msgstr ""
+#~ "Notă: Istoricul conversațiilor este dezactivat pentru acest contact."
+
+#~ msgid "Render XHTML styles (colors, etc.) of incoming messages"
+#~ msgstr "Redarea stilurilor XHTML (culori, etc.) ale mesajelor primite"
+
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Salvați conversațiile pentru toate contactele"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -1262,6 +1262,9 @@ msgstr "Both"
 msgid "Browse"
 msgstr "瀏覽(_B)"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "用帳號 %(account)s 瀏覽位址 %(address)s"
@@ -1289,6 +1292,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2502,9 +2512,6 @@ msgstr "檔案傳輸已停止"
 msgid "File transfers"
 msgstr "檔案傳輸"
 
-msgid "File: "
-msgstr "檔案: "
-
 #, python-format
 msgid "File: %s"
 msgstr "檔案:  %s"
@@ -3114,7 +3121,7 @@ msgid "Ignore Unknown Contacts"
 msgstr "邀請聯絡人(_C)"
 
 #, fuzzy
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "忽略聯絡人清單以外的聯絡人觸發的事件(_I)"
 
 #, fuzzy
@@ -3613,9 +3620,6 @@ msgstr ""
 "除非您啟用了命令歷程記錄而且向您傳送訊息的聯絡人在您的聯絡人清單中，您才能\n"
 "在以後讀到這些訊息。"
 
-msgid "Microphone & Camera"
-msgstr ""
-
 #, fuzzy
 msgid "Minutes until your status gets changed"
 msgstr "記錄聯絡人狀態變化(_L)"
@@ -3693,9 +3697,6 @@ msgstr "加入聯絡人"
 #, fuzzy
 msgid "New Group"
 msgstr "新聊天室"
-
-msgid "New Message"
-msgstr "新訊息"
 
 #, fuzzy
 msgid "New Search"
@@ -3818,13 +3819,6 @@ msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr ""
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-
-#, fuzzy
-msgid "Note: Chat history is disabled for this contact."
-msgstr "忽略這個證書的這個錯誤。"
 
 msgid "Notes"
 msgstr ""
@@ -4542,9 +4536,6 @@ msgstr "移除(_R)"
 msgid "Removing Account..."
 msgstr "移除帳號 %s"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 #, fuzzy
 msgid "Report"
 msgstr "報告錯誤(_R)"
@@ -4735,10 +4726,6 @@ msgstr "儲存密碼"
 #, fuzzy
 msgid "Save as..."
 msgstr "儲存在: %s"
-
-#, fuzzy
-msgid "Save conversations for all contacts"
-msgstr "儲存與所有聯絡人的聊天記錄(_L)"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -5068,6 +5055,10 @@ msgid "Share Status"
 msgstr "狀態"
 
 #, fuzzy
+msgid "Share Video"
+msgstr "一個視訊"
+
+#, fuzzy
 msgid "Share my online status"
 msgstr "變更狀態"
 
@@ -5341,10 +5332,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "開始聊天"
 
-#, fuzzy
-msgid "Start Call…"
-msgstr "開始聊天"
-
 msgid "Start Chat"
 msgstr "開始聊天"
 
@@ -5361,8 +5348,12 @@ msgid "Start Search..."
 msgstr "開始聊天(_S)…"
 
 #, fuzzy
-msgid "Start Video"
-msgstr "一個視訊"
+msgid "Start Video Call…"
+msgstr "開始聊天"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "開始聊天"
 
 #, fuzzy
 msgid "Start a new chat"
@@ -5439,9 +5430,6 @@ msgid "Stop sharing online status?"
 msgstr "向我傳送狀態"
 
 msgid "Stopped sharing their status with you"
-msgstr ""
-
-msgid "Store conversations on the harddrive"
 msgstr ""
 
 #, fuzzy
@@ -6224,9 +6212,6 @@ msgstr ""
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr "連線後才可瀏覽可用服務"
 
@@ -6242,10 +6227,6 @@ msgstr "外掛程式"
 
 msgid "X11"
 msgstr ""
-
-#, fuzzy
-msgid "XHTML Formatting"
-msgstr "顯示格式清單(Alt+M)"
 
 msgid "XML Console"
 msgstr " XML 主控臺"
@@ -6408,12 +6389,6 @@ msgstr "您還沒有加入聊天室。"
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr "您剛剛收到一條來自 \"%s\" 的訊息"
 
 #, fuzzy
 msgid "You left this group chat"
@@ -7093,3 +7068,27 @@ msgstr "%(nick)s 的狀態是 %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "File: "
+#~ msgstr "檔案: "
+
+#~ msgid "New Message"
+#~ msgstr "新訊息"
+
+#, fuzzy
+#~ msgid "Note: Chat history is disabled for this contact."
+#~ msgstr "忽略這個證書的這個錯誤。"
+
+#, fuzzy
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "儲存與所有聯絡人的聊天記錄(_L)"
+
+#, fuzzy
+#~ msgid "XHTML Formatting"
+#~ msgstr "顯示格式清單(Alt+M)"
+
+#, fuzzy
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr "您剛剛收到一條來自 \"%s\" 的訊息"

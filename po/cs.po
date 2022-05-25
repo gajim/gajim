@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: 2010-01-22 14:35+0100\n"
 "Last-Translator: Petr Menšík <pihhan@cipis.net>\n"
 "Language-Team: <>\n"
@@ -1289,6 +1289,9 @@ msgstr "Oboustranná"
 msgid "Browse"
 msgstr "_Prohlížet"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Procházím %(address)s pomocí účtu %(account)s"
@@ -1316,6 +1319,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2540,9 +2550,6 @@ msgstr "Přenos souboru zastaven"
 msgid "File transfers"
 msgstr "Přenosy souborů"
 
-msgid "File: "
-msgstr "Soubor: "
-
 #, python-format
 msgid "File: %s"
 msgstr "Soubor: %s"
@@ -3160,7 +3167,7 @@ msgid "Ignore Unknown Contacts"
 msgstr "Pozvat kontakt"
 
 #, fuzzy
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "_Ignorovat události od kontaktů mimo můj Seznam"
 
 #, fuzzy
@@ -3665,9 +3672,6 @@ msgstr ""
 "Zprávy bude možné číst později, pokud máte povolený záznam historie a "
 "kontakt je v rosteru."
 
-msgid "Microphone & Camera"
-msgstr ""
-
 #, fuzzy
 msgid "Minutes until your status gets changed"
 msgstr "Zaznamenávat změny _stavu kontaktů"
@@ -3746,9 +3750,6 @@ msgstr "Přidat nový kontakt"
 #, fuzzy
 msgid "New Group"
 msgstr "Nová diskuze"
-
-msgid "New Message"
-msgstr "Nová zpráva"
 
 #, fuzzy
 msgid "New Search"
@@ -3871,13 +3872,6 @@ msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr ""
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-
-#, fuzzy
-msgid "Note: Chat history is disabled for this contact."
-msgstr "Ignorovat tuto chybu certifikátu."
 
 msgid "Notes"
 msgstr ""
@@ -4604,9 +4598,6 @@ msgstr "Odst_ranit"
 msgid "Removing Account..."
 msgstr "Odstraňuju účet %s"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 #, fuzzy
 msgid "Report"
 msgstr "_Ohlásit chybu"
@@ -4797,10 +4788,6 @@ msgstr "Uložit heslo"
 #, fuzzy
 msgid "Save as..."
 msgstr "Má"
-
-#, fuzzy
-msgid "Save conversations for all contacts"
-msgstr "Uložit _historii pro všechny kontakty"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -5133,6 +5120,10 @@ msgid "Share Status"
 msgstr "Stav"
 
 #, fuzzy
+msgid "Share Video"
+msgstr "video"
+
+#, fuzzy
 msgid "Share my online status"
 msgstr "Změnit stav"
 
@@ -5407,10 +5398,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "Začít rozhovor"
 
-#, fuzzy
-msgid "Start Call…"
-msgstr "Začít rozhovor"
-
 msgid "Start Chat"
 msgstr "Začít rozhovor"
 
@@ -5427,8 +5414,12 @@ msgid "Start Search..."
 msgstr "_Začít rozhovor"
 
 #, fuzzy
-msgid "Start Video"
-msgstr "video"
+msgid "Start Video Call…"
+msgstr "Začít rozhovor"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Začít rozhovor"
 
 #, fuzzy
 msgid "Start a new chat"
@@ -5505,9 +5496,6 @@ msgid "Stop sharing online status?"
 msgstr "Požádat o zobrazení je(jí)ho stavu"
 
 msgid "Stopped sharing their status with you"
-msgstr ""
-
-msgid "Store conversations on the harddrive"
 msgstr ""
 
 #, fuzzy
@@ -6292,9 +6280,6 @@ msgstr ""
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr "Bez spojení nemůžete prohlížet dostupné služby"
 
@@ -6310,10 +6295,6 @@ msgstr "Pokročilé akce"
 
 msgid "X11"
 msgstr ""
-
-#, fuzzy
-msgid "XHTML Formatting"
-msgstr "Zobrazit seznam formátování"
 
 msgid "XML Console"
 msgstr "XML Konzole"
@@ -6476,12 +6457,6 @@ msgstr "Nepřipojil jsi se k diskuzi."
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr "Právě jsi obdržela novou zprávu od \"%s\""
 
 #, fuzzy
 msgid "You left this group chat"
@@ -7167,3 +7142,27 @@ msgstr "%(nick)s je nyní %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "File: "
+#~ msgstr "Soubor: "
+
+#~ msgid "New Message"
+#~ msgstr "Nová zpráva"
+
+#, fuzzy
+#~ msgid "Note: Chat history is disabled for this contact."
+#~ msgstr "Ignorovat tuto chybu certifikátu."
+
+#, fuzzy
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Uložit _historii pro všechny kontakty"
+
+#, fuzzy
+#~ msgid "XHTML Formatting"
+#~ msgstr "Zobrazit seznam formátování"
+
+#, fuzzy
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr "Právě jsi obdržela novou zprávu od \"%s\""

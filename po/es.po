@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
-"PO-Revision-Date: 2022-05-16 22:00+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
+"PO-Revision-Date: 2022-05-24 14:24+0000\n"
 "Last-Translator: El gran Pirujo <boina@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
@@ -1132,6 +1132,9 @@ msgstr "Ambos"
 msgid "Browse"
 msgstr "Navegar"
 
+msgid "Browse history by date"
+msgstr "Navegar por el historial por fechas"
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Navegar por %(address)s usando la cuenta %(account)s"
@@ -1160,6 +1163,13 @@ msgstr "Llamada entrante"
 
 msgid "Call Outgoing"
 msgstr "Llamada saliente"
+
+msgid "Call ended"
+msgstr "Llamada finalizada"
+
+#, python-format
+msgid "Call with %s"
+msgstr "Llamada con %s"
 
 msgid "Calling (Video)…"
 msgstr "Llamada (Vídeo)…"
@@ -2229,9 +2239,6 @@ msgstr "Transferencia del archivo detenida"
 msgid "File transfers"
 msgstr "Transferencias de ficheros"
 
-msgid "File: "
-msgstr "Archivo: "
-
 #, python-format
 msgid "File: %s"
 msgstr "Archivo: %s"
@@ -2827,7 +2834,7 @@ msgstr ""
 msgid "Ignore Unknown Contacts"
 msgstr "Ignorar contactos desconocidos"
 
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "Ignorar todo de los contactos que no están en tu lista de contactos"
 
 msgid "Image"
@@ -3283,9 +3290,6 @@ msgstr ""
 "almacenamiento del historial de chat está habilitado y si el contacto está "
 "en tu roster."
 
-msgid "Microphone & Camera"
-msgstr "Micrófono y cámara"
-
 msgid "Minutes until your status gets changed"
 msgstr "Minutos hasta que cambie tu estado"
 
@@ -3355,9 +3359,6 @@ msgstr "Nuevo Contacto"
 
 msgid "New Group"
 msgstr "Nuevo grupo de charla"
-
-msgid "New Message"
-msgstr "Nuevo mensaje"
 
 msgid "New Search"
 msgstr "Nueva búsqueda"
@@ -3466,13 +3467,6 @@ msgstr "Nota para mi"
 
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr "Nota: las cuentas anónimas no son posibles en todos los servidores"
-
-msgid "Note: Chat history is disabled for this account."
-msgstr "Nota: El historial de chat está deshabilitado para esta cuenta."
-
-msgid "Note: Chat history is disabled for this contact."
-msgstr ""
-"Nota: el historial de conversación está deshabilitado para este contacto."
 
 msgid "Notes"
 msgstr "Notas"
@@ -4115,9 +4109,6 @@ msgstr "Eliminar…"
 msgid "Removing Account..."
 msgstr "Eliminando la cuenta..."
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr "Renderizar estilos XHTML (colores, etc.) de mensajes entrantes"
-
 msgid "Report"
 msgstr "Informe"
 
@@ -4278,9 +4269,6 @@ msgstr "Guardar contraseña"
 
 msgid "Save as..."
 msgstr "Guardar como..."
-
-msgid "Save conversations for all contacts"
-msgstr "Guardar conversaciones para todos los contactos"
 
 msgid "Saving Avatar Failed"
 msgstr "Fallo al guardar el avatar"
@@ -4582,6 +4570,9 @@ msgstr "Configuraciones"
 msgid "Share Status"
 msgstr "Compartir estado"
 
+msgid "Share Video"
+msgstr "Compartir vídeo"
+
 msgid "Share my online status"
 msgstr "Compartir mi estado"
 
@@ -4833,9 +4824,6 @@ msgstr "Etapa"
 msgid "Start / Join Chat"
 msgstr "Iniciar / unirse a un chat"
 
-msgid "Start Call…"
-msgstr "Iniciar llamada…"
-
 msgid "Start Chat"
 msgstr "Iniciar conversación"
 
@@ -4848,8 +4836,11 @@ msgstr "Iniciar nueva conversación"
 msgid "Start Search..."
 msgstr "Comenzar búsqueda..."
 
-msgid "Start Video"
-msgstr "Iniciar vídeo"
+msgid "Start Video Call…"
+msgstr "Iniciar vídeo llamada…"
+
+msgid "Start Voice Call…"
+msgstr "Iniciar llamada de voz…"
 
 msgid "Start a new chat"
 msgstr "Iniciar nueva conversación"
@@ -4915,9 +4906,6 @@ msgstr "¿Dejar de compartir estado?"
 
 msgid "Stopped sharing their status with you"
 msgstr "Dejo de compartir su estado contigo"
-
-msgid "Store conversations on the harddrive"
-msgstr "Almacenar conversaciones en el disco duro"
 
 msgid "Street"
 msgstr "Calle"
@@ -5645,9 +5633,6 @@ msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 "Windows Credential Vault se usa para el almacenamiento seguro de contraseñas"
 
-msgid "With Microphone"
-msgstr "Con micrófono"
-
 msgid "Without a connection, you can not browse available services"
 msgstr "Sin una conexión no puedes navegar los servicios disponibles"
 
@@ -5662,9 +5647,6 @@ msgstr "Preferencias del Área de Trabajo"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XHTML Formatting"
-msgstr "Formateo XHTML"
 
 msgid "XML Console"
 msgstr "Consola XML"
@@ -5814,14 +5796,6 @@ msgstr "Tienes que estar conectado para crear un grupo."
 
 msgid "You have to invite people so they can join"
 msgstr "Tienes que invitar a la gente para que se pueda unir"
-
-#, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr ""
-"Acabas de recibir un nuevo mensaje de %s.\n"
-"¿Quieres cerrar esta pestaña?"
 
 msgid "You left this group chat"
 msgstr "Has dejado este grupo"
@@ -6415,3 +6389,41 @@ msgstr "{nick} es ahora {show}{status}"
 
 msgid "…or drop it here"
 msgstr "…o soltarla aqui"
+
+#~ msgid "File: "
+#~ msgstr "Archivo: "
+
+#~ msgid "Microphone & Camera"
+#~ msgstr "Micrófono y cámara"
+
+#~ msgid "New Message"
+#~ msgstr "Nuevo mensaje"
+
+#~ msgid "Note: Chat history is disabled for this account."
+#~ msgstr "Nota: El historial de chat está deshabilitado para esta cuenta."
+
+#~ msgid "Note: Chat history is disabled for this contact."
+#~ msgstr ""
+#~ "Nota: el historial de conversación está deshabilitado para este contacto."
+
+#~ msgid "Render XHTML styles (colors, etc.) of incoming messages"
+#~ msgstr "Renderizar estilos XHTML (colores, etc.) de mensajes entrantes"
+
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Guardar conversaciones para todos los contactos"
+
+#~ msgid "Store conversations on the harddrive"
+#~ msgstr "Almacenar conversaciones en el disco duro"
+
+#~ msgid "With Microphone"
+#~ msgstr "Con micrófono"
+
+#~ msgid "XHTML Formatting"
+#~ msgstr "Formateo XHTML"
+
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr ""
+#~ "Acabas de recibir un nuevo mensaje de %s.\n"
+#~ "¿Quieres cerrar esta pestaña?"

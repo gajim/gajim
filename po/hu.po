@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: 2010-11-28 12:15+0100\n"
 "Last-Translator: Gabriel Papp <gabriel.papp@gmx.com>\n"
 "Language-Team: -\n"
@@ -1286,6 +1286,9 @@ msgstr "mindkét"
 msgid "Browse"
 msgstr "_Tallózás"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Browsing %(address)s using account %(account)s"
@@ -1313,6 +1316,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2540,9 +2550,6 @@ msgstr "Fileátvitel megállítva"
 msgid "File transfers"
 msgstr "Fileátvitelek"
 
-msgid "File: "
-msgstr "File: "
-
 #, python-format
 msgid "File: %s"
 msgstr "File: %s"
@@ -3175,7 +3182,7 @@ msgid "Ignore Unknown Contacts"
 msgstr "_Partnerek Meghívása "
 
 #, fuzzy
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "_Ignore events from contacts not in the roster"
 
 #, fuzzy
@@ -3680,9 +3687,6 @@ msgstr ""
 "Messages will only be available for reading them later if you have history "
 "enabled and contact is in your roster."
 
-msgid "Microphone & Camera"
-msgstr ""
-
 #, fuzzy
 msgid "Minutes until your status gets changed"
 msgstr "_Log status changes of contacts"
@@ -3760,9 +3764,6 @@ msgstr "Új partner felvétele"
 #, fuzzy
 msgid "New Group"
 msgstr "Új közös beszélgetés"
-
-msgid "New Message"
-msgstr "Új üzenet"
 
 #, fuzzy
 msgid "New Search"
@@ -3886,13 +3887,6 @@ msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr ""
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-
-#, fuzzy
-msgid "Note: Chat history is disabled for this contact."
-msgstr "Mellőzd ezt a hibát ehhez a tanusítványhoz."
 
 msgid "Notes"
 msgstr ""
@@ -4622,9 +4616,6 @@ msgstr "_Eltávolítás"
 msgid "Removing Account..."
 msgstr "%s fiók törlése"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 #, fuzzy
 msgid "Report"
 msgstr "Hiba _jelentése"
@@ -4821,10 +4812,6 @@ msgstr "Jelszó megjegyzése"
 #, fuzzy
 msgid "Save as..."
 msgstr "Van "
-
-#, fuzzy
-msgid "Save conversations for all contacts"
-msgstr "Beszé_lgetésnapló mentése az összes partnerhez"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -5158,6 +5145,10 @@ msgid "Share Status"
 msgstr "Állapot"
 
 #, fuzzy
+msgid "Share Video"
+msgstr "egy videó"
+
+#, fuzzy
 msgid "Share my online status"
 msgstr "Állapot megváltoztatása"
 
@@ -5438,10 +5429,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "Beszélgetés kezdeményezése"
 
-#, fuzzy
-msgid "Start Call…"
-msgstr "Beszélgetés kezdeményezése"
-
 msgid "Start Chat"
 msgstr "Beszélgetés kezdeményezése"
 
@@ -5458,8 +5445,12 @@ msgid "Start Search..."
 msgstr "Csevegés _kezdeményezése..."
 
 #, fuzzy
-msgid "Start Video"
-msgstr "egy videó"
+msgid "Start Video Call…"
+msgstr "Beszélgetés kezdeményezése"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Beszélgetés kezdeményezése"
 
 #, fuzzy
 msgid "Start a new chat"
@@ -5536,9 +5527,6 @@ msgid "Stop sharing online status?"
 msgstr "hogy állapotokat küldjön nekem"
 
 msgid "Stopped sharing their status with you"
-msgstr ""
-
-msgid "Store conversations on the harddrive"
 msgstr ""
 
 #, fuzzy
@@ -6335,9 +6323,6 @@ msgstr ""
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr "Kapcsolat nélkül nem böngészheted az elérhető szolgáltatásokat"
 
@@ -6353,10 +6338,6 @@ msgstr "Bővített Műveletek"
 
 msgid "X11"
 msgstr ""
-
-#, fuzzy
-msgid "XHTML Formatting"
-msgstr "Tartózkodási hely: %s"
 
 msgid "XML Console"
 msgstr "XML parancssor"
@@ -6520,12 +6501,6 @@ msgstr "Nem csatlakoztál a csoportos beszélgetéshez."
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr "Új üzeneted érkezett tőle: \"%s\""
 
 #, fuzzy
 msgid "You left this group chat"
@@ -7205,3 +7180,27 @@ msgstr "%(nick)s mostantól %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "File: "
+#~ msgstr "File: "
+
+#~ msgid "New Message"
+#~ msgstr "Új üzenet"
+
+#, fuzzy
+#~ msgid "Note: Chat history is disabled for this contact."
+#~ msgstr "Mellőzd ezt a hibát ehhez a tanusítványhoz."
+
+#, fuzzy
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Beszé_lgetésnapló mentése az összes partnerhez"
+
+#, fuzzy
+#~ msgid "XHTML Formatting"
+#~ msgstr "Tartózkodási hely: %s"
+
+#, fuzzy
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr "Új üzeneted érkezett tőle: \"%s\""

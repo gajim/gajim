@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: 2009-08-19 23:51+0200\n"
 "Last-Translator: Iván Méndez López <>\n"
 "Language-Team:  <softwarelibre@udc.es>\n"
@@ -1254,6 +1254,9 @@ msgstr "Ambos"
 msgid "Browse"
 msgstr "_Navegar"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Navegar %s coa conta %s"
@@ -1281,6 +1284,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2512,9 +2522,6 @@ msgstr "Detívose a transferencia do ficheiro"
 msgid "File transfers"
 msgstr "Transferencias"
 
-msgid "File: "
-msgstr "Ficheiro: "
-
 #, python-format
 msgid "File: %s"
 msgstr "Ficheiro: %s"
@@ -3118,7 +3125,7 @@ msgid "Ignore Unknown Contacts"
 msgstr "Contactos"
 
 #, fuzzy
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr ""
 "_Ignorar as mensaxes de contactos que non estean na listaxe de contactos"
 
@@ -3625,9 +3632,6 @@ msgstr ""
 "As mensaxes só estarán dispoñíbeis para a súa lectura posterior se ten o "
 "historial activado"
 
-msgid "Microphone & Camera"
-msgstr ""
-
 #, fuzzy
 msgid "Minutes until your status gets changed"
 msgstr "_Rexistrar os cambios de estado dos contactos"
@@ -3707,9 +3711,6 @@ msgstr "Engadir un contacto novo"
 #, fuzzy
 msgid "New Group"
 msgstr "Novo grupo de charla"
-
-msgid "New Message"
-msgstr "Mensaxe nova"
 
 #, fuzzy
 msgid "New Search"
@@ -3832,12 +3833,6 @@ msgid "Note to myself"
 msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
-msgstr ""
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-
-msgid "Note: Chat history is disabled for this contact."
 msgstr ""
 
 msgid "Notes"
@@ -4560,9 +4555,6 @@ msgstr "_Eliminar"
 msgid "Removing Account..."
 msgstr "A eliminar a conta %s"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 #, fuzzy
 msgid "Report"
 msgstr "_Informar do erro"
@@ -4751,10 +4743,6 @@ msgstr "Gardar o contrasinal"
 #, fuzzy
 msgid "Save as..."
 msgstr "Ten "
-
-#, fuzzy
-msgid "Save conversations for all contacts"
-msgstr "Gravar as conversas para todos os contactos"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -5088,6 +5076,9 @@ msgstr "Fallou a conexión"
 msgid "Share Status"
 msgstr "Estado"
 
+msgid "Share Video"
+msgstr ""
+
 #, fuzzy
 msgid "Share my online status"
 msgstr "Un contacto cambiou o seu estado"
@@ -5364,10 +5355,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "Iniciar a charla"
 
-#, fuzzy
-msgid "Start Call…"
-msgstr "Iniciar a charla"
-
 msgid "Start Chat"
 msgstr "Iniciar a charla"
 
@@ -5383,8 +5370,13 @@ msgstr "Iniciar a charla"
 msgid "Start Search..."
 msgstr "_Iniciar a charla"
 
-msgid "Start Video"
-msgstr ""
+#, fuzzy
+msgid "Start Video Call…"
+msgstr "Iniciar a charla"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Iniciar a charla"
 
 #, fuzzy
 msgid "Start a new chat"
@@ -5461,9 +5453,6 @@ msgid "Stop sharing online status?"
 msgstr "para me enviar o estado"
 
 msgid "Stopped sharing their status with you"
-msgstr ""
-
-msgid "Store conversations on the harddrive"
 msgstr ""
 
 #, fuzzy
@@ -6232,9 +6221,6 @@ msgstr ""
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr "Sen unha conexión non pode navegar polos servizos dispoñíbeis"
 
@@ -6250,10 +6236,6 @@ msgstr "Accións A_vanzadas"
 
 msgid "X11"
 msgstr ""
-
-#, fuzzy
-msgid "XHTML Formatting"
-msgstr "Prema aquí para inserir unha emoticona (Alt+M)"
 
 msgid "XML Console"
 msgstr "Consola XML"
@@ -6417,12 +6399,6 @@ msgstr "%s entrou no grupo de charla"
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr "Acaba de recibir unha mensaxe nova de \"%s\""
 
 #, fuzzy
 msgid "You left this group chat"
@@ -7107,3 +7083,23 @@ msgstr "%(nick)s está agora %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "File: "
+#~ msgstr "Ficheiro: "
+
+#~ msgid "New Message"
+#~ msgstr "Mensaxe nova"
+
+#, fuzzy
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Gravar as conversas para todos os contactos"
+
+#, fuzzy
+#~ msgid "XHTML Formatting"
+#~ msgstr "Prema aquí para inserir unha emoticona (Alt+M)"
+
+#, fuzzy
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr "Acaba de recibir unha mensaxe nova de \"%s\""

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: 2022-04-22 21:28+0000\n"
 "Last-Translator: bodqhrohro <bodqhrohro@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -18,8 +18,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 4.11.2\n"
 "X-Poedit-Basepath: /home/test/gajim\n"
 
@@ -1157,6 +1157,9 @@ msgstr "Оба"
 msgid "Browse"
 msgstr "Просмотреть"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Просмотр %(address)s с учетной записью %(account)s"
@@ -1187,6 +1190,13 @@ msgstr "Входящий звонок"
 #, fuzzy
 msgid "Call Outgoing"
 msgstr "Звонок…"
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
+msgstr ""
 
 msgid "Calling (Video)…"
 msgstr "Звонок (Видео)…"
@@ -2311,9 +2321,6 @@ msgstr "Передача файла остановлена"
 msgid "File transfers"
 msgstr "Передача файлов"
 
-msgid "File: "
-msgstr "Файл: "
-
 #, python-format
 msgid "File: %s"
 msgstr "Файл: %s"
@@ -2918,7 +2925,8 @@ msgstr ""
 msgid "Ignore Unknown Contacts"
 msgstr "Игнорировать неизвестные контакты"
 
-msgid "Ignore everything from contacts not in your Roster"
+#, fuzzy
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "Игнорировать все контакты, которых нет в Вашем списке"
 
 #, fuzzy
@@ -3382,9 +3390,6 @@ msgstr ""
 "Сообщения будут доступны для чтения только в том случае, если включена "
 "история чата и если контакт есть в Вашем списке контактов."
 
-msgid "Microphone & Camera"
-msgstr "Микрофон и камера"
-
 msgid "Minutes until your status gets changed"
 msgstr "Минуты до изменения Вашего статуса"
 
@@ -3458,9 +3463,6 @@ msgstr "Добавить новый контакт"
 #, fuzzy
 msgid "New Group"
 msgstr "Новая комната"
-
-msgid "New Message"
-msgstr "Новое сообщение"
 
 msgid "New Search"
 msgstr "Новый поиск"
@@ -3574,12 +3576,6 @@ msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr "Примечание: анонимные учетные записи возможны не на всех серверах"
-
-msgid "Note: Chat history is disabled for this account."
-msgstr "Примечание: история чата отключена для этой учетной записи."
-
-msgid "Note: Chat history is disabled for this contact."
-msgstr "Примечание: история чата отключена для этого контакта."
 
 msgid "Notes"
 msgstr ""
@@ -4243,9 +4239,6 @@ msgstr "Удаление"
 msgid "Removing Account..."
 msgstr "Удаление учетной записи..."
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr "Отображать XHTML-стили (цвета и т.д.) входящих сообщений"
-
 #, fuzzy
 msgid "Report"
 msgstr "_Сообщить об ошибке"
@@ -4425,9 +4418,6 @@ msgstr "Сохранить пароль"
 #, fuzzy
 msgid "Save as..."
 msgstr "Сохранить _как"
-
-msgid "Save conversations for all contacts"
-msgstr "Сохранять историю для всех контактов"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -4744,6 +4734,10 @@ msgid "Share Status"
 msgstr "Изменить статус"
 
 #, fuzzy
+msgid "Share Video"
+msgstr "видео"
+
+#, fuzzy
 msgid "Share my online status"
 msgstr "Контакт изменит статус"
 
@@ -5011,9 +5005,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "Начать / присоединиться к чату"
 
-msgid "Start Call…"
-msgstr "Начать вызов…"
-
 msgid "Start Chat"
 msgstr "Начать чат"
 
@@ -5029,8 +5020,12 @@ msgid "Start Search..."
 msgstr "Начать поиск..."
 
 #, fuzzy
-msgid "Start Video"
-msgstr "видео"
+msgid "Start Video Call…"
+msgstr "Начать вызов…"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Начать вызов…"
 
 msgid "Start a new chat"
 msgstr "Начать новый чат"
@@ -5106,9 +5101,6 @@ msgstr "посылать мне свой статус"
 
 msgid "Stopped sharing their status with you"
 msgstr ""
-
-msgid "Store conversations on the harddrive"
-msgstr "Сохранять переписку на жестком диске"
 
 msgid "Street"
 msgstr "Улица"
@@ -5863,9 +5855,6 @@ msgstr ""
 "Для безопасного хранения паролей используется хранилище учетных данных "
 "Windows"
 
-msgid "With Microphone"
-msgstr "С микрофоном"
-
 msgid "Without a connection, you can not browse available services"
 msgstr "Для просмотра сервисов необходимо сначала подключиться к серверу"
 
@@ -5881,9 +5870,6 @@ msgstr "Расширенные настройки"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XHTML Formatting"
-msgstr "XHTML форматирование"
 
 msgid "XML Console"
 msgstr "Консоль XML"
@@ -6037,14 +6023,6 @@ msgstr "Вы должны быть подключены, чтобы создат
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr ""
-"Получено новое сообщение от %s.\n"
-"Закрыть эту вкладку?"
 
 #, fuzzy
 msgid "You left this group chat"
@@ -6657,3 +6635,40 @@ msgstr "{nick} теперь {show} {status}"
 #, fuzzy
 msgid "…or drop it here"
 msgstr "Выберите изображение или перетащите его сюда"
+
+#~ msgid "File: "
+#~ msgstr "Файл: "
+
+#~ msgid "Microphone & Camera"
+#~ msgstr "Микрофон и камера"
+
+#~ msgid "New Message"
+#~ msgstr "Новое сообщение"
+
+#~ msgid "Note: Chat history is disabled for this account."
+#~ msgstr "Примечание: история чата отключена для этой учетной записи."
+
+#~ msgid "Note: Chat history is disabled for this contact."
+#~ msgstr "Примечание: история чата отключена для этого контакта."
+
+#~ msgid "Render XHTML styles (colors, etc.) of incoming messages"
+#~ msgstr "Отображать XHTML-стили (цвета и т.д.) входящих сообщений"
+
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Сохранять историю для всех контактов"
+
+#~ msgid "Store conversations on the harddrive"
+#~ msgstr "Сохранять переписку на жестком диске"
+
+#~ msgid "With Microphone"
+#~ msgstr "С микрофоном"
+
+#~ msgid "XHTML Formatting"
+#~ msgstr "XHTML форматирование"
+
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr ""
+#~ "Получено новое сообщение от %s.\n"
+#~ "Закрыть эту вкладку?"

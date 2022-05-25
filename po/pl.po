@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: 2022-02-02 22:34+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/"
@@ -1174,6 +1174,9 @@ msgstr "Obustronna"
 msgid "Browse"
 msgstr "Przeglądaj"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Przeglądanie %(address)s przy użyciu konta %(account)s"
@@ -1201,6 +1204,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2341,9 +2351,6 @@ msgstr "Przesyłanie pliku zatrzymane"
 msgid "File transfers"
 msgstr "Przesyłane pliki"
 
-msgid "File: "
-msgstr "Plik: "
-
 #, python-format
 msgid "File: %s"
 msgstr "Plik: %s"
@@ -2942,7 +2949,8 @@ msgstr ""
 msgid "Ignore Unknown Contacts"
 msgstr "Ignoruj nieznane kontakty"
 
-msgid "Ignore everything from contacts not in your Roster"
+#, fuzzy
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "Ignoruj wszystko od kontaktów spoza twojego rostera"
 
 #, fuzzy
@@ -3417,9 +3425,6 @@ msgstr ""
 "gdy historia konwersacji jest załączona i użytkownik, z którym się "
 "kontaktujesz jest na Twojej liście kontaktów."
 
-msgid "Microphone & Camera"
-msgstr ""
-
 #, fuzzy
 msgid "Minutes until your status gets changed"
 msgstr "_Zapisuj w logach zmiany statusów kontaktów"
@@ -3495,9 +3500,6 @@ msgstr "Dodaj nowy kontakt"
 #, fuzzy
 msgid "New Group"
 msgstr "Nowa rozmowa grupowa"
-
-msgid "New Message"
-msgstr "Nowa wiadomość"
 
 msgid "New Search"
 msgstr "Nowe wyszukiwanie"
@@ -3612,12 +3614,6 @@ msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr "Uwaga: anonimowe konta nie są możliwe na wszystkich serwerach"
-
-msgid "Note: Chat history is disabled for this account."
-msgstr "Uwaga: Historia rozmów jest wyłączona dla tego konta."
-
-msgid "Note: Chat history is disabled for this contact."
-msgstr "Uwaga: Historia rozmów jest wyłączona dla tego kontaktu."
 
 msgid "Notes"
 msgstr ""
@@ -4284,9 +4280,6 @@ msgstr "_Usuń"
 msgid "Removing Account..."
 msgstr "Usuwanie konta…"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 #, fuzzy
 msgid "Report"
 msgstr "_Zgłoś Błąd"
@@ -4464,9 +4457,6 @@ msgstr "Zapisz hasło"
 #, fuzzy
 msgid "Save as..."
 msgstr "Zapisz _jako"
-
-msgid "Save conversations for all contacts"
-msgstr "Zapisz rozmowy dla wszystkich kontaktów"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -4788,6 +4778,10 @@ msgid "Share Status"
 msgstr "Nowy status"
 
 #, fuzzy
+msgid "Share Video"
+msgstr "wideo"
+
+#, fuzzy
 msgid "Share my online status"
 msgstr "Zmień status"
 
@@ -5057,10 +5051,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "Rozpocznij czat / dołącz do czatu"
 
-#, fuzzy
-msgid "Start Call…"
-msgstr "Rozpocznij rozmowę"
-
 msgid "Start Chat"
 msgstr "Rozpocznij rozmowę"
 
@@ -5076,8 +5066,12 @@ msgid "Start Search..."
 msgstr "Rozpocznij szukanie…"
 
 #, fuzzy
-msgid "Start Video"
-msgstr "wideo"
+msgid "Start Video Call…"
+msgstr "Rozpocznij rozmowę"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Rozpocznij rozmowę"
 
 msgid "Start a new chat"
 msgstr "Rozpocznij nową rozmowę"
@@ -5154,9 +5148,6 @@ msgstr "wysyłać mi status"
 
 msgid "Stopped sharing their status with you"
 msgstr ""
-
-msgid "Store conversations on the harddrive"
-msgstr "Przechowuj rozmowy na dysku twardym"
 
 msgid "Street"
 msgstr "Ulica"
@@ -5929,9 +5920,6 @@ msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 "Do bezpiecznego przechowywania haseł jest używany Windows Credential Vault"
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr "Nie możesz przeglądać usług, jeśli nie jesteś połączony"
 
@@ -5947,10 +5935,6 @@ msgstr "Opcje zaawansowane"
 
 msgid "X11"
 msgstr "X11"
-
-#, fuzzy
-msgid "XHTML Formatting"
-msgstr "Pokaż formatowanie tekstu"
 
 msgid "XML Console"
 msgstr "Konsola XML"
@@ -6109,14 +6093,6 @@ msgstr "Musisz być połączony przed utworzeniem czatu grupowego."
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr ""
-"Właśnie otrzymałeś nową wiadomość od %s.\n"
-"Czy chcesz zamknąć tę kartę?"
 
 #, fuzzy
 msgid "You left this group chat"
@@ -6732,3 +6708,32 @@ msgstr "{nick} ma teraz status {show}{status}"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "File: "
+#~ msgstr "Plik: "
+
+#~ msgid "New Message"
+#~ msgstr "Nowa wiadomość"
+
+#~ msgid "Note: Chat history is disabled for this account."
+#~ msgstr "Uwaga: Historia rozmów jest wyłączona dla tego konta."
+
+#~ msgid "Note: Chat history is disabled for this contact."
+#~ msgstr "Uwaga: Historia rozmów jest wyłączona dla tego kontaktu."
+
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Zapisz rozmowy dla wszystkich kontaktów"
+
+#~ msgid "Store conversations on the harddrive"
+#~ msgstr "Przechowuj rozmowy na dysku twardym"
+
+#, fuzzy
+#~ msgid "XHTML Formatting"
+#~ msgstr "Pokaż formatowanie tekstu"
+
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr ""
+#~ "Właśnie otrzymałeś nową wiadomość od %s.\n"
+#~ "Czy chcesz zamknąć tę kartę?"

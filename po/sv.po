@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: 2009-10-29 10:21+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -1268,6 +1268,9 @@ msgstr "Båda"
 msgid "Browse"
 msgstr "_Bläddra"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Bläddrar i %(address)s med kontot %(account)s"
@@ -1295,6 +1298,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2505,9 +2515,6 @@ msgstr "Filöverföringen stoppad"
 msgid "File transfers"
 msgstr "Filöverföringar"
 
-msgid "File: "
-msgstr "Fil: "
-
 #, python-format
 msgid "File: %s"
 msgstr "Fil: %s"
@@ -3108,7 +3115,7 @@ msgid "Ignore Unknown Contacts"
 msgstr "Bjud in _kontakter"
 
 #, fuzzy
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "_Ignorera händelser från kontakter som inte finns i kontaktlistan"
 
 msgid "Image"
@@ -3610,9 +3617,6 @@ msgstr ""
 "Meddelanden kommer endast vara tillgängliga för läsning senare om du har "
 "historik aktiverat och kontakten finns i din kontaktlista."
 
-msgid "Microphone & Camera"
-msgstr ""
-
 #, fuzzy
 msgid "Minutes until your status gets changed"
 msgstr "_Logga statusändringar för kontakter"
@@ -3691,9 +3695,6 @@ msgstr "Lägg till ny kontakt"
 #, fuzzy
 msgid "New Group"
 msgstr "Ny gruppchatt"
-
-msgid "New Message"
-msgstr "Nytt Meddelande"
 
 #, fuzzy
 msgid "New Search"
@@ -3816,13 +3817,6 @@ msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr ""
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-
-#, fuzzy
-msgid "Note: Chat history is disabled for this contact."
-msgstr "Ignorera detta fel med certifikatet."
 
 msgid "Notes"
 msgstr ""
@@ -4546,9 +4540,6 @@ msgstr "Ta _bort"
 msgid "Removing Account..."
 msgstr "Tar bort %s konto"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 #, fuzzy
 msgid "Report"
 msgstr "_Rapportera fel"
@@ -4742,10 +4733,6 @@ msgstr "Spara lösenord"
 #, fuzzy
 msgid "Save as..."
 msgstr "Har "
-
-#, fuzzy
-msgid "Save conversations for all contacts"
-msgstr "Spara konversations_loggar för alla kontakter"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -5077,6 +5064,9 @@ msgstr "Registreringen misslyckades"
 msgid "Share Status"
 msgstr "Status"
 
+msgid "Share Video"
+msgstr ""
+
 #, fuzzy
 msgid "Share my online status"
 msgstr "Ändra status"
@@ -5350,10 +5340,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "Starta Chatt"
 
-#, fuzzy
-msgid "Start Call…"
-msgstr "Starta Chatt"
-
 msgid "Start Chat"
 msgstr "Starta Chatt"
 
@@ -5369,8 +5355,13 @@ msgstr "Starta Chatt"
 msgid "Start Search..."
 msgstr "_Starta chatt..."
 
-msgid "Start Video"
-msgstr ""
+#, fuzzy
+msgid "Start Video Call…"
+msgstr "Starta Chatt"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Starta Chatt"
 
 #, fuzzy
 msgid "Start a new chat"
@@ -5447,9 +5438,6 @@ msgid "Stop sharing online status?"
 msgstr "att skicka mig status"
 
 msgid "Stopped sharing their status with you"
-msgstr ""
-
-msgid "Store conversations on the harddrive"
 msgstr ""
 
 #, fuzzy
@@ -6228,9 +6216,6 @@ msgstr ""
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr "Du kan inte bläddra bland tillgängliga tjänster utan en anslutning"
 
@@ -6246,10 +6231,6 @@ msgstr "Avancerade åtgärder"
 
 msgid "X11"
 msgstr ""
-
-#, fuzzy
-msgid "XHTML Formatting"
-msgstr "Visa en lista över formateringar"
 
 msgid "XML Console"
 msgstr "XML-konsol"
@@ -6416,12 +6397,6 @@ msgstr "Du har inte gått in i en gruppchatt."
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr "Du tog just emot ett meddelande från \"%s\""
 
 #, fuzzy
 msgid "You left this group chat"
@@ -7108,3 +7083,27 @@ msgstr "%(nick)s är nu %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "File: "
+#~ msgstr "Fil: "
+
+#~ msgid "New Message"
+#~ msgstr "Nytt Meddelande"
+
+#, fuzzy
+#~ msgid "Note: Chat history is disabled for this contact."
+#~ msgstr "Ignorera detta fel med certifikatet."
+
+#, fuzzy
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Spara konversations_loggar för alla kontakter"
+
+#, fuzzy
+#~ msgid "XHTML Formatting"
+#~ msgstr "Visa en lista över formateringar"
+
+#, fuzzy
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr "Du tog just emot ett meddelande från \"%s\""

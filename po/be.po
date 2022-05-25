@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgid ""
 "\n"
@@ -1255,6 +1255,9 @@ msgstr "Абодва"
 msgid "Browse"
 msgstr "_Праглядзець"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Прагляд %s для рахунка %s"
@@ -1282,6 +1285,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2507,9 +2517,6 @@ msgstr "Перадача файла спыненая"
 msgid "File transfers"
 msgstr "Перадача файлаў"
 
-msgid "File: "
-msgstr "Файл: "
-
 #, python-format
 msgid "File: %s"
 msgstr "Файл: %s"
@@ -3119,7 +3126,7 @@ msgid "Ignore Unknown Contacts"
 msgstr "Людзі"
 
 #, fuzzy
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "_Ігнараваць падзеі ад людзей, якіх няма ў кантактным лісце"
 
 #, fuzzy
@@ -3623,9 +3630,6 @@ msgstr ""
 "Вы зможаце прачытаць нечытаныя паведамленні толькі з уключаным вядзеннем "
 "журналаў размоў."
 
-msgid "Microphone & Camera"
-msgstr ""
-
 #, fuzzy
 msgid "Minutes until your status gets changed"
 msgstr "_Пісаць у журнал паведамленні аб змене стану чалавека"
@@ -3705,9 +3709,6 @@ msgstr "Дадаць новага чалавека"
 #, fuzzy
 msgid "New Group"
 msgstr "Новая групавая размова"
-
-msgid "New Message"
-msgstr "Новае паведамленне"
 
 #, fuzzy
 msgid "New Search"
@@ -3830,12 +3831,6 @@ msgid "Note to myself"
 msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
-msgstr ""
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-
-msgid "Note: Chat history is disabled for this contact."
 msgstr ""
 
 msgid "Notes"
@@ -4558,9 +4553,6 @@ msgstr "Вы_даліць"
 msgid "Removing Account..."
 msgstr "Выдаленне рахунка %s"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 #, fuzzy
 msgid "Report"
 msgstr "_Паведаміць пра памылку"
@@ -4746,10 +4738,6 @@ msgstr "Захаваць пароль"
 #, fuzzy
 msgid "Save as..."
 msgstr "Мае "
-
-#, fuzzy
-msgid "Save conversations for all contacts"
-msgstr "Захоўваць _журналы размоў з усімі людзьмі"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -5082,6 +5070,9 @@ msgstr "Памылка злучэння"
 msgid "Share Status"
 msgstr "Стан"
 
+msgid "Share Video"
+msgstr ""
+
 #, fuzzy
 msgid "Share my online status"
 msgstr "Змяніць стан"
@@ -5358,10 +5349,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "Пачаць размову"
 
-#, fuzzy
-msgid "Start Call…"
-msgstr "Пачаць размову"
-
 msgid "Start Chat"
 msgstr "Пачаць размову"
 
@@ -5377,8 +5364,13 @@ msgstr "Пачаць размову"
 msgid "Start Search..."
 msgstr "_Пачаць размову"
 
-msgid "Start Video"
-msgstr ""
+#, fuzzy
+msgid "Start Video Call…"
+msgstr "Пачаць размову"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Пачаць размову"
 
 #, fuzzy
 msgid "Start a new chat"
@@ -5455,9 +5447,6 @@ msgid "Stop sharing online status?"
 msgstr "адпраўляць мне паведамленні аб змене стану"
 
 msgid "Stopped sharing their status with you"
-msgstr ""
-
-msgid "Store conversations on the harddrive"
 msgstr ""
 
 #, fuzzy
@@ -6228,9 +6217,6 @@ msgstr ""
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr ""
 "Вы не можаце праглядзець спіс даступных сервісаў, не злучыўшыся з серверам."
@@ -6247,10 +6233,6 @@ msgstr "Адмысловыя дзеянні"
 
 msgid "X11"
 msgstr ""
-
-#, fuzzy
-msgid "XHTML Formatting"
-msgstr "Пстрыкніце, каб уставіць сымболік (Alt+M)"
 
 msgid "XML Console"
 msgstr "Кансоль XML"
@@ -6415,12 +6397,6 @@ msgstr "Вы не ўвайшлі ў пакой групавой размовы."
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr "Вам адправіў паведамленне \"%s\""
 
 #, fuzzy
 msgid "You left this group chat"
@@ -7099,3 +7075,23 @@ msgstr "%(nick)s цяпер %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "File: "
+#~ msgstr "Файл: "
+
+#~ msgid "New Message"
+#~ msgstr "Новае паведамленне"
+
+#, fuzzy
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Захоўваць _журналы размоў з усімі людзьмі"
+
+#, fuzzy
+#~ msgid "XHTML Formatting"
+#~ msgstr "Пстрыкніце, каб уставіць сымболік (Alt+M)"
+
+#, fuzzy
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr "Вам адправіў паведамленне \"%s\""

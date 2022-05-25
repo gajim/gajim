@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -1262,6 +1262,9 @@ msgstr "Και τα δυο"
 msgid "Browse"
 msgstr "_Περιήγηση"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Περιήγηση %s χρησιμοποιώντας το λογαριασμό %s"
@@ -1289,6 +1292,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2502,9 +2512,6 @@ msgstr "Η μεταφορά αρχείου διακόπηκε"
 msgid "File transfers"
 msgstr "Μεταφορές αρχείων"
 
-msgid "File: "
-msgstr "Αρχείο:"
-
 #, python-format
 msgid "File: %s"
 msgstr "Αρχείο: %s"
@@ -3114,7 +3121,7 @@ msgid "Ignore Unknown Contacts"
 msgstr "Επαφές"
 
 #, fuzzy
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "Να _αγνοούνται γεγονότα από επαφές που δεν είναι στη λίστα επαφών"
 
 msgid "Image"
@@ -3616,9 +3623,6 @@ msgstr ""
 "Τα μηνύματα θα είναι διαθέσιμα για ανάγνωση αργότερα μόνο αν έχετε "
 "ενεργοποιημένο το ιστορικό."
 
-msgid "Microphone & Camera"
-msgstr ""
-
 #, fuzzy
 msgid "Minutes until your status gets changed"
 msgstr "Καταγραφή α_λλαγών κατάστασης των επαφών"
@@ -3698,9 +3702,6 @@ msgstr "Προσθήκη νέας επαφής"
 #, fuzzy
 msgid "New Group"
 msgstr "Αρχηγός ομάδας παραθύρων"
-
-msgid "New Message"
-msgstr "Νέο μήνυμα"
 
 #, fuzzy
 msgid "New Search"
@@ -3822,12 +3823,6 @@ msgid "Note to myself"
 msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
-msgstr ""
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-
-msgid "Note: Chat history is disabled for this contact."
 msgstr ""
 
 msgid "Notes"
@@ -4550,9 +4545,6 @@ msgstr "_Αφαίρεση"
 msgid "Removing Account..."
 msgstr "Aφαίρεση του λογαριασμού %s"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 #, fuzzy
 msgid "Report"
 msgstr "_Αναφορά σφάλματος"
@@ -4744,10 +4736,6 @@ msgstr "Αποθήκευση κωδικού"
 #, fuzzy
 msgid "Save as..."
 msgstr "Έχει"
-
-#, fuzzy
-msgid "Save conversations for all contacts"
-msgstr "Αποθήκευση ιστορι_κού συνομιλιών για όλες τις επαφές"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -5083,6 +5071,9 @@ msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 msgid "Share Status"
 msgstr "Κατάσταση"
 
+msgid "Share Video"
+msgstr ""
+
 #, fuzzy
 msgid "Share my online status"
 msgstr "Αλλαγή κατάστασης"
@@ -5353,10 +5344,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "Έναρξη κουβέντας"
 
-#, fuzzy
-msgid "Start Call…"
-msgstr "Έναρξη κουβέντας"
-
 msgid "Start Chat"
 msgstr "Έναρξη κουβέντας"
 
@@ -5372,8 +5359,13 @@ msgstr "Έναρξη κουβέντας"
 msgid "Start Search..."
 msgstr "_Έναρξη συζήτησης"
 
-msgid "Start Video"
-msgstr ""
+#, fuzzy
+msgid "Start Video Call…"
+msgstr "Έναρξη κουβέντας"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Έναρξη κουβέντας"
 
 #, fuzzy
 msgid "Start a new chat"
@@ -5450,9 +5442,6 @@ msgid "Stop sharing online status?"
 msgstr "Αποστολή επιλεγμένου αρχείου στο \"%s\""
 
 msgid "Stopped sharing their status with you"
-msgstr ""
-
-msgid "Store conversations on the harddrive"
 msgstr ""
 
 #, fuzzy
@@ -6226,9 +6215,6 @@ msgstr ""
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr "Πρέπει να συνδεθείτε για να περιηγηθείτε στις υπηρεσίες"
 
@@ -6244,10 +6230,6 @@ msgstr "Προχωρημένες ενέργειες"
 
 msgid "X11"
 msgstr ""
-
-#, fuzzy
-msgid "XHTML Formatting"
-msgstr "Κάντε κλικ για να εισάγετε φατσούλα (Alt+M)"
 
 msgid "XML Console"
 msgstr "XML Κονσόλα"
@@ -6416,12 +6398,6 @@ msgstr "Ο/Η %s μπήκε στο δωμάτιο"
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr "Mόλις λάβατε ένα μήνυμα από \"%s\""
 
 #, fuzzy
 msgid "You left this group chat"
@@ -7115,3 +7091,23 @@ msgstr "Ο %(nick)s είναι τώρα %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "File: "
+#~ msgstr "Αρχείο:"
+
+#~ msgid "New Message"
+#~ msgstr "Νέο μήνυμα"
+
+#, fuzzy
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Αποθήκευση ιστορι_κού συνομιλιών για όλες τις επαφές"
+
+#, fuzzy
+#~ msgid "XHTML Formatting"
+#~ msgstr "Κάντε κλικ για να εισάγετε φατσούλα (Alt+M)"
+
+#, fuzzy
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr "Mόλις λάβατε ένα μήνυμα από \"%s\""

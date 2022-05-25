@@ -13,11 +13,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
-"PO-Revision-Date: 2022-05-17 07:30+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
+"PO-Revision-Date: 2022-05-24 21:50+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
-"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/"
-">\n"
+"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
+"\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -895,7 +895,7 @@ msgstr "Bei dem Versuch dein Passwort zu ändern ist ein Fehler aufgetreten."
 #, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr ""
-"Es ist ein Fehler aufgetreten beim Speichern einer Datei unter  %(path)s:"
+"Es ist ein Fehler aufgetreten beim Speichern einer Datei unter %(path)s:"
 "%(error)s"
 
 msgid "Anonymous login not supported"
@@ -1148,6 +1148,9 @@ msgstr "Beide"
 msgid "Browse"
 msgstr "Durchsuchen"
 
+msgid "Browse history by date"
+msgstr "Unterhaltungsverlauf nach Datum durchsuchen"
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Durchsuche %(address)s über das Konto %(account)s"
@@ -1176,6 +1179,13 @@ msgstr "Eingehender Anruf"
 
 msgid "Call Outgoing"
 msgstr "Ausgehender Anruf"
+
+msgid "Call ended"
+msgstr "Anruf beendet"
+
+#, python-format
+msgid "Call with %s"
+msgstr "Anruf mit %s"
 
 msgid "Calling (Video)…"
 msgstr "Anrufen (Video)…"
@@ -2251,9 +2261,6 @@ msgstr "Dateiübertragung gestoppt"
 msgid "File transfers"
 msgstr "Dateiübertragungen"
 
-msgid "File: "
-msgstr "Datei: "
-
 #, python-format
 msgid "File: %s"
 msgstr "Datei: %s"
@@ -2857,7 +2864,7 @@ msgstr ""
 msgid "Ignore Unknown Contacts"
 msgstr "Unbekannte Kontakte blockieren"
 
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "Kontakte blockieren, die nicht in der Kontaktliste sind"
 
 msgid "Image"
@@ -3321,9 +3328,6 @@ msgstr ""
 "Nachrichtenverlauf gespeichert wird und der Kontakt sich in der Kontaktliste "
 "befindet."
 
-msgid "Microphone & Camera"
-msgstr "Mikrofon & Kamera"
-
 msgid "Minutes until your status gets changed"
 msgstr "Minuten bis der Status geändert wird"
 
@@ -3392,9 +3396,6 @@ msgstr "Neuer Kontakt"
 
 msgid "New Group"
 msgstr "Neue Gruppe"
-
-msgid "New Message"
-msgstr "Neue Nachricht"
 
 msgid "New Search"
 msgstr "Neue Suche"
@@ -3503,12 +3504,6 @@ msgstr "Notiz an mich"
 
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr "Hinweis: Anonyme Konten sind nicht auf allen Servern möglich"
-
-msgid "Note: Chat history is disabled for this account."
-msgstr "Hinweis: Für dieses Konto wird kein Nachrichtenverlauf gespeichert."
-
-msgid "Note: Chat history is disabled for this contact."
-msgstr "Hinweis: Für diesen Kontakt wird kein Nachrichtenverlauf gespeichert."
 
 msgid "Notes"
 msgstr "Notizen"
@@ -4151,9 +4146,6 @@ msgstr "Entfernen…"
 msgid "Removing Account..."
 msgstr "Konto wird entfernt..."
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr "XHTML-Styles (Farben usw.) von eingehenden Nachrichten darstellen"
-
 msgid "Report"
 msgstr "Melden"
 
@@ -4316,9 +4308,6 @@ msgstr "Passwort speichern"
 
 msgid "Save as..."
 msgstr "Speichern unter..."
-
-msgid "Save conversations for all contacts"
-msgstr "Nachrichtenverlauf für alle Kontakte dieses Kontos speichern"
 
 msgid "Saving Avatar Failed"
 msgstr "Speichern des Kontaktbilds fehlgeschlagen"
@@ -4622,6 +4611,9 @@ msgstr "Einstellungen"
 msgid "Share Status"
 msgstr "Status teilen"
 
+msgid "Share Video"
+msgstr "Video teilen"
+
 msgid "Share my online status"
 msgstr "Meinen Online-Status teilen"
 
@@ -4880,9 +4872,6 @@ msgstr "Bearbeitungsschritt"
 msgid "Start / Join Chat"
 msgstr "Chat starten / beitreten"
 
-msgid "Start Call…"
-msgstr "Anruf starten…"
-
 msgid "Start Chat"
 msgstr "Chat starten"
 
@@ -4895,8 +4884,11 @@ msgstr "Neuen Chat starten"
 msgid "Start Search..."
 msgstr "Suche starten…"
 
-msgid "Start Video"
-msgstr "Video starten"
+msgid "Start Video Call…"
+msgstr "Videoanruf starten…"
+
+msgid "Start Voice Call…"
+msgstr "Sprachanruf starten…"
 
 msgid "Start a new chat"
 msgstr "Neuen Chat starten"
@@ -4962,9 +4954,6 @@ msgstr "Online-Status nicht mehr teilen?"
 
 msgid "Stopped sharing their status with you"
 msgstr "Hat aufgehört den Status mit dir zu teilen"
-
-msgid "Store conversations on the harddrive"
-msgstr "Nachrichtenverlauf auf diesem Gerät speichern"
 
 msgid "Street"
 msgstr "Straße"
@@ -5718,9 +5707,6 @@ msgstr ""
 "Die Windows Passwortverwaltung wird für die sichere Speicherung der "
 "Passwörter verwendet"
 
-msgid "With Microphone"
-msgstr "Mit Mikrofon"
-
 msgid "Without a connection, you can not browse available services"
 msgstr "Du musst angemeldet sein, um die Dienste durchsuchen zu können"
 
@@ -5735,9 +5721,6 @@ msgstr "Einstellungen des Arbeitsbereichs"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XHTML Formatting"
-msgstr "XHTML-Formatierung"
 
 msgid "XML Console"
 msgstr "XML-Konsole"
@@ -5893,14 +5876,6 @@ msgstr "Du musst verbunden sein, um einen Gruppenchat erstellen zu können."
 
 msgid "You have to invite people so they can join"
 msgstr "Nur Eingeladene können beitreten"
-
-#, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr ""
-"Du hast soeben eine neue Nachricht von %s erhalten.\n"
-"Willst du diesen Tab schließen?"
 
 msgid "You left this group chat"
 msgstr "Du hast diesen Gruppenchat verlassen"
@@ -6508,3 +6483,41 @@ msgstr "{nick} ist jetzt {show}{status}"
 
 msgid "…or drop it here"
 msgstr "… oder hierher ziehen"
+
+#~ msgid "File: "
+#~ msgstr "Datei: "
+
+#~ msgid "Microphone & Camera"
+#~ msgstr "Mikrofon & Kamera"
+
+#~ msgid "New Message"
+#~ msgstr "Neue Nachricht"
+
+#~ msgid "Note: Chat history is disabled for this account."
+#~ msgstr "Hinweis: Für dieses Konto wird kein Nachrichtenverlauf gespeichert."
+
+#~ msgid "Note: Chat history is disabled for this contact."
+#~ msgstr ""
+#~ "Hinweis: Für diesen Kontakt wird kein Nachrichtenverlauf gespeichert."
+
+#~ msgid "Render XHTML styles (colors, etc.) of incoming messages"
+#~ msgstr "XHTML-Styles (Farben usw.) von eingehenden Nachrichten darstellen"
+
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Nachrichtenverlauf für alle Kontakte dieses Kontos speichern"
+
+#~ msgid "Store conversations on the harddrive"
+#~ msgstr "Nachrichtenverlauf auf diesem Gerät speichern"
+
+#~ msgid "With Microphone"
+#~ msgstr "Mit Mikrofon"
+
+#~ msgid "XHTML Formatting"
+#~ msgstr "XHTML-Formatierung"
+
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr ""
+#~ "Du hast soeben eine neue Nachricht von %s erhalten.\n"
+#~ "Willst du diesen Tab schließen?"

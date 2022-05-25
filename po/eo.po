@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: 2020-08-19 19:27+0000\n"
 "Last-Translator: Vincent L <vincent.laporte+gajim@mailbox.org>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -1251,6 +1251,9 @@ msgstr "Ambaŭ"
 msgid "Browse"
 msgstr "_Rigardi"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Rigardado %s per konto %s"
@@ -1279,6 +1282,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2184,8 +2194,8 @@ msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
 "'WIKTIONARY' (which means use Wikitionary)."
 msgstr ""
-"Enigi propran URL kun %s en ĝi, kie %s estos la vorto/frazo, aŭ "
-"\"WIKTIONARY\" kio signifas uzi wiktionary."
+"Enigi propran URL kun %s en ĝi, kie %s estos la vorto/frazo, aŭ \"WIKTIONARY"
+"\" kio signifas uzi wiktionary."
 
 #, fuzzy
 msgid "Email"
@@ -2502,9 +2512,6 @@ msgstr "Dosiera transmeto haltitas"
 #, fuzzy
 msgid "File transfers"
 msgstr "Dosieraj transmetoj"
-
-msgid "File: "
-msgstr "Dosiero: "
 
 #, python-format
 msgid "File: %s"
@@ -3113,7 +3120,7 @@ msgid "Ignore Unknown Contacts"
 msgstr "Kontaktoj"
 
 #, fuzzy
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "_Ignori eventojn de kontaktoj kiuj mankas en kontaktlisto"
 
 #, fuzzy
@@ -3615,9 +3622,6 @@ msgid ""
 "history is enabled and if the contact is in your contact list."
 msgstr "Mesaĝoj disponeblos por legi ĝin poste nur se vi ŝaltis historion."
 
-msgid "Microphone & Camera"
-msgstr ""
-
 #, fuzzy
 msgid "Minutes until your status gets changed"
 msgstr "_Protokoli statŝanĝojn de kontaktoj"
@@ -3697,9 +3701,6 @@ msgstr "Aldoni novan kontakton"
 #, fuzzy
 msgid "New Group"
 msgstr "Nova babilejo"
-
-msgid "New Message"
-msgstr "Nova mesaĝo"
 
 #, fuzzy
 msgid "New Search"
@@ -3822,12 +3823,6 @@ msgid "Note to myself"
 msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
-msgstr ""
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-
-msgid "Note: Chat history is disabled for this contact."
 msgstr ""
 
 msgid "Notes"
@@ -4555,9 +4550,6 @@ msgstr "_Forigi"
 msgid "Removing Account..."
 msgstr "Forigado de konto %s"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 #, fuzzy
 msgid "Report"
 msgstr "_Raporti pri eraro"
@@ -4743,10 +4735,6 @@ msgstr "Konservi pasvorton"
 #, fuzzy
 msgid "Save as..."
 msgstr "Havas "
-
-#, fuzzy
-msgid "Save conversations for all contacts"
-msgstr "Konservi komunikadajn _protokolojn por ĉiuj kontaktoj"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -5079,6 +5067,9 @@ msgstr "Konektado malsukcesis"
 msgid "Share Status"
 msgstr "Kontakto ŝanĝis sian staton"
 
+msgid "Share Video"
+msgstr ""
+
 #, fuzzy
 msgid "Share my online status"
 msgstr "Kontakto ŝanĝis sian staton"
@@ -5352,10 +5343,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "Babili"
 
-#, fuzzy
-msgid "Start Call…"
-msgstr "Babili"
-
 msgid "Start Chat"
 msgstr "Babili"
 
@@ -5371,8 +5358,13 @@ msgstr "Babili"
 msgid "Start Search..."
 msgstr "_Ekparoli"
 
-msgid "Start Video"
-msgstr ""
+#, fuzzy
+msgid "Start Video Call…"
+msgstr "Babili"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Babili"
 
 #, fuzzy
 msgid "Start a new chat"
@@ -5449,9 +5441,6 @@ msgid "Stop sharing online status?"
 msgstr "sendi staton al mi"
 
 msgid "Stopped sharing their status with you"
-msgstr ""
-
-msgid "Store conversations on the harddrive"
 msgstr ""
 
 #, fuzzy
@@ -6222,9 +6211,6 @@ msgstr ""
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr "Senkonekta vi ne povas rigardi disponeblajn servojn"
 
@@ -6240,10 +6226,6 @@ msgstr "Kromaj agoj"
 
 msgid "X11"
 msgstr ""
-
-#, fuzzy
-msgid "XHTML Formatting"
-msgstr "Klaku por enigi mienon (Alt+M)"
 
 msgid "XML Console"
 msgstr "XML-konzolo"
@@ -6406,12 +6388,6 @@ msgstr "%s aliĝis al la babilejo"
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr "Vi ĵus ricevis novan mesaĝon de \"%s\""
 
 #, fuzzy
 msgid "You left this group chat"
@@ -7091,3 +7067,23 @@ msgstr "%(nick)s nun estas %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "File: "
+#~ msgstr "Dosiero: "
+
+#~ msgid "New Message"
+#~ msgstr "Nova mesaĝo"
+
+#, fuzzy
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Konservi komunikadajn _protokolojn por ĉiuj kontaktoj"
+
+#, fuzzy
+#~ msgid "XHTML Formatting"
+#~ msgstr "Klaku por enigi mienon (Alt+M)"
+
+#, fuzzy
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr "Vi ĵus ricevis novan mesaĝon de \"%s\""

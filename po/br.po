@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -1248,6 +1248,9 @@ msgstr "An daou"
 msgid "Browse"
 msgstr "_Furchal"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "O furchal e-barzh %s oc'h implij ar gont %s"
@@ -1275,6 +1278,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2480,9 +2490,6 @@ msgstr "Sac'het an treuzkas"
 msgid "File transfers"
 msgstr "Treuzkasoù"
 
-msgid "File: "
-msgstr "Restr:"
-
 #, python-format
 msgid "File: %s"
 msgstr "Restr: %s"
@@ -3063,7 +3070,7 @@ msgid "Ignore Unknown Contacts"
 msgstr "Darempredoù"
 
 #, fuzzy
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "_Chom hep teurel pled eus ar c'hemennadennoù kaset gant tud dianav"
 
 msgid "Image"
@@ -3556,9 +3563,6 @@ msgid ""
 msgstr ""
 "Posubl e vo lenn ar gemennadennoù diwezhatoc'h m'emañ an istoradur war enaou."
 
-msgid "Microphone & Camera"
-msgstr ""
-
 #, fuzzy
 msgid "Minutes until your status gets changed"
 msgstr "_Menegiñ kemmoù stad an darempredoù e-barzh an istoradur"
@@ -3639,9 +3643,6 @@ msgstr "Ouzhpennañ un darempred nevez"
 #, fuzzy
 msgid "New Group"
 msgstr "Flap a-stroll"
-
-msgid "New Message"
-msgstr "Kemennadenn nevez"
 
 #, fuzzy
 msgid "New Search"
@@ -3764,12 +3765,6 @@ msgid "Note to myself"
 msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
-msgstr ""
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-
-msgid "Note: Chat history is disabled for this contact."
 msgstr ""
 
 msgid "Notes"
@@ -4491,9 +4486,6 @@ msgstr "_Dilemel"
 msgid "Removing Account..."
 msgstr "Lemel ar gont %s"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 #, fuzzy
 msgid "Report"
 msgstr "_Diskleriañ ar Bug"
@@ -4681,10 +4673,6 @@ msgstr "Enrollañ ar ger-kuzh"
 #, fuzzy
 msgid "Save as..."
 msgstr "Enrollet e-barzh: %s"
-
-#, fuzzy
-msgid "Save conversations for all contacts"
-msgstr "Enrollaén an _istoradur-flapiñ evit an holl zarempredoù"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -5015,6 +5003,9 @@ msgstr "échec lors de la publication de votre vCard"
 msgid "Share Status"
 msgstr "Stad"
 
+msgid "Share Video"
+msgstr ""
+
 #, fuzzy
 msgid "Share my online status"
 msgstr "Darempred diluget"
@@ -5280,10 +5271,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "Kregiñ da flapiñ"
 
-#, fuzzy
-msgid "Start Call…"
-msgstr "Kregiñ da flapiñ"
-
 msgid "Start Chat"
 msgstr "Kregiñ da flapiñ"
 
@@ -5299,8 +5286,13 @@ msgstr "Kregiñ da flapiñ"
 msgid "Start Search..."
 msgstr "_Kregiñ da flapiñ"
 
-msgid "Start Video"
-msgstr ""
+#, fuzzy
+msgid "Start Video Call…"
+msgstr "Kregiñ da flapiñ"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Kregiñ da flapiñ"
 
 #, fuzzy
 msgid "Start a new chat"
@@ -5377,9 +5369,6 @@ msgid "Stop sharing online status?"
 msgstr "Goulenn evit gwelet e/he stad"
 
 msgid "Stopped sharing their status with you"
-msgstr ""
-
-msgid "Store conversations on the harddrive"
 msgstr ""
 
 #, fuzzy
@@ -6141,9 +6130,6 @@ msgstr ""
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr "Rankout a rit bezañ luget evit gellout furchal er servijoù hegerz"
 
@@ -6159,10 +6145,6 @@ msgstr "Actions a_vancées"
 
 msgid "X11"
 msgstr ""
-
-#, fuzzy
-msgid "XHTML Formatting"
-msgstr "Klikit evit enlakaat ur boulomell (Alt+M)"
 
 msgid "XML Console"
 msgstr ""
@@ -6322,12 +6304,6 @@ msgstr "Er strollad"
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr "O paouez resev ur gemennadenn nevez digant \"%s\" emaoc'h"
 
 #, fuzzy
 msgid "You left this group chat"
@@ -7010,3 +6986,23 @@ msgstr "%(nick)s a zo bremañ %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "File: "
+#~ msgstr "Restr:"
+
+#~ msgid "New Message"
+#~ msgstr "Kemennadenn nevez"
+
+#, fuzzy
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Enrollaén an _istoradur-flapiñ evit an holl zarempredoù"
+
+#, fuzzy
+#~ msgid "XHTML Formatting"
+#~ msgstr "Klikit evit enlakaat ur boulomell (Alt+M)"
+
+#, fuzzy
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr "O paouez resev ur gemennadenn nevez digant \"%s\" emaoc'h"

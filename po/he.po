@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -1310,6 +1310,9 @@ msgstr "הדדית"
 msgid "Browse"
 msgstr "_עיין"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "עיון בשירותים בכתובת ‫%(address)s באמצעות חשבון ‫%(account)s"
@@ -1339,6 +1342,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2588,9 +2598,6 @@ msgstr "העברת קובץ נעצרה"
 msgid "File transfers"
 msgstr "העברת קובץ"
 
-msgid "File: "
-msgstr "קובץ: "
-
 #, python-format
 msgid "File: %s"
 msgstr "קובץ: %s"
@@ -3254,7 +3261,7 @@ msgid "Ignore Unknown Contacts"
 msgstr "הזמן _אנשי קשר"
 
 #, fuzzy
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "הת_עלם מאירועים מאת אנשי קשר שלא ברשימה"
 
 #, fuzzy
@@ -3776,9 +3783,6 @@ msgstr ""
 "הודעות יהיו זמינות לקריאה מאוחרת רק אם אפשרת רישום היסטוריה ואיש הקשר מצוי "
 "ברשימה שלך."
 
-msgid "Microphone & Camera"
-msgstr ""
-
 #, fuzzy
 msgid "Minutes until your status gets changed"
 msgstr "הצג _הודעות מצב"
@@ -3857,9 +3861,6 @@ msgstr "הוספת איש קשר חדש"
 #, fuzzy
 msgid "New Group"
 msgstr "שיחת קבוצה חדשה"
-
-msgid "New Message"
-msgstr "הודעה חדשה"
 
 #, fuzzy
 msgid "New Search"
@@ -3982,13 +3983,6 @@ msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr ""
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-
-#, fuzzy
-msgid "Note: Chat history is disabled for this contact."
-msgstr "התעלם משגיאה זו עבור תעודה זו."
 
 msgid "Notes"
 msgstr ""
@@ -4740,9 +4734,6 @@ msgstr "הס_ר"
 msgid "Removing Account..."
 msgstr "הסרת חשבון ‫%s"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 #, fuzzy
 msgid "Report"
 msgstr "_דווחו על בעיה"
@@ -4936,10 +4927,6 @@ msgstr "שמור סיסמה"
 #, fuzzy
 msgid "Save as..."
 msgstr "נשמר בתוך: ‎%s"
-
-#, fuzzy
-msgid "Save conversations for all contacts"
-msgstr "שמור רשו_מות שיחה עבור כל איש קשר"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -5292,6 +5279,10 @@ msgid "Share Status"
 msgstr "מצב"
 
 #, fuzzy
+msgid "Share Video"
+msgstr "וידאו"
+
+#, fuzzy
 msgid "Share my online status"
 msgstr "שנה מצב"
 
@@ -5575,10 +5566,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "התחלת שיחה"
 
-#, fuzzy
-msgid "Start Call…"
-msgstr "התחלת שיחה"
-
 msgid "Start Chat"
 msgstr "התחלת שיחה"
 
@@ -5595,8 +5582,12 @@ msgid "Start Search..."
 msgstr "התחל _שיחה..."
 
 #, fuzzy
-msgid "Start Video"
-msgstr "וידאו"
+msgid "Start Video Call…"
+msgstr "התחלת שיחה"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "התחלת שיחה"
 
 #, fuzzy
 msgid "Start a new chat"
@@ -5673,9 +5664,6 @@ msgid "Stop sharing online status?"
 msgstr "לשלוח אלי מצב"
 
 msgid "Stopped sharing their status with you"
-msgstr ""
-
-msgid "Store conversations on the harddrive"
 msgstr ""
 
 #, fuzzy
@@ -6346,8 +6334,8 @@ msgid ""
 "Valid URI schemes. Only schemes in this list will be accepted as 'real' URI "
 "(mailto and xmpp are handled separately)."
 msgstr ""
-"תרשים uri תקף. תרשימים המצויים בתוך הרשימה בלבד יתקבלו בתור תרשים uri "
-"\"אמיתי\". (mailto וגם xmpp מטופלים בנפרד)"
+"תרשים uri תקף. תרשימים המצויים בתוך הרשימה בלבד יתקבלו בתור תרשים uri \"אמיתי"
+"\". (mailto וגם xmpp מטופלים בנפרד)"
 
 msgid "Validity"
 msgstr ""
@@ -6477,9 +6465,6 @@ msgstr ""
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-msgid "With Microphone"
-msgstr ""
-
 # BUG: Dot
 msgid "Without a connection, you can not browse available services"
 msgstr "ללא חיבור, אין באפשרותך לעיין בשירותים זמינים"
@@ -6496,10 +6481,6 @@ msgstr "קיצורי מקש"
 
 msgid "X11"
 msgstr ""
-
-#, fuzzy
-msgid "XHTML Formatting"
-msgstr "הצגת רשימת עיצובים"
 
 msgid "XML Console"
 msgstr "מסוף XML"
@@ -6680,12 +6661,6 @@ msgstr "לא הצטרפת לשיחת קבוצה."
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr "זה עתה קיבלת הודעה חדשה מן \"%s\""
 
 #, fuzzy
 msgid "You left this group chat"
@@ -7383,3 +7358,27 @@ msgstr "%(nick)s מצוי/ה כעת במצב %(status)s "
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "File: "
+#~ msgstr "קובץ: "
+
+#~ msgid "New Message"
+#~ msgstr "הודעה חדשה"
+
+#, fuzzy
+#~ msgid "Note: Chat history is disabled for this contact."
+#~ msgstr "התעלם משגיאה זו עבור תעודה זו."
+
+#, fuzzy
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "שמור רשו_מות שיחה עבור כל איש קשר"
+
+#, fuzzy
+#~ msgid "XHTML Formatting"
+#~ msgstr "הצגת רשימת עיצובים"
+
+#, fuzzy
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr "זה עתה קיבלת הודעה חדשה מן \"%s\""

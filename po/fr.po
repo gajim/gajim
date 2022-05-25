@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
-"PO-Revision-Date: 2022-05-09 07:29+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
+"PO-Revision-Date: 2022-05-24 08:29+0000\n"
 "Last-Translator: pitchum <pitchum@gramaton.org>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
 ">\n"
@@ -888,10 +888,10 @@ msgid "An error occurred while trying to change your password."
 msgstr ""
 "Une erreur est survenue lors de la tentative de changement de mot de passe."
 
-#, fuzzy, python-format
+#, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr ""
-"Une erreur est survenue lors de la tentative de changement de mot de passe."
+"Une erreur est survenue en tentant de créer un fichier à %(path)s : %(error)s"
 
 msgid "Anonymous login not supported"
 msgstr "Connexion anonyme non supportée"
@@ -1145,6 +1145,9 @@ msgstr "Les deux"
 msgid "Browse"
 msgstr "Parcourir"
 
+msgid "Browse history by date"
+msgstr "Parcourir l'historique par date"
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Parcourt %(address)s en utilisant le compte %(account)s"
@@ -1173,6 +1176,13 @@ msgstr "Appel entrant"
 
 msgid "Call Outgoing"
 msgstr "Appel en cours"
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
+msgstr ""
 
 msgid "Calling (Video)…"
 msgstr "Appel en cours (vidéo)…"
@@ -2259,9 +2269,6 @@ msgstr "Transfert de fichier interrompu"
 msgid "File transfers"
 msgstr "Transferts de fichiers"
 
-msgid "File: "
-msgstr "Fichier : "
-
 #, python-format
 msgid "File: %s"
 msgstr "Fichier : %s"
@@ -2867,8 +2874,9 @@ msgstr ""
 msgid "Ignore Unknown Contacts"
 msgstr "Ignorer les contacts inconnus"
 
-msgid "Ignore everything from contacts not in your Roster"
-msgstr "Ignorer les messages des contacts qui ne sont pas dans votre liste"
+msgid "Ignore everything from contacts not in your contact list"
+msgstr ""
+"Tout ignorer en provenance des contacts qui ne sont pas dans votre liste"
 
 msgid "Image"
 msgstr "Image"
@@ -3054,9 +3062,8 @@ msgstr "Rejoindre le salon de discussion ?"
 msgid "Join Groupchat"
 msgstr "Rejoindre un salon de discussion"
 
-#, fuzzy
 msgid "Join Support Chat"
-msgstr "Rejoindre un salon de discussion"
+msgstr "Rejoindre le salon de support"
 
 msgid "Join a group chat given by an XMPP Address"
 msgstr "Rejoindre un salon de discussion en donnant son adresse XMPP"
@@ -3328,9 +3335,6 @@ msgstr ""
 "l’archivage de l'historique est actif et si le contact est dans votre liste "
 "de contact."
 
-msgid "Microphone & Camera"
-msgstr "Micro & Caméra"
-
 msgid "Minutes until your status gets changed"
 msgstr "Nombre de minutes pour que votre état soit changé"
 
@@ -3401,9 +3405,6 @@ msgstr "Nouveau contact"
 
 msgid "New Group"
 msgstr "Nouveau groupe"
-
-msgid "New Message"
-msgstr "Nouveau message"
 
 msgid "New Search"
 msgstr "Nouvelle recherche"
@@ -3514,12 +3515,6 @@ msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr ""
 "Remarque : la création de comptes anonymes n'est pas possible sur tous les "
 "serveurs"
-
-msgid "Note: Chat history is disabled for this account."
-msgstr "Note : l'historique de discussion est désactivé pour ce compte."
-
-msgid "Note: Chat history is disabled for this contact."
-msgstr "Note : l'historique de discussion est désactivé pour ce contact."
 
 msgid "Notes"
 msgstr "Notes"
@@ -3844,7 +3839,6 @@ msgstr "Veuillez utiliser aaaa-mm-jj"
 msgid "Plugin Settings"
 msgstr "Paramètres de l'extension"
 
-#, fuzzy
 msgid "Plugin Updates"
 msgstr "Mises à jour des extensions"
 
@@ -4164,9 +4158,6 @@ msgstr "Supprimer…"
 msgid "Removing Account..."
 msgstr "Suppression du compte..."
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr "Appliquer les styles XHTML (couleurs, etc.) des messages entrants"
-
 msgid "Report"
 msgstr "Signaler"
 
@@ -4328,9 +4319,6 @@ msgstr "Enregistrer le mot de passe"
 
 msgid "Save as..."
 msgstr "Enregistrer sous..."
-
-msgid "Save conversations for all contacts"
-msgstr "Garder l'historique des conversations pour tous les contacts"
 
 msgid "Saving Avatar Failed"
 msgstr "L'enregistrement d'avatar a échoué"
@@ -4628,13 +4616,17 @@ msgstr ""
 "sont affichés"
 
 msgid "Setting is locked by the system"
-msgstr ""
+msgstr "Ce paramètre est verrouillé par le système"
 
 msgid "Settings"
 msgstr "Paramètres"
 
 msgid "Share Status"
 msgstr "Partager l'état"
+
+#, fuzzy
+msgid "Share Video"
+msgstr "Démarrer la vidéo"
 
 msgid "Share my online status"
 msgstr "Partager mon état de connexion"
@@ -4892,9 +4884,6 @@ msgstr "Étape"
 msgid "Start / Join Chat"
 msgstr "Commencer/rejoindre une discussion"
 
-msgid "Start Call…"
-msgstr "Démarrer un appel…"
-
 msgid "Start Chat"
 msgstr "Commencer une discussion"
 
@@ -4907,8 +4896,13 @@ msgstr "Commencer une nouvelle discussion"
 msgid "Start Search..."
 msgstr "Lancer la recherche..."
 
-msgid "Start Video"
-msgstr "Démarrer la vidéo"
+#, fuzzy
+msgid "Start Video Call…"
+msgstr "Démarrer un appel…"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Démarrer un appel…"
 
 msgid "Start a new chat"
 msgstr "Commencer une nouvelle discussion"
@@ -4975,9 +4969,6 @@ msgstr "Ne plus partager l'état ?"
 
 msgid "Stopped sharing their status with you"
 msgstr "Ne partage plus son état avec vous"
-
-msgid "Store conversations on the harddrive"
-msgstr "Enregistrer les conversations sur le disque dur"
 
 msgid "Street"
 msgstr "Rue"
@@ -5692,9 +5683,9 @@ msgid ""
 "When to show the notification area icon. Can be 'never', 'on_event', and "
 "'always'."
 msgstr ""
-"Quand afficher l'icône dans la zone de notifications. Peut être "
-"\"never\" (jamais), \"on_event\" (lorsqu'il y a un évènement en attente) ou "
-"\"always\" (toujours)."
+"Quand afficher l'icône dans la zone de notifications. Peut être \"never"
+"\" (jamais), \"on_event\" (lorsqu'il y a un évènement en attente) ou \"always"
+"\" (toujours)."
 
 msgid "Where participants should go"
 msgstr "Où est-ce que les participants devraient aller"
@@ -5720,9 +5711,6 @@ msgstr ""
 "Le coffre fort de Windows est utilisé pour le stockage sécurisé des mots de "
 "passe"
 
-msgid "With Microphone"
-msgstr "Avec micro"
-
 msgid "Without a connection, you can not browse available services"
 msgstr "Vous devez être connecté pour parcourir les services disponibles"
 
@@ -5737,9 +5725,6 @@ msgstr "Paramètres d'espace de travail"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XHTML Formatting"
-msgstr "Formatage XHTML"
 
 msgid "XML Console"
 msgstr "Console XML"
@@ -5898,14 +5883,6 @@ msgstr "Vous devez être connecté pour pouvoir créer un salon de discussion."
 msgid "You have to invite people so they can join"
 msgstr ""
 "Vous devez inviter des personnes pour qu'elles puissent rejoindre le salon"
-
-#, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr ""
-"Vous venez de recevoir un nouveau message de %s.\n"
-"Voulez-vous fermer cet onglet ?"
 
 msgid "You left this group chat"
 msgstr "Vous avez quitté ce salon de discussion"
@@ -6242,7 +6219,6 @@ msgstr "_Désinscrire le compte auprès du service"
 msgid "_Unsubscribe"
 msgstr "_Désinscrire"
 
-#, fuzzy
 msgid "_Update"
 msgstr "_Mettre à jour"
 
@@ -6358,7 +6334,6 @@ msgstr ""
 "vous a intivé dans un salon de discussion.\n"
 "Voulez-vous rejoindre ?"
 
-#, fuzzy
 msgid "help"
 msgstr "Aide"
 
@@ -6508,3 +6483,40 @@ msgstr "{nick} est maintenant {show}{status}"
 
 msgid "…or drop it here"
 msgstr "... ou bien déposez ici"
+
+#~ msgid "File: "
+#~ msgstr "Fichier : "
+
+#~ msgid "Microphone & Camera"
+#~ msgstr "Micro & Caméra"
+
+#~ msgid "New Message"
+#~ msgstr "Nouveau message"
+
+#~ msgid "Note: Chat history is disabled for this account."
+#~ msgstr "Note : l'historique de discussion est désactivé pour ce compte."
+
+#~ msgid "Note: Chat history is disabled for this contact."
+#~ msgstr "Note : l'historique de discussion est désactivé pour ce contact."
+
+#~ msgid "Render XHTML styles (colors, etc.) of incoming messages"
+#~ msgstr "Appliquer les styles XHTML (couleurs, etc.) des messages entrants"
+
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Garder l'historique des conversations pour tous les contacts"
+
+#~ msgid "Store conversations on the harddrive"
+#~ msgstr "Enregistrer les conversations sur le disque dur"
+
+#~ msgid "With Microphone"
+#~ msgstr "Avec micro"
+
+#~ msgid "XHTML Formatting"
+#~ msgstr "Formatage XHTML"
+
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr ""
+#~ "Vous venez de recevoir un nouveau message de %s.\n"
+#~ "Voulez-vous fermer cet onglet ?"

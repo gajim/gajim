@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: 2022-01-13 21:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -1244,6 +1244,9 @@ msgstr "İkisi de"
 msgid "Browse"
 msgstr "_Göz at"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr ""
@@ -1274,6 +1277,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2466,9 +2476,6 @@ msgstr "Dosya Gönderme Tamamlandı"
 msgid "File transfers"
 msgstr "Dosya Aktarımları"
 
-msgid "File: "
-msgstr "Dosya: "
-
 #, python-format
 msgid "File: %s"
 msgstr "Dosya: %s"
@@ -3032,7 +3039,7 @@ msgstr ""
 msgid "Ignore Unknown Contacts"
 msgstr "Kişi Davet _Et"
 
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr ""
 
 #, fuzzy
@@ -3522,9 +3529,6 @@ msgid ""
 "history is enabled and if the contact is in your contact list."
 msgstr ""
 
-msgid "Microphone & Camera"
-msgstr ""
-
 #, fuzzy
 msgid "Minutes until your status gets changed"
 msgstr "Tüm _durum değişikliklerini sistem günlüğüne kaydet"
@@ -3603,9 +3607,6 @@ msgstr "Yeni Kişi Ekle"
 #, fuzzy
 msgid "New Group"
 msgstr "_Yeni Bir Grup Sohbeti"
-
-msgid "New Message"
-msgstr "Yeni Mesaj"
 
 #, fuzzy
 msgid "New Search"
@@ -3730,13 +3731,6 @@ msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr ""
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-
-#, fuzzy
-msgid "Note: Chat history is disabled for this contact."
-msgstr "Bu imza için bir yürürlükten kaldırma sertifikası oluşturulsun mu? "
 
 msgid "Notes"
 msgstr ""
@@ -4461,9 +4455,6 @@ msgstr "_Kaldır"
 msgid "Removing Account..."
 msgstr "XMPP hesabı %s@%s"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 #, fuzzy
 msgid "Report"
 msgstr "_Hata Bildir"
@@ -4652,10 +4643,6 @@ msgstr "Parolayı Değiştir"
 #, fuzzy
 msgid "Save as..."
 msgstr "Sahip"
-
-#, fuzzy
-msgid "Save conversations for all contacts"
-msgstr "Her kişinin sohbet _kaydını kaydet"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -4986,6 +4973,10 @@ msgid "Share Status"
 msgstr "Durum"
 
 #, fuzzy
+msgid "Share Video"
+msgstr "bir video"
+
+#, fuzzy
 msgid "Share my online status"
 msgstr "Durumu Değiştir"
 
@@ -5250,10 +5241,6 @@ msgid "Start / Join Chat"
 msgstr "Sohbet _Başla"
 
 #, fuzzy
-msgid "Start Call…"
-msgstr "Sohbet _Başla"
-
-#, fuzzy
 msgid "Start Chat"
 msgstr "Sohbet _Başla"
 
@@ -5270,8 +5257,12 @@ msgid "Start Search..."
 msgstr "Sohbet _Başla"
 
 #, fuzzy
-msgid "Start Video"
-msgstr "bir video"
+msgid "Start Video Call…"
+msgstr "Sohbet _Başla"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Sohbet _Başla"
 
 #, fuzzy
 msgid "Start a new chat"
@@ -5349,9 +5340,6 @@ msgid "Stop sharing online status?"
 msgstr "bana mesaj göndermek için"
 
 msgid "Stopped sharing their status with you"
-msgstr ""
-
-msgid "Store conversations on the harddrive"
 msgstr ""
 
 #, fuzzy
@@ -6122,9 +6110,6 @@ msgstr ""
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr ""
 
@@ -6140,10 +6125,6 @@ msgstr "İlerlemiş aksiyonlar"
 
 msgid "X11"
 msgstr ""
-
-#, fuzzy
-msgid "XHTML Formatting"
-msgstr "Yer:"
 
 #, fuzzy
 msgid "XML Console"
@@ -6302,12 +6283,6 @@ msgstr "[%s sayfasını okuyamazsınız.]"
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr "\"%s\"den yeni bir ileti aldın"
 
 #, fuzzy
 msgid "You left this group chat"
@@ -6974,3 +6949,27 @@ msgstr "%(nick)s durumu şimdi %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "File: "
+#~ msgstr "Dosya: "
+
+#~ msgid "New Message"
+#~ msgstr "Yeni Mesaj"
+
+#, fuzzy
+#~ msgid "Note: Chat history is disabled for this contact."
+#~ msgstr "Bu imza için bir yürürlükten kaldırma sertifikası oluşturulsun mu? "
+
+#, fuzzy
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Her kişinin sohbet _kaydını kaydet"
+
+#, fuzzy
+#~ msgid "XHTML Formatting"
+#~ msgstr "Yer:"
+
+#, fuzzy
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr "\"%s\"den yeni bir ileti aldın"

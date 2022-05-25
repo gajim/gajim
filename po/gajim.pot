@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1077,6 +1077,9 @@ msgstr ""
 msgid "Browse"
 msgstr ""
 
+msgid "Browse history by date"
+msgstr ""
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr ""
@@ -1104,6 +1107,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2118,9 +2128,6 @@ msgstr ""
 msgid "File transfers"
 msgstr ""
 
-msgid "File: "
-msgstr ""
-
 #, python-format
 msgid "File: %s"
 msgstr ""
@@ -2629,7 +2636,7 @@ msgstr ""
 msgid "Ignore Unknown Contacts"
 msgstr ""
 
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr ""
 
 msgid "Image"
@@ -3054,9 +3061,6 @@ msgid ""
 "history is enabled and if the contact is in your contact list."
 msgstr ""
 
-msgid "Microphone & Camera"
-msgstr ""
-
 msgid "Minutes until your status gets changed"
 msgstr ""
 
@@ -3124,9 +3128,6 @@ msgid "New Contact"
 msgstr ""
 
 msgid "New Group"
-msgstr ""
-
-msgid "New Message"
 msgstr ""
 
 msgid "New Search"
@@ -3231,12 +3232,6 @@ msgid "Note to myself"
 msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
-msgstr ""
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-
-msgid "Note: Chat history is disabled for this contact."
 msgstr ""
 
 msgid "Notes"
@@ -3852,9 +3847,6 @@ msgstr ""
 msgid "Removing Account..."
 msgstr ""
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 msgid "Report"
 msgstr ""
 
@@ -4010,9 +4002,6 @@ msgid "Save Password"
 msgstr ""
 
 msgid "Save as..."
-msgstr ""
-
-msgid "Save conversations for all contacts"
 msgstr ""
 
 msgid "Saving Avatar Failed"
@@ -4296,6 +4285,9 @@ msgstr ""
 msgid "Share Status"
 msgstr ""
 
+msgid "Share Video"
+msgstr ""
+
 msgid "Share my online status"
 msgstr ""
 
@@ -4524,9 +4516,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr ""
 
-msgid "Start Call…"
-msgstr ""
-
 msgid "Start Chat"
 msgstr ""
 
@@ -4539,7 +4528,10 @@ msgstr ""
 msgid "Start Search..."
 msgstr ""
 
-msgid "Start Video"
+msgid "Start Video Call…"
+msgstr ""
+
+msgid "Start Voice Call…"
 msgstr ""
 
 msgid "Start a new chat"
@@ -4603,9 +4595,6 @@ msgid "Stop sharing online status?"
 msgstr ""
 
 msgid "Stopped sharing their status with you"
-msgstr ""
-
-msgid "Store conversations on the harddrive"
 msgstr ""
 
 msgid "Street"
@@ -5291,9 +5280,6 @@ msgstr ""
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr ""
 
@@ -5307,9 +5293,6 @@ msgid "Workspace Settings"
 msgstr ""
 
 msgid "X11"
-msgstr ""
-
-msgid "XHTML Formatting"
 msgstr ""
 
 msgid "XML Console"
@@ -5452,12 +5435,6 @@ msgid "You have to be connected to create a group chat."
 msgstr ""
 
 msgid "You have to invite people so they can join"
-msgstr ""
-
-#, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
 msgstr ""
 
 msgid "You left this group chat"

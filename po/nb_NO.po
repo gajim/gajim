@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: 2009-11-18 15:50+0100\n"
 "Last-Translator: Stian B. Barmen <stian@barmen.nu>\n"
 "Language-Team: <>\n"
@@ -1265,6 +1265,9 @@ msgstr "Begge"
 msgid "Browse"
 msgstr "Utforsk"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Utforsker %(address)s med kontoen %(account)s"
@@ -1292,6 +1295,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2492,9 +2502,6 @@ msgstr "Filoverføring stoppet"
 msgid "File transfers"
 msgstr "Filoverføringer"
 
-msgid "File: "
-msgstr "Fil: "
-
 #, python-format
 msgid "File: %s"
 msgstr "Fil: %s"
@@ -3156,7 +3163,7 @@ msgid "Ignore Unknown Contacts"
 msgstr "Inviter _kontakter"
 
 #, fuzzy
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "_Ignorer hendelser fra kontakter som ikke er i kontaktlisten"
 
 msgid "Image"
@@ -3661,9 +3668,6 @@ msgstr ""
 "Meldinger vil kun være tilgjengelig for senere lesning hvis du har historikk "
 "påskrudd og kontakten er å finne på din kontaktliste."
 
-msgid "Microphone & Camera"
-msgstr ""
-
 #, fuzzy
 msgid "Minutes until your status gets changed"
 msgstr "_Vis statusendringer"
@@ -3739,9 +3743,6 @@ msgstr "Ny kontakt"
 #, fuzzy
 msgid "New Group"
 msgstr "Ny gruppesludring"
-
-msgid "New Message"
-msgstr "Ny melding"
 
 #, fuzzy
 msgid "New Search"
@@ -3861,13 +3862,6 @@ msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr ""
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-
-#, fuzzy
-msgid "Note: Chat history is disabled for this contact."
-msgstr "Se bort fra denne feilen for dette sertifikatet."
 
 msgid "Notes"
 msgstr ""
@@ -4590,9 +4584,6 @@ msgstr "Fjern"
 msgid "Removing Account..."
 msgstr "Fjerner kontoen %s"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 #, fuzzy
 msgid "Report"
 msgstr "Rapporter feil"
@@ -4787,9 +4778,6 @@ msgstr "Lagre passord"
 #, fuzzy
 msgid "Save as..."
 msgstr "Lagre _som"
-
-msgid "Save conversations for all contacts"
-msgstr "Lagre alle samtaler ført med kontakter"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -5128,6 +5116,10 @@ msgid "Share Status"
 msgstr "Status"
 
 #, fuzzy
+msgid "Share Video"
+msgstr "en video"
+
+#, fuzzy
 msgid "Share my online status"
 msgstr "Endre status"
 
@@ -5409,10 +5401,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "Start samtale"
 
-#, fuzzy
-msgid "Start Call…"
-msgstr "Start samtale"
-
 msgid "Start Chat"
 msgstr "Start samtale"
 
@@ -5429,8 +5417,12 @@ msgid "Start Search..."
 msgstr "_Start Samtale..."
 
 #, fuzzy
-msgid "Start Video"
-msgstr "en video"
+msgid "Start Video Call…"
+msgstr "Start samtale"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Start samtale"
 
 msgid "Start a new chat"
 msgstr "Start ny samtale"
@@ -5507,9 +5499,6 @@ msgstr "å sende meg status"
 
 msgid "Stopped sharing their status with you"
 msgstr ""
-
-msgid "Store conversations on the harddrive"
-msgstr "Lagre samtaler på harddisken"
 
 #, fuzzy
 msgid "Street"
@@ -6312,9 +6301,6 @@ msgstr ""
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr "Uten en tilkobling kan du ikke liste opp tilgjengelige tjenester"
 
@@ -6330,10 +6316,6 @@ msgstr "Avanserte Handlinger"
 
 msgid "X11"
 msgstr ""
-
-#, fuzzy
-msgid "XHTML Formatting"
-msgstr "Vis formateringsliste"
 
 msgid "XML Console"
 msgstr "XML-konsoll"
@@ -6501,12 +6483,6 @@ msgstr "Du har ikke tatt del i en gruppesamtale."
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr "Du fikk akkurat en ny melding fra \"%s\""
 
 #, fuzzy
 msgid "You left this group chat"
@@ -7178,3 +7154,29 @@ msgstr "%(nick)s er nå %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "File: "
+#~ msgstr "Fil: "
+
+#~ msgid "New Message"
+#~ msgstr "Ny melding"
+
+#, fuzzy
+#~ msgid "Note: Chat history is disabled for this contact."
+#~ msgstr "Se bort fra denne feilen for dette sertifikatet."
+
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Lagre alle samtaler ført med kontakter"
+
+#~ msgid "Store conversations on the harddrive"
+#~ msgstr "Lagre samtaler på harddisken"
+
+#, fuzzy
+#~ msgid "XHTML Formatting"
+#~ msgstr "Vis formateringsliste"
+
+#, fuzzy
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr "Du fikk akkurat en ny melding fra \"%s\""

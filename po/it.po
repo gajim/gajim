@@ -7,13 +7,14 @@
 # Daniel Coppi <neoex.dc@gmail.com>, 2007.
 # Davide Pizzetti <erpizzo@alice.it>, 2014.
 # Max Muster <c@zp1.net>, 2022.
+# sbadux <enricobe@hotmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
-"PO-Revision-Date: 2022-05-14 22:29+0000\n"
-"Last-Translator: Max Muster <c@zp1.net>\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
+"PO-Revision-Date: 2022-05-24 19:29+0000\n"
+"Last-Translator: sbadux <enricobe@hotmail.com>\n"
 "Language-Team: Italian <https://translate.gajim.org/projects/gajim/master/it/"
 ">\n"
 "Language: it\n"
@@ -82,9 +83,9 @@ msgstr ""
 "$S sarà sostituito dal messaggio di stato attuale, $T dal valore di "
 "'autoxatime'."
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
-msgstr "%(contact)s ti ha invitato a %(chat)s"
+msgstr "%(contact)s ha declinato il tuo invito a %(chat)s"
 
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
@@ -96,45 +97,51 @@ msgstr "%(days)s giorni, %(hours)s ore"
 
 #, fuzzy, python-format
 msgid "%(minutes)s min %(seconds)s s"
-msgstr "%(minutes)s min %(seconds)s sec"
+msgstr "%(minutes)s min %(seconds)s s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(name)s %(jid)s suggested me to add you to my contact list."
-msgstr "%s mi ha suggerito di aggiungerti alla mia lista contatti."
+msgstr ""
+"%(name)s %(jid)s mi ha suggerito di aggiungerti alla mia lista contatti."
 
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%(name)s (%(jid)s) would like to add some contacts to your contact list."
-msgstr "<b>%s</b> vorrebbe aggiungere alcuni contatti alla tua lista contatti."
+msgstr ""
+"%(name)s (%(jid)s) vorrebbe aggiunger alcuni contatti alla tua lista "
+"contatti."
 
 # %(action)s can be 'add', 'modify', 'remove' -> 'aggiungessi', 'modificassi', 'eliminassi'
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%(name)s (%(jid)s) would like to delete some contacts from your contact list."
-msgstr "<b>%s</b> vorrebbe eliminare alcuni contatti della tua lista contatti."
+msgstr ""
+"%(name)s (%(jid)s) vorrebbe eliminare alcuni contatti della tua lista "
+"contatti."
 
 # %(action)s can be 'add', 'modify', 'remove' -> 'aggiungessi', 'modificassi', 'eliminassi'
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%(name)s (%(jid)s) would like to modify some contacts in your contact list."
 msgstr ""
-"<b>%s</b> vorrebbe modificare alcuni contatti della tua lista contatti."
+"%(name)s (%(jid)s) vorrebbe modificare alcuni contatti della tua lista "
+"contatti."
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(name)s cancelled the transfer (%(reason)s)"
-msgstr "%(jid)s ha rifiutato l'invito: %(reason)s"
+msgstr "%(name)s ha annullato il trasferimento per (%(reason)s)"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(nickname)s:"
-msgstr "Soprannome:"
+msgstr "%(nickname)s:"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
-msgstr "%(owner_or_admin_or_member)s di questa conversazione di gruppo"
+msgstr "%(owner_or_admin_or_member)s di questa chat di gruppo"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(progress)s %% (%(time)s remaining)"
-msgstr "%(progress)s di %(total)s"
+msgstr "%(progress)s %% (%(time)s rimanente)"
 
 #, python-format
 msgid "%(received)s of %(max)s"
@@ -147,40 +154,40 @@ msgstr "la cifratura %(type)s è attiva %(authenticated)s."
 #, python-format
 msgid "%i min ago"
 msgid_plural "%i mins ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%i min fa"
+msgstr[1] "%i min fa"
 
 #, python-format
 msgid "%s (desynced)"
 msgstr "%s (non sincronizzato)"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s asks you to share your status"
-msgstr "\"%s\" ora vedrà il tuo stato."
+msgstr "%s chiede di condividere il tuo stato"
 
 #, python-format
 msgid "%s group chats found"
-msgstr "%s conversazioni di gruppo trovate"
+msgstr "%s chat di gruppo trovate"
 
 #, python-format
 msgid "%s has been invited to this group chat"
 msgstr "%s è stato invitato a questa conversazione di gruppo"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s has joined"
-msgstr "%s se n'è andato"
+msgstr "%s è entrato"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s has read up to this point"
-msgstr "Fai sapere agli altri fino a che punto hai letto"
+msgstr "%s ha letto fino a questo punto"
 
 #, python-format
 msgid "%s is a file but it should be a directory"
 msgstr "%s è un file, ma dovrebbe essere una cartella"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s is already in your contact list"
-msgstr "Questo contatto è già presente nella lista contatti."
+msgstr "%s è già nella tua lista contatti."
 
 #, python-format
 msgid "%s is calling"
@@ -214,9 +221,9 @@ msgstr "%s sec"
 msgid "%s stopped sharing their status"
 msgstr "%s ha smesso di condividere il proprio stato"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s stopped the transfer"
-msgstr "Il contatto remoto ha interrotto il trasferimento"
+msgstr "%s ha fermato il trasferimento"
 
 #, python-format
 msgid "%s wants to send you a file"
@@ -396,9 +403,8 @@ msgstr "priorità"
 msgid "?CLI:status"
 msgstr "stato"
 
-#, fuzzy
 msgid "?Gender:None"
-msgstr "Mittente: "
+msgstr "?Gender:Nessuno"
 
 msgid "?Gender:Other"
 msgstr "Altro"
@@ -493,9 +499,8 @@ msgstr "Squadra"
 msgid "?Group chat name:Vacation"
 msgstr "Vacanza"
 
-#, fuzzy
 msgid "?Message state:Received"
-msgstr "?Message state:Letto"
+msgstr "?Message state:Ricevuto"
 
 msgid "?Noun:Download"
 msgstr "Scaricato"
@@ -527,13 +532,11 @@ msgstr "Tipo"
 msgid "?config:Value"
 msgstr "Valore"
 
-#, fuzzy
 msgid "?profile:Address"
-msgstr "Indirizzo"
+msgstr "?profile:Indirizzo"
 
-#, fuzzy
 msgid "?profile:Full Name"
-msgstr "Nome Completo"
+msgstr "?profile:Nome Completo"
 
 msgid "?profile:Gender"
 msgstr "Genere"
@@ -543,7 +546,7 @@ msgstr "Indirizzo IM"
 
 #, fuzzy
 msgid "?profile:Note"
-msgstr "Profilo"
+msgstr "?profile:Note"
 
 msgid "?profile:Organisation"
 msgstr "Organizzazione"
@@ -551,9 +554,8 @@ msgstr "Organizzazione"
 msgid "?profile:Public Encryption Key"
 msgstr "Chiave di Cifratura Pubblica"
 
-#, fuzzy
 msgid "?profile:Role"
-msgstr "Profilo"
+msgstr "?profile:Ruolo"
 
 msgid "?profile:Title"
 msgstr "Titolo"
@@ -642,9 +644,8 @@ msgstr "Preferenze API. Valori: 'http', 'iq'"
 msgid "A_way"
 msgstr "A_ssente"
 
-#, fuzzy
 msgid "Abort"
-msgstr "_Interrompi"
+msgstr "Interrompi"
 
 msgid "Abuse"
 msgstr "Abuso"
@@ -665,9 +666,8 @@ msgstr "L'account %s è ancora connesso"
 msgid "Account Added"
 msgstr "Account Aggiunto"
 
-#, fuzzy
 msgid "Account Name..."
-msgstr "Account Rimosso"
+msgstr "Nome account..."
 
 msgid "Account Removal Failed"
 msgstr "Rimozione Account Fallita"
@@ -675,13 +675,11 @@ msgstr "Rimozione Account Fallita"
 msgid "Account Removed"
 msgstr "Account Rimosso"
 
-#, fuzzy
 msgid "Account Settings…"
-msgstr "Impostazioni…"
+msgstr "Impostazioni account…"
 
-#, fuzzy
 msgid "Account Wizard"
-msgstr "Account disabilitato"
+msgstr "Configurazione guidata account"
 
 msgid "Account disabled"
 msgstr "Account disabilitato"
@@ -727,16 +725,14 @@ msgstr "Aggiungi Account"
 msgid "Add Contact"
 msgstr "Aggiungi Contatto"
 
-#, fuzzy
 msgid "Add Entry"
-msgstr "Voce:"
+msgstr "Aggiungi voce"
 
 msgid "Add Files"
 msgstr "Aggiungi File"
 
-#, fuzzy
 msgid "Add Group…"
-msgstr "Modifica _Gruppi…"
+msgstr "Aggiungi gruppo…"
 
 msgid "Add Proxy"
 msgstr "Aggiungi Proxy"
@@ -747,9 +743,8 @@ msgstr "Aggiungi Opzione"
 msgid "Add Workspace"
 msgstr "Aggiungi spazio di lavoro"
 
-#, fuzzy
 msgid "Add _Contact…"
-msgstr "Aggiungi Contatto…"
+msgstr "Aggiungi _Contatto…"
 
 msgid "Add a checkmark to received messages"
 msgstr "Mostra una spunta quando il destinatario riceve il messaggio"
@@ -766,9 +761,8 @@ msgstr "Aggiungi Tema"
 msgid "Add new line"
 msgstr "Ritorna a capo"
 
-#, fuzzy
 msgid "Add some details…"
-msgstr "Aggiungi alla Lista Contatti…"
+msgstr "Aggiungi dettagli…"
 
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr "Aggiungi questo certificato alla lista di quelli _affidabili"
@@ -788,9 +782,8 @@ msgstr "Indirizzo"
 msgid "Address does not belong to a group chat server"
 msgstr "L'indirizzo non appartiene al server di una conversazione di gruppo"
 
-#, fuzzy
 msgid "Adhoc Group Chat"
-msgstr "Unisciti ad una Conversazione di Gruppo"
+msgstr "Chat di gruppo adhoc"
 
 msgid "Adjust to Status"
 msgstr "Adatta allo Stato"
@@ -801,9 +794,8 @@ msgstr "_Adatta allo Stato"
 msgid "Admin"
 msgstr "Amministratore"
 
-#, fuzzy
 msgid "Administration"
-msgstr "Amministratore"
+msgstr "Amministrazione"
 
 msgid "Administrator"
 msgstr "Amministratore"
@@ -885,23 +877,21 @@ msgstr "Si è Verificato un Errore"
 msgid "An entry with this XMPP Address already exists"
 msgstr "Esiste già una voce con questo Indirizzo XMPP"
 
-#, fuzzy
 msgid "An error occurred"
-msgstr "Si è Verificato un Errore"
+msgstr "Si è verificato un errore"
 
 msgid "An error occurred during account creation"
 msgstr "Si è verificato un errore durante la creazione dell'account"
 
-#, fuzzy
 msgid "An error occurred while exporting your messages"
-msgstr "Si è verificato un errore durante la modifica della password."
+msgstr "Errore durante l'esportazione dei messaggi"
 
 msgid "An error occurred while trying to change your password."
 msgstr "Si è verificato un errore durante la modifica della password."
 
-#, fuzzy, python-format
+#, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
-msgstr "Si è verificato un errore durante la modifica della password."
+msgstr "Errore nella creazione di un file in %(path)s: %(error)s"
 
 msgid "Anonymous login not supported"
 msgstr "Accesso anonimo non supportato"
@@ -913,23 +903,20 @@ msgid "Any participant is allowed to see your full XMPP Address"
 msgstr ""
 "A qualsiasi partecipante è permesso vedere il tuo indirizzo XMPP completo"
 
-#, fuzzy
 msgid "Anyone can join"
-msgstr "Chiunque si può unire a questa conversazione di gruppo"
+msgstr "Chiunque si può unire"
 
 msgid "Anyone can join this group chat"
 msgstr "Chiunque si può unire a questa conversazione di gruppo"
 
-#, fuzzy
 msgid "App Indicator Icon"
-msgstr "Applicazioni"
+msgstr "Icona indicatore app"
 
 msgid "Application verification failure"
 msgstr "Verifica applicazione fallita"
 
-#, fuzzy
 msgid "Apply"
-msgstr "_Applica"
+msgstr "Applica"
 
 msgid "Archive"
 msgstr "Archivio"
@@ -1006,9 +993,8 @@ msgstr "Audio"
 msgid "Audio / Video"
 msgstr "Audio / Video"
 
-#, fuzzy
 msgid "Audio File"
-msgstr "Aggiungi File"
+msgstr "File Audio"
 
 msgid "Audio Input Device"
 msgstr "Dispositivo Ingresso Audio"
@@ -1016,9 +1002,8 @@ msgstr "Dispositivo Ingresso Audio"
 msgid "Audio Output Device"
 msgstr "Dispositivo Uscita Audio"
 
-#, fuzzy
 msgid "Audio preview is not available"
-msgstr "Le sessioni audio non sono disponibili"
+msgstr "Anteprima audio non disponibile"
 
 msgid "Audio test"
 msgstr "Test audio"
@@ -1092,9 +1077,8 @@ msgstr "Accetta automaticamente ogni richiesta dei contatti"
 msgid "Available"
 msgstr "Disponibile"
 
-#, fuzzy
 msgid "Avatar file size too big"
-msgstr "L'immagine è troppo grande"
+msgstr "Avatar troppo grande"
 
 msgid "Away"
 msgstr "Assente"
@@ -1140,9 +1124,8 @@ msgstr "Lista Utenti Bloccati"
 msgid "Blocking List for %s"
 msgstr "Elenco di Blocco per %s"
 
-#, fuzzy
 msgid "Block…"
-msgstr "Blocca"
+msgstr "Blocca…"
 
 msgid "Bold"
 msgstr "Grassetto"
@@ -1160,6 +1143,9 @@ msgstr "Entrambi"
 msgid "Browse"
 msgstr "Esplora"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Consultazione di %(address)s tramite l'account %(account)s"
@@ -1176,20 +1162,25 @@ msgstr "La CRL non è ancora valida"
 msgid "CRL signature failure"
 msgstr "Fallimento firma CRL"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Cairo Version: %s"
-msgstr "Versione GLib: %s"
+msgstr "Versione Cairo: %s"
 
 msgid "Call"
 msgstr ""
 
-#, fuzzy
 msgid "Call Incoming"
-msgstr "Chiamata in Entrata"
+msgstr "Chiamata in arrivo"
 
-#, fuzzy
 msgid "Call Outgoing"
-msgstr "Chiamata…"
+msgstr "Chiamata in corso"
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
+msgstr ""
 
 msgid "Calling (Video)…"
 msgstr "Chiamata (Video)…"
@@ -1248,9 +1239,8 @@ msgstr "Fallimento firma del certificato"
 msgid "Ch_ange"
 msgstr "C_ambia"
 
-#, fuzzy
 msgid "Ch_ange Subject"
-msgstr "Cambia Argomento"
+msgstr "C_ambia argomento"
 
 msgid "Change"
 msgstr "Cambia"
@@ -1279,9 +1269,8 @@ msgstr ""
 msgid "Change your nickname in a group chat"
 msgstr "Cambia il tuo soprannome in una conversazione di gruppo"
 
-#, fuzzy
 msgid "Change your profile picture"
-msgstr "Cambia il tuo soprannome (Ctrl+N)"
+msgstr "Cambia l'immagine di profilo"
 
 msgid "Change your status to 'Away' after a certain amount of time"
 msgstr "Cambia il tuo stato in 'Assente' dopo un certo periodo di tempo"
@@ -1290,9 +1279,9 @@ msgid "Change your status to 'Not Available' after a certain amount of time"
 msgstr ""
 "Cambia il tuo stato in 'Non Disponibile' dopo un certo periodo di tempo"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Changed by %s"
-msgstr "Cambia"
+msgstr "Cambiato da %s"
 
 msgid "Changes the priority of account(s)"
 msgstr "Cambia la priorità del/degli account"
@@ -1313,17 +1302,14 @@ msgstr ""
 msgid "Chat"
 msgstr "Conversazioni"
 
-#, fuzzy
 msgid "Chat Banner: Background Color"
-msgstr "Banner - Colore Sfondo"
+msgstr "Banner Chat: Colore sfondo"
 
-#, fuzzy
 msgid "Chat Banner: Foreground Color"
-msgstr "Banner - Colore Primo Piano"
+msgstr "Banner Chat: Colore primo piano"
 
-#, fuzzy
 msgid "Chat Banner: Text Font"
-msgstr "Banner della conversazione"
+msgstr "Banner chat: Font del testo"
 
 msgid "Chat history"
 msgstr "Cronologia delle conversazioni"
@@ -1371,13 +1357,11 @@ msgstr "Controlla Aggiornamenti"
 msgid "Check for Gajim updates periodically"
 msgstr "Controllo periodico degli aggiornamenti di Gajim"
 
-#, fuzzy
 msgid "Check for updates"
-msgstr "Controlla Aggiornamenti"
+msgstr "Cerca aggiornamenti"
 
-#, fuzzy
 msgid "Check for updates periodically"
-msgstr "Controllo periodico degli aggiornamenti di Gajim"
+msgstr "Controllo periodico degli aggiornamenti"
 
 msgid "Check if Gajim is running"
 msgstr "Controlla se Gajim è in esecuzione"
@@ -1391,9 +1375,8 @@ msgstr "Seleziona Archivio"
 msgid "Choose Avatar…"
 msgstr "Seleziona Avatar…"
 
-#, fuzzy
 msgid "Choose Device"
-msgstr "Seleziona Archivio"
+msgstr "Seleziona dispositivo"
 
 msgid "Choose File to Send…"
 msgstr "Scegli File da Inviare…"
@@ -1410,9 +1393,8 @@ msgstr "Scegli File da Inviare…"
 msgid "Choose a color or select an image"
 msgstr ""
 
-#, fuzzy
 msgid "Choose a group…"
-msgstr "Seleziona Avatar…"
+msgstr "Scegli un gruppo…"
 
 msgid "Choose encryption"
 msgstr "Scegli Cifratura"
@@ -1420,9 +1402,8 @@ msgstr "Scegli Cifratura"
 msgid "Choose from various emoji styles"
 msgstr "Scegli lo stile delle emoji"
 
-#, fuzzy
 msgid "Choose the contact's groups"
-msgstr "Mostra il profilo del contatto (Ctrl+I)"
+msgstr "Seleziona i gruppi del contatto"
 
 msgid "City"
 msgstr "Città"
@@ -1453,9 +1434,8 @@ msgstr ""
 "Clicca per visualizzare la pagina wiki su come installare le estensioni in "
 "Flatpak."
 
-#, fuzzy
 msgid "Click to view location"
-msgstr "Clicca per impostare il tuo avatar"
+msgstr "Clicca per vedere la località"
 
 msgid "Client Certificate"
 msgstr "Certificato Client"
@@ -1499,7 +1479,6 @@ msgstr "Nome Comune (CN)"
 msgid "Common Name (CN): "
 msgstr "Nome Comune (CN): "
 
-#, fuzzy
 msgid "Complete"
 msgstr "Completato"
 
@@ -1512,9 +1491,8 @@ msgstr "Completato"
 msgid "Composing Only"
 msgstr "Solo Composizione Messaggio"
 
-#, fuzzy
 msgid "Computer"
-msgstr "Completato"
+msgstr "Computer"
 
 msgid "Configuration"
 msgstr "Configurazione"
@@ -1570,9 +1548,9 @@ msgstr "Connessione fallita"
 msgid "Connection not available"
 msgstr "Connessione non disponibile"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Connection with %s could not be established."
-msgstr "La connessione non può essere stabilita."
+msgstr "La connessione %s non può essere stabilita."
 
 msgid "ConnectionType: START TLS, DIRECT TLS or PLAIN"
 msgstr "Tipo Connessione: 'START TLS', 'DIRECT TLS', 'PLAIN'"
@@ -1592,9 +1570,8 @@ msgstr "Contatto Disconnesso"
 msgid "Contact Information"
 msgstr "Informazioni Contatto"
 
-#, fuzzy
 msgid "Contact Infos"
-msgstr "Richiedi Informazioni Contatto"
+msgstr "Informazioni contatto"
 
 msgid "Contact List"
 msgstr "Lista Contatti"
@@ -1602,29 +1579,23 @@ msgstr "Lista Contatti"
 msgid "Contact List Exchange"
 msgstr "Scambio Lista Contatti"
 
-#, fuzzy
 msgid "Contact List: Contact Background Color"
-msgstr "Riga Contatto - Colore Sfondo"
+msgstr "Lista contatti: Colore sfondo contatto"
 
-#, fuzzy
 msgid "Contact List: Contact Font"
-msgstr "Lista Contatti all'Avvio"
+msgstr "Lista contatti: Font contatto"
 
-#, fuzzy
 msgid "Contact List: Contact Foreground Color"
-msgstr "Riga Contatto - Colore Primo Piano"
+msgstr "Lista contatti: Colore primo piano"
 
-#, fuzzy
 msgid "Contact List: Group Background Color"
-msgstr "Riga Contatto - Colore Sfondo"
+msgstr "Lista contatti: Colore sfondo del gruppo"
 
-#, fuzzy
 msgid "Contact List: Group Font"
-msgstr "Riga Contatto - Colore Carattere"
+msgstr "Lista contatti: Font del gruppo"
 
-#, fuzzy
 msgid "Contact List: Group Foreground Color"
-msgstr "Riga Contatto - Colore Primo Piano"
+msgstr "Lista contatti: Colore primo piano"
 
 #, fuzzy
 msgid "Contact Unsubscribed"
@@ -1664,21 +1635,17 @@ msgstr ""
 msgid "Conversation: Nickname Color (Outgoing)"
 msgstr ""
 
-#, fuzzy
 msgid "Conversation: Text Color"
-msgstr "Cronologia Conversazioni"
+msgstr "Conversazione: Colore testo"
 
-#, fuzzy
 msgid "Conversation: Text Font"
-msgstr "Carattere Conversazione"
+msgstr "Conversazione: Font testo"
 
-#, fuzzy
 msgid "Conversation: URL Color"
-msgstr "Carattere Conversazione"
+msgstr "Conversazione: Colore URL"
 
-#, fuzzy
 msgid "Conversations"
-msgstr "Carattere Conversazione"
+msgstr "Conversazioni"
 
 msgid "Conversations are not stored on the server"
 msgstr "Le conversazioni non saranno archiviate sul server"
@@ -1719,9 +1686,8 @@ msgstr "Copia informazioni negli appunti"
 msgid "Could not Open File"
 msgstr "Impossibile Aprire il File"
 
-#, fuzzy
 msgid "Could not access file"
-msgstr "Impossibile Aprire il File"
+msgstr "Impossibile accedere al file"
 
 msgid "Country"
 msgstr "Paese"
@@ -1775,9 +1741,8 @@ msgstr "Disattivato"
 msgid "Debug Logging"
 msgstr "Log di Debug"
 
-#, fuzzy
 msgid "Decline"
-msgstr "_Rifiuta"
+msgstr "Rifiuta"
 
 msgid "Default"
 msgstr "Predefinito"
@@ -1838,9 +1803,8 @@ msgstr "Descrizione"
 msgid "Description: "
 msgstr "Descrizione: "
 
-#, fuzzy
 msgid "Destroy Groupchat…"
-msgstr "_Nuova conversazione di gruppo"
+msgstr "Distruggi chat di gruppo"
 
 msgid "Destroy This Chat"
 msgstr "Distruggi Questa Conversazione"
@@ -1852,21 +1816,18 @@ msgstr "Dettagli"
 msgid "Device \"%s\""
 msgstr ""
 
-#, fuzzy
 msgid "Devices"
-msgstr "Servizio"
+msgstr "Dispositivi"
 
 #, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "Nell'URL della Ricerca Web manca un \"%s\""
 
-#, fuzzy
 msgid "Direct Messages"
-msgstr "Elimina Messaggio"
+msgstr "Messaggi diretti"
 
-#, fuzzy
 msgid "Directory"
-msgstr "Cronologia"
+msgstr "Cartella"
 
 #, python-format
 msgid "Directory '%s' is not writable"
@@ -2313,9 +2274,6 @@ msgstr "Trasferimento file interrotto"
 
 msgid "File transfers"
 msgstr "Trasferimento file"
-
-msgid "File: "
-msgstr "File: "
 
 #, python-format
 msgid "File: %s"
@@ -2926,7 +2884,8 @@ msgstr ""
 msgid "Ignore Unknown Contacts"
 msgstr "Ignora Contatti Sconosciuti"
 
-msgid "Ignore everything from contacts not in your Roster"
+#, fuzzy
+msgid "Ignore everything from contacts not in your contact list"
 msgstr ""
 "Ignora completamente i contatti che non appartengono alla tua Lista Contatti"
 
@@ -3394,9 +3353,6 @@ msgstr ""
 "I messaggi saranno disponibili per una lettura successiva solo se la "
 "cronologia è abilitata e il contatto è nella tua lista."
 
-msgid "Microphone & Camera"
-msgstr "Microfono e Fotocamera"
-
 msgid "Minutes until your status gets changed"
 msgstr "Minuti che devono trascorrere prima che lo stato sia cambiato"
 
@@ -3471,9 +3427,6 @@ msgstr "Aggiungi un nuovo contatto"
 #, fuzzy
 msgid "New Group"
 msgstr "Nuova Conversazione di Gruppo"
-
-msgid "New Message"
-msgstr "Nuovo Messaggio"
 
 msgid "New Search"
 msgstr "Nuova Ricerca"
@@ -3587,14 +3540,6 @@ msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
 msgstr "Nota: Non tutti i server consentono gli account anonimi"
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-"Nota: la cronologia delle conversazioni è disabilitata per questo account."
-
-msgid "Note: Chat history is disabled for this contact."
-msgstr ""
-"Nota: la cronologia delle conversazioni è disabilitata per questo contatto."
 
 msgid "Notes"
 msgstr ""
@@ -4264,9 +4209,6 @@ msgstr "Rimuovi"
 msgid "Removing Account..."
 msgstr "Rimozione Account..."
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr "Mostra gli stili XHTML (colori, ecc.) per i messaggi ricevuti"
-
 #, fuzzy
 msgid "Report"
 msgstr "_Segnala Bug"
@@ -4446,9 +4388,6 @@ msgstr "Salva Password"
 #, fuzzy
 msgid "Save as..."
 msgstr "Salv_a come "
-
-msgid "Save conversations for all contacts"
-msgstr "Salva conversazioni per tutti i contatti"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -4759,6 +4698,14 @@ msgstr "Impostazioni"
 msgid "Share Status"
 msgstr "Modifica Stato"
 
+# it's one of the types which can replace %(type)s in the following:
+# %(contact)s wants to start %(type)s session with you. Do you want to answer the call?
+# Look at the translation of this string to better understand.
+# In italian translation, i just put "video" because it will result in "iniziare una sessione video".
+#, fuzzy
+msgid "Share Video"
+msgstr "video"
+
 #, fuzzy
 msgid "Share my online status"
 msgstr "Modifica stato"
@@ -5026,9 +4973,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "Avvia / Unisciti a una Conversazione"
 
-msgid "Start Call…"
-msgstr "Avvia Chiamata…"
-
 msgid "Start Chat"
 msgstr "Inizia Conversazione"
 
@@ -5043,13 +4987,13 @@ msgstr "Inizia Conversazione"
 msgid "Start Search..."
 msgstr "Avvia Ricerca..."
 
-# it's one of the types which can replace %(type)s in the following:
-# %(contact)s wants to start %(type)s session with you. Do you want to answer the call?
-# Look at the translation of this string to better understand.
-# In italian translation, i just put "video" because it will result in "iniziare una sessione video".
 #, fuzzy
-msgid "Start Video"
-msgstr "video"
+msgid "Start Video Call…"
+msgstr "Avvia Chiamata…"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Avvia Chiamata…"
 
 msgid "Start a new chat"
 msgstr "Inizia una conversazione"
@@ -5127,9 +5071,6 @@ msgstr "Smettere di condividere lo status online?"
 
 msgid "Stopped sharing their status with you"
 msgstr ""
-
-msgid "Store conversations on the harddrive"
-msgstr "Archivia le conversazioni sul disco locale"
 
 msgid "Street"
 msgstr "Via"
@@ -5893,9 +5834,6 @@ msgstr ""
 "Per l'archiviazione sicura delle password è utilizzato Gestione Credenziali "
 "di Windows"
 
-msgid "With Microphone"
-msgstr "Con Microfono"
-
 msgid "Without a connection, you can not browse available services"
 msgstr "Senza una connessione non è possibile consultare i servizi disponibili"
 
@@ -5911,9 +5849,6 @@ msgstr "Impostazioni Avanzate"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XHTML Formatting"
-msgstr "Formattazione XHTML"
 
 msgid "XML Console"
 msgstr "Console XML"
@@ -6074,14 +6009,6 @@ msgstr "Devi essere connesso per poter creare una conversazione di gruppo."
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr ""
-"Hai appena ricevuto un nuovo messaggio da %s.\n"
-"Vuoi chiudere questa scheda?"
 
 #, fuzzy
 msgid "You left this group chat"
@@ -6691,3 +6618,43 @@ msgstr "{nick} è ora {show}{status}"
 #, fuzzy
 msgid "…or drop it here"
 msgstr "Seleziona un'immagine o trascinala qui"
+
+#~ msgid "File: "
+#~ msgstr "File: "
+
+#~ msgid "Microphone & Camera"
+#~ msgstr "Microfono e Fotocamera"
+
+#~ msgid "New Message"
+#~ msgstr "Nuovo Messaggio"
+
+#~ msgid "Note: Chat history is disabled for this account."
+#~ msgstr ""
+#~ "Nota: la cronologia delle conversazioni è disabilitata per questo account."
+
+#~ msgid "Note: Chat history is disabled for this contact."
+#~ msgstr ""
+#~ "Nota: la cronologia delle conversazioni è disabilitata per questo "
+#~ "contatto."
+
+#~ msgid "Render XHTML styles (colors, etc.) of incoming messages"
+#~ msgstr "Mostra gli stili XHTML (colori, ecc.) per i messaggi ricevuti"
+
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Salva conversazioni per tutti i contatti"
+
+#~ msgid "Store conversations on the harddrive"
+#~ msgstr "Archivia le conversazioni sul disco locale"
+
+#~ msgid "With Microphone"
+#~ msgstr "Con Microfono"
+
+#~ msgid "XHTML Formatting"
+#~ msgstr "Formattazione XHTML"
+
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr ""
+#~ "Hai appena ricevuto un nuovo messaggio da %s.\n"
+#~ "Vuoi chiudere questa scheda?"

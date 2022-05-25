@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1189,6 +1189,9 @@ msgstr ""
 msgid "Browse"
 msgstr ""
 
+msgid "Browse history by date"
+msgstr ""
+
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr ""
@@ -1216,6 +1219,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2344,9 +2354,6 @@ msgstr ""
 msgid "File transfers"
 msgstr ""
 
-msgid "File: "
-msgstr ""
-
 #, python-format
 msgid "File: %s"
 msgstr ""
@@ -2896,7 +2903,7 @@ msgstr ""
 msgid "Ignore Unknown Contacts"
 msgstr "Convida _Contactes"
 
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr ""
 
 msgid "Image"
@@ -3357,9 +3364,6 @@ msgid ""
 "history is enabled and if the contact is in your contact list."
 msgstr ""
 
-msgid "Microphone & Camera"
-msgstr ""
-
 #, fuzzy
 msgid "Minutes until your status gets changed"
 msgstr "Mostra els canvis d'estat"
@@ -3435,9 +3439,6 @@ msgstr "Afegeix un contacte nou"
 #, fuzzy
 msgid "New Group"
 msgstr "Grups de xat"
-
-msgid "New Message"
-msgstr ""
 
 #, fuzzy
 msgid "New Search"
@@ -3555,12 +3556,6 @@ msgid "Note to myself"
 msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
-msgstr ""
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-
-msgid "Note: Chat history is disabled for this contact."
 msgstr ""
 
 msgid "Notes"
@@ -4245,9 +4240,6 @@ msgstr "Esborra"
 msgid "Removing Account..."
 msgstr "Fusiona comptes"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 #, fuzzy
 msgid "Report"
 msgstr "Informa de l'error"
@@ -4427,10 +4419,6 @@ msgstr "Desa la contrasenya"
 #, fuzzy
 msgid "Save as..."
 msgstr "Desa la contrasenya"
-
-#, fuzzy
-msgid "Save conversations for all contacts"
-msgstr "Guarda registre de les converses amb tots els contactes"
 
 msgid "Saving Avatar Failed"
 msgstr ""
@@ -4740,6 +4728,9 @@ msgstr "Connectors"
 msgid "Share Status"
 msgstr "Estat"
 
+msgid "Share Video"
+msgstr ""
+
 #, fuzzy
 msgid "Share my online status"
 msgstr "Mostra els contactes desconnectats"
@@ -4990,10 +4981,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "Inicia Xat"
 
-#, fuzzy
-msgid "Start Call…"
-msgstr "Comença Xat"
-
 msgid "Start Chat"
 msgstr ""
 
@@ -5009,8 +4996,13 @@ msgstr "Comença Xat"
 msgid "Start Search..."
 msgstr "Inicia Xat..."
 
-msgid "Start Video"
-msgstr ""
+#, fuzzy
+msgid "Start Video Call…"
+msgstr "Comença Xat"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Comença Xat"
 
 msgid "Start a new chat"
 msgstr ""
@@ -5085,9 +5077,6 @@ msgid "Stop sharing online status?"
 msgstr ""
 
 msgid "Stopped sharing their status with you"
-msgstr ""
-
-msgid "Store conversations on the harddrive"
 msgstr ""
 
 msgid "Street"
@@ -5810,9 +5799,6 @@ msgstr ""
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr ""
 
@@ -5828,10 +5814,6 @@ msgstr "Connectors"
 
 msgid "X11"
 msgstr ""
-
-#, fuzzy
-msgid "XHTML Formatting"
-msgstr "Mostra una llista de formats"
 
 msgid "XML Console"
 msgstr ""
@@ -5980,12 +5962,6 @@ msgid "You have to be connected to create a group chat."
 msgstr ""
 
 msgid "You have to invite people so they can join"
-msgstr ""
-
-#, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
 msgstr ""
 
 #, fuzzy
@@ -6627,3 +6603,11 @@ msgstr ""
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "Guarda registre de les converses amb tots els contactes"
+
+#, fuzzy
+#~ msgid "XHTML Formatting"
+#~ msgstr "Mostra una llista de formats"

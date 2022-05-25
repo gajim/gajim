@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 21:36+0000\n"
+"POT-Creation-Date: 2022-05-24 13:53+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -1253,6 +1253,9 @@ msgstr "Biak"
 msgid "Browse"
 msgstr "_Bilatu"
 
+msgid "Browse history by date"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Begiratzen %s  %s kontua erabiliz"
@@ -1280,6 +1283,13 @@ msgid "Call Incoming"
 msgstr ""
 
 msgid "Call Outgoing"
+msgstr ""
+
+msgid "Call ended"
+msgstr ""
+
+#, python-format
+msgid "Call with %s"
 msgstr ""
 
 msgid "Calling (Video)…"
@@ -2509,9 +2519,6 @@ msgstr "Fitxero Transferentzia Gelditua"
 msgid "File transfers"
 msgstr "Fitxero Transferentzia"
 
-msgid "File: "
-msgstr "Fitxeroa:"
-
 #, python-format
 msgid "File: %s"
 msgstr "Fitxeroa: %s"
@@ -3111,7 +3118,7 @@ msgid "Ignore Unknown Contacts"
 msgstr "Kontaktua"
 
 #, fuzzy
-msgid "Ignore everything from contacts not in your Roster"
+msgid "Ignore everything from contacts not in your contact list"
 msgstr "_Zerrendan ez dauden kontaktuen gertaerak baztertu"
 
 #, fuzzy
@@ -3614,9 +3621,6 @@ msgid ""
 "history is enabled and if the contact is in your contact list."
 msgstr "Mezuak gero irakurri ahalko dira historiala aktibatua baduzu."
 
-msgid "Microphone & Camera"
-msgstr ""
-
 #, fuzzy
 msgid "Minutes until your status gets changed"
 msgstr "Kontaktuen egoera aldaketak gorde"
@@ -3696,9 +3700,6 @@ msgstr "Kontaktu Berri bat Sartu"
 #, fuzzy
 msgid "New Group"
 msgstr "Txat Taldea Berria"
-
-msgid "New Message"
-msgstr "Mezu Berria Bat"
 
 #, fuzzy
 msgid "New Search"
@@ -3821,12 +3822,6 @@ msgid "Note to myself"
 msgstr ""
 
 msgid "Note: Anonymous accounts are not possible on all servers"
-msgstr ""
-
-msgid "Note: Chat history is disabled for this account."
-msgstr ""
-
-msgid "Note: Chat history is disabled for this contact."
 msgstr ""
 
 msgid "Notes"
@@ -4553,9 +4548,6 @@ msgstr "_Ezabatu"
 msgid "Removing Account..."
 msgstr "%s kontua ezabatzen"
 
-msgid "Render XHTML styles (colors, etc.) of incoming messages"
-msgstr ""
-
 #, fuzzy
 msgid "Report"
 msgstr "_Report Bug"
@@ -4744,10 +4736,6 @@ msgstr "Gorde pasahitza"
 #, fuzzy
 msgid "Save as..."
 msgstr "daukadanean"
-
-#, fuzzy
-msgid "Save conversations for all contacts"
-msgstr "_Gorde kontu guztien elkarrizketak"
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -5081,6 +5069,9 @@ msgstr "Konexioak huts egin du"
 msgid "Share Status"
 msgstr "Egoera"
 
+msgid "Share Video"
+msgstr ""
+
 #, fuzzy
 msgid "Share my online status"
 msgstr "Kontaktu Egoera Aldaketa"
@@ -5354,10 +5345,6 @@ msgstr ""
 msgid "Start / Join Chat"
 msgstr "Elkarrizketa Hasi"
 
-#, fuzzy
-msgid "Start Call…"
-msgstr "Elkarrizketa Hasi"
-
 msgid "Start Chat"
 msgstr "Elkarrizketa Hasi"
 
@@ -5373,8 +5360,13 @@ msgstr "Elkarrizketa Hasi"
 msgid "Start Search..."
 msgstr "Elkarrizketa  _Hasi"
 
-msgid "Start Video"
-msgstr ""
+#, fuzzy
+msgid "Start Video Call…"
+msgstr "Elkarrizketa Hasi"
+
+#, fuzzy
+msgid "Start Voice Call…"
+msgstr "Elkarrizketa Hasi"
 
 #, fuzzy
 msgid "Start a new chat"
@@ -5451,9 +5443,6 @@ msgid "Stop sharing online status?"
 msgstr "niri egoera bidaltzeko"
 
 msgid "Stopped sharing their status with you"
-msgstr ""
-
-msgid "Store conversations on the harddrive"
 msgstr ""
 
 #, fuzzy
@@ -6221,9 +6210,6 @@ msgstr ""
 msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
-msgid "With Microphone"
-msgstr ""
-
 msgid "Without a connection, you can not browse available services"
 msgstr "Konektatu gabe ezin duzu zerbitzari erabilgarriak bilatu"
 
@@ -6239,10 +6225,6 @@ msgstr "Ekintza Aurreratuak"
 
 msgid "X11"
 msgstr ""
-
-#, fuzzy
-msgid "XHTML Formatting"
-msgstr "Sakatu emoticon bat ezartzeko (Alt+M)"
 
 msgid "XML Console"
 msgstr " XML Konsola"
@@ -6405,12 +6387,6 @@ msgstr "%s gelan sartu da"
 
 msgid "You have to invite people so they can join"
 msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"You just received a new message from %s.\n"
-"Do you want to close this tab?"
-msgstr "\"%s\" -tik mezu berri bat jaso duzu"
 
 #, fuzzy
 msgid "You left this group chat"
@@ -7094,3 +7070,23 @@ msgstr "%(nick)s orain dago %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "File: "
+#~ msgstr "Fitxeroa:"
+
+#~ msgid "New Message"
+#~ msgstr "Mezu Berria Bat"
+
+#, fuzzy
+#~ msgid "Save conversations for all contacts"
+#~ msgstr "_Gorde kontu guztien elkarrizketak"
+
+#, fuzzy
+#~ msgid "XHTML Formatting"
+#~ msgstr "Sakatu emoticon bat ezartzeko (Alt+M)"
+
+#, fuzzy
+#~ msgid ""
+#~ "You just received a new message from %s.\n"
+#~ "Do you want to close this tab?"
+#~ msgstr "\"%s\" -tik mezu berri bat jaso duzu"
