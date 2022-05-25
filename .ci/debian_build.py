@@ -81,7 +81,6 @@ def build(context: ReleaseContext) -> None:
     subprocess.run(
        [
         'dpkg-buildpackage',
-        '-rfakeroot',
         '--no-sign'
        ],
        cwd=context.release_dir,
