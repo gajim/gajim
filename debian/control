@@ -1,4 +1,4 @@
-Source: gajim
+Source: gajim-nightly
 Section: net
 Priority: optional
 Maintainer: Gajim Maintainers <ci@gajim.org>
@@ -12,7 +12,7 @@ Build-Depends:
     python3-gi,
     python3-gi-cairo,
     python3-nbxmpp-nightly (>=20220501),
-    python3-setuptools
+    python3-setuptools,
     gir1.2-gtk-3.0,
 Rules-Requires-Root: no
 Standards-Version: 4.1.4
@@ -20,7 +20,7 @@ Homepage: https://gajim.org/
 Vcs-Git: https://dev.gajim.org/gajim/gajim.git
 Vcs-Browser: https://dev.gajim.org/gajim/gajim/tree/master
 
-Package: gajim
+Package: gajim-nightly
 Architecture: all
 Depends:
     ${misc:Depends},
@@ -36,9 +36,9 @@ Depends:
     python3-nbxmpp-nightly (>=20220501),
     python3-openssl (>= 0.19),
     python3-precis-i18n,
-    python3-keyring
-    python3-packaging
-    python3-setuptools
+    python3-keyring,
+    python3-packaging,
+    python3-setuptools,
     python3-css-parser,
 Recommends:
     aspell-en | aspell-dictionary,
