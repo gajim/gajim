@@ -1,3 +1,33 @@
+Gajim 1.4.2 (25 May 2022)
+
+  New
+  
+  * SearchView: Add calendar for browsing history
+  
+  Improvements
+  
+  * MUC: Enable history when creating rooms
+  * #10671 Preferences: Bind show_send_message_button to send_on_ctrl_enter
+  
+  Performance
+  
+  * #10828 MessageInputTextView: Limit chars when applying styles
+  
+  Bug Fixes
+  
+  * Accounts: Fix accessing disabled accounts
+  * MUC: Display moderated messages again
+  * MUC: Ignore gateway services for room creation
+  * Preferences: Hide non-functional xhtml setting
+  * Remove `Save conversation` setting
+  * Reset conversation view when switching chat
+  * #10265 Socks5: Catch specific exception
+  * #10867 Status: Restore last status correctly
+  * #10889 Jingle: Stop early if no transport is available
+  * #10898 Roster: Filter list on contact update
+  * #10898 Roster: Sort DND last
+  * #10902 Don't set read marker when receiving own carbons
+
 Gajim 1.4.1 (21 May 2022)
 
   New
