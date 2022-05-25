@@ -1,12 +1,9 @@
 #!/usr/bin/make -f
 
-DPKG_EXPORT_BUILDFLAGS = 1
-include /usr/share/dpkg/default.mk
-
-export PYBUILD_NAME=gajim
-
 %:
 	dh $@ --with python3 --buildsystem=pybuild
 
-# test target is broken
-override_dh_auto_test:
+
+# override_dh_auto_clean:
+# 	python3 setup.py clean -a
+# 	rm -rf $$(find gajim/ -name __pycache__)

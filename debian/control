@@ -1,57 +1,67 @@
-Source: gajim-nightly
+Source: gajim
 Section: net
 Priority: optional
-Maintainer: Yann Leboulanger <asterix@lagaule.org>
+Maintainer: Gajim Maintainers <ci@gajim.org>
 Build-Depends:
-    debhelper (>= 9),
+    debhelper-compat (= 13),
     dh-python,
-    python3 (>= 3.9),
     gettext (>= 0.17-4),
-Standards-Version: 4.0.0
-Homepage: https://gajim.org
+    libglib2.0-dev,
+    python3 (>= 3.9),
+    python3-css-parser,
+    python3-gi,
+    python3-gi-cairo,
+    python3-nbxmpp-nightly (>=20220501),
+    python3-setuptools
+    gir1.2-gtk-3.0,
+Rules-Requires-Root: no
+Standards-Version: 4.1.4
+Homepage: https://gajim.org/
 Vcs-Git: https://dev.gajim.org/gajim/gajim.git
 Vcs-Browser: https://dev.gajim.org/gajim/gajim/tree/master
 
-Package: gajim-nightly
+Package: gajim
 Architecture: all
 Depends:
-    python3 (>= 3.9),
-    ${misc:Depends}, ${python3:Depends},
-    python3-gi (>=3.32.0),
-    python3-gi-cairo,
-    gir1.2-gtk-3.0 (>=3.22),
+    ${misc:Depends},
+    ${python3:Depends},
+    desktop-file-utils,
+    gir1.2-gtk-3.0 (>= 3.22.27~),
     gir1.2-gtksource-4,
-    python3-nbxmpp-nightly (>= 20160905),
-    python3-openssl,
-    python3-keyring,
-    python3-css-parser,
+    python3 (>= 3.9),
+    python3-css-parser (>= 1.0.2),
+    python3-gi (>= 3.32.0),
+    python3-gi-cairo (>= 1.14.0~),
+    python3-idna,
+    python3-nbxmpp-nightly (>=20220501),
+    python3-openssl (>= 0.19),
     python3-precis-i18n,
-    python3-packaging,
+    python3-keyring
+    python3-packaging
+    python3-setuptools
+    python3-css-parser,
 Recommends:
+    aspell-en | aspell-dictionary,
     ca-certificates,
     dbus,
-    python3-dbus,
-    notification-daemon,
-    python3-crypto,
-    pulseaudio-utils | alsa-utils | sox | oss4-base,
-    python3-gnupg (>= 0.3.8),
-Suggests:
-    network-manager,
-    gir1.2-gtkspell3-3.0,
-    aspell-en | aspell-dictionary,
-    gir1.2-gnomekeyring-1.0,
-    gnome-keyring,
-    python3-kerberos,
-    texlive-latex-base,
-    dvipng,
+    fonts-noto-color-emoji,
     gir1.2-farstream-0.2,
+    gir1.2-gsound-1.0,
+    gir1.2-gspell-1,
+    gir1.2-gst-plugins-base-1.0,
     gir1.2-gstreamer-1.0,
-    gstreamer1.0-plugins-good,
-    gstreamer1.0-gtk3,
-    python3-pycurl,
     gir1.2-gupnpigd-1.0,
-Conflicts: gajim
-Description: XMPP client written in Python / GTK
- Gajim is a XMPP client. It has a tabbed user interface with normal
- chats, group chats, and has many features such as, TLS, GPG, SSL, multiple
- accounts, avatars, file transfers, audio/video call, D-Bus and Metacontacts.
+    gir1.2-secret-1,
+    gstreamer1.0-plugins-ugly,
+    notification-daemon,
+    pulseaudio-utils | alsa-utils | sox | oss4-base,
+    python3-dbus (>=0.81),
+    python3-keyring,
+    python3-pil,
+    python3-sentry-sdk,
+Suggests:
+    libxss1,
+Description: GTK+-based Jabber client
+ Gajim is a Jabber client. It has a tabbed user interface with normal chats,
+ group chats, and has many features such as, TLS, GPG, SSL, multiple accounts,
+ avatars, file transfers, audio/video call, D-Bus and Metacontacts.
