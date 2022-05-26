@@ -51,7 +51,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.set_resizable(True)
         self.set_default_size(-1, 600)
-        self.set_title(_('Groupchat Details'))
+        self.set_title(_('Group Chat Details'))
 
         self.account = contact.account
         self._client = app.get_client(contact.account)
