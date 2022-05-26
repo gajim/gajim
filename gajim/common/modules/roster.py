@@ -23,14 +23,16 @@ from typing import cast
 
 import nbxmpp
 from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import Iq
 from nbxmpp.protocol import JID
+from nbxmpp.structs import IqProperties
 from nbxmpp.structs import RosterData
 from nbxmpp.structs import RosterItem
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.task import Task
 
 from gajim.common import app
-from gajim.common.client import Client
+from gajim.common import types
 from gajim.common.events import RosterReceived
 from gajim.common.events import RosterPush
 from gajim.common.modules.base import BaseModule
@@ -45,7 +47,7 @@ class Roster(BaseModule):
         'set_item',
     ]
 
-    def __init__(self, client: Client) -> None:
+    def __init__(self, client: types.Client) -> None:
         BaseModule.__init__(self, client)
 
         self.handlers = [
@@ -131,9 +133,14 @@ class Roster(BaseModule):
 
         self._store_roster()
 
-    def _process_roster_push(self, _con, _stanza, properties):
+    def _process_roster_push(self,
+                             _con: types.xmppClient,
+                             _stanza: Iq,
+                             properties: IqProperties
+                             ) -> None:
         self._log.info('Push received')
 
+        assert properties.roster is not None
         item = properties.roster.item
         if item.subscription == 'remove':
             self._roster.pop(item.jid)
