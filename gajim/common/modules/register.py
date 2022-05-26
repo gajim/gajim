@@ -14,9 +14,12 @@
 
 # XEP-0077: In-Band Registration
 
+from __future__ import annotations
 
 from nbxmpp.namespaces import Namespace
+from nbxmpp.structs import DiscoInfo
 
+from gajim.common import types
 from gajim.common.modules.base import BaseModule
 
 
@@ -31,10 +34,10 @@ class Register(BaseModule):
         'submit_register_form',
     ]
 
-    def __init__(self, con):
+    def __init__(self, con: types.Client):
         BaseModule.__init__(self, con)
 
         self.supported = False
 
-    def pass_disco(self, info):
+    def pass_disco(self, info: DiscoInfo) -> None:
         self.supported = Namespace.REGISTER in info.features

@@ -30,6 +30,7 @@
         "gajim/common/idle.py",
         "gajim/common/logging_helpers.py",
         "gajim/common/modules/chat_markers.py",
+        "gajim/common/modules/register.py",
         "gajim/common/passwords.py",
         "gajim/common/regex.py",
         "gajim/common/setting_values.py",
