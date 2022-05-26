@@ -14,9 +14,14 @@
 
 # XEP-0083: Nested Roster Groups
 
+from __future__ import annotations
+
+from typing import Generator
+from typing import Optional
 
 from nbxmpp.errors import is_error
 
+from gajim.common import types
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import as_task
 
@@ -29,13 +34,13 @@ class Delimiter(BaseModule):
         'set_delimiter'
     ]
 
-    def __init__(self, con):
+    def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
         self.available = False
         self.delimiter = '::'
 
     @as_task
-    def get_roster_delimiter(self):
+    def get_roster_delimiter(self) -> Generator[Optional[str], None, None]:
         _task = yield
 
         delimiter = yield self.request_delimiter()
