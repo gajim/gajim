@@ -14,13 +14,18 @@
 
 # XEP-0258: Security Labels in XMPP
 
+from __future__ import annotations
+
+from typing import Generator
 from typing import Optional
 
 from nbxmpp.errors import is_error
 from nbxmpp.namespaces import Namespace
 from nbxmpp.modules.security_labels import Catalog
+from nbxmpp.structs import DiscoInfo
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.events import SecCatalogReceived
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import as_task
@@ -33,13 +38,13 @@ class SecLabels(BaseModule):
         'request_catalog',
     ]
 
-    def __init__(self, con):
+    def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
 
         self._catalogs: dict[str, Catalog] = {}
         self.supported = False
 
-    def pass_disco(self, info):
+    def pass_disco(self, info: DiscoInfo) -> None:
         if Namespace.SECLABEL not in info.features:
             return
 
@@ -47,7 +52,7 @@ class SecLabels(BaseModule):
         self._log.info('Discovered security labels: %s', info.jid)
 
     @as_task
-    def request_catalog(self, jid: str):
+    def request_catalog(self, jid: str) -> Generator[Catalog, None, None]:
 
         _task = yield
 

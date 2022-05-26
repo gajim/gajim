@@ -24,6 +24,7 @@ from dataclasses import dataclass
 from dataclasses import field
 
 from nbxmpp.protocol import JID
+from nbxmpp.modules.security_labels import Catalog
 from nbxmpp.structs import HTTPAuthData
 from nbxmpp.structs import ModerationData
 from nbxmpp.structs import LocationData
@@ -606,7 +607,7 @@ class SecCatalogReceived(ApplicationEvent):
     name: str = field(init=False, default='sec-catalog-received')
     account: str
     jid: str
-    catalog: dict[str, Any]
+    catalog: dict[str, Catalog]
 
 
 @dataclass
