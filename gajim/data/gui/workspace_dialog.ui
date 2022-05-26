@@ -29,6 +29,8 @@
             <property name="halign">center</property>
             <property name="activates-default">True</property>
             <property name="xalign">0.5</property>
+            <property name="show-emoji-icon">True</property>
+            <property name="enable-emoji-completion">True</property>
             <signal name="notify::text" handler="_on_text_changed" swapped="no"/>
           </object>
           <packing>
@@ -88,6 +90,7 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="halign">center</property>
+        <property name="margin-top">24</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkSwitch" id="image_switch">

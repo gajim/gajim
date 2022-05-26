@@ -41,7 +41,7 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         self.set_show_menubar(False)
         self.set_title(_('Workspace Settings'))
         self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
-        self.set_size_request(350, -1)
+        self.set_size_request(500, 600)
 
         self._workspace_id = workspace_id
 
