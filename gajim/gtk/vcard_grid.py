@@ -155,6 +155,7 @@ class VCardGrid(Gtk.Grid):
         self.set_no_show_all(True)
         self.set_visible(True)
         self.set_halign(Gtk.Align.CENTER)
+        self.set_size_request(300, -1)
 
         self._account = account
         self._row_count: int = 0
