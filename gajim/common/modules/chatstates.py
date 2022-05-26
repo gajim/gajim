@@ -14,33 +14,36 @@
 
 # XEP-0085: Chat State Notifications
 
+from __future__ import annotations
+
 from typing import Any
-from typing import Dict  # pylint: disable=unused-import
-from typing import List  # pylint: disable=unused-import
 from typing import Optional
 
 import time
 from functools import wraps
 
-import nbxmpp
 from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import JID
+from nbxmpp.protocol import Presence
+from nbxmpp.structs import MessageProperties
+from nbxmpp.structs import PresenceProperties
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.const import Chatstate as State
+
 from gi.repository import GLib
 
+from gajim.common import types
+from gajim.common.const import ClientState
 from gajim.common.structs import OutgoingMessage
 from gajim.common.modules.base import BaseModule
-
-from gajim.common.types import ConnectionT
-
 
 INACTIVE_AFTER = 60
 PAUSED_AFTER = 10
 
 
-def ensure_enabled(func):
+def ensure_enabled(func: Any) -> Any:
     @wraps(func)
-    def func_wrapper(self, *args, **kwargs):
+    def func_wrapper(self: Any, *args: Any, **kwargs: Any):
         # pylint: disable=protected-access
         if not self._enabled:
             return None
@@ -49,7 +52,7 @@ def ensure_enabled(func):
 
 
 class Chatstate(BaseModule):
-    def __init__(self, con: ConnectionT) -> None:
+    def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
 
         self.handlers = [
@@ -62,31 +65,38 @@ class Chatstate(BaseModule):
         ]
 
         # Our current chatstate with a specific contact
-        self._chatstates = {}  # type: Dict[str, State]
+        self._chatstates: dict[JID, State] = {}
 
         # The current chatstate we received from a contact
-        self._remote_chatstate = {}
+        self._remote_chatstate: dict[JID, State] = {}
 
-        self._last_keyboard_activity = {}  # type: Dict[str, float]
-        self._last_mouse_activity = {}  # type: Dict[str, float]
+        self._last_keyboard_activity: dict[JID, float] = {}
+        self._last_mouse_activity: dict[JID, float] = {}
         self._timeout_id = None
-        self._delay_timeout_ids = {}  # type: Dict[str, str]
-        self._blocked = []  # type: List[str]
+        self._delay_timeout_ids: dict[JID, int] = {}
+        self._blocked: list[JID] = []
         self._enabled = False
 
         self._con.connect_signal('state-changed', self._on_client_state_changed)
         self._con.connect_signal('resume-failed', self._on_client_resume_failed)
 
-    def _on_client_resume_failed(self, _client, _signal_name):
+    def _on_client_resume_failed(self,
+                                 _client: types.Client,
+                                 _signal_name: str
+                                 ) -> None:
         self._set_enabled(False)
 
-    def _on_client_state_changed(self, _client, _signal_name, state):
+    def _on_client_state_changed(self,
+                                 _client: types.Client,
+                                 _signal_name: str,
+                                 state: ClientState
+                                 ) -> None:
         if state.is_disconnected:
             self._set_enabled(False)
         elif state.is_connected:
             self._set_enabled(True)
 
-    def _set_enabled(self, value):
+    def _set_enabled(self, value: bool) -> None:
         if self._enabled == value:
             return
 
@@ -103,10 +113,10 @@ class Chatstate(BaseModule):
 
     @ensure_enabled
     def _presence_received(self,
-                           _con: ConnectionT,
-                           _stanza: nbxmpp.Presence,
-                           properties: Any) -> None:
-
+                           _con: types.xmppClient,
+                           _stanza: Presence,
+                           properties: PresenceProperties
+                           ) -> None:
         if not properties.type.is_unavailable and not properties.type.is_error:
             return
 
@@ -115,6 +125,7 @@ class Chatstate(BaseModule):
 
         jid = properties.jid
 
+        assert jid is not None
         self._remote_chatstate.pop(jid, None)
         self._chatstates.pop(jid, None)
         self._last_mouse_activity.pop(jid, None)
@@ -128,7 +139,11 @@ class Chatstate(BaseModule):
 
         contact.notify('chatstate-update')
 
-    def _process_chatstate(self, _con, _stanza, properties):
+    def _process_chatstate(self,
+                           _con: types.xmppClient,
+                           _stanza: Any,
+                           properties: MessageProperties
+                           ) -> None:
         if properties.type.is_error:
             return
 
@@ -141,6 +156,7 @@ class Chatstate(BaseModule):
                 properties.is_carbon_message and properties.carbon.is_sent):
             return
 
+        assert properties.jid is not None
         self._remote_chatstate[properties.jid] = properties.chatstate
 
         self._log.info('Recv: %-10s - %s', properties.chatstate, properties.jid)
@@ -152,7 +168,7 @@ class Chatstate(BaseModule):
         contact.notify('chatstate-update')
 
     @ensure_enabled
-    def _check_last_interaction(self) -> GLib.SOURCE_CONTINUE:
+    def _check_last_interaction(self) -> bool:
         now = time.time()
         for jid in list(self._last_mouse_activity.keys()):
             time_ = self._last_mouse_activity[jid]
@@ -181,17 +197,19 @@ class Chatstate(BaseModule):
 
         return GLib.SOURCE_CONTINUE
 
-    def get_remote_chatstate(self, jid):
+    def get_remote_chatstate(self, jid: JID) -> Chatstate:
         return self._remote_chatstate.get(jid)
 
     @ensure_enabled
-    def set_active(self, contact) -> None:
+    def set_active(self, contact: types.ChatContactT) -> None:
         if contact.settings.get('send_chatstate') == 'disabled':
             return
         self._last_mouse_activity[contact.jid] = time.time()
         self._chatstates[contact.jid] = State.ACTIVE
 
-    def get_active_chatstate(self, contact) -> Optional[str]:
+    def get_active_chatstate(self,
+                             contact: types.ChatContactT
+                             ) -> Optional[str]:
         # determines if we add 'active' on outgoing messages
         if contact.settings.get('send_chatstate') == 'disabled':
             return None
@@ -208,7 +226,10 @@ class Chatstate(BaseModule):
         return 'active'
 
     @ensure_enabled
-    def block_chatstates(self, contact, block: bool) -> None:
+    def block_chatstates(self,
+                         contact: types.ChatContactT,
+                         block: bool
+                         ) -> None:
         # Block sending chatstates to a contact
         # Used for example if we cycle through the MUC nick list, which
         # produces a lot of buffer 'changed' signals from the input textview.
@@ -219,7 +240,10 @@ class Chatstate(BaseModule):
             self._blocked.remove(contact.jid)
 
     @ensure_enabled
-    def set_chatstate_delayed(self, contact, state: State) -> None:
+    def set_chatstate_delayed(self,
+                              contact: types.ChatContactT,
+                              state: State
+                              ) -> None:
         # Used when we go from Composing -> Active after deleting all text
         # from the Textview. We delay the Active state because maybe the
         # User starts writing again.
@@ -228,7 +252,7 @@ class Chatstate(BaseModule):
             2, self.set_chatstate, contact, state)
 
     @ensure_enabled
-    def set_chatstate(self, contact, state: State) -> None:
+    def set_chatstate(self, contact: types.ChatContactT, state: State) -> None:
         # Don’t send chatstates to ourself
         if self._con.get_own_jid().bare_match(contact.jid):
             return
@@ -287,7 +311,10 @@ class Chatstate(BaseModule):
 
         self._chatstates[contact.jid] = state
 
-    def _send_chatstate(self, contact, chatstate):
+    def _send_chatstate(self,
+                        contact: types.ChatContactT,
+                        chatstate: State
+                        ) -> None:
         type_ = 'groupchat' if contact.is_groupchat else 'chat'
         message = OutgoingMessage(account=self._account,
                                   contact=contact,
@@ -299,7 +326,10 @@ class Chatstate(BaseModule):
         self._con.send_message(message)
 
     @ensure_enabled
-    def set_mouse_activity(self, contact, was_paused: bool) -> None:
+    def set_mouse_activity(self,
+                           contact: types.ChatContactT,
+                           was_paused: bool
+                           ) -> None:
         if contact.settings.get('send_chatstate') == 'disabled':
             return
         self._last_mouse_activity[contact.jid] = time.time()
@@ -310,21 +340,21 @@ class Chatstate(BaseModule):
                 self.set_chatstate(contact, State.ACTIVE)
 
     @ensure_enabled
-    def set_keyboard_activity(self, contact) -> None:
+    def set_keyboard_activity(self, contact: types.ChatContactT) -> None:
         self._last_keyboard_activity[contact.jid] = time.time()
 
-    def remove_delay_timeout(self, contact):
+    def remove_delay_timeout(self, contact: types.ChatContactT) -> None:
         timeout = self._delay_timeout_ids.get(contact.jid)
         if timeout is not None:
             GLib.source_remove(timeout)
             del self._delay_timeout_ids[contact.jid]
 
-    def remove_all_delay_timeouts(self):
+    def remove_all_delay_timeouts(self) -> None:
         for timeout in self._delay_timeout_ids.values():
             GLib.source_remove(timeout)
         self._delay_timeout_ids.clear()
 
-    def cleanup(self):
+    def cleanup(self) -> None:
         self.remove_all_delay_timeouts()
         if self._timeout_id is not None:
             GLib.source_remove(self._timeout_id)
