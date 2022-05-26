@@ -14,13 +14,21 @@
 
 # XEP-0191: Blocking Command
 
+from __future__ import annotations
+
+from typing import Generator
+
 import nbxmpp
-from nbxmpp.protocol import JID
 from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import Iq
+from nbxmpp.protocol import JID
+from nbxmpp.structs import BlockingProperties
+from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.modules.util import raise_if_error
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.events import FeatureDiscovered
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import as_task
@@ -35,10 +43,10 @@ class Blocking(BaseModule):
         'request_blocking_list',
     ]
 
-    def __init__(self, con):
+    def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
 
-        self.blocked = set()
+        self.blocked: set[JID] = set()
 
         self.handlers = [
             StanzaHandler(name='iq',
@@ -49,7 +57,7 @@ class Blocking(BaseModule):
 
         self.supported = False
 
-    def pass_disco(self, info):
+    def pass_disco(self, info: DiscoInfo) -> None:
         if Namespace.BLOCKING not in info.features:
             return
 
@@ -60,11 +68,11 @@ class Blocking(BaseModule):
 
         self._log.info('Discovered blocking: %s', info.jid)
 
-    def is_blocked(self, jid):
+    def is_blocked(self, jid: JID) -> bool:
         return jid in self.blocked
 
     @as_task
-    def get_blocking_list(self):
+    def get_blocking_list(self) -> Generator[set[JID], None, None]:
         _task = yield
 
         blocking_list = yield self._nbxmpp('Blocking').request_blocking_list()
@@ -78,7 +86,10 @@ class Blocking(BaseModule):
         yield blocking_list
 
     @as_task
-    def update_blocking_list(self, block, unblock):
+    def update_blocking_list(self,
+                             block: set[JID],
+                             unblock: set[JID]
+                             ) -> Generator[bool, None, None]:
         _task = yield
 
         if block:
@@ -91,7 +102,11 @@ class Blocking(BaseModule):
 
         yield True
 
-    def _blocking_push_received(self, _con, _stanza, properties):
+    def _blocking_push_received(self,
+                                _con: types.xmppClient,
+                                _stanza: Iq,
+                                properties: BlockingProperties
+                                ) -> None:
         if not properties.is_blocking:
             return
 
@@ -114,13 +129,15 @@ class Blocking(BaseModule):
 
         raise nbxmpp.NodeProcessed
 
-    def _unblock_jids(self, jids):
+    def _unblock_jids(self, jids: set[JID]) -> None:
         for contact in self._get_contacts_from_jids(jids):
             contact.set_unblocked()
             self._presence_probe(contact.jid)
             self._log.info('Unblock Push: %s', contact.jid)
 
-    def _get_contacts_from_jids(self, jids):
+    def _get_contacts_from_jids(self,
+                                jids: set[JID]
+                                ) -> Generator[types.BareContactT, None, None]:
         for jid in jids:
             if jid.resource is not None:
                 # Currently not supported by GUI

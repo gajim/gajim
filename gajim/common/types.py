@@ -78,6 +78,7 @@ GdkPixbufType = Union[GdkPixbuf.Pixbuf, GdkPixbuf.PixbufAnimation]
 AnyCallableT = Callable[..., Any]
 ObservableCbDict = dict[str, list[weakref.WeakMethod[AnyCallableT]]]
 
+BareContactT = Union['BareContact']
 ChatContactT = Union['BareContact', 'GroupchatContact', 'GroupchatParticipant']
 OneOnOneContactT = Union['BareContact', 'GroupchatParticipant']
 GroupchatContactT = Union['GroupchatContact']
