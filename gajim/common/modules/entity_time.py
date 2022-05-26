@@ -14,7 +14,12 @@
 
 # XEP-0202: Entity Time
 
+from __future__ import annotations
+
+from nbxmpp.protocol import JID
+
 from gajim.common import app
+from gajim.common import types
 from gajim.common.modules.base import BaseModule
 
 
@@ -27,12 +32,12 @@ class EntityTime(BaseModule):
         'disable',
     ]
 
-    def __init__(self, con):
+    def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
 
         self.handlers = []
 
-    def set_enabled(self, enabled):
+    def set_enabled(self, enabled: bool) -> None:
         if not enabled:
             self._nbxmpp('EntityTime').disable()
             return
@@ -44,7 +49,7 @@ class EntityTime(BaseModule):
         self._nbxmpp('EntityTime').enable()
         self._nbxmpp('EntityTime').set_allow_reply_func(self._allow_reply)
 
-    def _allow_reply(self, jid):
+    def _allow_reply(self, jid: JID) -> bool:
         item = self._con.get_module('Roster').get_item(jid.bare)
         if item is None:
             return False
