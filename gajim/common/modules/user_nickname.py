@@ -14,9 +14,15 @@
 
 # XEP-0172: User Nickname
 
+from __future__ import annotations
+
+from typing import Any
+
 from nbxmpp.namespaces import Namespace
+from nbxmpp.structs import MessageProperties
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
 
@@ -29,12 +35,16 @@ class UserNickname(BaseModule):
         'set_access_model',
     ]
 
-    def __init__(self, con):
+    def __init__(self, con: types.Client):
         BaseModule.__init__(self, con)
         self._register_pubsub_handler(self._nickname_received)
 
     @event_node(Namespace.NICK)
-    def _nickname_received(self, _con, _stanza, properties):
+    def _nickname_received(self,
+                           _con: types.xmppClient,
+                           _stanza: Any,
+                           properties: MessageProperties
+                           ) -> None:
         if properties.pubsub_event.retracted:
             return
 
