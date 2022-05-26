@@ -14,8 +14,15 @@
 
 # XEP-0012: Last Activity
 
+from __future__ import annotations
+
+from typing import cast
+
+from nbxmpp.protocol import JID
+
 from gajim.common import app
 from gajim.common import idle
+from gajim.common import types
 from gajim.common.modules.base import BaseModule
 
 
@@ -28,10 +35,10 @@ class LastActivity(BaseModule):
         'disable',
     ]
 
-    def __init__(self, con):
+    def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
 
-    def set_enabled(self, enabled):
+    def set_enabled(self, enabled: bool) -> None:
         if not enabled or not app.is_installed('IDLE'):
             self._nbxmpp('LastActivity').disable()
             return
@@ -43,10 +50,11 @@ class LastActivity(BaseModule):
         self._nbxmpp('LastActivity').set_idle_func(idle.Monitor.get_idle_sec)
         self._nbxmpp('LastActivity').set_allow_reply_func(self._allow_reply)
 
-    def _allow_reply(self, jid):
+    def _allow_reply(self, jid: JID) -> bool:
         item = self._con.get_module('Roster').get_item(jid.bare)
         if item is None:
             return False
 
-        contact = self._get_contact(jid.bare)
+        contact = cast(types.BareContact, self._get_contact(
+            JID.from_string(jid.bare)))
         return contact.is_subscribed
