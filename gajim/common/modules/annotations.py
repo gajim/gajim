@@ -14,8 +14,6 @@
 
 # XEP-0145: Annotations
 
-from typing import Any
-from typing import Dict
 from typing import Union
 from typing import Optional
 
@@ -23,6 +21,7 @@ from nbxmpp.errors import StanzaError
 from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.structs import AnnotationNote
 from nbxmpp.protocol import JID
+from nbxmpp.task import Task
 
 from gajim.common.types import ConnectionT
 from gajim.common.modules.base import BaseModule
@@ -39,13 +38,13 @@ class Annotations(BaseModule):
     def __init__(self, con: ConnectionT) -> None:
         BaseModule.__init__(self, con)
 
-        self._annotations: Dict[Union[JID, str], AnnotationNote] = {}
+        self._annotations: dict[Union[JID, str], AnnotationNote] = {}
 
     def request_annotations(self) -> None:
         self._nbxmpp('Annotations').request_annotations(
             callback=self._annotations_received)
 
-    def _annotations_received(self, task: Any) -> None:
+    def _annotations_received(self, task: Task) -> None:
         try:
             annotations = task.finish()
         except (StanzaError, MalformedStanzaError) as error:
