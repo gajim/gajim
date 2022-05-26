@@ -14,21 +14,33 @@
 
 # XEP-0363: HTTP File Upload
 
+from __future__ import annotations
+
+from typing import cast
+from typing import Callable
+from typing import Optional
 
 import os
 import io
 from urllib.parse import urlparse
 import mimetypes
 
-from nbxmpp.namespaces import Namespace
 from nbxmpp.errors import StanzaError
 from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.errors import HTTPUploadStanzaError
+from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import JID
+from nbxmpp.structs import DiscoInfo
+from nbxmpp.structs import HTTPUploadData
+from nbxmpp.task import Task
 from nbxmpp.util import convert_tls_error_flags
+
+from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Soup
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.i18n import _
 from gajim.common.helpers import get_tls_error_phrase
 from gajim.common.helpers import get_account_proxy
@@ -42,21 +54,21 @@ class HTTPUpload(BaseModule):
 
     _nbxmpp_extends = 'HTTPUpload'
 
-    def __init__(self, con):
+    def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
 
         self.available = False
-        self.component = None
-        self.httpupload_namespace = None
-        self.max_file_size = None  # maximum file size in bytes
+        self.component: Optional[JID] = None
+        self.httpupload_namespace: Optional[str] = None
+        self.max_file_size: Optional[float] = None  # max file size in bytes
 
-        self._proxy_resolver = None
-        self._queued_messages = {}
+        self._proxy_resolver: Optional[Gio.SimpleProxyResolver] = None
+        self._queued_messages: dict[int, Soup.Message] = {}
         self._session = Soup.Session()
         self._session.props.ssl_strict = False
-        self._session.props.user_agent = 'Gajim %s' % app.version
+        self._session.props.user_agent = f'Gajim {app.version}'
 
-    def _set_proxy_if_available(self):
+    def _set_proxy_if_available(self) -> None:
         proxy = get_account_proxy(self._account)
         if proxy is None:
             self._proxy_resolver = None
@@ -65,7 +77,7 @@ class HTTPUpload(BaseModule):
             self._proxy_resolver = proxy.get_resolver()
             self._session.props.proxy_resolver = self._proxy_resolver
 
-    def pass_disco(self, info):
+    def pass_disco(self, info: DiscoInfo) -> None:
         if not info.has_httpupload:
             return
 
@@ -79,18 +91,24 @@ class HTTPUpload(BaseModule):
         if self.max_file_size is None:
             self._log.warning('Component does not provide maximum file size')
         else:
-            size = GLib.format_size_full(self.max_file_size,
+            size = GLib.format_size_full(int(self.max_file_size),
                                          GLib.FormatSizeFlags.IEC_UNITS)
             self._log.info('Component has a maximum file size of: %s', size)
 
         for ctrl in app.window.get_controls(account=self._account):
             ctrl.update_actions()
 
-    def make_transfer(self, path, encryption, contact, groupchat=False):
+    def make_transfer(self,
+                      path: str,
+                      encryption: Optional[str],
+                      contact: types.ContactT,
+                      groupchat: bool = False
+                      ) -> HTTPFileTransfer:
         if not path or not os.path.exists(path):
             raise FileError(_('Could not access file'))
 
         invalid_file = False
+        msg = ''
         stat = os.stat(path)
 
         if os.path.isfile(path):
@@ -101,10 +119,10 @@ class HTTPUpload(BaseModule):
             invalid_file = True
             msg = _('File does not exist')
 
-        if self.max_file_size is not None and \
-                stat.st_size > self.max_file_size:
+        if (self.max_file_size is not None and
+                stat.st_size > self.max_file_size):
             invalid_file = True
-            size = GLib.format_size_full(self.max_file_size,
+            size = GLib.format_size_full(int(self.max_file_size),
                                          GLib.FormatSizeFlags.IEC_UNITS)
             msg = _('File is too large, '
                     'maximum allowed file size is: %s') % size
@@ -124,7 +142,7 @@ class HTTPUpload(BaseModule):
                                 encryption,
                                 groupchat)
 
-    def cancel_transfer(self, transfer):
+    def cancel_transfer(self, transfer: HTTPFileTransfer) -> None:
         transfer.set_cancelled()
         message = self._queued_messages.get(id(transfer))
         if message is None:
@@ -132,7 +150,7 @@ class HTTPUpload(BaseModule):
 
         self._session.cancel_message(message, Soup.Status.CANCELLED)
 
-    def start_transfer(self, transfer):
+    def start_transfer(self, transfer: HTTPFileTransfer) -> None:
         if transfer.encryption is not None and not transfer.is_encrypted:
             transfer.set_encrypting()
             plugin = app.plugin_manager.encryption_plugins[transfer.encryption]
@@ -155,8 +173,8 @@ class HTTPUpload(BaseModule):
             callback=self._received_slot,
             user_data=transfer)
 
-    def _received_slot(self, task):
-        transfer = task.get_user_data()
+    def _received_slot(self, task: Task) -> None:
+        transfer = cast(HTTPFileTransfer, task.get_user_data())
 
         try:
             result = task.finish()
@@ -190,9 +208,10 @@ class HTTPUpload(BaseModule):
 
         self._upload_file(transfer)
 
-    def _upload_file(self, transfer):
+    def _upload_file(self, transfer: HTTPFileTransfer) -> None:
         transfer.set_started()
 
+        assert transfer.put_uri is not None
         message = Soup.Message.new('PUT', transfer.put_uri)
         message.connect('starting', self._check_certificate, transfer)
 
@@ -201,8 +220,10 @@ class HTTPUpload(BaseModule):
         message.set_flags(Soup.MessageFlags.CAN_REBUILD |
                           Soup.MessageFlags.NO_REDIRECT)
 
+        assert message.props.request_body is not None
         message.props.request_body.set_accumulate(False)
 
+        assert message.props.request_headers is not None
         message.props.request_headers.set_content_type(transfer.mime, None)
         message.props.request_headers.set_content_length(transfer.size)
         for name, value in transfer.headers.items():
@@ -215,7 +236,10 @@ class HTTPUpload(BaseModule):
         self._set_proxy_if_available()
         self._session.queue_message(message, self._on_finish, transfer)
 
-    def _check_certificate(self, message, transfer):
+    def _check_certificate(self,
+                           message: Soup.Message,
+                           transfer: HTTPFileTransfer
+                           ) -> None:
         https_used, tls_certificate, tls_errors = message.get_https_status()
         if not https_used:
             self._log.warning('HTTPS was not used for upload')
@@ -234,7 +258,11 @@ class HTTPUpload(BaseModule):
         transfer.set_error('tls-verification-failed', phrase)
         self._session.cancel_message(message, Soup.Status.CANCELLED)
 
-    def _on_finish(self, _session, message, transfer):
+    def _on_finish(self,
+                   _session: Soup.Session,
+                   message: Soup.Message,
+                   transfer: HTTPFileTransfer
+                   ) -> None:
         self._queued_messages.pop(id(transfer), None)
 
         if message.props.status_code == Soup.Status.CANCELLED:
@@ -252,25 +280,36 @@ class HTTPUpload(BaseModule):
                             phrase)
             transfer.set_error('http-response', phrase)
 
-    def _on_wrote_chunk(self, message, transfer):
+    def _on_wrote_chunk(self,
+                        message: Soup.Message,
+                        transfer: HTTPFileTransfer
+                        ) -> None:
         transfer.update_progress()
         if transfer.is_complete:
+            assert message.props.request_body is not None
             message.props.request_body.complete()
             return
 
         bytes_ = transfer.get_chunk()
+        assert bytes_ is not None
         self._session.pause_message(message)
         GLib.idle_add(self._append, message, bytes_)
 
-    def _append(self, message, bytes_):
+    def _append(self, message: Soup.Message, bytes_: bytes) -> None:
         if message.props.status_code == Soup.Status.CANCELLED:
             return
         self._session.unpause_message(message)
+        assert message.props.request_body is not None
         message.props.request_body.append(bytes_)
 
     @staticmethod
-    def _on_wrote_headers(message, transfer):
-        message.props.request_body.append(transfer.get_chunk())
+    def _on_wrote_headers(message: Soup.Message,
+                          transfer: HTTPFileTransfer
+                          ) -> None:
+        bytes_ = transfer.get_chunk()
+        assert bytes_ is not None
+        assert message.props.request_body is not None
+        message.props.request_body.append(bytes_)
 
 
 class HTTPFileTransfer(FileTransfer):
@@ -288,12 +327,13 @@ class HTTPFileTransfer(FileTransfer):
     }
 
     def __init__(self,
-                 account,
-                 path,
-                 contact,
-                 mime,
-                 encryption,
-                 groupchat):
+                 account: str,
+                 path: str,
+                 contact: types.ContactT,
+                 mime: str,
+                 encryption: Optional[str],
+                 groupchat: bool
+                 ) -> None:
 
         FileTransfer.__init__(self, account)
 
@@ -304,76 +344,76 @@ class HTTPFileTransfer(FileTransfer):
         self._mime = mime
 
         self.size = os.stat(path).st_size
-        self.put_uri = None
-        self.get_uri = None
-        self._uri_transform_func = None
+        self.put_uri: Optional[str] = None
+        self.get_uri: Optional[str] = None
+        self._uri_transform_func: Optional[Callable[[str], str]] = None
 
         self._stream = None
-        self._data = None
-        self._headers = {}
+        self._data: Optional[bytes] = None
+        self._headers: dict[str, str] = {}
 
         self._is_encrypted = False
 
     @property
-    def mime(self):
+    def mime(self) -> str:
         return self._mime
 
     @property
-    def contact(self):
+    def contact(self) -> types.ContactT:
         return self._contact
 
     @property
-    def is_groupchat(self):
+    def is_groupchat(self) -> bool:
         return self._groupchat
 
     @property
-    def encryption(self):
+    def encryption(self) -> Optional[str]:
         return self._encryption
 
     @property
-    def headers(self):
+    def headers(self) -> dict[str, str]:
         return self._headers
 
     @property
-    def path(self):
+    def path(self) -> str:
         return self._path
 
     @property
-    def is_encrypted(self):
+    def is_encrypted(self) -> bool:
         return self._is_encrypted
 
-    def get_transformed_uri(self):
+    def get_transformed_uri(self) -> str:
         if self._uri_transform_func is not None:
             return self._uri_transform_func(self.get_uri)
         return self.get_uri
 
-    def set_uri_transform_func(self, func):
+    def set_uri_transform_func(self, func: Callable[[str], str]) -> None:
         self._uri_transform_func = func
 
     @property
     def filename(self) -> str:
         return os.path.basename(self._path)
 
-    def set_error(self, domain, text=''):
+    def set_error(self, domain: str, text: str = '') -> None:
         if not text:
             text = self._errors[domain]
 
         self._close()
         super().set_error(domain, text)
 
-    def set_finished(self):
+    def set_finished(self) -> None:
         self._close()
         super().set_finished()
 
-    def set_encrypted_data(self, data):
+    def set_encrypted_data(self, data: bytes) -> None:
         self._data = data
         self._is_encrypted = True
 
-    def _close(self):
+    def _close(self) -> None:
         if self._stream is not None:
             self._stream.close()
 
-    def get_chunk(self):
+    def get_chunk(self) -> Optional[bytes]:
         if self._stream is None:
             if self._encryption is None:
                 self._stream = open(self._path, 'rb')  # pylint: disable=consider-using-with
@@ -389,12 +429,12 @@ class HTTPFileTransfer(FileTransfer):
             self._close()
         return data
 
-    def get_data(self):
+    def get_data(self) -> bytes:
         with open(self._path, 'rb') as file:
             data = file.read()
         return data
 
-    def process_result(self, result):
+    def process_result(self, result: HTTPUploadData) -> None:
         self.put_uri = result.put_uri
         self.get_uri = result.get_uri
         self._headers = result.headers
