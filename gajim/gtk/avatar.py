@@ -38,6 +38,8 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 
 from .const import DEFAULT_WORKSPACE_COLOR
+from .emoji_data import is_emoji
+from .emoji_data import get_emoji_font
 from .util import load_icon_surface
 from .util import load_pixbuf
 from .util import text_to_color
@@ -79,7 +81,11 @@ def generate_avatar(letters: str,
     context.fill()
 
     # Draw letters
-    context.select_font_face('sans-serif',
+    if is_emoji(letters):
+        font_face = get_emoji_font()
+    else:
+        font_face = 'sans-serif'
+    context.select_font_face(font_face,
                              cairo.FontSlant.NORMAL,
                              cairo.FontWeight.NORMAL)
     context.set_font_size(font_size)
