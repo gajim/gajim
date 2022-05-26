@@ -14,19 +14,23 @@
 
 # XEP-0280: Message Carbons
 
+from __future__ import annotations
+
 import nbxmpp
 from nbxmpp.namespaces import Namespace
+from nbxmpp.structs import DiscoInfo
 
+from gajim.common import types
 from gajim.common.modules.base import BaseModule
 
 
 class Carbons(BaseModule):
-    def __init__(self, con):
+    def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
 
         self.supported = False
 
-    def pass_disco(self, info):
+    def pass_disco(self, info: DiscoInfo) -> None:
         if Namespace.CARBONS not in info.features:
             return
 
