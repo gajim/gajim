@@ -371,7 +371,7 @@ class FileTransfersWindow:
             new_file_props.hash_ = file_props.hash_
             new_file_props.type_ = 'r'
             tsid = client.get_module('Jingle').start_file_transfer(
-                jid, new_file_props, True)
+                str(jid), new_file_props, True)
 
             new_file_props.transport_sid = tsid
             self.add_transfer(account, contact, new_file_props)

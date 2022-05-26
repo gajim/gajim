@@ -28,16 +28,22 @@ Handles the jingle signalling protocol
 #   * config:
 #     - codecs
 
+from __future__ import annotations
+
+from typing import Any
 from typing import Optional
 
 import logging
 
 import nbxmpp
 from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import Iq
 from nbxmpp.structs import StanzaHandler
+from nbxmpp.structs import IqProperties
 
 from gajim.common import helpers
 from gajim.common import jingle_xtls
+from gajim.common import types
 from gajim.common.file_props import FileProp
 from gajim.common.modules.base import BaseModule
 from gajim.common.jingle_session import JingleSession
@@ -51,7 +57,7 @@ logger = logging.getLogger('gajim.c.m.jingle')
 
 
 class Jingle(BaseModule):
-    def __init__(self, con):
+    def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
 
         self.handlers = [
@@ -80,8 +86,8 @@ class Jingle(BaseModule):
 
         # dictionary: (jid, iq stanza id) => JingleSession object,
         # one time callbacks
-        self.__iq_responses = {}
-        self.files = []
+        self.__iq_responses: dict[tuple[str, str], JingleSession] = {}
+        self.files: list[dict[str, Any]] = []
 
     def delete_jingle_session(self, sid: str) -> None:
         """
@@ -94,19 +100,31 @@ class Jingle(BaseModule):
             self._sessions[sid].callbacks = []
             del self._sessions[sid]
 
-    def _on_pubkey_request(self, con, stanza, _properties):
+    def _on_pubkey_request(self,
+                           con: types.xmppClient,
+                           stanza: Iq,
+                           _properties: IqProperties
+                           ) -> None:
         jid_from = helpers.get_full_jid_from_iq(stanza)
         self._log.info('Pubkey request from %s', jid_from)
         sid = stanza.getAttr('id')
         jingle_xtls.send_cert(con, jid_from, sid)
         raise nbxmpp.NodeProcessed
 
-    def _pubkey_result_received(self, con, stanza, _properties):
+    def _pubkey_result_received(self,
+                                con: types.xmppClient,
+                                stanza: Iq,
+                                _properties: IqProperties
+                                ) -> None:
         jid_from = helpers.get_full_jid_from_iq(stanza)
         self._log.info('Pubkey result from %s', jid_from)
         jingle_xtls.handle_new_cert(con, stanza, jid_from)
 
-    def _on_jingle_iq(self, _con, stanza, _properties):
+    def _on_jingle_iq(self,
+                      _con: types.xmppClient,
+                      stanza: Iq,
+                      _properties: IqProperties
+                      ) -> None:
         """
         The jingle stanza dispatcher
 
@@ -138,6 +156,7 @@ class Jingle(BaseModule):
                 if id_ in sesn.iq_ids:
                     sesn.on_stanza(stanza)
             return
+
         # do we need to create a new jingle object
         if sid not in self._sessions:
             #TODO: tie-breaking and other things...
@@ -148,14 +167,15 @@ class Jingle(BaseModule):
         self._sessions[sid].collect_iq_id(id_)
         self._sessions[sid].on_stanza(stanza)
         # Delete invalid/unneeded sessions
-        if sid in self._sessions and \
-        self._sessions[sid].state == JingleStates.ENDED:
+        if (sid in self._sessions and
+                self._sessions[sid].state == JingleStates.ENDED):
             self.delete_jingle_session(sid)
         raise nbxmpp.NodeProcessed
 
     def start_audio(self, jid: str) -> str:
-        if self.get_jingle_session(jid, media='audio'):
-            return self.get_jingle_session(jid, media='audio').sid
+        audio_session = self.get_jingle_session(jid, media='audio')
+        if audio_session is not None:
+            return audio_session.sid
         jingle = self.get_jingle_session(jid, media='video')
         if jingle:
             jingle.add_content('voice', JingleAudio(jingle))
@@ -167,8 +187,9 @@ class Jingle(BaseModule):
         return jingle.sid
 
     def start_video(self, jid: str) -> str:
-        if self.get_jingle_session(jid, media='video'):
-            return self.get_jingle_session(jid, media='video').sid
+        video_session = self.get_jingle_session(jid, media='video')
+        if video_session is not None:
+            return video_session.sid
         jingle = self.get_jingle_session(jid, media='audio')
         if jingle:
             video = JingleVideo(jingle)
@@ -249,7 +270,7 @@ class Jingle(BaseModule):
         return transfer.transport.sid
 
     @staticmethod
-    def __hash_support(contact):
+    def __hash_support(contact: types.ResourceContact) -> Optional[str]:
         if contact.supports(Namespace.HASHES_2):
             if contact.supports(Namespace.HASHES_BLAKE2B_512):
                 return 'blake2b-512'
@@ -265,7 +286,11 @@ class Jingle(BaseModule):
                 return 'sha-256'
         return None
 
-    def get_jingle_sessions(self, jid, sid=None, media=None):
+    def get_jingle_sessions(self,
+                            jid: Optional[str],
+                            sid: Optional[str] = None,
+                            media: Optional[str] = None
+                            ) -> list[JingleSession]:
         if sid:
             return [se for se in self._sessions.values() if se.sid == sid]
 
@@ -276,12 +301,17 @@ class Jingle(BaseModule):
             return [se for se in sessions if se.get_content(media)]
         return sessions
 
-    def set_file_info(self, file_):
+    def set_file_info(self, file_: dict[str, Any]) -> None:
         # Saves information about the files we have transferred
         # in case they need to be requested again.
         self.files.append(file_)
 
-    def get_file_info(self, peerjid, hash_=None, name=None, _account=None):
+    def get_file_info(self,
+                      peerjid: str,
+                      hash_: Optional[str] = None,
+                      name: Optional[str] = None,
+                      _account: Optional[str] = None
+                      ) -> Optional[dict[str, Any]]:
         if hash_:
             for file in self.files: # DEBUG
                 #if f['hash'] == '1294809248109223':
