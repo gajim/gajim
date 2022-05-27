@@ -18,13 +18,15 @@ Handles  Jingle File Transfer (XEP 0234)
 
 from __future__ import annotations
 
-import typing
+from typing import Any
 from typing import Optional
+from typing import TYPE_CHECKING
 
 import logging
 import threading
 import time
-from enum import IntEnum, unique
+from enum import IntEnum
+from enum import unique
 
 import nbxmpp
 from nbxmpp import JID
@@ -50,7 +52,7 @@ from gajim.common.jingle_ftstates import StateTransfering
 from gajim.common.jingle_ftstates import StateCandSentAndRecv
 from gajim.common.jingle_ftstates import StateTransportReplace
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from gajim.common.jingle_session import JingleSession
     from gajim.common.jingle_transport import JingleTransport
 
@@ -101,7 +103,7 @@ class JingleFileTransfer(JingleContent):
         self.callbacks['iq-result'] += [self.__on_iq_result]
 
         self.use_security = use_security
-        self.x509_fingerprint = None
+        self.x509_fingerprint: Optional[str] = None
         self.file_props = file_props
         self.weinitiate = self.session.weinitiate
         self.werequest = self.session.werequest
@@ -143,7 +145,10 @@ class JingleFileTransfer(JingleContent):
                 and cert_name.with_suffix('.pkey').exists()):
             jingle_xtls.make_certs(cert_name, 'gajim')
 
-    def __state_changed(self, nextstate, args=None):
+    def __state_changed(self,
+                        nextstate: State,
+                        args: Optional[dict[str, Any]] =None
+                        ) -> None:
         # Executes the next state action and sets the next state
         current_state = self.state
         st = self.states[nextstate]
@@ -152,7 +157,12 @@ class JingleFileTransfer(JingleContent):
         if self.state == current_state:
             self.state = nextstate
 
-    def __on_session_initiate(self, stanza, content, error, action):
+    def __on_session_initiate(self,
+                              stanza: nbxmpp.Node,
+                              content: nbxmpp.Node,
+                              error: Optional[nbxmpp.Node],
+                              action: str
+                              ) -> None:
         log.debug("Jingle FT request received")
         self._raise_event(stanza, content)
 
@@ -177,7 +187,10 @@ class JingleFileTransfer(JingleContent):
             self.session.approve_content(self.media, self.name)
             self.session.accept_session()
 
-    def _raise_event(self, stanza, content):
+    def _raise_event(self,
+                     stanza: nbxmpp.Node,
+                     content: nbxmpp.Node
+                     ) -> None:
         con = self.session.connection
         id_ = stanza.getID()
         fjid = con.get_module('Bytestream')._ft_get_from(stanza)
@@ -260,10 +273,15 @@ class JingleFileTransfer(JingleContent):
             jid=jid,
             file_props=file_props))
 
-    def __on_session_initiate_sent(self, stanza, content, error, action):
+    def __on_session_initiate_sent(self,
+                                   stanza: nbxmpp.Node,
+                                   content: nbxmpp.Node,
+                                   error: Optional[nbxmpp.Node],
+                                   action: str
+                                   ) -> None:
         pass
 
-    def __send_hash(self):
+    def __send_hash(self) -> None:
         # Send hash in a session info
         checksum = nbxmpp.Node(tag='checksum',
                                payload=[nbxmpp.Node(tag='file',
@@ -280,7 +298,7 @@ class JingleFileTransfer(JingleContent):
                     }
         self.session.connection.get_module('Jingle').set_file_info(file_info)
 
-    def _compute_hash(self):
+    def _compute_hash(self) -> Optional[nbxmpp.Hashes2]:
         # Calculates the hash and returns a xep-300 hash stanza
         if self.file_props.algo is None:
             return
@@ -301,11 +319,16 @@ class JingleFileTransfer(JingleContent):
         h.addHash(hash_, self.file_props.algo)
         return h
 
-    def on_cert_received(self):
+    def on_cert_received(self) -> None:
         self.session.approve_session()
         self.session.approve_content('file', name=self.name)
 
-    def __on_session_accept(self, stanza, content, error, action):
+    def __on_session_accept(self,
+                            stanza: nbxmpp.Node,
+                            content: nbxmpp.Node,
+                            error: Optional[nbxmpp.Node],
+                            action: str
+                            ) -> None:
         log.info("__on_session_accept")
         con = self.session.connection
         security = content.getTag('security')
@@ -326,7 +349,7 @@ class JingleFileTransfer(JingleContent):
                     raise nbxmpp.NodeProcessed
         self.continue_session_accept(stanza)
 
-    def continue_session_accept(self, stanza):
+    def continue_session_accept(self, stanza: nbxmpp.Node) -> None:
         if self.state == State.TRANSPORT_REPLACE:
             # If we are requesting we don't have the file
             if self.session.werequest:
@@ -351,31 +374,61 @@ class JingleFileTransfer(JingleContent):
         if self.transport.type_ == TransportType.SOCKS5:
             sid = self.file_props.transport_sid
             app.socks5queue.connect_to_hosts(self.session.connection.name,
-                                               sid,
-                                               self.on_connect,
-                                               self._on_connect_error,
-                                               fingerprint=fingerprint,
-                                               receiving=False)
+                                             sid,
+                                             self.on_connect,
+                                             self._on_connect_error,
+                                             fingerprint=fingerprint,
+                                             receiving=False)
             raise nbxmpp.NodeProcessed
         self.__state_changed(State.TRANSFERRING)
         raise nbxmpp.NodeProcessed
 
-    def __on_session_terminate(self, stanza, content, error, action):
+    def __on_session_terminate(self,
+                               stanza: nbxmpp.Node,
+                               content: nbxmpp.Node,
+                               error: Optional[nbxmpp.Node],
+                               action: str
+                               ) -> None:
         log.info("__on_session_terminate")
 
-    def __on_session_info(self, stanza, content, error, action):
+    def __on_session_info(self,
+                           stanza: nbxmpp.Node,
+                           content: nbxmpp.Node,
+                           error: Optional[nbxmpp.Node],
+                           action: str
+                           ) -> None:
         pass
 
-    def __on_transport_accept(self, stanza, content, error, action):
+    def __on_transport_accept(self,
+                              stanza: nbxmpp.Node,
+                              content: nbxmpp.Node,
+                              error: Optional[nbxmpp.Node],
+                              action: str
+                              ) -> None:
         log.info("__on_transport_accept")
 
-    def __on_transport_replace(self, stanza, content, error, action):
+    def __on_transport_replace(self,
+                               stanza: nbxmpp.Node,
+                               content: nbxmpp.Node,
+                               error: Optional[nbxmpp.Node],
+                               action: str
+                               ) -> None:
         log.info("__on_transport_replace")
 
-    def __on_transport_reject(self, stanza, content, error, action):
+    def __on_transport_reject(self,
+                              stanza: nbxmpp.Node,
+                              content: nbxmpp.Node,
+                              error: Optional[nbxmpp.Node],
+                              action: str
+                              ) -> None:
         log.info("__on_transport_reject")
 
-    def __on_transport_info(self, stanza, content, error, action):
+    def __on_transport_info(self,
+                            stanza: nbxmpp.Node,
+                            content: nbxmpp.Node,
+                            error: Optional[nbxmpp.Node],
+                            action: str
+                            ) -> None:
         log.info("__on_transport_info")
         cand_error = content.getTag('transport').getTag('candidate-error')
         cand_used = content.getTag('transport').getTag('candidate-used')
@@ -426,7 +479,12 @@ class JingleFileTransfer(JingleContent):
             raise nbxmpp.NodeProcessed
         self.__state_changed(State.CAND_RECEIVED, args)
 
-    def __on_iq_result(self, stanza, content, error, action):
+    def __on_iq_result(self,
+                       stanza: nbxmpp.Node,
+                       content: nbxmpp.Node,
+                       error: Optional[nbxmpp.Node],
+                       action: str
+                       ) -> None:
         log.info("__on_iq_result")
 
         if self.state in (State.NOT_STARTED, State.CAND_RECEIVED):
@@ -441,8 +499,12 @@ class JingleFileTransfer(JingleContent):
             # initiate transfer
             self.__state_changed(State.TRANSFERRING)
 
-    def __transport_setup(self, stanza=None, content=None, error=None,
-                          action=None):
+    def __transport_setup(self,
+                          stanza: nbxmpp.Node,
+                          content: nbxmpp.Node,
+                          error: Optional[nbxmpp.Node],
+                          action: str
+                          ) -> None:
         # Sets up a few transport specific things for the file transfer
         if self.transport.type_ == TransportType.IBB:
             # No action required, just set the state to transferring
@@ -462,23 +524,23 @@ class JingleFileTransfer(JingleContent):
         self.nominated_cand['our-cand'] = streamhost
         self.__send_candidate(args)
 
-    def _on_connect_error(self, sid):
+    def _on_connect_error(self, sid: str) -> None:
         log.info('connect error, sid=%s', sid)
         args = {'candError' : True,
                 'sendCand'  : True}
         self.__send_candidate(args)
 
-    def __send_candidate(self, args):
+    def __send_candidate(self, args: dict[str, Any]) -> None:
         if self.state == State.CAND_RECEIVED:
             self.__state_changed(State.CAND_SENT_AND_RECEIVED, args)
         else:
             self.__state_changed(State.CAND_SENT, args)
 
-    def _store_socks5_sid(self, sid, hash_id):
+    def _store_socks5_sid(self, sid: str, hash_id: str) -> None:
         # callback from socsk5queue.start_listener
         self.file_props.hash_ = hash_id
 
-    def _listen_host(self):
+    def _listen_host(self) -> None:
         receiver = self.file_props.receiver
         sender = self.file_props.sender
         sha_str = helpers.get_auth_sha(self.file_props.sid, sender,
@@ -497,7 +559,7 @@ class JingleFileTransfer(JingleContent):
             # send error message, notify the user
             return
 
-    def is_our_candidate_used(self):
+    def is_our_candidate_used(self) -> bool:
         '''
         If this method returns true then the candidate we nominated will be
         used, if false, the candidate nominated by peer will be used
@@ -513,12 +575,12 @@ class JingleFileTransfer(JingleContent):
             return our_pr > peer_pr
         return self.weinitiate
 
-    def start_ibb_transfer(self):
+    def start_ibb_transfer(self) -> None:
         if self.file_props.type_ == 's':
             self.__state_changed(State.TRANSFERRING)
 
 
-def get_content(desc):
+def get_content(desc) -> JingleFileTransfer:
     return JingleFileTransfer
 
 contents[Namespace.JINGLE_FILE_TRANSFER_5] = get_content
