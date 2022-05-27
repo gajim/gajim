@@ -12,15 +12,25 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Any
+from typing import Optional
+from typing import TYPE_CHECKING
+
 import logging
 
 import nbxmpp
 from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.jingle_transport import TransportType
 from gajim.common.socks5 import Socks5ReceiverClient
 from gajim.common.socks5 import Socks5SenderClient
+
+if TYPE_CHECKING:
+    from gajim.common.jingle_ft import JingleFileTransfer
 
 log = logging.getLogger('gajim.c.jingle_ftstates')
 
@@ -30,10 +40,10 @@ class JingleFileTransferStates:
     This class implements the state machine design pattern
     '''
 
-    def __init__(self, jingleft):
+    def __init__(self, jingleft: JingleFileTransfer) -> None:
         self.jft = jingleft
 
-    def action(self, args=None):
+    def action(self, args: Optional[dict[str, Any]] = None) -> None:
         '''
         This method MUST be overridden by a subclass
         '''
@@ -45,7 +55,7 @@ class StateInitialized(JingleFileTransferStates):
     This state initializes the file transfer
     '''
 
-    def action(self, args=None):
+    def action(self, args: Optional[dict[str, Any]] = None) -> None:
         if self.jft.weinitiate:
             # update connection's fileprops
             self.jft._listen_host()
@@ -65,7 +75,7 @@ class StateCandSent(JingleFileTransferStates):
     This state sends our nominated candidate
     '''
 
-    def _send_candidate(self, args):
+    def _send_candidate(self, args: dict[str, Any]) -> None:
         if 'candError' in args:
             self.jft.nominated_cand['our-cand'] = False
             self.jft.send_error_candidate()
@@ -85,7 +95,7 @@ class StateCandSent(JingleFileTransferStates):
         content.addChild(node=transport)
         self.jft.session.send_transport_info(content)
 
-    def action(self, args=None):
+    def action(self, args: Optional[dict[str, Any]] = None) -> None:
         self._send_candidate(args)
 
 
@@ -95,7 +105,7 @@ class StateCandReceived(JingleFileTransferStates):
     It takes the arguments: canError if we receive a candidate-error
     '''
 
-    def _recv_candidate(self, args):
+    def _recv_candidate(self, args: dict[str, Any]) -> None:
         if 'candError' in args:
             return
         content = args['content']
@@ -112,7 +122,7 @@ class StateCandReceived(JingleFileTransferStates):
         # We save the candidate nominated by peer
         self.jft.nominated_cand['peer-cand'] = streamhost_used
 
-    def action(self, args=None):
+    def action(self, args: Optional[dict[str, Any]] = None) -> None:
         self._recv_candidate(args)
 
 
@@ -123,7 +133,7 @@ class StateCandSentAndRecv(StateCandSent, StateCandReceived):
     we should execute the action of when we receive or send a candidate.
     '''
 
-    def action(self, args=None):
+    def action(self, args: Optional[dict[str, Any]] = None) -> None:
         if args['sendCand']:
             self._send_candidate(args)
         else:
@@ -135,7 +145,7 @@ class StateTransportReplace(JingleFileTransferStates):
     This state initiates transport replace
     '''
 
-    def action(self, args=None):
+    def action(self, args: Optional[dict[str, Any]] = None) -> None:
         self.jft.session.transport_replace()
 
 
@@ -145,14 +155,14 @@ class StateTransfering(JingleFileTransferStates):
     we have.
     '''
 
-    def _start_ibb_transfer(self, con):
+    def _start_ibb_transfer(self, con: types.Client) -> None:
         self.jft.file_props.transport_sid = self.jft.transport.sid
         fp = open(self.jft.file_props.file_name, 'rb')
         con.get_module('IBB').send_open(self.jft.session.peerjid,
                                         self.jft.file_props.sid,
                                         fp)
 
-    def _start_sock5_transfer(self):
+    def _start_sock5_transfer(self) -> None:
         # It tells whether we start the transfer as client or server
         mode = None
         if self.jft.is_our_candidate_used():
@@ -221,7 +231,7 @@ class StateTransfering(JingleFileTransferStates):
             app.socks5queue.send_file(self.jft.file_props,
                                         self.jft.session.connection.name, mode)
 
-    def action(self, args=None):
+    def action(self, args: Optional[dict[str, Any]] = None) -> None:
         if self.jft.transport.type_ == TransportType.IBB:
             self._start_ibb_transfer(self.jft.session.connection)
         elif self.jft.transport.type_ == TransportType.SOCKS5:
