@@ -409,6 +409,9 @@
                     </child>
                   </object>
                 </child>
+                <style>
+                  <class name="padding-18"/>
+                </style>
               </object>
               <packing>
                 <property name="name">information</property>
@@ -711,6 +714,9 @@
                     </child>
                   </object>
                 </child>
+                <style>
+                  <class name="padding-18"/>
+                </style>
               </object>
               <packing>
                 <property name="name">settings</property>

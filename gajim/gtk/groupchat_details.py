@@ -62,7 +62,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self._ui = get_builder('groupchat_details.ui')
         self._ui.connect_signals(self)
 
-        self._switcher = SideBarSwitcher()
+        self._switcher = SideBarSwitcher(width=250)
         self._switcher.set_stack(self._ui.main_stack)
         self._ui.main_grid.attach(self._switcher, 0, 0, 1, 1)
         self._ui.main_stack.connect('notify::visible-child-name',
@@ -148,6 +148,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
 
     def _add_groupchat_settings(self) -> None:
         main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=24)
+        main_box.get_style_context().add_class('padding-18')
 
         settings_box = GroupChatSettings(self.account, self._contact.jid)
         main_box.add(settings_box)

@@ -93,7 +93,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         self._tasks: list[Task] = []
         self._devices: dict[str, DeviceGrid] = {}
 
-        self._switcher = SideBarSwitcher()
+        self._switcher = SideBarSwitcher(width=250)
         self._switcher.set_stack(self._ui.main_stack, rows_visible=False)
         self._ui.main_grid.attach(self._switcher, 0, 0, 1, 1)
         self._ui.main_stack.connect('notify::visible-child-name',
