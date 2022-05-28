@@ -14,10 +14,19 @@
 
 # XEP-0084: User Avatar
 
+from __future__ import annotations
+
+from typing import Generator
+from typing import Optional
+
 from nbxmpp.namespaces import Namespace
+from nbxmpp.modules.user_avatar import AvatarData
 from nbxmpp.modules.util import is_error
+from nbxmpp.protocol import Message
+from nbxmpp.structs import MessageProperties
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import as_task
@@ -32,12 +41,16 @@ class UserAvatar(BaseModule):
         'set_access_model'
     ]
 
-    def __init__(self, con):
+    def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
         self._register_pubsub_handler(self._avatar_metadata_received)
 
     @event_node(Namespace.AVATAR_METADATA)
-    def _avatar_metadata_received(self, _con, _stanza, properties):
+    def _avatar_metadata_received(self,
+                                  _con: types.xmppClient,
+                                  _stanza: Message,
+                                  properties: MessageProperties
+                                  ) -> None:
         if properties.pubsub_event.retracted:
             return
 
@@ -65,7 +78,10 @@ class UserAvatar(BaseModule):
             self._request_avatar_data(contact, metadata.default)
 
     @as_task
-    def _request_avatar_data(self, contact, sha):
+    def _request_avatar_data(self,
+                             contact: types.ChatContactT,
+                             sha: str
+                             ) -> Generator[Optional[AvatarData], None, None]:
         _task = yield
 
         avatar = yield self._nbxmpp('UserAvatar').request_avatar_data(
