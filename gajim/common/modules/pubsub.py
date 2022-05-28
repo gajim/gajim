@@ -20,10 +20,17 @@
 
 # XEP-0060: Publish-Subscribe
 
+from __future__ import annotations
+
+from typing import Any
+from typing import Callable
+
 import nbxmpp
 from nbxmpp.namespaces import Namespace
+from nbxmpp.structs import DiscoInfo
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.modules.base import BaseModule
 
 
@@ -38,17 +45,21 @@ class PubSub(BaseModule):
         'get_access_model',
     ]
 
-    def __init__(self, con):
+    def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
 
         self.publish_options = False
 
-    def pass_disco(self, info):
+    def pass_disco(self, info: DiscoInfo) -> None:
         if Namespace.PUBSUB_PUBLISH_OPTIONS in info.features:
             self._log.info('Discovered Pubsub publish options: %s', info.jid)
             self.publish_options = True
 
-    def send_pb_subscription_query(self, jid, cb, **kwargs):
+    def send_pb_subscription_query(self,
+                                   jid: str,
+                                   cb: Callable[..., Any],
+                                   **kwargs: Any
+                                   ) -> None:
         if not app.account_is_available(self._account):
             return
 
@@ -58,7 +69,12 @@ class PubSub(BaseModule):
 
         self._con.connection.SendAndCallForResponse(query, cb, kwargs)
 
-    def send_pb_subscribe(self, jid, node, cb, **kwargs):
+    def send_pb_subscribe(self,
+                          jid: str,
+                          node: str,
+                          cb: Callable[..., Any],
+                          **kwargs: Any
+                          ) -> None:
         if not app.account_is_available(self._account):
             return
 
@@ -69,7 +85,12 @@ class PubSub(BaseModule):
 
         self._con.connection.SendAndCallForResponse(query, cb, kwargs)
 
-    def send_pb_unsubscribe(self, jid, node, cb, **kwargs):
+    def send_pb_unsubscribe(self,
+                            jid: str,
+                            node: str,
+                            cb: Callable[..., Any],
+                            **kwargs: Any
+                            ) -> None:
         if not app.account_is_available(self._account):
             return
 
