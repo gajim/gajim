@@ -33,6 +33,7 @@
         "gajim/common/modules/pep.py",
         "gajim/common/modules/register.py",
         "gajim/common/modules/vcard_temp.py",
+        "gajim/common/modules/vcard4.py",
         "gajim/common/passwords.py",
         "gajim/common/regex.py",
         "gajim/common/setting_values.py",

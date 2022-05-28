@@ -14,6 +14,9 @@
 
 # XEP-0292: vCard4 Over XMPP
 
+from __future__ import annotations
+
+from gajim.common import types
 from gajim.common.modules.base import BaseModule
 
 
@@ -25,5 +28,5 @@ class VCard4(BaseModule):
         'set_vcard',
     ]
 
-    def __init__(self, con):
+    def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
