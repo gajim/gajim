@@ -14,20 +14,31 @@
 
 # XEP-0153: vCard-Based Avatars
 
-from nbxmpp.namespaces import Namespace
-from nbxmpp.structs import StanzaHandler
+from __future__ import annotations
+
+from typing import Generator
+from typing import Optional
+
 from nbxmpp.const import AvatarState
 from nbxmpp.modules.util import is_error
+from nbxmpp.modules.vcard_temp import VCard
+from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import JID
+from nbxmpp.protocol import Presence
+from nbxmpp.structs import DiscoInfo
+from nbxmpp.structs import PresenceProperties
+from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import as_task
 
 
 class VCardAvatars(BaseModule):
-    def __init__(self, con):
+    def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
-        self._requested_shas = []
+        self._requested_shas: list[str] = []
 
         self.handlers = [
             StanzaHandler(name='presence',
@@ -38,18 +49,22 @@ class VCardAvatars(BaseModule):
 
         self.avatar_conversion_available = False
 
-        self._muc_avatar_cache = {}
+        self._muc_avatar_cache: dict[JID, str] = {}
 
-    def pass_disco(self, info):
+    def pass_disco(self, info: DiscoInfo) -> None:
         is_available = Namespace.VCARD_CONVERSION in info.features
         self.avatar_conversion_available = is_available
         self._log.info('Discovered Avatar Conversion')
 
-    def get_avatar_sha(self, jid):
+    def get_avatar_sha(self, jid: JID) -> Optional[str]:
         return self._muc_avatar_cache.get(jid)
 
     @as_task
-    def _request_vcard(self, jid, expected_sha, type_):
+    def _request_vcard(self,
+                       jid: JID,
+                       expected_sha: str,
+                       type_: str
+                       ) -> Generator[VCard, None, None]:
         _task = yield
 
         vcard = yield self._con.get_module('VCardTemp').request_vcard(jid=jid)
@@ -86,7 +101,11 @@ class VCardAvatars(BaseModule):
 
         contact.update_avatar(avatar_sha)
 
-    def _presence_received(self, _con, _stanza, properties):
+    def _presence_received(self,
+                           _con: types.xmppClient,
+                           _stanza: Presence,
+                           properties: PresenceProperties
+                           ) -> None:
         if not properties.type.is_available:
             return
 
@@ -108,7 +127,7 @@ class VCardAvatars(BaseModule):
                                  properties.avatar_sha,
                                  muc is not None)
 
-    def muc_disco_info_update(self, disco_info):
+    def muc_disco_info_update(self, disco_info: DiscoInfo) -> None:
         if not disco_info.supports(Namespace.VCARD):
             return
 
@@ -123,7 +142,12 @@ class VCardAvatars(BaseModule):
         state = AvatarState.EMPTY if not avatar_sha else AvatarState.ADVERTISED
         self._process_update(disco_info.jid, state, avatar_sha, True)
 
-    def _process_update(self, jid, state, avatar_sha, groupchat):
+    def _process_update(self,
+                        jid: JID,
+                        state: AvatarState,
+                        avatar_sha: str,
+                        groupchat: bool
+                        ) -> None:
         contact = self._con.get_module('Contacts').get_contact(
             jid, groupchat=groupchat)
 
@@ -162,7 +186,7 @@ class VCardAvatars(BaseModule):
                 else:
                     self._request_vcard(jid, avatar_sha, 'contact')
 
-    def _muc_update_received(self, properties):
+    def _muc_update_received(self, properties: PresenceProperties) -> None:
         contact = self._con.get_module('Contacts').get_contact(properties.jid,
                                                                groupchat=True)
         nick = properties.jid.resource
