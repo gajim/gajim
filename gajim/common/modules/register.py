@@ -34,7 +34,7 @@ class Register(BaseModule):
         'submit_register_form',
     ]
 
-    def __init__(self, con: types.Client):
+    def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
 
         self.supported = False
