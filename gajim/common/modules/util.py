@@ -14,15 +14,23 @@
 
 # Util module
 
+from __future__ import annotations
+
+from typing import Any
 from typing import Union
 
 from logging import LoggerAdapter
 from functools import wraps
 from functools import partial
 
+import nbxmpp
+from nbxmpp.protocol import Message
+from nbxmpp.structs import EMEData
+from nbxmpp.structs import MessageProperties
 from nbxmpp.task import Task
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.const import EME_MESSAGES
 
 
@@ -36,7 +44,7 @@ def from_xs_boolean(value: Union[str, bool]) -> bool:
     if value in ('0', 'false', 'False', ''):
         return False
 
-    raise ValueError('Cant convert %s to python boolean' % value)
+    raise ValueError(f'Cant convert {value} to python boolean')
 
 
 def to_xs_boolean(value: Union[bool, None]) -> str:
@@ -51,14 +59,17 @@ def to_xs_boolean(value: Union[bool, None]) -> str:
     if value is None:
         return 'false'
 
-    raise ValueError(
-        'Cant convert %s to xs:boolean' % value)
+    raise ValueError(f'Cant convert {value} to xs:boolean')
 
 
-def event_node(node):
-    def event_node_decorator(func):
+def event_node(node: nbxmpp.Node) -> Any:
+    def event_node_decorator(func: Any):
         @wraps(func)
-        def func_wrapper(self, _con, _stanza, properties):
+        def func_wrapper(self: Any,
+                         _con: types.xmppClient,
+                         _stanza: Message,
+                         properties: MessageProperties
+                         ) -> Any:
             if not properties.is_pubsub_event:
                 return
             if properties.pubsub_event.node != node:
@@ -69,9 +80,9 @@ def event_node(node):
     return event_node_decorator
 
 
-def store_publish(func):
+def store_publish(func: Any):
     @wraps(func)
-    def func_wrapper(self, *args, **kwargs):
+    def func_wrapper(self: Any, *args: Any, **kwargs: Any):
         # pylint: disable=protected-access
         if not app.account_is_connected(self._account):
             self._stored_publish = partial(func, self, *args, **kwargs)
@@ -80,7 +91,7 @@ def store_publish(func):
     return func_wrapper
 
 
-def get_eme_message(eme_data):
+def get_eme_message(eme_data: EMEData) -> str:
     try:
         return EME_MESSAGES[eme_data.namespace]
     except KeyError:
@@ -88,8 +99,8 @@ def get_eme_message(eme_data):
 
 
 class LogAdapter(LoggerAdapter):
-    def process(self, msg, kwargs):
-        return '(%s) %s' % (self.extra['account'], msg), kwargs
+    def process(self, msg: str, kwargs: Any) -> tuple[str, Any]:
+        return f'({self.extra["account"]}) {msg}', kwargs
 
 
 def as_task(func):
