@@ -46,6 +46,7 @@ class Iq(BaseModule):
                            properties: IqProperties
                            ) -> None:
         self._log.info('Error: %s', properties.error)
+        assert properties.error is not None
         if properties.error.condition in ('jid-malformed',
                                           'forbidden',
                                           'not-acceptable'):
@@ -73,9 +74,9 @@ class Iq(BaseModule):
                 if file_props:
                     app.ged.raise_event(
                         FileSendError(account=self._account,
-                                    jid=str(properties.jid),
-                                    file_props=file_props,
-                                    error_msg=''))
+                                      jid=str(properties.jid),
+                                      file_props=file_props,
+                                      error_msg=''))
                     self._con.get_module('Bytestream').disconnect_transfer(
                         file_props)
                     raise nbxmpp.NodeProcessed
