@@ -96,6 +96,8 @@ class GajimPlugin:
         self.config.load()
 
     def __eq__(self, plugin: Any) -> bool:
+        if not isinstance(plugin, GajimPlugin):
+            return False
         return self.manifest.short_name == plugin.manifest.short_name
 
     def __ne__(self, plugin: Any) -> bool:
