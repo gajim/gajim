@@ -14,17 +14,26 @@
 
 # XEP-0070: Verifying HTTP Requests via XMPP
 
+from __future__ import annotations
+
+from typing import Union
+
 import nbxmpp
+from nbxmpp.protocol import Iq
+from nbxmpp.protocol import Message
+from nbxmpp.structs import IqProperties
+from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.events import HttpAuth
 from gajim.common.modules.base import BaseModule
 
 
 class HTTPAuth(BaseModule):
-    def __init__(self, con):
+    def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
 
         self.handlers = [
@@ -39,7 +48,11 @@ class HTTPAuth(BaseModule):
                           priority=45)
         ]
 
-    def _http_auth(self, _con, stanza, properties):
+    def _http_auth(self,
+                   _con: types.xmppClient,
+                   stanza: Union[Iq, Message],
+                   properties: Union[IqProperties, MessageProperties]
+                   ) -> None:
         if not properties.is_http_auth:
             return
 
@@ -56,7 +69,10 @@ class HTTPAuth(BaseModule):
                      stanza=stanza))
         raise nbxmpp.NodeProcessed
 
-    def build_http_auth_answer(self, stanza, answer):
+    def build_http_auth_answer(self,
+                               stanza: Union[Iq, Message],
+                               answer: str
+                               ) -> None:
         if answer == 'yes':
             self._log.info('Auth request approved')
             confirm = stanza.getTag('confirm')
