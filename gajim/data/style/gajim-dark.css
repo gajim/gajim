@@ -5,15 +5,27 @@ infobar.info > revealer > box {
     color: #D9EDF7;
     background-color: #3A87AD;
 }
+infobar.info > revealer > box > box * {
+    color: #D9EDF7;
+}
 infobar.question > revealer > box {
     color: #D9EDF7;
     background-color: #295A72;
+}
+infobar.question > revealer > box > box * {
+    color: #D9EDF7;
 }
 infobar.warning > revealer > box {
     color: #FCF8E3;
     background-color: #D2822B;
 }
+infobar.warning > revealer > box > box * {
+    color: #FCF8E3;
+}
 infobar.error > revealer > box {
     color: #FCE5D5;
     background-color: #D64937;
+}
+infobar.error > revealer > box > box * {
+    color: #FCE5D5;
 }
