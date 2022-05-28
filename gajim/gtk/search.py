@@ -14,252 +14,219 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import cast
+from typing import Any
+from typing import Optional
+from typing import Union
+from typing import Type
+
 import logging
 import itertools
-from enum import IntEnum
 
+from gi.repository import Gdk
 from gi.repository import Gtk
 
+from nbxmpp.simplexml import Node
 from nbxmpp.modules import dataforms
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common.events import SearchFormReceivedEvent
+from gajim.common.events import SearchResultReceivedEvent
 from gajim.common.i18n import _
 
-from .menus import SearchMenu
+from .assistant import Assistant
+from .assistant import ErrorPage
+from .assistant import Page
+from .assistant import ProgressPage
 from .dataform import DataFormWidget
+from .menus import SearchMenu
 from .util import ensure_not_destroyed
-from .util import find_widget
 from .util import EventHelper
 
 log = logging.getLogger('gajim.gui.search')
 
 
-class Page(IntEnum):
-    REQUEST_FORM = 0
-    FORM = 1
-    REQUEST_RESULT = 2
-    COMPLETED = 3
-    ERROR = 4
-
-
-class Search(Gtk.Assistant, EventHelper):
-    def __init__(self, account, jid, transient_for=None):
-        Gtk.Assistant.__init__(self)
+class DirectorySearch(Assistant, EventHelper):
+    def __init__(self,
+                 account: str,
+                 jid: str,
+                 transient_for: Optional[Gtk.Window] = None
+                 ) -> None:
+        Assistant.__init__(self,
+                           transient_for=transient_for,
+                           width=700,
+                           height=500)
         EventHelper.__init__(self)
 
-        self._con = app.connections[account]
-        self._account = account
+        self._client = app.get_client(account)
+        self.account = account
         self._jid = jid
         self._destroyed = False
 
-        self.set_application(app.app)
-        self.set_resizable(True)
-        self.set_position(Gtk.WindowPosition.CENTER)
-        if transient_for is not None:
-            self.set_transient_for(transient_for)
+        self.add_button('search', _('Search'), 'suggested-action')
+        self.add_button('new-search', _('New Search'))
+        self.add_button('close', _('Close'))
 
-        self.set_size_request(500, 400)
-        self.get_style_context().add_class('dialog-margin')
+        self.add_pages({
+            'prepare': RequestForm(),
+            'form': SearchForm(),
+            'result': Result(),
+            'error': Error()
+        })
 
-        self._add_page(RequestForm())
-        self._add_page(Form())
-        self._add_page(RequestResult())
-        self._add_page(Completed())
-        self._add_page(Error())
+        progress = cast(ProgressPage, self.add_default_page('progress'))
+        progress.set_title(_('Searching'))
+        progress.set_text(_('Searching…'))
 
-        self.connect('prepare', self._on_page_change)
-        self.connect('cancel', self._on_cancel)
-        self.connect('close', self._on_cancel)
+        self.connect('button-clicked', self._on_button_clicked)
         self.connect('destroy', self._on_destroy)
 
-        self._remove_sidebar()
-
-        self._buttons = {}
-        self._add_custom_buttons()
-
-        self.show()
         self.register_events([
             ('search-form-received', ged.GUI1, self._search_form_received),
             ('search-result-received', ged.GUI1, self._search_result_received),
         ])
 
-        self._request_search_fields()
+        self._client.get_module('Search').request_search_fields(self._jid)
 
-    def _add_custom_buttons(self):
-        action_area = find_widget('action_area', self)
-        for button in list(action_area.get_children()):
-            self.remove_action_widget(button)
+        self.show_all()
 
-        search = Gtk.Button(label=_('Search'))
-        search.connect('clicked', self._execute_search)
-        search.get_style_context().add_class('suggested-action')
-        self._buttons['search'] = search
-        self.add_action_widget(search)
+    def _on_button_clicked(self,
+                           _assistant: Assistant,
+                           button_name: str
+                           ) -> None:
+        if button_name == 'search':
+            self.show_page('progress', Gtk.StackTransitionType.SLIDE_LEFT)
+            form = cast(SearchForm, self.get_page('form')).get_submit_form()
+            self._client.get_module('Search').send_search_form(
+                self._jid, form, True)
+            return
 
-        new_search = Gtk.Button(label=_('New Search'))
-        new_search.get_style_context().add_class('suggested-action')
-        new_search.connect('clicked',
-                           lambda *args: self.set_current_page(Page.FORM))
-        self._buttons['new-search'] = new_search
-        self.add_action_widget(new_search)
+        if button_name == 'new-search':
+            self.show_page('form', Gtk.StackTransitionType.SLIDE_RIGHT)
+            return
 
-    def _set_button_visibility(self, page):
-        for button in self._buttons.values():
-            button.hide()
-
-        if page == Page.FORM:
-            self._buttons['search'].show()
-
-        elif page in (Page.ERROR, Page.COMPLETED):
-            self._buttons['new-search'].show()
-
-    def _add_page(self, page):
-        self.append_page(page)
-        self.set_page_type(page, page.type_)
-        self.set_page_title(page, page.title)
-        self.set_page_complete(page, page.complete)
-
-    def set_stage_complete(self, is_valid):
-        self._buttons['search'].set_sensitive(is_valid)
-
-    def _request_search_fields(self):
-        self._con.get_module('Search').request_search_fields(self._jid)
-
-    def _execute_search(self, *args):
-        self.set_current_page(Page.REQUEST_RESULT)
-        form = self.get_nth_page(Page.FORM).get_submit_form()
-        self._con.get_module('Search').send_search_form(self._jid, form, True)
+        if button_name == 'close':
+            self.destroy()
 
     @ensure_not_destroyed
-    def _search_form_received(self, event):
+    def _search_form_received(self, event: SearchFormReceivedEvent) -> None:
         if not event.is_dataform:
-            self.set_current_page(Page.ERROR)
+            error_page = cast(Error, self.get_page('error'))
+            error_page.set_text(_('Error while retrieving search form.'))
+            self.show_page('error')
             return
 
-        self.get_nth_page(Page.FORM).process_search_form(event.data)
-        self.set_current_page(Page.FORM)
+        form_page = cast(SearchForm, self.get_page('form'))
+        form_page.process_search_form(event.data)
+        self.show_page('form')
 
     @ensure_not_destroyed
-    def _search_result_received(self, event):
+    def _search_result_received(self,
+                                event: SearchResultReceivedEvent
+                                ) -> None:
         if event.data is None:
-            self._on_error('')
+            error_page = cast(Error, self.get_page('error'))
+            error_page.set_text(_('Error while receiving search results.'))
+            self.show_page('error')
             return
-        self.get_nth_page(Page.COMPLETED).process_result(event.data)
-        self.set_current_page(Page.COMPLETED)
 
-    def _remove_sidebar(self):
-        main_box = self.get_children()[0]
-        sidebar = main_box.get_children()[0]
-        main_box.remove(sidebar)
+        result_page = cast(Result, self.get_page('result'))
+        result_page.process_result(event.data)
+        self.show_page('result')
 
-    def _on_page_change(self, _assistant, _page):
-        self._set_button_visibility(self.get_current_page())
-
-    def _on_error(self, error_text):
-        log.info('Show Error page')
-        page = self.get_nth_page(Page.ERROR)
-        page.set_text(error_text)
-        self.set_current_page(Page.ERROR)
-
-    def _on_cancel(self, _widget):
-        self.destroy()
-
-    def _on_destroy(self, *args):
+    def _on_destroy(self, *args: Any) -> None:
         self._destroyed = True
 
 
-class RequestForm(Gtk.Box):
-
-    type_ = Gtk.AssistantPageType.CUSTOM
-    title = _('Request Search Form')
-    complete = False
-
+class RequestForm(ProgressPage):
     def __init__(self):
-        super().__init__(orientation=Gtk.Orientation.VERTICAL)
-        self.set_spacing(18)
-        spinner = Gtk.Spinner()
-        self.pack_start(spinner, True, True, 0)
-        spinner.start()
-        self.show_all()
+        ProgressPage.__init__(self)
+        self.set_title(_('Request Search Form'))
+        self.set_text(_('Requesting search form from server'))
+
+    def get_visible_buttons(self) -> list[str]:
+        return ['close']
 
 
-class Form(Gtk.Box):
+class SearchForm(Page):
+    def __init__(self) -> None:
+        Page.__init__(self)
+        self.title = _('Search')
 
-    type_ = Gtk.AssistantPageType.CUSTOM
-    title = _('Search')
-    complete = True
+        self.complete = False
 
-    def __init__(self):
-        super().__init__(orientation=Gtk.Orientation.VERTICAL)
-        self.set_spacing(18)
         self._dataform_widget = None
+
         self.show_all()
 
     @property
-    def search_form(self):
+    def search_form(self) -> dataforms.SimpleDataForm:
         return self._dataform_widget.get_submit_form()
 
-    def clear(self):
+    def clear(self) -> None:
         self._show_form(None)
 
-    def process_search_form(self, form):
+    def process_search_form(self, form: Node) -> None:
         self._show_form(form)
 
-    def _show_form(self, form):
+    def _show_form(self, form: Optional[Node]) -> None:
         if self._dataform_widget is not None:
             self.remove(self._dataform_widget)
             self._dataform_widget.destroy()
         if form is None:
             return
 
-        options = {'form-width': 350}
+        options = {'form-width': 350,
+                   'entry-activates-default': True
+        }
 
         form = dataforms.extend_form(node=form)
         self._dataform_widget = DataFormWidget(form, options=options)
+        self._dataform_widget.set_propagate_natural_height(True)
         self._dataform_widget.connect('is-valid', self._on_is_valid)
         self._dataform_widget.validate()
         self._dataform_widget.show_all()
         self.add(self._dataform_widget)
 
-    def _on_is_valid(self, _widget, is_valid):
-        self.get_toplevel().set_stage_complete(is_valid)
+    def _on_is_valid(self, _widget: DataFormWidget, is_valid: bool) -> None:
+        self.complete = True
+        self.update_page_complete()
 
-    def get_submit_form(self):
+    def get_submit_form(self) -> dataforms.SimpleDataForm:
         return self._dataform_widget.get_submit_form()
 
+    def get_visible_buttons(self) -> list[str]:
+        return ['close', 'search']
 
-class RequestResult(RequestForm):
-
-    type_ = Gtk.AssistantPageType.CUSTOM
-    title = _('Search…')
-    complete = False
+    def get_default_button(self) -> str:
+        return 'search'
 
 
-class Completed(Gtk.Box):
+class Result(Page):
+    def __init__(self) -> None:
+        Page.__init__(self)
+        self.title = _('Search Result')
 
-    type_ = Gtk.AssistantPageType.CUSTOM
-    title = _('Search Result')
-    complete = True
-
-    def __init__(self):
-        super().__init__(orientation=Gtk.Orientation.VERTICAL)
-        self.set_spacing(12)
-        self.show_all()
         self._label = Gtk.Label(label=_('No results found'))
         self._label.get_style_context().add_class('bold16')
         self._label.set_no_show_all(True)
         self._label.set_halign(Gtk.Align.CENTER)
+
         self._scrolled = Gtk.ScrolledWindow()
+        self._scrolled.set_propagate_natural_height(True)
         self._scrolled.get_style_context().add_class('search-scrolled')
         self._scrolled.set_no_show_all(True)
-        self._treeview = None
-        self._menu = None
+
         self.add(self._label)
         self.add(self._scrolled)
+
+        self._treeview: Optional[Gtk.TreeView] = None
+        self._menu: Optional[SearchMenu] = None
+
         self.show_all()
 
-    def process_result(self, form):
+    def process_result(self, form: Optional[Node]) -> None:
         if self._treeview is not None:
             self._scrolled.remove(self._treeview)
             self._treeview.destroy()
@@ -274,8 +241,8 @@ class Completed(Gtk.Box):
 
         form = dataforms.extend_form(node=form)
 
-        fieldtypes = []
-        fieldvars = []
+        fieldtypes: list[Union[Type[bool], Type[str]]] = []
+        fieldvars: list[Any] = []
         for field in form.reported.iter_fields():
             if field.type_ == 'boolean':
                 fieldtypes.append(bool)
@@ -315,42 +282,41 @@ class Completed(Gtk.Box):
         self._scrolled.add(self._treeview)
         self._scrolled.show()
 
-    def _on_button_press(self, treeview, event):
-        if event.button != 3:
-            return
-        path, _column, _x, _y = treeview.get_path_at_pos(event.x, event.y)
+    def _on_button_press(self,
+                         treeview: Gtk.TreeView,
+                         event: Gdk.EventButton
+                         ) -> bool:
+        if event.button != 3:  # Right click
+            return False
+
+        path = treeview.get_path_at_pos(int(event.x), int(event.y))
         if path is None:
-            return
+            return False
+
+        path, _column, _x, _y = path
         store = treeview.get_model()
+        assert store is not None
+        assert path is not None
         iter_ = store.get_iter(path)
-        column_values = store[iter_]
+        column_values = str(store[iter_])
         text = ' '.join(column_values)
+        assert self._menu is not None
         self._menu.set_copy_text(text)
         self._menu.popup_at_pointer()
+        return True
+
+    def get_visible_buttons(self) -> list[str]:
+        return ['close', 'new-search']
+
+    def get_default_button(self) -> str:
+        return 'close'
 
 
-class Error(Gtk.Box):
+class Error(ErrorPage):
+    def __init__(self) -> None:
+        ErrorPage.__init__(self)
+        self.set_title(_('Error'))
+        self.set_heading(_('An error occurred'))
 
-    type_ = Gtk.AssistantPageType.CUSTOM
-    title = _('Error')
-    complete = True
-
-    def __init__(self):
-        super().__init__(orientation=Gtk.Orientation.VERTICAL)
-        self.set_spacing(12)
-        self.set_homogeneous(True)
-
-        icon = Gtk.Image.new_from_icon_name('dialog-error-symbolic',
-                                            Gtk.IconSize.DIALOG)
-        icon.get_style_context().add_class('error-color')
-        icon.set_valign(Gtk.Align.END)
-        self._label = Gtk.Label()
-        self._label.get_style_context().add_class('bold16')
-        self._label.set_valign(Gtk.Align.START)
-
-        self.add(icon)
-        self.add(self._label)
-        self.show_all()
-
-    def set_text(self, text):
-        self._label.set_text(text)
+    def get_visible_buttons(self) -> list[str]:
+        return ['close']
