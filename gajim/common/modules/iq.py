@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 import nbxmpp
-from nbxmpp.protocol import Iq
 from nbxmpp.structs import IqProperties
 from nbxmpp.structs import StanzaHandler
 
@@ -43,7 +42,7 @@ class Iq(BaseModule):
 
     def _iq_error_received(self,
                            _con: types.xmppClient,
-                           _stanza: Iq,
+                           _stanza: nbxmpp.protocol.Iq,
                            properties: IqProperties
                            ) -> None:
         self._log.info('Error: %s', properties.error)
