@@ -14,10 +14,17 @@
 
 # XEP-0055: Jabber Search
 
+from __future__ import annotations
+
+from typing import Any
+
 import nbxmpp
+from nbxmpp.modules.dataforms import SimpleDataForm
 from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import Iq
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.events import SearchFormReceivedEvent
 from gajim.common.events import SearchResultReceivedEvent
 
@@ -25,15 +32,18 @@ from gajim.common.modules.base import BaseModule
 
 
 class Search(BaseModule):
-    def __init__(self, con):
+    def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
 
-    def request_search_fields(self, jid):
+    def request_search_fields(self, jid: str) -> None:
         self._log.info('Request search fields from %s', jid)
         iq = nbxmpp.Iq(typ='get', to=jid, queryNS=Namespace.SEARCH)
         self._con.connection.SendAndCallForResponse(iq, self._fields_received)
 
-    def _fields_received(self, _nbxmpp_client, stanza):
+    def _fields_received(self,
+                         _nbxmpp_client: types.xmppClient,
+                         stanza: Iq
+                         ) -> None:
         data = None
         is_dataform = False
 
@@ -60,7 +70,11 @@ class Search(BaseModule):
                                     is_dataform=is_dataform,
                                     data=data))
 
-    def send_search_form(self, jid, form, is_form):
+    def send_search_form(self,
+                         jid: str,
+                         form: SimpleDataForm,
+                         is_form: bool
+                         ) -> None:
         iq = nbxmpp.Iq(typ='set', to=jid, queryNS=Namespace.SEARCH)
         item = iq.setQuery()
         if is_form:
@@ -71,7 +85,10 @@ class Search(BaseModule):
 
         self._con.connection.SendAndCallForResponse(iq, self._received_result)
 
-    def _received_result(self, _nbxmpp_client, stanza):
+    def _received_result(self,
+                         _nbxmpp_client: types.xmppClient,
+                         stanza: Iq
+                         ) -> None:
         data = None
         is_dataform = False
 
@@ -86,7 +103,7 @@ class Search(BaseModule):
             if data is not None:
                 is_dataform = True
             else:
-                data = []
+                data: list[Any] = []
                 for item in tag.getTags('item'):
                     # We also show attributes. jid is there
                     field = item.attrs
