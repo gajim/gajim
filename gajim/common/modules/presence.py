@@ -14,15 +14,24 @@
 
 # Presence handler
 
+from __future__ import annotations
+
+from typing import Any
+from typing import Optional
+from typing import Union
+
 import time
 
 import nbxmpp
-from nbxmpp.namespaces import Namespace
-from nbxmpp.structs import StanzaHandler
 from nbxmpp.const import PresenceType
+from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import JID
+from nbxmpp.structs import PresenceProperties
+from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
 from gajim.common import idle
+from gajim.common import types
 from gajim.common.events import PresenceReceived
 from gajim.common.events import ShowChanged
 from gajim.common.events import SubscribePresenceReceived
@@ -42,7 +51,7 @@ class Presence(BaseModule):
         'subscribed',
     ]
 
-    def __init__(self, con):
+    def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
 
         self.handlers = [
@@ -67,16 +76,20 @@ class Presence(BaseModule):
                           priority=49),
         ]
 
-        self._presence_store = {}
+        self._presence_store: dict[JID, PresenceData] = {}
 
         # keep the jids we auto added (transports contacts) to not send the
         # SUBSCRIBED event to GUI
-        self.automatically_added = []
+        self.automatically_added: list[str] = []
 
         # list of jid to auto-authorize
-        self._jids_for_auto_auth = set()
+        self._jids_for_auto_auth: set[str] = set()
 
-    def _presence_received(self, _con, stanza, properties):
+    def _presence_received(self,
+                           _con: types.xmppClient,
+                           stanza: nbxmpp.protocol.Presence,
+                           properties: PresenceProperties
+                           ) -> None:
         if properties.from_muc:
             # MUC occupant presences are already handled in MUC module
             return
@@ -116,7 +129,7 @@ class Presence(BaseModule):
         if properties.type.is_unavailable:
             show = 'offline'
 
-        event_attrs = {
+        event_attrs: dict[str, Any] = {
             'account': self._account,
             'conn': self._con,
             'stanza': stanza,
@@ -144,7 +157,7 @@ class Presence(BaseModule):
 
         self._log_presence(properties)
 
-    def _log_presence(self, properties):
+    def _log_presence(self, properties: PresenceProperties) -> None:
         if not app.settings.get('log_contact_status_changes'):
             return
 
@@ -159,7 +172,11 @@ class Presence(BaseModule):
                                              message=properties.status,
                                              show=show)
 
-    def _subscribe_received(self, _con, _stanza, properties):
+    def _subscribe_received(self,
+                            _con: types.xmppClient,
+                            _stanza: nbxmpp.protocol.Presence,
+                            properties: PresenceProperties
+                            ) -> None:
         jid = properties.jid.bare
         fjid = str(properties.jid)
 
@@ -190,7 +207,11 @@ class Presence(BaseModule):
 
         raise nbxmpp.NodeProcessed
 
-    def _subscribed_received(self, _con, _stanza, properties):
+    def _subscribed_received(self,
+                             _con: types.xmppClient,
+                             _stanza: nbxmpp.protocol.Presence,
+                             properties: PresenceProperties
+                             ) -> None:
         jid = properties.jid.bare
         self._log.info('Received Subscribed: %s', properties.jid)
         if jid in self.automatically_added:
@@ -202,11 +223,19 @@ class Presence(BaseModule):
             jid=properties.jid))
         raise nbxmpp.NodeProcessed
 
-    def _unsubscribe_received(self, _con, _stanza, properties):
+    def _unsubscribe_received(self,
+                              _con: types.xmppClient,
+                              _stanza: nbxmpp.protocol.Presence,
+                              properties: PresenceProperties
+                              ) -> None:
         self._log.info('Received Unsubscribe: %s', properties.jid)
         raise nbxmpp.NodeProcessed
 
-    def _unsubscribed_received(self, _con, _stanza, properties):
+    def _unsubscribed_received(self,
+                               _con: types.xmppClient,
+                               _stanza: nbxmpp.protocol.Presence,
+                               properties: PresenceProperties
+                               ) -> None:
         self._log.info('Received Unsubscribed: %s', properties.jid)
         app.ged.raise_event(UnsubscribedPresenceReceived(
             conn=self._con,
@@ -214,17 +243,23 @@ class Presence(BaseModule):
             jid=properties.jid.bare))
         raise nbxmpp.NodeProcessed
 
-    def unsubscribed(self, jid):
+    def unsubscribed(self, jid: Union[JID, str]) -> None:
         self._log.info('Unsubscribed: %s', jid)
-        self._jids_for_auto_auth.discard(jid)
+        self._jids_for_auto_auth.discard(str(jid))
         self._nbxmpp('BasePresence').unsubscribed(jid)
 
-    def unsubscribe(self, jid):
+    def unsubscribe(self, jid: Union[JID, str]) -> None:
         self._log.info('Unsubscribe from %s', jid)
-        self._jids_for_auto_auth.discard(jid)
+        self._jids_for_auto_auth.discard(str(jid))
         self._nbxmpp('BasePresence').unsubscribe(jid)
 
-    def subscribe(self, jid, msg=None, name=None, groups=None, auto_auth=False):
+    def subscribe(self,
+                  jid: Union[JID, str],
+                  msg: Optional[str] = None,
+                  name: Optional[str] = None,
+                  groups: Optional[list[str]] = None,
+                  auto_auth: bool = False
+                  ) -> None:
         self._log.info('Request Subscription to %s', jid)
 
         if auto_auth:
@@ -235,9 +270,16 @@ class Presence(BaseModule):
                                                status=msg,
                                                nick=app.nicks[self._account])
 
-    def get_presence(self, to=None, typ=None, priority=None,
-                     show=None, status=None, nick=None, caps=True,
-                     idle_time=False):
+    def get_presence(self,
+                     to: Optional[str] = None,
+                     typ: Optional[str] = None,
+                     priority: Optional[int] = None,
+                     show: Optional[str] = None,
+                     status: Optional[str] = None,
+                     nick: Optional[str] = None,
+                     caps: bool = True,
+                     idle_time: bool = False
+                     ) -> nbxmpp.Presence:
         if show not in ('chat', 'away', 'xa', 'dnd'):
             # Gajim sometimes passes invalid show values here
             # until this is fixed this is a workaround
@@ -265,7 +307,7 @@ class Presence(BaseModule):
 
         return presence
 
-    def send_presence(self, *args, **kwargs):
+    def send_presence(self, *args: Any, **kwargs: Any) -> None:
         if not app.account_is_connected(self._account):
             return
         presence = self.get_presence(*args, **kwargs)
