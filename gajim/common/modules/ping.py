@@ -14,17 +14,20 @@
 
 # XEP-0199: XMPP Ping
 
+from __future__ import annotations
+
 from typing import Generator
 
 import time
 
 from nbxmpp.errors import is_error
+from nbxmpp.structs import CommonResult
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.events import PingError
 from gajim.common.events import PingReply
 from gajim.common.events import PingSent
-from gajim.common.types import ConnectionT
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import as_task
 
@@ -36,13 +39,15 @@ class Ping(BaseModule):
         'ping',
     ]
 
-    def __init__(self, con: ConnectionT) -> None:
+    def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
 
         self.handlers = []
 
     @as_task
-    def send_ping(self, contact) -> Generator:
+    def send_ping(self,
+                  contact: types.ContactT
+                  ) -> Generator[CommonResult, None, None]:
         _task = yield
 
         if not app.account_is_available(self._account):

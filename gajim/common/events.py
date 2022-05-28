@@ -599,7 +599,7 @@ class PingReply(ApplicationEvent):
     name: str = field(init=False, default='ping-reply')
     account: str
     contact: Any
-    seconds: int
+    seconds: float
 
 
 @dataclass
