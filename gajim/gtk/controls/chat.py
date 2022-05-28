@@ -197,12 +197,13 @@ class ChatControl(BaseControl):
             online and self._client.get_module('Blocking').supported)
 
         # Jingle AV
-        self._get_action('start-voice-call-').set_enabled(
-            online and self.contact.supports_audio()
-            and sys.platform != 'win32')
-        self._get_action('start-video-call-').set_enabled(
-            online and self.contact.supports_video()
-            and sys.platform != 'win32')
+        if self.type.is_chat:
+            self._get_action('start-voice-call-').set_enabled(
+                online and self.contact.supports_audio()
+                and sys.platform != 'win32')
+            self._get_action('start-video-call-').set_enabled(
+                online and self.contact.supports_video()
+                and sys.platform != 'win32')
 
         # Send message
         has_text = self.msg_textview.has_text()
