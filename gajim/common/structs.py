@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Dict
 from typing import Type
 from typing import TypeVar
 from typing import NamedTuple
@@ -28,11 +27,14 @@ from dataclasses import fields
 
 from gi.repository import GLib
 
-from nbxmpp.protocol import JID
-from nbxmpp.const import Role
 from nbxmpp.const import Affiliation
+from nbxmpp.const import Chatstate
 from nbxmpp.const import PresenceShow
+from nbxmpp.const import Role
+from nbxmpp.protocol import JID
+from nbxmpp.structs import PresenceProperties
 
+from gajim.common import types
 from gajim.common.const import MUCJoinedState
 from gajim.common.const import KindConstant
 from gajim.common.const import PresenceShowExt
@@ -46,7 +48,7 @@ _T = TypeVar('_T')
 class URI(NamedTuple):
     type: URIType
     action: Optional[URIAction] = None
-    data: Optional[Union[Dict[str, str], str]] = None
+    data: Optional[Union[dict[str, str], str]] = None
 
 
 class MUCData:
@@ -54,7 +56,8 @@ class MUCData:
                  room_jid: str,
                  nick: str,
                  password: str,
-                 config=None) -> None:
+                 config: Optional[dict[str, Any]] = None
+                 ) -> None:
 
         self._room_jid = JID.from_string(room_jid)
         self._config = config
@@ -74,29 +77,30 @@ class MUCData:
         return self._room_jid.new_with(resource=self.nick)
 
     @property
-    def config(self):
+    def config(self) -> Optional[dict[str, Any]]:
         return self._config
 
 
 class OutgoingMessage:
     def __init__(self,
                  account: str,
-                 contact,
+                 contact: types.ChatContactT,
                  message: Optional[str],
                  type_: str,
                  subject: Optional[str] = None,
-                 chatstate=None,
+                 chatstate: Optional[Chatstate] = None,
                  marker: Optional[tuple[str, str]] = None,
                  resource: Optional[str] = None,
                  user_nick: Optional[str] = None,
                  label: Optional[str] = None,
-                 control=None,
+                 control: Optional[Any] = None,
                  attention: Optional[bool] = None,
                  correct_id: Optional[str] = None,
                  oob_url: Optional[str] = None,
-                 xhtml=None,
-                 nodes=None,
-                 play_sound: bool = True):
+                 xhtml: Optional[str] = None,
+                 nodes: Optional[Any] = None,
+                 play_sound: bool = True
+                 ) -> None:
 
         if type_ not in ('chat', 'groupchat', 'normal', 'headline'):
             raise ValueError('Unknown message type: %s' % type_)
@@ -207,7 +211,7 @@ class PresenceData:
     available: bool
 
     @classmethod
-    def from_presence(cls, properties):
+    def from_presence(cls, properties: PresenceProperties) -> PresenceData:
         return cls(show=properties.show,
                    status=properties.status,
                    priority=properties.priority,
@@ -233,7 +237,7 @@ class MUCPresenceData:
     real_jid: Optional[JID]
 
     @classmethod
-    def from_presence(cls, properties):
+    def from_presence(cls, properties: PresenceProperties) -> MUCPresenceData:
         return cls(show=properties.show,
                    status=properties.status,
                    idle_time=properties.idle_timestamp,
