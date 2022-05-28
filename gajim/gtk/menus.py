@@ -549,18 +549,23 @@ def get_groupchat_roster_menu(account: str,
     return menu
 
 
-class SearchMenu(Gtk.Menu):
-    def __init__(self, treeview: Gtk.TreeView) -> None:
-        Gtk.Menu.__init__(self)
-        self._copy_item = Gtk.MenuItem(label=_('Copy'))
-        self._copy_item.set_action_name('app.copy-text')
-        self.set_copy_text('')
-        self._copy_item.show()
-        self.append(self._copy_item)
-        self.attach_to_widget(treeview, None)
-
-    def set_copy_text(self, text: str) -> None:
-        self._copy_item.set_action_target_value(GLib.Variant('s', text))
+def get_directory_search_menu(jid: str, copy_text: str) -> Gio.Menu:
+    menu_items: list[tuple[str, str]] = [
+        ('app.copy-text', _('Copy')),
+        ('app.start-chat', _('Start Chat…'))
+    ]
+    menu = Gio.Menu()
+    for item in menu_items:
+        action, label = item
+        menuitem = Gio.MenuItem.new(label, action)
+        if action == 'app.copy-text':
+            data = copy_text
+        else:
+            data = jid
+        variant = GLib.Variant('s', data)
+        menuitem.set_action_and_target_value(action, variant)
+        menu.append_item(menuitem)
+    return menu
 
 
 def escape_mnemonic(label: Optional[str]) -> Optional[str]:

@@ -40,7 +40,7 @@ from .assistant import ErrorPage
 from .assistant import Page
 from .assistant import ProgressPage
 from .dataform import DataFormWidget
-from .menus import SearchMenu
+from .menus import get_directory_search_menu
 from .util import ensure_not_destroyed
 from .util import EventHelper
 
@@ -222,7 +222,6 @@ class Result(Page):
         self.add(self._scrolled)
 
         self._treeview: Optional[Gtk.TreeView] = None
-        self._menu: Optional[SearchMenu] = None
 
         self.show_all()
 
@@ -231,7 +230,6 @@ class Result(Page):
             self._scrolled.remove(self._treeview)
             self._treeview.destroy()
             self._treeview = None
-            self._menu = None
             self._label.hide()
             self._scrolled.hide()
 
@@ -268,7 +266,6 @@ class Result(Page):
         self._treeview.set_vexpand(True)
         self._treeview.get_style_context().add_class('search-treeview')
         self._treeview.connect('button-press-event', self._on_button_press)
-        self._menu = SearchMenu(self._treeview)
 
         for field, counter in zip(form.reported.iter_fields(),
                                   itertools.count()):
@@ -298,11 +295,21 @@ class Result(Page):
         assert store is not None
         assert path is not None
         iter_ = store.get_iter(path)
-        column_values = str(store[iter_])
+        column_values = store[iter_]
         text = ' '.join(column_values)
-        assert self._menu is not None
-        self._menu.set_copy_text(text)
-        self._menu.popup_at_pointer()
+
+        menu = get_directory_search_menu(column_values[0], text)
+
+        rectangle = Gdk.Rectangle()
+        rectangle.x = int(event.x)
+        rectangle.y = int(event.y)
+        rectangle.width = rectangle.height = 1
+
+        popover = Gtk.Popover.new_from_model(self, menu)
+        popover.set_relative_to(self)
+        popover.set_position(Gtk.PositionType.RIGHT)
+        popover.set_pointing_to(rectangle)
+        popover.popup()
         return True
 
     def get_visible_buttons(self) -> list[str]:
