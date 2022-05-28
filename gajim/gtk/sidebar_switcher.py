@@ -23,10 +23,12 @@ from gajim.common import app
 
 
 class SideBarSwitcher(Gtk.ListBox):
-    def __init__(self):
+    def __init__(self, width: Optional[int] = None) -> None:
         Gtk.ListBox.__init__(self)
         self.set_vexpand(True)
         self.get_style_context().add_class('settings-menu')
+        if width is not None:
+            self.set_size_request(width, -1)
         self.connect('row-activated', self._on_row_activated)
         self._stack = cast(Gtk.Stack, None)
         self._rows: dict[str, Row] = {}
