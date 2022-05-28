@@ -37,6 +37,7 @@
         "gajim/common/setting_values.py",
         "gajim/common/sound.py",
         "gajim/common/storage/",
+        "gajim/common/task_manager.py",
         "gajim/gtk/about.py",
         "gajim/gtk/account_page.py",
         "gajim/gtk/account_side_bar.py",

@@ -14,7 +14,7 @@
 
 from __future__ import annotations
 
-from typing import List
+from typing import Optional
 
 import functools
 import queue
@@ -26,16 +26,16 @@ log = logging.getLogger('gajim.c.m.task_manager')
 
 
 class TaskManager:
-    def __init__(self):
-        self._timeout = None
-        self._queue = queue.PriorityQueue()
+    def __init__(self) -> None:
+        self._timeout: Optional[int] = None
+        self._queue: queue.PriorityQueue[Task] = queue.PriorityQueue()
 
     def _start_worker(self) -> None:
         self._timeout = GLib.timeout_add_seconds(2, self._process_queue)
 
     def _process_queue(self) -> bool:
         log.info('%s tasks queued', self._queue.qsize())
-        requeue = []
+        requeue: list[Task] = []
         while not self._queue.empty():
             task = self._queue.get_nowait()
             if task.is_obsolete():
@@ -63,7 +63,7 @@ class TaskManager:
         self._timeout = None
         return False
 
-    def _requeue_tasks(self, tasks: List[Task]) -> bool:
+    def _requeue_tasks(self, tasks: list[Task]) -> bool:
         if not tasks:
             return False
 
@@ -81,7 +81,7 @@ class TaskManager:
 
 @functools.total_ordering
 class Task:
-    def __init__(self, priority: int = 0):
+    def __init__(self, priority: int = 0) -> None:
         self.priority = priority
         self._obsolete = False
 

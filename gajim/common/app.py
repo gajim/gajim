@@ -62,6 +62,7 @@ if typing.TYPE_CHECKING:
     from gajim.common.cert_store import CertificateStore
     from gajim.common.call_manager import CallManager
     from gajim.common.preview import PreviewManager
+    from gajim.common.task_manager import TaskManager
 
 
 interface = cast(types.InterfaceT, None)
@@ -112,7 +113,7 @@ call_manager = cast('CallManager', None)
 
 preview_manager = cast('PreviewManager', None)
 
-task_manager = None
+task_manager = cast('TaskManager', None)
 
 # These will be set in app.gui_interface.
 idlequeue = cast(IdleQueue, None)
