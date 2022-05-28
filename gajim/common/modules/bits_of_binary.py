@@ -14,23 +14,33 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Any
+from typing import Optional
+
 import logging
 import hashlib
 from base64 import b64decode
+from pathlib import Path
 
 import nbxmpp
 from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import Iq
+from nbxmpp.structs import BobData
+from nbxmpp.structs import IqProperties
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
 from gajim.common import configpaths
+from gajim.common import types
 from gajim.common.modules.base import BaseModule
 
 log = logging.getLogger('gajim.c.m.bob')
 
 
 class BitsOfBinary(BaseModule):
-    def __init__(self, con):
+    def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
 
         self.handlers = [
@@ -41,9 +51,13 @@ class BitsOfBinary(BaseModule):
         ]
 
         # Used to track which cids are in-flight.
-        self.awaiting_cids = {}
+        self.awaiting_cids: dict[str, tuple[Any, Any, int]] = {}
 
-    def _answer_bob_request(self, _con, stanza, _properties):
+    def _answer_bob_request(self,
+                            _con: types.xmppClient,
+                            stanza: Iq,
+                            _properties: IqProperties
+                            ) -> None:
         self._log.info('Request from %s for BoB data', stanza.getFrom())
         iq = stanza.buildReply('error')
         err = nbxmpp.ErrorNode(nbxmpp.ERR_ITEM_NOT_FOUND)
@@ -52,7 +66,11 @@ class BitsOfBinary(BaseModule):
         self._con.connection.send(iq)
         raise nbxmpp.NodeProcessed
 
-    def _on_bob_received(self, _nbxmpp_client, result, cid):
+    def _on_bob_received(self,
+                         _nbxmpp_client: types.xmppClient,
+                         result: Iq,
+                         cid: str
+                         ) -> None:
         """
         Called when we receive BoB data
         """
@@ -86,7 +104,13 @@ class BitsOfBinary(BaseModule):
             cb(*args)
         del self.awaiting_cids[cid]
 
-    def get_bob_data(self, cid, to, callback, args, position):
+    def get_bob_data(self,
+                     cid: str,
+                     to: str,
+                     callback: Any,
+                     args: Any,
+                     position: int
+                     ) -> None:
         """
         Request for BoB (XEP-0231) and when data will arrive, call callback
         with given args, after having replaced cid by it's data in
@@ -102,7 +126,7 @@ class BitsOfBinary(BaseModule):
             iq, self._on_bob_received, {'cid': cid})
 
 
-def parse_bob_data(stanza):
+def parse_bob_data(stanza: Iq) -> Optional[Path]:
     data_node = stanza.getTag('data', namespace=Namespace.BOB)
     if data_node is None:
         return None
@@ -176,11 +200,11 @@ def parse_bob_data(stanza):
     return filepath
 
 
-def store_bob_data(bob_data):
+def store_bob_data(bob_data: Optional[BobData]) -> Optional[Path]:
     if bob_data is None:
         return None
 
-    algo_hash = '%s+%s' % (bob_data.algo, bob_data.hash_)
+    algo_hash = f'{bob_data.algo}+{bob_data.hash_}'
 
     filepath = configpaths.get('BOB') / algo_hash
     if algo_hash in app.bob_cache or filepath.exists():
