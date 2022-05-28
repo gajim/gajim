@@ -14,10 +14,15 @@
 
 # Iq handler
 
+from __future__ import annotations
+
 import nbxmpp
+from nbxmpp.protocol import Iq
+from nbxmpp.structs import IqProperties
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.events import FileRequestError
 from gajim.common.events import FileSendError
 from gajim.common.helpers import to_user_string
@@ -26,7 +31,7 @@ from gajim.common.modules.base import BaseModule
 
 
 class Iq(BaseModule):
-    def __init__(self, con):
+    def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
 
         self.handlers = [
@@ -36,7 +41,11 @@ class Iq(BaseModule):
                           priority=51),
         ]
 
-    def _iq_error_received(self, _con, _stanza, properties):
+    def _iq_error_received(self,
+                           _con: types.xmppClient,
+                           _stanza: Iq,
+                           properties: IqProperties
+                           ) -> None:
         self._log.info('Error: %s', properties.error)
         if properties.error.condition in ('jid-malformed',
                                           'forbidden',
@@ -78,7 +87,7 @@ class Iq(BaseModule):
         raise nbxmpp.NodeProcessed
 
     @staticmethod
-    def _get_sid(id_):
+    def _get_sid(id_: str) -> str:
         sid = id_
         if len(id_) > 3 and id_[2] == '_':
             sid = id_[3:]
