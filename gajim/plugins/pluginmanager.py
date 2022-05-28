@@ -543,10 +543,12 @@ class PluginManager(metaclass=Singleton):
 
         self._remove_events_handler_from_ged(plugin)
         self._remove_name_from_encryption_plugins(plugin)
-        self._unregister_modules_with_handlers(plugin)
 
-        # removing plug-in from active plug-ins list
+        # deactivate() must be before _unregister_modules_with_handlers(),
+        # because plugin.deactivate() may want to use the module
         plugin.deactivate()
+
+        self._unregister_modules_with_handlers(plugin)
         self.active_plugins.remove(plugin)
         app.settings.set_plugin_setting(plugin.manifest.short_name,
                                         'active',
