@@ -14,14 +14,21 @@
 
 # Message handler
 
+from __future__ import annotations
+
+from typing import Any
+from typing import Optional
+
 import time
 
 import nbxmpp
 from nbxmpp.namespaces import Namespace
+from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.util import generate_id
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.events import GcMessageReceived
 from gajim.common.events import MessageError
 from gajim.common.events import MessageReceived
@@ -34,10 +41,11 @@ from gajim.common.modules.util import get_eme_message
 from gajim.common.modules.misc import parse_correction
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_xhtml
+from gajim.common.structs import OutgoingMessage
 
 
 class Message(BaseModule):
-    def __init__(self, con):
+    def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
 
         self.handlers = [
@@ -57,7 +65,11 @@ class Message(BaseModule):
         self._message_namespaces = set([Namespace.ROSTERX,
                                         Namespace.IBB])
 
-    def _check_if_unknown_contact(self, _con, stanza, properties):
+    def _check_if_unknown_contact(self,
+                                  _con: types.xmppClient,
+                                  stanza: nbxmpp.Message,
+                                  properties: MessageProperties
+                                  ) -> None:
         if (properties.type.is_groupchat or
                 properties.is_muc_pm or
                 properties.is_self_message or
@@ -78,7 +90,11 @@ class Message(BaseModule):
             self._log.warning(stanza)
             raise nbxmpp.NodeProcessed
 
-    def _message_received(self, _con, stanza, properties):
+    def _message_received(self,
+                          _con: types.xmppClient,
+                          stanza: nbxmpp.Message,
+                          properties: MessageProperties
+                          ) -> None:
         if (properties.is_mam_message or
                 properties.is_pubsub or
                 properties.type.is_error):
@@ -172,7 +188,7 @@ class Message(BaseModule):
         if properties.has_security_label:
             displaymarking = properties.security_label.displaymarking
 
-        event_attr = {
+        event_attr: dict[str, Any] = {
             'conn': self._con,
             'stanza': stanza,
             'account': self._account,
@@ -241,7 +257,11 @@ class Message(BaseModule):
             stanza_id=stanza_id or message_id,
             message_id=properties.id)
 
-    def _message_error_received(self, _con, _stanza, properties):
+    def _message_error_received(self,
+                                _con: types.xmppClient,
+                                _stanza: nbxmpp.Message,
+                                properties: MessageProperties
+                                ) -> None:
         jid = properties.jid
         if not properties.is_muc_pm:
             jid = jid.new_as_bare()
@@ -261,7 +281,7 @@ class Message(BaseModule):
                          message_id=properties.id,
                          error=properties.error))
 
-    def _log_muc_message(self, event):
+    def _log_muc_message(self, event: GcMessageReceived) -> None:
         self._check_for_mam_compliance(event.room_jid, event.stanza_id)
 
         if event.msgtxt and event.properties.muc_nickname:
@@ -276,12 +296,14 @@ class Message(BaseModule):
                 stanza_id=event.stanza_id,
                 message_id=event.properties.id)
 
-    def _check_for_mam_compliance(self, room_jid, stanza_id):
+    def _check_for_mam_compliance(self, room_jid: str, stanza_id: str) -> None:
         disco_info = app.storage.cache.get_last_disco_info(room_jid)
         if stanza_id is None and disco_info.mam_namespace == Namespace.MAM_2:
             self._log.warning('%s announces mam:2 without stanza-id', room_jid)
 
-    def _get_unique_id(self, properties):
+    def _get_unique_id(self,
+                       properties: MessageProperties
+                       ) -> tuple[Optional[str], Optional[str]]:
         if properties.is_self_message:
             # Deduplicate self message with message-id
             return None, properties.id
@@ -310,7 +332,7 @@ class Message(BaseModule):
         # stanza-id not added by the archive, ignore it.
         return None, None
 
-    def build_message_stanza(self, message):
+    def build_message_stanza(self, message: OutgoingMessage) -> nbxmpp.Message:
         own_jid = self._con.get_own_jid()
 
         stanza = nbxmpp.Message(to=message.jid,
@@ -384,7 +406,7 @@ class Message(BaseModule):
 
         return stanza
 
-    def log_message(self, message):
+    def log_message(self, message: OutgoingMessage) -> None:
         if not message.is_loggable:
             return
 
