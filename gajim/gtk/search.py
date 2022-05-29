@@ -190,7 +190,7 @@ class SearchForm(Page):
         self.add(self._dataform_widget)
 
     def _on_is_valid(self, _widget: DataFormWidget, is_valid: bool) -> None:
-        self.complete = True
+        self.complete = is_valid
         self.update_page_complete()
 
     def get_submit_form(self) -> dataforms.SimpleDataForm:
