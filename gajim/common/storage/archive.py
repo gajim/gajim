@@ -1379,21 +1379,6 @@ class MessageArchiveStorage(SqliteStorage):
         self._delayed_commit()
         log.info('Removed history for: %s', jid)
 
-    def forget_jid_data(self, account: str, jid: JID) -> None:
-        try:
-            jid_id = self.get_jid_id(jid)
-        except ValueError:
-            log.info('No history entries for: %s', jid)
-            return
-        sql = 'DELETE FROM jids WHERE jid_id = ?'
-        self._con.execute(sql, (jid_id,))
-
-        sql = 'DELETE FROM last_archive_message WHERE jid_id = ?'
-        self._con.execute(sql, (jid_id,))
-
-        self._delayed_commit()
-        log.info('Forgot data for: %s', jid)
-
     def remove_all_history(self) -> None:
         """
         Remove all messages for all accounts

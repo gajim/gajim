@@ -806,7 +806,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
         client.get_module('Bookmarks').remove(params.jid)
 
         app.storage.archive.remove_history(params.account, params.jid)
-        app.storage.archive.forget_jid_data(params.account, params.jid)
 
     @staticmethod
     def _on_groupchat_join_action(_action: Gio.SimpleAction,
