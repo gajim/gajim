@@ -191,6 +191,8 @@ class SearchView(Gtk.Box):
         for msg in itertools.islice(self._results_iterator, 25):
             if self._scope == 'everywhere':
                 archive_jid = app.storage.archive.get_jid_from_id(msg.jid_id)
+                if archive_jid is None:
+                    continue
                 result_row = ResultRow(
                     msg,
                     accounts[msg.account_id],

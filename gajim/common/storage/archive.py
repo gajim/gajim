@@ -284,8 +284,9 @@ class MessageArchiveStorage(SqliteStorage):
             self._jid_ids[row.jid] = row
             self._jid_ids_reversed[row.jid_id] = row
 
-    def get_jid_from_id(self, jid_id: int) -> JidsTableRow:
-        return self._jid_ids_reversed[jid_id]
+    def get_jid_from_id(self, jid_id: int) -> Optional[JidsTableRow]:
+        # Use get as a fail-safe for cases where the JID ID table is incomplete
+        return self._jid_ids_reversed.get(jid_id)
 
     def get_jids_in_db(self) -> KeysView[JID]:
         return self._jid_ids.keys()
