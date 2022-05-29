@@ -124,6 +124,8 @@ class GroupchatControl(BaseControl):
 
         self.roster = GroupchatRoster(self.account, self.room_jid, self)
         self.xml.roster_revealer.add(self.roster)
+        self.xml.roster_revealer.set_reveal_child(
+            not app.settings.get('hide_groupchat_occupants_list'))
         self.roster.connect('row-activated', self._on_roster_row_activated)
 
         self.add_actions()
@@ -524,6 +526,7 @@ class GroupchatControl(BaseControl):
             transition = Gtk.RevealerTransitionType.SLIDE_LEFT
         self.xml.roster_revealer.set_transition_type(transition)
         self.xml.roster_revealer.set_reveal_child(show)
+        app.settings.set('hide_groupchat_occupants_list', show)
 
     def _on_roster_row_activated(self,
                                  _roster: GroupchatRoster,
