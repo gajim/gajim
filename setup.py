@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import cast
+
 import os
 import sys
 
@@ -14,6 +16,9 @@ from pathlib import Path
 from setuptools import setup
 from setuptools.command.build_py import build_py as _build
 from setuptools.command.install import install as _install
+
+
+DataFilesT = list[tuple[str, list[str]]]
 
 
 MAN_FILES = [
@@ -65,7 +70,7 @@ def build_translation() -> None:
             print('Compiling %s >> %s' % (po_file, mo_file))
 
 
-def install_trans(data_files) -> None:
+def install_trans(data_files: DataFilesT) -> None:
     for lang in ALL_LINGUAS:
         mo_file = str(BUILD_DIR / 'mo' / lang / 'LC_MESSAGES' / 'gajim.mo')
         target = f'share/locale/{lang}/LC_MESSAGES'
@@ -97,7 +102,7 @@ def build_man() -> None:
             print('Compiling %s >> %s' % (filename, man_file_gz))
 
 
-def install_man(data_files) -> None:
+def install_man(data_files: DataFilesT) -> None:
     man_dir = BUILD_DIR / 'man'
     target = 'share/man/man1'
 
@@ -120,12 +125,15 @@ def build_intl() -> None:
         merge(Path(filename + '.in'), newfile, option)
 
 
-def install_intl(data_files) -> None:
+def install_intl(data_files: DataFilesT) -> None:
     for filename, target, _ in META_FILES:
         data_files.append((target, [str(BUILD_DIR / filename)]))
 
 
-def merge(in_file, out_file, option, po_dir: str = 'po') -> None:
+def merge(in_file: Path,
+          out_file: Path,
+          option: str,
+          po_dir: str = 'po') -> None:
     '''
     Run the msgfmt command.
     '''
@@ -154,12 +162,12 @@ class build(_build):
 
 class install(_install):
     def run(self):
-        data_files = self.distribution.data_files
+        data_files = cast(DataFilesT, self.distribution.data_files)  # pyright: ignore
         install_trans(data_files)
         if sys.platform != 'win32':
             install_man(data_files)
             install_intl(data_files)
-        _install.run(self)
+        _install.run(self)  # pyright: ignore
 
 
 # only install subdirectories of data
@@ -170,7 +178,7 @@ data_files_app_icon = [
      ["gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim-symbolic.svg"])
 ]
 
-data_files = data_files_app_icon
+data_files: DataFilesT = data_files_app_icon
 
 setup(
     cmdclass={
