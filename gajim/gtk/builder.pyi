@@ -101,6 +101,10 @@ class AppPageBuilder(Builder):
     gajim_update: Gtk.Box
     update_message: Gtk.Label
     gajim_update_check: Gtk.Box
+    plugin_updates: Gtk.Box
+    auto_update_plugins: Gtk.CheckButton
+    plugin_updates_finished: Gtk.Box
+    notify_after_plugin_updates: Gtk.CheckButton
 
 
 class ApplicationMenuBuilder(Builder):

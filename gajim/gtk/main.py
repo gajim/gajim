@@ -897,39 +897,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                      _repository: PluginRepository,
                                      _signal_name: str,
                                      manifests: list[PluginManifest]) -> None:
-
-        def _open_update(is_checked: bool):
-            if is_checked:
-                app.settings.set('plugins_auto_update', True)
-            app.plugin_repository.download_plugins(manifests)
-
-        plugins_str = '\n'
-        plugins_str += '\n'.join([manifest.name for manifest in manifests])
-        ConfirmationCheckDialog(
-            _('Plugin Updates'),
-            _('Plugin Updates Available'),
-            _('There are updates for your plugins:\n'
-              '<b>%s</b>') % plugins_str,
-            _('Update plugins automatically next time'),
-            [DialogButton.make('Cancel'),
-             DialogButton.make('Accept',
-                               text=_('_Update'),
-                               is_default=True,
-                               callback=_open_update)]).show()
+        self._app_page.add_plugin_update_message(manifests)
 
     def _on_plugin_auto_update_finished(self,
                                         _repository: PluginRepository,
                                         _signal_name: str) -> None:
-
-        def _on_ok(is_checked: bool) -> None:
-            if is_checked:
-                app.settings.set('plugins_notify_after_update', False)
-
-        ConfirmationCheckDialog(
-            _('Plugins Updated'),
-            _('Plugins Updated'),
-            _('Plugin updates have successfully been downloaded.\n'
-              'Updates will be installed next time Gajim is started.'),
-            _('Do not show this message again'),
-            [DialogButton.make('OK',
-                               callback=_on_ok)]).show()
+        self.add_app_message('plugin-updates-finished')

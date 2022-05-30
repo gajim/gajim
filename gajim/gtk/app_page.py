@@ -24,6 +24,7 @@ from gajim.common import app
 from gajim.common.events import ApplicationEvent
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
+from gajim.plugins.pluginmanager import PluginManifest
 
 from .status_message_selector import StatusMessageSelector
 from .status_selector import StatusSelector
@@ -71,9 +72,18 @@ class AppPage(Gtk.Box):
 
         self.show_all()
 
-    def add_app_message(self, category: str, message: Optional[str]) -> None:
+    def add_app_message(self,
+                        category: str,
+                        message: Optional[str]
+                        ) -> None:
         self._app_message_listbox.add_app_message(category, message)
+        self._unread_count += 1
+        self.emit('unread-count-changed', self._unread_count)
 
+    def add_plugin_update_message(self,
+                                  manifests: list[PluginManifest]
+                                  ) -> None:
+        self._app_message_listbox.add_plugin_update_message(manifests)
         self._unread_count += 1
         self.emit('unread-count-changed', self._unread_count)
 
@@ -104,6 +114,12 @@ class AppMessageListBox(Gtk.ListBox):
         row = AppMessageRow(category, message)
         self.add(row)
 
+    def add_plugin_update_message(self,
+                                  manifests: list[PluginManifest]
+                                  ) -> None:
+        row = AppMessageRow('plugin-updates', plugin_manifests=manifests)
+        self.add(row)
+
     def remove_app_message(self, row: Gtk.ListBoxRow) -> None:
         self.remove(row)
         app_page = cast(AppPage, self.get_parent())
@@ -111,8 +127,14 @@ class AppMessageListBox(Gtk.ListBox):
 
 
 class AppMessageRow(Gtk.ListBoxRow):
-    def __init__(self, category: str, message: Optional[str] = None) -> None:
+    def __init__(self,
+                 category: str,
+                 message: Optional[str] = None,
+                 plugin_manifests: Optional[list[PluginManifest]] = None
+                 ) -> None:
         Gtk.ListBoxRow.__init__(self)
+        self._plugin_manifests = plugin_manifests
+
         self._ui = get_builder('app_page.ui')
 
         if category == 'allow-gajim-update-check':
@@ -123,24 +145,46 @@ class AppMessageRow(Gtk.ListBoxRow):
             text = _('Version %s is available') % message
             self._ui.update_message.set_text(text)
 
+        if category == 'plugin-updates':
+            self.add(self._ui.plugin_updates)
+
+        if category == 'plugin-updates-finished':
+            self.add(self._ui.plugin_updates_finished)
+
         self._ui.connect_signals(self)
         self.show_all()
 
-    def _on_check_clicked(self, _button: Gtk.Button) -> None:
-        app.app.check_for_gajim_updates()
+    def _remove_app_message(self) -> None:
         list_box = cast(AppMessageListBox, self.get_parent())
         list_box.remove_app_message(self)
+
+    def _on_activate_check_clicked(self, _button: Gtk.Button) -> None:
+        app.app.check_for_gajim_updates()
+        self._remove_app_message()
 
     def _on_dismiss_check_clicked(self, _button: Gtk.Button) -> None:
         app.settings.set('check_for_update', False)
-        list_box = cast(AppMessageListBox, self.get_parent())
-        list_box.remove_app_message(self)
+        self._remove_app_message()
 
     def _on_visit_website_clicked(self, _button: Gtk.Button) -> None:
         open_uri('https://gajim.org/download')
-        list_box = cast(AppMessageListBox, self.get_parent())
-        list_box.remove_app_message(self)
+        self._remove_app_message()
 
-    def _on_dismiss_update_clicked(self, _button: Gtk.Button) -> None:
-        list_box = cast(AppMessageListBox, self.get_parent())
-        list_box.remove_app_message(self)
+    def _on_dismiss_clicked(self, _button: Gtk.Button) -> None:
+        self._remove_app_message()
+
+    def _on_update_plugins_clicked(self, _button: Gtk.Button) -> None:
+        if self._ui.auto_update_plugins.get_active():
+            app.settings.set('plugins_auto_update', True)
+        assert self._plugin_manifests is not None
+        app.plugin_repository.download_plugins(self._plugin_manifests)
+        self._remove_app_message()
+
+    def _on_dismiss_update_notification(self, _button: Gtk.Button) -> None:
+        if self._ui.notify_after_plugin_updates.get_active():
+            app.settings.set('plugins_notify_after_update', False)
+        self._remove_app_message()
+
+    def _on_open_plugins(self, _button: Gtk.Button) -> None:
+        app.app.activate_action('plugins', None)
+        self._remove_app_message()
