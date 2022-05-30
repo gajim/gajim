@@ -391,7 +391,8 @@ class StartChatDialog(Gtk.ApplicationWindow):
         except StanzaError as error:
             contact_conditions = [
                 'service-unavailable',  # Prosody
-                'subscription-required'  # ejabberd
+                'subscription-required',  # ejabberd
+                'feature-not-implemented'  # transports/bridges
             ]
             if error.condition in contact_conditions:
                 # These error conditions are the result of
