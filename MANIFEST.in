@@ -1,5 +1,3 @@
-include COPYING
-recursive-include po *.po
+recursive-include po *
 recursive-include data *.1 *.in
-recursive-include test *.py
-recursive-exclude * *.pyc
+recursive-include test test_*.py
