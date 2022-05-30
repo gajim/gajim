@@ -549,11 +549,14 @@ def get_groupchat_roster_menu(account: str,
     return menu
 
 
-def get_directory_search_menu(jid: str, copy_text: str) -> Gio.Menu:
+def get_component_search_menu(jid: Optional[str], copy_text: str) -> Gio.Menu:
     menu_items: list[tuple[str, str]] = [
         ('app.copy-text', _('Copy')),
-        ('app.start-chat', _('Start Chat…'))
     ]
+    if jid is not None:
+        menu_items.append(
+            ('app.start-chat', _('Start Chat…')))
+
     menu = Gio.Menu()
     for item in menu_items:
         action, label = item

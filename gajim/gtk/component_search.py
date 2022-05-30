@@ -40,7 +40,7 @@ from .assistant import ErrorPage
 from .assistant import Page
 from .assistant import ProgressPage
 from .dataform import DataFormWidget
-from .menus import get_directory_search_menu
+from .menus import get_component_search_menu
 from .util import ensure_not_destroyed
 from .util import EventHelper
 
@@ -208,6 +208,8 @@ class Result(Page):
         Page.__init__(self)
         self.title = _('Search Result')
 
+        self._jid_col: Optional[int] = None
+
         self._label = Gtk.Label(label=_('No results found'))
         self._label.get_style_context().add_class('bold16')
         self._label.set_no_show_all(True)
@@ -241,15 +243,20 @@ class Result(Page):
 
         fieldtypes: list[Union[Type[bool], Type[str]]] = []
         fieldvars: list[Any] = []
+        index = 0
         for field in form.reported.iter_fields():
             if field.type_ == 'boolean':
                 fieldtypes.append(bool)
             elif field.type_ in ('jid-single', 'text-single'):
                 fieldtypes.append(str)
+                if field.type_ == 'jid-single' or field.var == 'jid':
+                    # Enable Start Chat context menu entry
+                    self._jid_col = index
             else:
                 log.warning('Not supported field received: %s', field.type_)
                 continue
             fieldvars.append(field.var)
+            index += 1
 
         liststore = Gtk.ListStore(*fieldtypes)
 
@@ -298,7 +305,10 @@ class Result(Page):
         column_values = store[iter_]
         text = ' '.join(column_values)
 
-        menu = get_directory_search_menu(column_values[0], text)
+        jid = None
+        if self._jid_col is not None:
+            jid = column_values[self._jid_col]
+        menu = get_component_search_menu(jid, text)
 
         rectangle = Gdk.Rectangle()
         rectangle.x = int(event.x)
