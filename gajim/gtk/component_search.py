@@ -47,7 +47,7 @@ from .util import EventHelper
 log = logging.getLogger('gajim.gui.search')
 
 
-class DirectorySearch(Assistant, EventHelper):
+class ComponentSearch(Assistant, EventHelper):
     def __init__(self,
                  account: str,
                  jid: str,

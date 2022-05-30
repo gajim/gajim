@@ -59,7 +59,7 @@ from gajim.common.i18n import _
 from gajim.common.const import StyleAttr
 
 from .dialogs import ErrorDialog
-from .search import DirectorySearch
+from .component_search import ComponentSearch
 from .util import icon_exists
 from .builder import get_builder
 from .util import open_window
@@ -1310,7 +1310,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         if not iter_:
             return
         service = model[iter_][0]
-        DirectorySearch(self.account, service, self.window.window)
+        ComponentSearch(self.account, service, self.window.window)
 
     def cleanup(self):
         AgentBrowser.cleanup(self)
