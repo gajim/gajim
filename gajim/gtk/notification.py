@@ -248,7 +248,7 @@ class PopupNotification(Gtk.Window):
             # present_with_time needs to be called at this instant in order to
             # work on Windows
             app.window.present_with_time(event.time)
-            app.app.activate_action(f'app.{self._event.account}-open-event',
+            app.app.activate_action(f'{self._event.account}-open-event',
                                     params.to_variant())
 
         self.destroy()
