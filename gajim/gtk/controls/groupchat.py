@@ -126,6 +126,10 @@ class GroupchatControl(BaseControl):
         self.xml.roster_revealer.add(self.roster)
         self.xml.roster_revealer.set_reveal_child(
             not app.settings.get('hide_groupchat_occupants_list'))
+        app.settings.bind_signal(
+            'hide_groupchat_occupants_list',
+            self.xml.roster_revealer,
+            'set_reveal_child')
         self.roster.connect('row-activated', self._on_roster_row_activated)
 
         self.add_actions()
