@@ -16,6 +16,8 @@
 Handles Jingle Transports (currently only ICE-UDP)
 """
 
+from __future__ import annotations
+
 from typing import Any
 from typing import Optional
 
@@ -27,6 +29,11 @@ from enum import IntEnum, unique
 import nbxmpp
 from nbxmpp.namespaces import Namespace
 from nbxmpp.util import generate_id
+
+try:
+    from gi.repository import Farstream
+except ImportError:
+    pass
 
 from gajim.common import app
 from gajim.common.client import Client
@@ -421,11 +428,6 @@ class JingleTransportIBB(JingleTransport):
         transport.setAttr('block-size', self.block_sz)
         transport.setAttr('sid', self.sid)
         return transport
-
-try:
-    from gi.repository import Farstream
-except ImportError:
-    pass
 
 
 class JingleTransportICEUDP(JingleTransport):
