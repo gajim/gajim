@@ -10,8 +10,11 @@
         ".git"
     ],
     "include": [
-        "win/*",
+        "launch.py",
+        "setup.py",
         ".ci/*",
+        "scripts/*",
+        "win/*",
         "gajim/gajim.py",
         "gajim/plugins/gajimplugin.py",
         "gajim/plugins/helpers.py",
