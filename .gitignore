@@ -8,32 +8,23 @@ syntax: glob
 *.pyo
 *~
 *#
-autom4te.cache
-data/org.gajim.Gajim.appdata.xml
-data/org.gajim.Gajim.desktop
-libtool
-po/.intltool-merge-cache
-data/gajim-remote.desktop
-po/POTFILES
-po/stamp-it
-stamp-h1
-Makefile
+
+gajim/gui/*
+!gajim/gui/__init__.py
+
+# Cache
+
 __pycache__/
 .mypy_cache/
+
+# Build folders
+
 debian_build/
 build/
 dist/
 gajim.egg-info/
-src/gtk/
 win/_build_root
+
+# IDE files
+
 .vscode
-
-syntax: regexp
-^config\.*
-^config\/
-^scripts\/gajim.*
-
-!MANIFEST.in
-
-gajim/gui/*
-!gajim/gui/__init__.py
