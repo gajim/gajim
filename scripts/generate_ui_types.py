@@ -3,6 +3,7 @@
 # Reads all .ui files and creates builder.pyi
 # Excecute this script from the repo root dir
 
+from io import TextIOWrapper
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
@@ -41,22 +42,22 @@ GET_BUILDER = '''
 def get_builder(file_name: str, widgets: list[str] = ...) -> Builder: ...'''
 
 
-def make_class_name(path):
+def make_class_name(path: Path) -> str:
     name = path.name.removesuffix('.ui')
     names = name.split('_')
     names = map(lambda x: x.capitalize(), names)
     return ''.join(names) + 'Builder'
 
 
-def parse(path, file):
+def parse(path: Path, file: TextIOWrapper) -> str:
     print('read', path)
-    lines = []
+    lines: list[str] = []
     tree = ET.parse(path)
     for node in tree.iter(tag='object'):
         id_ = node.attrib.get('id')
         if id_ is None:
             continue
-        klass = node.attrib.get('class')
+        klass = node.attrib['class']
         if klass.startswith('GtkSource'):
             klass = f'GtkSource.{klass.removeprefix("GtkSource")}'
         elif klass.startswith('Atk'):
@@ -78,7 +79,7 @@ def parse(path, file):
     return klass_name
 
 
-builder_names = []
+builder_names: list[tuple[str, str]] = []
 
 with out_path.open(mode='w', encoding='utf8') as file:
     file.write(IMPORTS)
