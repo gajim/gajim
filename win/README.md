@@ -18,6 +18,15 @@ Download [msys2](https://www.msys2.org/) (msys2-x86_64-xxx.exe) and follow the i
 * Now go to the git root dir `cd ..`
 * Launch Gajim `./launch.py`
 
+### GtkInspector
+
+For Gtk Inspector to work, add the following registry key
+```
+HKEY_CURRENT_USER\Software\GSettings\org\gtk\settings\debug
+DWORD enable-inspector-keybinding = 1
+```
+
+Afterwards press CTRL + SHIFT + I, to  activate GtkInspector
 
 ## Build Gajim / Create an Installer
 
