@@ -565,8 +565,7 @@ class AccountRow(Gtk.ListBoxRow):
         if (account in app.connections and
                 not app.connections[account].state.is_disconnected):
             # Connecting or connected
-            window = get_app_window('AccountsWindow')
-            assert window is not None
+            window = cast(AccountsWindow, get_app_window('AccountsWindow'))
             ConfirmationDialog(
                 _('Disable Account'),
                 _('Account %s is still connected') % account,
@@ -707,8 +706,7 @@ class GeneralPage(GenericSettingPage):
         GenericSettingPage.__init__(self, account, settings)
 
     def _on_account_name_change(self, *args: Any) -> None:
-        window = get_app_window('AccountsWindow')
-        assert window is not None
+        window = cast(AccountsWindow, get_app_window('AccountsWindow'))
         window.update_account_label(self.account)
 
 
