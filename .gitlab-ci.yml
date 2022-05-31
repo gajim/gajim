@@ -1,4 +1,4 @@
-image: ci-gajim:master
+image: gajim-master:latest
 
 workflow:
   rules:
@@ -57,13 +57,14 @@ test-unittest:
   interruptible: true
 
 build-linux:
+  image: gajim-deb-build:latest
   stage: build
   rules:
     - if: '$GAJIM_NIGHTLY_BUILD'
     - if: '$CI_COMMIT_TAG'
   script:
     - python3 setup.py sdist
-    # - python3 .ci/debian_build.py "$(find dist/gajim-*)" 1
+    - python3 .ci/debian_build.py "$(find dist/gajim-*)" 1
 
   artifacts:
     name: "gajim-$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA"
@@ -111,6 +112,7 @@ deploy-linux:
 #     - python3 .ci/deploy.py build
 
 deploy-flatpak:
+  image: git-deploy:latest
   stage: deploy
   needs: []
   rules:
@@ -131,6 +133,7 @@ deploy-flatpak:
     # - git push
 
 publish-release:
+  image: git-deploy:latest
   stage: publish
   needs: ['deploy-linux', build-and-deploy-windows]
   rules:
