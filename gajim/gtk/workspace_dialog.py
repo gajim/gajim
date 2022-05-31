@@ -56,7 +56,8 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         color: Optional[str] = None
         self._avatar_sha: Optional[str] = None
 
-        if workspace_id is None:
+        workspaces = app.settings.get_workspaces()
+        if workspace_id is None or len(workspaces) == 1:
             self._ui.remove_workspace_button.set_sensitive(False)
         else:
             name = app.settings.get_workspace_setting(
