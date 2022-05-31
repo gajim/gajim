@@ -692,6 +692,10 @@ class ChatRow(Gtk.ListBoxRow):
                          ) -> None:
         if event.button == 3:  # right click
             self._popup_menu(event)
+        elif event.button == 2:  # middle click
+            app.window.activate_action(
+                'remove-chat',
+                GLib.Variant('as', [self.account, str(self.jid)]))
 
     def _popup_menu(self, event: Gdk.EventButton):
         menu = get_chat_list_row_menu(
