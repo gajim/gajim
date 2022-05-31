@@ -22,13 +22,12 @@
       <li>Chat securely with End-to-End encryption via OMEMO or OpenPGP</li>
       <li>Use your favorite emoticons, set your own profile picture</li>
       <li>Keep and manage all your chat history</li>
-      <li>Organize your chats with tabs</li>
+      <li>Organize your chats with workspaces</li>
       <li>Automatic spell-checking for your messages</li>
       <li>Connect to other Messengers via Transports (Facebook, IRC, ...)</li>
       <li>Lookup things on Wikipedia, dictionaries or other search engines directly from the chat window</li>
-      <li>Set your activity, tune, and mood to show your friends how you are feeling</li>
+      <li>Set your activity or tune to show your friends how you are feeling</li>
       <li>Support for multiple accounts</li>
-      <li>Group multiple contacts from one friend to a single Meta-Contact</li>
       <li>XML console to see what's happening on the protocol layer</li>
       <li>Support for service discovery including nodes and search for users</li>
       <li>Even more features via plugins</li>
