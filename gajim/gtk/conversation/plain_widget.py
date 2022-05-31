@@ -17,6 +17,7 @@ from __future__ import annotations
 from typing import Any
 
 import logging
+import sys
 
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -52,15 +53,17 @@ class PlainWidget(Gtk.Box):
 
         self._account = account
 
-        # We use a Gtk.Textview on Windows and MacOS, since there is no support
-        # for rendering color fonts (Emojis) on Windows/MacOS yet, see:
-        # https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/244
+        # We use a Gtk.Textview on MacOS, since there is no support
+        # for rendering color fonts (Emojis) on MacOS yet, see:
+        # https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/289
         # https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/9
-        # if app.settings.get('dev_use_message_label'):
-        #     self._text_widget = MessageLabel(self._account, selectable)
-        # else:
-        #     self._text_widget = MessageTextview(self._account)
-        self._text_widget = MessageLabel(self._account, selectable)
+        if sys.platform == 'darwin':
+            if app.settings.get('dev_use_message_label'):
+                self._text_widget = MessageLabel(self._account, selectable)
+            else:
+                self._text_widget = MessageTextview(self._account)
+        else:
+            self._text_widget = MessageLabel(self._account, selectable)
         self.add(self._text_widget)
 
     def add_content(self, block: PlainBlock) -> None:

@@ -491,7 +491,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             return Gdk.EVENT_STOP
 
         if action == 'show-emoji-chooser':
-            if sys.platform in ('win32', 'darwin'):
+            if sys.platform == 'darwin':
+                # TODO: Remove if colored emoji rendering works well on
+                # Windows and MacOS
                 self.xml.emoticons_button.get_popover().show()
                 return Gdk.EVENT_STOP
             self.msg_textview.emit('insert-emoji')
@@ -1297,7 +1299,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         if not app.settings.get('emoticons_theme'):
             return
 
-        if sys.platform in ('win32', 'darwin'):
+        if sys.platform == 'darwin':
+            # TODO: Remove if colored emoji rendering works well on
+            # Windows and MacOS
             emoji_chooser.text_widget = self.msg_textview
             self.xml.emoticons_button.set_popover(emoji_chooser)
             return

@@ -116,7 +116,9 @@ class Preferences(Gtk.ApplicationWindow):
         self._ui.connect_signals(self)
 
         self.show_all()
-        if sys.platform not in ('win32', 'darwin'):
+        if sys.platform != 'darwin':
+            # TODO: Remove if colored emoji rendering works well on
+            # Windows and MacOS
             self._ui.emoji.hide()
 
     def get_ui(self):
@@ -701,7 +703,9 @@ class Themes(PreferenceBox):
 
 class Emoji(PreferenceBox):
     def __init__(self, *args: Any) -> None:
-        if sys.platform not in ('win32', 'darwin'):
+        if sys.platform != 'darwin':
+            # TODO: Remove if colored emoji rendering works well on
+            # Windows and MacOS
             PreferenceBox.__init__(self, [])
             return
 

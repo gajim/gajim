@@ -232,7 +232,9 @@ class GajimApplication(Gtk.Application, CoreApplication):
         idle.Monitor.set_interval(app.settings.get('autoawaytime') * 60,
                                   app.settings.get('autoxatime') * 60)
 
-        if sys.platform in ('win32', 'darwin'):
+        if sys.platform == 'darwin':
+            # TODO: Remove if colored emoji rendering works well on
+            # Windows and MacOS
             from gajim.gui.emoji_chooser import emoji_chooser
             emoji_chooser.load()
 

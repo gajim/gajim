@@ -19,6 +19,8 @@
 
 from typing import Any
 
+import sys
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
@@ -222,6 +224,10 @@ class MessageInputTextView(Gtk.TextView):
             buf.get_iter_at_offset(end_offset + 2))
 
     def replace_emojis(self) -> None:
+        if sys.platform != 'darwin':
+            # TODO: Remove if colored emoji rendering works well on MacOS
+            return
+
         theme = app.settings.get('emoticons_theme')
         if not theme or theme == 'font':
             return
