@@ -61,7 +61,7 @@ Recommends:
     python3-sentry-sdk,
 Suggests:
     libxss1,
-Description: GTK+-based Jabber client
- Gajim is a Jabber client. It has a tabbed user interface with normal chats,
- group chats, and has many features such as, TLS, GPG, SSL, multiple accounts,
- avatars, file transfers, audio/video call, D-Bus and Metacontacts.
+Description: Fully-featured XMPP chat client
+ Gajim aims to be an easy to use and fully-featured XMPP client.
+ Just chat with your friends or family, easily share pictures and 
+ thoughts or discuss the news with your groups.
