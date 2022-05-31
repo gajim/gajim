@@ -56,10 +56,11 @@ class PlainWidget(Gtk.Box):
         # for rendering color fonts (Emojis) on Windows/MacOS yet, see:
         # https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/244
         # https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/9
-        if app.settings.get('dev_use_message_label'):
-            self._text_widget = MessageLabel(self._account, selectable)
-        else:
-            self._text_widget = MessageTextview(self._account)
+        # if app.settings.get('dev_use_message_label'):
+        #     self._text_widget = MessageLabel(self._account, selectable)
+        # else:
+        #     self._text_widget = MessageTextview(self._account)
+        self._text_widget = MessageLabel(self._account, selectable)
         self.add(self._text_widget)
 
     def add_content(self, block: PlainBlock) -> None:
