@@ -90,6 +90,7 @@ class ChatListStack(Gtk.Stack):
         actions = [
             ('toggle-chat-pinned', 'a{sv}', self._toggle_chat_pinned),
             ('move-chat-to-workspace', 'a{sv}', self._move_chat_to_workspace),
+            ('move-chat-to-new-workspace', 'a{sv}', self._move_chat_to_new_workspace),
             ('mark-as-read', 'a{sv}', self._mark_as_read),
         ]
 
@@ -229,6 +230,13 @@ class ChatListStack(Gtk.Stack):
         new_chatlist.add_chat(params.account, params.jid, type_)
         self.store_open_chats(current_chatlist.workspace_id)
         self.store_open_chats(params.workspace_id)
+
+    @structs.actionmethod
+    def _move_chat_to_new_workspace(self,
+                                    _action: Gio.SimpleAction,
+                                    params: structs.AccountJidParam
+                                    ) -> None:
+        app.window.move_chat_to_new_workspace(params.account, params.jid)
 
     @structs.actionmethod
     def _mark_as_read(self,

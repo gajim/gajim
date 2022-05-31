@@ -428,11 +428,15 @@ def get_chat_list_row_menu(workspace_id: str,
     toggle_label = _('Unpin Chat') if pinned else _('Pin Chat')
     menu.add_item(toggle_label, 'win.toggle-chat-pinned', params)
 
+    submenu = menu.add_submenu(_('Move Chat'))
     workspaces = app.settings.get_workspaces()
     if len(workspaces) > 1:
-        submenu = menu.add_submenu(_('Move Chat'))
         for name, params in get_workspace_params(workspace_id, account, jid):
             submenu.add_item(name, 'win.move-chat-to-workspace', params)
+
+    params = AccountJidParam(account=account, jid=jid)
+    submenu.add_item(
+        _('New Workspace'), 'win.move-chat-to-new-workspace', params)
 
     if can_add_to_roster(contact):
         params = AccountJidParam(account=account, jid=jid)

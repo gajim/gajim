@@ -15,8 +15,9 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
+from typing import cast
 from typing import Generator
+from typing import Optional
 
 import logging
 import os
@@ -529,6 +530,24 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def get_chat_list(self, workspace_id: str) -> ChatList:
         chat_list_stack = self._chat_page.get_chat_list_stack()
         return chat_list_stack.get_chatlist(workspace_id)
+
+    def move_chat_to_new_workspace(self,
+                                   account: str,
+                                   jid: JID
+                                   ) -> None:
+        chat_list_stack = self._chat_page.get_chat_list_stack()
+        current_chatlist = cast(ChatList, chat_list_stack.get_visible_child())
+        type_ = current_chatlist.get_chat_type(account, jid)
+        if type_ is None:
+            return
+        current_chatlist.remove_chat(account, jid)
+
+        workspace_id = app.settings.add_workspace(_('My Workspace'))
+        app.window.add_workspace(workspace_id)
+        new_chatlist = self.get_chat_list(workspace_id)
+        new_chatlist.add_chat(account, jid, type_)
+        chat_list_stack.store_open_chats(current_chatlist.workspace_id)
+        chat_list_stack.store_open_chats(workspace_id)
 
     def _add_group_chat(self,
                         _action: Gio.SimpleAction,

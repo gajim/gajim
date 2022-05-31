@@ -149,13 +149,16 @@ class WorkspaceSideBar(Gtk.ListBox):
 
     def _process_chat_list_drop(self, identifier: str, y_coord: int) -> None:
         account, jid = identifier.split()
+        jid = JID.from_string(jid)
         workspace_row = cast(Workspace, self.get_row_at_y(y_coord))
         if workspace_row.workspace_id == 'add':
+            app.window.move_chat_to_new_workspace(
+                account, jid)
             return
 
         params = ChatListEntryParam(workspace_id=workspace_row.workspace_id,
                                     account=account,
-                                    jid=JID.from_string(jid))
+                                    jid=jid)
         app.window.activate_action('move-chat-to-workspace',
                                    params.to_variant())
 
