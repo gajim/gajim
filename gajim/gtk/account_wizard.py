@@ -12,10 +12,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Any
-from typing import List
+from typing import cast
+from typing import Literal
 from typing import Optional
-from typing import Tuple
+from typing import overload
 from typing import Union
 
 import logging
@@ -41,7 +44,8 @@ from nbxmpp.task import Task
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import helpers
-from gajim.common.events import StanzaReceived, StanzaSent
+from gajim.common.events import StanzaReceived
+from gajim.common.events import StanzaSent
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import validate_jid
 from gajim.common.helpers import get_proxy
@@ -49,10 +53,12 @@ from gajim.common.i18n import _
 from gajim.common.const import SASL_ERRORS
 from gajim.common.const import GIO_TLS_ERRORS
 
+from .accounts import AccountsWindow
 from .assistant import Assistant
-from .assistant import Page
-from .assistant import SuccessPage
 from .assistant import ErrorPage
+from .assistant import Page
+from .assistant import ProgressPage
+from .assistant import SuccessPage
 from .dataform import DataFormWidget
 from .builder import get_builder
 from .util import open_window
@@ -86,7 +92,7 @@ class AccountWizard(Assistant):
                         'error': Error(),
                         })
 
-        self._progress = self.add_default_page('progress')
+        self.add_default_page('progress')
 
         self.get_page('login').connect('clicked', self._on_button_clicked)
         self.connect('button-clicked', self._on_assistant_button_clicked)
@@ -100,7 +106,31 @@ class AccountWizard(Assistant):
         self._client: Optional[Client] = None
         self._method: str = 'login'
 
-    def get_currenct_method(self) -> str:
+    @overload
+    def get_page(self, name: Literal['login']) -> Login: ...
+    @overload
+    def get_page(self, name: Literal['signup']) -> Signup: ...
+    @overload
+    def get_page(self, name: Literal['advanced']) -> AdvancedSettings: ...
+    @overload
+    def get_page(self,
+                 name: Literal['security-warning']
+                 ) -> SecurityWarning: ...
+    @overload
+    def get_page(self, name: Literal['form']) -> Form: ...
+    @overload
+    def get_page(self, name: Literal['redirect']) -> Redirect: ...
+    @overload
+    def get_page(self, name: Literal['success']) -> Success: ...
+    @overload
+    def get_page(self, name: Literal['error']) -> Error: ...
+    @overload
+    def get_page(self, name: Literal['progress']) -> ProgressPage: ...
+
+    def get_page(self, name: str) -> Page:
+        return self._pages[name]
+
+    def get_current_method(self) -> str:
         return self._method
 
     def _on_button_clicked(self, _page: Gtk.Widget, button_name: str) -> None:
@@ -126,8 +156,9 @@ class AccountWizard(Assistant):
 
             elif page == 'security-warning':
                 if self.get_page('security-warning').trust_certificate:
-                    app.cert_store.add_certificate(
-                        self.get_page('security-warning').cert)
+                    cert = self.get_page('security-warning').cert
+                    assert cert is not None
+                    app.cert_store.add_certificate(cert)
                 self._test_credentials(ignore_all_errors=True)
 
         elif button_name == 'signup':
@@ -150,8 +181,9 @@ class AccountWizard(Assistant):
 
             elif page == 'security-warning':
                 if self.get_page('security-warning').trust_certificate:
-                    app.cert_store.add_certificate(
-                        self.get_page('security-warning').cert)
+                    cert = self.get_page('security-warning').cert
+                    assert cert is not None
+                    app.cert_store.add_certificate(cert)
 
                 if self.get_page('signup').is_anonymous():
                     self._test_anonymous_server(ignore_all_errors=True)
@@ -210,7 +242,7 @@ class AccountWizard(Assistant):
 
     def _get_base_client(self,
                          domain: str,
-                         username: str,
+                         username: Optional[str],
                          mode: Mode,
                          advanced: bool,
                          ignore_all_errors: bool
@@ -413,8 +445,8 @@ class AccountWizard(Assistant):
         self.show_page('error', Gtk.StackTransitionType.SLIDE_LEFT)
 
     def _show_progress_page(self, title: str, text: str) -> None:
-        self._progress.set_title(title)
-        self._progress.set_text(text)
+        self.get_page('progress').set_title(title)
+        self.get_page('progress').set_text(text)
         self.show_page('progress', Gtk.StackTransitionType.SLIDE_LEFT)
 
     @staticmethod
@@ -587,7 +619,7 @@ class Login(Page):
             return
         text = text.split('@', 1)[0]
 
-        model = entry.get_completion().get_model()
+        model = cast(Gtk.ListStore, entry.get_completion().get_model())
         model.clear()
 
         for server in self._servers:
@@ -626,12 +658,12 @@ class Login(Page):
     def _set_complete(self, *args: Any) -> None:
         address = self._validate_jid(self._ui.log_in_address_entry.get_text())
         password = self._ui.log_in_password_entry.get_text()
-        self._ui.log_in_button.set_sensitive(address and password)
+        self._ui.log_in_button.set_sensitive(bool(address and password))
 
     def is_advanced(self) -> bool:
         return self._ui.login_advanced_checkbutton.get_active()
 
-    def get_credentials(self) -> Tuple[str, str]:
+    def get_credentials(self) -> tuple[str, str]:
         data = (self._ui.log_in_address_entry.get_text(),
                 self._ui.log_in_password_entry.get_text())
         return data
@@ -713,7 +745,7 @@ class Signup(Page):
         open_uri(uri)
         return Gdk.EVENT_STOP
 
-    def get_visible_buttons(self) -> List[str]:
+    def get_visible_buttons(self) -> list[str]:
         return ['back', 'signup']
 
     def get_default_button(self) -> str:
@@ -753,7 +785,7 @@ class AdvancedSettings(Page):
         active = self._ui.proxies_combobox.get_active()
         return self._ui.proxies_combobox.get_model()[active][0]
 
-    def get_custom_host(self) -> Optional[Tuple[str,
+    def get_custom_host(self) -> Optional[tuple[str,
                                                 ConnectionProtocol,
                                                 ConnectionType]]:
         host = self._ui.custom_host_entry.get_text()
@@ -841,11 +873,13 @@ class AdvancedSettings(Page):
 
         self.update_page_complete()
 
-    def get_visible_buttons(self) -> List[str]:
-        return ['back', self.get_toplevel().get_currenct_method()]
+    def get_visible_buttons(self) -> list[str]:
+        return [
+            'back',
+            cast(AccountWizard, self.get_toplevel()).get_current_method()]
 
     def get_default_button(self) -> str:
-        return self.get_toplevel().get_currenct_method()
+        return cast(AccountWizard, self.get_toplevel()).get_current_method()
 
 
 class SecurityWarning(Page):
@@ -867,7 +901,7 @@ class SecurityWarning(Page):
     def set_warning(self,
                     domain: str,
                     cert: Gio.TlsCertificate,
-                    errors: List[Gio.TlsCertificateFlags]
+                    errors: list[Gio.TlsCertificateFlags]
                     ) -> None:
         # Clear list
         self._cert = cert
@@ -903,8 +937,10 @@ class SecurityWarning(Page):
     def trust_certificate(self) -> bool:
         return self._ui.trust_cert_checkbutton.get_active()
 
-    def get_visible_buttons(self) -> List[str]:
-        return ['back', self.get_toplevel().get_currenct_method()]
+    def get_visible_buttons(self) -> list[str]:
+        return [
+            'back',
+            cast(AccountWizard, self.get_toplevel()).get_current_method()]
 
     def get_default_button(self) -> str:
         return 'back'
@@ -947,7 +983,7 @@ class Form(Page):
         self.pack_start(self._current_form, True, True, 0)
         self._current_form.show_all()
 
-    def get_credentials(self) -> Tuple[str, str]:
+    def get_credentials(self) -> tuple[str, str]:
         return (self._current_form.get_form()['username'].value,
                 self._current_form.get_form()['password'].value)
 
@@ -965,7 +1001,7 @@ class Form(Page):
     def focus(self) -> None:
         self._current_form.focus_first_entry()
 
-    def get_visible_buttons(self) -> List[str]:
+    def get_visible_buttons(self) -> list[str]:
         return ['back', 'signup']
 
     def get_default_button(self) -> str:
@@ -990,9 +1026,10 @@ class Redirect(Page):
         self._link = link
 
     def _on_link_button(self, _button:Gtk.Button) -> None:
+        assert self._link is not None
         open_uri(self._link)
 
-    def get_visible_buttons(self) -> List[str]:
+    def get_visible_buttons(self) -> list[str]:
         return ['back']
 
 
@@ -1059,11 +1096,11 @@ class Success(SuccessPage):
             app.settings.set_account_setting(
                 self._account, 'account_label', self._label)
         app.css_config.refresh()
-        window = get_app_window('AccountsWindow')
+        window = cast(AccountsWindow, get_app_window('AccountsWindow'))
         if window is not None:
             window.update_account_label(self._account)
 
-    def get_visible_buttons(self) -> List[str]:
+    def get_visible_buttons(self) -> list[str]:
         return ['connect']
 
 
@@ -1072,5 +1109,5 @@ class Error(ErrorPage):
         ErrorPage.__init__(self)
         self.set_heading(_('An error occurred during account creation'))
 
-    def get_visible_buttons(self) -> List[str]:
+    def get_visible_buttons(self) -> list[str]:
         return ['back']
