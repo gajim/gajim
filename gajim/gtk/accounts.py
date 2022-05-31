@@ -44,6 +44,7 @@ from .const import SettingType
 from .settings import SettingsDialog
 from .settings import SettingsBox
 from .settings import PopoverSetting
+from .util import get_app_window
 from .util import open_window
 
 log = logging.getLogger('gajim.gui.accounts')
@@ -564,7 +565,8 @@ class AccountRow(Gtk.ListBoxRow):
         if (account in app.connections and
                 not app.connections[account].state.is_disconnected):
             # Connecting or connected
-            window = cast(Gtk.Window, self.get_toplevel())
+            window = get_app_window('AccountsWindow')
+            assert window is not None
             ConfirmationDialog(
                 _('Disable Account'),
                 _('Account %s is still connected') % account,
@@ -705,7 +707,8 @@ class GeneralPage(GenericSettingPage):
         GenericSettingPage.__init__(self, account, settings)
 
     def _on_account_name_change(self, *args: Any) -> None:
-        window = cast(AccountsWindow, self.get_toplevel())
+        window = get_app_window('AccountsWindow')
+        assert window is not None
         window.update_account_label(self.account)
 
 
