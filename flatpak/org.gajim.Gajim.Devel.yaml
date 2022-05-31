@@ -60,11 +60,11 @@ modules:
   - name: python3-pyparsing
     buildsystem: simple
     build-commands:
-      - pip3 install pyparsing-3.0.8-py3-none-any.whl
+      - pip3 install pyparsing-3.0.9-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/pyparsing/pyparsing-3.0.8-py3-none-any.whl
-        sha256: ef7b523f6356f763771559412c0d7134753f037822dad1b16945b7b846f7ad06
+        url: https://files.pythonhosted.org/packages/py3/p/pyparsing/pyparsing-3.0.9-py3-none-any.whl
+        sha256: 5026bae9a10eeaefb61dab2f09052b9f4307d44aee4eda64b309723d8d206bbc
 
   - name: python3-packaging
     buildsystem: simple
@@ -182,24 +182,24 @@ modules:
   - name: python3-importlib-metadata
     buildsystem: simple
     build-commands:
-      - pip3 install importlib_metadata-4.11.3-py3-none-any.whl
+      - pip3 install importlib_metadata-4.11.4-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/i/importlib_metadata/importlib_metadata-4.11.3-py3-none-any.whl
-        sha256: 1208431ca90a8cca1a6b8af391bb53c1a2db74e5d1cef6ddced95d4b2062edc6
+        url: https://files.pythonhosted.org/packages/py3/i/importlib_metadata/importlib_metadata-4.11.4-py3-none-any.whl
+        sha256: c58c8eb8a762858f49e18436ff552e83914778e50e9d2f1660535ffb364552ec
 
   - name: python3-keyring
     buildsystem: simple
     build-commands:
-      - pip3 install keyring-23.5.0-py3-none-any.whl
+      - pip3 install keyring-23.5.1-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/k/keyring/keyring-23.5.0-py3-none-any.whl
-        sha256: b0d28928ac3ec8e42ef4cc227822647a19f1d544f21f96457965dc01cf555261
+        url: https://files.pythonhosted.org/packages/py3/k/keyring/keyring-23.5.1-py3-none-any.whl
+        sha256: 9ef58314bcc823f426b49ec787539a2d73571b37de4cd498f839803b01acff1e
 
   - name: python3-css-parser
     buildsystem: simple
@@ -271,8 +271,8 @@ modules:
       - pip3 install .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/p/pillow/Pillow-9.1.0.tar.gz
-        sha256: f401ed2bbb155e1ade150ccc63db1a4f6c1909d3d378f7d1235a44e90d75fb97
+        url: https://files.pythonhosted.org/packages/source/p/pillow/Pillow-9.1.1.tar.gz
+        sha256: 7502539939b53d7565f3d11d87c78e7ec900d3c72945d4ee0e2f250d598309a0
 
   # sentry-sdk dependency
   - name: python3-urllib3
@@ -287,20 +287,20 @@ modules:
   - name: python3-certifi
     buildsystem: simple
     build-commands:
-      - pip3 install certifi-2021.10.8-py2.py3-none-any.whl
+      - pip3 install certifi-2022.5.18.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/c/certifi/certifi-2021.10.8-py2.py3-none-any.whl
-        sha256: d62a0163eb4c2344ac042ab2bdf75399a71a2d8c7d47eac2e2ee91b9d6339569
+        url: https://files.pythonhosted.org/packages/py3/c/certifi/certifi-2022.5.18.1-py3-none-any.whl
+        sha256: f1d53542ee8cbedbe2118b5686372fb33c297fcd6379b050cca0ef13a597382a
 
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-1.5.11-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-1.5.12-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.5.11-py2.py3-none-any.whl
-        sha256: c17179183cac614e900cbd048dab03f49a48e2820182ec686c25e7ce46f8548f
+        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.5.12-py2.py3-none-any.whl
+        sha256: 778b53f0a6c83b1ee43d3b7886318ba86d975e686cb2c7906ccc35b334360be1
 
   - name: python3-nbxmpp
     buildsystem: simple
