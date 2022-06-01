@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Optional
 
 import logging
@@ -19,7 +21,10 @@ from pathlib import Path
 
 from gi.repository import GLib
 from gi.repository import Gtk
-from gi.repository import Gst
+try:
+    from gi.repository import Gst
+except Exception:
+    pass
 
 from gajim.common.i18n import _
 

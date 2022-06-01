@@ -31,7 +31,11 @@ from urllib.parse import ParseResult
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Gio
-from gi.repository import GstPbutils
+
+try:
+    from gi.repository import GstPbutils
+except Exception:
+    pass
 
 from PIL import Image
 from PIL import ImageFile
