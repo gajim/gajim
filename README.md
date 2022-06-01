@@ -16,11 +16,6 @@
 - GLib (>=2.60.0)
 - gir1.2-gtksource-4
 - gir1.2-soup-2.4
-- gir1.2-gstreamer-1.0
-- gir1.2-gst-plugins-base-1.0
-- gstreamer1.0-plugins-ugly
-- gstreamer1.0-libav
-- gstreamer1.0-gtk3
 
 ### Optional Runtime Requirements
 
@@ -33,7 +28,15 @@
 - gir1.2-networkmanager-1.0 for network lose detection
 - gir1.2-geoclue-2.0 for sharing your location
 - gir1.2-gsound-1.0 for sound on Linux
+
+#### For Video and Audio Calls
+
 - gir1.2-farstream-0.2 for video calls
+- gir1.2-gstreamer-1.0 for video and audio calls
+- gir1.2-gst-plugins-base-1.0 for video and audio calls
+- gstreamer1.0-plugins-ugly for video and audio calls
+- gstreamer1.0-libav for video and audio calls
+- gstreamer1.0-gtk3 
 
 ### Compile-time Requirements
 
