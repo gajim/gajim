@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 13:53+0000\n"
-"PO-Revision-Date: 2022-05-25 02:29+0000\n"
+"POT-Creation-Date: 2022-05-31 18:12+0000\n"
+"PO-Revision-Date: 2022-05-26 22:21+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
 "ja/>\n"
@@ -57,25 +57,6 @@ msgstr " (音声チャット)"
 #, python-brace-format
 msgid " by {actor}"
 msgstr " {actor} によって"
-
-msgid "$S (Away: Idle more than $T min)"
-msgstr "$S (操作のない状態が $T 分を超えたため、離席中とします)"
-
-msgid "$S (Not available: Idle more than $T min)"
-msgstr "$S (操作のない状態が $T 分を超えたため、不在とします)"
-
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoawaytime' "
-"value."
-msgstr ""
-"$S は現在の状況メッセージに置き換えられます。$T は 'autoawaytime'(自動離席の"
-"時間) の値です。"
-
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoxatime' value."
-msgstr ""
-"$S は現在の状況メッセージに置き換えられます。$T は 'autoxatime'(自動不在の時"
-"間) の値です。"
 
 #, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
@@ -204,9 +185,9 @@ msgstr ""
 msgid "%s not found"
 msgstr "%s は見つかりません"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s s"
-msgstr "%s s"
+msgstr "%s 秒"
 
 #, python-format
 msgid "%s stopped sharing their status"
@@ -270,9 +251,6 @@ msgstr "1年"
 
 msgid "2 Days"
 msgstr "2日"
-
-msgid "2: System, 1: Enabled, 0: Disabled"
-msgstr "2: システム 1: 有効化 0: 無効化"
 
 msgid "3 Months"
 msgstr "3か月"
@@ -696,6 +674,10 @@ msgstr "アカウント"
 msgid "Action when left-clicking a preview"
 msgstr "プレビューを左クリックしたときの動作"
 
+#, fuzzy
+msgid "Activate"
+msgstr "有効"
+
 msgid "Activated"
 msgstr "有効"
 
@@ -828,18 +810,8 @@ msgstr "すべてのファイル"
 msgid "All other group chat participants can see your XMPP address"
 msgstr "談話室のすべての参加者があなたの XMPP アドレスを見ることができます"
 
-msgid ""
-"Allow Gajim to send information about the operating system you are running."
-msgstr "Gajim が使用中の OS を通知することを許可します。"
-
-msgid "Allow Gajim to send your local time."
-msgstr "Gajim があなたの現地時間を通知することを許可します。"
-
 msgid "Allow a participant to send you public or private messages"
 msgstr "参加者がメッセージ (私信も含む) を送ってくることを許可します"
-
-msgid "Allow certificate verification with POSH."
-msgstr "POSH での証明書の検証を許します。"
 
 msgid ""
 "Allow to hide the contact list window even if the notification area icon is "
@@ -1305,34 +1277,6 @@ msgstr "OMEMO または OpenPGP での端末間暗号化による安全なチャ
 msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
 msgstr "OMEMO または OpenPGP での端末間暗号化による安全なチャット。"
 
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: 'all', "
-"'composing_only', 'disabled'"
-msgstr ""
-"相手先に送信されるチャット状態通知。all (すべての状態)、composing_only (入力"
-"中のみ)、disabled (通知しない) のいずれか"
-
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: all, "
-"composing_only, disabled"
-msgstr ""
-"相手先に送信されるチャット状態通知。all (すべての状態)、composing_only (入力"
-"中のみ)、disabled (通知しない) のいずれか"
-
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only' or 'disabled'."
-msgstr ""
-"談話室に送信されるチャット状態通知。all (すべての状態)、composing_only (入力"
-"中のみ)、disabled (通知しない) のいずれか。"
-
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only', 'disabled'"
-msgstr ""
-"談話室に送信されるチャット状態通知。all (すべての状態)、composing_only (入力"
-"中のみ)、disabled (通知しない) のいずれか"
-
 msgid "Chats"
 msgstr "チャット"
 
@@ -1534,9 +1478,6 @@ msgstr "接続していません"
 msgid "Connection with %s could not be established."
 msgstr "%s との接続は確立できませんでした。"
 
-msgid "ConnectionType: START TLS, DIRECT TLS or PLAIN"
-msgstr "接続方法: START TLS または DIRECT TLS または PLAIN"
-
 msgid "Contact"
 msgstr "相手先"
 
@@ -1590,26 +1531,6 @@ msgstr "相手先一覧"
 
 msgid "Contacts"
 msgstr "相手先"
-
-msgid ""
-"Controls the window where new messages are placed.\n"
-"'always' - All messages are sent to a single window.\n"
-"'always_with_roster' - Like 'always' but the messages are in a single window "
-"along with the contact list.\n"
-"'never' - All messages get their own window.\n"
-"'peracct' - Messages for each account are sent to a specific window.\n"
-"'pertype' - Each message type (e.g. chats vs. group chats) is sent to a "
-"specific window."
-msgstr ""
-"新着メッセージを置くウィンドウの制御。\n"
-"'always'(常に) - すべてのメッセージはひとつのウィンドウに。\n"
-"'always_with_roster'(相手先一覧つき) - 'always'(常に) に似て、メッセージは相"
-"手先一覧つきのひとつのウィンドウに。\n"
-"'never'(なし) - すべてのメッセージはそれぞれのウィンドウに。\n"
-"'peracct'(アカウントごと) - それぞれのアカウントへのメッセージはそれぞれの"
-"ウィンドウに。\n"
-"'pertype'(種類ごと) - メッセージの種類(たとえばチャット、談話室)ごとにそれぞ"
-"れのウィンドウに。"
 
 msgid "Conversation: Nickname Color (Incoming)"
 msgstr "会話: ニックネームの色 (着信)"
@@ -1701,12 +1622,6 @@ msgstr "アカウント作成中…"
 msgid "Credentials expired"
 msgstr "認証情報は期限切れです"
 
-msgid ""
-"Ctrl+Tab switches to the next composing tab when there are no tabs with "
-"messages pending."
-msgstr ""
-"未読メッセージを含むタブがない場合、Ctrl+Tab で次の入力タブに移動します。"
-
 msgid "Current Developers"
 msgstr "現在の開発者"
 
@@ -1716,9 +1631,6 @@ msgstr ""
 
 msgid "Dark Theme"
 msgstr "ダークテーマ"
-
-msgid "Date of the last update check"
-msgstr "最後に更新チェックした日"
 
 msgid "Deactivated"
 msgstr "無効"
@@ -1731,18 +1643,6 @@ msgstr "拒否"
 
 msgid "Default"
 msgstr "デフォルト"
-
-msgid ""
-"Default Setting: Show a status message for all status changes (away, dnd, "
-"etc.) of users in a group chat."
-msgstr ""
-"デフォルト設定: 談話室でユーザーのすべての状況変更(離席中、取り込み中など)の"
-"メッセージを表示します。"
-
-msgid ""
-"Default Setting: Show a status message for every join or leave in a group "
-"chat."
-msgstr "デフォルト設定: 談話室への入退室ごとに状況メッセージを表示します。"
 
 msgid "Default Sync Threshold"
 msgstr "デフォルトの同期の制限値"
@@ -1765,10 +1665,6 @@ msgstr "新しい談話室のデフォルト"
 msgid "Default for new public group chats"
 msgstr "新しい談話室のデフォルト"
 
-msgid ""
-"Define the position of avatars in the contact list. Can be 'left' or 'right'."
-msgstr "相手先一覧でのアバターの表示位置。'left'(左)または 'right'(右)。"
-
 msgid "Delete"
 msgstr "削除"
 
@@ -1784,7 +1680,7 @@ msgstr "説明"
 msgid "Description: "
 msgstr "説明: "
 
-msgid "Destroy Groupchat…"
+msgid "Destroy Group Chat…"
 msgstr "グループチャットを閉鎖…"
 
 msgid "Destroy This Chat"
@@ -1858,9 +1754,6 @@ msgstr "談話室の題を表示または変更します"
 msgid "Do not disturb"
 msgstr "邪魔しないでください"
 
-msgid "Do not show this message again"
-msgstr "次回からこのメッセージを表示しない"
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "この申し込み(アカウント %s)を承認しますか ?"
@@ -1894,11 +1787,12 @@ msgstr "現在インストールされているバージョンを上書きしま
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr "<b>%s</b> でもアカウントを登録抹消しますか ?"
 
-msgid "Don't show contact list window in the system taskbar."
-msgstr "システムのタスクバーに相手先一覧ウィンドウを表示しません。"
-
 msgid "Don’t show main window in the system taskbar."
 msgstr "システムのタスクバーにメインウィンドウを表示しません。"
+
+#, fuzzy
+msgid "Don’t show this again"
+msgstr "次回からこのメッセージを表示しない"
 
 msgid "Download"
 msgstr "ダウンロード"
@@ -2039,6 +1933,14 @@ msgstr "書き出し時のエラー"
 
 msgid "Error while processing image"
 msgstr "画像処理中のエラー"
+
+#, fuzzy
+msgid "Error while receiving search results."
+msgstr "画像処理中のエラー"
+
+#, fuzzy
+msgid "Error while retrieving search form."
+msgstr "書き出し時のエラー"
 
 msgid "Error while uploading avatar"
 msgstr "アバターのアップロード中のエラー"
@@ -2243,6 +2145,10 @@ msgstr "チャットを絞り込む…"
 msgid "Fingerprints"
 msgstr "指紋"
 
+#, fuzzy
+msgid "Finished"
+msgstr "書き出しが完了しました"
+
 #, python-format
 msgid ""
 "Finished synchronising chat history:\n"
@@ -2411,6 +2317,9 @@ msgstr "グループ"
 msgid "Group Chat"
 msgstr "談話室"
 
+msgid "Group Chat Details"
+msgstr "談話室の詳細"
+
 msgid "Group Chat Invitation"
 msgstr "談話室への招待"
 
@@ -2464,12 +2373,6 @@ msgstr "談話室はメンバー以外にも見えます"
 
 msgid "Group chat support"
 msgstr "談話室に対応"
-
-msgid "Group multiple contacts from one friend to a single Meta-Contact"
-msgstr "一人の相手の複数の連絡先をグループ化(メタ相手先)"
-
-msgid "Groupchat Details"
-msgstr "談話室の詳細"
 
 msgid "Groups"
 msgstr "グループ"
@@ -2538,21 +2441,6 @@ msgstr "あなたを私の相手先リストに追加したいと思います。
 msgid "I would like to add you to my roster."
 msgstr "あなたを私の相手先一覧に追加したいと思っています。"
 
-msgid "I'm eating."
-msgstr "食事中です。"
-
-msgid "I'm on the phone."
-msgstr "電話中です。"
-
-msgid "I'm out enjoying life."
-msgstr "出かけています。"
-
-msgid "I'm watching a movie."
-msgstr "ただいま映画鑑賞中です。"
-
-msgid "I'm working."
-msgstr "仕事中です。"
-
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC 標準規格で、KiB は 1024 バイト、KB は 1000 バイト。"
 
@@ -2576,26 +2464,6 @@ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 msgstr "チェックをつけると、Gajim を gajim-remote を使って遠隔操作できます。"
 
 msgid ""
-"If disabled, Gajim will no longer print status messages in chats when a "
-"contact changes their status (and/or their status message)."
-msgstr ""
-"無効の場合、相手先が在席状況や状況メッセージを変更しても、Gajim はチャットに"
-"在席状況を表示しません。"
-
-msgid ""
-"If disabled, this account will be disabled and will not appear in the "
-"contact list window."
-msgstr ""
-"無効の場合、このアカウントを無効にして、相手先一覧ウィンドウに表示しません。"
-
-msgid ""
-"If enabled, Gajim hides the contact list window when pressing the X button "
-"instead of minimizing into the notification area."
-msgstr ""
-"有効の場合、Gajim は X ボタンが押された際に、相手先一覧ウィンドウを最小化する"
-"のではなく、閉じます。"
-
-msgid ""
 "If enabled, Gajim hides the main window when pressing the X button instead "
 "of minimizing into the notification area."
 msgstr ""
@@ -2609,39 +2477,9 @@ msgstr ""
 "有効の場合、保留のイベントがある場合にウィンドウをフラッシュさせます (たいて"
 "いのウィンドウマネージャのデフォルトの挙動です)。"
 
-msgid ""
-"If enabled, Gajim quits when clicking the X button of your Window Manager. "
-"This setting is taken into account only if the notification area icon is "
-"used."
-msgstr ""
-"有効の場合、ウィンドウマネージャーの X ボタンがクリックされた場合に Gajim を"
-"終了します。この設定は通知アイコンが使用されているときのみ適用されます。"
-
-msgid ""
-"If enabled, Gajim shows the group chat subject in the chat window when "
-"joining."
-msgstr "有効の場合、Gajim は談話室への参加の際にその題を表示します。"
-
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 "有効の場合、Gajim は相手先一覧ウィンドウのタイトルに * と [n] を付けます。"
-
-msgid "If enabled, Gajim will answer to message receipt requests."
-msgstr "有効の場合、Gajim はメッセージ受信確認に応答します。"
-
-msgid ""
-"If enabled, Gajim will display an icon to show that sent messages have been "
-"received by your contact."
-msgstr ""
-"有効の場合、Gajim は、送ったメッセージが相手先に受信されたとき、アイコンを表"
-"示します。"
-
-msgid ""
-"If enabled, Gajim will display the status message (if not empty) underneath "
-"the contact name in the contact list window."
-msgstr ""
-"有効の場合、Gajim は相手先一覧ウィンドウの相手先の名前の下に在席状況メッセー"
-"ジを (それが空でなければ) 表示します。"
 
 msgid "If enabled, Gajim will execute XEP-0146 Commands."
 msgstr "有効の場合、Gajim は XEP-0146 コマンドを実行します。"
@@ -2654,47 +2492,11 @@ msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
 msgstr "有効の場合、Gajim は受信する注目メッセージを無視します ('wizz')。"
 
 msgid ""
-"If enabled, Gajim will reopen chat windows that were opened last time Gajim "
-"was closed."
-msgstr ""
-"有効の場合、Gajim は、最後に終了した際に開いていたチャットウィンドウを再び開"
-"きます。"
-
-msgid ""
-"If enabled, Gajim will save the contact list window position when hiding it, "
-"and restore it when showing the contact list window again."
-msgstr ""
-"有効の場合、Gajim は相手先一覧を閉じる際にその位置を保存し、開く際にはその位"
-"置に復元戻します。"
-
-msgid ""
 "If enabled, Gajim will save the main window position when hiding it, and "
 "restore it when showing the window again."
 msgstr ""
 "有効の場合、Gajim は相手先一覧を閉じる際にその位置を保存し、開く際にはその位"
 "置に復元します。"
-
-msgid ""
-"If enabled, Gajim will send your local IP so your contact can connect to "
-"your machine for file transfers."
-msgstr ""
-"有効の場合、Gajim は相手先がファイル転送を行うためにあなたのローカル IP アド"
-"レスを送信します。"
-
-msgid ""
-"If enabled, Gajim will show both the number of online and total contacts in "
-"account rows as well as in group rows."
-msgstr ""
-"有効の場合、Gajim はアカウントとグループの行にオンラインと総計の相手先の数を"
-"表示します。"
-
-msgid ""
-"If enabled, Gajim will test file transfer proxies on startup to be sure they "
-"work. Openfire's proxies are known to fail this test even if they work."
-msgstr ""
-"有効の場合、Gajim は起動時にファイル転送プロキシが正常に機能するかテストを行"
-"います。Openfire のプロキシは (正常に機能する場合でも) このテストに失敗するこ"
-"とがわかっています。"
 
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
@@ -2705,61 +2507,11 @@ msgstr ""
 "す。"
 
 msgid ""
-"If enabled, Gajim will use the System's Keyring to store account passwords."
-msgstr "有効の場合、Gajim はパスワードの保存にシステムのキーリングを使います。"
-
-msgid ""
-"If enabled, Gajim will use your IP and proxies defined in "
-"'file_transfer_proxies' option for file transfers."
-msgstr ""
-"有効の場合、Gajim はあなたの IP とプロキシを使います。プロキシはファイル転送"
-"のために file_transfer_proxies オプションで定義します。"
-
-msgid ""
-"If enabled, a notification is created for every message in this group chat."
-msgstr "有効の場合、この談話室でのすべてのメッセージについて通知します。"
-
-msgid ""
 "If enabled, completion in group chats will be like a shell auto-completion."
 msgstr "有効の場合、談話室での補完をシェルの自動補完のようにします。"
 
-msgid ""
-"If enabled, contacts requesting authorization will be accepted automatically."
-msgstr "有効の場合、相手先の承認の要求は自動的に了承されます。"
-
-msgid ""
-"If enabled, do not remove */_ . So *abc* will be bold but with * * not "
-"removed."
-msgstr ""
-"有効の場合、*/_ を除去しません。たとえば *abc* は太字になりますが * * は除か"
-"れません。"
-
-msgid ""
-"If enabled, plugins will be activated on startup (this is saved when exiting "
-"Gajim). This option SHOULD NOT be used to (de)activate plugins. Use the "
-"plugin window instead."
-msgstr ""
-"有効の場合、プラグインは起動時に有効化されます (これは Gajim の終了時に保存さ"
-"れます)。このオプションをプラグインの有効化/無効化のために使用しないでくださ"
-"い。代わりにプラグインウィンドウを使用してください。"
-
 msgid "If enabled, pressing Esc closes a tab/window."
 msgstr "有効の場合、エスケープキーを押すことでタブまたはウィンドウを閉じます。"
-
-msgid ""
-"If enabled, the contact row is colored according to the current chat state "
-"of the contact."
-msgstr ""
-"有効の場合、Gajim は相手先のチャット状態に応じて相手先の行に色を付けます。"
-
-# (Mako) If enabled は If True であるべきだろう
-msgid "If enabled, the last status will be restored."
-msgstr "有効の場合、最後に使われた在席状況を復元します。"
-
-msgid ""
-"If enabled, the tab is colored according to the current chat state of the "
-"contact."
-msgstr "有効の場合、相手先のチャット状態に応じてタブに色を付けます。"
 
 msgid ""
 "If enabled, you will be able to set a negative priority to your account in "
@@ -2769,9 +2521,6 @@ msgstr ""
 "有効の場合、アカウントの設定ウィンドウで、アカウントに負の優先順位を設定でき"
 "ます。【注意】負の優先順位のままログインすると、サーバーからどんなメッセージ"
 "も受信しません。"
-
-msgid "If enabled, you will see your webcam's video stream as well."
-msgstr "有効の場合、自分のウェブカメラの映像も表示します。"
 
 #, python-format
 msgid "If you close this window, you will leave '%s'."
@@ -2798,14 +2547,6 @@ msgstr "画像"
 
 msgid "Import Contacts"
 msgstr "相手先をインポート"
-
-# (Mako)chat は group chat のことか?
-msgid ""
-"In a chat, show the nickname at the beginning of a line only when it's not "
-"the same person talking as in the previous message."
-msgstr ""
-"チャットで、前のメッセージと別の人の場合のみ、行の先頭にニックネームを表示し"
-"ます。"
 
 msgid ""
 "In order to write messages in this chat, you need to request voice first.\n"
@@ -2941,8 +2682,9 @@ msgstr "出かけています。"
 msgid ""
 "I’m synchronizing my contacts from my account at \"%s\". Could you please "
 "add this address to your contact list?"
-msgstr "私はアカウントの相手先を \"%s\" に同期しています。"
-"このアドレスをあなたの相手先一覧に追加していただけますか ?"
+msgstr ""
+"私はアカウントの相手先を \"%s\" に同期しています。このアドレスをあなたの相手"
+"先一覧に追加していただけますか ?"
 
 msgid "I’m watching a movie."
 msgstr "ただいま映画鑑賞中です。"
@@ -3011,9 +2753,6 @@ msgstr "蹴り出す…"
 msgid "Label"
 msgstr "ラベル"
 
-msgid "Language used for spell checking."
-msgstr "スペルチェックのための言語。"
-
 msgid "Last but not least"
 msgstr "最後に大切なことを付け加えますと、"
 
@@ -3035,24 +2774,6 @@ msgstr "ここまで読んだことを他人に知らせます"
 
 msgid "Limit must be an integer"
 msgstr "制限は整数にしてください"
-
-msgid ""
-"List of XMPP Addresses (space separated) for which the chat window will be "
-"re-opened on next startup."
-msgstr ""
-"次回の起動時にチャットウィンドウを開く XMPP アドレスの一覧 (空白で区切る)。"
-
-msgid ""
-"List of XMPP Addresses (space separated) for which you do not want to store "
-"chat history. You can also add the name of an account to disable storing "
-"chat history for this account."
-msgstr ""
-"履歴を保存しない XMPP アドレスの一覧 (空白で区切る)。アカウント名も追加でき、"
-"そのアカウントについて履歴を残しません。"
-
-msgid ""
-"List of rows (accounts and groups) that are collapsed (space separated)."
-msgstr "折り畳む (アカウントや談話室の) 行の一覧 (空白で区切る)。"
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -3132,7 +2853,8 @@ msgid "Make Owner"
 msgstr "主宰者にする"
 
 msgid "Make your profile visible for everyone or just for your contacts."
-msgstr "自分のプロフィールを誰にでもまたは自分の相手先だけに見えるようにします。"
+msgstr ""
+"自分のプロフィールを誰にでもまたは自分の相手先だけに見えるようにします。"
 
 msgid "Male"
 msgstr "男性"
@@ -3160,21 +2882,6 @@ msgstr "既読としてマーク"
 
 msgid "Maximum file size for preview generation"
 msgstr "プレビューを生成する最大ファイルサイズ"
-
-msgid ""
-"Maximum history in days we request from a private group chat archive. 0: As "
-"much as possible."
-msgstr "非公開談話室の保存から引き出す最大履歴(日数)。0なら最大限。"
-
-msgid ""
-"Maximum history in days we request from a public group chat archive. 0: As "
-"much as possible."
-msgstr "公開談話室の保存から引き出す最大履歴(日数)。0なら最大限。"
-
-msgid ""
-"Maximum number of lines that are printed in conversations. Oldest lines are "
-"cleared."
-msgstr "表示された会話の最大行数。古いほうから削除されます。"
 
 msgid "Me"
 msgstr "私"
@@ -3218,9 +2925,6 @@ msgid ""
 msgstr ""
 "メッセージは修正されました。元のメッセージは\n"
 "%s"
-
-msgid "Message that is sent to contacts you want to add."
-msgstr "追加しようとする相手先に送られるメッセージ。"
 
 msgid "Messages are archived on the server"
 msgstr "メッセージはサーバーに記録されます"
@@ -3304,6 +3008,10 @@ msgstr "新しいグループ"
 
 msgid "New Search"
 msgstr "新しい検索"
+
+#, fuzzy
+msgid "New Workspace"
+msgstr "My Workspace"
 
 #, python-format
 msgid "New message from %s"
@@ -3485,6 +3193,10 @@ msgstr "リンク先をブラウザで開く"
 msgid "Open Link in _Browser"
 msgstr "リンク先をブラウザで開く (_B)"
 
+#, fuzzy
+msgid "Open Plugins…"
+msgstr "プラグイン"
+
 # #(Mako)Containing をどうする
 msgid "Open _Folder"
 msgstr "フォルダを開く (_F)"
@@ -3510,12 +3222,6 @@ msgstr "検索バーを開く"
 msgid "Operating System"
 msgstr "オペレーティングシステム"
 
-msgid "Optionally fix Jingle output video framerate. Example: 10/1 or 25/2."
-msgstr "jingle の出力のビデオのフレームレート (省略可)。例: 10/1 または 25/2。"
-
-msgid "Optionally resize Jingle output video. Example: 320x240."
-msgstr "jingle の出力のビデオの大きさ (省略可)。 例: 320x240。"
-
 msgid "Organisation"
 msgstr "組織"
 
@@ -3531,7 +3237,8 @@ msgstr "部門 (OU)"
 msgid "Organizational Unit (OU): "
 msgstr "部門 (OU): "
 
-msgid "Organize your chats with tabs"
+#, fuzzy
+msgid "Organize your chats with workspaces"
 msgstr "チャットウィンドウをタブでまとめ"
 
 msgid "Others"
@@ -3662,22 +3369,16 @@ msgid "Pinned"
 msgstr "ピン止め済"
 
 msgid "Pipewire"
-msgstr ""
+msgstr "Pipewire"
 
 msgid "Pl_ugins"
 msgstr "プラグイン (_U)"
-
-msgid "Place the contact list on the right in single window mode"
-msgstr "ひとつのウィンドウの場合、相手先一覧を右側にします"
 
 msgid "Play Sound"
 msgstr "サウンドを鳴らす"
 
 msgid "Play Sounds"
 msgstr "サウンドを鳴らす"
-
-msgid "Play sound even when being busy."
-msgstr "取り込み中でもサウンドを鳴らします"
 
 msgid "Play sounds even when you are Away, Busy, etc."
 msgstr "離席中、取り込み中などでもサウンドを鳴らします"
@@ -3717,8 +3418,8 @@ msgid ""
 "your choice."
 msgstr ""
 "自分のアカウントを1つ選択してください。\n"
-"Gajim "
-"は選択したアカウントのすべてのメッセージを選んだディレクトリに書き出します。"
+"Gajim は選択したアカウントのすべてのメッセージを選んだディレクトリに書き出し"
+"ます。"
 
 msgid "Please use these settings with caution!"
 msgstr "これらの設定には注意してください。"
@@ -3732,9 +3433,6 @@ msgstr "プラグインの設定"
 msgid "Plugin Updates"
 msgstr "プラグインの更新"
 
-msgid "Plugin Updates Available"
-msgstr "プラグインの更新があります"
-
 msgid "Plugin already exists"
 msgstr "プラグインは既に存在しています"
 
@@ -3744,17 +3442,11 @@ msgstr "プラグインに失敗しました"
 msgid "Plugin manager"
 msgstr "プラグイン管理"
 
-msgid ""
-"Plugin updates have successfully been downloaded.\n"
-"Updates will be installed next time Gajim is started."
-msgstr ""
-"プラグインの更新のダウンロードに成功しました。\n"
-"更新は次の Gajim の起動時にインストールされます。"
-
 msgid "Plugins"
 msgstr "プラグイン"
 
-msgid "Plugins Updated"
+#, fuzzy
+msgid "Plugins Updated Successfully"
 msgstr "プラグインを更新しました"
 
 #, python-format
@@ -3786,13 +3478,6 @@ msgstr "設定"
 msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
 msgstr ""
 "チャットウィンドウへのファイルのドラッグアンドドロップで用いられる転送方法"
-
-msgid ""
-"Preferred file transfer mechanism for file drag&drop on a chat window. Can "
-"be 'httpupload' (default) or 'jingle'."
-msgstr ""
-"チャットウィンドウへのファイルのドラッグアンドドロップで用いられる転送方"
-"法。'httpupload' (デフォルト)または 'jingle'。"
 
 msgid "Presence description:"
 msgstr "在席状況の説明:"
@@ -3828,17 +3513,9 @@ msgstr "登録アカウントの一覧の表示します"
 msgid "Priority"
 msgstr "優先順位"
 
-msgid ""
-"Priority will change automatically according to your status. Priorities are "
-"defined in 'autopriority_*' options."
-msgstr ""
-"在席状況に応じて優先順位を自動的に変更します。優先順位は 'autopriority_*' オ"
-"プションで定義します。"
-
 msgid "Privacy"
 msgstr "プライバシー"
 
-#, fuzzy
 msgid "Private"
 msgstr "非公開"
 
@@ -3860,17 +3537,9 @@ msgstr "プロキシのホスト"
 msgid "Proxy Type"
 msgstr "プロキシの種類"
 
-msgid ""
-"Proxy used for all outgoing connections if the account does not have a "
-"specific proxy configured."
-msgstr ""
-"アカウントで正しいプロキシの設定がなされていない場合に、外向きの通信に使われ"
-"るプロキシ。"
-
 msgid "Proxy, custom hostname and port"
 msgstr "プロキシ、別のホスト名、ポート番号"
 
-#, fuzzy
 msgid "Public"
 msgstr "公開"
 
@@ -4071,6 +3740,10 @@ msgstr "コマンド一覧を要求中"
 msgid "Requesting HTTP File Upload Slot…"
 msgstr "HTTP ファイルアップロード枠を要求しています…"
 
+#, fuzzy
+msgid "Requesting search form from server"
+msgstr "検索欄を要求"
+
 msgid "Required"
 msgstr "必須"
 
@@ -4260,6 +3933,14 @@ msgid ""
 msgstr ""
 "談話室を全体的に検索します\n"
 "(リターンで検索開始)"
+
+#, fuzzy
+msgid "Searching"
+msgstr "検索"
+
+#, fuzzy
+msgid "Searching…"
+msgstr "検索…"
 
 msgid "Search…"
 msgstr "検索…"
@@ -4497,8 +4178,8 @@ msgstr "在席状況を「在席」に設定します"
 msgid "Set the presence type and description"
 msgstr "在席状況の種類と説明の設定"
 
-msgid ""
-"Set your activity, tune, and mood to show your friends how you are feeling"
+#, fuzzy
+msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr "友人にどうしているかを知らせるため、動向・聴いている楽曲・気分を設定"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
@@ -4587,32 +4268,8 @@ msgstr "絵文字の一覧を表示"
 msgid "Show a live preview to test your video source"
 msgstr "ビデオ入力のテストのためにライブビューを表示します"
 
-msgid ""
-"Show a status message for all status changes (away, dnd, etc.) of users in a "
-"group chat."
-msgstr ""
-"談話室のユーザーのすべての状況変更(離席中、取り込み中など)の状況メッセージを"
-"表示します。"
-
-msgid "Show a status message for every join or leave in a group chat."
-msgstr "談話室への入退室ごとに状況メッセージを表示します。"
-
 msgid "Show all warnings"
 msgstr "すべての警告を表示"
-
-msgid "Show close button in tab?"
-msgstr "タブに閉じるボタンを表示するかどうか。"
-
-msgid ""
-"Show contact list window on startup.\n"
-"'always' - Always show contact list window.\n"
-"'never' - Never show contact list window.\n"
-"'last_state' - Restore last state of the contact list window."
-msgstr ""
-"起動時に相手先一覧を表示するかどうか。\n"
-"'always'(常に) - 常に相手先一覧を表示する。\n"
-"'never'(なし) - 相手先一覧を表示しない。\n"
-"'last_state'(以前の状態) - 以前の相手先一覧の表示状態のとおりにする。"
 
 msgid ""
 "Show help on a given command or a list of available commands if -a is given"
@@ -4631,7 +4288,8 @@ msgstr "記録されたメッセージから、検索語句を含むものを表
 msgid ""
 "Show message meta data (avatar, nickname, timestamp) only once, if there are "
 "multiple messages from the same sender within a specific timespan."
-msgstr "一定時間内に同一送信者からのメッセージがあった場合、メタデータ(アバター、ニッ"
+msgstr ""
+"一定時間内に同一送信者からのメッセージがあった場合、メタデータ(アバター、ニッ"
 "クネーム、時刻)は一度だけ表示します。"
 
 msgid "Show notifications even if you are Away, Busy, etc."
@@ -4639,16 +4297,6 @@ msgstr "離席や取り込み中などでも通知を表示します"
 
 msgid "Show only critical errors"
 msgstr "深刻なエラーのみ表示"
-
-msgid "Show only online and free for chat contacts in the contact list."
-msgstr ""
-"「オンライン」と「チャットできます」の相手先のみを相手先一覧に表示します。"
-
-msgid "Show tab when only one conversation?"
-msgstr "会話がひとつだけのときもタブを表示するかどうか。"
-
-msgid "Show tabbed notebook border in chat windows?"
-msgstr "チャットウィンドウにタブつき帳面の縁を表示するかどうか。"
 
 msgid "Show the application's version"
 msgstr "アプリケーションのバージョンを表示"
@@ -4671,14 +4319,6 @@ msgstr "指定のコマンドに対するヘルプを表示します"
 
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr "ファイル転送の一覧を表示します"
-
-msgid ""
-"Shows a text in the banner that describes the current chat state of the "
-"contact."
-msgstr "相手先の現在のチャット状態の説明をバナーに表示します。"
-
-msgid "Shows an info bar with helpful hints in the Start / Join Chat dialog"
-msgstr "「チャットを開始」ダイアログにヒントを表示します"
 
 # (Mako)"Ask status message when I:" に続く語
 msgid "Sign In"
@@ -4722,16 +4362,6 @@ msgstr "参加者一覧を在席状況順に並べる"
 msgid "Sort by Status"
 msgstr "在席状況順に並べる"
 
-msgid ""
-"Sound to play when a group chat message contains one of the words in "
-"'muc_highlight_words' or your nickname is mentioned."
-msgstr ""
-"談話室のメッセージに、'muc_highlight_words' で設定した語、またはあなたのニッ"
-"クネームが含まれる場合にサウンドを鳴らします。"
-
-msgid "Sound to play when any group chat message arrives."
-msgstr "談話室のメッセージがあった際にサウンドを鳴らします。"
-
 msgid "Sounds"
 msgstr "サウンド"
 
@@ -4768,6 +4398,10 @@ msgstr "チャットを開始"
 
 msgid "Start Chatting…"
 msgstr "チャットを開始…"
+
+#, fuzzy
+msgid "Start Chat…"
+msgstr "チャットを開始"
 
 msgid "Start New Chat"
 msgstr "新しいチャットを開始"
@@ -4906,17 +4540,26 @@ msgstr "同期の制限"
 msgid "Synchronise"
 msgstr "同調"
 
-msgid "Synchronise History"
-msgstr "履歴を同期"
-
 msgid "Synchronise History…"
 msgstr "履歴を同期…"
 
 msgid "Synchronise the status of all accounts"
 msgstr "すべてのアカウントの在席状況を同期します"
 
+#, fuzzy
+msgid "Synchronize"
+msgstr "同調"
+
 msgid "Synchronize Accounts"
 msgstr "アカウントを同期"
+
+#, fuzzy
+msgid "Synchronize Chat History"
+msgstr "履歴を同期"
+
+#, fuzzy
+msgid "Synchronizing Chat History…"
+msgstr "履歴を同期…"
 
 msgid "System"
 msgstr "システム"
@@ -4960,9 +4603,6 @@ msgid ""
 msgstr ""
 "在席状況を知らせることを停止したことが相手先に通知されます。これには他の副作"
 "用がある可能性があることに注意してください。"
-
-msgid "The currently active encryption for that contact."
-msgstr "現在その相手先に適用する暗号化方式。"
 
 #, python-format
 msgid ""
@@ -5028,16 +4668,11 @@ msgstr ""
 "ひとつのサーバーにアカウントを作成すれば、他のサーバーの相手先と通信できま"
 "す。"
 
-#, python-format
-msgid ""
-"There are updates for your plugins:\n"
-"<b>%s</b>"
+#, fuzzy
+msgid "There are updates for Gajim’s plugins"
 msgstr ""
 "プラグインの更新があります:\n"
 "<b>%s</b>"
-
-msgid "There is already a synchronisation in progress. Please try again later."
-msgstr "ただいま同期の作業中です。後で試してください。"
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr "選択した暗号化に適用できる暗号化方式がありません。"
@@ -5127,17 +4762,6 @@ msgstr ""
 "ん。このようなメッセージを扱うには OpenPGP プラグインをインストールしてくださ"
 "い。"
 
-msgid ""
-"This option lets you customize the timestamp that is printed in "
-"conversation. For example '[%H:%M] ' will show '[hour:minute] '. See python "
-"doc on strftime for full documentation (https://docs.python.org/3/library/"
-"time.html#time.strftime)."
-msgstr ""
-"このオプションで、会話に印される時刻の書式を指定できます。たとえば、'[%H:%M] "
-"' は '[hour:minute] ' となります。詳しくは python の strftime に関する文書を"
-"参照してください (https://docs.python.org/3/library/time.html#time."
-"strftime)。"
-
 msgid "This server does not allow signup."
 msgstr "このサーバーは登録を許可していません。"
 
@@ -5181,15 +4805,6 @@ msgstr "「離席」までの時間"
 msgid "Time Until Not Available"
 msgstr "「不在」までの時間"
 
-msgid "Time in minutes, after which your status changes to away."
-msgstr "在席状況が「離席中」に変わるまでの時間 (単位は分)。"
-
-msgid "Time in minutes, after which your status changes to not available."
-msgstr "在席状況が「不在」に変わるまでの時間 (単位は分)。"
-
-msgid "Time of inactivity needed before the change status window closes down."
-msgstr "在籍情況変更ウィンドウを閉じるまでの活動停止の時間。"
-
 # (Mako)subscription
 msgid "To"
 msgstr "相手先が承認"
@@ -5220,10 +4835,6 @@ msgstr ""
 msgid "Topic"
 msgstr "話題"
 
-# 固有名詞(プロキシ・サーバー The Onion Router)
-msgid "Tor"
-msgstr "Tor"
-
 msgid "Transferring File…"
 msgstr "ファイルを転送しています…"
 
@@ -5238,7 +4849,7 @@ msgid "Treat * / _ pairs as possible formatting characters."
 msgstr "* / _ の組を、書式指定の文字として扱います。"
 
 msgid "Trust Not Decided"
-msgstr ""
+msgstr "未定の信用"
 
 msgid "Try Again"
 msgstr "再試行"
@@ -5369,11 +4980,14 @@ msgstr "利用可能な更新があります"
 msgid "Update plugins automatically"
 msgstr "プラグインを自動更新"
 
-msgid "Update plugins automatically next time"
-msgstr "次回プラグインを自動的に更新します"
-
 msgid "Updates"
 msgstr "更新"
+
+#, fuzzy
+msgid "Updates will be installed next time Gajim is started"
+msgstr ""
+"プラグインの更新のダウンロードに成功しました。\n"
+"更新は次の Gajim の起動時にインストールされます。"
 
 msgid "Upload Files"
 msgstr "ファイルをアップロード"
@@ -5450,13 +5064,6 @@ msgstr "ユーザー数"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-msgid ""
-"Valid URI schemes. Only schemes in this list will be accepted as 'real' URI "
-"(mailto and xmpp are handled separately)."
-msgstr ""
-"正当な URI スキーム。この一覧にあるスキームだけが“実際の”URIとして扱われます"
-"(mailto と xmpp は別)。"
 
 msgid "Validity"
 msgstr "有効期間"
@@ -5541,13 +5148,6 @@ msgstr "これはどういう意味ですか ?"
 
 msgid "What happened"
 msgstr "どうしましたか"
-
-msgid ""
-"When to show the notification area icon. Can be 'never', 'on_event', and "
-"'always'."
-msgstr ""
-"いつ通知エリアにアイコンを表示するか。'never'(表示しない)、'on_event'(保留イ"
-"ベントがあるときだけ)、'always'(常に)のいずれか。"
 
 msgid "Where participants should go"
 msgstr "参加者が向かうべきは"
@@ -6070,9 +5670,6 @@ msgstr "サービスからアカウントを抹消する (_U)"
 msgid "_Unsubscribe"
 msgstr "継読の取り消し (_U)"
 
-msgid "_Update"
-msgstr "更新 (_U)"
-
 msgid "_Username"
 msgstr "ユーザー名 (_U)"
 
@@ -6331,40 +5928,3 @@ msgstr "{nick} は現在 {show}{status}"
 
 msgid "…or drop it here"
 msgstr "…またはここにドロップ"
-
-#~ msgid "File: "
-#~ msgstr "ファイル: "
-
-#~ msgid "Microphone & Camera"
-#~ msgstr "マイクロフォンとカメラ"
-
-#~ msgid "New Message"
-#~ msgstr "新着メッセージ"
-
-#~ msgid "Note: Chat history is disabled for this account."
-#~ msgstr "注意: このアカウントの会話履歴は無効になっています。"
-
-#~ msgid "Note: Chat history is disabled for this contact."
-#~ msgstr "注意: この相手先の会話履歴は無効になっています。"
-
-#~ msgid "Render XHTML styles (colors, etc.) of incoming messages"
-#~ msgstr "受信メッセージの XHTML スタイル (色など) をレンダリングします"
-
-#~ msgid "Save conversations for all contacts"
-#~ msgstr "すべての相手先の会話記録を保存する"
-
-#~ msgid "Store conversations on the harddrive"
-#~ msgstr "ハードドライブに会話を保存します"
-
-#~ msgid "With Microphone"
-#~ msgstr "マイクロフォン"
-
-#~ msgid "XHTML Formatting"
-#~ msgstr "XHTML 装飾"
-
-#~ msgid ""
-#~ "You just received a new message from %s.\n"
-#~ "Do you want to close this tab?"
-#~ msgstr ""
-#~ "\"%s\" さんから新しいメッセージを受信しました。\n"
-#~ "このタブを閉じますか ?"

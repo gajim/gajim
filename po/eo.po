@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 13:53+0000\n"
+"POT-Creation-Date: 2022-05-31 18:12+0000\n"
 "PO-Revision-Date: 2020-08-19 19:27+0000\n"
 "Last-Translator: Vincent L <vincent.laporte+gajim@mailbox.org>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -45,23 +45,6 @@ msgstr "Mendo de dosiera transmeto"
 
 #, python-brace-format
 msgid " by {actor}"
-msgstr ""
-
-#, fuzzy
-msgid "$S (Away: Idle more than $T min)"
-msgstr "Aŭtomate fora"
-
-#, fuzzy
-msgid "$S (Not available: Idle more than $T min)"
-msgstr "Nedisponebla pro longa senfarado"
-
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoawaytime' "
-"value."
-msgstr ""
-
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoxatime' value."
 msgstr ""
 
 #, python-format
@@ -244,9 +227,6 @@ msgid "1 Year"
 msgstr ""
 
 msgid "2 Days"
-msgstr ""
-
-msgid "2: System, 1: Enabled, 0: Disabled"
 msgstr ""
 
 msgid "3 Months"
@@ -748,6 +728,10 @@ msgstr "Kontoj"
 msgid "Action when left-clicking a preview"
 msgstr ""
 
+#, fuzzy
+msgid "Activate"
+msgstr "Ŝaltita"
+
 msgid "Activated"
 msgstr "Ŝaltita"
 
@@ -908,21 +892,8 @@ msgstr "Ĉiuj dosieroj"
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
 
-#, fuzzy
-msgid ""
-"Allow Gajim to send information about the operating system you are running."
-msgstr "Se markitas, Gajim aliĝos al tiu ĉi babilejo dum lanĉo"
-
-#, fuzzy
-msgid "Allow Gajim to send your local time."
-msgstr "%s volas sendi dosieron al vi."
-
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
-
-#, fuzzy
-msgid "Allow certificate verification with POSH."
-msgstr "Aligado de speciala avizo por %s"
 
 msgid ""
 "Allow to hide the contact list window even if the notification area icon is "
@@ -1448,38 +1419,6 @@ msgstr ""
 msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
 msgstr ""
 
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: 'all', "
-"'composing_only', 'disabled'"
-msgstr ""
-"Sendataj babilstataj avizoj en interparolaj fenestroj. Povas esti unu el "
-"\"all\", \"composing_only\", aŭ \"disabled\"."
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: all, "
-"composing_only, disabled"
-msgstr ""
-"Sendataj babilstataj avizoj en interparolaj fenestroj. Povas esti unu el "
-"\"all\", \"composing_only\", aŭ \"disabled\"."
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only' or 'disabled'."
-msgstr ""
-"Sendataj babilstataj avizoj en interparolaj fenestroj. Povas esti unu el "
-"\"all\", \"composing_only\", aŭ \"disabled\"."
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only', 'disabled'"
-msgstr ""
-"Sendataj babilstataj avizoj en interparolaj fenestroj. Povas esti unu el "
-"\"all\", \"composing_only\", aŭ \"disabled\"."
-
 msgid "Chats"
 msgstr "Babilejoj"
 
@@ -1716,9 +1655,6 @@ msgstr "Konekto mankas"
 msgid "Connection with %s could not be established."
 msgstr "Konekto kun punkto neestableblas."
 
-msgid "ConnectionType: START TLS, DIRECT TLS or PLAIN"
-msgstr ""
-
 msgid "Contact"
 msgstr "Kontakto"
 
@@ -1784,25 +1720,6 @@ msgstr "Kontaktoj"
 
 msgid "Contacts"
 msgstr "Kontaktoj"
-
-#, fuzzy
-msgid ""
-"Controls the window where new messages are placed.\n"
-"'always' - All messages are sent to a single window.\n"
-"'always_with_roster' - Like 'always' but the messages are in a single window "
-"along with the contact list.\n"
-"'never' - All messages get their own window.\n"
-"'peracct' - Messages for each account are sent to a specific window.\n"
-"'pertype' - Each message type (e.g. chats vs. group chats) is sent to a "
-"specific window."
-msgstr ""
-"Administras fenestron kien novaj mesaĝoj metitas:\n"
-"'always' - ĉiuj mesaĝoj en unu fenestron;\n"
-"'never' - ĉiu mesaĝo en lian propran fenestron;\n"
-"'peracct' - mesaĝoj de ĉiu konto en apartan fenestron;\n"
-"'pertype' - ĉiu mesaĝtipo (ekzemple babileja aŭ dupersoninterparola) en "
-"apartan fenestron. Rimarku, ŝanĝo de tiu opcio bezonas relanĉon de Gajim "
-"antaŭ la ŝanĝo efikos."
 
 msgid "Conversation: Nickname Color (Incoming)"
 msgstr ""
@@ -1918,12 +1835,6 @@ msgid "Credentials expired"
 msgstr "Pasfrazo necesas"
 
 #, fuzzy
-msgid ""
-"Ctrl+Tab switches to the next composing tab when there are no tabs with "
-"messages pending."
-msgstr "Ctrl-Tab iras al sekva konversacian langeton se ĉiuj legitas."
-
-#, fuzzy
 msgid "Current Developers"
 msgstr "Nunaj programistoj:"
 
@@ -1933,9 +1844,6 @@ msgstr "D-BUS aŭ konforma pitona modulo mankas ĉe tiu ĉi komputilo."
 #, fuzzy
 msgid "Dark Theme"
 msgstr "Gajim - %s"
-
-msgid "Date of the last update check"
-msgstr ""
 
 msgid "Deactivated"
 msgstr "Malŝaltita"
@@ -1950,18 +1858,6 @@ msgstr "_Senkonekta"
 
 msgid "Default"
 msgstr "Defaŭlte"
-
-#, fuzzy
-msgid ""
-"Default Setting: Show a status message for all status changes (away, dnd, "
-"etc.) of users in a group chat."
-msgstr "Neeblas aliĝi al babilejo"
-
-#, fuzzy
-msgid ""
-"Default Setting: Show a status message for every join or leave in a group "
-"chat."
-msgstr "Neeblas aliĝi al babilejo"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -1990,10 +1886,6 @@ msgstr "Nova babilejo"
 msgid "Default for new public group chats"
 msgstr "Nova babilejo"
 
-msgid ""
-"Define the position of avatars in the contact list. Can be 'left' or 'right'."
-msgstr ""
-
 msgid "Delete"
 msgstr "Forigi"
 
@@ -2012,7 +1904,7 @@ msgid "Description: "
 msgstr "Priskribo: %s"
 
 #, fuzzy
-msgid "Destroy Groupchat…"
+msgid "Destroy Group Chat…"
 msgstr "Nova babilejo"
 
 #, fuzzy
@@ -2098,10 +1990,6 @@ msgstr "Demandi antaŭ fermi babilejan fenestron/slipon."
 msgid "Do not disturb"
 msgstr "Ne malhelpu."
 
-#, fuzzy
-msgid "Do not show this message again"
-msgstr "_Ne plu demandi"
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Ĉu vi akceptas tiun peton?"
@@ -2136,12 +2024,12 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
 #, fuzzy
-msgid "Don't show contact list window in the system taskbar."
+msgid "Don’t show main window in the system taskbar."
 msgstr "Ne montri kontaktliston en la sistema taskostrio."
 
 #, fuzzy
-msgid "Don’t show main window in the system taskbar."
-msgstr "Ne montri kontaktliston en la sistema taskostrio."
+msgid "Don’t show this again"
+msgstr "_Ne plu demandi"
 
 #, fuzzy
 msgid "Download"
@@ -2194,8 +2082,8 @@ msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
 "'WIKTIONARY' (which means use Wikitionary)."
 msgstr ""
-"Enigi propran URL kun %s en ĝi, kie %s estos la vorto/frazo, aŭ \"WIKTIONARY"
-"\" kio signifas uzi wiktionary."
+"Enigi propran URL kun %s en ĝi, kie %s estos la vorto/frazo, aŭ "
+"\"WIKTIONARY\" kio signifas uzi wiktionary."
 
 #, fuzzy
 msgid "Email"
@@ -2303,6 +2191,14 @@ msgstr "eraro dum aldonado de servo %s"
 #, fuzzy
 msgid "Error while processing image"
 msgstr "Ne povas alŝuti bildon"
+
+#, fuzzy
+msgid "Error while receiving search results."
+msgstr "Ne povas alŝuti bildon"
+
+#, fuzzy
+msgid "Error while retrieving search form."
+msgstr "eraro dum aldonado de servo %s"
 
 #, fuzzy
 msgid "Error while uploading avatar"
@@ -2544,6 +2440,10 @@ msgstr "Privataj interparoloj"
 msgid "Fingerprints"
 msgstr ""
 
+#, fuzzy
+msgid "Finished"
+msgstr "_Finigi"
+
 #, python-format
 msgid ""
 "Finished synchronising chat history:\n"
@@ -2717,6 +2617,10 @@ msgid "Group Chat"
 msgstr "_Babilejo"
 
 #, fuzzy
+msgid "Group Chat Details"
+msgstr "Konektado malsukcesis"
+
+#, fuzzy
 msgid "Group Chat Invitation"
 msgstr "Babileja invitilo"
 
@@ -2783,13 +2687,6 @@ msgstr ""
 #, fuzzy
 msgid "Group chat support"
 msgstr "Babilejoj"
-
-msgid "Group multiple contacts from one friend to a single Meta-Contact"
-msgstr ""
-
-#, fuzzy
-msgid "Groupchat Details"
-msgstr "Konektado malsukcesis"
 
 #, fuzzy
 msgid "Groups"
@@ -2870,22 +2767,6 @@ msgstr "Mi petas vin permesi aldoni vin en mian kontaktliston."
 msgid "I would like to add you to my roster."
 msgstr "Mi volus aldoni vin al mia kontaktlisto."
 
-#, fuzzy
-msgid "I'm eating."
-msgstr "Mi laboras."
-
-msgid "I'm on the phone."
-msgstr "Mi telefonas."
-
-msgid "I'm out enjoying life."
-msgstr "Mi eliris por amuziĝi."
-
-msgid "I'm watching a movie."
-msgstr "Mi spektas filmon."
-
-msgid "I'm working."
-msgstr "Mi laboras."
-
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC normo diras: KiB = 1024 bajtoj, KB = 1000 bajtoj."
 
@@ -2913,25 +2794,6 @@ msgstr "Se markitas, oni eblas komandi al Gajim malproksime per gajim-remote."
 
 #, fuzzy
 msgid ""
-"If disabled, Gajim will no longer print status messages in chats when a "
-"contact changes their status (and/or their status message)."
-msgstr ""
-"Se \"False\", Gajim ne plu eligos statlineon en interparolaj fenestroj kiam "
-"kontakto ŝanĝas lian aŭ ŝian staton kaj/aŭ statmesaĝon."
-
-#, fuzzy
-msgid ""
-"If disabled, this account will be disabled and will not appear in the "
-"contact list window."
-msgstr "Se \"False\", vi ne plu vidos la kaŝbildetojn en la babileja fenestro."
-
-msgid ""
-"If enabled, Gajim hides the contact list window when pressing the X button "
-"instead of minimizing into the notification area."
-msgstr ""
-
-#, fuzzy
-msgid ""
 "If enabled, Gajim hides the main window when pressing the X button instead "
 "of minimizing into the notification area."
 msgstr ""
@@ -2948,40 +2810,10 @@ msgstr ""
 "kiam estas atendantaj eventoj."
 
 #, fuzzy
-msgid ""
-"If enabled, Gajim quits when clicking the X button of your Window Manager. "
-"This setting is taken into account only if the notification area icon is "
-"used."
-msgstr ""
-"Se \"True\", finas Gajim kiam oni alklakas fenestran sisteman butonon X. "
-"Tiun ĉi parametron mi konsideras nur se pleta piktogramo uzatas."
-
-msgid ""
-"If enabled, Gajim shows the group chat subject in the chat window when "
-"joining."
-msgstr ""
-
-#, fuzzy
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 "Se markitas, Gajim montros kaŝbildetojn de kontaktoj en kontaktlista "
 "fenestro kaj en babilejoj"
-
-msgid "If enabled, Gajim will answer to message receipt requests."
-msgstr ""
-
-msgid ""
-"If enabled, Gajim will display an icon to show that sent messages have been "
-"received by your contact."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will display the status message (if not empty) underneath "
-"the contact name in the contact list window."
-msgstr ""
-"Se estas \"True\", Gajim montros statmesaĝojn, se ĝi ne estas malplena, por "
-"ĉiu kontakto sub la kontaktnomo en la kontaktlisto."
 
 msgid "If enabled, Gajim will execute XEP-0146 Commands."
 msgstr ""
@@ -2993,39 +2825,8 @@ msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
 msgstr ""
 
 msgid ""
-"If enabled, Gajim will reopen chat windows that were opened last time Gajim "
-"was closed."
-msgstr ""
-
-msgid ""
-"If enabled, Gajim will save the contact list window position when hiding it, "
-"and restore it when showing the contact list window again."
-msgstr ""
-
-msgid ""
 "If enabled, Gajim will save the main window position when hiding it, and "
 "restore it when showing the window again."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will send your local IP so your contact can connect to "
-"your machine for file transfers."
-msgstr ""
-"Se markitas, Gajim uzos vian IP kaj prokurservilojn difinitajn en la opcio "
-"file_transfer_proxies por dosiertransmeto."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will show both the number of online and total contacts in "
-"account rows as well as in group rows."
-msgstr ""
-"Se \"True\", Gajim montros kvantojn de konektitaj kaj ĉiuj kontaktoj en "
-"kontaj kaj grupaj linioj."
-
-msgid ""
-"If enabled, Gajim will test file transfer proxies on startup to be sure they "
-"work. Openfire's proxies are known to fail this test even if they work."
 msgstr ""
 
 msgid ""
@@ -3033,65 +2834,13 @@ msgid ""
 "in 'stun_server' option, or the one given by the XMPP server."
 msgstr ""
 
-#, fuzzy
-msgid ""
-"If enabled, Gajim will use the System's Keyring to store account passwords."
-msgstr ""
-"Se \"True\", Gajim uzos Gnoman ŝlosilaron (se disponeblas) por konservu "
-"pasvortojn."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will use your IP and proxies defined in "
-"'file_transfer_proxies' option for file transfers."
-msgstr ""
-"Se markitas, Gajim uzos vian IP kaj prokurservilojn difinitajn en la opcio "
-"file_transfer_proxies por dosiertransmeto."
-
-msgid ""
-"If enabled, a notification is created for every message in this group chat."
-msgstr ""
-
 msgid ""
 "If enabled, completion in group chats will be like a shell auto-completion."
-msgstr ""
-
-msgid ""
-"If enabled, contacts requesting authorization will be accepted automatically."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, do not remove */_ . So *abc* will be bold but with * * not "
-"removed."
-msgstr ""
-"Se \"True\", ne forigos */_ . Do *abc* estos dika sed restos kun neforigitaj "
-"* *."
-
-msgid ""
-"If enabled, plugins will be activated on startup (this is saved when exiting "
-"Gajim). This option SHOULD NOT be used to (de)activate plugins. Use the "
-"plugin window instead."
 msgstr ""
 
 #, fuzzy
 msgid "If enabled, pressing Esc closes a tab/window."
 msgstr "Se \"True\", premo de la klavo \"Escape\" fermas slipon/fenestron."
-
-#, fuzzy
-msgid ""
-"If enabled, the contact row is colored according to the current chat state "
-"of the contact."
-msgstr "Se markitas, Gajim aliĝos al tiu ĉi babilejo dum lanĉo"
-
-msgid "If enabled, the last status will be restored."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, the tab is colored according to the current chat state of the "
-"contact."
-msgstr "Se markitas, Gajim aliĝos al tiu ĉi babilejo dum lanĉo"
 
 #, fuzzy
 msgid ""
@@ -3102,9 +2851,6 @@ msgstr ""
 "Se \"True\", vi povos valorigi prioritaton de via konto per negativaj "
 "nombroj en la konta korekdada fenestro. GARDU VIN, se vi ensalutis kun "
 "negativa prioritato, vi ricevos neniujn mesaĝojn de via servilo."
-
-msgid "If enabled, you will see your webcam's video stream as well."
-msgstr ""
 
 #, fuzzy, python-format
 msgid "If you close this window, you will leave '%s'."
@@ -3133,14 +2879,6 @@ msgstr "Bildoj"
 #, fuzzy
 msgid "Import Contacts"
 msgstr "Kontaktoj"
-
-#, fuzzy
-msgid ""
-"In a chat, show the nickname at the beginning of a line only when it's not "
-"the same person talking as in the previous message."
-msgstr ""
-"En konversacio, montri la kaŝnomon komence de linio nur kiam tiu ne estas la "
-"sama persono dirinta ĉi-antaŭan mesaĝon."
 
 msgid ""
 "In order to write messages in this chat, you need to request voice first.\n"
@@ -3377,10 +3115,6 @@ msgstr "_Elpeli"
 msgid "Label"
 msgstr ""
 
-#, fuzzy
-msgid "Language used for spell checking."
-msgstr "Lingvo uzata de literumilo"
-
 msgid "Last but not least"
 msgstr ""
 
@@ -3404,22 +3138,6 @@ msgstr ""
 
 msgid "Limit must be an integer"
 msgstr ""
-
-msgid ""
-"List of XMPP Addresses (space separated) for which the chat window will be "
-"re-opened on next startup."
-msgstr ""
-
-msgid ""
-"List of XMPP Addresses (space separated) for which you do not want to store "
-"chat history. You can also add the name of an account to disable storing "
-"chat history for this account."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"List of rows (accounts and groups) that are collapsed (space separated)."
-msgstr "Listo (spacetseparita) de lineoj (kontoj kaj grupoj) kiuj rulitas."
 
 #, fuzzy
 msgid ""
@@ -3547,21 +3265,6 @@ msgstr ""
 msgid "Maximum file size for preview generation"
 msgstr ""
 
-msgid ""
-"Maximum history in days we request from a private group chat archive. 0: As "
-"much as possible."
-msgstr ""
-
-msgid ""
-"Maximum history in days we request from a public group chat archive. 0: As "
-"much as possible."
-msgstr ""
-
-msgid ""
-"Maximum number of lines that are printed in conversations. Oldest lines are "
-"cleared."
-msgstr ""
-
 #, fuzzy
 msgid "Me"
 msgstr "Germana"
@@ -3607,10 +3310,6 @@ msgid ""
 "Message corrected. Original message:\n"
 "%s"
 msgstr ""
-
-#, fuzzy
-msgid "Message that is sent to contacts you want to add."
-msgstr "Bonvolu pleni la datumon pri kontakto, kiun vi volas aldoni"
 
 #, fuzzy
 msgid "Messages are archived on the server"
@@ -3705,6 +3404,10 @@ msgstr "Nova babilejo"
 #, fuzzy
 msgid "New Search"
 msgstr "Serĉi"
+
+#, fuzzy
+msgid "New Workspace"
+msgstr "Renomigado de kontakto"
 
 #, fuzzy, python-format
 msgid "New message from %s"
@@ -3912,6 +3615,10 @@ msgid "Open Link in _Browser"
 msgstr "_Malfermi ligilon per retrigardilo"
 
 #, fuzzy
+msgid "Open Plugins…"
+msgstr "Konektado malsukcesis"
+
+#, fuzzy
 msgid "Open _Folder"
 msgstr "_Malfermi enhavantan dosierujon"
 
@@ -3943,12 +3650,6 @@ msgstr ""
 msgid "Operating System"
 msgstr "Malkorekta salutnomo"
 
-msgid "Optionally fix Jingle output video framerate. Example: 10/1 or 25/2."
-msgstr ""
-
-msgid "Optionally resize Jingle output video. Example: 320x240."
-msgstr ""
-
 msgid "Organisation"
 msgstr ""
 
@@ -3964,7 +3665,7 @@ msgstr ""
 msgid "Organizational Unit (OU): "
 msgstr ""
 
-msgid "Organize your chats with tabs"
+msgid "Organize your chats with workspaces"
 msgstr ""
 
 msgid "Others"
@@ -4114,9 +3815,6 @@ msgstr ""
 msgid "Pl_ugins"
 msgstr "Konektado malsukcesis"
 
-msgid "Place the contact list on the right in single window mode"
-msgstr ""
-
 #, fuzzy
 msgid "Play Sound"
 msgstr "Ludi _sonojn"
@@ -4124,9 +3822,6 @@ msgstr "Ludi _sonojn"
 #, fuzzy
 msgid "Play Sounds"
 msgstr "Ludi _sonojn"
-
-msgid "Play sound even when being busy."
-msgstr ""
 
 msgid "Play sounds even when you are Away, Busy, etc."
 msgstr ""
@@ -4182,10 +3877,6 @@ msgid "Plugin Updates"
 msgstr "Konektado malsukcesis"
 
 #, fuzzy
-msgid "Plugin Updates Available"
-msgstr "Nedisponebla"
-
-#, fuzzy
 msgid "Plugin already exists"
 msgstr "Tiu dosiero jam ekzistas"
 
@@ -4197,16 +3888,11 @@ msgstr "Konektado malsukcesis"
 msgid "Plugin manager"
 msgstr "Konektado malsukcesis"
 
-msgid ""
-"Plugin updates have successfully been downloaded.\n"
-"Updates will be installed next time Gajim is started."
-msgstr ""
-
 msgid "Plugins"
 msgstr ""
 
 #, fuzzy
-msgid "Plugins Updated"
+msgid "Plugins Updated Successfully"
 msgstr "Konektado malsukcesis"
 
 #, python-format
@@ -4239,11 +3925,6 @@ msgid "Preferences"
 msgstr "Agordo"
 
 msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
-msgstr ""
-
-msgid ""
-"Preferred file transfer mechanism for file drag&drop on a chat window. Can "
-"be 'httpupload' (default) or 'jingle'."
 msgstr ""
 
 #, fuzzy
@@ -4286,14 +3967,6 @@ msgid "Priority"
 msgstr "Priori_tato:"
 
 #, fuzzy
-msgid ""
-"Priority will change automatically according to your status. Priorities are "
-"defined in 'autopriority_*' options."
-msgstr ""
-"Prioritato ŝanĝiĝos aŭtomate laŭ via stato. Prioritatoj specifatas en la "
-"agorderoj \"autopriority_*\"."
-
-#, fuzzy
 msgid "Privacy"
 msgstr "Privata listo"
 
@@ -4323,11 +3996,6 @@ msgstr "Prokura servilo:"
 #, fuzzy
 msgid "Proxy Type"
 msgstr "Prokura servilo:"
-
-msgid ""
-"Proxy used for all outgoing connections if the account does not have a "
-"specific proxy configured."
-msgstr ""
 
 #, fuzzy
 msgid "Proxy, custom hostname and port"
@@ -4576,6 +4244,9 @@ msgstr "_Plenumi komandon..."
 msgid "Requesting HTTP File Upload Slot…"
 msgstr ""
 
+msgid "Requesting search form from server"
+msgstr ""
+
 #, fuzzy
 msgid "Required"
 msgstr "Pasvorto necesas"
@@ -4783,6 +4454,14 @@ msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
 msgstr ""
+
+#, fuzzy
+msgid "Searching"
+msgstr "Serĉi"
+
+#, fuzzy
+msgid "Searching…"
+msgstr "Serĉi"
 
 #, fuzzy
 msgid "Search…"
@@ -5049,8 +4728,7 @@ msgstr ""
 msgid "Set the presence type and description"
 msgstr ""
 
-msgid ""
-"Set your activity, tune, and mood to show your friends how you are feeling"
+msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
@@ -5160,28 +4838,8 @@ msgid "Show a live preview to test your video source"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"Show a status message for all status changes (away, dnd, etc.) of users in a "
-"group chat."
-msgstr "Neeblas aliĝi al babilejo"
-
-#, fuzzy
-msgid "Show a status message for every join or leave in a group chat."
-msgstr "Neeblas aliĝi al babilejo"
-
-#, fuzzy
 msgid "Show all warnings"
 msgstr "Montri ĉiujn nelegitajn _eventojn"
-
-msgid "Show close button in tab?"
-msgstr "Ĉu montri fermontan butonon en sliplangeto?"
-
-msgid ""
-"Show contact list window on startup.\n"
-"'always' - Always show contact list window.\n"
-"'never' - Never show contact list window.\n"
-"'last_state' - Restore last state of the contact list window."
-msgstr ""
 
 msgid ""
 "Show help on a given command or a list of available commands if -a is given"
@@ -5209,16 +4867,6 @@ msgid "Show only critical errors"
 msgstr "Montri nur en _kontaktlisto"
 
 #, fuzzy
-msgid "Show only online and free for chat contacts in the contact list."
-msgstr "Mi petas vin permesi aldoni vin en mian kontaktliston."
-
-msgid "Show tab when only one conversation?"
-msgstr "Ĉu montri langeton kiam estas nur unu konversacio?"
-
-msgid "Show tabbed notebook border in chat windows?"
-msgstr "Ĉu montri langetan framon en interparolajn fenestrojn?"
-
-#, fuzzy
 msgid "Show the application's version"
 msgstr "Uzi pletpiktogramon"
 
@@ -5241,15 +4889,6 @@ msgstr "Montri helpon pri specifita komando"
 #, fuzzy
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr "Montras liston de dosiertransmetojn inter vi kaj aliaj"
-
-#, fuzzy
-msgid ""
-"Shows a text in the banner that describes the current chat state of the "
-"contact."
-msgstr "Se markitas, Gajim aliĝos al tiu ĉi babilejo dum lanĉo"
-
-msgid "Shows an info bar with helpful hints in the Start / Join Chat dialog"
-msgstr ""
 
 #, fuzzy
 msgid "Sign In"
@@ -5298,18 +4937,6 @@ msgid "Sort by Status"
 msgstr "_Ordigi kontaktojn per stato"
 
 #, fuzzy
-msgid ""
-"Sound to play when a group chat message contains one of the words in "
-"'muc_highlight_words' or your nickname is mentioned."
-msgstr ""
-"Sono por ludi kiam babileja mesaĝo enhavas vorton, listitan en "
-"muc_highlight_words, aŭ vian kaŝnomon."
-
-#, fuzzy
-msgid "Sound to play when any group chat message arrives."
-msgstr "Sono ludota kiam ĉiu babileja mesaĝo venas."
-
-#, fuzzy
 msgid "Sounds"
 msgstr "Wav-sonoj"
 
@@ -5348,6 +4975,10 @@ msgstr "Babili"
 
 #, fuzzy
 msgid "Start Chatting…"
+msgstr "Babili"
+
+#, fuzzy
+msgid "Start Chat…"
 msgstr "Babili"
 
 #, fuzzy
@@ -5508,10 +5139,6 @@ msgid "Synchronise"
 msgstr ""
 
 #, fuzzy
-msgid "Synchronise History"
-msgstr "Montri _senkonektajn kontaktojn"
-
-#, fuzzy
 msgid "Synchronise History…"
 msgstr "Montri _senkonektajn kontaktojn"
 
@@ -5520,7 +5147,19 @@ msgid "Synchronise the status of all accounts"
 msgstr "Ŝanĝas staton de konto aŭ kontoj"
 
 #, fuzzy
+msgid "Synchronize"
+msgstr "Montri _senkonektajn kontaktojn"
+
+#, fuzzy
 msgid "Synchronize Accounts"
+msgstr "Montri _senkonektajn kontaktojn"
+
+#, fuzzy
+msgid "Synchronize Chat History"
+msgstr "Montri _senkonektajn kontaktojn"
+
+#, fuzzy
+msgid "Synchronizing Chat History…"
 msgstr "Montri _senkonektajn kontaktojn"
 
 #, fuzzy
@@ -5567,10 +5206,6 @@ msgid ""
 "The contact will be informed that you stopped sharing your status. Please "
 "note that this can have other side effects."
 msgstr ""
-
-#, fuzzy
-msgid "The currently active encryption for that contact."
-msgstr "Ĉu OpenPGP estas ŝaltita por tiu ĉi kontakto?"
 
 #, python-format
 msgid ""
@@ -5634,13 +5269,7 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
-#, python-format
-msgid ""
-"There are updates for your plugins:\n"
-"<b>%s</b>"
-msgstr ""
-
-msgid "There is already a synchronisation in progress. Please try again later."
+msgid "There are updates for Gajim’s plugins"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5734,18 +5363,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid ""
-"This option lets you customize the timestamp that is printed in "
-"conversation. For example '[%H:%M] ' will show '[hour:minute] '. See python "
-"doc on strftime for full documentation (https://docs.python.org/3/library/"
-"time.html#time.strftime)."
-msgstr ""
-"Ĉi tiu opcio ebligas agordi formon de tempo kiu eligitos ĉe konversacio. "
-"Ekzemple \"[%H:%M] \" montros tempon kiel \"[horo:minuto] \". Pli detale "
-"vidu pitonan dokumentaron pri la funkcio \"strftime\": http://docs.python."
-"org/lib/module-time.html"
-
-#, fuzzy
 msgid "This server does not allow signup."
 msgstr "Via servilo ne subtenas Vizitkarton"
 
@@ -5793,15 +5410,6 @@ msgstr ""
 msgid "Time Until Not Available"
 msgstr "Nedisponebla"
 
-msgid "Time in minutes, after which your status changes to away."
-msgstr "Tempo en minutoj, post kiu via stato ŝanĝos al fora."
-
-msgid "Time in minutes, after which your status changes to not available."
-msgstr "Tempo en minutoj, post kiu via stato ŝanĝos al nedisponebla."
-
-msgid "Time of inactivity needed before the change status window closes down."
-msgstr ""
-
 msgid "To"
 msgstr "Al"
 
@@ -5833,10 +5441,6 @@ msgstr ""
 
 msgid "Topic"
 msgstr ""
-
-#, fuzzy
-msgid "Tor"
-msgstr "Al"
 
 #, fuzzy
 msgid "Transferring File…"
@@ -5998,10 +5602,10 @@ msgstr "Nedisponebla"
 msgid "Update plugins automatically"
 msgstr ""
 
-msgid "Update plugins automatically next time"
+msgid "Updates"
 msgstr ""
 
-msgid "Updates"
+msgid "Updates will be installed next time Gajim is started"
 msgstr ""
 
 #, fuzzy
@@ -6083,11 +5687,6 @@ msgstr "Uzuloj"
 
 #, python-format
 msgid "V4L2: %s"
-msgstr ""
-
-msgid ""
-"Valid URI schemes. Only schemes in this list will be accepted as 'real' URI "
-"(mailto and xmpp are handled separately)."
 msgstr ""
 
 msgid "Validity"
@@ -6182,11 +5781,6 @@ msgid "What does this mean?"
 msgstr "Kaŝi tiun ĉi menuon"
 
 msgid "What happened"
-msgstr ""
-
-msgid ""
-"When to show the notification area icon. Can be 'never', 'on_event', and "
-"'always'."
 msgstr ""
 
 msgid "Where participants should go"
@@ -6790,10 +6384,6 @@ msgid "_Unsubscribe"
 msgstr "_Malaboni"
 
 #, fuzzy
-msgid "_Update"
-msgstr "Renovigi tagmesaĝon"
-
-#, fuzzy
 msgid "_Username"
 msgstr "_Salutnomo:"
 
@@ -7067,23 +6657,3 @@ msgstr "%(nick)s nun estas %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
-
-#~ msgid "File: "
-#~ msgstr "Dosiero: "
-
-#~ msgid "New Message"
-#~ msgstr "Nova mesaĝo"
-
-#, fuzzy
-#~ msgid "Save conversations for all contacts"
-#~ msgstr "Konservi komunikadajn _protokolojn por ĉiuj kontaktoj"
-
-#, fuzzy
-#~ msgid "XHTML Formatting"
-#~ msgstr "Klaku por enigi mienon (Alt+M)"
-
-#, fuzzy
-#~ msgid ""
-#~ "You just received a new message from %s.\n"
-#~ "Do you want to close this tab?"
-#~ msgstr "Vi ĵus ricevis novan mesaĝon de \"%s\""

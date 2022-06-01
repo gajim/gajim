@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 13:53+0000\n"
+"POT-Creation-Date: 2022-05-31 18:12+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -61,30 +61,6 @@ msgstr "בקשה לשיחה קולית"
 #, python-brace-format
 msgid " by {actor}"
 msgstr ""
-
-# בשל היותי במצב סרק
-#, fuzzy
-msgid "$S (Away: Idle more than $T min)"
-msgstr "$S (נעדר כתוצאה מהיותי בחוסר פעילות למשך של יותר מ־$T דקות)"
-
-#, fuzzy
-msgid "$S (Not available: Idle more than $T min)"
-msgstr "$S (לא זמין כתוצאה מהיותי בחוסר פעילות למשך של יותר מ־$T דקות)"
-
-#, fuzzy
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoawaytime' "
-"value."
-msgstr ""
-"התווים $S יוחלפו על ידי הודעת מצב נוכחית, והתווים $T יוחלפו בערך הנקוב "
-"ברשומה autoawaytime."
-
-#, fuzzy
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoxatime' value."
-msgstr ""
-"התווים $S יוחלפו על ידי הודעת מצב נוכחית, והתווים $T יוחלפו בערך הנקוב "
-"ברשומה autoxatime."
 
 #, fuzzy, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
@@ -281,9 +257,6 @@ msgid "1 Year"
 msgstr ""
 
 msgid "2 Days"
-msgstr ""
-
-msgid "2: System, 1: Enabled, 0: Disabled"
 msgstr ""
 
 msgid "3 Months"
@@ -787,6 +760,10 @@ msgstr "חשבונות"
 msgid "Action when left-clicking a preview"
 msgstr ""
 
+#, fuzzy
+msgid "Activate"
+msgstr "מופעלת"
+
 msgid "Activated"
 msgstr "מופעלת"
 
@@ -953,20 +930,9 @@ msgstr "כל הקבצים"
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
 
-msgid ""
-"Allow Gajim to send information about the operating system you are running."
-msgstr "התר ל־Gajim לשלוח מידע אודות מערכת ההפעלה אשר בשימושך."
-
-msgid "Allow Gajim to send your local time."
-msgstr "התר ל־Gajim לשלוח את הזמן המקומי שלך."
-
 #, fuzzy
 msgid "Allow a participant to send you public or private messages"
 msgstr "התרה לנוכח לשלוח לך הודעות פומביות או פרטיות"
-
-#, fuzzy
-msgid "Allow certificate verification with POSH."
-msgstr "אימות תעודת SSL עבור %s"
 
 #, fuzzy
 msgid ""
@@ -1511,34 +1477,6 @@ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
 msgstr ""
 
 #, fuzzy
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: 'all', "
-"'composing_only', 'disabled'"
-msgstr ""
-"התראות מצב שיחה שנשלחות. יכול להיות אחד מאלו all, composing_only, disabled."
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: all, "
-"composing_only, disabled"
-msgstr ""
-"התראות מצב שיחה שנשלחות. יכול להיות אחד מאלו all, composing_only, disabled."
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only' or 'disabled'."
-msgstr ""
-"התראות מצב שיחה שנשלחות. יכול להיות אחד מאלו all, composing_only, disabled."
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only', 'disabled'"
-msgstr ""
-"התראות מצב שיחה שנשלחות. יכול להיות אחד מאלו all, composing_only, disabled."
-
-#, fuzzy
 msgid "Chats"
 msgstr "שיחות"
 
@@ -1772,9 +1710,6 @@ msgstr "חיבור לא זמין"
 msgid "Connection with %s could not be established."
 msgstr "חיבור עם עמית לא היה אפשרי לביסוס."
 
-msgid "ConnectionType: START TLS, DIRECT TLS or PLAIN"
-msgstr ""
-
 msgid "Contact"
 msgstr "איש קשר"
 
@@ -1842,25 +1777,6 @@ msgstr "איש קשר"
 #, fuzzy
 msgid "Contacts"
 msgstr "איש קשר"
-
-#, fuzzy
-msgid ""
-"Controls the window where new messages are placed.\n"
-"'always' - All messages are sent to a single window.\n"
-"'always_with_roster' - Like 'always' but the messages are in a single window "
-"along with the contact list.\n"
-"'never' - All messages get their own window.\n"
-"'peracct' - Messages for each account are sent to a specific window.\n"
-"'pertype' - Each message type (e.g. chats vs. group chats) is sent to a "
-"specific window."
-msgstr ""
-"בקרה על החלון בו הודעות חדשות מושמות.\n"
-"‏'always' - כל ההודעות נשלחות לחלון בודד.\n"
-"‏'always_with_roster' - כמו 'always' אך ההודעות נמצאות בחלון בודד יחד עם "
-"הרשימה.\n"
-"‏'never' - לכל ההודעות חלון נפרד משלהן.\n"
-"‏'peracct' - הודעות עבור כל חשבון נשלחות לחלון מסוים.\n"
-"‏'pertype' - כל טיפוס הודעה (למשל, שיחות כנגד שיחות קבוצה) נשלח לחלון מסוים."
 
 msgid "Conversation: Nickname Color (Incoming)"
 msgstr ""
@@ -1978,13 +1894,6 @@ msgid "Credentials expired"
 msgstr "אישורי Oauth2"
 
 #, fuzzy
-msgid ""
-"Ctrl+Tab switches to the next composing tab when there are no tabs with "
-"messages pending."
-msgstr ""
-"‏Ctrl-Tab כדי לעבור להכרטיסייה המלחינה הבאה כאשר אין כרטיסיות שלא נקראו."
-
-#, fuzzy
 msgid "Current Developers"
 msgstr "‎מפתחים נוכחיים:"
 
@@ -1994,9 +1903,6 @@ msgstr ""
 #, fuzzy
 msgid "Dark Theme"
 msgstr "‏Gajim מרחוק"
-
-msgid "Date of the last update check"
-msgstr ""
 
 msgid "Deactivated"
 msgstr "מנוטרלת"
@@ -2011,18 +1917,6 @@ msgstr "לא מ_קוון"
 
 msgid "Default"
 msgstr "ברירת מחדל"
-
-#, fuzzy
-msgid ""
-"Default Setting: Show a status message for all status changes (away, dnd, "
-"etc.) of users in a group chat."
-msgstr "אין אפשרות להצטרף לשיחת קבוצה"
-
-#, fuzzy
-msgid ""
-"Default Setting: Show a status message for every join or leave in a group "
-"chat."
-msgstr "אין אפשרות להצטרף לשיחת קבוצה"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -2054,14 +1948,6 @@ msgstr "עזוב שיחות קבוצה"
 msgid "Default for new public group chats"
 msgstr "עזוב שיחות קבוצה"
 
-# right is left and left is right
-#, fuzzy
-msgid ""
-"Define the position of avatars in the contact list. Can be 'left' or 'right'."
-msgstr ""
-"הגדרת המיקום של האווטאר ברשימה. המיקום יכול להיות בצד ימין (left) או בצד "
-"שמאל (right)"
-
 msgid "Delete"
 msgstr "מחק"
 
@@ -2079,7 +1965,7 @@ msgid "Description: "
 msgstr "תיאור: "
 
 #, fuzzy
-msgid "Destroy Groupchat…"
+msgid "Destroy Group Chat…"
 msgstr "שיחת קבוצה חדשה"
 
 #, fuzzy
@@ -2165,10 +2051,6 @@ msgstr "הצגה או שינוי נושא של שיחת קבוצה"
 msgid "Do not disturb"
 msgstr "נא לא להפריע"
 
-#, fuzzy
-msgid "Do not show this message again"
-msgstr "אל ת_שאל אותי שוב"
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "האם לקבל את בקשה זו בחשבון %s?"
@@ -2203,12 +2085,12 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
 #, fuzzy
-msgid "Don't show contact list window in the system taskbar."
+msgid "Don’t show main window in the system taskbar."
 msgstr "אל תציג את הרשימה בתוך שורת המשימות של המערכת."
 
 #, fuzzy
-msgid "Don’t show main window in the system taskbar."
-msgstr "אל תציג את הרשימה בתוך שורת המשימות של המערכת."
+msgid "Don’t show this again"
+msgstr "אל ת_שאל אותי שוב"
 
 #, fuzzy
 msgid "Download"
@@ -2385,6 +2267,14 @@ msgstr "שגיאה בעת הוספת שירות. %s"
 #, fuzzy
 msgid "Error while processing image"
 msgstr "שגיאה בטעינת תמונה"
+
+#, fuzzy
+msgid "Error while receiving search results."
+msgstr "שגיאה בטעינת תמונה"
+
+#, fuzzy
+msgid "Error while retrieving search form."
+msgstr "שגיאה בעת הוספת שירות. %s"
 
 #, fuzzy
 msgid "Error while uploading avatar"
@@ -2629,6 +2519,10 @@ msgstr "שיחות פרטיות"
 msgid "Fingerprints"
 msgstr ""
 
+#, fuzzy
+msgid "Finished"
+msgstr "_סיים"
+
 #, python-format
 msgid ""
 "Finished synchronising chat history:\n"
@@ -2812,6 +2706,10 @@ msgid "Group Chat"
 msgstr "שיחות קבוצה"
 
 #, fuzzy
+msgid "Group Chat Details"
+msgstr "קיצורי מקש"
+
+#, fuzzy
 msgid "Group Chat Invitation"
 msgstr "הזמנת שיחת קבוצה"
 
@@ -2881,13 +2779,6 @@ msgstr "כרגע החדר מציג חברים אשר אינם זמינים"
 #, fuzzy
 msgid "Group chat support"
 msgstr "שיחות קבוצה"
-
-msgid "Group multiple contacts from one friend to a single Meta-Contact"
-msgstr ""
-
-#, fuzzy
-msgid "Groupchat Details"
-msgstr "קיצורי מקש"
 
 msgid "Groups"
 msgstr "קבוצות"
@@ -2969,22 +2860,6 @@ msgstr "ברצוני להוסיף אותך לרשימת הקשר שלי."
 msgid "I would like to add you to my roster."
 msgstr "ברצוני להוסיף אותך לרשימה שלי."
 
-#, fuzzy
-msgid "I'm eating."
-msgstr "אני בעבודה."
-
-msgid "I'm on the phone."
-msgstr "אני בטלפון."
-
-msgid "I'm out enjoying life."
-msgstr "יצאתי החוצה ליהנות מן החיים."
-
-msgid "I'm watching a movie."
-msgstr "אני צופה בסרט."
-
-msgid "I'm working."
-msgstr "אני בעבודה."
-
 # לפי תקן IEC
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "תקן IEC אומר KiB‏ = 1024 ביתים, KB‏ = 1000 ביתים."
@@ -3013,26 +2888,6 @@ msgstr "בחוסר פעילות מאז %s"
 msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 msgstr "כאשר מסומן, Gajim יכול לפעול באופן מרוחק באמצעות gajim-remote."
 
-# BUG: or is better than and/or
-#, fuzzy
-msgid ""
-"If disabled, Gajim will no longer print status messages in chats when a "
-"contact changes their status (and/or their status message)."
-msgstr ""
-"כאשר מנוטרלת, Gajim לא ידפיס שורות מצב בתוך שיחות כאשר איש קשר משנה מצב או "
-"הודעת מצב."
-
-#, fuzzy
-msgid ""
-"If disabled, this account will be disabled and will not appear in the "
-"contact list window."
-msgstr "כאשר מנוטרלת, חשבון זה ינוטרל ולא יופיע בחלון רשימה."
-
-msgid ""
-"If enabled, Gajim hides the contact list window when pressing the X button "
-"instead of minimizing into the notification area."
-msgstr ""
-
 #, fuzzy
 msgid ""
 "If enabled, Gajim hides the main window when pressing the X button instead "
@@ -3051,46 +2906,10 @@ msgstr ""
 "להבזיק (לרוב זוהי ההתנהגות השגרתית אצל מנהלי חלונות) כאשר ישנם אירועים "
 "ממתינים."
 
-#, fuzzy
-msgid ""
-"If enabled, Gajim quits when clicking the X button of your Window Manager. "
-"This setting is taken into account only if the notification area icon is "
-"used."
-msgstr ""
-"כאשר מופעלת, Gajim יצא כאשר לחצן X של מנהל חלונות נלחץ. הגדרה זו נלקחת "
-"בחשבון רק כאשר סמל התראה מצוי בשימוש."
-
-msgid ""
-"If enabled, Gajim shows the group chat subject in the chat window when "
-"joining."
-msgstr ""
-
 # BUG: a dot at the end
 #, fuzzy
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr "כאשר מסומן, Gajim יציג את מצבי הרוח של אנשי קשר בחלון הרשימה"
-
-#, fuzzy
-msgid "If enabled, Gajim will answer to message receipt requests."
-msgstr ""
-"כאשר מופעלת, Gajim יציג סמל המעיד על כך שהודעה אשר נשלחה התקבלה על ידי איש "
-"הקשר שלך"
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will display an icon to show that sent messages have been "
-"received by your contact."
-msgstr ""
-"כאשר מופעלת, Gajim יציג סמל המעיד על כך שהודעה אשר נשלחה התקבלה על ידי איש "
-"הקשר שלך"
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will display the status message (if not empty) underneath "
-"the contact name in the contact list window."
-msgstr ""
-"כאשר מופעלת, Gajim יציג הודעת מצב, בתנאי שזו לא ריקה, עבור כל איש קשר תחת שם "
-"איש קשר בחלון הרשימה."
 
 msgid "If enabled, Gajim will execute XEP-0146 Commands."
 msgstr ""
@@ -3102,21 +2921,6 @@ msgstr ""
 msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
 msgstr "כאשר מופעלת, Gajim יתעלם מבקשות הקשב נכנסות (\"wizz\")."
 
-msgid ""
-"If enabled, Gajim will reopen chat windows that were opened last time Gajim "
-"was closed."
-msgstr ""
-"כאשר מופעלת, Gajim יפתח מחדש חלונות שיחה שהיו פתוחים בפעם האחרונה בה Gajim "
-"נסגר."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will save the contact list window position when hiding it, "
-"and restore it when showing the contact list window again."
-msgstr ""
-"כאשר מופעלת, Gajim ישמור את מיקום הרשימה כאשר הרשימה מוסתרת, וישחזרה כאשר "
-"הרשימה מוצגת."
-
 #, fuzzy
 msgid ""
 "If enabled, Gajim will save the main window position when hiding it, and "
@@ -3124,29 +2928,6 @@ msgid ""
 msgstr ""
 "כאשר מופעלת, Gajim ישמור את מיקום הרשימה כאשר הרשימה מוסתרת, וישחזרה כאשר "
 "הרשימה מוצגת."
-
-# BUG: can directly connect to
-#, fuzzy
-msgid ""
-"If enabled, Gajim will send your local IP so your contact can connect to "
-"your machine for file transfers."
-msgstr ""
-"כאשר מופעלת, Gajim ישלח את כתובות IP מקומיות שלך, כך שהאיש קשר שלך יוכל "
-"להתחבר ישירות למחשב שלך כדי להעביר קבצים."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will show both the number of online and total contacts in "
-"account rows as well as in group rows."
-msgstr "כאשר מופעלת, Gajim יציג מספר של אנשי קשר מקוונים בשורות חשבון וקבוצה."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will test file transfer proxies on startup to be sure they "
-"work. Openfire's proxies are known to fail this test even if they work."
-msgstr ""
-"כאשר מופעלת, Gajim יבחן צירי (proxy) העברת קובץ בעת הפעלה כדי לוודא כי זו "
-"אכן פועלת. ידוע כי מתווכי Openfire נכשלים בבחינה זו אפילו אם אלו עובדים."
 
 #, fuzzy
 msgid ""
@@ -3157,27 +2938,6 @@ msgstr ""
 "זה אשר הוגדר בתוך אפשרות \"stun_server\", או בזה אשר ניתן על ידי שרת jabber "
 "נתון."
 
-#, fuzzy
-msgid ""
-"If enabled, Gajim will use the System's Keyring to store account passwords."
-msgstr ""
-"כאשר מופעלת, Gajim יעשה שימוש ביישום Gnome Keyring (אם זמין) כדי לאחסן "
-"סיסמאות חשבון."
-
-# INTERESTING!
-# option (אפשרות), not entry (רשומה)
-#, fuzzy
-msgid ""
-"If enabled, Gajim will use your IP and proxies defined in "
-"'file_transfer_proxies' option for file transfers."
-msgstr ""
-"כאשר מסומן, Gajim יעשה שימוש בכתובת IP ובצירים (proxy) שהוגדרו על ידך "
-"באפשרות file_transfer_proxies לשם העברת קובץ."
-
-msgid ""
-"If enabled, a notification is created for every message in this group chat."
-msgstr ""
-
 # BUG: Dot at end
 #, fuzzy
 msgid ""
@@ -3186,52 +2946,9 @@ msgstr ""
 "כאשר מופעלת, השלמה בתוך שיחות קבוצה תיעשה בדומה להשלמה אוטומטית במעטפת "
 "(shell) של מסוף"
 
-# BUG: typo: the authorization of the contacts will get accepted, not the contacts themselves
-# הרשאות שיתבקשו על ידי אנשי קשר יתקבלו אוטומטית
-#, fuzzy
-msgid ""
-"If enabled, contacts requesting authorization will be accepted automatically."
-msgstr "כאשר מופעלת, אנשי קשר אשר מבקשים הרשאה יתקבלו אוטומטית."
-
-#, fuzzy
-msgid ""
-"If enabled, do not remove */_ . So *abc* will be bold but with * * not "
-"removed."
-msgstr ""
-"כאשר מופעלת, אל תסיר */_ . כך שמחרוזת כגון *אבג* תהיה מובלטת כאשר * * לא "
-"מוסרים."
-
-#, fuzzy
-msgid ""
-"If enabled, plugins will be activated on startup (this is saved when exiting "
-"Gajim). This option SHOULD NOT be used to (de)activate plugins. Use the "
-"plugin window instead."
-msgstr ""
-"קבע האם על תוספים להיות מתופעלים בעת הפעלה (זוהי נשמרת בעת יציאה מתוך "
-"Gajim). אין להשתמש באפשרות זו כדי לשפעל או לנטרל תוספים. עליך להשתמש בממשק "
-"משתמש גרפי במקום."
-
 #, fuzzy
 msgid "If enabled, pressing Esc closes a tab/window."
 msgstr "כאשר מופעלת, לחיצה על המקש Esc תוביל לסגירת חלון/כרטיסייה."
-
-# BUG: a dot at the end
-#, fuzzy
-msgid ""
-"If enabled, the contact row is colored according to the current chat state "
-"of the contact."
-msgstr "כאשר מסומן, Gajim יתיר לאחרים לאתר את הזמן של המערכת שלך"
-
-#, fuzzy
-msgid "If enabled, the last status will be restored."
-msgstr "כאשר מופעלת, המצב האחרון אשר היה בשימוש ישוחזר."
-
-# BUG: a dot at the end
-#, fuzzy
-msgid ""
-"If enabled, the tab is colored according to the current chat state of the "
-"contact."
-msgstr "כאשר מסומן, Gajim יתיר לאחרים לאתר את הזמן של המערכת שלך"
 
 #, fuzzy
 msgid ""
@@ -3242,9 +2959,6 @@ msgstr ""
 "כאשר מופעלת, תהיה באפשרותך להגדיר עדיפות שלילית עבור חשבונך בתוך חלון התאמת "
 "חשבון. יש להיזהר, בעת התחברותך יחד עם עדיפות שלילית, לא תתקבלנה שום הודעה "
 "מתוך השרת שלך."
-
-msgid "If enabled, you will see your webcam's video stream as well."
-msgstr ""
 
 #, fuzzy, python-format
 msgid "If you close this window, you will leave '%s'."
@@ -3274,15 +2988,6 @@ msgstr "תמונות"
 #, fuzzy
 msgid "Import Contacts"
 msgstr "הזמן _אנשי קשר"
-
-# What does "than" mean?
-#, fuzzy
-msgid ""
-"In a chat, show the nickname at the beginning of a line only when it's not "
-"the same person talking as in the previous message."
-msgstr ""
-"בשיחה, הצג את שם הכינוי בתחילת שורה רק כאשר אין זו אותה האישיות אשר מדברת "
-"מבהודעה קודמת."
 
 msgid ""
 "In order to write messages in this chat, you need to request voice first.\n"
@@ -3524,10 +3229,6 @@ msgstr "ב_עט"
 msgid "Label"
 msgstr ""
 
-#, fuzzy
-msgid "Language used for spell checking."
-msgstr "שפה אשר מצויה בשימוש על ידי מאיית"
-
 msgid "Last but not least"
 msgstr ""
 
@@ -3551,29 +3252,6 @@ msgstr ""
 
 msgid "Limit must be an integer"
 msgstr "תחום מוכרח להיות ספרה"
-
-#, fuzzy
-msgid ""
-"List of XMPP Addresses (space separated) for which the chat window will be "
-"re-opened on next startup."
-msgstr ""
-"רשימה אשר מופרדת על ידי רווח, של כתובות JID עבורן אנו רוצים לפתוח מחדש חלון "
-"שיחה בהפעלה הבאה."
-
-#, fuzzy
-msgid ""
-"List of XMPP Addresses (space separated) for which you do not want to store "
-"chat history. You can also add the name of an account to disable storing "
-"chat history for this account."
-msgstr ""
-"רשימה אשר מופרדת על ידי רווח, של כתובות JID עבורן אין ברצונך לאחסן רשומות. "
-"באפשרותך גם להוסיף שם חשבון כדי לא לרשום דבר עבור חשבון זה."
-
-#, fuzzy
-msgid ""
-"List of rows (accounts and groups) that are collapsed (space separated)."
-msgstr ""
-"רשימה (מופרדת על ידי רווח) של שורות (חשבונות וקבוצות) אשר הינן מכווצות."
 
 # תרגום כתובת/תיעול שערים
 #, fuzzy
@@ -3701,21 +3379,6 @@ msgstr ""
 msgid "Maximum file size for preview generation"
 msgstr ""
 
-msgid ""
-"Maximum history in days we request from a private group chat archive. 0: As "
-"much as possible."
-msgstr ""
-
-msgid ""
-"Maximum history in days we request from a public group chat archive. 0: As "
-"much as possible."
-msgstr ""
-
-msgid ""
-"Maximum number of lines that are printed in conversations. Oldest lines are "
-"cleared."
-msgstr "מספר מרבי של שורות אשר יודפסו בתוך דיונים. השורות הכי ישנות יטוהרו."
-
 #, fuzzy
 msgid "Me"
 msgstr "דל"
@@ -3763,10 +3426,6 @@ msgid ""
 msgstr ""
 "<b>הודעה תוקנה. הודעה אחרונה היתה:</b>\n"
 "  %s"
-
-#, fuzzy
-msgid "Message that is sent to contacts you want to add."
-msgstr "הודעה אשר תישלח לאנשי קשר אותם ברצונך להוסיף"
 
 #, fuzzy
 msgid "Messages are archived on the server"
@@ -3865,6 +3524,10 @@ msgstr "שיחת קבוצה חדשה"
 #, fuzzy
 msgid "New Search"
 msgstr "חיפוש"
+
+#, fuzzy
+msgid "New Workspace"
+msgstr "שינוי שם איש קשר"
 
 #, fuzzy, python-format
 msgid "New message from %s"
@@ -4069,6 +3732,10 @@ msgid "Open Link in _Browser"
 msgstr "_פתח קישור בתוך דפדפן"
 
 #, fuzzy
+msgid "Open Plugins…"
+msgstr "תוספים"
+
+#, fuzzy
 msgid "Open _Folder"
 msgstr "_פתח תיקיה מכילה"
 
@@ -4099,14 +3766,6 @@ msgid "Operating System"
 msgstr "תעודת לקוח"
 
 #, fuzzy
-msgid "Optionally fix Jingle output video framerate. Example: 10/1 or 25/2."
-msgstr "אפשרות קיבוע פלט תדר וידאו של jingle. דוגמא: 10/1 או 25/2"
-
-#, fuzzy
-msgid "Optionally resize Jingle output video. Example: 320x240."
-msgstr "אפשרות שינוי מידת פלט הוידאו של jingle. דוגמא: 320x240"
-
-#, fuzzy
 msgid "Organisation"
 msgstr "בחופשה"
 
@@ -4122,7 +3781,7 @@ msgstr ""
 msgid "Organizational Unit (OU): "
 msgstr ""
 
-msgid "Organize your chats with tabs"
+msgid "Organize your chats with workspaces"
 msgstr ""
 
 msgid "Others"
@@ -4274,9 +3933,6 @@ msgstr ""
 msgid "Pl_ugins"
 msgstr "תוספים"
 
-msgid "Place the contact list on the right in single window mode"
-msgstr ""
-
 #, fuzzy
 msgid "Play Sound"
 msgstr "נגן _צלילים"
@@ -4284,10 +3940,6 @@ msgstr "נגן _צלילים"
 #, fuzzy
 msgid "Play Sounds"
 msgstr "נגן _צלילים"
-
-#, fuzzy
-msgid "Play sound even when being busy."
-msgstr "נגן צלילים כאשר משתמש הינו עסוק"
 
 #, fuzzy
 msgid "Play sounds even when you are Away, Busy, etc."
@@ -4343,10 +3995,6 @@ msgstr "תוספים"
 msgid "Plugin Updates"
 msgstr "כשל תוסף"
 
-#, fuzzy
-msgid "Plugin Updates Available"
-msgstr "אין חשבון זמין"
-
 msgid "Plugin already exists"
 msgstr "תוסף כבר ישנו"
 
@@ -4357,16 +4005,11 @@ msgstr "כשל תוסף"
 msgid "Plugin manager"
 msgstr "כשל תוסף"
 
-msgid ""
-"Plugin updates have successfully been downloaded.\n"
-"Updates will be installed next time Gajim is started."
-msgstr ""
-
 msgid "Plugins"
 msgstr "תוספים"
 
 #, fuzzy
-msgid "Plugins Updated"
+msgid "Plugins Updated Successfully"
 msgstr "כשל תוסף"
 
 #, fuzzy, python-format
@@ -4400,11 +4043,6 @@ msgid "Preferences"
 msgstr "העדפות"
 
 msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
-msgstr ""
-
-msgid ""
-"Preferred file transfer mechanism for file drag&drop on a chat window. Can "
-"be 'httpupload' (default) or 'jingle'."
 msgstr ""
 
 # BUG: Remove colon because it is appearing in Psi with two colons
@@ -4450,14 +4088,6 @@ msgid "Priority"
 msgstr "_עדיפות:"
 
 #, fuzzy
-msgid ""
-"Priority will change automatically according to your status. Priorities are "
-"defined in 'autopriority_*' options."
-msgstr ""
-"עדיפות תשונה אוטומטית בהתאם למצב שלך. עדיפויות מוגדרות בתוך האפשרות "
-"autopriority_*."
-
-#, fuzzy
 msgid "Privacy"
 msgstr "רשימת פרטיות"
 
@@ -4487,14 +4117,6 @@ msgstr "מ_ארח proxy:"
 #, fuzzy
 msgid "Proxy Type"
 msgstr "_פרוקסי:"
-
-#, fuzzy
-msgid ""
-"Proxy used for all outgoing connections if the account does not have a "
-"specific proxy configured."
-msgstr ""
-"ציר (proxy) אשר בשימוש עבור כל החיבורים היוצאים במידה ולחשבון אין ציר מסוים "
-"מוגדר"
 
 # BUG: _underline
 #, fuzzy
@@ -4760,6 +4382,9 @@ msgstr "הרץ _פקודה"
 msgid "Requesting HTTP File Upload Slot…"
 msgstr ""
 
+msgid "Requesting search form from server"
+msgstr ""
+
 #, fuzzy
 msgid "Required"
 msgstr "דרוש"
@@ -4977,6 +4602,14 @@ msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
 msgstr ""
+
+#, fuzzy
+msgid "Searching"
+msgstr "חיפוש"
+
+#, fuzzy
+msgid "Searching…"
+msgstr "חיפוש"
 
 #, fuzzy
 msgid "Search…"
@@ -5260,8 +4893,7 @@ msgstr "קביעת מצב נוכחי אל מקוון"
 msgid "Set the presence type and description"
 msgstr "קביעת טיפוס ותיאור הנוכחות"
 
-msgid ""
-"Set your activity, tune, and mood to show your friends how you are feeling"
+msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
@@ -5372,33 +5004,8 @@ msgid "Show a live preview to test your video source"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"Show a status message for all status changes (away, dnd, etc.) of users in a "
-"group chat."
-msgstr "אין אפשרות להצטרף לשיחת קבוצה"
-
-#, fuzzy
-msgid "Show a status message for every join or leave in a group chat."
-msgstr "אין אפשרות להצטרף לשיחת קבוצה"
-
-#, fuzzy
 msgid "Show all warnings"
 msgstr "הצג _אירועים ממתינים"
-
-msgid "Show close button in tab?"
-msgstr "האם להציג לחצן סגירה בתוך כרטיסייה?"
-
-#, fuzzy
-msgid ""
-"Show contact list window on startup.\n"
-"'always' - Always show contact list window.\n"
-"'never' - Never show contact list window.\n"
-"'last_state' - Restore last state of the contact list window."
-msgstr ""
-"הצגת רשימה בעת הפעלה.\n"
-"‏'always' - תמיד להציג את הרשימה.\n"
-"‏'never' - לא להציג רשימה בכלל.\n"
-"‏'last_state' - שחזור המצב האחרון של הרשימה."
 
 msgid ""
 "Show help on a given command or a list of available commands if -a is given"
@@ -5427,17 +5034,6 @@ msgid "Show only critical errors"
 msgstr "cli"
 
 #, fuzzy
-msgid "Show only online and free for chat contacts in the contact list."
-msgstr "הצגה בלעדית של אנשי קשר מקוונים וחופשיים לשיחה ברשימה."
-
-msgid "Show tab when only one conversation?"
-msgstr "האם להציג כרטיסייה כאשר ישנו רק דיון אחד?"
-
-# help translate
-msgid "Show tabbed notebook border in chat windows?"
-msgstr "להציג מסגרת פנקס מתויג בתוך חלונות שיחה?"
-
-#, fuzzy
 msgid "Show the application's version"
 msgstr "הצג סמל אזור התראה:"
 
@@ -5462,16 +5058,6 @@ msgstr "cli"
 #, fuzzy
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr "הצגת רשימה של העברות קבצים בינך לבין אחרים"
-
-# BUG: a dot at the end
-#, fuzzy
-msgid ""
-"Shows a text in the banner that describes the current chat state of the "
-"contact."
-msgstr "כאשר מסומן, Gajim יתיר לאחרים לאתר את הזמן של המערכת שלך"
-
-msgid "Shows an info bar with helpful hints in the Start / Join Chat dialog"
-msgstr ""
 
 #, fuzzy
 msgid "Sign In"
@@ -5520,18 +5106,6 @@ msgid "Sort by Status"
 msgstr "מיין אנשי קשר לפי מצב"
 
 #, fuzzy
-msgid ""
-"Sound to play when a group chat message contains one of the words in "
-"'muc_highlight_words' or your nickname is mentioned."
-msgstr ""
-"צליל לניגון כאשר הודעת שיחת קבוצה מכילה אחת מתוך המילים אשר מצוינות בתוך "
-"muc_highlight_words, או כאשר הודעת שיחת קבוצה מכילה את השם כינוי שלך."
-
-#, fuzzy
-msgid "Sound to play when any group chat message arrives."
-msgstr "צליל לניגון כאשר הודעת שמ״מ מגיעה."
-
-#, fuzzy
 msgid "Sounds"
 msgstr "צלילי Wav"
 
@@ -5571,6 +5145,10 @@ msgstr "התחלת שיחה"
 
 #, fuzzy
 msgid "Start Chatting…"
+msgstr "התחלת שיחה"
+
+#, fuzzy
+msgid "Start Chat…"
 msgstr "התחלת שיחה"
 
 #, fuzzy
@@ -5733,10 +5311,6 @@ msgid "Synchronise"
 msgstr "סנכרון"
 
 #, fuzzy
-msgid "Synchronise History"
-msgstr "סנכרון"
-
-#, fuzzy
 msgid "Synchronise History…"
 msgstr "סנכרון"
 
@@ -5744,11 +5318,23 @@ msgstr "סנכרון"
 msgid "Synchronise the status of all accounts"
 msgstr "cli"
 
+#, fuzzy
+msgid "Synchronize"
+msgstr "סנכרון"
+
 # BUG: _underline
 # אישי קשר
 #, fuzzy
 msgid "Synchronize Accounts"
 msgstr "סנכרן אנשי קשר"
+
+#, fuzzy
+msgid "Synchronize Chat History"
+msgstr "סנכרון"
+
+#, fuzzy
+msgid "Synchronizing Chat History…"
+msgstr "סנכרון"
 
 #, fuzzy
 msgid "System"
@@ -5798,10 +5384,6 @@ msgid ""
 "The contact will be informed that you stopped sharing your status. Please "
 "note that this can have other side effects."
 msgstr ""
-
-#, fuzzy
-msgid "The currently active encryption for that contact."
-msgstr "אפשור הצפנת ESessions עבור חשבון זה."
 
 # אופן מסולף
 #, fuzzy, python-format
@@ -5873,13 +5455,7 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
-#, python-format
-msgid ""
-"There are updates for your plugins:\n"
-"<b>%s</b>"
-msgstr ""
-
-msgid "There is already a synchronisation in progress. Please try again later."
+msgid "There are updates for Gajim’s plugins"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5974,18 +5550,6 @@ msgid ""
 "You can install the OpenPGP plugin to handle those messages."
 msgstr ""
 
-# ראה
-#, fuzzy
-msgid ""
-"This option lets you customize the timestamp that is printed in "
-"conversation. For example '[%H:%M] ' will show '[hour:minute] '. See python "
-"doc on strftime for full documentation (https://docs.python.org/3/library/"
-"time.html#time.strftime)."
-msgstr ""
-"אפשרות זו מאפשרת לך להתאים את חותמת הזמן המודפסת בתוך דיון. למשל \"[%H:%M] "
-"\" תציג \"[שעה:דקה] \". לרשותך קיים מסמך Python אודות strftime לשם תיעוד מלא "
-"בכתובת: http://docs.python.org/lib/module-time.html"
-
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "השרת שלך לא תומך vCard"
@@ -6036,15 +5600,6 @@ msgstr ""
 msgid "Time Until Not Available"
 msgstr "לא זמין"
 
-msgid "Time in minutes, after which your status changes to away."
-msgstr "זמן בדקות, אשר לאחריו המצב שלך ישונה אל נעדר."
-
-msgid "Time in minutes, after which your status changes to not available."
-msgstr "זמן בדקות, אשר לאחריו המצב שלך ישתנה אל לא זמין."
-
-msgid "Time of inactivity needed before the change status window closes down."
-msgstr "זמן חוסר פעילות אשר נחוץ לפני שחלון שינוי מצב נסגר."
-
 msgid "To"
 msgstr "אל"
 
@@ -6074,9 +5629,6 @@ msgid ""
 msgstr "cli"
 
 msgid "Topic"
-msgstr ""
-
-msgid "Tor"
 msgstr ""
 
 #, fuzzy
@@ -6244,10 +5796,10 @@ msgstr "אין חשבון זמין"
 msgid "Update plugins automatically"
 msgstr ""
 
-msgid "Update plugins automatically next time"
+msgid "Updates"
 msgstr ""
 
-msgid "Updates"
+msgid "Updates will be installed next time Gajim is started"
 msgstr ""
 
 #, fuzzy
@@ -6328,14 +5880,6 @@ msgstr "משתמשים"
 #, python-format
 msgid "V4L2: %s"
 msgstr "‏V4L2: ‏%s"
-
-#, fuzzy
-msgid ""
-"Valid URI schemes. Only schemes in this list will be accepted as 'real' URI "
-"(mailto and xmpp are handled separately)."
-msgstr ""
-"תרשים uri תקף. תרשימים המצויים בתוך הרשימה בלבד יתקבלו בתור תרשים uri \"אמיתי"
-"\". (mailto וגם xmpp מטופלים בנפרד)"
 
 msgid "Validity"
 msgstr ""
@@ -6432,15 +5976,6 @@ msgstr "הסתר תפריט זה"
 
 msgid "What happened"
 msgstr ""
-
-# מגש המערכת
-#, fuzzy
-msgid ""
-"When to show the notification area icon. Can be 'never', 'on_event', and "
-"'always'."
-msgstr ""
-"מתי להציג סמל אזור התראה. יכול להיות 'never' (בכלל לא), 'on_event' (בעת "
-"אירוע), 'always' (תמיד)."
 
 msgid "Where participants should go"
 msgstr ""
@@ -7069,10 +6604,6 @@ msgid "_Unsubscribe"
 msgstr "_בטל הרשמה"
 
 #, fuzzy
-msgid "_Update"
-msgstr "עדכן MOTD..."
-
-#, fuzzy
 msgid "_Username"
 msgstr "שם _משתמש:"
 
@@ -7358,27 +6889,3 @@ msgstr "%(nick)s מצוי/ה כעת במצב %(status)s "
 
 msgid "…or drop it here"
 msgstr ""
-
-#~ msgid "File: "
-#~ msgstr "קובץ: "
-
-#~ msgid "New Message"
-#~ msgstr "הודעה חדשה"
-
-#, fuzzy
-#~ msgid "Note: Chat history is disabled for this contact."
-#~ msgstr "התעלם משגיאה זו עבור תעודה זו."
-
-#, fuzzy
-#~ msgid "Save conversations for all contacts"
-#~ msgstr "שמור רשו_מות שיחה עבור כל איש קשר"
-
-#, fuzzy
-#~ msgid "XHTML Formatting"
-#~ msgstr "הצגת רשימת עיצובים"
-
-#, fuzzy
-#~ msgid ""
-#~ "You just received a new message from %s.\n"
-#~ "Do you want to close this tab?"
-#~ msgstr "זה עתה קיבלת הודעה חדשה מן \"%s\""

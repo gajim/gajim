@@ -7,12 +7,13 @@
 # SAIHAZE <saihaze@outlook.com>, 2022.
 # Tommy He <lovenemesis@gmail.com>, 2022.
 # andy baker <andy.baker@dismail.de>, 2022.
+# Bob Huang (Ziyan Huang) <bc3104hzy@126.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 13:53+0000\n"
-"PO-Revision-Date: 2022-05-23 05:30+0000\n"
+"POT-Creation-Date: 2022-05-31 18:12+0000\n"
+"PO-Revision-Date: 2022-05-31 10:12+0000\n"
 "Last-Translator: Tommy He <lovenemesis@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
 "gajim/master/zh_Hans/>\n"
@@ -60,21 +61,6 @@ msgstr " 语音聊天"
 #, python-brace-format
 msgid " by {actor}"
 msgstr " 由 {actor}"
-
-msgid "$S (Away: Idle more than $T min)"
-msgstr "$S (离开, 因为闲置超过了$T分钟)"
-
-msgid "$S (Not available: Idle more than $T min)"
-msgstr "$S (禁止, 因为闲置超过了$T分钟)"
-
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoawaytime' "
-"value."
-msgstr "$S 会被当前的状态信息替换, $T 会被 \"autoawaytime\" 值替换。"
-
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoxatime' value."
-msgstr "$S 会被当前的状态信息替换, $T 会被 \"autoxatime\" 替换。"
 
 #, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
@@ -258,9 +244,6 @@ msgstr "一年"
 
 msgid "2 Days"
 msgstr "两天"
-
-msgid "2: System, 1: Enabled, 0: Disabled"
-msgstr "2: 系统, 1: 启用, 0: 禁用"
 
 msgid "3 Months"
 msgstr "三个月"
@@ -682,6 +665,9 @@ msgstr "账户"
 msgid "Action when left-clicking a preview"
 msgstr "左击预览时的动作"
 
+msgid "Activate"
+msgstr "激活"
+
 msgid "Activated"
 msgstr "已激活"
 
@@ -813,18 +799,8 @@ msgstr "所有文件"
 msgid "All other group chat participants can see your XMPP address"
 msgstr "所有其他群聊参与者都将能看到您的 XMPP 地址"
 
-msgid ""
-"Allow Gajim to send information about the operating system you are running."
-msgstr "允许 Gajim 发送关于您所运行操作系统的信息。"
-
-msgid "Allow Gajim to send your local time."
-msgstr "允许 Gajim 发送您的本地时间。"
-
 msgid "Allow a participant to send you public or private messages"
 msgstr "允许参与者向您发送公开或私人消息"
-
-msgid "Allow certificate verification with POSH."
-msgstr "允许使用 POSH 验证证书。"
 
 msgid ""
 "Allow to hide the contact list window even if the notification area icon is "
@@ -1049,7 +1025,7 @@ msgid "Away"
 msgstr "离开"
 
 msgid "Back"
-msgstr "回来"
+msgstr "返回"
 
 msgid "Back in some minutes."
 msgstr "几分钟后回来。"
@@ -1141,11 +1117,11 @@ msgid "Call Outgoing"
 msgstr "通话去电"
 
 msgid "Call ended"
-msgstr ""
+msgstr "通话已结束"
 
 #, python-format
 msgid "Call with %s"
-msgstr ""
+msgstr "与 %s 的通话"
 
 msgid "Calling (Video)…"
 msgstr "通话中(视频)…"
@@ -1281,26 +1257,6 @@ msgstr "通过 OMEMO 或者 OpenPGP 运用端到端加密技术保证聊天的�
 
 msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
 msgstr "通过 OMEMO 或 OpenGPG 端对端加密安全聊天。"
-
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: 'all', "
-"'composing_only', 'disabled'"
-msgstr "向联系人发送聊天状态通知。可能的值为: '全部', '仅正在编辑', '禁用'"
-
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: all, "
-"composing_only, disabled"
-msgstr "向联系人发送聊天状态通知。可能的值为: 全部，仅正在编辑，禁用"
-
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only' or 'disabled'."
-msgstr "向群聊发送聊天状态通知。可能的值为: '全部', '仅正在编辑' 或 '禁用'。"
-
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only', 'disabled'"
-msgstr "向群聊发送聊天状态通知。可能的值为: '全部', '仅正在编辑', '禁用'"
 
 msgid "Chats"
 msgstr "聊天"
@@ -1501,9 +1457,6 @@ msgstr "连接不可用"
 msgid "Connection with %s could not be established."
 msgstr "无法与 %s 建立连接。"
 
-msgid "ConnectionType: START TLS, DIRECT TLS or PLAIN"
-msgstr "连接类型: START TLS, DIRECT TLS 或 PLAIN"
-
 msgid "Contact"
 msgstr "联系人"
 
@@ -1557,24 +1510,6 @@ msgstr "联系人列表"
 
 msgid "Contacts"
 msgstr "联系人"
-
-msgid ""
-"Controls the window where new messages are placed.\n"
-"'always' - All messages are sent to a single window.\n"
-"'always_with_roster' - Like 'always' but the messages are in a single window "
-"along with the contact list.\n"
-"'never' - All messages get their own window.\n"
-"'peracct' - Messages for each account are sent to a specific window.\n"
-"'pertype' - Each message type (e.g. chats vs. group chats) is sent to a "
-"specific window."
-msgstr ""
-"控制新消息被放置的窗口。\n"
-"'always' - 所有消息都发送到一个窗口。\n"
-"'always_with_roster' - 与 'always' 类似但所有消息在一个单独的窗口中，独立于联"
-"系人列表。\n"
-"'never' - 所有消息都拥有自己单独的窗口。\n"
-"'peracct' - 每个账户的消息发送到一个特定的窗口。\n"
-"'pertype' - 每种类型的消息 (例如, 聊天 相对于 群聊) 发送到一个特定的窗口。"
 
 msgid "Conversation: Nickname Color (Incoming)"
 msgstr "通话: 昵称颜色(呼入)"
@@ -1663,11 +1598,6 @@ msgstr "正在创建账户…"
 msgid "Credentials expired"
 msgstr "证书已过期"
 
-msgid ""
-"Ctrl+Tab switches to the next composing tab when there are no tabs with "
-"messages pending."
-msgstr "当所有标签中没有未读消息时按 Ctrl-Tab 转到下一个正在编辑的标签。"
-
 msgid "Current Developers"
 msgstr "当前开发者"
 
@@ -1676,9 +1606,6 @@ msgstr "在这台计算机上没有 D-Bus 或者 Python 模块缺失"
 
 msgid "Dark Theme"
 msgstr "暗黑主题"
-
-msgid "Date of the last update check"
-msgstr "上一次检查更新的日期"
 
 msgid "Deactivated"
 msgstr "未激活的"
@@ -1691,16 +1618,6 @@ msgstr "拒绝"
 
 msgid "Default"
 msgstr "默认"
-
-msgid ""
-"Default Setting: Show a status message for all status changes (away, dnd, "
-"etc.) of users in a group chat."
-msgstr "默认设置: 显示群聊中用户所有状态更改（离开、免打扰等) 的状态消息。"
-
-msgid ""
-"Default Setting: Show a status message for every join or leave in a group "
-"chat."
-msgstr "默认设置: 在群聊中显示每一条加入或离开的状态信息。"
 
 msgid "Default Sync Threshold"
 msgstr "默认同步阈值"
@@ -1723,10 +1640,6 @@ msgstr "新群聊默认值"
 msgid "Default for new public group chats"
 msgstr "新公开群聊默认值"
 
-msgid ""
-"Define the position of avatars in the contact list. Can be 'left' or 'right'."
-msgstr "定义位于联系人列表中头像的显示位置。可以是左或右"
-
 msgid "Delete"
 msgstr "删除"
 
@@ -1742,7 +1655,7 @@ msgstr "描述"
 msgid "Description: "
 msgstr "描述: "
 
-msgid "Destroy Groupchat…"
+msgid "Destroy Group Chat…"
 msgstr "解散群聊…"
 
 msgid "Destroy This Chat"
@@ -1816,9 +1729,6 @@ msgstr "显示或更改群聊话题"
 msgid "Do not disturb"
 msgstr "请勿打扰"
 
-msgid "Do not show this message again"
-msgstr "不再显示此消息"
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "是否接受这个请求(账户: %s)?"
@@ -1852,11 +1762,11 @@ msgstr "您确定要覆盖当前已安装的版本吗？"
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr "您确定要注销位于 <b>%s</b> 的账户吗？"
 
-msgid "Don't show contact list window in the system taskbar."
-msgstr "在系统任务栏中不显示联系人列表窗口。"
-
 msgid "Don’t show main window in the system taskbar."
 msgstr "不要在系统任务栏中显示主窗口。"
+
+msgid "Don’t show this again"
+msgstr "不再显示此消息"
 
 msgid "Download"
 msgstr "下载"
@@ -1997,6 +1907,12 @@ msgstr "导出时错误"
 
 msgid "Error while processing image"
 msgstr "处理图片时错误"
+
+msgid "Error while receiving search results."
+msgstr "接收搜索结果时错误。"
+
+msgid "Error while retrieving search form."
+msgstr "获取搜索表格时错误。"
 
 msgid "Error while uploading avatar"
 msgstr "上传头像时错误"
@@ -2201,6 +2117,9 @@ msgstr "过滤聊天…"
 msgid "Fingerprints"
 msgstr "指纹"
 
+msgid "Finished"
+msgstr "已完成"
+
 #, python-format
 msgid ""
 "Finished synchronising chat history:\n"
@@ -2360,6 +2279,9 @@ msgstr "群组"
 msgid "Group Chat"
 msgstr "群聊"
 
+msgid "Group Chat Details"
+msgstr "群聊详情"
+
 msgid "Group Chat Invitation"
 msgstr "群聊邀请"
 
@@ -2413,12 +2335,6 @@ msgstr "群聊现在显示不可用的成员"
 
 msgid "Group chat support"
 msgstr "群聊支持"
-
-msgid "Group multiple contacts from one friend to a single Meta-Contact"
-msgstr "将来自一个朋友的多个联系人分组到一个元联系人"
-
-msgid "Groupchat Details"
-msgstr "群聊详情"
 
 msgid "Groups"
 msgstr "群组"
@@ -2487,21 +2403,6 @@ msgstr "我想添加您到我的联系人列表。"
 msgid "I would like to add you to my roster."
 msgstr "我想将您添加到我的花名册。"
 
-msgid "I'm eating."
-msgstr "我正在用餐。"
-
-msgid "I'm on the phone."
-msgstr "我正在通话中。"
-
-msgid "I'm out enjoying life."
-msgstr "我正在享受户外生活。"
-
-msgid "I'm watching a movie."
-msgstr "我正在看电影。"
-
-msgid "I'm working."
-msgstr "我正在工作。"
-
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC 标准规定 1 KiB = 1024 bytes(字节), 1 KB = 1000 bytes(字节)。"
 
@@ -2525,23 +2426,6 @@ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 msgstr "如果选中，Gajim 可以被 gajim-remote 远程控制。"
 
 msgid ""
-"If disabled, Gajim will no longer print status messages in chats when a "
-"contact changes their status (and/or their status message)."
-msgstr ""
-"如果禁用，当联系人改变状态(和/或状态信息)时，Gajim 将不再打印状态信息。"
-
-msgid ""
-"If disabled, this account will be disabled and will not appear in the "
-"contact list window."
-msgstr "如过禁用，该帐户将被禁用且不会出现在联系人列表窗口。"
-
-msgid ""
-"If enabled, Gajim hides the contact list window when pressing the X button "
-"instead of minimizing into the notification area."
-msgstr ""
-"如果开启该选项，按下X按钮时Gajim将隐藏联系人列表窗口而不是最小化至消息提醒区"
-
-msgid ""
 "If enabled, Gajim hides the main window when pressing the X button instead "
 "of minimizing into the notification area."
 msgstr ""
@@ -2553,36 +2437,8 @@ msgid ""
 msgstr ""
 "如果启用，Gajim 将在有挂起事件时使窗口闪烁（大多数窗口管理器中的默认行为）。"
 
-msgid ""
-"If enabled, Gajim quits when clicking the X button of your Window Manager. "
-"This setting is taken into account only if the notification area icon is "
-"used."
-msgstr ""
-"如果启用， 单击窗口管理器的关闭按钮会退出 Gajim。这一设定仅当启用通知区域图标"
-"时生效。"
-
-msgid ""
-"If enabled, Gajim shows the group chat subject in the chat window when "
-"joining."
-msgstr "如果启用，Gajim 将会在加入群聊时在聊天窗口显示话题。"
-
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr "如果启用，Gajim 会在联系人列表窗口标题中添加 * 和 [n]。"
-
-msgid "If enabled, Gajim will answer to message receipt requests."
-msgstr "如果启用， Gajim 将会回应消息回执请求。"
-
-msgid ""
-"If enabled, Gajim will display an icon to show that sent messages have been "
-"received by your contact."
-msgstr "如果启用，Gajim 将会在已发送的消息已被你的联系人接收时显示一个图标。"
-
-msgid ""
-"If enabled, Gajim will display the status message (if not empty) underneath "
-"the contact name in the contact list window."
-msgstr ""
-"如果启用，Gajim 将在联系人列表窗口中的联系人名字的下方显示状态信息（如果不为"
-"空）。"
 
 msgid "If enabled, Gajim will execute XEP-0146 Commands."
 msgstr "如启用，Gajim执行XEP-0146中规定的命令."
@@ -2594,39 +2450,10 @@ msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
 msgstr "如果启用，Gajim 将忽略发送来的关注请求('wizz')。"
 
 msgid ""
-"If enabled, Gajim will reopen chat windows that were opened last time Gajim "
-"was closed."
-msgstr "如启用，Gajim将打开上次关闭时的聊天窗口"
-
-msgid ""
-"If enabled, Gajim will save the contact list window position when hiding it, "
-"and restore it when showing the contact list window again."
-msgstr "如果开启, Gajim将在联系人列表窗口隐藏时保存位置，并在显示时恢复"
-
-msgid ""
 "If enabled, Gajim will save the main window position when hiding it, and "
 "restore it when showing the window again."
 msgstr ""
 "如果启用，Gajim 将保存主窗口时的位置，然后在下次展示窗口列表时重新恢复。"
-
-msgid ""
-"If enabled, Gajim will send your local IP so your contact can connect to "
-"your machine for file transfers."
-msgstr ""
-"如果启用，Gajim 将会发送您的本地 IP 从而您的联系人可以连接到您的机器完成文件"
-"传输。"
-
-msgid ""
-"If enabled, Gajim will show both the number of online and total contacts in "
-"account rows as well as in group rows."
-msgstr "如果启用，Gajim 会在账户和群组列显示在线人数和总联系人数。"
-
-msgid ""
-"If enabled, Gajim will test file transfer proxies on startup to be sure they "
-"work. Openfire's proxies are known to fail this test even if they work."
-msgstr ""
-"如果启用，Gajim 将在启动时测试文件传输代理来确保它们确实工作。Openfire 的代理"
-"已知会在此测试失败，尽管它们确实工作。"
 
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
@@ -2636,56 +2463,11 @@ msgstr ""
 "\"stun_server\"选项给出，或由 XMPP 服务器给出。"
 
 msgid ""
-"If enabled, Gajim will use the System's Keyring to store account passwords."
-msgstr "如果启用，Gajim 会使用系统的密钥环来存储账户的密码。"
-
-msgid ""
-"If enabled, Gajim will use your IP and proxies defined in "
-"'file_transfer_proxies' option for file transfers."
-msgstr ""
-"如果启用，Gajim 会使用您在 file_transfer_proxies 选项中定义的 IP 和代理进行文"
-"件传输。"
-
-msgid ""
-"If enabled, a notification is created for every message in this group chat."
-msgstr "如果启用，在当前群聊中的每个消息都将创建一个提示。"
-
-msgid ""
 "If enabled, completion in group chats will be like a shell auto-completion."
 msgstr "如果启用，群聊中的补全将会像 Shell 中的自动补全一样。"
 
-msgid ""
-"If enabled, contacts requesting authorization will be accepted automatically."
-msgstr "如果启用，联系人的认证请求将被自动接受。"
-
-msgid ""
-"If enabled, do not remove */_ . So *abc* will be bold but with * * not "
-"removed."
-msgstr "如果启用，将不移除 */_。这样 *abc* 将被加粗，但是 * * 不会被移除。"
-
-msgid ""
-"If enabled, plugins will be activated on startup (this is saved when exiting "
-"Gajim). This option SHOULD NOT be used to (de)activate plugins. Use the "
-"plugin window instead."
-msgstr ""
-"如果启用，插件将在启动时被激活 (这是在退出 Gajim 时保存的)。这个选项不应该被"
-"用来(取消)激活插件，请使用插件窗口进行此类操作。"
-
 msgid "If enabled, pressing Esc closes a tab/window."
 msgstr "如果启用，按 Esc 键将关闭标签/窗口。"
-
-msgid ""
-"If enabled, the contact row is colored according to the current chat state "
-"of the contact."
-msgstr "如果启用，联系人行会根据该联系人当前的聊天状态显示不同颜色。"
-
-msgid "If enabled, the last status will be restored."
-msgstr "如果启用，上次使用的状态将被恢复。"
-
-msgid ""
-"If enabled, the tab is colored according to the current chat state of the "
-"contact."
-msgstr "如果启用，将根据联系人的当前聊天状态对标签页着色。"
 
 msgid ""
 "If enabled, you will be able to set a negative priority to your account in "
@@ -2694,9 +2476,6 @@ msgid ""
 msgstr ""
 "如果启用， 您可以在账户窗口中为你的账户可以设置一个负的优先级。注意！当您使用"
 "负的优先级账户登入时，您将不会从服务器收到任何消息。"
-
-msgid "If enabled, you will see your webcam's video stream as well."
-msgstr "如果启用，您亦可以同时看到您的网络摄像头视频流。"
 
 #, python-format
 msgid "If you close this window, you will leave '%s'."
@@ -2712,9 +2491,8 @@ msgstr ""
 msgid "Ignore Unknown Contacts"
 msgstr "忽略未知联系人"
 
-#, fuzzy
 msgid "Ignore everything from contacts not in your contact list"
-msgstr "忽略不在你花名册上联系人的一切活动"
+msgstr "忽略不在您联系人列表上联系人的一切活动"
 
 msgid "Image"
 msgstr "图像"
@@ -2724,13 +2502,6 @@ msgstr "图像"
 
 msgid "Import Contacts"
 msgstr "导入联系人"
-
-msgid ""
-"In a chat, show the nickname at the beginning of a line only when it's not "
-"the same person talking as in the previous message."
-msgstr ""
-"在聊天中，只有当聊天对象不是前一条信息中的同一个人时，才在一行的开头显示昵"
-"称。"
 
 msgid ""
 "In order to write messages in this chat, you need to request voice first.\n"
@@ -2935,9 +2706,6 @@ msgstr "踢出…"
 msgid "Label"
 msgstr "标签"
 
-msgid "Language used for spell checking."
-msgstr "用于拼写检查的语言。"
-
 msgid "Last but not least"
 msgstr "最后但同样重要的"
 
@@ -2959,23 +2727,6 @@ msgstr "让其他人知道您已经阅读至此"
 
 msgid "Limit must be an integer"
 msgstr "Limit 必须是一个整数"
-
-msgid ""
-"List of XMPP Addresses (space separated) for which the chat window will be "
-"re-opened on next startup."
-msgstr "下次启动时将要重新打开的聊天窗口 XMPP 地址列表(以空格隔开)。"
-
-msgid ""
-"List of XMPP Addresses (space separated) for which you do not want to store "
-"chat history. You can also add the name of an account to disable storing "
-"chat history for this account."
-msgstr ""
-"您不想保存聊天记录的 XMPP 地址列表(以空格隔开)。您也可以添加账户名称从而禁用"
-"该账户的聊天记录保存。"
-
-msgid ""
-"List of rows (accounts and groups) that are collapsed (space separated)."
-msgstr "需要折叠的行(账户和分组)列表(以空格隔开)。"
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -3083,21 +2834,6 @@ msgstr "标记为已读"
 msgid "Maximum file size for preview generation"
 msgstr "预览生成的最大文件尺寸"
 
-msgid ""
-"Maximum history in days we request from a private group chat archive. 0: As "
-"much as possible."
-msgstr "从私人聊天归档中请求的最大历史记录天数。0: 尽可能多。"
-
-msgid ""
-"Maximum history in days we request from a public group chat archive. 0: As "
-"much as possible."
-msgstr "从公开群聊归档中请求的最大历史记录天数。0: 尽可能多。"
-
-msgid ""
-"Maximum number of lines that are printed in conversations. Oldest lines are "
-"cleared."
-msgstr "在对话中最多显示的行数。最旧的那些行会被清除。"
-
 msgid "Me"
 msgstr "本人"
 
@@ -3138,9 +2874,6 @@ msgid ""
 msgstr ""
 "消息已修订。原始消息:\n"
 "%s"
-
-msgid "Message that is sent to contacts you want to add."
-msgstr "向你希望添加的联系人发送的消息。"
 
 msgid "Messages are archived on the server"
 msgstr "被归档到服务器上的消息"
@@ -3223,6 +2956,10 @@ msgstr "新群组"
 
 msgid "New Search"
 msgstr "新搜索"
+
+#, fuzzy
+msgid "New Workspace"
+msgstr "我的工作区"
 
 #, python-format
 msgid "New message from %s"
@@ -3401,6 +3138,9 @@ msgstr "在浏览器中打开链接"
 msgid "Open Link in _Browser"
 msgstr "在浏览器中打开链接(_B)"
 
+msgid "Open Plugins…"
+msgstr "打开插件…"
+
 msgid "Open _Folder"
 msgstr "打开文件夹(_F)"
 
@@ -3424,12 +3164,6 @@ msgstr "打开搜索栏"
 msgid "Operating System"
 msgstr "操作系统"
 
-msgid "Optionally fix Jingle output video framerate. Example: 10/1 or 25/2."
-msgstr "可选地修正 Jingle 视频输出的帧速率。比如: 10/1 或 25/2。"
-
-msgid "Optionally resize Jingle output video. Example: 320x240."
-msgstr "可选地调整 Jingle 视频输出尺寸。比如: 320x240。"
-
 msgid "Organisation"
 msgstr "组织"
 
@@ -3445,7 +3179,8 @@ msgstr "组织单元 (OU)"
 msgid "Organizational Unit (OU): "
 msgstr "组织单元 (OU): "
 
-msgid "Organize your chats with tabs"
+#, fuzzy
+msgid "Organize your chats with workspaces"
 msgstr "用标签页组织您的聊天"
 
 msgid "Others"
@@ -3580,17 +3315,11 @@ msgstr "Pipewire"
 msgid "Pl_ugins"
 msgstr "插件(_U)"
 
-msgid "Place the contact list on the right in single window mode"
-msgstr "单一窗口模式下放置联系人列表在右"
-
 msgid "Play Sound"
 msgstr "播放声音"
 
 msgid "Play Sounds"
 msgstr "播放声音"
-
-msgid "Play sound even when being busy."
-msgstr "即使在正忙时也播放声音。"
 
 msgid "Play sounds even when you are Away, Busy, etc."
 msgstr "即使在状态为离开、忙碌时也播放声音。"
@@ -3644,9 +3373,6 @@ msgstr "插件设定"
 msgid "Plugin Updates"
 msgstr "插件更新"
 
-msgid "Plugin Updates Available"
-msgstr "有可用的插件更新"
-
 msgid "Plugin already exists"
 msgstr "插件已经存在"
 
@@ -3656,18 +3382,11 @@ msgstr "插件失败"
 msgid "Plugin manager"
 msgstr "插件管理器"
 
-msgid ""
-"Plugin updates have successfully been downloaded.\n"
-"Updates will be installed next time Gajim is started."
-msgstr ""
-"插件更新已经成功下载。\n"
-"更新将在下一次 Gajim 启动时安装。"
-
 msgid "Plugins"
 msgstr "插件"
 
-msgid "Plugins Updated"
-msgstr "插件已更新"
+msgid "Plugins Updated Successfully"
+msgstr "插件已更新成功"
 
 #, python-format
 msgid "Pong! (%(nick)s %(delay)s s.)"
@@ -3697,13 +3416,6 @@ msgstr "首选项"
 
 msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
 msgstr "在聊天窗口中进行文件拖放时首选的文件传输机制"
-
-msgid ""
-"Preferred file transfer mechanism for file drag&drop on a chat window. Can "
-"be 'httpupload' (default) or 'jingle'."
-msgstr ""
-"在聊天窗口中进行文件拖放时首选的文件传输机制 。可以是 'httpupload'（默认）或"
-"者 'jingle'。"
 
 msgid "Presence description:"
 msgstr "预设描述:"
@@ -3738,11 +3450,6 @@ msgstr "打印注册账户的列表"
 msgid "Priority"
 msgstr "优先级"
 
-msgid ""
-"Priority will change automatically according to your status. Priorities are "
-"defined in 'autopriority_*' options."
-msgstr "优先级将根据您的状态自动改变。优先级由 'autopriority_*' 选项定义。"
-
 msgid "Privacy"
 msgstr "隐私"
 
@@ -3766,11 +3473,6 @@ msgstr "代理服务器主机"
 
 msgid "Proxy Type"
 msgstr "代理服务器类型"
-
-msgid ""
-"Proxy used for all outgoing connections if the account does not have a "
-"specific proxy configured."
-msgstr "如果当前账户没有指定代理服务器配置的话代理服务器将用于所有传出的连接。"
 
 msgid "Proxy, custom hostname and port"
 msgstr "代理服务器，自定义主机名和端口"
@@ -3973,6 +3675,9 @@ msgstr "正在请求命令列表"
 msgid "Requesting HTTP File Upload Slot…"
 msgstr "正在请求 HTTP 文件上传口…"
 
+msgid "Requesting search form from server"
+msgstr "正在从服务器请求搜索表格"
+
 msgid "Required"
 msgstr "必要"
 
@@ -4154,6 +3859,12 @@ msgid ""
 msgstr ""
 "全局搜索群聊\n"
 "(按下回车开始搜索)"
+
+msgid "Searching"
+msgstr "正在搜索"
+
+msgid "Searching…"
+msgstr "搜索中…"
 
 msgid "Search…"
 msgstr "搜索…"
@@ -4386,8 +4097,8 @@ msgstr "将当前状态设置为在线"
 msgid "Set the presence type and description"
 msgstr "设置状态类型与描述"
 
-msgid ""
-"Set your activity, tune, and mood to show your friends how you are feeling"
+#, fuzzy
+msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr "设置您的活动、曲调和心境来向您的朋友展示您的感觉"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
@@ -4402,9 +4113,8 @@ msgstr "设定"
 msgid "Share Status"
 msgstr "分享状态"
 
-#, fuzzy
 msgid "Share Video"
-msgstr "开启视频"
+msgstr "共享视频"
 
 msgid "Share my online status"
 msgstr "分享我的在线状态"
@@ -4474,30 +4184,8 @@ msgstr "显示表情符号列表"
 msgid "Show a live preview to test your video source"
 msgstr "显示一个实时预览来测试您的视频来源"
 
-msgid ""
-"Show a status message for all status changes (away, dnd, etc.) of users in a "
-"group chat."
-msgstr "为群聊中用户的所有状态变化（离开、请勿打扰等）显示状态消息。"
-
-msgid "Show a status message for every join or leave in a group chat."
-msgstr "为群聊中每个加入或离开显示状态消息。"
-
 msgid "Show all warnings"
 msgstr "显示所有警告"
-
-msgid "Show close button in tab?"
-msgstr "在标签页上显示关闭按钮？"
-
-msgid ""
-"Show contact list window on startup.\n"
-"'always' - Always show contact list window.\n"
-"'never' - Never show contact list window.\n"
-"'last_state' - Restore last state of the contact list window."
-msgstr ""
-"在启动时显示联系人列表窗口。\n"
-"'always' - 总是显示联系人列表窗口。\n"
-"'never' - 从不显示联系人列表窗口。\n"
-"'last_state' - 恢复上一次联系人列表窗口状态。"
 
 msgid ""
 "Show help on a given command or a list of available commands if -a is given"
@@ -4524,15 +4212,6 @@ msgstr "哪怕您离开或忙碌等时候依然显示通知。"
 msgid "Show only critical errors"
 msgstr "仅显示严重错误"
 
-msgid "Show only online and free for chat contacts in the contact list."
-msgstr "在联系人列表中只显示在线和有空闲聊的联系人。"
-
-msgid "Show tab when only one conversation?"
-msgstr "只有一个对话时仍显示标签页？"
-
-msgid "Show tabbed notebook border in chat windows?"
-msgstr "是否在聊天窗口中显示标签式样的边框？"
-
 msgid "Show the application's version"
 msgstr "显示应用版本"
 
@@ -4553,14 +4232,6 @@ msgstr "为特定命令显示帮助"
 
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr "显示您与您的联系人之间的传输文件列表"
-
-msgid ""
-"Shows a text in the banner that describes the current chat state of the "
-"contact."
-msgstr "在横幅中显示描述联系人当前聊天状态的文本。"
-
-msgid "Shows an info bar with helpful hints in the Start / Join Chat dialog"
-msgstr "在开始/加入聊天对话框中显示包含有用提示的信息横幅"
 
 msgid "Sign In"
 msgstr "登录"
@@ -4601,16 +4272,6 @@ msgstr "按状态排序参与者列表"
 msgid "Sort by Status"
 msgstr "按状态排序"
 
-msgid ""
-"Sound to play when a group chat message contains one of the words in "
-"'muc_highlight_words' or your nickname is mentioned."
-msgstr ""
-"当收到的聊天室的消息包含 'muc_highlight_words' 内的词或提及您昵称时播放的声"
-"音。"
-
-msgid "Sound to play when any group chat message arrives."
-msgstr "当任何群聊消息到达时播放的声音。"
-
 msgid "Sounds"
 msgstr "声音"
 
@@ -4631,7 +4292,7 @@ msgid "Spell Checker"
 msgstr "拼写检查工具"
 
 msgid "Spell Checking"
-msgstr "正在检查拼写"
+msgstr "拼写检查"
 
 msgid "Sta_tus"
 msgstr "状态(_T)"
@@ -4648,19 +4309,20 @@ msgstr "开始聊天"
 msgid "Start Chatting…"
 msgstr "开始聊天…"
 
+msgid "Start Chat…"
+msgstr "开始聊天…"
+
 msgid "Start New Chat"
 msgstr "开始新聊天"
 
 msgid "Start Search..."
 msgstr "开始搜索…"
 
-#, fuzzy
 msgid "Start Video Call…"
-msgstr "开始通话…"
+msgstr "开始视频通话…"
 
-#, fuzzy
 msgid "Start Voice Call…"
-msgstr "开始通话…"
+msgstr "开始语音通话…"
 
 msgid "Start a new chat"
 msgstr "开始新聊天"
@@ -4785,17 +4447,23 @@ msgstr "同步阈值"
 msgid "Synchronise"
 msgstr "同步"
 
-msgid "Synchronise History"
-msgstr "同步聊天记录"
-
 msgid "Synchronise History…"
 msgstr "同步聊天记录…"
 
 msgid "Synchronise the status of all accounts"
 msgstr "同步所有账户状态"
 
+msgid "Synchronize"
+msgstr "同步"
+
 msgid "Synchronize Accounts"
 msgstr "同步账户"
+
+msgid "Synchronize Chat History"
+msgstr "同步聊天记录"
+
+msgid "Synchronizing Chat History…"
+msgstr "同步聊天记录中…"
 
 msgid "System"
 msgstr "系统"
@@ -4837,9 +4505,6 @@ msgid ""
 "The contact will be informed that you stopped sharing your status. Please "
 "note that this can have other side effects."
 msgstr "联系人将会被知会您已停止共享您的状态。请注意这将可能有其他副作用。"
-
-msgid "The currently active encryption for that contact."
-msgstr "针对该联系人当前活跃的加密。"
 
 #, python-format
 msgid ""
@@ -4903,16 +4568,8 @@ msgstr ""
 "有大量服务器可供选择。\n"
 "在一个服务器上创建账户亦可允许您和其他服务器上的联系人沟通。"
 
-#, python-format
-msgid ""
-"There are updates for your plugins:\n"
-"<b>%s</b>"
-msgstr ""
-"您的插件有更新:\n"
-"<b>%s</b>"
-
-msgid "There is already a synchronisation in progress. Please try again later."
-msgstr "已经有一个同步正在进行中。请稍后再试。"
+msgid "There are updates for Gajim’s plugins"
+msgstr "Gajim 插件有更新"
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr "没有适用于选定加密的加密方式。"
@@ -4998,16 +4655,6 @@ msgstr ""
 "该消息已使用 XMPP 专用 OpenPGP 加密且无法解密。您可以安装 OpenPGP 插件以处理"
 "这类消息。"
 
-msgid ""
-"This option lets you customize the timestamp that is printed in "
-"conversation. For example '[%H:%M] ' will show '[hour:minute] '. See python "
-"doc on strftime for full documentation (https://docs.python.org/3/library/"
-"time.html#time.strftime)."
-msgstr ""
-"这个选项允许您自定义对话中显示的时间戳格式。比如\"[%H:%M]\"会显示为\"[小时:分"
-"钟]\"。请参考 Python 文档关于 strftime 的完整文档(https://docs.python.org/3/"
-"library/time.html#time.strftime)。"
-
 msgid "This server does not allow signup."
 msgstr "该服务器不允许注册。"
 
@@ -5051,15 +4698,6 @@ msgstr "直到离开前的时间"
 msgid "Time Until Not Available"
 msgstr "直到不可用前的时间"
 
-msgid "Time in minutes, after which your status changes to away."
-msgstr "以分钟为单位的时间。在此时间后将状态更改为离开。"
-
-msgid "Time in minutes, after which your status changes to not available."
-msgstr "以分钟为单位的时间。在此时间后将状态更改为不可用。"
-
-msgid "Time of inactivity needed before the change status window closes down."
-msgstr "如果在此指定时间内没有活动便将状态变更窗口关闭。"
-
 msgid "To"
 msgstr "至"
 
@@ -5088,9 +4726,6 @@ msgstr ""
 
 msgid "Topic"
 msgstr "话题"
-
-msgid "Tor"
-msgstr "Tor"
 
 msgid "Transferring File…"
 msgstr "传输文件中…"
@@ -5236,11 +4871,11 @@ msgstr "有可用的更新"
 msgid "Update plugins automatically"
 msgstr "自动更新插件"
 
-msgid "Update plugins automatically next time"
-msgstr "下一次自动更新插件"
-
 msgid "Updates"
 msgstr "更新"
+
+msgid "Updates will be installed next time Gajim is started"
+msgstr "更新将在下一次 Gajim 启动时安装。"
 
 msgid "Upload Files"
 msgstr "上传文件"
@@ -5317,13 +4952,6 @@ msgstr "用户"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-msgid ""
-"Valid URI schemes. Only schemes in this list will be accepted as 'real' URI "
-"(mailto and xmpp are handled separately)."
-msgstr ""
-"有效的 URI Scheme。只有这个列表中的 Scheme 会被接受为 \"真正的\" URI。"
-"(mailto 和 xmpp 被分开处理)。"
 
 msgid "Validity"
 msgstr "有效性"
@@ -5407,11 +5035,6 @@ msgstr "这是什么意思？"
 
 msgid "What happened"
 msgstr "发生了什么"
-
-msgid ""
-"When to show the notification area icon. Can be 'never', 'on_event', and "
-"'always'."
-msgstr "何时在通知区域显示图标。可以是 'never'、 'on_event'和 'always'。"
 
 msgid "Where participants should go"
 msgstr "参与者将前往何处"
@@ -5922,9 +5545,6 @@ msgstr "从服务中注销账户(_U)"
 msgid "_Unsubscribe"
 msgstr "退订(_U)"
 
-msgid "_Update"
-msgstr "更新(_U)"
-
 msgid "_Username"
 msgstr "用户名(_U)"
 
@@ -6180,40 +5800,3 @@ msgstr "{nick} 现在状态是 {show}{status}"
 
 msgid "…or drop it here"
 msgstr "或者在这里卸下"
-
-#~ msgid "File: "
-#~ msgstr "文件: "
-
-#~ msgid "Microphone & Camera"
-#~ msgstr "麦克风和摄像头"
-
-#~ msgid "New Message"
-#~ msgstr "新消息"
-
-#~ msgid "Note: Chat history is disabled for this account."
-#~ msgstr "注意：当前账户的聊天记录已停用。"
-
-#~ msgid "Note: Chat history is disabled for this contact."
-#~ msgstr "注意：当前联系人的聊天记录已禁用。"
-
-#~ msgid "Render XHTML styles (colors, etc.) of incoming messages"
-#~ msgstr "为传入消息渲染 XHTML 风格(颜色等)"
-
-#~ msgid "Save conversations for all contacts"
-#~ msgstr "保存与所有联系人的对话"
-
-#~ msgid "Store conversations on the harddrive"
-#~ msgstr "在硬盘存储对话"
-
-#~ msgid "With Microphone"
-#~ msgstr "使用麦克风"
-
-#~ msgid "XHTML Formatting"
-#~ msgstr "XHTML 格式"
-
-#~ msgid ""
-#~ "You just received a new message from %s.\n"
-#~ "Do you want to close this tab?"
-#~ msgstr ""
-#~ "您刚刚收到一条来自 \"%s\" 的消息。\n"
-#~ "您想要关闭该标签页？"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 13:53+0000\n"
+"POT-Creation-Date: 2022-05-31 18:12+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -45,31 +45,6 @@ msgstr "Filoverførsel Forespørgsel"
 #, python-brace-format
 msgid " by {actor}"
 msgstr ""
-
-#, fuzzy
-msgid "$S (Away: Idle more than $T min)"
-msgstr "$S (Væk som et resultat af at være inaktiv i mere end $T minutter)"
-
-#, fuzzy
-msgid "$S (Not available: Idle more than $T min)"
-msgstr ""
-"$S (Ikke tilgængelig som et resultat af at være inaktiv i mere end $T "
-"minutter)"
-
-#, fuzzy
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoawaytime' "
-"value."
-msgstr ""
-"$S vil blive ombyttet med den nuværende status besked, $T ved automatisk væk "
-"tid."
-
-#, fuzzy
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoxatime' value."
-msgstr ""
-"$S vil blive erstattet med den nuværende status besked, $T ved ikke "
-"tilgængelig tid."
 
 #, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
@@ -258,9 +233,6 @@ msgid "1 Year"
 msgstr ""
 
 msgid "2 Days"
-msgstr ""
-
-msgid "2: System, 1: Enabled, 0: Disabled"
 msgstr ""
 
 msgid "3 Months"
@@ -766,6 +738,10 @@ msgstr "Konti"
 msgid "Action when left-clicking a preview"
 msgstr ""
 
+#, fuzzy
+msgid "Activate"
+msgstr "Aktiveret"
+
 msgid "Activated"
 msgstr "Aktiveret"
 
@@ -931,22 +907,8 @@ msgstr "Alle filer"
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
 
-#, fuzzy
-msgid ""
-"Allow Gajim to send information about the operating system you are running."
-msgstr ""
-"Hvis valgt vil Gajim tillade andre at kunne se det operativ system du bruger"
-
-#, fuzzy
-msgid "Allow Gajim to send your local time."
-msgstr "%s vil gerne sende dig en fil."
-
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
-
-#, fuzzy
-msgid "Allow certificate verification with POSH."
-msgstr "SSL certifikat fejl"
 
 msgid ""
 "Allow to hide the contact list window even if the notification area icon is "
@@ -1481,38 +1443,6 @@ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
 msgstr ""
 
 #, fuzzy
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: 'all', "
-"'composing_only', 'disabled'"
-msgstr ""
-"Send samtale status påmindelser. Kan være en af disse: all, composing_only, "
-"disabled."
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: all, "
-"composing_only, disabled"
-msgstr ""
-"Send samtale status påmindelser. Kan være en af disse: all, composing_only, "
-"disabled."
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only' or 'disabled'."
-msgstr ""
-"Send samtale status påmindelser. Kan være en af disse: all, composing_only, "
-"disabled."
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only', 'disabled'"
-msgstr ""
-"Send samtale status påmindelser. Kan være en af disse: all, composing_only, "
-"disabled."
-
-#, fuzzy
 msgid "Chats"
 msgstr "Samtaler"
 
@@ -1745,9 +1675,6 @@ msgstr "Tilslutning er ikke tilgængelig"
 msgid "Connection with %s could not be established."
 msgstr "Tilslutning til ligeværdige kan ikke oprettes."
 
-msgid "ConnectionType: START TLS, DIRECT TLS or PLAIN"
-msgstr ""
-
 msgid "Contact"
 msgstr "Kontakt"
 
@@ -1813,27 +1740,6 @@ msgstr "Kontakter"
 
 msgid "Contacts"
 msgstr "Kontakter"
-
-#, fuzzy
-msgid ""
-"Controls the window where new messages are placed.\n"
-"'always' - All messages are sent to a single window.\n"
-"'always_with_roster' - Like 'always' but the messages are in a single window "
-"along with the contact list.\n"
-"'never' - All messages get their own window.\n"
-"'peracct' - Messages for each account are sent to a specific window.\n"
-"'pertype' - Each message type (e.g. chats vs. group chats) is sent to a "
-"specific window."
-msgstr ""
-"Kontrollerer vinduet hvor nye beskeder er placeret.\n"
-"'always' - Alle beskeder bliver vist i et enkelt vindue.\n"
-"'always_with_roster' - Som 'always' men beskederne er i et enkelt vindue "
-"sammen med kontaktvinduet.\n"
-"'never' - Alle beskeder får deres eget vindue.\n"
-"'peracct' - Beskeder for den enkelte konto bliver sendt til specifikke "
-"vinduer.\n"
-"'pertype' - Hver besked type (for eks. samtaler versus gruppesamtaler) "
-"bliver sendt til et specifikt vindue."
 
 msgid "Conversation: Nickname Color (Incoming)"
 msgstr ""
@@ -1948,12 +1854,6 @@ msgid "Credentials expired"
 msgstr "Certifikatet er udløbet"
 
 #, fuzzy
-msgid ""
-"Ctrl+Tab switches to the next composing tab when there are no tabs with "
-"messages pending."
-msgstr "Ctrl-Tab gå til næste faneblad når ingen er ulæste."
-
-#, fuzzy
 msgid "Current Developers"
 msgstr "Nuværende Programudviklere:"
 
@@ -1964,9 +1864,6 @@ msgstr ""
 #, fuzzy
 msgid "Dark Theme"
 msgstr "Gajim - %s"
-
-msgid "Date of the last update check"
-msgstr ""
 
 msgid "Deactivated"
 msgstr "Ikke aktiveret"
@@ -1981,18 +1878,6 @@ msgstr "_Afkoblet"
 
 msgid "Default"
 msgstr "Standard"
-
-#, fuzzy
-msgid ""
-"Default Setting: Show a status message for all status changes (away, dnd, "
-"etc.) of users in a group chat."
-msgstr "Ikke i stand til at deltage i gruppesamtale."
-
-#, fuzzy
-msgid ""
-"Default Setting: Show a status message for every join or leave in a group "
-"chat."
-msgstr "Ikke i stand til at deltage i gruppesamtale."
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -2021,12 +1906,6 @@ msgstr "Forlad Gruppesamtaler"
 msgid "Default for new public group chats"
 msgstr "Forlad Gruppesamtaler"
 
-#, fuzzy
-msgid ""
-"Define the position of avatars in the contact list. Can be 'left' or 'right'."
-msgstr ""
-"Definer positionen af avataren i kontaktvinduet. Kan være venstre eller højre"
-
 msgid "Delete"
 msgstr "Slet"
 
@@ -2044,7 +1923,7 @@ msgid "Description: "
 msgstr "Beskrivelse: "
 
 #, fuzzy
-msgid "Destroy Groupchat…"
+msgid "Destroy Group Chat…"
 msgstr "Ny Gruppe Samtale"
 
 #, fuzzy
@@ -2131,10 +2010,6 @@ msgstr "Spørg før et gruppesamtale vindue/faneblad lukkes."
 msgid "Do not disturb"
 msgstr "Forstyr ikke"
 
-#, fuzzy
-msgid "Do not show this message again"
-msgstr "_Spørg mig ikke igen"
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Accepterer du denne forespørgsel for konto %s?"
@@ -2169,12 +2044,12 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
 #, fuzzy
-msgid "Don't show contact list window in the system taskbar."
+msgid "Don’t show main window in the system taskbar."
 msgstr "Ikke hvis kontaktvindue i vindueslisten."
 
 #, fuzzy
-msgid "Don’t show main window in the system taskbar."
-msgstr "Ikke hvis kontaktvindue i vindueslisten."
+msgid "Don’t show this again"
+msgstr "_Spørg mig ikke igen"
 
 #, fuzzy
 msgid "Download"
@@ -2340,6 +2215,14 @@ msgstr "Fejl ved tilføjelse af tjeneste. %s"
 #, fuzzy
 msgid "Error while processing image"
 msgstr "Tidsudløb nået for at laste billede"
+
+#, fuzzy
+msgid "Error while receiving search results."
+msgstr "Tidsudløb nået for at laste billede"
+
+#, fuzzy
+msgid "Error while retrieving search form."
+msgstr "Fejl ved tilføjelse af tjeneste. %s"
 
 #, fuzzy
 msgid "Error while uploading avatar"
@@ -2577,6 +2460,10 @@ msgstr "Private Samtaler"
 msgid "Fingerprints"
 msgstr ""
 
+#, fuzzy
+msgid "Finished"
+msgstr "_Færdig"
+
 #, python-format
 msgid ""
 "Finished synchronising chat history:\n"
@@ -2747,6 +2634,10 @@ msgid "Group Chat"
 msgstr "Gruppesamtaler"
 
 #, fuzzy
+msgid "Group Chat Details"
+msgstr "Tilslutning fejlede"
+
+#, fuzzy
 msgid "Group Chat Invitation"
 msgstr "Gruppesamtale Invitation"
 
@@ -2814,13 +2705,6 @@ msgstr "Rummet viser nu; ikke tilgængelige medlemmer"
 #, fuzzy
 msgid "Group chat support"
 msgstr "Gruppesamtaler"
-
-msgid "Group multiple contacts from one friend to a single Meta-Contact"
-msgstr ""
-
-#, fuzzy
-msgid "Groupchat Details"
-msgstr "Tilslutning fejlede"
 
 msgid "Groups"
 msgstr "Grupper"
@@ -2900,22 +2784,6 @@ msgstr "Jeg vil gerne tilføje dig til min kontakt liste."
 msgid "I would like to add you to my roster."
 msgstr "Jeg vil gerne tilføje dig til min kontaktliste."
 
-#, fuzzy
-msgid "I'm eating."
-msgstr "Jeg arbejder."
-
-msgid "I'm on the phone."
-msgstr "Jeg snakker i telefon."
-
-msgid "I'm out enjoying life."
-msgstr "Jeg er ude og nyder livet."
-
-msgid "I'm watching a movie."
-msgstr "Jeg ser en film."
-
-msgid "I'm working."
-msgstr "Jeg arbejder."
-
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC standard siger KiB = 1024 byte, KB = 1000 byte."
 
@@ -2944,28 +2812,6 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"If disabled, Gajim will no longer print status messages in chats when a "
-"contact changes their status (and/or their status message)."
-msgstr ""
-"Hvis Falsk, vil Gajim ikke længere skrive statuslinjer i samtaler når en "
-"kontakt ændrer hans eller hendes status og/eller hans eller hendes status "
-"besked."
-
-#, fuzzy
-msgid ""
-"If disabled, this account will be disabled and will not appear in the "
-"contact list window."
-msgstr ""
-"Hvis Falsk vil denne konto blive deaktiveret og vil ikke vises i "
-"kontaktvinduet."
-
-msgid ""
-"If enabled, Gajim hides the contact list window when pressing the X button "
-"instead of minimizing into the notification area."
-msgstr ""
-
-#, fuzzy
-msgid ""
 "If enabled, Gajim hides the main window when pressing the X button instead "
 "of minimizing into the notification area."
 msgstr ""
@@ -2982,44 +2828,8 @@ msgstr ""
 "ventende begivenheder."
 
 #, fuzzy
-msgid ""
-"If enabled, Gajim quits when clicking the X button of your Window Manager. "
-"This setting is taken into account only if the notification area icon is "
-"used."
-msgstr ""
-"Hvis Sandt, lukker Gajim når X knappen fra vindueshåndteringen klikkes. "
-"Denne indstilling tages der kun hensyn til hvis et statusfelt ikon bruges."
-
-msgid ""
-"If enabled, Gajim shows the group chat subject in the chat window when "
-"joining."
-msgstr ""
-
-#, fuzzy
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr "Hvis valgt vil Gajim vise kontakternes humør i kontaktvinduet"
-
-#, fuzzy
-msgid "If enabled, Gajim will answer to message receipt requests."
-msgstr ""
-"Hvis aktiveret vil Gajim i spørge for en status besked. Den valgte standard "
-"besked vil blive brugt i stedet."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will display an icon to show that sent messages have been "
-"received by your contact."
-msgstr ""
-"Hvis aktiveret vil Gajim i spørge for en status besked. Den valgte standard "
-"besked vil blive brugt i stedet."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will display the status message (if not empty) underneath "
-"the contact name in the contact list window."
-msgstr ""
-"Hvis Sandt, vil Gajim vise status beskeder, hvis ikke tomme, for hver "
-"kontakt under kontaktnavnet i kontaktvinduet."
 
 msgid "If enabled, Gajim will execute XEP-0146 Commands."
 msgstr ""
@@ -3031,63 +2841,13 @@ msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
 msgstr ""
 
 msgid ""
-"If enabled, Gajim will reopen chat windows that were opened last time Gajim "
-"was closed."
-msgstr ""
-
-msgid ""
-"If enabled, Gajim will save the contact list window position when hiding it, "
-"and restore it when showing the contact list window again."
-msgstr ""
-
-msgid ""
 "If enabled, Gajim will save the main window position when hiding it, and "
 "restore it when showing the window again."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will send your local IP so your contact can connect to "
-"your machine for file transfers."
-msgstr ""
-"Hvis valgt vil Gajim bruge din IP og proxy defineret i file_transfer_proxies "
-"indstillingen for filoverførsler."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will show both the number of online and total contacts in "
-"account rows as well as in group rows."
-msgstr ""
-"Hvis Sandt vil Gajim vise antallet af online og totale kontakter i konto og "
-"gruppe rækker."
-
-msgid ""
-"If enabled, Gajim will test file transfer proxies on startup to be sure they "
-"work. Openfire's proxies are known to fail this test even if they work."
 msgstr ""
 
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in 'stun_server' option, or the one given by the XMPP server."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will use the System's Keyring to store account passwords."
-msgstr ""
-"Hvis Sandt vil Gajim bruge Gnome Nøglering (hvis tilgængelig) til at gemme "
-"konto adgangskoder."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will use your IP and proxies defined in "
-"'file_transfer_proxies' option for file transfers."
-msgstr ""
-"Hvis valgt vil Gajim bruge din IP og proxy defineret i file_transfer_proxies "
-"indstillingen for filoverførsler."
-
-msgid ""
-"If enabled, a notification is created for every message in this group chat."
 msgstr ""
 
 #, fuzzy
@@ -3098,47 +2858,8 @@ msgstr ""
 "færdiggørelse i kommandolinjen"
 
 #, fuzzy
-msgid ""
-"If enabled, contacts requesting authorization will be accepted automatically."
-msgstr ""
-"Hvis sandt, kontakter som beder om autorisering vil automatisk blive "
-"accepteret."
-
-#, fuzzy
-msgid ""
-"If enabled, do not remove */_ . So *abc* will be bold but with * * not "
-"removed."
-msgstr ""
-"Hvis sandt, ikke fjern */_. Således at *abc* bliver skrevet med fed skrift "
-"men * * bliver ikke fjernet."
-
-msgid ""
-"If enabled, plugins will be activated on startup (this is saved when exiting "
-"Gajim). This option SHOULD NOT be used to (de)activate plugins. Use the "
-"plugin window instead."
-msgstr ""
-
-#, fuzzy
 msgid "If enabled, pressing Esc closes a tab/window."
 msgstr "Hvis Sandt vil tryk på escape tasten lukke et vindue/faneblad."
-
-#, fuzzy
-msgid ""
-"If enabled, the contact row is colored according to the current chat state "
-"of the contact."
-msgstr ""
-"Hvis valgt vil Gajim tillade andre at kunne se det operativ system du bruger"
-
-#, fuzzy
-msgid "If enabled, the last status will be restored."
-msgstr "Hvis valgt, gendan den sidste status som var brugt."
-
-#, fuzzy
-msgid ""
-"If enabled, the tab is colored according to the current chat state of the "
-"contact."
-msgstr ""
-"Hvis valgt vil Gajim tillade andre at kunne se det operativ system du bruger"
 
 #, fuzzy
 msgid ""
@@ -3149,9 +2870,6 @@ msgstr ""
 "Hvis Sandt vil du være i stand til at sætte en negativ prioritet til din "
 "konto i kontoændrings vinduet. VÆR FORSIGTIG, når du er logget med en "
 "negativ prioritet vil du IKKE modtage nogen beskeder fra din server."
-
-msgid "If enabled, you will see your webcam's video stream as well."
-msgstr ""
 
 #, fuzzy, python-format
 msgid "If you close this window, you will leave '%s'."
@@ -3181,14 +2899,6 @@ msgstr "Billeder"
 #, fuzzy
 msgid "Import Contacts"
 msgstr "Inviter _Kontakter"
-
-#, fuzzy
-msgid ""
-"In a chat, show the nickname at the beginning of a line only when it's not "
-"the same person talking as in the previous message."
-msgstr ""
-"I en samtale, vis kælenavn i begyndelsen af en linie kun når det ikke er den "
-"samme person som snakker som i forrige besked."
 
 msgid ""
 "In order to write messages in this chat, you need to request voice first.\n"
@@ -3422,10 +3132,6 @@ msgstr "_Kast ud"
 msgid "Label"
 msgstr ""
 
-#, fuzzy
-msgid "Language used for spell checking."
-msgstr "Sprog brugt af stavelseskontrollen"
-
 msgid "Last but not least"
 msgstr ""
 
@@ -3449,24 +3155,6 @@ msgstr ""
 
 msgid "Limit must be an integer"
 msgstr ""
-
-msgid ""
-"List of XMPP Addresses (space separated) for which the chat window will be "
-"re-opened on next startup."
-msgstr ""
-
-msgid ""
-"List of XMPP Addresses (space separated) for which you do not want to store "
-"chat history. You can also add the name of an account to disable storing "
-"chat history for this account."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"List of rows (accounts and groups) that are collapsed (space separated)."
-msgstr ""
-"Liste (separeret med mellemrum) af rækker (konti og grupper) som er "
-"kollapset."
 
 #, fuzzy
 msgid ""
@@ -3594,23 +3282,6 @@ msgstr ""
 msgid "Maximum file size for preview generation"
 msgstr ""
 
-msgid ""
-"Maximum history in days we request from a private group chat archive. 0: As "
-"much as possible."
-msgstr ""
-
-msgid ""
-"Maximum history in days we request from a public group chat archive. 0: As "
-"much as possible."
-msgstr ""
-
-msgid ""
-"Maximum number of lines that are printed in conversations. Oldest lines are "
-"cleared."
-msgstr ""
-"Maksimum antal linjer som bliver skrevet i samtaler. De ældste linjer bliver "
-"slettet."
-
 #, fuzzy
 msgid "Me"
 msgstr "Ondskabsfuld"
@@ -3656,10 +3327,6 @@ msgid ""
 "Message corrected. Original message:\n"
 "%s"
 msgstr ""
-
-#, fuzzy
-msgid "Message that is sent to contacts you want to add."
-msgstr "Fyld ind data for den kontakt som du vil tilføje"
 
 #, fuzzy
 msgid "Messages are archived on the server"
@@ -3755,6 +3422,10 @@ msgstr "Ny Gruppe Samtale"
 #, fuzzy
 msgid "New Search"
 msgstr "Søg"
+
+#, fuzzy
+msgid "New Workspace"
+msgstr "Omdøb Kontakt"
 
 #, fuzzy, python-format
 msgid "New message from %s"
@@ -3960,6 +3631,10 @@ msgid "Open Link in _Browser"
 msgstr "_Åbn Henvisning i Netlæser"
 
 #, fuzzy
+msgid "Open Plugins…"
+msgstr "Tilslutning fejlede"
+
+#, fuzzy
 msgid "Open _Folder"
 msgstr "_Åbn folderen med filen"
 
@@ -3987,12 +3662,6 @@ msgstr ""
 msgid "Operating System"
 msgstr "Selvsigneret certifikat"
 
-msgid "Optionally fix Jingle output video framerate. Example: 10/1 or 25/2."
-msgstr ""
-
-msgid "Optionally resize Jingle output video. Example: 320x240."
-msgstr ""
-
 #, fuzzy
 msgid "Organisation"
 msgstr "Få Ferie"
@@ -4009,7 +3678,7 @@ msgstr ""
 msgid "Organizational Unit (OU): "
 msgstr ""
 
-msgid "Organize your chats with tabs"
+msgid "Organize your chats with workspaces"
 msgstr ""
 
 msgid "Others"
@@ -4158,9 +3827,6 @@ msgstr ""
 msgid "Pl_ugins"
 msgstr "Tilslutning fejlede"
 
-msgid "Place the contact list on the right in single window mode"
-msgstr ""
-
 #, fuzzy
 msgid "Play Sound"
 msgstr "Afspil _lyde"
@@ -4168,10 +3834,6 @@ msgstr "Afspil _lyde"
 #, fuzzy
 msgid "Play Sounds"
 msgstr "Afspil _lyde"
-
-#, fuzzy
-msgid "Play sound even when being busy."
-msgstr "Spil en lyd når brugeren er optaget"
 
 #, fuzzy
 msgid "Play sounds even when you are Away, Busy, etc."
@@ -4228,10 +3890,6 @@ msgid "Plugin Updates"
 msgstr "Tilslutning fejlede"
 
 #, fuzzy
-msgid "Plugin Updates Available"
-msgstr "Ingen konto tilgængelig"
-
-#, fuzzy
 msgid "Plugin already exists"
 msgstr "Denne fil eksisterer allerede"
 
@@ -4243,16 +3901,11 @@ msgstr "Tilslutning fejlede"
 msgid "Plugin manager"
 msgstr "Tilslutning fejlede"
 
-msgid ""
-"Plugin updates have successfully been downloaded.\n"
-"Updates will be installed next time Gajim is started."
-msgstr ""
-
 msgid "Plugins"
 msgstr ""
 
 #, fuzzy
-msgid "Plugins Updated"
+msgid "Plugins Updated Successfully"
 msgstr "Tilslutning fejlede"
 
 #, fuzzy, python-format
@@ -4285,11 +3938,6 @@ msgid "Preferences"
 msgstr "Indstillinger"
 
 msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
-msgstr ""
-
-msgid ""
-"Preferred file transfer mechanism for file drag&drop on a chat window. Can "
-"be 'httpupload' (default) or 'jingle'."
 msgstr ""
 
 msgid "Presence description:"
@@ -4330,14 +3978,6 @@ msgstr "Udskriver en liste af registrerede konti"
 msgid "Priority"
 msgstr "Priori_tet:"
 
-#, fuzzy
-msgid ""
-"Priority will change automatically according to your status. Priorities are "
-"defined in 'autopriority_*' options."
-msgstr ""
-"Prioriteten vil ændres automatisk ifølge din status. Prioriteter er "
-"defineret i autopriority_* indstillingerne."
-
 msgid "Privacy"
 msgstr "Privatliv"
 
@@ -4367,11 +4007,6 @@ msgstr "Proxy _vært:"
 #, fuzzy
 msgid "Proxy Type"
 msgstr "Proxy:"
-
-msgid ""
-"Proxy used for all outgoing connections if the account does not have a "
-"specific proxy configured."
-msgstr ""
 
 #, fuzzy
 msgid "Proxy, custom hostname and port"
@@ -4619,6 +4254,9 @@ msgstr "_Kør Kommando"
 msgid "Requesting HTTP File Upload Slot…"
 msgstr ""
 
+msgid "Requesting search form from server"
+msgstr ""
+
 #, fuzzy
 msgid "Required"
 msgstr "Adgangskode er Påkrævet"
@@ -4834,6 +4472,14 @@ msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
 msgstr ""
+
+#, fuzzy
+msgid "Searching"
+msgstr "Søg"
+
+#, fuzzy
+msgid "Searching…"
+msgstr "Søg"
 
 #, fuzzy
 msgid "Search…"
@@ -5099,8 +4745,7 @@ msgstr ""
 msgid "Set the presence type and description"
 msgstr "Sæt tilstedeværelses type og beskrivelse"
 
-msgid ""
-"Set your activity, tune, and mood to show your friends how you are feeling"
+msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
@@ -5211,28 +4856,8 @@ msgid "Show a live preview to test your video source"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"Show a status message for all status changes (away, dnd, etc.) of users in a "
-"group chat."
-msgstr "Ikke i stand til at deltage i gruppesamtale."
-
-#, fuzzy
-msgid "Show a status message for every join or leave in a group chat."
-msgstr "Ikke i stand til at deltage i gruppesamtale."
-
-#, fuzzy
 msgid "Show all warnings"
 msgstr "Vis Alle Ventende Hænd_elser"
-
-msgid "Show close button in tab?"
-msgstr "Vis lukke knap i faneblad?"
-
-msgid ""
-"Show contact list window on startup.\n"
-"'always' - Always show contact list window.\n"
-"'never' - Never show contact list window.\n"
-"'last_state' - Restore last state of the contact list window."
-msgstr ""
 
 msgid ""
 "Show help on a given command or a list of available commands if -a is given"
@@ -5260,17 +4885,6 @@ msgid "Show only critical errors"
 msgstr "_Vis hændelse i kontaktvindue"
 
 #, fuzzy
-msgid "Show only online and free for chat contacts in the contact list."
-msgstr ""
-"Vis kun brugere på net og brugere klar for en samtale i kontaktvinduet."
-
-msgid "Show tab when only one conversation?"
-msgstr "Vis et faneblad når der kun er en samtale?"
-
-msgid "Show tabbed notebook border in chat windows?"
-msgstr "Vis faneblade i samtalevinduer?"
-
-#, fuzzy
 msgid "Show the application's version"
 msgstr "Vis et faneblad når der kun er en samtale?"
 
@@ -5294,16 +4908,6 @@ msgstr "Viser hjælp for en specifik kommando"
 #, fuzzy
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr "Viser en liste over filoverførsler mellem dig og andre"
-
-#, fuzzy
-msgid ""
-"Shows a text in the banner that describes the current chat state of the "
-"contact."
-msgstr ""
-"Hvis valgt vil Gajim tillade andre at kunne se det operativ system du bruger"
-
-msgid "Shows an info bar with helpful hints in the Start / Join Chat dialog"
-msgstr ""
 
 #, fuzzy
 msgid "Sign In"
@@ -5351,19 +4955,6 @@ msgid "Sort by Status"
 msgstr "Sorter kontakter efter status"
 
 #, fuzzy
-msgid ""
-"Sound to play when a group chat message contains one of the words in "
-"'muc_highlight_words' or your nickname is mentioned."
-msgstr ""
-"Lyd som spilles når en gruppesamtale besked indeholder en af følgende ord i "
-"muc_highlight_words, eller når en gruppesamtale besked indeholder dit "
-"kælenavn."
-
-#, fuzzy
-msgid "Sound to play when any group chat message arrives."
-msgstr "Lyd som spilles når en hvilken som helst MUC besked ankommer."
-
-#, fuzzy
 msgid "Sounds"
 msgstr "Wav Lyde"
 
@@ -5403,6 +4994,10 @@ msgstr "Start Samtale"
 
 #, fuzzy
 msgid "Start Chatting…"
+msgstr "Start Samtale"
+
+#, fuzzy
+msgid "Start Chat…"
 msgstr "Start Samtale"
 
 #, fuzzy
@@ -5562,10 +5157,6 @@ msgid "Synchronise"
 msgstr "Synkroniser"
 
 #, fuzzy
-msgid "Synchronise History"
-msgstr "Synkroniser"
-
-#, fuzzy
 msgid "Synchronise History…"
 msgstr "Synkroniser"
 
@@ -5574,8 +5165,20 @@ msgid "Synchronise the status of all accounts"
 msgstr "Ændrer status for kontoen eller konti"
 
 #, fuzzy
+msgid "Synchronize"
+msgstr "Synkroniser"
+
+#, fuzzy
 msgid "Synchronize Accounts"
 msgstr "Synkroniser kontakter"
+
+#, fuzzy
+msgid "Synchronize Chat History"
+msgstr "Synkroniser"
+
+#, fuzzy
+msgid "Synchronizing Chat History…"
+msgstr "Synkroniser"
 
 #, fuzzy
 msgid "System"
@@ -5623,10 +5226,6 @@ msgid ""
 "The contact will be informed that you stopped sharing your status. Please "
 "note that this can have other side effects."
 msgstr ""
-
-#, fuzzy
-msgid "The currently active encryption for that contact."
-msgstr "Aktiver ESessions kryptering for denne konto."
 
 #, python-format
 msgid ""
@@ -5691,13 +5290,7 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
-#, python-format
-msgid ""
-"There are updates for your plugins:\n"
-"<b>%s</b>"
-msgstr ""
-
-msgid "There is already a synchronisation in progress. Please try again later."
+msgid "There are updates for Gajim’s plugins"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5793,18 +5386,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid ""
-"This option lets you customize the timestamp that is printed in "
-"conversation. For example '[%H:%M] ' will show '[hour:minute] '. See python "
-"doc on strftime for full documentation (https://docs.python.org/3/library/"
-"time.html#time.strftime)."
-msgstr ""
-"Denne valgmulighed giver dig muligheden for at tilpasse hvordan "
-"klokkeslettet bliver skrevet i en samtale. For eksempel [%H:%M] vil vise "
-"[timer:minutter]. Se python dokumentationen for strftime: http://docs.python."
-"org/lib/module-time.html"
-
-#, fuzzy
 msgid "This server does not allow signup."
 msgstr "Din server understøtter ikke Vcard"
 
@@ -5852,16 +5433,6 @@ msgstr ""
 msgid "Time Until Not Available"
 msgstr "Ikke Tilgængelig"
 
-msgid "Time in minutes, after which your status changes to away."
-msgstr "Tid i minutter før din status ændres til borte."
-
-msgid "Time in minutes, after which your status changes to not available."
-msgstr "Tid i minutter før din status ændres til ikke tilgængelig."
-
-msgid "Time of inactivity needed before the change status window closes down."
-msgstr ""
-"Tid med inaktivitet der skal gå før vinduet til at ændre status lukkes."
-
 msgid "To"
 msgstr "Til"
 
@@ -5894,10 +5465,6 @@ msgstr ""
 
 msgid "Topic"
 msgstr ""
-
-#, fuzzy
-msgid "Tor"
-msgstr "Til"
 
 #, fuzzy
 msgid "Transferring File…"
@@ -6061,10 +5628,10 @@ msgstr "Ingen konto tilgængelig"
 msgid "Update plugins automatically"
 msgstr ""
 
-msgid "Update plugins automatically next time"
+msgid "Updates"
 msgstr ""
 
-msgid "Updates"
+msgid "Updates will be installed next time Gajim is started"
 msgstr ""
 
 #, fuzzy
@@ -6148,14 +5715,6 @@ msgstr "Brugere"
 #, python-format
 msgid "V4L2: %s"
 msgstr ""
-
-#, fuzzy
-msgid ""
-"Valid URI schemes. Only schemes in this list will be accepted as 'real' URI "
-"(mailto and xmpp are handled separately)."
-msgstr ""
-"Gyldige uri skemaer. Kun skemaer i denne liste vil blive accepteret som "
-"\"rigtige\" uri. (mailto og xmpp bliver behandlet separat)"
 
 msgid "Validity"
 msgstr ""
@@ -6252,13 +5811,6 @@ msgstr "Skjul denne menu"
 
 msgid "What happened"
 msgstr ""
-
-#, fuzzy
-msgid ""
-"When to show the notification area icon. Can be 'never', 'on_event', and "
-"'always'."
-msgstr ""
-"Når skal systembakke ikonet vises? Kan være 'never', 'on_event', 'always'."
 
 msgid "Where participants should go"
 msgstr ""
@@ -6863,10 +6415,6 @@ msgid "_Unsubscribe"
 msgstr "_Frameld abonnement"
 
 #, fuzzy
-msgid "_Update"
-msgstr "Opdater MOTD..."
-
-#, fuzzy
 msgid "_Username"
 msgstr "_Brugernavn:"
 
@@ -7137,27 +6685,3 @@ msgstr "%(nick)s er nu %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
-
-#~ msgid "File: "
-#~ msgstr "Fil: "
-
-#~ msgid "New Message"
-#~ msgstr "Ny Besked"
-
-#, fuzzy
-#~ msgid "Note: Chat history is disabled for this contact."
-#~ msgstr "Ignorer denne fejl for dette certifikat."
-
-#, fuzzy
-#~ msgid "Save conversations for all contacts"
-#~ msgstr "Gem konversations _logger for alle kontakter"
-
-#, fuzzy
-#~ msgid "XHTML Formatting"
-#~ msgstr "Hvis en liste over følelsesikoner"
-
-#, fuzzy
-#~ msgid ""
-#~ "You just received a new message from %s.\n"
-#~ "Do you want to close this tab?"
-#~ msgstr "Du har netop modtaget en besked fra \"%s\""

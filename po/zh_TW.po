@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 13:53+0000\n"
+"POT-Creation-Date: 2022-05-31 18:12+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -48,25 +48,6 @@ msgstr "語音聊天請求"
 #, python-brace-format
 msgid " by {actor}"
 msgstr ""
-
-#, fuzzy
-msgid "$S (Away: Idle more than $T min)"
-msgstr "$S (離開，因為閒置超過了$T分鐘)"
-
-#, fuzzy
-msgid "$S (Not available: Idle more than $T min)"
-msgstr "$S (離開很久了，因為閒置超過了$T分鐘)"
-
-#, fuzzy
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoawaytime' "
-"value."
-msgstr "$S 會被目前的狀態訊息替換，$T 會被自動離開的時間替換。"
-
-#, fuzzy
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoxatime' value."
-msgstr "$S 會被目前的狀態訊息替換，$T 會被自動無法使用的時間替換。"
 
 #, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
@@ -249,9 +230,6 @@ msgid "1 Year"
 msgstr ""
 
 msgid "2 Days"
-msgstr ""
-
-msgid "2: System, 1: Enabled, 0: Disabled"
 msgstr ""
 
 msgid "3 Months"
@@ -749,6 +727,10 @@ msgstr "帳號"
 msgid "Action when left-clicking a preview"
 msgstr ""
 
+#, fuzzy
+msgid "Activate"
+msgstr "啟用的"
+
 msgid "Activated"
 msgstr "啟用的"
 
@@ -912,19 +894,8 @@ msgstr "所有檔案"
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
 
-msgid ""
-"Allow Gajim to send information about the operating system you are running."
-msgstr "允許 Gajim 發送您正在執行的作業系統相關資訊。"
-
-msgid "Allow Gajim to send your local time."
-msgstr "允許 Gajim 發送您的本地時間。"
-
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
-
-#, fuzzy
-msgid "Allow certificate verification with POSH."
-msgstr "SSL 憑證驗證"
 
 #, fuzzy
 msgid ""
@@ -1457,30 +1428,6 @@ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
 msgstr ""
 
 #, fuzzy
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: 'all', "
-"'composing_only', 'disabled'"
-msgstr "傳送聊天狀態通知。可以是全部，僅正在編輯，停用中的一個。"
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: all, "
-"composing_only, disabled"
-msgstr "傳送聊天狀態通知。可以是全部，僅正在編輯，停用中的一個。"
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only' or 'disabled'."
-msgstr "傳送聊天狀態通知。可以是全部，僅正在編輯，停用中的一個。"
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only', 'disabled'"
-msgstr "傳送聊天狀態通知。可以是全部，僅正在編輯，停用中的一個。"
-
-#, fuzzy
 msgid "Chats"
 msgstr "聊天"
 
@@ -1713,9 +1660,6 @@ msgstr "連線無法使用"
 msgid "Connection with %s could not be established."
 msgstr "無法與對方建立連線。"
 
-msgid "ConnectionType: START TLS, DIRECT TLS or PLAIN"
-msgstr ""
-
 msgid "Contact"
 msgstr "聯絡人"
 
@@ -1781,25 +1725,6 @@ msgstr "聯絡人"
 
 msgid "Contacts"
 msgstr "聯絡人"
-
-#, fuzzy
-msgid ""
-"Controls the window where new messages are placed.\n"
-"'always' - All messages are sent to a single window.\n"
-"'always_with_roster' - Like 'always' but the messages are in a single window "
-"along with the contact list.\n"
-"'never' - All messages get their own window.\n"
-"'peracct' - Messages for each account are sent to a specific window.\n"
-"'pertype' - Each message type (e.g. chats vs. group chats) is sent to a "
-"specific window."
-msgstr ""
-"控制新訊息被放置的視窗。\n"
-"'always' - 所有訊息都傳送到一個視窗。\n"
-"'always_with_roster' - 與 'always' 類似但所有訊息在一個單獨的視窗中，這個視窗"
-"獨立於聯絡人清單視窗。\n"
-"'never' - 所有訊息都開啟單獨的視窗。\n"
-"'peracct' - 每個帳號的訊息傳送到一個單獨的視窗。\n"
-"'pertype' - 每種類型的訊息 (例如，聊天 及 多人聊天) 傳送到一個單獨的視窗。"
 
 msgid "Conversation: Nickname Color (Incoming)"
 msgstr ""
@@ -1914,12 +1839,6 @@ msgid "Credentials expired"
 msgstr "證書已過期"
 
 #, fuzzy
-msgid ""
-"Ctrl+Tab switches to the next composing tab when there are no tabs with "
-"messages pending."
-msgstr "當所有分頁中沒有未讀訊息時按 Ctrl-Tab 轉到下一個正在編輯的標籤。"
-
-#, fuzzy
 msgid "Current Developers"
 msgstr "目前的開發者:"
 
@@ -1929,9 +1848,6 @@ msgstr "在這臺電腦上沒有 D-Bus 或是 Python 模組缺失"
 #, fuzzy
 msgid "Dark Theme"
 msgstr "Gajim - %s"
-
-msgid "Date of the last update check"
-msgstr ""
 
 msgid "Deactivated"
 msgstr "未啟用的"
@@ -1946,18 +1862,6 @@ msgstr "離線(_O)"
 
 msgid "Default"
 msgstr "預設"
-
-#, fuzzy
-msgid ""
-"Default Setting: Show a status message for all status changes (away, dnd, "
-"etc.) of users in a group chat."
-msgstr "無法加入聊天室"
-
-#, fuzzy
-msgid ""
-"Default Setting: Show a status message for every join or leave in a group "
-"chat."
-msgstr "無法加入聊天室"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -1986,11 +1890,6 @@ msgstr "離開聊天室"
 msgid "Default for new public group chats"
 msgstr "離開聊天室"
 
-#, fuzzy
-msgid ""
-"Define the position of avatars in the contact list. Can be 'left' or 'right'."
-msgstr "定義了在聯絡人清單中頭像的顯示位置。可以是左或右"
-
 msgid "Delete"
 msgstr "刪除"
 
@@ -2008,7 +1907,7 @@ msgid "Description: "
 msgstr "描述: "
 
 #, fuzzy
-msgid "Destroy Groupchat…"
+msgid "Destroy Group Chat…"
 msgstr "新聊天室"
 
 #, fuzzy
@@ -2093,10 +1992,6 @@ msgstr "關閉多人聊天標籤/視窗前詢問。"
 msgid "Do not disturb"
 msgstr "請無打擾"
 
-#, fuzzy
-msgid "Do not show this message again"
-msgstr "不要再問我了(_D)"
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "是否接受這個對帳號 %s 的請求?"
@@ -2131,12 +2026,12 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
 #, fuzzy
-msgid "Don't show contact list window in the system taskbar."
+msgid "Don’t show main window in the system taskbar."
 msgstr "不要將聯絡人清單視窗顯示在系統的工作列中。"
 
 #, fuzzy
-msgid "Don’t show main window in the system taskbar."
-msgstr "不要將聯絡人清單視窗顯示在系統的工作列中。"
+msgid "Don’t show this again"
+msgstr "不要再問我了(_D)"
 
 #, fuzzy
 msgid "Download"
@@ -2303,6 +2198,14 @@ msgstr "加入服務錯誤。 %s"
 #, fuzzy
 msgid "Error while processing image"
 msgstr "讀取檔案逾時"
+
+#, fuzzy
+msgid "Error while receiving search results."
+msgstr "讀取檔案逾時"
+
+#, fuzzy
+msgid "Error while retrieving search form."
+msgstr "加入服務錯誤。 %s"
 
 #, fuzzy
 msgid "Error while uploading avatar"
@@ -2543,6 +2446,10 @@ msgstr "私人聊天"
 msgid "Fingerprints"
 msgstr ""
 
+#, fuzzy
+msgid "Finished"
+msgstr "完成(_F)"
+
 #, python-format
 msgid ""
 "Finished synchronising chat history:\n"
@@ -2714,6 +2621,10 @@ msgid "Group Chat"
 msgstr "多人聊天"
 
 #, fuzzy
+msgid "Group Chat Details"
+msgstr "外掛程式"
+
+#, fuzzy
 msgid "Group Chat Invitation"
 msgstr "多人聊天邀請"
 
@@ -2781,13 +2692,6 @@ msgstr "聊天室現在顯示了無法使用的成員"
 #, fuzzy
 msgid "Group chat support"
 msgstr "多人聊天"
-
-msgid "Group multiple contacts from one friend to a single Meta-Contact"
-msgstr ""
-
-#, fuzzy
-msgid "Groupchat Details"
-msgstr "外掛程式"
 
 msgid "Groups"
 msgstr "群組"
@@ -2867,22 +2771,6 @@ msgstr "我想加入您到我的聯絡人清單"
 msgid "I would like to add you to my roster."
 msgstr "我想將您加入到我的聯絡人清單。"
 
-#, fuzzy
-msgid "I'm eating."
-msgstr "我正在工作。"
-
-msgid "I'm on the phone."
-msgstr "我正在打電話"
-
-msgid "I'm out enjoying life."
-msgstr "我正在享受戶外生活。"
-
-msgid "I'm watching a movie."
-msgstr "我正在看電影。"
-
-msgid "I'm working."
-msgstr "我正在工作。"
-
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC 標準規定 1 KiB = 1024 bytes(位元組)，1 KB = 1000 bytes。"
 
@@ -2910,25 +2798,6 @@ msgstr "如果選取，Gajim 可以被 gajim-remote 遠端控制。"
 
 #, fuzzy
 msgid ""
-"If disabled, Gajim will no longer print status messages in chats when a "
-"contact changes their status (and/or their status message)."
-msgstr ""
-"如果為假，Gajim 將不會在聯絡人的狀態或狀態訊息變化時在聊天視窗中顯示一列提"
-"示。"
-
-#, fuzzy
-msgid ""
-"If disabled, this account will be disabled and will not appear in the "
-"contact list window."
-msgstr "如果為假，這個帳號將被停用且不會出現在聯絡人清單視窗中。"
-
-msgid ""
-"If enabled, Gajim hides the contact list window when pressing the X button "
-"instead of minimizing into the notification area."
-msgstr ""
-
-#, fuzzy
-msgid ""
 "If enabled, Gajim hides the main window when pressing the X button instead "
 "of minimizing into the notification area."
 msgstr ""
@@ -2944,40 +2813,8 @@ msgstr ""
 "口閃爍(大部分視窗管理器的預設回應)"
 
 #, fuzzy
-msgid ""
-"If enabled, Gajim quits when clicking the X button of your Window Manager. "
-"This setting is taken into account only if the notification area icon is "
-"used."
-msgstr ""
-"如果為真，按一下視窗管理器的 X 按鈕會離開 Gajim。此一設定僅當啟用通知區域圖示"
-"時會生效。"
-
-msgid ""
-"If enabled, Gajim shows the group chat subject in the chat window when "
-"joining."
-msgstr ""
-
-#, fuzzy
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr "如果選取，Gajim 會在聯絡人清單視窗中顯示聯絡人的心情。"
-
-#, fuzzy
-msgid "If enabled, Gajim will answer to message receipt requests."
-msgstr "如果選取，Gajim 不會詢問狀態訊息，而使用特定的預設訊息。"
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will display an icon to show that sent messages have been "
-"received by your contact."
-msgstr "如果選取，Gajim 不會詢問狀態訊息，而使用特定的預設訊息。"
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will display the status message (if not empty) underneath "
-"the contact name in the contact list window."
-msgstr ""
-"如果為真， Gajim 將在聯絡人清單視窗中每一個聯絡人名稱的下方顯示狀態資訊(如果"
-"不為空)。"
 
 msgid "If enabled, Gajim will execute XEP-0146 Commands."
 msgstr ""
@@ -2988,41 +2825,11 @@ msgstr ""
 msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
 msgstr ""
 
-msgid ""
-"If enabled, Gajim will reopen chat windows that were opened last time Gajim "
-"was closed."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will save the contact list window position when hiding it, "
-"and restore it when showing the contact list window again."
-msgstr "如果為真，當隱藏名冊時 Gajim 將會儲存名冊位置，並於顯示名冊時還原。"
-
 #, fuzzy
 msgid ""
 "If enabled, Gajim will save the main window position when hiding it, and "
 "restore it when showing the window again."
 msgstr "如果為真，當隱藏名冊時 Gajim 將會儲存名冊位置，並於顯示名冊時還原。"
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will send your local IP so your contact can connect to "
-"your machine for file transfers."
-msgstr ""
-"如果選取，Gajim 會使用您在 file_transfer_proxies 選項中定義的 IP 和代理進行檔"
-"案傳輸。"
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will show both the number of online and total contacts in "
-"account rows as well as in group rows."
-msgstr "如果為真，Gajim 會在帳號和群組所在列顯示線上和總共聯絡人數目。"
-
-msgid ""
-"If enabled, Gajim will test file transfer proxies on startup to be sure they "
-"work. Openfire's proxies are known to fail this test even if they work."
-msgstr ""
 
 #, fuzzy
 msgid ""
@@ -3034,65 +2841,12 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"If enabled, Gajim will use the System's Keyring to store account passwords."
-msgstr "如果為真，Gajim 會使用 Gnome Keyring (如果可用) 儲存帳號的密碼。"
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will use your IP and proxies defined in "
-"'file_transfer_proxies' option for file transfers."
-msgstr ""
-"如果選取，Gajim 會使用您在 file_transfer_proxies 選項中定義的 IP 和代理進行檔"
-"案傳輸。"
-
-msgid ""
-"If enabled, a notification is created for every message in this group chat."
-msgstr ""
-
-#, fuzzy
-msgid ""
 "If enabled, completion in group chats will be like a shell auto-completion."
 msgstr "如果為真，多人聊天中會像 shell 一樣自動補全"
 
 #, fuzzy
-msgid ""
-"If enabled, contacts requesting authorization will be accepted automatically."
-msgstr "如果為真，聯絡人的認證請求將被自動接受。"
-
-#, fuzzy
-msgid ""
-"If enabled, do not remove */_ . So *abc* will be bold but with * * not "
-"removed."
-msgstr "如果為真，則不移除 */_。這樣 *abc* 將被加粗但 * * 不會被移除。"
-
-#, fuzzy
-msgid ""
-"If enabled, plugins will be activated on startup (this is saved when exiting "
-"Gajim). This option SHOULD NOT be used to (de)activate plugins. Use the "
-"plugin window instead."
-msgstr ""
-"表述在離開時是否啟用外掛程式(在 Gajim 離開時這會被儲存)。這個選項不應該用於啟"
-"用或停用外掛程式。使用圖形介面代替。"
-
-#, fuzzy
 msgid "If enabled, pressing Esc closes a tab/window."
 msgstr "如果為真，按 Escape 鍵將關閉標籤/視窗。"
-
-#, fuzzy
-msgid ""
-"If enabled, the contact row is colored according to the current chat state "
-"of the contact."
-msgstr "如果選取，Gajim 會允許他人偵測到您所使用的作業系統"
-
-#, fuzzy
-msgid "If enabled, the last status will be restored."
-msgstr "如果啟用，則恢復上次使用的狀態。"
-
-#, fuzzy
-msgid ""
-"If enabled, the tab is colored according to the current chat state of the "
-"contact."
-msgstr "如果選取，Gajim 會允許他人偵測到您所使用的作業系統"
 
 #, fuzzy
 msgid ""
@@ -3102,9 +2856,6 @@ msgid ""
 msgstr ""
 "如果為真，您將可以在修改帳號視窗中為您的帳號可以設定一個負的優先等級。注意!當"
 "您使用負的優先等級登入時您將不能從伺服器收到任何訊息。"
-
-msgid "If enabled, you will see your webcam's video stream as well."
-msgstr ""
 
 #, fuzzy, python-format
 msgid "If you close this window, you will leave '%s'."
@@ -3134,13 +2885,6 @@ msgstr "圖像"
 #, fuzzy
 msgid "Import Contacts"
 msgstr "邀請聯絡人(_C)"
-
-#, fuzzy
-msgid ""
-"In a chat, show the nickname at the beginning of a line only when it's not "
-"the same person talking as in the previous message."
-msgstr ""
-"在聊天中，只在目前一條訊息不是由同一個人發出的的時候才在一列前顯示暱稱。"
 
 msgid ""
 "In order to write messages in this chat, you need to request voice first.\n"
@@ -3376,10 +3120,6 @@ msgstr "踢除(_K)"
 msgid "Label"
 msgstr "標籤"
 
-#, fuzzy
-msgid "Language used for spell checking."
-msgstr "拼寫檢查的語言"
-
 msgid "Last but not least"
 msgstr ""
 
@@ -3403,22 +3143,6 @@ msgstr ""
 
 msgid "Limit must be an integer"
 msgstr ""
-
-msgid ""
-"List of XMPP Addresses (space separated) for which the chat window will be "
-"re-opened on next startup."
-msgstr ""
-
-msgid ""
-"List of XMPP Addresses (space separated) for which you do not want to store "
-"chat history. You can also add the name of an account to disable storing "
-"chat history for this account."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"List of rows (accounts and groups) that are collapsed (space separated)."
-msgstr "折疊的列(帳號和組)的清單(空格分隔)。"
 
 #, fuzzy
 msgid ""
@@ -3543,21 +3267,6 @@ msgstr ""
 msgid "Maximum file size for preview generation"
 msgstr ""
 
-msgid ""
-"Maximum history in days we request from a private group chat archive. 0: As "
-"much as possible."
-msgstr ""
-
-msgid ""
-"Maximum history in days we request from a public group chat archive. 0: As "
-"much as possible."
-msgstr ""
-
-msgid ""
-"Maximum number of lines that are printed in conversations. Oldest lines are "
-"cleared."
-msgstr "在對話中最多顯示的列數。最舊的那些列會被清除。"
-
 #, fuzzy
 msgid "Me"
 msgstr "小氣"
@@ -3603,10 +3312,6 @@ msgid ""
 "Message corrected. Original message:\n"
 "%s"
 msgstr ""
-
-#, fuzzy
-msgid "Message that is sent to contacts you want to add."
-msgstr "向您希望加入的聯絡人傳送的訊息"
 
 #, fuzzy
 msgid "Messages are archived on the server"
@@ -3701,6 +3406,10 @@ msgstr "新聊天室"
 #, fuzzy
 msgid "New Search"
 msgstr "搜尋"
+
+#, fuzzy
+msgid "New Workspace"
+msgstr "重新命名聯絡人"
 
 #, fuzzy, python-format
 msgid "New message from %s"
@@ -3904,6 +3613,10 @@ msgid "Open Link in _Browser"
 msgstr "在瀏覽器中開啟連結(_O)"
 
 #, fuzzy
+msgid "Open Plugins…"
+msgstr "外掛程式"
+
+#, fuzzy
 msgid "Open _Folder"
 msgstr "開啟資料夾(_O)"
 
@@ -3930,14 +3643,6 @@ msgid "Operating System"
 msgstr "客戶端證書"
 
 #, fuzzy
-msgid "Optionally fix Jingle output video framerate. Example: 10/1 or 25/2."
-msgstr "可選地修正 jingle 視訊輸出的圖框速率。比如: 10/1 或 25/2"
-
-#, fuzzy
-msgid "Optionally resize Jingle output video. Example: 320x240."
-msgstr "可選地縮放 jingle 視訊輸出尺寸。比如: 320x240"
-
-#, fuzzy
 msgid "Organisation"
 msgstr "渡假"
 
@@ -3953,7 +3658,7 @@ msgstr ""
 msgid "Organizational Unit (OU): "
 msgstr ""
 
-msgid "Organize your chats with tabs"
+msgid "Organize your chats with workspaces"
 msgstr ""
 
 msgid "Others"
@@ -4104,9 +3809,6 @@ msgstr ""
 msgid "Pl_ugins"
 msgstr "外掛程式"
 
-msgid "Place the contact list on the right in single window mode"
-msgstr ""
-
 #, fuzzy
 msgid "Play Sound"
 msgstr "播放聲音(_S)"
@@ -4114,10 +3816,6 @@ msgstr "播放聲音(_S)"
 #, fuzzy
 msgid "Play Sounds"
 msgstr "播放聲音(_S)"
-
-#, fuzzy
-msgid "Play sound even when being busy."
-msgstr "在用於忙是播放聲音"
 
 #, fuzzy
 msgid "Play sounds even when you are Away, Busy, etc."
@@ -4173,10 +3871,6 @@ msgstr "外掛程式"
 msgid "Plugin Updates"
 msgstr "外掛程式失敗"
 
-#, fuzzy
-msgid "Plugin Updates Available"
-msgstr "沒有有效帳號"
-
 msgid "Plugin already exists"
 msgstr "外掛程式已經存在"
 
@@ -4187,16 +3881,11 @@ msgstr "外掛程式失敗"
 msgid "Plugin manager"
 msgstr "外掛程式失敗"
 
-msgid ""
-"Plugin updates have successfully been downloaded.\n"
-"Updates will be installed next time Gajim is started."
-msgstr ""
-
 msgid "Plugins"
 msgstr "外掛程式"
 
 #, fuzzy
-msgid "Plugins Updated"
+msgid "Plugins Updated Successfully"
 msgstr "外掛程式失敗"
 
 #, fuzzy, python-format
@@ -4230,11 +3919,6 @@ msgid "Preferences"
 msgstr "參數"
 
 msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
-msgstr ""
-
-msgid ""
-"Preferred file transfer mechanism for file drag&drop on a chat window. Can "
-"be 'httpupload' (default) or 'jingle'."
 msgstr ""
 
 msgid "Presence description:"
@@ -4276,12 +3960,6 @@ msgid "Priority"
 msgstr "優先等級(_T):"
 
 #, fuzzy
-msgid ""
-"Priority will change automatically according to your status. Priorities are "
-"defined in 'autopriority_*' options."
-msgstr "優先等級將根據您的狀態自動變更。優先等級在 autopriority_* 選項中定義。"
-
-#, fuzzy
 msgid "Privacy"
 msgstr "隱私策略清單"
 
@@ -4311,11 +3989,6 @@ msgstr "代理伺服器位址(_H):"
 #, fuzzy
 msgid "Proxy Type"
 msgstr "代理伺服器(_Y):"
-
-msgid ""
-"Proxy used for all outgoing connections if the account does not have a "
-"specific proxy configured."
-msgstr ""
 
 #, fuzzy
 msgid "Proxy, custom hostname and port"
@@ -4562,6 +4235,9 @@ msgstr "執行命令(_E)…"
 msgid "Requesting HTTP File Upload Slot…"
 msgstr ""
 
+msgid "Requesting search form from server"
+msgstr ""
+
 #, fuzzy
 msgid "Required"
 msgstr "require"
@@ -4774,6 +4450,14 @@ msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
 msgstr ""
+
+#, fuzzy
+msgid "Searching"
+msgstr "搜尋"
+
+#, fuzzy
+msgid "Searching…"
+msgstr "搜尋"
 
 #, fuzzy
 msgid "Search…"
@@ -5036,8 +4720,7 @@ msgstr ""
 msgid "Set the presence type and description"
 msgstr "設定狀態類型與描述"
 
-msgid ""
-"Set your activity, tune, and mood to show your friends how you are feeling"
+msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
@@ -5144,33 +4827,8 @@ msgid "Show a live preview to test your video source"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"Show a status message for all status changes (away, dnd, etc.) of users in a "
-"group chat."
-msgstr "無法加入聊天室"
-
-#, fuzzy
-msgid "Show a status message for every join or leave in a group chat."
-msgstr "無法加入聊天室"
-
-#, fuzzy
 msgid "Show all warnings"
 msgstr "顯示所有未處理事件(_E)"
-
-msgid "Show close button in tab?"
-msgstr "在標籤上顯示關閉按鈕?"
-
-#, fuzzy
-msgid ""
-"Show contact list window on startup.\n"
-"'always' - Always show contact list window.\n"
-"'never' - Never show contact list window.\n"
-"'last_state' - Restore last state of the contact list window."
-msgstr ""
-"啟動時顯示名冊。\n"
-"「自動」- 自動顯示名冊。\n"
-"「永不」- 永不顯示名冊。\n"
-"「last_state」- 還原最後狀態名冊。"
 
 msgid ""
 "Show help on a given command or a list of available commands if -a is given"
@@ -5198,16 +4856,6 @@ msgid "Show only critical errors"
 msgstr "只顯示在聯絡人清單中"
 
 #, fuzzy
-msgid "Show only online and free for chat contacts in the contact list."
-msgstr "在聯絡人清單中只顯示線上和和我聊天吧的聯絡人。"
-
-msgid "Show tab when only one conversation?"
-msgstr "只有一個對話時顯示標籤?"
-
-msgid "Show tabbed notebook border in chat windows?"
-msgstr "在聊天視窗中顯示標籤組的邊框。"
-
-#, fuzzy
 msgid "Show the application's version"
 msgstr "在通知區域顯示圖示:"
 
@@ -5231,15 +4879,6 @@ msgstr "為特定命令顯示求助"
 #, fuzzy
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr "顯示您與他人進行的傳輸檔案清單"
-
-#, fuzzy
-msgid ""
-"Shows a text in the banner that describes the current chat state of the "
-"contact."
-msgstr "如果選取，Gajim 會允許他人偵測到您所使用的作業系統"
-
-msgid "Shows an info bar with helpful hints in the Start / Join Chat dialog"
-msgstr ""
 
 #, fuzzy
 msgid "Sign In"
@@ -5287,17 +4926,6 @@ msgid "Sort by Status"
 msgstr "將聯絡人按狀態排序"
 
 #, fuzzy
-msgid ""
-"Sound to play when a group chat message contains one of the words in "
-"'muc_highlight_words' or your nickname is mentioned."
-msgstr ""
-"當收到的多人聊天訊息包含 \"muc_highlight_words\" 或您的暱稱時播放的聲音。"
-
-#, fuzzy
-msgid "Sound to play when any group chat message arrives."
-msgstr "收到任意多人聊天訊息播放的聲音。"
-
-#, fuzzy
 msgid "Sounds"
 msgstr "Wav聲音"
 
@@ -5337,6 +4965,10 @@ msgstr "開始聊天"
 
 #, fuzzy
 msgid "Start Chatting…"
+msgstr "開始聊天"
+
+#, fuzzy
+msgid "Start Chat…"
 msgstr "開始聊天"
 
 #, fuzzy
@@ -5496,10 +5128,6 @@ msgid "Synchronise"
 msgstr "同步"
 
 #, fuzzy
-msgid "Synchronise History"
-msgstr "同步"
-
-#, fuzzy
 msgid "Synchronise History…"
 msgstr "同步"
 
@@ -5508,8 +5136,20 @@ msgid "Synchronise the status of all accounts"
 msgstr "變更一個或多個帳號狀態"
 
 #, fuzzy
+msgid "Synchronize"
+msgstr "同步"
+
+#, fuzzy
 msgid "Synchronize Accounts"
 msgstr "同步聯絡人"
+
+#, fuzzy
+msgid "Synchronize Chat History"
+msgstr "同步"
+
+#, fuzzy
+msgid "Synchronizing Chat History…"
+msgstr "同步"
 
 #, fuzzy
 msgid "System"
@@ -5557,10 +5197,6 @@ msgid ""
 "The contact will be informed that you stopped sharing your status. Please "
 "note that this can have other side effects."
 msgstr ""
-
-#, fuzzy
-msgid "The currently active encryption for that contact."
-msgstr "為這個帳號啟用 ESession 加密。"
 
 #, python-format
 msgid ""
@@ -5625,13 +5261,7 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
-#, python-format
-msgid ""
-"There are updates for your plugins:\n"
-"<b>%s</b>"
-msgstr ""
-
-msgid "There is already a synchronisation in progress. Please try again later."
+msgid "There are updates for Gajim’s plugins"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5725,17 +5355,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid ""
-"This option lets you customize the timestamp that is printed in "
-"conversation. For example '[%H:%M] ' will show '[hour:minute] '. See python "
-"doc on strftime for full documentation (https://docs.python.org/3/library/"
-"time.html#time.strftime)."
-msgstr ""
-"這個選項允許您自訂對話中顯示的時間戳記格式。比如，\"[%H:%M] \" 會顯示為\n"
-"\"[小時:分鐘]\"。請參考 Python doc 關於 strftime 的文件:\n"
-"http://docs.python.org/lib/module-time.html"
-
-#, fuzzy
 msgid "This server does not allow signup."
 msgstr "您的伺服器不支援 Vcard"
 
@@ -5783,15 +5402,6 @@ msgstr ""
 msgid "Time Until Not Available"
 msgstr "離開很久了"
 
-msgid "Time in minutes, after which your status changes to away."
-msgstr "時間，以分鐘為單位。在此時間後將狀態變更為離開。"
-
-msgid "Time in minutes, after which your status changes to not available."
-msgstr "時間，以分鐘為單位。在此時間後將狀態變更為離開很久了。"
-
-msgid "Time of inactivity needed before the change status window closes down."
-msgstr "時間，如果在此時間內沒有活動，將變更狀態視窗關閉。"
-
 msgid "To"
 msgstr "To"
 
@@ -5824,10 +5434,6 @@ msgstr ""
 
 msgid "Topic"
 msgstr ""
-
-#, fuzzy
-msgid "Tor"
-msgstr "To"
 
 #, fuzzy
 msgid "Transferring File…"
@@ -5991,10 +5597,10 @@ msgstr "沒有有效帳號"
 msgid "Update plugins automatically"
 msgstr ""
 
-msgid "Update plugins automatically next time"
+msgid "Updates"
 msgstr ""
 
-msgid "Updates"
+msgid "Updates will be installed next time Gajim is started"
 msgstr ""
 
 #, fuzzy
@@ -6078,14 +5684,6 @@ msgstr "使用者"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-#, fuzzy
-msgid ""
-"Valid URI schemes. Only schemes in this list will be accepted as 'real' URI "
-"(mailto and xmpp are handled separately)."
-msgstr ""
-"合法的 URI Scheme。只有這個清單中的 Scheme 會被接受為\"真正的\" URI。(mailto "
-"和 xmpp 被分開處理)"
 
 msgid "Validity"
 msgstr ""
@@ -6182,12 +5780,6 @@ msgstr "隱藏本選單"
 
 msgid "What happened"
 msgstr ""
-
-#, fuzzy
-msgid ""
-"When to show the notification area icon. Can be 'never', 'on_event', and "
-"'always'."
-msgstr "何時在通知區域顯示圖示。可以是'永遠不'，'當有未處理的事件時'，'總是'。"
 
 msgid "Where participants should go"
 msgstr ""
@@ -6790,10 +6382,6 @@ msgid "_Unsubscribe"
 msgstr "退訂(_S)"
 
 #, fuzzy
-msgid "_Update"
-msgstr "更新 MOTD…"
-
-#, fuzzy
 msgid "_Username"
 msgstr "使用者名稱(_U):"
 
@@ -7068,27 +6656,3 @@ msgstr "%(nick)s 的狀態是 %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
-
-#~ msgid "File: "
-#~ msgstr "檔案: "
-
-#~ msgid "New Message"
-#~ msgstr "新訊息"
-
-#, fuzzy
-#~ msgid "Note: Chat history is disabled for this contact."
-#~ msgstr "忽略這個證書的這個錯誤。"
-
-#, fuzzy
-#~ msgid "Save conversations for all contacts"
-#~ msgstr "儲存與所有聯絡人的聊天記錄(_L)"
-
-#, fuzzy
-#~ msgid "XHTML Formatting"
-#~ msgstr "顯示格式清單(Alt+M)"
-
-#, fuzzy
-#~ msgid ""
-#~ "You just received a new message from %s.\n"
-#~ "Do you want to close this tab?"
-#~ msgstr "您剛剛收到一條來自 \"%s\" 的訊息"

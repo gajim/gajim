@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 13:53+0000\n"
+"POT-Creation-Date: 2022-05-31 18:12+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -45,23 +45,6 @@ msgstr "Požiadavka na hlasový rozhovor"
 
 #, python-brace-format
 msgid " by {actor}"
-msgstr ""
-
-#, fuzzy
-msgid "$S (Away: Idle more than $T min)"
-msgstr "$S (Preč ako výsledok nečinnosti viac ako $T minút)"
-
-#, fuzzy
-msgid "$S (Not available: Idle more than $T min)"
-msgstr "$S (Neprítomný ako výsledok nečinnosti viac ako $T minút)"
-
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoawaytime' "
-"value."
-msgstr ""
-
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoxatime' value."
 msgstr ""
 
 #, python-format
@@ -245,9 +228,6 @@ msgid "1 Year"
 msgstr ""
 
 msgid "2 Days"
-msgstr ""
-
-msgid "2: System, 1: Enabled, 0: Disabled"
 msgstr ""
 
 msgid "3 Months"
@@ -750,6 +730,10 @@ msgstr "Účty"
 msgid "Action when left-clicking a preview"
 msgstr ""
 
+#, fuzzy
+msgid "Activate"
+msgstr "Aktivovaná"
+
 msgid "Activated"
 msgstr "Aktivovaná"
 
@@ -917,23 +901,8 @@ msgstr "Všetky súbory"
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
 
-#, fuzzy
-msgid ""
-"Allow Gajim to send information about the operating system you are running."
-msgstr ""
-"Ak je zaškrtnuté, Gajim povolí ostatným zistiť operačný systém, ktorý "
-"používate"
-
-#, fuzzy
-msgid "Allow Gajim to send your local time."
-msgstr "%s vám chce poslať súbor."
-
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
-
-#, fuzzy
-msgid "Allow certificate verification with POSH."
-msgstr "Chyba SSL certifikátu"
 
 msgid ""
 "Allow to hide the contact list window even if the notification area icon is "
@@ -1462,38 +1431,6 @@ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
 msgstr ""
 
 #, fuzzy
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: 'all', "
-"'composing_only', 'disabled'"
-msgstr ""
-"Posielanie informácii o stave diskusie. Môže byť nastavené na hodnotu all, "
-"composing_only, disabled."
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: all, "
-"composing_only, disabled"
-msgstr ""
-"Posielanie informácii o stave diskusie. Môže byť nastavené na hodnotu all, "
-"composing_only, disabled."
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only' or 'disabled'."
-msgstr ""
-"Posielanie informácii o stave diskusie. Môže byť nastavené na hodnotu all, "
-"composing_only, disabled."
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only', 'disabled'"
-msgstr ""
-"Posielanie informácii o stave diskusie. Môže byť nastavené na hodnotu all, "
-"composing_only, disabled."
-
-#, fuzzy
 msgid "Chats"
 msgstr "Rozhovory"
 
@@ -1729,9 +1666,6 @@ msgstr "Pripojenie nie je dostupné"
 msgid "Connection with %s could not be established."
 msgstr "Spojenie s druhou stranou nie je možné nadviazať."
 
-msgid "ConnectionType: START TLS, DIRECT TLS or PLAIN"
-msgstr ""
-
 msgid "Contact"
 msgstr "Kontakt"
 
@@ -1797,26 +1731,6 @@ msgstr "Kontakty"
 
 msgid "Contacts"
 msgstr "Kontakty"
-
-#, fuzzy
-msgid ""
-"Controls the window where new messages are placed.\n"
-"'always' - All messages are sent to a single window.\n"
-"'always_with_roster' - Like 'always' but the messages are in a single window "
-"along with the contact list.\n"
-"'never' - All messages get their own window.\n"
-"'peracct' - Messages for each account are sent to a specific window.\n"
-"'pertype' - Each message type (e.g. chats vs. group chats) is sent to a "
-"specific window."
-msgstr ""
-"Ovládanie okna, kde je umiestnená nová správa.\n"
-"'always' - Všetky správy sú odoslané do samostatného okna.\n"
-"'always_with_roster' - Ako 'always', ale správy su v samostatnom okne spolu "
-"s zoznamom.\n"
-"'never' - Všetky správy dostanú vlastné okno.\n"
-"'peracct' - Správy pre každý účet sú odoslané do špecifikovaného okna.\n"
-"'pertype' - Každý typ správy (napr., rozhovory proti diskusiám) sú odoslané "
-"do špecifikovaného okna."
 
 msgid "Conversation: Nickname Color (Incoming)"
 msgstr ""
@@ -1931,14 +1845,6 @@ msgid "Credentials expired"
 msgstr "Certifikát vypršal"
 
 #, fuzzy
-msgid ""
-"Ctrl+Tab switches to the next composing tab when there are no tabs with "
-"messages pending."
-msgstr ""
-"Ctrl-Tab vás presunie na ďalšiu kartu, pokiaľ už nie sú žiadne neprečítané "
-"správy."
-
-#, fuzzy
 msgid "Current Developers"
 msgstr "Súčasní vývojári:"
 
@@ -1948,9 +1854,6 @@ msgstr "D-Bus nie je prítomný na tomto stroji alebo chýba modul pre python"
 #, fuzzy
 msgid "Dark Theme"
 msgstr "gajim-remote"
-
-msgid "Date of the last update check"
-msgstr ""
 
 msgid "Deactivated"
 msgstr "Deaktivovaná"
@@ -1965,18 +1868,6 @@ msgstr "_Odhlásený"
 
 msgid "Default"
 msgstr "Predvolené"
-
-#, fuzzy
-msgid ""
-"Default Setting: Show a status message for all status changes (away, dnd, "
-"etc.) of users in a group chat."
-msgstr "Nie je možné pripojiť sa do diskusnej skupiny"
-
-#, fuzzy
-msgid ""
-"Default Setting: Show a status message for every join or leave in a group "
-"chat."
-msgstr "Nie je možné pripojiť sa do diskusnej skupiny"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -2005,10 +1896,6 @@ msgstr "Opustiť diskusnú skupinu"
 msgid "Default for new public group chats"
 msgstr "Opustiť diskusnú skupinu"
 
-msgid ""
-"Define the position of avatars in the contact list. Can be 'left' or 'right'."
-msgstr ""
-
 msgid "Delete"
 msgstr "Odstrániť"
 
@@ -2026,7 +1913,7 @@ msgid "Description: "
 msgstr "Popis:"
 
 #, fuzzy
-msgid "Destroy Groupchat…"
+msgid "Destroy Group Chat…"
 msgstr "Nová diskusná skupina"
 
 #, fuzzy
@@ -2115,10 +2002,6 @@ msgstr "Spýtať sa pred zatvorením okna/záložky pre diskusnú skupinu."
 msgid "Do not disturb"
 msgstr "Nerušiť"
 
-#, fuzzy
-msgid "Do not show this message again"
-msgstr "Znovu sa už _nepýtať"
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Prijať túto požiadavku?"
@@ -2153,12 +2036,12 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
 #, fuzzy
-msgid "Don't show contact list window in the system taskbar."
+msgid "Don’t show main window in the system taskbar."
 msgstr "Nezobrazovať zoznam v paneli úloh."
 
 #, fuzzy
-msgid "Don’t show main window in the system taskbar."
-msgstr "Nezobrazovať zoznam v paneli úloh."
+msgid "Don’t show this again"
+msgstr "Znovu sa už _nepýtať"
 
 #, fuzzy
 msgid "Download"
@@ -2322,6 +2205,14 @@ msgstr "Chyba pri pridávaní služby. %s"
 #, fuzzy
 msgid "Error while processing image"
 msgstr "Vypršal čas nahrávania obrázku"
+
+#, fuzzy
+msgid "Error while receiving search results."
+msgstr "Vypršal čas nahrávania obrázku"
+
+#, fuzzy
+msgid "Error while retrieving search form."
+msgstr "Chyba pri pridávaní služby. %s"
 
 #, fuzzy
 msgid "Error while uploading avatar"
@@ -2560,6 +2451,10 @@ msgstr "Súkromné rozhovory"
 msgid "Fingerprints"
 msgstr ""
 
+#, fuzzy
+msgid "Finished"
+msgstr "_Dokončiť"
+
 #, python-format
 msgid ""
 "Finished synchronising chat history:\n"
@@ -2731,6 +2626,10 @@ msgid "Group Chat"
 msgstr "Diskuné skupiny"
 
 #, fuzzy
+msgid "Group Chat Details"
+msgstr "Registrácia zlyhala"
+
+#, fuzzy
 msgid "Group Chat Invitation"
 msgstr "Pozvánka do diskusnej skupiny"
 
@@ -2798,13 +2697,6 @@ msgstr "Miestnosť práve zobrazuje nedostupného člena"
 #, fuzzy
 msgid "Group chat support"
 msgstr "Diskuné skupiny"
-
-msgid "Group multiple contacts from one friend to a single Meta-Contact"
-msgstr ""
-
-#, fuzzy
-msgid "Groupchat Details"
-msgstr "Registrácia zlyhala"
 
 msgid "Groups"
 msgstr "Skupiny"
@@ -2884,22 +2776,6 @@ msgstr "Chcem si vás pridať do môjho zoznamu kontaktov."
 msgid "I would like to add you to my roster."
 msgstr "Chcem si vás pridať do môjho zoznamu."
 
-#, fuzzy
-msgid "I'm eating."
-msgstr "Pracujem."
-
-msgid "I'm on the phone."
-msgstr "Telefonujem."
-
-msgid "I'm out enjoying life."
-msgstr "Som vonku a užívam si život."
-
-msgid "I'm watching a movie."
-msgstr "Pozerám film."
-
-msgid "I'm working."
-msgstr "Pracujem."
-
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC štandard znamená KiB = 1024 bajtov, KB = 1000 bajtov."
 
@@ -2928,25 +2804,6 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"If disabled, Gajim will no longer print status messages in chats when a "
-"contact changes their status (and/or their status message)."
-msgstr ""
-"Ak nie je pravda, nebudete vidieť informáciu o zmene stavu kontaktu a jeho/"
-"jej stavovú správu"
-
-#, fuzzy
-msgid ""
-"If disabled, this account will be disabled and will not appear in the "
-"contact list window."
-msgstr "Ak nie je pravda, neuvidíte avatarov v diskusnom okne"
-
-msgid ""
-"If enabled, Gajim hides the contact list window when pressing the X button "
-"instead of minimizing into the notification area."
-msgstr ""
-
-#, fuzzy
-msgid ""
 "If enabled, Gajim hides the main window when pressing the X button instead "
 "of minimizing into the notification area."
 msgstr ""
@@ -2963,46 +2820,10 @@ msgstr ""
 "manažérov), keď sa udeje nejaká udalosť."
 
 #, fuzzy
-msgid ""
-"If enabled, Gajim quits when clicking the X button of your Window Manager. "
-"This setting is taken into account only if the notification area icon is "
-"used."
-msgstr ""
-"Ak je pravda, Gajim skončí keď bude X tlačidlo vo Window manažéri stlačené. "
-"Toto nastavenie je použíté, len v prípade, že sa používa trayikona."
-
-msgid ""
-"If enabled, Gajim shows the group chat subject in the chat window when "
-"joining."
-msgstr ""
-
-#, fuzzy
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 "Ak je zaškrtnuté, Gajim bude zobrazovať náladu kontaktov v okne so zoznamom "
 "kontaktovi."
-
-#, fuzzy
-msgid "If enabled, Gajim will answer to message receipt requests."
-msgstr ""
-"Ak je povolené, Gajim sa nebude pýtať na správu o stave. Namiesto nej bude "
-"použitá predvolená špecifikovaná správa."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will display an icon to show that sent messages have been "
-"received by your contact."
-msgstr ""
-"Ak je povolené, Gajim sa nebude pýtať na správu o stave. Namiesto nej bude "
-"použitá predvolená špecifikovaná správa."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will display the status message (if not empty) underneath "
-"the contact name in the contact list window."
-msgstr ""
-"Ak je pravda, Gajim zobrazí stavovú správu v zozname kontaktov, za "
-"predpokladu, že táto správa nie je prázdna."
 
 msgid "If enabled, Gajim will execute XEP-0146 Commands."
 msgstr ""
@@ -3014,39 +2835,8 @@ msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
 msgstr ""
 
 msgid ""
-"If enabled, Gajim will reopen chat windows that were opened last time Gajim "
-"was closed."
-msgstr ""
-
-msgid ""
-"If enabled, Gajim will save the contact list window position when hiding it, "
-"and restore it when showing the contact list window again."
-msgstr ""
-
-msgid ""
 "If enabled, Gajim will save the main window position when hiding it, and "
 "restore it when showing the window again."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will send your local IP so your contact can connect to "
-"your machine for file transfers."
-msgstr ""
-"Ak je zaškrtnuté, Gajim použije vašu IP adresu a proxy definovanú v "
-"premennej file_transfer_proxies na prenos súborov."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will show both the number of online and total contacts in "
-"account rows as well as in group rows."
-msgstr ""
-"Ak je pravda, Gajim bude zobrazovať počet prítomných a všetkých kontaktov v "
-"riadku účtu a skupiny."
-
-msgid ""
-"If enabled, Gajim will test file transfer proxies on startup to be sure they "
-"work. Openfire's proxies are known to fail this test even if they work."
 msgstr ""
 
 msgid ""
@@ -3054,70 +2844,13 @@ msgid ""
 "in 'stun_server' option, or the one given by the XMPP server."
 msgstr ""
 
-#, fuzzy
-msgid ""
-"If enabled, Gajim will use the System's Keyring to store account passwords."
-msgstr ""
-"Ak je pravda, Gajim bude používať Správca zväzku kľúčov (ak je prítomný) na "
-"ukladanie hesiel."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will use your IP and proxies defined in "
-"'file_transfer_proxies' option for file transfers."
-msgstr ""
-"Ak je zaškrtnuté, Gajim použije vašu IP adresu a proxy definovanú v "
-"premennej file_transfer_proxies na prenos súborov."
-
-msgid ""
-"If enabled, a notification is created for every message in this group chat."
-msgstr ""
-
 msgid ""
 "If enabled, completion in group chats will be like a shell auto-completion."
-msgstr ""
-
-msgid ""
-"If enabled, contacts requesting authorization will be accepted automatically."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, do not remove */_ . So *abc* will be bold but with * * not "
-"removed."
-msgstr ""
-"Ak je pravda, neodstaňuj */_ .  Takže *abc* bude tečné a * * nebude "
-"odstránené."
-
-msgid ""
-"If enabled, plugins will be activated on startup (this is saved when exiting "
-"Gajim). This option SHOULD NOT be used to (de)activate plugins. Use the "
-"plugin window instead."
 msgstr ""
 
 #, fuzzy
 msgid "If enabled, pressing Esc closes a tab/window."
 msgstr "Ak je pravda, stlačením Esc klávesy zatvoríte kartu/okno."
-
-#, fuzzy
-msgid ""
-"If enabled, the contact row is colored according to the current chat state "
-"of the contact."
-msgstr ""
-"Ak je zaškrtnuté, Gajim povolí ostatným zistiť operačný systém, ktorý "
-"používate"
-
-#, fuzzy
-msgid "If enabled, the last status will be restored."
-msgstr "Ak je povolené, obnoví sa naposledy použitý stav."
-
-#, fuzzy
-msgid ""
-"If enabled, the tab is colored according to the current chat state of the "
-"contact."
-msgstr ""
-"Ak je zaškrtnuté, Gajim povolí ostatným zistiť operačný systém, ktorý "
-"používate"
 
 #, fuzzy
 msgid ""
@@ -3128,9 +2861,6 @@ msgstr ""
 "Ak je True, bude možné nasatviť zápornú prioritu pre váš účet v okne úprav "
 "účtov. BUĎTE OPATRNÝ, keď sa prihlásite s zápornou prioritou, tak nebudete "
 "dostávať ŽIADNE správy z vášho servera."
-
-msgid "If enabled, you will see your webcam's video stream as well."
-msgstr ""
 
 #, fuzzy, python-format
 msgid "If you close this window, you will leave '%s'."
@@ -3159,14 +2889,6 @@ msgstr "Obrázky"
 #, fuzzy
 msgid "Import Contacts"
 msgstr "Pozvať _kontakty"
-
-#, fuzzy
-msgid ""
-"In a chat, show the nickname at the beginning of a line only when it's not "
-"the same person talking as in the previous message."
-msgstr ""
-"V rozhovore sa zobrazí prezývka na začiatku riadku, len v prípade, že "
-"predchádzajúca správa prišla od inej osoby."
 
 msgid ""
 "In order to write messages in this chat, you need to request voice first.\n"
@@ -3399,10 +3121,6 @@ msgstr "_Vykopnúť"
 msgid "Label"
 msgstr ""
 
-#, fuzzy
-msgid "Language used for spell checking."
-msgstr "Jazyk pre kontrolu pravopisu"
-
 msgid "Last but not least"
 msgstr ""
 
@@ -3426,23 +3144,6 @@ msgstr ""
 
 msgid "Limit must be an integer"
 msgstr ""
-
-msgid ""
-"List of XMPP Addresses (space separated) for which the chat window will be "
-"re-opened on next startup."
-msgstr ""
-
-msgid ""
-"List of XMPP Addresses (space separated) for which you do not want to store "
-"chat history. You can also add the name of an account to disable storing "
-"chat history for this account."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"List of rows (accounts and groups) that are collapsed (space separated)."
-msgstr ""
-"Zoznam (oddelený medzerami) a riadkov (účet a skupina), ktoré sú zabalené."
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -3566,23 +3267,6 @@ msgstr ""
 msgid "Maximum file size for preview generation"
 msgstr ""
 
-msgid ""
-"Maximum history in days we request from a private group chat archive. 0: As "
-"much as possible."
-msgstr ""
-
-msgid ""
-"Maximum history in days we request from a public group chat archive. 0: As "
-"much as possible."
-msgstr ""
-
-msgid ""
-"Maximum number of lines that are printed in conversations. Oldest lines are "
-"cleared."
-msgstr ""
-"Maximálny počet riadkov zobrazených v rozhovore. Najstaršie riadky budú "
-"zmazané."
-
 #, fuzzy
 msgid "Me"
 msgstr "Protivný"
@@ -3628,10 +3312,6 @@ msgid ""
 "Message corrected. Original message:\n"
 "%s"
 msgstr ""
-
-#, fuzzy
-msgid "Message that is sent to contacts you want to add."
-msgstr "Prosím vyplňte údaje o kontakte, ktorý chcete pridať"
 
 #, fuzzy
 msgid "Messages are archived on the server"
@@ -3727,6 +3407,10 @@ msgstr "Nová diskusná skupina"
 #, fuzzy
 msgid "New Search"
 msgstr "Hľadať"
+
+#, fuzzy
+msgid "New Workspace"
+msgstr "Premenovať kontakt"
 
 #, fuzzy, python-format
 msgid "New message from %s"
@@ -3932,6 +3616,10 @@ msgid "Open Link in _Browser"
 msgstr "_Otvoriť odkaz v prehliadači"
 
 #, fuzzy
+msgid "Open Plugins…"
+msgstr "Registrácia zlyhala"
+
+#, fuzzy
 msgid "Open _Folder"
 msgstr "_Otvoriť priečinok s obsahom"
 
@@ -3963,12 +3651,6 @@ msgstr ""
 msgid "Operating System"
 msgstr "Certifikát podpísaný sám sebou"
 
-msgid "Optionally fix Jingle output video framerate. Example: 10/1 or 25/2."
-msgstr ""
-
-msgid "Optionally resize Jingle output video. Example: 320x240."
-msgstr ""
-
 #, fuzzy
 msgid "Organisation"
 msgstr "Na dovolenke"
@@ -3985,7 +3667,7 @@ msgstr ""
 msgid "Organizational Unit (OU): "
 msgstr ""
 
-msgid "Organize your chats with tabs"
+msgid "Organize your chats with workspaces"
 msgstr ""
 
 msgid "Others"
@@ -4135,9 +3817,6 @@ msgstr ""
 msgid "Pl_ugins"
 msgstr "Registrácia zlyhala"
 
-msgid "Place the contact list on the right in single window mode"
-msgstr ""
-
 #, fuzzy
 msgid "Play Sound"
 msgstr "Prehrať _zvuky"
@@ -4145,10 +3824,6 @@ msgstr "Prehrať _zvuky"
 #, fuzzy
 msgid "Play Sounds"
 msgstr "Prehrať _zvuky"
-
-#, fuzzy
-msgid "Play sound even when being busy."
-msgstr "Prehrať zvuk keď je používateľ zaneprázdnený"
 
 #, fuzzy
 msgid "Play sounds even when you are Away, Busy, etc."
@@ -4205,10 +3880,6 @@ msgid "Plugin Updates"
 msgstr "Registrácia zlyhala"
 
 #, fuzzy
-msgid "Plugin Updates Available"
-msgstr "Žiadne účty nie sú dostupné"
-
-#, fuzzy
 msgid "Plugin already exists"
 msgstr "Tento súbor už existuje"
 
@@ -4220,16 +3891,11 @@ msgstr "Registrácia zlyhala"
 msgid "Plugin manager"
 msgstr "Registrácia zlyhala"
 
-msgid ""
-"Plugin updates have successfully been downloaded.\n"
-"Updates will be installed next time Gajim is started."
-msgstr ""
-
 msgid "Plugins"
 msgstr ""
 
 #, fuzzy
-msgid "Plugins Updated"
+msgid "Plugins Updated Successfully"
 msgstr "Registrácia zlyhala"
 
 #, fuzzy, python-format
@@ -4262,11 +3928,6 @@ msgid "Preferences"
 msgstr "Predvoľby"
 
 msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
-msgstr ""
-
-msgid ""
-"Preferred file transfer mechanism for file drag&drop on a chat window. Can "
-"be 'httpupload' (default) or 'jingle'."
 msgstr ""
 
 msgid "Presence description:"
@@ -4308,14 +3969,6 @@ msgid "Priority"
 msgstr "Priori_ta:"
 
 #, fuzzy
-msgid ""
-"Priority will change automatically according to your status. Priorities are "
-"defined in 'autopriority_*' options."
-msgstr ""
-"Priorita sa zmení automaticky vzhľadom k vášmu stavu. Priority sú definované "
-"v premenných autopriority_* nastaveniach."
-
-#, fuzzy
 msgid "Privacy"
 msgstr "Súkromný zoznam"
 
@@ -4345,11 +3998,6 @@ msgstr "_Hostiteľ proxy:"
 #, fuzzy
 msgid "Proxy Type"
 msgstr "Proxy:"
-
-msgid ""
-"Proxy used for all outgoing connections if the account does not have a "
-"specific proxy configured."
-msgstr ""
 
 #, fuzzy
 msgid "Proxy, custom hostname and port"
@@ -4597,6 +4245,9 @@ msgstr "_Vykonať príkaz"
 msgid "Requesting HTTP File Upload Slot…"
 msgstr ""
 
+msgid "Requesting search form from server"
+msgstr ""
+
 #, fuzzy
 msgid "Required"
 msgstr "Heslo je požadované"
@@ -4809,6 +4460,14 @@ msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
 msgstr ""
+
+#, fuzzy
+msgid "Searching"
+msgstr "Hľadať"
+
+#, fuzzy
+msgid "Searching…"
+msgstr "Hľadať"
 
 #, fuzzy
 msgid "Search…"
@@ -5075,8 +4734,7 @@ msgstr ""
 msgid "Set the presence type and description"
 msgstr ""
 
-msgid ""
-"Set your activity, tune, and mood to show your friends how you are feeling"
+msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
@@ -5187,28 +4845,8 @@ msgid "Show a live preview to test your video source"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"Show a status message for all status changes (away, dnd, etc.) of users in a "
-"group chat."
-msgstr "Nie je možné pripojiť sa do diskusnej skupiny"
-
-#, fuzzy
-msgid "Show a status message for every join or leave in a group chat."
-msgstr "Nie je možné pripojiť sa do diskusnej skupiny"
-
-#, fuzzy
 msgid "Show all warnings"
 msgstr "Zobraziť všetky čakajúce _udalosti"
-
-msgid "Show close button in tab?"
-msgstr "Zobraziť zatváracie tlačidlo v karte?"
-
-msgid ""
-"Show contact list window on startup.\n"
-"'always' - Always show contact list window.\n"
-"'never' - Never show contact list window.\n"
-"'last_state' - Restore last state of the contact list window."
-msgstr ""
 
 msgid ""
 "Show help on a given command or a list of available commands if -a is given"
@@ -5236,16 +4874,6 @@ msgid "Show only critical errors"
 msgstr "_Zobraziť udalosť v zozname"
 
 #, fuzzy
-msgid "Show only online and free for chat contacts in the contact list."
-msgstr "Chcem si vás pridať do môjho zoznamu kontaktov."
-
-msgid "Show tab when only one conversation?"
-msgstr "Ukázať kartu len ak prebieha konverzácia?"
-
-msgid "Show tabbed notebook border in chat windows?"
-msgstr ""
-
-#, fuzzy
 msgid "Show the application's version"
 msgstr "Notification-daemon"
 
@@ -5269,17 +4897,6 @@ msgstr "Zobrazí pomocníka pre daný príkaz"
 #, fuzzy
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr "Zobraziť zoznam prenosov súborov medzi vami a ostatnými"
-
-#, fuzzy
-msgid ""
-"Shows a text in the banner that describes the current chat state of the "
-"contact."
-msgstr ""
-"Ak je zaškrtnuté, Gajim povolí ostatným zistiť operačný systém, ktorý "
-"používate"
-
-msgid "Shows an info bar with helpful hints in the Start / Join Chat dialog"
-msgstr ""
 
 #, fuzzy
 msgid "Sign In"
@@ -5327,15 +4944,6 @@ msgstr "Usporiadať kontakty podľa stavu"
 msgid "Sort by Status"
 msgstr "Usporiadať kontakty podľa stavu"
 
-msgid ""
-"Sound to play when a group chat message contains one of the words in "
-"'muc_highlight_words' or your nickname is mentioned."
-msgstr ""
-
-#, fuzzy
-msgid "Sound to play when any group chat message arrives."
-msgstr "Prehrať zvuk keď príde nejaká MUC správa."
-
 #, fuzzy
 msgid "Sounds"
 msgstr "Wav zvuky"
@@ -5376,6 +4984,10 @@ msgstr "Začať rozhovor"
 
 #, fuzzy
 msgid "Start Chatting…"
+msgstr "Začať rozhovor"
+
+#, fuzzy
+msgid "Start Chat…"
 msgstr "Začať rozhovor"
 
 #, fuzzy
@@ -5535,10 +5147,6 @@ msgid "Synchronise"
 msgstr "Synchronizovať"
 
 #, fuzzy
-msgid "Synchronise History"
-msgstr "Synchronizovať"
-
-#, fuzzy
 msgid "Synchronise History…"
 msgstr "Synchronizovať"
 
@@ -5547,8 +5155,20 @@ msgid "Synchronise the status of all accounts"
 msgstr "Zmeniť stav účtu alebo účtov"
 
 #, fuzzy
+msgid "Synchronize"
+msgstr "Synchronizovať"
+
+#, fuzzy
 msgid "Synchronize Accounts"
 msgstr "Synchronizovať kontakty"
+
+#, fuzzy
+msgid "Synchronize Chat History"
+msgstr "Synchronizovať"
+
+#, fuzzy
+msgid "Synchronizing Chat History…"
+msgstr "Synchronizovať"
 
 #, fuzzy
 msgid "System"
@@ -5596,10 +5216,6 @@ msgid ""
 "The contact will be informed that you stopped sharing your status. Please "
 "note that this can have other side effects."
 msgstr ""
-
-#, fuzzy
-msgid "The currently active encryption for that contact."
-msgstr "Povoliť šifrovanie ESessions pre tento účet."
 
 #, python-format
 msgid ""
@@ -5664,13 +5280,7 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
-#, python-format
-msgid ""
-"There are updates for your plugins:\n"
-"<b>%s</b>"
-msgstr ""
-
-msgid "There is already a synchronisation in progress. Please try again later."
+msgid "There are updates for Gajim’s plugins"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5767,13 +5377,6 @@ msgid ""
 "You can install the OpenPGP plugin to handle those messages."
 msgstr ""
 
-msgid ""
-"This option lets you customize the timestamp that is printed in "
-"conversation. For example '[%H:%M] ' will show '[hour:minute] '. See python "
-"doc on strftime for full documentation (https://docs.python.org/3/library/"
-"time.html#time.strftime)."
-msgstr ""
-
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Server nepodporuje Vcard"
@@ -5822,15 +5425,6 @@ msgstr ""
 msgid "Time Until Not Available"
 msgstr "Neprítomný"
 
-msgid "Time in minutes, after which your status changes to away."
-msgstr "Čas v minútach, po ktorých sa zmení stav na preč."
-
-msgid "Time in minutes, after which your status changes to not available."
-msgstr "Čas v minútach, po ktorých sa zmení stav na neprítomný."
-
-msgid "Time of inactivity needed before the change status window closes down."
-msgstr "Doba neaktivity potrebná na zmenenie stavu na zatvoril okno."
-
 msgid "To"
 msgstr "Pre"
 
@@ -5864,10 +5458,6 @@ msgstr ""
 
 msgid "Topic"
 msgstr ""
-
-#, fuzzy
-msgid "Tor"
-msgstr "Pre"
 
 #, fuzzy
 msgid "Transferring File…"
@@ -6030,10 +5620,10 @@ msgstr "Žiadne účty nie sú dostupné"
 msgid "Update plugins automatically"
 msgstr ""
 
-msgid "Update plugins automatically next time"
+msgid "Updates"
 msgstr ""
 
-msgid "Updates"
+msgid "Updates will be installed next time Gajim is started"
 msgstr ""
 
 #, fuzzy
@@ -6117,11 +5707,6 @@ msgstr "Používatelia"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-msgid ""
-"Valid URI schemes. Only schemes in this list will be accepted as 'real' URI "
-"(mailto and xmpp are handled separately)."
-msgstr ""
 
 msgid "Validity"
 msgstr ""
@@ -6217,11 +5802,6 @@ msgid "What does this mean?"
 msgstr "Skryť toto menu"
 
 msgid "What happened"
-msgstr ""
-
-msgid ""
-"When to show the notification area icon. Can be 'never', 'on_event', and "
-"'always'."
 msgstr ""
 
 msgid "Where participants should go"
@@ -6826,10 +6406,6 @@ msgid "_Unsubscribe"
 msgstr "_Odhlásiť"
 
 #, fuzzy
-msgid "_Update"
-msgstr "Aktualizovať správu dňa..."
-
-#, fuzzy
 msgid "_Username"
 msgstr "_Používateľské meno:"
 
@@ -7103,27 +6679,3 @@ msgstr "%(nick)s je teraz %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
-
-#~ msgid "File: "
-#~ msgstr "Súbor:"
-
-#~ msgid "New Message"
-#~ msgstr "Nová správa"
-
-#, fuzzy
-#~ msgid "Note: Chat history is disabled for this contact."
-#~ msgstr "Ignorovať túto chybu pre tento certifikát."
-
-#, fuzzy
-#~ msgid "Save conversations for all contacts"
-#~ msgstr "Uložiť _záznam z rozhovoru pre všetky účty"
-
-#, fuzzy
-#~ msgid "XHTML Formatting"
-#~ msgstr "Zobraziť zoznam emotikon (Alt+M)"
-
-#, fuzzy
-#~ msgid ""
-#~ "You just received a new message from %s.\n"
-#~ "Do you want to close this tab?"
-#~ msgstr "Práve ste prijali novú správu od \"%s\""

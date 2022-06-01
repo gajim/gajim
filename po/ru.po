@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 13:53+0000\n"
+"POT-Creation-Date: 2022-05-31 18:12+0000\n"
 "PO-Revision-Date: 2022-04-22 21:28+0000\n"
 "Last-Translator: bodqhrohro <bodqhrohro@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -18,8 +18,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 4.11.2\n"
 "X-Poedit-Basepath: /home/test/gajim\n"
 
@@ -66,21 +66,6 @@ msgstr ""
 #, python-brace-format
 msgid " by {actor}"
 msgstr " от {actor}"
-
-msgid "$S (Away: Idle more than $T min)"
-msgstr "$S (Отошел: бездействие более $T мин.)"
-
-msgid "$S (Not available: Idle more than $T min)"
-msgstr "$S (Недоступен: бездействие более $T мин.)"
-
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoawaytime' "
-"value."
-msgstr "$S будет заменено текущим сообщением о статусе, $T - временем простоя."
-
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoxatime' value."
-msgstr "$S будет заменено текущим сообщением о статусе, $T - временем простоя."
 
 #, fuzzy, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
@@ -264,9 +249,6 @@ msgstr "1 год"
 
 msgid "2 Days"
 msgstr "2 дня"
-
-msgid "2: System, 1: Enabled, 0: Disabled"
-msgstr "2: Система, 1: Включено, 0: Отключено"
 
 msgid "3 Months"
 msgstr "3 месяца"
@@ -705,6 +687,10 @@ msgstr "Учётные записи"
 msgid "Action when left-clicking a preview"
 msgstr ""
 
+#, fuzzy
+msgid "Activate"
+msgstr "Активно"
+
 msgid "Activated"
 msgstr "Активно"
 
@@ -844,20 +830,8 @@ msgstr "Все файлы"
 msgid "All other group chat participants can see your XMPP address"
 msgstr "Все остальные участники группового чата могут видеть ваш адрес XMPP"
 
-msgid ""
-"Allow Gajim to send information about the operating system you are running."
-msgstr ""
-"Разрешить Gajim отправлять информацию об используемой Вами операционной "
-"системе."
-
-msgid "Allow Gajim to send your local time."
-msgstr "Разрешить Gajim отправлять ваше локальное время."
-
 msgid "Allow a participant to send you public or private messages"
 msgstr "Разрешить участнику отправлять вам публичные или личные сообщения"
-
-msgid "Allow certificate verification with POSH."
-msgstr "Подтверждение SSL сертификата при помощи POSH."
 
 msgid ""
 "Allow to hide the contact list window even if the notification area icon is "
@@ -1342,34 +1316,6 @@ msgstr ""
 "Безопасно общайтесь с помощью сквозного шифрования с помощью OMEMO или "
 "OpenPGP."
 
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: 'all', "
-"'composing_only', 'disabled'"
-msgstr ""
-"Уведомления о состоянии чата, отправляемые контактам. Возможные значения: "
-"'all', 'composing_only', 'disabled'"
-
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: all, "
-"composing_only, disabled"
-msgstr ""
-"Уведомления о состоянии чата, которые отправляются контактам. Возможные "
-"значения: all, composing_only, disabled"
-
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only' or 'disabled'."
-msgstr ""
-"Уведомления о состоянии чата, отправляемые в групповой чат. Возможные "
-"значения: 'all', 'composing_only' или 'disabled'."
-
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only', 'disabled'"
-msgstr ""
-"Уведомления о состоянии чата, которые отправляются в групповой чат. "
-"Возможные значения: 'all', 'composing_only', 'disabled'"
-
 msgid "Chats"
 msgstr "Чаты"
 
@@ -1580,9 +1526,6 @@ msgstr "Соединение недоступно"
 msgid "Connection with %s could not be established."
 msgstr "Не удалось установить соединение с одноранговым узлом."
 
-msgid "ConnectionType: START TLS, DIRECT TLS or PLAIN"
-msgstr "Тип подключения: START TLS, DIRECT TLS или PLAIN"
-
 msgid "Contact"
 msgstr "Контакт"
 
@@ -1644,26 +1587,6 @@ msgstr "Список контактов"
 
 msgid "Contacts"
 msgstr "Контакты"
-
-msgid ""
-"Controls the window where new messages are placed.\n"
-"'always' - All messages are sent to a single window.\n"
-"'always_with_roster' - Like 'always' but the messages are in a single window "
-"along with the contact list.\n"
-"'never' - All messages get their own window.\n"
-"'peracct' - Messages for each account are sent to a specific window.\n"
-"'pertype' - Each message type (e.g. chats vs. group chats) is sent to a "
-"specific window."
-msgstr ""
-"Управляет окном, в котором помещаются новые сообщения.\n"
-"'always' - все сообщения отправляются в одно окно.\n"
-"'always_with_roster' - как «always», но сообщения находятся в одном окне "
-"вместе со списком контактов.\n"
-"'never' - все сообщения получают собственные окна.\n"
-"'peracct' - сообщения для каждой учетной записи отправляются в отдельные "
-"окна.\n"
-"'pertype' - каждый тип сообщения (например, чаты или групповые чаты) "
-"отправляются в отдельные окна."
 
 msgid "Conversation: Nickname Color (Incoming)"
 msgstr ""
@@ -1757,13 +1680,6 @@ msgstr "Создание учетной записи..."
 msgid "Credentials expired"
 msgstr "Срок действия учетных данных истек"
 
-msgid ""
-"Ctrl+Tab switches to the next composing tab when there are no tabs with "
-"messages pending."
-msgstr ""
-"Использовать Ctrl+Tab для переключения между вкладками, когда нет вкладок с "
-"непрочитанными сообщениями."
-
 msgid "Current Developers"
 msgstr "Разработчики"
 
@@ -1772,9 +1688,6 @@ msgstr "На машине отсутствует D-Bus или модуль пи�
 
 msgid "Dark Theme"
 msgstr "Темная тема"
-
-msgid "Date of the last update check"
-msgstr "Дата последней проверки обновлений"
 
 msgid "Deactivated"
 msgstr "Неактивно"
@@ -1788,20 +1701,6 @@ msgstr "_Отклонить"
 
 msgid "Default"
 msgstr "По умолчанию"
-
-msgid ""
-"Default Setting: Show a status message for all status changes (away, dnd, "
-"etc.) of users in a group chat."
-msgstr ""
-"Настройка по умолчанию: показывать сообщение о статусе для всех изменений "
-"состояния (отошел, не беспокоить и т.д.) пользователей в групповом чате."
-
-msgid ""
-"Default Setting: Show a status message for every join or leave in a group "
-"chat."
-msgstr ""
-"Настройка по умолчанию: показывать сообщение о статусе для каждого "
-"присоединения/выхода в групповом чате."
 
 msgid "Default Sync Threshold"
 msgstr "Порог Синхронизации по умолчанию"
@@ -1825,11 +1724,6 @@ msgstr "По умолчанию для новых групповых чатов"
 msgid "Default for new public group chats"
 msgstr "По умолчанию для новых публичных групповых чатов"
 
-msgid ""
-"Define the position of avatars in the contact list. Can be 'left' or 'right'."
-msgstr ""
-"Расположение аватаров в списке контактов. Может быть 'слева' или 'справа'."
-
 msgid "Delete"
 msgstr "Удалить"
 
@@ -1846,7 +1740,7 @@ msgid "Description: "
 msgstr "Описание: "
 
 #, fuzzy
-msgid "Destroy Groupchat…"
+msgid "Destroy Group Chat…"
 msgstr "В _новую комнату"
 
 msgid "Destroy This Chat"
@@ -1930,10 +1824,6 @@ msgstr "Показать или изменить тему комнаты"
 msgid "Do not disturb"
 msgstr "Не беспокоить"
 
-#, fuzzy
-msgid "Do not show this message again"
-msgstr "_Не показывать снова"
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Вы принимаете этот запрос (аккаунт: %s)?"
@@ -1965,12 +1855,13 @@ msgstr "Вы хотите перезаписать текущую установ
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr "Вы хотите отменить регистрацию своей учетной записи на <b>%s</b>?"
 
-msgid "Don't show contact list window in the system taskbar."
-msgstr "Не отображать окно списка контактов в панели задач."
-
 #, fuzzy
 msgid "Don’t show main window in the system taskbar."
 msgstr "Не отображать окно списка контактов в панели задач."
+
+#, fuzzy
+msgid "Don’t show this again"
+msgstr "_Не показывать снова"
 
 #, fuzzy
 msgid "Download"
@@ -2127,6 +2018,14 @@ msgstr "Ошибка при сохранении"
 #, fuzzy
 msgid "Error while processing image"
 msgstr "Ошибка загрузки изображения"
+
+#, fuzzy
+msgid "Error while receiving search results."
+msgstr "Ошибка загрузки изображения"
+
+#, fuzzy
+msgid "Error while retrieving search form."
+msgstr "Ошибка при сохранении"
 
 #, fuzzy
 msgid "Error while uploading avatar"
@@ -2349,6 +2248,10 @@ msgstr "Личные беседы"
 msgid "Fingerprints"
 msgstr "Отпечатки"
 
+#, fuzzy
+msgid "Finished"
+msgstr "Закончено"
+
 #, python-format
 msgid ""
 "Finished synchronising chat history:\n"
@@ -2518,6 +2421,10 @@ msgstr "Группа"
 msgid "Group Chat"
 msgstr "Групповой чат"
 
+#, fuzzy
+msgid "Group Chat Details"
+msgstr "Групповые чаты"
+
 msgid "Group Chat Invitation"
 msgstr "Приглашение в групповой чат"
 
@@ -2573,13 +2480,6 @@ msgstr "Теперь в групповом чате отображаются н�
 
 msgid "Group chat support"
 msgstr "Поддержка группового чата"
-
-msgid "Group multiple contacts from one friend to a single Meta-Contact"
-msgstr "Группируйте несколько контактов в один мета-контакт"
-
-#, fuzzy
-msgid "Groupchat Details"
-msgstr "Групповые чаты"
 
 msgid "Groups"
 msgstr "Группы"
@@ -2653,21 +2553,6 @@ msgstr "Я хочу добавить вас в свой список конта�
 msgid "I would like to add you to my roster."
 msgstr "Я хочу добавить вас в свой список."
 
-msgid "I'm eating."
-msgstr "Принимаю пищу."
-
-msgid "I'm on the phone."
-msgstr "Говорю по телефону."
-
-msgid "I'm out enjoying life."
-msgstr "Наслаждаюсь жизнью, чего и вам желаю."
-
-msgid "I'm watching a movie."
-msgstr "Смотрю кино."
-
-msgid "I'm working."
-msgstr "Работаю."
-
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC стандарт утверждает, что KiB = 1024 байт, KB = 1000 байт."
 
@@ -2693,27 +2578,6 @@ msgstr ""
 "Если отмечено, то Gajim'ом можно будет управлять удаленно с использованием "
 "gajim-remote."
 
-msgid ""
-"If disabled, Gajim will no longer print status messages in chats when a "
-"contact changes their status (and/or their status message)."
-msgstr ""
-"Если неактивно, Gajim больше не будет показывать сообщения о статусе в "
-"чатах, когда контакт меняет свой статус и/или сообщение о статусе."
-
-msgid ""
-"If disabled, this account will be disabled and will not appear in the "
-"contact list window."
-msgstr ""
-"Если неактивно, эта учетная запись будет отключена и не будет отображаться в "
-"окне списка контактов."
-
-msgid ""
-"If enabled, Gajim hides the contact list window when pressing the X button "
-"instead of minimizing into the notification area."
-msgstr ""
-"Если этот параметр включен, Gajim скрывает окно списка контактов при нажатии "
-"кнопки X вместо сворачивания в область уведомлений."
-
 #, fuzzy
 msgid ""
 "If enabled, Gajim hides the main window when pressing the X button instead "
@@ -2729,40 +2593,8 @@ msgstr ""
 "Если активно, то окно Gajim будет мигать (стандартное поведение большинства "
 "оконных менеджеров) когда присутствуют непросмотренные события."
 
-msgid ""
-"If enabled, Gajim quits when clicking the X button of your Window Manager. "
-"This setting is taken into account only if the notification area icon is "
-"used."
-msgstr ""
-"Если активно, Gajim будет завершаться при нажатии на кнопку закрытия окна. "
-"Эта опция учитывается, только если используется иконка в области уведомлений."
-
-msgid ""
-"If enabled, Gajim shows the group chat subject in the chat window when "
-"joining."
-msgstr ""
-"Если этот параметр включен, Gajim показывает тему группового чата в окне "
-"чата при присоединении."
-
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr "Если активно, Gajim добавит * и [n] в заголовок окна списка контактов."
-
-msgid "If enabled, Gajim will answer to message receipt requests."
-msgstr "Если активно, Gajim будет отвечать на запросы о получении сообщений."
-
-msgid ""
-"If enabled, Gajim will display an icon to show that sent messages have been "
-"received by your contact."
-msgstr ""
-"Если активно, Gajim отобразит иконку, чтобы показать, что отправленные "
-"сообщения были получены."
-
-msgid ""
-"If enabled, Gajim will display the status message (if not empty) underneath "
-"the contact name in the contact list window."
-msgstr ""
-"Если активно, Gajim будет отображать сообщение о статусе (если оно не "
-"пустое) под именем контакта в окне списка контактов."
 
 msgid "If enabled, Gajim will execute XEP-0146 Commands."
 msgstr "Если этот параметр включен, Gajim будет выполнять команды XEP-0146."
@@ -2777,21 +2609,6 @@ msgstr ""
 "Если этот параметр включен, Gajim будет игнорировать входящие запросы "
 "внимания ('wizz')."
 
-msgid ""
-"If enabled, Gajim will reopen chat windows that were opened last time Gajim "
-"was closed."
-msgstr ""
-"Если этот параметр включен, Gajim снова откроет окна чата, которые были "
-"открыты в прошлый раз, когда Gajim был закрыт."
-
-msgid ""
-"If enabled, Gajim will save the contact list window position when hiding it, "
-"and restore it when showing the contact list window again."
-msgstr ""
-"Если этот параметр включен, Gajim сохранит положение окна списка контактов "
-"при его скрытии и восстановит его при повторном отображении окна списка "
-"контактов."
-
 #, fuzzy
 msgid ""
 "If enabled, Gajim will save the main window position when hiding it, and "
@@ -2802,28 +2619,6 @@ msgstr ""
 "контактов."
 
 msgid ""
-"If enabled, Gajim will send your local IP so your contact can connect to "
-"your machine for file transfers."
-msgstr ""
-"Если активно, Gajim будет отправлять Ваш IP-адрес, чтобы контакт мог "
-"подключиться к Вашему компьютеру для передачи файлов."
-
-msgid ""
-"If enabled, Gajim will show both the number of online and total contacts in "
-"account rows as well as in group rows."
-msgstr ""
-"Если активно, Gajim будет показывать количество онлайн-контактов и общее "
-"количество контактов в строках учетной записи, а также в строках групп."
-
-msgid ""
-"If enabled, Gajim will test file transfer proxies on startup to be sure they "
-"work. Openfire's proxies are known to fail this test even if they work."
-msgstr ""
-"Если этот параметр включен, Gajim будет проверять прокси-серверы передачи "
-"файлов при запуске, чтобы убедиться, что они работают. Прокси Openfire, как "
-"известно, не проходят этот тест, даже если они работают."
-
-msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in 'stun_server' option, or the one given by the XMPP server."
 msgstr ""
@@ -2832,71 +2627,13 @@ msgstr ""
 "сервером."
 
 msgid ""
-"If enabled, Gajim will use the System's Keyring to store account passwords."
-msgstr ""
-"Если активно, Gajim будет использовать системное хранилище ключей для "
-"хранения паролей учетных записей."
-
-msgid ""
-"If enabled, Gajim will use your IP and proxies defined in "
-"'file_transfer_proxies' option for file transfers."
-msgstr ""
-"Если активно, Gajim будет использовать IP-адрес и прокси, заданные опцией "
-"'file_transfer_proxies', для передачи файлов."
-
-msgid ""
-"If enabled, a notification is created for every message in this group chat."
-msgstr ""
-"Если этот параметр включен, уведомление создается для каждого сообщения в "
-"этом групповом чате."
-
-msgid ""
 "If enabled, completion in group chats will be like a shell auto-completion."
 msgstr ""
 "Если активно, автодополнение ников в групповых чатах будет работать как "
 "автодополнение в консоли."
 
-msgid ""
-"If enabled, contacts requesting authorization will be accepted automatically."
-msgstr ""
-"Если активно, контакты, запрашивающие авторизацию, будут автоматически её "
-"получать."
-
-msgid ""
-"If enabled, do not remove */_ . So *abc* will be bold but with * * not "
-"removed."
-msgstr ""
-"Если активно, то символы */_ не будут удаляться. Т.о. *абв* будет написано "
-"жирным шрифтом, но * * удалены не будут."
-
-msgid ""
-"If enabled, plugins will be activated on startup (this is saved when exiting "
-"Gajim). This option SHOULD NOT be used to (de)activate plugins. Use the "
-"plugin window instead."
-msgstr ""
-"Если активно, плагины будут активированы при запуске (это сохраняется при "
-"выходе из Gajim). Эту опцию НЕ СЛЕДУЕТ использовать для (де)активации "
-"плагинов. Вместо этого используйте окно плагина."
-
 msgid "If enabled, pressing Esc closes a tab/window."
 msgstr "Если активно, то нажатие клавиши Escape будет закрывать вкладку/окно."
-
-msgid ""
-"If enabled, the contact row is colored according to the current chat state "
-"of the contact."
-msgstr ""
-"Если активно, строка контакта окрашивается в соответствии с текущим "
-"состоянием чата контакта."
-
-msgid "If enabled, the last status will be restored."
-msgstr "Если активно, восстанавливать последний статус."
-
-msgid ""
-"If enabled, the tab is colored according to the current chat state of the "
-"contact."
-msgstr ""
-"Если активно, вкладка окрашивается в соответствии с текущим состоянием чата "
-"контакта."
 
 msgid ""
 "If enabled, you will be able to set a negative priority to your account in "
@@ -2907,9 +2644,6 @@ msgstr ""
 "приоритет для учетной записи в окне настройки учетных записей. БУДЬТЕ "
 "ОСТОРОЖНЫ, при подключении с отрицательным приоритетом, Вы НЕ получите "
 "никаких сообщений от сервера."
-
-msgid "If enabled, you will see your webcam's video stream as well."
-msgstr "Если этот параметр включен,вы также увидите видеопоток с веб-камеры."
 
 #, python-format
 msgid "If you close this window, you will leave '%s'."
@@ -2938,13 +2672,6 @@ msgstr "Картинки"
 
 msgid "Import Contacts"
 msgstr "Импорт Контактов"
-
-msgid ""
-"In a chat, show the nickname at the beginning of a line only when it's not "
-"the same person talking as in the previous message."
-msgstr ""
-"Показывать ник в начале строки в чате, только если предыдущее сообщение было "
-"написано другим участником."
 
 msgid ""
 "In order to write messages in this chat, you need to request voice first.\n"
@@ -3150,9 +2877,6 @@ msgstr "Выгнать"
 msgid "Label"
 msgstr "Ярлык"
 
-msgid "Language used for spell checking."
-msgstr "Язык, используемый для проверки орфографии."
-
 msgid "Last but not least"
 msgstr "Последний, но тем не менее важный"
 
@@ -3175,26 +2899,6 @@ msgstr ""
 
 msgid "Limit must be an integer"
 msgstr "Предел должен быть целым числом"
-
-msgid ""
-"List of XMPP Addresses (space separated) for which the chat window will be "
-"re-opened on next startup."
-msgstr ""
-"Список адресов XMPP (разделенных пробелом), для которых окно чата будет "
-"повторно открыто при следующем запуске."
-
-msgid ""
-"List of XMPP Addresses (space separated) for which you do not want to store "
-"chat history. You can also add the name of an account to disable storing "
-"chat history for this account."
-msgstr ""
-"Список адресов XMPP (разделенных пробелом), для которых вы не хотите хранить "
-"историю чата. Вы также можете добавить имя учетной записи, чтобы отключить "
-"хранение истории чата для этой учетной записи."
-
-msgid ""
-"List of rows (accounts and groups) that are collapsed (space separated)."
-msgstr "Список свернутых строк (учётных записей и групп) (через пробел)."
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -3313,25 +3017,6 @@ msgstr "Пометить, как прочитанное"
 msgid "Maximum file size for preview generation"
 msgstr ""
 
-msgid ""
-"Maximum history in days we request from a private group chat archive. 0: As "
-"much as possible."
-msgstr ""
-"Максимальная история в днях, которую мы запрашиваем из личного архива "
-"группового чата. 0: как можно больше."
-
-msgid ""
-"Maximum history in days we request from a public group chat archive. 0: As "
-"much as possible."
-msgstr ""
-"Максимальная история в днях, которую мы запрашиваем из публичного архива "
-"группового чата. 0: как можно больше."
-
-msgid ""
-"Maximum number of lines that are printed in conversations. Oldest lines are "
-"cleared."
-msgstr "Максимальное количество строк в окне. Старые строки будут удалены."
-
 #, fuzzy
 msgid "Me"
 msgstr "Подлый"
@@ -3376,9 +3061,6 @@ msgid ""
 msgstr ""
 "<b>Сообщение отредактировано. Исходное сообщение:</b>\n"
 "{}"
-
-msgid "Message that is sent to contacts you want to add."
-msgstr "Сообщение, отправляемое контактам, которых вы хотите добавить."
 
 msgid "Messages are archived on the server"
 msgstr "Сообщения архивируются на сервере"
@@ -3466,6 +3148,10 @@ msgstr "Новая комната"
 
 msgid "New Search"
 msgstr "Новый поиск"
+
+#, fuzzy
+msgid "New Workspace"
+msgstr "Удалить контакт"
 
 #, fuzzy, python-format
 msgid "New message from %s"
@@ -3652,6 +3338,10 @@ msgstr "Открыть ссылку в браузере"
 msgid "Open Link in _Browser"
 msgstr "Открыть ссылку в браузере"
 
+#, fuzzy
+msgid "Open Plugins…"
+msgstr "Модули"
+
 msgid "Open _Folder"
 msgstr "Открыть _директорию"
 
@@ -3678,15 +3368,6 @@ msgstr ""
 msgid "Operating System"
 msgstr "Клиент / Операционная система"
 
-msgid "Optionally fix Jingle output video framerate. Example: 10/1 or 25/2."
-msgstr ""
-"Опциональное изменение частоты кадров видео в Jingle. Например: 10/1 или "
-"25/2."
-
-msgid "Optionally resize Jingle output video. Example: 320x240."
-msgstr ""
-"Опциональное изменение размера видео-кадра в Jingle. Например: 320x240."
-
 #, fuzzy
 msgid "Organisation"
 msgstr "Организация"
@@ -3703,7 +3384,8 @@ msgstr "Подразделение организации (OU)"
 msgid "Organizational Unit (OU): "
 msgstr "Подразделение организации (OU): "
 
-msgid "Organize your chats with tabs"
+#, fuzzy
+msgid "Organize your chats with workspaces"
 msgstr "Организуйте свои чаты с помощью вкладок"
 
 msgid "Others"
@@ -3844,17 +3526,11 @@ msgstr "Pipewire"
 msgid "Pl_ugins"
 msgstr "Пла_гины"
 
-msgid "Place the contact list on the right in single window mode"
-msgstr "Поместить список контактов справа в однооконном режиме"
-
 msgid "Play Sound"
 msgstr "Проигрывать звук"
 
 msgid "Play Sounds"
 msgstr "Проигрывать звуки"
-
-msgid "Play sound even when being busy."
-msgstr "Проигрывать звуки, даже если Вы заняты."
 
 msgid "Play sounds even when you are Away, Busy, etc."
 msgstr "Проигрывать звуки, даже если Ваш статус \"Отошел\", \"Занят\" и т.д."
@@ -3906,10 +3582,6 @@ msgstr "Настройки плагина"
 msgid "Plugin Updates"
 msgstr "Ошибка в модуле"
 
-#, fuzzy
-msgid "Plugin Updates Available"
-msgstr "Доступно обновление Gajim"
-
 msgid "Plugin already exists"
 msgstr "Модуль уже существует"
 
@@ -3919,16 +3591,11 @@ msgstr "Ошибка в модуле"
 msgid "Plugin manager"
 msgstr "Менеджер плагинов"
 
-msgid ""
-"Plugin updates have successfully been downloaded.\n"
-"Updates will be installed next time Gajim is started."
-msgstr ""
-
 msgid "Plugins"
 msgstr "Модули"
 
 #, fuzzy
-msgid "Plugins Updated"
+msgid "Plugins Updated Successfully"
 msgstr "Ошибка в модуле"
 
 #, python-format
@@ -3962,13 +3629,6 @@ msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
 msgstr ""
 "Предпочтительный механизм передачи файлов для перетаскиваемых в окно чата "
 "файлов"
-
-msgid ""
-"Preferred file transfer mechanism for file drag&drop on a chat window. Can "
-"be 'httpupload' (default) or 'jingle'."
-msgstr ""
-"Предпочтительный механизм передачи файлов для перетаскивания файлов в окне "
-"чата. Может быть 'http upload' (по умолчанию) или 'jingle'."
 
 msgid "Presence description:"
 msgstr "Описание присутствия:"
@@ -4004,13 +3664,6 @@ msgstr "Показывает список зарегистрированных �
 msgid "Priority"
 msgstr "Приоритет"
 
-msgid ""
-"Priority will change automatically according to your status. Priorities are "
-"defined in 'autopriority_*' options."
-msgstr ""
-"Приоритет будет изменяться автоматически согласно Вашему статусу. Приоритеты "
-"для статусов определяются опцией 'autopriority_*'."
-
 msgid "Privacy"
 msgstr "Конфиденциальность"
 
@@ -4035,13 +3688,6 @@ msgstr "Хост прокси"
 
 msgid "Proxy Type"
 msgstr "Тип прокси"
-
-msgid ""
-"Proxy used for all outgoing connections if the account does not have a "
-"specific proxy configured."
-msgstr ""
-"Прокси используется для всех исходящих соединений, если в настройках учетной "
-"записи не задан конкретный прокси."
 
 msgid "Proxy, custom hostname and port"
 msgstr "Прокси, настраиваемое имя хоста и порт"
@@ -4266,6 +3912,10 @@ msgstr "Список команд запроса"
 msgid "Requesting HTTP File Upload Slot…"
 msgstr "Запрашиваем место для HTTP File Upload…"
 
+#, fuzzy
+msgid "Requesting search form from server"
+msgstr "Запросить форму поиска"
+
 msgid "Required"
 msgstr "Требуемый"
 
@@ -4466,6 +4116,14 @@ msgid ""
 msgstr ""
 "Искать групповые чаты глобально\n"
 "(нажмите Return, чтобы начать поиск)"
+
+#, fuzzy
+msgid "Searching"
+msgstr "Поиск"
+
+#, fuzzy
+msgid "Searching…"
+msgstr "Поиск…"
 
 msgid "Search…"
 msgstr "Поиск…"
@@ -4715,8 +4373,8 @@ msgstr "Установить текущий статус на \"В сети\""
 msgid "Set the presence type and description"
 msgstr "Установка статуса и статусного сообщения"
 
-msgid ""
-"Set your activity, tune, and mood to show your friends how you are feeling"
+#, fuzzy
+msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
 "Укажите статус и настроение, чтобы показать друзьям, как Вы себя чувствуете"
 
@@ -4819,34 +4477,8 @@ msgstr ""
 "Показать предварительный просмотр в реальном времени, чтобы проверить видео "
 "источник"
 
-msgid ""
-"Show a status message for all status changes (away, dnd, etc.) of users in a "
-"group chat."
-msgstr ""
-"Показывать сообщение о статусе при всех изменениях статуса (отошел, не "
-"беспокоить и т.д.) пользователей в групповом чате."
-
-msgid "Show a status message for every join or leave in a group chat."
-msgstr ""
-"Показывать сообщение о статусе для каждого присоединения/выхода в групповом "
-"чате."
-
 msgid "Show all warnings"
 msgstr "Показать все предупреждения"
-
-msgid "Show close button in tab?"
-msgstr "Показывать кнопку закрытия на вкладке?"
-
-msgid ""
-"Show contact list window on startup.\n"
-"'always' - Always show contact list window.\n"
-"'never' - Never show contact list window.\n"
-"'last_state' - Restore last state of the contact list window."
-msgstr ""
-"Показывать окно списка контактов при запуске.\n"
-"'always' - всегда показывать окно списка контактов.\n"
-"'never' - никогда не показывать окно списка контактов.\n"
-"'last_state' - восстановливать последнее состояние."
 
 msgid ""
 "Show help on a given command or a list of available commands if -a is given"
@@ -4874,17 +4506,6 @@ msgstr ""
 msgid "Show only critical errors"
 msgstr "показывать только сообщения об ошибках"
 
-msgid "Show only online and free for chat contacts in the contact list."
-msgstr ""
-"Показывать в списке контактов только контакты со статусами «Доступен» и "
-"«Готов поболтать»."
-
-msgid "Show tab when only one conversation?"
-msgstr "Показывать вкладку при одном чат-окне?"
-
-msgid "Show tabbed notebook border in chat windows?"
-msgstr "Показывать границу вкладки в окне чата?"
-
 msgid "Show the application's version"
 msgstr "Показать версию приложения"
 
@@ -4909,17 +4530,6 @@ msgstr "Показывает помощь для конкретной коман
 
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr "Показывает список передач файлов между Вами и Вашими контактами"
-
-msgid ""
-"Shows a text in the banner that describes the current chat state of the "
-"contact."
-msgstr ""
-"Показывает текст в баннере, описывающий текущее состояние чата контакта."
-
-msgid "Shows an info bar with helpful hints in the Start / Join Chat dialog"
-msgstr ""
-"Показывать информационную панель с полезными подсказками в диалоговом окне "
-"\"Начать / присоединиться к чату\""
 
 msgid "Sign In"
 msgstr "Войти"
@@ -4963,17 +4573,6 @@ msgstr "Сортировать контакты по статусу"
 msgid "Sort by Status"
 msgstr "Сортировать контакты по статусу"
 
-msgid ""
-"Sound to play when a group chat message contains one of the words in "
-"'muc_highlight_words' or your nickname is mentioned."
-msgstr ""
-"Звук, воспроизводимый, когда сообщение группового чата содержит одно из слов "
-"списка 'muc_highlight_words' или при упоминании Вашего ника."
-
-msgid "Sound to play when any group chat message arrives."
-msgstr ""
-"Звук, воспроизводимый при поступлении любого сообщения группового чата."
-
 msgid "Sounds"
 msgstr "Звуки"
 
@@ -5010,6 +4609,10 @@ msgstr "Начать чат"
 
 #, fuzzy
 msgid "Start Chatting…"
+msgstr "Начать чат"
+
+#, fuzzy
+msgid "Start Chat…"
 msgstr "Начать чат"
 
 #, fuzzy
@@ -5162,9 +4765,6 @@ msgstr "Порог синхронизации"
 msgid "Synchronise"
 msgstr "Синхронизировать"
 
-msgid "Synchronise History"
-msgstr "Синхронизировать историю"
-
 msgid "Synchronise History…"
 msgstr "Синхронизировать историю…"
 
@@ -5172,8 +4772,20 @@ msgid "Synchronise the status of all accounts"
 msgstr "Синхронизировать статусы всех аккаунтов"
 
 #, fuzzy
+msgid "Synchronize"
+msgstr "Синхронизировать"
+
+#, fuzzy
 msgid "Synchronize Accounts"
 msgstr "Синхронизировать контакты"
+
+#, fuzzy
+msgid "Synchronize Chat History"
+msgstr "Синхронизировать историю"
+
+#, fuzzy
+msgid "Synchronizing Chat History…"
+msgstr "Синхронизировать историю…"
 
 msgid "System"
 msgstr "Система"
@@ -5216,9 +4828,6 @@ msgid ""
 "The contact will be informed that you stopped sharing your status. Please "
 "note that this can have other side effects."
 msgstr ""
-
-msgid "The currently active encryption for that contact."
-msgstr "Текущее активное шифрование для этого контакта."
 
 #, python-format
 msgid ""
@@ -5287,14 +4896,8 @@ msgstr ""
 "Создание учетной записи на одном сервере позволяет Вам также общаться с "
 "контактами с других серверов."
 
-#, python-format
-msgid ""
-"There are updates for your plugins:\n"
-"<b>%s</b>"
+msgid "There are updates for Gajim’s plugins"
 msgstr ""
-
-msgid "There is already a synchronisation in progress. Please try again later."
-msgstr "Синхронизация уже выполняется. Пожалуйста, повторите попытку позже."
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr "Для выбранного метода шифрования не существует способа шифрования."
@@ -5392,17 +4995,6 @@ msgstr ""
 "расшифровано. Вы можете установить плагин OpenPGP для обработки этих "
 "сообщений."
 
-msgid ""
-"This option lets you customize the timestamp that is printed in "
-"conversation. For example '[%H:%M] ' will show '[hour:minute] '. See python "
-"doc on strftime for full documentation (https://docs.python.org/3/library/"
-"time.html#time.strftime)."
-msgstr ""
-"Эта опция позволяет настроить отпечаток времени, который печатается в чатах. "
-"К примеру '[%H:%M]' будет показано как '[чч:мм]'. Подробнее в документации "
-"python к strftime (https://docs.python.org/3/library/time.html#time."
-"strftime)."
-
 msgid "This server does not allow signup."
 msgstr "Этот сервер не позволяет зарегистрироваться."
 
@@ -5446,15 +5038,6 @@ msgstr "Время до установления статуса \"Отсутст
 msgid "Time Until Not Available"
 msgstr "Время установки статуса \"Недоступен\""
 
-msgid "Time in minutes, after which your status changes to away."
-msgstr "Время в минутах, после которого ваш статус изменится на Отошел."
-
-msgid "Time in minutes, after which your status changes to not available."
-msgstr "Время в минутах, после которого ваш статус изменится на Недоступен."
-
-msgid "Time of inactivity needed before the change status window closes down."
-msgstr "Время не активности прежде чем окно изменения статуса закроется."
-
 msgid "To"
 msgstr "К"
 
@@ -5485,9 +5068,6 @@ msgstr ""
 
 msgid "Topic"
 msgstr "Тема"
-
-msgid "Tor"
-msgstr "Tor"
 
 #, fuzzy
 msgid "Transferring File…"
@@ -5643,12 +5223,12 @@ msgstr "Доступно обновление"
 msgid "Update plugins automatically"
 msgstr "Присоединяться автоматически"
 
-msgid "Update plugins automatically next time"
-msgstr ""
-
 #, fuzzy
 msgid "Updates"
 msgstr "_Обновить сейчас"
+
+msgid "Updates will be installed next time Gajim is started"
+msgstr ""
 
 msgid "Upload Files"
 msgstr "Загрузить файлы"
@@ -5729,13 +5309,6 @@ msgstr "Пользователи"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-msgid ""
-"Valid URI schemes. Only schemes in this list will be accepted as 'real' URI "
-"(mailto and xmpp are handled separately)."
-msgstr ""
-"Допустимые URI-схемы. Только схемы из этого списка будут приняты как "
-"'действительные' URI (mailto и xmpp обрабатываются отдельно)."
 
 msgid "Validity"
 msgstr "Достоверность"
@@ -5822,13 +5395,6 @@ msgstr "Скрыть это меню"
 
 msgid "What happened"
 msgstr ""
-
-msgid ""
-"When to show the notification area icon. Can be 'never', 'on_event', and "
-"'always'."
-msgstr ""
-"Когда показывать иконку в области уведомлений. Возможные значения 'никогда', "
-"'на_мероприятии', 'всегда'."
 
 msgid "Where participants should go"
 msgstr "Куда должны идти участники"
@@ -6365,10 +5931,6 @@ msgstr "_Отменить регистрацию учетной записи в 
 msgid "_Unsubscribe"
 msgstr "_Отписаться"
 
-#, fuzzy
-msgid "_Update"
-msgstr "_Обновить сейчас"
-
 msgid "_Username"
 msgstr "_Имя пользователя"
 
@@ -6635,40 +6197,3 @@ msgstr "{nick} теперь {show} {status}"
 #, fuzzy
 msgid "…or drop it here"
 msgstr "Выберите изображение или перетащите его сюда"
-
-#~ msgid "File: "
-#~ msgstr "Файл: "
-
-#~ msgid "Microphone & Camera"
-#~ msgstr "Микрофон и камера"
-
-#~ msgid "New Message"
-#~ msgstr "Новое сообщение"
-
-#~ msgid "Note: Chat history is disabled for this account."
-#~ msgstr "Примечание: история чата отключена для этой учетной записи."
-
-#~ msgid "Note: Chat history is disabled for this contact."
-#~ msgstr "Примечание: история чата отключена для этого контакта."
-
-#~ msgid "Render XHTML styles (colors, etc.) of incoming messages"
-#~ msgstr "Отображать XHTML-стили (цвета и т.д.) входящих сообщений"
-
-#~ msgid "Save conversations for all contacts"
-#~ msgstr "Сохранять историю для всех контактов"
-
-#~ msgid "Store conversations on the harddrive"
-#~ msgstr "Сохранять переписку на жестком диске"
-
-#~ msgid "With Microphone"
-#~ msgstr "С микрофоном"
-
-#~ msgid "XHTML Formatting"
-#~ msgstr "XHTML форматирование"
-
-#~ msgid ""
-#~ "You just received a new message from %s.\n"
-#~ "Do you want to close this tab?"
-#~ msgstr ""
-#~ "Получено новое сообщение от %s.\n"
-#~ "Закрыть эту вкладку?"

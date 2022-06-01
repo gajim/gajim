@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 13:53+0000\n"
+"POT-Creation-Date: 2022-05-31 18:12+0000\n"
 "PO-Revision-Date: 2009-10-29 23:50+0100\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: KBabel 1.11.4\n"
 
 msgid ""
@@ -47,29 +47,6 @@ msgstr "Zahtev za prenosom datoteke"
 #, python-brace-format
 msgid " by {actor}"
 msgstr ""
-
-#, fuzzy
-msgid "$S (Away: Idle more than $T min)"
-msgstr "$S (Odsutan, kao posledica mirovanja više od $T min.)"
-
-#, fuzzy
-msgid "$S (Not available: Idle more than $T min)"
-msgstr "$S (Nije dostupan, kao posledica mirovanja više od $T min.)"
-
-#, fuzzy
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoawaytime' "
-"value."
-msgstr ""
-"$S će biti zamenjeno sa trenutnom statusnom porukom,$T sa vremenom "
-"odsutnosti."
-
-#, fuzzy
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoxatime' value."
-msgstr ""
-"$S će biti zamenjeno sa trenutnom statusnom porukom,$T sa vremenom "
-"nedostupnosti"
 
 #, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
@@ -255,9 +232,6 @@ msgid "1 Year"
 msgstr ""
 
 msgid "2 Days"
-msgstr ""
-
-msgid "2: System, 1: Enabled, 0: Disabled"
 msgstr ""
 
 msgid "3 Months"
@@ -763,6 +737,10 @@ msgstr "Nalozi"
 msgid "Action when left-clicking a preview"
 msgstr ""
 
+#, fuzzy
+msgid "Activate"
+msgstr "Aktivirano"
+
 msgid "Activated"
 msgstr "Aktivirano"
 
@@ -930,23 +908,8 @@ msgstr "Sve datoteke"
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
 
-#, fuzzy
-msgid ""
-"Allow Gajim to send information about the operating system you are running."
-msgstr ""
-"Ako je označena, Gajim će dozvoliti drugima da pogledaju koji operativni "
-"sistem koristite"
-
-#, fuzzy
-msgid "Allow Gajim to send your local time."
-msgstr "%s Vam želi poslati datoteku."
-
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
-
-#, fuzzy
-msgid "Allow certificate verification with POSH."
-msgstr "Greška SSL sertifikata"
 
 msgid ""
 "Allow to hide the contact list window even if the notification area icon is "
@@ -1481,38 +1444,6 @@ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
 msgstr ""
 
 #, fuzzy
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: 'all', "
-"'composing_only', 'disabled'"
-msgstr ""
-"Poslata obaveštenja o stanju razgovora. Može biti jedno od "
-"'svi','samo_sastavljanje', 'onemogućeno'."
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: all, "
-"composing_only, disabled"
-msgstr ""
-"Poslata obaveštenja o stanju razgovora. Može biti jedno od "
-"'svi','samo_sastavljanje', 'onemogućeno'."
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only' or 'disabled'."
-msgstr ""
-"Poslata obaveštenja o stanju razgovora. Može biti jedno od "
-"'svi','samo_sastavljanje', 'onemogućeno'."
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only', 'disabled'"
-msgstr ""
-"Poslata obaveštenja o stanju razgovora. Može biti jedno od "
-"'svi','samo_sastavljanje', 'onemogućeno'."
-
-#, fuzzy
 msgid "Chats"
 msgstr "Razgovori"
 
@@ -1747,9 +1678,6 @@ msgstr "Veza nije dostupna"
 msgid "Connection with %s could not be established."
 msgstr "Nije moguće uspostaviti vezu sa drugom stranom."
 
-msgid "ConnectionType: START TLS, DIRECT TLS or PLAIN"
-msgstr ""
-
 msgid "Contact"
 msgstr "Kontakt"
 
@@ -1815,25 +1743,6 @@ msgstr "Kontakti"
 
 msgid "Contacts"
 msgstr "Kontakti"
-
-#, fuzzy
-msgid ""
-"Controls the window where new messages are placed.\n"
-"'always' - All messages are sent to a single window.\n"
-"'always_with_roster' - Like 'always' but the messages are in a single window "
-"along with the contact list.\n"
-"'never' - All messages get their own window.\n"
-"'peracct' - Messages for each account are sent to a specific window.\n"
-"'pertype' - Each message type (e.g. chats vs. group chats) is sent to a "
-"specific window."
-msgstr ""
-"Kontroliše prozor gde se smeštaju nove poruke.\n"
-"'always' - Sve poruke se šalju u isti prozor.\n"
-"'always_with_roster' - Kao iznad, ali su poruke u istom prozoru sa listom "
-"kontakata'never' - Svaka poruka dobija svoj prozor.\n"
-"'peracct' - Poruke za isti nalog se šalju u isti prozor.\n"
-"'pertype' - Poruke istog tipa (npr., razgovori i grupni razgovori) se šalju "
-"u isti prozor."
 
 msgid "Conversation: Nickname Color (Incoming)"
 msgstr ""
@@ -1948,12 +1857,6 @@ msgid "Credentials expired"
 msgstr "Sertifikat je istekao"
 
 #, fuzzy
-msgid ""
-"Ctrl+Tab switches to the next composing tab when there are no tabs with "
-"messages pending."
-msgstr "Ctrl-Tab ide na sledeći jezičak kada nema nepročitanih jezičaka"
-
-#, fuzzy
 msgid "Current Developers"
 msgstr "Trenutni programeri:"
 
@@ -1963,9 +1866,6 @@ msgstr "D-Bus ne postoji na ovom računaru ili nema python modula."
 #, fuzzy
 msgid "Dark Theme"
 msgstr "gajim-remote"
-
-msgid "Date of the last update check"
-msgstr ""
 
 msgid "Deactivated"
 msgstr "Deaktivirano"
@@ -1980,18 +1880,6 @@ msgstr "_Nije na vezi"
 
 msgid "Default"
 msgstr "Podrazumevano"
-
-#, fuzzy
-msgid ""
-"Default Setting: Show a status message for all status changes (away, dnd, "
-"etc.) of users in a group chat."
-msgstr "Nije moguće pridružiti se grupnom razgovoru"
-
-#, fuzzy
-msgid ""
-"Default Setting: Show a status message for every join or leave in a group "
-"chat."
-msgstr "Nije moguće pridružiti se grupnom razgovoru"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -2020,12 +1908,6 @@ msgstr "Napusti grupne razgovore"
 msgid "Default for new public group chats"
 msgstr "Napusti grupne razgovore"
 
-#, fuzzy
-msgid ""
-"Define the position of avatars in the contact list. Can be 'left' or 'right'."
-msgstr ""
-"Definišite poziciju avatara u listi kontakata. Može biti levo ili desno"
-
 msgid "Delete"
 msgstr "Obriši"
 
@@ -2043,7 +1925,7 @@ msgid "Description: "
 msgstr "Opis:"
 
 #, fuzzy
-msgid "Destroy Groupchat…"
+msgid "Destroy Group Chat…"
 msgstr "Novi grupni razgovor"
 
 #, fuzzy
@@ -2132,10 +2014,6 @@ msgstr "Pitaj pre zatvaranja prozora/jezička grupnog razgovora."
 msgid "Do not disturb"
 msgstr "Ne smetaj"
 
-#, fuzzy
-msgid "Do not show this message again"
-msgstr "_Ne pitaj me više"
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Prihvatate li ovaj zahtev na nalogu %s?"
@@ -2170,12 +2048,12 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
 #, fuzzy
-msgid "Don't show contact list window in the system taskbar."
+msgid "Don’t show main window in the system taskbar."
 msgstr "Ne prikazuj listu kontakata u sistemskoj kaseti."
 
 #, fuzzy
-msgid "Don’t show main window in the system taskbar."
-msgstr "Ne prikazuj listu kontakata u sistemskoj kaseti."
+msgid "Don’t show this again"
+msgstr "_Ne pitaj me više"
 
 #, fuzzy
 msgid "Download"
@@ -2340,6 +2218,14 @@ msgstr "Greška prilikom dodavanja servisa. %s"
 #, fuzzy
 msgid "Error while processing image"
 msgstr "Isteklo vreme za učitavanje slike"
+
+#, fuzzy
+msgid "Error while receiving search results."
+msgstr "Isteklo vreme za učitavanje slike"
+
+#, fuzzy
+msgid "Error while retrieving search form."
+msgstr "Greška prilikom dodavanja servisa. %s"
 
 #, fuzzy
 msgid "Error while uploading avatar"
@@ -2578,6 +2464,10 @@ msgstr "Privatni Razgovori"
 msgid "Fingerprints"
 msgstr ""
 
+#, fuzzy
+msgid "Finished"
+msgstr "_Završi"
+
 #, python-format
 msgid ""
 "Finished synchronising chat history:\n"
@@ -2750,6 +2640,10 @@ msgid "Group Chat"
 msgstr "Grupni razgovori"
 
 #, fuzzy
+msgid "Group Chat Details"
+msgstr "Registracija neuspela"
+
+#, fuzzy
 msgid "Group Chat Invitation"
 msgstr "Poziv na grupni razgovor"
 
@@ -2817,13 +2711,6 @@ msgstr "Soba sada prikazuje nedostupne članove"
 #, fuzzy
 msgid "Group chat support"
 msgstr "Grupni razgovori"
-
-msgid "Group multiple contacts from one friend to a single Meta-Contact"
-msgstr ""
-
-#, fuzzy
-msgid "Groupchat Details"
-msgstr "Registracija neuspela"
 
 msgid "Groups"
 msgstr "Grupe"
@@ -2903,22 +2790,6 @@ msgstr "Želio bih da Vas dodam na listu mojih kontakata."
 msgid "I would like to add you to my roster."
 msgstr "Želeo bih da te dodam na moju listu kontakata."
 
-#, fuzzy
-msgid "I'm eating."
-msgstr "Radim."
-
-msgid "I'm on the phone."
-msgstr "Telefoniram."
-
-msgid "I'm out enjoying life."
-msgstr "Napolju sam, uživam u životu."
-
-msgid "I'm watching a movie."
-msgstr "Gledam film."
-
-msgid "I'm working."
-msgstr "Radim."
-
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC standard definiše KiB = 1024 bajtova, KB = 1000 bajtova"
 
@@ -2946,27 +2817,6 @@ msgstr "Ako je označeno, Gajim se može kontrolisati korišćenjem gajim-remote
 
 #, fuzzy
 msgid ""
-"If disabled, Gajim will no longer print status messages in chats when a "
-"contact changes their status (and/or their status message)."
-msgstr ""
-"Ako je neistinito, više nećete videti statusnu porukuu razgovorima kada "
-"kontakt promeni svoj status i/ili statusnu poruku."
-
-#, fuzzy
-msgid ""
-"If disabled, this account will be disabled and will not appear in the "
-"contact list window."
-msgstr ""
-"Ako je False, nalog će biti onemogućen i neće se prikazivati u listi "
-"kontakata."
-
-msgid ""
-"If enabled, Gajim hides the contact list window when pressing the X button "
-"instead of minimizing into the notification area."
-msgstr ""
-
-#, fuzzy
-msgid ""
 "If enabled, Gajim hides the main window when pressing the X button instead "
 "of minimizing into the notification area."
 msgstr ""
@@ -2983,46 +2833,10 @@ msgstr ""
 "novim događajima."
 
 #, fuzzy
-msgid ""
-"If enabled, Gajim quits when clicking the X button of your Window Manager. "
-"This setting is taken into account only if the notification area icon is "
-"used."
-msgstr ""
-"Ako je istinito, Gajim se završava kada se pritisne X dugme. Ovo podešavanje "
-"se koristi samo ako je ikona sistemske kasete u upotrebi."
-
-msgid ""
-"If enabled, Gajim shows the group chat subject in the chat window when "
-"joining."
-msgstr ""
-
-#, fuzzy
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 "Ako je označena, Gajim će prikazivati raspoloženje kontakata u listi "
 "kontakata"
-
-#, fuzzy
-msgid "If enabled, Gajim will answer to message receipt requests."
-msgstr ""
-"Ako je označena, Gajim neće pitati za statusnu poruku. Već postavljena "
-"podrazumevana poruka će biti korišćena."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will display an icon to show that sent messages have been "
-"received by your contact."
-msgstr ""
-"Ako je označena, Gajim neće pitati za statusnu poruku. Već postavljena "
-"podrazumevana poruka će biti korišćena."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will display the status message (if not empty) underneath "
-"the contact name in the contact list window."
-msgstr ""
-"Ako je istinito, Gajim će prikazivati statusnu poruku (ako nije prazna) za "
-"svaki kontakt u listi kontakata"
 
 msgid "If enabled, Gajim will execute XEP-0146 Commands."
 msgstr ""
@@ -3034,63 +2848,13 @@ msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
 msgstr ""
 
 msgid ""
-"If enabled, Gajim will reopen chat windows that were opened last time Gajim "
-"was closed."
-msgstr ""
-
-msgid ""
-"If enabled, Gajim will save the contact list window position when hiding it, "
-"and restore it when showing the contact list window again."
-msgstr ""
-
-msgid ""
 "If enabled, Gajim will save the main window position when hiding it, and "
 "restore it when showing the window again."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will send your local IP so your contact can connect to "
-"your machine for file transfers."
-msgstr ""
-"Ako je označeno, Gajim će koristiti Vašu IP adresu u proksi koji je "
-"difinisan u file_transfer_proxies podešavanjima za prenos."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will show both the number of online and total contacts in "
-"account rows as well as in group rows."
-msgstr ""
-"Ako je istinito, Gajim će prikazivati ukupan broj korisnika i broj korinsika "
-"na vezi u grupnim redovima."
-
-msgid ""
-"If enabled, Gajim will test file transfer proxies on startup to be sure they "
-"work. Openfire's proxies are known to fail this test even if they work."
 msgstr ""
 
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in 'stun_server' option, or the one given by the XMPP server."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will use the System's Keyring to store account passwords."
-msgstr ""
-"Ako je istinito, Gajim će koristiti Gnomov Keyring (ako je dostupan) da "
-"uskladišti lozinke naloga."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will use your IP and proxies defined in "
-"'file_transfer_proxies' option for file transfers."
-msgstr ""
-"Ako je označeno, Gajim će koristiti Vašu IP adresu u proksi koji je "
-"difinisan u file_transfer_proxies podešavanjima za prenos."
-
-msgid ""
-"If enabled, a notification is created for every message in this group chat."
 msgstr ""
 
 #, fuzzy
@@ -3101,48 +2865,8 @@ msgstr ""
 "konzoli"
 
 #, fuzzy
-msgid ""
-"If enabled, contacts requesting authorization will be accepted automatically."
-msgstr ""
-"Ako je True, kontakti koji traže autorizaciju će automatski biti prihvaćeni."
-
-#, fuzzy
-msgid ""
-"If enabled, do not remove */_ . So *abc* will be bold but with * * not "
-"removed."
-msgstr ""
-"Ako je istinito, ne uklanjaj */_ . Tako će *abv* biti podebljano, ali "
-"iokruženo sa * *."
-
-msgid ""
-"If enabled, plugins will be activated on startup (this is saved when exiting "
-"Gajim). This option SHOULD NOT be used to (de)activate plugins. Use the "
-"plugin window instead."
-msgstr ""
-
-#, fuzzy
 msgid "If enabled, pressing Esc closes a tab/window."
 msgstr "Ako je istinito, pritisak na taster 'esc' zatvara jezičak/prozor."
-
-#, fuzzy
-msgid ""
-"If enabled, the contact row is colored according to the current chat state "
-"of the contact."
-msgstr ""
-"Ako je označena, Gajim će dozvoliti drugima da pogledaju koji operativni "
-"sistem koristite"
-
-#, fuzzy
-msgid "If enabled, the last status will be restored."
-msgstr "Ako je omogućeno, postavi poslednji korišćeni status."
-
-#, fuzzy
-msgid ""
-"If enabled, the tab is colored according to the current chat state of the "
-"contact."
-msgstr ""
-"Ako je označena, Gajim će dozvoliti drugima da pogledaju koji operativni "
-"sistem koristite"
 
 #, fuzzy
 msgid ""
@@ -3153,9 +2877,6 @@ msgstr ""
 "Ako je istinito, bićete u mogućnosti postaviti negativan prioritetna Vaš "
 "nalog u prozoru za izmenu podešavanja naloga. BUDITE OPREZNI, kada ste "
 "povezani sa negativnim prioritetom NEĆETE primati nikakve poruke od servera."
-
-msgid "If enabled, you will see your webcam's video stream as well."
-msgstr ""
 
 #, fuzzy, python-format
 msgid "If you close this window, you will leave '%s'."
@@ -3185,14 +2906,6 @@ msgstr "Slike"
 #, fuzzy
 msgid "Import Contacts"
 msgstr "Pozovi kontakte"
-
-#, fuzzy
-msgid ""
-"In a chat, show the nickname at the beginning of a line only when it's not "
-"the same person talking as in the previous message."
-msgstr ""
-"U razgovoru, prikaži nadimak na početku novog reda samo kada se ne radi o "
-"istoj osobi koja je pričala i u prošloj poruci."
 
 msgid ""
 "In order to write messages in this chat, you need to request voice first.\n"
@@ -3426,10 +3139,6 @@ msgstr "_Izbaci"
 msgid "Label"
 msgstr ""
 
-#, fuzzy
-msgid "Language used for spell checking."
-msgstr "Jezik koji koristi pravopis"
-
 msgid "Last but not least"
 msgstr ""
 
@@ -3453,23 +3162,6 @@ msgstr ""
 
 msgid "Limit must be an integer"
 msgstr ""
-
-msgid ""
-"List of XMPP Addresses (space separated) for which the chat window will be "
-"re-opened on next startup."
-msgstr ""
-
-msgid ""
-"List of XMPP Addresses (space separated) for which you do not want to store "
-"chat history. You can also add the name of an account to disable storing "
-"chat history for this account."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"List of rows (accounts and groups) that are collapsed (space separated)."
-msgstr ""
-"Lista (odvojena blanko znakovima) redova (naloga i grupa) koji su otvoreni."
 
 #, fuzzy
 msgid ""
@@ -3596,23 +3288,6 @@ msgstr ""
 msgid "Maximum file size for preview generation"
 msgstr ""
 
-msgid ""
-"Maximum history in days we request from a private group chat archive. 0: As "
-"much as possible."
-msgstr ""
-
-msgid ""
-"Maximum history in days we request from a public group chat archive. 0: As "
-"much as possible."
-msgstr ""
-
-msgid ""
-"Maximum number of lines that are printed in conversations. Oldest lines are "
-"cleared."
-msgstr ""
-"Maksimum poruka koje se prikazuju u razogovoru. Najstarije linije se "
-"sklanjaju."
-
 #, fuzzy
 msgid "Me"
 msgstr "Zloban"
@@ -3658,10 +3333,6 @@ msgid ""
 "Message corrected. Original message:\n"
 "%s"
 msgstr ""
-
-#, fuzzy
-msgid "Message that is sent to contacts you want to add."
-msgstr "Molimo Vas ispunite podatke za kontakt koga želite dodati"
 
 #, fuzzy
 msgid "Messages are archived on the server"
@@ -3757,6 +3428,10 @@ msgstr "Novi grupni razgovor"
 #, fuzzy
 msgid "New Search"
 msgstr "Pretraga"
+
+#, fuzzy
+msgid "New Workspace"
+msgstr "Preimenuj kontakt"
 
 #, fuzzy, python-format
 msgid "New message from %s"
@@ -3962,6 +3637,10 @@ msgid "Open Link in _Browser"
 msgstr "_Otvori vezu u internet pregledaču"
 
 #, fuzzy
+msgid "Open Plugins…"
+msgstr "Registracija neuspela"
+
+#, fuzzy
 msgid "Open _Folder"
 msgstr "_Otvori sadržavajuću fasciklu"
 
@@ -3991,12 +3670,6 @@ msgstr ""
 msgid "Operating System"
 msgstr "Samopotpisani sertifikat"
 
-msgid "Optionally fix Jingle output video framerate. Example: 10/1 or 25/2."
-msgstr ""
-
-msgid "Optionally resize Jingle output video. Example: 320x240."
-msgstr ""
-
 #, fuzzy
 msgid "Organisation"
 msgstr "Na odmoru"
@@ -4013,7 +3686,7 @@ msgstr ""
 msgid "Organizational Unit (OU): "
 msgstr ""
 
-msgid "Organize your chats with tabs"
+msgid "Organize your chats with workspaces"
 msgstr ""
 
 msgid "Others"
@@ -4163,9 +3836,6 @@ msgstr ""
 msgid "Pl_ugins"
 msgstr "Registracija neuspela"
 
-msgid "Place the contact list on the right in single window mode"
-msgstr ""
-
 #, fuzzy
 msgid "Play Sound"
 msgstr "Puštaj zvukove"
@@ -4173,10 +3843,6 @@ msgstr "Puštaj zvukove"
 #, fuzzy
 msgid "Play Sounds"
 msgstr "Puštaj zvukove"
-
-#, fuzzy
-msgid "Play sound even when being busy."
-msgstr "Pusti zvuk kada je korisnik zauzet"
 
 #, fuzzy
 msgid "Play sounds even when you are Away, Busy, etc."
@@ -4233,10 +3899,6 @@ msgid "Plugin Updates"
 msgstr "Registracija neuspela"
 
 #, fuzzy
-msgid "Plugin Updates Available"
-msgstr "Nema dostupnih naloga"
-
-#, fuzzy
 msgid "Plugin already exists"
 msgstr "Ova datoteka već postoji"
 
@@ -4248,16 +3910,11 @@ msgstr "Registracija neuspela"
 msgid "Plugin manager"
 msgstr "Registracija neuspela"
 
-msgid ""
-"Plugin updates have successfully been downloaded.\n"
-"Updates will be installed next time Gajim is started."
-msgstr ""
-
 msgid "Plugins"
 msgstr ""
 
 #, fuzzy
-msgid "Plugins Updated"
+msgid "Plugins Updated Successfully"
 msgstr "Registracija neuspela"
 
 #, fuzzy, python-format
@@ -4290,11 +3947,6 @@ msgid "Preferences"
 msgstr "Podešavanja"
 
 msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
-msgstr ""
-
-msgid ""
-"Preferred file transfer mechanism for file drag&drop on a chat window. Can "
-"be 'httpupload' (default) or 'jingle'."
 msgstr ""
 
 msgid "Presence description:"
@@ -4336,14 +3988,6 @@ msgid "Priority"
 msgstr "Priori_tet"
 
 #, fuzzy
-msgid ""
-"Priority will change automatically according to your status. Priorities are "
-"defined in 'autopriority_*' options."
-msgstr ""
-"Prioritet će se automatski promeniti u zavisnosti od Vašeg statusa. "
-"Prioriteti su definsani u autopriority_* podešavanjima."
-
-#, fuzzy
 msgid "Privacy"
 msgstr "Lista privatnosti"
 
@@ -4373,11 +4017,6 @@ msgstr "Proksi _host:"
 #, fuzzy
 msgid "Proxy Type"
 msgstr "Proksi:"
-
-msgid ""
-"Proxy used for all outgoing connections if the account does not have a "
-"specific proxy configured."
-msgstr ""
 
 #, fuzzy
 msgid "Proxy, custom hostname and port"
@@ -4626,6 +4265,9 @@ msgstr "_Izvrši naredbu"
 msgid "Requesting HTTP File Upload Slot…"
 msgstr ""
 
+msgid "Requesting search form from server"
+msgstr ""
+
 #, fuzzy
 msgid "Required"
 msgstr "Lozinka zahtevana"
@@ -4838,6 +4480,14 @@ msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
 msgstr ""
+
+#, fuzzy
+msgid "Searching"
+msgstr "Pretraga"
+
+#, fuzzy
+msgid "Searching…"
+msgstr "Pretraga"
 
 #, fuzzy
 msgid "Search…"
@@ -5105,8 +4755,7 @@ msgstr ""
 msgid "Set the presence type and description"
 msgstr "Postavi tip prisutnosti i opis"
 
-msgid ""
-"Set your activity, tune, and mood to show your friends how you are feeling"
+msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
@@ -5216,28 +4865,8 @@ msgid "Show a live preview to test your video source"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"Show a status message for all status changes (away, dnd, etc.) of users in a "
-"group chat."
-msgstr "Nije moguće pridružiti se grupnom razgovoru"
-
-#, fuzzy
-msgid "Show a status message for every join or leave in a group chat."
-msgstr "Nije moguće pridružiti se grupnom razgovoru"
-
-#, fuzzy
 msgid "Show all warnings"
 msgstr "Prikaži sv_e događaje na čekanju"
-
-msgid "Show close button in tab?"
-msgstr "Prikaši dugme za zatvaranje u jezičku?"
-
-msgid ""
-"Show contact list window on startup.\n"
-"'always' - Always show contact list window.\n"
-"'never' - Never show contact list window.\n"
-"'last_state' - Restore last state of the contact list window."
-msgstr ""
 
 msgid ""
 "Show help on a given command or a list of available commands if -a is given"
@@ -5265,16 +4894,6 @@ msgid "Show only critical errors"
 msgstr "Prikaži događaj u listi kontakata"
 
 #, fuzzy
-msgid "Show only online and free for chat contacts in the contact list."
-msgstr "Prikaži u listi samo kontakte koji su na vezi i slobodni za ćaskanje."
-
-msgid "Show tab when only one conversation?"
-msgstr "Prikaži jezičak iako je samo jedan razgovor?"
-
-msgid "Show tabbed notebook border in chat windows?"
-msgstr "Prikaši granicu sveske u prozorima razgovora?"
-
-#, fuzzy
 msgid "Show the application's version"
 msgstr "Notification-daemon"
 
@@ -5298,17 +4917,6 @@ msgstr "Prikazuje pomoć za određenu naredbu"
 #, fuzzy
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr "Prikazuje listu prenosa datoteka između Vas i ostalih"
-
-#, fuzzy
-msgid ""
-"Shows a text in the banner that describes the current chat state of the "
-"contact."
-msgstr ""
-"Ako je označena, Gajim će dozvoliti drugima da pogledaju koji operativni "
-"sistem koristite"
-
-msgid "Shows an info bar with helpful hints in the Start / Join Chat dialog"
-msgstr ""
 
 #, fuzzy
 msgid "Sign In"
@@ -5357,19 +4965,6 @@ msgid "Sort by Status"
 msgstr "Sortiraj kontakte po statusu"
 
 #, fuzzy
-msgid ""
-"Sound to play when a group chat message contains one of the words in "
-"'muc_highlight_words' or your nickname is mentioned."
-msgstr ""
-"Zvuk koji će se pustiti kada poruka grupnog razgovora sadrži neku reč iz "
-"muc_highlight_words, ili kada neka poruka grupnog razgovora sadrži Vaš "
-"nadimak."
-
-#, fuzzy
-msgid "Sound to play when any group chat message arrives."
-msgstr "Zvuk koji će se pustiti kada stigne neka MUC poruka."
-
-#, fuzzy
 msgid "Sounds"
 msgstr "Wav Zvukovi"
 
@@ -5409,6 +5004,10 @@ msgstr "Započni razgovor"
 
 #, fuzzy
 msgid "Start Chatting…"
+msgstr "Započni razgovor"
+
+#, fuzzy
+msgid "Start Chat…"
 msgstr "Započni razgovor"
 
 #, fuzzy
@@ -5568,10 +5167,6 @@ msgid "Synchronise"
 msgstr "Sinhronizuj"
 
 #, fuzzy
-msgid "Synchronise History"
-msgstr "Sinhronizuj"
-
-#, fuzzy
 msgid "Synchronise History…"
 msgstr "Sinhronizuj"
 
@@ -5580,8 +5175,20 @@ msgid "Synchronise the status of all accounts"
 msgstr "Menja status jednog ili više naloga"
 
 #, fuzzy
+msgid "Synchronize"
+msgstr "Sinhronizuj"
+
+#, fuzzy
 msgid "Synchronize Accounts"
 msgstr "Sinhronizuj kontakte"
+
+#, fuzzy
+msgid "Synchronize Chat History"
+msgstr "Sinhronizuj"
+
+#, fuzzy
+msgid "Synchronizing Chat History…"
+msgstr "Sinhronizuj"
 
 #, fuzzy
 msgid "System"
@@ -5629,10 +5236,6 @@ msgid ""
 "The contact will be informed that you stopped sharing your status. Please "
 "note that this can have other side effects."
 msgstr ""
-
-#, fuzzy
-msgid "The currently active encryption for that contact."
-msgstr "Omogući ESessions enkripciju za ovaj nalog."
 
 #, python-format
 msgid ""
@@ -5697,13 +5300,7 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
-#, python-format
-msgid ""
-"There are updates for your plugins:\n"
-"<b>%s</b>"
-msgstr ""
-
-msgid "There is already a synchronisation in progress. Please try again later."
+msgid "There are updates for Gajim’s plugins"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5799,18 +5396,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid ""
-"This option lets you customize the timestamp that is printed in "
-"conversation. For example '[%H:%M] ' will show '[hour:minute] '. See python "
-"doc on strftime for full documentation (https://docs.python.org/3/library/"
-"time.html#time.strftime)."
-msgstr ""
-"Ova opcija Vam omogućava podešavanje vremena koje se prikazuje u razgovoru. "
-"Na primer \"[%H:%M] \" će prikazati \"[sat:minut] \". Pogledajte python "
-"dokumentaciju za strftime, za punu dokumentaciju: http://docs.python.org/lib/"
-"module-time.html"
-
-#, fuzzy
 msgid "This server does not allow signup."
 msgstr "Vaš server ne podržava Vcard"
 
@@ -5858,16 +5443,6 @@ msgstr ""
 msgid "Time Until Not Available"
 msgstr "Nedostupan"
 
-msgid "Time in minutes, after which your status changes to away."
-msgstr "Vreme u minutama, nakom koga će se Vaš status promeiti u Odsutan."
-
-msgid "Time in minutes, after which your status changes to not available."
-msgstr ""
-"Vreme u minutama, nakom koga će se Vaš status promeiti u Nije dostupan."
-
-msgid "Time of inactivity needed before the change status window closes down."
-msgstr "Vreme neaktivnosti posle koga se prozor za izmenu statusa zatvara."
-
 msgid "To"
 msgstr "Za"
 
@@ -5900,10 +5475,6 @@ msgstr ""
 
 msgid "Topic"
 msgstr ""
-
-#, fuzzy
-msgid "Tor"
-msgstr "Za"
 
 #, fuzzy
 msgid "Transferring File…"
@@ -6067,10 +5638,10 @@ msgstr "Nema dostupnih naloga"
 msgid "Update plugins automatically"
 msgstr ""
 
-msgid "Update plugins automatically next time"
+msgid "Updates"
 msgstr ""
 
-msgid "Updates"
+msgid "Updates will be installed next time Gajim is started"
 msgstr ""
 
 #, fuzzy
@@ -6154,14 +5725,6 @@ msgstr "Korisnici"
 #, python-format
 msgid "V4L2: %s"
 msgstr ""
-
-#, fuzzy
-msgid ""
-"Valid URI schemes. Only schemes in this list will be accepted as 'real' URI "
-"(mailto and xmpp are handled separately)."
-msgstr ""
-"Ispravne uri šeme. Samo šeme sa ove liste će biti prihvaćene kao \"stvarne\" "
-"uri. (mailto i xmpp se obrađuju zasebno)"
 
 msgid "Validity"
 msgstr ""
@@ -6257,14 +5820,6 @@ msgstr "Sakrij ovaj meni"
 
 msgid "What happened"
 msgstr ""
-
-#, fuzzy
-msgid ""
-"When to show the notification area icon. Can be 'never', 'on_event', and "
-"'always'."
-msgstr ""
-"Kada prikazati ikonicu u sistemskoj kaseti. Može biti 'never', 'on_event', "
-"'always'."
 
 msgid "Where participants should go"
 msgstr ""
@@ -6869,10 +6424,6 @@ msgid "_Unsubscribe"
 msgstr "_Ukini pretplatu"
 
 #, fuzzy
-msgid "_Update"
-msgstr "Osveži poruku dana..."
-
-#, fuzzy
 msgid "_Username"
 msgstr "_Korisničko ime:"
 
@@ -7146,27 +6697,3 @@ msgstr "%(nick)s je trenutno %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
-
-#~ msgid "File: "
-#~ msgstr "Datoteka: "
-
-#~ msgid "New Message"
-#~ msgstr "Nova Poruka"
-
-#, fuzzy
-#~ msgid "Note: Chat history is disabled for this contact."
-#~ msgstr "Ignoriši ovu grešku za ovaj sertifikat."
-
-#, fuzzy
-#~ msgid "Save conversations for all contacts"
-#~ msgstr "Snimi dnevnik razgovora za sve kontakte"
-
-#, fuzzy
-#~ msgid "XHTML Formatting"
-#~ msgstr "Prikaži listu formatiranja"
-
-#, fuzzy
-#~ msgid ""
-#~ "You just received a new message from %s.\n"
-#~ "Do you want to close this tab?"
-#~ msgstr "\"%s\" Vam je upravo poslao poruku"

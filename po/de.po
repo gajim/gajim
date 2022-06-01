@@ -13,11 +13,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 13:53+0000\n"
-"PO-Revision-Date: 2022-05-24 21:50+0000\n"
+"POT-Creation-Date: 2022-05-31 18:12+0000\n"
+"PO-Revision-Date: 2022-06-01 07:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
-"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
-"\n"
+"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/"
+">\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -63,24 +63,6 @@ msgstr " (Sprachanruf)"
 #, python-brace-format
 msgid " by {actor}"
 msgstr " durch {actor}"
-
-msgid "$S (Away: Idle more than $T min)"
-msgstr "$S (Abwesend: Untätig seit mehr als $T Minuten)"
-
-msgid "$S (Not available: Idle more than $T min)"
-msgstr "$S (Nicht verfügbar: Untätig seit mehr als $T Minuten)"
-
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoawaytime' "
-"value."
-msgstr ""
-"$S wird mit dem aktuellen Status ersetzt, $T durch die Abwesenheitszeit."
-
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoxatime' value."
-msgstr ""
-"$S wird mit der aktuellen Statusnachricht ersetzt, $T durch die Nicht-"
-"Verfügbar-Zeit."
 
 #, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
@@ -277,9 +259,6 @@ msgstr "1 Jahr"
 
 msgid "2 Days"
 msgstr "2 Tage"
-
-msgid "2: System, 1: Enabled, 0: Disabled"
-msgstr "2: System, 1: Aktiviert, 0: Deaktiviert"
 
 msgid "3 Months"
 msgstr "3 Monate"
@@ -711,6 +690,9 @@ msgstr "Konten"
 msgid "Action when left-clicking a preview"
 msgstr "Aktion bei einem Linksklick auf die Vorschau"
 
+msgid "Activate"
+msgstr "Aktivieren"
+
 msgid "Activated"
 msgstr "Aktiviert"
 
@@ -843,19 +825,9 @@ msgstr "Alle Dateien"
 msgid "All other group chat participants can see your XMPP address"
 msgstr "Alle Teilnehmer des Gruppenchats können deine XMPP-Adresse sehen"
 
-msgid ""
-"Allow Gajim to send information about the operating system you are running."
-msgstr "Erlaubt Gajim, Informationen zu deinem Betriebssystem zu übermitteln."
-
-msgid "Allow Gajim to send your local time."
-msgstr "Erlaubt Gajim, deine lokale Zeit zu übermitteln."
-
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 "Einem Teilnehmer erlauben öffentliche oder private Nachrichten zu senden"
-
-msgid "Allow certificate verification with POSH."
-msgstr "Erlaube Zertifikatsverifizierung mittels POSH."
 
 msgid ""
 "Allow to hide the contact list window even if the notification area icon is "
@@ -1331,34 +1303,6 @@ msgstr ""
 "Chatte sicher und verschlüsselt durch Ende-zu-Ende-Verschlüsselung per OMEMO "
 "oder OpenPGP."
 
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: 'all', "
-"'composing_only', 'disabled'"
-msgstr ""
-"Chatstatus-Benachrichtigungen, die an Kontakte gesendet werden. Mögliche "
-"Optionen sind \"all\", \"composing_only\" oder \"disabled\""
-
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: all, "
-"composing_only, disabled"
-msgstr ""
-"Chatstatus-Benachrichtigungen, die an Kontakte gesendet werden. Mögliche "
-"Optionen sind \"all\", \"composing_only\" oder \"disabled\""
-
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only' or 'disabled'."
-msgstr ""
-"Chatstatus-Benachrichtigungen, die an den Gruppenchat gesendet werden "
-"sollen. Mögliche Optionen sind \"all\", \"composing_only\" oder \"disabled\"."
-
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only', 'disabled'"
-msgstr ""
-"Chatstatus-Benachrichtigungen, die an den Gruppenchat gesendet werden "
-"sollen. Mögliche Optionen sind \"all\", \"composing_only\" oder \"disabled\""
-
 msgid "Chats"
 msgstr "Chats"
 
@@ -1560,9 +1504,6 @@ msgstr "Verbindung nicht verfügbar"
 msgid "Connection with %s could not be established."
 msgstr "Verbindung mit %s konnte nicht hergestellt werden."
 
-msgid "ConnectionType: START TLS, DIRECT TLS or PLAIN"
-msgstr "Verbindungstyp: START TLS, DIRECT TLS oder PLAIN"
-
 msgid "Contact"
 msgstr "Kontakt"
 
@@ -1616,26 +1557,6 @@ msgstr "Kontaktliste"
 
 msgid "Contacts"
 msgstr "Kontakte"
-
-msgid ""
-"Controls the window where new messages are placed.\n"
-"'always' - All messages are sent to a single window.\n"
-"'always_with_roster' - Like 'always' but the messages are in a single window "
-"along with the contact list.\n"
-"'never' - All messages get their own window.\n"
-"'peracct' - Messages for each account are sent to a specific window.\n"
-"'pertype' - Each message type (e.g. chats vs. group chats) is sent to a "
-"specific window."
-msgstr ""
-"Entscheidet in welchem Fenster neue Nachrichten angezeigt werden.\n"
-"\"always\" - Alle Nachrichten landen in einem einzigen Fenster.\n"
-"\"always_with_roster\" - Wie 'Immer', die Nachrichten teilen sich jedoch ein "
-"Fenster mit der Kontaktliste.\n"
-"\"never\" - Alle Nachrichten werden in eigenen Fenstern angezeigt.\n"
-"\"peracct\" - Jedes Konto besitzt ein eigenes Fenster, in dem die "
-"Nachrichten angezeigt werden.\n"
-"\"pertype\" - Jeder Nachrichtentyp (z.B. Chat oder Gruppenchat) landet in "
-"einem eigenen Fenster."
 
 msgid "Conversation: Nickname Color (Incoming)"
 msgstr "Unterhaltung: Farbe des Spitznamens (eingehend)"
@@ -1724,13 +1645,6 @@ msgstr "Konto wird erstellt..."
 msgid "Credentials expired"
 msgstr "Zugangsdaten abgelaufen"
 
-msgid ""
-"Ctrl+Tab switches to the next composing tab when there are no tabs with "
-"messages pending."
-msgstr ""
-"Strg+Tab wechselt zum nächsten Tab, wenn kein anderer Tab ungelesene "
-"Nachrichten enthält."
-
 msgid "Current Developers"
 msgstr "Derzeitige Entwickler"
 
@@ -1741,9 +1655,6 @@ msgstr ""
 # TODO mark as do not translate?
 msgid "Dark Theme"
 msgstr "Dunkles Design"
-
-msgid "Date of the last update check"
-msgstr "Datum der letzten Überprüfung auf Updates"
 
 msgid "Deactivated"
 msgstr "Deaktiviert"
@@ -1756,20 +1667,6 @@ msgstr "Ablehnen"
 
 msgid "Default"
 msgstr "Standard"
-
-msgid ""
-"Default Setting: Show a status message for all status changes (away, dnd, "
-"etc.) of users in a group chat."
-msgstr ""
-"Standardeinstellung: Statusnachricht für jede Statusänderung (abwesend, "
-"nicht stören, etc.) von Teilnehmern eines Gruppenchats anzeigen."
-
-msgid ""
-"Default Setting: Show a status message for every join or leave in a group "
-"chat."
-msgstr ""
-"Standardeinstellung: Status-Benachrichtigung für jedes Beitreten oder "
-"Verlassen in einem Gruppenchat anzeigen."
 
 msgid "Default Sync Threshold"
 msgstr "Standardwert für Synchronisationsbegrenzung"
@@ -1792,12 +1689,6 @@ msgstr "Standard für neue Gruppenchats"
 msgid "Default for new public group chats"
 msgstr "Standard für neue öffentliche Gruppenchats"
 
-msgid ""
-"Define the position of avatars in the contact list. Can be 'left' or 'right'."
-msgstr ""
-"Legt die Position des Kontaktbildes in der Kontaktliste fest. Mögliche "
-"Optionem sind \"left\" (links) oder \"right\" (rechts)."
-
 msgid "Delete"
 msgstr "Löschen"
 
@@ -1813,7 +1704,7 @@ msgstr "Beschreibung"
 msgid "Description: "
 msgstr "Beschreibung: "
 
-msgid "Destroy Groupchat…"
+msgid "Destroy Group Chat…"
 msgstr "Gruppenchat auflösen…"
 
 msgid "Destroy This Chat"
@@ -1889,9 +1780,6 @@ msgstr "Thema des Gruppenchats anzeigen oder ändern"
 msgid "Do not disturb"
 msgstr "Bitte nicht stören"
 
-msgid "Do not show this message again"
-msgstr "Nicht erneut anzeigen"
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Akzeptierst du diese Anfrage (Konto: %s)?"
@@ -1925,11 +1813,11 @@ msgstr "Willst du die derzeit installierte Version überschreiben?"
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr "Soll dein Konto auch bei <b>%s</b> gelöscht werden?"
 
-msgid "Don't show contact list window in the system taskbar."
-msgstr "Kontaktliste nicht in der Taskleiste anzeigen."
-
 msgid "Don’t show main window in the system taskbar."
 msgstr "Hauptfenster nicht in der Taskleiste anzeigen."
+
+msgid "Don’t show this again"
+msgstr "Nicht erneut anzeigen"
 
 msgid "Download"
 msgstr "Herunterladen"
@@ -2083,6 +1971,12 @@ msgstr "Fehler beim Export"
 
 msgid "Error while processing image"
 msgstr "Fehler beim Verarbeiten des Bildes"
+
+msgid "Error while receiving search results."
+msgstr "Fehler beim Empfangen der Suchergebnisse."
+
+msgid "Error while retrieving search form."
+msgstr "Fehler beim Empfangen des Suchformulars."
 
 msgid "Error while uploading avatar"
 msgstr "Fehler beim Hochladen des Profilbilds"
@@ -2287,6 +2181,9 @@ msgstr "Chats filtern…"
 msgid "Fingerprints"
 msgstr "Fingerabdrücke"
 
+msgid "Finished"
+msgstr "Abgeschlossen"
+
 #, python-format
 msgid ""
 "Finished synchronising chat history:\n"
@@ -2456,6 +2353,9 @@ msgstr "Gruppe"
 msgid "Group Chat"
 msgstr "Gruppenchats"
 
+msgid "Group Chat Details"
+msgstr "Gruppenchatdetails"
+
 msgid "Group Chat Invitation"
 msgstr "Gruppenchat-Einladung"
 
@@ -2509,14 +2409,6 @@ msgstr "Der Gruppenchat zeigt nun abwesende Teilnehmer an"
 
 msgid "Group chat support"
 msgstr "Unterstützung von Gruppenchats"
-
-msgid "Group multiple contacts from one friend to a single Meta-Contact"
-msgstr ""
-"Gruppiere mehrere Kontakte eines bestimmten Freunds zu einem einzelnen Meta-"
-"Kontakt"
-
-msgid "Groupchat Details"
-msgstr "Gruppenchatdetails"
 
 msgid "Groups"
 msgstr "Gruppen"
@@ -2590,21 +2482,6 @@ msgstr "Ich würde dich gerne zu meiner Kontaktliste hinzufügen."
 msgid "I would like to add you to my roster."
 msgstr "Ich würde dich gerne zu meiner Kontaktliste hinzufügen."
 
-msgid "I'm eating."
-msgstr "Ich esse gerade."
-
-msgid "I'm on the phone."
-msgstr "Ich telefoniere gerade."
-
-msgid "I'm out enjoying life."
-msgstr "Ich bin draußen und genieße das Leben."
-
-msgid "I'm watching a movie."
-msgstr "Ich sehe mir einen Film an."
-
-msgid "I'm working."
-msgstr "Ich arbeite."
-
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "Der IEC-Standard legt fest: 1 KiB = 1024 Byte, 1 kB = 1000 Byte."
 
@@ -2630,27 +2507,6 @@ msgstr ""
 "werden."
 
 msgid ""
-"If disabled, Gajim will no longer print status messages in chats when a "
-"contact changes their status (and/or their status message)."
-msgstr ""
-"Falls deaktiviert, wird Gajim keine Statusnachricht im Chat anzeigen, wenn "
-"ein Kontakt den Status oder die Statusnachricht ändert."
-
-msgid ""
-"If disabled, this account will be disabled and will not appear in the "
-"contact list window."
-msgstr ""
-"Falls deaktiviert, wird das Konto deaktiviert und nicht in der Kontaktliste "
-"erscheinen."
-
-msgid ""
-"If enabled, Gajim hides the contact list window when pressing the X button "
-"instead of minimizing into the notification area."
-msgstr ""
-"Falls aktiviert, versteckt Gajim die Kontaktliste beim Klick auf die X-"
-"Schaltfläche, anstatt sie in den Benachrichtigungsbereich zu minimieren."
-
-msgid ""
 "If enabled, Gajim hides the main window when pressing the X button instead "
 "of minimizing into the notification area."
 msgstr ""
@@ -2664,45 +2520,10 @@ msgstr ""
 "Falls aktiviert, blinkt das Fenster bei neuen Ereignissen (Standardverhalten "
 "der meisten Fenster-Manager)."
 
-msgid ""
-"If enabled, Gajim quits when clicking the X button of your Window Manager. "
-"This setting is taken into account only if the notification area icon is "
-"used."
-msgstr ""
-"Falls aktiviert, wird Gajim beendet, wenn die Schließen-Schaltfläche des "
-"Fensters geklickt wird. Diese Option funktioniert nur, wenn das "
-"Benachrichtigungssymbol verwendet wird."
-
-msgid ""
-"If enabled, Gajim shows the group chat subject in the chat window when "
-"joining."
-msgstr ""
-"Falls aktiviert, wird Gajim das Thema des Gruppenchats beim Beitreten im "
-"Chatfenster anzeigen."
-
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 "Falls aktiviert, wird Gajim * und [n] zum Titel des Kontaktlistenfensters "
 "hinzufügen."
-
-msgid "If enabled, Gajim will answer to message receipt requests."
-msgstr ""
-"Falls aktiviert, wird Gajim Anfragen zur Empfangsbestätigung beantworten."
-
-msgid ""
-"If enabled, Gajim will display an icon to show that sent messages have been "
-"received by your contact."
-msgstr ""
-"Falls aktiviert, zeigt Gajim eine Empfangsbestätigung an, wenn die Nachricht "
-"vom Gegenüber empfangen wurde."
-
-msgid ""
-"If enabled, Gajim will display the status message (if not empty) underneath "
-"the contact name in the contact list window."
-msgstr ""
-"Falls aktiviert, wird in der Kontaktliste unter dem Namen eines jeden "
-"Kontaktes dessen Statusnachricht angezeigt, sofern dieser eine festgelegt "
-"hat."
 
 msgid "If enabled, Gajim will execute XEP-0146 Commands."
 msgstr "Falls aktiviert, wird Gajim XEP-0146-Befehle ausführen."
@@ -2718,49 +2539,12 @@ msgstr ""
 "Aufmerksamkeit zu erregen (\"wizz\")."
 
 msgid ""
-"If enabled, Gajim will reopen chat windows that were opened last time Gajim "
-"was closed."
-msgstr ""
-"Falls aktiviert, wird Gajim Fenster die beim letzten Beenden geöffnet waren "
-"wieder öffnen."
-
-msgid ""
-"If enabled, Gajim will save the contact list window position when hiding it, "
-"and restore it when showing the contact list window again."
-msgstr ""
-"Falls aktiviert, wird Gajim die Position der Kontaktliste beim Verstecken "
-"speichern und die Position wiederherstellen, sobald die Kontaktliste wieder "
-"angezeigt wird."
-
-msgid ""
 "If enabled, Gajim will save the main window position when hiding it, and "
 "restore it when showing the window again."
 msgstr ""
 "Falls aktiviert, wird Gajim die Position des Hauptfensters beim Verstecken "
 "speichern und die Position wiederherstellen, sobald das Fenster wieder "
 "angezeigt wird."
-
-msgid ""
-"If enabled, Gajim will send your local IP so your contact can connect to "
-"your machine for file transfers."
-msgstr ""
-"Falls aktiviert, wird Gajim deine lokale IP an Kontakte schicken, um "
-"Dateiübertragungen zu ermöglichen."
-
-msgid ""
-"If enabled, Gajim will show both the number of online and total contacts in "
-"account rows as well as in group rows."
-msgstr ""
-"Falls aktiviert, werden die Anzahl angemeldeter und die Gesamtanzahl der "
-"Kontakte auf Konto- und Gruppenebene angezeigt."
-
-msgid ""
-"If enabled, Gajim will test file transfer proxies on startup to be sure they "
-"work. Openfire's proxies are known to fail this test even if they work."
-msgstr ""
-"Falls aktiviert, wird Gajim die Proxies für Dateiübertragungen beim Starten "
-"testen, um deren Funktion sicherzustellen. Es ist bekannt, dass dieser Test "
-"bei Openfire-Proxies immer fehlschlägt, auch wenn sie funktionieren."
 
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
@@ -2771,70 +2555,13 @@ msgstr ""
 "Server vorgegebenen Server."
 
 msgid ""
-"If enabled, Gajim will use the System's Keyring to store account passwords."
-msgstr ""
-"Falls aktiviert, wird Gajim den Schlüsselbund des Systems verwenden, um die "
-"Konto-Passwörter zu speichern."
-
-msgid ""
-"If enabled, Gajim will use your IP and proxies defined in "
-"'file_transfer_proxies' option for file transfers."
-msgstr ""
-"Falls aktiviert, wird Gajim deine IP-Adresse und die in der "
-"\"file_transfer_proxies\"-Option definierten Proxies für den Dateitransfer "
-"verwenden."
-
-msgid ""
-"If enabled, a notification is created for every message in this group chat."
-msgstr ""
-"Falls aktiviert, wird für jede Nachricht in diesem Gruppenchat eine "
-"Benachrichtigung angezeigt."
-
-msgid ""
 "If enabled, completion in group chats will be like a shell auto-completion."
 msgstr ""
 "Falls aktiviert, wird sich die Autovervollständigung in Gruppenchats ähnlich "
 "der Autovervollständigung in einer Kommandozeile verhalten."
 
-msgid ""
-"If enabled, contacts requesting authorization will be accepted automatically."
-msgstr "Falls aktiviert, werden Kontaktanfragen automatisch akzeptiert."
-
-msgid ""
-"If enabled, do not remove */_ . So *abc* will be bold but with * * not "
-"removed."
-msgstr ""
-"Falls aktiviert, wird */_ nicht entfernt. Dadurch wird bspw. *abc* fett "
-"dargestellt, aber die * * werden nicht entfernt."
-
-msgid ""
-"If enabled, plugins will be activated on startup (this is saved when exiting "
-"Gajim). This option SHOULD NOT be used to (de)activate plugins. Use the "
-"plugin window instead."
-msgstr ""
-"Falls aktiviert, werden Plugins beim Starten aktiviert (wird beim Beenden "
-"von Gajim gespeichert). Diese Option SOLLTE NICHT benutzt werden, um Plugins "
-"zu (de-)aktivieren. Benutze dafür stattdessen die Plugin-Verwaltung."
-
 msgid "If enabled, pressing Esc closes a tab/window."
 msgstr "Falls aktiviert, schließt die Escape-Taste aktive Tabs/Fenster."
-
-msgid ""
-"If enabled, the contact row is colored according to the current chat state "
-"of the contact."
-msgstr ""
-"Falls aktiviert, wird die Kontakt-Ebene dem Chatstatus des Kontakts "
-"entsprechend gefärbt."
-
-msgid "If enabled, the last status will be restored."
-msgstr "Falls aktiviert, wird er zuletzt verwendete Status wiederhergestellt."
-
-msgid ""
-"If enabled, the tab is colored according to the current chat state of the "
-"contact."
-msgstr ""
-"Falls aktiviert, wird der Tab dem Chatstatus des Kontakts entsprechend "
-"gefärbt."
 
 msgid ""
 "If enabled, you will be able to set a negative priority to your account in "
@@ -2844,10 +2571,6 @@ msgstr ""
 "Falls aktiviert, kannst du eine negative Priorität für dein Konto im "
 "Kontobearbeitungsfenster setzen. VORSICHT: Wenn du mit einer negativen "
 "Priorität angemeldet bist, erhälst du KEINE Nachrichten mehr vom Server."
-
-msgid "If enabled, you will see your webcam's video stream as well."
-msgstr ""
-"Falls aktiviert, wirst du den Videostream deiner Webcam ebenfalls sehen."
 
 #, python-format
 msgid "If you close this window, you will leave '%s'."
@@ -2875,13 +2598,6 @@ msgstr "Bilder"
 
 msgid "Import Contacts"
 msgstr "Kontakte importieren"
-
-msgid ""
-"In a chat, show the nickname at the beginning of a line only when it's not "
-"the same person talking as in the previous message."
-msgstr ""
-"Der Spitzname wird im Chat nur dann vor einer Nachricht angezeigt, wenn sie "
-"nicht von der Person stammt, die schon die letzte Nachricht geschrieben hat."
 
 msgid ""
 "In order to write messages in this chat, you need to request voice first.\n"
@@ -3094,9 +2810,6 @@ msgstr "Rauswerfen…"
 msgid "Label"
 msgstr "Bezeichnung"
 
-msgid "Language used for spell checking."
-msgstr "Sprache der Rechtschreibprüfung."
-
 msgid "Last but not least"
 msgstr "Zu guter Letzt"
 
@@ -3118,28 +2831,6 @@ msgstr "Lass deinen Kontakt wissen bis wohin du gelesen hast"
 
 msgid "Limit must be an integer"
 msgstr "Grenze muss eine ganze Zahl sein"
-
-msgid ""
-"List of XMPP Addresses (space separated) for which the chat window will be "
-"re-opened on next startup."
-msgstr ""
-"Durch Leerzeichen getrennte Liste von XMPP-Adressen, für welche das "
-"Chatfenster beim nächsten Start wieder geöffnet werden soll."
-
-msgid ""
-"List of XMPP Addresses (space separated) for which you do not want to store "
-"chat history. You can also add the name of an account to disable storing "
-"chat history for this account."
-msgstr ""
-"Durch Leerzeichen getrennte Liste von XMPP-Adressen, für die kein "
-"Nachrichtenverlauf gespeichert werden soll. Du kannst auch einen Kontonamen "
-"verwenden, um für das gesamte Konto nichts zu speichern."
-
-msgid ""
-"List of rows (accounts and groups) that are collapsed (space separated)."
-msgstr ""
-"Liste (getrennt durch Leerzeichen) von Ebenen (Konten und Gruppen), die "
-"eingeklappt sind."
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -3252,27 +2943,6 @@ msgstr "Als gelesen markieren"
 msgid "Maximum file size for preview generation"
 msgstr "Maximale Dateigröße für die Erstellung eines Vorschaubildes"
 
-msgid ""
-"Maximum history in days we request from a private group chat archive. 0: As "
-"much as possible."
-msgstr ""
-"Maximale Anzahl von Tagen, die aus dem Nachrichtenarchiv des eines privaten "
-"Gruppenchats angefordert werden. 0: So viel wie möglich."
-
-msgid ""
-"Maximum history in days we request from a public group chat archive. 0: As "
-"much as possible."
-msgstr ""
-"Maximale Anzahl von Tagen, die aus dem Nachrichtenarchiv eines öffentlichen "
-"Gruppenchats angefordert werden. 0: So viel wie möglich."
-
-msgid ""
-"Maximum number of lines that are printed in conversations. Oldest lines are "
-"cleared."
-msgstr ""
-"Maximale Anzahl von Zeilen, die in einem Gespräch dargestellt werden. Die "
-"ältesten Zeilen werden ausgeblendet."
-
 msgid "Me"
 msgstr "Ich"
 
@@ -3313,9 +2983,6 @@ msgid ""
 msgstr ""
 "Nachricht wurde korrigiert. Ursprüngliche Nachricht:\n"
 "%s"
-
-msgid "Message that is sent to contacts you want to add."
-msgstr "Nachricht, die an Kontakte gesendet wird, die du hinzufügen willst."
 
 msgid "Messages are archived on the server"
 msgstr "Nachrichten werden auf dem Server gespeichert"
@@ -3399,6 +3066,9 @@ msgstr "Neue Gruppe"
 
 msgid "New Search"
 msgstr "Neue Suche"
+
+msgid "New Workspace"
+msgstr "Neuer Arbeitsbereich"
 
 #, python-format
 msgid "New message from %s"
@@ -3578,6 +3248,9 @@ msgstr "Link im Webbrowser öffnen"
 msgid "Open Link in _Browser"
 msgstr "Link im _Browser öffnen"
 
+msgid "Open Plugins…"
+msgstr "Plugins öffnen…"
+
 msgid "Open _Folder"
 msgstr "_Ordner öffnen"
 
@@ -3603,14 +3276,6 @@ msgstr "Suchleiste öffnen"
 msgid "Operating System"
 msgstr "Betriebssystem"
 
-msgid "Optionally fix Jingle output video framerate. Example: 10/1 or 25/2."
-msgstr ""
-"Bildwiederholrate der Jingle-Videoausgabe optional korrigieren. Beispiel: "
-"10/1 oder 25/2."
-
-msgid "Optionally resize Jingle output video. Example: 320x240."
-msgstr "Jingle-Videoausgabegröße optional ändern. Beispiel: 320x240."
-
 msgid "Organisation"
 msgstr "Organisation"
 
@@ -3626,8 +3291,8 @@ msgstr "Organizationseinheit (OU)"
 msgid "Organizational Unit (OU): "
 msgstr "Organizationseinheit (OU): "
 
-msgid "Organize your chats with tabs"
-msgstr "Ordne deine Chats mit Tabs"
+msgid "Organize your chats with workspaces"
+msgstr "Ordne deine Chats mit Arbeitsbereichen"
 
 msgid "Others"
 msgstr "Andere"
@@ -3764,17 +3429,11 @@ msgstr "Pipewire"
 msgid "Pl_ugins"
 msgstr "Pl_ugins"
 
-msgid "Place the contact list on the right in single window mode"
-msgstr "Kontaktliste im Einzelfenstermodus auf der rechten Seite anzeigen"
-
 msgid "Play Sound"
 msgstr "Klang abspielen"
 
 msgid "Play Sounds"
 msgstr "Klänge abspielen"
-
-msgid "Play sound even when being busy."
-msgstr "Klang abspielen, auch wenn der Benutzer beschäftigt ist."
 
 msgid "Play sounds even when you are Away, Busy, etc."
 msgstr "Klänge abspielen auch abspielen wenn du abwesend/beschäftigt usw. bist"
@@ -3829,9 +3488,6 @@ msgstr "Plugin-Konfiguration"
 msgid "Plugin Updates"
 msgstr "Plugin-Aktualisierungen"
 
-msgid "Plugin Updates Available"
-msgstr "Plugin-Aktualisierungen verfügbar"
-
 msgid "Plugin already exists"
 msgstr "Plugin existiert bereits"
 
@@ -3841,17 +3497,10 @@ msgstr "Plugin fehlgeschlagen"
 msgid "Plugin manager"
 msgstr "Plugin-Verwaltung"
 
-msgid ""
-"Plugin updates have successfully been downloaded.\n"
-"Updates will be installed next time Gajim is started."
-msgstr ""
-"Updates für deine Plugins wurden erfolgreich heruntergeladen.\n"
-"Die Updates werden beim nächsten Start von Gajim installiert."
-
 msgid "Plugins"
 msgstr "Plugins"
 
-msgid "Plugins Updated"
+msgid "Plugins Updated Successfully"
 msgstr "Plugins wurden aktualisiert"
 
 #, python-format
@@ -3884,13 +3533,6 @@ msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
 msgstr ""
 "Bevorzugte Methode für Dateiübertragungen per Ziehen und Ablegen auf das "
 "Chatfenster"
-
-msgid ""
-"Preferred file transfer mechanism for file drag&drop on a chat window. Can "
-"be 'httpupload' (default) or 'jingle'."
-msgstr ""
-"Bevorzugte Methode für Dateiübertragungen per Ziehen und Ablegen auf das "
-"Chatfenster. Zur Verfügung stehen \"httpupload\" (Standard) oder \"jingle\"."
 
 msgid "Presence description:"
 msgstr "Beschreibung des Online-Status:"
@@ -3925,13 +3567,6 @@ msgstr "Gibt eine Liste registrierter Konten aus"
 msgid "Priority"
 msgstr "Priorität"
 
-msgid ""
-"Priority will change automatically according to your status. Priorities are "
-"defined in 'autopriority_*' options."
-msgstr ""
-"Die Priorität richtet sich automatisch nach deinem Status. Die Prioritäten "
-"werden in den \"autopriority_*\"-Optionen festgelegt."
-
 msgid "Privacy"
 msgstr "Privatsphäre"
 
@@ -3955,13 +3590,6 @@ msgstr "Proxy-Host"
 
 msgid "Proxy Type"
 msgstr "Proxy-Typ"
-
-msgid ""
-"Proxy used for all outgoing connections if the account does not have a "
-"specific proxy configured."
-msgstr ""
-"Proxy, der für alle ausgehenden Verbindungen verwendet wird, wenn das Konto "
-"keine eigene Proxy-Konfiguration hat."
 
 msgid "Proxy, custom hostname and port"
 msgstr "Proxy, benutzerdefinierter Hostname und Port"
@@ -4167,6 +3795,9 @@ msgstr "Liste der Befehle wird abrufen"
 msgid "Requesting HTTP File Upload Slot…"
 msgstr "Fordere Slot für HTTP Datei-Upload an…"
 
+msgid "Requesting search form from server"
+msgstr "Suchformular wird angefordert"
+
 msgid "Required"
 msgstr "Benötigt"
 
@@ -4352,6 +3983,12 @@ msgid ""
 msgstr ""
 "Weltweite Suche nach Gruppenchats\n"
 "(zum Starten der Suche Enter drücken)"
+
+msgid "Searching"
+msgstr "Suche"
+
+msgid "Searching…"
+msgstr "Suche…"
 
 msgid "Search…"
 msgstr "Suchen…"
@@ -4592,11 +4229,10 @@ msgstr "Aktuellen Status festlegen auf Online"
 msgid "Set the presence type and description"
 msgstr "Online-Status und Beschreibung festlegen"
 
-msgid ""
-"Set your activity, tune, and mood to show your friends how you are feeling"
+msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
-"Wenn du magst, teile deine Aktivität, Stimmung und die Musik, die du gerade "
-"hörst, mit deinen Freunden"
+"Wenn du magst, teile deine Aktivität und die Musik, die du gerade hörst, mit "
+"deinen Freunden"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -4686,34 +4322,8 @@ msgstr "Übersicht der Emojis zeigen"
 msgid "Show a live preview to test your video source"
 msgstr "Eine Live-Vorschau anzeigen, um dein Videoaufnahmegerät zu testen"
 
-msgid ""
-"Show a status message for all status changes (away, dnd, etc.) of users in a "
-"group chat."
-msgstr ""
-"Statusnachricht für jede Statusänderung (abwesend, nicht stören, etc.) von "
-"Nutzern in einem Gruppenchat anzeigen."
-
-msgid "Show a status message for every join or leave in a group chat."
-msgstr ""
-"Status-Benachrichtigung für jedes Beitreten oder Verlassen in einem "
-"Gruppenchat anzeigen."
-
 msgid "Show all warnings"
 msgstr "Zeige alle Warnungen"
-
-msgid "Show close button in tab?"
-msgstr "Schließen-Schaltflächen in Tabs anzeigen?"
-
-msgid ""
-"Show contact list window on startup.\n"
-"'always' - Always show contact list window.\n"
-"'never' - Never show contact list window.\n"
-"'last_state' - Restore last state of the contact list window."
-msgstr ""
-"Kontaktliste beim Starten anzeigen.\n"
-"\"always\" - Kontaktliste immer anzeigen.\n"
-"\"never\" - Kontaktliste nie anzeigen.\n"
-"\"last_state\" - Letzten Zustand wiederherstellen."
 
 msgid ""
 "Show help on a given command or a list of available commands if -a is given"
@@ -4745,17 +4355,6 @@ msgstr ""
 msgid "Show only critical errors"
 msgstr "Nur kritische Fehler anzeigen"
 
-msgid "Show only online and free for chat contacts in the contact list."
-msgstr ""
-"Zeige nur die Kontakte in der Kontaktliste an, die verfügbar oder frei zum "
-"Chatten sind."
-
-msgid "Show tab when only one conversation?"
-msgstr "Tab-Leiste bei einzelner Unterhaltung anzeigen?"
-
-msgid "Show tabbed notebook border in chat windows?"
-msgstr "Tab-Grenzen im Chatfenster anzeigen?"
-
 msgid "Show the application's version"
 msgstr "Version des Programms anzeigen"
 
@@ -4778,18 +4377,6 @@ msgstr "Zeigt die Hilfe für einen bestimmten Befehl"
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr ""
 "Zeigt eine Liste der Dateiübertragungen zwischen dir und deinen Kontakten"
-
-msgid ""
-"Shows a text in the banner that describes the current chat state of the "
-"contact."
-msgstr ""
-"Zeigt einen Text im Banner, der den aktuellen Chatstatus des Kontakts "
-"beschreibt."
-
-msgid "Shows an info bar with helpful hints in the Start / Join Chat dialog"
-msgstr ""
-"Zeigt eine Infoleiste mit hilfreichen Hinweisen im Chat starten / beitreten "
-"Fenster"
 
 msgid "Sign In"
 msgstr "Anmeldung"
@@ -4830,17 +4417,6 @@ msgstr "Teilnehmerliste nach Status sortieren"
 msgid "Sort by Status"
 msgstr "Nach Status sortieren"
 
-msgid ""
-"Sound to play when a group chat message contains one of the words in "
-"'muc_highlight_words' or your nickname is mentioned."
-msgstr ""
-"Abzuspielender Klang, wenn eine Gruppenchat-Nachricht eines der Wörter aus "
-"der \"muc_highlights_words\"-Liste oder deinen Spitznamen enthält."
-
-msgid "Sound to play when any group chat message arrives."
-msgstr ""
-"Klang, der bei einer neuen Gruppenchat-Nachricht abgespielt werden soll."
-
 msgid "Sounds"
 msgstr "Klänge"
 
@@ -4876,6 +4452,9 @@ msgid "Start Chat"
 msgstr "Chat starten"
 
 msgid "Start Chatting…"
+msgstr "Chat starten…"
+
+msgid "Start Chat…"
 msgstr "Chat starten…"
 
 msgid "Start New Chat"
@@ -5015,17 +4594,23 @@ msgstr "Synchronisationsbegrenzung"
 msgid "Synchronise"
 msgstr "Synchronisieren"
 
-msgid "Synchronise History"
-msgstr "Nachrichtenverlauf synchronisieren"
-
 msgid "Synchronise History…"
 msgstr "Nachrichtenverlauf synchronisieren…"
 
 msgid "Synchronise the status of all accounts"
 msgstr "Synchronisiere den Status aller Konten"
 
+msgid "Synchronize"
+msgstr "Synchronisieren"
+
 msgid "Synchronize Accounts"
 msgstr "Konten synchronisieren"
+
+msgid "Synchronize Chat History"
+msgstr "Nachrichtenverlauf synchronisieren"
+
+msgid "Synchronizing Chat History…"
+msgstr "Nachrichtenverlauf wird synchronisiert…"
 
 msgid "System"
 msgstr "System"
@@ -5069,9 +4654,6 @@ msgid ""
 msgstr ""
 "Der Kontakt wird darauf hingewiesen, dass du deinen Online-Status nicht mehr "
 "teilst. Bitte beachte, dass dieser Schritt weitere Konsequenzen haben kann."
-
-msgid "The currently active encryption for that contact."
-msgstr "Die derzeit aktive Verschlüsselung für diesen Kontakt."
 
 #, python-format
 msgid ""
@@ -5147,18 +4729,8 @@ msgstr ""
 "Nach der Registrierung bei einem Server deiner Wahl kannst du problemlos mit "
 "Kontakten auf anderen Servern kommunizieren."
 
-#, python-format
-msgid ""
-"There are updates for your plugins:\n"
-"<b>%s</b>"
-msgstr ""
-"Es sind Updates für deine Plugins verfügbar:\n"
-"<b>%s</b>"
-
-msgid "There is already a synchronisation in progress. Please try again later."
-msgstr ""
-"Es findet bereits eine Synchronisation statt. Bitte versuche es später noch "
-"einmal."
+msgid "There are updates for Gajim’s plugins"
+msgstr "Es sind Updates für Gajims Plugins verfügbar"
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr ""
@@ -5258,17 +4830,6 @@ msgstr ""
 "entschlüsselt werden. Du kannst das OpenPGP-Plugin installieren, das solche "
 "Nachrichten verarbeiten kann."
 
-msgid ""
-"This option lets you customize the timestamp that is printed in "
-"conversation. For example '[%H:%M] ' will show '[hour:minute] '. See python "
-"doc on strftime for full documentation (https://docs.python.org/3/library/"
-"time.html#time.strftime)."
-msgstr ""
-"Hiermit lässt sich der Zeitstempel anpassen, der in Unterhaltungen "
-"dargestellt wird. Zum Beispiel wird \"[%H:%M] \" zu \"[Stunde:Minute] \". "
-"Weitere Informationen findest du in der Python-Dokumentation zu \"strftime\" "
-"unter: https://docs.python.org/3/library/time.html#time.strftime (Englisch)."
-
 msgid "This server does not allow signup."
 msgstr "Dieser Server erlaubt keine Registrierung."
 
@@ -5314,17 +4875,6 @@ msgstr "Zeit bis abwesend"
 msgid "Time Until Not Available"
 msgstr "Zeit bis abwesend nicht verfügbar"
 
-msgid "Time in minutes, after which your status changes to away."
-msgstr "Zeit in Minuten, nach der dein Status auf Abwesend gesetzt wird."
-
-msgid "Time in minutes, after which your status changes to not available."
-msgstr ""
-"Zeit in Minuten, nach der dein Status auf Nicht Verfügbar gesetzt wird."
-
-msgid "Time of inactivity needed before the change status window closes down."
-msgstr ""
-"Wartezeit, bevor das \"Status ändern\"-Fenster automatisch geschlossen wird."
-
 msgid "To"
 msgstr "An"
 
@@ -5356,9 +4906,6 @@ msgstr ""
 
 msgid "Topic"
 msgstr "Thema"
-
-msgid "Tor"
-msgstr "Tor"
 
 msgid "Transferring File…"
 msgstr "Übertrage Datei…"
@@ -5505,11 +5052,11 @@ msgstr "Update verfügbar"
 msgid "Update plugins automatically"
 msgstr "Plugins automatisch aktualisieren"
 
-msgid "Update plugins automatically next time"
-msgstr "Plugins in Zukunft automatisch aktualisieren"
-
 msgid "Updates"
 msgstr "Updates"
+
+msgid "Updates will be installed next time Gajim is started"
+msgstr "Updates werden beim nächsten Start von Gajim installiert"
 
 msgid "Upload Files"
 msgstr "Dateien hochladen"
@@ -5586,13 +5133,6 @@ msgstr "Benutzer"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-msgid ""
-"Valid URI schemes. Only schemes in this list will be accepted as 'real' URI "
-"(mailto and xmpp are handled separately)."
-msgstr ""
-"Gültige URI-Schemata. Nur Schemata in dieser Liste werden als \"wirkliche\" "
-"URIs akzeptiert (mailto und xmpp werden separat behandelt)."
 
 msgid "Validity"
 msgstr "Gültigkeit"
@@ -5676,13 +5216,6 @@ msgstr "Was heißt das?"
 
 msgid "What happened"
 msgstr "Was passiert ist"
-
-msgid ""
-"When to show the notification area icon. Can be 'never', 'on_event', and "
-"'always'."
-msgstr ""
-"Legt fest, wann das Benachrichtigungssymbol angezeigt wird. Mögliche Werte: "
-"'never', 'on_event' und 'always'."
 
 msgid "Where participants should go"
 msgstr "Alternativer Gruppenchat für die Teilnehmer"
@@ -6212,9 +5745,6 @@ msgstr "_Konto auch bei dem Dienst löschen"
 msgid "_Unsubscribe"
 msgstr "_Abbestellen"
 
-msgid "_Update"
-msgstr "Akt_ualisieren"
-
 msgid "_Username"
 msgstr "_Benutzername"
 
@@ -6483,41 +6013,3 @@ msgstr "{nick} ist jetzt {show}{status}"
 
 msgid "…or drop it here"
 msgstr "… oder hierher ziehen"
-
-#~ msgid "File: "
-#~ msgstr "Datei: "
-
-#~ msgid "Microphone & Camera"
-#~ msgstr "Mikrofon & Kamera"
-
-#~ msgid "New Message"
-#~ msgstr "Neue Nachricht"
-
-#~ msgid "Note: Chat history is disabled for this account."
-#~ msgstr "Hinweis: Für dieses Konto wird kein Nachrichtenverlauf gespeichert."
-
-#~ msgid "Note: Chat history is disabled for this contact."
-#~ msgstr ""
-#~ "Hinweis: Für diesen Kontakt wird kein Nachrichtenverlauf gespeichert."
-
-#~ msgid "Render XHTML styles (colors, etc.) of incoming messages"
-#~ msgstr "XHTML-Styles (Farben usw.) von eingehenden Nachrichten darstellen"
-
-#~ msgid "Save conversations for all contacts"
-#~ msgstr "Nachrichtenverlauf für alle Kontakte dieses Kontos speichern"
-
-#~ msgid "Store conversations on the harddrive"
-#~ msgstr "Nachrichtenverlauf auf diesem Gerät speichern"
-
-#~ msgid "With Microphone"
-#~ msgstr "Mit Mikrofon"
-
-#~ msgid "XHTML Formatting"
-#~ msgstr "XHTML-Formatierung"
-
-#~ msgid ""
-#~ "You just received a new message from %s.\n"
-#~ "Do you want to close this tab?"
-#~ msgstr ""
-#~ "Du hast soeben eine neue Nachricht von %s erhalten.\n"
-#~ "Willst du diesen Tab schließen?"

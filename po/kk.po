@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 13:53+0000\n"
+"POT-Creation-Date: 2022-05-31 18:12+0000\n"
 "PO-Revision-Date: 2020-07-22 17:59+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -49,29 +49,6 @@ msgstr "Дауыс чаты"
 #, python-brace-format
 msgid " by {actor}"
 msgstr ""
-
-#, fuzzy
-msgid "$S (Away: Idle more than $T min)"
-msgstr "$S (Кетіп қалған, $T минуттан көп белсенді емес)"
-
-#, fuzzy
-msgid "$S (Not available: Idle more than $T min)"
-msgstr "$S (Қол жетерсіз, $T минуттан көп белсенді емес)"
-
-#, fuzzy
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoawaytime' "
-"value."
-msgstr ""
-"$S ағымдағы күй хабарласымен, ал $T авто қолжетерсіз уақыт шамасымен "
-"алмастырылады."
-
-#, fuzzy
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoxatime' value."
-msgstr ""
-"$S ағымдағы күй хабарласымен, ал $T авто кеңейтілген қолжетерсізге уақыт "
-"шамасымен алмастырылады."
 
 #, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
@@ -255,9 +232,6 @@ msgid "1 Year"
 msgstr "Бір жыл"
 
 msgid "2 Days"
-msgstr ""
-
-msgid "2: System, 1: Enabled, 0: Disabled"
 msgstr ""
 
 msgid "3 Months"
@@ -754,6 +728,10 @@ msgstr "Тіркелгілер"
 msgid "Action when left-clicking a preview"
 msgstr ""
 
+#, fuzzy
+msgid "Activate"
+msgstr "Белсенді"
+
 msgid "Activated"
 msgstr "Белсенді"
 
@@ -907,20 +885,8 @@ msgstr "Барлық файлдар"
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
 
-msgid ""
-"Allow Gajim to send information about the operating system you are running."
-msgstr ""
-"Gajim-ге сіздің операциялық жүйеңіз туралы ақпаратты жіберуге рұқсат ету."
-
-msgid "Allow Gajim to send your local time."
-msgstr "Gajim-ге сіздің жергілікті уақытты жіберуге рұқсат ету."
-
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
-
-#, fuzzy
-msgid "Allow certificate verification with POSH."
-msgstr "SSL сертификат қатесі"
 
 msgid ""
 "Allow to hide the contact list window even if the notification area icon is "
@@ -1449,38 +1415,6 @@ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
 msgstr ""
 
 #, fuzzy
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: 'all', "
-"'composing_only', 'disabled'"
-msgstr ""
-"Сөйлесудің күйі туралы хабарлау. Мүмкін нұсқалары: all (барлығы), "
-"composing_only (тек жазу туралы), disabled (сөндірілген)."
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: all, "
-"composing_only, disabled"
-msgstr ""
-"Сөйлесудің күйі туралы хабарлау. Мүмкін нұсқалары: all (барлығы), "
-"composing_only (тек жазу туралы), disabled (сөндірілген)."
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only' or 'disabled'."
-msgstr ""
-"Сөйлесудің күйі туралы хабарлау. Мүмкін нұсқалары: all (барлығы), "
-"composing_only (тек жазу туралы), disabled (сөндірілген)."
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only', 'disabled'"
-msgstr ""
-"Сөйлесудің күйі туралы хабарлау. Мүмкін нұсқалары: all (барлығы), "
-"composing_only (тек жазу туралы), disabled (сөндірілген)."
-
-#, fuzzy
 msgid "Chats"
 msgstr "Чаттар"
 
@@ -1706,9 +1640,6 @@ msgstr "Байланыс қолжетерсіз"
 msgid "Connection with %s could not be established."
 msgstr "Тораппен байланысты орнату мүмкін емес."
 
-msgid "ConnectionType: START TLS, DIRECT TLS or PLAIN"
-msgstr ""
-
 msgid "Contact"
 msgstr "Контакт"
 
@@ -1774,26 +1705,6 @@ msgstr "Контакттар"
 
 msgid "Contacts"
 msgstr "Контакттар"
-
-#, fuzzy
-msgid ""
-"Controls the window where new messages are placed.\n"
-"'always' - All messages are sent to a single window.\n"
-"'always_with_roster' - Like 'always' but the messages are in a single window "
-"along with the contact list.\n"
-"'never' - All messages get their own window.\n"
-"'peracct' - Messages for each account are sent to a specific window.\n"
-"'pertype' - Each message type (e.g. chats vs. group chats) is sent to a "
-"specific window."
-msgstr ""
-"Жаңа хабарламалар көрсетілетін терезені басқару.\n"
-"'always' - Барлық хабарламалар бір терезеге жіберіледі.\n"
-"'always_with_roster' - 'always' сияқты, бірақ хабарламалар бар бір терезе "
-"ростермен бір терезені құрайды.\n"
-"'never' - Барлық хабарламалар жеке терезелерінде.\n"
-"'peracct' - Әр тіркелгі үшін хабарламалар жеке терезеде.\n"
-"'pertype' - Хабарламалар түрі бойынша (мыс. чат не топтық чаттар) терезеге "
-"жіберіледі."
 
 msgid "Conversation: Nickname Color (Incoming)"
 msgstr ""
@@ -1896,13 +1807,6 @@ msgstr "%s тіркелгісі өшірілуде"
 msgid "Credentials expired"
 msgstr "Сертификат мерзімі біткен"
 
-#, fuzzy
-msgid ""
-"Ctrl+Tab switches to the next composing tab when there are no tabs with "
-"messages pending."
-msgstr ""
-"Оқылмағандар болмаса, Ctrl-Tab басу арқылы келесі жазылудағы бетке өтеді."
-
 msgid "Current Developers"
 msgstr "Ағымдағы әзірлеушілер"
 
@@ -1912,9 +1816,6 @@ msgstr "D-Bus бұл машинада жоқ не керек python модулі
 #, fuzzy
 msgid "Dark Theme"
 msgstr "Gajim - %s"
-
-msgid "Date of the last update check"
-msgstr ""
 
 msgid "Deactivated"
 msgstr "Сөндірілген"
@@ -1929,18 +1830,6 @@ msgstr "Желі_де емес"
 
 msgid "Default"
 msgstr "Бастапқысы"
-
-#, fuzzy
-msgid ""
-"Default Setting: Show a status message for all status changes (away, dnd, "
-"etc.) of users in a group chat."
-msgstr "Чат бөлмесіне кіру мүмкін емес"
-
-#, fuzzy
-msgid ""
-"Default Setting: Show a status message for every join or leave in a group "
-"chat."
-msgstr "Чат бөлмесіне кіру мүмкін емес"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -1968,11 +1857,6 @@ msgstr "Топ чаттардан шығу"
 msgid "Default for new public group chats"
 msgstr "Топ чаттардан шығу"
 
-#, fuzzy
-msgid ""
-"Define the position of avatars in the contact list. Can be 'left' or 'right'."
-msgstr "Ростердегі аватар орналасуын орнатады. left не right бола алады"
-
 msgid "Delete"
 msgstr "Өшіру"
 
@@ -1990,7 +1874,7 @@ msgid "Description: "
 msgstr "Анықтамасы: "
 
 #, fuzzy
-msgid "Destroy Groupchat…"
+msgid "Destroy Group Chat…"
 msgstr "Жаңа чат бөлмесі"
 
 #, fuzzy
@@ -2076,10 +1960,6 @@ msgstr "Топ чат беті/терезесін жабу алдында сұр
 msgid "Do not disturb"
 msgstr "Мазамды алмаңыз"
 
-#, fuzzy
-msgid "Do not show this message again"
-msgstr "М_ені қайта сұрамау"
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "%s тіркелгісіндегі бұл сұранымды қабылдайсыз ба?"
@@ -2114,12 +1994,12 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
 #, fuzzy
-msgid "Don't show contact list window in the system taskbar."
+msgid "Don’t show main window in the system taskbar."
 msgstr "Ростерді жүйелік есептер панелінде көрсетпеу."
 
 #, fuzzy
-msgid "Don’t show main window in the system taskbar."
-msgstr "Ростерді жүйелік есептер панелінде көрсетпеу."
+msgid "Don’t show this again"
+msgstr "М_ені қайта сұрамау"
 
 #, fuzzy
 msgid "Download"
@@ -2285,6 +2165,14 @@ msgstr "Қызметті қосу қатесі. %s"
 #, fuzzy
 msgid "Error while processing image"
 msgstr "Суретті жүктеу уақыты бітті"
+
+#, fuzzy
+msgid "Error while receiving search results."
+msgstr "Суретті жүктеу уақыты бітті"
+
+#, fuzzy
+msgid "Error while retrieving search form."
+msgstr "Қызметті қосу қатесі. %s"
 
 #, fuzzy
 msgid "Error while uploading avatar"
@@ -2517,6 +2405,10 @@ msgstr "Жеке чаттар"
 msgid "Fingerprints"
 msgstr "Баспалар"
 
+#, fuzzy
+msgid "Finished"
+msgstr "_Аяқтау"
+
 #, python-format
 msgid ""
 "Finished synchronising chat history:\n"
@@ -2688,6 +2580,10 @@ msgid "Group Chat"
 msgstr "Топтық чаттар"
 
 #, fuzzy
+msgid "Group Chat Details"
+msgstr "Плагиндер"
+
+#, fuzzy
 msgid "Group Chat Invitation"
 msgstr "Топ чатына шақыру"
 
@@ -2750,13 +2646,6 @@ msgstr "Топтық чат енді қолжетімсіз қатысушыла
 #, fuzzy
 msgid "Group chat support"
 msgstr "Топтық чаттар"
-
-msgid "Group multiple contacts from one friend to a single Meta-Contact"
-msgstr ""
-
-#, fuzzy
-msgid "Groupchat Details"
-msgstr "Плагиндер"
 
 msgid "Groups"
 msgstr "Топтар"
@@ -2835,22 +2724,6 @@ msgstr "Мен сізді өзімнің контакттар тізіміне �
 msgid "I would like to add you to my roster."
 msgstr "Мен өз ростеріме сізді қосқым келеді"
 
-#, fuzzy
-msgid "I'm eating."
-msgstr "Мен жұмыс істеп отырмын."
-
-msgid "I'm on the phone."
-msgstr "Мен телефонмен сөйлесудемін."
-
-msgid "I'm out enjoying life."
-msgstr "Мен өмірмен рахаттанып отырмын."
-
-msgid "I'm watching a movie."
-msgstr "Кино көрудемін."
-
-msgid "I'm working."
-msgstr "Мен жұмыс істеп отырмын."
-
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC стандарты КиБ = 1024 байт, ал КБ = 1000 байтқа тең деп айтады."
 
@@ -2878,27 +2751,6 @@ msgstr "Белгіленсе, Gajim-ді қашықтан gajim-remote қолд�
 
 #, fuzzy
 msgid ""
-"If disabled, Gajim will no longer print status messages in chats when a "
-"contact changes their status (and/or their status message)."
-msgstr ""
-"Сөндірілген болса, Gajim чаттарда контакт өз күйін не күй хабарламасын "
-"өзгертсе, күй жолын енді жазбайды."
-
-#, fuzzy
-msgid ""
-"If disabled, this account will be disabled and will not appear in the "
-"contact list window."
-msgstr ""
-"Сөндірілген болса, бұл тіркелгі сөндіріледі және ростерде көрсетілмейтін "
-"болады."
-
-msgid ""
-"If enabled, Gajim hides the contact list window when pressing the X button "
-"instead of minimizing into the notification area."
-msgstr ""
-
-#, fuzzy
-msgid ""
 "If enabled, Gajim hides the main window when pressing the X button instead "
 "of minimizing into the notification area."
 msgstr ""
@@ -2914,45 +2766,9 @@ msgstr ""
 "оқиға бар болса, терезе шегі жыпылықтайды."
 
 #, fuzzy
-msgid ""
-"If enabled, Gajim quits when clicking the X button of your Window Manager. "
-"This setting is taken into account only if the notification area icon is "
-"used."
-msgstr ""
-"Белсенді болса, Терезелер басқарушысы ұсынған X батырмасын шерткенде Gajim "
-"жұмысын өз аяқтайды. Тек жүйелік сөре таңбашасы іске қосулы болу керек."
-
-msgid ""
-"If enabled, Gajim shows the group chat subject in the chat window when "
-"joining."
-msgstr ""
-
-#, fuzzy
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 "Белгіленген болса, Gajim ростердегі контакттар үшін көңіл-күйін көрсетеді"
-
-#, fuzzy
-msgid "If enabled, Gajim will answer to message receipt requests."
-msgstr ""
-"Қосулы тұрса, Gajim қалып-күй хабарламасын сұрамайды, бастапқы мәндері "
-"қолданылады."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will display an icon to show that sent messages have been "
-"received by your contact."
-msgstr ""
-"Қосулы тұрса, Gajim қалып-күй хабарламасын сұрамайды, бастапқы мәндері "
-"қолданылады."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will display the status message (if not empty) underneath "
-"the contact name in the contact list window."
-msgstr ""
-"Белгіленген болса, Gajim ростерде әр контакт астында оның қалып-күй "
-"хабарламасын көрсетеді, егер ол бар болса."
 
 msgid "If enabled, Gajim will execute XEP-0146 Commands."
 msgstr ""
@@ -2964,39 +2780,8 @@ msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
 msgstr ""
 
 msgid ""
-"If enabled, Gajim will reopen chat windows that were opened last time Gajim "
-"was closed."
-msgstr ""
-
-msgid ""
-"If enabled, Gajim will save the contact list window position when hiding it, "
-"and restore it when showing the contact list window again."
-msgstr ""
-
-msgid ""
 "If enabled, Gajim will save the main window position when hiding it, and "
 "restore it when showing the window again."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will send your local IP so your contact can connect to "
-"your machine for file transfers."
-msgstr ""
-"Белгіленген болса, Gajim файлдармен алмасулар үшін сіздің IP бен "
-"file_transfer_proxies опциясындағы прокси адрестерін қолданады."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will show both the number of online and total contacts in "
-"account rows as well as in group rows."
-msgstr ""
-"Қосулы тұрса, Gajim желідегі мен барлық контакттар санын тіркелгі мен топтар "
-"жолында көрсетеді."
-
-msgid ""
-"If enabled, Gajim will test file transfer proxies on startup to be sure they "
-"work. Openfire's proxies are known to fail this test even if they work."
 msgstr ""
 
 #, fuzzy
@@ -3010,75 +2795,13 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"If enabled, Gajim will use the System's Keyring to store account passwords."
-msgstr ""
-"Белсенді болса, Gajim тіркелгі парольдерін сақтау үшін Gnome Keyring (егер "
-"қолжетерлік болса) қолданады."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will use your IP and proxies defined in "
-"'file_transfer_proxies' option for file transfers."
-msgstr ""
-"Белгіленген болса, Gajim файлдармен алмасулар үшін сіздің IP бен "
-"file_transfer_proxies опциясындағы прокси адрестерін қолданады."
-
-msgid ""
-"If enabled, a notification is created for every message in this group chat."
-msgstr ""
-
-#, fuzzy
-msgid ""
 "If enabled, completion in group chats will be like a shell auto-completion."
 msgstr ""
 "Қосулы тұрса, топ чаттардағы мәтінді автотолықтыру қоршамдағыдай іске асады"
 
 #, fuzzy
-msgid ""
-"If enabled, contacts requesting authorization will be accepted automatically."
-msgstr "Белсенді болса, жазылуды сұраған контакттар авто қабылданады."
-
-#, fuzzy
-msgid ""
-"If enabled, do not remove */_ . So *abc* will be bold but with * * not "
-"removed."
-msgstr ""
-"Белсенді болса, */_ өшірілмейді. Мысалы, *abc* жуан қаріппен көрсетіледі, "
-"бірақ * * өшірілмейді."
-
-#, fuzzy
-msgid ""
-"If enabled, plugins will be activated on startup (this is saved when exiting "
-"Gajim). This option SHOULD NOT be used to (de)activate plugins. Use the "
-"plugin window instead."
-msgstr ""
-"Жұмысты аяқтау кезінде плагиндер белсенді қылу керек пе, соны анықтайды (Бұл "
-"Gajim жұмыс аяқтағанда сақталады). Бұл опция плагиндерді белсенді(емес) қылу "
-"үшін ҚОЛДАНБАҢЫЗ. Орнына GUI қолданыңыз."
-
-#, fuzzy
 msgid "If enabled, pressing Esc closes a tab/window."
 msgstr "Белсенді болса, escape батырмасы бет/терезені жабады"
-
-#, fuzzy
-msgid ""
-"If enabled, the contact row is colored according to the current chat state "
-"of the contact."
-msgstr ""
-"Белгіленген болса, Gajim басқаларға сіздің операциялық жүйеңізді анықтауға "
-"рұқсат етеді"
-
-#, fuzzy
-msgid "If enabled, the last status will be restored."
-msgstr "Қосулы тұрса, соңғы қалып-күй қалпына келтіріледі."
-
-#, fuzzy
-msgid ""
-"If enabled, the tab is colored according to the current chat state of the "
-"contact."
-msgstr ""
-"Белгіленген болса, Gajim басқаларға сіздің операциялық жүйеңізді анықтауға "
-"рұқсат етеді"
 
 #, fuzzy
 msgid ""
@@ -3089,9 +2812,6 @@ msgstr ""
 "Қосулы тұрса, тіркелгіні баптау терезесінде сіз приоритеттің теріс мәнің "
 "орната аласыз. АБАЙЛАҢЫЗ, теріс приоритетпен отырған кезде, серверден бірде-"
 "бір хабарламаны АЛМАЙСЫЗ."
-
-msgid "If enabled, you will see your webcam's video stream as well."
-msgstr ""
 
 #, fuzzy, python-format
 msgid "If you close this window, you will leave '%s'."
@@ -3122,14 +2842,6 @@ msgstr "Суреттер"
 #, fuzzy
 msgid "Import Contacts"
 msgstr "Контакттарды _шақыру"
-
-#, fuzzy
-msgid ""
-"In a chat, show the nickname at the beginning of a line only when it's not "
-"the same person talking as in the previous message."
-msgstr ""
-"Чатта, алдыңғы хабарламадағы адам емес болмаса ғана, жол басынан контакт "
-"атын көрсету."
 
 msgid ""
 "In order to write messages in this chat, you need to request voice first.\n"
@@ -3356,10 +3068,6 @@ msgstr "Тебу"
 msgid "Label"
 msgstr "белгі"
 
-#, fuzzy
-msgid "Language used for spell checking."
-msgstr "Емле тексеруші қолданатын тілі"
-
 msgid "Last but not least"
 msgstr ""
 
@@ -3383,23 +3091,6 @@ msgstr ""
 
 msgid "Limit must be an integer"
 msgstr "Шектеу мәні бүтін сан болуы тиіс"
-
-msgid ""
-"List of XMPP Addresses (space separated) for which the chat window will be "
-"re-opened on next startup."
-msgstr ""
-
-msgid ""
-"List of XMPP Addresses (space separated) for which you do not want to store "
-"chat history. You can also add the name of an account to disable storing "
-"chat history for this account."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"List of rows (accounts and groups) that are collapsed (space separated)."
-msgstr ""
-"Жиналған жолдар (тіркелгілер мен топтар) тізімі (бос аралықпен ажыратылсын)."
 
 #, fuzzy
 msgid ""
@@ -3521,22 +3212,6 @@ msgstr ""
 msgid "Maximum file size for preview generation"
 msgstr ""
 
-msgid ""
-"Maximum history in days we request from a private group chat archive. 0: As "
-"much as possible."
-msgstr ""
-
-msgid ""
-"Maximum history in days we request from a public group chat archive. 0: As "
-"much as possible."
-msgstr ""
-
-msgid ""
-"Maximum number of lines that are printed in conversations. Oldest lines are "
-"cleared."
-msgstr ""
-"Сөйлесулерде көрсетілетін жолдардың максимал саны. Ескі жолдар өшіріледі."
-
 #, fuzzy
 msgid "Me"
 msgstr "Орташа"
@@ -3582,10 +3257,6 @@ msgid ""
 "Message corrected. Original message:\n"
 "%s"
 msgstr ""
-
-#, fuzzy
-msgid "Message that is sent to contacts you want to add."
-msgstr "Қосқыңыз келетін контакттарға жіберілетін хабарлама"
 
 #, fuzzy
 msgid "Messages are archived on the server"
@@ -3680,6 +3351,10 @@ msgstr "Жаңа чат бөлмесі"
 #, fuzzy
 msgid "New Search"
 msgstr "Іздеу"
+
+#, fuzzy
+msgid "New Workspace"
+msgstr "Контакт атын ауыстыру"
 
 #, fuzzy, python-format
 msgid "New message from %s"
@@ -3880,6 +3555,10 @@ msgid "Open Link in _Browser"
 msgstr "Сілтемені браузерде ашу"
 
 #, fuzzy
+msgid "Open Plugins…"
+msgstr "Плагиндер"
+
+#, fuzzy
 msgid "Open _Folder"
 msgstr "_Орналасқан буманы ашу"
 
@@ -3908,17 +3587,6 @@ msgid "Operating System"
 msgstr "Клиент сертификаты"
 
 #, fuzzy
-msgid "Optionally fix Jingle output video framerate. Example: 10/1 or 25/2."
-msgstr ""
-"Осыған қоса, jingle шығыс видеосының кадр/сек қасиетін автоөзгерту. Мысалы: "
-"10/1 не 25/2"
-
-#, fuzzy
-msgid "Optionally resize Jingle output video. Example: 320x240."
-msgstr ""
-"Осыған қоса, jingle шығыс видеосының өлшемін автоөзгерту. Мысалы: 320x240"
-
-#, fuzzy
 msgid "Organisation"
 msgstr "Ұйым (O)"
 
@@ -3934,7 +3602,7 @@ msgstr "Ұйым бөлімі (OU)"
 msgid "Organizational Unit (OU): "
 msgstr ""
 
-msgid "Organize your chats with tabs"
+msgid "Organize your chats with workspaces"
 msgstr ""
 
 msgid "Others"
@@ -4078,19 +3746,12 @@ msgstr ""
 msgid "Pl_ugins"
 msgstr "Плаг_индер"
 
-msgid "Place the contact list on the right in single window mode"
-msgstr ""
-
 msgid "Play Sound"
 msgstr "Дыбысты ойнату"
 
 #, fuzzy
 msgid "Play Sounds"
 msgstr "Дыбысты ойнату"
-
-#, fuzzy
-msgid "Play sound even when being busy."
-msgstr "Пайдаланушы бос емес болса дыбысты ойнату"
 
 #, fuzzy
 msgid "Play sounds even when you are Away, Busy, etc."
@@ -4145,10 +3806,6 @@ msgstr "Плагин баптаулары"
 msgid "Plugin Updates"
 msgstr "Плагин сәтсіз"
 
-#, fuzzy
-msgid "Plugin Updates Available"
-msgstr "Бірде-бір тіркелгі қолжетерсіз"
-
 msgid "Plugin already exists"
 msgstr "Плагин бар болып тұр"
 
@@ -4159,16 +3816,11 @@ msgstr "Плагин сәтсіз"
 msgid "Plugin manager"
 msgstr "Плагин сәтсіз"
 
-msgid ""
-"Plugin updates have successfully been downloaded.\n"
-"Updates will be installed next time Gajim is started."
-msgstr ""
-
 msgid "Plugins"
 msgstr "Плагиндер"
 
 #, fuzzy
-msgid "Plugins Updated"
+msgid "Plugins Updated Successfully"
 msgstr "Плагин сәтсіз"
 
 #, python-format
@@ -4201,11 +3853,6 @@ msgid "Preferences"
 msgstr "Баптаулар"
 
 msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
-msgstr ""
-
-msgid ""
-"Preferred file transfer mechanism for file drag&drop on a chat window. Can "
-"be 'httpupload' (default) or 'jingle'."
 msgstr ""
 
 msgid "Presence description:"
@@ -4246,14 +3893,6 @@ msgstr "Бар тіркелгілер тізімін шығарады"
 msgid "Priority"
 msgstr "Приорите_т:"
 
-#, fuzzy
-msgid ""
-"Priority will change automatically according to your status. Priorities are "
-"defined in 'autopriority_*' options."
-msgstr ""
-"Приоритет күйіңізге сәйкес автоөзгертіледі. Приоритеттер autopriority_* "
-"опцияларында бапталған."
-
 msgid "Privacy"
 msgstr "Жекелік"
 
@@ -4281,11 +3920,6 @@ msgstr "Прокси _хосты:"
 #, fuzzy
 msgid "Proxy Type"
 msgstr "Прокси:"
-
-msgid ""
-"Proxy used for all outgoing connections if the account does not have a "
-"specific proxy configured."
-msgstr ""
 
 #, fuzzy
 msgid "Proxy, custom hostname and port"
@@ -4527,6 +4161,9 @@ msgstr "К_оманда орындау"
 msgid "Requesting HTTP File Upload Slot…"
 msgstr ""
 
+msgid "Requesting search form from server"
+msgstr ""
+
 #, fuzzy
 msgid "Required"
 msgstr "require"
@@ -4737,6 +4374,14 @@ msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
 msgstr ""
+
+#, fuzzy
+msgid "Searching"
+msgstr "Іздеу"
+
+#, fuzzy
+msgid "Searching…"
+msgstr "Іздеу…"
 
 msgid "Search…"
 msgstr "Іздеу…"
@@ -4993,8 +4638,7 @@ msgstr ""
 msgid "Set the presence type and description"
 msgstr "Бар болудың түрін мен анықтамасын орнату"
 
-msgid ""
-"Set your activity, tune, and mood to show your friends how you are feeling"
+msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
@@ -5103,28 +4747,8 @@ msgid "Show a live preview to test your video source"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"Show a status message for all status changes (away, dnd, etc.) of users in a "
-"group chat."
-msgstr "Чат бөлмесіне кіру мүмкін емес"
-
-#, fuzzy
-msgid "Show a status message for every join or leave in a group chat."
-msgstr "Чат бөлмесіне кіру мүмкін емес"
-
-#, fuzzy
 msgid "Show all warnings"
 msgstr "Қат_ыспаған оқиғаларды көрсету"
-
-msgid "Show close button in tab?"
-msgstr "Бет үшін жабу батырмасын көрсету керек пе?"
-
-msgid ""
-"Show contact list window on startup.\n"
-"'always' - Always show contact list window.\n"
-"'never' - Never show contact list window.\n"
-"'last_state' - Restore last state of the contact list window."
-msgstr ""
 
 msgid ""
 "Show help on a given command or a list of available commands if -a is given"
@@ -5151,16 +4775,6 @@ msgstr "Жүйелік сөре таңбашасы_н көрсету"
 msgid "Show only critical errors"
 msgstr "Тек ростерде көрсету"
 
-#, fuzzy
-msgid "Show only online and free for chat contacts in the contact list."
-msgstr "Ростерде тек желідегі мен чатқа дайын контакттарды көрсету"
-
-msgid "Show tab when only one conversation?"
-msgstr "Тек бір сөйлесу бар болса чат терезесінде беттерді көрсету керек пе?"
-
-msgid "Show tabbed notebook border in chat windows?"
-msgstr "Чат терезесінде бет шекарасын көрсету керек пе?"
-
 msgid "Show the application's version"
 msgstr "Қолданба нұсқасын көрсету"
 
@@ -5184,17 +4798,6 @@ msgstr "Көрсетілген команда үшін көмекті көрсе
 #, fuzzy
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr "Сіз бен басқалар арасындағы файл алмасуларды көрсетеді"
-
-#, fuzzy
-msgid ""
-"Shows a text in the banner that describes the current chat state of the "
-"contact."
-msgstr ""
-"Белгіленген болса, Gajim басқаларға сіздің операциялық жүйеңізді анықтауға "
-"рұқсат етеді"
-
-msgid "Shows an info bar with helpful hints in the Start / Join Chat dialog"
-msgstr ""
 
 #, fuzzy
 msgid "Sign In"
@@ -5241,18 +4844,6 @@ msgid "Sort by Status"
 msgstr "Контакттарды қалып-күй бойынша сұрыптау"
 
 #, fuzzy
-msgid ""
-"Sound to play when a group chat message contains one of the words in "
-"'muc_highlight_words' or your nickname is mentioned."
-msgstr ""
-"Топ чат хабарламасында muc_highlight_words ішінде көрсетілген сөздердің "
-"біреуі не сіздің ник атыңыз кездескен кезде ойналатын дыбыс."
-
-#, fuzzy
-msgid "Sound to play when any group chat message arrives."
-msgstr "MUC хабарламасы келген кезде ойналатын дыбыс."
-
-#, fuzzy
 msgid "Sounds"
 msgstr "Wav дыбыстары"
 
@@ -5292,6 +4883,10 @@ msgstr "Чатты бастау"
 
 #, fuzzy
 msgid "Start Chatting…"
+msgstr "Чатты бастау"
+
+#, fuzzy
+msgid "Start Chat…"
 msgstr "Чатты бастау"
 
 #, fuzzy
@@ -5449,10 +5044,6 @@ msgstr "Синхрондау табалдырық мәні"
 msgid "Synchronise"
 msgstr "Синхрондау"
 
-#, fuzzy
-msgid "Synchronise History"
-msgstr "Синхрондау"
-
 msgid "Synchronise History…"
 msgstr "Тарихты синхрондау…"
 
@@ -5461,8 +5052,20 @@ msgid "Synchronise the status of all accounts"
 msgstr "Тіркелгі не тіркелгілердің қалып-күйін өзгерту"
 
 #, fuzzy
+msgid "Synchronize"
+msgstr "Синхрондау"
+
+#, fuzzy
 msgid "Synchronize Accounts"
 msgstr "Контакттарды синхрондау"
+
+#, fuzzy
+msgid "Synchronize Chat History"
+msgstr "Синхрондау"
+
+#, fuzzy
+msgid "Synchronizing Chat History…"
+msgstr "Тарихты синхрондау…"
 
 #, fuzzy
 msgid "System"
@@ -5509,10 +5112,6 @@ msgid ""
 "The contact will be informed that you stopped sharing your status. Please "
 "note that this can have other side effects."
 msgstr ""
-
-#, fuzzy
-msgid "The currently active encryption for that contact."
-msgstr "Бұл тіркелгі үшін ESessions шифрлеуді іске қосу."
 
 #, python-format
 msgid ""
@@ -5577,13 +5176,7 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
-#, python-format
-msgid ""
-"There are updates for your plugins:\n"
-"<b>%s</b>"
-msgstr ""
-
-msgid "There is already a synchronisation in progress. Please try again later."
+msgid "There are updates for Gajim’s plugins"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5676,17 +5269,6 @@ msgid ""
 "You can install the OpenPGP plugin to handle those messages."
 msgstr ""
 
-msgid ""
-"This option lets you customize the timestamp that is printed in "
-"conversation. For example '[%H:%M] ' will show '[hour:minute] '. See python "
-"doc on strftime for full documentation (https://docs.python.org/3/library/"
-"time.html#time.strftime)."
-msgstr ""
-"Бұл опция сізге сөйлесулердегі уақыт көрсетілуін баптауға мүмкіндік береді. "
-"Мысалы, \"[%H:%M] \" болса, \"[сағат:минут] \" ретінде көрсетіледі. Көбірек "
-"білу үшін python құжаттамасынан strftime үшін ақпаратты қараңыз (https://"
-"docs.python.org/3/library/time.html#time.strftime)."
-
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Серверіңіз Vcard-ты қолдамайды"
@@ -5735,16 +5317,6 @@ msgstr ""
 msgid "Time Until Not Available"
 msgstr "Қол жетерсіз"
 
-msgid "Time in minutes, after which your status changes to away."
-msgstr "Қалып-күйіңіз Кетіп қалғанға ауысу үшін керек уақыт шамасы."
-
-msgid "Time in minutes, after which your status changes to not available."
-msgstr "Қалып-күйіңіз Қолжетерсізге ауысу үшін керек уақыт шамасы."
-
-msgid "Time of inactivity needed before the change status window closes down."
-msgstr ""
-"Күйді өзгерту терезесі жабылу үшін керек белсенді еместік уақыт шамасы."
-
 msgid "To"
 msgstr "Оған"
 
@@ -5777,10 +5349,6 @@ msgstr ""
 
 msgid "Topic"
 msgstr "Тақырып"
-
-#, fuzzy
-msgid "Tor"
-msgstr "Оған"
 
 #, fuzzy
 msgid "Transferring File…"
@@ -5942,10 +5510,10 @@ msgstr "Бірде-бір тіркелгі қолжетерсіз"
 msgid "Update plugins automatically"
 msgstr "Автоматты түрде қосылу"
 
-msgid "Update plugins automatically next time"
+msgid "Updates"
 msgstr ""
 
-msgid "Updates"
+msgid "Updates will be installed next time Gajim is started"
 msgstr ""
 
 #, fuzzy
@@ -6030,14 +5598,6 @@ msgstr "Пайдаланушылар"
 #, python-format
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
-
-#, fuzzy
-msgid ""
-"Valid URI schemes. Only schemes in this list will be accepted as 'real' URI "
-"(mailto and xmpp are handled separately)."
-msgstr ""
-"Дұрыс uri схемелары. Тек осы тізімдегі схемалар ғана \"шын\" uri ретінде "
-"қабылданады. (mailto және xmpp бөлек өнделеді)"
 
 msgid "Validity"
 msgstr "Жарамдылығы"
@@ -6132,14 +5692,6 @@ msgstr "Бұл мәзірді жасыру"
 
 msgid "What happened"
 msgstr ""
-
-#, fuzzy
-msgid ""
-"When to show the notification area icon. Can be 'never', 'on_event', and "
-"'always'."
-msgstr ""
-"Жүйелік сөре таңбашасын қашан көрсету керек. Мүмкін мәндері: 'never', "
-"'on_event', 'always'."
 
 msgid "Where participants should go"
 msgstr ""
@@ -6720,10 +6272,6 @@ msgstr ""
 msgid "_Unsubscribe"
 msgstr "Жа_зылудан бас тарту"
 
-#, fuzzy
-msgid "_Update"
-msgstr "MOTD жаңарту…"
-
 msgid "_Username"
 msgstr "_Пайдаланушы аты"
 
@@ -6990,28 +6538,3 @@ msgstr "{nick} енді {show}{status}"
 
 msgid "…or drop it here"
 msgstr ""
-
-#~ msgid "File: "
-#~ msgstr "Файл: "
-
-#~ msgid "New Message"
-#~ msgstr "Жаңа хабарлама"
-
-#, fuzzy
-#~ msgid "Note: Chat history is disabled for this contact."
-#~ msgstr "Бұл сертификат үшін осы қатені елемеу."
-
-#, fuzzy
-#~ msgid "Save conversations for all contacts"
-#~ msgstr "Барлық к_онтакттар үшін хабарламалар тарихын сақтау"
-
-#, fuzzy
-#~ msgid "XHTML Formatting"
-#~ msgstr "Пішімдеулер тізімін көрсету"
-
-#~ msgid ""
-#~ "You just received a new message from %s.\n"
-#~ "Do you want to close this tab?"
-#~ msgstr ""
-#~ "Сіз \"%s\" жіберген жаңа хабарламаны алдыңыз.\n"
-#~ "Бұл бетті жабуды қалайсыз ба?"

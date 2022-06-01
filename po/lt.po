@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 13:53+0000\n"
+"POT-Creation-Date: 2022-05-31 18:12+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -43,23 +43,6 @@ msgstr "File Transfer Request"
 
 #, python-brace-format
 msgid " by {actor}"
-msgstr ""
-
-#, fuzzy
-msgid "$S (Away: Idle more than $T min)"
-msgstr "$S (Nutolęs, nes nesinaudoja kompiuteriu, daugiau kaip $T min)"
-
-#, fuzzy
-msgid "$S (Not available: Idle more than $T min)"
-msgstr "$S (Nepasiekiamas, nes nesinaudoja kompiuteriu daugiau kaip $T min)"
-
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoawaytime' "
-"value."
-msgstr ""
-
-msgid ""
-"$S will be replaced by current status message, $T by the 'autoxatime' value."
 msgstr ""
 
 #, python-format
@@ -242,9 +225,6 @@ msgid "1 Year"
 msgstr ""
 
 msgid "2 Days"
-msgstr ""
-
-msgid "2: System, 1: Enabled, 0: Disabled"
 msgstr ""
 
 msgid "3 Months"
@@ -740,6 +720,10 @@ msgstr "Prieiga"
 msgid "Action when left-clicking a preview"
 msgstr ""
 
+#, fuzzy
+msgid "Activate"
+msgstr "Activated"
+
 msgid "Activated"
 msgstr "Activated"
 
@@ -902,22 +886,8 @@ msgstr "All files"
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
 
-#, fuzzy
-msgid ""
-"Allow Gajim to send information about the operating system you are running."
-msgstr ""
-"Jei pažymėta, Gajim leis kitiems matyti kokią operacijų sistemą naudojate"
-
-#, fuzzy
-msgid "Allow Gajim to send your local time."
-msgstr "%s wants to send you a file."
-
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
-
-#, fuzzy
-msgid "Allow certificate verification with POSH."
-msgstr "Adding Special Notification for %s"
 
 msgid ""
 "Allow to hide the contact list window even if the notification area icon is "
@@ -1433,34 +1403,6 @@ msgstr ""
 msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
 msgstr ""
 
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: 'all', "
-"'composing_only', 'disabled'"
-msgstr ""
-"Sent chat state notifications. Can be one of all, composing_only, disabled."
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to contacts. Possible values: all, "
-"composing_only, disabled"
-msgstr ""
-"Sent chat state notifications. Can be one of all, composing_only, disabled."
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only' or 'disabled'."
-msgstr ""
-"Sent chat state notifications. Can be one of all, composing_only, disabled."
-
-#, fuzzy
-msgid ""
-"Chat state notifications that are sent to the group chat. Possible values: "
-"'all', 'composing_only', 'disabled'"
-msgstr ""
-"Sent chat state notifications. Can be one of all, composing_only, disabled."
-
 msgid "Chats"
 msgstr "Chats"
 
@@ -1692,9 +1634,6 @@ msgstr "Connection not available"
 msgid "Connection with %s could not be established."
 msgstr "Connection with peer cannot be established."
 
-msgid "ConnectionType: START TLS, DIRECT TLS or PLAIN"
-msgstr ""
-
 msgid "Contact"
 msgstr "Asmuo"
 
@@ -1761,17 +1700,6 @@ msgstr "Asmuo"
 #, fuzzy
 msgid "Contacts"
 msgstr "Asmuo"
-
-msgid ""
-"Controls the window where new messages are placed.\n"
-"'always' - All messages are sent to a single window.\n"
-"'always_with_roster' - Like 'always' but the messages are in a single window "
-"along with the contact list.\n"
-"'never' - All messages get their own window.\n"
-"'peracct' - Messages for each account are sent to a specific window.\n"
-"'pertype' - Each message type (e.g. chats vs. group chats) is sent to a "
-"specific window."
-msgstr ""
 
 msgid "Conversation: Nickname Color (Incoming)"
 msgstr ""
@@ -1886,12 +1814,6 @@ msgid "Credentials expired"
 msgstr "Passphrase Required"
 
 #, fuzzy
-msgid ""
-"Ctrl+Tab switches to the next composing tab when there are no tabs with "
-"messages pending."
-msgstr "Ctrl-Tab go to next composing tab when none is unread."
-
-#, fuzzy
 msgid "Current Developers"
 msgstr "Current Developers:"
 
@@ -1901,9 +1823,6 @@ msgstr "D-Bus is not present on this machine or python module is missing"
 #, fuzzy
 msgid "Dark Theme"
 msgstr "Gajim - %s"
-
-msgid "Date of the last update check"
-msgstr ""
 
 msgid "Deactivated"
 msgstr "Deactivated"
@@ -1917,18 +1836,6 @@ msgstr "A_tsijungęs"
 
 msgid "Default"
 msgstr "Default"
-
-#, fuzzy
-msgid ""
-"Default Setting: Show a status message for all status changes (away, dnd, "
-"etc.) of users in a group chat."
-msgstr "Unable to join group chat"
-
-#, fuzzy
-msgid ""
-"Default Setting: Show a status message for every join or leave in a group "
-"chat."
-msgstr "Unable to join group chat"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -1956,10 +1863,6 @@ msgstr "Leave Groupchats"
 msgid "Default for new public group chats"
 msgstr "Leave Groupchats"
 
-msgid ""
-"Define the position of avatars in the contact list. Can be 'left' or 'right'."
-msgstr ""
-
 msgid "Delete"
 msgstr "Trinti"
 
@@ -1977,7 +1880,7 @@ msgid "Description: "
 msgstr "Aprašymas: "
 
 #, fuzzy
-msgid "Destroy Groupchat…"
+msgid "Destroy Group Chat…"
 msgstr "New Group Chat"
 
 #, fuzzy
@@ -2064,10 +1967,6 @@ msgstr "Ask before closing a group chat tab/window."
 msgid "Do not disturb"
 msgstr "Do not disturb"
 
-#, fuzzy
-msgid "Do not show this message again"
-msgstr "Do _not ask me again"
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Do you accept this request?"
@@ -2100,12 +1999,12 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
 #, fuzzy
-msgid "Don't show contact list window in the system taskbar."
+msgid "Don’t show main window in the system taskbar."
 msgstr "Don't show roster in the system taskbar."
 
 #, fuzzy
-msgid "Don’t show main window in the system taskbar."
-msgstr "Don't show roster in the system taskbar."
+msgid "Don’t show this again"
+msgstr "Do _not ask me again"
 
 #, fuzzy
 msgid "Download"
@@ -2266,6 +2165,14 @@ msgstr "Error while adding service. %s"
 #, fuzzy
 msgid "Error while processing image"
 msgstr "Unable to load idle module"
+
+#, fuzzy
+msgid "Error while receiving search results."
+msgstr "Unable to load idle module"
+
+#, fuzzy
+msgid "Error while retrieving search form."
+msgstr "Error while adding service. %s"
 
 #, fuzzy
 msgid "Error while uploading avatar"
@@ -2505,6 +2412,10 @@ msgstr "Private Chats"
 msgid "Fingerprints"
 msgstr ""
 
+#, fuzzy
+msgid "Finished"
+msgstr "_Baigti"
+
 #, python-format
 msgid ""
 "Finished synchronising chat history:\n"
@@ -2676,6 +2587,10 @@ msgid "Group Chat"
 msgstr "Pokalbiai _Grupėje"
 
 #, fuzzy
+msgid "Group Chat Details"
+msgstr "Registracija nesėkminga"
+
+#, fuzzy
 msgid "Group Chat Invitation"
 msgstr "Groupchat Invitation"
 
@@ -2742,13 +2657,6 @@ msgstr ""
 #, fuzzy
 msgid "Group chat support"
 msgstr "Groupchats"
-
-msgid "Group multiple contacts from one friend to a single Meta-Contact"
-msgstr ""
-
-#, fuzzy
-msgid "Groupchat Details"
-msgstr "Registracija nesėkminga"
 
 msgid "Groups"
 msgstr "Grupės"
@@ -2827,22 +2735,6 @@ msgstr "Norėšiau jus įtraukti į savo kontaktų sąrašą."
 msgid "I would like to add you to my roster."
 msgstr "I would like to add you to my roster."
 
-#, fuzzy
-msgid "I'm eating."
-msgstr "I'm working."
-
-msgid "I'm on the phone."
-msgstr "I'm on the phone."
-
-msgid "I'm out enjoying life."
-msgstr "I'm out enjoying life."
-
-msgid "I'm watching a movie."
-msgstr "I'm watching a movie."
-
-msgid "I'm working."
-msgstr "I'm working."
-
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 
@@ -2870,24 +2762,6 @@ msgstr "If ticked, Gajim can be controlled remotely using gajim-remote."
 
 #, fuzzy
 msgid ""
-"If disabled, Gajim will no longer print status messages in chats when a "
-"contact changes their status (and/or their status message)."
-msgstr ""
-"If False, Gajim will no longer print status line in chats when a contact "
-"changes his or her status and/or status message."
-
-msgid ""
-"If disabled, this account will be disabled and will not appear in the "
-"contact list window."
-msgstr ""
-
-msgid ""
-"If enabled, Gajim hides the contact list window when pressing the X button "
-"instead of minimizing into the notification area."
-msgstr ""
-
-#, fuzzy
-msgid ""
 "If enabled, Gajim hides the main window when pressing the X button instead "
 "of minimizing into the notification area."
 msgstr ""
@@ -2904,38 +2778,8 @@ msgstr ""
 "pending events."
 
 #, fuzzy
-msgid ""
-"If enabled, Gajim quits when clicking the X button of your Window Manager. "
-"This setting is taken into account only if the notification area icon is "
-"used."
-msgstr ""
-"If True, quits Gajim when X button of Window Manager is clicked. This "
-"setting is taken into account only if trayicon is used."
-
-msgid ""
-"If enabled, Gajim shows the group chat subject in the chat window when "
-"joining."
-msgstr ""
-
-#, fuzzy
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr "Jei pažymėta, Gajim rodys kontaktų nuotaiką sąrašo lange"
-
-msgid "If enabled, Gajim will answer to message receipt requests."
-msgstr ""
-
-msgid ""
-"If enabled, Gajim will display an icon to show that sent messages have been "
-"received by your contact."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will display the status message (if not empty) underneath "
-"the contact name in the contact list window."
-msgstr ""
-"If True, Gajim will display the status message, if not empty, for every "
-"contact under the contact name in roster window."
 
 msgid "If enabled, Gajim will execute XEP-0146 Commands."
 msgstr ""
@@ -2947,39 +2791,8 @@ msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
 msgstr ""
 
 msgid ""
-"If enabled, Gajim will reopen chat windows that were opened last time Gajim "
-"was closed."
-msgstr ""
-
-msgid ""
-"If enabled, Gajim will save the contact list window position when hiding it, "
-"and restore it when showing the contact list window again."
-msgstr ""
-
-msgid ""
 "If enabled, Gajim will save the main window position when hiding it, and "
 "restore it when showing the window again."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will send your local IP so your contact can connect to "
-"your machine for file transfers."
-msgstr ""
-"If ticked, Gajim will use your IP and proxies defined in "
-"file_transfer_proxies option for file transfer."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will show both the number of online and total contacts in "
-"account rows as well as in group rows."
-msgstr ""
-"If True, Gajim will show number of online and total contacts in account and "
-"group rows."
-
-msgid ""
-"If enabled, Gajim will test file transfer proxies on startup to be sure they "
-"work. Openfire's proxies are known to fail this test even if they work."
 msgstr ""
 
 msgid ""
@@ -2987,66 +2800,13 @@ msgid ""
 "in 'stun_server' option, or the one given by the XMPP server."
 msgstr ""
 
-#, fuzzy
-msgid ""
-"If enabled, Gajim will use the System's Keyring to store account passwords."
-msgstr ""
-"If True, Gajim will use Gnome Keyring (if available) to store account "
-"passwords."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will use your IP and proxies defined in "
-"'file_transfer_proxies' option for file transfers."
-msgstr ""
-"If ticked, Gajim will use your IP and proxies defined in "
-"file_transfer_proxies option for file transfer."
-
-msgid ""
-"If enabled, a notification is created for every message in this group chat."
-msgstr ""
-
 msgid ""
 "If enabled, completion in group chats will be like a shell auto-completion."
-msgstr ""
-
-msgid ""
-"If enabled, contacts requesting authorization will be accepted automatically."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, do not remove */_ . So *abc* will be bold but with * * not "
-"removed."
-msgstr ""
-"If True, do not remove */_ . So *abc* will be bold but with * * not removed."
-
-msgid ""
-"If enabled, plugins will be activated on startup (this is saved when exiting "
-"Gajim). This option SHOULD NOT be used to (de)activate plugins. Use the "
-"plugin window instead."
 msgstr ""
 
 #, fuzzy
 msgid "If enabled, pressing Esc closes a tab/window."
 msgstr "If True, pressing the escape key closes a tab/window."
-
-#, fuzzy
-msgid ""
-"If enabled, the contact row is colored according to the current chat state "
-"of the contact."
-msgstr ""
-"Jei pažymėta, Gajim leis kitiems matyti kokią operacijų sistemą naudojate"
-
-msgid "If enabled, the last status will be restored."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, the tab is colored according to the current chat state of the "
-"contact."
-msgstr ""
-"Jei pažymėta, Gajim leis kitiems matyti kokią operacijų sistemą naudojate"
 
 #, fuzzy
 msgid ""
@@ -3057,9 +2817,6 @@ msgstr ""
 "If True, you will be able to set a negative priority to your account in "
 "account modification window. BE CAREFUL, when you are logged in with a "
 "negative priority, you will NOT receive any message from your server."
-
-msgid "If enabled, you will see your webcam's video stream as well."
-msgstr ""
 
 #, python-format
 msgid "If you close this window, you will leave '%s'."
@@ -3088,14 +2845,6 @@ msgstr "Images"
 #, fuzzy
 msgid "Import Contacts"
 msgstr "Kviesti Kontaktus"
-
-#, fuzzy
-msgid ""
-"In a chat, show the nickname at the beginning of a line only when it's not "
-"the same person talking as in the previous message."
-msgstr ""
-"In a chat, show the nickname at the beginning of a line only when it's not "
-"the same person talking than in previous message."
 
 msgid ""
 "In order to write messages in this chat, you need to request voice first.\n"
@@ -3327,10 +3076,6 @@ msgstr "_Išspirti"
 msgid "Label"
 msgstr ""
 
-#, fuzzy
-msgid "Language used for spell checking."
-msgstr "Language used by speller"
-
 msgid "Last but not least"
 msgstr ""
 
@@ -3354,23 +3099,6 @@ msgstr ""
 
 msgid "Limit must be an integer"
 msgstr ""
-
-msgid ""
-"List of XMPP Addresses (space separated) for which the chat window will be "
-"re-opened on next startup."
-msgstr ""
-
-msgid ""
-"List of XMPP Addresses (space separated) for which you do not want to store "
-"chat history. You can also add the name of an account to disable storing "
-"chat history for this account."
-msgstr ""
-
-#, fuzzy
-msgid ""
-"List of rows (accounts and groups) that are collapsed (space separated)."
-msgstr ""
-"List (space separated) of rows (accounts and groups) that are collapsed."
 
 msgid ""
 "List of send hosts (comma separated) in addition to local interfaces for "
@@ -3495,21 +3223,6 @@ msgstr ""
 msgid "Maximum file size for preview generation"
 msgstr ""
 
-msgid ""
-"Maximum history in days we request from a private group chat archive. 0: As "
-"much as possible."
-msgstr ""
-
-msgid ""
-"Maximum history in days we request from a public group chat archive. 0: As "
-"much as possible."
-msgstr ""
-
-msgid ""
-"Maximum number of lines that are printed in conversations. Oldest lines are "
-"cleared."
-msgstr ""
-
 #, fuzzy
 msgid "Me"
 msgstr "Moderator"
@@ -3555,10 +3268,6 @@ msgid ""
 "Message corrected. Original message:\n"
 "%s"
 msgstr ""
-
-#, fuzzy
-msgid "Message that is sent to contacts you want to add."
-msgstr "Please fill in the data of the contact you want to add"
 
 #, fuzzy
 msgid "Messages are archived on the server"
@@ -3651,6 +3360,10 @@ msgstr "New Group Chat"
 #, fuzzy
 msgid "New Search"
 msgstr "Ieškoti"
+
+#, fuzzy
+msgid "New Workspace"
+msgstr "Removes contact from roster"
 
 #, fuzzy, python-format
 msgid "New message from %s"
@@ -3855,6 +3568,10 @@ msgid "Open Link in _Browser"
 msgstr "_Atverti nuorodą naršyklėje"
 
 #, fuzzy
+msgid "Open Plugins…"
+msgstr "Registracija nesėkminga"
+
+#, fuzzy
 msgid "Open _Folder"
 msgstr "_Atidaryti katalogą, kuriame yra failas"
 
@@ -3886,12 +3603,6 @@ msgstr ""
 msgid "Operating System"
 msgstr "Blogas CA sertifikatas"
 
-msgid "Optionally fix Jingle output video framerate. Example: 10/1 or 25/2."
-msgstr ""
-
-msgid "Optionally resize Jingle output video. Example: 320x240."
-msgstr ""
-
 msgid "Organisation"
 msgstr ""
 
@@ -3907,7 +3618,7 @@ msgstr ""
 msgid "Organizational Unit (OU): "
 msgstr ""
 
-msgid "Organize your chats with tabs"
+msgid "Organize your chats with workspaces"
 msgstr ""
 
 msgid "Others"
@@ -4055,9 +3766,6 @@ msgstr ""
 msgid "Pl_ugins"
 msgstr "Registracija nesėkminga"
 
-msgid "Place the contact list on the right in single window mode"
-msgstr ""
-
 #, fuzzy
 msgid "Play Sound"
 msgstr "Groti _garsus"
@@ -4065,9 +3773,6 @@ msgstr "Groti _garsus"
 #, fuzzy
 msgid "Play Sounds"
 msgstr "Groti _garsus"
-
-msgid "Play sound even when being busy."
-msgstr ""
 
 msgid "Play sounds even when you are Away, Busy, etc."
 msgstr ""
@@ -4123,10 +3828,6 @@ msgid "Plugin Updates"
 msgstr "Registracija nesėkminga"
 
 #, fuzzy
-msgid "Plugin Updates Available"
-msgstr "No such account available"
-
-#, fuzzy
 msgid "Plugin already exists"
 msgstr "This file already exists"
 
@@ -4138,16 +3839,11 @@ msgstr "Registracija nesėkminga"
 msgid "Plugin manager"
 msgstr "Registracija nesėkminga"
 
-msgid ""
-"Plugin updates have successfully been downloaded.\n"
-"Updates will be installed next time Gajim is started."
-msgstr ""
-
 msgid "Plugins"
 msgstr ""
 
 #, fuzzy
-msgid "Plugins Updated"
+msgid "Plugins Updated Successfully"
 msgstr "Registracija nesėkminga"
 
 #, python-format
@@ -4180,11 +3876,6 @@ msgid "Preferences"
 msgstr "Parinktys"
 
 msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
-msgstr ""
-
-msgid ""
-"Preferred file transfer mechanism for file drag&drop on a chat window. Can "
-"be 'httpupload' (default) or 'jingle'."
 msgstr ""
 
 msgid "Presence description:"
@@ -4225,14 +3916,6 @@ msgid "Priority"
 msgstr "_Prioritetas:"
 
 #, fuzzy
-msgid ""
-"Priority will change automatically according to your status. Priorities are "
-"defined in 'autopriority_*' options."
-msgstr ""
-"Priority will change automatically according to your status. Priorities are "
-"defined in autopriority_* options."
-
-#, fuzzy
 msgid "Privacy"
 msgstr "Privatus sąrašas"
 
@@ -4262,11 +3945,6 @@ msgstr "Proksi _Serveris:"
 #, fuzzy
 msgid "Proxy Type"
 msgstr "Proksis:"
-
-msgid ""
-"Proxy used for all outgoing connections if the account does not have a "
-"specific proxy configured."
-msgstr ""
 
 #, fuzzy
 msgid "Proxy, custom hostname and port"
@@ -4512,6 +4190,9 @@ msgstr "_Vykdyti komandą"
 msgid "Requesting HTTP File Upload Slot…"
 msgstr ""
 
+msgid "Requesting search form from server"
+msgstr ""
+
 #, fuzzy
 msgid "Required"
 msgstr "Password Required"
@@ -4719,6 +4400,14 @@ msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
 msgstr ""
+
+#, fuzzy
+msgid "Searching"
+msgstr "Ieškoti"
+
+#, fuzzy
+msgid "Searching…"
+msgstr "Ieškoti"
 
 #, fuzzy
 msgid "Search…"
@@ -4983,8 +4672,7 @@ msgstr ""
 msgid "Set the presence type and description"
 msgstr "Set the presence type and description"
 
-msgid ""
-"Set your activity, tune, and mood to show your friends how you are feeling"
+msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
@@ -5094,28 +4782,8 @@ msgid "Show a live preview to test your video source"
 msgstr ""
 
 #, fuzzy
-msgid ""
-"Show a status message for all status changes (away, dnd, etc.) of users in a "
-"group chat."
-msgstr "Unable to join group chat"
-
-#, fuzzy
-msgid "Show a status message for every join or leave in a group chat."
-msgstr "Unable to join group chat"
-
-#, fuzzy
 msgid "Show all warnings"
 msgstr "Rodyti Visus Laukiančius Į_vykius"
-
-msgid "Show close button in tab?"
-msgstr "Show close button in tab?"
-
-msgid ""
-"Show contact list window on startup.\n"
-"'always' - Always show contact list window.\n"
-"'never' - Never show contact list window.\n"
-"'last_state' - Restore last state of the contact list window."
-msgstr ""
 
 msgid ""
 "Show help on a given command or a list of available commands if -a is given"
@@ -5143,16 +4811,6 @@ msgid "Show only critical errors"
 msgstr "Rodyti tik kontaktų _sąrašą"
 
 #, fuzzy
-msgid "Show only online and free for chat contacts in the contact list."
-msgstr "Norėšiau jus įtraukti į savo kontaktų sąrašą."
-
-msgid "Show tab when only one conversation?"
-msgstr "Show tab when only one conversation?"
-
-msgid "Show tabbed notebook border in chat windows?"
-msgstr "Show tabbed notebook border in chat windows?"
-
-#, fuzzy
 msgid "Show the application's version"
 msgstr "Naudoti piktogramą trėjuje (pranešimų panelės piktograma)"
 
@@ -5175,16 +4833,6 @@ msgstr "Shows a help on specific command"
 #, fuzzy
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr "Rodyti failų siuntimų sąrašą tarp jūsų ir kitų"
-
-#, fuzzy
-msgid ""
-"Shows a text in the banner that describes the current chat state of the "
-"contact."
-msgstr ""
-"Jei pažymėta, Gajim leis kitiems matyti kokią operacijų sistemą naudojate"
-
-msgid "Shows an info bar with helpful hints in the Start / Join Chat dialog"
-msgstr ""
 
 #, fuzzy
 msgid "Sign In"
@@ -5233,18 +4881,6 @@ msgid "Sort by Status"
 msgstr "Rūšiuoti kontaktus pagal būklę"
 
 #, fuzzy
-msgid ""
-"Sound to play when a group chat message contains one of the words in "
-"'muc_highlight_words' or your nickname is mentioned."
-msgstr ""
-"Sound to play when a group chat message contains one of the words in "
-"muc_highlight_words, or when a group chat message contains your nickname."
-
-#, fuzzy
-msgid "Sound to play when any group chat message arrives."
-msgstr "Sound to play when any MUC message arrives."
-
-#, fuzzy
 msgid "Sounds"
 msgstr "Wav Sounds"
 
@@ -5283,6 +4919,10 @@ msgstr "Start Chat"
 
 #, fuzzy
 msgid "Start Chatting…"
+msgstr "Start Chat"
+
+#, fuzzy
+msgid "Start Chat…"
 msgstr "Start Chat"
 
 #, fuzzy
@@ -5441,10 +5081,6 @@ msgid "Synchronise"
 msgstr ""
 
 #, fuzzy
-msgid "Synchronise History"
-msgstr "Sinchronizuoti kontaktus"
-
-#, fuzzy
 msgid "Synchronise History…"
 msgstr "Sinchronizuoti kontaktus"
 
@@ -5453,7 +5089,19 @@ msgid "Synchronise the status of all accounts"
 msgstr "Changes the status of account or accounts"
 
 #, fuzzy
+msgid "Synchronize"
+msgstr "Sinchronizuoti kontaktus"
+
+#, fuzzy
 msgid "Synchronize Accounts"
+msgstr "Sinchronizuoti kontaktus"
+
+#, fuzzy
+msgid "Synchronize Chat History"
+msgstr "Sinchronizuoti kontaktus"
+
+#, fuzzy
+msgid "Synchronizing Chat History…"
 msgstr "Sinchronizuoti kontaktus"
 
 #, fuzzy
@@ -5500,10 +5148,6 @@ msgid ""
 "The contact will be informed that you stopped sharing your status. Please "
 "note that this can have other side effects."
 msgstr ""
-
-#, fuzzy
-msgid "The currently active encryption for that contact."
-msgstr "Is OpenPGP enabled for this contact?"
 
 #, python-format
 msgid ""
@@ -5567,13 +5211,7 @@ msgid ""
 "from other servers as well."
 msgstr ""
 
-#, python-format
-msgid ""
-"There are updates for your plugins:\n"
-"<b>%s</b>"
-msgstr ""
-
-msgid "There is already a synchronisation in progress. Please try again later."
+msgid "There are updates for Gajim’s plugins"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5664,17 +5302,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid ""
-"This option lets you customize the timestamp that is printed in "
-"conversation. For example '[%H:%M] ' will show '[hour:minute] '. See python "
-"doc on strftime for full documentation (https://docs.python.org/3/library/"
-"time.html#time.strftime)."
-msgstr ""
-"This option let you customize timestamp that is printed in conversation. For "
-"exemple \"[%H:%M] \" will show \"[hour:minute] \". See python doc on "
-"strftime for full documentation: http://docs.python.org/lib/module-time.html"
-
-#, fuzzy
 msgid "This server does not allow signup."
 msgstr "Your server doesn't support Vcard"
 
@@ -5719,15 +5346,6 @@ msgstr ""
 msgid "Time Until Not Available"
 msgstr "Esu išėjęs"
 
-msgid "Time in minutes, after which your status changes to away."
-msgstr "Time in minutes, after which your status changes to away."
-
-msgid "Time in minutes, after which your status changes to not available."
-msgstr ""
-
-msgid "Time of inactivity needed before the change status window closes down."
-msgstr ""
-
 msgid "To"
 msgstr "Kam"
 
@@ -5757,10 +5375,6 @@ msgstr ""
 
 msgid "Topic"
 msgstr ""
-
-#, fuzzy
-msgid "Tor"
-msgstr "Kam"
 
 #, fuzzy
 msgid "Transferring File…"
@@ -5920,10 +5534,10 @@ msgstr "No such account available"
 msgid "Update plugins automatically"
 msgstr ""
 
-msgid "Update plugins automatically next time"
+msgid "Updates"
 msgstr ""
 
-msgid "Updates"
+msgid "Updates will be installed next time Gajim is started"
 msgstr ""
 
 #, fuzzy
@@ -6004,11 +5618,6 @@ msgstr "Users"
 
 #, python-format
 msgid "V4L2: %s"
-msgstr ""
-
-msgid ""
-"Valid URI schemes. Only schemes in this list will be accepted as 'real' URI "
-"(mailto and xmpp are handled separately)."
 msgstr ""
 
 msgid "Validity"
@@ -6103,11 +5712,6 @@ msgid "What does this mean?"
 msgstr "Hide this menu"
 
 msgid "What happened"
-msgstr ""
-
-msgid ""
-"When to show the notification area icon. Can be 'never', 'on_event', and "
-"'always'."
 msgstr ""
 
 msgid "Where participants should go"
@@ -6703,10 +6307,6 @@ msgid "_Unsubscribe"
 msgstr ""
 
 #, fuzzy
-msgid "_Update"
-msgstr "Atnaujinti MOTD..."
-
-#, fuzzy
 msgid "_Username"
 msgstr "_Naudotojo vardas:"
 
@@ -6973,23 +6573,3 @@ msgstr "%(nick)s is now %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
-
-#~ msgid "File: "
-#~ msgstr "File: "
-
-#~ msgid "New Message"
-#~ msgstr "New Message"
-
-#, fuzzy
-#~ msgid "Save conversations for all contacts"
-#~ msgstr "Saugoti visų asmenų pokalbių žurnalus"
-
-#, fuzzy
-#~ msgid "XHTML Formatting"
-#~ msgstr "Rodyti formatavimo sąrašą"
-
-#, fuzzy
-#~ msgid ""
-#~ "You just received a new message from %s.\n"
-#~ "Do you want to close this tab?"
-#~ msgstr "You just received a new message from \"%s\""
