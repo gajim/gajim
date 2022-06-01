@@ -120,7 +120,7 @@ deploy-flatpak:
   before_script:
     # - echo "${FLATHUB_DEPLOY_KEY}" | tr -d '\r' | ssh-add - > /dev/null
     - mkdir -p ~/.ssh
-    - ssh-keyscan https://github.com >> ~/.ssh/known_hosts
+    - ssh-keyscan github.com >> ~/.ssh/known_hosts
   script:
     - git config user.email "$CI_GIT_USER_EMAIL"
     - git config user.name "$CI_GIT_USER_USERNAME"
