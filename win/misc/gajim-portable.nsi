@@ -48,61 +48,26 @@ BrandingText "Gajim Setup"
 !insertmacro MUI_RESERVEFILE_LANGDLL
 
 ; English
-LangString NAME_Emoticons ${LANG_ENGLISH} "Emoticons"
-LangString NAME_Iconsets ${LANG_ENGLISH} "Iconsets"
-LangString NAME_Languages ${LANG_ENGLISH} "Languages"
-LangString NAME_SecLanguagesOther ${LANG_ENGLISH} "Other"
-LangString NAME_Themes ${LANG_ENGLISH} "Themes"
 LangString DESC_SecGajim ${LANG_ENGLISH} "Installs the main Gajim files."
 LangString INST_NotEmpty ${LANG_ENGLISH} "It looks like you already installed Gajim in this directory. A cleanup is necessary before installing. Your user data will not be touched. Cleanup now?"
 
-
 ; French
-LangString NAME_Emoticons ${LANG_FRENCH} "Emoticônes"
-LangString NAME_Iconsets ${LANG_FRENCH} "Bibliothèque d'icônes"
-LangString NAME_Languages ${LANG_FRENCH} "Langues"
-LangString NAME_SecLanguagesOther ${LANG_FRENCH} "Autre"
-LangString NAME_Themes ${LANG_FRENCH} "Thèmes"
 LangString DESC_SecGajim ${LANG_FRENCH} "Installer les fichiers principaux de Gajim."
 LangString INST_NotEmpty ${LANG_FRENCH} "It looks like you already installed Gajim in this directory. A cleanup is necessary before installing. Your user data will not be touched. Cleanup now?"
 
-
 ; German
-LangString NAME_Emoticons ${LANG_GERMAN} "Emojis"
-LangString NAME_Iconsets ${LANG_GERMAN} "Iconsets"
-LangString NAME_Languages ${LANG_GERMAN} "Sprachen"
-LangString NAME_SecLanguagesOther ${LANG_GERMAN} "Sonstige"
-LangString NAME_Themes ${LANG_GERMAN} "Designs"
 LangString DESC_SecGajim ${LANG_GERMAN} "Installiert die Hauptdateien von Gajim."
 LangString INST_NotEmpty ${LANG_GERMAN} "Anscheinend ist Gajim bereits in diesem Verzeichnis installiert. Vor der Installation ist es notwendig das Verzeichnis aufzuräumen. Deine Benutzerdaten bleiben erhalten. Jetzt aufräumen?"
 
-
 ; Italian
-LangString NAME_Emoticons ${LANG_ITALIAN} "Emoticons"
-LangString NAME_Iconsets ${LANG_ITALIAN} "Set di icone"
-LangString NAME_Languages ${LANG_ITALIAN} "Lingue"
-LangString NAME_SecLanguagesOther ${LANG_ITALIAN} "Altre"
-LangString NAME_Themes ${LANG_ITALIAN} "Temi"
 LangString DESC_SecGajim ${LANG_ITALIAN} "Installa i file principali di Gajim."
 LangString INST_NotEmpty ${LANG_ITALIAN} "It looks like you already installed Gajim in this directory. A cleanup is necessary before installing. Your user data will not be touched. Cleanup now?"
 
-
 ; Russian
-LangString NAME_Emoticons ${LANG_RUSSIAN} "Смайлики"
-LangString NAME_Iconsets ${LANG_RUSSIAN} "Темы иконок"
-LangString NAME_Languages ${LANG_RUSSIAN} "Языки"
-LangString NAME_SecLanguagesOther ${LANG_RUSSIAN} "Другое"
-LangString NAME_Themes ${LANG_RUSSIAN} "Темы"
 LangString DESC_SecGajim ${LANG_RUSSIAN} "Установка основных файлов Gajim."
 LangString INST_NotEmpty ${LANG_RUSSIAN} "It looks like you already installed Gajim in this directory. A cleanup is necessary before installing. Your user data will not be touched. Cleanup now?"
 
-
 ; Hebrew
-LangString NAME_Emoticons ${LANG_HEBREW} "רגשונים"
-LangString NAME_Iconsets ${LANG_HEBREW} "מערכי צלמית"
-LangString NAME_Languages ${LANG_HEBREW} "שפות"
-LangString NAME_SecLanguagesOther ${LANG_HEBREW} "אחרות"
-LangString NAME_Themes ${LANG_HEBREW} "ערכאות נושא"
 LangString DESC_SecGajim ${LANG_HEBREW} "מתקין קבצי Gajim עיקריים."
 LangString INST_NotEmpty ${LANG_HEBREW} "It looks like you already installed Gajim in this directory. A cleanup is necessary before installing. Your user data will not be touched. Cleanup now?"
 
