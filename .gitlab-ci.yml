@@ -118,8 +118,10 @@ deploy-flatpak:
   rules:
     - if: '$CI_COMMIT_TAG'
   before_script:
+    - eval $(ssh-agent -s)
     # - echo "${FLATHUB_DEPLOY_KEY}" | tr -d '\r' | ssh-add - > /dev/null
     - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
     - ssh-keyscan github.com >> ~/.ssh/known_hosts
   script:
     - git config user.email "$CI_GIT_USER_EMAIL"
@@ -139,8 +141,10 @@ publish-release:
   rules:
     - if: '$CI_COMMIT_TAG'
   before_script:
+    - eval $(ssh-agent -s)
     - echo "${WEBSITE_DEPLOY_KEY}" | tr -d '\r' | ssh-add - > /dev/null
     - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
     - ssh-keyscan dev.gajim.org >> ~/.ssh/known_hosts
   script:
     - git config --global user.email "$CI_GIT_USER_EMAIL"
