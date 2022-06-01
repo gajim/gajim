@@ -1,3 +1,39 @@
+Gajim 1.4.3 (01 Jun 2022)
+
+  Improvements
+  
+  * AppPage: Show plugin update notifications
+  * ChatList: Add middle mouse click for closing a chat
+  * DirectorySearch: Use Gio.Menu, add Start Chat item
+  * Group chat roster: Store visibility
+  * Smaller Jingle file transfer widget
+  * Unify ContactInfo and GroupchatDetails elements width
+  * Windows: Change PANGOCAIRO backend to enable colored emojis
+  * Windows: Enable native emoji chooser
+  * Workspaces: Add Move to new workspace functionality
+  * #10812 Workspaces: Enable emoji picker
+  * #10876 Windows: Simplify installer
+  * #10905 Avatars: Render emojis correctly
+  
+  Bug Fixes
+  
+  * AddContact: Fix opening AdHocCommands window
+  * ContactInfo: Fix copying name and JID by Ctrl+C
+  * DirectorySearch: Correctly connect form validation
+  * Don’t fail on GajimPlugin equality test
+  * History: Don’t remove JID IDs from database
+  * InfoBar: Add style rule for anchors in dark mode
+  * Make GStreamer an optional dependency again
+  * Plugins: Unregister modules after calling deactivate()
+  * Replace user-visible strings of 'Groupchat' with 'Group Chat'
+  * WorkspaceDialog: Disable Remove button for last workspace
+  * #10903 Notifications: Show correct chat when clicking notification on Windows
+  * #10911 AccountsWindow: Use get_app_window to reliably access window's methods
+  * #10912 VCardGrid: Request minimum width
+  * #10921 ChatControl: Don't update AV actions for PMs
+  * #10922 Search: Add fail-safe for incomplete JID ID tables
+  * #10924 StartChat: Allow transport JIDs without successful discovery
+
 Gajim 1.4.2 (25 May 2022)
 
   New
