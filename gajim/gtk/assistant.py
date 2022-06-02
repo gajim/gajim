@@ -144,8 +144,8 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
         self._ui.action_area.pack_end(button, False, False, 0)
 
     def add_pages(self, pages: dict[str, Page]):
-        self._pages = pages
         for name, widget in pages.items():
+            self._pages[name] = widget
             widget.connect('update-page-complete', self._update_page_complete)
             self._ui.stack.add_named(widget, name)
 
