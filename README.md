@@ -11,6 +11,7 @@
 - python3-keyring
 - python3-precis-i18n
 - python3-packaging
+- python3-pil
 - python3-setuptools
 - Gtk3 (>=3.22)
 - GLib (>=2.60.0)

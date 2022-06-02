@@ -36,6 +36,7 @@ Depends:
     python3-precis-i18n,
     python3-keyring,
     python3-packaging,
+    python3-pil,
     python3-setuptools,
     python3-css-parser,
     gir1.2-gtk-3.0 (>= 3.22.27~),
@@ -59,7 +60,6 @@ Recommends:
     pulseaudio-utils | alsa-utils | sox | oss4-base,
     python3-dbus (>=0.81),
     python3-keyring,
-    python3-pil,
     python3-sentry-sdk,
 Suggests:
     libxss1,

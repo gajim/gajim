@@ -31,11 +31,7 @@ from functools import lru_cache
 from pathlib import Path
 from re import Match
 
-try:
-    from PIL import Image
-except Exception:
-    pass
-
+from PIL import Image
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import Gtk
