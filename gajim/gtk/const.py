@@ -156,3 +156,75 @@ WINDOW_MODULES = {
     'WorkspaceDialog': 'gajim.gui.workspace_dialog',
     'XMLConsoleWindow': 'gajim.gui.xml_console',
 }
+
+
+APP_ACTIONS = [
+    ('about', None),
+    ('accounts', 's'),
+    ('add-account', None),
+    ('add-contact', 's'),
+    ('content', None),
+    ('copy-text', 's'),
+    ('create-groupchat', 's'),
+    ('faq', None),
+    ('features', None),
+    ('file-transfer', None),
+    ('forget-groupchat', 'a{sv}'),
+    ('groupchat-join', 'as'),
+    ('ipython', None),
+    ('join-support-chat', None),
+    ('manage-proxies', None),
+    ('open-link', 'as'),
+    ('open-mail', 's'),
+    ('plugins', None),
+    ('preferences', None),
+    ('quit', None),
+    ('remove-history', 'a{sv}'),
+    ('shortcuts', None),
+    ('start-chat', 's'),
+    ('xml-console', None),
+]
+
+
+ACCOUNT_ACTIONS = [
+    ('add-contact', 'as'),
+    ('archive', 's'),
+    ('blocking', 's'),
+    ('bookmarks', 's'),
+    ('export-history', 's'),
+    ('import-contacts', 's'),
+    ('mark-as-read', 'a{sv}'),
+    ('open-chat', 'as'),
+    ('open-event', 'a{sv}'),
+    ('pep-config', 's'),
+    ('profile', 's'),
+    ('server-info', 's'),
+    ('services', 's'),
+    ('sync-history', 's'),
+]
+
+
+ALWAYS_ACCOUNT_ACTIONS = {
+    'export-history',
+    'import-contacts',
+    'open-event',
+}
+
+
+ONLINE_ACCOUNT_ACTIONS = {
+    'add-contact',
+    'bookmarks',
+    'import-contacts',
+    'open-chat',
+    'pep-config',
+    'profile',
+    'server-info',
+    'services',
+    'sync-history',
+}
+
+
+FEATURE_ACCOUNT_ACTIONS = {
+    'archive',
+    'blocking',
+}

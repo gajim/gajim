@@ -42,7 +42,6 @@ from typing import cast
 
 import os
 import sys
-
 from urllib.parse import unquote
 
 from nbxmpp.namespaces import Namespace
@@ -74,6 +73,11 @@ from gajim.gui import structs
 from gajim.gui.about import AboutDialog
 from gajim.gui.avatar import AvatarStorage
 from gajim.gui.builder import get_builder
+from gajim.gui.const import ACCOUNT_ACTIONS
+from gajim.gui.const import ALWAYS_ACCOUNT_ACTIONS
+from gajim.gui.const import APP_ACTIONS
+from gajim.gui.const import FEATURE_ACCOUNT_ACTIONS
+from gajim.gui.const import ONLINE_ACCOUNT_ACTIONS
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.dialogs import ShortcutsWindow
@@ -85,7 +89,6 @@ from gajim.gui.util import open_window
 
 
 ActionListT = list[tuple[str,
-                         Optional[str],
                          Callable[[Gio.SimpleAction, GLib.Variant], Any]]]
 
 
@@ -246,7 +249,11 @@ class GajimApplication(Gtk.Application, CoreApplication):
         from gajim.gui.status_icon import StatusIcon
         self.systray = StatusIcon()
 
-        self.add_actions()
+        self._add_app_actions()
+        accounts = app.settings.get_accounts()
+        for account in accounts:
+            self.add_account_actions(account)
+
         self._load_shortcuts()
         menus.build_accounts_menu()
         self.update_app_actions_state()
@@ -389,109 +396,109 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         return -1
 
-    def add_actions(self) -> None:
-        actions: ActionListT = [
-            ('quit', None, self._on_quit_action),
-            ('add-account', None,  self._on_add_account_action),
-            ('manage-proxies', None,  self._on_manage_proxies_action),
-            ('preferences', None,  self._on_preferences_action),
-            ('plugins', None,  self._on_plugins_action),
-            ('xml-console', None,  self._on_xml_console_action),
-            ('file-transfer', None,  self._on_file_transfer_action),
-            ('shortcuts', None,  self._on_shortcuts_action),
-            ('features', None,  self._on_features_action),
-            ('content', None,  self._on_content_action),
-            ('join-support-chat', None, self._on_join_support_chat),
-            ('about', None,  self._on_about_action),
-            ('faq', None,  self._on_faq_action),
-            ('ipython', None,  self._on_ipython_action),
-            ('start-chat', 's', self._on_new_chat_action),
-            ('accounts', 's', self._on_accounts_action),
-            ('add-contact', 's', self._on_add_contact_action),
-            ('copy-text', 's', self._on_copy_text_action),
-            ('open-link', 'as', self._on_open_link_action),
-            ('open-mail', 's', self._on_open_mail_action),
-            ('remove-history', 'a{sv}', self._on_remove_history_action),
-            ('create-groupchat', 's', self._on_create_groupchat_action),
-            ('forget-groupchat', 'a{sv}', self._on_forget_groupchat_action),
-            ('groupchat-join', 'as', self._on_groupchat_join_action),
-        ]
-
-        for action in actions:
-            action_name, variant, func = action
+    def _add_app_actions(self) -> None:
+        for action in APP_ACTIONS:
+            action_name, variant = action
             if variant is not None:
                 variant = GLib.VariantType.new(variant)
 
             act = Gio.SimpleAction.new(action_name, variant)
+            self.add_action(act)
+
+        self._connect_app_actions()
+
+    def _connect_app_actions(self) -> None:
+        actions: ActionListT = [
+            ('quit', self._on_quit_action),
+            ('add-account', self._on_add_account_action),
+            ('manage-proxies', self._on_manage_proxies_action),
+            ('preferences', self._on_preferences_action),
+            ('plugins', self._on_plugins_action),
+            ('xml-console', self._on_xml_console_action),
+            ('file-transfer', self._on_file_transfer_action),
+            ('shortcuts', self._on_shortcuts_action),
+            ('features', self._on_features_action),
+            ('content', self._on_content_action),
+            ('join-support-chat', self._on_join_support_chat),
+            ('about', self._on_about_action),
+            ('faq', self._on_faq_action),
+            ('ipython', self._on_ipython_action),
+            ('start-chat', self._on_new_chat_action),
+            ('accounts', self._on_accounts_action),
+            ('add-contact', self._on_add_contact_action),
+            ('copy-text', self._on_copy_text_action),
+            ('open-link', self._on_open_link_action),
+            ('open-mail', self._on_open_mail_action),
+            ('remove-history', self._on_remove_history_action),
+            ('create-groupchat', self._on_create_groupchat_action),
+            ('forget-groupchat', self._on_forget_groupchat_action),
+            ('groupchat-join', self._on_groupchat_join_action),
+        ]
+
+        for action in actions:
+            action_name, func = action
+            act = self.lookup_action(action_name)
+            assert act is not None
             act.connect('activate', func)
             self.add_action(act)
 
-        accounts_list = sorted(app.settings.get_accounts())
-        if not accounts_list:
-            return
-        if len(accounts_list) > 1:
-            for acc in accounts_list:
-                self.add_account_actions(acc)
-        else:
-            self.add_account_actions(accounts_list[0])
-
-    def _get_account_actions(self,
-                             account: str) -> list[tuple[str, Any, str, str]]:
-        # pylint: disable=line-too-long
-        return [
-            ('-bookmarks', self._on_bookmarks_action, 'online', 's'),
-            ('-open-chat', self._on_open_chat_action, 'online', 'as'),
-            ('-add-contact', self._on_add_contact_account_action, 'online', 'as'),
-            ('-services', self._on_services_action, 'online', 's'),
-            ('-profile', self._on_profile_action, 'online', 's'),
-            ('-server-info', self._on_server_info_action, 'online', 's'),
-            ('-archive', self._on_archive_action, 'feature', 's'),
-            ('-pep-config', self._on_pep_config_action, 'online', 's'),
-            ('-sync-history', self._on_sync_history_action, 'online', 's'),
-            ('-blocking', self._on_blocking_action, 'feature', 's'),
-            ('-open-event', self._on_open_event_action, 'always', 'a{sv}'),
-            ('-mark-as-read', self._on_mark_as_read_action, 'always', 'a{sv}'),
-            ('-import-contacts', self._on_import_contacts_action, 'online', 's'),
-            ('-export-history', self._on_export_history, 'always', 's'),
-        ]
-        # pylint: enable=line-too-long
-
     def add_account_actions(self, account: str) -> None:
-        for action in self._get_account_actions(account):
-            action_name, func, state, type_ = action
-            action_name = account + action_name
-            if self.lookup_action(action_name) is not None:
-                # We already added this action
-                continue
-            act = Gio.SimpleAction.new(
-                action_name, GLib.VariantType.new(type_))
-            act.connect("activate", func)
-            if state != 'always':
-                act.set_enabled(False)
+        for action_name, type_ in ACCOUNT_ACTIONS:
+            account_action_name = f'{account}-{action_name}'
+            if self.has_action(account_action_name):
+                raise ValueError('Trying to add action more than once')
+
+            act = Gio.SimpleAction.new(account_action_name,
+                                       GLib.VariantType.new(type_))
+            act.set_enabled(action_name in ALWAYS_ACCOUNT_ACTIONS)
             self.add_action(act)
 
+        self._connect_account_actions(account)
+
+    def _connect_account_actions(self, account: str) -> None:
+        actions = [
+            ('bookmarks', self._on_bookmarks_action),
+            ('open-chat', self._on_open_chat_action),
+            ('add-contact', self._on_add_contact_account_action),
+            ('services', self._on_services_action),
+            ('profile', self._on_profile_action),
+            ('server-info', self._on_server_info_action),
+            ('archive', self._on_archive_action),
+            ('pep-config', self._on_pep_config_action),
+            ('sync-history', self._on_sync_history_action),
+            ('blocking', self._on_blocking_action),
+            ('open-event', self._on_open_event_action),
+            ('mark-as-read', self._on_mark_as_read_action),
+            ('import-contacts', self._on_import_contacts_action),
+            ('export-history', self._on_export_history),
+        ]
+
+        for action_name, func in actions:
+            account_action_name = f'{account}-{action_name}'
+            act = self.lookup_action(account_action_name)
+            assert act is not None
+            act.connect('activate', func)
+
     def remove_account_actions(self, account: str) -> None:
-        for action in self._get_account_actions(account):
-            action_name = account + action[0]
-            self.remove_action(action_name)
+        for action_name in self.list_actions():
+            if action_name.startswith(f'{account}-'):
+                self.remove_action(action_name)
 
     def set_action_state(self, action_name: str, state: bool) -> None:
         action = self.lookup_action(action_name)
-        if action is None:
-            raise ValueError('Action %s does not exist' % action_name)
+        assert action is not None
         action.set_enabled(state)
 
     def set_account_actions_state(self,
                                   account: str,
                                   new_state: bool = False) -> None:
-        for action in self._get_account_actions(account):
-            action_name, _, state, _ = action
-            if not new_state and state in ('online', 'feature'):
-                # We go offline
-                self.set_action_state(account + action_name, False)
-            elif new_state and state == 'online':
-                # We go online
-                self.set_action_state(account + action_name, True)
+
+        for action_name in ONLINE_ACCOUNT_ACTIONS:
+            self.set_action_state(f'{account}-{action_name}', new_state)
+
+        if not new_state:
+            for action_name in FEATURE_ACCOUNT_ACTIONS:
+                self.set_action_state(f'{account}-{action_name}', new_state)
 
     def update_app_actions_state(self) -> None:
         active_accounts = bool(app.get_connected_accounts(exclude_local=True))
