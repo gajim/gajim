@@ -93,8 +93,3 @@ class MessageWidget(Gtk.Box):
 
     def clear(self) -> None:
         self.foreach(self.remove)
-
-    def update_text_tags(self, *args: Any) -> None:
-        for widget in cast(list[MessageWidget], self.get_children()):
-            if not isinstance(widget, CodeWidget):
-                widget.update_text_tags()

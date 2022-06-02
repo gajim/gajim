@@ -229,10 +229,6 @@ class MessageRow(BaseRow):
 
         self.show_all()
 
-    def update_text_tags(self) -> None:
-        if isinstance(self._message_widget, MessageWidget):
-            self._message_widget.update_text_tags()
-
     def _check_for_highlight(self, text: str) -> None:
         assert isinstance(self._contact, GroupchatContact)
         if self._contact.nickname is None:

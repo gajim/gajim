@@ -60,9 +60,6 @@ class BaseRow(Gtk.ListBoxRow):
     def is_merged(self) -> bool:
         return self._merged
 
-    def update_text_tags(self) -> None:
-        pass
-
     @staticmethod
     def create_timestamp_widget(timestamp: datetime) -> Gtk.Label:
         time_format = from_one_line(app.settings.get('chat_timestamp_format'))

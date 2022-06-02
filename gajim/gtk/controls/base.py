@@ -286,7 +286,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             ('ping-sent', ged.GUI1, self._nec_ping),
             ('ping-reply', ged.GUI1, self._nec_ping),
             ('ping-error', ged.GUI1, self._nec_ping),
-            ('style-changed', ged.GUI1, self._style_changed),
         ])
 
         # This is basically a very nasty hack to surpass the inability
@@ -1320,12 +1319,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                                          ) -> None:
         formatting = menu_item.get_name()
         self.msg_textview.apply_formatting(formatting)
-
-    def _style_changed(self, _event: events.StyleChanged) -> None:
-        self.update_text_tags()
-
-    def update_text_tags(self) -> None:
-        self.conversation_view.update_text_tags()
 
     def set_control_active(self, state: bool) -> None:
         if not self._chat_loaded:

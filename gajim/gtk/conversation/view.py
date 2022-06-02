@@ -485,11 +485,6 @@ class ConversationView(Gtk.ListBox):
             if isinstance(row, MessageRow):
                 row.update_avatar()
 
-    def update_text_tags(self) -> None:
-        for row in cast(list[BaseRow], self.get_children()):
-            if isinstance(row, MessageRow):
-                row.update_text_tags()
-
     def scroll_to_end(self, force: bool = False) -> None:
         if self.autoscroll or force:
             GLib.idle_add(self.emit, 'scroll-to-end')

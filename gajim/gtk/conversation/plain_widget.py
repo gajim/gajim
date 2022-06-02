@@ -74,9 +74,6 @@ class PlainWidget(Gtk.Box):
         text = GLib.markup_escape_text(text)
         self._text_widget.add_action_phrase(text)
 
-    def update_text_tags(self) -> None:
-        self._text_widget.update_text_tags()
-
 
 class MessageLabel(Gtk.Label):
     def __init__(self, account: str, selectable: bool) -> None:
@@ -124,9 +121,6 @@ class MessageLabel(Gtk.Label):
 
     def add_action_phrase(self, text: str) -> None:
         self.set_markup(f'<i>{text}</i>')
-
-    def update_text_tags(self) -> None:
-        pass
 
     def _on_activate_link(self, _label: Gtk.Label, uri: str) -> int:
         open_uri(uri, self._account)
@@ -200,14 +194,6 @@ class MessageTextview(Gtk.TextView):
                                                foreground=color,
                                                underline=Pango.Underline.SINGLE)
             tag.connect('event', self._on_uri_clicked, tag)
-
-    def update_text_tags(self) -> None:
-        tag_table = self.get_buffer().get_tag_table()
-        url_color = app.css_config.get_value('.gajim-url', StyleAttr.COLOR)
-        for tag_name in URI_TAGS:
-            tag = tag_table.lookup(tag_name)
-            assert tag is not None
-            tag.set_property('foreground', url_color)
 
     def clear(self) -> None:
         buffer_ = self.get_buffer()
