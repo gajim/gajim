@@ -80,6 +80,11 @@ class JingleRTPContent(JingleContent):
         self.p2psession: Optional[Farstream.Session] = None
         self.p2pstream: Optional[Farstream.Stream] = None
 
+        self.available_gst_plugins: list[str] = []
+        gst_plugin_registry = Gst.Registry.get()
+        for plugin in gst_plugin_registry.get_plugin_list():
+            self.available_gst_plugins.append(plugin.get_name())
+
         self.callbacks['session-initiate'] += [self.__on_remote_codecs]
         self.callbacks['content-add'] += [self.__on_remote_codecs]
         self.callbacks['description-info'] += [self.__on_remote_codecs]
@@ -427,23 +432,35 @@ class JingleAudio(JingleRTPContent):
 
         # the local parts
         # TODO: Add queues?
-        self.src_bin = self.make_bin_from_config(
-            'audio_input_device',
-            '''%s
-            ! webrtcdsp
-                echo-suppression-level=high
-                noise-suppression-level=very-high
-                voice-detection=true
-            ! audioconvert ''',
-            _('audio input'))
+        if 'webrtcdsp' in self.available_gst_plugins:
+            self.src_bin = self.make_bin_from_config(
+                'audio_input_device',
+                '''%s
+                ! webrtcdsp
+                    echo-suppression-level=high
+                    noise-suppression-level=very-high
+                    voice-detection=true
+                ! audioconvert ''',
+                _('audio input'))
+        else:
+            self.src_bin = self.make_bin_from_config(
+                'audio_input_device',
+                '%s ! audioconvert ',
+                _('audio input'))
 
         # setting name=webrtcechoprobe0 is needed because lingering probes
         # cause a bug in subsequent calls
-        self.sink = self.make_bin_from_config(
-            'audio_output_device',
-            'audioconvert ! volume name=gajim_out_vol ! webrtcechoprobe name=webrtcechoprobe0 ! %s',
-            _('audio output'))
-
+        if 'webrtcdsp' in self.available_gst_plugins:
+            self.sink = self.make_bin_from_config(
+                'audio_output_device',
+                '''audioconvert ! volume name=gajim_out_vol !
+                webrtcechoprobe name=webrtcechoprobe0 ! %s''',
+                _('audio output'))
+        else:
+            self.sink = self.make_bin_from_config(
+                'audio_output_device',
+                'audioconvert ! volume name=gajim_out_vol ! %s',
+                _('audio output'))
         self.mic_volume = self.src_bin.get_by_name('gajim_vol')
         self.out_volume = self.sink.get_by_name('gajim_out_vol')
 
