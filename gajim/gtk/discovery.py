@@ -47,6 +47,7 @@ import weakref
 import nbxmpp
 from nbxmpp.structs import DiscoIdentity
 from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import JID
 from nbxmpp.errors import StanzaError
 
 from gi.repository import GLib
@@ -1342,7 +1343,7 @@ class ToplevelAgentBrowser(AgentBrowser):
             self.window.services_treeview.get_selection().get_selected()
         if not iter_:
             return
-        jid = model[iter_][0]
+        jid = JID.from_string(model[iter_][0])
         if jid:
             open_window(
                 'ServiceRegistration', account=self.account, address=jid)

@@ -100,6 +100,7 @@
         "gajim/gtk/resource_selector.py",
         "gajim/gtk/roster.py",
         "gajim/gtk/search_view.py",
+        "gajim/gtk/service_registration.py",
         "gajim/gtk/sidebar_switcher.py",
         "gajim/gtk/ssl_error_dialog.py",
         "gajim/gtk/status_icon.py",

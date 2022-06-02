@@ -12,218 +12,192 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Any
+from typing import Literal
+from typing import Optional
+from typing import overload
+
 import logging
-from enum import IntEnum
 
 from gi.repository import Gtk
 
 from nbxmpp.errors import StanzaError
 from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.errors import RegisterStanzaError
+from nbxmpp.protocol import JID
+from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common.i18n import _
 
+from .assistant import Assistant
+from .assistant import ErrorPage
+from .assistant import Page
+from .assistant import ProgressPage
+from .assistant import SuccessPage
 from .dataform import DataFormWidget
 
-log = logging.getLogger('gajim.gui.registration')
+log = logging.getLogger('gajim.gui.service_registration')
 
 
-class Page(IntEnum):
-    REQUEST = 0
-    FORM = 1
-    SENDING = 2
-    SUCCESS = 3
-    ERROR = 4
-
-
-class ServiceRegistration(Gtk.Assistant):
-    def __init__(self, account, address):
-        Gtk.Assistant.__init__(self)
+class ServiceRegistration(Assistant):
+    def __init__(self, account: str, address: JID) -> None:
+        Assistant.__init__(self, width= 600, height=400)
         self.account = account
 
-        self._con = app.connections[account]
-        self._agent = address
-        self._data_form_widget = None
+        self._client = app.get_client(account)
+        self._service = address
 
-        self.set_application(app.app)
-        self.set_resizable(True)
-        self.set_position(Gtk.WindowPosition.CENTER)
+        self.add_button('register', _('Register'), 'suggested-action')
+        self.add_button('close', _('Close'))
+        self.add_button('back', _('Back'))
 
-        self.set_default_size(600, 400)
-        self.get_style_context().add_class('dialog-margin')
+        self.set_button_visible_func(self._visible_func)
 
-        self._add_page(RequestPage())
-        self._add_page(FormPage())
-        self._add_page(SendingPage())
-        self._add_page(SuccessfulPage())
-        self._add_page(ErrorPage())
+        self.add_pages({
+            'form': Form(),
+        })
 
-        self.connect('prepare', self._on_page_change)
-        self.connect('cancel', self._on_cancel)
-        self.connect('close', self._on_cancel)
+        self.add_default_page('error')
+        self.add_default_page('progress')
+        self.add_default_page('success')
 
-        self._remove_sidebar()
+        self.get_page('error').set_title(_('Registration failed'))
+        self.get_page('error').set_heading(_('Registration failed'))
+
+        self.connect('button-clicked', self._on_button_clicked)
+
         self.show_all()
 
-    def _add_page(self, page):
-        self.append_page(page)
-        self.set_page_type(page, page.type_)
-        self.set_page_title(page, page.title)
-        self.set_page_complete(page, page.complete)
+        self._request_form()
 
-    def _remove_sidebar(self):
-        main_box = self.get_children()[0]
-        sidebar = main_box.get_children()[0]
-        main_box.remove(sidebar)
+    @overload
+    def get_page(self, name: Literal['form']) -> Form: ...
+    @overload
+    def get_page(self, name: Literal['success']) -> SuccessPage: ...
+    @overload
+    def get_page(self, name: Literal['error']) -> ErrorPage: ...
+    @overload
+    def get_page(self, name: Literal['progress']) -> ProgressPage: ...
 
-    def _on_page_change(self, _assistant, _page):
-        if self.get_current_page() == Page.REQUEST:
-            self._con.get_module('Register').request_register_form(
-                self._agent, callback=self._on_register_form)
-        elif self.get_current_page() == Page.SENDING:
+    def get_page(self, name: str) -> Page:
+        return self._pages[name]
+
+    @staticmethod
+    def _visible_func(_assistant: Assistant, page_name: str) -> list[str]:
+        if page_name == 'form':
+            return ['close', 'register']
+
+        if page_name == 'progress':
+            return []
+
+        if page_name == 'success':
+            return ['close']
+
+        if page_name == 'error':
+            return ['back', 'close']
+        raise ValueError(f'page {page_name} unknown')
+
+    def _on_button_clicked(self, _page: Gtk.Widget, button_name: str) -> None:
+        if button_name == 'register':
             self._register()
-            self.commit()
 
-    def _on_register_form(self, task):
+        if button_name == 'back':
+            self.show_page('form', Gtk.StackTransitionType.SLIDE_RIGHT)
+
+        if button_name == 'close':
+            self.destroy()
+
+    def _request_form(self) -> None:
+        self.get_page('progress').set_title(_('Requesting Register Form'))
+        self.get_page('progress').set_text(
+            _('Requesting register form from server…'))
+        self.show_page('progress')
+
+        self._client.get_module('Register').request_register_form(
+            self._service, callback=self._on_register_form)
+
+    def _on_register_form(self, task: Task) -> None:
         try:
             result = task.finish()
         except (StanzaError, MalformedStanzaError) as error:
-            self.get_nth_page(Page.ERROR).set_text(error.get_text())
-            self.set_current_page(Page.ERROR)
+            self.get_page('error').set_text(error.get_text())
+            self.show_page('error')
             return
 
         form = result.form
         if result.form is None:
             form = result.fields_form
 
-        self._data_form_widget = DataFormWidget(form)
-        self._data_form_widget.connect('is-valid', self._on_is_valid)
-        self._data_form_widget.validate()
-        self.get_nth_page(Page.FORM).set_form(self._data_form_widget)
-        self.set_current_page(Page.FORM)
+        self.get_page('form').add_form(form)
+        self.show_page('form')
 
-    def _on_is_valid(self, _widget, is_valid):
-        self.set_page_complete(self.get_nth_page(Page.FORM), is_valid)
+    def _register(self) -> None:
+        self.get_page('progress').set_title(_('Registering…'))
+        self.get_page('progress').set_text(_('Registering…'))
+        self.show_page('progress')
 
-    def _on_cancel(self, _widget):
-        self.destroy()
-
-    def _register(self):
-        form = self._data_form_widget.get_submit_form()
-        self._con.get_module('Register').submit_register_form(
+        form = self.get_page('form').get_submit_form()
+        self._client.get_module('Register').submit_register_form(
             form,
-            self._agent,
+            self._service,
             callback=self._on_register_result)
 
-    def _on_register_result(self, task):
+    def _on_register_result(self, task: Task) -> None:
         try:
             task.finish()
         except (StanzaError,
                 MalformedStanzaError,
                 RegisterStanzaError) as error:
-            self.get_nth_page(Page.ERROR).set_text(error.get_text())
-            self.set_current_page(Page.ERROR)
+            self.get_page('error').set_text(error.get_text())
+            self.show_page('error')
             return
 
-        self.set_current_page(Page.SUCCESS)
+        self.get_page('success').set_title(_('Registration successful'))
+        self.get_page('success').set_text(_('Registration successful'))
+        self.show_page('success')
 
 
-class RequestPage(Gtk.Box):
+class Form(Page):
+    def __init__(self) -> None:
+        Page.__init__(self)
+        self.title = _('Register')
+        self.complete = False
 
-    type_ = Gtk.AssistantPageType.INTRO
-    title = _('Register')
-    complete = False
+        self._dataform_widget: Optional[DataFormWidget] = None
+        self.show_all()
 
-    def __init__(self):
-        super().__init__(orientation=Gtk.Orientation.VERTICAL)
-        self.set_spacing(18)
-        spinner = Gtk.Spinner()
-        self.pack_start(spinner, True, True, 0)
-        spinner.start()
+    def add_form(self, form: Any) -> None:
+        self.remove_form()
 
+        options = {
+            'form-width': 350,
+            'entry-activates-default': True
+        }
+        self._dataform_widget = DataFormWidget(form, options)
+        self._dataform_widget.set_propagate_natural_height(True)
+        self._dataform_widget.connect('is-valid', self._on_is_valid)
+        self._dataform_widget.validate()
+        self._dataform_widget.show_all()
+        self.add(self._dataform_widget)
 
-class SendingPage(RequestPage):
+    def _on_is_valid(self, _widget: DataFormWidget, is_valid: bool) -> None:
+        self.complete = is_valid
+        self.update_page_complete()
 
-    type_ = Gtk.AssistantPageType.PROGRESS
-    title = _('Register')
-    complete = False
+    def get_submit_form(self) -> Any:
+        assert self._dataform_widget is not None
+        return self._dataform_widget.get_submit_form()
 
+    def remove_form(self) -> None:
+        if self._dataform_widget is None:
+            return
 
-class FormPage(Gtk.Box):
+        self.remove(self._dataform_widget)
+        self._dataform_widget.destroy()
+        self._dataform_widget = None
 
-    type_ = Gtk.AssistantPageType.INTRO
-    title = _('Register')
-    complete = True
-
-    def __init__(self):
-        super().__init__(orientation=Gtk.Orientation.VERTICAL)
-        self._form = None
-        self._label = Gtk.Label()
-        self._label.set_no_show_all(True)
-        self._label.get_style_context().add_class('error-color')
-        self.pack_end(self._label, False, False, 0)
-
-    def set_form(self, form, error_text=None):
-        if self._form is not None:
-            self.remove(self._form)
-            self._form.destroy()
-            self._label.hide()
-        self._form = form
-
-        if error_text is not None:
-            self._label.set_text(error_text)
-            self._label.show()
-
-        self.pack_start(form, True, True, 0)
-        self._form.show_all()
-
-
-class SuccessfulPage(Gtk.Box):
-
-    type_ = Gtk.AssistantPageType.SUMMARY
-    title = _('Registration successful')
-    complete = True
-
-    def __init__(self):
-        super().__init__(orientation=Gtk.Orientation.VERTICAL)
-        self.set_spacing(12)
-        self.set_homogeneous(True)
-
-        icon = Gtk.Image.new_from_icon_name('object-select-symbolic',
-                                            Gtk.IconSize.DIALOG)
-        icon.get_style_context().add_class('success-color')
-        icon.set_valign(Gtk.Align.END)
-        label = Gtk.Label(label=_('Registration successful'))
-        label.get_style_context().add_class('bold16')
-        label.set_valign(Gtk.Align.START)
-
-        self.add(icon)
-        self.add(label)
-
-
-class ErrorPage(Gtk.Box):
-
-    type_ = Gtk.AssistantPageType.SUMMARY
-    title = _('Registration failed')
-    complete = True
-
-    def __init__(self):
-        super().__init__(orientation=Gtk.Orientation.VERTICAL)
-        self.set_spacing(12)
-        self.set_homogeneous(True)
-
-        icon = Gtk.Image.new_from_icon_name('dialog-error-symbolic',
-                                            Gtk.IconSize.DIALOG)
-        icon.get_style_context().add_class('error-color')
-        icon.set_valign(Gtk.Align.END)
-        self._label = Gtk.Label()
-        self._label.set_valign(Gtk.Align.START)
-        self._label.set_max_width_chars(50)
-        self._label.set_line_wrap(True)
-
-        self.add(icon)
-        self.add(self._label)
-
-    def set_text(self, text):
-        self._label.set_text(text)
+    def get_default_button(self) -> str:
+        return 'register'

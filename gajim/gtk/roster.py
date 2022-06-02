@@ -330,11 +330,10 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     def _on_modify_gateway(self,
                            _action: Gio.SimpleAction,
                            param: GLib.Variant) -> None:
-
         open_window(
             'ServiceRegistration',
             account=self._account,
-            address=param.get_string())
+            address=JID.from_string(param.get_string()))
 
     def _on_execute_command(self,
                             _action: Gio.SimpleAction,
