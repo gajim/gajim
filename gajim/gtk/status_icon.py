@@ -188,12 +188,10 @@ class GtkMenuBackend(EventHelper):
         app.settings.set('sounds_on', not widget.get_active())
 
     def _on_toggle_window(self, _widget: Gtk.MenuItem) -> None:
-        # When using Gtk.StatusIcon, app.window will never return True for
-        # 'has-toplevel-focus' while clicking the menu item
-        GLib.idle_add(self._on_activate)
+        self._on_activate()
 
     def _on_activate(self, *args: Any) -> None:
-        if app.window.get_property('has-toplevel-focus'):
+        if app.settings.get('last_main_window_visible'):
             save_main_window_position()
             app.window.hide()
             return
