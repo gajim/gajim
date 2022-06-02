@@ -1,3 +1,4 @@
+include COPYING
 recursive-include po *
 recursive-include data *.1 *.in
 recursive-include test *
