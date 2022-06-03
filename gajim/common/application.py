@@ -116,6 +116,7 @@ class CoreApplication:
 
     def _shutdown_core(self) -> None:
         # Commit any outstanding SQL transactions
+        app.storage.archive.cleanup_chat_history()
         app.storage.cache.shutdown()
         app.storage.archive.shutdown()
 

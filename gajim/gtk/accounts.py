@@ -722,6 +722,7 @@ class PrivacyPage(GenericSettingPage):
 
         history_max_age = {
             -1: _('Forever'),
+            0: _('Until Gajim is Closed'),
             86400: _('1 Day'),
             604800: _('1 Week'),
             2629743: _('1 Month'),
