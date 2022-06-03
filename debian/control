@@ -13,6 +13,7 @@ Build-Depends:
     python3-gi-cairo,
     python3-nbxmpp-nightly (>=20220501),
     python3-setuptools,
+    python3-pil,
     gir1.2-gtk-3.0,
 Rules-Requires-Root: no
 Standards-Version: 4.1.4
