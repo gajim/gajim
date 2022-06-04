@@ -30,7 +30,9 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common.styling import process
 from gajim.common.styling import PlainBlock
+from gajim.common.types import ChatContactT
 
+from .chat_action_processor import ChatActionProcessor
 from .util import scroll_to_end
 
 if app.is_installed('GSPELL'):
@@ -50,8 +52,11 @@ class MessageInputTextView(Gtk.TextView):
     """
     A Gtk.Textview for chat message input
     """
-    def __init__(self) -> None:
+    def __init__(self, account: str, contact: ChatContactT) -> None:
         Gtk.TextView.__init__(self)
+        self.account = account
+        self.contact = contact
+
         self.set_border_width(3)
         self.set_accepts_tab(True)
         self.set_editable(True)
@@ -67,6 +72,8 @@ class MessageInputTextView(Gtk.TextView):
 
         self._undo_list: list[str] = []
         self.undo_pressed: bool = False
+
+        self._chat_action_processor = ChatActionProcessor(self)
 
         self.get_buffer().create_tag('strong', weight=Pango.Weight.BOLD)
         self.get_buffer().create_tag('emphasis', style=Pango.Style.ITALIC)
@@ -89,6 +96,8 @@ class MessageInputTextView(Gtk.TextView):
             Gtk.DestDefaults.ALL,
             None,
             Gdk.DragAction.DEFAULT)
+        self._chat_action_processor.destroy()
+        app.check_finalize(self)
 
     def _on_focus_in(self,
                      _widget: Gtk.Widget,

@@ -213,7 +213,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             account, self.contact)
         self.xml.hbox.pack_start(self._security_label_selector, False, True, 0)
 
-        self.msg_textview = MessageInputTextView()
+        self.msg_textview = MessageInputTextView(self.account, self.contact)
         self.msg_textview.connect('paste-clipboard',
                                   self._on_message_textview_paste_event)
         self.msg_textview.connect('key-press-event',
