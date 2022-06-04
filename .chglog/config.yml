@@ -34,3 +34,6 @@ options:
   refs:
     actions:
       - Fixes
+  notes:
+    keywords:
+      - NOTES
