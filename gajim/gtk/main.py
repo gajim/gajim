@@ -156,8 +156,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                   self._on_client_state_changed)
 
     def _prepare_window(self) -> None:
-        if app.settings.get('main_window_skip_taskbar'):
-            self.set_property('skip-taskbar-hint', True)
+        if app.settings.get('minimize_to_tray'):
+            self.set_skip_taskbar_hint(True)
 
         restore_main_window_position()
         window_width = app.settings.get('mainwin_width')

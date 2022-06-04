@@ -200,8 +200,6 @@ class GtkMenuBackend(EventHelper):
             # Window was minimized
             restore_main_window_position()
 
-        if not app.settings.get('main_window_skip_taskbar'):
-            app.window.set_property('skip-taskbar-hint', False)
         app.window.present_with_time(Gtk.get_current_event_time())
 
     @staticmethod

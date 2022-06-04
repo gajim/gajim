@@ -204,9 +204,20 @@ class WindowBehaviour(PreferenceBox):
                     SettingType.CONFIG,
                     'quit_on_main_window_x_button',
                     desc=_('Quit when closing Gajim’s window')),
+
+            Setting(SettingKind.SWITCH,
+                    _('Minimize to Tray'),
+                    SettingType.CONFIG,
+                    'minimize_to_tray',
+                    desc=_('Hide window to system tray when minimized'),
+                    callback=self._on__minimize_to_tray),
         ]
 
         PreferenceBox.__init__(self, settings)
+
+    @staticmethod
+    def _on__minimize_to_tray(value: bool, *args: Any) -> None:
+        app.window.set_skip_taskbar_hint(value)
 
 
 class Plugins(PreferenceBox):
