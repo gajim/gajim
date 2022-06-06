@@ -42,8 +42,6 @@ from gajim.common.ged import EventHelper
 
 from .builder import get_builder
 from .util import get_icon_name
-from .util import save_main_window_position
-from .util import restore_main_window_position
 from .util import open_window
 
 if app.is_installed('APPINDICATOR'):
@@ -192,15 +190,9 @@ class GtkMenuBackend(EventHelper):
 
     def _on_activate(self, *args: Any) -> None:
         if app.settings.get('last_main_window_visible'):
-            save_main_window_position()
-            app.window.hide()
-            return
-
-        if not app.window.get_property('visible'):
-            # Window was minimized
-            restore_main_window_position()
-
-        app.window.present_with_time(Gtk.get_current_event_time())
+            app.window.minimize()
+        else:
+            app.window.unminimize()
 
     @staticmethod
     def _on_preferences(_widget: Gtk.MenuItem) -> None:

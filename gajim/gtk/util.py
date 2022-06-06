@@ -776,6 +776,17 @@ def get_gtk_version() -> str:
     return gtk_ver
 
 
+def is_minimize_event(event: Gdk.EventWindowState) -> bool:
+    if Gdk.WindowState.ICONIFIED & event.changed_mask:
+        return bool(Gdk.WindowState.ICONIFIED & event.new_window_state)
+    return False
+
+
+def is_minimized(event: Gdk.EventWindowState) -> bool:
+    minimized_states = Gdk.WindowState.ICONIFIED | Gdk.WindowState.WITHDRAWN
+    return bool(minimized_states & event.new_window_state)
+
+
 class EventHelper(CommonEventHelper):
     def __init__(self):
         CommonEventHelper.__init__(self)

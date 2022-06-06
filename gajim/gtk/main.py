@@ -54,6 +54,8 @@ from .dialogs import ConfirmationCheckDialog
 from .types import ControlT
 from .builder import get_builder
 from .util import get_app_window
+from .util import is_minimized
+from .util import is_minimize_event
 from .util import get_key_theme
 from .util import resize_window
 from .util import restore_main_window_position
@@ -155,25 +157,28 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             client.connect_signal('state-changed',
                                   self._on_client_state_changed)
 
-    def _prepare_window(self) -> None:
-        if app.settings.get('minimize_to_tray'):
-            self.set_skip_taskbar_hint(True)
+    def minimize(self) -> None:
+        self.iconify()
 
+    def unminimize(self) -> None:
         restore_main_window_position()
+        self.deiconify()
+        self.present_with_time(Gtk.get_current_event_time())
+
+    def _prepare_window(self) -> None:
         window_width = app.settings.get('mainwin_width')
         window_height = app.settings.get('mainwin_height')
         resize_window(self, window_width, window_height)
-        self.show_all()
 
         show_main_window = app.settings.get('show_main_window_on_startup')
-        if (show_main_window == 'always' or
-                not app.settings.get('show_trayicon')):
-            # Without trayicon, we have to show the main window
-            return
+        if show_main_window == 'never':
+            self.minimize()
 
-        if (show_main_window == 'never' or
+        elif (show_main_window == 'last_state' and
                 not app.settings.get('last_main_window_visible')):
-            self.hide()
+            self.minimize()
+
+        self.show_all()
 
     def _on_account_enabled(self, event: events.AccountEnabled) -> None:
         self._account_side_bar.add_account(event.account)
@@ -430,10 +435,22 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                  window: MainWindow,
                                  event: Gdk.EventWindowState) -> None:
 
-        iconified = bool(Gdk.WindowState.ICONIFIED & event.new_window_state)
-        hidden = bool(Gdk.WindowState.WITHDRAWN & event.new_window_state)
-        visible = not (iconified or hidden)
-        app.settings.set('last_main_window_visible', visible)
+        states = Gdk.WindowState.WITHDRAWN | Gdk.WindowState.ICONIFIED
+        if states & event.changed_mask:
+            is_withdrawn = bool(Gdk.WindowState.WITHDRAWN &
+                                event.new_window_state)
+            is_iconified = bool(Gdk.WindowState.ICONIFIED &
+                                event.new_window_state)
+            log.debug('Window state changed: ICONIFIED: %s, WITHDRAWN: %s',
+                      is_iconified, is_withdrawn)
+
+            app.settings.set('last_main_window_visible',
+                             not is_minimized(event))
+
+        if is_minimize_event(event) and app.settings.get('minimize_to_tray'):
+            save_main_window_position()
+            log.debug('Minimize to tray')
+            self.hide()
 
     def _set_startup_finished(self) -> None:
         self._startup_finished = True
