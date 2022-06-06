@@ -6,11 +6,6 @@ Hidden=true
 Directories=16x16/actions,16x16/devices,16x16/status,32x32/categories,32x32/devices,32x32/status,48x48/status,96x96/categories,scalable/apps,scalable/categories,scalable/devices,scalable/status
 
 
-[16x16/actions]
-Size=16
-Context=Actions
-Type=Fixed
-
 [16x16/devices]
 Size=16
 Context=Devices
