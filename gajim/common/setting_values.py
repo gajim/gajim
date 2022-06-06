@@ -34,7 +34,6 @@ HAS_ACCOUNT_DEFAULT = _ACCOUNT_DEFAULT()
 # pylint: disable=line-too-long
 
 BoolSettings = Literal[
-    'allow_hide_roster',
     'always_ask_for_status_message',
     'always_english_wikipedia',
     'always_english_wiktionary',
@@ -62,7 +61,6 @@ BoolSettings = Literal[
     'hide_chat_banner',
     'hide_groupchat_banner',
     'hide_groupchat_occupants_list',
-    'hide_on_main_window_x_button',
     'ignore_incoming_attention',
     'last_main_window_visible',
     'log_contact_status_changes',
@@ -76,7 +74,7 @@ BoolSettings = Literal[
     'preview_anonymous_muc',
     'preview_verify_https',
     'print_status_in_chats',
-    'quit_on_main_window_x_button',
+    'minimize_on_window_delete',
     'remote_commands',
     'remote_control',
     'save_main_window_position',
@@ -95,6 +93,7 @@ BoolSettings = Literal[
     'show_trayicon',
     'showoffline',
     'show_in_taskbar',
+    'confirm_on_window_delete',
     'sort_by_show_in_muc',
     'sort_by_show_in_roster',
     'sounddnd',
@@ -188,7 +187,6 @@ APP_SETTINGS = {
     'ask_online_status': False,
     'ask_offline_status': False,
     'show_trayicon': True,
-    'allow_hide_roster': False,
     'roster_theme': 'default',
     'sort_by_show_in_roster': True,
     'sort_by_show_in_muc': False,
@@ -206,8 +204,7 @@ APP_SETTINGS = {
     'save_main_window_position': True,
     'show_main_window_on_startup': 'always',
     'last_main_window_visible': True,
-    'quit_on_main_window_x_button': False,
-    'hide_on_main_window_x_button': False,
+    'minimize_on_window_delete': True,
     'minimize_to_tray': False,
     'latest_disco_addresses': '',
     'change_roster_title': True,
@@ -302,6 +299,7 @@ APP_SETTINGS = {
     'plugins_auto_update': False,
     'plugins_notify_after_update': True,
     'show_in_taskbar': True,
+    'confirm_on_window_delete': True,
 }
 
 BoolAccountSettings = Literal[
@@ -621,7 +619,6 @@ DEFAULT_SOUNDEVENT_SETTINGS = {
 
 ADVANCED_SETTINGS = {
     'app': {
-        'allow_hide_roster': _('Allow to hide the contact list window even if the notification area icon is not shown.'),
         'ascii_formatting': _('Treat * / _ pairs as possible formatting characters.'),
         'gc_refer_to_nick_char': _('Character to add after nickname when using nickname completion (tab) in group chat.'),
         'save_main_window_position': _('If enabled, Gajim will save the main window position when hiding it, and restore it when showing the window again.'),
@@ -639,6 +636,7 @@ ADVANCED_SETTINGS = {
         'confirm_paste_image': _('Ask before pasting an image.'),
         'confirm_close_muc': _('Ask before closing a group chat tab/window.'),
         'confirm_close_multiple_tabs': _('Ask before closing tabbed chat window if there are chats that can lose data (chat, private chat).'),
+        'confirm_on_window_delete': _('Ask before quitting when Gajim’s window is closed'),
         'file_transfers_port': '',
         'ft_add_hosts_to_send': _('List of send hosts (comma separated) in addition to local interfaces for file transfers (in case of address translation/port forwarding).'),
         'use_kib_mib': _('IEC standard says KiB = 1024 bytes, KB = 1000 bytes.'),
@@ -646,7 +644,6 @@ ADVANCED_SETTINGS = {
         'trayicon_notification_on_events': _('Notify of events in the notification area.'),
         'notification_preview_message': _('Preview new messages in notification popup?'),
         'muc_highlight_words': _('A list of words (semicolon separated) that will be highlighted in group chats.'),
-        'hide_on_main_window_x_button': _('If enabled, Gajim hides the main window when pressing the X button instead of minimizing into the notification area.'),
         'use_urgency_hint': _('If enabled, Gajim makes the window flash (the default behaviour in most Window Managers) when holding pending events.'),
         'notification_timeout': '',
         'escape_key_closes': _('If enabled, pressing Esc closes a tab/window.'),

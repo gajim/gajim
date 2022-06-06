@@ -200,10 +200,10 @@ class WindowBehaviour(PreferenceBox):
                     desc=_('Show window when starting Gajim')),
 
             Setting(SettingKind.SWITCH,
-                    _('Quit Gajim on Close'),
+                    _('Minimize on Close'),
                     SettingType.CONFIG,
-                    'quit_on_main_window_x_button',
-                    desc=_('Quit when closing Gajim’s window')),
+                    'minimize_on_window_delete',
+                    desc=_('Minimize when closing Gajim’s window')),
 
             Setting(SettingKind.SWITCH,
                     _('Minimize to Tray'),

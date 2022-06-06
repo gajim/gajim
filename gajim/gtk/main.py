@@ -20,7 +20,6 @@ from typing import Generator
 from typing import Optional
 
 import logging
-import os
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -402,36 +401,32 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def _on_window_delete(self,
                           _widget: Gtk.ApplicationWindow,
                           _event: Gdk.Event
-                          ) -> bool:
-        # Main window X button was clicked
-        if app.settings.get('quit_on_main_window_x_button'):
+                          ) -> int:
+
+        if app.settings.get('minimize_on_window_delete'):
+            self.minimize()
+            return Gdk.EVENT_STOP
+
+        if not app.settings.get('confirm_on_window_delete'):
             self.quit()
-        else:
-            if (app.settings.get('allow_hide_roster') or
-                    app.app.systray.is_visible()):
-                save_main_window_position()
-                if (os.name == 'nt' or
-                        app.settings.get('hide_on_main_window_x_button')):
-                    self.hide()
-                else:
-                    self.iconify()
-                return True
+            return Gdk.EVENT_STOP
 
-            def _on_ok(is_checked: bool) -> None:
-                if is_checked:
-                    app.settings.set('quit_on_main_window_x_button', True)
-                self.quit()
+        def _on_ok(is_checked: bool) -> None:
+            if is_checked:
+                app.settings.set('confirm_on_window_delete', False)
+            self.quit()
 
-            ConfirmationCheckDialog(
-                _('Quit Gajim'),
-                _('You are about to quit Gajim'),
-                _('Are you sure you want to quit Gajim?'),
-                _('_Always quit when closing Gajim'),
-                [DialogButton.make('Cancel'),
-                 DialogButton.make('Remove',
-                                   text=_('_Quit'),
-                                   callback=_on_ok)]).show()
-        return True
+        ConfirmationCheckDialog(
+            _('Quit Gajim'),
+            _('You are about to quit Gajim'),
+            _('Are you sure you want to quit Gajim?'),
+            _('_Don’t ask again'),
+            [DialogButton.make('Cancel'),
+             DialogButton.make('Remove',
+                               text=_('_Quit'),
+                               callback=_on_ok)]).show()
+
+        return Gdk.EVENT_STOP
 
     def _on_window_state_changed(self,
                                  window: MainWindow,
