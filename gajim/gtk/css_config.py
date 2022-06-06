@@ -32,6 +32,7 @@ import css_parser
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.const import StyleAttr, CSSPriority
+from gajim.common.dbus.system_style import SystemStyleListener
 
 from .const import Theme
 
@@ -106,6 +107,8 @@ class CSSConfig:
         # Holds all currently available themes
         self.themes: list[str] = []
 
+        self._system_style = SystemStyleListener(callback=self.set_dark_theme)
+
         self.set_dark_theme()
         self._load_css()
         self._gather_available_themes()
@@ -122,6 +125,8 @@ class CSSConfig:
     def prefer_dark(self) -> bool:
         setting = app.settings.get('dark_theme')
         if setting == Theme.SYSTEM:
+            if self._system_style.prefer_dark is not None:
+                return self._system_style.prefer_dark
             if settings is None:
                 return False
             return settings.get_property('gtk-application-prefer-dark-theme')
@@ -136,8 +141,10 @@ class CSSConfig:
         if settings is None:
             return
         if value == Theme.SYSTEM:
-            settings.reset_property('gtk-application-prefer-dark-theme')
-            return
+            if self._system_style.prefer_dark is None:
+                settings.reset_property('gtk-application-prefer-dark-theme')
+                return
+            value = self._system_style.prefer_dark
         settings.set_property('gtk-application-prefer-dark-theme', bool(value))
         self._load_css()
 
