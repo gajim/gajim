@@ -18,6 +18,10 @@
 Watch for system sleep using systemd-logind.
 Documentation: http://www.freedesktop.org/wiki/Software/systemd/inhibit
 '''
+from __future__ import annotations
+
+from typing import Any
+from typing import Optional
 
 import os
 import logging
@@ -32,17 +36,17 @@ log = logging.getLogger('gajim.c.dbus.logind')
 
 
 class LogindListener:
-    _instance = None
+    _instance: Optional[LogindListener] = None
 
     @classmethod
-    def get(cls):
+    def get(cls) -> LogindListener:
         if cls._instance is None:
             cls._instance = cls()
         return cls._instance
 
-    def __init__(self):
+    def __init__(self) -> None:
         # file descriptor object of the inhibitor
-        self._inhibit_fd = None
+        self._inhibit_fd: Optional[int] = None
 
         Gio.bus_watch_name(
             Gio.BusType.SYSTEM,
@@ -51,14 +55,20 @@ class LogindListener:
             self._on_appear_logind,
             self._on_vanish_logind)
 
-    def _on_prepare_for_sleep(self, connection, _sender_name, _object_path,
-                              interface_name, signal_name, parameters,
-                              *_user_data):
+    def _on_prepare_for_sleep(self,
+                              connection: Gio.DBusConnection,
+                              _sender_name: str,
+                              _object_path: str,
+                              interface_name: str,
+                              signal_name: str,
+                              parameters: tuple[str, str, str],
+                              *_user_data: Any
+                              ) -> None:
         '''Signal handler for PrepareForSleep event'''
         log.debug('Received signal %s.%s%s',
                   interface_name, signal_name, parameters)
 
-        before = parameters[0] # Signal is either before or after sleep occurs
+        before = parameters[0]  # Signal is either before or after sleep occurs
         if before:
             warn = self._inhibit_fd is None
             log.log(
@@ -86,7 +96,7 @@ class LogindListener:
                 if conn.state.is_disconnected and conn.time_to_reconnect:
                     conn.reconnect()
 
-    def _inhibit_sleep(self, connection):
+    def _inhibit_sleep(self, connection: Gio.DBusConnection) -> None:
         '''Obtain a sleep delay inhibitor from logind'''
         if self._inhibit_fd is not None:
             # Something is wrong, we have an inhibitor fd, and we are asking for
@@ -95,7 +105,7 @@ class LogindListener:
                         'while already holding one.')
 
         try:
-            ret, ret_fdlist = connection.call_with_unix_fd_list_sync(
+            result = connection.call_with_unix_fd_list_sync(
                 'org.freedesktop.login1',
                 '/org/freedesktop/login1',
                 'org.freedesktop.login1.Manager',
@@ -104,10 +114,18 @@ class LogindListener:
                     'sleep',
                     'org.gajim.Gajim',
                     _('Disconnect from the network'),
-                    'delay' # Inhibitor will delay but not block sleep
+                    'delay'  # Inhibitor will delay but not block sleep
                     )),
                 GLib.VariantType.new('(h)'),
-                Gio.DBusCallFlags.NONE, -1, None, None)
+                Gio.DBusCallFlags.NONE,
+                -1,
+                None,
+                None)
+            if result is None:
+                log.warning(
+                    'Cannot obtain a sleep delay inhibitor from logind')
+                return
+            ret, ret_fdlist = result
         except GLib.Error as error:
             log.warning(
                 'Cannot obtain a sleep delay inhibitor from logind: %s', error)
@@ -116,14 +134,19 @@ class LogindListener:
         log.info('Inhibit sleep')
         self._inhibit_fd = ret_fdlist.get(ret.unpack()[0])
 
-    def _disinhibit_sleep(self):
+    def _disinhibit_sleep(self) -> None:
         '''Relinquish our sleep delay inhibitor'''
         if self._inhibit_fd is not None:
             os.close(self._inhibit_fd)
             self._inhibit_fd = None
         log.info('Disinhibit sleep')
 
-    def _on_appear_logind(self, connection, name, name_owner, *_user_data):
+    def _on_appear_logind(self,
+                          connection: Gio.DBusConnection,
+                          name: str,
+                          name_owner: str,
+                          *_user_data: Any
+                          ) -> None:
         '''Use signal and locks provided by org.freedesktop.login1'''
         log.info('Name %s appeared, owned by %s', name, name_owner)
 
@@ -138,13 +161,17 @@ class LogindListener:
             None)
         self._inhibit_sleep(connection)
 
-    def _on_vanish_logind(self, _connection, name, *_user_data):
+    def _on_vanish_logind(self,
+                          _connection: Gio.DBusConnection,
+                          name: str,
+                          *_user_data: Any
+                          ) -> None:
         '''Release remaining resources related to org.freedesktop.login1'''
         log.info('Name %s vanished', name)
         self._disinhibit_sleep()
 
 
-def enable():
+def enable() -> None:
     # Module should be rewritten
     # Its not useful to know when the computer goes to sleep.
     # Because of stream management we don’t need to do anything in that case.

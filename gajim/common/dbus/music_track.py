@@ -19,6 +19,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Any
+from typing import cast
 from typing import Optional
 
 import logging
@@ -38,18 +42,18 @@ MPRIS_PLAYER_PREFIX = 'org.mpris.MediaPlayer2.'
 
 class MusicTrackListener:
 
-    _instance = None
+    _instance: Optional[MusicTrackListener] = None
 
     @classmethod
-    def get(cls):
+    def get(cls) -> MusicTrackListener:
         if cls._instance is None:
             cls._instance = cls()
         return cls._instance
 
-    def __init__(self):
-        self.players = {}
-        self.connection = None
-        self._current_tune = None
+    def __init__(self) -> None:
+        self.players: dict[str, int] = {}
+        self.connection: Optional[Gio.DBusConnection] = None
+        self._current_tune: Optional[TuneData] = None
         self._running = False
 
         if sys.platform not in ('win32', 'darwin'):
@@ -94,7 +98,7 @@ class MusicTrackListener:
                 -1,
                 None)
         except GLib.Error as error:
-            log.debug("Could not list names: %s", error.message)
+            log.debug('Could not list names: %s', error.message)
             return
 
         for name in result[0]:
@@ -106,19 +110,19 @@ class MusicTrackListener:
 
         self._running = True
 
-    def stop(self):
+    def stop(self) -> None:
         for name in list(self.players):
             if name.startswith(MPRIS_PLAYER_PREFIX):
                 self._remove_player(name)
 
     def _signal_name_owner_changed(self,
-                                   _connection,
-                                   _sender_name,
-                                   _object_path,
-                                   _interface_name,
-                                   _signal_name,
-                                   parameters,
-                                   *_user_data):
+                                   _connection: Gio.DBusConnection,
+                                   _sender_name: str,
+                                   _object_path: str,
+                                   _interface_name: str,
+                                   _signal_name: str,
+                                   parameters: tuple[str, str, str],
+                                   *_user_data: Any):
         name, old_owner, new_owner = parameters
         if name.startswith(MPRIS_PLAYER_PREFIX):
             if new_owner and not old_owner:
@@ -126,13 +130,14 @@ class MusicTrackListener:
             else:
                 self._remove_player(name)
 
-    def _add_player(self, name):
+    def _add_player(self, name: str) -> None:
         '''Set up a listener for music player signals'''
         log.info('%s appeared', name)
 
         if name in self.players:
             return
 
+        assert self.connection is not None
         self.players[name] = self.connection.signal_subscribe(
             name,
             'org.freedesktop.DBus.Properties',
@@ -143,9 +148,13 @@ class MusicTrackListener:
             self._signal_received,
             name)
 
-    def _remove_player(self, name):
+    def _remove_player(self, name: str) -> None:
         log.info('%s vanished', name)
         if name in self.players:
+            if self.connection is None:
+                self._emit(None)
+                return
+
             self.connection.signal_unsubscribe(
                 self.players[name])
             self.players.pop(name)
@@ -153,21 +162,21 @@ class MusicTrackListener:
             self._emit(None)
 
     def _signal_received(self,
-                         _connection,
-                         _sender_name,
-                         _object_path,
-                         interface_name,
-                         _signal_name,
-                         parameters,
-                         *user_data):
+                         _connection: Gio.DBusConnection,
+                         _sender_name: str,
+                         _object_path: str,
+                         interface_name: str,
+                         _signal_name: str,
+                         parameters: tuple[str, str, str],
+                         *user_data: str):
         '''Signal handler for PropertiesChanged event'''
 
         log.info('Signal received: %s - %s', interface_name, parameters)
         self._get_playing_track(user_data[0])
 
     @staticmethod
-    def _get_music_info(properties):
-        meta = properties.get('Metadata')
+    def _get_music_info(properties: dict[str, str]) -> Optional[TuneData]:
+        meta = cast(dict[str, str], properties.get('Metadata'))
         if meta is None or not meta:
             return None
 
@@ -183,7 +192,7 @@ class MusicTrackListener:
             artist = ', '.join(artist)
         return TuneData(artist=artist, title=title, source=album)
 
-    def _get_playing_track(self, name):
+    def _get_playing_track(self, name: str) -> None:
         '''Return a TuneData for the currently playing
         song, or None if no song is playing'''
         proxy = Gio.DBusProxy.new_for_bus_sync(
@@ -195,18 +204,21 @@ class MusicTrackListener:
             'org.freedesktop.DBus.Properties',
             None)
 
-        def proxy_call_finished(proxy, res):
+        def proxy_call_finished(proxy: Gio.DBusProxy,
+                                res: Gio.AsyncResult
+                                ) -> None:
             try:
                 result = proxy.call_finish(res)
             except GLib.Error as error:
-                log.debug("Could not enable music listener: %s", error.message)
+                log.debug('Could not enable music listener: %s', error.message)
                 return
 
+            assert result is not None
             info = self._get_music_info(result[0])
             if info is not None:
                 self._emit(info)
 
-        proxy.call("GetAll",
+        proxy.call('GetAll',
                    GLib.Variant('(s)', ('org.mpris.MediaPlayer2.Player',)),
                    Gio.DBusCallFlags.NONE,
                    -1,

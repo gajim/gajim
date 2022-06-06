@@ -13,7 +13,11 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import annotations
+
+from typing import Any
+from typing import Callable
 from typing import cast
+from typing import Optional
 
 import sys
 import logging
@@ -28,8 +32,8 @@ log = logging.getLogger('gajim.c.dbus.system_style')
 
 
 class SystemStyleListener:
-    def __init__(self, callback) -> None:
-        self._prefer_dark = None
+    def __init__(self, callback: Callable[..., None]) -> None:
+        self._prefer_dark: Optional[bool] = None
         self._callback = callback
 
         if sys.platform in ('win32', 'darwin'):
@@ -57,32 +61,35 @@ class SystemStyleListener:
             result = self.dbus_proxy.call_sync(
                 'Read',
                 GLib.Variant('(ss)', ('org.freedesktop.appearance',
-                                       'color-scheme')),
+                                      'color-scheme')),
                 Gio.DBusCallFlags.NO_AUTO_START,
                 -1,
                 None)
             (self._prefer_dark,) = cast(tuple[bool], result)
         except GLib.Error as error:
-            log.error("Couldn't read the color-scheme setting: %s",
+            log.error('Couldn’t read the color-scheme setting: %s',
                       error.message)
+            self._prefer_dark = False
             return
 
     def _signal_setting_changed(self,
-                                   _proxy,
-                                   _sender_name,
-                                   signal_name,
-                                   parameters,
-                                   *_user_data) -> None:
+                                _proxy: Gio.DBusProxy,
+                                _sender_name: Optional[str],
+                                signal_name: str,
+                                parameters: GLib.Variant,
+                                *_user_data: Any
+                                ) -> None:
         if signal_name != 'SettingChanged':
             return
 
         namespace, name, value = parameters
-        if (namespace == "org.freedesktop.appearance" and
-            name == "color-scheme"):
+        if (namespace == 'org.freedesktop.appearance' and
+            name == 'color-scheme'):
             self._prefer_dark = (value == 1)
             self._callback()
             app.ged.raise_event(StyleChanged())
 
     @property
     def prefer_dark(self) -> bool:
+        assert self._prefer_dark is not None
         return self._prefer_dark
