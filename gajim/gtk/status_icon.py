@@ -233,7 +233,7 @@ class GtkStatusIcon(GtkMenuBackend):
         self._status_icon.set_visible(True)
 
         if count > 0:
-            self._status_icon.set_from_icon_name('dcraven-message-new')
+            self._status_icon.set_from_icon_name('mail-message-new')
             return
 
         show = get_global_show()
@@ -312,7 +312,7 @@ class AppIndicator(GtkMenuBackend):
         self._status_icon.set_status(appindicator.IndicatorStatus.ACTIVE)
 
         if count > 0:
-            icon_name = 'dcraven-message-new'
+            icon_name = 'mail-message-new'
             self._status_icon.set_icon_full(icon_name, _('Pending Event'))
             return
 
