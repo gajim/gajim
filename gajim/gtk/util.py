@@ -220,9 +220,6 @@ def get_app_icon_list(scale_widget: Gtk.Widget) -> list[GdkPixbuf.Pixbuf]:
 
 def get_icon_name(name: str,
                   transport: Optional[str] = None) -> str:
-    if name == 'not in roster':
-        name = 'notinroster'
-
     if transport is not None:
         return f'{transport}-{name}'
 
