@@ -94,6 +94,7 @@ BoolSettings = Literal[
     'show_xhtml',
     'show_trayicon',
     'showoffline',
+    'show_in_taskbar',
     'sort_by_show_in_muc',
     'sort_by_show_in_roster',
     'sounddnd',
@@ -300,6 +301,7 @@ APP_SETTINGS = {
     'plugins_update_check': True,
     'plugins_auto_update': False,
     'plugins_notify_after_update': True,
+    'show_in_taskbar': True,
 }
 
 BoolAccountSettings = Literal[

@@ -209,15 +209,22 @@ class WindowBehaviour(PreferenceBox):
                     _('Minimize to Tray'),
                     SettingType.CONFIG,
                     'minimize_to_tray',
-                    desc=_('Hide window to system tray when minimized'),
-                    callback=self._on__minimize_to_tray),
+                    desc=_('Hide window to system tray when minimized')),
+
+            Setting(SettingKind.SWITCH,
+                    _('Show in Taskbar'),
+                    SettingType.CONFIG,
+                    'show_in_taskbar',
+                    desc=_('Show window in the taskbar'),
+                    callback=self._on_show_in_taskbar),
+
         ]
 
         PreferenceBox.__init__(self, settings)
 
     @staticmethod
-    def _on__minimize_to_tray(value: bool, *args: Any) -> None:
-        app.window.set_skip_taskbar_hint(value)
+    def _on_show_in_taskbar(value: bool, *args: Any) -> None:
+        app.window.set_skip_taskbar_hint(not value)
 
 
 class Plugins(PreferenceBox):

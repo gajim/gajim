@@ -170,6 +170,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         window_height = app.settings.get('mainwin_height')
         resize_window(self, window_width, window_height)
 
+        self.set_skip_taskbar_hint(not app.settings.get('show_in_taskbar'))
+
         show_main_window = app.settings.get('show_main_window_on_startup')
         if show_main_window == 'never':
             self.minimize()
