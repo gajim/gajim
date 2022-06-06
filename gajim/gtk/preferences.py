@@ -193,7 +193,7 @@ class WindowBehaviour(PreferenceBox):
 
         settings = [
             Setting(SettingKind.POPOVER,
-                    _('Show Gajim on Startup'),
+                    _('Show on Startup'),
                     SettingType.CONFIG,
                     'show_main_window_on_startup',
                     props={'entries': main_window_on_startup_items},
