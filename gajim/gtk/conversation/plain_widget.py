@@ -117,6 +117,11 @@ class MessageLabel(Gtk.Label):
         text += after
 
         self.set_markup(text)
+
+        if len(self.get_text()) > 10000:
+            # Limit message styling processing
+            return
+
         self.set_attributes(make_pango_attributes(block))
 
     def add_action_phrase(self, text: str) -> None:
@@ -208,6 +213,10 @@ class MessageTextview(Gtk.TextView):
     def print_text_with_styling(self, block: PlainBlock) -> None:
         buffer_ = self.get_buffer()
         buffer_.insert(buffer_.get_start_iter(), block.text.strip())
+
+        if len(self.get_text()) > 10000:
+            # Limit message styling processing
+            return
 
         for span in block.spans:
             start_iter = buffer_.get_iter_at_offset(span.start)

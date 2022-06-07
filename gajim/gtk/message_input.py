@@ -142,7 +142,7 @@ class MessageInputTextView(Gtk.TextView):
 
         self._clear_tags()
 
-        if len(text) > 20000:
+        if len(text) > 10000:
             # Limit message styling processing
             return
 
