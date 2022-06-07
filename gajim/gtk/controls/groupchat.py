@@ -67,7 +67,6 @@ from gajim.command_system.implementation.hosts import GroupChatCommands
 from gajim.gui.const import ControlType
 from gajim.gui.const import TARGET_TYPE_URI_LIST
 from gajim.gui.dialogs import DialogButton
-from gajim.gui.dialogs import ConfirmationCheckDialog
 from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.dataform import DataFormWidget
 from gajim.gui.groupchat_inviter import GroupChatInviter
@@ -1178,43 +1177,6 @@ class GroupchatControl(BaseControl):
 
         super(GroupchatControl, self).shutdown()
         app.check_finalize(self)
-
-    def safe_shutdown(self) -> bool:
-        # whether to ask for confirmation before closing muc
-        if app.settings.get('confirm_close_muc') and self.contact.is_joined:
-            return False
-        return True
-
-    def allow_shutdown(self, _method, on_yes, on_no):
-        # whether to ask for confirmation before closing muc
-        if app.settings.get('confirm_close_muc') and self.contact.is_joined:
-            def on_ok(is_checked: bool) -> None:
-                if is_checked:
-                    # User does not want to be asked again
-                    app.settings.set('confirm_close_muc', False)
-                on_yes(self)
-
-            def on_cancel(is_checked: bool) -> None:
-                if is_checked:
-                    # User does not want to be asked again
-                    app.settings.set('confirm_close_muc', False)
-                on_no(self)
-
-            ConfirmationCheckDialog(
-                _('Leave Group Chat'),
-                _('Are you sure you want to leave this group chat?'),
-                _('If you close this window, you will leave '
-                  '\'%s\'.') % self.contact.name,
-                _('_Do not ask me again'),
-                [DialogButton.make('Cancel',
-                                   callback=on_cancel),
-                 DialogButton.make('Accept',
-                                   text=_('_Leave'),
-                                   callback=on_ok)],
-                transient_for=app.window).show()
-            return
-
-        on_yes(self)
 
     def _close_control(self) -> None:
         app.window.activate_action(

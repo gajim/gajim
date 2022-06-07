@@ -569,9 +569,6 @@ class ChatControl(BaseControl):
         super(ChatControl, self).shutdown()
         app.check_finalize(self)
 
-    def allow_shutdown(self, _method, on_yes, on_no):
-        on_yes(self)
-
     def _on_avatar_update(self,
                           _contact: types.BareContact,
                           _signal_name: str

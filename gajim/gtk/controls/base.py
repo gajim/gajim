@@ -389,25 +389,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def is_groupchat(self) -> bool:
         return self._type.is_groupchat
 
-    def safe_shutdown(self) -> bool:
-        """
-        Called to check if control can be closed without losing data.
-        returns True if control can be closed safely else False
-
-        Derived classes MAY implement this.
-        """
-        return True
-
-    def allow_shutdown(self, method, on_response_yes, on_response_no):
-        """
-        Called to check is a control is allowed to shutdown.
-        If a control is not in a suitable shutdown state this method
-        should call on_response_no, else on_response_yes or
-
-        Derived classes MAY implement this.
-        """
-        on_response_yes(self)
-
     def focus(self) -> None:
         raise NotImplementedError
 
