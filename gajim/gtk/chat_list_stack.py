@@ -27,11 +27,14 @@ from nbxmpp import JID
 
 from gajim.common import app
 from gajim.common import events
+from gajim.common.i18n import _
 
 from . import structs
 from .chat_filter import ChatFilter
 from .chat_list import ChatList
 from .chat_list import ChatRow
+from .dialogs import DialogButton
+from .dialogs import ConfirmationCheckDialog
 
 
 HANDLED_EVENTS = (
@@ -249,9 +252,32 @@ class ChatListStack(Gtk.Stack):
     def remove_chat(self, workspace_id: str, account: str, jid: JID) -> None:
         chat_list = self._chat_lists[workspace_id]
         type_ = chat_list.get_chat_type(account, jid)
-        chat_list.remove_chat(account, jid, emit_unread=False)
-        self.store_open_chats(workspace_id)
-        self.emit('chat-removed', account, jid, type_)
+
+        def _leave(is_checked: bool) -> None:
+            if is_checked:
+                app.settings.set('confirm_close_muc', False)
+
+            chat_list.remove_chat(account, jid, emit_unread=False)
+            self.store_open_chats(workspace_id)
+            self.emit('chat-removed', account, jid, type_)
+
+        if type_ == 'groupchat' and app.settings.get('confirm_close_muc'):
+            client = app.get_client(account)
+            contact = client.get_module('Contacts').get_group_chat_contact(jid)
+            ConfirmationCheckDialog(
+                _('Leave Group Chat'),
+                _('Are you sure you want to leave this group chat?'),
+                _('If you close this chat, you will leave '
+                  '\'%s\'.') % contact.name,
+                _('_Do not ask me again'),
+                [DialogButton.make('Cancel'),
+                 DialogButton.make('Accept',
+                                   text=_('_Leave'),
+                                   callback=_leave)],
+                transient_for=app.window).show()
+            return
+
+        _leave(True)
 
     def remove_chats_for_account(self, account: str) -> None:
         for workspace_id, chat_list in self._chat_lists.items():
