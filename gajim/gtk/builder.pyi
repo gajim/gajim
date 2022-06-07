@@ -720,17 +720,20 @@ class PreviewBuilder(Builder):
     icon_event_box: Gtk.EventBox
     icon_button: Gtk.Button
     right_box: Gtk.Box
+    progress_box: Gtk.Box
+    progressbar: Gtk.ProgressBar
+    progress_text: Gtk.Label
+    cancel_download_button: Gtk.Button
     content_box: Gtk.Box
     image_button: Gtk.Button
     link_button: Gtk.LinkButton
-    progress_box: Gtk.Box
-    progressbar: Gtk.ProgressBar
     button_box: Gtk.Box
     download_button: Gtk.Button
     save_as_button: Gtk.Button
     open_folder_button: Gtk.Button
     file_name: Gtk.Label
     file_size: Gtk.Label
+    info_message: Gtk.Label
 
 
 class PreviewContextMenuBuilder(Builder):

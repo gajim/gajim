@@ -53,6 +53,8 @@ class PreviewWidget(Gtk.Box):
         self.account = account
         self._preview: Optional[Preview] = None
 
+        self._in_progress = False
+
         if app.settings.get('use_kib_mib'):
             self._units = GLib.FormatSizeFlags.IEC_UNITS
         else:
@@ -69,12 +71,22 @@ class PreviewWidget(Gtk.Box):
         return self._preview.uri
 
     def update_progress(self, _preview: Preview, progress: float) -> None:
+        self._in_progress = True
+
+        self._ui.download_button.hide()
+
         self._ui.progress_box.show()
+        self._ui.progress_text.set_label(f'{int(progress * 100)} %')
         self._ui.progressbar.set_fraction(progress)
+        self._ui.info_message.set_text(_('Downloading…'))
+        self._ui.info_message.set_tooltip_text('')
 
     def update(self, preview: Preview, data: Optional[GdkPixbufType]) -> None:
         self._preview = preview
+
+        self._in_progress = False
         self._ui.progress_box.hide()
+        self._ui.info_message.hide()
 
         if preview.is_geo_uri:
             data = load_icon_pixbuf('map', size=preview.size)
@@ -143,6 +155,11 @@ class PreviewWidget(Gtk.Box):
                 self._ui.right_box.pack_end(audio_widget, False, True, 0)
                 self._ui.right_box.reorder_child(audio_widget, 1)
         else:
+            if preview.info_message is not None:
+                self._ui.info_message.set_text(preview.info_message)
+                self._ui.info_message.set_tooltip_text(preview.info_message)
+                self._ui.info_message.show()
+
             if preview.file_size == 0:
                 self._ui.download_button.hide()
                 self._ui.link_button.show()
@@ -186,6 +203,8 @@ class PreviewWidget(Gtk.Box):
         if self._preview.orig_exists():
             menu.download.hide()
         else:
+            if self._in_progress:
+                menu.download.hide()
             menu.open.hide()
             menu.save_as.hide()
             menu.open_folder.hide()
@@ -256,7 +275,9 @@ class PreviewWidget(Gtk.Box):
         open_file(self._preview.orig_path.parent)
 
     def _on_copy_link_location(self, _menu: Gtk.Menu) -> None:
-        clipboard = Gtk.Clipboard.get_default(Gdk.Display.get_default())
+        display = Gdk.Display.get_default()
+        assert display is not None
+        clipboard = Gtk.Clipboard.get_default(display)
         assert self._preview
         clipboard.set_text(self._preview.uri, -1)
 

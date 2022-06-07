@@ -33,6 +33,7 @@ from gajim.common.helpers import load_file_async
 from gajim.common.helpers import write_file_async
 from gajim.common.helpers import get_tls_error_phrase
 from gajim.common.helpers import get_account_proxy
+from gajim.common.i18n import _
 from gajim.common.preview_helpers import aes_decrypt
 from gajim.common.preview_helpers import filename_from_uri
 from gajim.common.preview_helpers import parse_fragment
@@ -77,6 +78,8 @@ class Preview:
         self.mime_type: str = ''
         self.file_size: int = 0
         self._received_size: int = 0
+
+        self.info_message: Optional[str] = None
 
         self._soup_message: Optional[Soup.Message] = None
 
@@ -150,6 +153,9 @@ class Preview:
             log.warning('Creating thumbnail failed for: %s', self.orig_path)
             return False
         return True
+
+    def reset_received_size(self) -> None:
+        self._received_size = 0
 
     def update_widget(self, data: Optional[GdkPixbufType] = None) -> None:
         self._widget.update(self, data)
@@ -395,7 +401,8 @@ class PreviewManager:
             log.warning('TLS verification failed: %s', phrase)
             session = self._get_session(preview.account)
             session.cancel_message(message, Soup.Status.CANCELLED)
-            return
+            preview.info_message = _('TLS verification failed: %s') % phrase
+            preview.update_widget()
 
     def _on_content_sniffed(self,
                             message: Soup.Message,
@@ -425,6 +432,8 @@ class PreviewManager:
                 file_size, uri)
             if not force:
                 session.cancel_message(message, Soup.Status.CANCELLED)
+                preview.info_message = _('Automatic preview disabled '
+                                         '(file too big)')
 
         preview.update_widget()
 
@@ -441,7 +450,12 @@ class PreviewManager:
                      preview: Preview) -> None:
         if message.status_code != Soup.Status.OK:
             log.warning('Download failed: %s', preview.request_uri)
-            log.warning(Soup.Status.get_phrase(message.status_code))
+            status_code = Soup.Status.get_phrase(message.status_code)
+            log.warning(status_code)
+            preview.reset_received_size()
+            if message.status_code != 1:
+                # status_code 1: 'Cancelled'
+                preview.info_message = _('Download failed (%s)') % status_code
             preview.update_widget()
             return
 
