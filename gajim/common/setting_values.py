@@ -499,7 +499,7 @@ ACCOUNT_SETTINGS = {
 }
 
 StringWorkspaceSettings = Literal[
-    'avatar_sha'
+    'avatar_sha',
     'color',
     'name',
 ]
