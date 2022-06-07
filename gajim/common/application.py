@@ -36,6 +36,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common import configpaths
 from gajim.common import logging_helpers
+from gajim.common.dbus import logind
 from gajim.common.events import AccountDisonnected
 from gajim.common.events import AllowGajimUpdateCheck
 from gajim.common.events import GajimUpdateAvailable
@@ -87,6 +88,8 @@ class CoreApplication:
 
         if sys.platform in ('win32', 'darwin'):
             GLib.timeout_add_seconds(20, self._check_for_updates)
+        else:
+            logind.enable()
 
         for account in app.settings.get_active_accounts():
             app.connections[account] = Client(account)
@@ -174,6 +177,7 @@ class CoreApplication:
         app.storage.cache.shutdown()
         app.storage.archive.shutdown()
         self.end_profiling()
+        logind.shutdown()
 
     def _quit_app(self) -> None:
         self._shutdown_core()
