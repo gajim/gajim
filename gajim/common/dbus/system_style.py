@@ -69,7 +69,6 @@ class SystemStyleListener:
         except GLib.Error as error:
             log.error('Couldn’t read the color-scheme setting: %s',
                       error.message)
-            self._prefer_dark = False
             return
 
     def _signal_setting_changed(self,
@@ -90,6 +89,5 @@ class SystemStyleListener:
             app.ged.raise_event(StyleChanged())
 
     @property
-    def prefer_dark(self) -> bool:
-        assert self._prefer_dark is not None
+    def prefer_dark(self) -> Optional[bool]:
         return self._prefer_dark
