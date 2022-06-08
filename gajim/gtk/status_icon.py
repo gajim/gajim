@@ -190,7 +190,7 @@ class GtkMenuBackend(EventHelper):
 
     def _on_activate(self, *args: Any) -> None:
         if app.settings.get('last_main_window_visible'):
-            app.window.minimize()
+            app.window.hide()
         else:
             app.window.unminimize()
 
