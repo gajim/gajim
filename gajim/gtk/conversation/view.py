@@ -201,8 +201,6 @@ class ConversationView(Gtk.ListBox):
         self._insert_message(join_left)
 
     def add_user_status(self, name: str, show: str, status: str) -> None:
-        if not self._contact.settings.get('print_status'):
-            return
         user_status = UserStatus(self._account, name, show, status)
         self._insert_message(user_status)
 

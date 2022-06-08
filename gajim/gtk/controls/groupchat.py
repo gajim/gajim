@@ -846,11 +846,13 @@ class GroupchatControl(BaseControl):
         self.add_info_message(message)
 
     def _on_user_status_show_changed(self,
-                                     _contact: GroupchatContact,
+                                     contact: GroupchatContact,
                                      _signal_name: str,
                                      user_contact: GroupchatParticipant,
                                      properties: MessageProperties
                                      ) -> None:
+        if not contact.settings.get('print_status'):
+            return
 
         self.conversation_view.add_user_status(user_contact.name,
                                                user_contact.show.value,
