@@ -27,7 +27,7 @@ test-pyright:
   script:
     - pip3 install git+https://dev.gajim.org/gajim/python-nbxmpp.git
     - pip3 install git+https://github.com/pygobject/pygobject-stubs.git
-    - npm install pyright@1.1.249
+    - npm install pyright
     - python3 .ci/link-gtk.py
     - $(npm bin)/pyright --version
     - $(npm bin)/pyright
