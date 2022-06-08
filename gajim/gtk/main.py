@@ -186,15 +186,15 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self.set_skip_taskbar_hint(not app.settings.get('show_in_taskbar'))
 
+        self.show_all()
+
         show_main_window = app.settings.get('show_main_window_on_startup')
         if show_main_window == 'never':
-            self.minimize()
+            self.hide()
 
         elif (show_main_window == 'last_state' and
                 not app.settings.get('last_main_window_visible')):
-            self.minimize()
-
-        self.show_all()
+            self.hide()
 
     def _on_account_enabled(self, event: events.AccountEnabled) -> None:
         self._account_side_bar.add_account(event.account)
