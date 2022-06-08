@@ -61,7 +61,7 @@ class MUCJoinLeft(BaseRow):
 
         timestamp_widget = self.create_timestamp_widget(self.timestamp)
         timestamp_widget.set_halign(Gtk.Align.START)
-        timestamp_widget.set_valign(Gtk.Align.END)
+        timestamp_widget.set_valign(Gtk.Align.FILL)
         self.grid.attach(timestamp_widget, 3, 0, 1, 1)
 
         self.show_all()
