@@ -33,6 +33,7 @@ from gajim.common import events
 from gajim.common import ged
 from gajim.common.client import Client
 from gajim.common.const import Direction
+from gajim.common.const import Display
 from gajim.common.const import SimpleClientState
 from gajim.common.ged import EventHelper
 from gajim.common.helpers import ask_for_status_message
@@ -155,6 +156,20 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         for client in app.get_clients():
             client.connect_signal('state-changed',
                                   self._on_client_state_changed)
+
+    def is_minimized(self) -> bool:
+        if app.is_display(Display.WAYLAND):
+            # There is no way to discover if a window is minimized on wayland
+            return False
+
+        window = self.get_window()
+        assert window is not None
+        return bool(Gdk.WindowState.ICONIFIED & window.get_state())
+
+    def is_withdrawn(self) -> bool:
+        window = self.get_window()
+        assert window is not None
+        return bool(Gdk.WindowState.WITHDRAWN & window.get_state())
 
     def minimize(self) -> None:
         self.iconify()
