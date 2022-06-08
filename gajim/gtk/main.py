@@ -54,8 +54,6 @@ from .dialogs import ConfirmationCheckDialog
 from .types import ControlT
 from .builder import get_builder
 from .util import get_app_window
-from .util import is_minimized
-from .util import is_minimize_event
 from .util import get_key_theme
 from .util import resize_window
 from .util import restore_main_window_position
@@ -171,11 +169,18 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         assert window is not None
         return bool(Gdk.WindowState.WITHDRAWN & window.get_state())
 
+    def hide(self) -> None:
+        save_main_window_position()
+        Gtk.ApplicationWindow.hide(self)
+
+    def show(self) -> None:
+        restore_main_window_position()
+        self.present_with_time(Gtk.get_current_event_time())
+
     def minimize(self) -> None:
         self.iconify()
 
     def unminimize(self) -> None:
-        restore_main_window_position()
         self.deiconify()
         self.present_with_time(Gtk.get_current_event_time())
 
@@ -193,7 +198,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self.hide()
 
         elif (show_main_window == 'last_state' and
-                not app.settings.get('last_main_window_visible')):
+                not app.settings.get('is_window_visible')):
             self.hide()
 
     def _on_account_enabled(self, event: events.AccountEnabled) -> None:
@@ -419,7 +424,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                           ) -> int:
 
         if app.settings.get('minimize_on_window_delete'):
-            self.minimize()
+            if app.settings.get('minimize_to_tray'):
+                self.hide()
+            else:
+                self.minimize()
             return Gdk.EVENT_STOP
 
         if not app.settings.get('confirm_on_window_delete'):
@@ -456,13 +464,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             log.debug('Window state changed: ICONIFIED: %s, WITHDRAWN: %s',
                       is_iconified, is_withdrawn)
 
-            app.settings.set('last_main_window_visible',
-                             not is_minimized(event))
-
-        if is_minimize_event(event) and app.settings.get('minimize_to_tray'):
-            save_main_window_position()
-            log.debug('Minimize to tray')
-            self.hide()
+            app.settings.set('is_window_visible', not is_withdrawn)
 
     def _set_startup_finished(self) -> None:
         self._startup_finished = True

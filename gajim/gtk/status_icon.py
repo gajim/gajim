@@ -189,8 +189,10 @@ class GtkMenuBackend(EventHelper):
         self._on_activate()
 
     def _on_activate(self, *args: Any) -> None:
-        if app.window.is_minimized() or app.window.is_withdrawn():
+        if app.window.is_minimized():
             app.window.unminimize()
+        if app.window.is_withdrawn():
+            app.window.show()
         else:
             app.window.hide()
 
