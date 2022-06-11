@@ -298,7 +298,7 @@ class AppIndicator(GtkMenuBackend):
 
         self._status_icon = appindicator.Indicator.new(
             'Gajim',
-            'dcraven-online',
+            'org.gajim.Gajim',
             appindicator.IndicatorCategory.COMMUNICATIONS)
         self._status_icon.set_icon_theme_path(str(configpaths.get('ICONS')))
         self._status_icon.set_status(appindicator.IndicatorStatus.ACTIVE)
@@ -318,6 +318,9 @@ class AppIndicator(GtkMenuBackend):
         if not init and app.window.get_total_unread_count():
             icon_name = 'mail-message-new'
             self._status_icon.set_icon_full(icon_name, _('Pending Event'))
+            return
+
+        if app.is_flatpak():
             return
 
         show = get_global_show()

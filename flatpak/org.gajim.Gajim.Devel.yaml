@@ -26,6 +26,8 @@ finish-args:
   - --talk-name=org.kde.kwalletd5
   # Notifications
   - --talk-name=org.freedesktop.Notifications
+  # tray/status icon
+  - --talk-name=org.kde.StatusNotifierWatcher
   # GnuPG
   - --filesystem=~/.gnupg
   # camera access
