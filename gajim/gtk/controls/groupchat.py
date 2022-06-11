@@ -126,14 +126,14 @@ class GroupchatControl(BaseControl):
 
         show_roster = app.settings.get('hide_groupchat_occupants_list')
         self.xml.roster_revealer.set_reveal_child(show_roster)
-        icon = 'go-next-symbolic' if show_roster else 'go-previous-symbolic'
-        self.xml.toggle_roster_image.set_from_icon_name(
-            icon, Gtk.IconSize.BUTTON)
-
         app.settings.bind_signal(
             'hide_groupchat_occupants_list',
             self.xml.roster_revealer,
             'set_reveal_child')
+        self._set_toggle_roster_button_icon(show_roster)
+        app.settings.connect_signal(
+            'hide_groupchat_occupants_list',
+            self._set_toggle_roster_button_icon)
         self.roster.connect('row-activated', self._on_roster_row_activated)
 
         self.add_actions()
@@ -522,11 +522,16 @@ class GroupchatControl(BaseControl):
             self.room_jid,
             {jid: {'affiliation': affiliation}})
 
-    def _show_roster(self, *args: Any) -> None:
-        show = not self.xml.roster_revealer.get_reveal_child()
-        icon = 'go-next-symbolic' if show else 'go-previous-symbolic'
+    def _set_toggle_roster_button_icon(self,
+                                       show_roster: bool,
+                                       *args: Any) -> None:
+        icon = 'go-next-symbolic' if show_roster else 'go-previous-symbolic'
         self.xml.toggle_roster_image.set_from_icon_name(
             icon, Gtk.IconSize.BUTTON)
+
+    def _show_roster(self, *args: Any) -> None:
+        show = not self.xml.roster_revealer.get_reveal_child()
+        self._set_toggle_roster_button_icon(show)
 
         transition = Gtk.RevealerTransitionType.SLIDE_RIGHT
         if show:
