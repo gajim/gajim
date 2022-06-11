@@ -127,9 +127,8 @@ def make_workspace_avatar(letter: str,
                           style: str = 'round-corners') -> cairo.ImageSurface:
 
     surface = generate_avatar(letter, color, size, scale)
-    surface = clip(surface, style)
     surface.set_device_scale(scale, scale)
-    return surface
+    return clip(surface, style)
 
 
 def add_status_to_avatar(surface: cairo.ImageSurface,
@@ -294,18 +293,21 @@ def clip_circle(surface: cairo.ImageSurface) -> cairo.ImageSurface:
 
 
 def round_corners(surface: cairo.ImageSurface) -> cairo.ImageSurface:
-    new_surface = cairo.ImageSurface(cairo.Format.ARGB32,
-                                     surface.get_width(),
-                                     surface.get_height())
+    width = surface.get_width()
+    height = surface.get_height()
+    scale = surface.get_device_scale()[0]
 
+    new_surface = cairo.ImageSurface(cairo.Format.ARGB32,
+                                     width,
+                                     height)
     new_surface.set_device_scale(*surface.get_device_scale())
     context = cairo.Context(new_surface)
     context.set_source_surface(surface, 0, 0)
 
-    width = surface.get_width()
-    height = surface.get_height()
-    scale = surface.get_device_scale()[0]
-    radius = 9 * scale
+    width = width / scale
+    height = height / scale
+
+    radius = 9
     degrees = pi / 180
 
     context.new_sub_path()
