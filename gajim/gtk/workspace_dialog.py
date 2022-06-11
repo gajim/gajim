@@ -134,6 +134,7 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         else:
             self._ui.style_stack.set_visible_child_name('color')
             self._avatar_sha = None
+            self._avatar_selector.reset()
         self._update_avatar()
 
     def _update_avatar(self) -> None:

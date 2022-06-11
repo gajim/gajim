@@ -16,6 +16,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
+from typing import cast
 from typing import Optional
 
 import os
@@ -34,6 +35,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 from gajim.common.helpers import get_file_path_from_dnd_dropped_uri
 
+from .dialogs import ErrorDialog
 from .filechoosers import AvatarChooserDialog
 from .util import scale_with_ratio
 
@@ -107,6 +109,11 @@ class AvatarSelector(Gtk.Box):
     def _on_destroy(self, *args: Any) -> None:
         app.check_finalize(self)
 
+    def reset(self) -> None:
+        self._load_button.show()
+        self._helper_label.show()
+        self._crop_area.hide()
+
     def prepare_crop_area(self, path: str) -> None:
         pixbuf = self._get_pixbuf_from_path(path)
         if pixbuf is None:
@@ -165,9 +172,10 @@ class AvatarSelector(Gtk.Box):
         if width > AvatarSize.PUBLISH or height > AvatarSize.PUBLISH:
             # Scale only down, never up
             width, height = scale_with_ratio(AvatarSize.PUBLISH, width, height)
-            pixbuf = pixbuf.scale_simple(width,
-                                         height,
-                                         GdkPixbuf.InterpType.BILINEAR)
+            scaled_pixbuf = pixbuf.scale_simple(
+                width, height, GdkPixbuf.InterpType.BILINEAR)
+            assert scaled_pixbuf is not None
+            return scaled_pixbuf, width, height
         return pixbuf, width, height
 
     def get_avatar_surface(self) -> Optional[tuple[cairo.Surface, int, int]]:
@@ -238,14 +246,16 @@ class CropArea(Gtk.DrawingArea):
         else:
             self._aspect = -1
 
-    def set_pixbuf(self, pixbuf: GdkPixbuf.Pixbuf) -> None:
-        if pixbuf:
-            self._browse_pixbuf = pixbuf
-            width = pixbuf.get_width()
-            height = pixbuf.get_height()
-        else:
-            width = 0
-            height = 0
+    def set_pixbuf(self, pixbuf: Optional[GdkPixbuf.Pixbuf]) -> None:
+        if pixbuf is None:
+            self._browse_pixbuf = None
+            avatar_selector = cast(AvatarSelector, self.get_parent())
+            avatar_selector.reset()
+            return
+
+        self._browse_pixbuf = pixbuf
+        width = pixbuf.get_width()
+        height = pixbuf.get_height()
 
         self._crop.width = 2 * self._base_width
         self._crop.height = 2 * self._base_height
@@ -281,7 +291,12 @@ class CropArea(Gtk.DrawingArea):
 
         self._update_pixbufs()
 
-        assert self._pixbuf
+        if self._pixbuf is None:
+            ErrorDialog(_('Error Loading Image'),
+                        _('Selected image could not be loaded.'))
+            self.set_pixbuf(None)
+            return False
+
         width = self._pixbuf.get_width()
         height = self._pixbuf.get_height()
         crop = self._crop_to_widget()
@@ -289,6 +304,7 @@ class CropArea(Gtk.DrawingArea):
         ix = self._image.x
         iy = self._image.y
 
+        assert self._color_shifted_pixbuf is not None
         Gdk.cairo_set_source_pixbuf(
             context, self._color_shifted_pixbuf, ix, iy)
         context.rectangle(
@@ -604,9 +620,13 @@ class CropArea(Gtk.DrawingArea):
         dest_width = int(width * scale)
         dest_height = int(height * scale)
 
+        if dest_width == 0 or dest_height == 0:
+            log.warning('Image width or height is zero')
+            return
+
         if (self._pixbuf is None or
-                self._pixbuf.get_width != allocation.width or
-                self._pixbuf.get_height != allocation.height):
+                self._pixbuf.get_width() != allocation.width or
+                self._pixbuf.get_height() != allocation.height):
 
             self._pixbuf = GdkPixbuf.Pixbuf.new(
                 GdkPixbuf.Colorspace.RGB,
@@ -614,6 +634,7 @@ class CropArea(Gtk.DrawingArea):
                 8,
                 dest_width,
                 dest_height)
+
             if self._pixbuf is None:
                 return
 
@@ -770,5 +791,6 @@ class CropArea(Gtk.DrawingArea):
         context.paint()
 
         surface = context.get_target()
+        assert isinstance(surface, cairo.ImageSurface)
         self._color_shifted_pixbuf = Gdk.pixbuf_get_from_surface(
             surface, 0, 0, surface.get_width(), surface.get_height())
