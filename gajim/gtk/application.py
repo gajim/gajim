@@ -58,7 +58,6 @@ from gajim.common import configpaths
 from gajim.common import events
 from gajim.common import ged
 from gajim.common import idle
-from gajim.common import logging_helpers
 from gajim.common.application import CoreApplication
 from gajim.common.const import GAJIM_FAQ_URI
 from gajim.common.const import GAJIM_WIKI_URI
@@ -198,7 +197,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         self.connect('handle-local-options', self._handle_local_options)
         self.connect('command-line', self._command_line)
-        self.connect('startup', self._startup)
         self.connect('shutdown', self._shutdown)
 
         self.interface = None
@@ -218,7 +216,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
         option.short_name = 0
         return [option]
 
-    def _startup(self, _application: GajimApplication) -> None:
+    def _startup(self) -> None:
         if sys.platform == 'win32':
             # Changing the PANGOCAIRO_BACKEND is necessary on Windows
             # to render colored emoji glyphs
@@ -335,6 +333,9 @@ class GajimApplication(Gtk.Application, CoreApplication):
     def _command_line(self,
                       _application: GajimApplication,
                       command_line: Gio.ApplicationCommandLine) -> int:
+        '''Handles command line options not related to the startup of Gajim.
+        '''
+
         options = command_line.get_options_dict()
 
         remote_commands = [
@@ -359,13 +360,10 @@ class GajimApplication(Gtk.Application, CoreApplication):
     def _handle_local_options(self,
                               _application: Gtk.Application,
                               options: GLib.VariantDict) -> int:
-        # Parse all options that have to be executed before ::startup
+
         if options.contains('version'):
             print(gajim.__version__)
             return 0
-
-        if options.contains('cprofile'):
-            self.start_profiling()
 
         profile = options.lookup_value('profile')
         if profile is not None:
@@ -376,35 +374,12 @@ class GajimApplication(Gtk.Application, CoreApplication):
             self.set_application_id(app_id)
             configpaths.set_profile(profile)
 
-        if options.contains('separate'):
-            configpaths.set_separation(True)
+        self.register()
+        if self.get_is_remote():
+            return -1
 
-        config_path = options.lookup_value('config-path')
-        if config_path is not None:
-            config_path = config_path.get_string()
-            configpaths.set_config_root(config_path)
-
-        configpaths.init()
-
-        if options.contains('gdebug'):
-            os.environ['G_MESSAGES_DEBUG'] = 'all'
-
-        logging_helpers.init()
-
-        if options.contains('quiet'):
-            logging_helpers.set_quiet()
-
-        if options.contains('verbose'):
-            logging_helpers.set_verbose()
-
-        loglevel = options.lookup_value('loglevel')
-        if loglevel is not None:
-            loglevel = loglevel.get_string()
-            logging_helpers.set_loglevels(loglevel)
-
-        if options.contains('warnings'):
-            self._show_warnings()
-
+        self._core_command_line(options)
+        self._startup()
         return -1
 
     def _add_app_actions(self) -> None:

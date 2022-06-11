@@ -35,6 +35,7 @@ from gi.repository import Soup
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import configpaths
+from gajim.common import logging_helpers
 from gajim.common.events import AccountDisonnected
 from gajim.common.events import AllowGajimUpdateCheck
 from gajim.common.events import GajimUpdateAvailable
@@ -93,6 +94,38 @@ class CoreApplication:
     @property
     def _log(self) -> logging.Logger:
         return app.log('gajim.application')
+
+    def _core_command_line(self, options: GLib.VariantDict) -> None:
+        if options.contains('cprofile'):
+            self.start_profiling()
+
+        if options.contains('gdebug'):
+            os.environ['G_MESSAGES_DEBUG'] = 'all'
+
+        if options.contains('separate'):
+            configpaths.set_separation(True)
+
+        config_path = options.lookup_value('config-path')
+        if config_path is not None:
+            config_path = config_path.get_string()
+            configpaths.set_config_root(config_path)
+
+        configpaths.init()
+        logging_helpers.init()
+
+        if options.contains('quiet'):
+            logging_helpers.set_quiet()
+
+        if options.contains('verbose'):
+            logging_helpers.set_verbose()
+
+        loglevel = options.lookup_value('loglevel')
+        if loglevel is not None:
+            loglevel = loglevel.get_string()
+            logging_helpers.set_loglevels(loglevel)
+
+        if options.contains('warnings'):
+            self._show_warnings()
 
     def start_profiling(self) -> None:
         self._log.info('Start profiling')
