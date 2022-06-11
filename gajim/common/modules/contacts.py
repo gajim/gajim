@@ -361,7 +361,6 @@ class BareContact(CommonContact):
 
         transport_icon = None
         if self.is_gateway:
-            show = None
             disco_info = app.storage.cache.get_last_disco_info(self._jid)
             if disco_info is not None:
                 if disco_info.gateway_type == 'sms':
@@ -373,6 +372,9 @@ class BareContact(CommonContact):
                 if resource_contact.identity_type == 'sms':
                     transport_icon = 'gajim-agent-sms'
                     break
+
+        if self.avatar_sha is not None:
+            transport_icon = None
 
         if pixbuf:
             return app.app.avatar_storage.get_pixbuf(
