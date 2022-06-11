@@ -96,6 +96,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
     '''Main class handling activation and command line.'''
 
     def __init__(self):
+        CoreApplication.__init__(self)
         flags = (Gio.ApplicationFlags.HANDLES_COMMAND_LINE |
                  Gio.ApplicationFlags.CAN_OVERRIDE_APP_ID)
         Gtk.Application.__init__(self,
@@ -179,6 +180,13 @@ class GajimApplication(Gtk.Application, CoreApplication):
             GLib.OptionArg.NONE,
             _('Sets an environment variable so '
               'GLib debug messages are printed'))
+
+        self.add_main_option(
+            'cprofile',
+            0,
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.NONE,
+            _('Profile application with cprofile'))
 
         self.add_main_option(
             'start-chat', 0,
@@ -355,6 +363,9 @@ class GajimApplication(Gtk.Application, CoreApplication):
         if options.contains('version'):
             print(gajim.__version__)
             return 0
+
+        if options.contains('cprofile'):
+            self.start_profiling()
 
         profile = options.lookup_value('profile')
         if profile is not None:

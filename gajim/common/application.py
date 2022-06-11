@@ -22,6 +22,9 @@ import os
 import sys
 import json
 import logging
+import cProfile
+import pstats
+from pstats import SortKey
 from datetime import datetime
 from packaging.version import Version as V
 
@@ -46,6 +49,9 @@ from gajim.common.storage.archive import MessageArchiveStorage
 
 
 class CoreApplication:
+    def __init__(self) -> None:
+        self._profiling_session = None
+
     def _init_core(self) -> None:
         # Create and initialize Application Paths & Databases
         app.app = self
@@ -88,6 +94,21 @@ class CoreApplication:
     def _log(self) -> logging.Logger:
         return app.log('gajim.application')
 
+    def start_profiling(self) -> None:
+        self._log.info('Start profiling')
+        self._profiling_session = cProfile.Profile()
+        self._profiling_session.enable()
+
+    def end_profiling(self) -> None:
+        if self._profiling_session is None:
+            return
+
+        self._profiling_session.disable()
+        self._log.info('End profiling')
+        ps = pstats.Stats(self._profiling_session)
+        ps = ps.sort_stats(SortKey.CUMULATIVE)
+        ps.print_stats()
+
     def start_shutdown(self, *args: Any, **kwargs: Any) -> None:
         app.app.systray.shutdown()
 
@@ -119,6 +140,7 @@ class CoreApplication:
         app.storage.archive.cleanup_chat_history()
         app.storage.cache.shutdown()
         app.storage.archive.shutdown()
+        self.end_profiling()
 
     def _quit_app(self) -> None:
         self._shutdown_core()
