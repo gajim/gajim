@@ -41,6 +41,7 @@ class StatusMessageSelector(Gtk.Box, EventHelper):
         self._entry = Gtk.Entry()
         self._entry.set_size_request(200, -1)
         self._entry.set_property('show-emoji-icon', True)
+        self._entry.set_property('enable-emoji-completion', True)
         self._entry.set_placeholder_text(_('Status message…'))
         self._entry.connect('activate', self._set_status_message)
         self._entry.connect('changed', self._on_changed)
