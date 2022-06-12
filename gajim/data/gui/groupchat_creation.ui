@@ -97,6 +97,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="show-emoji-icon">True</property>
+                <property name="enable-emoji-completion">True</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
