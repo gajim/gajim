@@ -374,7 +374,9 @@ class GroupchatControl(BaseControl):
         transition = Gtk.StackTransitionType.SLIDE_DOWN
         if name == 'groupchat':
             transition = Gtk.StackTransitionType.SLIDE_UP
-            self.msg_textview.grab_focus()
+            active_control = app.window.get_active_control()
+            if active_control == self:
+                self.msg_textview.grab_focus()
         self.xml.stack.set_visible_child_full(name, transition)
 
     def _get_current_page(self) -> str:
