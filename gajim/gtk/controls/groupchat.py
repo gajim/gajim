@@ -123,8 +123,13 @@ class GroupchatControl(BaseControl):
 
         self.roster = GroupchatRoster(self.account, self.room_jid, self)
         self.xml.roster_revealer.add(self.roster)
-        self.xml.roster_revealer.set_reveal_child(
-            not app.settings.get('hide_groupchat_occupants_list'))
+
+        show_roster = app.settings.get('hide_groupchat_occupants_list')
+        self.xml.roster_revealer.set_reveal_child(show_roster)
+        icon = 'go-next-symbolic' if show_roster else 'go-previous-symbolic'
+        self.xml.toggle_roster_image.set_from_icon_name(
+            icon, Gtk.IconSize.BUTTON)
+
         app.settings.bind_signal(
             'hide_groupchat_occupants_list',
             self.xml.roster_revealer,
@@ -244,7 +249,6 @@ class GroupchatControl(BaseControl):
 
         if self.contact.is_joined:
             self._set_control_active()
-            self._show_roster()
             self._groupchat_state.set_joined()
 
         elif self.contact.is_not_joined:
