@@ -493,6 +493,17 @@ class ResourceContact(CommonContact):
         return None
 
     @property
+    def is_phone(self):
+        disco_info = app.storage.cache.get_last_disco_info(self._jid)
+        if disco_info is None:
+            return False
+
+        for identity in disco_info.identities:
+            if identity.type == 'phone':
+                return True
+        return False
+
+    @property
     def is_available(self) -> bool:
         return self._presence.available
 

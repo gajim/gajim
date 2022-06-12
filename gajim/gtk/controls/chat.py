@@ -323,13 +323,6 @@ class ChatControl(BaseControl):
     def _on_nickname_received(self, _event):
         self.update_ui()
 
-    def _on_update_client_info(self, event):
-        # TODO: Test if this works
-        contact = self._client.get_module('Contacts').get_contact(event.jid)
-        if contact is None:
-            return
-        self.xml.phone_image.set_visible(contact.uses_phone)
-
     def _on_chatstate_update(self,
                              _contact: types.BareContact,
                              _signal_name: str
@@ -381,6 +374,9 @@ class ChatControl(BaseControl):
         kind = 'incoming'
         if event.properties.is_sent_carbon:
             kind = 'outgoing'
+
+        resource_contact = self.contact.get_resource(event.resource)
+        self.xml.phone_image.set_visible(resource_contact.is_phone)
 
         self.add_message(event.msgtxt,
                          kind,
