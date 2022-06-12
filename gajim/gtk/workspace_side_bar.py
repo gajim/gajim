@@ -20,12 +20,12 @@ from typing import Optional
 from typing import cast
 
 import logging
+import pickle
 
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
-
 from nbxmpp.protocol import JID
 
 from gajim.common import app
@@ -117,12 +117,13 @@ class WorkspaceSideBar(Gtk.ListBox):
                                _info: int,
                                _time: int
                                ) -> None:
-        data = selection_data.get_data().decode('utf-8')
+        data = selection_data.get_data()
         item_type = selection_data.get_data_type().name()
         if item_type == 'WORKSPACE_SIDEBAR_ITEM':
-            self._process_workspace_drop(data)
+            self._process_workspace_drop(data.decode('utf-8'))
         elif item_type == 'CHAT_LIST_ITEM':
-            self._process_chat_list_drop(data, y_coord)
+            account, jid = pickle.loads(data)
+            self._process_chat_list_drop(account, jid, y_coord)
         else:
             log.debug('Unknown item type dropped')
 
@@ -147,9 +148,11 @@ class WorkspaceSideBar(Gtk.ListBox):
         self.store_workspace_order()
         app.window.activate_workspace(workspace_id)
 
-    def _process_chat_list_drop(self, identifier: str, y_coord: int) -> None:
-        account, jid = identifier.split()
-        jid = JID.from_string(jid)
+    def _process_chat_list_drop(self,
+                                account: str,
+                                jid: JID,
+                                y_coord: int) -> None:
+
         workspace_row = cast(Workspace, self.get_row_at_y(y_coord))
         if workspace_row.workspace_id == 'add':
             app.window.move_chat_to_new_workspace(
@@ -377,7 +380,7 @@ class Workspace(CommonWorkspace):
                           ) -> None:
         drop_type = Gdk.Atom.intern_static_string('WORKSPACE_SIDEBAR_ITEM')
         data = self.workspace_id.encode('utf-8')
-        selection_data.set(drop_type, 32, data)
+        selection_data.set(drop_type, 8, data)
 
 
 class AddWorkspace(CommonWorkspace):

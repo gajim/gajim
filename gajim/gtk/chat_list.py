@@ -21,6 +21,7 @@ from typing import Union
 
 import logging
 import time
+import pickle
 
 from gi.repository import Gio
 from gi.repository import Gdk
@@ -737,8 +738,8 @@ class ChatRow(Gtk.ListBoxRow):
                           _time: int
                           ) -> None:
         drop_type = Gdk.Atom.intern_static_string('CHAT_LIST_ITEM')
-        data = f'{self.account} {self.jid}'.encode('utf-8')
-        selection_data.set(drop_type, 32, data)
+        byte_data = pickle.dumps((self.account, self.jid))
+        selection_data.set(drop_type, 8, byte_data)
 
     def toggle_pinned(self) -> None:
         self._pinned = not self._pinned
