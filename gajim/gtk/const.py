@@ -181,6 +181,7 @@ APP_ACTIONS = [
     ('quit', None),
     ('remove-history', 'a{sv}'),
     ('shortcuts', None),
+    ('show', None),
     ('start-chat', 's'),
     ('xml-console', None),
 ]

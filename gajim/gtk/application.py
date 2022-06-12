@@ -193,6 +193,12 @@ class GajimApplication(Gtk.Application, CoreApplication):
             GLib.OptionArg.NONE,
             _('Start a new chat'))
 
+        self.add_main_option(
+            'show', 0,
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.NONE,
+            _('Show Gajim'))
+
         self.add_main_option_entries(self._get_remaining_entry())
 
         self.connect('handle-local-options', self._handle_local_options)
@@ -341,6 +347,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
         remote_commands = [
             ('ipython', None),
             ('start-chat', GLib.Variant('s', '')),
+            ('show', None)
         ]
 
         remaining = options.lookup_value(GLib.OPTION_REMAINING,
@@ -419,6 +426,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
             ('create-groupchat', self._on_create_groupchat_action),
             ('forget-groupchat', self._on_forget_groupchat_action),
             ('groupchat-join', self._on_groupchat_join_action),
+            ('show', self._on_show),
         ]
 
         for action in actions:
@@ -812,3 +820,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
                                   param: GLib.Variant) -> None:
         account, jid = param.get_strv()
         open_window('GroupchatJoin', account=account, jid=jid)
+
+    @staticmethod
+    def _on_show(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
+        app.window.show()
