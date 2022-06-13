@@ -14,12 +14,13 @@
 
 from __future__ import annotations
 
-from typing import List
+from typing import Any
 from typing import Optional
 
 import locale
 
-from gi.repository import Gdk, GdkPixbuf
+from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -342,7 +343,7 @@ class GroupChatInviter(Gtk.Box):
 
     def _filter_func(self,
                      row: ContactRow,
-                     _user_data: Optional[object]
+                     _user_data: Optional[Any]
                      ) -> bool:
         search_text = self._ui.search_entry.get_text().lower()
         search_text_list = search_text.split()
@@ -357,7 +358,7 @@ class GroupChatInviter(Gtk.Box):
     @staticmethod
     def _sort_func(row1: ContactRow,
                    row2: ContactRow,
-                   _user_data: Optional[object]
+                   _user_data: Optional[Any]
                    ) -> int:
         name1 = row1.get_search_text()
         name2 = row2.get_search_text()
@@ -394,5 +395,5 @@ class GroupChatInviter(Gtk.Box):
     def focus_search_entry(self) -> None:
         self._ui.search_entry.grab_focus()
 
-    def get_invitees(self) -> List[str]:
+    def get_invitees(self) -> list[str]:
         return self._invitees_box.get_contact_jids()
