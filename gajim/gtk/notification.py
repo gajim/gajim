@@ -279,7 +279,7 @@ class Linux(NotificationBackend):
         log.info('Detected notification capabilities: %s', self._caps)
 
     def _detect_dbus_caps(self) -> None:
-        if app.is_flatpak() or app.desktop_env == 'gnome':
+        if app.desktop_env == 'gnome':
             # Gnome Desktop does not use org.freedesktop.Notifications.
             # It has its own API at org.gtk.Notifications, which is not an
             # implementation of the freedesktop spec. There is no documentation

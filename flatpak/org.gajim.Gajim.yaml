@@ -17,6 +17,8 @@ finish-args:
   # Keyring
   - --talk-name=org.freedesktop.secrets
   - --talk-name=org.kde.kwalletd5
+  # Notifications
+  - --talk-name=org.freedesktop.Notifications
   # GnuPG
   - --filesystem=~/.gnupg
   # camera access
