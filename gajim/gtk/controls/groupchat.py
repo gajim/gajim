@@ -121,6 +121,13 @@ class GroupchatControl(BaseControl):
         self.correcting: bool = False
         self.last_sent_msg: Optional[str] = None
 
+        self._groupchat_state = GroupchatState()
+        self._groupchat_state.connect('join-clicked',
+                                      self._on_groupchat_state_join_clicked)
+        self._groupchat_state.connect('abort-clicked',
+                                      self._on_groupchat_state_abort_clicked)
+        self.xml.conv_view_overlay.add_overlay(self._groupchat_state)
+
         self.roster = GroupchatRoster(self.account, self.room_jid, self)
         self.xml.roster_revealer.add(self.roster)
 
@@ -138,7 +145,6 @@ class GroupchatControl(BaseControl):
 
         self.add_actions()
         GLib.idle_add(self.update_actions)
-        self.scale_factor = app.window.get_scale_factor()
 
         if not app.settings.get('hide_groupchat_banner'):
             self.xml.banner_eventbox.set_no_show_all(False)
@@ -195,13 +201,6 @@ class GroupchatControl(BaseControl):
         ])
 
         self._set_control_inactive()
-
-        self._groupchat_state = GroupchatState()
-        self._groupchat_state.connect('join-clicked',
-                                      self._on_groupchat_state_join_clicked)
-        self._groupchat_state.connect('abort-clicked',
-                                      self._on_groupchat_state_abort_clicked)
-        self.xml.conv_view_overlay.add_overlay(self._groupchat_state)
 
         # Stack
         self.xml.stack.show_all()
@@ -565,7 +564,8 @@ class GroupchatControl(BaseControl):
         self._update_avatar()
 
     def _update_avatar(self) -> None:
-        surface = self.contact.get_avatar(AvatarSize.CHAT, self.scale_factor)
+        surface = self.contact.get_avatar(
+            AvatarSize.CHAT, app.window.get_scale_factor())
         self.xml.avatar_image.set_from_surface(surface)
 
     def draw_banner_text(self) -> None:
