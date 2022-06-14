@@ -33,6 +33,16 @@ test-pyright:
     - $(npm bin)/pyright
   interruptible: true
 
+test-flake8:
+  stage: test
+  allow_failure: true
+  rules:
+    - changes:
+      - "**/*.py"
+  script:
+    - flake8
+  interruptible: true
+
 test-pylint:
   stage: test
   rules:
