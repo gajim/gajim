@@ -83,7 +83,7 @@ class SystemStyleListener:
 
         namespace, name, value = parameters
         if (namespace == 'org.freedesktop.appearance' and
-            name == 'color-scheme'):
+                name == 'color-scheme'):
             self._prefer_dark = (value == 1)
             self._callback()
             app.ged.raise_event(StyleChanged())

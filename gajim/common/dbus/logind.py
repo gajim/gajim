@@ -95,7 +95,7 @@ class LogindListener:
                     'org.gajim.Gajim',
                     _('Shutting down Gajim'),
                     'delay'  # Inhibitor will delay but not block shutdown
-                    )),
+                )),
                 GLib.VariantType.new('(h)'),
                 Gio.DBusCallFlags.NONE,
                 -1,
@@ -123,11 +123,11 @@ class LogindListener:
         log.info('Released shutdown delay inhibitor')
 
     def _on_logind_appeared(self,
-                           connection: Gio.DBusConnection,
-                           name: str,
-                           name_owner: str,
-                           *_user_data: Any
-                           ) -> None:
+                            connection: Gio.DBusConnection,
+                            name: str,
+                            name_owner: str,
+                            *_user_data: Any
+                            ) -> None:
         '''Use signal and locks provided by org.freedesktop.login1'''
         log.info('Name %s appeared, owned by %s', name, name_owner)
 
