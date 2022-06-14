@@ -58,6 +58,7 @@ from gajim.common.structs import MUCData
 from gajim.common.structs import MUCPresenceData
 from gajim.common.modules.bits_of_binary import store_bob_data
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.contacts import GroupchatContact
 
 log = logging.getLogger('gajim.c.m.muc')
 
@@ -431,7 +432,7 @@ class MUC(BaseModule):
         self.set_affiliation(result.jid, user_list)
 
         for jid in invites:
-            self.invite(result.jid, jid)
+            self.invite(result.jid, JID.from_string(jid))
 
     def _on_disco_result_after_config(self, task: Task) -> None:
         try:
@@ -919,17 +920,27 @@ class MUC(BaseModule):
                           **invite_data._asdict()))
 
     def invite(self,
-               room: str,
-               jid: str,
+               room: JID,
+               jid: JID,
                reason: Optional[str] = None,
                continue_: bool = False
                ) -> str:
-        type_ = InviteType.MEDIATED
-        contact = self._get_contact(jid)
-        if contact and contact.supports(Namespace.CONFERENCE):
+        if helpers.get_muc_context(room) == 'private':
+            room_contact = self._get_contact(room)
+            assert isinstance(room_contact, GroupchatContact)
+            self_contact = room_contact.get_self()
+            affiliation = self_contact.affiliation
+            admin = affiliation.is_owner or affiliation.is_admin
+            if admin:
+                self.set_affiliation(
+                    room, {jid: {'affiliation': 'member'}})
+                type_ = InviteType.DIRECT
+            else:
+                type_ = InviteType.MEDIATED
+        else:
             type_ = InviteType.DIRECT
 
-        password = self._mucs[room].password
+        password = self._mucs[str(room)].password
         self._log.info('Invite %s to %s', jid, room)
         return self._nbxmpp('MUC').invite(
             room, jid, reason, password, continue_, type_)

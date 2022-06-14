@@ -410,13 +410,16 @@ class GroupchatControl(BaseControl):
     def _on_invite_clicked(self, _button: Gtk.Button) -> None:
         invitees = self._invite_box.get_invitees()
         for jid in invitees:
-            self.invite(jid)
+            self.invite(JID.from_string(jid))
         self._show_page('groupchat')
 
-    def invite(self, contact_jid: str) -> None:
-        self._client.get_module('MUC').invite(self.room_jid, contact_jid)
+    def invite(self, invited_jid: JID) -> None:
+        self._client.get_module('MUC').invite(
+            self.contact.jid, invited_jid)
+        invited_contact = self._client.get_module('Contacts').get_contact(
+            invited_jid)
         self.add_info_message(
-            _('%s has been invited to this group chat') % contact_jid)
+            _('%s has been invited to this group chat') % invited_contact.name)
 
     def _on_destroy_room(self, _button: Gtk.Button) -> None:
         self.xml.destroy_reason_entry.grab_focus()
