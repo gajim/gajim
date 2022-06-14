@@ -208,6 +208,7 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
             return
 
         name = entry.get_text()
+        name = name.replace(' ', '-')
         server = self._get_muc_service_jid()
         self._ui.address_entry.set_text(f'{name.lower()}@{server}')
 
