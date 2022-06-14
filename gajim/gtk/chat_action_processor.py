@@ -74,13 +74,11 @@ class ChatActionProcessor(Gtk.Popover):
             self._move_selection(Direction.NEXT)
             return True
 
-        if event.keyval == Gdk.KEY_Return:
-            selected_action = self._get_selected_action()
-            self._replace_text(selected_action)
+        if event.keyval in (Gdk.KEY_Left, Gdk.KEY_Right):
             self.popdown()
-            return True
+            return False
 
-        if event.keyval == Gdk.KEY_Tab:
+        if event.keyval in (Gdk.KEY_Return, Gdk.KEY_Tab):
             selected_action = self._get_selected_action()
             self._replace_text(selected_action)
             self.popdown()
@@ -160,16 +158,19 @@ class ChatActionProcessor(Gtk.Popover):
                               ) -> None:
         self._menu.remove_all()
         command_list = self._get_commands()
+        num_entries = 0
         for command in command_list:
             if not command.startswith(action_text[1:]):
                 continue
-            if command_list.index(command) >= MAX_ENTRIES:
+            if num_entries >= MAX_ENTRIES:
                 continue
+
             action_data = GLib.Variant('s', f'/{command}')
             menu_item = Gio.MenuItem()
             menu_item.set_label(f'/{command}')
             menu_item.set_attribute_value('action-data', action_data)
             self._menu.append_item(menu_item)
+            num_entries +=1
 
         if self._menu.get_n_items() > 0:
             self._show_menu(start)
