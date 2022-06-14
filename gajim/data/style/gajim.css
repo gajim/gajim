@@ -80,9 +80,9 @@ row:backdrop { transition: none; }
     padding: 12px;
 }
 .conversation-command-row label {
+    font-weight: 600;
     border-radius: 6px;
     padding: 12px;
-    font-size: small;
 }
 .conversation-subject-box,
 .conversation-call-box {
