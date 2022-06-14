@@ -661,6 +661,7 @@ ADVANCED_SETTINGS = {
         'notification_preview_message': _('Preview new messages in notification popup?'),
         'notification_timeout': '',
         'notify_on_all_muc_messages': '',
+        'plugins_repository_enabled': _('If enabled, Gajim offers to download plugins hosted on gajim.org'),
         'remote_commands': _('If enabled, Gajim will execute XEP-0146 Commands.'),
         'remote_control': _('If checked, Gajim can be controlled remotely using gajim-remote.'),
         'restore_timeout': _('How far back in time (minutes) chat history is restored. -1 means no limit.'),
