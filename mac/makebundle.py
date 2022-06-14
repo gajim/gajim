@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 import os
 import sys
 from argparse import ArgumentParser
@@ -18,12 +19,25 @@ if __name__ == '__main__':
         version = args.version
     else:
         try:
-            version = check_output(['git', 'describe', '--tags']).decode().strip()
+            version = check_output(['git', 'describe', '--tags'])
+            version = version.decode().strip()
         except CalledProcessError:
             version = 'unknown'
     dmg_name = 'gajim-{}.dmg'.format(version)
 
-    run(['cp', 'mac/gajim.spec', 'gajim.spec'], check=True) # the .spec has to be in the project root
+    # the .spec has to be in the project root
+    run(['cp', 'mac/gajim.spec', 'gajim.spec'], check=True)
     run(['pyinstaller', 'gajim.spec'], check=True)
-    run(['rm', '-rf', 'dist/launch']) # we only want Gajim.app in the dmg
-    run(['hdiutil', 'create', '-volname', 'Gajim', '-srcfolder', 'dist', '-ov', '-format', 'UDZO', dmg_name], check=True)
+    # we only want Gajim.app in the dmg
+    run(['rm', '-rf', 'dist/launch'])
+    run(['hdiutil',
+         'create',
+         '-volname',
+         'Gajim',
+         '-srcfolder',
+         'dist',
+         '-ov',
+         '-format',
+         'UDZO',
+         dmg_name],
+        check=True)

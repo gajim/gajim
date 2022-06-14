@@ -16,7 +16,7 @@ from typing import Optional
 
 import gi
 gi.require_version("GIRepository", "2.0")
-from gi.repository import GIRepository
+from gi.repository import GIRepository  # noqa: E402
 
 
 def get_required_by_typelibs() -> set[str]:

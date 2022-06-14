@@ -36,7 +36,7 @@ ATTR = '\n    %s: %s'
 
 GET_BUILDER_OVERLOAD = '''
 @overload
-def get_builder(file_name: Literal['%s'], widgets: list[str] = ...) -> %s: ...'''
+def get_builder(file_name: Literal['%s'], widgets: list[str] = ...) -> %s: ...'''  # noqa
 
 GET_BUILDER = '''
 def get_builder(file_name: str, widgets: list[str] = ...) -> Builder: ...'''

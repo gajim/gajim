@@ -79,12 +79,12 @@ def prepare_changelog(context: ReleaseContext) -> None:
 def build(context: ReleaseContext) -> None:
     log.info('Start package build')
     subprocess.run(
-       [
-        'dpkg-buildpackage',
-        '--no-sign'
-       ],
-       cwd=context.release_dir,
-       check=True)
+        [
+            'dpkg-buildpackage',
+            '--no-sign'
+        ],
+        cwd=context.release_dir,
+        check=True)
 
 
 if __name__ == '__main__':

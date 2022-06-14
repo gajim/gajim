@@ -143,7 +143,7 @@ def _set_proc_title() -> None:
 
         if sysname == 'Linux':
             proc_name = b'gajim'
-            buff = create_string_buffer(len(proc_name)+1)
+            buff = create_string_buffer(len(proc_name) + 1)
             buff.value = proc_name
             libc.prctl(PR_SET_NAME, byref(buff), 0, 0, 0)
         elif sysname in ('FreeBSD', 'OpenBSD', 'NetBSD'):

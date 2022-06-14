@@ -229,7 +229,8 @@ class PluginRepository(Observable):
             log.warning('Unable to download plugins because repository not set')
             return
 
-        manifests = [self._manifests[manifest.short_name] for manifest in manifests]
+        manifests = [self._manifests[manifest.short_name] for manifest
+                     in manifests]
 
         manifests = set(manifests) - self._download_queue
         if not manifests:

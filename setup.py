@@ -162,7 +162,7 @@ class build(_build):
 
 class install(_install):
     def run(self):
-        data_files = cast(DataFilesT, self.distribution.data_files)  # pyright: ignore
+        data_files = cast(DataFilesT, self.distribution.data_files)  # pyright: ignore  # noqa: E501
         install_trans(data_files)
         if sys.platform != 'win32':
             install_man(data_files)

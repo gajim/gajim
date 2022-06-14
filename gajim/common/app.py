@@ -66,7 +66,8 @@ if typing.TYPE_CHECKING:
 
 
 interface = cast(types.InterfaceT, None)
-thread_interface = lambda *args: None # Interface to run a thread and then a callback
+# Interface to run a thread and then a callback
+thread_interface = None
 config = c_config.Config()
 settings = cast(types.SettingsT, None)
 version = gajim.__version__
@@ -74,17 +75,19 @@ connections: dict[str, types.Client] = {}
 avatar_cache: dict[str, dict[str, Any]] = {}
 bob_cache: dict[str, bytes] = {}
 ipython_window = None
-app = None # type: GajimApplication
-window = None # type: MainWindow
+app = None  # type: GajimApplication
+window = None  # type: MainWindow
 
-ged = ged_module.GlobalEventsDispatcher() # Global Events Dispatcher
+ged = ged_module.GlobalEventsDispatcher()  # Global Events Dispatcher
 plugin_manager = cast(types.PluginManagerT, None)  # Plugins Manager
 plugin_repository = cast(types.PluginRepositoryT, None)
+
 
 class Storage:
     def __init__(self):
         self.cache: CacheStorage = None
         self.archive: MessageArchiveStorage = None
+
 
 storage = Storage()
 
@@ -312,11 +315,12 @@ def detect_desktop_env() -> Optional[str]:
         return 'gnome'
     return desktop
 
+
 desktop_env = detect_desktop_env()
 
 
 def get_server_from_jid(jid: str) -> str:
-    pos = jid.find('@') + 1 # after @
+    pos = jid.find('@') + 1  # after @
     return jid[pos:]
 
 
@@ -324,10 +328,10 @@ def get_room_and_nick_from_fjid(jid: str) -> list[str]:
     # fake jid is the jid for a contact in a room
     # gaim@conference.jabber.no/nick/nick-continued
     # return ('gaim@conference.jabber.no', 'nick/nick-continued')
-    l = jid.split('/', 1)
-    if len(l) == 1: # No nick
-        l.append('')
-    return l
+    list_ = jid.split('/', 1)
+    if len(list_) == 1:  # No nick
+        list_.append('')
+    return list_
 
 
 def get_jid_without_resource(jid: str) -> str:
@@ -446,7 +450,7 @@ def get_transport_name_from_jid(
     """
     # TODO: Rewrite/remove
 
-    #FIXME: jid can be None! one TB I saw had this problem:
+    # FIXME: jid can be None! one TB I saw had this problem:
     # in the code block # it is a groupchat presence in handle_event_notify
     # jid was None. Yann why?
     if not jid:
@@ -471,6 +475,7 @@ def get_transport_name_from_jid(
     if host == 'facebook':
         return 'facebook'
     return None
+
 
 def jid_is_transport(jid: str) -> bool:
     # if not '@' or '@' starts the jid then it is transport
@@ -551,7 +556,8 @@ def get_priority(account: str, show: str) -> int:
         show = 'online'
 
     if show in ('online', 'chat', 'away', 'xa', 'dnd') and \
-    settings.get_account_setting(account, 'adjust_priority_with_status'):
+            settings.get_account_setting(account,
+                                         'adjust_priority_with_status'):
         prio = settings.get_account_setting(account, 'autopriority_' + show)
     else:
         prio = settings.get_account_setting(account, 'priority')

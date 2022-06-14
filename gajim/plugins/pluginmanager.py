@@ -433,8 +433,8 @@ class PluginManager(metaclass=Singleton):
         :type args: tuple
 
         '''
-        if ((gui_extpoint_name not in self.gui_extension_points)
-                or (args not in self.gui_extension_points[gui_extpoint_name])):
+        if (gui_extpoint_name not in self.gui_extension_points or
+                args not in self.gui_extension_points[gui_extpoint_name]):
             self.gui_extension_points.setdefault(gui_extpoint_name, []).append(
                 args)
 

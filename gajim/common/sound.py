@@ -162,10 +162,13 @@ def _init_platform() -> PlaySound:
 
     return PlatformUnix()
 
+
 _platform_player = _init_platform()
+
 
 def play(path: Path, loop: bool = False) -> None:
     _platform_player.play(path, loop)
+
 
 def stop():
     _platform_player.stop()

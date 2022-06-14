@@ -75,7 +75,6 @@ from IPython.core.displayhook import DisplayHook
 from IPython.core.display_trap import DisplayTrap
 
 
-
 class MyPromptDisplayHook(DisplayHook):
     def __init__(self, shell, view):
         DisplayHook.__init__(self, shell=shell)
@@ -128,7 +127,6 @@ class IterableIPShell:
         io = IPython.utils.io
         if input_func:
             IPython.terminal.interactiveshell.raw_input_original = input_func
-
 
         # This is to get rid of the blockage that occurs during
         # IPython.Shell.InteractiveShell.user_setup()

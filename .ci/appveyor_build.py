@@ -51,7 +51,7 @@ def start_build() -> str:
         'branch': BRANCH,
         'commitId': os.environ['CI_COMMIT_SHA'],
         'environmentVariables': {
-           'GAJIM_VERSION': get_gajim_version(),
+            'GAJIM_VERSION': get_gajim_version(),
         }
     }
     req = requests.post(BUILDS_API_URL, headers=HEADERS, json=payload)
