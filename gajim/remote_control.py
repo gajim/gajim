@@ -204,10 +204,6 @@ class GajimRemote(Server):
                 <arg name='prio' type='s' />
                 <arg name='account' type='s' />
             </method>
-            <method name='start_chat'>
-                <arg name='jid' type='s' />
-                <arg direction='out' type='b' />
-            </method>
             <signal name='AccountPresence'>
                 <arg type='av' />
             </signal>
@@ -732,10 +728,6 @@ class GajimRemote(Server):
 
     def get_unread_msgs_number(self):
         return str(app.window.get_total_unread_count())
-
-    def start_chat(self, jid=''):
-        app.app.activate_action('start-chat', GLib.Variant('s', jid))
-        return True
 
     def send_xml(self, xml, account):
         if account:
