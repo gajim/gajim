@@ -204,17 +204,11 @@ class GajimRemote(Server):
                 <arg name='prio' type='s' />
                 <arg name='account' type='s' />
             </method>
-            <method name='show_roster' />
             <method name='start_chat'>
                 <arg name='jid' type='s' />
                 <arg direction='out' type='b' />
             </method>
-            <method name='toggle_ipython' />
-            <method name='toggle_roster_appearance' />
             <signal name='AccountPresence'>
-                <arg type='av' />
-            </signal>
-            <signal name='ChatState'>
                 <arg type='av' />
             </signal>
             <signal name='ContactAbsence'>
@@ -226,28 +220,13 @@ class GajimRemote(Server):
             <signal name='ContactStatus'>
                 <arg type='av' />
             </signal>
-            <signal name='EntityTime'>
-                <arg type='av' />
-            </signal>
             <signal name='GCMessage'>
-                <arg type='av' />
-            </signal>
-            <signal name='GCPresence'>
                 <arg type='av' />
             </signal>
             <signal name='MessageSent'>
                 <arg type='av' />
             </signal>
-            <signal name='NewAccount'>
-                <arg type='av' />
-            </signal>
             <signal name='NewMessage'>
-                <arg type='av' />
-            </signal>
-            <signal name='Roster'>
-                <arg type='av' />
-            </signal>
-            <signal name='RosterInfo'>
                 <arg type='av' />
             </signal>
             <signal name='Subscribe'>
@@ -257,9 +236,6 @@ class GajimRemote(Server):
                 <arg type='av' />
             </signal>
             <signal name='Unsubscribed'>
-                <arg type='av' />
-            </signal>
-            <signal name='VcardInfo'>
                 <arg type='av' />
             </signal>
         </interface>
@@ -273,10 +249,6 @@ class GajimRemote(Server):
         super().__init__(self.con, '/org/gajim/dbus/RemoteObject')
         self.first_show = True
 
-        app.ged.register_event_handler('time-result-received', ged.POSTGUI,
-            self.on_time)
-        app.ged.register_event_handler('roster-info', ged.POSTGUI,
-            self.on_roster_info)
         app.ged.register_event_handler('presence-received', ged.POSTGUI,
             self.on_presence_received)
         app.ged.register_event_handler('subscribe-presence-received',
@@ -291,10 +263,6 @@ class GajimRemote(Server):
             ged.POSTGUI, self._nec_decrypted_message_received)
         app.ged.register_event_handler('our-show', ged.POSTGUI,
             self.on_our_status)
-        app.ged.register_event_handler('account-created', ged.POSTGUI,
-            self.on_account_created)
-        app.ged.register_event_handler('vcard-received', ged.POSTGUI,
-            self.on_vcard_received)
         app.ged.register_event_handler('message-sent', ged.POSTGUI,
             self.on_message_sent)
 
@@ -305,15 +273,6 @@ class GajimRemote(Server):
             chatstate = ''
         self.raise_signal('MessageSent', (obj.account, [
             obj.jid, obj.message, chatstate]))
-
-    def on_time(self, obj):
-        self.raise_signal('EntityTime', (obj.conn.name, [obj.jid.bare,
-                                                         obj.jid.resource,
-                                                         obj.time_info]))
-
-    def on_roster_info(self, obj):
-        self.raise_signal('RosterInfo', (obj.conn.name, [obj.jid, obj.nickname,
-            obj.sub, obj.ask, obj.groups]))
 
     def on_presence_received(self, obj):
         if obj.old_show < 2 and obj.new_show > 1:
@@ -359,12 +318,6 @@ class GajimRemote(Server):
 
     def on_our_status(self, event):
         self.raise_signal('AccountPresence', (event.show, event.account))
-
-    def on_account_created(self, obj):
-        self.raise_signal('NewAccount', (obj.conn.name, obj.account_info))
-
-    def on_vcard_received(self, obj):
-        self.raise_signal('VcardInfo', (obj.account, obj.vcard_dict))
 
     def raise_signal(self, event_name, data):
         log.info('Send event %s', event_name)
