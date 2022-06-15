@@ -253,7 +253,11 @@ class PreviewManager:
             return False
 
         uri = text
-        urlparts = urlparse(uri)
+        try:
+            urlparts = urlparse(uri)
+        except Exception:
+            return False
+
         if not self._accept_uri(urlparts, uri, additional_data):
             return False
 
