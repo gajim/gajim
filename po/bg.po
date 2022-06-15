@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 18:12+0000\n"
+"POT-Creation-Date: 2022-06-15 19:47+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -907,11 +907,6 @@ msgstr ""
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
-msgid ""
-"Allow to hide the contact list window even if the notification area icon is "
-"not shown."
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1050,6 +1045,9 @@ msgstr ""
 msgid "Ask before pasting an image."
 msgstr ""
 
+msgid "Ask before quitting when Gajim’s window is closed"
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Първо получено съобщение"
@@ -1153,6 +1151,9 @@ msgstr "_Съгласуване спрямо състоянието"
 msgid "Automatic preview disabled"
 msgstr ""
 
+msgid "Automatic preview disabled (file too big)"
+msgstr ""
+
 #, fuzzy
 msgid "Automatic spell-checking for your messages"
 msgstr "Проверка на изходящите съобщения за правописни грешки."
@@ -1192,7 +1193,7 @@ msgstr "Участник"
 msgid "Ban…"
 msgstr ""
 
-msgid "Behaviour of Windows & Tabs"
+msgid "Behaviour of Application Window"
 msgstr ""
 
 #, fuzzy
@@ -1290,6 +1291,10 @@ msgstr "Отлъчване…"
 #, fuzzy
 msgid "Cancel"
 msgstr "_Отказ"
+
+#, fuzzy
+msgid "Cancel Download"
+msgstr "Изтегляне"
 
 #, fuzzy
 msgid "Cancel the selected file transfer and remove incomplete files"
@@ -1983,9 +1988,6 @@ msgstr ""
 msgid "Disclose the time of your last activity"
 msgstr ""
 
-msgid "Disconnect from the network"
-msgstr ""
-
 #, fuzzy
 msgid "Discover Services…"
 msgstr "_Откриване на услуги"
@@ -2041,10 +2043,6 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
 #, fuzzy
-msgid "Don’t show main window in the system taskbar."
-msgstr "Да не се показва списъка в панела."
-
-#, fuzzy
 msgid "Don’t show this again"
 msgstr "Да _не се задава този въпрос отново"
 
@@ -2061,8 +2059,16 @@ msgid "Download and Install"
 msgstr "Да _не се задава този въпрос отново"
 
 #, fuzzy, python-format
+msgid "Download failed (%s)"
+msgstr "Да _не се задава този въпрос отново"
+
+#, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "Препращане на непрочетени съобщения"
+
+#, fuzzy
+msgid "Downloading…"
+msgstr "Програмирам"
 
 #, fuzzy
 msgid "Drop Files or Contacts"
@@ -2191,6 +2197,10 @@ msgstr ""
 #, fuzzy
 msgid "Error"
 msgstr "Грешка."
+
+#, fuzzy
+msgid "Error Loading Image"
+msgstr "Избор на изображение"
 
 msgid "Error during command execution!"
 msgstr ""
@@ -2741,6 +2751,9 @@ msgstr ""
 msgid "Hide this menu"
 msgstr "Скриване на това меню"
 
+msgid "Hide window to system tray when minimized"
+msgstr ""
+
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "Скрива лентата в прозореца на стаята"
@@ -2821,21 +2834,15 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"If enabled, Gajim hides the main window when pressing the X button instead "
-"of minimizing into the notification area."
-msgstr ""
-"Ако е активирана, се спира програмата при натискане на бутона „X“ на "
-"администратора на прозорци. Тази настройка е валидна само ако се използва "
-"иконата в областта за уведомяване."
-
-#, fuzzy
-msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
 msgstr ""
 "Ако е активирана и инсталираните версии на GTK+ и PyGTK са поне 2.8, "
 "прозорецът ще мига (стандартното поведение при повечето мениджъри на "
 "прозорци) при задържане на чакащи събития."
+
+msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
+msgstr ""
 
 #, fuzzy
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
@@ -2883,7 +2890,7 @@ msgstr ""
 "отрицателен приоритет, НЯМА да получите нито едно съобщение от сървъра."
 
 #, fuzzy, python-format
-msgid "If you close this window, you will leave '%s'."
+msgid "If you close this chat, you will leave '%s'."
 msgstr "Ако затворите този прозорец, връзката със стаята ще бъде прекъсната."
 
 msgid ""
@@ -3244,9 +3251,6 @@ msgid ""
 "from the chat window"
 msgstr ""
 
-msgid "Machine is going to sleep"
-msgstr ""
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Администратор"
@@ -3350,6 +3354,16 @@ msgid ""
 msgstr ""
 "Може да преглеждате съобщенията по-късно само ако е активирана опцията за "
 "историята и контактът е в списъка."
+
+#, fuzzy
+msgid "Minimize on Close"
+msgstr "Gajim"
+
+msgid "Minimize to Tray"
+msgstr ""
+
+msgid "Minimize when closing Gajim’s window"
+msgstr ""
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -4006,6 +4020,9 @@ msgstr "Филтър за уединение"
 msgid "Profile"
 msgstr "файл"
 
+msgid "Profile application with cprofile"
+msgstr ""
+
 msgid "Progress"
 msgstr "Напредък"
 
@@ -4051,13 +4068,6 @@ msgstr "Версия на PyGTK:"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quit Gajim on Close"
-msgstr "Gajim"
-
-msgid "Quit when closing Gajim’s window"
-msgstr ""
 
 #, fuzzy
 msgid "Quote next message"
@@ -4131,6 +4141,10 @@ msgstr "_Регистриране"
 #, fuzzy
 msgid "Register on the Website"
 msgstr "Регистриране в %s"
+
+#, fuzzy
+msgid "Registering…"
+msgstr "_Регистриране"
 
 #, fuzzy
 msgid "Registration failed"
@@ -4270,6 +4284,12 @@ msgid "Requesting Command List"
 msgstr "_Изпълнение на команда"
 
 msgid "Requesting HTTP File Upload Slot…"
+msgstr ""
+
+msgid "Requesting Register Form"
+msgstr ""
+
+msgid "Requesting register form from server…"
 msgstr ""
 
 msgid "Requesting search form from server"
@@ -4546,6 +4566,10 @@ msgstr ""
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
+#, fuzzy
+msgid "Selected image could not be loaded."
+msgstr "Услугата не може да бъде намерена"
+
 #, fuzzy, python-format
 msgid "Selected security label: %s"
 msgstr "Отлъчване на %s"
@@ -4803,8 +4827,8 @@ msgid "Show Contact Infos"
 msgstr "Показване на изкл_ючените контакти"
 
 #, fuzzy
-msgid "Show Gajim on Startup"
-msgstr "П_оказване на списъка"
+msgid "Show Gajim"
+msgstr "Gajim"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4880,6 +4904,10 @@ msgid ""
 "Show help on a given command or a list of available commands if -a is given"
 msgstr ""
 
+#, fuzzy
+msgid "Show in Taskbar"
+msgstr "Показване на т_ранспорти"
+
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
@@ -4898,6 +4926,10 @@ msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Демон за уведомления"
 
 #, fuzzy
+msgid "Show on Startup"
+msgstr "П_оказване на списъка"
+
+#, fuzzy
 msgid "Show only critical errors"
 msgstr "Показване на събитието в спис_ъка"
 
@@ -4907,6 +4939,10 @@ msgstr "Демон за уведомления"
 
 msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
 msgstr ""
+
+#, fuzzy
+msgid "Show window in the taskbar"
+msgstr "Да не се показва списъка в панела."
 
 msgid "Show window when starting Gajim"
 msgstr ""
@@ -4926,12 +4962,12 @@ msgid "Shows a list of file transfers between you and your contacts"
 msgstr "Показва списък с файловите трансфери между вас и останалите"
 
 #, fuzzy
-msgid "Sign In"
-msgstr "_Включване"
+msgid "Shutting down Gajim"
+msgstr "Gajim"
 
 #, fuzzy
-msgid "Sign Out"
-msgstr "Изкл_ючване"
+msgid "Sign In"
+msgstr "_Включване"
 
 #, fuzzy
 msgid "Sign Up"
@@ -5051,10 +5087,6 @@ msgstr "Състояние"
 
 msgid "Status"
 msgstr "Състояние"
-
-#, fuzzy
-msgid "Status Change"
-msgstr "Запазване на промените на _състоянията на контактите"
 
 msgid "Status Message"
 msgstr "Съобщение за състояние"
@@ -5201,6 +5233,10 @@ msgstr "Синхронизиране"
 #, fuzzy
 msgid "System"
 msgstr "<b>Система:</b>"
+
+#, fuzzy, python-format
+msgid "TLS verification failed: %s"
+msgstr "Грешка в сертификата на SSL"
 
 #, fuzzy
 msgid "T_ry Again"
@@ -5618,6 +5654,10 @@ msgstr "Непрочетени събития"
 
 msgid "Unsupported certificate purpose"
 msgstr "Неподдържана цел на сертификата"
+
+#, fuzzy
+msgid "Until Gajim is Closed"
+msgstr "Gajim"
 
 #, fuzzy
 msgid "Untrusted"
@@ -6147,9 +6187,6 @@ msgstr "_Адрес:"
 msgid "_Advanced Settings"
 msgstr "Действия за напреднали"
 
-msgid "_Always quit when closing Gajim"
-msgstr ""
-
 msgid "_Approve"
 msgstr ""
 
@@ -6222,6 +6259,10 @@ msgstr "Невалидно име на акаунт"
 
 #, fuzzy
 msgid "_Do not ask me again"
+msgstr "Да _не се задава този въпрос отново"
+
+#, fuzzy
+msgid "_Don’t ask again"
 msgstr "Да _не се задава този въпрос отново"
 
 #, fuzzy
@@ -6717,3 +6758,20 @@ msgstr "%(nick)s вече е %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, Gajim hides the main window when pressing the X button "
+#~ "instead of minimizing into the notification area."
+#~ msgstr ""
+#~ "Ако е активирана, се спира програмата при натискане на бутона „X“ на "
+#~ "администратора на прозорци. Тази настройка е валидна само ако се използва "
+#~ "иконата в областта за уведомяване."
+
+#, fuzzy
+#~ msgid "Sign Out"
+#~ msgstr "Изкл_ючване"
+
+#, fuzzy
+#~ msgid "Status Change"
+#~ msgstr "Запазване на промените на _състоянията на контактите"

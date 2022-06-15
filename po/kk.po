@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 18:12+0000\n"
+"POT-Creation-Date: 2022-06-15 19:47+0000\n"
 "PO-Revision-Date: 2020-07-22 17:59+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -888,11 +888,6 @@ msgstr ""
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
-msgid ""
-"Allow to hide the contact list window even if the notification area icon is "
-"not shown."
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1028,6 +1023,9 @@ msgstr ""
 msgid "Ask before pasting an image."
 msgstr ""
 
+msgid "Ask before quitting when Gajim’s window is closed"
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Бірінші хабарлама алынды"
@@ -1135,6 +1133,9 @@ msgstr "Өздігінен қалып-күйді орнату"
 msgid "Automatic preview disabled"
 msgstr ""
 
+msgid "Automatic preview disabled (file too big)"
+msgstr ""
+
 #, fuzzy
 msgid "Automatic spell-checking for your messages"
 msgstr "Жазылған хабарламаларды емлеге тексеру."
@@ -1173,7 +1174,7 @@ msgstr "Қатысушы"
 msgid "Ban…"
 msgstr ""
 
-msgid "Behaviour of Windows & Tabs"
+msgid "Behaviour of Application Window"
 msgstr ""
 
 msgid "Birthday"
@@ -1266,6 +1267,10 @@ msgstr "Кіру…"
 #, fuzzy
 msgid "Cancel"
 msgstr "_Бас тарту"
+
+#, fuzzy
+msgid "Cancel Download"
+msgstr "Беру"
 
 #, fuzzy
 msgid "Cancel the selected file transfer and remove incomplete files"
@@ -1937,9 +1942,6 @@ msgstr ""
 msgid "Disclose the time of your last activity"
 msgstr ""
 
-msgid "Disconnect from the network"
-msgstr "Желімен байланысты үзу"
-
 msgid "Discover Services…"
 msgstr "Қызметтерді қарап шығу…"
 
@@ -1994,10 +1996,6 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
 #, fuzzy
-msgid "Don’t show main window in the system taskbar."
-msgstr "Ростерді жүйелік есептер панелінде көрсетпеу."
-
-#, fuzzy
 msgid "Don’t show this again"
 msgstr "М_ені қайта сұрамау"
 
@@ -2013,9 +2011,17 @@ msgstr "Беру"
 msgid "Download and Install"
 msgstr "М_ені қайта сұрамау"
 
+#, fuzzy, python-format
+msgid "Download failed (%s)"
+msgstr "М_ені қайта сұрамау"
+
 #, python-format
 msgid "Downloaded %s messages"
 msgstr "%s хабарлама жүктеп алынды"
+
+#, fuzzy
+msgid "Downloading…"
+msgstr "Код жазуда"
 
 #, fuzzy
 msgid "Drop Files or Contacts"
@@ -2143,6 +2149,10 @@ msgstr ""
 
 msgid "Error"
 msgstr "Қате"
+
+#, fuzzy
+msgid "Error Loading Image"
+msgstr "Суретті кірістіру"
 
 msgid "Error during command execution!"
 msgstr ""
@@ -2676,6 +2686,9 @@ msgstr ""
 msgid "Hide this menu"
 msgstr "Бұл мәзірді жасыру"
 
+msgid "Hide window to system tray when minimized"
+msgstr ""
+
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "Топтық чат терезесінде тақырыпты жасырады"
@@ -2751,19 +2764,14 @@ msgstr "Белгіленсе, Gajim-ді қашықтан gajim-remote қолд�
 
 #, fuzzy
 msgid ""
-"If enabled, Gajim hides the main window when pressing the X button instead "
-"of minimizing into the notification area."
-msgstr ""
-"Белсенді болса, Терезелер басқарушысы ұсынған X батырмасын шерткенде Gajim "
-"жұмысын өз аяқтайды. Тек жүйелік сөре таңбашасы іске қосулы болу керек."
-
-#, fuzzy
-msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
 msgstr ""
 "Белсенді болса және GTK+ мен PyGTK нұсқалары кем дегенде 2.8 болса, кезекте "
 "оқиға бар болса, терезе шегі жыпылықтайды."
+
+msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
+msgstr ""
 
 #, fuzzy
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
@@ -2814,7 +2822,7 @@ msgstr ""
 "бір хабарламаны АЛМАЙСЫЗ."
 
 #, fuzzy, python-format
-msgid "If you close this window, you will leave '%s'."
+msgid "If you close this chat, you will leave '%s'."
 msgstr "Бұл терезені жапсаңыз, топ чатынан шығасыз."
 
 msgid ""
@@ -3166,9 +3174,6 @@ msgid ""
 "from the chat window"
 msgstr ""
 
-msgid "Machine is going to sleep"
-msgstr ""
-
 msgid "Make Admin"
 msgstr "Әкімші қылу"
 
@@ -3269,6 +3274,17 @@ msgid ""
 msgstr ""
 "Кейінірек оқу үшін хабарламалар тек тарихыңыз қосулы және контакт "
 "ростеріңізде болса ғана қолжетерлік болады."
+
+#, fuzzy
+msgid "Minimize on Close"
+msgstr "Gajim"
+
+msgid "Minimize to Tray"
+msgstr ""
+
+#, fuzzy
+msgid "Minimize when closing Gajim’s window"
+msgstr "Gajim-ді әрқашан жабу"
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3903,6 +3919,9 @@ msgstr "Жекелік"
 msgid "Profile"
 msgstr "Профиль"
 
+msgid "Profile application with cprofile"
+msgstr ""
+
 msgid "Progress"
 msgstr "Барысы"
 
@@ -3947,14 +3966,6 @@ msgstr "PyGTK нұсқасы:"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quit Gajim on Close"
-msgstr "Gajim"
-
-#, fuzzy
-msgid "Quit when closing Gajim’s window"
-msgstr "Gajim-ді әрқашан жабу"
 
 #, fuzzy
 msgid "Quote next message"
@@ -4026,6 +4037,10 @@ msgstr "Ті_ркелу"
 #, fuzzy
 msgid "Register on the Website"
 msgstr "%s үшін тіркелу"
+
+#, fuzzy
+msgid "Registering…"
+msgstr "Ті_ркелу"
 
 msgid "Registration failed"
 msgstr "Тіркелу сәтсіз"
@@ -4159,6 +4174,12 @@ msgid "Requesting Command List"
 msgstr "К_оманда орындау"
 
 msgid "Requesting HTTP File Upload Slot…"
+msgstr ""
+
+msgid "Requesting Register Form"
+msgstr ""
+
+msgid "Requesting register form from server…"
 msgstr ""
 
 msgid "Requesting search form from server"
@@ -4429,6 +4450,10 @@ msgstr ""
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
+#, fuzzy
+msgid "Selected image could not be loaded."
+msgstr "Қызмет табылмады"
+
 #, fuzzy, python-format
 msgid "Selected security label: %s"
 msgstr "%s банға жіберу"
@@ -4678,8 +4703,8 @@ msgid "Show Contact Infos"
 msgstr "Те_к белсенді контакттарды көрсету"
 
 #, fuzzy
-msgid "Show Gajim on Startup"
-msgstr "Gajim қосылғанда, байланыс _орнату"
+msgid "Show Gajim"
+msgstr "Gajim"
 
 msgid "Show Join/Leave"
 msgstr "Кіру/шығуды көрсету"
@@ -4754,6 +4779,10 @@ msgid ""
 "Show help on a given command or a list of available commands if -a is given"
 msgstr ""
 
+#, fuzzy
+msgid "Show in Taskbar"
+msgstr "Транс_порттарды көрсету"
+
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
@@ -4772,6 +4801,10 @@ msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Жүйелік сөре таңбашасы_н көрсету"
 
 #, fuzzy
+msgid "Show on Startup"
+msgstr "Gajim қосылғанда, байланыс _орнату"
+
+#, fuzzy
 msgid "Show only critical errors"
 msgstr "Тек ростерде көрсету"
 
@@ -4780,6 +4813,10 @@ msgstr "Қолданба нұсқасын көрсету"
 
 msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
 msgstr ""
+
+#, fuzzy
+msgid "Show window in the taskbar"
+msgstr "Ростерді жүйелік есептер панелінде көрсетпеу."
 
 #, fuzzy
 msgid "Show window when starting Gajim"
@@ -4800,12 +4837,12 @@ msgid "Shows a list of file transfers between you and your contacts"
 msgstr "Сіз бен басқалар арасындағы файл алмасуларды көрсетеді"
 
 #, fuzzy
-msgid "Sign In"
-msgstr "Мен _кірген"
+msgid "Shutting down Gajim"
+msgstr "Gajim"
 
 #, fuzzy
-msgid "Sign Out"
-msgstr "Мен _шыққан кезде"
+msgid "Sign In"
+msgstr "Мен _кірген"
 
 msgid "Sign Up"
 msgstr "Тіркелу"
@@ -4924,10 +4961,6 @@ msgstr "Штат"
 
 msgid "Status"
 msgstr "Күй"
-
-#, fuzzy
-msgid "Status Change"
-msgstr "Қалып-күй өзгерісін көрсету"
 
 msgid "Status Message"
 msgstr "Күй хабарламасы"
@@ -5070,6 +5103,10 @@ msgstr "Тарихты синхрондау…"
 #, fuzzy
 msgid "System"
 msgstr "<b>Жүйе:</b>"
+
+#, fuzzy, python-format
+msgid "TLS verification failed: %s"
+msgstr "SSL сертификат қатесі"
 
 #, fuzzy
 msgid "T_ry Again"
@@ -5478,6 +5515,10 @@ msgstr "Оқылмаған оқиғалар"
 
 msgid "Unsupported certificate purpose"
 msgstr "Қолдау жоқ сертификат мақсаты"
+
+#, fuzzy
+msgid "Until Gajim is Closed"
+msgstr "Gajim"
 
 #, fuzzy
 msgid "Untrusted"
@@ -6000,10 +6041,6 @@ msgstr "_Адресі:"
 msgid "_Advanced Settings"
 msgstr "Кеңейтілген б_аптаулар"
 
-#, fuzzy
-msgid "_Always quit when closing Gajim"
-msgstr "Gajim-ді әрқашан жабу"
-
 msgid "_Approve"
 msgstr "Рұқс_ат ету"
 
@@ -6075,6 +6112,10 @@ msgid "_Disable Account"
 msgstr "Қате тіркелгі"
 
 msgid "_Do not ask me again"
+msgstr "М_ені қайта сұрамау"
+
+#, fuzzy
+msgid "_Don’t ask again"
 msgstr "М_ені қайта сұрамау"
 
 #, fuzzy
@@ -6538,3 +6579,27 @@ msgstr "{nick} енді {show}{status}"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "Disconnect from the network"
+#~ msgstr "Желімен байланысты үзу"
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, Gajim hides the main window when pressing the X button "
+#~ "instead of minimizing into the notification area."
+#~ msgstr ""
+#~ "Белсенді болса, Терезелер басқарушысы ұсынған X батырмасын шерткенде "
+#~ "Gajim жұмысын өз аяқтайды. Тек жүйелік сөре таңбашасы іске қосулы болу "
+#~ "керек."
+
+#, fuzzy
+#~ msgid "Sign Out"
+#~ msgstr "Мен _шыққан кезде"
+
+#, fuzzy
+#~ msgid "Status Change"
+#~ msgstr "Қалып-күй өзгерісін көрсету"
+
+#, fuzzy
+#~ msgid "_Always quit when closing Gajim"
+#~ msgstr "Gajim-ді әрқашан жабу"

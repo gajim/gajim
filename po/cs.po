@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 18:12+0000\n"
+"POT-Creation-Date: 2022-06-15 19:47+0000\n"
 "PO-Revision-Date: 2010-01-22 14:35+0100\n"
 "Last-Translator: Petr Menšík <pihhan@cipis.net>\n"
 "Language-Team: <>\n"
@@ -916,11 +916,6 @@ msgstr ""
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
-msgid ""
-"Allow to hide the contact list window even if the notification area icon is "
-"not shown."
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1062,6 +1057,9 @@ msgstr ""
 msgid "Ask before pasting an image."
 msgstr ""
 
+msgid "Ask before quitting when Gajim’s window is closed"
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "První zpráva přijata"
@@ -1168,6 +1166,9 @@ msgstr "Automatický stav"
 msgid "Automatic preview disabled"
 msgstr ""
 
+msgid "Automatic preview disabled (file too big)"
+msgstr ""
+
 #, fuzzy
 msgid "Automatic spell-checking for your messages"
 msgstr "Kontrola Pravopisu psaných zpráv."
@@ -1207,7 +1208,7 @@ msgstr "Účastník"
 msgid "Ban…"
 msgstr ""
 
-msgid "Behaviour of Windows & Tabs"
+msgid "Behaviour of Application Window"
 msgstr ""
 
 #, fuzzy
@@ -1305,6 +1306,10 @@ msgstr "Zakazuji..."
 #, fuzzy
 msgid "Cancel"
 msgstr "_Zrušit"
+
+#, fuzzy
+msgid "Cancel Download"
+msgstr "Stáhnout"
 
 #, fuzzy
 msgid "Cancel the selected file transfer and remove incomplete files"
@@ -1996,9 +2001,6 @@ msgstr ""
 msgid "Disclose the time of your last activity"
 msgstr ""
 
-msgid "Disconnect from the network"
-msgstr ""
-
 # FIXME: chtelo by to cesky vyraz pro service discovery
 #, fuzzy
 msgid "Discover Services…"
@@ -2055,10 +2057,6 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
 #, fuzzy
-msgid "Don’t show main window in the system taskbar."
-msgstr "Nezobrazuj roster v liště úloh."
-
-#, fuzzy
 msgid "Don’t show this again"
 msgstr "Příště _nezobrazovat"
 
@@ -2075,8 +2073,16 @@ msgid "Download and Install"
 msgstr "Příště _nezobrazovat"
 
 #, fuzzy, python-format
+msgid "Download failed (%s)"
+msgstr "Příště _nezobrazovat"
+
+#, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "Přeposlat nepřečtené zprávy"
+
+#, fuzzy
+msgid "Downloading…"
+msgstr "Programuji"
 
 #, fuzzy
 msgid "Drop Files or Contacts"
@@ -2204,6 +2210,10 @@ msgstr ""
 
 msgid "Error"
 msgstr "Chyba"
+
+#, fuzzy
+msgid "Error Loading Image"
+msgstr "Vyberte obrázek"
 
 msgid "Error during command execution!"
 msgstr ""
@@ -2747,6 +2757,9 @@ msgstr ""
 msgid "Hide this menu"
 msgstr "Skryje toto menu"
 
+msgid "Hide window to system tray when minimized"
+msgstr ""
+
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "Skryje nadpis v okně diskuze"
@@ -2823,20 +2836,15 @@ msgstr "Pokud zaškrtnuta, Gajim může být ovládán vzdáleně pomocí gajim-
 
 #, fuzzy
 msgid ""
-"If enabled, Gajim hides the main window when pressing the X button instead "
-"of minimizing into the notification area."
-msgstr ""
-"Pokud zapnuto, ukonči Gajim když bude stisknuto tlačítko X v titulku okna. "
-"Toto nastavení se použije pouze tehdy, pokud je použita ikona v trayi."
-
-#, fuzzy
-msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
 msgstr ""
 "Pokud je True a instalované GTK+ a PyGTK verze jsou alespoň 2.8, blikej "
 "oknem (výchozí chování ve většině Window Managerů) pokud čekají nové "
 "události."
+
+msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
+msgstr ""
 
 #, fuzzy
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
@@ -2884,7 +2892,7 @@ msgstr ""
 "žádnou zprávu."
 
 #, fuzzy, python-format
-msgid "If you close this window, you will leave '%s'."
+msgid "If you close this chat, you will leave '%s'."
 msgstr "Pokud zavřete toto okno, budete odpojen(a) z této místnosti."
 
 #, fuzzy
@@ -3248,9 +3256,6 @@ msgid ""
 "from the chat window"
 msgstr ""
 
-msgid "Machine is going to sleep"
-msgstr ""
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Správce"
@@ -3354,6 +3359,17 @@ msgid ""
 msgstr ""
 "Zprávy bude možné číst později, pokud máte povolený záznam historie a "
 "kontakt je v rosteru."
+
+#, fuzzy
+msgid "Minimize on Close"
+msgstr "Gajim"
+
+msgid "Minimize to Tray"
+msgstr ""
+
+#, fuzzy
+msgid "Minimize when closing Gajim’s window"
+msgstr "Vždy zavřít Gajim"
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -4009,6 +4025,9 @@ msgstr "Nastavení Soukromí"
 msgid "Profile"
 msgstr "soubor"
 
+msgid "Profile application with cprofile"
+msgstr ""
+
 msgid "Progress"
 msgstr "Průběh"
 
@@ -4054,14 +4073,6 @@ msgstr "PyGTK verze: "
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quit Gajim on Close"
-msgstr "Gajim"
-
-#, fuzzy
-msgid "Quit when closing Gajim’s window"
-msgstr "Vždy zavřít Gajim"
 
 #, fuzzy
 msgid "Quote next message"
@@ -4135,6 +4146,10 @@ msgstr "_Registrovat"
 #, fuzzy
 msgid "Register on the Website"
 msgstr "Registrovat k %s"
+
+#, fuzzy
+msgid "Registering…"
+msgstr "_Registrovat"
 
 msgid "Registration failed"
 msgstr "Registrace selhala"
@@ -4273,6 +4288,12 @@ msgid "Requesting Command List"
 msgstr "Spustit _příkaz..."
 
 msgid "Requesting HTTP File Upload Slot…"
+msgstr ""
+
+msgid "Requesting Register Form"
+msgstr ""
+
+msgid "Requesting register form from server…"
 msgstr ""
 
 msgid "Requesting search form from server"
@@ -4547,6 +4568,10 @@ msgstr ""
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
+#, fuzzy
+msgid "Selected image could not be loaded."
+msgstr "Tato služba nebyla nalezena"
+
 #, fuzzy, python-format
 msgid "Selected security label: %s"
 msgstr "Zakazuji %s"
@@ -4804,8 +4829,8 @@ msgid "Show Contact Infos"
 msgstr "Zobrazit pouze _aktivní kontakty"
 
 #, fuzzy
-msgid "Show Gajim on Startup"
-msgstr "Zobrazit _Seznam"
+msgid "Show Gajim"
+msgstr "Gajim"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4881,6 +4906,10 @@ msgid ""
 "Show help on a given command or a list of available commands if -a is given"
 msgstr ""
 
+#, fuzzy
+msgid "Show in Taskbar"
+msgstr "Zobrazuj trans_porty"
+
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
@@ -4899,6 +4928,10 @@ msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Notification-daemon"
 
 #, fuzzy
+msgid "Show on Startup"
+msgstr "Zobrazit _Seznam"
+
+#, fuzzy
 msgid "Show only critical errors"
 msgstr "_Zobrazit událost v rosteru"
 
@@ -4908,6 +4941,10 @@ msgstr "Notification-daemon"
 
 msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
 msgstr ""
+
+#, fuzzy
+msgid "Show window in the taskbar"
+msgstr "Nezobrazuj roster v liště úloh."
 
 #, fuzzy
 msgid "Show window when starting Gajim"
@@ -4928,12 +4965,12 @@ msgid "Shows a list of file transfers between you and your contacts"
 msgstr "Zobrazí výpis přenosů souborů mezi Vámi a ostatními"
 
 #, fuzzy
-msgid "Sign In"
-msgstr "_Přihlásí"
+msgid "Shutting down Gajim"
+msgstr "Gajim"
 
 #, fuzzy
-msgid "Sign Out"
-msgstr "_Odhlásí"
+msgid "Sign In"
+msgstr "_Přihlásí"
 
 #, fuzzy
 msgid "Sign Up"
@@ -5053,10 +5090,6 @@ msgstr "Stát:"
 
 msgid "Status"
 msgstr "Stav"
-
-#, fuzzy
-msgid "Status Change"
-msgstr "Zaznamenávat změny _stavu kontaktů"
 
 msgid "Status Message"
 msgstr "Text stavu"
@@ -5201,6 +5234,10 @@ msgstr "Synchronizovat"
 #, fuzzy
 msgid "System"
 msgstr "<b>Systému:</b>"
+
+#, fuzzy, python-format
+msgid "TLS verification failed: %s"
+msgstr "Chyba SSL certifikátu"
 
 #, fuzzy
 msgid "T_ry Again"
@@ -5613,6 +5650,10 @@ msgstr "Nepřečtené zprávy"
 
 msgid "Unsupported certificate purpose"
 msgstr "Nepodporované osvědčení certifikátu"
+
+#, fuzzy
+msgid "Until Gajim is Closed"
+msgstr "Gajim"
 
 #, fuzzy
 msgid "Untrusted"
@@ -6142,10 +6183,6 @@ msgid "_Advanced Settings"
 msgstr "Pokročilé akce"
 
 #, fuzzy
-msgid "_Always quit when closing Gajim"
-msgstr "Vždy zavřít Gajim"
-
-#, fuzzy
 msgid "_Approve"
 msgstr "schválit"
 
@@ -6218,6 +6255,10 @@ msgstr "Neplatný účtu"
 
 #, fuzzy
 msgid "_Do not ask me again"
+msgstr "Příště _nezobrazovat"
+
+#, fuzzy
+msgid "_Don’t ask again"
 msgstr "Příště _nezobrazovat"
 
 #, fuzzy
@@ -6709,3 +6750,24 @@ msgstr "%(nick)s je nyní %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, Gajim hides the main window when pressing the X button "
+#~ "instead of minimizing into the notification area."
+#~ msgstr ""
+#~ "Pokud zapnuto, ukonči Gajim když bude stisknuto tlačítko X v titulku "
+#~ "okna. Toto nastavení se použije pouze tehdy, pokud je použita ikona v "
+#~ "trayi."
+
+#, fuzzy
+#~ msgid "Sign Out"
+#~ msgstr "_Odhlásí"
+
+#, fuzzy
+#~ msgid "Status Change"
+#~ msgstr "Zaznamenávat změny _stavu kontaktů"
+
+#, fuzzy
+#~ msgid "_Always quit when closing Gajim"
+#~ msgstr "Vždy zavřít Gajim"

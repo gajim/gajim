@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 18:12+0000\n"
+"POT-Creation-Date: 2022-06-15 19:47+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -902,11 +902,6 @@ msgstr ""
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
-msgid ""
-"Allow to hide the contact list window even if the notification area icon is "
-"not shown."
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1043,6 +1038,9 @@ msgstr ""
 msgid "Ask before pasting an image."
 msgstr ""
 
+msgid "Ask before quitting when Gajim’s window is closed"
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Λήφθηκε το πρώτο μήνυμα"
@@ -1145,6 +1143,9 @@ msgstr "Αδυναμία φόρτωσης"
 msgid "Automatic preview disabled"
 msgstr ""
 
+msgid "Automatic preview disabled (file too big)"
+msgstr ""
+
 msgid "Automatic spell-checking for your messages"
 msgstr ""
 
@@ -1184,7 +1185,7 @@ msgstr "Συμμετέχων"
 msgid "Ban…"
 msgstr ""
 
-msgid "Behaviour of Windows & Tabs"
+msgid "Behaviour of Application Window"
 msgstr ""
 
 #, fuzzy
@@ -1280,6 +1281,10 @@ msgstr "Απαγορεύεται η πρόσβαση..."
 #, fuzzy
 msgid "Cancel"
 msgstr "_Άκυρο"
+
+#, fuzzy
+msgid "Cancel Download"
+msgstr "Λήψη"
 
 #, fuzzy
 msgid "Cancel the selected file transfer and remove incomplete files"
@@ -1976,9 +1981,6 @@ msgstr ""
 msgid "Disclose the time of your last activity"
 msgstr ""
 
-msgid "Disconnect from the network"
-msgstr ""
-
 #, fuzzy
 msgid "Discover Services…"
 msgstr "Εύρεση _υπηρεσιών"
@@ -2033,9 +2035,6 @@ msgstr "_Επιλέξτε εάν επιθυμείτε να καταχωρήσε�
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
-msgid "Don’t show main window in the system taskbar."
-msgstr ""
-
 #, fuzzy
 msgid "Don’t show this again"
 msgstr "Μη_ν με ξαναρωτήσεις"
@@ -2053,8 +2052,16 @@ msgid "Download and Install"
 msgstr "Μη_ν με ξαναρωτήσεις"
 
 #, fuzzy, python-format
+msgid "Download failed (%s)"
+msgstr "Μη_ν με ξαναρωτήσεις"
+
+#, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "%d μη αναγνωσμένο μήνυμα"
+
+#, fuzzy
+msgid "Downloading…"
+msgstr "Σύνθεση"
 
 #, fuzzy
 msgid "Drop Files or Contacts"
@@ -2179,6 +2186,10 @@ msgstr ""
 #, fuzzy
 msgid "Error"
 msgstr "Σφάλμα:"
+
+#, fuzzy
+msgid "Error Loading Image"
+msgstr "Επιλογή εικόνας"
 
 msgid "Error during command execution!"
 msgstr ""
@@ -2730,6 +2741,9 @@ msgstr ""
 msgid "Hide this menu"
 msgstr "Απόκρυψη αυτού του μενού"
 
+msgid "Hide window to system tray when minimized"
+msgstr ""
+
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "Ερώτηση πριν το κλείσιμο καρτέλας/ παραθύρου ομαδικής κουβέντας."
@@ -2809,20 +2823,14 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"If enabled, Gajim hides the main window when pressing the X button instead "
-"of minimizing into the notification area."
-msgstr ""
-"Αν είναι αληθές, το Gajim κλείνει όταν πατιέται το κουμπί Χ του διαχειριστή "
-"παραθύρων. Αυτή η ρύθμιση έχει νόημα μόνο εφόσον γίνεται χρήση εικονιδίου "
-"στην μπάρα ειδοποιήσεων."
-
-#, fuzzy
-msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
 msgstr ""
 "Αν είναι ενεργοποιημένο, και τα GTK+ και PyGTK είναι έκδοσης 2.8 και πάνω, "
 "να αναβοσβήνει το παράθυρο όταν υπάρχουν εκκρεμή γεγονότα."
+
+msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
+msgstr ""
 
 #, fuzzy
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
@@ -2865,7 +2873,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy, python-format
-msgid "If you close this window, you will leave '%s'."
+msgid "If you close this chat, you will leave '%s'."
 msgstr "Αν κλείσετε αυτό το παράθυρο, θα αποσυνδεθείτε από αυτά το δωμάτια."
 
 msgid ""
@@ -3228,9 +3236,6 @@ msgid ""
 "from the chat window"
 msgstr ""
 
-msgid "Machine is going to sleep"
-msgstr ""
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Διαχειριστής"
@@ -3334,6 +3339,16 @@ msgid ""
 msgstr ""
 "Τα μηνύματα θα είναι διαθέσιμα για ανάγνωση αργότερα μόνο αν έχετε "
 "ενεργοποιημένο το ιστορικό."
+
+#, fuzzy
+msgid "Minimize on Close"
+msgstr "Gajim"
+
+msgid "Minimize to Tray"
+msgstr ""
+
+msgid "Minimize when closing Gajim’s window"
+msgstr ""
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3990,6 +4005,9 @@ msgstr "Προσωπικές συζητήσεις"
 msgid "Profile"
 msgstr "αρχείο"
 
+msgid "Profile application with cprofile"
+msgstr ""
+
 msgid "Progress"
 msgstr "Πρόοδος"
 
@@ -4035,13 +4053,6 @@ msgstr "Έκδοση PyGTK:"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quit Gajim on Close"
-msgstr "Gajim"
-
-msgid "Quit when closing Gajim’s window"
-msgstr ""
 
 #, fuzzy
 msgid "Quote next message"
@@ -4114,6 +4125,10 @@ msgstr "_Εγγραφή"
 #, fuzzy
 msgid "Register on the Website"
 msgstr "Εγγραφή στο %s"
+
+#, fuzzy
+msgid "Registering…"
+msgstr "_Εγγραφή"
 
 #, fuzzy
 msgid "Registration failed"
@@ -4254,6 +4269,13 @@ msgstr "_Εκτέλεση εντολής..."
 
 msgid "Requesting HTTP File Upload Slot…"
 msgstr ""
+
+msgid "Requesting Register Form"
+msgstr ""
+
+#, fuzzy
+msgid "Requesting register form from server…"
+msgstr "_Καταχώρηση νέου λογαριασμού"
 
 msgid "Requesting search form from server"
 msgstr ""
@@ -4531,6 +4553,10 @@ msgstr ""
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
+#, fuzzy
+msgid "Selected image could not be loaded."
+msgstr "Η υπηρεσία δεν ήταν δυνατό να βρεθεί"
+
 #, fuzzy, python-format
 msgid "Selected security label: %s"
 msgstr "Απαγορεύοντας την πρόσβαση στον %s"
@@ -4788,8 +4814,8 @@ msgid "Show Contact Infos"
 msgstr "Εμφάνιση _αποσυνδεδεμένων χρηστών"
 
 #, fuzzy
-msgid "Show Gajim on Startup"
-msgstr "Εμφάνιση του κεντρικού παραθύρου κατά την εκκίνηση του Gajim"
+msgid "Show Gajim"
+msgstr "Gajim"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4859,6 +4885,10 @@ msgid ""
 "Show help on a given command or a list of available commands if -a is given"
 msgstr ""
 
+#, fuzzy
+msgid "Show in Taskbar"
+msgstr "Προβολή ιδιοτήτων εκτυπωτή"
+
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
@@ -4877,6 +4907,10 @@ msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "_Εικονίδιο στην περιοχή γνωστοποίησης"
 
 #, fuzzy
+msgid "Show on Startup"
+msgstr "Εμφάνιση του κεντρικού παραθύρου κατά την εκκίνηση του Gajim"
+
+#, fuzzy
 msgid "Show only critical errors"
 msgstr "Εμφά_νιση το μόνο στο κύριο παράθυρο"
 
@@ -4885,6 +4919,9 @@ msgid "Show the application's version"
 msgstr "_Εικονίδιο στην περιοχή γνωστοποίησης"
 
 msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
+msgstr ""
+
+msgid "Show window in the taskbar"
 msgstr ""
 
 msgid "Show window when starting Gajim"
@@ -4906,12 +4943,12 @@ msgid "Shows a list of file transfers between you and your contacts"
 msgstr "Δείχνει τη λίστα μεταφορών αρχείων μεταξύ εσάς και άλλων"
 
 #, fuzzy
-msgid "Sign In"
-msgstr "Σύν_δεση"
+msgid "Shutting down Gajim"
+msgstr "Gajim"
 
 #, fuzzy
-msgid "Sign Out"
-msgstr "Αποσ_ύνδεση"
+msgid "Sign In"
+msgstr "Σύν_δεση"
 
 #, fuzzy
 msgid "Sign Up"
@@ -5030,10 +5067,6 @@ msgstr "Νομός:"
 
 msgid "Status"
 msgstr "Κατάσταση"
-
-#, fuzzy
-msgid "Status Change"
-msgstr "Καταγραφή α_λλαγών κατάστασης των επαφών"
 
 msgid "Status Message"
 msgstr "Μήνυμα κατάστασης"
@@ -5180,6 +5213,10 @@ msgstr "Εμφάνιση _αποσυνδεδεμένων χρηστών"
 #, fuzzy
 msgid "System"
 msgstr "<b>Προσαρμοσμένες ρυθμίσεις</b>"
+
+#, fuzzy, python-format
+msgid "TLS verification failed: %s"
+msgstr "Προσθήκη ειδικής ειδοποίησης για το %s"
 
 msgid "T_ry Again"
 msgstr ""
@@ -5591,6 +5628,10 @@ msgstr "Αδιάβαστα γεγονότα"
 
 msgid "Unsupported certificate purpose"
 msgstr ""
+
+#, fuzzy
+msgid "Until Gajim is Closed"
+msgstr "Gajim"
 
 #, fuzzy
 msgid "Untrusted"
@@ -6120,9 +6161,6 @@ msgstr "_Διεύθυνση:"
 msgid "_Advanced Settings"
 msgstr "Προχωρημένες ενέργειες"
 
-msgid "_Always quit when closing Gajim"
-msgstr ""
-
 msgid "_Approve"
 msgstr ""
 
@@ -6195,6 +6233,10 @@ msgstr "Μη έγκυρο όνομα λογαριασμού"
 
 #, fuzzy
 msgid "_Do not ask me again"
+msgstr "Μη_ν με ξαναρωτήσεις"
+
+#, fuzzy
+msgid "_Don’t ask again"
 msgstr "Μη_ν με ξαναρωτήσεις"
 
 #, fuzzy
@@ -6696,3 +6738,20 @@ msgstr "Ο %(nick)s είναι τώρα %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, Gajim hides the main window when pressing the X button "
+#~ "instead of minimizing into the notification area."
+#~ msgstr ""
+#~ "Αν είναι αληθές, το Gajim κλείνει όταν πατιέται το κουμπί Χ του "
+#~ "διαχειριστή παραθύρων. Αυτή η ρύθμιση έχει νόημα μόνο εφόσον γίνεται "
+#~ "χρήση εικονιδίου στην μπάρα ειδοποιήσεων."
+
+#, fuzzy
+#~ msgid "Sign Out"
+#~ msgstr "Αποσ_ύνδεση"
+
+#, fuzzy
+#~ msgid "Status Change"
+#~ msgstr "Καταγραφή α_λλαγών κατάστασης των επαφών"

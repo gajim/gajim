@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 18:12+0000\n"
+"POT-Creation-Date: 2022-06-15 19:47+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -858,11 +858,6 @@ msgstr ""
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
-msgid ""
-"Allow to hide the contact list window even if the notification area icon is "
-"not shown."
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -988,6 +983,9 @@ msgstr ""
 msgid "Ask before pasting an image."
 msgstr ""
 
+msgid "Ask before quitting when Gajim’s window is closed"
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr ""
 
@@ -1085,6 +1083,9 @@ msgstr "Ajustar a estat"
 msgid "Automatic preview disabled"
 msgstr ""
 
+msgid "Automatic preview disabled (file too big)"
+msgstr ""
+
 msgid "Automatic spell-checking for your messages"
 msgstr ""
 
@@ -1120,7 +1121,7 @@ msgstr "Accions Ocupant"
 msgid "Ban…"
 msgstr ""
 
-msgid "Behaviour of Windows & Tabs"
+msgid "Behaviour of Application Window"
 msgstr ""
 
 msgid "Birthday"
@@ -1213,6 +1214,9 @@ msgstr ""
 #, fuzzy
 msgid "Cancel"
 msgstr "_Cancel·la"
+
+msgid "Cancel Download"
+msgstr ""
 
 #, fuzzy
 msgid "Cancel the selected file transfer and remove incomplete files"
@@ -1865,9 +1869,6 @@ msgstr ""
 msgid "Disclose the time of your last activity"
 msgstr ""
 
-msgid "Disconnect from the network"
-msgstr ""
-
 #, fuzzy
 msgid "Discover Services…"
 msgstr "_Descobreix Serveis"
@@ -1917,9 +1918,6 @@ msgstr ""
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
-msgid "Don’t show main window in the system taskbar."
-msgstr ""
-
 msgid "Don’t show this again"
 msgstr ""
 
@@ -1933,8 +1931,15 @@ msgid "Download and Install"
 msgstr ""
 
 #, fuzzy, python-format
+msgid "Download failed (%s)"
+msgstr "_Canvia Missatge d'Estat"
+
+#, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "_Canvia Missatge d'Estat"
+
+msgid "Downloading…"
+msgstr ""
 
 #, fuzzy
 msgid "Drop Files or Contacts"
@@ -2050,6 +2055,9 @@ msgid ""
 msgstr ""
 
 msgid "Error"
+msgstr ""
+
+msgid "Error Loading Image"
 msgstr ""
 
 msgid "Error during command execution!"
@@ -2576,6 +2584,9 @@ msgstr ""
 msgid "Hide this menu"
 msgstr ""
 
+msgid "Hide window to system tray when minimized"
+msgstr ""
+
 msgid "Hides the banner in a 1:1 chat window."
 msgstr ""
 
@@ -2645,13 +2656,11 @@ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 msgstr ""
 
 msgid ""
-"If enabled, Gajim hides the main window when pressing the X button instead "
-"of minimizing into the notification area."
-msgstr ""
-
-msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
+msgstr ""
+
+msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
 msgstr ""
 
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
@@ -2690,7 +2699,7 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "If you close this window, you will leave '%s'."
+msgid "If you close this chat, you will leave '%s'."
 msgstr ""
 
 msgid ""
@@ -3024,9 +3033,6 @@ msgid ""
 "from the chat window"
 msgstr ""
 
-msgid "Machine is going to sleep"
-msgstr ""
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Administra"
@@ -3120,6 +3126,16 @@ msgstr ""
 msgid ""
 "Messages will only be available for reading them later if storing chat "
 "history is enabled and if the contact is in your contact list."
+msgstr ""
+
+#, fuzzy
+msgid "Minimize on Close"
+msgstr "_Minimitza en tancar"
+
+msgid "Minimize to Tray"
+msgstr ""
+
+msgid "Minimize when closing Gajim’s window"
 msgstr ""
 
 #, fuzzy
@@ -3743,6 +3759,9 @@ msgstr ""
 msgid "Profile"
 msgstr "Perfil"
 
+msgid "Profile application with cprofile"
+msgstr ""
+
 msgid "Progress"
 msgstr ""
 
@@ -3786,13 +3805,6 @@ msgid "PyGObject Version: %s"
 msgstr ""
 
 msgid "Quit Gajim"
-msgstr ""
-
-#, fuzzy
-msgid "Quit Gajim on Close"
-msgstr "_Minimitza en tancar"
-
-msgid "Quit when closing Gajim’s window"
 msgstr ""
 
 msgid "Quote next message"
@@ -3857,6 +3869,10 @@ msgstr "_Registra"
 
 msgid "Register on the Website"
 msgstr ""
+
+#, fuzzy
+msgid "Registering…"
+msgstr "_Registra"
 
 msgid "Registration failed"
 msgstr ""
@@ -3992,6 +4008,12 @@ msgid "Requesting Command List"
 msgstr "Sol.licita Veu"
 
 msgid "Requesting HTTP File Upload Slot…"
+msgstr ""
+
+msgid "Requesting Register Form"
+msgstr ""
+
+msgid "Requesting register form from server…"
 msgstr ""
 
 msgid "Requesting search form from server"
@@ -4252,6 +4274,9 @@ msgstr ""
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
+msgid "Selected image could not be loaded."
+msgstr ""
+
 #, python-format
 msgid "Selected security label: %s"
 msgstr ""
@@ -4490,8 +4515,8 @@ msgid "Show Contact Infos"
 msgstr "Mostra Contactes Actius"
 
 #, fuzzy
-msgid "Show Gajim on Startup"
-msgstr "C_onecta al servidor quan s'inicia"
+msgid "Show Gajim"
+msgstr "Gajim"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4560,6 +4585,10 @@ msgid ""
 "Show help on a given command or a list of available commands if -a is given"
 msgstr ""
 
+#, fuzzy
+msgid "Show in Taskbar"
+msgstr "Mostra Transports"
+
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
@@ -4577,6 +4606,10 @@ msgstr ""
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "_Notifica'm quan una transferència de fitxer ha acabat"
 
+#, fuzzy
+msgid "Show on Startup"
+msgstr "C_onecta al servidor quan s'inicia"
+
 msgid "Show only critical errors"
 msgstr ""
 
@@ -4584,6 +4617,9 @@ msgid "Show the application's version"
 msgstr ""
 
 msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
+msgstr ""
+
+msgid "Show window in the taskbar"
 msgstr ""
 
 msgid "Show window when starting Gajim"
@@ -4602,10 +4638,11 @@ msgstr ""
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr "Mostra una llista de transferències de fitxers entre tu i els altres"
 
-msgid "Sign In"
-msgstr ""
+#, fuzzy
+msgid "Shutting down Gajim"
+msgstr "Gajim"
 
-msgid "Sign Out"
+msgid "Sign In"
 msgstr ""
 
 msgid "Sign Up"
@@ -4718,10 +4755,6 @@ msgstr "Estat"
 
 msgid "Status"
 msgstr ""
-
-#, fuzzy
-msgid "Status Change"
-msgstr "Mostra els canvis d'estat"
 
 msgid "Status Message"
 msgstr ""
@@ -4862,6 +4895,10 @@ msgstr "Sincronitza els contactes"
 
 msgid "System"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "TLS verification failed: %s"
+msgstr "Certificat de client"
 
 msgid "T_ry Again"
 msgstr ""
@@ -5244,6 +5281,10 @@ msgstr "_Canvia Missatge d'Estat"
 
 msgid "Unsupported certificate purpose"
 msgstr ""
+
+#, fuzzy
+msgid "Until Gajim is Closed"
+msgstr "_Minimitza en tancar"
 
 msgid "Untrusted"
 msgstr ""
@@ -5735,9 +5776,6 @@ msgstr "_Copia adreça JID/Email"
 msgid "_Advanced Settings"
 msgstr "Connectors"
 
-msgid "_Always quit when closing Gajim"
-msgstr ""
-
 #, fuzzy
 msgid "_Approve"
 msgstr "Aprova"
@@ -5806,6 +5844,9 @@ msgid "_Disable Account"
 msgstr "Compte"
 
 msgid "_Do not ask me again"
+msgstr ""
+
+msgid "_Don’t ask again"
 msgstr ""
 
 msgid "_Download"
@@ -6266,3 +6307,7 @@ msgstr ""
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Status Change"
+#~ msgstr "Mostra els canvis d'estat"

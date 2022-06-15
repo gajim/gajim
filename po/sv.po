@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 18:12+0000\n"
+"POT-Creation-Date: 2022-06-15 19:47+0000\n"
 "PO-Revision-Date: 2009-10-29 10:21+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -906,11 +906,6 @@ msgstr ""
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
-msgid ""
-"Allow to hide the contact list window even if the notification area icon is "
-"not shown."
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1045,6 +1040,9 @@ msgstr ""
 msgid "Ask before pasting an image."
 msgstr ""
 
+msgid "Ask before quitting when Gajim’s window is closed"
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Första meddelandet mottaget"
@@ -1148,6 +1146,9 @@ msgstr "Automatisk status"
 msgid "Automatic preview disabled"
 msgstr ""
 
+msgid "Automatic preview disabled (file too big)"
+msgstr ""
+
 #, fuzzy
 msgid "Automatic spell-checking for your messages"
 msgstr "Stavningskontrollerar meddelanden."
@@ -1188,7 +1189,7 @@ msgstr "Deltagare"
 msgid "Ban…"
 msgstr ""
 
-msgid "Behaviour of Windows & Tabs"
+msgid "Behaviour of Application Window"
 msgstr ""
 
 #, fuzzy
@@ -1286,6 +1287,10 @@ msgstr "Bannlyser..."
 #, fuzzy
 msgid "Cancel"
 msgstr "_Avbryt"
+
+#, fuzzy
+msgid "Cancel Download"
+msgstr "Hämta"
 
 #, fuzzy
 msgid "Cancel the selected file transfer and remove incomplete files"
@@ -1980,9 +1985,6 @@ msgstr ""
 msgid "Disclose the time of your last activity"
 msgstr ""
 
-msgid "Disconnect from the network"
-msgstr ""
-
 #, fuzzy
 msgid "Discover Services…"
 msgstr "_Upptäck tjänster"
@@ -2038,10 +2040,6 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
 #, fuzzy
-msgid "Don’t show main window in the system taskbar."
-msgstr "Visa inte kontaktlista i systemets fönsterlista."
-
-#, fuzzy
 msgid "Don’t show this again"
 msgstr "Fråga mig i_nte igen"
 
@@ -2058,8 +2056,16 @@ msgid "Download and Install"
 msgstr "Fråga mig i_nte igen"
 
 #, fuzzy, python-format
+msgid "Download failed (%s)"
+msgstr "Fråga mig i_nte igen"
+
+#, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "Vidarebefordra olästa meddelanden"
+
+#, fuzzy
+msgid "Downloading…"
+msgstr "Programmerar"
 
 #, fuzzy
 msgid "Drop Files or Contacts"
@@ -2184,6 +2190,10 @@ msgstr ""
 #, fuzzy
 msgid "Error"
 msgstr "Fel."
+
+#, fuzzy
+msgid "Error Loading Image"
+msgstr "Välj Bild"
 
 msgid "Error during command execution!"
 msgstr ""
@@ -2728,6 +2738,9 @@ msgstr ""
 msgid "Hide this menu"
 msgstr "Dölj denna meny"
 
+msgid "Hide window to system tray when minimized"
+msgstr ""
+
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "Döljer bannern i ett gruppchattfönster"
@@ -2804,20 +2817,15 @@ msgstr "Om kryssad så kan Gajim fjärrstyras med gajim-remote."
 
 #, fuzzy
 msgid ""
-"If enabled, Gajim hides the main window when pressing the X button instead "
-"of minimizing into the notification area."
-msgstr ""
-"Om sant så avslutas Gajim när fönsterhanterarens X-knapp klickas. Denna "
-"inställning behandlas endast när aktivitetsfältsikonen används."
-
-#, fuzzy
-msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
 msgstr ""
 "Om sant och versionerna av GTK+ och PyGTK är 2.8 eller högre så kommer "
 "fönstret att blinka (standardbeteendet i de flesta fönsterhanterare) när det "
 "finns väntande händelser."
+
+msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
+msgstr ""
 
 #, fuzzy
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
@@ -2859,7 +2867,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy, python-format
-msgid "If you close this window, you will leave '%s'."
+msgid "If you close this chat, you will leave '%s'."
 msgstr ""
 "Om du stänger det här fönstret kommer du bli frånkopplad från det här rummet."
 
@@ -3222,9 +3230,6 @@ msgid ""
 "from the chat window"
 msgstr ""
 
-msgid "Machine is going to sleep"
-msgstr ""
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Admin"
@@ -3328,6 +3333,17 @@ msgid ""
 msgstr ""
 "Meddelanden kommer endast vara tillgängliga för läsning senare om du har "
 "historik aktiverat och kontakten finns i din kontaktlista."
+
+#, fuzzy
+msgid "Minimize on Close"
+msgstr "Gajim"
+
+msgid "Minimize to Tray"
+msgstr ""
+
+#, fuzzy
+msgid "Minimize when closing Gajim’s window"
+msgstr "Stäng alltid Gajim"
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3984,6 +4000,9 @@ msgstr "Integritetslista"
 msgid "Profile"
 msgstr "fil"
 
+msgid "Profile application with cprofile"
+msgstr ""
+
 msgid "Progress"
 msgstr "Förlopp"
 
@@ -4029,14 +4048,6 @@ msgstr "PyGTK version:"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quit Gajim on Close"
-msgstr "Gajim"
-
-#, fuzzy
-msgid "Quit when closing Gajim’s window"
-msgstr "Stäng alltid Gajim"
 
 #, fuzzy
 msgid "Quote next message"
@@ -4109,6 +4120,10 @@ msgstr "_Registrera"
 #, fuzzy
 msgid "Register on the Website"
 msgstr "Registrera till %s"
+
+#, fuzzy
+msgid "Registering…"
+msgstr "_Registrera"
 
 msgid "Registration failed"
 msgstr "Registreringen misslyckades"
@@ -4247,6 +4262,13 @@ msgstr "_Kör kommando"
 
 msgid "Requesting HTTP File Upload Slot…"
 msgstr ""
+
+msgid "Requesting Register Form"
+msgstr ""
+
+#, fuzzy
+msgid "Requesting register form from server…"
+msgstr "_Registrera nytt konto"
 
 msgid "Requesting search form from server"
 msgstr ""
@@ -4524,6 +4546,10 @@ msgstr ""
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
+#, fuzzy
+msgid "Selected image could not be loaded."
+msgstr "Denna tjänst kunde inte hittas"
+
 #, fuzzy, python-format
 msgid "Selected security label: %s"
 msgstr "Bannlyser %s"
@@ -4779,8 +4805,8 @@ msgid "Show Contact Infos"
 msgstr "Visa endast _aktiva kontakter"
 
 #, fuzzy
-msgid "Show Gajim on Startup"
-msgstr "Visa registerfönstret när Gajim startar"
+msgid "Show Gajim"
+msgstr "Gajim"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4850,6 +4876,10 @@ msgid ""
 "Show help on a given command or a list of available commands if -a is given"
 msgstr ""
 
+#, fuzzy
+msgid "Show in Taskbar"
+msgstr "Visa _transporter"
+
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
@@ -4868,6 +4898,10 @@ msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Använd _aktivitetsfältet (aka. notifieringsyta)"
 
 #, fuzzy
+msgid "Show on Startup"
+msgstr "Visa registerfönstret när Gajim startar"
+
+#, fuzzy
 msgid "Show only critical errors"
 msgstr "Visa enbart i _registret"
 
@@ -4877,6 +4911,10 @@ msgstr "Använd _aktivitetsfältet (aka. notifieringsyta)"
 
 msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
 msgstr ""
+
+#, fuzzy
+msgid "Show window in the taskbar"
+msgstr "Visa inte kontaktlista i systemets fönsterlista."
 
 #, fuzzy
 msgid "Show window when starting Gajim"
@@ -4897,12 +4935,12 @@ msgid "Shows a list of file transfers between you and your contacts"
 msgstr "Visar en lista med filöverföringar mellan dig och andra"
 
 #, fuzzy
-msgid "Sign In"
-msgstr "Loggar _in"
+msgid "Shutting down Gajim"
+msgstr "Gajim"
 
 #, fuzzy
-msgid "Sign Out"
-msgstr "Loggar _ut"
+msgid "Sign In"
+msgstr "Loggar _in"
 
 #, fuzzy
 msgid "Sign Up"
@@ -5022,10 +5060,6 @@ msgstr "Delstat:"
 
 msgid "Status"
 msgstr "Status"
-
-#, fuzzy
-msgid "Status Change"
-msgstr "_Logga statusändringar för kontakter"
 
 msgid "Status Message"
 msgstr "Statusmeddelande"
@@ -5170,6 +5204,10 @@ msgstr "Synkronisera"
 #, fuzzy
 msgid "System"
 msgstr "<b>System:</b>"
+
+#, fuzzy, python-format
+msgid "TLS verification failed: %s"
+msgstr "SSL-certifikatfel"
 
 #, fuzzy
 msgid "T_ry Again"
@@ -5583,6 +5621,10 @@ msgstr "Olästa händelser"
 
 msgid "Unsupported certificate purpose"
 msgstr ""
+
+#, fuzzy
+msgid "Until Gajim is Closed"
+msgstr "Gajim"
 
 #, fuzzy
 msgid "Untrusted"
@@ -6114,10 +6156,6 @@ msgstr "_Adress:"
 msgid "_Advanced Settings"
 msgstr "Avancerade åtgärder"
 
-#, fuzzy
-msgid "_Always quit when closing Gajim"
-msgstr "Stäng alltid Gajim"
-
 msgid "_Approve"
 msgstr ""
 
@@ -6190,6 +6228,10 @@ msgstr "Ogiltigt kontonamn"
 
 #, fuzzy
 msgid "_Do not ask me again"
+msgstr "Fråga mig i_nte igen"
+
+#, fuzzy
+msgid "_Don’t ask again"
 msgstr "Fråga mig i_nte igen"
 
 #, fuzzy
@@ -6683,3 +6725,23 @@ msgstr "%(nick)s är nu %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, Gajim hides the main window when pressing the X button "
+#~ "instead of minimizing into the notification area."
+#~ msgstr ""
+#~ "Om sant så avslutas Gajim när fönsterhanterarens X-knapp klickas. Denna "
+#~ "inställning behandlas endast när aktivitetsfältsikonen används."
+
+#, fuzzy
+#~ msgid "Sign Out"
+#~ msgstr "Loggar _ut"
+
+#, fuzzy
+#~ msgid "Status Change"
+#~ msgstr "_Logga statusändringar för kontakter"
+
+#, fuzzy
+#~ msgid "_Always quit when closing Gajim"
+#~ msgstr "Stäng alltid Gajim"

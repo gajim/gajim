@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 18:12+0000\n"
+"POT-Creation-Date: 2022-06-15 19:47+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -897,14 +897,6 @@ msgstr ""
 msgid "Allow a participant to send you public or private messages"
 msgstr "Laat een deelnemer toe je openbare of privéberichten te sturen"
 
-#, fuzzy
-msgid ""
-"Allow to hide the contact list window even if the notification area icon is "
-"not shown."
-msgstr ""
-"Laat toe het roostervenster te verbergen zelfs als het systeemvakpictogram "
-"niet weergegeven wordt."
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1043,6 +1035,9 @@ msgstr ""
 msgid "Ask before pasting an image."
 msgstr ""
 
+msgid "Ask before quitting when Gajim’s window is closed"
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr "Aandachtsbericht ontvangen"
 
@@ -1142,6 +1137,9 @@ msgstr "Automatische status"
 msgid "Automatic preview disabled"
 msgstr ""
 
+msgid "Automatic preview disabled (file too big)"
+msgstr ""
+
 msgid "Automatic spell-checking for your messages"
 msgstr "Automatische spellingscontrole voor je berichten"
 
@@ -1181,7 +1179,7 @@ msgid "Ban…"
 msgstr ""
 
 #, fuzzy
-msgid "Behaviour of Windows & Tabs"
+msgid "Behaviour of Application Window"
 msgstr "Gedrag van vensters en tabbladen"
 
 msgid "Birthday"
@@ -1274,6 +1272,10 @@ msgstr "Wordt verbannen…"
 
 msgid "Cancel"
 msgstr "Annuleren"
+
+#, fuzzy
+msgid "Cancel Download"
+msgstr "?Znw:Download"
 
 msgid "Cancel the selected file transfer and remove incomplete files"
 msgstr ""
@@ -1944,9 +1946,6 @@ msgstr ""
 msgid "Disclose the time of your last activity"
 msgstr ""
 
-msgid "Disconnect from the network"
-msgstr "Netwerkverbinding verbreken"
-
 #, fuzzy
 msgid "Discover Services…"
 msgstr "Diensten ontdekken"
@@ -2001,10 +2000,6 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
 #, fuzzy
-msgid "Don’t show main window in the system taskbar."
-msgstr "Rooster niet weergeven in systeemvak."
-
-#, fuzzy
 msgid "Don’t show this again"
 msgstr "Vraag mij _dit niet nogmaals"
 
@@ -2021,8 +2016,16 @@ msgid "Download and Install"
 msgstr "Vraag mij _dit niet nogmaals"
 
 #, fuzzy, python-format
+msgid "Download failed (%s)"
+msgstr "Vraag mij _dit niet nogmaals"
+
+#, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "%s berichten gedownload"
+
+#, fuzzy
+msgid "Downloading…"
+msgstr "Bezig met laden"
 
 #, fuzzy
 msgid "Drop Files or Contacts"
@@ -2153,6 +2156,10 @@ msgstr ""
 
 msgid "Error"
 msgstr "Fout"
+
+#, fuzzy
+msgid "Error Loading Image"
+msgstr "Kies afbeelding"
 
 msgid "Error during command execution!"
 msgstr "Fout tijdens uitvoeren van commando!"
@@ -2700,6 +2707,9 @@ msgstr ""
 msgid "Hide this menu"
 msgstr "Verberg dit menu"
 
+msgid "Hide window to system tray when minimized"
+msgstr ""
+
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "Verbergt de banner in een groepsgespreksvenster"
@@ -2777,19 +2787,14 @@ msgstr "Indien aangevinkt zal Gajim bestuurd kunnen worden met gajim-remote."
 
 #, fuzzy
 msgid ""
-"If enabled, Gajim hides the main window when pressing the X button instead "
-"of minimizing into the notification area."
-msgstr ""
-"Indien ingeschakeld verbergt Gajim het roostervenster wanneer dit wordt "
-"gesloten, in plaats van te minimaliseren naar het Dock."
-
-#, fuzzy
-msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
 msgstr ""
 "Indien ingeschakeld flikkert het venster (standaardgedrag bij de meeste "
 "vensterbeheerders) wanneer er lopende gebeurtenissen zijn."
+
+msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
+msgstr ""
 
 #, fuzzy
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
@@ -2851,7 +2856,7 @@ msgstr ""
 "je GEEN ENKEL bericht van je server ontvangen."
 
 #, fuzzy, python-format
-msgid "If you close this window, you will leave '%s'."
+msgid "If you close this chat, you will leave '%s'."
 msgstr ""
 "Als je dit venster sluit zal de verbinding verbroken worden met deze ruimten."
 
@@ -3213,9 +3218,6 @@ msgstr ""
 "Zoek dingen op op Wikipedia, in woordenboeken of met andere zoekmachines, "
 "rechtstreeks vanuit het gespreksvenster"
 
-msgid "Machine is going to sleep"
-msgstr "Machine gaat slapen"
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "Admin"
@@ -3320,6 +3322,17 @@ msgid ""
 msgstr ""
 "Berichten zullen alleen voor later beschikbaar zijn als je geschiedenis "
 "ingeschakeld hebt en het contact in je rooster staat."
+
+#, fuzzy
+msgid "Minimize on Close"
+msgstr "Gajim afsluiten"
+
+msgid "Minimize to Tray"
+msgstr ""
+
+#, fuzzy
+msgid "Minimize when closing Gajim’s window"
+msgstr "Gajim altijd sluiten"
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3954,6 +3967,9 @@ msgstr "Start Gesprek"
 msgid "Profile"
 msgstr "Profiel"
 
+msgid "Profile application with cprofile"
+msgstr ""
+
 msgid "Progress"
 msgstr "Voortgang"
 
@@ -3997,14 +4013,6 @@ msgstr "PyGObject-versie: %s"
 
 msgid "Quit Gajim"
 msgstr "Gajim afsluiten"
-
-#, fuzzy
-msgid "Quit Gajim on Close"
-msgstr "Gajim afsluiten"
-
-#, fuzzy
-msgid "Quit when closing Gajim’s window"
-msgstr "Gajim altijd sluiten"
 
 msgid "Quote next message"
 msgstr "Volgend bericht citeren"
@@ -4074,6 +4082,10 @@ msgstr "Registreren"
 #, fuzzy
 msgid "Register on the Website"
 msgstr "Registreren bij %s"
+
+#, fuzzy
+msgid "Registering…"
+msgstr "Registreren"
 
 msgid "Registration failed"
 msgstr "Registratie mislukt"
@@ -4210,6 +4222,12 @@ msgstr "Opdrachtlijst opvragen"
 #, fuzzy
 msgid "Requesting HTTP File Upload Slot…"
 msgstr "HTTP-uploadslot opvragen…"
+
+msgid "Requesting Register Form"
+msgstr ""
+
+msgid "Requesting register form from server…"
+msgstr ""
 
 msgid "Requesting search form from server"
 msgstr ""
@@ -4485,6 +4503,10 @@ msgstr ""
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
+#, fuzzy
+msgid "Selected image could not be loaded."
+msgstr "De dienst kon niet gevonden worden"
+
 #, fuzzy, python-format
 msgid "Selected security label: %s"
 msgstr "Waarschuwing"
@@ -4746,8 +4768,8 @@ msgid "Show Contact Infos"
 msgstr "Alleen actieve contacten weergeven"
 
 #, fuzzy
-msgid "Show Gajim on Startup"
-msgstr "Roo_ster weergeven bij opstarten"
+msgid "Show Gajim"
+msgstr "Gajim"
 
 #, fuzzy
 msgid "Show Join/Leave"
@@ -4826,6 +4848,10 @@ msgstr ""
 "Toon hulp voor een gegeven opdracht, of een lijst van beschikbare opdrachten "
 "indien ‘-a’ opgegeven is"
 
+#, fuzzy
+msgid "Show in Taskbar"
+msgstr "Transporten weergeven"
+
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
@@ -4843,6 +4869,10 @@ msgstr ""
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Pictogram weergeven i_n meldingsvak"
 
+#, fuzzy
+msgid "Show on Startup"
+msgstr "Roo_ster weergeven bij opstarten"
+
 msgid "Show only critical errors"
 msgstr "Alleen kritieke fouten weergeven"
 
@@ -4851,6 +4881,10 @@ msgstr "Toepassingsversie weergeven"
 
 msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
 msgstr ""
+
+#, fuzzy
+msgid "Show window in the taskbar"
+msgstr "Rooster niet weergeven in systeemvak."
 
 #, fuzzy
 msgid "Show window when starting Gajim"
@@ -4871,12 +4905,12 @@ msgid "Shows a list of file transfers between you and your contacts"
 msgstr "Laat een lijst met bestandsoverdrachten zien tussen jou en anderen"
 
 #, fuzzy
-msgid "Sign In"
-msgstr "_inlog"
+msgid "Shutting down Gajim"
+msgstr "Gajim"
 
 #, fuzzy
-msgid "Sign Out"
-msgstr "uitl_og"
+msgid "Sign In"
+msgstr "_inlog"
 
 #, fuzzy
 msgid "Sign Up"
@@ -4992,10 +5026,6 @@ msgstr "Staat"
 
 msgid "Status"
 msgstr "Status"
-
-#, fuzzy
-msgid "Status Change"
-msgstr "Statusveranderingen tonen"
 
 msgid "Status Message"
 msgstr "Statusbericht"
@@ -5138,6 +5168,10 @@ msgstr "Geschiedenis synchroniseren"
 
 msgid "System"
 msgstr "Systeem"
+
+#, fuzzy, python-format
+msgid "TLS verification failed: %s"
+msgstr "SSL-certificaatverificatie voor %s"
 
 #, fuzzy
 msgid "T_ry Again"
@@ -5557,6 +5591,10 @@ msgstr "Ongelezen gebeurtenissen"
 
 msgid "Unsupported certificate purpose"
 msgstr "Niet-ondersteund certificaatsdoel"
+
+#, fuzzy
+msgid "Until Gajim is Closed"
+msgstr "Gajim afsluiten"
 
 msgid "Untrusted"
 msgstr "Niet vertrouwd"
@@ -6099,10 +6137,6 @@ msgid "_Advanced Settings"
 msgstr "Gea_vanceerde Acties"
 
 #, fuzzy
-msgid "_Always quit when closing Gajim"
-msgstr "Gajim altijd sluiten"
-
-#, fuzzy
 msgid "_Approve"
 msgstr "approve"
 
@@ -6172,6 +6206,10 @@ msgid "_Disable Account"
 msgstr "Account uitschakelen"
 
 msgid "_Do not ask me again"
+msgstr "Vraag mij _dit niet nogmaals"
+
+#, fuzzy
+msgid "_Don’t ask again"
 msgstr "Vraag mij _dit niet nogmaals"
 
 #, fuzzy
@@ -6654,3 +6692,37 @@ msgstr "{nick} is nu {show}{status}"
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "Allow to hide the contact list window even if the notification area icon "
+#~ "is not shown."
+#~ msgstr ""
+#~ "Laat toe het roostervenster te verbergen zelfs als het "
+#~ "systeemvakpictogram niet weergegeven wordt."
+
+#~ msgid "Disconnect from the network"
+#~ msgstr "Netwerkverbinding verbreken"
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, Gajim hides the main window when pressing the X button "
+#~ "instead of minimizing into the notification area."
+#~ msgstr ""
+#~ "Indien ingeschakeld verbergt Gajim het roostervenster wanneer dit wordt "
+#~ "gesloten, in plaats van te minimaliseren naar het Dock."
+
+#~ msgid "Machine is going to sleep"
+#~ msgstr "Machine gaat slapen"
+
+#, fuzzy
+#~ msgid "Sign Out"
+#~ msgstr "uitl_og"
+
+#, fuzzy
+#~ msgid "Status Change"
+#~ msgstr "Statusveranderingen tonen"
+
+#, fuzzy
+#~ msgid "_Always quit when closing Gajim"
+#~ msgstr "Gajim altijd sluiten"

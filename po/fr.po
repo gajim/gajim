@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 18:12+0000\n"
+"POT-Creation-Date: 2022-06-15 19:47+0000\n"
 "PO-Revision-Date: 2022-05-31 08:30+0000\n"
 "Last-Translator: pitchum <pitchum@gramaton.org>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
@@ -823,13 +823,6 @@ msgstr ""
 msgid "Allow a participant to send you public or private messages"
 msgstr "Autoriser un occupant à vous envoyer des messages publics ou privés"
 
-msgid ""
-"Allow to hide the contact list window even if the notification area icon is "
-"not shown."
-msgstr ""
-"Autoriser à cacher la liste des contacts même si l'icône de notification "
-"n'est pas affichée."
-
 msgid "Allowed File Size"
 msgstr "Taille d'image autorisée"
 
@@ -956,6 +949,9 @@ msgstr ""
 msgid "Ask before pasting an image."
 msgstr "Demander avant de coller une image."
 
+msgid "Ask before quitting when Gajim’s window is closed"
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr "Message demandant attention reçu"
 
@@ -1040,6 +1036,10 @@ msgstr "Changement automatique d'état"
 msgid "Automatic preview disabled"
 msgstr "Aperçu automatique désactivé"
 
+#, fuzzy
+msgid "Automatic preview disabled (file too big)"
+msgstr "Aperçu automatique désactivé"
+
 msgid "Automatic spell-checking for your messages"
 msgstr "Vérification orthographique automatique des messages composés"
 
@@ -1074,7 +1074,8 @@ msgstr "Bannir participant"
 msgid "Ban…"
 msgstr "Bannir…"
 
-msgid "Behaviour of Windows & Tabs"
+#, fuzzy
+msgid "Behaviour of Application Window"
 msgstr "Comportement des fenêtres et des onglets"
 
 msgid "Birthday"
@@ -1162,6 +1163,10 @@ msgstr "Appel en cours…"
 
 msgid "Cancel"
 msgstr "Annuler"
+
+#, fuzzy
+msgid "Cancel Download"
+msgstr "Télécharger"
 
 msgid "Cancel the selected file transfer and remove incomplete files"
 msgstr ""
@@ -1760,9 +1765,6 @@ msgstr ""
 msgid "Disclose the time of your last activity"
 msgstr "Divulguer l’heure de votre dernière activité"
 
-msgid "Disconnect from the network"
-msgstr "Déconnecté du réseau"
-
 msgid "Discover Services…"
 msgstr "Découvrir des services…"
 
@@ -1814,10 +1816,6 @@ msgstr "Voulez-vous remplacer la version actuellement installée ?"
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr "Voulez-vous également désinscrire votre compte sur <b>%s</b> ?"
 
-msgid "Don’t show main window in the system taskbar."
-msgstr ""
-"Ne pas afficher la fenêtre de la liste de contacts dans la barre des tâches."
-
 #, fuzzy
 msgid "Don’t show this again"
 msgstr "Ne plus afficher ceci à l'avenir"
@@ -1831,9 +1829,17 @@ msgstr "Télécharger mise à jour"
 msgid "Download and Install"
 msgstr "Télécharger et installer"
 
+#, fuzzy, python-format
+msgid "Download failed (%s)"
+msgstr "Télécharger et installer"
+
 #, python-format
 msgid "Downloaded %s messages"
 msgstr "%s messages téléchargés"
+
+#, fuzzy
+msgid "Downloading…"
+msgstr "Chargement…"
 
 msgid "Drop Files or Contacts"
 msgstr "Déposer des fichiers ou des contacts"
@@ -1956,6 +1962,10 @@ msgstr ""
 
 msgid "Error"
 msgstr "Erreur"
+
+#, fuzzy
+msgid "Error Loading Image"
+msgstr "Charger l'image"
 
 msgid "Error during command execution!"
 msgstr "Erreur lors de l’exécution de la commande !"
@@ -2440,6 +2450,9 @@ msgstr "Aide à passer des appels à travers les pare-feux"
 msgid "Hide this menu"
 msgstr "Cacher ce menu"
 
+msgid "Hide window to system tray when minimized"
+msgstr ""
+
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "Cacher la bannière dans la fenêtre de discussion 1:1."
 
@@ -2513,19 +2526,15 @@ msgstr ""
 "remote."
 
 msgid ""
-"If enabled, Gajim hides the main window when pressing the X button instead "
-"of minimizing into the notification area."
-msgstr ""
-"Si activé, Gajim cache la fenêtre de la liste des contacts lorsqu'on appuie "
-"sur le bouton X au lieu de la minimiser dans la barre de notification."
-
-msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
 msgstr ""
 "Si activé, Gajim fait clignoter (comportement par défaut dans la plupart des "
 "gestionnaires de fenêtres) la fenêtre quand elle contient des événements non "
 "lus."
+
+msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
+msgstr ""
 
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
@@ -2578,8 +2587,8 @@ msgstr ""
 "connecté avec une priorité négative, vous ne recevrez AUCUN message de votre "
 "serveur."
 
-#, python-format
-msgid "If you close this window, you will leave '%s'."
+#, fuzzy, python-format
+msgid "If you close this chat, you will leave '%s'."
 msgstr "Si vous fermez cette fenêtre, vous quitterez '%s'."
 
 msgid ""
@@ -2903,9 +2912,6 @@ msgstr ""
 "Consultez Wikipédia, des dictionnaires ou utilisez des moteurs de recherche "
 "directement depuis la fenêtre de discussion"
 
-msgid "Machine is going to sleep"
-msgstr "La machine se met en veille"
-
 msgid "Make Admin"
 msgstr "Rendre admin"
 
@@ -2997,6 +3003,17 @@ msgstr ""
 "Les messages ne seront disponibles pour une lecture ultérieure que si "
 "l’archivage de l'historique est actif et si le contact est dans votre liste "
 "de contact."
+
+#, fuzzy
+msgid "Minimize on Close"
+msgstr "Quitter Gajim à la fermeture"
+
+msgid "Minimize to Tray"
+msgstr ""
+
+#, fuzzy
+msgid "Minimize when closing Gajim’s window"
+msgstr "Quitter lorsque la fenêtre de Gajim est fermée"
 
 msgid "Minutes until your status gets changed"
 msgstr "Nombre de minutes pour que votre état soit changé"
@@ -3586,6 +3603,9 @@ msgstr "Privé"
 msgid "Profile"
 msgstr "Profil"
 
+msgid "Profile application with cprofile"
+msgstr ""
+
 msgid "Progress"
 msgstr "Progression"
 
@@ -3623,12 +3643,6 @@ msgstr "Version de PyGObject : %s"
 
 msgid "Quit Gajim"
 msgstr "Quitter Gajim"
-
-msgid "Quit Gajim on Close"
-msgstr "Quitter Gajim à la fermeture"
-
-msgid "Quit when closing Gajim’s window"
-msgstr "Quitter lorsque la fenêtre de Gajim est fermée"
 
 msgid "Quote next message"
 msgstr "Cite le message suivant"
@@ -3691,6 +3705,10 @@ msgstr "S'inscrire"
 
 msgid "Register on the Website"
 msgstr "S'inscrire via le site web"
+
+#, fuzzy
+msgid "Registering…"
+msgstr "S'inscrire"
 
 msgid "Registration failed"
 msgstr "L'inscription a échoué"
@@ -3804,6 +3822,14 @@ msgstr "Récupération de la liste des commandes"
 
 msgid "Requesting HTTP File Upload Slot…"
 msgstr "Demande d'envoi de fichier par HTTP…"
+
+#, fuzzy
+msgid "Requesting Register Form"
+msgstr "Formulaire de recherche"
+
+#, fuzzy
+msgid "Requesting register form from server…"
+msgstr "Récupération en cours du formulaire de recherche depuis le serveur"
 
 msgid "Requesting search form from server"
 msgstr "Récupération en cours du formulaire de recherche depuis le serveur"
@@ -4042,6 +4068,10 @@ msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 "Sélectionnez votre périphérique d'entrée vidéo (ex : webcam, capture d'écran)"
 
+#, fuzzy
+msgid "Selected image could not be loaded."
+msgstr "Le service n'a pu être trouvé"
+
 #, python-format
 msgid "Selected security label: %s"
 msgstr "Label de sécurité sélectionné : %s"
@@ -4276,8 +4306,9 @@ msgstr "Afficher les commandes"
 msgid "Show Contact Infos"
 msgstr "Afficher les informations du contact"
 
-msgid "Show Gajim on Startup"
-msgstr "Afficher Gajim au démarrage"
+#, fuzzy
+msgid "Show Gajim"
+msgstr "Gajim"
 
 msgid "Show Join/Leave"
 msgstr "Montrer connecté/parti"
@@ -4342,6 +4373,10 @@ msgstr ""
 "Montre l'aide sur une commande donnée ou une listre des commandes possibles "
 "si -a est ajouté"
 
+#, fuzzy
+msgid "Show in Taskbar"
+msgstr "Afficher les transferts"
+
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
@@ -4363,6 +4398,10 @@ msgstr ""
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Afficher les notifications même lorsque vous êtes absent, occupé, etc."
 
+#, fuzzy
+msgid "Show on Startup"
+msgstr "Afficher Gajim au démarrage"
+
 msgid "Show only critical errors"
 msgstr "Ne montrer que les erreurs critiques"
 
@@ -4373,6 +4412,11 @@ msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner
 msgstr ""
 "Afficher l'état du contact (ex. \"en train d'écrire\") dans la bannière de "
 "la discussion"
+
+#, fuzzy
+msgid "Show window in the taskbar"
+msgstr ""
+"Ne pas afficher la fenêtre de la liste de contacts dans la barre des tâches."
 
 msgid "Show window when starting Gajim"
 msgstr "Montrer la fenêtre lorsque Gajim démarre"
@@ -4389,11 +4433,12 @@ msgstr "Afficher l’aide pour une commande"
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr "Affiche une liste des transferts de fichiers entre vous et les autres"
 
+#, fuzzy
+msgid "Shutting down Gajim"
+msgstr "Gajim"
+
 msgid "Sign In"
 msgstr "À la connexion"
-
-msgid "Sign Out"
-msgstr "À la déconnexion"
 
 msgid "Sign Up"
 msgstr "S'inscrire"
@@ -4499,9 +4544,6 @@ msgstr "État"
 
 msgid "Status"
 msgstr "État"
-
-msgid "Status Change"
-msgstr "Lors d'un changement d’état"
 
 msgid "Status Message"
 msgstr "Message d’état"
@@ -4628,6 +4670,10 @@ msgstr "Synchroniser l’historique de discussion…"
 
 msgid "System"
 msgstr "Système"
+
+#, fuzzy, python-format
+msgid "TLS verification failed: %s"
+msgstr "La vérification du fichier a échoué"
 
 msgid "T_ry Again"
 msgstr "_Essayer à nouveau"
@@ -5025,6 +5071,10 @@ msgstr "Messages non lus"
 
 msgid "Unsupported certificate purpose"
 msgstr "Objet du certificat non-supporté"
+
+#, fuzzy
+msgid "Until Gajim is Closed"
+msgstr "Quitter Gajim à la fermeture"
 
 msgid "Untrusted"
 msgstr "Non approuvé"
@@ -5509,9 +5559,6 @@ msgstr "_Adresse"
 msgid "_Advanced Settings"
 msgstr "Paramètres _avancés"
 
-msgid "_Always quit when closing Gajim"
-msgstr "_Toujours quitter en fermant Gajim"
-
 msgid "_Approve"
 msgstr "_Approuver"
 
@@ -5571,6 +5618,10 @@ msgid "_Disable Account"
 msgstr "_Désactiver le compte"
 
 msgid "_Do not ask me again"
+msgstr "_Ne plus me poser la question"
+
+#, fuzzy
+msgid "_Don’t ask again"
 msgstr "_Ne plus me poser la question"
 
 msgid "_Download"
@@ -6011,3 +6062,33 @@ msgstr "{nick} est maintenant {show}{status}"
 
 msgid "…or drop it here"
 msgstr "... ou bien déposez ici"
+
+#~ msgid ""
+#~ "Allow to hide the contact list window even if the notification area icon "
+#~ "is not shown."
+#~ msgstr ""
+#~ "Autoriser à cacher la liste des contacts même si l'icône de notification "
+#~ "n'est pas affichée."
+
+#~ msgid "Disconnect from the network"
+#~ msgstr "Déconnecté du réseau"
+
+#~ msgid ""
+#~ "If enabled, Gajim hides the main window when pressing the X button "
+#~ "instead of minimizing into the notification area."
+#~ msgstr ""
+#~ "Si activé, Gajim cache la fenêtre de la liste des contacts lorsqu'on "
+#~ "appuie sur le bouton X au lieu de la minimiser dans la barre de "
+#~ "notification."
+
+#~ msgid "Machine is going to sleep"
+#~ msgstr "La machine se met en veille"
+
+#~ msgid "Sign Out"
+#~ msgstr "À la déconnexion"
+
+#~ msgid "Status Change"
+#~ msgstr "Lors d'un changement d’état"
+
+#~ msgid "_Always quit when closing Gajim"
+#~ msgstr "_Toujours quitter en fermant Gajim"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 18:12+0000\n"
+"POT-Creation-Date: 2022-06-15 19:47+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 msgid ""
 "\n"
@@ -897,11 +897,6 @@ msgstr ""
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
-msgid ""
-"Allow to hide the contact list window even if the notification area icon is "
-"not shown."
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1037,6 +1032,9 @@ msgstr ""
 msgid "Ask before pasting an image."
 msgstr ""
 
+msgid "Ask before quitting when Gajim’s window is closed"
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Атрыманае першае паведамленне"
@@ -1140,6 +1138,9 @@ msgstr "_Адпаведна стану"
 msgid "Automatic preview disabled"
 msgstr ""
 
+msgid "Automatic preview disabled (file too big)"
+msgstr ""
+
 msgid "Automatic spell-checking for your messages"
 msgstr ""
 
@@ -1177,7 +1178,7 @@ msgstr "Удзельнік"
 msgid "Ban…"
 msgstr ""
 
-msgid "Behaviour of Windows & Tabs"
+msgid "Behaviour of Application Window"
 msgstr ""
 
 #, fuzzy
@@ -1273,6 +1274,10 @@ msgstr "Забараніць казанне..."
 #, fuzzy
 msgid "Cancel"
 msgstr "_Скасаваць"
+
+#, fuzzy
+msgid "Cancel Download"
+msgstr "Сцягнуць"
 
 #, fuzzy
 msgid "Cancel the selected file transfer and remove incomplete files"
@@ -1965,9 +1970,6 @@ msgstr ""
 msgid "Disclose the time of your last activity"
 msgstr ""
 
-msgid "Disconnect from the network"
-msgstr ""
-
 #, fuzzy
 msgid "Discover Services…"
 msgstr "_Пошук сервісаў"
@@ -2023,10 +2025,6 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
 #, fuzzy
-msgid "Don’t show main window in the system taskbar."
-msgstr "Не паказваць галоўнае вакно на панэлі заданняў."
-
-#, fuzzy
 msgid "Don’t show this again"
 msgstr "_Больш не пытацца"
 
@@ -2043,8 +2041,16 @@ msgid "Download and Install"
 msgstr "_Больш не пытацца"
 
 #, fuzzy, python-format
+msgid "Download failed (%s)"
+msgstr "_Больш не пытацца"
+
+#, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "%d нечытанае паведамленне"
+
+#, fuzzy
+msgid "Downloading…"
+msgstr "Піша"
 
 #, fuzzy
 msgid "Drop Files or Contacts"
@@ -2168,6 +2174,10 @@ msgstr ""
 
 msgid "Error"
 msgstr ""
+
+#, fuzzy
+msgid "Error Loading Image"
+msgstr "Выберыце малюнак"
 
 msgid "Error during command execution!"
 msgstr ""
@@ -2719,6 +2729,9 @@ msgstr ""
 msgid "Hide this menu"
 msgstr "Схаваць гэтае меню"
 
+msgid "Hide window to system tray when minimized"
+msgstr ""
+
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "Хавае банер у групавой размове"
@@ -2797,20 +2810,15 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"If enabled, Gajim hides the main window when pressing the X button instead "
-"of minimizing into the notification area."
-msgstr ""
-"Калі true, Gajim сканчвае работу па націску кнопкі X вакна. Гэтае "
-"настаўленне ўлічваецца толькі разам з значкай прасторы паведамленняў."
-
-#, fuzzy
-msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
 msgstr ""
 "Калі true і калі ўсталяваныя GTK+ і PyGTK версіі, вышэйшай за 2.8, міргаць "
 "вакном (звычайныя паводзіны ў бальшыні кіраўнікоў вокнаў) пры наяўнасці "
 "нягледжаных падзей."
+
+msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
+msgstr ""
 
 #, fuzzy
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
@@ -2856,7 +2864,7 @@ msgstr ""
 "ад Вашага сервера."
 
 #, fuzzy, python-format
-msgid "If you close this window, you will leave '%s'."
+msgid "If you close this chat, you will leave '%s'."
 msgstr "Калі Вы закрыеце гэтае вакно, Вы выйдзеце з гэтай групавой размовы."
 
 msgid ""
@@ -3219,9 +3227,6 @@ msgid ""
 "from the chat window"
 msgstr ""
 
-msgid "Machine is going to sleep"
-msgstr ""
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Адміністратар"
@@ -3325,6 +3330,16 @@ msgid ""
 msgstr ""
 "Вы зможаце прачытаць нечытаныя паведамленні толькі з уключаным вядзеннем "
 "журналаў размоў."
+
+#, fuzzy
+msgid "Minimize on Close"
+msgstr "Gajim"
+
+msgid "Minimize to Tray"
+msgstr ""
+
+msgid "Minimize when closing Gajim’s window"
+msgstr ""
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3979,6 +3994,9 @@ msgstr "Спіс прыватнасці"
 msgid "Profile"
 msgstr "файл"
 
+msgid "Profile application with cprofile"
+msgstr ""
+
 msgid "Progress"
 msgstr "Ступень выкананасці"
 
@@ -4024,13 +4042,6 @@ msgstr "Версія PyGTK:"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quit Gajim on Close"
-msgstr "Gajim"
-
-msgid "Quit when closing Gajim’s window"
-msgstr ""
 
 #, fuzzy
 msgid "Quote next message"
@@ -4103,6 +4114,10 @@ msgstr "_Рэгістрацыя"
 #, fuzzy
 msgid "Register on the Website"
 msgstr "Зарэгістравацца на %s"
+
+#, fuzzy
+msgid "Registering…"
+msgstr "_Рэгістрацыя"
 
 #, fuzzy
 msgid "Registration failed"
@@ -4242,6 +4257,12 @@ msgid "Requesting Command List"
 msgstr "_Выканаць загад..."
 
 msgid "Requesting HTTP File Upload Slot…"
+msgstr ""
+
+msgid "Requesting Register Form"
+msgstr ""
+
+msgid "Requesting register form from server…"
 msgstr ""
 
 msgid "Requesting search form from server"
@@ -4512,6 +4533,10 @@ msgstr ""
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
+#, fuzzy
+msgid "Selected image could not be loaded."
+msgstr "Немагчыма знайсці сервіс"
+
 #, fuzzy, python-format
 msgid "Selected security label: %s"
 msgstr "Забарона казання для %s"
@@ -4768,8 +4793,8 @@ msgid "Show Contact Infos"
 msgstr "Паказаць _адлучаных людзей"
 
 #, fuzzy
-msgid "Show Gajim on Startup"
-msgstr "Паказаць _галоўнае вакно"
+msgid "Show Gajim"
+msgstr "Gajim"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4845,6 +4870,10 @@ msgid ""
 "Show help on a given command or a list of available commands if -a is given"
 msgstr ""
 
+#, fuzzy
+msgid "Show in Taskbar"
+msgstr "Паказаць _транспарты"
+
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
@@ -4863,6 +4892,10 @@ msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "_Значка панэлі паведамленняў"
 
 #, fuzzy
+msgid "Show on Startup"
+msgstr "Паказаць _галоўнае вакно"
+
+#, fuzzy
 msgid "Show only critical errors"
 msgstr "Паказваць толькі ў _галоўным вакне"
 
@@ -4872,6 +4905,10 @@ msgstr "_Значка панэлі паведамленняў"
 
 msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
 msgstr ""
+
+#, fuzzy
+msgid "Show window in the taskbar"
+msgstr "Не паказваць галоўнае вакно на панэлі заданняў."
 
 msgid "Show window when starting Gajim"
 msgstr ""
@@ -4891,12 +4928,12 @@ msgid "Shows a list of file transfers between you and your contacts"
 msgstr "Паказаць спіс перадаваных і атрыманых файлаў"
 
 #, fuzzy
-msgid "Sign In"
-msgstr "_Злучыцца"
+msgid "Shutting down Gajim"
+msgstr "Gajim"
 
 #, fuzzy
-msgid "Sign Out"
-msgstr "З_ысці"
+msgid "Sign In"
+msgstr "_Злучыцца"
 
 #, fuzzy
 msgid "Sign Up"
@@ -5015,10 +5052,6 @@ msgstr "Штат:"
 
 msgid "Status"
 msgstr "Стан"
-
-#, fuzzy
-msgid "Status Change"
-msgstr "_Пісаць у журнал паведамленні аб змене стану чалавека"
 
 msgid "Status Message"
 msgstr "Паведамленне аб змене стану"
@@ -5165,6 +5198,10 @@ msgstr "Паказаць _адлучаных людзей"
 #, fuzzy
 msgid "System"
 msgstr "<b>Адмысловы</b>"
+
+#, fuzzy, python-format
+msgid "TLS verification failed: %s"
+msgstr "Дадаць асабістае нагадванне для %s"
 
 msgid "T_ry Again"
 msgstr ""
@@ -5571,6 +5608,10 @@ msgstr "Нягледжаныя падзеі"
 
 msgid "Unsupported certificate purpose"
 msgstr ""
+
+#, fuzzy
+msgid "Until Gajim is Closed"
+msgstr "Gajim"
 
 #, fuzzy
 msgid "Untrusted"
@@ -6095,9 +6136,6 @@ msgstr "_Адрас:"
 msgid "_Advanced Settings"
 msgstr "Адмысловыя дзеянні"
 
-msgid "_Always quit when closing Gajim"
-msgstr ""
-
 msgid "_Approve"
 msgstr ""
 
@@ -6170,6 +6208,10 @@ msgstr "Няправільная назва рахунка"
 
 #, fuzzy
 msgid "_Do not ask me again"
+msgstr "_Больш не пытацца"
+
+#, fuzzy
+msgid "_Don’t ask again"
 msgstr "_Больш не пытацца"
 
 #, fuzzy
@@ -6658,3 +6700,19 @@ msgstr "%(nick)s цяпер %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, Gajim hides the main window when pressing the X button "
+#~ "instead of minimizing into the notification area."
+#~ msgstr ""
+#~ "Калі true, Gajim сканчвае работу па націску кнопкі X вакна. Гэтае "
+#~ "настаўленне ўлічваецца толькі разам з значкай прасторы паведамленняў."
+
+#, fuzzy
+#~ msgid "Sign Out"
+#~ msgstr "З_ысці"
+
+#, fuzzy
+#~ msgid "Status Change"
+#~ msgstr "_Пісаць у журнал паведамленні аб змене стану чалавека"

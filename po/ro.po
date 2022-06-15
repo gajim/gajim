@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 18:12+0000\n"
+"POT-Creation-Date: 2022-06-15 19:47+0000\n"
 "PO-Revision-Date: 2022-05-29 13:30+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -818,13 +818,6 @@ msgstr "Toți ceilalți participanți la chat-ul de grup vă pot vedea adresa XM
 msgid "Allow a participant to send you public or private messages"
 msgstr "Permiteți unui participant să vă trimită mesaje publice sau private"
 
-msgid ""
-"Allow to hide the contact list window even if the notification area icon is "
-"not shown."
-msgstr ""
-"Permiteți să ascundeți fereastra listei de contacte chiar dacă pictograma "
-"din zona de notificare nu este afișată."
-
 msgid "Allowed File Size"
 msgstr "Dimensiunea permisă a fișierului"
 
@@ -949,6 +942,9 @@ msgstr ""
 msgid "Ask before pasting an image."
 msgstr "Întrebați înainte de a lipi o imagine."
 
+msgid "Ask before quitting when Gajim’s window is closed"
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr "Atenție mesaj primit"
 
@@ -1035,6 +1031,10 @@ msgstr "Schimbarea automată a statutului"
 msgid "Automatic preview disabled"
 msgstr "Previzualizare automată dezactivată"
 
+#, fuzzy
+msgid "Automatic preview disabled (file too big)"
+msgstr "Previzualizare automată dezactivată"
+
 msgid "Automatic spell-checking for your messages"
 msgstr "Verificarea ortografică automată a mesajelor dumneavoastră"
 
@@ -1069,7 +1069,8 @@ msgstr "Participant interzis"
 msgid "Ban…"
 msgstr "Interzis…"
 
-msgid "Behaviour of Windows & Tabs"
+#, fuzzy
+msgid "Behaviour of Application Window"
 msgstr "Comportamentul ferestrelor și al filelor"
 
 msgid "Birthday"
@@ -1157,6 +1158,10 @@ msgstr "Apelare…"
 
 msgid "Cancel"
 msgstr "Anulează"
+
+#, fuzzy
+msgid "Cancel Download"
+msgstr "Descărcați"
 
 msgid "Cancel the selected file transfer and remove incomplete files"
 msgstr ""
@@ -1749,9 +1754,6 @@ msgstr ""
 msgid "Disclose the time of your last activity"
 msgstr "Dezvăluiți ora la care ați avut ultima activitate"
 
-msgid "Disconnect from the network"
-msgstr "Deconectați-vă de la rețea"
-
 msgid "Discover Services…"
 msgstr "Descoperă serviciile…"
 
@@ -1803,9 +1805,6 @@ msgstr "Doriți să suprascrieți versiunea instalată în prezent?"
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr "Doriți să vă dezînregistrați contul și pe <b>%s</b>?"
 
-msgid "Don’t show main window in the system taskbar."
-msgstr "Nu afișați fereastra principală în bara de activități a sistemului."
-
 #, fuzzy
 msgid "Don’t show this again"
 msgstr "Nu mai afișați acest mesaj"
@@ -1819,9 +1818,17 @@ msgstr "Descărcare actualizare"
 msgid "Download and Install"
 msgstr "Descărcare și instalare"
 
+#, fuzzy, python-format
+msgid "Download failed (%s)"
+msgstr "Descărcare și instalare"
+
 #, python-format
 msgid "Downloaded %s messages"
 msgstr "Mesaje descărcate %s"
+
+#, fuzzy
+msgid "Downloading…"
+msgstr "Încărcare…"
 
 msgid "Drop Files or Contacts"
 msgstr "Aruncă fișiere sau contacte"
@@ -1944,6 +1951,10 @@ msgstr ""
 
 msgid "Error"
 msgstr "Eroare"
+
+#, fuzzy
+msgid "Error Loading Image"
+msgstr "Încărcați imaginea"
 
 msgid "Error during command execution!"
 msgstr "Eroare în timpul executării comenzii!"
@@ -2429,6 +2440,9 @@ msgstr "Ajută la stabilirea apelurilor prin firewall-uri"
 msgid "Hide this menu"
 msgstr "Ascundeți acest meniu"
 
+msgid "Hide window to system tray when minimized"
+msgstr ""
+
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "Ascunde bannerul într-o fereastră de chat 1:1."
 
@@ -2500,19 +2514,15 @@ msgstr ""
 "remote."
 
 msgid ""
-"If enabled, Gajim hides the main window when pressing the X button instead "
-"of minimizing into the notification area."
-msgstr ""
-"Dacă este activată, Gajim ascunde fereastra principală atunci când apăsați "
-"butonul X în loc să se minimizeze în zona de notificare."
-
-msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
 msgstr ""
 "Dacă este activată, Gajim face ca fereastra să pâlpâie (comportamentul "
 "implicit în majoritatea gestionarilor de ferestre) atunci când deține "
 "evenimente în așteptare."
+
+msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
+msgstr ""
 
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
@@ -2562,8 +2572,8 @@ msgstr ""
 "dumneavoastră în fereastra Conturi. ATENȚIE, atunci când vă conectați cu o "
 "prioritate negativă, NU veți primi niciun mesaj de la server."
 
-#, python-format
-msgid "If you close this window, you will leave '%s'."
+#, fuzzy, python-format
+msgid "If you close this chat, you will leave '%s'."
 msgstr "Dacă închideți această fereastră, veți lăsa \"%s\"."
 
 msgid ""
@@ -2886,9 +2896,6 @@ msgstr ""
 "Căutați lucruri pe Wikipedia, dicționare sau alte motoare de căutare direct "
 "din fereastra de chat"
 
-msgid "Machine is going to sleep"
-msgstr "Mașina merge la culcare"
-
 msgid "Make Admin"
 msgstr "Faceți Admin"
 
@@ -2981,6 +2988,17 @@ msgstr ""
 "Mesajele vor fi disponibile pentru a fi citite mai târziu numai dacă este "
 "activată stocarea istoricului conversațiilor și dacă persoana de contact se "
 "află în lista dumneavoastră de contacte."
+
+#, fuzzy
+msgid "Minimize on Close"
+msgstr "Renunță la Gajim pe Close"
+
+msgid "Minimize to Tray"
+msgstr ""
+
+#, fuzzy
+msgid "Minimize when closing Gajim’s window"
+msgstr "Ieșire la închiderea ferestrei lui Gajim"
 
 msgid "Minutes until your status gets changed"
 msgstr "Minute până când statutul tău se schimbă"
@@ -3568,6 +3586,9 @@ msgstr "Privat"
 msgid "Profile"
 msgstr "Profil"
 
+msgid "Profile application with cprofile"
+msgstr ""
+
 msgid "Progress"
 msgstr "Progresul"
 
@@ -3605,12 +3626,6 @@ msgstr "Versiunea PyGObject: %s"
 
 msgid "Quit Gajim"
 msgstr "Renunță la Gajim"
-
-msgid "Quit Gajim on Close"
-msgstr "Renunță la Gajim pe Close"
-
-msgid "Quit when closing Gajim’s window"
-msgstr "Ieșire la închiderea ferestrei lui Gajim"
 
 msgid "Quote next message"
 msgstr "Citez mesajul următor"
@@ -3673,6 +3688,10 @@ msgstr "Înregistrare"
 
 msgid "Register on the Website"
 msgstr "Înregistrați-vă pe site"
+
+#, fuzzy
+msgid "Registering…"
+msgstr "Înregistrare"
 
 msgid "Registration failed"
 msgstr "Înregistrarea a eșuat"
@@ -3787,6 +3806,14 @@ msgstr "Solicitarea listei de comenzi"
 
 msgid "Requesting HTTP File Upload Slot…"
 msgstr "Solicitarea unui slot de încărcare a fișierelor HTTP…"
+
+#, fuzzy
+msgid "Requesting Register Form"
+msgstr "Formular de cerere de căutare"
+
+#, fuzzy
+msgid "Requesting register form from server…"
+msgstr "Solicitarea formularului de căutare de pe server"
 
 msgid "Requesting search form from server"
 msgstr "Solicitarea formularului de căutare de pe server"
@@ -4026,6 +4053,10 @@ msgstr ""
 "Selectați dispozitivul de intrare video (de exemplu, camera web, captura de "
 "ecran)"
 
+#, fuzzy
+msgid "Selected image could not be loaded."
+msgstr "Serviciul nu a putut fi găsit"
+
 #, python-format
 msgid "Selected security label: %s"
 msgstr "Eticheta de securitate selectată: %s"
@@ -4260,8 +4291,9 @@ msgstr "Afișați Comenzile"
 msgid "Show Contact Infos"
 msgstr "Afișați informațiile de contact"
 
-msgid "Show Gajim on Startup"
-msgstr "Arată Gajim pe Startup"
+#, fuzzy
+msgid "Show Gajim"
+msgstr "Gajim"
 
 msgid "Show Join/Leave"
 msgstr "Afișați Join/Leave"
@@ -4324,6 +4356,10 @@ msgstr ""
 "Afișează ajutorul pentru o anumită comandă sau o listă de comenzi "
 "disponibile dacă se dă -a"
 
+#, fuzzy
+msgid "Show in Taskbar"
+msgstr "Afișați transferurile"
+
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
@@ -4345,6 +4381,10 @@ msgstr ""
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Afișați notificări chiar dacă sunteți plecat, ocupat etc."
 
+#, fuzzy
+msgid "Show on Startup"
+msgstr "Arată Gajim pe Startup"
+
 msgid "Show only critical errors"
 msgstr "Afișați numai erorile critice"
 
@@ -4355,6 +4395,10 @@ msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner
 msgstr ""
 "Afișați starea de chat a contactului (de exemplu, tastatura) în bannerul din "
 "fila Chat-uri"
+
+#, fuzzy
+msgid "Show window in the taskbar"
+msgstr "Nu afișați fereastra principală în bara de activități a sistemului."
 
 msgid "Show window when starting Gajim"
 msgstr "Afișați fereastra la pornirea Gajim"
@@ -4373,11 +4417,12 @@ msgstr ""
 "Afișează o listă de transferuri de fișiere între dumneavoastră și contactele "
 "voastre"
 
+#, fuzzy
+msgid "Shutting down Gajim"
+msgstr "Gajim"
+
 msgid "Sign In"
 msgstr "Conectați-vă"
-
-msgid "Sign Out"
-msgstr "Ieșire"
 
 msgid "Sign Up"
 msgstr "Înscrieți-vă"
@@ -4482,9 +4527,6 @@ msgstr "Stat"
 
 msgid "Status"
 msgstr "Stare"
-
-msgid "Status Change"
-msgstr "Schimbare de stare"
 
 msgid "Status Message"
 msgstr "Mesaj de stare"
@@ -4614,6 +4656,10 @@ msgstr "Sincronizarea istoriei…"
 
 msgid "System"
 msgstr "Sistem"
+
+#, fuzzy, python-format
+msgid "TLS verification failed: %s"
+msgstr "Verificarea fișierelor a eșuat"
 
 msgid "T_ry Again"
 msgstr "Î_ncercați din nou"
@@ -5013,6 +5059,10 @@ msgstr "Mesaje necitite"
 
 msgid "Unsupported certificate purpose"
 msgstr "Scopul nesuportat al certificatului"
+
+#, fuzzy
+msgid "Until Gajim is Closed"
+msgstr "Renunță la Gajim pe Close"
 
 msgid "Untrusted"
 msgstr "Neîncredere"
@@ -5488,9 +5538,6 @@ msgstr "_Adresă"
 msgid "_Advanced Settings"
 msgstr "_Setări avansate"
 
-msgid "_Always quit when closing Gajim"
-msgstr "_Întotdeauna ieșiți atunci când închideți Gajim"
-
 msgid "_Approve"
 msgstr "_Aprobați"
 
@@ -5549,6 +5596,10 @@ msgid "_Disable Account"
 msgstr "_Dezactivați contul"
 
 msgid "_Do not ask me again"
+msgstr "Nu mă mai întreba din nou"
+
+#, fuzzy
+msgid "_Don’t ask again"
 msgstr "Nu mă mai întreba din nou"
 
 msgid "_Download"
@@ -5988,3 +6039,32 @@ msgstr "{nick} este acum {show}{status}"
 
 msgid "…or drop it here"
 msgstr "...sau lăsați-o aici"
+
+#~ msgid ""
+#~ "Allow to hide the contact list window even if the notification area icon "
+#~ "is not shown."
+#~ msgstr ""
+#~ "Permiteți să ascundeți fereastra listei de contacte chiar dacă pictograma "
+#~ "din zona de notificare nu este afișată."
+
+#~ msgid "Disconnect from the network"
+#~ msgstr "Deconectați-vă de la rețea"
+
+#~ msgid ""
+#~ "If enabled, Gajim hides the main window when pressing the X button "
+#~ "instead of minimizing into the notification area."
+#~ msgstr ""
+#~ "Dacă este activată, Gajim ascunde fereastra principală atunci când "
+#~ "apăsați butonul X în loc să se minimizeze în zona de notificare."
+
+#~ msgid "Machine is going to sleep"
+#~ msgstr "Mașina merge la culcare"
+
+#~ msgid "Sign Out"
+#~ msgstr "Ieșire"
+
+#~ msgid "Status Change"
+#~ msgstr "Schimbare de stare"
+
+#~ msgid "_Always quit when closing Gajim"
+#~ msgstr "_Întotdeauna ieșiți atunci când închideți Gajim"

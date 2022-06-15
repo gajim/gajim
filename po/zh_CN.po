@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 18:12+0000\n"
-"PO-Revision-Date: 2022-05-31 10:12+0000\n"
+"POT-Creation-Date: 2022-06-15 19:47+0000\n"
+"PO-Revision-Date: 2022-06-13 19:03+0000\n"
 "Last-Translator: Tommy He <lovenemesis@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
 "gajim/master/zh_Hans/>\n"
@@ -802,11 +802,6 @@ msgstr "所有其他群聊参与者都将能看到您的 XMPP 地址"
 msgid "Allow a participant to send you public or private messages"
 msgstr "允许参与者向您发送公开或私人消息"
 
-msgid ""
-"Allow to hide the contact list window even if the notification area icon is "
-"not shown."
-msgstr "允许以在提醒区域图标未显示时隐藏联系人列表窗口"
-
 msgid "Allowed File Size"
 msgstr "可允许的文件尺寸"
 
@@ -925,6 +920,9 @@ msgstr "在关闭可能会丢失数据（聊天、私信）的标签式聊天窗
 msgid "Ask before pasting an image."
 msgstr "在粘贴图片前询问"
 
+msgid "Ask before quitting when Gajim’s window is closed"
+msgstr "当 Gajim 窗口关闭时退出之前询问"
+
 msgid "Attention Message Received"
 msgstr "收到关注的消息"
 
@@ -1009,6 +1007,9 @@ msgstr "自动状态变化"
 msgid "Automatic preview disabled"
 msgstr "自动预览已禁用"
 
+msgid "Automatic preview disabled (file too big)"
+msgstr "自动预览已禁用(文件太大)"
+
 msgid "Automatic spell-checking for your messages"
 msgstr "自动对消息执行拼写检查"
 
@@ -1043,8 +1044,8 @@ msgstr "封禁参与者"
 msgid "Ban…"
 msgstr "封禁…"
 
-msgid "Behaviour of Windows & Tabs"
-msgstr "窗口和标签页行为"
+msgid "Behaviour of Application Window"
+msgstr "应用窗口行为"
 
 msgid "Birthday"
 msgstr "生日"
@@ -1131,6 +1132,9 @@ msgstr "通话中…"
 
 msgid "Cancel"
 msgstr "取消"
+
+msgid "Cancel Download"
+msgstr "取消下载"
 
 msgid "Cancel the selected file transfer and remove incomplete files"
 msgstr "取消选定文件传输并删除未完成文件"
@@ -1708,9 +1712,6 @@ msgstr "公开正在运行 Gajim 的本地系统时间"
 msgid "Disclose the time of your last activity"
 msgstr "公开您最近活动的时间"
 
-msgid "Disconnect from the network"
-msgstr "从网络断开"
-
 msgid "Discover Services…"
 msgstr "寻找服务器……"
 
@@ -1762,9 +1763,6 @@ msgstr "您确定要覆盖当前已安装的版本吗？"
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr "您确定要注销位于 <b>%s</b> 的账户吗？"
 
-msgid "Don’t show main window in the system taskbar."
-msgstr "不要在系统任务栏中显示主窗口。"
-
 msgid "Don’t show this again"
 msgstr "不再显示此消息"
 
@@ -1778,8 +1776,15 @@ msgid "Download and Install"
 msgstr "下载并安装"
 
 #, python-format
+msgid "Download failed (%s)"
+msgstr "下载失败 (%s)"
+
+#, python-format
 msgid "Downloaded %s messages"
 msgstr "已下载 %s 条信息"
+
+msgid "Downloading…"
+msgstr "下载中…"
 
 msgid "Drop Files or Contacts"
 msgstr "拖放文件或联系人"
@@ -1888,6 +1893,9 @@ msgstr "输入您的昵称。这将是您显示给您联系人的名字。"
 
 msgid "Error"
 msgstr "错误"
+
+msgid "Error Loading Image"
+msgstr "加载图像错误"
 
 msgid "Error during command execution!"
 msgstr "命令执行过程中出错!"
@@ -2363,6 +2371,9 @@ msgstr "帮助穿透防火墙以建立通话"
 msgid "Hide this menu"
 msgstr "隐藏本菜单"
 
+msgid "Hide window to system tray when minimized"
+msgstr "窗口最小化时隐藏到系统托盘"
+
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "在私聊窗口中隐藏横幅。"
 
@@ -2426,16 +2437,13 @@ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 msgstr "如果选中，Gajim 可以被 gajim-remote 远程控制。"
 
 msgid ""
-"If enabled, Gajim hides the main window when pressing the X button instead "
-"of minimizing into the notification area."
-msgstr ""
-"如果启用， Gajim 将会在点按关闭按钮时隐藏主窗口而不是最小化到通知区域。"
-
-msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
 msgstr ""
 "如果启用，Gajim 将在有挂起事件时使窗口闪烁（大多数窗口管理器中的默认行为）。"
+
+msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
+msgstr ""
 
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr "如果启用，Gajim 会在联系人列表窗口标题中添加 * 和 [n]。"
@@ -2478,8 +2486,8 @@ msgstr ""
 "负的优先级账户登入时，您将不会从服务器收到任何消息。"
 
 #, python-format
-msgid "If you close this window, you will leave '%s'."
-msgstr "如果关闭此窗口，您将离开聊天室 \"%s\" 。"
+msgid "If you close this chat, you will leave '%s'."
+msgstr "如果关闭此聊天，您将离开 ‘%s’ 。"
 
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
@@ -2792,9 +2800,6 @@ msgid ""
 "from the chat window"
 msgstr "从聊天窗口中直接查询 Wikipedia、词典或者其他搜索引擎"
 
-msgid "Machine is going to sleep"
-msgstr "机器即将休眠"
-
 msgid "Make Admin"
 msgstr "设为管理员"
 
@@ -2885,6 +2890,15 @@ msgstr ""
 "除非你启用了历史记录而且向你发送消息的联系人在你的联系人列表中，你才能在以后"
 "读到这些消息。"
 
+msgid "Minimize on Close"
+msgstr "关闭时最小化"
+
+msgid "Minimize to Tray"
+msgstr "最小化到托盘"
+
+msgid "Minimize when closing Gajim’s window"
+msgstr "关闭 Gajim 窗口时最小化"
+
 msgid "Minutes until your status gets changed"
 msgstr "过多少分钟自动更改你的状态"
 
@@ -2957,9 +2971,8 @@ msgstr "新群组"
 msgid "New Search"
 msgstr "新搜索"
 
-#, fuzzy
 msgid "New Workspace"
-msgstr "我的工作区"
+msgstr "新工作区"
 
 #, python-format
 msgid "New message from %s"
@@ -3179,9 +3192,8 @@ msgstr "组织单元 (OU)"
 msgid "Organizational Unit (OU): "
 msgstr "组织单元 (OU): "
 
-#, fuzzy
 msgid "Organize your chats with workspaces"
-msgstr "用标签页组织您的聊天"
+msgstr "用工作区组织您的聊天"
 
 msgid "Others"
 msgstr "其他"
@@ -3459,6 +3471,9 @@ msgstr "私密"
 msgid "Profile"
 msgstr "配置文件"
 
+msgid "Profile application with cprofile"
+msgstr "使用 cprofile 的预置文件应用"
+
 msgid "Progress"
 msgstr "进度"
 
@@ -3496,12 +3511,6 @@ msgstr "PyGObject 版本: %s"
 
 msgid "Quit Gajim"
 msgstr "退出 Gajim"
-
-msgid "Quit Gajim on Close"
-msgstr "关闭时退出 Gajim"
-
-msgid "Quit when closing Gajim’s window"
-msgstr "关闭 Gajim 窗口时退出"
 
 msgid "Quote next message"
 msgstr "引用下一条消息"
@@ -3564,6 +3573,9 @@ msgstr "注册"
 
 msgid "Register on the Website"
 msgstr "在网站上注册"
+
+msgid "Registering…"
+msgstr "注册中…"
 
 msgid "Registration failed"
 msgstr "注册失败"
@@ -3674,6 +3686,12 @@ msgstr "正在请求命令列表"
 
 msgid "Requesting HTTP File Upload Slot…"
 msgstr "正在请求 HTTP 文件上传口…"
+
+msgid "Requesting Register Form"
+msgstr "正在请求注册表格"
+
+msgid "Requesting register form from server…"
+msgstr "正在从服务器请求注册表格…"
 
 msgid "Requesting search form from server"
 msgstr "正在从服务器请求搜索表格"
@@ -3908,6 +3926,9 @@ msgstr "选择您的音频输入（例如麦克风）"
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr "选择您的视频输入设备（例如网络摄像头、屏幕录制）"
 
+msgid "Selected image could not be loaded."
+msgstr "无法加载选定的图像。"
+
 #, python-format
 msgid "Selected security label: %s"
 msgstr "选定的安全标签: %s"
@@ -4097,9 +4118,8 @@ msgstr "将当前状态设置为在线"
 msgid "Set the presence type and description"
 msgstr "设置状态类型与描述"
 
-#, fuzzy
 msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr "设置您的活动、曲调和心境来向您的朋友展示您的感觉"
+msgstr "设置您的活动或曲调来向您的朋友展示您的感觉"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr "设置一个环境变量从而打印 GLib 调试信息"
@@ -4131,8 +4151,8 @@ msgstr "显示命令"
 msgid "Show Contact Infos"
 msgstr "显示联系人信息"
 
-msgid "Show Gajim on Startup"
-msgstr "在启动时显示 Gajim"
+msgid "Show Gajim"
+msgstr "显示 Gajim"
 
 msgid "Show Join/Leave"
 msgstr "显示加入/离开"
@@ -4191,6 +4211,9 @@ msgid ""
 "Show help on a given command or a list of available commands if -a is given"
 msgstr "当指定 -a 时显示指定命令的帮助或者可用命令的列表"
 
+msgid "Show in Taskbar"
+msgstr "在任务栏显示"
+
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
@@ -4209,6 +4232,9 @@ msgstr ""
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "哪怕您离开或忙碌等时候依然显示通知。"
 
+msgid "Show on Startup"
+msgstr "在启动时显示"
+
 msgid "Show only critical errors"
 msgstr "仅显示严重错误"
 
@@ -4217,6 +4243,9 @@ msgstr "显示应用版本"
 
 msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
 msgstr "在聊天标签页横幅出显示联系人的聊天状态（比如正在输入）"
+
+msgid "Show window in the taskbar"
+msgstr "在任务栏中显示窗口"
 
 msgid "Show window when starting Gajim"
 msgstr "启动时 Gajim 显示窗口"
@@ -4233,11 +4262,12 @@ msgstr "为特定命令显示帮助"
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr "显示您与您的联系人之间的传输文件列表"
 
+#, fuzzy
+msgid "Shutting down Gajim"
+msgstr "显示 Gajim"
+
 msgid "Sign In"
 msgstr "登录"
-
-msgid "Sign Out"
-msgstr "登出"
 
 msgid "Sign Up"
 msgstr "注册"
@@ -4340,9 +4370,6 @@ msgstr "州"
 
 msgid "Status"
 msgstr "状态"
-
-msgid "Status Change"
-msgstr "状态更改"
 
 msgid "Status Message"
 msgstr "状态信息"
@@ -4467,6 +4494,10 @@ msgstr "同步聊天记录中…"
 
 msgid "System"
 msgstr "系统"
+
+#, python-format
+msgid "TLS verification failed: %s"
+msgstr "TLS 验证失败: %s"
 
 msgid "T_ry Again"
 msgstr "再试一次(_R)"
@@ -4846,6 +4877,9 @@ msgstr "未读消息"
 
 msgid "Unsupported certificate purpose"
 msgstr "不支持的证书用途"
+
+msgid "Until Gajim is Closed"
+msgstr "直到 Gajim 关闭时"
 
 msgid "Untrusted"
 msgstr "不信任"
@@ -5305,9 +5339,6 @@ msgstr "地址(_A)"
 msgid "_Advanced Settings"
 msgstr "高级设定(_A)"
 
-msgid "_Always quit when closing Gajim"
-msgstr "总是关闭 Gajim(_A)"
-
 msgid "_Approve"
 msgstr "批准(_A)"
 
@@ -5366,6 +5397,9 @@ msgid "_Disable Account"
 msgstr "禁用账户(_D)"
 
 msgid "_Do not ask me again"
+msgstr "不再询问(_D)"
+
+msgid "_Don’t ask again"
 msgstr "不再询问(_D)"
 
 msgid "_Download"
@@ -5799,4 +5833,33 @@ msgid "{nick} is now {show}{status}"
 msgstr "{nick} 现在状态是 {show}{status}"
 
 msgid "…or drop it here"
-msgstr "或者在这里卸下"
+msgstr "或者把图像拖放到这里"
+
+#~ msgid ""
+#~ "Allow to hide the contact list window even if the notification area icon "
+#~ "is not shown."
+#~ msgstr "允许以在提醒区域图标未显示时隐藏联系人列表窗口"
+
+#~ msgid "Disconnect from the network"
+#~ msgstr "从网络断开"
+
+#~ msgid ""
+#~ "If enabled, Gajim hides the main window when pressing the X button "
+#~ "instead of minimizing into the notification area."
+#~ msgstr ""
+#~ "如果启用， Gajim 将会在点按关闭按钮时隐藏主窗口而不是最小化到通知区域。"
+
+#~ msgid "Machine is going to sleep"
+#~ msgstr "机器即将休眠"
+
+#~ msgid "Quit Gajim on Close"
+#~ msgstr "关闭时退出 Gajim"
+
+#~ msgid "Sign Out"
+#~ msgstr "登出"
+
+#~ msgid "Status Change"
+#~ msgstr "状态更改"
+
+#~ msgid "_Always quit when closing Gajim"
+#~ msgstr "总是关闭 Gajim(_A)"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 18:12+0000\n"
+"POT-Creation-Date: 2022-06-15 19:47+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -910,11 +910,6 @@ msgstr ""
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
-msgid ""
-"Allow to hide the contact list window even if the notification area icon is "
-"not shown."
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1056,6 +1051,9 @@ msgstr ""
 msgid "Ask before pasting an image."
 msgstr ""
 
+msgid "Ask before quitting when Gajim’s window is closed"
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Første Besked er Modtaget"
@@ -1161,6 +1159,9 @@ msgstr "Automatisk status"
 msgid "Automatic preview disabled"
 msgstr ""
 
+msgid "Automatic preview disabled (file too big)"
+msgstr ""
+
 #, fuzzy
 msgid "Automatic spell-checking for your messages"
 msgstr "Stavekontrol af forfattede beskeder."
@@ -1200,7 +1201,7 @@ msgstr "Deltager"
 msgid "Ban…"
 msgstr ""
 
-msgid "Behaviour of Windows & Tabs"
+msgid "Behaviour of Application Window"
 msgstr ""
 
 #, fuzzy
@@ -1298,6 +1299,10 @@ msgstr "Bandlysning..."
 #, fuzzy
 msgid "Cancel"
 msgstr "_Afbryd"
+
+#, fuzzy
+msgid "Cancel Download"
+msgstr "Hent"
 
 #, fuzzy
 msgid "Cancel the selected file transfer and remove incomplete files"
@@ -1986,9 +1991,6 @@ msgstr ""
 msgid "Disclose the time of your last activity"
 msgstr ""
 
-msgid "Disconnect from the network"
-msgstr ""
-
 #, fuzzy
 msgid "Discover Services…"
 msgstr "Op_dag Tjenester"
@@ -2044,10 +2046,6 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
 #, fuzzy
-msgid "Don’t show main window in the system taskbar."
-msgstr "Ikke hvis kontaktvindue i vindueslisten."
-
-#, fuzzy
 msgid "Don’t show this again"
 msgstr "_Spørg mig ikke igen"
 
@@ -2064,8 +2062,16 @@ msgid "Download and Install"
 msgstr "Ikke spørg mig ige_n"
 
 #, fuzzy, python-format
+msgid "Download failed (%s)"
+msgstr "Ikke spørg mig ige_n"
+
+#, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "Videresend ulæste beskeder"
+
+#, fuzzy
+msgid "Downloading…"
+msgstr "Koder"
 
 #, fuzzy
 msgid "Drop Files or Contacts"
@@ -2193,6 +2199,10 @@ msgstr ""
 
 msgid "Error"
 msgstr "Fejl"
+
+#, fuzzy
+msgid "Error Loading Image"
+msgstr "Vælg billede"
 
 msgid "Error during command execution!"
 msgstr ""
@@ -2735,6 +2745,9 @@ msgstr ""
 msgid "Hide this menu"
 msgstr "Skjul denne menu"
 
+msgid "Hide window to system tray when minimized"
+msgstr ""
+
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "Skjuler banneret i et gruppesamtale vindue"
@@ -2812,20 +2825,15 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"If enabled, Gajim hides the main window when pressing the X button instead "
-"of minimizing into the notification area."
-msgstr ""
-"Hvis Sandt, lukker Gajim når X knappen fra vindueshåndteringen klikkes. "
-"Denne indstilling tages der kun hensyn til hvis et statusfelt ikon bruges."
-
-#, fuzzy
-msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
 msgstr ""
 "Hvis Sandt og GTK+ og PyGTK installerede versioner er mindst 2.8, blink med "
 "vinduet (standard adfærd i de fleste vindueshåndterere) når det indeholder "
 "ventende begivenheder."
+
+msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
+msgstr ""
 
 #, fuzzy
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
@@ -2872,7 +2880,7 @@ msgstr ""
 "negativ prioritet vil du IKKE modtage nogen beskeder fra din server."
 
 #, fuzzy, python-format
-msgid "If you close this window, you will leave '%s'."
+msgid "If you close this chat, you will leave '%s'."
 msgstr ""
 "Hvis du lukker dette vindue vil du blive frakoblet fra denne gruppe samtale."
 
@@ -3233,9 +3241,6 @@ msgid ""
 "from the chat window"
 msgstr ""
 
-msgid "Machine is going to sleep"
-msgstr ""
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Administrator"
@@ -3339,6 +3344,17 @@ msgid ""
 msgstr ""
 "Beskeder vil kun være tilgængelige for læsning senere hvis du har historik "
 "aktiveret og kontakten er i dit kontaktvindue."
+
+#, fuzzy
+msgid "Minimize on Close"
+msgstr "Gajim"
+
+msgid "Minimize to Tray"
+msgstr ""
+
+#, fuzzy
+msgid "Minimize when closing Gajim’s window"
+msgstr "Altid afslut Gajim"
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3989,6 +4005,9 @@ msgstr "Privatliv"
 msgid "Profile"
 msgstr "fil"
 
+msgid "Profile application with cprofile"
+msgstr ""
+
 msgid "Progress"
 msgstr "Fremgang"
 
@@ -4034,14 +4053,6 @@ msgstr "PyGTK Version:"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quit Gajim on Close"
-msgstr "Gajim"
-
-#, fuzzy
-msgid "Quit when closing Gajim’s window"
-msgstr "Altid afslut Gajim"
 
 #, fuzzy
 msgid "Quote next message"
@@ -4115,6 +4126,10 @@ msgstr "Kan _registreres"
 #, fuzzy
 msgid "Register on the Website"
 msgstr "Registrer til %s"
+
+#, fuzzy
+msgid "Registering…"
+msgstr "Kan _registreres"
 
 msgid "Registration failed"
 msgstr "Tilslutning fejlede"
@@ -4252,6 +4267,12 @@ msgid "Requesting Command List"
 msgstr "_Kør Kommando"
 
 msgid "Requesting HTTP File Upload Slot…"
+msgstr ""
+
+msgid "Requesting Register Form"
+msgstr ""
+
+msgid "Requesting register form from server…"
 msgstr ""
 
 msgid "Requesting search form from server"
@@ -4529,6 +4550,10 @@ msgstr ""
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
+#, fuzzy
+msgid "Selected image could not be loaded."
+msgstr "Tjenesten findes ikke"
+
 #, fuzzy, python-format
 msgid "Selected security label: %s"
 msgstr "Advarsel"
@@ -4786,8 +4811,8 @@ msgid "Show Contact Infos"
 msgstr "Vis Kun _Aktive Kontakter"
 
 #, fuzzy
-msgid "Show Gajim on Startup"
-msgstr "T_ilslut når Gajim startes"
+msgid "Show Gajim"
+msgstr "Gajim"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4863,6 +4888,10 @@ msgid ""
 "Show help on a given command or a list of available commands if -a is given"
 msgstr ""
 
+#, fuzzy
+msgid "Show in Taskbar"
+msgstr "Vis Trans_porter"
+
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
@@ -4881,6 +4910,10 @@ msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Vis et faneblad når der kun er en samtale?"
 
 #, fuzzy
+msgid "Show on Startup"
+msgstr "T_ilslut når Gajim startes"
+
+#, fuzzy
 msgid "Show only critical errors"
 msgstr "_Vis hændelse i kontaktvindue"
 
@@ -4890,6 +4923,10 @@ msgstr "Vis et faneblad når der kun er en samtale?"
 
 msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
 msgstr ""
+
+#, fuzzy
+msgid "Show window in the taskbar"
+msgstr "Ikke hvis kontaktvindue i vindueslisten."
 
 #, fuzzy
 msgid "Show window when starting Gajim"
@@ -4910,12 +4947,12 @@ msgid "Shows a list of file transfers between you and your contacts"
 msgstr "Viser en liste over filoverførsler mellem dig og andre"
 
 #, fuzzy
-msgid "Sign In"
-msgstr "Logge _ind"
+msgid "Shutting down Gajim"
+msgstr "Gajim"
 
 #, fuzzy
-msgid "Sign Out"
-msgstr "Log _af"
+msgid "Sign In"
+msgstr "Logge _ind"
 
 #, fuzzy
 msgid "Sign Up"
@@ -5034,10 +5071,6 @@ msgstr "Status"
 
 msgid "Status"
 msgstr "Status"
-
-#, fuzzy
-msgid "Status Change"
-msgstr "_Log status ændringer hos kontakter"
 
 msgid "Status Message"
 msgstr "Status Besked"
@@ -5183,6 +5216,10 @@ msgstr "Synkroniser"
 #, fuzzy
 msgid "System"
 msgstr "<b>System:</b>"
+
+#, fuzzy, python-format
+msgid "TLS verification failed: %s"
+msgstr "SSL certifikat fejl"
 
 #, fuzzy
 msgid "T_ry Again"
@@ -5597,6 +5634,10 @@ msgstr "Ulæste hændelser"
 
 msgid "Unsupported certificate purpose"
 msgstr "Ikke understøttet formål for certifikatet"
+
+#, fuzzy
+msgid "Until Gajim is Closed"
+msgstr "Gajim"
 
 #, fuzzy
 msgid "Untrusted"
@@ -6127,10 +6168,6 @@ msgstr "_Adresse:"
 msgid "_Advanced Settings"
 msgstr "Avancerede Handlinger"
 
-#, fuzzy
-msgid "_Always quit when closing Gajim"
-msgstr "Altid afslut Gajim"
-
 msgid "_Approve"
 msgstr ""
 
@@ -6202,6 +6239,10 @@ msgid "_Disable Account"
 msgstr "Ugyldig Konto"
 
 msgid "_Do not ask me again"
+msgstr "_Spørg mig ikke igen"
+
+#, fuzzy
+msgid "_Don’t ask again"
 msgstr "_Spørg mig ikke igen"
 
 #, fuzzy
@@ -6685,3 +6726,23 @@ msgstr "%(nick)s er nu %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, Gajim hides the main window when pressing the X button "
+#~ "instead of minimizing into the notification area."
+#~ msgstr ""
+#~ "Hvis Sandt, lukker Gajim når X knappen fra vindueshåndteringen klikkes. "
+#~ "Denne indstilling tages der kun hensyn til hvis et statusfelt ikon bruges."
+
+#, fuzzy
+#~ msgid "Sign Out"
+#~ msgstr "Log _af"
+
+#, fuzzy
+#~ msgid "Status Change"
+#~ msgstr "_Log status ændringer hos kontakter"
+
+#, fuzzy
+#~ msgid "_Always quit when closing Gajim"
+#~ msgstr "Altid afslut Gajim"

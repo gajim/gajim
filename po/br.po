@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 18:12+0000\n"
+"POT-Creation-Date: 2022-06-15 19:47+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -892,11 +892,6 @@ msgstr ""
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
-msgid ""
-"Allow to hide the contact list window even if the notification area icon is "
-"not shown."
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1031,6 +1026,9 @@ msgstr ""
 msgid "Ask before pasting an image."
 msgstr ""
 
+msgid "Ask before quitting when Gajim’s window is closed"
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Kemennadenn gentañ"
@@ -1133,6 +1131,9 @@ msgstr "Goulenn evit gwelet e/he stad"
 msgid "Automatic preview disabled"
 msgstr ""
 
+msgid "Automatic preview disabled (file too big)"
+msgstr ""
+
 msgid "Automatic spell-checking for your messages"
 msgstr ""
 
@@ -1172,7 +1173,7 @@ msgstr "Perzhiad-ez"
 msgid "Ban…"
 msgstr ""
 
-msgid "Behaviour of Windows & Tabs"
+msgid "Behaviour of Application Window"
 msgstr ""
 
 #, fuzzy
@@ -1268,6 +1269,10 @@ msgstr "Oc'h argas..."
 #, fuzzy
 msgid "Cancel"
 msgstr "_Nullañ"
+
+#, fuzzy
+msgid "Cancel Download"
+msgstr "Pellgargañ"
 
 #, fuzzy
 msgid "Cancel the selected file transfer and remove incomplete files"
@@ -1959,9 +1964,6 @@ msgstr ""
 msgid "Disclose the time of your last activity"
 msgstr ""
 
-msgid "Disconnect from the network"
-msgstr ""
-
 #, fuzzy
 msgid "Discover Services…"
 msgstr "_Dizoleiñ ar servijoù"
@@ -2016,9 +2018,6 @@ msgstr "Fellout a ra din emezelañ evit krouiñ ur gont"
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
-msgid "Don’t show main window in the system taskbar."
-msgstr ""
-
 #, fuzzy
 msgid "Don’t show this again"
 msgstr "_Chom hep goulenn ket"
@@ -2036,8 +2035,16 @@ msgid "Download and Install"
 msgstr "_Chom hep goulenn ket"
 
 #, fuzzy, python-format
+msgid "Download failed (%s)"
+msgstr "_Chom hep goulenn ket"
+
+#, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "Gajim - %d gemennadenn nevez"
+
+#, fuzzy
+msgid "Downloading…"
+msgstr "O skrivañ"
 
 #, fuzzy
 msgid "Drop Files or Contacts"
@@ -2161,6 +2168,10 @@ msgstr ""
 
 msgid "Error"
 msgstr ""
+
+#, fuzzy
+msgid "Error Loading Image"
+msgstr "Pegañ ar skeudenn"
 
 msgid "Error during command execution!"
 msgstr ""
@@ -2710,6 +2721,9 @@ msgstr ""
 msgid "Hide this menu"
 msgstr "Kuzhat ar meuziad-mañ"
 
+msgid "Hide window to system tray when minimized"
+msgstr ""
+
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "A guzha an nozelennoù er prenestr flapiñ"
@@ -2786,13 +2800,11 @@ msgstr ""
 "M'eo diuzet, e vo tu da sturiañ Gajim a-bell en ur implij gajim-remote."
 
 msgid ""
-"If enabled, Gajim hides the main window when pressing the X button instead "
-"of minimizing into the notification area."
-msgstr ""
-
-msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
+msgstr ""
+
+msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
 msgstr ""
 
 #, fuzzy
@@ -2836,7 +2848,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy, python-format
-msgid "If you close this window, you will leave '%s'."
+msgid "If you close this chat, you will leave '%s'."
 msgstr "Si vous fermer cette fenêtre, vous serez déconnecté de ces salons."
 
 msgid ""
@@ -3193,9 +3205,6 @@ msgid ""
 "from the chat window"
 msgstr ""
 
-msgid "Machine is going to sleep"
-msgstr ""
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Merour-ez"
@@ -3299,6 +3308,16 @@ msgid ""
 "history is enabled and if the contact is in your contact list."
 msgstr ""
 "Posubl e vo lenn ar gemennadennoù diwezhatoc'h m'emañ an istoradur war enaou."
+
+#, fuzzy
+msgid "Minimize on Close"
+msgstr "Gajim"
+
+msgid "Minimize to Tray"
+msgstr ""
+
+msgid "Minimize when closing Gajim’s window"
+msgstr ""
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3956,6 +3975,9 @@ msgstr "Roll argas"
 msgid "Profile"
 msgstr "restr"
 
+msgid "Profile application with cprofile"
+msgstr ""
+
 msgid "Progress"
 msgstr "Araokadur"
 
@@ -4001,13 +4023,6 @@ msgstr ""
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quit Gajim on Close"
-msgstr "Gajim"
-
-msgid "Quit when closing Gajim’s window"
-msgstr ""
 
 #, fuzzy
 msgid "Quote next message"
@@ -4080,6 +4095,10 @@ msgstr "_Emezelañ"
 #, fuzzy
 msgid "Register on the Website"
 msgstr "Emezelañ war %s"
+
+#, fuzzy
+msgid "Registering…"
+msgstr "_Emezelañ"
 
 #, fuzzy
 msgid "Registration failed"
@@ -4218,6 +4237,12 @@ msgid "Requesting Command List"
 msgstr "urzhiad"
 
 msgid "Requesting HTTP File Upload Slot…"
+msgstr ""
+
+msgid "Requesting Register Form"
+msgstr ""
+
+msgid "Requesting register form from server…"
 msgstr ""
 
 msgid "Requesting search form from server"
@@ -4492,6 +4517,10 @@ msgstr ""
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
+#, fuzzy
+msgid "Selected image could not be loaded."
+msgstr "N'eo ket bet kavet ar servij"
+
 #, fuzzy, python-format
 msgid "Selected security label: %s"
 msgstr "Argas %s"
@@ -4745,8 +4774,8 @@ msgid "Show Contact Infos"
 msgstr "Diskouez an darempredoù _ezlinenn"
 
 #, fuzzy
-msgid "Show Gajim on Startup"
-msgstr "Diskouez ar _roll-darempredoù"
+msgid "Show Gajim"
+msgstr "Gajim"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4816,6 +4845,10 @@ msgid ""
 "Show help on a given command or a list of available commands if -a is given"
 msgstr ""
 
+#, fuzzy
+msgid "Show in Taskbar"
+msgstr "Dorioù"
+
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
@@ -4834,6 +4867,10 @@ msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "_Implij an arlun-gelaouiñ (trayicon)"
 
 #, fuzzy
+msgid "Show on Startup"
+msgstr "Diskouez ar _roll-darempredoù"
+
+#, fuzzy
 msgid "Show only critical errors"
 msgstr "Diskouez er _roll hepken"
 
@@ -4842,6 +4879,9 @@ msgid "Show the application's version"
 msgstr "_Implij an arlun-gelaouiñ (trayicon)"
 
 msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
+msgstr ""
+
+msgid "Show window in the taskbar"
 msgstr ""
 
 msgid "Show window when starting Gajim"
@@ -4863,12 +4903,12 @@ msgid "Shows a list of file transfers between you and your contacts"
 msgstr "A ziskouez ur roll eus an dreuzkasoù etrezoc'h hag ar re all"
 
 #, fuzzy
-msgid "Sign In"
-msgstr "_Lugañ"
+msgid "Shutting down Gajim"
+msgstr "Gajim"
 
 #, fuzzy
-msgid "Sign Out"
-msgstr "_Dilugañ"
+msgid "Sign In"
+msgstr "_Lugañ"
 
 #, fuzzy
 msgid "Sign Up"
@@ -4987,10 +5027,6 @@ msgstr "Stad:"
 
 msgid "Status"
 msgstr "Stad"
-
-#, fuzzy
-msgid "Status Change"
-msgstr "_Menegiñ kemmoù stad an darempredoù e-barzh an istoradur"
 
 msgid "Status Message"
 msgstr "Titour-stad"
@@ -5137,6 +5173,10 @@ msgstr "Diskouez an darempredoù _ezlinenn"
 #, fuzzy
 msgid "System"
 msgstr "<b>Personelaet</b>"
+
+#, fuzzy, python-format
+msgid "TLS verification failed: %s"
+msgstr "Oc'h ouzhpennañ ur gelaouenn nevez evit %s"
 
 msgid "T_ry Again"
 msgstr ""
@@ -5541,6 +5581,10 @@ msgstr "Darvoudoù chomet dilenn"
 
 msgid "Unsupported certificate purpose"
 msgstr ""
+
+#, fuzzy
+msgid "Until Gajim is Closed"
+msgstr "Gajim"
 
 #, fuzzy
 msgid "Untrusted"
@@ -6060,9 +6104,6 @@ msgstr "_Chomlec'h:"
 msgid "_Advanced Settings"
 msgstr "Actions a_vancées"
 
-msgid "_Always quit when closing Gajim"
-msgstr ""
-
 msgid "_Approve"
 msgstr ""
 
@@ -6135,6 +6176,10 @@ msgstr "Anv-kont direizh"
 
 #, fuzzy
 msgid "_Do not ask me again"
+msgstr "_Chom hep goulenn ket"
+
+#, fuzzy
+msgid "_Don’t ask again"
 msgstr "_Chom hep goulenn ket"
 
 #, fuzzy
@@ -6625,3 +6670,11 @@ msgstr "%(nick)s a zo bremañ %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Sign Out"
+#~ msgstr "_Dilugañ"
+
+#, fuzzy
+#~ msgid "Status Change"
+#~ msgstr "_Menegiñ kemmoù stad an darempredoù e-barzh an istoradur"

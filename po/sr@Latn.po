@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 18:12+0000\n"
+"POT-Creation-Date: 2022-06-15 19:47+0000\n"
 "PO-Revision-Date: 2009-10-29 23:50+0100\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: KBabel 1.11.4\n"
 
 msgid ""
@@ -911,11 +911,6 @@ msgstr ""
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
-msgid ""
-"Allow to hide the contact list window even if the notification area icon is "
-"not shown."
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1057,6 +1052,9 @@ msgstr ""
 msgid "Ask before pasting an image."
 msgstr ""
 
+msgid "Ask before quitting when Gajim’s window is closed"
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Primljena Prva Poruka"
@@ -1160,6 +1158,9 @@ msgstr "Automatski status"
 msgid "Automatic preview disabled"
 msgstr ""
 
+msgid "Automatic preview disabled (file too big)"
+msgstr ""
+
 #, fuzzy
 msgid "Automatic spell-checking for your messages"
 msgstr "Provera pravopisa sastavljenih poruka."
@@ -1199,7 +1200,7 @@ msgstr "Učesnik"
 msgid "Ban…"
 msgstr ""
 
-msgid "Behaviour of Windows & Tabs"
+msgid "Behaviour of Application Window"
 msgstr ""
 
 #, fuzzy
@@ -1297,6 +1298,10 @@ msgstr "Zabrana..."
 #, fuzzy
 msgid "Cancel"
 msgstr "_Odustani"
+
+#, fuzzy
+msgid "Cancel Download"
+msgstr "Skidanje"
 
 #, fuzzy
 msgid "Cancel the selected file transfer and remove incomplete files"
@@ -1990,9 +1995,6 @@ msgstr ""
 msgid "Disclose the time of your last activity"
 msgstr ""
 
-msgid "Disconnect from the network"
-msgstr ""
-
 #, fuzzy
 msgid "Discover Services…"
 msgstr "_Otkrivanje servisa"
@@ -2048,10 +2050,6 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
 #, fuzzy
-msgid "Don’t show main window in the system taskbar."
-msgstr "Ne prikazuj listu kontakata u sistemskoj kaseti."
-
-#, fuzzy
 msgid "Don’t show this again"
 msgstr "_Ne pitaj me više"
 
@@ -2068,8 +2066,16 @@ msgid "Download and Install"
 msgstr "_Ne pitaj me više"
 
 #, fuzzy, python-format
+msgid "Download failed (%s)"
+msgstr "_Ne pitaj me više"
+
+#, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "Prosledi nepročitane poruke"
+
+#, fuzzy
+msgid "Downloading…"
+msgstr "Programira"
 
 #, fuzzy
 msgid "Drop Files or Contacts"
@@ -2196,6 +2202,10 @@ msgstr ""
 
 msgid "Error"
 msgstr "Greška"
+
+#, fuzzy
+msgid "Error Loading Image"
+msgstr "Odaberite sliku"
 
 msgid "Error during command execution!"
 msgstr ""
@@ -2741,6 +2751,9 @@ msgstr ""
 msgid "Hide this menu"
 msgstr "Sakrij ovaj meni"
 
+msgid "Hide window to system tray when minimized"
+msgstr ""
+
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "Sakriva baner u prozoru grupnog razgovora."
@@ -2817,20 +2830,15 @@ msgstr "Ako je označeno, Gajim se može kontrolisati korišćenjem gajim-remote
 
 #, fuzzy
 msgid ""
-"If enabled, Gajim hides the main window when pressing the X button instead "
-"of minimizing into the notification area."
-msgstr ""
-"Ako je istinito, Gajim se završava kada se pritisne X dugme. Ovo podešavanje "
-"se koristi samo ako je ikona sistemske kasete u upotrebi."
-
-#, fuzzy
-msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
 msgstr ""
 "Ako je istinito, i instalirane verzije GTK+ i PyGTK su barem 2.8, neka "
 "prozor bljeska (podrazumevano ponašanje u većini menadžera prozora) pri "
 "novim događajima."
+
+msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
+msgstr ""
 
 #, fuzzy
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
@@ -2879,7 +2887,7 @@ msgstr ""
 "povezani sa negativnim prioritetom NEĆETE primati nikakve poruke od servera."
 
 #, fuzzy, python-format
-msgid "If you close this window, you will leave '%s'."
+msgid "If you close this chat, you will leave '%s'."
 msgstr ""
 "Ako zatvorite ovaj prozor, bićete isključeni sa ovoh grupnog razgovora."
 
@@ -3239,9 +3247,6 @@ msgid ""
 "from the chat window"
 msgstr ""
 
-msgid "Machine is going to sleep"
-msgstr ""
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Admin"
@@ -3345,6 +3350,17 @@ msgid ""
 msgstr ""
 "Poruke će biti dostupne za čitanje i kasnije ako imate omogućen istorijat i "
 "taj kontakt u listi."
+
+#, fuzzy
+msgid "Minimize on Close"
+msgstr "Gajim"
+
+msgid "Minimize to Tray"
+msgstr ""
+
+#, fuzzy
+msgid "Minimize when closing Gajim’s window"
+msgstr "Uvek zatvori Gajim"
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3999,6 +4015,9 @@ msgstr "Lista privatnosti"
 msgid "Profile"
 msgstr "datoteka"
 
+msgid "Profile application with cprofile"
+msgstr ""
+
 msgid "Progress"
 msgstr "Napredak"
 
@@ -4044,14 +4063,6 @@ msgstr "PyGTK verzija:"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quit Gajim on Close"
-msgstr "Gajim"
-
-#, fuzzy
-msgid "Quit when closing Gajim’s window"
-msgstr "Uvek zatvori Gajim"
 
 #, fuzzy
 msgid "Quote next message"
@@ -4125,6 +4136,10 @@ msgstr "_Registracija"
 #, fuzzy
 msgid "Register on the Website"
 msgstr "Registruj se na %s"
+
+#, fuzzy
+msgid "Registering…"
+msgstr "_Registracija"
 
 msgid "Registration failed"
 msgstr "Registracija neuspela"
@@ -4263,6 +4278,12 @@ msgid "Requesting Command List"
 msgstr "_Izvrši naredbu"
 
 msgid "Requesting HTTP File Upload Slot…"
+msgstr ""
+
+msgid "Requesting Register Form"
+msgstr ""
+
+msgid "Requesting register form from server…"
 msgstr ""
 
 msgid "Requesting search form from server"
@@ -4537,6 +4558,10 @@ msgstr ""
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
+#, fuzzy
+msgid "Selected image could not be loaded."
+msgstr "Usluga ne može biti nađena"
+
 #, fuzzy, python-format
 msgid "Selected security label: %s"
 msgstr "Zabranjujem %s"
@@ -4795,8 +4820,8 @@ msgid "Show Contact Infos"
 msgstr "Prikaži samo _aktivne kontakte"
 
 #, fuzzy
-msgid "Show Gajim on Startup"
-msgstr "_Prikaži listu kontakata"
+msgid "Show Gajim"
+msgstr "Gajim"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4872,6 +4897,10 @@ msgid ""
 "Show help on a given command or a list of available commands if -a is given"
 msgstr ""
 
+#, fuzzy
+msgid "Show in Taskbar"
+msgstr "Prikaži trans_porte"
+
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
@@ -4890,6 +4919,10 @@ msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Notification-daemon"
 
 #, fuzzy
+msgid "Show on Startup"
+msgstr "_Prikaži listu kontakata"
+
+#, fuzzy
 msgid "Show only critical errors"
 msgstr "Prikaži događaj u listi kontakata"
 
@@ -4899,6 +4932,10 @@ msgstr "Notification-daemon"
 
 msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
 msgstr ""
+
+#, fuzzy
+msgid "Show window in the taskbar"
+msgstr "Ne prikazuj listu kontakata u sistemskoj kaseti."
 
 #, fuzzy
 msgid "Show window when starting Gajim"
@@ -4919,12 +4956,12 @@ msgid "Shows a list of file transfers between you and your contacts"
 msgstr "Prikazuje listu prenosa datoteka između Vas i ostalih"
 
 #, fuzzy
-msgid "Sign In"
-msgstr "Prijavljivanju"
+msgid "Shutting down Gajim"
+msgstr "Gajim"
 
 #, fuzzy
-msgid "Sign Out"
-msgstr "Odjavljivanju"
+msgid "Sign In"
+msgstr "Prijavljivanju"
 
 #, fuzzy
 msgid "Sign Up"
@@ -5044,10 +5081,6 @@ msgstr "Status"
 
 msgid "Status"
 msgstr "Status"
-
-#, fuzzy
-msgid "Status Change"
-msgstr "_Zapisuj u dnevnik statusne promene kontakata"
 
 msgid "Status Message"
 msgstr "Statusna poruka"
@@ -5193,6 +5226,10 @@ msgstr "Sinhronizuj"
 #, fuzzy
 msgid "System"
 msgstr "<b>Sistem:</b>"
+
+#, fuzzy, python-format
+msgid "TLS verification failed: %s"
+msgstr "Greška SSL sertifikata"
 
 #, fuzzy
 msgid "T_ry Again"
@@ -5607,6 +5644,10 @@ msgstr "Nepročitani događaji"
 
 msgid "Unsupported certificate purpose"
 msgstr "Nepodržana svrha sertifikata"
+
+#, fuzzy
+msgid "Until Gajim is Closed"
+msgstr "Gajim"
 
 #, fuzzy
 msgid "Untrusted"
@@ -6135,10 +6176,6 @@ msgstr "_Adresa:"
 msgid "_Advanced Settings"
 msgstr "Napredne Akcije"
 
-#, fuzzy
-msgid "_Always quit when closing Gajim"
-msgstr "Uvek zatvori Gajim"
-
 msgid "_Approve"
 msgstr ""
 
@@ -6211,6 +6248,10 @@ msgstr "Neispravan nalog"
 
 #, fuzzy
 msgid "_Do not ask me again"
+msgstr "_Ne pitaj me više"
+
+#, fuzzy
+msgid "_Don’t ask again"
 msgstr "_Ne pitaj me više"
 
 #, fuzzy
@@ -6697,3 +6738,23 @@ msgstr "%(nick)s je trenutno %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, Gajim hides the main window when pressing the X button "
+#~ "instead of minimizing into the notification area."
+#~ msgstr ""
+#~ "Ako je istinito, Gajim se završava kada se pritisne X dugme. Ovo "
+#~ "podešavanje se koristi samo ako je ikona sistemske kasete u upotrebi."
+
+#, fuzzy
+#~ msgid "Sign Out"
+#~ msgstr "Odjavljivanju"
+
+#, fuzzy
+#~ msgid "Status Change"
+#~ msgstr "_Zapisuj u dnevnik statusne promene kontakata"
+
+#, fuzzy
+#~ msgid "_Always quit when closing Gajim"
+#~ msgstr "Uvek zatvori Gajim"

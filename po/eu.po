@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 18:12+0000\n"
+"POT-Creation-Date: 2022-06-15 19:47+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -897,11 +897,6 @@ msgstr ""
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
-msgid ""
-"Allow to hide the contact list window even if the notification area icon is "
-"not shown."
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1038,6 +1033,9 @@ msgstr ""
 msgid "Ask before pasting an image."
 msgstr ""
 
+msgid "Ask before quitting when Gajim’s window is closed"
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Lehen Mezu Jasoa"
@@ -1140,6 +1138,9 @@ msgstr "Egoerarekin b_at egin"
 msgid "Automatic preview disabled"
 msgstr ""
 
+msgid "Automatic preview disabled (file too big)"
+msgstr ""
+
 msgid "Automatic spell-checking for your messages"
 msgstr ""
 
@@ -1177,7 +1178,7 @@ msgstr "Partaidea"
 msgid "Ban…"
 msgstr ""
 
-msgid "Behaviour of Windows & Tabs"
+msgid "Behaviour of Application Window"
 msgstr ""
 
 #, fuzzy
@@ -1273,6 +1274,10 @@ msgstr "Debekatzen..."
 #, fuzzy
 msgid "Cancel"
 msgstr "_kantzelatu"
+
+#, fuzzy
+msgid "Cancel Download"
+msgstr "Deskargatu"
 
 #, fuzzy
 msgid "Cancel the selected file transfer and remove incomplete files"
@@ -1969,9 +1974,6 @@ msgstr ""
 msgid "Disclose the time of your last activity"
 msgstr ""
 
-msgid "Disconnect from the network"
-msgstr ""
-
 #, fuzzy
 msgid "Discover Services…"
 msgstr "_Zerbitzuak Aurkitu"
@@ -2028,10 +2030,6 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
 #, fuzzy
-msgid "Don’t show main window in the system taskbar."
-msgstr "ez erakutsi zerrenda sistemako zeregin barran."
-
-#, fuzzy
 msgid "Don’t show this again"
 msgstr "E_z galdetu berriro  "
 
@@ -2048,8 +2046,16 @@ msgid "Download and Install"
 msgstr "E_z galdetu berriro  "
 
 #, fuzzy, python-format
+msgid "Download failed (%s)"
+msgstr "E_z galdetu berriro  "
+
+#, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "%d mezu irakurri gabe"
+
+#, fuzzy
+msgid "Downloading…"
+msgstr "Sortzen"
 
 #, fuzzy
 msgid "Drop Files or Contacts"
@@ -2173,6 +2179,10 @@ msgstr ""
 
 msgid "Error"
 msgstr ""
+
+#, fuzzy
+msgid "Error Loading Image"
+msgstr "Aukeratu Irudia"
 
 msgid "Error during command execution!"
 msgstr ""
@@ -2723,6 +2733,9 @@ msgstr ""
 msgid "Hide this menu"
 msgstr "Ezkutatu Menua"
 
+msgid "Hide window to system tray when minimized"
+msgstr ""
+
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "Ezkutatu banner-a txat talde leihoan"
@@ -2799,20 +2812,15 @@ msgstr "Hautatua badago, Gajim gajim-remote erabiliz kontrolatu daiteke."
 
 #, fuzzy
 msgid ""
-"If enabled, Gajim hides the main window when pressing the X button instead "
-"of minimizing into the notification area."
-msgstr ""
-"If True, quits Gajim when X button of Window Manager is clicked. This "
-"setting is taken into account only if trayicon is used."
-
-#, fuzzy
-msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
 msgstr ""
 "Hautatu badago eta GTK+ eta PyGTK bertsioak gutxienez 2.8 bertsiokoak "
 "badira, make the window flash (the default behaviour in most Window "
 "Managers) when holding pending events."
+
+msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
+msgstr ""
 
 #, fuzzy
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
@@ -2858,7 +2866,7 @@ msgstr ""
 "zerbitzariarengandik. "
 
 #, fuzzy, python-format
-msgid "If you close this window, you will leave '%s'."
+msgid "If you close this chat, you will leave '%s'."
 msgstr "Leiho hau isten baduzu, gela honetatik deskonektatuko zara."
 
 msgid ""
@@ -3221,9 +3229,6 @@ msgid ""
 "from the chat window"
 msgstr ""
 
-msgid "Machine is going to sleep"
-msgstr ""
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Admin"
@@ -3325,6 +3330,16 @@ msgid ""
 "Messages will only be available for reading them later if storing chat "
 "history is enabled and if the contact is in your contact list."
 msgstr "Mezuak gero irakurri ahalko dira historiala aktibatua baduzu."
+
+#, fuzzy
+msgid "Minimize on Close"
+msgstr "Gajim"
+
+msgid "Minimize to Tray"
+msgstr ""
+
+msgid "Minimize when closing Gajim’s window"
+msgstr ""
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3982,6 +3997,9 @@ msgstr "Debekatze Zerrenda"
 msgid "Profile"
 msgstr "fitxeroa"
 
+msgid "Profile application with cprofile"
+msgstr ""
+
 msgid "Progress"
 msgstr "Prozesua"
 
@@ -4027,13 +4045,6 @@ msgstr "PyGTK Bertsioa:"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quit Gajim on Close"
-msgstr "Gajim"
-
-msgid "Quit when closing Gajim’s window"
-msgstr ""
 
 #, fuzzy
 msgid "Quote next message"
@@ -4106,6 +4117,10 @@ msgstr "Erre_gistratu"
 #, fuzzy
 msgid "Register on the Website"
 msgstr "%s -ra erregistratua"
+
+#, fuzzy
+msgid "Registering…"
+msgstr "Erre_gistratu"
 
 #, fuzzy
 msgid "Registration failed"
@@ -4246,6 +4261,12 @@ msgid "Requesting Command List"
 msgstr "_Komandoa Exekutatu..."
 
 msgid "Requesting HTTP File Upload Slot…"
+msgstr ""
+
+msgid "Requesting Register Form"
+msgstr ""
+
+msgid "Requesting register form from server…"
 msgstr ""
 
 msgid "Requesting search form from server"
@@ -4519,6 +4540,10 @@ msgstr ""
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
+#, fuzzy
+msgid "Selected image could not be loaded."
+msgstr "Zerbitzua ezin izan da aurkitu"
+
 #, fuzzy, python-format
 msgid "Selected security label: %s"
 msgstr "Debekatzen %s"
@@ -4776,8 +4801,8 @@ msgid "Show Contact Infos"
 msgstr "Ikusi _Deskonektatutako Kontaktuak"
 
 #, fuzzy
-msgid "Show Gajim on Startup"
-msgstr "Ikusi _Zerrenda"
+msgid "Show Gajim"
+msgstr "Gajim"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4853,6 +4878,10 @@ msgid ""
 "Show help on a given command or a list of available commands if -a is given"
 msgstr ""
 
+#, fuzzy
+msgid "Show in Taskbar"
+msgstr "Trans_porteak Erakutsi"
+
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
@@ -4871,6 +4900,10 @@ msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "E_rabili ikonifikazioa (aka. notification area)"
 
 #, fuzzy
+msgid "Show on Startup"
+msgstr "Ikusi _Zerrenda"
+
+#, fuzzy
 msgid "Show only critical errors"
 msgstr "Ikusi _zerrendan bakarrik"
 
@@ -4880,6 +4913,10 @@ msgstr "E_rabili ikonifikazioa (aka. notification area)"
 
 msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
 msgstr ""
+
+#, fuzzy
+msgid "Show window in the taskbar"
+msgstr "ez erakutsi zerrenda sistemako zeregin barran."
 
 msgid "Show window when starting Gajim"
 msgstr ""
@@ -4899,12 +4936,12 @@ msgid "Shows a list of file transfers between you and your contacts"
 msgstr "Erakutsi zu eta beste baten arteko fitxero transferentzia"
 
 #, fuzzy
-msgid "Sign In"
-msgstr "_Konektatuta"
+msgid "Shutting down Gajim"
+msgstr "Gajim"
 
 #, fuzzy
-msgid "Sign Out"
-msgstr "_Deskonektatuta"
+msgid "Sign In"
+msgstr "_Konektatuta"
 
 #, fuzzy
 msgid "Sign Up"
@@ -5023,10 +5060,6 @@ msgstr "Egoera:"
 
 msgid "Status"
 msgstr "Egoera"
-
-#, fuzzy
-msgid "Status Change"
-msgstr "Kontaktuen egoera aldaketak gorde"
 
 msgid "Status Message"
 msgstr "Egoera Mezua"
@@ -5173,6 +5206,10 @@ msgstr "Ikusi _Deskonektatutako Kontaktuak"
 #, fuzzy
 msgid "System"
 msgstr "<b>Bezeroak</b>"
+
+#, fuzzy, python-format
+msgid "TLS verification failed: %s"
+msgstr "Jakinarazketa Berezia Gehitzen %s-entzat"
 
 msgid "T_ry Again"
 msgstr ""
@@ -5582,6 +5619,10 @@ msgstr "Irakurri gabeko gertaerak"
 
 msgid "Unsupported certificate purpose"
 msgstr ""
+
+#, fuzzy
+msgid "Until Gajim is Closed"
+msgstr "Gajim"
 
 #, fuzzy
 msgid "Untrusted"
@@ -6105,9 +6146,6 @@ msgstr "_Helbidea:"
 msgid "_Advanced Settings"
 msgstr "Ekintza Aurreratuak"
 
-msgid "_Always quit when closing Gajim"
-msgstr ""
-
 msgid "_Approve"
 msgstr ""
 
@@ -6180,6 +6218,10 @@ msgstr "Kontu izen baliogabea"
 
 #, fuzzy
 msgid "_Do not ask me again"
+msgstr "E_z galdetu berriro  "
+
+#, fuzzy
+msgid "_Don’t ask again"
 msgstr "E_z galdetu berriro  "
 
 #, fuzzy
@@ -6671,3 +6713,19 @@ msgstr "%(nick)s orain dago %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, Gajim hides the main window when pressing the X button "
+#~ "instead of minimizing into the notification area."
+#~ msgstr ""
+#~ "If True, quits Gajim when X button of Window Manager is clicked. This "
+#~ "setting is taken into account only if trayicon is used."
+
+#, fuzzy
+#~ msgid "Sign Out"
+#~ msgstr "_Deskonektatuta"
+
+#, fuzzy
+#~ msgid "Status Change"
+#~ msgstr "Kontaktuen egoera aldaketak gorde"

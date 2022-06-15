@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 18:12+0000\n"
+"POT-Creation-Date: 2022-06-15 19:47+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -934,12 +934,6 @@ msgstr ""
 msgid "Allow a participant to send you public or private messages"
 msgstr "התרה לנוכח לשלוח לך הודעות פומביות או פרטיות"
 
-#, fuzzy
-msgid ""
-"Allow to hide the contact list window even if the notification area icon is "
-"not shown."
-msgstr "אפשר הסתרת הרשימה אפילו כאשר סמל מגש איננו מוצג."
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1082,6 +1076,9 @@ msgstr ""
 msgid "Ask before pasting an image."
 msgstr ""
 
+msgid "Ask before quitting when Gajim’s window is closed"
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr "התקבלה הודעת הקשב"
 
@@ -1187,6 +1184,9 @@ msgstr "מצב אוטומטי"
 msgid "Automatic preview disabled"
 msgstr ""
 
+msgid "Automatic preview disabled (file too big)"
+msgstr ""
+
 # Changed to: Spellchecking while writing.
 #, fuzzy
 msgid "Automatic spell-checking for your messages"
@@ -1227,7 +1227,7 @@ msgstr "משתתף"
 msgid "Ban…"
 msgstr ""
 
-msgid "Behaviour of Windows & Tabs"
+msgid "Behaviour of Application Window"
 msgstr ""
 
 #, fuzzy
@@ -1327,6 +1327,10 @@ msgstr "אסירה..."
 #, fuzzy
 msgid "Cancel"
 msgstr "_ביטול"
+
+#, fuzzy
+msgid "Cancel Download"
+msgstr "הורדה"
 
 #, fuzzy
 msgid "Cancel the selected file transfer and remove incomplete files"
@@ -2027,9 +2031,6 @@ msgstr ""
 msgid "Disclose the time of your last activity"
 msgstr ""
 
-msgid "Disconnect from the network"
-msgstr ""
-
 # איתור
 #, fuzzy
 msgid "Discover Services…"
@@ -2085,10 +2086,6 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
 #, fuzzy
-msgid "Don’t show main window in the system taskbar."
-msgstr "אל תציג את הרשימה בתוך שורת המשימות של המערכת."
-
-#, fuzzy
 msgid "Don’t show this again"
 msgstr "אל ת_שאל אותי שוב"
 
@@ -2105,8 +2102,16 @@ msgid "Download and Install"
 msgstr "אל ת_שאל אותי שוב"
 
 #, fuzzy, python-format
+msgid "Download failed (%s)"
+msgstr "אל ת_שאל אותי שוב"
+
+#, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "קדם הודעות אשר לא נקראו"
+
+#, fuzzy
+msgid "Downloading…"
+msgstr "כעת טוען"
 
 #, fuzzy
 msgid "Drop Files or Contacts"
@@ -2245,6 +2250,10 @@ msgstr ""
 
 msgid "Error"
 msgstr "שגיאה"
+
+#, fuzzy
+msgid "Error Loading Image"
+msgstr "בחירת תמונה"
 
 msgid "Error during command execution!"
 msgstr "שגיאה במהלך הוצאה לפועל של פקודה!"
@@ -2809,6 +2818,9 @@ msgstr ""
 msgid "Hide this menu"
 msgstr "הסתר תפריט זה"
 
+msgid "Hide window to system tray when minimized"
+msgstr ""
+
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "הסתרת הכרזה בחלון שיחת קבוצה"
@@ -2888,14 +2900,6 @@ msgstr "בחוסר פעילות מאז %s"
 msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 msgstr "כאשר מסומן, Gajim יכול לפעול באופן מרוחק באמצעות gajim-remote."
 
-#, fuzzy
-msgid ""
-"If enabled, Gajim hides the main window when pressing the X button instead "
-"of minimizing into the notification area."
-msgstr ""
-"כאשר מופעלת, Gajim יצא כאשר לחצן X של מנהל חלונות נלחץ. הגדרה זו נלקחת "
-"בחשבון רק כאשר סמל התראה מצוי בשימוש."
-
 # להבהב
 #, fuzzy
 msgid ""
@@ -2905,6 +2909,9 @@ msgstr ""
 "כאשר מופעלת, והגרסאות המותקנות של ‭GTK+‬ ושל PyGTK הן לפחות 2.8, גרום לחלון "
 "להבזיק (לרוב זוהי ההתנהגות השגרתית אצל מנהלי חלונות) כאשר ישנם אירועים "
 "ממתינים."
+
+msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
+msgstr ""
 
 # BUG: a dot at the end
 #, fuzzy
@@ -2961,7 +2968,7 @@ msgstr ""
 "מתוך השרת שלך."
 
 #, fuzzy, python-format
-msgid "If you close this window, you will leave '%s'."
+msgid "If you close this chat, you will leave '%s'."
 msgstr "כאשר תסגור את חלון זה, אתה תנותק מתוך שיחת קבוצה זו."
 
 #, fuzzy
@@ -3329,10 +3336,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Machine is going to sleep"
-msgstr "מחשב על סף שינה‫"
-
-#, fuzzy
 msgid "Make Admin"
 msgstr "_מנהל"
 
@@ -3441,6 +3444,18 @@ msgid ""
 msgstr ""
 "הודעות יהיו זמינות לקריאה מאוחרת רק אם אפשרת רישום היסטוריה ואיש הקשר מצוי "
 "ברשימה שלך."
+
+# In Hebrew: גאג'ים
+#, fuzzy
+msgid "Minimize on Close"
+msgstr "‫Gajim"
+
+msgid "Minimize to Tray"
+msgstr ""
+
+#, fuzzy
+msgid "Minimize when closing Gajim’s window"
+msgstr "סגור את Gajim תמיד"
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -4099,6 +4114,9 @@ msgstr "רשימת פרטיות"
 msgid "Profile"
 msgstr "cli"
 
+msgid "Profile application with cprofile"
+msgstr ""
+
 msgid "Progress"
 msgstr "התקדמות"
 
@@ -4149,15 +4167,6 @@ msgstr "גרסא:"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "‫Gajim"
-
-# In Hebrew: גאג'ים
-#, fuzzy
-msgid "Quit Gajim on Close"
-msgstr "‫Gajim"
-
-#, fuzzy
-msgid "Quit when closing Gajim’s window"
-msgstr "סגור את Gajim תמיד"
 
 #, fuzzy
 msgid "Quote next message"
@@ -4236,6 +4245,10 @@ msgstr "_רישום"
 #, fuzzy
 msgid "Register on the Website"
 msgstr "הירשם אל ‫%s"
+
+#, fuzzy
+msgid "Registering…"
+msgstr "_רישום"
 
 msgid "Registration failed"
 msgstr "רישום נכשל"
@@ -4380,6 +4393,12 @@ msgid "Requesting Command List"
 msgstr "הרץ _פקודה"
 
 msgid "Requesting HTTP File Upload Slot…"
+msgstr ""
+
+msgid "Requesting Register Form"
+msgstr ""
+
+msgid "Requesting register form from server…"
 msgstr ""
 
 msgid "Requesting search form from server"
@@ -4659,6 +4678,11 @@ msgstr ""
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
+# BUG: general title without "the"
+#, fuzzy
+msgid "Selected image could not be loaded."
+msgstr "השירות לא היה יכול להימצא"
+
 #, fuzzy, python-format
 msgid "Selected security label: %s"
 msgstr "אזהרה: %s"
@@ -4933,9 +4957,10 @@ msgstr "cli"
 msgid "Show Contact Infos"
 msgstr "הצג אנשי קשר _פעילים בלבד"
 
+# In Hebrew: גאג'ים
 #, fuzzy
-msgid "Show Gajim on Startup"
-msgstr "ה_צג רשימה בעת הפעלה:"
+msgid "Show Gajim"
+msgstr "‫Gajim"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -5012,6 +5037,10 @@ msgid ""
 msgstr ""
 "הצגת עזרה על פקודה נתונה או רשימה של פקודות זמינות כאשר הארגומנט ‎-a ניתן"
 
+#, fuzzy
+msgid "Show in Taskbar"
+msgstr "הצג מו_בילים"
+
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
@@ -5030,6 +5059,10 @@ msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "הצג סמל אזור התראה:"
 
 #, fuzzy
+msgid "Show on Startup"
+msgstr "ה_צג רשימה בעת הפעלה:"
+
+#, fuzzy
 msgid "Show only critical errors"
 msgstr "cli"
 
@@ -5039,6 +5072,10 @@ msgstr "הצג סמל אזור התראה:"
 
 msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
 msgstr ""
+
+#, fuzzy
+msgid "Show window in the taskbar"
+msgstr "אל תציג את הרשימה בתוך שורת המשימות של המערכת."
 
 #, fuzzy
 msgid "Show window when starting Gajim"
@@ -5059,13 +5096,14 @@ msgstr "cli"
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr "הצגת רשימה של העברות קבצים בינך לבין אחרים"
 
+# In Hebrew: גאג'ים
+#, fuzzy
+msgid "Shutting down Gajim"
+msgstr "‫Gajim"
+
 #, fuzzy
 msgid "Sign In"
 msgstr "התח_ברות"
-
-#, fuzzy
-msgid "Sign Out"
-msgstr "הת_נתקות"
 
 #, fuzzy
 msgid "Sign Up"
@@ -5185,10 +5223,6 @@ msgstr "מצב"
 
 msgid "Status"
 msgstr "מצב"
-
-#, fuzzy
-msgid "Status Change"
-msgstr "הצג _הודעות מצב"
 
 msgid "Status Message"
 msgstr "הודעת מצב"
@@ -5339,6 +5373,10 @@ msgstr "סנכרון"
 #, fuzzy
 msgid "System"
 msgstr "<b>מערכת:</b>"
+
+#, fuzzy, python-format
+msgid "TLS verification failed: %s"
+msgstr "אימות תעודת SSL עבור %s"
 
 # מאמת
 #, fuzzy
@@ -5764,6 +5802,11 @@ msgstr "אירועים אשר לא נקראו"
 
 msgid "Unsupported certificate purpose"
 msgstr "תכלית תעודה לא נתמכת"
+
+# In Hebrew: גאג'ים
+#, fuzzy
+msgid "Until Gajim is Closed"
+msgstr "‫Gajim"
 
 # מעוניין, מגלה עניין, מתעניין
 #, fuzzy
@@ -6311,10 +6354,6 @@ msgid "_Advanced Settings"
 msgstr "קיצורי מקש"
 
 #, fuzzy
-msgid "_Always quit when closing Gajim"
-msgstr "סגור את Gajim תמיד"
-
-#, fuzzy
 msgid "_Approve"
 msgstr "אשר"
 
@@ -6387,6 +6426,10 @@ msgid "_Disable Account"
 msgstr "חשבון שגוי"
 
 msgid "_Do not ask me again"
+msgstr "אל ת_שאל אותי שוב"
+
+#, fuzzy
+msgid "_Don’t ask again"
 msgstr "אל ת_שאל אותי שוב"
 
 #, fuzzy
@@ -6889,3 +6932,33 @@ msgstr "%(nick)s מצוי/ה כעת במצב %(status)s "
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "Allow to hide the contact list window even if the notification area icon "
+#~ "is not shown."
+#~ msgstr "אפשר הסתרת הרשימה אפילו כאשר סמל מגש איננו מוצג."
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, Gajim hides the main window when pressing the X button "
+#~ "instead of minimizing into the notification area."
+#~ msgstr ""
+#~ "כאשר מופעלת, Gajim יצא כאשר לחצן X של מנהל חלונות נלחץ. הגדרה זו נלקחת "
+#~ "בחשבון רק כאשר סמל התראה מצוי בשימוש."
+
+#, fuzzy
+#~ msgid "Machine is going to sleep"
+#~ msgstr "מחשב על סף שינה‫"
+
+#, fuzzy
+#~ msgid "Sign Out"
+#~ msgstr "הת_נתקות"
+
+#, fuzzy
+#~ msgid "Status Change"
+#~ msgstr "הצג _הודעות מצב"
+
+#, fuzzy
+#~ msgid "_Always quit when closing Gajim"
+#~ msgstr "סגור את Gajim תמיד"

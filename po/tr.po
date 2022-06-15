@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 18:12+0000\n"
+"POT-Creation-Date: 2022-06-15 19:47+0000\n"
 "PO-Revision-Date: 2022-01-13 21:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -883,11 +883,6 @@ msgstr ""
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
-msgid ""
-"Allow to hide the contact list window even if the notification area icon is "
-"not shown."
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1023,6 +1018,9 @@ msgstr ""
 msgid "Ask before pasting an image."
 msgstr ""
 
+msgid "Ask before quitting when Gajim’s window is closed"
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Üyelik ileti _kaydet"
@@ -1129,6 +1127,9 @@ msgstr "Otomatik durum"
 msgid "Automatic preview disabled"
 msgstr ""
 
+msgid "Automatic preview disabled (file too big)"
+msgstr ""
+
 #, fuzzy
 msgid "Automatic spell-checking for your messages"
 msgstr "<b>Önceden hazırlanmış Durum İletleri</b>"
@@ -1169,7 +1170,7 @@ msgstr "Katılan"
 msgid "Ban…"
 msgstr ""
 
-msgid "Behaviour of Windows & Tabs"
+msgid "Behaviour of Application Window"
 msgstr ""
 
 #, fuzzy
@@ -1269,6 +1270,10 @@ msgstr ""
 #, fuzzy
 msgid "Cancel"
 msgstr "_İptal"
+
+#, fuzzy
+msgid "Cancel Download"
+msgstr "Yükleme"
 
 #, fuzzy
 msgid "Cancel the selected file transfer and remove incomplete files"
@@ -1958,9 +1963,6 @@ msgstr ""
 msgid "Disclose the time of your last activity"
 msgstr ""
 
-msgid "Disconnect from the network"
-msgstr ""
-
 #, fuzzy
 msgid "Discover Services…"
 msgstr "Çevrimiçi Servisler"
@@ -2015,9 +2017,6 @@ msgstr "%s grupu kişi listesinden silmek istiyor musun?"
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
-msgid "Don’t show main window in the system taskbar."
-msgstr ""
-
 #, fuzzy
 msgid "Don’t show this again"
 msgstr "Bu iletişim kutusunu bir daha _gösterme"
@@ -2035,8 +2034,16 @@ msgid "Download and Install"
 msgstr "Bu iletişim kutusunu bir daha _gösterme"
 
 #, fuzzy, python-format
+msgid "Download failed (%s)"
+msgstr "Bu iletişim kutusunu bir daha _gösterme"
+
+#, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "Okunmamış iletler var"
+
+#, fuzzy
+msgid "Downloading…"
+msgstr "Kodlamada"
 
 #, fuzzy
 msgid "Drop Files or Contacts"
@@ -2159,6 +2166,10 @@ msgstr ""
 
 msgid "Error"
 msgstr "Hata"
+
+#, fuzzy
+msgid "Error Loading Image"
+msgstr "Resim seç"
 
 msgid "Error during command execution!"
 msgstr ""
@@ -2706,6 +2717,9 @@ msgstr ""
 msgid "Hide this menu"
 msgstr "Menüyi gizle"
 
+msgid "Hide window to system tray when minimized"
+msgstr ""
+
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "Konuşma penceresinde tüm düğmeleri gizle"
@@ -2779,13 +2793,11 @@ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 msgstr ""
 
 msgid ""
-"If enabled, Gajim hides the main window when pressing the X button instead "
-"of minimizing into the notification area."
-msgstr ""
-
-msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
+msgstr ""
+
+msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
 msgstr ""
 
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
@@ -2824,7 +2836,7 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "If you close this window, you will leave '%s'."
+msgid "If you close this chat, you will leave '%s'."
 msgstr ""
 
 msgid ""
@@ -3178,9 +3190,6 @@ msgid ""
 "from the chat window"
 msgstr ""
 
-msgid "Machine is going to sleep"
-msgstr ""
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Yönetici"
@@ -3282,6 +3291,17 @@ msgid ""
 "Messages will only be available for reading them later if storing chat "
 "history is enabled and if the contact is in your contact list."
 msgstr ""
+
+#, fuzzy
+msgid "Minimize on Close"
+msgstr "Gajim"
+
+msgid "Minimize to Tray"
+msgstr ""
+
+#, fuzzy
+msgid "Minimize when closing Gajim’s window"
+msgstr "Gajimi her zaman kapat"
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3940,6 +3960,9 @@ msgstr "Geçersiz Liste İsmi"
 msgid "Profile"
 msgstr "dosya"
 
+msgid "Profile application with cprofile"
+msgstr ""
+
 msgid "Progress"
 msgstr "İlerleme"
 
@@ -3985,14 +4008,6 @@ msgstr "<b>Kurulu Sürüm</b>"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quit Gajim on Close"
-msgstr "Gajim"
-
-#, fuzzy
-msgid "Quit when closing Gajim’s window"
-msgstr "Gajimi her zaman kapat"
 
 #, fuzzy
 msgid "Quote next message"
@@ -4067,6 +4082,10 @@ msgstr "_Kayıt Ol"
 #, fuzzy
 msgid "Register on the Website"
 msgstr "Bunu %s buna %s gönder"
+
+#, fuzzy
+msgid "Registering…"
+msgstr "_Kayıt Ol"
 
 msgid "Registration failed"
 msgstr "Kayıt başarısız"
@@ -4203,6 +4222,12 @@ msgid "Requesting Command List"
 msgstr "Komuta _Yürüt"
 
 msgid "Requesting HTTP File Upload Slot…"
+msgstr ""
+
+msgid "Requesting Register Form"
+msgstr ""
+
+msgid "Requesting register form from server…"
 msgstr ""
 
 msgid "Requesting search form from server"
@@ -4476,6 +4501,10 @@ msgstr ""
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
+#, fuzzy
+msgid "Selected image could not be loaded."
+msgstr "Hizmet bulunamadı"
+
 #, fuzzy, python-format
 msgid "Selected security label: %s"
 msgstr "ben burdaysam"
@@ -4730,8 +4759,8 @@ msgid "Show Contact Infos"
 msgstr "Sadece _Çecredeki Kişileri Göster"
 
 #, fuzzy
-msgid "Show Gajim on Startup"
-msgstr "Gajim açılırken bağlan"
+msgid "Show Gajim"
+msgstr "Gajim"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4801,6 +4830,10 @@ msgid ""
 "Show help on a given command or a list of available commands if -a is given"
 msgstr ""
 
+#, fuzzy
+msgid "Show in Taskbar"
+msgstr "_XML Konsolu Göster"
+
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
@@ -4819,6 +4852,10 @@ msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "_Bir dosya aktarımı tamamlandığında beni bilgilendir"
 
 #, fuzzy
+msgid "Show on Startup"
+msgstr "Gajim açılırken bağlan"
+
+#, fuzzy
 msgid "Show only critical errors"
 msgstr "Kişi listesindeki olayları göster"
 
@@ -4827,6 +4864,10 @@ msgstr ""
 
 msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
 msgstr ""
+
+#, fuzzy
+msgid "Show window in the taskbar"
+msgstr "Gajimi her zaman kapat"
 
 #, fuzzy
 msgid "Show window when starting Gajim"
@@ -4846,12 +4887,12 @@ msgid "Shows a list of file transfers between you and your contacts"
 msgstr ""
 
 #, fuzzy
-msgid "Sign In"
-msgstr "_Bağlan"
+msgid "Shutting down Gajim"
+msgstr "Gajim"
 
 #, fuzzy
-msgid "Sign Out"
-msgstr "_Çık"
+msgid "Sign In"
+msgstr "_Bağlan"
 
 #, fuzzy
 msgid "Sign Up"
@@ -4973,10 +5014,6 @@ msgstr "Durum"
 
 msgid "Status"
 msgstr "Durum"
-
-#, fuzzy
-msgid "Status Change"
-msgstr "Tüm _durum değişikliklerini sistem günlüğüne kaydet"
 
 #, fuzzy
 msgid "Status Message"
@@ -5125,6 +5162,10 @@ msgstr "Kişileri eşzamana getir"
 #, fuzzy
 msgid "System"
 msgstr "<b>Sistem:</b>"
+
+#, fuzzy, python-format
+msgid "TLS verification failed: %s"
+msgstr "<b>Bir hata oluştu:</b>"
 
 #, fuzzy
 msgid "T_ry Again"
@@ -5532,6 +5573,10 @@ msgstr "Okunmamış iletler var"
 #, fuzzy
 msgid "Unsupported certificate purpose"
 msgstr "Sertifika doğrulama hatası (%s)"
+
+#, fuzzy
+msgid "Until Gajim is Closed"
+msgstr "Gajim"
 
 #, fuzzy
 msgid "Untrusted"
@@ -6052,10 +6097,6 @@ msgstr "_Adres:"
 msgid "_Advanced Settings"
 msgstr "İlerlemiş aksiyonlar"
 
-#, fuzzy
-msgid "_Always quit when closing Gajim"
-msgstr "Gajimi her zaman kapat"
-
 msgid "_Approve"
 msgstr ""
 
@@ -6128,6 +6169,10 @@ msgstr "XMPP hesabı %s@%s"
 
 #, fuzzy
 msgid "_Do not ask me again"
+msgstr "Bu iletişim kutusunu bir daha _gösterme"
+
+#, fuzzy
+msgid "_Don’t ask again"
 msgstr "Bu iletişim kutusunu bir daha _gösterme"
 
 #, fuzzy
@@ -6604,3 +6649,15 @@ msgstr "%(nick)s durumu şimdi %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Sign Out"
+#~ msgstr "_Çık"
+
+#, fuzzy
+#~ msgid "Status Change"
+#~ msgstr "Tüm _durum değişikliklerini sistem günlüğüne kaydet"
+
+#, fuzzy
+#~ msgid "_Always quit when closing Gajim"
+#~ msgstr "Gajimi her zaman kapat"

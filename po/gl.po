@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 18:12+0000\n"
+"POT-Creation-Date: 2022-06-15 19:47+0000\n"
 "PO-Revision-Date: 2009-08-19 23:51+0200\n"
 "Last-Translator: Iván Méndez López <>\n"
 "Language-Team:  <softwarelibre@udc.es>\n"
@@ -898,11 +898,6 @@ msgstr ""
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
-msgid ""
-"Allow to hide the contact list window even if the notification area icon is "
-"not shown."
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1039,6 +1034,9 @@ msgstr ""
 msgid "Ask before pasting an image."
 msgstr ""
 
+msgid "Ask before quitting when Gajim’s window is closed"
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Recibiuse a primeira mensaxe"
@@ -1141,6 +1139,9 @@ msgstr "_Adaptar ao estado"
 msgid "Automatic preview disabled"
 msgstr ""
 
+msgid "Automatic preview disabled (file too big)"
+msgstr ""
+
 msgid "Automatic spell-checking for your messages"
 msgstr ""
 
@@ -1178,7 +1179,7 @@ msgstr "Participante"
 msgid "Ban…"
 msgstr ""
 
-msgid "Behaviour of Windows & Tabs"
+msgid "Behaviour of Application Window"
 msgstr ""
 
 #, fuzzy
@@ -1274,6 +1275,10 @@ msgstr "A expulsar..."
 #, fuzzy
 msgid "Cancel"
 msgstr "_Cancelar"
+
+#, fuzzy
+msgid "Cancel Download"
+msgstr "Descarga"
 
 #, fuzzy
 msgid "Cancel the selected file transfer and remove incomplete files"
@@ -1969,9 +1974,6 @@ msgstr ""
 msgid "Disclose the time of your last activity"
 msgstr ""
 
-msgid "Disconnect from the network"
-msgstr ""
-
 #, fuzzy
 msgid "Discover Services…"
 msgstr "_Descubrir os servizos"
@@ -2028,10 +2030,6 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
 #, fuzzy
-msgid "Don’t show main window in the system taskbar."
-msgstr "Non amosar a listaxe na barra de tarefas."
-
-#, fuzzy
 msgid "Don’t show this again"
 msgstr "_Non me preguntar outra vez"
 
@@ -2048,8 +2046,16 @@ msgid "Download and Install"
 msgstr "_Non me preguntar outra vez"
 
 #, fuzzy, python-format
+msgid "Download failed (%s)"
+msgstr "_Non me preguntar outra vez"
+
+#, fuzzy, python-format
 msgid "Downloaded %s messages"
 msgstr "%d mensaxe sen ler"
+
+#, fuzzy
+msgid "Downloading…"
+msgstr "A compor"
 
 #, fuzzy
 msgid "Drop Files or Contacts"
@@ -2173,6 +2179,10 @@ msgstr ""
 
 msgid "Error"
 msgstr ""
+
+#, fuzzy
+msgid "Error Loading Image"
+msgstr "Elixir unha imaxe"
 
 msgid "Error during command execution!"
 msgstr ""
@@ -2723,6 +2733,9 @@ msgstr ""
 msgid "Hide this menu"
 msgstr "Ocultar este menú"
 
+msgid "Hide window to system tray when minimized"
+msgstr ""
+
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "Oculta o báner nunha fiestra de grupo de charla"
@@ -2800,20 +2813,14 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"If enabled, Gajim hides the main window when pressing the X button instead "
-"of minimizing into the notification area."
-msgstr ""
-"Se é verdadeiro, peche o Gajim cando se preme o botón X do xestor de "
-"fiestras. Esta preferencia só se activa se se usa a icona da área de "
-"notificación. "
-
-#, fuzzy
-msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
 msgstr ""
 "Se é verdadeiro e as versións instaladas de GTK+ e PyGTK son, cando menos, "
 "2.8, resalta a fiestra cando hai eventos pendentes."
+
+msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
+msgstr ""
 
 #, fuzzy
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
@@ -2860,7 +2867,7 @@ msgstr ""
 "prioridade negativa, NON recibirá ningunha mensaxe do seu servidor."
 
 #, fuzzy, python-format
-msgid "If you close this window, you will leave '%s'."
+msgid "If you close this chat, you will leave '%s'."
 msgstr "Se pecha esta fiestra, desconectaráselle deste grupo de charla."
 
 msgid ""
@@ -3224,9 +3231,6 @@ msgid ""
 "from the chat window"
 msgstr ""
 
-msgid "Machine is going to sleep"
-msgstr ""
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Administrar"
@@ -3330,6 +3334,16 @@ msgid ""
 msgstr ""
 "As mensaxes só estarán dispoñíbeis para a súa lectura posterior se ten o "
 "historial activado"
+
+#, fuzzy
+msgid "Minimize on Close"
+msgstr "Gajim"
+
+msgid "Minimize to Tray"
+msgstr ""
+
+msgid "Minimize when closing Gajim’s window"
+msgstr ""
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3985,6 +3999,9 @@ msgstr "Listaxe de privacidade"
 msgid "Profile"
 msgstr "ficheiro"
 
+msgid "Profile application with cprofile"
+msgstr ""
+
 msgid "Progress"
 msgstr "Progreso"
 
@@ -4030,13 +4047,6 @@ msgstr "Versión de PyGTK:"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quit Gajim on Close"
-msgstr "Gajim"
-
-msgid "Quit when closing Gajim’s window"
-msgstr ""
 
 #, fuzzy
 msgid "Quote next message"
@@ -4109,6 +4119,10 @@ msgstr "_Rexistrar"
 #, fuzzy
 msgid "Register on the Website"
 msgstr "Rexistrar %s"
+
+#, fuzzy
+msgid "Registering…"
+msgstr "_Rexistrar"
 
 #, fuzzy
 msgid "Registration failed"
@@ -4247,6 +4261,12 @@ msgid "Requesting Command List"
 msgstr "Executar o _comando..."
 
 msgid "Requesting HTTP File Upload Slot…"
+msgstr ""
+
+msgid "Requesting Register Form"
+msgstr ""
+
+msgid "Requesting register form from server…"
 msgstr ""
 
 msgid "Requesting search form from server"
@@ -4520,6 +4540,10 @@ msgstr ""
 msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
+#, fuzzy
+msgid "Selected image could not be loaded."
+msgstr "O servizo non se achou"
+
 #, fuzzy, python-format
 msgid "Selected security label: %s"
 msgstr "A expulsar %s"
@@ -4777,8 +4801,8 @@ msgid "Show Contact Infos"
 msgstr "Amosar os contactos desconectados"
 
 #, fuzzy
-msgid "Show Gajim on Startup"
-msgstr "Amosar _listaxe"
+msgid "Show Gajim"
+msgstr "Gajim"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4854,6 +4878,10 @@ msgid ""
 "Show help on a given command or a list of available commands if -a is given"
 msgstr ""
 
+#, fuzzy
+msgid "Show in Taskbar"
+msgstr "Amosar os trans_portes"
+
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
@@ -4872,6 +4900,10 @@ msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "Usar a icona na á_rea de notificación"
 
 #, fuzzy
+msgid "Show on Startup"
+msgstr "Amosar _listaxe"
+
+#, fuzzy
 msgid "Show only critical errors"
 msgstr "Amosar só na _listaxe de contactos"
 
@@ -4881,6 +4913,10 @@ msgstr "Usar a icona na á_rea de notificación"
 
 msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
 msgstr ""
+
+#, fuzzy
+msgid "Show window in the taskbar"
+msgstr "Non amosar a listaxe na barra de tarefas."
 
 msgid "Show window when starting Gajim"
 msgstr ""
@@ -4900,12 +4936,12 @@ msgid "Shows a list of file transfers between you and your contacts"
 msgstr "Amosa unha listaxe de transferencias entre vostede e outra persoa"
 
 #, fuzzy
-msgid "Sign In"
-msgstr "Conectar"
+msgid "Shutting down Gajim"
+msgstr "Gajim"
 
 #, fuzzy
-msgid "Sign Out"
-msgstr "_Desconectar"
+msgid "Sign In"
+msgstr "Conectar"
 
 #, fuzzy
 msgid "Sign Up"
@@ -5024,10 +5060,6 @@ msgstr "Estado:"
 
 msgid "Status"
 msgstr "Estado"
-
-#, fuzzy
-msgid "Status Change"
-msgstr "_Rexistrar os cambios de estado dos contactos"
 
 msgid "Status Message"
 msgstr "Mensaxe de estado"
@@ -5174,6 +5206,10 @@ msgstr "Amosar os contactos desconectados"
 #, fuzzy
 msgid "System"
 msgstr "<b>Personalizado</b>"
+
+#, fuzzy, python-format
+msgid "TLS verification failed: %s"
+msgstr "Engadir unha notificación especial para %s"
 
 msgid "T_ry Again"
 msgstr ""
@@ -5584,6 +5620,10 @@ msgstr "Acontecementos sen ler"
 
 msgid "Unsupported certificate purpose"
 msgstr ""
+
+#, fuzzy
+msgid "Until Gajim is Closed"
+msgstr "Gajim"
 
 #, fuzzy
 msgid "Untrusted"
@@ -6107,9 +6147,6 @@ msgstr "_Enderezo:"
 msgid "_Advanced Settings"
 msgstr "Accións A_vanzadas"
 
-msgid "_Always quit when closing Gajim"
-msgstr ""
-
 msgid "_Approve"
 msgstr ""
 
@@ -6182,6 +6219,10 @@ msgstr "O nome da conta non é válido"
 
 #, fuzzy
 msgid "_Do not ask me again"
+msgstr "_Non me preguntar outra vez"
+
+#, fuzzy
+msgid "_Don’t ask again"
 msgstr "_Non me preguntar outra vez"
 
 #, fuzzy
@@ -6675,3 +6716,20 @@ msgstr "%(nick)s está agora %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, Gajim hides the main window when pressing the X button "
+#~ "instead of minimizing into the notification area."
+#~ msgstr ""
+#~ "Se é verdadeiro, peche o Gajim cando se preme o botón X do xestor de "
+#~ "fiestras. Esta preferencia só se activa se se usa a icona da área de "
+#~ "notificación. "
+
+#, fuzzy
+#~ msgid "Sign Out"
+#~ msgstr "_Desconectar"
+
+#, fuzzy
+#~ msgid "Status Change"
+#~ msgstr "_Rexistrar os cambios de estado dos contactos"

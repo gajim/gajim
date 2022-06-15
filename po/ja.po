@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 18:12+0000\n"
+"POT-Creation-Date: 2022-06-15 19:47+0000\n"
 "PO-Revision-Date: 2022-05-26 22:21+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -813,13 +813,6 @@ msgstr "談話室のすべての参加者があなたの XMPP アドレスを見
 msgid "Allow a participant to send you public or private messages"
 msgstr "参加者がメッセージ (私信も含む) を送ってくることを許可します"
 
-msgid ""
-"Allow to hide the contact list window even if the notification area icon is "
-"not shown."
-msgstr ""
-"トレイアイコンが表示されていない状態でも相手先一覧ウィンドウを閉じることを許"
-"します。"
-
 msgid "Allowed File Size"
 msgstr "許容されるファイルサイズ"
 
@@ -941,6 +934,9 @@ msgstr ""
 msgid "Ask before pasting an image."
 msgstr "画像を貼り付ける前に確認します。"
 
+msgid "Ask before quitting when Gajim’s window is closed"
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr "注目メッセージを受信した"
 
@@ -1026,6 +1022,10 @@ msgstr "在席状況の自動変更"
 msgid "Automatic preview disabled"
 msgstr "自動プレビューは無効です"
 
+#, fuzzy
+msgid "Automatic preview disabled (file too big)"
+msgstr "自動プレビューは無効です"
+
 msgid "Automatic spell-checking for your messages"
 msgstr "入力メッセージの自動スペルチェック"
 
@@ -1060,7 +1060,8 @@ msgstr "参加者を締め出す"
 msgid "Ban…"
 msgstr "締め出す…"
 
-msgid "Behaviour of Windows & Tabs"
+#, fuzzy
+msgid "Behaviour of Application Window"
 msgstr "ウィンドウとタブの挙動"
 
 msgid "Birthday"
@@ -1148,6 +1149,10 @@ msgstr "通話…"
 
 msgid "Cancel"
 msgstr "中止"
+
+#, fuzzy
+msgid "Cancel Download"
+msgstr "ダウンロード"
 
 msgid "Cancel the selected file transfer and remove incomplete files"
 msgstr "選択されたファイルの転送を中止し、不完全なファイルは削除します"
@@ -1733,9 +1738,6 @@ msgstr "Gajim を実行しているデバイスのシステム時刻を公表し
 msgid "Disclose the time of your last activity"
 msgstr "最後に操作してからの時間を公表します"
 
-msgid "Disconnect from the network"
-msgstr "ネットワークから切断"
-
 msgid "Discover Services…"
 msgstr "サービスを探索…"
 
@@ -1787,9 +1789,6 @@ msgstr "現在インストールされているバージョンを上書きしま
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr "<b>%s</b> でもアカウントを登録抹消しますか ?"
 
-msgid "Don’t show main window in the system taskbar."
-msgstr "システムのタスクバーにメインウィンドウを表示しません。"
-
 #, fuzzy
 msgid "Don’t show this again"
 msgstr "次回からこのメッセージを表示しない"
@@ -1803,9 +1802,17 @@ msgstr "更新をダウンロード"
 msgid "Download and Install"
 msgstr "ダウンロードしてインストール"
 
+#, fuzzy, python-format
+msgid "Download failed (%s)"
+msgstr "ダウンロードしてインストール"
+
 #, python-format
 msgid "Downloaded %s messages"
 msgstr "%s件のメッセージをダウンロードしました"
+
+#, fuzzy
+msgid "Downloading…"
+msgstr "読み込み中…"
 
 msgid "Drop Files or Contacts"
 msgstr "ファイルまたは相手先をドロップ"
@@ -1914,6 +1921,10 @@ msgstr "ニックネームを入れてください。これが相手先に表示
 
 msgid "Error"
 msgstr "エラー"
+
+#, fuzzy
+msgid "Error Loading Image"
+msgstr "画像を読む込む"
 
 msgid "Error during command execution!"
 msgstr "コマンド実行中のエラー"
@@ -2401,6 +2412,9 @@ msgstr "ファイアウォールを越える通話の確立を助けます"
 msgid "Hide this menu"
 msgstr "このメニューを表示しない"
 
+msgid "Hide window to system tray when minimized"
+msgstr ""
+
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "1対1チャットウィンドウのバナーを表示しません。"
 
@@ -2464,18 +2478,14 @@ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 msgstr "チェックをつけると、Gajim を gajim-remote を使って遠隔操作できます。"
 
 msgid ""
-"If enabled, Gajim hides the main window when pressing the X button instead "
-"of minimizing into the notification area."
-msgstr ""
-"有効の場合、Gajim は X ボタンが押された際に、相手先一覧ウィンドウを通知エリア"
-"に最小化するのではなく、閉じます。"
-
-msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
 msgstr ""
 "有効の場合、保留のイベントがある場合にウィンドウをフラッシュさせます (たいて"
 "いのウィンドウマネージャのデフォルトの挙動です)。"
+
+msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
+msgstr ""
 
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
@@ -2522,8 +2532,8 @@ msgstr ""
 "ます。【注意】負の優先順位のままログインすると、サーバーからどんなメッセージ"
 "も受信しません。"
 
-#, python-format
-msgid "If you close this window, you will leave '%s'."
+#, fuzzy, python-format
+msgid "If you close this chat, you will leave '%s'."
 msgstr "このウィンドウを閉じると、’%s’ を退出します。"
 
 msgid ""
@@ -2839,9 +2849,6 @@ msgid ""
 "from the chat window"
 msgstr "チャットウィンドウから直接 Wikipedia や辞書その他の検索エンジンの利用"
 
-msgid "Machine is going to sleep"
-msgstr "コンピューターを終了しています"
-
 msgid "Make Admin"
 msgstr "管理人にする"
 
@@ -2935,6 +2942,17 @@ msgid ""
 msgstr ""
 "履歴が有効になっていて、かつ相手先が相手先一覧にあれば、メッセージは後で読め"
 "ます。"
+
+#, fuzzy
+msgid "Minimize on Close"
+msgstr "閉じると Gajim を終了する"
+
+msgid "Minimize to Tray"
+msgstr ""
+
+#, fuzzy
+msgid "Minimize when closing Gajim’s window"
+msgstr "Gajim のウィンドウを閉じると終了します"
 
 msgid "Minutes until your status gets changed"
 msgstr "在籍状況を変更するまでの時間(分)"
@@ -3522,6 +3540,9 @@ msgstr "非公開"
 msgid "Profile"
 msgstr "プロフィール"
 
+msgid "Profile application with cprofile"
+msgstr ""
+
 msgid "Progress"
 msgstr "進捗"
 
@@ -3559,12 +3580,6 @@ msgstr "PyGObject バージョン: %s"
 
 msgid "Quit Gajim"
 msgstr "Gajim を終了"
-
-msgid "Quit Gajim on Close"
-msgstr "閉じると Gajim を終了する"
-
-msgid "Quit when closing Gajim’s window"
-msgstr "Gajim のウィンドウを閉じると終了します"
 
 msgid "Quote next message"
 msgstr "次のメッセージを引用"
@@ -3628,6 +3643,10 @@ msgstr "登録"
 
 msgid "Register on the Website"
 msgstr "ウェブサイトで登録"
+
+#, fuzzy
+msgid "Registering…"
+msgstr "登録"
 
 msgid "Registration failed"
 msgstr "登録に失敗しました"
@@ -3739,6 +3758,14 @@ msgstr "コマンド一覧を要求中"
 
 msgid "Requesting HTTP File Upload Slot…"
 msgstr "HTTP ファイルアップロード枠を要求しています…"
+
+#, fuzzy
+msgid "Requesting Register Form"
+msgstr "検索欄を要求"
+
+#, fuzzy
+msgid "Requesting register form from server…"
+msgstr "検索欄を要求"
 
 #, fuzzy
 msgid "Requesting search form from server"
@@ -3985,6 +4012,10 @@ msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 "ビデオ入力デバイスを選択してください (例: ウェブカメラ、画面キャプチャ)"
 
+#, fuzzy
+msgid "Selected image could not be loaded."
+msgstr "サービスが見つかりませんでした"
+
 #, python-format
 msgid "Selected security label: %s"
 msgstr "選択された安全性ラベル: %s"
@@ -4213,8 +4244,9 @@ msgstr "コマンドを表示する"
 msgid "Show Contact Infos"
 msgstr "相手先の情報を表示"
 
-msgid "Show Gajim on Startup"
-msgstr "起動時に Gajim を表示する"
+#, fuzzy
+msgid "Show Gajim"
+msgstr "Gajim"
 
 msgid "Show Join/Leave"
 msgstr "入室/退出を表示する"
@@ -4275,6 +4307,10 @@ msgid ""
 "Show help on a given command or a list of available commands if -a is given"
 msgstr "コマンドのヘルプを表示します。-a で、可能なコマンドの一覧を表示します"
 
+#, fuzzy
+msgid "Show in Taskbar"
+msgstr "中継先を表示"
+
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
@@ -4295,6 +4331,10 @@ msgstr ""
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr "離席や取り込み中などでも通知を表示します"
 
+#, fuzzy
+msgid "Show on Startup"
+msgstr "起動時に Gajim を表示する"
+
 msgid "Show only critical errors"
 msgstr "深刻なエラーのみ表示"
 
@@ -4303,6 +4343,10 @@ msgstr "アプリケーションのバージョンを表示"
 
 msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
 msgstr "チャットのタブのバナーに相手先のチャット状態(入力中など)を表示します"
+
+#, fuzzy
+msgid "Show window in the taskbar"
+msgstr "システムのタスクバーにメインウィンドウを表示しません。"
 
 msgid "Show window when starting Gajim"
 msgstr "Gajim の起動時にウィンドウを表示します"
@@ -4320,13 +4364,13 @@ msgstr "指定のコマンドに対するヘルプを表示します"
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr "ファイル転送の一覧を表示します"
 
+#, fuzzy
+msgid "Shutting down Gajim"
+msgstr "Gajim"
+
 # (Mako)"Ask status message when I:" に続く語
 msgid "Sign In"
 msgstr "サインインしたとき"
-
-# (Mako)"Ask status message when I:" に続く語
-msgid "Sign Out"
-msgstr "サインアウトしたとき"
 
 # (Mako)"Ask status message when I:" に続く語
 msgid "Sign Up"
@@ -4433,9 +4477,6 @@ msgstr "州(県)"
 
 msgid "Status"
 msgstr "在席状況"
-
-msgid "Status Change"
-msgstr "状況が変化したとき"
 
 msgid "Status Message"
 msgstr "状況メッセージ"
@@ -4563,6 +4604,10 @@ msgstr "履歴を同期…"
 
 msgid "System"
 msgstr "システム"
+
+#, fuzzy, python-format
+msgid "TLS verification failed: %s"
+msgstr "ファイルの検証に失敗しました"
 
 msgid "T_ry Again"
 msgstr "再試行 (_R)"
@@ -4955,6 +5000,10 @@ msgstr "未読メッセージ"
 
 msgid "Unsupported certificate purpose"
 msgstr "証明書の目的はサポートされていません"
+
+#, fuzzy
+msgid "Until Gajim is Closed"
+msgstr "閉じると Gajim を終了する"
 
 msgid "Untrusted"
 msgstr "信用されない"
@@ -5425,9 +5474,6 @@ msgstr "アドレス (_A)"
 msgid "_Advanced Settings"
 msgstr "詳細設定 (_A)"
 
-msgid "_Always quit when closing Gajim"
-msgstr "Gajim を閉じると常に終了する (_A)"
-
 msgid "_Approve"
 msgstr "承認 (_A)"
 
@@ -5486,6 +5532,10 @@ msgid "_Disable Account"
 msgstr "アカウントを無効化 (_A)"
 
 msgid "_Do not ask me again"
+msgstr "次回から質問しない (_D)"
+
+#, fuzzy
+msgid "_Don’t ask again"
 msgstr "次回から質問しない (_D)"
 
 msgid "_Download"
@@ -5928,3 +5978,33 @@ msgstr "{nick} は現在 {show}{status}"
 
 msgid "…or drop it here"
 msgstr "…またはここにドロップ"
+
+#~ msgid ""
+#~ "Allow to hide the contact list window even if the notification area icon "
+#~ "is not shown."
+#~ msgstr ""
+#~ "トレイアイコンが表示されていない状態でも相手先一覧ウィンドウを閉じることを"
+#~ "許します。"
+
+#~ msgid "Disconnect from the network"
+#~ msgstr "ネットワークから切断"
+
+#~ msgid ""
+#~ "If enabled, Gajim hides the main window when pressing the X button "
+#~ "instead of minimizing into the notification area."
+#~ msgstr ""
+#~ "有効の場合、Gajim は X ボタンが押された際に、相手先一覧ウィンドウを通知エ"
+#~ "リアに最小化するのではなく、閉じます。"
+
+#~ msgid "Machine is going to sleep"
+#~ msgstr "コンピューターを終了しています"
+
+# (Mako)"Ask status message when I:" に続く語
+#~ msgid "Sign Out"
+#~ msgstr "サインアウトしたとき"
+
+#~ msgid "Status Change"
+#~ msgstr "状況が変化したとき"
+
+#~ msgid "_Always quit when closing Gajim"
+#~ msgstr "Gajim を閉じると常に終了する (_A)"
