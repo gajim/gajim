@@ -22,6 +22,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
+
 import os
 import logging
 
@@ -31,6 +33,7 @@ from gi.repository import Gio
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import helpers
+from gajim.common import events
 from gajim.common.structs import OutgoingMessage
 
 from gajim.gui.add_contact import AddContact
@@ -207,13 +210,7 @@ class GajimRemote(Server):
             <signal name='AccountPresence'>
                 <arg type='av' />
             </signal>
-            <signal name='ContactAbsence'>
-                <arg type='av' />
-            </signal>
             <signal name='ContactPresence'>
-                <arg type='av' />
-            </signal>
-            <signal name='ContactStatus'>
                 <arg type='av' />
             </signal>
             <signal name='GCMessage'>
@@ -270,17 +267,12 @@ class GajimRemote(Server):
         self.raise_signal('MessageSent', (obj.account, [
             obj.jid, obj.message, chatstate]))
 
-    def on_presence_received(self, obj):
-        if obj.old_show < 2 and obj.new_show > 1:
-            event = 'ContactPresence'
-        elif obj.old_show > 1 and obj.new_show < 2:
-            event = 'ContactAbsence'
-        elif obj.new_show > 1:
-            event = 'ContactStatus'
-        else:
-            return
-        self.raise_signal(event, (obj.conn.name, [obj.jid, obj.show,
-                obj.status, obj.resource, obj.prio, obj.timestamp]))
+    def on_presence_received(self, event: events.PresenceReceived) -> None:
+        self.raise_signal('ContactPresence', (event.account, [
+            event.jid,
+            event.resource,
+            event.show,
+            event.status]))
 
     def on_subscribe_presence_received(self, obj):
         self.raise_signal('Subscribe', (obj.conn.name, [obj.jid, obj.status,
@@ -315,7 +307,7 @@ class GajimRemote(Server):
     def on_our_status(self, event):
         self.raise_signal('AccountPresence', (event.show, event.account))
 
-    def raise_signal(self, event_name, data):
+    def raise_signal(self, event_name: str, data: Any) -> None:
         log.info('Send event %s', event_name)
         self.con.emit_signal(None,
                              '/org/gajim/dbus/RemoteObject',
