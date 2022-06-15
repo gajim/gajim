@@ -559,16 +559,6 @@ class StatusMessage(PreferenceBox):
                     _('Sign In'),
                     SettingType.CONFIG,
                     'ask_online_status'),
-
-            Setting(SettingKind.SWITCH,
-                    _('Sign Out'),
-                    SettingType.CONFIG,
-                    'ask_offline_status'),
-
-            Setting(SettingKind.SWITCH,
-                    _('Status Change'),
-                    SettingType.CONFIG,
-                    'always_ask_for_status_message'),
         ]
 
         PreferenceBox.__init__(self, settings)

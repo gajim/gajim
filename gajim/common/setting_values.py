@@ -37,11 +37,9 @@ HAS_ACCOUNT_DEFAULT = _ACCOUNT_DEFAULT()
 # pylint: disable=line-too-long
 
 BoolSettings = Literal[
-    'always_ask_for_status_message',
     'always_english_wikipedia',
     'always_english_wiktionary',
     'ascii_formatting',
-    'ask_offline_status',
     'ask_online_status',
     'autoaway',
     'autoxa',
@@ -175,11 +173,9 @@ AllSettings = Literal[BoolSettings, IntSettings, StringSettings]
 AllSettingsT = Union[str, int, bool]
 
 APP_SETTINGS = {
-    'always_ask_for_status_message': False,
     'always_english_wikipedia': False,
     'always_english_wiktionary': True,
     'ascii_formatting': True,
-    'ask_offline_status': False,
     'ask_online_status': False,
     'audio_input_device': 'autoaudiosrc ! volume name=gajim_vol',
     'audio_input_volume': 50,

@@ -67,7 +67,6 @@ from gajim.common.events import FileCompleted
 from gajim.common.events import FileHashError
 from gajim.common.events import FileProgress
 from gajim.common.events import FileError
-from gajim.common.helpers import ask_for_status_message
 from gajim.common.structs import OutgoingMessage
 from gajim.common.i18n import _
 from gajim.common.client import Client
@@ -164,7 +163,7 @@ class Interface:
         if event.conn.get_module('MAM').available:
             event.conn.get_module('MAM').request_archive_on_signin()
 
-        if ask_for_status_message(event.conn.status, signin=True):
+        if app.settings.get('ask_online_status'):
             app.window.show_account_page(account)
 
     def handle_event_presence(self, event):
@@ -565,17 +564,9 @@ class Interface:
                       status: str,
                       account: Optional[str] = None
                       ) -> None:
-        ask = ask_for_status_message(status)
 
         if status is None:
             status = helpers.get_global_show()
-
-        if ask:
-            if account is None:
-                app.window.show_app_page()
-            else:
-                app.window.show_account_page(account)
-            return
 
         if account is not None:
             self._change_status(account, status)

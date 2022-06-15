@@ -1396,20 +1396,6 @@ def get_idle_status_message(state: str, status_message: str) -> str:
     return message
 
 
-def ask_for_status_message(status: str, signin: bool = False) -> bool:
-    if status is None:
-        # We try to change the message
-        return True
-
-    if signin:
-        return app.settings.get('ask_online_status')
-
-    if status == 'offline':
-        return app.settings.get('ask_offline_status')
-
-    return app.settings.get('always_ask_for_status_message')
-
-
 def get_group_chat_nick(account: str, room_jid: Union[JID, str]) -> str:
     nick = app.nicks[account]
 

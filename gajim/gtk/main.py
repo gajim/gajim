@@ -36,7 +36,6 @@ from gajim.common.const import Direction
 from gajim.common.const import Display
 from gajim.common.const import SimpleClientState
 from gajim.common.ged import EventHelper
-from gajim.common.helpers import ask_for_status_message
 from gajim.common.i18n import _
 from gajim.common.modules.bytestream import is_transfer_active
 from gajim.plugins.pluginmanager import PluginManifest
@@ -875,13 +874,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._main_stack.process_event(event)
 
     def quit(self) -> None:
-        accounts = list(app.connections.keys())
-        get_msg = False
-        for acct in accounts:
-            if app.account_is_available(acct):
-                get_msg = True
-                break
-
         save_main_window_position()
         window_width, window_height = self.get_size()
         app.settings.set('mainwin_width', window_width)
@@ -937,11 +929,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 return
             on_continue2(message)
 
-        if get_msg and ask_for_status_message('offline'):
-            print('TODO: Let user choose status message')
-            on_continue('')  # status message here
-        else:
-            on_continue('')
+        on_continue('')
 
     def _on_plugin_updates_available(self,
                                      _repository: PluginRepository,
