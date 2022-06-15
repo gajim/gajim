@@ -54,6 +54,7 @@ EMOJI_RX = re.compile(EMOJI_RX)
 
 SD = 0
 SD_POS = 1
+MAX_QUOTE_LEVEL = 20
 
 
 @dataclass
@@ -115,6 +116,12 @@ class PlainBlock(Block):
     spans: list[Span] = field(default_factory=list)
     uris: list[BaseUri] = field(default_factory=list)
     emojis: list[Emoji] = field(default_factory=list)
+
+    @classmethod
+    def from_quote_match(cls, match: Match[str]) -> PlainBlock:
+        return cls(start=match.start(),
+                   end=match.end(),
+                   text=match.group('quote'))
 
 
 @dataclass
@@ -187,11 +194,11 @@ def find_byte_index(text: str, index: int):
     raise ValueError('index not in string: %s, %s' % (text, index))
 
 
-def process(text: Union[str, bytes], nested: bool = False) -> ParsingResult:
+def process(text: Union[str, bytes], level: int = 0) -> ParsingResult:
     if isinstance(text, bytes):
         text = text.decode()
 
-    blocks = _parse_blocks(text, nested)
+    blocks = _parse_blocks(text, level)
     for block in blocks:
         if isinstance(block, PlainBlock):
             offset = 0
@@ -204,18 +211,18 @@ def process(text: Union[str, bytes], nested: bool = False) -> ParsingResult:
                 offset_bytes += len(line.encode())
 
         if isinstance(block, QuoteBlock):
-            result = process(block.unquote(), nested=True)
+            result = process(block.unquote(), level=level + 1)
             block.blocks = result.blocks
 
     return ParsingResult(text, blocks)
 
 
-def _parse_blocks(text: str, nested: bool) -> list[Block]:
+def _parse_blocks(text: str, level: int) -> list[Block]:
     blocks: list[Block] = []
     text_len = len(text)
     last_end_pos = 0
 
-    rx = BLOCK_NESTED_RX if nested else BLOCK_RX
+    rx = BLOCK_NESTED_RX if level > 0 else BLOCK_RX
 
     for match in rx.finditer(text):
         if match.start() != last_end_pos:
@@ -228,7 +235,10 @@ def _parse_blocks(text: str, nested: bool) -> list[Block]:
         group_dict = match.groupdict()
 
         if group_dict.get('quote') is not None:
-            blocks.append(QuoteBlock.from_match(match))
+            if level > MAX_QUOTE_LEVEL:
+                blocks.append(PlainBlock.from_quote_match(match))
+            else:
+                blocks.append(QuoteBlock.from_match(match))
 
         if group_dict.get('pre') is not None:
             blocks.append(PreBlock.from_match(match))
