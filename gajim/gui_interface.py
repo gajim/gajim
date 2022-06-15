@@ -700,7 +700,8 @@ class Interface:
                     from gajim import remote_control
                     remote_control.GajimRemote()
                 except Exception:
-                    pass
+                    log.exception('Failed to init remote control')
+
         GLib.timeout_add_seconds(5, remote_init)
 
 

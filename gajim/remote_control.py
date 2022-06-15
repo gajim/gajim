@@ -35,6 +35,7 @@ from gajim.common import ged
 from gajim.common import helpers
 from gajim.common import events
 from gajim.common.structs import OutgoingMessage
+from gajim.common.modules.contacts import BareContact
 
 from gajim.gui.add_contact import AddContact
 
@@ -689,31 +690,26 @@ class GajimRemote(Server):
                 return contact.real_jid
             return jid
 
-    def _contacts_as_dbus_structure(self, bare_contact):
+    def _contacts_as_dbus_structure(self, contact: BareContact):
         """
         Get info from list of Contact objects and create dbus dict
         """
-        prim_contact = None  # primary contact
-        for res_contact in bare_contact:
-            if (prim_contact is None or
-                    res_contact.priority > prim_contact.priority):
-                prim_contact = res_contact
-        contact_dict = {}
-        name = bare_contact.name
-        contact_dict['name'] = GLib.Variant('s', name)
-        contact_dict['show'] = GLib.Variant('s', prim_contact.show)
-        contact_dict['jid'] = GLib.Variant('s', prim_contact.jid)
 
-        resources = GLib.VariantBuilder(GLib.VariantType('a(sis)'))
-        for res_contact in bare_contact:
-            resource_props = (res_contact.jid.resource,
-                              int(res_contact.priority),
+        contact_dict = {}
+
+        contact_dict['name'] = GLib.Variant('s', contact.name)
+        contact_dict['show'] = GLib.Variant('s', contact.show.value)
+        contact_dict['jid'] = GLib.Variant('s', str(contact.jid))
+
+        resources = GLib.VariantBuilder(GLib.VariantType('a(ss)'))
+        for res_contact in contact.iter_resources():
+            resource_props = (res_contact.resource,
                               res_contact.status)
-            resources.add_value(GLib.Variant('(sis)', resource_props))
+            resources.add_value(GLib.Variant('(ss)', resource_props))
         contact_dict['resources'] = resources.end()
 
         groups = GLib.VariantBuilder(GLib.VariantType('as'))
-        for group in bare_contact.groups:
+        for group in contact.groups:
             groups.add_value(GLib.Variant('s', group))
         contact_dict['groups'] = groups.end()
         return contact_dict
