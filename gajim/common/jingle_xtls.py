@@ -25,17 +25,21 @@ from gajim.common import configpaths
 
 log = logging.getLogger('gajim.c.jingle_xtls')
 
-# key-exchange id -> [callback, args], accept that session once key-exchange completes
+# key-exchange id -> [callback, args]
+# accept that session once key-exchange completes
 pending_contents = {}
+
 
 def key_exchange_pend(id_, cb, args):
     # args is a list
     pending_contents[id_] = [cb, args]
 
+
 def approve_pending_content(id_):
     cb = pending_contents[id_][0]
     args = pending_contents[id_][1]
     cb(*args)
+
 
 TYPE_RSA = crypto.TYPE_RSA
 TYPE_DSA = crypto.TYPE_DSA
@@ -44,9 +48,11 @@ SELF_SIGNED_CERTIFICATE = 'localcert'
 DH_PARAMS = 'dh_params.pem'
 DEFAULT_DH_PARAMS = 'dh4096.pem'
 
+
 def default_callback(connection, certificate, error_num, depth, return_code):
     log.info("certificate: %s", certificate)
     return return_code
+
 
 def load_cert_file(cert_path, cert_store=None):
     """
@@ -67,7 +73,7 @@ def load_cert_file(cert_path, cert_store=None):
         if 'BEGIN CERTIFICATE' in line:
             begin = i
         elif 'END CERTIFICATE' in line and begin > -1:
-            cert = ''.join(lines[begin:i+2])
+            cert = ''.join(lines[begin:i + 2])
             try:
                 x509cert = crypto.load_certificate(crypto.FILETYPE_PEM, cert)
                 if cert_store:
@@ -84,25 +90,27 @@ def load_cert_file(cert_path, cert_store=None):
         i += 1
     f.close()
 
+
 def get_context(fingerprint, verify_cb=None, remote_jid=None):
     """
     constructs and returns the context objects
     """
     ctx = SSL.Context(SSL.SSLv23_METHOD)
-    flags = (SSL.OP_NO_SSLv2 | SSL.OP_NO_SSLv3 | SSL.OP_SINGLE_DH_USE \
-             | SSL.OP_NO_TICKET)
+    flags = (SSL.OP_NO_SSLv2 | SSL.OP_NO_SSLv3 | SSL.OP_SINGLE_DH_USE |
+             SSL.OP_NO_TICKET)
     ctx.set_options(flags)
     ctx.set_cipher_list(b'HIGH:!aNULL:!3DES')
 
-    if fingerprint == 'server': # for testing purposes only
-        ctx.set_verify(SSL.VERIFY_NONE|SSL.VERIFY_FAIL_IF_NO_PEER_CERT,
+    if fingerprint == 'server':  # for testing purposes only
+        ctx.set_verify(SSL.VERIFY_NONE | SSL.VERIFY_FAIL_IF_NO_PEER_CERT,
                        verify_cb or default_callback)
     elif fingerprint == 'client':
         ctx.set_verify(SSL.VERIFY_PEER, verify_cb or default_callback)
 
     cert_name = configpaths.get('MY_CERT') / SELF_SIGNED_CERTIFICATE
     ctx.use_privatekey_file(str(cert_name.with_suffix('.pkey')).encode('utf-8'))
-    ctx.use_certificate_file(str(cert_name.with_suffix('.cert')).encode('utf-8'))
+    ctx.use_certificate_file(
+        str(cert_name.with_suffix('.cert')).encode('utf-8'))
 
     # Try to load Diffie-Hellman parameters.
     # First try user DH parameters, if this fails load the default DH parameters
@@ -110,7 +118,7 @@ def get_context(fingerprint, verify_cb=None, remote_jid=None):
     try:
         with open(dh_params_name, "r", encoding='utf8'):
             ctx.load_tmp_dh(dh_params_name.encode('utf-8'))
-    except FileNotFoundError as err:
+    except FileNotFoundError:
         default_dh_params_name = (configpaths.get('DATA') / 'other' /
                                   DEFAULT_DH_PARAMS)
         try:
@@ -123,13 +131,14 @@ def get_context(fingerprint, verify_cb=None, remote_jid=None):
 
     if remote_jid:
         store = ctx.get_cert_store()
-        path = configpaths.get('MY_PEER_CERTS').expanduser() / (remote_jid
-                                                                + '.cert')
+        path = configpaths.get('MY_PEER_CERTS').expanduser()
+        path = path / f'{remote_jid}.cert'
         if path.exists():
             load_cert_file(path, cert_store=store)
             log.debug('certificate file %s loaded fingerprint %s',
                       path, fingerprint)
     return ctx
+
 
 def read_cert(certpath):
     certificate = ''
@@ -139,9 +148,9 @@ def read_cert(certpath):
                 certificate += line
     return certificate
 
+
 def send_cert(con, jid_from, sid):
-    certpath = configpaths.get('MY_CERT') / (SELF_SIGNED_CERTIFICATE
-                                             + '.cert')
+    certpath = configpaths.get('MY_CERT') / f'{SELF_SIGNED_CERTIFICATE}.cert'
     certificate = read_cert(certpath)
     iq = nbxmpp.Iq('result', to=jid_from)
     iq.setAttr('id', sid)
@@ -156,6 +165,7 @@ def send_cert(con, jid_from, sid):
     cert.setData(certificate)
 
     con.send(iq)
+
 
 def handle_new_cert(con, obj, jid_from):
     jid = app.get_jid_without_resource(jid_from)
@@ -175,16 +185,18 @@ def handle_new_cert(con, obj, jid_from):
 
     approve_pending_content(id_)
 
+
 def check_cert(jid, fingerprint):
     certpath = configpaths.get('MY_PEER_CERTS').expanduser() / (jid + '.cert')
     if certpath.exists():
         cert = load_cert_file(certpath)
         if cert:
-            digest_algo = cert.get_signature_algorithm().decode('utf-8')\
-                    .split('With')[0]
+            digest_algo = cert.get_signature_algorithm()
+            digest_algo = digest_algo.decode('utf-8').split('With')[0]
             if cert.digest(digest_algo) == fingerprint:
                 return True
     return False
+
 
 def send_cert_request(con, to_jid):
     iq = nbxmpp.Iq('get', to=to_jid)
@@ -197,6 +209,7 @@ def send_cert_request(con, to_jid):
 
 # the following code is partly due to pyopenssl examples
 
+
 def createKeyPair(type_, bits):
     """
     Create a public/private key pair.
@@ -208,6 +221,7 @@ def createKeyPair(type_, bits):
     pkey = crypto.PKey()
     pkey.generate_key(type_, bits)
     return pkey
+
 
 def createCertRequest(pkey, digest="sha256", **name):
     """
@@ -236,7 +250,9 @@ def createCertRequest(pkey, digest="sha256", **name):
     req.sign(pkey, digest)
     return req
 
-def createCertificate(req, issuerCert, issuerKey, serial, notBefore, notAfter, digest="sha256"):
+
+def createCertificate(req, issuerCert, issuerKey, serial, notBefore, notAfter,
+                      digest="sha256"):
     """
     Generate a certificate given a certificate request.
 
@@ -261,6 +277,7 @@ def createCertificate(req, issuerCert, issuerKey, serial, notBefore, notAfter, d
     cert.sign(issuerKey, digest)
     return cert
 
+
 def make_certs(filepath, CN):
     """
     make self signed certificates
@@ -270,7 +287,8 @@ def make_certs(filepath, CN):
     """
     key = createKeyPair(TYPE_RSA, 4096)
     req = createCertRequest(key, CN=CN)
-    cert = createCertificate(req, req, key, 0, 0, 60*60*24*365*5) # five years
+    # five years
+    cert = createCertificate(req, req, key, 0, 0, 60 * 60 * 24 * 365 * 5)
     with open(filepath.with_suffix('.pkey'), 'wb') as f:
         filepath.with_suffix('.pkey').chmod(0o600)
         f.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, key))
