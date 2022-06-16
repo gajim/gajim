@@ -146,7 +146,7 @@ def extract_and_resize_frames(image: Image.Image,
     return frames, result
 
 
-def create_thumbnail(data: bytes, size:int) -> Optional[bytes]:
+def create_thumbnail(data: bytes, size: int) -> Optional[bytes]:
     thumbnail = create_thumbnail_with_pil(data, size)
     if thumbnail is not None:
         return thumbnail
@@ -191,7 +191,7 @@ def create_thumbnail_with_pil(data: bytes, size: int) -> Optional[bytes]:
     output_file = BytesIO()
     try:
         image = Image.open(input_file)
-    except OSError as error:
+    except Exception as error:
         log.warning('making pil thumbnail failed: %s', error)
         log.warning('fallback to pixbuf')
         input_file.close()

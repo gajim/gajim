@@ -142,6 +142,11 @@ class PreviewWidget(Gtk.Box):
         label.set_ellipsize(Pango.EllipsizeMode.END)
         label.set_max_width_chars(32)
 
+        if preview.info_message is not None:
+            self._ui.info_message.set_text(preview.info_message)
+            self._ui.info_message.set_tooltip_text(preview.info_message)
+            self._ui.info_message.show()
+
         if preview.orig_exists():
             self._ui.download_button.hide()
             self._ui.open_folder_button.show()
@@ -155,11 +160,6 @@ class PreviewWidget(Gtk.Box):
                 self._ui.right_box.pack_end(audio_widget, False, True, 0)
                 self._ui.right_box.reorder_child(audio_widget, 1)
         else:
-            if preview.info_message is not None:
-                self._ui.info_message.set_text(preview.info_message)
-                self._ui.info_message.set_tooltip_text(preview.info_message)
-                self._ui.info_message.show()
-
             if preview.file_size == 0:
                 self._ui.download_button.hide()
                 self._ui.link_button.show()

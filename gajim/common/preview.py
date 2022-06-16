@@ -150,6 +150,7 @@ class Preview:
     def create_thumbnail(self, data: bytes) -> bool:
         self.thumbnail = create_thumbnail(data, self.size)
         if self.thumbnail is None:
+            self.info_message = _('Creating thumbnail failed')
             log.warning('Creating thumbnail failed for: %s', self.orig_path)
             return False
         return True
@@ -342,8 +343,7 @@ class PreviewManager:
                                  preview.thumbnail,
                                  self._on_thumb_write_finished,
                                  preview)
-        else:
-            preview.update_widget()
+        preview.update_widget()
 
     @staticmethod
     def _on_thumb_load_finished(data: Optional[bytes],
@@ -426,7 +426,7 @@ class PreviewManager:
             return
 
         if file_size == 0:
-            log.info('File size is unknown (zero) for URL: \'%s\'',  uri)
+            log.info('File size is unknown (zero) for URL: \'%s\'', uri)
             session.cancel_message(message, Soup.Status.CANCELLED)
             return
 
@@ -434,7 +434,9 @@ class PreviewManager:
             log.info(
                 'File size (%s) too big for URL: \'%s\'',
                 file_size, uri)
-            if not force:
+            if force:
+                preview.info_message = None
+            else:
                 session.cancel_message(message, Soup.Status.CANCELLED)
                 preview.info_message = _('Automatic preview disabled '
                                          '(file too big)')
@@ -463,6 +465,8 @@ class PreviewManager:
             preview.update_widget()
             return
 
+        preview.info_message = None
+
         data = message.props.response_body_data.get_data()
         if data is None:
             return
@@ -486,6 +490,8 @@ class PreviewManager:
                                  preview.thumbnail,
                                  self._on_thumb_write_finished,
                                  preview)
+            else:
+                preview.update_widget()
 
     @staticmethod
     def _on_orig_write_finished(_result: bool,
