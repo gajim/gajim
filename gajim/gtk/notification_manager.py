@@ -236,21 +236,23 @@ class NotificationManager(Gtk.ListBox):
         self.add(new_row)
         self.update_unread_count()
 
-        if get_muc_context(event.muc) == 'public':
-            jid = event.from_
+        jid = event.from_.bare
+        muc_context = get_muc_context(event.muc)
+        if (muc_context == 'private' and
+                not event.muc.bare_match(event.from_)):
+            contact = self._client.get_module('Contacts').get_contact(jid)
+            text = _('%(contact)s invited you to %(chat)s') % {
+                'contact': contact.name,
+                'chat': event.info.muc_name}
         else:
-            jid = event.from_.bare
-        contact = self._client.get_module('Contacts').get_contact(jid)
-        text = _('%(contact)s invited you to %(chat)s') % {
-            'contact': contact.name,
-            'chat': event.info.muc_name}
+            text = _('You have been invited to %s') % event.info.muc_name
 
         app.ged.raise_event(
             Notification(account=self._account,
-                            jid=jid,
-                            type='group-chat-invitation',
-                            title=_('Group Chat Invitation'),
-                            text=text))
+                         jid=jid,
+                         type='group-chat-invitation',
+                         title=_('Group Chat Invitation'),
+                         text=text))
 
     def add_invitation_declined(self, event: MucDecline) -> None:
         row = self._get_notification_row(str(event.muc))
@@ -394,10 +396,7 @@ class InvitationReceivedRow(NotificationRow):
 
         self._event = event
 
-        if get_muc_context(event.muc) == 'public':
-            jid = event.from_
-        else:
-            jid = event.from_.bare
+        jid = event.from_.bare
         image = self._generate_avatar_image(jid)
         self.grid.attach(image, 1, 1, 1, 2)
 
@@ -406,10 +405,16 @@ class InvitationReceivedRow(NotificationRow):
         title_label.get_style_context().add_class('bold')
         self.grid.attach(title_label, 2, 1, 1, 1)
 
-        contact = self._client.get_module('Contacts').get_contact(jid)
-        invitation_text = _('%(contact)s invited you to %(chat)s') % {
-            'contact': contact.name,
-            'chat': event.info.muc_name}
+        muc_context = get_muc_context(event.muc)
+        if (muc_context == 'private' and
+                not event.muc.bare_match(event.from_)):
+            contact = self._client.get_module('Contacts').get_contact(jid)
+            invitation_text = _('%(contact)s invited you to %(chat)s') % {
+                'contact': contact.name,
+                'chat': event.info.muc_name}
+        else:
+            invitation_text = _('You have been invited '
+                                'to %s') % event.info.muc_name
         text_label = self._generate_label()
         text_label.set_text(invitation_text)
         text_label.set_tooltip_text(invitation_text)
