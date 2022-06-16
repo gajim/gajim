@@ -697,7 +697,7 @@ class Interface:
         def remote_init():
             if app.settings.get('remote_control'):
                 try:
-                    from gajim import remote_control
+                    from gajim.common.dbus import remote_control
                     remote_control.GajimRemote()
                 except Exception:
                     log.exception('Failed to init remote control')
