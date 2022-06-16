@@ -63,6 +63,7 @@ def is_transfer_paused(file_props: FileProp) -> bool:
         return False
     return file_props.paused
 
+
 def is_transfer_active(file_props: FileProp) -> bool:
     if file_props.stopped:
         return False
@@ -73,6 +74,7 @@ def is_transfer_active(file_props: FileProp) -> bool:
     if file_props.paused:
         return True
     return not file_props.paused
+
 
 def is_transfer_stopped(file_props: FileProp) -> bool:
     if not file_props:
@@ -378,16 +380,18 @@ class Bytestream(BaseModule):
                 # it's an IPv6
                 return True
             ip_s = ip.split('.')
-            ip_l = int(ip_s[0])<<24 | int(ip_s[1])<<16 | int(ip_s[2])<<8 | \
-                 int(ip_s[3])
+            ip_l = (int(ip_s[0]) << 24 |
+                    int(ip_s[1]) << 16 |
+                    int(ip_s[2]) << 8 |
+                    int(ip_s[3]))
             # 10/8
-            if ip_l & (255<<24) == 10<<24:
+            if ip_l & (255 << 24) == 10 << 24:
                 return True
             # 172.16/12
-            if ip_l & (255<<24 | 240<<16) == (172<<24 | 16<<16):
+            if ip_l & (255 << 24 | 240 << 16) == (172 << 24 | 16 << 16):
                 return True
             # 192.168
-            if ip_l & (255<<24 | 255<<16) == (192<<24 | 168<<16):
+            if ip_l & (255 << 24 | 255 << 16) == (192 << 24 | 168 << 16):
                 return True
             return False
 
@@ -445,7 +449,6 @@ class Bytestream(BaseModule):
             self._con.connection.send(iq)
             cleanup_gupnp()
             return False
-
 
         self.ok_id = app.gupnp_igd.connect('mapped-external-port', success)
         self.fail_id = app.gupnp_igd.connect('error-mapping-port', fail)
@@ -628,7 +631,7 @@ class Bytestream(BaseModule):
                 streamhosts.append(host_dict)
         file_props = FilesProp.getFilePropBySid(sid)
         if file_props is not None:
-            if file_props.type_ == 's': # FIXME: remove fast xmlns
+            if file_props.type_ == 's':  # FIXME: remove fast xmlns
                 # only psi do this
                 if file_props.streamhosts:
                     file_props.streamhosts.extend(streamhosts)
@@ -646,6 +649,7 @@ class Bytestream(BaseModule):
             raise nbxmpp.NodeProcessed
 
         file_props.streamhosts = streamhosts
+
         def _connection_error(sid: str) -> None:
             self._connect_error(sid,
                                 'item-not-found',
@@ -693,7 +697,7 @@ class Bytestream(BaseModule):
 
         try:
             streamhost = query.getTag('streamhost-used')
-        except Exception: # this bytestream result is not what we need
+        except Exception:  # this bytestream result is not what we need
             pass
         id_ = real_id[3:]
         file_props = FilesProp.getFileProp(self._account, id_)
@@ -704,11 +708,11 @@ class Bytestream(BaseModule):
             if real_id.startswith('au_'):
                 if file_props.streamhost_used is False:
                     raise nbxmpp.NodeProcessed
-                if  not file_props.proxyhosts:
+                if not file_props.proxyhosts:
                     raise nbxmpp.NodeProcessed
                 for host in file_props.proxyhosts:
-                    if host['initiator'] == frm and \
-                    query.getAttr('sid') == file_props.sid:
+                    if (host['initiator'] == frm and
+                            query.getAttr('sid') == file_props.sid):
                         app.socks5queue.activate_proxy(host['idx'])
                         break
             raise nbxmpp.NodeProcessed

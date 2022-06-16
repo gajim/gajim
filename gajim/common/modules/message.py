@@ -192,12 +192,11 @@ class Message(BaseModule):
 
         correct_id = parse_correction(properties)
         if correct_id is not None:
-            event = MessageUpdated(
-                        account=self._account,
-                        jid=event_attr['jid'],
-                        msgtxt=msgtxt,
-                        properties=properties,
-                        correct_id=correct_id)
+            event = MessageUpdated(account=self._account,
+                                   jid=event_attr['jid'],
+                                   msgtxt=msgtxt,
+                                   properties=properties,
+                                   correct_id=correct_id)
 
             app.storage.archive.store_message_correction(
                 self._account,

@@ -38,6 +38,7 @@ from nbxmpp.modules.discovery import parse_disco_info
 
 _T = TypeVar('_T')
 
+
 def timeit(func: Callable[..., _T]) -> Callable[..., _T]:
     def func_wrapper(self: Any, *args: Any, **kwargs: Any) -> _T:
         start = time.time()
@@ -55,8 +56,10 @@ def timeit(func: Callable[..., _T]) -> Callable[..., _T]:
 def _convert_common_error(common_error: bytes) -> CommonError:
     return CommonError.from_string(common_error)
 
+
 def _adapt_common_error(common_error: CommonError) -> str:
     return common_error.serialize()
+
 
 sqlite3.register_converter('common_error', _convert_common_error)
 sqlite3.register_adapter(CommonError, _adapt_common_error)
@@ -68,20 +71,26 @@ def _convert_marker(marker: bytes):
 
 sqlite3.register_converter('marker', _convert_marker)
 
+
 def _jid_adapter(jid: JID) -> str:
     return str(jid)
+
 
 def _jid_converter(jid: bytes) -> JID:
     return JID.from_string(jid.decode())
 
+
 sqlite3.register_converter('jid', _jid_converter)
 sqlite3.register_adapter(JID, _jid_adapter)
+
 
 def _convert_disco_info(disco_info: bytes) -> DiscoInfo:
     return parse_disco_info(Iq(node=disco_info))  # type: ignore
 
+
 def _adapt_disco_info(disco_info: DiscoInfo) -> str:
     return str(disco_info.stanza)
+
 
 sqlite3.register_converter('disco_info', _convert_disco_info)
 sqlite3.register_adapter(DiscoInfo, _adapt_disco_info)
