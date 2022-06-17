@@ -155,6 +155,10 @@ def Q_(text: str) -> str:
     return text
 
 
+def P_(context: str, message: str) -> str:
+    return _translation.pgettext(context, message)
+
+
 def ngettext(s_sing: str,
              s_plural: str,
              n: int,
