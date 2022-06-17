@@ -213,12 +213,6 @@ class WindowBehaviour(PreferenceBox):
                     desc=_('Action when closing Gajim’s window')),
 
             Setting(SettingKind.SWITCH,
-                    _('Minimize to Tray'),
-                    SettingType.CONFIG,
-                    'minimize_to_tray',
-                    desc=_('Hide window to system tray when minimized')),
-
-            Setting(SettingKind.SWITCH,
                     _('Show in Taskbar'),
                     SettingType.CONFIG,
                     'show_in_taskbar',
