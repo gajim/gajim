@@ -596,7 +596,7 @@ class ChatRow(Gtk.ListBoxRow):
 
         if self.contact.is_groupchat and not self.contact.can_notify():
             self._ui.unread_label.get_style_context().add_class(
-               'unread-counter-silent')
+                'unread-counter-silent')
 
         # Get last chat message from archive
         line = app.storage.archive.get_last_conversation_line(account, jid)

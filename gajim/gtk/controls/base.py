@@ -1146,7 +1146,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                     displaymarking: Optional[Displaymarking] = None,
                     msg_log_id: Optional[int] = None,
                     message_id: Optional[str] = None,
-                    stanza_id: Optional[str]  =None,
+                    stanza_id: Optional[str] = None,
                     additional_data: Optional[AdditionalDataDict] = None
                     ) -> None:
 

@@ -38,8 +38,7 @@ if TYPE_CHECKING:
     from .conversation.rows.scroll_hint import ScrollHintRow
 
 
-
-ControlT = Union [
+ControlT = Union[
     'BaseControl',
     'ChatControl',
     'PrivateChatControl',

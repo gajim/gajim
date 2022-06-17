@@ -131,23 +131,23 @@ class JingleFileTransfer(JingleContent):
         self.nominated_cand = {}
         self.state = State.NOT_STARTED
         self.states = {
-            State.INITIALIZED   : StateInitialized(self),
-            State.CAND_SENT     : StateCandSent(self),
-            State.CAND_RECEIVED : StateCandReceived(self),
-            State.TRANSFERRING  : StateTransfering(self),
-            State.TRANSPORT_REPLACE : StateTransportReplace(self),
-            State.CAND_SENT_AND_RECEIVED : StateCandSentAndRecv(self)
+            State.INITIALIZED: StateInitialized(self),
+            State.CAND_SENT: StateCandSent(self),
+            State.CAND_RECEIVED: StateCandReceived(self),
+            State.TRANSFERRING: StateTransfering(self),
+            State.TRANSPORT_REPLACE: StateTransportReplace(self),
+            State.CAND_SENT_AND_RECEIVED: StateCandSentAndRecv(self)
         }
 
         cert_name = (configpaths.get('MY_CERT') /
                      jingle_xtls.SELF_SIGNED_CERTIFICATE)
-        if not (cert_name.with_suffix('.cert').exists()
-                and cert_name.with_suffix('.pkey').exists()):
+        if not (cert_name.with_suffix('.cert').exists() and
+                cert_name.with_suffix('.pkey').exists()):
             jingle_xtls.make_certs(cert_name, 'gajim')
 
     def __state_changed(self,
                         nextstate: State,
-                        args: Optional[dict[str, Any]] =None
+                        args: Optional[dict[str, Any]] = None
                         ) -> None:
         # Executes the next state action and sets the next state
         current_state = self.state
@@ -284,18 +284,21 @@ class JingleFileTransfer(JingleContent):
     def __send_hash(self) -> None:
         # Send hash in a session info
         checksum = nbxmpp.Node(tag='checksum',
-                               payload=[nbxmpp.Node(tag='file',
-                                                    payload=[self._compute_hash()])])
+                               payload=[
+                                   nbxmpp.Node(tag='file',
+                                               payload=[self._compute_hash()])
+                               ])
         checksum.setNamespace(Namespace.JINGLE_FILE_TRANSFER_5)
         self.session.__session_info(checksum)
         pjid = app.get_jid_without_resource(self.session.peerjid)
-        file_info = {'name' : self.file_props.name,
-                     'file-name' : self.file_props.file_name,
-                     'hash' : self.file_props.hash_,
-                     'size' : self.file_props.size,
-                     'date' : self.file_props.date,
-                     'peerjid' : pjid
-                    }
+        file_info = {
+            'name': self.file_props.name,
+            'file-name': self.file_props.file_name,
+            'hash': self.file_props.hash_,
+            'size': self.file_props.size,
+            'date': self.file_props.date,
+            'peerjid': pjid
+        }
         self.session.connection.get_module('Jingle').set_file_info(file_info)
 
     def _compute_hash(self) -> Optional[nbxmpp.Hashes2]:
@@ -311,7 +314,7 @@ class JingleFileTransfer(JingleContent):
         hash_ = h.calculateHash(self.file_props.algo, file_)
         file_.close()
         # DEBUG
-        #hash_ = '1294809248109223'
+        # hash_ = '1294809248109223'
         if not hash_:
             # Hash algorithm not supported
             return
@@ -332,7 +335,7 @@ class JingleFileTransfer(JingleContent):
         log.info("__on_session_accept")
         con = self.session.connection
         security = content.getTag('security')
-        if not security: # responder can not verify our fingerprint
+        if not security:  # responder can not verify our fingerprint
             self.use_security = False
         else:
             fingerprint = security.getTag('fingerprint')
@@ -392,11 +395,11 @@ class JingleFileTransfer(JingleContent):
         log.info("__on_session_terminate")
 
     def __on_session_info(self,
-                           stanza: nbxmpp.Node,
-                           content: nbxmpp.Node,
-                           error: Optional[nbxmpp.Node],
-                           action: str
-                           ) -> None:
+                          stanza: nbxmpp.Node,
+                          content: nbxmpp.Node,
+                          error: Optional[nbxmpp.Node],
+                          action: str
+                          ) -> None:
         pass
 
     def __on_transport_accept(self,
@@ -452,7 +455,7 @@ class JingleFileTransfer(JingleContent):
                     self.__state_changed(State.TRANSFERRING)
                     raise nbxmpp.NodeProcessed
             else:
-                args = {'candError' : True}
+                args = {'candError': True}
                 self.__state_changed(State.CAND_RECEIVED, args)
             return
         if cand_used:
@@ -463,13 +466,13 @@ class JingleFileTransfer(JingleContent):
                     streamhost_used = cand
                     break
             if streamhost_used is None or streamhost_used['type'] == 'proxy':
-                if app.socks5queue.listener and \
-                not app.socks5queue.listener.connections:
+                if (app.socks5queue.listener and
+                        not app.socks5queue.listener.connections):
                     app.socks5queue.listener.disconnect()
         if content.getTag('transport').getTag('activated'):
             self.state = State.TRANSFERRING
             app.socks5queue.send_file(self.file_props,
-                                        self.session.connection.name, 'client')
+                                      self.session.connection.name, 'client')
             return
         args = {'content': content,
                 'sendCand': False}
@@ -490,8 +493,8 @@ class JingleFileTransfer(JingleContent):
         if self.state in (State.NOT_STARTED, State.CAND_RECEIVED):
             self.__state_changed(State.INITIALIZED)
         elif self.state == State.CAND_SENT_AND_RECEIVED:
-            if not self.nominated_cand['our-cand'] and \
-            not self.nominated_cand['peer-cand']:
+            if (not self.nominated_cand['our-cand'] and
+                    not self.nominated_cand['peer-cand']):
                 if not self.weinitiate:
                     return
                 self.__state_changed(State.TRANSPORT_REPLACE)
@@ -519,15 +522,15 @@ class JingleFileTransfer(JingleContent):
         log.info('send_candidate_used')
         if streamhost is None:
             return
-        args = {'streamhost' : streamhost,
-                'sendCand'   : True}
+        args = {'streamhost': streamhost,
+                'sendCand': True}
         self.nominated_cand['our-cand'] = streamhost
         self.__send_candidate(args)
 
     def _on_connect_error(self, sid: str) -> None:
         log.info('connect error, sid=%s', sid)
-        args = {'candError' : True,
-                'sendCand'  : True}
+        args = {'candError': True,
+                'sendCand': True}
         self.__send_candidate(args)
 
     def __send_candidate(self, args: dict[str, Any]) -> None:
@@ -550,11 +553,13 @@ class JingleFileTransfer(JingleContent):
         fingerprint = None
         if self.use_security:
             fingerprint = 'server'
-        listener = app.socks5queue.start_listener(port, sha_str,
-                                                    self._store_socks5_sid,
-                                                    self.file_props,
-                                                    fingerprint=fingerprint,
-                                                    typ='sender' if self.weinitiate else 'receiver')
+        listener = app.socks5queue.start_listener(
+            port,
+            sha_str,
+            self._store_socks5_sid,
+            self.file_props,
+            fingerprint=fingerprint,
+            typ='sender' if self.weinitiate else 'receiver')
         if not listener:
             # send error message, notify the user
             return
@@ -582,5 +587,6 @@ class JingleFileTransfer(JingleContent):
 
 def get_content(desc) -> JingleFileTransfer:
     return JingleFileTransfer
+
 
 contents[Namespace.JINGLE_FILE_TRANSFER_5] = get_content

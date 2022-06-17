@@ -118,13 +118,6 @@ class Features(Gtk.ApplicationWindow):
                     _('Requires: libxss'),
                     _('No additional requirements'),
                     auto_status_enabled),
-#            Feature(_('Location detection'),
-#                    app.is_installed('GEOCLUE'),
-#                    _('Enables Gajim to be location-aware, if the user decides '
-#                      'to publish the device’s location'),
-#                    _('Requires: geoclue'),
-#                    _('Feature is not available under Windows'),
-#                    None),
             Feature(_('Notification Sounds'),
                     notification_sounds_available,
                     _('Enables Gajim to play sounds for various notifications'),
