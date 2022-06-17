@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 19:47+0000\n"
+"POT-Creation-Date: 2022-06-17 18:19+0000\n"
 "PO-Revision-Date: 2020-07-22 17:59+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -167,10 +167,6 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "%s not found"
-msgstr "%s табылмады"
-
-#, python-format
 msgid "%s s"
 msgstr ""
 
@@ -189,14 +185,6 @@ msgstr "%s сізге файлды жібергісі келеді:"
 #, python-format
 msgid "%s: Nothing found"
 msgstr "%s: Ешнәрсе табылмады"
-
-#, fuzzy, python-format
-msgid ""
-"'%s' is not in your contact list.\n"
-"Please specify account for sending the message."
-msgstr ""
-"'%s' ростеріңізде жоқ.\n"
-"Хабарламаны жіберу үшін тіркелгіні көрсетіңіз."
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -353,22 +341,6 @@ msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "?Ask (for Subscription):Жоқ"
-
-#, fuzzy
-msgid "?CLI:account"
-msgstr "тіркелгі"
-
-#, fuzzy
-msgid "?CLI:message"
-msgstr "хабарлама"
-
-#, fuzzy
-msgid "?CLI:priority"
-msgstr "приоритет"
-
-#, fuzzy
-msgid "?CLI:status"
-msgstr "күйі"
 
 #, fuzzy
 msgid "?Gender:None"
@@ -711,19 +683,20 @@ msgstr "\"%s\" тіркелгісі серверге қосылған"
 msgid "Account is being created"
 msgstr "\"%s\" тіркелгісі серверге қосылған"
 
-#, fuzzy
-msgid ""
-"Account to which the XML will be sent; if not specified, XML will be sent to "
-"all accounts"
-msgstr ""
-"Xml жібетілетін тіркелгі; көрсетілмесе, xml барлық тіркелгілерге жіберіледі"
-
 #, python-format
 msgid "Account: %s"
 msgstr "Тіркелгі: %s"
 
 msgid "Accounts"
 msgstr "Тіркелгілер"
+
+#, fuzzy
+msgid "Action on Close"
+msgstr "Gajim"
+
+#, fuzzy
+msgid "Action when closing Gajim’s window"
+msgstr "Gajim-ді әрқашан жабу"
 
 msgid "Action when left-clicking a preview"
 msgstr ""
@@ -885,6 +858,11 @@ msgstr "Барлық файлдар"
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
 
+msgid ""
+"Allow Gajim to broadcast useful information via D-Bus. It also allows other "
+"applications to control Gajim remotely."
+msgstr ""
+
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
@@ -990,17 +968,6 @@ msgstr ""
 
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Gajim-нан шығуды шынымен қалайсыз ба?"
-
-#, python-format
-msgid ""
-"Argument \"%(arg)s\" is not specified. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"\"%(arg)s\" аргументі көрсетілмеген. \n"
-"Көбірек білу үшін \"%(basename)s help %(command)s\" енгізіңіз"
-
-msgid "Arguments:"
-msgstr "Аргументтер:"
 
 msgid "Artists"
 msgstr "Суретшілер"
@@ -1347,12 +1314,6 @@ msgstr "Парольді өзгерту"
 msgid "Change Subject"
 msgstr "_Тақырыпты өзгерту..."
 
-msgid "Change status"
-msgstr "Қалып-күйді өзгерту"
-
-msgid "Change status information"
-msgstr "Қалып-күй ақпаратын өзгерту"
-
 msgid "Change your account’s password, etc."
 msgstr ""
 
@@ -1373,14 +1334,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Changed by %s"
 msgstr "_Никті өзгерту..."
-
-#, fuzzy
-msgid "Changes the priority of account(s)"
-msgstr "Бір не бірнеше тіркелгі үшін приоритетті өзгертеді"
-
-#, fuzzy
-msgid "Changes the status of account(s)"
-msgstr "Тіркелгі не тіркелгілердің қалып-күйін өзгерту"
 
 #, fuzzy
 msgid "Changing Password..."
@@ -1434,9 +1387,6 @@ msgstr ""
 
 msgid "Check for updates periodically"
 msgstr ""
-
-msgid "Check if Gajim is running"
-msgstr "Gajim қосулы тұрғанына көз жеткізіңіз"
 
 msgid "Checking file…"
 msgstr "Файлды тексеру…"
@@ -1808,6 +1758,9 @@ msgstr "Жаңа хабарламаны жасау"
 msgid "Creating Account..."
 msgstr "%s тіркелгісі өшірілуде"
 
+msgid "Creating thumbnail failed"
+msgstr ""
+
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Сертификат мерзімі біткен"
@@ -1815,8 +1768,8 @@ msgstr "Сертификат мерзімі біткен"
 msgid "Current Developers"
 msgstr "Ағымдағы әзірлеушілер"
 
-msgid "D-Bus is not present on this machine or python module is missing"
-msgstr "D-Bus бұл машинада жоқ не керек python модулі жоқ"
+msgid "D-Bus Interface"
+msgstr ""
 
 #, fuzzy
 msgid "Dark Theme"
@@ -1958,9 +1911,6 @@ msgstr "%s топтық чаттың аты емес."
 #, fuzzy
 msgid "Display or change a group chat topic"
 msgstr "Топ чат беті/терезесін жабу алдында сұрау."
-
-msgid "Do not disturb"
-msgstr "Мазамды алмаңыз"
 
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -2265,9 +2215,6 @@ msgstr "Хабарламаларды шифрлеу."
 msgid "Extended Address"
 msgstr "Қосымша адрес"
 
-msgid "Extended away"
-msgstr "Кеңейтілген кетіп қалған"
-
 msgid "FA_Q (Online)"
 msgstr "ЖҚ_С (Онлайн)"
 
@@ -2372,9 +2319,6 @@ msgstr "Файл бос"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr "Файл тым үлкен, максималды рұқсат етілген файл өлшемі: %s"
 
-msgid "File path"
-msgstr "Файл орналасуы"
-
 msgid "File size unknown"
 msgstr ""
 
@@ -2466,9 +2410,6 @@ msgstr "Хабарламаны жазу…"
 msgid "Free for Chat"
 msgstr "Чатқа дайын"
 
-msgid "Free for chat"
-msgstr "Чатқа дайын"
-
 msgid "From"
 msgstr "Одан"
 
@@ -2556,12 +2497,6 @@ msgstr ""
 
 msgid "Generate preview for any URLs containing images (may be unsafe)"
 msgstr ""
-
-msgid "Gets detailed info on a account"
-msgstr "Тіркелгінің толық ақпаратын алу"
-
-msgid "Gets detailed info on a contact"
-msgstr "Контакттың толық ақпаратын алу"
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2683,11 +2618,11 @@ msgstr "Сәлем, мен - $name."
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
+msgid "Hide"
+msgstr ""
+
 msgid "Hide this menu"
 msgstr "Бұл мәзірді жасыру"
-
-msgid "Hide window to system tray when minimized"
-msgstr ""
 
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
@@ -2759,9 +2694,6 @@ msgstr "%s бастап белсенді емес"
 msgid "Idle since: %s"
 msgstr "Белсенді емес уақытының басы:"
 
-msgid "If checked, Gajim can be controlled remotely using gajim-remote."
-msgstr "Белгіленсе, Gajim-ді қашықтан gajim-remote қолданып басқаруға болады."
-
 #, fuzzy
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2777,9 +2709,6 @@ msgstr ""
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 "Белгіленген болса, Gajim ростердегі контакттар үшін көңіл-күйін көрсетеді"
-
-msgid "If enabled, Gajim will execute XEP-0146 Commands."
-msgstr ""
 
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
@@ -2977,9 +2906,6 @@ msgstr ""
 msgid "It is not possible to send empty files"
 msgstr "Бос файлдарды жіберу мүмкін емес"
 
-msgid "It seems Gajim is not running. So you can't use gajim-remote."
-msgstr "Gajim қосулы емес сияқты. Сол үшін gajim-remote қолдануға болмайды."
-
 msgid "Italic"
 msgstr "Көлбеу"
 
@@ -3110,11 +3036,6 @@ msgstr ""
 
 msgid "Listing of Servers"
 msgstr "Серверлер тізімі"
-
-#, fuzzy
-msgid "Lists all contacts in the contact list, one for each line"
-msgstr ""
-"Ростердегі бар контакттар тізімін шығарады. Әр контакт бөлек жолда болады"
 
 msgid "Live Preview"
 msgstr ""
@@ -3276,15 +3197,8 @@ msgstr ""
 "ростеріңізде болса ғана қолжетерлік болады."
 
 #, fuzzy
-msgid "Minimize on Close"
+msgid "Minimize"
 msgstr "Gajim"
-
-msgid "Minimize to Tray"
-msgstr ""
-
-#, fuzzy
-msgid "Minimize when closing Gajim’s window"
-msgstr "Gajim-ді әрқашан жабу"
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3293,9 +3207,6 @@ msgstr "К_онтакттардың күй өзгерісін тарихқа ж�
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Таңдамалы</b>"
-
-msgid "Missing argument \"contact_jid\""
-msgstr "\"contact_jid\" аргументі жоқ"
 
 #, fuzzy
 msgid "Missing arguments"
@@ -3343,9 +3254,6 @@ msgstr "Аты"
 
 msgid "Name <b>default</b> is not allowed"
 msgstr ""
-
-msgid "Name of the account"
-msgstr "Тіркелгі аты"
 
 msgid "Needs gspell to be installed"
 msgstr ""
@@ -3528,17 +3436,11 @@ msgstr "_ОК"
 msgid "Offline"
 msgstr "Желіде емес"
 
-msgid "Offline - disconnect"
-msgstr "Желіде емес - байланыспаған"
-
 msgid "One Month"
 msgstr ""
 
 msgid "One Year"
 msgstr "Бір жыл"
-
-msgid "Online"
-msgstr "Осында"
 
 #, fuzzy
 msgid "Online Status"
@@ -3871,9 +3773,6 @@ msgstr "Баптаулар"
 msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
 msgstr ""
 
-msgid "Presence description:"
-msgstr "Бар болудың анықтамасы:"
-
 #, fuzzy
 msgid "Presets"
 msgstr "_Бар болу"
@@ -3901,9 +3800,6 @@ msgstr "Орнатылған хабарламалар:"
 
 msgid "Print XML stanzas and other debug information"
 msgstr ""
-
-msgid "Prints a list of registered accounts"
-msgstr "Бар тіркелгілер тізімін шығарады"
 
 #, fuzzy
 msgid "Priority"
@@ -3962,6 +3858,10 @@ msgstr "Барлық чаттар тарихы"
 #, fuzzy, python-format
 msgid "PyGObject Version: %s"
 msgstr "PyGTK нұсқасы:"
+
+#, fuzzy
+msgid "Quit"
+msgstr "_Шығу"
 
 #, fuzzy
 msgid "Quit Gajim"
@@ -4140,10 +4040,6 @@ msgstr[0] "%s контакт өшірілген"
 msgstr[1] "%s контакт өшірілген"
 
 #, fuzzy
-msgid "Removes contact from contact list"
-msgstr "Ростерден контактты өшіреді"
-
-#, fuzzy
 msgid "Remove…"
 msgstr "Өші_ру"
 
@@ -4264,19 +4160,6 @@ msgstr "Күй хабарламасы"
 #, fuzzy
 msgid "Retract message?"
 msgstr "қалып-күй хабарламасы"
-
-msgid "Returns current status (the global one unless account is specified)"
-msgstr ""
-"Ағымдағы қалып-күйді қайтарады (тіркелгі көрсетілмесе, жалпыны қолданады)"
-
-msgid ""
-"Returns current status message (the global one unless account is specified)"
-msgstr ""
-"Ағымдағы қалып-күй хабарламасын қайтарады (тіркелгі көрсетілмесе, жалпыны "
-"қолданады)"
-
-msgid "Returns number of unread messages"
-msgstr "Оқылмаған хабарламалар саның қайтарады"
 
 msgid "Revoke Member"
 msgstr "Мүше құқығын алып тастау"
@@ -4549,26 +4432,6 @@ msgstr "Жіберуші: "
 msgid "Sending private message failed"
 msgstr "Жеке хабарламаны жіберу сәтсіз"
 
-#, fuzzy
-msgid ""
-"Sends a chat message to someone on your contact list. Account is optional."
-msgstr "Контактқа файлды жібереді"
-
-msgid "Sends custom XML"
-msgstr "Таңдауыңызша XML жіберу"
-
-msgid "Sends file to a contact"
-msgstr "Контактқа файлды жібереді"
-
-#, fuzzy
-msgid ""
-"Sends new chat message to a contact in the contact list. Account is optional."
-msgstr "Контактқа файлды жібереді"
-
-#, fuzzy
-msgid "Sends new message to a group chat you've joined."
-msgstr "Сіз кірген топ чатына жаңа хабарламаны жіберу."
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Жіберген контакт: \"%(jid)s\" (%(name)s)"
@@ -4621,19 +4484,6 @@ msgstr "%s тіркелгісі үшін қызметтерді қарап шы�
 msgid "Service Gateway"
 msgstr "Сервер"
 
-msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr ""
-"Қызмет қолжетерсіз: Gajim қосулы емес, не remote_control False мәніне "
-"орнатылған"
-
-#, python-format
-msgid ""
-"Session bus is not available.\n"
-"Try reading %(url)s"
-msgstr ""
-"Сессиялық шина қолжетерсіз.\n"
-"Келесіні оқыңыз: %(url)s"
-
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "%s баптау қатесі"
@@ -4659,9 +4509,6 @@ msgstr ""
 
 msgid "Set the current status to online"
 msgstr ""
-
-msgid "Set the presence type and description"
-msgstr "Бар болудың түрін мен анықтамасын орнату"
 
 msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
@@ -4828,9 +4675,6 @@ msgstr ""
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "Терезені жасырады"
-
-msgid "Shows a help on specific command"
-msgstr "Көрсетілген команда үшін көмекті көрсетеді"
 
 #, fuzzy
 msgid "Shows a list of file transfers between you and your contacts"
@@ -5196,9 +5040,6 @@ msgstr "Қызмет қарау үшін қол жетерсіз"
 msgid "The signing certificate authority is not known"
 msgstr ""
 
-msgid "The status has been changed."
-msgstr "Қалып-күй өзгертілді."
-
 #, fuzzy
 msgid "Theme"
 msgstr "Тақырыбы"
@@ -5375,14 +5216,6 @@ msgstr "Қатысушы"
 #, fuzzy
 msgid "Too many arguments"
 msgstr "\"contact_jid\" аргументі жоқ"
-
-#, python-format
-msgid ""
-"Too many arguments. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"Аргументтер тым көп. \n"
-"Көбірек білу үшін \"%(basename)s help %(command)s\" енгізіңіз"
 
 msgid "Topic"
 msgstr "Тақырып"
@@ -5575,26 +5408,6 @@ msgstr "Жеке хабарламаны жіберу сәтсіз"
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
-#, python-format
-msgid ""
-"Usage:\n"
-"  %s command [arguments]\n"
-"\n"
-"Command is one of:\n"
-msgstr ""
-"Қолданылуы:\n"
-"  %s команда [аргументтері]\n"
-"\n"
-"Команда - келесілердің біреуі:\n"
-
-#, python-format
-msgid ""
-"Usage: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-msgstr ""
-"Қолданылуы: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -5779,23 +5592,8 @@ msgstr "XML консолі"
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
-msgid "XML to send"
-msgstr "Жіберілетін XML"
-
 msgid "XMPP Address"
 msgstr "XMPP адресі"
-
-#, fuzzy
-msgid "XMPP Address of the contact"
-msgstr "Контакт JID-і"
-
-#, fuzzy
-msgid "XMPP Address of the contact that will receive the message"
-msgstr "Хабарламаны алатын контакттың JID-і"
-
-#, fuzzy
-msgid "XMPP Address of the group chat that will receive the message"
-msgstr "хабарламаны алатын бөлменің JID-і"
 
 #, fuzzy
 msgid "XMPP Address…"
@@ -5912,6 +5710,10 @@ msgstr "Сізде ол бумада файлдарды жасауға құқы�
 msgid "You have been banned{actor}{reason}"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "You have been invited to %s"
+msgstr "{contact_jid} бұл топтық чатқа шақырылды"
+
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr ""
@@ -5923,9 +5725,6 @@ msgstr "%(nick)s бөлімнен шығарылған (%(reason)s)"
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr ""
-
-msgid "You have no active account"
-msgstr "Сізде белсенді тіркелгі жоқ"
 
 #, fuzzy
 msgid "You have to be connected to create a group chat."
@@ -6359,28 +6158,11 @@ msgstr "marine"
 msgid "building"
 msgstr "Жасырылуда"
 
-msgid ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
-msgstr ""
-"\"Тіркелгі\" тіркелгісінің қалып-күйін өзгертеді. Көрсетілмесе, \"sync with "
-"global status\" опциясы орнатылған барлық тіркелгілерге әсер етеді"
-
-msgid ""
-"change the priority of the given account. If not specified, change status of "
-"all accounts that have \"sync with global status\" option set"
-msgstr ""
-"көрсетілген тіркелгінің қалып-күйін өзгерту. Көрсетілмесе, барлық \"sync "
-"with global status\" опциясы орнатылған тіркелгілерге әсер етеді"
-
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
 msgid "column"
 msgstr "баған"
-
-msgid "command"
-msgstr "команда"
 
 #, fuzzy
 msgid "country"
@@ -6412,9 +6194,6 @@ msgstr "%(message)s жіберу кезіндегі қате ( %(error)s )"
 msgid "example.org"
 msgstr ""
 
-msgid "file"
-msgstr "файл"
-
 msgid "file transfers list"
 msgstr "файлдармен алмасу тізімі"
 
@@ -6432,15 +6211,6 @@ msgstr "Шығу үшін топ чаттарын таңдаңыз"
 
 msgid "help"
 msgstr ""
-
-msgid "if specified, contact is taken from the contact list of this account"
-msgstr "көрсетілсе, контакттар бұл тіркелгінің тізімінен алынады"
-
-msgid "if specified, file will be sent using this account"
-msgstr "көрсетілсе, файл бұл тіркелгіні қолданып жіберіледі"
-
-msgid "if specified, the message will be sent using this account"
-msgstr "көрсетілсе, хабарлама бұл тіркелгіні қолданып жіберіледі"
 
 msgid "is composing a message…"
 msgstr "хабарлама жазып тұр…"
@@ -6464,21 +6234,6 @@ msgstr "бір"
 msgid "macOS"
 msgstr ""
 
-msgid "message contents"
-msgstr "хабарлама құрамасы"
-
-msgid "message subject"
-msgstr "хабарлама тақырыбы"
-
-#, fuzzy
-msgid ""
-"one of: offline, online, chat, away, xa, dnd. If not set, use account's "
-"previous status"
-msgstr ""
-"келесіден біреу: желіде емес, осында, кетіп қалған, кеңейтілген кетіп "
-"қалған, мазамды алмаңыз, жасырын. Орнатылмаса, тіркелгінің алдыңғы күйі "
-"қолданылады"
-
 msgid "or"
 msgstr "немесе"
 
@@ -6490,9 +6245,6 @@ msgstr "хабарлама жазуды аялдатқан"
 
 msgid "postalcode"
 msgstr ""
-
-msgid "priority you want to give to the account"
-msgstr "тіркелгіге бергіңіз келетін приоритет"
 
 #, fuzzy, python-format
 msgid "python-cairo Version: %s"
@@ -6508,24 +6260,12 @@ msgstr ""
 msgid "room"
 msgstr "бөлме"
 
-msgid "show help on command"
-msgstr "команда көмегін көрсету"
-
-msgid "show only contacts of the given account"
-msgstr "тек көрсетілген тіркелгі контакттарын көрсету"
-
 msgid "speed"
 msgstr ""
-
-msgid "status message"
-msgstr "қалып-күй хабарламасы"
 
 #, fuzzy
 msgid "street"
 msgstr "stream"
-
-msgid "subject"
-msgstr "тақырып"
 
 msgid "text"
 msgstr ""
@@ -6580,8 +6320,95 @@ msgstr "{nick} енді {show}{status}"
 msgid "…or drop it here"
 msgstr ""
 
+#~ msgid "%s not found"
+#~ msgstr "%s табылмады"
+
+#, fuzzy
+#~ msgid ""
+#~ "'%s' is not in your contact list.\n"
+#~ "Please specify account for sending the message."
+#~ msgstr ""
+#~ "'%s' ростеріңізде жоқ.\n"
+#~ "Хабарламаны жіберу үшін тіркелгіні көрсетіңіз."
+
+#, fuzzy
+#~ msgid "?CLI:account"
+#~ msgstr "тіркелгі"
+
+#, fuzzy
+#~ msgid "?CLI:message"
+#~ msgstr "хабарлама"
+
+#, fuzzy
+#~ msgid "?CLI:priority"
+#~ msgstr "приоритет"
+
+#, fuzzy
+#~ msgid "?CLI:status"
+#~ msgstr "күйі"
+
+#, fuzzy
+#~ msgid ""
+#~ "Account to which the XML will be sent; if not specified, XML will be sent "
+#~ "to all accounts"
+#~ msgstr ""
+#~ "Xml жібетілетін тіркелгі; көрсетілмесе, xml барлық тіркелгілерге "
+#~ "жіберіледі"
+
+#~ msgid ""
+#~ "Argument \"%(arg)s\" is not specified. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "\"%(arg)s\" аргументі көрсетілмеген. \n"
+#~ "Көбірек білу үшін \"%(basename)s help %(command)s\" енгізіңіз"
+
+#~ msgid "Arguments:"
+#~ msgstr "Аргументтер:"
+
+#~ msgid "Change status"
+#~ msgstr "Қалып-күйді өзгерту"
+
+#~ msgid "Change status information"
+#~ msgstr "Қалып-күй ақпаратын өзгерту"
+
+#, fuzzy
+#~ msgid "Changes the priority of account(s)"
+#~ msgstr "Бір не бірнеше тіркелгі үшін приоритетті өзгертеді"
+
+#, fuzzy
+#~ msgid "Changes the status of account(s)"
+#~ msgstr "Тіркелгі не тіркелгілердің қалып-күйін өзгерту"
+
+#~ msgid "Check if Gajim is running"
+#~ msgstr "Gajim қосулы тұрғанына көз жеткізіңіз"
+
+#~ msgid "D-Bus is not present on this machine or python module is missing"
+#~ msgstr "D-Bus бұл машинада жоқ не керек python модулі жоқ"
+
 #~ msgid "Disconnect from the network"
 #~ msgstr "Желімен байланысты үзу"
+
+#~ msgid "Do not disturb"
+#~ msgstr "Мазамды алмаңыз"
+
+#~ msgid "Extended away"
+#~ msgstr "Кеңейтілген кетіп қалған"
+
+#~ msgid "File path"
+#~ msgstr "Файл орналасуы"
+
+#~ msgid "Free for chat"
+#~ msgstr "Чатқа дайын"
+
+#~ msgid "Gets detailed info on a account"
+#~ msgstr "Тіркелгінің толық ақпаратын алу"
+
+#~ msgid "Gets detailed info on a contact"
+#~ msgstr "Контакттың толық ақпаратын алу"
+
+#~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
+#~ msgstr ""
+#~ "Белгіленсе, Gajim-ді қашықтан gajim-remote қолданып басқаруға болады."
 
 #, fuzzy
 #~ msgid ""
@@ -6592,6 +6419,90 @@ msgstr ""
 #~ "Gajim жұмысын өз аяқтайды. Тек жүйелік сөре таңбашасы іске қосулы болу "
 #~ "керек."
 
+#~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
+#~ msgstr "Gajim қосулы емес сияқты. Сол үшін gajim-remote қолдануға болмайды."
+
+#, fuzzy
+#~ msgid "Lists all contacts in the contact list, one for each line"
+#~ msgstr ""
+#~ "Ростердегі бар контакттар тізімін шығарады. Әр контакт бөлек жолда болады"
+
+#~ msgid "Missing argument \"contact_jid\""
+#~ msgstr "\"contact_jid\" аргументі жоқ"
+
+#~ msgid "Name of the account"
+#~ msgstr "Тіркелгі аты"
+
+#~ msgid "Offline - disconnect"
+#~ msgstr "Желіде емес - байланыспаған"
+
+#~ msgid "Online"
+#~ msgstr "Осында"
+
+#~ msgid "Presence description:"
+#~ msgstr "Бар болудың анықтамасы:"
+
+#~ msgid "Prints a list of registered accounts"
+#~ msgstr "Бар тіркелгілер тізімін шығарады"
+
+#, fuzzy
+#~ msgid "Removes contact from contact list"
+#~ msgstr "Ростерден контактты өшіреді"
+
+#~ msgid "Returns current status (the global one unless account is specified)"
+#~ msgstr ""
+#~ "Ағымдағы қалып-күйді қайтарады (тіркелгі көрсетілмесе, жалпыны қолданады)"
+
+#~ msgid ""
+#~ "Returns current status message (the global one unless account is "
+#~ "specified)"
+#~ msgstr ""
+#~ "Ағымдағы қалып-күй хабарламасын қайтарады (тіркелгі көрсетілмесе, жалпыны "
+#~ "қолданады)"
+
+#~ msgid "Returns number of unread messages"
+#~ msgstr "Оқылмаған хабарламалар саның қайтарады"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends a chat message to someone on your contact list. Account is optional."
+#~ msgstr "Контактқа файлды жібереді"
+
+#~ msgid "Sends custom XML"
+#~ msgstr "Таңдауыңызша XML жіберу"
+
+#~ msgid "Sends file to a contact"
+#~ msgstr "Контактқа файлды жібереді"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends new chat message to a contact in the contact list. Account is "
+#~ "optional."
+#~ msgstr "Контактқа файлды жібереді"
+
+#, fuzzy
+#~ msgid "Sends new message to a group chat you've joined."
+#~ msgstr "Сіз кірген топ чатына жаңа хабарламаны жіберу."
+
+#~ msgid ""
+#~ "Service not available: Gajim is not running, or remote_control is False"
+#~ msgstr ""
+#~ "Қызмет қолжетерсіз: Gajim қосулы емес, не remote_control False мәніне "
+#~ "орнатылған"
+
+#~ msgid ""
+#~ "Session bus is not available.\n"
+#~ "Try reading %(url)s"
+#~ msgstr ""
+#~ "Сессиялық шина қолжетерсіз.\n"
+#~ "Келесіні оқыңыз: %(url)s"
+
+#~ msgid "Set the presence type and description"
+#~ msgstr "Бар болудың түрін мен анықтамасын орнату"
+
+#~ msgid "Shows a help on specific command"
+#~ msgstr "Көрсетілген команда үшін көмекті көрсетеді"
+
 #, fuzzy
 #~ msgid "Sign Out"
 #~ msgstr "Мен _шыққан кезде"
@@ -6600,6 +6511,111 @@ msgstr ""
 #~ msgid "Status Change"
 #~ msgstr "Қалып-күй өзгерісін көрсету"
 
+#~ msgid "The status has been changed."
+#~ msgstr "Қалып-күй өзгертілді."
+
+#~ msgid ""
+#~ "Too many arguments. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "Аргументтер тым көп. \n"
+#~ "Көбірек білу үшін \"%(basename)s help %(command)s\" енгізіңіз"
+
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  %s command [arguments]\n"
+#~ "\n"
+#~ "Command is one of:\n"
+#~ msgstr ""
+#~ "Қолданылуы:\n"
+#~ "  %s команда [аргументтері]\n"
+#~ "\n"
+#~ "Команда - келесілердің біреуі:\n"
+
+#~ msgid ""
+#~ "Usage: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+#~ msgstr ""
+#~ "Қолданылуы: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+
+#~ msgid "XML to send"
+#~ msgstr "Жіберілетін XML"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact"
+#~ msgstr "Контакт JID-і"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact that will receive the message"
+#~ msgstr "Хабарламаны алатын контакттың JID-і"
+
+#, fuzzy
+#~ msgid "XMPP Address of the group chat that will receive the message"
+#~ msgstr "хабарламаны алатын бөлменің JID-і"
+
+#~ msgid "You have no active account"
+#~ msgstr "Сізде белсенді тіркелгі жоқ"
+
 #, fuzzy
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "Gajim-ді әрқашан жабу"
+
+#~ msgid ""
+#~ "change status of account \"account\". If not specified, try to change "
+#~ "status of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "\"Тіркелгі\" тіркелгісінің қалып-күйін өзгертеді. Көрсетілмесе, \"sync "
+#~ "with global status\" опциясы орнатылған барлық тіркелгілерге әсер етеді"
+
+#~ msgid ""
+#~ "change the priority of the given account. If not specified, change status "
+#~ "of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "көрсетілген тіркелгінің қалып-күйін өзгерту. Көрсетілмесе, барлық \"sync "
+#~ "with global status\" опциясы орнатылған тіркелгілерге әсер етеді"
+
+#~ msgid "command"
+#~ msgstr "команда"
+
+#~ msgid "file"
+#~ msgstr "файл"
+
+#~ msgid "if specified, contact is taken from the contact list of this account"
+#~ msgstr "көрсетілсе, контакттар бұл тіркелгінің тізімінен алынады"
+
+#~ msgid "if specified, file will be sent using this account"
+#~ msgstr "көрсетілсе, файл бұл тіркелгіні қолданып жіберіледі"
+
+#~ msgid "if specified, the message will be sent using this account"
+#~ msgstr "көрсетілсе, хабарлама бұл тіркелгіні қолданып жіберіледі"
+
+#~ msgid "message contents"
+#~ msgstr "хабарлама құрамасы"
+
+#~ msgid "message subject"
+#~ msgstr "хабарлама тақырыбы"
+
+#, fuzzy
+#~ msgid ""
+#~ "one of: offline, online, chat, away, xa, dnd. If not set, use account's "
+#~ "previous status"
+#~ msgstr ""
+#~ "келесіден біреу: желіде емес, осында, кетіп қалған, кеңейтілген кетіп "
+#~ "қалған, мазамды алмаңыз, жасырын. Орнатылмаса, тіркелгінің алдыңғы күйі "
+#~ "қолданылады"
+
+#~ msgid "priority you want to give to the account"
+#~ msgstr "тіркелгіге бергіңіз келетін приоритет"
+
+#~ msgid "show help on command"
+#~ msgstr "команда көмегін көрсету"
+
+#~ msgid "show only contacts of the given account"
+#~ msgstr "тек көрсетілген тіркелгі контакттарын көрсету"
+
+#~ msgid "status message"
+#~ msgstr "қалып-күй хабарламасы"
+
+#~ msgid "subject"
+#~ msgstr "тақырып"

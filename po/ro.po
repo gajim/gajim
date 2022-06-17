@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 19:47+0000\n"
+"POT-Creation-Date: 2022-06-17 18:19+0000\n"
 "PO-Revision-Date: 2022-05-29 13:30+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -184,10 +184,6 @@ msgstr ""
 "Alegeți dispozitivul la care doriți să trimiteți fișierul."
 
 #, python-format
-msgid "%s not found"
-msgstr "%s nu a fost găsit"
-
-#, python-format
 msgid "%s s"
 msgstr "%s sec"
 
@@ -206,14 +202,6 @@ msgstr "%s vrea să vă trimită un fișier"
 #, python-format
 msgid "%s: Nothing found"
 msgstr "%s: Nu s-a găsit nimic"
-
-#, python-format
-msgid ""
-"'%s' is not in your contact list.\n"
-"Please specify account for sending the message."
-msgstr ""
-"'%s' nu se află în lista dumneavoastră de contacte.\n"
-"Vă rugăm să specificați contul pentru trimiterea mesajului."
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -359,18 +347,6 @@ msgstr "<span color=\"yellow\" font-weight=\"bold\">Nu este accelerat</span>"
 
 msgid "?Ask (for Subscription):None"
 msgstr "Nici unul"
-
-msgid "?CLI:account"
-msgstr "cont"
-
-msgid "?CLI:message"
-msgstr "mesaj"
-
-msgid "?CLI:priority"
-msgstr "prioritate"
-
-msgid "?CLI:status"
-msgstr "stare"
 
 msgid "?Gender:None"
 msgstr "Nici unul"
@@ -661,19 +637,20 @@ msgstr "Contul trebuie să fie conectat"
 msgid "Account is being created"
 msgstr "Contul este în curs de creare"
 
-msgid ""
-"Account to which the XML will be sent; if not specified, XML will be sent to "
-"all accounts"
-msgstr ""
-"Contul la care va fi trimis XML; dacă nu este specificat, XML va fi trimis "
-"la toate conturile"
-
 #, python-format
 msgid "Account: %s"
 msgstr "Cont: %s"
 
 msgid "Accounts"
 msgstr "Conturi"
+
+#, fuzzy
+msgid "Action on Close"
+msgstr "Renunță la Gajim pe Close"
+
+#, fuzzy
+msgid "Action when closing Gajim’s window"
+msgstr "Ieșire la închiderea ferestrei lui Gajim"
 
 msgid "Action when left-clicking a preview"
 msgstr "Acțiune atunci când se face clic stânga pe o previzualizare"
@@ -815,6 +792,11 @@ msgstr "Toate fișierele"
 msgid "All other group chat participants can see your XMPP address"
 msgstr "Toți ceilalți participanți la chat-ul de grup vă pot vedea adresa XMPP"
 
+msgid ""
+"Allow Gajim to broadcast useful information via D-Bus. It also allows other "
+"applications to control Gajim remotely."
+msgstr ""
+
 msgid "Allow a participant to send you public or private messages"
 msgstr "Permiteți unui participant să vă trimită mesaje publice sau private"
 
@@ -911,17 +893,6 @@ msgstr ""
 
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Ești sigur că vrei să renunți la Gajim?"
-
-#, python-format
-msgid ""
-"Argument \"%(arg)s\" is not specified. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"Argumentul \"%(arg)s\" nu este specificat. \n"
-"Introduceți \"%(basename)s ajutor %(command)s\" pentru mai multe informații"
-
-msgid "Arguments:"
-msgstr "Argumente:"
 
 msgid "Artists"
 msgstr "Artiști"
@@ -1230,12 +1201,6 @@ msgstr "Schimbați parola"
 msgid "Change Subject"
 msgstr "Schimbă subiectul"
 
-msgid "Change status"
-msgstr "Schimbă starea"
-
-msgid "Change status information"
-msgstr "Modificarea informațiilor de stare"
-
 msgid "Change your account’s password, etc."
 msgstr "Schimbați parola contului dumneavoastră, etc."
 
@@ -1255,12 +1220,6 @@ msgstr ""
 #, python-format
 msgid "Changed by %s"
 msgstr "Schimbat de %s"
-
-msgid "Changes the priority of account(s)"
-msgstr "Schimbă prioritatea contului (conturilor)"
-
-msgid "Changes the status of account(s)"
-msgstr "Schimbă statutul contului (conturilor)"
 
 msgid "Changing Password..."
 msgstr "Schimbarea parolei..."
@@ -1307,9 +1266,6 @@ msgstr "Verificați dacă există actualizări"
 
 msgid "Check for updates periodically"
 msgstr "Verificați dacă există actualizări"
-
-msgid "Check if Gajim is running"
-msgstr "Verificați dacă Gajim rulează"
 
 msgid "Checking file…"
 msgstr "Verificarea fișierului…"
@@ -1636,14 +1592,17 @@ msgstr "Creați un post nou"
 msgid "Creating Account..."
 msgstr "Crearea contului..."
 
+msgid "Creating thumbnail failed"
+msgstr ""
+
 msgid "Credentials expired"
 msgstr "Credențiale expirate"
 
 msgid "Current Developers"
 msgstr "Dezvoltatorii actuali"
 
-msgid "D-Bus is not present on this machine or python module is missing"
-msgstr "D-Bus nu este prezent pe această mașină sau modulul python lipsește"
+msgid "D-Bus Interface"
+msgstr ""
 
 msgid "Dark Theme"
 msgstr "Tema întunecată"
@@ -1768,9 +1727,6 @@ msgstr "Afișarea numelor tuturor participanților la chat-ul de grup"
 
 msgid "Display or change a group chat topic"
 msgstr "Afișarea sau modificarea unui subiect de chat în grup"
-
-msgid "Do not disturb"
-msgstr "Nu deranjați"
 
 #, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -2052,9 +2008,6 @@ msgstr "Exportul mesajelor dumneavoastră..."
 msgid "Extended Address"
 msgstr "Adresa extinsă"
 
-msgid "Extended away"
-msgstr "Îndepărtare prelungită"
-
 msgid "FA_Q (Online)"
 msgstr "FA_Q ( Conectat)"
 
@@ -2146,9 +2099,6 @@ msgstr "Fișierul este gol"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr "Fișierul este prea mare, dimensiunea maximă permisă este: %s"
 
-msgid "File path"
-msgstr "Calea de acces la fișier"
-
 msgid "File size unknown"
 msgstr "Dimensiunea fișierului necunoscută"
 
@@ -2230,9 +2180,6 @@ msgid "Format your message…"
 msgstr "Formatați mesajul dumneavoastră…"
 
 msgid "Free for Chat"
-msgstr "Liber pentru chat"
-
-msgid "Free for chat"
 msgstr "Liber pentru chat"
 
 msgid "From"
@@ -2328,12 +2275,6 @@ msgid "Generate preview for any URLs containing images (may be unsafe)"
 msgstr ""
 "Generarea unei previzualizări pentru orice URL-uri care conțin imagini "
 "(poate fi nesigur)"
-
-msgid "Gets detailed info on a account"
-msgstr "Obține informații detaliate despre un cont"
-
-msgid "Gets detailed info on a contact"
-msgstr "Obține informații detaliate despre un contact"
 
 msgid "Global Group Chat Search"
 msgstr "Căutare globală de chat în grup"
@@ -2437,11 +2378,11 @@ msgstr "Bună ziua, eu sunt $name. %s"
 msgid "Helps to establish calls through firewalls"
 msgstr "Ajută la stabilirea apelurilor prin firewall-uri"
 
+msgid "Hide"
+msgstr ""
+
 msgid "Hide this menu"
 msgstr "Ascundeți acest meniu"
-
-msgid "Hide window to system tray when minimized"
-msgstr ""
 
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "Ascunde bannerul într-o fereastră de chat 1:1."
@@ -2508,11 +2449,6 @@ msgstr "Timp de inactivitate"
 msgid "Idle since: %s"
 msgstr "Inactiv de la: %s"
 
-msgid "If checked, Gajim can be controlled remotely using gajim-remote."
-msgstr ""
-"Dacă este bifat, Gajim poate fi controlat de la distanță folosind gajim-"
-"remote."
-
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
@@ -2528,9 +2464,6 @@ msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 "Dacă este activată, Gajim va adăuga * și [n] în titlul ferestrei listei de "
 "contacte."
-
-msgid "If enabled, Gajim will execute XEP-0146 Commands."
-msgstr "Dacă este activată, Gajim va executa comenzi XEP-0146."
 
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
@@ -2718,9 +2651,6 @@ msgstr "Eliberat pentru\n"
 msgid "It is not possible to send empty files"
 msgstr "Nu este posibil să se trimită fișiere goale"
 
-msgid "It seems Gajim is not running. So you can't use gajim-remote."
-msgstr "Se pare că Gajim nu merge. Deci, nu puteți utiliza gajim-remote."
-
 msgid "Italic"
 msgstr "Italic"
 
@@ -2837,11 +2767,6 @@ msgstr ""
 
 msgid "Listing of Servers"
 msgstr "Lista de servere"
-
-msgid "Lists all contacts in the contact list, one for each line"
-msgstr ""
-"Listează toate contactele din lista de contacte, câte una pentru fiecare "
-"linie"
 
 msgid "Live Preview"
 msgstr "Previzualizare în direct"
@@ -2990,24 +2915,14 @@ msgstr ""
 "află în lista dumneavoastră de contacte."
 
 #, fuzzy
-msgid "Minimize on Close"
+msgid "Minimize"
 msgstr "Renunță la Gajim pe Close"
-
-msgid "Minimize to Tray"
-msgstr ""
-
-#, fuzzy
-msgid "Minimize when closing Gajim’s window"
-msgstr "Ieșire la închiderea ferestrei lui Gajim"
 
 msgid "Minutes until your status gets changed"
 msgstr "Minute până când statutul tău se schimbă"
 
 msgid "Miscellaneous"
 msgstr "Diverse"
-
-msgid "Missing argument \"contact_jid\""
-msgstr "Lipsește argumentul \"contact_jid\""
 
 msgid "Missing arguments"
 msgstr "Argumente lipsă"
@@ -3050,9 +2965,6 @@ msgstr "Nume"
 
 msgid "Name <b>default</b> is not allowed"
 msgstr "Numele <b>default</b> nu este permis"
-
-msgid "Name of the account"
-msgstr "Denumirea contului"
 
 msgid "Needs gspell to be installed"
 msgstr "Necesită ca gspell să fie instalat"
@@ -3215,17 +3127,11 @@ msgstr "OK"
 msgid "Offline"
 msgstr "Offline"
 
-msgid "Offline - disconnect"
-msgstr "Offline - deconectare"
-
 msgid "One Month"
 msgstr "O lună"
 
 msgid "One Year"
 msgstr "Un an"
-
-msgid "Online"
-msgstr "Online"
 
 msgid "Online Status"
 msgstr "Starea online"
@@ -3544,9 +3450,6 @@ msgstr ""
 "Mecanismul preferat de transfer de fișiere pentru glisarea și plasarea "
 "fișierelor pe o fereastră de chat"
 
-msgid "Presence description:"
-msgstr "Descrierea prezenței:"
-
 msgid "Presets"
 msgstr "Presetări"
 
@@ -3570,9 +3473,6 @@ msgstr "Mesaj trimis anterior"
 
 msgid "Print XML stanzas and other debug information"
 msgstr "Imprimă stări XML și alte informații de depanare"
-
-msgid "Prints a list of registered accounts"
-msgstr "Tipărește o listă de conturi înregistrate"
 
 msgid "Priority"
 msgstr "Prioritate"
@@ -3623,6 +3523,10 @@ msgstr "Curățați tot istoricul de chat"
 #, python-format
 msgid "PyGObject Version: %s"
 msgstr "Versiunea PyGObject: %s"
+
+#, fuzzy
+msgid "Quit"
+msgstr "_Ieșiți"
 
 msgid "Quit Gajim"
 msgstr "Renunță la Gajim"
@@ -3777,9 +3681,6 @@ msgstr[0] "A eliminat %d contact"
 msgstr[1] "A eliminat %d contacte"
 msgstr[2] "A eliminat %d de contacte"
 
-msgid "Removes contact from contact list"
-msgstr "Elimină contactul din lista de contacte"
-
 msgid "Remove…"
 msgstr "Eliminați…"
 
@@ -3884,19 +3785,6 @@ msgstr "Retragerea mesajului"
 
 msgid "Retract message?"
 msgstr "Retragerea mesajului?"
-
-msgid "Returns current status (the global one unless account is specified)"
-msgstr ""
-"Returnează starea curentă (cea globală, dacă nu este specificat contul)"
-
-msgid ""
-"Returns current status message (the global one unless account is specified)"
-msgstr ""
-"Returnează mesajul de stare curent (cel global, dacă nu este specificat "
-"contul)"
-
-msgid "Returns number of unread messages"
-msgstr "Returnează numărul de mesaje necitite"
 
 msgid "Revoke Member"
 msgstr "Revocare Membru"
@@ -4137,27 +4025,6 @@ msgstr "Expeditor: "
 msgid "Sending private message failed"
 msgstr "Trimiterea mesajului privat a eșuat"
 
-msgid ""
-"Sends a chat message to someone on your contact list. Account is optional."
-msgstr ""
-"Trimite un mesaj de chat către o persoană din lista de contacte. Contul este "
-"opțional."
-
-msgid "Sends custom XML"
-msgstr "Trimite XML personalizat"
-
-msgid "Sends file to a contact"
-msgstr "Trimite fișierul către un contact"
-
-msgid ""
-"Sends new chat message to a contact in the contact list. Account is optional."
-msgstr ""
-"Trimite un nou mesaj de chat către un contact din lista de contacte. Contul "
-"este opțional."
-
-msgid "Sends new message to a group chat you've joined."
-msgstr "Trimite un mesaj nou către un grup de chat la care v-ați alăturat."
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Contact trimis: \"%(jid)s\" (%(name)s)"
@@ -4208,18 +4075,6 @@ msgstr "Service Discovery utilizând contul %s"
 msgid "Service Gateway"
 msgstr "Portal de servicii"
 
-msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr ""
-"Serviciul nu este disponibil: Gajim nu rulează, sau remote_control este False"
-
-#, python-format
-msgid ""
-"Session bus is not available.\n"
-"Try reading %(url)s"
-msgstr ""
-"Busul de sesiune nu este disponibil.\n"
-"Încercați să citiți %(url)s"
-
 msgid "Set configuration directory"
 msgstr "Setați directorul de configurare"
 
@@ -4249,9 +4104,6 @@ msgstr "Setați starea curentă pe departe"
 
 msgid "Set the current status to online"
 msgstr "Setați starea curentă pe online"
-
-msgid "Set the presence type and description"
-msgstr "Setați tipul prezentării și descrierea"
 
 #, fuzzy
 msgid "Set your activity or tune to show your friends how you are feeling"
@@ -4408,9 +4260,6 @@ msgstr "Afișați-vă propriul flux video în apeluri"
 
 msgid "Show/Hide Window"
 msgstr "Afișează/ Ascunde fereastra"
-
-msgid "Shows a help on specific command"
-msgstr "Afișează un ajutor pentru o comandă specifică"
 
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr ""
@@ -4753,9 +4602,6 @@ msgstr "Serviciul nu poate fi răsfoit"
 msgid "The signing certificate authority is not known"
 msgstr "Autoritatea care semnează certificatul nu este cunoscută"
 
-msgid "The status has been changed."
-msgstr "Starea a fost modificată."
-
 msgid "Theme"
 msgstr "Tema"
 
@@ -4928,14 +4774,6 @@ msgstr "Comutați lista participanților"
 
 msgid "Too many arguments"
 msgstr "Prea multe argumente"
-
-#, python-format
-msgid ""
-"Too many arguments. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"Prea multe argumente. \n"
-"Tastați \"%(basename)s help %(command)s\" pentru mai multe informații"
 
 msgid "Topic"
 msgstr "Subiect"
@@ -5113,26 +4951,6 @@ msgstr "Încărcarea imaginii avatar a eșuat: %s"
 msgid "Uploading via HTTP File Upload…"
 msgstr "Încărcarea prin HTTP File Upload…"
 
-#, python-format
-msgid ""
-"Usage:\n"
-"  %s command [arguments]\n"
-"\n"
-"Command is one of:\n"
-msgstr ""
-"Utilizare:\n"
-"  %s comandă [argumente]\n"
-"\n"
-"Comanda este una dintre următoarele:\n"
-
-#, python-format
-msgid ""
-"Usage: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-msgstr ""
-"Utilizare: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-
 msgid "Use GSSAPI"
 msgstr "Utilizați GSSAPI"
 
@@ -5300,20 +5118,8 @@ msgstr "Consolă XML"
 msgid "XML console to see what's happening on the protocol layer"
 msgstr "Consola XML pentru a vedea ce se întâmplă la nivelul protocolului"
 
-msgid "XML to send"
-msgstr "XML de trimis"
-
 msgid "XMPP Address"
 msgstr "Adresă XMPP"
-
-msgid "XMPP Address of the contact"
-msgstr "Adresa XMPP a contactului"
-
-msgid "XMPP Address of the contact that will receive the message"
-msgstr "Adresa XMPP a persoanei de contact care va primi mesajul"
-
-msgid "XMPP Address of the group chat that will receive the message"
-msgstr "Adresa XMPP a grupului de chat care va primi mesajul"
 
 msgid "XMPP Address…"
 msgstr "Adresă XMPP…"
@@ -5423,6 +5229,10 @@ msgstr ""
 msgid "You have been banned{actor}{reason}"
 msgstr "Ați fost banat{actor}{reason}"
 
+#, fuzzy, python-format
+msgid "You have been invited to %s"
+msgstr "%s a fost invitat la acest grup de chat"
+
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr "Ați fost dat afară{actor}{reason}"
@@ -5434,9 +5244,6 @@ msgstr "Ați fost eliminat din grupul de chat{actor}{reason}"
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr "Ați plecat din cauza unei erori{reason}"
-
-msgid "You have no active account"
-msgstr "Nu aveți un cont activ"
 
 msgid "You have to be connected to create a group chat."
 msgstr "Trebuie să fiți conectat pentru a crea un chat de grup."
@@ -5822,30 +5629,11 @@ msgstr "rulment"
 msgid "building"
 msgstr "clădire"
 
-msgid ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
-msgstr ""
-"modificarea statutului contului \"account\". Dacă nu este specificat, se "
-"încearcă modificarea stării tuturor conturilor pentru care este setată "
-"opțiunea \"sincronizare cu starea globală\""
-
-msgid ""
-"change the priority of the given account. If not specified, change status of "
-"all accounts that have \"sync with global status\" option set"
-msgstr ""
-"modifică prioritatea contului dat. Dacă nu este specificat, se modifică "
-"statutul tuturor conturilor pentru care este setată opțiunea \"sincronizare "
-"cu statutul global\""
-
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "chat;mesagerie;im;xmpp;voip;"
 
 msgid "column"
 msgstr "coloană"
-
-msgid "command"
-msgstr "comandă"
 
 msgid "country"
 msgstr "țară"
@@ -5873,9 +5661,6 @@ msgstr "eroare în timpul trimiterii %(message)s ( %(error)s )"
 msgid "example.org"
 msgstr "exemplu.org"
 
-msgid "file"
-msgstr "fișier"
-
 msgid "file transfers list"
 msgstr "lista transferurilor de fișiere"
 
@@ -5894,17 +5679,6 @@ msgstr ""
 
 msgid "help"
 msgstr "ajutor"
-
-msgid "if specified, contact is taken from the contact list of this account"
-msgstr ""
-"dacă este specificat, contactul este preluat din lista de contacte a acestui "
-"cont"
-
-msgid "if specified, file will be sent using this account"
-msgstr "dacă este specificat, fișierul va fi trimis folosind acest cont"
-
-msgid "if specified, the message will be sent using this account"
-msgstr "dacă este specificat, mesajul va fi trimis folosind acest cont"
 
 msgid "is composing a message…"
 msgstr "compune un mesaj…"
@@ -5927,19 +5701,6 @@ msgstr "lon"
 msgid "macOS"
 msgstr "macOS"
 
-msgid "message contents"
-msgstr "conținutul mesajului"
-
-msgid "message subject"
-msgstr "subiectul mesajului"
-
-msgid ""
-"one of: offline, online, chat, away, xa, dnd. If not set, use account's "
-"previous status"
-msgstr ""
-"unul dintre: offline, online, chat, away, xa, dnd. Dacă nu este setat, se "
-"utilizează starea anterioară a contului"
-
 msgid "or"
 msgstr "sau"
 
@@ -5951,9 +5712,6 @@ msgstr "a fost întreruptă compunerea unui mesaj"
 
 msgid "postalcode"
 msgstr "cod poștal"
-
-msgid "priority you want to give to the account"
-msgstr "prioritatea pe care doriți să o acordați contului"
 
 #, python-format
 msgid "python-cairo Version: %s"
@@ -5969,23 +5727,11 @@ msgstr "regiune"
 msgid "room"
 msgstr "cameră"
 
-msgid "show help on command"
-msgstr "arată ajutor pentru comandă"
-
-msgid "show only contacts of the given account"
-msgstr "afișează numai contactele din contul dat"
-
 msgid "speed"
 msgstr "viteză"
 
-msgid "status message"
-msgstr "mesaj de stare"
-
 msgid "street"
 msgstr "stradă"
-
-msgid "subject"
-msgstr "subiect"
 
 msgid "text"
 msgstr "textul"
@@ -6040,6 +5786,35 @@ msgstr "{nick} este acum {show}{status}"
 msgid "…or drop it here"
 msgstr "...sau lăsați-o aici"
 
+#~ msgid "%s not found"
+#~ msgstr "%s nu a fost găsit"
+
+#~ msgid ""
+#~ "'%s' is not in your contact list.\n"
+#~ "Please specify account for sending the message."
+#~ msgstr ""
+#~ "'%s' nu se află în lista dumneavoastră de contacte.\n"
+#~ "Vă rugăm să specificați contul pentru trimiterea mesajului."
+
+#~ msgid "?CLI:account"
+#~ msgstr "cont"
+
+#~ msgid "?CLI:message"
+#~ msgstr "mesaj"
+
+#~ msgid "?CLI:priority"
+#~ msgstr "prioritate"
+
+#~ msgid "?CLI:status"
+#~ msgstr "stare"
+
+#~ msgid ""
+#~ "Account to which the XML will be sent; if not specified, XML will be sent "
+#~ "to all accounts"
+#~ msgstr ""
+#~ "Contul la care va fi trimis XML; dacă nu este specificat, XML va fi "
+#~ "trimis la toate conturile"
+
 #~ msgid ""
 #~ "Allow to hide the contact list window even if the notification area icon "
 #~ "is not shown."
@@ -6047,8 +5822,60 @@ msgstr "...sau lăsați-o aici"
 #~ "Permiteți să ascundeți fereastra listei de contacte chiar dacă pictograma "
 #~ "din zona de notificare nu este afișată."
 
+#~ msgid ""
+#~ "Argument \"%(arg)s\" is not specified. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "Argumentul \"%(arg)s\" nu este specificat. \n"
+#~ "Introduceți \"%(basename)s ajutor %(command)s\" pentru mai multe "
+#~ "informații"
+
+#~ msgid "Arguments:"
+#~ msgstr "Argumente:"
+
+#~ msgid "Change status"
+#~ msgstr "Schimbă starea"
+
+#~ msgid "Change status information"
+#~ msgstr "Modificarea informațiilor de stare"
+
+#~ msgid "Changes the priority of account(s)"
+#~ msgstr "Schimbă prioritatea contului (conturilor)"
+
+#~ msgid "Changes the status of account(s)"
+#~ msgstr "Schimbă statutul contului (conturilor)"
+
+#~ msgid "Check if Gajim is running"
+#~ msgstr "Verificați dacă Gajim rulează"
+
+#~ msgid "D-Bus is not present on this machine or python module is missing"
+#~ msgstr "D-Bus nu este prezent pe această mașină sau modulul python lipsește"
+
 #~ msgid "Disconnect from the network"
 #~ msgstr "Deconectați-vă de la rețea"
+
+#~ msgid "Do not disturb"
+#~ msgstr "Nu deranjați"
+
+#~ msgid "Extended away"
+#~ msgstr "Îndepărtare prelungită"
+
+#~ msgid "File path"
+#~ msgstr "Calea de acces la fișier"
+
+#~ msgid "Free for chat"
+#~ msgstr "Liber pentru chat"
+
+#~ msgid "Gets detailed info on a account"
+#~ msgstr "Obține informații detaliate despre un cont"
+
+#~ msgid "Gets detailed info on a contact"
+#~ msgstr "Obține informații detaliate despre un contact"
+
+#~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
+#~ msgstr ""
+#~ "Dacă este bifat, Gajim poate fi controlat de la distanță folosind gajim-"
+#~ "remote."
 
 #~ msgid ""
 #~ "If enabled, Gajim hides the main window when pressing the X button "
@@ -6057,8 +5884,95 @@ msgstr "...sau lăsați-o aici"
 #~ "Dacă este activată, Gajim ascunde fereastra principală atunci când "
 #~ "apăsați butonul X în loc să se minimizeze în zona de notificare."
 
+#~ msgid "If enabled, Gajim will execute XEP-0146 Commands."
+#~ msgstr "Dacă este activată, Gajim va executa comenzi XEP-0146."
+
+#~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
+#~ msgstr "Se pare că Gajim nu merge. Deci, nu puteți utiliza gajim-remote."
+
+#~ msgid "Lists all contacts in the contact list, one for each line"
+#~ msgstr ""
+#~ "Listează toate contactele din lista de contacte, câte una pentru fiecare "
+#~ "linie"
+
 #~ msgid "Machine is going to sleep"
 #~ msgstr "Mașina merge la culcare"
+
+#~ msgid "Missing argument \"contact_jid\""
+#~ msgstr "Lipsește argumentul \"contact_jid\""
+
+#~ msgid "Name of the account"
+#~ msgstr "Denumirea contului"
+
+#~ msgid "Offline - disconnect"
+#~ msgstr "Offline - deconectare"
+
+#~ msgid "Online"
+#~ msgstr "Online"
+
+#~ msgid "Presence description:"
+#~ msgstr "Descrierea prezenței:"
+
+#~ msgid "Prints a list of registered accounts"
+#~ msgstr "Tipărește o listă de conturi înregistrate"
+
+#~ msgid "Removes contact from contact list"
+#~ msgstr "Elimină contactul din lista de contacte"
+
+#~ msgid "Returns current status (the global one unless account is specified)"
+#~ msgstr ""
+#~ "Returnează starea curentă (cea globală, dacă nu este specificat contul)"
+
+#~ msgid ""
+#~ "Returns current status message (the global one unless account is "
+#~ "specified)"
+#~ msgstr ""
+#~ "Returnează mesajul de stare curent (cel global, dacă nu este specificat "
+#~ "contul)"
+
+#~ msgid "Returns number of unread messages"
+#~ msgstr "Returnează numărul de mesaje necitite"
+
+#~ msgid ""
+#~ "Sends a chat message to someone on your contact list. Account is optional."
+#~ msgstr ""
+#~ "Trimite un mesaj de chat către o persoană din lista de contacte. Contul "
+#~ "este opțional."
+
+#~ msgid "Sends custom XML"
+#~ msgstr "Trimite XML personalizat"
+
+#~ msgid "Sends file to a contact"
+#~ msgstr "Trimite fișierul către un contact"
+
+#~ msgid ""
+#~ "Sends new chat message to a contact in the contact list. Account is "
+#~ "optional."
+#~ msgstr ""
+#~ "Trimite un nou mesaj de chat către un contact din lista de contacte. "
+#~ "Contul este opțional."
+
+#~ msgid "Sends new message to a group chat you've joined."
+#~ msgstr "Trimite un mesaj nou către un grup de chat la care v-ați alăturat."
+
+#~ msgid ""
+#~ "Service not available: Gajim is not running, or remote_control is False"
+#~ msgstr ""
+#~ "Serviciul nu este disponibil: Gajim nu rulează, sau remote_control este "
+#~ "False"
+
+#~ msgid ""
+#~ "Session bus is not available.\n"
+#~ "Try reading %(url)s"
+#~ msgstr ""
+#~ "Busul de sesiune nu este disponibil.\n"
+#~ "Încercați să citiți %(url)s"
+
+#~ msgid "Set the presence type and description"
+#~ msgstr "Setați tipul prezentării și descrierea"
+
+#~ msgid "Shows a help on specific command"
+#~ msgstr "Afișează un ajutor pentru o comandă specifică"
 
 #~ msgid "Sign Out"
 #~ msgstr "Ieșire"
@@ -6066,5 +5980,109 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Status Change"
 #~ msgstr "Schimbare de stare"
 
+#~ msgid "The status has been changed."
+#~ msgstr "Starea a fost modificată."
+
+#~ msgid ""
+#~ "Too many arguments. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "Prea multe argumente. \n"
+#~ "Tastați \"%(basename)s help %(command)s\" pentru mai multe informații"
+
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  %s command [arguments]\n"
+#~ "\n"
+#~ "Command is one of:\n"
+#~ msgstr ""
+#~ "Utilizare:\n"
+#~ "  %s comandă [argumente]\n"
+#~ "\n"
+#~ "Comanda este una dintre următoarele:\n"
+
+#~ msgid ""
+#~ "Usage: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+#~ msgstr ""
+#~ "Utilizare: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+
+#~ msgid "XML to send"
+#~ msgstr "XML de trimis"
+
+#~ msgid "XMPP Address of the contact"
+#~ msgstr "Adresa XMPP a contactului"
+
+#~ msgid "XMPP Address of the contact that will receive the message"
+#~ msgstr "Adresa XMPP a persoanei de contact care va primi mesajul"
+
+#~ msgid "XMPP Address of the group chat that will receive the message"
+#~ msgstr "Adresa XMPP a grupului de chat care va primi mesajul"
+
+#~ msgid "You have no active account"
+#~ msgstr "Nu aveți un cont activ"
+
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "_Întotdeauna ieșiți atunci când închideți Gajim"
+
+#~ msgid ""
+#~ "change status of account \"account\". If not specified, try to change "
+#~ "status of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "modificarea statutului contului \"account\". Dacă nu este specificat, se "
+#~ "încearcă modificarea stării tuturor conturilor pentru care este setată "
+#~ "opțiunea \"sincronizare cu starea globală\""
+
+#~ msgid ""
+#~ "change the priority of the given account. If not specified, change status "
+#~ "of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "modifică prioritatea contului dat. Dacă nu este specificat, se modifică "
+#~ "statutul tuturor conturilor pentru care este setată opțiunea "
+#~ "\"sincronizare cu statutul global\""
+
+#~ msgid "command"
+#~ msgstr "comandă"
+
+#~ msgid "file"
+#~ msgstr "fișier"
+
+#~ msgid "if specified, contact is taken from the contact list of this account"
+#~ msgstr ""
+#~ "dacă este specificat, contactul este preluat din lista de contacte a "
+#~ "acestui cont"
+
+#~ msgid "if specified, file will be sent using this account"
+#~ msgstr "dacă este specificat, fișierul va fi trimis folosind acest cont"
+
+#~ msgid "if specified, the message will be sent using this account"
+#~ msgstr "dacă este specificat, mesajul va fi trimis folosind acest cont"
+
+#~ msgid "message contents"
+#~ msgstr "conținutul mesajului"
+
+#~ msgid "message subject"
+#~ msgstr "subiectul mesajului"
+
+#~ msgid ""
+#~ "one of: offline, online, chat, away, xa, dnd. If not set, use account's "
+#~ "previous status"
+#~ msgstr ""
+#~ "unul dintre: offline, online, chat, away, xa, dnd. Dacă nu este setat, se "
+#~ "utilizează starea anterioară a contului"
+
+#~ msgid "priority you want to give to the account"
+#~ msgstr "prioritatea pe care doriți să o acordați contului"
+
+#~ msgid "show help on command"
+#~ msgstr "arată ajutor pentru comandă"
+
+#~ msgid "show only contacts of the given account"
+#~ msgstr "afișează numai contactele din contul dat"
+
+#~ msgid "status message"
+#~ msgstr "mesaj de stare"
+
+#~ msgid "subject"
+#~ msgstr "subiect"

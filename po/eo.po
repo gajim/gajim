@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 19:47+0000\n"
+"POT-Creation-Date: 2022-06-17 18:19+0000\n"
 "PO-Revision-Date: 2020-08-19 19:27+0000\n"
 "Last-Translator: Vincent L <vincent.laporte+gajim@mailbox.org>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -163,10 +163,6 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "%s not found"
-msgstr "%s ne trovitas"
-
-#, python-format
 msgid "%s s"
 msgstr ""
 
@@ -185,14 +181,6 @@ msgstr "%s volas sendi dosieron al vi."
 #, fuzzy, python-format
 msgid "%s: Nothing found"
 msgstr "%s ne trovitas"
-
-#, fuzzy, python-format
-msgid ""
-"'%s' is not in your contact list.\n"
-"Please specify account for sending the message."
-msgstr ""
-"%s mankas en via kontaktlisto\n"
-"Bonvolu specifi konton por sendi la mesaĝon."
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -346,22 +334,6 @@ msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "Nenion"
-
-#, fuzzy
-msgid "?CLI:account"
-msgstr "konto"
-
-#, fuzzy
-msgid "?CLI:message"
-msgstr "mesaĝo"
-
-#, fuzzy
-msgid "?CLI:priority"
-msgstr "Priori_tato:"
-
-#, fuzzy
-msgid "?CLI:status"
-msgstr "stato"
 
 #, fuzzy
 msgid "?Gender:None"
@@ -710,20 +682,19 @@ msgstr "Konto \"%s\" estas konektita al la servilo"
 msgid "Account is being created"
 msgstr "Konto \"%s\" estas konektita al la servilo"
 
-#, fuzzy
-msgid ""
-"Account to which the XML will be sent; if not specified, XML will be sent to "
-"all accounts"
-msgstr ""
-"Konto kien la XML sendotas; se konto nespecifitas, XML sendotas al ĉiuj "
-"kontoj"
-
 #, python-format
 msgid "Account: %s"
 msgstr "Konto  : %s"
 
 msgid "Accounts"
 msgstr "Kontoj"
+
+#, fuzzy
+msgid "Action on Close"
+msgstr "Gajim"
+
+msgid "Action when closing Gajim’s window"
+msgstr ""
 
 msgid "Action when left-clicking a preview"
 msgstr ""
@@ -892,6 +863,11 @@ msgstr "Ĉiuj dosieroj"
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
 
+msgid ""
+"Allow Gajim to broadcast useful information via D-Bus. It also allows other "
+"applications to control Gajim remotely."
+msgstr ""
+
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
@@ -998,17 +974,6 @@ msgstr "Ĉu vi certe volas foriri el babilejo \"%s\"?"
 #, fuzzy
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Ĉu vi certe volas foriri el babilejo \"%s\"?"
-
-#, fuzzy, python-format
-msgid ""
-"Argument \"%(arg)s\" is not specified. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"Argumento \"%s\" ne estas specifita. \n"
-"Enigi \"%s help %s\" por plia informo"
-
-msgid "Arguments:"
-msgstr "Argumentoj:"
 
 msgid "Artists"
 msgstr ""
@@ -1352,14 +1317,6 @@ msgstr "Ŝanĝi pasvorton"
 msgid "Change Subject"
 msgstr "Ŝanĝi _temon"
 
-#, fuzzy
-msgid "Change status"
-msgstr "Kontakto ŝanĝis sian staton"
-
-#, fuzzy
-msgid "Change status information"
-msgstr "Kontakta informo"
-
 msgid "Change your account’s password, etc."
 msgstr ""
 
@@ -1380,14 +1337,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Changed by %s"
 msgstr "Ŝanĝi kaŝ_nomon"
-
-#, fuzzy
-msgid "Changes the priority of account(s)"
-msgstr "Ŝanĝas staton de konto aŭ kontoj"
-
-#, fuzzy
-msgid "Changes the status of account(s)"
-msgstr "Ŝanĝas staton de konto aŭ kontoj"
 
 #, fuzzy
 msgid "Changing Password..."
@@ -1438,10 +1387,6 @@ msgstr ""
 
 msgid "Check for updates periodically"
 msgstr ""
-
-#, fuzzy
-msgid "Check if Gajim is running"
-msgstr "Bonvolu certiĝi ke avahi-demono estas aktiva."
 
 #, fuzzy
 msgid "Checking file…"
@@ -1835,6 +1780,9 @@ msgstr "Nova mesaĝo"
 msgid "Creating Account..."
 msgstr "Forigado de konto %s"
 
+msgid "Creating thumbnail failed"
+msgstr ""
+
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Pasfrazo necesas"
@@ -1843,8 +1791,8 @@ msgstr "Pasfrazo necesas"
 msgid "Current Developers"
 msgstr "Nunaj programistoj:"
 
-msgid "D-Bus is not present on this machine or python module is missing"
-msgstr "D-BUS aŭ konforma pitona modulo mankas ĉe tiu ĉi komputilo."
+msgid "D-Bus Interface"
+msgstr ""
 
 #, fuzzy
 msgid "Dark Theme"
@@ -1987,10 +1935,6 @@ msgstr "Uzado: /%s , - eligas la nomoj de babilejaj ĉeestantoj."
 #, fuzzy
 msgid "Display or change a group chat topic"
 msgstr "Demandi antaŭ fermi babilejan fenestron/slipon."
-
-#, fuzzy
-msgid "Do not disturb"
-msgstr "Ne malhelpu."
 
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -2292,9 +2236,6 @@ msgstr "Ve_nanta mesaĝo:"
 msgid "Extended Address"
 msgstr "Kroma adreso:"
 
-msgid "Extended away"
-msgstr ""
-
 #, fuzzy
 msgid "FA_Q (Online)"
 msgstr "naŭ"
@@ -2405,9 +2346,6 @@ msgstr "Dosierindiko"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File path"
-msgstr "Dosierindiko"
-
 msgid "File size unknown"
 msgstr ""
 
@@ -2501,10 +2439,6 @@ msgstr "Nova privata mesaĝo"
 msgid "Free for Chat"
 msgstr "Babilema"
 
-#, fuzzy
-msgid "Free for chat"
-msgstr "Babilema"
-
 msgid "From"
 msgstr "De"
 
@@ -2593,12 +2527,6 @@ msgstr ""
 
 msgid "Generate preview for any URLs containing images (may be unsafe)"
 msgstr ""
-
-msgid "Gets detailed info on a account"
-msgstr "Ricevas detalan informon pri konto"
-
-msgid "Gets detailed info on a contact"
-msgstr "Ricevas detalan informon pri kontakto"
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2725,11 +2653,11 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
+msgid "Hide"
+msgstr ""
+
 msgid "Hide this menu"
 msgstr "Kaŝi tiun ĉi menuon"
-
-msgid "Hide window to system tray when minimized"
-msgstr ""
 
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
@@ -2802,9 +2730,6 @@ msgstr " ekde %s"
 msgid "Idle since: %s"
 msgstr " ekde %s"
 
-msgid "If checked, Gajim can be controlled remotely using gajim-remote."
-msgstr "Se markitas, oni eblas komandi al Gajim malproksime per gajim-remote."
-
 #, fuzzy
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2822,9 +2747,6 @@ msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 "Se markitas, Gajim montros kaŝbildetojn de kontaktoj en kontaktlista "
 "fenestro kaj en babilejoj"
-
-msgid "If enabled, Gajim will execute XEP-0146 Commands."
-msgstr ""
 
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
@@ -3021,9 +2943,6 @@ msgstr ""
 msgid "It is not possible to send empty files"
 msgstr "Neeblas sendi senenhavajn dosierojn"
 
-msgid "It seems Gajim is not running. So you can't use gajim-remote."
-msgstr ""
-
 msgid "Italic"
 msgstr "Kursiva"
 
@@ -3157,12 +3076,6 @@ msgstr ""
 
 msgid "Listing of Servers"
 msgstr ""
-
-#, fuzzy
-msgid "Lists all contacts in the contact list, one for each line"
-msgstr ""
-"Eligas liston de ĉiuj kontaktoj de kontaktlisto. Ĉiu kontakto aperas en "
-"separata lineo"
 
 msgid "Live Preview"
 msgstr ""
@@ -3327,14 +3240,8 @@ msgid ""
 msgstr "Mesaĝoj disponeblos por legi ĝin poste nur se vi ŝaltis historion."
 
 #, fuzzy
-msgid "Minimize on Close"
+msgid "Minimize"
 msgstr "Gajim"
-
-msgid "Minimize to Tray"
-msgstr ""
-
-msgid "Minimize when closing Gajim’s window"
-msgstr ""
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3343,9 +3250,6 @@ msgstr "_Protokoli statŝanĝojn de kontaktoj"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Cetero</b>"
-
-msgid "Missing argument \"contact_jid\""
-msgstr "Mankas argumento \"kontakt-jid\""
 
 #, fuzzy
 msgid "Missing arguments"
@@ -3394,9 +3298,6 @@ msgstr "Nomo"
 
 msgid "Name <b>default</b> is not allowed"
 msgstr ""
-
-msgid "Name of the account"
-msgstr "Nomo de la konto"
 
 msgid "Needs gspell to be installed"
 msgstr ""
@@ -3583,18 +3484,11 @@ msgstr "_O kej"
 msgid "Offline"
 msgstr "Senkonekta"
 
-msgid "Offline - disconnect"
-msgstr ""
-
 msgid "One Month"
 msgstr ""
 
 msgid "One Year"
 msgstr ""
-
-#, fuzzy
-msgid "Online"
-msgstr "naŭ"
 
 #, fuzzy
 msgid "Online Status"
@@ -3943,10 +3837,6 @@ msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
 msgstr ""
 
 #, fuzzy
-msgid "Presence description:"
-msgstr "Priskribo"
-
-#, fuzzy
 msgid "Presets"
 msgstr "_Ĉeesto"
 
@@ -3973,9 +3863,6 @@ msgstr "Antaŭpreparitaj mesaĝoj:"
 
 msgid "Print XML stanzas and other debug information"
 msgstr ""
-
-msgid "Prints a list of registered accounts"
-msgstr "Eligas liston de registritaj kontoj"
 
 #, fuzzy
 msgid "Priority"
@@ -4037,6 +3924,10 @@ msgstr "ia ajn stato"
 #, fuzzy, python-format
 msgid "PyGObject Version: %s"
 msgstr "Versio de PyGTK:"
+
+#, fuzzy
+msgid "Quit"
+msgstr "_Eliri"
 
 #, fuzzy
 msgid "Quit Gajim"
@@ -4222,10 +4113,6 @@ msgstr[0] "Forigas kontakton el kontaktlisto"
 msgstr[1] "Forigas kontakton el kontaktlisto"
 
 #, fuzzy
-msgid "Removes contact from contact list"
-msgstr "Forigas kontakton el kontaktlisto"
-
-#, fuzzy
 msgid "Remove…"
 msgstr "_Forigi"
 
@@ -4344,16 +4231,6 @@ msgstr "Statmesaĝo"
 #, fuzzy
 msgid "Retract message?"
 msgstr "statmesaĝo"
-
-msgid "Returns current status (the global one unless account is specified)"
-msgstr "Donas nuntempan staton (la komuna se konto estas nespecifita)"
-
-msgid ""
-"Returns current status message (the global one unless account is specified)"
-msgstr "Donas nuntempan statmesaĝon (la komuna se konto estas nespecifita)"
-
-msgid "Returns number of unread messages"
-msgstr "Donas kvanton de nelegitaj mesaĝoj"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -4636,25 +4513,6 @@ msgstr "Sendanto: "
 msgid "Sending private message failed"
 msgstr "Sendado de privata mesaĝo malsukcesis"
 
-#, fuzzy
-msgid ""
-"Sends a chat message to someone on your contact list. Account is optional."
-msgstr "Uzado: /%s, - kaŝas la babiladajn butonojn."
-
-msgid "Sends custom XML"
-msgstr "Sendi propran XML"
-
-msgid "Sends file to a contact"
-msgstr "Sendi dosieron al kontakto"
-
-#, fuzzy
-msgid ""
-"Sends new chat message to a contact in the contact list. Account is optional."
-msgstr "Uzado: /%s, - kaŝas la babiladajn butonojn."
-
-msgid "Sends new message to a group chat you've joined."
-msgstr ""
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr ""
@@ -4712,18 +4570,6 @@ msgstr "Serĉado de servoj per konto %s"
 msgid "Service Gateway"
 msgstr "Servilo"
 
-msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr ""
-"Servo nedisponeblas: Gajim ne aktivas, aŭ opcio remote_control estas False"
-
-#, fuzzy, python-format
-msgid ""
-"Session bus is not available.\n"
-"Try reading %(url)s"
-msgstr ""
-"Seancbuso nedisponeblas.\n"
-"Provu legi http://trac.gajim.org/wiki/GajimDBus"
-
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "Agordo de babilejo"
@@ -4748,9 +4594,6 @@ msgid "Set the current status to away"
 msgstr ""
 
 msgid "Set the current status to online"
-msgstr ""
-
-msgid "Set the presence type and description"
 msgstr ""
 
 msgid "Set your activity or tune to show your friends how you are feeling"
@@ -4919,9 +4762,6 @@ msgstr ""
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "Kaŝas la fenestron"
-
-msgid "Shows a help on specific command"
-msgstr "Montri helpon pri specifita komando"
 
 #, fuzzy
 msgid "Shows a list of file transfers between you and your contacts"
@@ -5289,9 +5129,6 @@ msgstr "Tiu ĉi servo ne rigardeblas"
 msgid "The signing certificate authority is not known"
 msgstr ""
 
-msgid "The status has been changed."
-msgstr ""
-
 #, fuzzy
 msgid "Theme"
 msgstr "Etoso"
@@ -5467,14 +5304,6 @@ msgstr "Partoprenanto"
 #, fuzzy
 msgid "Too many arguments"
 msgstr "Mankas argumento \"kontakt-jid\""
-
-#, fuzzy, python-format
-msgid ""
-"Too many arguments. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"Tro multe da argumentoj. \n"
-"Enigu \"%s help %s\" por plia informo"
 
 msgid "Topic"
 msgstr ""
@@ -5668,22 +5497,6 @@ msgstr "Sendado de privata mesaĝo malsukcesis"
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
-#, fuzzy, python-format
-msgid ""
-"Usage:\n"
-"  %s command [arguments]\n"
-"\n"
-"Command is one of:\n"
-msgstr ""
-"Uzado: %s komando [argumentoj]\n"
-"Komando estas unu el:\n"
-
-#, python-format
-msgid ""
-"Usage: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-msgstr ""
-
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -5868,24 +5681,9 @@ msgstr "XML-konzolo"
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
-msgid "XML to send"
-msgstr "XML por sendi"
-
 #, fuzzy
 msgid "XMPP Address"
 msgstr "AIM-adreso:"
-
-#, fuzzy
-msgid "XMPP Address of the contact"
-msgstr "JID de la kontakto"
-
-#, fuzzy
-msgid "XMPP Address of the contact that will receive the message"
-msgstr "JID de kontakto, kiu ricevos la mesaĝon"
-
-#, fuzzy
-msgid "XMPP Address of the group chat that will receive the message"
-msgstr "JID de kontakto, kiu ricevos la mesaĝon"
 
 #, fuzzy
 msgid "XMPP Address…"
@@ -6002,6 +5800,10 @@ msgstr "Vi ne havas permeson krei dosierojn en ĉi tiu dosierujo."
 msgid "You have been banned{actor}{reason}"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "You have been invited to %s"
+msgstr "%(nick)s estas elpelita de %(who)s: %(reason)s"
+
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr ""
@@ -6013,9 +5815,6 @@ msgstr "%(nick)s estas elpelita de %(who)s: %(reason)s"
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr ""
-
-msgid "You have no active account"
-msgstr "Vi ne havas aktivan konton"
 
 #, fuzzy
 msgid "You have to be connected to create a group chat."
@@ -6475,31 +6274,11 @@ msgstr "mara"
 msgid "building"
 msgstr "Elpelatas %s"
 
-msgid ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
-msgstr ""
-"ŝanĝas staton de konto \"account\". Se ne estas specifita, provas ŝanĝi "
-"statojn de ĉiuj kontoj, kiuj havas ŝaltitan parametron \"sinkronigi kun "
-"komuna stato\""
-
-#, fuzzy
-msgid ""
-"change the priority of the given account. If not specified, change status of "
-"all accounts that have \"sync with global status\" option set"
-msgstr ""
-"ŝanĝas staton de konto \"account\". Se ne estas specifita, provas ŝanĝi "
-"statojn de ĉiuj kontoj, kiuj havas ŝaltitan parametron \"sinkronigi kun "
-"komuna stato\""
-
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
 msgid "column"
 msgstr ""
-
-msgid "command"
-msgstr "komando"
 
 #, fuzzy
 msgid "country"
@@ -6531,9 +6310,6 @@ msgstr "eraro dum sendado %s ( %s )"
 msgid "example.org"
 msgstr ""
 
-msgid "file"
-msgstr "dosiero"
-
 msgid "file transfers list"
 msgstr "dosiertransdonada listo"
 
@@ -6551,15 +6327,6 @@ msgstr "Bonvolu pleni la datumon pri kontakto, kiun vi volas aldoni"
 
 msgid "help"
 msgstr ""
-
-msgid "if specified, contact is taken from the contact list of this account"
-msgstr "Se specifita, kontakto estos prenata el kontaktlisto de tiu ĉi konto"
-
-msgid "if specified, file will be sent using this account"
-msgstr "Se specifita, dosiero estos sendita per tiu ĉi konto"
-
-msgid "if specified, the message will be sent using this account"
-msgstr "Se specifita, la mesaĝo estos sendita per tiu ĉi konto"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -6584,19 +6351,6 @@ msgstr "unu"
 msgid "macOS"
 msgstr ""
 
-msgid "message contents"
-msgstr "mesaĝenhavo"
-
-msgid "message subject"
-msgstr "temo de mesaĝo"
-
-#, fuzzy
-msgid ""
-"one of: offline, online, chat, away, xa, dnd. If not set, use account's "
-"previous status"
-msgstr ""
-"unu el: senkonekta, enrete, babilas, fora, nedisponebla, okupata, nevidebla "
-
 #, fuzzy
 msgid "or"
 msgstr "Al"
@@ -6609,10 +6363,6 @@ msgstr "paŭzas tajpi mesaĝon"
 
 msgid "postalcode"
 msgstr ""
-
-#, fuzzy
-msgid "priority you want to give to the account"
-msgstr "Mi volas registri novan konton"
 
 #, fuzzy, python-format
 msgid "python-cairo Version: %s"
@@ -6628,23 +6378,11 @@ msgstr ""
 msgid "room"
 msgstr "babilejo"
 
-msgid "show help on command"
-msgstr "montri helpon pri komando"
-
-msgid "show only contacts of the given account"
-msgstr "Montri kontaktojn nur de specifita konto"
-
 msgid "speed"
 msgstr ""
 
-msgid "status message"
-msgstr "statmesaĝo"
-
 msgid "street"
 msgstr ""
-
-msgid "subject"
-msgstr "temo"
 
 msgid "text"
 msgstr ""
@@ -6700,6 +6438,96 @@ msgstr "%(nick)s nun estas %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#~ msgid "%s not found"
+#~ msgstr "%s ne trovitas"
+
+#, fuzzy
+#~ msgid ""
+#~ "'%s' is not in your contact list.\n"
+#~ "Please specify account for sending the message."
+#~ msgstr ""
+#~ "%s mankas en via kontaktlisto\n"
+#~ "Bonvolu specifi konton por sendi la mesaĝon."
+
+#, fuzzy
+#~ msgid "?CLI:account"
+#~ msgstr "konto"
+
+#, fuzzy
+#~ msgid "?CLI:message"
+#~ msgstr "mesaĝo"
+
+#, fuzzy
+#~ msgid "?CLI:priority"
+#~ msgstr "Priori_tato:"
+
+#, fuzzy
+#~ msgid "?CLI:status"
+#~ msgstr "stato"
+
+#, fuzzy
+#~ msgid ""
+#~ "Account to which the XML will be sent; if not specified, XML will be sent "
+#~ "to all accounts"
+#~ msgstr ""
+#~ "Konto kien la XML sendotas; se konto nespecifitas, XML sendotas al ĉiuj "
+#~ "kontoj"
+
+#, fuzzy
+#~ msgid ""
+#~ "Argument \"%(arg)s\" is not specified. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "Argumento \"%s\" ne estas specifita. \n"
+#~ "Enigi \"%s help %s\" por plia informo"
+
+#~ msgid "Arguments:"
+#~ msgstr "Argumentoj:"
+
+#, fuzzy
+#~ msgid "Change status"
+#~ msgstr "Kontakto ŝanĝis sian staton"
+
+#, fuzzy
+#~ msgid "Change status information"
+#~ msgstr "Kontakta informo"
+
+#, fuzzy
+#~ msgid "Changes the priority of account(s)"
+#~ msgstr "Ŝanĝas staton de konto aŭ kontoj"
+
+#, fuzzy
+#~ msgid "Changes the status of account(s)"
+#~ msgstr "Ŝanĝas staton de konto aŭ kontoj"
+
+#, fuzzy
+#~ msgid "Check if Gajim is running"
+#~ msgstr "Bonvolu certiĝi ke avahi-demono estas aktiva."
+
+#~ msgid "D-Bus is not present on this machine or python module is missing"
+#~ msgstr "D-BUS aŭ konforma pitona modulo mankas ĉe tiu ĉi komputilo."
+
+#, fuzzy
+#~ msgid "Do not disturb"
+#~ msgstr "Ne malhelpu."
+
+#~ msgid "File path"
+#~ msgstr "Dosierindiko"
+
+#, fuzzy
+#~ msgid "Free for chat"
+#~ msgstr "Babilema"
+
+#~ msgid "Gets detailed info on a account"
+#~ msgstr "Ricevas detalan informon pri konto"
+
+#~ msgid "Gets detailed info on a contact"
+#~ msgstr "Ricevas detalan informon pri kontakto"
+
+#~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
+#~ msgstr ""
+#~ "Se markitas, oni eblas komandi al Gajim malproksime per gajim-remote."
+
 #, fuzzy
 #~ msgid ""
 #~ "If enabled, Gajim hides the main window when pressing the X button "
@@ -6709,9 +6537,179 @@ msgstr ""
 #~ "Tiun ĉi parametron mi konsideras nur se pleta piktogramo uzatas."
 
 #, fuzzy
+#~ msgid "Lists all contacts in the contact list, one for each line"
+#~ msgstr ""
+#~ "Eligas liston de ĉiuj kontaktoj de kontaktlisto. Ĉiu kontakto aperas en "
+#~ "separata lineo"
+
+#~ msgid "Missing argument \"contact_jid\""
+#~ msgstr "Mankas argumento \"kontakt-jid\""
+
+#~ msgid "Name of the account"
+#~ msgstr "Nomo de la konto"
+
+#, fuzzy
+#~ msgid "Online"
+#~ msgstr "naŭ"
+
+#, fuzzy
+#~ msgid "Presence description:"
+#~ msgstr "Priskribo"
+
+#~ msgid "Prints a list of registered accounts"
+#~ msgstr "Eligas liston de registritaj kontoj"
+
+#, fuzzy
+#~ msgid "Removes contact from contact list"
+#~ msgstr "Forigas kontakton el kontaktlisto"
+
+#~ msgid "Returns current status (the global one unless account is specified)"
+#~ msgstr "Donas nuntempan staton (la komuna se konto estas nespecifita)"
+
+#~ msgid ""
+#~ "Returns current status message (the global one unless account is "
+#~ "specified)"
+#~ msgstr "Donas nuntempan statmesaĝon (la komuna se konto estas nespecifita)"
+
+#~ msgid "Returns number of unread messages"
+#~ msgstr "Donas kvanton de nelegitaj mesaĝoj"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends a chat message to someone on your contact list. Account is optional."
+#~ msgstr "Uzado: /%s, - kaŝas la babiladajn butonojn."
+
+#~ msgid "Sends custom XML"
+#~ msgstr "Sendi propran XML"
+
+#~ msgid "Sends file to a contact"
+#~ msgstr "Sendi dosieron al kontakto"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends new chat message to a contact in the contact list. Account is "
+#~ "optional."
+#~ msgstr "Uzado: /%s, - kaŝas la babiladajn butonojn."
+
+#~ msgid ""
+#~ "Service not available: Gajim is not running, or remote_control is False"
+#~ msgstr ""
+#~ "Servo nedisponeblas: Gajim ne aktivas, aŭ opcio remote_control estas False"
+
+#, fuzzy
+#~ msgid ""
+#~ "Session bus is not available.\n"
+#~ "Try reading %(url)s"
+#~ msgstr ""
+#~ "Seancbuso nedisponeblas.\n"
+#~ "Provu legi http://trac.gajim.org/wiki/GajimDBus"
+
+#~ msgid "Shows a help on specific command"
+#~ msgstr "Montri helpon pri specifita komando"
+
+#, fuzzy
 #~ msgid "Sign Out"
 #~ msgstr "E_lsalutas"
 
 #, fuzzy
 #~ msgid "Status Change"
 #~ msgstr "_Protokoli statŝanĝojn de kontaktoj"
+
+#, fuzzy
+#~ msgid ""
+#~ "Too many arguments. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "Tro multe da argumentoj. \n"
+#~ "Enigu \"%s help %s\" por plia informo"
+
+#, fuzzy
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  %s command [arguments]\n"
+#~ "\n"
+#~ "Command is one of:\n"
+#~ msgstr ""
+#~ "Uzado: %s komando [argumentoj]\n"
+#~ "Komando estas unu el:\n"
+
+#~ msgid "XML to send"
+#~ msgstr "XML por sendi"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact"
+#~ msgstr "JID de la kontakto"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact that will receive the message"
+#~ msgstr "JID de kontakto, kiu ricevos la mesaĝon"
+
+#, fuzzy
+#~ msgid "XMPP Address of the group chat that will receive the message"
+#~ msgstr "JID de kontakto, kiu ricevos la mesaĝon"
+
+#~ msgid "You have no active account"
+#~ msgstr "Vi ne havas aktivan konton"
+
+#~ msgid ""
+#~ "change status of account \"account\". If not specified, try to change "
+#~ "status of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "ŝanĝas staton de konto \"account\". Se ne estas specifita, provas ŝanĝi "
+#~ "statojn de ĉiuj kontoj, kiuj havas ŝaltitan parametron \"sinkronigi kun "
+#~ "komuna stato\""
+
+#, fuzzy
+#~ msgid ""
+#~ "change the priority of the given account. If not specified, change status "
+#~ "of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "ŝanĝas staton de konto \"account\". Se ne estas specifita, provas ŝanĝi "
+#~ "statojn de ĉiuj kontoj, kiuj havas ŝaltitan parametron \"sinkronigi kun "
+#~ "komuna stato\""
+
+#~ msgid "command"
+#~ msgstr "komando"
+
+#~ msgid "file"
+#~ msgstr "dosiero"
+
+#~ msgid "if specified, contact is taken from the contact list of this account"
+#~ msgstr ""
+#~ "Se specifita, kontakto estos prenata el kontaktlisto de tiu ĉi konto"
+
+#~ msgid "if specified, file will be sent using this account"
+#~ msgstr "Se specifita, dosiero estos sendita per tiu ĉi konto"
+
+#~ msgid "if specified, the message will be sent using this account"
+#~ msgstr "Se specifita, la mesaĝo estos sendita per tiu ĉi konto"
+
+#~ msgid "message contents"
+#~ msgstr "mesaĝenhavo"
+
+#~ msgid "message subject"
+#~ msgstr "temo de mesaĝo"
+
+#, fuzzy
+#~ msgid ""
+#~ "one of: offline, online, chat, away, xa, dnd. If not set, use account's "
+#~ "previous status"
+#~ msgstr ""
+#~ "unu el: senkonekta, enrete, babilas, fora, nedisponebla, okupata, "
+#~ "nevidebla "
+
+#, fuzzy
+#~ msgid "priority you want to give to the account"
+#~ msgstr "Mi volas registri novan konton"
+
+#~ msgid "show help on command"
+#~ msgstr "montri helpon pri komando"
+
+#~ msgid "show only contacts of the given account"
+#~ msgstr "Montri kontaktojn nur de specifita konto"
+
+#~ msgid "status message"
+#~ msgstr "statmesaĝo"
+
+#~ msgid "subject"
+#~ msgstr "temo"

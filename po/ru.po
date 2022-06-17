@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 19:47+0000\n"
+"POT-Creation-Date: 2022-06-17 18:19+0000\n"
 "PO-Revision-Date: 2022-04-22 21:28+0000\n"
 "Last-Translator: bodqhrohro <bodqhrohro@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -184,10 +184,6 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "%s not found"
-msgstr "%s не найден"
-
-#, python-format
 msgid "%s s"
 msgstr ""
 
@@ -206,14 +202,6 @@ msgstr "%s хочет отправить Вам файл"
 #, python-format
 msgid "%s: Nothing found"
 msgstr "%s: Ничего не найдено"
-
-#, python-format
-msgid ""
-"'%s' is not in your contact list.\n"
-"Please specify account for sending the message."
-msgstr ""
-"'%s' нет в Вашем списке контактов.\n"
-"Укажите учетную запись для отправки сообщения."
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -358,18 +346,6 @@ msgstr "<span color=\"yellow\" font-weight=\"bold\">Без ускорения</s
 
 msgid "?Ask (for Subscription):None"
 msgstr "?Запрос (на подписку):Нет"
-
-msgid "?CLI:account"
-msgstr "?CLI:учетная запись"
-
-msgid "?CLI:message"
-msgstr "?CLI:сообщение"
-
-msgid "?CLI:priority"
-msgstr "?CLI:приоритет"
-
-msgid "?CLI:status"
-msgstr "?CLI:статус"
 
 #, fuzzy
 msgid "?Gender:None"
@@ -670,19 +646,20 @@ msgstr "Учетная запись должна быть подключена"
 msgid "Account is being created"
 msgstr "Создается учетная запись"
 
-msgid ""
-"Account to which the XML will be sent; if not specified, XML will be sent to "
-"all accounts"
-msgstr ""
-"Учетная запись, которой будет отправлен XML. Если не указано, XML будет "
-"отправлен всем учетным записям"
-
 #, python-format
 msgid "Account: %s"
 msgstr "Учетная запись: %s"
 
 msgid "Accounts"
 msgstr "Учётные записи"
+
+#, fuzzy
+msgid "Action on Close"
+msgstr "Выйти при закрытии"
+
+#, fuzzy
+msgid "Action when closing Gajim’s window"
+msgstr "_Всегда выходить при закрытии Gajim"
 
 msgid "Action when left-clicking a preview"
 msgstr ""
@@ -830,6 +807,11 @@ msgstr "Все файлы"
 msgid "All other group chat participants can see your XMPP address"
 msgstr "Все остальные участники группового чата могут видеть ваш адрес XMPP"
 
+msgid ""
+"Allow Gajim to broadcast useful information via D-Bus. It also allows other "
+"applications to control Gajim remotely."
+msgstr ""
+
 msgid "Allow a participant to send you public or private messages"
 msgstr "Разрешить участнику отправлять вам публичные или личные сообщения"
 
@@ -927,17 +909,6 @@ msgstr "Вы точно хотите вставить изображение и�
 
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Вы точно хотите закрыть Gajim?"
-
-#, python-format
-msgid ""
-"Argument \"%(arg)s\" is not specified. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"Аргумент «%(arg)s» не задан. \n"
-"Наберите «%(basename)s help %(command)s» для справки"
-
-msgid "Arguments:"
-msgstr "Аргументы:"
 
 msgid "Artists"
 msgstr "Художники"
@@ -1252,12 +1223,6 @@ msgstr "Изменить пароль"
 msgid "Change Subject"
 msgstr "Изменить тему"
 
-msgid "Change status"
-msgstr "Контакт изменит статус"
-
-msgid "Change status information"
-msgstr "Изменить информацию о статусе"
-
 msgid "Change your account’s password, etc."
 msgstr ""
 
@@ -1277,12 +1242,6 @@ msgstr "Изменять свой статус на \"Недоступен\" ч�
 #, fuzzy, python-format
 msgid "Changed by %s"
 msgstr "Изменить"
-
-msgid "Changes the priority of account(s)"
-msgstr "Изменяет приоритет учетных записей"
-
-msgid "Changes the status of account(s)"
-msgstr "Изменяет статус учетной записи(ей)"
 
 msgid "Changing Password..."
 msgstr "Изменение пароля..."
@@ -1336,9 +1295,6 @@ msgstr "Проверить наличие обновлений"
 #, fuzzy
 msgid "Check for updates periodically"
 msgstr "Выполнять периодические проверки обновлений"
-
-msgid "Check if Gajim is running"
-msgstr "Проверить, запущен ли Gajim"
 
 msgid "Checking file…"
 msgstr "Проверяется файл…"
@@ -1681,14 +1637,17 @@ msgstr "Создать новое сообщение"
 msgid "Creating Account..."
 msgstr "Создание учетной записи..."
 
+msgid "Creating thumbnail failed"
+msgstr ""
+
 msgid "Credentials expired"
 msgstr "Срок действия учетных данных истек"
 
 msgid "Current Developers"
 msgstr "Разработчики"
 
-msgid "D-Bus is not present on this machine or python module is missing"
-msgstr "На машине отсутствует D-Bus или модуль питона для нее"
+msgid "D-Bus Interface"
+msgstr ""
 
 msgid "Dark Theme"
 msgstr "Темная тема"
@@ -1821,9 +1780,6 @@ msgstr "Показать список всех участников группо
 
 msgid "Display or change a group chat topic"
 msgstr "Показать или изменить тему комнаты"
-
-msgid "Do not disturb"
-msgstr "Не беспокоить"
 
 #, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -2116,9 +2072,6 @@ msgstr "Шифрование сообщений чата."
 msgid "Extended Address"
 msgstr "Дополнительный адрес"
 
-msgid "Extended away"
-msgstr "Недоступен (расширенный)"
-
 msgid "FA_Q (Online)"
 msgstr "ЧА_ВО (В сети)"
 
@@ -2217,9 +2170,6 @@ msgstr "Пустой файл"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr "Файл слишком большой, максимально допустимый размер файла: %s"
 
-msgid "File path"
-msgstr "Путь до файла"
-
 msgid "File size unknown"
 msgstr ""
 
@@ -2306,9 +2256,6 @@ msgid "Format your message…"
 msgstr "Напишите сообщение…"
 
 msgid "Free for Chat"
-msgstr "Готов поболтать"
-
-msgid "Free for chat"
 msgstr "Готов поболтать"
 
 msgid "From"
@@ -2402,12 +2349,6 @@ msgstr ""
 
 msgid "Generate preview for any URLs containing images (may be unsafe)"
 msgstr ""
-
-msgid "Gets detailed info on a account"
-msgstr "Получает детальную информацию о учетной записи"
-
-msgid "Gets detailed info on a contact"
-msgstr "Получает детальную информацию о контакте"
 
 msgid "Global Group Chat Search"
 msgstr "Поиск в глобальном групповом чате"
@@ -2515,11 +2456,11 @@ msgstr "Привет, я $name."
 msgid "Helps to establish calls through firewalls"
 msgstr "Помогает устанавливать звонки через брандмауэры"
 
+msgid "Hide"
+msgstr ""
+
 msgid "Hide this menu"
 msgstr "Скрыть это меню"
-
-msgid "Hide window to system tray when minimized"
-msgstr ""
 
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "Скрывает баннер в окне личного чата."
@@ -2585,11 +2526,6 @@ msgstr "Время простоя"
 msgid "Idle since: %s"
 msgstr "Бездействует с:"
 
-msgid "If checked, Gajim can be controlled remotely using gajim-remote."
-msgstr ""
-"Если отмечено, то Gajim'ом можно будет управлять удаленно с использованием "
-"gajim-remote."
-
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
@@ -2602,9 +2538,6 @@ msgstr ""
 
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr "Если активно, Gajim добавит * и [n] в заголовок окна списка контактов."
-
-msgid "If enabled, Gajim will execute XEP-0146 Commands."
-msgstr "Если этот параметр включен, Gajim будет выполнять команды XEP-0146."
 
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
@@ -2795,9 +2728,6 @@ msgstr "Выдано для\n"
 msgid "It is not possible to send empty files"
 msgstr "Нельзя отсылать пустые файлы"
 
-msgid "It seems Gajim is not running. So you can't use gajim-remote."
-msgstr "По-видимому, Gajim не запущен. Вы не можете использовать gajim-remote."
-
 msgid "Italic"
 msgstr "Курсив"
 
@@ -2917,9 +2847,6 @@ msgstr ""
 
 msgid "Listing of Servers"
 msgstr "Список серверов"
-
-msgid "Lists all contacts in the contact list, one for each line"
-msgstr "Выводит все контакты в списке контактов, по одному для каждой строки"
 
 msgid "Live Preview"
 msgstr "Предварительный просмотр"
@@ -3077,24 +3004,14 @@ msgstr ""
 "история чата и если контакт есть в Вашем списке контактов."
 
 #, fuzzy
-msgid "Minimize on Close"
+msgid "Minimize"
 msgstr "Выйти при закрытии"
-
-msgid "Minimize to Tray"
-msgstr ""
-
-#, fuzzy
-msgid "Minimize when closing Gajim’s window"
-msgstr "_Всегда выходить при закрытии Gajim"
 
 msgid "Minutes until your status gets changed"
 msgstr "Минуты до изменения Вашего статуса"
 
 msgid "Miscellaneous"
 msgstr "Прочее"
-
-msgid "Missing argument \"contact_jid\""
-msgstr "Пропущен аргумент «JID контакта»"
 
 msgid "Missing arguments"
 msgstr "Отсутствуют аргументы"
@@ -3140,9 +3057,6 @@ msgstr "Имя"
 
 msgid "Name <b>default</b> is not allowed"
 msgstr "Имя <b>по умолчанию</b> не допускается"
-
-msgid "Name of the account"
-msgstr "Имя учетной записи"
 
 msgid "Needs gspell to be installed"
 msgstr "Требуется установка gspell"
@@ -3311,17 +3225,11 @@ msgstr "ОК"
 msgid "Offline"
 msgstr "Отключен"
 
-msgid "Offline - disconnect"
-msgstr "Не в сети — отключен"
-
 msgid "One Month"
 msgstr "Один месяц"
 
 msgid "One Year"
 msgstr "Один год"
-
-msgid "Online"
-msgstr "В сети"
 
 #, fuzzy
 msgid "Online Status"
@@ -3645,9 +3553,6 @@ msgstr ""
 "Предпочтительный механизм передачи файлов для перетаскиваемых в окно чата "
 "файлов"
 
-msgid "Presence description:"
-msgstr "Описание присутствия:"
-
 msgid "Presets"
 msgstr "Предустановки"
 
@@ -3672,9 +3577,6 @@ msgstr "Ранее отправленное сообщение"
 
 msgid "Print XML stanzas and other debug information"
 msgstr "Вывести XML-разделы и другую отладочную информацию"
-
-msgid "Prints a list of registered accounts"
-msgstr "Показывает список зарегистрированных учетных записей"
 
 msgid "Priority"
 msgstr "Приоритет"
@@ -3729,6 +3631,10 @@ msgstr "Хранить историю чата"
 #, python-format
 msgid "PyGObject Version: %s"
 msgstr "Версия PyGObject: %s"
+
+#, fuzzy
+msgid "Quit"
+msgstr "_Выйти"
 
 msgid "Quit Gajim"
 msgstr "Выход из Gajim"
@@ -3889,9 +3795,6 @@ msgstr[0] "Удален %d контакт"
 msgstr[1] "Удалено %d контактов"
 msgstr[2] "Удалено %d контактов"
 
-msgid "Removes contact from contact list"
-msgstr "Удаляет контакт из списка контактов"
-
 #, fuzzy
 msgid "Remove…"
 msgstr "Удаление"
@@ -4010,20 +3913,6 @@ msgstr "Сообщение о статусе"
 #, fuzzy
 msgid "Retract message?"
 msgstr "сообщение о статусе"
-
-msgid "Returns current status (the global one unless account is specified)"
-msgstr ""
-"Возвращает текущий статус (по умолчанию глобальный, если не указана учетная "
-"запись)"
-
-msgid ""
-"Returns current status message (the global one unless account is specified)"
-msgstr ""
-"Возвращает текущее сообщение о статусе (по умолчанию глобальное, если не "
-"указана учетная запись)"
-
-msgid "Returns number of unread messages"
-msgstr "Возвращает количество непрочитанных сообщений"
 
 msgid "Revoke Member"
 msgstr "Отозвать участника"
@@ -4279,28 +4168,6 @@ msgstr "Отправитель: "
 msgid "Sending private message failed"
 msgstr "Не удалось отправить личное сообщение"
 
-msgid ""
-"Sends a chat message to someone on your contact list. Account is optional."
-msgstr ""
-"Отправляет сообщение чата кому-нибудь из вашего списка контактов. Аккаунт не "
-"обязателен."
-
-msgid "Sends custom XML"
-msgstr "Отправляет произвольный XML"
-
-msgid "Sends file to a contact"
-msgstr "Отправляет контакту файл"
-
-msgid ""
-"Sends new chat message to a contact in the contact list. Account is optional."
-msgstr ""
-"Отправляет новое сообщение чата контакту из списка контактов. Аккаунт не "
-"обязателен."
-
-msgid "Sends new message to a group chat you've joined."
-msgstr ""
-"Отправляет новое сообщение в групповой чат, к которому вы присоединились."
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Отправленный контакт: \"%(jid)s\" (%(name)s)"
@@ -4352,19 +4219,6 @@ msgstr "Обзор сервисов с учётной записи %s"
 msgid "Service Gateway"
 msgstr "Сервис"
 
-msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr ""
-"Сервис недоступен: Gajim не запущен или отключена функция удаленного "
-"управления (настройка remote_control)"
-
-#, python-format
-msgid ""
-"Session bus is not available.\n"
-"Try reading %(url)s"
-msgstr ""
-"Шина D-Bus не доступна.\n"
-"Попробуйте прочитать %(url)s"
-
 msgid "Set configuration directory"
 msgstr "Установить каталог загрузки конфигурации"
 
@@ -4395,9 +4249,6 @@ msgstr "Установить текущий статус на \"Отсутств
 
 msgid "Set the current status to online"
 msgstr "Установить текущий статус на \"В сети\""
-
-msgid "Set the presence type and description"
-msgstr "Установка статуса и статусного сообщения"
 
 #, fuzzy
 msgid "Set your activity or tune to show your friends how you are feeling"
@@ -4562,9 +4413,6 @@ msgstr "Показывать собственный видеопоток в зв
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "Скрывает окно"
-
-msgid "Shows a help on specific command"
-msgstr "Показывает помощь для конкретной команды"
 
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr "Показывает список передач файлов между Вами и Вашими контактами"
@@ -4918,9 +4766,6 @@ msgstr "Сервис недоступен для просмотра"
 msgid "The signing certificate authority is not known"
 msgstr "Центр сертификации подписи неизвестен"
 
-msgid "The status has been changed."
-msgstr "Статус изменён."
-
 msgid "Theme"
 msgstr "Тема"
 
@@ -5097,14 +4942,6 @@ msgstr "Куда должны идти участники"
 
 msgid "Too many arguments"
 msgstr "Слишком много аргументов"
-
-#, python-format
-msgid ""
-"Too many arguments. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"Много аргументов. \n"
-"Наберите «%(basename)s help %(command)s» для справки"
 
 msgid "Topic"
 msgstr "Тема"
@@ -5291,26 +5128,6 @@ msgstr "Не удалось загрузить аватар"
 msgid "Uploading via HTTP File Upload…"
 msgstr "Загрузка через HTTP File Upload…"
 
-#, python-format
-msgid ""
-"Usage:\n"
-"  %s command [arguments]\n"
-"\n"
-"Command is one of:\n"
-msgstr ""
-"Использование:\n"
-"  %s команда [аргумента]\n"
-"\n"
-"Команда одна из:\n"
-
-#, python-format
-msgid ""
-"Usage: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-msgstr ""
-"Использование: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -5487,20 +5304,8 @@ msgstr "Консоль XML"
 msgid "XML console to see what's happening on the protocol layer"
 msgstr "XML-консоль, чтобы видеть, что происходит на уровне протокола"
 
-msgid "XML to send"
-msgstr "Отправляемый XML"
-
 msgid "XMPP Address"
 msgstr "XMPP-адрес"
-
-msgid "XMPP Address of the contact"
-msgstr "XMPP-адрес контакта"
-
-msgid "XMPP Address of the contact that will receive the message"
-msgstr "XMPP-адрес контакта, который получит сообщение"
-
-msgid "XMPP Address of the group chat that will receive the message"
-msgstr "XMPP-адрес группового чата, который получит сообщение"
 
 #, fuzzy
 msgid "XMPP Address…"
@@ -5613,6 +5418,10 @@ msgstr "У Вас нет прав на создание файлов в этой
 msgid "You have been banned{actor}{reason}"
 msgstr "Вы забанены{actor}{reason}"
 
+#, fuzzy, python-format
+msgid "You have been invited to %s"
+msgstr "%s приглашен в групповой чат"
+
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr "Вас выкинули{actor}{reason}"
@@ -5624,9 +5433,6 @@ msgstr "Вас выгнали из комнаты {actor} {reason}"
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr "Вы покинули из-за ошибки{reason}"
-
-msgid "You have no active account"
-msgstr "У вас нет ни одной активной учетной записи"
 
 msgid "You have to be connected to create a group chat."
 msgstr "Вы должны быть подключены, чтобы создать групповой чат."
@@ -6018,31 +5824,12 @@ msgstr "направление"
 msgid "building"
 msgstr "строение"
 
-msgid ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
-msgstr ""
-"изменяет статус учетной записи «учетная запись». Если не указано, пытается "
-"изменить статус всех учетных записей, у которых установлена опция "
-"«синхронизировать с глобальным статусом»"
-
-msgid ""
-"change the priority of the given account. If not specified, change status of "
-"all accounts that have \"sync with global status\" option set"
-msgstr ""
-"изменяет приоритет учетной записи. Если не указано, пытается изменить статус "
-"всех учетных записей, у которых установлена опция «синхронизировать с "
-"глобальным статусом»"
-
 #, fuzzy
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "chat;messaging;im;xmpp;bonjour;voip;"
 
 msgid "column"
 msgstr "колонка"
-
-msgid "command"
-msgstr "команда"
 
 msgid "country"
 msgstr "страна"
@@ -6070,9 +5857,6 @@ msgstr "ошибка при отправке %(message)s ( %(error)s )"
 msgid "example.org"
 msgstr "example.org"
 
-msgid "file"
-msgstr "файл"
-
 msgid "file transfers list"
 msgstr "список передач"
 
@@ -6091,17 +5875,6 @@ msgstr ""
 
 msgid "help"
 msgstr ""
-
-msgid "if specified, contact is taken from the contact list of this account"
-msgstr "если указано, контакт будет взят из контакт-листа этой учетной записи"
-
-msgid "if specified, file will be sent using this account"
-msgstr ""
-"если указано, файл будет отправлен с использованием этой учетной записи"
-
-msgid "if specified, the message will be sent using this account"
-msgstr ""
-"если указано, сообщение будет отправлено с использованием этой учетной записи"
 
 msgid "is composing a message…"
 msgstr "печатает сообщение…"
@@ -6124,19 +5897,6 @@ msgstr "долгота"
 msgid "macOS"
 msgstr "macOS"
 
-msgid "message contents"
-msgstr "содержимое сообщения"
-
-msgid "message subject"
-msgstr "тема сообщения"
-
-msgid ""
-"one of: offline, online, chat, away, xa, dnd. If not set, use account's "
-"previous status"
-msgstr ""
-"один из: отключен, в сети, готов поболтать, отошел, недоступен, не "
-"беспокоить. Если не указано, использовать предыдущий статус"
-
 msgid "or"
 msgstr "или"
 
@@ -6148,9 +5908,6 @@ msgstr "перестал печатать сообщение"
 
 msgid "postalcode"
 msgstr "индекс"
-
-msgid "priority you want to give to the account"
-msgstr "приоритет, который вы хотите назначить для учетной записи"
 
 #, fuzzy, python-format
 msgid "python-cairo Version: %s"
@@ -6166,23 +5923,11 @@ msgstr "область"
 msgid "room"
 msgstr "комната"
 
-msgid "show help on command"
-msgstr "показать помощь по команде"
-
-msgid "show only contacts of the given account"
-msgstr "показывать контакты только для данной учетной записи"
-
 msgid "speed"
 msgstr "скорость"
 
-msgid "status message"
-msgstr "сообщение о статусе"
-
 msgid "street"
 msgstr "улица"
-
-msgid "subject"
-msgstr "тема"
 
 msgid "text"
 msgstr "текст"
@@ -6243,6 +5988,35 @@ msgstr "{nick} теперь {show} {status}"
 msgid "…or drop it here"
 msgstr "Выберите изображение или перетащите его сюда"
 
+#~ msgid "%s not found"
+#~ msgstr "%s не найден"
+
+#~ msgid ""
+#~ "'%s' is not in your contact list.\n"
+#~ "Please specify account for sending the message."
+#~ msgstr ""
+#~ "'%s' нет в Вашем списке контактов.\n"
+#~ "Укажите учетную запись для отправки сообщения."
+
+#~ msgid "?CLI:account"
+#~ msgstr "?CLI:учетная запись"
+
+#~ msgid "?CLI:message"
+#~ msgstr "?CLI:сообщение"
+
+#~ msgid "?CLI:priority"
+#~ msgstr "?CLI:приоритет"
+
+#~ msgid "?CLI:status"
+#~ msgstr "?CLI:статус"
+
+#~ msgid ""
+#~ "Account to which the XML will be sent; if not specified, XML will be sent "
+#~ "to all accounts"
+#~ msgstr ""
+#~ "Учетная запись, которой будет отправлен XML. Если не указано, XML будет "
+#~ "отправлен всем учетным записям"
+
 #~ msgid ""
 #~ "Allow to hide the contact list window even if the notification area icon "
 #~ "is not shown."
@@ -6250,8 +6024,59 @@ msgstr "Выберите изображение или перетащите ег
 #~ "Разрешить скрыть окно списка контактов, даже если значок области "
 #~ "уведомлений не отображается."
 
+#~ msgid ""
+#~ "Argument \"%(arg)s\" is not specified. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "Аргумент «%(arg)s» не задан. \n"
+#~ "Наберите «%(basename)s help %(command)s» для справки"
+
+#~ msgid "Arguments:"
+#~ msgstr "Аргументы:"
+
+#~ msgid "Change status"
+#~ msgstr "Контакт изменит статус"
+
+#~ msgid "Change status information"
+#~ msgstr "Изменить информацию о статусе"
+
+#~ msgid "Changes the priority of account(s)"
+#~ msgstr "Изменяет приоритет учетных записей"
+
+#~ msgid "Changes the status of account(s)"
+#~ msgstr "Изменяет статус учетной записи(ей)"
+
+#~ msgid "Check if Gajim is running"
+#~ msgstr "Проверить, запущен ли Gajim"
+
+#~ msgid "D-Bus is not present on this machine or python module is missing"
+#~ msgstr "На машине отсутствует D-Bus или модуль питона для нее"
+
 #~ msgid "Disconnect from the network"
 #~ msgstr "Отключиться от сети"
+
+#~ msgid "Do not disturb"
+#~ msgstr "Не беспокоить"
+
+#~ msgid "Extended away"
+#~ msgstr "Недоступен (расширенный)"
+
+#~ msgid "File path"
+#~ msgstr "Путь до файла"
+
+#~ msgid "Free for chat"
+#~ msgstr "Готов поболтать"
+
+#~ msgid "Gets detailed info on a account"
+#~ msgstr "Получает детальную информацию о учетной записи"
+
+#~ msgid "Gets detailed info on a contact"
+#~ msgstr "Получает детальную информацию о контакте"
+
+#~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
+#~ msgstr ""
+#~ "Если отмечено, то Gajim'ом можно будет управлять удаленно с "
+#~ "использованием gajim-remote."
 
 #, fuzzy
 #~ msgid ""
@@ -6261,8 +6086,97 @@ msgstr "Выберите изображение или перетащите ег
 #~ "Если этот параметр включен, Gajim скрывает окно списка контактов при "
 #~ "нажатии кнопки X вместо сворачивания в область уведомлений."
 
+#~ msgid "If enabled, Gajim will execute XEP-0146 Commands."
+#~ msgstr "Если этот параметр включен, Gajim будет выполнять команды XEP-0146."
+
+#~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
+#~ msgstr ""
+#~ "По-видимому, Gajim не запущен. Вы не можете использовать gajim-remote."
+
+#~ msgid "Lists all contacts in the contact list, one for each line"
+#~ msgstr ""
+#~ "Выводит все контакты в списке контактов, по одному для каждой строки"
+
 #~ msgid "Machine is going to sleep"
 #~ msgstr "Компьютер перешел в спящий режим"
+
+#~ msgid "Missing argument \"contact_jid\""
+#~ msgstr "Пропущен аргумент «JID контакта»"
+
+#~ msgid "Name of the account"
+#~ msgstr "Имя учетной записи"
+
+#~ msgid "Offline - disconnect"
+#~ msgstr "Не в сети — отключен"
+
+#~ msgid "Online"
+#~ msgstr "В сети"
+
+#~ msgid "Presence description:"
+#~ msgstr "Описание присутствия:"
+
+#~ msgid "Prints a list of registered accounts"
+#~ msgstr "Показывает список зарегистрированных учетных записей"
+
+#~ msgid "Removes contact from contact list"
+#~ msgstr "Удаляет контакт из списка контактов"
+
+#~ msgid "Returns current status (the global one unless account is specified)"
+#~ msgstr ""
+#~ "Возвращает текущий статус (по умолчанию глобальный, если не указана "
+#~ "учетная запись)"
+
+#~ msgid ""
+#~ "Returns current status message (the global one unless account is "
+#~ "specified)"
+#~ msgstr ""
+#~ "Возвращает текущее сообщение о статусе (по умолчанию глобальное, если не "
+#~ "указана учетная запись)"
+
+#~ msgid "Returns number of unread messages"
+#~ msgstr "Возвращает количество непрочитанных сообщений"
+
+#~ msgid ""
+#~ "Sends a chat message to someone on your contact list. Account is optional."
+#~ msgstr ""
+#~ "Отправляет сообщение чата кому-нибудь из вашего списка контактов. Аккаунт "
+#~ "не обязателен."
+
+#~ msgid "Sends custom XML"
+#~ msgstr "Отправляет произвольный XML"
+
+#~ msgid "Sends file to a contact"
+#~ msgstr "Отправляет контакту файл"
+
+#~ msgid ""
+#~ "Sends new chat message to a contact in the contact list. Account is "
+#~ "optional."
+#~ msgstr ""
+#~ "Отправляет новое сообщение чата контакту из списка контактов. Аккаунт не "
+#~ "обязателен."
+
+#~ msgid "Sends new message to a group chat you've joined."
+#~ msgstr ""
+#~ "Отправляет новое сообщение в групповой чат, к которому вы присоединились."
+
+#~ msgid ""
+#~ "Service not available: Gajim is not running, or remote_control is False"
+#~ msgstr ""
+#~ "Сервис недоступен: Gajim не запущен или отключена функция удаленного "
+#~ "управления (настройка remote_control)"
+
+#~ msgid ""
+#~ "Session bus is not available.\n"
+#~ "Try reading %(url)s"
+#~ msgstr ""
+#~ "Шина D-Bus не доступна.\n"
+#~ "Попробуйте прочитать %(url)s"
+
+#~ msgid "Set the presence type and description"
+#~ msgstr "Установка статуса и статусного сообщения"
+
+#~ msgid "Shows a help on specific command"
+#~ msgstr "Показывает помощь для конкретной команды"
 
 #~ msgid "Sign Out"
 #~ msgstr "Выйти"
@@ -6270,5 +6184,111 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Status Change"
 #~ msgstr "Изменение статуса"
 
+#~ msgid "The status has been changed."
+#~ msgstr "Статус изменён."
+
+#~ msgid ""
+#~ "Too many arguments. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "Много аргументов. \n"
+#~ "Наберите «%(basename)s help %(command)s» для справки"
+
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  %s command [arguments]\n"
+#~ "\n"
+#~ "Command is one of:\n"
+#~ msgstr ""
+#~ "Использование:\n"
+#~ "  %s команда [аргумента]\n"
+#~ "\n"
+#~ "Команда одна из:\n"
+
+#~ msgid ""
+#~ "Usage: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+#~ msgstr ""
+#~ "Использование: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+
+#~ msgid "XML to send"
+#~ msgstr "Отправляемый XML"
+
+#~ msgid "XMPP Address of the contact"
+#~ msgstr "XMPP-адрес контакта"
+
+#~ msgid "XMPP Address of the contact that will receive the message"
+#~ msgstr "XMPP-адрес контакта, который получит сообщение"
+
+#~ msgid "XMPP Address of the group chat that will receive the message"
+#~ msgstr "XMPP-адрес группового чата, который получит сообщение"
+
+#~ msgid "You have no active account"
+#~ msgstr "У вас нет ни одной активной учетной записи"
+
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "_Всегда выходить при закрытии Gajim"
+
+#~ msgid ""
+#~ "change status of account \"account\". If not specified, try to change "
+#~ "status of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "изменяет статус учетной записи «учетная запись». Если не указано, "
+#~ "пытается изменить статус всех учетных записей, у которых установлена "
+#~ "опция «синхронизировать с глобальным статусом»"
+
+#~ msgid ""
+#~ "change the priority of the given account. If not specified, change status "
+#~ "of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "изменяет приоритет учетной записи. Если не указано, пытается изменить "
+#~ "статус всех учетных записей, у которых установлена опция "
+#~ "«синхронизировать с глобальным статусом»"
+
+#~ msgid "command"
+#~ msgstr "команда"
+
+#~ msgid "file"
+#~ msgstr "файл"
+
+#~ msgid "if specified, contact is taken from the contact list of this account"
+#~ msgstr ""
+#~ "если указано, контакт будет взят из контакт-листа этой учетной записи"
+
+#~ msgid "if specified, file will be sent using this account"
+#~ msgstr ""
+#~ "если указано, файл будет отправлен с использованием этой учетной записи"
+
+#~ msgid "if specified, the message will be sent using this account"
+#~ msgstr ""
+#~ "если указано, сообщение будет отправлено с использованием этой учетной "
+#~ "записи"
+
+#~ msgid "message contents"
+#~ msgstr "содержимое сообщения"
+
+#~ msgid "message subject"
+#~ msgstr "тема сообщения"
+
+#~ msgid ""
+#~ "one of: offline, online, chat, away, xa, dnd. If not set, use account's "
+#~ "previous status"
+#~ msgstr ""
+#~ "один из: отключен, в сети, готов поболтать, отошел, недоступен, не "
+#~ "беспокоить. Если не указано, использовать предыдущий статус"
+
+#~ msgid "priority you want to give to the account"
+#~ msgstr "приоритет, который вы хотите назначить для учетной записи"
+
+#~ msgid "show help on command"
+#~ msgstr "показать помощь по команде"
+
+#~ msgid "show only contacts of the given account"
+#~ msgstr "показывать контакты только для данной учетной записи"
+
+#~ msgid "status message"
+#~ msgstr "сообщение о статусе"
+
+#~ msgid "subject"
+#~ msgstr "тема"

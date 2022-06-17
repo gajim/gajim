@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 19:47+0000\n"
+"POT-Creation-Date: 2022-06-17 18:19+0000\n"
 "PO-Revision-Date: 2022-01-13 21:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -164,10 +164,6 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "%s not found"
-msgstr "%s bulunamadı"
-
-#, python-format
 msgid "%s s"
 msgstr ""
 
@@ -186,12 +182,6 @@ msgstr "%s size bir dosya göndermek istiyor."
 #, fuzzy, python-format
 msgid "%s: Nothing found"
 msgstr "%s bulunamadı"
-
-#, python-format
-msgid ""
-"'%s' is not in your contact list.\n"
-"Please specify account for sending the message."
-msgstr ""
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -338,22 +328,6 @@ msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "?Ask (for Subscription):Hiç biri"
-
-#, fuzzy
-msgid "?CLI:account"
-msgstr "hesap"
-
-#, fuzzy
-msgid "?CLI:message"
-msgstr "mesaj"
-
-#, fuzzy
-msgid "?CLI:priority"
-msgstr "öncelik"
-
-#, fuzzy
-msgid "?CLI:status"
-msgstr "durum"
 
 #, fuzzy
 msgid "?Gender:None"
@@ -698,17 +672,20 @@ msgstr "ping:  Bağlanılan sunucuya PING at."
 msgid "Account is being created"
 msgstr "ping:  Bağlanılan sunucuya PING at."
 
-msgid ""
-"Account to which the XML will be sent; if not specified, XML will be sent to "
-"all accounts"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Account: %s"
 msgstr "Hesaplar"
 
 msgid "Accounts"
 msgstr "Hesaplar"
+
+#, fuzzy
+msgid "Action on Close"
+msgstr "Gajim"
+
+#, fuzzy
+msgid "Action when closing Gajim’s window"
+msgstr "Gajimi her zaman kapat"
 
 msgid "Action when left-clicking a preview"
 msgstr ""
@@ -880,6 +857,11 @@ msgstr "Tüm dosyalar"
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
 
+msgid ""
+"Allow Gajim to broadcast useful information via D-Bus. It also allows other "
+"applications to control Gajim remotely."
+msgstr ""
+
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
@@ -990,15 +972,6 @@ msgstr "Onu kullanmak istediğinizden emin misiniz? (e/H) "
 #, fuzzy
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Onu kullanmak istediğinizden emin misiniz? (e/H) "
-
-#, python-format
-msgid ""
-"Argument \"%(arg)s\" is not specified. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-
-msgid "Arguments:"
-msgstr "Argümanlar:"
 
 msgid "Artists"
 msgstr ""
@@ -1355,12 +1328,6 @@ msgstr "Parolayı Değiştir"
 msgid "Change Subject"
 msgstr "Konuk Değiştiriliyor"
 
-msgid "Change status"
-msgstr "Durumu Değiştir"
-
-msgid "Change status information"
-msgstr "Durum informationu değiştir"
-
 msgid "Change your account’s password, etc."
 msgstr ""
 
@@ -1380,13 +1347,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Changed by %s"
 msgstr "Takma Ad Ayarla"
-
-msgid "Changes the priority of account(s)"
-msgstr ""
-
-#, fuzzy
-msgid "Changes the status of account(s)"
-msgstr "Durum satırı okunamadı"
 
 #, fuzzy
 msgid "Changing Password..."
@@ -1437,10 +1397,6 @@ msgstr ""
 
 msgid "Check for updates periodically"
 msgstr ""
-
-#, fuzzy
-msgid "Check if Gajim is running"
-msgstr "Paket sisteminin kilitli olup olmadığını kontrol edin."
 
 #, fuzzy
 msgid "Checking file…"
@@ -1831,6 +1787,9 @@ msgstr "Yeni posta yarat"
 msgid "Creating Account..."
 msgstr "XMPP hesabı %s@%s"
 
+msgid "Creating thumbnail failed"
+msgstr ""
+
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Bu anahtarın kullanım süresi dolmuş"
@@ -1839,7 +1798,7 @@ msgstr "Bu anahtarın kullanım süresi dolmuş"
 msgid "Current Developers"
 msgstr "Şu Anki Geliştiriciler"
 
-msgid "D-Bus is not present on this machine or python module is missing"
+msgid "D-Bus Interface"
 msgstr ""
 
 #, fuzzy
@@ -1980,9 +1939,6 @@ msgstr "%s mevcut bir grubun ismi değil"
 #, fuzzy
 msgid "Display or change a group chat topic"
 msgstr "%s mevcut bir grubun ismi değil"
-
-msgid "Do not disturb"
-msgstr "Rahatsız etmeyin"
 
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -2284,9 +2240,6 @@ msgstr "<b>Önceden hazırlanmış Durum İletleri</b>"
 msgid "Extended Address"
 msgstr "<b>Ekstra Adres:</b>"
 
-msgid "Extended away"
-msgstr "Uzun süreli uzakta"
-
 #, fuzzy
 msgid "FA_Q (Online)"
 msgstr "Çevrimiçi"
@@ -2394,9 +2347,6 @@ msgstr "Dosya boş"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File path"
-msgstr "Dosya yolu"
-
 msgid "File size unknown"
 msgstr ""
 
@@ -2490,9 +2440,6 @@ msgstr "Ileti alınıyor"
 msgid "Free for Chat"
 msgstr "Sohbet için Hazır"
 
-msgid "Free for chat"
-msgstr "Sohbet için Hazır"
-
 msgid "From"
 msgstr "Gönderen"
 
@@ -2580,12 +2527,6 @@ msgid ""
 msgstr ""
 
 msgid "Generate preview for any URLs containing images (may be unsafe)"
-msgstr ""
-
-msgid "Gets detailed info on a account"
-msgstr ""
-
-msgid "Gets detailed info on a contact"
 msgstr ""
 
 #, fuzzy
@@ -2714,11 +2655,11 @@ msgstr "Merhaba, benim adım $name."
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
+msgid "Hide"
+msgstr ""
+
 msgid "Hide this menu"
 msgstr "Menüyi gizle"
-
-msgid "Hide window to system tray when minimized"
-msgstr ""
 
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
@@ -2789,9 +2730,6 @@ msgstr "Üye olduğu süre:"
 msgid "Idle since: %s"
 msgstr "Üye olduğu süre:"
 
-msgid "If checked, Gajim can be controlled remotely using gajim-remote."
-msgstr ""
-
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
@@ -2801,9 +2739,6 @@ msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
 msgstr ""
 
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
-msgstr ""
-
-msgid "If enabled, Gajim will execute XEP-0146 Commands."
 msgstr ""
 
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
@@ -2993,9 +2928,6 @@ msgstr ""
 msgid "It is not possible to send empty files"
 msgstr ""
 
-msgid "It seems Gajim is not running. So you can't use gajim-remote."
-msgstr ""
-
 msgid "Italic"
 msgstr "Italik"
 
@@ -3126,9 +3058,6 @@ msgid ""
 msgstr ""
 
 msgid "Listing of Servers"
-msgstr ""
-
-msgid "Lists all contacts in the contact list, one for each line"
 msgstr ""
 
 msgid "Live Preview"
@@ -3293,15 +3222,8 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Minimize on Close"
+msgid "Minimize"
 msgstr "Gajim"
-
-msgid "Minimize to Tray"
-msgstr ""
-
-#, fuzzy
-msgid "Minimize when closing Gajim’s window"
-msgstr "Gajimi her zaman kapat"
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3310,10 +3232,6 @@ msgstr "Tüm _durum değişikliklerini sistem günlüğüne kaydet"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Karışık</b>"
-
-#, fuzzy
-msgid "Missing argument \"contact_jid\""
-msgstr "JID veya Kişi adı girdir"
 
 #, fuzzy
 msgid "Missing arguments"
@@ -3361,9 +3279,6 @@ msgstr "Adı"
 
 msgid "Name <b>default</b> is not allowed"
 msgstr ""
-
-msgid "Name of the account"
-msgstr "Hesapın ismi"
 
 msgid "Needs gspell to be installed"
 msgstr ""
@@ -3548,17 +3463,11 @@ msgstr "_Tamam"
 msgid "Offline"
 msgstr "Bağlı değil"
 
-msgid "Offline - disconnect"
-msgstr "Çevrimdışı - bağlantıyı kes"
-
 msgid "One Month"
 msgstr ""
 
 msgid "One Year"
 msgstr ""
-
-msgid "Online"
-msgstr "Çevrimiçi"
 
 #, fuzzy
 msgid "Online Status"
@@ -3910,10 +3819,6 @@ msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
 msgstr ""
 
 #, fuzzy
-msgid "Presence description:"
-msgstr "Hata açıklaması…"
-
-#, fuzzy
 msgid "Presets"
 msgstr "_Bulunma"
 
@@ -3939,9 +3844,6 @@ msgid "Previously sent message"
 msgstr "Önceden hazırlanmış iletleri:"
 
 msgid "Print XML stanzas and other debug information"
-msgstr ""
-
-msgid "Prints a list of registered accounts"
 msgstr ""
 
 #, fuzzy
@@ -4004,6 +3906,9 @@ msgstr "Bütün Sohbet Kayıtları"
 #, fuzzy, python-format
 msgid "PyGObject Version: %s"
 msgstr "<b>Kurulu Sürüm</b>"
+
+msgid "Quit"
+msgstr ""
 
 #, fuzzy
 msgid "Quit Gajim"
@@ -4187,10 +4092,6 @@ msgid_plural "Removed %d contacts"
 msgstr[0] "Kişileri eşzamana getir"
 
 #, fuzzy
-msgid "Removes contact from contact list"
-msgstr "Kişiyi listeden sil"
-
-#, fuzzy
 msgid "Remove…"
 msgstr "_Kaldır"
 
@@ -4311,16 +4212,6 @@ msgstr "durum ileti"
 #, fuzzy
 msgid "Retract message?"
 msgstr "durum ileti"
-
-msgid "Returns current status (the global one unless account is specified)"
-msgstr ""
-
-msgid ""
-"Returns current status message (the global one unless account is specified)"
-msgstr ""
-
-msgid "Returns number of unread messages"
-msgstr "Kaç okunmamış ileti sayısını geri ver"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -4604,25 +4495,6 @@ msgstr "Gönderen"
 msgid "Sending private message failed"
 msgstr "Kişisel ilet gönderimi başarısız"
 
-#, fuzzy
-msgid ""
-"Sends a chat message to someone on your contact list. Account is optional."
-msgstr "Dosyayı bir kişiye gönderir"
-
-msgid "Sends custom XML"
-msgstr "Özel XML gönder"
-
-msgid "Sends file to a contact"
-msgstr "Dosyayı bir kişiye gönderir"
-
-#, fuzzy
-msgid ""
-"Sends new chat message to a contact in the contact list. Account is optional."
-msgstr "Dosyayı bir kişiye gönderir"
-
-msgid "Sends new message to a group chat you've joined."
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Kişinin bağlantısı kesildi"
@@ -4680,15 +4552,6 @@ msgstr ""
 msgid "Service Gateway"
 msgstr "_Sunuc:"
 
-msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr ""
-
-#, python-format
-msgid ""
-"Session bus is not available.\n"
-"Try reading %(url)s"
-msgstr ""
-
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "Hata açıklaması…"
@@ -4713,9 +4576,6 @@ msgid "Set the current status to away"
 msgstr ""
 
 msgid "Set the current status to online"
-msgstr ""
-
-msgid "Set the presence type and description"
 msgstr ""
 
 msgid "Set your activity or tune to show your friends how you are feeling"
@@ -4879,9 +4739,6 @@ msgstr ""
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "Pencereyi gizler"
-
-msgid "Shows a help on specific command"
-msgstr "Belirtilen komutla ilgili yardımı gösterir"
 
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr ""
@@ -5257,10 +5114,6 @@ msgid "The signing certificate authority is not known"
 msgstr ""
 
 #, fuzzy
-msgid "The status has been changed."
-msgstr "Yeni bir oda yaratılmıştır"
-
-#, fuzzy
 msgid "Theme"
 msgstr "Temalar"
 
@@ -5426,12 +5279,6 @@ msgstr "Katılan"
 #, fuzzy
 msgid "Too many arguments"
 msgstr "JID veya Kişi adı girdir"
-
-#, python-format
-msgid ""
-"Too many arguments. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
 
 msgid "Topic"
 msgstr ""
@@ -5633,22 +5480,6 @@ msgstr "Kişisel ilet gönderimi başarısız"
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
-#, python-format
-msgid ""
-"Usage:\n"
-"  %s command [arguments]\n"
-"\n"
-"Command is one of:\n"
-msgstr ""
-
-#, fuzzy, python-format
-msgid ""
-"Usage: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-msgstr ""
-"Kullanım: %s [komut satır yordamları reddedildi]\n"
-"  veya:  %s OPTION\n"
-
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -5837,23 +5668,9 @@ msgstr "_XML Konsolu Göster"
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
-msgid "XML to send"
-msgstr "gönderilenecek XML"
-
 #, fuzzy
 msgid "XMPP Address"
 msgstr "AIM Adres:"
-
-#, fuzzy
-msgid "XMPP Address of the contact"
-msgstr "Kişinin JIDsi"
-
-#, fuzzy
-msgid "XMPP Address of the contact that will receive the message"
-msgstr "Dosyayı bir kişiye gönderir"
-
-msgid "XMPP Address of the group chat that will receive the message"
-msgstr ""
 
 #, fuzzy
 msgid "XMPP Address…"
@@ -5965,6 +5782,10 @@ msgstr ""
 msgid "You have been banned{actor}{reason}"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "You have been invited to %s"
+msgstr "%s grup sohbete katıldı"
+
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr ""
@@ -5976,10 +5797,6 @@ msgstr "Öntanımlı veritabanı dil kodlaması %s olarak ayarlandı.\n"
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr ""
-
-#, fuzzy
-msgid "You have no active account"
-msgstr "Bir hesap seçmek zorundasınız."
 
 #, fuzzy
 msgid "You have to be connected to create a group chat."
@@ -6436,24 +6253,11 @@ msgstr "denizcilik"
 msgid "building"
 msgstr "Saklanmada"
 
-msgid ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
-msgstr ""
-
-msgid ""
-"change the priority of the given account. If not specified, change status of "
-"all accounts that have \"sync with global status\" option set"
-msgstr ""
-
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
 msgid "column"
 msgstr ""
-
-msgid "command"
-msgstr "komut"
 
 #, fuzzy
 msgid "country"
@@ -6485,9 +6289,6 @@ msgstr "Kişisel ilet gönderimi başarısız"
 msgid "example.org"
 msgstr ""
 
-msgid "file"
-msgstr "dosya"
-
 msgid "file transfers list"
 msgstr "dosya aktarımların listesi"
 
@@ -6504,15 +6305,6 @@ msgid ""
 msgstr "Lütfen göstermek istediğiniz kaynak dosyasındaki satırı seçiniz:"
 
 msgid "help"
-msgstr ""
-
-msgid "if specified, contact is taken from the contact list of this account"
-msgstr ""
-
-msgid "if specified, file will be sent using this account"
-msgstr ""
-
-msgid "if specified, the message will be sent using this account"
 msgstr ""
 
 #, fuzzy
@@ -6538,17 +6330,6 @@ msgstr "bir"
 msgid "macOS"
 msgstr ""
 
-msgid "message contents"
-msgstr "iletinin içindekiler"
-
-msgid "message subject"
-msgstr "iletinin konusu"
-
-msgid ""
-"one of: offline, online, chat, away, xa, dnd. If not set, use account's "
-"previous status"
-msgstr ""
-
 #, fuzzy
 msgid "or"
 msgstr "Kime"
@@ -6560,9 +6341,6 @@ msgid "paused composing a message"
 msgstr "ilet yazarken durdu"
 
 msgid "postalcode"
-msgstr ""
-
-msgid "priority you want to give to the account"
 msgstr ""
 
 #, fuzzy, python-format
@@ -6579,23 +6357,11 @@ msgstr ""
 msgid "room"
 msgstr "oda"
 
-msgid "show help on command"
-msgstr "komut yardımını göster"
-
-msgid "show only contacts of the given account"
-msgstr "sadece bu hesapın kişilerini göster"
-
 msgid "speed"
 msgstr ""
 
-msgid "status message"
-msgstr "durum ileti"
-
 msgid "street"
 msgstr ""
-
-msgid "subject"
-msgstr "konu"
 
 msgid "text"
 msgstr ""
@@ -6650,6 +6416,98 @@ msgstr "%(nick)s durumu şimdi %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#~ msgid "%s not found"
+#~ msgstr "%s bulunamadı"
+
+#, fuzzy
+#~ msgid "?CLI:account"
+#~ msgstr "hesap"
+
+#, fuzzy
+#~ msgid "?CLI:message"
+#~ msgstr "mesaj"
+
+#, fuzzy
+#~ msgid "?CLI:priority"
+#~ msgstr "öncelik"
+
+#, fuzzy
+#~ msgid "?CLI:status"
+#~ msgstr "durum"
+
+#~ msgid "Arguments:"
+#~ msgstr "Argümanlar:"
+
+#~ msgid "Change status"
+#~ msgstr "Durumu Değiştir"
+
+#~ msgid "Change status information"
+#~ msgstr "Durum informationu değiştir"
+
+#, fuzzy
+#~ msgid "Changes the status of account(s)"
+#~ msgstr "Durum satırı okunamadı"
+
+#, fuzzy
+#~ msgid "Check if Gajim is running"
+#~ msgstr "Paket sisteminin kilitli olup olmadığını kontrol edin."
+
+#~ msgid "Do not disturb"
+#~ msgstr "Rahatsız etmeyin"
+
+#~ msgid "Extended away"
+#~ msgstr "Uzun süreli uzakta"
+
+#~ msgid "File path"
+#~ msgstr "Dosya yolu"
+
+#~ msgid "Free for chat"
+#~ msgstr "Sohbet için Hazır"
+
+#, fuzzy
+#~ msgid "Missing argument \"contact_jid\""
+#~ msgstr "JID veya Kişi adı girdir"
+
+#~ msgid "Name of the account"
+#~ msgstr "Hesapın ismi"
+
+#~ msgid "Offline - disconnect"
+#~ msgstr "Çevrimdışı - bağlantıyı kes"
+
+#~ msgid "Online"
+#~ msgstr "Çevrimiçi"
+
+#, fuzzy
+#~ msgid "Presence description:"
+#~ msgstr "Hata açıklaması…"
+
+#, fuzzy
+#~ msgid "Removes contact from contact list"
+#~ msgstr "Kişiyi listeden sil"
+
+#~ msgid "Returns number of unread messages"
+#~ msgstr "Kaç okunmamış ileti sayısını geri ver"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends a chat message to someone on your contact list. Account is optional."
+#~ msgstr "Dosyayı bir kişiye gönderir"
+
+#~ msgid "Sends custom XML"
+#~ msgstr "Özel XML gönder"
+
+#~ msgid "Sends file to a contact"
+#~ msgstr "Dosyayı bir kişiye gönderir"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends new chat message to a contact in the contact list. Account is "
+#~ "optional."
+#~ msgstr "Dosyayı bir kişiye gönderir"
+
+#~ msgid "Shows a help on specific command"
+#~ msgstr "Belirtilen komutla ilgili yardımı gösterir"
+
 #, fuzzy
 #~ msgid "Sign Out"
 #~ msgstr "_Çık"
@@ -6659,5 +6517,56 @@ msgstr ""
 #~ msgstr "Tüm _durum değişikliklerini sistem günlüğüne kaydet"
 
 #, fuzzy
+#~ msgid "The status has been changed."
+#~ msgstr "Yeni bir oda yaratılmıştır"
+
+#, fuzzy
+#~ msgid ""
+#~ "Usage: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+#~ msgstr ""
+#~ "Kullanım: %s [komut satır yordamları reddedildi]\n"
+#~ "  veya:  %s OPTION\n"
+
+#~ msgid "XML to send"
+#~ msgstr "gönderilenecek XML"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact"
+#~ msgstr "Kişinin JIDsi"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact that will receive the message"
+#~ msgstr "Dosyayı bir kişiye gönderir"
+
+#, fuzzy
+#~ msgid "You have no active account"
+#~ msgstr "Bir hesap seçmek zorundasınız."
+
+#, fuzzy
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "Gajimi her zaman kapat"
+
+#~ msgid "command"
+#~ msgstr "komut"
+
+#~ msgid "file"
+#~ msgstr "dosya"
+
+#~ msgid "message contents"
+#~ msgstr "iletinin içindekiler"
+
+#~ msgid "message subject"
+#~ msgstr "iletinin konusu"
+
+#~ msgid "show help on command"
+#~ msgstr "komut yardımını göster"
+
+#~ msgid "show only contacts of the given account"
+#~ msgstr "sadece bu hesapın kişilerini göster"
+
+#~ msgid "status message"
+#~ msgstr "durum ileti"
+
+#~ msgid "subject"
+#~ msgstr "konu"

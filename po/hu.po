@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 19:47+0000\n"
+"POT-Creation-Date: 2022-06-17 18:19+0000\n"
 "PO-Revision-Date: 2010-11-28 12:15+0100\n"
 "Last-Translator: Gabriel Papp <gabriel.papp@gmx.com>\n"
 "Language-Team: -\n"
@@ -166,10 +166,6 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "%s not found"
-msgstr "%s nincs meg"
-
-#, python-format
 msgid "%s s"
 msgstr ""
 
@@ -188,14 +184,6 @@ msgstr "%s egy filet szeretne küldeni neked."
 #, fuzzy, python-format
 msgid "%s: Nothing found"
 msgstr "%s nincs meg"
-
-#, fuzzy, python-format
-msgid ""
-"'%s' is not in your contact list.\n"
-"Please specify account for sending the message."
-msgstr ""
-"'%s' is not in your roster.\n"
-"Please specify account for sending the message."
 
 #, fuzzy, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -353,22 +341,6 @@ msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "Egyik sem"
-
-#, fuzzy
-msgid "?CLI:account"
-msgstr "fiók"
-
-#, fuzzy
-msgid "?CLI:message"
-msgstr "üzenet"
-
-#, fuzzy
-msgid "?CLI:priority"
-msgstr "prioritás"
-
-#, fuzzy
-msgid "?CLI:status"
-msgstr "állapot"
 
 #, fuzzy
 msgid "?Gender:None"
@@ -717,20 +689,20 @@ msgstr "A \"%s\" fiók csatlakozva van a szerverhez"
 msgid "Account is being created"
 msgstr "A \"%s\" fiók csatlakozva van a szerverhez"
 
-#, fuzzy
-msgid ""
-"Account to which the XML will be sent; if not specified, XML will be sent to "
-"all accounts"
-msgstr ""
-"Account in which the xml will be sent; if not specified, xml will be sent to "
-"all accounts"
-
 #, fuzzy, python-format
 msgid "Account: %s"
 msgstr "Fiókok"
 
 msgid "Accounts"
 msgstr "Fiókok"
+
+#, fuzzy
+msgid "Action on Close"
+msgstr "Gajim"
+
+#, fuzzy
+msgid "Action when closing Gajim’s window"
+msgstr "Always close Gajim"
 
 msgid "Action when left-clicking a preview"
 msgstr ""
@@ -905,6 +877,11 @@ msgstr "Minden file"
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
 
+msgid ""
+"Allow Gajim to broadcast useful information via D-Bus. It also allows other "
+"applications to control Gajim remotely."
+msgstr ""
+
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
@@ -1015,17 +992,6 @@ msgstr "Biztosan el szeretnéd hagyni ezt a közös beszélgetést: \"%s\"?"
 #, fuzzy
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Are you sure you want to quit Gajim?"
-
-#, fuzzy, python-format
-msgid ""
-"Argument \"%(arg)s\" is not specified. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"Argument \"%(arg)s\" is not specified. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-
-msgid "Arguments:"
-msgstr "Argumentumok:"
 
 msgid "Artists"
 msgstr ""
@@ -1378,12 +1344,6 @@ msgstr "Jelszó megváltoztatása"
 msgid "Change Subject"
 msgstr "_Beszélgetőtéma megváltoztatása..."
 
-msgid "Change status"
-msgstr "Állapot megváltoztatása"
-
-msgid "Change status information"
-msgstr "Állapot információ változtatás"
-
 msgid "Change your account’s password, etc."
 msgstr ""
 
@@ -1403,14 +1363,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Changed by %s"
 msgstr "Becenév _megváltoztatása..."
-
-#, fuzzy
-msgid "Changes the priority of account(s)"
-msgstr "Egy vagy több fiók prioritását változtatja meg"
-
-#, fuzzy
-msgid "Changes the status of account(s)"
-msgstr "Megváltoztatja az állapotát egy fióknak vagy több fióknak"
 
 #, fuzzy
 msgid "Changing Password..."
@@ -1464,9 +1416,6 @@ msgstr ""
 
 msgid "Check for updates periodically"
 msgstr ""
-
-msgid "Check if Gajim is running"
-msgstr "Ellenőrizd, hogy fut-e a Gajim"
 
 #, fuzzy
 msgid "Checking file…"
@@ -1858,6 +1807,9 @@ msgstr "Új bejegyzés létrehozása"
 msgid "Creating Account..."
 msgstr "%s fiók törlése"
 
+msgid "Creating thumbnail failed"
+msgstr ""
+
 #, fuzzy
 msgid "Credentials expired"
 msgstr "A tanusítvány lejárt"
@@ -1866,8 +1818,8 @@ msgstr "A tanusítvány lejárt"
 msgid "Current Developers"
 msgstr "Jelenlegi fejlesztők:"
 
-msgid "D-Bus is not present on this machine or python module is missing"
-msgstr "A D-Bus nincs jelen ezen a számítógépen, vagy a python modul hiányzik"
+msgid "D-Bus Interface"
+msgstr ""
 
 #, fuzzy
 msgid "Dark Theme"
@@ -2013,9 +1965,6 @@ msgstr "%s nem a közös beszélgetés neve."
 #, fuzzy
 msgid "Display or change a group chat topic"
 msgstr "Ask before closing a group chat tab/window."
-
-msgid "Do not disturb"
-msgstr "Ne zavarj"
 
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -2327,9 +2276,6 @@ msgstr "Chat üzenetek titkosítása."
 msgid "Extended Address"
 msgstr "<b>Extra Cím:</b>"
 
-msgid "Extended away"
-msgstr "Kiterjesztett távollét"
-
 #, fuzzy
 msgid "FA_Q (Online)"
 msgstr "Online"
@@ -2437,9 +2383,6 @@ msgstr "A file üres"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File path"
-msgstr "File elérési útvonala"
-
 msgid "File size unknown"
 msgstr ""
 
@@ -2536,9 +2479,6 @@ msgstr "Egy Üzenet Fogadása"
 msgid "Free for Chat"
 msgstr "Ráér beszélgetni"
 
-msgid "Free for chat"
-msgstr "Ráér beszélgetni"
-
 msgid "From"
 msgstr "Feladó"
 
@@ -2628,12 +2568,6 @@ msgstr ""
 
 msgid "Generate preview for any URLs containing images (may be unsafe)"
 msgstr ""
-
-msgid "Gets detailed info on a account"
-msgstr "Részletes információkat kér le a fiókról"
-
-msgid "Gets detailed info on a contact"
-msgstr "Részletes információkat kér le a partnerről"
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2760,11 +2694,11 @@ msgstr "Szia! Én $name vagyok."
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
+msgid "Hide"
+msgstr ""
+
 msgid "Hide this menu"
 msgstr "Elrejti ezt a menüt"
-
-msgid "Hide window to system tray when minimized"
-msgstr ""
 
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
@@ -2839,10 +2773,6 @@ msgid "Idle since: %s"
 msgstr "%s óta tétlen"
 
 #, fuzzy
-msgid "If checked, Gajim can be controlled remotely using gajim-remote."
-msgstr "If ticked, Gajim can be controlled remotely using gajim-remote."
-
-#, fuzzy
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
@@ -2858,9 +2788,6 @@ msgstr ""
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 "If ticked, Gajim will display the mood of contacts in the roster window"
-
-msgid "If enabled, Gajim will execute XEP-0146 Commands."
-msgstr ""
 
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
@@ -3061,9 +2988,6 @@ msgstr ""
 msgid "It is not possible to send empty files"
 msgstr "Nem lehet üres fileokat küldeni"
 
-msgid "It seems Gajim is not running. So you can't use gajim-remote."
-msgstr "Úgy tűnik nem fut a Gajim, tehát nem használhatod a gajim-remote-t"
-
 msgid "Italic"
 msgstr "Dőlt"
 
@@ -3198,12 +3122,6 @@ msgstr ""
 
 msgid "Listing of Servers"
 msgstr ""
-
-#, fuzzy
-msgid "Lists all contacts in the contact list, one for each line"
-msgstr ""
-"Kiír egy listát az összes névsoron lévő partnerről. Minden partner külön "
-"sorba kerül"
 
 msgid "Live Preview"
 msgstr ""
@@ -3369,15 +3287,8 @@ msgstr ""
 "enabled and contact is in your roster."
 
 #, fuzzy
-msgid "Minimize on Close"
+msgid "Minimize"
 msgstr "Gajim"
-
-msgid "Minimize to Tray"
-msgstr ""
-
-#, fuzzy
-msgid "Minimize when closing Gajim’s window"
-msgstr "Always close Gajim"
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3386,9 +3297,6 @@ msgstr "_Log status changes of contacts"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Vegyes</b>"
-
-msgid "Missing argument \"contact_jid\""
-msgstr "Hiányzó argumentum \"contact_jid\""
 
 #, fuzzy
 msgid "Missing arguments"
@@ -3436,9 +3344,6 @@ msgstr "Név"
 
 msgid "Name <b>default</b> is not allowed"
 msgstr ""
-
-msgid "Name of the account"
-msgstr "Fiók neve"
 
 msgid "Needs gspell to be installed"
 msgstr ""
@@ -3623,17 +3528,11 @@ msgstr "_OK"
 msgid "Offline"
 msgstr "Kijelentkezett"
 
-msgid "Offline - disconnect"
-msgstr "Offline - lecsatlakozva"
-
 msgid "One Month"
 msgstr ""
 
 msgid "One Year"
 msgstr ""
-
-msgid "Online"
-msgstr "Online"
 
 #, fuzzy
 msgid "Online Status"
@@ -3983,9 +3882,6 @@ msgstr "Beállítások"
 msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
 msgstr ""
 
-msgid "Presence description:"
-msgstr "Jelenlét leírása:"
-
 #, fuzzy
 msgid "Presets"
 msgstr "_Jelenlét"
@@ -4014,9 +3910,6 @@ msgstr "Sablonüzenetek:"
 
 msgid "Print XML stanzas and other debug information"
 msgstr ""
-
-msgid "Prints a list of registered accounts"
-msgstr "Kiír egy listát a regisztrált fiókokról"
 
 #, fuzzy
 msgid "Priority"
@@ -4078,6 +3971,9 @@ msgstr "All Chat Histories"
 #, fuzzy, python-format
 msgid "PyGObject Version: %s"
 msgstr "PyGTK Verzió:"
+
+msgid "Quit"
+msgstr ""
 
 #, fuzzy
 msgid "Quit Gajim"
@@ -4262,10 +4158,6 @@ msgstr[0] "%d partner eltávolítva"
 msgstr[1] "%d partner eltávolítva"
 
 #, fuzzy
-msgid "Removes contact from contact list"
-msgstr "Eltávolítja a partnert a névsorról"
-
-#, fuzzy
 msgid "Remove…"
 msgstr "_Eltávolítás"
 
@@ -4390,19 +4282,6 @@ msgstr "Állapot üzenet"
 #, fuzzy
 msgid "Retract message?"
 msgstr "állapotüzenet"
-
-msgid "Returns current status (the global one unless account is specified)"
-msgstr ""
-"A jelenlegi állapotot adja vissza (a globálisat, ha nincs fiók beállítva)"
-
-#, fuzzy
-msgid ""
-"Returns current status message (the global one unless account is specified)"
-msgstr ""
-"Returns current status message (the global one unless account is specified)"
-
-msgid "Returns number of unread messages"
-msgstr "Visszaadja az olvasatlan üzenetek számát"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -4687,26 +4566,6 @@ msgstr "Feladó: "
 msgid "Sending private message failed"
 msgstr "Nem sikerült elküldeni a privát üzenetet"
 
-#, fuzzy
-msgid ""
-"Sends a chat message to someone on your contact list. Account is optional."
-msgstr "Filet küld egy partnernek"
-
-msgid "Sends custom XML"
-msgstr "Egyedi XML-t küld"
-
-msgid "Sends file to a contact"
-msgstr "Filet küld egy partnernek"
-
-#, fuzzy
-msgid ""
-"Sends new chat message to a contact in the contact list. Account is optional."
-msgstr "Filet küld egy partnernek"
-
-#, fuzzy
-msgid "Sends new message to a group chat you've joined."
-msgstr "Új üzenetet küld egy olyan közös beszélgetésbe amelyhez csatlakoztál."
-
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Elküldött partner: \"%s\" (%s)"
@@ -4762,19 +4621,6 @@ msgstr "Szolgáltatás felderítés ennek a fióknak a használatával: %s"
 msgid "Service Gateway"
 msgstr "Szerver"
 
-msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr ""
-"Szolgáltatás nem elérhető: Nem fut a Gajum, vagy a távoli számítógépes "
-"_irányítás nem megfelelő."
-
-#, python-format
-msgid ""
-"Session bus is not available.\n"
-"Try reading %(url)s"
-msgstr ""
-"Munkamenet busz nem elérhető.\n"
-"Megpróbálom olvasni a(z) %(url)s"
-
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "%s konfiguráció hiba"
@@ -4800,9 +4646,6 @@ msgstr ""
 
 msgid "Set the current status to online"
 msgstr ""
-
-msgid "Set the presence type and description"
-msgstr "Jelenlét típusának és leírásának beállítása"
 
 msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
@@ -4972,9 +4815,6 @@ msgstr ""
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "Elrejti az ablakot"
-
-msgid "Shows a help on specific command"
-msgstr "Mutassa a súgót az egyes parancsoknál"
 
 #, fuzzy
 msgid "Shows a list of file transfers between you and your contacts"
@@ -5345,9 +5185,6 @@ msgstr "A szolgáltatás nem böngészhető"
 msgid "The signing certificate authority is not known"
 msgstr ""
 
-msgid "The status has been changed."
-msgstr "Az állapot megváltozott."
-
 #, fuzzy
 msgid "Theme"
 msgstr "Téma"
@@ -5528,14 +5365,6 @@ msgstr "Résztvevő"
 #, fuzzy
 msgid "Too many arguments"
 msgstr "Hiányzó argumentum \"contact_jid\""
-
-#, fuzzy, python-format
-msgid ""
-"Too many arguments. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"Too many arguments. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
 
 msgid "Topic"
 msgstr ""
@@ -5738,24 +5567,6 @@ msgstr "Nem sikerült elküldeni a privát üzenetet"
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
-#, fuzzy, python-format
-msgid ""
-"Usage:\n"
-"  %s command [arguments]\n"
-"\n"
-"Command is one of:\n"
-msgstr ""
-"Usage: %s command [arguments]\n"
-"Command is one of:\n"
-
-#, fuzzy, python-format
-msgid ""
-"Usage: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-msgstr ""
-"Usage: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -5943,24 +5754,9 @@ msgstr "XML parancssor"
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
-msgid "XML to send"
-msgstr "küldendő XML"
-
 #, fuzzy
 msgid "XMPP Address"
 msgstr "AIM cím:"
-
-#, fuzzy
-msgid "XMPP Address of the contact"
-msgstr "Partner Jabber Azonosítója"
-
-#, fuzzy
-msgid "XMPP Address of the contact that will receive the message"
-msgstr "Annak a partnernek a Jabber Azonosítója aki az üzenetet kapni fogja"
-
-#, fuzzy
-msgid "XMPP Address of the group chat that will receive the message"
-msgstr "A Jabber Azonosítója annak a szobának ami meg fogja kapni az üzenetet"
 
 #, fuzzy
 msgid "XMPP Address…"
@@ -6078,6 +5874,10 @@ msgstr "Nincs jogosultságod file létrehozására ebbe a könyvtárba"
 msgid "You have been banned{actor}{reason}"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "You have been invited to %s"
+msgstr "%(nick)s el lettek távolítva a szobából (%(reason)s)"
+
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr ""
@@ -6089,9 +5889,6 @@ msgstr "%(nick)s el lettek távolítva a szobából (%(reason)s)"
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr ""
-
-msgid "You have no active account"
-msgstr "Nincs aktív fiókod"
 
 #, fuzzy
 msgid "You have to be connected to create a group chat."
@@ -6545,30 +6342,11 @@ msgstr "tengerész"
 msgid "building"
 msgstr "Rejtőzködik"
 
-#, fuzzy
-msgid ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
-msgstr ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
-
-#, fuzzy
-msgid ""
-"change the priority of the given account. If not specified, change status of "
-"all accounts that have \"sync with global status\" option set"
-msgstr ""
-"change the priority of the given account. If not specified, change status of "
-"all accounts that have \"sync with global status\" option set"
-
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
 msgid "column"
 msgstr ""
-
-msgid "command"
-msgstr "parancs"
 
 #, fuzzy
 msgid "country"
@@ -6600,9 +6378,6 @@ msgstr "hiba ennek a küldése során %(message)s ( %(error)s )"
 msgid "example.org"
 msgstr ""
 
-msgid "file"
-msgstr "file"
-
 msgid "file transfers list"
 msgstr "fileátvitelek listája"
 
@@ -6620,16 +6395,6 @@ msgstr "Válaszd ki a csoportos beszélgetéseket amelyeket el szeretnél hagyni
 
 msgid "help"
 msgstr ""
-
-#, fuzzy
-msgid "if specified, contact is taken from the contact list of this account"
-msgstr "if specified, contact is taken from the contact list of this account"
-
-msgid "if specified, file will be sent using this account"
-msgstr "ha be van állítva, a file ezen a fiókon keresztül lesz elküldve"
-
-msgid "if specified, the message will be sent using this account"
-msgstr "ha be van állítva, az üzenet ezzel a fiókkal lesz elküldve"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -6654,20 +6419,6 @@ msgstr "egy"
 msgid "macOS"
 msgstr ""
 
-msgid "message contents"
-msgstr "üzenet tartalma"
-
-msgid "message subject"
-msgstr "üzenet tárgya"
-
-#, fuzzy
-msgid ""
-"one of: offline, online, chat, away, xa, dnd. If not set, use account's "
-"previous status"
-msgstr ""
-"one of: offline, online, chat, away, xa, dnd, invisible. If not set, use "
-"account's previous status"
-
 #, fuzzy
 msgid "or"
 msgstr "neki"
@@ -6680,9 +6431,6 @@ msgstr "üzenetet fogalmaz, de nem gépel"
 
 msgid "postalcode"
 msgstr ""
-
-msgid "priority you want to give to the account"
-msgstr "a prioritás amit hozzá szeretnél rendelni egy fiókhoz"
 
 #, fuzzy, python-format
 msgid "python-cairo Version: %s"
@@ -6698,24 +6446,11 @@ msgstr ""
 msgid "room"
 msgstr "room"
 
-msgid "show help on command"
-msgstr "mutass súgót az egyes parancsoknál"
-
-#, fuzzy
-msgid "show only contacts of the given account"
-msgstr "show only contacts of the given account"
-
 msgid "speed"
 msgstr ""
 
-msgid "status message"
-msgstr "állapotüzenet"
-
 msgid "street"
 msgstr ""
-
-msgid "subject"
-msgstr "tárgy"
 
 msgid "text"
 msgstr ""
@@ -6775,6 +6510,95 @@ msgstr "%(nick)s mostantól %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#~ msgid "%s not found"
+#~ msgstr "%s nincs meg"
+
+#, fuzzy
+#~ msgid ""
+#~ "'%s' is not in your contact list.\n"
+#~ "Please specify account for sending the message."
+#~ msgstr ""
+#~ "'%s' is not in your roster.\n"
+#~ "Please specify account for sending the message."
+
+#, fuzzy
+#~ msgid "?CLI:account"
+#~ msgstr "fiók"
+
+#, fuzzy
+#~ msgid "?CLI:message"
+#~ msgstr "üzenet"
+
+#, fuzzy
+#~ msgid "?CLI:priority"
+#~ msgstr "prioritás"
+
+#, fuzzy
+#~ msgid "?CLI:status"
+#~ msgstr "állapot"
+
+#, fuzzy
+#~ msgid ""
+#~ "Account to which the XML will be sent; if not specified, XML will be sent "
+#~ "to all accounts"
+#~ msgstr ""
+#~ "Account in which the xml will be sent; if not specified, xml will be sent "
+#~ "to all accounts"
+
+#, fuzzy
+#~ msgid ""
+#~ "Argument \"%(arg)s\" is not specified. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "Argument \"%(arg)s\" is not specified. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+
+#~ msgid "Arguments:"
+#~ msgstr "Argumentumok:"
+
+#~ msgid "Change status"
+#~ msgstr "Állapot megváltoztatása"
+
+#~ msgid "Change status information"
+#~ msgstr "Állapot információ változtatás"
+
+#, fuzzy
+#~ msgid "Changes the priority of account(s)"
+#~ msgstr "Egy vagy több fiók prioritását változtatja meg"
+
+#, fuzzy
+#~ msgid "Changes the status of account(s)"
+#~ msgstr "Megváltoztatja az állapotát egy fióknak vagy több fióknak"
+
+#~ msgid "Check if Gajim is running"
+#~ msgstr "Ellenőrizd, hogy fut-e a Gajim"
+
+#~ msgid "D-Bus is not present on this machine or python module is missing"
+#~ msgstr ""
+#~ "A D-Bus nincs jelen ezen a számítógépen, vagy a python modul hiányzik"
+
+#~ msgid "Do not disturb"
+#~ msgstr "Ne zavarj"
+
+#~ msgid "Extended away"
+#~ msgstr "Kiterjesztett távollét"
+
+#~ msgid "File path"
+#~ msgstr "File elérési útvonala"
+
+#~ msgid "Free for chat"
+#~ msgstr "Ráér beszélgetni"
+
+#~ msgid "Gets detailed info on a account"
+#~ msgstr "Részletes információkat kér le a fiókról"
+
+#~ msgid "Gets detailed info on a contact"
+#~ msgstr "Részletes információkat kér le a partnerről"
+
+#, fuzzy
+#~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
+#~ msgstr "If ticked, Gajim can be controlled remotely using gajim-remote."
+
 #, fuzzy
 #~ msgid ""
 #~ "If enabled, Gajim hides the main window when pressing the X button "
@@ -6782,6 +6606,93 @@ msgstr ""
 #~ msgstr ""
 #~ "If True, quits Gajim when X button of Window Manager is clicked. This "
 #~ "setting is taken into account only if trayicon is used."
+
+#~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
+#~ msgstr "Úgy tűnik nem fut a Gajim, tehát nem használhatod a gajim-remote-t"
+
+#, fuzzy
+#~ msgid "Lists all contacts in the contact list, one for each line"
+#~ msgstr ""
+#~ "Kiír egy listát az összes névsoron lévő partnerről. Minden partner külön "
+#~ "sorba kerül"
+
+#~ msgid "Missing argument \"contact_jid\""
+#~ msgstr "Hiányzó argumentum \"contact_jid\""
+
+#~ msgid "Name of the account"
+#~ msgstr "Fiók neve"
+
+#~ msgid "Offline - disconnect"
+#~ msgstr "Offline - lecsatlakozva"
+
+#~ msgid "Online"
+#~ msgstr "Online"
+
+#~ msgid "Presence description:"
+#~ msgstr "Jelenlét leírása:"
+
+#~ msgid "Prints a list of registered accounts"
+#~ msgstr "Kiír egy listát a regisztrált fiókokról"
+
+#, fuzzy
+#~ msgid "Removes contact from contact list"
+#~ msgstr "Eltávolítja a partnert a névsorról"
+
+#~ msgid "Returns current status (the global one unless account is specified)"
+#~ msgstr ""
+#~ "A jelenlegi állapotot adja vissza (a globálisat, ha nincs fiók beállítva)"
+
+#, fuzzy
+#~ msgid ""
+#~ "Returns current status message (the global one unless account is "
+#~ "specified)"
+#~ msgstr ""
+#~ "Returns current status message (the global one unless account is "
+#~ "specified)"
+
+#~ msgid "Returns number of unread messages"
+#~ msgstr "Visszaadja az olvasatlan üzenetek számát"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends a chat message to someone on your contact list. Account is optional."
+#~ msgstr "Filet küld egy partnernek"
+
+#~ msgid "Sends custom XML"
+#~ msgstr "Egyedi XML-t küld"
+
+#~ msgid "Sends file to a contact"
+#~ msgstr "Filet küld egy partnernek"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends new chat message to a contact in the contact list. Account is "
+#~ "optional."
+#~ msgstr "Filet küld egy partnernek"
+
+#, fuzzy
+#~ msgid "Sends new message to a group chat you've joined."
+#~ msgstr ""
+#~ "Új üzenetet küld egy olyan közös beszélgetésbe amelyhez csatlakoztál."
+
+#~ msgid ""
+#~ "Service not available: Gajim is not running, or remote_control is False"
+#~ msgstr ""
+#~ "Szolgáltatás nem elérhető: Nem fut a Gajum, vagy a távoli számítógépes "
+#~ "_irányítás nem megfelelő."
+
+#~ msgid ""
+#~ "Session bus is not available.\n"
+#~ "Try reading %(url)s"
+#~ msgstr ""
+#~ "Munkamenet busz nem elérhető.\n"
+#~ "Megpróbálom olvasni a(z) %(url)s"
+
+#~ msgid "Set the presence type and description"
+#~ msgstr "Jelenlét típusának és leírásának beállítása"
+
+#~ msgid "Shows a help on specific command"
+#~ msgstr "Mutassa a súgót az egyes parancsoknál"
 
 #, fuzzy
 #~ msgid "Sign Out"
@@ -6791,6 +6702,117 @@ msgstr ""
 #~ msgid "Status Change"
 #~ msgstr "_Log status changes of contacts"
 
+#~ msgid "The status has been changed."
+#~ msgstr "Az állapot megváltozott."
+
+#, fuzzy
+#~ msgid ""
+#~ "Too many arguments. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "Too many arguments. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+
+#, fuzzy
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  %s command [arguments]\n"
+#~ "\n"
+#~ "Command is one of:\n"
+#~ msgstr ""
+#~ "Usage: %s command [arguments]\n"
+#~ "Command is one of:\n"
+
+#, fuzzy
+#~ msgid ""
+#~ "Usage: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+#~ msgstr ""
+#~ "Usage: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+
+#~ msgid "XML to send"
+#~ msgstr "küldendő XML"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact"
+#~ msgstr "Partner Jabber Azonosítója"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact that will receive the message"
+#~ msgstr "Annak a partnernek a Jabber Azonosítója aki az üzenetet kapni fogja"
+
+#, fuzzy
+#~ msgid "XMPP Address of the group chat that will receive the message"
+#~ msgstr ""
+#~ "A Jabber Azonosítója annak a szobának ami meg fogja kapni az üzenetet"
+
+#~ msgid "You have no active account"
+#~ msgstr "Nincs aktív fiókod"
+
 #, fuzzy
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "Always close Gajim"
+
+#, fuzzy
+#~ msgid ""
+#~ "change status of account \"account\". If not specified, try to change "
+#~ "status of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "change status of account \"account\". If not specified, try to change "
+#~ "status of all accounts that have \"sync with global status\" option set"
+
+#, fuzzy
+#~ msgid ""
+#~ "change the priority of the given account. If not specified, change status "
+#~ "of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "change the priority of the given account. If not specified, change status "
+#~ "of all accounts that have \"sync with global status\" option set"
+
+#~ msgid "command"
+#~ msgstr "parancs"
+
+#~ msgid "file"
+#~ msgstr "file"
+
+#, fuzzy
+#~ msgid "if specified, contact is taken from the contact list of this account"
+#~ msgstr ""
+#~ "if specified, contact is taken from the contact list of this account"
+
+#~ msgid "if specified, file will be sent using this account"
+#~ msgstr "ha be van állítva, a file ezen a fiókon keresztül lesz elküldve"
+
+#~ msgid "if specified, the message will be sent using this account"
+#~ msgstr "ha be van állítva, az üzenet ezzel a fiókkal lesz elküldve"
+
+#~ msgid "message contents"
+#~ msgstr "üzenet tartalma"
+
+#~ msgid "message subject"
+#~ msgstr "üzenet tárgya"
+
+#, fuzzy
+#~ msgid ""
+#~ "one of: offline, online, chat, away, xa, dnd. If not set, use account's "
+#~ "previous status"
+#~ msgstr ""
+#~ "one of: offline, online, chat, away, xa, dnd, invisible. If not set, use "
+#~ "account's previous status"
+
+#~ msgid "priority you want to give to the account"
+#~ msgstr "a prioritás amit hozzá szeretnél rendelni egy fiókhoz"
+
+#~ msgid "show help on command"
+#~ msgstr "mutass súgót az egyes parancsoknál"
+
+#, fuzzy
+#~ msgid "show only contacts of the given account"
+#~ msgstr "show only contacts of the given account"
+
+#~ msgid "status message"
+#~ msgstr "állapotüzenet"
+
+#~ msgid "subject"
+#~ msgstr "tárgy"

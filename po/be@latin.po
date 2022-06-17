@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 19:47+0000\n"
+"POT-Creation-Date: 2022-06-17 18:19+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -163,10 +163,6 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "%s not found"
-msgstr "%s nia znojdzieny"
-
-#, python-format
 msgid "%s s"
 msgstr ""
 
@@ -185,14 +181,6 @@ msgstr "%s choča dasłać tabie fajł."
 #, fuzzy, python-format
 msgid "%s: Nothing found"
 msgstr "%s nia znojdzieny"
-
-#, fuzzy, python-format
-msgid ""
-"'%s' is not in your contact list.\n"
-"Please specify account for sending the message."
-msgstr ""
-"'%s' niama ŭ tvajim śpisie kantaktaŭ.\n"
-"Kali łaska, akreśli kont dla dasyłańnia paviedamleńnia."
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -346,22 +334,6 @@ msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "?Zapyt (aŭtaryzacyi):Niama"
-
-#, fuzzy
-msgid "?CLI:account"
-msgstr "kont"
-
-#, fuzzy
-msgid "?CLI:message"
-msgstr "paviedamleńnie"
-
-#, fuzzy
-msgid "?CLI:priority"
-msgstr "Pryjary_tet:"
-
-#, fuzzy
-msgid "?CLI:status"
-msgstr "status"
 
 #, fuzzy
 msgid "?Gender:None"
@@ -711,20 +683,19 @@ msgstr "Kont \"%s\" dałučany da servera"
 msgid "Account is being created"
 msgstr "Kont \"%s\" dałučany da servera"
 
-#, fuzzy
-msgid ""
-"Account to which the XML will be sent; if not specified, XML will be sent to "
-"all accounts"
-msgstr ""
-"Kont, na jaki budzie dasłany XML; kali kont nie akreśleny, XML budzie "
-"dasłany na ŭsie konty"
-
 #, fuzzy, python-format
 msgid "Account: %s"
 msgstr "Konty"
 
 msgid "Accounts"
 msgstr "Konty"
+
+#, fuzzy
+msgid "Action on Close"
+msgstr "Gajim"
+
+msgid "Action when closing Gajim’s window"
+msgstr ""
 
 msgid "Action when left-clicking a preview"
 msgstr ""
@@ -896,6 +867,11 @@ msgstr "Usie fajły"
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
 
+msgid ""
+"Allow Gajim to broadcast useful information via D-Bus. It also allows other "
+"applications to control Gajim remotely."
+msgstr ""
+
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
@@ -1004,17 +980,6 @@ msgstr "Ty sapraŭdy chočaš pakinuć pakoj \"%s\"?"
 #, fuzzy
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Ty sapraŭdy chočaš pakinuć pakoj \"%s\"?"
-
-#, fuzzy, python-format
-msgid ""
-"Argument \"%(arg)s\" is not specified. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"Arhument \"%s\" nie akreśleny. \n"
-"Vykanaj \"%s help %s\" dla padrabiaźniejšych źviestak"
-
-msgid "Arguments:"
-msgstr "Arhumenty:"
 
 msgid "Artists"
 msgstr ""
@@ -1355,12 +1320,6 @@ msgstr "Źmiani parol"
 msgid "Change Subject"
 msgstr "Źmiani _temu"
 
-msgid "Change status"
-msgstr "Źmiani status"
-
-msgid "Change status information"
-msgstr "Źmiani infarmacyju statusu"
-
 msgid "Change your account’s password, etc."
 msgstr ""
 
@@ -1381,14 +1340,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Changed by %s"
 msgstr "Źmiani _mianušku"
-
-#, fuzzy
-msgid "Changes the priority of account(s)"
-msgstr "Źmianiaje status kontu albo kontaŭ"
-
-#, fuzzy
-msgid "Changes the status of account(s)"
-msgstr "Źmianiaje status kontu albo kontaŭ"
 
 #, fuzzy
 msgid "Changing Password..."
@@ -1438,10 +1389,6 @@ msgstr ""
 
 msgid "Check for updates periodically"
 msgstr ""
-
-#, fuzzy
-msgid "Check if Gajim is running"
-msgstr "Kali łaska, pravier, ci pracuje avahi-daemon."
 
 #, fuzzy
 msgid "Checking file…"
@@ -1834,6 +1781,9 @@ msgstr "Stvary novy zapis"
 msgid "Creating Account..."
 msgstr "Vydalajecca kont %s"
 
+msgid "Creating thumbnail failed"
+msgstr ""
+
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Musiš vyznačyć parol"
@@ -1842,8 +1792,8 @@ msgstr "Musiš vyznačyć parol"
 msgid "Current Developers"
 msgstr "Dziejnyja raspracoŭniki:"
 
-msgid "D-Bus is not present on this machine or python module is missing"
-msgstr "D-Busu niama na hetym kamputary, albo nie staje modula Python"
+msgid "D-Bus Interface"
+msgstr ""
 
 #, fuzzy
 msgid "Dark Theme"
@@ -1990,9 +1940,6 @@ msgstr "Užyvańnie: /%s, pakazvaje imiony naviednikaŭ pakoju."
 #, fuzzy
 msgid "Display or change a group chat topic"
 msgstr "Pytajsia paćvierdžańnia pierad začynieńniem kartki/akna razmovy."
-
-msgid "Do not disturb"
-msgstr "Nie turbavać"
 
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -2296,9 +2243,6 @@ msgstr "_Uvachodnaje paviedamleńnie:"
 msgid "Extended Address"
 msgstr "Dadatkovy adras:"
 
-msgid "Extended away"
-msgstr "Adyjšoŭ"
-
 #, fuzzy
 msgid "FA_Q (Online)"
 msgstr "Dałučany"
@@ -2409,9 +2353,6 @@ msgstr "Ściežka da fajłu"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File path"
-msgstr "Ściežka da fajłu"
-
 msgid "File size unknown"
 msgstr ""
 
@@ -2505,9 +2446,6 @@ msgstr "Novaje pryvatnaje paviedamleńnie"
 msgid "Free for Chat"
 msgstr "Achvotna parazmaŭlaju"
 
-msgid "Free for chat"
-msgstr "Achvotna parazmaŭlaju"
-
 msgid "From"
 msgstr "Ad"
 
@@ -2597,12 +2535,6 @@ msgstr ""
 
 msgid "Generate preview for any URLs containing images (may be unsafe)"
 msgstr ""
-
-msgid "Gets detailed info on a account"
-msgstr "Atrymvaje padrabiaznyja źviestki ab kantakcie"
-
-msgid "Gets detailed info on a contact"
-msgstr "Atrymvaje padrabiaznyja źviestki ab kantakcie"
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2729,11 +2661,11 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
+msgid "Hide"
+msgstr ""
+
 msgid "Hide this menu"
 msgstr "Schavaj hetaje menu"
-
-msgid "Hide window to system tray when minimized"
-msgstr ""
 
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
@@ -2806,10 +2738,6 @@ msgstr " ad %s"
 msgid "Idle since: %s"
 msgstr " ad %s"
 
-msgid "If checked, Gajim can be controlled remotely using gajim-remote."
-msgstr ""
-"Kali hetaja opcyja ŭklučanaja, Gajimam možna kiravać praz gajim-remote."
-
 #, fuzzy
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2827,9 +2755,6 @@ msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 "Kali ŭklučanaja hetaja opcyja, Gajim budzie pakazvać avatary kantaktaŭ u "
 "śpisie kantaktaŭ i ŭ pakojach"
-
-msgid "If enabled, Gajim will execute XEP-0146 Commands."
-msgstr ""
 
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
@@ -3027,9 +2952,6 @@ msgstr ""
 msgid "It is not possible to send empty files"
 msgstr "Niemahčyma dasyłać pustyja fajły"
 
-msgid "It seems Gajim is not running. So you can't use gajim-remote."
-msgstr ""
-
 msgid "Italic"
 msgstr "Nachileny"
 
@@ -3163,12 +3085,6 @@ msgstr ""
 
 msgid "Listing of Servers"
 msgstr ""
-
-#, fuzzy
-msgid "Lists all contacts in the contact list, one for each line"
-msgstr ""
-"Pakazvaje śpis usich kantaktaŭ sa śpisu kantaktaŭ. Źviestki ab kožnym "
-"kantakcie źjaŭlajucca na novym radku"
 
 msgid "Live Preview"
 msgstr ""
@@ -3335,14 +3251,8 @@ msgstr ""
 "žurnałaŭ razmoŭ."
 
 #, fuzzy
-msgid "Minimize on Close"
+msgid "Minimize"
 msgstr "Gajim"
-
-msgid "Minimize to Tray"
-msgstr ""
-
-msgid "Minimize when closing Gajim’s window"
-msgstr ""
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3351,9 +3261,6 @@ msgstr "_Zachoŭvać u žurnale źmieny statusu kantaktaŭ"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Roznaje</b>"
-
-msgid "Missing argument \"contact_jid\""
-msgstr "Nie staje arhumenta \"contact_jid\""
 
 #, fuzzy
 msgid "Missing arguments"
@@ -3402,9 +3309,6 @@ msgstr "Nazva"
 
 msgid "Name <b>default</b> is not allowed"
 msgstr ""
-
-msgid "Name of the account"
-msgstr "Nazva kontu"
 
 msgid "Needs gspell to be installed"
 msgstr ""
@@ -3591,17 +3495,11 @@ msgstr "_Tak"
 msgid "Offline"
 msgstr "Adłučany"
 
-msgid "Offline - disconnect"
-msgstr "Niabačny - adłučany"
-
 msgid "One Month"
 msgstr ""
 
 msgid "One Year"
 msgstr ""
-
-msgid "Online"
-msgstr "Dałučany"
 
 #, fuzzy
 msgid "Online Status"
@@ -3949,9 +3847,6 @@ msgstr "Nałady"
 msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
 msgstr ""
 
-msgid "Presence description:"
-msgstr "Apisańnie statusu:"
-
 #, fuzzy
 msgid "Presets"
 msgstr "P_rysutnaść"
@@ -3979,9 +3874,6 @@ msgstr "Šablony paviedamleńniaŭ statusu:"
 
 msgid "Print XML stanzas and other debug information"
 msgstr ""
-
-msgid "Prints a list of registered accounts"
-msgstr "Pakazvaje śpis zarehistravanych kontaŭ"
 
 #, fuzzy
 msgid "Priority"
@@ -4043,6 +3935,10 @@ msgstr "Старыя казкі"
 #, fuzzy, python-format
 msgid "PyGObject Version: %s"
 msgstr "Versija PyGTK:"
+
+#, fuzzy
+msgid "Quit"
+msgstr "_Skonč pracu"
 
 #, fuzzy
 msgid "Quit Gajim"
@@ -4227,10 +4123,6 @@ msgstr[1] "Vydalaje kantakt sa śpisu"
 msgstr[2] "Vydalaje kantakt sa śpisu"
 
 #, fuzzy
-msgid "Removes contact from contact list"
-msgstr "Vydalaje kantakt sa śpisu"
-
-#, fuzzy
 msgid "Remove…"
 msgstr "_Vydal"
 
@@ -4348,18 +4240,6 @@ msgstr "Paviedamleńnie statusu"
 #, fuzzy
 msgid "Retract message?"
 msgstr "paviedamlennie statusu"
-
-msgid "Returns current status (the global one unless account is specified)"
-msgstr "Viartaje dziejny status (hlabalny, kali nie akreśleny kont)"
-
-msgid ""
-"Returns current status message (the global one unless account is specified)"
-msgstr ""
-"Viartaje dziejnaje paviedamleńnie statusu (hlabalnaha, kali nie akreśleny "
-"kont)"
-
-msgid "Returns number of unread messages"
-msgstr "Viartaje kolkaść niečytanych paviedamleńniaŭ"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -4642,25 +4522,6 @@ msgstr "Adpraŭnik:"
 msgid "Sending private message failed"
 msgstr "Pamyłka dasyłańnia pryvatnaha paviedamleńnia"
 
-#, fuzzy
-msgid ""
-"Sends a chat message to someone on your contact list. Account is optional."
-msgstr "Užyvańnie: /%s, chavaje knopki razmovy."
-
-msgid "Sends custom XML"
-msgstr "Dasyłaje svoj XML"
-
-msgid "Sends file to a contact"
-msgstr "Dasyłaje kantaktu fajł"
-
-#, fuzzy
-msgid ""
-"Sends new chat message to a contact in the contact list. Account is optional."
-msgstr "Užyvańnie: /%s, chavaje knopki razmovy."
-
-msgid "Sends new message to a group chat you've joined."
-msgstr ""
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr ""
@@ -4718,19 +4579,6 @@ msgstr "Prahlad servisaŭ dla kontu %s"
 msgid "Service Gateway"
 msgstr "Server"
 
-msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr ""
-"Servis niedastupny: Gajim nie vykonvajecca, albo opcyja remote_control maje "
-"vartaść False"
-
-#, fuzzy, python-format
-msgid ""
-"Session bus is not available.\n"
-"Try reading %(url)s"
-msgstr ""
-"Interfejs sesijaŭ niedastupny.\n"
-"Pasprabuj pračytać: http://trac.gajim.org/wiki/GajimDBus"
-
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "Kanfihuracyja pakoju"
@@ -4756,9 +4604,6 @@ msgstr ""
 
 msgid "Set the current status to online"
 msgstr ""
-
-msgid "Set the presence type and description"
-msgstr "Akreśli typ bačnaści i apisańnie"
 
 msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
@@ -4926,9 +4771,6 @@ msgstr ""
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "Schavaj akno"
-
-msgid "Shows a help on specific command"
-msgstr "Pakazvaje daviedku pa akreślenym zahadzie"
 
 #, fuzzy
 msgid "Shows a list of file transfers between you and your contacts"
@@ -5296,9 +5138,6 @@ msgstr "Niemahčyma ahladać hety servis"
 msgid "The signing certificate authority is not known"
 msgstr ""
 
-msgid "The status has been changed."
-msgstr "Status źmianiŭsia."
-
 #, fuzzy
 msgid "Theme"
 msgstr "Tema"
@@ -5473,14 +5312,6 @@ msgstr "Udzielnik"
 #, fuzzy
 msgid "Too many arguments"
 msgstr "Nie staje arhumenta \"contact_jid\""
-
-#, fuzzy, python-format
-msgid ""
-"Too many arguments. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"Nadta šmat arhumentaŭ. \n"
-"Vykanaj \"%s help %s\" dla padrabiaźniejšych źviestak"
 
 msgid "Topic"
 msgstr ""
@@ -5674,22 +5505,6 @@ msgstr "Pamyłka dasyłańnia pryvatnaha paviedamleńnia"
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
-#, fuzzy, python-format
-msgid ""
-"Usage:\n"
-"  %s command [arguments]\n"
-"\n"
-"Command is one of:\n"
-msgstr ""
-"Užyvańnie: %s zahad [arhumenty]\n"
-"Zahadam moža być adzin z nastupnych vyrazaŭ:\n"
-
-#, python-format
-msgid ""
-"Usage: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-msgstr ""
-
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -5874,24 +5689,9 @@ msgstr "Kansol XML"
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
-msgid "XML to send"
-msgstr "XML dla dasyłańnia"
-
 #, fuzzy
 msgid "XMPP Address"
 msgstr "Adras AIM:"
-
-#, fuzzy
-msgid "XMPP Address of the contact"
-msgstr "JID kantaktu"
-
-#, fuzzy
-msgid "XMPP Address of the contact that will receive the message"
-msgstr "JID kantaktu, jaki atrymaje paviedamleńnie"
-
-#, fuzzy
-msgid "XMPP Address of the group chat that will receive the message"
-msgstr "JID kantaktu, jaki atrymaje paviedamleńnie"
 
 #, fuzzy
 msgid "XMPP Address…"
@@ -6010,6 +5810,10 @@ msgstr "Nie staje pravoŭ dla stvareńnia fajłaŭ u hetym katalohu."
 msgid "You have been banned{actor}{reason}"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "You have been invited to %s"
+msgstr "%(who)s vypchnuŭ %(nick)s: %(reason)s"
+
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr ""
@@ -6021,9 +5825,6 @@ msgstr "%(who)s vypchnuŭ %(nick)s: %(reason)s"
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr ""
-
-msgid "You have no active account"
-msgstr "Nivodny kont nia dziejny"
 
 #, fuzzy
 msgid "You have to be connected to create a group chat."
@@ -6485,31 +6286,11 @@ msgstr "marski"
 msgid "building"
 msgstr "Vypichvajecca %s"
 
-msgid ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
-msgstr ""
-"źmiani status kontu \"kont\". Kali nie akreślena, pasprabuj źmianić statusy "
-"dla ŭsich kontaŭ, dla jakich vystaŭlenaja opcyja \"Synchranizuj z hlabalnym "
-"statusam\""
-
-#, fuzzy
-msgid ""
-"change the priority of the given account. If not specified, change status of "
-"all accounts that have \"sync with global status\" option set"
-msgstr ""
-"źmiani status kontu \"kont\". Kali nie akreślena, pasprabuj źmianić statusy "
-"dla ŭsich kontaŭ, dla jakich vystaŭlenaja opcyja \"Synchranizuj z hlabalnym "
-"statusam\""
-
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
 msgid "column"
 msgstr ""
-
-msgid "command"
-msgstr "zahad"
 
 #, fuzzy
 msgid "country"
@@ -6541,9 +6322,6 @@ msgstr "pamyłka dasyłańnia %s ( %s )"
 msgid "example.org"
 msgstr ""
 
-msgid "file"
-msgstr "fajł"
-
 msgid "file transfers list"
 msgstr "śpis pieradačaŭ fajłaŭ"
 
@@ -6561,15 +6339,6 @@ msgstr "Zaznač pakoji, jakija chočaš pakinuć"
 
 msgid "help"
 msgstr ""
-
-msgid "if specified, contact is taken from the contact list of this account"
-msgstr "Kali akreślena, kantakt biarecca sa śpisu kantaktaŭ hetaha kontu"
-
-msgid "if specified, file will be sent using this account"
-msgstr "Kali akreślena, fajł budzie dasłany z hetaha kontu"
-
-msgid "if specified, the message will be sent using this account"
-msgstr "Kali akreślena, paviedamleńnie budzie dasłanaje z hetaha kontu"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -6594,18 +6363,6 @@ msgstr "pieršaja"
 msgid "macOS"
 msgstr ""
 
-msgid "message contents"
-msgstr "źmiest paviedamleńnia"
-
-msgid "message subject"
-msgstr "tema paviedamleńnia"
-
-#, fuzzy
-msgid ""
-"one of: offline, online, chat, away, xa, dnd. If not set, use account's "
-"previous status"
-msgstr "adno z: offline, online, chat, away, xa, dnd, invisible "
-
 #, fuzzy
 msgid "or"
 msgstr "Da"
@@ -6618,10 +6375,6 @@ msgstr "pierastaŭ pisać"
 
 msgid "postalcode"
 msgstr ""
-
-#, fuzzy
-msgid "priority you want to give to the account"
-msgstr "Ja chaču za_rehistravać novy kont"
 
 #, fuzzy, python-format
 msgid "python-cairo Version: %s"
@@ -6637,23 +6390,11 @@ msgstr ""
 msgid "room"
 msgstr "pakoj"
 
-msgid "show help on command"
-msgstr "pakažy daviedku pa zahadzie"
-
-msgid "show only contacts of the given account"
-msgstr "pakažy kantakty akreślenaha kontu"
-
 msgid "speed"
 msgstr ""
 
-msgid "status message"
-msgstr "paviedamlennie statusu"
-
 msgid "street"
 msgstr ""
-
-msgid "subject"
-msgstr "tema"
 
 msgid "text"
 msgstr ""
@@ -6709,6 +6450,95 @@ msgstr "%(nick)s maje ciapier status %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#~ msgid "%s not found"
+#~ msgstr "%s nia znojdzieny"
+
+#, fuzzy
+#~ msgid ""
+#~ "'%s' is not in your contact list.\n"
+#~ "Please specify account for sending the message."
+#~ msgstr ""
+#~ "'%s' niama ŭ tvajim śpisie kantaktaŭ.\n"
+#~ "Kali łaska, akreśli kont dla dasyłańnia paviedamleńnia."
+
+#, fuzzy
+#~ msgid "?CLI:account"
+#~ msgstr "kont"
+
+#, fuzzy
+#~ msgid "?CLI:message"
+#~ msgstr "paviedamleńnie"
+
+#, fuzzy
+#~ msgid "?CLI:priority"
+#~ msgstr "Pryjary_tet:"
+
+#, fuzzy
+#~ msgid "?CLI:status"
+#~ msgstr "status"
+
+#, fuzzy
+#~ msgid ""
+#~ "Account to which the XML will be sent; if not specified, XML will be sent "
+#~ "to all accounts"
+#~ msgstr ""
+#~ "Kont, na jaki budzie dasłany XML; kali kont nie akreśleny, XML budzie "
+#~ "dasłany na ŭsie konty"
+
+#, fuzzy
+#~ msgid ""
+#~ "Argument \"%(arg)s\" is not specified. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "Arhument \"%s\" nie akreśleny. \n"
+#~ "Vykanaj \"%s help %s\" dla padrabiaźniejšych źviestak"
+
+#~ msgid "Arguments:"
+#~ msgstr "Arhumenty:"
+
+#~ msgid "Change status"
+#~ msgstr "Źmiani status"
+
+#~ msgid "Change status information"
+#~ msgstr "Źmiani infarmacyju statusu"
+
+#, fuzzy
+#~ msgid "Changes the priority of account(s)"
+#~ msgstr "Źmianiaje status kontu albo kontaŭ"
+
+#, fuzzy
+#~ msgid "Changes the status of account(s)"
+#~ msgstr "Źmianiaje status kontu albo kontaŭ"
+
+#, fuzzy
+#~ msgid "Check if Gajim is running"
+#~ msgstr "Kali łaska, pravier, ci pracuje avahi-daemon."
+
+#~ msgid "D-Bus is not present on this machine or python module is missing"
+#~ msgstr "D-Busu niama na hetym kamputary, albo nie staje modula Python"
+
+#~ msgid "Do not disturb"
+#~ msgstr "Nie turbavać"
+
+#~ msgid "Extended away"
+#~ msgstr "Adyjšoŭ"
+
+#~ msgid "File path"
+#~ msgstr "Ściežka da fajłu"
+
+#~ msgid "Free for chat"
+#~ msgstr "Achvotna parazmaŭlaju"
+
+#~ msgid "Gets detailed info on a account"
+#~ msgstr "Atrymvaje padrabiaznyja źviestki ab kantakcie"
+
+#~ msgid "Gets detailed info on a contact"
+#~ msgstr "Atrymvaje padrabiaznyja źviestki ab kantakcie"
+
+#~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
+#~ msgstr ""
+#~ "Kali hetaja opcyja ŭklučanaja, Gajimam možna kiravać praz gajim-remote."
+
 #, fuzzy
 #~ msgid ""
 #~ "If enabled, Gajim hides the main window when pressing the X button "
@@ -6719,9 +6549,186 @@ msgstr ""
 #~ "ikonaj pola nahadvańnia."
 
 #, fuzzy
+#~ msgid "Lists all contacts in the contact list, one for each line"
+#~ msgstr ""
+#~ "Pakazvaje śpis usich kantaktaŭ sa śpisu kantaktaŭ. Źviestki ab kožnym "
+#~ "kantakcie źjaŭlajucca na novym radku"
+
+#~ msgid "Missing argument \"contact_jid\""
+#~ msgstr "Nie staje arhumenta \"contact_jid\""
+
+#~ msgid "Name of the account"
+#~ msgstr "Nazva kontu"
+
+#~ msgid "Offline - disconnect"
+#~ msgstr "Niabačny - adłučany"
+
+#~ msgid "Online"
+#~ msgstr "Dałučany"
+
+#~ msgid "Presence description:"
+#~ msgstr "Apisańnie statusu:"
+
+#~ msgid "Prints a list of registered accounts"
+#~ msgstr "Pakazvaje śpis zarehistravanych kontaŭ"
+
+#, fuzzy
+#~ msgid "Removes contact from contact list"
+#~ msgstr "Vydalaje kantakt sa śpisu"
+
+#~ msgid "Returns current status (the global one unless account is specified)"
+#~ msgstr "Viartaje dziejny status (hlabalny, kali nie akreśleny kont)"
+
+#~ msgid ""
+#~ "Returns current status message (the global one unless account is "
+#~ "specified)"
+#~ msgstr ""
+#~ "Viartaje dziejnaje paviedamleńnie statusu (hlabalnaha, kali nie akreśleny "
+#~ "kont)"
+
+#~ msgid "Returns number of unread messages"
+#~ msgstr "Viartaje kolkaść niečytanych paviedamleńniaŭ"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends a chat message to someone on your contact list. Account is optional."
+#~ msgstr "Užyvańnie: /%s, chavaje knopki razmovy."
+
+#~ msgid "Sends custom XML"
+#~ msgstr "Dasyłaje svoj XML"
+
+#~ msgid "Sends file to a contact"
+#~ msgstr "Dasyłaje kantaktu fajł"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends new chat message to a contact in the contact list. Account is "
+#~ "optional."
+#~ msgstr "Užyvańnie: /%s, chavaje knopki razmovy."
+
+#~ msgid ""
+#~ "Service not available: Gajim is not running, or remote_control is False"
+#~ msgstr ""
+#~ "Servis niedastupny: Gajim nie vykonvajecca, albo opcyja remote_control "
+#~ "maje vartaść False"
+
+#, fuzzy
+#~ msgid ""
+#~ "Session bus is not available.\n"
+#~ "Try reading %(url)s"
+#~ msgstr ""
+#~ "Interfejs sesijaŭ niedastupny.\n"
+#~ "Pasprabuj pračytać: http://trac.gajim.org/wiki/GajimDBus"
+
+#~ msgid "Set the presence type and description"
+#~ msgstr "Akreśli typ bačnaści i apisańnie"
+
+#~ msgid "Shows a help on specific command"
+#~ msgstr "Pakazvaje daviedku pa akreślenym zahadzie"
+
+#, fuzzy
 #~ msgid "Sign Out"
 #~ msgstr "_Adłučajusia"
 
 #, fuzzy
 #~ msgid "Status Change"
 #~ msgstr "_Zachoŭvać u žurnale źmieny statusu kantaktaŭ"
+
+#~ msgid "The status has been changed."
+#~ msgstr "Status źmianiŭsia."
+
+#, fuzzy
+#~ msgid ""
+#~ "Too many arguments. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "Nadta šmat arhumentaŭ. \n"
+#~ "Vykanaj \"%s help %s\" dla padrabiaźniejšych źviestak"
+
+#, fuzzy
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  %s command [arguments]\n"
+#~ "\n"
+#~ "Command is one of:\n"
+#~ msgstr ""
+#~ "Užyvańnie: %s zahad [arhumenty]\n"
+#~ "Zahadam moža być adzin z nastupnych vyrazaŭ:\n"
+
+#~ msgid "XML to send"
+#~ msgstr "XML dla dasyłańnia"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact"
+#~ msgstr "JID kantaktu"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact that will receive the message"
+#~ msgstr "JID kantaktu, jaki atrymaje paviedamleńnie"
+
+#, fuzzy
+#~ msgid "XMPP Address of the group chat that will receive the message"
+#~ msgstr "JID kantaktu, jaki atrymaje paviedamleńnie"
+
+#~ msgid "You have no active account"
+#~ msgstr "Nivodny kont nia dziejny"
+
+#~ msgid ""
+#~ "change status of account \"account\". If not specified, try to change "
+#~ "status of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "źmiani status kontu \"kont\". Kali nie akreślena, pasprabuj źmianić "
+#~ "statusy dla ŭsich kontaŭ, dla jakich vystaŭlenaja opcyja \"Synchranizuj z "
+#~ "hlabalnym statusam\""
+
+#, fuzzy
+#~ msgid ""
+#~ "change the priority of the given account. If not specified, change status "
+#~ "of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "źmiani status kontu \"kont\". Kali nie akreślena, pasprabuj źmianić "
+#~ "statusy dla ŭsich kontaŭ, dla jakich vystaŭlenaja opcyja \"Synchranizuj z "
+#~ "hlabalnym statusam\""
+
+#~ msgid "command"
+#~ msgstr "zahad"
+
+#~ msgid "file"
+#~ msgstr "fajł"
+
+#~ msgid "if specified, contact is taken from the contact list of this account"
+#~ msgstr "Kali akreślena, kantakt biarecca sa śpisu kantaktaŭ hetaha kontu"
+
+#~ msgid "if specified, file will be sent using this account"
+#~ msgstr "Kali akreślena, fajł budzie dasłany z hetaha kontu"
+
+#~ msgid "if specified, the message will be sent using this account"
+#~ msgstr "Kali akreślena, paviedamleńnie budzie dasłanaje z hetaha kontu"
+
+#~ msgid "message contents"
+#~ msgstr "źmiest paviedamleńnia"
+
+#~ msgid "message subject"
+#~ msgstr "tema paviedamleńnia"
+
+#, fuzzy
+#~ msgid ""
+#~ "one of: offline, online, chat, away, xa, dnd. If not set, use account's "
+#~ "previous status"
+#~ msgstr "adno z: offline, online, chat, away, xa, dnd, invisible "
+
+#, fuzzy
+#~ msgid "priority you want to give to the account"
+#~ msgstr "Ja chaču za_rehistravać novy kont"
+
+#~ msgid "show help on command"
+#~ msgstr "pakažy daviedku pa zahadzie"
+
+#~ msgid "show only contacts of the given account"
+#~ msgstr "pakažy kantakty akreślenaha kontu"
+
+#~ msgid "status message"
+#~ msgstr "paviedamlennie statusu"
+
+#~ msgid "subject"
+#~ msgstr "tema"

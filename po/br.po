@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 19:47+0000\n"
+"POT-Creation-Date: 2022-06-17 18:19+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -162,10 +162,6 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "%s not found"
-msgstr "N'eo ket bet kavet %s"
-
-#, python-format
 msgid "%s s"
 msgstr ""
 
@@ -184,14 +180,6 @@ msgstr "Fellout a ra da %s kas deoc'h ur restr."
 #, fuzzy, python-format
 msgid "%s: Nothing found"
 msgstr "N'eo ket bet kavet %s"
-
-#, fuzzy, python-format
-msgid ""
-"'%s' is not in your contact list.\n"
-"Please specify account for sending the message."
-msgstr ""
-"N'emañ ket '%s' en hor roll darempredoù.\n"
-"Resisait ar gont evit kas ur gemennadenn."
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -346,22 +334,6 @@ msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "Hini ebet"
-
-#, fuzzy
-msgid "?CLI:account"
-msgstr "kont"
-
-#, fuzzy
-msgid "?CLI:message"
-msgstr "kemennadenn"
-
-#, fuzzy
-msgid "?CLI:priority"
-msgstr "Digant"
-
-#, fuzzy
-msgid "?CLI:status"
-msgstr "stad"
 
 #, fuzzy
 msgid "?Gender:None"
@@ -709,17 +681,19 @@ msgstr "Luget eo ar gont \"%s\" d'ar servijer"
 msgid "Account is being created"
 msgstr "Luget eo ar gont \"%s\" d'ar servijer"
 
-msgid ""
-"Account to which the XML will be sent; if not specified, XML will be sent to "
-"all accounts"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Account: %s"
 msgstr "Kontoù"
 
 msgid "Accounts"
 msgstr "Kontoù"
+
+#, fuzzy
+msgid "Action on Close"
+msgstr "Gajim"
+
+msgid "Action when closing Gajim’s window"
+msgstr ""
 
 msgid "Action when left-clicking a preview"
 msgstr ""
@@ -889,6 +863,11 @@ msgstr "An holl restroù"
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
 
+msgid ""
+"Allow Gajim to broadcast useful information via D-Bus. It also allows other "
+"applications to control Gajim remotely."
+msgstr ""
+
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
@@ -998,15 +977,6 @@ msgstr "Ha sur oc'h e fell deoc'h kuitaat ar flap \"%s\"?"
 #, fuzzy
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Êtes-vous sûr de vouloir quitter les salons \"%s\" ?"
-
-#, python-format
-msgid ""
-"Argument \"%(arg)s\" is not specified. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-
-msgid "Arguments:"
-msgstr "Arguments :"
 
 msgid "Artists"
 msgstr ""
@@ -1348,14 +1318,6 @@ msgstr "Cheñch ar ger-kuzh"
 msgid "Change Subject"
 msgstr "Kemmañ ar _sujed"
 
-#, fuzzy
-msgid "Change status"
-msgstr "Darempred diluget"
-
-#, fuzzy
-msgid "Change status information"
-msgstr "Titouroù"
-
 msgid "Change your account’s password, etc."
 msgstr ""
 
@@ -1376,14 +1338,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Changed by %s"
 msgstr "Cheñch _lesanv"
-
-#, fuzzy
-msgid "Changes the priority of account(s)"
-msgstr "A cheñch stad ar gont pe ar c'hontoù"
-
-#, fuzzy
-msgid "Changes the status of account(s)"
-msgstr "A cheñch stad ar gont pe ar c'hontoù"
 
 #, fuzzy
 msgid "Changing Password..."
@@ -1430,9 +1384,6 @@ msgid "Check for updates"
 msgstr ""
 
 msgid "Check for updates periodically"
-msgstr ""
-
-msgid "Check if Gajim is running"
 msgstr ""
 
 #, fuzzy
@@ -1826,6 +1777,9 @@ msgstr ""
 msgid "Creating Account..."
 msgstr "Lemel ar gont %s"
 
+msgid "Creating thumbnail failed"
+msgstr ""
+
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Ger-kuzh ret"
@@ -1834,9 +1788,8 @@ msgstr "Ger-kuzh ret"
 msgid "Current Developers"
 msgstr "Diorroerien kent:"
 
-msgid "D-Bus is not present on this machine or python module is missing"
+msgid "D-Bus Interface"
 msgstr ""
-"N'eus ket eus D-Bus war an urzhiataer-mañ, pe mankout a ra ur mollad python"
 
 #, fuzzy
 msgid "Dark Theme"
@@ -1981,9 +1934,6 @@ msgstr "Usage : /%s [sujet], affiche ou met à jour le sujet actuel du salon."
 #, fuzzy
 msgid "Display or change a group chat topic"
 msgstr "Goulenn a-raok serriñ un ivinell pe ur prenestr."
-
-msgid "Do not disturb"
-msgstr ""
 
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -2286,9 +2236,6 @@ msgstr "Kemennadenn o _tegouezhout:"
 msgid "Extended Address"
 msgstr "Chomlec'h 2:"
 
-msgid "Extended away"
-msgstr ""
-
 #, fuzzy
 msgid "FA_Q (Online)"
 msgstr "_Kenderc'hel"
@@ -2399,9 +2346,6 @@ msgstr "Treug ar restr"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File path"
-msgstr "Treug ar restr"
-
 msgid "File size unknown"
 msgstr ""
 
@@ -2495,10 +2439,6 @@ msgstr "Kemennadenn hiniennel nevez"
 msgid "Free for Chat"
 msgstr "Prest da flapiñ"
 
-#, fuzzy
-msgid "Free for chat"
-msgstr "Prest da flapiñ"
-
 msgid "From"
 msgstr "Digant"
 
@@ -2586,12 +2526,6 @@ msgstr ""
 
 msgid "Generate preview for any URLs containing images (may be unsafe)"
 msgstr ""
-
-msgid "Gets detailed info on a account"
-msgstr "Evit kargañ titouroù-munut ur gont"
-
-msgid "Gets detailed info on a contact"
-msgstr "Evit kargañ titouroù-munut un darempred"
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2718,11 +2652,11 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
+msgid "Hide"
+msgstr ""
+
 msgid "Hide this menu"
 msgstr "Kuzhat ar meuziad-mañ"
-
-msgid "Hide window to system tray when minimized"
-msgstr ""
 
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
@@ -2795,10 +2729,6 @@ msgstr "dibaoe %s"
 msgid "Idle since: %s"
 msgstr "dibaoe %s"
 
-msgid "If checked, Gajim can be controlled remotely using gajim-remote."
-msgstr ""
-"M'eo diuzet, e vo tu da sturiañ Gajim a-bell en ur implij gajim-remote."
-
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
@@ -2812,9 +2742,6 @@ msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 "Si cette case est cochée, Gajim affichera l'avatar de chaque contact dans la "
 "fenêtre principale et les salons"
-
-msgid "If enabled, Gajim will execute XEP-0146 Commands."
-msgstr ""
 
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
@@ -3006,9 +2933,6 @@ msgstr ""
 msgid "It is not possible to send empty files"
 msgstr "N'eus ket tu da gas restroù goullo"
 
-msgid "It seems Gajim is not running. So you can't use gajim-remote."
-msgstr ""
-
 msgid "Italic"
 msgstr "Stouet"
 
@@ -3139,11 +3063,6 @@ msgstr ""
 
 msgid "Listing of Servers"
 msgstr ""
-
-#, fuzzy
-msgid "Lists all contacts in the contact list, one for each line"
-msgstr ""
-"A ziskouez ur roll eus an holl zarempredoù, pep darempred war ul linenn."
 
 msgid "Live Preview"
 msgstr ""
@@ -3310,14 +3229,8 @@ msgstr ""
 "Posubl e vo lenn ar gemennadennoù diwezhatoc'h m'emañ an istoradur war enaou."
 
 #, fuzzy
-msgid "Minimize on Close"
+msgid "Minimize"
 msgstr "Gajim"
-
-msgid "Minimize to Tray"
-msgstr ""
-
-msgid "Minimize when closing Gajim’s window"
-msgstr ""
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3326,9 +3239,6 @@ msgstr "_Menegiñ kemmoù stad an darempredoù e-barzh an istoradur"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>A bep seurt</b>"
-
-msgid "Missing argument \"contact_jid\""
-msgstr ""
 
 #, fuzzy
 msgid "Missing arguments"
@@ -3378,9 +3288,6 @@ msgstr "Anv"
 
 msgid "Name <b>default</b> is not allowed"
 msgstr ""
-
-msgid "Name of the account"
-msgstr "Anv ar gont"
 
 msgid "Needs gspell to be installed"
 msgstr ""
@@ -3566,18 +3473,11 @@ msgstr "_Mat eo"
 msgid "Offline"
 msgstr "Ezlinenn"
 
-msgid "Offline - disconnect"
-msgstr ""
-
 msgid "One Month"
 msgstr ""
 
 msgid "One Year"
 msgstr ""
-
-#, fuzzy
-msgid "Online"
-msgstr "_Kenderc'hel"
 
 #, fuzzy
 msgid "Online Status"
@@ -3926,10 +3826,6 @@ msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
 msgstr ""
 
 #, fuzzy
-msgid "Presence description:"
-msgstr "Taolennadur"
-
-#, fuzzy
 msgid "Presets"
 msgstr "_Bezañs"
 
@@ -3956,9 +3852,6 @@ msgstr "Kemennadennoù raklakaet:"
 
 msgid "Print XML stanzas and other debug information"
 msgstr ""
-
-msgid "Prints a list of registered accounts"
-msgstr "A ziskouez roll ar c'hontoù enrollet"
 
 msgid "Priority"
 msgstr ""
@@ -4019,6 +3912,10 @@ msgstr "Stad:"
 #, python-format
 msgid "PyGObject Version: %s"
 msgstr ""
+
+#, fuzzy
+msgid "Quit"
+msgstr "_Kuitaat"
 
 #, fuzzy
 msgid "Quit Gajim"
@@ -4203,10 +4100,6 @@ msgstr[0] "Dilemel an darempred diouzh ar roll"
 msgstr[1] "Dilemel an darempred diouzh ar roll"
 
 #, fuzzy
-msgid "Removes contact from contact list"
-msgstr "Dilemel an darempred diouzh ar roll"
-
-#, fuzzy
 msgid "Remove…"
 msgstr "_Dilemel"
 
@@ -4324,20 +4217,6 @@ msgstr "Titour-stad"
 #, fuzzy
 msgid "Retract message?"
 msgstr "titour stad"
-
-msgid "Returns current status (the global one unless account is specified)"
-msgstr ""
-"A ro ar stad red (an hini hollek, nemet ez eus bet resisaet ur gont bennak)"
-
-msgid ""
-"Returns current status message (the global one unless account is specified)"
-msgstr ""
-"A gas an titour-stad red (an hini hollek, nemet ez eus bet resisaet ur gont "
-"bennak)"
-
-#, fuzzy
-msgid "Returns number of unread messages"
-msgstr "A ro an niver a gemennadennoù chomet dilenn"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -4620,25 +4499,6 @@ msgstr "Kaser:"
 msgid "Sending private message failed"
 msgstr "Kas ar gemennadenn brevez c'hwitet"
 
-#, fuzzy
-msgid ""
-"Sends a chat message to someone on your contact list. Account is optional."
-msgstr "Usage: /%s, cache les boutons de discussion."
-
-msgid "Sends custom XML"
-msgstr ""
-
-msgid "Sends file to a contact"
-msgstr "Kas ur restr d'un darempred"
-
-#, fuzzy
-msgid ""
-"Sends new chat message to a contact in the contact list. Account is optional."
-msgstr "Usage: /%s, cache les boutons de discussion."
-
-msgid "Sends new message to a group chat you've joined."
-msgstr ""
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr ""
@@ -4694,17 +4554,6 @@ msgstr "Merañ servijoù ar gont %s"
 msgid "Service Gateway"
 msgstr "Servijer"
 
-msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr ""
-"Servij dihegerz: n'eo ket loc'het Gajim, pe lakaet eo bet remote_control war "
-"False"
-
-#, fuzzy, python-format
-msgid ""
-"Session bus is not available.\n"
-"Try reading %(url)s"
-msgstr "Le bus de session n'est pas disponible"
-
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "Kefluniañ ar webgaoz"
@@ -4729,9 +4578,6 @@ msgid "Set the current status to away"
 msgstr ""
 
 msgid "Set the current status to online"
-msgstr ""
-
-msgid "Set the presence type and description"
 msgstr ""
 
 msgid "Set your activity or tune to show your friends how you are feeling"
@@ -4893,10 +4739,6 @@ msgstr ""
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "A guzha ar prenestr"
-
-#, fuzzy
-msgid "Shows a help on specific command"
-msgstr "diskouez ar skoazell evit un urzhiad resis"
 
 #, fuzzy
 msgid "Shows a list of file transfers between you and your contacts"
@@ -5264,9 +5106,6 @@ msgstr "N'eus ket tu furchal er servij"
 msgid "The signing certificate authority is not known"
 msgstr ""
 
-msgid "The status has been changed."
-msgstr ""
-
 #, fuzzy
 msgid "Theme"
 msgstr "Gwiskadur"
@@ -5442,12 +5281,6 @@ msgstr "Perzhiad-ez"
 #, fuzzy
 msgid "Too many arguments"
 msgstr "Kemennadenn gaset"
-
-#, python-format
-msgid ""
-"Too many arguments. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
 
 msgid "Topic"
 msgstr ""
@@ -5640,22 +5473,6 @@ msgstr "Kas ar gemennadenn brevez c'hwitet"
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
-#, fuzzy, python-format
-msgid ""
-"Usage:\n"
-"  %s command [arguments]\n"
-"\n"
-"Command is one of:\n"
-msgstr ""
-"Implij: %s urzhiad [arguments]\n"
-"urzhiad eo unan eus :\n"
-
-#, python-format
-msgid ""
-"Usage: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-msgstr ""
-
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -5839,24 +5656,9 @@ msgstr ""
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
-msgid "XML to send"
-msgstr ""
-
 #, fuzzy
 msgid "XMPP Address"
 msgstr "_Chomlec'h:"
-
-#, fuzzy
-msgid "XMPP Address of the contact"
-msgstr "JID an darempred"
-
-#, fuzzy
-msgid "XMPP Address of the contact that will receive the message"
-msgstr "JID an darempred hag a resevo ar gemennadenn"
-
-#, fuzzy
-msgid "XMPP Address of the group chat that will receive the message"
-msgstr "JID an darempred hag a resevo ar gemennadenn"
 
 #, fuzzy
 msgid "XMPP Address…"
@@ -5970,6 +5772,10 @@ msgstr ""
 msgid "You have been banned{actor}{reason}"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "You have been invited to %s"
+msgstr "%(nick)s a zo bet skarzhet gant %(who)s : %(reason)s"
+
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr ""
@@ -5981,9 +5787,6 @@ msgstr "%(nick)s a zo bet skarzhet gant %(who)s : %(reason)s"
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr ""
-
-msgid "You have no active account"
-msgstr "N'ho peus kont bev ebet"
 
 #, fuzzy
 msgid "You have to be connected to create a group chat."
@@ -6445,29 +6248,11 @@ msgstr "Glas-mor"
 msgid "building"
 msgstr "Skarzhañ %s"
 
-msgid ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
-msgstr ""
-"A cheñch stad ar gont \"kont\". Ma n'eus hini ebet roet, klaskit cheñch stad "
-"an holl gontoù o deus an dibab \"sync with global status\" enaouet"
-
-#, fuzzy
-msgid ""
-"change the priority of the given account. If not specified, change status of "
-"all accounts that have \"sync with global status\" option set"
-msgstr ""
-"A cheñch stad ar gont \"kont\". Ma n'eus hini ebet roet, klaskit cheñch stad "
-"an holl gontoù o deus an dibab \"sync with global status\" enaouet"
-
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
 msgid "column"
 msgstr ""
-
-msgid "command"
-msgstr "urzhiad"
 
 #, fuzzy
 msgid "country"
@@ -6498,9 +6283,6 @@ msgstr "fazi en ur gas %s ( %s )"
 msgid "example.org"
 msgstr ""
 
-msgid "file"
-msgstr "restr"
-
 msgid "file transfers list"
 msgstr "roll an treuzkasadoù"
 
@@ -6518,15 +6300,6 @@ msgstr "Leuniit an titouroù diwar-benn an darempred da ouzhpennañ"
 
 msgid "help"
 msgstr ""
-
-msgid "if specified, contact is taken from the contact list of this account"
-msgstr "Si spécifié, le contact est pris dans la liste de contact de ce compte"
-
-msgid "if specified, file will be sent using this account"
-msgstr "m'eo resisaet, e vo kaset ar rest en ur implij ar gont-mañ"
-
-msgid "if specified, the message will be sent using this account"
-msgstr "Ma vez resisaet, e vo kaset ar gemennadenn en ur implij ar gont-mañ"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -6551,19 +6324,6 @@ msgstr "Hini ebet"
 msgid "macOS"
 msgstr ""
 
-msgid "message contents"
-msgstr "korf ar gemennadenn"
-
-#, fuzzy
-msgid "message subject"
-msgstr "Kemennadenn gaset"
-
-#, fuzzy
-msgid ""
-"one of: offline, online, chat, away, xa, dnd. If not set, use account's "
-"previous status"
-msgstr "unan eus: offline, online, chat, away, xa, dnd, invisible "
-
 #, fuzzy
 msgid "or"
 msgstr "Da"
@@ -6576,10 +6336,6 @@ msgstr "a zo paouezet da skrivañ ar gemennadenn"
 
 msgid "postalcode"
 msgstr ""
-
-#, fuzzy
-msgid "priority you want to give to the account"
-msgstr "Fellout a ra din emezelañ evit krouiñ ur gont"
 
 #, fuzzy, python-format
 msgid "python-cairo Version: %s"
@@ -6596,24 +6352,11 @@ msgstr ""
 msgid "room"
 msgstr "Digant"
 
-msgid "show help on command"
-msgstr "diskouez ar skoazell evit an urzhiad"
-
-msgid "show only contacts of the given account"
-msgstr "diskouez darempredoù ar gont roet hepken"
-
 msgid "speed"
 msgstr ""
 
-msgid "status message"
-msgstr "titour stad"
-
 msgid "street"
 msgstr ""
-
-#, fuzzy
-msgid "subject"
-msgstr "Titl"
 
 msgid "text"
 msgstr ""
@@ -6671,6 +6414,143 @@ msgstr "%(nick)s a zo bremañ %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#~ msgid "%s not found"
+#~ msgstr "N'eo ket bet kavet %s"
+
+#, fuzzy
+#~ msgid ""
+#~ "'%s' is not in your contact list.\n"
+#~ "Please specify account for sending the message."
+#~ msgstr ""
+#~ "N'emañ ket '%s' en hor roll darempredoù.\n"
+#~ "Resisait ar gont evit kas ur gemennadenn."
+
+#, fuzzy
+#~ msgid "?CLI:account"
+#~ msgstr "kont"
+
+#, fuzzy
+#~ msgid "?CLI:message"
+#~ msgstr "kemennadenn"
+
+#, fuzzy
+#~ msgid "?CLI:priority"
+#~ msgstr "Digant"
+
+#, fuzzy
+#~ msgid "?CLI:status"
+#~ msgstr "stad"
+
+#~ msgid "Arguments:"
+#~ msgstr "Arguments :"
+
+#, fuzzy
+#~ msgid "Change status"
+#~ msgstr "Darempred diluget"
+
+#, fuzzy
+#~ msgid "Change status information"
+#~ msgstr "Titouroù"
+
+#, fuzzy
+#~ msgid "Changes the priority of account(s)"
+#~ msgstr "A cheñch stad ar gont pe ar c'hontoù"
+
+#, fuzzy
+#~ msgid "Changes the status of account(s)"
+#~ msgstr "A cheñch stad ar gont pe ar c'hontoù"
+
+#~ msgid "D-Bus is not present on this machine or python module is missing"
+#~ msgstr ""
+#~ "N'eus ket eus D-Bus war an urzhiataer-mañ, pe mankout a ra ur mollad "
+#~ "python"
+
+#~ msgid "File path"
+#~ msgstr "Treug ar restr"
+
+#, fuzzy
+#~ msgid "Free for chat"
+#~ msgstr "Prest da flapiñ"
+
+#~ msgid "Gets detailed info on a account"
+#~ msgstr "Evit kargañ titouroù-munut ur gont"
+
+#~ msgid "Gets detailed info on a contact"
+#~ msgstr "Evit kargañ titouroù-munut un darempred"
+
+#~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
+#~ msgstr ""
+#~ "M'eo diuzet, e vo tu da sturiañ Gajim a-bell en ur implij gajim-remote."
+
+#, fuzzy
+#~ msgid "Lists all contacts in the contact list, one for each line"
+#~ msgstr ""
+#~ "A ziskouez ur roll eus an holl zarempredoù, pep darempred war ul linenn."
+
+#~ msgid "Name of the account"
+#~ msgstr "Anv ar gont"
+
+#, fuzzy
+#~ msgid "Online"
+#~ msgstr "_Kenderc'hel"
+
+#, fuzzy
+#~ msgid "Presence description:"
+#~ msgstr "Taolennadur"
+
+#~ msgid "Prints a list of registered accounts"
+#~ msgstr "A ziskouez roll ar c'hontoù enrollet"
+
+#, fuzzy
+#~ msgid "Removes contact from contact list"
+#~ msgstr "Dilemel an darempred diouzh ar roll"
+
+#~ msgid "Returns current status (the global one unless account is specified)"
+#~ msgstr ""
+#~ "A ro ar stad red (an hini hollek, nemet ez eus bet resisaet ur gont "
+#~ "bennak)"
+
+#~ msgid ""
+#~ "Returns current status message (the global one unless account is "
+#~ "specified)"
+#~ msgstr ""
+#~ "A gas an titour-stad red (an hini hollek, nemet ez eus bet resisaet ur "
+#~ "gont bennak)"
+
+#, fuzzy
+#~ msgid "Returns number of unread messages"
+#~ msgstr "A ro an niver a gemennadennoù chomet dilenn"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends a chat message to someone on your contact list. Account is optional."
+#~ msgstr "Usage: /%s, cache les boutons de discussion."
+
+#~ msgid "Sends file to a contact"
+#~ msgstr "Kas ur restr d'un darempred"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends new chat message to a contact in the contact list. Account is "
+#~ "optional."
+#~ msgstr "Usage: /%s, cache les boutons de discussion."
+
+#~ msgid ""
+#~ "Service not available: Gajim is not running, or remote_control is False"
+#~ msgstr ""
+#~ "Servij dihegerz: n'eo ket loc'het Gajim, pe lakaet eo bet remote_control "
+#~ "war False"
+
+#, fuzzy
+#~ msgid ""
+#~ "Session bus is not available.\n"
+#~ "Try reading %(url)s"
+#~ msgstr "Le bus de session n'est pas disponible"
+
+#, fuzzy
+#~ msgid "Shows a help on specific command"
+#~ msgstr "diskouez ar skoazell evit un urzhiad resis"
+
 #, fuzzy
 #~ msgid "Sign Out"
 #~ msgstr "_Dilugañ"
@@ -6678,3 +6558,89 @@ msgstr ""
 #, fuzzy
 #~ msgid "Status Change"
 #~ msgstr "_Menegiñ kemmoù stad an darempredoù e-barzh an istoradur"
+
+#, fuzzy
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  %s command [arguments]\n"
+#~ "\n"
+#~ "Command is one of:\n"
+#~ msgstr ""
+#~ "Implij: %s urzhiad [arguments]\n"
+#~ "urzhiad eo unan eus :\n"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact"
+#~ msgstr "JID an darempred"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact that will receive the message"
+#~ msgstr "JID an darempred hag a resevo ar gemennadenn"
+
+#, fuzzy
+#~ msgid "XMPP Address of the group chat that will receive the message"
+#~ msgstr "JID an darempred hag a resevo ar gemennadenn"
+
+#~ msgid "You have no active account"
+#~ msgstr "N'ho peus kont bev ebet"
+
+#~ msgid ""
+#~ "change status of account \"account\". If not specified, try to change "
+#~ "status of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "A cheñch stad ar gont \"kont\". Ma n'eus hini ebet roet, klaskit cheñch "
+#~ "stad an holl gontoù o deus an dibab \"sync with global status\" enaouet"
+
+#, fuzzy
+#~ msgid ""
+#~ "change the priority of the given account. If not specified, change status "
+#~ "of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "A cheñch stad ar gont \"kont\". Ma n'eus hini ebet roet, klaskit cheñch "
+#~ "stad an holl gontoù o deus an dibab \"sync with global status\" enaouet"
+
+#~ msgid "command"
+#~ msgstr "urzhiad"
+
+#~ msgid "file"
+#~ msgstr "restr"
+
+#~ msgid "if specified, contact is taken from the contact list of this account"
+#~ msgstr ""
+#~ "Si spécifié, le contact est pris dans la liste de contact de ce compte"
+
+#~ msgid "if specified, file will be sent using this account"
+#~ msgstr "m'eo resisaet, e vo kaset ar rest en ur implij ar gont-mañ"
+
+#~ msgid "if specified, the message will be sent using this account"
+#~ msgstr "Ma vez resisaet, e vo kaset ar gemennadenn en ur implij ar gont-mañ"
+
+#~ msgid "message contents"
+#~ msgstr "korf ar gemennadenn"
+
+#, fuzzy
+#~ msgid "message subject"
+#~ msgstr "Kemennadenn gaset"
+
+#, fuzzy
+#~ msgid ""
+#~ "one of: offline, online, chat, away, xa, dnd. If not set, use account's "
+#~ "previous status"
+#~ msgstr "unan eus: offline, online, chat, away, xa, dnd, invisible "
+
+#, fuzzy
+#~ msgid "priority you want to give to the account"
+#~ msgstr "Fellout a ra din emezelañ evit krouiñ ur gont"
+
+#~ msgid "show help on command"
+#~ msgstr "diskouez ar skoazell evit an urzhiad"
+
+#~ msgid "show only contacts of the given account"
+#~ msgstr "diskouez darempredoù ar gont roet hepken"
+
+#~ msgid "status message"
+#~ msgstr "titour stad"
+
+#, fuzzy
+#~ msgid "subject"
+#~ msgstr "Titl"

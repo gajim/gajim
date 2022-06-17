@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 19:47+0000\n"
+"POT-Creation-Date: 2022-06-17 18:19+0000\n"
 "PO-Revision-Date: 2022-05-26 22:21+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -182,10 +182,6 @@ msgstr ""
 "ファイルを送りたいデバイスを選んでください。"
 
 #, python-format
-msgid "%s not found"
-msgstr "%s は見つかりません"
-
-#, python-format
 msgid "%s s"
 msgstr "%s 秒"
 
@@ -204,14 +200,6 @@ msgstr "%s さんがファイルを転送したがっています"
 #, python-format
 msgid "%s: Nothing found"
 msgstr "%s: 見つかりません"
-
-#, python-format
-msgid ""
-"'%s' is not in your contact list.\n"
-"Please specify account for sending the message."
-msgstr ""
-"'%s' は相手先一覧にありません。\n"
-"メッセージを送るためのアカウントを指定してください。"
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -359,18 +347,6 @@ msgstr "<span color=\"yellow\" font-weight=\"bold\">非高速化</span>"
 
 msgid "?Ask (for Subscription):None"
 msgstr "なし"
-
-msgid "?CLI:account"
-msgstr "?CLI:アカウント"
-
-msgid "?CLI:message"
-msgstr "?CLI:メッセージ"
-
-msgid "?CLI:priority"
-msgstr "?CLI:優先順位"
-
-msgid "?CLI:status"
-msgstr "?CLI:在席状況"
 
 msgid "?Gender:None"
 msgstr "なし"
@@ -657,19 +633,20 @@ msgstr "アカウントはサーバーに接続されている必要がありま
 msgid "Account is being created"
 msgstr "アカウントを作成しています"
 
-msgid ""
-"Account to which the XML will be sent; if not specified, XML will be sent to "
-"all accounts"
-msgstr ""
-"XML が送信されるアカウント。指定されない場合、XML はすべてのアカウントに送信"
-"されます"
-
 #, python-format
 msgid "Account: %s"
 msgstr "アカウント: %s"
 
 msgid "Accounts"
 msgstr "アカウント"
+
+#, fuzzy
+msgid "Action on Close"
+msgstr "閉じると Gajim を終了する"
+
+#, fuzzy
+msgid "Action when closing Gajim’s window"
+msgstr "Gajim のウィンドウを閉じると終了します"
 
 msgid "Action when left-clicking a preview"
 msgstr "プレビューを左クリックしたときの動作"
@@ -810,6 +787,11 @@ msgstr "すべてのファイル"
 msgid "All other group chat participants can see your XMPP address"
 msgstr "談話室のすべての参加者があなたの XMPP アドレスを見ることができます"
 
+msgid ""
+"Allow Gajim to broadcast useful information via D-Bus. It also allows other "
+"applications to control Gajim remotely."
+msgstr ""
+
 msgid "Allow a participant to send you public or private messages"
 msgstr "参加者がメッセージ (私信も含む) を送ってくることを許可します"
 
@@ -902,17 +884,6 @@ msgstr "本当にクリップボードからチャットウィンドウに画像
 
 msgid "Are you sure you want to quit Gajim?"
 msgstr "本当に Gajim を終了しますか ?"
-
-#, python-format
-msgid ""
-"Argument \"%(arg)s\" is not specified. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"引数 \"%(arg)s\" が指定されていません。\n"
-"詳しくは \"%(basename)s help %(command)s\" と入力してください"
-
-msgid "Arguments:"
-msgstr "引数:"
 
 msgid "Artists"
 msgstr "アーティスト"
@@ -1220,12 +1191,6 @@ msgstr "パスワードを変更"
 msgid "Change Subject"
 msgstr "談話室の題を変更"
 
-msgid "Change status"
-msgstr "在席状況を変更する"
-
-msgid "Change status information"
-msgstr "在席状況の変更"
-
 msgid "Change your account’s password, etc."
 msgstr "アカウントのパスワードなどを変更します"
 
@@ -1244,12 +1209,6 @@ msgstr "一定時間後、在席状況を'不在'に変えます"
 #, python-format
 msgid "Changed by %s"
 msgstr "%s により変更"
-
-msgid "Changes the priority of account(s)"
-msgstr "アカウントの優先順位を変更します"
-
-msgid "Changes the status of account(s)"
-msgstr "アカウントの在席状況の変更します"
 
 msgid "Changing Password..."
 msgstr "パスワードを変更…"
@@ -1296,9 +1255,6 @@ msgstr "更新をチェック"
 
 msgid "Check for updates periodically"
 msgstr "定期的に更新をチェック"
-
-msgid "Check if Gajim is running"
-msgstr "Gajim が起動しているかチェックします"
 
 msgid "Checking file…"
 msgstr "ファイルをチェックしています…"
@@ -1624,15 +1580,17 @@ msgstr "新しい投稿を作成"
 msgid "Creating Account..."
 msgstr "アカウント作成中…"
 
+msgid "Creating thumbnail failed"
+msgstr ""
+
 msgid "Credentials expired"
 msgstr "認証情報は期限切れです"
 
 msgid "Current Developers"
 msgstr "現在の開発者"
 
-msgid "D-Bus is not present on this machine or python module is missing"
+msgid "D-Bus Interface"
 msgstr ""
-"このコンピューターに D-Bus がないか、あるいは python のモジュールがありません"
 
 msgid "Dark Theme"
 msgstr "ダークテーマ"
@@ -1752,9 +1710,6 @@ msgstr "談話室のすべての参加者の名前を表示します"
 
 msgid "Display or change a group chat topic"
 msgstr "談話室の題を表示または変更します"
-
-msgid "Do not disturb"
-msgstr "邪魔しないでください"
 
 #, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -2024,9 +1979,6 @@ msgstr "メッセージを書き出しています…"
 msgid "Extended Address"
 msgstr "建物名など"
 
-msgid "Extended away"
-msgstr "長時間不在です"
-
 msgid "FA_Q (Online)"
 msgstr "FAQ (オンライン) (_Q)"
 
@@ -2118,9 +2070,6 @@ msgstr "ファイルが空です"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr "ファイルが大きすぎます。最大ファイルサイズ: %s"
 
-msgid "File path"
-msgstr "ファイルの場所"
-
 msgid "File size unknown"
 msgstr "ファイルサイズは不明です"
 
@@ -2204,9 +2153,6 @@ msgstr "メッセージを装飾…"
 
 msgid "Free for Chat"
 msgstr "チャット可"
-
-msgid "Free for chat"
-msgstr "チャットできます"
 
 # (Mako)groups_post_window.ui は、メールの「差出人」に相当
 # helpers.pyは、
@@ -2300,12 +2246,6 @@ msgstr ""
 
 msgid "Generate preview for any URLs containing images (may be unsafe)"
 msgstr "画像を含む URL のプレビューを生成します(安全でない可能性があります)"
-
-msgid "Gets detailed info on a account"
-msgstr "アカウントの詳細情報を取得します"
-
-msgid "Gets detailed info on a contact"
-msgstr "相手先の詳細情報を取得します"
 
 msgid "Global Group Chat Search"
 msgstr "全体的な談話室検索"
@@ -2409,11 +2349,11 @@ msgstr "こんにちは。私は $name. %s です"
 msgid "Helps to establish calls through firewalls"
 msgstr "ファイアウォールを越える通話の確立を助けます"
 
+msgid "Hide"
+msgstr ""
+
 msgid "Hide this menu"
 msgstr "このメニューを表示しない"
-
-msgid "Hide window to system tray when minimized"
-msgstr ""
 
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "1対1チャットウィンドウのバナーを表示しません。"
@@ -2474,9 +2414,6 @@ msgstr "操作のない時間"
 msgid "Idle since: %s"
 msgstr "操作のない状態(いつから): %s"
 
-msgid "If checked, Gajim can be controlled remotely using gajim-remote."
-msgstr "チェックをつけると、Gajim を gajim-remote を使って遠隔操作できます。"
-
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
@@ -2490,9 +2427,6 @@ msgstr ""
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 "有効の場合、Gajim は相手先一覧ウィンドウのタイトルに * と [n] を付けます。"
-
-msgid "If enabled, Gajim will execute XEP-0146 Commands."
-msgstr "有効の場合、Gajim は XEP-0146 コマンドを実行します。"
 
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
@@ -2676,9 +2610,6 @@ msgstr "証明対象\n"
 msgid "It is not possible to send empty files"
 msgstr "空のファイルを転送することはできません"
 
-msgid "It seems Gajim is not running. So you can't use gajim-remote."
-msgstr "Gajim が起動していないようです。そのため gajim-remote は使えません。"
-
 msgid "Italic"
 msgstr "イタリック"
 
@@ -2794,9 +2725,6 @@ msgstr ""
 
 msgid "Listing of Servers"
 msgstr "サーバーの一覧"
-
-msgid "Lists all contacts in the contact list, one for each line"
-msgstr "相手先一覧にある相手先すべてを、それぞれ1行に表示します"
 
 msgid "Live Preview"
 msgstr "ライブプレビュー"
@@ -2944,24 +2872,14 @@ msgstr ""
 "ます。"
 
 #, fuzzy
-msgid "Minimize on Close"
+msgid "Minimize"
 msgstr "閉じると Gajim を終了する"
-
-msgid "Minimize to Tray"
-msgstr ""
-
-#, fuzzy
-msgid "Minimize when closing Gajim’s window"
-msgstr "Gajim のウィンドウを閉じると終了します"
 
 msgid "Minutes until your status gets changed"
 msgstr "在籍状況を変更するまでの時間(分)"
 
 msgid "Miscellaneous"
 msgstr "その他の設定"
-
-msgid "Missing argument \"contact_jid\""
-msgstr "引数 \"contact_jid\" がありません"
 
 msgid "Missing arguments"
 msgstr "引数がありません"
@@ -3004,9 +2922,6 @@ msgstr "名前"
 
 msgid "Name <b>default</b> is not allowed"
 msgstr "名前 <b>default</b> は使えません"
-
-msgid "Name of the account"
-msgstr "アカウント名"
 
 msgid "Needs gspell to be installed"
 msgstr "gspell がインストールされている必要があります"
@@ -3171,17 +3086,11 @@ msgstr "OK"
 msgid "Offline"
 msgstr "オフライン"
 
-msgid "Offline - disconnect"
-msgstr "オフライン - 切断中"
-
 msgid "One Month"
 msgstr "1か月"
 
 msgid "One Year"
 msgstr "1年"
-
-msgid "Online"
-msgstr "オンライン"
 
 msgid "Online Status"
 msgstr "在席状況"
@@ -3497,9 +3406,6 @@ msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
 msgstr ""
 "チャットウィンドウへのファイルのドラッグアンドドロップで用いられる転送方法"
 
-msgid "Presence description:"
-msgstr "在席状況の説明:"
-
 # (Mako)あえて訳さない
 msgid "Presets"
 msgstr "Presets"
@@ -3524,9 +3430,6 @@ msgstr "前の送信済メッセージ"
 
 msgid "Print XML stanzas and other debug information"
 msgstr "XML スタンザとその他のデバッグ情報を出力"
-
-msgid "Prints a list of registered accounts"
-msgstr "登録アカウントの一覧の表示します"
 
 msgid "Priority"
 msgstr "優先順位"
@@ -3577,6 +3480,10 @@ msgstr "会話の履歴をすべて削除"
 #, python-format
 msgid "PyGObject Version: %s"
 msgstr "PyGObject バージョン: %s"
+
+#, fuzzy
+msgid "Quit"
+msgstr "終了 (_Q)"
 
 msgid "Quit Gajim"
 msgstr "Gajim を終了"
@@ -3729,9 +3636,6 @@ msgid_plural "Removed %d contacts"
 msgstr[0] "%d 件の相手先を削除しました"
 msgstr[1] "%d 件の相手先を削除しました"
 
-msgid "Removes contact from contact list"
-msgstr "相手先を相手先一覧から削除します"
-
 msgid "Remove…"
 msgstr "削除…"
 
@@ -3840,20 +3744,6 @@ msgstr "メッセージを撤回"
 
 msgid "Retract message?"
 msgstr "メッセージを撤回しますか ?"
-
-msgid "Returns current status (the global one unless account is specified)"
-msgstr ""
-"現在の在席状況を返します (もしアカウントが指定されなければ、全体の在席状況を"
-"返します)"
-
-msgid ""
-"Returns current status message (the global one unless account is specified)"
-msgstr ""
-"現在の状況メッセージを返します (もしアカウントが指定されなければ、全体の状況"
-"メッセージを返します)"
-
-msgid "Returns number of unread messages"
-msgstr "未読メッセージ数を返します"
 
 # (Mako)「会員」では排他的なニュアンスが強いのでしかたなくカタカナ語で
 msgid "Revoke Member"
@@ -4096,24 +3986,6 @@ msgstr "送信者: "
 msgid "Sending private message failed"
 msgstr "私信の送信に失敗しました"
 
-msgid ""
-"Sends a chat message to someone on your contact list. Account is optional."
-msgstr "相手先一覧にある誰かにメッセージを送信します(アカウントは省略可)。"
-
-msgid "Sends custom XML"
-msgstr "独自の XML を送信します"
-
-msgid "Sends file to a contact"
-msgstr "相手先にファイルを転送します"
-
-msgid ""
-"Sends new chat message to a contact in the contact list. Account is optional."
-msgstr ""
-"相手先一覧にある相手先に新たにメッセージを送信します(アカウントは省略可)。"
-
-msgid "Sends new message to a group chat you've joined."
-msgstr "参加している談話室に新しいメッセージを送信します。"
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "送った相手先: \"%(jid)s\" (%(name)s)"
@@ -4162,19 +4034,6 @@ msgstr "アカウント %s でサービス探索"
 msgid "Service Gateway"
 msgstr "サービス中継"
 
-msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr ""
-"サービスがありません: Gajim が起動していないか、あるいは remote_control が"
-"「偽」に設定されています"
-
-#, python-format
-msgid ""
-"Session bus is not available.\n"
-"Try reading %(url)s"
-msgstr ""
-"セッションバスが有効ではありません。\n"
-"%(url)s を読んでください"
-
 msgid "Set configuration directory"
 msgstr "設定ファイルのディレクトリを指定"
 
@@ -4205,9 +4064,6 @@ msgstr "在席状況を「離席中」に設定します"
 
 msgid "Set the current status to online"
 msgstr "在席状況を「在席」に設定します"
-
-msgid "Set the presence type and description"
-msgstr "在席状況の種類と説明の設定"
 
 #, fuzzy
 msgid "Set your activity or tune to show your friends how you are feeling"
@@ -4357,9 +4213,6 @@ msgstr "通話中、自分のビデオストリームを表示します"
 # (Mako)この場合は「閉じる」
 msgid "Show/Hide Window"
 msgstr "ウィンドウを表示/閉じる"
-
-msgid "Shows a help on specific command"
-msgstr "指定のコマンドに対するヘルプを表示します"
 
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr "ファイル転送の一覧を表示します"
@@ -4695,9 +4548,6 @@ msgstr "このサービスを見ることはできません"
 msgid "The signing certificate authority is not known"
 msgstr "署名している証明機関が不明です"
 
-msgid "The status has been changed."
-msgstr "在席状況が変更されました。"
-
 msgid "Theme"
 msgstr "テーマ"
 
@@ -4868,14 +4718,6 @@ msgstr "参加者一覧を表示/非表示"
 
 msgid "Too many arguments"
 msgstr "引数が多すぎます"
-
-#, python-format
-msgid ""
-"Too many arguments. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"引数が多すぎます。\n"
-"詳しくは \"%(basename)s help %(command)s\" と入力してください"
 
 msgid "Topic"
 msgstr "話題"
@@ -5054,26 +4896,6 @@ msgstr "アバター画像のアップロードに失敗しました: %s"
 msgid "Uploading via HTTP File Upload…"
 msgstr "「HTTP ファイルアップロード」でアップロードしています…"
 
-#, python-format
-msgid ""
-"Usage:\n"
-"  %s command [arguments]\n"
-"\n"
-"Command is one of:\n"
-msgstr ""
-"使い方:\n"
-"  %s コマンド [引数]\n"
-"\n"
-"コマンドは次のいずれか:\n"
-
-#, python-format
-msgid ""
-"Usage: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-msgstr ""
-"使い方: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-
 msgid "Use GSSAPI"
 msgstr "GSSAPI を使う"
 
@@ -5240,20 +5062,8 @@ msgstr "XML コンソール"
 msgid "XML console to see what's happening on the protocol layer"
 msgstr "プロトコル層で何が起こったか確認できる XML コンソール"
 
-msgid "XML to send"
-msgstr "送信する XML"
-
 msgid "XMPP Address"
 msgstr "XMPP アドレス"
-
-msgid "XMPP Address of the contact"
-msgstr "相手先の XMPP アドレス"
-
-msgid "XMPP Address of the contact that will receive the message"
-msgstr "メッセージを受け取りたい相手先の XMPP アドレス"
-
-msgid "XMPP Address of the group chat that will receive the message"
-msgstr "メッセージを受け取る談話室そのものの XMPP アドレス"
 
 msgid "XMPP Address…"
 msgstr "XMPP アドレス…"
@@ -5361,6 +5171,10 @@ msgstr "このディレクトリにファイルを作成する権限がありま
 msgid "You have been banned{actor}{reason}"
 msgstr "{actor} によって、あなたは締め出されました: {reason}"
 
+#, fuzzy, python-format
+msgid "You have been invited to %s"
+msgstr "%s さんは既にこの談話室に招待されています"
+
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr "{actor} によって、あなたは蹴り出されました: {reason}"
@@ -5372,9 +5186,6 @@ msgstr "{actor} によって、この談話室から削除されました ({reas
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr "エラーのため、あなたは退出しました: {reason}"
-
-msgid "You have no active account"
-msgstr "有効になっているアカウントがありません"
 
 msgid "You have to be connected to create a group chat."
 msgstr "談話室を作成するには、接続されている必要があります。"
@@ -5762,29 +5573,11 @@ msgstr "方位"
 msgid "building"
 msgstr "建物"
 
-msgid ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
-msgstr ""
-"アカウント \"account\" の在席状況を変更します。アカウントが指定されない場"
-"合、\"sync with global status\" オプションが設定されているアカウントすべての"
-"在席状況を変更します"
-
-msgid ""
-"change the priority of the given account. If not specified, change status of "
-"all accounts that have \"sync with global status\" option set"
-msgstr ""
-"アカウントの優先順位を変更します。アカウントが指定されない場合、\"sync with "
-"global status\" オプションの設定されたアカウントすべての優先順位を変更します"
-
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "chat;messaging;im;xmpp;voip;"
 
 msgid "column"
 msgstr "カラム"
-
-msgid "command"
-msgstr "コマンド"
 
 msgid "country"
 msgstr "国"
@@ -5812,9 +5605,6 @@ msgstr "%(message)s を送信する際にエラー ( %(error)s )"
 msgid "example.org"
 msgstr "example.org"
 
-msgid "file"
-msgstr "ファイル"
-
 msgid "file transfers list"
 msgstr "ファイル転送の一覧"
 
@@ -5833,15 +5623,6 @@ msgstr ""
 
 msgid "help"
 msgstr "ヘルプ"
-
-msgid "if specified, contact is taken from the contact list of this account"
-msgstr "指定した場合、相手先はこのアカウントの相手先一覧から選択します"
-
-msgid "if specified, file will be sent using this account"
-msgstr "指定した場合、このアカウントを使ってファイルを転送します"
-
-msgid "if specified, the message will be sent using this account"
-msgstr "指定した場合、メッセージはこのアカウントを使って送られます"
 
 msgid "is composing a message…"
 msgstr "さんはメッセージを書いています…"
@@ -5864,20 +5645,6 @@ msgstr "経度"
 msgid "macOS"
 msgstr "macOS"
 
-msgid "message contents"
-msgstr "メッセージの内容"
-
-msgid "message subject"
-msgstr "メッセージの件名"
-
-msgid ""
-"one of: offline, online, chat, away, xa, dnd. If not set, use account's "
-"previous status"
-msgstr ""
-"次のいずれか: offline (オフライン)、online (オンライン)、chat (チャット可)、"
-"away (離席中)、xa (不在)、dnd (取り込み中)。設定されなければ、アカウントの以"
-"前の状況が使われます"
-
 # 固有名詞(プロキシ・サーバー The Onion Router)
 msgid "or"
 msgstr "または"
@@ -5890,9 +5657,6 @@ msgstr "さんは書く手をちょっと止めています"
 
 msgid "postalcode"
 msgstr "郵便番号"
-
-msgid "priority you want to give to the account"
-msgstr "アカウントに設定する優先順位"
 
 #, python-format
 msgid "python-cairo Version: %s"
@@ -5908,23 +5672,11 @@ msgstr "州(県)"
 msgid "room"
 msgstr "部屋"
 
-msgid "show help on command"
-msgstr "コマンドのヘルプを表示します"
-
-msgid "show only contacts of the given account"
-msgstr "指定されたアカウントの相手先のみ表示します"
-
 msgid "speed"
 msgstr "移動速度"
 
-msgid "status message"
-msgstr "状況メッセージ"
-
 msgid "street"
 msgstr "町丁名・番地"
-
-msgid "subject"
-msgstr "件名"
 
 msgid "text"
 msgstr "その他の情報"
@@ -5979,6 +5731,35 @@ msgstr "{nick} は現在 {show}{status}"
 msgid "…or drop it here"
 msgstr "…またはここにドロップ"
 
+#~ msgid "%s not found"
+#~ msgstr "%s は見つかりません"
+
+#~ msgid ""
+#~ "'%s' is not in your contact list.\n"
+#~ "Please specify account for sending the message."
+#~ msgstr ""
+#~ "'%s' は相手先一覧にありません。\n"
+#~ "メッセージを送るためのアカウントを指定してください。"
+
+#~ msgid "?CLI:account"
+#~ msgstr "?CLI:アカウント"
+
+#~ msgid "?CLI:message"
+#~ msgstr "?CLI:メッセージ"
+
+#~ msgid "?CLI:priority"
+#~ msgstr "?CLI:優先順位"
+
+#~ msgid "?CLI:status"
+#~ msgstr "?CLI:在席状況"
+
+#~ msgid ""
+#~ "Account to which the XML will be sent; if not specified, XML will be sent "
+#~ "to all accounts"
+#~ msgstr ""
+#~ "XML が送信されるアカウント。指定されない場合、XML はすべてのアカウントに送"
+#~ "信されます"
+
 #~ msgid ""
 #~ "Allow to hide the contact list window even if the notification area icon "
 #~ "is not shown."
@@ -5986,8 +5767,60 @@ msgstr "…またはここにドロップ"
 #~ "トレイアイコンが表示されていない状態でも相手先一覧ウィンドウを閉じることを"
 #~ "許します。"
 
+#~ msgid ""
+#~ "Argument \"%(arg)s\" is not specified. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "引数 \"%(arg)s\" が指定されていません。\n"
+#~ "詳しくは \"%(basename)s help %(command)s\" と入力してください"
+
+#~ msgid "Arguments:"
+#~ msgstr "引数:"
+
+#~ msgid "Change status"
+#~ msgstr "在席状況を変更する"
+
+#~ msgid "Change status information"
+#~ msgstr "在席状況の変更"
+
+#~ msgid "Changes the priority of account(s)"
+#~ msgstr "アカウントの優先順位を変更します"
+
+#~ msgid "Changes the status of account(s)"
+#~ msgstr "アカウントの在席状況の変更します"
+
+#~ msgid "Check if Gajim is running"
+#~ msgstr "Gajim が起動しているかチェックします"
+
+#~ msgid "D-Bus is not present on this machine or python module is missing"
+#~ msgstr ""
+#~ "このコンピューターに D-Bus がないか、あるいは python のモジュールがありま"
+#~ "せん"
+
 #~ msgid "Disconnect from the network"
 #~ msgstr "ネットワークから切断"
+
+#~ msgid "Do not disturb"
+#~ msgstr "邪魔しないでください"
+
+#~ msgid "Extended away"
+#~ msgstr "長時間不在です"
+
+#~ msgid "File path"
+#~ msgstr "ファイルの場所"
+
+#~ msgid "Free for chat"
+#~ msgstr "チャットできます"
+
+#~ msgid "Gets detailed info on a account"
+#~ msgstr "アカウントの詳細情報を取得します"
+
+#~ msgid "Gets detailed info on a contact"
+#~ msgstr "相手先の詳細情報を取得します"
+
+#~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
+#~ msgstr ""
+#~ "チェックをつけると、Gajim を gajim-remote を使って遠隔操作できます。"
 
 #~ msgid ""
 #~ "If enabled, Gajim hides the main window when pressing the X button "
@@ -5996,8 +5829,92 @@ msgstr "…またはここにドロップ"
 #~ "有効の場合、Gajim は X ボタンが押された際に、相手先一覧ウィンドウを通知エ"
 #~ "リアに最小化するのではなく、閉じます。"
 
+#~ msgid "If enabled, Gajim will execute XEP-0146 Commands."
+#~ msgstr "有効の場合、Gajim は XEP-0146 コマンドを実行します。"
+
+#~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
+#~ msgstr ""
+#~ "Gajim が起動していないようです。そのため gajim-remote は使えません。"
+
+#~ msgid "Lists all contacts in the contact list, one for each line"
+#~ msgstr "相手先一覧にある相手先すべてを、それぞれ1行に表示します"
+
 #~ msgid "Machine is going to sleep"
 #~ msgstr "コンピューターを終了しています"
+
+#~ msgid "Missing argument \"contact_jid\""
+#~ msgstr "引数 \"contact_jid\" がありません"
+
+#~ msgid "Name of the account"
+#~ msgstr "アカウント名"
+
+#~ msgid "Offline - disconnect"
+#~ msgstr "オフライン - 切断中"
+
+#~ msgid "Online"
+#~ msgstr "オンライン"
+
+#~ msgid "Presence description:"
+#~ msgstr "在席状況の説明:"
+
+#~ msgid "Prints a list of registered accounts"
+#~ msgstr "登録アカウントの一覧の表示します"
+
+#~ msgid "Removes contact from contact list"
+#~ msgstr "相手先を相手先一覧から削除します"
+
+#~ msgid "Returns current status (the global one unless account is specified)"
+#~ msgstr ""
+#~ "現在の在席状況を返します (もしアカウントが指定されなければ、全体の在席状況"
+#~ "を返します)"
+
+#~ msgid ""
+#~ "Returns current status message (the global one unless account is "
+#~ "specified)"
+#~ msgstr ""
+#~ "現在の状況メッセージを返します (もしアカウントが指定されなければ、全体の状"
+#~ "況メッセージを返します)"
+
+#~ msgid "Returns number of unread messages"
+#~ msgstr "未読メッセージ数を返します"
+
+#~ msgid ""
+#~ "Sends a chat message to someone on your contact list. Account is optional."
+#~ msgstr "相手先一覧にある誰かにメッセージを送信します(アカウントは省略可)。"
+
+#~ msgid "Sends custom XML"
+#~ msgstr "独自の XML を送信します"
+
+#~ msgid "Sends file to a contact"
+#~ msgstr "相手先にファイルを転送します"
+
+#~ msgid ""
+#~ "Sends new chat message to a contact in the contact list. Account is "
+#~ "optional."
+#~ msgstr ""
+#~ "相手先一覧にある相手先に新たにメッセージを送信します(アカウントは省略可)。"
+
+#~ msgid "Sends new message to a group chat you've joined."
+#~ msgstr "参加している談話室に新しいメッセージを送信します。"
+
+#~ msgid ""
+#~ "Service not available: Gajim is not running, or remote_control is False"
+#~ msgstr ""
+#~ "サービスがありません: Gajim が起動していないか、あるいは remote_control が"
+#~ "「偽」に設定されています"
+
+#~ msgid ""
+#~ "Session bus is not available.\n"
+#~ "Try reading %(url)s"
+#~ msgstr ""
+#~ "セッションバスが有効ではありません。\n"
+#~ "%(url)s を読んでください"
+
+#~ msgid "Set the presence type and description"
+#~ msgstr "在席状況の種類と説明の設定"
+
+#~ msgid "Shows a help on specific command"
+#~ msgstr "指定のコマンドに対するヘルプを表示します"
 
 # (Mako)"Ask status message when I:" に続く語
 #~ msgid "Sign Out"
@@ -6006,5 +5923,108 @@ msgstr "…またはここにドロップ"
 #~ msgid "Status Change"
 #~ msgstr "状況が変化したとき"
 
+#~ msgid "The status has been changed."
+#~ msgstr "在席状況が変更されました。"
+
+#~ msgid ""
+#~ "Too many arguments. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "引数が多すぎます。\n"
+#~ "詳しくは \"%(basename)s help %(command)s\" と入力してください"
+
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  %s command [arguments]\n"
+#~ "\n"
+#~ "Command is one of:\n"
+#~ msgstr ""
+#~ "使い方:\n"
+#~ "  %s コマンド [引数]\n"
+#~ "\n"
+#~ "コマンドは次のいずれか:\n"
+
+#~ msgid ""
+#~ "Usage: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+#~ msgstr ""
+#~ "使い方: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+
+#~ msgid "XML to send"
+#~ msgstr "送信する XML"
+
+#~ msgid "XMPP Address of the contact"
+#~ msgstr "相手先の XMPP アドレス"
+
+#~ msgid "XMPP Address of the contact that will receive the message"
+#~ msgstr "メッセージを受け取りたい相手先の XMPP アドレス"
+
+#~ msgid "XMPP Address of the group chat that will receive the message"
+#~ msgstr "メッセージを受け取る談話室そのものの XMPP アドレス"
+
+#~ msgid "You have no active account"
+#~ msgstr "有効になっているアカウントがありません"
+
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "Gajim を閉じると常に終了する (_A)"
+
+#~ msgid ""
+#~ "change status of account \"account\". If not specified, try to change "
+#~ "status of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "アカウント \"account\" の在席状況を変更します。アカウントが指定されない場"
+#~ "合、\"sync with global status\" オプションが設定されているアカウントすべて"
+#~ "の在席状況を変更します"
+
+#~ msgid ""
+#~ "change the priority of the given account. If not specified, change status "
+#~ "of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "アカウントの優先順位を変更します。アカウントが指定されない場合、\"sync "
+#~ "with global status\" オプションの設定されたアカウントすべての優先順位を変"
+#~ "更します"
+
+#~ msgid "command"
+#~ msgstr "コマンド"
+
+#~ msgid "file"
+#~ msgstr "ファイル"
+
+#~ msgid "if specified, contact is taken from the contact list of this account"
+#~ msgstr "指定した場合、相手先はこのアカウントの相手先一覧から選択します"
+
+#~ msgid "if specified, file will be sent using this account"
+#~ msgstr "指定した場合、このアカウントを使ってファイルを転送します"
+
+#~ msgid "if specified, the message will be sent using this account"
+#~ msgstr "指定した場合、メッセージはこのアカウントを使って送られます"
+
+#~ msgid "message contents"
+#~ msgstr "メッセージの内容"
+
+#~ msgid "message subject"
+#~ msgstr "メッセージの件名"
+
+#~ msgid ""
+#~ "one of: offline, online, chat, away, xa, dnd. If not set, use account's "
+#~ "previous status"
+#~ msgstr ""
+#~ "次のいずれか: offline (オフライン)、online (オンライン)、chat (チャット"
+#~ "可)、away (離席中)、xa (不在)、dnd (取り込み中)。設定されなければ、アカウ"
+#~ "ントの以前の状況が使われます"
+
+#~ msgid "priority you want to give to the account"
+#~ msgstr "アカウントに設定する優先順位"
+
+#~ msgid "show help on command"
+#~ msgstr "コマンドのヘルプを表示します"
+
+#~ msgid "show only contacts of the given account"
+#~ msgstr "指定されたアカウントの相手先のみ表示します"
+
+#~ msgid "status message"
+#~ msgstr "状況メッセージ"
+
+#~ msgid "subject"
+#~ msgstr "件名"

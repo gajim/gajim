@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 19:47+0000\n"
+"POT-Creation-Date: 2022-06-17 18:19+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -161,10 +161,6 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "%s not found"
-msgstr ""
-
-#, python-format
 msgid "%s s"
 msgstr ""
 
@@ -182,12 +178,6 @@ msgstr ""
 
 #, python-format
 msgid "%s: Nothing found"
-msgstr ""
-
-#, python-format
-msgid ""
-"'%s' is not in your contact list.\n"
-"Please specify account for sending the message."
 msgstr ""
 
 #, python-format
@@ -323,21 +313,6 @@ msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
 msgstr ""
 
 msgid "?Ask (for Subscription):None"
-msgstr ""
-
-#, fuzzy
-msgid "?CLI:account"
-msgstr "Compte"
-
-#, fuzzy
-msgid "?CLI:message"
-msgstr "missatge"
-
-#, fuzzy
-msgid "?CLI:priority"
-msgstr "Priori_tat:"
-
-msgid "?CLI:status"
 msgstr ""
 
 msgid "?Gender:None"
@@ -675,17 +650,19 @@ msgstr "Entra a aquesta sala _automàticament quan em connecto"
 msgid "Account is being created"
 msgstr "Comptes"
 
-msgid ""
-"Account to which the XML will be sent; if not specified, XML will be sent to "
-"all accounts"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Account: %s"
 msgstr "Comptes"
 
 msgid "Accounts"
 msgstr "Comptes"
+
+#, fuzzy
+msgid "Action on Close"
+msgstr "_Minimitza en tancar"
+
+msgid "Action when closing Gajim’s window"
+msgstr ""
 
 msgid "Action when left-clicking a preview"
 msgstr ""
@@ -855,6 +832,11 @@ msgstr ""
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
 
+msgid ""
+"Allow Gajim to broadcast useful information via D-Bus. It also allows other "
+"applications to control Gajim remotely."
+msgstr ""
+
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
@@ -954,15 +936,6 @@ msgid ""
 msgstr ""
 
 msgid "Are you sure you want to quit Gajim?"
-msgstr ""
-
-#, python-format
-msgid ""
-"Argument \"%(arg)s\" is not specified. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-
-msgid "Arguments:"
 msgstr ""
 
 msgid "Artists"
@@ -1293,12 +1266,6 @@ msgstr "Canviar contrasenya"
 msgid "Change Subject"
 msgstr "Canvia Tema..."
 
-msgid "Change status"
-msgstr ""
-
-msgid "Change status information"
-msgstr ""
-
 msgid "Change your account’s password, etc."
 msgstr ""
 
@@ -1318,12 +1285,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Changed by %s"
 msgstr "Canvia _Nick..."
-
-msgid "Changes the priority of account(s)"
-msgstr ""
-
-msgid "Changes the status of account(s)"
-msgstr ""
 
 #, fuzzy
 msgid "Changing Password..."
@@ -1371,9 +1332,6 @@ msgid "Check for updates"
 msgstr ""
 
 msgid "Check for updates periodically"
-msgstr ""
-
-msgid "Check if Gajim is running"
 msgstr ""
 
 msgid "Checking file…"
@@ -1742,13 +1700,16 @@ msgstr "Crea nou missatge"
 msgid "Creating Account..."
 msgstr "Fusiona comptes"
 
+msgid "Creating thumbnail failed"
+msgstr ""
+
 msgid "Credentials expired"
 msgstr ""
 
 msgid "Current Developers"
 msgstr ""
 
-msgid "D-Bus is not present on this machine or python module is missing"
+msgid "D-Bus Interface"
 msgstr ""
 
 #, fuzzy
@@ -1883,9 +1844,6 @@ msgid "Display names of all group chat participants"
 msgstr ""
 
 msgid "Display or change a group chat topic"
-msgstr ""
-
-msgid "Do not disturb"
 msgstr ""
 
 #, python-format
@@ -2165,9 +2123,6 @@ msgstr ""
 msgid "Extended Address"
 msgstr "_Copia adreça JID/Email"
 
-msgid "Extended away"
-msgstr ""
-
 #, fuzzy
 msgid "FA_Q (Online)"
 msgstr "Connectat"
@@ -2271,9 +2226,6 @@ msgstr ""
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File path"
-msgstr ""
-
 msgid "File size unknown"
 msgstr ""
 
@@ -2364,9 +2316,6 @@ msgstr "Envia missatge"
 msgid "Free for Chat"
 msgstr "Disponible per parlar"
 
-msgid "Free for chat"
-msgstr "Lliure per xatejar"
-
 msgid "From"
 msgstr ""
 
@@ -2450,12 +2399,6 @@ msgid ""
 msgstr ""
 
 msgid "Generate preview for any URLs containing images (may be unsafe)"
-msgstr ""
-
-msgid "Gets detailed info on a account"
-msgstr ""
-
-msgid "Gets detailed info on a contact"
 msgstr ""
 
 #, fuzzy
@@ -2581,10 +2524,10 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
-msgid "Hide this menu"
+msgid "Hide"
 msgstr ""
 
-msgid "Hide window to system tray when minimized"
+msgid "Hide this menu"
 msgstr ""
 
 msgid "Hides the banner in a 1:1 chat window."
@@ -2652,9 +2595,6 @@ msgstr ""
 msgid "Idle since: %s"
 msgstr "Nom de feed:"
 
-msgid "If checked, Gajim can be controlled remotely using gajim-remote."
-msgstr ""
-
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
@@ -2664,9 +2604,6 @@ msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
 msgstr ""
 
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
-msgstr ""
-
-msgid "If enabled, Gajim will execute XEP-0146 Commands."
 msgstr ""
 
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
@@ -2852,9 +2789,6 @@ msgstr ""
 msgid "It is not possible to send empty files"
 msgstr ""
 
-msgid "It seems Gajim is not running. So you can't use gajim-remote."
-msgstr ""
-
 msgid "Italic"
 msgstr "Cursiva"
 
@@ -2975,9 +2909,6 @@ msgid ""
 msgstr ""
 
 msgid "Listing of Servers"
-msgstr ""
-
-msgid "Lists all contacts in the contact list, one for each line"
 msgstr ""
 
 msgid "Live Preview"
@@ -3129,14 +3060,8 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Minimize on Close"
+msgid "Minimize"
 msgstr "_Minimitza en tancar"
-
-msgid "Minimize to Tray"
-msgstr ""
-
-msgid "Minimize when closing Gajim’s window"
-msgstr ""
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3145,9 +3070,6 @@ msgstr "Mostra els canvis d'estat"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Miscel·lània</b>"
-
-msgid "Missing argument \"contact_jid\""
-msgstr ""
 
 msgid "Missing arguments"
 msgstr ""
@@ -3192,9 +3114,6 @@ msgid "Name"
 msgstr ""
 
 msgid "Name <b>default</b> is not allowed"
-msgstr ""
-
-msgid "Name of the account"
 msgstr ""
 
 msgid "Needs gspell to be installed"
@@ -3373,17 +3292,11 @@ msgstr ""
 msgid "Offline"
 msgstr "Desconnectat"
 
-msgid "Offline - disconnect"
-msgstr ""
-
 msgid "One Month"
 msgstr ""
 
 msgid "One Year"
 msgstr ""
-
-msgid "Online"
-msgstr "Connectat"
 
 #, fuzzy
 msgid "Online Status"
@@ -3713,9 +3626,6 @@ msgstr "Preferències"
 msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
 msgstr ""
 
-msgid "Presence description:"
-msgstr ""
-
 #, fuzzy
 msgid "Presets"
 msgstr "Missatges preconfigurats:"
@@ -3741,9 +3651,6 @@ msgid "Previously sent message"
 msgstr "Missatges preconfigurats:"
 
 msgid "Print XML stanzas and other debug information"
-msgstr ""
-
-msgid "Prints a list of registered accounts"
 msgstr ""
 
 #, fuzzy
@@ -3803,6 +3710,10 @@ msgstr "Historial"
 #, python-format
 msgid "PyGObject Version: %s"
 msgstr ""
+
+#, fuzzy
+msgid "Quit"
+msgstr "Surt"
 
 msgid "Quit Gajim"
 msgstr ""
@@ -3974,10 +3885,6 @@ msgstr[0] ""
 msgstr[1] ""
 
 #, fuzzy
-msgid "Removes contact from contact list"
-msgstr "Esborra transferència de fitxer de la llista."
-
-#, fuzzy
 msgid "Remove…"
 msgstr "Esborra"
 
@@ -4093,16 +4000,6 @@ msgstr "_Canvia Missatge d'Estat"
 #, fuzzy
 msgid "Retract message?"
 msgstr "missatge"
-
-msgid "Returns current status (the global one unless account is specified)"
-msgstr ""
-
-msgid ""
-"Returns current status message (the global one unless account is specified)"
-msgstr ""
-
-msgid "Returns number of unread messages"
-msgstr ""
 
 #, fuzzy
 msgid "Revoke Member"
@@ -4368,23 +4265,6 @@ msgstr ""
 msgid "Sending private message failed"
 msgstr ""
 
-msgid ""
-"Sends a chat message to someone on your contact list. Account is optional."
-msgstr ""
-
-msgid "Sends custom XML"
-msgstr ""
-
-msgid "Sends file to a contact"
-msgstr ""
-
-msgid ""
-"Sends new chat message to a contact in the contact list. Account is optional."
-msgstr ""
-
-msgid "Sends new message to a group chat you've joined."
-msgstr ""
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr ""
@@ -4438,15 +4318,6 @@ msgstr ""
 msgid "Service Gateway"
 msgstr "_Servidor:"
 
-msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr ""
-
-#, python-format
-msgid ""
-"Session bus is not available.\n"
-"Try reading %(url)s"
-msgstr ""
-
 msgid "Set configuration directory"
 msgstr ""
 
@@ -4470,9 +4341,6 @@ msgid "Set the current status to away"
 msgstr ""
 
 msgid "Set the current status to online"
-msgstr ""
-
-msgid "Set the presence type and description"
 msgstr ""
 
 msgid "Set your activity or tune to show your friends how you are feeling"
@@ -4629,9 +4497,6 @@ msgid "Show your own video stream in calls"
 msgstr ""
 
 msgid "Show/Hide Window"
-msgstr ""
-
-msgid "Shows a help on specific command"
 msgstr ""
 
 #, fuzzy
@@ -4982,9 +4847,6 @@ msgstr ""
 msgid "The signing certificate authority is not known"
 msgstr ""
 
-msgid "The status has been changed."
-msgstr ""
-
 #, fuzzy
 msgid "Theme"
 msgstr "Personalització Temes Gajim"
@@ -5142,12 +5004,6 @@ msgid "Toggle participants list"
 msgstr "Accions Ocupant"
 
 msgid "Too many arguments"
-msgstr ""
-
-#, python-format
-msgid ""
-"Too many arguments. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
 msgstr ""
 
 msgid "Topic"
@@ -5336,20 +5192,6 @@ msgstr ""
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
-#, python-format
-msgid ""
-"Usage:\n"
-"  %s command [arguments]\n"
-"\n"
-"Command is one of:\n"
-msgstr ""
-
-#, python-format
-msgid ""
-"Usage: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-msgstr ""
-
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -5529,21 +5371,9 @@ msgstr ""
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
-msgid "XML to send"
-msgstr ""
-
 #, fuzzy
 msgid "XMPP Address"
 msgstr "_Copia adreça JID/Email"
-
-msgid "XMPP Address of the contact"
-msgstr ""
-
-msgid "XMPP Address of the contact that will receive the message"
-msgstr ""
-
-msgid "XMPP Address of the group chat that will receive the message"
-msgstr ""
 
 #, fuzzy
 msgid "XMPP Address…"
@@ -5651,6 +5481,10 @@ msgstr ""
 msgid "You have been banned{actor}{reason}"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "You have been invited to %s"
+msgstr "Sobrenom:"
+
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr ""
@@ -5661,9 +5495,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "You have left due to an error{reason}"
-msgstr ""
-
-msgid "You have no active account"
 msgstr ""
 
 msgid "You have to be connected to create a group chat."
@@ -6101,23 +5932,10 @@ msgstr ""
 msgid "building"
 msgstr ""
 
-msgid ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
-msgstr ""
-
-msgid ""
-"change the priority of the given account. If not specified, change status of "
-"all accounts that have \"sync with global status\" option set"
-msgstr ""
-
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
 msgid "column"
-msgstr ""
-
-msgid "command"
 msgstr ""
 
 msgid "country"
@@ -6146,9 +5964,6 @@ msgstr ""
 msgid "example.org"
 msgstr ""
 
-msgid "file"
-msgstr ""
-
 msgid "file transfers list"
 msgstr "llista de trasferència de fitxers"
 
@@ -6164,15 +5979,6 @@ msgid ""
 msgstr ""
 
 msgid "help"
-msgstr ""
-
-msgid "if specified, contact is taken from the contact list of this account"
-msgstr ""
-
-msgid "if specified, file will be sent using this account"
-msgstr ""
-
-msgid "if specified, the message will be sent using this account"
 msgstr ""
 
 msgid "is composing a message…"
@@ -6196,17 +6002,6 @@ msgstr ""
 msgid "macOS"
 msgstr ""
 
-msgid "message contents"
-msgstr ""
-
-msgid "message subject"
-msgstr ""
-
-msgid ""
-"one of: offline, online, chat, away, xa, dnd. If not set, use account's "
-"previous status"
-msgstr ""
-
 #, fuzzy
 msgid "or"
 msgstr "otr"
@@ -6218,9 +6013,6 @@ msgid "paused composing a message"
 msgstr ""
 
 msgid "postalcode"
-msgstr ""
-
-msgid "priority you want to give to the account"
 msgstr ""
 
 #, fuzzy, python-format
@@ -6237,22 +6029,10 @@ msgstr ""
 msgid "room"
 msgstr ""
 
-msgid "show help on command"
-msgstr ""
-
-msgid "show only contacts of the given account"
-msgstr ""
-
 msgid "speed"
 msgstr ""
 
-msgid "status message"
-msgstr ""
-
 msgid "street"
-msgstr ""
-
-msgid "subject"
 msgstr ""
 
 msgid "text"
@@ -6307,6 +6087,28 @@ msgstr ""
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy
+#~ msgid "?CLI:account"
+#~ msgstr "Compte"
+
+#, fuzzy
+#~ msgid "?CLI:message"
+#~ msgstr "missatge"
+
+#, fuzzy
+#~ msgid "?CLI:priority"
+#~ msgstr "Priori_tat:"
+
+#~ msgid "Free for chat"
+#~ msgstr "Lliure per xatejar"
+
+#~ msgid "Online"
+#~ msgstr "Connectat"
+
+#, fuzzy
+#~ msgid "Removes contact from contact list"
+#~ msgstr "Esborra transferència de fitxer de la llista."
 
 #, fuzzy
 #~ msgid "Status Change"

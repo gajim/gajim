@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 19:47+0000\n"
-"PO-Revision-Date: 2022-06-13 19:03+0000\n"
+"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"PO-Revision-Date: 2022-06-17 14:58+0000\n"
 "Last-Translator: Tommy He <lovenemesis@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
 "gajim/master/zh_Hans/>\n"
@@ -179,10 +179,6 @@ msgstr ""
 "选择您想发送文件的设备。"
 
 #, python-format
-msgid "%s not found"
-msgstr "%s 未找到"
-
-#, python-format
 msgid "%s s"
 msgstr "%s 秒"
 
@@ -201,14 +197,6 @@ msgstr "%s 想发送给您一个文件"
 #, python-format
 msgid "%s: Nothing found"
 msgstr "%s 未找到"
-
-#, python-format
-msgid ""
-"'%s' is not in your contact list.\n"
-"Please specify account for sending the message."
-msgstr ""
-"“%s” 不在您的联系人列表中。\n"
-"请为发送此消息指定账户。"
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -352,18 +340,6 @@ msgstr "<span color=\"yellow\" font-weight=\"bold\">未加速</span>"
 
 msgid "?Ask (for Subscription):None"
 msgstr "无"
-
-msgid "?CLI:account"
-msgstr "账户"
-
-msgid "?CLI:message"
-msgstr "消息"
-
-msgid "?CLI:priority"
-msgstr "优先级"
-
-msgid "?CLI:status"
-msgstr "状态"
 
 msgid "?Gender:None"
 msgstr "无"
@@ -650,17 +626,20 @@ msgstr "必须连接账户"
 msgid "Account is being created"
 msgstr "账户创建中"
 
-msgid ""
-"Account to which the XML will be sent; if not specified, XML will be sent to "
-"all accounts"
-msgstr "XML 将被发送的账户; 如果不指定, XML 将被发送至所有账户"
-
 #, python-format
 msgid "Account: %s"
 msgstr "账户: %s"
 
 msgid "Accounts"
 msgstr "账户"
+
+#, fuzzy
+msgid "Action on Close"
+msgstr "关闭时最小化"
+
+#, fuzzy
+msgid "Action when closing Gajim’s window"
+msgstr "关闭 Gajim 窗口时最小化"
 
 msgid "Action when left-clicking a preview"
 msgstr "左击预览时的动作"
@@ -799,6 +778,11 @@ msgstr "所有文件"
 msgid "All other group chat participants can see your XMPP address"
 msgstr "所有其他群聊参与者都将能看到您的 XMPP 地址"
 
+msgid ""
+"Allow Gajim to broadcast useful information via D-Bus. It also allows other "
+"applications to control Gajim remotely."
+msgstr ""
+
 msgid "Allow a participant to send you public or private messages"
 msgstr "允许参与者向您发送公开或私人消息"
 
@@ -891,17 +875,6 @@ msgstr "您确定要将剪切板中的图片粘贴到当前聊天窗口中？"
 
 msgid "Are you sure you want to quit Gajim?"
 msgstr "您确定您要退出 Gajim 吗?"
-
-#, python-format
-msgid ""
-"Argument \"%(arg)s\" is not specified. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"参数 \"%(arg)s\" 未指定。\n"
-"输入 \"%(basename)s help %(command)s\" 来获取更多信息"
-
-msgid "Arguments:"
-msgstr "参数:"
 
 msgid "Artists"
 msgstr "美工"
@@ -1202,12 +1175,6 @@ msgstr "更改密码"
 msgid "Change Subject"
 msgstr "更改话题"
 
-msgid "Change status"
-msgstr "更改状态"
-
-msgid "Change status information"
-msgstr "更改状态信息"
-
 msgid "Change your account’s password, etc."
 msgstr "更改您的账户密码等。"
 
@@ -1226,12 +1193,6 @@ msgstr "在一段时间后更改您的状态为“不活跃”"
 #, python-format
 msgid "Changed by %s"
 msgstr "由 %s 更改"
-
-msgid "Changes the priority of account(s)"
-msgstr "更改账户优先级"
-
-msgid "Changes the status of account(s)"
-msgstr "更改账户状态"
 
 msgid "Changing Password..."
 msgstr "更改密码中…"
@@ -1276,9 +1237,6 @@ msgstr "检查更新"
 
 msgid "Check for updates periodically"
 msgstr "定期检查 Gajim 的更新"
-
-msgid "Check if Gajim is running"
-msgstr "请检查 Gajim 是否正在运行"
 
 msgid "Checking file…"
 msgstr "正在检查文件…"
@@ -1599,14 +1557,17 @@ msgstr "创建新消息"
 msgid "Creating Account..."
 msgstr "正在创建账户…"
 
+msgid "Creating thumbnail failed"
+msgstr "创建缩略图失败"
+
 msgid "Credentials expired"
 msgstr "证书已过期"
 
 msgid "Current Developers"
 msgstr "当前开发者"
 
-msgid "D-Bus is not present on this machine or python module is missing"
-msgstr "在这台计算机上没有 D-Bus 或者 Python 模块缺失"
+msgid "D-Bus Interface"
+msgstr ""
 
 msgid "Dark Theme"
 msgstr "暗黑主题"
@@ -1726,9 +1687,6 @@ msgstr "显示所有群聊的参与者名称"
 
 msgid "Display or change a group chat topic"
 msgstr "显示或更改群聊话题"
-
-msgid "Do not disturb"
-msgstr "请勿打扰"
 
 #, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -1993,9 +1951,6 @@ msgstr "正在导出您的消息…"
 msgid "Extended Address"
 msgstr "附加地址"
 
-msgid "Extended away"
-msgstr "长时间离开"
-
 msgid "FA_Q (Online)"
 msgstr "在线常见问题 (_Q)"
 
@@ -2087,9 +2042,6 @@ msgstr "文件为空"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr "文件太大，最大允许的文件尺寸为: %s"
 
-msgid "File path"
-msgstr "文件路径"
-
 msgid "File size unknown"
 msgstr "文件尺寸未知"
 
@@ -2170,9 +2122,6 @@ msgid "Format your message…"
 msgstr "为您的消息应用格式…"
 
 msgid "Free for Chat"
-msgstr "和我聊天吧"
-
-msgid "Free for chat"
 msgstr "和我聊天吧"
 
 msgid "From"
@@ -2259,12 +2208,6 @@ msgstr "在公共群聊中自动生成预览(可能公开您的数据)"
 
 msgid "Generate preview for any URLs containing images (may be unsafe)"
 msgstr "为包含图片的任何 URL 生成预览(可能不安全)"
-
-msgid "Gets detailed info on a account"
-msgstr "获得账户的详细信息"
-
-msgid "Gets detailed info on a contact"
-msgstr "获得联系人的详细信息"
 
 msgid "Global Group Chat Search"
 msgstr "全局群聊搜索"
@@ -2368,11 +2311,11 @@ msgstr "你好，我是 $name. %s"
 msgid "Helps to establish calls through firewalls"
 msgstr "帮助穿透防火墙以建立通话"
 
+msgid "Hide"
+msgstr ""
+
 msgid "Hide this menu"
 msgstr "隐藏本菜单"
-
-msgid "Hide window to system tray when minimized"
-msgstr "窗口最小化时隐藏到系统托盘"
 
 msgid "Hides the banner in a 1:1 chat window."
 msgstr "在私聊窗口中隐藏横幅。"
@@ -2433,9 +2376,6 @@ msgstr "空闲时间"
 msgid "Idle since: %s"
 msgstr "空闲开始自: %s"
 
-msgid "If checked, Gajim can be controlled remotely using gajim-remote."
-msgstr "如果选中，Gajim 可以被 gajim-remote 远程控制。"
-
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
@@ -2443,13 +2383,10 @@ msgstr ""
 "如果启用，Gajim 将在有挂起事件时使窗口闪烁（大多数窗口管理器中的默认行为）。"
 
 msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
-msgstr ""
+msgstr "如果启用，Gajim 将提供托管在 gajim.org 的插件以供下载"
 
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr "如果启用，Gajim 会在联系人列表窗口标题中添加 * 和 [n]。"
-
-msgid "If enabled, Gajim will execute XEP-0146 Commands."
-msgstr "如启用，Gajim执行XEP-0146中规定的命令."
 
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr "如启用，Gajim将执行命令(/show, /sh, /execute, /exec)。"
@@ -2627,9 +2564,6 @@ msgstr "发生给\n"
 msgid "It is not possible to send empty files"
 msgstr "无法发送空文件"
 
-msgid "It seems Gajim is not running. So you can't use gajim-remote."
-msgstr "似乎 Gajim 不在运行。因此您无法使用 gajim-remote。"
-
 msgid "Italic"
 msgstr "斜体"
 
@@ -2745,9 +2679,6 @@ msgstr ""
 
 msgid "Listing of Servers"
 msgstr "当前服务器列表"
-
-msgid "Lists all contacts in the contact list, one for each line"
-msgstr "列出联系人列表中所有联系人，每个联系人一行"
 
 msgid "Live Preview"
 msgstr "实时预览"
@@ -2890,23 +2821,15 @@ msgstr ""
 "除非你启用了历史记录而且向你发送消息的联系人在你的联系人列表中，你才能在以后"
 "读到这些消息。"
 
-msgid "Minimize on Close"
-msgstr "关闭时最小化"
-
-msgid "Minimize to Tray"
+#, fuzzy
+msgid "Minimize"
 msgstr "最小化到托盘"
-
-msgid "Minimize when closing Gajim’s window"
-msgstr "关闭 Gajim 窗口时最小化"
 
 msgid "Minutes until your status gets changed"
 msgstr "过多少分钟自动更改你的状态"
 
 msgid "Miscellaneous"
 msgstr "杂项"
-
-msgid "Missing argument \"contact_jid\""
-msgstr "缺失参数 \"contact_jid\""
 
 msgid "Missing arguments"
 msgstr "缺失参数"
@@ -2949,9 +2872,6 @@ msgstr "名称"
 
 msgid "Name <b>default</b> is not allowed"
 msgstr "名称 <b>default</b> 不被允许"
-
-msgid "Name of the account"
-msgstr "账户名称"
 
 msgid "Needs gspell to be installed"
 msgstr "需要安装 gspell"
@@ -3112,17 +3032,11 @@ msgstr "确定"
 msgid "Offline"
 msgstr "离线"
 
-msgid "Offline - disconnect"
-msgstr "离线 - 未连接"
-
 msgid "One Month"
 msgstr "一个月"
 
 msgid "One Year"
 msgstr "一年"
-
-msgid "Online"
-msgstr "在线"
 
 msgid "Online Status"
 msgstr "在线状态"
@@ -3429,9 +3343,6 @@ msgstr "首选项"
 msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
 msgstr "在聊天窗口中进行文件拖放时首选的文件传输机制"
 
-msgid "Presence description:"
-msgstr "预设描述:"
-
 msgid "Presets"
 msgstr "预设"
 
@@ -3455,9 +3366,6 @@ msgstr "之前发送的消息"
 
 msgid "Print XML stanzas and other debug information"
 msgstr "打印 XML 节及其他调试信息"
-
-msgid "Prints a list of registered accounts"
-msgstr "打印注册账户的列表"
 
 msgid "Priority"
 msgstr "优先级"
@@ -3508,6 +3416,10 @@ msgstr "清空所有聊天记录"
 #, python-format
 msgid "PyGObject Version: %s"
 msgstr "PyGObject 版本: %s"
+
+#, fuzzy
+msgid "Quit"
+msgstr "退出(_Q)"
 
 msgid "Quit Gajim"
 msgstr "退出 Gajim"
@@ -3657,9 +3569,6 @@ msgid "Removed %d contact"
 msgid_plural "Removed %d contacts"
 msgstr[0] "删除了 %d 个联系人"
 
-msgid "Removes contact from contact list"
-msgstr "从联系人列表删除联系人"
-
 msgid "Remove…"
 msgstr "移除…"
 
@@ -3762,16 +3671,6 @@ msgstr "撤回消息"
 
 msgid "Retract message?"
 msgstr "撤回信息？"
-
-msgid "Returns current status (the global one unless account is specified)"
-msgstr "返回当前状态(如不指定账户将返回全局设置)"
-
-msgid ""
-"Returns current status message (the global one unless account is specified)"
-msgstr "返回当前状态信息(如不指定账户将返回全局设置)"
-
-msgid "Returns number of unread messages"
-msgstr "返回未读消息数"
 
 msgid "Revoke Member"
 msgstr "撤销成员"
@@ -4009,23 +3908,6 @@ msgstr "发送者: "
 msgid "Sending private message failed"
 msgstr "发送私聊消息失败"
 
-msgid ""
-"Sends a chat message to someone on your contact list. Account is optional."
-msgstr "向你的联系人列表中的某人发送聊天消息。账户是可选的。"
-
-msgid "Sends custom XML"
-msgstr "发送自定义 XML"
-
-msgid "Sends file to a contact"
-msgstr "向联系人发送文件"
-
-msgid ""
-"Sends new chat message to a contact in the contact list. Account is optional."
-msgstr "向联系人列表中的联系人发送新的聊天消息。账户是可选的。"
-
-msgid "Sends new message to a group chat you've joined."
-msgstr "向一个您已加入的聊天室发送新消息。"
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "已发送联系人: \"%(jid)s\" (%(name)s)"
@@ -4074,17 +3956,6 @@ msgstr "正在使用账户 %s 来发现服务"
 msgid "Service Gateway"
 msgstr "服务网关"
 
-msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr "服务不可用: Gajim 不在运行, 或者 remote_control 为 False"
-
-#, python-format
-msgid ""
-"Session bus is not available.\n"
-"Try reading %(url)s"
-msgstr ""
-"会话总线不可用。\n"
-"请参考 %(url)s"
-
 msgid "Set configuration directory"
 msgstr "设置配置文件目录"
 
@@ -4114,9 +3985,6 @@ msgstr "将当前状态设置为离开"
 
 msgid "Set the current status to online"
 msgstr "将当前状态设置为在线"
-
-msgid "Set the presence type and description"
-msgstr "设置状态类型与描述"
 
 msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr "设置您的活动或曲调来向您的朋友展示您的感觉"
@@ -4256,15 +4124,11 @@ msgstr "在通话中显示您本身的视频流"
 msgid "Show/Hide Window"
 msgstr "显示/隐藏窗口"
 
-msgid "Shows a help on specific command"
-msgstr "为特定命令显示帮助"
-
 msgid "Shows a list of file transfers between you and your contacts"
 msgstr "显示您与您的联系人之间的传输文件列表"
 
-#, fuzzy
 msgid "Shutting down Gajim"
-msgstr "显示 Gajim"
+msgstr "正在关闭 Gajim"
 
 msgid "Sign In"
 msgstr "登录"
@@ -4582,9 +4446,6 @@ msgstr "该服务无法浏览"
 msgid "The signing certificate authority is not known"
 msgstr "签名证书颁发机构未知"
 
-msgid "The status has been changed."
-msgstr "状态发生了变化。"
-
 msgid "Theme"
 msgstr "主题"
 
@@ -4746,14 +4607,6 @@ msgstr "切换参与者列表"
 
 msgid "Too many arguments"
 msgstr "参数过多"
-
-#, python-format
-msgid ""
-"Too many arguments. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"参数过多。\n"
-"输入 \"%(basename)s help %(command)s\" 获取更多信息"
 
 msgid "Topic"
 msgstr "话题"
@@ -4927,26 +4780,6 @@ msgstr "上传头像图片失败: %s"
 msgid "Uploading via HTTP File Upload…"
 msgstr "正在使用 HTTP 文件上传…"
 
-#, python-format
-msgid ""
-"Usage:\n"
-"  %s command [arguments]\n"
-"\n"
-"Command is one of:\n"
-msgstr ""
-"用法:\n"
-"  %s 命令 [参数]\n"
-"\n"
-"命令是下列之一: \n"
-
-#, python-format
-msgid ""
-"Usage: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-msgstr ""
-"用法: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-
 msgid "Use GSSAPI"
 msgstr "使用 GSSAPI"
 
@@ -5112,20 +4945,8 @@ msgstr "XML 控制台"
 msgid "XML console to see what's happening on the protocol layer"
 msgstr "XML 控制台可用来查看协议层发生了什么"
 
-msgid "XML to send"
-msgstr "要发送的 XML"
-
 msgid "XMPP Address"
 msgstr "XMPP 地址"
-
-msgid "XMPP Address of the contact"
-msgstr "联系人的 XMPP 地址"
-
-msgid "XMPP Address of the contact that will receive the message"
-msgstr "将接收消息的联系人的 XMPP 地址"
-
-msgid "XMPP Address of the group chat that will receive the message"
-msgstr "将接收消息的群聊的 XMPP 地址"
 
 msgid "XMPP Address…"
 msgstr "XMPP 地址…"
@@ -5229,6 +5050,10 @@ msgstr "您没有合适的权限在这个目录里创建文件。"
 msgid "You have been banned{actor}{reason}"
 msgstr "您已被封禁{actor}{reason}"
 
+#, python-format
+msgid "You have been invited to %s"
+msgstr "您已经被邀请到聊天室 %s"
+
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr "您已被踢除{actor}{reason}"
@@ -5240,9 +5065,6 @@ msgstr "您已经被从群聊移除{actor}{reason}"
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr "一个错误已导致您离开{reason}"
-
-msgid "You have no active account"
-msgstr "您没有活跃的账户"
 
 msgid "You have to be connected to create a group chat."
 msgstr "您必须要连接来创建一个群聊。"
@@ -5621,26 +5443,11 @@ msgstr "方向"
 msgid "building"
 msgstr "楼宇"
 
-msgid ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
-msgstr "改变账户的状态。如果不指明，将改变所有设置了\"与全局同步\"选项的账户"
-
-msgid ""
-"change the priority of the given account. If not specified, change status of "
-"all accounts that have \"sync with global status\" option set"
-msgstr ""
-"改变指定账户的优先级。如果不指明，将改变所有设置了\"与全局状态同步\"选项的账"
-"户"
-
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "chat;messaging;im;xmpp;voip;"
 
 msgid "column"
 msgstr "列"
-
-msgid "command"
-msgstr "命令"
 
 msgid "country"
 msgstr "国家"
@@ -5668,9 +5475,6 @@ msgstr "发送 %(message)s 时出现错误( %(error)s )"
 msgid "example.org"
 msgstr "example.org"
 
-msgid "file"
-msgstr "文件"
-
 msgid "file transfers list"
 msgstr "文件传输列表"
 
@@ -5689,15 +5493,6 @@ msgstr ""
 
 msgid "help"
 msgstr "帮助"
-
-msgid "if specified, contact is taken from the contact list of this account"
-msgstr "如指定，将从此帐户联系人列表下获取联系人"
-
-msgid "if specified, file will be sent using this account"
-msgstr "如指定，文件将使用此账户发送"
-
-msgid "if specified, the message will be sent using this account"
-msgstr "如指定，消息将使用此账户发送"
 
 msgid "is composing a message…"
 msgstr "正在输入消息…"
@@ -5720,19 +5515,6 @@ msgstr "经度"
 msgid "macOS"
 msgstr "macOS"
 
-msgid "message contents"
-msgstr "消息内容"
-
-msgid "message subject"
-msgstr "消息标题"
-
-msgid ""
-"one of: offline, online, chat, away, xa, dnd. If not set, use account's "
-"previous status"
-msgstr ""
-"下列状态之一: offline, online, chat, away, xa, dnd。如果没有设置，将使用账户"
-"先前的状态"
-
 msgid "or"
 msgstr "或者"
 
@@ -5744,9 +5526,6 @@ msgstr "暂停输入消息"
 
 msgid "postalcode"
 msgstr "邮政编码"
-
-msgid "priority you want to give to the account"
-msgstr "您想要给予这个账户的优先级"
 
 #, python-format
 msgid "python-cairo Version: %s"
@@ -5762,23 +5541,11 @@ msgstr "地区"
 msgid "room"
 msgstr "群聊"
 
-msgid "show help on command"
-msgstr "为命令显示帮助"
-
-msgid "show only contacts of the given account"
-msgstr "只显示指定帐户的联系人"
-
 msgid "speed"
 msgstr "速度"
 
-msgid "status message"
-msgstr "状态信息"
-
 msgid "street"
 msgstr "街道"
-
-msgid "subject"
-msgstr "标题"
 
 msgid "text"
 msgstr "文字"
@@ -5835,13 +5602,92 @@ msgstr "{nick} 现在状态是 {show}{status}"
 msgid "…or drop it here"
 msgstr "或者把图像拖放到这里"
 
+#~ msgid "%s not found"
+#~ msgstr "%s 未找到"
+
+#~ msgid ""
+#~ "'%s' is not in your contact list.\n"
+#~ "Please specify account for sending the message."
+#~ msgstr ""
+#~ "“%s” 不在您的联系人列表中。\n"
+#~ "请为发送此消息指定账户。"
+
+#~ msgid "?CLI:account"
+#~ msgstr "账户"
+
+#~ msgid "?CLI:message"
+#~ msgstr "消息"
+
+#~ msgid "?CLI:priority"
+#~ msgstr "优先级"
+
+#~ msgid "?CLI:status"
+#~ msgstr "状态"
+
+#~ msgid ""
+#~ "Account to which the XML will be sent; if not specified, XML will be sent "
+#~ "to all accounts"
+#~ msgstr "XML 将被发送的账户; 如果不指定, XML 将被发送至所有账户"
+
 #~ msgid ""
 #~ "Allow to hide the contact list window even if the notification area icon "
 #~ "is not shown."
 #~ msgstr "允许以在提醒区域图标未显示时隐藏联系人列表窗口"
 
+#~ msgid ""
+#~ "Argument \"%(arg)s\" is not specified. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "参数 \"%(arg)s\" 未指定。\n"
+#~ "输入 \"%(basename)s help %(command)s\" 来获取更多信息"
+
+#~ msgid "Arguments:"
+#~ msgstr "参数:"
+
+#~ msgid "Change status"
+#~ msgstr "更改状态"
+
+#~ msgid "Change status information"
+#~ msgstr "更改状态信息"
+
+#~ msgid "Changes the priority of account(s)"
+#~ msgstr "更改账户优先级"
+
+#~ msgid "Changes the status of account(s)"
+#~ msgstr "更改账户状态"
+
+#~ msgid "Check if Gajim is running"
+#~ msgstr "请检查 Gajim 是否正在运行"
+
+#~ msgid "D-Bus is not present on this machine or python module is missing"
+#~ msgstr "在这台计算机上没有 D-Bus 或者 Python 模块缺失"
+
 #~ msgid "Disconnect from the network"
 #~ msgstr "从网络断开"
+
+#~ msgid "Do not disturb"
+#~ msgstr "请勿打扰"
+
+#~ msgid "Extended away"
+#~ msgstr "长时间离开"
+
+#~ msgid "File path"
+#~ msgstr "文件路径"
+
+#~ msgid "Free for chat"
+#~ msgstr "和我聊天吧"
+
+#~ msgid "Gets detailed info on a account"
+#~ msgstr "获得账户的详细信息"
+
+#~ msgid "Gets detailed info on a contact"
+#~ msgstr "获得联系人的详细信息"
+
+#~ msgid "Hide window to system tray when minimized"
+#~ msgstr "窗口最小化时隐藏到系统托盘"
+
+#~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
+#~ msgstr "如果选中，Gajim 可以被 gajim-remote 远程控制。"
 
 #~ msgid ""
 #~ "If enabled, Gajim hides the main window when pressing the X button "
@@ -5849,11 +5695,87 @@ msgstr "或者把图像拖放到这里"
 #~ msgstr ""
 #~ "如果启用， Gajim 将会在点按关闭按钮时隐藏主窗口而不是最小化到通知区域。"
 
+#~ msgid "If enabled, Gajim will execute XEP-0146 Commands."
+#~ msgstr "如启用，Gajim执行XEP-0146中规定的命令."
+
+#~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
+#~ msgstr "似乎 Gajim 不在运行。因此您无法使用 gajim-remote。"
+
+#~ msgid "Lists all contacts in the contact list, one for each line"
+#~ msgstr "列出联系人列表中所有联系人，每个联系人一行"
+
 #~ msgid "Machine is going to sleep"
 #~ msgstr "机器即将休眠"
 
+#~ msgid "Missing argument \"contact_jid\""
+#~ msgstr "缺失参数 \"contact_jid\""
+
+#~ msgid "Name of the account"
+#~ msgstr "账户名称"
+
+#~ msgid "Offline - disconnect"
+#~ msgstr "离线 - 未连接"
+
+#~ msgid "Online"
+#~ msgstr "在线"
+
+#~ msgid "Presence description:"
+#~ msgstr "预设描述:"
+
+#~ msgid "Prints a list of registered accounts"
+#~ msgstr "打印注册账户的列表"
+
 #~ msgid "Quit Gajim on Close"
 #~ msgstr "关闭时退出 Gajim"
+
+#~ msgid "Removes contact from contact list"
+#~ msgstr "从联系人列表删除联系人"
+
+#~ msgid "Returns current status (the global one unless account is specified)"
+#~ msgstr "返回当前状态(如不指定账户将返回全局设置)"
+
+#~ msgid ""
+#~ "Returns current status message (the global one unless account is "
+#~ "specified)"
+#~ msgstr "返回当前状态信息(如不指定账户将返回全局设置)"
+
+#~ msgid "Returns number of unread messages"
+#~ msgstr "返回未读消息数"
+
+#~ msgid ""
+#~ "Sends a chat message to someone on your contact list. Account is optional."
+#~ msgstr "向你的联系人列表中的某人发送聊天消息。账户是可选的。"
+
+#~ msgid "Sends custom XML"
+#~ msgstr "发送自定义 XML"
+
+#~ msgid "Sends file to a contact"
+#~ msgstr "向联系人发送文件"
+
+#~ msgid ""
+#~ "Sends new chat message to a contact in the contact list. Account is "
+#~ "optional."
+#~ msgstr "向联系人列表中的联系人发送新的聊天消息。账户是可选的。"
+
+#~ msgid "Sends new message to a group chat you've joined."
+#~ msgstr "向一个您已加入的聊天室发送新消息。"
+
+#~ msgid ""
+#~ "Service not available: Gajim is not running, or remote_control is False"
+#~ msgstr "服务不可用: Gajim 不在运行, 或者 remote_control 为 False"
+
+#~ msgid ""
+#~ "Session bus is not available.\n"
+#~ "Try reading %(url)s"
+#~ msgstr ""
+#~ "会话总线不可用。\n"
+#~ "请参考 %(url)s"
+
+#~ msgid "Set the presence type and description"
+#~ msgstr "设置状态类型与描述"
+
+#~ msgid "Shows a help on specific command"
+#~ msgstr "为特定命令显示帮助"
 
 #~ msgid "Sign Out"
 #~ msgstr "登出"
@@ -5861,5 +5783,104 @@ msgstr "或者把图像拖放到这里"
 #~ msgid "Status Change"
 #~ msgstr "状态更改"
 
+#~ msgid "The status has been changed."
+#~ msgstr "状态发生了变化。"
+
+#~ msgid ""
+#~ "Too many arguments. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "参数过多。\n"
+#~ "输入 \"%(basename)s help %(command)s\" 获取更多信息"
+
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  %s command [arguments]\n"
+#~ "\n"
+#~ "Command is one of:\n"
+#~ msgstr ""
+#~ "用法:\n"
+#~ "  %s 命令 [参数]\n"
+#~ "\n"
+#~ "命令是下列之一: \n"
+
+#~ msgid ""
+#~ "Usage: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+#~ msgstr ""
+#~ "用法: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+
+#~ msgid "XML to send"
+#~ msgstr "要发送的 XML"
+
+#~ msgid "XMPP Address of the contact"
+#~ msgstr "联系人的 XMPP 地址"
+
+#~ msgid "XMPP Address of the contact that will receive the message"
+#~ msgstr "将接收消息的联系人的 XMPP 地址"
+
+#~ msgid "XMPP Address of the group chat that will receive the message"
+#~ msgstr "将接收消息的群聊的 XMPP 地址"
+
+#~ msgid "You have no active account"
+#~ msgstr "您没有活跃的账户"
+
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "总是关闭 Gajim(_A)"
+
+#~ msgid ""
+#~ "change status of account \"account\". If not specified, try to change "
+#~ "status of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "改变账户的状态。如果不指明，将改变所有设置了\"与全局同步\"选项的账户"
+
+#~ msgid ""
+#~ "change the priority of the given account. If not specified, change status "
+#~ "of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "改变指定账户的优先级。如果不指明，将改变所有设置了\"与全局状态同步\"选项的"
+#~ "账户"
+
+#~ msgid "command"
+#~ msgstr "命令"
+
+#~ msgid "file"
+#~ msgstr "文件"
+
+#~ msgid "if specified, contact is taken from the contact list of this account"
+#~ msgstr "如指定，将从此帐户联系人列表下获取联系人"
+
+#~ msgid "if specified, file will be sent using this account"
+#~ msgstr "如指定，文件将使用此账户发送"
+
+#~ msgid "if specified, the message will be sent using this account"
+#~ msgstr "如指定，消息将使用此账户发送"
+
+#~ msgid "message contents"
+#~ msgstr "消息内容"
+
+#~ msgid "message subject"
+#~ msgstr "消息标题"
+
+#~ msgid ""
+#~ "one of: offline, online, chat, away, xa, dnd. If not set, use account's "
+#~ "previous status"
+#~ msgstr ""
+#~ "下列状态之一: offline, online, chat, away, xa, dnd。如果没有设置，将使用账"
+#~ "户先前的状态"
+
+#~ msgid "priority you want to give to the account"
+#~ msgstr "您想要给予这个账户的优先级"
+
+#~ msgid "show help on command"
+#~ msgstr "为命令显示帮助"
+
+#~ msgid "show only contacts of the given account"
+#~ msgstr "只显示指定帐户的联系人"
+
+#~ msgid "status message"
+#~ msgstr "状态信息"
+
+#~ msgid "subject"
+#~ msgstr "标题"

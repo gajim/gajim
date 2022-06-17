@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 19:47+0000\n"
+"POT-Creation-Date: 2022-06-17 18:19+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -164,10 +164,6 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "%s not found"
-msgstr "%s nenájdený"
-
-#, python-format
 msgid "%s s"
 msgstr ""
 
@@ -186,14 +182,6 @@ msgstr "%s vám chce poslať súbor."
 #, fuzzy, python-format
 msgid "%s: Nothing found"
 msgstr "%s nenájdený"
-
-#, fuzzy, python-format
-msgid ""
-"'%s' is not in your contact list.\n"
-"Please specify account for sending the message."
-msgstr ""
-"'%s' nie je vo vašom zozname.\n"
-"Prosím, špecifikujte účet, z ktorého odoslať správu."
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -350,22 +338,6 @@ msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "?Vyžiadať (zápis): Žiadny"
-
-#, fuzzy
-msgid "?CLI:account"
-msgstr "účet"
-
-#, fuzzy
-msgid "?CLI:message"
-msgstr "správa"
-
-#, fuzzy
-msgid "?CLI:priority"
-msgstr "priorita"
-
-#, fuzzy
-msgid "?CLI:status"
-msgstr "stav"
 
 #, fuzzy
 msgid "?Gender:None"
@@ -712,20 +684,20 @@ msgstr "Účet \"%s\" je pripojený na server"
 msgid "Account is being created"
 msgstr "Účet \"%s\" je pripojený na server"
 
-#, fuzzy
-msgid ""
-"Account to which the XML will be sent; if not specified, XML will be sent to "
-"all accounts"
-msgstr ""
-"Účet na ktorý bude XML odoslané; ak nie je špecifikovaný, XML bude odoslané "
-"všetkým účtom"
-
 #, fuzzy, python-format
 msgid "Account: %s"
 msgstr "Účty"
 
 msgid "Accounts"
 msgstr "Účty"
+
+#, fuzzy
+msgid "Action on Close"
+msgstr "Gajim"
+
+#, fuzzy
+msgid "Action when closing Gajim’s window"
+msgstr "Vždy zavrieť Gajim"
 
 msgid "Action when left-clicking a preview"
 msgstr ""
@@ -901,6 +873,11 @@ msgstr "Všetky súbory"
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
 
+msgid ""
+"Allow Gajim to broadcast useful information via D-Bus. It also allows other "
+"applications to control Gajim remotely."
+msgstr ""
+
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
@@ -1008,17 +985,6 @@ msgstr "Ste si istý, že chcete opustiť diskusnú skupinu \"%s\"?"
 
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Ste si istý, že chcete ukončiť program Gajim?"
-
-#, python-format
-msgid ""
-"Argument \"%(arg)s\" is not specified. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"Argument \"%(arg)s\" nie je špecifikovaný. \n"
-"Zadajte \"%(basename)s help %(command)s\" pre viac informácií"
-
-msgid "Arguments:"
-msgstr "Argumenty:"
 
 msgid "Artists"
 msgstr ""
@@ -1364,12 +1330,6 @@ msgstr "Zmeniť heslo"
 msgid "Change Subject"
 msgstr "Zmeniť _predmet..."
 
-msgid "Change status"
-msgstr "Zmeniť stav"
-
-msgid "Change status information"
-msgstr "Zmeniť informáciu o stave"
-
 msgid "Change your account’s password, etc."
 msgstr ""
 
@@ -1390,14 +1350,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Changed by %s"
 msgstr "Zmeniť p_rezývku..."
-
-#, fuzzy
-msgid "Changes the priority of account(s)"
-msgstr "Zmení prioritu účtu alebo účtov"
-
-#, fuzzy
-msgid "Changes the status of account(s)"
-msgstr "Zmeniť stav účtu alebo účtov"
 
 #, fuzzy
 msgid "Changing Password..."
@@ -1450,9 +1402,6 @@ msgstr ""
 
 msgid "Check for updates periodically"
 msgstr ""
-
-msgid "Check if Gajim is running"
-msgstr "Kontrolovať, či je Gajim spustený"
 
 #, fuzzy
 msgid "Checking file…"
@@ -1845,6 +1794,9 @@ msgstr "Vytvoriť novú správu"
 msgid "Creating Account..."
 msgstr "Odstraňuje sa účet %s"
 
+msgid "Creating thumbnail failed"
+msgstr ""
+
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Certifikát vypršal"
@@ -1853,8 +1805,8 @@ msgstr "Certifikát vypršal"
 msgid "Current Developers"
 msgstr "Súčasní vývojári:"
 
-msgid "D-Bus is not present on this machine or python module is missing"
-msgstr "D-Bus nie je prítomný na tomto stroji alebo chýba modul pre python"
+msgid "D-Bus Interface"
+msgstr ""
 
 #, fuzzy
 msgid "Dark Theme"
@@ -2000,9 +1952,6 @@ msgstr "Použitie: /%s , zobrazí mená členov v diskusnej skupine."
 #, fuzzy
 msgid "Display or change a group chat topic"
 msgstr "Spýtať sa pred zatvorením okna/záložky pre diskusnú skupinu."
-
-msgid "Do not disturb"
-msgstr "Nerušiť"
 
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -2307,9 +2256,6 @@ msgstr "Šifrovanie správ rozhovorov."
 msgid "Extended Address"
 msgstr "<b>Ďaľšia adresa:</b>"
 
-msgid "Extended away"
-msgstr ""
-
 #, fuzzy
 msgid "FA_Q (Online)"
 msgstr "Prítomný"
@@ -2417,9 +2363,6 @@ msgstr "Súbor je prázdny"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File path"
-msgstr "Cesta k súboru"
-
 msgid "File size unknown"
 msgstr ""
 
@@ -2512,9 +2455,6 @@ msgstr "Nová súkromná správa"
 msgid "Free for Chat"
 msgstr "Mám čas na debatu"
 
-msgid "Free for chat"
-msgstr "Mám čas na debatu"
-
 msgid "From"
 msgstr "Od"
 
@@ -2602,12 +2542,6 @@ msgstr ""
 
 msgid "Generate preview for any URLs containing images (may be unsafe)"
 msgstr ""
-
-msgid "Gets detailed info on a account"
-msgstr "Získať podrobné informácie o účte"
-
-msgid "Gets detailed info on a contact"
-msgstr "Získať podrobné informácie o kontakte"
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2734,11 +2668,11 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
+msgid "Hide"
+msgstr ""
+
 msgid "Hide this menu"
 msgstr "Skryť toto menu"
-
-msgid "Hide window to system tray when minimized"
-msgstr ""
 
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
@@ -2811,10 +2745,6 @@ msgstr " od %s"
 msgid "Idle since: %s"
 msgstr " od %s"
 
-msgid "If checked, Gajim can be controlled remotely using gajim-remote."
-msgstr ""
-"Ak je zaškrtnuté, Gajim môže byť ovládaný na diaľku s použitím gajim-remote."
-
 #, fuzzy
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2832,9 +2762,6 @@ msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 "Ak je zaškrtnuté, Gajim bude zobrazovať náladu kontaktov v okne so zoznamom "
 "kontaktovi."
-
-msgid "If enabled, Gajim will execute XEP-0146 Commands."
-msgstr ""
 
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
@@ -3027,9 +2954,6 @@ msgstr ""
 msgid "It is not possible to send empty files"
 msgstr "Nie je možné poslať prázdne súbory"
 
-msgid "It seems Gajim is not running. So you can't use gajim-remote."
-msgstr "Vyzerá že Gajim nebeží. Nemôžete tak použiť gajim-remote."
-
 msgid "Italic"
 msgstr "Kurzíva"
 
@@ -3160,12 +3084,6 @@ msgstr ""
 
 msgid "Listing of Servers"
 msgstr ""
-
-#, fuzzy
-msgid "Lists all contacts in the contact list, one for each line"
-msgstr ""
-"Vypíše zoznam všetkých kontaktov v zozname kontaktov. Každý kontakt sa "
-"zobrazí na novom riadku"
 
 msgid "Live Preview"
 msgstr ""
@@ -3331,15 +3249,8 @@ msgstr ""
 "kontakt je vo vašom zozname kontaktov."
 
 #, fuzzy
-msgid "Minimize on Close"
+msgid "Minimize"
 msgstr "Gajim"
-
-msgid "Minimize to Tray"
-msgstr ""
-
-#, fuzzy
-msgid "Minimize when closing Gajim’s window"
-msgstr "Vždy zavrieť Gajim"
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3348,9 +3259,6 @@ msgstr "_Zaznamenať zmenu stavu kontaktu"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Rôzne</b>"
-
-msgid "Missing argument \"contact_jid\""
-msgstr "Chýbajúci argument \"contact_jid\""
 
 #, fuzzy
 msgid "Missing arguments"
@@ -3398,9 +3306,6 @@ msgstr "Meno"
 
 msgid "Name <b>default</b> is not allowed"
 msgstr ""
-
-msgid "Name of the account"
-msgstr "Názov účtu"
 
 msgid "Needs gspell to be installed"
 msgstr ""
@@ -3586,17 +3491,11 @@ msgstr "_OK"
 msgid "Offline"
 msgstr "Odhlásený"
 
-msgid "Offline - disconnect"
-msgstr "Odhlásený - odpojený"
-
 msgid "One Month"
 msgstr ""
 
 msgid "One Year"
 msgstr ""
-
-msgid "Online"
-msgstr "Prítomný"
 
 #, fuzzy
 msgid "Online Status"
@@ -3946,9 +3845,6 @@ msgstr "Predvoľby"
 msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
 msgstr ""
 
-msgid "Presence description:"
-msgstr ""
-
 #, fuzzy
 msgid "Presets"
 msgstr "_Prítomnosť"
@@ -3976,9 +3872,6 @@ msgstr "Prednastavené správy:"
 
 msgid "Print XML stanzas and other debug information"
 msgstr ""
-
-msgid "Prints a list of registered accounts"
-msgstr "Vypíše zoznam registrovaných účtov"
 
 #, fuzzy
 msgid "Priority"
@@ -4040,6 +3933,10 @@ msgstr "Všetky stavy"
 #, fuzzy, python-format
 msgid "PyGObject Version: %s"
 msgstr "Verzia PyGTK:"
+
+#, fuzzy
+msgid "Quit"
+msgstr "_Koniec"
 
 #, fuzzy
 msgid "Quit Gajim"
@@ -4223,10 +4120,6 @@ msgstr[1] "Odstránených %s kontaktov"
 msgstr[2] "Odstránených %s kontaktov"
 
 #, fuzzy
-msgid "Removes contact from contact list"
-msgstr "Odstráni kontakt zo zoznamu"
-
-#, fuzzy
 msgid "Remove…"
 msgstr "O_dstrániť"
 
@@ -4348,18 +4241,6 @@ msgstr "Správa o stave"
 #, fuzzy
 msgid "Retract message?"
 msgstr "správa o stave"
-
-msgid "Returns current status (the global one unless account is specified)"
-msgstr "Vráti aktuálny stav (použije sa globálny, pokiaľ nie je vybraný účet)"
-
-msgid ""
-"Returns current status message (the global one unless account is specified)"
-msgstr ""
-"Vráti aktuálnu správu o stave (použije sa globálny, pokiaľ nie je vybraný "
-"účet)"
-
-msgid "Returns number of unread messages"
-msgstr "Vráti počet neprečítaných správ"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -4641,26 +4522,6 @@ msgstr "Odosielateľ: "
 msgid "Sending private message failed"
 msgstr "Odoslanie súkromnej správy sa nepodarilo"
 
-#, fuzzy
-msgid ""
-"Sends a chat message to someone on your contact list. Account is optional."
-msgstr "Použitie: /%s, pošle správu kontaktu"
-
-msgid "Sends custom XML"
-msgstr "Odoslať vlastné XML"
-
-msgid "Sends file to a contact"
-msgstr "Poslať súbor kontaktu"
-
-#, fuzzy
-msgid ""
-"Sends new chat message to a contact in the contact list. Account is optional."
-msgstr "Použitie: /%s, pošle správu kontaktu"
-
-#, fuzzy
-msgid "Sends new message to a group chat you've joined."
-msgstr "Pošle novú správu diskusnej skupine do ktorej ste sa prihlásili."
-
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Poslať kontakt: \"%s\" (%s)"
@@ -4717,19 +4578,6 @@ msgstr "Prehliadanie služieb s použitím účtu %s"
 msgid "Service Gateway"
 msgstr "Server"
 
-msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr ""
-"Služba nie je dostupná: Gajim nebeží alebo ovládanie vzdialeného programu "
-"Gajim vrátilo False"
-
-#, python-format
-msgid ""
-"Session bus is not available.\n"
-"Try reading %(url)s"
-msgstr ""
-"Zbernica relácie nie je k dispozícii.\n"
-"Skúste si prečítať %(url)s"
-
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "%s konfiguračná chyba"
@@ -4754,9 +4602,6 @@ msgid "Set the current status to away"
 msgstr ""
 
 msgid "Set the current status to online"
-msgstr ""
-
-msgid "Set the presence type and description"
 msgstr ""
 
 msgid "Set your activity or tune to show your friends how you are feeling"
@@ -4927,9 +4772,6 @@ msgstr ""
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "Skrývanie okien"
-
-msgid "Shows a help on specific command"
-msgstr "Zobrazí pomocníka pre daný príkaz"
 
 #, fuzzy
 msgid "Shows a list of file transfers between you and your contacts"
@@ -5300,9 +5142,6 @@ msgstr "Služba nie je prehľadávateľná"
 msgid "The signing certificate authority is not known"
 msgstr ""
 
-msgid "The status has been changed."
-msgstr "Stav bol zmenený."
-
 #, fuzzy
 msgid "Theme"
 msgstr "Téma"
@@ -5484,14 +5323,6 @@ msgstr "Účastník"
 #, fuzzy
 msgid "Too many arguments"
 msgstr "Chýbajúci argument \"contact_jid\""
-
-#, python-format
-msgid ""
-"Too many arguments. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"Príliš veľa argumentov. \n"
-"Zadajte \"%(basename)s help %(command)s\" pre viac informácií"
 
 msgid "Topic"
 msgstr ""
@@ -5686,24 +5517,6 @@ msgstr "Odoslanie súkromnej správy sa nepodarilo"
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
-#, fuzzy, python-format
-msgid ""
-"Usage:\n"
-"  %s command [arguments]\n"
-"\n"
-"Command is one of:\n"
-msgstr ""
-"Použitie: %s príkaz [argumenty]\n"
-"Príkaz je jeden z:\n"
-
-#, python-format
-msgid ""
-"Usage: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-msgstr ""
-"Použitie: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -5890,24 +5703,9 @@ msgstr "XML konzola"
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
-msgid "XML to send"
-msgstr "XML na odoslanie"
-
 #, fuzzy
 msgid "XMPP Address"
 msgstr "AIM adresa:"
-
-#, fuzzy
-msgid "XMPP Address of the contact"
-msgstr "JID kontaktu"
-
-#, fuzzy
-msgid "XMPP Address of the contact that will receive the message"
-msgstr "JID kontaktu, ktorý prijme správu"
-
-#, fuzzy
-msgid "XMPP Address of the group chat that will receive the message"
-msgstr "JID kontaktu, ktorý prijme správu"
 
 #, fuzzy
 msgid "XMPP Address…"
@@ -6024,6 +5822,10 @@ msgstr "Nemáte oprávnenie vytvoriť súbor v tomto priečinku."
 msgid "You have been banned{actor}{reason}"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "You have been invited to %s"
+msgstr "%(nick)s bol odstránený z miestnosti (%(reason)s)"
+
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr ""
@@ -6035,9 +5837,6 @@ msgstr "%(nick)s bol odstránený z miestnosti (%(reason)s)"
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr ""
-
-msgid "You have no active account"
-msgstr "Nemáte žiadny aktívny účet"
 
 #, fuzzy
 msgid "You have to be connected to create a group chat."
@@ -6496,29 +6295,11 @@ msgstr "námornícka"
 msgid "building"
 msgstr "Hrám skrývačku"
 
-msgid ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
-msgstr ""
-"zmeniť stav účtu \"účet\". Ak nie je špecifikovaný, pokús sa zmeniť všetky "
-"účty, ktoré majú nastavenú vlastnosť \"synchronizácia s globálnym stavom\""
-
-#, fuzzy
-msgid ""
-"change the priority of the given account. If not specified, change status of "
-"all accounts that have \"sync with global status\" option set"
-msgstr ""
-"zmeniť stav účtu \"účet\". Ak nie je špecifikovaný, pokús sa zmeniť všetky "
-"účty, ktoré majú nastavenú vlastnosť \"synchronizácia s globálnym stavom\""
-
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
 msgid "column"
 msgstr ""
-
-msgid "command"
-msgstr "príkaz"
 
 #, fuzzy
 msgid "country"
@@ -6550,9 +6331,6 @@ msgstr "chyba pri odosielaní %(message)s ( %(error)s )"
 msgid "example.org"
 msgstr ""
 
-msgid "file"
-msgstr "súbor"
-
 msgid "file transfers list"
 msgstr "zoznam prenosu súborov"
 
@@ -6570,15 +6348,6 @@ msgstr "Zvolte diskusné skupiny, ktoré chcete opustiť"
 
 msgid "help"
 msgstr ""
-
-msgid "if specified, contact is taken from the contact list of this account"
-msgstr "ak je špecifikované, kontakt je zobraný zo zoznamu pre tento účet"
-
-msgid "if specified, file will be sent using this account"
-msgstr "ak je špecifikovaný, súbor bude odoslaný s použitím tohto účtom"
-
-msgid "if specified, the message will be sent using this account"
-msgstr "ak je špecifikovaný, správa bude odoslaná s použitím tohoto účtu"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -6603,20 +6372,6 @@ msgstr "jeden"
 msgid "macOS"
 msgstr ""
 
-msgid "message contents"
-msgstr "obsah správy"
-
-msgid "message subject"
-msgstr "predmet správy"
-
-#, fuzzy
-msgid ""
-"one of: offline, online, chat, away, xa, dnd. If not set, use account's "
-"previous status"
-msgstr ""
-"jeden z: odhlásený, prítomný, chat, preč, diskutovať, zaneprázdnený, "
-"neviditeľný"
-
 #, fuzzy
 msgid "or"
 msgstr "Pre"
@@ -6629,9 +6384,6 @@ msgstr "prestal písať správu"
 
 msgid "postalcode"
 msgstr ""
-
-msgid "priority you want to give to the account"
-msgstr "priorita, ktorú chcete udeliť účtu"
 
 #, fuzzy, python-format
 msgid "python-cairo Version: %s"
@@ -6647,23 +6399,11 @@ msgstr ""
 msgid "room"
 msgstr "miestnosť"
 
-msgid "show help on command"
-msgstr "ukáž pomocníka pre príkaz"
-
-msgid "show only contacts of the given account"
-msgstr "zobraziť len kontakty daného účtu"
-
 msgid "speed"
 msgstr ""
 
-msgid "status message"
-msgstr "správa o stave"
-
 msgid "street"
 msgstr ""
-
-msgid "subject"
-msgstr "predmet"
 
 msgid "text"
 msgstr ""
@@ -6721,6 +6461,91 @@ msgstr "%(nick)s je teraz %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#~ msgid "%s not found"
+#~ msgstr "%s nenájdený"
+
+#, fuzzy
+#~ msgid ""
+#~ "'%s' is not in your contact list.\n"
+#~ "Please specify account for sending the message."
+#~ msgstr ""
+#~ "'%s' nie je vo vašom zozname.\n"
+#~ "Prosím, špecifikujte účet, z ktorého odoslať správu."
+
+#, fuzzy
+#~ msgid "?CLI:account"
+#~ msgstr "účet"
+
+#, fuzzy
+#~ msgid "?CLI:message"
+#~ msgstr "správa"
+
+#, fuzzy
+#~ msgid "?CLI:priority"
+#~ msgstr "priorita"
+
+#, fuzzy
+#~ msgid "?CLI:status"
+#~ msgstr "stav"
+
+#, fuzzy
+#~ msgid ""
+#~ "Account to which the XML will be sent; if not specified, XML will be sent "
+#~ "to all accounts"
+#~ msgstr ""
+#~ "Účet na ktorý bude XML odoslané; ak nie je špecifikovaný, XML bude "
+#~ "odoslané všetkým účtom"
+
+#~ msgid ""
+#~ "Argument \"%(arg)s\" is not specified. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "Argument \"%(arg)s\" nie je špecifikovaný. \n"
+#~ "Zadajte \"%(basename)s help %(command)s\" pre viac informácií"
+
+#~ msgid "Arguments:"
+#~ msgstr "Argumenty:"
+
+#~ msgid "Change status"
+#~ msgstr "Zmeniť stav"
+
+#~ msgid "Change status information"
+#~ msgstr "Zmeniť informáciu o stave"
+
+#, fuzzy
+#~ msgid "Changes the priority of account(s)"
+#~ msgstr "Zmení prioritu účtu alebo účtov"
+
+#, fuzzy
+#~ msgid "Changes the status of account(s)"
+#~ msgstr "Zmeniť stav účtu alebo účtov"
+
+#~ msgid "Check if Gajim is running"
+#~ msgstr "Kontrolovať, či je Gajim spustený"
+
+#~ msgid "D-Bus is not present on this machine or python module is missing"
+#~ msgstr "D-Bus nie je prítomný na tomto stroji alebo chýba modul pre python"
+
+#~ msgid "Do not disturb"
+#~ msgstr "Nerušiť"
+
+#~ msgid "File path"
+#~ msgstr "Cesta k súboru"
+
+#~ msgid "Free for chat"
+#~ msgstr "Mám čas na debatu"
+
+#~ msgid "Gets detailed info on a account"
+#~ msgstr "Získať podrobné informácie o účte"
+
+#~ msgid "Gets detailed info on a contact"
+#~ msgstr "Získať podrobné informácie o kontakte"
+
+#~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
+#~ msgstr ""
+#~ "Ak je zaškrtnuté, Gajim môže byť ovládaný na diaľku s použitím gajim-"
+#~ "remote."
+
 #, fuzzy
 #~ msgid ""
 #~ "If enabled, Gajim hides the main window when pressing the X button "
@@ -6730,6 +6555,85 @@ msgstr ""
 #~ "stlačené. Toto nastavenie je použíté, len v prípade, že sa používa "
 #~ "trayikona."
 
+#~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
+#~ msgstr "Vyzerá že Gajim nebeží. Nemôžete tak použiť gajim-remote."
+
+#, fuzzy
+#~ msgid "Lists all contacts in the contact list, one for each line"
+#~ msgstr ""
+#~ "Vypíše zoznam všetkých kontaktov v zozname kontaktov. Každý kontakt sa "
+#~ "zobrazí na novom riadku"
+
+#~ msgid "Missing argument \"contact_jid\""
+#~ msgstr "Chýbajúci argument \"contact_jid\""
+
+#~ msgid "Name of the account"
+#~ msgstr "Názov účtu"
+
+#~ msgid "Offline - disconnect"
+#~ msgstr "Odhlásený - odpojený"
+
+#~ msgid "Online"
+#~ msgstr "Prítomný"
+
+#~ msgid "Prints a list of registered accounts"
+#~ msgstr "Vypíše zoznam registrovaných účtov"
+
+#, fuzzy
+#~ msgid "Removes contact from contact list"
+#~ msgstr "Odstráni kontakt zo zoznamu"
+
+#~ msgid "Returns current status (the global one unless account is specified)"
+#~ msgstr ""
+#~ "Vráti aktuálny stav (použije sa globálny, pokiaľ nie je vybraný účet)"
+
+#~ msgid ""
+#~ "Returns current status message (the global one unless account is "
+#~ "specified)"
+#~ msgstr ""
+#~ "Vráti aktuálnu správu o stave (použije sa globálny, pokiaľ nie je vybraný "
+#~ "účet)"
+
+#~ msgid "Returns number of unread messages"
+#~ msgstr "Vráti počet neprečítaných správ"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends a chat message to someone on your contact list. Account is optional."
+#~ msgstr "Použitie: /%s, pošle správu kontaktu"
+
+#~ msgid "Sends custom XML"
+#~ msgstr "Odoslať vlastné XML"
+
+#~ msgid "Sends file to a contact"
+#~ msgstr "Poslať súbor kontaktu"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends new chat message to a contact in the contact list. Account is "
+#~ "optional."
+#~ msgstr "Použitie: /%s, pošle správu kontaktu"
+
+#, fuzzy
+#~ msgid "Sends new message to a group chat you've joined."
+#~ msgstr "Pošle novú správu diskusnej skupine do ktorej ste sa prihlásili."
+
+#~ msgid ""
+#~ "Service not available: Gajim is not running, or remote_control is False"
+#~ msgstr ""
+#~ "Služba nie je dostupná: Gajim nebeží alebo ovládanie vzdialeného programu "
+#~ "Gajim vrátilo False"
+
+#~ msgid ""
+#~ "Session bus is not available.\n"
+#~ "Try reading %(url)s"
+#~ msgstr ""
+#~ "Zbernica relácie nie je k dispozícii.\n"
+#~ "Skúste si prečítať %(url)s"
+
+#~ msgid "Shows a help on specific command"
+#~ msgstr "Zobrazí pomocníka pre daný príkaz"
+
 #, fuzzy
 #~ msgid "Sign Out"
 #~ msgstr "_Odhlásil sa"
@@ -6738,6 +6642,112 @@ msgstr ""
 #~ msgid "Status Change"
 #~ msgstr "_Zaznamenať zmenu stavu kontaktu"
 
+#~ msgid "The status has been changed."
+#~ msgstr "Stav bol zmenený."
+
+#~ msgid ""
+#~ "Too many arguments. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "Príliš veľa argumentov. \n"
+#~ "Zadajte \"%(basename)s help %(command)s\" pre viac informácií"
+
+#, fuzzy
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  %s command [arguments]\n"
+#~ "\n"
+#~ "Command is one of:\n"
+#~ msgstr ""
+#~ "Použitie: %s príkaz [argumenty]\n"
+#~ "Príkaz je jeden z:\n"
+
+#~ msgid ""
+#~ "Usage: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+#~ msgstr ""
+#~ "Použitie: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+
+#~ msgid "XML to send"
+#~ msgstr "XML na odoslanie"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact"
+#~ msgstr "JID kontaktu"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact that will receive the message"
+#~ msgstr "JID kontaktu, ktorý prijme správu"
+
+#, fuzzy
+#~ msgid "XMPP Address of the group chat that will receive the message"
+#~ msgstr "JID kontaktu, ktorý prijme správu"
+
+#~ msgid "You have no active account"
+#~ msgstr "Nemáte žiadny aktívny účet"
+
 #, fuzzy
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "Vždy zavrieť Gajim"
+
+#~ msgid ""
+#~ "change status of account \"account\". If not specified, try to change "
+#~ "status of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "zmeniť stav účtu \"účet\". Ak nie je špecifikovaný, pokús sa zmeniť "
+#~ "všetky účty, ktoré majú nastavenú vlastnosť \"synchronizácia s globálnym "
+#~ "stavom\""
+
+#, fuzzy
+#~ msgid ""
+#~ "change the priority of the given account. If not specified, change status "
+#~ "of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "zmeniť stav účtu \"účet\". Ak nie je špecifikovaný, pokús sa zmeniť "
+#~ "všetky účty, ktoré majú nastavenú vlastnosť \"synchronizácia s globálnym "
+#~ "stavom\""
+
+#~ msgid "command"
+#~ msgstr "príkaz"
+
+#~ msgid "file"
+#~ msgstr "súbor"
+
+#~ msgid "if specified, contact is taken from the contact list of this account"
+#~ msgstr "ak je špecifikované, kontakt je zobraný zo zoznamu pre tento účet"
+
+#~ msgid "if specified, file will be sent using this account"
+#~ msgstr "ak je špecifikovaný, súbor bude odoslaný s použitím tohto účtom"
+
+#~ msgid "if specified, the message will be sent using this account"
+#~ msgstr "ak je špecifikovaný, správa bude odoslaná s použitím tohoto účtu"
+
+#~ msgid "message contents"
+#~ msgstr "obsah správy"
+
+#~ msgid "message subject"
+#~ msgstr "predmet správy"
+
+#, fuzzy
+#~ msgid ""
+#~ "one of: offline, online, chat, away, xa, dnd. If not set, use account's "
+#~ "previous status"
+#~ msgstr ""
+#~ "jeden z: odhlásený, prítomný, chat, preč, diskutovať, zaneprázdnený, "
+#~ "neviditeľný"
+
+#~ msgid "priority you want to give to the account"
+#~ msgstr "priorita, ktorú chcete udeliť účtu"
+
+#~ msgid "show help on command"
+#~ msgstr "ukáž pomocníka pre príkaz"
+
+#~ msgid "show only contacts of the given account"
+#~ msgstr "zobraziť len kontakty daného účtu"
+
+#~ msgid "status message"
+#~ msgstr "správa o stave"
+
+#~ msgid "subject"
+#~ msgstr "predmet"

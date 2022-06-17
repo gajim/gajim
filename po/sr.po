@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 19:47+0000\n"
+"POT-Creation-Date: 2022-06-17 18:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -163,10 +163,6 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "%s not found"
-msgstr "%s није пронађен"
-
-#, python-format
 msgid "%s s"
 msgstr ""
 
@@ -185,14 +181,6 @@ msgstr "%s Вам жели послати датотеку."
 #, fuzzy, python-format
 msgid "%s: Nothing found"
 msgstr "%s није пронађен"
-
-#, fuzzy, python-format
-msgid ""
-"'%s' is not in your contact list.\n"
-"Please specify account for sending the message."
-msgstr ""
-"'%s' није на Вашј листи.\n"
-"Молимо одредите налог за слање поруке."
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -350,22 +338,6 @@ msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "?Питај (за претплату):Ниједна"
-
-#, fuzzy
-msgid "?CLI:account"
-msgstr "налог"
-
-#, fuzzy
-msgid "?CLI:message"
-msgstr "порука"
-
-#, fuzzy
-msgid "?CLI:priority"
-msgstr "приоритет"
-
-#, fuzzy
-msgid "?CLI:status"
-msgstr "статус"
 
 #, fuzzy
 msgid "?Gender:None"
@@ -715,20 +687,20 @@ msgstr "Рачун \"%s\" је повезан на сервер"
 msgid "Account is being created"
 msgstr "Рачун \"%s\" је повезан на сервер"
 
-#, fuzzy
-msgid ""
-"Account to which the XML will be sent; if not specified, XML will be sent to "
-"all accounts"
-msgstr ""
-"Налог за који ће бити послан xml ; ако није одређен, xml ће бити послат за "
-"све налоге"
-
 #, fuzzy, python-format
 msgid "Account: %s"
 msgstr "Налози"
 
 msgid "Accounts"
 msgstr "Налози"
+
+#, fuzzy
+msgid "Action on Close"
+msgstr "Гајим"
+
+#, fuzzy
+msgid "Action when closing Gajim’s window"
+msgstr "Увек затвори Гајим"
 
 msgid "Action when left-clicking a preview"
 msgstr ""
@@ -904,6 +876,11 @@ msgstr "Све датотеке"
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
 
+msgid ""
+"Allow Gajim to broadcast useful information via D-Bus. It also allows other "
+"applications to control Gajim remotely."
+msgstr ""
+
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
@@ -1014,17 +991,6 @@ msgstr "Јесте ли сигурни да желите напустити гр
 
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Јесте ли сигурни да желите затворити Гајим?"
-
-#, python-format
-msgid ""
-"Argument \"%(arg)s\" is not specified. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"Аргумент \"%(arg)s\" није наведен. \n"
-"Укуцајте \"%(basename)s help %(command)s\" за више информација"
-
-msgid "Arguments:"
-msgstr "Аргументи:"
 
 msgid "Artists"
 msgstr ""
@@ -1373,12 +1339,6 @@ msgstr "Измени лозинку"
 msgid "Change Subject"
 msgstr "Промени _тему..."
 
-msgid "Change status"
-msgstr "Измени статус"
-
-msgid "Change status information"
-msgstr "Измени статусне информације"
-
 msgid "Change your account’s password, etc."
 msgstr ""
 
@@ -1399,14 +1359,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Changed by %s"
 msgstr "Промени _надимак..."
-
-#, fuzzy
-msgid "Changes the priority of account(s)"
-msgstr "Мења статус једног или више налога"
-
-#, fuzzy
-msgid "Changes the status of account(s)"
-msgstr "Мења статус једног или више налога"
 
 #, fuzzy
 msgid "Changing Password..."
@@ -1459,9 +1411,6 @@ msgstr ""
 
 msgid "Check for updates periodically"
 msgstr ""
-
-msgid "Check if Gajim is running"
-msgstr "Молимо проверите да ли је Гајим покренут"
 
 #, fuzzy
 msgid "Checking file…"
@@ -1854,6 +1803,9 @@ msgstr "Направи нову објаву"
 msgid "Creating Account..."
 msgstr "Уклањање рачуна %s"
 
+msgid "Creating thumbnail failed"
+msgstr ""
+
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Сертификат је истекао"
@@ -1862,8 +1814,8 @@ msgstr "Сертификат је истекао"
 msgid "Current Developers"
 msgstr "Тренутни програмери:"
 
-msgid "D-Bus is not present on this machine or python module is missing"
-msgstr "D-Bus не постоји на овом рачунару или нема python модула."
+msgid "D-Bus Interface"
+msgstr ""
 
 #, fuzzy
 msgid "Dark Theme"
@@ -2009,9 +1961,6 @@ msgstr "Начин коришћења: /%s , приказује имена уч�
 #, fuzzy
 msgid "Display or change a group chat topic"
 msgstr "Питај пре затварања прозора/језичка групног разговора."
-
-msgid "Do not disturb"
-msgstr "Не сметај"
 
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -2318,9 +2267,6 @@ msgstr "Шифрујем поруке разговора."
 msgid "Extended Address"
 msgstr "<b>Додатна адреса:</b>"
 
-msgid "Extended away"
-msgstr "Дуже одсутан"
-
 #, fuzzy
 msgid "FA_Q (Online)"
 msgstr "На вези"
@@ -2428,9 +2374,6 @@ msgstr "Датотека је празна"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File path"
-msgstr "Путања до датотеке"
-
 msgid "File size unknown"
 msgstr ""
 
@@ -2523,9 +2466,6 @@ msgstr "статусна порука"
 msgid "Free for Chat"
 msgstr "Слободан за разговор"
 
-msgid "Free for chat"
-msgstr "Слободан за разговор"
-
 msgid "From"
 msgstr "Од"
 
@@ -2614,12 +2554,6 @@ msgstr ""
 
 msgid "Generate preview for any URLs containing images (may be unsafe)"
 msgstr ""
-
-msgid "Gets detailed info on a account"
-msgstr "Даје детаљне информације о налогу"
-
-msgid "Gets detailed info on a contact"
-msgstr "Даје детаљне информације о контакту"
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2746,11 +2680,11 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
+msgid "Hide"
+msgstr ""
+
 msgid "Hide this menu"
 msgstr "Сакриј овај мени"
-
-msgid "Hide window to system tray when minimized"
-msgstr ""
 
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
@@ -2823,9 +2757,6 @@ msgstr " од %s"
 msgid "Idle since: %s"
 msgstr " од %s"
 
-msgid "If checked, Gajim can be controlled remotely using gajim-remote."
-msgstr "Ако је означено, Гајим се може контролисати коришћењем gajim-remote."
-
 #, fuzzy
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2842,9 +2773,6 @@ msgstr ""
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 "Ако је означена, Гајим ће приказивати расположење контаката у листи контаката"
-
-msgid "If enabled, Gajim will execute XEP-0146 Commands."
-msgstr ""
 
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
@@ -3041,9 +2969,6 @@ msgstr ""
 msgid "It is not possible to send empty files"
 msgstr "Није могуће послати празну датотеку"
 
-msgid "It seems Gajim is not running. So you can't use gajim-remote."
-msgstr "Чини се да Гајим не ради. Не можете да користите gajim-remote."
-
 msgid "Italic"
 msgstr "Курзив"
 
@@ -3177,12 +3102,6 @@ msgstr ""
 
 msgid "Listing of Servers"
 msgstr ""
-
-#, fuzzy
-msgid "Lists all contacts in the contact list, one for each line"
-msgstr ""
-"Исписује листу свих контаката са листе контаката. Сваки контакт је у "
-"посебној линији"
 
 msgid "Live Preview"
 msgstr ""
@@ -3348,15 +3267,8 @@ msgstr ""
 "тај контакт у листи."
 
 #, fuzzy
-msgid "Minimize on Close"
+msgid "Minimize"
 msgstr "Гајим"
-
-msgid "Minimize to Tray"
-msgstr ""
-
-#, fuzzy
-msgid "Minimize when closing Gajim’s window"
-msgstr "Увек затвори Гајим"
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3365,9 +3277,6 @@ msgstr "_Записуј у дневник статусне промене кон
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Остало</b>"
-
-msgid "Missing argument \"contact_jid\""
-msgstr "Недостаје аргумент \"contact_jid\""
 
 msgid "Missing arguments"
 msgstr "Недостају аргументи"
@@ -3414,9 +3323,6 @@ msgstr "Име"
 
 msgid "Name <b>default</b> is not allowed"
 msgstr ""
-
-msgid "Name of the account"
-msgstr "Име налога"
 
 msgid "Needs gspell to be installed"
 msgstr ""
@@ -3602,17 +3508,11 @@ msgstr "_У реду"
 msgid "Offline"
 msgstr "Није на вези"
 
-msgid "Offline - disconnect"
-msgstr "Није на вези"
-
 msgid "One Month"
 msgstr ""
 
 msgid "One Year"
 msgstr ""
-
-msgid "Online"
-msgstr "На вези"
 
 #, fuzzy
 msgid "Online Status"
@@ -3958,9 +3858,6 @@ msgstr "Подешавања"
 msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
 msgstr ""
 
-msgid "Presence description:"
-msgstr "Опис присутности:"
-
 #, fuzzy
 msgid "Presets"
 msgstr "_Присутност"
@@ -3988,9 +3885,6 @@ msgstr "Већ постављене поруке:"
 
 msgid "Print XML stanzas and other debug information"
 msgstr ""
-
-msgid "Prints a list of registered accounts"
-msgstr "Исписује листу регистрованих налога"
 
 #, fuzzy
 msgid "Priority"
@@ -4052,6 +3946,9 @@ msgstr "Недавно:"
 #, fuzzy, python-format
 msgid "PyGObject Version: %s"
 msgstr "PyГТК верзија:"
+
+msgid "Quit"
+msgstr ""
 
 #, fuzzy
 msgid "Quit Gajim"
@@ -4236,10 +4133,6 @@ msgstr[1] "Уклања контакт са листе"
 msgstr[2] "Уклања контакт са листе"
 
 #, fuzzy
-msgid "Removes contact from contact list"
-msgstr "Уклања контакт са листе"
-
-#, fuzzy
 msgid "Remove…"
 msgstr "_Уклони"
 
@@ -4362,16 +4255,6 @@ msgstr "Статусна порука"
 #, fuzzy
 msgid "Retract message?"
 msgstr "статусна порука"
-
-msgid "Returns current status (the global one unless account is specified)"
-msgstr "Враћа тренутни статус (глобални ако није назначен налог)"
-
-msgid ""
-"Returns current status message (the global one unless account is specified)"
-msgstr "Враћа тренутну статусну поруку (глобалну ако није назначен налог)"
-
-msgid "Returns number of unread messages"
-msgstr "Враћа број непрочитаних порука"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -4655,26 +4538,6 @@ msgstr "Пошаљилац: "
 msgid "Sending private message failed"
 msgstr "Неуспешно слање приватне поруке"
 
-#, fuzzy
-msgid ""
-"Sends a chat message to someone on your contact list. Account is optional."
-msgstr "Начин коришћења: /%s, шаље поруку контакту"
-
-msgid "Sends custom XML"
-msgstr "Шаље кориснички дефинисан XML"
-
-msgid "Sends file to a contact"
-msgstr "Шаље датотеку контакту"
-
-#, fuzzy
-msgid ""
-"Sends new chat message to a contact in the contact list. Account is optional."
-msgstr "Начин коришћења: /%s, шаље поруку контакту"
-
-#, fuzzy
-msgid "Sends new message to a group chat you've joined."
-msgstr "Шаље нову поруку на групни разговор коме сте се придружили."
-
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Послати контакти: \"%s\" (%s)"
@@ -4730,19 +4593,6 @@ msgstr "Откривање услуга са налога %s"
 msgid "Service Gateway"
 msgstr "Сервер"
 
-msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr ""
-"Сервис није доступан: Гајим није покренут или је ставка подешавања "
-"remote_control неистинита"
-
-#, fuzzy, python-format
-msgid ""
-"Session bus is not available.\n"
-"Try reading %(url)s"
-msgstr ""
-"Линија сесије није доступна.\n"
-"Прочитајте http:/trac.gajim.org/wiki/GajimDBus"
-
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "Конфигурација собе"
@@ -4768,9 +4618,6 @@ msgstr ""
 
 msgid "Set the current status to online"
 msgstr ""
-
-msgid "Set the presence type and description"
-msgstr "Постави тип присутности и опис"
 
 msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
@@ -4939,9 +4786,6 @@ msgstr ""
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "Сакрива прозор"
-
-msgid "Shows a help on specific command"
-msgstr "Приказује помоћ за одређену наредбу"
 
 #, fuzzy
 msgid "Shows a list of file transfers between you and your contacts"
@@ -5311,9 +5155,6 @@ msgstr "Услуге нису претраживе"
 msgid "The signing certificate authority is not known"
 msgstr ""
 
-msgid "The status has been changed."
-msgstr "Статус се променио."
-
 #, fuzzy
 msgid "Theme"
 msgstr "Тема"
@@ -5492,14 +5333,6 @@ msgstr "Учесник"
 #, fuzzy
 msgid "Too many arguments"
 msgstr "Недостају аргументи"
-
-#, python-format
-msgid ""
-"Too many arguments. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"Превише аргумената\n"
-"Укуцајте \"%(basename)s help %(command)s\" за више информација"
 
 msgid "Topic"
 msgstr ""
@@ -5695,25 +5528,6 @@ msgstr "Неуспешно слање приватне поруке"
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
-#, python-format
-msgid ""
-"Usage:\n"
-"  %s command [arguments]\n"
-"\n"
-"Command is one of:\n"
-msgstr ""
-"Коришћење:\n"
-"  %s наредба [аргументи]\n"
-"Наредба је једна од:\n"
-
-#, python-format
-msgid ""
-"Usage: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-msgstr ""
-"Коришћење: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -5899,24 +5713,9 @@ msgstr "XML Конзола"
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
-msgid "XML to send"
-msgstr "XML за слање"
-
 #, fuzzy
 msgid "XMPP Address"
 msgstr "АИМ адреса:"
-
-#, fuzzy
-msgid "XMPP Address of the contact"
-msgstr "Џабер ИД контакта"
-
-#, fuzzy
-msgid "XMPP Address of the contact that will receive the message"
-msgstr "Џабер ИД контакта који ће примити поруку"
-
-#, fuzzy
-msgid "XMPP Address of the group chat that will receive the message"
-msgstr "Џабер ИД собе која ће примити поруку"
 
 #, fuzzy
 msgid "XMPP Address…"
@@ -6036,6 +5835,10 @@ msgstr "Немате привилегија за писање у овој фас
 msgid "You have been banned{actor}{reason}"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "You have been invited to %s"
+msgstr "%(nick)s је избачен из собе (%(reason)s)"
+
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr ""
@@ -6047,9 +5850,6 @@ msgstr "%(nick)s је избачен из собе (%(reason)s)"
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr ""
-
-msgid "You have no active account"
-msgstr "немате активних рачуна"
 
 #, fuzzy
 msgid "You have to be connected to create a group chat."
@@ -6507,29 +6307,11 @@ msgstr "морска"
 msgid "building"
 msgstr "Крије се"
 
-msgid ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
-msgstr ""
-"измена статуса налога \"налог\". Ако није одређен, покушај промене статуса "
-"свих налога који имају укључену опцију \"синхронизација са глобалним статусом"
-"\""
-
-msgid ""
-"change the priority of the given account. If not specified, change status of "
-"all accounts that have \"sync with global status\" option set"
-msgstr ""
-"измена приоритета датог налога. Ако није одређен, мења се статус свих налога "
-"који имају постављену опцију \"синхронизација са глобалним статусом\""
-
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
 msgid "column"
 msgstr ""
-
-msgid "command"
-msgstr "наредба"
 
 #, fuzzy
 msgid "country"
@@ -6561,9 +6343,6 @@ msgstr "грешка приликом слања %(message)s ( %(error)s )"
 msgid "example.org"
 msgstr ""
 
-msgid "file"
-msgstr "датотека"
-
 msgid "file transfers list"
 msgstr "листа преноса датотека"
 
@@ -6581,15 +6360,6 @@ msgstr "Одаберите групне разговоре које желите
 
 msgid "help"
 msgstr ""
-
-msgid "if specified, contact is taken from the contact list of this account"
-msgstr "ако је назначено, контакт се узима са листе контаката овог налога"
-
-msgid "if specified, file will be sent using this account"
-msgstr "ако је назначено, датотека ће бити послата коритећи овај налог"
-
-msgid "if specified, the message will be sent using this account"
-msgstr "ако је назначено, порука ће бити послата користећи овај налог"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -6614,20 +6384,6 @@ msgstr "један"
 msgid "macOS"
 msgstr ""
 
-msgid "message contents"
-msgstr "садржај поруке"
-
-msgid "message subject"
-msgstr "тема поруке"
-
-#, fuzzy
-msgid ""
-"one of: offline, online, chat, away, xa, dnd. If not set, use account's "
-"previous status"
-msgstr ""
-"једно од: није на вези, на вези, прича, одсутан, продужено одсутан, не "
-"узнемиравај, невидљив"
-
 #, fuzzy
 msgid "or"
 msgstr "За"
@@ -6640,9 +6396,6 @@ msgstr "пауза при писању поруке"
 
 msgid "postalcode"
 msgstr ""
-
-msgid "priority you want to give to the account"
-msgstr "приоритет који желите да дате овом налогу"
 
 #, fuzzy, python-format
 msgid "python-cairo Version: %s"
@@ -6658,23 +6411,11 @@ msgstr ""
 msgid "room"
 msgstr "соба"
 
-msgid "show help on command"
-msgstr "прикажи помоћ за команду"
-
-msgid "show only contacts of the given account"
-msgstr "приказује само контакте са овог налога"
-
 msgid "speed"
 msgstr ""
 
-msgid "status message"
-msgstr "статусна порука"
-
 msgid "street"
 msgstr ""
-
-msgid "subject"
-msgstr "тема"
 
 msgid "text"
 msgstr ""
@@ -6732,6 +6473,93 @@ msgstr "%(nick)s је тренутно %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#~ msgid "%s not found"
+#~ msgstr "%s није пронађен"
+
+#, fuzzy
+#~ msgid ""
+#~ "'%s' is not in your contact list.\n"
+#~ "Please specify account for sending the message."
+#~ msgstr ""
+#~ "'%s' није на Вашј листи.\n"
+#~ "Молимо одредите налог за слање поруке."
+
+#, fuzzy
+#~ msgid "?CLI:account"
+#~ msgstr "налог"
+
+#, fuzzy
+#~ msgid "?CLI:message"
+#~ msgstr "порука"
+
+#, fuzzy
+#~ msgid "?CLI:priority"
+#~ msgstr "приоритет"
+
+#, fuzzy
+#~ msgid "?CLI:status"
+#~ msgstr "статус"
+
+#, fuzzy
+#~ msgid ""
+#~ "Account to which the XML will be sent; if not specified, XML will be sent "
+#~ "to all accounts"
+#~ msgstr ""
+#~ "Налог за који ће бити послан xml ; ако није одређен, xml ће бити послат "
+#~ "за све налоге"
+
+#~ msgid ""
+#~ "Argument \"%(arg)s\" is not specified. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "Аргумент \"%(arg)s\" није наведен. \n"
+#~ "Укуцајте \"%(basename)s help %(command)s\" за више информација"
+
+#~ msgid "Arguments:"
+#~ msgstr "Аргументи:"
+
+#~ msgid "Change status"
+#~ msgstr "Измени статус"
+
+#~ msgid "Change status information"
+#~ msgstr "Измени статусне информације"
+
+#, fuzzy
+#~ msgid "Changes the priority of account(s)"
+#~ msgstr "Мења статус једног или више налога"
+
+#, fuzzy
+#~ msgid "Changes the status of account(s)"
+#~ msgstr "Мења статус једног или више налога"
+
+#~ msgid "Check if Gajim is running"
+#~ msgstr "Молимо проверите да ли је Гајим покренут"
+
+#~ msgid "D-Bus is not present on this machine or python module is missing"
+#~ msgstr "D-Bus не постоји на овом рачунару или нема python модула."
+
+#~ msgid "Do not disturb"
+#~ msgstr "Не сметај"
+
+#~ msgid "Extended away"
+#~ msgstr "Дуже одсутан"
+
+#~ msgid "File path"
+#~ msgstr "Путања до датотеке"
+
+#~ msgid "Free for chat"
+#~ msgstr "Слободан за разговор"
+
+#~ msgid "Gets detailed info on a account"
+#~ msgstr "Даје детаљне информације о налогу"
+
+#~ msgid "Gets detailed info on a contact"
+#~ msgstr "Даје детаљне информације о контакту"
+
+#~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
+#~ msgstr ""
+#~ "Ако је означено, Гајим се може контролисати коришћењем gajim-remote."
+
 #, fuzzy
 #~ msgid ""
 #~ "If enabled, Gajim hides the main window when pressing the X button "
@@ -6739,6 +6567,89 @@ msgstr ""
 #~ msgstr ""
 #~ "Ако је истинито, Гајим се завршава када се притисне X дугме. Ово "
 #~ "подешавање се користи само ако је икона системске касете у употреби."
+
+#~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
+#~ msgstr "Чини се да Гајим не ради. Не можете да користите gajim-remote."
+
+#, fuzzy
+#~ msgid "Lists all contacts in the contact list, one for each line"
+#~ msgstr ""
+#~ "Исписује листу свих контаката са листе контаката. Сваки контакт је у "
+#~ "посебној линији"
+
+#~ msgid "Missing argument \"contact_jid\""
+#~ msgstr "Недостаје аргумент \"contact_jid\""
+
+#~ msgid "Name of the account"
+#~ msgstr "Име налога"
+
+#~ msgid "Offline - disconnect"
+#~ msgstr "Није на вези"
+
+#~ msgid "Online"
+#~ msgstr "На вези"
+
+#~ msgid "Presence description:"
+#~ msgstr "Опис присутности:"
+
+#~ msgid "Prints a list of registered accounts"
+#~ msgstr "Исписује листу регистрованих налога"
+
+#, fuzzy
+#~ msgid "Removes contact from contact list"
+#~ msgstr "Уклања контакт са листе"
+
+#~ msgid "Returns current status (the global one unless account is specified)"
+#~ msgstr "Враћа тренутни статус (глобални ако није назначен налог)"
+
+#~ msgid ""
+#~ "Returns current status message (the global one unless account is "
+#~ "specified)"
+#~ msgstr "Враћа тренутну статусну поруку (глобалну ако није назначен налог)"
+
+#~ msgid "Returns number of unread messages"
+#~ msgstr "Враћа број непрочитаних порука"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends a chat message to someone on your contact list. Account is optional."
+#~ msgstr "Начин коришћења: /%s, шаље поруку контакту"
+
+#~ msgid "Sends custom XML"
+#~ msgstr "Шаље кориснички дефинисан XML"
+
+#~ msgid "Sends file to a contact"
+#~ msgstr "Шаље датотеку контакту"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends new chat message to a contact in the contact list. Account is "
+#~ "optional."
+#~ msgstr "Начин коришћења: /%s, шаље поруку контакту"
+
+#, fuzzy
+#~ msgid "Sends new message to a group chat you've joined."
+#~ msgstr "Шаље нову поруку на групни разговор коме сте се придружили."
+
+#~ msgid ""
+#~ "Service not available: Gajim is not running, or remote_control is False"
+#~ msgstr ""
+#~ "Сервис није доступан: Гајим није покренут или је ставка подешавања "
+#~ "remote_control неистинита"
+
+#, fuzzy
+#~ msgid ""
+#~ "Session bus is not available.\n"
+#~ "Try reading %(url)s"
+#~ msgstr ""
+#~ "Линија сесије није доступна.\n"
+#~ "Прочитајте http:/trac.gajim.org/wiki/GajimDBus"
+
+#~ msgid "Set the presence type and description"
+#~ msgstr "Постави тип присутности и опис"
+
+#~ msgid "Shows a help on specific command"
+#~ msgstr "Приказује помоћ за одређену наредбу"
 
 #, fuzzy
 #~ msgid "Sign Out"
@@ -6748,6 +6659,111 @@ msgstr ""
 #~ msgid "Status Change"
 #~ msgstr "_Записуј у дневник статусне промене контаката"
 
+#~ msgid "The status has been changed."
+#~ msgstr "Статус се променио."
+
+#~ msgid ""
+#~ "Too many arguments. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "Превише аргумената\n"
+#~ "Укуцајте \"%(basename)s help %(command)s\" за више информација"
+
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  %s command [arguments]\n"
+#~ "\n"
+#~ "Command is one of:\n"
+#~ msgstr ""
+#~ "Коришћење:\n"
+#~ "  %s наредба [аргументи]\n"
+#~ "Наредба је једна од:\n"
+
+#~ msgid ""
+#~ "Usage: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+#~ msgstr ""
+#~ "Коришћење: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+
+#~ msgid "XML to send"
+#~ msgstr "XML за слање"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact"
+#~ msgstr "Џабер ИД контакта"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact that will receive the message"
+#~ msgstr "Џабер ИД контакта који ће примити поруку"
+
+#, fuzzy
+#~ msgid "XMPP Address of the group chat that will receive the message"
+#~ msgstr "Џабер ИД собе која ће примити поруку"
+
+#~ msgid "You have no active account"
+#~ msgstr "немате активних рачуна"
+
 #, fuzzy
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "Увек затвори Гајим"
+
+#~ msgid ""
+#~ "change status of account \"account\". If not specified, try to change "
+#~ "status of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "измена статуса налога \"налог\". Ако није одређен, покушај промене "
+#~ "статуса свих налога који имају укључену опцију \"синхронизација са "
+#~ "глобалним статусом\""
+
+#~ msgid ""
+#~ "change the priority of the given account. If not specified, change status "
+#~ "of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "измена приоритета датог налога. Ако није одређен, мења се статус свих "
+#~ "налога који имају постављену опцију \"синхронизација са глобалним статусом"
+#~ "\""
+
+#~ msgid "command"
+#~ msgstr "наредба"
+
+#~ msgid "file"
+#~ msgstr "датотека"
+
+#~ msgid "if specified, contact is taken from the contact list of this account"
+#~ msgstr "ако је назначено, контакт се узима са листе контаката овог налога"
+
+#~ msgid "if specified, file will be sent using this account"
+#~ msgstr "ако је назначено, датотека ће бити послата коритећи овај налог"
+
+#~ msgid "if specified, the message will be sent using this account"
+#~ msgstr "ако је назначено, порука ће бити послата користећи овај налог"
+
+#~ msgid "message contents"
+#~ msgstr "садржај поруке"
+
+#~ msgid "message subject"
+#~ msgstr "тема поруке"
+
+#, fuzzy
+#~ msgid ""
+#~ "one of: offline, online, chat, away, xa, dnd. If not set, use account's "
+#~ "previous status"
+#~ msgstr ""
+#~ "једно од: није на вези, на вези, прича, одсутан, продужено одсутан, не "
+#~ "узнемиравај, невидљив"
+
+#~ msgid "priority you want to give to the account"
+#~ msgstr "приоритет који желите да дате овом налогу"
+
+#~ msgid "show help on command"
+#~ msgstr "прикажи помоћ за команду"
+
+#~ msgid "show only contacts of the given account"
+#~ msgstr "приказује само контакте са овог налога"
+
+#~ msgid "status message"
+#~ msgstr "статусна порука"
+
+#~ msgid "subject"
+#~ msgstr "тема"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 19:47+0000\n"
+"POT-Creation-Date: 2022-06-17 18:19+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -164,10 +164,6 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "%s not found"
-msgstr "%s ez da aurkitu"
-
-#, python-format
 msgid "%s s"
 msgstr ""
 
@@ -186,14 +182,6 @@ msgstr "%s fitxero bat bidali nahi dizu"
 #, fuzzy, python-format
 msgid "%s: Nothing found"
 msgstr "%s ez da aurkitu"
-
-#, fuzzy, python-format
-msgid ""
-"'%s' is not in your contact list.\n"
-"Please specify account for sending the message."
-msgstr ""
-"'%s'  ez dago zure zerrendan.\n"
-"Kontua zehaztu mezua bidaltzeko."
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -347,22 +335,6 @@ msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "Inork ez"
-
-#, fuzzy
-msgid "?CLI:account"
-msgstr "kontua"
-
-#, fuzzy
-msgid "?CLI:message"
-msgstr "mezua"
-
-#, fuzzy
-msgid "?CLI:priority"
-msgstr "Lehentas_una:"
-
-#, fuzzy
-msgid "?CLI:status"
-msgstr "egoera"
 
 #, fuzzy
 msgid "?Gender:None"
@@ -712,19 +684,19 @@ msgstr "\"%s\"  kontua zerbitzarira konektatu da"
 msgid "Account is being created"
 msgstr "\"%s\"  kontua zerbitzarira konektatu da"
 
-#, fuzzy
-msgid ""
-"Account to which the XML will be sent; if not specified, XML will be sent to "
-"all accounts"
-msgstr ""
-"Xml-a bidaliko den kontua ez badako zehaztuta, kontu guztietara bidaliko da"
-
 #, fuzzy, python-format
 msgid "Account: %s"
 msgstr "Kontuak"
 
 msgid "Accounts"
 msgstr "Kontuak"
+
+#, fuzzy
+msgid "Action on Close"
+msgstr "Gajim"
+
+msgid "Action when closing Gajim’s window"
+msgstr ""
 
 msgid "Action when left-clicking a preview"
 msgstr ""
@@ -894,6 +866,11 @@ msgstr "Fitxategi guztiak"
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
 
+msgid ""
+"Allow Gajim to broadcast useful information via D-Bus. It also allows other "
+"applications to control Gajim remotely."
+msgstr ""
+
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
@@ -1003,17 +980,6 @@ msgstr "Ziur al zaude \"%s\" gelatik atera nahi duzula?"
 #, fuzzy
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Ziur al zaude \"%s\" gelatik atera nahi duzula?"
-
-#, fuzzy, python-format
-msgid ""
-"Argument \"%(arg)s\" is not specified. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"Argument \"%s\" is not specified. \n"
-"Type \"%s help %s\" for more info"
-
-msgid "Arguments:"
-msgstr "Argumentuak:"
 
 msgid "Artists"
 msgstr ""
@@ -1355,14 +1321,6 @@ msgstr "Aldatu Pasahitza"
 msgid "Change Subject"
 msgstr "Aldatu _Gaia"
 
-#, fuzzy
-msgid "Change status"
-msgstr "Kontaktu Egoera Aldaketa"
-
-#, fuzzy
-msgid "Change status information"
-msgstr "Kontaktuaren Informazioa"
-
 msgid "Change your account’s password, etc."
 msgstr ""
 
@@ -1383,14 +1341,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Changed by %s"
 msgstr "Aldatu _Izengoitia"
-
-#, fuzzy
-msgid "Changes the priority of account(s)"
-msgstr "Aldatu kontaktuaren edo kontaktuen egoera"
-
-#, fuzzy
-msgid "Changes the status of account(s)"
-msgstr "Aldatu kontaktuaren edo kontaktuen egoera"
 
 #, fuzzy
 msgid "Changing Password..."
@@ -1441,10 +1391,6 @@ msgstr ""
 
 msgid "Check for updates periodically"
 msgstr ""
-
-#, fuzzy
-msgid "Check if Gajim is running"
-msgstr "Mesedez begiratu avahi-daemon martxan dagoen."
 
 #, fuzzy
 msgid "Checking file…"
@@ -1837,6 +1783,9 @@ msgstr "Mezu berria sortu"
 msgid "Creating Account..."
 msgstr "%s kontua ezabatzen"
 
+msgid "Creating thumbnail failed"
+msgstr ""
+
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Pasa-esaldia Behar da"
@@ -1845,9 +1794,8 @@ msgstr "Pasa-esaldia Behar da"
 msgid "Current Developers"
 msgstr "Egungo diseinatzaileak: "
 
-msgid "D-Bus is not present on this machine or python module is missing"
+msgid "D-Bus Interface"
 msgstr ""
-"D-bus ez dago ordenagailu honetan edo python moduloak ez daude erabilgarri"
 
 #, fuzzy
 msgid "Dark Theme"
@@ -1991,10 +1939,6 @@ msgstr "Erabilera:/%s , erakutsarazi gelako pertsonen izenak."
 #, fuzzy
 msgid "Display or change a group chat topic"
 msgstr "Galdetu leiho bat itxi baino lehen."
-
-#, fuzzy
-msgid "Do not disturb"
-msgstr "Ez nahasi."
 
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -2298,9 +2242,6 @@ msgstr "_Sarrerako mezua:"
 msgid "Extended Address"
 msgstr "Helbide Gehigarria:"
 
-msgid "Extended away"
-msgstr ""
-
 #, fuzzy
 msgid "FA_Q (Online)"
 msgstr "bederatzi"
@@ -2411,9 +2352,6 @@ msgstr "Fitxeroaren tokia"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File path"
-msgstr "Fitxeroaren tokia"
-
 msgid "File size unknown"
 msgstr ""
 
@@ -2507,10 +2445,6 @@ msgstr "Mezu Pribatu Berri Bat"
 msgid "Free for Chat"
 msgstr "Libre Hitz Egiteko"
 
-#, fuzzy
-msgid "Free for chat"
-msgstr "Libre Hitz Egiteko"
-
 msgid "From"
 msgstr "-etik"
 
@@ -2598,12 +2532,6 @@ msgstr ""
 
 msgid "Generate preview for any URLs containing images (may be unsafe)"
 msgstr ""
-
-msgid "Gets detailed info on a account"
-msgstr "Kontaktu baten informazioa lortu"
-
-msgid "Gets detailed info on a contact"
-msgstr "Kontaktu baten informazioa lortu"
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2730,11 +2658,11 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
+msgid "Hide"
+msgstr ""
+
 msgid "Hide this menu"
 msgstr "Ezkutatu Menua"
-
-msgid "Hide window to system tray when minimized"
-msgstr ""
 
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
@@ -2807,9 +2735,6 @@ msgstr " %s-etik"
 msgid "Idle since: %s"
 msgstr " %s-etik"
 
-msgid "If checked, Gajim can be controlled remotely using gajim-remote."
-msgstr "Hautatua badago, Gajim gajim-remote erabiliz kontrolatu daiteke."
-
 #, fuzzy
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2827,9 +2752,6 @@ msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 "Hautatua badago, Gajim-ek zerrendan eta txat taldeetan kontaktuen abatereak "
 "azalaraziko ditu"
-
-msgid "If enabled, Gajim will execute XEP-0146 Commands."
-msgstr ""
 
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
@@ -3026,9 +2948,6 @@ msgstr ""
 msgid "It is not possible to send empty files"
 msgstr "Ez da posible hutsik dauden artxiboak bidaltzea"
 
-msgid "It seems Gajim is not running. So you can't use gajim-remote."
-msgstr ""
-
 msgid "Italic"
 msgstr "Etzana"
 
@@ -3162,12 +3081,6 @@ msgstr ""
 
 msgid "Listing of Servers"
 msgstr ""
-
-#, fuzzy
-msgid "Lists all contacts in the contact list, one for each line"
-msgstr ""
-"Zerrendan inprimatu kontaktu guztien lista. Kontaktu horiek hainbat lerrotan "
-"agertuko dira."
 
 msgid "Live Preview"
 msgstr ""
@@ -3332,14 +3245,8 @@ msgid ""
 msgstr "Mezuak gero irakurri ahalko dira historiala aktibatua baduzu."
 
 #, fuzzy
-msgid "Minimize on Close"
+msgid "Minimize"
 msgstr "Gajim"
-
-msgid "Minimize to Tray"
-msgstr ""
-
-msgid "Minimize when closing Gajim’s window"
-msgstr ""
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3348,9 +3255,6 @@ msgstr "Kontaktuen egoera aldaketak gorde"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Denetatik</b>"
-
-msgid "Missing argument \"contact_jid\""
-msgstr "Galdutako argumentua  \"contact_jid\""
 
 #, fuzzy
 msgid "Missing arguments"
@@ -3399,9 +3303,6 @@ msgstr "Izena"
 
 msgid "Name <b>default</b> is not allowed"
 msgstr ""
-
-msgid "Name of the account"
-msgstr "Kontuaren izena"
 
 msgid "Needs gspell to be installed"
 msgstr ""
@@ -3588,18 +3489,11 @@ msgstr "_OK"
 msgid "Offline"
 msgstr "Deskonektatuta"
 
-msgid "Offline - disconnect"
-msgstr ""
-
 msgid "One Month"
 msgstr ""
 
 msgid "One Year"
 msgstr ""
-
-#, fuzzy
-msgid "Online"
-msgstr "bederatzi"
 
 #, fuzzy
 msgid "Online Status"
@@ -3948,10 +3842,6 @@ msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
 msgstr ""
 
 #, fuzzy
-msgid "Presence description:"
-msgstr "Deskripzio errorea...."
-
-#, fuzzy
 msgid "Presets"
 msgstr "_Egoera"
 
@@ -3977,9 +3867,6 @@ msgstr "Ezarritako egoerak:"
 
 msgid "Print XML stanzas and other debug information"
 msgstr ""
-
-msgid "Prints a list of registered accounts"
-msgstr "Inprimatu erregistratutako kontuen lista"
 
 #, fuzzy
 msgid "Priority"
@@ -4041,6 +3928,10 @@ msgstr "Old stories"
 #, fuzzy, python-format
 msgid "PyGObject Version: %s"
 msgstr "PyGTK Bertsioa:"
+
+#, fuzzy
+msgid "Quit"
+msgstr "At_era"
 
 #, fuzzy
 msgid "Quit Gajim"
@@ -4226,10 +4117,6 @@ msgstr[0] "Zerrendatik kontaktua ezabatu"
 msgstr[1] "Zerrendatik kontaktua ezabatu"
 
 #, fuzzy
-msgid "Removes contact from contact list"
-msgstr "Zerrendatik kontaktua ezabatu"
-
-#, fuzzy
 msgid "Remove…"
 msgstr "_Ezabatu"
 
@@ -4349,18 +4236,6 @@ msgstr "Egoera Mezua"
 #, fuzzy
 msgid "Retract message?"
 msgstr "egoera mezua"
-
-msgid "Returns current status (the global one unless account is specified)"
-msgstr "Oraingo egoera itzuli (Globala, ez badago kontu bat aukeratuta)"
-
-msgid ""
-"Returns current status message (the global one unless account is specified)"
-msgstr ""
-"Oraingo egoera mezua itzuli (Globala aukeratu ez badago kontu bat aukeratuta)"
-
-#, fuzzy
-msgid "Returns number of unread messages"
-msgstr "Irakurri gabeko mezuen kontaketa itzuli"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -4643,25 +4518,6 @@ msgstr "Bidaltzailea: "
 msgid "Sending private message failed"
 msgstr "Mezu pribatua bidaltzeak huts egin du"
 
-#, fuzzy
-msgid ""
-"Sends a chat message to someone on your contact list. Account is optional."
-msgstr "Erabilera:/%s, ezkutatu txat-eko botoilak."
-
-msgid "Sends custom XML"
-msgstr "Sends custom XML"
-
-msgid "Sends file to a contact"
-msgstr "Fitxero bat bidali kontaktu bati"
-
-#, fuzzy
-msgid ""
-"Sends new chat message to a contact in the contact list. Account is optional."
-msgstr "Erabilera:/%s, ezkutatu txat-eko botoilak."
-
-msgid "Sends new message to a group chat you've joined."
-msgstr ""
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr ""
@@ -4719,19 +4575,6 @@ msgstr "Zerbitzaria Aurkitua %s kontua erabiliz"
 msgid "Service Gateway"
 msgstr "Zerbitzaria"
 
-msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr ""
-"Zerbitzua ez erabilgarri: Gajim ez dago abiarazita edota remote_control "
-"False egoeran dago"
-
-#, fuzzy, python-format
-msgid ""
-"Session bus is not available.\n"
-"Try reading %(url)s"
-msgstr ""
-"Bus saioa ez dago erabilgarri.\n"
-"Saiatu irakurtzen http://trac.gajim.org/wiki/GajimDBus"
-
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "Gelaren Konfigurazioa"
@@ -4756,9 +4599,6 @@ msgid "Set the current status to away"
 msgstr ""
 
 msgid "Set the current status to online"
-msgstr ""
-
-msgid "Set the presence type and description"
 msgstr ""
 
 msgid "Set your activity or tune to show your friends how you are feeling"
@@ -4927,9 +4767,6 @@ msgstr ""
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "Leihoa ezkutatu"
-
-msgid "Shows a help on specific command"
-msgstr "Shows a help on specific command"
 
 #, fuzzy
 msgid "Shows a list of file transfers between you and your contacts"
@@ -5297,9 +5134,6 @@ msgstr "Zerbitzua erabilezina"
 msgid "The signing certificate authority is not known"
 msgstr ""
 
-msgid "The status has been changed."
-msgstr ""
-
 #, fuzzy
 msgid "Theme"
 msgstr "Gaia"
@@ -5477,14 +5311,6 @@ msgstr "Partaidea"
 #, fuzzy
 msgid "Too many arguments"
 msgstr "Galdutako argumentua  \"contact_jid\""
-
-#, fuzzy, python-format
-msgid ""
-"Too many arguments. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"Argument \"%s\" is not specified. \n"
-"Type \"%s help %s\" for more info"
 
 msgid "Topic"
 msgstr ""
@@ -5678,22 +5504,6 @@ msgstr "Mezu pribatua bidaltzeak huts egin du"
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
-#, fuzzy, python-format
-msgid ""
-"Usage:\n"
-"  %s command [arguments]\n"
-"\n"
-"Command is one of:\n"
-msgstr ""
-"Usage: %s command [arguments]\n"
-"Command is one of:\n"
-
-#, python-format
-msgid ""
-"Usage: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-msgstr ""
-
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -5878,24 +5688,9 @@ msgstr " XML Konsola"
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
-msgid "XML to send"
-msgstr " XML bidaltzeko"
-
 #, fuzzy
 msgid "XMPP Address"
 msgstr "AIM Hebidea:"
-
-#, fuzzy
-msgid "XMPP Address of the contact"
-msgstr "Kontaktuaren JID-a"
-
-#, fuzzy
-msgid "XMPP Address of the contact that will receive the message"
-msgstr "Mezua jaso dugun kontuaren JID-a"
-
-#, fuzzy
-msgid "XMPP Address of the group chat that will receive the message"
-msgstr "Mezua jaso dugun kontuaren JID-a"
 
 #, fuzzy
 msgid "XMPP Address…"
@@ -6012,6 +5807,10 @@ msgstr "Ez duzu baimenik kokapen honetan fitxerorik sortzeko."
 msgid "You have been banned{actor}{reason}"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "You have been invited to %s"
+msgstr "%(nick)s botata izan da %(who)s -engatik: %(reason)s"
+
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr ""
@@ -6023,9 +5822,6 @@ msgstr "%(nick)s botata izan da %(who)s -engatik: %(reason)s"
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr ""
-
-msgid "You have no active account"
-msgstr "Ez duzu aktibatutako konturik"
 
 #, fuzzy
 msgid "You have to be connected to create a group chat."
@@ -6487,31 +6283,11 @@ msgstr "arrantzale"
 msgid "building"
 msgstr "Botatzen %s"
 
-msgid ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
-msgstr ""
-"\"kontua\" kontuaren egoera aldatu. Ez badago zehaztua, saiatu "
-"\"Sinkronizatu egoera globalarekin\" aukera hautatua duten kontu guztien "
-"egoera aldatzen"
-
-#, fuzzy
-msgid ""
-"change the priority of the given account. If not specified, change status of "
-"all accounts that have \"sync with global status\" option set"
-msgstr ""
-"\"kontua\" kontuaren egoera aldatu. Ez badago zehaztua, saiatu "
-"\"Sinkronizatu egoera globalarekin\" aukera hautatua duten kontu guztien "
-"egoera aldatzen"
-
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
 msgid "column"
 msgstr ""
-
-msgid "command"
-msgstr "command"
 
 #, fuzzy
 msgid "country"
@@ -6543,9 +6319,6 @@ msgstr "errorea bidaltzen zen bitartean %s ( %s )"
 msgid "example.org"
 msgstr ""
 
-msgid "file"
-msgstr "fitxeroa"
-
 msgid "file transfers list"
 msgstr "fitxeroen transferentziaren lista"
 
@@ -6563,15 +6336,6 @@ msgstr "Mesedez bete sartu nahi duzun kontaktuaren informazioa"
 
 msgid "help"
 msgstr ""
-
-msgid "if specified, contact is taken from the contact list of this account"
-msgstr "hautatua badago, kontaktua kontu honen kontaktu listatik lortuko da."
-
-msgid "if specified, file will be sent using this account"
-msgstr "Hautatua badago, fitxero hau kontu hau erabiliz bidaliko da"
-
-msgid "if specified, the message will be sent using this account"
-msgstr "hautatua badago, mezua kontu hau erabiliz bidaliko da"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -6596,18 +6360,6 @@ msgstr "bat"
 msgid "macOS"
 msgstr ""
 
-msgid "message contents"
-msgstr "mezuaren edukia"
-
-msgid "message subject"
-msgstr "mezuaren gaia"
-
-#, fuzzy
-msgid ""
-"one of: offline, online, chat, away, xa, dnd. If not set, use account's "
-"previous status"
-msgstr "hauetako bat: offline, online, chat, away, xa, dnd, invisible "
-
 #, fuzzy
 msgid "or"
 msgstr "Norentzat"
@@ -6620,10 +6372,6 @@ msgstr "mezuaren sorrera gelditua"
 
 msgid "postalcode"
 msgstr ""
-
-#, fuzzy
-msgid "priority you want to give to the account"
-msgstr "Kontu berri bat _erregistratu nahi dut"
 
 #, fuzzy, python-format
 msgid "python-cairo Version: %s"
@@ -6640,23 +6388,11 @@ msgstr ""
 msgid "room"
 msgstr "-etik"
 
-msgid "show help on command"
-msgstr "show help on command"
-
-msgid "show only contacts of the given account"
-msgstr "Ikusi emandako kontaktuak bakarrik"
-
 msgid "speed"
 msgstr ""
 
-msgid "status message"
-msgstr "egoera mezua"
-
 msgid "street"
 msgstr ""
-
-msgid "subject"
-msgstr "gaia"
 
 msgid "text"
 msgstr ""
@@ -6714,6 +6450,96 @@ msgstr "%(nick)s orain dago %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#~ msgid "%s not found"
+#~ msgstr "%s ez da aurkitu"
+
+#, fuzzy
+#~ msgid ""
+#~ "'%s' is not in your contact list.\n"
+#~ "Please specify account for sending the message."
+#~ msgstr ""
+#~ "'%s'  ez dago zure zerrendan.\n"
+#~ "Kontua zehaztu mezua bidaltzeko."
+
+#, fuzzy
+#~ msgid "?CLI:account"
+#~ msgstr "kontua"
+
+#, fuzzy
+#~ msgid "?CLI:message"
+#~ msgstr "mezua"
+
+#, fuzzy
+#~ msgid "?CLI:priority"
+#~ msgstr "Lehentas_una:"
+
+#, fuzzy
+#~ msgid "?CLI:status"
+#~ msgstr "egoera"
+
+#, fuzzy
+#~ msgid ""
+#~ "Account to which the XML will be sent; if not specified, XML will be sent "
+#~ "to all accounts"
+#~ msgstr ""
+#~ "Xml-a bidaliko den kontua ez badako zehaztuta, kontu guztietara bidaliko "
+#~ "da"
+
+#, fuzzy
+#~ msgid ""
+#~ "Argument \"%(arg)s\" is not specified. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "Argument \"%s\" is not specified. \n"
+#~ "Type \"%s help %s\" for more info"
+
+#~ msgid "Arguments:"
+#~ msgstr "Argumentuak:"
+
+#, fuzzy
+#~ msgid "Change status"
+#~ msgstr "Kontaktu Egoera Aldaketa"
+
+#, fuzzy
+#~ msgid "Change status information"
+#~ msgstr "Kontaktuaren Informazioa"
+
+#, fuzzy
+#~ msgid "Changes the priority of account(s)"
+#~ msgstr "Aldatu kontaktuaren edo kontaktuen egoera"
+
+#, fuzzy
+#~ msgid "Changes the status of account(s)"
+#~ msgstr "Aldatu kontaktuaren edo kontaktuen egoera"
+
+#, fuzzy
+#~ msgid "Check if Gajim is running"
+#~ msgstr "Mesedez begiratu avahi-daemon martxan dagoen."
+
+#~ msgid "D-Bus is not present on this machine or python module is missing"
+#~ msgstr ""
+#~ "D-bus ez dago ordenagailu honetan edo python moduloak ez daude erabilgarri"
+
+#, fuzzy
+#~ msgid "Do not disturb"
+#~ msgstr "Ez nahasi."
+
+#~ msgid "File path"
+#~ msgstr "Fitxeroaren tokia"
+
+#, fuzzy
+#~ msgid "Free for chat"
+#~ msgstr "Libre Hitz Egiteko"
+
+#~ msgid "Gets detailed info on a account"
+#~ msgstr "Kontaktu baten informazioa lortu"
+
+#~ msgid "Gets detailed info on a contact"
+#~ msgstr "Kontaktu baten informazioa lortu"
+
+#~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
+#~ msgstr "Hautatua badago, Gajim gajim-remote erabiliz kontrolatu daiteke."
+
 #, fuzzy
 #~ msgid ""
 #~ "If enabled, Gajim hides the main window when pressing the X button "
@@ -6723,9 +6549,181 @@ msgstr ""
 #~ "setting is taken into account only if trayicon is used."
 
 #, fuzzy
+#~ msgid "Lists all contacts in the contact list, one for each line"
+#~ msgstr ""
+#~ "Zerrendan inprimatu kontaktu guztien lista. Kontaktu horiek hainbat "
+#~ "lerrotan agertuko dira."
+
+#~ msgid "Missing argument \"contact_jid\""
+#~ msgstr "Galdutako argumentua  \"contact_jid\""
+
+#~ msgid "Name of the account"
+#~ msgstr "Kontuaren izena"
+
+#, fuzzy
+#~ msgid "Online"
+#~ msgstr "bederatzi"
+
+#, fuzzy
+#~ msgid "Presence description:"
+#~ msgstr "Deskripzio errorea...."
+
+#~ msgid "Prints a list of registered accounts"
+#~ msgstr "Inprimatu erregistratutako kontuen lista"
+
+#, fuzzy
+#~ msgid "Removes contact from contact list"
+#~ msgstr "Zerrendatik kontaktua ezabatu"
+
+#~ msgid "Returns current status (the global one unless account is specified)"
+#~ msgstr "Oraingo egoera itzuli (Globala, ez badago kontu bat aukeratuta)"
+
+#~ msgid ""
+#~ "Returns current status message (the global one unless account is "
+#~ "specified)"
+#~ msgstr ""
+#~ "Oraingo egoera mezua itzuli (Globala aukeratu ez badago kontu bat "
+#~ "aukeratuta)"
+
+#, fuzzy
+#~ msgid "Returns number of unread messages"
+#~ msgstr "Irakurri gabeko mezuen kontaketa itzuli"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends a chat message to someone on your contact list. Account is optional."
+#~ msgstr "Erabilera:/%s, ezkutatu txat-eko botoilak."
+
+#~ msgid "Sends custom XML"
+#~ msgstr "Sends custom XML"
+
+#~ msgid "Sends file to a contact"
+#~ msgstr "Fitxero bat bidali kontaktu bati"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends new chat message to a contact in the contact list. Account is "
+#~ "optional."
+#~ msgstr "Erabilera:/%s, ezkutatu txat-eko botoilak."
+
+#~ msgid ""
+#~ "Service not available: Gajim is not running, or remote_control is False"
+#~ msgstr ""
+#~ "Zerbitzua ez erabilgarri: Gajim ez dago abiarazita edota remote_control "
+#~ "False egoeran dago"
+
+#, fuzzy
+#~ msgid ""
+#~ "Session bus is not available.\n"
+#~ "Try reading %(url)s"
+#~ msgstr ""
+#~ "Bus saioa ez dago erabilgarri.\n"
+#~ "Saiatu irakurtzen http://trac.gajim.org/wiki/GajimDBus"
+
+#~ msgid "Shows a help on specific command"
+#~ msgstr "Shows a help on specific command"
+
+#, fuzzy
 #~ msgid "Sign Out"
 #~ msgstr "_Deskonektatuta"
 
 #, fuzzy
 #~ msgid "Status Change"
 #~ msgstr "Kontaktuen egoera aldaketak gorde"
+
+#, fuzzy
+#~ msgid ""
+#~ "Too many arguments. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "Argument \"%s\" is not specified. \n"
+#~ "Type \"%s help %s\" for more info"
+
+#, fuzzy
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  %s command [arguments]\n"
+#~ "\n"
+#~ "Command is one of:\n"
+#~ msgstr ""
+#~ "Usage: %s command [arguments]\n"
+#~ "Command is one of:\n"
+
+#~ msgid "XML to send"
+#~ msgstr " XML bidaltzeko"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact"
+#~ msgstr "Kontaktuaren JID-a"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact that will receive the message"
+#~ msgstr "Mezua jaso dugun kontuaren JID-a"
+
+#, fuzzy
+#~ msgid "XMPP Address of the group chat that will receive the message"
+#~ msgstr "Mezua jaso dugun kontuaren JID-a"
+
+#~ msgid "You have no active account"
+#~ msgstr "Ez duzu aktibatutako konturik"
+
+#~ msgid ""
+#~ "change status of account \"account\". If not specified, try to change "
+#~ "status of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "\"kontua\" kontuaren egoera aldatu. Ez badago zehaztua, saiatu "
+#~ "\"Sinkronizatu egoera globalarekin\" aukera hautatua duten kontu guztien "
+#~ "egoera aldatzen"
+
+#, fuzzy
+#~ msgid ""
+#~ "change the priority of the given account. If not specified, change status "
+#~ "of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "\"kontua\" kontuaren egoera aldatu. Ez badago zehaztua, saiatu "
+#~ "\"Sinkronizatu egoera globalarekin\" aukera hautatua duten kontu guztien "
+#~ "egoera aldatzen"
+
+#~ msgid "command"
+#~ msgstr "command"
+
+#~ msgid "file"
+#~ msgstr "fitxeroa"
+
+#~ msgid "if specified, contact is taken from the contact list of this account"
+#~ msgstr ""
+#~ "hautatua badago, kontaktua kontu honen kontaktu listatik lortuko da."
+
+#~ msgid "if specified, file will be sent using this account"
+#~ msgstr "Hautatua badago, fitxero hau kontu hau erabiliz bidaliko da"
+
+#~ msgid "if specified, the message will be sent using this account"
+#~ msgstr "hautatua badago, mezua kontu hau erabiliz bidaliko da"
+
+#~ msgid "message contents"
+#~ msgstr "mezuaren edukia"
+
+#~ msgid "message subject"
+#~ msgstr "mezuaren gaia"
+
+#, fuzzy
+#~ msgid ""
+#~ "one of: offline, online, chat, away, xa, dnd. If not set, use account's "
+#~ "previous status"
+#~ msgstr "hauetako bat: offline, online, chat, away, xa, dnd, invisible "
+
+#, fuzzy
+#~ msgid "priority you want to give to the account"
+#~ msgstr "Kontu berri bat _erregistratu nahi dut"
+
+#~ msgid "show help on command"
+#~ msgstr "show help on command"
+
+#~ msgid "show only contacts of the given account"
+#~ msgstr "Ikusi emandako kontaktuak bakarrik"
+
+#~ msgid "status message"
+#~ msgstr "egoera mezua"
+
+#~ msgid "subject"
+#~ msgstr "gaia"

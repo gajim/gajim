@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 19:47+0000\n"
+"POT-Creation-Date: 2022-06-17 18:19+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -167,10 +167,6 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "%s not found"
-msgstr "%s ikke fundet"
-
-#, python-format
 msgid "%s s"
 msgstr ""
 
@@ -189,14 +185,6 @@ msgstr "%s vil gerne sende dig en fil."
 #, fuzzy, python-format
 msgid "%s: Nothing found"
 msgstr "%s ikke fundet"
-
-#, fuzzy, python-format
-msgid ""
-"'%s' is not in your contact list.\n"
-"Please specify account for sending the message."
-msgstr ""
-"'%s' er ikke i dit kontaktvindue.\n"
-"Specificer venligst en konto for at sende beskeden."
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -355,22 +343,6 @@ msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "?Ask (for Subscription):Intet"
-
-#, fuzzy
-msgid "?CLI:account"
-msgstr "Konto"
-
-#, fuzzy
-msgid "?CLI:message"
-msgstr "besked"
-
-#, fuzzy
-msgid "?CLI:priority"
-msgstr "prioritet"
-
-#, fuzzy
-msgid "?CLI:status"
-msgstr "status"
 
 #, fuzzy
 msgid "?Gender:None"
@@ -721,19 +693,20 @@ msgstr "Kontoen \"%s\" er tilsluttet til serveren"
 msgid "Account is being created"
 msgstr "Kontoen \"%s\" er tilsluttet til serveren"
 
-msgid ""
-"Account to which the XML will be sent; if not specified, XML will be sent to "
-"all accounts"
-msgstr ""
-"Den konto hvor XML vil blive sendt; hvis ikke den er specificeret, vil XML "
-"blive sendt til alle konti"
-
 #, fuzzy, python-format
 msgid "Account: %s"
 msgstr "Konti"
 
 msgid "Accounts"
 msgstr "Konti"
+
+#, fuzzy
+msgid "Action on Close"
+msgstr "Gajim"
+
+#, fuzzy
+msgid "Action when closing Gajim’s window"
+msgstr "Altid afslut Gajim"
 
 msgid "Action when left-clicking a preview"
 msgstr ""
@@ -907,6 +880,11 @@ msgstr "Alle filer"
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
 
+msgid ""
+"Allow Gajim to broadcast useful information via D-Bus. It also allows other "
+"applications to control Gajim remotely."
+msgstr ""
+
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
@@ -1018,17 +996,6 @@ msgstr ""
 
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Er du sikker på du vil afslutte Gajim?"
-
-#, python-format
-msgid ""
-"Argument \"%(arg)s\" is not specified. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"Argument \"%(arg)s\" er ikke specificeret. \n"
-"Skriv \"%(basename)s help %(command)s\" for mere information"
-
-msgid "Arguments:"
-msgstr "Argumenter:"
 
 msgid "Artists"
 msgstr ""
@@ -1378,12 +1345,6 @@ msgstr "Ændre Adgangskode"
 msgid "Change Subject"
 msgstr "Ændre _Emne..."
 
-msgid "Change status"
-msgstr "Ændre status"
-
-msgid "Change status information"
-msgstr "Ændre status information"
-
 msgid "Change your account’s password, etc."
 msgstr ""
 
@@ -1404,12 +1365,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Changed by %s"
 msgstr "Ændre _Kælenavn..."
-
-msgid "Changes the priority of account(s)"
-msgstr "Ændrer prioriteringen for kontoen eller konti"
-
-msgid "Changes the status of account(s)"
-msgstr "Ændrer status for kontoen eller konti"
 
 #, fuzzy
 msgid "Changing Password..."
@@ -1462,9 +1417,6 @@ msgstr ""
 
 msgid "Check for updates periodically"
 msgstr ""
-
-msgid "Check if Gajim is running"
-msgstr "Kontroller om Gajim kører"
 
 msgid "Checking file…"
 msgstr "Tjekker fil..."
@@ -1854,6 +1806,9 @@ msgstr "Lav en ny post"
 msgid "Creating Account..."
 msgstr "Fjerne kontoen med navnet %s"
 
+msgid "Creating thumbnail failed"
+msgstr ""
+
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Certifikatet er udløbet"
@@ -1862,9 +1817,8 @@ msgstr "Certifikatet er udløbet"
 msgid "Current Developers"
 msgstr "Nuværende Programudviklere:"
 
-msgid "D-Bus is not present on this machine or python module is missing"
+msgid "D-Bus Interface"
 msgstr ""
-"D-Bus er ikke tilgængelig på denne maskine eller et python modul mangler"
 
 #, fuzzy
 msgid "Dark Theme"
@@ -2008,9 +1962,6 @@ msgstr "%s er ikke navnet på en gruppe samtale."
 #, fuzzy
 msgid "Display or change a group chat topic"
 msgstr "Spørg før et gruppesamtale vindue/faneblad lukkes."
-
-msgid "Do not disturb"
-msgstr "Forstyr ikke"
 
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -2317,9 +2268,6 @@ msgstr "Krypterer samtale beskeder."
 msgid "Extended Address"
 msgstr "<b>Ekstra Adresse:</b>"
 
-msgid "Extended away"
-msgstr "Udvidet borte"
-
 #, fuzzy
 msgid "FA_Q (Online)"
 msgstr "Online"
@@ -2426,9 +2374,6 @@ msgstr "Filen er tom"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File path"
-msgstr "Filsti"
-
 msgid "File size unknown"
 msgstr ""
 
@@ -2521,9 +2466,6 @@ msgstr "Ny Privat Besked"
 msgid "Free for Chat"
 msgstr "Tilgængelig for samtale"
 
-msgid "Free for chat"
-msgstr "Åben for samtaler"
-
 msgid "From"
 msgstr "Fra"
 
@@ -2610,12 +2552,6 @@ msgstr ""
 
 msgid "Generate preview for any URLs containing images (may be unsafe)"
 msgstr ""
-
-msgid "Gets detailed info on a account"
-msgstr "Få detaljeret information om kontoen"
-
-msgid "Gets detailed info on a contact"
-msgstr "Få detaljeret information om kontakten"
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2742,11 +2678,11 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
+msgid "Hide"
+msgstr ""
+
 msgid "Hide this menu"
 msgstr "Skjul denne menu"
-
-msgid "Hide window to system tray when minimized"
-msgstr ""
 
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
@@ -2819,10 +2755,6 @@ msgstr " siden %s"
 msgid "Idle since: %s"
 msgstr " siden %s"
 
-msgid "If checked, Gajim can be controlled remotely using gajim-remote."
-msgstr ""
-"Hvis valgt kan Gajim blive kontrolleret eksternt ved hjælp af gajim-remote."
-
 #, fuzzy
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2838,9 +2770,6 @@ msgstr ""
 #, fuzzy
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr "Hvis valgt vil Gajim vise kontakternes humør i kontaktvinduet"
-
-msgid "If enabled, Gajim will execute XEP-0146 Commands."
-msgstr ""
 
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
@@ -3038,9 +2967,6 @@ msgstr ""
 msgid "It is not possible to send empty files"
 msgstr "Det er ikke mulig at sende tomme filer"
 
-msgid "It seems Gajim is not running. So you can't use gajim-remote."
-msgstr "Det ser ud til at Gajim ikke kører. Så du kan ikke bruge gajim-remote."
-
 msgid "Italic"
 msgstr "Kursiv"
 
@@ -3175,12 +3101,6 @@ msgstr ""
 
 msgid "Listing of Servers"
 msgstr ""
-
-#, fuzzy
-msgid "Lists all contacts in the contact list, one for each line"
-msgstr ""
-"Udskriver en liste af alle kontakter i kontaktvinduet. Hver kontakt placeres "
-"på en separat linie"
 
 msgid "Live Preview"
 msgstr ""
@@ -3346,15 +3266,8 @@ msgstr ""
 "aktiveret og kontakten er i dit kontaktvindue."
 
 #, fuzzy
-msgid "Minimize on Close"
+msgid "Minimize"
 msgstr "Gajim"
-
-msgid "Minimize to Tray"
-msgstr ""
-
-#, fuzzy
-msgid "Minimize when closing Gajim’s window"
-msgstr "Altid afslut Gajim"
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3363,9 +3276,6 @@ msgstr "_Log status ændringer hos kontakter"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Diverse</b>"
-
-msgid "Missing argument \"contact_jid\""
-msgstr "Manglende argument \"contact_jid\""
 
 #, fuzzy
 msgid "Missing arguments"
@@ -3413,9 +3323,6 @@ msgstr "Navn"
 
 msgid "Name <b>default</b> is not allowed"
 msgstr ""
-
-msgid "Name of the account"
-msgstr "Navn på kontoen"
 
 msgid "Needs gspell to be installed"
 msgstr ""
@@ -3601,17 +3508,11 @@ msgstr "_OK"
 msgid "Offline"
 msgstr "Afkoblet"
 
-msgid "Offline - disconnect"
-msgstr "Ofline - ikke tilsluttet"
-
 msgid "One Month"
 msgstr ""
 
 msgid "One Year"
 msgstr ""
-
-msgid "Online"
-msgstr "Online"
 
 #, fuzzy
 msgid "Online Status"
@@ -3956,9 +3857,6 @@ msgstr "Indstillinger"
 msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
 msgstr ""
 
-msgid "Presence description:"
-msgstr "Tilstedeværelses beskrivelse:"
-
 #, fuzzy
 msgid "Presets"
 msgstr "_Tilstedeværelse"
@@ -3986,9 +3884,6 @@ msgstr "Forvalgte beskeder:"
 
 msgid "Print XML stanzas and other debug information"
 msgstr ""
-
-msgid "Prints a list of registered accounts"
-msgstr "Udskriver en liste af registrerede konti"
 
 #, fuzzy
 msgid "Priority"
@@ -4049,6 +3944,10 @@ msgstr "Status For Alle"
 #, fuzzy, python-format
 msgid "PyGObject Version: %s"
 msgstr "PyGTK Version:"
+
+#, fuzzy
+msgid "Quit"
+msgstr "_Afslut"
 
 #, fuzzy
 msgid "Quit Gajim"
@@ -4232,10 +4131,6 @@ msgstr[0] "Fjerner kontakt fra kontaktvinduet"
 msgstr[1] "Fjerner kontakt fra kontaktvinduet"
 
 #, fuzzy
-msgid "Removes contact from contact list"
-msgstr "Fjerner kontakt fra kontaktvinduet"
-
-#, fuzzy
 msgid "Remove…"
 msgstr "_Kan fjernes"
 
@@ -4359,20 +4254,6 @@ msgstr "Status Besked"
 #, fuzzy
 msgid "Retract message?"
 msgstr "status besked"
-
-msgid "Returns current status (the global one unless account is specified)"
-msgstr ""
-"Returnere den nuværende status (den globale status hvis ikke en konto er "
-"valgt)"
-
-msgid ""
-"Returns current status message (the global one unless account is specified)"
-msgstr ""
-"Returnere den nuværende statusbesked (den globale status besked hvis ikke en "
-"konto er valgt)"
-
-msgid "Returns number of unread messages"
-msgstr "Returnerer antal ikke læste beskeder"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -4654,26 +4535,6 @@ msgstr "Afsender: "
 msgid "Sending private message failed"
 msgstr "Sending af privat besked fejlede"
 
-#, fuzzy
-msgid ""
-"Sends a chat message to someone on your contact list. Account is optional."
-msgstr "Send en fil til en kontakt"
-
-msgid "Sends custom XML"
-msgstr "Sender tilpasset XML"
-
-msgid "Sends file to a contact"
-msgstr "Send en fil til en kontakt"
-
-#, fuzzy
-msgid ""
-"Sends new chat message to a contact in the contact list. Account is optional."
-msgstr "Send en fil til en kontakt"
-
-#, fuzzy
-msgid "Sends new message to a group chat you've joined."
-msgstr "Send en ny besked til en gruppesamtale du deltager i."
-
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Sendt kontakt: \"%s\" (%s)"
@@ -4729,18 +4590,6 @@ msgstr "Opdag Tjenester med kontoen %s"
 msgid "Service Gateway"
 msgstr "Server"
 
-msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr ""
-"Tjeneste ikke tilgængelig: Gajim kører ikke, eller remote_control er Falsk"
-
-#, fuzzy, python-format
-msgid ""
-"Session bus is not available.\n"
-"Try reading %(url)s"
-msgstr ""
-"Sessions bussen er ikke tilgængelig.\n"
-"Prøv at læse http://trac.gajim.org/wiki/GajimDBus"
-
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "Rum Konfigurering"
@@ -4766,9 +4615,6 @@ msgstr ""
 
 msgid "Set the current status to online"
 msgstr ""
-
-msgid "Set the presence type and description"
-msgstr "Sæt tilstedeværelses type og beskrivelse"
 
 msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
@@ -4938,9 +4784,6 @@ msgstr ""
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "Skjuler vinduet"
-
-msgid "Shows a help on specific command"
-msgstr "Viser hjælp for en specifik kommando"
 
 #, fuzzy
 msgid "Shows a list of file transfers between you and your contacts"
@@ -5310,9 +5153,6 @@ msgstr "Det er ikke mulig at gennemse denne tjeneste"
 msgid "The signing certificate authority is not known"
 msgstr ""
 
-msgid "The status has been changed."
-msgstr "Din status er blevet ændret."
-
 #, fuzzy
 msgid "Theme"
 msgstr "Tema"
@@ -5491,14 +5331,6 @@ msgstr "Deltager"
 #, fuzzy
 msgid "Too many arguments"
 msgstr "Manglende argument \"contact_jid\""
-
-#, python-format
-msgid ""
-"Too many arguments. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"For mange argumenter. \n"
-"Skriv \"%(basename)s help %(command)s\" for mere information"
 
 msgid "Topic"
 msgstr ""
@@ -5694,24 +5526,6 @@ msgstr "Sending af privat besked fejlede"
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
-#, fuzzy, python-format
-msgid ""
-"Usage:\n"
-"  %s command [arguments]\n"
-"\n"
-"Command is one of:\n"
-msgstr ""
-"Brug: %s kommando [argumenter]\n"
-"Kommando er en af:\n"
-
-#, python-format
-msgid ""
-"Usage: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-msgstr ""
-"Brug: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -5898,24 +5712,9 @@ msgstr "XML Konsol"
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
-msgid "XML to send"
-msgstr "XML som skal sendes"
-
 #, fuzzy
 msgid "XMPP Address"
 msgstr "AIM Adresse:"
-
-#, fuzzy
-msgid "XMPP Address of the contact"
-msgstr "Kontaktens JID"
-
-#, fuzzy
-msgid "XMPP Address of the contact that will receive the message"
-msgstr "JID på den kontakt som skal modtage beskeden"
-
-#, fuzzy
-msgid "XMPP Address of the group chat that will receive the message"
-msgstr "JID på den rum som skal modtage beskeden"
 
 #, fuzzy
 msgid "XMPP Address…"
@@ -6034,6 +5833,10 @@ msgstr "Du har ikke rettigheder til at oprette filer i dette katalog."
 msgid "You have been banned{actor}{reason}"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "You have been invited to %s"
+msgstr "%(nick)s er blevet fjernet fra rummet %(reason)s"
+
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr ""
@@ -6045,9 +5848,6 @@ msgstr "%(nick)s er blevet fjernet fra rummet %(reason)s"
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr ""
-
-msgid "You have no active account"
-msgstr "Du har ingen aktiv konto"
 
 #, fuzzy
 msgid "You have to be connected to create a group chat."
@@ -6505,29 +6305,11 @@ msgstr "marint"
 msgid "building"
 msgstr "Skjult"
 
-msgid ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
-msgstr ""
-"Ændre status for konto \"konto\". Hvis ikke specificeret, prøv at ændre "
-"status for alle konti der har sat \"synkroniser med generel status\" "
-"indstillingen"
-
-msgid ""
-"change the priority of the given account. If not specified, change status of "
-"all accounts that have \"sync with global status\" option set"
-msgstr ""
-"ændre prioritet for en given konto. Hvis ikke specificeret, ændrer status "
-"for alle konti der har sat \"synkroniser med generel status\" indstillingen"
-
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
 msgid "column"
 msgstr ""
-
-msgid "command"
-msgstr "Kommando"
 
 #, fuzzy
 msgid "country"
@@ -6559,9 +6341,6 @@ msgstr "fejl opstod under sending %(message)s ( %(error)s )"
 msgid "example.org"
 msgstr ""
 
-msgid "file"
-msgstr "fil"
-
 msgid "file transfers list"
 msgstr "filoverførsel liste"
 
@@ -6579,16 +6358,6 @@ msgstr "Vælg de gruppesamtaler du vil forlade"
 
 msgid "help"
 msgstr ""
-
-msgid "if specified, contact is taken from the contact list of this account"
-msgstr ""
-"hvis specificeret vil kontakten tages fra kontaktlisten fra denne konto"
-
-msgid "if specified, file will be sent using this account"
-msgstr "hvis specificeret vil filen blive sendt med denne konto"
-
-msgid "if specified, the message will be sent using this account"
-msgstr "hvis specificeret vil beskeden blive sendt med denne konto"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -6613,18 +6382,6 @@ msgstr "en"
 msgid "macOS"
 msgstr ""
 
-msgid "message contents"
-msgstr "besked indhold"
-
-msgid "message subject"
-msgstr "emne på besked"
-
-#, fuzzy
-msgid ""
-"one of: offline, online, chat, away, xa, dnd. If not set, use account's "
-"previous status"
-msgstr "en af: offline, online, chat, away, xa, dnd, invisible"
-
 #, fuzzy
 msgid "or"
 msgstr "Til"
@@ -6637,9 +6394,6 @@ msgstr "holder pause med at komponere en besked"
 
 msgid "postalcode"
 msgstr ""
-
-msgid "priority you want to give to the account"
-msgstr "prioriteten du vil give til kontoen"
 
 #, fuzzy, python-format
 msgid "python-cairo Version: %s"
@@ -6655,23 +6409,11 @@ msgstr ""
 msgid "room"
 msgstr "rum"
 
-msgid "show help on command"
-msgstr "Vis hjælp for kommando"
-
-msgid "show only contacts of the given account"
-msgstr "viser kun kontakter for den givne konto"
-
 msgid "speed"
 msgstr ""
 
-msgid "status message"
-msgstr "status besked"
-
 msgid "street"
 msgstr ""
-
-msgid "subject"
-msgstr "emne"
 
 msgid "text"
 msgstr ""
@@ -6727,6 +6469,92 @@ msgstr "%(nick)s er nu %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#~ msgid "%s not found"
+#~ msgstr "%s ikke fundet"
+
+#, fuzzy
+#~ msgid ""
+#~ "'%s' is not in your contact list.\n"
+#~ "Please specify account for sending the message."
+#~ msgstr ""
+#~ "'%s' er ikke i dit kontaktvindue.\n"
+#~ "Specificer venligst en konto for at sende beskeden."
+
+#, fuzzy
+#~ msgid "?CLI:account"
+#~ msgstr "Konto"
+
+#, fuzzy
+#~ msgid "?CLI:message"
+#~ msgstr "besked"
+
+#, fuzzy
+#~ msgid "?CLI:priority"
+#~ msgstr "prioritet"
+
+#, fuzzy
+#~ msgid "?CLI:status"
+#~ msgstr "status"
+
+#~ msgid ""
+#~ "Account to which the XML will be sent; if not specified, XML will be sent "
+#~ "to all accounts"
+#~ msgstr ""
+#~ "Den konto hvor XML vil blive sendt; hvis ikke den er specificeret, vil "
+#~ "XML blive sendt til alle konti"
+
+#~ msgid ""
+#~ "Argument \"%(arg)s\" is not specified. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "Argument \"%(arg)s\" er ikke specificeret. \n"
+#~ "Skriv \"%(basename)s help %(command)s\" for mere information"
+
+#~ msgid "Arguments:"
+#~ msgstr "Argumenter:"
+
+#~ msgid "Change status"
+#~ msgstr "Ændre status"
+
+#~ msgid "Change status information"
+#~ msgstr "Ændre status information"
+
+#~ msgid "Changes the priority of account(s)"
+#~ msgstr "Ændrer prioriteringen for kontoen eller konti"
+
+#~ msgid "Changes the status of account(s)"
+#~ msgstr "Ændrer status for kontoen eller konti"
+
+#~ msgid "Check if Gajim is running"
+#~ msgstr "Kontroller om Gajim kører"
+
+#~ msgid "D-Bus is not present on this machine or python module is missing"
+#~ msgstr ""
+#~ "D-Bus er ikke tilgængelig på denne maskine eller et python modul mangler"
+
+#~ msgid "Do not disturb"
+#~ msgstr "Forstyr ikke"
+
+#~ msgid "Extended away"
+#~ msgstr "Udvidet borte"
+
+#~ msgid "File path"
+#~ msgstr "Filsti"
+
+#~ msgid "Free for chat"
+#~ msgstr "Åben for samtaler"
+
+#~ msgid "Gets detailed info on a account"
+#~ msgstr "Få detaljeret information om kontoen"
+
+#~ msgid "Gets detailed info on a contact"
+#~ msgstr "Få detaljeret information om kontakten"
+
+#~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
+#~ msgstr ""
+#~ "Hvis valgt kan Gajim blive kontrolleret eksternt ved hjælp af gajim-"
+#~ "remote."
+
 #, fuzzy
 #~ msgid ""
 #~ "If enabled, Gajim hides the main window when pressing the X button "
@@ -6734,6 +6562,93 @@ msgstr ""
 #~ msgstr ""
 #~ "Hvis Sandt, lukker Gajim når X knappen fra vindueshåndteringen klikkes. "
 #~ "Denne indstilling tages der kun hensyn til hvis et statusfelt ikon bruges."
+
+#~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
+#~ msgstr ""
+#~ "Det ser ud til at Gajim ikke kører. Så du kan ikke bruge gajim-remote."
+
+#, fuzzy
+#~ msgid "Lists all contacts in the contact list, one for each line"
+#~ msgstr ""
+#~ "Udskriver en liste af alle kontakter i kontaktvinduet. Hver kontakt "
+#~ "placeres på en separat linie"
+
+#~ msgid "Missing argument \"contact_jid\""
+#~ msgstr "Manglende argument \"contact_jid\""
+
+#~ msgid "Name of the account"
+#~ msgstr "Navn på kontoen"
+
+#~ msgid "Offline - disconnect"
+#~ msgstr "Ofline - ikke tilsluttet"
+
+#~ msgid "Online"
+#~ msgstr "Online"
+
+#~ msgid "Presence description:"
+#~ msgstr "Tilstedeværelses beskrivelse:"
+
+#~ msgid "Prints a list of registered accounts"
+#~ msgstr "Udskriver en liste af registrerede konti"
+
+#, fuzzy
+#~ msgid "Removes contact from contact list"
+#~ msgstr "Fjerner kontakt fra kontaktvinduet"
+
+#~ msgid "Returns current status (the global one unless account is specified)"
+#~ msgstr ""
+#~ "Returnere den nuværende status (den globale status hvis ikke en konto er "
+#~ "valgt)"
+
+#~ msgid ""
+#~ "Returns current status message (the global one unless account is "
+#~ "specified)"
+#~ msgstr ""
+#~ "Returnere den nuværende statusbesked (den globale status besked hvis ikke "
+#~ "en konto er valgt)"
+
+#~ msgid "Returns number of unread messages"
+#~ msgstr "Returnerer antal ikke læste beskeder"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends a chat message to someone on your contact list. Account is optional."
+#~ msgstr "Send en fil til en kontakt"
+
+#~ msgid "Sends custom XML"
+#~ msgstr "Sender tilpasset XML"
+
+#~ msgid "Sends file to a contact"
+#~ msgstr "Send en fil til en kontakt"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends new chat message to a contact in the contact list. Account is "
+#~ "optional."
+#~ msgstr "Send en fil til en kontakt"
+
+#, fuzzy
+#~ msgid "Sends new message to a group chat you've joined."
+#~ msgstr "Send en ny besked til en gruppesamtale du deltager i."
+
+#~ msgid ""
+#~ "Service not available: Gajim is not running, or remote_control is False"
+#~ msgstr ""
+#~ "Tjeneste ikke tilgængelig: Gajim kører ikke, eller remote_control er Falsk"
+
+#, fuzzy
+#~ msgid ""
+#~ "Session bus is not available.\n"
+#~ "Try reading %(url)s"
+#~ msgstr ""
+#~ "Sessions bussen er ikke tilgængelig.\n"
+#~ "Prøv at læse http://trac.gajim.org/wiki/GajimDBus"
+
+#~ msgid "Set the presence type and description"
+#~ msgstr "Sæt tilstedeværelses type og beskrivelse"
+
+#~ msgid "Shows a help on specific command"
+#~ msgstr "Viser hjælp for en specifik kommando"
 
 #, fuzzy
 #~ msgid "Sign Out"
@@ -6743,6 +6658,110 @@ msgstr ""
 #~ msgid "Status Change"
 #~ msgstr "_Log status ændringer hos kontakter"
 
+#~ msgid "The status has been changed."
+#~ msgstr "Din status er blevet ændret."
+
+#~ msgid ""
+#~ "Too many arguments. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "For mange argumenter. \n"
+#~ "Skriv \"%(basename)s help %(command)s\" for mere information"
+
+#, fuzzy
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  %s command [arguments]\n"
+#~ "\n"
+#~ "Command is one of:\n"
+#~ msgstr ""
+#~ "Brug: %s kommando [argumenter]\n"
+#~ "Kommando er en af:\n"
+
+#~ msgid ""
+#~ "Usage: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+#~ msgstr ""
+#~ "Brug: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+
+#~ msgid "XML to send"
+#~ msgstr "XML som skal sendes"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact"
+#~ msgstr "Kontaktens JID"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact that will receive the message"
+#~ msgstr "JID på den kontakt som skal modtage beskeden"
+
+#, fuzzy
+#~ msgid "XMPP Address of the group chat that will receive the message"
+#~ msgstr "JID på den rum som skal modtage beskeden"
+
+#~ msgid "You have no active account"
+#~ msgstr "Du har ingen aktiv konto"
+
 #, fuzzy
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "Altid afslut Gajim"
+
+#~ msgid ""
+#~ "change status of account \"account\". If not specified, try to change "
+#~ "status of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "Ændre status for konto \"konto\". Hvis ikke specificeret, prøv at ændre "
+#~ "status for alle konti der har sat \"synkroniser med generel status\" "
+#~ "indstillingen"
+
+#~ msgid ""
+#~ "change the priority of the given account. If not specified, change status "
+#~ "of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "ændre prioritet for en given konto. Hvis ikke specificeret, ændrer status "
+#~ "for alle konti der har sat \"synkroniser med generel status\" "
+#~ "indstillingen"
+
+#~ msgid "command"
+#~ msgstr "Kommando"
+
+#~ msgid "file"
+#~ msgstr "fil"
+
+#~ msgid "if specified, contact is taken from the contact list of this account"
+#~ msgstr ""
+#~ "hvis specificeret vil kontakten tages fra kontaktlisten fra denne konto"
+
+#~ msgid "if specified, file will be sent using this account"
+#~ msgstr "hvis specificeret vil filen blive sendt med denne konto"
+
+#~ msgid "if specified, the message will be sent using this account"
+#~ msgstr "hvis specificeret vil beskeden blive sendt med denne konto"
+
+#~ msgid "message contents"
+#~ msgstr "besked indhold"
+
+#~ msgid "message subject"
+#~ msgstr "emne på besked"
+
+#, fuzzy
+#~ msgid ""
+#~ "one of: offline, online, chat, away, xa, dnd. If not set, use account's "
+#~ "previous status"
+#~ msgstr "en af: offline, online, chat, away, xa, dnd, invisible"
+
+#~ msgid "priority you want to give to the account"
+#~ msgstr "prioriteten du vil give til kontoen"
+
+#~ msgid "show help on command"
+#~ msgstr "Vis hjælp for kommando"
+
+#~ msgid "show only contacts of the given account"
+#~ msgstr "viser kun kontakter for den givne konto"
+
+#~ msgid "status message"
+#~ msgstr "status besked"
+
+#~ msgid "subject"
+#~ msgstr "emne"

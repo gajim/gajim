@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 19:47+0000\n"
+"POT-Creation-Date: 2022-06-17 18:19+0000\n"
 "PO-Revision-Date: 2009-10-29 10:21+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -166,10 +166,6 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "%s not found"
-msgstr "%s kunde inte hittas"
-
-#, python-format
 msgid "%s s"
 msgstr ""
 
@@ -188,14 +184,6 @@ msgstr "%s vill skicka en fil till dig."
 #, fuzzy, python-format
 msgid "%s: Nothing found"
 msgstr "%s kunde inte hittas"
-
-#, fuzzy, python-format
-msgid ""
-"'%s' is not in your contact list.\n"
-"Please specify account for sending the message."
-msgstr ""
-"\"%s\" finns inte i din kontaktlista.\n"
-"Ange konto för att skicka meddelandet."
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -352,22 +340,6 @@ msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "?Fråga (för prenumeration):Ingen"
-
-#, fuzzy
-msgid "?CLI:account"
-msgstr "konto"
-
-#, fuzzy
-msgid "?CLI:message"
-msgstr "meddelande"
-
-#, fuzzy
-msgid "?CLI:priority"
-msgstr "Priori_tet:"
-
-#, fuzzy
-msgid "?CLI:status"
-msgstr "status"
 
 #, fuzzy
 msgid "?Gender:None"
@@ -718,20 +690,20 @@ msgstr "Konto \"%s\" är anslutet till servern"
 msgid "Account is being created"
 msgstr "Konto \"%s\" är anslutet till servern"
 
-#, fuzzy
-msgid ""
-"Account to which the XML will be sent; if not specified, XML will be sent to "
-"all accounts"
-msgstr ""
-"Konto för vilket XML kommer skickas. Om du inte specificerat kommer XML "
-"skickas till alla konton"
-
 #, fuzzy, python-format
 msgid "Account: %s"
 msgstr "Konton"
 
 msgid "Accounts"
 msgstr "Konton"
+
+#, fuzzy
+msgid "Action on Close"
+msgstr "Gajim"
+
+#, fuzzy
+msgid "Action when closing Gajim’s window"
+msgstr "Stäng alltid Gajim"
 
 msgid "Action when left-clicking a preview"
 msgstr ""
@@ -903,6 +875,11 @@ msgstr "Alla filer"
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
 
+msgid ""
+"Allow Gajim to broadcast useful information via D-Bus. It also allows other "
+"applications to control Gajim remotely."
+msgstr ""
+
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
 
@@ -1010,17 +987,6 @@ msgstr "Är du säker på att du vill lämna gruppchatten \"%s\"?"
 
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Är du säker på att du vill avsluta Gajim?"
-
-#, python-format
-msgid ""
-"Argument \"%(arg)s\" is not specified. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"Argumentet \"%(arg)s\" är inte angivet. \n"
-"Skriv \"%(basename)s help %(command)s\" för mer info"
-
-msgid "Arguments:"
-msgstr "Parametrar:"
 
 msgid "Artists"
 msgstr ""
@@ -1367,12 +1333,6 @@ msgstr "Byt lösenord"
 msgid "Change Subject"
 msgstr "Byt _ämne..."
 
-msgid "Change status"
-msgstr "Ändra status"
-
-msgid "Change status information"
-msgstr "Ändra statusinformation"
-
 msgid "Change your account’s password, etc."
 msgstr ""
 
@@ -1393,14 +1353,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Changed by %s"
 msgstr "Byt smek_namn..."
-
-#, fuzzy
-msgid "Changes the priority of account(s)"
-msgstr "Ändrar status för konto eller konton"
-
-#, fuzzy
-msgid "Changes the status of account(s)"
-msgstr "Ändrar status för konto eller konton"
 
 #, fuzzy
 msgid "Changing Password..."
@@ -1452,9 +1404,6 @@ msgstr ""
 
 msgid "Check for updates periodically"
 msgstr ""
-
-msgid "Check if Gajim is running"
-msgstr "Kontrollera om Gajim är igång"
 
 #, fuzzy
 msgid "Checking file…"
@@ -1847,6 +1796,9 @@ msgstr "Skapa ny post"
 msgid "Creating Account..."
 msgstr "Tar bort %s konto"
 
+msgid "Creating thumbnail failed"
+msgstr ""
+
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Certifikatet har gått ut"
@@ -1855,8 +1807,8 @@ msgstr "Certifikatet har gått ut"
 msgid "Current Developers"
 msgstr "Nuvarande utvecklare:"
 
-msgid "D-Bus is not present on this machine or python module is missing"
-msgstr "D-Bus finns inte på den här maskinen eller så saknas pythonmodulen"
+msgid "D-Bus Interface"
+msgstr ""
 
 #, fuzzy
 msgid "Dark Theme"
@@ -2002,9 +1954,6 @@ msgstr "Användning: /%s, visa namnen för gruppchattens deltagare."
 #, fuzzy
 msgid "Display or change a group chat topic"
 msgstr "Fråga innan gruppchattflik eller -fönster stängs."
-
-msgid "Do not disturb"
-msgstr "Stör inte"
 
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -2308,9 +2257,6 @@ msgstr "Krypterar chattmeddelanden."
 msgid "Extended Address"
 msgstr "<b>Extra adress:</b>"
 
-msgid "Extended away"
-msgstr "Utökad frånvaro"
-
 #, fuzzy
 msgid "FA_Q (Online)"
 msgstr "Ansluten"
@@ -2418,9 +2364,6 @@ msgstr "Filen är tom"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-msgid "File path"
-msgstr "Sökväg"
-
 msgid "File size unknown"
 msgstr ""
 
@@ -2513,9 +2456,6 @@ msgstr "Skicka Privat Meddelande"
 msgid "Free for Chat"
 msgstr "Ledig för chatt"
 
-msgid "Free for chat"
-msgstr "Ledig för chatt"
-
 msgid "From"
 msgstr "Från"
 
@@ -2603,12 +2543,6 @@ msgstr ""
 
 msgid "Generate preview for any URLs containing images (may be unsafe)"
 msgstr ""
-
-msgid "Gets detailed info on a account"
-msgstr "Hämtar detaljerad information för kontakt"
-
-msgid "Gets detailed info on a contact"
-msgstr "Hämta detaljerad information om kontakt"
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2735,11 +2669,11 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
+msgid "Hide"
+msgstr ""
+
 msgid "Hide this menu"
 msgstr "Dölj denna meny"
-
-msgid "Hide window to system tray when minimized"
-msgstr ""
 
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
@@ -2812,9 +2746,6 @@ msgstr " sedan %s"
 msgid "Idle since: %s"
 msgstr " sedan %s"
 
-msgid "If checked, Gajim can be controlled remotely using gajim-remote."
-msgstr "Om kryssad så kan Gajim fjärrstyras med gajim-remote."
-
 #, fuzzy
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2832,9 +2763,6 @@ msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 "Om kryssad kommer Gajim att visa kontakters avatarer i register- och "
 "gruppchattsfönstren"
-
-msgid "If enabled, Gajim will execute XEP-0146 Commands."
-msgstr ""
 
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
@@ -3025,11 +2953,6 @@ msgstr ""
 msgid "It is not possible to send empty files"
 msgstr "Det är inte möjligt att skicka tomma filer"
 
-msgid "It seems Gajim is not running. So you can't use gajim-remote."
-msgstr ""
-"Det verkar som om Gajim inte är igång. Därför kan du inte använda gajim-"
-"remote."
-
 msgid "Italic"
 msgstr "Kursiv"
 
@@ -3163,12 +3086,6 @@ msgstr ""
 
 msgid "Listing of Servers"
 msgstr ""
-
-#, fuzzy
-msgid "Lists all contacts in the contact list, one for each line"
-msgstr ""
-"Skriver ut en lista över alla kontakter i kontaktlistan. Varje kontakt "
-"hamnar på en egen rad"
 
 msgid "Live Preview"
 msgstr ""
@@ -3335,15 +3252,8 @@ msgstr ""
 "historik aktiverat och kontakten finns i din kontaktlista."
 
 #, fuzzy
-msgid "Minimize on Close"
+msgid "Minimize"
 msgstr "Gajim"
-
-msgid "Minimize to Tray"
-msgstr ""
-
-#, fuzzy
-msgid "Minimize when closing Gajim’s window"
-msgstr "Stäng alltid Gajim"
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3352,9 +3262,6 @@ msgstr "_Logga statusändringar för kontakter"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Diverse</b>"
-
-msgid "Missing argument \"contact_jid\""
-msgstr "Saknar argument \"contact_jid\""
 
 #, fuzzy
 msgid "Missing arguments"
@@ -3402,9 +3309,6 @@ msgstr "Namn"
 
 msgid "Name <b>default</b> is not allowed"
 msgstr ""
-
-msgid "Name of the account"
-msgstr "Namn för kontot"
 
 msgid "Needs gspell to be installed"
 msgstr ""
@@ -3589,17 +3493,11 @@ msgstr "_OK"
 msgid "Offline"
 msgstr "Frånkopplad"
 
-msgid "Offline - disconnect"
-msgstr "Frånkopplad - koppla från"
-
 msgid "One Month"
 msgstr ""
 
 msgid "One Year"
 msgstr ""
-
-msgid "Online"
-msgstr "Ansluten"
 
 #, fuzzy
 msgid "Online Status"
@@ -3949,9 +3847,6 @@ msgstr "Inställningar"
 msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
 msgstr ""
 
-msgid "Presence description:"
-msgstr "Beskrivning av närvaro:"
-
 #, fuzzy
 msgid "Presets"
 msgstr "_Närvaro"
@@ -3980,9 +3875,6 @@ msgstr "Förvalda meddelanden:"
 
 msgid "Print XML stanzas and other debug information"
 msgstr ""
-
-msgid "Prints a list of registered accounts"
-msgstr "Skriver ut en lista över registrerade konton"
 
 #, fuzzy
 msgid "Priority"
@@ -4044,6 +3936,10 @@ msgstr "Gamla berättelser"
 #, fuzzy, python-format
 msgid "PyGObject Version: %s"
 msgstr "PyGTK version:"
+
+#, fuzzy
+msgid "Quit"
+msgstr "A_vsluta"
 
 #, fuzzy
 msgid "Quit Gajim"
@@ -4226,10 +4122,6 @@ msgstr[0] "Ta bort en kontakt från kontaktlista"
 msgstr[1] "Ta bort en kontakt från kontaktlista"
 
 #, fuzzy
-msgid "Removes contact from contact list"
-msgstr "Ta bort en kontakt från kontaktlista"
-
-#, fuzzy
 msgid "Remove…"
 msgstr "Ta _bort"
 
@@ -4354,19 +4246,6 @@ msgstr "Statusmeddelande"
 #, fuzzy
 msgid "Retract message?"
 msgstr "statusmeddelande"
-
-msgid "Returns current status (the global one unless account is specified)"
-msgstr ""
-"Returnerar nuvarande status (global status om inget konto specificerats)"
-
-msgid ""
-"Returns current status message (the global one unless account is specified)"
-msgstr ""
-"Returnerar nuvarande statusmeddelande (det globala om inget konto "
-"specificerats)"
-
-msgid "Returns number of unread messages"
-msgstr "Returnerar antalet olästa meddelanden"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -4649,26 +4528,6 @@ msgstr "Sändare: "
 msgid "Sending private message failed"
 msgstr "Skicka privat meddelande misslyckades"
 
-#, fuzzy
-msgid ""
-"Sends a chat message to someone on your contact list. Account is optional."
-msgstr "Användning: /%s, skickar meddelandet till kontakten"
-
-msgid "Sends custom XML"
-msgstr "Skickar anpassad XML"
-
-msgid "Sends file to a contact"
-msgstr "Skicka fil till en kontakt"
-
-#, fuzzy
-msgid ""
-"Sends new chat message to a contact in the contact list. Account is optional."
-msgstr "Användning: /%s, skickar meddelandet till kontakten"
-
-#, fuzzy
-msgid "Sends new message to a group chat you've joined."
-msgstr "Skickar nytt meddelande till en gruppchatt som du gått in i."
-
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Skickade kontakt: \"%s\" (%s)"
@@ -4726,16 +4585,6 @@ msgstr "Söker tjänster med konto %s"
 msgid "Service Gateway"
 msgstr "Server"
 
-msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr ""
-"Tjänsten ej tillgänglig: Gajim körs inte, eller så är remote_control False"
-
-#, fuzzy, python-format
-msgid ""
-"Session bus is not available.\n"
-"Try reading %(url)s"
-msgstr "Sessionsbus finns inte tillgänglig."
-
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "Rumkonfiguration"
@@ -4761,9 +4610,6 @@ msgstr ""
 
 msgid "Set the current status to online"
 msgstr ""
-
-msgid "Set the presence type and description"
-msgstr "Ställ in närvarotypen och en beskrivning"
 
 msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
@@ -4926,9 +4772,6 @@ msgstr ""
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "Döljer fönstret"
-
-msgid "Shows a help on specific command"
-msgstr "Visar hjälp för ett specifikt kommando"
 
 #, fuzzy
 msgid "Shows a list of file transfers between you and your contacts"
@@ -5298,9 +5141,6 @@ msgstr "Tjänst är inte bläddringsbar"
 msgid "The signing certificate authority is not known"
 msgstr ""
 
-msgid "The status has been changed."
-msgstr "Statusen har ändrats."
-
 #, fuzzy
 msgid "Theme"
 msgstr "Tema"
@@ -5478,14 +5318,6 @@ msgstr "Deltagare"
 #, fuzzy
 msgid "Too many arguments"
 msgstr "Saknar argument \"contact_jid\""
-
-#, python-format
-msgid ""
-"Too many arguments. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"För många argument. \n"
-"Skriv \"%(basename)s help %(command)s\" för mer information"
 
 msgid "Topic"
 msgstr ""
@@ -5681,24 +5513,6 @@ msgstr "Skicka privat meddelande misslyckades"
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
-#, fuzzy, python-format
-msgid ""
-"Usage:\n"
-"  %s command [arguments]\n"
-"\n"
-"Command is one of:\n"
-msgstr ""
-"Användning: %s kommando [parametrar]\n"
-"Kommando är en av:\n"
-
-#, python-format
-msgid ""
-"Usage: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-msgstr ""
-"Användning: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -5884,24 +5698,9 @@ msgstr "XML-konsol"
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
-msgid "XML to send"
-msgstr "XML att skicka"
-
 #, fuzzy
 msgid "XMPP Address"
 msgstr "AIM-adress:"
-
-#, fuzzy
-msgid "XMPP Address of the contact"
-msgstr "JID för kontakten"
-
-#, fuzzy
-msgid "XMPP Address of the contact that will receive the message"
-msgstr "JID för kontakten som kommer ta emot meddelandet"
-
-#, fuzzy
-msgid "XMPP Address of the group chat that will receive the message"
-msgstr "JID för rummet som kommer ta emot meddelandet"
 
 #, fuzzy
 msgid "XMPP Address…"
@@ -6022,6 +5821,10 @@ msgstr "Du har inte rättigheter att skapa filer i den här katalogen."
 msgid "You have been banned{actor}{reason}"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "You have been invited to %s"
+msgstr "%(nick)s har tagits bort från rummet (%(reason)s)"
+
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr ""
@@ -6033,9 +5836,6 @@ msgstr "%(nick)s har tagits bort från rummet (%(reason)s)"
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr ""
-
-msgid "You have no active account"
-msgstr "Du har inget aktivt konto"
 
 #, fuzzy
 msgid "You have to be connected to create a group chat."
@@ -6497,29 +6297,11 @@ msgstr "marine"
 msgid "building"
 msgstr "Gömmer sig"
 
-msgid ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
-msgstr ""
-"ändra status för kontot \"konto\". Om inte angivet, försök ändra status på "
-"alla konton som har alternativet \"synkronisera med global status\" inställt"
-
-#, fuzzy
-msgid ""
-"change the priority of the given account. If not specified, change status of "
-"all accounts that have \"sync with global status\" option set"
-msgstr ""
-"ändra status för kontot \"konto\". Om inte angivet, försök ändra status på "
-"alla konton som har alternativet \"synkronisera med global status\" inställt"
-
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
 msgid "column"
 msgstr ""
-
-msgid "command"
-msgstr "kommando"
 
 #, fuzzy
 msgid "country"
@@ -6551,9 +6333,6 @@ msgstr "fel vid sändning av %(message)s ( %(error)s )"
 msgid "example.org"
 msgstr ""
 
-msgid "file"
-msgstr "fil"
-
 msgid "file transfers list"
 msgstr "filöverföringslista"
 
@@ -6571,16 +6350,6 @@ msgstr "Välj de gruppchattar som du vill lämna"
 
 msgid "help"
 msgstr ""
-
-msgid "if specified, contact is taken from the contact list of this account"
-msgstr ""
-"om specificerat tas kontakten bort från kontaktlistan för det här kontot"
-
-msgid "if specified, file will be sent using this account"
-msgstr "om specificerat kommer filen bli skickad genom det här kontot"
-
-msgid "if specified, the message will be sent using this account"
-msgstr "om specificerat kommer meddelandet bli skickat genom det här kontot"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -6605,18 +6374,6 @@ msgstr "ett"
 msgid "macOS"
 msgstr ""
 
-msgid "message contents"
-msgstr "meddelandeinnehåll"
-
-msgid "message subject"
-msgstr "meddelandeämne"
-
-#, fuzzy
-msgid ""
-"one of: offline, online, chat, away, xa, dnd. If not set, use account's "
-"previous status"
-msgstr "en av: offline, online, chat, away, xa, dnd, invisible "
-
 #, fuzzy
 msgid "or"
 msgstr "Till"
@@ -6629,10 +6386,6 @@ msgstr "tog en paus i skrivandet"
 
 msgid "postalcode"
 msgstr ""
-
-#, fuzzy
-msgid "priority you want to give to the account"
-msgstr "Jag vill _registrera ett nytt konto"
 
 #, fuzzy, python-format
 msgid "python-cairo Version: %s"
@@ -6648,23 +6401,11 @@ msgstr ""
 msgid "room"
 msgstr "rum"
 
-msgid "show help on command"
-msgstr "visar hjälp för kommando"
-
-msgid "show only contacts of the given account"
-msgstr "visa bara kontakter för det givna kontot"
-
 msgid "speed"
 msgstr ""
 
-msgid "status message"
-msgstr "statusmeddelande"
-
 msgid "street"
 msgstr ""
-
-msgid "subject"
-msgstr "ämne"
 
 msgid "text"
 msgstr ""
@@ -6726,6 +6467,92 @@ msgstr "%(nick)s är nu %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#~ msgid "%s not found"
+#~ msgstr "%s kunde inte hittas"
+
+#, fuzzy
+#~ msgid ""
+#~ "'%s' is not in your contact list.\n"
+#~ "Please specify account for sending the message."
+#~ msgstr ""
+#~ "\"%s\" finns inte i din kontaktlista.\n"
+#~ "Ange konto för att skicka meddelandet."
+
+#, fuzzy
+#~ msgid "?CLI:account"
+#~ msgstr "konto"
+
+#, fuzzy
+#~ msgid "?CLI:message"
+#~ msgstr "meddelande"
+
+#, fuzzy
+#~ msgid "?CLI:priority"
+#~ msgstr "Priori_tet:"
+
+#, fuzzy
+#~ msgid "?CLI:status"
+#~ msgstr "status"
+
+#, fuzzy
+#~ msgid ""
+#~ "Account to which the XML will be sent; if not specified, XML will be sent "
+#~ "to all accounts"
+#~ msgstr ""
+#~ "Konto för vilket XML kommer skickas. Om du inte specificerat kommer XML "
+#~ "skickas till alla konton"
+
+#~ msgid ""
+#~ "Argument \"%(arg)s\" is not specified. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "Argumentet \"%(arg)s\" är inte angivet. \n"
+#~ "Skriv \"%(basename)s help %(command)s\" för mer info"
+
+#~ msgid "Arguments:"
+#~ msgstr "Parametrar:"
+
+#~ msgid "Change status"
+#~ msgstr "Ändra status"
+
+#~ msgid "Change status information"
+#~ msgstr "Ändra statusinformation"
+
+#, fuzzy
+#~ msgid "Changes the priority of account(s)"
+#~ msgstr "Ändrar status för konto eller konton"
+
+#, fuzzy
+#~ msgid "Changes the status of account(s)"
+#~ msgstr "Ändrar status för konto eller konton"
+
+#~ msgid "Check if Gajim is running"
+#~ msgstr "Kontrollera om Gajim är igång"
+
+#~ msgid "D-Bus is not present on this machine or python module is missing"
+#~ msgstr "D-Bus finns inte på den här maskinen eller så saknas pythonmodulen"
+
+#~ msgid "Do not disturb"
+#~ msgstr "Stör inte"
+
+#~ msgid "Extended away"
+#~ msgstr "Utökad frånvaro"
+
+#~ msgid "File path"
+#~ msgstr "Sökväg"
+
+#~ msgid "Free for chat"
+#~ msgstr "Ledig för chatt"
+
+#~ msgid "Gets detailed info on a account"
+#~ msgstr "Hämtar detaljerad information för kontakt"
+
+#~ msgid "Gets detailed info on a contact"
+#~ msgstr "Hämta detaljerad information om kontakt"
+
+#~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
+#~ msgstr "Om kryssad så kan Gajim fjärrstyras med gajim-remote."
+
 #, fuzzy
 #~ msgid ""
 #~ "If enabled, Gajim hides the main window when pressing the X button "
@@ -6733,6 +6560,91 @@ msgstr ""
 #~ msgstr ""
 #~ "Om sant så avslutas Gajim när fönsterhanterarens X-knapp klickas. Denna "
 #~ "inställning behandlas endast när aktivitetsfältsikonen används."
+
+#~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
+#~ msgstr ""
+#~ "Det verkar som om Gajim inte är igång. Därför kan du inte använda gajim-"
+#~ "remote."
+
+#, fuzzy
+#~ msgid "Lists all contacts in the contact list, one for each line"
+#~ msgstr ""
+#~ "Skriver ut en lista över alla kontakter i kontaktlistan. Varje kontakt "
+#~ "hamnar på en egen rad"
+
+#~ msgid "Missing argument \"contact_jid\""
+#~ msgstr "Saknar argument \"contact_jid\""
+
+#~ msgid "Name of the account"
+#~ msgstr "Namn för kontot"
+
+#~ msgid "Offline - disconnect"
+#~ msgstr "Frånkopplad - koppla från"
+
+#~ msgid "Online"
+#~ msgstr "Ansluten"
+
+#~ msgid "Presence description:"
+#~ msgstr "Beskrivning av närvaro:"
+
+#~ msgid "Prints a list of registered accounts"
+#~ msgstr "Skriver ut en lista över registrerade konton"
+
+#, fuzzy
+#~ msgid "Removes contact from contact list"
+#~ msgstr "Ta bort en kontakt från kontaktlista"
+
+#~ msgid "Returns current status (the global one unless account is specified)"
+#~ msgstr ""
+#~ "Returnerar nuvarande status (global status om inget konto specificerats)"
+
+#~ msgid ""
+#~ "Returns current status message (the global one unless account is "
+#~ "specified)"
+#~ msgstr ""
+#~ "Returnerar nuvarande statusmeddelande (det globala om inget konto "
+#~ "specificerats)"
+
+#~ msgid "Returns number of unread messages"
+#~ msgstr "Returnerar antalet olästa meddelanden"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends a chat message to someone on your contact list. Account is optional."
+#~ msgstr "Användning: /%s, skickar meddelandet till kontakten"
+
+#~ msgid "Sends custom XML"
+#~ msgstr "Skickar anpassad XML"
+
+#~ msgid "Sends file to a contact"
+#~ msgstr "Skicka fil till en kontakt"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends new chat message to a contact in the contact list. Account is "
+#~ "optional."
+#~ msgstr "Användning: /%s, skickar meddelandet till kontakten"
+
+#, fuzzy
+#~ msgid "Sends new message to a group chat you've joined."
+#~ msgstr "Skickar nytt meddelande till en gruppchatt som du gått in i."
+
+#~ msgid ""
+#~ "Service not available: Gajim is not running, or remote_control is False"
+#~ msgstr ""
+#~ "Tjänsten ej tillgänglig: Gajim körs inte, eller så är remote_control False"
+
+#, fuzzy
+#~ msgid ""
+#~ "Session bus is not available.\n"
+#~ "Try reading %(url)s"
+#~ msgstr "Sessionsbus finns inte tillgänglig."
+
+#~ msgid "Set the presence type and description"
+#~ msgstr "Ställ in närvarotypen och en beskrivning"
+
+#~ msgid "Shows a help on specific command"
+#~ msgstr "Visar hjälp för ett specifikt kommando"
 
 #, fuzzy
 #~ msgid "Sign Out"
@@ -6742,6 +6654,112 @@ msgstr ""
 #~ msgid "Status Change"
 #~ msgstr "_Logga statusändringar för kontakter"
 
+#~ msgid "The status has been changed."
+#~ msgstr "Statusen har ändrats."
+
+#~ msgid ""
+#~ "Too many arguments. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "För många argument. \n"
+#~ "Skriv \"%(basename)s help %(command)s\" för mer information"
+
+#, fuzzy
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  %s command [arguments]\n"
+#~ "\n"
+#~ "Command is one of:\n"
+#~ msgstr ""
+#~ "Användning: %s kommando [parametrar]\n"
+#~ "Kommando är en av:\n"
+
+#~ msgid ""
+#~ "Usage: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+#~ msgstr ""
+#~ "Användning: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+
+#~ msgid "XML to send"
+#~ msgstr "XML att skicka"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact"
+#~ msgstr "JID för kontakten"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact that will receive the message"
+#~ msgstr "JID för kontakten som kommer ta emot meddelandet"
+
+#, fuzzy
+#~ msgid "XMPP Address of the group chat that will receive the message"
+#~ msgstr "JID för rummet som kommer ta emot meddelandet"
+
+#~ msgid "You have no active account"
+#~ msgstr "Du har inget aktivt konto"
+
 #, fuzzy
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "Stäng alltid Gajim"
+
+#~ msgid ""
+#~ "change status of account \"account\". If not specified, try to change "
+#~ "status of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "ändra status för kontot \"konto\". Om inte angivet, försök ändra status "
+#~ "på alla konton som har alternativet \"synkronisera med global status\" "
+#~ "inställt"
+
+#, fuzzy
+#~ msgid ""
+#~ "change the priority of the given account. If not specified, change status "
+#~ "of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "ändra status för kontot \"konto\". Om inte angivet, försök ändra status "
+#~ "på alla konton som har alternativet \"synkronisera med global status\" "
+#~ "inställt"
+
+#~ msgid "command"
+#~ msgstr "kommando"
+
+#~ msgid "file"
+#~ msgstr "fil"
+
+#~ msgid "if specified, contact is taken from the contact list of this account"
+#~ msgstr ""
+#~ "om specificerat tas kontakten bort från kontaktlistan för det här kontot"
+
+#~ msgid "if specified, file will be sent using this account"
+#~ msgstr "om specificerat kommer filen bli skickad genom det här kontot"
+
+#~ msgid "if specified, the message will be sent using this account"
+#~ msgstr "om specificerat kommer meddelandet bli skickat genom det här kontot"
+
+#~ msgid "message contents"
+#~ msgstr "meddelandeinnehåll"
+
+#~ msgid "message subject"
+#~ msgstr "meddelandeämne"
+
+#, fuzzy
+#~ msgid ""
+#~ "one of: offline, online, chat, away, xa, dnd. If not set, use account's "
+#~ "previous status"
+#~ msgstr "en av: offline, online, chat, away, xa, dnd, invisible "
+
+#, fuzzy
+#~ msgid "priority you want to give to the account"
+#~ msgstr "Jag vill _registrera ett nytt konto"
+
+#~ msgid "show help on command"
+#~ msgstr "visar hjälp för kommando"
+
+#~ msgid "show only contacts of the given account"
+#~ msgstr "visa bara kontakter för det givna kontot"
+
+#~ msgid "status message"
+#~ msgstr "statusmeddelande"
+
+#~ msgid "subject"
+#~ msgstr "ämne"

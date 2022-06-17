@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 19:47+0000\n"
+"POT-Creation-Date: 2022-06-17 18:19+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -192,10 +192,6 @@ msgid ""
 "Choose the device you would like to send the file to."
 msgstr ""
 
-#, fuzzy, python-format
-msgid "%s not found"
-msgstr "cli"
-
 #, python-format
 msgid "%s s"
 msgstr ""
@@ -216,12 +212,6 @@ msgstr "‏%s רוצה לשלוח לך קובץ."
 #, python-format
 msgid "%s: Nothing found"
 msgstr "‏%s: לא נמצא דבר"
-
-#, fuzzy, python-format
-msgid ""
-"'%s' is not in your contact list.\n"
-"Please specify account for sending the message."
-msgstr "cli"
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -384,21 +374,6 @@ msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "אין"
-
-#, fuzzy
-msgid "?CLI:account"
-msgstr "חשבון"
-
-#, fuzzy
-msgid "?CLI:message"
-msgstr "הודעה"
-
-#, fuzzy
-msgid "?CLI:priority"
-msgstr "_עדיפות:"
-
-msgid "?CLI:status"
-msgstr ""
 
 #, fuzzy
 msgid "?Gender:None"
@@ -744,18 +719,21 @@ msgstr "חשבון \"%s\" מחובר כעת לשרת"
 msgid "Account is being created"
 msgstr "חשבון \"%s\" מחובר כעת לשרת"
 
-#, fuzzy
-msgid ""
-"Account to which the XML will be sent; if not specified, XML will be sent to "
-"all accounts"
-msgstr "cli"
-
 #, fuzzy, python-format
 msgid "Account: %s"
 msgstr "חשבונות"
 
 msgid "Accounts"
 msgstr "חשבונות"
+
+# In Hebrew: גאג'ים
+#, fuzzy
+msgid "Action on Close"
+msgstr "‫Gajim"
+
+#, fuzzy
+msgid "Action when closing Gajim’s window"
+msgstr "סגור את Gajim תמיד"
 
 msgid "Action when left-clicking a preview"
 msgstr ""
@@ -930,6 +908,11 @@ msgstr "כל הקבצים"
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
 
+msgid ""
+"Allow Gajim to broadcast useful information via D-Bus. It also allows other "
+"applications to control Gajim remotely."
+msgstr ""
+
 #, fuzzy
 msgid "Allow a participant to send you public or private messages"
 msgstr "התרה לנוכח לשלוח לך הודעות פומביות או פרטיות"
@@ -1042,16 +1025,6 @@ msgstr "האם אתה בטוח כי ברצונך לעזוב את שיחת קבו
 
 msgid "Are you sure you want to quit Gajim?"
 msgstr "האם אתה בטוח כי ברצונך לסגור את Gajim?"
-
-#, fuzzy, python-format
-msgid ""
-"Argument \"%(arg)s\" is not specified. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr "cli"
-
-#, fuzzy
-msgid "Arguments:"
-msgstr "cli"
 
 msgid "Artists"
 msgstr ""
@@ -1407,12 +1380,6 @@ msgstr "שינוי סיסמה"
 msgid "Change Subject"
 msgstr "שנה _נושא..."
 
-msgid "Change status"
-msgstr "שנה מצב"
-
-msgid "Change status information"
-msgstr "שנה מידע מצב"
-
 msgid "Change your account’s password, etc."
 msgstr ""
 
@@ -1432,14 +1399,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Changed by %s"
 msgstr "שנה שם _כינוי..."
-
-#, fuzzy
-msgid "Changes the priority of account(s)"
-msgstr "cli"
-
-#, fuzzy
-msgid "Changes the status of account(s)"
-msgstr "cli"
 
 #, fuzzy
 msgid "Changing Password..."
@@ -1495,10 +1454,6 @@ msgstr ""
 
 msgid "Check for updates periodically"
 msgstr ""
-
-#, fuzzy
-msgid "Check if Gajim is running"
-msgstr "cli"
 
 #, fuzzy
 msgid "Checking file…"
@@ -1893,6 +1848,9 @@ msgstr "יצירת פוסט חדש"
 msgid "Creating Account..."
 msgstr "הסרת חשבון ‫%s"
 
+msgid "Creating thumbnail failed"
+msgstr ""
+
 #, fuzzy
 msgid "Credentials expired"
 msgstr "אישורי Oauth2"
@@ -1901,7 +1859,7 @@ msgstr "אישורי Oauth2"
 msgid "Current Developers"
 msgstr "‎מפתחים נוכחיים:"
 
-msgid "D-Bus is not present on this machine or python module is missing"
+msgid "D-Bus Interface"
 msgstr ""
 
 #, fuzzy
@@ -2048,9 +2006,6 @@ msgstr "הצגת שמות של כל הנוכחים בתוך שיחת קבוצה"
 
 msgid "Display or change a group chat topic"
 msgstr "הצגה או שינוי נושא של שיחת קבוצה"
-
-msgid "Do not disturb"
-msgstr "נא לא להפריע"
 
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -2374,9 +2329,6 @@ msgstr "הצפנת הודעות שיחה."
 msgid "Extended Address"
 msgstr "<b>כתובת נוספת:</b>"
 
-msgid "Extended away"
-msgstr "נעדר לזמן ארוך"
-
 #, fuzzy
 msgid "FA_Q (Online)"
 msgstr "מקוון"
@@ -2483,10 +2435,6 @@ msgstr "קובץ ריק"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr ""
 
-#, fuzzy
-msgid "File path"
-msgstr "cli"
-
 msgid "File size unknown"
 msgstr ""
 
@@ -2581,11 +2529,6 @@ msgstr "cli"
 msgid "Free for Chat"
 msgstr "חופשי לשיחה"
 
-# BUG: Free for Chat
-# BUG: x2
-msgid "Free for chat"
-msgstr "חופשי לשיחה"
-
 msgid "From"
 msgstr "מן"
 
@@ -2678,15 +2621,6 @@ msgstr ""
 
 msgid "Generate preview for any URLs containing images (may be unsafe)"
 msgstr ""
-
-# BUG: on an account
-#, fuzzy
-msgid "Gets detailed info on a account"
-msgstr "cli"
-
-#, fuzzy
-msgid "Gets detailed info on a contact"
-msgstr "cli"
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2815,11 +2749,11 @@ msgstr "שלום, שמי $name."
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
+msgid "Hide"
+msgstr ""
+
 msgid "Hide this menu"
 msgstr "הסתר תפריט זה"
-
-msgid "Hide window to system tray when minimized"
-msgstr ""
 
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
@@ -2897,9 +2831,6 @@ msgstr "בחוסר פעילות מאז %s"
 msgid "Idle since: %s"
 msgstr "בחוסר פעילות מאז %s"
 
-msgid "If checked, Gajim can be controlled remotely using gajim-remote."
-msgstr "כאשר מסומן, Gajim יכול לפעול באופן מרוחק באמצעות gajim-remote."
-
 # להבהב
 #, fuzzy
 msgid ""
@@ -2917,9 +2848,6 @@ msgstr ""
 #, fuzzy
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr "כאשר מסומן, Gajim יציג את מצבי הרוח של אנשי קשר בחלון הרשימה"
-
-msgid "If enabled, Gajim will execute XEP-0146 Commands."
-msgstr ""
 
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
@@ -3129,11 +3057,6 @@ msgstr ""
 msgid "It is not possible to send empty files"
 msgstr "אין זה אפשרי לשלוח קבצים ריקים"
 
-# נראה כי Gajim לא מורץ. משכך אין באפשרותך לעשות שימוש ביישום gajim-remote.
-#, fuzzy
-msgid "It seems Gajim is not running. So you can't use gajim-remote."
-msgstr "cli"
-
 msgid "Italic"
 msgstr "נטוי"
 
@@ -3271,10 +3194,6 @@ msgstr ""
 
 msgid "Listing of Servers"
 msgstr ""
-
-#, fuzzy
-msgid "Lists all contacts in the contact list, one for each line"
-msgstr "cli"
 
 msgid "Live Preview"
 msgstr ""
@@ -3447,15 +3366,8 @@ msgstr ""
 
 # In Hebrew: גאג'ים
 #, fuzzy
-msgid "Minimize on Close"
+msgid "Minimize"
 msgstr "‫Gajim"
-
-msgid "Minimize to Tray"
-msgstr ""
-
-#, fuzzy
-msgid "Minimize when closing Gajim’s window"
-msgstr "סגור את Gajim תמיד"
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3464,10 +3376,6 @@ msgstr "הצג _הודעות מצב"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>שונות</b>"
-
-#, fuzzy
-msgid "Missing argument \"contact_jid\""
-msgstr "cli"
 
 msgid "Missing arguments"
 msgstr "ארגומנטים חסרים"
@@ -3514,10 +3422,6 @@ msgstr "שם"
 
 msgid "Name <b>default</b> is not allowed"
 msgstr ""
-
-#, fuzzy
-msgid "Name of the account"
-msgstr "cli"
 
 msgid "Needs gspell to be installed"
 msgstr ""
@@ -3700,18 +3604,11 @@ msgstr "_אישור"
 msgid "Offline"
 msgstr "לא מקוון"
 
-# Needs to be tested
-msgid "Offline - disconnect"
-msgstr "לא מקוון - מנותק"
-
 msgid "One Month"
 msgstr ""
 
 msgid "One Year"
 msgstr ""
-
-msgid "Online"
-msgstr "מקוון"
 
 #, fuzzy
 msgid "Online Status"
@@ -4060,11 +3957,6 @@ msgstr "העדפות"
 msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
 msgstr ""
 
-# BUG: Remove colon because it is appearing in Psi with two colons
-# תיאור נוכחות::
-msgid "Presence description:"
-msgstr "תיאור נוכחות:"
-
 #, fuzzy
 msgid "Presets"
 msgstr "_נוכחות"
@@ -4092,10 +3984,6 @@ msgstr "הודעות מותאמות:"
 
 #, fuzzy
 msgid "Print XML stanzas and other debug information"
-msgstr "cli"
-
-#, fuzzy
-msgid "Prints a list of registered accounts"
 msgstr "cli"
 
 #, fuzzy
@@ -4162,6 +4050,9 @@ msgstr "כל היסטוריות שיחה"
 #, fuzzy, python-format
 msgid "PyGObject Version: %s"
 msgstr "גרסא:"
+
+msgid "Quit"
+msgstr ""
 
 # In Hebrew: גאג'ים
 #, fuzzy
@@ -4358,10 +4249,6 @@ msgstr[0] "הוסר איש קשר %d"
 msgstr[1] "הוסרו %d אנשי קשר"
 
 #, fuzzy
-msgid "Removes contact from contact list"
-msgstr "cli"
-
-#, fuzzy
 msgid "Remove…"
 msgstr "הס_ר"
 
@@ -4483,19 +4370,6 @@ msgstr "הודעת מצב"
 
 #, fuzzy
 msgid "Retract message?"
-msgstr "cli"
-
-#, fuzzy
-msgid "Returns current status (the global one unless account is specified)"
-msgstr "cli"
-
-#, fuzzy
-msgid ""
-"Returns current status message (the global one unless account is specified)"
-msgstr "cli"
-
-#, fuzzy
-msgid "Returns number of unread messages"
 msgstr "cli"
 
 #, fuzzy
@@ -4787,32 +4661,6 @@ msgstr "ממען: "
 msgid "Sending private message failed"
 msgstr "מסירת הודעה פרטית נכשלה"
 
-# BUG: him or her or they
-# he she
-#, fuzzy
-msgid ""
-"Sends a chat message to someone on your contact list. Account is optional."
-msgstr "מסירת הודעה לאיש קשר אשר תסב את תשומת ליבו"
-
-#, fuzzy
-msgid "Sends custom XML"
-msgstr "cli"
-
-#, fuzzy
-msgid "Sends file to a contact"
-msgstr "cli"
-
-# BUG: him or her or they
-# he she
-#, fuzzy
-msgid ""
-"Sends new chat message to a contact in the contact list. Account is optional."
-msgstr "מסירת הודעה לאיש קשר אשר תסב את תשומת ליבו"
-
-#, fuzzy
-msgid "Sends new message to a group chat you've joined."
-msgstr "cli"
-
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "איש קשר אשר נשלח: \"%s\" ‏(%s)"
@@ -4868,18 +4716,6 @@ msgstr "מציאת שירות באמצעות חשבון ‫%s"
 msgid "Service Gateway"
 msgstr "שרת"
 
-msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr "שירות לא זמין: Gajim לא מורץ, או שההעדפה remote_control הינה מנוטרלת"
-
-# Who tries?
-#, python-format
-msgid ""
-"Session bus is not available.\n"
-"Try reading %(url)s"
-msgstr ""
-"אפיק סשן אינו זמין.\n"
-"נסה לקרוא את %(url)s"
-
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "cli"
@@ -4913,9 +4749,6 @@ msgstr "קביעת מצב נוכחי אל נעדר"
 
 msgid "Set the current status to online"
 msgstr "קביעת מצב נוכחי אל מקוון"
-
-msgid "Set the presence type and description"
-msgstr "קביעת טיפוס ותיאור הנוכחות"
 
 msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
@@ -5087,10 +4920,6 @@ msgstr ""
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "הסתרת חלון"
-
-#, fuzzy
-msgid "Shows a help on specific command"
-msgstr "cli"
 
 #, fuzzy
 msgid "Shows a list of file transfers between you and your contacts"
@@ -5475,10 +5304,6 @@ msgstr "השירות אינו בר עיון"
 msgid "The signing certificate authority is not known"
 msgstr ""
 
-# BUG: remove "the"
-msgid "The status has been changed."
-msgstr "המצב השתנה."
-
 #, fuzzy
 msgid "Theme"
 msgstr "ערכת נושא"
@@ -5659,12 +5484,6 @@ msgstr "משתתף"
 #, fuzzy
 msgid "Too many arguments"
 msgstr "ארגומנטים חסרים"
-
-#, fuzzy, python-format
-msgid ""
-"Too many arguments. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr "cli"
 
 msgid "Topic"
 msgstr ""
@@ -5864,20 +5683,6 @@ msgstr "מסירת הודעה פרטית נכשלה"
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
-#, fuzzy, python-format
-msgid ""
-"Usage:\n"
-"  %s command [arguments]\n"
-"\n"
-"Command is one of:\n"
-msgstr "cli"
-
-#, fuzzy, python-format
-msgid ""
-"Usage: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-msgstr "cli"
-
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -6067,24 +5872,8 @@ msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
 #, fuzzy
-msgid "XML to send"
-msgstr "cli"
-
-#, fuzzy
 msgid "XMPP Address"
 msgstr "כתובת AIM:"
-
-#, fuzzy
-msgid "XMPP Address of the contact"
-msgstr "cli"
-
-#, fuzzy
-msgid "XMPP Address of the contact that will receive the message"
-msgstr "cli"
-
-#, fuzzy
-msgid "XMPP Address of the group chat that will receive the message"
-msgstr "cli"
 
 #, fuzzy
 msgid "XMPP Address…"
@@ -6217,6 +6006,11 @@ msgstr "אין לך הרשאות ליצור קבצים במדור זה."
 msgid "You have been banned{actor}{reason}"
 msgstr ""
 
+# in or to?
+#, fuzzy, python-format
+msgid "You have been invited to %s"
+msgstr "%(jid)s הוזמן/ה לחדר זה"
+
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr ""
@@ -6228,10 +6022,6 @@ msgstr "%(nick)s הוסר/ה מתוך החדר (%(reason)s)"
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr ""
-
-#, fuzzy
-msgid "You have no active account"
-msgstr "cli"
 
 #, fuzzy
 msgid "You have to be connected to create a group chat."
@@ -6695,27 +6485,11 @@ msgid "building"
 msgstr "בניין"
 
 #, fuzzy
-msgid ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
-msgstr "cli"
-
-#, fuzzy
-msgid ""
-"change the priority of the given account. If not specified, change status of "
-"all accounts that have \"sync with global status\" option set"
-msgstr "cli"
-
-#, fuzzy
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "צ'אט;מסרים;מסנג'ר;jabber;xmpp;bonjour;voip"
 
 msgid "column"
 msgstr ""
-
-#, fuzzy
-msgid "command"
-msgstr "cli"
 
 msgid "country"
 msgstr "ארץ"
@@ -6744,10 +6518,6 @@ msgstr "שגיאה בעת מסירת %(message)s ‏( %(error)s )"
 msgid "example.org"
 msgstr ""
 
-#, fuzzy
-msgid "file"
-msgstr "cli"
-
 msgid "file transfers list"
 msgstr "רשימת העברת קבצים"
 
@@ -6766,18 +6536,6 @@ msgstr "הזמנת משתמש לחדר עם ציון סיבה"
 
 msgid "help"
 msgstr ""
-
-#, fuzzy
-msgid "if specified, contact is taken from the contact list of this account"
-msgstr "cli"
-
-#, fuzzy
-msgid "if specified, file will be sent using this account"
-msgstr "cli"
-
-#, fuzzy
-msgid "if specified, the message will be sent using this account"
-msgstr "cli"
 
 #, fuzzy
 msgid "is composing a message…"
@@ -6802,20 +6560,6 @@ msgid "macOS"
 msgstr ""
 
 #, fuzzy
-msgid "message contents"
-msgstr "cli"
-
-#, fuzzy
-msgid "message subject"
-msgstr "cli"
-
-#, fuzzy
-msgid ""
-"one of: offline, online, chat, away, xa, dnd. If not set, use account's "
-"previous status"
-msgstr "cli"
-
-#, fuzzy
 msgid "or"
 msgstr "עבודה"
 
@@ -6827,10 +6571,6 @@ msgstr "חדל/ה מלהלחין הודעה"
 
 msgid "postalcode"
 msgstr "מיקוד דואר"
-
-#, fuzzy
-msgid "priority you want to give to the account"
-msgstr "cli"
 
 #, fuzzy, python-format
 msgid "python-cairo Version: %s"
@@ -6846,27 +6586,11 @@ msgstr "תחום"
 msgid "room"
 msgstr "חדר"
 
-#, fuzzy
-msgid "show help on command"
-msgstr "cli"
-
-#, fuzzy
-msgid "show only contacts of the given account"
-msgstr "cli"
-
 msgid "speed"
 msgstr "מהירות"
 
-#, fuzzy
-msgid "status message"
-msgstr "cli"
-
 msgid "street"
 msgstr "רחוב"
-
-#, fuzzy
-msgid "subject"
-msgstr "cli"
 
 msgid "text"
 msgstr "תמליל"
@@ -6934,10 +6658,93 @@ msgid "…or drop it here"
 msgstr ""
 
 #, fuzzy
+#~ msgid "%s not found"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid ""
+#~ "'%s' is not in your contact list.\n"
+#~ "Please specify account for sending the message."
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "?CLI:account"
+#~ msgstr "חשבון"
+
+#, fuzzy
+#~ msgid "?CLI:message"
+#~ msgstr "הודעה"
+
+#, fuzzy
+#~ msgid "?CLI:priority"
+#~ msgstr "_עדיפות:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Account to which the XML will be sent; if not specified, XML will be sent "
+#~ "to all accounts"
+#~ msgstr "cli"
+
+#, fuzzy
 #~ msgid ""
 #~ "Allow to hide the contact list window even if the notification area icon "
 #~ "is not shown."
 #~ msgstr "אפשר הסתרת הרשימה אפילו כאשר סמל מגש איננו מוצג."
+
+#, fuzzy
+#~ msgid ""
+#~ "Argument \"%(arg)s\" is not specified. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "Arguments:"
+#~ msgstr "cli"
+
+#~ msgid "Change status"
+#~ msgstr "שנה מצב"
+
+#~ msgid "Change status information"
+#~ msgstr "שנה מידע מצב"
+
+#, fuzzy
+#~ msgid "Changes the priority of account(s)"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "Changes the status of account(s)"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "Check if Gajim is running"
+#~ msgstr "cli"
+
+#~ msgid "Do not disturb"
+#~ msgstr "נא לא להפריע"
+
+#~ msgid "Extended away"
+#~ msgstr "נעדר לזמן ארוך"
+
+#, fuzzy
+#~ msgid "File path"
+#~ msgstr "cli"
+
+# BUG: Free for Chat
+# BUG: x2
+#~ msgid "Free for chat"
+#~ msgstr "חופשי לשיחה"
+
+# BUG: on an account
+#, fuzzy
+#~ msgid "Gets detailed info on a account"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "Gets detailed info on a contact"
+#~ msgstr "cli"
+
+#~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
+#~ msgstr "כאשר מסומן, Gajim יכול לפעול באופן מרוחק באמצעות gajim-remote."
 
 #, fuzzy
 #~ msgid ""
@@ -6947,9 +6754,107 @@ msgstr ""
 #~ "כאשר מופעלת, Gajim יצא כאשר לחצן X של מנהל חלונות נלחץ. הגדרה זו נלקחת "
 #~ "בחשבון רק כאשר סמל התראה מצוי בשימוש."
 
+# נראה כי Gajim לא מורץ. משכך אין באפשרותך לעשות שימוש ביישום gajim-remote.
+#, fuzzy
+#~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "Lists all contacts in the contact list, one for each line"
+#~ msgstr "cli"
+
 #, fuzzy
 #~ msgid "Machine is going to sleep"
 #~ msgstr "מחשב על סף שינה‫"
+
+#, fuzzy
+#~ msgid "Missing argument \"contact_jid\""
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "Name of the account"
+#~ msgstr "cli"
+
+# Needs to be tested
+#~ msgid "Offline - disconnect"
+#~ msgstr "לא מקוון - מנותק"
+
+#~ msgid "Online"
+#~ msgstr "מקוון"
+
+# BUG: Remove colon because it is appearing in Psi with two colons
+# תיאור נוכחות::
+#~ msgid "Presence description:"
+#~ msgstr "תיאור נוכחות:"
+
+#, fuzzy
+#~ msgid "Prints a list of registered accounts"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "Removes contact from contact list"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "Returns current status (the global one unless account is specified)"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid ""
+#~ "Returns current status message (the global one unless account is "
+#~ "specified)"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "Returns number of unread messages"
+#~ msgstr "cli"
+
+# BUG: him or her or they
+# he she
+#, fuzzy
+#~ msgid ""
+#~ "Sends a chat message to someone on your contact list. Account is optional."
+#~ msgstr "מסירת הודעה לאיש קשר אשר תסב את תשומת ליבו"
+
+#, fuzzy
+#~ msgid "Sends custom XML"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "Sends file to a contact"
+#~ msgstr "cli"
+
+# BUG: him or her or they
+# he she
+#, fuzzy
+#~ msgid ""
+#~ "Sends new chat message to a contact in the contact list. Account is "
+#~ "optional."
+#~ msgstr "מסירת הודעה לאיש קשר אשר תסב את תשומת ליבו"
+
+#, fuzzy
+#~ msgid "Sends new message to a group chat you've joined."
+#~ msgstr "cli"
+
+#~ msgid ""
+#~ "Service not available: Gajim is not running, or remote_control is False"
+#~ msgstr ""
+#~ "שירות לא זמין: Gajim לא מורץ, או שההעדפה remote_control הינה מנוטרלת"
+
+# Who tries?
+#~ msgid ""
+#~ "Session bus is not available.\n"
+#~ "Try reading %(url)s"
+#~ msgstr ""
+#~ "אפיק סשן אינו זמין.\n"
+#~ "נסה לקרוא את %(url)s"
+
+#~ msgid "Set the presence type and description"
+#~ msgstr "קביעת טיפוס ותיאור הנוכחות"
+
+#, fuzzy
+#~ msgid "Shows a help on specific command"
+#~ msgstr "cli"
 
 #, fuzzy
 #~ msgid "Sign Out"
@@ -6959,6 +6864,116 @@ msgstr ""
 #~ msgid "Status Change"
 #~ msgstr "הצג _הודעות מצב"
 
+# BUG: remove "the"
+#~ msgid "The status has been changed."
+#~ msgstr "המצב השתנה."
+
+#, fuzzy
+#~ msgid ""
+#~ "Too many arguments. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  %s command [arguments]\n"
+#~ "\n"
+#~ "Command is one of:\n"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid ""
+#~ "Usage: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "XML to send"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact that will receive the message"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "XMPP Address of the group chat that will receive the message"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "You have no active account"
+#~ msgstr "cli"
+
 #, fuzzy
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "סגור את Gajim תמיד"
+
+#, fuzzy
+#~ msgid ""
+#~ "change status of account \"account\". If not specified, try to change "
+#~ "status of all accounts that have \"sync with global status\" option set"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid ""
+#~ "change the priority of the given account. If not specified, change status "
+#~ "of all accounts that have \"sync with global status\" option set"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "command"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "file"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "if specified, contact is taken from the contact list of this account"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "if specified, file will be sent using this account"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "if specified, the message will be sent using this account"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "message contents"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "message subject"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid ""
+#~ "one of: offline, online, chat, away, xa, dnd. If not set, use account's "
+#~ "previous status"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "priority you want to give to the account"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "show help on command"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "show only contacts of the given account"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "status message"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "subject"
+#~ msgstr "cli"

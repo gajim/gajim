@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 19:47+0000\n"
+"POT-Creation-Date: 2022-06-17 18:19+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -178,10 +178,6 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "%s not found"
-msgstr "%s niet gevonden"
-
-#, python-format
 msgid "%s s"
 msgstr ""
 
@@ -200,14 +196,6 @@ msgstr "%s wil je een bestand sturen."
 #, python-format
 msgid "%s: Nothing found"
 msgstr "%s: niets gevonden"
-
-#, fuzzy, python-format
-msgid ""
-"'%s' is not in your contact list.\n"
-"Please specify account for sending the message."
-msgstr ""
-"‘%s’ staat niet in je rooster.\n"
-"Geef een account op om het bericht mee te sturen."
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -355,18 +343,6 @@ msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "?Vragen (voor abonnering):Geen"
-
-msgid "?CLI:account"
-msgstr "?CLI:account"
-
-msgid "?CLI:message"
-msgstr "?CLI:bericht"
-
-msgid "?CLI:priority"
-msgstr "?CLI:prioriteit"
-
-msgid "?CLI:status"
-msgstr "?CLI:status"
 
 #, fuzzy
 msgid "?Gender:None"
@@ -713,19 +689,20 @@ msgstr "Account %s is nog verbonden"
 msgid "Account is being created"
 msgstr "Account %s is nog verbonden"
 
-msgid ""
-"Account to which the XML will be sent; if not specified, XML will be sent to "
-"all accounts"
-msgstr ""
-"Account waarnaar de XML verzonden zal worden; indien niet opgegeven, zal ze "
-"naar alle account verzonden worden"
-
 #, fuzzy, python-format
 msgid "Account: %s"
 msgstr "Accounts"
 
 msgid "Accounts"
 msgstr "Accounts"
+
+#, fuzzy
+msgid "Action on Close"
+msgstr "Gajim afsluiten"
+
+#, fuzzy
+msgid "Action when closing Gajim’s window"
+msgstr "Gajim altijd sluiten"
 
 msgid "Action when left-clicking a preview"
 msgstr ""
@@ -893,6 +870,11 @@ msgstr ""
 "Semi-anoniem\n"
 "<span size=\"small\">(Enkel moderators kunnen je XMPP-adres zien)</span>"
 
+msgid ""
+"Allow Gajim to broadcast useful information via D-Bus. It also allows other "
+"applications to control Gajim remotely."
+msgstr ""
+
 #, fuzzy
 msgid "Allow a participant to send you public or private messages"
 msgstr "Laat een deelnemer toe je openbare of privéberichten te sturen"
@@ -1000,17 +982,6 @@ msgstr "Weet je zeker dat je het groepsgesprek ‘%s’ wil verlaten?"
 
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Weet je zeker dat je Gajim wil afsluiten?"
-
-#, python-format
-msgid ""
-"Argument \"%(arg)s\" is not specified. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"Parameter ‘%(arg)s’ is niet gespecificeerd. \n"
-"Voer ‘%(basename)s help %(command)s’ in voor meer informatie"
-
-msgid "Arguments:"
-msgstr "Parameters:"
 
 msgid "Artists"
 msgstr "Artiesten"
@@ -1352,12 +1323,6 @@ msgstr "Verander wachtwoord"
 msgid "Change Subject"
 msgstr "Onderwerp veranderen"
 
-msgid "Change status"
-msgstr "Status veranderen"
-
-msgid "Change status information"
-msgstr "Statusinformatie wijzigen"
-
 msgid "Change your account’s password, etc."
 msgstr ""
 
@@ -1377,12 +1342,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Changed by %s"
 msgstr "Bijnaam veranderen"
-
-msgid "Changes the priority of account(s)"
-msgstr "Verandert de prioriteit van de account(s)"
-
-msgid "Changes the status of account(s)"
-msgstr "Verandert de status van de account(s)"
 
 #, fuzzy
 msgid "Changing Password..."
@@ -1437,9 +1396,6 @@ msgstr "Controleren op updates bij opstarten"
 
 msgid "Check for updates periodically"
 msgstr ""
-
-msgid "Check if Gajim is running"
-msgstr "Controleer of Gajim wordt uitgevoerd"
 
 msgid "Checking file…"
 msgstr "Bestand wordt gecontroleerd…"
@@ -1812,6 +1768,9 @@ msgstr "Nieuwe post maken"
 msgid "Creating Account..."
 msgstr "Account %s wordt verwijderd"
 
+msgid "Creating thumbnail failed"
+msgstr ""
+
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Gebruikersreferenties"
@@ -1819,8 +1778,8 @@ msgstr "Gebruikersreferenties"
 msgid "Current Developers"
 msgstr "Huidige ontwikkelaars"
 
-msgid "D-Bus is not present on this machine or python module is missing"
-msgstr "D-Bus bevindt zich niet op deze machine of de python module ontbreekt"
+msgid "D-Bus Interface"
+msgstr ""
 
 #, fuzzy
 msgid "Dark Theme"
@@ -1962,9 +1921,6 @@ msgstr "Namen van alle deelnemers aan het groepsgesprek weergeven"
 
 msgid "Display or change a group chat topic"
 msgstr "Onderwerp van groepsgesprek weergeven of wijzigen"
-
-msgid "Do not disturb"
-msgstr "Niet storen"
 
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -2272,9 +2228,6 @@ msgstr "Berichten worden versleuteld."
 msgid "Extended Address"
 msgstr "Extra adres"
 
-msgid "Extended away"
-msgstr "Lang weg"
-
 #, fuzzy
 msgid "FA_Q (Online)"
 msgstr "Online"
@@ -2377,9 +2330,6 @@ msgstr "Bestand is leeg"
 msgid "File is too large, maximum allowed file size is: %s"
 msgstr "Bestand is te groot, maximale bestandsgrootte is: %s"
 
-msgid "File path"
-msgstr "Bestandspad"
-
 msgid "File size unknown"
 msgstr ""
 
@@ -2473,9 +2423,6 @@ msgid "Format your message…"
 msgstr "Schrijf een bericht…"
 
 msgid "Free for Chat"
-msgstr "Open voor gesprek"
-
-msgid "Free for chat"
 msgstr "Open voor gesprek"
 
 msgid "From"
@@ -2575,12 +2522,6 @@ msgstr ""
 
 msgid "Generate preview for any URLs containing images (may be unsafe)"
 msgstr ""
-
-msgid "Gets detailed info on a account"
-msgstr "Haalt gedetailleerde informatie op over een contact"
-
-msgid "Gets detailed info on a contact"
-msgstr "Haalt gedetailleerde informatie op over een contact"
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2704,11 +2645,11 @@ msgstr "Hallo, ik ben $name."
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
+msgid "Hide"
+msgstr ""
+
 msgid "Hide this menu"
 msgstr "Verberg dit menu"
-
-msgid "Hide window to system tray when minimized"
-msgstr ""
 
 #, fuzzy
 msgid "Hides the banner in a 1:1 chat window."
@@ -2782,9 +2723,6 @@ msgstr "Inactief sinds:"
 msgid "Idle since: %s"
 msgstr "Inactief sinds:"
 
-msgid "If checked, Gajim can be controlled remotely using gajim-remote."
-msgstr "Indien aangevinkt zal Gajim bestuurd kunnen worden met gajim-remote."
-
 #, fuzzy
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2801,10 +2739,6 @@ msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 "Indien aangevinkt zal Gajim de stemming van contacten in het roostervenster "
 "laten zien"
-
-#, fuzzy
-msgid "If enabled, Gajim will execute XEP-0146 Commands."
-msgstr "Indien ingeschakeld zal Gajim XEP-0146-opdrachten uitvoeren."
 
 #, fuzzy
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
@@ -3015,11 +2949,6 @@ msgstr "Uitgegeven aan"
 msgid "It is not possible to send empty files"
 msgstr "Het is onmogelijk lege bestanden te sturen"
 
-msgid "It seems Gajim is not running. So you can't use gajim-remote."
-msgstr ""
-"Het lijkt erop dat Gajim niet wordt uitgevoerd, dus kan je gajim-remote niet "
-"gebruiken."
-
 msgid "Italic"
 msgstr "Schuingedrukt"
 
@@ -3151,11 +3080,6 @@ msgstr ""
 
 msgid "Listing of Servers"
 msgstr ""
-
-#, fuzzy
-msgid "Lists all contacts in the contact list, one for each line"
-msgstr ""
-"Lijst alle contacten in het rooster op, elk contact komt op een aparte regel"
 
 msgid "Live Preview"
 msgstr ""
@@ -3324,15 +3248,8 @@ msgstr ""
 "ingeschakeld hebt en het contact in je rooster staat."
 
 #, fuzzy
-msgid "Minimize on Close"
+msgid "Minimize"
 msgstr "Gajim afsluiten"
-
-msgid "Minimize to Tray"
-msgstr ""
-
-#, fuzzy
-msgid "Minimize when closing Gajim’s window"
-msgstr "Gajim altijd sluiten"
 
 #, fuzzy
 msgid "Minutes until your status gets changed"
@@ -3340,9 +3257,6 @@ msgstr "Statusveranderingen tonen"
 
 msgid "Miscellaneous"
 msgstr "Overige"
-
-msgid "Missing argument \"contact_jid\""
-msgstr "Parameter ‘contact_jid’ ontbreekt"
 
 msgid "Missing arguments"
 msgstr "Parameters ontbreken"
@@ -3389,9 +3303,6 @@ msgstr "Naam"
 
 msgid "Name <b>default</b> is not allowed"
 msgstr "Naam <b>standaard</b> is niet toegestaan"
-
-msgid "Name of the account"
-msgstr "Naam van de account"
 
 msgid "Needs gspell to be installed"
 msgstr ""
@@ -3568,17 +3479,11 @@ msgstr "_Oké"
 msgid "Offline"
 msgstr "Offline"
 
-msgid "Offline - disconnect"
-msgstr "Offline - verbinding verbreken"
-
 msgid "One Month"
 msgstr "Een maand"
 
 msgid "One Year"
 msgstr "Een jaar"
-
-msgid "Online"
-msgstr "Online"
 
 #, fuzzy
 msgid "Online Status"
@@ -3923,9 +3828,6 @@ msgstr ""
 "Voorkeursmechanisme voor bestandsoverdracht bij verslepen en neerzetten van "
 "bestand op gespreksvenster. Kan ‘httpupload’ (standaard) of ‘jingle’ zijn"
 
-msgid "Presence description:"
-msgstr "Aanwezigheidsbeschrijving:"
-
 msgid "Presets"
 msgstr "Voorinstellingen"
 
@@ -3950,9 +3852,6 @@ msgstr "Vorig verzonden bericht"
 
 msgid "Print XML stanzas and other debug information"
 msgstr "XML-stanza’s en andere debuginformatie afdrukken"
-
-msgid "Prints a list of registered accounts"
-msgstr "Drukt een lijst van geregistreerde accounts af"
 
 msgid "Priority"
 msgstr "Prioriteit"
@@ -4010,6 +3909,10 @@ msgstr "Status: "
 #, python-format
 msgid "PyGObject Version: %s"
 msgstr "PyGObject-versie: %s"
+
+#, fuzzy
+msgid "Quit"
+msgstr "_Afsluiten"
 
 msgid "Quit Gajim"
 msgstr "Gajim afsluiten"
@@ -4186,10 +4089,6 @@ msgstr[0] "%d contact verwijderd"
 msgstr[1] "%d contacten verwijderd"
 
 #, fuzzy
-msgid "Removes contact from contact list"
-msgstr "Verwijdert contact van rooster"
-
-#, fuzzy
 msgid "Remove…"
 msgstr "Verwijderen"
 
@@ -4312,20 +4211,6 @@ msgstr "Statusbericht"
 #, fuzzy
 msgid "Retract message?"
 msgstr "statusbericht"
-
-msgid "Returns current status (the global one unless account is specified)"
-msgstr ""
-"Geeft de huidige status weer (de globale status, tenzij een account is "
-"opgegeven)"
-
-msgid ""
-"Returns current status message (the global one unless account is specified)"
-msgstr ""
-"Geeft het huidig statusbericht weer (de globale status, tenzij een account "
-"is opgegeven)"
-
-msgid "Returns number of unread messages"
-msgstr "Geeft het aantal ongelezen berichten weer"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -4601,27 +4486,6 @@ msgstr "Afzender: "
 msgid "Sending private message failed"
 msgstr "Sturen van privébericht mislukt"
 
-#, fuzzy
-msgid ""
-"Sends a chat message to someone on your contact list. Account is optional."
-msgstr "Stuur een bericht naar het contact dat zijn/haar aandacht zal trekken"
-
-msgid "Sends custom XML"
-msgstr "Verstuurt aangepaste XML"
-
-msgid "Sends file to a contact"
-msgstr "Stuurt een bestand naar een contact"
-
-#, fuzzy
-msgid ""
-"Sends new chat message to a contact in the contact list. Account is optional."
-msgstr "Stuur een bericht naar het contact dat zijn/haar aandacht zal trekken"
-
-# Kan beter vertaald worden
-#, fuzzy
-msgid "Sends new message to a group chat you've joined."
-msgstr "Stuurt een nieuw bericht in een groepsgesprek waaraan je deelneemt."
-
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
 msgstr "Contact verzonden: ‘%(jid)s’ (%(name)s)"
@@ -4676,18 +4540,6 @@ msgstr "Dienstontdekking met account %s"
 msgid "Service Gateway"
 msgstr "Server"
 
-msgid "Service not available: Gajim is not running, or remote_control is False"
-msgstr ""
-"Service niet beschikbaar: Gajim is niet open of remote_control staat uit"
-
-#, python-format
-msgid ""
-"Session bus is not available.\n"
-"Try reading %(url)s"
-msgstr ""
-"Sessiebus is niet beschikbaar.\n"
-"Lees %(url)s"
-
 msgid "Set configuration directory"
 msgstr "Configuratiemap instellen"
 
@@ -4721,9 +4573,6 @@ msgstr "Stel de huidige status in als even weg"
 
 msgid "Set the current status to online"
 msgstr "Stel de huidige status in als beschikbaar"
-
-msgid "Set the presence type and description"
-msgstr "Stel het type en beschrijving van de aanwezigheid in"
 
 #, fuzzy
 msgid "Set your activity or tune to show your friends how you are feeling"
@@ -4896,9 +4745,6 @@ msgstr ""
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "Venster verbergen"
-
-msgid "Shows a help on specific command"
-msgstr "Toont hulp voor een specifieke opdracht"
 
 #, fuzzy
 msgid "Shows a list of file transfers between you and your contacts"
@@ -5263,9 +5109,6 @@ msgstr "De dienst kan niet worden doorbladerd"
 msgid "The signing certificate authority is not known"
 msgstr ""
 
-msgid "The status has been changed."
-msgstr "De status is veranderd."
-
 #, fuzzy
 msgid "Theme"
 msgstr "Thema’s"
@@ -5450,14 +5293,6 @@ msgstr "Deelnemer"
 
 msgid "Too many arguments"
 msgstr "Te veel parameters"
-
-#, python-format
-msgid ""
-"Too many arguments. \n"
-"Type \"%(basename)s help %(command)s\" for more info"
-msgstr ""
-"Te veel parameters. \n"
-"Voer ‘%(basename)s help %(command)s’ in voor meer informatie"
 
 msgid "Topic"
 msgstr ""
@@ -5650,26 +5485,6 @@ msgstr "Sturen van privébericht mislukt"
 msgid "Uploading via HTTP File Upload…"
 msgstr "Bestand uploaden met HTTP-bestandsupload…"
 
-#, python-format
-msgid ""
-"Usage:\n"
-"  %s command [arguments]\n"
-"\n"
-"Command is one of:\n"
-msgstr ""
-"Gebruik:\n"
-"  %s opdracht [parameters]\n"
-"\n"
-"Opdracht is een van:\n"
-
-#, python-format
-msgid ""
-"Usage: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-msgstr ""
-"Gebruik: %(basename)s %(command)s %(arguments)s \n"
-"\t %(help)s"
-
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -5857,24 +5672,9 @@ msgstr "XML-console"
 msgid "XML console to see what's happening on the protocol layer"
 msgstr "XML-console om na te kijken wat er gebeurt in de protocollaag"
 
-msgid "XML to send"
-msgstr "Te versturen XML"
-
 #, fuzzy
 msgid "XMPP Address"
 msgstr "AIM-adres:"
-
-#, fuzzy
-msgid "XMPP Address of the contact"
-msgstr "JID van contact"
-
-#, fuzzy
-msgid "XMPP Address of the contact that will receive the message"
-msgstr "JID of contact die het bericht zal ontvangen"
-
-#, fuzzy
-msgid "XMPP Address of the group chat that will receive the message"
-msgstr "JID van het groepsgesprek dat het bericht zal ontvangen"
 
 #, fuzzy
 msgid "XMPP Address…"
@@ -6003,6 +5803,10 @@ msgstr "Je hebt geen toestemming om bestanden aan te maken in deze map."
 msgid "You have been banned{actor}{reason}"
 msgstr "Je bent uit het gesprek verbannen{actor}{reason}"
 
+#, fuzzy, python-format
+msgid "You have been invited to %s"
+msgstr "%(jid)s is in dit groepsgesprek uitgenodigd"
+
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
 msgstr "Je bent uit het gesprek geschopt{actor}{reason}"
@@ -6014,9 +5818,6 @@ msgstr "Je bent uit het gesprek verwijderd{actor}{reason}"
 #, python-brace-format
 msgid "You have left due to an error{reason}"
 msgstr "Je hebt het gesprek verlaten vanwege een fout{reason}"
-
-msgid "You have no active account"
-msgstr "Je hebt geen actieve account"
 
 #, fuzzy
 msgid "You have to be connected to create a group chat."
@@ -6469,31 +6270,12 @@ msgstr "lager"
 msgid "building"
 msgstr "bouwen"
 
-msgid ""
-"change status of account \"account\". If not specified, try to change status "
-"of all accounts that have \"sync with global status\" option set"
-msgstr ""
-"verander status van account ‘account’. Indien niet opgegeven, probeer de "
-"status van alle accounts te veranderen die synchroniseren met de globale "
-"status"
-
-msgid ""
-"change the priority of the given account. If not specified, change status of "
-"all accounts that have \"sync with global status\" option set"
-msgstr ""
-"verander status van gegeven account. Indien niet opgegeven, probeer de "
-"status van alle accounts te veranderen die synchroniseren met de globale "
-"status"
-
 #, fuzzy
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "chat;messaging;berichten;gesprekken;im;xmpp;bonjour;voip;"
 
 msgid "column"
 msgstr "kolom"
-
-msgid "command"
-msgstr "opdracht"
 
 msgid "country"
 msgstr "land"
@@ -6522,9 +6304,6 @@ msgstr "fout bij versturen van %(message)s ( %(error)s )"
 msgid "example.org"
 msgstr "gebruiker@voorbeeld.nl"
 
-msgid "file"
-msgstr "bestand"
-
 msgid "file transfers list"
 msgstr "bestandsoverdrachtlijst"
 
@@ -6542,17 +6321,6 @@ msgstr "Nodig een gebruiker uit in een groepsgesprek voor een reden"
 
 msgid "help"
 msgstr ""
-
-msgid "if specified, contact is taken from the contact list of this account"
-msgstr ""
-"indien opgegeven zal contact van de contactlijst van deze account gehaald "
-"worden"
-
-msgid "if specified, file will be sent using this account"
-msgstr "indien opgegeven zal het bestand verzonden worden met deze account"
-
-msgid "if specified, the message will be sent using this account"
-msgstr "indien opgegeven zal het bericht verzonden worden met deze account"
 
 msgid "is composing a message…"
 msgstr "is een bericht aan het typen…"
@@ -6575,21 +6343,6 @@ msgstr "lengte"
 msgid "macOS"
 msgstr ""
 
-msgid "message contents"
-msgstr "berichtinhoud"
-
-msgid "message subject"
-msgstr "berichtonderwerp"
-
-#, fuzzy
-msgid ""
-"one of: offline, online, chat, away, xa, dnd. If not set, use account's "
-"previous status"
-msgstr ""
-"een van: offline, online, chat (gesprek), away (even weg), xa, dnd, "
-"invisible (onzichtbaar). Gebruik vorige status van account indien niet "
-"ingesteld"
-
 #, fuzzy
 msgid "or"
 msgstr "Tor"
@@ -6602,9 +6355,6 @@ msgstr "pauzeert tijdens het typen van een bericht"
 
 msgid "postalcode"
 msgstr "postcode"
-
-msgid "priority you want to give to the account"
-msgstr "prioriteit die je aan de account wil geven"
 
 #, fuzzy, python-format
 msgid "python-cairo Version: %s"
@@ -6620,23 +6370,11 @@ msgstr "regio"
 msgid "room"
 msgstr "groepsgesprek"
 
-msgid "show help on command"
-msgstr "toont hulp bij opdracht"
-
-msgid "show only contacts of the given account"
-msgstr "geef alleen contacten weer van de gegeven account"
-
 msgid "speed"
 msgstr "snelheid"
 
-msgid "status message"
-msgstr "statusbericht"
-
 msgid "street"
 msgstr "straat"
-
-msgid "subject"
-msgstr "onderwerp"
 
 msgid "text"
 msgstr "tekst"
@@ -6693,6 +6431,36 @@ msgstr "{nick} is nu {show}{status}"
 msgid "…or drop it here"
 msgstr ""
 
+#~ msgid "%s not found"
+#~ msgstr "%s niet gevonden"
+
+#, fuzzy
+#~ msgid ""
+#~ "'%s' is not in your contact list.\n"
+#~ "Please specify account for sending the message."
+#~ msgstr ""
+#~ "‘%s’ staat niet in je rooster.\n"
+#~ "Geef een account op om het bericht mee te sturen."
+
+#~ msgid "?CLI:account"
+#~ msgstr "?CLI:account"
+
+#~ msgid "?CLI:message"
+#~ msgstr "?CLI:bericht"
+
+#~ msgid "?CLI:priority"
+#~ msgstr "?CLI:prioriteit"
+
+#~ msgid "?CLI:status"
+#~ msgstr "?CLI:status"
+
+#~ msgid ""
+#~ "Account to which the XML will be sent; if not specified, XML will be sent "
+#~ "to all accounts"
+#~ msgstr ""
+#~ "Account waarnaar de XML verzonden zal worden; indien niet opgegeven, zal "
+#~ "ze naar alle account verzonden worden"
+
 #, fuzzy
 #~ msgid ""
 #~ "Allow to hide the contact list window even if the notification area icon "
@@ -6701,8 +6469,59 @@ msgstr ""
 #~ "Laat toe het roostervenster te verbergen zelfs als het "
 #~ "systeemvakpictogram niet weergegeven wordt."
 
+#~ msgid ""
+#~ "Argument \"%(arg)s\" is not specified. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "Parameter ‘%(arg)s’ is niet gespecificeerd. \n"
+#~ "Voer ‘%(basename)s help %(command)s’ in voor meer informatie"
+
+#~ msgid "Arguments:"
+#~ msgstr "Parameters:"
+
+#~ msgid "Change status"
+#~ msgstr "Status veranderen"
+
+#~ msgid "Change status information"
+#~ msgstr "Statusinformatie wijzigen"
+
+#~ msgid "Changes the priority of account(s)"
+#~ msgstr "Verandert de prioriteit van de account(s)"
+
+#~ msgid "Changes the status of account(s)"
+#~ msgstr "Verandert de status van de account(s)"
+
+#~ msgid "Check if Gajim is running"
+#~ msgstr "Controleer of Gajim wordt uitgevoerd"
+
+#~ msgid "D-Bus is not present on this machine or python module is missing"
+#~ msgstr ""
+#~ "D-Bus bevindt zich niet op deze machine of de python module ontbreekt"
+
 #~ msgid "Disconnect from the network"
 #~ msgstr "Netwerkverbinding verbreken"
+
+#~ msgid "Do not disturb"
+#~ msgstr "Niet storen"
+
+#~ msgid "Extended away"
+#~ msgstr "Lang weg"
+
+#~ msgid "File path"
+#~ msgstr "Bestandspad"
+
+#~ msgid "Free for chat"
+#~ msgstr "Open voor gesprek"
+
+#~ msgid "Gets detailed info on a account"
+#~ msgstr "Haalt gedetailleerde informatie op over een contact"
+
+#~ msgid "Gets detailed info on a contact"
+#~ msgstr "Haalt gedetailleerde informatie op over een contact"
+
+#~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
+#~ msgstr ""
+#~ "Indien aangevinkt zal Gajim bestuurd kunnen worden met gajim-remote."
 
 #, fuzzy
 #~ msgid ""
@@ -6712,8 +6531,102 @@ msgstr ""
 #~ "Indien ingeschakeld verbergt Gajim het roostervenster wanneer dit wordt "
 #~ "gesloten, in plaats van te minimaliseren naar het Dock."
 
+#, fuzzy
+#~ msgid "If enabled, Gajim will execute XEP-0146 Commands."
+#~ msgstr "Indien ingeschakeld zal Gajim XEP-0146-opdrachten uitvoeren."
+
+#~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
+#~ msgstr ""
+#~ "Het lijkt erop dat Gajim niet wordt uitgevoerd, dus kan je gajim-remote "
+#~ "niet gebruiken."
+
+#, fuzzy
+#~ msgid "Lists all contacts in the contact list, one for each line"
+#~ msgstr ""
+#~ "Lijst alle contacten in het rooster op, elk contact komt op een aparte "
+#~ "regel"
+
 #~ msgid "Machine is going to sleep"
 #~ msgstr "Machine gaat slapen"
+
+#~ msgid "Missing argument \"contact_jid\""
+#~ msgstr "Parameter ‘contact_jid’ ontbreekt"
+
+#~ msgid "Name of the account"
+#~ msgstr "Naam van de account"
+
+#~ msgid "Offline - disconnect"
+#~ msgstr "Offline - verbinding verbreken"
+
+#~ msgid "Online"
+#~ msgstr "Online"
+
+#~ msgid "Presence description:"
+#~ msgstr "Aanwezigheidsbeschrijving:"
+
+#~ msgid "Prints a list of registered accounts"
+#~ msgstr "Drukt een lijst van geregistreerde accounts af"
+
+#, fuzzy
+#~ msgid "Removes contact from contact list"
+#~ msgstr "Verwijdert contact van rooster"
+
+#~ msgid "Returns current status (the global one unless account is specified)"
+#~ msgstr ""
+#~ "Geeft de huidige status weer (de globale status, tenzij een account is "
+#~ "opgegeven)"
+
+#~ msgid ""
+#~ "Returns current status message (the global one unless account is "
+#~ "specified)"
+#~ msgstr ""
+#~ "Geeft het huidig statusbericht weer (de globale status, tenzij een "
+#~ "account is opgegeven)"
+
+#~ msgid "Returns number of unread messages"
+#~ msgstr "Geeft het aantal ongelezen berichten weer"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends a chat message to someone on your contact list. Account is optional."
+#~ msgstr ""
+#~ "Stuur een bericht naar het contact dat zijn/haar aandacht zal trekken"
+
+#~ msgid "Sends custom XML"
+#~ msgstr "Verstuurt aangepaste XML"
+
+#~ msgid "Sends file to a contact"
+#~ msgstr "Stuurt een bestand naar een contact"
+
+#, fuzzy
+#~ msgid ""
+#~ "Sends new chat message to a contact in the contact list. Account is "
+#~ "optional."
+#~ msgstr ""
+#~ "Stuur een bericht naar het contact dat zijn/haar aandacht zal trekken"
+
+# Kan beter vertaald worden
+#, fuzzy
+#~ msgid "Sends new message to a group chat you've joined."
+#~ msgstr "Stuurt een nieuw bericht in een groepsgesprek waaraan je deelneemt."
+
+#~ msgid ""
+#~ "Service not available: Gajim is not running, or remote_control is False"
+#~ msgstr ""
+#~ "Service niet beschikbaar: Gajim is niet open of remote_control staat uit"
+
+#~ msgid ""
+#~ "Session bus is not available.\n"
+#~ "Try reading %(url)s"
+#~ msgstr ""
+#~ "Sessiebus is niet beschikbaar.\n"
+#~ "Lees %(url)s"
+
+#~ msgid "Set the presence type and description"
+#~ msgstr "Stel het type en beschrijving van de aanwezigheid in"
+
+#~ msgid "Shows a help on specific command"
+#~ msgstr "Toont hulp voor een specifieke opdracht"
 
 #, fuzzy
 #~ msgid "Sign Out"
@@ -6723,6 +6636,115 @@ msgstr ""
 #~ msgid "Status Change"
 #~ msgstr "Statusveranderingen tonen"
 
+#~ msgid "The status has been changed."
+#~ msgstr "De status is veranderd."
+
+#~ msgid ""
+#~ "Too many arguments. \n"
+#~ "Type \"%(basename)s help %(command)s\" for more info"
+#~ msgstr ""
+#~ "Te veel parameters. \n"
+#~ "Voer ‘%(basename)s help %(command)s’ in voor meer informatie"
+
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  %s command [arguments]\n"
+#~ "\n"
+#~ "Command is one of:\n"
+#~ msgstr ""
+#~ "Gebruik:\n"
+#~ "  %s opdracht [parameters]\n"
+#~ "\n"
+#~ "Opdracht is een van:\n"
+
+#~ msgid ""
+#~ "Usage: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+#~ msgstr ""
+#~ "Gebruik: %(basename)s %(command)s %(arguments)s \n"
+#~ "\t %(help)s"
+
+#~ msgid "XML to send"
+#~ msgstr "Te versturen XML"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact"
+#~ msgstr "JID van contact"
+
+#, fuzzy
+#~ msgid "XMPP Address of the contact that will receive the message"
+#~ msgstr "JID of contact die het bericht zal ontvangen"
+
+#, fuzzy
+#~ msgid "XMPP Address of the group chat that will receive the message"
+#~ msgstr "JID van het groepsgesprek dat het bericht zal ontvangen"
+
+#~ msgid "You have no active account"
+#~ msgstr "Je hebt geen actieve account"
+
 #, fuzzy
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "Gajim altijd sluiten"
+
+#~ msgid ""
+#~ "change status of account \"account\". If not specified, try to change "
+#~ "status of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "verander status van account ‘account’. Indien niet opgegeven, probeer de "
+#~ "status van alle accounts te veranderen die synchroniseren met de globale "
+#~ "status"
+
+#~ msgid ""
+#~ "change the priority of the given account. If not specified, change status "
+#~ "of all accounts that have \"sync with global status\" option set"
+#~ msgstr ""
+#~ "verander status van gegeven account. Indien niet opgegeven, probeer de "
+#~ "status van alle accounts te veranderen die synchroniseren met de globale "
+#~ "status"
+
+#~ msgid "command"
+#~ msgstr "opdracht"
+
+#~ msgid "file"
+#~ msgstr "bestand"
+
+#~ msgid "if specified, contact is taken from the contact list of this account"
+#~ msgstr ""
+#~ "indien opgegeven zal contact van de contactlijst van deze account gehaald "
+#~ "worden"
+
+#~ msgid "if specified, file will be sent using this account"
+#~ msgstr "indien opgegeven zal het bestand verzonden worden met deze account"
+
+#~ msgid "if specified, the message will be sent using this account"
+#~ msgstr "indien opgegeven zal het bericht verzonden worden met deze account"
+
+#~ msgid "message contents"
+#~ msgstr "berichtinhoud"
+
+#~ msgid "message subject"
+#~ msgstr "berichtonderwerp"
+
+#, fuzzy
+#~ msgid ""
+#~ "one of: offline, online, chat, away, xa, dnd. If not set, use account's "
+#~ "previous status"
+#~ msgstr ""
+#~ "een van: offline, online, chat (gesprek), away (even weg), xa, dnd, "
+#~ "invisible (onzichtbaar). Gebruik vorige status van account indien niet "
+#~ "ingesteld"
+
+#~ msgid "priority you want to give to the account"
+#~ msgstr "prioriteit die je aan de account wil geven"
+
+#~ msgid "show help on command"
+#~ msgstr "toont hulp bij opdracht"
+
+#~ msgid "show only contacts of the given account"
+#~ msgstr "geef alleen contacten weer van de gegeven account"
+
+#~ msgid "status message"
+#~ msgstr "statusbericht"
+
+#~ msgid "subject"
+#~ msgstr "onderwerp"
