@@ -16,6 +16,7 @@
         "scripts/*",
         "win/*",
         "gajim/gajim.py",
+        "gajim/gajim_remote.py",
         "gajim/common/dbus/*",
         "gajim/common/application.py",
         "gajim/common/call_manager.py",

@@ -45,7 +45,6 @@ Depends:
 Recommends:
     aspell-en | aspell-dictionary,
     ca-certificates,
-    dbus,
     fonts-noto-color-emoji,
     gir1.2-gsound-1.0,
     gir1.2-gspell-1,
@@ -59,7 +58,6 @@ Recommends:
     gstreamer1.0-gtk3,
     notification-daemon,
     pulseaudio-utils | alsa-utils | sox | oss4-base,
-    python3-dbus (>=0.81),
     python3-sentry-sdk,
 Suggests:
     libxss1,
