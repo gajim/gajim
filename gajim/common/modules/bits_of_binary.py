@@ -86,6 +86,7 @@ class BitsOfBinary(BaseModule):
                     args = func[1]
                     pos = func[2]
                     bob_data = data.getData()
+
                     def recurs(node, cid, data):
                         if node.getData() == 'cid:' + cid:
                             node.setData(data)

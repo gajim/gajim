@@ -251,6 +251,7 @@ class HTTPUpload(BaseModule):
         if app.cert_store.verify(tls_certificate, tls_errors):
             return
 
+        phrase = ''
         for error in tls_errors:
             phrase = get_tls_error_phrase(error)
             self._log.warning('TLS verification failed: %s', phrase)
@@ -272,7 +273,6 @@ class HTTPUpload(BaseModule):
         if message.props.status_code in (Soup.Status.OK, Soup.Status.CREATED):
             self._log.info('Upload completed successfully')
             transfer.set_finished()
-
 
         else:
             phrase = Soup.Status.get_phrase(message.props.status_code)
@@ -416,7 +416,7 @@ class HTTPFileTransfer(FileTransfer):
     def get_chunk(self) -> Optional[bytes]:
         if self._stream is None:
             if self._encryption is None:
-                self._stream = open(self._path, 'rb')  # pylint: disable=consider-using-with
+                self._stream = open(self._path, 'rb')  # pylint: disable=consider-using-with  # noqa: E501
             else:
                 self._stream = io.BytesIO(self._data)
 

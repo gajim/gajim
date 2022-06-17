@@ -31,6 +31,7 @@ from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import as_task
 
+
 class UserAvatar(BaseModule):
 
     _nbxmpp_extends = 'UserAvatar'

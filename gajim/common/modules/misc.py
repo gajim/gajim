@@ -25,6 +25,7 @@ from gajim.common.i18n import get_rfc5646_lang
 
 log = logging.getLogger('gajim.c.m.misc')
 
+
 # XEP-0066: Out of Band Data
 def parse_oob(properties: MessageProperties,
               additional_data: AdditionalDataDict

@@ -16,7 +16,7 @@
 Handles the jingle signalling protocol
 """
 
-#TODO:
+# TODO:
 # * things in XEP 0176, including:
 #      - http://xmpp.org/extensions/xep-0176.html#protocol-restarts
 #      - http://xmpp.org/extensions/xep-0176.html#fallback
@@ -94,7 +94,7 @@ class Jingle(BaseModule):
         Remove a jingle session from a jingle stanza dispatcher
         """
         if sid in self._sessions:
-            #FIXME: Move this elsewhere?
+            # FIXME: Move this elsewhere?
             for content in list(self._sessions[sid].contents.values()):
                 content.destroy()
             self._sessions[sid].callbacks = []
@@ -159,7 +159,7 @@ class Jingle(BaseModule):
 
         # do we need to create a new jingle object
         if sid not in self._sessions:
-            #TODO: tie-breaking and other things...
+            # TODO: tie-breaking and other things...
             newjingle = JingleSession(self._con, weinitiate=False, jid=jid,
                                       iq_id=id_, sid=sid)
             self._sessions[sid] = newjingle
@@ -313,8 +313,8 @@ class Jingle(BaseModule):
                       _account: Optional[str] = None
                       ) -> Optional[dict[str, Any]]:
         if hash_:
-            for file in self.files: # DEBUG
-                #if f['hash'] == '1294809248109223':
+            for file in self.files:  # DEBUG
+                # if f['hash'] == '1294809248109223':
                 if file['hash'] == hash_ and file['peerjid'] == peerjid:
                     return file
         elif name:
