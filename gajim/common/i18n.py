@@ -194,12 +194,13 @@ for dir_ in iter_locale_dirs():
         _translation = gettext.translation(DOMAIN, dir_)
         _ = _translation.gettext
         if hasattr(locale, 'bindtextdomain'):
-            locale.bindtextdomain(DOMAIN, dir_)  # type: ignore
+            locale.bindtextdomain(DOMAIN, dir_)
     except OSError:
         continue
     else:
         break
+
 else:
-    print('No translations found', file=sys.stderr)
-    print('Dirs searched: %s' % get_locale_dirs(), file=sys.stderr)
     _ = _translation.gettext
+    print('No translations found for', LANG, file=sys.stderr)
+    print('Dirs searched: %s' % get_locale_dirs(), file=sys.stderr)
