@@ -422,11 +422,13 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                           _event: Gdk.Event
                           ) -> int:
 
-        if app.settings.get('minimize_on_window_delete'):
-            if app.settings.get('minimize_to_tray'):
-                self.hide()
-            else:
-                self.minimize()
+        action = app.settings.get('action_on_close')
+        if action == 'hide':
+            self.hide()
+            return Gdk.EVENT_STOP
+
+        if action == 'minimize':
+            self.minimize()
             return Gdk.EVENT_STOP
 
         if not app.settings.get('confirm_on_window_delete'):

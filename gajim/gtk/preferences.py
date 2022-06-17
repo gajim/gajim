@@ -191,6 +191,12 @@ class WindowBehaviour(PreferenceBox):
             'last_state': _('Restore last state'),
         }
 
+        action_on_close_items = {
+            'hide': _('Hide'),
+            'minimize': _('Minimize'),
+            'quit': _('Quit'),
+        }
+
         settings = [
             Setting(SettingKind.POPOVER,
                     _('Show on Startup'),
@@ -199,11 +205,12 @@ class WindowBehaviour(PreferenceBox):
                     props={'entries': main_window_on_startup_items},
                     desc=_('Show window when starting Gajim')),
 
-            Setting(SettingKind.SWITCH,
-                    _('Minimize on Close'),
+            Setting(SettingKind.POPOVER,
+                    _('Action on Close'),
                     SettingType.CONFIG,
-                    'minimize_on_window_delete',
-                    desc=_('Minimize when closing Gajim’s window')),
+                    'action_on_close',
+                    props={'entries': action_on_close_items},
+                    desc=_('Action when closing Gajim’s window')),
 
             Setting(SettingKind.SWITCH,
                     _('Minimize to Tray'),

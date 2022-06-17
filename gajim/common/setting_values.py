@@ -66,7 +66,6 @@ BoolSettings = Literal[
     'ignore_incoming_attention',
     'is_window_visible',
     'log_contact_status_changes',
-    'minimize_on_window_delete',
     'minimize_to_tray',
     'muc_prefer_direct_msg',
     'notification_preview_message',
@@ -138,6 +137,7 @@ IntSettings = Literal[
 ]
 
 StringSettings = Literal[
+    'action_on_close',
     'audio_input_device',
     'audio_output_device',
     'autoaway_message',
@@ -234,7 +234,7 @@ APP_SETTINGS = {
     'mainwin_width': 1000,
     'mainwin_x_position': 0,
     'mainwin_y_position': 0,
-    'minimize_on_window_delete': True,
+    'action_on_close': 'hide',
     'minimize_to_tray': False,
     'muc_highlight_words': '',
     'muc_prefer_direct_msg': True,
