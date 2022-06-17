@@ -139,10 +139,12 @@ class SignedIn(ApplicationEvent):
     account: str
     conn: 'Client'
 
+
 @dataclass
 class LocationChanged(ApplicationEvent):
     name: str = field(init=False, default='location-changed')
     info: Optional[LocationData]
+
 
 @dataclass
 class MusicTrackChanged(ApplicationEvent):
@@ -173,20 +175,6 @@ class MessageNotSent(ApplicationEvent):
     message: str
     error: str
     time: float
-
-
-@dataclass
-class AdHocCommandError(ApplicationEvent):
-    name: str = field(init=False, default='adhoc-command-error')
-    conn: 'Client'
-    error: str
-
-
-@dataclass
-class AdHocCommandActionResponse(ApplicationEvent):
-    name: str = field(init=False, default='adhoc-command-action-response')
-    conn: 'Client'
-    command: Any
 
 
 @dataclass
