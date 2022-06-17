@@ -407,5 +407,5 @@ class GajimRemote(Server):
         return str(app.window.get_total_unread_count())
 
     @staticmethod
-    def Introspect() -> str:
+    def Introspect() -> str:  # pylint: disable=invalid-name
         return INTERFACE_DESC
