@@ -244,18 +244,20 @@ class GajimRemote(Server):
                               event_name,
                               GLib.Variant.new_tuple(get_dbus_struct(data)))
 
-    def get_status(self, account: str) -> str:
+    @staticmethod
+    def get_status(account: str) -> str:
         if not account:
             return helpers.get_global_show()
         return app.get_client(account).status
 
-    def get_status_message(self, account: str) -> str:
+    @staticmethod
+    def get_status_message(account: str) -> str:
         if not account:
             return str(helpers.get_global_status_message())
         return app.get_client(account).status_message
 
-    def _send_message(self,
-                      jid: str,
+    @staticmethod
+    def _send_message(jid: str,
                       message: str,
                       account: str,
                       type_: str) -> bool:
@@ -295,7 +297,8 @@ class GajimRemote(Server):
 
         return self._send_message(jid, message, account, 'groupchat')
 
-    def change_status(self, status: str, message: str, account: str) -> bool:
+    @staticmethod
+    def change_status(status: str, message: str, account: str) -> bool:
         """
         change_status(status, message, account). Account is optional - if not
         specified status is changed for all accounts
@@ -325,7 +328,8 @@ class GajimRemote(Server):
                               message)  # pyright: ignore
         return False
 
-    def list_accounts(self) -> list[str]:
+    @staticmethod
+    def list_accounts() -> list[str]:
         """
         List register accounts
         """
@@ -336,7 +340,8 @@ class GajimRemote(Server):
                 result_array.append(account)
         return result_array
 
-    def account_info(self, account: str) -> dict[str, str]:
+    @staticmethod
+    def account_info(account: str) -> dict[str, str]:
         """
         Show info on account: resource, jid, nick, prio, message
         """
@@ -371,8 +376,8 @@ class GajimRemote(Server):
                         result.append(item)
         return result
 
-    def _contacts_as_dbus_structure(self,
-                                    contact: BareContact
+    @staticmethod
+    def _contacts_as_dbus_structure(contact: BareContact
                                     ) -> dict[str, GLib.Variant]:
         """
         Get info from list of Contact objects and create dbus dict
@@ -397,8 +402,10 @@ class GajimRemote(Server):
         contact_dict['groups'] = groups.end()
         return contact_dict
 
-    def get_unread_msgs_number(self) -> str:
+    @staticmethod
+    def get_unread_msgs_number() -> str:
         return str(app.window.get_total_unread_count())
 
-    def Introspect(self) -> str:
+    @staticmethod
+    def Introspect() -> str:
         return INTERFACE_DESC
