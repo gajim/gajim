@@ -1000,10 +1000,12 @@ class Miscellaneous(PreferenceBox):
                                text=_('_Purge'),
                                callback=_purge)]).show()
 
+
 class Advanced(PreferenceBox):
     def __init__(self, pref_window: Preferences) -> None:
 
         settings = [
+
             Setting(SettingKind.SWITCH,
                     _('Debug Logging'),
                     SettingType.VALUE,
@@ -1011,6 +1013,14 @@ class Advanced(PreferenceBox):
                     props={'button-icon-name': 'folder-symbolic',
                            'button-callback': self._on_open_debug_logs},
                     callback=self._on_debug_logging),
+
+            Setting(SettingKind.SWITCH,
+                    _('D-Bus Interface'),
+                    SettingType.CONFIG,
+                    'remote_control',
+                    desc=_('Allow Gajim to broadcast useful information via '
+                           'D-Bus. It also allows other applications to '
+                           'control Gajim remotely.')),
         ]
 
         PreferenceBox.__init__(self, settings)
