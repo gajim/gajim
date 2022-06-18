@@ -1,3 +1,63 @@
+Gajim 1.4.4 (18 Jun 2022)
+
+  New
+  
+  * Add support for inputing emoji short codes
+  * Add freedesktop colorscheme preference support
+  * Add new CLI command --show
+  * Add new CLI command --cprofile
+  * Preferences: Add `Action on Close Button` setting
+  * Preferences: Add `Show in Taskbar` setting
+  * Preferences: Add D-Bus Interface setting
+  * Rewrite gajim-remote
+  * #10040 Logind: Listen to system shutdown and quit Gajim gracefully
+  
+  Improvements
+  
+  * CreateGroupchatWindow: Enable emoji completion for description
+  * CreateGroupchatWindow: Produce valid addresses from name
+  * Gateways: Use avatar if published
+  * History: Add Keep History 'Until Gajim is Closed' option
+  * MUC: Base invitation type on MUC type and affiliation
+  * Rework DBus Remote Interface
+  * StatusMessageSelector: Enable emoji completion
+  * #10908 Group chats: Ask for confirmation before leaving
+  * #10958 #10949 #10943 Preview: Improve layout and display errors
+  
+  Performance
+  
+  * #10828 Limit message size for styling
+
+  Change
+
+  * Remove remote AdHocCommands feature
+  * #10986 Remove ask for status settings
+  
+  Bug Fixes
+  
+  * Chat banner: Show phone image if last message came from a phone
+  * Flatpak: Determine notification backend caps with dbus
+  * Groupchat: Prevent automatic roster revealer toggling on join
+  * Make plugins_repository_enabled available via ACE
+  * MucJoinLeft: Align timestamp correctly
+  * NotificationManager: Make displaying an invitation more robust
+  * StatusIcon: Reliably raise/hide window
+  * #10900 Groupchat: don't steal active msg textbox focus
+  * #10913 Groupchat: Load GroupChatState widget early
+  * #10934 DBus: Unify presence signals
+  * #10938 JingleAudio: Check if webrtcdsp is available
+  * #10944 Groupchat: Show correct icon when toggling roster revealer
+  * #10950 WorkspaceDialog: Show correct settings for workspace if there is only one
+  * #10953 Status messages: Check for correct setting
+  * #10955 MessageInputTextView: Don’t remove tags for spell checking
+  * #10961 Workspaces: Fix image scaling
+  * #10965 AvatarSelector: Add fail-safes for loading images
+  * #10977 Limit max quote recursion
+  * #10978 Make drag & drop more reliable
+  * #10984 Preview: Don’t fail on invalid IPV6 urls
+  * #10985 Remote: Don’t fail on list_contacts
+  * #10989 Preview: Catch PIL errors while generating preview
+
 Gajim 1.4.3 (01 Jun 2022)
 
   Improvements
