@@ -312,7 +312,7 @@ def round_corners(surface: cairo.ImageSurface) -> cairo.ImageSurface:
 
     context.new_sub_path()
     context.arc(width - radius, radius, radius, -90 * degrees, 0 * degrees)
-    context.arc(width - radius, height - radius, radius, 0 * degrees, 90 * degrees)
+    context.arc(width - radius, height - radius, radius, 0 * degrees, 90 * degrees)  # noqa: E501
     context.arc(radius, height - radius, radius, 90 * degrees, 180 * degrees)
     context.arc(radius, radius, radius, 180 * degrees, 270 * degrees)
     context.close_path()

@@ -48,7 +48,7 @@ class Ping(BaseModule):
     def send_ping(self,
                   contact: types.ContactT
                   ) -> Generator[CommonResult, None, None]:
-        _task = yield
+        _task = yield  # noqa: F841
 
         if not app.account_is_available(self._account):
             return

@@ -170,7 +170,7 @@ class ChatActionProcessor(Gtk.Popover):
             menu_item.set_label(f'/{command}')
             menu_item.set_attribute_value('action-data', action_data)
             self._menu.append_item(menu_item)
-            num_entries +=1
+            num_entries += 1
 
         if self._menu.get_n_items() > 0:
             self._show_menu(start)
@@ -290,7 +290,7 @@ class ChatActionProcessor(Gtk.Popover):
                 break
 
             if items.index(item) == 0:
-                new_item = items[num_items -1]
+                new_item = items[num_items - 1]
                 break
             new_item = items[items.index(item) - 1]
             break

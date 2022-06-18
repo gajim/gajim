@@ -83,7 +83,7 @@ class UserAvatar(BaseModule):
                              contact: types.ChatContactT,
                              sha: str
                              ) -> Generator[Optional[AvatarData], None, None]:
-        _task = yield
+        _task = yield  # noqa: F841
 
         avatar = yield self._nbxmpp('UserAvatar').request_avatar_data(
             sha, jid=contact.jid)

@@ -90,8 +90,8 @@ from gajim.command_system.implementation.middleware import CommandTools
 # registers the contained CommandContainers with the command system, thereby
 # populating the list of available commands.
 # pylint: disable=unused-import
-from gajim.command_system.implementation import standard
-from gajim.command_system.implementation import execute
+from gajim.command_system.implementation import standard  # noqa: F401
+from gajim.command_system.implementation import execute  # noqa: F401
 # pylint: enable=unused-import
 
 if app.is_installed('GSPELL'):
@@ -634,7 +634,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
     def on_language_changed(self, checker: Gspell.Checker, _param: Any) -> None:
         gspell_lang = checker.get_language()
         if gspell_lang is not None:
-            self.contact.settings.set('speller_language', gspell_lang.get_code())
+            self.contact.settings.set('speller_language',
+                                      gspell_lang.get_code())
 
     def shutdown(self) -> None:
         # remove_gui_extension_point() is called on shutdown, but also when
@@ -980,7 +981,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                        _widget: Gtk.Widget,
                        _context: Gdk.DragContext,
                        _time: int
-                        ) -> None:
+                       ) -> None:
         self.xml.drop_area.set_no_show_all(True)
         self.xml.drop_area.hide()
 

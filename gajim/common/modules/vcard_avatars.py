@@ -65,7 +65,7 @@ class VCardAvatars(BaseModule):
                        expected_sha: str,
                        type_: str
                        ) -> Generator[VCard, None, None]:
-        _task = yield
+        _task = yield  # noqa: F841
 
         vcard = yield self._con.get_module('VCardTemp').request_vcard(jid=jid)
 

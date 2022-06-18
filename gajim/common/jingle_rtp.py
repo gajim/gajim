@@ -94,9 +94,11 @@ class JingleRTPContent(JingleContent):
         self.callbacks['session-terminate-sent'] += [self.__stop]
 
     def setup_stream(self,
-                     on_src_pad_added: Callable[
-                         [Farstream.Stream, Gst.Pad, Farstream.Codec], None]
-                         ) -> None:
+                     on_src_pad_added: Callable[[Farstream.Stream,
+                                                 Gst.Pad,
+                                                 Farstream.Codec], None]
+                     ) -> None:
+
         # pipeline and bus
         self.pipeline = Gst.Pipeline()
         bus = self.pipeline.get_bus()
@@ -129,8 +131,9 @@ class JingleRTPContent(JingleContent):
                 else:
                     params['stun-ip'] = ip
 
-        self.p2pstream = self.p2psession.new_stream(participant,
-                                                    Farstream.StreamDirection.BOTH)
+        self.p2pstream = self.p2psession.new_stream(
+            participant,
+            Farstream.StreamDirection.BOTH)
         self.p2pstream.connect('src-pad-added', on_src_pad_added)
         self.p2pstream.set_transmitter_ht('nice', params)
 
@@ -231,8 +234,9 @@ class JingleRTPContent(JingleContent):
                         self.p2pstream.add_remote_candidates(
                             self.transport.remote_candidates)
                         self.transport.remote_candidates = []
-                        self.p2pstream.set_property('direction',
-                                                    Farstream.StreamDirection.BOTH)
+                        self.p2pstream.set_property(
+                            'direction',
+                            Farstream.StreamDirection.BOTH)
 
             elif name == 'farstream-local-candidates-prepared':
                 self.candidates_ready = True
@@ -296,9 +300,11 @@ class JingleRTPContent(JingleContent):
                     self.p2pstream.add_remote_candidates(
                         self.transport.remote_candidates)
                     self.transport.remote_candidates = []
-                    # TODO: Farstream.StreamDirection.BOTH only if senders='both'
-#                    self.p2pstream.set_property('direction',
-#                        Farstream.StreamDirection.BOTH)
+                    # TODO: Farstream.StreamDirection.BOTH only if
+                    # senders='both'
+                    # self.p2pstream.set_property(
+                    #    'direction',
+                    #    Farstream.StreamDirection.BOTH)
         JingleContent.on_negotiated(self)
 
     def __on_remote_codecs(self,
@@ -413,7 +419,7 @@ class JingleAudio(JingleRTPContent):
                                 Farstream.MediaType.AUDIO, 8000),
             Farstream.Codec.new(Farstream.CODEC_ID_ANY, 'AMR',
                                 Farstream.MediaType.AUDIO, 8000),
-            ]
+        ]
 
         # disable all other codecs
         disable_codecs: list[Farstream.Codec] = []
@@ -495,8 +501,8 @@ class JingleVideo(JingleRTPContent):
         # list of codecs that are explicitly allowed
         # for now only VP8/H264 (available in gst-plugins-good)
         allow_codecs: list[Farstream.Codec] = [
-            #Farstream.Codec.new(Farstream.CODEC_ID_ANY, 'VP9',
-            #                    Farstream.MediaType.VIDEO, 90000),
+            # Farstream.Codec.new(Farstream.CODEC_ID_ANY, 'VP9',
+            #                     Farstream.MediaType.VIDEO, 90000),
             Farstream.Codec.new(Farstream.CODEC_ID_ANY, 'VP8',
                                 Farstream.MediaType.VIDEO, 90000),
             Farstream.Codec.new(Farstream.CODEC_ID_ANY, 'H264',

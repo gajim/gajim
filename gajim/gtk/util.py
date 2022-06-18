@@ -187,8 +187,8 @@ def load_icon_surface(
         icon_name: str,
         size: int = 16,
         scale: Optional[int] = None,
-        flags: Gtk.IconLookupFlags = Gtk.IconLookupFlags.FORCE_SIZE,
-        ) -> Optional[cairo.Surface]:
+        flags: Gtk.IconLookupFlags = Gtk.IconLookupFlags.FORCE_SIZE
+) -> Optional[cairo.Surface]:
 
     icon_info = load_icon_info(icon_name, size, scale, flags)
     if icon_info is None:
@@ -199,7 +199,7 @@ def load_icon_surface(
 def load_icon_pixbuf(icon_name: str,
                      size: int = 16,
                      scale: Optional[int] = None,
-                     flags: Gtk.IconLookupFlags = Gtk.IconLookupFlags.FORCE_SIZE,
+                     flags: Gtk.IconLookupFlags = Gtk.IconLookupFlags.FORCE_SIZE
                      ) -> Optional[GdkPixbuf.Pixbuf]:
 
     icon_info = load_icon_info(icon_name, size, scale, flags)

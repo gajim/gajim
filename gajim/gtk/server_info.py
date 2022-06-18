@@ -301,7 +301,8 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
                     self._client.get_module('HTTPUpload').available,
                     http_upload_info),
             Feature('XEP-0398: Avatar Conversion',
-                    self._client.get_module('VCardAvatars').avatar_conversion_available),
+                    self._client.get_module(
+                        'VCardAvatars').avatar_conversion_available),
             Feature('XEP-0411: Bookmarks Conversion',
                     self._client.get_module('Bookmarks').conversion),
             Feature('XEP-0402: Bookmarks Compat',

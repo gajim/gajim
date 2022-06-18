@@ -351,8 +351,8 @@ class AdrBox(Gtk.Box):
     __gsignals__ = {
         'field-changed': (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
-            None, # return value
-            (str, str) # arguments
+            None,
+            (str, str)
         )}
 
     def __init__(self, prop):

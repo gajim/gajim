@@ -152,16 +152,22 @@ class FileTransferJingleRow(BaseRow):
         if self._file_props is None:
             return
 
-        # pylint: disable=line-too-long
-        app.ged.register_event_handler('file-completed', ged.GUI1, self.process_event)
-        app.ged.register_event_handler('file-hash-error', ged.GUI1, self.process_event)
-        app.ged.register_event_handler('file-send-error', ged.GUI1, self.process_event)
-        app.ged.register_event_handler('file-request-error', ged.GUI1, self.process_event)
-        app.ged.register_event_handler('file-progress', ged.GUI1, self.process_event)
-        app.ged.register_event_handler('file-error', ged.GUI1, self.process_event)
-        app.ged.register_event_handler('jingle-error-received', ged.GUI1, self.process_event)
-        app.ged.register_event_handler('jingle-ft-cancelled-received', ged.GUI1, self.process_event)
-        # pylint: enable=line-too-long
+        app.ged.register_event_handler(
+            'file-completed', ged.GUI1, self.process_event)
+        app.ged.register_event_handler(
+            'file-hash-error', ged.GUI1, self.process_event)
+        app.ged.register_event_handler(
+            'file-send-error', ged.GUI1, self.process_event)
+        app.ged.register_event_handler(
+            'file-request-error', ged.GUI1, self.process_event)
+        app.ged.register_event_handler(
+            'file-progress', ged.GUI1, self.process_event)
+        app.ged.register_event_handler(
+            'file-error', ged.GUI1, self.process_event)
+        app.ged.register_event_handler(
+            'jingle-error-received', ged.GUI1, self.process_event)
+        app.ged.register_event_handler(
+            'jingle-ft-cancelled-received', ged.GUI1, self.process_event)
 
     def _reconstruct_transfer(self) -> None:
         self._show_file_infos()

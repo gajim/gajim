@@ -222,8 +222,6 @@ def _cleanup_debug_logs() -> None:
             file.unlink()
 
 
-
-# tests
 if __name__ == '__main__':
     init()
 

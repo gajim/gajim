@@ -83,7 +83,8 @@ class AccountPage(Gtk.Box, EventHelper):
         # pylint: disable=line-too-long
         self.register_events([
             ('subscribe-presence-received', ged.GUI1, self._subscribe_received),
-            ('unsubscribed-presence-received', ged.GUI1, self._unsubscribed_received),
+            ('unsubscribed-presence-received',
+             ged.GUI1, self._unsubscribed_received),
             ('muc-invitation', ged.GUI1, self._muc_invitation_received),
             ('muc-decline', ged.GUI1, self._muc_invitation_declined),
         ])

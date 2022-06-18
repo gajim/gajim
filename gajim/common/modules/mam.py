@@ -415,7 +415,7 @@ class MAM(BaseModule):
 
     @as_task
     def request_archive_on_signin(self):
-        _task = yield
+        _task = yield  # noqa: F841
 
         own_jid = self._con.get_own_jid().bare
 
@@ -456,10 +456,8 @@ class MAM(BaseModule):
                 oldest_mam_timestamp=start_date.timestamp())
 
     @as_task
-    def request_archive_on_muc_join(self,
-                                    jid: JID
-                                    ):
-        _task = yield
+    def request_archive_on_muc_join(self, jid: JID):
+        _task = yield  # noqa: F841
 
         threshold = app.settings.get_group_chat_setting(self._account,
                                                         jid,
@@ -499,7 +497,7 @@ class MAM(BaseModule):
                        mam_id: Optional[str],
                        start_date: Optional[datetime]
                        ):
-        _task = yield
+        _task = yield  # noqa: F841
 
         if jid in self._catch_up_finished:
             self._catch_up_finished.remove(jid)

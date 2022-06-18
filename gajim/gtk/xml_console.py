@@ -198,8 +198,8 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         elif text == 'Disco Info':
             input_text = (
                 '<iq to="" type="get" xmlns="jabber:client">\n'
-                '<query xmlns="http://jabber.org/protocol/disco#info"></query>\n'
-                '</iq>')
+                '<query xmlns="http://jabber.org/protocol/disco#info">'
+                '</query>\n</iq>')
         # pylint: enable=line-too-long
 
         if input_text is not None:
@@ -360,11 +360,12 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
                     callback=self._on_setting, data='outgoing'),
         ]
 
-        self.filter_dialog = SettingsDialog(self,
-                                            _('Filter'),
-                                            Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                                            settings,
-                                            self.selected_account or 'AllAccounts')
+        self.filter_dialog = SettingsDialog(
+            self,
+            _('Filter'),
+            Gtk.DialogFlags.DESTROY_WITH_PARENT,
+            settings,
+            self.selected_account or 'AllAccounts')
         self.filter_dialog.connect('destroy', self._on_filter_destroyed)
 
     def _on_filter_destroyed(self, _widget: Gtk.Widget) -> None:

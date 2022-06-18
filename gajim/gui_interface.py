@@ -428,7 +428,7 @@ class Interface:
                        password: str,
                        proxy_name: str,
                        custom_host: str,
-                       anonymous:bool = False
+                       anonymous: bool = False
                        ) -> None:
 
         account_label = f'{username}@{domain}'

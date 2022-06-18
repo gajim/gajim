@@ -34,8 +34,8 @@ from nbxmpp.structs import BookmarkData
 if TYPE_CHECKING:
     # pylint: disable=unused-import
     from gajim.common.client import Client
-    from nbxmpp.client import Client as xmppClient
-    from gajim.common.modules.contacts import CommonContact
+    from nbxmpp.client import Client as xmppClient  # noqa: F401
+    from gajim.common.modules.contacts import CommonContact  # noqa: F401
     from gajim.common.modules.contacts import BareContact
     from gajim.common.modules.contacts import ResourceContact
     from gajim.common.modules.contacts import GroupchatContact

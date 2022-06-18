@@ -110,11 +110,11 @@ class ConfigPaths:
             if gajim.IS_PORTABLE:
                 application_path = Path(sys.executable).parent
                 self.config_root = self.cache_root = self.data_root = \
-                        application_path.parent / 'UserData'
+                    application_path.parent / 'UserData'
             else:
                 # Documents and Settings\[User Name]\Application Data\Gajim
                 self.config_root = self.cache_root = self.data_root = \
-                        Path(os.environ['appdata']) / 'Gajim'
+                    Path(os.environ['appdata']) / 'Gajim'
         else:
             self.config_root = Path(GLib.get_user_config_dir()) / 'gajim'
             self.cache_root = Path(GLib.get_user_cache_dir()) / 'gajim'
@@ -192,7 +192,8 @@ class ConfigPaths:
             ('MY_PEER_CERTS', 'certs', PathLocation.DATA, PathType.FOLDER),
             ('CERT_STORE', 'cert_store', PathLocation.DATA, PathType.FOLDER),
             ('DEBUG', 'debug', PathLocation.DATA, PathType.FOLDER),
-            ('PLUGINS_DATA', 'plugins_data', PathLocation.DATA, PathType.FOLDER),
+            ('PLUGINS_DATA', 'plugins_data',
+             PathLocation.DATA, PathType.FOLDER),
 
             # Config paths
             ('SETTINGS', 'settings.sqlite', PathLocation.CONFIG, PathType.FILE),
@@ -200,7 +201,8 @@ class ConfigPaths:
             ('PLUGINS_CONFIG_DIR',
              'pluginsconfig', PathLocation.CONFIG, PathType.FOLDER),
             ('MY_CERT', 'localcerts', PathLocation.CONFIG, PathType.FOLDER),
-            ('MY_SHORTCUTS', 'shortcuts.json', PathLocation.CONFIG, PathType.FILE),
+            ('MY_SHORTCUTS', 'shortcuts.json',
+             PathLocation.CONFIG, PathType.FILE),
         ]
 
         for path in unique_profile_paths:
@@ -211,8 +213,10 @@ class ConfigPaths:
         paths = [
             # Data paths
             ('LOG_DB', 'logs.db', PathLocation.DATA, PathType.FILE),
-            ('PLUGINS_DOWNLOAD', 'plugins_download', PathLocation.CACHE, PathType.FOLDER),
-            ('PLUGINS_IMAGES', 'plugins_images', PathLocation.CACHE, PathType.FOLDER),
+            ('PLUGINS_DOWNLOAD', 'plugins_download',
+             PathLocation.CACHE, PathType.FOLDER),
+            ('PLUGINS_IMAGES', 'plugins_images',
+             PathLocation.CACHE, PathType.FOLDER),
             ('PLUGINS_USER', 'plugins', PathLocation.DATA, PathType.FOLDER),
             ('MY_EMOTS',
              'emoticons', PathLocation.DATA, PathType.FOLDER_OPTIONAL),

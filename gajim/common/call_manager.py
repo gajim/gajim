@@ -47,7 +47,8 @@ class CallManager(EventHelper):
         self.register_events([
             ('jingle-request-received', ged.GUI2, self._on_jingle_request),
             ('jingle-connected-received', ged.GUI2, self._on_jingle_connected),
-            ('jingle-disconnected-received', ged.GUI2, self._on_jingle_disconnected),
+            ('jingle-disconnected-received', ged.GUI2,
+             self._on_jingle_disconnected),
             ('jingle-error-received', ged.GUI2, self._on_jingle_error),
         ])
         # pylint: enable=line-too-long

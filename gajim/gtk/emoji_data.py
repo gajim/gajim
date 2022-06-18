@@ -108,7 +108,7 @@ class EmojiPixbufs(dict):
                 weakref.ReferenceType[Gtk.TextMark],
                 weakref.ReferenceType[Gtk.TextMark],
                 str]]
-            ] = weakref.WeakKeyDictionary()
+        ] = weakref.WeakKeyDictionary()
 
     @property
     def complete(self) -> bool:
@@ -13092,7 +13092,7 @@ emoji_data = EmojiData([
         'Emoji_Presentation': True,
         'Extended_Pictographic': True
     }),
-    ('\U0001F469\U0000200D\U00002764\U0000FE0F\U0000200D\U0001F48B\U0000200D\U0001F468', {
+    ('\U0001F469\U0000200D\U00002764\U0000FE0F\U0000200D\U0001F48B\U0000200D\U0001F468', {  # noqa: E501
         'desc': 'kiss: woman, man',
         'group': 'Smileys & People',
         'subgroup': 'family',
@@ -13105,7 +13105,7 @@ emoji_data = EmojiData([
         'subgroup': 'family',
         'fully-qualified': False
     }),
-    ('\U0001F468\U0000200D\U00002764\U0000FE0F\U0000200D\U0001F48B\U0000200D\U0001F468', {
+    ('\U0001F468\U0000200D\U00002764\U0000FE0F\U0000200D\U0001F48B\U0000200D\U0001F468', {  # noqa: E501
         'desc': 'kiss: man, man',
         'group': 'Smileys & People',
         'subgroup': 'family',
@@ -13118,7 +13118,7 @@ emoji_data = EmojiData([
         'subgroup': 'family',
         'fully-qualified': False
     }),
-    ('\U0001F469\U0000200D\U00002764\U0000FE0F\U0000200D\U0001F48B\U0000200D\U0001F469', {
+    ('\U0001F469\U0000200D\U00002764\U0000FE0F\U0000200D\U0001F48B\U0000200D\U0001F469', {  # noqa: E501
         'desc': 'kiss: woman, woman',
         'group': 'Smileys & People',
         'subgroup': 'family',

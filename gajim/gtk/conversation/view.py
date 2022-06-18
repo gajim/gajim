@@ -277,8 +277,8 @@ class ConversationView(Gtk.ListBox):
         if kind == 'incoming':
             self._read_marker_row.set_last_incoming_timestamp(
                 message_row.timestamp)
-        if (marker is not None and marker == 'displayed'
-                and message_id is not None):
+        if (marker is not None and marker == 'displayed' and
+                message_id is not None):
             self.set_read_marker(message_id)
 
         self._insert_message(message_row)

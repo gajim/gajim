@@ -121,13 +121,18 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         self.connect('destroy', self._on_destroy)
 
         # pylint: disable=line-too-long
-        connect_destroy(self._ui.tree_selection, 'changed', self._on_group_selection_changed)
-        connect_destroy(self._ui.toggle_renderer, 'toggled', self._on_group_toggled)
-        connect_destroy(self._ui.text_renderer, 'edited', self._on_group_name_edited)
+        connect_destroy(self._ui.tree_selection,
+                        'changed', self._on_group_selection_changed)
+        connect_destroy(self._ui.toggle_renderer,
+                        'toggled', self._on_group_toggled)
+        connect_destroy(self._ui.text_renderer,
+                        'edited', self._on_group_name_edited)
 
         self.register_events([
-            ('subscribed-presence-received', ged.GUI1, self._on_subscribed_presence_received),
-            ('unsubscribed-presence-received', ged.GUI1, self._on_unsubscribed_presence_received),
+            ('subscribed-presence-received', ged.GUI1,
+             self._on_subscribed_presence_received),
+            ('unsubscribed-presence-received', ged.GUI1,
+             self._on_unsubscribed_presence_received),
         ])
         # pylint: enable=line-too-long
 

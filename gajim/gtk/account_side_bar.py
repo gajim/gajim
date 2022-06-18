@@ -66,6 +66,7 @@ class AccountSideBar(Gtk.ListBox):
                 row.set_unread_count(count)
                 break
 
+
 class Account(Gtk.ListBoxRow):
     def __init__(self, account: str) -> None:
         Gtk.ListBoxRow.__init__(self)

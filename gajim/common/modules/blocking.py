@@ -73,7 +73,7 @@ class Blocking(BaseModule):
 
     @as_task
     def get_blocking_list(self) -> Generator[set[JID], None, None]:
-        _task = yield
+        _task = yield  # noqa: F841
 
         blocking_list = yield self._nbxmpp('Blocking').request_blocking_list()
 
@@ -90,7 +90,7 @@ class Blocking(BaseModule):
                              block: set[JID],
                              unblock: set[JID]
                              ) -> Generator[bool, None, None]:
-        _task = yield
+        _task = yield  # noqa: F841
 
         if block:
             result = yield self.block(block)

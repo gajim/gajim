@@ -68,8 +68,8 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
     __gsignals__ = {
         'row-activated': (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
-            None, # return value
-            (str, )) # arguments
+            None,
+            (str, ))
     }
 
     def __init__(self,

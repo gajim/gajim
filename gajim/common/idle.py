@@ -2,7 +2,7 @@
 # Copyright (C) 2005-2006 Nikos Kouremenos <kourem AT gmail.com>
 # Copyright (C) 2007 Jean-Marie Traissard <jim AT lapin.org>
 # Copyright (C) 2008 Mateusz Biliński <mateusz AT bilinski.it>
-# Copyright (C) 2008 Thorsten P. 'dGhvcnN0ZW5wIEFUIHltYWlsIGNvbQ==\n'.decode("base64")
+# Copyright (C) 2008 Thorsten P. 'dGhvcnN0ZW5wIEFUIHltYWlsIGNvbQ==\n'.decode("base64")  # noqa: E501
 # Copyright (C) 2018 Philipp Hörist <philipp AT hoerist.com>
 #
 # This file is part of Gajim.
@@ -181,7 +181,9 @@ class Xss(IdleMonitor):
         if libXsspath is None:
             raise OSError('libXss could not be found.')
         self.libXss = ctypes.cdll.LoadLibrary(libXsspath)
-        self.libXss.XScreenSaverQueryExtension.argtypes = display_p, c_int_p, c_int_p
+        self.libXss.XScreenSaverQueryExtension.argtypes = (display_p,
+                                                           c_int_p,
+                                                           c_int_p)
         self.libXss.XScreenSaverAllocInfo.restype = XScreenSaverInfo_p
         self.libXss.XScreenSaverQueryInfo.argtypes = (
             display_p, xid, XScreenSaverInfo_p)
@@ -235,7 +237,7 @@ class Windows(IdleMonitor):
 
     def get_idle_sec(self) -> int:
         self.GetLastInputInfo(ctypes.byref(self.lastInputInfo))
-        return int(self.GetTickCount() - self.lastInputInfo.dwTime) // 1000  # type: ignore
+        return int(self.GetTickCount() - self.lastInputInfo.dwTime) // 1000
 
     def set_extended_away(self, state: bool) -> None:
         raise NotImplementedError
@@ -275,8 +277,8 @@ class IdleMonitorManager(GObject.Object):
     __gsignals__ = {
         'state-changed': (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
-            None, # return value
-            () # arguments
+            None,
+            ()
         )}
 
     def __init__(self):

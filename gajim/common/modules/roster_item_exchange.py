@@ -125,6 +125,9 @@ class RosterItemExchange(BaseModule):
                                     body=msg)
         elif type_ == 'iq':
             stanza = nbxmpp.Iq(to=fjid, typ='set')
+        else:
+            raise ValueError
+
         xdata = stanza.addChild(name='x', namespace=Namespace.ROSTERX)
         for contact in contacts:
             name = contact.name

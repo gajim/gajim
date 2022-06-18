@@ -64,11 +64,13 @@ class HistoryExport(Assistant):
 
         success_page = cast(SuccessPage, self.add_default_page('success'))
         success_page.set_title(_('Export Finished'))
-        success_page.set_text(_('Your messages have been exported successfully'))
+        success_page.set_text(
+            _('Your messages have been exported successfully'))
 
         error_page = cast(ErrorPage, self.add_default_page('error'))
         error_page.set_title(_('Error while Exporting'))
-        error_page.set_text(_('An error occurred while exporting your messages'))
+        error_page.set_text(
+            _('An error occurred while exporting your messages'))
 
         self.connect('button-clicked', self._on_button_clicked)
         self.show_all()
@@ -126,8 +128,7 @@ class HistoryExport(Assistant):
                     _('An error occurred while trying to create a '
                       'file at %(path)s: %(error)s') % {
                           'path': file_path,
-                          'error': str(err)
-                          })
+                          'error': str(err)})
                 self.show_page('error', Gtk.StackTransitionType.SLIDE_LEFT)
                 return
 

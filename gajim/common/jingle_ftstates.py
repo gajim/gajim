@@ -65,7 +65,8 @@ class StateInitialized(JingleFileTransferStates):
             if self.jft.use_security:
                 fingerprint = 'client'
             # Connect to the candidate host, on success call on_connect method
-            app.socks5queue.connect_to_hosts(self.jft.session.connection.name,
+            app.socks5queue.connect_to_hosts(
+                self.jft.session.connection.name,
                 self.jft.file_props.transport_sid, self.jft.on_connect,
                 self.jft._on_connect_error, fingerprint=fingerprint)
 
@@ -186,14 +187,14 @@ class StateTransfering(JingleFileTransferStates):
             if self.jft.file_props.type_ == 's':
                 s = app.socks5queue.senders
                 for v in s.values():
-                    if v.host == streamhost_used['host'] and \
-                    v.connected:
+                    if (v.host == streamhost_used['host'] and
+                            v.connected):
                         return
             elif self.jft.file_props.type_ == 'r':
                 r = app.socks5queue.readers
                 for v in r.values():
-                    if v.host == streamhost_used['host'] and \
-                    v.connected:
+                    if (v.host == streamhost_used['host'] and
+                            v.connected):
                         return
             else:
                 raise TypeError
@@ -213,13 +214,14 @@ class StateTransfering(JingleFileTransferStates):
                                              fingerprint=None, connected=False,
                                              file_props=self.jft.file_props)
             else:
-                sockobj = Socks5ReceiverClient(app.idlequeue, streamhost_used,
+                sockobj = Socks5ReceiverClient(
+                    app.idlequeue, streamhost_used,
                     transport_sid=self.jft.file_props.transport_sid,
                     file_props=self.jft.file_props, fingerprint=None)
             sockobj.proxy = True
             sockobj.streamhost = streamhost_used
             app.socks5queue.add_sockobj(self.jft.session.connection.name,
-                                          sockobj)
+                                        sockobj)
             streamhost_used['idx'] = sockobj.queue_idx
             # If we offered the nominated candidate used, we activate
             # the proxy
@@ -229,7 +231,7 @@ class StateTransfering(JingleFileTransferStates):
             # TODO: add on failure
         else:
             app.socks5queue.send_file(self.jft.file_props,
-                                        self.jft.session.connection.name, mode)
+                                      self.jft.session.connection.name, mode)
 
     def action(self, args: Optional[dict[str, Any]] = None) -> None:
         if self.jft.transport.type_ == TransportType.IBB:

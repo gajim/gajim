@@ -141,7 +141,7 @@ class AddContact(Assistant):
 
     @as_task
     def _disco_info(self, account: str, address: str) -> Any:
-        _task = yield
+        _task = yield  # noqa: F841
 
         client = app.get_client(account)
 

@@ -41,7 +41,7 @@ class Delimiter(BaseModule):
 
     @as_task
     def get_roster_delimiter(self) -> Generator[Optional[str], None, None]:
-        _task = yield
+        _task = yield  # noqa: F841
 
         delimiter = yield self.request_delimiter()
         if is_error(delimiter) or delimiter is None:

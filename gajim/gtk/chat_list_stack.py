@@ -93,7 +93,8 @@ class ChatListStack(Gtk.Stack):
         actions = [
             ('toggle-chat-pinned', 'a{sv}', self._toggle_chat_pinned),
             ('move-chat-to-workspace', 'a{sv}', self._move_chat_to_workspace),
-            ('move-chat-to-new-workspace', 'a{sv}', self._move_chat_to_new_workspace),
+            ('move-chat-to-new-workspace', 'a{sv}',
+             self._move_chat_to_new_workspace),
             ('mark-as-read', 'a{sv}', self._mark_as_read),
         ]
 
@@ -160,7 +161,7 @@ class ChatListStack(Gtk.Stack):
     def remove_chat_list(self, workspace_id: str) -> None:
         chat_list = self._chat_lists[workspace_id]
         self.remove(chat_list)
-        for account, jid, _, _ in chat_list.get_open_chats():
+        for account, jid, _type, _pinned in chat_list.get_open_chats():
             self.remove_chat(workspace_id, account, jid)
 
         self._chat_lists.pop(workspace_id)

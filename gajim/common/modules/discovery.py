@@ -219,7 +219,7 @@ class Discovery(BaseModule):
                   allow_redirect: bool = False
                   ):
 
-        _task = yield
+        _task = yield  # noqa: F841
 
         self._log.info('Request MUC info for %s', jid)
 
@@ -257,7 +257,7 @@ class Discovery(BaseModule):
 
     @as_task
     def disco_contact(self, contact: types.ContactT):
-        _task = yield
+        _task = yield  # noqa: F841
 
         result = yield self.disco_info(contact.jid)
         if is_error(result):

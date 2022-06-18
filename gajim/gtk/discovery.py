@@ -80,44 +80,44 @@ LABELS = {
 def _gen_agent_type_info():
     return {
         # Defaults
-        (0, 0):                         (None, None),
+        (0, 0): (None, None),
 
         # XMPP server
-        ('server', 'im'):               (ToplevelAgentBrowser, 'jabber'),
-        ('services', 'jabber'):         (ToplevelAgentBrowser, 'jabber'),
-        ('hierarchy', 'branch'):        (AgentBrowser, 'jabber'),
+        ('server', 'im'): (ToplevelAgentBrowser, 'jabber'),
+        ('services', 'jabber'): (ToplevelAgentBrowser, 'jabber'),
+        ('hierarchy', 'branch'): (AgentBrowser, 'jabber'),
 
         # Services
-        ('conference', 'text'):         (MucBrowser, 'conference'),
-        ('headline', 'rss'):            (AgentBrowser, 'rss'),
-        ('headline', 'weather'):        (False, 'weather'),
-        ('gateway', 'weather'):         (False, 'weather'),
-        ('_jid', 'weather'):            (False, 'weather'),
-        ('gateway', 'sip'):             (False, 'sip'),
-        ('directory', 'user'):          (None, 'jud'),
-        ('pubsub', 'generic'):          (PubSubBrowser, 'pubsub'),
-        ('pubsub', 'service'):          (PubSubBrowser, 'pubsub'),
-        ('proxy', 'bytestreams'):       (None, 'bytestreams'),  # Socks5 FT proxy
-        ('headline', 'newmail'):        (ToplevelAgentBrowser, 'mail'),
+        ('conference', 'text'): (MucBrowser, 'conference'),
+        ('headline', 'rss'): (AgentBrowser, 'rss'),
+        ('headline', 'weather'): (False, 'weather'),
+        ('gateway', 'weather'): (False, 'weather'),
+        ('_jid', 'weather'): (False, 'weather'),
+        ('gateway', 'sip'): (False, 'sip'),
+        ('directory', 'user'): (None, 'jud'),
+        ('pubsub', 'generic'): (PubSubBrowser, 'pubsub'),
+        ('pubsub', 'service'): (PubSubBrowser, 'pubsub'),
+        ('proxy', 'bytestreams'): (None, 'bytestreams'),  # Socks5 FT proxy
+        ('headline', 'newmail'): (ToplevelAgentBrowser, 'mail'),
 
         # Transports
-        ('conference', 'irc'):          (ToplevelAgentBrowser, 'irc'),
-        ('_jid', 'irc'):                (False, 'irc'),
-        ('gateway', 'irc'):             (False, 'irc'),
-        ('gateway', 'gadu-gadu'):       (False, 'gadu-gadu'),
-        ('_jid', 'gadugadu'):           (False, 'gadu-gadu'),
-        ('gateway', 'http-ws'):         (False, 'http-ws'),
-        ('gateway', 'icq'):             (False, 'icq'),
-        ('_jid', 'icq'):                (False, 'icq'),
-        ('gateway', 'sms'):             (False, 'sms'),
-        ('_jid', 'sms'):                (False, 'sms'),
-        ('gateway', 'smtp'):            (False, 'mail'),
-        ('gateway', 'mrim'):            (False, 'mrim'),
-        ('_jid', 'mrim'):               (False, 'mrim'),
-        ('gateway', 'facebook'):        (False, 'facebook'),
-        ('_jid', 'facebook'):           (False, 'facebook'),
-        ('gateway', 'tv'):              (False, 'tv'),
-        ('gateway', 'twitter'):         (False, 'twitter'),
+        ('conference', 'irc'): (ToplevelAgentBrowser, 'irc'),
+        ('_jid', 'irc'): (False, 'irc'),
+        ('gateway', 'irc'): (False, 'irc'),
+        ('gateway', 'gadu-gadu'): (False, 'gadu-gadu'),
+        ('_jid', 'gadugadu'): (False, 'gadu-gadu'),
+        ('gateway', 'http-ws'): (False, 'http-ws'),
+        ('gateway', 'icq'): (False, 'icq'),
+        ('_jid', 'icq'): (False, 'icq'),
+        ('gateway', 'sms'): (False, 'sms'),
+        ('_jid', 'sms'): (False, 'sms'),
+        ('gateway', 'smtp'): (False, 'mail'),
+        ('gateway', 'mrim'): (False, 'mrim'),
+        ('_jid', 'mrim'): (False, 'mrim'),
+        ('gateway', 'facebook'): (False, 'facebook'),
+        ('_jid', 'facebook'): (False, 'facebook'),
+        ('gateway', 'tv'): (False, 'tv'),
+        ('gateway', 'twitter'): (False, 'twitter'),
     }
 
 
@@ -763,7 +763,7 @@ class ServiceDiscoveryWindow:
         for j in self.latest_addresses:
             self.address_comboboxtext.append_text(j)
         app.settings.set('latest_disco_addresses',
-                       ' '.join(self.latest_addresses))
+                         ' '.join(self.latest_addresses))
         self.travel(jid, None)
 
     def _on_services_treeview_row_activated(self, widget, path, col=0):

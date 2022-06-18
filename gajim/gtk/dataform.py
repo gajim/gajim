@@ -180,7 +180,7 @@ class FormGrid(Gtk.Grid):
             self._add_row(widget(field, self, options))
 
     def _add_media_field(self, field, options):
-        if not field.type_ in ('text-single', 'text-private', 'text-multi'):
+        if field.type_ not in ('text-single', 'text-private', 'text-multi'):
             return False
 
         for uri in field.media.uris:
@@ -692,7 +692,6 @@ class FakeDataFormWidget(Gtk.ScrolledWindow):
         for name, entry in self._entries.items():
             fields[name] = entry.get_text()
         return fields
-
 
 
 class DataFormDialog(Gtk.Dialog):

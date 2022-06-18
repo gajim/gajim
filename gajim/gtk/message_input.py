@@ -122,6 +122,7 @@ class MessageInputTextView(Gtk.TextView):
 
     def _clear_tags(self) -> None:
         to_remove: list[Gtk.TextTag] = []
+
         def _check(tag: Gtk.TextTag) -> None:
             if tag.get_property('underline-rgba-set') is True:
                 # Don’t remove spell checking underlines

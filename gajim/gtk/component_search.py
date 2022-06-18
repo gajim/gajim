@@ -177,8 +177,9 @@ class SearchForm(Page):
         if form is None:
             return
 
-        options = {'form-width': 350,
-                   'entry-activates-default': True
+        options = {
+            'form-width': 350,
+            'entry-activates-default': True
         }
 
         form = dataforms.extend_form(node=form)

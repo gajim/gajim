@@ -107,25 +107,42 @@ class AccountWizard(Assistant):
         self._method: str = 'login'
 
     @overload
-    def get_page(self, name: Literal['login']) -> Login: ...
+    def get_page(self, name: Literal['login']) -> Login:
+        ...
+
     @overload
-    def get_page(self, name: Literal['signup']) -> Signup: ...
+    def get_page(self, name: Literal['signup']) -> Signup:
+        ...
+
     @overload
-    def get_page(self, name: Literal['advanced']) -> AdvancedSettings: ...
+    def get_page(self, name: Literal['advanced']) -> AdvancedSettings:
+        ...
+
     @overload
     def get_page(self,
                  name: Literal['security-warning']
-                 ) -> SecurityWarning: ...
+                 ) -> SecurityWarning:
+        ...
+
     @overload
-    def get_page(self, name: Literal['form']) -> Form: ...
+    def get_page(self, name: Literal['form']) -> Form:
+        ...
+
     @overload
-    def get_page(self, name: Literal['redirect']) -> Redirect: ...
+    def get_page(self, name: Literal['redirect']) -> Redirect:
+        ...
+
     @overload
-    def get_page(self, name: Literal['success']) -> Success: ...
+    def get_page(self, name: Literal['success']) -> Success:
+        ...
+
     @overload
-    def get_page(self, name: Literal['error']) -> Error: ...
+    def get_page(self, name: Literal['error']) -> Error:
+        ...
+
     @overload
-    def get_page(self, name: Literal['progress']) -> ProgressPage: ...
+    def get_page(self, name: Literal['progress']) -> ProgressPage:
+        ...
 
     def get_page(self, name: str) -> Page:
         return self._pages[name]
@@ -1025,7 +1042,7 @@ class Redirect(Page):
         self._ui.instructions.set_text(instructions)
         self._link = link
 
-    def _on_link_button(self, _button:Gtk.Button) -> None:
+    def _on_link_button(self, _button: Gtk.Button) -> None:
         assert self._link is not None
         open_uri(self._link)
 

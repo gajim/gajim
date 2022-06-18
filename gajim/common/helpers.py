@@ -81,7 +81,7 @@ from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Soup
 
-import precis_i18n.codec  # pylint: disable=unused-import
+import precis_i18n.codec  # pylint: disable=unused-import  # noqa: F401
 
 from gajim.common import app
 from gajim.common import configpaths
@@ -373,9 +373,14 @@ def sanitize_filename(filename: str) -> str:
     filename = punycode_encode(filename).decode('utf-8')
     filename = filename.replace('/', '_')
     if os.name == 'nt':
-        filename = filename.replace('?', '_').replace(':', '_')\
-                .replace('\\', '_').replace('"', "'").replace('|', '_')\
-                .replace('*', '_').replace('<', '_').replace('>', '_')
+        filename = filename.replace('?', '_')\
+                           .replace(':', '_')\
+                           .replace('\\', '_')\
+                           .replace('"', "'")\
+                           .replace('|', '_')\
+                           .replace('*', '_')\
+                           .replace('<', '_')\
+                           .replace('>', '_')
 
     return filename
 
@@ -604,6 +609,7 @@ def get_random_string(count: int = 16) -> str:
     """
     allowed = string.ascii_uppercase + string.digits
     return ''.join(random.choice(allowed) for char in range(count))
+
 
 @functools.lru_cache(maxsize=1)
 def get_os_info() -> str:
@@ -1056,6 +1062,8 @@ def open_uri(uri: Union[URI, str], account: Optional[str] = None) -> None:
             message = uri.data.get('body')
         else:
             log.warning('Cant open URI: %s', uri)
+            return
+
         if uri.action == URIAction.JOIN:
             app.app.activate_action(
                 'groupchat-join',
@@ -1423,7 +1431,7 @@ def get_random_muc_localpart() -> str:
     rand = random.randrange(4)
     is_vowel = bool(random.getrandbits(1))
     result = ''
-    for _ in range(rand * 2 + (5 - rand)):
+    for _n in range(rand * 2 + (5 - rand)):
         if is_vowel:
             result = f'{result}{VOWELS[random.randrange(len(VOWELS))]}'
         else:

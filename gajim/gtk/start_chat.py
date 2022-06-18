@@ -196,7 +196,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
                                        groupchat=True))
 
     def _add_new_contact_rows(self, rows: list[ContactRow]) -> None:
-        for account, _ in self._accounts:
+        for account, _label in self._accounts:
             show_account = len(self._accounts) > 1
             row = ContactRow(account, None, None, None, show_account)
             self.new_contact_rows[account] = row
@@ -663,7 +663,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
     @as_task
     def _start_iq_search(self, client, text):
-        _task = yield
+        _task = yield  # noqa: F841
 
         if self._parameter_form is None:
             result = yield client.get_module('Muclumbus').request_parameters(
@@ -695,7 +695,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
     @as_task
     def _start_http_search(self, client, text):
-        _task = yield
+        _task = yield  # noqa: F841
 
         self._keywords = text.split(' ')
         result = yield client.get_module('Muclumbus').set_http_search(

@@ -92,13 +92,14 @@ class JingleTransport:
                        candidates: Optional[list[dict[str, Any]]] = None
                        ) -> nbxmpp.Node:
         """
-        Build a transport stanza with the given candidates (or self.candidates if
-        candidates is None)
+        Build a transport stanza with the given candidates (or self.candidates
+        if candidates is None)
         """
         if not candidates:
             candidates = list(self._iter_candidates())
         else:
-            candidates = (self.make_candidate(candidate) for candidate in candidates)
+            candidates = (self.make_candidate(candidate) for candidate
+                          in candidates)
         transport = nbxmpp.Node('transport', payload=candidates)
         return transport
 
@@ -135,7 +136,6 @@ class JingleTransportSocks5(JingleTransport):
         self.sid: Optional[str] = None
         if node and node.getAttr('sid'):
             self.sid = node.getAttr('sid')
-
 
     def make_candidate(self, candidate) -> nbxmpp.Node:
         log.info('candidate dict, %s', candidate)
@@ -188,13 +188,12 @@ class JingleTransportSocks5(JingleTransport):
             self.remote_candidates = candidates
         return candidates
 
-
     def _add_candidates(self, candidates: list[dict[str, Any]]) -> None:
         for cand in candidates:
             in_remote = False
             for cand2 in self.remote_candidates:
-                if cand['host'] == cand2['host'] and \
-                cand['port'] == cand2['port']:
+                if (cand['host'] == cand2['host'] and
+                        cand['port'] == cand2['port']):
                     in_remote = True
                     break
             if not in_remote:
@@ -207,7 +206,7 @@ class JingleTransportSocks5(JingleTransport):
         if not self.connection:
             return
         port = int(app.settings.get('file_transfers_port'))
-        #type preference of connection type. XEP-0260 section 2.2
+        # type preference of connection type. XEP-0260 section 2.2
         type_preference = 126
         priority = (2**16) * type_preference
 
@@ -233,8 +232,8 @@ class JingleTransportSocks5(JingleTransport):
         try:
             for addrinfo in socket.getaddrinfo(socket.gethostname(), None):
                 addr = addrinfo[4][0]
-                if not addr in hosts and not addr.startswith('127.') and \
-                addr != '::1':
+                if (addr not in hosts and not addr.startswith('127.') and
+                        addr != '::1'):
                     candidate = {
                         'host': addr,
                         'candidate_id': generate_id(),
@@ -248,7 +247,7 @@ class JingleTransportSocks5(JingleTransport):
                     hosts.add(addr)
                     local_ip_cand.append(candidate)
         except socket.gaierror:
-            pass # ignore address-related errors for getaddrinfo
+            pass  # ignore address-related errors for getaddrinfo
 
         try:
             from netifaces import interfaces, ifaddresses, AF_INET, AF_INET6
@@ -274,8 +273,8 @@ class JingleTransportSocks5(JingleTransport):
                 if AF_INET6 in addresses:
                     for address in addresses[AF_INET6]:
                         addr = address['addr']
-                        if addr in hosts or addr.startswith('::1') or \
-                        addr.count(':') != 7:
+                        if (addr in hosts or addr.startswith('::1') or
+                                addr.count(':') != 7):
                             continue
                         candidate = {
                             'host': addr,
@@ -328,7 +327,9 @@ class JingleTransportSocks5(JingleTransport):
         priority = (2**16) * type_preference
         proxy_cand = []
         socks5conn = self.connection
-        proxyhosts = socks5conn.get_module('Bytestream')._get_file_transfer_proxies_from_config(self.file_props)
+        proxyhosts = socks5conn.get_module(
+            'Bytestream')._get_file_transfer_proxies_from_config(
+                self.file_props)
 
         if proxyhosts:
             self.file_props.proxyhosts = proxyhosts
@@ -376,7 +377,6 @@ class JingleTransportSocks5(JingleTransport):
         iq.setID(auth_id)
         self.connection.connection.send(iq)
 
-
         content = nbxmpp.Node('content')
         content.setAttr('creator', 'initiator')
         content_object = self.get_content()
@@ -391,8 +391,9 @@ class JingleTransportSocks5(JingleTransport):
             cid = proxy['cid']
         else:
             for host in self.candidates:
-                if host['host'] == proxy['host'] and host['jid'] == proxy['jid'] \
-                        and host['port'] == proxy['port']:
+                if (host['host'] == proxy['host'] and
+                        host['jid'] == proxy['jid'] and
+                        host['port'] == proxy['port']):
                     cid = host['candidate_id']
                     break
         if cid is None:
@@ -444,12 +445,12 @@ class JingleTransportICEUDP(JingleTransport):
         }
         attrs: dict[str, Any] = {
             'component': candidate.component_id,
-            'foundation': '1', # hack
+            'foundation': '1',  # hack
             'generation': '0',
             'ip': candidate.ip,
             'network': '0',
             'port': candidate.port,
-            'priority': int(candidate.priority), # hack
+            'priority': int(candidate.priority),  # hack
             'id': str(uuid.uuid4())
         }
         if candidate.type in types:
@@ -514,6 +515,7 @@ class JingleTransportICEUDP(JingleTransport):
             candidates.append(cand)
         self.remote_candidates.extend(candidates)
         return candidates
+
 
 transports[Namespace.JINGLE_ICE_UDP] = JingleTransportICEUDP
 transports[Namespace.JINGLE_BYTESTREAM] = JingleTransportSocks5

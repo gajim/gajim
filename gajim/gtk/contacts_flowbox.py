@@ -39,7 +39,7 @@ class ContactItem(Gtk.FlowBoxChild):
         name_label.get_style_context().add_class('bold')
 
         if is_new:
-            avatar_image =  Gtk.Image.new_from_icon_name(
+            avatar_image = Gtk.Image.new_from_icon_name(
                 'avatar-default', Gtk.IconSize.DND)
             name_label.set_text(jid)
             name_label.set_tooltip_text(jid)

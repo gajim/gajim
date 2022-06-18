@@ -230,7 +230,8 @@ class MessageArchiveStorage(SqliteStorage):
 
         if user_version < 2:
             statements = [
-                'ALTER TABLE last_archive_message ADD COLUMN "sync_threshold" INTEGER',
+                ('ALTER TABLE last_archive_message '
+                 'ADD COLUMN "sync_threshold" INTEGER'),
                 'PRAGMA user_version=2'
             ]
             self._execute_multiple(statements)
@@ -646,7 +647,6 @@ class MessageArchiveStorage(SqliteStorage):
             for result in results:
                 yield result
 
-
     @timeit
     def search_all_logs(self,
                         query: str,
@@ -752,9 +752,10 @@ class MessageArchiveStorage(SqliteStorage):
                        account_id=account_id,
                        kinds=', '.join(kinds))
 
-        return self._con.execute(sql, tuple(jids) +
-                                      (date.timestamp(),
-                                      (date + delta).timestamp())).fetchall()
+        return self._con.execute(
+            sql,
+            tuple(jids) + (date.timestamp(),
+                           (date + delta).timestamp())).fetchall()
 
     @timeit
     def get_last_history_timestamp(self,
@@ -978,7 +979,8 @@ class MessageArchiveStorage(SqliteStorage):
         else:
             sql = '''
                 SELECT stanza_id FROM logs
-                WHERE stanza_id IN ({values}) AND account_id = ? AND kind != ? LIMIT 1
+                WHERE stanza_id IN ({values}) AND account_id = ? AND
+                kind != ? LIMIT 1
                 '''.format(values=', '.join('?' * len(ids)))
             result = self._con.execute(
                 sql, tuple(ids) + (account_id, KindConstant.GC_MSG)).fetchone()
@@ -1172,7 +1174,9 @@ class MessageArchiveStorage(SqliteStorage):
                          values=', '.join('?' * len(kwargs)))
 
         lastrowid = self._con.execute(
-            sql, (account_id, jid_id, time_, kind) + tuple(kwargs.values())).lastrowid
+            sql, (account_id,
+                  jid_id, time_,
+                  kind) + tuple(kwargs.values())).lastrowid
         assert lastrowid is not None
 
         log.info('Insert into DB: jid: %s, time: %s, kind: %s, stanza_id: %s',

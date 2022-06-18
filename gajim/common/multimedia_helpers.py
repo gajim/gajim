@@ -75,17 +75,21 @@ class AudioInputManager(DeviceManager):
     def detect(self) -> None:
         self.devices: Dict[str, str] = {}
         # Test src
-        self.detect_element('audiotestsrc', _('Audio test'),
-            '%s is-live=true name=gajim_vol')
+        self.detect_element('audiotestsrc',
+                            _('Audio test'),
+                            '%s is-live=true name=gajim_vol')
         # Auto src
-        self.detect_element('autoaudiosrc', _('Autodetect'),
-            '%s ! volume name=gajim_vol')
+        self.detect_element('autoaudiosrc',
+                            _('Autodetect'),
+                            '%s ! volume name=gajim_vol')
         # Alsa src
-        self.detect_element('alsasrc', _('ALSA: %s'),
-            '%s ! volume name=gajim_vol')
+        self.detect_element('alsasrc',
+                            _('ALSA: %s'),
+                            '%s ! volume name=gajim_vol')
         # Pulseaudio src
-        self.detect_element('pulsesrc', _('Pulse: %s'),
-            '%s ! volume name=gajim_vol')
+        self.detect_element('pulsesrc',
+                            _('Pulse: %s'),
+                            '%s ! volume name=gajim_vol')
 
 
 class AudioOutputManager(DeviceManager):
@@ -105,7 +109,9 @@ class VideoInputManager(DeviceManager):
     def detect(self) -> None:
         self.devices: Dict[str, str] = {}
         # Test src
-        self.detect_element('videotestsrc', _('Video test'),
+        self.detect_element(
+            'videotestsrc',
+            _('Video test'),
             '%s is-live=true ! video/x-raw,framerate=10/1 ! videoconvert')
         # Auto src
         self.detect_element('autovideosrc', _('Autodetect'))

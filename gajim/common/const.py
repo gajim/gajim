@@ -153,11 +153,13 @@ class JIDConstant(IntEnum):
     NORMAL_TYPE = 0
     ROOM_TYPE = 1
 
+
 @unique
 class StyleAttr(Enum):
     COLOR = 'color'
     BACKGROUND = 'background'
     FONT = 'font'
+
 
 @unique
 class CSSPriority(IntEnum):
@@ -167,10 +169,12 @@ class CSSPriority(IntEnum):
     DEFAULT_THEME_DARK = 611
     USER_THEME = 650
 
+
 @unique
 class ButtonAction(Enum):
     DESTRUCTIVE = 'destructive-action'
     SUGGESTED = 'suggested-action'
+
 
 @unique
 class IdleState(Enum):
@@ -366,7 +370,8 @@ MUC_DISCO_ERRORS = {
     'remote-server-not-found': _('Remote server not found'),
     'remote-server-timeout': _('Remote server timeout'),
     'service-unavailable': _('Address does not belong to a group chat server'),
-    'subscription-required': _('Address does not belong to a group chat server'),
+    'subscription-required': _(
+        'Address does not belong to a group chat server'),
     'not-muc-service': _('Address does not belong to a group chat server'),
     'already-exists': _('Group chat already exists'),
     'item-not-found': _('Group chat does not exist'),
@@ -776,17 +781,21 @@ RFC5646_LANGUAGE_TAGS = {
     'zu-ZA': 'Zulu (South Africa)'
 }
 
-# pylint: disable=line-too-long
+
 GIO_TLS_ERRORS = {
-    Gio.TlsCertificateFlags.UNKNOWN_CA: _('The signing certificate authority is not known'),
-    Gio.TlsCertificateFlags.REVOKED: _('The certificate has been revoked'),
-    Gio.TlsCertificateFlags.BAD_IDENTITY: _('The certificate does not match the expected identity of the site'),
-    Gio.TlsCertificateFlags.INSECURE: _('The certificate’s algorithm is insecure'),
-    Gio.TlsCertificateFlags.NOT_ACTIVATED: _('The certificate’s activation time is in the future'),
+    Gio.TlsCertificateFlags.UNKNOWN_CA: _(
+        'The signing certificate authority is not known'),
+    Gio.TlsCertificateFlags.REVOKED: _(
+        'The certificate has been revoked'),
+    Gio.TlsCertificateFlags.BAD_IDENTITY: _(
+        'The certificate does not match the expected identity of the site'),
+    Gio.TlsCertificateFlags.INSECURE: _(
+        'The certificate’s algorithm is insecure'),
+    Gio.TlsCertificateFlags.NOT_ACTIVATED: _(
+        'The certificate’s activation time is in the future'),
     Gio.TlsCertificateFlags.GENERIC_ERROR: _('Unknown validation error'),
     Gio.TlsCertificateFlags.EXPIRED: _('The certificate has expired'),
 }
-# pylint: enable=line-too-long
 
 
 class FTState(Enum):

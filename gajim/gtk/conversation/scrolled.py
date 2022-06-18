@@ -21,6 +21,7 @@ from gi.repository import GObject
 
 from ..types import ConversationViewT
 
+
 class ScrolledView(Gtk.ScrolledWindow):
 
     __gsignals__ = {

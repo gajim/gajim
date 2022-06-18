@@ -169,7 +169,8 @@ class NativeFileOpenDialog(BaseFileOpenDialog, NativeFileChooserDialog):
     pass
 
 
-class NativeAvatarChooserDialog(BaseAvatarChooserDialog, NativeFileChooserDialog):
+class NativeAvatarChooserDialog(BaseAvatarChooserDialog,
+                                NativeFileChooserDialog):
     pass
 
 

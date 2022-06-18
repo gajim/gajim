@@ -89,7 +89,7 @@ class BlockingList(Gtk.ApplicationWindow):
 
     def _on_save_result(self, task: Task):
         try:
-            _successful = cast(bool, task.finish())
+            task.finish()
         except StanzaError as error:
             self._show_error(to_user_string(error))
             self._disable_spinner()

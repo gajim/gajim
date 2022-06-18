@@ -34,7 +34,6 @@ class _ACCOUNT_DEFAULT:
 HAS_APP_DEFAULT = _DEFAULT()
 HAS_ACCOUNT_DEFAULT = _ACCOUNT_DEFAULT()
 
-# pylint: disable=line-too-long
 
 BoolSettings = Literal[
     'always_english_wikipedia',
@@ -617,55 +616,102 @@ ADVANCED_SETTINGS = {
     'app': {
         'always_english_wikipedia': '',
         'always_english_wiktionary': '',
-        'ascii_formatting': _('Treat * / _ pairs as possible formatting characters.'),
-        'change_roster_title': _('If enabled, Gajim will add * and [n] in contact list window title.'),
-        'chat_merge_consecutive_nickname': _('Show message meta data (avatar, nickname, timestamp) only once, if there are multiple messages from the same sender within a specific timespan.'),
-        'chat_timestamp_format': 'https://docs.python.org/3/library/time.html#time.strftime',
-        'command_system_execute': _('If enabled, Gajim will execute commands (/show, /sh, /execute, /exec).'),
-        'confirm_block': _('Show a confirmation dialog to block a contact? Empty string means never show the dialog.'),
+        'ascii_formatting': _(
+            'Treat * / _ pairs as possible formatting characters.'),
+        'change_roster_title': _(
+            'If enabled, Gajim will add * and [n] in contact list '
+            'window title.'),
+        'chat_merge_consecutive_nickname': _(
+            'Show message meta data (avatar, nickname, timestamp) only once, '
+            'if there are multiple messages from the same sender within a '
+            'specific timespan.'),
+        'chat_timestamp_format': 'https://docs.python.org/3/library/time.html#time.strftime',  # noqa: E501
+        'command_system_execute': _(
+            'If enabled, Gajim will execute commands '
+            '(/show, /sh, /execute, /exec).'),
+        'confirm_block': _(
+            'Show a confirmation dialog to block a contact? Empty string '
+            'means never show the dialog.'),
         'confirm_close_muc': _('Ask before closing a group chat tab/window.'),
-        'confirm_close_multiple_tabs': _('Ask before closing tabbed chat window if there are chats that can lose data (chat, private chat).'),
-        'confirm_on_window_delete': _('Ask before quitting when Gajim’s window is closed'),
+        'confirm_close_multiple_tabs': _(
+            'Ask before closing tabbed chat window if there are chats that '
+            'can lose data (chat, private chat).'),
+        'confirm_on_window_delete': _(
+            'Ask before quitting when Gajim’s window is closed'),
         'confirm_paste_image': _('Ask before pasting an image.'),
-        'date_timestamp_format': 'https://docs.python.org/3/library/time.html#time.strftime',
+        'date_timestamp_format': 'https://docs.python.org/3/library/time.html#time.strftime',  # noqa: E501
         'dev_force_bookmark_2': _('Force Bookmark 2 usage'),
         'dev_use_message_label': '',
         'developer_modus': '',
-        'dictionary_url': _('Either a custom URL with %%s in it (where %%s is the word/phrase) or \'WIKTIONARY\' (which means use Wikitionary).'),
-        'enable_negative_priority': _('If enabled, you will be able to set a negative priority to your account in the Accounts window. BE CAREFUL, when you are logged in with a negative priority, you will NOT receive any message from your server.'),
+        'dictionary_url': _(
+            'Either a custom URL with %%s in it (where %%s is the word/phrase)'
+            ' or \'WIKTIONARY\' (which means use Wikitionary).'),
+        'enable_negative_priority': _(
+            'If enabled, you will be able to set a negative priority to your '
+            'account in the Accounts window. BE CAREFUL, when you are logged '
+            'in with a negative priority, you will NOT receive any message '
+            'from your server.'),
         'escape_key_closes': _('If enabled, pressing Esc closes a tab/window.'),
         'file_transfers_port': '',
-        'ft_add_hosts_to_send': _('List of send hosts (comma separated) in addition to local interfaces for file transfers (in case of address translation/port forwarding).'),
+        'ft_add_hosts_to_send': _(
+            'List of send hosts (comma separated) in '
+            'addition to local interfaces for file transfers (in case of '
+            'address translation/port forwarding).'),
         'gc_notify_on_all_messages_private_default': '',
         'gc_notify_on_all_messages_public_default': '',
-        'gc_refer_to_nick_char': _('Character to add after nickname when using nickname completion (tab) in group chat.'),
+        'gc_refer_to_nick_char': _(
+            'Character to add after nickname when using nickname completion '
+            '(tab) in group chat.'),
         'groupchat_roster_width': _('Width of group chat roster in pixel'),
         'hide_chat_banner': _('Hides the banner in a 1:1 chat window.'),
         'hide_groupchat_banner': _('Hides the banner in a group chat window.'),
-        'hide_groupchat_occupants_list': _('Hides the group chat participants list in a group chat window.'),
-        'ignore_incoming_attention': _('If enabled, Gajim will ignore incoming attention requests (\'wizz\').'),
-        'key_up_lines': _('How many lines to store for Ctrl+KeyUP (previously sent messages).'),
+        'hide_groupchat_occupants_list': _(
+            'Hides the group chat participants list in a group chat window.'),
+        'ignore_incoming_attention': _(
+            'If enabled, Gajim will ignore incoming attention '
+            'requests (\'wizz\').'),
+        'key_up_lines': _(
+            'How many lines to store for Ctrl+KeyUP '
+            '(previously sent messages).'),
         'log_contact_status_changes': '',
-        'muc_highlight_words': _('A list of words (semicolon separated) that will be highlighted in group chats.'),
+        'muc_highlight_words': _(
+            'A list of words (semicolon separated) that will be '
+            'highlighted in group chats.'),
         'muclumbus_api_http_uri': '',
         'muclumbus_api_jid': '',
-        'muclumbus_api_pref': _('API Preferences. Possible values: \'http\', \'iq\''),
-        'notification_preview_message': _('Preview new messages in notification popup?'),
+        'muclumbus_api_pref': _(
+            'API Preferences. Possible values: \'http\', \'iq\''),
+        'notification_preview_message': _(
+            'Preview new messages in notification popup?'),
         'notification_timeout': '',
         'notify_on_all_muc_messages': '',
-        'plugins_repository_enabled': _('If enabled, Gajim offers to download plugins hosted on gajim.org'),
-        'restore_timeout': _('How far back in time (minutes) chat history is restored. -1 means no limit.'),
-        'save_main_window_position': _('If enabled, Gajim will save the main window position when hiding it, and restore it when showing the window again.'),
+        'plugins_repository_enabled': _(
+            'If enabled, Gajim offers to download plugins hosted on gajim.org'),
+        'restore_timeout': _(
+            'How far back in time (minutes) chat history is restored. -1 '
+            'means no limit.'),
+        'save_main_window_position': _(
+            'If enabled, Gajim will save the main window position when hiding '
+            'it, and restore it when showing the window again.'),
         'search_engine': '',
-        'send_on_ctrl_enter': _('Send message on Ctrl+Enter and make a new line with Enter.'),
-        'shell_like_completion': _('If enabled, completion in group chats will be like a shell auto-completion.'),
+        'send_on_ctrl_enter': _(
+            'Send message on Ctrl+Enter and make a new line with Enter.'),
+        'shell_like_completion': _(
+            'If enabled, completion in group chats will be like a shell '
+            'auto-completion.'),
         'stun_server': _('STUN server to use when using Jingle'),
-        'trayicon_notification_on_events': _('Notify of events in the notification area.'),
-        'use_kib_mib': _('IEC standard says KiB = 1024 bytes, KB = 1000 bytes.'),
-        'use_libappindicator': _('Enables libappindicator, an alternative tray icon provider'),
-        'use_stun_server': _('If enabled, Gajim will try to use a STUN server when using Jingle. The one in \'stun_server\' option, or the one given by the XMPP server.'),
-        'use_urgency_hint': _('If enabled, Gajim makes the window flash (the default behaviour in most Window Managers) when holding pending events.'),
+        'trayicon_notification_on_events': _(
+            'Notify of events in the notification area.'),
+        'use_kib_mib': _(
+            'IEC standard says KiB = 1024 bytes, KB = 1000 bytes.'),
+        'use_libappindicator': _(
+            'Enables libappindicator, an alternative tray icon provider'),
+        'use_stun_server': _(
+            'If enabled, Gajim will try to use a STUN server when using Jingle.'
+            ' The one in \'stun_server\' option, or the one given by '
+            'the XMPP server.'),
+        'use_urgency_hint': _(
+            'If enabled, Gajim makes the window flash (the default behaviour '
+            'in most Window Managers) when holding pending events.'),
     },
 }
-
-# pylint: enable=line-too-long

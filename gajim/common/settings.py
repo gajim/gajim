@@ -130,7 +130,6 @@ class Settings:
             # remove the func once it should not be called anymore
             raise ValueError('Only bound methods can be connected')
 
-
         weak_func = weakref.WeakMethod(func)
         self._callbacks[(setting, account, jid)].append(weak_func)
 
@@ -415,7 +414,7 @@ class Settings:
             else:
                 category = 'contact'
 
-            if not jid in self._account_settings[account][category]:
+            if jid not in self._account_settings[account][category]:
                 self._account_settings[account][category][jid] = {
                     'encryption': encryption}
             else:
@@ -538,11 +537,17 @@ class Settings:
         return setting in self._app_overrides
 
     @overload
-    def get_app_setting(self, setting: BoolSettings) -> bool: ...
+    def get_app_setting(self, setting: BoolSettings) -> bool:
+        ...
+
     @overload
-    def get_app_setting(self, setting: StringSettings) -> str: ...
+    def get_app_setting(self, setting: StringSettings) -> str:
+        ...
+
     @overload
-    def get_app_setting(self, setting: IntSettings) -> int: ...
+    def get_app_setting(self, setting: IntSettings) -> int:
+        ...
+
     def get_app_setting(self, setting: str) -> AllSettingsT:
         if setting not in APP_SETTINGS:
             raise ValueError(f'Invalid app setting: {setting}')
@@ -555,12 +560,27 @@ class Settings:
     get = get_app_setting
 
     @overload
-    def set_app_setting(self, setting: BoolSettings, value: Optional[bool]) -> None: ...
+    def set_app_setting(self,
+                        setting: BoolSettings,
+                        value: Optional[bool]) -> None:
+        ...
+
     @overload
-    def set_app_setting(self, setting: StringSettings, value: Optional[str]) -> None: ...
+    def set_app_setting(self,
+                        setting: StringSettings,
+                        value: Optional[str]) -> None:
+        ...
+
     @overload
-    def set_app_setting(self, setting: IntSettings, value: Optional[int]) -> None: ...
-    def set_app_setting(self, setting: str, value: Optional[AllSettingsT]) -> None:
+    def set_app_setting(self,
+                        setting: IntSettings,
+                        value: Optional[int]) -> None:
+        ...
+
+    def set_app_setting(self,
+                        setting: str,
+                        value: Optional[AllSettingsT]) -> None:
+
         if setting not in APP_SETTINGS:
             raise ValueError(f'Invalid app setting: {setting}')
 
@@ -591,7 +611,7 @@ class Settings:
 
     set = set_app_setting
 
-    def get_plugin_setting(self, plugin: str, setting: str) ->  SETTING_TYPE:
+    def get_plugin_setting(self, plugin: str, setting: str) -> SETTING_TYPE:
         if setting not in PLUGIN_SETTINGS:
             raise ValueError(f'Invalid plugin setting: {setting}')
 
@@ -665,15 +685,21 @@ class Settings:
     @overload
     def get_account_setting(self,
                             account: str,
-                            setting: StringAccountSettings) -> str: ...
+                            setting: StringAccountSettings) -> str:
+        ...
+
     @overload
     def get_account_setting(self,
                             account: str,
-                            setting: IntAccountSettings) -> int: ...
+                            setting: IntAccountSettings) -> int:
+        ...
+
     @overload
     def get_account_setting(self,
                             account: str,
-                            setting: BoolAccountSettings) -> bool: ...
+                            setting: BoolAccountSettings) -> bool:
+        ...
+
     def get_account_setting(self,
                             account: str,
                             setting: str) -> AllSettingsT:
@@ -693,17 +719,22 @@ class Settings:
     def set_account_setting(self,
                             account: str,
                             setting: StringAccountSettings,
-                            value: Optional[str]) -> None: ...
+                            value: Optional[str]) -> None:
+        ...
+
     @overload
     def set_account_setting(self,
                             account: str,
                             setting: IntAccountSettings,
-                            value: Optional[int]) -> None: ...
+                            value: Optional[int]) -> None:
+        ...
+
     @overload
     def set_account_setting(self,
                             account: str,
                             setting: BoolAccountSettings,
-                            value: Optional[bool]) -> None: ...
+                            value: Optional[bool]) -> None:
+        ...
 
     def set_account_setting(self,
                             account: str,
@@ -741,21 +772,24 @@ class Settings:
                                account: str,
                                jid: JID,
                                setting: IntGroupChatSettings
-                               ) -> int: ...
+                               ) -> int:
+        ...
 
     @overload
     def get_group_chat_setting(self,
                                account: str,
                                jid: JID,
                                setting: BoolGroupChatSettings
-                               ) -> bool: ...
+                               ) -> bool:
+        ...
 
     @overload
     def get_group_chat_setting(self,
                                account: str,
                                jid: JID,
                                setting: StringGroupChatSettings
-                               ) -> str: ...
+                               ) -> str:
+        ...
 
     def get_group_chat_setting(self,
                                account: str,
@@ -802,21 +836,24 @@ class Settings:
                                account: str,
                                jid: JID,
                                setting: StringGroupChatSettings,
-                               value: str) -> None: ...
+                               value: str) -> None:
+        ...
 
     @overload
     def set_group_chat_setting(self,
                                account: str,
                                jid: JID,
                                setting: IntGroupChatSettings,
-                               value: int) -> None: ...
+                               value: int) -> None:
+        ...
 
     @overload
     def set_group_chat_setting(self,
                                account: str,
                                jid: JID,
                                setting: BoolGroupChatSettings,
-                               value: bool) -> None: ...
+                               value: bool) -> None:
+        ...
 
     def set_group_chat_setting(self,
                                account: str,
@@ -1090,13 +1127,17 @@ class Settings:
     def set_workspace_setting(self,
                               workspace_id: str,
                               setting: StringWorkspaceSettings,
-                              value: str) -> None: ...
+                              value: str) -> None:
+        ...
+
     @overload
     def set_workspace_setting(self,
                               workspace_id: str,
                               setting: Literal['open_chats'],
                               value: list[tuple[str, JID, str, bool]]
-                              ) -> None: ...
+                              ) -> None:
+        ...
+
     def set_workspace_setting(self,
                               workspace_id: str,
                               setting: AllWorkspaceSettings,
@@ -1120,11 +1161,15 @@ class Settings:
     def get_workspace_setting(self,
                               workspace_id: str,
                               setting: Literal['open_chats']
-                              ) -> OpenChatSettingT: ...
+                              ) -> OpenChatSettingT:
+        ...
+
     @overload
     def get_workspace_setting(self,
                               workspace_id: str,
-                              setting: StringWorkspaceSettings) -> str: ...
+                              setting: StringWorkspaceSettings) -> str:
+        ...
+
     def get_workspace_setting(self,
                               workspace_id: str,
                               setting: AllWorkspaceSettings
@@ -1167,7 +1212,6 @@ class Settings:
     def remove_workspace(self, id_: str) -> None:
         del self._settings['workspaces'][id_]
         self._commit_settings('workspaces')
-
 
 
 class LegacyConfig:

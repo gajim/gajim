@@ -40,7 +40,6 @@ class DialogButton(NamedTuple):
     action: ButtonAction
     is_default: bool
 
-
     @classmethod
     def make(cls, type_: Optional[str] = None, **kwargs: Any) -> DialogButton:
         # Defaults

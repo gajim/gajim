@@ -54,7 +54,7 @@ class SecLabels(BaseModule):
     @as_task
     def request_catalog(self, jid: str) -> Generator[Catalog, None, None]:
 
-        _task = yield
+        _task = yield  # noqa: F841
 
         catalog = yield self._nbxmpp('SecurityLabels').request_catalog(jid)
 

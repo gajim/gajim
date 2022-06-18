@@ -173,16 +173,24 @@ class FileTransfersWindow:
 
         self._ui.connect_signals(self)
 
-        # pylint: disable=line-too-long
-        app.ged.register_event_handler('file-completed', ged.GUI1, self._file_completed)
-        app.ged.register_event_handler('file-hash-error', ged.GUI1, self._file_hash_error)
-        app.ged.register_event_handler('file-send-error', ged.GUI1, self._file_send_error)
-        app.ged.register_event_handler('file-request-error', ged.GUI1, self._file_request_error)
-        app.ged.register_event_handler('file-request-received', ged.GUI1, self._file_request_received)
-        app.ged.register_event_handler('file-progress', ged.GUI1, self._file_progress)
-        app.ged.register_event_handler('file-error', ged.GUI1, self._file_error)
-        app.ged.register_event_handler('jingle-ft-cancelled-received', ged.GUI1, self._file_transfer_cancelled)
-        # pylint: enable=line-too-long
+        app.ged.register_event_handler(
+            'file-completed', ged.GUI1, self._file_completed)
+        app.ged.register_event_handler(
+            'file-hash-error', ged.GUI1, self._file_hash_error)
+        app.ged.register_event_handler(
+            'file-send-error', ged.GUI1, self._file_send_error)
+        app.ged.register_event_handler(
+            'file-request-error', ged.GUI1, self._file_request_error)
+        app.ged.register_event_handler(
+            'file-request-received', ged.GUI1, self._file_request_received)
+        app.ged.register_event_handler(
+            'file-progress', ged.GUI1, self._file_progress)
+        app.ged.register_event_handler(
+            'file-error', ged.GUI1, self._file_error)
+        app.ged.register_event_handler(
+            'jingle-ft-cancelled-received',
+            ged.GUI1,
+            self._file_transfer_cancelled)
 
     def _file_completed(self, event):
         self.set_status(event.file_props, 'ok')

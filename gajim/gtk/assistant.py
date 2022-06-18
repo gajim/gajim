@@ -170,8 +170,9 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
 
     def show_page(self,
                   name: str,
-                  transition: Gtk.StackTransitionType = Gtk.StackTransitionType.NONE
-                  ) -> None:
+                  transition: Gtk.StackTransitionType =
+                  Gtk.StackTransitionType.NONE) -> None:
+
         if self._ui.stack.get_visible_child_name() == name:
             return
         self._hide_buttons()

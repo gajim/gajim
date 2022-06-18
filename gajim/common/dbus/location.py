@@ -34,7 +34,7 @@ from gajim.common.events import LocationChanged
 if app.is_installed('GEOCLUE'):
     import gi
     gi.require_version('Geoclue', '2.0')
-    from gi.repository import Geoclue  # pylint: disable=ungrouped-imports,no-name-in-module
+    from gi.repository import Geoclue  # pylint: disable=ungrouped-imports,no-name-in-module  # noqa: E501
 
 log = logging.getLogger('gajim.c.dbus.location')
 

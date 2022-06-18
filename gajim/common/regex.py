@@ -1,5 +1,6 @@
 import re
 
+
 def _get_link_pattern():
     # regexp meta characters are:  . ^ $ * + ? { } [ ] \ | ( )
     # one escapes the metachars with \
@@ -45,6 +46,7 @@ def _get_link_pattern():
     link_pattern = links + '|' + mail + '|' + legacy_prefixes
     return link_pattern
 
+
 def _get_basic_pattern():
     basic_pattern = _get_link_pattern()
     # detects eg. *b* *bold* *bold bold* test *bold* *bold*! (*bold*)
@@ -53,6 +55,7 @@ def _get_basic_pattern():
         r'(?<!\S)' r'~[^\s~]' r'([^~]*[^\s~])?' r'~(?!\S)|'\
         r'(?<!\w)' r'_[^\s_]' r'([^_]*[^\s_])?' r'_(?!\w)'
     return basic_pattern + formatting
+
 
 def _get_emot_and_basic_pattern(use_ascii_formatting: bool = True) -> str:
     from gajim.gui.emoji_data import emoji_data
@@ -67,6 +70,7 @@ def _get_emot_and_basic_pattern(use_ascii_formatting: bool = True) -> str:
 
     return '%s|%s' % (pattern, emoticons)
 
+
 LINK_REGEX = re.compile(_get_link_pattern(), re.I | re.U)
 
 # link pattern + ASCII formatting
@@ -74,11 +78,11 @@ BASIC_REGEX = re.compile(_get_basic_pattern(), re.IGNORECASE)
 
 # emoticons + link pattern
 EMOT_AND_LINK_REGEX = re.compile(_get_emot_and_basic_pattern(False),
-                                          re.IGNORECASE)
+                                 re.IGNORECASE)
 
 # emoticons + link pattern + ASCII formatting
 EMOT_AND_BASIC_REGEX = re.compile(_get_emot_and_basic_pattern(True),
-                                          re.IGNORECASE)
+                                  re.IGNORECASE)
 
 INVALID_XML_CHARS_REGEX = re.compile(
     '[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x1f]|[\ud800-\udfff]|[\ufffe-\uffff]')

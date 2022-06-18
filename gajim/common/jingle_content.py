@@ -125,7 +125,7 @@ class JingleContent:
     def __on_content_accept(self,
                             stanza: nbxmpp.Node,
                             content: nbxmpp.Node,
-                            error:  Optional[nbxmpp.Node],
+                            error: Optional[nbxmpp.Node],
                             action: str
                             ) -> None:
         self.on_negotiated()
@@ -157,7 +157,7 @@ class JingleContent:
     def __on_transport_replace(self,
                                stanza: nbxmpp.Node,
                                content: nbxmpp.Node,
-                               error:  Optional[nbxmpp.Node],
+                               error: Optional[nbxmpp.Node],
                                action: str
                                ) -> None:
         content.addChild(node=self.transport.make_transport())
@@ -165,7 +165,7 @@ class JingleContent:
     def __on_transport_info(self,
                             stanza: nbxmpp.Node,
                             content: nbxmpp.Node,
-                            error:  Optional[nbxmpp.Node],
+                            error: Optional[nbxmpp.Node],
                             action: str
                             ) -> None:
         """
@@ -208,7 +208,6 @@ class JingleContent:
         content.addChild(node=tp)
         self.session.send_transport_info(content)
 
-
     def send_description_info(self) -> None:
         content = self.__content()
         self._fill_content(content)
@@ -217,7 +216,7 @@ class JingleContent:
     def __fill_jingle_stanza(self,
                              stanza: nbxmpp.Node,
                              content: nbxmpp.Node,
-                             error:  Optional[nbxmpp.Node],
+                             error: Optional[nbxmpp.Node],
                              action: str
                              ) -> None:
         """
@@ -256,29 +255,30 @@ class JingleContent:
                 if hash_data:
                     file_tag.addChild(node=hash_data)
                 pjid = app.get_jid_without_resource(self.session.peerjid)
-                file_info = {'name' : self.file_props.name,
-                             'file-name' : self.file_props.file_name,
-                             'hash' : self.file_props.hash_,
-                             'size' : self.file_props.size,
-                             'date' : self.file_props.date,
-                             'peerjid' : pjid
-                            }
-                self.session.connection.get_module('Jingle').set_file_info(file_info)
+                file_info = {'name': self.file_props.name,
+                             'file-name': self.file_props.file_name,
+                             'hash': self.file_props.hash_,
+                             'size': self.file_props.size,
+                             'date': self.file_props.date,
+                             'peerjid': pjid
+                             }
+                self.session.connection.get_module('Jingle').set_file_info(
+                    file_info)
         desc = file_tag.setTag('desc')
         if self.file_props.desc:
             desc.setData(self.file_props.desc)
         if self.use_security:
             security = nbxmpp.simplexml.Node(
                 tag=Namespace.JINGLE_XTLS + ' security')
-            certpath = configpaths.get('MY_CERT') / (SELF_SIGNED_CERTIFICATE
-                                                     + '.cert')
+            certpath = configpaths.get('MY_CERT')
+            certpath = certpath / f'{SELF_SIGNED_CERTIFICATE}.cert'
             cert = load_cert_file(certpath)
             if cert:
                 digest_algo = (cert.get_signature_algorithm()
                                .decode('utf-8').split('With')[0])
                 security.addChild('fingerprint').addData(cert.digest(
                     digest_algo).decode('utf-8'))
-                for m in ('x509', ): # supported authentication methods
+                for m in ('x509', ):  # supported authentication methods
                     method = nbxmpp.simplexml.Node(tag='method')
                     method.setAttr('name', m)
                     security.addChild(node=method)

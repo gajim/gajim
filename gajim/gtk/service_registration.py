@@ -44,7 +44,7 @@ log = logging.getLogger('gajim.gui.service_registration')
 
 class ServiceRegistration(Assistant):
     def __init__(self, account: str, address: JID) -> None:
-        Assistant.__init__(self, width= 600, height=400)
+        Assistant.__init__(self, width=600, height=400)
         self.account = account
 
         self._client = app.get_client(account)
@@ -74,13 +74,20 @@ class ServiceRegistration(Assistant):
         self._request_form()
 
     @overload
-    def get_page(self, name: Literal['form']) -> Form: ...
+    def get_page(self, name: Literal['form']) -> Form:
+        ...
+
     @overload
-    def get_page(self, name: Literal['success']) -> SuccessPage: ...
+    def get_page(self, name: Literal['success']) -> SuccessPage:
+        ...
+
     @overload
-    def get_page(self, name: Literal['error']) -> ErrorPage: ...
+    def get_page(self, name: Literal['error']) -> ErrorPage:
+        ...
+
     @overload
-    def get_page(self, name: Literal['progress']) -> ProgressPage: ...
+    def get_page(self, name: Literal['progress']) -> ProgressPage:
+        ...
 
     def get_page(self, name: str) -> Page:
         return self._pages[name]

@@ -40,6 +40,7 @@ S_FINISHED = 4
 
 CONNECT_TIMEOUT = 20
 
+
 class Proxy65Manager:
     """
     Keep records for file transfer proxies. Each time account establishes a
@@ -56,7 +57,7 @@ class Proxy65Manager:
         self.default_proxies = {}
 
     def resolve(self, proxy, connection, sender_jid, default=None,
-    testit=True):
+                testit=True):
         """
         Start
         if testit=False, Gajim won't try to resolve it
@@ -113,6 +114,7 @@ class Proxy65Manager:
                 return (resolver.host, resolver.port, resolver.jid)
         return (None, 0, None)
 
+
 class ProxyResolver:
     def resolve_result(self, host, port, jid):
         """
@@ -126,17 +128,19 @@ class ProxyResolver:
             return
         self.state = S_INITIAL
         log.info('start resolving %s:%s', self.host, self.port)
-        self.receiver_tester = ReceiverTester(self.host, self.port, self.jid,
-                self.sid, self.sender_jid, self._on_receiver_success,
-                self._on_connect_failure)
+        self.receiver_tester = ReceiverTester(
+            self.host, self.port, self.jid,
+            self.sid, self.sender_jid, self._on_receiver_success,
+            self._on_connect_failure)
         self.receiver_tester.connect()
 
     def _on_receiver_success(self):
         log.debug('Receiver successfully connected %s:%s',
                   self.host, self.port)
-        self.host_tester = HostTester(self.host, self.port, self.jid,
-                self.sid, self.sender_jid, self._on_connect_success,
-                self._on_connect_failure)
+        self.host_tester = HostTester(
+            self.host, self.port, self.jid,
+            self.sid, self.sender_jid, self._on_connect_success,
+            self._on_connect_failure)
         self.host_tester.connect()
 
     def _on_connect_success(self):
@@ -151,8 +155,8 @@ class ProxyResolver:
 
         if self.active_connection:
             log.debug('Activating bytestream on %s:%s', self.host, self.port)
-            self.active_connection.SendAndCallForResponse(iq,
-                     self._result_received)
+            self.active_connection.SendAndCallForResponse(
+                iq, self._result_received)
             self.state = S_ACTIVATED
         else:
             self.state = S_INITIAL
@@ -238,12 +242,20 @@ class ProxyResolver:
         self.sender_jid = sender_jid
         self.testit = testit
 
+
 class HostTester(Socks5, IdleObject):
     """
     Fake proxy tester
     """
 
-    def __init__(self, host, port, jid, sid, sender_jid, on_success, on_failure):
+    def __init__(self,
+                 host,
+                 port,
+                 jid,
+                 sid,
+                 sender_jid,
+                 on_success,
+                 on_failure):
         """
         Try to establish and auth to proxy at (host, port)
 
@@ -272,7 +284,7 @@ class HostTester(Socks5, IdleObject):
         self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._sock.setblocking(False)
         self.fd = self._sock.fileno()
-        self.state = 0 # about to be connected
+        self.state = 0  # about to be connected
         app.idlequeue.plug_idle(self, True, False)
         self.do_connect()
         self.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
@@ -291,7 +303,7 @@ class HostTester(Socks5, IdleObject):
         if self.state == 0:
             self.do_connect()
             return
-        if self.state == 1: # send initially: version and auth types
+        if self.state == 1:  # send initially: version and auth types
             data = self._get_auth_buff()
             self.send_raw(data)
         else:
@@ -353,17 +365,25 @@ class HostTester(Socks5, IdleObject):
             self._send = self._sock.send
             self._recv = self._sock.recv
         self.buff = b''
-        self.state = 1 # connected
+        self.state = 1  # connected
         log.debug('Host connected to %s:%s', self.host, self.port)
         self.idlequeue.plug_idle(self, True, False)
         return
+
 
 class ReceiverTester(Socks5, IdleObject):
     """
     Fake proxy tester
     """
 
-    def __init__(self, host, port, jid, sid, sender_jid, on_success, on_failure):
+    def __init__(self,
+                 host,
+                 port,
+                 jid,
+                 sid,
+                 sender_jid,
+                 on_success,
+                 on_failure):
         """
         Try to establish and auth to proxy at (host, port)
 
@@ -392,7 +412,7 @@ class ReceiverTester(Socks5, IdleObject):
         self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._sock.setblocking(False)
         self.fd = self._sock.fileno()
-        self.state = 0 # about to be connected
+        self.state = 0  # about to be connected
         app.idlequeue.plug_idle(self, True, False)
         self.do_connect()
         self.idlequeue.set_read_timeout(self.fd, CONNECT_TIMEOUT)
@@ -411,7 +431,7 @@ class ReceiverTester(Socks5, IdleObject):
         if self.state == 0:
             self.do_connect()
             return
-        if self.state == 1: # send initially: version and auth types
+        if self.state == 1:  # send initially: version and auth types
             data = self._get_auth_buff()
             self.send_raw(data)
         else:
@@ -481,6 +501,6 @@ class ReceiverTester(Socks5, IdleObject):
             self._send = self._sock.send
             self._recv = self._sock.recv
         self.buff = ''
-        self.state = 1 # connected
+        self.state = 1  # connected
         log.debug('Receiver connected to %s:%s', self.host, self.port)
         self.idlequeue.plug_idle(self, True, False)

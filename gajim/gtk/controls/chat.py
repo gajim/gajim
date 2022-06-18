@@ -199,11 +199,11 @@ class ChatControl(BaseControl):
         # Jingle AV
         if self.type.is_chat:
             self._get_action('start-voice-call-').set_enabled(
-                online and self.contact.supports_audio()
-                and sys.platform != 'win32')
+                online and self.contact.supports_audio() and
+                sys.platform != 'win32')
             self._get_action('start-video-call-').set_enabled(
-                online and self.contact.supports_video()
-                and sys.platform != 'win32')
+                online and self.contact.supports_video() and
+                sys.platform != 'win32')
 
         # Send message
         has_text = self.msg_textview.has_text()
@@ -347,7 +347,8 @@ class ChatControl(BaseControl):
                         ) -> None:
         self.update_ui()
 
-    def _on_mam_message_received(self, event: events.MamMessageReceived) -> None:
+    def _on_mam_message_received(self,
+                                 event: events.MamMessageReceived) -> None:
         if event.properties.is_muc_pm:
             if not event.properties.jid == self.contact.jid:
                 return

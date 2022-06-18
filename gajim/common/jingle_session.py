@@ -16,7 +16,7 @@
 Handles Jingle sessions (XEP 0166)
 """
 
-#TODO:
+# TODO:
 # * 'senders' attribute of 'content' element
 # * security preconditions
 # * actions:
@@ -71,6 +71,7 @@ JINGLE_EVENTS = {
     'jingle-error-received': events.JingleErrorReceived
 }
 
+
 # FIXME: Move it to JingleSession.States?
 @unique
 class JingleStates(Enum):
@@ -81,11 +82,13 @@ class JingleStates(Enum):
     PENDING = 1
     ACTIVE = 2
 
+
 class OutOfOrder(Exception):
     """
     Exception that should be raised when an action is received when in the wrong
     state
     """
+
 
 class TieBreak(Exception):
     """
@@ -93,11 +96,13 @@ class TieBreak(Exception):
     action
     """
 
+
 class FailedApplication(Exception):
     """
     Exception that should be raised in case responder supports none of the
     payload-types offered by the initiator
     """
+
 
 class JingleSession:
     """
@@ -120,10 +125,10 @@ class JingleSession:
         """
         # negotiated contents
         self.contents: dict[tuple[str, str], JingleContent] = {}
-        self.connection = con # connection to use
+        self.connection = con  # connection to use
         # our full jid
         self.ourjid = str(self.connection.get_own_jid())
-        self.peerjid = jid # jid we connect to
+        self.peerjid = jid  # jid we connect to
         # jid we use as the initiator
         self.initiator = self.ourjid if weinitiate else self.peerjid
         # jid we use as the responder
@@ -137,14 +142,14 @@ class JingleSession:
         self.state = JingleStates.ENDED
         if not sid:
             sid = generate_id()
-        self.sid = sid # sessionid
+        self.sid = sid  # sessionid
         # iq stanza id, used to determine which sessions to summon callback
         # later on when iq-result stanza arrives
         if iq_id is not None:
             self.iq_ids = [iq_id]
         else:
             self.iq_ids = []
-        self.accepted = True # is this session accepted by user
+        self.accepted = True  # is this session accepted by user
         # Tells whether this session is a file transfer or not
         self.session_type_ft = False
         # callbacks to call on proper contents
@@ -153,34 +158,35 @@ class JingleSession:
         self.callbacks: dict[str, list[Callable[
             [nbxmpp.Node, nbxmpp.Node, Optional[nbxmpp.Node], str],
             None]]] = {
-            'content-accept':       [self.__ack, self.__on_content_accept,
-                                     self.__broadcast],
-            'content-add':          [self.__ack,
-                                     self.__on_content_add, self.__broadcast
-                                    ], #TODO
-            'content-modify':       [self.__ack], #TODO
-            'content-reject':       [self.__ack, self.__on_content_remove],
-            'content-remove':       [self.__ack, self.__on_content_remove],
-            'description-info':     [self.__ack, self.__broadcast], #TODO
-            'security-info':        [self.__ack], #TODO
-            'session-accept':       [self.__ack, self.__on_session_accept,
-                                     self.__on_content_accept,
-                                     self.__broadcast],
-            'session-info':         [self.__ack, self.__broadcast,
-                                     self.__on_session_info],
-            'session-initiate':     [self.__ack, self.__on_session_initiate,
-                                     self.__broadcast],
-            'session-terminate':    [self.__ack, self.__on_session_terminate,
-                                     self.__broadcast_all],
-            'transport-info':       [self.__ack, self.__broadcast],
-            'transport-replace':    [self.__ack, self.__broadcast,
-                                     self.__on_transport_replace], #TODO
-            'transport-accept':     [self.__ack, self.__on_session_accept,
-                                     self.__on_content_accept,
-                                     self.__broadcast],
-            'transport-reject':     [self.__ack], #TODO
-            'iq-result':            [self.__broadcast],
-            'iq-error':             [self.__on_error],
+            'content-accept': [self.__ack,
+                               self.__on_content_accept,
+                               self.__broadcast],
+            'content-add': [self.__ack,
+                            self.__on_content_add,
+                            self.__broadcast],  # TODO
+            'content-modify': [self.__ack],  # TODO
+            'content-reject': [self.__ack, self.__on_content_remove],
+            'content-remove': [self.__ack, self.__on_content_remove],
+            'description-info': [self.__ack, self.__broadcast],  # TODO
+            'security-info': [self.__ack],  # TODO
+            'session-accept': [self.__ack, self.__on_session_accept,
+                               self.__on_content_accept,
+                               self.__broadcast],
+            'session-info': [self.__ack, self.__broadcast,
+                             self.__on_session_info],
+            'session-initiate': [self.__ack, self.__on_session_initiate,
+                                 self.__broadcast],
+            'session-terminate': [self.__ack, self.__on_session_terminate,
+                                  self.__broadcast_all],
+            'transport-info': [self.__ack, self.__broadcast],
+            'transport-replace': [self.__ack, self.__broadcast,
+                                  self.__on_transport_replace],  # TODO
+            'transport-accept': [self.__ack, self.__on_session_accept,
+                                 self.__on_content_accept,
+                                 self.__broadcast],
+            'transport-reject': [self.__ack],  # TODO
+            'iq-result': [self.__broadcast],
+            'iq-error': [self.__on_error],
         }
 
     def collect_iq_id(self, iq_id: str) -> None:
@@ -258,11 +264,11 @@ class JingleSession:
         Creator must be one of ('we', 'peer', 'initiator', 'responder')
         """
         assert creator in ('we', 'peer', 'initiator', 'responder')
-        if (creator == 'we' and self.weinitiate) or (creator == 'peer' and \
-        not self.weinitiate):
+        if ((creator == 'we' and self.weinitiate) or
+                (creator == 'peer' and not self.weinitiate)):
             creator = 'initiator'
-        elif (creator == 'peer' and self.weinitiate) or (creator == 'we' and \
-        not self.weinitiate):
+        elif ((creator == 'peer' and self.weinitiate) or
+                (creator == 'we' and not self.weinitiate)):
             creator = 'responder'
         content.creator = creator
         content.name = name
@@ -309,14 +315,16 @@ class JingleSession:
                                  content: Optional[JingleContent] = None
                                  ) -> None:
         if self.state == JingleStates.ENDED:
-            # Session not yet started, only one action possible: session-initiate
+            # Session not yet started, only one action possible:
+            # session-initiate
             if self.is_ready() and self.weinitiate:
                 self.__session_initiate()
         elif self.state == JingleStates.PENDING:
             # We can either send a session-accept or a content-add
             if self.is_ready() and not self.weinitiate:
                 self.__session_accept()
-            elif content and (content.creator == 'initiator') == self.weinitiate:
+            elif (content and
+                  (content.creator == 'initiator') == self.weinitiate):
                 self.__content_add(content)
             elif content and self.weinitiate:
                 self.__content_accept(content)
@@ -325,8 +333,8 @@ class JingleSession:
             # we are sending a file we can only use session_initiate.
             if not content:
                 return
-            we_created_content = (content.creator == 'initiator') \
-                                 == self.weinitiate
+            is_initiator = content.creator == 'initiator'
+            we_created_content = is_initiator == self.weinitiate
             if we_created_content and content.media == 'file':
                 self.__session_initiate()
             if we_created_content:
@@ -340,8 +348,8 @@ class JingleSession:
         """
         Return True when all codecs and candidates are ready (for all contents)
         """
-        return (all((content.is_ready() for content in self.contents.values()))
-                and self.accepted)
+        ready = [content.is_ready() for content in self.contents.values()]
+        return all(ready) and self.accepted
 
     def accept_session(self) -> None:
         """
@@ -381,8 +389,8 @@ class JingleSession:
 
     def on_stanza(self, stanza: nbxmpp.Node) -> None:
         """
-        A callback for ConnectionJingle. It gets stanza, then tries to send it to
-        all internally registered callbacks. First one to raise
+        A callback for ConnectionJingle. It gets stanza, then tries to send
+        it to all internally registered callbacks. First one to raise
         nbxmpp.NodeProcessed breaks function
         """
         jingle = stanza.getTag('jingle')
@@ -423,7 +431,7 @@ class JingleSession:
     def __ack(self,
               stanza: nbxmpp.Node,
               jingle: nbxmpp.Node,
-              error:  Optional[nbxmpp.Node],
+              error: Optional[nbxmpp.Node],
               action: str
               ) -> None:
         """
@@ -467,14 +475,14 @@ class JingleSession:
     def __on_transport_replace(self,
                                stanza: nbxmpp.Node,
                                jingle: nbxmpp.Node,
-                               error:  Optional[nbxmpp.Node],
+                               error: Optional[nbxmpp.Node],
                                action: str
                                ) -> None:
         for content in jingle.iterTags('content'):
             creator = content['creator']
             name = content['name']
+            transport_ns = content.getTag('transport').getNamespace()
             if (creator, name) in self.contents:
-                transport_ns = content.getTag('transport').getNamespace()
                 if transport_ns == Namespace.JINGLE_ICE_UDP:
                     # FIXME: We don't manage anything else than ICE-UDP now...
                     # What was the previous transport?!?
@@ -485,13 +493,15 @@ class JingleSession:
                         'transport'))
                     self.modify_content(creator, name, transport)
                     self.state = JingleStates.PENDING
-                    self.contents[(creator, name)].state = State.TRANSPORT_REPLACE
+                    self.contents[(creator, name)].state = \
+                        State.TRANSPORT_REPLACE
                     self.__ack(stanza, jingle, error, action)
                     self.__transport_accept(transport)
                 else:
                     stanza, jingle = self.__make_jingle('transport-reject')
-                    content = jingle.setTag('content', attrs={'creator': creator,
-                                                              'name': name})
+                    content = jingle.setTag('content',
+                                            attrs={'creator': creator,
+                                                   'name': name})
                     content.setTag('transport', namespace=transport_ns)
                     self.connection.connection.send(stanza)
                     raise nbxmpp.NodeProcessed
@@ -508,7 +518,7 @@ class JingleSession:
     def __on_session_info(self,
                           stanza: nbxmpp.Node,
                           jingle: nbxmpp.Node,
-                          error:  Optional[nbxmpp.Node],
+                          error: Optional[nbxmpp.Node],
                           action: str
                           ) -> None:
         # TODO: active, (un)hold, (un)mute
@@ -520,8 +530,9 @@ class JingleSession:
             raise OutOfOrder
         for child in jingle.getChildren():
             if child.getName() == 'checksum':
-                hash_ = child.getTag('file').getTag(name='hash',
-                                                    namespace=Namespace.HASHES_2)
+                hash_ = child.getTag('file').getTag(
+                    name='hash',
+                    namespace=Namespace.HASHES_2)
                 if hash_ is None:
                     continue
                 algo = hash_.getAttr('algo')
@@ -538,7 +549,7 @@ class JingleSession:
     def __on_content_remove(self,
                             stanza: nbxmpp.Node,
                             jingle: nbxmpp.Node,
-                            error:  Optional[nbxmpp.Node],
+                            error: Optional[nbxmpp.Node],
                             action: str
                             ) -> None:
         for content in jingle.iterTags('content'):
@@ -559,7 +570,7 @@ class JingleSession:
     def __on_session_accept(self,
                             stanza: nbxmpp.Node,
                             jingle: nbxmpp.Node,
-                            error:  Optional[nbxmpp.Node],
+                            error: Optional[nbxmpp.Node],
                             action: str
                             ) -> None:
         # FIXME
@@ -570,7 +581,7 @@ class JingleSession:
     @staticmethod
     def __on_content_accept(stanza: nbxmpp.Node,
                             jingle: nbxmpp.Node,
-                            error:  Optional[nbxmpp.Node],
+                            error: Optional[nbxmpp.Node],
                             action: str
                             ) -> None:
         """
@@ -586,7 +597,7 @@ class JingleSession:
     def __on_content_add(self,
                          stanza: nbxmpp.Node,
                          jingle: nbxmpp.Node,
-                         error:  Optional[nbxmpp.Node],
+                         error: Optional[nbxmpp.Node],
                          action: str
                          ) -> None:
         if self.state == JingleStates.ENDED:
@@ -604,7 +615,7 @@ class JingleSession:
     def __on_session_initiate(self,
                               stanza: nbxmpp.Node,
                               jingle: nbxmpp.Node,
-                              error:  Optional[nbxmpp.Node],
+                              error: Optional[nbxmpp.Node],
                               action: str
                               ) -> None:
         """
@@ -629,8 +640,8 @@ class JingleSession:
         self.accepted = False   # user did not accept this session yet
         # TODO: If the initiator is unknown to the receiver (e.g., via presence
         # subscription) and the receiver has a policy of not communicating via
-        # Jingle with unknown entities, it SHOULD return a <service-unavailable/>
-        # error.
+        # Jingle with unknown entities, it SHOULD return a
+        # <service-unavailable/> error.
         # Lets check what kind of jingle session does the peer want
         contents, _contents_rejected, reason_txt = self.__parse_contents(jingle)
 
@@ -646,7 +657,8 @@ class JingleSession:
         # If we are not receiving a file
         # Check if there's already a session with this user:
         if contents[0].media != 'file':
-            for session in self.connection.get_module('Jingle').get_jingle_sessions(self.peerjid):
+            jingle_module = self.connection.get_module('Jingle')
+            for session in jingle_module.get_jingle_sessions(self.peerjid):
                 if session is not self:
                     reason = nbxmpp.Node('reason')
                     alternative_session = reason.setTag('alternative-session')
@@ -668,8 +680,8 @@ class JingleSession:
                 file_info = self.connection.get_module('Jingle').get_file_info(
                     pjid, hash_data, n, self.connection.name)
                 if not file_info:
-                    log.warning('The peer %s is requesting a ' \
-                                'file that we don’t have or ' \
+                    log.warning('The peer %s is requesting a '
+                                'file that we don’t have or '
                                 'it is not allowed to request', pjid)
                     self.decline_session()
                     raise nbxmpp.NodeProcessed
@@ -700,13 +712,13 @@ class JingleSession:
     def __broadcast(self,
                     stanza: nbxmpp.Node,
                     jingle: nbxmpp.Node,
-                    error:  Optional[nbxmpp.Node],
+                    error: Optional[nbxmpp.Node],
                     action: str
                     ) -> None:
         """
         Broadcast the stanza contents to proper content handlers
         """
-        #if jingle is None: # it is a iq-result stanza
+        # if jingle is None: # it is a iq-result stanza
         #    for cn in self.contents.values():
         #        cn.on_stanza(stanza, None, error, action)
         #    return
@@ -719,8 +731,12 @@ class JingleSession:
             name = content['name']
             creator = content['creator']
             if (creator, name) not in self.contents:
-                text = 'Content %s (created by %s) does not exist' % (name, creator)
-                self.__send_error(stanza, 'bad-request', text=text, type_='modify')
+                text = 'Content %s (created by %s) does not exist' % (name,
+                                                                      creator)
+                self.__send_error(stanza,
+                                  'bad-request',
+                                  text=text,
+                                  type_='modify')
                 raise nbxmpp.NodeProcessed
 
             cn = self.contents[(creator, name)]
@@ -729,7 +745,7 @@ class JingleSession:
     def __on_session_terminate(self,
                                stanza: nbxmpp.Node,
                                jingle: nbxmpp.Node,
-                               error:  Optional[nbxmpp.Node],
+                               error: Optional[nbxmpp.Node],
                                action: str
                                ) -> None:
         self.connection.get_module('Jingle').delete_jingle_session(self.sid)
@@ -846,7 +862,7 @@ class JingleSession:
         attrs = {
             'action': action,
             'sid': self.sid,
-            'initiator' : self.initiator
+            'initiator': self.initiator
         }
         jingle = stanza.addChild('jingle', attrs=attrs,
                                  namespace=Namespace.JINGLE)
@@ -856,7 +872,7 @@ class JingleSession:
 
     def __send_error(self,
                      stanza: nbxmpp.Node,
-                     error:  Optional[str],
+                     error: Optional[str],
                      jingle_error: Optional[str] = None,
                      text: Optional[str] = None,
                      type_: Optional[str] = None
@@ -919,9 +935,9 @@ class JingleSession:
 
     def _JingleFileTransfer__session_info(self, payload: nbxmpp.Node) -> None:
         # For some strange reason when I call
-        # self.session.__session_info(payload) from the jingleFileTransfer object
-        # within a thread, this method gets called instead. Even though, it
-        # isn't being called explicitly.
+        # self.session.__session_info(payload) from the jingleFileTransfer
+        # object within a thread, this method gets called instead. Even though,
+        # it isn't being called explicitly.
         self.__session_info(payload)
 
     def _session_terminate(self, reason: Optional[nbxmpp.Node] = None) -> None:

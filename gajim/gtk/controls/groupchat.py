@@ -296,12 +296,13 @@ class GroupchatControl(BaseControl):
             app.window.add_action(act)
 
     def update_actions(self, *args: Any) -> None:
+        request_voice = False
         joined = self.contact.is_joined
         if joined:
             contact = self.contact.get_self()
+            request_voice = contact.role.is_visitor
 
-        self._get_action('request-voice-').set_enabled(
-            joined and contact.role.is_visitor)
+        self._get_action('request-voice-').set_enabled(request_voice)
 
         # Change Nick
         self._get_action('change-nickname-').set_enabled(
@@ -326,7 +327,8 @@ class GroupchatControl(BaseControl):
             tooltip_text = _('Send File…')
             max_file_size = self._client.get_module('HTTPUpload').max_file_size
             if max_file_size is not None:
-                max_file_size = GLib.format_size_full(max_file_size, self._units)
+                max_file_size = GLib.format_size_full(max_file_size,
+                                                      self._units)
                 tooltip_text = _('Send File (max. %s)…') % max_file_size
         else:
             tooltip_text = _('No File Transfer available')
@@ -1158,8 +1160,8 @@ class GroupchatControl(BaseControl):
                 correct_id = self.last_sent_msg
             else:
                 correct_id = None
-            chatstate = self._client.get_module('Chatstate').get_active_chatstate(
-                self.contact)
+            chatstate = self._client.get_module('Chatstate')\
+                .get_active_chatstate(self.contact)
 
             # Send the message
             message_ = OutgoingMessage(account=self.account,
@@ -1370,9 +1372,9 @@ class GroupchatControl(BaseControl):
 
         if action == 'change-subject':
             open_window('GroupchatDetails',
-                contact=self.contact,
-                subject=self._subject_text,
-                page='manage')
+                        contact=self.contact,
+                        subject=self._subject_text,
+                        page='manage')
             return Gdk.EVENT_STOP
 
         if action == 'show-contact-info':
