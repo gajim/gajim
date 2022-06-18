@@ -185,17 +185,10 @@ class Discovery(BaseModule):
         from_ = stanza.getFrom()
         self._log.info('Answer disco items to %s', from_)
 
-        if self._con.get_module('AdHocCommands').command_items_query(stanza):
-            raise nbxmpp.NodeProcessed
-
         node = stanza.getTagAttr('query', 'node')
         if node is None:
             result = stanza.buildReply('result')
             self._con.connection.send(result)
-            raise nbxmpp.NodeProcessed
-
-        if node == Namespace.COMMANDS:
-            self._con.get_module('AdHocCommands').command_list_query(stanza)
             raise nbxmpp.NodeProcessed
 
     def _answer_disco_info(self,
@@ -207,9 +200,6 @@ class Discovery(BaseModule):
         self._log.info('Answer disco info %s', from_)
         if str(from_).startswith('echo.'):
             # Service that echos all stanzas, ignore it
-            raise nbxmpp.NodeProcessed
-
-        if self._con.get_module('AdHocCommands').command_info_query(stanza):
             raise nbxmpp.NodeProcessed
 
     @as_task
