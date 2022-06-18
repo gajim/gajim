@@ -311,9 +311,12 @@ modules:
     build-commands:
       - pip3 install .
       - touch /app/share/run-as-flatpak
+      - cp -t ${FLATPAK_DEST} app-overrides.json
     sources:
       - type: git
         url: https://dev.gajim.org/gajim/gajim.git
         tag: 1.4.4
+      - type: file
+        path: app-overrides.json
     post-install:
       - install -d /app/plugins

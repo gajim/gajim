@@ -317,11 +317,14 @@ modules:
     build-commands:
       - pip3 install .
       - touch /app/share/run-as-flatpak
+      - cp -t ${FLATPAK_DEST} app-overrides.json
       - echo -e '#!/bin/sh\ngajim --gapplication-app-id=org.gajim.Gajim.Devel "$@"' > /app/bin/gajim-devel
       - chmod 755 /app/bin/gajim-devel
     sources:
       - type: git
         url: https://dev.gajim.org/gajim/gajim.git
+      - type: file
+        path: app-overrides.json
       - type: shell
         commands:
           - sed -i "s+<id>org.gajim.Gajim</id>+<id>org.gajim.Gajim.Devel</id>+" data/org.gajim.Gajim.appdata.xml.in

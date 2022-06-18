@@ -106,7 +106,10 @@ _SignalCallable = Callable[[Any, str, Optional[str], Optional[JID]], Any]
 _CallbackDict = dict[tuple[str, Optional[str], Optional[JID]],
                      list[weakref.WeakMethod[_SignalCallable]]]
 
-OVERRIDES_PATH = Path('/etc/gajim/app-overrides.json')
+if app.is_flatpak():
+    OVERRIDES_PATH = Path('/app/app-overrides.json')
+else:
+    OVERRIDES_PATH = Path('/etc/gajim/app-overrides.json')
 
 
 class Settings:
