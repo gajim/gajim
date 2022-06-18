@@ -124,6 +124,7 @@ deploy-linux:
 deploy-flatpak:
   image: git-deploy:latest
   stage: deploy
+  allow_failure: true
   needs: []
   rules:
     - if: '$CI_COMMIT_TAG'
