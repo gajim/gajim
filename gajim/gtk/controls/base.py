@@ -89,10 +89,8 @@ from gajim.command_system.implementation.middleware import CommandTools
 # module, but still they need to be kept around. Importing them automatically
 # registers the contained CommandContainers with the command system, thereby
 # populating the list of available commands.
-# pylint: disable=unused-import
 from gajim.command_system.implementation import standard  # noqa: F401
 from gajim.command_system.implementation import execute  # noqa: F401
-# pylint: enable=unused-import
 
 if app.is_installed('GSPELL'):
     from gi.repository import Gspell  # pylint: disable=ungrouped-imports

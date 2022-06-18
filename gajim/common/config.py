@@ -27,10 +27,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Any  # pylint: disable=unused-import
-from typing import Dict  # pylint: disable=unused-import
-from typing import List  # pylint: disable=unused-import
-from typing import Tuple  # pylint: disable=unused-import
+from typing import Any
 
 import re
 import copy
@@ -63,7 +60,7 @@ class Config:
     DEFAULT_MOOD_ICONSET = 'default'
     DEFAULT_ACTIVITY_ICONSET = 'default'
 
-    __options = ({
+    __options: tuple[dict[str, list[Any]], dict[Any, Any]] = ({
         # name: [ type, default_value, help_string, restart ]
         'autopopup': [opt_bool, False],
         'autopopupaway': [opt_bool, False],
@@ -208,9 +205,10 @@ class Config:
         'check_for_update': [opt_bool, True, 'Check for Gajim updates periodically'],
         'last_update_check': [opt_str, '', 'Date of the last update check'],
         'always_ask_for_status_message': [opt_bool, False],
-    }, {})  # type: Tuple[Dict[str, List[Any]], Dict[Any, Any]]
+    }, {})
 
-    __options_per_key = {
+    __options_per_key: dict[str,
+                            tuple[dict[str, list[Any]], dict[Any, Any]]] = {
         'accounts': ({
             'name': [opt_str, '', '', True],
             'account_label': [opt_str, '', '', False],
@@ -314,7 +312,7 @@ class Config:
         'plugins': ({
             'active': [opt_bool, False, 'If enabled, plugins will be activated on startup (this is saved when exiting Gajim). This option SHOULD NOT be used to (de)activate plugins. Use the plugin window instead.'],
         }, {}),
-    }  # type: Dict[str, Tuple[Dict[str, List[Any]], Dict[Any, Any]]]
+    }
 
     statusmsg_default = {
         'Sleeping': ['ZZZZzzzzzZZZZZ', 'inactive', 'sleeping', '', 'sleepy', ''],

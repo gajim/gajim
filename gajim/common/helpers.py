@@ -81,7 +81,7 @@ from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Soup
 
-import precis_i18n.codec  # pylint: disable=unused-import  # noqa: F401
+import precis_i18n.codec  # noqa: F401
 
 from gajim.common import app
 from gajim.common import configpaths

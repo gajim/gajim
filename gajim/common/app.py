@@ -197,7 +197,7 @@ def detect_dependencies() -> None:
         gi.require_version('Gst', '1.0')
         gi.require_version('GstPbutils', '1.0')
         from gi.repository import Gst
-        from gi.repository import GstPbutils  # pylint: disable=unused-import
+        from gi.repository import GstPbutils  # noqa: F401
         success, _argv = Gst.init_check(None)
         _dependencies['GST'] = success
     except Exception:
@@ -224,7 +224,7 @@ def detect_dependencies() -> None:
     # GEOCLUE
     try:
         gi.require_version('Geoclue', '2.0')
-        from gi.repository import Geoclue  # pylint: disable=unused-import
+        from gi.repository import Geoclue  # noqa: F401
         _dependencies['GEOCLUE'] = True
     except (ImportError, ValueError):
         pass
@@ -277,21 +277,21 @@ def detect_dependencies() -> None:
     # APPINDICATOR
     try:
         gi.require_version('AppIndicator3', '0.1')
-        from gi.repository import AppIndicator3  # pylint: disable=unused-import
+        from gi.repository import AppIndicator3  # noqa: F401
         _dependencies['APPINDICATOR'] = True
     except (ImportError, ValueError):
         pass
     # AYATANA APPINDICATOR
     try:
         gi.require_version('AyatanaAppIndicator3', '0.1')
-        from gi.repository import AyatanaAppIndicator3  # pylint: disable=unused-import
+        from gi.repository import AyatanaAppIndicator3  # noqa: F401
         _dependencies['AYATANA_APPINDICATOR'] = True
     except (ImportError, ValueError):
         pass
 
     # SENTRY SDK
     try:
-        import sentry_sdk  # pylint: disable=unused-import
+        import sentry_sdk  # noqa: F401
         _dependencies['SENTRY_SDK'] = True
     except ImportError:
         pass

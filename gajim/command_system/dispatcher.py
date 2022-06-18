@@ -31,13 +31,12 @@ to automatic discovery and dispatching, also features manual control
 over the process.
 """
 
-from typing import Any  # pylint: disable=unused-import
-from typing import Dict  # pylint: disable=unused-import
+from typing import Any
 
 from gajim.command_system.tools import remove
 
-COMMANDS = {}  # type: Dict[Any, Any]
-CONTAINERS = {}  # type: Dict[Any, Any]
+COMMANDS: dict[Any, Any] = {}
+CONTAINERS: dict[Any, Any] = {}
 
 
 def add_host(host):
