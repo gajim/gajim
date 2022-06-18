@@ -16,6 +16,7 @@ ALLOWED_TAGS = [
     'perf',
     'refactor',
     'chore',
+    'change',
     'release',
     'other',
     'imprv',

@@ -8,19 +8,22 @@ options:
     filters:
       Type:
         - feat
+        - imprv
+        - change
         - perf
         - fix
-        - imprv
   commit_groups:
     sort_by: Custom
     title_order:
       - feat
       - imprv
+      - change
       - perf
       - fix
     title_maps:
       feat: New
       imprv: Improvements
+      change: Change
       perf: Performance
       fix: Bug Fixes
   header:

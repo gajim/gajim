@@ -35,12 +35,13 @@ A good article regarding [good commit messages](https://chris.beams.io/posts/git
 Every commit message must be prefixed with one of the following tags:
 
 - ci        (ci related changes)
-- feat      (functionality of the application was changed)
+- feat      (a new feature was added)
 - fix       (something was fixed)
 - perf      (performance related changes)
 - imprv     (improvements)
 - refactor  (code was changed, but the end user will not notice)
 - chore     (reoccuring tasks which need to be done)
+- change    (existing functionality was changed)
 - release   (only used for release commits)
 - other
 
