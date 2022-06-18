@@ -35,7 +35,6 @@ test-pyright:
 
 test-flake8:
   stage: test
-  allow_failure: true
   rules:
     - changes:
       - "**/*.py"
