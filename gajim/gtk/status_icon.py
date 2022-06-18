@@ -45,10 +45,12 @@ from .util import get_icon_name
 from .util import open_window
 
 if app.is_installed('APPINDICATOR'):
-    from gi.repository import AppIndicator3 as appindicator  # pylint: disable=ungrouped-imports
+    # pylint: disable=ungrouped-imports
+    from gi.repository import AppIndicator3 as appindicator
 
 elif app.is_installed('AYATANA_APPINDICATOR'):
-    from gi.repository import AyatanaAppIndicator3 as appindicator  # pylint: disable=ungrouped-imports
+    # pylint: disable=ungrouped-imports
+    from gi.repository import AyatanaAppIndicator3 as appindicator
 
 
 log = logging.getLogger('gajim.gui.statusicon')

@@ -216,8 +216,8 @@ class RosterItemExchange(Gtk.ApplicationWindow):
                         groups = []
                     jid = model[iter_][1]
                     if app.jid_is_transport(str(self._jid_from)):
-                        self._client.get_module('Presence').automatically_added.append(
-                            jid)
+                        self._client.get_module('Presence')\
+                            .automatically_added.append(jid)
 
                     self._client.get_module('Presence').subscribe(
                         jid,
