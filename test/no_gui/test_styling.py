@@ -325,6 +325,8 @@ URLS = [
 EMAILS = [
     'asd@asd.at',
     'asd@asd.asd.at',
+    'asd@asd.asd-asd.at',
+    'asd-asd@asd.asdasd.at',
     'mailto:foo@bar.com.uk',
 ]
 
@@ -339,6 +341,7 @@ EMAILS_WITH_TEXT = [
 URL_WITH_TEXT = [
     ('see this http://userid@example.com/ link', 'http://userid@example.com/'),
     ('see this http://userid@example.com/, and ..', 'http://userid@example.com/'),
+    ('<http://userid@example.com/>', 'http://userid@example.com/'),
 ]
 
 XMPP_URIS = [
@@ -390,7 +393,6 @@ class Test(unittest.TestCase):
             start = match.start()
             end = match.end()
             self.assertTrue(text[start:end] == result)
-
 
 
 if __name__ == "__main__":
