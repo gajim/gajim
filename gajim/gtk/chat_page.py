@@ -313,3 +313,8 @@ class ChatPage(Gtk.Box):
             self._search_revealer.set_reveal_child(False)
             return True
         return False
+
+    def toggle_chat_list(self) -> None:
+        chat_list = self._ui.paned.get_child1()
+        assert chat_list is not None
+        chat_list.set_visible(not chat_list.get_visible())

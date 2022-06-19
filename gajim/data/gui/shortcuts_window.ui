@@ -178,6 +178,13 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
+                <property name="accelerator">&lt;primary&gt;R</property>
+                <property name="title" translatable="yes">Toggle Chat List</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;Page_Up</property>
                 <property name="title" translatable="yes">Switch to the previous tab</property>
               </object>

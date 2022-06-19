@@ -343,6 +343,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             'switch-tab-7',
             'switch-tab-8',
             'switch-tab-9',
+            'toggle-chat-list',
         ]
 
         disabled_for_emacs = (
@@ -402,6 +403,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         elif action_name.startswith('switch-tab-'):
             number = int(action_name[-1]) - 1
             self.select_chat_number(number)
+
+        elif action_name == 'toggle-chat-list':
+            self._chat_page.toggle_chat_list()
 
         return None
 
