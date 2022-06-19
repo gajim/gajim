@@ -363,31 +363,31 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                    action: Gio.SimpleAction,
                    _param: Optional[GLib.Variant]) -> Optional[int]:
 
-        control = self.get_active_control()
-        if control is None:
-            return None
-        log.info('Activate action: %s, active control: %s',
-                 action.get_name(), control.contact.jid)
-
         action_name = action.get_name()
+        log.info('Activate action: %s', action_name)
 
-        res = control.delegate_action(action_name)
-        if res != Gdk.EVENT_PROPAGATE:
-            return res
+        if action_name == 'escape' and self._chat_page.hide_search():
+            return None
 
-        if action_name == 'escape':
-            if self._chat_page.hide_search():
-                return None
+        control = self.get_active_control()
+        if control is not None:
 
-            if app.settings.get('escape_key_closes'):
+            res = control.delegate_action(action_name)
+            if res != Gdk.EVENT_PROPAGATE:
+                return res
+
+            if action_name == 'escape':
+                if app.settings.get('escape_key_closes'):
+                    self._chat_page.remove_chat(control.account,
+                                                control.contact.jid)
+                    return None
+
+            elif action_name == 'close-tab':
                 self._chat_page.remove_chat(control.account,
                                             control.contact.jid)
                 return None
 
-        elif action_name == 'close-tab':
-            self._chat_page.remove_chat(control.account, control.contact.jid)
-
-        elif action_name == 'switch-next-tab':
+        if action_name == 'switch-next-tab':
             self.select_next_chat(Direction.NEXT)
 
         elif action_name == 'switch-prev-tab':
