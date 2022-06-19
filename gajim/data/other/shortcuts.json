@@ -31,5 +31,5 @@
     "win.switch-tab-8": ["<Alt>8", "<Alt>KP_8"],
     "win.switch-tab-9": ["<Alt>9", "<Alt>KP_9"],
     "win.search-history": ["<Primary>H"],
-    "win.hide-chat-list": ["<Primary>R"]
+    "win.toggle-chat-list": ["<Primary>R"]
 }
