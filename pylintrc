@@ -7,7 +7,7 @@ extension-pkg-whitelist=
 
 # Add files or directories to the blacklist. They should be base names, not
 # paths.
-ignore=CVS
+ignore=gui
 
 # Add files or directories matching the regex patterns to the blacklist. The
 # regex matches against base names, not paths.
@@ -50,12 +50,70 @@ confidence=
 # --enable=similarities". If you want to run only the classes checker, but have
 # no Warning level messages displayed, use"--disable=all --enable=classes
 # --disable=W"
-#
-# Most errors here are disabled because they are covered by pyright
-# C0111 missing-docstring
-# W0511 fix-me
 # 
-disable=C0111,W0511,E1101,E1102,E1111,E1120,E1121,E1123,E1124,E1125,E1126,E1127,E1128,E1129,E1130,E1131,E1132,E1133,E1134,E1135,E1136,E1137,E1138,E1139,E1140,E1141,E1142,I1101,W0212,W1113,W1114,W1115,W1116
+# Errors which are covered by pyright
+#
+# E0401 import-error
+# E1101 no-member
+# E1102 not-callable
+# E1111 assignment-from-no-return
+# E1120 no-value-for-parameter
+# E1121 too-many-function-args
+# E1123 unexpected-keyword-arg
+# E1124 redundant-keyword-arg
+# E1125 missing-kwoa
+# E1126 invalid-sequence-index
+# E1127 invalid-slice-index
+# E1128 assignment-from-none
+# E1129 not-context-manager
+# E1130 invalid-unary-operand-type
+# E1131 unsupported-binary-operation
+# E1132 repeated-keyword
+# E1133 not-an-iterable
+# E1134 not-a-mapping
+# E1135 unsupported-membership-test
+# E1136 unsubscriptable-object
+# E1137 unsupported-assignment-operation
+# E1138 unsupported-delete-operation
+# E1139 invalid-metaclass
+# E1140 unhashable-dict-key
+# E1141 dict-iter-missing-items
+# E1142 await-outside-async
+# I1101 c-extension-no-member
+# W0212 protected-access
+# W1113 keyword-arg-before-vararg
+# W1114 arguments-out-of-order
+# W1115 non-str-assignment-to-dunder-name
+# W1116 isinstance-second-argument-not-valid-type
+#
+# Errors which are covered by flake8
+#
+# C0301 line-too-long
+# C0303 trailing-whitespace
+# C0304 missing-final-newline
+# C0321 multiple-statements
+# W0301 unnecessary-semicolon
+# W0311 bad-indentation
+# W0611 unused-import
+#
+# Ignore Always, we don’t need these checks
+#
+# C0111 missing-docstring
+# C0209 use-f-string
+# C0302 too-many-lines
+# R0801 duplicat-code
+# R0904 too-many-public-methods
+# R0913 too-many-arguments
+# R0915 too-many-statements 
+# R1725 super-with-arguments
+# R1732 consider-using-with
+# W0237 arguments-renamed
+# W0511 fix-me
+# W0707 raise-missing-from
+# W1404 implicit-str-concat
+# W1406 redundant-u-string-prefix
+
+disable=E0401,E1101,E1102,E1111,E1120,E1121,E1123,E1124,E1125,E1126,E1127,E1128,E1129,E1130,E1131,E1132,E1133,E1134,E1135,E1136,E1137,E1138,E1139,E1140,E1141,E1142,I1101,W0212,W1113,W1114,W1115,W1116,C0301,C0303,C0304,C0321,W0301,W0311,W0611,C0111,C0209,C0302,R0801,R0904,R0913,R0915,R1725,R1732,W0237,W0311,W0511,W0707,W1404,W1406
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
@@ -149,7 +207,7 @@ ignored-classes=optparse.Values,thread._local,_thread._local,gi.repository.GLib.
 # (useful for modules/projects where namespaces are manipulated during runtime
 # and thus existing member attributes cannot be deduced by static analysis. It
 # supports qualified module names, as well as Unix pattern matching.
-ignored-modules=gi.repository,gajim.gui,cairo
+ignored-modules=gi.repository,cairo
 
 # Show a hint with possible names when a member name was not found. The aspect
 # of finding the hint is based on edit distance.
@@ -230,12 +288,6 @@ max-line-length=80
 # Maximum number of lines in a module
 max-module-lines=3000
 
-# List of optional constructs for which whitespace checking is disabled. `dict-
-# separator` is used to allow tabulation in dicts, etc.: {1  : 1,\n222: 2}.
-# `trailing-comma` allows a space between comma and closing bracket: (a, ).
-# `empty-line` allows space-only lines.
-no-space-check=trailing-comma,dict-separator
-
 # Allow the body of an if to be on the same line as the test if there is no
 # else.
 single-line-if-stmt=no
@@ -243,14 +295,8 @@ single-line-if-stmt=no
 
 [BASIC]
 
-# Naming hint for argument names
-argument-name-hint=(([a-z][a-z0-9_]{1,30})|(_[a-z0-9_]*))$
-
 # Regular expression matching correct argument names
 argument-rgx=(([a-z][a-z0-9_]{1,30})|(_[a-z0-9_]*))$
-
-# Naming hint for attribute names
-attr-name-hint=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
 
 # Regular expression matching correct attribute names
 attr-rgx=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
@@ -258,20 +304,11 @@ attr-rgx=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
 # Bad variable names which should always be refused, separated by a comma
 bad-names=foo,bar,baz,toto,tutu,tata
 
-# Naming hint for class attribute names
-class-attribute-name-hint=([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$
-
 # Regular expression matching correct class attribute names
 class-attribute-rgx=([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$
 
-# Naming hint for class names
-class-name-hint=[A-Z_][a-zA-Z0-9]+$
-
 # Regular expression matching correct class names
 class-rgx=[A-Z_][a-zA-Z0-9]+$
-
-# Naming hint for constant names
-const-name-hint=(([A-Z_][A-Z0-9_]*)|(__.*__))$
 
 # Regular expression matching correct constant names
 const-rgx=
@@ -279,9 +316,6 @@ const-rgx=
 # Minimum line length for functions/classes that require docstrings, shorter
 # ones are exempt.
 docstring-min-length=-1
-
-# Naming hint for function names
-function-name-hint=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
 
 # Regular expression matching correct function names
 function-rgx=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
@@ -292,20 +326,11 @@ good-names=i,j,k,ex,Run,_,iq
 # Include a hint for the correct naming format with invalid-name
 include-naming-hint=no
 
-# Naming hint for inline iteration names
-inlinevar-name-hint=[A-Za-z_][A-Za-z0-9_]*$
-
 # Regular expression matching correct inline iteration names
 inlinevar-rgx=[A-Za-z_][A-Za-z0-9_]*$
 
-# Naming hint for method names
-method-name-hint=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
-
 # Regular expression matching correct method names
 method-rgx=(([a-z][a-z0-9_]{2,30})|(_[a-z0-9_]*))$
-
-# Naming hint for module names
-module-name-hint=(([a-z_][a-z0-9_]*)|([A-Z][a-zA-Z0-9]+))$
 
 # Regular expression matching correct module names
 module-rgx=(([a-z_][a-z0-9_]*)|([A-Z][a-zA-Z0-9]+))$
@@ -321,9 +346,6 @@ no-docstring-rgx=^_
 # List of decorators that produce properties, such as abc.abstractproperty. Add
 # to this list to register other decorators that produce valid properties.
 property-classes=abc.abstractproperty
-
-# Naming hint for variable names
-variable-name-hint=(([a-z][a-z0-9_]{1,30})|(_[a-z0-9_]*))$
 
 # Regular expression matching correct variable names
 variable-rgx=(([a-z][a-z0-9_]{1,30})|(_[a-z0-9_]*))$
