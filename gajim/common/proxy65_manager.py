@@ -261,6 +261,7 @@ class HostTester(Socks5, IdleObject):
 
         Calls on_success, or on_failure according to the result.
         """
+        IdleObject.__init__(self)
         self.host = host
         self.port = port
         self.jid = jid
@@ -389,6 +390,7 @@ class ReceiverTester(Socks5, IdleObject):
 
         Call on_success, or on_failure according to the result.
         """
+        IdleObject.__init__(self)
         self.host = host
         self.port = port
         self.jid = jid

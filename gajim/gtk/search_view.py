@@ -127,8 +127,8 @@ class SearchView(Gtk.Box):
         text, before_filters = self._strip_filters(text, 'before')
         if before_filters is not None:
             try:
-                before_filters = min([datetime.fromisoformat(date) for
-                                      date in before_filters])
+                before_filters = min(datetime.fromisoformat(date) for
+                                     date in before_filters)
             except ValueError:
                 self._ui.date_hint.show()
                 return
@@ -137,8 +137,8 @@ class SearchView(Gtk.Box):
         text, after_filters = self._strip_filters(text, 'after')
         if after_filters is not None:
             try:
-                after_filters = min([datetime.fromisoformat(date) for
-                                     date in after_filters])
+                after_filters = min(datetime.fromisoformat(date) for
+                                    date in after_filters)
                 # if only the day is specified, we want to look after the
                 # end of that day.
                 # if precision is increased,we do want to look during the

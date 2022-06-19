@@ -111,7 +111,7 @@ def get_short_lang_code(lang: Optional[str] = None) -> str:
 def initialize_direction_mark() -> None:
     from gi.repository import Gtk
 
-    global direction_mark
+    global direction_mark  # pylint: disable=global-statement
 
     if Gtk.Widget.get_default_direction() == Gtk.TextDirection.RTL:
         direction_mark = '\u200F'

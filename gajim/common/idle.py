@@ -218,6 +218,7 @@ class Xss(IdleMonitor):
 
 class Windows(IdleMonitor):
     def __init__(self) -> None:
+        IdleMonitor.__init__(self)
         self.OpenInputDesktop = ctypes.windll.user32.OpenInputDesktop
         self.CloseDesktop = ctypes.windll.user32.CloseDesktop
         self.SystemParametersInfo = ctypes.windll.user32.SystemParametersInfoW

@@ -233,7 +233,7 @@ def detect_dependencies() -> None:
     try:
         gi.require_version('GUPnPIgd', '1.0')
         from gi.repository import GUPnPIgd
-        global gupnp_igd
+        global gupnp_igd  # pylint: disable=global-statement
         gupnp_igd = GUPnPIgd.SimpleIgd()
         _dependencies['UPNP'] = True
     except ValueError:
@@ -251,7 +251,7 @@ def detect_dependencies() -> None:
     try:
         gi.require_version('GSound', '1.0')
         from gi.repository import GSound
-        global gsound_ctx
+        global gsound_ctx  # pylint: disable=global-statement
         gsound_ctx = GSound.Context()
         try:
             gsound_ctx.init()
@@ -583,7 +583,7 @@ def prefers_app_menu() -> bool:
 
 
 def load_css_config() -> None:
-    global css_config
+    global css_config   # pylint: disable=global-statement
     from gajim.gui.css_config import CSSConfig
     css_config = CSSConfig()
 

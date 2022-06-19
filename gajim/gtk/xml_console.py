@@ -415,6 +415,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
 
         stanza = event.stanza
         if not isinstance(stanza, str):
+            # pylint: disable=unnecessary-dunder-call
             stanza = stanza.__str__(fancy=True)
 
         if not stanza:

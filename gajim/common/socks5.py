@@ -341,7 +341,7 @@ class SocksQueue:
         return False
 
     def on_connection_accepted(self, sock, listener):
-        sock_hash = sock.__hash__()
+        sock_hash = hash(sock)
         if listener.file_props.type_ == 's' and \
         not self.isHashInSockObjs(self.senders, sock_hash):
             sockobj = Socks5SenderServer(self.idlequeue, sock_hash, self,
@@ -944,6 +944,7 @@ class Socks5Sender(IdleObject):
     """
     def __init__(self, idlequeue, sock_hash, parent, _sock, host=None,
                  port=None, fingerprint=None, connected=True, file_props=None):
+        IdleObject.__init__(self)
         self.fingerprint = fingerprint
         self.queue_idx = sock_hash
         self.queue = parent
@@ -1028,6 +1029,7 @@ class Socks5Receiver(IdleObject):
         fingerprint: fingerprint of certificates we shall use, set to None if
         TLS connection not desired
         """
+        IdleObject.__init__(self)
         self.queue_idx = -1
         self.streamhost = streamhost
         self.queue = None
@@ -1407,6 +1409,7 @@ class Socks5Listener(IdleObject):
         fingerprint: fingerprint of certificates we shall use, set to None if
         TLS connection not desired
         """
+        IdleObject.__init__(self)
         self.port = port
         self.ais = socket.getaddrinfo(None, port, socket.AF_UNSPEC,
             socket.SOCK_STREAM, socket.SOL_TCP, socket.AI_PASSIVE)
