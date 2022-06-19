@@ -43,7 +43,7 @@ BLOCK_RX = re.compile(PRE_RX + '|' + QUOTE_RX, re.S | re.M)
 BLOCK_NESTED_RX = re.compile(PRE_NESTED_RX + '|' + QUOTE_RX, re.S | re.M)
 UNQUOTE_RX = re.compile(r'^> |^>', re.M)
 
-URI_RX = r'(?P<uri>([\w-]+://?|www[.])[\S()<>]+?(?=[,]?(\s|\Z)+))'
+URI_RX = r'(?P<uri>([\w-]+://|www[.])[\S()<>]+?(?=[,>]?(\s|\Z)+))'
 ADDRESS_RX = r'(?P<address>\b((xmpp|mailto):)?[\w-]*@(\w*?\.)+[\w]+([\?].*?(?=([\s\),]|$)))?)'  # noqa: E501
 URI_ADDRESS_RX = URI_RX + '|' + ADDRESS_RX
 
