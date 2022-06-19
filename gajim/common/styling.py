@@ -43,11 +43,13 @@ BLOCK_RX = re.compile(PRE_RX + '|' + QUOTE_RX, re.S | re.M)
 BLOCK_NESTED_RX = re.compile(PRE_NESTED_RX + '|' + QUOTE_RX, re.S | re.M)
 UNQUOTE_RX = re.compile(r'^> |^>', re.M)
 
-URI_RX = r'((?P<protocol>[\w-]+://?|www[.])[\S()<>]+?(?=[,]?(\s|\Z)+))'
-URI_RX = re.compile(URI_RX)
+URI_RX = r'(?P<uri>([\w-]+://?|www[.])[\S()<>]+?(?=[,]?(\s|\Z)+))'
+ADDRESS_RX = r'(?P<address>\b((xmpp|mailto):)?[\w-]*@(\w*?\.)+[\w]+([\?].*?(?=([\s\),]|$)))?)'  # noqa: E501
+URI_ADDRESS_RX = URI_RX + '|' + ADDRESS_RX
 
-ADDRESS_RX = r'(\b(?P<protocol>(xmpp|mailto):)?[\w-]*@(\w*?\.)+[\w]+([\?].*?(?=([\s\),]|$)))?)'  # noqa: E501
+URI_RX = re.compile(URI_RX)
 ADDRESS_RX = re.compile(ADDRESS_RX)
+URI_ADDRESS_RX = re.compile(URI_ADDRESS_RX)
 
 EMOJI_RX = emoji_data.get_regex()
 EMOJI_RX = re.compile(EMOJI_RX)
@@ -319,12 +321,8 @@ def _parse_uris(line: str, offset: int, offset_bytes: int) -> list[BaseUri]:
                           offset_bytes,
                           is_address)
 
-    for match in URI_RX.finditer(line):
-        uri = make(match, False)
-        uris.append(uri)
-
-    for match in ADDRESS_RX.finditer(line):
-        uri = make(match, True)
+    for match in URI_ADDRESS_RX.finditer(line):
+        uri = make(match, bool(match.group('address')))
         uris.append(uri)
 
     return uris
