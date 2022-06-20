@@ -349,6 +349,7 @@ class MessageUpdated(ApplicationEvent):
     account: str
     jid: JID
     msgtxt: str
+    nickname: Optional[str]
     properties: Any
     correct_id: str
 

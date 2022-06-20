@@ -433,7 +433,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             return
 
         if event.correct_id == row.message_id:
-            row.set_message_text(event.msgtxt)
+            row.set_message_text(event.msgtxt, event.nickname)
 
     def _on_message_moderated(self, event: events.MessageModerated) -> None:
         row = self._chats.get((event.account, event.jid))

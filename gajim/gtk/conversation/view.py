@@ -487,10 +487,14 @@ class ConversationView(Gtk.ListBox):
         if self.autoscroll or force:
             GLib.idle_add(self.emit, 'scroll-to-end')
 
-    def correct_message(self, correct_id: str, text: str) -> None:
+    def correct_message(self,
+                        correct_id: str,
+                        text: str,
+                        nickname: Optional[str]
+                        ) -> None:
         message_row = self._get_row_by_message_id(correct_id)
         if message_row is not None:
-            message_row.set_correction(text)
+            message_row.set_correction(text, nickname)
             message_row.set_merged(False)
 
     def show_message_retraction(self, stanza_id: str, text: str) -> None:

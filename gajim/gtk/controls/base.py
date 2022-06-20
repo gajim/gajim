@@ -327,7 +327,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         getattr(self, method_name)(event)
 
     def _on_message_updated(self, event: events.MessageUpdated) -> None:
-        self.conversation_view.correct_message(event.correct_id, event.msgtxt)
+        self.conversation_view.correct_message(
+            event.correct_id, event.msgtxt, event.nickname)
 
     def _on_message_moderated(self, event: events.MessageModerated) -> None:
         text = get_retraction_text(

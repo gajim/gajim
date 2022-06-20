@@ -60,8 +60,10 @@ class MessageWidget(Gtk.Box):
         self.add_content(result)
 
     def _add_action_phrase(self, text: str, nickname: str):
+        self.clear()
         widget = PlainWidget(self._account, self._selectable)
         widget.add_action_phrase(text, nickname)
+        widget.show_all()
         self.add(widget)
 
     def add_content(self, content: ContentT) -> None:

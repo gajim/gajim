@@ -313,9 +313,11 @@ class MAM(BaseModule):
 
         correct_id = parse_correction(properties)
         if correct_id is not None:
+            nickname = properties.muc_nickname or properties.nickname
             app.ged.raise_event(MessageUpdated(account=self._account,
                                                jid=jid,
                                                msgtxt=properties.body,
+                                               nickname=nickname,
                                                properties=properties,
                                                correct_id=correct_id))
             app.storage.archive.store_message_correction(

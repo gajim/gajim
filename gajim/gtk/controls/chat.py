@@ -415,7 +415,7 @@ class ChatControl(BaseControl):
 
         if event.correct_id:
             self.conversation_view.correct_message(
-                event.correct_id, event.message)
+                event.correct_id, event.message, self.get_our_nick())
             return
 
         self.add_message(event.message,

@@ -192,9 +192,11 @@ class Message(BaseModule):
 
         correct_id = parse_correction(properties)
         if correct_id is not None:
+            nickname = properties.muc_nickname or properties.nickname
             event = MessageUpdated(account=self._account,
                                    jid=event_attr['jid'],
                                    msgtxt=msgtxt,
+                                   nickname=nickname,
                                    properties=properties,
                                    correct_id=correct_id)
 

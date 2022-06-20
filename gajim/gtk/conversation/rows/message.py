@@ -417,9 +417,9 @@ class MessageRow(BaseRow):
         self._message_widget.add_with_styling(text)
         self.get_style_context().add_class('retracted-message')
 
-    def set_correction(self, text: str) -> None:
+    def set_correction(self, text: str, nickname: Optional[str]) -> None:
         if not isinstance(self._message_widget, PreviewWidget):
-            self._message_widget.add_with_styling(text)
+            self._message_widget.add_with_styling(text, nickname)
 
         self._has_receipt = False
         self._message_icons.set_receipt_icon_visible(False)
