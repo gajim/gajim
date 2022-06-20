@@ -610,7 +610,15 @@ class MUC(BaseModule):
             # unavailable presence, because we left the MUC
             return
 
-        presence = self._process_user_presence(properties)
+        try:
+            presence = self._process_user_presence(properties)
+        except KeyError:
+            # Sometimes it seems to happen that we get unavailable presence
+            # from occupants we don’t know
+            log.warning('Unexpected presence received')
+            log.warning(stanza)
+            return
+
         occupant.update_presence(presence, properties)
 
     def _process_user_presence(self,
