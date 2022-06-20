@@ -129,7 +129,7 @@ deploy-flatpak:
     - if: '$CI_COMMIT_TAG'
   before_script:
     - eval $(ssh-agent -s)
-    # - echo "${FLATHUB_DEPLOY_KEY}" | tr -d '\r' | ssh-add - > /dev/null
+    - echo "${FLATHUB_DEPLOY_KEY}" | tr -d '\r' | ssh-add - > /dev/null
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - ssh-keyscan github.com >> ~/.ssh/known_hosts
@@ -139,10 +139,11 @@ deploy-flatpak:
     - git clone https://github.com/flathub/org.gajim.Gajim.git
     - cd org.gajim.Gajim
     - mv ../flatpak/org.gajim.Gajim.yaml org.gajim.Gajim.yaml
+    - mv ../flatpak/app-overrides.json app-overrides.json
     - git diff
-    - git add org.gajim.Gajim.yaml
+    - git add --all
     - git commit -m "$CI_COMMIT_TAG"
-    # - git push
+    - git push
 
 publish-release:
   image: git-deploy:latest
