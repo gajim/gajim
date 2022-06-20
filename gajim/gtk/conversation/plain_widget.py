@@ -31,7 +31,9 @@ from gajim.common.const import StyleAttr
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import parse_uri
 from gajim.common.structs import URI
+from gajim.common.styling import BaseUri
 from gajim.common.styling import PlainBlock
+from gajim.common.styling import process_uris
 
 from ..menus import get_conv_action_context_menu
 from ..menus import get_conv_uri_context_menu
@@ -70,9 +72,7 @@ class PlainWidget(Gtk.Box):
         self._text_widget.print_text_with_styling(block)
 
     def add_action_phrase(self, text: str, nickname: str) -> None:
-        text = text.replace('/me', f'* {nickname}', 1)
-        text = GLib.markup_escape_text(text)
-        self._text_widget.add_action_phrase(text)
+        self._text_widget.add_action_phrase(text, nickname)
 
 
 class MessageLabel(Gtk.Label):
@@ -106,16 +106,19 @@ class MessageLabel(Gtk.Label):
         menu.prepend(action_menu_item)
         menu.show_all()
 
-    def print_text_with_styling(self, block: PlainBlock) -> None:
-        text = ''
-        after = GLib.markup_escape_text(block.text.strip())
-        for uri in block.uris:
+    def _build_link_markup(self, text: str, uris: list[BaseUri]) -> str:
+        markup_text = ''
+        after = GLib.markup_escape_text(text.strip())
+        for uri in uris:
             uri_escaped = GLib.markup_escape_text(uri.text)
             before, _, after = after.partition(uri_escaped)
-            text += before
-            text += uri.get_markup_string()
-        text += after
+            markup_text += before
+            markup_text += uri.get_markup_string()
+        markup_text += after
+        return markup_text
 
+    def print_text_with_styling(self, block: PlainBlock) -> None:
+        text = self._build_link_markup(block.text, block.uris)
         self.set_markup(text)
 
         if len(self.get_text()) > 10000:
@@ -124,7 +127,10 @@ class MessageLabel(Gtk.Label):
 
         self.set_attributes(make_pango_attributes(block))
 
-    def add_action_phrase(self, text: str) -> None:
+    def add_action_phrase(self, text: str, nickname: str) -> None:
+        text = text.replace('/me', f'* {nickname}', 1)
+        uris = process_uris(text)
+        text = self._build_link_markup(text, uris)
         self.set_markup(f'<i>{text}</i>')
 
     def _on_activate_link(self, _label: Gtk.Label, uri: str) -> int:
@@ -274,9 +280,17 @@ class MessageTextview(Gtk.TextView):
         buffer_.delete_mark(start_mark)
         buffer_.delete_mark(end_mark)
 
-    def add_action_phrase(self, text: str) -> None:
+    def add_action_phrase(self, text: str, nickname: str) -> None:
+        text = text.replace('/me', f'* {nickname}', 1)
+
         buffer_ = self.get_buffer()
         buffer_.insert(buffer_.get_start_iter(), text.strip())
+
+        uris = process_uris(text)
+        for uri in uris:
+            start_iter = buffer_.get_iter_at_offset(uri.start)
+            end_iter = buffer_.get_iter_at_offset(uri.end)
+            buffer_.apply_tag_by_name(uri.name, start_iter, end_iter)
 
         start_iter = buffer_.get_start_iter()
         end_iter = buffer_.get_end_iter()

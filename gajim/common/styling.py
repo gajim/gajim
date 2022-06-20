@@ -219,6 +219,21 @@ def process(text: Union[str, bytes], level: int = 0) -> ParsingResult:
     return ParsingResult(text, blocks)
 
 
+def process_uris(text: Union[str, bytes]) -> list[BaseUri]:
+    if isinstance(text, bytes):
+        text = text.decode()
+
+    uris: list[BaseUri] = []
+    offset = 0
+    offset_bytes = 0
+    for line in text.splitlines(keepends=True):
+        uris += _parse_uris(line, offset, offset_bytes)
+        offset += len(line)
+        offset_bytes += len(line.encode())
+
+    return uris
+
+
 def _parse_blocks(text: str, level: int) -> list[Block]:
     blocks: list[Block] = []
     text_len = len(text)
