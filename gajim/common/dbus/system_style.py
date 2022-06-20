@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Callable
-from typing import cast
 from typing import Optional
 
 import sys
@@ -65,7 +64,7 @@ class SystemStyleListener:
                 Gio.DBusCallFlags.NO_AUTO_START,
                 -1,
                 None)
-            (self._prefer_dark,) = cast(tuple[bool], result)
+            self._prefer_dark = result[0] == 1
         except GLib.Error as error:
             log.error('Couldn’t read the color-scheme setting: %s',
                       error.message)
@@ -84,7 +83,7 @@ class SystemStyleListener:
         namespace, name, value = parameters
         if (namespace == 'org.freedesktop.appearance' and
                 name == 'color-scheme'):
-            self._prefer_dark = (value == 1)
+            self._prefer_dark = value == 1
             self._callback()
             app.ged.raise_event(StyleChanged())
 
