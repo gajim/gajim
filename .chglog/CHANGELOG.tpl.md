@@ -1,26 +1,11 @@
-{{ if .Versions -}}
-<a name="unreleased"></a>
-## [Unreleased]
-
-{{ if .Unreleased.CommitGroups -}}
-{{ range .Unreleased.CommitGroups -}}
-{{ .Title }}
-
-{{ range .Commits -}}
-  * {{if .Refs}}{{range .Refs}}#{{.Ref}} {{end}}{{end}}{{ if .Scope }}**{{ .Scope }}:** {{ end }}{{ .Subject }}
-{{ end }}
-{{ end -}}
-{{ end -}}
-{{ end -}}
-
-
 {{ range .Versions }}
-<a name="{{ .Tag.Name }}"></a>
-## {{ if .Tag.Previous }}[{{ .Tag.Name }}]{{ else }}{{ .Tag.Name }}{{ end }} - {{ datetime "2006-01-02" .Tag.Date }}
+Gajim {{ .Tag.Name }} ({{ datetime "02 Jan 2006" .Tag.Date }})
+
 {{ range .CommitGroups -}}
-{{ .Title }}
+{{ if .Title }}  {{ .Title }}{{end}}
+
 {{ range .Commits -}}
-  * {{ if .Scope }}**{{ .Scope }}:** {{ end }}{{ .Subject }}
+{{ if .Subject }}  * {{ .Subject }}{{end}}{{if .Refs}} ({{range .Refs}}#{{.Ref}}{{end}}){{end}}
 {{ end }}
 {{ end -}}
 
@@ -32,13 +17,7 @@
 {{ end }}
 {{ end -}}
 {{ end -}}
-{{ end -}}
 
-{{- if .Versions }}
-[Unreleased]: {{ .Info.RepositoryURL }}/compare/{{ $latest := index .Versions 0 }}{{ $latest.Tag.Name }}...HEAD
-{{ range .Versions -}}
-{{ if .Tag.Previous -}}
-[{{ .Tag.Name }}]: {{ $.Info.RepositoryURL }}/compare/{{ .Tag.Previous.Name }}...{{ .Tag.Name }}
-{{ end -}}
-{{ end -}}
+{{break}}
+
 {{ end -}}
