@@ -66,15 +66,15 @@ class NotificationManager(Gtk.ListBox):
 
     def _add_actions(self) -> None:
         actions = [
-            ('subscription-accept', self._on_subscription_accept),
-            ('subscription-deny', self._on_subscription_deny),
-            ('subscription-block', self._on_subscription_block),
-            ('subscription-report', self._on_subscription_report),
+            ('subscription-accept', self._on_subscription_accept, 'as'),
+            ('subscription-deny', self._on_subscription_deny, 's'),
+            ('subscription-block', self._on_subscription_block, 's'),
+            ('subscription-report', self._on_subscription_report, 's'),
         ]
         for action in actions:
-            action_name, func = action
+            action_name, func, typ = action
             act = Gio.SimpleAction.new(
-                f'{action_name}-{self._account}', GLib.VariantType.new('s'))
+                f'{action_name}-{self._account}', GLib.VariantType.new(typ))
             act.connect('activate', func)
             app.window.add_action(act)
 
@@ -123,14 +123,14 @@ class NotificationManager(Gtk.ListBox):
                                 _action: Gio.SimpleAction,
                                 param: GLib.Variant
                                 ) -> None:
-        jid = param.get_string()
+        jid, nickname = param.get_strv()
         row = self._get_notification_row(jid)
         self._client.get_module('Presence').subscribed(jid)
         jid = JID.from_string(jid)
         contact = self._client.get_module('Contacts').get_contact(jid)
         if not contact.is_in_roster:
             open_window('AddContact', account=self._account,
-                        jid=jid, nick=contact.name)
+                        jid=jid, nick=nickname or contact.name)
         if row is not None:
             row.destroy()
 
@@ -189,9 +189,12 @@ class NotificationManager(Gtk.ListBox):
             new_row.connect('destroy', self._on_row_destroy)
             self.add(new_row)
 
-            contact = self._client.get_module('Contacts').get_contact(
-                event.jid)
-            text = _('%s asks you to share your status') % contact.name
+            nick = event.user_nick
+            if not nick:
+                contact = self._client.get_module('Contacts').get_contact(
+                    event.jid)
+                nick = contact.name
+            text = _('%s asks you to share your status') % nick
 
             app.ged.raise_event(
                 Notification(account=self._account,
@@ -330,7 +333,10 @@ class SubscriptionRequestRow(NotificationRow):
         accept_button.set_valign(Gtk.Align.CENTER)
         accept_button.set_action_name(
             f'win.subscription-accept-{self._account}')
-        accept_button.set_action_target_value(GLib.Variant('s', self.jid))
+        accept_button.set_action_target_value(GLib.Variant.new_strv([
+            self.jid,
+            user_nick or ''
+        ]))
         self.grid.attach(accept_button, 3, 1, 1, 2)
 
         more_image = Gtk.Image.new_from_icon_name(
