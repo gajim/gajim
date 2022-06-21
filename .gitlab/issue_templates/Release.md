@@ -1,12 +1,7 @@
 *Release date: xx xxx xxxx*
 
-## Things to do before release:
-
-* [ ] xxx
-
 ## Build
 * [ ] Merge translations from Weblate
-* [ ] Update `ChangeLog`
 * [ ] Run `./scripts/bump_version.py x.x.x`
 * [ ] Push release tag `x.x.x`
 
