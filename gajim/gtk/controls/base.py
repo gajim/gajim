@@ -867,41 +867,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         message_buffer = self.msg_textview.get_buffer()
         event_state = event.get_state()
-        if event.keyval == Gdk.KEY_Tab:
-            start, end = message_buffer.get_bounds()
-            position = message_buffer.get_insert()
-            end = message_buffer.get_iter_at_mark(position)
-            text = message_buffer.get_text(start, end, False)
-            split = text.split()
-            if (text.startswith(self.COMMAND_PREFIX) and
-                    not text.startswith(self.COMMAND_PREFIX * 2) and
-                    len(split) == 1):
-                text = split[0]
-                bare = text.lstrip(self.COMMAND_PREFIX)
-                if len(text) == 1:
-                    self.command_hits = []
-                    for command in self.list_commands():
-                        for name in command.names:
-                            self.command_hits.append(name)
-                else:
-                    if (self.last_key_tabs and self.command_hits and
-                            self.command_hits[0].startswith(bare)):
-                        self.command_hits.append(self.command_hits.pop(0))
-                    else:
-                        self.command_hits = []
-                        for command in self.list_commands():
-                            for name in command.names:
-                                if name.startswith(bare):
-                                    self.command_hits.append(name)
-
-                if self.command_hits:
-                    message_buffer.delete(start, end)
-                    message_buffer.insert_at_cursor(
-                        self.COMMAND_PREFIX + self.command_hits[0] + ' ')
-                    self.last_key_tabs = True
-                return True
-            if not self.is_groupchat:
-                self.last_key_tabs = False
         if event.keyval == Gdk.KEY_Up:
             if event_state & Gdk.ModifierType.CONTROL_MASK:
                 if event_state & Gdk.ModifierType.SHIFT_MASK:  # Ctrl+Shift+UP
