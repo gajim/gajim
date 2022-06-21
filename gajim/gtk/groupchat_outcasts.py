@@ -175,7 +175,7 @@ class GroupchatOutcasts(Gtk.Box):
                                 reason=row[Column.REASON]))
         return rows
 
-    def _get_diff(self) -> list[OutcastRow]:
+    def _get_diff(self) -> tuple[list[OutcastRow], list[OutcastRow]]:
 
         new_rows = self._get_new_rows()
 
@@ -192,16 +192,19 @@ class GroupchatOutcasts(Gtk.Box):
         same_rows = {row for row in new_rows if row.jid in same}
         modified_rows = list(same_rows - self._current_rows)
 
-        return removed_rows + added_rows + modified_rows
+        return removed_rows, added_rows + modified_rows
 
     def _set_outcasts(self) -> None:
-        diff_rows = self._get_diff()
+        removed_rows, other_rows = self._get_diff()
 
         outcasts = {}
-        for row in diff_rows:
+        for row in other_rows:
             outcasts[row.jid] = {'affiliation': 'outcast'}
             if row.reason:
                 outcasts[row.jid]['reason'] = row.reason
+
+        for row in removed_rows:
+            outcasts[row.jid] = {'affiliation': 'none'}
 
         self._client.get_module('MUC').set_affiliation(
             self._contact.jid,
