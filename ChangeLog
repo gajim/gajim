@@ -1,3 +1,29 @@
+Gajim 1.4.5 (21 Jun 2022)
+
+  New
+
+  * Add new Shortcut for toggling the chat list
+
+  Improvements
+
+  * Preferences: Add setting for emoji shortcodes
+  * Disable plugin updates by Gajim on flatpak
+
+  Bug Fixes
+
+  * Use nickname provided in subscription requests everywhere
+  * GroupchatOutcasts: Make removing users work
+  * Chat: Display corrections for /me messages correctly (#10933)
+  * Styling: Process URIs when using /me command (#10988)
+  * Preview: Align link button correctly (#10997)
+  * MUC: Don’t fail on presence from unknown occupants (#10981)
+  * SystemStyleListener: Fix handling of color scheme states (#10996)
+  * Styling: Improve address regex
+  * Styling: Improve uri regex
+  * Styling: Parse text correctly which contains uris and addresses (#10974)
+  * Main: Process window shortcuts when no chat is open
+  * Restore minimal AdHoc module
+
 Gajim 1.4.4 (18 Jun 2022)
 
   New

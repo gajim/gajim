@@ -74,6 +74,7 @@
     <control>pointing</control>
   </recommends>
   <releases>
+    <release version="1.4.5" date="2022-06-21" />
     <release version="1.4.4" date="2022-06-18" />
     <release version="1.4.3" date="2022-06-01" />
     <release version="1.4.2" date="2022-05-25" />
