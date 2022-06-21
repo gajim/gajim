@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -2054,6 +2054,9 @@ msgid "Email"
 msgstr "Νέο E-Mail"
 
 msgid "Emoji"
+msgstr ""
+
+msgid "Emoji Shortcodes"
 msgstr ""
 
 #, fuzzy
@@ -4757,6 +4760,9 @@ msgstr "Εμφάνιση του κεντρικού παραθύρου κατά �
 msgid "Show only critical errors"
 msgstr "Εμφά_νιση το μόνο στο κύριο παράθυρο"
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 #, fuzzy
 msgid "Show the application's version"
 msgstr "_Εικονίδιο στην περιοχή γνωστοποίησης"
@@ -5306,6 +5312,10 @@ msgid "To apply all changes instantly, you have to re-login."
 msgstr ""
 "Αν θέλετε να εφαρμόσετε άμεσα τις αλλαγές, θα πρέπει να αποσυνδεθείτε και να "
 "συνδεθείτε ξανά."
+
+#, fuzzy
+msgid "Toggle Chat List"
+msgstr "Συμμετέχων"
 
 msgid "Toggle Video Chat"
 msgstr ""

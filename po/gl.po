@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
 "PO-Revision-Date: 2009-08-19 23:51+0200\n"
 "Last-Translator: Iván Méndez López <>\n"
 "Language-Team:  <softwarelibre@udc.es>\n"
@@ -2044,6 +2044,9 @@ msgid "Email"
 msgstr "Correo electrónico novo"
 
 msgid "Emoji"
+msgstr ""
+
+msgid "Emoji Shortcodes"
 msgstr ""
 
 #, fuzzy
@@ -4745,6 +4748,9 @@ msgstr "Amosar _listaxe"
 msgid "Show only critical errors"
 msgstr "Amosar só na _listaxe de contactos"
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Usar a icona na á_rea de notificación"
@@ -5296,6 +5302,10 @@ msgid "To apply all changes instantly, you have to re-login."
 msgstr ""
 "Se quere que se apliquen todos os cambios instantaneamente, debe "
 "reconectarse."
+
+#, fuzzy
+msgid "Toggle Chat List"
+msgstr "Participante"
 
 msgid "Toggle Video Chat"
 msgstr ""

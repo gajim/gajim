@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
 "PO-Revision-Date: 2009-11-18 15:50+0100\n"
 "Last-Translator: Stian B. Barmen <stian@barmen.nu>\n"
 "Language-Team: <>\n"
@@ -2035,6 +2035,9 @@ msgid "Email"
 msgstr "E-post"
 
 msgid "Emoji"
+msgstr ""
+
+msgid "Emoji Shortcodes"
 msgstr ""
 
 #, fuzzy
@@ -4737,6 +4740,9 @@ msgstr "_Vis kontaktliste ved oppstart:"
 msgid "Show only critical errors"
 msgstr "Bare vis kritiske feil"
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 msgid "Show the application's version"
 msgstr "Vis programversjon"
 
@@ -5301,6 +5307,10 @@ msgid "To apply all changes instantly, you have to re-login."
 msgstr ""
 "Dersom du ønsker at endringene skal trå i kraft umiddelbart, må du logge inn "
 "på nytt."
+
+#, fuzzy
+msgid "Toggle Chat List"
+msgstr "Veksle videoøkt"
 
 #, fuzzy
 msgid "Toggle Video Chat"

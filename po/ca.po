@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1938,6 +1938,9 @@ msgid "Email"
 msgstr ""
 
 msgid "Emoji"
+msgstr ""
+
+msgid "Emoji Shortcodes"
 msgstr ""
 
 #, fuzzy
@@ -4481,6 +4484,9 @@ msgstr "C_onecta al servidor quan s'inicia"
 msgid "Show only critical errors"
 msgstr ""
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 msgid "Show the application's version"
 msgstr ""
 
@@ -4992,6 +4998,10 @@ msgstr ""
 
 msgid "To apply all changes instantly, you have to re-login."
 msgstr ""
+
+#, fuzzy
+msgid "Toggle Chat List"
+msgstr "Accions Ocupant"
 
 msgid "Toggle Video Chat"
 msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -2021,6 +2021,9 @@ msgid "Email"
 msgstr "New E-mail"
 
 msgid "Emoji"
+msgstr ""
+
+msgid "Emoji Shortcodes"
 msgstr ""
 
 #, fuzzy
@@ -4694,6 +4697,9 @@ msgstr "Rodyk _Kontaktų Sąrašą"
 msgid "Show only critical errors"
 msgstr "Rodyti tik kontaktų _sąrašą"
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Naudoti piktogramą trėjuje (pranešimų panelės piktograma)"
@@ -5234,6 +5240,10 @@ msgstr "Kam"
 #, fuzzy
 msgid "To apply all changes instantly, you have to re-login."
 msgstr "If you want all the changes to apply instantly, you must relogin."
+
+#, fuzzy
+msgid "Toggle Chat List"
+msgstr "Participant"
 
 msgid "Toggle Video Chat"
 msgstr ""

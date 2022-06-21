@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1741,6 +1741,9 @@ msgid "Email"
 msgstr ""
 
 msgid "Emoji"
+msgstr ""
+
+msgid "Emoji Shortcodes"
 msgstr ""
 
 msgid "Emoji Theme"
@@ -4019,6 +4022,9 @@ msgstr ""
 msgid "Show only critical errors"
 msgstr ""
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 msgid "Show the application's version"
 msgstr ""
 
@@ -4496,6 +4502,9 @@ msgid "To"
 msgstr ""
 
 msgid "To apply all changes instantly, you have to re-login."
+msgstr ""
+
+msgid "Toggle Chat List"
 msgstr ""
 
 msgid "Toggle Video Chat"

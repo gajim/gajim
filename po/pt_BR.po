@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
 "PO-Revision-Date: 2020-09-06 18:19+0000\n"
 "Last-Translator: Antonio Morais <antonio@alfa67.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -2041,6 +2041,9 @@ msgstr "E-mail"
 #, fuzzy
 msgid "Emoji"
 msgstr "Emojis"
+
+msgid "Emoji Shortcodes"
+msgstr ""
 
 #, fuzzy
 msgid "Emoji Theme"
@@ -4716,6 +4719,9 @@ msgstr "Exibi_r lista"
 msgid "Show only critical errors"
 msgstr "Mostrar somente erros críticos"
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 msgid "Show the application's version"
 msgstr "Mostra versão da aplicação"
 
@@ -5290,6 +5296,10 @@ msgstr "Para"
 #, fuzzy
 msgid "To apply all changes instantly, you have to re-login."
 msgstr "Se você quer aplicar todas as mudanças, deve se re-autenticar."
+
+#, fuzzy
+msgid "Toggle Chat List"
+msgstr "Bate-papo de voz de alternância"
 
 #, fuzzy
 msgid "Toggle Video Chat"

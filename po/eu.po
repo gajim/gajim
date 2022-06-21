@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -2044,6 +2044,9 @@ msgid "Email"
 msgstr "E-Posta Berria"
 
 msgid "Emoji"
+msgstr ""
+
+msgid "Emoji Shortcodes"
 msgstr ""
 
 #, fuzzy
@@ -4747,6 +4750,9 @@ msgstr "Ikusi _Zerrenda"
 msgid "Show only critical errors"
 msgstr "Ikusi _zerrendan bakarrik"
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 #, fuzzy
 msgid "Show the application's version"
 msgstr "E_rabili ikonifikazioa (aka. notification area)"
@@ -5297,6 +5303,10 @@ msgstr "Norentzat"
 msgid "To apply all changes instantly, you have to re-login."
 msgstr ""
 "Momentuan aldaturiko aukerak ezarri nahi badituzu, birkargatu beharko duzu."
+
+#, fuzzy
+msgid "Toggle Chat List"
+msgstr "Partaidea"
 
 msgid "Toggle Video Chat"
 msgstr ""

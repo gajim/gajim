@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
 "PO-Revision-Date: 2010-01-22 14:35+0100\n"
 "Last-Translator: Petr Menšík <pihhan@cipis.net>\n"
 "Language-Team: <>\n"
@@ -2076,6 +2076,9 @@ msgid "Email"
 msgstr "Nový E-mail"
 
 msgid "Emoji"
+msgstr ""
+
+msgid "Emoji Shortcodes"
 msgstr ""
 
 #, fuzzy
@@ -4785,6 +4788,9 @@ msgstr "Zobrazit _Seznam"
 msgid "Show only critical errors"
 msgstr "_Zobrazit událost v rosteru"
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Notification-daemon"
@@ -5337,6 +5343,10 @@ msgstr "Příjemce"
 #, fuzzy
 msgid "To apply all changes instantly, you have to re-login."
 msgstr "Pokud chcete, aby se změny projevily ihned, musíte se znovu přihlásit."
+
+#, fuzzy
+msgid "Toggle Chat List"
+msgstr "Přepnout video"
 
 #, fuzzy
 msgid "Toggle Video Chat"

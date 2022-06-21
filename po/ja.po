@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
 "PO-Revision-Date: 2022-05-26 22:21+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -1806,6 +1806,9 @@ msgstr "メール"
 
 msgid "Emoji"
 msgstr "絵文字"
+
+msgid "Emoji Shortcodes"
+msgstr ""
 
 msgid "Emoji Theme"
 msgstr "絵文字テーマ"
@@ -4194,6 +4197,9 @@ msgstr "起動時に Gajim を表示する"
 msgid "Show only critical errors"
 msgstr "深刻なエラーのみ表示"
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 msgid "Show the application's version"
 msgstr "アプリケーションのバージョンを表示"
 
@@ -4706,6 +4712,10 @@ msgstr "相手先が承認"
 
 msgid "To apply all changes instantly, you have to re-login."
 msgstr "すべての変更を直ちに有効にするには、再ログインしてください。"
+
+#, fuzzy
+msgid "Toggle Chat List"
+msgstr "音声チャットにする/しない"
 
 msgid "Toggle Video Chat"
 msgstr "ビデオチャットにする/しない"

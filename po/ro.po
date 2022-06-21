@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
 "PO-Revision-Date: 2022-05-29 13:30+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -1825,6 +1825,9 @@ msgstr "E-mail"
 
 msgid "Emoji"
 msgstr "Emoticon"
+
+msgid "Emoji Shortcodes"
+msgstr ""
 
 msgid "Emoji Theme"
 msgstr "Tema Emoticon"
@@ -4240,6 +4243,9 @@ msgstr "Arată Gajim pe Startup"
 msgid "Show only critical errors"
 msgstr "Afișați numai erorile critice"
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 msgid "Show the application's version"
 msgstr "Afișați versiunea aplicației"
 
@@ -4762,6 +4768,10 @@ msgid "To apply all changes instantly, you have to re-login."
 msgstr ""
 "Pentru a aplica toate modificările instantaneu, trebuie să vă autentificați "
 "din nou."
+
+#, fuzzy
+msgid "Toggle Chat List"
+msgstr "Comutați chat-ul vocal"
 
 msgid "Toggle Video Chat"
 msgstr "Comutați Video Chat-ul"

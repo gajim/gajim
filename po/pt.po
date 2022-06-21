@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
 "PO-Revision-Date: 2020-07-03 20:44+0000\n"
 "Last-Translator: Fabiano Borges de Sousa <fabianobss@gmail.com>\n"
 "Language-Team: Portuguese <https://translate.gajim.org/projects/gajim/master/"
@@ -2039,6 +2039,9 @@ msgid "Email"
 msgstr "E-Mail"
 
 msgid "Emoji"
+msgstr ""
+
+msgid "Emoji Shortcodes"
 msgstr ""
 
 #, fuzzy
@@ -4721,6 +4724,9 @@ msgstr "Mostrar janela principal ao arranque"
 msgid "Show only critical errors"
 msgstr "Mostrar apenas na _lista"
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 #, fuzzy
 msgid "Show the application's version"
 msgstr "_Ícone na bandeja (também conhecido por área de notificação)"
@@ -5267,6 +5273,10 @@ msgstr "Para"
 
 msgid "To apply all changes instantly, you have to re-login."
 msgstr ""
+
+#, fuzzy
+msgid "Toggle Chat List"
+msgstr "Participante"
 
 msgid "Toggle Video Chat"
 msgstr ""

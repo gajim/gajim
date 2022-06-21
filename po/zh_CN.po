@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
-"PO-Revision-Date: 2022-06-17 14:58+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
+"PO-Revision-Date: 2022-06-21 16:28+0000\n"
 "Last-Translator: Tommy He <lovenemesis@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
 "gajim/master/zh_Hans/>\n"
@@ -633,13 +633,11 @@ msgstr "账户: %s"
 msgid "Accounts"
 msgstr "账户"
 
-#, fuzzy
 msgid "Action on Close"
-msgstr "关闭时最小化"
+msgstr "关闭时的动作"
 
-#, fuzzy
 msgid "Action when closing Gajim’s window"
-msgstr "关闭 Gajim 窗口时最小化"
+msgstr "关闭 Gajim 窗口时的动作"
 
 msgid "Action when left-clicking a preview"
 msgstr "左击预览时的动作"
@@ -782,6 +780,7 @@ msgid ""
 "Allow Gajim to broadcast useful information via D-Bus. It also allows other "
 "applications to control Gajim remotely."
 msgstr ""
+"允许 Gajim 通过 D-Bus 广播有用的信息。这也将允许其他应用远程控制 Gajim。"
 
 msgid "Allow a participant to send you public or private messages"
 msgstr "允许参与者向您发送公开或私人消息"
@@ -1567,7 +1566,7 @@ msgid "Current Developers"
 msgstr "当前开发者"
 
 msgid "D-Bus Interface"
-msgstr ""
+msgstr "D-Bus 接口"
 
 msgid "Dark Theme"
 msgstr "暗黑主题"
@@ -1781,6 +1780,9 @@ msgstr "电子邮件"
 
 msgid "Emoji"
 msgstr "表情符号"
+
+msgid "Emoji Shortcodes"
+msgstr ""
 
 msgid "Emoji Theme"
 msgstr "表情符号主题"
@@ -2312,7 +2314,7 @@ msgid "Helps to establish calls through firewalls"
 msgstr "帮助穿透防火墙以建立通话"
 
 msgid "Hide"
-msgstr ""
+msgstr "隐藏"
 
 msgid "Hide this menu"
 msgstr "隐藏本菜单"
@@ -2821,9 +2823,8 @@ msgstr ""
 "除非你启用了历史记录而且向你发送消息的联系人在你的联系人列表中，你才能在以后"
 "读到这些消息。"
 
-#, fuzzy
 msgid "Minimize"
-msgstr "最小化到托盘"
+msgstr "最小化"
 
 msgid "Minutes until your status gets changed"
 msgstr "过多少分钟自动更改你的状态"
@@ -3417,9 +3418,8 @@ msgstr "清空所有聊天记录"
 msgid "PyGObject Version: %s"
 msgstr "PyGObject 版本: %s"
 
-#, fuzzy
 msgid "Quit"
-msgstr "退出(_Q)"
+msgstr "退出"
 
 msgid "Quit Gajim"
 msgstr "退出 Gajim"
@@ -4106,6 +4106,9 @@ msgstr "在启动时显示"
 msgid "Show only critical errors"
 msgstr "仅显示严重错误"
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 msgid "Show the application's version"
 msgstr "显示应用版本"
 
@@ -4595,6 +4598,9 @@ msgstr "至"
 
 msgid "To apply all changes instantly, you have to re-login."
 msgstr "如果想使所有变更立即生效，您必须重新登录。"
+
+msgid "Toggle Chat List"
+msgstr "切换聊天列表"
 
 msgid "Toggle Video Chat"
 msgstr "切换视频聊天"

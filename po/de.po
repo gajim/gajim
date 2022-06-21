@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
-"PO-Revision-Date: 2022-06-16 18:40+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
+"PO-Revision-Date: 2022-06-19 22:23+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/"
 ">\n"
@@ -656,13 +656,11 @@ msgstr "Konto: %s"
 msgid "Accounts"
 msgstr "Konten"
 
-#, fuzzy
 msgid "Action on Close"
-msgstr "Beim Schließen minimieren"
+msgstr "Aktion beim Schließen"
 
-#, fuzzy
 msgid "Action when closing Gajim’s window"
-msgstr "Gajim minimieren, wenn das Hauptfenster geschlossen wird"
+msgstr "Aktion beim Schließen von Gajims Hauptfenster"
 
 msgid "Action when left-clicking a preview"
 msgstr "Aktion bei einem Linksklick auf die Vorschau"
@@ -806,6 +804,8 @@ msgid ""
 "Allow Gajim to broadcast useful information via D-Bus. It also allows other "
 "applications to control Gajim remotely."
 msgstr ""
+"Gajim das Veröffentlichen von nützlichen Informationen via D-Bus erlauben. "
+"Dies erlaubt außerdem anderen Apps, Gajim fernzusteuern."
 
 msgid "Allow a participant to send you public or private messages"
 msgstr ""
@@ -1609,7 +1609,7 @@ msgid "Current Developers"
 msgstr "Derzeitige Entwickler"
 
 msgid "D-Bus Interface"
-msgstr ""
+msgstr "D-Bus-Interface"
 
 # TODO mark as do not translate?
 msgid "Dark Theme"
@@ -1828,6 +1828,9 @@ msgstr "E-Mail"
 
 msgid "Emoji"
 msgstr "Emoji"
+
+msgid "Emoji Shortcodes"
+msgstr ""
 
 # TODO mark as do not translate?
 msgid "Emoji Theme"
@@ -2380,7 +2383,7 @@ msgid "Helps to establish calls through firewalls"
 msgstr "Hilf beim Rufaufbau durch Firewalls hindurch"
 
 msgid "Hide"
-msgstr ""
+msgstr "Verstecken"
 
 msgid "Hide this menu"
 msgstr "Dieses Menü ausblenden"
@@ -2921,9 +2924,8 @@ msgstr ""
 "Nachrichtenverlauf gespeichert wird und der Kontakt sich in der Kontaktliste "
 "befindet."
 
-#, fuzzy
 msgid "Minimize"
-msgstr "In den Infobereich minimieren"
+msgstr "Minimieren"
 
 msgid "Minutes until your status gets changed"
 msgstr "Minuten bis der Status geändert wird"
@@ -3526,9 +3528,8 @@ msgstr "Gesamten Nachrichtenverlauf löschen"
 msgid "PyGObject Version: %s"
 msgstr "PyGObject-Version: %s"
 
-#, fuzzy
 msgid "Quit"
-msgstr "_Beenden"
+msgstr "Beenden"
 
 msgid "Quit Gajim"
 msgstr "Gajim beenden"
@@ -4233,6 +4234,9 @@ msgstr "Beim Start anzeigen"
 msgid "Show only critical errors"
 msgstr "Nur kritische Fehler anzeigen"
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 msgid "Show the application's version"
 msgstr "Version des Programms anzeigen"
 
@@ -4758,6 +4762,9 @@ msgid "To apply all changes instantly, you have to re-login."
 msgstr ""
 "Wenn die Änderungen sofort übernommen werden sollen, musst du dich erneut "
 "anmelden."
+
+msgid "Toggle Chat List"
+msgstr "Chatliste ein-/ausblenden"
 
 msgid "Toggle Video Chat"
 msgstr "Videoanruf starten"

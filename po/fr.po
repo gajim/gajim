@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
 "PO-Revision-Date: 2022-05-31 08:30+0000\n"
 "Last-Translator: pitchum <pitchum@gramaton.org>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
@@ -1835,6 +1835,9 @@ msgstr "Courrier électronique"
 
 msgid "Emoji"
 msgstr "Émoji"
+
+msgid "Emoji Shortcodes"
+msgstr ""
 
 msgid "Emoji Theme"
 msgstr "Thème d'émojis"
@@ -4257,6 +4260,9 @@ msgstr "Afficher Gajim au démarrage"
 msgid "Show only critical errors"
 msgstr "Ne montrer que les erreurs critiques"
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 msgid "Show the application's version"
 msgstr "Afficher la version de l’application"
 
@@ -4773,6 +4779,10 @@ msgid "To apply all changes instantly, you have to re-login."
 msgstr ""
 "Si vous voulez que vos changements soient appliqués immédiatement, vous "
 "devez vous reconnecter."
+
+#, fuzzy
+msgid "Toggle Chat List"
+msgstr "Activer/désactiver la discussion audio"
 
 msgid "Toggle Video Chat"
 msgstr "Démarrer/arrêter la discussion vidéo"

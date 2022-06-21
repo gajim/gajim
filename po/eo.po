@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
 "PO-Revision-Date: 2020-08-19 19:27+0000\n"
 "Last-Translator: Vincent L <vincent.laporte+gajim@mailbox.org>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -2040,6 +2040,9 @@ msgid "Email"
 msgstr "Nova retletero"
 
 msgid "Emoji"
+msgstr ""
+
+msgid "Emoji Shortcodes"
 msgstr ""
 
 #, fuzzy
@@ -4742,6 +4745,9 @@ msgstr "Montri _kontaktliston"
 msgid "Show only critical errors"
 msgstr "Montri nur en _kontaktlisto"
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Uzi pletpiktogramon"
@@ -5290,6 +5296,10 @@ msgstr "Al"
 #, fuzzy
 msgid "To apply all changes instantly, you have to re-login."
 msgstr "Se vi volas ekuzi la ĉiujn ŝanĝojn, vi devas rekonekti."
+
+#, fuzzy
+msgid "Toggle Chat List"
+msgstr "Partoprenanto"
 
 msgid "Toggle Video Chat"
 msgstr ""

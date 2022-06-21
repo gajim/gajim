@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -2045,6 +2045,9 @@ msgid "Email"
 msgstr "Novy list"
 
 msgid "Emoji"
+msgstr ""
+
+msgid "Emoji Shortcodes"
 msgstr ""
 
 #, fuzzy
@@ -4751,6 +4754,9 @@ msgstr "Pakažy _śpis kantaktaŭ"
 msgid "Show only critical errors"
 msgstr "Pakazvaj tolki ŭ śpisie _kantaktaŭ"
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Pakazvaj _ikonu ŭ poli nahadvańnia"
@@ -5298,6 +5304,10 @@ msgstr "Da"
 #, fuzzy
 msgid "To apply all changes instantly, you have to re-login."
 msgstr "Kali chočaš zadziejničać źmieny, treba pieradałučycca."
+
+#, fuzzy
+msgid "Toggle Chat List"
+msgstr "Udzielnik"
 
 msgid "Toggle Video Chat"
 msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -2067,6 +2067,9 @@ msgid "Email"
 msgstr "Ny E-post"
 
 msgid "Emoji"
+msgstr ""
+
+msgid "Emoji Shortcodes"
 msgstr ""
 
 #, fuzzy
@@ -4763,6 +4766,9 @@ msgstr "T_ilslut når Gajim startes"
 msgid "Show only critical errors"
 msgstr "_Vis hændelse i kontaktvindue"
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Vis et faneblad når der kun er en samtale?"
@@ -5317,6 +5323,10 @@ msgstr "Til"
 msgid "To apply all changes instantly, you have to re-login."
 msgstr ""
 "Hvis du vil at alle ændringerne skal træde i kraft nu, må du logge ind igen."
+
+#, fuzzy
+msgid "Toggle Chat List"
+msgstr "Deltager"
 
 msgid "Toggle Video Chat"
 msgstr ""

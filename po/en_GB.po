@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
 "PO-Revision-Date: 2009-11-20 20:49+1100\n"
 "Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: English <en_gb@li.org>\n"
@@ -2058,6 +2058,9 @@ msgid "Email"
 msgstr "New E-mail"
 
 msgid "Emoji"
+msgstr ""
+
+msgid "Emoji Shortcodes"
 msgstr ""
 
 #, fuzzy
@@ -4755,6 +4758,9 @@ msgstr "Show _roster"
 msgid "Show only critical errors"
 msgstr "Show only in _roster"
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Use t_rayicon (aka. notification area icon)"
@@ -5309,6 +5315,10 @@ msgstr "To"
 #, fuzzy
 msgid "To apply all changes instantly, you have to re-login."
 msgstr "If you want all the changes to apply instantly, you must relogin."
+
+#, fuzzy
+msgid "Toggle Chat List"
+msgstr "Participant"
 
 msgid "Toggle Video Chat"
 msgstr ""

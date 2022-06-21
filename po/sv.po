@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
 "PO-Revision-Date: 2009-10-29 10:21+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -2059,6 +2059,9 @@ msgid "Email"
 msgstr "Ny E-post"
 
 msgid "Emoji"
+msgstr ""
+
+msgid "Emoji Shortcodes"
 msgstr ""
 
 #, fuzzy
@@ -4751,6 +4754,9 @@ msgstr "Visa registerfönstret när Gajim startar"
 msgid "Show only critical errors"
 msgstr "Visa enbart i _registret"
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Använd _aktivitetsfältet (aka. notifieringsyta)"
@@ -5304,6 +5310,10 @@ msgstr "Till"
 #, fuzzy
 msgid "To apply all changes instantly, you have to re-login."
 msgstr "Om du vill att ändringarna skall ske omedelbart måste du återansluta."
+
+#, fuzzy
+msgid "Toggle Chat List"
+msgstr "Deltagare"
 
 msgid "Toggle Video Chat"
 msgstr ""

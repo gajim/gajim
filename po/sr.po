@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2066,6 +2066,9 @@ msgid "Email"
 msgstr "Нови Е-мејл"
 
 msgid "Emoji"
+msgstr ""
+
+msgid "Emoji Shortcodes"
 msgstr ""
 
 #, fuzzy
@@ -4765,6 +4768,9 @@ msgstr "_Прикажи листу контаката"
 msgid "Show only critical errors"
 msgstr "Прикажи догађај у листи контаката"
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Notification-daemon"
@@ -5319,6 +5325,10 @@ msgstr "За"
 msgid "To apply all changes instantly, you have to re-login."
 msgstr ""
 "Ако желите да се све промене тренутно примене, морате да се поново повежете."
+
+#, fuzzy
+msgid "Toggle Chat List"
+msgstr "Учесник"
 
 msgid "Toggle Video Chat"
 msgstr ""

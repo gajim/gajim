@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
 "PO-Revision-Date: 2010-11-28 12:15+0100\n"
 "Last-Translator: Gabriel Papp <gabriel.papp@gmx.com>\n"
 "Language-Team: -\n"
@@ -2070,6 +2070,9 @@ msgid "Email"
 msgstr "Új E-mail"
 
 msgid "Emoji"
+msgstr ""
+
+msgid "Emoji Shortcodes"
 msgstr ""
 
 #, fuzzy
@@ -4794,6 +4797,9 @@ msgstr "C_satlakozás a Gajim indításával"
 msgid "Show only critical errors"
 msgstr "Csak a főablakban jelenítse meg"
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Show tab when only one conversation?"
@@ -5351,6 +5357,10 @@ msgid "To apply all changes instantly, you have to re-login."
 msgstr ""
 "Ha azt szeretnéd, hogy a változások azonnal életbelépjenek, akkor újra be "
 "kell jelentkezned."
+
+#, fuzzy
+msgid "Toggle Chat List"
+msgstr "Résztvevő"
 
 msgid "Toggle Video Chat"
 msgstr ""

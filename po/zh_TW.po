@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-17 18:19+0000\n"
+"POT-Creation-Date: 2022-06-21 16:28+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -2047,6 +2047,9 @@ msgid "Email"
 msgstr "新電子郵件"
 
 msgid "Emoji"
+msgstr ""
+
+msgid "Emoji Shortcodes"
 msgstr ""
 
 #, fuzzy
@@ -4740,6 +4743,9 @@ msgstr "啟動時顯示名冊(_S):"
 msgid "Show only critical errors"
 msgstr "只顯示在聯絡人清單中"
 
+msgid "Show suggestions for shortcodes, e.g. :+1:"
+msgstr ""
+
 #, fuzzy
 msgid "Show the application's version"
 msgstr "在通知區域顯示圖示:"
@@ -5291,6 +5297,10 @@ msgstr "To"
 #, fuzzy
 msgid "To apply all changes instantly, you have to re-login."
 msgstr "如果想使所有調整立即生效，您必須重新登入。"
+
+#, fuzzy
+msgid "Toggle Chat List"
+msgstr "切換視訊作業階段"
 
 #, fuzzy
 msgid "Toggle Video Chat"
