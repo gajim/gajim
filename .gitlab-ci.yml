@@ -134,8 +134,8 @@ deploy-flatpak:
     - chmod 700 ~/.ssh
     - ssh-keyscan github.com >> ~/.ssh/known_hosts
   script:
-    - git config user.email "$CI_GIT_USER_EMAIL"
-    - git config user.name "$CI_GIT_USER_USERNAME"
+    - git config --global user.email "$CI_GIT_USER_EMAIL"
+    - git config --global user.name "$CI_GIT_USER_USERNAME"
     - git clone https://github.com/flathub/org.gajim.Gajim.git
     - cd org.gajim.Gajim
     - mv ../flatpak/org.gajim.Gajim.yaml org.gajim.Gajim.yaml
