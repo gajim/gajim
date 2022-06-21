@@ -178,6 +178,9 @@ class ChatActionProcessor(Gtk.Popover):
             self.popdown()
 
     def _check_for_emoji(self, start_iter: Gtk.TextIter) -> bool:
+        if not app.settings.get('enable_emoji_shortcodes'):
+            return False
+
         assert self._current_iter is not None
         search = self._current_iter.backward_search(
             ':',

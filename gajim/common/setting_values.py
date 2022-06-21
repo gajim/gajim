@@ -107,6 +107,7 @@ BoolSettings = Literal[
     'use_stun_server',
     'use_urgency_hint',
     'video_see_self',
+    'enable_emoji_shortcodes',
 ]
 
 IntSettings = Literal[
@@ -294,6 +295,7 @@ APP_SETTINGS = {
     'video_see_self': True,
     'video_size': '',
     'workspace_order': [],
+    'enable_emoji_shortcodes': True,
 }
 
 BoolAccountSettings = Literal[

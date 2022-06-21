@@ -293,7 +293,11 @@ class Chats(PreferenceBox):
                     SettingType.CONFIG,
                     'show_send_message_button',
                     callback=self._on_show_send_message_button),
-
+            Setting(SettingKind.SWITCH,
+                    _('Emoji Shortcodes'),
+                    SettingType.CONFIG,
+                    'enable_emoji_shortcodes',
+                    desc=_('Show suggestions for shortcodes, e.g. :+1:')),
             Setting(SettingKind.SWITCH,
                     _('Show Status Changes'),
                     SettingType.CONFIG,
