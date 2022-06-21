@@ -4,6 +4,7 @@ import re
 import argparse
 from datetime import datetime
 from pathlib import Path
+import subprocess
 
 REPO_DIR = Path(__file__).resolve().parent.parent
 
@@ -11,6 +12,7 @@ REPO_DIR = Path(__file__).resolve().parent.parent
 INIT = REPO_DIR / 'gajim' / '__init__.py'
 FLATPAK = REPO_DIR / 'flatpak' / 'org.gajim.Gajim.yaml'
 APPDATA = REPO_DIR / 'data' / 'org.gajim.Gajim.appdata.xml.in'
+CHANGELOG = REPO_DIR / 'ChangeLog'
 
 VERSION_RX = r"\d+\.\d+\.\d+"
 
@@ -61,6 +63,29 @@ def bump_appdata(new_version: str) -> None:
                 f.write('\n')
 
 
+def make_changelog(new_version: str) -> None:
+
+    cmd = [
+        'git-chglog',
+        '--next-tag',
+        new_version
+    ]
+
+    result = subprocess.run(cmd,
+                            cwd=REPO_DIR,
+                            text=True,
+                            check=True,
+                            capture_output=True)
+
+    changes = result.stdout
+    changes = changes.removeprefix('\n')
+
+    current_changelog = CHANGELOG.read_text()
+
+    with CHANGELOG.open('w') as f:
+        f.write(changes + current_changelog)
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Bump Version')
     parser.add_argument('version', help='The new version, e.g. 1.5.0')
@@ -70,3 +95,4 @@ if __name__ == '__main__':
     bump_init(current_version, args.version)
     bump_flatpak(current_version, args.version)
     bump_appdata(args.version)
+    make_changelog(args.version)
