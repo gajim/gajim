@@ -39,14 +39,12 @@ class GroupChatNickCompletion:
                  message_input: MessageInputTextView
                  ) -> None:
         self._account = account
-        self._client = app.get_client(account)
 
         self._contact = contact
         self._contact.connect(
             'user-nickname-changed', self._on_user_nickname_changed)
 
-        self._message_input = message_input
-        self._message_input.connect('key-press-event', self._on_key_press)
+        message_input.connect('key-press-event', self._on_key_press)
 
         self._sender_list: list[str] = []
         self._attention_list: list[str] = []
@@ -174,7 +172,7 @@ class GroupChatNickCompletion:
                 text.endswith(gc_refer_to_nick_char + ' ')):
             with_refer_to_nick_char = True
             after_nick_len = len(gc_refer_to_nick_char + ' ')
-        if (self._nick_hits and self._last_key_tab and 
+        if (self._nick_hits and self._last_key_tab and
                 text[:-after_nick_len].endswith(self._nick_hits[0])):
             # we should cycle
             # Previous nick in list may had a space inside, so we check text
@@ -219,7 +217,8 @@ class GroupChatNickCompletion:
             else:
                 start_iter.backward_chars(len(begin))
 
-            self._client.get_module('Chatstate').block_chatstates(
+            client = app.get_client(self._account)
+            client.get_module('Chatstate').block_chatstates(
                 self._contact, True)
 
             message_buffer.delete(start_iter, end_iter)
@@ -252,7 +251,7 @@ class GroupChatNickCompletion:
                 completion = self._nick_hits[0]
             message_buffer.insert_at_cursor(completion + add)
 
-            self._client.get_module('Chatstate').block_chatstates(
+            client.get_module('Chatstate').block_chatstates(
                 self._contact, False)
 
         self._last_key_tab = True

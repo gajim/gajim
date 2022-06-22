@@ -1,50 +1,62 @@
 import unittest
+from unittest.mock import MagicMock
 
 from gajim import gui
 gui.init('gtk')
-from gajim.gui.util import NickCompletionGenerator
+
+from gajim.gui.groupchat_nick_completion import GroupChatNickCompletion
+
 
 class Test(unittest.TestCase):
 
     def test_generate_suggestions(self):
-        gen = NickCompletionGenerator('meeeee')
+        contact = MagicMock()
+        message_input = MagicMock()
+        gen = GroupChatNickCompletion('testacc', contact, message_input)
 
-        l = ['aaaa', 'meeeee', 'fooo', 'xxxxz', 'xaaaz']
+        l = ['aaaa', 'fooo', 'xxxxz', 'xaaaz']
         for n in l:
             gen.record_message(n, False)
         l2 = ['xxx'] + l
-        r = gen.generate_suggestions(nicks=l2, beginning='x')
+        r = gen._generate_suggestions(nicks=l2, beginning='x')
         self.assertEqual(r, ['xaaaz', 'xxxxz', 'xxx'])
 
-        r = gen.generate_suggestions(
+        r = gen._generate_suggestions(
             nicks=l2,
             beginning='m'
-            )
+        )
         self.assertEqual(r, [])
 
         for n in ['xaaaz', 'xxxxz']:
             gen.record_message(n, True)
 
-        r = gen.generate_suggestions(
+        r = gen._generate_suggestions(
             nicks=l2,
             beginning='x'
-            )
+        )
         self.assertEqual(r, ['xxxxz', 'xaaaz', 'xxx'])
-        r = gen.generate_suggestions(
+        r = gen._generate_suggestions(
             nicks=l2,
             beginning=''
-            )
+        )
         self.assertEqual(r, ['xxxxz', 'xaaaz', 'aaaa', 'fooo', 'xxx'])
 
         l2[1] = 'bbbb'
-        gen.contact_renamed('aaaa', 'bbbb')
-        r = gen.generate_suggestions(
+
+        old_name = 'aaaa'
+        new_name = 'bbbb'
+
+        for lst in (gen._attention_list, gen._sender_list):
+            for idx, contact in enumerate(lst):
+                if contact == old_name:
+                    lst[idx] = new_name
+
+        r = gen._generate_suggestions(
             nicks=l2,
             beginning=''
-            )
+        )
         self.assertEqual(r, ['xxxxz', 'xaaaz', 'bbbb', 'fooo', 'xxx'])
 
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
