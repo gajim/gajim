@@ -266,9 +266,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         # TODO:
         self.user_nick: Optional[str] = None
 
-        self.command_hits: list[str] = []
-        self.last_key_tabs: bool = False
-
         self.sendmessage: bool = True
 
         self._client.get_module('Chatstate').set_active(self.contact)
@@ -846,10 +843,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             self.space_pressed = False
 
         # Ctrl [+ Shift] + Tab are not forwarded to notebook. We handle it here
-        if self.is_groupchat:
-            if event.keyval not in (Gdk.KEY_ISO_Left_Tab, Gdk.KEY_Tab):
-                self.last_key_tabs = False
-
         if event.get_state() & Gdk.ModifierType.SHIFT_MASK:
             if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and
                     event.keyval == Gdk.KEY_ISO_Left_Tab):

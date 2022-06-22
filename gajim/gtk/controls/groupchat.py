@@ -72,8 +72,7 @@ from gajim.gui.dataform import DataFormWidget
 from gajim.gui.groupchat_inviter import GroupChatInviter
 from gajim.gui.groupchat_roster import GroupchatRoster
 from gajim.gui.groupchat_state import GroupchatState
-from gajim.gui.message_input import MessageInputTextView
-from gajim.gui.util import NickCompletionGenerator
+from gajim.gui.groupchat_nick_completion import GroupChatNickCompletion
 from gajim.gui.util import open_window
 
 from ..menus import get_encryption_menu
@@ -153,11 +152,8 @@ class GroupchatControl(BaseControl):
         # if True, the room has mentioned us
         self.attention_flag: bool = False
 
-        # sorted list of nicks who mentioned us (last at the end)
-        self.attention_list: list[str] = []
-        self.nick_hits: list[str] = []
-        self.__nick_completion: Optional[NickCompletionGenerator] = None
-        self.last_key_tabs: bool = False
+        self._nick_completion = GroupChatNickCompletion(
+            self.account, self.contact, self.msg_textview)
 
         # Send file
         self.xml.sendfile_button.set_action_name(
@@ -259,13 +255,6 @@ class GroupchatControl(BaseControl):
                                  state: SimpleClientState
                                  ) -> None:
         pass
-
-    @property
-    def _nick_completion(self) -> NickCompletionGenerator:
-        if self.__nick_completion is None:
-            self.__nick_completion = NickCompletionGenerator(
-                self.contact.nickname)
-        return self.__nick_completion
 
     @property
     def disco_info(self):
@@ -797,7 +786,7 @@ class GroupchatControl(BaseControl):
                         _contact: GroupchatContact,
                         _signal_name: str,
                         user_contact: GroupchatParticipant,
-                        properties: MessageProperties
+                        properties: PresenceProperties
                         ) -> None:
         nick = user_contact.name
         if not properties.is_muc_self_presence:
@@ -852,12 +841,10 @@ class GroupchatControl(BaseControl):
         nick = user_contact.name
         new_nick = properties.muc_user.nick
         if properties.is_muc_self_presence:
-            self._nick_completion.change_nick(new_nick)
             message = _('You are now known as %s') % new_nick
         else:
             message = _('{nick} is now known '
                         'as {new_nick}').format(nick=nick, new_nick=new_nick)
-            self._nick_completion.contact_renamed(nick, new_nick)
 
         self.add_info_message(message)
 
@@ -1223,128 +1210,6 @@ class GroupchatControl(BaseControl):
         if target_type == TARGET_TYPE_URI_LIST:
             # File drag and drop (handled in chat_control_base)
             self.drag_data_file_transfer(selection)
-
-    def _jid_not_blocked(self, bare_jid: str) -> bool:
-        fjid = self.room_jid + '/' + bare_jid
-        return not helpers.jid_is_blocked(self.account, fjid)
-
-    def _on_message_textview_key_press_event(self,
-                                             textview: MessageInputTextView,
-                                             event: Gdk.EventKey
-                                             ) -> bool:
-        # pylint: disable=too-many-nested-blocks
-        res = BaseControl._on_message_textview_key_press_event(
-            self, textview, event)
-        if res:
-            return True
-
-        if event.keyval == Gdk.KEY_Tab:  # TAB
-            message_buffer = textview.get_buffer()
-            start_iter, end_iter = message_buffer.get_bounds()
-            cursor_position = message_buffer.get_insert()
-            end_iter = message_buffer.get_iter_at_mark(cursor_position)
-            text = message_buffer.get_text(start_iter, end_iter, False)
-
-            splitted_text = text.split()
-
-            # nick completion
-            # check if tab is pressed with empty message
-            if splitted_text:  # if there are any words
-                begin = splitted_text[-1]  # last word we typed
-            else:
-                begin = ''
-
-            gc_refer_to_nick_char = app.settings.get('gc_refer_to_nick_char')
-            with_refer_to_nick_char = False
-            after_nick_len = 1  # the space that is printed after we type [Tab]
-
-            # first part of this if : works fine even if refer_to_nick_char
-            if (gc_refer_to_nick_char and
-                    text.endswith(gc_refer_to_nick_char + ' ')):
-                with_refer_to_nick_char = True
-                after_nick_len = len(gc_refer_to_nick_char + ' ')
-            if self.nick_hits and self.last_key_tabs and \
-               text[:-after_nick_len].endswith(self.nick_hits[0]):
-                # we should cycle
-                # Previous nick in list may had a space inside, so we check text
-                # and not splitted_text and store it into 'begin' var
-                self.nick_hits.append(self.nick_hits[0])
-                begin = self.nick_hits.pop(0)
-            else:
-                list_nick = self.contact.get_user_nicknames()
-                list_nick = list(filter(self._jid_not_blocked, list_nick))
-
-                log.debug("Nicks to be considered for autosuggestions: %s",
-                          list_nick)
-                self.nick_hits = self._nick_completion.generate_suggestions(
-                    nicks=list_nick, beginning=begin)
-                log.debug("Nicks filtered for autosuggestions: %s",
-                          self.nick_hits)
-
-            if self.nick_hits:
-                if len(splitted_text) < 2 or with_refer_to_nick_char:
-                    # This is the 1st word of the line or no word or we are
-                    # cycling at the beginning, possibly with a space in
-                    # one nick
-                    add = gc_refer_to_nick_char + ' '
-                else:
-                    add = ' '
-                start_iter = end_iter.copy()
-                if (self.last_key_tabs and
-                        with_refer_to_nick_char or (text and text[-1] == ' ')):
-                    # have to accommodate for the added space from last
-                    # completion
-                    # gc_refer_to_nick_char may be more than one char!
-                    start_iter.backward_chars(len(begin) + len(add))
-                elif (self.last_key_tabs and
-                      not app.settings.get('shell_like_completion')):
-                    # have to accommodate for the added space from last
-                    # completion
-                    start_iter.backward_chars(
-                        len(begin) + len(gc_refer_to_nick_char))
-                else:
-                    start_iter.backward_chars(len(begin))
-
-                self._client.get_module('Chatstate').block_chatstates(
-                    self.contact, True)
-
-                message_buffer.delete(start_iter, end_iter)
-                # get a shell-like completion
-                # if there's more than one nick for this completion, complete
-                # only the part that all these nicks have in common
-                if (app.settings.get('shell_like_completion') and
-                        len(self.nick_hits) > 1):
-                    end = False
-                    completion = ''
-                    add = ""  # if nick is not complete, don't add anything
-                    while not end and len(completion) < len(self.nick_hits[0]):
-                        completion = self.nick_hits[0][:len(completion) + 1]
-                        for nick in self.nick_hits:
-                            if completion.lower() not in nick.lower():
-                                end = True
-                                completion = completion[:-1]
-                                break
-                    # if the current nick matches a COMPLETE existing nick,
-                    # and if the user tab TWICE, complete that nick (with the
-                    # "add")
-                    if self.last_key_tabs:
-                        for nick in self.nick_hits:
-                            if nick == completion:
-                                # The user seems to want this nick, so
-                                # complete it as if it were the only nick
-                                # available
-                                add = gc_refer_to_nick_char + ' '
-                else:
-                    completion = self.nick_hits[0]
-                message_buffer.insert_at_cursor(completion + add)
-
-                self._client.get_module('Chatstate').block_chatstates(
-                    self.contact, False)
-
-                self.last_key_tabs = True
-                return True
-            self.last_key_tabs = False
-        return False
 
     def delegate_action(self, action: str) -> int:
         res = super().delegate_action(action)
