@@ -151,12 +151,12 @@ class ChatPage(Gtk.Box):
                           account: str,
                           jid: JID) -> None:
 
-        self._control_stack.show_chat(account, jid)
+        self._chat_stack.show_chat(account, jid)
         self._search_view.set_context(account, jid)
         self.emit('chat-selected', workspace_id, account, jid)
 
     def _on_chat_unselected(self, _chat_list_stack: ChatListStack) -> None:
-        self._control_stack.clear()
+        self._chat_stack.clear()
         self._search_view.set_context(None, None)
 
     def _on_search_history(self,
@@ -185,7 +185,7 @@ class ChatPage(Gtk.Box):
         self._ui.search_entry.set_text('')
 
     def process_event(self, event: ApplicationEvent):
-        self._control_stack.process_event(event)
+        self._chat_stack.process_event(event)
         self._chat_list_stack.process_event(event)
 
     def add_chat_list(self, workspace_id: str) -> None:
