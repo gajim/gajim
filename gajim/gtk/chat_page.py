@@ -34,6 +34,7 @@ from .builder import get_builder
 from .chat_filter import ChatFilter
 from .chat_list import ChatList
 from .chat_list_stack import ChatListStack
+from .chat_stack import ChatStack
 from .control_stack import ControlStack
 from .search_view import SearchView
 from .types import ControlT
@@ -57,8 +58,10 @@ class ChatPage(Gtk.Box):
         self.add(self._ui.paned)
         self._ui.connect_signals(self)
 
-        self._control_stack = ControlStack()
-        self._ui.right_grid_overlay.add(self._control_stack)
+        self._chat_stack = ChatStack()
+        self._ui.right_grid_overlay.add(self._chat_stack)
+
+        self._control_stack = self._chat_stack.get_control_stack()
 
         self._search_view = SearchView()
         self._search_view.connect('hide-search', self._on_search_hide)
