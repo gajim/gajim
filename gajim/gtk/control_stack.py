@@ -34,10 +34,10 @@ from .controls.private import PrivateChatControl
 from .types import ControlT
 from .util import EventHelper
 
-log = logging.getLogger('gajim.gui.chatstack')
+log = logging.getLogger('gajim.gui.controlstack')
 
 
-class ChatStack(Gtk.Stack, EventHelper):
+class ControlStack(Gtk.Stack, EventHelper):
     def __init__(self):
         Gtk.Stack.__init__(self)
         EventHelper.__init__(self)

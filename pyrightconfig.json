@@ -61,7 +61,7 @@
         "gajim/gtk/chat_list_stack.py",
         "gajim/gtk/chat_list.py",
         "gajim/gtk/chat_page.py",
-        "gajim/gtk/chat_stack.py",
+        "gajim/gtk/control_stack.py",
         "gajim/gtk/const.py",
         "gajim/gtk/contact_info.py",
         "gajim/gtk/contacts_flowbox.py",

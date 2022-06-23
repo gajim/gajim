@@ -34,7 +34,7 @@ from .builder import get_builder
 from .chat_filter import ChatFilter
 from .chat_list import ChatList
 from .chat_list_stack import ChatListStack
-from .chat_stack import ChatStack
+from .control_stack import ControlStack
 from .search_view import SearchView
 from .types import ControlT
 
@@ -57,8 +57,8 @@ class ChatPage(Gtk.Box):
         self.add(self._ui.paned)
         self._ui.connect_signals(self)
 
-        self._chat_stack = ChatStack()
-        self._ui.right_grid_overlay.add(self._chat_stack)
+        self._control_stack = ControlStack()
+        self._ui.right_grid_overlay.add(self._control_stack)
 
         self._search_view = SearchView()
         self._search_view.connect('hide-search', self._on_search_hide)
@@ -118,8 +118,8 @@ class ChatPage(Gtk.Box):
     def get_chat_list_stack(self) -> ChatListStack:
         return self._chat_list_stack
 
-    def get_chat_stack(self) -> ChatStack:
-        return self._chat_stack
+    def get_control_stack(self) -> ControlStack:
+        return self._control_stack
 
     @staticmethod
     def _on_start_chat_clicked(_button: Gtk.Button) -> None:
@@ -148,12 +148,12 @@ class ChatPage(Gtk.Box):
                           account: str,
                           jid: JID) -> None:
 
-        self._chat_stack.show_chat(account, jid)
+        self._control_stack.show_chat(account, jid)
         self._search_view.set_context(account, jid)
         self.emit('chat-selected', workspace_id, account, jid)
 
     def _on_chat_unselected(self, _chat_list_stack: ChatListStack) -> None:
-        self._chat_stack.clear()
+        self._control_stack.clear()
         self._search_view.set_context(None, None)
 
     def _on_search_history(self,
@@ -182,7 +182,7 @@ class ChatPage(Gtk.Box):
         self._ui.search_entry.set_text('')
 
     def process_event(self, event: ApplicationEvent):
-        self._chat_stack.process_event(event)
+        self._control_stack.process_event(event)
         self._chat_list_stack.process_event(event)
 
     def add_chat_list(self, workspace_id: str) -> None:
@@ -227,15 +227,15 @@ class ChatPage(Gtk.Box):
             return
 
         if type_ == 'groupchat':
-            self._chat_stack.add_group_chat(account, jid)
+            self._control_stack.add_group_chat(account, jid)
         elif type_ == 'pm':
             if not self._startup_finished:
                 # TODO: Currently we can’t load private chats at start
                 # because the Contacts dont exist yet
                 return
-            self._chat_stack.add_private_chat(account, jid)
+            self._control_stack.add_private_chat(account, jid)
         else:
-            self._chat_stack.add_chat(account, jid)
+            self._control_stack.add_chat(account, jid)
         self._chat_list_stack.add_chat(workspace_id, account, jid, type_,
                                        pinned)
 
@@ -279,7 +279,7 @@ class ChatPage(Gtk.Box):
 
     def _on_chat_removed(self, _chat_list: ChatList, account: str, jid: JID,
                          type_: str) -> None:
-        self._chat_stack.remove_chat(account, jid)
+        self._control_stack.remove_chat(account, jid)
         if type_ == 'groupchat':
             client = app.get_client(account)
             client.get_module('MUC').leave(jid)
@@ -290,10 +290,10 @@ class ChatPage(Gtk.Box):
             chat_list.unselect_all()
 
         self._chat_list_stack.remove_chats_for_account(account)
-        self._chat_stack.remove_chats_for_account(account)
+        self._control_stack.remove_chats_for_account(account)
 
     def get_control(self, account: str, jid: JID) -> Optional[ControlT]:
-        return self._chat_stack.get_control(account, jid)
+        return self._control_stack.get_control(account, jid)
 
     def get_active_control(self) -> Optional[ControlT]:
         chat = self._chat_list_stack.get_selected_chat()
@@ -302,11 +302,11 @@ class ChatPage(Gtk.Box):
         return self.get_control(chat.account, chat.jid)
 
     def is_chat_loaded(self, account: str, jid: JID) -> bool:
-        return self._chat_stack.is_chat_loaded(account, jid)
+        return self._control_stack.is_chat_loaded(account, jid)
 
     def get_controls(self, account: Optional[str]
                      ) -> Generator[ControlT, None, None]:
-        return self._chat_stack.get_controls(account)
+        return self._control_stack.get_controls(account)
 
     def hide_search(self) -> bool:
         if self._search_revealer.get_reveal_child():
