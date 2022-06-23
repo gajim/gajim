@@ -72,7 +72,6 @@ from gajim.gui.dataform import DataFormWidget
 from gajim.gui.groupchat_inviter import GroupChatInviter
 from gajim.gui.groupchat_roster import GroupchatRoster
 from gajim.gui.groupchat_state import GroupchatState
-from gajim.gui.groupchat_nick_completion import GroupChatNickCompletion
 from gajim.gui.util import open_window
 
 from ..menus import get_encryption_menu
@@ -151,9 +150,6 @@ class GroupchatControl(BaseControl):
         # muc attention flag (when we are mentioned in a muc)
         # if True, the room has mentioned us
         self.attention_flag: bool = False
-
-        self._nick_completion = GroupChatNickCompletion(
-            self.account, self.contact, self.msg_textview)
 
         # Send file
         self.xml.sendfile_button.set_action_name(
@@ -657,7 +653,7 @@ class GroupchatControl(BaseControl):
             highlight = helpers.message_needs_highlight(
                 text, self.contact.nickname, self._client.get_own_jid().bare)
 
-            self._nick_completion.record_message(contact, highlight)
+            self.msg_textview.process_outgoing_message(contact, highlight)
 
         BaseControl.add_message(self,
                                 text,

@@ -24,9 +24,13 @@ from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.const import Direction
+from gajim.common.modules.contacts import GroupchatContact
 
 from .emoji_data_gtk import get_emoji_data
+from .groupchat_nick_completion import GroupChatNickCompletion
+
 if TYPE_CHECKING:
     from .message_input import MessageInputTextView
 
@@ -34,7 +38,11 @@ MAX_ENTRIES = 5
 
 
 class ChatActionProcessor(Gtk.Popover):
-    def __init__(self, message_input: MessageInputTextView) -> None:
+    def __init__(self,
+                 account: str,
+                 contact: types.ChatContactT,
+                 message_input: MessageInputTextView
+                 ) -> None:
         Gtk.Popover.__init__(self)
         self._menu = Gio.Menu()
         self.bind_model(self._menu)
@@ -51,6 +59,12 @@ class ChatActionProcessor(Gtk.Popover):
         self._buf = message_input.get_buffer()
         self._buf.connect('changed', self._on_changed)
 
+        self._nick_completion: Optional[GroupChatNickCompletion] = None
+        if contact.is_groupchat:
+            assert isinstance(contact, GroupchatContact)
+            self._nick_completion = GroupChatNickCompletion(
+                account, contact, message_input)
+
         self._start_mark: Optional[Gtk.TextMark] = None
         self._current_iter: Optional[Gtk.TextIter] = None
 
@@ -60,9 +74,14 @@ class ChatActionProcessor(Gtk.Popover):
         app.check_finalize(self)
 
     def _on_key_press(self,
-                      _textview: Gtk.TextView,
+                      textview: MessageInputTextView,
                       event: Gdk.EventKey
                       ) -> bool:
+        if self._nick_completion is not None:
+            res = self._nick_completion.process_key_press(textview, event)
+            if res:
+                return True
+
         if not self._active:
             return False
 
@@ -305,3 +324,7 @@ class ChatActionProcessor(Gtk.Popover):
     def _item_has_focus(item: Gtk.ModelButton) -> bool:
         flags = item.get_state_flags()
         return 'GTK_STATE_FLAG_FOCUSED' in str(flags)
+
+    def process_outgoing_message(self, contact: str, highlight: bool) -> None:
+        if self._nick_completion is not None:
+            self._nick_completion.record_message(contact, highlight)

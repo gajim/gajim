@@ -73,7 +73,8 @@ class MessageInputTextView(Gtk.TextView):
         self._undo_list: list[str] = []
         self.undo_pressed: bool = False
 
-        self._chat_action_processor = ChatActionProcessor(self)
+        self._chat_action_processor = ChatActionProcessor(
+            account, contact, self)
 
         self.get_buffer().create_tag('strong', weight=Pango.Weight.BOLD)
         self.get_buffer().create_tag('emphasis', style=Pango.Style.ITALIC)
@@ -313,3 +314,10 @@ class MessageInputTextView(Gtk.TextView):
         if self._undo_list:
             buf.set_text(self._undo_list.pop())
         self.undo_pressed = True
+
+    def process_outgoing_message(self,
+                                 contact_name: str,
+                                 highlight: bool
+                                 ) -> None:
+        self._chat_action_processor.process_outgoing_message(
+            contact_name, highlight)

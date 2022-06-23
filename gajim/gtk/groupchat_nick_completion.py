@@ -44,8 +44,6 @@ class GroupChatNickCompletion:
         self._contact.connect(
             'user-nickname-changed', self._on_user_nickname_changed)
 
-        message_input.connect('key-press-event', self._on_key_press)
-
         self._sender_list: list[str] = []
         self._attention_list: list[str] = []
         self._nick_hits: list[str] = []
@@ -140,10 +138,10 @@ class GroupChatNickCompletion:
 
         return matches + other_nicks
 
-    def _on_key_press(self,
-                      textview: MessageInputTextView,
-                      event: Gdk.EventKey
-                      ) -> bool:
+    def process_key_press(self,
+                          textview: MessageInputTextView,
+                          event: Gdk.EventKey
+                          ) -> bool:
         if event.keyval not in (Gdk.KEY_ISO_Left_Tab, Gdk.KEY_Tab):
             self._last_key_tab = False
             return False
@@ -156,7 +154,6 @@ class GroupChatNickCompletion:
 
         text_split = text.split()
 
-        # nick completion
         # check if tab is pressed with empty message
         if text_split:  # if there are any words
             begin = text_split[-1]  # last word we typed
@@ -194,22 +191,21 @@ class GroupChatNickCompletion:
                 return False
 
         if self._nick_hits:
+            shell_like_completion = app.settings.get('shell_like_completion')
+
             if len(text_split) < 2 or with_refer_to_nick_char:
                 # This is the 1st word of the line or no word or we are
-                # cycling at the beginning, possibly with a space in
-                # one nick
+                # cycling at the beginning, possibly with a space in one nick
                 add = gc_refer_to_nick_char + ' '
             else:
                 add = ' '
             start_iter = end_iter.copy()
             if (self._last_key_tab and
                     with_refer_to_nick_char or (text and text[-1] == ' ')):
-                # have to accommodate for the added space from last
-                # completion
+                # have to accommodate for the added space from last completion
                 # gc_refer_to_nick_char may be more than one char!
                 start_iter.backward_chars(len(begin) + len(add))
-            elif (self._last_key_tab and
-                    not app.settings.get('shell_like_completion')):
+            elif self._last_key_tab and not shell_like_completion:
                 # have to accommodate for the added space from last
                 # completion
                 start_iter.backward_chars(
@@ -225,11 +221,10 @@ class GroupChatNickCompletion:
             # get a shell-like completion
             # if there's more than one nick for this completion, complete
             # only the part that all these nicks have in common
-            if (app.settings.get('shell_like_completion') and
-                    len(self._nick_hits) > 1):
+            if shell_like_completion and len(self._nick_hits) > 1:
                 end = False
                 completion = ''
-                add = ""  # if nick is not complete, don't add anything
+                add = ''  # if nick is not complete, don't add anything
                 while not end and len(completion) < len(self._nick_hits[0]):
                     completion = self._nick_hits[0][:len(completion) + 1]
                     for nick in self._nick_hits:
