@@ -82,6 +82,7 @@ class BaseRow(Gtk.ListBoxRow):
         label = Gtk.Label()
         label.set_selectable(True)
         label.set_ellipsize(Pango.EllipsizeMode.END)
+        label.set_valign(Gtk.Align.END)
         label.get_style_context().add_class('conversation-nickname')
         label.set_markup(GLib.markup_escape_text(name))
 
