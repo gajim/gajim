@@ -162,10 +162,11 @@ class PopupNotification(Gtk.Window):
 
     def __init__(self, event: events.Notification, timeout: int) -> None:
         Gtk.Window.__init__(self)
-        self.set_type_hint(Gdk.WindowTypeHint.NOTIFICATION)
+        self.set_type_hint(Gdk.WindowTypeHint.UTILITY)
         self.set_focus_on_map(False)
         self.set_accept_focus(False)
         self.set_skip_taskbar_hint(True)
+        self.set_skip_pager_hint(True)
         self.set_decorated(False)
         self.set_keep_above(True)
 
