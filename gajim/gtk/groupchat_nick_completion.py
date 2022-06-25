@@ -142,7 +142,9 @@ class GroupChatNickCompletion:
                           textview: MessageInputTextView,
                           event: Gdk.EventKey
                           ) -> bool:
-        if event.keyval not in (Gdk.KEY_ISO_Left_Tab, Gdk.KEY_Tab):
+        if (event.get_state() & Gdk.ModifierType.SHIFT_MASK or
+                event.get_state() & Gdk.ModifierType.CONTROL_MASK or
+                event.keyval not in (Gdk.KEY_ISO_Left_Tab, Gdk.KEY_Tab)):
             self._last_key_tab = False
             return False
 
