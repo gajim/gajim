@@ -68,7 +68,10 @@ def enforce_message_rules(subject: str) -> None:
 
 def main(args: Tuple[str, str, str]) -> None:
     ref_name, old_ref, new_ref = args
-    if 'refs/tags' in ref_name:
+    print('UPDATE', ref_name, old_ref, new_ref)
+
+    if ref_name != 'refs/heads/master':
+        # We enforce only for master branch
         return
 
     shas = get_commit_shas(old_ref, new_ref)
