@@ -21,6 +21,7 @@ from typing import cast
 from typing import Optional
 from typing import Union
 
+import textwrap
 from urllib.parse import quote
 
 from gi.repository import Gtk
@@ -34,7 +35,6 @@ from gajim.common import types
 from gajim.common.helpers import is_affiliation_change_allowed
 from gajim.common.helpers import is_role_change_allowed
 from gajim.common.helpers import jid_is_blocked
-from gajim.common.helpers import reduce_chars_newlines
 from gajim.common.i18n import _
 from gajim.common.i18n import get_short_lang_code
 from gajim.common.const import URIType
@@ -222,7 +222,9 @@ def get_encryption_menu(control_id: str,
 def get_conv_action_context_menu(account: str,
                                  selected_text: str
                                  ) -> Gtk.MenuItem:
-    selected_text_short = reduce_chars_newlines(selected_text, 10, 1)
+    selected_text_short = textwrap.shorten(selected_text,
+                                           width=10,
+                                           placeholder='…')
 
     action_menu_item = Gtk.MenuItem.new_with_mnemonic(
         _('_Actions for "%s"') % selected_text_short)

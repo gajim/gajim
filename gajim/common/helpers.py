@@ -385,36 +385,6 @@ def sanitize_filename(filename: str) -> str:
     return filename
 
 
-def reduce_chars_newlines(text: str, max_chars: int = 0,
-                          max_lines: int = 0) -> str:
-    """
-    Cut the chars after 'max_chars' on each line and show only the first
-    'max_lines'
-
-    If any of the params is not present (None or 0) the action on it is not
-    performed
-    """
-    def _cut_if_long(string_: str) -> str:
-        if len(string_) > max_chars:
-            string_ = string_[:max_chars - 3] + '…'
-        return string_
-
-    if max_lines == 0:
-        lines = text.split('\n')
-    else:
-        lines = text.split('\n', max_lines)[:max_lines]
-    if max_chars > 0:
-        if lines:
-            lines = [_cut_if_long(e) for e in lines]
-    if lines:
-        reduced_text = '\n'.join(lines)
-        if reduced_text != text:
-            reduced_text += '…'
-    else:
-        reduced_text = ''
-    return reduced_text
-
-
 def get_contact_dict_for_account(account: str) -> dict[str, types.BareContact]:
     """
     Creates a dict of jid -> contact with all contacts of account

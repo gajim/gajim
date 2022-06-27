@@ -18,6 +18,7 @@ from typing import Optional
 
 from datetime import datetime
 from datetime import timedelta
+import textwrap
 
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
@@ -40,7 +41,6 @@ from gajim.common.helpers import from_one_line
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_muc_context
 from gajim.common.helpers import message_needs_highlight
-from gajim.common.helpers import reduce_chars_newlines
 from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
 from gajim.common.i18n import Q_
@@ -187,8 +187,10 @@ class MessageRow(BaseRow):
             if correction_original is not None:
                 self._original_text = correction_original
                 self._message_icons.set_correction_icon_visible(True)
-                original_text = reduce_chars_newlines(
-                    correction_original, max_chars=150, max_lines=10)
+                original_text = textwrap.fill(correction_original,
+                                              width=150,
+                                              max_lines=10,
+                                              placeholder='…')
                 self._message_icons.set_correction_tooltip(
                     _('Message corrected. Original message:'
                       '\n%s') % original_text)
@@ -425,8 +427,10 @@ class MessageRow(BaseRow):
         self._message_icons.set_receipt_icon_visible(False)
         self._message_icons.set_correction_icon_visible(True)
 
-        original_text = reduce_chars_newlines(
-            self._original_text, max_chars=150, max_lines=10)
+        original_text = textwrap.fill(self._original_text,
+                                      width=150,
+                                      max_lines=10,
+                                      placeholder='…')
         self._message_icons.set_correction_tooltip(
             _('Message corrected. Original message:\n%s') % original_text)
 
