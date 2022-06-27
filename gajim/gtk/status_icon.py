@@ -188,9 +188,6 @@ class GtkMenuBackend(EventHelper):
         app.settings.set('sounds_on', not widget.get_active())
 
     def _on_toggle_window(self, _widget: Gtk.MenuItem) -> None:
-        self._on_activate()
-
-    def _on_activate(self, *args: Any) -> None:
         if app.window.is_minimized():
             app.window.unminimize()
         elif app.window.is_withdrawn():
@@ -258,17 +255,22 @@ class GtkStatusIcon(GtkMenuBackend):
         self.update_state()
 
     def _on_popup_menu(self,
-                       _status_icon: Gtk.StatusIcon,
+                       status_icon: Gtk.StatusIcon,
                        button: int,
                        activate_time: int) -> None:
-        if button == 1:
-            self._on_activate()
-        elif button == 2:
-            self._on_activate()
-        elif button == 3:
-            self._build_menu(activate_time)
 
-    def _build_menu(self, event_time: int) -> None:
+        if button in (1, 2):
+            self._on_activate(status_icon)
+        elif button == 3:
+            self._build_menu(button, activate_time)
+
+    def _on_activate(self, _status_icon: Gtk.StatusIcon) -> None:
+        if app.window.has_toplevel_focus():
+            app.window.hide()
+        else:
+            app.window.show()
+
+    def _build_menu(self, button: int, event_time: int) -> None:
         for menu in self._popup_menus:
             menu.destroy()
 
@@ -289,7 +291,7 @@ class GtkStatusIcon(GtkMenuBackend):
 
         self._ui.systray_context_menu.show_all()
         self._ui.systray_context_menu.popup(
-            None, None, None, None, 0, event_time)
+            None, None, None, None, button, event_time)
 
 
 class AppIndicator(GtkMenuBackend):
