@@ -80,8 +80,7 @@ class StatusIcon:
                 app.is_installed('AYATANA_APPINDICATOR'))
 
     def _on_setting_changed(self, *args: Any) -> None:
-        count = app.window.get_total_unread_count()
-        self._backend.update_state(count=count)
+        self._backend.update_state()
 
     def connect_unread_widget(self, widget: Gtk.Widget, signal: str) -> None:
         widget.connect(signal, self._on_unread_count_changed)
@@ -89,8 +88,7 @@ class StatusIcon:
     def _on_unread_count_changed(self, *args: Any) -> None:
         if not app.settings.get('trayicon_notification_on_events'):
             return
-        count = app.window.get_total_unread_count()
-        self._backend.update_state(count=count)
+        self._backend.update_state()
 
     def is_visible(self) -> bool:
         return self._backend.is_visible()
@@ -100,7 +98,7 @@ class StatusIcon:
 
 
 class NoneBackend:
-    def update_state(self, count: int = 0) -> None:
+    def update_state(self, init: bool = False) -> None:
         pass
 
     def is_visible(self) -> bool:
@@ -133,7 +131,7 @@ class GtkMenuBackend(EventHelper):
             client.connect_signal('state-changed',
                                   self._on_client_state_changed)
 
-    def update_state(self, count: int = 0) -> None:
+    def update_state(self, init: bool = False) -> None:
         raise NotImplementedError
 
     def is_visible(self) -> bool:
@@ -220,9 +218,9 @@ class GtkStatusIcon(GtkMenuBackend):
         self._status_icon.connect('popup-menu', self._on_popup_menu)
         self._status_icon.connect('size-changed', self._on_size_changed)
 
-        self.update_state()
+        self.update_state(init=True)
 
-    def update_state(self, count: int = 0) -> None:
+    def update_state(self, init: bool = False) -> None:
         if self._shutdown:
             # Shutdown in progress, don't update icon
             return
@@ -233,7 +231,7 @@ class GtkStatusIcon(GtkMenuBackend):
 
         self._status_icon.set_visible(True)
 
-        if count > 0:
+        if not init and app.window.get_total_unread_count():
             self._status_icon.set_from_icon_name('mail-message-new')
             return
 
@@ -308,16 +306,16 @@ class AppIndicator(GtkMenuBackend):
         self._status_icon.set_secondary_activate_target(
             self._ui.toggle_window_menuitem)
 
-        self.update_state()
+        self.update_state(init=True)
 
-    def update_state(self, count: int = 0) -> None:
+    def update_state(self, init: bool = False) -> None:
         if not app.settings.get('show_trayicon'):
             self._status_icon.set_status(appindicator.IndicatorStatus.PASSIVE)
             return
 
         self._status_icon.set_status(appindicator.IndicatorStatus.ACTIVE)
 
-        if count > 0:
+        if not init and app.window.get_total_unread_count():
             icon_name = 'mail-message-new'
             self._status_icon.set_icon_full(icon_name, _('Pending Event'))
             return
