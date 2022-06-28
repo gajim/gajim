@@ -206,6 +206,8 @@ class RosterTooltip:
             show_image.set_halign(Gtk.Align.START)
             show_image.set_valign(Gtk.Align.CENTER)
 
+            show_string = helpers.get_uf_show(resource.show.value)
+
             assert resource.jid.resource is not None
             resource_string = GLib.markup_escape_text(resource.jid.resource)
             resource_label = Gtk.Label()
@@ -213,7 +215,7 @@ class RosterTooltip:
             resource_label.set_xalign(0)
             resource_label.set_ellipsize(Pango.EllipsizeMode.END)
             resource_label.set_max_width_chars(30)
-            resource_label.set_text(resource_string)
+            resource_label.set_text(f'{show_string} ({resource_string})')
 
             base_box = Gtk.Box(spacing=6)
             base_box.add(show_image)
