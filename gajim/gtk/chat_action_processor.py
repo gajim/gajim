@@ -210,7 +210,7 @@ class ChatActionProcessor(Gtk.Popover):
             start, _end = search
             colon_offset = start.get_offset()
             before_colon = self._buf.get_iter_at_offset(colon_offset - 1)
-            if before_colon.get_char() != ' ':
+            if before_colon.get_char() not in (' ', '\n'):
                 # We want to show the menu only if text begins with a colon,
                 # or if a colon follows on a space. This avoids showing the
                 # menu within normal sentences containing colons.
