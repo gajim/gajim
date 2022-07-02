@@ -100,6 +100,7 @@ class CodeTextview(GtkSource.View):
         self.set_top_margin(2)
         self.set_bottom_margin(2)
         self.set_monospace(True)
+        self.get_buffer().set_highlight_matching_brackets(False)
 
         self._source_manager = GtkSource.LanguageManager.get_default()
         self._style_scheme_manager = GtkSource.StyleSchemeManager.get_default()
