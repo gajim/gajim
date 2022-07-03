@@ -2,46 +2,45 @@
 
 ### Runtime Requirements
 
-- python3.9 or higher
-- python3-gi
-- python3-gi-cairo
-- python3-nbxmpp (>=2.99.0)
-- python3-openssl (>=16.2)
-- python3-css-parser
-- python3-keyring
-- python3-precis-i18n
-- python3-packaging
-- python3-pil
-- python3-setuptools
-- Gtk3 (>=3.22)
-- GLib (>=2.60.0)
-- gir1.2-gtksource-4
-- gir1.2-soup-2.4
+- [Python](https://www.python.org/) (>=3.9)
+- [PyGObject](https://pypi.org/project/PyGObject/)
+- [pycairo](https://pypi.org/project/pycairo/)
+- [nbxmpp](https://pypi.org/project/nbxmpp/) (>=3.0.0)
+- [pyOpenSSL](https://pypi.org/project/pyOpenSSL/) (>=16.2)
+- [css-parser](https://pypi.org/project/css-parser/)
+- [keyring](https://pypi.org/project/keyring/)
+- [precis_i18n](https://pypi.org/project/precis-i18n/)
+- [packaging](https://pypi.org/project/packaging/)
+- [Pillow](https://pypi.org/project/Pillow/)
+- [setuptools](https://pypi.org/project/setuptools/)
+- [Gtk3](https://gitlab.com/gnome/gtk) (>=3.22)
+- [GLib](https://gitlab.com/gnome/glib) (>=2.60.0)
+- [GtkSourceView](https://gitlab.gnome.org/GNOME/gtksourceview)
+- [libsoup](https://gitlab.gnome.org/GNOME/libsoup/)
 
 ### Optional Runtime Requirements
 
-- python3-sentry-sdk for Sentry error reporting to dev.gajim.org (users decide whether to send reports or not)
-- gir1.2-gspell-1 and hunspell-LANG where lang is your locale eg. en, fr etc
-- gir1.2-secret-1 for GNOME Keyring or KDE support as password storage
 - D-Bus running to have gajim-remote working
-- gir1.2-gupnpigd-1.0 for better NAT traversing
-- gir1.2-networkmanager-1.0 for network lose detection
-- gir1.2-geoclue-2.0 for sharing your location
-- gir1.2-gsound-1.0 for sound on Linux
+- [sentry-sdk](https://pypi.org/project/sentry-sdk/) for Sentry error reporting to dev.gajim.org (users decide whether to send reports or not)
+- [gspell](https://gitlab.gnome.org/GNOME/gspell) and hunspell-LANG where lang is your locale eg. en, fr etc
+- [libsecret](https://gitlab.gnome.org/GNOME/libsecret/) for GNOME Keyring or KDE support as password storage
+- [GUPnP-IGD](https://gitlab.gnome.org/GNOME/gupnp) for better NAT traversing
+- [NetworkManager](https://gitlab.freedesktop.org/NetworkManager/NetworkManager) for network lose detection
+- [GeoClue](https://gitlab.freedesktop.org/geoclue/geoclue) for sharing your location
+- [GSound](https://gitlab.gnome.org/GNOME/gsound) for sound on Linux
 
 #### For Video and Audio Calls
 
-- gir1.2-farstream-0.2 for video calls
-- gir1.2-gstreamer-1.0 for video and audio calls
-- gir1.2-gst-plugins-base-1.0 for video and audio calls
-- gstreamer1.0-plugins-ugly for video and audio calls
-- gstreamer1.0-libav for video and audio calls
-- gstreamer1.0-gtk3 
+- [Farstream](https://gitlab.freedesktop.org/farstream/farstream)
+- [GStreamer](https://gitlab.freedesktop.org/gstreamer/gstreamer)
+- [gst-plugins-base](https://gitlab.freedesktop.org/gstreamer/gst-plugins-base)
+- [gst-plugins-ugly](https://gitlab.freedesktop.org/gstreamer/gst-plugins-ugly)
+- [gst-libav](https://gitlab.freedesktop.org/gstreamer/gst-libav)
 
 ### Compile-time Requirements
 
-- python3-setuptools
-- gettext
+- [setuptools](https://pypi.org/project/setuptools/)
+- [gettext](https://savannah.gnu.org/projects/gettext/)
 
 ### Running Tests
 
