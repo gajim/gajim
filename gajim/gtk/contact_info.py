@@ -332,10 +332,15 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         self._ui.name_entry.set_sensitive(active)
         if active:
             self._ui.name_entry.grab_focus()
+        else:
+            name = self._ui.name_entry.get_text()
+            if name == self.contact.name:
+                return
 
-        name = self._ui.name_entry.get_text()
-        self._client.get_module('Roster').set_item(self.contact.jid, name)
-        self._ui.contact_name_label.set_text(name)
+            assert isinstance(self.contact, BareContact)
+            self._client.get_module('Roster').set_item(
+                self.contact.jid, name, self.contact.groups)
+            self._ui.contact_name_label.set_text(name)
 
     def _on_name_entry_activate(self, _widget: Gtk.Entry) -> None:
         self._ui.edit_name_button.set_active(False)
