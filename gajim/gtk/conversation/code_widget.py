@@ -13,7 +13,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
-from typing import Tuple
 from typing import Optional
 
 import logging
@@ -72,16 +71,16 @@ class CodeWidget(Gtk.Box):
 
     def add_content(self, block: PreBlock):
         code, lang = self._prepare_code(block.text)
-        lang_name = self._textview.set_language(lang)
         if lang is None:
             self._lang_label.set_text(_('Code snippet'))
         else:
+            lang_name = self._textview.set_language(lang)
             self._lang_label.set_text(_('Code snippet (%s)') % lang_name)
 
         self._textview.print_code(code)
 
     @staticmethod
-    def _prepare_code(text: str) -> Tuple[str, Optional[str]]:
+    def _prepare_code(text: str) -> tuple[str, Optional[str]]:
         text = text.strip()
         code_start = text.partition('\n')[0]
         lang = None
@@ -127,15 +126,10 @@ class CodeTextview(GtkSource.View):
         if style_scheme is not None:
             self.get_buffer().set_style_scheme(style_scheme)
 
-    def set_language(self, language_string: Optional[str]) -> str:
-        if language_string is None:
-            language_string = 'python3'
-
+    def set_language(self, language_string: str) -> str:
         lang = self._source_manager.get_language(language_string)
         if lang is None:
-            lang = self._source_manager.get_language('python3')
-
-        assert lang is not None
+            return _('Unknown language')
 
         log.debug('Code snippet lang: %s', lang.get_name())
         self.get_buffer().set_language(lang)
