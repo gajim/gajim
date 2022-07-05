@@ -36,6 +36,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common import configpaths
 from gajim.common import logging_helpers
+from gajim.common import passwords
 from gajim.common.dbus import logind
 from gajim.common.events import AccountDisonnected
 from gajim.common.events import AllowGajimUpdateCheck
@@ -60,6 +61,8 @@ class CoreApplication:
         app.print_version()
         app.detect_dependencies()
         configpaths.create_paths()
+
+        passwords.init()
 
         app.settings = Settings()
         app.settings.init()

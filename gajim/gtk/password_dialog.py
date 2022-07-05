@@ -18,10 +18,9 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 
 from gajim.common import app
+from gajim.common import passwords
 from gajim.common.events import PasswordRequired
 from gajim.common.i18n import _
-from gajim.common.passwords import save_password
-from gajim.common.passwords import KEYRING_AVAILABLE
 
 from .builder import get_builder
 
@@ -69,9 +68,12 @@ class PasswordDialog(Gtk.ApplicationWindow):
                 'jid': own_jid,
                 'account': account_name})
         self._ui.save_pass_checkbutton.show()
+
+        is_keyring_available = passwords.is_keyring_available()
         self._ui.save_pass_checkbutton.set_sensitive(
-            not app.settings.get('use_keyring') or KEYRING_AVAILABLE)
-        if not KEYRING_AVAILABLE:
+            not app.settings.get('use_keyring') or
+            is_keyring_available)
+        if not is_keyring_available:
             self._ui.keyring_hint.show()
 
     def _on_ok(self, _button: Gtk.Button) -> None:
@@ -81,7 +83,7 @@ class PasswordDialog(Gtk.ApplicationWindow):
             self.account,
             'savepass',
             self._ui.save_pass_checkbutton.get_active())
-        save_password(self.account, password)
+        passwords.save_password(self.account, password)
         self._event.on_password(password)
         self.destroy()
 

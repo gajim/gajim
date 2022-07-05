@@ -1084,7 +1084,7 @@ class LoginDialog(SettingsDialog):
                     SettingType.ACCOUNT_CONFIG,
                     'savepass',
                     enabled_func=(lambda: not app.settings.get('use_keyring') or
-                                  passwords.KEYRING_AVAILABLE)),
+                                  passwords.is_keyring_available())),
 
             Setting(SettingKind.CHANGEPASSWORD,
                     _('Change Password'),

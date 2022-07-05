@@ -29,6 +29,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 
 from gajim.common import app
+from gajim.common import passwords
 from gajim.common.i18n import _
 
 
@@ -125,7 +126,7 @@ class Features(Gtk.ApplicationWindow):
                     _('No additional requirements'),
                     notification_sounds_enabled),
             Feature(_('Secure Password Storage'),
-                    self._some_keyring_available(),
+                    passwords.is_keyring_available(),
                     _('Enables Gajim to store Passwords securely instead of '
                       'storing them in plaintext'),
                     _('Requires: gnome-keyring or kwallet'),
@@ -147,11 +148,6 @@ class Features(Gtk.ApplicationWindow):
                     _('Feature not available under Windows'),
                     None)
         ]
-
-    @staticmethod
-    def _some_keyring_available() -> bool:
-        from gajim.common import passwords
-        return passwords.KEYRING_AVAILABLE
 
     @staticmethod
     def _idle_available() -> bool:

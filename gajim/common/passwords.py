@@ -23,6 +23,7 @@
 from __future__ import annotations
 
 from typing import Optional
+from typing import cast
 
 import logging
 
@@ -31,21 +32,34 @@ import keyring
 from gajim.common import app
 
 __all__ = [
+    'init',
+    'is_keyring_available',
     'get_password',
     'save_password',
     'delete_password'
 ]
 
-log = logging.getLogger('gajim.password')
+log = logging.getLogger('gajim.c.passwords')
 
-backends = keyring.backend.get_all_keyring()
-for backend in backends:
-    log.info('Found keyring backend: %s', backend)
 
-keyring_backend = keyring.get_keyring()
-log.info('Select %s backend', keyring_backend)
+class Interface:
+    def __init__(self):
+        self.backend = cast(keyring.backend.KeyringBackend, None)
+        self._is_keyring_available = False
 
-KEYRING_AVAILABLE = keyring.core.recommended(keyring_backend)
+    @property
+    def is_keyring_available(self):
+        return self._is_keyring_available
+
+    def init(self) -> None:
+        backends = keyring.backend.get_all_keyring()
+        for backend in backends:
+            log.info('Found keyring backend: %s', backend)
+
+        self.backend = keyring.get_keyring()
+        log.info('Select %s backend', self.backend)
+
+        self._is_keyring_available = keyring.core.recommended(self.backend)
 
 
 class SecretPasswordStorage:
@@ -55,13 +69,13 @@ class SecretPasswordStorage:
 
     @staticmethod
     def save_password(account_name: str, password: str) -> bool:
-        if not KEYRING_AVAILABLE:
+        if not is_keyring_available():
             log.warning('No recommended keyring backend available.'
                         'Passwords cannot be stored.')
             return True
         try:
             log.info('Save password to keyring')
-            keyring_backend.set_password('gajim', account_name, password)
+            _interface.backend.set_password('gajim', account_name, password)
             return True
         except Exception:
             log.exception('Save password failed')
@@ -69,25 +83,28 @@ class SecretPasswordStorage:
 
     @staticmethod
     def get_password(account_name: str) -> Optional[str]:
-        log.info('Request password from keyring')
-        if not KEYRING_AVAILABLE:
+        if not is_keyring_available():
             return
+
+        log.info('Request password from keyring')
+
         try:
             # For security reasons remove clear-text password
             ConfigPasswordStorage.delete_password(account_name)
-            return keyring_backend.get_password('gajim', account_name)
+            return _interface.backend.get_password('gajim', account_name)
         except Exception:
             log.exception('Request password failed')
             return
 
     @staticmethod
     def delete_password(account_name: str) -> None:
-        log.info('Remove password from keyring')
-        if not KEYRING_AVAILABLE:
+        if not is_keyring_available():
             return
 
+        log.info('Remove password from keyring')
+
         try:
-            return keyring_backend.delete_password('gajim', account_name)
+            return _interface.backend.delete_password('gajim', account_name)
         except keyring.errors.PasswordDeleteError as error:
             log.warning('Removing password failed: %s', error)
         except Exception:
@@ -111,6 +128,14 @@ class ConfigPasswordStorage:
     @staticmethod
     def delete_password(account_name: str) -> None:
         app.settings.set_account_setting(account_name, 'password', '')
+
+
+def init() -> None:
+    _interface.init()
+
+
+def is_keyring_available() -> bool:
+    return _interface.is_keyring_available
 
 
 def get_password(account_name: str) -> Optional[str]:
@@ -138,3 +163,6 @@ def delete_password(account_name: str) -> None:
     if app.settings.get('use_keyring'):
         return SecretPasswordStorage.delete_password(account_name)
     return ConfigPasswordStorage.delete_password(account_name)
+
+
+_interface = Interface()
