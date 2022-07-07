@@ -136,7 +136,7 @@ deploy-flatpak:
   script:
     - git config --global user.email "$CI_GIT_USER_EMAIL"
     - git config --global user.name "$CI_GIT_USER_USERNAME"
-    - git clone https://github.com/flathub/org.gajim.Gajim.git
+    - git clone git@github.com:flathub/org.gajim.Gajim.git
     - cd org.gajim.Gajim
     - mv ../flatpak/org.gajim.Gajim.yaml org.gajim.Gajim.yaml
     - mv ../flatpak/app-overrides.json app-overrides.json
