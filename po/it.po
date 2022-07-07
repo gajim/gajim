@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-21 16:28+0000\n"
+"POT-Creation-Date: 2022-07-04 10:35+0000\n"
 "PO-Revision-Date: 2022-05-24 19:29+0000\n"
 "Last-Translator: sbadux <enricobe@hotmail.com>\n"
 "Language-Team: Italian <https://translate.gajim.org/projects/gajim/master/it/"
@@ -5037,6 +5037,10 @@ msgid "Unknown TLS error '%s'"
 msgstr "Errore TLS \"%s\" sconosciuto"
 
 msgid "Unknown Title"
+msgstr "Titolo Sconosciuto"
+
+#, fuzzy
+msgid "Unknown language"
 msgstr "Titolo Sconosciuto"
 
 msgid "Unknown nickname"

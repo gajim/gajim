@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-21 16:28+0000\n"
+"POT-Creation-Date: 2022-07-04 10:35+0000\n"
 "PO-Revision-Date: 2010-11-28 12:15+0100\n"
 "Last-Translator: Gabriel Papp <gabriel.papp@gmx.com>\n"
 "Language-Team: -\n"
@@ -5497,6 +5497,10 @@ msgid "Unknown TLS error '%s'"
 msgstr "Ismeretlen SSL hiba: %d"
 
 msgid "Unknown Title"
+msgstr "Ismeretlen Cím"
+
+#, fuzzy
+msgid "Unknown language"
 msgstr "Ismeretlen Cím"
 
 #, fuzzy

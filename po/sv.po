@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-21 16:28+0000\n"
+"POT-Creation-Date: 2022-07-04 10:35+0000\n"
 "PO-Revision-Date: 2009-10-29 10:21+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -5443,6 +5443,10 @@ msgid "Unknown TLS error '%s'"
 msgstr "Okänt SSL-fel: %d"
 
 msgid "Unknown Title"
+msgstr "Okänd titel"
+
+#, fuzzy
+msgid "Unknown language"
 msgstr "Okänd titel"
 
 #, fuzzy

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-21 16:28+0000\n"
+"POT-Creation-Date: 2022-07-04 10:35+0000\n"
 "PO-Revision-Date: 2022-05-31 08:30+0000\n"
 "Last-Translator: pitchum <pitchum@gramaton.org>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
@@ -4903,6 +4903,10 @@ msgid "Unknown TLS error '%s'"
 msgstr "Erreur TLS inconnue '%s'"
 
 msgid "Unknown Title"
+msgstr "Titre Iconnu"
+
+#, fuzzy
+msgid "Unknown language"
 msgstr "Titre Iconnu"
 
 msgid "Unknown nickname"

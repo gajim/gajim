@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-21 16:28+0000\n"
+"POT-Creation-Date: 2022-07-04 10:35+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -5447,6 +5447,10 @@ msgid "Unknown TLS error '%s'"
 msgstr "Neznáma chyba SSL: %d"
 
 msgid "Unknown Title"
+msgstr "Neznámy titulok"
+
+#, fuzzy
+msgid "Unknown language"
 msgstr "Neznámy titulok"
 
 #, fuzzy

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-21 16:28+0000\n"
+"POT-Creation-Date: 2022-07-04 10:35+0000\n"
 "PO-Revision-Date: 2022-05-26 22:21+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -4836,6 +4836,10 @@ msgid "Unknown TLS error '%s'"
 msgstr "未知の TLS エラー: '%s'"
 
 msgid "Unknown Title"
+msgstr "不明"
+
+#, fuzzy
+msgid "Unknown language"
 msgstr "不明"
 
 msgid "Unknown nickname"

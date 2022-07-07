@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-21 16:28+0000\n"
+"POT-Creation-Date: 2022-07-04 10:35+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -5611,6 +5611,10 @@ msgid "Unknown TLS error '%s'"
 msgstr "שגיאת SSL לא מוכרת: %d"
 
 msgid "Unknown Title"
+msgstr "כותרת לא ידועה"
+
+#, fuzzy
+msgid "Unknown language"
 msgstr "כותרת לא ידועה"
 
 #, fuzzy

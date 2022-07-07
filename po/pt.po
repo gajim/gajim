@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-21 16:28+0000\n"
+"POT-Creation-Date: 2022-07-04 10:35+0000\n"
 "PO-Revision-Date: 2020-07-03 20:44+0000\n"
 "Last-Translator: Fabiano Borges de Sousa <fabianobss@gmail.com>\n"
 "Language-Team: Portuguese <https://translate.gajim.org/projects/gajim/master/"
@@ -5405,6 +5405,10 @@ msgid "Unknown TLS error '%s'"
 msgstr "Versão D-Bus desconhecida: %s"
 
 msgid "Unknown Title"
+msgstr "Título Desconhecido"
+
+#, fuzzy
+msgid "Unknown language"
 msgstr "Título Desconhecido"
 
 #, fuzzy

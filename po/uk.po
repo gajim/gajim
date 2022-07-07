@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-21 16:28+0000\n"
+"POT-Creation-Date: 2022-07-04 10:35+0000\n"
 "PO-Revision-Date: 2013-08-30 12:04+0300\n"
 "Last-Translator: Sergiy Yegorov <prapor@unixzone.org.ua>\n"
 "Language-Team: Ukrainian <kde-i18n-doc@kde.org>\n"
@@ -5485,6 +5485,10 @@ msgid "Unknown TLS error '%s'"
 msgstr "Невідома помилка SSL: %d"
 
 msgid "Unknown Title"
+msgstr "Невідома назва"
+
+#, fuzzy
+msgid "Unknown language"
 msgstr "Невідома назва"
 
 #, fuzzy

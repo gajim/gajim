@@ -13,11 +13,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-21 16:28+0000\n"
-"PO-Revision-Date: 2022-06-19 22:23+0000\n"
+"POT-Creation-Date: 2022-07-04 10:35+0000\n"
+"PO-Revision-Date: 2022-07-07 17:04+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
-"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/"
-">\n"
+"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
+"\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1830,7 +1830,7 @@ msgid "Emoji"
 msgstr "Emoji"
 
 msgid "Emoji Shortcodes"
-msgstr ""
+msgstr "Emoji-Shortcode"
 
 # TODO mark as do not translate?
 msgid "Emoji Theme"
@@ -4235,7 +4235,7 @@ msgid "Show only critical errors"
 msgstr "Nur kritische Fehler anzeigen"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
-msgstr ""
+msgstr "Zeige Empfehlungen für Shortcodes, z.B. :+1:"
 
 msgid "Show the application's version"
 msgstr "Version des Programms anzeigen"
@@ -4886,6 +4886,9 @@ msgstr "Unbekannter TLS-Fehler \"%s\""
 
 msgid "Unknown Title"
 msgstr "Unbekannter Titel"
+
+msgid "Unknown language"
+msgstr "Unbekannte Sprache"
 
 msgid "Unknown nickname"
 msgstr "Unbekannter Spitzname"

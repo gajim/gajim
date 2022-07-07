@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-21 16:28+0000\n"
+"POT-Creation-Date: 2022-07-04 10:35+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -5129,6 +5129,10 @@ msgstr ""
 
 msgid "Unknown Title"
 msgstr ""
+
+#, fuzzy
+msgid "Unknown language"
+msgstr "Sobrenom:"
 
 #, fuzzy
 msgid "Unknown nickname"

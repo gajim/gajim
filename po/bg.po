@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-21 16:28+0000\n"
+"POT-Creation-Date: 2022-07-04 10:35+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -5473,6 +5473,10 @@ msgid "Unknown TLS error '%s'"
 msgstr "Неизвестна грешка на SSL: %d"
 
 msgid "Unknown Title"
+msgstr "Неизвестно заглавие"
+
+#, fuzzy
+msgid "Unknown language"
 msgstr "Неизвестно заглавие"
 
 #, fuzzy

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-21 16:28+0000\n"
+"POT-Creation-Date: 2022-07-04 10:35+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -5371,6 +5371,10 @@ msgstr "Kambario nustatymai"
 
 msgid "Unknown Title"
 msgstr ""
+
+#, fuzzy
+msgid "Unknown language"
+msgstr "A_fter nickname:"
 
 #, fuzzy
 msgid "Unknown nickname"

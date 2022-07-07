@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-21 16:28+0000\n"
+"POT-Creation-Date: 2022-07-04 10:35+0000\n"
 "PO-Revision-Date: 2020-08-19 19:27+0000\n"
 "Last-Translator: Vincent L <vincent.laporte+gajim@mailbox.org>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -5429,6 +5429,10 @@ msgstr "Nekonata versio de D-BUS: %s"
 
 msgid "Unknown Title"
 msgstr ""
+
+#, fuzzy
+msgid "Unknown language"
+msgstr "Post kaŝnomo:"
 
 #, fuzzy
 msgid "Unknown nickname"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-21 16:28+0000\n"
+"POT-Creation-Date: 2022-07-04 10:35+0000\n"
 "PO-Revision-Date: 2009-08-19 23:51+0200\n"
 "Last-Translator: Iván Méndez López <>\n"
 "Language-Team:  <softwarelibre@udc.es>\n"
@@ -5435,6 +5435,10 @@ msgstr "Configuración da sala"
 
 msgid "Unknown Title"
 msgstr ""
+
+#, fuzzy
+msgid "Unknown language"
+msgstr "Despois do alcume:"
 
 #, fuzzy
 msgid "Unknown nickname"

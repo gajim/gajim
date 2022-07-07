@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-21 16:28+0000\n"
+"POT-Creation-Date: 2022-07-04 10:35+0000\n"
 "PO-Revision-Date: 2020-09-06 18:19+0000\n"
 "Last-Translator: Antonio Morais <antonio@alfa67.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -5429,6 +5429,10 @@ msgid "Unknown TLS error '%s'"
 msgstr "Erro SSL desconhecido '%s'"
 
 msgid "Unknown Title"
+msgstr "Título desconhecido"
+
+#, fuzzy
+msgid "Unknown language"
 msgstr "Título desconhecido"
 
 #, fuzzy

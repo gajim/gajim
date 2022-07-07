@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-21 16:28+0000\n"
+"POT-Creation-Date: 2022-07-04 10:35+0000\n"
 "PO-Revision-Date: 2010-01-22 14:35+0100\n"
 "Last-Translator: Petr Menšík <pihhan@cipis.net>\n"
 "Language-Team: <>\n"
@@ -5476,6 +5476,10 @@ msgid "Unknown TLS error '%s'"
 msgstr "Neznámá SSL chyba: %d"
 
 msgid "Unknown Title"
+msgstr "Neznámý Název"
+
+#, fuzzy
+msgid "Unknown language"
 msgstr "Neznámý Název"
 
 #, fuzzy

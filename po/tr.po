@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-21 16:28+0000\n"
+"POT-Creation-Date: 2022-07-04 10:35+0000\n"
 "PO-Revision-Date: 2022-01-13 21:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -5409,6 +5409,10 @@ msgid "Unknown TLS error '%s'"
 msgstr "<b>Bir hata oluştu:</b>"
 
 msgid "Unknown Title"
+msgstr "Bilinmeyen Parça"
+
+#, fuzzy
+msgid "Unknown language"
 msgstr "Bilinmeyen Parça"
 
 #, fuzzy

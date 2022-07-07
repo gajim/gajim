@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-21 16:28+0000\n"
+"POT-Creation-Date: 2022-07-04 10:35+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -5456,6 +5456,10 @@ msgid "Unknown TLS error '%s'"
 msgstr "Ukendt SSL fejl: %d"
 
 msgid "Unknown Title"
+msgstr "Ukendt Titel"
+
+#, fuzzy
+msgid "Unknown language"
 msgstr "Ukendt Titel"
 
 #, fuzzy
