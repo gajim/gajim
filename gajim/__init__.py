@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 
-__version__ = '1.4.5'
+__version__ = '1.4.6'
 
 IS_FLATPAK = Path('/app/share/run-as-flatpak').exists()
 
