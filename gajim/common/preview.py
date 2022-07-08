@@ -61,12 +61,14 @@ class Preview:
                  thumb_path: Optional[Path],
                  size: int,
                  widget: Any,
+                 from_us: bool = False,
                  context: Optional[str] = None
                  ) -> None:
         self._uri = uri
         self._urlparts = urlparts
         self._filename = filename_from_uri(uri)
         self._widget = widget
+        self._from_us = from_us
         self._context = context
 
         self.account = widget.account
@@ -108,6 +110,10 @@ class Preview:
     @property
     def uri(self) -> str:
         return self._uri
+
+    @property
+    def from_us(self) -> bool:
+        return self._from_us
 
     @property
     def context(self) -> Optional[str]:
@@ -275,7 +281,7 @@ class PreviewManager:
     def create_preview(self,
                        uri: str,
                        widget: Any,
-                       is_self: bool,
+                       from_us: bool,
                        context: Optional[str] = None
                        ) -> None:
         if uri.startswith('geo:'):
@@ -283,10 +289,10 @@ class PreviewManager:
             preview.update_widget()
             return
 
-        preview = self._process_web_uri(uri, widget, context)
+        preview = self._process_web_uri(uri, widget, from_us, context)
 
         if not preview.orig_exists():
-            if context is not None and not is_self:
+            if context is not None and not from_us:
                 allow_in_public = app.settings.get('preview_anonymous_muc')
                 if context == 'public' and not allow_in_public:
                     preview.update_widget()
@@ -307,6 +313,7 @@ class PreviewManager:
     def _process_web_uri(self,
                          uri: str,
                          widget: Any,
+                         from_us: bool,
                          context: Optional[str] = None
                          ) -> Preview:
         urlparts = urlparse(uri)
@@ -322,6 +329,7 @@ class PreviewManager:
                        thumb_path,
                        size,
                        widget,
+                       from_us,
                        context=context)
 
     def _on_orig_load_finished(self,

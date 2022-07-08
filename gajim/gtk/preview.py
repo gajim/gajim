@@ -168,7 +168,8 @@ class PreviewWidget(Gtk.Box):
             self._ui.save_as_button.hide()
             self._ui.open_folder_button.hide()
             allow_in_public = app.settings.get('preview_anonymous_muc')
-            if preview.context == 'public' and not allow_in_public:
+            if (preview.context == 'public' and not
+                    allow_in_public and not preview.from_us):
                 image = Gtk.Image.new_from_icon_name(
                     'dialog-question', Gtk.IconSize.DIALOG)
                 self._ui.icon_button.set_image(image)

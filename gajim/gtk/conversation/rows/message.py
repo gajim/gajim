@@ -118,9 +118,9 @@ class MessageRow(BaseRow):
 
         if self._is_groupchat:
             our_nick = get_group_chat_nick(self._account, self._contact.jid)
-            is_self = name == our_nick
+            from_us = name == our_nick
         else:
-            is_self = kind == 'outgoing'
+            from_us = kind == 'outgoing'
 
         is_previewable = False
         if additional_data is not None:
@@ -132,7 +132,7 @@ class MessageRow(BaseRow):
                 context = get_muc_context(self._contact.jid)
             self._message_widget = PreviewWidget(account)
             app.preview_manager.create_preview(
-                text, self._message_widget, is_self, context)
+                text, self._message_widget, from_us, context)
         else:
             self._message_widget = MessageWidget(account)
             self._message_widget.add_with_styling(text, nickname=name)
@@ -145,7 +145,7 @@ class MessageRow(BaseRow):
         if self._contact.jid == self._client.get_own_jid().bare:
             name = _('Me')
 
-        name_widget = self.create_name_widget(name, is_self)
+        name_widget = self.create_name_widget(name, from_us)
 
         self._meta_box = Gtk.Box(spacing=6)
         self._meta_box.set_hexpand(True)
