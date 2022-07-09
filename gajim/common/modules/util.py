@@ -27,6 +27,7 @@ from logging import LoggerAdapter
 import nbxmpp
 from nbxmpp.const import MessageType
 from nbxmpp.protocol import JID
+from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import Message
 from nbxmpp.structs import EMEData
 from nbxmpp.structs import MessageProperties
@@ -184,3 +185,15 @@ def check_if_message_correction(properties: MessageProperties,
 
     app.ged.raise_event(event)
     return True
+
+
+def prepare_stanza(stanza, plaintext):
+    delete_nodes(stanza, 'encrypted', Namespace.OMEMO_TEMP)
+    delete_nodes(stanza, 'body')
+    stanza.setBody(plaintext)
+
+
+def delete_nodes(stanza, name, namespace=None):
+    nodes = stanza.getTags(name, namespace=namespace)
+    for node in nodes:
+        stanza.delChild(node)

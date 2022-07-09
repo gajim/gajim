@@ -18,6 +18,7 @@ from typing import Any
 from typing import Optional
 
 import logging
+import time
 
 import nbxmpp
 from gi.repository import Gio
@@ -37,6 +38,7 @@ from gajim.common.const import ClientState
 from gajim.common.const import SimpleClientState
 from gajim.common.events import AccountConnected
 from gajim.common.events import AccountDisconnected
+from gajim.common.events import MessageNotSent
 from gajim.common.events import MessageSent
 from gajim.common.events import Notification
 from gajim.common.events import PasswordRequired
@@ -467,6 +469,21 @@ class Client(Observable):
 
         method = message.contact.settings.get('encryption')
         if not method:
+            self._send_message(message)
+            return
+
+        if method == 'OMEMO':
+            try:
+                self.get_module('OMEMO').encrypt_message(message)
+            except Exception:
+                app.ged.raise_event(
+                    MessageNotSent(client=self._client,
+                                   jid=message.jid,
+                                   message=message.message,
+                                   error=_('Encryption error'),
+                                   time=time.time()))
+                return
+
             self._send_message(message)
             return
 

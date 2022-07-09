@@ -780,3 +780,8 @@ class MUCUserStatusShowChanged(ApplicationEvent):
     nick: str
     status: str
     show_value: str
+
+
+class OMEMONewFingerprint(ApplicationEvent):
+    name: str = field(init=False, default='omemo-new-fingerprint')
+    chat_control: Any
