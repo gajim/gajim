@@ -1180,6 +1180,6 @@ class PresenceShowExt(Enum):
     def __lt__(self, other: Union[PresenceShowExt, PresenceShow]) -> bool:
         if isinstance(other, PresenceShowExt):
             return False
-        if not isinstance(other, PresenceShow):
+        if not isinstance(other, PresenceShow):  # pyright: ignore
             return NotImplemented
         return True
