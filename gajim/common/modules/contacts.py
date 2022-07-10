@@ -144,6 +144,16 @@ class Contacts(BaseModule):
         contact = contact.get_resource(resource)
         return contact
 
+    def get_bare_contact(self, jid: Union[str, JID]) -> Union[BareContact,
+                                                              GroupchatContact]:
+        '''This method gives direct access to the contacts dict.
+           This is helpful when performance is essential. In difference to
+           get_contact() this method does not create contacts nor can it handle
+           JIDs which are not bare. Use this only if you know the contact
+           exists.
+        '''
+        return self._contacts[jid]
+
     def get_group_chat_contact(self,
                                jid: Union[str, JID]
                                ) -> Union[BareContact,

@@ -79,6 +79,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
         self._account = account
         self._client = app.get_client(account)
+        self._contacts = self._client.get_module('Contacts')
 
         self._roster_tooltip = RosterTooltip()
 
@@ -195,9 +196,6 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         for action in actions:
             app.window.remove_action(f'{action}-{self._account}')
 
-    def _get_contact(self, jid: str) -> types.BareContact:
-        return self._client.get_module('Contacts').get_contact(jid)
-
     def _on_account_state(self, _event: ApplicationEvent) -> None:
         self.update_actions()
 
@@ -300,7 +298,8 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             self._roster_tooltip.clear_tooltip()
             return False
 
-        contact = self._get_contact(model[iter_][Column.JID_OR_GROUP])
+        contact = self._contacts.get_bare_contact(
+            model[iter_][Column.JID_OR_GROUP])
         value, widget = self._roster_tooltip.get_tooltip(path, contact)
         tooltip.set_custom(widget)
         return value
@@ -352,7 +351,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
                            param: GLib.Variant):
 
         jid = JID.from_string(param.get_string())
-        selected_contact = self._client.get_module('Contacts').get_contact(jid)
+        selected_contact = self._contacts.get_contact(jid)
         if selected_contact.is_gateway:
             # Check for transport users in roster and warn about removing the
             # transport if there are any
@@ -438,7 +437,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
                            treeview: Gtk.TreeView,
                            event: Gdk.EventButton) -> None:
 
-        contact = self._client.get_module('Contacts').get_contact(jid)
+        contact = self._contacts.get_bare_contact(jid)
         gateway_register = contact.is_gateway and contact.supports(
             Namespace.REGISTER)
         menu = get_roster_menu(
@@ -537,7 +536,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
     @event_filter(['account'])
     def _on_roster_push(self, event: RosterPush) -> None:
-        contact = self._get_contact(str(event.item.jid))
+        contact = self._contacts.get_contact(str(event.item.jid))
 
         if event.item.subscription == 'remove':
             contact.disconnect(self)
@@ -665,7 +664,8 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         for group in self._store:
             group_is_visible = False
             for child in group.iterchildren():
-                contact = self._get_contact(child[Column.JID_OR_GROUP])
+                contact = self._contacts.get_bare_contact(
+                    child[Column.JID_OR_GROUP])
                 is_visible = self._get_contact_visible(contact)
                 child[Column.VISIBLE] = is_visible
                 if is_visible:
@@ -758,8 +758,10 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             if not app.settings.get('sort_by_show_in_roster'):
                 return locale.strcoll(name1.lower(), name2.lower())
 
-            contact1 = self._get_contact(model[iter1][Column.JID_OR_GROUP])
-            contact2 = self._get_contact(model[iter2][Column.JID_OR_GROUP])
+            contact1 = self._contacts.get_bare_contact(
+                model[iter1][Column.JID_OR_GROUP])
+            contact2 = self._contacts.get_bare_contact(
+                model[iter2][Column.JID_OR_GROUP])
 
             if contact1.show != contact2.show:
                 if contact1.show == PresenceShow.DND:
@@ -795,4 +797,5 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         del self._roster
         del self._store
         del self._roster_tooltip
+        del self._contacts
         app.check_finalize(self)
