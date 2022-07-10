@@ -528,7 +528,6 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
                            _signal_name: str) -> None:
 
         self._draw_contact(contact)
-        self._refilter()
 
     @event_filter(['account'])
     def _on_roster_received(self, _event: RosterReceived) -> None:
@@ -693,6 +692,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         surface = contact.get_avatar(
             AvatarSize.ROSTER, self.get_scale_factor())
         self._store[iter_][Column.AVATAR] = surface
+        self._store[iter_][Column.VISIBLE] = self._get_contact_visible(contact)
 
     def _get_total_user_count(self) -> int:
         count = 0
