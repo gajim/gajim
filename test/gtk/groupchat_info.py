@@ -6,6 +6,7 @@ from gi.repository import Gtk
 
 from nbxmpp.protocol import Iq
 from nbxmpp.modules.discovery import parse_disco_info
+from nbxmpp.structs import MucSubject
 
 from gajim.common.const import CSSPriority
 
@@ -86,6 +87,10 @@ stanza = Iq(node='''
 </query>
 </iq>''')
 
+
+subject = ('Lorem ipsum dolor sit amet, consetetur sadipscing elitr sed '
+           'diam nonumy eirmod tempor invidunt ut labore et dolore magna')
+
 disco_info = parse_disco_info(stanza)
 
 class GroupchatInfo(Gtk.ApplicationWindow):
@@ -107,10 +112,9 @@ class GroupchatInfo(Gtk.ApplicationWindow):
 
         self.add(self._main_box)
         self._muc_info_box.set_from_disco_info(disco_info)
-        self._muc_info_box.set_subject(
-            'Lorem ipsum dolor sit amet, consetetur sadipscing elitr sed '
-            'diam nonumy eirmod tempor invidunt ut labore et dolore magna')
-        self._muc_info_box.set_author('userX', None)
+        self._muc_info_box.set_subject(MucSubject(text=subject,
+                                                  author='someone',
+                                                  timestamp=None))
         self.show_all()
 
 

@@ -191,9 +191,6 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         if self._minimal:
             return
 
-        # Set subject
-        self.set_subject(info.muc_subject)
-
         # Set user
         has_users = info.muc_users is not None
         self._ui.users.set_text(info.muc_users or '')
