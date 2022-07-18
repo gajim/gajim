@@ -428,7 +428,7 @@ class PreviewManager:
         preview.mime_type = type_
         preview.file_size = file_size
 
-        if type_ not in ALLOWED_MIME_TYPES:
+        if type_ not in ALLOWED_MIME_TYPES and not force:
             log.info('Not an allowed content type: %s, %s', type_, uri)
             session.cancel_message(message, Soup.Status.CANCELLED)
             return
