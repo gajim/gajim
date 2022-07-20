@@ -392,7 +392,7 @@ class ConversationView(Gtk.ListBox):
         row1 = self.get_row_at_index(2)
         row2 = self.get_row_at_index(3)
 
-        if row1.type == row2.type == 'date':
+        if row1.type == 'date' and row2.type == 'date':
             # First two rows are date rows,
             # it’s safe to remove the fist row
             row1.destroy()
