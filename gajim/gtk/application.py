@@ -383,6 +383,8 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         self.register()
         if self.get_is_remote():
+            print('Gajim is already running. '
+                  'The primary instance will handle remote commands')
             return -1
 
         self._core_command_line(options)
