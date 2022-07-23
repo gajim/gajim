@@ -53,7 +53,9 @@ BoolSettings = Literal[
     'dev_force_bookmark_2',
     'dev_use_message_label',
     'developer_modus',
+    'enable_emoji_shortcodes',
     'enable_negative_priority',
+    'enable_file_preview',
     'escape_key_closes',
     'gc_notify_on_all_messages_private_default',
     'gc_notify_on_all_messages_public_default',
@@ -107,7 +109,6 @@ BoolSettings = Literal[
     'use_stun_server',
     'use_urgency_hint',
     'video_see_self',
-    'enable_emoji_shortcodes',
 ]
 
 IntSettings = Literal[
@@ -203,7 +204,9 @@ APP_SETTINGS = {
     'developer_modus': False,
     'dictionary_url': 'WIKTIONARY',
     'emoticons_theme': 'noto-emoticons',
+    'enable_emoji_shortcodes': True,
     'enable_negative_priority': False,
+    'enable_file_preview': True,
     'escape_key_closes': False,
     'file_transfers_port': 28011,
     'ft_add_hosts_to_send': '',
@@ -295,7 +298,6 @@ APP_SETTINGS = {
     'video_see_self': True,
     'video_size': '',
     'workspace_order': [],
-    'enable_emoji_shortcodes': True,
 }
 
 BoolAccountSettings = Literal[

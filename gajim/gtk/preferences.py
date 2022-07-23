@@ -445,11 +445,17 @@ class FilePreview(PreferenceBox):
         }
 
         settings = [
+            Setting(SettingKind.SWITCH,
+                    _('File Preview'),
+                    SettingType.CONFIG,
+                    'enable_file_preview',
+                    desc=_('Show previews for files')),
             Setting(SettingKind.SPIN,
                     _('Preview Size'),
                     SettingType.CONFIG,
                     'preview_size',
                     desc=_('Size of preview image'),
+                    bind='enable_file_preview',
                     props={'range_': (100, 1000)}),
 
             Setting(SettingKind.POPOVER,
@@ -457,6 +463,7 @@ class FilePreview(PreferenceBox):
                     SettingType.CONFIG,
                     'preview_max_file_size',
                     desc=_('Maximum file size for preview generation'),
+                    bind='enable_file_preview',
                     props={'entries': sizes}),
 
             Setting(SettingKind.SWITCH,
@@ -464,27 +471,31 @@ class FilePreview(PreferenceBox):
                     SettingType.CONFIG,
                     'preview_anonymous_muc',
                     desc=_('Generate preview automatically in public '
-                           'group chats (may disclose your data)')),
+                           'group chats (may disclose your data)'),
+                    bind='enable_file_preview'),
 
             Setting(SettingKind.SWITCH,
                     _('Preview all Image URLs'),
                     SettingType.CONFIG,
                     'preview_allow_all_images',
                     desc=_('Generate preview for any URLs containing images '
-                           '(may be unsafe)')),
+                           '(may be unsafe)'),
+                    bind='enable_file_preview'),
 
             Setting(SettingKind.POPOVER,
                     _('Left Click Action'),
                     SettingType.CONFIG,
                     'preview_leftclick_action',
                     desc=_('Action when left-clicking a preview'),
+                    bind='enable_file_preview',
                     props={'entries': actions}),
 
             Setting(SettingKind.SWITCH,
                     _('HTTPS Verification'),
                     SettingType.CONFIG,
                     'preview_verify_https',
-                    desc=_('Whether to check for a valid certificate')),
+                    desc=_('Whether to check for a valid certificate'),
+                    bind='enable_file_preview'),
         ]
 
         PreferenceBox.__init__(self, settings)

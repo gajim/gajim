@@ -123,9 +123,11 @@ class MessageRow(BaseRow):
             from_us = kind == 'outgoing'
 
         is_previewable = False
-        if additional_data is not None:
+        preview_enabled = app.settings.get('enable_file_preview')
+        if additional_data is not None and preview_enabled:
             is_previewable = app.preview_manager.is_previewable(
                 text, additional_data)
+
         if is_previewable:
             context = None
             if self._is_groupchat:
