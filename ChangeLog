@@ -1,3 +1,37 @@
+Gajim 1.4.7 (24 Jul 2022)
+
+  Improvements
+
+  * Startup: Show hint in console if Gajim is already running (#11039)
+  * Preview: Add setting to disable file preview (#10991)
+  * Roster: Display show value in tooltip (#11010)
+  * ChatActionProcessor: Improve detection of emoji shortcode start
+
+  Performance
+
+  * Roster: Don’t invalidate filter on contact update
+  * Roster: Sort more efficiently
+
+  Bug Fixes
+
+  * Settings migration: Don’t fail on missing proxies key (#11050)
+  * Chat Markers: Don’t send marker for outgoing messages (#11043)
+  * Main Window: Move to stored position on startup
+  * Preview: Allow manual download for all mime types (#11044)
+  * GroupchatInfo: Don’t set subject when loading from disco info (#11040)
+  * Preview: Hide download hint if we sent the file (#11036)
+  * Flatpak: Fix display of tray icon using libappindicator (#10869)
+  * Remote: Console scripts need a method as entry point (#11034)
+  * CodeWidget: Don’t default to python for highlighting (#11012)
+  * ContactInfo: Preserve groups when changing contact name (#11028)
+  * CodeWidget: Don't highlight matching brackets (#11026)
+  * StatusIcon: Don’t lose new message icon on state change (#11013)
+  * GtkStatusIcon: Always show when Gajim has not toplevel focus
+  * GroupChatNickCompletion: Only process Tab press
+  * Notifications: Change Gdk window hints on Windows (#11008)
+  * MessageRow: Align name label correctly
+  * StatusIcon: Fix logic error on activate
+
 Gajim 1.4.6 (07 Jul 2022)
 
   Improvements
