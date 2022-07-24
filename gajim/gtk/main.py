@@ -54,7 +54,6 @@ from .types import ControlT
 from .builder import get_builder
 from .util import get_app_window
 from .util import get_key_theme
-from .util import move_window
 from .util import resize_window
 from .util import restore_main_window_position
 from .util import save_main_window_position
@@ -189,13 +188,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         window_width = app.settings.get('mainwin_width')
         window_height = app.settings.get('mainwin_height')
         resize_window(self, window_width, window_height)
+        restore_main_window_position()
 
         self.set_skip_taskbar_hint(not app.settings.get('show_in_taskbar'))
-
-        x_pos = app.settings.get('mainwin_x_position')
-        y_pos = app.settings.get('mainwin_y_position')
-        move_window(self, x_pos, y_pos)
-
         self.show_all()
 
         show_main_window = app.settings.get('show_main_window_on_startup')
