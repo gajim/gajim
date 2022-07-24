@@ -465,7 +465,7 @@ VOWELS = 'aeiou'
 CONSONANTS = 'bcdfghjklmnpqrstvwxyz'
 
 
-THANKS = u"""\
+THANKS = """\
 Alexander Futász
 Alexander V. Butenko
 Alexey Nezhdanov
@@ -511,7 +511,7 @@ Yakov Bezrukov
 Yavor Doganov
 """.strip().split("\n")
 
-ARTISTS = u"""\
+ARTISTS = """\
 Anders Ström
 Christophe Got
 Dennis Craven
@@ -524,14 +524,14 @@ Rederick Asher
 Jakub Szypulka
 """.strip().split("\n")
 
-DEVS_CURRENT = u"""\
+DEVS_CURRENT = """\
 Yann Leboulanger (asterix AT lagaule.org)
 Philipp Hörist (philipp AT hoerist.com)
 Daniel Brötzmann (wurstsalat AT posteo.de)
 André Apitzsch
 """.strip().split("\n")
 
-DEVS_PAST = u"""\
+DEVS_PAST = """\
 Stefan Bethge (stefan AT lanpartei.de)
 Alexander Cherniuk (ts33kr AT gmail.com)
 Stephan Erb (steve-e AT h3c.de)
