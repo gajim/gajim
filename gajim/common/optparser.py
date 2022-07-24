@@ -200,7 +200,8 @@ class OptionsParser:
 
     def update_config_to_1194(self):
         # Delete all BOSH proxies
-        for name in self.old_values['proxies']:
+        proxies = self.old_values.get('proxies', [])
+        for name in proxies:
             if self.old_values['proxies'][name]['type'] == 'bosh':
                 app.config.del_per('proxies', name)
                 for account in self.old_values['accounts']:
