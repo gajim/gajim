@@ -11,6 +11,7 @@ import subprocess
 
 ALLOWED_TAGS = [
     'ci',
+    'cs',
     'feat',
     'fix',
     'perf',
