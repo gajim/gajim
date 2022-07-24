@@ -99,7 +99,6 @@ build-and-deploy-windows:
 
 deploy-linux:
   stage: deploy
-  needs: ['build-linux']
   rules:
     - if: '$GAJIM_NIGHTLY_BUILD'
     - if: '$CI_COMMIT_TAG'
@@ -110,7 +109,6 @@ deploy-linux:
 
 # deploy-windows:
 #   stage: deploy
-#   needs: ['build-windows']
 #   rules:
 #     - if: '$GAJIM_NIGHTLY_BUILD'
 #     - if: '$CI_COMMIT_TAG'
@@ -123,8 +121,6 @@ deploy-linux:
 deploy-flatpak:
   image: git-deploy:latest
   stage: deploy
-  allow_failure: true
-  needs: []
   rules:
     - if: '$CI_COMMIT_TAG'
   before_script:
@@ -148,7 +144,6 @@ deploy-flatpak:
 publish-release:
   image: git-deploy:latest
   stage: publish
-  needs: ['deploy-linux', build-and-deploy-windows]
   rules:
     - if: '$CI_COMMIT_TAG'
   before_script:
