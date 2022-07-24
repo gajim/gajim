@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-04 10:35+0000\n"
+"POT-Creation-Date: 2022-07-24 12:49+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -623,7 +623,7 @@ msgstr "Een instelling is gewijzigd, niet gerelateerd aan privacy"
 msgid "ALSA: %s"
 msgstr "ALSA: %s"
 
-msgid "API Preferences. Possible values: 'http', 'iq'"
+msgid "API Preferences. Possible values: \"http\", \"iq\""
 msgstr ""
 
 msgid "A_way"
@@ -1254,7 +1254,7 @@ msgstr ""
 "verwijderen"
 
 #, fuzzy, python-format
-msgid "Cannot overwrite existing file '%s'"
+msgid "Cannot overwrite existing file \"%s\""
 msgstr "Kan bestaand bestand ‘%s’ niet overschrijven"
 
 msgid "Certificate"
@@ -1333,10 +1333,10 @@ msgstr "Je bijnaam veranderen in een groepsgesprek"
 msgid "Change your profile picture"
 msgstr "Je bijnaam veranderen (Ctrl+N)"
 
-msgid "Change your status to 'Away' after a certain amount of time"
+msgid "Change your status to \"Away\" after a certain amount of time"
 msgstr ""
 
-msgid "Change your status to 'Not Available' after a certain amount of time"
+msgid "Change your status to \"Not Available\" after a certain amount of time"
 msgstr ""
 
 #, fuzzy, python-format
@@ -1872,7 +1872,7 @@ msgid "Directory"
 msgstr "Geschiedenis"
 
 #, fuzzy, python-format
-msgid "Directory '%s' is not writable"
+msgid "Directory \"%s\" is not writable"
 msgstr "Map ‘%s’ is niet schrijfbaar"
 
 msgid "Disable Account"
@@ -2016,7 +2016,7 @@ msgstr "B_ewerken"
 #, fuzzy, python-format
 msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
-"'WIKTIONARY' (which means use Wikitionary)."
+"\"WIKTIONARY\" (which means use Wikitionary)."
 msgstr ""
 "Ofwel een aangepaste URL met %%s erin verwerkt, waar %%s een woord/zin is, "
 "ofwel ‘WIKTIONARY’, wat betekent dat Wiktionary gebruikt zal worden."
@@ -2748,7 +2748,7 @@ msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr "Indien ingeschakeld zal Gajim XEP-0146-opdrachten uitvoeren."
 
 #, fuzzy
-msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
+msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 "Indien ingeschakeld zal Gajim inkomende aandachtsverzoeken negeren (‘wizz’)."
 
@@ -2763,7 +2763,7 @@ msgstr ""
 #, fuzzy
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
-"in 'stun_server' option, or the one given by the XMPP server."
+"in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
 "Indien ingeschakeld zal Gajim een STUN-server proberen gebruiken bij gebruik "
 "van Jingle, ofwel die in de optie ‘stun_server’, ofwel die gegeven door de "
@@ -3758,7 +3758,7 @@ msgid ""
 msgstr "Voer je wachtwoord voor account %s in"
 
 #, fuzzy, python-format
-msgid "Please make sure you are connected with '%s'."
+msgid "Please make sure you are connected with \"%s\"."
 msgstr "Zorg ervoor dat je verbinding hebt met ‘%s’."
 
 msgid ""
@@ -4728,6 +4728,10 @@ msgstr "Roo_ster weergeven bij opstarten"
 msgid "Show only critical errors"
 msgstr "Alleen kritieke fouten weergeven"
 
+#, fuzzy
+msgid "Show previews for files"
+msgstr "Audiosessies zijn niet beschikbaar"
+
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
 
@@ -5312,7 +5316,7 @@ msgid "Transferring File…"
 msgstr "Verzenden"
 
 #, fuzzy, python-format
-msgid "Transport '%s' will be removed"
+msgid "Transport \"%s\" will be removed"
 msgstr "Transport ‘%s’ zal worden verwijderd"
 
 msgid "Transports"
@@ -5405,14 +5409,14 @@ msgid "Unknown Artist"
 msgstr "Onbekende artiest"
 
 #, fuzzy, python-format
-msgid "Unknown SSL error '%s'"
+msgid "Unknown SSL error \"%s\""
 msgstr "Onbekende SSL-fout: %d"
 
 msgid "Unknown Source"
 msgstr "Onbekende bron"
 
 #, fuzzy, python-format
-msgid "Unknown TLS error '%s'"
+msgid "Unknown TLS error \"%s\""
 msgstr "Onbekende SSL-fout: %d"
 
 msgid "Unknown Title"

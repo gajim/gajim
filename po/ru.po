@@ -5,13 +5,14 @@
 # Yakov Bezrukov <nebulam51@gmail.com>, 2005, 2006, 2007.
 # Dmitry Korzhevin <dkorzhevin@lsupport.net>, 2010.
 # bodqhrohro <bodqhrohro@gmail.com>, 2022.
+# Elijah Draga <waytoroot@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-04 10:35+0000\n"
-"PO-Revision-Date: 2022-04-22 21:28+0000\n"
-"Last-Translator: bodqhrohro <bodqhrohro@gmail.com>\n"
+"POT-Creation-Date: 2022-07-24 12:49+0000\n"
+"PO-Revision-Date: 2022-07-23 19:36+0000\n"
+"Last-Translator: Elijah Draga <waytoroot@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
 ">\n"
 "Language: ru\n"
@@ -586,7 +587,8 @@ msgstr "Была изменена настройка, не связанная с
 msgid "ALSA: %s"
 msgstr "ALSA: %s"
 
-msgid "API Preferences. Possible values: 'http', 'iq'"
+#, fuzzy
+msgid "API Preferences. Possible values: \"http\", \"iq\""
 msgstr "Настройки API. Возможные значения: 'http', 'iq'"
 
 msgid "A_way"
@@ -1159,8 +1161,8 @@ msgstr "?Существительное:Скачать"
 msgid "Cancel the selected file transfer and remove incomplete files"
 msgstr "Отменить выбранную передачу файлов и удалить неполные файлы"
 
-#, python-format
-msgid "Cannot overwrite existing file '%s'"
+#, fuzzy, python-format
+msgid "Cannot overwrite existing file \"%s\""
 msgstr "Невозможно перезаписать существующий файл \"%s\""
 
 msgid "Certificate"
@@ -1233,10 +1235,12 @@ msgstr "Сменить ник в комнате"
 msgid "Change your profile picture"
 msgstr "Изменить ник (Ctrl+N)"
 
-msgid "Change your status to 'Away' after a certain amount of time"
+#, fuzzy
+msgid "Change your status to \"Away\" after a certain amount of time"
 msgstr "Изменять свой статус на \"Отсутствую\" через определенное время"
 
-msgid "Change your status to 'Not Available' after a certain amount of time"
+#, fuzzy
+msgid "Change your status to \"Not Available\" after a certain amount of time"
 msgstr "Изменять свой статус на \"Недоступен\" через определенное время"
 
 #, fuzzy, python-format
@@ -1732,8 +1736,8 @@ msgstr "Удалить сообщение"
 msgid "Directory"
 msgstr "История"
 
-#, python-format
-msgid "Directory '%s' is not writable"
+#, fuzzy, python-format
+msgid "Directory \"%s\" is not writable"
 msgstr "Директория \"%s\" недоступна для записи"
 
 msgid "Disable Account"
@@ -1868,10 +1872,10 @@ msgstr "Редактировать _группы…"
 msgid "Edit…"
 msgstr "_Правка"
 
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
-"'WIKTIONARY' (which means use Wikitionary)."
+"\"WIKTIONARY\" (which means use Wikitionary)."
 msgstr ""
 "Введите свой URL-адрес с %%s в нем (где %%s - слово/фраза), или "
 "'WIKTIONARY'(чтобы использовать Викисловарь)."
@@ -2547,7 +2551,8 @@ msgstr ""
 "Если включено, то Gajim будет выполнять команды (/show, /sh, /execute, /"
 "exec)."
 
-msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
+#, fuzzy
+msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 "Если этот параметр включен, Gajim будет игнорировать входящие запросы "
 "внимания ('wizz')."
@@ -2561,9 +2566,10 @@ msgstr ""
 "при его скрытии и восстановит его при повторном отображении окна списка "
 "контактов."
 
+#, fuzzy
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
-"in 'stun_server' option, or the one given by the XMPP server."
+"in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
 "Если включено, Gajim попытается использовать STUN-сервер при использовании "
 "Jingle, который указан опцией 'stun_server', либо предоставленный XMPP-"
@@ -3485,8 +3491,8 @@ msgid ""
 "(Account: %(account)s)"
 msgstr "Введите пароль для учетной записи %s"
 
-#, python-format
-msgid "Please make sure you are connected with '%s'."
+#, fuzzy, python-format
+msgid "Please make sure you are connected with \"%s\"."
 msgstr "Пожалуйста, убедитесь, что Вы подключены к '%s'."
 
 msgid ""
@@ -4201,9 +4207,9 @@ msgstr "Серверное ПО"
 msgid "Server Software"
 msgstr "Серверное ПО"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Server Software: %s\n"
-msgstr "Серверное ПО"
+msgstr "Серверное ПО: %s\n"
 
 msgid "Server Uptime"
 msgstr "Uptime сервера"
@@ -4393,6 +4399,10 @@ msgstr "Список контактов при запуске"
 
 msgid "Show only critical errors"
 msgstr "показывать только сообщения об ошибках"
+
+#, fuzzy
+msgid "Show previews for files"
+msgstr "Аудио сеансы не доступны"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
@@ -4960,8 +4970,8 @@ msgstr "Тема"
 msgid "Transferring File…"
 msgstr "Передается"
 
-#, python-format
-msgid "Transport '%s' will be removed"
+#, fuzzy, python-format
+msgid "Transport \"%s\" will be removed"
 msgstr "Транспорт '%s' будет удален"
 
 msgid "Transports"
@@ -5051,15 +5061,15 @@ msgstr "Неизвестна"
 msgid "Unknown Artist"
 msgstr "Неизвестный исполнитель"
 
-#, python-format
-msgid "Unknown SSL error '%s'"
+#, fuzzy, python-format
+msgid "Unknown SSL error \"%s\""
 msgstr "Неизвестная ошибка SSL '%s'"
 
 msgid "Unknown Source"
 msgstr "Неизвестный альбом"
 
-#, python-format
-msgid "Unknown TLS error '%s'"
+#, fuzzy, python-format
+msgid "Unknown TLS error \"%s\""
 msgstr "Неизвестная ошибка TLS '%s'"
 
 msgid "Unknown Title"

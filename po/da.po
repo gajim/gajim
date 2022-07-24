@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-04 10:35+0000\n"
+"POT-Creation-Date: 2022-07-24 12:49+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -627,7 +627,7 @@ msgstr ""
 msgid "ALSA: %s"
 msgstr "Størrelse: %s"
 
-msgid "API Preferences. Possible values: 'http', 'iq'"
+msgid "API Preferences. Possible values: \"http\", \"iq\""
 msgstr ""
 
 msgid "A_way"
@@ -1276,7 +1276,7 @@ msgid "Cancel the selected file transfer and remove incomplete files"
 msgstr "Annullerer den valgte filoverførsel og fjerner den ikke fuldførte fil"
 
 #, fuzzy, python-format
-msgid "Cannot overwrite existing file '%s'"
+msgid "Cannot overwrite existing file \"%s\""
 msgstr "Kan ikke overskrive den eksisterende fil \"%s\""
 
 #, fuzzy
@@ -1356,10 +1356,10 @@ msgstr "Ændre dit kælenavn (Ctrl+N)"
 msgid "Change your profile picture"
 msgstr "Ændre dit kælenavn (Ctrl+N)"
 
-msgid "Change your status to 'Away' after a certain amount of time"
+msgid "Change your status to \"Away\" after a certain amount of time"
 msgstr ""
 
-msgid "Change your status to 'Not Available' after a certain amount of time"
+msgid "Change your status to \"Not Available\" after a certain amount of time"
 msgstr ""
 
 #, fuzzy, python-format
@@ -1913,7 +1913,7 @@ msgid "Directory"
 msgstr "_Historie"
 
 #, fuzzy, python-format
-msgid "Directory '%s' is not writable"
+msgid "Directory \"%s\" is not writable"
 msgstr "Kataloget \"%s\" er ikke skrivbart"
 
 #, fuzzy
@@ -2057,7 +2057,7 @@ msgstr "R_ediger"
 #, fuzzy, python-format
 msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
-"'WIKTIONARY' (which means use Wikitionary)."
+"\"WIKTIONARY\" (which means use Wikitionary)."
 msgstr ""
 "Enten en tilpasset url som indeholder %s hvor %s er ordet/frasen, eller "
 "'WIKTIONARY' som betyder brug wiktionary."
@@ -2777,7 +2777,7 @@ msgstr "Hvis valgt vil Gajim vise kontakternes humør i kontaktvinduet"
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
 
-msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
+msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 
 msgid ""
@@ -2787,7 +2787,7 @@ msgstr ""
 
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
-"in 'stun_server' option, or the one given by the XMPP server."
+"in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
 
 #, fuzzy
@@ -3786,7 +3786,7 @@ msgid ""
 msgstr "Skriv din adgangskode for kontoen %s"
 
 #, fuzzy, python-format
-msgid "Please make sure you are connected with '%s'."
+msgid "Please make sure you are connected with \"%s\"."
 msgstr "Vær venligst sikker på at du er tilsluttet med \"%s\"."
 
 msgid ""
@@ -4766,6 +4766,10 @@ msgstr "T_ilslut når Gajim startes"
 msgid "Show only critical errors"
 msgstr "_Vis hændelse i kontaktvindue"
 
+#, fuzzy
+msgid "Show previews for files"
+msgstr "En tilslutning er ikke tilgængelig"
+
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
 
@@ -5350,7 +5354,7 @@ msgid "Transferring File…"
 msgstr "Overfører"
 
 #, fuzzy, python-format
-msgid "Transport '%s' will be removed"
+msgid "Transport \"%s\" will be removed"
 msgstr "Transport \"%s\" vil blive fjernet"
 
 msgid "Transports"
@@ -5445,14 +5449,14 @@ msgid "Unknown Artist"
 msgstr "Ukendt Artist"
 
 #, fuzzy, python-format
-msgid "Unknown SSL error '%s'"
+msgid "Unknown SSL error \"%s\""
 msgstr "Ukendt SSL fejl: %d"
 
 msgid "Unknown Source"
 msgstr "Ukendt Kilde"
 
 #, fuzzy, python-format
-msgid "Unknown TLS error '%s'"
+msgid "Unknown TLS error \"%s\""
 msgstr "Ukendt SSL fejl: %d"
 
 msgid "Unknown Title"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-04 10:35+0000\n"
+"POT-Creation-Date: 2022-07-24 12:49+0000\n"
 "PO-Revision-Date: 2022-05-26 22:21+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -578,7 +578,8 @@ msgstr "プライバシーに関係のない設定が変更されました"
 msgid "ALSA: %s"
 msgstr "ALSA: %s"
 
-msgid "API Preferences. Possible values: 'http', 'iq'"
+#, fuzzy
+msgid "API Preferences. Possible values: \"http\", \"iq\""
 msgstr "API の選択。'http' または 'iq'"
 
 msgid "A_way"
@@ -1128,8 +1129,8 @@ msgstr "ダウンロード"
 msgid "Cancel the selected file transfer and remove incomplete files"
 msgstr "選択されたファイルの転送を中止し、不完全なファイルは削除します"
 
-#, python-format
-msgid "Cannot overwrite existing file '%s'"
+#, fuzzy, python-format
+msgid "Cannot overwrite existing file \"%s\""
 msgstr "既存のファイル '%s' に上書きできません"
 
 msgid "Certificate"
@@ -1200,10 +1201,12 @@ msgstr "談話室でニックネームを変更します"
 msgid "Change your profile picture"
 msgstr "プロフィールの画像を変更"
 
-msgid "Change your status to 'Away' after a certain amount of time"
+#, fuzzy
+msgid "Change your status to \"Away\" after a certain amount of time"
 msgstr "一定時間後、在席状況を'離席中'に変えます"
 
-msgid "Change your status to 'Not Available' after a certain amount of time"
+#, fuzzy
+msgid "Change your status to \"Not Available\" after a certain amount of time"
 msgstr "一定時間後、在席状況を'不在'に変えます"
 
 #, python-format
@@ -1669,8 +1672,8 @@ msgstr "ダイレクトメッセージ"
 msgid "Directory"
 msgstr "ディレクトリ"
 
-#, python-format
-msgid "Directory '%s' is not writable"
+#, fuzzy, python-format
+msgid "Directory \"%s\" is not writable"
 msgstr "ディレクトリ '%s' に書き込む権限がありません"
 
 msgid "Disable Account"
@@ -1793,10 +1796,10 @@ msgstr "作業空間の編集…"
 msgid "Edit…"
 msgstr "編集…"
 
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
-"'WIKTIONARY' (which means use Wikitionary)."
+"\"WIKTIONARY\" (which means use Wikitionary)."
 msgstr ""
 "独自の辞書の URL (%%s を含めます。ここで %%s は語/フレーズです)。または、"
 "Wikitionary を使う場合は単に 'WIKTIONARY' としてください。"
@@ -2435,7 +2438,8 @@ msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
 "有効の場合、Gajim はコマンドを実行します(/show, /sh, /execute, /exec)。"
 
-msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
+#, fuzzy
+msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr "有効の場合、Gajim は受信する注目メッセージを無視します ('wizz')。"
 
 msgid ""
@@ -2445,9 +2449,10 @@ msgstr ""
 "有効の場合、Gajim は相手先一覧を閉じる際にその位置を保存し、開く際にはその位"
 "置に復元します。"
 
+#, fuzzy
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
-"in 'stun_server' option, or the one given by the XMPP server."
+"in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
 "有効の場合、Gajim は Jingle を使う際に STUN サーバーを利用しようとします。"
 "サーバーは 'stun_server' オプションか、または XMPP サーバーによって与えられま"
@@ -3338,8 +3343,8 @@ msgstr ""
 "%(jid)s\n"
 "(Account: %(account)s)"
 
-#, python-format
-msgid "Please make sure you are connected with '%s'."
+#, fuzzy, python-format
+msgid "Please make sure you are connected with \"%s\"."
 msgstr "'%s' に接続していることを確認してください。"
 
 msgid ""
@@ -4197,6 +4202,10 @@ msgstr "起動時に Gajim を表示する"
 msgid "Show only critical errors"
 msgstr "深刻なエラーのみ表示"
 
+#, fuzzy
+msgid "Show previews for files"
+msgstr "音声のプレビューは無効です"
+
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
 
@@ -4735,8 +4744,8 @@ msgstr "話題"
 msgid "Transferring File…"
 msgstr "ファイルを転送しています…"
 
-#, python-format
-msgid "Transport '%s' will be removed"
+#, fuzzy, python-format
+msgid "Transport \"%s\" will be removed"
 msgstr "中継先 '%s' を削除します"
 
 msgid "Transports"
@@ -4824,15 +4833,15 @@ msgstr "不明"
 msgid "Unknown Artist"
 msgstr "不明"
 
-#, python-format
-msgid "Unknown SSL error '%s'"
+#, fuzzy, python-format
+msgid "Unknown SSL error \"%s\""
 msgstr "未知の SSL エラー: '%s'"
 
 msgid "Unknown Source"
 msgstr "不明"
 
-#, python-format
-msgid "Unknown TLS error '%s'"
+#, fuzzy, python-format
+msgid "Unknown TLS error \"%s\""
 msgstr "未知の TLS エラー: '%s'"
 
 msgid "Unknown Title"

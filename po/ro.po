@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-04 10:35+0000\n"
+"POT-Creation-Date: 2022-07-24 12:49+0000\n"
 "PO-Revision-Date: 2022-05-29 13:30+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -582,7 +582,8 @@ msgstr "A fost modificată o setare care nu are legătură cu confidențialitate
 msgid "ALSA: %s"
 msgstr "ALSA: %s"
 
-msgid "API Preferences. Possible values: 'http', 'iq'"
+#, fuzzy
+msgid "API Preferences. Possible values: \"http\", \"iq\""
 msgstr "Preferințe API. Valori posibile: 'http', 'iq'"
 
 msgid "A_way"
@@ -1138,8 +1139,8 @@ msgid "Cancel the selected file transfer and remove incomplete files"
 msgstr ""
 "Anularea transferului de fișiere selectat și eliminarea fișierelor incomplete"
 
-#, python-format
-msgid "Cannot overwrite existing file '%s'"
+#, fuzzy, python-format
+msgid "Cannot overwrite existing file \"%s\""
 msgstr "Nu se poate suprascrie fișierul existent '%s'"
 
 msgid "Certificate"
@@ -1210,10 +1211,12 @@ msgstr "Schimbați-vă nickname-ul într-un chat de grup"
 msgid "Change your profile picture"
 msgstr "Schimbă-ți poza de profil"
 
-msgid "Change your status to 'Away' after a certain amount of time"
+#, fuzzy
+msgid "Change your status to \"Away\" after a certain amount of time"
 msgstr "Schimbă-ți statutul în \"Away\" după o anumită perioadă de timp"
 
-msgid "Change your status to 'Not Available' after a certain amount of time"
+#, fuzzy
+msgid "Change your status to \"Not Available\" after a certain amount of time"
 msgstr ""
 "Schimbă-ți statutul în \"Nu este disponibil\" după o anumită perioadă de timp"
 
@@ -1681,8 +1684,8 @@ msgstr "Mesaje directe"
 msgid "Directory"
 msgstr "Director"
 
-#, python-format
-msgid "Directory '%s' is not writable"
+#, fuzzy, python-format
+msgid "Directory \"%s\" is not writable"
 msgstr "Directorul \"%s\" nu este inscriptibil"
 
 msgid "Disable Account"
@@ -1812,10 +1815,10 @@ msgstr "Editați spațiul de lucru…"
 msgid "Edit…"
 msgstr "Editați…"
 
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
-"'WIKTIONARY' (which means use Wikitionary)."
+"\"WIKTIONARY\" (which means use Wikitionary)."
 msgstr ""
 "Fie o adresă URL personalizată cu %%s în ea (unde %%s este cuvântul/fraza), "
 "fie \"WIKTIONARY\" (ceea ce înseamnă că trebuie să utilizați Wikitionary)."
@@ -2472,7 +2475,8 @@ msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
 "Dacă este activat, Gajim va executa comenzi (/show, /sh, /execute, /exec)."
 
-msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
+#, fuzzy
+msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr "Dacă este activată, Gajim va ignora cererile de atenție (\"wizz\")."
 
 msgid ""
@@ -2482,9 +2486,10 @@ msgstr ""
 "Dacă este activată, Gajim va salva poziția ferestrei principale atunci când "
 "o ascunde și o va restabili atunci când o afișează din nou."
 
+#, fuzzy
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
-"in 'stun_server' option, or the one given by the XMPP server."
+"in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
 "Dacă este activată, Gajim va încerca să utilizeze un server STUN atunci când "
 "utilizează Jingle. Cel din opțiunea \"stun_server\" sau cel furnizat de "
@@ -3381,8 +3386,8 @@ msgstr ""
 "%(jid)s\n"
 "(Account: %(account)s)"
 
-#, python-format
-msgid "Please make sure you are connected with '%s'."
+#, fuzzy, python-format
+msgid "Please make sure you are connected with \"%s\"."
 msgstr "Vă rugăm să vă asigurați că sunteți conectat cu '%s'."
 
 msgid ""
@@ -4243,6 +4248,10 @@ msgstr "Arată Gajim pe Startup"
 msgid "Show only critical errors"
 msgstr "Afișați numai erorile critice"
 
+#, fuzzy
+msgid "Show previews for files"
+msgstr "Previzualizarea audio nu este disponibilă"
+
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
 
@@ -4791,8 +4800,8 @@ msgstr "Subiect"
 msgid "Transferring File…"
 msgstr "Transferul de fișiere…"
 
-#, python-format
-msgid "Transport '%s' will be removed"
+#, fuzzy, python-format
+msgid "Transport \"%s\" will be removed"
 msgstr "Transportul \"%s\" va fi eliminat"
 
 msgid "Transports"
@@ -4879,15 +4888,15 @@ msgstr "Necunoscut"
 msgid "Unknown Artist"
 msgstr "Artist necunoscut"
 
-#, python-format
-msgid "Unknown SSL error '%s'"
+#, fuzzy, python-format
+msgid "Unknown SSL error \"%s\""
 msgstr "Eroare SSL necunoscută \"%s"
 
 msgid "Unknown Source"
 msgstr "Sursă necunoscută"
 
-#, python-format
-msgid "Unknown TLS error '%s'"
+#, fuzzy, python-format
+msgid "Unknown TLS error \"%s\""
 msgstr "Eroare TLS necunoscută \"%s"
 
 msgid "Unknown Title"

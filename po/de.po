@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-04 10:35+0000\n"
-"PO-Revision-Date: 2022-07-07 17:04+0000\n"
+"POT-Creation-Date: 2022-07-24 12:49+0000\n"
+"PO-Revision-Date: 2022-07-24 14:23+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
 "\n"
@@ -594,7 +594,7 @@ msgstr ""
 msgid "ALSA: %s"
 msgstr "ALSA: %s"
 
-msgid "API Preferences. Possible values: 'http', 'iq'"
+msgid "API Preferences. Possible values: \"http\", \"iq\""
 msgstr "API-Einstellungen. Mögliche Werte: \"http\", \"iq\""
 
 msgid "A_way"
@@ -1146,7 +1146,7 @@ msgstr ""
 "Dateien"
 
 #, python-format
-msgid "Cannot overwrite existing file '%s'"
+msgid "Cannot overwrite existing file \"%s\""
 msgstr "Kann bereits existierende Datei \"%s\" nicht überschreiben"
 
 msgid "Certificate"
@@ -1217,12 +1217,11 @@ msgstr "Spitznamen in einem Gruppenchat ändern"
 msgid "Change your profile picture"
 msgstr "Ändere dein Profilbild"
 
-msgid "Change your status to 'Away' after a certain amount of time"
+msgid "Change your status to \"Away\" after a certain amount of time"
 msgstr "Deinen Status auf \"abwesend\" setzen nach einer bestimmten Zeit"
 
-msgid "Change your status to 'Not Available' after a certain amount of time"
-msgstr ""
-"Deinen Status auf \"nicht verfügbar\" setzen nach einer bestimmten Zeit"
+msgid "Change your status to \"Not Available\" after a certain amount of time"
+msgstr "Deinen Status auf \"nicht verfügbar\" setzen nach einer bestimmten Zeit"
 
 #, python-format
 msgid "Changed by %s"
@@ -1690,7 +1689,7 @@ msgid "Directory"
 msgstr "Verzeichnis"
 
 #, python-format
-msgid "Directory '%s' is not writable"
+msgid "Directory \"%s\" is not writable"
 msgstr "Kein Schreibzugriff auf Verzeichnis \"%s\""
 
 msgid "Disable Account"
@@ -1818,7 +1817,7 @@ msgstr "Bearbeiten…"
 #, python-format
 msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
-"'WIKTIONARY' (which means use Wikitionary)."
+"\"WIKTIONARY\" (which means use Wikitionary)."
 msgstr ""
 "Entweder eine benutzerdefinierte URL, die %%s enthält (wobei %%s das Wort "
 "oder der Satz ist) oder \"WIKTIONARY\" (Wiktionary-Wörterbuch verwenden)."
@@ -2474,7 +2473,7 @@ msgstr ""
 "Falls aktiviert, wird Gajim Befehle im Chatfenster ausführen (/show, /sh, /"
 "execute, /exec)."
 
-msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
+msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 "Falls aktiviert, wird Gajim Nachrichten ignorieren, die versuchen deine "
 "Aufmerksamkeit zu erregen (\"wizz\")."
@@ -2489,7 +2488,7 @@ msgstr ""
 
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
-"in 'stun_server' option, or the one given by the XMPP server."
+"in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
 "Falls aktiviert, wird Gajim versuchen einen STUN-Server für Jingle zu "
 "verwenden. Entweder jenen in der \"stun_server\"-Option oder einen vom XMPP-"
@@ -3384,7 +3383,7 @@ msgstr ""
 "(Konto: %(account)s)"
 
 #, python-format
-msgid "Please make sure you are connected with '%s'."
+msgid "Please make sure you are connected with \"%s\"."
 msgstr "Bitte vergewissere dich, dass du mit \"%s\" verbunden bist."
 
 msgid ""
@@ -4234,6 +4233,9 @@ msgstr "Beim Start anzeigen"
 msgid "Show only critical errors"
 msgstr "Nur kritische Fehler anzeigen"
 
+msgid "Show previews for files"
+msgstr "Vorschau für Dateien anzeigen"
+
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr "Zeige Empfehlungen für Shortcodes, z.B. :+1:"
 
@@ -4785,7 +4787,7 @@ msgid "Transferring File…"
 msgstr "Übertrage Datei…"
 
 #, python-format
-msgid "Transport '%s' will be removed"
+msgid "Transport \"%s\" will be removed"
 msgstr "Der Transport \"%s\" wird entfernt"
 
 msgid "Transports"
@@ -4874,14 +4876,14 @@ msgid "Unknown Artist"
 msgstr "Unbekannter Künstler"
 
 #, python-format
-msgid "Unknown SSL error '%s'"
+msgid "Unknown SSL error \"%s\""
 msgstr "Unbekannter SSL-Fehler \"%s\""
 
 msgid "Unknown Source"
 msgstr "Unbekannte Quelle"
 
 #, python-format
-msgid "Unknown TLS error '%s'"
+msgid "Unknown TLS error \"%s\""
 msgstr "Unbekannter TLS-Fehler \"%s\""
 
 msgid "Unknown Title"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-04 10:35+0000\n"
+"POT-Creation-Date: 2022-07-24 12:49+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -615,7 +615,7 @@ msgstr ""
 msgid "ALSA: %s"
 msgstr "Памер: %s"
 
-msgid "API Preferences. Possible values: 'http', 'iq'"
+msgid "API Preferences. Possible values: \"http\", \"iq\""
 msgstr ""
 
 msgid "A_way"
@@ -1249,7 +1249,7 @@ msgid "Cancel the selected file transfer and remove incomplete files"
 msgstr "Скасаваць выбраную перадачу файла і выдаліць няскончаны файл"
 
 #, fuzzy, python-format
-msgid "Cannot overwrite existing file '%s'"
+msgid "Cannot overwrite existing file \"%s\""
 msgstr "Немагчыма перапісаць наяўны файл \"%s\""
 
 #, fuzzy
@@ -1329,10 +1329,10 @@ msgstr "Змяніць м_янушку"
 msgid "Change your profile picture"
 msgstr "Змяніць м_янушку"
 
-msgid "Change your status to 'Away' after a certain amount of time"
+msgid "Change your status to \"Away\" after a certain amount of time"
 msgstr ""
 
-msgid "Change your status to 'Not Available' after a certain amount of time"
+msgid "Change your status to \"Not Available\" after a certain amount of time"
 msgstr ""
 
 #, fuzzy, python-format
@@ -1886,7 +1886,7 @@ msgid "Directory"
 msgstr "_Журнал"
 
 #, fuzzy, python-format
-msgid "Directory '%s' is not writable"
+msgid "Directory \"%s\" is not writable"
 msgstr "Немагчыма запісваць файлы ў дырэкторыю \"%s\""
 
 #, fuzzy
@@ -2032,7 +2032,7 @@ msgstr "_Змяніць"
 #, fuzzy, python-format
 msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
-"'WIKTIONARY' (which means use Wikitionary)."
+"\"WIKTIONARY\" (which means use Wikitionary)."
 msgstr ""
 "Альбо адмысловы адрас з %s, дзе %s ёсць словам/выразам, альбо 'WIKTIONARY', "
 "што значыць выкарыстанне Вікі-Слоўніка."
@@ -2759,7 +2759,7 @@ msgstr ""
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
 
-msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
+msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 
 msgid ""
@@ -2769,7 +2769,7 @@ msgstr ""
 
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
-"in 'stun_server' option, or the one given by the XMPP server."
+"in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
 
 msgid ""
@@ -3770,7 +3770,7 @@ msgid ""
 msgstr "Увядзіце пароль для рахунка %s"
 
 #, fuzzy, python-format
-msgid "Please make sure you are connected with '%s'."
+msgid "Please make sure you are connected with \"%s\"."
 msgstr "Праверце злучэнне з \"%s\"."
 
 msgid ""
@@ -4748,6 +4748,10 @@ msgstr "Паказаць _галоўнае вакно"
 msgid "Show only critical errors"
 msgstr "Паказваць толькі ў _галоўным вакне"
 
+#, fuzzy
+msgid "Show previews for files"
+msgstr "Няма злучэння"
+
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
 
@@ -5325,7 +5329,7 @@ msgid "Transferring File…"
 msgstr "Перадача"
 
 #, fuzzy, python-format
-msgid "Transport '%s' will be removed"
+msgid "Transport \"%s\" will be removed"
 msgstr "Транспарт \"%s\" будзе выдалены"
 
 msgid "Transports"
@@ -5418,15 +5422,15 @@ msgstr "?Сістэма:Невядомая"
 msgid "Unknown Artist"
 msgstr ""
 
-#, python-format
-msgid "Unknown SSL error '%s'"
-msgstr ""
+#, fuzzy, python-format
+msgid "Unknown SSL error \"%s\""
+msgstr "Настаўленні пакоя"
 
 msgid "Unknown Source"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "Unknown TLS error '%s'"
+msgid "Unknown TLS error \"%s\""
 msgstr "Настаўленні пакоя"
 
 msgid "Unknown Title"

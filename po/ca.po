@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-04 10:35+0000\n"
+"POT-Creation-Date: 2022-07-24 12:49+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -586,7 +586,7 @@ msgstr ""
 msgid "ALSA: %s"
 msgstr ""
 
-msgid "API Preferences. Possible values: 'http', 'iq'"
+msgid "API Preferences. Possible values: \"http\", \"iq\""
 msgstr ""
 
 msgid "A_way"
@@ -1197,7 +1197,7 @@ msgstr ""
 "Cancel.la la transferència seleccionada i esborra els fitxers incomplets."
 
 #, python-format
-msgid "Cannot overwrite existing file '%s'"
+msgid "Cannot overwrite existing file \"%s\""
 msgstr ""
 
 #, fuzzy
@@ -1276,10 +1276,10 @@ msgstr ""
 msgid "Change your profile picture"
 msgstr "Canvia el teu nick (Ctrl+N)"
 
-msgid "Change your status to 'Away' after a certain amount of time"
+msgid "Change your status to \"Away\" after a certain amount of time"
 msgstr ""
 
-msgid "Change your status to 'Not Available' after a certain amount of time"
+msgid "Change your status to \"Not Available\" after a certain amount of time"
 msgstr ""
 
 #, fuzzy, python-format
@@ -1802,7 +1802,7 @@ msgid "Directory"
 msgstr "Historial"
 
 #, python-format
-msgid "Directory '%s' is not writable"
+msgid "Directory \"%s\" is not writable"
 msgstr ""
 
 #, fuzzy
@@ -1931,7 +1931,7 @@ msgstr "_Edita"
 #, python-format
 msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
-"'WIKTIONARY' (which means use Wikitionary)."
+"\"WIKTIONARY\" (which means use Wikitionary)."
 msgstr ""
 
 msgid "Email"
@@ -2612,7 +2612,7 @@ msgstr ""
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
 
-msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
+msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 
 msgid ""
@@ -2622,7 +2622,7 @@ msgstr ""
 
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
-"in 'stun_server' option, or the one given by the XMPP server."
+"in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
 
 msgid ""
@@ -3560,7 +3560,7 @@ msgid ""
 msgstr "Escriu la teva contrasenya per al compte %s"
 
 #, python-format
-msgid "Please make sure you are connected with '%s'."
+msgid "Please make sure you are connected with \"%s\"."
 msgstr ""
 
 msgid ""
@@ -4484,6 +4484,10 @@ msgstr "C_onecta al servidor quan s'inicia"
 msgid "Show only critical errors"
 msgstr ""
 
+#, fuzzy
+msgid "Show previews for files"
+msgstr "Transferència de Fitxers"
+
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
 
@@ -5024,7 +5028,7 @@ msgid "Transferring File…"
 msgstr "Envia _Fitxer"
 
 #, python-format
-msgid "Transport '%s' will be removed"
+msgid "Transport \"%s\" will be removed"
 msgstr ""
 
 msgid "Transports"
@@ -5117,14 +5121,14 @@ msgid "Unknown Artist"
 msgstr ""
 
 #, python-format
-msgid "Unknown SSL error '%s'"
+msgid "Unknown SSL error \"%s\""
 msgstr ""
 
 msgid "Unknown Source"
 msgstr ""
 
 #, python-format
-msgid "Unknown TLS error '%s'"
+msgid "Unknown TLS error \"%s\""
 msgstr ""
 
 msgid "Unknown Title"

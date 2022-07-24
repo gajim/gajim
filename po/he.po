@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-04 10:35+0000\n"
+"POT-Creation-Date: 2022-07-24 12:49+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -653,7 +653,7 @@ msgstr ""
 msgid "ALSA: %s"
 msgstr "‏ALSA: ‏%s"
 
-msgid "API Preferences. Possible values: 'http', 'iq'"
+msgid "API Preferences. Possible values: \"http\", \"iq\""
 msgstr ""
 
 msgid "A_way"
@@ -1311,7 +1311,7 @@ msgstr "ביטול העברת קובץ נבחר והסרת קבצים לא של�
 
 # להחליף
 #, fuzzy, python-format
-msgid "Cannot overwrite existing file '%s'"
+msgid "Cannot overwrite existing file \"%s\""
 msgstr "אין אפשרות לכתוב על קובץ קיים \"%s\""
 
 #, fuzzy
@@ -1390,10 +1390,10 @@ msgstr "שינוי שם הכינוי שלך בתוך שיחת קבוצה"
 msgid "Change your profile picture"
 msgstr "שינוי שם כינוי (Ctrl+N)"
 
-msgid "Change your status to 'Away' after a certain amount of time"
+msgid "Change your status to \"Away\" after a certain amount of time"
 msgstr ""
 
-msgid "Change your status to 'Not Available' after a certain amount of time"
+msgid "Change your status to \"Not Available\" after a certain amount of time"
 msgstr ""
 
 #, fuzzy, python-format
@@ -1959,7 +1959,7 @@ msgstr "_היסטוריה"
 
 # זמין לכתיבה
 #, fuzzy, python-format
-msgid "Directory '%s' is not writable"
+msgid "Directory \"%s\" is not writable"
 msgstr "המדור \"%s\" אינו נתון לכתיבה"
 
 #, fuzzy
@@ -2101,7 +2101,7 @@ msgstr "ע_ריכה"
 #, fuzzy, python-format
 msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
-"'WIKTIONARY' (which means use Wikitionary)."
+"\"WIKTIONARY\" (which means use Wikitionary)."
 msgstr ""
 "או כתובת url מותאמת עם %s בתוכה כאשר הסימן %s הינו המילה/הצירוף או "
 "'WIKTIONARY' אשר משמעותו היא להשתמש בויקימילון."
@@ -2856,7 +2856,7 @@ msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
 
 #, fuzzy
-msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
+msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr "כאשר מופעלת, Gajim יתעלם מבקשות הקשב נכנסות (\"wizz\")."
 
 #, fuzzy
@@ -2870,7 +2870,7 @@ msgstr ""
 #, fuzzy
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
-"in 'stun_server' option, or the one given by the XMPP server."
+"in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
 "כאשר מופעלת, Gajim ינסה לעשות שימש בשרת STUN כאשר jingle הינו מצוי בשימוש. "
 "זה אשר הוגדר בתוך אפשרות \"stun_server\", או בזה אשר ניתן על ידי שרת jabber "
@@ -3887,7 +3887,7 @@ msgid ""
 msgstr "הזן סיסמה עבור חשבון %s"
 
 #, fuzzy, python-format
-msgid "Please make sure you are connected with '%s'."
+msgid "Please make sure you are connected with \"%s\"."
 msgstr "אנא ודא כי אתה מחובר בעזרת \"%s\"."
 
 msgid ""
@@ -4902,6 +4902,10 @@ msgstr "ה_צג רשימה בעת הפעלה:"
 msgid "Show only critical errors"
 msgstr "cli"
 
+#, fuzzy
+msgid "Show previews for files"
+msgstr "סשנים קוליים אינם זמינים"
+
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
 
@@ -5503,7 +5507,7 @@ msgid "Transferring File…"
 msgstr "כעת מעביר"
 
 #, fuzzy, python-format
-msgid "Transport '%s' will be removed"
+msgid "Transport \"%s\" will be removed"
 msgstr "מוביל \"%s\" יוסר"
 
 msgid "Transports"
@@ -5600,14 +5604,14 @@ msgid "Unknown Artist"
 msgstr "אמן לא ידוע"
 
 #, fuzzy, python-format
-msgid "Unknown SSL error '%s'"
+msgid "Unknown SSL error \"%s\""
 msgstr "שגיאת SSL לא מוכרת: %d"
 
 msgid "Unknown Source"
 msgstr "מקור לא ידוע"
 
 #, fuzzy, python-format
-msgid "Unknown TLS error '%s'"
+msgid "Unknown TLS error \"%s\""
 msgstr "שגיאת SSL לא מוכרת: %d"
 
 msgid "Unknown Title"

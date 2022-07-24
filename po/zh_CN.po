@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-04 10:35+0000\n"
-"PO-Revision-Date: 2022-06-21 16:28+0000\n"
-"Last-Translator: Tommy He <lovenemesis@gmail.com>\n"
+"POT-Creation-Date: 2022-07-24 12:49+0000\n"
+"PO-Revision-Date: 2022-07-24 09:02+0000\n"
+"Last-Translator: Bob Huang (Ziyan Huang) <bc3104hzy@126.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
 "gajim/master/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -571,7 +571,8 @@ msgstr "一个与隐私无关的设定已被更改"
 msgid "ALSA: %s"
 msgstr "ALSA: %s"
 
-msgid "API Preferences. Possible values: 'http', 'iq'"
+#, fuzzy
+msgid "API Preferences. Possible values: \"http\", \"iq\""
 msgstr "API设置，可能的值：'http', 'iq'"
 
 msgid "A_way"
@@ -1111,8 +1112,8 @@ msgstr "取消下载"
 msgid "Cancel the selected file transfer and remove incomplete files"
 msgstr "取消选定文件传输并删除未完成文件"
 
-#, python-format
-msgid "Cannot overwrite existing file '%s'"
+#, fuzzy, python-format
+msgid "Cannot overwrite existing file \"%s\""
 msgstr "无法覆盖现有文件\"%s\""
 
 msgid "Certificate"
@@ -1183,10 +1184,12 @@ msgstr "更改您在群聊中的昵称"
 msgid "Change your profile picture"
 msgstr "更改您的简介照片"
 
-msgid "Change your status to 'Away' after a certain amount of time"
+#, fuzzy
+msgid "Change your status to \"Away\" after a certain amount of time"
 msgstr "在一段时间后更改您的状态为“离开”"
 
-msgid "Change your status to 'Not Available' after a certain amount of time"
+#, fuzzy
+msgid "Change your status to \"Not Available\" after a certain amount of time"
 msgstr "在一段时间后更改您的状态为“不活跃”"
 
 #, python-format
@@ -1645,8 +1648,8 @@ msgstr "直接消息"
 msgid "Directory"
 msgstr "目录"
 
-#, python-format
-msgid "Directory '%s' is not writable"
+#, fuzzy, python-format
+msgid "Directory \"%s\" is not writable"
 msgstr "目录 '%s' 无法写入"
 
 msgid "Disable Account"
@@ -1767,10 +1770,10 @@ msgstr "编辑工作区…"
 msgid "Edit…"
 msgstr "编辑…"
 
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
-"'WIKTIONARY' (which means use Wikitionary)."
+"\"WIKTIONARY\" (which means use Wikitionary)."
 msgstr ""
 "使用包含 %%s 的自定义 URL( %%s 即是单词/短语)，或者 'WIKTIONARY' 以使用 "
 "Wiktionary。"
@@ -1782,7 +1785,7 @@ msgid "Emoji"
 msgstr "表情符号"
 
 msgid "Emoji Shortcodes"
-msgstr ""
+msgstr "表情符号快捷短语"
 
 msgid "Emoji Theme"
 msgstr "表情符号主题"
@@ -2393,7 +2396,8 @@ msgstr "如果启用，Gajim 会在联系人列表窗口标题中添加 * 和 [n
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr "如启用，Gajim将执行命令(/show, /sh, /execute, /exec)。"
 
-msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
+#, fuzzy
+msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr "如果启用，Gajim 将忽略发送来的关注请求('wizz')。"
 
 msgid ""
@@ -2402,9 +2406,10 @@ msgid ""
 msgstr ""
 "如果启用，Gajim 将保存主窗口时的位置，然后在下次展示窗口列表时重新恢复。"
 
+#, fuzzy
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
-"in 'stun_server' option, or the one given by the XMPP server."
+"in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
 "如果启用， Gajim 在使用 Jingle 时会尝试使用 STUN 服务器。服务器可以由"
 "\"stun_server\"选项给出，或由 XMPP 服务器给出。"
@@ -3276,8 +3281,8 @@ msgstr ""
 "%(jid)s\n"
 "（账户：%(account)s）"
 
-#, python-format
-msgid "Please make sure you are connected with '%s'."
+#, fuzzy, python-format
+msgid "Please make sure you are connected with \"%s\"."
 msgstr "请确认您已经连接到 \"%s\"。"
 
 msgid ""
@@ -3753,7 +3758,7 @@ msgid "Scroll up"
 msgstr "向上滚动"
 
 msgid "Scroll up to load more chat history…"
-msgstr "向上滚动来加在更多聊天记录…"
+msgstr "向上滚动来加载更多聊天记录…"
 
 msgid "Search"
 msgstr "搜索"
@@ -4106,8 +4111,12 @@ msgstr "在启动时显示"
 msgid "Show only critical errors"
 msgstr "仅显示严重错误"
 
+#, fuzzy
+msgid "Show previews for files"
+msgstr "音频预览不可用"
+
 msgid "Show suggestions for shortcodes, e.g. :+1:"
-msgstr ""
+msgstr "为表情符号快捷短语显示建议，例如 :+1:"
 
 msgid "Show the application's version"
 msgstr "显示应用版本"
@@ -4620,8 +4629,8 @@ msgstr "话题"
 msgid "Transferring File…"
 msgstr "传输文件中…"
 
-#, python-format
-msgid "Transport '%s' will be removed"
+#, fuzzy, python-format
+msgid "Transport \"%s\" will be removed"
 msgstr "传输 \"%s\" 将被移除"
 
 msgid "Transports"
@@ -4708,23 +4717,22 @@ msgstr "未知"
 msgid "Unknown Artist"
 msgstr "未知艺术家"
 
-#, python-format
-msgid "Unknown SSL error '%s'"
+#, fuzzy, python-format
+msgid "Unknown SSL error \"%s\""
 msgstr "未知的 SSL 错误 '%s'"
 
 msgid "Unknown Source"
 msgstr "未知来源"
 
-#, python-format
-msgid "Unknown TLS error '%s'"
+#, fuzzy, python-format
+msgid "Unknown TLS error \"%s\""
 msgstr "未知的 TLS 错误 '%s'"
 
 msgid "Unknown Title"
 msgstr "未知标题"
 
-#, fuzzy
 msgid "Unknown language"
-msgstr "未知标题"
+msgstr "未知语言"
 
 msgid "Unknown nickname"
 msgstr "未知的昵称"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-04 10:35+0000\n"
+"POT-Creation-Date: 2022-07-24 12:49+0000\n"
 "PO-Revision-Date: 2010-01-22 14:35+0100\n"
 "Last-Translator: Petr Menšík <pihhan@cipis.net>\n"
 "Language-Team: <>\n"
@@ -631,7 +631,7 @@ msgstr ""
 msgid "ALSA: %s"
 msgstr "Velikost: %s"
 
-msgid "API Preferences. Possible values: 'http', 'iq'"
+msgid "API Preferences. Possible values: \"http\", \"iq\""
 msgstr ""
 
 msgid "A_way"
@@ -1282,7 +1282,7 @@ msgid "Cancel the selected file transfer and remove incomplete files"
 msgstr "Zruší vybraný přenos souboru a smaže nedokončený soubor"
 
 #, fuzzy, python-format
-msgid "Cannot overwrite existing file '%s'"
+msgid "Cannot overwrite existing file \"%s\""
 msgstr "Nemohu přepsat existující soubor \"%s\""
 
 #, fuzzy
@@ -1362,10 +1362,10 @@ msgstr "Změ_nit přezdívku"
 msgid "Change your profile picture"
 msgstr "Změ_nit přezdívku"
 
-msgid "Change your status to 'Away' after a certain amount of time"
+msgid "Change your status to \"Away\" after a certain amount of time"
 msgstr ""
 
-msgid "Change your status to 'Not Available' after a certain amount of time"
+msgid "Change your status to \"Not Available\" after a certain amount of time"
 msgstr ""
 
 #, fuzzy, python-format
@@ -1923,7 +1923,7 @@ msgid "Directory"
 msgstr "_Historie"
 
 #, fuzzy, python-format
-msgid "Directory '%s' is not writable"
+msgid "Directory \"%s\" is not writable"
 msgstr "Adresář \"%s\" není zapisovatelný"
 
 #, fuzzy
@@ -2066,7 +2066,7 @@ msgstr "_Úpravy"
 #, fuzzy, python-format
 msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
-"'WIKTIONARY' (which means use Wikitionary)."
+"\"WIKTIONARY\" (which means use Wikitionary)."
 msgstr ""
 "Buď vlastní url s %s v těle, kde %s je slovo nebo fráze, nebo 'WIKTIONARY', "
 "která znamená že se použije wiktionary."
@@ -2789,7 +2789,7 @@ msgstr ""
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
 
-msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
+msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 
 msgid ""
@@ -2799,7 +2799,7 @@ msgstr ""
 
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
-"in 'stun_server' option, or the one given by the XMPP server."
+"in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
 
 #, fuzzy
@@ -3804,7 +3804,7 @@ msgid ""
 msgstr "Zadejte heslo pro účet %s"
 
 #, fuzzy, python-format
-msgid "Please make sure you are connected with '%s'."
+msgid "Please make sure you are connected with \"%s\"."
 msgstr "Prosím ujistěte se že jste připojen s účtem \"%s\"."
 
 msgid ""
@@ -4788,6 +4788,10 @@ msgstr "Zobrazit _Seznam"
 msgid "Show only critical errors"
 msgstr "_Zobrazit událost v rosteru"
 
+#, fuzzy
+msgid "Show previews for files"
+msgstr "Spojení není dostupné"
+
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
 
@@ -5371,7 +5375,7 @@ msgid "Transferring File…"
 msgstr "Přenáším"
 
 #, fuzzy, python-format
-msgid "Transport '%s' will be removed"
+msgid "Transport \"%s\" will be removed"
 msgstr "Transport \"%s\" bude smazán"
 
 msgid "Transports"
@@ -5465,14 +5469,14 @@ msgid "Unknown Artist"
 msgstr "Neznámý Umělec"
 
 #, fuzzy, python-format
-msgid "Unknown SSL error '%s'"
+msgid "Unknown SSL error \"%s\""
 msgstr "Neznámá SSL chyba: %d"
 
 msgid "Unknown Source"
 msgstr "Neznámý Zdroj"
 
 #, fuzzy, python-format
-msgid "Unknown TLS error '%s'"
+msgid "Unknown TLS error \"%s\""
 msgstr "Neznámá SSL chyba: %d"
 
 msgid "Unknown Title"

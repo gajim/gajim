@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-04 10:35+0000\n"
+"POT-Creation-Date: 2022-07-24 12:49+0000\n"
 "PO-Revision-Date: 2020-07-22 17:59+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -617,7 +617,7 @@ msgstr "Жекелікке байланысты емес баптау өзгер
 msgid "ALSA: %s"
 msgstr "ALSA: %s"
 
-msgid "API Preferences. Possible values: 'http', 'iq'"
+msgid "API Preferences. Possible values: \"http\", \"iq\""
 msgstr ""
 
 msgid "A_way"
@@ -1244,7 +1244,7 @@ msgid "Cancel the selected file transfer and remove incomplete files"
 msgstr "Бұл файлдармен алмасудан бас тарту және толық емес файлдарды өшіру"
 
 #, fuzzy, python-format
-msgid "Cannot overwrite existing file '%s'"
+msgid "Cannot overwrite existing file \"%s\""
 msgstr "Бар файлды \"%s\" үстінен жазу мүмкін емес"
 
 #, fuzzy
@@ -1325,10 +1325,10 @@ msgstr "Сіздің ник атыңызды өзгерту (Ctrl+N)"
 msgid "Change your profile picture"
 msgstr "Сіздің ник атыңызды өзгерту (Ctrl+N)"
 
-msgid "Change your status to 'Away' after a certain amount of time"
+msgid "Change your status to \"Away\" after a certain amount of time"
 msgstr ""
 
-msgid "Change your status to 'Not Available' after a certain amount of time"
+msgid "Change your status to \"Not Available\" after a certain amount of time"
 msgstr ""
 
 #, fuzzy, python-format
@@ -1863,7 +1863,7 @@ msgid "Directory"
 msgstr "Тарих"
 
 #, fuzzy, python-format
-msgid "Directory '%s' is not writable"
+msgid "Directory \"%s\" is not writable"
 msgstr "\"%s\" бумасына жазу мүмкін емес"
 
 #, fuzzy
@@ -2006,7 +2006,7 @@ msgstr "Тү_зету"
 #, fuzzy, python-format
 msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
-"'WIKTIONARY' (which means use Wikitionary)."
+"\"WIKTIONARY\" (which means use Wikitionary)."
 msgstr ""
 "%s бар таңдауыңызша сілтеме, бұл жерде %s - сөз не мәтін, немесе "
 "'WIKTIONARY', яғни, wiktionary қолдану."
@@ -2716,7 +2716,7 @@ msgstr ""
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
 
-msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
+msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 
 msgid ""
@@ -2727,7 +2727,7 @@ msgstr ""
 #, fuzzy
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
-"in 'stun_server' option, or the one given by the XMPP server."
+"in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
 "Қосулы түрса, jingle қолдану кезде Gajim STUN серверін қолдануға тырысады. "
 "Ол сервер \"stun_server\" опциясында көрсетіледі не оны jabber сервердің өзі "
@@ -3705,7 +3705,7 @@ msgid ""
 msgstr "%s тіркелгіңіз үшін парольді енгізіңіз"
 
 #, fuzzy, python-format
-msgid "Please make sure you are connected with '%s'."
+msgid "Please make sure you are connected with \"%s\"."
 msgstr "\"%s\" үшін байланыс орнатылғанына көз жеткізіңіз."
 
 msgid ""
@@ -4658,6 +4658,10 @@ msgstr "Gajim қосылғанда, байланыс _орнату"
 msgid "Show only critical errors"
 msgstr "Тек ростерде көрсету"
 
+#, fuzzy
+msgid "Show previews for files"
+msgstr "Байланыс қолжетерсіз"
+
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
 
@@ -5235,7 +5239,7 @@ msgid "Transferring File…"
 msgstr "Алмасуда"
 
 #, fuzzy, python-format
-msgid "Transport '%s' will be removed"
+msgid "Transport \"%s\" will be removed"
 msgstr "\"%s\" транспорты өшіріледі"
 
 msgid "Transports"
@@ -5327,14 +5331,14 @@ msgid "Unknown Artist"
 msgstr "Белгісіз орындаушы"
 
 #, fuzzy, python-format
-msgid "Unknown SSL error '%s'"
+msgid "Unknown SSL error \"%s\""
 msgstr "Белгісіз SSL қатесі: %d"
 
 msgid "Unknown Source"
 msgstr "Белгісіз көзі"
 
 #, fuzzy, python-format
-msgid "Unknown TLS error '%s'"
+msgid "Unknown TLS error \"%s\""
 msgstr "Белгісіз SSL қатесі: %d"
 
 msgid "Unknown Title"

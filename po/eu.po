@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-04 10:35+0000\n"
+"POT-Creation-Date: 2022-07-24 12:49+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -618,7 +618,7 @@ msgstr ""
 msgid "ALSA: %s"
 msgstr "Tamaina: %s"
 
-msgid "API Preferences. Possible values: 'http', 'iq'"
+msgid "API Preferences. Possible values: \"http\", \"iq\""
 msgstr ""
 
 msgid "A_way"
@@ -1252,7 +1252,7 @@ msgstr ""
 "fitxeroa "
 
 #, fuzzy, python-format
-msgid "Cannot overwrite existing file '%s'"
+msgid "Cannot overwrite existing file \"%s\""
 msgstr "Ezin izan da gainarazi \"%s\" fitxeroa"
 
 #, fuzzy
@@ -1332,10 +1332,10 @@ msgstr "Aldatu _Izengoitia"
 msgid "Change your profile picture"
 msgstr "Aldatu _Izengoitia"
 
-msgid "Change your status to 'Away' after a certain amount of time"
+msgid "Change your status to \"Away\" after a certain amount of time"
 msgstr ""
 
-msgid "Change your status to 'Not Available' after a certain amount of time"
+msgid "Change your status to \"Not Available\" after a certain amount of time"
 msgstr ""
 
 #, fuzzy, python-format
@@ -1892,7 +1892,7 @@ msgid "Directory"
 msgstr "_Historiala"
 
 #, fuzzy, python-format
-msgid "Directory '%s' is not writable"
+msgid "Directory \"%s\" is not writable"
 msgstr "\"%s\" kokapena ez da idazgarria"
 
 #, fuzzy
@@ -2034,7 +2034,7 @@ msgstr "_Editatu"
 #, fuzzy, python-format
 msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
-"'WIKTIONARY' (which means use Wikitionary)."
+"\"WIKTIONARY\" (which means use Wikitionary)."
 msgstr ""
 "Either custom url with %s in it where %s is the word/phrase or 'WIKTIONARY' "
 "which means use wiktionary."
@@ -2759,7 +2759,7 @@ msgstr ""
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
 
-msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
+msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 
 msgid ""
@@ -2769,7 +2769,7 @@ msgstr ""
 
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
-"in 'stun_server' option, or the one given by the XMPP server."
+"in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
 
 msgid ""
@@ -3770,7 +3770,7 @@ msgid ""
 msgstr "%s kontuaren pasahitza sartu"
 
 #, fuzzy, python-format
-msgid "Please make sure you are connected with '%s'."
+msgid "Please make sure you are connected with \"%s\"."
 msgstr "Mesedez begiratu \"%s\" -rekin konektatuta zauden."
 
 msgid ""
@@ -4750,6 +4750,10 @@ msgstr "Ikusi _Zerrenda"
 msgid "Show only critical errors"
 msgstr "Ikusi _zerrendan bakarrik"
 
+#, fuzzy
+msgid "Show previews for files"
+msgstr "Konexioa ez dago erabilgarri"
+
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
 
@@ -5330,7 +5334,7 @@ msgid "Transferring File…"
 msgstr "Tranferitzen"
 
 #, fuzzy, python-format
-msgid "Transport '%s' will be removed"
+msgid "Transport \"%s\" will be removed"
 msgstr "\"%s\" transportea ezabatu da"
 
 msgid "Transports"
@@ -5424,14 +5428,14 @@ msgid "Unknown Artist"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "Unknown SSL error '%s'"
+msgid "Unknown SSL error \"%s\""
 msgstr "D-Bus bertsioa aurkitugabea: %s"
 
 msgid "Unknown Source"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "Unknown TLS error '%s'"
+msgid "Unknown TLS error \"%s\""
 msgstr "D-Bus bertsioa aurkitugabea: %s"
 
 msgid "Unknown Title"

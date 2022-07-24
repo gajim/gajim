@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-04 10:35+0000\n"
+"POT-Creation-Date: 2022-07-24 12:49+0000\n"
 "PO-Revision-Date: 2022-05-24 19:29+0000\n"
 "Last-Translator: sbadux <enricobe@hotmail.com>\n"
 "Language-Team: Italian <https://translate.gajim.org/projects/gajim/master/it/"
@@ -592,7 +592,8 @@ msgstr "È stata cambiata un'impostazione non riguardante la privacy"
 msgid "ALSA: %s"
 msgstr "ALSA: %s"
 
-msgid "API Preferences. Possible values: 'http', 'iq'"
+#, fuzzy
+msgid "API Preferences. Possible values: \"http\", \"iq\""
 msgstr "Preferenze API. Valori: 'http', 'iq'"
 
 msgid "A_way"
@@ -1141,8 +1142,8 @@ msgstr "?Noun:Scaricato"
 msgid "Cancel the selected file transfer and remove incomplete files"
 msgstr "Annulla il trasferimento file selezionato e rimuove i file incompleti"
 
-#, python-format
-msgid "Cannot overwrite existing file '%s'"
+#, fuzzy, python-format
+msgid "Cannot overwrite existing file \"%s\""
 msgstr "Impossibile sovrascrivere il file esistente \"%s\""
 
 msgid "Certificate"
@@ -1213,10 +1214,12 @@ msgstr "Cambia il tuo soprannome in una conversazione di gruppo"
 msgid "Change your profile picture"
 msgstr "Cambia l'immagine di profilo"
 
-msgid "Change your status to 'Away' after a certain amount of time"
+#, fuzzy
+msgid "Change your status to \"Away\" after a certain amount of time"
 msgstr "Cambia il tuo stato in 'Assente' dopo un certo periodo di tempo"
 
-msgid "Change your status to 'Not Available' after a certain amount of time"
+#, fuzzy
+msgid "Change your status to \"Not Available\" after a certain amount of time"
 msgstr ""
 "Cambia il tuo stato in 'Non Disponibile' dopo un certo periodo di tempo"
 
@@ -1685,8 +1688,8 @@ msgstr "Messaggi diretti"
 msgid "Directory"
 msgstr "Cartella"
 
-#, python-format
-msgid "Directory '%s' is not writable"
+#, fuzzy, python-format
+msgid "Directory \"%s\" is not writable"
 msgstr "Impossibile scrivere nella cartella \"%s\""
 
 msgid "Disable Account"
@@ -1820,10 +1823,10 @@ msgstr "Modifica _Gruppi…"
 msgid "Edit…"
 msgstr "Modifica"
 
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
-"'WIKTIONARY' (which means use Wikitionary)."
+"\"WIKTIONARY\" (which means use Wikitionary)."
 msgstr ""
 "URL personalizzato contenente %%s (parola/frase) o 'WIKTIONARY' (che "
 "significa usare Wiktionary)."
@@ -2509,7 +2512,8 @@ msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
 "Se attivo, Gajim potrà eseguire i comandi (/show, /sh, /execute, /exec)."
 
-msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
+#, fuzzy
+msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 "Se attiva, la richieste di attenzione in entrata saranno ignorate ('wizz')."
 
@@ -2521,9 +2525,10 @@ msgstr ""
 "Se attiva, Gajim salverà la posizione della finestra della lista contatti "
 "prima di nasconderla e la ripristinerà quando verrà mostrata di nuovo."
 
+#, fuzzy
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
-"in 'stun_server' option, or the one given by the XMPP server."
+"in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
 "Se attiva, Gajim proverà ad usare un server STUN quando si usa Jingle. "
 "Quello nell'opzione \"stun_server\", o quello fornito dal server XMPP."
@@ -3452,8 +3457,8 @@ msgstr ""
 "%(jid)s\n"
 "(l'account : %(account)s)"
 
-#, python-format
-msgid "Please make sure you are connected with '%s'."
+#, fuzzy, python-format
+msgid "Please make sure you are connected with \"%s\"."
 msgstr "Assicurati di essere connesso con \"%s\"."
 
 msgid ""
@@ -4359,6 +4364,10 @@ msgstr "Lista Contatti all'Avvio"
 msgid "Show only critical errors"
 msgstr "Mostra solo gli errori critici"
 
+#, fuzzy
+msgid "Show previews for files"
+msgstr "Anteprima audio non disponibile"
+
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
 
@@ -4935,8 +4944,8 @@ msgstr "Argomento"
 msgid "Transferring File…"
 msgstr "Trasferimento in corso"
 
-#, python-format
-msgid "Transport '%s' will be removed"
+#, fuzzy, python-format
+msgid "Transport \"%s\" will be removed"
 msgstr "Il transport '%s' sarà rimosso"
 
 msgid "Transports"
@@ -5025,15 +5034,15 @@ msgstr "Sconosciuto"
 msgid "Unknown Artist"
 msgstr "Artista Sconosciuto"
 
-#, python-format
-msgid "Unknown SSL error '%s'"
+#, fuzzy, python-format
+msgid "Unknown SSL error \"%s\""
 msgstr "Errore SSL \"%s\" sconosciuto"
 
 msgid "Unknown Source"
 msgstr "Fonte Sconosciuta"
 
-#, python-format
-msgid "Unknown TLS error '%s'"
+#, fuzzy, python-format
+msgid "Unknown TLS error \"%s\""
 msgstr "Errore TLS \"%s\" sconosciuto"
 
 msgid "Unknown Title"

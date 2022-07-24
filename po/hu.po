@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-04 10:35+0000\n"
+"POT-Creation-Date: 2022-07-24 12:49+0000\n"
 "PO-Revision-Date: 2010-11-28 12:15+0100\n"
 "Last-Translator: Gabriel Papp <gabriel.papp@gmx.com>\n"
 "Language-Team: -\n"
@@ -623,7 +623,7 @@ msgstr ""
 msgid "ALSA: %s"
 msgstr "ALSA: %s"
 
-msgid "API Preferences. Possible values: 'http', 'iq'"
+msgid "API Preferences. Possible values: \"http\", \"iq\""
 msgstr ""
 
 msgid "A_way"
@@ -1275,7 +1275,7 @@ msgid "Cancel the selected file transfer and remove incomplete files"
 msgstr "Cancels the selected file transfer and removes incomplete file"
 
 #, fuzzy, python-format
-msgid "Cannot overwrite existing file '%s'"
+msgid "Cannot overwrite existing file \"%s\""
 msgstr "Nem lehet kicserélni a létező filet \"%s\""
 
 #, fuzzy
@@ -1354,10 +1354,10 @@ msgstr "Nem csatlakoztál a csoportos beszélgetéshez."
 msgid "Change your profile picture"
 msgstr ""
 
-msgid "Change your status to 'Away' after a certain amount of time"
+msgid "Change your status to \"Away\" after a certain amount of time"
 msgstr ""
 
-msgid "Change your status to 'Not Available' after a certain amount of time"
+msgid "Change your status to \"Not Available\" after a certain amount of time"
 msgstr ""
 
 #, fuzzy, python-format
@@ -1914,7 +1914,7 @@ msgid "Directory"
 msgstr "_Előzmények"
 
 #, fuzzy, python-format
-msgid "Directory '%s' is not writable"
+msgid "Directory \"%s\" is not writable"
 msgstr "A(z) \"%s\" könyvtár nem írható"
 
 #, fuzzy
@@ -2060,7 +2060,7 @@ msgstr "_Szerkesztés"
 #, fuzzy, python-format
 msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
-"'WIKTIONARY' (which means use Wikitionary)."
+"\"WIKTIONARY\" (which means use Wikitionary)."
 msgstr ""
 "Either custom URL with %s in it where %s is the word/phrase or 'WIKTIONARY' "
 "which means use wiktionary."
@@ -2795,7 +2795,7 @@ msgstr ""
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
 
-msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
+msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 
 msgid ""
@@ -2806,7 +2806,7 @@ msgstr ""
 #, fuzzy
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
-"in 'stun_server' option, or the one given by the XMPP server."
+"in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
 "If True, Gajim will try to use a STUN server when using jingle. The one in "
 "\"stun_server\" option, or the one given by the jabber server."
@@ -3811,7 +3811,7 @@ msgid ""
 msgstr "Írd be a jelszavad a következő fiókhoz: %s"
 
 #, fuzzy, python-format
-msgid "Please make sure you are connected with '%s'."
+msgid "Please make sure you are connected with \"%s\"."
 msgstr "Győződj meg róla, hogy ezzel vagy csatlakozva: \"%s\"."
 
 msgid ""
@@ -4797,6 +4797,10 @@ msgstr "C_satlakozás a Gajim indításával"
 msgid "Show only critical errors"
 msgstr "Csak a főablakban jelenítse meg"
 
+#, fuzzy
+msgid "Show previews for files"
+msgstr "Egy kapcsolat nem elérhető"
+
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
 
@@ -5384,7 +5388,7 @@ msgid "Transferring File…"
 msgstr "Továbbítás"
 
 #, fuzzy, python-format
-msgid "Transport '%s' will be removed"
+msgid "Transport \"%s\" will be removed"
 msgstr "Transport \"%s\" will be removed"
 
 msgid "Transports"
@@ -5486,14 +5490,14 @@ msgid "Unknown Artist"
 msgstr "Ismeretlen Előadó"
 
 #, fuzzy, python-format
-msgid "Unknown SSL error '%s'"
+msgid "Unknown SSL error \"%s\""
 msgstr "Ismeretlen SSL hiba: %d"
 
 msgid "Unknown Source"
 msgstr "Ismeretlen forrás"
 
 #, fuzzy, python-format
-msgid "Unknown TLS error '%s'"
+msgid "Unknown TLS error \"%s\""
 msgstr "Ismeretlen SSL hiba: %d"
 
 msgid "Unknown Title"

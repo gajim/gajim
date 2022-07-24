@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-04 10:35+0000\n"
+"POT-Creation-Date: 2022-07-24 12:49+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -617,7 +617,7 @@ msgstr ""
 msgid "ALSA: %s"
 msgstr "ALSA: %s"
 
-msgid "API Preferences. Possible values: 'http', 'iq'"
+msgid "API Preferences. Possible values: \"http\", \"iq\""
 msgstr ""
 
 msgid "A_way"
@@ -1260,7 +1260,7 @@ msgid "Cancel the selected file transfer and remove incomplete files"
 msgstr "取消選取檔案傳輸並刪除未完成檔案"
 
 #, fuzzy, python-format
-msgid "Cannot overwrite existing file '%s'"
+msgid "Cannot overwrite existing file \"%s\""
 msgstr "無法覆寫現有檔案\"%s\""
 
 #, fuzzy
@@ -1340,10 +1340,10 @@ msgstr "變更您的暱稱(Ctrl+N)"
 msgid "Change your profile picture"
 msgstr "變更您的暱稱(Ctrl+N)"
 
-msgid "Change your status to 'Away' after a certain amount of time"
+msgid "Change your status to \"Away\" after a certain amount of time"
 msgstr ""
 
-msgid "Change your status to 'Not Available' after a certain amount of time"
+msgid "Change your status to \"Not Available\" after a certain amount of time"
 msgstr ""
 
 #, fuzzy, python-format
@@ -1896,7 +1896,7 @@ msgid "Directory"
 msgstr "命令歷程(_H)"
 
 #, fuzzy, python-format
-msgid "Directory '%s' is not writable"
+msgid "Directory \"%s\" is not writable"
 msgstr "目錄 \"%s\" 不可寫"
 
 #, fuzzy
@@ -2038,7 +2038,7 @@ msgstr "編輯(_E)"
 #, fuzzy, python-format
 msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
-"'WIKTIONARY' (which means use Wikitionary)."
+"\"WIKTIONARY\" (which means use Wikitionary)."
 msgstr ""
 "自訂位址，在其中應包含 %s，%s 是單字/片語; 或'WIKTIONARY'以使用 wiktionary。"
 
@@ -2762,7 +2762,7 @@ msgstr "如果選取，Gajim 會在聯絡人清單視窗中顯示聯絡人的心
 msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 msgstr ""
 
-msgid "If enabled, Gajim will ignore incoming attention requests ('wizz')."
+msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 
 #, fuzzy
@@ -2774,7 +2774,7 @@ msgstr "如果為真，當隱藏名冊時 Gajim 將會儲存名冊位置，並�
 #, fuzzy
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
-"in 'stun_server' option, or the one given by the XMPP server."
+"in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
 "如果為真，Gajim 在使用 jingle 時會嘗試使用 STUN 伺服器。伺服器可以由"
 "\"stun_server\"選項給出，或由 jabber 伺服器給出。"
@@ -3770,7 +3770,7 @@ msgid ""
 msgstr "輸入帳號 %s 的密碼"
 
 #, fuzzy, python-format
-msgid "Please make sure you are connected with '%s'."
+msgid "Please make sure you are connected with \"%s\"."
 msgstr "請確認您已經連線到 \"%s\"。"
 
 msgid ""
@@ -4743,6 +4743,10 @@ msgstr "啟動時顯示名冊(_S):"
 msgid "Show only critical errors"
 msgstr "只顯示在聯絡人清單中"
 
+#, fuzzy
+msgid "Show previews for files"
+msgstr "一個連線無法使用"
+
 msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
 
@@ -5325,7 +5329,7 @@ msgid "Transferring File…"
 msgstr "傳輸中"
 
 #, fuzzy, python-format
-msgid "Transport '%s' will be removed"
+msgid "Transport \"%s\" will be removed"
 msgstr "代理\"%s\"將被移除"
 
 msgid "Transports"
@@ -5420,14 +5424,14 @@ msgid "Unknown Artist"
 msgstr "不明演出者"
 
 #, fuzzy, python-format
-msgid "Unknown SSL error '%s'"
+msgid "Unknown SSL error \"%s\""
 msgstr "不明的 SSL 錯誤: %d"
 
 msgid "Unknown Source"
 msgstr "不明來源"
 
 #, fuzzy, python-format
-msgid "Unknown TLS error '%s'"
+msgid "Unknown TLS error \"%s\""
 msgstr "不明的 SSL 錯誤: %d"
 
 msgid "Unknown Title"
