@@ -12,9 +12,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-"""
-Handles  Jingle File Transfer (XEP 0234)
-"""
+
+# Handles  Jingle File Transfer (XEP 0234)
+
 
 from __future__ import annotations
 
@@ -85,7 +85,7 @@ class JingleFileTransfer(JingleContent):
                  ) -> None:
 
         JingleContent.__init__(self, session, transport, senders)
-        log.info("transport value: %s", transport)
+        log.info('transport value: %s', transport)
         # events we might be interested in
         self.callbacks['session-initiate'] += [self.__on_session_initiate]
         self.callbacks['session-initiate-sent'] += [
@@ -163,7 +163,7 @@ class JingleFileTransfer(JingleContent):
                               error: Optional[nbxmpp.Node],
                               action: str
                               ) -> None:
-        log.debug("Jingle FT request received")
+        log.debug('Jingle FT request received')
         self._raise_event(stanza, content)
 
         account = self.session.connection.name
@@ -332,7 +332,7 @@ class JingleFileTransfer(JingleContent):
                             error: Optional[nbxmpp.Node],
                             action: str
                             ) -> None:
-        log.info("__on_session_accept")
+        log.info('__on_session_accept')
         con = self.session.connection
         security = content.getTag('security')
         if not security:  # responder can not verify our fingerprint
@@ -392,7 +392,7 @@ class JingleFileTransfer(JingleContent):
                                error: Optional[nbxmpp.Node],
                                action: str
                                ) -> None:
-        log.info("__on_session_terminate")
+        log.info('__on_session_terminate')
 
     def __on_session_info(self,
                           stanza: nbxmpp.Node,
@@ -408,7 +408,7 @@ class JingleFileTransfer(JingleContent):
                               error: Optional[nbxmpp.Node],
                               action: str
                               ) -> None:
-        log.info("__on_transport_accept")
+        log.info('__on_transport_accept')
 
     def __on_transport_replace(self,
                                stanza: nbxmpp.Node,
@@ -416,7 +416,7 @@ class JingleFileTransfer(JingleContent):
                                error: Optional[nbxmpp.Node],
                                action: str
                                ) -> None:
-        log.info("__on_transport_replace")
+        log.info('__on_transport_replace')
 
     def __on_transport_reject(self,
                               stanza: nbxmpp.Node,
@@ -424,7 +424,7 @@ class JingleFileTransfer(JingleContent):
                               error: Optional[nbxmpp.Node],
                               action: str
                               ) -> None:
-        log.info("__on_transport_reject")
+        log.info('__on_transport_reject')
 
     def __on_transport_info(self,
                             stanza: nbxmpp.Node,
@@ -432,7 +432,7 @@ class JingleFileTransfer(JingleContent):
                             error: Optional[nbxmpp.Node],
                             action: str
                             ) -> None:
-        log.info("__on_transport_info")
+        log.info('__on_transport_info')
         cand_error = content.getTag('transport').getTag('candidate-error')
         cand_used = content.getTag('transport').getTag('candidate-used')
         if (cand_error or cand_used) and \
@@ -488,7 +488,7 @@ class JingleFileTransfer(JingleContent):
                        error: Optional[nbxmpp.Node],
                        action: str
                        ) -> None:
-        log.info("__on_iq_result")
+        log.info('__on_iq_result')
 
         if self.state in (State.NOT_STARTED, State.CAND_RECEIVED):
             self.__state_changed(State.INITIALIZED)
@@ -516,9 +516,9 @@ class JingleFileTransfer(JingleContent):
             self._listen_host()
 
     def on_connect(self, streamhost):
-        """
+        '''
         send candidate-used stanza
-        """
+        '''
         log.info('send_candidate_used')
         if streamhost is None:
             return

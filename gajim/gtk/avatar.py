@@ -487,13 +487,13 @@ class AvatarStorage(metaclass=Singleton):
 
     @staticmethod
     def save_avatar(data: bytes) -> Optional[str]:
-        """
+        '''
         Save an avatar to the harddisk
 
         :param data:  bytes
 
         returns SHA1 value of the avatar or None on error
-        """
+        '''
         if data is None:
             return None
 

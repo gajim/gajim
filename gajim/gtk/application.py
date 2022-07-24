@@ -110,7 +110,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
             ord('V'),
             GLib.OptionFlags.NONE,
             GLib.OptionArg.NONE,
-            _('Show the application\'s version'))
+            _("Show the application's version"))
 
         self.add_main_option(
             'quiet',
@@ -743,9 +743,9 @@ class GajimApplication(Gtk.Application, CoreApplication):
     @staticmethod
     def _on_ipython_action(_action: Gio.SimpleAction,
                            _param: Optional[GLib.Variant]) -> None:
-        """
+        '''
         Show/hide the ipython window
-        """
+        '''
         win = cast(Gtk.Window, app.ipython_window)
         if win and win.is_visible():
             win.present()

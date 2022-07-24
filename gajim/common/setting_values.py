@@ -649,7 +649,7 @@ ADVANCED_SETTINGS = {
         'developer_modus': '',
         'dictionary_url': _(
             'Either a custom URL with %%s in it (where %%s is the word/phrase)'
-            ' or \'WIKTIONARY\' (which means use Wikitionary).'),
+            ' or "WIKTIONARY" (which means use Wikitionary).'),
         'enable_negative_priority': _(
             'If enabled, you will be able to set a negative priority to your '
             'account in the Accounts window. BE CAREFUL, when you are logged '
@@ -673,7 +673,7 @@ ADVANCED_SETTINGS = {
             'Hides the group chat participants list in a group chat window.'),
         'ignore_incoming_attention': _(
             'If enabled, Gajim will ignore incoming attention '
-            'requests (\'wizz\').'),
+            'requests ("wizz").'),
         'key_up_lines': _(
             'How many lines to store for Ctrl+KeyUP '
             '(previously sent messages).'),
@@ -684,7 +684,7 @@ ADVANCED_SETTINGS = {
         'muclumbus_api_http_uri': '',
         'muclumbus_api_jid': '',
         'muclumbus_api_pref': _(
-            'API Preferences. Possible values: \'http\', \'iq\''),
+            'API Preferences. Possible values: "http", "iq"'),
         'notification_preview_message': _(
             'Preview new messages in notification popup?'),
         'notification_timeout': '',
@@ -712,7 +712,7 @@ ADVANCED_SETTINGS = {
             'Enables libappindicator, an alternative tray icon provider'),
         'use_stun_server': _(
             'If enabled, Gajim will try to use a STUN server when using Jingle.'
-            ' The one in \'stun_server\' option, or the one given by '
+            ' The one in "stun_server" option, or the one given by '
             'the XMPP server.'),
         'use_urgency_hint': _(
             'If enabled, Gajim makes the window flash (the default behaviour '

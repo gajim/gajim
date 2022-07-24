@@ -101,10 +101,10 @@ INTERFACE_DESC = '''
 
 
 def get_dbus_struct(obj: Any) -> GLib.Variant:
-    """
+    '''
     Recursively go through all the items and replace them with their casted dbus
     equivalents
-    """
+    '''
     if isinstance(obj, str):
         return GLib.Variant('s', obj)
     if isinstance(obj, int):
@@ -299,10 +299,10 @@ class GajimRemote(Server):
 
     @staticmethod
     def change_status(status: str, message: str, account: str) -> bool:
-        """
+        '''
         change_status(status, message, account). Account is optional - if not
         specified status is changed for all accounts
-        """
+        '''
         if status not in ('offline', 'online', 'chat', 'away', 'xa', 'dnd'):
             status = ''
         if account:
@@ -330,9 +330,9 @@ class GajimRemote(Server):
 
     @staticmethod
     def list_accounts() -> list[str]:
-        """
+        '''
         List register accounts
-        """
+        '''
         result = app.settings.get_active_accounts()
         result_array: list[str] = []
         if result:
@@ -342,9 +342,9 @@ class GajimRemote(Server):
 
     @staticmethod
     def account_info(account: str) -> dict[str, str]:
-        """
+        '''
         Show info on account: resource, jid, nick, prio, message
-        """
+        '''
         result: dict[str, str] = {}
         if account in app.connections:
             # account is valid
@@ -379,9 +379,9 @@ class GajimRemote(Server):
     @staticmethod
     def _contacts_as_dbus_structure(contact: BareContact
                                     ) -> dict[str, GLib.Variant]:
-        """
+        '''
         Get info from list of Contact objects and create dbus dict
-        """
+        '''
 
         contact_dict: dict[str, GLib.Variant] = {}
 

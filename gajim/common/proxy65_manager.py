@@ -42,12 +42,12 @@ CONNECT_TIMEOUT = 20
 
 
 class Proxy65Manager:
-    """
+    '''
     Keep records for file transfer proxies. Each time account establishes a
     connection to its server call proxy65manger.resolve(proxy) for every proxy
     that is configured within the account. The class takes care to resolve and
     test each proxy only once
-    """
+    '''
 
     def __init__(self, idlequeue):
         # dict {proxy: proxy properties}
@@ -58,10 +58,10 @@ class Proxy65Manager:
 
     def resolve(self, proxy, connection, sender_jid, default=None,
                 testit=True):
-        """
+        '''
         Start
         if testit=False, Gajim won't try to resolve it
-        """
+        '''
         if proxy in self.proxies:
             resolver = self.proxies[proxy]
         else:
@@ -117,9 +117,9 @@ class Proxy65Manager:
 
 class ProxyResolver:
     def resolve_result(self, host, port, jid):
-        """
+        '''
         Test if host has a real proxy65 listening on port
-        """
+        '''
         self.host = str(host)
         self.port = int(port)
         self.jid = str(jid)
@@ -199,25 +199,25 @@ class ProxyResolver:
                 self.try_next_connection()
 
     def try_next_connection(self):
-        """
+        '''
         Try to resolve proxy with the next possible connection
-        """
+        '''
         if self.connections:
             connection = self.connections.pop(0)
             self.start_resolve(connection)
 
     def add_connection(self, connection):
-        """
+        '''
         Add a new connection in case the first fails
-        """
+        '''
         self.connections.append(connection)
         if self.state == S_INITIAL:
             self.start_resolve(connection)
 
     def start_resolve(self, connection):
-        """
+        '''
         Request network address from proxy
-        """
+        '''
         self.state = S_STARTED
         self.active_connection = connection
         iq = nbxmpp.Protocol(name='iq', to=self.proxy, typ='get')
@@ -226,9 +226,9 @@ class ProxyResolver:
         connection.send(iq)
 
     def __init__(self, proxy, sender_jid, testit):
-        """
+        '''
         if testit is False, don't test it, only get IP/port
-        """
+        '''
         self.proxy = proxy
         self.state = S_INITIAL
         self.active_connection = None
@@ -244,9 +244,9 @@ class ProxyResolver:
 
 
 class HostTester(Socks5, IdleObject):
-    """
+    '''
     Fake proxy tester
-    """
+    '''
 
     def __init__(self,
                  host,
@@ -256,11 +256,11 @@ class HostTester(Socks5, IdleObject):
                  sender_jid,
                  on_success,
                  on_failure):
-        """
+        '''
         Try to establish and auth to proxy at (host, port)
 
         Calls on_success, or on_failure according to the result.
-        """
+        '''
         IdleObject.__init__(self)
         self.host = host
         self.port = port
@@ -276,9 +276,9 @@ class HostTester(Socks5, IdleObject):
         self.sid = sid
 
     def connect(self):
-        """
+        '''
         Create the socket and plug it to the idlequeue
-        """
+        '''
         if self.host is None:
             self.on_failure()
             return None
@@ -373,9 +373,9 @@ class HostTester(Socks5, IdleObject):
 
 
 class ReceiverTester(Socks5, IdleObject):
-    """
+    '''
     Fake proxy tester
-    """
+    '''
 
     def __init__(self,
                  host,
@@ -385,11 +385,11 @@ class ReceiverTester(Socks5, IdleObject):
                  sender_jid,
                  on_success,
                  on_failure):
-        """
+        '''
         Try to establish and auth to proxy at (host, port)
 
         Call on_success, or on_failure according to the result.
-        """
+        '''
         IdleObject.__init__(self)
         self.host = host
         self.port = port
@@ -405,9 +405,9 @@ class ReceiverTester(Socks5, IdleObject):
         self.sid = sid
 
     def connect(self):
-        """
+        '''
         Create the socket and plug it to the idlequeue
-        """
+        '''
         if self.host is None:
             self.on_failure()
             return None

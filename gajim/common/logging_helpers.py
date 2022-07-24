@@ -27,9 +27,9 @@ from gajim.common.i18n import _
 
 
 def parseLogLevel(arg: str) -> int:
-    """
+    '''
     Either numeric value or level name from logging module
-    """
+    '''
     if arg.isdigit():
         return int(arg)
     if arg.isupper() and hasattr(logging, arg):
@@ -39,11 +39,11 @@ def parseLogLevel(arg: str) -> int:
 
 
 def parseLogTarget(arg: str) -> str:
-    """
+    '''
     [gajim.]c.x.y  ->  gajim.c.x.y
     .other_logger  ->  other_logger
     <None>         ->  gajim
-    """
+    '''
     arg = arg.lower()
     if not arg:
         return 'gajim'
@@ -55,7 +55,7 @@ def parseLogTarget(arg: str) -> str:
 
 
 def parseAndSetLogLevels(arg: str) -> None:
-    """
+    '''
     [=]LOGLEVEL     ->  gajim=LOGLEVEL
     gajim=LOGLEVEL  ->  gajim=LOGLEVEL
     .other=10       ->  other=10
@@ -64,7 +64,7 @@ def parseAndSetLogLevels(arg: str) -> None:
                         gajim.c.z=20
     gajim=10,c.x=20 ->  gajim=10
                         gajim.c.x=20
-    """
+    '''
     for directive in arg.split(','):
         directive = directive.strip()
         if not directive:
@@ -77,28 +77,28 @@ def parseAndSetLogLevels(arg: str) -> None:
             target = parseLogTarget(target.strip())
             if target:
                 logging.getLogger(target).setLevel(level)
-                print("Logger %s level set to %d" % (target, level),
+                print('Logger %s level set to %d' % (target, level),
                       file=sys.stderr)
 
 
 class colors:
-    NONE = chr(27) + "[0m"
-    BLACK = chr(27) + "[30m"
-    RED = chr(27) + "[31m"
-    GREEN = chr(27) + "[32m"
-    BROWN = chr(27) + "[33m"
-    BLUE = chr(27) + "[34m"
-    MAGENTA = chr(27) + "[35m"
-    CYAN = chr(27) + "[36m"
-    LIGHT_GRAY = chr(27) + "[37m"
-    DARK_GRAY = chr(27) + "[30;1m"
-    BRIGHT_RED = chr(27) + "[31;1m"
-    BRIGHT_GREEN = chr(27) + "[32;1m"
-    YELLOW = chr(27) + "[33;1m"
-    BRIGHT_BLUE = chr(27) + "[34;1m"
-    PURPLE = chr(27) + "[35;1m"
-    BRIGHT_CYAN = chr(27) + "[36;1m"
-    WHITE = chr(27) + "[37;1m"
+    NONE = chr(27) + '[0m'
+    BLACK = chr(27) + '[30m'
+    RED = chr(27) + '[31m'
+    GREEN = chr(27) + '[32m'
+    BROWN = chr(27) + '[33m'
+    BLUE = chr(27) + '[34m'
+    MAGENTA = chr(27) + '[35m'
+    CYAN = chr(27) + '[36m'
+    LIGHT_GRAY = chr(27) + '[37m'
+    DARK_GRAY = chr(27) + '[30;1m'
+    BRIGHT_RED = chr(27) + '[31;1m'
+    BRIGHT_GREEN = chr(27) + '[32;1m'
+    YELLOW = chr(27) + '[33;1m'
+    BRIGHT_BLUE = chr(27) + '[34;1m'
+    PURPLE = chr(27) + '[35;1m'
+    BRIGHT_CYAN = chr(27) + '[36;1m'
+    WHITE = chr(27) + '[37;1m'
 
 
 def colorize(text: str, color: str) -> str:
@@ -106,9 +106,9 @@ def colorize(text: str, color: str) -> str:
 
 
 class FancyFormatter(logging.Formatter):
-    """
+    '''
     An eye-candy formatter with colors
-    """
+    '''
     colors_mapping = {
         'DEBUG': colors.BLUE,
         'INFO': colors.GREEN,
@@ -147,9 +147,9 @@ class FancyFormatter(logging.Formatter):
 
 
 def init() -> None:
-    """
+    '''
     Iinitialize the logging system
-    """
+    '''
 
     if app.get_debug_mode():
         _cleanup_debug_logs()

@@ -368,7 +368,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             if has_transport_contacts:
                 ConfirmationDialog(
                     _('Remove Transport'),
-                    _('Transport \'%s\' will be '
+                    _('Transport "%s" will be '
                       'removed') % selected_contact.name,
                     _('You will no longer be able to send and receive '
                       'messages from and to contacts using this transport.'),
@@ -746,9 +746,9 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
                             iter1: Gtk.TreeIter,
                             iter2: Gtk.TreeIter,
                             _user_data: Literal[None]):
-        """
+        '''
         Compare two iterators to sort them
-        """
+        '''
 
         is_contact = model.iter_parent(iter1)
         if is_contact:

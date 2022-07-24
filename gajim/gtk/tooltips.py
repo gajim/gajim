@@ -75,16 +75,16 @@ class GCTooltip:
         return False, self._ui.tooltip_grid
 
     def _hide_grid_children(self) -> None:
-        """
+        '''
         Hide all Elements of the Tooltip Grid
-        """
+        '''
         for child in self._ui.tooltip_grid.get_children():
             child.hide()
 
     def _populate_grid(self, contact: types.GroupchatParticipant) -> None:
-        """
+        '''
         Populate the Tooltip Grid with data of from the contact
-        """
+        '''
         self._hide_grid_children()
 
         self._ui.nick.set_text(contact.name)

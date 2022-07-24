@@ -133,7 +133,7 @@ class HTTPUpload(BaseModule):
         mime = mimetypes.MimeTypes().guess_type(path)[0]
         if not mime:
             mime = 'application/octet-stream'  # fallback mime type
-        self._log.info("Detected MIME type of file: %s", mime)
+        self._log.info('Detected MIME type of file: %s', mime)
 
         return HTTPFileTransfer(self._account,
                                 path,

@@ -925,7 +925,7 @@ class SecurityWarning(Page):
         self._domain = domain
         self._ui.error_list.foreach(self._ui.error_list.remove)
 
-        unknown_error = _('Unknown TLS error \'%s\'')
+        unknown_error = _('Unknown TLS error "%s"')
         for error in errors:
             error_text = GIO_TLS_ERRORS.get(error, unknown_error % error)
             box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)

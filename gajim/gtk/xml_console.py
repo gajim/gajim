@@ -214,7 +214,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
             # If offline or connecting
             ErrorDialog(
                 _('Connection not available'),
-                _('Please make sure you are connected with \'%s\'.') %
+                _('Please make sure you are connected with "%s".') %
                 self._selected_send_account)
             return
         buffer_ = self._ui.input_entry.get_buffer()

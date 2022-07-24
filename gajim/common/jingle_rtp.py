@@ -12,9 +12,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-"""
-Handles Jingle RTP sessions (XEP 0167)
-"""
+
+# Handles Jingle RTP sessions (XEP 0167)
+
 
 from __future__ import annotations
 
@@ -164,11 +164,11 @@ class JingleRTPContent(JingleContent):
             self.p2pstream.add_remote_candidates(candidates)
 
     def batch_dtmf(self, events: list[str]) -> None:
-        """
+        '''
         Send several DTMF tones
-        """
+        '''
         if self._dtmf_running:
-            raise Exception("There is a DTMF batch already running")
+            raise Exception('There is a DTMF batch already running')
         d_events = deque(events)
         self._dtmf_running = True
         self.start_dtmf(d_events.popleft())
@@ -313,9 +313,9 @@ class JingleRTPContent(JingleContent):
                            _error: Optional[nbxmpp.Node],
                            _action: str
                            ) -> None:
-        """
+        '''
         Get peer codecs from what we get from peer
-        """
+        '''
         codecs: list[Farstream.Codec] = []
         for codec in content.getTag('description').iterTags('payload-type'):
             if not codec['id'] or not codec['name'] or not codec['clockrate']:
@@ -374,10 +374,10 @@ class JingleRTPContent(JingleContent):
 
 
 class JingleAudio(JingleRTPContent):
-    """
+    '''
     Jingle VoIP sessions consist of audio content transported over an ICE UDP
     protocol
-    """
+    '''
 
     def __init__(self,
                  session: JingleSession,
@@ -387,15 +387,15 @@ class JingleAudio(JingleRTPContent):
         self.setup_stream()
 
     def set_mic_volume(self, vol: float) -> None:
-        """
+        '''
         vol must be between 0 and 1
-        """
+        '''
         self.mic_volume.set_property('volume', vol)
 
     def set_out_volume(self, vol: float) -> None:
-        """
+        '''
         vol must be between 0 and 1
-        """
+        '''
         self.out_volume.set_property('volume', vol)
 
     def setup_stream(self) -> None:

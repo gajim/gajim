@@ -147,9 +147,9 @@ class HigDialog(Gtk.MessageDialog):
         return None
 
     def popup(self) -> None:
-        """
+        '''
         Show dialog
-        """
+        '''
         # Give focus to top vbox
         box = cast(Gtk.Box, self.get_children()[0])
         inner_box = cast(Gtk.Box, box.get_children()[0])
@@ -158,9 +158,9 @@ class HigDialog(Gtk.MessageDialog):
 
 
 class WarningDialog(HigDialog):
-    """
+    '''
     HIG compliant warning dialog
-    """
+    '''
 
     def __init__(self,
                  pritext: str,
@@ -181,9 +181,9 @@ class WarningDialog(HigDialog):
 
 
 class InformationDialog(HigDialog):
-    """
+    '''
     HIG compliant info dialog
-    """
+    '''
 
     def __init__(self,
                  pritext: str,
@@ -204,9 +204,9 @@ class InformationDialog(HigDialog):
 
 
 class ErrorDialog(HigDialog):
-    """
+    '''
     HIG compliant error dialog
-    """
+    '''
 
     def __init__(self,
                  pritext: str,

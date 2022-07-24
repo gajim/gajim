@@ -61,7 +61,7 @@ class Builder:
     def _load_string_from_filename(filename: str, gettext_: Any) -> str:
         file_path = str(configpaths.get('GUI') / filename)
 
-        if sys.platform == "win32":
+        if sys.platform == 'win32':
             # This is a workaround for non working translation on Windows
             tree = ET.parse(file_path)
             for node in tree.iter():

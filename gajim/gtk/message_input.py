@@ -49,9 +49,9 @@ FORMAT_CHARS: dict[str, str] = {
 
 
 class MessageInputTextView(Gtk.TextView):
-    """
+    '''
     A Gtk.Textview for chat message input
-    """
+    '''
     def __init__(self, account: str, contact: ChatContactT) -> None:
         Gtk.TextView.__init__(self)
         self.account = account

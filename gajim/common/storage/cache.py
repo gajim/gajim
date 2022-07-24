@@ -177,9 +177,9 @@ class CacheStorage(SqliteStorage):
 
     @timeit
     def _clean_caps_table(self) -> None:
-        """
+        '''
         Remove caps which was not seen for 3 months
-        """
+        '''
         timestamp = int(time.time()) - 3 * 30 * 24 * 3600
         self._con.execute('DELETE FROM caps_cache WHERE last_seen < ?',
                           (timestamp,))
@@ -199,14 +199,14 @@ class CacheStorage(SqliteStorage):
     def get_last_disco_info(self,
                             jid: JID,
                             max_age: int = 0) -> Optional[DiscoInfo]:
-        """
+        '''
         Get last disco info from jid
 
         :param jid:         The jid
 
         :param max_age:     max age in seconds of the DiscoInfo record
 
-        """
+        '''
 
         disco_info = self._disco_info_cache.get(jid)
         if disco_info is not None:
@@ -220,14 +220,14 @@ class CacheStorage(SqliteStorage):
                             jid: JID,
                             disco_info: DiscoInfo,
                             cache_only: bool = False) -> None:
-        """
+        '''
         Get last disco info from jid
 
         :param jid:          The jid
 
         :param disco_info:   A DiscoInfo object
 
-        """
+        '''
 
         log.info('Save disco info from %s', jid)
 

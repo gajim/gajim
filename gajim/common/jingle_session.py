@@ -12,9 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-"""
-Handles Jingle sessions (XEP 0166)
-"""
+
+# Handles Jingle sessions (XEP 0166)
 
 # TODO:
 # * 'senders' attribute of 'content' element
@@ -60,7 +59,7 @@ if TYPE_CHECKING:
     from gajim.common.jingle_transport import JingleTransport
 
 
-log = logging.getLogger("app.c.jingle_session")
+log = logging.getLogger('app.c.jingle_session')
 
 
 JINGLE_EVENTS = {
@@ -75,40 +74,40 @@ JINGLE_EVENTS = {
 # FIXME: Move it to JingleSession.States?
 @unique
 class JingleStates(Enum):
-    """
+    '''
     States in which jingle session may exist
-    """
+    '''
     ENDED = 0
     PENDING = 1
     ACTIVE = 2
 
 
 class OutOfOrder(Exception):
-    """
+    '''
     Exception that should be raised when an action is received when in the wrong
     state
-    """
+    '''
 
 
 class TieBreak(Exception):
-    """
+    '''
     Exception that should be raised in case of a tie, when we overrule the other
     action
-    """
+    '''
 
 
 class FailedApplication(Exception):
-    """
+    '''
     Exception that should be raised in case responder supports none of the
     payload-types offered by the initiator
-    """
+    '''
 
 
 class JingleSession:
-    """
+    '''
     This represents one jingle session, that is, one or more content types
     negotiated between an initiator and a responder.
-    """
+    '''
 
     def __init__(self,
                  con: Client,
@@ -118,11 +117,11 @@ class JingleSession:
                  sid: Optional[str] = None,
                  werequest: bool = False
                  ) -> None:
-        """
+        '''
         con -- connection object,
         weinitiate -- boolean, are we the initiator?
         jid - jid of the other entity
-        """
+        '''
         # negotiated contents
         self.contents: dict[tuple[str, str], JingleContent] = {}
         self.connection = con  # connection to use
@@ -194,23 +193,23 @@ class JingleSession:
             self.iq_ids.append(iq_id)
 
     def approve_session(self) -> None:
-        """
+        '''
         Called when user accepts session in UI (when we aren't the initiator)
-        """
+        '''
         self.accept_session()
 
     def decline_session(self) -> None:
-        """
+        '''
         Called when user declines session in UI (when we aren't the initiator)
-        """
+        '''
         reason = nbxmpp.Node('reason')
         reason.addChild('decline')
         self._session_terminate(reason)
 
     def cancel_session(self) -> None:
-        """
+        '''
         Called when user declines session in UI (when we aren't the initiator)
-        """
+        '''
         reason = nbxmpp.Node('reason')
         reason.addChild('cancel')
         self._session_terminate(reason)
@@ -230,9 +229,9 @@ class JingleSession:
             self.on_session_state_changed()
 
     def end_session(self) -> None:
-        """
+        '''
         Called when user stops or cancel session in UI
-        """
+        '''
         reason = nbxmpp.Node('reason')
         if self.state == JingleStates.ACTIVE:
             reason.addChild('success')
@@ -257,12 +256,12 @@ class JingleSession:
                     content: JingleContent,
                     creator: str = 'we'
                     ) -> None:
-        """
+        '''
         Add new content to session. If the session is active, this will send
         proper stanza to update session
 
         Creator must be one of ('we', 'peer', 'initiator', 'responder')
-        """
+        '''
         assert creator in ('we', 'peer', 'initiator', 'responder')
         if ((creator == 'we' and self.weinitiate) or
                 (creator == 'peer' and not self.weinitiate)):
@@ -282,11 +281,11 @@ class JingleSession:
                        name: str,
                        reason: Optional[nbxmpp.Node] = None
                        ) -> None:
-        """
+        '''
         Remove the content `name` created by `creator`
         by sending content-remove, or by sending session-terminate if
         there is no content left.
-        """
+        '''
         if (creator, name) in self.contents:
             content = self.contents[(creator, name)]
             self.__content_remove(content, reason)
@@ -345,23 +344,23 @@ class JingleSession:
                 self.__content_accept(content)
 
     def is_ready(self) -> bool:
-        """
+        '''
         Return True when all codecs and candidates are ready (for all contents)
-        """
+        '''
         ready = [content.is_ready() for content in self.contents.values()]
         return all(ready) and self.accepted
 
     def accept_session(self) -> None:
-        """
+        '''
         Mark the session as accepted
-        """
+        '''
         self.accepted = True
         self.on_session_state_changed()
 
     def start_session(self) -> None:
-        """
+        '''
         Mark the session as ready to be started
-        """
+        '''
         self.accepted = True
         self.on_session_state_changed()
 
@@ -388,11 +387,11 @@ class JingleSession:
         self.connection.connection.send(stanza)
 
     def on_stanza(self, stanza: nbxmpp.Node) -> None:
-        """
+        '''
         A callback for ConnectionJingle. It gets stanza, then tries to send
         it to all internally registered callbacks. First one to raise
         nbxmpp.NodeProcessed breaks function
-        """
+        '''
         jingle = stanza.getTag('jingle')
         error = stanza.getTag('error')
         if error:
@@ -434,9 +433,9 @@ class JingleSession:
               error: Optional[nbxmpp.Node],
               action: str
               ) -> None:
-        """
+        '''
         Default callback for action stanzas -- simple ack and stop processing
-        """
+        '''
         response = stanza.buildReply('result')
         response.delChild(response.getQuery())
         self.connection.connection.send(response)
@@ -584,10 +583,10 @@ class JingleSession:
                             error: Optional[nbxmpp.Node],
                             action: str
                             ) -> None:
-        """
+        '''
         Called when we get content-accept stanza or equivalent one (like
         session-accept)
-        """
+        '''
         # check which contents are accepted
         # for content in jingle.iterTags('content'):
         #     creator = content['creator']
@@ -618,10 +617,10 @@ class JingleSession:
                               error: Optional[nbxmpp.Node],
                               action: str
                               ) -> None:
-        """
+        '''
         We got a jingle session request from other entity, therefore we are the
         receiver... Unpack the data, inform the user
-        """
+        '''
         if self.state != JingleStates.ENDED:
             raise OutOfOrder
 
@@ -715,9 +714,9 @@ class JingleSession:
                     error: Optional[nbxmpp.Node],
                     action: str
                     ) -> None:
-        """
+        '''
         Broadcast the stanza contents to proper content handlers
-        """
+        '''
         # if jingle is None: # it is a iq-result stanza
         #    for cn in self.contents.values():
         #        cn.on_stanza(stanza, None, error, action)
@@ -776,9 +775,9 @@ class JingleSession:
                         error: Optional[nbxmpp.Node],
                         action: str
                         ) -> None:
-        """
+        '''
         Broadcast the stanza to all content handlers
-        """
+        '''
         for content in self.contents.values():
             content.on_stanza(stanza, None, error, action)
 
@@ -890,18 +889,18 @@ class JingleSession:
 
     @staticmethod
     def __append_content(jingle: nbxmpp.Node, content: JingleContent) -> None:
-        """
+        '''
         Append <content/> element to <jingle/> element
-        """
+        '''
         jingle.addChild('content',
                         attrs={'name': content.name,
                                'creator': content.creator,
                                'senders': content.senders})
 
     def __append_contents(self, jingle: nbxmpp.Node) -> None:
-        """
+        '''
         Append all <content/> elements to <jingle/>
-        """
+        '''
         # TODO: integrate with __appendContent?
         # TODO: parameters 'name', 'content'?
         for content in self.contents.values():

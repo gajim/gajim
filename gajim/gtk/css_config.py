@@ -42,7 +42,7 @@ settings = Gtk.Settings.get_default()
 
 class CSSConfig:
     def __init__(self) -> None:
-        """
+        '''
         CSSConfig handles loading and storing of all relevant Gajim style files
 
         The order in which CSSConfig loads the styles
@@ -70,7 +70,7 @@ class CSSConfig:
 
         These are the themes the Themes Dialog stores. Because they are
         loaded at last they overwrite everything else. Users should add custom
-        css here."""
+        css here.'''
 
         # Delete empty rules
         css_parser.ser.prefs.keepEmptyRules = False
@@ -165,7 +165,7 @@ class CSSConfig:
                             ) -> None:
         path = configpaths.get('STYLE') / filename
         try:
-            with open(path, "r", encoding='utf8') as file_:
+            with open(path, 'r', encoding='utf8') as file_:
                 css = file_.read()
         except Exception as exc:
             log.error('Error loading css: %s', exc)

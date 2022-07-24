@@ -31,10 +31,10 @@ log = logging.getLogger('gajim.gui.adhoc_muc')
 
 class AdhocMUC(Gtk.ApplicationWindow):
     def __init__(self, account, contact, preselected=None):
-        """
+        '''
         This window is used to transform a one-to-one chat to a MUC. We do 2
         things: first select the server and then make a guests list
-        """
+        '''
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)

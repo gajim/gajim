@@ -14,7 +14,7 @@ FLATPAK = REPO_DIR / 'flatpak' / 'org.gajim.Gajim.yaml'
 APPDATA = REPO_DIR / 'data' / 'org.gajim.Gajim.appdata.xml.in'
 CHANGELOG = REPO_DIR / 'ChangeLog'
 
-VERSION_RX = r"\d+\.\d+\.\d+"
+VERSION_RX = r'\d+\.\d+\.\d+'
 
 
 def get_current_version() -> str:

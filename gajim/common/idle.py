@@ -360,9 +360,9 @@ class IdleMonitorManager(GObject.Object):
         return self._idle_monitor.get_idle_sec()
 
     def _poll(self) -> bool:
-        """
+        '''
         Check to see if we should change state
-        """
+        '''
         assert self._idle_monitor is not None
 
         if self._idle_monitor.is_extended_away():

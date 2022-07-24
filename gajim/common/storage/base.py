@@ -207,10 +207,10 @@ class SqliteStorage:
         raise NotImplementedError
 
     def _execute_multiple(self, statements: list[str]) -> None:
-        """
+        '''
         Execute multiple statements with the option to fail on duplicates
         but still continue
-        """
+        '''
         for sql in statements:
             try:
                 self._con.execute(sql)

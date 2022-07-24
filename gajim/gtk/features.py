@@ -114,7 +114,7 @@ class Features(Gtk.ApplicationWindow):
                     None),
             Feature(_('Automatic Status'),
                     self._idle_available(),
-                    _('Enables Gajim to measure your computer\'s idle time in '
+                    _("Enables Gajim to measure your computer's idle time in "
                       'order to set your Status automatically'),
                     _('Requires: libxss'),
                     _('No additional requirements'),

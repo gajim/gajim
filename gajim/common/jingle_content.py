@@ -12,9 +12,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-"""
-Handles Jingle contents (XEP 0166)
-"""
+
+# Handles Jingle contents (XEP 0166)
+
 
 from __future__ import annotations
 
@@ -46,15 +46,15 @@ def get_jingle_content(node: nbxmpp.Node):
 
 
 class JingleContentSetupException(Exception):
-    """
+    '''
     Exception that should be raised when a content fails to setup.
-    """
+    '''
 
 
 class JingleContent:
-    """
+    '''
     An abstraction of content in Jingle sessions
-    """
+    '''
 
     def __init__(self,
                  session: JingleSession,
@@ -136,9 +136,9 @@ class JingleContent:
             self.session.content_negotiated(self.media)
 
     def add_remote_candidates(self, candidates):
-        """
+        '''
         Add a list of candidates to the list of remote candidates
-        """
+        '''
         self.transport.remote_candidates = candidates
 
     def on_stanza(self,
@@ -147,9 +147,9 @@ class JingleContent:
                   error: Optional[nbxmpp.Node],
                   action: str
                   ) -> None:
-        """
+        '''
         Called when something related to our content was sent by peer
-        """
+        '''
         if action in self.callbacks:
             for callback in self.callbacks[action]:
                 callback(stanza, content, error, action)
@@ -168,9 +168,9 @@ class JingleContent:
                             error: Optional[nbxmpp.Node],
                             action: str
                             ) -> None:
-        """
+        '''
         Got a new transport candidate
-        """
+        '''
         candidates = self.transport.parse_transport_stanza(
             content.getTag('transport'))
         if candidates:
@@ -179,9 +179,9 @@ class JingleContent:
     def __content(self,
                   payload: Optional[list[nbxmpp.Node]] = None
                   ) -> nbxmpp.Node:
-        """
+        '''
         Build a XML content-wrapper for our data
-        """
+        '''
         if payload is None:
             payload = []
         return nbxmpp.Node('content',
@@ -191,17 +191,17 @@ class JingleContent:
                            payload=payload)
 
     def send_candidate(self, candidate: dict[str, Any]) -> None:
-        """
+        '''
         Send a transport candidate for a previously defined transport.
-        """
+        '''
         content = self.__content()
         content.addChild(node=self.transport.make_transport([candidate]))
         self.session.send_transport_info(content)
 
     def send_error_candidate(self) -> None:
-        """
+        '''
         Sends a candidate-error when we can't connect to a candidate.
-        """
+        '''
         content = self.__content()
         tp = self.transport.make_transport(add_candidates=False)
         tp.addChild(name='candidate-error')
@@ -219,9 +219,9 @@ class JingleContent:
                              error: Optional[nbxmpp.Node],
                              action: str
                              ) -> None:
-        """
+        '''
         Add our things to session-initiate stanza
-        """
+        '''
         self._fill_content(content)
         self.sent = True
         content.addChild(node=self.transport.make_transport())

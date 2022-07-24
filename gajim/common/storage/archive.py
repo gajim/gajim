@@ -1164,7 +1164,7 @@ class MessageArchiveStorage(SqliteStorage):
             if not kwargs['additional_data']:
                 del kwargs['additional_data']
             else:
-                serialized_dict = json.dumps(kwargs["additional_data"].data)
+                serialized_dict = json.dumps(kwargs['additional_data'].data)
                 kwargs['additional_data'] = serialized_dict
 
         sql = '''

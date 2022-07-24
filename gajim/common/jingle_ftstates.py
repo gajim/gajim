@@ -118,7 +118,7 @@ class StateCandReceived(JingleFileTransferStates):
                 streamhost_used = cand
                 break
         if streamhost_used is None:
-            log.info("unknown streamhost")
+            log.info('unknown streamhost')
             return
         # We save the candidate nominated by peer
         self.jft.nominated_cand['peer-cand'] = streamhost_used

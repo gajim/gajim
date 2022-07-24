@@ -1,4 +1,4 @@
-"""
+'''
 This module is in charge of taking care of all the information related to
 individual files. Files are identified by the account name and its sid.
 
@@ -15,7 +15,7 @@ Exception: this class should not be instatiated
 >>> fp2 = FilesProp.getFileProp('jabberid', '10')
 >>> fp == fp2
 True
-"""
+'''
 
 from __future__ import annotations
 
@@ -173,6 +173,6 @@ class FileProp:
     sid = property(getsid, setsid)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     import doctest
     doctest.testmod()

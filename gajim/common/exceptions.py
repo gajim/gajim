@@ -19,9 +19,9 @@
 
 
 class GajimGeneralException(Exception):
-    """
+    '''
     This exception is our general exception
-    """
+    '''
 
     def __init__(self, text: str = '') -> None:
         Exception.__init__(self)
@@ -32,9 +32,9 @@ class GajimGeneralException(Exception):
 
 
 class PluginsystemError(Exception):
-    """
+    '''
     Error in the pluginsystem
-    """
+    '''
 
     def __init__(self, text: str = '') -> None:
         Exception.__init__(self)

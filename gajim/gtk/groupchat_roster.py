@@ -397,9 +397,9 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
                             iter2: Gtk.TreeIter,
                             _user_data: Optional[object]
                             ) -> int:
-        """
+        '''
         Compare two iterators to sort them
-        """
+        '''
         is_contact = model.iter_parent(iter1)
         if is_contact:
             # Sort contacts with pending events to top

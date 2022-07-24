@@ -203,7 +203,7 @@ class CoreApplication:
                                                     filename, lineno, line))
 
         warnings.showwarning = warn_with_traceback
-        warnings.filterwarnings(action="always")
+        warnings.filterwarnings(action='always')
 
     def _network_status_changed(self,
                                 monitor: Gio.NetworkMonitor,

@@ -132,11 +132,11 @@ class Interface:
         # pylint: enable=line-too-long
 
     def _register_core_handlers(self) -> None:
-        """
+        '''
         Register core handlers in Global Events Dispatcher (GED).
 
         This is part of rewriting whole events handling system to use GED.
-        """
+        '''
         for event_name, event_handlers in self.handlers.items():
             for event_handler in event_handlers:
                 prio = ged.GUI1
@@ -150,9 +150,9 @@ class Interface:
 
     @staticmethod
     def handle_event_signed_in(event):
-        """
+        '''
         SIGNED_IN event is emitted when we sign in, so handle it
-        """
+        '''
         # ('SIGNED_IN', account, ())
         # block signed in notifications for 30 seconds
 
@@ -540,9 +540,9 @@ class Interface:
             window.remove_account(account)
 
     def autoconnect(self) -> None:
-        """
+        '''
         Auto connect at startup
-        """
+        '''
 
         for account, con in app.connections.items():
             if not app.settings.get_account_setting(account, 'autoconnect'):
@@ -592,9 +592,9 @@ class Interface:
         client.change_status(status, message)
 
     def process_connections(self) -> bool:
-        """
+        '''
         Called each foo (200) milliseconds. Check for idlequeue timeouts
-        """
+        '''
         try:
             app.idlequeue.process()
         except Exception:
@@ -707,9 +707,9 @@ class Interface:
 
 class ThreadInterface:
     def __init__(self, func, func_args=(), callback=None, callback_args=()):
-        """
+        '''
         Call a function in a thread
-        """
+        '''
         def thread_function(func, func_args, callback, callback_args):
             output = func(*func_args)
             if callback:

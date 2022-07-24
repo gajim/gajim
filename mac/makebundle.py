@@ -7,8 +7,8 @@ from subprocess import run, check_output, CalledProcessError
 
 if __name__ == '__main__':
     if not os.path.isdir('mac'):
-        sys.exit("can't find the 'mac' directory. make sure you run "
-                 "this script from the project root")
+        sys.exit('Unable to find "mac" directory. make sure you run '
+                 'this script from the project root')
 
     parser = ArgumentParser(description='Create a macOS .app bundle. '
                             'Requires PyInstaller and hdiutil (macOS).')

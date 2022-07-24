@@ -132,10 +132,10 @@ def parse_jid(jidstring: str) -> str:
 
 
 def idn_to_ascii(host: str) -> str:
-    """
+    '''
     Convert IDN (Internationalized Domain Names) to ACE (ASCII-compatible
     encoding)
-    """
+    '''
     from encodings import idna
     labels = idna.dots.split(host)
     converted_labels: list[str] = []
@@ -144,26 +144,26 @@ def idn_to_ascii(host: str) -> str:
             converted_labels.append(idna.ToASCII(label).decode('utf-8'))
         else:
             converted_labels.append('')
-    return ".".join(converted_labels)
+    return '.'.join(converted_labels)
 
 
 def ascii_to_idn(host: str) -> str:
-    """
+    '''
     Convert ACE (ASCII-compatible encoding) to IDN (Internationalized Domain
     Names)
-    """
+    '''
     from encodings import idna
     labels = idna.dots.split(host)
     converted_labels: list[str] = []
     for label in labels:
         converted_labels.append(idna.ToUnicode(label))
-    return ".".join(converted_labels)
+    return '.'.join(converted_labels)
 
 
 def parse_resource(resource: str) -> Optional[str]:
-    """
+    '''
     Perform stringprep on resource and return it
-    """
+    '''
     if not resource:
         return None
 
@@ -304,9 +304,9 @@ def from_one_line(msg: str) -> str:
 
 
 def get_uf_chatstate(chatstate: str) -> str:
-    """
+    '''
     Remove chatstate jargon and returns user friendly messages
-    """
+    '''
     if chatstate == 'active':
         return _('is paying attention to the conversation')
     if chatstate == 'inactive':
@@ -325,11 +325,11 @@ def exec_command(command: str,
                  use_shell: bool = False,
                  posix: bool = True
                  ) -> None:
-    """
+    '''
     execute a command. if use_shell is True, we run the command as is it was
     typed in a console. So it may be dangerous if you are not sure about what
     is executed.
-    """
+    '''
     if use_shell:
         subprocess.Popen(f'{command} &', shell=True).wait()
     else:
@@ -360,10 +360,10 @@ def get_file_path_from_dnd_dropped_uri(uri: str) -> str:
 
 
 def sanitize_filename(filename: str) -> str:
-    """
+    '''
     Make sure the filename we will write does contain only acceptable and latin
     characters, and is not too long (in that case hash it)
-    """
+    '''
     # 48 is the limit
     if len(filename) > 48:
         hash_ = hashlib.md5(filename.encode('utf-8'))
@@ -386,10 +386,10 @@ def sanitize_filename(filename: str) -> str:
 
 
 def get_contact_dict_for_account(account: str) -> dict[str, types.BareContact]:
-    """
+    '''
     Creates a dict of jid -> contact with all contacts of account
     Can be used for completion lists
-    """
+    '''
     contacts_dict: dict[str, types.BareContact] = {}
     client = app.get_client(account)
     for contact in client.get_module('Roster').iter_contacts():
@@ -413,14 +413,14 @@ def play_sound(sound_event: str,
 def check_soundfile_path(file_: str,
                          dirs: Optional[list[Path]] = None
                          ) -> Optional[Path]:
-    """
+    '''
     Check if the sound file exists
 
     :param file_: the file to check, absolute or relative to 'dirs' path
     :param dirs: list of knows paths to fallback if the file doesn't exists
                                      (eg: ~/.gajim/sounds/, DATADIR/sounds...).
     :return      the path to file or None if it doesn't exists.
-    """
+    '''
     if not file_:
         return None
     if Path(file_).exists():
@@ -440,7 +440,7 @@ def check_soundfile_path(file_: str,
 def strip_soundfile_path(file_: Union[Path, str],
                          dirs: Optional[list[Path]] = None,
                          abs_: bool = True):
-    """
+    '''
     Remove knowns paths from a sound file
 
     Filechooser returns an absolute path.
@@ -450,7 +450,7 @@ def strip_soundfile_path(file_: Union[Path, str],
     param: file_: the filename to strip
     param: dirs: list of knowns paths from which the filename should be stripped
     param: abs_: force absolute path on dirs
-    """
+    '''
 
     if not file_:
         return None
@@ -520,9 +520,9 @@ def get_global_status_message() -> str:
 
 
 def statuses_unified() -> bool:
-    """
+    '''
     Test if all statuses are the same
-    """
+    '''
     reference = None
     for account in app.connections:
         if not app.settings.get_account_setting(account,
@@ -538,9 +538,9 @@ def statuses_unified() -> bool:
 
 
 def get_full_jid_from_iq(iq_obj: Iq) -> Optional[str]:
-    """
+    '''
     Return the full jid (with resource) from an iq
-    """
+    '''
     jid = iq_obj.getFrom()
     if jid is None:
         return None
@@ -548,9 +548,9 @@ def get_full_jid_from_iq(iq_obj: Iq) -> Optional[str]:
 
 
 def get_jid_from_iq(iq_obj: Iq) -> Optional[str]:
-    """
+    '''
     Return the jid (without resource) from an iq
-    """
+    '''
     jid = get_full_jid_from_iq(iq_obj)
     if jid is None:
         return None
@@ -558,9 +558,9 @@ def get_jid_from_iq(iq_obj: Iq) -> Optional[str]:
 
 
 def get_auth_sha(sid: str, initiator: str, target: str) -> str:
-    """
+    '''
     Return sha of sid + initiator + target used for proxy auth
-    """
+    '''
     return hashlib.sha1(
         (f'{sid}{initiator}{target}').encode('utf-8')).hexdigest()
 
@@ -572,11 +572,11 @@ def remove_invalid_xml_chars(string_: str) -> str:
 
 
 def get_random_string(count: int = 16) -> str:
-    """
+    '''
     Create random string of count length
 
     WARNING: Don't use this for security purposes
-    """
+    '''
     allowed = string.ascii_uppercase + string.digits
     return ''.join(random.choice(allowed) for char in range(count))
 
@@ -597,10 +597,10 @@ def get_os_info() -> str:
 
 
 def message_needs_highlight(text: str, nickname: str, own_jid: str) -> bool:
-    """
+    '''
     Check text to see whether any of the words in (muc_highlight_words and
     nick) appear
-    """
+    '''
     special_words = app.settings.get('muc_highlight_words').split(';')
     special_words.append(nickname)
     special_words.append(own_jid)
@@ -1060,10 +1060,10 @@ def open_file(path: Union[str, Path]) -> None:
 
 
 def file_is_locked(path_to_file: str) -> bool:
-    """
+    '''
     Return True if file is locked
     NOTE: Windows only.
-    """
+    '''
     if os.name != 'nt':
         return False
 

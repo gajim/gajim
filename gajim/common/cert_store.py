@@ -51,7 +51,7 @@ class CertificateStore:
             try:
                 cert = Gio.TlsCertificate.new_from_file(str(path))
             except GLib.Error as error:
-                log.warning('Can\'t load certificate: %s, %s', path, error)
+                log.warning("Can't load certificate: %s, %s", path, error)
                 continue
 
             log.info('Loaded: %s', path.stem)
@@ -91,7 +91,7 @@ class CertificateStore:
                                        error: Optional[GLib.Error],
                                        path: Path):
         if error is not None:
-            log.error('Can\'t store certificate: %s', error.message)
+            log.error("Can't store certificate: %s", error.message)
             return
 
         log.info('Certificate stored: %s', path)

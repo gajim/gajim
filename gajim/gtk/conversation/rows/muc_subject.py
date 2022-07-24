@@ -56,7 +56,7 @@ class MUCSubject(BaseRow):
 
         date = ''
         if subject.timestamp is not None:
-            time_str = time.strftime("%c", time.localtime(subject.timestamp))
+            time_str = time.strftime('%c', time.localtime(subject.timestamp))
             date = f' ({time_str})'
 
         meta_str = f'{author}{date}'

@@ -39,14 +39,14 @@ UPDATE_CHECK_INTERVAL = 68400
 
 
 class PluginRepository(Observable):
-    """Signals
+    '''Signals
 
         - donwload-started
         - download-finished
         - download-failed
         - plugin-updates-available
         - auto-update-finished
-    """
+    '''
     def __init__(self) -> None:
         Observable.__init__(self)
         self._manifests: dict[str, PluginManifest] = {}

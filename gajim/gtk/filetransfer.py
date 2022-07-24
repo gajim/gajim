@@ -327,9 +327,9 @@ class FileTransfersWindow:
         return value
 
     def find_transfer_by_jid(self, account, jid):
-        """
+        '''
         Find all transfers with peer 'jid' that belong to 'account'
-        """
+        '''
         active_transfers = [[], []]  # ['senders', 'receivers']
         allfp = FilesProp.getAllFileProp()
         for file_props in allfp:
@@ -417,9 +417,9 @@ class FileTransfersWindow:
                   file_path: str,
                   file_desc: str = ''
                   ) -> bool:
-        """
+        '''
         Start the real transfer(upload) of the file
-        """
+        '''
         if file_is_locked(file_path):
             pritext = _('Gajim can not read this file')
             sextext = _('Another process is using this file.')
@@ -482,7 +482,7 @@ class FileTransfersWindow:
                     file_name = GLib.markup_escape_text(
                         os.path.basename(file_path))
                     ErrorDialog(
-                        _('Cannot overwrite existing file \'%s\'') % file_name,
+                        _('Cannot overwrite existing file "%s"') % file_name,
                         _('A file with this name already exists and you do '
                           'not have permission to overwrite it.'))
                     return
@@ -494,7 +494,7 @@ class FileTransfersWindow:
                 # windows, not to mark that a folder is read-only.
                 # See ticket #3587
                 ErrorDialog(
-                    _('Directory \'%s\' is not writable') % dirname,
+                    _('Directory "%s" is not writable') % dirname,
                     _('You do not have permissions to create files '
                       'in this directory.'))
                 return
@@ -511,9 +511,9 @@ class FileTransfersWindow:
                        file_name=file_props.name)
 
     def set_status(self, file_props, status):
-        """
+        '''
         Change the status of a transfer to state 'status'
-        """
+        '''
         iter_ = self.get_iter_by_sid(file_props.type_, file_props.sid)
         if iter_ is None:
             return
@@ -558,10 +558,10 @@ class FileTransfersWindow:
         self._select_func(path)
 
     def _format_percent(self, percent):
-        """
+        '''
         Add extra spaces from both sides of the percent, so that progress
         string has always a fixed size
-        """
+        '''
         _str = '          '
         if percent != 100.:
             _str += ' '
@@ -616,9 +616,9 @@ class FileTransfersWindow:
             event.file_props.received_len)
 
     def set_progress(self, typ, sid, transfered_size, iter_=None):
-        """
+        '''
         Change the progress of a transfer with new transfered size
-        """
+        '''
         if time.time() - self._last_progress_update < 0.5:
             # Update window every 500ms only
             return
@@ -697,10 +697,10 @@ class FileTransfersWindow:
                 self._select_func(path)
 
     def get_iter_by_sid(self, typ, sid):
-        """
+        '''
         Return iter to the row, which holds file transfer, identified by the
         session id
-        """
+        '''
         iter_ = self.model.get_iter_first()
         while iter_:
             if typ + sid == self.model[iter_][Column.SID]:
@@ -720,10 +720,10 @@ class FileTransfersWindow:
                             file_name: str,
                             file_desc: str = ''
                             ) -> Optional[FileProp]:
-        """
+        '''
         Create new file_props object and set initial file transfer
         properties in it
-        """
+        '''
         if os.path.isfile(file_path):
             stat = os.stat(file_path)
         else:
@@ -755,9 +755,9 @@ class FileTransfersWindow:
         return file_props
 
     def add_transfer(self, account, contact, file_props):
-        """
+        '''
         Add new transfer to FT window and show the FT window
-        """
+        '''
         if file_props is None:
             return
 
@@ -799,19 +799,19 @@ class FileTransfersWindow:
         self._on_open_folder_menuitem_activate(widget)
 
     def _set_cleanup_sensitivity(self):
-        """
+        '''
         Check if there are transfer rows and set cleanup_button sensitive, or
         insensitive if model is empty
-        """
+        '''
         if not self.model:
             self._ui.cleanup_button.set_sensitive(False)
         else:
             self._ui.cleanup_button.set_sensitive(True)
 
     def _set_all_insensitive(self):
-        """
+        '''
         Make all buttons/menuitems insensitive
-        """
+        '''
         self._ui.pause_resume_button.set_sensitive(False)
         self._ui.pause_resume_menuitem.set_sensitive(False)
         self._ui.remove_menuitem.set_sensitive(False)
@@ -821,10 +821,10 @@ class FileTransfersWindow:
         self._set_cleanup_sensitivity()
 
     def _set_buttons_sensitive(self, path, is_row_selected):
-        """
+        '''
         Make buttons/menuitems sensitive as appropriate to the state of file
         transfer located at path 'path'
-        """
+        '''
         if path is None:
             self._set_all_insensitive()
             return
@@ -861,9 +861,9 @@ class FileTransfersWindow:
         return True
 
     def _selection_changed(self, args):
-        """
+        '''
         Selection has changed - change the sensitivity of the buttons/menuitems
-        """
+        '''
         selection = args
         selected = selection.get_selected_rows()
         if selected[1] != []:
@@ -974,9 +974,9 @@ class FileTransfersWindow:
             event.time)
 
     def _on_transfers_list_key_press_event(self, widget, event):
-        """
+        '''
         When a key is pressed in the treeviews
-        """
+        '''
         iter_ = None
         try:
             iter_ = self._ui.transfers_list.get_selection().get_selected()[1]

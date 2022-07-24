@@ -27,9 +27,9 @@ from .builder import get_builder
 
 
 class RosterItemExchange(Gtk.ApplicationWindow):
-    """
+    '''
     Used when someone sends a Roster Item Exchange suggestion (XEP-0144)
-    """
+    '''
     def __init__(self,
                  account: str,
                  action: str,

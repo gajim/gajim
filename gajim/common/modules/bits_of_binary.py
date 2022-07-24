@@ -71,9 +71,9 @@ class BitsOfBinary(BaseModule):
                          result: Iq,
                          cid: str
                          ) -> None:
-        """
+        '''
         Called when we receive BoB data
-        """
+        '''
         if cid not in self.awaiting_cids:
             return
 
@@ -112,11 +112,11 @@ class BitsOfBinary(BaseModule):
                      args: Any,
                      position: int
                      ) -> None:
-        """
+        '''
         Request for BoB (XEP-0231) and when data will arrive, call callback
         with given args, after having replaced cid by it's data in
         args[position]
-        """
+        '''
         if cid in self.awaiting_cids:
             self.awaiting_cids[cid].appends((callback, args, position))
         else:

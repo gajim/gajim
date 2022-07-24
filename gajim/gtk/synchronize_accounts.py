@@ -87,9 +87,9 @@ class SynchronizeAccounts(Gtk.ApplicationWindow):
             self.destroy()
 
     def _init_accounts(self) -> None:
-        """
+        '''
         Initialize listStore with existing accounts
-        """
+        '''
         model = self._ui.accounts_treeview.get_model()
         assert isinstance(model, Gtk.ListStore)
         model.clear()

@@ -63,9 +63,9 @@ class Interface:
 
 
 class SecretPasswordStorage:
-    """
+    '''
     Store password using Keyring
-    """
+    '''
 
     @staticmethod
     def save_password(account_name: str, password: str) -> bool:
@@ -112,9 +112,9 @@ class SecretPasswordStorage:
 
 
 class ConfigPasswordStorage:
-    """
+    '''
     Store password directly in Gajim's config
-    """
+    '''
 
     @staticmethod
     def get_password(account_name: str) -> str:

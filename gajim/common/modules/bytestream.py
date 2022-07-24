@@ -140,15 +140,15 @@ class Bytestream(BaseModule):
         return helpers.parse_jid(streamhost.getAttr('jid'))
 
     def send_file_approval(self, file_props: FileProp) -> None:
-        """
+        '''
         Send iq, confirming that we want to download the file
-        """
+        '''
         # user response to ConfirmationDialog may come after we've disconnected
         if not app.account_is_available(self._account):
             return
 
         # file transfer initiated by a jingle session
-        log.info("send_file_approval: jingle session accept")
+        log.info('send_file_approval: jingle session accept')
 
         session = self._con.get_module('Jingle').get_jingle_session(
             file_props.sender, file_props.sid)
@@ -180,12 +180,12 @@ class Bytestream(BaseModule):
         session.approve_content('file', content.name)
 
     def send_file_rejection(self, file_props: FileProp) -> None:
-        """
+        '''
         Inform sender that we refuse to download the file
 
         typ is used when code = '400', in this case typ can be 'stream' for
         invalid stream or 'profile' for invalid profile
-        """
+        '''
         # user response to ConfirmationDialog may come after we've disconnected
         if not app.account_is_available(self._account):
             return
@@ -197,9 +197,9 @@ class Bytestream(BaseModule):
     def send_success_connect_reply(self,
                                    streamhost: Optional[dict[str, Any]]
                                    ) -> None:
-        """
+        '''
         Send reply to the initiator of FT that we made a connection
-        """
+        '''
         if not app.account_is_available(self._account):
             return
         if streamhost is None:
@@ -214,9 +214,9 @@ class Bytestream(BaseModule):
         self._con.connection.send(iq)
 
     def stop_all_active_file_transfers(self, contact: types.ChatContactT):
-        """
+        '''
         Stop all active transfer to or from the given contact
-        """
+        '''
         for file_props in FilesProp.getAllFileProp():
             if is_transfer_stopped(file_props):
                 continue
@@ -236,9 +236,9 @@ class Bytestream(BaseModule):
                 self.remove_transfer(file_props)
 
     def remove_all_transfers(self) -> None:
-        """
+        '''
         Stop and remove all active connections from the socks5 pool
-        """
+        '''
         for file_props in FilesProp.getAllFileProp():
             self.remove_transfer(file_props)
 
@@ -261,9 +261,9 @@ class Bytestream(BaseModule):
                     app.socks5queue.remove_sender(host['idx'])
 
     def _send_socks5_info(self, file_props: FileProp) -> None:
-        """
+        '''
         Send iq for the present streamhosts and proxies
-        """
+        '''
         if not app.account_is_available(self._account):
             return
         receiver = file_props.receiver
@@ -521,9 +521,9 @@ class Bytestream(BaseModule):
 
     @staticmethod
     def _result_socks5_sid(sid: str, hash_id: str) -> None:
-        """
+        '''
         Store the result of SHA message from auth
-        """
+        '''
         file_props = FilesProp.getFilePropBySid(sid)
         file_props.hash_ = hash_id
 
@@ -533,10 +533,10 @@ class Bytestream(BaseModule):
                        error_type: str,
                        msg: Optional[str] = None
                        ) -> None:
-        """
+        '''
         Called when there is an error establishing BS connection, or when
         connection is rejected
-        """
+        '''
         if not app.account_is_available(self._account):
             return
         file_props = FilesProp.getFileProp(self._account, sid)
@@ -563,14 +563,14 @@ class Bytestream(BaseModule):
                                  error_msg=msg))
 
     def _proxy_auth_ok(self, proxy: dict[str, Any]) -> None:
-        """
+        '''
         Called after authentication to proxy server
-        """
+        '''
         if not app.account_is_available(self._account):
             return
         file_props = FilesProp.getFileProp(self._account, proxy['sid'])
         iq = nbxmpp.Iq(to=proxy['initiator'], typ='set')
-        auth_id = "au_" + proxy['sid']
+        auth_id = 'au_' + proxy['sid']
         iq.setID(auth_id)
         query = iq.setTag('query', namespace=Namespace.BYTESTREAM)
         query.setAttr('sid', proxy['sid'])

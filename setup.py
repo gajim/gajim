@@ -40,7 +40,7 @@ ALL_LINGUAS = sorted([lang.stem for lang in TRANS_DIR.glob('*.po')])
 
 def newer(source: Path, target: Path) -> bool:
     if not source.exists():
-        raise ValueError("file '%s' does not exist" % source.resolve())
+        raise ValueError('file "%s" does not exist' % source.resolve())
     if not target.exists():
         return True
 
@@ -172,10 +172,10 @@ class install(_install):
 
 # only install subdirectories of data
 data_files_app_icon = [
-    ("share/icons/hicolor/scalable/apps",
-     ["gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim.svg"]),
-    ("share/icons/hicolor/scalable/apps",
-     ["gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim-symbolic.svg"])
+    ('share/icons/hicolor/scalable/apps',
+     ['gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim.svg']),
+    ('share/icons/hicolor/scalable/apps',
+     ['gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim-symbolic.svg'])
 ]
 
 data_files: DataFilesT = data_files_app_icon

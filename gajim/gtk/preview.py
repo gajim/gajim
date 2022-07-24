@@ -251,7 +251,7 @@ class PreviewWidget(Gtk.Box):
             dirname = target_path.parent
             if not os.access(dirname, os.W_OK):
                 ErrorDialog(
-                    _('Directory \'%s\' is not writable') % dirname,
+                    _('Directory "%s" is not writable') % dirname,
                     _('You do not have the proper permissions to '
                       'create files in this directory.'),
                     transient_for=app.app.get_active_window())

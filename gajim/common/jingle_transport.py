@@ -12,9 +12,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-"""
-Handles Jingle Transports (currently only ICE-UDP)
-"""
+
+# Handles Jingle Transports (currently only ICE-UDP)
+
 
 from __future__ import annotations
 
@@ -53,18 +53,18 @@ def get_jingle_transport(node: nbxmpp.Node):
 
 @unique
 class TransportType(IntEnum):
-    """
+    '''
     Possible types of a JingleTransport
-    """
+    '''
     ICEUDP = 1
     SOCKS5 = 2
     IBB = 3
 
 
 class JingleTransport:
-    """
+    '''
     An abstraction of a transport in Jingle sessions
-    """
+    '''
 
     __slots__ = ['type_', 'candidates', 'remote_candidates', 'connection',
                  'file_props', 'ourjid', 'sid']
@@ -84,17 +84,17 @@ class JingleTransport:
             yield self.make_candidate(candidate)
 
     def make_candidate(self, candidate: dict[str, Any]) -> Any:
-        """
+        '''
         Build a candidate stanza for the given candidate
-        """
+        '''
 
     def make_transport(self,
                        candidates: Optional[list[dict[str, Any]]] = None
                        ) -> nbxmpp.Node:
-        """
+        '''
         Build a transport stanza with the given candidates (or self.candidates
         if candidates is None)
-        """
+        '''
         if not candidates:
             candidates = list(self._iter_candidates())
         else:
@@ -104,9 +104,9 @@ class JingleTransport:
         return transport
 
     def parse_transport_stanza(self, transport: nbxmpp.Node) -> list[Any]:
-        """
+        '''
         Return the list of transport candidates from a transport stanza
-        """
+        '''
         return []
 
     def set_connection(self, conn: Client) -> None:
@@ -125,10 +125,10 @@ class JingleTransport:
 
 
 class JingleTransportSocks5(JingleTransport):
-    """
+    '''
     Socks5 transport in jingle scenario
     Note: Don't forget to call set_file_props after initialization
-    """
+    '''
     def __init__(self, node: Optional[nbxmpp.Node] = None) -> None:
         JingleTransport.__init__(self, TransportType.SOCKS5)
         self.connection = None
@@ -368,7 +368,7 @@ class JingleTransportSocks5(JingleTransport):
             return
 
         iq = nbxmpp.Iq(to=proxy['jid'], frm=self.ourjid, typ='set')
-        auth_id = "au_" + proxy['sid']
+        auth_id = 'au_' + proxy['sid']
         iq.setID(auth_id)
         query = iq.setTag('query', namespace=Namespace.BYTESTREAM)
         query.setAttr('sid', proxy['sid'])

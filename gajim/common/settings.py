@@ -240,7 +240,7 @@ class Settings:
     def _namedtuple_factory(cursor: sqlite3.Cursor,
                             row: tuple[Any, ...]) -> NamedTuple:
         fields = [col[0] for col in cursor.description]
-        return namedtuple("Row", fields)(*row)  # type: ignore
+        return namedtuple('Row', fields)(*row)  # type: ignore
 
     def _connect_database(self) -> None:
         path = configpaths.get('SETTINGS')

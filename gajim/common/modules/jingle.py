@@ -12,9 +12,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-"""
-Handles the jingle signalling protocol
-"""
+
+# Handles the jingle signalling protocol
+
 
 # TODO:
 # * things in XEP 0176, including:
@@ -90,9 +90,9 @@ class Jingle(BaseModule):
         self.files: list[dict[str, Any]] = []
 
     def delete_jingle_session(self, sid: str) -> None:
-        """
+        '''
         Remove a jingle session from a jingle stanza dispatcher
-        """
+        '''
         if sid in self._sessions:
             # FIXME: Move this elsewhere?
             for content in list(self._sessions[sid].contents.values()):
@@ -125,7 +125,7 @@ class Jingle(BaseModule):
                       stanza: Iq,
                       _properties: IqProperties
                       ) -> None:
-        """
+        '''
         The jingle stanza dispatcher
 
         Route jingle stanza to proper JingleSession object, or create one if it
@@ -133,7 +133,7 @@ class Jingle(BaseModule):
 
         TODO: Also check if the stanza isn't an error stanza, if so route it
         adequately.
-        """
+        '''
         # get data
         try:
             jid = helpers.get_full_jid_from_iq(stanza)
@@ -234,7 +234,7 @@ class Jingle(BaseModule):
                             file_props: FileProp,
                             request: bool = False
                             ) -> Optional[str]:
-        logger.info("start file transfer with file: %s", file_props)
+        logger.info('start file transfer with file: %s', file_props)
         contact = self._con.get_module('Contacts').get_contact(jid)
         use_security = contact.supports(Namespace.JINGLE_XTLS)
         jingle = JingleSession(self._con,

@@ -104,12 +104,12 @@ class GroupChatNickCompletion:
                               nicks: list[str],
                               beginning: str
                               ) -> list[str]:
-        """
+        '''
         Generate the order of suggested MUC autocompletions
 
         `nicks` is the list of contacts currently participating in a MUC
         `beginning` is the text already typed by the user
-        """
+        '''
         def _nick_matching(nick: str) -> bool:
             return (nick != self._contact.nickname and
                     nick.lower().startswith(beginning.lower()))

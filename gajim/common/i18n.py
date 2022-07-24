@@ -87,10 +87,10 @@ def get_darwin_default_lang() -> str:
 
 
 def get_default_lang() -> str:
-    if sys.platform == "win32":
+    if sys.platform == 'win32':
         return get_win32_default_lang()
 
-    if sys.platform == "darwin":
+    if sys.platform == 'darwin':
         return get_darwin_default_lang()
 
     return locale.getdefaultlocale()[0] or 'en'
@@ -118,12 +118,12 @@ def initialize_direction_mark() -> None:
 
 
 def paragraph_direction_mark(text: str) -> str:
-    """
+    '''
     Determine paragraph writing direction according to
     http://www.unicode.org/reports/tr9/#The_Paragraph_Level
 
     Returns either Unicode LTR mark or RTL mark.
-    """
+    '''
     for char in text:
         bidi = unicodedata.bidirectional(char)
         if bidi == 'L':
@@ -135,7 +135,7 @@ def paragraph_direction_mark(text: str) -> str:
 
 
 def Q_(text: str) -> str:
-    """
+    '''
     Translate the given text, optionally qualified with a special
     construction, which will help translators to disambiguate between
     same terms, but in different contexts.
@@ -148,7 +148,7 @@ def Q_(text: str) -> str:
 
     Everything between ? and : - is the qualifier to convey the context
     to the translators. Everything after : - is the text itself.
-    """
+    '''
     text = _(text)
     if text.startswith('?'):
         text = text.split(':', 1)[1]
@@ -164,13 +164,13 @@ def ngettext(s_sing: str,
              n: int,
              replace_sing: Optional[str] = None,
              replace_plural: Optional[str] = None) -> str:
-    """
+    '''
     Use as:
         i18n.ngettext(
             'leave room %s', 'leave rooms %s', len(rooms), 'a', 'a, b, c')
 
     In other words this is a hack to ngettext() to support %s %d etc..
-    """
+    '''
     text = _translation.ngettext(s_sing, s_plural, n)
     if n == 1 and replace_sing is not None:
         text = text % replace_sing

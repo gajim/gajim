@@ -349,10 +349,10 @@ class Client(Observable):
                                            stanza=stanza))
 
     def get_own_jid(self) -> JID:
-        """
+        '''
         Return the last full JID we received on a bind event.
         In case we were never connected it returns the bare JID from config.
-        """
+        '''
         if self._client is not None:
             jid = self._client.get_bound_jid()
             if jid is not None:
@@ -381,7 +381,7 @@ class Client(Observable):
                 helpers.to_one_line(message))
 
         if self._state.is_disconnecting:
-            log.warning('Can\'t change status while '
+            log.warning("Can\'t change status while "
                         'disconnect is in progress')
             return
 
@@ -472,9 +472,9 @@ class Client(Observable):
         modules.send_stored_publish(self._account)
 
     def send_stanza(self, stanza: Any) -> None:
-        """
+        '''
         Send a stanza untouched
-        """
+        '''
         return self._client.send_stanza(stanza)
 
     def send_message(self, message: OutgoingMessage) -> None:
@@ -570,7 +570,7 @@ class Client(Observable):
 
     def _schedule_reconnect(self) -> None:
         self._set_state(ClientState.RECONNECT_SCHEDULED)
-        log.info("Reconnect to %s in 3s", self._account)
+        log.info('Reconnect to %s in 3s', self._account)
         self._reconnect_timer_source = GLib.timeout_add_seconds(
             3, self._prepare_for_connect)
 

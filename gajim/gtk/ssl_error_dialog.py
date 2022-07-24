@@ -60,7 +60,7 @@ class SSLErrorDialog(Gtk.ApplicationWindow):
             _('There was an error while attempting to verify the SSL '
               'certificate of your XMPP server (%s).') % self._server)
 
-        unknown_error = _('Unknown SSL error \'%s\'') % self._error
+        unknown_error = _('Unknown SSL error "%s"') % self._error
         ssl_error = GIO_TLS_ERRORS.get(self._error, unknown_error)
         self._ui.ssl_error.set_text(ssl_error)
 

@@ -50,14 +50,14 @@ DEFAULT_DH_PARAMS = 'dh4096.pem'
 
 
 def default_callback(connection, certificate, error_num, depth, return_code):
-    log.info("certificate: %s", certificate)
+    log.info('certificate: %s', certificate)
     return return_code
 
 
 def load_cert_file(cert_path, cert_store=None):
-    """
+    '''
     This is almost identical to the one in nbxmpp.tls_nb
-    """
+    '''
     if not cert_path.is_file():
         return None
     try:
@@ -92,9 +92,9 @@ def load_cert_file(cert_path, cert_store=None):
 
 
 def get_context(fingerprint, verify_cb=None, remote_jid=None):
-    """
+    '''
     constructs and returns the context objects
-    """
+    '''
     ctx = SSL.Context(SSL.SSLv23_METHOD)
     flags = (SSL.OP_NO_SSLv2 | SSL.OP_NO_SSLv3 | SSL.OP_SINGLE_DH_USE |
              SSL.OP_NO_TICKET)
@@ -116,13 +116,13 @@ def get_context(fingerprint, verify_cb=None, remote_jid=None):
     # First try user DH parameters, if this fails load the default DH parameters
     dh_params_name = configpaths.get('MY_CERT') / DH_PARAMS
     try:
-        with open(dh_params_name, "r", encoding='utf8'):
+        with open(dh_params_name, 'r', encoding='utf8'):
             ctx.load_tmp_dh(dh_params_name.encode('utf-8'))
     except FileNotFoundError:
         default_dh_params_name = (configpaths.get('DATA') / 'other' /
                                   DEFAULT_DH_PARAMS)
         try:
-            with open(default_dh_params_name, "r", encoding='utf8'):
+            with open(default_dh_params_name, 'r', encoding='utf8'):
                 ctx.load_tmp_dh(str(default_dh_params_name).encode('utf-8'))
         except FileNotFoundError as err:
             log.error('Unable to load default DH parameter file: %s, %s',
@@ -211,20 +211,20 @@ def send_cert_request(con, to_jid):
 
 
 def createKeyPair(type_, bits):
-    """
+    '''
     Create a public/private key pair.
 
     Arguments: type_ - Key type, must be one of TYPE_RSA and TYPE_DSA
                bits - Number of bits to use in the key
     Returns:   The public/private key pair in a PKey object
-    """
+    '''
     pkey = crypto.PKey()
     pkey.generate_key(type_, bits)
     return pkey
 
 
-def createCertRequest(pkey, digest="sha256", **name):
-    """
+def createCertRequest(pkey, digest='sha256', **name):
+    '''
     Create a certificate request.
 
     Arguments: pkey   - The key to associate with the request
@@ -239,7 +239,7 @@ def createCertRequest(pkey, digest="sha256", **name):
                           CN    - Common name
                           emailAddress - E-mail address
     Returns:   The certificate request in an X509Req object
-    """
+    '''
     req = crypto.X509Req()
     subj = req.get_subject()
 
@@ -252,8 +252,8 @@ def createCertRequest(pkey, digest="sha256", **name):
 
 
 def createCertificate(req, issuerCert, issuerKey, serial, notBefore, notAfter,
-                      digest="sha256"):
-    """
+                      digest='sha256'):
+    '''
     Generate a certificate given a certificate request.
 
     Arguments: req        - Certificate request to use
@@ -266,7 +266,7 @@ def createCertificate(req, issuerCert, issuerKey, serial, notBefore, notAfter,
                             stops being valid
                digest     - Digest method to use for signing, default is sha256
     Returns:   The signed certificate in an X509 object
-    """
+    '''
     cert = crypto.X509()
     cert.set_serial_number(serial)
     cert.gmtime_adj_notBefore(notBefore)
@@ -279,12 +279,12 @@ def createCertificate(req, issuerCert, issuerKey, serial, notBefore, notAfter,
 
 
 def make_certs(filepath, CN):
-    """
+    '''
     make self signed certificates
     filepath : absolute path of certificate file, will be appended the '.pkey'
     and '.cert' extensions
     CN : common name
-    """
+    '''
     key = createKeyPair(TYPE_RSA, 4096)
     req = createCertRequest(key, CN=CN)
     # five years

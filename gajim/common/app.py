@@ -339,18 +339,18 @@ def get_jid_without_resource(jid: str) -> str:
 
 
 def get_number_of_accounts() -> int:
-    """
+    '''
     Return the number of ALL accounts
-    """
+    '''
     return len(connections.keys())
 
 
 def get_number_of_connected_accounts(
         accounts_list: Optional[list[str]] = None) -> int:
-    """
+    '''
     Returns the number of connected accounts. You can optionally pass an
     accounts_list and if you do those will be checked, else all will be checked
-    """
+    '''
     connected_accounts = 0
     if accounts_list is None:
         accounts = connections.keys()
@@ -371,9 +371,9 @@ def get_available_clients() -> list[types.Client]:
 
 
 def get_connected_accounts(exclude_local: bool = False) -> list[str]:
-    """
+    '''
     Returns a list of CONNECTED accounts
-    """
+    '''
     account_list: list[str] = []
     for account in connections:
         if account == 'Local' and exclude_local:
@@ -395,10 +395,10 @@ def get_accounts_sorted() -> list[str]:
 def get_enabled_accounts_with_labels(
         connected_only: bool = False,
         private_storage_only: bool = False) -> list[list[str]]:
-    """
+    '''
     Returns a list with [account, account_label] entries.
     Order by account_label
-    """
+    '''
     accounts: list[list[str]] = []
     for acc in connections:
         if connected_only and not account_is_connected(acc):
@@ -443,11 +443,11 @@ def get_transport_name_from_jid(
         jid: str,
         use_config_setting: bool = True) -> Optional[str]:
 
-    """
+    '''
     Returns 'gg', 'irc' etc
 
     If JID is not from transport returns None.
-    """
+    '''
     # TODO: Rewrite/remove
 
     # FIXME: jid can be None! one TB I saw had this problem:
@@ -485,9 +485,9 @@ def jid_is_transport(jid: str) -> bool:
 
 
 def get_jid_from_account(account_name: str) -> str:
-    """
+    '''
     Return the jid we use in the given account
-    """
+    '''
     name = settings.get_account_setting(account_name, 'name')
     hostname = settings.get_account_setting(account_name, 'hostname')
     jid = name + '@' + hostname
@@ -501,9 +501,9 @@ def get_account_from_jid(jid: str) -> Optional[str]:
 
 
 def get_hostname_from_account(account_name: str, use_srv: bool = False) -> str:
-    """
+    '''
     Returns hostname (if custom hostname is used, that is returned)
-    """
+    '''
     if use_srv and connections[account_name].connected_hostname:
         return connections[account_name].connected_hostname
     if settings.get_account_setting(account_name, 'use_custom_host'):
@@ -512,9 +512,9 @@ def get_hostname_from_account(account_name: str, use_srv: bool = False) -> str:
 
 
 def get_notification_image_prefix(jid: str) -> str:
-    """
+    '''
     Returns the prefix for the notification images
-    """
+    '''
     transport_name = get_transport_name_from_jid(jid)
     if transport_name in ['icq', 'facebook']:
         prefix = transport_name
@@ -549,9 +549,9 @@ def add_recent_groupchat(account: str, room_jid: str, nickname: str) -> None:
 
 
 def get_priority(account: str, show: str) -> int:
-    """
+    '''
     Return the priority an account must have
-    """
+    '''
     if not show:
         show = 'online'
 

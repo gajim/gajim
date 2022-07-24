@@ -587,14 +587,14 @@ class AutomaticStatus(PreferenceBox):
             Setting(SettingKind.AUTO_AWAY,
                     _('Auto Away'),
                     SettingType.DIALOG,
-                    desc=_('Change your status to \'Away\' after a certain '
+                    desc=_('Change your status to "Away" after a certain '
                            'amount of time'),
                     props={'dialog': AutoAwayDialog}),
 
             Setting(SettingKind.AUTO_EXTENDED_AWAY,
                     _('Auto Not Available'),
                     SettingType.DIALOG,
-                    desc=_('Change your status to \'Not Available\' after a '
+                    desc=_('Change your status to "Not Available" after a '
                            'certain amount of time'),
                     props={'dialog': AutoExtendedAwayDialog}),
 

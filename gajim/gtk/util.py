@@ -174,9 +174,9 @@ def get_total_screen_geometry() -> tuple[int, int]:
 
 
 def resize_window(window: Gtk.Window, width: int, height: int) -> None:
-    """
+    '''
     Resize window, but also checks if huge window or negative values
-    """
+    '''
     screen_w, screen_h = get_total_screen_geometry()
     if not width or not height:
         return
@@ -187,9 +187,9 @@ def resize_window(window: Gtk.Window, width: int, height: int) -> None:
 
 
 def move_window(window: Gtk.Window, pos_x: int, pos_y: int) -> None:
-    """
+    '''
     Move the window, but also check if out of screen
-    """
+    '''
     screen_w, screen_h = get_total_screen_geometry()
     pos_x = max(pos_x, 0)
     pos_y = max(pos_y, 0)
@@ -224,10 +224,10 @@ def restore_main_window_position() -> None:
 
 
 def get_completion_liststore(entry: Gtk.Entry) -> Gtk.ListStore:
-    """
+    '''
     Create a completion model for entry widget completion list consists of
     (Pixbuf, Text) rows
-    """
+    '''
     completion = Gtk.EntryCompletion()
     liststore = Gtk.ListStore(str, str)
 
@@ -254,14 +254,14 @@ def get_cursor(name: str) -> Gdk.Cursor:
 
 
 def scroll_to_end(widget: Gtk.ScrolledWindow) -> bool:
-    """Scrolls to the end of a GtkScrolledWindow.
+    '''Scrolls to the end of a GtkScrolledWindow.
 
     Args:
         widget (GtkScrolledWindow)
 
     Returns:
         bool: The return value is False so it can be used with GLib.idle_add.
-    """
+    '''
     adj_v = widget.get_vadjustment()
     if adj_v is None:
         # This can happen when the Widget is already destroyed when called
@@ -276,14 +276,14 @@ def scroll_to_end(widget: Gtk.ScrolledWindow) -> bool:
 
 
 def at_the_end(widget: Gtk.ScrolledWindow) -> bool:
-    """Determines if a Scrollbar in a GtkScrolledWindow is at the end.
+    '''Determines if a Scrollbar in a GtkScrolledWindow is at the end.
 
     Args:
         widget (GtkScrolledWindow)
 
     Returns:
         bool: The return value is True if at the end, False if not.
-    """
+    '''
     adj_v = widget.get_vadjustment()
     max_scroll_pos = adj_v.get_upper() - adj_v.get_page_size()
     return adj_v.get_value() == max_scroll_pos
@@ -351,11 +351,11 @@ def get_monitor_scale_factor() -> int:
 
 
 def get_primary_accel_mod() -> Optional[Gdk.ModifierType]:
-    """
+    '''
     Returns the primary Gdk.ModifierType modifier.
     cmd on osx, ctrl everywhere else.
-    """
-    return Gtk.accelerator_parse("<Primary>")[1]
+    '''
+    return Gtk.accelerator_parse('<Primary>')[1]
 
 
 def get_hardware_key_codes(keyval: int) -> list[int]:
@@ -515,9 +515,9 @@ def add_css_to_widget(widget: Any, css: str) -> None:
 
 def get_pixbuf_from_data(file_data: bytes) -> Optional[GdkPixbuf.Pixbuf]:
     # TODO: This already exists in preview_helpery pixbuf_from_data
-    """
+    '''
     Get image data and returns GdkPixbuf.Pixbuf
-    """
+    '''
     pixbufloader = GdkPixbuf.PixbufLoader()
     try:
         pixbufloader.write(file_data)
@@ -529,7 +529,7 @@ def get_pixbuf_from_data(file_data: bytes) -> Optional[GdkPixbuf.Pixbuf]:
         log.warning('loading avatar using pixbufloader failed, trying to '
                     'convert avatar image using pillow')
         try:
-            avatar = Image.open(BytesIO(file_data)).convert("RGBA")
+            avatar = Image.open(BytesIO(file_data)).convert('RGBA')
             array = GLib.Bytes.new(avatar.tobytes())  # type: ignore
             width, height = avatar.size
             pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
@@ -584,7 +584,7 @@ def load_pixbuf(path: Union[str, Path],
         try:
             with open(path, 'rb') as im_handle:
                 img = Image.open(im_handle)
-                avatar = img.convert("RGBA")
+                avatar = img.convert('RGBA')
         except (NameError, OSError):
             log.warning('Pillow convert failed: %s', path)
             log.debug('Error', exc_info=True)
@@ -711,21 +711,21 @@ def _connect_destroy(sender: Any,
                      handler: Any,
                      *args: Any,
                      **kwargs: Any) -> int:
-    """Connect a bound method to a foreign object signal and disconnect
+    '''Connect a bound method to a foreign object signal and disconnect
     if the object the method is bound to emits destroy (Gtk.Widget subclass).
     Also works if the handler is a nested function in a method and
     references the method's bound object.
     This solves the problem that the sender holds a strong reference
     to the bound method and the bound to object doesn't get GCed.
-    """
+    '''
 
-    if hasattr(handler, "__self__"):
+    if hasattr(handler, '__self__'):
         obj = handler.__self__
     else:
         # XXX: get the "self" var of the enclosing scope.
         # Used for nested functions which ref the object but aren't methods.
         # In case they don't ref "self" normal connect() should be used anyway.
-        index = handler.__code__.co_freevars.index("self")
+        index = handler.__code__.co_freevars.index('self')
         obj = handler.__closure__[index].cell_contents
 
     assert obj is not sender
