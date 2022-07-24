@@ -1134,7 +1134,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         else:
             self._jump_to_end_button.add_unread_count()
 
-        if message_id:
+        if message_id and kind == 'incoming':
             if self.is_groupchat:
                 self.last_msg_id = stanza_id or message_id
             else:
