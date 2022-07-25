@@ -282,6 +282,11 @@ class BareContact(CommonContact):
         return False
 
     def add_resource(self, resource: str) -> ResourceContact:
+        assert resource is not None
+        # Check if resource is not None because not the whole
+        # codebase is type checked and it creates hard to track
+        # problems if we create a ResourceContact without resource
+
         jid = self._jid.new_with(resource=resource)
         assert isinstance(self._log, LogAdapter)
         contact = ResourceContact(self._log, jid, self._account)
@@ -562,6 +567,11 @@ class GroupchatContact(CommonContact):
         return True
 
     def add_resource(self, resource: str) -> GroupchatParticipant:
+        assert resource is not None
+        # Check if resource is not None because not the whole
+        # codebase is type checked and it creates hard to track
+        # problems if we create a GroupchatParticipant without resource
+
         jid = self._jid.new_with(resource=resource)
         assert isinstance(self._log, LogAdapter)
         contact = GroupchatParticipant(self._log, jid, self._account)
