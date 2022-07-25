@@ -376,8 +376,12 @@ class ChatControl(BaseControl):
         if event.properties.is_sent_carbon:
             kind = 'outgoing'
 
-        resource_contact = self.contact.get_resource(event.resource)
-        self.xml.phone_image.set_visible(resource_contact.is_phone)
+        visible = False
+        if event.resource is not None:
+            resource_contact = self.contact.get_resource(event.resource)
+            visible = resource_contact.is_phone
+
+        self.xml.phone_image.set_visible(visible)
 
         self.add_message(event.msgtxt,
                          kind,
