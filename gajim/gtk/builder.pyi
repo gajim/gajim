@@ -273,6 +273,7 @@ class ContactInfoBuilder(Builder):
     header_image: Gtk.Image
     name_entry: Gtk.Entry
     edit_name_button: Gtk.ToggleButton
+    edit_name_button_image: Gtk.Image
     main_stack: Gtk.Stack
     vcard_scrolled: Gtk.ScrolledWindow
     vcard_box: Gtk.Box
@@ -475,6 +476,7 @@ class GroupchatDetailsBuilder(Builder):
     header_image: Gtk.Image
     name_entry: Gtk.Entry
     edit_name_button: Gtk.ToggleButton
+    edit_name_button_image: Gtk.Image
     main_stack: Gtk.Stack
     info_box: Gtk.Box
     settings_box: Gtk.Box

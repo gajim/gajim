@@ -332,7 +332,11 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         self._ui.name_entry.set_sensitive(active)
         if active:
             self._ui.name_entry.grab_focus()
+            self._ui.edit_name_button_image.set_from_icon_name(
+                'document-save-symbolic', Gtk.IconSize.BUTTON)
         else:
+            self._ui.edit_name_button_image.set_from_icon_name(
+                'document-edit-symbolic', Gtk.IconSize.BUTTON)
             name = self._ui.name_entry.get_text()
             if name == self.contact.name:
                 return
