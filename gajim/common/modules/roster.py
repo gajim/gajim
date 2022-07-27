@@ -51,8 +51,6 @@ class Roster(BaseModule):
         BaseModule.__init__(self, client)
 
         self.handlers = [
-            # StanzaHandler(name='presence',
-            #               callback=self._presence_received),
             StanzaHandler(name='iq',
                           callback=self._process_roster_push,
                           typ='set',

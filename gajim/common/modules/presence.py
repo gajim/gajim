@@ -57,6 +57,11 @@ class Presence(BaseModule):
         self.handlers = [
             StanzaHandler(name='presence',
                           callback=self._presence_received,
+                          typ='available',
+                          priority=50),
+            StanzaHandler(name='presence',
+                          callback=self._presence_received,
+                          typ='unavailable',
                           priority=50),
             StanzaHandler(name='presence',
                           callback=self._subscribe_received,
@@ -90,6 +95,7 @@ class Presence(BaseModule):
                            stanza: nbxmpp.protocol.Presence,
                            properties: PresenceProperties
                            ) -> None:
+
         if properties.from_muc:
             # MUC occupant presences are already handled in MUC module
             return
@@ -107,10 +113,6 @@ class Presence(BaseModule):
 
         contact = self._con.get_module('Contacts').get_contact(properties.jid)
         contact.update_presence(presence_data)
-
-        if properties.type == PresenceType.ERROR:
-            self._log.info('Error: %s %s', properties.jid, properties.error)
-            return
 
         if properties.is_self_presence:
             app.ged.raise_event(ShowChanged(account=self._account,

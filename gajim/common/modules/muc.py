@@ -91,6 +91,12 @@ class MUC(BaseModule):
         self.handlers = [
             StanzaHandler(name='presence',
                           callback=self._on_muc_user_presence,
+                          typ='available',
+                          ns=Namespace.MUC_USER,
+                          priority=49),
+            StanzaHandler(name='presence',
+                          callback=self._on_muc_user_presence,
+                          typ='unavailable',
                           ns=Namespace.MUC_USER,
                           priority=49),
             StanzaHandler(name='presence',
@@ -474,6 +480,7 @@ class MUC(BaseModule):
                            stanza: Presence,
                            properties: PresenceProperties
                            ) -> None:
+
         room_jid = properties.jid.bare
         muc_data = self._mucs.get(room_jid)
         if muc_data is None:
@@ -524,8 +531,6 @@ class MUC(BaseModule):
                               stanza: Presence,
                               properties: PresenceProperties
                               ) -> None:
-        if properties.type == PresenceType.ERROR:
-            return
 
         room_jid = str(properties.muc_jid)
         if room_jid not in self._mucs:

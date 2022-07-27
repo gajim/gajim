@@ -42,6 +42,7 @@ class VCardAvatars(BaseModule):
 
         self.handlers = [
             StanzaHandler(name='presence',
+                          typ='available',
                           callback=self._presence_received,
                           ns=Namespace.VCARD_UPDATE,
                           priority=51),
@@ -106,8 +107,6 @@ class VCardAvatars(BaseModule):
                            _stanza: Presence,
                            properties: PresenceProperties
                            ) -> None:
-        if not properties.type.is_available:
-            return
 
         if properties.avatar_state in (AvatarState.IGNORE,
                                        AvatarState.NOT_READY):

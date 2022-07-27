@@ -57,7 +57,13 @@ class Chatstate(BaseModule):
 
         self.handlers = [
             StanzaHandler(name='presence',
-                          callback=self._presence_received),
+                          callback=self._presence_received,
+                          typ='error',
+                          priority=50),
+            StanzaHandler(name='presence',
+                          callback=self._presence_received,
+                          typ='unavailable',
+                          priority=50),
             StanzaHandler(name='message',
                           callback=self._process_chatstate,
                           ns=Namespace.CHATSTATES,
@@ -117,8 +123,6 @@ class Chatstate(BaseModule):
                            _stanza: Presence,
                            properties: PresenceProperties
                            ) -> None:
-        if not properties.type.is_unavailable and not properties.type.is_error:
-            return
 
         if properties.is_self_bare:
             return

@@ -59,6 +59,7 @@ class Caps(BaseModule):
         self.handlers = [
             StanzaHandler(name='presence',
                           callback=self._entity_caps,
+                          typ='available',
                           ns=Namespace.CAPS,
                           priority=51),
         ]
@@ -103,8 +104,6 @@ class Caps(BaseModule):
                      _stanza: Presence,
                      properties: PresenceProperties
                      ) -> None:
-        if properties.type.is_error or properties.type.is_unavailable:
-            return
 
         if properties.is_self_presence:
             return
