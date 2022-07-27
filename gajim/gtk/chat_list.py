@@ -143,10 +143,6 @@ class ChatList(Gtk.ListBox, EventHelper):
                        self._workspace_id,
                        count)
 
-    def is_visible(self) -> bool:
-        chat_list = cast(ChatList, self.get_parent())
-        return chat_list.get_property('child-widget') == self
-
     def _on_destroy(self, _widget: Gtk.Widget) -> None:
         GLib.source_remove(self._timer_id)
 

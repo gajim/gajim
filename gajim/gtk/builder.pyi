@@ -600,9 +600,11 @@ class HistoryExportBuilder(Builder):
 class MainBuilder(Builder):
     main_grid: Gtk.Grid
     left_grid: Gtk.Grid
-    account_box: Gtk.Box
     workspace_scrolled: Gtk.ScrolledWindow
     app_box: Gtk.Box
+    account_box: Gtk.Box
+    toggle_chat_list_button: Gtk.Button
+    toggle_chat_list_icon: Gtk.Image
 
 
 class MamPreferencesBuilder(Builder):

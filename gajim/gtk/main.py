@@ -405,9 +405,25 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self.select_chat_number(number)
 
         elif action_name == 'toggle-chat-list':
-            self._chat_page.toggle_chat_list()
+            self._toggle_chat_list()
 
         return None
+
+    def _toggle_chat_list(self) -> None:
+        chat_list_stack = self._chat_page.get_chat_list_stack()
+        chat_list = chat_list_stack.get_current_chat_list()
+        if chat_list is not None:
+            if chat_list.is_visible():
+                self._ui.toggle_chat_list_button.set_tooltip_text(
+                    _('Show chat list'))
+                self._ui.toggle_chat_list_icon.set_from_icon_name(
+                    'go-next-symbolic', Gtk.IconSize.BUTTON)
+            else:
+                self._ui.toggle_chat_list_button.set_tooltip_text(
+                    _('Hide chat list'))
+                self._ui.toggle_chat_list_icon.set_from_icon_name(
+                    'go-previous-symbolic', Gtk.IconSize.BUTTON)
+        self._chat_page.toggle_chat_list()
 
     def _on_window_motion_notify(self,
                                  _widget: Gtk.ApplicationWindow,
