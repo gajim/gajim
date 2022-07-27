@@ -68,6 +68,7 @@ test-unittest:
 build-linux:
   image: gajim-deb-build:latest
   stage: build
+  dependencies: []
   rules:
     - if: '$GAJIM_NIGHTLY_BUILD'
     - if: '$CI_COMMIT_TAG'
@@ -83,6 +84,7 @@ build-linux:
 
 build-and-deploy-windows:
   stage: build
+  dependencies: []
   rules:
     - if: '$GAJIM_NIGHTLY_BUILD'
     - if: '$CI_COMMIT_TAG'
@@ -99,6 +101,8 @@ build-and-deploy-windows:
 
 deploy-linux:
   stage: deploy
+  dependencies:
+    - build-linux
   rules:
     - if: '$GAJIM_NIGHTLY_BUILD'
     - if: '$CI_COMMIT_TAG'
@@ -121,6 +125,7 @@ deploy-linux:
 deploy-flatpak:
   image: git-deploy:latest
   stage: deploy
+  dependencies: []
   rules:
     - if: '$CI_COMMIT_TAG'
   before_script:
@@ -144,6 +149,7 @@ deploy-flatpak:
 publish-release:
   image: git-deploy:latest
   stage: publish
+  dependencies: []
   rules:
     - if: '$CI_COMMIT_TAG'
   before_script:
