@@ -23,7 +23,6 @@ from typing import Union
 import time
 
 import nbxmpp
-from nbxmpp.const import PresenceType
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.structs import PresenceProperties
