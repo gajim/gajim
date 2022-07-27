@@ -5,7 +5,7 @@
 - [Python](https://www.python.org/) (>=3.9)
 - [PyGObject](https://pypi.org/project/PyGObject/)
 - [pycairo](https://pypi.org/project/pycairo/)
-- [nbxmpp](https://pypi.org/project/nbxmpp/) (>=3.0.0)
+- [nbxmpp](https://pypi.org/project/nbxmpp/) (>=3.1.1)
 - [pyOpenSSL](https://pypi.org/project/pyOpenSSL/) (>=16.2)
 - [css-parser](https://pypi.org/project/css-parser/)
 - [keyring](https://pypi.org/project/keyring/)
