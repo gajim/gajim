@@ -11,6 +11,7 @@ function main {
         mingw-w64-x86_64-toolchain \
         mingw-w64-x86_64-adwaita-icon-theme \
         mingw-w64-x86_64-gtk3 \
+        mingw-w64-x86_64-gtksourceview4 \
         mingw-w64-x86_64-python-setuptools-scm \
         mingw-w64-x86_64-python-cryptography \
         mingw-w64-x86_64-python-certifi \
