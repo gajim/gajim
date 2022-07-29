@@ -67,16 +67,20 @@ from gajim.common.events import FileCompleted
 from gajim.common.events import FileHashError
 from gajim.common.events import FileProgress
 from gajim.common.events import FileError
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.structs import OutgoingMessage
 from gajim.common.i18n import _
 from gajim.common.client import Client
 from gajim.common.const import FTState
 from gajim.common.file_props import FileProp
+from gajim.common.types import ChatContactT
 
 from gajim.common.modules.httpupload import HTTPFileTransfer
 
 from gajim.gui.dialogs import ErrorDialog
 from gajim.gui.filechoosers import FileChooserDialog
+from gajim.gui.file_transfer_send import SendFileDialog
 from gajim.gui.filetransfer import FileTransfersWindow
 from gajim.gui.menus import build_accounts_menu
 from gajim.gui.util import get_app_window
@@ -125,7 +129,6 @@ class Interface:
         # pylint: disable=line-too-long
         self.handlers = {
             'signed-in': [self.handle_event_signed_in],
-            'presence-received': [self.handle_event_presence],
             'message-sent': [self.handle_event_msgsent],
             'message-not-sent': [self.handle_event_msgnotsent],
         }
@@ -165,14 +168,6 @@ class Interface:
 
         if app.settings.get('ask_online_status'):
             app.window.show_account_page(account)
-
-    def handle_event_presence(self, event):
-        account = event.conn.name
-        jid = event.jid
-
-        ctrl = app.window.get_control(account, jid)
-        if ctrl and ctrl.session and len(event.contact_list) > 1:
-            ctrl.remove_session(ctrl.session)
 
     @staticmethod
     def handle_event_msgsent(event):
@@ -376,6 +371,60 @@ class Interface:
         # Note: This has to be a bound method in order to connect the signal
         client = app.get_client(transfer.account)
         client.get_module('HTTPUpload').cancel_transfer(transfer)
+
+    def _get_pref_ft_method(self, contact: ChatContactT) -> Optional[str]:
+        ft_pref = app.settings.get_account_setting(contact.account,
+                                                   'filetransfer_preference')
+        httpupload = app.window.get_action_enabled('send-file-httpupload')
+        jingle = app.window.get_action_enabled('send-file-jingle')
+
+        if isinstance(contact, GroupchatContact):
+            if httpupload:
+                return 'httpupload'
+            return None
+
+        if httpupload and jingle:
+            return ft_pref
+
+        if httpupload:
+            return 'httpupload'
+
+        if jingle:
+            return 'jingle'
+        return None
+
+    def start_file_transfer(self,
+                            contact: ChatContactT,
+                            path: Optional[str] = None,
+                            method: Optional[str] = None
+                            ) -> None:
+        if method is None:
+            method = self._get_pref_ft_method(contact)
+            if method is None:
+                return
+
+        current_control = app.window.get_active_control()
+        if current_control is None:
+            return
+
+        if path is None:
+            if method == 'httpupload':
+                self.send_httpupload(current_control)
+                return
+            if method == 'jingle':
+                self.instances['file_transfers'].show_file_send_request(
+                    contact.account, contact)
+            return
+
+        if method == 'httpupload':
+            self.send_httpupload(current_control, path)
+        else:
+            assert isinstance(contact, BareContact)
+            send_callback = partial(
+                self.instances['file_transfers'].send_file,
+                contact.account,
+                contact)
+            SendFileDialog(contact, send_callback, app.window, [path])
 
     @staticmethod
     def create_groupchat(account: str,

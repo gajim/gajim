@@ -56,7 +56,6 @@ class ChatCommandProcessor(CommandProcessor):
         parents = super(ChatCommandProcessor, self)
         flag = parents.process_as_command(text)
         if flag and self.command_succeeded:
-            self.add_history(text)
             self.clear_input()
         return flag
 
@@ -146,13 +145,6 @@ class CommandTools:
         Clear input.
         """
         self.set_input(str())
-
-    def add_history(self, text):
-        """
-        Add given text to the input history, so user can scroll through
-        it using ctrl + up/down arrow keys.
-        """
-        self.save_message(text, 'sent')
 
     @property
     def connection(self):

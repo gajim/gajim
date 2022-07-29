@@ -31,7 +31,10 @@ from nbxmpp.const import Affiliation
 from nbxmpp.const import Chatstate
 from nbxmpp.const import PresenceShow
 from nbxmpp.const import Role
+from nbxmpp.modules.dataforms import SimpleDataForm
+from nbxmpp.modules.security_labels import SecurityLabel
 from nbxmpp.protocol import JID
+from nbxmpp.structs import MucSubject
 from nbxmpp.structs import PresenceProperties
 
 from gajim.common import types
@@ -55,7 +58,7 @@ class MUCData:
     def __init__(self,
                  room_jid: str,
                  nick: str,
-                 password: str,
+                 password: Optional[str],
                  config: Optional[dict[str, Any]] = None
                  ) -> None:
 
@@ -65,8 +68,11 @@ class MUCData:
         self.password = password
         self.state = MUCJoinedState.NOT_JOINED
         # Message id of the captcha challenge
-        self.captcha_id = None
-        self.subject = None
+        self.captcha_id: Optional[str] = None
+        self.captcha_form: Optional[SimpleDataForm] = None
+        self.error: Optional[str] = None
+        self.error_text: Optional[str] = None
+        self.subject: Optional[MucSubject] = None
 
     @property
     def jid(self) -> JID:
@@ -92,7 +98,7 @@ class OutgoingMessage:
                  marker: Optional[tuple[str, str]] = None,
                  resource: Optional[str] = None,
                  user_nick: Optional[str] = None,
-                 label: Optional[str] = None,
+                 label: Optional[SecurityLabel] = None,
                  control: Optional[Any] = None,
                  attention: Optional[bool] = None,
                  correct_id: Optional[str] = None,

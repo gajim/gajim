@@ -43,15 +43,12 @@ class GroupchatManage(Gtk.Box):
     def __init__(self,
                  account: str,
                  contact: GroupchatContact,
-                 subject: str
                  ) -> None:
         Gtk.Box.__init__(self)
         self._account = account
         self._client = app.get_client(account)
         self._contact = contact
         self._contact.connect('room-subject', self._on_room_subject)
-
-        self._subject_text = subject
 
         self._room_config_form = None
 
@@ -81,7 +78,11 @@ class GroupchatManage(Gtk.Box):
         return app.storage.cache.get_last_disco_info(self._contact.jid)
 
     def _prepare_subject(self) -> None:
-        self._ui.subject_textview.get_buffer().set_text(self._subject_text)
+        text = ''
+        if self._contact.subject is not None:
+            text = self._contact.subject.text
+
+        self._ui.subject_textview.get_buffer().set_text(text)
 
         joined = self._contact.is_joined
         change_allowed = self._is_subject_change_allowed()
@@ -103,8 +104,11 @@ class GroupchatManage(Gtk.Box):
         text = buffer_.get_text(buffer_.get_start_iter(),
                                 buffer_.get_end_iter(),
                                 False)
+
+        assert self._contact.subject is not None
+
         self._ui.subject_change_button.set_sensitive(
-            text != self._subject_text)
+            text != self._contact.subject.text)
 
     def _on_subject_change_clicked(self, _button: Gtk.Button) -> None:
         buffer_ = self._ui.subject_textview.get_buffer()
@@ -121,7 +125,6 @@ class GroupchatManage(Gtk.Box):
         if subject is None:
             return
 
-        self._subject_text = subject.text
         self._ui.subject_textview.get_buffer().set_text(subject.text)
 
     def _prepare_manage(self) -> None:

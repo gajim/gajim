@@ -378,7 +378,7 @@ class UnsubscribedRow(NotificationRow):
         remove_button.set_valign(Gtk.Align.CENTER)
         remove_button.set_tooltip_text('Remove from contact list')
         remove_button.set_action_name(
-            f'win.remove-contact-{self._account}')
+            f'win.{self._account}-remove-contact')
         remove_button.set_action_target_value(GLib.Variant('s', str(self.jid)))
         self.grid.attach(remove_button, 3, 1, 1, 2)
 

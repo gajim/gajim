@@ -246,6 +246,7 @@ class MUCJoinedState(Enum):
     CREATING = 'creating'
     CAPTCHA_REQUEST = 'captcha in progress'
     CAPTCHA_FAILED = 'captcha failed'
+    PASSWORD_REQUEST = 'password request'
 
     def __str__(self):
         return self.name
@@ -273,6 +274,10 @@ class MUCJoinedState(Enum):
     @property
     def is_captcha_failed(self):
         return self == MUCJoinedState.CAPTCHA_FAILED
+
+    @property
+    def is_password_request(self):
+        return self == MUCJoinedState.PASSWORD_REQUEST
 
 
 class ClientState(IntEnum):

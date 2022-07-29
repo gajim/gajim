@@ -993,6 +993,34 @@ class MessageArchiveStorage(SqliteStorage):
         return False
 
     @timeit
+    def get_last_correctable_message(self,
+                                     account: str,
+                                     jid: JID,
+                                     message_id: str
+                                     ) -> Optional[LastConversationRow]:
+        '''
+        Load the last correctable message of a conversation by message_id.
+        Conditions: max 5 min old
+        '''
+        jids = [jid]
+        account_id = self.get_account_id(account)
+        min_time = time.time() - 5 * 60
+
+        sql = '''
+            SELECT contact_name, time, kind, message, stanza_id, message_id,
+            additional_data
+            FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+            AND account_id = {account_id}
+            AND message_id = ?
+            AND time > ?
+            '''.format(jids=', '.join('?' * len(jids)),
+                       account_id=account_id)
+
+        return self._con.execute(
+            sql,
+            tuple(jids) + (message_id, min_time)).fetchone()
+
+    @timeit
     def store_message_correction(self,
                                  account: str,
                                  jid: JID,

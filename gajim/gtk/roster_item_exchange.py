@@ -243,11 +243,6 @@ class RosterItemExchange(Gtk.ApplicationWindow):
                     self._client.get_module('Roster').set_item(
                         jid, model[iter_][2], groups)
 
-                    # Update opened chats
-                    ctrl = app.window.get_control(self.account, jid)
-                    if ctrl:
-                        ctrl.update_ui()
-
                 iter_ = model.iter_next(iter_)
         elif self._action == 'delete':
             count = 0

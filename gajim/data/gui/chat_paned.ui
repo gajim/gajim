@@ -22,6 +22,7 @@
             <property name="row-spacing">3</property>
             <child>
               <object class="GtkBox">
+                <property name="height-request">39</property>
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="spacing">12</property>
@@ -31,6 +32,7 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
                     <property name="tooltip-text" translatable="yes">Edit workspace…</property>
+                    <property name="valign">center</property>
                     <signal name="clicked" handler="_on_edit_workspace_clicked" swapped="no"/>
                     <child>
                       <object class="GtkImage">
@@ -69,6 +71,7 @@
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
                     <property name="tooltip-text" translatable="yes">Filter Chats…</property>
+                    <property name="valign">center</property>
                     <child>
                       <object class="GtkImage">
                         <property name="visible">True</property>

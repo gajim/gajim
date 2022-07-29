@@ -526,6 +526,8 @@ class GajimApplication(Gtk.Application, CoreApplication):
         elif event.feature == Namespace.BLOCKING:
             action = '%s-blocking' % event.account
             self.set_action_state(action, True)
+            action = '%s-block-contact' % event.account
+            self.set_action_state(action, True)
 
     # Action Callbacks
 

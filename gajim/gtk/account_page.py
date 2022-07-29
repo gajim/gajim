@@ -75,7 +75,7 @@ class AccountPage(Gtk.Box, EventHelper):
 
         roster_menu = Gio.Menu()
         for action, label in ROSTER_MENU_DICT.items():
-            roster_menu.append(label, f'win.{action}-{account}')
+            roster_menu.append(label, f'win.{action}')
         self._ui.roster_menu_button.set_menu_model(roster_menu)
 
         self._ui.connect_signals(self)

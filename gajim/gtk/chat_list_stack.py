@@ -269,7 +269,7 @@ class ChatListStack(Gtk.Stack):
                 _('Leave Group Chat'),
                 _('Are you sure you want to leave this group chat?'),
                 _('If you close this chat, you will leave '
-                  '\'%s\'.') % contact.name,
+                  '"%s".') % contact.name,
                 _('_Do not ask me again'),
                 [DialogButton.make('Cancel'),
                  DialogButton.make('Accept',

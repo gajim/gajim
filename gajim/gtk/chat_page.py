@@ -121,6 +121,9 @@ class ChatPage(Gtk.Box):
     def get_chat_list_stack(self) -> ChatListStack:
         return self._chat_list_stack
 
+    def get_chat_stack(self) -> ChatStack:
+        return self._chat_stack
+
     def get_control_stack(self) -> ControlStack:
         return self._control_stack
 

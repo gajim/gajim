@@ -14,6 +14,7 @@
 
 from __future__ import annotations
 
+from typing import Optional
 from typing import TYPE_CHECKING
 
 import logging
@@ -23,8 +24,12 @@ from nbxmpp.structs import PresenceProperties
 from gi.repository import Gdk
 
 from gajim.common import app
+from gajim.common import ged
 from gajim.common import types
+from gajim.common.events import GcMessageReceived
+from gajim.common.ged import EventHelper
 from gajim.common.helpers import jid_is_blocked
+from gajim.common.helpers import message_needs_highlight
 
 if TYPE_CHECKING:
     from .message_input import MessageInputTextView
@@ -32,22 +37,43 @@ if TYPE_CHECKING:
 log = logging.getLogger('gajim.gui.groupchat_nick_completion')
 
 
-class GroupChatNickCompletion:
-    def __init__(self,
-                 account: str,
-                 contact: types.GroupchatContactT,
-                 message_input: MessageInputTextView
-                 ) -> None:
-        self._account = account
+class GroupChatNickCompletion(EventHelper):
+    def __init__(self) -> None:
+        EventHelper.__init__(self)
 
+        self._account: Optional[str] = None
+        self._contact: Optional[types.GroupchatContactT] = None
+
+        self._sender_list: list[str] = []
+        self._highlight_list: list[str] = []
+        self._nick_hits: list[str] = []
+        self._last_key_tab = False
+
+        self._nick_data: dict[str, tuple[list[str], list[str]]] = {}
+
+        self.register_event(
+            'gc-message-received', ged.GUI1, self._on_gc_message_received)
+
+    def switch_contact(self, contact: types.GroupchatContactT) -> None:
+        self._nick_hits.clear()
+        self._last_key_tab = False
+
+        if self._contact is not None:
+            self._contact.disconnect_all_from_obj(self)
+            self._nick_data[str(self._contact.jid)] = (
+                self._sender_list, self._highlight_list)
+
+        nick_data = self._nick_data.get(str(contact.jid))
+        if nick_data is None:
+            self._sender_list.clear()
+            self._highlight_list.clear()
+        else:
+            self._sender_list, self._highlight_list = nick_data
+
+        self._account = contact.account
         self._contact = contact
         self._contact.connect(
             'user-nickname-changed', self._on_user_nickname_changed)
-
-        self._sender_list: list[str] = []
-        self._attention_list: list[str] = []
-        self._nick_hits: list[str] = []
-        self._last_key_tab = False
 
     def _on_user_nickname_changed(self,
                                   _contact: types.GroupchatContact,
@@ -63,27 +89,46 @@ class GroupChatNickCompletion:
         new_name = properties.muc_user.nick
         assert new_name is not None
         log.debug('Contact %s renamed to %s', old_name, new_name)
-        for lst in (self._attention_list, self._sender_list):
+        for lst in (self._highlight_list, self._sender_list):
             for idx, contact in enumerate(lst):
                 if contact == old_name:
                     lst[idx] = new_name
 
-    def record_message(self, contact_name: str, highlight: bool) -> None:
-        if contact_name == self._contact.nickname:
+    def _on_gc_message_received(self, event: GcMessageReceived) -> None:
+        if event.properties.muc_nickname is None:
+            # Message from server
             return
 
-        log.debug('Recorded a message from %s, highlight; %s',
-                  contact_name,
-                  highlight)
+        client = app.get_client(event.account)
+        gc_contact = client.get_module('Contacts').get_contact(
+            event.room_jid)
 
+        participant_nick = event.properties.muc_nickname
+        if participant_nick == gc_contact.nickname:
+            return
+
+        highlight = message_needs_highlight(
+            event.msgtxt, gc_contact.nickname, client.get_own_jid().bare)
+        self._process_message(participant_nick, highlight, event.room_jid)
+
+    def _process_message(self,
+                         participant_nick: str,
+                         highlight: bool,
+                         room_jid: str
+                         ) -> None:
+        nick_data = self._nick_data.get(room_jid)
+        if nick_data is None:
+            return
+
+        sender_list, highlight_list = nick_data
         if highlight:
             try:
-                self._attention_list.remove(contact_name)
+                highlight_list.remove(participant_nick)
             except ValueError:
                 pass
-            if len(self._attention_list) > 6:
-                self._attention_list.pop(0)  # remove older
-            self._attention_list.append(contact_name)
+            if len(highlight_list) > 6:
+                highlight_list.pop(0)  # remove older
+            highlight_list.append(participant_nick)
 
         # TODO implement it in a more efficient way
         # Currently it's O(n*m + n*s), where n is the number of participants and
@@ -95,10 +140,10 @@ class GroupChatNickCompletion:
         # for each suggestion (currently generating the suggestions is O(n))
         # this would give the expected complexity of O(m + s * n log n)
         try:
-            self._sender_list.remove(contact_name)
+            sender_list.remove(participant_nick)
         except ValueError:
             pass
-        self._sender_list.append(contact_name)
+        sender_list.append(participant_nick)
 
     def _generate_suggestions(self,
                               nicks: list[str],
@@ -111,12 +156,13 @@ class GroupChatNickCompletion:
         `beginning` is the text already typed by the user
         '''
         def _nick_matching(nick: str) -> bool:
+            assert self._contact
             return (nick != self._contact.nickname and
                     nick.lower().startswith(beginning.lower()))
 
         if beginning == '':
             # empty message, so just suggest recent mentions
-            potential_matches = self._attention_list
+            potential_matches = self._highlight_list
         else:
             # nick partially typed, try completing it
             potential_matches = self._sender_list
@@ -179,6 +225,7 @@ class GroupChatNickCompletion:
             self._nick_hits.append(self._nick_hits[0])
             begin = self._nick_hits.pop(0)
         else:
+            assert self._contact
             list_nick = self._contact.get_user_nicknames()
             list_nick = list(filter(self._jid_not_blocked, list_nick))
 
@@ -215,6 +262,7 @@ class GroupChatNickCompletion:
             else:
                 start_iter.backward_chars(len(begin))
 
+            assert self._account
             client = app.get_client(self._account)
             client.get_module('Chatstate').block_chatstates(
                 self._contact, True)
@@ -255,6 +303,8 @@ class GroupChatNickCompletion:
         return True
 
     def _jid_not_blocked(self, resource: str) -> bool:
+        assert self._account
+        assert self._contact
         resource_contact = self._contact.get_resource(resource)
         return not jid_is_blocked(
             self._account, str(resource_contact.jid))

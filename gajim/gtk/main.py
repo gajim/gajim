@@ -38,6 +38,7 @@ from gajim.common.const import SimpleClientState
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.modules.bytestream import is_transfer_active
+from gajim.gtk.const import MAIN_WIN_ACTIONS
 from gajim.plugins.pluginmanager import PluginManifest
 from gajim.plugins.repository import PluginRepository
 
@@ -75,6 +76,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self.set_default_icon_name('org.gajim.Gajim')
 
         app.window = self
+
+        self._add_actions()
+        self._add_actions2()
+        self._add_stateful_actions()
 
         self._startup_finished: bool = False
 
@@ -142,8 +147,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._check_for_account()
         self._load_chats()
         self._load_unread_counts()
-        self._add_actions()
-        self._add_actions2()
 
         self._prepare_window()
 
@@ -154,6 +157,11 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         for client in app.get_clients():
             client.connect_signal('state-changed',
                                   self._on_client_state_changed)
+
+    def get_action(self, name: str) -> Gio.SimpleAction:
+        action = self.lookup_action(name)
+        assert action is not None
+        return action
 
     def is_minimized(self) -> bool:
         if app.is_display(Display.WAYLAND):
@@ -319,16 +327,44 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             act.connect('activate', func)
             self.add_action(act)
 
+    def _add_stateful_actions(self) -> None:
+        action = Gio.SimpleAction.new_stateful(
+            'show-offline',
+            None,
+            GLib.Variant('b', app.settings.get('showoffline')))
+
+        action.connect('change-state', self._on_show_offline)
+
+        self.add_action(action)
+
+        action = Gio.SimpleAction.new_stateful(
+            'sort-by-show',
+            None,
+            GLib.Variant('b', app.settings.get('sort_by_show_in_roster')))
+
+        action.connect('change-state', self._on_sort_by_show)
+
+        self.add_action(action)
+
+        action = Gio.SimpleAction.new_stateful(
+            'set-encryption',
+            GLib.VariantType('s'),
+            GLib.Variant('s', 'disabled'))
+
+        self.add_action(action)
+
     def _add_actions2(self) -> None:
+        for action, variant_type, enabled in MAIN_WIN_ACTIONS:
+            if variant_type is not None:
+                variant_type = GLib.VariantType(variant_type)
+            act = Gio.SimpleAction.new(action, variant_type)
+            act.set_enabled(enabled)
+            self.add_action(act)
+
         actions = [
             'change-nickname',
             'change-subject',
             'escape',
-            'send-file',
-            'show-contact-info',
-            'show-emoji-chooser',
-            'clear-chat',
-            'delete-line',
             'close-tab',
             'switch-next-tab',
             'switch-prev-tab',
@@ -347,7 +383,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         ]
 
         disabled_for_emacs = (
-            'send-file',
             'close-tab'
         )
 
@@ -370,12 +405,21 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         if action_name == 'escape' and self._chat_page.hide_search():
             return None
 
+        chat_stack = self._chat_page.get_chat_stack()
+        if action_name == 'escape' and chat_stack.process_escape():
+            return None
+
         control = self.get_active_control()
         if control is not None:
+            if action_name == 'change-nickname':
+                app.window.activate_action('muc-change-nickname', None)
+                return None
 
-            res = control.delegate_action(action_name)
-            if res != Gdk.EVENT_PROPAGATE:
-                return res
+            if action_name == 'change-subject':
+                open_window('GroupchatDetails',
+                            contact=control.contact,
+                            page='manage')
+                return None
 
             if action_name == 'escape':
                 if app.settings.get('escape_key_closes'):
@@ -409,6 +453,20 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         return None
 
+    def _on_show_offline(self,
+                         action: Gio.SimpleAction,
+                         value: GLib.Variant) -> None:
+
+        action.set_state(value)
+        app.settings.set('showoffline', value.get_boolean())
+
+    def _on_sort_by_show(self,
+                         action: Gio.SimpleAction,
+                         value: GLib.Variant) -> None:
+
+        action.set_state(value)
+        app.settings.set('sort_by_show_in_roster', value.get_boolean())
+
     def _toggle_chat_list(self) -> None:
         chat_list_stack = self._chat_page.get_chat_list_stack()
         chat_list = chat_list_stack.get_current_chat_list()
@@ -435,8 +493,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         if self.get_property('has-toplevel-focus'):
             client = app.get_client(control.account)
+            chat_stack = self._chat_page.get_chat_stack()
+            msg_action_box = chat_stack.get_message_action_box()
             client.get_module('Chatstate').set_mouse_activity(
-                control.contact, control.msg_textview.has_text())
+                control.contact, msg_action_box.msg_textview.has_text)
 
     def _on_window_delete(self,
                           _widget: Gtk.ApplicationWindow,
@@ -714,6 +774,20 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def chat_exists(self, account: str, jid: JID) -> bool:
         return self._chat_page.chat_exists(account, jid)
+
+    def is_message_correctable(self,
+                               account: str,
+                               jid: JID,
+                               message_id: str
+                               ) -> bool:
+        chat_stack = self._chat_page.get_chat_stack()
+        last_message_id = chat_stack.get_last_message_id(account, jid)
+        if last_message_id is None or last_message_id != message_id:
+            return False
+
+        message_row = app.storage.archive.get_last_correctable_message(
+            account, jid, last_message_id)
+        return message_row is not None
 
     def get_total_unread_count(self) -> int:
         chat_list_stack = self._chat_page.get_chat_list_stack()

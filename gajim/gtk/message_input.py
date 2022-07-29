@@ -17,7 +17,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Any
+from typing import Optional
 
 import sys
 
@@ -27,7 +30,10 @@ from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Pango
 
+from nbxmpp.protocol import JID
+
 from gajim.common import app
+from gajim.common.i18n import _
 from gajim.common.styling import process
 from gajim.common.styling import PlainBlock
 from gajim.common.types import ChatContactT
@@ -52,11 +58,8 @@ class MessageInputTextView(Gtk.TextView):
     '''
     A Gtk.Textview for chat message input
     '''
-    def __init__(self, account: str, contact: ChatContactT) -> None:
+    def __init__(self) -> None:
         Gtk.TextView.__init__(self)
-        self.account = account
-        self.contact = contact
-
         self.set_border_width(3)
         self.set_accepts_tab(True)
         self.set_editable(True)
@@ -73,8 +76,10 @@ class MessageInputTextView(Gtk.TextView):
         self._undo_list: list[str] = []
         self.undo_pressed: bool = False
 
-        self._chat_action_processor = ChatActionProcessor(
-            account, contact, self)
+        self._contact: Optional[ChatContactT] = None
+        self._drafts: dict[tuple[str, JID], str] = {}
+
+        self._chat_action_processor = ChatActionProcessor(self)
 
         self.get_buffer().create_tag('strong', weight=Pango.Weight.BOLD)
         self.get_buffer().create_tag('emphasis', style=Pango.Style.ITALIC)
@@ -86,6 +91,24 @@ class MessageInputTextView(Gtk.TextView):
         self.connect('focus-in-event', self._on_focus_in)
         self.connect('focus-out-event', self._on_focus_out)
         self.connect('destroy', self._on_destroy)
+        self.connect('populate-popup', self._on_populate_popup)
+
+    def switch_contact(self, contact: ChatContactT) -> None:
+        if self._contact is not None:
+            account = self._contact.account
+            jid = self._contact.jid
+            if self.has_text:
+                self._drafts[(account, jid)] = self.get_text()
+            else:
+                self._drafts.pop((account, jid), None)
+
+        self.clear()
+        draft = self._drafts.get((contact.account, contact.jid))
+        if draft is not None:
+            self.insert_text(draft)
+
+        self._contact = contact
+        self._chat_action_processor.switch_contact(contact)
 
     def _on_destroy(self, _widget: Gtk.Widget) -> None:
         # We restore the TextView’s drag destination to avoid a GTK warning
@@ -117,7 +140,7 @@ class MessageInputTextView(Gtk.TextView):
         scrolled = self.get_parent()
         assert scrolled
         scrolled.get_style_context().remove_class('message-input-focus')
-        if not self.has_text():
+        if not self.has_text:
             self.toggle_speller(False)
         return False
 
@@ -167,6 +190,7 @@ class MessageInputTextView(Gtk.TextView):
         if buf.get_end_iter().equal(iter_):
             GLib.idle_add(scroll_to_end, self.get_parent())
 
+    @property
     def has_text(self) -> bool:
         buf = self.get_buffer()
         start, end = buf.get_bounds()
@@ -178,6 +202,9 @@ class MessageInputTextView(Gtk.TextView):
         start, end = buf.get_bounds()
         text = self.get_buffer().get_text(start, end, True)
         return text
+
+    def get_draft(self, account: str, jid: JID) -> Optional[str]:
+        return self._drafts.get((account, jid))
 
     def toggle_speller(self, activate: bool) -> None:
         if app.is_installed('GSPELL') and app.settings.get('use_speller'):
@@ -302,6 +329,7 @@ class MessageInputTextView(Gtk.TextView):
         buf = self.get_buffer()
         start, end = buf.get_bounds()
         buf.delete(start, end)
+        self._undo_list.clear()
 
     def save_undo(self, text: str) -> None:
         self._undo_list.append(text)
@@ -315,9 +343,42 @@ class MessageInputTextView(Gtk.TextView):
             buf.set_text(self._undo_list.pop())
         self.undo_pressed = True
 
-    def process_outgoing_message(self,
-                                 contact_name: str,
-                                 highlight: bool
-                                 ) -> None:
-        self._chat_action_processor.process_outgoing_message(
-            contact_name, highlight)
+    def _on_populate_popup(self,
+                           _textview: MessageInputTextView,
+                           menu: Gtk.Widget
+                           ) -> None:
+        assert isinstance(menu, Gtk.Menu)
+        item = Gtk.MenuItem.new_with_mnemonic(_('_Undo'))
+        menu.prepend(item)
+        item.connect('activate', self.undo)
+
+        item = Gtk.SeparatorMenuItem()
+        menu.prepend(item)
+
+        item = Gtk.MenuItem.new_with_mnemonic(_('_Clear'))
+        menu.prepend(item)
+        item.connect('activate', self.clear)
+
+        paste_item = Gtk.MenuItem.new_with_label(_('Paste as quote'))
+        paste_item.connect('activate', self._paste_clipboard_as_quote)
+        menu.append(paste_item)
+
+        menu.show_all()
+
+    def mention_participant(self, name: str) -> None:
+        gc_refer_to_nick_char = app.settings.get('gc_refer_to_nick_char')
+        text = f'{name}{gc_refer_to_nick_char} '
+        self.insert_text(text)
+        self.grab_focus()
+
+    def insert_as_quote(self, text: str) -> None:
+        text = '> ' + text.replace('\n', '\n> ') + '\n'
+        self.insert_text(text)
+        self.grab_focus()
+
+    def _paste_clipboard_as_quote(self, _item: Gtk.MenuItem) -> None:
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        text = clipboard.wait_for_text()
+        if text is None:
+            return
+        self.insert_as_quote(text)

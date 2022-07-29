@@ -38,11 +38,7 @@ MAX_ENTRIES = 5
 
 
 class ChatActionProcessor(Gtk.Popover):
-    def __init__(self,
-                 account: str,
-                 contact: types.ChatContactT,
-                 message_input: MessageInputTextView
-                 ) -> None:
+    def __init__(self, message_input: MessageInputTextView) -> None:
         Gtk.Popover.__init__(self)
         self._menu = Gio.Menu()
         self.bind_model(self._menu)
@@ -53,22 +49,27 @@ class ChatActionProcessor(Gtk.Popover):
         self.connect('closed', self._on_popover_closed)
         self.connect('destroy', self._on_destroy)
 
+        self._account: Optional[str] = None
+        self._contact: Optional[types.ChatContactT] = None
+
         self._message_input = message_input
         self._message_input.connect('key-press-event', self._on_key_press)
 
         self._buf = message_input.get_buffer()
         self._buf.connect('changed', self._on_changed)
 
-        self._nick_completion: Optional[GroupChatNickCompletion] = None
-        if contact.is_groupchat:
-            assert isinstance(contact, GroupchatContact)
-            self._nick_completion = GroupChatNickCompletion(
-                account, contact, message_input)
+        self._nick_completion = GroupChatNickCompletion()
 
         self._start_mark: Optional[Gtk.TextMark] = None
         self._current_iter: Optional[Gtk.TextIter] = None
 
         self._active = False
+
+    def switch_contact(self, contact: types.ChatContactT) -> None:
+        self._account = contact.account
+        self._contact = contact
+        if isinstance(contact, GroupchatContact):
+            self._nick_completion.switch_contact(contact)
 
     def _on_destroy(self, _popover: Gtk.Popover) -> None:
         app.check_finalize(self)
@@ -77,7 +78,7 @@ class ChatActionProcessor(Gtk.Popover):
                       textview: MessageInputTextView,
                       event: Gdk.EventKey
                       ) -> bool:
-        if self._nick_completion is not None:
+        if isinstance(self._contact, GroupchatContact):
             res = self._nick_completion.process_key_press(textview, event)
             if res:
                 return True
@@ -122,8 +123,9 @@ class ChatActionProcessor(Gtk.Popover):
 
     def _get_commands(self) -> list[str]:
         commands: list[str] = []
-        control = app.window.get_control(
-            self._message_input.account, self._message_input.contact.jid)
+        assert self._account
+        assert self._contact
+        control = app.window.get_control(self._account, self._contact.jid)
         assert control is not None
         for command in control.list_commands():
             for name in command.names:
@@ -324,7 +326,3 @@ class ChatActionProcessor(Gtk.Popover):
     def _item_has_focus(item: Gtk.ModelButton) -> bool:
         flags = item.get_state_flags()
         return 'GTK_STATE_FLAG_FOCUSED' in str(flags)
-
-    def process_outgoing_message(self, contact: str, highlight: bool) -> None:
-        if self._nick_completion is not None:
-            self._nick_completion.record_message(contact, highlight)

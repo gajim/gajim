@@ -25,7 +25,6 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Gtk
-from gi.repository import GObject
 from gi.repository import Pango
 
 import cairo
@@ -62,20 +61,6 @@ MERGE_TIMEFRAME = timedelta(seconds=120)
 
 
 class MessageRow(BaseRow):
-
-    __gsignals__ = {
-        'mention': (
-            GObject.SignalFlags.RUN_LAST,
-            None,
-            (str,)
-        ),
-        'quote': (
-            GObject.SignalFlags.RUN_LAST,
-            None,
-            (str,)
-        ),
-    }
-
     def __init__(self,
                  account: str,
                  contact: ChatContactT,
@@ -273,7 +258,7 @@ class MessageRow(BaseRow):
                            name: str
                            ) -> int:
         if event.type == Gdk.EventType.BUTTON_PRESS and event.button == 1:
-            self.emit('mention', name)
+            app.window.activate_action('mention', GLib.Variant('s', name))
         return Gdk.EVENT_STOP
 
     @staticmethod
@@ -335,7 +320,11 @@ class MessageRow(BaseRow):
         clip.set_text(f'{timestamp_formatted} - {self.name}: {text}', -1)
 
     def on_quote_message(self, _widget: Gtk.Widget) -> None:
-        self.emit('quote', self._message_widget.get_text())
+        app.window.activate_action(
+            'quote', GLib.Variant('s', self._message_widget.get_text()))
+
+    def on_correct_message(self, _widget: Gtk.Widget) -> None:
+        app.window.activate_action('correct-message', None)
 
     def on_retract_message(self, _widget: Gtk.Widget) -> None:
         def _on_retract(reason: str) -> None:

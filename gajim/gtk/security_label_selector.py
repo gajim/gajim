@@ -19,6 +19,7 @@ from typing import Optional
 from gi.repository import Gtk
 from gi.repository import Pango
 
+from nbxmpp.modules.security_labels import SecurityLabel
 from nbxmpp.protocol import JID
 
 from gajim.common import app
@@ -31,11 +32,11 @@ from gajim.common.i18n import _
 
 
 class SecurityLabelSelector(Gtk.ComboBox):
-    def __init__(self, account: str, contact: ChatContactT) -> None:
+    def __init__(self) -> None:
         Gtk.ComboBox.__init__(self, no_show_all=True)
-        self._account = account
-        self._client = app.get_client(account)
-        self._contact = contact
+        self._account: Optional[str] = None
+        self._client: Optional[Client] = None
+        self._contact: Optional[ChatContactT] = None
 
         self.set_valign(Gtk.Align.CENTER)
         self.set_tooltip_text(_('Select a security label for your message…'))
@@ -51,14 +52,25 @@ class SecurityLabelSelector(Gtk.ComboBox):
         app.ged.register_event_handler(
             'sec-catalog-received', ged.GUI1, self._sec_labels_received)
 
+        self.connect('changed', self._on_changed)
+        self.connect('destroy', self._on_destroy)
+
+    def switch_contact(self, contact: ChatContactT) -> None:
+        app.settings.disconnect_signals(self)
+        if self._client is not None:
+            self._client.disconnect_all_from_obj(self)
+
+        self._account = contact.account
+        self._client = app.get_client(contact.account)
+        self._contact = contact
+
         app.settings.connect_signal(
             'enable_security_labels',
             self._on_setting_changed,
             account=self._account)
         self._client.connect_signal(
             'state-changed', self._on_client_state_changed)
-        self.connect('changed', self._on_changed)
-        self.connect('destroy', self._on_destroy)
+        self._update()
 
     def _on_destroy(self, _widget: SecurityLabelSelector) -> None:
         app.ged.remove_event_handler('sec-catalog-received',
@@ -79,13 +91,14 @@ class SecurityLabelSelector(Gtk.ComboBox):
     def _on_client_state_changed(self,
                                  _client: Client,
                                  _signal_name: str,
-                                 _state: SimpleClientState):
-        self.update()
+                                 _state: SimpleClientState
+                                 ) -> None:
+        self._update()
 
     def _on_setting_changed(self,
                             state: bool,
                             _name: str,
-                            account: str,
+                            _account: Optional[str],
                             _jid: Optional[JID]
                             ) -> None:
         self.set_no_show_all(not state)
@@ -93,9 +106,13 @@ class SecurityLabelSelector(Gtk.ComboBox):
             self.show_all()
         else:
             self.hide()
+        self._update()
 
     def _sec_labels_received(self, event: SecCatalogReceived) -> None:
-        if event.account != self._account:
+        if self._account is None or self._account != event.account:
+            return
+
+        if self._contact is None:
             return
 
         if event.jid != self._contact.jid.bare:
@@ -120,11 +137,13 @@ class SecurityLabelSelector(Gtk.ComboBox):
         self.set_no_show_all(False)
         self.show_all()
 
-    def get_seclabel(self) -> Optional[str]:
+    def get_seclabel(self) -> Optional[SecurityLabel]:
         index = self.get_active()
         if index == -1:
             return None
 
+        assert self._contact is not None
+        assert self._client is not None
         jid = self._contact.jid.bare
         catalog = self._client.get_module('SecLabels').get_catalog(jid)
         if catalog is None:
@@ -132,10 +151,13 @@ class SecurityLabelSelector(Gtk.ComboBox):
 
         labels, label_list = catalog.labels, catalog.get_label_names()
         label_name = label_list[index]
-        label = labels[label_name]
-        return label
+        return labels[label_name]
 
-    def update(self) -> None:
+    def _update(self) -> None:
+        assert self._account is not None
+        assert self._client is not None
+        assert self._contact is not None
+
         chat_active = app.window.is_chat_active(
             self._account, self._contact.jid)
         if chat_active:
