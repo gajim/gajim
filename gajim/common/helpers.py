@@ -57,6 +57,7 @@ from string import Template
 from datetime import datetime
 from datetime import timedelta
 from urllib.parse import unquote
+from urllib.parse import urlparse
 from encodings.punycode import punycode_encode
 from functools import wraps
 from pathlib import Path
@@ -989,6 +990,13 @@ def parse_uri(uri: str) -> URI:
 
     if uri.startswith('file://'):
         return URI(type=URIType.FILE, data=uri)
+
+    try:
+        urlparts = urlparse(uri)
+        if not urlparts.scheme:
+            return URI(type=URIType.WEB, data=f'http://{uri}')
+    except Exception:
+        pass
 
     return URI(type=URIType.WEB, data=uri)
 
