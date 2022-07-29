@@ -10,52 +10,37 @@ from gajim.gui.groupchat_nick_completion import GroupChatNickCompletion
 class Test(unittest.TestCase):
 
     def test_generate_suggestions(self):
+        gen = GroupChatNickCompletion()
         contact = MagicMock()
-        message_input = MagicMock()
-        gen = GroupChatNickCompletion('testacc', contact, message_input)
+        contact.jid = 'test'
+        gen.switch_contact(contact)
 
-        l = ['aaaa', 'fooo', 'xxxxz', 'xaaaz']
-        for n in l:
-            gen.record_message(n, False)
-        l2 = ['xxx'] + l
-        r = gen._generate_suggestions(nicks=l2, beginning='x')
-        self.assertEqual(r, ['xaaaz', 'xxxxz', 'xxx'])
+        list_1 = ['aaaa', 'fooo', 'xxxxz', 'xaaaz']
+        for name in list_1:
+            gen._process_message(name, False, contact.jid)
+        list_2 = list_1 + ['xxx']
+        r = gen._generate_suggestions(nicks=list_2, beginning='x')
+        self.assertEqual(r, ['xaaaz', 'xxx', 'xxxxz'])
 
         r = gen._generate_suggestions(
-            nicks=l2,
+            nicks=list_2,
             beginning='m'
         )
         self.assertEqual(r, [])
 
-        for n in ['xaaaz', 'xxxxz']:
-            gen.record_message(n, True)
+        for name in ['xaaaz', 'xxxxz']:
+            gen._process_message(name, True, contact.jid)
 
         r = gen._generate_suggestions(
-            nicks=l2,
+            nicks=list_2,
             beginning='x'
         )
-        self.assertEqual(r, ['xxxxz', 'xaaaz', 'xxx'])
+        self.assertEqual(r, ['xaaaz', 'xxx', 'xxxxz'])
         r = gen._generate_suggestions(
-            nicks=l2,
+            nicks=list_2,
             beginning=''
         )
-        self.assertEqual(r, ['xxxxz', 'xaaaz', 'aaaa', 'fooo', 'xxx'])
-
-        l2[1] = 'bbbb'
-
-        old_name = 'aaaa'
-        new_name = 'bbbb'
-
-        for lst in (gen._attention_list, gen._sender_list):
-            for idx, contact in enumerate(lst):
-                if contact == old_name:
-                    lst[idx] = new_name
-
-        r = gen._generate_suggestions(
-            nicks=l2,
-            beginning=''
-        )
-        self.assertEqual(r, ['xxxxz', 'xaaaz', 'bbbb', 'fooo', 'xxx'])
+        self.assertEqual(r, ['aaaa', 'fooo', 'xaaaz', 'xxx', 'xxxxz'])
 
 
 if __name__ == '__main__':
