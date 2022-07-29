@@ -584,6 +584,13 @@ class GroupchatContact(CommonContact):
     def is_groupchat(self) -> bool:
         return True
 
+    @property
+    def is_irc(self) -> bool:
+        disco_info = self.get_disco()
+        if disco_info is None:
+            return False
+        return disco_info.is_irc
+
     def add_resource(self, resource: str) -> GroupchatParticipant:
         assert resource is not None
         # Check if resource is not None because not the whole
