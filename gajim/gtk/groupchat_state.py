@@ -12,53 +12,58 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
 
+from gi.repository import GLib
 from gi.repository import Gtk
-from gi.repository import GObject
+
+from gajim.common import app
+from gajim.common.modules.contacts import GroupchatContact
 
 from gajim.gui.builder import get_builder
 
 
 class GroupchatState(Gtk.Box):
-
-    __gsignals__ = {
-        'join-clicked': (
-            GObject.SignalFlags.RUN_FIRST,
-            None,
-            ()),
-        'abort-clicked': (
-            GObject.SignalFlags.RUN_FIRST,
-            None,
-            ()),
-    }
-
-    def __init__(self):
+    def __init__(self, contact: GroupchatContact) -> None:
         Gtk.Box.__init__(self)
-
         self.set_halign(Gtk.Align.CENTER)
         self.set_valign(Gtk.Align.END)
+        self.set_no_show_all(True)
+
+        self._contact = contact
+        self._contact.connect('state-changed', self._on_muc_state_changed)
 
         self._ui = get_builder('groupchat_state.ui')
         self._ui.connect_signals(self)
         self.add(self._ui.groupchat_state)
         self.show_all()
 
-    def set_joining(self):
-        self._ui.groupchat_state.set_visible_child_name('joining')
+        self._update_state(contact)
 
-    def set_joined(self):
-        self.hide()
-        self.set_no_show_all(True)
+    def _on_muc_state_changed(self,
+                              contact: GroupchatContact,
+                              _signal_name: str
+                              ) -> None:
+        self._update_state(contact)
 
-    def set_not_joined(self):
-        self._ui.groupchat_state.set_visible_child_name('not-joined')
-        self.show()
+    def _update_state(self, contact: GroupchatContact) -> None:
+        if contact.is_joining:
+            self._ui.groupchat_state.set_visible_child_name('joining')
 
-    def set_fetching(self):
+        elif contact.is_not_joined:
+            self._ui.groupchat_state.set_visible_child_name('not-joined')
+
+        self.set_visible(not contact.is_joined)
+
+    def set_fetching(self) -> None:
         self._ui.groupchat_state.set_visible_child_name('fetching')
 
     def _on_join_clicked(self, _button: Gtk.Button) -> None:
-        self.emit('join-clicked')
+        client = app.get_client(self._contact.account)
+        client.get_module('MUC').join(self._contact.jid)
 
     def _on_abort_clicked(self, _button: Gtk.Button) -> None:
-        self.emit('abort-clicked')
+        app.window.activate_action(
+            'remove-chat',
+            GLib.Variant(
+                'as', [self._contact.account, str(self._contact.jid)]))
