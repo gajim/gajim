@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 
+from typing import Any
+
+import json
 import os
 import requests
 import time
 from pathlib import Path
 
 from rich.console import Console
+
 
 ACCOUNT = 'lovetox'
 PROJECT_SLUG = 'gajim'
@@ -67,7 +71,7 @@ def is_build_finished(build: dict[str, str]) -> bool:
     return build['status'] == 'success'
 
 
-def get_artifacts(build_id: str) -> None:
+def check_for_response(build_id: str) -> None:
     time.sleep(INITIAL_START_DELAY)
     while True:
         time.sleep(RETRY_TIMEOUT)
@@ -89,28 +93,26 @@ def get_artifacts(build_id: str) -> None:
     build_folder.mkdir()
 
     for job in build['jobs']:
-        download_job_artifacts(job['jobId'], build_folder)
+        response = get_job_response(job['jobId'])
+        result = build_folder / f'{job["jobId"]}.json'
+        result.write_text(json.dumps(response))
+        console.print('Write job response:', result)
 
-    console.print('All artifacts downloaded!')
 
-
-def download_job_artifacts(job_id: str, target_folder: Path) -> None:
+def get_job_response(job_id: str) -> list[dict[str, Any]]:
     artifacts_api_url = f'{BASE_URL}/buildjobs/{job_id}/artifacts'
     req = requests.get(artifacts_api_url, headers=HEADERS)
     req.raise_for_status()
     response = req.json()
 
     for artifact in response:
-        filename = artifact['fileName']
-        console.print('Download', filename, '...')
-        file_url = f'{artifacts_api_url}/{filename}'
-        req = requests.get(file_url, headers=HEADERS)
-        req.raise_for_status()
-        with open(target_folder / filename, 'wb') as file:
-            file.write(req.content)
+        file_url = f'{artifacts_api_url}/{artifact["fileName"]}'
+        artifact['fileUrl'] = file_url
+
+    return response
 
 
 if __name__ == '__main__':
     push_yaml_to_project()
     build_id = start_build()
-    get_artifacts(build_id)
+    check_for_response(build_id)

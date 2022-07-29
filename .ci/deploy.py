@@ -1,19 +1,26 @@
+#!/usr/bin/env python3
+
 from typing import Any
 from typing import Optional
 
 import functools
+import json
 import os
 import sys
 from datetime import date
 from ftplib import FTP_TLS
 from pathlib import Path
 
+import requests
 from rich.console import Console
 
 
 FTP_URL = 'panoramix.gajim.org'
 FTP_USER = os.environ['FTP_USER']
 FTP_PASS = os.environ['FTP_PASS']
+
+API_KEY = os.environ['APPVEYOR_API_KEY']
+HEADERS = {'Authorization': f'Bearer {API_KEY}'}
 
 WINDOWS_NIGHTLY_FOLDER = 'downloads/snap/win'
 LINUX_NIGHTLY_FOLDER = 'downloads/snap'
@@ -84,6 +91,29 @@ def upload_file(ftp: FTP_TLS,
         ftp.storbinary('STOR ' + name, f)
 
 
+def download_artifacts(path: Path) -> None:
+    build_results = list(path.glob('*.json'))
+    if not build_results:
+        sys.exit('No build build_results found')
+
+    responses = [json.loads(response.read_text()) for response in build_results]
+
+    for response in responses:
+        for artifact in response:
+            filename = artifact['fileName']
+            file_url = artifact['fileUrl']
+
+            console.print('Download', filename, '...')
+
+            req = requests.get(file_url, headers=HEADERS)
+            req.raise_for_status()
+            with open(path / filename, 'wb') as file:
+                file.write(req.content)
+
+    for result in build_results:
+        result.unlink()
+
+
 def get_deploy_method() -> str:
     deploy_type = os.environ['DEPLOY_TYPE']
     is_nightly = bool(os.environ.get('GAJIM_NIGHTLY_BUILD'))
@@ -95,6 +125,7 @@ def get_deploy_method() -> str:
 @ftp_connection
 def deploy_windows_nightly(ftp: FTP_TLS, filedir: Path) -> None:
     ftp.cwd(WINDOWS_NIGHTLY_FOLDER)
+    download_artifacts(filedir)
     upload_all_from_dir(ftp, filedir)
 
 
@@ -102,6 +133,7 @@ def deploy_windows_nightly(ftp: FTP_TLS, filedir: Path) -> None:
 def deploy_windows_release(ftp: FTP_TLS, filedir: Path) -> None:
     tag = get_gajim_tag()
     create_release_folder(ftp, tag)
+    download_artifacts(filedir)
     upload_all_from_dir(ftp, filedir)
 
 
