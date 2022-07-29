@@ -51,7 +51,7 @@ class GroupchatState(Gtk.Box):
         self.set_no_show_all(True)
 
     def set_not_joined(self):
-        self._ui.groupchat_state.set_visible_child_name('not-joining')
+        self._ui.groupchat_state.set_visible_child_name('not-joined')
         self.show()
 
     def set_fetching(self):
