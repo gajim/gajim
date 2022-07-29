@@ -25,6 +25,8 @@ from dataclasses import field
 
 from nbxmpp.protocol import JID
 from nbxmpp.modules.security_labels import Catalog
+from nbxmpp.modules.security_labels import Displaymarking
+from nbxmpp.modules.security_labels import SecurityLabel
 from nbxmpp.structs import HTTPAuthData
 from nbxmpp.structs import ModerationData
 from nbxmpp.structs import LocationData
@@ -162,7 +164,7 @@ class MessageSent(ApplicationEvent):
     chatstate: Optional[str]
     timestamp: float
     additional_data: AdditionalDataDict
-    label: Optional[str]
+    label: Optional[SecurityLabel]
     correct_id: Optional[str]
     play_sound: bool
 
@@ -393,7 +395,7 @@ class MessageReceived(ApplicationEvent):
     session: Any
     delayed: Optional[float]
     msg_log_id: int
-    displaymarking: str
+    displaymarking: Optional[Displaymarking]
 
 
 @dataclass
@@ -589,6 +591,9 @@ class PingReply(ApplicationEvent):
     account: str
     contact: Any
     seconds: float
+
+
+PingEventT = Union[PingSent, PingReply, PingError]
 
 
 @dataclass

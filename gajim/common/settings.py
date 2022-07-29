@@ -150,19 +150,20 @@ class Settings:
                     handlers.remove(handler)
 
     def bind_signal(self,
-                    setting,
-                    widget,
-                    func_name,
-                    account=None,
-                    jid=None,
-                    inverted=False,
-                    default_text=None):
+                    setting: str,
+                    widget: Any,
+                    func_name: str,
+                    account: Optional[str] = None,
+                    jid: Optional[JID] = None,
+                    inverted: bool = False,
+                    default_text: Optional[str] = None
+                    ) -> None:
 
         callbacks = self._callbacks[(setting, account, jid)]
         func = getattr(widget, func_name)
         callbacks.append((func, inverted, default_text))
 
-        def _on_destroy(*args):
+        def _on_destroy(*args: Any) -> None:
             callbacks.remove((func, inverted, default_text))
 
         widget.connect('destroy', _on_destroy)

@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 from typing import Optional
+from typing import Union
 
 from datetime import datetime
 from datetime import timedelta
@@ -31,6 +32,7 @@ import cairo
 
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules.security_labels import Displaymarking
+from nbxmpp.structs import CommonError
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
@@ -86,7 +88,7 @@ class MessageRow(BaseRow):
                  additional_data: Optional[AdditionalDataDict] = None,
                  display_marking: Optional[Displaymarking] = None,
                  marker: Optional[str] = None,
-                 error: Optional[StanzaError] = None,
+                 error: Union[CommonError, StanzaError, None] = None,
                  encryption_enabled: bool = False,
                  log_line_id: Optional[int] = None) -> None:
 

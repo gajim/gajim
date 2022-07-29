@@ -32,6 +32,7 @@ from gi.repository import Gtk
 
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules.security_labels import Displaymarking
+from nbxmpp.structs import CommonError
 from nbxmpp.structs import MucSubject
 from nbxmpp.protocol import JID
 
@@ -251,7 +252,8 @@ class ConversationView(Gtk.ListBox):
                     display_marking: Optional[Displaymarking] = None,
                     additional_data: Optional[AdditionalDataDict] = None,
                     marker: Optional[str] = None,
-                    error: Optional[StanzaError] = None) -> None:
+                    error: Union[CommonError, StanzaError, None] = None
+                    ) -> None:
 
         if not timestamp:
             timestamp = time.time()

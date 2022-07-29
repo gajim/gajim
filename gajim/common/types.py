@@ -16,10 +16,7 @@
 
 from typing import Any
 from typing import Callable
-from typing import Dict
-from typing import List
 from typing import Optional
-from typing import Tuple
 from typing import Union
 from typing import TYPE_CHECKING
 
@@ -62,15 +59,15 @@ CSSConfigT = Union['CSSConfig']
 
 # PEP
 PEPNotifyCallback = Callable[[nbxmpp.JID, nbxmpp.Node], None]
-PEPHandlersDict = Dict[str, List[PEPNotifyCallback]]
+PEPHandlersDict = dict[str, list[PEPNotifyCallback]]
 
 # Plugins
-PluginExtensionPoints = Dict[str, Tuple[Optional[Callable[..., None]],
+PluginExtensionPoints = dict[str, tuple[Optional[Callable[..., None]],
                                         Optional[Callable[..., None]]]]
 
 SettingsT = Union['Settings']
 
-BookmarksDict = Dict[JID, BookmarkData]
+BookmarksDict = dict[JID, BookmarkData]
 
 GdkPixbufType = Union[GdkPixbuf.Pixbuf, GdkPixbuf.PixbufAnimation]
 

@@ -69,6 +69,7 @@ from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
 from nbxmpp.const import Affiliation
 from nbxmpp.errors import StanzaError
+from nbxmpp.structs import CommonError
 from nbxmpp.structs import ProxyData
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import InvalidJid
@@ -1153,7 +1154,7 @@ def validate_jid(jid: Union[str, JID], type_: Optional[str] = None) -> JID:
     raise ValueError(f'Not a {type_} JID')
 
 
-def to_user_string(error: StanzaError) -> str:
+def to_user_string(error: Union[CommonError, StanzaError]) -> str:
     text = error.get_text(get_rfc5646_lang())
     if text:
         return text
