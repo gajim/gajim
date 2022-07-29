@@ -27,7 +27,6 @@ from datetime import datetime
 from datetime import timedelta
 
 from gi.repository import GLib
-from gi.repository import GObject
 from gi.repository import Gtk
 
 from nbxmpp.errors import StanzaError
@@ -68,25 +67,6 @@ log = logging.getLogger('gajim.gui.conversation_view')
 
 
 class ConversationView(Gtk.ListBox):
-
-    __gsignals__ = {
-        'quote': (
-            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
-            None,
-            (str, )
-        ),
-        'mention': (
-            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
-            None,
-            (str, )
-        ),
-        'scroll-to-end': (
-            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
-            None,
-            ()
-        ),
-    }
-
     def __init__(self, account: str, contact: ChatContactT) -> None:
         Gtk.ListBox.__init__(self)
         self.set_selection_mode(Gtk.SelectionMode.NONE)
@@ -273,8 +253,6 @@ class ConversationView(Gtk.ListBox):
             error=error,
             encryption_enabled=self.encryption_enabled,
             log_line_id=log_line_id)
-        message_row.connect('mention', self._on_mention)
-        message_row.connect('quote', self._on_quote)
 
         if message_id is not None:
             self._message_id_row_map[message_id] = message_row
@@ -488,10 +466,6 @@ class ConversationView(Gtk.ListBox):
             if isinstance(row, MessageRow):
                 row.update_avatar()
 
-    def scroll_to_end(self, force: bool = False) -> None:
-        if self.autoscroll or force:
-            GLib.idle_add(self.emit, 'scroll-to-end')
-
     def correct_message(self,
                         correct_id: str,
                         text: str,
@@ -517,12 +491,6 @@ class ConversationView(Gtk.ListBox):
         if message_row is not None:
             message_row.set_error(to_user_string(error))
             message_row.set_merged(False)
-
-    def _on_quote(self, _message_row: MessageRow, text: str) -> None:
-        self.emit('quote', text)
-
-    def _on_mention(self, _message_row: MessageRow, name: str) -> None:
-        self.emit('mention', name)
 
     def _on_contact_setting_changed(self,
                                     value: Any,

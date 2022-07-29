@@ -117,8 +117,6 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._ui.connect_signals(self)
 
         self.register_events([
-            ('account-connected', ged.CORE, self._on_account_state),
-            ('account-disconnected', ged.CORE, self._on_account_state),
             ('roster-received', ged.CORE, self._on_roster_received),
             ('theme-update', ged.GUI2, self._on_theme_update),
             ('roster-push', ged.GUI2, self._on_roster_push),
@@ -135,69 +133,29 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._filter_enabled = False
         self._filter_string = ''
 
-        self._add_actions()
+        app.settings.connect_signal('showoffline', self._on_setting_changed)
+        app.settings.connect_signal('sort_by_show_in_roster',
+                                    self._on_setting_changed)
+
+        self._connect_actions()
         self._initial_draw()
 
-    def _add_actions(self):
-        actions = [
-            ('contact-info', self._on_contact_info),
-            ('modify-gateway', self._on_modify_gateway),
-            ('execute-command', self._on_execute_command),
-            ('block-contact', self._on_block_contact),
-            ('remove-contact', self._on_remove_contact),
+    def _connect_actions(self):
+        app_actions = [
+            (f'{self._account}-modify-gateway', self._on_modify_gateway),
+            (f'{self._account}-execute-command', self._on_execute_command),
+            (f'{self._account}-block-contact', self._on_block_contact),
+            (f'{self._account}-remove-contact', self._on_remove_contact),
         ]
-        for action in actions:
+
+        for action in app_actions:
             action_name, func = action
-            act = Gio.SimpleAction.new(
-                f'{action_name}-{self._account}', GLib.VariantType.new('s'))
-            act.connect('activate', func)
-            app.window.add_action(act)
+            action = app.app.lookup_action(action_name)
+            assert action is not None
+            action.connect('activate', func)
 
-        action = Gio.SimpleAction.new_stateful(
-            f'show-offline-{self._account}',
-            None,
-            GLib.Variant.new_boolean(app.settings.get('showoffline')))
-        action.connect('change-state', self._on_show_offline)
-        app.window.add_action(action)
-
-        action = Gio.SimpleAction.new_stateful(
-            f'sort-by-show-{self._account}',
-            None,
-            GLib.Variant.new_boolean(
-                app.settings.get('sort_by_show_in_roster')))
-        action.connect('change-state', self._on_sort_by_show)
-        app.window.add_action(action)
-
-    def update_actions(self):
-        online = app.account_is_connected(self._account)
-        blocking_support = self._client.get_module('Blocking').supported
-
-        actions = [('contact-info', online),
-                   ('modify-gateway', online),
-                   ('execute-command', online),
-                   ('block-contact', online and blocking_support),
-                   ('remove-contact', online)]
-
-        for action, enabled in actions:
-            act = app.window.lookup_action(f'{action}-{self._account}')
-            assert act is not None
-            act.set_enabled(enabled)
-
-    def _remove_actions(self):
-        actions = [
-            'contact-info',
-            'modify-gateway',
-            'execute-command',
-            'block-contact',
-            'remove-contact',
-            'show-offline',
-            'sort-by-show',
-        ]
-        for action in actions:
-            app.window.remove_action(f'{action}-{self._account}')
-
-    def _on_account_state(self, _event: ApplicationEvent) -> None:
-        self.update_actions()
+    def _get_contact(self, jid: str) -> types.BareContact:
+        return self._client.get_module('Contacts').get_contact(jid)
 
     def _on_theme_update(self, _event: ApplicationEvent) -> None:
         self.redraw()
@@ -304,20 +262,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         tooltip.set_custom(widget)
         return value
 
-    def _on_show_offline(self,
-                         action: Gio.SimpleAction,
-                         value: Optional[GLib.Variant]) -> None:
-
-        assert value is not None
-        action.set_state(value)
-        app.settings.set('showoffline', value.get_boolean())
-        self._refilter()
-
-    def _on_sort_by_show(self,
-                         action: Gio.SimpleAction,
-                         value: GLib.Variant) -> None:
-        action.set_state(value)
-        app.settings.set('sort_by_show_in_roster', value.get_boolean())
+    def _on_setting_changed(self, *args: Any) -> None:
         self._refilter()
 
     def _on_contact_info(self,
@@ -787,7 +732,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             return
 
     def _on_destroy(self, _roster: Roster) -> None:
-        self._remove_actions()
+        app.settings.disconnect_signals(self)
         self._contact_refs.clear()
         self._group_refs.clear()
         self._unset_model()

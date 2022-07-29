@@ -23,6 +23,7 @@ from typing import Union
 
 import logging
 import math
+import sys
 import textwrap
 from io import BytesIO
 from importlib import import_module
@@ -356,6 +357,18 @@ def get_primary_accel_mod() -> Optional[Gdk.ModifierType]:
     cmd on osx, ctrl everywhere else.
     '''
     return Gtk.accelerator_parse('<Primary>')[1]
+
+
+def get_copy_modifier() -> Gdk.ModifierType:
+    if sys.platform == 'darwin':
+        return Gdk.ModifierType.META_MASK
+    return Gdk.ModifierType.CONTROL_MASK
+
+
+def get_copy_modifier_keys() -> tuple[int, int]:
+    if sys.platform == 'darwin':
+        return Gdk.KEY_Meta_L, Gdk.KEY_Meta_R
+    return Gdk.KEY_Control_L, Gdk.KEY_Control_R
 
 
 def get_hardware_key_codes(keyval: int) -> list[int]:

@@ -15,7 +15,7 @@
     "win.show-contact-info": ["<Primary>I"],
     "win.show-emoji-chooser": ["<Primary><Shift>M"],
     "win.clear-chat": ["<Primary>L"],
-    "win.delete-line": ["<Primary>U"],
+    "win.input-clear": ["<Primary>U"],
     "win.close-tab": ["<Primary>W"],
     "win.switch-next-tab": ["<Primary>Page_Down"],
     "win.switch-prev-tab": ["<Primary>Page_Up"],

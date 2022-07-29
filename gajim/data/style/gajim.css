@@ -6,6 +6,8 @@
 	border: none;
 }
 
+.message-action-box { margin: 8px 13px 8px 8px }
+
 .no-border { border: none; }
 .scrolled-no-border { border: none; }
 .no-scroll-indicator undershoot.top, undershoot.bottom { background-image: none; }
@@ -184,10 +186,10 @@ row:backdrop { transition: none; }
     padding: 4px;
 }
 .app-page-box {
-    margin-top: 6px;
+    margin-top: 3px;
 }
 .app-page-box > separator {
-    background-color: darker(@theme_bg_color);
+    background-color: @unfocused_borders;
     margin-left: 12px;
     margin-right: 12px;
 }

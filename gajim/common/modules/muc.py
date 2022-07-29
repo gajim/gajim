@@ -34,6 +34,7 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
 from nbxmpp.protocol import Presence
+from nbxmpp.structs import CommonError
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import PresenceProperties
@@ -267,7 +268,8 @@ class MUC(BaseModule):
             # join a different nickname, so update MUCData here.
             muc_data.nick = nick
 
-        if not muc_data.state.is_not_joined:
+        if muc_data.state not in (MUCJoinedState.NOT_JOINED,
+                                  MUCJoinedState.PASSWORD_REQUEST):
             self._log.warning('Can’t join MUC %s, state: %s',
                               jid, muc_data.state)
             return
@@ -503,21 +505,31 @@ class MUC(BaseModule):
 
             elif properties.error.condition == 'not-authorized':
                 self._remove_rejoin_timeout(room_jid)
-                self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
+                self._set_muc_state(room_jid, MUCJoinedState.PASSWORD_REQUEST)
                 room.notify('room-password-required', properties)
 
             else:
                 self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
                 if room_jid not in self._rejoin_muc:
+                    muc_data.error = 'join-failed'
+                    assert isinstance(properties.error, CommonError)
+                    muc_data.error_text = helpers.to_user_string(
+                        properties.error)
                     room.notify('room-join-failed', properties.error)
 
         elif muc_data.state == MUCJoinedState.CREATING:
             self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
+            muc_data.error = 'creation-failed'
+            assert isinstance(properties.error, CommonError)
+            muc_data.error_text = helpers.to_user_string(properties.error)
             room.notify('room-creation-failed', properties)
 
         elif muc_data.state == MUCJoinedState.CAPTCHA_REQUEST:
             self._set_muc_state(room_jid, MUCJoinedState.CAPTCHA_FAILED)
             self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
+            muc_data.error = 'captcha-failed'
+            assert isinstance(properties.error, CommonError)
+            muc_data.error_text = helpers.to_user_string(properties.error)
             room.notify('room-captcha-error', properties.error)
 
         elif muc_data.state == MUCJoinedState.CAPTCHA_FAILED:
@@ -767,6 +779,9 @@ class MUC(BaseModule):
         room = self._get_contact(room_jid)
         room.notify('room-joined')
 
+    def cancel_password_request(self, room_jid: str) -> None:
+        self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
+
     def _room_join_complete(self, muc_data: MUCData):
         self._remove_join_timeout(muc_data.jid)
         self._set_muc_state(muc_data.jid, MUCJoinedState.JOINED)
@@ -820,8 +835,11 @@ class MUC(BaseModule):
             return
 
         self._log.info('Captcha challenge received from %s', properties.jid)
+
+        assert properties.captcha is not None
         store_bob_data(properties.captcha.bob_data)
         muc_data.captcha_id = properties.id
+        muc_data.captcha_form = properties.captcha.form
 
         self._set_muc_state(properties.jid, MUCJoinedState.CAPTCHA_REQUEST)
         self._remove_rejoin_timeout(properties.jid)

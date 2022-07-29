@@ -77,6 +77,7 @@ class JumpToEndButton(Gtk.Overlay):
         self.set_no_show_all(True)
 
     def _on_jump_clicked(self, _button: Gtk.Button) -> None:
+        self.reset_unread_count()
         self.emit('clicked')
 
     def toggle(self, visible: bool) -> None:

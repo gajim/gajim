@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.38.2 -->
+<interface>
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkBox" id="box">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+    <property name="hexpand">True</property>
+    <property name="spacing">2</property>
+    <child>
+      <object class="GtkButton" id="quick_invite_button">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
+        <property name="tooltip-text" translatable="yes">Invite Contacts…</property>
+        <property name="action-name">win.invite</property>
+        <property name="relief">none</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="icon-name">list-add-symbolic</property>
+          </object>
+        </child>
+        <style>
+          <class name="chatcontrol-actionbar-button"/>
+          <class name="flat"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="pack-type">end</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkMenuButton" id="settings_menu">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
+        <property name="relief">none</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="icon-name">open-menu-symbolic</property>
+          </object>
+        </child>
+        <style>
+          <class name="chatcontrol-actionbar-button"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="pack-type">end</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="encryption_details_button">
+        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
+        <property name="receives-default">True</property>
+        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+        <property name="no-show-all">True</property>
+        <property name="relief">none</property>
+        <signal name="clicked" handler="_on_encryption_details_clicked" swapped="no"/>
+        <child>
+          <object class="GtkImage" id="encryption_details_image">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="icon_size">1</property>
+          </object>
+        </child>
+        <style>
+          <class name="chatcontrol-actionbar-button"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="pack-type">end</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkMenuButton" id="encryption_menu_button">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
+        <property name="tooltip-text" translatable="yes">Choose encryption</property>
+        <property name="relief">none</property>
+        <child>
+          <object class="GtkImage" id="encryption_image">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="icon-name">channel-insecure-symbolic</property>
+          </object>
+        </child>
+        <style>
+          <class name="chatcontrol-actionbar-button"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="pack-type">end</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="sendfile_button">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
+        <property name="receives-default">True</property>
+        <property name="action-name">win.send-file</property>
+        <property name="relief">none</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="icon-name">mail-attachment-symbolic</property>
+          </object>
+        </child>
+        <style>
+          <class name="chatcontrol-actionbar-button"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="pack-type">end</property>
+        <property name="position">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkMenuButton" id="emoticons_button">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">True</property>
+        <property name="tooltip-text" translatable="yes">Show a list of emojis</property>
+        <property name="relief">none</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="icon-name">face-smile-symbolic</property>
+          </object>
+        </child>
+        <style>
+          <class name="chatcontrol-actionbar-button"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">5</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="send_message_button">
+        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
+        <property name="receives-default">True</property>
+        <property name="no-show-all">True</property>
+        <property name="tooltip-text" translatable="yes">Send Message</property>
+        <property name="action-name">win.send-message</property>
+        <property name="relief">none</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="icon-name">document-send</property>
+          </object>
+        </child>
+        <style>
+          <class name="chatcontrol-actionbar-button"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="pack-type">end</property>
+        <property name="position">6</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkMenuButton" id="formattings_button">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
+        <property name="receives-default">True</property>
+        <property name="tooltip-text" translatable="yes">Format your message</property>
+        <property name="relief">none</property>
+        <property name="direction">up</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="icon-name">format-text-bold-symbolic</property>
+            <property name="icon_size">1</property>
+          </object>
+        </child>
+        <style>
+          <class name="chatcontrol-actionbar-button"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">7</property>
+      </packing>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow" id="input_scrolled">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="margin-start">3</property>
+        <property name="margin-end">3</property>
+        <property name="shadow-type">in</property>
+        <property name="overlay-scrolling">False</property>
+        <property name="max-content-height">100</property>
+        <property name="propagate-natural-height">True</property>
+        <child>
+          <placeholder/>
+        </child>
+        <style>
+          <class name="message-input-border"/>
+          <class name="scrolled-no-border"/>
+          <class name="no-scroll-indicator"/>
+          <class name="scrollbar-style"/>
+          <class name="one-line-scrollbar"/>
+        </style>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">9</property>
+      </packing>
+    </child>
+  </object>
+</interface>

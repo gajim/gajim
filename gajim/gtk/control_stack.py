@@ -18,49 +18,39 @@ from typing import Generator
 
 import logging
 
-from gi.repository import GLib
 from gi.repository import Gtk
 
 from nbxmpp import JID
-
-from gajim.common import app
-from gajim.common import ged
-from gajim.common.i18n import _
 
 from .controls.chat import ChatControl
 from .controls.groupchat import GroupchatControl
 from .controls.private import PrivateChatControl
 
 from .types import ControlT
-from .util import EventHelper
 
 log = logging.getLogger('gajim.gui.controlstack')
 
 
-class ControlStack(Gtk.Stack, EventHelper):
+class ControlStack(Gtk.Stack):
     def __init__(self):
         Gtk.Stack.__init__(self)
-        EventHelper.__init__(self)
-
         self.set_vexpand(True)
         self.set_hexpand(True)
 
-        self.add_named(ChatPlaceholderBox(), 'empty')
-
-        self.register_events([
-            ('account-enabled', ged.GUI2, self._on_account_changed),
-            ('account-disabled', ged.GUI2, self._on_account_changed),
-        ])
+        self.add_named(Gtk.Box(), 'empty')
 
         self.show_all()
         self._controls: dict[tuple[str, JID], ControlT] = {}
-        self._current_control = None
+        self._current_control: Optional[ControlT] = None
 
     def get_control(self, account: str, jid: JID) -> Optional[ControlT]:
         try:
             return self._controls[(account, jid)]
         except KeyError:
             return None
+
+    def get_current_control(self) -> Optional[ControlT]:
+        return self._current_control
 
     def get_controls(self, account: Optional[str]
                      ) -> Generator[ControlT, None, None]:
@@ -117,14 +107,12 @@ class ControlStack(Gtk.Stack, EventHelper):
             return
 
         if self._current_control is not None:
-            self._current_control.set_control_active(False)
             self._current_control.reset_view()
 
-        control.set_control_active(True)
+        control.load_messages()
         self._current_control = control
 
         self.set_visible_child_name(new_name)
-        GLib.idle_add(control.focus)
 
     def is_chat_loaded(self, account: str, jid: JID) -> bool:
         control = self.get_control(account, jid)
@@ -147,31 +135,3 @@ class ControlStack(Gtk.Stack, EventHelper):
             if chat_account != account:
                 continue
             self.remove_chat(account, jid)
-
-    def _on_account_changed(self, *args: Any) -> None:
-        for control in self._controls.values():
-            control.update_account_badge()
-
-
-class ChatPlaceholderBox(Gtk.Box):
-    def __init__(self):
-        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL,
-                         spacing=18)
-        self.set_valign(Gtk.Align.CENTER)
-        pixbuf = Gtk.IconTheme.load_icon_for_scale(
-            Gtk.IconTheme.get_default(),
-            'org.gajim.Gajim-symbolic',
-            100,
-            self.get_scale_factor(),
-            Gtk.IconLookupFlags.FORCE_SIZE)
-        image = Gtk.Image.new_from_pixbuf(pixbuf)
-        image.get_style_context().add_class('dim-label')
-        self.add(image)
-
-        button = Gtk.Button(label=_('Start Chatting…'))
-        button.set_halign(Gtk.Align.CENTER)
-        button.connect('clicked', self._on_start_chatting)
-        self.add(button)
-
-    def _on_start_chatting(self, _button: Gtk.Button) -> None:
-        app.app.activate_action('start-chat', GLib.Variant('s', ''))

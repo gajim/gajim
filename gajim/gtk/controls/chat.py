@@ -30,51 +30,31 @@ from typing import Type
 from typing import Optional
 
 import logging
-import sys
-
-from gi.repository import Gtk
-from gi.repository import Gio
-from gi.repository import GLib
-from gi.repository import Gdk
 
 from nbxmpp import JID
 from nbxmpp.const import Chatstate
 from nbxmpp.modules.security_labels import Displaymarking
-from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common import events
-from gajim.common import helpers
-from gajim.common import types
-from gajim.common.client import Client
 from gajim.common.i18n import _
 from gajim.common.helpers import AdditionalDataDict
-from gajim.common.const import AvatarSize
-from gajim.common.const import CallType
-from gajim.common.const import SimpleClientState
 from gajim.common.const import KindConstant
 from gajim.common.modules.contacts import BareContact
 
 from gajim.gui.controls.base import BaseControl
-from gajim.gui.const import TARGET_TYPE_URI_LIST
 from gajim.gui.const import ControlType
-from gajim.gui.util import open_window
 
 from gajim.command_system.implementation.hosts import ChatCommands
 from gajim.command_system.framework import CommandHost
-
-from ..menus import get_encryption_menu
-from ..menus import get_private_chat_menu
-from ..menus import get_self_contact_menu
-from ..menus import get_singlechat_menu
 
 log = logging.getLogger('gajim.gui.controls.chat')
 
 
 class ChatControl(BaseControl):
-    """
+    '''
     A control for standard 1-1 chat
-    """
+    '''
     _type = ControlType.CHAT
 
     # Set a command host to bound to. Every command given through a chat will be
@@ -86,266 +66,13 @@ class ChatControl(BaseControl):
                              'chat_control',
                              account,
                              jid)
-
-        self.sendmessage: bool = True
-
-        # XEP-0308 Message Correction
-        self.correcting: bool = False
-        self.last_sent_msg: Optional[str] = None
-
-        self.toggle_emoticons()
-
-        if self._type == ControlType.CHAT:
-            self._client.connect_signal('state-changed',
-                                        self._on_client_state_changed)
-
-        if not app.settings.get('hide_chat_banner'):
-            self.xml.banner_eventbox.set_no_show_all(False)
-
-        self.xml.sendfile_button.set_action_name(
-            f'win.send-file-{self.control_id}')
-
-        # Menu for the HeaderBar
-        if self._type == ControlType.CHAT:
-            if self.contact.is_self:
-                self.control_menu = get_self_contact_menu(self.control_id,
-                                                          self.contact)
-            else:
-                self.control_menu = get_singlechat_menu(self.control_id,
-                                                        self.contact)
-        else:
-            self.control_menu = get_private_chat_menu(self.control_id,
-                                                      self.contact)
-
-        # Settings menu
-        self.xml.settings_menu.set_menu_model(self.control_menu)
-
-        self.update_toolbar()
-        self._update_avatar()
-
-        self.add_actions()
-        self.update_ui()
-        self.set_lock_image()
-
-        self.xml.encryption_menu.set_menu_model(get_encryption_menu(
-            self.control_id, self._type))
-        self.set_encryption_menu_icon()
-        self.msg_textview.grab_focus()
-
         # PluginSystem: adding GUI extension point for this ChatControl
         # instance object
         app.plugin_manager.gui_extension_point('chat_control', self)
-        self.update_actions()
-
-    def _connect_contact_signals(self) -> None:
-        self.contact.multi_connect({
-            'presence-update': self._on_presence_update,
-            'chatstate-update': self._on_chatstate_update,
-            'nickname-update': self._on_nickname_update,
-            'avatar-update': self._on_avatar_update,
-            'caps-update': self._on_caps_update,
-        })
 
     @property
     def jid(self) -> JID:
         return self.contact.jid
-
-    def add_actions(self) -> None:
-        super().add_actions()
-        actions = [
-            ('invite-contacts-', self._on_invite_contacts),
-            ('add-to-roster-', self._on_add_to_roster),
-            ('block-contact-', self._on_block_contact),
-            ('information-', self._on_information),
-            ('start-voice-call-', self._on_start_voice_call),
-            ('start-video-call-', self._on_start_video_call),
-        ]
-
-        for action in actions:
-            action_name, func = action
-            act = Gio.SimpleAction.new(action_name + self.control_id, None)
-            act.connect('activate', func)
-            app.window.add_action(act)
-
-        chatstate = self.contact.settings.get('send_chatstate')
-
-        act = Gio.SimpleAction.new_stateful(
-            'send-chatstate-' + self.control_id,
-            GLib.VariantType.new("s"),
-            GLib.Variant("s", chatstate))
-        act.connect('change-state', self._on_send_chatstate)
-        app.window.add_action(act)
-
-        marker = self.contact.settings.get('send_marker')
-
-        act = Gio.SimpleAction.new_stateful(
-            f'send-marker-{self.control_id}',
-            None,
-            GLib.Variant.new_boolean(marker))
-        act.connect('change-state', self._on_send_marker)
-        app.window.add_action(act)
-
-    def update_actions(self) -> None:
-        online = app.account_is_connected(self.account)
-
-        if self.type.is_chat:
-            self._get_action('add-to-roster-').set_enabled(
-                not self.contact.is_in_roster)
-
-        # Block contact
-        self._get_action('block-contact-').set_enabled(
-            online and self._client.get_module('Blocking').supported)
-
-        # Jingle AV
-        if self.type.is_chat:
-            self._get_action('start-voice-call-').set_enabled(
-                online and self.contact.supports_audio() and
-                sys.platform != 'win32')
-            self._get_action('start-video-call-').set_enabled(
-                online and self.contact.supports_video() and
-                sys.platform != 'win32')
-
-        # Send message
-        has_text = self.msg_textview.has_text()
-        self._get_action('send-message-').set_enabled(online and has_text)
-
-        # Send file (HTTP File Upload)
-        httpupload = self._get_action('send-file-httpupload-')
-        httpupload.set_enabled(online and
-                               self._client.get_module('HTTPUpload').available)
-
-        # Send file (Jingle)
-        jingle = self._get_action('send-file-jingle-')
-        jingle.set_enabled(online and self.contact.is_jingle_available)
-
-        # Send file
-        self._get_action('send-file-').set_enabled(jingle.get_enabled() or
-                                                   httpupload.get_enabled())
-
-        # Set File Transfer Button tooltip
-        if online and (httpupload.get_enabled() or jingle.get_enabled()):
-            tooltip_text = _('Send File…')
-        else:
-            tooltip_text = _('No File Transfer available')
-        self.xml.sendfile_button.set_tooltip_text(tooltip_text)
-
-        # Chat markers
-        state = GLib.Variant.new_boolean(
-            self.contact.settings.get('send_marker'))
-        self._get_action('send-marker-').change_state(state)
-
-        # Convert to GC
-        enabled = self.contact.supports(Namespace.MUC) and online
-        self._get_action('invite-contacts-').set_enabled(enabled)
-
-        # Information
-        self._get_action('information-').set_enabled(online)
-
-    def remove_actions(self) -> None:
-        super().remove_actions()
-        actions = [
-            'invite-contacts-',
-            'add-to-roster-',
-            'block-contact-',
-            'information-',
-            'start-voice-call-',
-            'start-video-call-',
-            'send-chatstate-',
-            'send-marker-',
-        ]
-        for action in actions:
-            app.window.remove_action(f'{action}{self.control_id}')
-
-    def focus(self) -> None:
-        if not hasattr(self, 'msg_textview'):
-            # focus() is called sometimes with GLib.idle_add()
-            # This means there is the possibility that shutdown() was called
-            # before focus is executed.
-            return
-        self.msg_textview.grab_focus()
-
-    def delegate_action(self, action: str) -> int:
-        res = super().delegate_action(action)
-        if res == Gdk.EVENT_STOP:
-            return res
-
-        if action == 'show-contact-info':
-            self._get_action('information-').activate()
-            return Gdk.EVENT_STOP
-
-        if action == 'send-file':
-            self._get_action('send-file-').activate()
-            return Gdk.EVENT_STOP
-
-        return Gdk.EVENT_PROPAGATE
-
-    def _on_add_to_roster(self,
-                          _action: Gio.SimpleAction,
-                          _param: Optional[GLib.Variant]
-                          ) -> None:
-        jid = self.contact.jid
-        if self.type.is_privatechat and self.contact.real_jid is not None:
-            jid = self.contact.real_jid
-        open_window('AddContact', account=self.account, jid=jid)
-
-    def _on_block_contact(self,
-                          _action: Gio.SimpleAction,
-                          _param: Optional[GLib.Variant]
-                          ) -> None:
-        app.window.block_contact(self.account, self.contact.jid)
-
-    def _on_information(self,
-                        _action: Gio.SimpleAction,
-                        _param: Optional[GLib.Variant]
-                        ) -> None:
-        app.window.contact_info(self.account, self.contact.jid)
-
-    def _on_invite_contacts(self,
-                            _action: Gio.SimpleAction,
-                            _param: Optional[GLib.Variant]
-                            ) -> None:
-        open_window('AdhocMUC', account=self.account, contact=self.contact)
-
-    def _on_send_chatstate(self,
-                           action: Gio.SimpleAction,
-                           param: GLib.Variant
-                           ) -> None:
-        action.set_state(param)
-        self.contact.settings.set('send_chatstate', param.get_string())
-
-    def _on_send_marker(self,
-                        action: Gio.SimpleAction,
-                        param: GLib.Variant
-                        ) -> None:
-        action.set_state(param)
-        self.contact.settings.set('send_marker', param.get_boolean())
-
-    def _on_nickname_received(self, _event):
-        self.update_ui()
-
-    def _on_chatstate_update(self,
-                             _contact: types.BareContact,
-                             _signal_name: str
-                             ) -> None:
-        self.draw_banner_text()
-
-    def _on_nickname_update(self,
-                            _contact: types.BareContact,
-                            _signal_name: str
-                            ) -> None:
-        self.draw_banner_text()
-
-    def _on_presence_update(self,
-                            _contact: types.BareContact,
-                            _signal_name: str
-                            ) -> None:
-        self._update_avatar()
-
-    def _on_caps_update(self,
-                        _contact: types.BareContact,
-                        _signal_name: str
-                        ) -> None:
-        self.update_ui()
 
     def _on_mam_message_received(self,
                                  event: events.MamMessageReceived) -> None:
@@ -376,13 +103,6 @@ class ChatControl(BaseControl):
         if event.properties.is_sent_carbon:
             kind = 'outgoing'
 
-        visible = False
-        if event.resource is not None:
-            resource_contact = self.contact.get_resource(event.resource)
-            visible = resource_contact.is_phone
-
-        self.xml.phone_image.set_visible(visible)
-
         self.add_message(event.msgtxt,
                          kind,
                          tim=event.properties.timestamp,
@@ -392,19 +112,9 @@ class ChatControl(BaseControl):
                          stanza_id=event.stanza_id,
                          additional_data=event.additional_data)
 
-    def _on_message_error(self, event: events.MessageError) -> None:
-        self.conversation_view.show_error(event.message_id, event.error)
-
     def _on_message_sent(self, event: events.MessageSent) -> None:
         if not event.message:
             return
-
-        if event.correct_id is None:
-            oob_url = event.additional_data.get_value('gajim', 'oob_url')
-            if oob_url == event.message:
-                self.last_sent_msg = None
-            else:
-                self.last_sent_msg = event.message_id
 
         message_id = event.message_id
 
@@ -412,10 +122,6 @@ class ChatControl(BaseControl):
             displaymarking = event.label.displaymarking
         else:
             displaymarking = None
-        if self.correcting:
-            self.correcting = False
-            self.msg_textview.get_style_context().remove_class(
-                'gajim-msg-correcting')
 
         if event.correct_id:
             self.conversation_view.correct_message(
@@ -435,7 +141,7 @@ class ChatControl(BaseControl):
     def _on_displayed_received(self, event: events.DisplayedReceived) -> None:
         self.conversation_view.set_read_marker(event.marker_id)
 
-    def _nec_ping(self, event: events.ApplicationEvent):
+    def _on_ping_event(self, event: events.PingEventT) -> None:
         if self.contact != event.contact:
             return
         if isinstance(event, events.PingSent):
@@ -443,89 +149,8 @@ class ChatControl(BaseControl):
         elif isinstance(event, events.PingReply):
             self.add_info_message(
                 _('Pong! (%s seconds)') % event.seconds)
-        elif isinstance(event, events.PingError):
-            self.add_info_message(event.error)
-
-    def _on_start_voice_call(self,
-                             _action: Gio.SimpleAction,
-                             _param: Optional[GLib.Variant]
-                             ) -> None:
-        app.call_manager.start_call(self.account, self.jid, CallType.AUDIO)
-
-    def _on_start_video_call(self,
-                             _action: Gio.SimpleAction,
-                             _param: Optional[GLib.Variant]
-                             ) -> None:
-        app.call_manager.start_call(self.account, self.jid, CallType.VIDEO)
-
-    def update_ui(self) -> None:
-        BaseControl.update_ui(self)
-        self.update_toolbar()
-        self._update_avatar()
-        self.update_actions()
-
-    def draw_banner_text(self) -> None:
-        """
-        Draws the chat banner's text (e.g. name, chat state) in the top of the
-        chat window
-        """
-        contact = self.contact
-        name = contact.name
-
-        if self.jid == self._client.get_own_jid().bare:
-            name = _('Note to myself')
-
-        if self._type.is_privatechat:
-            name = f'{name} ({self.room_name})'
-
-        chatstate = self.contact.chatstate
-        if chatstate is not None:
-            chatstate = chatstate.value
-
-        if app.settings.get('show_chatstate_in_banner'):
-            chatstate = helpers.get_uf_chatstate(chatstate)
-
-            label_text = f'<span>{name}</span>' \
-                         f'<span size="x-small" weight="light">' \
-                         f' {chatstate}</span>'
-            label_tooltip = f'{name} {chatstate}'
         else:
-            label_text = f'<span>{name}</span>'
-            label_tooltip = name
-
-        status_text = ''
-        self.xml.banner_label.hide()
-        self.xml.banner_label.set_no_show_all(True)
-        self.xml.banner_label.set_markup(status_text)
-
-        self.xml.banner_name_label.set_markup(label_text)
-        self.xml.banner_name_label.set_tooltip_text(label_tooltip)
-
-    def send_message(self,
-                     message: str,
-                     process_commands: bool = True,
-                     attention: bool = False
-                     ) -> None:
-        """
-        Send a message to contact
-        """
-
-        if self.encryption:
-            self.sendmessage = True
-            app.plugin_manager.extension_point('send_message' + self.encryption,
-                                               self)
-            if not self.sendmessage:
-                return
-
-        message = helpers.remove_invalid_xml_chars(message)
-        if message in ('', None, '\n'):
-            return
-
-        BaseControl.send_message(self,
-                                 message,
-                                 type_='chat',
-                                 process_commands=process_commands,
-                                 attention=attention)
+            self.add_info_message(event.error)
 
     def add_message(self,
                     text: str,
@@ -561,8 +186,6 @@ class ChatControl(BaseControl):
         # instance object
         app.plugin_manager.remove_gui_extension_point('chat_control', self)
 
-        self.remove_actions()
-
         # Send 'gone' chatstate
         self._client.get_module('Chatstate').set_chatstate(
             self.contact, Chatstate.GONE)
@@ -570,50 +193,7 @@ class ChatControl(BaseControl):
         super(ChatControl, self).shutdown()
         app.check_finalize(self)
 
-    def _on_avatar_update(self,
-                          _contact: types.BareContact,
-                          _signal_name: str
-                          ) -> None:
-        self._update_avatar()
-
-    def _update_avatar(self) -> None:
-        scale = app.window.get_scale_factor()
-        surface = self.contact.get_avatar(AvatarSize.CHAT, scale)
-        self.xml.avatar_image.set_from_surface(surface)
-
-    def _on_drag_data_received(self,
-                               _widget: Gtk.Widget,
-                               _context: Gdk.DragContext,
-                               _x_coord: int,
-                               _y_coord: int,
-                               selection: Gtk.SelectionData,
-                               target_type: int,
-                               _timestamp: int
-                               ) -> None:
-        if not selection.get_data():
-            return
-
-        log.debug('Drop received: %s, %s', selection.get_data(), target_type)
-
-        # TODO: Contact drag and drop for AdHocMUC
-        if target_type == TARGET_TYPE_URI_LIST:
-            # File drag and drop (handled in chat_control_base)
-            self.drag_data_file_transfer(selection)
-
-    def _on_client_state_changed(self,
-                                 _client: Client,
-                                 _signal_name: str,
-                                 state: SimpleClientState):
-        self.set_message_input_state(state.is_connected)
-
-        self._update_avatar()
-        self.update_toolbar()
-        self.draw_banner()
-        self.update_actions()
-
     def _on_presence_received(self, event: events.PresenceReceived) -> None:
-        self.update_ui()
-
         if not app.settings.get('print_status_in_chats'):
             return
 

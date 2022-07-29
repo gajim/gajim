@@ -195,32 +195,26 @@ class CertificateBuilder(Builder):
     image1: Gtk.Image
 
 
-class ChatControlBuilder(Builder):
-    drop_area: Gtk.Box
-    formattings_menu: Gtk.Menu
-    bold: Gtk.MenuItem
-    italic: Gtk.MenuItem
-    strike: Gtk.MenuItem
-    chat_control_hbox: Gtk.Box
-    overlay: Gtk.Overlay
-    textview_box: Gtk.Box
-    banner_eventbox: Gtk.EventBox
-    avatar_eventbox: Gtk.EventBox
+class ChatBannerBuilder(Builder):
+    banner_box: Gtk.Box
     avatar_image: Gtk.Image
-    banner_name_label: Gtk.Label
-    banner_label: Gtk.Label
+    name_label: Gtk.Label
     phone_image: Gtk.Image
+    toggle_roster_button: Gtk.Button
+    toggle_roster_image: Gtk.Image
     account_badge_box: Gtk.Box
+    visitor_box: Gtk.Box
+    visitor_menu_button: Gtk.MenuButton
+    visitor_popover: Gtk.Popover
+
+
+class ChatControlBuilder(Builder):
+    control_box: Gtk.Box
+    overlay: Gtk.Overlay
+    conv_view_box: Gtk.Box
     conv_view_overlay: Gtk.Overlay
-    hbox: Gtk.Box
-    emoticons_button: Gtk.MenuButton
-    formattings_button: Gtk.MenuButton
-    settings_menu: Gtk.MenuButton
-    authentication_button: Gtk.Button
-    lock_image: Gtk.Image
-    encryption_menu: Gtk.MenuButton
-    sendfile_button: Gtk.Button
-    send_message_button: Gtk.Button
+    roster_revealer: Gtk.Revealer
+    drop_area: Gtk.Box
 
 
 class ChatListRowBuilder(Builder):
@@ -393,65 +387,6 @@ class GroupchatConfigBuilder(Builder):
     error_box: Gtk.Box
     error_image: Gtk.Image
     error_label: Gtk.Label
-
-
-class GroupchatControlBuilder(Builder):
-    drop_area: Gtk.Box
-    formattings_menu: Gtk.Menu
-    bold: Gtk.MenuItem
-    italic: Gtk.MenuItem
-    strike: Gtk.MenuItem
-    groupchat_control_hbox: Gtk.Box
-    overlay: Gtk.Overlay
-    stack: Gtk.Stack
-    groupchat_control_vbox: Gtk.Box
-    textview_box: Gtk.Box
-    banner_eventbox: Gtk.EventBox
-    avatar_image: Gtk.Image
-    banner_name_label: Gtk.Label
-    visitor_box: Gtk.Box
-    visitor_menu_button: Gtk.MenuButton
-    account_badge_box: Gtk.Box
-    toggle_roster_button: Gtk.Button
-    toggle_roster_image: Gtk.Image
-    conv_view_overlay: Gtk.Overlay
-    hbox: Gtk.Box
-    quick_invite_button: Gtk.Button
-    settings_menu: Gtk.MenuButton
-    authentication_button: Gtk.Button
-    lock_image: Gtk.Image
-    encryption_menu: Gtk.MenuButton
-    sendfile_button: Gtk.Button
-    emoticons_button: Gtk.MenuButton
-    send_message_button: Gtk.Button
-    formattings_button: Gtk.MenuButton
-    roster_revealer: Gtk.Revealer
-    nickname_entry: Gtk.Entry
-    nickname_change_button: Gtk.Button
-    password_set_button: Gtk.Button
-    password_entry: Gtk.Entry
-    captcha_set_button: Gtk.Button
-    captcha_box: Gtk.Box
-    remove_bookmark_button: Gtk.Button
-    retry_button: Gtk.Button
-    close_button: Gtk.Button
-    error_label: Gtk.Label
-    error_heading: Gtk.Label
-    captcha_close_button: Gtk.Button
-    captcha_try_again_button: Gtk.Button
-    captcha_error_label: Gtk.Label
-    kick_label: Gtk.Label
-    kick_participant_button: Gtk.Button
-    kick_reason_entry: Gtk.Entry
-    ban_label: Gtk.Label
-    ban_participant_button: Gtk.Button
-    ban_reason_entry: Gtk.Entry
-    destroy_button: Gtk.Button
-    destroy_alternate_entry: Gtk.Entry
-    destroy_reason_entry: Gtk.Entry
-    invite_grid: Gtk.Grid
-    invite_button: Gtk.Button
-    visitor_popover: Gtk.Popover
 
 
 class GroupchatCreationBuilder(Builder):
@@ -650,6 +585,21 @@ class ManageSoundsBuilder(Builder):
     manage_sounds: Gtk.Box
     sounds_treeview: Gtk.TreeView
     filechooser: Gtk.FileChooserButton
+
+
+class MessageActionsBoxBuilder(Builder):
+    box: Gtk.Box
+    quick_invite_button: Gtk.Button
+    settings_menu: Gtk.MenuButton
+    encryption_details_button: Gtk.Button
+    encryption_details_image: Gtk.Image
+    encryption_menu_button: Gtk.MenuButton
+    encryption_image: Gtk.Image
+    sendfile_button: Gtk.Button
+    emoticons_button: Gtk.MenuButton
+    send_message_button: Gtk.Button
+    formattings_button: Gtk.MenuButton
+    input_scrolled: Gtk.ScrolledWindow
 
 
 class PasswordDialogBuilder(Builder):
@@ -1002,6 +952,8 @@ def get_builder(file_name: Literal['call_window.ui'], widgets: list[str] = ...) 
 @overload
 def get_builder(file_name: Literal['certificate.ui'], widgets: list[str] = ...) -> CertificateBuilder: ...
 @overload
+def get_builder(file_name: Literal['chat_banner.ui'], widgets: list[str] = ...) -> ChatBannerBuilder: ...
+@overload
 def get_builder(file_name: Literal['chat_control.ui'], widgets: list[str] = ...) -> ChatControlBuilder: ...
 @overload
 def get_builder(file_name: Literal['chat_list_row.ui'], widgets: list[str] = ...) -> ChatListRowBuilder: ...
@@ -1025,8 +977,6 @@ def get_builder(file_name: Literal['filetransfers.ui'], widgets: list[str] = ...
 def get_builder(file_name: Literal['groupchat_affiliation.ui'], widgets: list[str] = ...) -> GroupchatAffiliationBuilder: ...
 @overload
 def get_builder(file_name: Literal['groupchat_config.ui'], widgets: list[str] = ...) -> GroupchatConfigBuilder: ...
-@overload
-def get_builder(file_name: Literal['groupchat_control.ui'], widgets: list[str] = ...) -> GroupchatControlBuilder: ...
 @overload
 def get_builder(file_name: Literal['groupchat_creation.ui'], widgets: list[str] = ...) -> GroupchatCreationBuilder: ...
 @overload
@@ -1061,6 +1011,8 @@ def get_builder(file_name: Literal['manage_pep_services_window.ui'], widgets: li
 def get_builder(file_name: Literal['manage_proxies.ui'], widgets: list[str] = ...) -> ManageProxiesBuilder: ...
 @overload
 def get_builder(file_name: Literal['manage_sounds.ui'], widgets: list[str] = ...) -> ManageSoundsBuilder: ...
+@overload
+def get_builder(file_name: Literal['message_actions_box.ui'], widgets: list[str] = ...) -> MessageActionsBoxBuilder: ...
 @overload
 def get_builder(file_name: Literal['password_dialog.ui'], widgets: list[str] = ...) -> PasswordDialogBuilder: ...
 @overload

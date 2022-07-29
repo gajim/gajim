@@ -24,22 +24,17 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Any
-
 from nbxmpp import JID
-from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import PresenceProperties
 
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.i18n import _
-from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 
 from gajim.gui.controls.chat import ChatControl
 from gajim.command_system.implementation.hosts import PrivateChatCommands
 
-from gajim.gui.dialogs import ErrorDialog
 from gajim.gui.const import ControlType
 
 
@@ -60,21 +55,11 @@ class PrivateChatControl(ChatControl):
 
     def _connect_contact_signals(self) -> None:
         self.contact.multi_connect({
-            'user-avatar-update': self._on_user_avatar_update,
-            'user-joined': self._on_user_joined,
-            'user-left': self._on_user_left,
             'user-status-show-changed': self._on_user_status_show_changed,
             'user-nickname-changed': self._on_user_nickname_changed,
             # 'room-kicked': self._on_room_kicked,
             # 'room-destroyed': self._on_room_destroyed,
-            'room-joined': self._on_room_joined,
-            # 'room-left': self._on_room_left
-            'chatstate-update': self._on_chatstate_update,
         })
-
-    @property
-    def room_name(self) -> str:
-        return self._room_contact.name
 
     def get_our_nick(self) -> str:
         muc_data = self._client.get_module('MUC').get_muc_data(
@@ -88,6 +73,8 @@ class PrivateChatControl(ChatControl):
                                   ) -> None:
         # TODO
         nick = properties.muc_nickname
+
+        assert properties.muc_user is not None
         new_nick = properties.muc_user.nick
         if properties.is_muc_self_presence:
             message = _('You are now known as %s') % new_nick
@@ -96,9 +83,6 @@ class PrivateChatControl(ChatControl):
                         'as {new_nick}').format(nick=nick, new_nick=new_nick)
 
         self.add_info_message(message)
-
-        self.draw_banner()
-        self.update_ui()
 
     def _on_user_status_show_changed(self,
                                      _user_contact: GroupchatParticipant,
@@ -112,7 +96,6 @@ class PrivateChatControl(ChatControl):
         show = helpers.get_uf_show(properties.show.value)
 
         if not self._room_contact.settings.get('print_status'):
-            self.update_ui()
             return
 
         if properties.is_muc_self_presence:
@@ -124,65 +107,3 @@ class PrivateChatControl(ChatControl):
                                                                show=show,
                                                                status=status)
         self.add_info_message(message)
-        self.update_ui()
-
-    # def _on_disconnected(self, event):
-    #     if event.properties.jid != self.contact.jid:
-    #         return
-    #     self.set_message_input_state(False)
-
-    def _on_user_left(self,
-                      _user_contact: GroupchatParticipant,
-                      _signal_name: str,
-                      _properties: MessageProperties
-                      ) -> None:
-        self.set_message_input_state(False)
-
-    def _on_user_joined(self,
-                        _user_contact: GroupchatParticipant,
-                        _signal_name: str,
-                        _properties: MessageProperties
-                        ) -> None:
-        self.set_message_input_state(True)
-
-    def _on_room_joined(self,
-                        _contact: GroupchatContact,
-                        _signal_name: str
-                        ) -> None:
-        if not self.contact.is_available:
-            return
-        self.set_message_input_state(True)
-
-    def send_message(self,
-                     message: str,
-                     process_commands: bool = True,
-                     attention: bool = False
-                     ) -> None:
-        """
-        Call this method to send the message
-        """
-        message = helpers.remove_invalid_xml_chars(message)
-        if not message:
-            return
-
-        # We need to make sure that we can still send through the room and that
-        # the recipient did not go away
-        if not self.contact.is_available:
-            ErrorDialog(
-                _('Sending private message failed'),
-                _('You are no longer joined "%(room)s" or '
-                  '"%(nick)s" has left the chat.') % {
-                      'room': self.room_name,
-                      'nick': self.contact.name})
-            return
-
-        ChatControl.send_message(self,
-                                 message,
-                                 process_commands=process_commands,
-                                 attention=attention)
-
-    def update_ui(self) -> None:
-        ChatControl.update_ui(self)
-
-    def _on_user_avatar_update(self, *args: Any) -> None:
-        self._update_avatar()

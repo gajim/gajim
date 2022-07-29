@@ -41,7 +41,6 @@ from .structs import RemoveHistoryActionParams
 class GroupchatDetails(Gtk.ApplicationWindow):
     def __init__(self,
                  contact: GroupchatContact,
-                 subject: str,
                  page: Optional[str] = None
                  ) -> None:
         Gtk.ApplicationWindow.__init__(self)
@@ -55,7 +54,6 @@ class GroupchatDetails(Gtk.ApplicationWindow):
 
         self.account = contact.account
         self._client = app.get_client(contact.account)
-        self._subject_text = subject
         self._contact = contact
         self._contact.connect('avatar-update', self._on_avatar_update)
 
@@ -136,8 +134,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
 
     def _add_groupchat_manage(self) -> None:
         self._groupchat_manage = GroupchatManage(self.account,
-                                                 self._contact,
-                                                 self._subject_text)
+                                                 self._contact)
         self._ui.manage_box.add(self._groupchat_manage)
 
     def _add_groupchat_info(self) -> None:

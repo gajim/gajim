@@ -187,8 +187,44 @@ APP_ACTIONS = [
 ]
 
 
+MAIN_WIN_ACTIONS = [
+    # action name, variant type, enabled
+    ('input-bold', None, False),
+    ('input-italic', None, False),
+    ('input-strike', None, False),
+    ('input-clear', None, False),
+    ('show-emoji-chooser', None, False),
+    ('correct-message', None, False),
+    ('quote', 's', False),
+    ('mention', 's', False),
+    ('send-file-httpupload', None, False),
+    ('send-file-jingle', None, False),
+    ('send-file', None, False),
+    ('invite-contacts', None, False),
+    ('add-to-roster', None, True),
+    ('start-voice-call', None, False),
+    ('start-video-call', None, False),
+    ('clear-chat', None, False),
+    ('show-contact-info', None, False),
+    ('send-message', None, False),
+    ('muc-change-nickname', None, False),
+    ('muc-invite', None, False),
+    ('muc-contact-info', 's', False),
+    ('muc-execute-command', 's', False),
+    ('muc-ban', 's', False),
+    ('muc-kick', 's', False),
+    ('muc-change-role', 'as', False),
+    ('muc-change-affiliation', 'as', False),
+    ('muc-request-voice', None, False),
+]
+
+
 ACCOUNT_ACTIONS = [
     ('add-contact', 'as'),
+    ('block-contact', 's'),
+    ('remove-contact', 's'),
+    ('execute-command', 's'),
+    ('modify-gateway', 's'),
     ('archive', 's'),
     ('blocking', 's'),
     ('bookmarks', 's'),
@@ -214,6 +250,9 @@ ALWAYS_ACCOUNT_ACTIONS = {
 
 ONLINE_ACCOUNT_ACTIONS = {
     'add-contact',
+    'remove-contact',
+    'execute-command',
+    'modify-gateway',
     'bookmarks',
     'import-contacts',
     'open-chat',
@@ -228,4 +267,5 @@ ONLINE_ACCOUNT_ACTIONS = {
 FEATURE_ACCOUNT_ACTIONS = {
     'archive',
     'blocking',
+    'block-contact',
 }

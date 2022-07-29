@@ -378,7 +378,6 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
         assert self_contact is not None
         contact = self._group_chat_contact.get_resource(nick)
         menu = get_groupchat_roster_menu(self._account,
-                                         self._control_id,
                                          self_contact,
                                          contact)
 

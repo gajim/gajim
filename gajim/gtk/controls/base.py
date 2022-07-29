@@ -28,59 +28,40 @@ from __future__ import annotations
 from typing import Any
 from typing import Optional
 from typing import Union
+from typing import cast
 
 import os
 import logging
-import sys
 import time
 import uuid
-import tempfile
-from functools import partial
 
 from gi.repository import Gtk
-from gi.repository import Gdk
-from gi.repository import GdkPixbuf
 from gi.repository import GLib
-from gi.repository import Gio
 
 from nbxmpp import JID
-from nbxmpp.const import Chatstate
 from nbxmpp.modules.security_labels import Displaymarking
 
 from gajim.common import app
 from gajim.common import events
 from gajim.common import ged
-from gajim.common import i18n
 from gajim.common.helpers import message_needs_highlight
 from gajim.common.helpers import get_file_path_from_dnd_dropped_uri
 from gajim.common.i18n import _
 from gajim.common.ged import EventHelper
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_retraction_text
-from gajim.common.const import Direction, KindConstant
+from gajim.common.const import KindConstant
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.preview_helpers import filename_from_uri
 from gajim.common.preview_helpers import guess_simple_file_type
 from gajim.common.storage.archive import ConversationRow
-from gajim.common.structs import OutgoingMessage
 
 from gajim.gui.conversation.view import ConversationView
 from gajim.gui.conversation.scrolled import ScrolledView
 from gajim.gui.conversation.jump_to_end_button import JumpToEndButton
-from gajim.gui.dialogs import DialogButton
-from gajim.gui.dialogs import ErrorDialog
-from gajim.gui.dialogs import PastePreviewDialog
-from gajim.gui.file_transfer_send import SendFileDialog
-from gajim.gui.message_input import MessageInputTextView
-from gajim.gui.security_label_selector import SecurityLabelSelector
-from gajim.gui.util import get_hardware_key_codes
 from gajim.gui.builder import get_builder
 from gajim.gui.util import set_urgency_hint
-from gajim.gui.util import scroll_to_end
-from gajim.gui.util import AccountBadge
 from gajim.gui.const import ControlType
-from gajim.gui.const import TARGET_TYPE_URI_LIST
-from gajim.gui.emoji_chooser import emoji_chooser
 
 from gajim.command_system.implementation.middleware import ChatCommandProcessor
 from gajim.command_system.implementation.middleware import CommandTools
@@ -92,39 +73,19 @@ from gajim.command_system.implementation.middleware import CommandTools
 from gajim.command_system.implementation import standard  # noqa: F401
 from gajim.command_system.implementation import execute  # noqa: F401
 
-if app.is_installed('GSPELL'):
-    from gi.repository import Gspell  # pylint: disable=ungrouped-imports
-
-# This is needed so copying text from the conversation textview
-# works with different language layouts. Pressing the key c on a russian
-# layout yields another keyval than with the english layout.
-# So we match hardware keycodes instead of keyvals.
-# Multiple hardware keycodes can trigger a keyval like Gdk.KEY_c.
-KEYCODES_KEY_C = get_hardware_key_codes(Gdk.KEY_c)
-
-if sys.platform == 'darwin':
-    COPY_MODIFIER = Gdk.ModifierType.META_MASK
-    COPY_MODIFIER_KEYS = (Gdk.KEY_Meta_L, Gdk.KEY_Meta_R)
-else:
-    COPY_MODIFIER = Gdk.ModifierType.CONTROL_MASK
-    COPY_MODIFIER_KEYS = (Gdk.KEY_Control_L, Gdk.KEY_Control_R)
 
 log = logging.getLogger('gajim.gui.controls.base')
 
 
-################################################################################
 class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
-    """
+    '''
     A base class containing a banner, ConversationView, MessageInputTextView
-    """
+    '''
 
     _type: Optional[ControlType] = None
 
     def __init__(self, widget_name: str, account: str, jid: JID) -> None:
         EventHelper.__init__(self)
-        # Undo needs this variable to know if space has been pressed.
-        # Initialize it to True so empty textview is saved in undo list
-        self.space_pressed: bool = True
 
         self.handlers: dict[int, Any] = {}
 
@@ -137,60 +98,13 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             jid, groupchat=groupchat)
         self._connect_contact_signals()
 
-        # control_id is a unique id for the control,
-        # its used as action name for actions that belong to a control
         self.control_id: str = str(uuid.uuid4())
-        self.session = None
 
-        if app.settings.get('use_kib_mib'):
-            self._units = GLib.FormatSizeFlags.IEC_UNITS
-        else:
-            self._units = GLib.FormatSizeFlags.DEFAULT
-
-        self.xml = get_builder(f'{widget_name}.ui')
-        self.xml.connect_signals(self)
-        self.widget: Gtk.Box = self.xml.get_object(f'{widget_name}_hbox')
-
-        self._account_badge = AccountBadge(self.account)
-        self.xml.account_badge_box.add(self._account_badge)
-        show_account_badge = len(app.settings.get_active_accounts()) > 1
-        self.xml.account_badge_box.set_visible(show_account_badge)
-
-        # Drag and drop
-        self.xml.overlay.add_overlay(self.xml.drop_area)
-        self.xml.drop_area.hide()
-        self.xml.overlay.connect(
-            'drag-data-received', self._on_drag_data_received)
-        self.xml.overlay.connect('drag-motion', self._on_drag_motion)
-        self.xml.overlay.connect('drag-leave', self._on_drag_leave)
-
-        uri_entry = Gtk.TargetEntry.new(
-            'text/uri-list',
-            Gtk.TargetFlags.OTHER_APP,
-            TARGET_TYPE_URI_LIST)
-        dst_targets = Gtk.TargetList.new([uri_entry])
-        dst_targets.add_text_targets(0)
-        self._dnd_list = [uri_entry,
-                          Gtk.TargetEntry.new(
-                              'MY_TREE_MODEL_ROW',
-                              Gtk.TargetFlags.SAME_APP,
-                              0)]
-
-        self.xml.overlay.drag_dest_set(
-            Gtk.DestDefaults.ALL,
-            self._dnd_list,
-            Gdk.DragAction.COPY | Gdk.DragAction.MOVE)
-        self.xml.overlay.drag_dest_set_target_list(dst_targets)
+        self.xml = get_builder('chat_control.ui')
+        self.widget = cast(Gtk.Box, self.xml.get_object('control_box'))
 
         # Create ConversationView and connect signals
         self.conversation_view = ConversationView(self.account, self.contact)
-        self.conversation_view.connect('quote', self._on_quote)
-        self.conversation_view.connect('mention', self._on_mention)
-        self.conversation_view.connect('scroll-to-end', self._on_scroll_to_end)
-
-        id_ = self.conversation_view.connect(
-            'key-press-event', self._on_conversation_view_key_press)
-        self.handlers[id_] = self.conversation_view
 
         self._scrolled_view = ScrolledView()
         self._scrolled_view.add(self.conversation_view)
@@ -207,66 +121,15 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self._scrolled_view.connect('request-history',
                                     self.fetch_n_lines_history, 20)
 
-        self._security_label_selector = SecurityLabelSelector(
-            account, self.contact)
-        self.xml.hbox.pack_start(self._security_label_selector, False, True, 0)
-
-        self.msg_textview = MessageInputTextView(self.account, self.contact)
-        self.msg_textview.connect('paste-clipboard',
-                                  self._on_message_textview_paste_event)
-        self.msg_textview.connect('key-press-event',
-                                  self._on_message_textview_key_press_event)
-        self.msg_textview.connect('populate-popup',
-                                  self._on_msg_textview_populate_popup)
-        self.msg_textview.get_buffer().connect(
-            'changed', self._on_message_tv_buffer_changed)
-
-        # Send message button
-        self.xml.send_message_button.set_action_name(
-            f'win.send-message-{self.control_id}')
-        self.xml.send_message_button.set_visible(
-            app.settings.get('show_send_message_button'))
-        app.settings.bind_signal(
-            'show_send_message_button',
-            self.xml.send_message_button,
-            'set_visible')
-
-        self.msg_scrolledwindow = ScrolledWindow()
-        self.msg_scrolledwindow.set_margin_start(3)
-        self.msg_scrolledwindow.set_margin_end(3)
-        self.msg_scrolledwindow.get_style_context().add_class(
-            'message-input-border')
-        self.msg_scrolledwindow.add(self.msg_textview)
-
-        self.xml.hbox.pack_start(self.msg_scrolledwindow, True, True, 0)
-
         # Keeps track of whether the ConversationView is populated
         self._chat_loaded: bool = False
-
-        # the following vars are used to keep history of user's messages
-        self.sent_history: list[str] = []
-        self.sent_history_pos: int = 0
-        self.received_history: list[str] = []
-        self.received_history_pos: int = 0
-        self.orig_msg: Optional[str] = None
 
         # XEP-0333 Chat Markers
         self.last_msg_id: Optional[str] = None
 
-        # XEP-0308 Message Correction
-        self.correcting: bool = False
-        self.last_sent_msg: Optional[str] = None
-
-        self.set_emoticon_popover()
-
-        # Attach speller
-        self.set_speller()
-
         # XEP-0172 User Nickname
         # TODO:
         self.user_nick: Optional[str] = None
-
-        self.sendmessage: bool = True
 
         self._client.get_module('Chatstate').set_active(self.contact)
 
@@ -278,9 +141,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         app.plugin_manager.gui_extension_point('chat_control_base', self)
 
         self.register_events([
-            ('ping-sent', ged.GUI1, self._nec_ping),
-            ('ping-reply', ged.GUI1, self._nec_ping),
-            ('ping-error', ged.GUI1, self._nec_ping),
+            ('ping-sent', ged.GUI1, self._on_ping_event),
+            ('ping-reply', ged.GUI1, self._on_ping_event),
+            ('ping-error', ged.GUI1, self._on_ping_event),
         ])
 
         # This is basically a very nasty hack to surpass the inability
@@ -288,10 +151,9 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         CommandTools.__init__(self)
 
     def _connect_contact_signals(self) -> None:
-        raise NotImplementedError
-
-    def _get_action(self, name: str) -> Gio.SimpleAction:
-        return app.window.lookup_action(f'{name}{self.control_id}')
+        '''
+        Derived types MAY implement this
+        '''
 
     def process_event(self, event: events.ApplicationEvent) -> None:
         if event.account != self.account:
@@ -305,23 +167,49 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             events.FileRequestSent
         )
 
-        if self.is_chat:
-            if isinstance(event, file_transfer_events):
-                self.add_jingle_file_transfer(event=event)
-                return
-            if isinstance(event, events.JingleRequestReceived):
-                active_jid = app.call_manager.get_active_call_jid()
-                # Don't add a second row if contact upgrades to video
-                if active_jid is None:
-                    self.add_call_message(event=event)
-                return
-            if isinstance(event, events.CallStopped):
-                self.conversation_view.update_call_rows()
-                return
+        if isinstance(event, file_transfer_events):
+            self.add_jingle_file_transfer(event=event)
+            return
+
+        if isinstance(event, events.JingleRequestReceived):
+            active_jid = app.call_manager.get_active_call_jid()
+            # Don't add a second row if contact upgrades to video
+            if active_jid is None:
+                self.add_call_message(event=event)
+            return
+
+        if isinstance(event, events.CallStopped):
+            self.conversation_view.update_call_rows()
+            return
+
+        if isinstance(event, events.MessageReceived) and not self.is_groupchat:
+            self._on_message_received(event)
+            return
+
+        if isinstance(event, events.MessageSent):
+            self._on_message_sent(event)
+            return
+
+        if isinstance(event, events.MessageError):
+            self._on_message_error(event)
+            return
 
         method_name = event.name.replace('-', '_')
         method_name = f'_on_{method_name}'
         getattr(self, method_name)(event)
+
+    def _on_message_sent(self, event: events.MessageSent) -> None:
+        '''
+        Derived types MAY implement this
+        '''
+
+    def _on_message_received(self, event: events.MessageReceived) -> None:
+        '''
+        Derived types MAY implement this
+        '''
+
+    def _on_message_error(self, event: events.MessageError) -> None:
+        self.conversation_view.show_error(event.message_id, event.error)
 
     def _on_message_updated(self, event: events.MessageUpdated) -> None:
         self.conversation_view.correct_message(
@@ -335,180 +223,28 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         self.conversation_view.show_message_retraction(
             event.moderation.stanza_id, text)
 
-    def _on_conversation_view_key_press(self,
-                                        _listbox: ConversationView,
-                                        event: Gdk.EventKey
-                                        ) -> int:
-        if event.get_state() & Gdk.ModifierType.SHIFT_MASK:
-            if event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up):
-                return Gdk.EVENT_PROPAGATE
-
-        if event.keyval in COPY_MODIFIER_KEYS:
-            # Don’t route modifier keys for copy action to the Message Input
-            # otherwise pressing CTRL/META + c (the next event after that)
-            # will not reach the textview (because the Message Input would get
-            # focused).
-            return Gdk.EVENT_PROPAGATE
-
-        # if event.get_state() & COPY_MODIFIER:
-        # TODO
-        #     # Don’t reroute the event if it is META + c and the
-        #     # textview has a selection
-        #     if event.hardware_keycode in KEYCODES_KEY_C:
-        #         if textview.get_buffer().props.has_selection:
-        #             return Gdk.EVENT_PROPAGATE
-
-        if not self.msg_textview.get_sensitive():
-            # If the input textview is not sensitive it can’t get the focus.
-            # In that case propagate_key_event() would send the event again
-            # to the conversation textview. This would mean a recursion.
-            return Gdk.EVENT_PROPAGATE
-
-        # Focus the Message Input and resend the event
-        self.msg_textview.grab_focus()
-        self.msg_textview.get_toplevel().propagate_key_event(event)
-        return Gdk.EVENT_STOP
-
     @property
     def type(self) -> ControlType:
+        assert self._type is not None
         return self._type
 
     @property
     def is_chat(self) -> bool:
+        assert self._type is not None
         return self._type.is_chat
 
     @property
     def is_privatechat(self) -> bool:
+        assert self._type is not None
         return self._type.is_privatechat
 
     @property
     def is_groupchat(self) -> bool:
+        assert self._type is not None
         return self._type.is_groupchat
 
-    def focus(self) -> None:
+    def _on_ping_event(self, event: events.PingEventT) -> None:
         raise NotImplementedError
-
-    def update_actions(self) -> None:
-        """
-        Derived types MAY implement this
-        """
-
-    def draw_banner(self) -> None:
-        """
-        Draw the fat line at the top of the window
-        that houses the icon, jid, etc
-
-        Derived types MAY implement this.
-        """
-        self.draw_banner_text()
-
-    def update_toolbar(self) -> None:
-        """
-        update state of buttons in toolbar
-        """
-        self._update_toolbar()
-        app.plugin_manager.gui_extension_point(
-            'chat_control_base_update_toolbar', self)
-
-    def draw_banner_text(self) -> None:
-        """
-        Derived types SHOULD implement this
-        """
-
-    def update_ui(self) -> None:
-        """
-        Derived types SHOULD implement this
-        """
-        self.draw_banner()
-
-    def repaint_themed_widgets(self) -> None:
-        """
-        Derived types MAY implement this
-        """
-        self.draw_banner()
-
-    def _update_toolbar(self) -> None:
-        """
-        Derived types MAY implement this
-        """
-
-    def set_session(self, session):
-        oldsession = None
-        if hasattr(self, 'session'):
-            oldsession = self.session
-
-        if oldsession and session == oldsession:
-            return
-
-        self.session = session
-
-        if session:
-            session.control = self
-
-        if session and oldsession:
-            oldsession.control = None
-
-    def remove_session(self, session):
-        if session != self.session:
-            return
-        self.session.control = None
-        self.session = None
-
-    def _nec_ping(self, obj):
-        raise NotImplementedError
-
-    def delegate_action(self, action: str) -> int:
-        if action == 'clear-chat':
-            self.reset_view()
-            return Gdk.EVENT_STOP
-
-        if action == 'delete-line':
-            self.msg_textview.clear()
-            return Gdk.EVENT_STOP
-
-        if action == 'show-emoji-chooser':
-            if sys.platform == 'darwin':
-                # TODO: Remove if colored emoji rendering works well on
-                # Windows and MacOS
-                self.xml.emoticons_button.get_popover().show()
-                return Gdk.EVENT_STOP
-            self.msg_textview.emit('insert-emoji')
-            return Gdk.EVENT_STOP
-
-        return Gdk.EVENT_PROPAGATE
-
-    def add_actions(self) -> None:
-        action = Gio.SimpleAction.new_stateful(
-            f'set-encryption-{self.control_id}',
-            GLib.VariantType.new('s'),
-            GLib.Variant('s', self.encryption or 'disabled'))
-        action.connect('change-state', self.change_encryption)
-        app.window.add_action(action)
-
-        actions = {
-            'send-message-%s': self._on_send_message,
-            'send-file-%s': self._on_send_file,
-            'send-file-httpupload-%s': self._on_send_file,
-            'send-file-jingle-%s': self._on_send_file,
-        }
-
-        for name, func in actions.items():
-            action = Gio.SimpleAction.new(name % self.control_id, None)
-            action.connect('activate', func)
-            action.set_enabled(False)
-            app.window.add_action(action)
-
-    def remove_actions(self) -> None:
-        actions = [
-            'send-message-',
-            'set-encryption-',
-            'send-file-',
-            'send-file-httpupload-',
-            'send-file-jingle-',
-        ]
-
-        for action in actions:
-            app.window.remove_action(f'{action}{self.control_id}')
 
     def mark_as_read(self, send_marker: bool = True) -> None:
         self._jump_to_end_button.reset_unread_count()
@@ -520,58 +256,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 self.last_msg_id,
                 str(self._type))
             self.last_msg_id = None
-
-    def change_encryption(self,
-                          action: Gio.SimpleAction,
-                          param: GLib.Variant
-                          ) -> None:
-        encryption = param.get_string()
-        if encryption == 'disabled':
-            encryption = None
-
-        if self.encryption == encryption:
-            return
-
-        if encryption:
-            plugin = app.plugin_manager.encryption_plugins[encryption]
-            if not plugin.activate_encryption(self):
-                return
-
-        action.set_state(param)
-        self.set_encryption_state(encryption)
-        self.set_encryption_menu_icon()
-        self.set_lock_image()
-
-    def set_lock_image(self) -> None:
-        encryption_state = {'visible': self.encryption is not None,
-                            'enc_type': self.encryption,
-                            'authenticated': False}
-
-        if self.encryption:
-            app.plugin_manager.extension_point(
-                'encryption_state' + self.encryption, self, encryption_state)
-
-        visible, enc_type, authenticated = encryption_state.values()
-
-        if authenticated:
-            authenticated_string = _('and authenticated')
-            self.xml.lock_image.set_from_icon_name(
-                'security-high-symbolic', Gtk.IconSize.MENU)
-        else:
-            authenticated_string = _('and NOT authenticated')
-            self.xml.lock_image.set_from_icon_name(
-                'security-low-symbolic', Gtk.IconSize.MENU)
-
-        tooltip = _('%(type)s encryption is active %(authenticated)s.') % {
-            'type': enc_type, 'authenticated': authenticated_string}
-
-        self.xml.authentication_button.set_tooltip_text(tooltip)
-        self.xml.authentication_button.set_visible(visible)
-        self.xml.lock_image.set_sensitive(visible)
-
-    def _on_authentication_button_clicked(self, _button: Gtk.Button) -> None:
-        app.plugin_manager.extension_point(
-            'encryption_dialog' + self.encryption, self)
 
     def set_encryption_state(self, encryption: Optional[str]) -> None:
         self.encryption = encryption
@@ -587,60 +271,12 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             return None
         return state
 
-    def set_encryption_menu_icon(self) -> None:
-        image = self.xml.encryption_menu.get_image()
-        if image is None:
-            image = Gtk.Image()
-            self.xml.encryption_menu.set_image(image)
-        if not self.encryption:
-            image.set_from_icon_name('channel-insecure-symbolic',
-                                     Gtk.IconSize.MENU)
-        else:
-            image.set_from_icon_name('channel-secure-symbolic',
-                                     Gtk.IconSize.MENU)
-
-    def set_speller(self) -> None:
-        if (not app.is_installed('GSPELL') or
-                not app.settings.get('use_speller')):
-            return
-
-        gspell_lang = self.get_speller_language()
-        spell_checker = Gspell.Checker.new(gspell_lang)
-        spell_buffer = Gspell.TextBuffer.get_from_gtk_text_buffer(
-            self.msg_textview.get_buffer())
-        spell_buffer.set_spell_checker(spell_checker)
-        spell_view = Gspell.TextView.get_from_gtk_text_view(self.msg_textview)
-        spell_view.set_inline_spell_checking(False)
-        spell_view.set_enable_language_menu(True)
-
-        spell_checker.connect('notify::language', self.on_language_changed)
-
-    def get_speller_language(self) -> Optional[Gspell.Language]:
-        lang = self.contact.settings.get('speller_language')
-        if not lang:
-            # use the default one
-            lang = app.settings.get('speller_language')
-            if not lang:
-                lang = i18n.LANG
-        gspell_lang = Gspell.language_lookup(lang)
-        if gspell_lang is None:
-            gspell_lang = Gspell.language_get_default()
-        return gspell_lang
-
-    def on_language_changed(self, checker: Gspell.Checker, _param: Any) -> None:
-        gspell_lang = checker.get_language()
-        if gspell_lang is not None:
-            self.contact.settings.set('speller_language',
-                                      gspell_lang.get_code())
-
     def shutdown(self) -> None:
         # remove_gui_extension_point() is called on shutdown, but also when
         # a plugin is getting disabled. Plugins don’t know the difference.
         # Plugins might want to remove their widgets on
         # remove_gui_extension_point(), so delete the objects only afterwards.
         app.plugin_manager.remove_gui_extension_point('chat_control_base', self)
-        app.plugin_manager.remove_gui_extension_point(
-            'chat_control_base_update_toolbar', self)
 
         self._client.disconnect_all_from_obj(self)
         self.contact.disconnect_all_from_obj(self)
@@ -655,8 +291,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
         del self.conversation_view
         del self._scrolled_view
-        del self.msg_textview
-        del self.msg_scrolledwindow
 
         self.widget.destroy()
         del self.widget
@@ -664,246 +298,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
         del self.xml
 
         self.unregister_events()
-
-    def _on_msg_textview_populate_popup(self,
-                                        _textview: MessageInputTextView,
-                                        menu: Gtk.Widget
-                                        ) -> None:
-        """
-        Override the default context menu and we prepend an option to switch
-        languages
-        """
-        assert isinstance(menu, Gtk.Menu)
-        item = Gtk.MenuItem.new_with_mnemonic(_('_Undo'))
-        menu.prepend(item)
-        id_ = item.connect('activate', self.msg_textview.undo)
-        self.handlers[id_] = item
-
-        item = Gtk.SeparatorMenuItem()
-        menu.prepend(item)
-
-        item = Gtk.MenuItem.new_with_mnemonic(_('_Clear'))
-        menu.prepend(item)
-        id_ = item.connect('activate', self.msg_textview.clear)
-        self.handlers[id_] = item
-
-        paste_item = Gtk.MenuItem.new_with_label(_('Paste as quote'))
-        id_ = paste_item.connect('activate', self.paste_clipboard_as_quote)
-        self.handlers[id_] = paste_item
-        menu.append(paste_item)
-
-        menu.show_all()
-
-    def insert_as_quote(self, text: str) -> None:
-        text = '> ' + text.replace('\n', '\n> ') + '\n'
-        message_buffer = self.msg_textview.get_buffer()
-        message_buffer.insert_at_cursor(text)
-        self.msg_textview.grab_focus()
-
-    def paste_clipboard_as_quote(self, _item: Gtk.MenuItem) -> None:
-        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        text = clipboard.wait_for_text()
-        if text is None:
-            return
-        self.insert_as_quote(text)
-
-    def _on_quote(self, _view: ConversationView, text: str) -> None:
-        self.insert_as_quote(text)
-
-    def _on_mention(self, _view: ConversationView, name: str) -> None:
-        gc_refer_to_nick_char = app.settings.get('gc_refer_to_nick_char')
-        text = f'{name}{gc_refer_to_nick_char} '
-        message_buffer = self.msg_textview.get_buffer()
-        message_buffer.insert_at_cursor(text)
-        GLib.idle_add(self.msg_textview.grab_focus)
-
-    def _on_scroll_to_end(self, _view: ConversationView) -> None:
-        scroll_to_end(self._scrolled_view)
-
-    def _on_message_textview_paste_event(self,
-                                         _texview: MessageInputTextView
-                                         ) -> None:
-        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        image = clipboard.wait_for_image()
-        if image is not None:
-            if not app.settings.get('confirm_paste_image'):
-                self._paste_event_confirmed(True, image)
-                return
-            PastePreviewDialog(
-                _('Paste Image'),
-                _('You are trying to paste an image'),
-                _('Are you sure you want to paste your '
-                  'clipboard\'s image into the chat window?'),
-                _('_Do not ask me again'),
-                image,
-                [DialogButton.make('Cancel'),
-                 DialogButton.make('Accept',
-                                   text=_('_Paste'),
-                                   callback=self._paste_event_confirmed,
-                                   args=[image])]).show()
-
-    def _paste_event_confirmed(self,
-                               is_checked: bool,
-                               image: GdkPixbuf.Pixbuf
-                               ) -> None:
-        if is_checked:
-            app.settings.set('confirm_paste_image', False)
-
-        dir_ = tempfile.gettempdir()
-        path = os.path.join(dir_, f'{uuid.uuid4()}.png')
-        if image is None:
-            self.add_info_message(_('Error: Could not process image'))
-            return
-
-        image.savev(path, 'png', [], [])
-
-        self._start_filetransfer(path)
-
-    def _get_pref_ft_method(self) -> Optional[str]:
-        ft_pref = app.settings.get_account_setting(self.account,
-                                                   'filetransfer_preference')
-        httpupload = app.window.lookup_action(
-            f'send-file-httpupload-{self.control_id}')
-        jingle = app.window.lookup_action(
-            f'send-file-jingle-{self.control_id}')
-
-        if self.is_groupchat:
-            if httpupload.get_enabled():
-                return 'httpupload'
-            return None
-
-        if httpupload.get_enabled() and jingle.get_enabled():
-            return ft_pref
-
-        if httpupload.get_enabled():
-            return 'httpupload'
-
-        if jingle.get_enabled():
-            return 'jingle'
-        return None
-
-    def _start_filetransfer(self, path: str) -> None:
-        method = self._get_pref_ft_method()
-        if method is None:
-            return
-
-        if method == 'httpupload':
-            app.interface.send_httpupload(self, path)
-        else:
-            send_callback = partial(
-                app.interface.instances['file_transfers'].send_file,
-                self.account,
-                self.contact)
-            SendFileDialog(self.contact, send_callback, app.window, [path])
-
-    def _on_send_file(self,
-                      action: Gio.SimpleAction,
-                      _param: Optional[GLib.Variant]
-                      ) -> None:
-        name = action.get_name()
-        if 'httpupload' in name:
-            app.interface.send_httpupload(self)
-            return
-
-        if 'jingle' in name:
-            app.interface.instances['file_transfers'].show_file_send_request(
-                self.account, self.contact)
-            return
-
-        method = self._get_pref_ft_method()
-        if method is None:
-            return
-
-        if method == 'httpupload':
-            app.interface.send_httpupload(self)
-        else:
-            app.interface.instances['file_transfers'].show_file_send_request(
-                self.account, self.contact)
-
-    def _on_message_textview_key_press_event(self,
-                                             textview: MessageInputTextView,
-                                             event: Gdk.EventKey
-                                             ) -> bool:
-        # pylint: disable=too-many-nested-blocks
-        if event.keyval == Gdk.KEY_space:
-            self.space_pressed = True
-
-        elif ((self.space_pressed or self.msg_textview.undo_pressed) and
-                event.keyval not in (Gdk.KEY_Control_L, Gdk.KEY_Control_R) and
-                not (event.keyval == Gdk.KEY_z and
-                     event.get_state() & Gdk.ModifierType.CONTROL_MASK)):
-            # If the space key has been pressed and now it hasn't,
-            # we save the buffer into the undo list. But be careful we're not
-            # pressing Control again (as in ctrl+z)
-            _buffer = textview.get_buffer()
-            start_iter, end_iter = _buffer.get_bounds()
-            self.msg_textview.save_undo(_buffer.get_text(start_iter,
-                                                         end_iter,
-                                                         True))
-            self.space_pressed = False
-
-        # Ctrl [+ Shift] + Tab are not forwarded to notebook. We handle it here
-        if event.get_state() & Gdk.ModifierType.SHIFT_MASK:
-            if (event.get_state() & Gdk.ModifierType.CONTROL_MASK and
-                    event.keyval == Gdk.KEY_ISO_Left_Tab):
-                app.window.select_next_chat(Direction.PREV, unread_first=True)
-                return True
-
-            if event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up):
-                self.conversation_view.event(event)
-                return True
-
-        if event.get_state() & Gdk.ModifierType.CONTROL_MASK:
-            if event.keyval == Gdk.KEY_Tab:
-                app.window.select_next_chat(Direction.NEXT, unread_first=True)
-                return True
-
-        message_buffer = self.msg_textview.get_buffer()
-        event_state = event.get_state()
-        if event.keyval == Gdk.KEY_Up:
-            if event_state & Gdk.ModifierType.CONTROL_MASK:
-                if event_state & Gdk.ModifierType.SHIFT_MASK:  # Ctrl+Shift+UP
-                    self.scroll_messages('up', message_buffer, 'received')
-                else:  # Ctrl+UP
-                    self.scroll_messages('up', message_buffer, 'sent')
-                return True
-        elif event.keyval == Gdk.KEY_Down:
-            if event_state & Gdk.ModifierType.CONTROL_MASK:
-                if event_state & Gdk.ModifierType.SHIFT_MASK:  # Ctrl+Shift+Down
-                    self.scroll_messages('down', message_buffer, 'received')
-                else:  # Ctrl+Down
-                    self.scroll_messages('down', message_buffer, 'sent')
-                return True
-        elif event.keyval in (Gdk.KEY_Return, Gdk.KEY_KP_Enter):  # ENTER
-            if event_state & Gdk.ModifierType.SHIFT_MASK:
-                textview.insert_newline()
-                return True
-
-            if event_state & Gdk.ModifierType.CONTROL_MASK:
-                if not app.settings.get('send_on_ctrl_enter'):
-                    textview.insert_newline()
-                    return True
-            else:
-                if app.settings.get('send_on_ctrl_enter'):
-                    textview.insert_newline()
-                    return True
-
-            if not app.account_is_available(self.account):
-                # we are not connected
-                ErrorDialog(
-                    _('No Connection Available'),
-                    _('Your message can not be sent until you are connected.'))
-                return True
-
-            self._on_send_message()
-            return True
-
-        elif event.keyval == Gdk.KEY_z:  # CTRL+z
-            if event_state & Gdk.ModifierType.CONTROL_MASK:
-                self.msg_textview.undo()
-                return True
-
-        return False
 
     def _on_autoscroll_changed(self,
                                _widget: ScrolledView,
@@ -918,40 +312,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
             app.window.mark_as_read(self.account, self.contact.jid)
 
     def _on_jump_to_end(self, _button: Gtk.Button) -> None:
-        self.scroll_to_end(force=True)
-        self._jump_to_end_button.reset_unread_count()
-
-    def _on_drag_data_received(self,
-                               widget: Gtk.Widget,
-                               context: Gdk.DragContext,
-                               x_coord: int,
-                               y_coord: int,
-                               selection: Gtk.SelectionData,
-                               target_type: int,
-                               timestamp: int
-                               ) -> None:
-        """
-        Derived types SHOULD implement this
-        """
-
-    def _on_drag_leave(self,
-                       _widget: Gtk.Widget,
-                       _context: Gdk.DragContext,
-                       _time: int
-                       ) -> None:
-        self.xml.drop_area.set_no_show_all(True)
-        self.xml.drop_area.hide()
-
-    def _on_drag_motion(self,
-                        _widget: Gtk.Widget,
-                        _context: Gdk.DragContext,
-                        _x_coord: int,
-                        _y_coord: int,
-                        _time: int
-                        ) -> bool:
-        self.xml.drop_area.set_no_show_all(False)
-        self.xml.drop_area.show_all()
-        return True
+        self.reset_view()
 
     def drag_data_file_transfer(self, selection: Gtk.SelectionData) -> None:
         # we may have more than one file dropped
@@ -964,113 +325,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                       'not uploaded: %s') % path)
                 continue
 
-            self._start_filetransfer(path)
-
-    def get_seclabel(self) -> Optional[str]:
-        return self._security_label_selector.get_seclabel()
+            app.interface.start_file_transfer(self.contact, path)
 
     def get_our_nick(self) -> str:
         return app.nicks[self.account]
-
-    def _on_send_message(self, *args: Any) -> None:
-        self.msg_textview.replace_emojis()
-        message = self.msg_textview.get_text()
-        self.send_message(message)
-
-    def send_message(self,
-                     message: str,
-                     type_: str = 'chat',
-                     resource: Optional[str] = None,
-                     process_commands: bool = True,
-                     attention: bool = False
-                     ) -> None:
-        """
-        Send the given message to the active tab. Doesn't return None if error
-        """
-        if not message or message == '\n':
-            return None
-
-        if process_commands and self.process_as_command(message):
-            return
-
-        label = self.get_seclabel()
-
-        correct_id: Optional[str] = None
-        if self.correcting and self.last_sent_msg:
-            correct_id = self.last_sent_msg
-        else:
-            correct_id = None
-
-        chatstate = self._client.get_module('Chatstate').get_active_chatstate(
-            self.contact)
-
-        message_ = OutgoingMessage(account=self.account,
-                                   contact=self.contact,
-                                   message=message,
-                                   type_=type_,
-                                   chatstate=chatstate,
-                                   resource=resource,
-                                   user_nick=self.user_nick,
-                                   label=label,
-                                   control=self,
-                                   attention=attention,
-                                   correct_id=correct_id)
-
-        self._client.send_message(message_)
-
-        # Record the history of sent messages
-        self.save_message(message, 'sent')
-
-        # Be sure to send user nickname only once according to JEP-0172
-        self.user_nick = None
-
-        self.msg_textview.clear()
-
-    def _on_message_tv_buffer_changed(self,
-                                      textbuffer: Gtk.TextBuffer
-                                      ) -> None:
-        has_text = self.msg_textview.has_text()
-        app.window.lookup_action(
-            f'send-message-{self.control_id}').set_enabled(has_text)
-
-        if textbuffer.get_char_count() and self.encryption:
-            app.plugin_manager.extension_point(
-                'typing' + self.encryption, self)
-
-        self._client.get_module('Chatstate').set_keyboard_activity(
-            self.contact)
-        if not has_text:
-            self._client.get_module('Chatstate').set_chatstate_delayed(
-                self.contact, Chatstate.ACTIVE)
-            return
-        self._client.get_module('Chatstate').set_chatstate(
-            self.contact, Chatstate.COMPOSING)
-
-    def save_message(self, message: str, msg_type: str) -> None:
-        # save the message, so user can scroll though the list with key up/down
-        if msg_type == 'sent':
-            history = self.sent_history
-            pos = self.sent_history_pos
-        else:
-            history = self.received_history
-            pos = self.received_history_pos
-        size = len(history)
-        scroll = pos != size
-        # we don't want size of the buffer to grow indefinitely
-        max_size = app.settings.get('key_up_lines')
-        for _i in range(size - max_size + 1):
-            if pos == 0:
-                break
-            history.pop(0)
-            pos -= 1
-        history.append(message)
-        if not scroll or msg_type == 'sent':
-            pos = len(history)
-        if msg_type == 'sent':
-            self.sent_history_pos = pos
-            self.orig_msg = None
-        else:
-            self.received_history_pos = pos
 
     def _allow_add_message(self) -> bool:
         # Only add messages if the view is already populated
@@ -1128,7 +386,7 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
             if not self._scrolled_view.get_autoscroll():
                 if kind == 'outgoing':
-                    self.scroll_to_end()
+                    self.reset_view()
                 else:
                     self._jump_to_end_button.add_unread_count()
         else:
@@ -1141,11 +399,8 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 self.last_msg_id = message_id
 
         if kind == 'incoming':
-            # Record the history of received messages
-            self.save_message(text, 'received')
-
-            # Issue notification
             if notify:
+                # Issue notification
                 self._notify(name, text, tim, additional_data)
 
             if not chat_active and notify:
@@ -1201,8 +456,10 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 return
 
         if self.is_privatechat:
+            room_contact = self._client.get_module('Contacts').get_contact(
+                self.contact.jid.bare)
             msg_type = 'private-chat-message'
-            title += f' (private in {self.room_name})'
+            title += f' (private in {room_contact.name})'
             sound = 'first_message_received'
 
         # Is it a history message? Don't want sound-floods when we join.
@@ -1222,65 +479,11 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                                 text=text,
                                 sound=sound))
 
-    def toggle_emoticons(self) -> None:
-        """
-        Hide show emoticons_button
-        """
-        if app.settings.get('emoticons_theme'):
-            self.xml.emoticons_button.set_no_show_all(False)
-            self.xml.emoticons_button.show()
-        else:
-            self.xml.emoticons_button.set_no_show_all(True)
-            self.xml.emoticons_button.hide()
-
-    def set_emoticon_popover(self) -> None:
-        if not app.settings.get('emoticons_theme'):
+    def load_messages(self) -> None:
+        if self._chat_loaded:
             return
 
-        if sys.platform == 'darwin':
-            # TODO: Remove if colored emoji rendering works well on
-            # Windows and MacOS
-            emoji_chooser.text_widget = self.msg_textview
-            self.xml.emoticons_button.set_popover(emoji_chooser)
-            return
-
-        self.xml.emoticons_button.set_sensitive(True)
-        self.xml.emoticons_button.connect('clicked',
-                                          self._on_emoticon_button_clicked)
-
-    def _on_emoticon_button_clicked(self, _widget: Gtk.Button) -> None:
-        # Present GTK emoji chooser (not cross platform compatible)
-        self.msg_textview.emit('insert-emoji')
-        self.xml.emoticons_button.set_active(False)
-
-    def _on_formatting_menuitem_activate(self,
-                                         menu_item: Gtk.CheckMenuItem
-                                         ) -> None:
-        formatting = menu_item.get_name()
-        self.msg_textview.apply_formatting(formatting)
-
-    def set_control_active(self, state: bool) -> None:
-        if not self._chat_loaded:
-            self.fetch_n_lines_history(self._scrolled_view, True, 20)
-
-        if state:
-            self.set_emoticon_popover()
-            self._security_label_selector.update()
-
-            if self.msg_textview.has_text():
-                self._client.get_module('Chatstate').set_chatstate(
-                    self.contact, Chatstate.PAUSED)
-            else:
-                self._client.get_module('Chatstate').set_chatstate(
-                    self.contact, Chatstate.ACTIVE)
-        else:
-            self._client.get_module('Chatstate').set_chatstate(
-                self.contact, Chatstate.INACTIVE)
-
-    def set_message_input_state(self, state: bool) -> None:
-        self.xml.formattings_button.set_sensitive(state)
-        self.msg_textview.set_sensitive(state)
-        self.msg_textview.set_editable(state)
+        self.fetch_n_lines_history(self._scrolled_view, True, 20)
 
     @property
     def is_chat_loaded(self) -> bool:
@@ -1293,11 +496,6 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
 
     def get_autoscroll(self) -> bool:
         return self._scrolled_view.get_autoscroll()
-
-    def scroll_to_end(self, force: bool = False) -> None:
-        # Clear view and reload conversation
-        self.reset_view()
-        self.conversation_view.scroll_to_end(force)
 
     def scroll_to_message(self, log_line_id: int, timestamp: float) -> None:
         row = self.conversation_view.get_row_by_log_line_id(log_line_id)
@@ -1412,82 +610,3 @@ class BaseControl(ChatCommandProcessor, CommandTools, EventHelper):
                 log_line_id=msg.log_line_id,
                 marker=msg.marker,
                 error=msg.error)
-
-    def has_focus(self) -> bool:
-        if app.window.get_property('has-toplevel-focus'):
-            if self == app.window.get_active_control():
-                return True
-        return False
-
-    def scroll_messages(self,
-                        direction: str,
-                        msg_buf: Gtk.TextBuffer,
-                        msg_type: str,
-                        ) -> None:
-        # pylint: disable=too-many-boolean-expressions
-        if msg_type == 'sent':
-            history = self.sent_history
-            pos = self.sent_history_pos
-            self.received_history_pos = len(self.received_history)
-        else:
-            history = self.received_history
-            pos = self.received_history_pos
-            self.sent_history_pos = len(self.sent_history)
-        size = len(history)
-        if self.orig_msg is None:
-            # user was typing something and then went into history, so save
-            # whatever is already typed
-            start_iter = msg_buf.get_start_iter()
-            end_iter = msg_buf.get_end_iter()
-            self.orig_msg = msg_buf.get_text(start_iter, end_iter, False)
-        if (pos == size and size > 0 and direction == 'up' and
-                msg_type == 'sent' and not self.correcting and (
-                    not history[pos - 1].startswith('/') or
-                    history[pos - 1].startswith('/me'))):
-            if self.last_sent_msg is not None:
-                self.correcting = True
-                self.msg_textview.get_style_context().add_class(
-                    'gajim-msg-correcting')
-                message = history[pos - 1]
-                msg_buf.set_text(message)
-                return
-        if self.correcting:
-            # We were previously correcting
-            self.msg_textview.get_style_context().remove_class(
-                'gajim-msg-correcting')
-        self.correcting = False
-        pos += -1 if direction == 'up' else +1
-        if pos == -1:
-            return
-        if pos >= size:
-            pos = size
-            message = self.orig_msg
-            self.orig_msg = None
-        else:
-            message = history[pos]
-        if msg_type == 'sent':
-            self.sent_history_pos = pos
-        else:
-            self.received_history_pos = pos
-            if self.orig_msg is not None:
-                message = '> %s\n' % message.replace('\n', '\n> ')
-        msg_buf.set_text(message)
-
-    def update_account_badge(self) -> None:
-        show = len(app.settings.get_active_accounts()) > 1
-        self.xml.account_badge_box.set_visible(show)
-
-
-class ScrolledWindow(Gtk.ScrolledWindow):
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        Gtk.ScrolledWindow.__init__(self, *args, **kwargs)
-
-        self.set_overlay_scrolling(False)
-        self.set_max_content_height(100)
-        self.set_propagate_natural_height(True)
-        self.get_style_context().add_class('scrolled-no-border')
-        self.get_style_context().add_class('no-scroll-indicator')
-        self.get_style_context().add_class('scrollbar-style')
-        self.get_style_context().add_class('one-line-scrollbar')
-        self.set_shadow_type(Gtk.ShadowType.IN)
-        self.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)

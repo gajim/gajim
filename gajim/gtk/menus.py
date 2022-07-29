@@ -41,6 +41,7 @@ from gajim.common.const import URIType
 from gajim.common.const import URIAction
 from gajim.common.structs import URI
 from gajim.common.structs import VariantMixin
+from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import can_add_to_roster
 
 from gajim.gui.structs import AddChatActionParams
@@ -48,22 +49,20 @@ from gajim.gui.structs import AccountJidParam
 from gajim.gui.structs import ChatListEntryParam
 from gajim.gui.structs import RemoveHistoryActionParams
 from gajim.gui.util import GajimMenu
-from gajim.gui.const import ControlType
 
 
 MenuValueT = Union[None, str, GLib.Variant, VariantMixin]
 MenuItemListT = list[tuple[str, str, MenuValueT]]
 
 
-def get_self_contact_menu(control_id: str,
-                          contact: types.BareContact) -> GajimMenu:
+def get_self_contact_menu(contact: types.BareContact) -> GajimMenu:
     account = contact.account
     jid = contact.jid
 
     menu = GajimMenu()
 
     menu.add_item(_('Profile'), f'app.{account}-profile', f'"{account}"')
-    submenu = get_send_file_submenu(control_id)
+    submenu = get_send_file_submenu()
     menu.append_submenu(_('Send File'), submenu)
 
     params = RemoveHistoryActionParams(account=account, jid=jid)
@@ -72,60 +71,55 @@ def get_self_contact_menu(control_id: str,
     return menu
 
 
-def get_singlechat_menu(control_id: str,
-                        contact: Union[types.BareContact,
-                                       types.GroupchatParticipant]
-                        ) -> GajimMenu:
+def get_singlechat_menu(contact: types.BareContact) -> GajimMenu:
+    account = contact.account
 
     menu = GajimMenu()
-    menu.add_item(_('Details'), f'win.information-{control_id}')
-    menu.add_item(_('Block Contact…'), f'win.block-contact-{control_id}')
+    menu.add_item(_('Details'), 'win.show-contact-info')
+    menu.add_item(_('Block Contact…'), f'app.{account}-block-contact')
 
-    submenu = get_send_file_submenu(control_id)
+    submenu = get_send_file_submenu()
     menu.append_submenu(_('Send File'), submenu)
 
-    menu.add_item(_('Start Voice Call…'), f'win.start-voice-call-{control_id}')
-    menu.add_item(_('Start Video Call…'), f'win.start-video-call-{control_id}')
+    menu.add_item(_('Start Voice Call…'), 'win.start-voice-call')
+    menu.add_item(_('Start Video Call…'), 'win.start-video-call')
+
+    menu.add_item(_('Search…'), 'win.search-history', None)
+
+    if can_add_to_roster(contact):
+        params = AccountJidParam(account=account, jid=contact.jid)
+        menu.add_item(_('Add to Contact List…'), 'win.add-to-roster', params)
+
+    return menu
+
+
+def get_private_chat_menu(contact: types.GroupchatParticipant) -> GajimMenu:
+    menu = GajimMenu()
+    menu.add_item(_('Details'), 'win.show-contact-info')
+    menu.add_item(_('Upload File…'), 'win.send-file-httpupload')
     menu.add_item(_('Search…'), 'win.search-history')
 
     if can_add_to_roster(contact):
-        menu.append(_('Add to Contact List…'),
-                    f'win.add-to-roster-{control_id}')
+        params = AccountJidParam(account=contact.account, jid=contact.jid)
+        menu.add_item(_('Add to Contact List…'), 'win.add-to-roster', params)
 
     return menu
 
 
-def get_private_chat_menu(control_id: str,
-                          contact: types.GroupchatParticipant
-                          ) -> GajimMenu:
-
-    menu = GajimMenu()
-    menu.add_item(_('Details'), f'win.information-{control_id}')
-    menu.add_item(_('Upload File…'), f'win.send-file-httpupload-{control_id}')
-    menu.add_item(_('Search…'), 'win.search-history')
-
-    if can_add_to_roster(contact):
-        menu.append(_('Add to Contact List…'),
-                    f'win.add-to-roster-{control_id}')
-
-    return menu
-
-
-def get_send_file_submenu(control_id: str) -> GajimMenu:
+def get_send_file_submenu() -> GajimMenu:
     menu = GajimMenu()
 
-    menu.add_item(_('Upload File…'), f'win.send-file-httpupload-{control_id}')
-    menu.add_item(_('Send File Directly…'),
-                  f'win.send-file-jingle-{control_id}')
+    menu.add_item(_('Upload File…'), 'win.send-file-httpupload')
+    menu.add_item(_('Send File Directly…'), 'win.send-file-jingle')
     return menu
 
 
-def get_groupchat_menu(control_id: str, account: str, jid: JID) -> GajimMenu:
+def get_groupchat_menu(contact: GroupchatContact) -> GajimMenu:
     menuitems: MenuItemListT = [
-        (_('Details'), f'win.groupchat-details-{control_id}', None),
-        (_('Change Nickname…'), f'win.change-nickname-{control_id}', None),
-        (_('Request Voice'), f'win.request-voice-{control_id}', None),
-        (_('Execute Command…'), f'win.execute-command-{control_id}', '""'),
+        (_('Details'), 'win.show-contact-info', None),
+        (_('Change Nickname…'), 'win.muc-change-nickname', None),
+        (_('Request Voice'), 'win.muc-request-voice', None),
+        (_('Execute Command…'), 'win.muc-execute-command', '""'),
         (_('Search…'), 'win.search-history', None)
     ]
 
@@ -199,24 +193,16 @@ def build_accounts_menu() -> None:
         menubar.insert_submenu(menu_position, _('Accounts'), acc_menu)
 
 
-def get_encryption_menu(control_id: str,
-                        control_type: ControlType,
-                        ) -> Optional[GajimMenu]:
-    menu = GajimMenu()
-    action = f'win.set-encryption-{control_id}'
-    menu.add_item(_('Disabled'), action, '"disabled"')
-    for name, plugin in app.plugin_manager.encryption_plugins.items():
-        if control_type.is_groupchat:
-            if not hasattr(plugin, 'allow_groupchat'):
-                continue
-        if control_type.is_privatechat:
-            if not hasattr(plugin, 'allow_privatechat'):
-                continue
-        menu.add_item(name, action, f'"{name}"')
+def get_encryption_menu() -> GajimMenu:
 
-    if menu.get_n_items() == 1:
-        return None
-    return menu
+    menuitems: MenuItemListT = [
+        (_('Disabled'), 'win.set-encryption', '""'),
+        ('OMEMO', 'win.set-encryption', '"OMEMO"'),
+        ('OpenPGP', 'win.set-encryption', '"OpenPGP"'),
+        ('PGP', 'win.set-encryption', '"PGP"'),
+    ]
+
+    return GajimMenu.from_list(menuitems)
 
 
 def get_conv_action_context_menu(account: str,
@@ -373,15 +359,15 @@ def get_roster_menu(account: str, jid: str, gateway: bool = False) -> GajimMenu:
     value = f'"{jid}"'
 
     menuitems: MenuItemListT = [
-        (_('Details'), f'win.contact-info-{account}', value),
-        (_('Execute Command…'), f'win.execute-command-{account}', value),
-        (block_label, f'win.block-contact-{account}', value),
-        (_('Remove…'), f'win.remove-contact-{account}', value),
+        (_('Details'), f'app.{account}-contact-info', value),
+        (_('Execute Command…'), f'app.{account}-execute-command', value),
+        (block_label, f'app.{account}-block-contact', value),
+        (_('Remove…'), f'app.{account}-remove-contact', value),
     ]
 
     if gateway:
         menuitems.insert(
-            1, (_('Modify Gateway…'), f'win.modify-gateway-{account}', value))
+            1, (_('Modify Gateway…'), f'app.{account}-modify-gateway', value))
 
     return GajimMenu.from_list(menuitems)
 
@@ -466,13 +452,12 @@ def get_workspace_params(current_workspace_id: str,
         yield name, params
 
 
-def get_groupchat_admin_menu(control_id: str,
-                             self_contact: types.GroupchatParticipant,
+def get_groupchat_admin_menu(self_contact: types.GroupchatParticipant,
                              contact: types.GroupchatParticipant) -> GajimMenu:
 
     menu = GajimMenu()
 
-    action = f'win.change-affiliation-{control_id}'
+    action = 'win.muc-change-affiliation'
 
     if is_affiliation_change_allowed(self_contact, contact, 'owner'):
         value = f'["{contact.real_jid}", "owner"]'
@@ -492,7 +477,7 @@ def get_groupchat_admin_menu(control_id: str,
 
     if is_affiliation_change_allowed(self_contact, contact, 'outcast'):
         value = f'"{contact.real_jid}"'
-        menu.add_item(_('Ban…'), f'win.ban-{control_id}', value)
+        menu.add_item(_('Ban…'), 'win.muc-ban', value)
 
     if not menu.get_n_items():
         menu.add_item(_('Not Available'), 'dummy', None)
@@ -500,8 +485,7 @@ def get_groupchat_admin_menu(control_id: str,
     return menu
 
 
-def get_groupchat_mod_menu(control_id: str,
-                           self_contact: types.GroupchatParticipant,
+def get_groupchat_mod_menu(self_contact: types.GroupchatParticipant,
                            contact: types.GroupchatParticipant
                            ) -> GajimMenu:
 
@@ -509,9 +493,9 @@ def get_groupchat_mod_menu(control_id: str,
 
     if is_role_change_allowed(self_contact, contact):
         value = f'"{contact.name}"'
-        menu.add_item(_('Kick…'), f'win.kick-{control_id}', value)
+        menu.add_item(_('Kick…'), 'win.muc-kick', value)
 
-    action = f'win.change-role-{control_id}'
+    action = 'win.muc-change-role'
 
     if is_role_change_allowed(self_contact, contact):
         if contact.role.is_visitor:
@@ -528,7 +512,6 @@ def get_groupchat_mod_menu(control_id: str,
 
 
 def get_groupchat_roster_menu(account: str,
-                              control_id: str,
                               self_contact: types.GroupchatParticipant,
                               contact: types.GroupchatParticipant
                               ) -> GajimMenu:
@@ -536,8 +519,8 @@ def get_groupchat_roster_menu(account: str,
     value = f'"{contact.name}"'
 
     general_items: MenuItemListT = [
-        (_('Details'), f'win.contact-information-{control_id}', value),
-        (_('Execute Command…'), f'win.execute-command-{control_id}', value),
+        (_('Details'), 'win.muc-contact-info', value),
+        (_('Execute Command…'), 'win.muc-execute-command', value),
     ]
 
     real_contact = contact.get_real_contact()
@@ -546,8 +529,8 @@ def get_groupchat_roster_menu(account: str,
         action = f'app.{account}-add-contact'
         general_items.insert(1, (_('Add to Contact List…'), action, value))
 
-    mod_menu = get_groupchat_mod_menu(control_id, self_contact, contact)
-    admin_menu = get_groupchat_admin_menu(control_id, self_contact, contact)
+    mod_menu = get_groupchat_mod_menu(self_contact, contact)
+    admin_menu = get_groupchat_admin_menu(self_contact, contact)
 
     menu = GajimMenu.from_list(general_items)
     menu.append_section(_('Moderation'), mod_menu)
@@ -575,6 +558,17 @@ def get_component_search_menu(jid: Optional[str], copy_text: str) -> Gio.Menu:
         menuitem.set_action_and_target_value(action, variant)
         menu.append_item(menuitem)
     return menu
+
+
+def get_format_menu() -> GajimMenu:
+
+    menuitems: MenuItemListT = [
+        (_('bold'), 'win.input-bold', None),
+        (_('italic'), 'win.input-italic', None),
+        (_('strike'), 'win.input-strike', None),
+    ]
+
+    return GajimMenu.from_list(menuitems)
 
 
 def escape_mnemonic(label: Optional[str]) -> Optional[str]:

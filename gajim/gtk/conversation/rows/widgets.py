@@ -14,8 +14,7 @@
 
 from __future__ import annotations
 
-from typing import Union
-from typing import Any
+from typing import TYPE_CHECKING
 
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -24,13 +23,13 @@ from gi.repository import GLib
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.helpers import is_retraction_allowed
-from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
-from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.types import ChatContactT
+
+if TYPE_CHECKING:
+    from .message import MessageRow
 
 from ...util import wrap_with_event_box
-
-ContactT = Union[BareContact, GroupchatContact, GroupchatParticipant]
 
 
 class SimpleLabel(Gtk.Label):
@@ -45,8 +44,8 @@ class SimpleLabel(Gtk.Label):
 @wrap_with_event_box
 class MoreMenuButton(Gtk.Button):
     def __init__(self,
-                 row: Any,
-                 contact: ContactT,
+                 row: MessageRow,
+                 contact: ChatContactT,
                  name: str
                  ) -> None:
 
@@ -70,23 +69,33 @@ class MoreMenuButton(Gtk.Button):
         show_retract = False
         if isinstance(self._contact, GroupchatContact):
             if not self._contact.is_joined:
-                self._create_popover(False)
+                self._create_popover(show_retract=False)
                 return
+
+            contact = self._contact.get_resource(self._name)
+            self_contact = self._contact.get_self()
+            assert self_contact is not None
+            is_allowed = is_retraction_allowed(self_contact, contact)
 
             disco_info = app.storage.cache.get_last_disco_info(
                 self._contact.jid)
             assert disco_info is not None
 
-            contact = self._contact.get_resource(self._name)
-            self_contact = self._contact.get_self()
-            assert self_contact is not None
-
-            is_allowed = is_retraction_allowed(self_contact, contact)
             if disco_info.has_message_moderation and is_allowed:
                 show_retract = True
-        self._create_popover(show_retract)
 
-    def _create_popover(self, show_retract: bool) -> None:
+        show_correction = False
+        if self._row.message_id is not None:
+            show_correction = app.window.is_message_correctable(
+                self._contact.account, self._contact.jid, self._row.message_id)
+
+        self._create_popover(show_retract=show_retract,
+                             show_correction=show_correction)
+
+    def _create_popover(self,
+                        show_retract: bool = False,
+                        show_correction: bool = False
+                        ) -> None:
         menu_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         menu_box.get_style_context().add_class('padding-6')
 
@@ -115,6 +124,16 @@ class MoreMenuButton(Gtk.Button):
         copy_button.set_image(Gtk.Image.new_from_icon_name(
             'edit-copy-symbolic', Gtk.IconSize.MENU))
         menu_box.add(copy_button)
+
+        if show_correction:
+            correct_button = Gtk.ModelButton()
+            correct_button.set_halign(Gtk.Align.START)
+            correct_button.connect(
+                'clicked', self._row.on_correct_message)
+            correct_button.set_label(_('Correct'))
+            correct_button.set_image(Gtk.Image.new_from_icon_name(
+                'document-edit-symbolic', Gtk.IconSize.MENU))
+            menu_box.add(correct_button)
 
         if show_retract:
             retract_button = Gtk.ModelButton()

@@ -385,13 +385,13 @@ BoolGroupChatSettings = Literal[
     'notify_on_all_messages',
     'print_join_left',
     'print_status',
-    'send_chatstate',
     'send_marker',
 ]
 
 StringGroupChatSettings = Literal[
     'encryption',
     'speller_language',
+    'send_chatstate',
 ]
 
 IntGroupChatSettings = Literal[
