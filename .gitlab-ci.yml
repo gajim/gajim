@@ -74,7 +74,7 @@ build-linux:
     - if: '$CI_COMMIT_TAG'
   script:
     - apt-get update
-    - apt-get install python3-nbxmpp-nightly
+    - apt-get install -y python3-nbxmpp-nightly
     - python3 setup.py sdist
     - python3 .ci/debian_build.py "$(find dist/gajim-*)" 1
 
