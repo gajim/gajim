@@ -37,6 +37,8 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.const import PresenceShowExt
 from gajim.common.const import SimpleClientState
+from gajim.common.setting_values import BoolContactSettings
+from gajim.common.setting_values import StringContactSettings
 from gajim.common.setting_values import BoolGroupChatSettings
 from gajim.common.setting_values import IntGroupChatSettings
 from gajim.common.setting_values import StringGroupChatSettings
@@ -52,8 +54,26 @@ from gajim.common.helpers import get_groupchat_name
 
 class ContactSettings:
     def __init__(self, account: str, jid: JID) -> None:
-        self.get = partial(app.settings.get_contact_setting, account, jid)
-        self.set = partial(app.settings.set_contact_setting, account, jid)
+        self._account = account
+        self._jid = jid
+
+    @overload
+    def get(self, setting: StringContactSettings) -> str: ...  # noqa: E704
+    @overload
+    def get(self, setting: BoolContactSettings) -> bool: ...  # noqa: E704
+
+    def get(self, setting: Any) -> Any:
+        return app.settings.get_contact_setting(
+            self._account, self._jid, setting)
+
+    @overload
+    def set(self, setting: StringContactSettings, value: str) -> None: ...  # noqa: E501, E704
+    @overload
+    def set(self, setting: BoolContactSettings, value: bool) -> None: ...  # noqa: E501, E704
+
+    def set(self, setting: Any, value: Any) -> None:
+        app.settings.set_contact_setting(
+            self._account, self._jid, setting, value)
 
 
 class GroupChatSettings:

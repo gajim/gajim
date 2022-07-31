@@ -405,6 +405,23 @@ AllGroupChatSettings = Literal[BoolGroupChatSettings,
 
 AllGroupChatSettingsT = Union[str, int, bool]
 
+
+BoolContactSettings = Literal[
+    'send_marker',
+]
+
+StringContactSettings = Literal[
+    'encryption',
+    'speller_language',
+    'send_chatstate',
+]
+
+AllContactSettings = Literal[BoolContactSettings,
+                             StringContactSettings]
+
+AllContactSettingsT = Union[str, bool]
+
+
 ACCOUNT_SETTINGS = {
     'account': {
         'account_color': 'rgb(85, 85, 85)',

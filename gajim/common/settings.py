@@ -45,6 +45,10 @@ from gajim.common.helpers import get_muc_context
 from gajim.common.storage.base import Encoder
 from gajim.common.storage.base import json_decoder
 from gajim.common.setting_values import APP_SETTINGS
+from gajim.common.setting_values import AllContactSettings
+from gajim.common.setting_values import AllContactSettingsT
+from gajim.common.setting_values import BoolContactSettings
+from gajim.common.setting_values import StringContactSettings
 from gajim.common.setting_values import AllGroupChatSettings
 from gajim.common.setting_values import AllGroupChatSettingsT
 from gajim.common.setting_values import BoolGroupChatSettings
@@ -923,10 +927,27 @@ class Settings:
                         continue
                 self.set_group_chat_setting(account, jid, setting, value)
 
+    @overload
     def get_contact_setting(self,
                             account: str,
                             jid: JID,
-                            setting: str) -> SETTING_TYPE:
+                            setting: BoolContactSettings
+                            ) -> bool:
+        ...
+
+    @overload
+    def get_contact_setting(self,
+                            account: str,
+                            jid: JID,
+                            setting: StringContactSettings
+                            ) -> str:
+        ...
+
+    def get_contact_setting(self,
+                            account: str,
+                            jid: JID,
+                            setting: AllContactSettings
+                            ) -> AllContactSettingsT:
 
         if account not in self._account_settings:
             raise ValueError(f'Account missing: {account}')
@@ -946,11 +967,27 @@ class Settings:
 
             return default
 
+    @overload
     def set_contact_setting(self,
                             account: str,
                             jid: JID,
-                            setting: str,
-                            value: SETTING_TYPE) -> None:
+                            setting: StringContactSettings,
+                            value: str) -> None:
+        ...
+
+    @overload
+    def set_contact_setting(self,
+                            account: str,
+                            jid: JID,
+                            setting: BoolContactSettings,
+                            value: bool) -> None:
+        ...
+
+    def set_contact_setting(self,
+                            account: str,
+                            jid: JID,
+                            setting: AllContactSettings,
+                            value: AllContactSettingsT) -> None:
 
         if account not in self._account_settings:
             raise ValueError(f'Account missing: {account}')
@@ -992,7 +1029,7 @@ class Settings:
 
     def set_contact_settings(self,
                              setting: str,
-                             value: SETTING_TYPE) -> None:
+                             value: AllContactSettings) -> None:
 
         for account, acc_settings in self._account_settings.items():
             for jid in acc_settings['contact']:
