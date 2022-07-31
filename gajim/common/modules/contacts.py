@@ -20,8 +20,6 @@ from typing import Optional
 from typing import Union
 from typing import overload
 
-from functools import partial
-
 import cairo
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Chatstate

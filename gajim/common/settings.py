@@ -1029,7 +1029,7 @@ class Settings:
 
     def set_contact_settings(self,
                              setting: str,
-                             value: AllContactSettings) -> None:
+                             value: SETTING_TYPE) -> None:
 
         for account, acc_settings in self._account_settings.items():
             for jid in acc_settings['contact']:
