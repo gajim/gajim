@@ -43,6 +43,7 @@ from gajim.common.events import FileRequestSent
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_start_of_day
+from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive import ConversationRow
 from gajim.common.modules.contacts import BareContact
@@ -183,6 +184,7 @@ class ConversationView(Gtk.ListBox):
                           nick: str,
                           reason: str,
                           error: bool = False) -> None:
+        assert isinstance(self._contact, GroupchatContact)
         if not self._contact.settings.get('print_join_left'):
             return
         join_left = MUCJoinLeft('muc-user-left',
@@ -193,6 +195,7 @@ class ConversationView(Gtk.ListBox):
         self._insert_message(join_left)
 
     def add_muc_user_joined(self, nick: str) -> None:
+        assert isinstance(self._contact, GroupchatContact)
         if not self._contact.settings.get('print_join_left'):
             return
         join_left = MUCJoinLeft('muc-user-joined',
