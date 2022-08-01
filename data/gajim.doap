@@ -28,15 +28,13 @@
     <category rdf:resource="https://linkmauve.fr/ns/xmpp-doap#category-client"/>
     <category rdf:resource="http://api.gnome.org/doap-extensions#apps"/>
     <license rdf:resource="http://usefulinc.com/doap/licenses/gplv3"/>
+
     <schema:logo rdf:resource="https://gajim.org/img/gajim-logo.svg"/>
     <schema:screenshot rdf:resource="https://gajim.org/img/screenshots/single-window-mode.png"/>
 
     <programming-language>Python</programming-language>
     <os>Linux</os>
     <os>Windows</os>
-
-    <category rdf:resource='https://linkmauve.fr/ns/xmpp-doap#category-client'/>
-    <category rdf:resource="http://api.gnome.org/doap-extensions#apps"/>
 
     <repository>
       <GitRepository>
