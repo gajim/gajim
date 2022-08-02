@@ -41,6 +41,7 @@ from .dialogs import ErrorDialog
 from .filechoosers import FileSaveDialog
 from .preview_audio import AudioWidget
 from .builder import get_builder
+from .util import ensure_not_destroyed
 from .util import get_cursor
 from .util import load_icon_pixbuf
 
@@ -54,6 +55,7 @@ class PreviewWidget(Gtk.Box):
         self._preview: Optional[Preview] = None
 
         self._in_progress = False
+        self._destroyed = False
 
         if app.settings.get('use_kib_mib'):
             self._units = GLib.FormatSizeFlags.IEC_UNITS
@@ -63,13 +65,20 @@ class PreviewWidget(Gtk.Box):
         self._ui = get_builder('preview.ui')
         self._ui.connect_signals(self)
         self.add(self._ui.preview_box)
+
+        self.connect('destroy', self._on_destroy)
+
         self.show_all()
+
+    def _on_destroy(self, _widget: Gtk.Widget) -> None:
+        self._destroyed = True
 
     def get_text(self) -> str:
         if self._preview is None:
             return ''
         return self._preview.uri
 
+    @ensure_not_destroyed
     def update_progress(self, _preview: Preview, progress: float) -> None:
         self._in_progress = True
 
@@ -81,6 +90,7 @@ class PreviewWidget(Gtk.Box):
         self._ui.info_message.set_text(_('Downloading…'))
         self._ui.info_message.set_tooltip_text('')
 
+    @ensure_not_destroyed
     def update(self, preview: Preview, data: Optional[GdkPixbufType]) -> None:
         self._preview = preview
 
@@ -120,7 +130,7 @@ class PreviewWidget(Gtk.Box):
             self._ui.preview_box.set_size_request(160, -1)
             return
 
-        if preview.is_previewable and preview.orig_exists():
+        if preview.is_previewable and preview.orig_exists:
             self._ui.icon_event_box.hide()
             self._ui.image_button.show()
             self._ui.save_as_button.show()
@@ -147,7 +157,7 @@ class PreviewWidget(Gtk.Box):
             self._ui.info_message.set_tooltip_text(preview.info_message)
             self._ui.info_message.show()
 
-        if preview.orig_exists():
+        if preview.orig_exists:
             self._ui.download_button.hide()
             self._ui.open_folder_button.show()
             self._ui.save_as_button.show()
@@ -201,7 +211,7 @@ class PreviewWidget(Gtk.Box):
             menu.open_folder.hide()
             return menu.context_menu
 
-        if self._preview.orig_exists():
+        if self._preview.orig_exists:
             menu.download.hide()
         else:
             if self._in_progress:
@@ -215,7 +225,7 @@ class PreviewWidget(Gtk.Box):
     def _on_download(self, _menu: Gtk.Menu) -> None:
         if self._preview is None:
             return
-        if not self._preview.orig_exists():
+        if not self._preview.orig_exists:
             app.preview_manager.download_content(self._preview, force=True)
 
     def _on_open(self, _menu: Gtk.Menu) -> None:
@@ -226,7 +236,7 @@ class PreviewWidget(Gtk.Box):
             open_uri(self._preview.uri)
             return
 
-        if not self._preview.orig_exists():
+        if not self._preview.orig_exists:
             app.preview_manager.download_content(self._preview, force=True)
             return
 
@@ -258,7 +268,7 @@ class PreviewWidget(Gtk.Box):
                 return
             shutil.copyfile(str(self._preview.orig_path), target_path)
 
-        if not self._preview.orig_exists():
+        if not self._preview.orig_exists:
             app.preview_manager.download_content(self._preview, force=True)
             return
 
@@ -269,7 +279,7 @@ class PreviewWidget(Gtk.Box):
 
     def _on_open_folder(self, _menu: Gtk.Menu) -> None:
         assert self._preview
-        if not self._preview.orig_exists():
+        if not self._preview.orig_exists:
             app.preview_manager.download_content(self._preview, force=True)
             return
         assert self._preview.orig_path

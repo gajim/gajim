@@ -143,11 +143,13 @@ class Preview:
             return False
         return self._urlparts.scheme == 'aesgcm'
 
+    @property
     def thumb_exists(self) -> bool:
         if self.thumb_path is None:
             return False
         return self.thumb_path.exists()
 
+    @property
     def orig_exists(self) -> bool:
         if self.orig_path is None:
             return False
@@ -291,7 +293,7 @@ class PreviewManager:
 
         preview = self._process_web_uri(uri, widget, from_us, context)
 
-        if not preview.orig_exists():
+        if not preview.orig_exists:
             if context is not None and not from_us:
                 allow_in_public = app.settings.get('preview_anonymous_muc')
                 if context == 'public' and not allow_in_public:
@@ -300,7 +302,7 @@ class PreviewManager:
 
             self.download_content(preview)
 
-        elif not preview.thumb_exists():
+        elif not preview.thumb_exists:
             load_file_async(preview.orig_path,
                             self._on_orig_load_finished,
                             preview)
