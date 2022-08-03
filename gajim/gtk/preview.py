@@ -267,6 +267,9 @@ class PreviewWidget(Gtk.Box):
                     transient_for=app.app.get_active_window())
                 return
             shutil.copyfile(str(self._preview.orig_path), target_path)
+            file_dir = os.path.dirname(target_path)
+            if file_dir:
+                app.settings.set('last_save_dir', file_dir)
 
         if not self._preview.orig_exists:
             app.preview_manager.download_content(self._preview, force=True)
