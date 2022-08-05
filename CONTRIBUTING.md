@@ -35,7 +35,7 @@ A good article regarding [good commit messages](https://chris.beams.io/posts/git
 Every commit message must be prefixed with one of the following tags:
 
 - ci        (ci related changes)
-- cs        (code style changes)
+- cq        (code quality changes e.g. formatting, typing, codestyle)
 - feat      (a new feature was added)
 - fix       (something was fixed)
 - perf      (performance related changes)
