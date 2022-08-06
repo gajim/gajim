@@ -753,6 +753,10 @@ class GroupchatParticipant(CommonContact):
         return False
 
     @property
+    def room(self) -> GroupchatContact:
+        return self._module('Contacts').get_bare_contact(self.jid.bare)
+
+    @property
     def presence(self) -> MUCPresenceData:
         return self._presence
 
