@@ -109,8 +109,6 @@ class ChatControl(EventHelper):
 
         # GROUPCHAT INIT
 
-        # self.room_jid = str(self.contact.jid)
-
         # self._groupchat_state = GroupchatState(self.contact)
         # self._ui.conv_view_overlay.add_overlay(self._groupchat_state)
 
@@ -630,7 +628,7 @@ class ChatControl(EventHelper):
 
             if not event.properties.type.is_groupchat:
                 return
-            if event.archive_jid != self.room_jid:
+            if event.archive_jid != self.contact.jid:
                 return
             self.add_muc_message(event.msgtxt,
                                  contact=event.properties.muc_nickname,
@@ -865,7 +863,7 @@ class ChatControl(EventHelper):
 
         def on_approve() -> None:
             self._client.get_module('MUC').approve_voice_request(
-                self.room_jid, voice_request)
+                self.contact.jid, voice_request)
 
         ConfirmationDialog(
             _('Voice Request'),
@@ -961,7 +959,7 @@ class ChatControl(EventHelper):
         if StatusCode.CONFIG_NON_PRIVACY_RELATED in status_codes:
             changes.append(_('A setting not related to privacy has been '
                              'changed'))
-            self._client.get_module('Discovery').disco_muc(self.room_jid)
+            self._client.get_module('Discovery').disco_muc(self.contact.jid)
 
         if StatusCode.CONFIG_ROOM_LOGGING in status_codes:
             # Can be a presence (see chg_contact_status in groupchat_control.py)
@@ -995,7 +993,7 @@ class ChatControl(EventHelper):
         self._client.get_module('Chatstate').remove_delay_timeout(self.contact)
 
     def rejoin(self) -> None:
-        self._client.get_module('MUC').join(self.room_jid)
+        self._client.get_module('MUC').join(self.contact.jid)
 
     def _on_user_joined(self,
                         _contact: GroupchatContact,
