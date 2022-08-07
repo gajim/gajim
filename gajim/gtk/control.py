@@ -77,7 +77,6 @@ class ChatControl(EventHelper):
         self._client = None
 
         self._ui = get_builder('chat_control.ui')
-        self.widget = cast(Gtk.Box, self._ui.get_object('control_box'))
 
         # Create ConversationView and connect signals
         self.conversation_view = ConversationView()
@@ -105,11 +104,10 @@ class ChatControl(EventHelper):
 
         self.encryption: Optional[str] = None
 
+        self.widget = cast(Gtk.Box, self._ui.get_object('control_box'))
         self.widget.show_all()
 
         # GROUPCHAT INIT
-
-        # self.is_anonymous: bool = True
 
         # self.room_jid = str(self.contact.jid)
 
@@ -843,8 +841,10 @@ class ChatControl(EventHelper):
                                  _roster: GroupchatRoster,
                                  nick: str
                                  ) -> None:
+
+        disco = self.contact.get_disco()
         muc_prefer_direct_msg = app.settings.get('muc_prefer_direct_msg')
-        if not self.is_anonymous and muc_prefer_direct_msg:
+        if disco.muc_is_nonanonymous and muc_prefer_direct_msg:
             participant = self.contact.get_resource(nick)
             app.window.add_chat(self.account,
                                 participant.real_jid,
@@ -972,15 +972,12 @@ class ChatControl(EventHelper):
 
         if StatusCode.CONFIG_NON_ANONYMOUS in status_codes:
             changes.append(_('Group chat is now non-anonymous'))
-            self.is_anonymous = False
 
         if StatusCode.CONFIG_SEMI_ANONYMOUS in status_codes:
             changes.append(_('Group chat is now semi-anonymous'))
-            self.is_anonymous = True
 
         if StatusCode.CONFIG_FULL_ANONYMOUS in status_codes:
             changes.append(_('Group chat is now fully anonymous'))
-            self.is_anonymous = True
 
         for change in changes:
             self.add_info_message(change)
@@ -1021,7 +1018,6 @@ class ChatControl(EventHelper):
         if StatusCode.NON_ANONYMOUS in status_codes:
             self.add_info_message(
                 _('Any participant is allowed to see your full XMPP Address'))
-            self.is_anonymous = False
 
         if StatusCode.CONFIG_ROOM_LOGGING in status_codes:
             self.add_info_message(_('Conversations are stored on the server'))
