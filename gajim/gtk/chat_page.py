@@ -224,6 +224,18 @@ class ChatPage(Gtk.Box):
                                type_: str,
                                pinned: bool = False,
                                select: bool = False) -> None:
+
+        client = app.get_client(account)
+
+        if type_ == 'chat':
+            client.get_module('Contacts').add_chat_contact(jid)
+
+        elif type_ == 'groupchat':
+            client.get_module('Contacts').add_group_chat_contact(jid)
+
+        elif type_ == 'pm':
+            client.get_module('Contacts').add_group_private_contact(jid)
+
         if self.chat_exists(account, jid):
             if select:
                 self._chat_list_stack.select_chat(account, jid)
