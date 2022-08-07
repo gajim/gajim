@@ -78,7 +78,6 @@ class ChatControl(EventHelper):
 
         self._ui = get_builder('chat_control.ui')
 
-        # Create ConversationView and connect signals
         self.conversation_view = ConversationView()
 
         self._scrolled_view = ScrolledView()
@@ -86,6 +85,9 @@ class ChatControl(EventHelper):
         self._scrolled_view.set_focus_vadjustment(Gtk.Adjustment())
 
         self._ui.conv_view_overlay.add(self._scrolled_view)
+
+        self._groupchat_state = GroupchatState()
+        self._ui.conv_view_overlay.add_overlay(self._groupchat_state)
 
         self._jump_to_end_button = JumpToEndButton()
         self._jump_to_end_button.connect('clicked', self._on_jump_to_end)
@@ -104,12 +106,6 @@ class ChatControl(EventHelper):
 
         self.encryption: Optional[str] = None
 
-        self.widget = cast(Gtk.Box, self._ui.get_object('control_box'))
-        self.widget.show_all()
-
-        # self._groupchat_state = GroupchatState(self.contact)
-        # self._ui.conv_view_overlay.add_overlay(self._groupchat_state)
-
         # self.roster = GroupchatRoster(self.account, self.room_jid, self)
         # self.roster.connect('row-activated', self._on_roster_row_activated)
 
@@ -125,6 +121,9 @@ class ChatControl(EventHelper):
         # self._subject_text = ''
 
         # self._set_control_inactive()
+
+        self.widget = cast(Gtk.Box, self._ui.get_object('control_box'))
+        self.widget.show_all()
 
     def is_loaded(self, account: str, jid: JID) -> bool:
         if self.contact is None:
@@ -142,6 +141,7 @@ class ChatControl(EventHelper):
         self.encryption = None
         self.last_msg_id = None
         self.reset_view()
+        self._groupchat_state.clear()
 
     def switch_contact(self, contact: Union[BareContact,
                                             GroupchatContact,
@@ -155,6 +155,7 @@ class ChatControl(EventHelper):
 
         self._jump_to_end_button.switch_contact(contact)
         self.conversation_view.switch_contact(contact)
+        self._groupchat_state.switch_contact(contact)
 
         self.encryption = self.get_encryption_state()
         self.conversation_view.encryption_enabled = self.encryption is not None

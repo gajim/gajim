@@ -18,25 +18,42 @@ from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.common.types import ChatContactT
 from gajim.common.modules.contacts import GroupchatContact
 
 from gajim.gui.builder import get_builder
 
 
 class GroupchatState(Gtk.Box):
-    def __init__(self, contact: GroupchatContact) -> None:
+    def __init__(self) -> None:
         Gtk.Box.__init__(self)
         self.set_halign(Gtk.Align.CENTER)
         self.set_valign(Gtk.Align.END)
         self.set_no_show_all(True)
 
-        self._contact = contact
-        self._contact.connect('state-changed', self._on_muc_state_changed)
+        self._contact = None
 
         self._ui = get_builder('groupchat_state.ui')
         self._ui.connect_signals(self)
         self.add(self._ui.groupchat_state)
         self.show_all()
+        self.hide()
+
+    def clear(self) -> None:
+        if self._contact is not None:
+            self._contact.disconnect_all_from_obj(self)
+
+        self._contact = None
+        self.hide()
+
+    def switch_contact(self, contact: ChatContactT) -> None:
+        self.clear()
+
+        if not isinstance(contact, GroupchatContact):
+            return
+
+        self._contact = contact
+        self._contact.connect('state-changed', self._on_muc_state_changed)
 
         self._update_state(contact)
 
@@ -44,6 +61,7 @@ class GroupchatState(Gtk.Box):
                               contact: GroupchatContact,
                               _signal_name: str
                               ) -> None:
+
         self._update_state(contact)
 
     def _update_state(self, contact: GroupchatContact) -> None:
