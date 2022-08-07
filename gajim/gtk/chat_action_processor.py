@@ -122,11 +122,13 @@ class ChatActionProcessor(Gtk.Popover):
         self._buf.insert(start_iter, selected_action)
 
     def _get_commands(self) -> list[str]:
+        # TODO
+        return []
+
         commands: list[str] = []
         assert self._account
         assert self._contact
-        control = app.window.get_control(self._account, self._contact.jid)
-        assert control is not None
+        control = app.window.get_control()
         for command in control.list_commands():
             for name in command.names:
                 commands.append(name)

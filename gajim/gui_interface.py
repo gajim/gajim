@@ -403,13 +403,12 @@ class Interface:
             if method is None:
                 return
 
-        current_control = app.window.get_active_control()
-        if current_control is None:
+        if app.window.get_control().has_active_chat():
             return
 
         if path is None:
             if method == 'httpupload':
-                self.send_httpupload(current_control)
+                self.send_httpupload(control)
                 return
             if method == 'jingle':
                 self.instances['file_transfers'].show_file_send_request(
@@ -417,7 +416,7 @@ class Interface:
             return
 
         if method == 'httpupload':
-            self.send_httpupload(current_control, path)
+            self.send_httpupload(control, path)
         else:
             assert isinstance(contact, BareContact)
             send_callback = partial(
@@ -457,6 +456,7 @@ class Interface:
                             jid: str,
                             message: Optional[str] = None
                             ) -> None:
+        # TODO
         jid_ = JID.from_string(jid)
         if app.window.chat_exists(account, jid_):
             app.window.select_chat(account, jid_)

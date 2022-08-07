@@ -44,8 +44,7 @@ from gajim.common.types import ChatContactT
 from .chat_banner import ChatBanner
 from .chat_function_page import ChatFunctionPage
 from .const import TARGET_TYPE_URI_LIST
-from .control_stack import ControlStack
-from .controls.groupchat import GroupchatControl
+from .control import ChatControl
 from .message_actions_box import MessageActionsBox
 from .util import EventHelper, open_window
 
@@ -70,7 +69,7 @@ class ChatStack(Gtk.Stack, EventHelper):
         self.add_named(self._chat_function_page, 'function')
 
         self._chat_banner = ChatBanner()
-        self._control_stack = ControlStack()
+        self._chat_control = ChatControl()
         self._message_action_box = MessageActionsBox()
 
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
@@ -79,7 +78,7 @@ class ChatStack(Gtk.Stack, EventHelper):
         separator1.set_margin_start(6)
         separator1.set_margin_end(6)
         box.add(separator1)
-        box.add(self._control_stack)
+        box.add(self._chat_control.widget)
         separator2 = Gtk.Separator()
         separator2.set_margin_start(6)
         separator2.set_margin_end(6)
@@ -145,8 +144,8 @@ class ChatStack(Gtk.Stack, EventHelper):
             return True
         return False
 
-    def get_control_stack(self) -> ControlStack:
-        return self._control_stack
+    def get_chat_control(self) -> ChatControl:
+        return self._chat_control
 
     def get_message_action_box(self) -> MessageActionsBox:
         return self._message_action_box
@@ -163,7 +162,7 @@ class ChatStack(Gtk.Stack, EventHelper):
         self._current_contact = client.get_module('Contacts').get_contact(jid)
 
         self._chat_banner.switch_contact(account, jid)
-        self._control_stack.show_chat(account, jid)
+        self._chat_control.switch_contact(self._current_contact)
         self._message_action_box.switch_contact(self._current_contact)
 
         self._update_base_actions(self._current_contact)
@@ -415,7 +414,6 @@ class ChatStack(Gtk.Stack, EventHelper):
         account = contact.account
         client = app.get_client(account)
         jid = contact.jid
-        current_control = self._control_stack.get_current_control()
 
         if action_name == 'send-message':
             self._on_send_message()
@@ -448,8 +446,7 @@ class ChatStack(Gtk.Stack, EventHelper):
             open_window('AddContact', account=account, jid=jid)
 
         elif action_name == 'clear-chat':
-            assert current_control is not None
-            current_control.reset_view()
+            self._chat_control.reset_view()
 
         elif action_name == 'show-contact-info':
             if isinstance(contact, GroupchatContact):
@@ -472,7 +469,6 @@ class ChatStack(Gtk.Stack, EventHelper):
             self._show_chat_function_page('change-nickname')
 
         elif action_name == 'muc-execute-command':
-            assert isinstance(current_control, GroupchatControl)
             nick = None
             if param is not None:
                 nick = param.get_string()
@@ -483,13 +479,11 @@ class ChatStack(Gtk.Stack, EventHelper):
             open_window('AdHocCommands', account=account, jid=jid)
 
         elif action_name == 'muc-kick':
-            assert isinstance(current_control, GroupchatControl)
             assert param is not None
             kick_nick = param.get_string()
             self._show_chat_function_page('kick', data=kick_nick)
 
         elif action_name == 'muc-ban':
-            assert isinstance(current_control, GroupchatControl)
             assert param is not None
             ban_jid = param.get_string()
             self._show_chat_function_page('ban', data=ban_jid)
@@ -525,9 +519,8 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         # TODO: Contact drag and drop for invitations (AdHoc MUC/MUC)
         if target_type == TARGET_TYPE_URI_LIST:
-            control = app.window.get_active_control()
-            if control is not None:
-                control.drag_data_file_transfer(selection)
+            if self._chat_control.has_active_chat():
+                self._chat_control.drag_data_file_transfer(selection)
 
     def _on_drag_leave(self,
                        _widget: Gtk.Widget,
@@ -575,16 +568,12 @@ class ChatStack(Gtk.Stack, EventHelper):
                              _function_page: ChatFunctionPage,
                              message: str
                              ) -> None:
-        control = self._control_stack.get_current_control()
-        assert control is not None
-        control.add_info_message(message)
+
+        self._chat_control.add_info_message(message)
 
     def _on_send_message(self) -> None:
         self._message_action_box.msg_textview.replace_emojis()
         message = self._message_action_box.msg_textview.get_text()
-
-        control = self._control_stack.get_current_control()
-        assert control is not None
 
         contact = self._current_contact
         assert contact is not None
@@ -594,7 +583,7 @@ class ChatStack(Gtk.Stack, EventHelper):
             self.sendmessage = True
             app.plugin_manager.extension_point(
                 'send_message' + encryption,
-                control)
+                self._chat_control)
             if not self.sendmessage:
                 return
 
@@ -628,7 +617,7 @@ class ChatStack(Gtk.Stack, EventHelper):
                                    type_=type_,
                                    chatstate=chatstate,
                                    label=label,
-                                   control=control,
+                                   control=self._chat_control,
                                    correct_id=correct_id)
 
         client.send_message(message_)
@@ -653,12 +642,12 @@ class ChatStack(Gtk.Stack, EventHelper):
         self.set_visible_child_name('empty')
         self._chat_banner.clear()
         self._message_action_box.clear()
-        self._control_stack.clear()
+        self._chat_control.clear()
 
     def process_event(self, event: Any) -> None:
         if isinstance(event, MucDiscoUpdate):
             self._on_muc_disco_update(event)
-        self._control_stack.process_event(event)
+        self._chat_control.process_event(event)
         self._message_action_box.process_event(event)
 
 

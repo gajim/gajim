@@ -318,7 +318,7 @@ class MessageActionsBox(Gtk.Grid):
                 # TODO: Add GUI error here
                 return
 
-            if not plugin.activate_encryption(app.window.get_active_control()):
+            if not plugin.activate_encryption(app.window.get_control()):
                 return
 
         self._set_encryption_state(new_state)
@@ -360,7 +360,7 @@ class MessageActionsBox(Gtk.Grid):
         contact = self.get_current_contact()
         encryption = contact.settings.get('encryption')
         app.plugin_manager.extension_point(
-            f'encryption_dialog{encryption}', app.window.get_active_control())
+            f'encryption_dialog{encryption}', app.window.get_control())
 
     def _set_settings_menu(self, contact: ChatContactT) -> None:
         if isinstance(contact, GroupchatContact):
@@ -559,8 +559,8 @@ class MessageActionsBox(Gtk.Grid):
                     return True
 
             if event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up):
-                control = app.window.get_active_control()
-                if control is not None:
+                control = app.window.get_control()
+                if control.has_active_chat():
                     control.conversation_view.event(event)
                     return True
 

@@ -819,8 +819,10 @@ class ChatRow(Gtk.ListBoxRow):
         return '999+'
 
     def add_unread(self, text: str) -> None:
-        control = app.window.get_control(self.account, self.jid)
-        if self.is_active and control is not None and control.get_autoscroll():
+        control = app.window.get_control()
+        if (self.is_active and
+                control.is_loaded(self.account, self.jid) and
+                control.get_autoscroll()):
             return
 
         self._unread_count += 1

@@ -409,8 +409,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         if action_name == 'escape' and chat_stack.process_escape():
             return None
 
-        control = self.get_active_control()
-        if control is not None:
+        control = self.get_control()
+        if control.has_active_chat():
             if action_name == 'change-nickname':
                 app.window.activate_action('muc-change-nickname', None)
                 return None
@@ -487,8 +487,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                  _widget: Gtk.ApplicationWindow,
                                  _event: Gdk.EventMotion
                                  ) -> None:
-        control = self.get_active_control()
-        if control is None:
+        control = self.get_control()
+        if not control.has_active_chat():
             return
 
         if self.get_property('has-toplevel-focus'):
@@ -759,18 +759,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                         message: Optional[str] = None) -> None:
         self._app_page.add_app_message(category, message)
 
-    def get_control(self, account: str, jid: JID) -> Optional[ControlT]:
-        return self._chat_page.get_control(account, jid)
-
-    def get_controls(self, account: Optional[str] = None
-                     ) -> Generator[ControlT, None, None]:
-        return self._chat_page.get_controls(account)
-
-    def get_active_control(self) -> Optional[ControlT]:
-        return self._chat_page.get_active_control()
-
-    def is_chat_loaded(self, account: str, jid: JID) -> bool:
-        return self._chat_page.is_chat_loaded(account, jid)
+    def get_control(self) -> ControlT:
+        return self._chat_page.get_control()
 
     def chat_exists(self, account: str, jid: JID) -> bool:
         return self._chat_page.chat_exists(account, jid)
@@ -805,6 +795,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def mark_as_read(self, account: str, jid: JID,
                      send_marker: bool = True) -> None:
+        # TODO
+        return
         set_urgency_hint(self, False)
         control = self.get_control(account, jid)
         if control is not None:
@@ -824,8 +816,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             return
 
         set_urgency_hint(self, False)
-        control = self.get_active_control()
-        if control is None:
+        control = self.get_control()
+        if not control.has_active_chat():
             return
 
         if control.get_autoscroll():
@@ -933,6 +925,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._main_stack.process_event(event)
 
     def _on_read_state_sync(self, event: events.ReadStateSync) -> None:
+        # TODO
+        return
+
         if event.is_muc_pm:
             jid = JID.from_string(event.jid.bare)
         else:

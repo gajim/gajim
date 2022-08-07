@@ -66,7 +66,7 @@ from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.groupchat_roster import GroupchatRoster
 from gajim.gui.groupchat_state import GroupchatState
 
-log = logging.getLogger('gajim.gui.controls.base')
+log = logging.getLogger('gajim.gui.control')
 
 
 class ChatControl(EventHelper):
@@ -150,6 +150,19 @@ class ChatControl(EventHelper):
         # self._subject_text = ''
 
         # self._set_control_inactive()
+
+    def is_loaded(self, account: str, jid: JID) -> bool:
+        if self.contact is None:
+            return False
+        return self.contact.account == account and self.contact.jid == jid
+
+    def has_active_chat(self) -> bool:
+        return self.contact is not None
+
+    def clear(self) -> None:
+        self.contact.disconnect_all_from_obj(self)
+        self.contact = None
+        self.reset_view()
 
     def switch_contact(self, contact: Union[BareContact,
                                             GroupchatContact,
@@ -338,7 +351,7 @@ class ChatControl(EventHelper):
 
     def _allow_add_message(self) -> bool:
         # Only add messages if the view is already populated
-        return self.is_chat_loaded and self._scrolled_view.get_lower_complete()
+        return self._chat_loaded and self._scrolled_view.get_lower_complete()
 
     def add_info_message(self, text: str) -> None:
         self.conversation_view.add_info_message(text)
@@ -490,10 +503,6 @@ class ChatControl(EventHelper):
             return
 
         self.fetch_n_lines_history(self._scrolled_view, True, 20)
-
-    @property
-    def is_chat_loaded(self) -> bool:
-        return self._chat_loaded
 
     def reset_view(self) -> None:
         self._chat_loaded = False

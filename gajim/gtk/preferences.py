@@ -40,7 +40,6 @@ from gajim.common.setting_values import AllSettings
 from .const import Setting
 from .const import SettingKind
 from .const import SettingType
-from .controls.groupchat import GroupchatControl
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
 from .emoji_chooser import emoji_chooser
@@ -320,6 +319,8 @@ class Chats(PreferenceBox):
 
     @staticmethod
     def _on_use_speller(value: bool, *args: Any) -> None:
+        # TODO
+        return
         if not value:
             return
 
@@ -401,17 +402,19 @@ class GroupChats(PreferenceBox):
 
     @staticmethod
     def _on_sort_by_show_in_muc(_value: bool, *args: Any) -> None:
+        # TODO
+        return
         for ctrl in app.window.get_controls():
             if ctrl.is_groupchat:
-                assert isinstance(ctrl, GroupchatControl)
                 if ctrl.roster is not None:
                     ctrl.roster.invalidate_sort()
 
     @staticmethod
     def _on_show_status_in_roster(_value: bool, *args: Any) -> None:
+        # TODO
+        return
         for ctrl in app.window.get_controls():
             if ctrl.is_groupchat:
-                assert isinstance(ctrl, GroupchatControl)
                 if ctrl.roster is not None:
                     ctrl.roster.draw_contacts()
 
@@ -755,6 +758,8 @@ class Emoji(PreferenceBox):
 
     @staticmethod
     def _toggle_emoticons() -> None:
+        # TODO
+        return
         for ctrl in app.window.get_controls():
             ctrl.toggle_emoticons()
 
