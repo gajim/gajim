@@ -148,7 +148,9 @@ class ChatControl(EventHelper):
                                             GroupchatContact,
                                             GroupchatParticipant]) -> None:
 
-        self.contact.disconnect_all_from_obj(self)
+        if self.contact is not None:
+            self.contact.disconnect_all_from_obj(self)
+
         self.contact = contact
         self.account = contact.account
 
@@ -800,6 +802,7 @@ class ChatControl(EventHelper):
                               _contact: GroupchatContact,
                               _signal_name: str
                               ) -> None:
+
         if self.contact.is_joined:
             self._set_control_active()
 
@@ -994,6 +997,7 @@ class ChatControl(EventHelper):
                         user_contact: GroupchatParticipant,
                         properties: PresenceProperties
                         ) -> None:
+
         nick = user_contact.name
         if not properties.is_muc_self_presence:
             if self.contact.is_joined:
