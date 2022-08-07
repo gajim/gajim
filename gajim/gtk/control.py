@@ -107,8 +107,6 @@ class ChatControl(EventHelper):
         self.widget = cast(Gtk.Box, self._ui.get_object('control_box'))
         self.widget.show_all()
 
-        # GROUPCHAT INIT
-
         # self._groupchat_state = GroupchatState(self.contact)
         # self._ui.conv_view_overlay.add_overlay(self._groupchat_state)
 
@@ -617,9 +615,6 @@ class ChatControl(EventHelper):
                 log_line_id=msg.log_line_id,
                 marker=msg.marker,
                 error=msg.error)
-
-
-# Chat
 
     def _on_mam_message_received(self,
                                  event: events.MamMessageReceived) -> None:
