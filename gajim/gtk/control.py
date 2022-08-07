@@ -98,7 +98,7 @@ class ChatControl(EventHelper):
         self._scrolled_view.connect('request-history',
                                     self.fetch_n_lines_history, 20)
 
-        self.roster = GroupchatRoster(self)
+        self.roster = GroupchatRoster()
         self.roster.connect('row-activated', self._on_roster_row_activated)
 
         self._show_roster_setting = app.settings.get(

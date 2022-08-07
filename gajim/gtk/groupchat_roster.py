@@ -72,7 +72,7 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
             (str, ))
     }
 
-    def __init__(self, control: ControlT) -> None:
+    def __init__(self) -> None:
         Gtk.ScrolledWindow.__init__(self)
         EventHelper.__init__(self)
         self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
@@ -80,7 +80,6 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
 
         self._contact = None
 
-        self._control = control
         self._tooltip = GCTooltip()
 
         self._ui = get_builder('groupchat_roster.ui')
