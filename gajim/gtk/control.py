@@ -134,7 +134,9 @@ class ChatControl(EventHelper):
         return self.contact is not None
 
     def clear(self) -> None:
-        self.contact.disconnect_all_from_obj(self)
+        if self.contact is not None:
+            self.contact.disconnect_all_from_obj(self)
+
         self.contact = None
         self._clinet = None
         self.account = None
