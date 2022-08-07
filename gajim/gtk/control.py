@@ -118,7 +118,7 @@ class ChatControl(EventHelper):
 
         self.encryption: Optional[str] = None
 
-        # self._subject_text = ''
+        self._subject_text_cache: dict[JID, str] = {}
 
         # self._set_control_inactive()
 
@@ -913,7 +913,7 @@ class ChatControl(EventHelper):
                           additional_data=additional_data)
 
     def _on_room_subject(self,
-                         _contact: GroupchatContact,
+                         contact: GroupchatContact,
                          _signal_name: str,
                          subject: Optional[MucSubject]
                          ) -> None:
@@ -921,11 +921,11 @@ class ChatControl(EventHelper):
         if subject is None:
             return
 
-        if self._subject_text == subject.text:
+        if self._subject_text_cache.get(contact.jid) == subject.text:
             # Probably a rejoin, we already showed that subject
             return
 
-        self._subject_text = subject.text
+        self._subject_text_cache[contact.jid] = subject.text
 
         if (app.settings.get('show_subject_on_join') or
                 not self.contact.is_joining):
