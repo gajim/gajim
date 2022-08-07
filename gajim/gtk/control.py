@@ -230,16 +230,6 @@ class ChatControl(EventHelper):
         method_name = f'_on_{method_name}'
         getattr(self, method_name)(event)
 
-    def _on_message_sent(self, event: events.MessageSent) -> None:
-        '''
-        Derived types MAY implement this
-        '''
-
-    def _on_message_received(self, event: events.MessageReceived) -> None:
-        '''
-        Derived types MAY implement this
-        '''
-
     def _on_message_error(self, event: events.MessageError) -> None:
         self.conversation_view.show_error(event.message_id, event.error)
 
