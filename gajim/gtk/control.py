@@ -76,8 +76,8 @@ class ChatControl(EventHelper):
         self.contact = None
         self._client = None
 
-        self.xml = get_builder('chat_control.ui')
-        self.widget = cast(Gtk.Box, self.xml.get_object('control_box'))
+        self._ui = get_builder('chat_control.ui')
+        self.widget = cast(Gtk.Box, self._ui.get_object('control_box'))
 
         # Create ConversationView and connect signals
         self.conversation_view = ConversationView()
@@ -86,11 +86,11 @@ class ChatControl(EventHelper):
         self._scrolled_view.add(self.conversation_view)
         self._scrolled_view.set_focus_vadjustment(Gtk.Adjustment())
 
-        self.xml.conv_view_overlay.add(self._scrolled_view)
+        self._ui.conv_view_overlay.add(self._scrolled_view)
 
         self._jump_to_end_button = JumpToEndButton()
         self._jump_to_end_button.connect('clicked', self._on_jump_to_end)
-        self.xml.conv_view_overlay.add_overlay(self._jump_to_end_button)
+        self._ui.conv_view_overlay.add_overlay(self._jump_to_end_button)
 
         self._scrolled_view.connect('autoscroll-changed',
                                     self._on_autoscroll_changed)
@@ -114,7 +114,7 @@ class ChatControl(EventHelper):
         # self.room_jid = str(self.contact.jid)
 
         # self._groupchat_state = GroupchatState(self.contact)
-        # self.xml.conv_view_overlay.add_overlay(self._groupchat_state)
+        # self._ui.conv_view_overlay.add_overlay(self._groupchat_state)
 
         # self.roster = GroupchatRoster(self.account, self.room_jid, self)
         # self.roster.connect('row-activated', self._on_roster_row_activated)
@@ -123,7 +123,7 @@ class ChatControl(EventHelper):
         # self._roster_revealer = Gtk.Revealer(no_show_all=not show_roster)
         # self._roster_revealer.add(self.roster)
         # self._roster_revealer.set_reveal_child(show_roster)
-        # self.xml.conv_view_box.add(self._roster_revealer)
+        # self._ui.conv_view_box.add(self._roster_revealer)
 
         # app.settings.connect_signal(
         #     'hide_groupchat_occupants_list', self._show_roster)
