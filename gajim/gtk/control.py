@@ -98,6 +98,18 @@ class ChatControl(EventHelper):
         self._scrolled_view.connect('request-history',
                                     self.fetch_n_lines_history, 20)
 
+        self.roster = GroupchatRoster(self)
+        self.roster.connect('row-activated', self._on_roster_row_activated)
+
+        self._show_roster_setting = app.settings.get(
+            'hide_groupchat_occupants_list')
+        app.settings.connect_signal(
+            'hide_groupchat_occupants_list', self._show_roster)
+
+        self._roster_revealer = Gtk.Revealer()
+        self._roster_revealer.add(self.roster)
+        self._ui.conv_view_box.add(self._roster_revealer)
+
         # Keeps track of whether the ConversationView is populated
         self._chat_loaded: bool = False
 
@@ -105,18 +117,6 @@ class ChatControl(EventHelper):
         self.last_msg_id: Optional[str] = None
 
         self.encryption: Optional[str] = None
-
-        # self.roster = GroupchatRoster(self.account, self.room_jid, self)
-        # self.roster.connect('row-activated', self._on_roster_row_activated)
-
-        # show_roster = app.settings.get('hide_groupchat_occupants_list')
-        # self._roster_revealer = Gtk.Revealer(no_show_all=not show_roster)
-        # self._roster_revealer.add(self.roster)
-        # self._roster_revealer.set_reveal_child(show_roster)
-        # self._ui.conv_view_box.add(self._roster_revealer)
-
-        # app.settings.connect_signal(
-        #     'hide_groupchat_occupants_list', self._show_roster)
 
         # self._subject_text = ''
 
@@ -142,6 +142,7 @@ class ChatControl(EventHelper):
         self.last_msg_id = None
         self.reset_view()
         self._groupchat_state.clear()
+        self.roster.clear()
 
     def switch_contact(self, contact: Union[BareContact,
                                             GroupchatContact,
@@ -156,6 +157,11 @@ class ChatControl(EventHelper):
         self._jump_to_end_button.switch_contact(contact)
         self.conversation_view.switch_contact(contact)
         self._groupchat_state.switch_contact(contact)
+        self.roster.switch_contact(contact)
+
+        show_roster = (isinstance(contact, GroupchatContact) and
+                       self._show_roster_setting)
+        self._roster_revealer.set_reveal_child(show_roster)
 
         self.encryption = self.get_encryption_state()
         self.conversation_view.encryption_enabled = self.encryption is not None
@@ -813,6 +819,7 @@ class ChatControl(EventHelper):
             _('%s has been invited to this group chat') % invited_contact.name)
 
     def _show_roster(self, show_roster: bool, *args: Any) -> None:
+        self._show_roster_setting = show_roster
         transition = Gtk.RevealerTransitionType.SLIDE_RIGHT
         if show_roster:
             self._roster_revealer.set_no_show_all(False)
@@ -974,7 +981,7 @@ class ChatControl(EventHelper):
     def _set_control_inactive(self) -> None:
         assert self.roster is not None
         self.roster.enable_sort(False)
-        self.roster.clear()
+        self.roster.reset()
 
         self._client.get_module('Chatstate').remove_delay_timeout(self.contact)
 

@@ -72,32 +72,16 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
             (str, ))
     }
 
-    def __init__(self,
-                 account: str,
-                 room_jid: str,
-                 control: ControlT
-                 ) -> None:
+    def __init__(self, control: ControlT) -> None:
         Gtk.ScrolledWindow.__init__(self)
         EventHelper.__init__(self)
         self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         self.get_style_context().add_class('groupchat-roster')
-        self._account = account
-        self.room_jid = room_jid
+
+        self._contact = None
+
         self._control = control
         self._tooltip = GCTooltip()
-        self._group_chat_contact = cast(GroupchatContact, control.contact)
-        self._group_chat_contact.connect(
-            'user-avatar-update', self._on_user_avatar_update)
-        self._group_chat_contact.connect('user-joined', self._on_user_joined)
-        self._group_chat_contact.connect('user-left', self._on_user_left)
-        self._group_chat_contact.connect(
-            'user-affiliation-changed', self._update_contact)
-        self._group_chat_contact.connect(
-            'user-role-changed', self._update_contact)
-        self._group_chat_contact.connect(
-            'user-status-show-changed', self._on_user_status_show_changed)
-        self._group_chat_contact.connect(
-            'user-nickname-changed', self._on_user_nickname_changed)
 
         self._ui = get_builder('groupchat_roster.ui')
         self._ui.roster_treeview.set_model(None)
@@ -119,12 +103,35 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
         self._ui.contact_column.set_cell_data_func(self._ui.text_renderer,
                                                    self._text_cell_data_func)
 
-        self.connect('destroy', self._on_destroy)
         self._ui.connect_signals(self)
 
         self.register_events([
             ('theme-update', ged.GUI2, self._on_theme_update),
         ])
+
+    def clear(self) -> None:
+        if self._contact is not None:
+            self._contact.disconnect_all_from_obj(self)
+
+        self._contact = None
+        self.reset()
+
+    def switch_contact(self, contact: types.ChatContactT) -> None:
+        self.clear()
+
+        if not isinstance(contact, GroupchatContact):
+            return
+
+        contact.connect('user-avatar-update', self._on_user_avatar_update)
+        contact.connect('user-joined', self._on_user_joined)
+        contact.connect('user-left', self._on_user_left)
+        contact.connect('user-affiliation-changed', self._update_contact)
+        contact.connect('user-role-changed', self._update_contact)
+        contact.connect('user-nickname-changed', self._on_user_nickname_changed)
+        contact.connect('user-status-show-changed',
+                        self._on_user_status_show_changed)
+
+        self._contact = contact
 
     @staticmethod
     def _on_focus_out(treeview: Gtk.TreeView, _param: Gdk.EventFocus) -> None:
@@ -164,7 +171,7 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
 
         nickname = self._store[iter_][Column.NICK_OR_GROUP]
 
-        contact = self._group_chat_contact.get_resource(nickname)
+        contact = self._contact.get_resource(nickname)
 
         value, widget = self._tooltip.get_tooltip(contact)
         tooltip.set_custom(widget)
@@ -335,7 +342,7 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
             # This is a group row
             return
         nick = self._store[iter_][Column.NICK_OR_GROUP]
-        if self._control.contact.nickname == nick:
+        if self._contact.nickname == nick:
             return
         self.emit('row-activated', nick)
 
@@ -360,7 +367,7 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
             return
 
         nick = self._store[iter_][Column.NICK_OR_GROUP]
-        if self._group_chat_contact.nickname == nick:
+        if self._contact.nickname == nick:
             return
 
         if event.button == 3:  # right click
@@ -373,9 +380,9 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
             self.emit('row-activated', nick)
 
     def _show_contact_menu(self, nick: str, rect: Gdk.Rectangle) -> None:
-        self_contact = self._group_chat_contact.get_self()
+        self_contact = self._contact.get_self()
         assert self_contact is not None
-        contact = self._group_chat_contact.get_resource(nick)
+        contact = self._contact.get_resource(nick)
         menu = get_groupchat_roster_menu(self._account,
                                          self_contact,
                                          contact)
@@ -410,8 +417,8 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
             if not app.settings.get('sort_by_show_in_muc'):
                 return locale.strcoll(nick1.lower(), nick2.lower())
 
-            contact1 = self._group_chat_contact.get_resource(nick1)
-            contact2 = self._group_chat_contact.get_resource(nick2)
+            contact1 = self._contact.get_resource(nick1)
+            contact2 = self._contact.get_resource(nick2)
 
             if contact1.show != contact2.show:
                 return -1 if contact1.show > contact2.show else 1
@@ -451,7 +458,7 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
         if not iter_:
             return
 
-        contact = self._group_chat_contact.get_resource(nick)
+        contact = self._contact.get_resource(nick)
 
         self._draw_avatar(contact)
 
@@ -460,8 +467,8 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
         name = GLib.markup_escape_text(contact.name)
 
         # Strike name if blocked
-        fjid = f'{self.room_jid}/{nick}'
-        if jid_is_blocked(self._account, fjid):
+        fjid = f'{self._contact.jid}/{nick}'
+        if jid_is_blocked(self._contact.account, fjid):
             name = f'<span strikethrough="true">{name}</span>'
 
         # add status msg, if not empty, under contact name
@@ -527,22 +534,7 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
     def _on_theme_update(self, _event: ApplicationEvent) -> None:
         self._redraw()
 
-    def clear(self) -> None:
+    def reset(self) -> None:
         self._contact_refs = {}
         self._group_refs = {}
         self._store.clear()
-
-    def _on_destroy(self, _roster: Any) -> None:
-        self._group_chat_contact.disconnect(self)
-        self._contact_refs = {}
-        self._group_refs = {}
-        self._roster.set_model(None)
-        self._store.clear()
-        # Store keeps a ref on the object if we dont unset the sort func
-        self._store.set_sort_func(Column.TEXT, print)
-        self._tooltip.destroy()
-        del self._roster
-        del self._store
-        del self._control
-        del self._tooltip
-        app.check_finalize(self)
