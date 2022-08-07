@@ -21,6 +21,7 @@ from typing import Union
 from typing import overload
 
 import cairo
+from gi.repository.GObject import Value
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Chatstate
 from nbxmpp.const import Role
@@ -121,6 +122,56 @@ class Contacts(BaseModule):
                                  state: SimpleClientState) -> None:
         if state.is_disconnected:
             self._reset_presence()
+
+    def add_chat_contact(self, jid: Union[str, JID]) -> BareContact:
+        if isinstance(jid, str):
+            jid = JID.from_string(jid)
+
+        contact = self._contacts.get(jid)
+        if contact is not None:
+            if not isinstance(contact, BareContact):
+                raise ValueError(f'Trying to add GroupchatContact {jid}, '
+                                 f'but contact exists already as {contact}')
+            return contact
+
+        contact = BareContact(self._log, jid, self._account)
+
+        self._contacts[jid] = contact
+        return contact
+
+    def add_group_chat_contact(self, jid: Union[str, JID]) -> GroupchatContact:
+        if isinstance(jid, str):
+            jid = JID.from_string(jid)
+
+        contact = self._contacts.get(jid)
+        if contact is not None:
+            if not isinstance(contact, GroupchatContact):
+                raise ValueError(f'Trying to add GroupchatContact {jid}, '
+                                 f'but contact exists already as {contact}')
+            return contact
+
+        contact = GroupchatContact(self._log, jid, self._account)
+
+        self._contacts[jid] = contact
+        return contact
+
+    def add_private_contact(self, jid: Union[str, JID]) -> GroupchatParticipant:
+        if isinstance(jid, str):
+            jid = JID.from_string(jid)
+
+        if jid.resource is None:
+            raise ValueError(f'Trying to add a bare JID as private {jid}')
+
+        contact = self._contacts.get(jid.bare)
+        if not isinstance(contact, GroupchatContact):
+            raise ValueError(f'Trying to add GroupchatParticipant {jid}, '
+                             f'to BareContact {contact}')
+
+        if contact is None:
+            group_chat_contact = self.add_group_chat_contact(jid.bare)
+            return group_chat_contact.add_resource(jid.resource)
+
+        return contact.add_resource(jid.resource)
 
     def add_contact(self,
                     jid: Union[str, JID],
@@ -596,6 +647,10 @@ class GroupchatContact(CommonContact):
         # Check if resource is not None because not the whole
         # codebase is type checked and it creates hard to track
         # problems if we create a GroupchatParticipant without resource
+
+        contact = self._resources.get(resource)
+        if contact is not None:
+            return contact
 
         jid = self._jid.new_with(resource=resource)
         assert isinstance(self._log, LogAdapter)
