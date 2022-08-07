@@ -103,8 +103,7 @@ class ChatControl(EventHelper):
         # XEP-0333 Chat Markers
         self.last_msg_id: Optional[str] = None
 
-        self.encryption: Optional[str] = self.get_encryption_state()
-        self.conversation_view.encryption_enabled = self.encryption is not None
+        self.encryption: Optional[str] = None
 
         self.widget.show_all()
 
@@ -146,6 +145,8 @@ class ChatControl(EventHelper):
         self.contact = None
         self._clinet = None
         self.account = None
+        self.encryption = None
+        self.last_msg_id = None
         self.reset_view()
 
     def switch_contact(self, contact: Union[BareContact,
@@ -160,6 +161,9 @@ class ChatControl(EventHelper):
 
         self._jump_to_end_button.switch_contact(contact)
         self.conversation_view.switch_contact(contact)
+
+        self.encryption = self.get_encryption_state()
+        self.conversation_view.encryption_enabled = self.encryption is not None
 
         if isinstance(self.contact, GroupchatParticipant):
             self.contact.multi_connect({
