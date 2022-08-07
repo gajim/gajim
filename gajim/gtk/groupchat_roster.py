@@ -84,7 +84,6 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
         self._account = account
         self.room_jid = room_jid
         self._control = control
-        self._control_id = control.control_id
         self._tooltip = GCTooltip()
         self._group_chat_contact = cast(GroupchatContact, control.contact)
         self._group_chat_contact.connect(

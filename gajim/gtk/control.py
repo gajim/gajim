@@ -22,7 +22,6 @@ from typing import cast
 import os
 import logging
 import time
-import uuid
 
 from gi.repository import Gtk
 from gi.repository import GLib
@@ -36,11 +35,9 @@ from nbxmpp.modules.security_labels import Displaymarking
 
 from gajim.common import app
 from gajim.common import events
-from gajim.common import ged
 from gajim.common import helpers
 from gajim.common.helpers import message_needs_highlight
 from gajim.common.helpers import get_file_path_from_dnd_dropped_uri
-from gajim.common.helpers import event_filter
 from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
 from gajim.common.ged import EventHelper
@@ -70,29 +67,20 @@ log = logging.getLogger('gajim.gui.control')
 
 
 class ChatControl(EventHelper):
-
-    _type: Optional[ControlType] = None
-
-    def __init__(self, widget_name: str, account: str, jid: JID) -> None:
+    def __init__(self) -> None:
         EventHelper.__init__(self)
 
         self.handlers: dict[int, Any] = {}
 
-        self.account = account
-
-        self._client = app.get_client(account)
-
-        groupchat = self._type != ControlType.CHAT
-        self.contact = self._client.get_module('Contacts').get_contact(
-            jid, groupchat=groupchat)
-
-        self.control_id: str = str(uuid.uuid4())
+        self.account = None
+        self.contact = None
+        self._client = None
 
         self.xml = get_builder('chat_control.ui')
         self.widget = cast(Gtk.Box, self.xml.get_object('control_box'))
 
         # Create ConversationView and connect signals
-        self.conversation_view = ConversationView(self.account, self.contact)
+        self.conversation_view = ConversationView()
 
         self._scrolled_view = ScrolledView()
         self._scrolled_view.add(self.conversation_view)
@@ -100,7 +88,7 @@ class ChatControl(EventHelper):
 
         self.xml.conv_view_overlay.add(self._scrolled_view)
 
-        self._jump_to_end_button = JumpToEndButton(self.contact)
+        self._jump_to_end_button = JumpToEndButton()
         self._jump_to_end_button.connect('clicked', self._on_jump_to_end)
         self.xml.conv_view_overlay.add_overlay(self._jump_to_end_button)
 
@@ -114,12 +102,6 @@ class ChatControl(EventHelper):
 
         # XEP-0333 Chat Markers
         self.last_msg_id: Optional[str] = None
-
-        # XEP-0172 User Nickname
-        # TODO:
-        self.user_nick: Optional[str] = None
-
-        self._client.get_module('Chatstate').set_active(self.contact)
 
         self.encryption: Optional[str] = self.get_encryption_state()
         self.conversation_view.encryption_enabled = self.encryption is not None
@@ -162,6 +144,8 @@ class ChatControl(EventHelper):
     def clear(self) -> None:
         self.contact.disconnect_all_from_obj(self)
         self.contact = None
+        self._clinet = None
+        self.account = None
         self.reset_view()
 
     def switch_contact(self, contact: Union[BareContact,
@@ -170,6 +154,12 @@ class ChatControl(EventHelper):
 
         self.contact.disconnect_all_from_obj(self)
         self.contact = contact
+        self.account = contact.account
+
+        self._client = app.get_client(contact.account)
+
+        self._jump_to_end_button.switch_contact(contact)
+        self.conversation_view.switch_contact(contact)
 
         if isinstance(self.contact, GroupchatParticipant):
             self.contact.multi_connect({
@@ -196,6 +186,8 @@ class ChatControl(EventHelper):
                 'room-voice-request': self._on_room_voice_request,
                 'room-subject': self._on_room_subject,
             })
+
+        self._client.get_module('Chatstate').set_active(self.contact)
 
     def process_event(self, event: events.ApplicationEvent) -> None:
         if event.account != self.account:
