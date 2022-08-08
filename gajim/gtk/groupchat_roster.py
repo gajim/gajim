@@ -18,6 +18,7 @@ from typing import Any
 from typing import Optional
 
 import locale
+import logging
 from enum import IntEnum
 
 from gi.repository import Gdk
@@ -44,6 +45,9 @@ from .builder import get_builder
 from .util import EventHelper
 
 
+log = logging.getLogger('gajim.gui.groupchat_roster')
+
+
 AffiliationRoleSortOrder = {
     'owner': 0,
     'admin': 1,
@@ -59,6 +63,17 @@ class Column(IntEnum):
     EVENT = 2
     IS_CONTACT = 3
     NICK_OR_GROUP = 4
+
+
+CONTACT_SIGNALS = {
+    'user-affiliation-changed',
+    'user-avatar-update',
+    'user-joined',
+    'user-left',
+    'user-nickname-changed',
+    'user-role-changed',
+    'user-status-show-changed',
+}
 
 
 class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
@@ -107,35 +122,32 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
         ])
 
     def clear(self) -> None:
-        if self._contact is not None:
-            self._contact.disconnect_all_from_obj(self)
-
+        log.info('Clear')
+        if self._contact is None:
+            return
+        self._unload_roster()
+        self._contact.disconnect_signal(self, 'state-changed')
         self._contact = None
-        self.reset()
 
     def switch_contact(self, contact: types.ChatContactT) -> None:
-        self.clear()
+        if self._contact is not None:
+            self.clear()
 
         if not isinstance(contact, GroupchatContact):
             return
 
-        contact.connect('user-avatar-update', self._on_user_avatar_update)
-        contact.connect('user-joined', self._on_user_joined)
-        contact.connect('user-left', self._on_user_left)
-        contact.connect('user-affiliation-changed', self._update_contact)
-        contact.connect('user-role-changed', self._update_contact)
-        contact.connect('user-nickname-changed', self._on_user_nickname_changed)
-        contact.connect('user-status-show-changed',
-                        self._on_user_status_show_changed)
+        log.info('Switch to %s (%s)', contact.jid, contact.account)
+
+        contact.connect('state-changed', self._on_muc_state_changed)
 
         self._contact = contact
+
+        if self._contact.is_joined:
+            self._load_roster()
 
     @staticmethod
     def _on_focus_out(treeview: Gtk.TreeView, _param: Gdk.EventFocus) -> None:
         treeview.get_selection().unselect_all()
-
-    def _set_model(self) -> None:
-        self._roster.set_model(self._store)
 
     def _query_tooltip(self,
                        widget: Gtk.Widget,
@@ -393,6 +405,17 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
         popover.connect('closed', destroy)
         popover.popup()
 
+    def _on_muc_state_changed(self,
+                              contact: GroupchatContact,
+                              _signal_name: str
+                              ) -> None:
+
+        if contact.is_joined:
+            self._load_roster()
+
+        elif contact.is_not_joined:
+            self._unload_roster()
+
     def _tree_compare_iters(self,
                             model: Gtk.TreeModel,
                             iter1: Gtk.TreeIter,
@@ -436,14 +459,39 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
 
         self._store.set_sort_column_id(column, Gtk.SortType.ASCENDING)
 
+    def _load_roster(self) -> None:
+        log.info('Load Roster')
+        self._contact.multi_connect({
+            'user-affiliation-changed': self._update_contact,
+            'user-avatar-update': self._on_user_avatar_update,
+            'user-joined': self._on_user_joined,
+            'user-left': self._on_user_left,
+            'user-nickname-changed': self._on_user_nickname_changed,
+            'user-role-changed': self._update_contact,
+            'user-status-show-changed': self._on_user_status_show_changed,
+        })
+
+        for participant in self._contact.get_participants():
+            self._add_contact(participant)
+
+        self.enable_sort(True)
+        self._roster.set_model(self._store)
+        self._roster.expand_all()
+
+    def _unload_roster(self) -> None:
+        log.info('Unload Roster')
+        self._contact.multi_disconnect(self, CONTACT_SIGNALS)
+
+        self._roster.set_model(None)
+        self._store.clear()
+        self.enable_sort(False)
+
+        self._contact_refs = {}
+        self._group_refs = {}
+
     def invalidate_sort(self) -> None:
         self.enable_sort(False)
         self.enable_sort(True)
-
-    def initial_draw(self) -> None:
-        self.enable_sort(True)
-        self._set_model()
-        self._roster.expand_all()
 
     def _redraw(self) -> None:
         self._roster.set_model(None)
@@ -530,8 +578,3 @@ class GroupchatRoster(Gtk.ScrolledWindow, EventHelper):
 
     def _on_theme_update(self, _event: ApplicationEvent) -> None:
         self._redraw()
-
-    def reset(self) -> None:
-        self._contact_refs = {}
-        self._group_refs = {}
-        self._store.clear()
