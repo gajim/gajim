@@ -669,6 +669,11 @@ class GroupchatContact(CommonContact):
             contact = self.add_resource(resource)
         return contact
 
+    def get_participants(self) -> Iterator[GroupchatParticipant]:
+        for contact in self._resources.values():
+            if contact.is_available:
+                yield contact
+
     @property
     def name(self) -> str:
         client = app.get_client(self._account)
