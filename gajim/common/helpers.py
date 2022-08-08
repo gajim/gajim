@@ -1266,6 +1266,9 @@ class Observable:
     def disconnect(self, obj: Any) -> None:
         self.disconnect_all_from_obj(obj)
 
+    def disconnect_signal(self, obj: Any, signal: str) -> None:
+        self.__disconnect(obj, {signal})
+
     def connect_signal(self,
                        signal_name: str,
                        func: types.AnyCallableT) -> None:
