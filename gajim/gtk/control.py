@@ -277,8 +277,7 @@ class ChatControl(EventHelper):
             # XEP-0333 Send <displayed> marker
             self._client.get_module('ChatMarkers').send_displayed_marker(
                 self.contact,
-                self.last_msg_id,
-                str(self._type))
+                self.last_msg_id)
             self.last_msg_id = None
 
     def set_encryption_state(self, encryption: Optional[str]) -> None:
@@ -299,13 +298,14 @@ class ChatControl(EventHelper):
                                _widget: ScrolledView,
                                autoscroll: bool
                                ) -> None:
+
         if not autoscroll:
             self._jump_to_end_button.toggle(True)
             return
 
         self._jump_to_end_button.toggle(False)
-        if app.window.is_chat_active(self.account, self.contact.jid):
-            app.window.mark_as_read(self.account, self.contact.jid)
+        if app.window.is_chat_active(self.contact.account, self.contact.jid):
+            app.window.mark_as_read(self.contact.account, self.contact.jid)
 
     def _on_jump_to_end(self, _button: Gtk.Button) -> None:
         self.reset_view()
