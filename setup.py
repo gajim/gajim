@@ -120,7 +120,7 @@ def build_intl() -> None:
     for filename, _, option in META_FILES:
         newfile = base / filename
         newdir = newfile.parent
-        if not(newdir.is_dir() or newdir.is_symlink()):
+        if not (newdir.is_dir() or newdir.is_symlink()):
             newdir.mkdir()
         merge(Path(filename + '.in'), newfile, option)
 
