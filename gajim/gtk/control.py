@@ -57,7 +57,6 @@ from gajim.gui.conversation.scrolled import ScrolledView
 from gajim.gui.conversation.jump_to_end_button import JumpToEndButton
 from gajim.gui.builder import get_builder
 from gajim.gui.util import set_urgency_hint
-from gajim.gui.const import ControlType
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.groupchat_roster import GroupchatRoster

@@ -36,7 +36,6 @@ from nbxmpp.structs import MucSubject
 from nbxmpp.protocol import JID
 
 from gajim.common import app
-from gajim.common.client import Client
 from gajim.common.events import JingleRequestReceived
 from gajim.common.events import FileRequestReceivedEvent
 from gajim.common.events import FileRequestSent

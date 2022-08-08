@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Optional
-from typing import cast
 
 import locale
 from enum import IntEnum
@@ -42,7 +41,6 @@ from gajim.common.modules.contacts import GroupchatContact
 from .menus import get_groupchat_roster_menu
 from .tooltips import GCTooltip
 from .builder import get_builder
-from .types import ControlT
 from .util import EventHelper
 
 

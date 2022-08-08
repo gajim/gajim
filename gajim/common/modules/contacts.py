@@ -21,7 +21,6 @@ from typing import Union
 from typing import overload
 
 import cairo
-from gi.repository.GObject import Value
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Chatstate
 from nbxmpp.const import Role
