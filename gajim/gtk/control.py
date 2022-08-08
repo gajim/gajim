@@ -119,8 +119,6 @@ class ChatControl(EventHelper):
 
         self._subject_text_cache: dict[JID, str] = {}
 
-        # self._set_control_inactive()
-
         self.widget = cast(Gtk.Box, self._ui.get_object('control_box'))
         self.widget.show_all()
 
@@ -133,6 +131,8 @@ class ChatControl(EventHelper):
         return self.contact is not None
 
     def clear(self) -> None:
+        log.info('Clear')
+
         if self.contact is not None:
             self.contact.disconnect_all_from_obj(self)
 
@@ -149,6 +149,7 @@ class ChatControl(EventHelper):
                                             GroupchatContact,
                                             GroupchatParticipant]) -> None:
 
+        log.info('Switch to %s (%s)', contact.jid, contact.account)
         if self.contact is not None:
             self.contact.disconnect_all_from_obj(self)
 
@@ -179,7 +180,6 @@ class ChatControl(EventHelper):
 
         elif isinstance(self.contact, GroupchatContact):
             self.contact.multi_connect({
-                'state-changed': self._on_muc_state_changed,
                 'user-joined': self._on_user_joined,
                 'user-left': self._on_user_left,
                 'user-affiliation-changed': self._on_user_affiliation_changed,
@@ -791,17 +791,6 @@ class ChatControl(EventHelper):
                                                                    status=status)
             self.add_info_message(message)
 
-    def _on_muc_state_changed(self,
-                              _contact: GroupchatContact,
-                              _signal_name: str
-                              ) -> None:
-
-        if self.contact.is_joined:
-            self._set_control_active()
-
-        elif self.contact.is_not_joined:
-            self._set_control_inactive()
-
     def _on_muc_disco_update(self, event: events.MucDiscoUpdate) -> None:
         pass
 
@@ -968,18 +957,6 @@ class ChatControl(EventHelper):
 
         for change in changes:
             self.add_info_message(change)
-
-    def _set_control_active(self) -> None:
-        assert self.roster is not None
-        self.roster.initial_draw()
-        self.conversation_view.update_avatars()
-
-    def _set_control_inactive(self) -> None:
-        assert self.roster is not None
-        self.roster.enable_sort(False)
-        self.roster.reset()
-
-        self._client.get_module('Chatstate').remove_delay_timeout(self.contact)
 
     def rejoin(self) -> None:
         self._client.get_module('MUC').join(self.contact.jid)
