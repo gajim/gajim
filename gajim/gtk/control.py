@@ -257,24 +257,16 @@ class ChatControl(EventHelper):
             event.moderation.stanza_id, text)
 
     @property
-    def type(self) -> ControlType:
-        assert self._type is not None
-        return self._type
-
-    @property
     def is_chat(self) -> bool:
-        assert self._type is not None
-        return self._type.is_chat
+        return isinstance(self.contact, BareContact)
 
     @property
     def is_privatechat(self) -> bool:
-        assert self._type is not None
-        return self._type.is_privatechat
+        return isinstance(self.contact, GroupchatParticipant)
 
     @property
     def is_groupchat(self) -> bool:
-        assert self._type is not None
-        return self._type.is_groupchat
+        return isinstance(self.contact, GroupchatContact)
 
     def _on_ping_event(self, event: events.PingEventT) -> None:
         raise NotImplementedError
