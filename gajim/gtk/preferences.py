@@ -402,21 +402,13 @@ class GroupChats(PreferenceBox):
 
     @staticmethod
     def _on_sort_by_show_in_muc(_value: bool, *args: Any) -> None:
-        # TODO
-        return
-        for ctrl in app.window.get_controls():
-            if ctrl.is_groupchat:
-                if ctrl.roster is not None:
-                    ctrl.roster.invalidate_sort()
+        roster = app.window.get_control().get_group_chat_roster()
+        roster.invalidate_sort()
 
     @staticmethod
     def _on_show_status_in_roster(_value: bool, *args: Any) -> None:
-        # TODO
-        return
-        for ctrl in app.window.get_controls():
-            if ctrl.is_groupchat:
-                if ctrl.roster is not None:
-                    ctrl.roster.draw_contacts()
+        roster = app.window.get_control().get_group_chat_roster()
+        roster.draw_contacts()
 
     @staticmethod
     def _reset_join_left(button: Gtk.Button) -> None:

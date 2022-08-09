@@ -97,9 +97,9 @@ class ChatControl(EventHelper):
         self._scrolled_view.connect('request-history',
                                     self.fetch_n_lines_history, 20)
 
-        self.roster = GroupchatRoster()
+        self._roster = GroupchatRoster()
 
-        self._ui.conv_view_box.add(self.roster)
+        self._ui.conv_view_box.add(self._roster)
 
         # Keeps track of whether the ConversationView is populated
         self._chat_loaded: bool = False
@@ -132,6 +132,9 @@ class ChatControl(EventHelper):
     def has_active_chat(self) -> bool:
         return self._contact is not None
 
+    def get_group_chat_roster(self) -> GroupchatRoster:
+        return self._roster
+
     def clear(self) -> None:
         log.info('Clear')
 
@@ -144,7 +147,7 @@ class ChatControl(EventHelper):
         self.last_msg_id = None
         self.reset_view()
         self._groupchat_state.clear()
-        self.roster.clear()
+        self._roster.clear()
 
     def switch_contact(self, contact: Union[BareContact,
                                             GroupchatContact,
@@ -161,7 +164,7 @@ class ChatControl(EventHelper):
         self._jump_to_end_button.switch_contact(contact)
         self.conversation_view.switch_contact(contact)
         self._groupchat_state.switch_contact(contact)
-        self.roster.switch_contact(contact)
+        self._roster.switch_contact(contact)
 
         self.encryption = self.get_encryption_state()
         self.conversation_view.encryption_enabled = self.encryption is not None
