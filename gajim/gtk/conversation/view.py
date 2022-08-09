@@ -99,13 +99,13 @@ class ConversationView(Gtk.ListBox):
 
         app.settings.disconnect_signals(self)
 
-        self._reset_conversation_view()
+        self.reset()
 
     def switch_contact(self, contact: ChatContactT) -> None:
         self._contact = contact
         self._client = app.get_client(contact.account)
 
-        self._reset_conversation_view()
+        self.reset()
 
         app.settings.disconnect_signals(self)
 
@@ -134,7 +134,7 @@ class ConversationView(Gtk.ListBox):
     def unlock(self) -> None:
         self.locked = False
 
-    def _reset_conversation_view(self) -> None:
+    def reset(self) -> None:
         for row in self.get_children()[2:]:
             row.destroy()
 

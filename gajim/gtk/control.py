@@ -493,7 +493,7 @@ class ChatControl(EventHelper):
 
     def reset_view(self) -> None:
         self._chat_loaded = False
-        self.conversation_view.clear()
+        self.conversation_view.reset()
         self._scrolled_view.reset()
 
     def get_autoscroll(self) -> bool:
