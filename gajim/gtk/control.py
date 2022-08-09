@@ -520,7 +520,8 @@ class ChatControl(EventHelper):
                               before: bool,
                               n_lines: int
                               ) -> None:
-        if self.conversation_view.locked:
+
+        if self.conversation_view.is_locked():
             return
 
         self.conversation_view.lock()
