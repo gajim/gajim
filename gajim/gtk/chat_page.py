@@ -232,7 +232,7 @@ class ChatPage(Gtk.Box):
             client.get_module('Contacts').add_group_chat_contact(jid)
 
         elif type_ == 'pm':
-            client.get_module('Contacts').add_group_private_contact(jid)
+            client.get_module('Contacts').add_private_contact(jid)
 
         if self.chat_exists(account, jid):
             if select:
