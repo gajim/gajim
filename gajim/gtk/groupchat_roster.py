@@ -110,7 +110,6 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
             ('theme-update', ged.GUI2, self._on_theme_update),
         ])
 
-        self.set_no_show_all(True)
         self.set_reveal_child(
             not app.settings.get('hide_groupchat_occupants_list'))
 
@@ -136,7 +135,8 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
             self.clear()
 
         is_groupchat = isinstance(contact, GroupchatContact)
-        self.set_visible(is_groupchat)
+        hide_roster = app.settings.get('hide_groupchat_occupants_list')
+        self.set_visible(is_groupchat and not hide_roster)
         if not is_groupchat:
             return
 
