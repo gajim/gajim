@@ -25,7 +25,7 @@ from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GLib
 from nbxmpp.const import Affiliation
-from nbxmpp.structs import MessageProperties
+from nbxmpp.structs import PresenceProperties
 
 from gajim.common import app
 from gajim.common import ged
@@ -184,6 +184,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
 
         nickname = self._store[iter_][Column.NICK_OR_GROUP]
 
+        assert self._contact is not None
         contact = self._contact.get_resource(nickname)
 
         value, widget = self._tooltip.get_tooltip(contact)
@@ -283,11 +284,13 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
                                   contact: types.GroupchatContact,
                                   _signal_name: str,
                                   user_contact: types.GroupchatParticipant,
-                                  properties: MessageProperties
+                                  properties: PresenceProperties
                                   ) -> None:
 
         self._remove_contact(user_contact)
 
+        assert properties.muc_user is not None
+        assert properties.muc_user.nick is not None
         user_contact = contact.get_resource(properties.muc_user.nick)
         self._add_contact(user_contact)
 
@@ -361,15 +364,20 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         if self._store.iter_parent(iter_) is None:
             # This is a group row
             return
+
+        assert self._contact is not None
+
         nick = self._store[iter_][Column.NICK_OR_GROUP]
         if self._contact.nickname == nick:
             return
 
         disco = self._contact.get_disco()
         assert disco is not None
+
         muc_prefer_direct_msg = app.settings.get('muc_prefer_direct_msg')
         if disco.muc_is_nonanonymous and muc_prefer_direct_msg:
             participant = self._contact.get_resource(nick)
+            assert participant.real_jid is not None
             app.window.add_chat(self._contact.account,
                                 participant.real_jid,
                                 'contact',
@@ -402,6 +410,8 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
             # Group row
             return
 
+        assert self._contact is not None
+
         nick = self._store[iter_][Column.NICK_OR_GROUP]
         if self._contact.nickname == nick:
             return
@@ -416,10 +426,11 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
             # self.roster.emit('row-activated', nick)
 
     def _show_contact_menu(self, nick: str, rect: Gdk.Rectangle) -> None:
+        assert self._contact is not None
         self_contact = self._contact.get_self()
         assert self_contact is not None
         contact = self._contact.get_resource(nick)
-        menu = get_groupchat_roster_menu(self._account,
+        menu = get_groupchat_roster_menu(self._contact.account,
                                          self_contact,
                                          contact)
 
@@ -461,6 +472,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
             if not app.settings.get('sort_by_show_in_muc'):
                 return locale.strcoll(nick1.lower(), nick2.lower())
 
+            assert self._contact is not None
             contact1 = self._contact.get_resource(nick1)
             contact2 = self._contact.get_resource(nick2)
 
@@ -485,6 +497,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
 
     def _load_roster(self) -> None:
         log.info('Load Roster')
+        assert self._contact is not None
         self._contact.multi_connect({
             'user-affiliation-changed': self._update_contact,
             'user-avatar-update': self._on_user_avatar_update,
@@ -504,6 +517,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
 
     def _unload_roster(self) -> None:
         log.info('Unload Roster')
+        assert self._contact is not None
         self._contact.multi_disconnect(self, CONTACT_SIGNALS)
 
         self._roster.set_model(None)
@@ -527,6 +541,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         if not iter_:
             return
 
+        assert self._contact is not None
         contact = self._contact.get_resource(nick)
 
         self._draw_avatar(contact)

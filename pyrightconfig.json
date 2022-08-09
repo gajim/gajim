@@ -84,6 +84,7 @@
         "gajim/gtk/groupchat_nick_completion.py",
         "gajim/gtk/groupchat_nick.py",
         "gajim/gtk/groupchat_outcasts.py",
+        "gajim/gtk/groupchat_roster.py",
         "gajim/gtk/groupchat_settings.py",
         "gajim/gtk/groupchat_state.py",
         "gajim/gtk/gstreamer.py",
