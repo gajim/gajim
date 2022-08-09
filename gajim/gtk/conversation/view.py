@@ -36,6 +36,7 @@ from nbxmpp.structs import MucSubject
 from nbxmpp.protocol import JID
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.events import JingleRequestReceived
 from gajim.common.events import FileRequestReceivedEvent
 from gajim.common.events import FileRequestSent
@@ -87,6 +88,11 @@ class ConversationView(Gtk.ListBox):
         # message_id -> row mapping
         self._message_id_row_map: dict[str, MessageRow] = {}
 
+    @property
+    def contact(self) -> types.ChatContactT:
+        assert self._contact is not None
+        return self._contact
+
     def clear(self) -> None:
         self._contact = None
         self._client = None
@@ -113,7 +119,7 @@ class ConversationView(Gtk.ListBox):
                                     account=contact.account,
                                     jid=contact.jid)
 
-        self._read_marker_row = ReadMarkerRow(contact.account, self._contact)
+        self._read_marker_row = ReadMarkerRow(contact.account, contact)
         self.add(self._read_marker_row)
 
         self._scroll_hint_row = ScrollHintRow(contact.account)
@@ -161,7 +167,7 @@ class ConversationView(Gtk.ListBox):
         return -1 if row1.timestamp < row2.timestamp else 1
 
     def add_muc_subject(self, subject: MucSubject) -> None:
-        muc_subject = MUCSubject(self._contact.account, subject)
+        muc_subject = MUCSubject(self.contact.account, subject)
         self._insert_message(muc_subject)
 
     def add_muc_user_left(self,
@@ -188,15 +194,15 @@ class ConversationView(Gtk.ListBox):
         self._insert_message(join_left)
 
     def add_user_status(self, name: str, show: str, status: str) -> None:
-        user_status = UserStatus(self._contact.account, name, show, status)
+        user_status = UserStatus(self.contact.account, name, show, status)
         self._insert_message(user_status)
 
     def add_info_message(self, text: str) -> None:
-        message = InfoMessage(self._contact.account, text)
+        message = InfoMessage(self.contact.account, text)
         self._insert_message(message)
 
     def add_file_transfer(self, transfer: HTTPFileTransfer) -> None:
-        transfer_row = FileTransferRow(self._contact.account, transfer)
+        transfer_row = FileTransferRow(self.contact.account, transfer)
         self._insert_message(transfer_row)
 
     def add_jingle_file_transfer(self,
@@ -229,7 +235,7 @@ class ConversationView(Gtk.ListBox):
 
     def add_command_output(self, text: str, is_error: bool) -> None:
         command_output_row = CommandOutputRow(
-            self._contact.account, text, is_error)
+            self.contact.account, text, is_error)
         self._insert_message(command_output_row)
 
     def add_message(self,
@@ -250,8 +256,8 @@ class ConversationView(Gtk.ListBox):
             timestamp = time.time()
 
         message_row = MessageRow(
-            self._contact.account,
-            self._contact,
+            self.contact.account,
+            self.contact,
             message_id,
             stanza_id,
             timestamp,
@@ -293,7 +299,7 @@ class ConversationView(Gtk.ListBox):
         if start_of_day in self._active_date_rows:
             return
 
-        date_row = DateRow(self._contact.account, start_of_day)
+        date_row = DateRow(self.contact.account, start_of_day)
         self._active_date_rows.add(start_of_day)
         self.add(date_row)
 

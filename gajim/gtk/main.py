@@ -50,7 +50,6 @@ from .chat_list import ChatList
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
 from .dialogs import ConfirmationCheckDialog
-from .types import ControlT
 from .builder import get_builder
 from .util import get_app_window
 from .util import get_key_theme
@@ -758,7 +757,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                         message: Optional[str] = None) -> None:
         self._app_page.add_app_message(category, message)
 
-    def get_control(self) -> ControlT:
+    def get_control(self) -> Any:
         return self._chat_page.get_control()
 
     def chat_exists(self, account: str, jid: JID) -> bool:

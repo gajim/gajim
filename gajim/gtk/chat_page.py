@@ -161,7 +161,7 @@ class ChatPage(Gtk.Box):
                            _param: Literal[None]) -> None:
 
         if self._chat_control.has_active_chat():
-            self._search_view.set_context(self._chat_control.account,
+            self._search_view.set_context(self._chat_control.contact.account,
                                           self._chat_control.contact.jid)
 
         self._search_view.clear()
