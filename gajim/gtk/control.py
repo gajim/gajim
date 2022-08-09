@@ -98,16 +98,8 @@ class ChatControl(EventHelper):
                                     self.fetch_n_lines_history, 20)
 
         self.roster = GroupchatRoster()
-        self.roster.connect('row-activated', self._on_roster_row_activated)
 
-        self._show_roster_setting = app.settings.get(
-            'hide_groupchat_occupants_list')
-        app.settings.connect_signal(
-            'hide_groupchat_occupants_list', self._show_roster)
-
-        self._roster_revealer = Gtk.Revealer()
-        self._roster_revealer.add(self.roster)
-        self._ui.conv_view_box.add(self._roster_revealer)
+        self._ui.conv_view_box.add(self.roster)
 
         # Keeps track of whether the ConversationView is populated
         self._chat_loaded: bool = False
@@ -162,10 +154,6 @@ class ChatControl(EventHelper):
         self.conversation_view.switch_contact(contact)
         self._groupchat_state.switch_contact(contact)
         self.roster.switch_contact(contact)
-
-        show_roster = (isinstance(contact, GroupchatContact) and
-                       self._show_roster_setting)
-        self._roster_revealer.set_reveal_child(show_roster)
 
         self.encryption = self.get_encryption_state()
         self.conversation_view.encryption_enabled = self.encryption is not None
@@ -802,34 +790,6 @@ class ChatControl(EventHelper):
             invited_jid)
         self.add_info_message(
             _('%s has been invited to this group chat') % invited_contact.name)
-
-    def _show_roster(self, show_roster: bool, *args: Any) -> None:
-        self._show_roster_setting = show_roster
-        transition = Gtk.RevealerTransitionType.SLIDE_RIGHT
-        if show_roster:
-            self._roster_revealer.set_no_show_all(False)
-            self._roster_revealer.show_all()
-            transition = Gtk.RevealerTransitionType.SLIDE_LEFT
-        self._roster_revealer.set_transition_type(transition)
-        self._roster_revealer.set_reveal_child(show_roster)
-
-    def _on_roster_row_activated(self,
-                                 _roster: GroupchatRoster,
-                                 nick: str
-                                 ) -> None:
-
-        disco = self.contact.get_disco()
-        muc_prefer_direct_msg = app.settings.get('muc_prefer_direct_msg')
-        if disco.muc_is_nonanonymous and muc_prefer_direct_msg:
-            participant = self.contact.get_resource(nick)
-            app.window.add_chat(self.account,
-                                participant.real_jid,
-                                'contact',
-                                select=True,
-                                workspace='current')
-        else:
-            contact = self.contact.get_resource(nick)
-            app.window.add_private_chat(self.account, contact.jid, select=True)
 
     def _on_room_voice_request(self,
                                _contact: GroupchatContact,
