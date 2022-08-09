@@ -180,7 +180,8 @@ class ChatControl(EventHelper):
                 'user-left': self._on_user_left,
                 'user-affiliation-changed': self._on_user_affiliation_changed,
                 'user-role-changed': self._on_user_role_changed,
-                'user-status-show-changed': self._on_user_status_show_changed,
+                'user-status-show-changed':
+                    self._on_muc_user_status_show_changed,
                 'user-nickname-changed': self._on_user_nickname_changed,
                 'room-kicked': self._on_room_kicked,
                 'room-destroyed': self._on_room_destroyed,
@@ -755,43 +756,45 @@ class ChatControl(EventHelper):
 
         self.add_info_message(message)
 
+    def _on_muc_user_status_show_changed(self,
+                                         contact: GroupchatContact,
+                                         _signal_name: str,
+                                         user_contact: GroupchatParticipant,
+                                         properties: PresenceProperties
+                                         ) -> None:
+
+        if not contact.settings.get('print_status'):
+            return
+
+        self.conversation_view.add_user_status(user_contact.name,
+                                               user_contact.show.value,
+                                               user_contact.status)
+
     def _on_user_status_show_changed(self,
                                      _user_contact: GroupchatParticipant,
                                      _signal_name: str,
                                      properties: PresenceProperties
                                      ) -> None:
 
-        # TODO: This does not work
-        return
-        if isinstance(self.contact, GroupchatContact):
-            if not contact.settings.get('print_status'):
-                return
+        nick = properties.muc_nickname
+        status = properties.status
+        status = '' if not status else f' - {status}'
+        assert properties.show is not None
+        show = helpers.get_uf_show(properties.show.value)
 
-            self.conversation_view.add_user_status(user_contact.name,
-                                                   user_contact.show.value,
-                                                   user_contact.status)
+        assert isinstance(self.contact, GroupchatParticipant)
+        if not self.contact.room.settings.get('print_status'):
+            return
+
+        if properties.is_muc_self_presence:
+            message = _('You are now {show}{status}').format(show=show,
+                                                             status=status)
 
         else:
-
-            nick = properties.muc_nickname
-            status = properties.status
-            status = '' if not status else f' - {status}'
-            assert properties.show is not None
-            show = helpers.get_uf_show(properties.show.value)
-
-            assert isinstance(self.contact, GroupchatParticipant)
-            if not self.contact.room.settings.get('print_status'):
-                return
-
-            if properties.is_muc_self_presence:
-                message = _('You are now {show}{status}').format(show=show,
-                                                                 status=status)
-
-            else:
-                message = _('{nick} is now {show}{status}').format(nick=nick,
-                                                                   show=show,
-                                                                   status=status)
-            self.add_info_message(message)
+            message = _('{nick} is now {show}{status}').format(nick=nick,
+                                                               show=show,
+                                                               status=status)
+        self.add_info_message(message)
 
     def _on_muc_disco_update(self, event: events.MucDiscoUpdate) -> None:
         pass
