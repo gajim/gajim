@@ -19,7 +19,9 @@ from typing import Optional
 from gi.repository import Gtk
 from gi.repository import GObject
 
-from ..types import ConversationViewT
+from gajim.common.types import ChatContactT
+
+from .view import ConversationView
 
 
 class ScrolledView(Gtk.ScrolledWindow):
@@ -69,11 +71,22 @@ class ScrolledView(Gtk.ScrolledWindow):
         vadjustment.connect('notify::upper', self._on_adj_upper_changed)
         vadjustment.connect('notify::value', self._on_adj_value_changed)
 
+        self._view = ConversationView()
+        self.add(self._view)
+        self.set_focus_vadjustment(Gtk.Adjustment())
+
+    def clear(self) -> None:
+        self._view.clear()
+
+    def switch_contact(self, contact: ChatContactT) -> None:
+        self.reset()
+        self._view.switch_contact(contact)
+
     def get_autoscroll(self) -> bool:
         return self._autoscroll
 
-    def get_view(self) -> ConversationViewT:
-        return self.get_child().get_child()
+    def get_view(self) -> ConversationView:
+        return self._view
 
     def reset(self) -> None:
         self._current_upper = 0
@@ -81,12 +94,13 @@ class ScrolledView(Gtk.ScrolledWindow):
         self._upper_complete = False
         self._lower_complete = False
         self._requesting = None
+        self._view.reset()
         self.set_history_complete(True, False)
 
     def set_history_complete(self, before: bool, complete: bool) -> None:
         if before:
             self._upper_complete = complete
-            self.get_view().set_history_complete(complete)
+            self._view.set_history_complete(complete)
         else:
             self._lower_complete = complete
 

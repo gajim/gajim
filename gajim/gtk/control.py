@@ -53,7 +53,6 @@ from gajim.common.preview_helpers import filename_from_uri
 from gajim.common.preview_helpers import guess_simple_file_type
 from gajim.common.storage.archive import ConversationRow
 
-from gajim.gui.conversation.view import ConversationView
 from gajim.gui.conversation.scrolled import ScrolledView
 from gajim.gui.conversation.jump_to_end_button import JumpToEndButton
 from gajim.gui.builder import get_builder
@@ -77,13 +76,14 @@ class ChatControl(EventHelper):
 
         self._ui = get_builder('chat_control.ui')
 
-        self.conversation_view = ConversationView()
-
         self._scrolled_view = ScrolledView()
-        self._scrolled_view.add(self.conversation_view)
-        self._scrolled_view.set_focus_vadjustment(Gtk.Adjustment())
-
+        self._scrolled_view.connect('autoscroll-changed',
+                                    self._on_autoscroll_changed)
+        self._scrolled_view.connect('request-history',
+                                    self.fetch_n_lines_history, 20)
         self._ui.conv_view_overlay.add(self._scrolled_view)
+
+        self.conversation_view = self._scrolled_view.get_view()
 
         self._groupchat_state = GroupchatState()
         self._ui.conv_view_overlay.add_overlay(self._groupchat_state)
@@ -91,11 +91,6 @@ class ChatControl(EventHelper):
         self._jump_to_end_button = JumpToEndButton()
         self._jump_to_end_button.connect('clicked', self._on_jump_to_end)
         self._ui.conv_view_overlay.add_overlay(self._jump_to_end_button)
-
-        self._scrolled_view.connect('autoscroll-changed',
-                                    self._on_autoscroll_changed)
-        self._scrolled_view.connect('request-history',
-                                    self.fetch_n_lines_history, 20)
 
         self._roster = GroupchatRoster()
 
@@ -146,6 +141,7 @@ class ChatControl(EventHelper):
         self.encryption = None
         self.last_msg_id = None
         self.reset_view()
+        self._scrolled_view.clear()
         self._groupchat_state.clear()
         self._roster.clear()
 
@@ -162,7 +158,7 @@ class ChatControl(EventHelper):
         self._client = app.get_client(contact.account)
 
         self._jump_to_end_button.switch_contact(contact)
-        self.conversation_view.switch_contact(contact)
+        self._scrolled_view.switch_contact(contact)
         self._groupchat_state.switch_contact(contact)
         self._roster.switch_contact(contact)
 
@@ -493,7 +489,6 @@ class ChatControl(EventHelper):
 
     def reset_view(self) -> None:
         self._chat_loaded = False
-        self.conversation_view.reset()
         self._scrolled_view.reset()
 
     def get_autoscroll(self) -> bool:

@@ -88,6 +88,9 @@ class ConversationView(Gtk.ListBox):
         # message_id -> row mapping
         self._message_id_row_map: dict[str, MessageRow] = {}
 
+        self._read_marker_row = None
+        self._scroll_hint_row = None
+
     @property
     def contact(self) -> types.ChatContactT:
         assert self._contact is not None
@@ -161,6 +164,8 @@ class ConversationView(Gtk.ListBox):
         return None
 
     def set_history_complete(self, complete: bool) -> None:
+        if self._scroll_hint_row is None:
+            return
         self._scroll_hint_row.set_history_complete(complete)
 
     @staticmethod
@@ -278,6 +283,7 @@ class ConversationView(Gtk.ListBox):
             self._message_id_row_map[message_id] = message_row
 
         if kind == 'incoming':
+            assert self._read_marker_row is not None
             self._read_marker_row.set_last_incoming_timestamp(
                 message_row.timestamp)
         if (marker is not None and marker == 'displayed' and
@@ -290,6 +296,7 @@ class ConversationView(Gtk.ListBox):
         self.add(message)
         self._add_date_row(message.timestamp)
         self._check_for_merge(message)
+        assert self._read_marker_row is not None
 
         if message.kind == 'incoming':
             if message.timestamp > self._read_marker_row.timestamp:
@@ -474,7 +481,7 @@ class ConversationView(Gtk.ListBox):
             return
 
         row.set_displayed()
-
+        assert self._read_marker_row is not None
         timestamp = row.timestamp + timedelta(microseconds=1)
         if self._read_marker_row.timestamp > timestamp:
             return
