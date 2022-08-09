@@ -46,6 +46,7 @@ from .chat_function_page import ChatFunctionPage
 from .const import TARGET_TYPE_URI_LIST
 from .control import ChatControl
 from .message_actions_box import MessageActionsBox
+from .message_input import MessageInputTextView
 from .util import EventHelper, open_window
 
 log = logging.getLogger('gajim.gui.chatstack')
@@ -149,6 +150,9 @@ class ChatStack(Gtk.Stack, EventHelper):
 
     def get_message_action_box(self) -> MessageActionsBox:
         return self._message_action_box
+
+    def get_message_input(self) -> MessageInputTextView:
+        return self._message_action_box.msg_textview
 
     def show_chat(self, account: str, jid: JID) -> None:
         # Store (preserve) primary clipboard and restore it after switching

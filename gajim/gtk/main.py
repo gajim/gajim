@@ -37,7 +37,6 @@ from gajim.common.const import SimpleClientState
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.modules.bytestream import is_transfer_active
-from gajim.gtk.const import MAIN_WIN_ACTIONS
 from gajim.plugins.pluginmanager import PluginManifest
 from gajim.plugins.repository import PluginRepository
 
@@ -47,6 +46,8 @@ from .workspace_side_bar import WorkspaceSideBar
 from .main_stack import MainStack
 from .call_window import CallWindow
 from .chat_list import ChatList
+from .chat_stack import ChatStack
+from .const import MAIN_WIN_ACTIONS
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
 from .dialogs import ConfirmationCheckDialog
@@ -160,6 +161,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         action = self.lookup_action(name)
         assert action is not None
         return action
+
+    def get_chat_stack(self) -> ChatStack:
+        return self._chat_page.get_chat_stack()
 
     def is_minimized(self) -> bool:
         if app.is_display(Display.WAYLAND):

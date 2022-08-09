@@ -456,15 +456,13 @@ class Interface:
                             jid: str,
                             message: Optional[str] = None
                             ) -> None:
-        # TODO
+
         jid_ = JID.from_string(jid)
         if app.window.chat_exists(account, jid_):
             app.window.select_chat(account, jid_)
             if message is not None:
-                control = app.window.get_control(account, jid_)
-                if control is None:
-                    return
-                control.msg_textview.insert_text(message)
+                message_input = app.window.get_chat_stack().get_message_input()
+                message_input.insert_text(message)
             return
 
         # TODO: handle message arg in StartChat
