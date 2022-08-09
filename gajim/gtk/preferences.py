@@ -320,19 +320,19 @@ class Chats(PreferenceBox):
     @staticmethod
     def _on_use_speller(value: bool, *args: Any) -> None:
         # TODO
-        return
-        if not value:
-            return
+        # if not value:
+        #     return
 
-        lang = app.settings.get('speller_language')
-        gspell_lang = Gspell.language_lookup(lang)
-        if gspell_lang is None:
-            gspell_lang = Gspell.language_get_default()
-        if gspell_lang is None:
-            return
-        app.settings.set('speller_language', gspell_lang.get_code())
-        for ctrl in app.window.get_controls():
-            ctrl.set_speller()
+        # lang = app.settings.get('speller_language')
+        # gspell_lang = Gspell.language_lookup(lang)
+        # if gspell_lang is None:
+        #     gspell_lang = Gspell.language_get_default()
+        # if gspell_lang is None:
+        #     return
+        # app.settings.set('speller_language', gspell_lang.get_code())
+        # for ctrl in app.window.get_controls():
+        #     ctrl.set_speller()
+        pass
 
     @staticmethod
     def _on_show_send_message_button(show_button: bool, *args: Any) -> None:
@@ -751,9 +751,9 @@ class Emoji(PreferenceBox):
     @staticmethod
     def _toggle_emoticons() -> None:
         # TODO
-        return
-        for ctrl in app.window.get_controls():
-            ctrl.toggle_emoticons()
+        # for ctrl in app.window.get_controls():
+        #     ctrl.toggle_emoticons()
+        pass
 
 
 class Server(PreferenceBox):
