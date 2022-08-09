@@ -115,6 +115,9 @@ class GajimPlugin:
     def deactivate(self) -> None:
         pass
 
+    def activate_encryption(self, chat_control: Any) -> None:
+        pass
+
 
 class GajimPluginConfig:
     def __init__(self, plugin: GajimPlugin) -> None:
