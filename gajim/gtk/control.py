@@ -36,6 +36,7 @@ from nbxmpp.modules.security_labels import Displaymarking
 from gajim.common import app
 from gajim.common import events
 from gajim.common import helpers
+from gajim.common import types
 from gajim.common.helpers import message_needs_highlight
 from gajim.common.helpers import get_file_path_from_dnd_dropped_uri
 from gajim.common.helpers import to_user_string
@@ -71,8 +72,7 @@ class ChatControl(EventHelper):
 
         self.handlers: dict[int, Any] = {}
 
-        self.account = None
-        self.contact = None
+        self._contact = None
         self._client = None
 
         self._ui = get_builder('chat_control.ui')
@@ -114,6 +114,16 @@ class ChatControl(EventHelper):
         self.widget = cast(Gtk.Box, self._ui.get_object('control_box'))
         self.widget.show_all()
 
+    @property
+    def contact(self) -> types.ChatContactT:
+        assert self._contact is not None
+        return self._contact
+
+    @property
+    def client(self) -> types.Client:
+        assert self._client is not None
+        return self._client
+
     def is_loaded(self, account: str, jid: JID) -> bool:
         if self.contact is None:
             return False
@@ -128,9 +138,8 @@ class ChatControl(EventHelper):
         if self.contact is not None:
             self.contact.disconnect_all_from_obj(self)
 
-        self.contact = None
-        self._clinet = None
-        self.account = None
+        self._contact = None
+        self._client = None
         self.encryption = None
         self.last_msg_id = None
         self.reset_view()
@@ -142,11 +151,10 @@ class ChatControl(EventHelper):
                                             GroupchatParticipant]) -> None:
 
         log.info('Switch to %s (%s)', contact.jid, contact.account)
-        if self.contact is not None:
-            self.contact.disconnect_all_from_obj(self)
+        if self._contact is not None:
+            self._contact.disconnect_all_from_obj(self)
 
-        self.contact = contact
-        self.account = contact.account
+        self._contact = contact
 
         self._client = app.get_client(contact.account)
 
@@ -158,16 +166,16 @@ class ChatControl(EventHelper):
         self.encryption = self.get_encryption_state()
         self.conversation_view.encryption_enabled = self.encryption is not None
 
-        if isinstance(self.contact, GroupchatParticipant):
-            self.contact.multi_connect({
+        if isinstance(contact, GroupchatParticipant):
+            contact.multi_connect({
                 'user-status-show-changed': self._on_user_status_show_changed,
                 'user-nickname-changed': self._on_user_nickname_changed,
                 # 'room-kicked': self._on_room_kicked,
                 # 'room-destroyed': self._on_room_destroyed,
             })
 
-        elif isinstance(self.contact, GroupchatContact):
-            self.contact.multi_connect({
+        elif isinstance(contact, GroupchatContact):
+            contact.multi_connect({
                 'user-joined': self._on_user_joined,
                 'user-left': self._on_user_left,
                 'user-affiliation-changed': self._on_user_affiliation_changed,
@@ -183,10 +191,10 @@ class ChatControl(EventHelper):
                 'room-subject': self._on_room_subject,
             })
 
-        self._client.get_module('Chatstate').set_active(self.contact)
+        self._client.get_module('Chatstate').set_active(contact)
 
-    def process_event(self, event: events.ApplicationEvent) -> None:
-        if event.account != self.account:
+    def process_event(self, event: events.MainEventT) -> None:
+        if event.account != self.contact.account:
             return
 
         if event.jid not in (self.contact.jid, self.contact.jid.bare):
@@ -237,7 +245,7 @@ class ChatControl(EventHelper):
 
     def _on_message_moderated(self, event: events.MessageModerated) -> None:
         text = get_retraction_text(
-            self.account,
+            self.contact.account,
             event.moderation.moderator_jid,
             event.moderation.reason)
         self.conversation_view.show_message_retraction(
@@ -263,7 +271,7 @@ class ChatControl(EventHelper):
 
         if send_marker and self.last_msg_id is not None:
             # XEP-0333 Send <displayed> marker
-            self._client.get_module('ChatMarkers').send_displayed_marker(
+            self.client.get_module('ChatMarkers').send_displayed_marker(
                 self.contact,
                 self.last_msg_id)
             self.last_msg_id = None
@@ -313,11 +321,11 @@ class ChatControl(EventHelper):
 
     def get_our_nick(self) -> str:
         if isinstance(self.contact, GroupchatParticipant):
-            muc_data = self._client.get_module('MUC').get_muc_data(
+            muc_data = self.client.get_module('MUC').get_muc_data(
                 self.contact.jid.bare)
             return muc_data.nick
 
-        return app.nicks[self.account]
+        return app.nicks[self.contact.account]
 
     def _allow_add_message(self) -> bool:
         # Only add messages if the view is already populated
@@ -359,7 +367,7 @@ class ChatControl(EventHelper):
             additional_data = AdditionalDataDict()
 
         chat_active = app.window.is_chat_active(
-            self.account, self.contact.jid)
+            self.contact.account, self.contact.jid)
 
         if self._allow_add_message():
             self.conversation_view.add_message(
@@ -393,12 +401,13 @@ class ChatControl(EventHelper):
                 self._notify(name, text, tim, additional_data)
 
             if not chat_active and notify:
-                if self.is_groupchat:
+                if isinstance(self._contact, GroupchatContact):
+                    assert self._contact.nickname is not None
                     needs_highlight = message_needs_highlight(
                         text,
-                        self.contact.nickname,
-                        self._client.get_own_jid().bare)
-                    if needs_highlight or self.contact.can_notify():
+                        self._contact.nickname,
+                        self.client.get_own_jid().bare)
+                    if needs_highlight or self._contact.can_notify():
                         set_urgency_hint(app.window, True)
                 else:
                     set_urgency_hint(app.window, True)
@@ -409,7 +418,7 @@ class ChatControl(EventHelper):
                 tim: Optional[float],
                 additional_data: AdditionalDataDict
                 ) -> None:
-        if app.window.is_chat_active(self.account, self.contact.jid):
+        if app.window.is_chat_active(self.contact.account, self.contact.jid):
             if self._scrolled_view.get_autoscroll():
                 return
 
@@ -431,21 +440,22 @@ class ChatControl(EventHelper):
             msg_type = 'chat-message'
             sound = 'first_message_received'
 
-        if self.is_groupchat:
+        if isinstance(self._contact, GroupchatContact):
             msg_type = 'group-chat-message'
-            title += f' ({self.contact.name})'
+            title += f' ({self._contact.name})'
+            assert self._contact.nickname is not None
             needs_highlight = message_needs_highlight(
-                text, self.contact.nickname, self._client.get_own_jid().bare)
+                text, self._contact.nickname, self.client.get_own_jid().bare)
             if needs_highlight:
                 sound = 'muc_message_highlight'
             else:
                 sound = 'muc_message_received'
 
-            if not self.contact.can_notify() and not needs_highlight:
+            if not self._contact.can_notify() and not needs_highlight:
                 return
 
         if self.is_privatechat:
-            room_contact = self._client.get_module('Contacts').get_contact(
+            room_contact = self.client.get_module('Contacts').get_contact(
                 self.contact.jid.bare)
             msg_type = 'private-chat-message'
             title += f' (private in {room_contact.name})'
@@ -460,7 +470,7 @@ class ChatControl(EventHelper):
                 text = f'* {name} {text[3:]}'
 
         app.ged.raise_event(
-            events.Notification(account=self.account,
+            events.Notification(account=self.contact.account,
                                 jid=self.contact.jid,
                                 type='incoming-message',
                                 sub_type=msg_type,
@@ -489,7 +499,7 @@ class ChatControl(EventHelper):
             self.conversation_view.lock()
             self.reset_view()
             before, at_after = app.storage.archive.get_conversation_around(
-                self.account, self.contact.jid, timestamp)
+                self.contact.account, self.contact.jid, timestamp)
             self.add_messages(before)
             self.add_messages(at_after)
 
@@ -517,7 +527,7 @@ class ChatControl(EventHelper):
             timestamp = row.db_timestamp
 
         messages = app.storage.archive.get_conversation_before_after(
-            self.account,
+            self.contact.account,
             self.contact.jid,
             before,
             timestamp,
@@ -582,7 +592,7 @@ class ChatControl(EventHelper):
                     reason = msg.additional_data.get_value(
                         'retracted', 'reason')
                     message_text = get_retraction_text(
-                        self.account, retracted_by, reason)
+                        self.contact.account, retracted_by, reason)
 
             self.conversation_view.add_message(
                 message_text,
@@ -606,8 +616,8 @@ class ChatControl(EventHelper):
             if event.archive_jid != self.contact.jid:
                 return
             self.add_muc_message(event.msgtxt,
-                                 contact=event.properties.muc_nickname,
                                  tim=event.properties.mam.timestamp,
+                                 contact=event.properties.muc_nickname,
                                  message_id=event.properties.id,
                                  stanza_id=event.stanza_id,
                                  additional_data=event.additional_data,
@@ -712,7 +722,7 @@ class ChatControl(EventHelper):
         if not app.settings.get('print_status_in_chats'):
             return
 
-        contact = self._client.get_module('Contacts').get_contact(event.fjid)
+        contact = self.client.get_module('Contacts').get_contact(event.fjid)
         if isinstance(contact, BareContact):
             return
         self.conversation_view.add_user_status(self.contact.name,
@@ -726,6 +736,7 @@ class ChatControl(EventHelper):
                                   ) -> None:
 
         # TODO: check if the nick logic makes sense
+        return
         if isinstance(self.contact, GroupchatContact):
             nick = user_contact.name
         else:
@@ -784,9 +795,9 @@ class ChatControl(EventHelper):
 
     def invite(self, invited_jid: JID) -> None:
         # TODO: Remove, used by command system
-        self._client.get_module('MUC').invite(
+        self.client.get_module('MUC').invite(
             self.contact.jid, invited_jid)
-        invited_contact = self._client.get_module('Contacts').get_contact(
+        invited_contact = self.client.get_module('Contacts').get_contact(
             invited_jid)
         self.add_info_message(
             _('%s has been invited to this group chat') % invited_contact.name)
@@ -800,7 +811,7 @@ class ChatControl(EventHelper):
         assert voice_request is not None
 
         def on_approve() -> None:
-            self._client.get_module('MUC').approve_voice_request(
+            self.client.get_module('MUC').approve_voice_request(
                 self.contact.jid, voice_request)
 
         ConfirmationDialog(
@@ -823,8 +834,8 @@ class ChatControl(EventHelper):
                                  additional_data=event.additional_data)
         else:
             self.add_muc_message(event.msgtxt,
-                                 contact=event.properties.muc_nickname,
                                  tim=event.properties.timestamp,
+                                 contact=event.properties.muc_nickname,
                                  displaymarking=event.displaymarking,
                                  message_id=event.properties.id,
                                  stanza_id=event.stanza_id,
@@ -832,8 +843,8 @@ class ChatControl(EventHelper):
 
     def add_muc_message(self,
                         text: str,
+                        tim: float,
                         contact: str = '',
-                        tim: Optional[float] = None,
                         displaymarking: Optional[Displaymarking] = None,
                         message_id: Optional[str] = None,
                         stanza_id: Optional[str] = None,
@@ -841,7 +852,9 @@ class ChatControl(EventHelper):
                         notify: bool = True
                         ) -> None:
 
-        if contact == self.contact.nickname:
+        assert isinstance(self._contact, GroupchatContact)
+
+        if contact == self._contact.nickname:
             kind = 'outgoing'
         else:
             kind = 'incoming'
@@ -873,7 +886,7 @@ class ChatControl(EventHelper):
         self._subject_text_cache[contact.jid] = subject.text
 
         if (app.settings.get('show_subject_on_join') or
-                not self.contact.is_joining):
+                not contact.is_joining):
             self.conversation_view.add_muc_subject(subject)
 
     def _on_room_config_changed(self,
@@ -897,7 +910,7 @@ class ChatControl(EventHelper):
         if StatusCode.CONFIG_NON_PRIVACY_RELATED in status_codes:
             changes.append(_('A setting not related to privacy has been '
                              'changed'))
-            self._client.get_module('Discovery').disco_muc(self.contact.jid)
+            self.client.get_module('Discovery').disco_muc(self.contact.jid)
 
         if StatusCode.CONFIG_ROOM_LOGGING in status_codes:
             # Can be a presence (see chg_contact_status in groupchat_control.py)
@@ -919,10 +932,10 @@ class ChatControl(EventHelper):
             self.add_info_message(change)
 
     def rejoin(self) -> None:
-        self._client.get_module('MUC').join(self.contact.jid)
+        self.client.get_module('MUC').join(self.contact.jid)
 
     def _on_user_joined(self,
-                        _contact: GroupchatContact,
+                        contact: GroupchatContact,
                         _signal_name: str,
                         user_contact: GroupchatParticipant,
                         properties: PresenceProperties
@@ -930,13 +943,13 @@ class ChatControl(EventHelper):
 
         nick = user_contact.name
         if not properties.is_muc_self_presence:
-            if self.contact.is_joined:
+            if contact.is_joined:
                 self.conversation_view.add_muc_user_joined(nick)
             return
 
         status_codes = properties.muc_status_codes or []
 
-        if not self.contact.is_joined:
+        if not contact.is_joined:
             # We just joined the room
             self.add_info_message(_('You (%s) joined the group chat') % nick)
 
@@ -1137,17 +1150,21 @@ class ChatControl(EventHelper):
     def _on_room_presence_error(self,
                                 _contact: GroupchatContact,
                                 _signal_name: str,
-                                properties: MessageProperties
+                                properties: PresenceProperties
                                 ) -> None:
+
+        assert properties.error is not None
         error_message = to_user_string(properties.error)
         self.add_info_message(_('Error: %s') % error_message)
 
     def _on_room_destroyed(self,
                            _contact: GroupchatContact,
                            _signal_name: str,
-                           properties: MessageProperties
+                           properties: PresenceProperties
                            ) -> None:
+
         destroyed = properties.muc_destroyed
+        assert destroyed is not None
 
         reason = destroyed.reason
         reason = '' if reason is None else f': {reason}'
