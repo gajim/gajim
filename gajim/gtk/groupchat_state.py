@@ -77,10 +77,12 @@ class GroupchatState(Gtk.Box):
         self._ui.groupchat_state.set_visible_child_name('fetching')
 
     def _on_join_clicked(self, _button: Gtk.Button) -> None:
+        assert self._contact is not None
         client = app.get_client(self._contact.account)
         client.get_module('MUC').join(self._contact.jid)
 
     def _on_abort_clicked(self, _button: Gtk.Button) -> None:
+        assert self._contact is not None
         app.window.activate_action(
             'remove-chat',
             GLib.Variant(
