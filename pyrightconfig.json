@@ -95,6 +95,7 @@
         "gajim/gtk/mam_preferences.py",
         "gajim/gtk/manage_sounds.py",
         "gajim/gtk/menus.py",
+        "gajim/gtk/message_action_box.py",
         "gajim/gtk/message_input.py",
         "gajim/gtk/notification_manager.py",
         "gajim/gtk/notification.py",
