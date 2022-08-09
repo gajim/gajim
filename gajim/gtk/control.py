@@ -758,7 +758,7 @@ class ChatControl(EventHelper):
                                      properties: PresenceProperties
                                      ) -> None:
 
-        # TODO: This cant work
+        # TODO: This does not work
         return
         if isinstance(self.contact, GroupchatContact):
             if not contact.settings.get('print_status'):
