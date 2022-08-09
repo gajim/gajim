@@ -169,7 +169,7 @@ class ChatControl(EventHelper):
         if isinstance(contact, GroupchatParticipant):
             contact.multi_connect({
                 'user-status-show-changed': self._on_user_status_show_changed,
-                'user-nickname-changed': self._on_user_nickname_changed,
+                # 'user-nickname-changed': self._on_user_nickname_changed,
                 # 'room-kicked': self._on_room_kicked,
                 # 'room-destroyed': self._on_room_destroyed,
             })
@@ -182,7 +182,7 @@ class ChatControl(EventHelper):
                 'user-role-changed': self._on_user_role_changed,
                 'user-status-show-changed':
                     self._on_muc_user_status_show_changed,
-                'user-nickname-changed': self._on_user_nickname_changed,
+                # 'user-nickname-changed': self._on_user_nickname_changed,
                 'room-kicked': self._on_room_kicked,
                 'room-destroyed': self._on_room_destroyed,
                 'room-config-finished': self._on_room_config_finished,
@@ -741,20 +741,20 @@ class ChatControl(EventHelper):
 
         # TODO: check if the nick logic makes sense
         return
-        if isinstance(self.contact, GroupchatContact):
-            nick = user_contact.name
-        else:
-            nick = properties.muc_nickname
+        # if isinstance(self.contact, GroupchatContact):
+        #     nick = user_contact.name
+        # else:
+        #     nick = properties.muc_nickname
 
-        assert properties.muc_user is not None
-        new_nick = properties.muc_user.nick
-        if properties.is_muc_self_presence:
-            message = _('You are now known as %s') % new_nick
-        else:
-            message = _('{nick} is now known '
-                        'as {new_nick}').format(nick=nick, new_nick=new_nick)
+        # assert properties.muc_user is not None
+        # new_nick = properties.muc_user.nick
+        # if properties.is_muc_self_presence:
+        #     message = _('You are now known as %s') % new_nick
+        # else:
+        #     message = _('{nick} is now known '
+        #                 'as {new_nick}').format(nick=nick, new_nick=new_nick)
 
-        self.add_info_message(message)
+        # self.add_info_message(message)
 
     def _on_muc_user_status_show_changed(self,
                                          contact: GroupchatContact,
