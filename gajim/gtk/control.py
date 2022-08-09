@@ -115,6 +115,18 @@ class ChatControl(EventHelper):
         return self._contact
 
     @property
+    def account(self) -> str:
+        # Compatibility with Plugins for Gajim < 1.5
+        assert self._contact is not None
+        return self._contact.account
+
+    @property
+    def room_jid(self) -> str:
+        # Compatibility with Plugins for Gajim < 1.5
+        assert self._contact is not None
+        return str(self._contact.jid)
+
+    @property
     def client(self) -> types.Client:
         assert self._client is not None
         return self._client
