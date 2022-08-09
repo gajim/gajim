@@ -125,18 +125,18 @@ class ChatControl(EventHelper):
         return self._client
 
     def is_loaded(self, account: str, jid: JID) -> bool:
-        if self.contact is None:
+        if self._contact is None:
             return False
         return self.contact.account == account and self.contact.jid == jid
 
     def has_active_chat(self) -> bool:
-        return self.contact is not None
+        return self._contact is not None
 
     def clear(self) -> None:
         log.info('Clear')
 
-        if self.contact is not None:
-            self.contact.disconnect_all_from_obj(self)
+        if self._contact is not None:
+            self._contact.disconnect_all_from_obj(self)
 
         self._contact = None
         self._client = None
@@ -194,10 +194,13 @@ class ChatControl(EventHelper):
         self._client.get_module('Chatstate').set_active(contact)
 
     def process_event(self, event: events.MainEventT) -> None:
-        if event.account != self.contact.account:
+        if self._contact is None:
             return
 
-        if event.jid not in (self.contact.jid, self.contact.jid.bare):
+        if event.account != self._contact.account:
+            return
+
+        if event.jid not in (self._contact.jid, self._contact.jid.bare):
             return
 
         file_transfer_events = (

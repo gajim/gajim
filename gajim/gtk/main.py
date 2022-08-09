@@ -421,12 +421,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
             if action_name == 'escape':
                 if app.settings.get('escape_key_closes'):
-                    self._chat_page.remove_chat(control.account,
+                    self._chat_page.remove_chat(control.contact.account,
                                                 control.contact.jid)
                     return None
 
             elif action_name == 'close-tab':
-                self._chat_page.remove_chat(control.account,
+                self._chat_page.remove_chat(control.contact.account,
                                             control.contact.jid)
                 return None
 
@@ -490,7 +490,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             return
 
         if self.get_property('has-toplevel-focus'):
-            client = app.get_client(control.account)
+            client = app.get_client(control.contact.account)
             chat_stack = self._chat_page.get_chat_stack()
             msg_action_box = chat_stack.get_message_action_box()
             client.get_module('Chatstate').set_mouse_activity(
@@ -822,7 +822,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             return
 
         if control.get_autoscroll():
-            self.mark_as_read(control.account, control.contact.jid)
+            self.mark_as_read(control.contact.account, control.contact.jid)
 
     @staticmethod
     def contact_info(account: str, jid: str) -> None:
