@@ -86,7 +86,7 @@ from gajim.gui.menus import build_accounts_menu
 from gajim.gui.util import get_app_window
 from gajim.gui.util import get_app_windows
 from gajim.gui.util import get_color_for_account
-from gajim.gui.types import ControlT
+from gajim.gui.control import ChatControl
 from gajim.plugins.repository import PluginRepository
 
 log = logging.getLogger('gajim.interface')
@@ -305,7 +305,7 @@ class Interface:
             session.end_session()
 
     def send_httpupload(self,
-                        chat_control: ControlT,
+                        chat_control: ChatControl,
                         path: Optional[str] = None
                         ) -> None:
         if path is not None:
@@ -318,14 +318,14 @@ class Interface:
                           transient_for=app.window)
 
     def _on_file_dialog_ok(self,
-                           chat_control: ControlT,
+                           chat_control: ChatControl,
                            paths: list[str]
                            ) -> None:
         for path in paths:
             self._send_httpupload(chat_control, path)
 
-    def _send_httpupload(self, chat_control: ControlT, path: str) -> None:
-        client = app.get_client(chat_control.account)
+    def _send_httpupload(self, chat_control: ChatControl, path: str) -> None:
+        client = app.get_client(chat_control.contact.account)
         try:
             transfer = client.get_module('HTTPUpload').make_transfer(
                 path,
@@ -403,7 +403,8 @@ class Interface:
             if method is None:
                 return
 
-        if app.window.get_control().has_active_chat():
+        control = app.window.get_control()
+        if control.has_active_chat():
             return
 
         if path is None:
