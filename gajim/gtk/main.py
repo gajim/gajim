@@ -930,18 +930,16 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._main_stack.process_event(event)
 
     def _on_read_state_sync(self, event: events.ReadStateSync) -> None:
-        # TODO
-        return
-
         if event.is_muc_pm:
             jid = JID.from_string(event.jid.bare)
         else:
             jid = event.jid
 
-        control = self.get_control(event.account, jid)
-        if control is None:
+        control = self.get_control()
+        if not control.is_loaded(event.account, jid):
             return
 
+        # TODO: last_msg_id does not work and needs to be refactored
         if event.marker_id != control.last_msg_id:
             return
 
