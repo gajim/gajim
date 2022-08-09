@@ -335,7 +335,9 @@ class MessageActionsBox(Gtk.Grid):
 
         if state:
             app.plugin_manager.extension_point(
-                f'encryption_state{state}', self, encryption_state)
+                f'encryption_state{state}',
+                app.window.get_control(),
+                encryption_state)
 
         visible, enc_type, authenticated = encryption_state.values()
         assert isinstance(visible, bool)
