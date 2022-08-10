@@ -76,7 +76,6 @@ class ConversationView(Gtk.ListBox):
         self._client = None
 
         self.encryption_enabled: bool = False
-        self._locked: bool = False
 
         # Keeps track of the number of rows shown in ConversationView
         self._row_count: int = 0
@@ -131,20 +130,10 @@ class ConversationView(Gtk.ListBox):
     def get_row_at_index(self, index: int) -> BaseRow:
         return cast(BaseRow, Gtk.ListBox.get_row_at_index(self, index))
 
-    def is_locked(self) -> bool:
-        return self._locked
-
-    def lock(self) -> None:
-        self._locked = True
-
-    def unlock(self) -> None:
-        self._locked = False
-
     def reset(self) -> None:
         for row in self.get_children()[2:]:
             row.destroy()
 
-        self.unlock()
         self._row_count = 0
         self._active_date_rows = set()
         self._message_id_row_map = {}

@@ -80,7 +80,7 @@ class ChatControl(EventHelper):
         self._scrolled_view.connect('autoscroll-changed',
                                     self._on_autoscroll_changed)
         self._scrolled_view.connect('request-history',
-                                    self.fetch_n_lines_history, 20)
+                                    self._fetch_n_lines_history, 20)
         self._ui.conv_view_overlay.add(self._scrolled_view)
 
         self.conversation_view = self._scrolled_view.get_view()
@@ -502,7 +502,7 @@ class ChatControl(EventHelper):
         row = self.conversation_view.get_row_by_log_line_id(log_line_id)
         if row is None:
             # Clear view and reload conversation around timestamp
-            self.conversation_view.lock()
+            self._scrolled_view.block_request_signal(True)
             self.reset_view()
             before, at_after = app.storage.archive.get_conversation_around(
                 self.contact.account, self.contact.jid, timestamp)
@@ -512,22 +512,21 @@ class ChatControl(EventHelper):
         GLib.idle_add(
             self.conversation_view.scroll_to_message_and_highlight,
             log_line_id)
-        GLib.idle_add(self.conversation_view.unlock)
+        GLib.idle_add(self._scrolled_view.block_request_signal, False)
 
-    def fetch_n_lines_history(self,
-                              _scrolled: Gtk.ScrolledWindow,
-                              before: bool,
-                              n_lines: int
-                              ) -> None:
+    def _fetch_n_lines_history(self,
+                               _scrolled: Gtk.ScrolledWindow,
+                               before: bool,
+                               n_lines: int
+                               ) -> None:
 
-        if self.conversation_view.is_locked():
-            return
+        self._scrolled_view.block_request_signal(True)
 
-        self.conversation_view.lock()
         if before:
             row = self.conversation_view.get_first_message_row()
         else:
             row = self.conversation_view.get_last_message_row()
+
         if row is None:
             timestamp = time.time()
         else:
@@ -542,7 +541,7 @@ class ChatControl(EventHelper):
 
         if not messages:
             self._scrolled_view.set_history_complete(before, True)
-            self.conversation_view.unlock()
+            self._scrolled_view.block_request_signal(False)
             return
 
         self.add_messages(messages)
@@ -554,7 +553,7 @@ class ChatControl(EventHelper):
         #    if self.conversation_view.reduce_message_count(before):
         #        self._scrolled_view.set_history_complete(before, False)
 
-        self.conversation_view.unlock()
+        self._scrolled_view.block_request_signal(False)
 
     def add_messages(self, messages: list[ConversationRow]):
         for msg in messages:
