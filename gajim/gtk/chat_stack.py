@@ -75,9 +75,15 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         box.add(self._chat_banner)
-        box.add(Gtk.Separator())
+        separator1 = Gtk.Separator()
+        separator1.set_margin_start(6)
+        separator1.set_margin_end(6)
+        box.add(separator1)
         box.add(self._control_stack)
-        box.add(Gtk.Separator())
+        separator2 = Gtk.Separator()
+        separator2.set_margin_start(6)
+        separator2.set_margin_end(6)
+        box.add(separator2)
         box.add(self._message_action_box)
 
         dnd_icon = Gtk.Image.new_from_icon_name(
