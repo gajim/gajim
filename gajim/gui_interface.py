@@ -398,13 +398,14 @@ class Interface:
                             path: Optional[str] = None,
                             method: Optional[str] = None
                             ) -> None:
+
         if method is None:
             method = self._get_pref_ft_method(contact)
             if method is None:
                 return
 
         control = app.window.get_control()
-        if control.has_active_chat():
+        if not control.has_active_chat():
             return
 
         if path is None:
