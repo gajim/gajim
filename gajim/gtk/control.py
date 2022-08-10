@@ -96,9 +96,6 @@ class ChatControl(EventHelper):
 
         self._ui.conv_view_box.add(self._roster)
 
-        # Keeps track of whether the ConversationView is populated
-        self._chat_loaded: bool = False
-
         # Used with encryption plugins
         self.sendmessage = False
 
@@ -346,8 +343,7 @@ class ChatControl(EventHelper):
         return app.nicks[self.contact.account]
 
     def _allow_add_message(self) -> bool:
-        # Only add messages if the view is already populated
-        return self._chat_loaded and self._scrolled_view.get_lower_complete()
+        return self._scrolled_view.get_lower_complete()
 
     def add_info_message(self, text: str) -> None:
         self.conversation_view.add_info_message(text)
@@ -496,14 +492,7 @@ class ChatControl(EventHelper):
                                 text=text,
                                 sound=sound))
 
-    def load_messages(self) -> None:
-        if self._chat_loaded:
-            return
-
-        self.fetch_n_lines_history(self._scrolled_view, True, 20)
-
     def reset_view(self) -> None:
-        self._chat_loaded = False
         self._scrolled_view.reset()
 
     def get_autoscroll(self) -> bool:
@@ -550,8 +539,6 @@ class ChatControl(EventHelper):
             before,
             timestamp,
             n_lines)
-
-        self._chat_loaded = True
 
         if not messages:
             self._scrolled_view.set_history_complete(before, True)
