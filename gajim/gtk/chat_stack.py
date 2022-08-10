@@ -584,11 +584,11 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         encryption = contact.settings.get('encryption')
         if encryption:
-            self.sendmessage = True
+            self._chat_control.sendmessage = True
             app.plugin_manager.extension_point(
                 'send_message' + encryption,
                 self._chat_control)
-            if not self.sendmessage:
+            if not self._chat_control.sendmessage:
                 return
 
         client = app.get_client(contact.account)

@@ -99,6 +99,9 @@ class ChatControl(EventHelper):
         # Keeps track of whether the ConversationView is populated
         self._chat_loaded: bool = False
 
+        # Used with encryption plugins
+        self.sendmessage = False
+
         # XEP-0333 Chat Markers
         self.last_msg_id: Optional[str] = None
 
