@@ -1,36 +1,44 @@
+from typing import Any
+
 import unittest
 
-from gajim import gui
-gui.init('gtk')
-import gajim.common.regex as regex
+from gajim.common.styling import URI_RX
+from gajim.common.styling import ADDRESS_RX
+
+
+TEST_URIS = [
+    'http://google.com/',
+    'http://google.com',
+    'http://www.google.ca/search?q=xmpp',
+    'http://tools.ietf.org/html/draft-saintandre-rfc3920bis-05#section-12.3',
+    'http://en.wikipedia.org/wiki/Protocol_(computing)',
+    'http://en.wikipedia.org/wiki/Protocol_%28computing%29',
+]
+
+ADDRESSES = [
+    'mailto:test@example.org',
+    'xmpp:example-node@example.com',
+    # 'xmpp:example-node@example.com/some-resource', FIXME
+    'xmpp:example-node@example.com?message',
+]
+
 
 class Test(unittest.TestCase):
     def test_links_regexp_entire(self):
-        def assert_matches_all(str_):
-            m = regex.BASIC_REGEX.match(str_)
+        def assert_matches_all(regex: Any, uri_str: str) -> None:
+            m = regex.match(uri_str)
+            if m is None:
+                raise AssertionError('Failed: %s' % uri_str)
 
-            # the match should equal the string
-            str_span = (0, len(str_))
-            self.assertEqual(m.span(), str_span)
+            str_span = (0, len(uri_str))
+            self.assertEqual(m.span(), str_span, uri_str)
 
-        # these entire strings should be parsed as links
-        assert_matches_all('http://google.com/')
-        assert_matches_all('http://google.com')
-        assert_matches_all('http://www.google.ca/search?q=xmpp')
+        for uri in TEST_URIS:
+            assert_matches_all(URI_RX, uri)
 
-        assert_matches_all('http://tools.ietf.org/html/draft-saintandre-rfc3920bis-05#section-12.3')
-
-        assert_matches_all('http://en.wikipedia.org/wiki/Protocol_(computing)')
-        assert_matches_all(
-                'http://en.wikipedia.org/wiki/Protocol_%28computing%29')
-
-        assert_matches_all('mailto:test@example.org')
-
-        assert_matches_all('xmpp:example-node@example.com')
-        assert_matches_all('xmpp:example-node@example.com/some-resource')
-        assert_matches_all('xmpp:example-node@example.com?message')
-        assert_matches_all('xmpp://guest@example.com/support@example.com?message')
+        for addr in ADDRESSES:
+            assert_matches_all(ADDRESS_RX, addr)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
