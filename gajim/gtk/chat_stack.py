@@ -313,7 +313,6 @@ class ChatStack(Gtk.Stack, EventHelper):
     def _connect_actions(self) -> None:
         actions = [
             'add-to-roster',
-            'clear-chat',
             'invite-contacts',
             'send-file',
             'send-file-httpupload',
@@ -364,7 +363,6 @@ class ChatStack(Gtk.Stack, EventHelper):
         app.window.get_action('input-italic').set_enabled(True)
         app.window.get_action('input-strike').set_enabled(True)
         app.window.get_action('input-clear').set_enabled(True)
-        app.window.get_action('clear-chat').set_enabled(True)
 
     def _update_chat_actions(self, contact: BareContact) -> None:
         account = contact.account
@@ -448,9 +446,6 @@ class ChatStack(Gtk.Stack, EventHelper):
                     contact.real_jid is not None):
                 jid = contact.real_jid
             open_window('AddContact', account=account, jid=jid)
-
-        elif action_name == 'clear-chat':
-            self._chat_control.reset_view()
 
         elif action_name == 'show-contact-info':
             if isinstance(contact, GroupchatContact):

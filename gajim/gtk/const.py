@@ -204,7 +204,6 @@ MAIN_WIN_ACTIONS = [
     ('add-to-roster', None, True),
     ('start-voice-call', None, False),
     ('start-video-call', None, False),
-    ('clear-chat', None, False),
     ('show-contact-info', None, False),
     ('send-message', None, False),
     ('muc-change-nickname', None, False),

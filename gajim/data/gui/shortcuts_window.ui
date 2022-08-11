@@ -130,13 +130,6 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
-                <property name="accelerator">&lt;primary&gt;l</property>
-                <property name="title" translatable="yes">Clear chat window</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;h</property>
                 <property name="title" translatable="yes">Open search bar</property>
               </object>

@@ -14,7 +14,6 @@
     "win.send-file": ["<Primary>F"],
     "win.show-contact-info": ["<Primary>I"],
     "win.show-emoji-chooser": ["<Primary><Shift>M"],
-    "win.clear-chat": ["<Primary>L"],
     "win.input-clear": ["<Primary>U"],
     "win.close-tab": ["<Primary>W"],
     "win.switch-next-tab": ["<Primary>Page_Down"],
