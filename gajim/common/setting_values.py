@@ -45,7 +45,6 @@ BoolSettings = Literal[
     'change_roster_title',
     'chat_merge_consecutive_nickname',
     'check_for_update',
-    'command_system_execute',
     'confirm_close_muc',
     'confirm_close_multiple_tabs',
     'confirm_on_window_delete',
@@ -191,7 +190,6 @@ APP_SETTINGS = {
     'chat_merge_consecutive_nickname': True,
     'chat_timestamp_format': '%H:%M',
     'check_for_update': True,
-    'command_system_execute': False,
     'confirm_block': '',
     'confirm_close_muc': True,
     'confirm_close_multiple_tabs': True,
@@ -647,9 +645,6 @@ ADVANCED_SETTINGS = {
             'if there are multiple messages from the same sender within a '
             'specific timespan.'),
         'chat_timestamp_format': 'https://docs.python.org/3/library/time.html#time.strftime',  # noqa: E501
-        'command_system_execute': _(
-            'If enabled, Gajim will execute commands '
-            '(/show, /sh, /execute, /exec).'),
         'confirm_block': _(
             'Show a confirmation dialog to block a contact? Empty string '
             'means never show the dialog.'),
