@@ -502,7 +502,7 @@ class ChatControl(EventHelper):
         row = self.conversation_view.get_row_by_log_line_id(log_line_id)
         if row is None:
             # Clear view and reload conversation around timestamp
-            self._scrolled_view.block_request_signal(True)
+            self._scrolled_view.block_signals(True)
             self.reset_view()
             before, at_after = app.storage.archive.get_conversation_around(
                 self.contact.account, self.contact.jid, timestamp)
@@ -512,7 +512,7 @@ class ChatControl(EventHelper):
         GLib.idle_add(
             self.conversation_view.scroll_to_message_and_highlight,
             log_line_id)
-        GLib.idle_add(self._scrolled_view.block_request_signal, False)
+        GLib.idle_add(self._scrolled_view.block_signals, False)
 
     def _fetch_n_lines_history(self,
                                _scrolled: Gtk.ScrolledWindow,
@@ -520,7 +520,7 @@ class ChatControl(EventHelper):
                                n_lines: int
                                ) -> None:
 
-        self._scrolled_view.block_request_signal(True)
+        self._scrolled_view.block_signals(True)
 
         if before:
             row = self.conversation_view.get_first_message_row()
@@ -541,7 +541,7 @@ class ChatControl(EventHelper):
 
         if not messages:
             self._scrolled_view.set_history_complete(before, True)
-            self._scrolled_view.block_request_signal(False)
+            self._scrolled_view.block_signals(False)
             return
 
         self.add_messages(messages)
@@ -553,7 +553,7 @@ class ChatControl(EventHelper):
         #    if self.conversation_view.reduce_message_count(before):
         #        self._scrolled_view.set_history_complete(before, False)
 
-        self._scrolled_view.block_request_signal(False)
+        self._scrolled_view.block_signals(False)
 
     def add_messages(self, messages: list[ConversationRow]):
         for msg in messages:
