@@ -86,7 +86,7 @@ from gajim.gui.menus import build_accounts_menu
 from gajim.gui.util import get_app_window
 from gajim.gui.util import get_app_windows
 from gajim.gui.util import get_color_for_account
-from gajim.gui.types import ControlT
+from gajim.gui.control import ChatControl
 from gajim.plugins.repository import PluginRepository
 
 log = logging.getLogger('gajim.interface')
@@ -305,7 +305,7 @@ class Interface:
             session.end_session()
 
     def send_httpupload(self,
-                        chat_control: ControlT,
+                        chat_control: ChatControl,
                         path: Optional[str] = None
                         ) -> None:
         if path is not None:
@@ -318,14 +318,14 @@ class Interface:
                           transient_for=app.window)
 
     def _on_file_dialog_ok(self,
-                           chat_control: ControlT,
+                           chat_control: ChatControl,
                            paths: list[str]
                            ) -> None:
         for path in paths:
             self._send_httpupload(chat_control, path)
 
-    def _send_httpupload(self, chat_control: ControlT, path: str) -> None:
-        client = app.get_client(chat_control.account)
+    def _send_httpupload(self, chat_control: ChatControl, path: str) -> None:
+        client = app.get_client(chat_control.contact.account)
         try:
             transfer = client.get_module('HTTPUpload').make_transfer(
                 path,
@@ -398,18 +398,19 @@ class Interface:
                             path: Optional[str] = None,
                             method: Optional[str] = None
                             ) -> None:
+
         if method is None:
             method = self._get_pref_ft_method(contact)
             if method is None:
                 return
 
-        current_control = app.window.get_active_control()
-        if current_control is None:
+        control = app.window.get_control()
+        if not control.has_active_chat():
             return
 
         if path is None:
             if method == 'httpupload':
-                self.send_httpupload(current_control)
+                self.send_httpupload(control)
                 return
             if method == 'jingle':
                 self.instances['file_transfers'].show_file_send_request(
@@ -417,7 +418,7 @@ class Interface:
             return
 
         if method == 'httpupload':
-            self.send_httpupload(current_control, path)
+            self.send_httpupload(control, path)
         else:
             assert isinstance(contact, BareContact)
             send_callback = partial(
@@ -457,14 +458,13 @@ class Interface:
                             jid: str,
                             message: Optional[str] = None
                             ) -> None:
+
         jid_ = JID.from_string(jid)
         if app.window.chat_exists(account, jid_):
             app.window.select_chat(account, jid_)
             if message is not None:
-                control = app.window.get_control(account, jid_)
-                if control is None:
-                    return
-                control.msg_textview.insert_text(message)
+                message_input = app.window.get_chat_stack().get_message_input()
+                message_input.insert_text(message)
             return
 
         # TODO: handle message arg in StartChat

@@ -19,7 +19,9 @@ from typing import Optional
 from gi.repository import Gtk
 from gi.repository import GObject
 
-from ..types import ConversationViewT
+from gajim.common.types import ChatContactT
+
+from .view import ConversationView
 
 
 class ScrolledView(Gtk.ScrolledWindow):
@@ -64,16 +66,34 @@ class ScrolledView(Gtk.ScrolledWindow):
         self._upper_complete: bool = False
         self._lower_complete: bool = False
         self._requesting: Optional[str] = None
+        self._block_request_signal = False
 
         vadjustment = self.get_vadjustment()
         vadjustment.connect('notify::upper', self._on_adj_upper_changed)
         vadjustment.connect('notify::value', self._on_adj_value_changed)
 
+        self._view = ConversationView()
+        self.add(self._view)
+        self.set_focus_vadjustment(Gtk.Adjustment())
+
+    def clear(self) -> None:
+        self._block_request_signal = True
+        self._view.clear()
+
+    def switch_contact(self, contact: ChatContactT) -> None:
+        self.reset()
+        self._view.switch_contact(contact)
+        self._block_request_signal = False
+        self.emit('request-history', True)
+
     def get_autoscroll(self) -> bool:
         return self._autoscroll
 
-    def get_view(self) -> ConversationViewT:
-        return self.get_child().get_child()
+    def get_view(self) -> ConversationView:
+        return self._view
+
+    def block_request_signal(self, value: bool) -> None:
+        self._block_request_signal = value
 
     def reset(self) -> None:
         self._current_upper = 0
@@ -81,12 +101,13 @@ class ScrolledView(Gtk.ScrolledWindow):
         self._upper_complete = False
         self._lower_complete = False
         self._requesting = None
+        self._view.reset()
         self.set_history_complete(True, False)
 
     def set_history_complete(self, before: bool, complete: bool) -> None:
         if before:
             self._upper_complete = complete
-            self.get_view().set_history_complete(complete)
+            self._view.set_history_complete(complete)
         else:
             self._lower_complete = complete
 
@@ -113,7 +134,8 @@ class ScrolledView(Gtk.ScrolledWindow):
 
         if upper == adj.get_page_size():
             # There is no scrollbar
-            self.emit('request-history', True)
+            if not self._block_request_signal:
+                self.emit('request-history', True)
             self._lower_complete = True
             self._autoscroll = True
             self.emit('autoscroll-changed', self._autoscroll)
@@ -156,7 +178,8 @@ class ScrolledView(Gtk.ScrolledWindow):
             self._request_history_at_upper = adj.get_upper()
             # Workaround: https://gitlab.gnome.org/GNOME/gtk/merge_requests/395
             self.set_kinetic_scrolling(False)
-            self.emit('request-history', True)
+            if not self._block_request_signal:
+                self.emit('request-history', True)
             self._requesting = 'before'
         elif (adj.get_upper() - (adj.get_value() + adj.get_page_size()) <
                 distance):
@@ -165,5 +188,6 @@ class ScrolledView(Gtk.ScrolledWindow):
                 return
             # Workaround: https://gitlab.gnome.org/GNOME/gtk/merge_requests/395
             self.set_kinetic_scrolling(False)
-            self.emit('request-history', False)
+            if not self._block_request_signal:
+                self.emit('request-history', False)
             self._requesting = 'after'

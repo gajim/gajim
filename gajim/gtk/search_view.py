@@ -307,8 +307,8 @@ class SearchView(Gtk.Box):
         self._ui.calendar.select_day(date.day)
 
     def _scroll_to_date(self, date: datetime) -> None:
-        control = app.window.get_active_control()
-        if control is None:
+        control = app.window.get_control()
+        if not control.has_active_chat():
             return
         if control.contact.jid == self._jid:
             meta_row = app.storage.archive.get_first_message_meta_for_date(
@@ -336,8 +336,8 @@ class SearchView(Gtk.Box):
 
     @staticmethod
     def _on_row_activated(_listbox: SearchView, row: ResultRow) -> None:
-        control = app.window.get_active_control()
-        if control is not None:
+        control = app.window.get_control()
+        if control.has_active_chat():
             if control.contact.jid == row.jid:
                 control.scroll_to_message(row.log_line_id, row.timestamp)
                 return
@@ -346,8 +346,8 @@ class SearchView(Gtk.Box):
         # TODO: type 'pm' is KindConstant.CHAT_MSG_RECV, too
         jid = JID.from_string(row.jid)
         app.window.add_chat(row.account, jid, row.type, select=True)
-        control = app.window.get_active_control()
-        if control is not None:
+        control = app.window.get_control()
+        if control.has_active_chat():
             control.scroll_to_message(row.log_line_id, row.timestamp)
 
     def set_focus(self) -> None:

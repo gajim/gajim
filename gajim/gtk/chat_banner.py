@@ -312,8 +312,9 @@ class ChatBanner(Gtk.Box, EventHelper):
         app.settings.set('hide_groupchat_occupants_list', not state)
 
     def _set_toggle_roster_button_icon(self,
-                                       show_roster: bool,
+                                       hide_roster: bool,
                                        *args: Any) -> None:
-        icon = 'go-next-symbolic' if show_roster else 'go-previous-symbolic'
+
+        icon = 'go-next-symbolic' if not hide_roster else 'go-previous-symbolic'
         self._ui.toggle_roster_image.set_from_icon_name(
             icon, Gtk.IconSize.BUTTON)

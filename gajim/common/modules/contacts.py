@@ -122,6 +122,56 @@ class Contacts(BaseModule):
         if state.is_disconnected:
             self._reset_presence()
 
+    def add_chat_contact(self, jid: Union[str, JID]) -> BareContact:
+        if isinstance(jid, str):
+            jid = JID.from_string(jid)
+
+        contact = self._contacts.get(jid)
+        if contact is not None:
+            if not isinstance(contact, BareContact):
+                raise ValueError(f'Trying to add GroupchatContact {jid}, '
+                                 f'but contact exists already as {contact}')
+            return contact
+
+        contact = BareContact(self._log, jid, self._account)
+
+        self._contacts[jid] = contact
+        return contact
+
+    def add_group_chat_contact(self, jid: Union[str, JID]) -> GroupchatContact:
+        if isinstance(jid, str):
+            jid = JID.from_string(jid)
+
+        contact = self._contacts.get(jid)
+        if contact is not None:
+            if not isinstance(contact, GroupchatContact):
+                raise ValueError(f'Trying to add GroupchatContact {jid}, '
+                                 f'but contact exists already as {contact}')
+            return contact
+
+        contact = GroupchatContact(self._log, jid, self._account)
+
+        self._contacts[jid] = contact
+        return contact
+
+    def add_private_contact(self, jid: Union[str, JID]) -> GroupchatParticipant:
+        if isinstance(jid, str):
+            jid = JID.from_string(jid)
+
+        if jid.resource is None:
+            raise ValueError(f'Trying to add a bare JID as private {jid}')
+
+        contact = self._contacts.get(jid.bare)
+        if not isinstance(contact, GroupchatContact):
+            raise ValueError(f'Trying to add GroupchatParticipant {jid}, '
+                             f'to BareContact {contact}')
+
+        if contact is None:
+            group_chat_contact = self.add_group_chat_contact(jid.bare)
+            return group_chat_contact.add_resource(jid.resource)
+
+        return contact.add_resource(jid.resource)
+
     def add_contact(self,
                     jid: Union[str, JID],
                     groupchat: bool = False) -> Union[BareContact,
@@ -597,6 +647,10 @@ class GroupchatContact(CommonContact):
         # codebase is type checked and it creates hard to track
         # problems if we create a GroupchatParticipant without resource
 
+        contact = self._resources.get(resource)
+        if contact is not None:
+            return contact
+
         jid = self._jid.new_with(resource=resource)
         assert isinstance(self._log, LogAdapter)
         contact = GroupchatParticipant(self._log, jid, self._account)
@@ -614,6 +668,11 @@ class GroupchatContact(CommonContact):
         if contact is None:
             contact = self.add_resource(resource)
         return contact
+
+    def get_participants(self) -> Iterator[GroupchatParticipant]:
+        for contact in self._resources.values():
+            if contact.is_available:
+                yield contact
 
     @property
     def name(self) -> str:
@@ -751,6 +810,10 @@ class GroupchatParticipant(CommonContact):
     @property
     def is_in_roster(self) -> bool:
         return False
+
+    @property
+    def room(self) -> GroupchatContact:
+        return self._module('Contacts').get_bare_contact(self.jid.bare)
 
     @property
     def presence(self) -> MUCPresenceData:

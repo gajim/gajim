@@ -40,7 +40,6 @@ from gajim.common.setting_values import AllSettings
 from .const import Setting
 from .const import SettingKind
 from .const import SettingType
-from .controls.groupchat import GroupchatControl
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
 from .emoji_chooser import emoji_chooser
@@ -53,8 +52,8 @@ from .util import open_window
 from .util import get_app_window
 from .builder import get_builder
 
-if app.is_installed('GSPELL'):
-    from gi.repository import Gspell  # pylint: disable=ungrouped-imports
+# if app.is_installed('GSPELL'):
+#     from gi.repository import Gspell  # pylint: disable=ungrouped-imports
 
 log = logging.getLogger('gajim.gui.preferences')
 
@@ -320,18 +319,20 @@ class Chats(PreferenceBox):
 
     @staticmethod
     def _on_use_speller(value: bool, *args: Any) -> None:
-        if not value:
-            return
+        # TODO
+        # if not value:
+        #     return
 
-        lang = app.settings.get('speller_language')
-        gspell_lang = Gspell.language_lookup(lang)
-        if gspell_lang is None:
-            gspell_lang = Gspell.language_get_default()
-        if gspell_lang is None:
-            return
-        app.settings.set('speller_language', gspell_lang.get_code())
-        for ctrl in app.window.get_controls():
-            ctrl.set_speller()
+        # lang = app.settings.get('speller_language')
+        # gspell_lang = Gspell.language_lookup(lang)
+        # if gspell_lang is None:
+        #     gspell_lang = Gspell.language_get_default()
+        # if gspell_lang is None:
+        #     return
+        # app.settings.set('speller_language', gspell_lang.get_code())
+        # for ctrl in app.window.get_controls():
+        #     ctrl.set_speller()
+        pass
 
     @staticmethod
     def _on_show_send_message_button(show_button: bool, *args: Any) -> None:
@@ -401,19 +402,13 @@ class GroupChats(PreferenceBox):
 
     @staticmethod
     def _on_sort_by_show_in_muc(_value: bool, *args: Any) -> None:
-        for ctrl in app.window.get_controls():
-            if ctrl.is_groupchat:
-                assert isinstance(ctrl, GroupchatControl)
-                if ctrl.roster is not None:
-                    ctrl.roster.invalidate_sort()
+        roster = app.window.get_control().get_group_chat_roster()
+        roster.invalidate_sort()
 
     @staticmethod
     def _on_show_status_in_roster(_value: bool, *args: Any) -> None:
-        for ctrl in app.window.get_controls():
-            if ctrl.is_groupchat:
-                assert isinstance(ctrl, GroupchatControl)
-                if ctrl.roster is not None:
-                    ctrl.roster.draw_contacts()
+        roster = app.window.get_control().get_group_chat_roster()
+        roster.draw_contacts()
 
     @staticmethod
     def _reset_join_left(button: Gtk.Button) -> None:
@@ -755,8 +750,10 @@ class Emoji(PreferenceBox):
 
     @staticmethod
     def _toggle_emoticons() -> None:
-        for ctrl in app.window.get_controls():
-            ctrl.toggle_emoticons()
+        # TODO
+        # for ctrl in app.window.get_controls():
+        #     ctrl.toggle_emoticons()
+        pass
 
 
 class Server(PreferenceBox):

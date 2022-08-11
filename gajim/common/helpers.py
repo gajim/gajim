@@ -1229,18 +1229,45 @@ class Observable:
         self._log = log_
         self._callbacks: types.ObservableCbDict = defaultdict(list)
 
-    def disconnect_signals(self) -> None:
-        self._callbacks = defaultdict(list)
+    def __disconnect(self,
+                     obj: Any,
+                     signals: Optional[set[str]] = None
+                     ) -> None:
 
-    def disconnect_all_from_obj(self, obj: Any) -> None:
-        for handlers in self._callbacks.values():
+        def _remove(handlers: list[weakref.WeakMethod[types.AnyCallableT]]
+                    ) -> None:
+
             for handler in list(handlers):
                 func = handler()
                 if func is None or func.__self__ is obj:
                     handlers.remove(handler)
 
+        if signals is None:
+            for handlers in self._callbacks.values():
+                _remove(handlers)
+
+        else:
+            for signal in signals:
+                _remove(self._callbacks.get(signal, []))
+
+    def disconnect_signals(self) -> None:
+        self._callbacks = defaultdict(list)
+
+    def multi_disconnect(self,
+                         obj: Any,
+                         signals: Optional[set[str]]
+                         ) -> None:
+
+        self.__disconnect(obj, signals)
+
+    def disconnect_all_from_obj(self, obj: Any) -> None:
+        self.__disconnect(obj)
+
     def disconnect(self, obj: Any) -> None:
         self.disconnect_all_from_obj(obj)
+
+    def disconnect_signal(self, obj: Any, signal: str) -> None:
+        self.__disconnect(obj, {signal})
 
     def connect_signal(self,
                        signal_name: str,

@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Callable
-from typing import Optional
 
 import sys
 import inspect
@@ -42,7 +41,7 @@ class OpenEventActionParams(VariantMixin):
 @dataclass
 class RemoveHistoryActionParams(VariantMixin):
     account: str
-    jid: Optional[JID] = None
+    jid: JID
 
 
 @dataclass

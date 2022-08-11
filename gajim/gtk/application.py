@@ -787,14 +787,14 @@ class GajimApplication(Gtk.Application, CoreApplication):
                                   params: structs.RemoveHistoryActionParams
                                   ) -> None:
         def _remove() -> None:
+            app.storage.archive.remove_history(params.account, params.jid)
+            control = app.window.get_control()
             if params.jid is not None:
-                app.storage.archive.remove_history(params.account, params.jid)
-                control = app.window.get_control(params.account, params.jid)
-                if control is not None:
-                    control.reset_view()
-            else:
-                for control in app.window.get_controls(params.account):
-                    control.reset_view()
+                if not control.is_loaded(params.account, params.jid):
+                    return
+
+            control.reset_view()
+
         ConfirmationDialog(
             _('Remove Chat History'),
             _('Remove Chat History?'),

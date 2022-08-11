@@ -36,7 +36,7 @@ from nbxmpp.structs import MucSubject
 from nbxmpp.protocol import JID
 
 from gajim.common import app
-from gajim.common.client import Client
+from gajim.common import types
 from gajim.common.events import JingleRequestReceived
 from gajim.common.events import FileRequestReceivedEvent
 from gajim.common.events import FileRequestSent
@@ -67,19 +67,15 @@ log = logging.getLogger('gajim.gui.conversation_view')
 
 
 class ConversationView(Gtk.ListBox):
-    def __init__(self, account: str, contact: ChatContactT) -> None:
+    def __init__(self) -> None:
         Gtk.ListBox.__init__(self)
         self.set_selection_mode(Gtk.SelectionMode.NONE)
         self.set_sort_func(self._sort_func)
-        self._account = account
-        self._client: Optional[Client] = None
-        if account is not None:
-            self._client = app.get_client(account)
-        self._contact = contact
+
+        self._contact = None
+        self._client = None
 
         self.encryption_enabled: bool = False
-        self.autoscroll: bool = True
-        self.locked: bool = False
 
         # Keeps track of the number of rows shown in ConversationView
         self._row_count: int = 0
@@ -91,45 +87,53 @@ class ConversationView(Gtk.ListBox):
         # message_id -> row mapping
         self._message_id_row_map: dict[str, MessageRow] = {}
 
+        self._read_marker_row = None
+        self._scroll_hint_row = None
+
+    @property
+    def contact(self) -> types.ChatContactT:
+        assert self._contact is not None
+        return self._contact
+
+    def clear(self) -> None:
+        self._contact = None
+        self._client = None
+
+        app.settings.disconnect_signals(self)
+
+        self.reset()
+
+    def switch_contact(self, contact: ChatContactT) -> None:
+        self._contact = contact
+        self._client = app.get_client(contact.account)
+
+        self.reset()
+
+        app.settings.disconnect_signals(self)
+
         app.settings.connect_signal('print_join_left',
                                     self._on_contact_setting_changed,
-                                    account=self._account,
-                                    jid=self._contact.jid)
+                                    account=contact.account,
+                                    jid=contact.jid)
 
         app.settings.connect_signal('print_status',
                                     self._on_contact_setting_changed,
-                                    account=self._account,
-                                    jid=self._contact.jid)
+                                    account=contact.account,
+                                    jid=contact.jid)
 
-        if self._contact is not None:
-            self._read_marker_row = ReadMarkerRow(self._account, self._contact)
-            self.add(self._read_marker_row)
+        self._read_marker_row = ReadMarkerRow(contact.account, contact)
+        self.add(self._read_marker_row)
 
-        self._scroll_hint_row = ScrollHintRow(self._account)
+        self._scroll_hint_row = ScrollHintRow(contact.account)
         self.add(self._scroll_hint_row)
-        self.connect('destroy', self._on_destroy)
 
     def get_row_at_index(self, index: int) -> BaseRow:
         return cast(BaseRow, Gtk.ListBox.get_row_at_index(self, index))
 
-    def _on_destroy(self, *args: Any) -> None:
-        app.check_finalize(self)
-
-    def lock(self) -> None:
-        self.locked = True
-
-    def unlock(self) -> None:
-        self.locked = False
-
-    def clear(self) -> None:
+    def reset(self) -> None:
         for row in self.get_children()[2:]:
-            if isinstance(row, ReadMarkerRow):
-                continue
             row.destroy()
 
-        self._reset_conversation_view()
-
-    def _reset_conversation_view(self) -> None:
         self._row_count = 0
         self._active_date_rows = set()
         self._message_id_row_map = {}
@@ -149,6 +153,8 @@ class ConversationView(Gtk.ListBox):
         return None
 
     def set_history_complete(self, complete: bool) -> None:
+        if self._scroll_hint_row is None:
+            return
         self._scroll_hint_row.set_history_complete(complete)
 
     @staticmethod
@@ -158,7 +164,7 @@ class ConversationView(Gtk.ListBox):
         return -1 if row1.timestamp < row2.timestamp else 1
 
     def add_muc_subject(self, subject: MucSubject) -> None:
-        muc_subject = MUCSubject(self._account, subject)
+        muc_subject = MUCSubject(self.contact.account, subject)
         self._insert_message(muc_subject)
 
     def add_muc_user_left(self,
@@ -169,7 +175,7 @@ class ConversationView(Gtk.ListBox):
         if not self._contact.settings.get('print_join_left'):
             return
         join_left = MUCJoinLeft('muc-user-left',
-                                self._account,
+                                self._contact.account,
                                 nick,
                                 reason=reason,
                                 error=error)
@@ -180,20 +186,20 @@ class ConversationView(Gtk.ListBox):
         if not self._contact.settings.get('print_join_left'):
             return
         join_left = MUCJoinLeft('muc-user-joined',
-                                self._account,
+                                self._contact.account,
                                 nick)
         self._insert_message(join_left)
 
     def add_user_status(self, name: str, show: str, status: str) -> None:
-        user_status = UserStatus(self._account, name, show, status)
+        user_status = UserStatus(self.contact.account, name, show, status)
         self._insert_message(user_status)
 
     def add_info_message(self, text: str) -> None:
-        message = InfoMessage(self._account, text)
+        message = InfoMessage(self.contact.account, text)
         self._insert_message(message)
 
     def add_file_transfer(self, transfer: HTTPFileTransfer) -> None:
-        transfer_row = FileTransferRow(self._account, transfer)
+        transfer_row = FileTransferRow(self.contact.account, transfer)
         self._insert_message(transfer_row)
 
     def add_jingle_file_transfer(self,
@@ -203,9 +209,13 @@ class ConversationView(Gtk.ListBox):
                                      None] = None,
                                  db_message: Optional[ConversationRow] = None
                                  ) -> None:
+
         assert isinstance(self._contact, BareContact)
         jingle_transfer_row = FileTransferJingleRow(
-            self._account, self._contact, event=event, db_message=db_message)
+            self._contact.account,
+            self._contact,
+            event=event,
+            db_message=db_message)
         self._insert_message(jingle_transfer_row)
 
     def add_call_message(self,
@@ -214,11 +224,15 @@ class ConversationView(Gtk.ListBox):
                          ) -> None:
         assert isinstance(self._contact, BareContact)
         call_row = CallRow(
-            self._account, self._contact, event=event, db_message=db_message)
+            self._contact.account,
+            self._contact,
+            event=event,
+            db_message=db_message)
         self._insert_message(call_row)
 
     def add_command_output(self, text: str, is_error: bool) -> None:
-        command_output_row = CommandOutputRow(self._account, text, is_error)
+        command_output_row = CommandOutputRow(
+            self.contact.account, text, is_error)
         self._insert_message(command_output_row)
 
     def add_message(self,
@@ -239,8 +253,8 @@ class ConversationView(Gtk.ListBox):
             timestamp = time.time()
 
         message_row = MessageRow(
-            self._account,
-            self._contact,
+            self.contact.account,
+            self.contact,
             message_id,
             stanza_id,
             timestamp,
@@ -258,6 +272,7 @@ class ConversationView(Gtk.ListBox):
             self._message_id_row_map[message_id] = message_row
 
         if kind == 'incoming':
+            assert self._read_marker_row is not None
             self._read_marker_row.set_last_incoming_timestamp(
                 message_row.timestamp)
         if (marker is not None and marker == 'displayed' and
@@ -270,6 +285,7 @@ class ConversationView(Gtk.ListBox):
         self.add(message)
         self._add_date_row(message.timestamp)
         self._check_for_merge(message)
+        assert self._read_marker_row is not None
 
         if message.kind == 'incoming':
             if message.timestamp > self._read_marker_row.timestamp:
@@ -282,7 +298,7 @@ class ConversationView(Gtk.ListBox):
         if start_of_day in self._active_date_rows:
             return
 
-        date_row = DateRow(self._account, start_of_day)
+        date_row = DateRow(self.contact.account, start_of_day)
         self._active_date_rows.add(start_of_day)
         self.add(date_row)
 
@@ -454,7 +470,7 @@ class ConversationView(Gtk.ListBox):
             return
 
         row.set_displayed()
-
+        assert self._read_marker_row is not None
         timestamp = row.timestamp + timedelta(microseconds=1)
         if self._read_marker_row.timestamp > timestamp:
             return
@@ -471,6 +487,7 @@ class ConversationView(Gtk.ListBox):
                         text: str,
                         nickname: Optional[str]
                         ) -> None:
+
         message_row = self._get_row_by_message_id(correct_id)
         if message_row is not None:
             message_row.set_correction(text, nickname)
@@ -497,6 +514,7 @@ class ConversationView(Gtk.ListBox):
                                     setting: str,
                                     _account: Optional[str],
                                     _jid: Optional[JID]) -> None:
+
         if setting == 'print_join_left':
             if value:
                 return

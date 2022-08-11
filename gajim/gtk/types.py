@@ -19,10 +19,7 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from .controls.base import BaseControl
-    from .controls.chat import ChatControl
-    from .controls.private import PrivateChatControl
-    from .controls.groupchat import GroupchatControl
+    from .control import ChatControl
     from .conversation.message_widget import MessageWidget  # noqa: F401
     from .conversation.view import ConversationView  # noqa: F401
     from .conversation.rows.call import CallRow  # noqa: F401
@@ -39,13 +36,6 @@ if TYPE_CHECKING:
     from .conversation.rows.scroll_hint import ScrollHintRow  # noqa: F401
 
 
-ControlT = Union[
-    'BaseControl',
-    'ChatControl',
-    'PrivateChatControl',
-    'GroupchatControl'
-]
-
-GroupchatControlT = Union['GroupchatControl']
+ControlT = Union['ChatControl']
 
 ConversationViewT = Union['ConversationView']

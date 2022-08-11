@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
-from typing import Generator
 from typing import Optional
 
 import logging
@@ -38,7 +37,6 @@ from gajim.common.const import SimpleClientState
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.modules.bytestream import is_transfer_active
-from gajim.gtk.const import MAIN_WIN_ACTIONS
 from gajim.plugins.pluginmanager import PluginManifest
 from gajim.plugins.repository import PluginRepository
 
@@ -48,10 +46,11 @@ from .workspace_side_bar import WorkspaceSideBar
 from .main_stack import MainStack
 from .call_window import CallWindow
 from .chat_list import ChatList
+from .chat_stack import ChatStack
+from .const import MAIN_WIN_ACTIONS
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
 from .dialogs import ConfirmationCheckDialog
-from .types import ControlT
 from .builder import get_builder
 from .util import get_app_window
 from .util import get_key_theme
@@ -162,6 +161,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         action = self.lookup_action(name)
         assert action is not None
         return action
+
+    def get_chat_stack(self) -> ChatStack:
+        return self._chat_page.get_chat_stack()
 
     def is_minimized(self) -> bool:
         if app.is_display(Display.WAYLAND):
@@ -409,8 +411,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         if action_name == 'escape' and chat_stack.process_escape():
             return None
 
-        control = self.get_active_control()
-        if control is not None:
+        control = self.get_control()
+        if control.has_active_chat():
             if action_name == 'change-nickname':
                 app.window.activate_action('muc-change-nickname', None)
                 return None
@@ -423,12 +425,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
             if action_name == 'escape':
                 if app.settings.get('escape_key_closes'):
-                    self._chat_page.remove_chat(control.account,
+                    self._chat_page.remove_chat(control.contact.account,
                                                 control.contact.jid)
                     return None
 
             elif action_name == 'close-tab':
-                self._chat_page.remove_chat(control.account,
+                self._chat_page.remove_chat(control.contact.account,
                                             control.contact.jid)
                 return None
 
@@ -487,12 +489,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                  _widget: Gtk.ApplicationWindow,
                                  _event: Gdk.EventMotion
                                  ) -> None:
-        control = self.get_active_control()
-        if control is None:
+        control = self.get_control()
+        if not control.has_active_chat():
             return
 
         if self.get_property('has-toplevel-focus'):
-            client = app.get_client(control.account)
+            client = app.get_client(control.contact.account)
             chat_stack = self._chat_page.get_chat_stack()
             msg_action_box = chat_stack.get_message_action_box()
             client.get_module('Chatstate').set_mouse_activity(
@@ -759,18 +761,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                         message: Optional[str] = None) -> None:
         self._app_page.add_app_message(category, message)
 
-    def get_control(self, account: str, jid: JID) -> Optional[ControlT]:
-        return self._chat_page.get_control(account, jid)
-
-    def get_controls(self, account: Optional[str] = None
-                     ) -> Generator[ControlT, None, None]:
-        return self._chat_page.get_controls(account)
-
-    def get_active_control(self) -> Optional[ControlT]:
-        return self._chat_page.get_active_control()
-
-    def is_chat_loaded(self, account: str, jid: JID) -> bool:
-        return self._chat_page.is_chat_loaded(account, jid)
+    def get_control(self) -> Any:
+        return self._chat_page.get_control()
 
     def chat_exists(self, account: str, jid: JID) -> bool:
         return self._chat_page.chat_exists(account, jid)
@@ -803,14 +795,19 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             account, jid, include_silent)
         return count or 0
 
-    def mark_as_read(self, account: str, jid: JID,
-                     send_marker: bool = True) -> None:
+    def mark_as_read(self,
+                     account: str,
+                     jid: JID,
+                     send_marker: bool = True
+                     ) -> None:
+
         set_urgency_hint(self, False)
-        control = self.get_control(account, jid)
-        if control is not None:
+        control = self.get_control()
+        if control.has_active_chat():
             # Send displayed marker and
             # reset jump to bottom button unread counter
             control.mark_as_read(send_marker=send_marker)
+
         # Reset chat list unread counter (emits unread-count-changed)
         chat_list_stack = self._chat_page.get_chat_list_stack()
         chat_list_stack.mark_as_read(account, jid)
@@ -824,12 +821,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             return
 
         set_urgency_hint(self, False)
-        control = self.get_active_control()
-        if control is None:
+        control = self.get_control()
+        if not control.has_active_chat():
             return
 
         if control.get_autoscroll():
-            self.mark_as_read(control.account, control.contact.jid)
+            self.mark_as_read(control.contact.account, control.contact.jid)
 
     @staticmethod
     def contact_info(account: str, jid: str) -> None:
@@ -938,10 +935,11 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         else:
             jid = event.jid
 
-        control = self.get_control(event.account, jid)
-        if control is None:
+        control = self.get_control()
+        if not control.is_loaded(event.account, jid):
             return
 
+        # TODO: last_msg_id does not work and needs to be refactored
         if event.marker_id != control.last_msg_id:
             return
 

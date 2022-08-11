@@ -26,6 +26,8 @@ from gajim.common import types
 from gajim.common.events import DisplayedReceived
 from gajim.common.events import ReadStateSync
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.structs import OutgoingMessage
 
 
@@ -112,23 +114,19 @@ class ChatMarkers(BaseModule):
     def _send_marker(self,
                      contact: types.ChatContactT,
                      marker: str,
-                     id_: str,
-                     type_: str) -> None:
+                     id_: str) -> None:
 
-        jid = contact.jid
-        if contact.is_pm_contact:
-            jid = contact.jid.new_as_bare()
-
-        if type_ in ('gc', 'pm'):
+        if isinstance(contact, (GroupchatContact, GroupchatParticipant)):
+            typ = 'groupchat'
             if not app.settings.get_group_chat_setting(
-                    self._account, jid, 'send_marker'):
+                    self._account, contact.jid.new_as_bare(), 'send_marker'):
                 return
         else:
+            typ = 'chat'
             if not app.settings.get_contact_setting(
-                    self._account, jid, 'send_marker'):
+                    self._account, contact.jid, 'send_marker'):
                 return
 
-        typ = 'groupchat' if type_ == 'gc' else 'chat'
         message = OutgoingMessage(account=self._account,
                                   contact=contact,
                                   message=None,
@@ -140,6 +138,6 @@ class ChatMarkers(BaseModule):
 
     def send_displayed_marker(self,
                               contact: types.ChatContactT,
-                              id_: str,
-                              type_: str) -> None:
-        self._send_marker(contact, 'displayed', id_, type_)
+                              id_: str) -> None:
+
+        self._send_marker(contact, 'displayed', id_)

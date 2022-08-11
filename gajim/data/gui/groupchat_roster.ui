@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkTreeStore" id="participant_store">
@@ -8,76 +8,66 @@
       <column type="CairoGObjectSurface"/>
       <!-- column-name Text -->
       <column type="gchararray"/>
-      <!-- column-name Event -->
-      <column type="gboolean"/>
       <!-- column-name IsContact -->
       <column type="gboolean"/>
       <!-- column-name GroupOrNickname -->
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkTreeView" id="roster_treeview">
+  <object class="GtkScrolledWindow" id="scrolled">
     <property name="visible">True</property>
-    <property name="can_focus">True</property>
-    <property name="model">participant_store</property>
-    <property name="headers_visible">False</property>
-    <property name="expander_column">expander</property>
-    <property name="search_column">1</property>
-    <signal name="button-press-event" handler="_on_roster_button_press_event" swapped="no"/>
-    <signal name="focus-out-event" handler="_on_focus_out" swapped="no"/>
-    <signal name="row-activated" handler="_on_roster_row_activated" swapped="no"/>
-    <child internal-child="selection">
-      <object class="GtkTreeSelection"/>
-    </child>
+    <property name="can-focus">True</property>
+    <property name="hscrollbar-policy">never</property>
     <child>
-      <object class="GtkTreeViewColumn" id="contact_column">
-        <property name="sizing">fixed</property>
-        <property name="fixed_width">210</property>
-        <property name="title">avatar</property>
-        <property name="expand">True</property>
+      <object class="GtkTreeView" id="roster_treeview">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="model">participant_store</property>
+        <property name="headers-visible">False</property>
+        <property name="expander-column">expander</property>
+        <property name="search-column">1</property>
+        <signal name="button-press-event" handler="_on_roster_button_press_event" swapped="no"/>
+        <signal name="focus-out-event" handler="_on_focus_out" swapped="no"/>
+        <signal name="query-tooltip" handler="_query_tooltip" swapped="no"/>
+        <signal name="row-activated" handler="_on_roster_row_activated" swapped="no"/>
         <child>
-          <object class="GtkCellRendererPixbuf" id="avatar_renderer">
-            <property name="width">40</property>
-            <property name="ypad">3</property>
-            <property name="xalign">0</property>
+          <object class="GtkTreeViewColumn" id="contact_column">
+            <property name="sizing">fixed</property>
+            <property name="fixed-width">210</property>
+            <property name="title">avatar</property>
+            <property name="expand">True</property>
+            <child>
+              <object class="GtkCellRendererPixbuf" id="avatar_renderer">
+                <property name="width">40</property>
+                <property name="ypad">3</property>
+                <property name="xalign">0</property>
+              </object>
+              <attributes>
+                <attribute name="visible">2</attribute>
+                <attribute name="surface">0</attribute>
+              </attributes>
+            </child>
+            <child>
+              <object class="GtkCellRendererText" id="text_renderer">
+                <property name="ellipsize">end</property>
+              </object>
+              <attributes>
+                <attribute name="markup">1</attribute>
+              </attributes>
+            </child>
           </object>
-          <attributes>
-            <attribute name="visible">3</attribute>
-            <attribute name="surface">0</attribute>
-          </attributes>
         </child>
         <child>
-          <object class="GtkCellRendererText" id="text_renderer">
-            <property name="ellipsize">end</property>
+          <object class="GtkTreeViewColumn" id="expander">
+            <property name="visible">False</property>
+            <property name="sizing">fixed</property>
+            <property name="title">expander</property>
           </object>
-          <attributes>
-            <attribute name="markup">1</attribute>
-          </attributes>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkTreeViewColumn" id="event_column">
-        <property name="sizing">fixed</property>
-        <property name="fixed_width">35</property>
-        <property name="title">event</property>
-        <child>
-          <object class="GtkCellRendererPixbuf" id="icon">
-            <property name="xalign">0</property>
-            <property name="icon_name">gajim-event</property>
-          </object>
-          <attributes>
-            <attribute name="visible">2</attribute>
-          </attributes>
         </child>
       </object>
     </child>
-    <child>
-      <object class="GtkTreeViewColumn" id="expander">
-        <property name="visible">False</property>
-        <property name="sizing">fixed</property>
-        <property name="title">expander</property>
-      </object>
-    </child>
+    <style>
+      <class name="groupchat-roster"/>
+    </style>
   </object>
 </interface>

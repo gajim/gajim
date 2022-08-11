@@ -210,11 +210,8 @@ class ChatBannerBuilder(Builder):
 
 class ChatControlBuilder(Builder):
     control_box: Gtk.Box
-    overlay: Gtk.Overlay
     conv_view_box: Gtk.Box
     conv_view_overlay: Gtk.Overlay
-    roster_revealer: Gtk.Revealer
-    drop_area: Gtk.Box
 
 
 class ChatListRowBuilder(Builder):
@@ -493,12 +490,11 @@ class GroupchatOutcastBuilder(Builder):
 
 class GroupchatRosterBuilder(Builder):
     participant_store: Gtk.TreeStore
+    scrolled: Gtk.ScrolledWindow
     roster_treeview: Gtk.TreeView
     contact_column: Gtk.TreeViewColumn
     avatar_renderer: Gtk.CellRendererPixbuf
     text_renderer: Gtk.CellRendererText
-    event_column: Gtk.TreeViewColumn
-    icon: Gtk.CellRendererPixbuf
     expander: Gtk.TreeViewColumn
 
 
