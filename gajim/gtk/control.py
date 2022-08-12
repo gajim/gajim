@@ -99,8 +99,6 @@ class ChatControl(EventHelper):
         # XEP-0333 Chat Markers
         self.last_msg_id: Optional[str] = None
 
-        self.encryption: Optional[str] = None
-
         self._subject_text_cache: dict[JID, str] = {}
 
         self.widget = cast(Gtk.Box, self._ui.get_object('control_box'))
@@ -147,7 +145,6 @@ class ChatControl(EventHelper):
 
         self._contact = None
         self._client = None
-        self.encryption = None
         self.last_msg_id = None
         self.reset_view()
         self._scrolled_view.clear()
@@ -171,8 +168,6 @@ class ChatControl(EventHelper):
         self._scrolled_view.switch_contact(contact)
         self._groupchat_state.switch_contact(contact)
         self._roster.switch_contact(contact)
-
-        self.encryption = self.get_encryption_state()
 
         self._register_events()
 
@@ -452,19 +447,6 @@ class ChatControl(EventHelper):
                 self.contact,
                 self.last_msg_id)
             self.last_msg_id = None
-
-    def set_encryption_state(self, encryption: Optional[str]) -> None:
-        self.encryption = encryption
-        self.contact.settings.set('encryption', self.encryption or '')
-
-    def get_encryption_state(self) -> Optional[str]:
-        state = self.contact.settings.get('encryption')
-        if not state:
-            return None
-        if state not in app.plugin_manager.encryption_plugins:
-            self.set_encryption_state(None)
-            return None
-        return state
 
     def _on_autoscroll_changed(self,
                                _widget: ScrolledView,

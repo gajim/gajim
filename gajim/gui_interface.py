@@ -326,10 +326,11 @@ class Interface:
 
     def _send_httpupload(self, chat_control: ChatControl, path: str) -> None:
         client = app.get_client(chat_control.contact.account)
+        encryption = chat_control.contact.settings.get('encryption') or None
         try:
             transfer = client.get_module('HTTPUpload').make_transfer(
                 path,
-                chat_control.encryption,
+                encryption,
                 chat_control.contact,
                 chat_control.is_groupchat)
         except exceptions.FileError as error:
