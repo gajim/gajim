@@ -120,11 +120,6 @@ class MessageActionsBox(Gtk.Grid):
 
         self._connect_actions()
 
-    def _get_encryption_state(self) -> tuple[bool, str]:
-        assert self._contact is not None
-        encryption = self._contact.settings.get('encryption')
-        return bool(encryption), encryption
-
     def get_current_contact(self) -> ChatContactT:
         assert self._contact is not None
         return self._contact
@@ -322,7 +317,6 @@ class MessageActionsBox(Gtk.Grid):
                 return
 
         self._set_encryption_state(new_state)
-        # self.conversation_view.encryption_enabled = encryption is not None
         contact = self.get_current_contact()
         contact.settings.set('encryption', new_state)
 
@@ -514,9 +508,10 @@ class MessageActionsBox(Gtk.Grid):
         send_message_action = app.window.get_action('send-message')
         send_message_action.set_enabled(has_text)
 
-        encryption_enabled, encryption_name = self._get_encryption_state()
+        assert self._contact is not None
+        encryption_name = self._contact.settings.get('encryption')
 
-        if has_text and encryption_enabled:
+        if has_text and encryption_name:
             app.plugin_manager.extension_point('typing' + encryption_name, self)
 
         assert self._contact

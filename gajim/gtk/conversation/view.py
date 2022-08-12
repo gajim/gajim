@@ -75,8 +75,6 @@ class ConversationView(Gtk.ListBox):
         self._contact = None
         self._client = None
 
-        self.encryption_enabled: bool = False
-
         # Keeps track of the number of rows shown in ConversationView
         self._row_count: int = 0
         self._max_row_count: int = 100
@@ -265,7 +263,6 @@ class ConversationView(Gtk.ListBox):
             display_marking=display_marking,
             marker=marker,
             error=error,
-            encryption_enabled=self.encryption_enabled,
             log_line_id=log_line_id)
 
         if message_id is not None:

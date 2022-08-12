@@ -74,7 +74,6 @@ class MessageRow(BaseRow):
                  display_marking: Optional[Displaymarking] = None,
                  marker: Optional[str] = None,
                  error: Union[CommonError, StanzaError, None] = None,
-                 encryption_enabled: bool = False,
                  log_line_id: Optional[int] = None) -> None:
 
         BaseRow.__init__(self, account)
@@ -144,8 +143,7 @@ class MessageRow(BaseRow):
 
         if kind in ('incoming', 'incoming_queue', 'outgoing'):
             if additional_data is not None:
-                encryption_img = self._get_encryption_image(
-                    additional_data, encryption_enabled)
+                encryption_img = self._get_encryption_image(additional_data)
                 if encryption_img:
                     self._meta_box.pack_start(encryption_img, False, True, 0)
 
@@ -344,12 +342,12 @@ class MessageRow(BaseRow):
 
     def _get_encryption_image(self,
                               additional_data: AdditionalDataDict,
-                              encryption_enabled: bool = False
                               ) -> Optional[Gtk.Image]:
+
         details = self._get_encryption_details(additional_data)
         if details is None:
             # Message was not encrypted
-            if not encryption_enabled:
+            if not self._contact.settings.get('encryption'):
                 return None
             icon = 'channel-insecure-symbolic'
             color = 'unencrypted-color'

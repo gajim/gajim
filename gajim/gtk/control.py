@@ -175,7 +175,6 @@ class ChatControl(EventHelper):
         self._roster.switch_contact(contact)
 
         self.encryption = self.get_encryption_state()
-        self.conversation_view.encryption_enabled = self.encryption is not None
 
         if isinstance(contact, GroupchatParticipant):
             contact.multi_connect({
@@ -293,7 +292,6 @@ class ChatControl(EventHelper):
 
     def set_encryption_state(self, encryption: Optional[str]) -> None:
         self.encryption = encryption
-        self.conversation_view.encryption_enabled = encryption is not None
         self.contact.settings.set('encryption', self.encryption or '')
 
     def get_encryption_state(self) -> Optional[str]:
