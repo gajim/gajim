@@ -54,7 +54,7 @@ def get_locale_dirs() -> Optional[list[Path]]:
     return [Path(dir_) for dir_ in data_dirs]
 
 
-def iter_locale_dirs() -> Iterator[Optional[str]]:
+def iter_locale_dirs() -> Iterator[Optional[Path]]:
     locale_dirs = get_locale_dirs()
     if locale_dirs is None:
         yield None
@@ -70,7 +70,7 @@ def iter_locale_dirs() -> Iterator[Optional[str]]:
             continue
         found_paths.append(locale_dir)
         if locale_dir.is_dir():
-            yield str(locale_dir)
+            yield locale_dir
 
 
 def get_win32_default_lang() -> str:

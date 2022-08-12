@@ -29,8 +29,7 @@ except KeyError:
     plugin_user_dir = Path.cwd()
 
 
-# python 3.7 gettext module does not support Path objects
-plugins_locale_dir = str(plugin_user_dir / 'locale')
+plugins_locale_dir = plugin_user_dir / 'locale'
 
 try:
     t = gettext.translation(DOMAIN, plugins_locale_dir)
