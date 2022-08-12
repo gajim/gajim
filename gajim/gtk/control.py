@@ -669,6 +669,9 @@ class ChatControl(EventHelper):
         if not event.message:
             return
 
+        if self.contact.is_groupchat:
+            return
+
         message_id = event.message_id
 
         if event.label:
