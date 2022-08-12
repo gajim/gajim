@@ -21,7 +21,6 @@ from gi.repository import Gtk
 
 import cairo
 
-from nbxmpp.protocol import JID
 from nbxmpp.structs import PresenceProperties
 
 from gajim.common import app
