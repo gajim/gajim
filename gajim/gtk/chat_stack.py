@@ -165,7 +165,7 @@ class ChatStack(Gtk.Stack, EventHelper):
         client = app.get_client(account)
         self._current_contact = client.get_module('Contacts').get_contact(jid)
 
-        self._chat_banner.switch_contact(account, jid)
+        self._chat_banner.switch_contact(self._current_contact)
         self._chat_control.switch_contact(self._current_contact)
         self._message_action_box.switch_contact(self._current_contact)
 

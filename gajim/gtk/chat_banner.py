@@ -80,24 +80,20 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._contact = None
         self._client = None
 
-    def switch_contact(self,
-                       account: str,
-                       jid: JID
-                       ) -> None:
-
-        self._update_account_badge(account)
+    def switch_contact(self, contact: types.ChatContactT) -> None:
+        self._update_account_badge(contact.account)
 
         if self._client is not None:
             self._client.disconnect_all_from_obj(self)
 
-        self._client = app.get_client(account)
+        self._client = app.get_client(contact.account)
         self._client.connect_signal('state-changed',
                                     self._on_client_state_changed)
 
         if self._contact is not None:
             self._contact.disconnect_all_from_obj(self)
 
-        self._contact = self._client.get_module('Contacts').get_contact(jid)
+        self._contact = contact
         self._contact.multi_connect({
             'chatstate-update': self._on_chatstate_update,
             'nickname-update': self._on_nickname_update,
@@ -221,7 +217,10 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._update_content()
 
     def _on_account_changed(self, event: AccountEnabled) -> None:
-        self._update_account_badge(event.account)
+        if self._contact is None:
+            return
+
+        self._update_account_badge(self._contact.account)
 
     def _on_message_received(self, event: MessageReceived) -> None:
         if not event.msgtxt:
