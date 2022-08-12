@@ -39,4 +39,4 @@ except OSError:
     _ = gettext.gettext
 
 if hasattr(locale, 'bindtextdomain'):
-    locale.bindtextdomain(DOMAIN, plugins_locale_dir)  # type: ignore
+    locale.bindtextdomain(DOMAIN, plugins_locale_dir)

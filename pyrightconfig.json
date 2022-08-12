@@ -4,6 +4,7 @@
     "typeCheckingMode": "strict",
     "reportImportCycles": "none",
     "reportImplicitStringConcatenation": "none",
+    "reportUnnecessaryTypeIgnoreComment": "error",
     "reportMissingModuleSource": "none",
     "exclude": [
         "**/__pycache__",

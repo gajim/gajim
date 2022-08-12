@@ -92,10 +92,10 @@ class CertificateBox(Gtk.Box):
             expires = datetime.strptime(after.decode('ascii'), '%Y%m%d%H%M%SZ')
             self._expires = expires.strftime('%c %Z')
 
-        sha1 = certificate.digest('sha1').decode('utf-8')  # type: ignore
+        sha1 = certificate.digest('sha1').decode('utf-8')
         self._sha1 = '%s\n%s' % (sha1[:29], sha1[30:])
 
-        sha256 = certificate.digest('sha256').decode('utf-8')  # type: ignore
+        sha256 = certificate.digest('sha256').decode('utf-8')
         self._sha256 = '%s\n%s\n%s\n%s' % (
             sha256[:23], sha256[24:47], sha256[48:71], sha256[72:])
 

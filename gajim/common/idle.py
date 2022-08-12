@@ -233,7 +233,7 @@ class Windows(IdleMonitor):
                 ('dwTime', ctypes.c_uint)
             ]
 
-        self.lastInputInfo = LastInputInfo()  # type: ignore
+        self.lastInputInfo = LastInputInfo()
         self.lastInputInfo.cbSize = ctypes.sizeof(self.lastInputInfo)
 
     def get_idle_sec(self) -> int:

@@ -96,7 +96,7 @@ class GroupchatConfig(Gtk.Box):
         self._ui.stack.set_visible_child_name('config')
 
     def _on_apply(self, button: Gtk.Button) -> None:
-        form = self._data_form_widget.get_submit_form()  # type: ignore
+        form = self._data_form_widget.get_submit_form()
 
         self._data_form_widget.set_sensitive(False)
 
