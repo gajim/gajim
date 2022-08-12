@@ -243,7 +243,7 @@ class ChatBanner(Gtk.Box, EventHelper):
         if kind == 'outgoing':
             return
 
-        if event.resource is not None:
+        if event.resource is not None and not self._contact.is_groupchat:
             resource_contact = self._contact.get_resource(event.resource)
             self._ui.phone_image.set_visible(resource_contact.is_phone)
 
