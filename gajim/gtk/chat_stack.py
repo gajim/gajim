@@ -14,6 +14,7 @@
 
 from __future__ import annotations
 
+from typing import Any
 from typing import Optional
 
 import sys
@@ -724,9 +725,10 @@ class ChatStack(Gtk.Stack, EventHelper):
         self._message_action_box.clear()
         self._chat_control.clear()
 
-    def process_event(self, event: events.MainEventT) -> None:
+    def process_event(self, event: Any) -> None:
         if isinstance(event, events.MucDiscoUpdate):
             self._on_muc_disco_update(event)
+
         if isinstance(event, events.MessageReceived):
             self._on_message_received(event)
 
