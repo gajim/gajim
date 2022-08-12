@@ -3,8 +3,8 @@
     "pythonVersion": "3.9",
     "typeCheckingMode": "strict",
     "reportImportCycles": "none",
-    "reportImplicitStringConcatenation": "none",
     "reportUnnecessaryTypeIgnoreComment": "error",
+    "reportPropertyTypeMismatch": "error",
     "reportMissingModuleSource": "none",
     "exclude": [
         "**/__pycache__",
