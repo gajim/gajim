@@ -21,7 +21,6 @@ from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.events import ApplicationEvent
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 from gajim.plugins.pluginmanager import PluginManifest
@@ -90,9 +89,6 @@ class AppPage(Gtk.Box):
     def remove_app_message(self) -> None:
         self._unread_count -= 1
         self.emit('unread-count-changed', self._unread_count)
-
-    def process_event(self, event: ApplicationEvent) -> None:
-        pass
 
 
 class AppMessageListBox(Gtk.ListBox):
