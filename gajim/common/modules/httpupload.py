@@ -24,6 +24,7 @@ import os
 import io
 from urllib.parse import urlparse
 import mimetypes
+from collections import defaultdict
 
 from nbxmpp.errors import StanzaError
 from nbxmpp.errors import MalformedStanzaError
@@ -69,7 +70,7 @@ class HTTPUpload(BaseModule):
         self._session.props.user_agent = f'Gajim {app.version}'
 
         self._running_transfers: dict[
-            tuple[str, str], set[HTTPFileTransfer]] = {}
+            tuple[str, JID], set[HTTPFileTransfer]] = defaultdict(set)
 
     def _set_proxy_if_available(self) -> None:
         proxy = get_account_proxy(self._account)
@@ -102,7 +103,7 @@ class HTTPUpload(BaseModule):
                               contact: types.ChatContactT
                               ) -> Optional[set[HTTPFileTransfer]]:
 
-        return self._running_transfers.get((contact.account, str(contact.jid)))
+        return self._running_transfers.get((contact.account, contact.jid))
 
     def make_transfer(self,
                       path: str,
@@ -148,22 +149,16 @@ class HTTPUpload(BaseModule):
                                     encryption,
                                     groupchat)
 
-        running_transfers = self._running_transfers.get(
-            (contact.account, str(contact.jid)))
-        if running_transfers is None:
-            self._running_transfers[
-                (contact.account, str(contact.jid))] = {transfer}
-        else:
-            running_transfers.add(transfer)
+        key = (contact.account, contact.jid)
+        self._running_transfers[key].add(transfer)
 
         return transfer
 
     def cancel_transfer(self, transfer: HTTPFileTransfer) -> None:
         transfer.set_cancelled()
-        transfer_set = self._running_transfers.get(
-            (transfer.account, str(transfer.contact.jid)))
-        if transfer_set is not None:
-            transfer_set.discard(transfer)
+
+        key = (transfer.account, transfer.contact.jid)
+        self._running_transfers[key].discard(transfer)
 
         message = self._queued_messages.get(id(transfer))
         if message is None:
@@ -285,12 +280,11 @@ class HTTPUpload(BaseModule):
                    message: Soup.Message,
                    transfer: HTTPFileTransfer
                    ) -> None:
+
         self._queued_messages.pop(id(transfer), None)
 
-        transfer_set = self._running_transfers.get(
-            (transfer.account, str(transfer.contact.jid)))
-        if transfer_set is not None:
-            transfer_set.discard(transfer)
+        key = (transfer.account, transfer.contact.jid)
+        self._running_transfers[key].discard(transfer)
 
         if message.props.status_code == Soup.Status.CANCELLED:
             self._log.info('Upload cancelled')
