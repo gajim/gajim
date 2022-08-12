@@ -37,6 +37,7 @@ from gajim.common import ged
 from gajim.common import configpaths
 from gajim.common import logging_helpers
 from gajim.common import passwords
+from gajim.common.commands import ChatCommands
 from gajim.common.dbus import logind
 from gajim.common.events import AccountDisonnected
 from gajim.common.events import AllowGajimUpdateCheck
@@ -68,6 +69,7 @@ class CoreApplication:
         app.settings.init()
 
         app.config = LegacyConfig()
+        app.commands = ChatCommands()
 
         app.storage.cache = CacheStorage()
         app.storage.cache.init()

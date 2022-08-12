@@ -121,17 +121,9 @@ class ChatActionProcessor(Gtk.Popover):
         self._buf.delete(start_iter, self._current_iter)
         self._buf.insert(start_iter, selected_action)
 
-    def _get_commands(self) -> list[str]:
-        # TODO
-        # commands: list[str] = []
-        # assert self._account
-        # assert self._contact
-        # control = app.window.get_control()
-        # for command in control.list_commands():
-        #     for name in command.names:
-        #         commands.append(name)
-        # return commands
-        return []
+    def _get_commands(self) -> list[tuple[str, str]]:
+        assert self._contact is not None
+        return app.commands.get_commands(self._contact.type_string)
 
     def _on_changed(self, _textview: MessageInputTextView) -> None:
         insert = self._buf.get_insert()
@@ -181,7 +173,7 @@ class ChatActionProcessor(Gtk.Popover):
         self._menu.remove_all()
         command_list = self._get_commands()
         num_entries = 0
-        for command in command_list:
+        for command, usage in command_list:
             if not command.startswith(action_text[1:]):
                 continue
             if num_entries >= MAX_ENTRIES:
@@ -189,7 +181,7 @@ class ChatActionProcessor(Gtk.Popover):
 
             action_data = GLib.Variant('s', f'/{command}')
             menu_item = Gio.MenuItem()
-            menu_item.set_label(f'/{command}')
+            menu_item.set_label(f'/{command} {usage}')
             menu_item.set_attribute_value('action-data', action_data)
             self._menu.append_item(menu_item)
             num_entries += 1

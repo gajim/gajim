@@ -22,6 +22,7 @@
         "gajim/common/application.py",
         "gajim/common/call_manager.py",
         "gajim/common/cert_store.py",
+        "gajim/common/commands.py",
         "gajim/common/configpaths.py",
         "gajim/common/const.py",
         "gajim/common/events.py",

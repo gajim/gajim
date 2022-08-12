@@ -63,6 +63,7 @@ if typing.TYPE_CHECKING:
     from gajim.common.call_manager import CallManager
     from gajim.common.preview import PreviewManager
     from gajim.common.task_manager import TaskManager
+    from gajim.common.commands import ChatCommands
 
 
 interface = cast(types.InterfaceT, None)
@@ -77,6 +78,7 @@ bob_cache: dict[str, bytes] = {}
 ipython_window = None
 app = None  # type: GajimApplication
 window = None  # type: MainWindow
+commands = None  # type: ChatCommands
 
 ged = ged_module.GlobalEventsDispatcher()  # Global Events Dispatcher
 plugin_manager = cast(types.PluginManagerT, None)  # Plugins Manager

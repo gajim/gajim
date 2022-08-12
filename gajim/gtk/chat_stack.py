@@ -76,6 +76,10 @@ class ChatStack(Gtk.Stack, EventHelper):
         self._chat_banner = ChatBanner()
         self._chat_control = ChatControl()
         self._message_action_box = MessageActionsBox()
+        self._message_action_box.connect('command-error',
+                                         self._on_command_error)
+        self._message_action_box.connect('command-not-found',
+                                         self._on_command_not_found)
 
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         box.add(self._chat_banner)
@@ -659,6 +663,9 @@ class ChatStack(Gtk.Stack, EventHelper):
     def _on_send_message(self) -> None:
         self._message_action_box.msg_textview.replace_emojis()
         message = self._message_action_box.msg_textview.get_text()
+        if message.startswith('//'):
+            # Escape sequence for chat commands
+            message = message[1:]
 
         contact = self._current_contact
         assert contact is not None
@@ -682,9 +689,6 @@ class ChatStack(Gtk.Stack, EventHelper):
         message = helpers.remove_invalid_xml_chars(message)
         if message in ('', None, '\n'):
             return
-
-        # if process_commands and self.process_as_command(message):
-        #     return
 
         label = self._message_action_box.get_seclabel()
 
@@ -733,6 +737,19 @@ class ChatStack(Gtk.Stack, EventHelper):
         self._chat_banner.clear()
         self._message_action_box.clear()
         self._chat_control.clear()
+
+    def _on_command_error(self,
+                          message_actions_box: MessageActionsBox,
+                          error: str) -> None:
+
+        self._chat_control.add_info_message(error)
+
+    def _on_command_not_found(self,
+                              message_actions_box: MessageActionsBox,
+                              error: str
+                              ) -> None:
+
+        self._chat_control.add_info_message(error)
 
 
 class ChatPlaceholderBox(Gtk.Box):

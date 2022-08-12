@@ -309,12 +309,20 @@ class CommonContact(Observable):
         return disco_info.supports(requested_feature)
 
     @property
+    def is_chat(self) -> bool:
+        return False
+
+    @property
     def is_groupchat(self) -> bool:
         return False
 
     @property
     def is_pm_contact(self) -> bool:
         return False
+
+    @property
+    def type_string(self) -> str:
+        raise NotImplementedError
 
     @property
     def is_jingle_available(self) -> bool:
@@ -558,6 +566,14 @@ class BareContact(CommonContact):
             return False
         return self.is_available
 
+    @property
+    def is_chat(self) -> bool:
+        return True
+
+    @property
+    def type_string(self) -> str:
+        return 'chat'
+
 
 class ResourceContact(CommonContact):
     def __init__(self, logger: LogAdapter, jid: JID, account: str) -> None:
@@ -631,6 +647,10 @@ class ResourceContact(CommonContact):
         self._presence = presence_data
         if notify:
             self.notify('presence-update')
+
+    @property
+    def type_string(self) -> str:
+        raise NotImplementedError
 
 
 class GroupchatContact(CommonContact):
@@ -791,6 +811,10 @@ class GroupchatContact(CommonContact):
         room = self.settings.get('notify_on_all_messages')
         return all_ or room
 
+    @property
+    def type_string(self) -> str:
+        return 'groupchat'
+
 
 class GroupchatParticipant(CommonContact):
     def __init__(self, logger: LogAdapter, jid: JID, account: str) -> None:
@@ -935,6 +959,10 @@ class GroupchatParticipant(CommonContact):
     def update_avatar(self, *args: Any) -> None:
         app.app.avatar_storage.invalidate_cache(self._jid)
         self.notify('user-avatar-update')
+
+    @property
+    def type_string(self) -> str:
+        return 'pm'
 
 
 def can_add_to_roster(contact: Union[BareContact,
