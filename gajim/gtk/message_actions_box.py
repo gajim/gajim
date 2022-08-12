@@ -37,6 +37,7 @@ from nbxmpp.protocol import JID
 from gajim.common import app
 from gajim.common import events
 from gajim.common import i18n
+from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.client import Client
 from gajim.common.const import SimpleClientState
@@ -65,9 +66,10 @@ if app.is_installed('GSPELL'):
 log = logging.getLogger('gajim.gui.messageactionsbox')
 
 
-class MessageActionsBox(Gtk.Grid):
+class MessageActionsBox(Gtk.Grid, ged.EventHelper):
     def __init__(self) -> None:
         Gtk.Grid.__init__(self)
+        ged.EventHelper.__init__(self)
 
         self._client: Optional[Client] = None
         self._contact: Optional[ChatContactT] = None
@@ -119,6 +121,10 @@ class MessageActionsBox(Gtk.Grid):
         self._ui.connect_signals(self)
 
         self._connect_actions()
+
+        self.register_events([
+            ('message-sent', ged.GUI2, self._on_message_sent)
+        ])
 
     def get_current_contact(self) -> ChatContactT:
         assert self._contact is not None
@@ -689,7 +695,3 @@ class MessageActionsBox(Gtk.Grid):
 
         self.msg_textview.get_style_context().remove_class(
             'gajim-msg-correcting')
-
-    def process_event(self, event: events.ApplicationEvent) -> None:
-        if isinstance(event, events.MessageSent):
-            self._on_message_sent(event)

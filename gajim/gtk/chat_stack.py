@@ -732,8 +732,6 @@ class ChatStack(Gtk.Stack, EventHelper):
         if isinstance(event, events.MessageReceived):
             self._on_message_received(event)
 
-        self._message_action_box.process_event(event)
-
 
 class ChatPlaceholderBox(Gtk.Box):
     def __init__(self):
