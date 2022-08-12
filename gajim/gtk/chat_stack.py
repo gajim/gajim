@@ -14,7 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Any
 from typing import Optional
 
 import sys
@@ -138,6 +137,11 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         self._connect_actions()
         self.show_all()
+
+        self.register_events([
+            ('message-received', 85, self._on_message_received),
+            ('muc-disco-update', 85, self._on_muc_disco_update),
+        ])
 
     def _get_current_contact(self) -> ChatContactT:
         assert self._current_contact is not None
@@ -305,14 +309,13 @@ class ChatStack(Gtk.Stack, EventHelper):
         self._update_group_chat_actions(contact)
 
     def _on_muc_disco_update(self, event: events.MucDiscoUpdate) -> None:
-        if self._current_contact is None:
+        if not isinstance(self._current_contact, GroupchatContact):
             return
 
         if event.jid != self._current_contact.jid:
             return
 
-        if isinstance(self._current_contact, GroupchatContact):
-            self._update_group_chat_actions(self._current_contact)
+        self._update_group_chat_actions(self._current_contact)
 
     def _on_message_received(self, event: events.MessageReceived) -> None:
         if not event.msgtxt or event.properties.is_sent_carbon:
@@ -724,13 +727,6 @@ class ChatStack(Gtk.Stack, EventHelper):
         self._chat_banner.clear()
         self._message_action_box.clear()
         self._chat_control.clear()
-
-    def process_event(self, event: Any) -> None:
-        if isinstance(event, events.MucDiscoUpdate):
-            self._on_muc_disco_update(event)
-
-        if isinstance(event, events.MessageReceived):
-            self._on_message_received(event)
 
 
 class ChatPlaceholderBox(Gtk.Box):

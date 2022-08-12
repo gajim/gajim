@@ -183,7 +183,6 @@ class ChatPage(Gtk.Box):
         self._ui.search_entry.set_text('')
 
     def process_event(self, event: ApplicationEvent):
-        self._chat_stack.process_event(event)
         self._chat_list_stack.process_event(event)
 
     def add_chat_list(self, workspace_id: str) -> None:
