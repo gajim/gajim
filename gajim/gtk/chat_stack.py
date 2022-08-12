@@ -14,11 +14,11 @@
 
 from __future__ import annotations
 
-from typing import Any
 from typing import Optional
 
 import sys
 import logging
+import time
 
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -31,8 +31,9 @@ from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import PresenceProperties
 
 from gajim.common import app
+from gajim.common import events
 from gajim.common import helpers
-from gajim.common.events import MucDiscoUpdate
+from gajim.common import preview_helpers
 from gajim.common.i18n import _
 from gajim.common.const import CallType
 from gajim.common.modules.contacts import BareContact
@@ -47,7 +48,9 @@ from .const import TARGET_TYPE_URI_LIST
 from .control import ChatControl
 from .message_actions_box import MessageActionsBox
 from .message_input import MessageInputTextView
-from .util import EventHelper, open_window
+from .util import EventHelper
+from .util import open_window
+from .util import set_urgency_hint
 
 log = logging.getLogger('gajim.gui.chatstack')
 
@@ -300,7 +303,7 @@ class ChatStack(Gtk.Stack, EventHelper):
                                      ) -> None:
         self._update_group_chat_actions(contact)
 
-    def _on_muc_disco_update(self, event: MucDiscoUpdate) -> None:
+    def _on_muc_disco_update(self, event: events.MucDiscoUpdate) -> None:
         if self._current_contact is None:
             return
 
@@ -309,6 +312,84 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         if isinstance(self._current_contact, GroupchatContact):
             self._update_group_chat_actions(self._current_contact)
+
+    def _on_message_received(self, event: events.MessageReceived) -> None:
+        if not event.msgtxt or event.properties.is_sent_carbon:
+            return
+
+        if app.window.is_chat_active(event.account, event.jid):
+            return
+
+        self._issue_notification(event)
+
+    def _issue_notification(self, event: events.MessageReceived) -> None:
+        text = event.msgtxt
+        tim = event.properties.timestamp
+        additional_data = event.additional_data
+        client = app.get_client(event.account)
+        contact = client.get_module('Contacts').get_contact(event.jid)
+
+        title = _('New message from')
+
+        is_previewable = app.preview_manager.is_previewable(
+            text, additional_data)
+        if is_previewable:
+            if text.startswith('geo:'):
+                text = _('Location')
+            else:
+                file_name = preview_helpers.filename_from_uri(text)
+                _icon, file_type = preview_helpers.guess_simple_file_type(text)
+                text = f'{file_type} ({file_name})'
+
+        sound: Optional[str] = None
+        msg_type = 'chat-message'
+        if isinstance(contact, BareContact):
+            msg_type = 'chat-message'
+            title += f' {contact.name}'
+            sound = 'first_message_received'
+            set_urgency_hint(app.window, True)
+
+        if isinstance(contact, GroupchatContact):
+            msg_type = 'group-chat-message'
+            title += f' {contact.nickname} ({contact.name})'
+            assert contact.nickname is not None
+            needs_highlight = helpers.message_needs_highlight(
+                text, contact.nickname, client.get_own_jid().bare)
+            if needs_highlight:
+                sound = 'muc_message_highlight'
+            else:
+                sound = 'muc_message_received'
+
+            if not contact.can_notify() and not needs_highlight:
+                return
+
+            if contact.can_notify() or needs_highlight:
+                set_urgency_hint(app.window, True)
+
+        if isinstance(contact, GroupchatParticipant):
+            msg_type = 'private-chat-message'
+            title += f' {contact.name} (private in {contact.room.name})'
+            sound = 'first_message_received'
+
+        # Is it a history message? Don't want sound-floods when we join.
+        if tim is not None and time.mktime(time.localtime()) - tim > 1:
+            sound = None
+
+        if app.settings.get('notification_preview_message'):
+            if text.startswith('/me') or text.startswith('/me\n'):
+                name = contact.name
+                if isinstance(contact, GroupchatContact):
+                    name = contact.nickname
+                text = f'* {name} {text[3:]}'
+
+        app.ged.raise_event(
+            events.Notification(account=contact.account,
+                                jid=contact.jid,
+                                type='incoming-message',
+                                sub_type=msg_type,
+                                title=title,
+                                text=text,
+                                sound=sound))
 
     def _connect_actions(self) -> None:
         actions = [
@@ -643,9 +724,12 @@ class ChatStack(Gtk.Stack, EventHelper):
         self._message_action_box.clear()
         self._chat_control.clear()
 
-    def process_event(self, event: Any) -> None:
-        if isinstance(event, MucDiscoUpdate):
+    def process_event(self, event: events.MainEventT) -> None:
+        if isinstance(event, events.MucDiscoUpdate):
             self._on_muc_disco_update(event)
+        if isinstance(event, events.MessageReceived):
+            self._on_message_received(event)
+
         self._chat_control.process_event(event)
         self._message_action_box.process_event(event)
 

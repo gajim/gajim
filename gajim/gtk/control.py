@@ -37,7 +37,6 @@ from gajim.common import app
 from gajim.common import events
 from gajim.common import helpers
 from gajim.common import types
-from gajim.common.helpers import message_needs_highlight
 from gajim.common.helpers import get_file_path_from_dnd_dropped_uri
 from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
@@ -49,14 +48,11 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.httpupload import HTTPFileTransfer
-from gajim.common.preview_helpers import filename_from_uri
-from gajim.common.preview_helpers import guess_simple_file_type
 from gajim.common.storage.archive import ConversationRow
 
 from gajim.gui.conversation.scrolled import ScrolledView
 from gajim.gui.conversation.jump_to_end_button import JumpToEndButton
 from gajim.gui.builder import get_builder
-from gajim.gui.util import set_urgency_hint
 from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.groupchat_roster import GroupchatRoster
@@ -367,7 +363,6 @@ class ChatControl(EventHelper):
                      kind: str,
                      name: str,
                      tim: float,
-                     notify: bool,
                      displaymarking: Optional[Displaymarking] = None,
                      msg_log_id: Optional[int] = None,
                      message_id: Optional[str] = None,
@@ -377,9 +372,6 @@ class ChatControl(EventHelper):
 
         if additional_data is None:
             additional_data = AdditionalDataDict()
-
-        chat_active = app.window.is_chat_active(
-            self.contact.account, self.contact.jid)
 
         if self._allow_add_message():
             self.conversation_view.add_message(
@@ -406,89 +398,6 @@ class ChatControl(EventHelper):
                 self.last_msg_id = stanza_id or message_id
             else:
                 self.last_msg_id = message_id
-
-        if kind == 'incoming':
-            if notify:
-                # Issue notification
-                self._notify(name, text, tim, additional_data)
-
-            if not chat_active and notify:
-                if isinstance(self._contact, GroupchatContact):
-                    assert self._contact.nickname is not None
-                    needs_highlight = message_needs_highlight(
-                        text,
-                        self._contact.nickname,
-                        self.client.get_own_jid().bare)
-                    if needs_highlight or self._contact.can_notify():
-                        set_urgency_hint(app.window, True)
-                else:
-                    set_urgency_hint(app.window, True)
-
-    def _notify(self,
-                name: str,
-                text: str,
-                tim: Optional[float],
-                additional_data: AdditionalDataDict
-                ) -> None:
-        if app.window.is_chat_active(self.contact.account, self.contact.jid):
-            if self._scrolled_view.get_autoscroll():
-                return
-
-        title = _('New message from %s') % name
-
-        is_previewable = app.preview_manager.is_previewable(
-            text, additional_data)
-        if is_previewable:
-            if text.startswith('geo:'):
-                text = _('Location')
-            else:
-                file_name = filename_from_uri(text)
-                _icon, file_type = guess_simple_file_type(text)
-                text = f'{file_type} ({file_name})'
-
-        sound: Optional[str] = None
-        msg_type = 'chat-message'
-        if self.is_chat:
-            msg_type = 'chat-message'
-            sound = 'first_message_received'
-
-        if isinstance(self._contact, GroupchatContact):
-            msg_type = 'group-chat-message'
-            title += f' ({self._contact.name})'
-            assert self._contact.nickname is not None
-            needs_highlight = message_needs_highlight(
-                text, self._contact.nickname, self.client.get_own_jid().bare)
-            if needs_highlight:
-                sound = 'muc_message_highlight'
-            else:
-                sound = 'muc_message_received'
-
-            if not self._contact.can_notify() and not needs_highlight:
-                return
-
-        if self.is_privatechat:
-            room_contact = self.client.get_module('Contacts').get_contact(
-                self.contact.jid.bare)
-            msg_type = 'private-chat-message'
-            title += f' (private in {room_contact.name})'
-            sound = 'first_message_received'
-
-        # Is it a history message? Don't want sound-floods when we join.
-        if tim is not None and time.mktime(time.localtime()) - tim > 1:
-            sound = None
-
-        if app.settings.get('notification_preview_message'):
-            if text.startswith('/me') or text.startswith('/me\n'):
-                text = f'* {name} {text[3:]}'
-
-        app.ged.raise_event(
-            events.Notification(account=self.contact.account,
-                                jid=self.contact.jid,
-                                type='incoming-message',
-                                sub_type=msg_type,
-                                title=title,
-                                text=text,
-                                sound=sound))
 
     def reset_view(self) -> None:
         self._scrolled_view.reset()
@@ -622,8 +531,7 @@ class ChatControl(EventHelper):
                                  contact=event.properties.muc_nickname,
                                  message_id=event.properties.id,
                                  stanza_id=event.stanza_id,
-                                 additional_data=event.additional_data,
-                                 notify=False)
+                                 additional_data=event.additional_data)
 
         else:
 
@@ -643,8 +551,7 @@ class ChatControl(EventHelper):
                              tim=event.properties.mam.timestamp,
                              message_id=event.properties.id,
                              stanza_id=event.stanza_id,
-                             additional_data=event.additional_data,
-                             notify=False)
+                             additional_data=event.additional_data)
 
     def _on_message_received(self, event: events.MessageReceived) -> None:
         if not event.msgtxt:
@@ -703,8 +610,7 @@ class ChatControl(EventHelper):
                     msg_log_id: Optional[int] = None,
                     stanza_id: Optional[str] = None,
                     message_id: Optional[str] = None,
-                    additional_data: Optional[AdditionalDataDict] = None,
-                    notify: bool = True
+                    additional_data: Optional[AdditionalDataDict] = None
                     ) -> None:
 
         if kind == 'incoming':
@@ -716,7 +622,6 @@ class ChatControl(EventHelper):
                           kind,
                           name,
                           tim,
-                          notify,
                           displaymarking=displaymarking,
                           msg_log_id=msg_log_id,
                           message_id=message_id,
@@ -856,7 +761,6 @@ class ChatControl(EventHelper):
                         message_id: Optional[str] = None,
                         stanza_id: Optional[str] = None,
                         additional_data: Optional[AdditionalDataDict] = None,
-                        notify: bool = True
                         ) -> None:
 
         assert isinstance(self._contact, GroupchatContact)
@@ -871,7 +775,6 @@ class ChatControl(EventHelper):
                           kind,
                           contact,
                           tim,
-                          notify,
                           displaymarking=displaymarking,
                           message_id=message_id,
                           stanza_id=stanza_id,
