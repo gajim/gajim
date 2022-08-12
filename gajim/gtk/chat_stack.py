@@ -41,6 +41,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.structs import OutgoingMessage
 from gajim.common.types import ChatContactT
+from gajim.gui.dialogs import ErrorDialog
 
 from .chat_banner import ChatBanner
 from .chat_function_page import ChatFunctionPage
@@ -664,6 +665,11 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         encryption = contact.settings.get('encryption')
         if encryption:
+            if encryption not in app.plugin_manager.encryption_plugins:
+                ErrorDialog(_('Encryption error'),
+                            _('Missing necessary encryption plugin'))
+                return
+
             self._chat_control.sendmessage = True
             app.plugin_manager.extension_point(
                 'send_message' + encryption,
