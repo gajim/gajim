@@ -46,6 +46,7 @@ if typing.TYPE_CHECKING:
 
 MainEventT = Union['PresenceReceived',
                    'MessageSent',
+                   'MessageReceived',
                    'MamMessageReceived',
                    'GcMessageReceived',
                    'MessageUpdated',
