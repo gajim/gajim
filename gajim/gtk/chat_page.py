@@ -26,7 +26,6 @@ from gi.repository import GObject
 from nbxmpp import JID
 
 from gajim.common import app
-from gajim.common.events import ApplicationEvent
 
 from .builder import get_builder
 from .chat_filter import ChatFilter
@@ -181,9 +180,6 @@ class ChatPage(Gtk.Box):
                                                   'name')
         self._ui.workspace_label.set_text(name)
         self._ui.search_entry.set_text('')
-
-    def process_event(self, event: ApplicationEvent):
-        self._chat_list_stack.process_event(event)
 
     def add_chat_list(self, workspace_id: str) -> None:
         self._chat_list_stack.add_chat_list(workspace_id)

@@ -15,14 +15,12 @@
 from __future__ import annotations
 
 from typing import Union
-from typing import cast
 
 from nbxmpp.protocol import JID
 
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.events import ApplicationEvent
 
 from .app_page import AppPage
 from .chat_list import ChatList
@@ -87,18 +85,6 @@ class MainStack(Gtk.Stack):
         chat_page = self.get_child_by_name('chats')
         assert isinstance(chat_page, ChatPage)
         return chat_page
-
-    def process_event(self, event: ApplicationEvent) -> None:
-        empty_box = self.get_child_by_name('empty')
-        pages = cast(list[PageT], self.get_children())
-        for page in pages:
-            if page is empty_box:
-                continue
-
-            if isinstance(page, AccountPage):
-                continue
-
-            page.process_event(event)
 
     def _on_chat_selected(self,
                           _chat_list: ChatList,

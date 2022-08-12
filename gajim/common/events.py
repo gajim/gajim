@@ -44,20 +44,17 @@ if typing.TYPE_CHECKING:
     from gajim.plugins.pluginmanager import PluginManifest
 
 
-MainEventT = Union['PresenceReceived',
-                   'MessageSent',
-                   'MessageReceived',
-                   'MamMessageReceived',
-                   'GcMessageReceived',
-                   'MessageUpdated',
-                   'ReceiptReceived',
-                   'DisplayedReceived',
-                   'MessageError',
-                   'MucDiscoUpdate',
-                   'JingleConnectedReceived',
-                   'JingleDisconnectedReceived',
-                   'JingleErrorReceived',
-                   'FileRequestSent']
+ChatListEventT = Union[
+    'MessageReceived',
+    'MamMessageReceived',
+    'GcMessageReceived',
+    'MessageUpdated',
+    'MessageModerated',
+    'PresenceReceived',
+    'MessageSent',
+    'JingleRequestReceived',
+    'FileRequestReceivedEvent'
+]
 
 
 @dataclass

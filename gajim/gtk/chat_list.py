@@ -366,7 +366,7 @@ class ChatList(Gtk.ListBox, EventHelper):
         for _key, row in self._chats.items():
             row.update_time()
 
-    def process_event(self, event: events.ApplicationEvent) -> None:
+    def process_event(self, event: events.ChatListEventT) -> None:
         if isinstance(event, (events.MessageReceived,
                               events.MamMessageReceived,
                               events.GcMessageReceived)):
@@ -381,7 +381,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             self._on_message_sent(event)
         elif isinstance(event, events.JingleRequestReceived):
             self._on_jingle_request_received(event)
-        elif isinstance(event, events.FileRequestReceivedEvent):
+        elif isinstance(event, events.FileRequestReceivedEvent):  # pyright: ignore [reportUnnecessaryIsInstance] # noqa
             self._on_file_request_received(event)
         else:
             log.warning('Unhandled Event: %s', event.name)

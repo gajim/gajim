@@ -27,6 +27,8 @@ from nbxmpp import JID
 
 from gajim.common import app
 from gajim.common import events
+from gajim.common import ged
+from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 
 from . import structs
@@ -37,20 +39,7 @@ from .dialogs import DialogButton
 from .dialogs import ConfirmationCheckDialog
 
 
-HANDLED_EVENTS = (
-    events.MessageReceived,
-    events.MamMessageReceived,
-    events.GcMessageReceived,
-    events.MessageUpdated,
-    events.MessageModerated,
-    events.PresenceReceived,
-    events.MessageSent,
-    events.JingleRequestReceived,
-    events.FileRequestReceivedEvent
-)
-
-
-class ChatListStack(Gtk.Stack):
+class ChatListStack(Gtk.Stack, EventHelper):
 
     __gsignals__ = {
         'unread-count-changed': (GObject.SignalFlags.RUN_LAST,
@@ -72,6 +61,7 @@ class ChatListStack(Gtk.Stack):
                  search_entry: Gtk.SearchEntry
                  ) -> None:
         Gtk.Stack.__init__(self)
+        EventHelper.__init__(self)
         self.set_hexpand(True)
         self.set_vexpand(True)
         self.set_vhomogeneous(False)
@@ -88,6 +78,18 @@ class ChatListStack(Gtk.Stack):
 
         self._add_actions()
         self.show_all()
+
+        self.register_events([
+            ('message-received', ged.GUI2, self._on_event),
+            ('mam-message-received', ged.GUI2, self._on_event),
+            ('gc-message-received', ged.GUI2, self._on_event),
+            ('message-updated', ged.GUI2, self._on_event),
+            ('message-moderated', ged.GUI2, self._on_event),
+            ('presence-received', ged.GUI2, self._on_event),
+            ('message-sent', ged.GUI2, self._on_event),
+            ('file-request-received', ged.GUI2, self._on_event),
+            ('jingle-request-received', ged.GUI2, self._on_event),
+        ])
 
     def _add_actions(self) -> None:
         actions = [
@@ -332,10 +334,7 @@ class ChatListStack(Gtk.Stack):
         for chat_list in self._chat_lists.values():
             chat_list.mark_as_read(account, jid)
 
-    def process_event(self, event: events.ApplicationEvent) -> None:
-        if not isinstance(event, HANDLED_EVENTS):
-            return
-
+    def _on_event(self, event: events.ChatListEventT) -> None:
         jid = JID.from_string(event.jid)
 
         chat_list = self.find_chat(event.account, jid)

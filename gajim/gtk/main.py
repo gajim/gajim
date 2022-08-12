@@ -109,23 +109,11 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.connect_signals(self)
 
         self.register_events([
-            ('presence-received', ged.GUI1, self._on_event),
-            ('message-sent', ged.GUI1, self._on_event),
-            ('message-received', ged.CORE, self._on_message_received),
-            ('mam-message-received', ged.CORE, self._on_event),
-            ('gc-message-received', ged.CORE, self._on_event),
-            ('message-updated', ged.CORE, self._on_event),
-            ('message-moderated', ged.CORE, self._on_event),
-            ('receipt-received', ged.GUI1, self._on_event),
-            ('displayed-received', ged.GUI1, self._on_event),
+            ('message-received', ged.GUI1, self._on_message_received),
             ('read-state-sync', ged.GUI1, self._on_read_state_sync),
-            ('message-error', ged.GUI1, self._on_event),
-            ('muc-disco-update', ged.GUI1, self._on_event),
             ('call-started', ged.GUI1, self._on_call_started),
-            ('call-stopped', ged.GUI1, self._on_event),
             ('jingle-request-received', ged.GUI1, self._on_jingle_request),
             ('file-request-received', ged.GUI1, self._on_file_request),
-            ('file-request-sent', ged.GUI1, self._on_event),
             ('account-enabled', ged.GUI1, self._on_account_enabled),
             ('account-disabled', ged.GUI1, self._on_account_disabled),
             ('allow-gajim-update-check', ged.GUI1, self._on_allow_gajim_update),
@@ -907,12 +895,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._set_startup_finished()
 
-    def _on_event(self, event: events.MainEventT) -> None:
-        if not self.chat_exists(event.account, event.jid):
-            return
-
-        self._main_stack.process_event(event)
-
     def _on_message_received(self, event: events.MessageReceived) -> None:
         if not self.chat_exists(event.account, event.jid):
             if not event.properties.body:
@@ -926,8 +908,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             else:
                 jid = event.properties.jid.new_as_bare()
                 self.add_chat(event.account, jid, 'contact')
-
-        self._main_stack.process_event(event)
 
     def _on_read_state_sync(self, event: events.ReadStateSync) -> None:
         if event.is_muc_pm:
@@ -960,13 +940,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 self.add_chat(event.account, event.jid, 'contact')
                 break
 
-        self._main_stack.process_event(event)
-
     def _on_file_request(self, event: events.FileRequestReceivedEvent) -> None:
         if not self.chat_exists(event.account, event.jid):
             self.add_chat(event.account, event.jid, 'contact')
-
-        self._main_stack.process_event(event)
 
     def quit(self) -> None:
         save_main_window_position()
