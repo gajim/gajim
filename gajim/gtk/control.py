@@ -200,6 +200,12 @@ class ChatControl(EventHelper):
 
         self._client.get_module('Chatstate').set_active(contact)
 
+        transfers = self._client.get_module('HTTPUpload').get_running_transfers(
+            contact)
+        if transfers is not None:
+            for transfer in transfers:
+                self.add_file_transfer(transfer)
+
     def process_event(self, event: events.MainEventT) -> None:
         if self._contact is None:
             return

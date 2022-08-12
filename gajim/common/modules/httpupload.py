@@ -68,6 +68,9 @@ class HTTPUpload(BaseModule):
         self._session.props.ssl_strict = False
         self._session.props.user_agent = f'Gajim {app.version}'
 
+        self._running_transfers: dict[
+            tuple[str, str], set[HTTPFileTransfer]] = {}
+
     def _set_proxy_if_available(self) -> None:
         proxy = get_account_proxy(self._account)
         if proxy is None:
@@ -94,6 +97,12 @@ class HTTPUpload(BaseModule):
             size = GLib.format_size_full(int(self.max_file_size),
                                          GLib.FormatSizeFlags.IEC_UNITS)
             self._log.info('Component has a maximum file size of: %s', size)
+
+    def get_running_transfers(self,
+                              contact: types.ChatContactT
+                              ) -> Optional[set[HTTPFileTransfer]]:
+
+        return self._running_transfers.get((contact.account, str(contact.jid)))
 
     def make_transfer(self,
                       path: str,
@@ -132,15 +141,30 @@ class HTTPUpload(BaseModule):
             mime = 'application/octet-stream'  # fallback mime type
         self._log.info('Detected MIME type of file: %s', mime)
 
-        return HTTPFileTransfer(self._account,
-                                path,
-                                contact,
-                                mime,
-                                encryption,
-                                groupchat)
+        transfer = HTTPFileTransfer(self._account,
+                                    path,
+                                    contact,
+                                    mime,
+                                    encryption,
+                                    groupchat)
+
+        running_transfers = self._running_transfers.get(
+            (contact.account, str(contact.jid)))
+        if running_transfers is None:
+            self._running_transfers[
+                (contact.account, str(contact.jid))] = {transfer}
+        else:
+            running_transfers.add(transfer)
+
+        return transfer
 
     def cancel_transfer(self, transfer: HTTPFileTransfer) -> None:
         transfer.set_cancelled()
+        transfer_set = self._running_transfers.get(
+            (transfer.account, str(transfer.contact.jid)))
+        if transfer_set is not None:
+            transfer_set.discard(transfer)
+
         message = self._queued_messages.get(id(transfer))
         if message is None:
             return
@@ -262,6 +286,11 @@ class HTTPUpload(BaseModule):
                    transfer: HTTPFileTransfer
                    ) -> None:
         self._queued_messages.pop(id(transfer), None)
+
+        transfer_set = self._running_transfers.get(
+            (transfer.account, str(transfer.contact.jid)))
+        if transfer_set is not None:
+            transfer_set.discard(transfer)
 
         if message.props.status_code == Soup.Status.CANCELLED:
             self._log.info('Upload cancelled')
