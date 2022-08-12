@@ -21,7 +21,6 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
-from gajim.common.events import ApplicationEvent
 from gajim.common.events import SubscribePresenceReceived
 from gajim.common.events import UnsubscribedPresenceReceived
 from gajim.common.events import MucInvitation
@@ -151,6 +150,3 @@ class AccountPage(Gtk.Box, EventHelper):
         if event.account != self._account:
             return
         self._notification_manager.add_invitation_declined(event)
-
-    def process_event(self, event: ApplicationEvent) -> None:
-        self._roster.process_event(event)

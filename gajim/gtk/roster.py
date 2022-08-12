@@ -56,8 +56,6 @@ from .util import open_window
 log = logging.getLogger('gajim.gui.roster')
 
 
-HANDLED_EVENTS = []
-
 DEFAULT_GROUP = _('Contacts')
 
 
@@ -726,10 +724,6 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._contact_refs.clear()
         self._group_refs.clear()
         self._store.clear()
-
-    def process_event(self, event: ApplicationEvent) -> None:
-        if event.name not in HANDLED_EVENTS:
-            return
 
     def _on_destroy(self, _roster: Roster) -> None:
         app.settings.disconnect_signals(self)

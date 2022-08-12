@@ -94,6 +94,10 @@ class MainStack(Gtk.Stack):
         for page in pages:
             if page is empty_box:
                 continue
+
+            if isinstance(page, AccountPage):
+                continue
+
             page.process_event(event)
 
     def _on_chat_selected(self,
