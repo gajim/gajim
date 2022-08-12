@@ -141,11 +141,10 @@ class MessageRow(BaseRow):
         timestamp_label = self.create_timestamp_widget(self.timestamp)
         self._meta_box.pack_start(timestamp_label, False, True, 0)
 
-        if kind in ('incoming', 'incoming_queue', 'outgoing'):
-            if additional_data is not None:
-                encryption_img = self._get_encryption_image(additional_data)
-                if encryption_img:
-                    self._meta_box.pack_start(encryption_img, False, True, 0)
+        if additional_data is not None:
+            encryption_img = self._get_encryption_image(additional_data)
+            if encryption_img:
+                self._meta_box.pack_start(encryption_img, False, True, 0)
 
         if display_marking and app.settings.get_account_setting(
                 account, 'enable_security_labels'):
