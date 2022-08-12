@@ -114,6 +114,9 @@ class EventHelper:
     def __init__(self):
         self.__event_handlers: list[EventHandlerT] = []
 
+    def has_events_registered(self) -> bool:
+        return bool(self.__event_handlers)
+
     def register_event(self,
                        event_name: str,
                        priority: int,

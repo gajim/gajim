@@ -732,7 +732,6 @@ class ChatStack(Gtk.Stack, EventHelper):
         if isinstance(event, events.MessageReceived):
             self._on_message_received(event)
 
-        self._chat_control.process_event(event)
         self._message_action_box.process_event(event)
 
 

@@ -35,6 +35,7 @@ from nbxmpp.modules.security_labels import Displaymarking
 
 from gajim.common import app
 from gajim.common import events
+from gajim.common import ged
 from gajim.common import helpers
 from gajim.common import types
 from gajim.common.helpers import get_file_path_from_dnd_dropped_uri
@@ -152,6 +153,7 @@ class ChatControl(EventHelper):
         self._scrolled_view.clear()
         self._groupchat_state.clear()
         self._roster.clear()
+        self.unregister_events()
 
     def switch_contact(self, contact: Union[BareContact,
                                             GroupchatContact,
@@ -171,6 +173,8 @@ class ChatControl(EventHelper):
         self._roster.switch_contact(contact)
 
         self.encryption = self.get_encryption_state()
+
+        self._register_events()
 
         if isinstance(contact, GroupchatParticipant):
             contact.multi_connect({
@@ -206,66 +210,226 @@ class ChatControl(EventHelper):
             for transfer in transfers:
                 self.add_file_transfer(transfer)
 
-    def process_event(self, event: events.MainEventT) -> None:
-        if self._contact is None:
+    def _register_events(self) -> None:
+        if self.has_events_registered():
             return
+
+        self.register_events([
+            ('presence-received', ged.GUI2, self._on_presence_received),
+            ('message-sent', ged.GUI2, self._on_message_sent),
+            ('message-received', ged.GUI2, self._on_message_received),
+            ('mam-message-received', ged.GUI2, self._on_mam_message_received),
+            ('gc-message-received', ged.GUI2, self._on_gc_message_received),
+            ('message-updated', ged.GUI2, self._on_message_updated),
+            ('message-moderated', ged.GUI2, self._on_message_moderated),
+            ('receipt-received', ged.GUI2, self._on_receipt_received),
+            ('displayed-received', ged.GUI2, self._on_displayed_received),
+            ('message-error', ged.GUI2, self._on_message_error),
+            ('call-stopped', ged.GUI2, self._on_call_stopped),
+            ('jingle-request-received',
+             ged.GUI2, self._on_jingle_request_received),
+            ('file-request-received', ged.GUI2, self._on_file_request_event),
+            ('file-request-sent', ged.GUI2, self._on_file_request_event),
+        ])
+
+    def _is_event_processable(self, event: Any) -> bool:
+        if self._contact is None:
+            return False
 
         if event.account != self._contact.account:
+            return False
+
+        if event.jid != self._contact.jid:
+            return False
+        return True
+
+    def _on_presence_received(self, event: events.PresenceReceived) -> None:
+        if not self._is_event_processable(event):
             return
 
-        if event.jid not in (self._contact.jid, self._contact.jid.bare):
+        if not app.settings.get('print_status_in_chats'):
             return
 
-        file_transfer_events = (
-            events.FileRequestReceivedEvent,
-            events.FileRequestSent
-        )
+        contact = self.client.get_module('Contacts').get_contact(event.fjid)
+        if isinstance(contact, BareContact):
+            return
+        self.conversation_view.add_user_status(self.contact.name,
+                                               contact.show.value,
+                                               contact.status)
 
-        if isinstance(event, file_transfer_events):
-            self.add_jingle_file_transfer(event=event)
+    def _on_message_sent(self, event: events.MessageSent) -> None:
+        if not self._is_event_processable(event):
             return
 
-        if isinstance(event, events.JingleRequestReceived):
-            active_jid = app.call_manager.get_active_call_jid()
-            # Don't add a second row if contact upgrades to video
-            if active_jid is None:
-                self.add_call_message(event=event)
+        if not event.message:
             return
 
-        if isinstance(event, events.CallStopped):
-            self.conversation_view.update_call_rows()
+        if self.contact.is_groupchat:
             return
 
-        if isinstance(event, events.MessageReceived) and not self.is_groupchat:
-            self._on_message_received(event)
+        message_id = event.message_id
+
+        if event.label:
+            displaymarking = event.label.displaymarking
+        else:
+            displaymarking = None
+
+        if event.correct_id:
+            self.conversation_view.correct_message(
+                event.correct_id, event.message, self.get_our_nick())
             return
 
-        if isinstance(event, events.MessageSent):
-            self._on_message_sent(event)
+        self.add_message(event.message,
+                         'outgoing',
+                         tim=event.timestamp,
+                         displaymarking=displaymarking,
+                         message_id=message_id,
+                         additional_data=event.additional_data)
+
+    def _on_message_received(self, event: events.MessageReceived) -> None:
+        if not self._is_event_processable(event):
             return
 
-        if isinstance(event, events.MessageError):
-            self._on_message_error(event)
+        if self.is_groupchat:
             return
 
-        method_name = event.name.replace('-', '_')
-        method_name = f'_on_{method_name}'
-        getattr(self, method_name)(event)
+        if not event.msgtxt:
+            return
 
-    def _on_message_error(self, event: events.MessageError) -> None:
-        self.conversation_view.show_error(event.message_id, event.error)
+        kind = 'incoming'
+        if event.properties.is_sent_carbon:
+            kind = 'outgoing'
+
+        self.add_message(event.msgtxt,
+                         kind,
+                         tim=event.properties.timestamp,
+                         displaymarking=event.displaymarking,
+                         msg_log_id=event.msg_log_id,
+                         message_id=event.properties.id,
+                         stanza_id=event.stanza_id,
+                         additional_data=event.additional_data)
+
+    def _on_mam_message_received(self,
+                                 event: events.MamMessageReceived) -> None:
+
+        if not self._is_event_processable(event):
+            return
+
+        if isinstance(self.contact, GroupchatContact):
+
+            if not event.properties.type.is_groupchat:
+                return
+            if event.archive_jid != self.contact.jid:
+                return
+            self.add_muc_message(event.msgtxt,
+                                 tim=event.properties.mam.timestamp,
+                                 contact=event.properties.muc_nickname,
+                                 message_id=event.properties.id,
+                                 stanza_id=event.stanza_id,
+                                 additional_data=event.additional_data)
+
+        else:
+
+            if event.properties.is_muc_pm:
+                if not event.properties.jid == self.contact.jid:
+                    return
+            else:
+                if not event.properties.jid.bare_match(self.contact.jid):
+                    return
+
+            kind = 'incoming'
+            if event.kind == KindConstant.CHAT_MSG_SENT:
+                kind = 'outgoing'
+
+            self.add_message(event.msgtxt,
+                             kind,
+                             tim=event.properties.mam.timestamp,
+                             message_id=event.properties.id,
+                             stanza_id=event.stanza_id,
+                             additional_data=event.additional_data)
+
+    def _on_gc_message_received(self, event: events.GcMessageReceived) -> None:
+        if not self._is_event_processable(event):
+            return
+
+        if event.properties.muc_nickname is None:
+            # message from server
+            self.add_muc_message(event.msgtxt,
+                                 tim=event.properties.timestamp,
+                                 displaymarking=event.displaymarking,
+                                 additional_data=event.additional_data)
+        else:
+            self.add_muc_message(event.msgtxt,
+                                 tim=event.properties.timestamp,
+                                 contact=event.properties.muc_nickname,
+                                 displaymarking=event.displaymarking,
+                                 message_id=event.properties.id,
+                                 stanza_id=event.stanza_id,
+                                 additional_data=event.additional_data)
 
     def _on_message_updated(self, event: events.MessageUpdated) -> None:
+        if not self._is_event_processable(event):
+            return
+
         self.conversation_view.correct_message(
             event.correct_id, event.msgtxt, event.nickname)
 
     def _on_message_moderated(self, event: events.MessageModerated) -> None:
+        if not self._is_event_processable(event):
+            return
+
         text = get_retraction_text(
             self.contact.account,
             event.moderation.moderator_jid,
             event.moderation.reason)
         self.conversation_view.show_message_retraction(
             event.moderation.stanza_id, text)
+
+    def _on_receipt_received(self, event: events.ReceiptReceived) -> None:
+        if not self._is_event_processable(event):
+            return
+
+        self.conversation_view.show_receipt(event.receipt_id)
+
+    def _on_displayed_received(self, event: events.DisplayedReceived) -> None:
+        if not self._is_event_processable(event):
+            return
+
+        self.conversation_view.set_read_marker(event.marker_id)
+
+    def _on_message_error(self, event: events.MessageError) -> None:
+        if not self._is_event_processable(event):
+            return
+
+        self.conversation_view.show_error(event.message_id, event.error)
+
+    def _on_call_stopped(self, event: events.CallStopped) -> None:
+        if not self._is_event_processable(event):
+            return
+
+        self.conversation_view.update_call_rows()
+
+    def _on_jingle_request_received(self,
+                                    event: events.JingleRequestReceived
+                                    ) -> None:
+
+        if not self._is_event_processable(event):
+            return
+
+        active_jid = app.call_manager.get_active_call_jid()
+        # Don't add a second row if contact upgrades to video
+        if active_jid is None:
+            self.add_call_message(event=event)
+
+    def _on_file_request_event(self,
+                               event: Union[events.FileRequestReceivedEvent,
+                                            events.FileRequestSent]
+                               ) -> None:
+
+        if not self._is_event_processable(event):
+            return
+
+        self.add_jingle_file_transfer(event=event)
 
     @property
     def is_chat(self) -> bool:
@@ -278,9 +442,6 @@ class ChatControl(EventHelper):
     @property
     def is_groupchat(self) -> bool:
         return isinstance(self.contact, GroupchatContact)
-
-    def _on_ping_event(self, event: events.PingEventT) -> None:
-        raise NotImplementedError
 
     def mark_as_read(self, send_marker: bool = True) -> None:
         self._jump_to_end_button.reset_unread_count()
@@ -523,91 +684,6 @@ class ChatControl(EventHelper):
                 marker=msg.marker,
                 error=msg.error)
 
-    def _on_mam_message_received(self,
-                                 event: events.MamMessageReceived) -> None:
-
-        if isinstance(self.contact, GroupchatContact):
-
-            if not event.properties.type.is_groupchat:
-                return
-            if event.archive_jid != self.contact.jid:
-                return
-            self.add_muc_message(event.msgtxt,
-                                 tim=event.properties.mam.timestamp,
-                                 contact=event.properties.muc_nickname,
-                                 message_id=event.properties.id,
-                                 stanza_id=event.stanza_id,
-                                 additional_data=event.additional_data)
-
-        else:
-
-            if event.properties.is_muc_pm:
-                if not event.properties.jid == self.contact.jid:
-                    return
-            else:
-                if not event.properties.jid.bare_match(self.contact.jid):
-                    return
-
-            kind = 'incoming'
-            if event.kind == KindConstant.CHAT_MSG_SENT:
-                kind = 'outgoing'
-
-            self.add_message(event.msgtxt,
-                             kind,
-                             tim=event.properties.mam.timestamp,
-                             message_id=event.properties.id,
-                             stanza_id=event.stanza_id,
-                             additional_data=event.additional_data)
-
-    def _on_message_received(self, event: events.MessageReceived) -> None:
-        if not event.msgtxt:
-            return
-
-        kind = 'incoming'
-        if event.properties.is_sent_carbon:
-            kind = 'outgoing'
-
-        self.add_message(event.msgtxt,
-                         kind,
-                         tim=event.properties.timestamp,
-                         displaymarking=event.displaymarking,
-                         msg_log_id=event.msg_log_id,
-                         message_id=event.properties.id,
-                         stanza_id=event.stanza_id,
-                         additional_data=event.additional_data)
-
-    def _on_message_sent(self, event: events.MessageSent) -> None:
-        if not event.message:
-            return
-
-        if self.contact.is_groupchat:
-            return
-
-        message_id = event.message_id
-
-        if event.label:
-            displaymarking = event.label.displaymarking
-        else:
-            displaymarking = None
-
-        if event.correct_id:
-            self.conversation_view.correct_message(
-                event.correct_id, event.message, self.get_our_nick())
-            return
-
-        self.add_message(event.message,
-                         'outgoing',
-                         tim=event.timestamp,
-                         displaymarking=displaymarking,
-                         message_id=message_id,
-                         additional_data=event.additional_data)
-
-    def _on_receipt_received(self, event: events.ReceiptReceived) -> None:
-        self.conversation_view.show_receipt(event.receipt_id)
-
-    def _on_displayed_received(self, event: events.DisplayedReceived) -> None:
-        self.conversation_view.set_read_marker(event.marker_id)
-
     def add_message(self,
                     text: str,
                     kind: str,
@@ -633,17 +709,6 @@ class ChatControl(EventHelper):
                           message_id=message_id,
                           stanza_id=stanza_id,
                           additional_data=additional_data)
-
-    def _on_presence_received(self, event: events.PresenceReceived) -> None:
-        if not app.settings.get('print_status_in_chats'):
-            return
-
-        contact = self.client.get_module('Contacts').get_contact(event.fjid)
-        if isinstance(contact, BareContact):
-            return
-        self.conversation_view.add_user_status(self.contact.name,
-                                               contact.show.value,
-                                               contact.status)
 
     def _on_user_nickname_changed(self,
                                   _user_contact: GroupchatParticipant,
@@ -708,9 +773,6 @@ class ChatControl(EventHelper):
                                                                status=status)
         self.add_info_message(message)
 
-    def _on_muc_disco_update(self, event: events.MucDiscoUpdate) -> None:
-        pass
-
     def invite(self, invited_jid: JID) -> None:
         # TODO: Remove, used by command system
         self.client.get_module('MUC').invite(
@@ -742,22 +804,6 @@ class ChatControl(EventHelper):
                                text=_('_Approve'),
                                callback=on_approve)],
             modal=False).show()
-
-    def _on_gc_message_received(self, event: events.GcMessageReceived) -> None:
-        if event.properties.muc_nickname is None:
-            # message from server
-            self.add_muc_message(event.msgtxt,
-                                 tim=event.properties.timestamp,
-                                 displaymarking=event.displaymarking,
-                                 additional_data=event.additional_data)
-        else:
-            self.add_muc_message(event.msgtxt,
-                                 tim=event.properties.timestamp,
-                                 contact=event.properties.muc_nickname,
-                                 displaymarking=event.displaymarking,
-                                 message_id=event.properties.id,
-                                 stanza_id=event.stanza_id,
-                                 additional_data=event.additional_data)
 
     def add_muc_message(self,
                         text: str,
