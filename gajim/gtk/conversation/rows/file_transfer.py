@@ -70,6 +70,8 @@ class FileTransferRow(BaseRow, EventHelper):
         self._ui = get_builder('file_transfer.ui')
         self.grid.attach(self._ui.transfer_box, 1, 1, 1, 1)
         self._ui.file_name.set_text(transfer.filename)
+        self._ui.transfer_description.set_text(
+            transfer.get_state_description())
 
         self.connect('destroy', self._on_destroy)
         self._ui.connect_signals(self)
@@ -79,14 +81,14 @@ class FileTransferRow(BaseRow, EventHelper):
     def _on_destroy(self, *args: Any) -> None:
         self._destroyed = True
 
-        if self._transfer.state.is_active:
-            self._transfer.cancel()
-
         del self._transfer
         if self._pulse is not None:
             GLib.source_remove(self._pulse)
 
     def _on_cancel_clicked(self, _button: Gtk.Button) -> None:
+        if self._transfer.state.is_active:
+            self._transfer.cancel()
+
         self.destroy()
 
     def _on_transfer_state_change(self,
