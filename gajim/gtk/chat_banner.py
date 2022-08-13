@@ -117,7 +117,6 @@ class ChatBanner(Gtk.Box, EventHelper):
                 'user-joined': self._on_user_state_changed,
                 'user-left': self._on_user_state_changed,
                 'user-avatar-update': self._on_user_avatar_update,
-                'user-nickname-changed': self._on_user_nickname_changed
             })
 
         self.register_events([
@@ -188,16 +187,6 @@ class ChatBanner(Gtk.Box, EventHelper):
                               user_contact: GroupchatParticipant,
                               properties: PresenceProperties
                               ) -> None:
-        self._update_content()
-
-    def _on_user_nickname_changed(self,
-                                  user_contact: GroupchatParticipant,
-                                  _signal_name: str,
-                                  properties: PresenceProperties,
-                                  ) -> None:
-        if user_contact.name != properties.muc_nickname:
-            return
-
         self._update_content()
 
     def _on_user_state_changed(self, *args: Any) -> None:

@@ -78,16 +78,17 @@ class GroupChatNickCompletion(EventHelper):
     def _on_user_nickname_changed(self,
                                   _contact: types.GroupchatContact,
                                   _signal_name: str,
-                                  user_contact: types.GroupchatParticipant,
+                                  old_contact: types.GroupchatParticipant,
+                                  new_contact: types.GroupchatParticipant,
                                   properties: PresenceProperties
                                   ) -> None:
+
         if properties.is_muc_self_presence:
             return
 
-        old_name = user_contact.name
-        assert properties.muc_user
-        new_name = properties.muc_user.nick
-        assert new_name is not None
+        old_name = old_contact.name
+        new_name = new_contact.name
+
         log.debug('Contact %s renamed to %s', old_name, new_name)
         for lst in (self._highlight_list, self._sender_list):
             for idx, contact in enumerate(lst):

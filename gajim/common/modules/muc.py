@@ -575,21 +575,21 @@ class MUC(BaseModule):
                            properties.jid,
                            properties.muc_user.nick)
 
-            # Create a copy of the contact object
-            new_occupant = room.add_resource(properties.muc_user.nick)
+            # We receive only the unavailable presence here, so we take
+            # the current presence and create a new contact with it, before we
+            # update the precence.
+            nickname = properties.muc_user.nick
+            new_occupant = room.add_resource(nickname)
             new_occupant.set_presence(occupant.presence)
+            self._joined_users[room.jid][nickname] = occupant.presence
 
             presence = self._process_user_presence(properties)
             occupant.update_presence(presence, properties)
 
-            # new_nick = properties.muc_user.nick
-            # nick = properties.muc_nickname
-            # presence_dict = self._joined_users[properties.jid.bare]
-            # presence_dict[new_nick] = presence_dict.pop(nick)
-            # self._manager.change_nickname
-            # TODO remove presence from manager
-
-            room.notify('user-nickname-changed', occupant, properties)
+            room.notify('user-nickname-changed',
+                        occupant,
+                        new_occupant,
+                        properties)
             return
 
         is_joined = self._is_user_joined(properties.jid)

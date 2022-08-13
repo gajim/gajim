@@ -283,16 +283,13 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
     def _on_user_nickname_changed(self,
                                   contact: types.GroupchatContact,
                                   _signal_name: str,
-                                  user_contact: types.GroupchatParticipant,
+                                  old_contact: types.GroupchatParticipant,
+                                  new_contact: types.GroupchatParticipant,
                                   properties: PresenceProperties
                                   ) -> None:
 
-        self._remove_contact(user_contact)
-
-        assert properties.muc_user is not None
-        assert properties.muc_user.nick is not None
-        user_contact = contact.get_resource(properties.muc_user.nick)
-        self._add_contact(user_contact)
+        self._remove_contact(old_contact)
+        self._add_contact(new_contact)
 
     def _on_user_status_show_changed(self,
                                      _contact: types.GroupchatContact,
