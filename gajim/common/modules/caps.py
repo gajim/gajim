@@ -111,6 +111,10 @@ class Caps(BaseModule):
         if properties.entity_caps is None:
             return
 
+        if properties.muc_user is not None:
+            # Don’t query MUC participants
+            return
+
         task = EntityCapsTask(self._account, properties, self._execute_task)
 
         self._log.info('Received %s', task.entity)
