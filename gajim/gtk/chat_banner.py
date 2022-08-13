@@ -51,6 +51,8 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._client: Optional[types.Client] = None
         self._contact: Optional[types.ChatContactT] = None
 
+        self._last_message_from_phone: set[BareContact] = set()
+
         self._ui = get_builder('chat_banner.ui')
         self.add(self._ui.banner_box)
         self._ui.connect_signals(self)
@@ -128,7 +130,8 @@ class ChatBanner(Gtk.Box, EventHelper):
                 ('account-disabled', ged.GUI2, self._on_account_changed)
             ])
 
-        self._ui.phone_image.set_visible(False)
+        self._ui.phone_image.set_visible(
+            self._contact in self._last_message_from_phone)
 
         if hide_banner:
             self.set_no_show_all(True)
@@ -225,6 +228,11 @@ class ChatBanner(Gtk.Box, EventHelper):
             return
 
         resource_contact = self._contact.get_resource(event.resource)
+        if resource_contact.is_phone:
+            self._last_message_from_phone.add(self._contact)
+        else:
+            self._last_message_from_phone.discard(self._contact)
+
         self._ui.phone_image.set_visible(resource_contact.is_phone)
 
     def _update_avatar(self) -> None:
