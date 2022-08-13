@@ -57,6 +57,10 @@ class GlobalEventsDispatcher:
 
         if event_name in self.handlers:
             handlers_list = self.handlers[event_name]
+            if (priority, handler) in handlers_list:
+                # Don’t register same handler/prio multiple times
+                return
+
             i = 0
             for i, handler_tuple in enumerate(handlers_list):
                 if priority < handler_tuple[0]:
@@ -122,11 +126,16 @@ class EventHelper:
                        priority: int,
                        handler: HandlerFuncT) -> None:
 
+        if (event_name, priority, handler) in self.__event_handlers:
+            return
+
         self.__event_handlers.append((event_name, priority, handler))
         app.ged.register_event_handler(event_name, priority, handler)
 
     def register_events(self, events: list[EventHandlerT]) -> None:
         for handler in events:
+            if handler in self.__event_handlers:
+                continue
             self.__event_handlers.append(handler)
             app.ged.register_event_handler(*handler)
 
