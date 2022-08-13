@@ -49,6 +49,9 @@ from gajim.common.preview_helpers import filename_from_uri
 from gajim.common.preview_helpers import guess_simple_file_type
 from gajim.common.types import ChatContactT
 from gajim.common.types import OneOnOneContactT
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 
 from .menus import get_chat_list_row_menu
 from .builder import get_builder
@@ -548,11 +551,24 @@ class ChatRow(Gtk.ListBoxRow):
 
         self._client = app.get_client(account)
         self.contact = self._client.get_module('Contacts').get_contact(jid)
-        self.contact.connect('presence-update', self._on_presence_update)
-        self.contact.connect('chatstate-update', self._on_chatstate_update)
-        self.contact.connect('nickname-update', self._on_nickname_update)
-        self.contact.connect('caps-update', self._on_avatar_update)
-        self.contact.connect('avatar-update', self._on_avatar_update)
+
+        if isinstance(self.contact, BareContact):
+            self.contact.connect('presence-update', self._on_presence_update)
+            self.contact.connect('chatstate-update', self._on_chatstate_update)
+            self.contact.connect('nickname-update', self._on_nickname_update)
+            self.contact.connect('caps-update', self._on_avatar_update)
+            self.contact.connect('avatar-update', self._on_avatar_update)
+
+        elif isinstance(self.contact, GroupchatContact):
+            self.contact.connect('avatar-update', self._on_avatar_update)
+
+        elif isinstance(self.contact, GroupchatParticipant):
+            self.contact.connect('chatstate-update', self._on_chatstate_update)
+            self.contact.connect('user-joined', self._on_muc_user_update)
+            self.contact.connect('user-left', self._on_muc_user_update)
+            self.contact.connect('user-avatar-update', self._on_muc_user_update)
+            self.contact.connect('user-status-show-changed',
+                                 self._on_muc_user_update)
 
         self.contact_name: str = self.contact.name
         self.timestamp: float = 0
@@ -568,6 +584,7 @@ class ChatRow(Gtk.ListBoxRow):
         self.add(self._ui.eventbox)
 
         self.connect('state-flags-changed', self._on_state_flags_changed)
+        self.connect('destroy', self._on_destroy)
         self._ui.eventbox.connect('button-press-event', self._on_button_press)
         self._ui.close_button.connect('clicked', self._on_close_button_clicked)
 
@@ -752,6 +769,13 @@ class ChatRow(Gtk.ListBoxRow):
                           ) -> None:
         self.update_avatar()
 
+    def _on_muc_user_update(self,
+                            _contact: GroupchatParticipant,
+                            _signal_name: str,
+                            *args: Any
+                            ) -> None:
+        self.update_avatar()
+
     def update_avatar(self) -> None:
         scale = self.get_scale_factor()
         surface = self.contact.get_avatar(AvatarSize.ROSTER, scale)
@@ -880,6 +904,10 @@ class ChatRow(Gtk.ListBoxRow):
             self._ui.revealer.set_reveal_child(True)
         else:
             self._ui.revealer.set_reveal_child(False)
+
+    def _on_destroy(self, _row: ChatRow) -> None:
+        self.contact.disconnect_all_from_obj(self)
+        app.check_finalize(self)
 
     def _on_close_button_clicked(self, _button: Gtk.Button) -> None:
         app.window.activate_action(
