@@ -280,7 +280,7 @@ class ChatBanner(Gtk.Box, EventHelper):
                 chatstate = ''
 
             label_text = f'<span>{name}</span>' \
-                         f'<span size="x-small" weight="light">' \
+                         f'<span size="60%" weight="light">' \
                          f' {chatstate}</span>'
             label_tooltip = f'{name} {chatstate}'
 
