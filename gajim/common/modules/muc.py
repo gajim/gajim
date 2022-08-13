@@ -577,7 +577,7 @@ class MUC(BaseModule):
 
             # We receive only the unavailable presence here, so we take
             # the current presence and create a new contact with it, before we
-            # update the precence.
+            # update the presence.
             nickname = properties.muc_user.nick
             new_occupant = room.add_resource(nickname)
             new_occupant.set_presence(occupant.presence)
