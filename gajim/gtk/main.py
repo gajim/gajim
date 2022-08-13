@@ -358,7 +358,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             'close-tab',
             'switch-next-tab',
             'switch-prev-tab',
-            'switch-next-unread-tab'
+            'switch-next-unread-tab',
             'switch-prev-unread-tab',
             'switch-tab-1',
             'switch-tab-2',
