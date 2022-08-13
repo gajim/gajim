@@ -265,6 +265,16 @@ class CommonContact(Observable):
         self._jid = jid
         self._account = account
 
+    def __hash__(self) -> int:
+        return hash(f'{self._account}-{self._jid}')
+
+    def __eq__(self, obj: object) -> bool:
+        if not isinstance(obj, CommonContact):
+            return NotImplemented
+
+        return (self._account == obj.account and
+                obj._jid == self._jid)
+
     def _module(self, name: str) -> BaseModule:
         return app.get_client(self._account).get_module(name)
 
