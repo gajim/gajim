@@ -127,6 +127,8 @@ class ChatBanner(Gtk.Box, EventHelper):
             ('account-disabled', ged.GUI2, self._on_account_changed)
         ])
 
+        self._ui.phone_image.set_visible(False)
+
         if hide_banner:
             self.set_no_show_all(True)
             self.hide()
@@ -211,30 +213,15 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._update_account_badge(self._contact.account)
 
     def _on_message_received(self, event: MessageReceived) -> None:
-        if not event.msgtxt:
+        if (not isinstance(self._contact, BareContact) or
+                event.jid != self._contact.jid or
+                not event.msgtxt or
+                event.properties.is_sent_carbon or
+                event.resource is None):
             return
 
-        if event.properties.is_sent_carbon:
-            return
-
-        assert self._contact is not None
-
-        if event.jid != self._contact.jid:
-            return
-
-        self._ui.phone_image.set_visible(False)
-
-        if isinstance(self._contact, (
-                GroupchatContact, GroupchatParticipant)):
-            return
-
-        kind = 'outgoing' if event.properties.is_sent_carbon else 'incoming'
-        if kind == 'outgoing':
-            return
-
-        if event.resource is not None and not self._contact.is_groupchat:
-            resource_contact = self._contact.get_resource(event.resource)
-            self._ui.phone_image.set_visible(resource_contact.is_phone)
+        resource_contact = self._contact.get_resource(event.resource)
+        self._ui.phone_image.set_visible(resource_contact.is_phone)
 
     def _update_avatar(self) -> None:
         scale = app.window.get_scale_factor()
