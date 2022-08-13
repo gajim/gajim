@@ -140,6 +140,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
     def _connect_actions(self):
         app_actions = [
+            (f'{self._account}-contact-info', self._on_contact_info),
             (f'{self._account}-modify-gateway', self._on_modify_gateway),
             (f'{self._account}-execute-command', self._on_execute_command),
             (f'{self._account}-block-contact', self._on_block_contact),

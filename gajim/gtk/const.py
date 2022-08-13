@@ -220,6 +220,7 @@ MAIN_WIN_ACTIONS = [
 
 ACCOUNT_ACTIONS = [
     ('add-contact', 'as'),
+    ('contact-info', 's'),
     ('block-contact', 's'),
     ('remove-contact', 's'),
     ('execute-command', 's'),
@@ -250,6 +251,7 @@ ALWAYS_ACCOUNT_ACTIONS = {
 ONLINE_ACCOUNT_ACTIONS = {
     'add-contact',
     'remove-contact',
+    'contact-info',
     'execute-command',
     'modify-gateway',
     'bookmarks',
