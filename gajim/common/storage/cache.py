@@ -93,10 +93,11 @@ class UnreadTableRow(NamedTuple):
 
 
 class CacheStorage(SqliteStorage):
-    def __init__(self):
+    def __init__(self, in_memory: bool = False):
+        path = None if in_memory else configpaths.get('CACHE_DB')
         SqliteStorage.__init__(self,
                                log,
-                               configpaths.get('CACHE_DB'),
+                               path,
                                CACHE_SQL_STATEMENT)
 
         self._entity_caps_cache: dict[tuple[str, str], DiscoInfo] = {}

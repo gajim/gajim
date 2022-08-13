@@ -16,6 +16,7 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Callable
+from typing import Optional
 from typing import TypeVar
 from typing import cast
 
@@ -35,6 +36,7 @@ from nbxmpp.structs import RosterItem
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import CommonError
 from nbxmpp.modules.discovery import parse_disco_info
+
 
 _T = TypeVar('_T')
 
@@ -135,9 +137,10 @@ class SqliteStorage:
 
     def __init__(self,
                  log: logging.Logger,
-                 path: Path,
+                 path: Optional[Path],
                  create_statement: str,
-                 commit_delay: int = 500) -> None:
+                 commit_delay: int = 500
+                 ) -> None:
 
         self._log = log
         self._path = path
@@ -147,13 +150,13 @@ class SqliteStorage:
         self._commit_source_id = None
 
     def init(self, **kwargs: Any) -> None:
-        if self._path.exists():
+        if self._path is None or not self._path.exists():
+            self._con = self._create_storage(**kwargs)
+
+        else:
             if not self._path.is_file():
                 sys.exit('%s must be a file' % self._path)
             self._con = self._connect(**kwargs)
-
-        else:
-            self._con = self._create_storage(**kwargs)
 
         self._migrate_storage()
 
@@ -171,19 +174,24 @@ class SqliteStorage:
         return self._con.execute('PRAGMA user_version').fetchone()[0]
 
     def _connect(self, **kwargs: Any) -> sqlite3.Connection:
-        return sqlite3.connect(self._path, **kwargs)
+        self._log.info('Connect to %s', self._path)
+        return sqlite3.connect(self._path or ':memory:', **kwargs)
 
     def _create_storage(self, **kwargs: Any) -> sqlite3.Connection:
-        self._log.info('Creating %s', self._path)
+        self._log.info('Creating %s', self._path or 'in memory')
+
         con = self._connect(**kwargs)
-        self._path.chmod(0o600)
+
+        if self._path is not None:
+            self._path.chmod(0o600)
 
         try:
             con.executescript(self._create_statement)
         except Exception:
             self._log.exception('Error')
             con.close()
-            self._path.unlink()
+            if self._path is not None:
+                self._path.unlink()
             sys.exit('Failed creating storage')
 
         con.commit()
@@ -192,7 +200,9 @@ class SqliteStorage:
     def _reinit_storage(self) -> None:
         if self._con is not None:
             self._con.close()
-        self._path.unlink()
+
+        if self._path is not None:
+            self._path.unlink()
         self.init()
 
     def _migrate_storage(self) -> None:
