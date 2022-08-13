@@ -607,7 +607,8 @@ class ChatRow(Gtk.ListBoxRow):
         self.update_name()
         self.update_account_identifier()
 
-        if self.contact.is_groupchat and not self.contact.can_notify():
+        if (isinstance(self.contact, GroupchatContact) and
+                not self.contact.can_notify()):
             self._ui.unread_label.get_style_context().add_class(
                 'unread-counter-silent')
 
