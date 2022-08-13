@@ -116,7 +116,7 @@ class CSSConfig:
         self._load_default()
         self._load_selected()
         self._activate_theme()
-        
+
         Gtk.StyleContext.add_provider_for_screen(
             Gdk.Screen.get_default(),
             self._provider,
