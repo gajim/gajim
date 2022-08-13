@@ -92,19 +92,19 @@ row:backdrop { transition: none; }
     padding: 12px;
 }
 .conversation-call-box label {
-    font-size: small;
+    font-size: 90%;
 }
 .conversation-meta {
     color: @insensitive_fg_color;
-    font-size: small;
+    font-size: 90%;
 }
 .conversation-read-marker {
     color: @insensitive_fg_color;
-    font-size: small;
+    font-size: 90%;
     font-style: italic;
 }
 .conversation-nickname {
-    font-size: small;
+    font-size: 90%;
     font-weight: bold;
 }
 .code-widget {
@@ -120,7 +120,7 @@ row:backdrop { transition: none; }
     border-top-right-radius: 3px;
 }
 .code-widget-header label {
-    font-size: small;
+    font-size: 90%;
 }
 .code-widget-header button {
     padding: 0;
@@ -172,7 +172,7 @@ row:backdrop { transition: none; }
     border-bottom-right-radius: 6px;
 }
 .small-label {
-    font-size: small;
+    font-size: 90%;
 }
 
 /* ChatList with Workspace and Account sidebars */
@@ -399,7 +399,7 @@ row:backdrop { transition: none; }
 	padding: 12px 18px 6px 18px;
 	font-weight: bold;
 	color: @insensitive_fg_color;
-	font-size: small;
+	font-size: 90%;
 }
 .header-box-first label {
 	padding: 0px 18px 6px 18px;
@@ -418,7 +418,7 @@ row:backdrop { transition: none; }
 	background: transparent;
 }
 .search-view-row-grid label {
-    font-size: small;
+    font-size: 90%;
 }
 .search-view-counter label {
     font-style: italic;
@@ -428,7 +428,7 @@ row:backdrop { transition: none; }
     padding: 12px 6px 6px 6px;
 }
 .search-view-header label {
-    font-size: small;
+    font-size: 90%;
     color: @insensitive_fg_color;
 }
 
@@ -439,7 +439,7 @@ row:backdrop { transition: none; }
 
 /*  Profile window */
 #NicknameEntry:disabled {
-    font-size: 28px;
+    font-size: 2.3rem;
     font-weight: bold;
     border: none;
     padding: 0px 0px 0px 0px;
@@ -484,7 +484,7 @@ row:backdrop { transition: none; }
     padding: 9px 9px;
 }
 #ContactNameEntry:disabled {
-    font-size: 24px;
+    font-size: 2.0rem;
     font-weight: bold;
     border: none;
     padding: 0px 0px 0px 0px;
@@ -494,25 +494,25 @@ row:backdrop { transition: none; }
 
 /* Emoticon Popover */
 popover#EmoticonPopover button { background: none; border: none; box-shadow:none; padding: 0px;}
-popover#EmoticonPopover button > label { font-size: 24px; }
-popover#EmoticonPopover flowboxchild > label { font-size: 24px; }
+popover#EmoticonPopover button > label { font-size: 2.0rem; }
+popover#EmoticonPopover flowboxchild > label { font-size: 2.0rem; }
 popover#EmoticonPopover flowboxchild { padding-top: 5px; padding-bottom: 5px; }
 popover#EmoticonPopover scrolledwindow { border: none; }
 popover#EmoticonPopover { padding: 5px; background-color: @theme_unfocused_base_color; }
 
-.emoji-chooser-heading { font-size: 13px; font-weight: bold; padding: 5px;}
+.emoji-chooser-heading { font-size: 1.15rem; font-weight: bold; padding: 5px;}
 .emoji-chooser-flowbox { padding-left: 5px; padding-right: 11px; }
 .emoji-modifier-chooser-flowbox { padding-left: 5px; }
 
 /* HistorySyncAssistant */
 #HistorySyncAssistant notebook { padding: 18px; }
-#HistorySyncAssistant progressbar text { color: #000; font-size: 18px; padding: 10px;}
+#HistorySyncAssistant progressbar text { color: #000; font-size: 1.6rem; padding: 10px;}
 #HistorySyncAssistant list { border: 1px solid; border-color: @borders; }
 #HistorySyncAssistant list > row { padding: 10px 30px 10px 30px; }
 #HistorySyncAssistant list > row > label { color: @insensitive_fg_color; }
 #HistorySyncAssistant list > row.activatable > label { color: @theme_text_color; }
 #HistorySyncAssistant list > row.activatable:selected > label { color: @theme_selected_fg_color; }
-#FinishedLabel { font-size: 14px; font-weight: bold; }
+#FinishedLabel { font-size: 1.2rem; font-weight: bold; }
 
 /* Server Info */
 #ServerInfo { border: 1px solid; border-color: @borders; }
@@ -546,7 +546,7 @@ window.settings-dialog list {
 }
 
 /* GenericSetting */
-#SubDescription { color: @insensitive_fg_color; font-size: small;}
+#SubDescription { color: @insensitive_fg_color; font-size: 90%;}
 #GenericSettingBox { margin-left: 30px; }
 #GenericSettingBox > label { padding-right: 3px; }
 
@@ -617,7 +617,7 @@ infobar.error > revealer > box {
 .accounts-label-row {
     padding-top: 10px;
     padding-bottom: 10px;
-    font-size: 18px;
+    font-size: 1.6rem;
     font-weight: bold;
     color: @insensitive_fg_color;}
 
@@ -742,9 +742,18 @@ infobar.error > revealer > box {
 /* Text style */
 
 .bold { font-weight: bold; }
-.bold16 { font-size: 16px; font-weight: bold; }
-.bold24 { font-size: 24px; font-weight: bold; }
-.large-header { font-size: 20px; font-weight: bold; }
+.bold16 {
+    font-size: 1.33rem;
+    font-weight: bold;
+}
+.bold24 {
+    font-size: 2.0rem;
+    font-weight: bold;
+}
+.large-header {
+    font-size: 1.75rem;
+    font-weight: bold;
+}
 .insensitive-fg-color {color: @insensitive_fg_color;}
 
 /* Padding/Margins */
@@ -782,8 +791,8 @@ button.flat.link { padding: 0; border: 0; }
 .receipt-received-color { color: rgb(75, 181, 67); }
 
 /*Dataforms*/
-.field-fixed { font-size: 16px; font-weight: bold; padding-top:5px;}
-.data-form-title { font-size: 16px; font-weight: bold; }
+.field-fixed { font-size: 1.33rem; font-weight: bold; padding-top:5px;}
+.data-form-title { font-size: 1.33rem; font-weight: bold; }
 .data-form-widget grid { margin: 0px 18px 18px 18px; }
 .data-form-widget treeview { padding: 5px; }
 .data-form-widget scrolledwindow { border: 1px solid; border-color:@unfocused_borders; }
