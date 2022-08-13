@@ -23,6 +23,7 @@ from typing import Tuple
 import math
 import logging
 from pathlib import Path
+import sys
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -115,11 +116,14 @@ class CSSConfig:
         self._load_default()
         self._load_selected()
         self._activate_theme()
-
+        
         Gtk.StyleContext.add_provider_for_screen(
             Gdk.Screen.get_default(),
             self._provider,
             CSSPriority.USER_THEME)
+
+        if sys.platform == 'win32':
+            self._apply_windows_font_size()
 
     @property
     def prefer_dark(self) -> bool:
@@ -184,6 +188,19 @@ class CSSConfig:
 
         except Exception:
             log.exception('Error loading application css')
+
+    @staticmethod
+    def _apply_windows_font_size() -> None:
+        css = '''
+        * {
+            font-size: 1.125rem;
+        }
+        '''
+        provider = Gtk.CssProvider()
+        provider.load_from_data(bytes(css.encode('utf-8')))
+        Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(),
+                                                 provider,
+                                                 CSSPriority.PRE_APPLICATION)
 
     @staticmethod
     def _pango_to_css_weight(number: int) -> int:

@@ -163,6 +163,7 @@ class StyleAttr(Enum):
 
 @unique
 class CSSPriority(IntEnum):
+    PRE_APPLICATION = 599
     APPLICATION = 600
     APPLICATION_DARK = 601
     DEFAULT_THEME = 610
