@@ -119,13 +119,14 @@ class ChatBanner(Gtk.Box, EventHelper):
                 'user-avatar-update': self._on_user_avatar_update,
             })
 
-        self.register_events([
-            ('message-received', ged.GUI1, self._on_message_received),
-            ('bookmarks-received', ged.GUI1, self._on_bookmarks_received),
-            ('muc-disco-update', ged.GUI1, self._on_muc_disco_update),
-            ('account-enabled', ged.GUI2, self._on_account_changed),
-            ('account-disabled', ged.GUI2, self._on_account_changed)
-        ])
+        if not self.has_events_registered():
+            self.register_events([
+                ('message-received', ged.GUI2, self._on_message_received),
+                ('muc-disco-update', ged.GUI2, self._on_muc_disco_update),
+                ('bookmarks-received', ged.GUI2, self._on_bookmarks_received),
+                ('account-enabled', ged.GUI2, self._on_account_changed),
+                ('account-disabled', ged.GUI2, self._on_account_changed)
+            ])
 
         self._ui.phone_image.set_visible(False)
 
@@ -189,6 +190,7 @@ class ChatBanner(Gtk.Box, EventHelper):
                               user_contact: GroupchatParticipant,
                               properties: PresenceProperties
                               ) -> None:
+
         self._update_content()
 
     def _on_user_state_changed(self, *args: Any) -> None:
@@ -198,18 +200,20 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._update_avatar()
 
     def _on_bookmarks_received(self, _event: BookmarksReceived) -> None:
+        if not isinstance(self._contact, GroupchatContact):
+            return
+
         self._update_content()
 
     def _on_muc_disco_update(self, event: MucDiscoUpdate) -> None:
-        if self._contact is None or event.jid != self._contact.jid:
+        assert self._contact is not None
+        if event.jid != self._contact.jid:
             return
 
         self._update_content()
 
     def _on_account_changed(self, event: AccountEnabled) -> None:
-        if self._contact is None:
-            return
-
+        assert self._contact is not None
         self._update_account_badge(self._contact.account)
 
     def _on_message_received(self, event: MessageReceived) -> None:
