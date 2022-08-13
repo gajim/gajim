@@ -309,17 +309,12 @@ def get_uf_chatstate(chatstate: str) -> str:
     '''
     Remove chatstate jargon and returns user friendly messages
     '''
-    if chatstate == 'active':
-        return _('is paying attention to the conversation')
-    if chatstate == 'inactive':
+    if chatstate in ('inactive', 'gone'):
         return _('is doing something else')
     if chatstate == 'composing':
         return _('is composing a message…')
     if chatstate == 'paused':
-        # paused means he or she was composing but has stopped for a while
         return _('paused composing a message')
-    if chatstate == 'gone':
-        return _('has closed the chat window or tab')
     return ''
 
 
