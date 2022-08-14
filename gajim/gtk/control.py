@@ -20,6 +20,8 @@ from typing import Union
 from typing import cast
 
 from collections import defaultdict
+from collections import deque
+from functools import partial
 import os
 import logging
 import time
@@ -62,8 +64,6 @@ from gajim.gui.groupchat_state import GroupchatState
 
 log = logging.getLogger('gajim.gui.control')
 
-INFO_MESSAGES_COUNT = 100
-
 
 class ChatControl(EventHelper):
     def __init__(self) -> None:
@@ -104,8 +104,11 @@ class ChatControl(EventHelper):
 
         self._subject_text_cache: dict[JID, str] = {}
 
+        # Store 100 info messages per contact on a FIFO basis
         self._info_messages: dict[
-            types.ChatContactT, list[tuple[float, str]]] = defaultdict(list)
+            types.ChatContactT,
+            deque[tuple[float, str]]] = defaultdict(
+                partial(deque, maxlen=100))  # pyright: ignore
 
         self.widget = cast(Gtk.Box, self._ui.get_object('control_box'))
         self.widget.show_all()
@@ -502,9 +505,6 @@ class ChatControl(EventHelper):
         if timestamp is None:
             assert self._contact is not None
             self._info_messages[self._contact].append((time.time(), text))
-            info_messages = self._info_messages[self._contact]
-            if len(info_messages) > INFO_MESSAGES_COUNT:
-                info_messages.pop(0)
 
         self.conversation_view.add_info_message(text, timestamp)
 
