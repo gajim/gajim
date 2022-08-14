@@ -43,6 +43,8 @@ class TaskManager:
                 continue
 
             if not task.preconditions_met():
+                # precondition_met() can change the obsolete flag, so we need
+                # to check again here
                 if task.is_obsolete():
                     log.info('Task obsolete: %r', task)
                 else:
