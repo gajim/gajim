@@ -93,6 +93,8 @@ class MessageInputTextView(Gtk.TextView):
         self.connect('destroy', self._on_destroy)
         self.connect('populate-popup', self._on_populate_popup)
 
+        app.plugin_manager.gui_extension_point('message_input', self)
+
     def switch_contact(self, contact: ChatContactT) -> None:
         if self._contact is not None:
             account = self._contact.account

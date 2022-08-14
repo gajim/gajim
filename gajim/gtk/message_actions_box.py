@@ -135,6 +135,9 @@ class MessageActionsBox(Gtk.Grid, ged.EventHelper):
             ('message-sent', ged.GUI2, self._on_message_sent)
         ])
 
+        app.plugin_manager.gui_extension_point(
+            'message_actions_box', self, self._ui.box)
+
     def get_current_contact(self) -> ChatContactT:
         assert self._contact is not None
         return self._contact

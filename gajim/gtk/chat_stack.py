@@ -229,6 +229,9 @@ class ChatStack(Gtk.Stack, EventHelper):
         self.set_transition_type(Gtk.StackTransitionType.NONE)
         self.set_visible_child_name('controls')
 
+        app.plugin_manager.extension_point(
+            'switch_contact', self._current_contact)
+
         if old_primary_clipboard is not None:
             GLib.idle_add(clipboard.set_text,  # pyright: ignore
                           old_primary_clipboard,
