@@ -12,6 +12,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Optional
+
 import time
 from datetime import datetime
 
@@ -25,13 +29,18 @@ from .base import BaseRow
 
 
 class InfoMessage(BaseRow):
-    def __init__(self, account: str, text: str) -> None:
+    def __init__(self,
+                 account: str,
+                 text: str,
+                 timestamp: Optional[float]
+                 ) -> None:
+
         BaseRow.__init__(self, account)
 
         self.type = 'info'
-        timestamp = time.time()
-        self.timestamp = datetime.fromtimestamp(timestamp)
-        self.db_timestamp = timestamp
+        current_timestamp = timestamp or time.time()
+        self.timestamp = datetime.fromtimestamp(current_timestamp)
+        self.db_timestamp = current_timestamp
 
         text = GLib.markup_escape_text(text)
 

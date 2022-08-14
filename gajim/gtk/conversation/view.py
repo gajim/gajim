@@ -193,8 +193,12 @@ class ConversationView(Gtk.ListBox):
         user_status = UserStatus(self.contact.account, name, show, status)
         self._insert_message(user_status)
 
-    def add_info_message(self, text: str) -> None:
-        message = InfoMessage(self.contact.account, text)
+    def add_info_message(self,
+                         text: str,
+                         timestamp: Optional[float] = None
+                         ) -> None:
+
+        message = InfoMessage(self.contact.account, text, timestamp)
         self._insert_message(message)
 
     def add_file_transfer(self, transfer: HTTPFileTransfer) -> None:

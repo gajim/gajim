@@ -19,6 +19,7 @@ from typing import Optional
 from typing import Union
 from typing import cast
 
+from collections import defaultdict
 import os
 import logging
 import time
@@ -61,6 +62,8 @@ from gajim.gui.groupchat_state import GroupchatState
 
 log = logging.getLogger('gajim.gui.control')
 
+INFO_MESSAGES_COUNT = 100
+
 
 class ChatControl(EventHelper):
     def __init__(self) -> None:
@@ -100,6 +103,9 @@ class ChatControl(EventHelper):
         self.last_msg_id: Optional[str] = None
 
         self._subject_text_cache: dict[JID, str] = {}
+
+        self._info_messages: dict[
+            types.ChatContactT, list[tuple[float, str]]] = defaultdict(list)
 
         self.widget = cast(Gtk.Box, self._ui.get_object('control_box'))
         self.widget.show_all()
@@ -201,6 +207,9 @@ class ChatControl(EventHelper):
         if transfers is not None:
             for transfer in transfers:
                 self.add_file_transfer(transfer)
+
+        for timestamp, message in self._info_messages[contact]:
+            self.add_info_message(message, timestamp)
 
     def _register_events(self) -> None:
         if self.has_events_registered():
@@ -485,8 +494,19 @@ class ChatControl(EventHelper):
     def _allow_add_message(self) -> bool:
         return self._scrolled_view.get_lower_complete()
 
-    def add_info_message(self, text: str) -> None:
-        self.conversation_view.add_info_message(text)
+    def add_info_message(self,
+                         text: str,
+                         timestamp: Optional[float] = None
+                         ) -> None:
+
+        if timestamp is None:
+            assert self._contact is not None
+            self._info_messages[self._contact].append((time.time(), text))
+            info_messages = self._info_messages[self._contact]
+            if len(info_messages) > INFO_MESSAGES_COUNT:
+                info_messages.pop(0)
+
+        self.conversation_view.add_info_message(text, timestamp)
 
     def add_file_transfer(self, transfer: HTTPFileTransfer) -> None:
         self.conversation_view.add_file_transfer(transfer)
