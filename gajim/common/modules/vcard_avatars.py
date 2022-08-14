@@ -253,7 +253,7 @@ class VCardAvatarsTask(Task):
         if not client.state.is_available:
             return False
 
-        elif isinstance(self._contact, GroupchatParticipant):
+        if isinstance(self._contact, GroupchatParticipant):
             if not self._contact.room.is_joined:
                 self.set_obsolete()
                 return False
