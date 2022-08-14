@@ -102,7 +102,8 @@ class ChatControl(EventHelper):
         # XEP-0333 Chat Markers
         self.last_msg_id: Optional[str] = None
 
-        self._subject_text_cache: dict[JID, str] = {}
+        self._muc_subjects: dict[
+            types.ChatContactT, tuple[float, MucSubject]] = {}
 
         # Store 100 info messages per contact on a FIFO basis
         self._info_messages: dict[
@@ -213,6 +214,14 @@ class ChatControl(EventHelper):
 
         for timestamp, message in self._info_messages[contact]:
             self.add_info_message(message, timestamp)
+
+        if isinstance(contact, GroupchatContact):
+            if (app.settings.get('show_subject_on_join') or
+                    not contact.is_joining):
+                timestamp, subject = self._muc_subjects.get(
+                    contact, (None, None))
+                if subject is not None:
+                    self.conversation_view.add_muc_subject(subject, timestamp)
 
     def _register_events(self) -> None:
         if self.has_events_registered():
@@ -834,11 +843,12 @@ class ChatControl(EventHelper):
         if subject is None:
             return
 
-        if self._subject_text_cache.get(contact.jid) == subject.text:
+        _timestamp, old_subject = self._muc_subjects.get(contact, (None, None))
+        if old_subject is not None and old_subject.text == subject.text:
             # Probably a rejoin, we already showed that subject
             return
 
-        self._subject_text_cache[contact.jid] = subject.text
+        self._muc_subjects[contact] = (time.time(), subject)
 
         if (app.settings.get('show_subject_on_join') or
                 not contact.is_joining):

@@ -12,6 +12,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Optional
+
 import time
 from datetime import datetime
 
@@ -29,12 +33,17 @@ class MUCSubject(BaseRow):
 
     type = 'muc-subject'
 
-    def __init__(self, account: str, subject: MucSubject) -> None:
+    def __init__(self,
+                 account: str,
+                 subject: MucSubject,
+                 timestamp: Optional[float] = None
+                 ) -> None:
+
         BaseRow.__init__(self, account)
 
-        timestamp = time.time()
-        self.timestamp = datetime.fromtimestamp(timestamp)
-        self.db_timestamp = timestamp
+        current_timestamp = timestamp or time.time()
+        self.timestamp = datetime.fromtimestamp(current_timestamp)
+        self.db_timestamp = current_timestamp
 
         self.grid.set_halign(Gtk.Align.START)
 
