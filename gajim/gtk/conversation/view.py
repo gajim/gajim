@@ -133,6 +133,7 @@ class ConversationView(Gtk.ListBox):
             row.destroy()
 
         self._row_count = 0
+        self._read_marker_row = None
         self._active_date_rows = set()
         self._message_id_row_map = {}
 
