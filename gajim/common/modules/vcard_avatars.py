@@ -195,6 +195,15 @@ class VCardAvatars(BaseModule):
     def _muc_update_received(self, properties: PresenceProperties) -> None:
         contact = self._con.get_module('Contacts').get_contact(properties.jid,
                                                                groupchat=True)
+        assert isinstance(contact, GroupchatParticipant)
+
+        # Custom ejabberd room config option
+        allow_query = contact.room.get_config_value('allow_query_users')
+        if allow_query is False:
+            self._log.debug('Room does not allow IQ queries: %s',
+                            contact.room.jid)
+            return
+
         nick = properties.jid.resource
 
         if properties.avatar_state == AvatarState.EMPTY:
