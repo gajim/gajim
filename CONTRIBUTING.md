@@ -34,15 +34,22 @@ A good article regarding [good commit messages](https://chris.beams.io/posts/git
 
 Every commit message must be prefixed with one of the following tags:
 
-- ci        (ci related changes)
-- cq        (code quality changes e.g. formatting, typing, codestyle)
+Changelog relevant
+
 - feat      (a new feature was added)
 - fix       (something was fixed)
 - perf      (performance related changes)
 - imprv     (improvements)
+- change    (existing functionality was changed)
+
+Prefixes for development
+
+- new       (new code, but the end user will not notice)
+- ci        (ci related changes)
+- cq        (code quality changes e.g. formatting, typing, codestyle)
+- cfix      (code fixes which should not show up in the changelog)
 - refactor  (code was changed, but the end user will not notice)
 - chore     (reoccuring tasks which need to be done)
-- change    (existing functionality was changed)
 - release   (only used for release commits)
 - other
 
