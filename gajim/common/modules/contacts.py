@@ -129,7 +129,7 @@ class Contacts(BaseModule):
         contact = self._contacts.get(jid)
         if contact is not None:
             if not isinstance(contact, BareContact):
-                raise ValueError(f'Trying to add GroupchatContact {jid}, '
+                raise ValueError(f'Trying to add BareContact {jid}, '
                                  f'but contact exists already as {contact}')
             return contact
 
@@ -162,13 +162,13 @@ class Contacts(BaseModule):
             raise ValueError(f'Trying to add a bare JID as private {jid}')
 
         contact = self._contacts.get(jid.bare)
-        if not isinstance(contact, GroupchatContact):
-            raise ValueError(f'Trying to add GroupchatParticipant {jid}, '
-                             f'to BareContact {contact}')
-
         if contact is None:
             group_chat_contact = self.add_group_chat_contact(jid.bare)
             return group_chat_contact.add_resource(jid.resource)
+
+        if not isinstance(contact, GroupchatContact):
+            raise ValueError(f'Trying to add GroupchatParticipant {jid}, '
+                             f'to BareContact {contact}')
 
         return contact.add_resource(jid.resource)
 
