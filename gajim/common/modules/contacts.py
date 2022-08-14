@@ -651,6 +651,11 @@ class GroupchatContact(CommonContact):
             return False
         return disco_info.is_irc
 
+    def get_config_value(self, field_name: str) -> Any:
+        disco_info = self.get_disco()
+        assert disco_info is not None
+        return disco_info.get_field_value(Namespace.MUC_INFO, field_name)
+
     def add_resource(self, resource: str) -> GroupchatParticipant:
         assert resource is not None
         # Check if resource is not None because not the whole
