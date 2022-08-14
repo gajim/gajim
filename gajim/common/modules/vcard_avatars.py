@@ -16,8 +16,12 @@
 
 from __future__ import annotations
 
+from typing import Any
+from typing import Callable
 from typing import Generator
 from typing import Optional
+
+import weakref
 
 from nbxmpp.const import AvatarState
 from nbxmpp.modules.util import is_error
@@ -31,8 +35,12 @@ from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
 from gajim.common import types
+from gajim.common.task_manager import Task
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import as_task
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.modules.contacts import BareContact
 
 
 class VCardAvatars(BaseModule):
@@ -62,13 +70,13 @@ class VCardAvatars(BaseModule):
 
     @as_task
     def _request_vcard(self,
-                       jid: JID,
-                       expected_sha: str,
-                       type_: str
+                       contact: types.ChatContactT,
+                       expected_sha: str
                        ) -> Generator[VCard, None, None]:
         _task = yield  # noqa: F841
 
-        vcard = yield self._con.get_module('VCardTemp').request_vcard(jid=jid)
+        vcard = yield self._con.get_module('VCardTemp').request_vcard(
+            jid=contact.jid)
 
         if is_error(vcard):
             self._log.warning(vcard)
@@ -76,29 +84,27 @@ class VCardAvatars(BaseModule):
 
         avatar, avatar_sha = vcard.get_avatar()
         if avatar is None:
-            self._log.info('Avatar missing: %s %s', jid, expected_sha)
+            self._log.info('Avatar missing: %s %s', contact.jid, expected_sha)
             return
 
         if expected_sha != avatar_sha:
             self._log.warning('Avatar mismatch: %s %s != %s',
-                              jid,
+                              contact.jid,
                               expected_sha,
                               avatar_sha)
             return
 
-        self._log.info('Received: %s %s', jid, avatar_sha)
+        self._log.info('Received: %s %s', contact.jid, avatar_sha)
         app.interface.save_avatar(avatar)
 
-        contact = self._con.get_module('Contacts').get_contact(jid)
+        if isinstance(contact, BareContact):
+            app.storage.cache.set_contact(contact.jid, 'avatar', avatar_sha)
 
-        if type_ == 'contact':
-            app.storage.cache.set_contact(jid, 'avatar', avatar_sha)
+        elif isinstance(contact, GroupchatContact):
+            app.storage.cache.set_muc(contact.jid, 'avatar', avatar_sha)
 
-        elif type_ == 'muc':
-            app.storage.cache.set_muc(jid, 'avatar', avatar_sha)
-
-        elif type_ == 'muc-user':
-            self._muc_avatar_cache[jid] = avatar_sha
+        else:
+            self._muc_avatar_cache[contact.jid] = avatar_sha
 
         contact.update_avatar(avatar_sha)
 
@@ -180,10 +186,11 @@ class VCardAvatars(BaseModule):
 
             if avatar_sha not in self._requested_shas:
                 self._requested_shas.append(avatar_sha)
-                if groupchat:
-                    self._request_vcard(jid, avatar_sha, 'muc')
-                else:
-                    self._request_vcard(jid, avatar_sha, 'contact')
+
+                task = VCardAvatarsTask(contact,
+                                        avatar_sha,
+                                        self._request_vcard)
+                app.task_manager.add_task(task)
 
     def _muc_update_received(self, properties: PresenceProperties) -> None:
         contact = self._con.get_module('Contacts').get_contact(properties.jid,
@@ -202,9 +209,11 @@ class VCardAvatars(BaseModule):
                 if properties.avatar_sha not in self._requested_shas:
                     app.log('avatar').info('Request: %s', nick)
                     self._requested_shas.append(properties.avatar_sha)
-                    self._request_vcard(properties.jid,
-                                        properties.avatar_sha,
-                                        'muc-user')
+
+                    task = VCardAvatarsTask(contact,
+                                            properties.avatar_sha,
+                                            self._request_vcard)
+                    app.task_manager.add_task(task)
                 return
 
             current_avatar_sha = self._muc_avatar_cache.get(properties.jid)
@@ -216,3 +225,43 @@ class VCardAvatars(BaseModule):
 
             else:
                 self._log.info('Avatar already known: %s', nick)
+
+
+class VCardAvatarsTask(Task):
+    def __init__(self,
+                 contact: Any,
+                 sha: str,
+                 callback: Callable[..., Any]
+                 ) -> None:
+
+        Task.__init__(self)
+        self._contact = contact
+        self._sha = sha
+        self._callback = weakref.WeakMethod(callback)
+
+    def execute(self) -> None:
+        callback = self._callback()
+        if callback is not None:
+            callback(self._contact, self._sha)
+
+    def preconditions_met(self) -> bool:
+        try:
+            client = app.get_client(self._contact.account)
+        except Exception:
+            return False
+
+        if not client.state.is_available:
+            return False
+
+        elif isinstance(self._contact, GroupchatParticipant):
+            if not self._contact.room.is_joined:
+                self.set_obsolete()
+                return False
+
+        return True
+
+    def __repr__(self) -> str:
+        return f'VCardAvatars ({self._contact.jid} {self._sha})'
+
+    def __hash__(self) -> int:
+        return hash((self._contact, self._sha))
