@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-24 12:49+0000\n"
+"POT-Creation-Date: 2022-08-13 16:07+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -15,23 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.11\n"
-
-msgid ""
-"\n"
-"    Ban user by a nick or a JID from a groupchat\n"
-"\n"
-"    If given nickname is not found it will be treated as a JID.\n"
-"    "
-msgstr ""
-
-msgid ""
-"\n"
-"    Set the current status\n"
-"\n"
-"    Status can be given as one of the following values:\n"
-"    online, away, chat, xa, dnd.\n"
-"    "
-msgstr ""
 
 #, fuzzy
 msgid " (Video Call)"
@@ -151,10 +134,6 @@ msgid "%s is not a valid loglevel"
 msgstr ""
 
 #, python-format
-msgid "%s is not a valid tone"
-msgstr ""
-
-#, python-format
 msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the file to."
@@ -174,10 +153,6 @@ msgstr "Transferències de fitxers"
 
 #, python-format
 msgid "%s wants to send you a file"
-msgstr ""
-
-#, python-format
-msgid "%s: Nothing found"
 msgstr ""
 
 #, python-format
@@ -837,9 +812,6 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allow a participant to send you public or private messages"
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1083,13 +1055,13 @@ msgstr ""
 msgid "Back soon"
 msgstr ""
 
+#, fuzzy
+msgid "Ban"
+msgstr "_Bandeja"
+
 #, python-format
 msgid "Ban %s"
 msgstr ""
-
-#, fuzzy
-msgid "Ban Participant"
-msgstr "Accions Ocupant"
 
 msgid "Ban…"
 msgstr ""
@@ -1122,9 +1094,6 @@ msgstr ""
 #, fuzzy
 msgid "Block…"
 msgstr "_Bloca"
-
-msgid "Bold"
-msgstr "Negreta"
 
 msgid "Bookmarks"
 msgstr "Adreces d'interès"
@@ -1240,10 +1209,6 @@ msgid "Certificate signature failure"
 msgstr ""
 
 #, fuzzy
-msgid "Ch_ange"
-msgstr "Canvia _Nick..."
-
-#, fuzzy
 msgid "Ch_ange Subject"
 msgstr "Canvia Tema..."
 
@@ -1267,9 +1232,6 @@ msgid "Change Subject"
 msgstr "Canvia Tema..."
 
 msgid "Change your account’s password, etc."
-msgstr ""
-
-msgid "Change your nickname in a group chat"
 msgstr ""
 
 #, fuzzy
@@ -1390,14 +1352,7 @@ msgstr "Fitxer de Certificat de Client:"
 msgid "Clear Sound"
 msgstr "Neteja"
 
-#, fuzzy
-msgid "Clear chat window"
-msgstr "Amaga la finestra"
-
 msgid "Clear message entry"
-msgstr ""
-
-msgid "Clear the text window"
 msgstr ""
 
 msgid "Click on contacts you would like to invite to this group chat."
@@ -1435,11 +1390,6 @@ msgid "Color"
 msgstr "Color"
 
 msgid "Command List"
-msgstr ""
-
-msgid ""
-"Command disabled. This command can be enabled by setting "
-"'command_system_execute' to True in ACE (Advanced Configuration Editor)."
 msgstr ""
 
 msgid "Commands"
@@ -1663,6 +1613,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr "_Copia la ubicació de l'enllaç"
 
+msgid "Correct"
+msgstr ""
+
 msgid "Could not Open File"
 msgstr ""
 
@@ -1840,12 +1793,6 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
-msgid "Display names of all group chat participants"
-msgstr ""
-
-msgid "Display or change a group chat topic"
-msgstr ""
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr ""
@@ -1898,10 +1845,6 @@ msgstr "_Canvia Missatge d'Estat"
 
 msgid "Downloading…"
 msgstr ""
-
-#, fuzzy
-msgid "Drop Files or Contacts"
-msgstr "Convida _Contactes"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -1993,23 +1936,26 @@ msgstr "Certificat de client"
 msgid "Encrypting file…"
 msgstr ""
 
+#, fuzzy
+msgid "Encryption error"
+msgstr "Connexió"
+
 msgid "Encryption required"
 msgstr ""
 
 msgid "End call"
 msgstr ""
 
-#, fuzzy
-msgid "Enter Nickname"
-msgstr "Sobrenom:"
-
-#, fuzzy
-msgid "Enter Password"
-msgstr "Desa la contrasenya"
+msgid "Enter a password to join this chat"
+msgstr ""
 
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Desa la contrasenya"
+
+#, fuzzy
+msgid "Enter your new nickname"
+msgstr "Sobrenom:"
 
 msgid ""
 "Enter your nickname. This is how your name is displayed to your contacts."
@@ -2019,9 +1965,6 @@ msgid "Error"
 msgstr ""
 
 msgid "Error Loading Image"
-msgstr ""
-
-msgid "Error during command execution!"
 msgstr ""
 
 #, python-format
@@ -2056,9 +1999,6 @@ msgstr ""
 msgid "Error: %s"
 msgstr ""
 
-msgid "Error: Could not process image"
-msgstr ""
-
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr ""
@@ -2082,12 +2022,6 @@ msgstr "_Executa Comanda...."
 #, fuzzy
 msgid "Execute Command…"
 msgstr "_Executa Comanda...."
-
-msgid "Execute expression inside a shell, send output"
-msgstr ""
-
-msgid "Execute expression inside a shell, show output"
-msgstr ""
 
 msgid "Executing…"
 msgstr ""
@@ -2281,9 +2215,6 @@ msgstr ""
 msgid "For example: \"Julia is now online\""
 msgstr ""
 
-msgid "Forbid a participant to send you public or private messages"
-msgstr ""
-
 #, fuzzy
 msgid "Force Bookmark 2 usage"
 msgstr "Afegeix aquesta sala a les adreces d'interès"
@@ -2291,6 +2222,10 @@ msgstr "Afegeix aquesta sala a les adreces d'interès"
 #, fuzzy
 msgid "Forever"
 msgstr "Mai"
+
+#, fuzzy
+msgid "Forget Group Chat"
+msgstr "Grups de xat"
 
 #, fuzzy
 msgid "Forget this Group Chat"
@@ -2311,10 +2246,6 @@ msgstr ""
 #, fuzzy
 msgid "Format your message"
 msgstr "missatge"
-
-#, fuzzy
-msgid "Format your message…"
-msgstr "Envia missatge"
 
 msgid "Free for Chat"
 msgstr "Disponible per parlar"
@@ -2376,10 +2307,6 @@ msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
-
-#, fuzzy
-msgid "Gajim will not try to join this group chat again"
-msgstr "Si està marcat, Gajim entrarà en aquest xat de grup a l'inici"
 
 msgid "Gajim will now exit"
 msgstr ""
@@ -2530,6 +2457,10 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
+#, fuzzy
+msgid "Hide chat list"
+msgstr "Accions Ocupant"
+
 msgid "Hide this menu"
 msgstr ""
 
@@ -2609,9 +2540,6 @@ msgstr ""
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 
-msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
-msgstr ""
-
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 
@@ -2639,7 +2567,7 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "If you close this chat, you will leave '%s'."
+msgid "If you close this chat, you will leave \"%s\"."
 msgstr ""
 
 msgid ""
@@ -2732,18 +2660,13 @@ msgstr ""
 msgid "Invalid XMPP Address"
 msgstr "Gestiona Sala"
 
-msgid "Invalid affiliation given"
-msgstr ""
-
 #, fuzzy
 msgid "Invalid domain name"
 msgstr "Gestiona Sala"
 
-msgid "Invalid nickname"
-msgstr ""
-
-msgid "Invalid role given"
-msgstr ""
+#, fuzzy
+msgid "Invite"
+msgstr "Con_vida"
 
 #, fuzzy
 msgid "Invite Contacts"
@@ -2756,9 +2679,6 @@ msgstr "Convida _Contactes"
 #, fuzzy
 msgid "Invite New Contact"
 msgstr "Convida _Contactes"
-
-msgid "Invite a user to a group chat for a reason"
-msgstr ""
 
 msgid "Invite friends to group chats or join one"
 msgstr ""
@@ -2791,9 +2711,6 @@ msgstr ""
 
 msgid "It is not possible to send empty files"
 msgstr ""
-
-msgid "Italic"
-msgstr "Cursiva"
 
 msgid "I’m eating."
 msgstr ""
@@ -2841,9 +2758,6 @@ msgstr "Uneix-te al xat en grup"
 msgid "Join Support Chat"
 msgstr "Uneix-te al xat en grup"
 
-msgid "Join a group chat given by an XMPP Address"
-msgstr ""
-
 msgid "Joining…"
 msgstr ""
 
@@ -2864,16 +2778,13 @@ msgstr ""
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
+#, fuzzy
+msgid "Kick"
+msgstr "Fes fora"
+
 #, fuzzy, python-format
 msgid "Kick %s"
 msgstr "Fes fora"
-
-#, fuzzy
-msgid "Kick Participant"
-msgstr "Accions Ocupant"
-
-msgid "Kick user from group chat by nickname"
-msgstr ""
 
 #, fuzzy
 msgid "Kick…"
@@ -2893,17 +2804,10 @@ msgstr ""
 msgid "Leave Group Chat"
 msgstr "Grups de xat"
 
-#, fuzzy
-msgid "Leave the group chat"
-msgstr "Grups de xat"
-
 msgid "Left Click Action"
 msgstr ""
 
 msgid "Let others know if you read up to this point"
-msgstr ""
-
-msgid "Limit must be an integer"
 msgstr ""
 
 msgid ""
@@ -3074,10 +2978,10 @@ msgstr "Mostra els canvis d'estat"
 msgid "Miscellaneous"
 msgstr "<b>Miscel·lània</b>"
 
-msgid "Missing arguments"
+msgid "Missing dependencies for Audio/Video"
 msgstr ""
 
-msgid "Missing dependencies for Audio/Video"
+msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
@@ -3144,20 +3048,13 @@ msgstr "Cerca:"
 msgid "New Workspace"
 msgstr "Afegeix un contacte nou"
 
-#, python-format
-msgid "New message from %s"
+msgid "New message from"
 msgstr ""
 
 msgid "Next"
 msgstr ""
 
-msgid "Next sent messages"
-msgstr ""
-
 msgid "Nickname"
-msgstr ""
-
-msgid "Nickname not found"
 msgstr ""
 
 msgid "No"
@@ -3214,9 +3111,6 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "Transferència de Fitxers"
-
-msgid "No open voice chats with the contact"
-msgstr ""
 
 #, fuzzy
 msgid "No proxy used"
@@ -3340,14 +3234,6 @@ msgstr "Connectors"
 #, fuzzy
 msgid "Open _Folder"
 msgstr "_Obre Carpeta Contenidora"
-
-msgid "Open a private chat window with a specified participant"
-msgstr ""
-
-msgid ""
-"Open a private chat window with a specified participant and send him a "
-"message"
-msgstr ""
 
 msgid "Open as _Link"
 msgstr ""
@@ -3506,13 +3392,6 @@ msgstr ""
 msgid "Pin Chat"
 msgstr "_Veu"
 
-msgid "Ping?"
-msgstr ""
-
-#, python-format
-msgid "Ping? (%s)"
-msgstr ""
-
 msgid "Pinned"
 msgstr ""
 
@@ -3599,14 +3478,6 @@ msgstr "Connectors"
 msgid "Plugins Updated Successfully"
 msgstr "Connectors"
 
-#, python-format
-msgid "Pong! (%(nick)s %(delay)s s.)"
-msgstr ""
-
-#, python-format
-msgid "Pong! (%s seconds)"
-msgstr ""
-
 #, fuzzy
 msgid "Port"
 msgstr "_Port:"
@@ -3648,10 +3519,6 @@ msgstr ""
 
 msgid "Previous"
 msgstr ""
-
-#, fuzzy
-msgid "Previously sent message"
-msgstr "Missatges preconfigurats:"
 
 msgid "Print XML stanzas and other debug information"
 msgstr ""
@@ -3719,12 +3586,6 @@ msgid "Quit"
 msgstr "Surt"
 
 msgid "Quit Gajim"
-msgstr ""
-
-msgid "Quote next message"
-msgstr ""
-
-msgid "Quote previous message"
 msgstr ""
 
 msgid "Quote…"
@@ -4203,9 +4064,6 @@ msgstr "Inactiva"
 msgid "Send Chatstate in Group Chats"
 msgstr "Uneix-te al xat en grup"
 
-msgid "Send DTMF sequence through an open voice chat"
-msgstr ""
-
 #, fuzzy
 msgid "Send File"
 msgstr "Envia _Fitxer"
@@ -4241,21 +4099,6 @@ msgstr "Enviar paquets _keep-alive"
 msgid "Send _Report"
 msgstr "Informa de l'error"
 
-msgid "Send a disco info request"
-msgstr ""
-
-msgid "Send a message to the contact"
-msgstr ""
-
-msgid "Send a message to the contact that will attract their attention"
-msgstr ""
-
-msgid "Send a ping to the contact"
-msgstr ""
-
-msgid "Send action (in the third person) to the current chat"
-msgstr ""
-
 msgid "Send message on Ctrl+Enter and make a new line with Enter."
 msgstr ""
 
@@ -4263,9 +4106,6 @@ msgid "Send the message"
 msgstr ""
 
 msgid "Sender: "
-msgstr ""
-
-msgid "Sending private message failed"
 msgstr ""
 
 #, python-format
@@ -4324,27 +4164,9 @@ msgstr "_Servidor:"
 msgid "Set configuration directory"
 msgstr ""
 
-msgid ""
-"Set participant affiliation in group chat.\n"
-"    Affiliation can be given as one of the following values:\n"
-"    owner, admin, member, outcast, none"
-msgstr ""
-
-msgid ""
-"Set participant role in group chat.\n"
-"    Role can be given as one of the following values:\n"
-"    moderator, participant, visitor, none"
-msgstr ""
-
 #, fuzzy
 msgid "Set status message"
 msgstr "_Canvia Missatge d'Estat"
-
-msgid "Set the current status to away"
-msgstr ""
-
-msgid "Set the current status to online"
-msgstr ""
 
 msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
@@ -4452,9 +4274,9 @@ msgstr ""
 msgid "Show all warnings"
 msgstr ""
 
-msgid ""
-"Show help on a given command or a list of available commands if -a is given"
-msgstr ""
+#, fuzzy
+msgid "Show chat list"
+msgstr "_Copia la ubicació de l'enllaç"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -4463,9 +4285,6 @@ msgstr "Mostra Transports"
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
-msgstr ""
-
-msgid "Show logged messages which mention given text"
 msgstr ""
 
 msgid ""
@@ -4687,9 +4506,6 @@ msgstr ""
 msgid "Street"
 msgstr ""
 
-msgid "Strike"
-msgstr "Ratllat"
-
 msgid "Style"
 msgstr ""
 
@@ -4775,9 +4591,6 @@ msgstr ""
 msgid "TLS verification failed: %s"
 msgstr "Certificat de client"
 
-msgid "T_ry Again"
-msgstr ""
-
 msgid "Tabbed chat window"
 msgstr ""
 
@@ -4831,9 +4644,6 @@ msgid ""
 msgstr ""
 
 msgid "The last message was written on a mobile client"
-msgstr ""
-
-msgid "The same as using a doc-string, except it supports translation"
 msgstr ""
 
 msgid "The server has assigned or modified your nickname in this group chat"
@@ -5007,18 +4817,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Accions Ocupant"
 
-msgid "Toggle Video Chat"
-msgstr ""
-
-msgid "Toggle Voice Chat"
-msgstr ""
-
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Accions Ocupant"
-
-msgid "Too many arguments"
-msgstr ""
 
 msgid "Topic"
 msgstr ""
@@ -5136,10 +4937,6 @@ msgstr ""
 
 #, fuzzy
 msgid "Unknown language"
-msgstr "Sobrenom:"
-
-#, fuzzy
-msgid "Unknown nickname"
 msgstr "Sobrenom:"
 
 msgid "Unknown validation error"
@@ -5290,10 +5087,6 @@ msgstr "Disponible per parlar"
 msgid "Video calls are not available on Windows"
 msgstr "Transferència de Fitxers"
 
-#, fuzzy
-msgid "Video chats are not available"
-msgstr "Transferència de Fitxers"
-
 msgid "Video test"
 msgstr ""
 
@@ -5316,10 +5109,6 @@ msgstr "Afegeix _Notificació Especial..."
 #, fuzzy
 msgid "Voice Request"
 msgstr "_Veu"
-
-#, fuzzy
-msgid "Voice chats are not available"
-msgstr "Transferència de Fitxers"
 
 msgid "Waiting…"
 msgstr ""
@@ -5431,11 +5220,6 @@ msgstr ""
 
 #, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
-msgstr ""
-
-#, python-format
-msgid ""
-"You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
 msgstr ""
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
@@ -5632,9 +5416,6 @@ msgstr "Aprova"
 msgid "_Back"
 msgstr ""
 
-msgid "_Ban"
-msgstr "_Bandeja"
-
 msgid "_Block"
 msgstr "_Bloca"
 
@@ -5715,10 +5496,6 @@ msgstr "Característiques"
 msgid "_File Transfer"
 msgstr "Transferència de Fitxers"
 
-#, fuzzy
-msgid "_Forget Group Chat"
-msgstr "Grups de xat"
-
 msgid "_Free for Chat"
 msgstr ""
 
@@ -5744,9 +5521,6 @@ msgstr "_Entra-hi"
 #, fuzzy
 msgid "_Keyboard Shortcuts"
 msgstr "Dreceres de teclat"
-
-msgid "_Kick"
-msgstr "Fes fora"
 
 msgid "_Later"
 msgstr ""
@@ -5887,9 +5661,6 @@ msgstr ""
 msgid "_Subscribe"
 msgstr ""
 
-msgid "_Try Again"
-msgstr ""
-
 #, fuzzy
 msgid "_Type"
 msgstr "_Tipus:"
@@ -5947,6 +5718,9 @@ msgstr ""
 msgid "bearing"
 msgstr ""
 
+msgid "bold"
+msgstr ""
+
 msgid "building"
 msgstr ""
 
@@ -5988,9 +5762,6 @@ msgstr "llista de trasferència de fitxers"
 msgid "floor"
 msgstr ""
 
-msgid "has closed the chat window or tab"
-msgstr ""
-
 msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
@@ -6005,8 +5776,9 @@ msgstr ""
 msgid "is doing something else"
 msgstr ""
 
-msgid "is paying attention to the conversation"
-msgstr ""
+#, fuzzy
+msgid "italic"
+msgstr "Cursiva"
 
 msgid "lat"
 msgstr ""
@@ -6052,6 +5824,10 @@ msgstr ""
 
 msgid "street"
 msgstr ""
+
+#, fuzzy
+msgid "strike"
+msgstr "Ratllat"
 
 msgid "text"
 msgstr ""
@@ -6118,11 +5894,54 @@ msgstr ""
 #~ msgid "?CLI:priority"
 #~ msgstr "Priori_tat:"
 
+#, fuzzy
+#~ msgid "Ban Participant"
+#~ msgstr "Accions Ocupant"
+
+#~ msgid "Bold"
+#~ msgstr "Negreta"
+
+#, fuzzy
+#~ msgid "Ch_ange"
+#~ msgstr "Canvia _Nick..."
+
+#, fuzzy
+#~ msgid "Clear chat window"
+#~ msgstr "Amaga la finestra"
+
+#, fuzzy
+#~ msgid "Drop Files or Contacts"
+#~ msgstr "Convida _Contactes"
+
+#, fuzzy
+#~ msgid "Enter Password"
+#~ msgstr "Desa la contrasenya"
+
+#, fuzzy
+#~ msgid "Format your message…"
+#~ msgstr "Envia missatge"
+
 #~ msgid "Free for chat"
 #~ msgstr "Lliure per xatejar"
 
+#, fuzzy
+#~ msgid "Gajim will not try to join this group chat again"
+#~ msgstr "Si està marcat, Gajim entrarà en aquest xat de grup a l'inici"
+
+#, fuzzy
+#~ msgid "Kick Participant"
+#~ msgstr "Accions Ocupant"
+
+#, fuzzy
+#~ msgid "Leave the group chat"
+#~ msgstr "Grups de xat"
+
 #~ msgid "Online"
 #~ msgstr "Connectat"
+
+#, fuzzy
+#~ msgid "Previously sent message"
+#~ msgstr "Missatges preconfigurats:"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6131,3 +5950,15 @@ msgstr ""
 #, fuzzy
 #~ msgid "Status Change"
 #~ msgstr "Mostra els canvis d'estat"
+
+#, fuzzy
+#~ msgid "Unknown nickname"
+#~ msgstr "Sobrenom:"
+
+#, fuzzy
+#~ msgid "Video chats are not available"
+#~ msgstr "Transferència de Fitxers"
+
+#, fuzzy
+#~ msgid "Voice chats are not available"
+#~ msgstr "Transferència de Fitxers"

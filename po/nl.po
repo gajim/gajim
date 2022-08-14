@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-24 12:49+0000\n"
+"POT-Creation-Date: 2022-08-13 16:07+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -18,36 +18,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.5.4\n"
-
-msgid ""
-"\n"
-"    Ban user by a nick or a JID from a groupchat\n"
-"\n"
-"    If given nickname is not found it will be treated as a JID.\n"
-"    "
-msgstr ""
-"\n"
-"    Verban een gebruiker uit een groepsgesprek op basis van een bijnaam of "
-"JID\n"
-"\n"
-"    Indien de gegeven bijnaam niet wordt gevonden, zal ze als JID behandeld "
-"worden.\n"
-"    "
-
-msgid ""
-"\n"
-"    Set the current status\n"
-"\n"
-"    Status can be given as one of the following values:\n"
-"    online, away, chat, xa, dnd.\n"
-"    "
-msgstr ""
-"\n"
-"    Huidige status instellen\n"
-"\n"
-"    Status kan opgegeven worden als een van de volgende waarden:\n"
-"    online, away, chat, xa, dnd.\n"
-"    "
 
 #, fuzzy
 msgid " (Video Call)"
@@ -168,10 +138,6 @@ msgid "%s is not a valid loglevel"
 msgstr "%s is geen geldig logniveau"
 
 #, python-format
-msgid "%s is not a valid tone"
-msgstr "%s is geen geldige toon"
-
-#, python-format
 msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the file to."
@@ -192,10 +158,6 @@ msgstr "Contact heeft de overdracht gestopt"
 #, fuzzy, python-format
 msgid "%s wants to send you a file"
 msgstr "%s wil je een bestand sturen."
-
-#, python-format
-msgid "%s: Nothing found"
-msgstr "%s: niets gevonden"
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -875,10 +837,6 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-#, fuzzy
-msgid "Allow a participant to send you public or private messages"
-msgstr "Laat een deelnemer toe je openbare of privéberichten te sturen"
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1138,13 +1096,13 @@ msgstr "In een paar minuten terug."
 msgid "Back soon"
 msgstr "Zo terug"
 
+#, fuzzy
+msgid "Ban"
+msgstr "Ver_bannen"
+
 #, fuzzy, python-format
 msgid "Ban %s"
 msgstr "Banlijst"
-
-#, fuzzy
-msgid "Ban Participant"
-msgstr "Deelnemer"
 
 msgid "Ban…"
 msgstr ""
@@ -1178,9 +1136,6 @@ msgstr "Blokkeringslijst voor %s"
 #, fuzzy
 msgid "Block…"
 msgstr "_Blokkeren"
-
-msgid "Bold"
-msgstr "Vetgedrukt"
 
 msgid "Bookmarks"
 msgstr "Bladwijzers"
@@ -1298,10 +1253,6 @@ msgid "Certificate signature failure"
 msgstr "Certificaatsondertekeningsfout"
 
 #, fuzzy
-msgid "Ch_ange"
-msgstr "Bijnaam veranderen"
-
-#, fuzzy
 msgid "Ch_ange Subject"
 msgstr "Onderwerp veranderen"
 
@@ -1325,9 +1276,6 @@ msgstr "Onderwerp veranderen"
 
 msgid "Change your account’s password, etc."
 msgstr ""
-
-msgid "Change your nickname in a group chat"
-msgstr "Je bijnaam veranderen in een groepsgesprek"
 
 #, fuzzy
 msgid "Change your profile picture"
@@ -1451,15 +1399,8 @@ msgstr "Bestand wissen"
 msgid "Clear Sound"
 msgstr "Geluid wissen"
 
-#, fuzzy
-msgid "Clear chat window"
-msgstr "Wis het tekstvenster"
-
 msgid "Clear message entry"
 msgstr "Berichtinvoer wissen"
-
-msgid "Clear the text window"
-msgstr "Wis het tekstvenster"
 
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
@@ -1499,11 +1440,6 @@ msgstr "Kleur"
 
 msgid "Command List"
 msgstr "Opdrachtlijst"
-
-msgid ""
-"Command disabled. This command can be enabled by setting "
-"'command_system_execute' to True in ACE (Advanced Configuration Editor)."
-msgstr ""
 
 msgid "Commands"
 msgstr "Opdrachten"
@@ -1730,6 +1666,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr "Info kopiëren naar klembord"
 
+msgid "Correct"
+msgstr ""
+
 #, fuzzy
 msgid "Could not Open File"
 msgstr "Kon bestand niet openen"
@@ -1915,13 +1854,6 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
-#, fuzzy
-msgid "Display names of all group chat participants"
-msgstr "Namen van alle deelnemers aan het groepsgesprek weergeven"
-
-msgid "Display or change a group chat topic"
-msgstr "Onderwerp van groepsgesprek weergeven of wijzigen"
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Accepteer je dit verzoek op account %s?"
@@ -1982,10 +1914,6 @@ msgstr "%s berichten gedownload"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Bezig met laden"
-
-#, fuzzy
-msgid "Drop Files or Contacts"
-msgstr "Contacten importeren"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2091,23 +2019,26 @@ msgid "Encrypting file…"
 msgstr "Bestand versleutelen…"
 
 #, fuzzy
+msgid "Encryption error"
+msgstr "Versleutelingsfout"
+
+#, fuzzy
 msgid "Encryption required"
 msgstr "Versleutelingsfout"
 
 msgid "End call"
 msgstr ""
 
-#, fuzzy
-msgid "Enter Nickname"
-msgstr "Bijnaam invoeren"
-
-#, fuzzy
-msgid "Enter Password"
-msgstr "Voer nieuw wachtwoord in:"
+msgid "Enter a password to join this chat"
+msgstr ""
 
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Voer nieuw wachtwoord in:"
+
+#, fuzzy
+msgid "Enter your new nickname"
+msgstr "Bijnaam invoeren"
 
 msgid ""
 "Enter your nickname. This is how your name is displayed to your contacts."
@@ -2119,9 +2050,6 @@ msgstr "Fout"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Kies afbeelding"
-
-msgid "Error during command execution!"
-msgstr "Fout tijdens uitvoeren van commando!"
 
 #, python-format
 msgid "Error message: %s"
@@ -2160,10 +2088,6 @@ msgstr "Fout!"
 msgid "Error: %s"
 msgstr "Fout: %s"
 
-#, fuzzy
-msgid "Error: Could not process image"
-msgstr "Kon afbeelding niet laden"
-
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr "Fout: kan %s niet voor lezen openen"
@@ -2187,12 +2111,6 @@ msgstr "Uitvoeren"
 #, fuzzy
 msgid "Execute Command…"
 msgstr "Opdra_cht uitvoeren…"
-
-msgid "Execute expression inside a shell, send output"
-msgstr "Expressie uitvoeren in een shell, uitvoer sturen"
-
-msgid "Execute expression inside a shell, show output"
-msgstr "Expressie uitvoeren in een shell, uitvoer tonen"
 
 msgid "Executing…"
 msgstr "Uitvoeren…"
@@ -2390,16 +2308,16 @@ msgid "For example: \"Julia is now online\""
 msgstr ""
 
 #, fuzzy
-msgid "Forbid a participant to send you public or private messages"
-msgstr "Verbied een deelnemer van je openbare of privéberichten te sturen"
-
-#, fuzzy
 msgid "Force Bookmark 2 usage"
 msgstr "Bladwijzernaam"
 
 #, fuzzy
 msgid "Forever"
 msgstr "Nooit"
+
+#, fuzzy
+msgid "Forget Group Chat"
+msgstr "Groepsgesprekken verlaten"
 
 #, fuzzy
 msgid "Forget this Group Chat"
@@ -2420,10 +2338,6 @@ msgstr "Formatteringsfout in notBefore-veld van certificaat"
 #, fuzzy
 msgid "Format your message"
 msgstr "Ongelezen berichten doorsturen"
-
-#, fuzzy
-msgid "Format your message…"
-msgstr "Schrijf een bericht…"
 
 msgid "Free for Chat"
 msgstr "Open voor gesprek"
@@ -2495,12 +2409,6 @@ msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
-
-#, fuzzy
-msgid "Gajim will not try to join this group chat again"
-msgstr ""
-"Indien aangevinkt zal Gajim zich automatisch aanmelden bij dit groepsgesprek "
-"tijdens het opstarten"
 
 msgid "Gajim will now exit"
 msgstr "Gajim sluit nu af"
@@ -2651,6 +2559,10 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
+#, fuzzy
+msgid "Hide chat list"
+msgstr "Videosessie in-/uitschakelen"
+
 msgid "Hide this menu"
 msgstr "Verberg dit menu"
 
@@ -2744,10 +2656,6 @@ msgstr ""
 "laten zien"
 
 #, fuzzy
-msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
-msgstr "Indien ingeschakeld zal Gajim XEP-0146-opdrachten uitvoeren."
-
-#, fuzzy
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 "Indien ingeschakeld zal Gajim inkomende aandachtsverzoeken negeren (‘wizz’)."
@@ -2793,7 +2701,7 @@ msgstr ""
 "je GEEN ENKEL bericht van je server ontvangen."
 
 #, fuzzy, python-format
-msgid "If you close this chat, you will leave '%s'."
+msgid "If you close this chat, you will leave \"%s\"."
 msgstr ""
 "Als je dit venster sluit zal de verbinding verbroken worden met deze ruimten."
 
@@ -2888,18 +2796,13 @@ msgstr "Ongeldige servernaam"
 msgid "Invalid XMPP Address"
 msgstr "Ongeldig knooppunt"
 
-msgid "Invalid affiliation given"
-msgstr "Ongeldige aansluiting gegeven"
-
 #, fuzzy
 msgid "Invalid domain name"
 msgstr "Ongeldige accountnaam"
 
-msgid "Invalid nickname"
-msgstr "Ongeldige bijnaam"
-
-msgid "Invalid role given"
-msgstr "Ongeldige gegeven rol"
+#, fuzzy
+msgid "Invite"
+msgstr "Uit_nodigen"
 
 #, fuzzy
 msgid "Invite Contacts"
@@ -2912,10 +2815,6 @@ msgstr "Contacten uitnodigen"
 #, fuzzy
 msgid "Invite New Contact"
 msgstr "Contacten uitnodigen"
-
-#, fuzzy
-msgid "Invite a user to a group chat for a reason"
-msgstr "Nodig een gebruiker uit in een groepsgesprek voor een reden"
 
 msgid "Invite friends to group chats or join one"
 msgstr "Nodig vrienden uit in groepsgesprekken, of neem eraan deel"
@@ -2951,9 +2850,6 @@ msgstr "Uitgegeven aan"
 
 msgid "It is not possible to send empty files"
 msgstr "Het is onmogelijk lege bestanden te sturen"
-
-msgid "Italic"
-msgstr "Schuingedrukt"
 
 #, fuzzy
 msgid "I’m eating."
@@ -3005,10 +2901,6 @@ msgid "Join Support Chat"
 msgstr "Deelnemen aan groepsgesprek"
 
 #, fuzzy
-msgid "Join a group chat given by an XMPP Address"
-msgstr "Deelnemen aan groepsgesprek met JID"
-
-#, fuzzy
 msgid "Joining…"
 msgstr "Wordt verbannen…"
 
@@ -3029,17 +2921,13 @@ msgstr "Bewaar en beheer je gespreksgeschiedenis"
 msgid "Key usage does not include certificate signing"
 msgstr "Sleutelgebruik bevat geen certificaatondertekening"
 
+#, fuzzy
+msgid "Kick"
+msgstr "Uit_schoppen"
+
 #, fuzzy, python-format
 msgid "Kick %s"
 msgstr "%s uit de ruimte schoppen"
-
-#, fuzzy
-msgid "Kick Participant"
-msgstr "Deelnemer"
-
-#, fuzzy
-msgid "Kick user from group chat by nickname"
-msgstr "Schop gebruiker met bijnaam uit een groepsgesprek"
 
 #, fuzzy
 msgid "Kick…"
@@ -3059,18 +2947,11 @@ msgstr "Laatste status: %s"
 msgid "Leave Group Chat"
 msgstr "Groepsgesprekken verlaten"
 
-#, fuzzy
-msgid "Leave the group chat"
-msgstr "Groepsgesprekken verlaten"
-
 msgid "Left Click Action"
 msgstr ""
 
 msgid "Let others know if you read up to this point"
 msgstr ""
-
-msgid "Limit must be an integer"
-msgstr "Limiet moet een geheel getal zijn"
 
 #, fuzzy
 msgid ""
@@ -3261,10 +3142,10 @@ msgstr "Statusveranderingen tonen"
 msgid "Miscellaneous"
 msgstr "Overige"
 
-msgid "Missing arguments"
-msgstr "Parameters ontbreken"
-
 msgid "Missing dependencies for Audio/Video"
+msgstr ""
+
+msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
@@ -3331,21 +3212,15 @@ msgstr "Zoeken"
 msgid "New Workspace"
 msgstr "Contact hernoemen"
 
-#, fuzzy, python-format
-msgid "New message from %s"
+#, fuzzy
+msgid "New message from"
 msgstr "Nieuw bericht van %(nickname)s"
 
 msgid "Next"
 msgstr "Volgende"
 
-msgid "Next sent messages"
-msgstr "Volgende verzonden berichten"
-
 msgid "Nickname"
 msgstr "Bijnaam"
-
-msgid "Nickname not found"
-msgstr "Bijnaam niet gevonden"
 
 msgid "No"
 msgstr "Nee"
@@ -3400,10 +3275,6 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "Geen account beschikbaar"
-
-#, fuzzy
-msgid "No open voice chats with the contact"
-msgstr "Geen open audiosessies met het contact"
 
 #, fuzzy
 msgid "No proxy used"
@@ -3528,18 +3399,6 @@ msgstr "Plug-ins"
 #, fuzzy
 msgid "Open _Folder"
 msgstr "_Bovenliggende map openen"
-
-#, fuzzy
-msgid "Open a private chat window with a specified participant"
-msgstr "Open een privé-gespreksvenster met opgegeven lid"
-
-#, fuzzy
-msgid ""
-"Open a private chat window with a specified participant and send him a "
-"message"
-msgstr ""
-"Open een privé-gespreksvenster met opgegeven lid en stuur hem/haar een "
-"bericht"
 
 msgid "Open as _Link"
 msgstr "Openen a_ls verwijzing"
@@ -3703,13 +3562,6 @@ msgstr "Te gebruiken afbeelding"
 msgid "Pin Chat"
 msgstr "Start Gesprek"
 
-msgid "Ping?"
-msgstr "Ping?"
-
-#, python-format
-msgid "Ping? (%s)"
-msgstr "Ping? (%s)"
-
 msgid "Pinned"
 msgstr ""
 
@@ -3797,14 +3649,6 @@ msgstr "Plug-ins"
 msgid "Plugins Updated Successfully"
 msgstr "Updates voor plug-ins"
 
-#, python-format
-msgid "Pong! (%(nick)s %(delay)s s.)"
-msgstr "Pong! (%(nick)s %(delay)s s.)"
-
-#, python-format
-msgid "Pong! (%s seconds)"
-msgstr "Pong! (%s seconden)"
-
 msgid "Port"
 msgstr "Poort"
 
@@ -3849,9 +3693,6 @@ msgstr "Nieuwe berichten in meldingspop-up weergeven?"
 
 msgid "Previous"
 msgstr "Vorige"
-
-msgid "Previously sent message"
-msgstr "Vorig verzonden bericht"
 
 msgid "Print XML stanzas and other debug information"
 msgstr "XML-stanza’s en andere debuginformatie afdrukken"
@@ -3919,12 +3760,6 @@ msgstr "_Afsluiten"
 
 msgid "Quit Gajim"
 msgstr "Gajim afsluiten"
-
-msgid "Quote next message"
-msgstr "Volgend bericht citeren"
-
-msgid "Quote previous message"
-msgstr "Vorig bericht citeren"
 
 #, fuzzy
 msgid "Quote…"
@@ -4421,10 +4256,6 @@ msgid "Send Chatstate in Group Chats"
 msgstr "Kan niet deelnemen aan het groepsgesprek"
 
 #, fuzzy
-msgid "Send DTMF sequence through an open voice chat"
-msgstr "DTMF-sequentie sturen via een open audiosessie"
-
-#, fuzzy
 msgid "Send File"
 msgstr "_Bestand Verzenden"
 
@@ -4459,22 +4290,6 @@ msgid "Send _Report"
 msgstr "_Fout melden"
 
 #, fuzzy
-msgid "Send a disco info request"
-msgstr "Verzonden ontvangstbevestigingen"
-
-msgid "Send a message to the contact"
-msgstr "Een bericht naar het contact sturen"
-
-msgid "Send a message to the contact that will attract their attention"
-msgstr "Stuur een bericht naar het contact dat zijn/haar aandacht zal trekken"
-
-msgid "Send a ping to the contact"
-msgstr "Stuur een ping naar het contact"
-
-msgid "Send action (in the third person) to the current chat"
-msgstr "Stuur actie (in de derde persoon) naar het huidige gesprek"
-
-#, fuzzy
 msgid "Send message on Ctrl+Enter and make a new line with Enter."
 msgstr ""
 "Ctrl+Enter stuurt bericht, enkel Enter maakt een nieuwe regel "
@@ -4485,9 +4300,6 @@ msgstr "Bericht verzenden"
 
 msgid "Sender: "
 msgstr "Afzender: "
-
-msgid "Sending private message failed"
-msgstr "Sturen van privébericht mislukt"
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4547,35 +4359,8 @@ msgid "Set configuration directory"
 msgstr "Configuratiemap instellen"
 
 #, fuzzy
-msgid ""
-"Set participant affiliation in group chat.\n"
-"    Affiliation can be given as one of the following values:\n"
-"    owner, admin, member, outcast, none"
-msgstr ""
-"Stel de aansluiting van een lid van het groepsgesprek in.\n"
-"    Aansluiting kan een van de volgende waarden zijn:\n"
-"    owner (eigenaar), admin (administrator), member (lid), outcast "
-"(verschoppeling), none (geen)"
-
-#, fuzzy
-msgid ""
-"Set participant role in group chat.\n"
-"    Role can be given as one of the following values:\n"
-"    moderator, participant, visitor, none"
-msgstr ""
-"Stel rol van deelnemers aan groepsgesprek in.\n"
-"    Rol kan een van volgende waarden zijn:\n"
-"    moderator, participant, visitor, none"
-
-#, fuzzy
 msgid "Set status message"
 msgstr "Statusbericht instellen"
-
-msgid "Set the current status to away"
-msgstr "Stel de huidige status in als even weg"
-
-msgid "Set the current status to online"
-msgstr "Stel de huidige status in als beschikbaar"
 
 #, fuzzy
 msgid "Set your activity or tune to show your friends how you are feeling"
@@ -4694,11 +4479,9 @@ msgstr ""
 msgid "Show all warnings"
 msgstr "Alle waarschuwingen weergeven"
 
-msgid ""
-"Show help on a given command or a list of available commands if -a is given"
-msgstr ""
-"Toon hulp voor een gegeven opdracht, of een lijst van beschikbare opdrachten "
-"indien ‘-a’ opgegeven is"
+#, fuzzy
+msgid "Show chat list"
+msgstr "Locatie:"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -4708,9 +4491,6 @@ msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
 msgstr ""
-
-msgid "Show logged messages which mention given text"
-msgstr "Opgeslagen berichten waarin de opgegeven tekst voorkomt weergeven"
 
 msgid ""
 "Show message meta data (avatar, nickname, timestamp) only once, if there are "
@@ -4940,9 +4720,6 @@ msgstr ""
 msgid "Street"
 msgstr "Straat"
 
-msgid "Strike"
-msgstr "Doorstrepen"
-
 msgid "Style"
 msgstr "Stijl"
 
@@ -5029,10 +4806,6 @@ msgstr "Systeem"
 msgid "TLS verification failed: %s"
 msgstr "SSL-certificaatverificatie voor %s"
 
-#, fuzzy
-msgid "T_ry Again"
-msgstr "Opnieuw verifiëren…"
-
 msgid "Tabbed chat window"
 msgstr "Gespreksvenster met tabbladen"
 
@@ -5091,9 +4864,6 @@ msgstr ""
 
 msgid "The last message was written on a mobile client"
 msgstr "Het laatste bericht is geschreven met een mobiele cliënt"
-
-msgid "The same as using a doc-string, except it supports translation"
-msgstr "The same as using a doc-string, except it supports translation"
 
 #, fuzzy
 msgid "The server has assigned or modified your nickname in this group chat"
@@ -5295,18 +5065,8 @@ msgid "Toggle Chat List"
 msgstr "Videosessie in-/uitschakelen"
 
 #, fuzzy
-msgid "Toggle Video Chat"
-msgstr "Videosessie in-/uitschakelen"
-
-msgid "Toggle Voice Chat"
-msgstr ""
-
-#, fuzzy
 msgid "Toggle participants list"
 msgstr "Deelnemer"
-
-msgid "Too many arguments"
-msgstr "Te veel parameters"
 
 msgid "Topic"
 msgstr ""
@@ -5425,10 +5185,6 @@ msgstr "Onbekend nummer"
 #, fuzzy
 msgid "Unknown language"
 msgstr "Onbekend nummer"
-
-#, fuzzy
-msgid "Unknown nickname"
-msgstr "Na bijnaam:"
 
 #, fuzzy
 msgid "Unknown validation error"
@@ -5583,10 +5339,6 @@ msgstr "Videosessie"
 msgid "Video calls are not available on Windows"
 msgstr "Videosessies zijn niet beschikbaar"
 
-#, fuzzy
-msgid "Video chats are not available"
-msgstr "Videosessies zijn niet beschikbaar"
-
 msgid "Video test"
 msgstr "Videotest"
 
@@ -5608,10 +5360,6 @@ msgstr "Visuele meldingen"
 #, fuzzy
 msgid "Voice Request"
 msgstr "Audiogespreksverzoek"
-
-#, fuzzy
-msgid "Voice chats are not available"
-msgstr "Videosessies zijn niet beschikbaar"
 
 #, fuzzy
 msgid "Waiting…"
@@ -5742,13 +5490,6 @@ msgstr "Weet je zeker dat je Gajim wil afsluiten?"
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr ""
 "Je staat op het punt ‘%(name)s’ (%(jid)s) uit je rooster te verwijderen.\n"
-
-#, fuzzy, python-format
-msgid ""
-"You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
-msgstr ""
-"Je bent niet meer in groepsgesprek ‘%(room)s’ of ‘%(nick)s’ heeft het "
-"groepsgesprek verlaten."
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5963,9 +5704,6 @@ msgstr "approve"
 msgid "_Back"
 msgstr "Zo terug"
 
-msgid "_Ban"
-msgstr "Ver_bannen"
-
 msgid "_Block"
 msgstr "_Blokkeren"
 
@@ -6050,10 +5788,6 @@ msgstr "Functies"
 msgid "_File Transfer"
 msgstr "Bestandsoverdracht"
 
-#, fuzzy
-msgid "_Forget Group Chat"
-msgstr "Groepsgesprekken verlaten"
-
 msgid "_Free for Chat"
 msgstr "Open voor _gesprek"
 
@@ -6079,9 +5813,6 @@ msgstr "_Binnengaan"
 #, fuzzy
 msgid "_Keyboard Shortcuts"
 msgstr "Sneltoetsen"
-
-msgid "_Kick"
-msgstr "Uit_schoppen"
 
 msgid "_Later"
 msgstr ""
@@ -6226,10 +5957,6 @@ msgstr ""
 msgid "_Subscribe"
 msgstr "_Abonneer"
 
-#, fuzzy
-msgid "_Try Again"
-msgstr "Opnieuw verifiëren…"
-
 msgid "_Type"
 msgstr "_Type"
 
@@ -6285,6 +6012,9 @@ msgstr "audio-uitvoer"
 msgid "bearing"
 msgstr "lager"
 
+msgid "bold"
+msgstr ""
+
 msgid "building"
 msgstr "bouwen"
 
@@ -6328,9 +6058,6 @@ msgstr "bestandsoverdrachtlijst"
 msgid "floor"
 msgstr "verdiep"
 
-msgid "has closed the chat window or tab"
-msgstr "heeft het gespreksvenster of -tabblad gesloten"
-
 #, fuzzy
 msgid ""
 "has invited you to a group chat.\n"
@@ -6346,8 +6073,9 @@ msgstr "is een bericht aan het typen…"
 msgid "is doing something else"
 msgstr "is met iets anders bezig"
 
-msgid "is paying attention to the conversation"
-msgstr "let op deze conversatie"
+#, fuzzy
+msgid "italic"
+msgstr "Schuingedrukt"
 
 msgid "lat"
 msgstr "breedte"
@@ -6393,6 +6121,10 @@ msgstr "snelheid"
 
 msgid "street"
 msgstr "straat"
+
+#, fuzzy
+msgid "strike"
+msgstr "Doorstrepen"
 
 msgid "text"
 msgstr "tekst"
@@ -6449,8 +6181,44 @@ msgstr "{nick} is nu {show}{status}"
 msgid "…or drop it here"
 msgstr ""
 
+#~ msgid ""
+#~ "\n"
+#~ "    Ban user by a nick or a JID from a groupchat\n"
+#~ "\n"
+#~ "    If given nickname is not found it will be treated as a JID.\n"
+#~ "    "
+#~ msgstr ""
+#~ "\n"
+#~ "    Verban een gebruiker uit een groepsgesprek op basis van een bijnaam "
+#~ "of JID\n"
+#~ "\n"
+#~ "    Indien de gegeven bijnaam niet wordt gevonden, zal ze als JID "
+#~ "behandeld worden.\n"
+#~ "    "
+
+#~ msgid ""
+#~ "\n"
+#~ "    Set the current status\n"
+#~ "\n"
+#~ "    Status can be given as one of the following values:\n"
+#~ "    online, away, chat, xa, dnd.\n"
+#~ "    "
+#~ msgstr ""
+#~ "\n"
+#~ "    Huidige status instellen\n"
+#~ "\n"
+#~ "    Status kan opgegeven worden als een van de volgende waarden:\n"
+#~ "    online, away, chat, xa, dnd.\n"
+#~ "    "
+
+#~ msgid "%s is not a valid tone"
+#~ msgstr "%s is geen geldige toon"
+
 #~ msgid "%s not found"
 #~ msgstr "%s niet gevonden"
+
+#~ msgid "%s: Nothing found"
+#~ msgstr "%s: niets gevonden"
 
 #, fuzzy
 #~ msgid ""
@@ -6480,6 +6248,10 @@ msgstr ""
 #~ "ze naar alle account verzonden worden"
 
 #, fuzzy
+#~ msgid "Allow a participant to send you public or private messages"
+#~ msgstr "Laat een deelnemer toe je openbare of privéberichten te sturen"
+
+#, fuzzy
 #~ msgid ""
 #~ "Allow to hide the contact list window even if the notification area icon "
 #~ "is not shown."
@@ -6497,11 +6269,25 @@ msgstr ""
 #~ msgid "Arguments:"
 #~ msgstr "Parameters:"
 
+#, fuzzy
+#~ msgid "Ban Participant"
+#~ msgstr "Deelnemer"
+
+#~ msgid "Bold"
+#~ msgstr "Vetgedrukt"
+
+#, fuzzy
+#~ msgid "Ch_ange"
+#~ msgstr "Bijnaam veranderen"
+
 #~ msgid "Change status"
 #~ msgstr "Status veranderen"
 
 #~ msgid "Change status information"
 #~ msgstr "Statusinformatie wijzigen"
+
+#~ msgid "Change your nickname in a group chat"
+#~ msgstr "Je bijnaam veranderen in een groepsgesprek"
 
 #~ msgid "Changes the priority of account(s)"
 #~ msgstr "Verandert de prioriteit van de account(s)"
@@ -6512,6 +6298,13 @@ msgstr ""
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Controleer of Gajim wordt uitgevoerd"
 
+#, fuzzy
+#~ msgid "Clear chat window"
+#~ msgstr "Wis het tekstvenster"
+
+#~ msgid "Clear the text window"
+#~ msgstr "Wis het tekstvenster"
+
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr ""
 #~ "D-Bus bevindt zich niet op deze machine of de python module ontbreekt"
@@ -6519,8 +6312,36 @@ msgstr ""
 #~ msgid "Disconnect from the network"
 #~ msgstr "Netwerkverbinding verbreken"
 
+#, fuzzy
+#~ msgid "Display names of all group chat participants"
+#~ msgstr "Namen van alle deelnemers aan het groepsgesprek weergeven"
+
+#~ msgid "Display or change a group chat topic"
+#~ msgstr "Onderwerp van groepsgesprek weergeven of wijzigen"
+
 #~ msgid "Do not disturb"
 #~ msgstr "Niet storen"
+
+#, fuzzy
+#~ msgid "Drop Files or Contacts"
+#~ msgstr "Contacten importeren"
+
+#, fuzzy
+#~ msgid "Enter Password"
+#~ msgstr "Voer nieuw wachtwoord in:"
+
+#~ msgid "Error during command execution!"
+#~ msgstr "Fout tijdens uitvoeren van commando!"
+
+#, fuzzy
+#~ msgid "Error: Could not process image"
+#~ msgstr "Kon afbeelding niet laden"
+
+#~ msgid "Execute expression inside a shell, send output"
+#~ msgstr "Expressie uitvoeren in een shell, uitvoer sturen"
+
+#~ msgid "Execute expression inside a shell, show output"
+#~ msgstr "Expressie uitvoeren in een shell, uitvoer tonen"
 
 #~ msgid "Extended away"
 #~ msgstr "Lang weg"
@@ -6528,8 +6349,22 @@ msgstr ""
 #~ msgid "File path"
 #~ msgstr "Bestandspad"
 
+#, fuzzy
+#~ msgid "Forbid a participant to send you public or private messages"
+#~ msgstr "Verbied een deelnemer van je openbare of privéberichten te sturen"
+
+#, fuzzy
+#~ msgid "Format your message…"
+#~ msgstr "Schrijf een bericht…"
+
 #~ msgid "Free for chat"
 #~ msgstr "Open voor gesprek"
+
+#, fuzzy
+#~ msgid "Gajim will not try to join this group chat again"
+#~ msgstr ""
+#~ "Indien aangevinkt zal Gajim zich automatisch aanmelden bij dit "
+#~ "groepsgesprek tijdens het opstarten"
 
 #~ msgid "Gets detailed info on a account"
 #~ msgstr "Haalt gedetailleerde informatie op over een contact"
@@ -6553,10 +6388,47 @@ msgstr ""
 #~ msgid "If enabled, Gajim will execute XEP-0146 Commands."
 #~ msgstr "Indien ingeschakeld zal Gajim XEP-0146-opdrachten uitvoeren."
 
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
+#~ msgstr "Indien ingeschakeld zal Gajim XEP-0146-opdrachten uitvoeren."
+
+#~ msgid "Invalid affiliation given"
+#~ msgstr "Ongeldige aansluiting gegeven"
+
+#~ msgid "Invalid nickname"
+#~ msgstr "Ongeldige bijnaam"
+
+#~ msgid "Invalid role given"
+#~ msgstr "Ongeldige gegeven rol"
+
+#, fuzzy
+#~ msgid "Invite a user to a group chat for a reason"
+#~ msgstr "Nodig een gebruiker uit in een groepsgesprek voor een reden"
+
 #~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
 #~ msgstr ""
 #~ "Het lijkt erop dat Gajim niet wordt uitgevoerd, dus kan je gajim-remote "
 #~ "niet gebruiken."
+
+#, fuzzy
+#~ msgid "Join a group chat given by an XMPP Address"
+#~ msgstr "Deelnemen aan groepsgesprek met JID"
+
+#, fuzzy
+#~ msgid "Kick Participant"
+#~ msgstr "Deelnemer"
+
+#, fuzzy
+#~ msgid "Kick user from group chat by nickname"
+#~ msgstr "Schop gebruiker met bijnaam uit een groepsgesprek"
+
+#, fuzzy
+#~ msgid "Leave the group chat"
+#~ msgstr "Groepsgesprekken verlaten"
+
+#~ msgid "Limit must be an integer"
+#~ msgstr "Limiet moet een geheel getal zijn"
 
 #, fuzzy
 #~ msgid "Lists all contacts in the contact list, one for each line"
@@ -6570,8 +6442,21 @@ msgstr ""
 #~ msgid "Missing argument \"contact_jid\""
 #~ msgstr "Parameter ‘contact_jid’ ontbreekt"
 
+#~ msgid "Missing arguments"
+#~ msgstr "Parameters ontbreken"
+
 #~ msgid "Name of the account"
 #~ msgstr "Naam van de account"
+
+#~ msgid "Next sent messages"
+#~ msgstr "Volgende verzonden berichten"
+
+#~ msgid "Nickname not found"
+#~ msgstr "Bijnaam niet gevonden"
+
+#, fuzzy
+#~ msgid "No open voice chats with the contact"
+#~ msgstr "Geen open audiosessies met het contact"
 
 #~ msgid "Offline - disconnect"
 #~ msgstr "Offline - verbinding verbreken"
@@ -6579,11 +6464,44 @@ msgstr ""
 #~ msgid "Online"
 #~ msgstr "Online"
 
+#, fuzzy
+#~ msgid "Open a private chat window with a specified participant"
+#~ msgstr "Open een privé-gespreksvenster met opgegeven lid"
+
+#, fuzzy
+#~ msgid ""
+#~ "Open a private chat window with a specified participant and send him a "
+#~ "message"
+#~ msgstr ""
+#~ "Open een privé-gespreksvenster met opgegeven lid en stuur hem/haar een "
+#~ "bericht"
+
+#~ msgid "Ping?"
+#~ msgstr "Ping?"
+
+#~ msgid "Ping? (%s)"
+#~ msgstr "Ping? (%s)"
+
+#~ msgid "Pong! (%(nick)s %(delay)s s.)"
+#~ msgstr "Pong! (%(nick)s %(delay)s s.)"
+
+#~ msgid "Pong! (%s seconds)"
+#~ msgstr "Pong! (%s seconden)"
+
 #~ msgid "Presence description:"
 #~ msgstr "Aanwezigheidsbeschrijving:"
 
+#~ msgid "Previously sent message"
+#~ msgstr "Vorig verzonden bericht"
+
 #~ msgid "Prints a list of registered accounts"
 #~ msgstr "Drukt een lijst van geregistreerde accounts af"
+
+#~ msgid "Quote next message"
+#~ msgstr "Volgend bericht citeren"
+
+#~ msgid "Quote previous message"
+#~ msgstr "Vorig bericht citeren"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6603,6 +6521,30 @@ msgstr ""
 
 #~ msgid "Returns number of unread messages"
 #~ msgstr "Geeft het aantal ongelezen berichten weer"
+
+#, fuzzy
+#~ msgid "Send DTMF sequence through an open voice chat"
+#~ msgstr "DTMF-sequentie sturen via een open audiosessie"
+
+#, fuzzy
+#~ msgid "Send a disco info request"
+#~ msgstr "Verzonden ontvangstbevestigingen"
+
+#~ msgid "Send a message to the contact"
+#~ msgstr "Een bericht naar het contact sturen"
+
+#~ msgid "Send a message to the contact that will attract their attention"
+#~ msgstr ""
+#~ "Stuur een bericht naar het contact dat zijn/haar aandacht zal trekken"
+
+#~ msgid "Send a ping to the contact"
+#~ msgstr "Stuur een ping naar het contact"
+
+#~ msgid "Send action (in the third person) to the current chat"
+#~ msgstr "Stuur actie (in de derde persoon) naar het huidige gesprek"
+
+#~ msgid "Sending private message failed"
+#~ msgstr "Sturen van privébericht mislukt"
 
 #, fuzzy
 #~ msgid ""
@@ -6640,8 +6582,45 @@ msgstr ""
 #~ "Sessiebus is niet beschikbaar.\n"
 #~ "Lees %(url)s"
 
+#, fuzzy
+#~ msgid ""
+#~ "Set participant affiliation in group chat.\n"
+#~ "    Affiliation can be given as one of the following values:\n"
+#~ "    owner, admin, member, outcast, none"
+#~ msgstr ""
+#~ "Stel de aansluiting van een lid van het groepsgesprek in.\n"
+#~ "    Aansluiting kan een van de volgende waarden zijn:\n"
+#~ "    owner (eigenaar), admin (administrator), member (lid), outcast "
+#~ "(verschoppeling), none (geen)"
+
+#, fuzzy
+#~ msgid ""
+#~ "Set participant role in group chat.\n"
+#~ "    Role can be given as one of the following values:\n"
+#~ "    moderator, participant, visitor, none"
+#~ msgstr ""
+#~ "Stel rol van deelnemers aan groepsgesprek in.\n"
+#~ "    Rol kan een van volgende waarden zijn:\n"
+#~ "    moderator, participant, visitor, none"
+
+#~ msgid "Set the current status to away"
+#~ msgstr "Stel de huidige status in als even weg"
+
+#~ msgid "Set the current status to online"
+#~ msgstr "Stel de huidige status in als beschikbaar"
+
 #~ msgid "Set the presence type and description"
 #~ msgstr "Stel het type en beschrijving van de aanwezigheid in"
+
+#~ msgid ""
+#~ "Show help on a given command or a list of available commands if -a is "
+#~ "given"
+#~ msgstr ""
+#~ "Toon hulp voor een gegeven opdracht, of een lijst van beschikbare "
+#~ "opdrachten indien ‘-a’ opgegeven is"
+
+#~ msgid "Show logged messages which mention given text"
+#~ msgstr "Opgeslagen berichten waarin de opgegeven tekst voorkomt weergeven"
 
 #~ msgid "Shows a help on specific command"
 #~ msgstr "Toont hulp voor een specifieke opdracht"
@@ -6654,8 +6633,22 @@ msgstr ""
 #~ msgid "Status Change"
 #~ msgstr "Statusveranderingen tonen"
 
+#, fuzzy
+#~ msgid "T_ry Again"
+#~ msgstr "Opnieuw verifiëren…"
+
+#~ msgid "The same as using a doc-string, except it supports translation"
+#~ msgstr "The same as using a doc-string, except it supports translation"
+
 #~ msgid "The status has been changed."
 #~ msgstr "De status is veranderd."
+
+#, fuzzy
+#~ msgid "Toggle Video Chat"
+#~ msgstr "Videosessie in-/uitschakelen"
+
+#~ msgid "Too many arguments"
+#~ msgstr "Te veel parameters"
 
 #~ msgid ""
 #~ "Too many arguments. \n"
@@ -6663,6 +6656,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Te veel parameters. \n"
 #~ "Voer ‘%(basename)s help %(command)s’ in voor meer informatie"
+
+#, fuzzy
+#~ msgid "Unknown nickname"
+#~ msgstr "Na bijnaam:"
 
 #~ msgid ""
 #~ "Usage:\n"
@@ -6682,6 +6679,14 @@ msgstr ""
 #~ "Gebruik: %(basename)s %(command)s %(arguments)s \n"
 #~ "\t %(help)s"
 
+#, fuzzy
+#~ msgid "Video chats are not available"
+#~ msgstr "Videosessies zijn niet beschikbaar"
+
+#, fuzzy
+#~ msgid "Voice chats are not available"
+#~ msgstr "Videosessies zijn niet beschikbaar"
+
 #~ msgid "XML to send"
 #~ msgstr "Te versturen XML"
 
@@ -6697,12 +6702,23 @@ msgstr ""
 #~ msgid "XMPP Address of the group chat that will receive the message"
 #~ msgstr "JID van het groepsgesprek dat het bericht zal ontvangen"
 
+#, fuzzy
+#~ msgid ""
+#~ "You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
+#~ msgstr ""
+#~ "Je bent niet meer in groepsgesprek ‘%(room)s’ of ‘%(nick)s’ heeft het "
+#~ "groepsgesprek verlaten."
+
 #~ msgid "You have no active account"
 #~ msgstr "Je hebt geen actieve account"
 
 #, fuzzy
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "Gajim altijd sluiten"
+
+#, fuzzy
+#~ msgid "_Try Again"
+#~ msgstr "Opnieuw verifiëren…"
 
 #~ msgid ""
 #~ "change status of account \"account\". If not specified, try to change "
@@ -6726,6 +6742,9 @@ msgstr ""
 #~ msgid "file"
 #~ msgstr "bestand"
 
+#~ msgid "has closed the chat window or tab"
+#~ msgstr "heeft het gespreksvenster of -tabblad gesloten"
+
 #~ msgid "if specified, contact is taken from the contact list of this account"
 #~ msgstr ""
 #~ "indien opgegeven zal contact van de contactlijst van deze account gehaald "
@@ -6736,6 +6755,9 @@ msgstr ""
 
 #~ msgid "if specified, the message will be sent using this account"
 #~ msgstr "indien opgegeven zal het bericht verzonden worden met deze account"
+
+#~ msgid "is paying attention to the conversation"
+#~ msgstr "let op deze conversatie"
 
 #~ msgid "message contents"
 #~ msgstr "berichtinhoud"

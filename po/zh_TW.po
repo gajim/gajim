@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-24 12:49+0000\n"
+"POT-Creation-Date: 2022-08-13 16:07+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -19,23 +19,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-
-msgid ""
-"\n"
-"    Ban user by a nick or a JID from a groupchat\n"
-"\n"
-"    If given nickname is not found it will be treated as a JID.\n"
-"    "
-msgstr ""
-
-msgid ""
-"\n"
-"    Set the current status\n"
-"\n"
-"    Status can be given as one of the following values:\n"
-"    online, away, chat, xa, dnd.\n"
-"    "
-msgstr ""
 
 #, fuzzy
 msgid " (Video Call)"
@@ -155,10 +138,6 @@ msgstr ""
 msgid "%s is not a valid loglevel"
 msgstr "%s 不是一個合法的日誌層級"
 
-#, fuzzy, python-format
-msgid "%s is not a valid tone"
-msgstr "%s 不是一個合法的日誌層級"
-
 #, python-format
 msgid ""
 "%s is online with multiple devices.\n"
@@ -180,10 +159,6 @@ msgstr "遠端聯絡人停止了傳輸"
 #, fuzzy, python-format
 msgid "%s wants to send you a file"
 msgstr "%s 想傳送給您一個檔案。"
-
-#, fuzzy, python-format
-msgid "%s: Nothing found"
-msgstr " %s 找不到"
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -873,9 +848,6 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allow a participant to send you public or private messages"
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1141,13 +1113,13 @@ msgstr "幾分鐘就回來。"
 msgid "Back soon"
 msgstr "馬上回來"
 
+#, fuzzy
+msgid "Ban"
+msgstr "封禁(_B)"
+
 #, fuzzy, python-format
 msgid "Ban %s"
 msgstr "封禁名單"
-
-#, fuzzy
-msgid "Ban Participant"
-msgstr "參與者"
 
 msgid "Ban…"
 msgstr ""
@@ -1182,9 +1154,6 @@ msgstr "%s 的隱私策略清單"
 #, fuzzy
 msgid "Block…"
 msgstr "阻斷(_B)"
-
-msgid "Bold"
-msgstr "粗體"
 
 #, fuzzy
 msgid "Bookmarks"
@@ -1303,10 +1272,6 @@ msgid "Certificate signature failure"
 msgstr "證書籤名稱失敗"
 
 #, fuzzy
-msgid "Ch_ange"
-msgstr "變更暱稱(_N)…"
-
-#, fuzzy
 msgid "Ch_ange Subject"
 msgstr "變更主題(_S)…"
 
@@ -1331,10 +1296,6 @@ msgstr "變更主題(_S)…"
 
 msgid "Change your account’s password, etc."
 msgstr ""
-
-#, fuzzy
-msgid "Change your nickname in a group chat"
-msgstr "變更您的暱稱(Ctrl+N)"
 
 #, fuzzy
 msgid "Change your profile picture"
@@ -1464,16 +1425,8 @@ msgid "Clear Sound"
 msgstr "選擇聲音"
 
 #, fuzzy
-msgid "Clear chat window"
-msgstr "隱藏該視窗"
-
-#, fuzzy
 msgid "Clear message entry"
 msgstr "訊息已傳送"
-
-#, fuzzy
-msgid "Clear the text window"
-msgstr "隱藏該視窗"
 
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
@@ -1514,11 +1467,6 @@ msgstr "Color"
 #, fuzzy
 msgid "Command List"
 msgstr "封禁名單"
-
-msgid ""
-"Command disabled. This command can be enabled by setting "
-"'command_system_execute' to True in ACE (Advanced Configuration Editor)."
-msgstr ""
 
 #, fuzzy
 msgid "Commands"
@@ -1750,6 +1698,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr "複製連結位置(_C)"
 
+msgid "Correct"
+msgstr ""
+
 #, fuzzy
 msgid "Could not Open File"
 msgstr "無法讀取圖片"
@@ -1936,14 +1887,6 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
-#, fuzzy
-msgid "Display names of all group chat participants"
-msgstr "%s 不是一個聊天室的名稱。"
-
-#, fuzzy
-msgid "Display or change a group chat topic"
-msgstr "關閉多人聊天標籤/視窗前詢問。"
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "是否接受這個對帳號 %s 的請求?"
@@ -2004,10 +1947,6 @@ msgstr "轉發未讀訊息"
 #, fuzzy
 msgid "Downloading…"
 msgstr "載入"
-
-#, fuzzy
-msgid "Drop Files or Contacts"
-msgstr "邀請聯絡人(_C)"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2111,23 +2050,26 @@ msgid "Encrypting file…"
 msgstr "E2E 加密被停用"
 
 #, fuzzy
+msgid "Encryption error"
+msgstr "認證請求"
+
+#, fuzzy
 msgid "Encryption required"
 msgstr "認證請求"
 
 msgid "End call"
 msgstr ""
 
-#, fuzzy
-msgid "Enter Nickname"
-msgstr "插入暱稱"
-
-#, fuzzy
-msgid "Enter Password"
-msgstr "輸入新的密碼"
+msgid "Enter a password to join this chat"
+msgstr ""
 
 #, fuzzy
 msgid "Enter new password..."
 msgstr "輸入新的密碼"
+
+#, fuzzy
+msgid "Enter your new nickname"
+msgstr "插入暱稱"
 
 msgid ""
 "Enter your nickname. This is how your name is displayed to your contacts."
@@ -2139,9 +2081,6 @@ msgstr "錯誤"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "選擇圖像"
-
-msgid "Error during command execution!"
-msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2182,10 +2121,6 @@ msgstr "錯誤"
 msgid "Error: %s"
 msgstr "錯誤: %s"
 
-#, fuzzy
-msgid "Error: Could not process image"
-msgstr "無法讀取圖片"
-
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr "錯誤: 無法按讀開啟檔案 %s"
@@ -2209,12 +2144,6 @@ msgstr "執行命令(_E)…"
 #, fuzzy
 msgid "Execute Command…"
 msgstr "執行命令(_E)…"
-
-msgid "Execute expression inside a shell, send output"
-msgstr ""
-
-msgid "Execute expression inside a shell, show output"
-msgstr ""
 
 #, fuzzy
 msgid "Executing…"
@@ -2416,9 +2345,6 @@ msgstr ""
 msgid "For example: \"Julia is now online\""
 msgstr ""
 
-msgid "Forbid a participant to send you public or private messages"
-msgstr ""
-
 #, fuzzy
 msgid "Force Bookmark 2 usage"
 msgstr "將本聊天室加入書籤(_B)"
@@ -2426,6 +2352,10 @@ msgstr "將本聊天室加入書籤(_B)"
 #, fuzzy
 msgid "Forever"
 msgstr "永遠不"
+
+#, fuzzy
+msgid "Forget Group Chat"
+msgstr "離開聊天室"
 
 #, fuzzy
 msgid "Forget this Group Chat"
@@ -2446,10 +2376,6 @@ msgstr "格式錯誤，在證書的'不早於'欄位"
 #, fuzzy
 msgid "Format your message"
 msgstr "轉發未讀訊息"
-
-#, fuzzy
-msgid "Format your message…"
-msgstr "狀態訊息"
 
 msgid "Free for Chat"
 msgstr "和我聊天吧"
@@ -2513,10 +2439,6 @@ msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
-
-#, fuzzy
-msgid "Gajim will not try to join this group chat again"
-msgstr "如果選取，Gajim 會在啟動時加入此聊天室"
 
 msgid "Gajim will now exit"
 msgstr "Gajim 即將離開"
@@ -2670,6 +2592,10 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
+#, fuzzy
+msgid "Hide chat list"
+msgstr "切換視訊作業階段"
+
 msgid "Hide this menu"
 msgstr "隱藏本選單"
 
@@ -2759,9 +2685,6 @@ msgstr ""
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr "如果選取，Gajim 會在聯絡人清單視窗中顯示聯絡人的心情。"
 
-msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
-msgstr ""
-
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 
@@ -2798,7 +2721,7 @@ msgstr ""
 "您使用負的優先等級登入時您將不能從伺服器收到任何訊息。"
 
 #, fuzzy, python-format
-msgid "If you close this chat, you will leave '%s'."
+msgid "If you close this chat, you will leave \"%s\"."
 msgstr "如果關閉此視窗，您將中斷此聊天室的連線。"
 
 #, fuzzy
@@ -2896,19 +2819,12 @@ msgid "Invalid XMPP Address"
 msgstr "無效檔案"
 
 #, fuzzy
-msgid "Invalid affiliation given"
-msgstr "歸屬變更"
-
-#, fuzzy
 msgid "Invalid domain name"
 msgstr "無效的帳號名稱"
 
-msgid "Invalid nickname"
-msgstr "無效的暱稱"
-
 #, fuzzy
-msgid "Invalid role given"
-msgstr "無效的伺服器"
+msgid "Invite"
+msgstr "邀請(_V)"
 
 #, fuzzy
 msgid "Invite Contacts"
@@ -2921,9 +2837,6 @@ msgstr "邀請聯絡人(_C)"
 #, fuzzy
 msgid "Invite New Contact"
 msgstr "邀請聯絡人(_C)"
-
-msgid "Invite a user to a group chat for a reason"
-msgstr ""
 
 msgid "Invite friends to group chats or join one"
 msgstr ""
@@ -2956,9 +2869,6 @@ msgstr ""
 
 msgid "It is not possible to send empty files"
 msgstr "無法傳送空檔案"
-
-msgid "Italic"
-msgstr "斜體"
 
 #, fuzzy
 msgid "I’m eating."
@@ -3013,10 +2923,6 @@ msgid "Join Support Chat"
 msgstr "加入多人聊天"
 
 #, fuzzy
-msgid "Join a group chat given by an XMPP Address"
-msgstr "在多人聊天視窗中(_G)"
-
-#, fuzzy
 msgid "Joining…"
 msgstr "封禁…"
 
@@ -3037,17 +2943,13 @@ msgstr ""
 msgid "Key usage does not include certificate signing"
 msgstr "密鑰用途中不包含證書籤名稱"
 
+#, fuzzy
+msgid "Kick"
+msgstr "踢除(_K)"
+
 #, fuzzy, python-format
 msgid "Kick %s"
 msgstr "將踢走 %s"
-
-#, fuzzy
-msgid "Kick Participant"
-msgstr "參與者"
-
-#, fuzzy
-msgid "Kick user from group chat by nickname"
-msgstr "您被邀請到一個聊天室"
 
 #, fuzzy
 msgid "Kick…"
@@ -3068,17 +2970,10 @@ msgstr "最後狀態: %s"
 msgid "Leave Group Chat"
 msgstr "離開聊天室"
 
-#, fuzzy
-msgid "Leave the group chat"
-msgstr "離開聊天室"
-
 msgid "Left Click Action"
 msgstr ""
 
 msgid "Let others know if you read up to this point"
-msgstr ""
-
-msgid "Limit must be an integer"
 msgstr ""
 
 #, fuzzy
@@ -3267,11 +3162,10 @@ msgstr "記錄聯絡人狀態變化(_L)"
 msgid "Miscellaneous"
 msgstr "<b>雜項</b>"
 
-#, fuzzy
-msgid "Missing arguments"
-msgstr "缺失的\"聯絡人 JID\"參數"
-
 msgid "Missing dependencies for Audio/Video"
+msgstr ""
+
+msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
@@ -3339,23 +3233,15 @@ msgstr "搜尋"
 msgid "New Workspace"
 msgstr "重新命名聯絡人"
 
-#, fuzzy, python-format
-msgid "New message from %s"
+#, fuzzy
+msgid "New message from"
 msgstr "來自 %(nickname)s 的新訊息"
 
 msgid "Next"
 msgstr ""
 
-#, fuzzy
-msgid "Next sent messages"
-msgstr "預設的訊息:"
-
 msgid "Nickname"
 msgstr "暱稱"
-
-#, fuzzy
-msgid "Nickname not found"
-msgstr "要使用的暱稱"
 
 msgid "No"
 msgstr "No"
@@ -3412,10 +3298,6 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "沒有有效帳號"
-
-#, fuzzy
-msgid "No open voice chats with the contact"
-msgstr "向聯絡人傳送檔案"
 
 #, fuzzy
 msgid "No proxy used"
@@ -3541,14 +3423,6 @@ msgstr "外掛程式"
 #, fuzzy
 msgid "Open _Folder"
 msgstr "開啟資料夾(_O)"
-
-msgid "Open a private chat window with a specified participant"
-msgstr ""
-
-msgid ""
-"Open a private chat window with a specified participant and send him a "
-"message"
-msgstr ""
 
 msgid "Open as _Link"
 msgstr "做為連結開啟(_L)"
@@ -3714,13 +3588,6 @@ msgstr "要使用的圖片"
 msgid "Pin Chat"
 msgstr "語音聊天請求"
 
-msgid "Ping?"
-msgstr "Ping?"
-
-#, fuzzy, python-format
-msgid "Ping? (%s)"
-msgstr "Pong! (%s s.)"
-
 msgid "Pinned"
 msgstr ""
 
@@ -3810,14 +3677,6 @@ msgstr "外掛程式"
 msgid "Plugins Updated Successfully"
 msgstr "外掛程式失敗"
 
-#, fuzzy, python-format
-msgid "Pong! (%(nick)s %(delay)s s.)"
-msgstr "Pong! (%s s.)"
-
-#, fuzzy, python-format
-msgid "Pong! (%s seconds)"
-msgstr "Pong! (%s s.)"
-
 #, fuzzy
 msgid "Port"
 msgstr "連接埠(_P):"
@@ -3863,10 +3722,6 @@ msgstr "在彈出提示中預覽訊息?"
 #, fuzzy
 msgid "Previous"
 msgstr "羨慕"
-
-#, fuzzy
-msgid "Previously sent message"
-msgstr "預設的訊息:"
 
 msgid "Print XML stanzas and other debug information"
 msgstr ""
@@ -3938,14 +3793,6 @@ msgstr ""
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quote next message"
-msgstr "傳送訊息"
-
-#, fuzzy
-msgid "Quote previous message"
-msgstr "狀態訊息"
 
 #, fuzzy
 msgid "Quote…"
@@ -4447,9 +4294,6 @@ msgstr "最後狀態"
 msgid "Send Chatstate in Group Chats"
 msgstr "無法加入聊天室"
 
-msgid "Send DTMF sequence through an open voice chat"
-msgstr ""
-
 #, fuzzy
 msgid "Send File"
 msgstr "傳送檔案(_F)"
@@ -4487,25 +4331,6 @@ msgid "Send _Report"
 msgstr "報告錯誤(_R)"
 
 #, fuzzy
-msgid "Send a disco info request"
-msgstr "傳送回執請求"
-
-#, fuzzy
-msgid "Send a message to the contact"
-msgstr "向聯絡人傳送檔案"
-
-#, fuzzy
-msgid "Send a message to the contact that will attract their attention"
-msgstr "向聯絡人傳送檔案"
-
-#, fuzzy
-msgid "Send a ping to the contact"
-msgstr "向聯絡人傳送檔案"
-
-msgid "Send action (in the third person) to the current chat"
-msgstr ""
-
-#, fuzzy
 msgid "Send message on Ctrl+Enter and make a new line with Enter."
 msgstr "用 Ctrl+Enter 傳送訊息，Enter 開始新列(紫茉莉 ICQ 客戶端預設作業)。"
 
@@ -4515,9 +4340,6 @@ msgstr "傳送訊息"
 
 msgid "Sender: "
 msgstr "傳送者: "
-
-msgid "Sending private message failed"
-msgstr "傳送私有訊息失敗"
 
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4578,27 +4400,9 @@ msgstr "伺服器"
 msgid "Set configuration directory"
 msgstr "%s 設定錯誤"
 
-msgid ""
-"Set participant affiliation in group chat.\n"
-"    Affiliation can be given as one of the following values:\n"
-"    owner, admin, member, outcast, none"
-msgstr ""
-
-msgid ""
-"Set participant role in group chat.\n"
-"    Role can be given as one of the following values:\n"
-"    moderator, participant, visitor, none"
-msgstr ""
-
 #, fuzzy
 msgid "Set status message"
 msgstr "狀態訊息"
-
-msgid "Set the current status to away"
-msgstr ""
-
-msgid "Set the current status to online"
-msgstr ""
 
 msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
@@ -4710,9 +4514,9 @@ msgstr ""
 msgid "Show all warnings"
 msgstr "顯示所有未處理事件(_E)"
 
-msgid ""
-"Show help on a given command or a list of available commands if -a is given"
-msgstr ""
+#, fuzzy
+msgid "Show chat list"
+msgstr "位置: %s"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -4721,9 +4525,6 @@ msgstr "顯示代理(_P)"
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
-msgstr ""
-
-msgid "Show logged messages which mention given text"
 msgstr ""
 
 msgid ""
@@ -4960,9 +4761,6 @@ msgstr ""
 msgid "Street"
 msgstr "stream"
 
-msgid "Strike"
-msgstr "劃去"
-
 msgid "Style"
 msgstr "風格"
 
@@ -5051,10 +4849,6 @@ msgstr "<b>系統:</b>"
 msgid "TLS verification failed: %s"
 msgstr "SSL 憑證驗證"
 
-#, fuzzy
-msgid "T_ry Again"
-msgstr "重新驗證…"
-
 msgid "Tabbed chat window"
 msgstr ""
 
@@ -5111,9 +4905,6 @@ msgid ""
 msgstr ""
 
 msgid "The last message was written on a mobile client"
-msgstr ""
-
-msgid "The same as using a doc-string, except it supports translation"
 msgstr ""
 
 #, fuzzy
@@ -5307,19 +5098,8 @@ msgid "Toggle Chat List"
 msgstr "切換視訊作業階段"
 
 #, fuzzy
-msgid "Toggle Video Chat"
-msgstr "切換視訊作業階段"
-
-msgid "Toggle Voice Chat"
-msgstr ""
-
-#, fuzzy
 msgid "Toggle participants list"
 msgstr "參與者"
-
-#, fuzzy
-msgid "Too many arguments"
-msgstr "缺失的\"聯絡人 JID\"參數"
 
 msgid "Topic"
 msgstr ""
@@ -5440,10 +5220,6 @@ msgstr "不明標題"
 #, fuzzy
 msgid "Unknown language"
 msgstr "不明標題"
-
-#, fuzzy
-msgid "Unknown nickname"
-msgstr "為聯絡人 %s 輸入新的暱稱"
 
 #, fuzzy
 msgid "Unknown validation error"
@@ -5602,10 +5378,6 @@ msgstr "視訊測試"
 msgid "Video calls are not available on Windows"
 msgstr "連線無法使用"
 
-#, fuzzy
-msgid "Video chats are not available"
-msgstr "連線無法使用"
-
 msgid "Video test"
 msgstr "視訊測試"
 
@@ -5628,10 +5400,6 @@ msgstr "<b>可視化提示</b>"
 #, fuzzy
 msgid "Voice Request"
 msgstr "語音聊天請求"
-
-#, fuzzy
-msgid "Voice chats are not available"
-msgstr "連線無法使用"
 
 #, fuzzy
 msgid "Waiting…"
@@ -5754,11 +5522,6 @@ msgstr "您確定您要離開 Gajim 嗎?"
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "您將從您的聯絡人清單中將 \"%(name)s\" (%(jid)s) 移除。\n"
-
-#, fuzzy, python-format
-msgid ""
-"You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
-msgstr "您不再在聊天室\"%(room)s\"中或\"%(nick)s\"已離開。"
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5965,9 +5728,6 @@ msgstr "approve"
 msgid "_Back"
 msgstr "馬上回來"
 
-msgid "_Ban"
-msgstr "封禁(_B)"
-
 msgid "_Block"
 msgstr "阻斷(_B)"
 
@@ -6054,10 +5814,6 @@ msgstr "特性"
 msgid "_File Transfer"
 msgstr "檔案傳輸"
 
-#, fuzzy
-msgid "_Forget Group Chat"
-msgstr "離開聊天室"
-
 msgid "_Free for Chat"
 msgstr "和我聊天吧(_F)"
 
@@ -6082,9 +5838,6 @@ msgstr "加入(_J)"
 
 msgid "_Keyboard Shortcuts"
 msgstr ""
-
-msgid "_Kick"
-msgstr "踢除(_K)"
 
 msgid "_Later"
 msgstr ""
@@ -6230,10 +5983,6 @@ msgid "_Subscribe"
 msgstr "訂閱(_S)"
 
 #, fuzzy
-msgid "_Try Again"
-msgstr "重新驗證…"
-
-#, fuzzy
 msgid "_Type"
 msgstr "類型(_T):"
 
@@ -6292,6 +6041,9 @@ msgstr "音訊輸出"
 msgid "bearing"
 msgstr "海洋"
 
+msgid "bold"
+msgstr ""
+
 #, fuzzy
 msgid "building"
 msgstr "藏起來"
@@ -6338,9 +6090,6 @@ msgstr "檔案傳輸清單"
 msgid "floor"
 msgstr ""
 
-msgid "has closed the chat window or tab"
-msgstr "關閉了聊天視窗或標籤"
-
 #, fuzzy
 msgid ""
 "has invited you to a group chat.\n"
@@ -6357,8 +6106,9 @@ msgstr "正在輸入訊息…"
 msgid "is doing something else"
 msgstr "在做其他事情"
 
-msgid "is paying attention to the conversation"
-msgstr "注意著與您的對話"
+#, fuzzy
+msgid "italic"
+msgstr "斜體"
 
 msgid "lat"
 msgstr ""
@@ -6406,6 +6156,10 @@ msgstr ""
 #, fuzzy
 msgid "street"
 msgstr "stream"
+
+#, fuzzy
+msgid "strike"
+msgstr "劃去"
 
 msgid "text"
 msgstr ""
@@ -6466,7 +6220,15 @@ msgstr "%(nick)s 的狀態是 %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#, fuzzy
+#~ msgid "%s is not a valid tone"
+#~ msgstr "%s 不是一個合法的日誌層級"
+
 #~ msgid "%s not found"
+#~ msgstr " %s 找不到"
+
+#, fuzzy
+#~ msgid "%s: Nothing found"
 #~ msgstr " %s 找不到"
 
 #, fuzzy
@@ -6515,11 +6277,26 @@ msgstr ""
 #~ msgid "Arguments:"
 #~ msgstr "參數:"
 
+#, fuzzy
+#~ msgid "Ban Participant"
+#~ msgstr "參與者"
+
+#~ msgid "Bold"
+#~ msgstr "粗體"
+
+#, fuzzy
+#~ msgid "Ch_ange"
+#~ msgstr "變更暱稱(_N)…"
+
 #~ msgid "Change status"
 #~ msgstr "變更狀態"
 
 #~ msgid "Change status information"
 #~ msgstr "變更狀態資訊"
+
+#, fuzzy
+#~ msgid "Change your nickname in a group chat"
+#~ msgstr "變更您的暱稱(Ctrl+N)"
 
 #, fuzzy
 #~ msgid "Changes the priority of account(s)"
@@ -6532,11 +6309,39 @@ msgstr ""
 #~ msgid "Check if Gajim is running"
 #~ msgstr "請檢查 Gajim 是否正在執行"
 
+#, fuzzy
+#~ msgid "Clear chat window"
+#~ msgstr "隱藏該視窗"
+
+#, fuzzy
+#~ msgid "Clear the text window"
+#~ msgstr "隱藏該視窗"
+
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr "在這臺電腦上沒有 D-Bus 或是 Python 模組缺失"
 
+#, fuzzy
+#~ msgid "Display names of all group chat participants"
+#~ msgstr "%s 不是一個聊天室的名稱。"
+
+#, fuzzy
+#~ msgid "Display or change a group chat topic"
+#~ msgstr "關閉多人聊天標籤/視窗前詢問。"
+
 #~ msgid "Do not disturb"
 #~ msgstr "請無打擾"
+
+#, fuzzy
+#~ msgid "Drop Files or Contacts"
+#~ msgstr "邀請聯絡人(_C)"
+
+#, fuzzy
+#~ msgid "Enter Password"
+#~ msgstr "輸入新的密碼"
+
+#, fuzzy
+#~ msgid "Error: Could not process image"
+#~ msgstr "無法讀取圖片"
 
 #~ msgid "Extended away"
 #~ msgstr "離開很久了"
@@ -6544,8 +6349,16 @@ msgstr ""
 #~ msgid "File path"
 #~ msgstr "檔案路徑"
 
+#, fuzzy
+#~ msgid "Format your message…"
+#~ msgstr "狀態訊息"
+
 #~ msgid "Free for chat"
 #~ msgstr "和我聊天吧"
+
+#, fuzzy
+#~ msgid "Gajim will not try to join this group chat again"
+#~ msgstr "如果選取，Gajim 會在啟動時加入此聊天室"
 
 #~ msgid "Gets detailed info on a account"
 #~ msgstr "獲得帳號的詳細資訊"
@@ -6564,8 +6377,35 @@ msgstr ""
 #~ "如果為真，按一下視窗管理器的 X 按鈕會離開 Gajim。此一設定僅當啟用通知區域"
 #~ "圖示時會生效。"
 
+#, fuzzy
+#~ msgid "Invalid affiliation given"
+#~ msgstr "歸屬變更"
+
+#~ msgid "Invalid nickname"
+#~ msgstr "無效的暱稱"
+
+#, fuzzy
+#~ msgid "Invalid role given"
+#~ msgstr "無效的伺服器"
+
 #~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
 #~ msgstr "似乎 Gajim 不在執行。因此您無法使用 gajim-remote。"
+
+#, fuzzy
+#~ msgid "Join a group chat given by an XMPP Address"
+#~ msgstr "在多人聊天視窗中(_G)"
+
+#, fuzzy
+#~ msgid "Kick Participant"
+#~ msgstr "參與者"
+
+#, fuzzy
+#~ msgid "Kick user from group chat by nickname"
+#~ msgstr "您被邀請到一個聊天室"
+
+#, fuzzy
+#~ msgid "Leave the group chat"
+#~ msgstr "離開聊天室"
 
 #, fuzzy
 #~ msgid "Lists all contacts in the contact list, one for each line"
@@ -6574,8 +6414,24 @@ msgstr ""
 #~ msgid "Missing argument \"contact_jid\""
 #~ msgstr "缺失的\"聯絡人 JID\"參數"
 
+#, fuzzy
+#~ msgid "Missing arguments"
+#~ msgstr "缺失的\"聯絡人 JID\"參數"
+
 #~ msgid "Name of the account"
 #~ msgstr "帳號名稱"
+
+#, fuzzy
+#~ msgid "Next sent messages"
+#~ msgstr "預設的訊息:"
+
+#, fuzzy
+#~ msgid "Nickname not found"
+#~ msgstr "要使用的暱稱"
+
+#, fuzzy
+#~ msgid "No open voice chats with the contact"
+#~ msgstr "向聯絡人傳送檔案"
 
 #~ msgid "Offline - disconnect"
 #~ msgstr "離線 - 未連線"
@@ -6583,11 +6439,38 @@ msgstr ""
 #~ msgid "Online"
 #~ msgstr "線上"
 
+#~ msgid "Ping?"
+#~ msgstr "Ping?"
+
+#, fuzzy
+#~ msgid "Ping? (%s)"
+#~ msgstr "Pong! (%s s.)"
+
+#, fuzzy
+#~ msgid "Pong! (%(nick)s %(delay)s s.)"
+#~ msgstr "Pong! (%s s.)"
+
+#, fuzzy
+#~ msgid "Pong! (%s seconds)"
+#~ msgstr "Pong! (%s s.)"
+
 #~ msgid "Presence description:"
 #~ msgstr "狀態描述:"
 
+#, fuzzy
+#~ msgid "Previously sent message"
+#~ msgstr "預設的訊息:"
+
 #~ msgid "Prints a list of registered accounts"
 #~ msgstr "列印註冊的帳號"
+
+#, fuzzy
+#~ msgid "Quote next message"
+#~ msgstr "傳送訊息"
+
+#, fuzzy
+#~ msgid "Quote previous message"
+#~ msgstr "狀態訊息"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6603,6 +6486,25 @@ msgstr ""
 
 #~ msgid "Returns number of unread messages"
 #~ msgstr "回傳未讀訊息數"
+
+#, fuzzy
+#~ msgid "Send a disco info request"
+#~ msgstr "傳送回執請求"
+
+#, fuzzy
+#~ msgid "Send a message to the contact"
+#~ msgstr "向聯絡人傳送檔案"
+
+#, fuzzy
+#~ msgid "Send a message to the contact that will attract their attention"
+#~ msgstr "向聯絡人傳送檔案"
+
+#, fuzzy
+#~ msgid "Send a ping to the contact"
+#~ msgstr "向聯絡人傳送檔案"
+
+#~ msgid "Sending private message failed"
+#~ msgstr "傳送私有訊息失敗"
 
 #, fuzzy
 #~ msgid ""
@@ -6650,8 +6552,20 @@ msgstr ""
 #~ msgid "Status Change"
 #~ msgstr "記錄聯絡人狀態變化(_L)"
 
+#, fuzzy
+#~ msgid "T_ry Again"
+#~ msgstr "重新驗證…"
+
 #~ msgid "The status has been changed."
 #~ msgstr "狀態發生了變化。"
+
+#, fuzzy
+#~ msgid "Toggle Video Chat"
+#~ msgstr "切換視訊作業階段"
+
+#, fuzzy
+#~ msgid "Too many arguments"
+#~ msgstr "缺失的\"聯絡人 JID\"參數"
 
 #~ msgid ""
 #~ "Too many arguments. \n"
@@ -6659,6 +6573,10 @@ msgstr ""
 #~ msgstr ""
 #~ "參數太多。\n"
 #~ "輸入 \"%(basename)s help %(command)s\" 獲取更多資訊"
+
+#, fuzzy
+#~ msgid "Unknown nickname"
+#~ msgstr "為聯絡人 %s 輸入新的暱稱"
 
 #, fuzzy
 #~ msgid ""
@@ -6677,6 +6595,14 @@ msgstr ""
 #~ "用法: %(basename)s %(command)s %(arguments)s \n"
 #~ "\t %(help)s"
 
+#, fuzzy
+#~ msgid "Video chats are not available"
+#~ msgstr "連線無法使用"
+
+#, fuzzy
+#~ msgid "Voice chats are not available"
+#~ msgstr "連線無法使用"
+
 #~ msgid "XML to send"
 #~ msgstr "傳送 XML"
 
@@ -6692,12 +6618,21 @@ msgstr ""
 #~ msgid "XMPP Address of the group chat that will receive the message"
 #~ msgstr "要收到這條訊息的聊天室的 JID"
 
+#, fuzzy
+#~ msgid ""
+#~ "You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
+#~ msgstr "您不再在聊天室\"%(room)s\"中或\"%(nick)s\"已離開。"
+
 #~ msgid "You have no active account"
 #~ msgstr "沒有活動的帳號"
 
 #, fuzzy
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "總是關閉 Gajim"
+
+#, fuzzy
+#~ msgid "_Try Again"
+#~ msgstr "重新驗證…"
 
 #~ msgid ""
 #~ "change status of account \"account\". If not specified, try to change "
@@ -6717,6 +6652,9 @@ msgstr ""
 #~ msgid "file"
 #~ msgstr "檔案"
 
+#~ msgid "has closed the chat window or tab"
+#~ msgstr "關閉了聊天視窗或標籤"
+
 #~ msgid "if specified, contact is taken from the contact list of this account"
 #~ msgstr "如指定，將從此帳號清單下移出聯絡人"
 
@@ -6725,6 +6663,9 @@ msgstr ""
 
 #~ msgid "if specified, the message will be sent using this account"
 #~ msgstr "如指定，訊息將被用此帳號傳送"
+
+#~ msgid "is paying attention to the conversation"
+#~ msgstr "注意著與您的對話"
 
 #~ msgid "message contents"
 #~ msgstr "訊息內容"

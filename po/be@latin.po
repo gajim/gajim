@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-24 12:49+0000\n"
+"POT-Creation-Date: 2022-08-13 16:07+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -16,23 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-
-msgid ""
-"\n"
-"    Ban user by a nick or a JID from a groupchat\n"
-"\n"
-"    If given nickname is not found it will be treated as a JID.\n"
-"    "
-msgstr ""
-
-msgid ""
-"\n"
-"    Set the current status\n"
-"\n"
-"    Status can be given as one of the following values:\n"
-"    online, away, chat, xa, dnd.\n"
-"    "
-msgstr ""
 
 #, fuzzy
 msgid " (Video Call)"
@@ -153,10 +136,6 @@ msgid "%s is not a valid loglevel"
 msgstr ""
 
 #, python-format
-msgid "%s is not a valid tone"
-msgstr ""
-
-#, python-format
 msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the file to."
@@ -177,10 +156,6 @@ msgstr "Vydalaje kantakt sa śpisu"
 #, fuzzy, python-format
 msgid "%s wants to send you a file"
 msgstr "%s choča dasłać tabie fajł."
-
-#, fuzzy, python-format
-msgid "%s: Nothing found"
-msgstr "%s nia znojdzieny"
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -872,9 +847,6 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allow a participant to send you public or private messages"
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1134,13 +1106,13 @@ msgstr "Viarnusia praz paru chvilinaŭ."
 msgid "Back soon"
 msgstr "Chutka viarnusia"
 
+#, fuzzy
+msgid "Ban"
+msgstr "Za_blakuj"
+
 #, fuzzy, python-format
 msgid "Ban %s"
 msgstr "Śpis zablakavanych kantaktaŭ"
-
-#, fuzzy
-msgid "Ban Participant"
-msgstr "Udzielnik"
 
 msgid "Ban…"
 msgstr ""
@@ -1173,9 +1145,6 @@ msgstr "Śpis pryvatnaści dla %s"
 
 msgid "Block…"
 msgstr ""
-
-msgid "Bold"
-msgstr "Tłusty"
 
 #, fuzzy
 msgid "Bookmarks"
@@ -1294,10 +1263,6 @@ msgid "Certificate signature failure"
 msgstr ""
 
 #, fuzzy
-msgid "Ch_ange"
-msgstr "Źmiani _mianušku"
-
-#, fuzzy
 msgid "Ch_ange Subject"
 msgstr "Źmiani _temu"
 
@@ -1322,10 +1287,6 @@ msgstr "Źmiani _temu"
 
 msgid "Change your account’s password, etc."
 msgstr ""
-
-#, fuzzy
-msgid "Change your nickname in a group chat"
-msgstr "Źmiani _mianušku"
 
 #, fuzzy
 msgid "Change your profile picture"
@@ -1455,16 +1416,8 @@ msgid "Clear Sound"
 msgstr "Abiary hukavy fajł"
 
 #, fuzzy
-msgid "Clear chat window"
-msgstr "Užyvańnie: /%s, ačyščaje akno ad tekstu."
-
-#, fuzzy
 msgid "Clear message entry"
 msgstr "Paviedamleńnie dasłanaje"
-
-#, fuzzy
-msgid "Clear the text window"
-msgstr "Užyvańnie: /%s, ačyščaje akno ad tekstu."
 
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
@@ -1505,11 +1458,6 @@ msgstr "Koler"
 #, fuzzy
 msgid "Command List"
 msgstr "Zahady: %s"
-
-msgid ""
-"Command disabled. This command can be enabled by setting "
-"'command_system_execute' to True in ACE (Advanced Configuration Editor)."
-msgstr ""
 
 #, fuzzy
 msgid "Commands"
@@ -1742,6 +1690,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr "S_kapijuj adras spasyłki"
 
+msgid "Correct"
+msgstr ""
+
 #, fuzzy
 msgid "Could not Open File"
 msgstr "Niemahčyma adčytać vyjavu"
@@ -1933,14 +1884,6 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
-#, fuzzy
-msgid "Display names of all group chat participants"
-msgstr "Užyvańnie: /%s, pakazvaje imiony naviednikaŭ pakoju."
-
-#, fuzzy
-msgid "Display or change a group chat topic"
-msgstr "Pytajsia paćvierdžańnia pierad začynieńniem kartki/akna razmovy."
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Prymaješ hety zapyt?"
@@ -2001,10 +1944,6 @@ msgstr "%d niečytanaje paviedamleńnie"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Uvod paviedamleńnia"
-
-#, fuzzy
-msgid "Drop Files or Contacts"
-msgstr "Kantakty"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2103,23 +2042,26 @@ msgid "Encrypting file…"
 msgstr "Šyfravańnie adklučanaje"
 
 #, fuzzy
+msgid "Encryption error"
+msgstr "Šyfravańnie ŭklučanaje"
+
+#, fuzzy
 msgid "Encryption required"
 msgstr "Šyfravańnie ŭklučanaje"
 
 msgid "End call"
 msgstr ""
 
-#, fuzzy
-msgid "Enter Nickname"
-msgstr "Ustaŭ mianušku"
-
-#, fuzzy
-msgid "Enter Password"
-msgstr "Uviadzi novy parol:"
+msgid "Enter a password to join this chat"
+msgstr ""
 
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Uviadzi novy parol:"
+
+#, fuzzy
+msgid "Enter your new nickname"
+msgstr "Ustaŭ mianušku"
 
 msgid ""
 "Enter your nickname. This is how your name is displayed to your contacts."
@@ -2131,9 +2073,6 @@ msgstr ""
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Abiary vyjavu"
-
-msgid "Error during command execution!"
-msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2175,10 +2114,6 @@ msgstr "Pamyłka Avahi"
 msgid "Error: %s"
 msgstr "Tekst pamyłki: %s"
 
-#, fuzzy
-msgid "Error: Could not process image"
-msgstr "Niemahčyma adčytać vyjavu"
-
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr "Pamyłka: niemahčyma adčytać %s"
@@ -2202,12 +2137,6 @@ msgstr "_Vykanaj zahad..."
 #, fuzzy
 msgid "Execute Command…"
 msgstr "_Vykanaj zahad..."
-
-msgid "Execute expression inside a shell, send output"
-msgstr ""
-
-msgid "Execute expression inside a shell, show output"
-msgstr ""
 
 #, fuzzy
 msgid "Executing…"
@@ -2411,9 +2340,6 @@ msgstr ""
 msgid "For example: \"Julia is now online\""
 msgstr ""
 
-msgid "Forbid a participant to send you public or private messages"
-msgstr ""
-
 #, fuzzy
 msgid "Force Bookmark 2 usage"
 msgstr "_Stvary zakładku dla hetaja pakoju"
@@ -2421,6 +2347,10 @@ msgstr "_Stvary zakładku dla hetaja pakoju"
 #, fuzzy
 msgid "Forever"
 msgstr "_Nikoli"
+
+#, fuzzy
+msgid "Forget Group Chat"
+msgstr "Pakiń pakoji"
 
 #, fuzzy
 msgid "Forget this Group Chat"
@@ -2441,10 +2371,6 @@ msgstr ""
 #, fuzzy
 msgid "Format your message"
 msgstr "%d niečytanaje paviedamleńnie"
-
-#, fuzzy
-msgid "Format your message…"
-msgstr "Novaje pryvatnaje paviedamleńnie"
 
 msgid "Free for Chat"
 msgstr "Achvotna parazmaŭlaju"
@@ -2508,12 +2434,6 @@ msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
-
-#, fuzzy
-msgid "Gajim will not try to join this group chat again"
-msgstr ""
-"Kali ŭklučanaja hetaja opcyja, Gajim budzie dałučacca da hetaha pakoju pry "
-"starcie"
 
 msgid "Gajim will now exit"
 msgstr "Gajim zaviaršaje vykanańnie"
@@ -2667,6 +2587,10 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
+#, fuzzy
+msgid "Hide chat list"
+msgstr "Udzielnik"
+
 msgid "Hide this menu"
 msgstr "Schavaj hetaje menu"
 
@@ -2759,9 +2683,6 @@ msgstr ""
 "Kali ŭklučanaja hetaja opcyja, Gajim budzie pakazvać avatary kantaktaŭ u "
 "śpisie kantaktaŭ i ŭ pakojach"
 
-msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
-msgstr ""
-
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 
@@ -2795,7 +2716,7 @@ msgstr ""
 "nia budzieš atrymvać paviedamleńniaŭ z servera."
 
 #, fuzzy, python-format
-msgid "If you close this chat, you will leave '%s'."
+msgid "If you close this chat, you will leave \"%s\"."
 msgstr "Kali začyniš hetaje akno, adłučyśsia ad pakoju."
 
 msgid ""
@@ -2893,20 +2814,12 @@ msgid "Invalid XMPP Address"
 msgstr "Niapravilny fajł"
 
 #, fuzzy
-msgid "Invalid affiliation given"
-msgstr "Suviaź: "
-
-#, fuzzy
 msgid "Invalid domain name"
 msgstr "Niapravilnaja nazva kontu"
 
 #, fuzzy
-msgid "Invalid nickname"
-msgstr "Niapravilnaje imia karystalnika"
-
-#, fuzzy
-msgid "Invalid role given"
-msgstr "Niapravilnaje imia karystalnika"
+msgid "Invite"
+msgstr "_Zaprasi"
 
 #, fuzzy
 msgid "Invite Contacts"
@@ -2919,9 +2832,6 @@ msgstr "Kantakty"
 #, fuzzy
 msgid "Invite New Contact"
 msgstr "Kantakty"
-
-msgid "Invite a user to a group chat for a reason"
-msgstr ""
 
 msgid "Invite friends to group chats or join one"
 msgstr ""
@@ -2954,9 +2864,6 @@ msgstr ""
 
 msgid "It is not possible to send empty files"
 msgstr "Niemahčyma dasyłać pustyja fajły"
-
-msgid "Italic"
-msgstr "Nachileny"
 
 #, fuzzy
 msgid "I’m eating."
@@ -3011,10 +2918,6 @@ msgid "Join Support Chat"
 msgstr "Dałučysia da pakoju"
 
 #, fuzzy
-msgid "Join a group chat given by an XMPP Address"
-msgstr "Dałučysia da _pakoju"
-
-#, fuzzy
 msgid "Joining…"
 msgstr "Blakavańnie..."
 
@@ -3035,17 +2938,13 @@ msgstr ""
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
+#, fuzzy
+msgid "Kick"
+msgstr "_Vypchni"
+
 #, fuzzy, python-format
 msgid "Kick %s"
 msgstr "Vypichvajecca %s"
-
-#, fuzzy
-msgid "Kick Participant"
-msgstr "Udzielnik"
-
-#, fuzzy
-msgid "Kick user from group chat by nickname"
-msgstr "Ty nie dałučyŭsia da pakoju."
 
 #, fuzzy
 msgid "Kick…"
@@ -3065,17 +2964,10 @@ msgstr "Apošni status: %s"
 msgid "Leave Group Chat"
 msgstr "Pakiń pakoji"
 
-#, fuzzy
-msgid "Leave the group chat"
-msgstr "Pakiń pakoji"
-
 msgid "Left Click Action"
 msgstr ""
 
 msgid "Let others know if you read up to this point"
-msgstr ""
-
-msgid "Limit must be an integer"
 msgstr ""
 
 #, fuzzy
@@ -3265,11 +3157,10 @@ msgstr "_Zachoŭvać u žurnale źmieny statusu kantaktaŭ"
 msgid "Miscellaneous"
 msgstr "<b>Roznaje</b>"
 
-#, fuzzy
-msgid "Missing arguments"
-msgstr "Nie staje arhumenta \"contact_jid\""
-
 msgid "Missing dependencies for Audio/Video"
+msgstr ""
+
+msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
@@ -3339,23 +3230,15 @@ msgstr "Šukaj"
 msgid "New Workspace"
 msgstr "Źmiani nazvu kantaktu"
 
-#, fuzzy, python-format
-msgid "New message from %s"
+#, fuzzy
+msgid "New message from"
 msgstr "Novaje paviedamleńnie ad %(nickname)s"
 
 msgid "Next"
 msgstr ""
 
-#, fuzzy
-msgid "Next sent messages"
-msgstr "Šablony paviedamleńniaŭ statusu:"
-
 msgid "Nickname"
 msgstr "Mianuška"
-
-#, fuzzy
-msgid "Nickname not found"
-msgstr "Mianuška nia znojdziena: %s"
 
 #, fuzzy
 msgid "No"
@@ -3412,10 +3295,6 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "Konty niedastupnyja"
-
-#, fuzzy
-msgid "No open voice chats with the contact"
-msgstr "Klikni, kab pahladzieć tekt papiarednich razmoŭ z hetym kantaktam"
 
 #, fuzzy
 msgid "No proxy used"
@@ -3544,20 +3423,6 @@ msgstr "Niemahvyma dałučycca"
 #, fuzzy
 msgid "Open _Folder"
 msgstr "_Adčyni kataloh z fajłam"
-
-#, fuzzy
-msgid "Open a private chat window with a specified participant"
-msgstr ""
-"Užyvańnie: /%s <mianuška>, adčyniaje akno pryvatnaj razmovy z akreślenaj "
-"asobaj."
-
-#, fuzzy
-msgid ""
-"Open a private chat window with a specified participant and send him a "
-"message"
-msgstr ""
-"Užyvańnie: /%s <mianuška>, adčyniaje akno pryvatnaj razmovy z akreślenaj "
-"asobaj."
 
 msgid "Open as _Link"
 msgstr "Adčyni jak _spasyłku"
@@ -3721,13 +3586,6 @@ msgstr "Mianuška nia znojdziena: %s"
 msgid "Pin Chat"
 msgstr "Zapyt na pieradaču fajłu"
 
-msgid "Ping?"
-msgstr ""
-
-#, python-format
-msgid "Ping? (%s)"
-msgstr ""
-
 msgid "Pinned"
 msgstr ""
 
@@ -3818,14 +3676,6 @@ msgstr ""
 msgid "Plugins Updated Successfully"
 msgstr "Niemahvyma dałučycca"
 
-#, python-format
-msgid "Pong! (%(nick)s %(delay)s s.)"
-msgstr ""
-
-#, python-format
-msgid "Pong! (%s seconds)"
-msgstr ""
-
 #, fuzzy
 msgid "Port"
 msgstr "_Port:"
@@ -3870,10 +3720,6 @@ msgstr ""
 #, fuzzy
 msgid "Previous"
 msgstr "uri"
-
-#, fuzzy
-msgid "Previously sent message"
-msgstr "Šablony paviedamleńniaŭ statusu:"
 
 msgid "Print XML stanzas and other debug information"
 msgstr ""
@@ -3946,14 +3792,6 @@ msgstr "_Skonč pracu"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quote next message"
-msgstr "Dašli paviedamleńnie"
-
-#, fuzzy
-msgid "Quote previous message"
-msgstr "paviedamlennie statusu"
 
 #, fuzzy
 msgid "Quote…"
@@ -4452,9 +4290,6 @@ msgstr "Apošni status: %s"
 msgid "Send Chatstate in Group Chats"
 msgstr "Niemahčyma dałučycca da pakoju"
 
-msgid "Send DTMF sequence through an open voice chat"
-msgstr ""
-
 #, fuzzy
 msgid "Send File"
 msgstr "Vyšli _fajł"
@@ -4491,24 +4326,6 @@ msgstr "Dasyłaj pravieračnyja infarmacyjnyja pakiety"
 msgid "Send _Report"
 msgstr "_Paviedam pra pamyłku"
 
-msgid "Send a disco info request"
-msgstr ""
-
-#, fuzzy
-msgid "Send a message to the contact"
-msgstr "Užyvańnie: /%s, chavaje knopki razmovy."
-
-#, fuzzy
-msgid "Send a message to the contact that will attract their attention"
-msgstr "Užyvańnie: /%s, chavaje knopki razmovy."
-
-#, fuzzy
-msgid "Send a ping to the contact"
-msgstr "Dasyłaje kantaktu fajł"
-
-msgid "Send action (in the third person) to the current chat"
-msgstr ""
-
 #, fuzzy
 msgid "Send message on Ctrl+Enter and make a new line with Enter."
 msgstr ""
@@ -4521,9 +4338,6 @@ msgstr "Dašli paviedamleńnie"
 
 msgid "Sender: "
 msgstr "Adpraŭnik:"
-
-msgid "Sending private message failed"
-msgstr "Pamyłka dasyłańnia pryvatnaha paviedamleńnia"
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4586,27 +4400,9 @@ msgstr "Server"
 msgid "Set configuration directory"
 msgstr "Kanfihuracyja pakoju"
 
-msgid ""
-"Set participant affiliation in group chat.\n"
-"    Affiliation can be given as one of the following values:\n"
-"    owner, admin, member, outcast, none"
-msgstr ""
-
-msgid ""
-"Set participant role in group chat.\n"
-"    Role can be given as one of the following values:\n"
-"    moderator, participant, visitor, none"
-msgstr ""
-
 #, fuzzy
 msgid "Set status message"
 msgstr "paviedamlennie statusu"
-
-msgid "Set the current status to away"
-msgstr ""
-
-msgid "Set the current status to online"
-msgstr ""
 
 msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
@@ -4721,9 +4517,9 @@ msgstr ""
 msgid "Show all warnings"
 msgstr "Pakažy ŭsie niahledžanyja _padzieji"
 
-msgid ""
-"Show help on a given command or a list of available commands if -a is given"
-msgstr ""
+#, fuzzy
+msgid "Show chat list"
+msgstr "Madyfikacyja kontu"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -4732,9 +4528,6 @@ msgstr "Pakažy _transparty"
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
-msgstr ""
-
-msgid "Show logged messages which mention given text"
 msgstr ""
 
 msgid ""
@@ -4971,10 +4764,6 @@ msgid "Street"
 msgstr "Vulica:"
 
 #, fuzzy
-msgid "Strike"
-msgstr "Mianuška"
-
-#, fuzzy
 msgid "Style"
 msgstr "Zatrymana"
 
@@ -5062,9 +4851,6 @@ msgstr "<b>Asablivy</b>"
 msgid "TLS verification failed: %s"
 msgstr "Dadajecca admysłovaje nahadvańnie dla %s"
 
-msgid "T_ry Again"
-msgstr ""
-
 msgid "Tabbed chat window"
 msgstr ""
 
@@ -5120,9 +4906,6 @@ msgid ""
 msgstr ""
 
 msgid "The last message was written on a mobile client"
-msgstr ""
-
-msgid "The same as using a doc-string, except it supports translation"
 msgstr ""
 
 #, fuzzy
@@ -5313,19 +5096,9 @@ msgstr "Kali chočaš zadziejničać źmieny, treba pieradałučycca."
 msgid "Toggle Chat List"
 msgstr "Udzielnik"
 
-msgid "Toggle Video Chat"
-msgstr ""
-
-msgid "Toggle Voice Chat"
-msgstr ""
-
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Udzielnik"
-
-#, fuzzy
-msgid "Too many arguments"
-msgstr "Nie staje arhumenta \"contact_jid\""
 
 msgid "Topic"
 msgstr ""
@@ -5444,10 +5217,6 @@ msgstr ""
 
 #, fuzzy
 msgid "Unknown language"
-msgstr "_Пасля мянушкі:"
-
-#, fuzzy
-msgid "Unknown nickname"
 msgstr "_Пасля мянушкі:"
 
 #, fuzzy
@@ -5605,10 +5374,6 @@ msgstr "Прыватная размова"
 msgid "Video calls are not available on Windows"
 msgstr "Złučeńnia niama"
 
-#, fuzzy
-msgid "Video chats are not available"
-msgstr "Złučeńnia niama"
-
 msgid "Video test"
 msgstr ""
 
@@ -5631,10 +5396,6 @@ msgstr "<b>Vizualnyja nahadvańni</b>"
 #, fuzzy
 msgid "Voice Request"
 msgstr "Zapyt na pieradaču fajłu"
-
-#, fuzzy
-msgid "Voice chats are not available"
-msgstr "Złučeńnia niama"
 
 #, fuzzy
 msgid "Waiting…"
@@ -5754,11 +5515,6 @@ msgstr "Ty sapraŭdy chočaš pakinuć pakoj \"%s\"?"
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "Chočaš vydalić hrupu %s sa śpisu kantaktaŭ?"
-
-#, fuzzy, python-format
-msgid ""
-"You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
-msgstr "Ciabie niama ŭ pakoji \"%s\", albo \"%s\" pakinuŭ jaho."
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5970,9 +5726,6 @@ msgstr ""
 msgid "_Back"
 msgstr "Chutka viarnusia"
 
-msgid "_Ban"
-msgstr "Za_blakuj"
-
 msgid "_Block"
 msgstr ""
 
@@ -6060,10 +5813,6 @@ msgstr "Zdolnaści serveraŭ"
 msgid "_File Transfer"
 msgstr "Pieradačy fajłaŭ"
 
-#, fuzzy
-msgid "_Forget Group Chat"
-msgstr "Pakiń pakoji"
-
 msgid "_Free for Chat"
 msgstr "_Achvotna parazmaŭlaju"
 
@@ -6088,9 +5837,6 @@ msgstr "_Dałučysia"
 
 msgid "_Keyboard Shortcuts"
 msgstr ""
-
-msgid "_Kick"
-msgstr "_Vypchni"
 
 msgid "_Later"
 msgstr ""
@@ -6236,9 +5982,6 @@ msgstr ""
 msgid "_Subscribe"
 msgstr "_Aŭtaryzuj"
 
-msgid "_Try Again"
-msgstr ""
-
 #, fuzzy
 msgid "_Type"
 msgstr "Typ:"
@@ -6300,6 +6043,9 @@ msgstr ""
 msgid "bearing"
 msgstr "marski"
 
+msgid "bold"
+msgstr ""
+
 #, fuzzy
 msgid "building"
 msgstr "Vypichvajecca %s"
@@ -6346,9 +6092,6 @@ msgstr "śpis pieradačaŭ fajłaŭ"
 msgid "floor"
 msgstr ""
 
-msgid "has closed the chat window or tab"
-msgstr "začyniŭ akno/kartku razmovy"
-
 #, fuzzy
 msgid ""
 "has invited you to a group chat.\n"
@@ -6365,8 +6108,9 @@ msgstr "piša paviedamleńnie..."
 msgid "is doing something else"
 msgstr "robić štości inšaje"
 
-msgid "is paying attention to the conversation"
-msgstr "sočyć za razmovaj"
+#, fuzzy
+msgid "italic"
+msgstr "Nachileny"
 
 msgid "lat"
 msgstr ""
@@ -6413,6 +6157,10 @@ msgstr ""
 
 msgid "street"
 msgstr ""
+
+#, fuzzy
+msgid "strike"
+msgstr "Mianuška"
 
 msgid "text"
 msgstr ""
@@ -6472,6 +6220,10 @@ msgstr ""
 #~ msgstr "%s nia znojdzieny"
 
 #, fuzzy
+#~ msgid "%s: Nothing found"
+#~ msgstr "%s nia znojdzieny"
+
+#, fuzzy
 #~ msgid ""
 #~ "'%s' is not in your contact list.\n"
 #~ "Please specify account for sending the message."
@@ -6514,11 +6266,26 @@ msgstr ""
 #~ msgid "Arguments:"
 #~ msgstr "Arhumenty:"
 
+#, fuzzy
+#~ msgid "Ban Participant"
+#~ msgstr "Udzielnik"
+
+#~ msgid "Bold"
+#~ msgstr "Tłusty"
+
+#, fuzzy
+#~ msgid "Ch_ange"
+#~ msgstr "Źmiani _mianušku"
+
 #~ msgid "Change status"
 #~ msgstr "Źmiani status"
 
 #~ msgid "Change status information"
 #~ msgstr "Źmiani infarmacyju statusu"
+
+#, fuzzy
+#~ msgid "Change your nickname in a group chat"
+#~ msgstr "Źmiani _mianušku"
 
 #, fuzzy
 #~ msgid "Changes the priority of account(s)"
@@ -6532,11 +6299,39 @@ msgstr ""
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Kali łaska, pravier, ci pracuje avahi-daemon."
 
+#, fuzzy
+#~ msgid "Clear chat window"
+#~ msgstr "Užyvańnie: /%s, ačyščaje akno ad tekstu."
+
+#, fuzzy
+#~ msgid "Clear the text window"
+#~ msgstr "Užyvańnie: /%s, ačyščaje akno ad tekstu."
+
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr "D-Busu niama na hetym kamputary, albo nie staje modula Python"
 
+#, fuzzy
+#~ msgid "Display names of all group chat participants"
+#~ msgstr "Užyvańnie: /%s, pakazvaje imiony naviednikaŭ pakoju."
+
+#, fuzzy
+#~ msgid "Display or change a group chat topic"
+#~ msgstr "Pytajsia paćvierdžańnia pierad začynieńniem kartki/akna razmovy."
+
 #~ msgid "Do not disturb"
 #~ msgstr "Nie turbavać"
+
+#, fuzzy
+#~ msgid "Drop Files or Contacts"
+#~ msgstr "Kantakty"
+
+#, fuzzy
+#~ msgid "Enter Password"
+#~ msgstr "Uviadzi novy parol:"
+
+#, fuzzy
+#~ msgid "Error: Could not process image"
+#~ msgstr "Niemahčyma adčytać vyjavu"
 
 #~ msgid "Extended away"
 #~ msgstr "Adyjšoŭ"
@@ -6544,8 +6339,18 @@ msgstr ""
 #~ msgid "File path"
 #~ msgstr "Ściežka da fajłu"
 
+#, fuzzy
+#~ msgid "Format your message…"
+#~ msgstr "Novaje pryvatnaje paviedamleńnie"
+
 #~ msgid "Free for chat"
 #~ msgstr "Achvotna parazmaŭlaju"
+
+#, fuzzy
+#~ msgid "Gajim will not try to join this group chat again"
+#~ msgstr ""
+#~ "Kali ŭklučanaja hetaja opcyja, Gajim budzie dałučacca da hetaha pakoju "
+#~ "pry starcie"
 
 #~ msgid "Gets detailed info on a account"
 #~ msgstr "Atrymvaje padrabiaznyja źviestki ab kantakcie"
@@ -6567,6 +6372,34 @@ msgstr ""
 #~ "ikonaj pola nahadvańnia."
 
 #, fuzzy
+#~ msgid "Invalid affiliation given"
+#~ msgstr "Suviaź: "
+
+#, fuzzy
+#~ msgid "Invalid nickname"
+#~ msgstr "Niapravilnaje imia karystalnika"
+
+#, fuzzy
+#~ msgid "Invalid role given"
+#~ msgstr "Niapravilnaje imia karystalnika"
+
+#, fuzzy
+#~ msgid "Join a group chat given by an XMPP Address"
+#~ msgstr "Dałučysia da _pakoju"
+
+#, fuzzy
+#~ msgid "Kick Participant"
+#~ msgstr "Udzielnik"
+
+#, fuzzy
+#~ msgid "Kick user from group chat by nickname"
+#~ msgstr "Ty nie dałučyŭsia da pakoju."
+
+#, fuzzy
+#~ msgid "Leave the group chat"
+#~ msgstr "Pakiń pakoji"
+
+#, fuzzy
 #~ msgid "Lists all contacts in the contact list, one for each line"
 #~ msgstr ""
 #~ "Pakazvaje śpis usich kantaktaŭ sa śpisu kantaktaŭ. Źviestki ab kožnym "
@@ -6575,8 +6408,24 @@ msgstr ""
 #~ msgid "Missing argument \"contact_jid\""
 #~ msgstr "Nie staje arhumenta \"contact_jid\""
 
+#, fuzzy
+#~ msgid "Missing arguments"
+#~ msgstr "Nie staje arhumenta \"contact_jid\""
+
 #~ msgid "Name of the account"
 #~ msgstr "Nazva kontu"
+
+#, fuzzy
+#~ msgid "Next sent messages"
+#~ msgstr "Šablony paviedamleńniaŭ statusu:"
+
+#, fuzzy
+#~ msgid "Nickname not found"
+#~ msgstr "Mianuška nia znojdziena: %s"
+
+#, fuzzy
+#~ msgid "No open voice chats with the contact"
+#~ msgstr "Klikni, kab pahladzieć tekt papiarednich razmoŭ z hetym kantaktam"
 
 #~ msgid "Offline - disconnect"
 #~ msgstr "Niabačny - adłučany"
@@ -6584,11 +6433,37 @@ msgstr ""
 #~ msgid "Online"
 #~ msgstr "Dałučany"
 
+#, fuzzy
+#~ msgid "Open a private chat window with a specified participant"
+#~ msgstr ""
+#~ "Užyvańnie: /%s <mianuška>, adčyniaje akno pryvatnaj razmovy z akreślenaj "
+#~ "asobaj."
+
+#, fuzzy
+#~ msgid ""
+#~ "Open a private chat window with a specified participant and send him a "
+#~ "message"
+#~ msgstr ""
+#~ "Užyvańnie: /%s <mianuška>, adčyniaje akno pryvatnaj razmovy z akreślenaj "
+#~ "asobaj."
+
 #~ msgid "Presence description:"
 #~ msgstr "Apisańnie statusu:"
 
+#, fuzzy
+#~ msgid "Previously sent message"
+#~ msgstr "Šablony paviedamleńniaŭ statusu:"
+
 #~ msgid "Prints a list of registered accounts"
 #~ msgstr "Pakazvaje śpis zarehistravanych kontaŭ"
+
+#, fuzzy
+#~ msgid "Quote next message"
+#~ msgstr "Dašli paviedamleńnie"
+
+#, fuzzy
+#~ msgid "Quote previous message"
+#~ msgstr "paviedamlennie statusu"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6606,6 +6481,21 @@ msgstr ""
 
 #~ msgid "Returns number of unread messages"
 #~ msgstr "Viartaje kolkaść niečytanych paviedamleńniaŭ"
+
+#, fuzzy
+#~ msgid "Send a message to the contact"
+#~ msgstr "Užyvańnie: /%s, chavaje knopki razmovy."
+
+#, fuzzy
+#~ msgid "Send a message to the contact that will attract their attention"
+#~ msgstr "Užyvańnie: /%s, chavaje knopki razmovy."
+
+#, fuzzy
+#~ msgid "Send a ping to the contact"
+#~ msgstr "Dasyłaje kantaktu fajł"
+
+#~ msgid "Sending private message failed"
+#~ msgstr "Pamyłka dasyłańnia pryvatnaha paviedamleńnia"
 
 #, fuzzy
 #~ msgid ""
@@ -6656,12 +6546,20 @@ msgstr ""
 #~ msgstr "Status źmianiŭsia."
 
 #, fuzzy
+#~ msgid "Too many arguments"
+#~ msgstr "Nie staje arhumenta \"contact_jid\""
+
+#, fuzzy
 #~ msgid ""
 #~ "Too many arguments. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
 #~ msgstr ""
 #~ "Nadta šmat arhumentaŭ. \n"
 #~ "Vykanaj \"%s help %s\" dla padrabiaźniejšych źviestak"
+
+#, fuzzy
+#~ msgid "Unknown nickname"
+#~ msgstr "_Пасля мянушкі:"
 
 #, fuzzy
 #~ msgid ""
@@ -6672,6 +6570,14 @@ msgstr ""
 #~ msgstr ""
 #~ "Užyvańnie: %s zahad [arhumenty]\n"
 #~ "Zahadam moža być adzin z nastupnych vyrazaŭ:\n"
+
+#, fuzzy
+#~ msgid "Video chats are not available"
+#~ msgstr "Złučeńnia niama"
+
+#, fuzzy
+#~ msgid "Voice chats are not available"
+#~ msgstr "Złučeńnia niama"
 
 #~ msgid "XML to send"
 #~ msgstr "XML dla dasyłańnia"
@@ -6687,6 +6593,11 @@ msgstr ""
 #, fuzzy
 #~ msgid "XMPP Address of the group chat that will receive the message"
 #~ msgstr "JID kantaktu, jaki atrymaje paviedamleńnie"
+
+#, fuzzy
+#~ msgid ""
+#~ "You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
+#~ msgstr "Ciabie niama ŭ pakoji \"%s\", albo \"%s\" pakinuŭ jaho."
 
 #~ msgid "You have no active account"
 #~ msgstr "Nivodny kont nia dziejny"
@@ -6714,6 +6625,9 @@ msgstr ""
 #~ msgid "file"
 #~ msgstr "fajł"
 
+#~ msgid "has closed the chat window or tab"
+#~ msgstr "začyniŭ akno/kartku razmovy"
+
 #~ msgid "if specified, contact is taken from the contact list of this account"
 #~ msgstr "Kali akreślena, kantakt biarecca sa śpisu kantaktaŭ hetaha kontu"
 
@@ -6722,6 +6636,9 @@ msgstr ""
 
 #~ msgid "if specified, the message will be sent using this account"
 #~ msgstr "Kali akreślena, paviedamleńnie budzie dasłanaje z hetaha kontu"
+
+#~ msgid "is paying attention to the conversation"
+#~ msgstr "sočyć za razmovaj"
 
 #~ msgid "message contents"
 #~ msgstr "źmiest paviedamleńnia"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-24 12:49+0000\n"
+"POT-Creation-Date: 2022-08-13 16:07+0000\n"
 "PO-Revision-Date: 2009-11-18 15:50+0100\n"
 "Last-Translator: Stian B. Barmen <stian@barmen.nu>\n"
 "Language-Team: <>\n"
@@ -17,35 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Bookmarks: -1,775,-1,-1,-1,-1,-1,-1,-1,-1\n"
-
-#, fuzzy
-msgid ""
-"\n"
-"    Ban user by a nick or a JID from a groupchat\n"
-"\n"
-"    If given nickname is not found it will be treated as a JID.\n"
-"    "
-msgstr ""
-"\n"
-"    Bannlys en bruker fra gruppesamtale etter kallenavn eller JID\n"
-"\n"
-"    Hvis oppgitt kallenavn finnes vil det bli behandlet som en JID.\n"
-"    "
-
-msgid ""
-"\n"
-"    Set the current status\n"
-"\n"
-"    Status can be given as one of the following values:\n"
-"    online, away, chat, xa, dnd.\n"
-"    "
-msgstr ""
-"\n"
-"    Sett gjeldende status\n"
-"\n"
-"    Status kan oppgis som én av følgende verdier:\n"
-"    'Pålogget', 'Borte', 'Prater', 'Ikke tilgjengelig', Ikke forstyrr'.\n"
-"    "
 
 #, fuzzy
 msgid " (Video Call)"
@@ -169,10 +140,6 @@ msgid "%s is not a valid loglevel"
 msgstr "%s er ikke et gyldig loggnivå"
 
 #, python-format
-msgid "%s is not a valid tone"
-msgstr "%s er ikke en gyldig tone"
-
-#, python-format
 msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the file to."
@@ -193,10 +160,6 @@ msgstr "Kontakten stoppet overføringen"
 #, fuzzy, python-format
 msgid "%s wants to send you a file"
 msgstr "%s ønsker å sende deg ei fil."
-
-#, python-format
-msgid "%s: Nothing found"
-msgstr "%s: Fant ikke noe"
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -881,10 +844,6 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-#, fuzzy
-msgid "Allow a participant to send you public or private messages"
-msgstr "Tillat en deltager å sende deg offentlige eller private meldinger"
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1147,13 +1106,13 @@ msgstr "Tilbake om noen minutter."
 msgid "Back soon"
 msgstr "Straks tilbake"
 
+#, fuzzy
+msgid "Ban"
+msgstr "_Bannlys"
+
 #, fuzzy, python-format
 msgid "Ban %s"
 msgstr "Liste over bannlyste"
-
-#, fuzzy
-msgid "Ban Participant"
-msgstr "Deltaker"
 
 msgid "Ban…"
 msgstr ""
@@ -1187,9 +1146,6 @@ msgstr "Personvernsliste for %s"
 #, fuzzy
 msgid "Block…"
 msgstr "_Blokker"
-
-msgid "Bold"
-msgstr "Fet"
 
 msgid "Bookmarks"
 msgstr "Bokmerker"
@@ -1306,10 +1262,6 @@ msgid "Certificate signature failure"
 msgstr "Sertifikat-signaturfeil"
 
 #, fuzzy
-msgid "Ch_ange"
-msgstr "Endre kallenavn"
-
-#, fuzzy
 msgid "Ch_ange Subject"
 msgstr "Endre emne"
 
@@ -1333,9 +1285,6 @@ msgstr "Endre emne"
 
 msgid "Change your account’s password, etc."
 msgstr ""
-
-msgid "Change your nickname in a group chat"
-msgstr "Endre kallenavnet ditt i en gruppesamtale"
 
 #, fuzzy
 msgid "Change your profile picture"
@@ -1461,15 +1410,8 @@ msgstr "Tøm fil"
 msgid "Clear Sound"
 msgstr "Velg Lyd"
 
-#, fuzzy
-msgid "Clear chat window"
-msgstr "Tøm tekstvinduet"
-
 msgid "Clear message entry"
 msgstr "Tøm meldingsoppføring"
-
-msgid "Clear the text window"
-msgstr "Tøm tekstvinduet"
 
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
@@ -1509,11 +1451,6 @@ msgstr "Farge"
 #, fuzzy
 msgid "Command List"
 msgstr "Kommandoer: %s"
-
-msgid ""
-"Command disabled. This command can be enabled by setting "
-"'command_system_execute' to True in ACE (Advanced Configuration Editor)."
-msgstr ""
 
 #, fuzzy
 msgid "Commands"
@@ -1741,6 +1678,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr "_Kopier lenke-plassering"
 
+msgid "Correct"
+msgstr ""
+
 #, fuzzy
 msgid "Could not Open File"
 msgstr "Kunne ikke åpne fil"
@@ -1925,13 +1865,6 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
-#, fuzzy
-msgid "Display names of all group chat participants"
-msgstr "Vis navnene til hele gruppens samtaledeltagere"
-
-msgid "Display or change a group chat topic"
-msgstr "Vis eller endre gruppens samtaletema"
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Godtar du denne forespørselen på %s-kontoen?"
@@ -1992,10 +1925,6 @@ msgstr "Lastet ned %s meldinger"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Laster"
-
-#, fuzzy
-msgid "Drop Files or Contacts"
-msgstr "Importer kontakter"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2098,23 +2027,26 @@ msgid "Encrypting file…"
 msgstr "Krypterer fil…"
 
 #, fuzzy
+msgid "Encryption error"
+msgstr "Krypteringsfeil"
+
+#, fuzzy
 msgid "Encryption required"
 msgstr "Krypteringsfeil"
 
 msgid "End call"
 msgstr ""
 
-#, fuzzy
-msgid "Enter Nickname"
-msgstr "Skriv inn kallenavn"
-
-#, fuzzy
-msgid "Enter Password"
-msgstr "Skriv inn nytt passord:"
+msgid "Enter a password to join this chat"
+msgstr ""
 
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Skriv inn nytt passord:"
+
+#, fuzzy
+msgid "Enter your new nickname"
+msgstr "Skriv inn kallenavn"
 
 msgid ""
 "Enter your nickname. This is how your name is displayed to your contacts."
@@ -2126,9 +2058,6 @@ msgstr "Feil"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Velg bilde"
-
-msgid "Error during command execution!"
-msgstr "Feil under kjøring av kommando!"
 
 #, python-format
 msgid "Error message: %s"
@@ -2167,10 +2096,6 @@ msgstr "Feil!"
 msgid "Error: %s"
 msgstr "Feil: %s"
 
-#, fuzzy
-msgid "Error: Could not process image"
-msgstr "Kunne ikke laste inn bilde"
-
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr "Feil: kan ikke åpne %s for lesing"
@@ -2196,12 +2121,6 @@ msgstr "Kjør kommando"
 #, fuzzy
 msgid "Execute Command…"
 msgstr "K_jør Kommando…"
-
-msgid "Execute expression inside a shell, send output"
-msgstr "Kjør uttrykk i et skall, send utdata"
-
-msgid "Execute expression inside a shell, show output"
-msgstr "Kjør uttrykk i et skall, vis utdata"
 
 #, fuzzy
 msgid "Executing…"
@@ -2401,16 +2320,16 @@ msgid "For example: \"Julia is now online\""
 msgstr ""
 
 #, fuzzy
-msgid "Forbid a participant to send you public or private messages"
-msgstr "Forby en deltager fra å sende deg offentlige eller private meldinger"
-
-#, fuzzy
 msgid "Force Bookmark 2 usage"
 msgstr "Bokmerk rommet"
 
 #, fuzzy
 msgid "Forever"
 msgstr "Aldri"
+
+#, fuzzy
+msgid "Forget Group Chat"
+msgstr "Forlat gruppesamtaler"
 
 #, fuzzy
 msgid "Forget this Group Chat"
@@ -2431,10 +2350,6 @@ msgstr "Formateringsfeil i sertifkatets ikkeFør-felt"
 #, fuzzy
 msgid "Format your message"
 msgstr "Videresend uleste meldinger"
-
-#, fuzzy
-msgid "Format your message…"
-msgstr "Skriv en melding…"
 
 msgid "Free for Chat"
 msgstr "Ledig for prat"
@@ -2501,10 +2416,6 @@ msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
-
-#, fuzzy
-msgid "Gajim will not try to join this group chat again"
-msgstr "Dersom valgt vil Gajim automatisk ta del i gruppesamtalen ved oppstart"
 
 msgid "Gajim will now exit"
 msgstr "Gajim vill nå lukkes"
@@ -2656,6 +2567,10 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
+#, fuzzy
+msgid "Hide chat list"
+msgstr "Veksle videoøkt"
+
 msgid "Hide this menu"
 msgstr "Skjul denne menyen"
 
@@ -2749,10 +2664,6 @@ msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr "Dersom valgt vil Gajim vise humør for kontakter i kontaktlistevinduet"
 
 #, fuzzy
-msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
-msgstr "Kjøring av XEP-0146-kommandoer i Gajim."
-
-#, fuzzy
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 "Hvis sant vil Gajim ignorere innkommende forespørsler om oppmerksomhet "
@@ -2796,7 +2707,7 @@ msgstr ""
 "prioritet vil du ikke motta noen meldinger fra din tjener."
 
 #, fuzzy, python-format
-msgid "If you close this chat, you will leave '%s'."
+msgid "If you close this chat, you will leave \"%s\"."
 msgstr ""
 "Dersom du lukker dette vinduet, så vil du bli frakoblet fra disse rommene."
 
@@ -2894,18 +2805,13 @@ msgstr "Ugyldig tjenernavn"
 msgid "Invalid XMPP Address"
 msgstr "Ugyldig fil"
 
-msgid "Invalid affiliation given"
-msgstr "Ugyldig tilhørighet angitt"
-
 #, fuzzy
 msgid "Invalid domain name"
 msgstr "Ugyldig kontonavn"
 
-msgid "Invalid nickname"
-msgstr "Ugyldig kallenavn"
-
-msgid "Invalid role given"
-msgstr "Ugyldig rolle oppgitt"
+#, fuzzy
+msgid "Invite"
+msgstr "In_viter"
 
 #, fuzzy
 msgid "Invite Contacts"
@@ -2918,10 +2824,6 @@ msgstr "Inviter _kontakter"
 #, fuzzy
 msgid "Invite New Contact"
 msgstr "Inviter _kontakter"
-
-#, fuzzy
-msgid "Invite a user to a group chat for a reason"
-msgstr "Inviter en bruker til et rom av en grunn"
 
 msgid "Invite friends to group chats or join one"
 msgstr ""
@@ -2954,9 +2856,6 @@ msgstr ""
 
 msgid "It is not possible to send empty files"
 msgstr "Det er ikke mulig å sende tomme filer"
-
-msgid "Italic"
-msgstr "Kursiv"
 
 #, fuzzy
 msgid "I’m eating."
@@ -3009,10 +2908,6 @@ msgid "Join Support Chat"
 msgstr "Ta del i gruppesamtale"
 
 #, fuzzy
-msgid "Join a group chat given by an XMPP Address"
-msgstr "Ta del i gruppesludring gitt av JID"
-
-#, fuzzy
 msgid "Joining…"
 msgstr "Bannlyser…"
 
@@ -3033,17 +2928,13 @@ msgstr ""
 msgid "Key usage does not include certificate signing"
 msgstr "Nøkkelbruk inkluderer ikke sertifikatssignering"
 
+#, fuzzy
+msgid "Kick"
+msgstr "_Kast ut"
+
 #, fuzzy, python-format
 msgid "Kick %s"
 msgstr "Kaster ut %s"
-
-#, fuzzy
-msgid "Kick Participant"
-msgstr "Deltaker"
-
-#, fuzzy
-msgid "Kick user from group chat by nickname"
-msgstr "Kast ut bruker fra gruppesamtale etter kallenavn"
 
 #, fuzzy
 msgid "Kick…"
@@ -3063,18 +2954,11 @@ msgstr "Siste status: %s"
 msgid "Leave Group Chat"
 msgstr "Forlat gruppesamtaler"
 
-#, fuzzy
-msgid "Leave the group chat"
-msgstr "Forlat gruppesamtaler"
-
 msgid "Left Click Action"
 msgstr ""
 
 msgid "Let others know if you read up to this point"
 msgstr ""
-
-msgid "Limit must be an integer"
-msgstr "Avgrensningen må være et heltall"
 
 #, fuzzy
 msgid ""
@@ -3263,10 +3147,10 @@ msgstr "_Vis statusendringer"
 msgid "Miscellaneous"
 msgstr "<b>Diverse</b>"
 
-msgid "Missing arguments"
-msgstr "Manglende argumenter"
-
 msgid "Missing dependencies for Audio/Video"
+msgstr ""
+
+msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
@@ -3333,21 +3217,15 @@ msgstr "Søk"
 msgid "New Workspace"
 msgstr "Gi kontakt nytt navn"
 
-#, fuzzy, python-format
-msgid "New message from %s"
+#, fuzzy
+msgid "New message from"
 msgstr "Ny melding fra %(nickname)s"
 
 msgid "Next"
 msgstr ""
 
-msgid "Next sent messages"
-msgstr "Neste sendte meldinger:"
-
 msgid "Nickname"
 msgstr "Kallenavn"
-
-msgid "Nickname not found"
-msgstr "Fant ikke kallenavnet"
 
 msgid "No"
 msgstr "Ingen"
@@ -3403,10 +3281,6 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "Ingen konto tilgjengelig"
-
-#, fuzzy
-msgid "No open voice chats with the contact"
-msgstr "Ingen åpne lydsamtaler med denne kontakten"
 
 #, fuzzy
 msgid "No proxy used"
@@ -3531,17 +3405,6 @@ msgstr "Tillegg"
 #, fuzzy
 msgid "Open _Folder"
 msgstr "Åpne _inneholdende mappe"
-
-#, fuzzy
-msgid "Open a private chat window with a specified participant"
-msgstr "Åpne privat samtalevindu med gitt deltager"
-
-#, fuzzy
-msgid ""
-"Open a private chat window with a specified participant and send him a "
-"message"
-msgstr ""
-"Åpne privat samtalevindu med en gitt deltager og send vedkommende en melding"
 
 msgid "Open as _Link"
 msgstr "Åpne som _lenke"
@@ -3705,13 +3568,6 @@ msgstr "Bilde å bruke"
 msgid "Pin Chat"
 msgstr "Privat Samtale"
 
-msgid "Ping?"
-msgstr "Ping?"
-
-#, fuzzy, python-format
-msgid "Ping? (%s)"
-msgstr "Pong! (%s s.)"
-
 msgid "Pinned"
 msgstr ""
 
@@ -3800,14 +3656,6 @@ msgstr "Tillegg"
 msgid "Plugins Updated Successfully"
 msgstr "Programtilleggsoppgraderinger"
 
-#, python-format
-msgid "Pong! (%(nick)s %(delay)s s.)"
-msgstr "Pong! (%(nick)s %(delay)s s.)"
-
-#, fuzzy, python-format
-msgid "Pong! (%s seconds)"
-msgstr "Pong! (%s s.)"
-
 msgid "Port"
 msgstr "Port"
 
@@ -3854,10 +3702,6 @@ msgstr "Forhåndsvis nye meldinger i oppsprettsvindu?"
 #, fuzzy
 msgid "Previous"
 msgstr "Misunnelig"
-
-#, fuzzy
-msgid "Previously sent message"
-msgstr "Tidligere sendt melding"
 
 msgid "Print XML stanzas and other debug information"
 msgstr "Skriv ut XML-stanza-er og annen feilrettingsinformasjon"
@@ -3926,12 +3770,6 @@ msgstr "_Avslutt"
 
 msgid "Quit Gajim"
 msgstr "Avslutt Gajim"
-
-msgid "Quote next message"
-msgstr "Siter neste melding"
-
-msgid "Quote previous message"
-msgstr "Siter forrige melding"
 
 #, fuzzy
 msgid "Quote…"
@@ -4435,10 +4273,6 @@ msgid "Send Chatstate in Group Chats"
 msgstr "Klarte ikke å ta del i gruppesludring"
 
 #, fuzzy
-msgid "Send DTMF sequence through an open voice chat"
-msgstr "Send DTMF-sekvens gjennom en åpen lydøkt"
-
-#, fuzzy
 msgid "Send File"
 msgstr "Send _fil"
 
@@ -4475,23 +4309,6 @@ msgid "Send _Report"
 msgstr "Rapporter feil"
 
 #, fuzzy
-msgid "Send a disco info request"
-msgstr "Sendte kvitteringsforespørsler"
-
-msgid "Send a message to the contact"
-msgstr "Send en melding til kontakten"
-
-#, fuzzy
-msgid "Send a message to the contact that will attract their attention"
-msgstr "Send en melding til kontakten som påkaller vedkommendes oppmerksomhet"
-
-msgid "Send a ping to the contact"
-msgstr "Send et ping til kontakten"
-
-msgid "Send action (in the third person) to the current chat"
-msgstr "Send handling (i tredjeperson) til gjeldende samtale"
-
-#, fuzzy
 msgid "Send message on Ctrl+Enter and make a new line with Enter."
 msgstr ""
 "Send meldinger med Ctrl+Enter og lag ny linje med Enter (ICQ-klientens "
@@ -4502,9 +4319,6 @@ msgstr "Send meldingen"
 
 msgid "Sender: "
 msgstr "Avsender: "
-
-msgid "Sending private message failed"
-msgstr "Forsendelse av privat melding mislyktes"
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4564,34 +4378,8 @@ msgid "Set configuration directory"
 msgstr "Velg oppsettsmappe"
 
 #, fuzzy
-msgid ""
-"Set participant affiliation in group chat.\n"
-"    Affiliation can be given as one of the following values:\n"
-"    owner, admin, member, outcast, none"
-msgstr ""
-"Sett deltager-tilhøriget i gruppesamtale.\n"
-"    Tilhørighet kan oppgis som én av følgende verdier:\n"
-"    'eier', 'admin', 'medlem', 'einstøing', 'ingen'"
-
-#, fuzzy
-msgid ""
-"Set participant role in group chat.\n"
-"    Role can be given as one of the following values:\n"
-"    moderator, participant, visitor, none"
-msgstr ""
-"Sett deltagerrolle i gruppesamtale.\n"
-"    Rolle kan være en av følgende verdier:\n"
-"    'moderator','deltager','besøkende' eller 'ingen'"
-
-#, fuzzy
 msgid "Set status message"
 msgstr "Sett statusmelding"
-
-msgid "Set the current status to away"
-msgstr "Sett gjeldende status til 'Borte'"
-
-msgid "Set the current status to online"
-msgstr "Sett gjeldende status til 'Pålogget'"
 
 msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
@@ -4706,11 +4494,9 @@ msgstr ""
 msgid "Show all warnings"
 msgstr "Vis alle advarsler"
 
-msgid ""
-"Show help on a given command or a list of available commands if -a is given"
-msgstr ""
-"Viser hjelp for en gitt kommando eller en liste over tilgjengelige "
-"kommandoer hvis -a blir lagt til"
+#, fuzzy
+msgid "Show chat list"
+msgstr "Plassering:"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -4720,9 +4506,6 @@ msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
 msgstr ""
-
-msgid "Show logged messages which mention given text"
-msgstr "Vis loggførte meldinger som siterer angitt tekst"
 
 msgid ""
 "Show message meta data (avatar, nickname, timestamp) only once, if there are "
@@ -4956,9 +4739,6 @@ msgstr ""
 msgid "Street"
 msgstr "gate"
 
-msgid "Strike"
-msgstr "Gjennomstrek"
-
 msgid "Style"
 msgstr "Stil"
 
@@ -5044,10 +4824,6 @@ msgstr "System"
 msgid "TLS verification failed: %s"
 msgstr "Bekreftelse av SSL-sertifikat for %s"
 
-#, fuzzy
-msgid "T_ry Again"
-msgstr "Bekreft igjen…"
-
 msgid "Tabbed chat window"
 msgstr "Fanebasert sludrevindu"
 
@@ -5108,10 +4884,6 @@ msgstr ""
 
 msgid "The last message was written on a mobile client"
 msgstr ""
-
-msgid "The same as using a doc-string, except it supports translation"
-msgstr ""
-"Det samme som å bruke en doc-streng, bortsett fra at det støtter oversetting"
 
 #, fuzzy
 msgid "The server has assigned or modified your nickname in this group chat"
@@ -5317,18 +5089,8 @@ msgid "Toggle Chat List"
 msgstr "Veksle videoøkt"
 
 #, fuzzy
-msgid "Toggle Video Chat"
-msgstr "Veksle videoøkt"
-
-msgid "Toggle Voice Chat"
-msgstr ""
-
-#, fuzzy
 msgid "Toggle participants list"
 msgstr "Deltaker"
-
-msgid "Too many arguments"
-msgstr "For mange argumenter"
 
 msgid "Topic"
 msgstr ""
@@ -5449,10 +5211,6 @@ msgstr "Ukjent tittel"
 #, fuzzy
 msgid "Unknown language"
 msgstr "Ukjent tittel"
-
-#, fuzzy
-msgid "Unknown nickname"
-msgstr "E_tter kallenavn:"
 
 #, fuzzy
 msgid "Unknown validation error"
@@ -5611,10 +5369,6 @@ msgstr "Videoøkt"
 msgid "Video calls are not available on Windows"
 msgstr "Videoøkter er ikke tilgjengelige"
 
-#, fuzzy
-msgid "Video chats are not available"
-msgstr "Videoøkter er ikke tilgjengelige"
-
 msgid "Video test"
 msgstr "Videotest"
 
@@ -5637,10 +5391,6 @@ msgstr "<b>Visuelle merknader</b>"
 #, fuzzy
 msgid "Voice Request"
 msgstr "Forespørsel om lydsamtale"
-
-#, fuzzy
-msgid "Voice chats are not available"
-msgstr "Videoøkter er ikke tilgjengelige"
 
 #, fuzzy
 msgid "Waiting…"
@@ -5765,13 +5515,6 @@ msgstr "Bekreft lukking av Gajim."
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr ""
 "Du er i ferd med å fjerne \"%(name)s\" (%(jid)s) fra kontaktlista di.\n"
-
-#, fuzzy, python-format
-msgid ""
-"You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
-msgstr ""
-"Du er ikke lenger i gruppesamtalen \"%(room)s\", eller så har \"%(nick)s\" "
-"forlatt den."
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5980,9 +5723,6 @@ msgstr ""
 msgid "_Back"
 msgstr "Straks tilbake"
 
-msgid "_Ban"
-msgstr "_Bannlys"
-
 msgid "_Block"
 msgstr "_Blokker"
 
@@ -6068,10 +5808,6 @@ msgstr "Funksjonalitet"
 msgid "_File Transfer"
 msgstr "Filoverføring"
 
-#, fuzzy
-msgid "_Forget Group Chat"
-msgstr "Forlat gruppesamtaler"
-
 msgid "_Free for Chat"
 msgstr "_Ledig for prat"
 
@@ -6097,9 +5833,6 @@ msgstr "_Delta"
 #, fuzzy
 msgid "_Keyboard Shortcuts"
 msgstr "Tastatursnarveier"
-
-msgid "_Kick"
-msgstr "_Kast ut"
 
 msgid "_Later"
 msgstr ""
@@ -6246,10 +5979,6 @@ msgid "_Subscribe"
 msgstr "_Abonner"
 
 #, fuzzy
-msgid "_Try Again"
-msgstr "Bekreft igjen…"
-
-#, fuzzy
 msgid "_Type"
 msgstr "_Skriv:"
 
@@ -6306,6 +6035,9 @@ msgstr "lydutdata"
 msgid "bearing"
 msgstr "kurs"
 
+msgid "bold"
+msgstr ""
+
 msgid "building"
 msgstr "bygning"
 
@@ -6348,9 +6080,6 @@ msgstr "filoverføringsliste"
 msgid "floor"
 msgstr "etasje"
 
-msgid "has closed the chat window or tab"
-msgstr "har lukket samtalevinduet eller fanen"
-
 #, fuzzy
 msgid ""
 "has invited you to a group chat.\n"
@@ -6367,8 +6096,9 @@ msgstr ""
 msgid "is doing something else"
 msgstr "gjør noe annet"
 
-msgid "is paying attention to the conversation"
-msgstr "fokuserer på samtalen"
+#, fuzzy
+msgid "italic"
+msgstr "Kursiv"
 
 msgid "lat"
 msgstr "breddegrad"
@@ -6414,6 +6144,10 @@ msgstr "hastighet"
 
 msgid "street"
 msgstr "gate"
+
+#, fuzzy
+msgid "strike"
+msgstr "Gjennomstrek"
 
 msgid "text"
 msgstr "tekst"
@@ -6470,8 +6204,43 @@ msgstr "%(nick)s er nå %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#, fuzzy
+#~ msgid ""
+#~ "\n"
+#~ "    Ban user by a nick or a JID from a groupchat\n"
+#~ "\n"
+#~ "    If given nickname is not found it will be treated as a JID.\n"
+#~ "    "
+#~ msgstr ""
+#~ "\n"
+#~ "    Bannlys en bruker fra gruppesamtale etter kallenavn eller JID\n"
+#~ "\n"
+#~ "    Hvis oppgitt kallenavn finnes vil det bli behandlet som en JID.\n"
+#~ "    "
+
+#~ msgid ""
+#~ "\n"
+#~ "    Set the current status\n"
+#~ "\n"
+#~ "    Status can be given as one of the following values:\n"
+#~ "    online, away, chat, xa, dnd.\n"
+#~ "    "
+#~ msgstr ""
+#~ "\n"
+#~ "    Sett gjeldende status\n"
+#~ "\n"
+#~ "    Status kan oppgis som én av følgende verdier:\n"
+#~ "    'Pålogget', 'Borte', 'Prater', 'Ikke tilgjengelig', Ikke forstyrr'.\n"
+#~ "    "
+
+#~ msgid "%s is not a valid tone"
+#~ msgstr "%s er ikke en gyldig tone"
+
 #~ msgid "%s not found"
 #~ msgstr "%s ikke funnet"
+
+#~ msgid "%s: Nothing found"
+#~ msgstr "%s: Fant ikke noe"
 
 #, fuzzy
 #~ msgid ""
@@ -6501,6 +6270,10 @@ msgstr ""
 #~ "alle kontoer"
 
 #, fuzzy
+#~ msgid "Allow a participant to send you public or private messages"
+#~ msgstr "Tillat en deltager å sende deg offentlige eller private meldinger"
+
+#, fuzzy
 #~ msgid ""
 #~ "Allow to hide the contact list window even if the notification area icon "
 #~ "is not shown."
@@ -6518,11 +6291,25 @@ msgstr ""
 #~ msgid "Arguments:"
 #~ msgstr "Argumenter:"
 
+#, fuzzy
+#~ msgid "Ban Participant"
+#~ msgstr "Deltaker"
+
+#~ msgid "Bold"
+#~ msgstr "Fet"
+
+#, fuzzy
+#~ msgid "Ch_ange"
+#~ msgstr "Endre kallenavn"
+
 #~ msgid "Change status"
 #~ msgstr "Endre status"
 
 #~ msgid "Change status information"
 #~ msgstr "Endre statusinformasjon"
+
+#~ msgid "Change your nickname in a group chat"
+#~ msgstr "Endre kallenavnet ditt i en gruppesamtale"
 
 #~ msgid "Changes the priority of account(s)"
 #~ msgstr "Endrer prioritet for alle konti"
@@ -6533,14 +6320,49 @@ msgstr ""
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Sjekk om Gajim kjører"
 
+#, fuzzy
+#~ msgid "Clear chat window"
+#~ msgstr "Tøm tekstvinduet"
+
+#~ msgid "Clear the text window"
+#~ msgstr "Tøm tekstvinduet"
+
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr "D-Bus finnes ikke på denne maskinen eller python-modulen mangler"
 
 #~ msgid "Disconnect from the network"
 #~ msgstr "Koble fra nettverket"
 
+#, fuzzy
+#~ msgid "Display names of all group chat participants"
+#~ msgstr "Vis navnene til hele gruppens samtaledeltagere"
+
+#~ msgid "Display or change a group chat topic"
+#~ msgstr "Vis eller endre gruppens samtaletema"
+
 #~ msgid "Do not disturb"
 #~ msgstr "Ikke forstyrr"
+
+#, fuzzy
+#~ msgid "Drop Files or Contacts"
+#~ msgstr "Importer kontakter"
+
+#, fuzzy
+#~ msgid "Enter Password"
+#~ msgstr "Skriv inn nytt passord:"
+
+#~ msgid "Error during command execution!"
+#~ msgstr "Feil under kjøring av kommando!"
+
+#, fuzzy
+#~ msgid "Error: Could not process image"
+#~ msgstr "Kunne ikke laste inn bilde"
+
+#~ msgid "Execute expression inside a shell, send output"
+#~ msgstr "Kjør uttrykk i et skall, send utdata"
+
+#~ msgid "Execute expression inside a shell, show output"
+#~ msgstr "Kjør uttrykk i et skall, vis utdata"
 
 #~ msgid "Extended away"
 #~ msgstr "Utvidet fravær"
@@ -6548,8 +6370,22 @@ msgstr ""
 #~ msgid "File path"
 #~ msgstr "Mappe"
 
+#, fuzzy
+#~ msgid "Forbid a participant to send you public or private messages"
+#~ msgstr ""
+#~ "Forby en deltager fra å sende deg offentlige eller private meldinger"
+
+#, fuzzy
+#~ msgid "Format your message…"
+#~ msgstr "Skriv en melding…"
+
 #~ msgid "Free for chat"
 #~ msgstr "Ledig for samtale"
+
+#, fuzzy
+#~ msgid "Gajim will not try to join this group chat again"
+#~ msgstr ""
+#~ "Dersom valgt vil Gajim automatisk ta del i gruppesamtalen ved oppstart"
 
 #~ msgid "Gets detailed info on a account"
 #~ msgstr "Henter detaljert info om en konto"
@@ -6572,9 +6408,46 @@ msgstr ""
 #~ msgid "If enabled, Gajim will execute XEP-0146 Commands."
 #~ msgstr "Kjøring av XEP-0146-kommandoer i Gajim."
 
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
+#~ msgstr "Kjøring av XEP-0146-kommandoer i Gajim."
+
+#~ msgid "Invalid affiliation given"
+#~ msgstr "Ugyldig tilhørighet angitt"
+
+#~ msgid "Invalid nickname"
+#~ msgstr "Ugyldig kallenavn"
+
+#~ msgid "Invalid role given"
+#~ msgstr "Ugyldig rolle oppgitt"
+
+#, fuzzy
+#~ msgid "Invite a user to a group chat for a reason"
+#~ msgstr "Inviter en bruker til et rom av en grunn"
+
 #~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
 #~ msgstr ""
 #~ "Det later til at Gajim ikke kjører. Så du kan ikke bruke gajim-remote."
+
+#, fuzzy
+#~ msgid "Join a group chat given by an XMPP Address"
+#~ msgstr "Ta del i gruppesludring gitt av JID"
+
+#, fuzzy
+#~ msgid "Kick Participant"
+#~ msgstr "Deltaker"
+
+#, fuzzy
+#~ msgid "Kick user from group chat by nickname"
+#~ msgstr "Kast ut bruker fra gruppesamtale etter kallenavn"
+
+#, fuzzy
+#~ msgid "Leave the group chat"
+#~ msgstr "Forlat gruppesamtaler"
+
+#~ msgid "Limit must be an integer"
+#~ msgstr "Avgrensningen må være et heltall"
 
 #, fuzzy
 #~ msgid "Lists all contacts in the contact list, one for each line"
@@ -6587,8 +6460,21 @@ msgstr ""
 #~ msgid "Missing argument \"contact_jid\""
 #~ msgstr "Mangler argumentet \"contact_jid\""
 
+#~ msgid "Missing arguments"
+#~ msgstr "Manglende argumenter"
+
 #~ msgid "Name of the account"
 #~ msgstr "Navn på kontoen"
+
+#~ msgid "Next sent messages"
+#~ msgstr "Neste sendte meldinger:"
+
+#~ msgid "Nickname not found"
+#~ msgstr "Fant ikke kallenavnet"
+
+#, fuzzy
+#~ msgid "No open voice chats with the contact"
+#~ msgstr "Ingen åpne lydsamtaler med denne kontakten"
 
 #~ msgid "Offline - disconnect"
 #~ msgstr "Frakoblet - koblet fra"
@@ -6596,11 +6482,47 @@ msgstr ""
 #~ msgid "Online"
 #~ msgstr "Pålogget"
 
+#, fuzzy
+#~ msgid "Open a private chat window with a specified participant"
+#~ msgstr "Åpne privat samtalevindu med gitt deltager"
+
+#, fuzzy
+#~ msgid ""
+#~ "Open a private chat window with a specified participant and send him a "
+#~ "message"
+#~ msgstr ""
+#~ "Åpne privat samtalevindu med en gitt deltager og send vedkommende en "
+#~ "melding"
+
+#~ msgid "Ping?"
+#~ msgstr "Ping?"
+
+#, fuzzy
+#~ msgid "Ping? (%s)"
+#~ msgstr "Pong! (%s s.)"
+
+#~ msgid "Pong! (%(nick)s %(delay)s s.)"
+#~ msgstr "Pong! (%(nick)s %(delay)s s.)"
+
+#, fuzzy
+#~ msgid "Pong! (%s seconds)"
+#~ msgstr "Pong! (%s s.)"
+
 #~ msgid "Presence description:"
 #~ msgstr "Tilstedeværelsesbeskrivelse:"
 
+#, fuzzy
+#~ msgid "Previously sent message"
+#~ msgstr "Tidligere sendt melding"
+
 #~ msgid "Prints a list of registered accounts"
 #~ msgstr "Skriver en liste over registrerte kontoer"
+
+#~ msgid "Quote next message"
+#~ msgstr "Siter neste melding"
+
+#~ msgid "Quote previous message"
+#~ msgstr "Siter forrige melding"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6619,6 +6541,31 @@ msgstr ""
 
 #~ msgid "Returns number of unread messages"
 #~ msgstr "Viser antall uleste meldinger"
+
+#, fuzzy
+#~ msgid "Send DTMF sequence through an open voice chat"
+#~ msgstr "Send DTMF-sekvens gjennom en åpen lydøkt"
+
+#, fuzzy
+#~ msgid "Send a disco info request"
+#~ msgstr "Sendte kvitteringsforespørsler"
+
+#~ msgid "Send a message to the contact"
+#~ msgstr "Send en melding til kontakten"
+
+#, fuzzy
+#~ msgid "Send a message to the contact that will attract their attention"
+#~ msgstr ""
+#~ "Send en melding til kontakten som påkaller vedkommendes oppmerksomhet"
+
+#~ msgid "Send a ping to the contact"
+#~ msgstr "Send et ping til kontakten"
+
+#~ msgid "Send action (in the third person) to the current chat"
+#~ msgstr "Send handling (i tredjeperson) til gjeldende samtale"
+
+#~ msgid "Sending private message failed"
+#~ msgstr "Forsendelse av privat melding mislyktes"
 
 #, fuzzy
 #~ msgid ""
@@ -6656,8 +6603,44 @@ msgstr ""
 #~ "Økt-bussen er ikke tilgjengelig.\n"
 #~ "Prøv å lese %(url)s"
 
+#, fuzzy
+#~ msgid ""
+#~ "Set participant affiliation in group chat.\n"
+#~ "    Affiliation can be given as one of the following values:\n"
+#~ "    owner, admin, member, outcast, none"
+#~ msgstr ""
+#~ "Sett deltager-tilhøriget i gruppesamtale.\n"
+#~ "    Tilhørighet kan oppgis som én av følgende verdier:\n"
+#~ "    'eier', 'admin', 'medlem', 'einstøing', 'ingen'"
+
+#, fuzzy
+#~ msgid ""
+#~ "Set participant role in group chat.\n"
+#~ "    Role can be given as one of the following values:\n"
+#~ "    moderator, participant, visitor, none"
+#~ msgstr ""
+#~ "Sett deltagerrolle i gruppesamtale.\n"
+#~ "    Rolle kan være en av følgende verdier:\n"
+#~ "    'moderator','deltager','besøkende' eller 'ingen'"
+
+#~ msgid "Set the current status to away"
+#~ msgstr "Sett gjeldende status til 'Borte'"
+
+#~ msgid "Set the current status to online"
+#~ msgstr "Sett gjeldende status til 'Pålogget'"
+
 #~ msgid "Set the presence type and description"
 #~ msgstr "Sett tilstedeværelses-type og beskrivelse"
+
+#~ msgid ""
+#~ "Show help on a given command or a list of available commands if -a is "
+#~ "given"
+#~ msgstr ""
+#~ "Viser hjelp for en gitt kommando eller en liste over tilgjengelige "
+#~ "kommandoer hvis -a blir lagt til"
+
+#~ msgid "Show logged messages which mention given text"
+#~ msgstr "Vis loggførte meldinger som siterer angitt tekst"
 
 #~ msgid "Shows a help on specific command"
 #~ msgstr "Viser hjelp vedrørende en gitt kommando"
@@ -6670,8 +6653,24 @@ msgstr ""
 #~ msgid "Status Change"
 #~ msgstr "_Vis statusendringer"
 
+#, fuzzy
+#~ msgid "T_ry Again"
+#~ msgstr "Bekreft igjen…"
+
+#~ msgid "The same as using a doc-string, except it supports translation"
+#~ msgstr ""
+#~ "Det samme som å bruke en doc-streng, bortsett fra at det støtter "
+#~ "oversetting"
+
 #~ msgid "The status has been changed."
 #~ msgstr "Statusen har blitt endret."
+
+#, fuzzy
+#~ msgid "Toggle Video Chat"
+#~ msgstr "Veksle videoøkt"
+
+#~ msgid "Too many arguments"
+#~ msgstr "For mange argumenter"
 
 #~ msgid ""
 #~ "Too many arguments. \n"
@@ -6679,6 +6678,10 @@ msgstr ""
 #~ msgstr ""
 #~ "For mange argumenter. \n"
 #~ "Skriv \"%(basename)s help %(command)s\" for mer informasjon"
+
+#, fuzzy
+#~ msgid "Unknown nickname"
+#~ msgstr "E_tter kallenavn:"
 
 #~ msgid ""
 #~ "Usage:\n"
@@ -6698,6 +6701,14 @@ msgstr ""
 #~ "Bruk: %(basename)s %(command)s %(arguments)s \n"
 #~ "\t %(help)s"
 
+#, fuzzy
+#~ msgid "Video chats are not available"
+#~ msgstr "Videoøkter er ikke tilgjengelige"
+
+#, fuzzy
+#~ msgid "Voice chats are not available"
+#~ msgstr "Videoøkter er ikke tilgjengelige"
+
 #~ msgid "XML to send"
 #~ msgstr "XML å sende"
 
@@ -6713,12 +6724,23 @@ msgstr ""
 #~ msgid "XMPP Address of the group chat that will receive the message"
 #~ msgstr "JID-en til rommet som mottar meldingen"
 
+#, fuzzy
+#~ msgid ""
+#~ "You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
+#~ msgstr ""
+#~ "Du er ikke lenger i gruppesamtalen \"%(room)s\", eller så har \"%(nick)s"
+#~ "\" forlatt den."
+
 #~ msgid "You have no active account"
 #~ msgstr "Du har ingen aktiv konto"
 
 #, fuzzy
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "Alltid lukk Gajim"
+
+#, fuzzy
+#~ msgid "_Try Again"
+#~ msgstr "Bekreft igjen…"
 
 #~ msgid ""
 #~ "change status of account \"account\". If not specified, try to change "
@@ -6740,6 +6762,9 @@ msgstr ""
 #~ msgid "file"
 #~ msgstr "fil"
 
+#~ msgid "has closed the chat window or tab"
+#~ msgstr "har lukket samtalevinduet eller fanen"
+
 #~ msgid "if specified, contact is taken from the contact list of this account"
 #~ msgstr ""
 #~ "hvis oppgitt tas kontakten fra kontaktlista tilhørende denne kontoen"
@@ -6749,6 +6774,9 @@ msgstr ""
 
 #~ msgid "if specified, the message will be sent using this account"
 #~ msgstr "hvis oppgitt, vil meldingen bli sendt ved bruk av denne kontoen"
+
+#~ msgid "is paying attention to the conversation"
+#~ msgstr "fokuserer på samtalen"
 
 #~ msgid "message contents"
 #~ msgstr "meldingsinnhold"

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-24 12:49+0000\n"
+"POT-Creation-Date: 2022-08-13 16:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,23 +15,6 @@ msgstr ""
 "X-Generator: Translate Toolkit 2.0.0rc2\n"
 "X-Pootle-Path: /sr/gajim/sr.po\n"
 "X-Pootle-Revision: 1037\n"
-
-msgid ""
-"\n"
-"    Ban user by a nick or a JID from a groupchat\n"
-"\n"
-"    If given nickname is not found it will be treated as a JID.\n"
-"    "
-msgstr ""
-
-msgid ""
-"\n"
-"    Set the current status\n"
-"\n"
-"    Status can be given as one of the following values:\n"
-"    online, away, chat, xa, dnd.\n"
-"    "
-msgstr ""
 
 #, fuzzy
 msgid " (Video Call)"
@@ -152,10 +135,6 @@ msgstr ""
 msgid "%s is not a valid loglevel"
 msgstr "%s није исправан ниво логовања"
 
-#, fuzzy, python-format
-msgid "%s is not a valid tone"
-msgstr "%s није исправан ниво логовања"
-
 #, python-format
 msgid ""
 "%s is online with multiple devices.\n"
@@ -177,10 +156,6 @@ msgstr "Удаљени контакт је прекинуо пренос"
 #, fuzzy, python-format
 msgid "%s wants to send you a file"
 msgstr "%s Вам жели послати датотеку."
-
-#, fuzzy, python-format
-msgid "%s: Nothing found"
-msgstr "%s није пронађен"
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -881,9 +856,6 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allow a participant to send you public or private messages"
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1151,13 +1123,13 @@ msgstr "Враћам се за пар минута."
 msgid "Back soon"
 msgstr "Враћам се брзо"
 
+#, fuzzy
+msgid "Ban"
+msgstr "_Забрани"
+
 #, fuzzy, python-format
 msgid "Ban %s"
 msgstr "Листа забрана"
-
-#, fuzzy
-msgid "Ban Participant"
-msgstr "Учесник"
 
 msgid "Ban…"
 msgstr ""
@@ -1192,9 +1164,6 @@ msgstr "Листа приватности за %s"
 #, fuzzy
 msgid "Block…"
 msgstr "_Блокирај"
-
-msgid "Bold"
-msgstr "Подебљано"
 
 #, fuzzy
 msgid "Bookmarks"
@@ -1313,10 +1282,6 @@ msgid "Certificate signature failure"
 msgstr "Грешка у потпису сертификата"
 
 #, fuzzy
-msgid "Ch_ange"
-msgstr "Промени _надимак..."
-
-#, fuzzy
 msgid "Ch_ange Subject"
 msgstr "Промени _тему..."
 
@@ -1341,10 +1306,6 @@ msgstr "Промени _тему..."
 
 msgid "Change your account’s password, etc."
 msgstr ""
-
-#, fuzzy
-msgid "Change your nickname in a group chat"
-msgstr "Промени надимак (Ctrl+N)"
 
 #, fuzzy
 msgid "Change your profile picture"
@@ -1476,16 +1437,8 @@ msgid "Clear Sound"
 msgstr "Одаберите звук"
 
 #, fuzzy
-msgid "Clear chat window"
-msgstr "Начин коришћења: /%s, празни текстуални прозор"
-
-#, fuzzy
 msgid "Clear message entry"
 msgstr "Порука Послата"
-
-#, fuzzy
-msgid "Clear the text window"
-msgstr "Начин коришћења: /%s, празни текстуални прозор"
 
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
@@ -1526,11 +1479,6 @@ msgstr "Боја"
 #, fuzzy
 msgid "Command List"
 msgstr "Листа забрана"
-
-msgid ""
-"Command disabled. This command can be enabled by setting "
-"'command_system_execute' to True in ACE (Advanced Configuration Editor)."
-msgstr ""
 
 #, fuzzy
 msgid "Commands"
@@ -1764,6 +1712,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr "_Копирај локацију везе"
 
+msgid "Correct"
+msgstr ""
+
 #, fuzzy
 msgid "Could not Open File"
 msgstr "Не могу учитати слику"
@@ -1954,14 +1905,6 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
-#, fuzzy
-msgid "Display names of all group chat participants"
-msgstr "Начин коришћења: /%s , приказује имена учесника у групном разговору."
-
-#, fuzzy
-msgid "Display or change a group chat topic"
-msgstr "Питај пре затварања прозора/језичка групног разговора."
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Прихватате ли овај захтев на налогу %s?"
@@ -2022,10 +1965,6 @@ msgstr "Проследи непрочитане поруке"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Програмира"
-
-#, fuzzy
-msgid "Drop Files or Contacts"
-msgstr "Позови контакте"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2128,23 +2067,26 @@ msgid "Encrypting file…"
 msgstr "E2E енкрипција онемогућена"
 
 #, fuzzy
+msgid "Encryption error"
+msgstr "Захтев за претплатом"
+
+#, fuzzy
 msgid "Encryption required"
 msgstr "Захтев за претплатом"
 
 msgid "End call"
 msgstr ""
 
-#, fuzzy
-msgid "Enter Nickname"
-msgstr "Убаци надимак"
-
-#, fuzzy
-msgid "Enter Password"
-msgstr "Унесите нову лозинку:"
+msgid "Enter a password to join this chat"
+msgstr ""
 
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Унесите нову лозинку:"
+
+#, fuzzy
+msgid "Enter your new nickname"
+msgstr "Убаци надимак"
 
 msgid ""
 "Enter your nickname. This is how your name is displayed to your contacts."
@@ -2156,9 +2098,6 @@ msgstr "Грешка"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Одаберите слику"
-
-msgid "Error during command execution!"
-msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2199,10 +2138,6 @@ msgstr "Грешка"
 msgid "Error: %s"
 msgstr "Грешка: %s"
 
-#, fuzzy
-msgid "Error: Could not process image"
-msgstr "Не могу учитати слику"
-
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr "Грешка: није могуће отворити %s за читање"
@@ -2226,12 +2161,6 @@ msgstr "_Изврши наредбу"
 #, fuzzy
 msgid "Execute Command…"
 msgstr "_Изврши наредбу"
-
-msgid "Execute expression inside a shell, send output"
-msgstr ""
-
-msgid "Execute expression inside a shell, show output"
-msgstr ""
 
 #, fuzzy
 msgid "Executing…"
@@ -2431,9 +2360,6 @@ msgstr ""
 msgid "For example: \"Julia is now online\""
 msgstr ""
 
-msgid "Forbid a participant to send you public or private messages"
-msgstr ""
-
 #, fuzzy
 msgid "Force Bookmark 2 usage"
 msgstr "Маркирај ову собу"
@@ -2441,6 +2367,10 @@ msgstr "Маркирај ову собу"
 #, fuzzy
 msgid "Forever"
 msgstr "Сервер"
+
+#, fuzzy
+msgid "Forget Group Chat"
+msgstr "Напусти групне разговоре"
 
 #, fuzzy
 msgid "Forget this Group Chat"
@@ -2461,10 +2391,6 @@ msgstr "Грешка у формату сертифаковог поља од к
 #, fuzzy
 msgid "Format your message"
 msgstr "Проследи непрочитане поруке"
-
-#, fuzzy
-msgid "Format your message…"
-msgstr "статусна порука"
 
 msgid "Free for Chat"
 msgstr "Слободан за разговор"
@@ -2528,11 +2454,6 @@ msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
-
-#, fuzzy
-msgid "Gajim will not try to join this group chat again"
-msgstr ""
-"Ако је означено, Гајим ће се придружити овом групном разговору при покретању"
 
 msgid "Gajim will now exit"
 msgstr "Гајим ће се сада завршити"
@@ -2686,6 +2607,10 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
+#, fuzzy
+msgid "Hide chat list"
+msgstr "Учесник"
+
 msgid "Hide this menu"
 msgstr "Сакриј овај мени"
 
@@ -2777,9 +2702,6 @@ msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 "Ако је означена, Гајим ће приказивати расположење контаката у листи контаката"
 
-msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
-msgstr ""
-
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 
@@ -2815,7 +2737,7 @@ msgstr ""
 "повезани са негативним приоритетом НЕЋЕТЕ примати никакве поруке од сервера."
 
 #, fuzzy, python-format
-msgid "If you close this chat, you will leave '%s'."
+msgid "If you close this chat, you will leave \"%s\"."
 msgstr "Ако затворите овај прозор, бићете искључени са овох групног разговора."
 
 msgid ""
@@ -2911,19 +2833,12 @@ msgid "Invalid XMPP Address"
 msgstr "Неисправна датотека"
 
 #, fuzzy
-msgid "Invalid affiliation given"
-msgstr "везаност измењена"
-
-#, fuzzy
 msgid "Invalid domain name"
 msgstr "Неисправно име налога"
 
-msgid "Invalid nickname"
-msgstr "Неисправан надимак"
-
 #, fuzzy
-msgid "Invalid role given"
-msgstr "Неисправан сервер"
+msgid "Invite"
+msgstr "Позо_ви"
 
 #, fuzzy
 msgid "Invite Contacts"
@@ -2936,9 +2851,6 @@ msgstr "Позови контакте"
 #, fuzzy
 msgid "Invite New Contact"
 msgstr "Позови контакте"
-
-msgid "Invite a user to a group chat for a reason"
-msgstr ""
 
 msgid "Invite friends to group chats or join one"
 msgstr ""
@@ -2971,9 +2883,6 @@ msgstr ""
 
 msgid "It is not possible to send empty files"
 msgstr "Није могуће послати празну датотеку"
-
-msgid "Italic"
-msgstr "Курзив"
 
 #, fuzzy
 msgid "I’m eating."
@@ -3028,10 +2937,6 @@ msgid "Join Support Chat"
 msgstr "Придружи се групном разговору"
 
 #, fuzzy
-msgid "Join a group chat given by an XMPP Address"
-msgstr "у _групним разговорима"
-
-#, fuzzy
 msgid "Joining…"
 msgstr "Забрана..."
 
@@ -3052,17 +2957,13 @@ msgstr ""
 msgid "Key usage does not include certificate signing"
 msgstr "Употреба кључа не укључује потписивање сертификата"
 
+#, fuzzy
+msgid "Kick"
+msgstr "_Избаци"
+
 #, fuzzy, python-format
 msgid "Kick %s"
 msgstr "Избацујем %s"
-
-#, fuzzy
-msgid "Kick Participant"
-msgstr "Учесник"
-
-#, fuzzy
-msgid "Kick user from group chat by nickname"
-msgstr "Позвани сте у групни разговор"
 
 #, fuzzy
 msgid "Kick…"
@@ -3082,17 +2983,10 @@ msgstr "Последњи статус: %s"
 msgid "Leave Group Chat"
 msgstr "Напусти групне разговоре"
 
-#, fuzzy
-msgid "Leave the group chat"
-msgstr "Напусти групне разговоре"
-
 msgid "Left Click Action"
 msgstr ""
 
 msgid "Let others know if you read up to this point"
-msgstr ""
-
-msgid "Limit must be an integer"
 msgstr ""
 
 #, fuzzy
@@ -3281,10 +3175,10 @@ msgstr "_Записуј у дневник статусне промене кон
 msgid "Miscellaneous"
 msgstr "<b>Остало</b>"
 
-msgid "Missing arguments"
-msgstr "Недостају аргументи"
-
 msgid "Missing dependencies for Audio/Video"
+msgstr ""
+
+msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
@@ -3353,23 +3247,15 @@ msgstr "Претрага"
 msgid "New Workspace"
 msgstr "Преименуј контакт"
 
-#, fuzzy, python-format
-msgid "New message from %s"
+#, fuzzy
+msgid "New message from"
 msgstr "Нова порука од %(nickname)s"
 
 msgid "Next"
 msgstr ""
 
-#, fuzzy
-msgid "Next sent messages"
-msgstr "Већ постављене поруке:"
-
 msgid "Nickname"
 msgstr "Надимак"
-
-#, fuzzy
-msgid "Nickname not found"
-msgstr "Надимак није пронађен: %s "
 
 #, fuzzy
 msgid "No"
@@ -3427,10 +3313,6 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "Нема доступних налога"
-
-#, fuzzy
-msgid "No open voice chats with the contact"
-msgstr "Начин коришћења: /%s, шаље пинк контакту"
 
 #, fuzzy
 msgid "No proxy used"
@@ -3557,16 +3439,6 @@ msgstr "Регистрација неуспела"
 #, fuzzy
 msgid "Open _Folder"
 msgstr "_Отвори садржавајућу фасциклу"
-
-#, fuzzy
-msgid "Open a private chat window with a specified participant"
-msgstr "Отвори приватни разговор са одабраним учесником"
-
-#, fuzzy
-msgid ""
-"Open a private chat window with a specified participant and send him a "
-"message"
-msgstr "Отвори приватни разговор са одабраним учесником и пошаљи му поруку"
 
 msgid "Open as _Link"
 msgstr "Отвори као _Везу"
@@ -3731,13 +3603,6 @@ msgstr "Надимак за коришћење"
 msgid "Pin Chat"
 msgstr "Захтев за преносом датотеке"
 
-msgid "Ping?"
-msgstr ""
-
-#, fuzzy, python-format
-msgid "Ping? (%s)"
-msgstr "Понг! (%s s.)"
-
 msgid "Pinned"
 msgstr ""
 
@@ -3829,14 +3694,6 @@ msgstr ""
 msgid "Plugins Updated Successfully"
 msgstr "Регистрација неуспела"
 
-#, fuzzy, python-format
-msgid "Pong! (%(nick)s %(delay)s s.)"
-msgstr "Понг! (%s s.)"
-
-#, fuzzy, python-format
-msgid "Pong! (%s seconds)"
-msgstr "Понг! (%s s.)"
-
 #, fuzzy
 msgid "Port"
 msgstr "_Порт:"
@@ -3881,10 +3738,6 @@ msgstr "Прегледај нове поруке у искачућим обав�
 #, fuzzy
 msgid "Previous"
 msgstr "Завидљив"
-
-#, fuzzy
-msgid "Previously sent message"
-msgstr "Већ постављене поруке:"
 
 msgid "Print XML stanzas and other debug information"
 msgstr ""
@@ -3956,14 +3809,6 @@ msgstr ""
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Гајим"
-
-#, fuzzy
-msgid "Quote next message"
-msgstr "Пошаљи поруку"
-
-#, fuzzy
-msgid "Quote previous message"
-msgstr "статусна порука"
 
 #, fuzzy
 msgid "Quote…"
@@ -4467,9 +4312,6 @@ msgstr "Последњи статус: %s"
 msgid "Send Chatstate in Group Chats"
 msgstr "Није могуће придружити се групном разговору"
 
-msgid "Send DTMF sequence through an open voice chat"
-msgstr ""
-
 #, fuzzy
 msgid "Send File"
 msgstr "Пошаљи _датотеку"
@@ -4507,25 +4349,6 @@ msgid "Send _Report"
 msgstr "Пошаљилац: "
 
 #, fuzzy
-msgid "Send a disco info request"
-msgstr "Послати захтев примања"
-
-#, fuzzy
-msgid "Send a message to the contact"
-msgstr "Начин коришћења: /%s, шаље поруку контакту"
-
-#, fuzzy
-msgid "Send a message to the contact that will attract their attention"
-msgstr "Начин коришћења: /%s, шаље поруку контакту"
-
-#, fuzzy
-msgid "Send a ping to the contact"
-msgstr "Начин коришћења: /%s, шаље пинк контакту"
-
-msgid "Send action (in the third person) to the current chat"
-msgstr ""
-
-#, fuzzy
 msgid "Send message on Ctrl+Enter and make a new line with Enter."
 msgstr ""
 "Пошаљи поруку са Ctrl+Enter, а са Enter прави нову линију. (Подразумевано "
@@ -4537,9 +4360,6 @@ msgstr "Пошаљи поруку"
 
 msgid "Sender: "
 msgstr "Пошаљилац: "
-
-msgid "Sending private message failed"
-msgstr "Неуспешно слање приватне поруке"
 
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4600,27 +4420,9 @@ msgstr "Сервер"
 msgid "Set configuration directory"
 msgstr "Конфигурација собе"
 
-msgid ""
-"Set participant affiliation in group chat.\n"
-"    Affiliation can be given as one of the following values:\n"
-"    owner, admin, member, outcast, none"
-msgstr ""
-
-msgid ""
-"Set participant role in group chat.\n"
-"    Role can be given as one of the following values:\n"
-"    moderator, participant, visitor, none"
-msgstr ""
-
 #, fuzzy
 msgid "Set status message"
 msgstr "статусна порука"
-
-msgid "Set the current status to away"
-msgstr ""
-
-msgid "Set the current status to online"
-msgstr ""
 
 msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
@@ -4735,9 +4537,9 @@ msgstr ""
 msgid "Show all warnings"
 msgstr "Прикажи св_е догађаје на чекању"
 
-msgid ""
-"Show help on a given command or a list of available commands if -a is given"
-msgstr ""
+#, fuzzy
+msgid "Show chat list"
+msgstr "Обавештење"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -4746,9 +4548,6 @@ msgstr "Прикажи транс_порте"
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
-msgstr ""
-
-msgid "Show logged messages which mention given text"
 msgstr ""
 
 msgid ""
@@ -4985,9 +4784,6 @@ msgstr ""
 msgid "Street"
 msgstr "Под стресом"
 
-msgid "Strike"
-msgstr "Прецртано"
-
 msgid "Style"
 msgstr "Стил"
 
@@ -5076,10 +4872,6 @@ msgstr "<b>Систем:</b>"
 msgid "TLS verification failed: %s"
 msgstr "Грешка SSL сертификата"
 
-#, fuzzy
-msgid "T_ry Again"
-msgstr "Потврдите поново..."
-
 msgid "Tabbed chat window"
 msgstr ""
 
@@ -5136,9 +4928,6 @@ msgid ""
 msgstr ""
 
 msgid "The last message was written on a mobile client"
-msgstr ""
-
-msgid "The same as using a doc-string, except it supports translation"
 msgstr ""
 
 #, fuzzy
@@ -5334,19 +5123,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Учесник"
 
-msgid "Toggle Video Chat"
-msgstr ""
-
-msgid "Toggle Voice Chat"
-msgstr ""
-
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Учесник"
-
-#, fuzzy
-msgid "Too many arguments"
-msgstr "Недостају аргументи"
 
 msgid "Topic"
 msgstr ""
@@ -5467,10 +5246,6 @@ msgstr "Непознат наслов"
 #, fuzzy
 msgid "Unknown language"
 msgstr "Непознат наслов"
-
-#, fuzzy
-msgid "Unknown nickname"
-msgstr "Унесите нови надимак за контакт %s"
 
 #, fuzzy
 msgid "Unknown validation error"
@@ -5628,10 +5403,6 @@ msgstr "Приватни Разговори"
 msgid "Video calls are not available on Windows"
 msgstr "Веза није доступна"
 
-#, fuzzy
-msgid "Video chats are not available"
-msgstr "Веза није доступна"
-
 msgid "Video test"
 msgstr ""
 
@@ -5654,10 +5425,6 @@ msgstr "<b>Визуална обавештења</b>"
 #, fuzzy
 msgid "Voice Request"
 msgstr "Захтев за преносом датотеке"
-
-#, fuzzy
-msgid "Voice chats are not available"
-msgstr "Веза није доступна"
 
 #, fuzzy
 msgid "Waiting…"
@@ -5782,12 +5549,6 @@ msgstr "Јесте ли сигурни да желите затворити Га
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "Управо ћете уклонити \"%(name)s\" (%(jid)s) из ваше листе контаката.\n"
-
-#, fuzzy, python-format
-msgid ""
-"You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
-msgstr ""
-"Више нисте у групном разговору \"%(room)s\" или је \"%(nick)s\" отишао."
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5996,9 +5757,6 @@ msgstr ""
 msgid "_Back"
 msgstr "Враћам се брзо"
 
-msgid "_Ban"
-msgstr "_Забрани"
-
 msgid "_Block"
 msgstr "_Блокирај"
 
@@ -6086,10 +5844,6 @@ msgstr "Могућности"
 msgid "_File Transfer"
 msgstr "Преноси датотека"
 
-#, fuzzy
-msgid "_Forget Group Chat"
-msgstr "Напусти групне разговоре"
-
 msgid "_Free for Chat"
 msgstr "_Слободан за разговор"
 
@@ -6114,9 +5868,6 @@ msgstr "_Придружи се"
 
 msgid "_Keyboard Shortcuts"
 msgstr ""
-
-msgid "_Kick"
-msgstr "_Избаци"
 
 msgid "_Later"
 msgstr ""
@@ -6259,10 +6010,6 @@ msgid "_Subscribe"
 msgstr "_Претплати се"
 
 #, fuzzy
-msgid "_Try Again"
-msgstr "Потврдите поново..."
-
-#, fuzzy
 msgid "_Type"
 msgstr "Врс_та:"
 
@@ -6321,6 +6068,9 @@ msgstr ""
 msgid "bearing"
 msgstr "морска"
 
+msgid "bold"
+msgstr ""
+
 #, fuzzy
 msgid "building"
 msgstr "Крије се"
@@ -6367,9 +6117,6 @@ msgstr "листа преноса датотека"
 msgid "floor"
 msgstr ""
 
-msgid "has closed the chat window or tab"
-msgstr "је затворио/затворила прозор или језичак разговора"
-
 #, fuzzy
 msgid ""
 "has invited you to a group chat.\n"
@@ -6386,8 +6133,9 @@ msgstr "пише поруку..."
 msgid "is doing something else"
 msgstr "ради нешто друго"
 
-msgid "is paying attention to the conversation"
-msgstr "слуша конверзацију"
+#, fuzzy
+msgid "italic"
+msgstr "Курзив"
 
 msgid "lat"
 msgstr ""
@@ -6434,6 +6182,10 @@ msgstr ""
 
 msgid "street"
 msgstr ""
+
+#, fuzzy
+msgid "strike"
+msgstr "Прецртано"
 
 msgid "text"
 msgstr ""
@@ -6491,7 +6243,15 @@ msgstr "%(nick)s је тренутно %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#, fuzzy
+#~ msgid "%s is not a valid tone"
+#~ msgstr "%s није исправан ниво логовања"
+
 #~ msgid "%s not found"
+#~ msgstr "%s није пронађен"
+
+#, fuzzy
+#~ msgid "%s: Nothing found"
 #~ msgstr "%s није пронађен"
 
 #, fuzzy
@@ -6536,11 +6296,26 @@ msgstr ""
 #~ msgid "Arguments:"
 #~ msgstr "Аргументи:"
 
+#, fuzzy
+#~ msgid "Ban Participant"
+#~ msgstr "Учесник"
+
+#~ msgid "Bold"
+#~ msgstr "Подебљано"
+
+#, fuzzy
+#~ msgid "Ch_ange"
+#~ msgstr "Промени _надимак..."
+
 #~ msgid "Change status"
 #~ msgstr "Измени статус"
 
 #~ msgid "Change status information"
 #~ msgstr "Измени статусне информације"
+
+#, fuzzy
+#~ msgid "Change your nickname in a group chat"
+#~ msgstr "Промени надимак (Ctrl+N)"
 
 #, fuzzy
 #~ msgid "Changes the priority of account(s)"
@@ -6553,11 +6328,40 @@ msgstr ""
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Молимо проверите да ли је Гајим покренут"
 
+#, fuzzy
+#~ msgid "Clear chat window"
+#~ msgstr "Начин коришћења: /%s, празни текстуални прозор"
+
+#, fuzzy
+#~ msgid "Clear the text window"
+#~ msgstr "Начин коришћења: /%s, празни текстуални прозор"
+
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr "D-Bus не постоји на овом рачунару или нема python модула."
 
+#, fuzzy
+#~ msgid "Display names of all group chat participants"
+#~ msgstr ""
+#~ "Начин коришћења: /%s , приказује имена учесника у групном разговору."
+
+#, fuzzy
+#~ msgid "Display or change a group chat topic"
+#~ msgstr "Питај пре затварања прозора/језичка групног разговора."
+
 #~ msgid "Do not disturb"
 #~ msgstr "Не сметај"
+
+#, fuzzy
+#~ msgid "Drop Files or Contacts"
+#~ msgstr "Позови контакте"
+
+#, fuzzy
+#~ msgid "Enter Password"
+#~ msgstr "Унесите нову лозинку:"
+
+#, fuzzy
+#~ msgid "Error: Could not process image"
+#~ msgstr "Не могу учитати слику"
 
 #~ msgid "Extended away"
 #~ msgstr "Дуже одсутан"
@@ -6565,8 +6369,18 @@ msgstr ""
 #~ msgid "File path"
 #~ msgstr "Путања до датотеке"
 
+#, fuzzy
+#~ msgid "Format your message…"
+#~ msgstr "статусна порука"
+
 #~ msgid "Free for chat"
 #~ msgstr "Слободан за разговор"
+
+#, fuzzy
+#~ msgid "Gajim will not try to join this group chat again"
+#~ msgstr ""
+#~ "Ако је означено, Гајим ће се придружити овом групном разговору при "
+#~ "покретању"
 
 #~ msgid "Gets detailed info on a account"
 #~ msgstr "Даје детаљне информације о налогу"
@@ -6586,8 +6400,35 @@ msgstr ""
 #~ "Ако је истинито, Гајим се завршава када се притисне X дугме. Ово "
 #~ "подешавање се користи само ако је икона системске касете у употреби."
 
+#, fuzzy
+#~ msgid "Invalid affiliation given"
+#~ msgstr "везаност измењена"
+
+#~ msgid "Invalid nickname"
+#~ msgstr "Неисправан надимак"
+
+#, fuzzy
+#~ msgid "Invalid role given"
+#~ msgstr "Неисправан сервер"
+
 #~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
 #~ msgstr "Чини се да Гајим не ради. Не можете да користите gajim-remote."
+
+#, fuzzy
+#~ msgid "Join a group chat given by an XMPP Address"
+#~ msgstr "у _групним разговорима"
+
+#, fuzzy
+#~ msgid "Kick Participant"
+#~ msgstr "Учесник"
+
+#, fuzzy
+#~ msgid "Kick user from group chat by nickname"
+#~ msgstr "Позвани сте у групни разговор"
+
+#, fuzzy
+#~ msgid "Leave the group chat"
+#~ msgstr "Напусти групне разговоре"
 
 #, fuzzy
 #~ msgid "Lists all contacts in the contact list, one for each line"
@@ -6598,8 +6439,23 @@ msgstr ""
 #~ msgid "Missing argument \"contact_jid\""
 #~ msgstr "Недостаје аргумент \"contact_jid\""
 
+#~ msgid "Missing arguments"
+#~ msgstr "Недостају аргументи"
+
 #~ msgid "Name of the account"
 #~ msgstr "Име налога"
+
+#, fuzzy
+#~ msgid "Next sent messages"
+#~ msgstr "Већ постављене поруке:"
+
+#, fuzzy
+#~ msgid "Nickname not found"
+#~ msgstr "Надимак није пронађен: %s "
+
+#, fuzzy
+#~ msgid "No open voice chats with the contact"
+#~ msgstr "Начин коришћења: /%s, шаље пинк контакту"
 
 #~ msgid "Offline - disconnect"
 #~ msgstr "Није на вези"
@@ -6607,11 +6463,45 @@ msgstr ""
 #~ msgid "Online"
 #~ msgstr "На вези"
 
+#, fuzzy
+#~ msgid "Open a private chat window with a specified participant"
+#~ msgstr "Отвори приватни разговор са одабраним учесником"
+
+#, fuzzy
+#~ msgid ""
+#~ "Open a private chat window with a specified participant and send him a "
+#~ "message"
+#~ msgstr "Отвори приватни разговор са одабраним учесником и пошаљи му поруку"
+
+#, fuzzy
+#~ msgid "Ping? (%s)"
+#~ msgstr "Понг! (%s s.)"
+
+#, fuzzy
+#~ msgid "Pong! (%(nick)s %(delay)s s.)"
+#~ msgstr "Понг! (%s s.)"
+
+#, fuzzy
+#~ msgid "Pong! (%s seconds)"
+#~ msgstr "Понг! (%s s.)"
+
 #~ msgid "Presence description:"
 #~ msgstr "Опис присутности:"
 
+#, fuzzy
+#~ msgid "Previously sent message"
+#~ msgstr "Већ постављене поруке:"
+
 #~ msgid "Prints a list of registered accounts"
 #~ msgstr "Исписује листу регистрованих налога"
+
+#, fuzzy
+#~ msgid "Quote next message"
+#~ msgstr "Пошаљи поруку"
+
+#, fuzzy
+#~ msgid "Quote previous message"
+#~ msgstr "статусна порука"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6627,6 +6517,25 @@ msgstr ""
 
 #~ msgid "Returns number of unread messages"
 #~ msgstr "Враћа број непрочитаних порука"
+
+#, fuzzy
+#~ msgid "Send a disco info request"
+#~ msgstr "Послати захтев примања"
+
+#, fuzzy
+#~ msgid "Send a message to the contact"
+#~ msgstr "Начин коришћења: /%s, шаље поруку контакту"
+
+#, fuzzy
+#~ msgid "Send a message to the contact that will attract their attention"
+#~ msgstr "Начин коришћења: /%s, шаље поруку контакту"
+
+#, fuzzy
+#~ msgid "Send a ping to the contact"
+#~ msgstr "Начин коришћења: /%s, шаље пинк контакту"
+
+#~ msgid "Sending private message failed"
+#~ msgstr "Неуспешно слање приватне поруке"
 
 #, fuzzy
 #~ msgid ""
@@ -6677,8 +6586,16 @@ msgstr ""
 #~ msgid "Status Change"
 #~ msgstr "_Записуј у дневник статусне промене контаката"
 
+#, fuzzy
+#~ msgid "T_ry Again"
+#~ msgstr "Потврдите поново..."
+
 #~ msgid "The status has been changed."
 #~ msgstr "Статус се променио."
+
+#, fuzzy
+#~ msgid "Too many arguments"
+#~ msgstr "Недостају аргументи"
 
 #~ msgid ""
 #~ "Too many arguments. \n"
@@ -6686,6 +6603,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Превише аргумената\n"
 #~ "Укуцајте \"%(basename)s help %(command)s\" за више информација"
+
+#, fuzzy
+#~ msgid "Unknown nickname"
+#~ msgstr "Унесите нови надимак за контакт %s"
 
 #~ msgid ""
 #~ "Usage:\n"
@@ -6704,6 +6625,14 @@ msgstr ""
 #~ "Коришћење: %(basename)s %(command)s %(arguments)s \n"
 #~ "\t %(help)s"
 
+#, fuzzy
+#~ msgid "Video chats are not available"
+#~ msgstr "Веза није доступна"
+
+#, fuzzy
+#~ msgid "Voice chats are not available"
+#~ msgstr "Веза није доступна"
+
 #~ msgid "XML to send"
 #~ msgstr "XML за слање"
 
@@ -6719,12 +6648,22 @@ msgstr ""
 #~ msgid "XMPP Address of the group chat that will receive the message"
 #~ msgstr "Џабер ИД собе која ће примити поруку"
 
+#, fuzzy
+#~ msgid ""
+#~ "You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
+#~ msgstr ""
+#~ "Више нисте у групном разговору \"%(room)s\" или је \"%(nick)s\" отишао."
+
 #~ msgid "You have no active account"
 #~ msgstr "немате активних рачуна"
 
 #, fuzzy
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "Увек затвори Гајим"
+
+#, fuzzy
+#~ msgid "_Try Again"
+#~ msgstr "Потврдите поново..."
 
 #~ msgid ""
 #~ "change status of account \"account\". If not specified, try to change "
@@ -6748,6 +6687,9 @@ msgstr ""
 #~ msgid "file"
 #~ msgstr "датотека"
 
+#~ msgid "has closed the chat window or tab"
+#~ msgstr "је затворио/затворила прозор или језичак разговора"
+
 #~ msgid "if specified, contact is taken from the contact list of this account"
 #~ msgstr "ако је назначено, контакт се узима са листе контаката овог налога"
 
@@ -6756,6 +6698,9 @@ msgstr ""
 
 #~ msgid "if specified, the message will be sent using this account"
 #~ msgstr "ако је назначено, порука ће бити послата користећи овај налог"
+
+#~ msgid "is paying attention to the conversation"
+#~ msgstr "слуша конверзацију"
 
 #~ msgid "message contents"
 #~ msgstr "садржај поруке"

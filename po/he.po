@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-24 12:49+0000\n"
+"POT-Creation-Date: 2022-08-13 16:07+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -20,35 +20,6 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Language: he\n"
 "X-Source-Language: en\n"
-
-#, fuzzy
-msgid ""
-"\n"
-"    Ban user by a nick or a JID from a groupchat\n"
-"\n"
-"    If given nickname is not found it will be treated as a JID.\n"
-"    "
-msgstr ""
-"\n"
-"    חסימת משתמש מתוך שיחת קבוצה לפי כינוי או לפי jid\n"
-"\n"
-"    כאשר שם כינוי נתון לא נמצא זה ייוחס בתור jid.\n"
-"    "
-
-msgid ""
-"\n"
-"    Set the current status\n"
-"\n"
-"    Status can be given as one of the following values:\n"
-"    online, away, chat, xa, dnd.\n"
-"    "
-msgstr ""
-"\n"
-"    קביעת מצב נוכחי\n"
-"\n"
-"    מצב יכול להיות נתון בתור אחד מתוך הערכים הבאים:\n"
-"    ‏online, away, chat, xa, dnd.\n"
-"    "
 
 #, fuzzy
 msgid " (Video Call)"
@@ -183,10 +154,6 @@ msgid "%s is not a valid loglevel"
 msgstr "cli"
 
 #, python-format
-msgid "%s is not a valid tone"
-msgstr "‏%s אינו טון (tone) תקף"
-
-#, python-format
 msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the file to."
@@ -207,11 +174,6 @@ msgstr "איש קשר מרוחק הפסיק העברה"
 #, fuzzy, python-format
 msgid "%s wants to send you a file"
 msgstr "‏%s רוצה לשלוח לך קובץ."
-
-# gajim-remote?
-#, python-format
-msgid "%s: Nothing found"
-msgstr "‏%s: לא נמצא דבר"
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -913,10 +875,6 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-#, fuzzy
-msgid "Allow a participant to send you public or private messages"
-msgstr "התרה לנוכח לשלוח לך הודעות פומביות או פרטיות"
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1189,13 +1147,13 @@ msgstr "אני אחזור בעוד כמה דקות."
 msgid "Back soon"
 msgstr "אשוב בקרוב"
 
+#, fuzzy
+msgid "Ban"
+msgstr "א_סור"
+
 #, fuzzy, python-format
 msgid "Ban %s"
 msgstr "רשימת אסירה"
-
-#, fuzzy
-msgid "Ban Participant"
-msgstr "משתתף"
 
 msgid "Ban…"
 msgstr ""
@@ -1230,9 +1188,6 @@ msgstr "רשימת פרטיות עבור ‫%s"
 #, fuzzy
 msgid "Block…"
 msgstr "_חסום"
-
-msgid "Bold"
-msgstr "מובלט"
 
 #, fuzzy
 msgid "Bookmarks"
@@ -1354,10 +1309,6 @@ msgid "Certificate signature failure"
 msgstr "כשל תעודת חתימה"
 
 #, fuzzy
-msgid "Ch_ange"
-msgstr "שנה שם _כינוי..."
-
-#, fuzzy
 msgid "Ch_ange Subject"
 msgstr "שנה _נושא..."
 
@@ -1382,9 +1333,6 @@ msgstr "שנה _נושא..."
 
 msgid "Change your account’s password, etc."
 msgstr ""
-
-msgid "Change your nickname in a group chat"
-msgstr "שינוי שם הכינוי שלך בתוך שיחת קבוצה"
 
 #, fuzzy
 msgid "Change your profile picture"
@@ -1518,15 +1466,8 @@ msgid "Clear Sound"
 msgstr "בחירת צליל"
 
 #, fuzzy
-msgid "Clear chat window"
-msgstr "טיהור תמליל חלון"
-
-#, fuzzy
 msgid "Clear message entry"
 msgstr "הודעה נשלחה"
-
-msgid "Clear the text window"
-msgstr "טיהור תמליל חלון"
 
 # in or to?
 #, fuzzy
@@ -1568,11 +1509,6 @@ msgstr "צבע"
 #, fuzzy
 msgid "Command List"
 msgstr "רשימת אסירה"
-
-msgid ""
-"Command disabled. This command can be enabled by setting "
-"'command_system_execute' to True in ACE (Advanced Configuration Editor)."
-msgstr ""
 
 #, fuzzy
 msgid "Commands"
@@ -1809,6 +1745,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr "ה_עתק מיקום קישור"
 
+msgid "Correct"
+msgstr ""
+
 #, fuzzy
 msgid "Could not Open File"
 msgstr "לא היתה אפשרות להטעין תמונה"
@@ -2000,13 +1939,6 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
-#, fuzzy
-msgid "Display names of all group chat participants"
-msgstr "הצגת שמות של כל הנוכחים בתוך שיחת קבוצה"
-
-msgid "Display or change a group chat topic"
-msgstr "הצגה או שינוי נושא של שיחת קבוצה"
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "האם לקבל את בקשה זו בחשבון %s?"
@@ -2067,10 +1999,6 @@ msgstr "קדם הודעות אשר לא נקראו"
 #, fuzzy
 msgid "Downloading…"
 msgstr "כעת טוען"
-
-#, fuzzy
-msgid "Drop Files or Contacts"
-msgstr "הזמן _אנשי קשר"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2183,24 +2111,27 @@ msgid "Encrypting file…"
 msgstr "הצפנת E2E מנוטרלת כעת"
 
 #, fuzzy
+msgid "Encryption error"
+msgstr "בקשת הרשמה"
+
+#, fuzzy
 msgid "Encryption required"
 msgstr "בקשת הרשמה"
 
 msgid "End call"
 msgstr ""
 
-# להכניס/להזין
-#, fuzzy
-msgid "Enter Nickname"
-msgstr "שבץ שם כינוי"
-
-#, fuzzy
-msgid "Enter Password"
-msgstr "הזן סיסמה חדשה:"
+msgid "Enter a password to join this chat"
+msgstr ""
 
 #, fuzzy
 msgid "Enter new password..."
 msgstr "הזן סיסמה חדשה:"
+
+# להכניס/להזין
+#, fuzzy
+msgid "Enter your new nickname"
+msgstr "שבץ שם כינוי"
 
 msgid ""
 "Enter your nickname. This is how your name is displayed to your contacts."
@@ -2212,9 +2143,6 @@ msgstr "שגיאה"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "בחירת תמונה"
-
-msgid "Error during command execution!"
-msgstr "שגיאה במהלך הוצאה לפועל של פקודה!"
 
 #, python-format
 msgid "Error message: %s"
@@ -2255,10 +2183,6 @@ msgstr "שגיאה"
 msgid "Error: %s"
 msgstr "שגיאה: %s"
 
-#, fuzzy
-msgid "Error: Could not process image"
-msgstr "לא היתה אפשרות להטעין תמונה"
-
 # cli
 #, fuzzy, python-format
 msgid "Error: cannot open %s for reading"
@@ -2283,12 +2207,6 @@ msgstr "הרץ _פקודה"
 #, fuzzy
 msgid "Execute Command…"
 msgstr "הרץ _פקודה"
-
-msgid "Execute expression inside a shell, send output"
-msgstr "הרצת ביטוי בתוך מעטפת, מסירת פלט"
-
-msgid "Execute expression inside a shell, show output"
-msgstr "הרצת ביטוי בתוך מעטפת, הצגת פלט"
 
 #, fuzzy
 msgid "Executing…"
@@ -2493,16 +2411,16 @@ msgid "For example: \"Julia is now online\""
 msgstr ""
 
 #, fuzzy
-msgid "Forbid a participant to send you public or private messages"
-msgstr "אסירה על נוכח לשלוח אליך הודעות פומביות או פרטיות"
-
-#, fuzzy
 msgid "Force Bookmark 2 usage"
 msgstr "_סמן את חדר זה"
 
 #, fuzzy
 msgid "Forever"
 msgstr "אף פעם"
+
+#, fuzzy
+msgid "Forget Group Chat"
+msgstr "עזוב שיחות קבוצה"
 
 #, fuzzy
 msgid "Forget this Group Chat"
@@ -2523,10 +2441,6 @@ msgstr "שגיאת תסדיר בשדה notBefore של התעודה"
 #, fuzzy
 msgid "Format your message"
 msgstr "קדם הודעות אשר לא נקראו"
-
-#, fuzzy
-msgid "Format your message…"
-msgstr "cli"
 
 # BUG: x2
 msgid "Free for Chat"
@@ -2593,11 +2507,6 @@ msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
-
-# BUG: a dot at the end
-#, fuzzy
-msgid "Gajim will not try to join this group chat again"
-msgstr "כאשר מסומן, Gajim יצטרף לשיחת קבוצה זו בעת הפעלה"
 
 #, fuzzy
 msgid "Gajim will now exit"
@@ -2755,6 +2664,10 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
+#, fuzzy
+msgid "Hide chat list"
+msgstr "הפעלת סשן וידאו"
+
 msgid "Hide this menu"
 msgstr "הסתר תפריט זה"
 
@@ -2852,9 +2765,6 @@ msgstr ""
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr "כאשר מסומן, Gajim יציג את מצבי הרוח של אנשי קשר בחלון הרשימה"
 
-msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
-msgstr ""
-
 #, fuzzy
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr "כאשר מופעלת, Gajim יתעלם מבקשות הקשב נכנסות (\"wizz\")."
@@ -2899,7 +2809,7 @@ msgstr ""
 "מתוך השרת שלך."
 
 #, fuzzy, python-format
-msgid "If you close this chat, you will leave '%s'."
+msgid "If you close this chat, you will leave \"%s\"."
 msgstr "כאשר תסגור את חלון זה, אתה תנותק מתוך שיחת קבוצה זו."
 
 #, fuzzy
@@ -2996,18 +2906,13 @@ msgstr "שם שרת שגוי"
 msgid "Invalid XMPP Address"
 msgstr "קובץ שגוי"
 
-msgid "Invalid affiliation given"
-msgstr "ניתן שיוך שגוי"
-
 #, fuzzy
 msgid "Invalid domain name"
 msgstr "שם חשבון שגוי"
 
-msgid "Invalid nickname"
-msgstr "שם כינוי שגוי"
-
-msgid "Invalid role given"
-msgstr "ניתן תפקיד שגוי"
+#, fuzzy
+msgid "Invite"
+msgstr "ה_זמן"
 
 #, fuzzy
 msgid "Invite Contacts"
@@ -3020,11 +2925,6 @@ msgstr "הזמן _אנשי קשר"
 #, fuzzy
 msgid "Invite New Contact"
 msgstr "הזמן _אנשי קשר"
-
-# בליווי תכלית
-#, fuzzy
-msgid "Invite a user to a group chat for a reason"
-msgstr "הזמנת משתמש לחדר עם ציון סיבה"
 
 msgid "Invite friends to group chats or join one"
 msgstr ""
@@ -3059,9 +2959,6 @@ msgstr ""
 # אין אפשרות
 msgid "It is not possible to send empty files"
 msgstr "אין זה אפשרי לשלוח קבצים ריקים"
-
-msgid "Italic"
-msgstr "נטוי"
 
 #, fuzzy
 msgid "I’m eating."
@@ -3116,10 +3013,6 @@ msgid "Join Support Chat"
 msgstr "הצטרף לשיחת קבוצה"
 
 #, fuzzy
-msgid "Join a group chat given by an XMPP Address"
-msgstr "בתוך _שיחות קבוצה"
-
-#, fuzzy
 msgid "Joining…"
 msgstr "אסירה..."
 
@@ -3143,17 +3036,13 @@ msgstr ""
 msgid "Key usage does not include certificate signing"
 msgstr "שימוש מפתח לא כולל חתימת תעודה"
 
+#, fuzzy
+msgid "Kick"
+msgstr "ב_עט"
+
 #, fuzzy, python-format
 msgid "Kick %s"
 msgstr "בעיטת ‫%s"
-
-#, fuzzy
-msgid "Kick Participant"
-msgstr "משתתף"
-
-#, fuzzy
-msgid "Kick user from group chat by nickname"
-msgstr "בעיטת משתמש מתוך שיחת קבוצה לפי כינוי"
 
 #, fuzzy
 msgid "Kick…"
@@ -3173,18 +3062,11 @@ msgstr "מצב אחרון: %s"
 msgid "Leave Group Chat"
 msgstr "עזוב שיחות קבוצה"
 
-#, fuzzy
-msgid "Leave the group chat"
-msgstr "עזוב שיחות קבוצה"
-
 msgid "Left Click Action"
 msgstr ""
 
 msgid "Let others know if you read up to this point"
 msgstr ""
-
-msgid "Limit must be an integer"
-msgstr "תחום מוכרח להיות ספרה"
 
 # תרגום כתובת/תיעול שערים
 #, fuzzy
@@ -3380,10 +3262,10 @@ msgstr "הצג _הודעות מצב"
 msgid "Miscellaneous"
 msgstr "<b>שונות</b>"
 
-msgid "Missing arguments"
-msgstr "ארגומנטים חסרים"
-
 msgid "Missing dependencies for Audio/Video"
+msgstr ""
+
+msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
@@ -3451,22 +3333,15 @@ msgstr "חיפוש"
 msgid "New Workspace"
 msgstr "שינוי שם איש קשר"
 
-#, fuzzy, python-format
-msgid "New message from %s"
+#, fuzzy
+msgid "New message from"
 msgstr "הודעה חדשה מאת %(nickname)s"
 
 msgid "Next"
 msgstr ""
 
-#, fuzzy
-msgid "Next sent messages"
-msgstr "הודעות מותאמות:"
-
 msgid "Nickname"
 msgstr "שם כינוי"
-
-msgid "Nickname not found"
-msgstr "שם כינוי לא נמצא"
 
 msgid "No"
 msgstr "לא"
@@ -3523,11 +3398,6 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "אין חשבון זמין"
-
-# הפעלות
-#, fuzzy
-msgid "No open voice chats with the contact"
-msgstr "לא קיימים סשנים קוליים פתוחים עם האיש קשר"
 
 #, fuzzy
 msgid "No proxy used"
@@ -3653,18 +3523,6 @@ msgstr "תוספים"
 #, fuzzy
 msgid "Open _Folder"
 msgstr "_פתח תיקיה מכילה"
-
-#, fuzzy
-msgid "Open a private chat window with a specified participant"
-msgstr "פתיחת חלון שיחה פרטית עם נוכח מצוין"
-
-# BUG: him or her or they
-# he she
-#, fuzzy
-msgid ""
-"Open a private chat window with a specified participant and send him a "
-"message"
-msgstr "פתיחת חלון שיחה פרטית עם נוכח מצוין ומסירת הודעה אליו"
 
 msgid "Open as _Link"
 msgstr "פתח בתור _קישור"
@@ -3831,13 +3689,6 @@ msgstr "cli"
 msgid "Pin Chat"
 msgstr "בקשה לשיחה קולית"
 
-msgid "Ping?"
-msgstr "פינג?"
-
-#, fuzzy, python-format
-msgid "Ping? (%s)"
-msgstr "פונג! (%s ש.)"
-
 msgid "Pinned"
 msgstr ""
 
@@ -3927,14 +3778,6 @@ msgstr "תוספים"
 msgid "Plugins Updated Successfully"
 msgstr "כשל תוסף"
 
-#, fuzzy, python-format
-msgid "Pong! (%(nick)s %(delay)s s.)"
-msgstr "פונג! (%s ש.)"
-
-#, fuzzy, python-format
-msgid "Pong! (%s seconds)"
-msgstr "פונג! (%s ש.)"
-
 #, fuzzy
 msgid "Port"
 msgstr "_פורט:"
@@ -3980,10 +3823,6 @@ msgstr "האם להראות תצוגה מוקדמת של הודעות חדשות
 #, fuzzy
 msgid "Previous"
 msgstr "מקנא"
-
-#, fuzzy
-msgid "Previously sent message"
-msgstr "הודעות מותאמות:"
 
 #, fuzzy
 msgid "Print XML stanzas and other debug information"
@@ -4061,14 +3900,6 @@ msgstr ""
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "‫Gajim"
-
-#, fuzzy
-msgid "Quote next message"
-msgstr "מסירת הודעה"
-
-#, fuzzy
-msgid "Quote previous message"
-msgstr "cli"
 
 #, fuzzy
 msgid "Quote…"
@@ -4590,10 +4421,6 @@ msgid "Send Chatstate in Group Chats"
 msgstr "אין אפשרות להצטרף לשיחת קבוצה"
 
 #, fuzzy
-msgid "Send DTMF sequence through an open voice chat"
-msgstr "מסירת רצף טזמ״ת (DTMF) מבעד לסשן קולי פתוח"
-
-#, fuzzy
 msgid "Send File"
 msgstr "שלח _קובץ"
 
@@ -4630,25 +4457,6 @@ msgid "Send _Report"
 msgstr "_דווחו על בעיה"
 
 #, fuzzy
-msgid "Send a disco info request"
-msgstr "בקשות קבלה אשר נשלחו"
-
-msgid "Send a message to the contact"
-msgstr "מסירת הודעה לאיש קשר"
-
-# BUG: him or her or they
-# he she
-#, fuzzy
-msgid "Send a message to the contact that will attract their attention"
-msgstr "מסירת הודעה לאיש קשר אשר תסב את תשומת ליבו"
-
-msgid "Send a ping to the contact"
-msgstr "מסירת פינג לאיש קשר"
-
-msgid "Send action (in the third person) to the current chat"
-msgstr "מסירת פעולה (בגוף השלישי) לשיחה הנוכחית"
-
-#, fuzzy
 msgid "Send message on Ctrl+Enter and make a new line with Enter."
 msgstr ""
 "מסירת הודעה בלחיצת Ctrl+Enter ויצירת שורה חדשה באמצעות המקש Enter (התנהגות "
@@ -4660,9 +4468,6 @@ msgstr "מסירת הודעה"
 
 msgid "Sender: "
 msgstr "ממען: "
-
-msgid "Sending private message failed"
-msgstr "מסירת הודעה פרטית נכשלה"
 
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4724,34 +4529,8 @@ msgid "Set configuration directory"
 msgstr "cli"
 
 #, fuzzy
-msgid ""
-"Set participant affiliation in group chat.\n"
-"    Affiliation can be given as one of the following values:\n"
-"    owner, admin, member, outcast, none"
-msgstr ""
-"קביעת שיוך נוכח בתוך שיחת קבוצה.\n"
-"    שיוך יכול להיות נתון בתור אחד מתוך הערכים הבאים:\n"
-"    ‏owner, admin, member, outcast, none"
-
-#, fuzzy
-msgid ""
-"Set participant role in group chat.\n"
-"    Role can be given as one of the following values:\n"
-"    moderator, participant, visitor, none"
-msgstr ""
-"קביעת תפקיד נוכח בתוך שיחת קבוצה.\n"
-"    תפקיד יכול להיות נתון בתור אחד מתוך הערכים הבאים:\n"
-"    ‏moderator, participant, visitor, none"
-
-#, fuzzy
 msgid "Set status message"
 msgstr "cli"
-
-msgid "Set the current status to away"
-msgstr "קביעת מצב נוכחי אל נעדר"
-
-msgid "Set the current status to online"
-msgstr "קביעת מצב נוכחי אל מקוון"
 
 msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
@@ -4868,10 +4647,9 @@ msgstr ""
 msgid "Show all warnings"
 msgstr "הצג _אירועים ממתינים"
 
-msgid ""
-"Show help on a given command or a list of available commands if -a is given"
-msgstr ""
-"הצגת עזרה על פקודה נתונה או רשימה של פקודות זמינות כאשר הארגומנט ‎-a ניתן"
+#, fuzzy
+msgid "Show chat list"
+msgstr "מיקום: "
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -4881,9 +4659,6 @@ msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
 msgstr ""
-
-msgid "Show logged messages which mention given text"
-msgstr "הצגת הודעות רשומות אשר מאזכרות תמליל נתון"
 
 msgid ""
 "Show message meta data (avatar, nickname, timestamp) only once, if there are "
@@ -5121,9 +4896,6 @@ msgstr ""
 msgid "Street"
 msgstr "רחוב"
 
-msgid "Strike"
-msgstr "קו חוצה"
-
 msgid "Style"
 msgstr "סגנון"
 
@@ -5217,11 +4989,6 @@ msgstr "<b>מערכת:</b>"
 msgid "TLS verification failed: %s"
 msgstr "אימות תעודת SSL עבור %s"
 
-# מאמת
-#, fuzzy
-msgid "T_ry Again"
-msgstr "אמת שוב..."
-
 msgid "Tabbed chat window"
 msgstr ""
 
@@ -5282,9 +5049,6 @@ msgid ""
 msgstr ""
 
 msgid "The last message was written on a mobile client"
-msgstr ""
-
-msgid "The same as using a doc-string, except it supports translation"
 msgstr ""
 
 # BUG: room nick
@@ -5485,19 +5249,8 @@ msgid "Toggle Chat List"
 msgstr "הפעלת סשן וידאו"
 
 #, fuzzy
-msgid "Toggle Video Chat"
-msgstr "הפעלת סשן וידאו"
-
-msgid "Toggle Voice Chat"
-msgstr ""
-
-#, fuzzy
 msgid "Toggle participants list"
 msgstr "משתתף"
-
-#, fuzzy
-msgid "Too many arguments"
-msgstr "ארגומנטים חסרים"
 
 msgid "Topic"
 msgstr ""
@@ -5620,10 +5373,6 @@ msgstr "כותרת לא ידועה"
 #, fuzzy
 msgid "Unknown language"
 msgstr "כותרת לא ידועה"
-
-#, fuzzy
-msgid "Unknown nickname"
-msgstr "הזן שם כינוי חדש עבור איש קשר %s"
 
 #, fuzzy
 msgid "Unknown validation error"
@@ -5785,10 +5534,6 @@ msgstr "בדיקת וידאו"
 msgid "Video calls are not available on Windows"
 msgstr "סשנים חזותיים אינם זמינים"
 
-#, fuzzy
-msgid "Video chats are not available"
-msgstr "סשנים חזותיים אינם זמינים"
-
 msgid "Video test"
 msgstr "בדיקת וידאו"
 
@@ -5811,10 +5556,6 @@ msgstr "<b>התראות חזותיות</b>"
 #, fuzzy
 msgid "Voice Request"
 msgstr "בקשה לשיחה קולית"
-
-#, fuzzy
-msgid "Voice chats are not available"
-msgstr "סשנים חזותיים אינם זמינים"
 
 #, fuzzy
 msgid "Waiting…"
@@ -5949,12 +5690,6 @@ msgstr "האם אתה בטוח כי ברצונך לסגור את Gajim?"
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "בחרת להסיר את \"%(name)s\" (%(jid)s) מתוך הרשימה שלך.\n"
-
-# אינך עוד בשיחת קבוצה או שהמשתמש עזב
-#, fuzzy, python-format
-msgid ""
-"You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
-msgstr "אינך נוכח בשיחת קבוצה \"%(room)s\" או שהמשתמש \"%(nick)s\" עזב."
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -6169,9 +5904,6 @@ msgstr "אשר"
 msgid "_Back"
 msgstr "אשוב בקרוב"
 
-msgid "_Ban"
-msgstr "א_סור"
-
 msgid "_Block"
 msgstr "_חסום"
 
@@ -6259,10 +5991,6 @@ msgstr "תכונות"
 msgid "_File Transfer"
 msgstr "העברות קבצים"
 
-#, fuzzy
-msgid "_Forget Group Chat"
-msgstr "עזוב שיחות קבוצה"
-
 msgid "_Free for Chat"
 msgstr "_חופשי לשיחה"
 
@@ -6288,9 +6016,6 @@ msgstr "ה_צטרף"
 #, fuzzy
 msgid "_Keyboard Shortcuts"
 msgstr "קיצורי מקש"
-
-msgid "_Kick"
-msgstr "ב_עט"
 
 msgid "_Later"
 msgstr ""
@@ -6436,11 +6161,6 @@ msgstr ""
 msgid "_Subscribe"
 msgstr "הי_רשם"
 
-# מאמת
-#, fuzzy
-msgid "_Try Again"
-msgstr "אמת שוב..."
-
 #, fuzzy
 msgid "_Type"
 msgstr "_טיפוס:"
@@ -6499,6 +6219,9 @@ msgstr "פלט שמע"
 msgid "bearing"
 msgstr "הסבה"
 
+msgid "bold"
+msgstr ""
+
 msgid "building"
 msgstr "בניין"
 
@@ -6542,9 +6265,6 @@ msgstr "רשימת העברת קבצים"
 msgid "floor"
 msgstr "קומה"
 
-msgid "has closed the chat window or tab"
-msgstr "סגר/ה את כרטיסיית או חלון השיחה"
-
 # בליווי תכלית
 #, fuzzy
 msgid ""
@@ -6562,8 +6282,9 @@ msgstr "כותב/ת כעת הודעה..."
 msgid "is doing something else"
 msgstr "עושה כעת משהו אחר"
 
-msgid "is paying attention to the conversation"
-msgstr "קשוב/ה כעת לשיחה"
+#, fuzzy
+msgid "italic"
+msgstr "נטוי"
 
 msgid "lat"
 msgstr "קו רוחב"
@@ -6609,6 +6330,10 @@ msgstr "מהירות"
 
 msgid "street"
 msgstr "רחוב"
+
+#, fuzzy
+msgid "strike"
+msgstr "קו חוצה"
 
 msgid "text"
 msgstr "תמליל"
@@ -6676,8 +6401,44 @@ msgid "…or drop it here"
 msgstr ""
 
 #, fuzzy
+#~ msgid ""
+#~ "\n"
+#~ "    Ban user by a nick or a JID from a groupchat\n"
+#~ "\n"
+#~ "    If given nickname is not found it will be treated as a JID.\n"
+#~ "    "
+#~ msgstr ""
+#~ "\n"
+#~ "    חסימת משתמש מתוך שיחת קבוצה לפי כינוי או לפי jid\n"
+#~ "\n"
+#~ "    כאשר שם כינוי נתון לא נמצא זה ייוחס בתור jid.\n"
+#~ "    "
+
+#~ msgid ""
+#~ "\n"
+#~ "    Set the current status\n"
+#~ "\n"
+#~ "    Status can be given as one of the following values:\n"
+#~ "    online, away, chat, xa, dnd.\n"
+#~ "    "
+#~ msgstr ""
+#~ "\n"
+#~ "    קביעת מצב נוכחי\n"
+#~ "\n"
+#~ "    מצב יכול להיות נתון בתור אחד מתוך הערכים הבאים:\n"
+#~ "    ‏online, away, chat, xa, dnd.\n"
+#~ "    "
+
+#~ msgid "%s is not a valid tone"
+#~ msgstr "‏%s אינו טון (tone) תקף"
+
+#, fuzzy
 #~ msgid "%s not found"
 #~ msgstr "cli"
+
+# gajim-remote?
+#~ msgid "%s: Nothing found"
+#~ msgstr "‏%s: לא נמצא דבר"
 
 #, fuzzy
 #~ msgid ""
@@ -6704,6 +6465,10 @@ msgstr ""
 #~ msgstr "cli"
 
 #, fuzzy
+#~ msgid "Allow a participant to send you public or private messages"
+#~ msgstr "התרה לנוכח לשלוח לך הודעות פומביות או פרטיות"
+
+#, fuzzy
 #~ msgid ""
 #~ "Allow to hide the contact list window even if the notification area icon "
 #~ "is not shown."
@@ -6719,11 +6484,25 @@ msgstr ""
 #~ msgid "Arguments:"
 #~ msgstr "cli"
 
+#, fuzzy
+#~ msgid "Ban Participant"
+#~ msgstr "משתתף"
+
+#~ msgid "Bold"
+#~ msgstr "מובלט"
+
+#, fuzzy
+#~ msgid "Ch_ange"
+#~ msgstr "שנה שם _כינוי..."
+
 #~ msgid "Change status"
 #~ msgstr "שנה מצב"
 
 #~ msgid "Change status information"
 #~ msgstr "שנה מידע מצב"
+
+#~ msgid "Change your nickname in a group chat"
+#~ msgstr "שינוי שם הכינוי שלך בתוך שיחת קבוצה"
 
 #, fuzzy
 #~ msgid "Changes the priority of account(s)"
@@ -6737,8 +6516,43 @@ msgstr ""
 #~ msgid "Check if Gajim is running"
 #~ msgstr "cli"
 
+#, fuzzy
+#~ msgid "Clear chat window"
+#~ msgstr "טיהור תמליל חלון"
+
+#~ msgid "Clear the text window"
+#~ msgstr "טיהור תמליל חלון"
+
+#, fuzzy
+#~ msgid "Display names of all group chat participants"
+#~ msgstr "הצגת שמות של כל הנוכחים בתוך שיחת קבוצה"
+
+#~ msgid "Display or change a group chat topic"
+#~ msgstr "הצגה או שינוי נושא של שיחת קבוצה"
+
 #~ msgid "Do not disturb"
 #~ msgstr "נא לא להפריע"
+
+#, fuzzy
+#~ msgid "Drop Files or Contacts"
+#~ msgstr "הזמן _אנשי קשר"
+
+#, fuzzy
+#~ msgid "Enter Password"
+#~ msgstr "הזן סיסמה חדשה:"
+
+#~ msgid "Error during command execution!"
+#~ msgstr "שגיאה במהלך הוצאה לפועל של פקודה!"
+
+#, fuzzy
+#~ msgid "Error: Could not process image"
+#~ msgstr "לא היתה אפשרות להטעין תמונה"
+
+#~ msgid "Execute expression inside a shell, send output"
+#~ msgstr "הרצת ביטוי בתוך מעטפת, מסירת פלט"
+
+#~ msgid "Execute expression inside a shell, show output"
+#~ msgstr "הרצת ביטוי בתוך מעטפת, הצגת פלט"
 
 #~ msgid "Extended away"
 #~ msgstr "נעדר לזמן ארוך"
@@ -6747,10 +6561,23 @@ msgstr ""
 #~ msgid "File path"
 #~ msgstr "cli"
 
+#, fuzzy
+#~ msgid "Forbid a participant to send you public or private messages"
+#~ msgstr "אסירה על נוכח לשלוח אליך הודעות פומביות או פרטיות"
+
+#, fuzzy
+#~ msgid "Format your message…"
+#~ msgstr "cli"
+
 # BUG: Free for Chat
 # BUG: x2
 #~ msgid "Free for chat"
 #~ msgstr "חופשי לשיחה"
+
+# BUG: a dot at the end
+#, fuzzy
+#~ msgid "Gajim will not try to join this group chat again"
+#~ msgstr "כאשר מסומן, Gajim יצטרף לשיחת קבוצה זו בעת הפעלה"
 
 # BUG: on an account
 #, fuzzy
@@ -6772,10 +6599,43 @@ msgstr ""
 #~ "כאשר מופעלת, Gajim יצא כאשר לחצן X של מנהל חלונות נלחץ. הגדרה זו נלקחת "
 #~ "בחשבון רק כאשר סמל התראה מצוי בשימוש."
 
+#~ msgid "Invalid affiliation given"
+#~ msgstr "ניתן שיוך שגוי"
+
+#~ msgid "Invalid nickname"
+#~ msgstr "שם כינוי שגוי"
+
+#~ msgid "Invalid role given"
+#~ msgstr "ניתן תפקיד שגוי"
+
+# בליווי תכלית
+#, fuzzy
+#~ msgid "Invite a user to a group chat for a reason"
+#~ msgstr "הזמנת משתמש לחדר עם ציון סיבה"
+
 # נראה כי Gajim לא מורץ. משכך אין באפשרותך לעשות שימוש ביישום gajim-remote.
 #, fuzzy
 #~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
 #~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "Join a group chat given by an XMPP Address"
+#~ msgstr "בתוך _שיחות קבוצה"
+
+#, fuzzy
+#~ msgid "Kick Participant"
+#~ msgstr "משתתף"
+
+#, fuzzy
+#~ msgid "Kick user from group chat by nickname"
+#~ msgstr "בעיטת משתמש מתוך שיחת קבוצה לפי כינוי"
+
+#, fuzzy
+#~ msgid "Leave the group chat"
+#~ msgstr "עזוב שיחות קבוצה"
+
+#~ msgid "Limit must be an integer"
+#~ msgstr "תחום מוכרח להיות ספרה"
 
 #, fuzzy
 #~ msgid "Lists all contacts in the contact list, one for each line"
@@ -6789,9 +6649,24 @@ msgstr ""
 #~ msgid "Missing argument \"contact_jid\""
 #~ msgstr "cli"
 
+#~ msgid "Missing arguments"
+#~ msgstr "ארגומנטים חסרים"
+
 #, fuzzy
 #~ msgid "Name of the account"
 #~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "Next sent messages"
+#~ msgstr "הודעות מותאמות:"
+
+#~ msgid "Nickname not found"
+#~ msgstr "שם כינוי לא נמצא"
+
+# הפעלות
+#, fuzzy
+#~ msgid "No open voice chats with the contact"
+#~ msgstr "לא קיימים סשנים קוליים פתוחים עם האיש קשר"
 
 # Needs to be tested
 #~ msgid "Offline - disconnect"
@@ -6800,13 +6675,52 @@ msgstr ""
 #~ msgid "Online"
 #~ msgstr "מקוון"
 
+#, fuzzy
+#~ msgid "Open a private chat window with a specified participant"
+#~ msgstr "פתיחת חלון שיחה פרטית עם נוכח מצוין"
+
+# BUG: him or her or they
+# he she
+#, fuzzy
+#~ msgid ""
+#~ "Open a private chat window with a specified participant and send him a "
+#~ "message"
+#~ msgstr "פתיחת חלון שיחה פרטית עם נוכח מצוין ומסירת הודעה אליו"
+
+#~ msgid "Ping?"
+#~ msgstr "פינג?"
+
+#, fuzzy
+#~ msgid "Ping? (%s)"
+#~ msgstr "פונג! (%s ש.)"
+
+#, fuzzy
+#~ msgid "Pong! (%(nick)s %(delay)s s.)"
+#~ msgstr "פונג! (%s ש.)"
+
+#, fuzzy
+#~ msgid "Pong! (%s seconds)"
+#~ msgstr "פונג! (%s ש.)"
+
 # BUG: Remove colon because it is appearing in Psi with two colons
 # תיאור נוכחות::
 #~ msgid "Presence description:"
 #~ msgstr "תיאור נוכחות:"
 
 #, fuzzy
+#~ msgid "Previously sent message"
+#~ msgstr "הודעות מותאמות:"
+
+#, fuzzy
 #~ msgid "Prints a list of registered accounts"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "Quote next message"
+#~ msgstr "מסירת הודעה"
+
+#, fuzzy
+#~ msgid "Quote previous message"
 #~ msgstr "cli"
 
 #, fuzzy
@@ -6826,6 +6740,32 @@ msgstr ""
 #, fuzzy
 #~ msgid "Returns number of unread messages"
 #~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "Send DTMF sequence through an open voice chat"
+#~ msgstr "מסירת רצף טזמ״ת (DTMF) מבעד לסשן קולי פתוח"
+
+#, fuzzy
+#~ msgid "Send a disco info request"
+#~ msgstr "בקשות קבלה אשר נשלחו"
+
+#~ msgid "Send a message to the contact"
+#~ msgstr "מסירת הודעה לאיש קשר"
+
+# BUG: him or her or they
+# he she
+#, fuzzy
+#~ msgid "Send a message to the contact that will attract their attention"
+#~ msgstr "מסירת הודעה לאיש קשר אשר תסב את תשומת ליבו"
+
+#~ msgid "Send a ping to the contact"
+#~ msgstr "מסירת פינג לאיש קשר"
+
+#~ msgid "Send action (in the third person) to the current chat"
+#~ msgstr "מסירת פעולה (בגוף השלישי) לשיחה הנוכחית"
+
+#~ msgid "Sending private message failed"
+#~ msgstr "מסירת הודעה פרטית נכשלה"
 
 # BUG: him or her or they
 # he she
@@ -6867,8 +6807,43 @@ msgstr ""
 #~ "אפיק סשן אינו זמין.\n"
 #~ "נסה לקרוא את %(url)s"
 
+#, fuzzy
+#~ msgid ""
+#~ "Set participant affiliation in group chat.\n"
+#~ "    Affiliation can be given as one of the following values:\n"
+#~ "    owner, admin, member, outcast, none"
+#~ msgstr ""
+#~ "קביעת שיוך נוכח בתוך שיחת קבוצה.\n"
+#~ "    שיוך יכול להיות נתון בתור אחד מתוך הערכים הבאים:\n"
+#~ "    ‏owner, admin, member, outcast, none"
+
+#, fuzzy
+#~ msgid ""
+#~ "Set participant role in group chat.\n"
+#~ "    Role can be given as one of the following values:\n"
+#~ "    moderator, participant, visitor, none"
+#~ msgstr ""
+#~ "קביעת תפקיד נוכח בתוך שיחת קבוצה.\n"
+#~ "    תפקיד יכול להיות נתון בתור אחד מתוך הערכים הבאים:\n"
+#~ "    ‏moderator, participant, visitor, none"
+
+#~ msgid "Set the current status to away"
+#~ msgstr "קביעת מצב נוכחי אל נעדר"
+
+#~ msgid "Set the current status to online"
+#~ msgstr "קביעת מצב נוכחי אל מקוון"
+
 #~ msgid "Set the presence type and description"
 #~ msgstr "קביעת טיפוס ותיאור הנוכחות"
+
+#~ msgid ""
+#~ "Show help on a given command or a list of available commands if -a is "
+#~ "given"
+#~ msgstr ""
+#~ "הצגת עזרה על פקודה נתונה או רשימה של פקודות זמינות כאשר הארגומנט ‎-a ניתן"
+
+#~ msgid "Show logged messages which mention given text"
+#~ msgstr "הצגת הודעות רשומות אשר מאזכרות תמליל נתון"
 
 #, fuzzy
 #~ msgid "Shows a help on specific command"
@@ -6882,15 +6857,32 @@ msgstr ""
 #~ msgid "Status Change"
 #~ msgstr "הצג _הודעות מצב"
 
+# מאמת
+#, fuzzy
+#~ msgid "T_ry Again"
+#~ msgstr "אמת שוב..."
+
 # BUG: remove "the"
 #~ msgid "The status has been changed."
 #~ msgstr "המצב השתנה."
+
+#, fuzzy
+#~ msgid "Toggle Video Chat"
+#~ msgstr "הפעלת סשן וידאו"
+
+#, fuzzy
+#~ msgid "Too many arguments"
+#~ msgstr "ארגומנטים חסרים"
 
 #, fuzzy
 #~ msgid ""
 #~ "Too many arguments. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
 #~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "Unknown nickname"
+#~ msgstr "הזן שם כינוי חדש עבור איש קשר %s"
 
 #, fuzzy
 #~ msgid ""
@@ -6905,6 +6897,14 @@ msgstr ""
 #~ "Usage: %(basename)s %(command)s %(arguments)s \n"
 #~ "\t %(help)s"
 #~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "Video chats are not available"
+#~ msgstr "סשנים חזותיים אינם זמינים"
+
+#, fuzzy
+#~ msgid "Voice chats are not available"
+#~ msgstr "סשנים חזותיים אינם זמינים"
 
 #, fuzzy
 #~ msgid "XML to send"
@@ -6922,6 +6922,12 @@ msgstr ""
 #~ msgid "XMPP Address of the group chat that will receive the message"
 #~ msgstr "cli"
 
+# אינך עוד בשיחת קבוצה או שהמשתמש עזב
+#, fuzzy
+#~ msgid ""
+#~ "You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
+#~ msgstr "אינך נוכח בשיחת קבוצה \"%(room)s\" או שהמשתמש \"%(nick)s\" עזב."
+
 #, fuzzy
 #~ msgid "You have no active account"
 #~ msgstr "cli"
@@ -6929,6 +6935,11 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "סגור את Gajim תמיד"
+
+# מאמת
+#, fuzzy
+#~ msgid "_Try Again"
+#~ msgstr "אמת שוב..."
 
 #, fuzzy
 #~ msgid ""
@@ -6950,6 +6961,9 @@ msgstr ""
 #~ msgid "file"
 #~ msgstr "cli"
 
+#~ msgid "has closed the chat window or tab"
+#~ msgstr "סגר/ה את כרטיסיית או חלון השיחה"
+
 #, fuzzy
 #~ msgid "if specified, contact is taken from the contact list of this account"
 #~ msgstr "cli"
@@ -6961,6 +6975,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "if specified, the message will be sent using this account"
 #~ msgstr "cli"
+
+#~ msgid "is paying attention to the conversation"
+#~ msgstr "קשוב/ה כעת לשיחה"
 
 #, fuzzy
 #~ msgid "message contents"

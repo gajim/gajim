@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-24 12:49+0000\n"
+"POT-Creation-Date: 2022-08-13 16:07+0000\n"
 "PO-Revision-Date: 2009-11-20 20:49+1100\n"
 "Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: English <en_gb@li.org>\n"
@@ -15,23 +15,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-msgid ""
-"\n"
-"    Ban user by a nick or a JID from a groupchat\n"
-"\n"
-"    If given nickname is not found it will be treated as a JID.\n"
-"    "
-msgstr ""
-
-msgid ""
-"\n"
-"    Set the current status\n"
-"\n"
-"    Status can be given as one of the following values:\n"
-"    online, away, chat, xa, dnd.\n"
-"    "
-msgstr ""
 
 #, fuzzy
 msgid " (Video Call)"
@@ -150,10 +133,6 @@ msgstr ""
 msgid "%s is not a valid loglevel"
 msgstr "%s is not a valid loglevel"
 
-#, fuzzy, python-format
-msgid "%s is not a valid tone"
-msgstr "%s is not a valid loglevel"
-
 #, python-format
 msgid ""
 "%s is online with multiple devices.\n"
@@ -175,10 +154,6 @@ msgstr "Remote contact stopped transfer"
 #, fuzzy, python-format
 msgid "%s wants to send you a file"
 msgstr "%s wants to send you a file."
-
-#, fuzzy, python-format
-msgid "%s: Nothing found"
-msgstr "%s not found"
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -876,9 +851,6 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allow a participant to send you public or private messages"
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1145,13 +1117,13 @@ msgstr "Back in some minutes."
 msgid "Back soon"
 msgstr "Back soon"
 
+#, fuzzy
+msgid "Ban"
+msgstr "_Ban"
+
 #, fuzzy, python-format
 msgid "Ban %s"
 msgstr "Ban List"
-
-#, fuzzy
-msgid "Ban Participant"
-msgstr "Participant"
 
 msgid "Ban…"
 msgstr ""
@@ -1186,9 +1158,6 @@ msgstr "Privacy List for %s"
 #, fuzzy
 msgid "Block…"
 msgstr "_Block"
-
-msgid "Bold"
-msgstr "Bold"
 
 #, fuzzy
 msgid "Bookmarks"
@@ -1307,10 +1276,6 @@ msgid "Certificate signature failure"
 msgstr "Certificate signature failure"
 
 #, fuzzy
-msgid "Ch_ange"
-msgstr "Change _Nickname..."
-
-#, fuzzy
 msgid "Ch_ange Subject"
 msgstr "Change _Subject..."
 
@@ -1335,10 +1300,6 @@ msgstr "Change _Subject..."
 
 msgid "Change your account’s password, etc."
 msgstr ""
-
-#, fuzzy
-msgid "Change your nickname in a group chat"
-msgstr "Change your nickname (Ctrl+N)"
 
 #, fuzzy
 msgid "Change your profile picture"
@@ -1469,16 +1430,8 @@ msgid "Clear Sound"
 msgstr "Choose Sound"
 
 #, fuzzy
-msgid "Clear chat window"
-msgstr "Usage: /%s, clears the text window."
-
-#, fuzzy
 msgid "Clear message entry"
 msgstr "Message Sent"
-
-#, fuzzy
-msgid "Clear the text window"
-msgstr "Usage: /%s, clears the text window."
 
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
@@ -1519,11 +1472,6 @@ msgstr "Colour"
 #, fuzzy
 msgid "Command List"
 msgstr "Commands: %s"
-
-msgid ""
-"Command disabled. This command can be enabled by setting "
-"'command_system_execute' to True in ACE (Advanced Configuration Editor)."
-msgstr ""
 
 #, fuzzy
 msgid "Commands"
@@ -1756,6 +1704,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr "_Copy Link Location"
 
+msgid "Correct"
+msgstr ""
+
 #, fuzzy
 msgid "Could not Open File"
 msgstr "Could not load image"
@@ -1946,14 +1897,6 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
-#, fuzzy
-msgid "Display names of all group chat participants"
-msgstr "Usage: /%s , display the names of group chat occupants."
-
-#, fuzzy
-msgid "Display or change a group chat topic"
-msgstr "Ask before closing a group chat tab/window."
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Do you accept this request on account %s?"
@@ -2014,10 +1957,6 @@ msgstr "Forward unread messages"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Coding"
-
-#, fuzzy
-msgid "Drop Files or Contacts"
-msgstr "Invite _Contacts"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2117,23 +2056,26 @@ msgid "Encrypting file…"
 msgstr "E2E encryption disabled"
 
 #, fuzzy
+msgid "Encryption error"
+msgstr "E2E encryption enabled"
+
+#, fuzzy
 msgid "Encryption required"
 msgstr "E2E encryption enabled"
 
 msgid "End call"
 msgstr ""
 
-#, fuzzy
-msgid "Enter Nickname"
-msgstr "Insert Nickname"
-
-#, fuzzy
-msgid "Enter Password"
-msgstr "Enter new password:"
+msgid "Enter a password to join this chat"
+msgstr ""
 
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Enter new password:"
+
+#, fuzzy
+msgid "Enter your new nickname"
+msgstr "Insert Nickname"
 
 msgid ""
 "Enter your nickname. This is how your name is displayed to your contacts."
@@ -2145,9 +2087,6 @@ msgstr "Error"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Choose Image"
-
-msgid "Error during command execution!"
-msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2188,10 +2127,6 @@ msgstr "Error"
 msgid "Error: %s"
 msgstr "Error: %s"
 
-#, fuzzy
-msgid "Error: Could not process image"
-msgstr "Could not load image"
-
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr "Error: cannot open %s for reading"
@@ -2215,12 +2150,6 @@ msgstr "_Execute Command"
 #, fuzzy
 msgid "Execute Command…"
 msgstr "_Execute Command"
-
-msgid "Execute expression inside a shell, send output"
-msgstr ""
-
-msgid "Execute expression inside a shell, show output"
-msgstr ""
 
 #, fuzzy
 msgid "Executing…"
@@ -2420,9 +2349,6 @@ msgstr ""
 msgid "For example: \"Julia is now online\""
 msgstr ""
 
-msgid "Forbid a participant to send you public or private messages"
-msgstr ""
-
 #, fuzzy
 msgid "Force Bookmark 2 usage"
 msgstr "Bookmark this room"
@@ -2430,6 +2356,10 @@ msgstr "Bookmark this room"
 #, fuzzy
 msgid "Forever"
 msgstr "_Never"
+
+#, fuzzy
+msgid "Forget Group Chat"
+msgstr "Leave Groupchats"
 
 #, fuzzy
 msgid "Forget this Group Chat"
@@ -2450,10 +2380,6 @@ msgstr "Format error in certificate's notBefore field"
 #, fuzzy
 msgid "Format your message"
 msgstr "Forward unread messages"
-
-#, fuzzy
-msgid "Format your message…"
-msgstr "New Private Message"
 
 msgid "Free for Chat"
 msgstr "Free for Chat"
@@ -2517,10 +2443,6 @@ msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
-
-#, fuzzy
-msgid "Gajim will not try to join this group chat again"
-msgstr "If ticked, Gajim will join this group chat on startup"
 
 msgid "Gajim will now exit"
 msgstr "Gajim will now exit"
@@ -2674,6 +2596,10 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
+#, fuzzy
+msgid "Hide chat list"
+msgstr "Participant"
+
 msgid "Hide this menu"
 msgstr "Hide this menu"
 
@@ -2765,9 +2691,6 @@ msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 "If ticked, Gajim will display the mood of contacts in the roster window"
 
-msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
-msgstr ""
-
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 
@@ -2801,7 +2724,7 @@ msgstr ""
 "negative priority, you will NOT receive any message from your server."
 
 #, fuzzy, python-format
-msgid "If you close this chat, you will leave '%s'."
+msgid "If you close this chat, you will leave \"%s\"."
 msgstr ""
 "If you close this window, you will be disconnected from this group chat."
 
@@ -2898,19 +2821,12 @@ msgid "Invalid XMPP Address"
 msgstr "Invalid File"
 
 #, fuzzy
-msgid "Invalid affiliation given"
-msgstr "affiliation changed"
-
-#, fuzzy
 msgid "Invalid domain name"
 msgstr "Invalid account name"
 
-msgid "Invalid nickname"
-msgstr "Invalid nickname"
-
 #, fuzzy
-msgid "Invalid role given"
-msgstr "Invalid server"
+msgid "Invite"
+msgstr "In_vite"
 
 #, fuzzy
 msgid "Invite Contacts"
@@ -2923,9 +2839,6 @@ msgstr "Invite _Contacts"
 #, fuzzy
 msgid "Invite New Contact"
 msgstr "Invite _Contacts"
-
-msgid "Invite a user to a group chat for a reason"
-msgstr ""
 
 msgid "Invite friends to group chats or join one"
 msgstr ""
@@ -2958,9 +2871,6 @@ msgstr ""
 
 msgid "It is not possible to send empty files"
 msgstr "It is not possible to send empty files"
-
-msgid "Italic"
-msgstr "Italic"
 
 #, fuzzy
 msgid "I’m eating."
@@ -3015,10 +2925,6 @@ msgid "Join Support Chat"
 msgstr "Join Group Chat"
 
 #, fuzzy
-msgid "Join a group chat given by an XMPP Address"
-msgstr "in _group chats"
-
-#, fuzzy
 msgid "Joining…"
 msgstr "Banning..."
 
@@ -3039,17 +2945,13 @@ msgstr ""
 msgid "Key usage does not include certificate signing"
 msgstr "Key usage does not include certificate signing"
 
+#, fuzzy
+msgid "Kick"
+msgstr "_Kick"
+
 #, fuzzy, python-format
 msgid "Kick %s"
 msgstr "Kicking %s"
-
-#, fuzzy
-msgid "Kick Participant"
-msgstr "Participant"
-
-#, fuzzy
-msgid "Kick user from group chat by nickname"
-msgstr "You are invited to a groupchat"
 
 #, fuzzy
 msgid "Kick…"
@@ -3069,17 +2971,10 @@ msgstr "Last status: %s"
 msgid "Leave Group Chat"
 msgstr "Leave Groupchats"
 
-#, fuzzy
-msgid "Leave the group chat"
-msgstr "Leave Groupchats"
-
 msgid "Left Click Action"
 msgstr ""
 
 msgid "Let others know if you read up to this point"
-msgstr ""
-
-msgid "Limit must be an integer"
 msgstr ""
 
 #, fuzzy
@@ -3269,11 +3164,10 @@ msgstr "_Log status changes of contacts"
 msgid "Miscellaneous"
 msgstr "<b>Miscellaneous</b>"
 
-#, fuzzy
-msgid "Missing arguments"
-msgstr "Missing argument \"contact_jid\""
-
 msgid "Missing dependencies for Audio/Video"
+msgstr ""
+
+msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
@@ -3342,22 +3236,15 @@ msgstr "Search"
 msgid "New Workspace"
 msgstr "Rename Contact"
 
-#, fuzzy, python-format
-msgid "New message from %s"
+#, fuzzy
+msgid "New message from"
 msgstr "New Message from %(nickname)s"
 
 msgid "Next"
 msgstr ""
 
-#, fuzzy
-msgid "Next sent messages"
-msgstr "Preset messages:"
-
 msgid "Nickname"
 msgstr "Nickname"
-
-msgid "Nickname not found"
-msgstr "Nickname not found"
 
 #, fuzzy
 msgid "No"
@@ -3415,10 +3302,6 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "No account available"
-
-#, fuzzy
-msgid "No open voice chats with the contact"
-msgstr "Click to see past conversations with this contact"
 
 #, fuzzy
 msgid "No proxy used"
@@ -3545,20 +3428,6 @@ msgstr "Registration failed"
 #, fuzzy
 msgid "Open _Folder"
 msgstr "_Open Containing Folder"
-
-#, fuzzy
-msgid "Open a private chat window with a specified participant"
-msgstr ""
-"Usage: /%s <nickname>, opens a private chat window with the specified "
-"occupant."
-
-#, fuzzy
-msgid ""
-"Open a private chat window with a specified participant and send him a "
-"message"
-msgstr ""
-"Usage: /%s <nickname>, opens a private chat window with the specified "
-"occupant."
 
 msgid "Open as _Link"
 msgstr "Open as _Link"
@@ -3723,13 +3592,6 @@ msgstr "Nickname to use"
 msgid "Pin Chat"
 msgstr "File Transfer Request"
 
-msgid "Ping?"
-msgstr "Ping?"
-
-#, fuzzy, python-format
-msgid "Ping? (%s)"
-msgstr "Pong! (%s s.)"
-
 msgid "Pinned"
 msgstr ""
 
@@ -3821,14 +3683,6 @@ msgstr ""
 msgid "Plugins Updated Successfully"
 msgstr "Registration failed"
 
-#, fuzzy, python-format
-msgid "Pong! (%(nick)s %(delay)s s.)"
-msgstr "Pong! (%s s.)"
-
-#, fuzzy, python-format
-msgid "Pong! (%s seconds)"
-msgstr "Pong! (%s s.)"
-
 #, fuzzy
 msgid "Port"
 msgstr "_Port:"
@@ -3873,10 +3727,6 @@ msgstr "Preview new messages in notification popup?"
 #, fuzzy
 msgid "Previous"
 msgstr "Envious"
-
-#, fuzzy
-msgid "Previously sent message"
-msgstr "Preset messages:"
 
 msgid "Print XML stanzas and other debug information"
 msgstr ""
@@ -3949,14 +3799,6 @@ msgstr "_Quit"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quote next message"
-msgstr "Send message"
-
-#, fuzzy
-msgid "Quote previous message"
-msgstr "status message"
 
 #, fuzzy
 msgid "Quote…"
@@ -4457,9 +4299,6 @@ msgstr "Last state"
 msgid "Send Chatstate in Group Chats"
 msgstr "Unable to join group chat"
 
-msgid "Send DTMF sequence through an open voice chat"
-msgstr ""
-
 #, fuzzy
 msgid "Send File"
 msgstr "Send _File"
@@ -4497,24 +4336,6 @@ msgid "Send _Report"
 msgstr "_Report Bug"
 
 #, fuzzy
-msgid "Send a disco info request"
-msgstr "Sent receipt requests"
-
-msgid "Send a message to the contact"
-msgstr "Send a message to the contact"
-
-#, fuzzy
-msgid "Send a message to the contact that will attract their attention"
-msgstr "Send a message to the contact"
-
-#, fuzzy
-msgid "Send a ping to the contact"
-msgstr "Usage: /%s, sends a ping to the contact"
-
-msgid "Send action (in the third person) to the current chat"
-msgstr ""
-
-#, fuzzy
 msgid "Send message on Ctrl+Enter and make a new line with Enter."
 msgstr ""
 "Send message on Ctrl+Enter and with Enter make new line (Mirabilis ICQ "
@@ -4526,9 +4347,6 @@ msgstr "Send message"
 
 msgid "Sender: "
 msgstr "Sender: "
-
-msgid "Sending private message failed"
-msgstr "Sending private message failed"
 
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4590,27 +4408,9 @@ msgstr "Server"
 msgid "Set configuration directory"
 msgstr "Room Configuration"
 
-msgid ""
-"Set participant affiliation in group chat.\n"
-"    Affiliation can be given as one of the following values:\n"
-"    owner, admin, member, outcast, none"
-msgstr ""
-
-msgid ""
-"Set participant role in group chat.\n"
-"    Role can be given as one of the following values:\n"
-"    moderator, participant, visitor, none"
-msgstr ""
-
 #, fuzzy
 msgid "Set status message"
 msgstr "status message"
-
-msgid "Set the current status to away"
-msgstr ""
-
-msgid "Set the current status to online"
-msgstr ""
 
 msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
@@ -4725,9 +4525,9 @@ msgstr ""
 msgid "Show all warnings"
 msgstr "Show All Pending _Events"
 
-msgid ""
-"Show help on a given command or a list of available commands if -a is given"
-msgstr ""
+#, fuzzy
+msgid "Show chat list"
+msgstr "Notification"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -4736,9 +4536,6 @@ msgstr "Show Trans_ports"
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
-msgstr ""
-
-msgid "Show logged messages which mention given text"
 msgstr ""
 
 msgid ""
@@ -4976,9 +4773,6 @@ msgstr ""
 msgid "Street"
 msgstr "Stressed"
 
-msgid "Strike"
-msgstr "Strike"
-
 msgid "Style"
 msgstr "Style"
 
@@ -5066,10 +4860,6 @@ msgstr "<b>System:</b>"
 msgid "TLS verification failed: %s"
 msgstr "SSL certificate error"
 
-#, fuzzy
-msgid "T_ry Again"
-msgstr "Verify again..."
-
 msgid "Tabbed chat window"
 msgstr ""
 
@@ -5126,9 +4916,6 @@ msgid ""
 msgstr ""
 
 msgid "The last message was written on a mobile client"
-msgstr ""
-
-msgid "The same as using a doc-string, except it supports translation"
 msgstr ""
 
 #, fuzzy
@@ -5324,19 +5111,9 @@ msgstr "If you want all the changes to apply instantly, you must relogin."
 msgid "Toggle Chat List"
 msgstr "Participant"
 
-msgid "Toggle Video Chat"
-msgstr ""
-
-msgid "Toggle Voice Chat"
-msgstr ""
-
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Participant"
-
-#, fuzzy
-msgid "Too many arguments"
-msgstr "Missing argument \"contact_jid\""
 
 msgid "Topic"
 msgstr ""
@@ -5457,10 +5234,6 @@ msgstr "Unknown Title"
 #, fuzzy
 msgid "Unknown language"
 msgstr "Unknown Title"
-
-#, fuzzy
-msgid "Unknown nickname"
-msgstr "A_fter nickname:"
 
 #, fuzzy
 msgid "Unknown validation error"
@@ -5618,10 +5391,6 @@ msgstr "Private Chat"
 msgid "Video calls are not available on Windows"
 msgstr "Connection not available"
 
-#, fuzzy
-msgid "Video chats are not available"
-msgstr "Connection not available"
-
 msgid "Video test"
 msgstr ""
 
@@ -5644,10 +5413,6 @@ msgstr "<b>Visual Notifications</b>"
 #, fuzzy
 msgid "Voice Request"
 msgstr "File Transfer Request"
-
-#, fuzzy
-msgid "Voice chats are not available"
-msgstr "Connection not available"
 
 #, fuzzy
 msgid "Waiting…"
@@ -5770,11 +5535,6 @@ msgstr "Are you sure you want to quit Gajim?"
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "You are about to remove \"%(name)s\" (%(jid)s) from your roster.\n"
-
-#, fuzzy, python-format
-msgid ""
-"You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
-msgstr "You are no longer in group chat \"%(room)s\" or \"%(nick)s\" has left."
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5983,9 +5743,6 @@ msgstr ""
 msgid "_Back"
 msgstr "Back soon"
 
-msgid "_Ban"
-msgstr "_Ban"
-
 msgid "_Block"
 msgstr "_Block"
 
@@ -6073,10 +5830,6 @@ msgstr "Features"
 msgid "_File Transfer"
 msgstr "File Transfers"
 
-#, fuzzy
-msgid "_Forget Group Chat"
-msgstr "Leave Groupchats"
-
 msgid "_Free for Chat"
 msgstr "_Free for Chat"
 
@@ -6101,9 +5854,6 @@ msgstr "_Join"
 
 msgid "_Keyboard Shortcuts"
 msgstr ""
-
-msgid "_Kick"
-msgstr "_Kick"
 
 msgid "_Later"
 msgstr ""
@@ -6249,10 +5999,6 @@ msgid "_Subscribe"
 msgstr "_Subscribe"
 
 #, fuzzy
-msgid "_Try Again"
-msgstr "Verify again..."
-
-#, fuzzy
 msgid "_Type"
 msgstr "_Type:"
 
@@ -6311,6 +6057,9 @@ msgstr ""
 msgid "bearing"
 msgstr "marine"
 
+msgid "bold"
+msgstr ""
+
 #, fuzzy
 msgid "building"
 msgstr "Hiding"
@@ -6357,9 +6106,6 @@ msgstr "file transfers list"
 msgid "floor"
 msgstr ""
 
-msgid "has closed the chat window or tab"
-msgstr "has closed the chat window or tab"
-
 #, fuzzy
 msgid ""
 "has invited you to a group chat.\n"
@@ -6376,8 +6122,9 @@ msgstr "is composing a message..."
 msgid "is doing something else"
 msgstr "is doing something else"
 
-msgid "is paying attention to the conversation"
-msgstr "is paying attention to the conversation"
+#, fuzzy
+msgid "italic"
+msgstr "Italic"
 
 msgid "lat"
 msgstr ""
@@ -6424,6 +6171,10 @@ msgstr ""
 
 msgid "street"
 msgstr ""
+
+#, fuzzy
+msgid "strike"
+msgstr "Strike"
 
 msgid "text"
 msgstr ""
@@ -6480,7 +6231,15 @@ msgstr "%(nick)s is now %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#, fuzzy
+#~ msgid "%s is not a valid tone"
+#~ msgstr "%s is not a valid loglevel"
+
 #~ msgid "%s not found"
+#~ msgstr "%s not found"
+
+#, fuzzy
+#~ msgid "%s: Nothing found"
 #~ msgstr "%s not found"
 
 #, fuzzy
@@ -6525,11 +6284,26 @@ msgstr ""
 #~ msgid "Arguments:"
 #~ msgstr "Arguments:"
 
+#, fuzzy
+#~ msgid "Ban Participant"
+#~ msgstr "Participant"
+
+#~ msgid "Bold"
+#~ msgstr "Bold"
+
+#, fuzzy
+#~ msgid "Ch_ange"
+#~ msgstr "Change _Nickname..."
+
 #~ msgid "Change status"
 #~ msgstr "Change status"
 
 #~ msgid "Change status information"
 #~ msgstr "Change status information"
+
+#, fuzzy
+#~ msgid "Change your nickname in a group chat"
+#~ msgstr "Change your nickname (Ctrl+N)"
 
 #, fuzzy
 #~ msgid "Changes the priority of account(s)"
@@ -6542,11 +6316,39 @@ msgstr ""
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Check if Gajim is running"
 
+#, fuzzy
+#~ msgid "Clear chat window"
+#~ msgstr "Usage: /%s, clears the text window."
+
+#, fuzzy
+#~ msgid "Clear the text window"
+#~ msgstr "Usage: /%s, clears the text window."
+
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr "D-Bus is not present on this machine or python module is missing"
 
+#, fuzzy
+#~ msgid "Display names of all group chat participants"
+#~ msgstr "Usage: /%s , display the names of group chat occupants."
+
+#, fuzzy
+#~ msgid "Display or change a group chat topic"
+#~ msgstr "Ask before closing a group chat tab/window."
+
 #~ msgid "Do not disturb"
 #~ msgstr "Do not disturb"
+
+#, fuzzy
+#~ msgid "Drop Files or Contacts"
+#~ msgstr "Invite _Contacts"
+
+#, fuzzy
+#~ msgid "Enter Password"
+#~ msgstr "Enter new password:"
+
+#, fuzzy
+#~ msgid "Error: Could not process image"
+#~ msgstr "Could not load image"
 
 #~ msgid "Extended away"
 #~ msgstr "Extended away"
@@ -6554,8 +6356,16 @@ msgstr ""
 #~ msgid "File path"
 #~ msgstr "File path"
 
+#, fuzzy
+#~ msgid "Format your message…"
+#~ msgstr "New Private Message"
+
 #~ msgid "Free for chat"
 #~ msgstr "Free for chat"
+
+#, fuzzy
+#~ msgid "Gajim will not try to join this group chat again"
+#~ msgstr "If ticked, Gajim will join this group chat on startup"
 
 #~ msgid "Gets detailed info on a account"
 #~ msgstr "Gets detailed info on a account"
@@ -6574,8 +6384,35 @@ msgstr ""
 #~ "If True, quits Gajim when X button of Window Manager is clicked. This "
 #~ "setting is taken into account only if trayicon is used."
 
+#, fuzzy
+#~ msgid "Invalid affiliation given"
+#~ msgstr "affiliation changed"
+
+#~ msgid "Invalid nickname"
+#~ msgstr "Invalid nickname"
+
+#, fuzzy
+#~ msgid "Invalid role given"
+#~ msgstr "Invalid server"
+
 #~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
 #~ msgstr "It seems Gajim is not running. So you can't use gajim-remote."
+
+#, fuzzy
+#~ msgid "Join a group chat given by an XMPP Address"
+#~ msgstr "in _group chats"
+
+#, fuzzy
+#~ msgid "Kick Participant"
+#~ msgstr "Participant"
+
+#, fuzzy
+#~ msgid "Kick user from group chat by nickname"
+#~ msgstr "You are invited to a groupchat"
+
+#, fuzzy
+#~ msgid "Leave the group chat"
+#~ msgstr "Leave Groupchats"
 
 #, fuzzy
 #~ msgid "Lists all contacts in the contact list, one for each line"
@@ -6586,8 +6423,23 @@ msgstr ""
 #~ msgid "Missing argument \"contact_jid\""
 #~ msgstr "Missing argument \"contact_jid\""
 
+#, fuzzy
+#~ msgid "Missing arguments"
+#~ msgstr "Missing argument \"contact_jid\""
+
 #~ msgid "Name of the account"
 #~ msgstr "Name of the account"
+
+#, fuzzy
+#~ msgid "Next sent messages"
+#~ msgstr "Preset messages:"
+
+#~ msgid "Nickname not found"
+#~ msgstr "Nickname not found"
+
+#, fuzzy
+#~ msgid "No open voice chats with the contact"
+#~ msgstr "Click to see past conversations with this contact"
 
 #~ msgid "Offline - disconnect"
 #~ msgstr "Offline - disconnect"
@@ -6595,11 +6447,52 @@ msgstr ""
 #~ msgid "Online"
 #~ msgstr "Online"
 
+#, fuzzy
+#~ msgid "Open a private chat window with a specified participant"
+#~ msgstr ""
+#~ "Usage: /%s <nickname>, opens a private chat window with the specified "
+#~ "occupant."
+
+#, fuzzy
+#~ msgid ""
+#~ "Open a private chat window with a specified participant and send him a "
+#~ "message"
+#~ msgstr ""
+#~ "Usage: /%s <nickname>, opens a private chat window with the specified "
+#~ "occupant."
+
+#~ msgid "Ping?"
+#~ msgstr "Ping?"
+
+#, fuzzy
+#~ msgid "Ping? (%s)"
+#~ msgstr "Pong! (%s s.)"
+
+#, fuzzy
+#~ msgid "Pong! (%(nick)s %(delay)s s.)"
+#~ msgstr "Pong! (%s s.)"
+
+#, fuzzy
+#~ msgid "Pong! (%s seconds)"
+#~ msgstr "Pong! (%s s.)"
+
 #~ msgid "Presence description:"
 #~ msgstr "Presence description:"
 
+#, fuzzy
+#~ msgid "Previously sent message"
+#~ msgstr "Preset messages:"
+
 #~ msgid "Prints a list of registered accounts"
 #~ msgstr "Prints a list of registered accounts"
+
+#, fuzzy
+#~ msgid "Quote next message"
+#~ msgstr "Send message"
+
+#, fuzzy
+#~ msgid "Quote previous message"
+#~ msgstr "status message"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6617,6 +6510,24 @@ msgstr ""
 
 #~ msgid "Returns number of unread messages"
 #~ msgstr "Returns number of unread messages"
+
+#, fuzzy
+#~ msgid "Send a disco info request"
+#~ msgstr "Sent receipt requests"
+
+#~ msgid "Send a message to the contact"
+#~ msgstr "Send a message to the contact"
+
+#, fuzzy
+#~ msgid "Send a message to the contact that will attract their attention"
+#~ msgstr "Send a message to the contact"
+
+#, fuzzy
+#~ msgid "Send a ping to the contact"
+#~ msgstr "Usage: /%s, sends a ping to the contact"
+
+#~ msgid "Sending private message failed"
+#~ msgstr "Sending private message failed"
 
 #, fuzzy
 #~ msgid ""
@@ -6666,8 +6577,16 @@ msgstr ""
 #~ msgid "Status Change"
 #~ msgstr "_Log status changes of contacts"
 
+#, fuzzy
+#~ msgid "T_ry Again"
+#~ msgstr "Verify again..."
+
 #~ msgid "The status has been changed."
 #~ msgstr "The status has been changed."
+
+#, fuzzy
+#~ msgid "Too many arguments"
+#~ msgstr "Missing argument \"contact_jid\""
 
 #~ msgid ""
 #~ "Too many arguments. \n"
@@ -6675,6 +6594,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Too many arguments. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
+
+#, fuzzy
+#~ msgid "Unknown nickname"
+#~ msgstr "A_fter nickname:"
 
 #, fuzzy
 #~ msgid ""
@@ -6693,6 +6616,14 @@ msgstr ""
 #~ "Usage: %(basename)s %(command)s %(arguments)s \n"
 #~ "\t %(help)s"
 
+#, fuzzy
+#~ msgid "Video chats are not available"
+#~ msgstr "Connection not available"
+
+#, fuzzy
+#~ msgid "Voice chats are not available"
+#~ msgstr "Connection not available"
+
 #~ msgid "XML to send"
 #~ msgstr "XML to send"
 
@@ -6708,12 +6639,22 @@ msgstr ""
 #~ msgid "XMPP Address of the group chat that will receive the message"
 #~ msgstr "JID of the room that will receive the message"
 
+#, fuzzy
+#~ msgid ""
+#~ "You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
+#~ msgstr ""
+#~ "You are no longer in group chat \"%(room)s\" or \"%(nick)s\" has left."
+
 #~ msgid "You have no active account"
 #~ msgstr "You have no active account"
 
 #, fuzzy
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "Always close Gajim"
+
+#, fuzzy
+#~ msgid "_Try Again"
+#~ msgstr "Verify again..."
 
 #~ msgid ""
 #~ "change status of account \"account\". If not specified, try to change "
@@ -6735,6 +6676,9 @@ msgstr ""
 #~ msgid "file"
 #~ msgstr "file"
 
+#~ msgid "has closed the chat window or tab"
+#~ msgstr "has closed the chat window or tab"
+
 #~ msgid "if specified, contact is taken from the contact list of this account"
 #~ msgstr ""
 #~ "if specified, contact is taken from the contact list of this account"
@@ -6744,6 +6688,9 @@ msgstr ""
 
 #~ msgid "if specified, the message will be sent using this account"
 #~ msgstr "if specified, the message will be sent using this account"
+
+#~ msgid "is paying attention to the conversation"
+#~ msgstr "is paying attention to the conversation"
 
 #~ msgid "message contents"
 #~ msgstr "message contents"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-24 12:49+0000\n"
+"POT-Creation-Date: 2022-08-13 16:07+0000\n"
 "PO-Revision-Date: 2022-01-13 21:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -19,23 +19,6 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 4.1.1\n"
 "X-Poedit-Bookmarks: -1,-1,66,-1,-1,-1,-1,-1,-1,-1\n"
-
-msgid ""
-"\n"
-"    Ban user by a nick or a JID from a groupchat\n"
-"\n"
-"    If given nickname is not found it will be treated as a JID.\n"
-"    "
-msgstr ""
-
-msgid ""
-"\n"
-"    Set the current status\n"
-"\n"
-"    Status can be given as one of the following values:\n"
-"    online, away, chat, xa, dnd.\n"
-"    "
-msgstr ""
 
 #, fuzzy
 msgid " (Video Call)"
@@ -153,10 +136,6 @@ msgstr ""
 msgid "%s is not a valid loglevel"
 msgstr "Klasör \"%s\" yazılabilir değil"
 
-#, fuzzy, python-format
-msgid "%s is not a valid tone"
-msgstr "Klasör \"%s\" yazılabilir değil"
-
 #, python-format
 msgid ""
 "%s is online with multiple devices.\n"
@@ -178,10 +157,6 @@ msgstr "Dosya Aktarımları"
 #, fuzzy, python-format
 msgid "%s wants to send you a file"
 msgstr "%s size bir dosya göndermek istiyor."
-
-#, fuzzy, python-format
-msgid "%s: Nothing found"
-msgstr "%s bulunamadı"
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -862,9 +837,6 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allow a participant to send you public or private messages"
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1132,13 +1104,13 @@ msgstr "Bekleme süresi (dakikalar)"
 msgid "Back soon"
 msgstr "Geri Düğme"
 
+#, fuzzy
+msgid "Ban"
+msgstr "Geçersiz Liste İsmi"
+
 #, fuzzy, python-format
 msgid "Ban %s"
 msgstr "Geçersiz Liste İsmi"
-
-#, fuzzy
-msgid "Ban Participant"
-msgstr "Katılan"
 
 msgid "Ban…"
 msgstr ""
@@ -1173,9 +1145,6 @@ msgstr "Sohbet için Hazır"
 #, fuzzy
 msgid "Block…"
 msgstr "_Engelle"
-
-msgid "Bold"
-msgstr "Kalın"
 
 #, fuzzy
 msgid "Bookmarks"
@@ -1302,10 +1271,6 @@ msgid "Certificate signature failure"
 msgstr "Hata: Yanlış imza"
 
 #, fuzzy
-msgid "Ch_ange"
-msgstr "Takma Ad Ayarla"
-
-#, fuzzy
 msgid "Ch_ange Subject"
 msgstr "Konuk Değiştiriliyor"
 
@@ -1330,10 +1295,6 @@ msgstr "Konuk Değiştiriliyor"
 
 msgid "Change your account’s password, etc."
 msgstr ""
-
-#, fuzzy
-msgid "Change your nickname in a group chat"
-msgstr "[%s sayfasını okuyamazsınız.]"
 
 msgid "Change your profile picture"
 msgstr ""
@@ -1462,16 +1423,8 @@ msgid "Clear Sound"
 msgstr "Ses seç"
 
 #, fuzzy
-msgid "Clear chat window"
-msgstr "Pencereyi gizler"
-
-#, fuzzy
 msgid "Clear message entry"
 msgstr "Ileti alınıyor"
-
-#, fuzzy
-msgid "Clear the text window"
-msgstr "Pencereyi gizler"
 
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
@@ -1512,11 +1465,6 @@ msgstr "Renk"
 #, fuzzy
 msgid "Command List"
 msgstr "Geçersiz Liste İsmi"
-
-msgid ""
-"Command disabled. This command can be enabled by setting "
-"'command_system_execute' to True in ACE (Advanced Configuration Editor)."
-msgstr ""
 
 #, fuzzy
 msgid "Commands"
@@ -1748,6 +1696,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr ""
 
+msgid "Correct"
+msgstr ""
+
 #, fuzzy
 msgid "Could not Open File"
 msgstr "Resim acılamadı"
@@ -1932,14 +1883,6 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
-#, fuzzy
-msgid "Display names of all group chat participants"
-msgstr "%s mevcut bir grubun ismi değil"
-
-#, fuzzy
-msgid "Display or change a group chat topic"
-msgstr "%s mevcut bir grubun ismi değil"
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Ricayı kabul ediyor musunuz?"
@@ -2000,10 +1943,6 @@ msgstr "Okunmamış iletler var"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Kodlamada"
-
-#, fuzzy
-msgid "Drop Files or Contacts"
-msgstr "Kişi Davet _Et"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2101,23 +2040,26 @@ msgid "Encrypting file…"
 msgstr "  Spam engelleme etkin değil\n"
 
 #, fuzzy
+msgid "Encryption error"
+msgstr "Üyelik isteği"
+
+#, fuzzy
 msgid "Encryption required"
 msgstr "Üyelik isteği"
 
 msgid "End call"
 msgstr ""
 
-#, fuzzy
-msgid "Enter Nickname"
-msgstr "Takma Ad girdir"
-
-#, fuzzy
-msgid "Enter Password"
-msgstr "Yeni parola girin: "
+msgid "Enter a password to join this chat"
+msgstr ""
 
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Yeni parola girin: "
+
+#, fuzzy
+msgid "Enter your new nickname"
+msgstr "Takma Ad girdir"
 
 msgid ""
 "Enter your nickname. This is how your name is displayed to your contacts."
@@ -2129,9 +2071,6 @@ msgstr "Hata"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Resim seç"
-
-msgid "Error during command execution!"
-msgstr ""
 
 #, fuzzy, python-format
 msgid "Error message: %s"
@@ -2172,10 +2111,6 @@ msgstr "Hata"
 msgid "Error: %s"
 msgstr "Hata: %s"
 
-#, fuzzy
-msgid "Error: Could not process image"
-msgstr "Resim acılamadı"
-
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr "Hata: %s okumak için açılamıyor"
@@ -2199,12 +2134,6 @@ msgstr "Komuta _Yürüt"
 #, fuzzy
 msgid "Execute Command…"
 msgstr "Komuta _Yürüt"
-
-msgid "Execute expression inside a shell, send output"
-msgstr ""
-
-msgid "Execute expression inside a shell, show output"
-msgstr ""
 
 #, fuzzy
 msgid "Executing…"
@@ -2405,9 +2334,6 @@ msgstr ""
 msgid "For example: \"Julia is now online\""
 msgstr ""
 
-msgid "Forbid a participant to send you public or private messages"
-msgstr ""
-
 #, fuzzy
 msgid "Force Bookmark 2 usage"
 msgstr "Bu odayi yer imle"
@@ -2415,6 +2341,10 @@ msgstr "Bu odayi yer imle"
 #, fuzzy
 msgid "Forever"
 msgstr "Asla"
+
+#, fuzzy
+msgid "Forget Group Chat"
+msgstr "Tam-Ekrandan Çık"
 
 #, fuzzy
 msgid "Forget this Group Chat"
@@ -2435,10 +2365,6 @@ msgstr ""
 #, fuzzy
 msgid "Format your message"
 msgstr "Okunmamış iletler var"
-
-#, fuzzy
-msgid "Format your message…"
-msgstr "Ileti alınıyor"
 
 msgid "Free for Chat"
 msgstr "Sohbet için Hazır"
@@ -2502,10 +2428,6 @@ msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
-
-#, fuzzy
-msgid "Gajim will not try to join this group chat again"
-msgstr "%s grup sohbete katıldı"
 
 #, fuzzy
 msgid "Gajim will now exit"
@@ -2661,6 +2583,10 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
+#, fuzzy
+msgid "Hide chat list"
+msgstr "Katılan"
+
 msgid "Hide this menu"
 msgstr "Menüyi gizle"
 
@@ -2744,9 +2670,6 @@ msgstr ""
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 
-msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
-msgstr ""
-
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 
@@ -2774,7 +2697,7 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "If you close this chat, you will leave '%s'."
+msgid "If you close this chat, you will leave \"%s\"."
 msgstr ""
 
 msgid ""
@@ -2870,19 +2793,12 @@ msgid "Invalid XMPP Address"
 msgstr "Geçersiz Dosya"
 
 #, fuzzy
-msgid "Invalid affiliation given"
-msgstr "üyelik değişti"
-
-#, fuzzy
 msgid "Invalid domain name"
 msgstr "Geçersiz Liste İsmi"
 
-msgid "Invalid nickname"
-msgstr "Geçersiz takma ad"
-
 #, fuzzy
-msgid "Invalid role given"
-msgstr "Geçersiz sunucu"
+msgid "Invite"
+msgstr "Davet _et"
 
 #, fuzzy
 msgid "Invite Contacts"
@@ -2895,9 +2811,6 @@ msgstr "Kişi Davet _Et"
 #, fuzzy
 msgid "Invite New Contact"
 msgstr "Kişi Davet _Et"
-
-msgid "Invite a user to a group chat for a reason"
-msgstr ""
 
 msgid "Invite friends to group chats or join one"
 msgstr ""
@@ -2930,9 +2843,6 @@ msgstr ""
 
 msgid "It is not possible to send empty files"
 msgstr ""
-
-msgid "Italic"
-msgstr "Italik"
 
 #, fuzzy
 msgid "I’m eating."
@@ -2986,10 +2896,6 @@ msgstr "Grup Sohbete Katıl"
 msgid "Join Support Chat"
 msgstr "Grup Sohbete Katıl"
 
-#, fuzzy
-msgid "Join a group chat given by an XMPP Address"
-msgstr "grupdaki herkez"
-
 msgid "Joining…"
 msgstr ""
 
@@ -3010,19 +2916,12 @@ msgstr ""
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
+msgid "Kick"
+msgstr ""
+
 #, python-format
 msgid "Kick %s"
 msgstr ""
-
-#, fuzzy
-msgid "Kick Participant"
-msgstr "Katılan"
-
-#, fuzzy
-msgid "Kick user from group chat by nickname"
-msgstr ""
-"Şuraya bir yorum gönderiyorsunuz:\n"
-"  "
 
 msgid "Kick…"
 msgstr ""
@@ -3042,17 +2941,10 @@ msgstr "Son durum: %s"
 msgid "Leave Group Chat"
 msgstr "Tam-Ekrandan Çık"
 
-#, fuzzy
-msgid "Leave the group chat"
-msgstr "Tam-Ekrandan Çık"
-
 msgid "Left Click Action"
 msgstr ""
 
 msgid "Let others know if you read up to this point"
-msgstr ""
-
-msgid "Limit must be an integer"
 msgstr ""
 
 msgid ""
@@ -3236,11 +3128,10 @@ msgstr "Tüm _durum değişikliklerini sistem günlüğüne kaydet"
 msgid "Miscellaneous"
 msgstr "<b>Karışık</b>"
 
-#, fuzzy
-msgid "Missing arguments"
-msgstr "JID veya Kişi adı girdir"
-
 msgid "Missing dependencies for Audio/Video"
+msgstr ""
+
+msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
@@ -3308,23 +3199,15 @@ msgstr "Ara"
 msgid "New Workspace"
 msgstr "Kişiyi yeniden adlandır"
 
-#, fuzzy, python-format
-msgid "New message from %s"
+#, fuzzy
+msgid "New message from"
 msgstr "%(nickname)s den Yeni İlet alındı"
 
 msgid "Next"
 msgstr ""
 
-#, fuzzy
-msgid "Next sent messages"
-msgstr "Önceden hazırlanmış iletleri:"
-
 msgid "Nickname"
 msgstr "Takma ad"
-
-#, fuzzy
-msgid "Nickname not found"
-msgstr "Kullanıcak takma ad"
 
 #, fuzzy
 msgid "No"
@@ -3382,10 +3265,6 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "Hiç bir hesap bulunmiyor"
-
-#, fuzzy
-msgid "No open voice chats with the contact"
-msgstr "Dosyayı bir kişiye gönderir"
 
 #, fuzzy
 msgid "No proxy used"
@@ -3512,16 +3391,6 @@ msgstr "Bağlantı Kurulamıyor"
 #, fuzzy
 msgid "Open _Folder"
 msgstr "Gmail Gelen Kutusunu _Aç"
-
-#, fuzzy
-msgid "Open a private chat window with a specified participant"
-msgstr "Kişiyle sohbet pencere _aç"
-
-#, fuzzy
-msgid ""
-"Open a private chat window with a specified participant and send him a "
-"message"
-msgstr "Kişiyle sohbet pencere _aç"
 
 #, fuzzy
 msgid "Open as _Link"
@@ -3690,13 +3559,6 @@ msgstr "Kullanılacak resim"
 msgid "Pin Chat"
 msgstr "Dosya Gönderme Soru"
 
-msgid "Ping?"
-msgstr "Ping?"
-
-#, fuzzy, python-format
-msgid "Ping? (%s)"
-msgstr "Pong! (%s s.)"
-
 msgid "Pinned"
 msgstr ""
 
@@ -3788,14 +3650,6 @@ msgstr ""
 msgid "Plugins Updated Successfully"
 msgstr "Bağlantı Kurulamıyor"
 
-#, fuzzy, python-format
-msgid "Pong! (%(nick)s %(delay)s s.)"
-msgstr "Pong! (%s s.)"
-
-#, fuzzy, python-format
-msgid "Pong! (%s seconds)"
-msgstr "Pong! (%s s.)"
-
 #, fuzzy
 msgid "Port"
 msgstr "_Porta:"
@@ -3841,10 +3695,6 @@ msgstr ""
 #, fuzzy
 msgid "Previous"
 msgstr "Kıskanç"
-
-#, fuzzy
-msgid "Previously sent message"
-msgstr "Önceden hazırlanmış iletleri:"
 
 msgid "Print XML stanzas and other debug information"
 msgstr ""
@@ -3916,14 +3766,6 @@ msgstr ""
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quote next message"
-msgstr "Mesajı gönder"
-
-#, fuzzy
-msgid "Quote previous message"
-msgstr "durum ileti"
 
 #, fuzzy
 msgid "Quote…"
@@ -4427,9 +4269,6 @@ msgstr "Son durum: %s"
 msgid "Send Chatstate in Group Chats"
 msgstr "Grup eklenemedi: grup zaten var"
 
-msgid "Send DTMF sequence through an open voice chat"
-msgstr ""
-
 #, fuzzy
 msgid "Send File"
 msgstr "_Dosya Gönder…"
@@ -4466,25 +4305,6 @@ msgstr "_Yaşamda kal paketleri gönder"
 msgid "Send _Report"
 msgstr "_Hata Bildir"
 
-#, fuzzy
-msgid "Send a disco info request"
-msgstr "     İsteklerin gideceği adres: %(requestaddr)s"
-
-#, fuzzy
-msgid "Send a message to the contact"
-msgstr "Dosyayı bir kişiye gönderir"
-
-#, fuzzy
-msgid "Send a message to the contact that will attract their attention"
-msgstr "Dosyayı bir kişiye gönderir"
-
-#, fuzzy
-msgid "Send a ping to the contact"
-msgstr "Dosyayı bir kişiye gönderir"
-
-msgid "Send action (in the third person) to the current chat"
-msgstr ""
-
 msgid "Send message on Ctrl+Enter and make a new line with Enter."
 msgstr ""
 
@@ -4494,9 +4314,6 @@ msgstr "Mesajı gönder"
 
 msgid "Sender: "
 msgstr "Gönderen"
-
-msgid "Sending private message failed"
-msgstr "Kişisel ilet gönderimi başarısız"
 
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4559,27 +4376,9 @@ msgstr "_Sunuc:"
 msgid "Set configuration directory"
 msgstr "Hata açıklaması…"
 
-msgid ""
-"Set participant affiliation in group chat.\n"
-"    Affiliation can be given as one of the following values:\n"
-"    owner, admin, member, outcast, none"
-msgstr ""
-
-msgid ""
-"Set participant role in group chat.\n"
-"    Role can be given as one of the following values:\n"
-"    moderator, participant, visitor, none"
-msgstr ""
-
 #, fuzzy
 msgid "Set status message"
 msgstr "durum ileti"
-
-msgid "Set the current status to away"
-msgstr ""
-
-msgid "Set the current status to online"
-msgstr ""
 
 msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
@@ -4689,9 +4488,9 @@ msgstr ""
 msgid "Show all warnings"
 msgstr "Bütün Bekleyen _Olayları Göster"
 
-msgid ""
-"Show help on a given command or a list of available commands if -a is given"
-msgstr ""
+#, fuzzy
+msgid "Show chat list"
+msgstr "Yer:"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -4700,9 +4499,6 @@ msgstr "_XML Konsolu Göster"
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
-msgstr ""
-
-msgid "Show logged messages which mention given text"
 msgstr ""
 
 msgid ""
@@ -4941,10 +4737,6 @@ msgstr ""
 msgid "Street"
 msgstr "Vurgulu"
 
-#, fuzzy
-msgid "Strike"
-msgstr "Ü&stü Çizili"
-
 msgid "Style"
 msgstr "Biçem"
 
@@ -5034,10 +4826,6 @@ msgstr "<b>Sistem:</b>"
 msgid "TLS verification failed: %s"
 msgstr "<b>Bir hata oluştu:</b>"
 
-#, fuzzy
-msgid "T_ry Again"
-msgstr "Tekrar dene ? [e/H] "
-
 msgid "Tabbed chat window"
 msgstr ""
 
@@ -5094,9 +4882,6 @@ msgid ""
 msgstr ""
 
 msgid "The last message was written on a mobile client"
-msgstr ""
-
-msgid "The same as using a doc-string, except it supports translation"
 msgstr ""
 
 #, fuzzy
@@ -5280,19 +5065,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Katılan"
 
-msgid "Toggle Video Chat"
-msgstr ""
-
-msgid "Toggle Voice Chat"
-msgstr ""
-
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Katılan"
-
-#, fuzzy
-msgid "Too many arguments"
-msgstr "JID veya Kişi adı girdir"
 
 msgid "Topic"
 msgstr ""
@@ -5418,10 +5193,6 @@ msgstr "Bilinmeyen Parça"
 #, fuzzy
 msgid "Unknown language"
 msgstr "Bilinmeyen Parça"
-
-#, fuzzy
-msgid "Unknown nickname"
-msgstr "Bu kişi için %s yeni bir takma ad girin."
 
 #, fuzzy
 msgid "Unknown validation error"
@@ -5581,10 +5352,6 @@ msgstr "Video testi"
 msgid "Video calls are not available on Windows"
 msgstr "Hiç bir hesap bulunmiyor"
 
-#, fuzzy
-msgid "Video chats are not available"
-msgstr "Hiç bir hesap bulunmiyor"
-
 msgid "Video test"
 msgstr "Video testi"
 
@@ -5607,10 +5374,6 @@ msgstr "<b>Görsel Bildirimler</b>"
 #, fuzzy
 msgid "Voice Request"
 msgstr "Dosya Gönderme Soru"
-
-#, fuzzy
-msgid "Voice chats are not available"
-msgstr "Hiç bir hesap bulunmiyor"
 
 #, fuzzy
 msgid "Waiting…"
@@ -5732,11 +5495,6 @@ msgstr "Onu kullanmak istediğinizden emin misiniz? (e/H) "
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "%s grupu kişi listesinden silmek istiyor musun?"
-
-#, python-format
-msgid ""
-"You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
-msgstr ""
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5939,9 +5697,6 @@ msgstr ""
 msgid "_Back"
 msgstr "Geri Düğme"
 
-msgid "_Ban"
-msgstr ""
-
 msgid "_Block"
 msgstr "_Engelle"
 
@@ -6029,10 +5784,6 @@ msgstr "Özellikler:"
 msgid "_File Transfer"
 msgstr "Dosya Aktarımları"
 
-#, fuzzy
-msgid "_Forget Group Chat"
-msgstr "Tam-Ekrandan Çık"
-
 msgid "_Free for Chat"
 msgstr "Sohbet için _Hazır"
 
@@ -6056,9 +5807,6 @@ msgid "_Join"
 msgstr "_Katıl"
 
 msgid "_Keyboard Shortcuts"
-msgstr ""
-
-msgid "_Kick"
 msgstr ""
 
 msgid "_Later"
@@ -6204,10 +5952,6 @@ msgid "_Subscribe"
 msgstr "_Üye yap"
 
 #, fuzzy
-msgid "_Try Again"
-msgstr "Tekrar dene ? [e/H] "
-
-#, fuzzy
 msgid "_Type"
 msgstr "_Türü:"
 
@@ -6267,6 +6011,9 @@ msgstr "ses çıktısı"
 msgid "bearing"
 msgstr "denizcilik"
 
+msgid "bold"
+msgstr ""
+
 #, fuzzy
 msgid "building"
 msgstr "Saklanmada"
@@ -6313,9 +6060,6 @@ msgstr "dosya aktarımların listesi"
 msgid "floor"
 msgstr ""
 
-msgid "has closed the chat window or tab"
-msgstr ""
-
 #, fuzzy
 msgid ""
 "has invited you to a group chat.\n"
@@ -6332,8 +6076,9 @@ msgstr "ilet yazıyor…"
 msgid "is doing something else"
 msgstr "başka bir şey yapıyor"
 
-msgid "is paying attention to the conversation"
-msgstr "sohbete dikkat veriyor"
+#, fuzzy
+msgid "italic"
+msgstr "Italik"
 
 msgid "lat"
 msgstr ""
@@ -6381,6 +6126,10 @@ msgstr ""
 msgid "street"
 msgstr ""
 
+#, fuzzy
+msgid "strike"
+msgstr "Ü&stü Çizili"
+
 msgid "text"
 msgstr ""
 
@@ -6419,9 +6168,9 @@ msgstr ""
 msgid "{nick} has left{reason}"
 msgstr ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{nick} is now known as {new_nick}"
-msgstr ""
+msgstr "%(nick)s durumu şimdi %(status)s"
 
 #, fuzzy, python-brace-format
 msgid "{nick} is now {show}"
@@ -6434,7 +6183,15 @@ msgstr "%(nick)s durumu şimdi %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#, fuzzy
+#~ msgid "%s is not a valid tone"
+#~ msgstr "Klasör \"%s\" yazılabilir değil"
+
 #~ msgid "%s not found"
+#~ msgstr "%s bulunamadı"
+
+#, fuzzy
+#~ msgid "%s: Nothing found"
 #~ msgstr "%s bulunamadı"
 
 #, fuzzy
@@ -6456,11 +6213,26 @@ msgstr ""
 #~ msgid "Arguments:"
 #~ msgstr "Argümanlar:"
 
+#, fuzzy
+#~ msgid "Ban Participant"
+#~ msgstr "Katılan"
+
+#~ msgid "Bold"
+#~ msgstr "Kalın"
+
+#, fuzzy
+#~ msgid "Ch_ange"
+#~ msgstr "Takma Ad Ayarla"
+
 #~ msgid "Change status"
 #~ msgstr "Durumu Değiştir"
 
 #~ msgid "Change status information"
 #~ msgstr "Durum informationu değiştir"
+
+#, fuzzy
+#~ msgid "Change your nickname in a group chat"
+#~ msgstr "[%s sayfasını okuyamazsınız.]"
 
 #, fuzzy
 #~ msgid "Changes the status of account(s)"
@@ -6470,8 +6242,36 @@ msgstr ""
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Paket sisteminin kilitli olup olmadığını kontrol edin."
 
+#, fuzzy
+#~ msgid "Clear chat window"
+#~ msgstr "Pencereyi gizler"
+
+#, fuzzy
+#~ msgid "Clear the text window"
+#~ msgstr "Pencereyi gizler"
+
+#, fuzzy
+#~ msgid "Display names of all group chat participants"
+#~ msgstr "%s mevcut bir grubun ismi değil"
+
+#, fuzzy
+#~ msgid "Display or change a group chat topic"
+#~ msgstr "%s mevcut bir grubun ismi değil"
+
 #~ msgid "Do not disturb"
 #~ msgstr "Rahatsız etmeyin"
+
+#, fuzzy
+#~ msgid "Drop Files or Contacts"
+#~ msgstr "Kişi Davet _Et"
+
+#, fuzzy
+#~ msgid "Enter Password"
+#~ msgstr "Yeni parola girin: "
+
+#, fuzzy
+#~ msgid "Error: Could not process image"
+#~ msgstr "Resim acılamadı"
 
 #~ msgid "Extended away"
 #~ msgstr "Uzun süreli uzakta"
@@ -6479,15 +6279,68 @@ msgstr ""
 #~ msgid "File path"
 #~ msgstr "Dosya yolu"
 
+#, fuzzy
+#~ msgid "Format your message…"
+#~ msgstr "Ileti alınıyor"
+
 #~ msgid "Free for chat"
 #~ msgstr "Sohbet için Hazır"
+
+#, fuzzy
+#~ msgid "Gajim will not try to join this group chat again"
+#~ msgstr "%s grup sohbete katıldı"
+
+#, fuzzy
+#~ msgid "Invalid affiliation given"
+#~ msgstr "üyelik değişti"
+
+#~ msgid "Invalid nickname"
+#~ msgstr "Geçersiz takma ad"
+
+#, fuzzy
+#~ msgid "Invalid role given"
+#~ msgstr "Geçersiz sunucu"
+
+#, fuzzy
+#~ msgid "Join a group chat given by an XMPP Address"
+#~ msgstr "grupdaki herkez"
+
+#, fuzzy
+#~ msgid "Kick Participant"
+#~ msgstr "Katılan"
+
+#, fuzzy
+#~ msgid "Kick user from group chat by nickname"
+#~ msgstr ""
+#~ "Şuraya bir yorum gönderiyorsunuz:\n"
+#~ "  "
+
+#, fuzzy
+#~ msgid "Leave the group chat"
+#~ msgstr "Tam-Ekrandan Çık"
 
 #, fuzzy
 #~ msgid "Missing argument \"contact_jid\""
 #~ msgstr "JID veya Kişi adı girdir"
 
+#, fuzzy
+#~ msgid "Missing arguments"
+#~ msgstr "JID veya Kişi adı girdir"
+
 #~ msgid "Name of the account"
 #~ msgstr "Hesapın ismi"
+
+#, fuzzy
+#~ msgid "Next sent messages"
+#~ msgstr "Önceden hazırlanmış iletleri:"
+
+#, fuzzy
+#~ msgid "Nickname not found"
+#~ msgstr "Kullanıcak takma ad"
+
+#, fuzzy
+#~ msgid "No open voice chats with the contact"
+#~ msgstr "Dosyayı bir kişiye gönderir"
 
 #~ msgid "Offline - disconnect"
 #~ msgstr "Çevrimdışı - bağlantıyı kes"
@@ -6496,8 +6349,45 @@ msgstr ""
 #~ msgstr "Çevrimiçi"
 
 #, fuzzy
+#~ msgid "Open a private chat window with a specified participant"
+#~ msgstr "Kişiyle sohbet pencere _aç"
+
+#, fuzzy
+#~ msgid ""
+#~ "Open a private chat window with a specified participant and send him a "
+#~ "message"
+#~ msgstr "Kişiyle sohbet pencere _aç"
+
+#~ msgid "Ping?"
+#~ msgstr "Ping?"
+
+#, fuzzy
+#~ msgid "Ping? (%s)"
+#~ msgstr "Pong! (%s s.)"
+
+#, fuzzy
+#~ msgid "Pong! (%(nick)s %(delay)s s.)"
+#~ msgstr "Pong! (%s s.)"
+
+#, fuzzy
+#~ msgid "Pong! (%s seconds)"
+#~ msgstr "Pong! (%s s.)"
+
+#, fuzzy
 #~ msgid "Presence description:"
 #~ msgstr "Hata açıklaması…"
+
+#, fuzzy
+#~ msgid "Previously sent message"
+#~ msgstr "Önceden hazırlanmış iletleri:"
+
+#, fuzzy
+#~ msgid "Quote next message"
+#~ msgstr "Mesajı gönder"
+
+#, fuzzy
+#~ msgid "Quote previous message"
+#~ msgstr "durum ileti"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6505,6 +6395,25 @@ msgstr ""
 
 #~ msgid "Returns number of unread messages"
 #~ msgstr "Kaç okunmamış ileti sayısını geri ver"
+
+#, fuzzy
+#~ msgid "Send a disco info request"
+#~ msgstr "     İsteklerin gideceği adres: %(requestaddr)s"
+
+#, fuzzy
+#~ msgid "Send a message to the contact"
+#~ msgstr "Dosyayı bir kişiye gönderir"
+
+#, fuzzy
+#~ msgid "Send a message to the contact that will attract their attention"
+#~ msgstr "Dosyayı bir kişiye gönderir"
+
+#, fuzzy
+#~ msgid "Send a ping to the contact"
+#~ msgstr "Dosyayı bir kişiye gönderir"
+
+#~ msgid "Sending private message failed"
+#~ msgstr "Kişisel ilet gönderimi başarısız"
 
 #, fuzzy
 #~ msgid ""
@@ -6535,8 +6444,20 @@ msgstr ""
 #~ msgstr "Tüm _durum değişikliklerini sistem günlüğüne kaydet"
 
 #, fuzzy
+#~ msgid "T_ry Again"
+#~ msgstr "Tekrar dene ? [e/H] "
+
+#, fuzzy
 #~ msgid "The status has been changed."
 #~ msgstr "Yeni bir oda yaratılmıştır"
+
+#, fuzzy
+#~ msgid "Too many arguments"
+#~ msgstr "JID veya Kişi adı girdir"
+
+#, fuzzy
+#~ msgid "Unknown nickname"
+#~ msgstr "Bu kişi için %s yeni bir takma ad girin."
 
 #, fuzzy
 #~ msgid ""
@@ -6545,6 +6466,14 @@ msgstr ""
 #~ msgstr ""
 #~ "Kullanım: %s [komut satır yordamları reddedildi]\n"
 #~ "  veya:  %s OPTION\n"
+
+#, fuzzy
+#~ msgid "Video chats are not available"
+#~ msgstr "Hiç bir hesap bulunmiyor"
+
+#, fuzzy
+#~ msgid "Voice chats are not available"
+#~ msgstr "Hiç bir hesap bulunmiyor"
 
 #~ msgid "XML to send"
 #~ msgstr "gönderilenecek XML"
@@ -6565,11 +6494,18 @@ msgstr ""
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "Gajimi her zaman kapat"
 
+#, fuzzy
+#~ msgid "_Try Again"
+#~ msgstr "Tekrar dene ? [e/H] "
+
 #~ msgid "command"
 #~ msgstr "komut"
 
 #~ msgid "file"
 #~ msgstr "dosya"
+
+#~ msgid "is paying attention to the conversation"
+#~ msgstr "sohbete dikkat veriyor"
 
 #~ msgid "message contents"
 #~ msgstr "iletinin içindekiler"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-24 12:49+0000\n"
+"POT-Creation-Date: 2022-08-13 16:07+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -16,23 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Rosetta-Version: 0.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1\n"
-
-msgid ""
-"\n"
-"    Ban user by a nick or a JID from a groupchat\n"
-"\n"
-"    If given nickname is not found it will be treated as a JID.\n"
-"    "
-msgstr ""
-
-msgid ""
-"\n"
-"    Set the current status\n"
-"\n"
-"    Status can be given as one of the following values:\n"
-"    online, away, chat, xa, dnd.\n"
-"    "
-msgstr ""
 
 #, fuzzy
 msgid " (Video Call)"
@@ -154,10 +137,6 @@ msgid "%s is not a valid loglevel"
 msgstr ""
 
 #, python-format
-msgid "%s is not a valid tone"
-msgstr ""
-
-#, python-format
 msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the file to."
@@ -178,10 +157,6 @@ msgstr "Zerrendatik kontaktua ezabatu"
 #, fuzzy, python-format
 msgid "%s wants to send you a file"
 msgstr "%s fitxero bat bidali nahi dizu"
-
-#, fuzzy, python-format
-msgid "%s: Nothing found"
-msgstr "%s ez da aurkitu"
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -871,9 +846,6 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allow a participant to send you public or private messages"
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1133,13 +1105,13 @@ msgstr "Minutu batzuk barru berriro hemen."
 msgid "Back soon"
 msgstr "Laster etorriko naiz"
 
+#, fuzzy
+msgid "Ban"
+msgstr "_Debekatu"
+
 #, fuzzy, python-format
 msgid "Ban %s"
 msgstr "Debekatutako Zerrenda"
-
-#, fuzzy
-msgid "Ban Participant"
-msgstr "Partaidea"
 
 msgid "Ban…"
 msgstr ""
@@ -1172,9 +1144,6 @@ msgstr "Debekatze Zerrenda %s-entzat"
 
 msgid "Block…"
 msgstr ""
-
-msgid "Bold"
-msgstr "Negrita"
 
 #, fuzzy
 msgid "Bookmarks"
@@ -1295,10 +1264,6 @@ msgid "Certificate signature failure"
 msgstr ""
 
 #, fuzzy
-msgid "Ch_ange"
-msgstr "Aldatu _Izengoitia"
-
-#, fuzzy
 msgid "Ch_ange Subject"
 msgstr "Aldatu _Gaia"
 
@@ -1323,10 +1288,6 @@ msgstr "Aldatu _Gaia"
 
 msgid "Change your account’s password, etc."
 msgstr ""
-
-#, fuzzy
-msgid "Change your nickname in a group chat"
-msgstr "Aldatu _Izengoitia"
 
 #, fuzzy
 msgid "Change your profile picture"
@@ -1457,16 +1418,8 @@ msgid "Clear Sound"
 msgstr "Aukeratu Soinua"
 
 #, fuzzy
-msgid "Clear chat window"
-msgstr "Erabilera: %s, testu leihoa itxi."
-
-#, fuzzy
 msgid "Clear message entry"
 msgstr "Mezua Bidaltzean"
-
-#, fuzzy
-msgid "Clear the text window"
-msgstr "Erabilera: %s, testu leihoa itxi."
 
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
@@ -1507,11 +1460,6 @@ msgstr ""
 #, fuzzy
 msgid "Command List"
 msgstr "Azalpenak: %s"
-
-msgid ""
-"Command disabled. This command can be enabled by setting "
-"'command_system_execute' to True in ACE (Advanced Configuration Editor)."
-msgstr ""
 
 #, fuzzy
 msgid "Commands"
@@ -1744,6 +1692,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr "_Lotura kokapena kopiatu"
 
+msgid "Correct"
+msgstr ""
+
 #, fuzzy
 msgid "Could not Open File"
 msgstr "Ezin izan da irudia kargatu"
@@ -1932,14 +1883,6 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
-#, fuzzy
-msgid "Display names of all group chat participants"
-msgstr "Erabilera:/%s , erakutsarazi gelako pertsonen izenak."
-
-#, fuzzy
-msgid "Display or change a group chat topic"
-msgstr "Galdetu leiho bat itxi baino lehen."
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Baimen hau onartzen al duzu?"
@@ -2000,10 +1943,6 @@ msgstr "%d mezu irakurri gabe"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Sortzen"
-
-#, fuzzy
-msgid "Drop Files or Contacts"
-msgstr "Kontaktua"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2102,23 +2041,26 @@ msgid "Encrypting file…"
 msgstr "Enkriptazioa desaktibatuta"
 
 #, fuzzy
+msgid "Encryption error"
+msgstr "Enkriptazioa aktibatuta"
+
+#, fuzzy
 msgid "Encryption required"
 msgstr "Enkriptazioa aktibatuta"
 
 msgid "End call"
 msgstr ""
 
-#, fuzzy
-msgid "Enter Nickname"
-msgstr "Sartu Izengoitia"
-
-#, fuzzy
-msgid "Enter Password"
-msgstr "Sartu pasahitz berria:"
+msgid "Enter a password to join this chat"
+msgstr ""
 
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Sartu pasahitz berria:"
+
+#, fuzzy
+msgid "Enter your new nickname"
+msgstr "Sartu Izengoitia"
 
 msgid ""
 "Enter your nickname. This is how your name is displayed to your contacts."
@@ -2130,9 +2072,6 @@ msgstr ""
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Aukeratu Irudia"
-
-msgid "Error during command execution!"
-msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2174,10 +2113,6 @@ msgstr "Avahi error"
 msgid "Error: %s"
 msgstr "Errore mezua: %s"
 
-#, fuzzy
-msgid "Error: Could not process image"
-msgstr "Ezin izan da irudia kargatu"
-
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr "Errorea: ezin da %s ireki irakurtzeko"
@@ -2201,12 +2136,6 @@ msgstr "_Komandoa Exekutatu..."
 #, fuzzy
 msgid "Execute Command…"
 msgstr "_Komandoa Exekutatu..."
-
-msgid "Execute expression inside a shell, send output"
-msgstr ""
-
-msgid "Execute expression inside a shell, show output"
-msgstr ""
 
 #, fuzzy
 msgid "Executing…"
@@ -2410,9 +2339,6 @@ msgstr ""
 msgid "For example: \"Julia is now online\""
 msgstr ""
 
-msgid "Forbid a participant to send you public or private messages"
-msgstr ""
-
 #, fuzzy
 msgid "Force Bookmark 2 usage"
 msgstr "_Talde Agendan Sartu Gela hau"
@@ -2420,6 +2346,10 @@ msgstr "_Talde Agendan Sartu Gela hau"
 #, fuzzy
 msgid "Forever"
 msgstr "_Inoiz"
+
+#, fuzzy
+msgid "Forget Group Chat"
+msgstr "Txat Taldea Berria"
 
 #, fuzzy
 msgid "Forget this Group Chat"
@@ -2440,10 +2370,6 @@ msgstr ""
 #, fuzzy
 msgid "Format your message"
 msgstr "%d mezu irakurri gabe"
-
-#, fuzzy
-msgid "Format your message…"
-msgstr "Mezu Pribatu Berri Bat"
 
 msgid "Free for Chat"
 msgstr "Libre Hitz Egiteko"
@@ -2507,10 +2433,6 @@ msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
-
-#, fuzzy
-msgid "Gajim will not try to join this group chat again"
-msgstr "Hautatua badago, Gajim-ek  txat talde honetan sartuko da abiaraztean"
 
 msgid "Gajim will now exit"
 msgstr "Gajim orain badago"
@@ -2664,6 +2586,10 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
+#, fuzzy
+msgid "Hide chat list"
+msgstr "Partaidea"
+
 msgid "Hide this menu"
 msgstr "Ezkutatu Menua"
 
@@ -2756,9 +2682,6 @@ msgstr ""
 "Hautatua badago, Gajim-ek zerrendan eta txat taldeetan kontaktuen abatereak "
 "azalaraziko ditu"
 
-msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
-msgstr ""
-
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 
@@ -2791,7 +2714,7 @@ msgstr ""
 "zerbitzariarengandik. "
 
 #, fuzzy, python-format
-msgid "If you close this chat, you will leave '%s'."
+msgid "If you close this chat, you will leave \"%s\"."
 msgstr "Leiho hau isten baduzu, gela honetatik deskonektatuko zara."
 
 msgid ""
@@ -2889,20 +2812,12 @@ msgid "Invalid XMPP Address"
 msgstr "Fitxero Baliogabea"
 
 #, fuzzy
-msgid "Invalid affiliation given"
-msgstr "Afizioak: "
-
-#, fuzzy
 msgid "Invalid domain name"
 msgstr "Kontu izen baliogabea"
 
 #, fuzzy
-msgid "Invalid nickname"
-msgstr "Baliogabeko izena"
-
-#, fuzzy
-msgid "Invalid role given"
-msgstr "Baliogabeko izena"
+msgid "Invite"
+msgstr "Honera gonbidatu"
 
 #, fuzzy
 msgid "Invite Contacts"
@@ -2915,9 +2830,6 @@ msgstr "Kontaktua"
 #, fuzzy
 msgid "Invite New Contact"
 msgstr "Kontaktua"
-
-msgid "Invite a user to a group chat for a reason"
-msgstr ""
 
 msgid "Invite friends to group chats or join one"
 msgstr ""
@@ -2950,9 +2862,6 @@ msgstr ""
 
 msgid "It is not possible to send empty files"
 msgstr "Ez da posible hutsik dauden artxiboak bidaltzea"
-
-msgid "Italic"
-msgstr "Etzana"
 
 #, fuzzy
 msgid "I’m eating."
@@ -3007,10 +2916,6 @@ msgid "Join Support Chat"
 msgstr "Txat Taldean Sartu"
 
 #, fuzzy
-msgid "Join a group chat given by an XMPP Address"
-msgstr "Txat Taldean _Sartu"
-
-#, fuzzy
 msgid "Joining…"
 msgstr "Debekatzen..."
 
@@ -3031,17 +2936,13 @@ msgstr ""
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
+#, fuzzy
+msgid "Kick"
+msgstr "_Bota"
+
 #, fuzzy, python-format
 msgid "Kick %s"
 msgstr "Botatzen %s"
-
-#, fuzzy
-msgid "Kick Participant"
-msgstr "Partaidea"
-
-#, fuzzy
-msgid "Kick user from group chat by nickname"
-msgstr "Gela honetan ukatua izan zara."
 
 #, fuzzy
 msgid "Kick…"
@@ -3061,17 +2962,10 @@ msgstr "Azken egoera: %s"
 msgid "Leave Group Chat"
 msgstr "Txat Taldea Berria"
 
-#, fuzzy
-msgid "Leave the group chat"
-msgstr "Txat Taldea Berria"
-
 msgid "Left Click Action"
 msgstr ""
 
 msgid "Let others know if you read up to this point"
-msgstr ""
-
-msgid "Limit must be an integer"
 msgstr ""
 
 #, fuzzy
@@ -3259,11 +3153,10 @@ msgstr "Kontaktuen egoera aldaketak gorde"
 msgid "Miscellaneous"
 msgstr "<b>Denetatik</b>"
 
-#, fuzzy
-msgid "Missing arguments"
-msgstr "Galdutako argumentua  \"contact_jid\""
-
 msgid "Missing dependencies for Audio/Video"
+msgstr ""
+
+msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
@@ -3333,23 +3226,15 @@ msgstr "Bilatu"
 msgid "New Workspace"
 msgstr "Berridatzi Kontaktua"
 
-#, fuzzy, python-format
-msgid "New message from %s"
+#, fuzzy
+msgid "New message from"
 msgstr "Mezu Berria %(nickname)s -etik"
 
 msgid "Next"
 msgstr ""
 
-#, fuzzy
-msgid "Next sent messages"
-msgstr "Ezarritako egoerak:"
-
 msgid "Nickname"
 msgstr "Izengoitia"
-
-#, fuzzy
-msgid "Nickname not found"
-msgstr "Izengoitia aurkitugabea: %s"
 
 #, fuzzy
 msgid "No"
@@ -3406,10 +3291,6 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "Ez dago konturik erabilgarri"
-
-#, fuzzy
-msgid "No open voice chats with the contact"
-msgstr "Sakatu kontaktu honen elkarrizketa zaharrak ikusteko"
 
 #, fuzzy
 msgid "No proxy used"
@@ -3538,20 +3419,6 @@ msgstr "Konexioak huts egin du"
 #, fuzzy
 msgid "Open _Folder"
 msgstr "_Ireki Fitxeroaren Edukia"
-
-#, fuzzy
-msgid "Open a private chat window with a specified participant"
-msgstr ""
-"Erabilera: /%s <nickname>, ireki txat pribatu bat espezifikatutako "
-"erabiltzaileari."
-
-#, fuzzy
-msgid ""
-"Open a private chat window with a specified participant and send him a "
-"message"
-msgstr ""
-"Erabilera: /%s <nickname>, ireki txat pribatu bat espezifikatutako "
-"erabiltzaileari."
 
 msgid "Open as _Link"
 msgstr "Ireki _lotura bezala"
@@ -3715,13 +3582,6 @@ msgstr "Izengoitia aurkitugabea: %s"
 msgid "Pin Chat"
 msgstr "Fitxeroa Transferitzeko Baimena"
 
-msgid "Ping?"
-msgstr ""
-
-#, python-format
-msgid "Ping? (%s)"
-msgstr ""
-
 msgid "Pinned"
 msgstr ""
 
@@ -3812,14 +3672,6 @@ msgstr ""
 msgid "Plugins Updated Successfully"
 msgstr "Konexioak huts egin du"
 
-#, python-format
-msgid "Pong! (%(nick)s %(delay)s s.)"
-msgstr ""
-
-#, python-format
-msgid "Pong! (%s seconds)"
-msgstr ""
-
 #, fuzzy
 msgid "Port"
 msgstr "_Portua:"
@@ -3863,10 +3715,6 @@ msgstr ""
 
 msgid "Previous"
 msgstr ""
-
-#, fuzzy
-msgid "Previously sent message"
-msgstr "Ezarritako egoerak:"
 
 msgid "Print XML stanzas and other debug information"
 msgstr ""
@@ -3939,14 +3787,6 @@ msgstr "At_era"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quote next message"
-msgstr "Bidali mezua"
-
-#, fuzzy
-msgid "Quote previous message"
-msgstr "egoera mezua"
 
 #, fuzzy
 msgid "Quote…"
@@ -4448,9 +4288,6 @@ msgstr "Azken egoera: %s"
 msgid "Send Chatstate in Group Chats"
 msgstr "Ezin da gela honetara sartu"
 
-msgid "Send DTMF sequence through an open voice chat"
-msgstr ""
-
 #, fuzzy
 msgid "Send File"
 msgstr "Bidali _Fitxeroa"
@@ -4487,24 +4324,6 @@ msgstr "Bidali keep-alive paketeak"
 msgid "Send _Report"
 msgstr "_Report Bug"
 
-msgid "Send a disco info request"
-msgstr ""
-
-#, fuzzy
-msgid "Send a message to the contact"
-msgstr "Erabilera:/%s, ezkutatu txat-eko botoilak."
-
-#, fuzzy
-msgid "Send a message to the contact that will attract their attention"
-msgstr "Erabilera:/%s, ezkutatu txat-eko botoilak."
-
-#, fuzzy
-msgid "Send a ping to the contact"
-msgstr "Fitxero bat bidali kontaktu bati"
-
-msgid "Send action (in the third person) to the current chat"
-msgstr ""
-
 #, fuzzy
 msgid "Send message on Ctrl+Enter and make a new line with Enter."
 msgstr ""
@@ -4517,9 +4336,6 @@ msgstr "Bidali mezua"
 
 msgid "Sender: "
 msgstr "Bidaltzailea: "
-
-msgid "Sending private message failed"
-msgstr "Mezu pribatua bidaltzeak huts egin du"
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4582,27 +4398,9 @@ msgstr "Zerbitzaria"
 msgid "Set configuration directory"
 msgstr "Gelaren Konfigurazioa"
 
-msgid ""
-"Set participant affiliation in group chat.\n"
-"    Affiliation can be given as one of the following values:\n"
-"    owner, admin, member, outcast, none"
-msgstr ""
-
-msgid ""
-"Set participant role in group chat.\n"
-"    Role can be given as one of the following values:\n"
-"    moderator, participant, visitor, none"
-msgstr ""
-
 #, fuzzy
 msgid "Set status message"
 msgstr "egoera mezua"
-
-msgid "Set the current status to away"
-msgstr ""
-
-msgid "Set the current status to online"
-msgstr ""
 
 msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
@@ -4717,9 +4515,9 @@ msgstr ""
 msgid "Show all warnings"
 msgstr "Ikusi Gabeko _Gertaerak"
 
-msgid ""
-"Show help on a given command or a list of available commands if -a is given"
-msgstr ""
+#, fuzzy
+msgid "Show chat list"
+msgstr "Kontu Eraldaketa"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -4728,9 +4526,6 @@ msgstr "Trans_porteak Erakutsi"
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
-msgstr ""
-
-msgid "Show logged messages which mention given text"
 msgstr ""
 
 msgid ""
@@ -4967,10 +4762,6 @@ msgid "Street"
 msgstr "Kalea:"
 
 #, fuzzy
-msgid "Strike"
-msgstr "Izengoitia"
-
-#, fuzzy
 msgid "Style"
 msgstr "Stalled"
 
@@ -5058,9 +4849,6 @@ msgstr "<b>Bezeroak</b>"
 msgid "TLS verification failed: %s"
 msgstr "Jakinarazketa Berezia Gehitzen %s-entzat"
 
-msgid "T_ry Again"
-msgstr ""
-
 msgid "Tabbed chat window"
 msgstr ""
 
@@ -5116,9 +4904,6 @@ msgid ""
 msgstr ""
 
 msgid "The last message was written on a mobile client"
-msgstr ""
-
-msgid "The same as using a doc-string, except it supports translation"
 msgstr ""
 
 #, fuzzy
@@ -5312,19 +5097,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Partaidea"
 
-msgid "Toggle Video Chat"
-msgstr ""
-
-msgid "Toggle Voice Chat"
-msgstr ""
-
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Partaidea"
-
-#, fuzzy
-msgid "Too many arguments"
-msgstr "Galdutako argumentua  \"contact_jid\""
 
 msgid "Topic"
 msgstr ""
@@ -5443,10 +5218,6 @@ msgstr ""
 
 #, fuzzy
 msgid "Unknown language"
-msgstr "Izengoitiaren on_doren:"
-
-#, fuzzy
-msgid "Unknown nickname"
 msgstr "Izengoitiaren on_doren:"
 
 #, fuzzy
@@ -5604,10 +5375,6 @@ msgstr "Txat Pribatua"
 msgid "Video calls are not available on Windows"
 msgstr "Konexioa ez erablgarri"
 
-#, fuzzy
-msgid "Video chats are not available"
-msgstr "Konexioa ez erablgarri"
-
 msgid "Video test"
 msgstr ""
 
@@ -5630,10 +5397,6 @@ msgstr "<b>Ikusizko Jakinarazketa</b>"
 #, fuzzy
 msgid "Voice Request"
 msgstr "Fitxeroa Transferitzeko Baimena"
-
-#, fuzzy
-msgid "Voice chats are not available"
-msgstr "Konexioa ez erablgarri"
 
 #, fuzzy
 msgid "Waiting…"
@@ -5753,11 +5516,6 @@ msgstr "Ziur al zaude \"%s\" gelatik atera nahi duzula?"
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "Ezabatu nahi al duzu %s taldea zerrendatik?"
-
-#, fuzzy, python-format
-msgid ""
-"You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
-msgstr "Ez zaude gela honetan \"%s\"jadanik edo \"%s\" joan da."
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5967,9 +5725,6 @@ msgstr ""
 msgid "_Back"
 msgstr "Laster etorriko naiz"
 
-msgid "_Ban"
-msgstr "_Debekatu"
-
 msgid "_Block"
 msgstr ""
 
@@ -6057,10 +5812,6 @@ msgstr "Zerbitzariaren Ezaugarriak:"
 msgid "_File Transfer"
 msgstr "Fitxero Transferentzia"
 
-#, fuzzy
-msgid "_Forget Group Chat"
-msgstr "Txat Taldea Berria"
-
 msgid "_Free for Chat"
 msgstr "Libre _Hitz Egiteko"
 
@@ -6085,9 +5836,6 @@ msgstr "_Sartu"
 
 msgid "_Keyboard Shortcuts"
 msgstr ""
-
-msgid "_Kick"
-msgstr "_Bota"
 
 msgid "_Later"
 msgstr ""
@@ -6233,9 +5981,6 @@ msgstr ""
 msgid "_Subscribe"
 msgstr "_Harpidetu"
 
-msgid "_Try Again"
-msgstr ""
-
 #, fuzzy
 msgid "_Type"
 msgstr "Mota:"
@@ -6297,6 +6042,9 @@ msgstr ""
 msgid "bearing"
 msgstr "arrantzale"
 
+msgid "bold"
+msgstr ""
+
 #, fuzzy
 msgid "building"
 msgstr "Botatzen %s"
@@ -6343,9 +6091,6 @@ msgstr "fitxeroen transferentziaren lista"
 msgid "floor"
 msgstr ""
 
-msgid "has closed the chat window or tab"
-msgstr "tab edo lehioa itxi egin du"
-
 #, fuzzy
 msgid ""
 "has invited you to a group chat.\n"
@@ -6362,8 +6107,9 @@ msgstr "mezu bat sortzen ari da..."
 msgid "is doing something else"
 msgstr "beste zerbait egiten ari da"
 
-msgid "is paying attention to the conversation"
-msgstr "arreta jartzen ari da elkarrizketara"
+#, fuzzy
+msgid "italic"
+msgstr "Etzana"
 
 msgid "lat"
 msgstr ""
@@ -6411,6 +6157,10 @@ msgstr ""
 
 msgid "street"
 msgstr ""
+
+#, fuzzy
+msgid "strike"
+msgstr "Izengoitia"
 
 msgid "text"
 msgstr ""
@@ -6472,6 +6222,10 @@ msgstr ""
 #~ msgstr "%s ez da aurkitu"
 
 #, fuzzy
+#~ msgid "%s: Nothing found"
+#~ msgstr "%s ez da aurkitu"
+
+#, fuzzy
 #~ msgid ""
 #~ "'%s' is not in your contact list.\n"
 #~ "Please specify account for sending the message."
@@ -6515,12 +6269,27 @@ msgstr ""
 #~ msgstr "Argumentuak:"
 
 #, fuzzy
+#~ msgid "Ban Participant"
+#~ msgstr "Partaidea"
+
+#~ msgid "Bold"
+#~ msgstr "Negrita"
+
+#, fuzzy
+#~ msgid "Ch_ange"
+#~ msgstr "Aldatu _Izengoitia"
+
+#, fuzzy
 #~ msgid "Change status"
 #~ msgstr "Kontaktu Egoera Aldaketa"
 
 #, fuzzy
 #~ msgid "Change status information"
 #~ msgstr "Kontaktuaren Informazioa"
+
+#, fuzzy
+#~ msgid "Change your nickname in a group chat"
+#~ msgstr "Aldatu _Izengoitia"
 
 #, fuzzy
 #~ msgid "Changes the priority of account(s)"
@@ -6534,20 +6303,57 @@ msgstr ""
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Mesedez begiratu avahi-daemon martxan dagoen."
 
+#, fuzzy
+#~ msgid "Clear chat window"
+#~ msgstr "Erabilera: %s, testu leihoa itxi."
+
+#, fuzzy
+#~ msgid "Clear the text window"
+#~ msgstr "Erabilera: %s, testu leihoa itxi."
+
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr ""
 #~ "D-bus ez dago ordenagailu honetan edo python moduloak ez daude erabilgarri"
 
 #, fuzzy
+#~ msgid "Display names of all group chat participants"
+#~ msgstr "Erabilera:/%s , erakutsarazi gelako pertsonen izenak."
+
+#, fuzzy
+#~ msgid "Display or change a group chat topic"
+#~ msgstr "Galdetu leiho bat itxi baino lehen."
+
+#, fuzzy
 #~ msgid "Do not disturb"
 #~ msgstr "Ez nahasi."
+
+#, fuzzy
+#~ msgid "Drop Files or Contacts"
+#~ msgstr "Kontaktua"
+
+#, fuzzy
+#~ msgid "Enter Password"
+#~ msgstr "Sartu pasahitz berria:"
+
+#, fuzzy
+#~ msgid "Error: Could not process image"
+#~ msgstr "Ezin izan da irudia kargatu"
 
 #~ msgid "File path"
 #~ msgstr "Fitxeroaren tokia"
 
 #, fuzzy
+#~ msgid "Format your message…"
+#~ msgstr "Mezu Pribatu Berri Bat"
+
+#, fuzzy
 #~ msgid "Free for chat"
 #~ msgstr "Libre Hitz Egiteko"
+
+#, fuzzy
+#~ msgid "Gajim will not try to join this group chat again"
+#~ msgstr ""
+#~ "Hautatua badago, Gajim-ek  txat talde honetan sartuko da abiaraztean"
 
 #~ msgid "Gets detailed info on a account"
 #~ msgstr "Kontaktu baten informazioa lortu"
@@ -6567,6 +6373,34 @@ msgstr ""
 #~ "setting is taken into account only if trayicon is used."
 
 #, fuzzy
+#~ msgid "Invalid affiliation given"
+#~ msgstr "Afizioak: "
+
+#, fuzzy
+#~ msgid "Invalid nickname"
+#~ msgstr "Baliogabeko izena"
+
+#, fuzzy
+#~ msgid "Invalid role given"
+#~ msgstr "Baliogabeko izena"
+
+#, fuzzy
+#~ msgid "Join a group chat given by an XMPP Address"
+#~ msgstr "Txat Taldean _Sartu"
+
+#, fuzzy
+#~ msgid "Kick Participant"
+#~ msgstr "Partaidea"
+
+#, fuzzy
+#~ msgid "Kick user from group chat by nickname"
+#~ msgstr "Gela honetan ukatua izan zara."
+
+#, fuzzy
+#~ msgid "Leave the group chat"
+#~ msgstr "Txat Taldea Berria"
+
+#, fuzzy
 #~ msgid "Lists all contacts in the contact list, one for each line"
 #~ msgstr ""
 #~ "Zerrendan inprimatu kontaktu guztien lista. Kontaktu horiek hainbat "
@@ -6575,19 +6409,61 @@ msgstr ""
 #~ msgid "Missing argument \"contact_jid\""
 #~ msgstr "Galdutako argumentua  \"contact_jid\""
 
+#, fuzzy
+#~ msgid "Missing arguments"
+#~ msgstr "Galdutako argumentua  \"contact_jid\""
+
 #~ msgid "Name of the account"
 #~ msgstr "Kontuaren izena"
+
+#, fuzzy
+#~ msgid "Next sent messages"
+#~ msgstr "Ezarritako egoerak:"
+
+#, fuzzy
+#~ msgid "Nickname not found"
+#~ msgstr "Izengoitia aurkitugabea: %s"
+
+#, fuzzy
+#~ msgid "No open voice chats with the contact"
+#~ msgstr "Sakatu kontaktu honen elkarrizketa zaharrak ikusteko"
 
 #, fuzzy
 #~ msgid "Online"
 #~ msgstr "bederatzi"
 
 #, fuzzy
+#~ msgid "Open a private chat window with a specified participant"
+#~ msgstr ""
+#~ "Erabilera: /%s <nickname>, ireki txat pribatu bat espezifikatutako "
+#~ "erabiltzaileari."
+
+#, fuzzy
+#~ msgid ""
+#~ "Open a private chat window with a specified participant and send him a "
+#~ "message"
+#~ msgstr ""
+#~ "Erabilera: /%s <nickname>, ireki txat pribatu bat espezifikatutako "
+#~ "erabiltzaileari."
+
+#, fuzzy
 #~ msgid "Presence description:"
 #~ msgstr "Deskripzio errorea...."
 
+#, fuzzy
+#~ msgid "Previously sent message"
+#~ msgstr "Ezarritako egoerak:"
+
 #~ msgid "Prints a list of registered accounts"
 #~ msgstr "Inprimatu erregistratutako kontuen lista"
+
+#, fuzzy
+#~ msgid "Quote next message"
+#~ msgstr "Bidali mezua"
+
+#, fuzzy
+#~ msgid "Quote previous message"
+#~ msgstr "egoera mezua"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6606,6 +6482,21 @@ msgstr ""
 #, fuzzy
 #~ msgid "Returns number of unread messages"
 #~ msgstr "Irakurri gabeko mezuen kontaketa itzuli"
+
+#, fuzzy
+#~ msgid "Send a message to the contact"
+#~ msgstr "Erabilera:/%s, ezkutatu txat-eko botoilak."
+
+#, fuzzy
+#~ msgid "Send a message to the contact that will attract their attention"
+#~ msgstr "Erabilera:/%s, ezkutatu txat-eko botoilak."
+
+#, fuzzy
+#~ msgid "Send a ping to the contact"
+#~ msgstr "Fitxero bat bidali kontaktu bati"
+
+#~ msgid "Sending private message failed"
+#~ msgstr "Mezu pribatua bidaltzeak huts egin du"
 
 #, fuzzy
 #~ msgid ""
@@ -6650,12 +6541,20 @@ msgstr ""
 #~ msgstr "Kontaktuen egoera aldaketak gorde"
 
 #, fuzzy
+#~ msgid "Too many arguments"
+#~ msgstr "Galdutako argumentua  \"contact_jid\""
+
+#, fuzzy
 #~ msgid ""
 #~ "Too many arguments. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
 #~ msgstr ""
 #~ "Argument \"%s\" is not specified. \n"
 #~ "Type \"%s help %s\" for more info"
+
+#, fuzzy
+#~ msgid "Unknown nickname"
+#~ msgstr "Izengoitiaren on_doren:"
 
 #, fuzzy
 #~ msgid ""
@@ -6666,6 +6565,14 @@ msgstr ""
 #~ msgstr ""
 #~ "Usage: %s command [arguments]\n"
 #~ "Command is one of:\n"
+
+#, fuzzy
+#~ msgid "Video chats are not available"
+#~ msgstr "Konexioa ez erablgarri"
+
+#, fuzzy
+#~ msgid "Voice chats are not available"
+#~ msgstr "Konexioa ez erablgarri"
 
 #~ msgid "XML to send"
 #~ msgstr " XML bidaltzeko"
@@ -6681,6 +6588,11 @@ msgstr ""
 #, fuzzy
 #~ msgid "XMPP Address of the group chat that will receive the message"
 #~ msgstr "Mezua jaso dugun kontuaren JID-a"
+
+#, fuzzy
+#~ msgid ""
+#~ "You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
+#~ msgstr "Ez zaude gela honetan \"%s\"jadanik edo \"%s\" joan da."
 
 #~ msgid "You have no active account"
 #~ msgstr "Ez duzu aktibatutako konturik"
@@ -6708,6 +6620,9 @@ msgstr ""
 #~ msgid "file"
 #~ msgstr "fitxeroa"
 
+#~ msgid "has closed the chat window or tab"
+#~ msgstr "tab edo lehioa itxi egin du"
+
 #~ msgid "if specified, contact is taken from the contact list of this account"
 #~ msgstr ""
 #~ "hautatua badago, kontaktua kontu honen kontaktu listatik lortuko da."
@@ -6717,6 +6632,9 @@ msgstr ""
 
 #~ msgid "if specified, the message will be sent using this account"
 #~ msgstr "hautatua badago, mezua kontu hau erabiliz bidaliko da"
+
+#~ msgid "is paying attention to the conversation"
+#~ msgstr "arreta jartzen ari da elkarrizketara"
 
 #~ msgid "message contents"
 #~ msgstr "mezuaren edukia"

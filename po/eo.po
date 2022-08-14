@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-24 12:49+0000\n"
+"POT-Creation-Date: 2022-08-13 16:07+0000\n"
 "PO-Revision-Date: 2020-08-19 19:27+0000\n"
 "Last-Translator: Vincent L <vincent.laporte+gajim@mailbox.org>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -17,23 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.1.1\n"
-
-msgid ""
-"\n"
-"    Ban user by a nick or a JID from a groupchat\n"
-"\n"
-"    If given nickname is not found it will be treated as a JID.\n"
-"    "
-msgstr ""
-
-msgid ""
-"\n"
-"    Set the current status\n"
-"\n"
-"    Status can be given as one of the following values:\n"
-"    online, away, chat, xa, dnd.\n"
-"    "
-msgstr ""
 
 #, fuzzy
 msgid " (Video Call)"
@@ -152,10 +135,6 @@ msgstr ""
 msgid "%s is not a valid loglevel"
 msgstr "%s ne estas valida protokola detalnivelo"
 
-#, fuzzy, python-format
-msgid "%s is not a valid tone"
-msgstr "%s ne estas valida protokola detalnivelo"
-
 #, python-format
 msgid ""
 "%s is online with multiple devices.\n"
@@ -177,10 +156,6 @@ msgstr "Forigas kontakton el kontaktlisto"
 #, fuzzy, python-format
 msgid "%s wants to send you a file"
 msgstr "%s volas sendi dosieron al vi."
-
-#, fuzzy, python-format
-msgid "%s: Nothing found"
-msgstr "%s ne trovitas"
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -868,9 +843,6 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allow a participant to send you public or private messages"
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1128,13 +1100,13 @@ msgstr "Revenos post kelkaj minutoj."
 msgid "Back soon"
 msgstr "Revenos baldaŭ"
 
+#, fuzzy
+msgid "Ban"
+msgstr "_Malpermesi"
+
 #, fuzzy, python-format
 msgid "Ban %s"
 msgstr "Listo de malpermesoj"
-
-#, fuzzy
-msgid "Ban Participant"
-msgstr "Partoprenanto"
 
 msgid "Ban…"
 msgstr ""
@@ -1169,9 +1141,6 @@ msgstr "Privata listo por %s"
 #, fuzzy
 msgid "Block…"
 msgstr "Kontaktoj"
-
-msgid "Bold"
-msgstr "Dika"
 
 #, fuzzy
 msgid "Bookmarks"
@@ -1291,10 +1260,6 @@ msgid "Certificate signature failure"
 msgstr ""
 
 #, fuzzy
-msgid "Ch_ange"
-msgstr "Ŝanĝi kaŝ_nomon"
-
-#, fuzzy
 msgid "Ch_ange Subject"
 msgstr "Ŝanĝi _temon"
 
@@ -1319,10 +1284,6 @@ msgstr "Ŝanĝi _temon"
 
 msgid "Change your account’s password, etc."
 msgstr ""
-
-#, fuzzy
-msgid "Change your nickname in a group chat"
-msgstr "Ŝanĝi kaŝ_nomon"
 
 #, fuzzy
 msgid "Change your profile picture"
@@ -1453,16 +1414,8 @@ msgid "Clear Sound"
 msgstr "Elektu sonon"
 
 #, fuzzy
-msgid "Clear chat window"
-msgstr "Uzado: /%s, - malplenigas la tekstan fenestron."
-
-#, fuzzy
 msgid "Clear message entry"
 msgstr "Mesaĝo sendita"
-
-#, fuzzy
-msgid "Clear the text window"
-msgstr "Uzado: /%s, - malplenigas la tekstan fenestron."
 
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
@@ -1503,11 +1456,6 @@ msgstr "Koloro"
 #, fuzzy
 msgid "Command List"
 msgstr "Komandoj: %s"
-
-msgid ""
-"Command disabled. This command can be enabled by setting "
-"'command_system_execute' to True in ACE (Advanced Configuration Editor)."
-msgstr ""
 
 #, fuzzy
 msgid "Commands"
@@ -1740,6 +1688,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr "_Kopii ligilan lokon"
 
+msgid "Correct"
+msgstr ""
+
 #, fuzzy
 msgid "Could not Open File"
 msgstr "Ne povas alŝuti bildon"
@@ -1928,14 +1879,6 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
-#, fuzzy
-msgid "Display names of all group chat participants"
-msgstr "Uzado: /%s , - eligas la nomoj de babilejaj ĉeestantoj."
-
-#, fuzzy
-msgid "Display or change a group chat topic"
-msgstr "Demandi antaŭ fermi babilejan fenestron/slipon."
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Ĉu vi akceptas tiun peton?"
@@ -1996,10 +1939,6 @@ msgstr " %d nelegita mesaĝo"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Tajpas mesaĝon"
-
-#, fuzzy
-msgid "Drop Files or Contacts"
-msgstr "Sendi dosieron al kontakto"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2098,23 +2037,26 @@ msgid "Encrypting file…"
 msgstr "Ĉifrado malebligata"
 
 #, fuzzy
+msgid "Encryption error"
+msgstr "Ĉifrado ebligata"
+
+#, fuzzy
 msgid "Encryption required"
 msgstr "Ĉifrado ebligata"
 
 msgid "End call"
 msgstr ""
 
-#, fuzzy
-msgid "Enter Nickname"
-msgstr "Enmeti kaŝnomon"
-
-#, fuzzy
-msgid "Enter Password"
-msgstr "Enigu novan pasvorton:"
+msgid "Enter a password to join this chat"
+msgstr ""
 
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Enigu novan pasvorton:"
+
+#, fuzzy
+msgid "Enter your new nickname"
+msgstr "Enmeti kaŝnomon"
 
 msgid ""
 "Enter your nickname. This is how your name is displayed to your contacts."
@@ -2126,9 +2068,6 @@ msgstr ""
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Elektu bildon"
-
-msgid "Error during command execution!"
-msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2168,10 +2107,6 @@ msgstr "Eraro !"
 msgid "Error: %s"
 msgstr "Erara mesaĝo: %s"
 
-#, fuzzy
-msgid "Error: Could not process image"
-msgstr "Ne povas alŝuti bildon"
-
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr "Eraro: ne povas malfermi %s por legi"
@@ -2195,12 +2130,6 @@ msgstr "_Plenumi komandon..."
 #, fuzzy
 msgid "Execute Command…"
 msgstr "_Plenumi komandon..."
-
-msgid "Execute expression inside a shell, send output"
-msgstr ""
-
-msgid "Execute expression inside a shell, show output"
-msgstr ""
 
 #, fuzzy
 msgid "Executing…"
@@ -2404,9 +2333,6 @@ msgstr ""
 msgid "For example: \"Julia is now online\""
 msgstr ""
 
-msgid "Forbid a participant to send you public or private messages"
-msgstr ""
-
 #, fuzzy
 msgid "Force Bookmark 2 usage"
 msgstr "Starigi legosignon por tiu babilejo"
@@ -2414,6 +2340,10 @@ msgstr "Starigi legosignon por tiu babilejo"
 #, fuzzy
 msgid "Forever"
 msgstr "_Neniam"
+
+#, fuzzy
+msgid "Forget Group Chat"
+msgstr "Nova babilejo"
 
 #, fuzzy
 msgid "Forget this Group Chat"
@@ -2434,10 +2364,6 @@ msgstr ""
 #, fuzzy
 msgid "Format your message"
 msgstr " %d nelegita mesaĝo"
-
-#, fuzzy
-msgid "Format your message…"
-msgstr "Nova privata mesaĝo"
 
 msgid "Free for Chat"
 msgstr "Babilema"
@@ -2502,10 +2428,6 @@ msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
-
-#, fuzzy
-msgid "Gajim will not try to join this group chat again"
-msgstr "Se markitas, Gajim aliĝos al tiu ĉi babilejo dum lanĉo"
 
 msgid "Gajim will now exit"
 msgstr "Gajim fermos tuj"
@@ -2659,6 +2581,10 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
+#, fuzzy
+msgid "Hide chat list"
+msgstr "Partoprenanto"
+
 msgid "Hide this menu"
 msgstr "Kaŝi tiun ĉi menuon"
 
@@ -2751,9 +2677,6 @@ msgstr ""
 "Se markitas, Gajim montros kaŝbildetojn de kontaktoj en kontaktlista "
 "fenestro kaj en babilejoj"
 
-msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
-msgstr ""
-
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 
@@ -2786,7 +2709,7 @@ msgstr ""
 "negativa prioritato, vi ricevos neniujn mesaĝojn de via servilo."
 
 #, fuzzy, python-format
-msgid "If you close this chat, you will leave '%s'."
+msgid "If you close this chat, you will leave \"%s\"."
 msgstr "Se vi fermos tiun fenestron, vi senkonektiĝos de tiu ĉi babilejo."
 
 msgid ""
@@ -2884,20 +2807,12 @@ msgid "Invalid XMPP Address"
 msgstr "Malkorekta dosiero"
 
 #, fuzzy
-msgid "Invalid affiliation given"
-msgstr "Aparteneco:"
-
-#, fuzzy
 msgid "Invalid domain name"
 msgstr "Malkorekta kontnomo"
 
 #, fuzzy
-msgid "Invalid nickname"
-msgstr "Malkorekta salutnomo"
-
-#, fuzzy
-msgid "Invalid role given"
-msgstr "Malkorekta salutnomo"
+msgid "Invite"
+msgstr "In_viti al"
 
 #, fuzzy
 msgid "Invite Contacts"
@@ -2910,9 +2825,6 @@ msgstr "Kontaktoj"
 #, fuzzy
 msgid "Invite New Contact"
 msgstr "Kontaktoj"
-
-msgid "Invite a user to a group chat for a reason"
-msgstr ""
 
 msgid "Invite friends to group chats or join one"
 msgstr ""
@@ -2945,9 +2857,6 @@ msgstr ""
 
 msgid "It is not possible to send empty files"
 msgstr "Neeblas sendi senenhavajn dosierojn"
-
-msgid "Italic"
-msgstr "Kursiva"
 
 #, fuzzy
 msgid "I’m eating."
@@ -3002,10 +2911,6 @@ msgid "Join Support Chat"
 msgstr "Eniri babilejen"
 
 #, fuzzy
-msgid "Join a group chat given by an XMPP Address"
-msgstr "Eniri en babilejon"
-
-#, fuzzy
 msgid "Joining…"
 msgstr "Malpermesas..."
 
@@ -3026,17 +2931,13 @@ msgstr ""
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
+#, fuzzy
+msgid "Kick"
+msgstr "_Elpeli"
+
 #, fuzzy, python-format
 msgid "Kick %s"
 msgstr "Elpelatas %s"
-
-#, fuzzy
-msgid "Kick Participant"
-msgstr "Partoprenanto"
-
-#, fuzzy
-msgid "Kick user from group chat by nickname"
-msgstr "Al vi oni malpermesis esti en la babilejo."
 
 #, fuzzy
 msgid "Kick…"
@@ -3056,17 +2957,10 @@ msgstr "Lasta stato: %s"
 msgid "Leave Group Chat"
 msgstr "Nova babilejo"
 
-#, fuzzy
-msgid "Leave the group chat"
-msgstr "Nova babilejo"
-
 msgid "Left Click Action"
 msgstr ""
 
 msgid "Let others know if you read up to this point"
-msgstr ""
-
-msgid "Limit must be an integer"
 msgstr ""
 
 #, fuzzy
@@ -3254,11 +3148,10 @@ msgstr "_Protokoli statŝanĝojn de kontaktoj"
 msgid "Miscellaneous"
 msgstr "<b>Cetero</b>"
 
-#, fuzzy
-msgid "Missing arguments"
-msgstr "Mankas argumento \"kontakt-jid\""
-
 msgid "Missing dependencies for Audio/Video"
+msgstr ""
+
+msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
@@ -3328,23 +3221,15 @@ msgstr "Serĉi"
 msgid "New Workspace"
 msgstr "Renomigado de kontakto"
 
-#, fuzzy, python-format
-msgid "New message from %s"
+#, fuzzy
+msgid "New message from"
 msgstr "Nova mesaĝo de %(nickname)s"
 
 msgid "Next"
 msgstr ""
 
-#, fuzzy
-msgid "Next sent messages"
-msgstr "Antaŭpreparitaj mesaĝoj:"
-
 msgid "Nickname"
 msgstr "Kaŝnomo"
-
-#, fuzzy
-msgid "Nickname not found"
-msgstr "Kaŝnomo ne trovitas: %s"
 
 #, fuzzy
 msgid "No"
@@ -3401,10 +3286,6 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "Neniu konto disponeblas"
-
-#, fuzzy
-msgid "No open voice chats with the contact"
-msgstr "Klaku por vidi pasintajn interparolojn kun tiu ĉi kontakto"
 
 #, fuzzy
 msgid "No proxy used"
@@ -3533,20 +3414,6 @@ msgstr "Konektado malsukcesis"
 #, fuzzy
 msgid "Open _Folder"
 msgstr "_Malfermi enhavantan dosierujon"
-
-#, fuzzy
-msgid "Open a private chat window with a specified participant"
-msgstr ""
-"Uzado: /%s <kaŝnomo>, - malfermas privatan interparolan fenestron por "
-"specifita persono."
-
-#, fuzzy
-msgid ""
-"Open a private chat window with a specified participant and send him a "
-"message"
-msgstr ""
-"Uzado: /%s <kaŝnomo>, - malfermas privatan interparolan fenestron por "
-"specifita persono."
 
 msgid "Open as _Link"
 msgstr "Malfermi kiel _ligilon"
@@ -3710,13 +3577,6 @@ msgstr "Kaŝnomo ne trovitas: %s"
 msgid "Pin Chat"
 msgstr "Mendo de dosiera transmeto"
 
-msgid "Ping?"
-msgstr ""
-
-#, python-format
-msgid "Ping? (%s)"
-msgstr ""
-
 msgid "Pinned"
 msgstr ""
 
@@ -3807,14 +3667,6 @@ msgstr ""
 msgid "Plugins Updated Successfully"
 msgstr "Konektado malsukcesis"
 
-#, python-format
-msgid "Pong! (%(nick)s %(delay)s s.)"
-msgstr ""
-
-#, python-format
-msgid "Pong! (%s seconds)"
-msgstr ""
-
 #, fuzzy
 msgid "Port"
 msgstr "_Pordo:"
@@ -3859,10 +3711,6 @@ msgstr ""
 #, fuzzy
 msgid "Previous"
 msgstr "uri"
-
-#, fuzzy
-msgid "Previously sent message"
-msgstr "Antaŭpreparitaj mesaĝoj:"
 
 msgid "Print XML stanzas and other debug information"
 msgstr ""
@@ -3935,14 +3783,6 @@ msgstr "_Eliri"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quote next message"
-msgstr "Sendi mesaĝon"
-
-#, fuzzy
-msgid "Quote previous message"
-msgstr "statmesaĝo"
 
 #, fuzzy
 msgid "Quote…"
@@ -4443,9 +4283,6 @@ msgstr "Lasta stato: %s"
 msgid "Send Chatstate in Group Chats"
 msgstr "Neeblas aliĝi al babilejo"
 
-msgid "Send DTMF sequence through an open voice chat"
-msgstr ""
-
 #, fuzzy
 msgid "Send File"
 msgstr "Sendi _dosieron"
@@ -4482,24 +4319,6 @@ msgstr "Sendi vivkontrolajn pakaĵojn"
 msgid "Send _Report"
 msgstr "_Raporti pri eraro"
 
-msgid "Send a disco info request"
-msgstr ""
-
-#, fuzzy
-msgid "Send a message to the contact"
-msgstr "Uzado: /%s, - kaŝas la babiladajn butonojn."
-
-#, fuzzy
-msgid "Send a message to the contact that will attract their attention"
-msgstr "Uzado: /%s, - kaŝas la babiladajn butonojn."
-
-#, fuzzy
-msgid "Send a ping to the contact"
-msgstr "Sendi dosieron al kontakto"
-
-msgid "Send action (in the third person) to the current chat"
-msgstr ""
-
 #, fuzzy
 msgid "Send message on Ctrl+Enter and make a new line with Enter."
 msgstr ""
@@ -4512,9 +4331,6 @@ msgstr "Sendi mesaĝon"
 
 msgid "Sender: "
 msgstr "Sendanto: "
-
-msgid "Sending private message failed"
-msgstr "Sendado de privata mesaĝo malsukcesis"
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4577,27 +4393,9 @@ msgstr "Servilo"
 msgid "Set configuration directory"
 msgstr "Agordo de babilejo"
 
-msgid ""
-"Set participant affiliation in group chat.\n"
-"    Affiliation can be given as one of the following values:\n"
-"    owner, admin, member, outcast, none"
-msgstr ""
-
-msgid ""
-"Set participant role in group chat.\n"
-"    Role can be given as one of the following values:\n"
-"    moderator, participant, visitor, none"
-msgstr ""
-
 #, fuzzy
 msgid "Set status message"
 msgstr "statmesaĝo"
-
-msgid "Set the current status to away"
-msgstr ""
-
-msgid "Set the current status to online"
-msgstr ""
 
 msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
@@ -4712,9 +4510,9 @@ msgstr ""
 msgid "Show all warnings"
 msgstr "Montri ĉiujn nelegitajn _eventojn"
 
-msgid ""
-"Show help on a given command or a list of available commands if -a is given"
-msgstr ""
+#, fuzzy
+msgid "Show chat list"
+msgstr "Konta korektado"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -4723,9 +4521,6 @@ msgstr "Montri Trans_portilojn"
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
-msgstr ""
-
-msgid "Show logged messages which mention given text"
 msgstr ""
 
 msgid ""
@@ -4962,10 +4757,6 @@ msgid "Street"
 msgstr "Strato:"
 
 #, fuzzy
-msgid "Strike"
-msgstr "Kaŝnomo"
-
-#, fuzzy
 msgid "Style"
 msgstr "Malrapidas"
 
@@ -5053,9 +4844,6 @@ msgstr "<b>Propraj</b>"
 msgid "TLS verification failed: %s"
 msgstr "Aligado de speciala avizo por %s"
 
-msgid "T_ry Again"
-msgstr ""
-
 msgid "Tabbed chat window"
 msgstr ""
 
@@ -5111,9 +4899,6 @@ msgid ""
 msgstr ""
 
 msgid "The last message was written on a mobile client"
-msgstr ""
-
-msgid "The same as using a doc-string, except it supports translation"
 msgstr ""
 
 #, fuzzy
@@ -5305,19 +5090,9 @@ msgstr "Se vi volas ekuzi la ĉiujn ŝanĝojn, vi devas rekonekti."
 msgid "Toggle Chat List"
 msgstr "Partoprenanto"
 
-msgid "Toggle Video Chat"
-msgstr ""
-
-msgid "Toggle Voice Chat"
-msgstr ""
-
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Partoprenanto"
-
-#, fuzzy
-msgid "Too many arguments"
-msgstr "Mankas argumento \"kontakt-jid\""
 
 msgid "Topic"
 msgstr ""
@@ -5436,10 +5211,6 @@ msgstr ""
 
 #, fuzzy
 msgid "Unknown language"
-msgstr "Post kaŝnomo:"
-
-#, fuzzy
-msgid "Unknown nickname"
 msgstr "Post kaŝnomo:"
 
 #, fuzzy
@@ -5597,10 +5368,6 @@ msgstr "Privata interparolo"
 msgid "Video calls are not available on Windows"
 msgstr "Konekto mankas"
 
-#, fuzzy
-msgid "Video chats are not available"
-msgstr "Konekto mankas"
-
 msgid "Video test"
 msgstr ""
 
@@ -5623,10 +5390,6 @@ msgstr "<b>Bildavizoj</b>"
 #, fuzzy
 msgid "Voice Request"
 msgstr "Mendo de dosiera transmeto"
-
-#, fuzzy
-msgid "Voice chats are not available"
-msgstr "Konekto mankas"
 
 #, fuzzy
 msgid "Waiting…"
@@ -5746,11 +5509,6 @@ msgstr "Ĉu vi certe volas foriri el babilejo \"%s\"?"
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "Ĉu vi volas forigi la grupon %s de la kontaktlisto?"
-
-#, fuzzy, python-format
-msgid ""
-"You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
-msgstr "Vi ne plu ĉeestas en babilejo \"%s\" aŭ \"%s\" foriris."
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5960,9 +5718,6 @@ msgstr ""
 msgid "_Back"
 msgstr "Revenos baldaŭ"
 
-msgid "_Ban"
-msgstr "_Malpermesi"
-
 msgid "_Block"
 msgstr ""
 
@@ -6050,10 +5805,6 @@ msgstr "Servilaj trajtoj"
 msgid "_File Transfer"
 msgstr "Dosieraj transmetoj"
 
-#, fuzzy
-msgid "_Forget Group Chat"
-msgstr "Nova babilejo"
-
 msgid "_Free for Chat"
 msgstr "_Babilema"
 
@@ -6078,9 +5829,6 @@ msgstr "_Aliĝi"
 
 msgid "_Keyboard Shortcuts"
 msgstr ""
-
-msgid "_Kick"
-msgstr "_Elpeli"
 
 msgid "_Later"
 msgstr ""
@@ -6226,9 +5974,6 @@ msgstr ""
 msgid "_Subscribe"
 msgstr "_Aboni"
 
-msgid "_Try Again"
-msgstr ""
-
 #, fuzzy
 msgid "_Type"
 msgstr "Tipo:"
@@ -6288,6 +6033,9 @@ msgstr ""
 msgid "bearing"
 msgstr "mara"
 
+msgid "bold"
+msgstr ""
+
 #, fuzzy
 msgid "building"
 msgstr "Elpelatas %s"
@@ -6334,9 +6082,6 @@ msgstr "dosiertransdonada listo"
 msgid "floor"
 msgstr ""
 
-msgid "has closed the chat window or tab"
-msgstr "fermis la interparolan fenestron aŭ slipon"
-
 #, fuzzy
 msgid ""
 "has invited you to a group chat.\n"
@@ -6353,8 +6098,9 @@ msgstr "tajpas mesaĝon..."
 msgid "is doing something else"
 msgstr "faras ion alian"
 
-msgid "is paying attention to the conversation"
-msgstr "atentas al la komunikado"
+#, fuzzy
+msgid "italic"
+msgstr "Kursiva"
 
 msgid "lat"
 msgstr ""
@@ -6401,6 +6147,10 @@ msgstr ""
 
 msgid "street"
 msgstr ""
+
+#, fuzzy
+msgid "strike"
+msgstr "Kaŝnomo"
 
 msgid "text"
 msgstr ""
@@ -6456,7 +6206,15 @@ msgstr "%(nick)s nun estas %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#, fuzzy
+#~ msgid "%s is not a valid tone"
+#~ msgstr "%s ne estas valida protokola detalnivelo"
+
 #~ msgid "%s not found"
+#~ msgstr "%s ne trovitas"
+
+#, fuzzy
+#~ msgid "%s: Nothing found"
 #~ msgstr "%s ne trovitas"
 
 #, fuzzy
@@ -6503,12 +6261,27 @@ msgstr ""
 #~ msgstr "Argumentoj:"
 
 #, fuzzy
+#~ msgid "Ban Participant"
+#~ msgstr "Partoprenanto"
+
+#~ msgid "Bold"
+#~ msgstr "Dika"
+
+#, fuzzy
+#~ msgid "Ch_ange"
+#~ msgstr "Ŝanĝi kaŝ_nomon"
+
+#, fuzzy
 #~ msgid "Change status"
 #~ msgstr "Kontakto ŝanĝis sian staton"
 
 #, fuzzy
 #~ msgid "Change status information"
 #~ msgstr "Kontakta informo"
+
+#, fuzzy
+#~ msgid "Change your nickname in a group chat"
+#~ msgstr "Ŝanĝi kaŝ_nomon"
 
 #, fuzzy
 #~ msgid "Changes the priority of account(s)"
@@ -6522,19 +6295,55 @@ msgstr ""
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Bonvolu certiĝi ke avahi-demono estas aktiva."
 
+#, fuzzy
+#~ msgid "Clear chat window"
+#~ msgstr "Uzado: /%s, - malplenigas la tekstan fenestron."
+
+#, fuzzy
+#~ msgid "Clear the text window"
+#~ msgstr "Uzado: /%s, - malplenigas la tekstan fenestron."
+
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr "D-BUS aŭ konforma pitona modulo mankas ĉe tiu ĉi komputilo."
+
+#, fuzzy
+#~ msgid "Display names of all group chat participants"
+#~ msgstr "Uzado: /%s , - eligas la nomoj de babilejaj ĉeestantoj."
+
+#, fuzzy
+#~ msgid "Display or change a group chat topic"
+#~ msgstr "Demandi antaŭ fermi babilejan fenestron/slipon."
 
 #, fuzzy
 #~ msgid "Do not disturb"
 #~ msgstr "Ne malhelpu."
 
+#, fuzzy
+#~ msgid "Drop Files or Contacts"
+#~ msgstr "Sendi dosieron al kontakto"
+
+#, fuzzy
+#~ msgid "Enter Password"
+#~ msgstr "Enigu novan pasvorton:"
+
+#, fuzzy
+#~ msgid "Error: Could not process image"
+#~ msgstr "Ne povas alŝuti bildon"
+
 #~ msgid "File path"
 #~ msgstr "Dosierindiko"
 
 #, fuzzy
+#~ msgid "Format your message…"
+#~ msgstr "Nova privata mesaĝo"
+
+#, fuzzy
 #~ msgid "Free for chat"
 #~ msgstr "Babilema"
+
+#, fuzzy
+#~ msgid "Gajim will not try to join this group chat again"
+#~ msgstr "Se markitas, Gajim aliĝos al tiu ĉi babilejo dum lanĉo"
 
 #~ msgid "Gets detailed info on a account"
 #~ msgstr "Ricevas detalan informon pri konto"
@@ -6555,6 +6364,34 @@ msgstr ""
 #~ "Tiun ĉi parametron mi konsideras nur se pleta piktogramo uzatas."
 
 #, fuzzy
+#~ msgid "Invalid affiliation given"
+#~ msgstr "Aparteneco:"
+
+#, fuzzy
+#~ msgid "Invalid nickname"
+#~ msgstr "Malkorekta salutnomo"
+
+#, fuzzy
+#~ msgid "Invalid role given"
+#~ msgstr "Malkorekta salutnomo"
+
+#, fuzzy
+#~ msgid "Join a group chat given by an XMPP Address"
+#~ msgstr "Eniri en babilejon"
+
+#, fuzzy
+#~ msgid "Kick Participant"
+#~ msgstr "Partoprenanto"
+
+#, fuzzy
+#~ msgid "Kick user from group chat by nickname"
+#~ msgstr "Al vi oni malpermesis esti en la babilejo."
+
+#, fuzzy
+#~ msgid "Leave the group chat"
+#~ msgstr "Nova babilejo"
+
+#, fuzzy
 #~ msgid "Lists all contacts in the contact list, one for each line"
 #~ msgstr ""
 #~ "Eligas liston de ĉiuj kontaktoj de kontaktlisto. Ĉiu kontakto aperas en "
@@ -6563,19 +6400,61 @@ msgstr ""
 #~ msgid "Missing argument \"contact_jid\""
 #~ msgstr "Mankas argumento \"kontakt-jid\""
 
+#, fuzzy
+#~ msgid "Missing arguments"
+#~ msgstr "Mankas argumento \"kontakt-jid\""
+
 #~ msgid "Name of the account"
 #~ msgstr "Nomo de la konto"
+
+#, fuzzy
+#~ msgid "Next sent messages"
+#~ msgstr "Antaŭpreparitaj mesaĝoj:"
+
+#, fuzzy
+#~ msgid "Nickname not found"
+#~ msgstr "Kaŝnomo ne trovitas: %s"
+
+#, fuzzy
+#~ msgid "No open voice chats with the contact"
+#~ msgstr "Klaku por vidi pasintajn interparolojn kun tiu ĉi kontakto"
 
 #, fuzzy
 #~ msgid "Online"
 #~ msgstr "naŭ"
 
 #, fuzzy
+#~ msgid "Open a private chat window with a specified participant"
+#~ msgstr ""
+#~ "Uzado: /%s <kaŝnomo>, - malfermas privatan interparolan fenestron por "
+#~ "specifita persono."
+
+#, fuzzy
+#~ msgid ""
+#~ "Open a private chat window with a specified participant and send him a "
+#~ "message"
+#~ msgstr ""
+#~ "Uzado: /%s <kaŝnomo>, - malfermas privatan interparolan fenestron por "
+#~ "specifita persono."
+
+#, fuzzy
 #~ msgid "Presence description:"
 #~ msgstr "Priskribo"
 
+#, fuzzy
+#~ msgid "Previously sent message"
+#~ msgstr "Antaŭpreparitaj mesaĝoj:"
+
 #~ msgid "Prints a list of registered accounts"
 #~ msgstr "Eligas liston de registritaj kontoj"
+
+#, fuzzy
+#~ msgid "Quote next message"
+#~ msgstr "Sendi mesaĝon"
+
+#, fuzzy
+#~ msgid "Quote previous message"
+#~ msgstr "statmesaĝo"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6591,6 +6470,21 @@ msgstr ""
 
 #~ msgid "Returns number of unread messages"
 #~ msgstr "Donas kvanton de nelegitaj mesaĝoj"
+
+#, fuzzy
+#~ msgid "Send a message to the contact"
+#~ msgstr "Uzado: /%s, - kaŝas la babiladajn butonojn."
+
+#, fuzzy
+#~ msgid "Send a message to the contact that will attract their attention"
+#~ msgstr "Uzado: /%s, - kaŝas la babiladajn butonojn."
+
+#, fuzzy
+#~ msgid "Send a ping to the contact"
+#~ msgstr "Sendi dosieron al kontakto"
+
+#~ msgid "Sending private message failed"
+#~ msgstr "Sendado de privata mesaĝo malsukcesis"
 
 #, fuzzy
 #~ msgid ""
@@ -6634,12 +6528,20 @@ msgstr ""
 #~ msgstr "_Protokoli statŝanĝojn de kontaktoj"
 
 #, fuzzy
+#~ msgid "Too many arguments"
+#~ msgstr "Mankas argumento \"kontakt-jid\""
+
+#, fuzzy
 #~ msgid ""
 #~ "Too many arguments. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
 #~ msgstr ""
 #~ "Tro multe da argumentoj. \n"
 #~ "Enigu \"%s help %s\" por plia informo"
+
+#, fuzzy
+#~ msgid "Unknown nickname"
+#~ msgstr "Post kaŝnomo:"
 
 #, fuzzy
 #~ msgid ""
@@ -6650,6 +6552,14 @@ msgstr ""
 #~ msgstr ""
 #~ "Uzado: %s komando [argumentoj]\n"
 #~ "Komando estas unu el:\n"
+
+#, fuzzy
+#~ msgid "Video chats are not available"
+#~ msgstr "Konekto mankas"
+
+#, fuzzy
+#~ msgid "Voice chats are not available"
+#~ msgstr "Konekto mankas"
 
 #~ msgid "XML to send"
 #~ msgstr "XML por sendi"
@@ -6665,6 +6575,11 @@ msgstr ""
 #, fuzzy
 #~ msgid "XMPP Address of the group chat that will receive the message"
 #~ msgstr "JID de kontakto, kiu ricevos la mesaĝon"
+
+#, fuzzy
+#~ msgid ""
+#~ "You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
+#~ msgstr "Vi ne plu ĉeestas en babilejo \"%s\" aŭ \"%s\" foriris."
 
 #~ msgid "You have no active account"
 #~ msgstr "Vi ne havas aktivan konton"
@@ -6692,6 +6607,9 @@ msgstr ""
 #~ msgid "file"
 #~ msgstr "dosiero"
 
+#~ msgid "has closed the chat window or tab"
+#~ msgstr "fermis la interparolan fenestron aŭ slipon"
+
 #~ msgid "if specified, contact is taken from the contact list of this account"
 #~ msgstr ""
 #~ "Se specifita, kontakto estos prenata el kontaktlisto de tiu ĉi konto"
@@ -6701,6 +6619,9 @@ msgstr ""
 
 #~ msgid "if specified, the message will be sent using this account"
 #~ msgstr "Se specifita, la mesaĝo estos sendita per tiu ĉi konto"
+
+#~ msgid "is paying attention to the conversation"
+#~ msgstr "atentas al la komunikado"
 
 #~ msgid "message contents"
 #~ msgstr "mesaĝenhavo"

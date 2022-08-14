@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-24 12:49+0000\n"
+"POT-Creation-Date: 2022-08-13 16:07+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -16,23 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-
-msgid ""
-"\n"
-"    Ban user by a nick or a JID from a groupchat\n"
-"\n"
-"    If given nickname is not found it will be treated as a JID.\n"
-"    "
-msgstr ""
-
-msgid ""
-"\n"
-"    Set the current status\n"
-"\n"
-"    Status can be given as one of the following values:\n"
-"    online, away, chat, xa, dnd.\n"
-"    "
-msgstr ""
 
 #, fuzzy
 msgid " (Video Call)"
@@ -153,10 +136,6 @@ msgid "%s is not a valid loglevel"
 msgstr ""
 
 #, python-format
-msgid "%s is not a valid tone"
-msgstr ""
-
-#, python-format
 msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the file to."
@@ -177,10 +156,6 @@ msgstr "Выдаліць чалавека з спіса"
 #, fuzzy, python-format
 msgid "%s wants to send you a file"
 msgstr "%s хоча адправіць Вам файл."
-
-#, fuzzy, python-format
-msgid "%s: Nothing found"
-msgstr "%s не знойдзены"
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -870,9 +845,6 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allow a participant to send you public or private messages"
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -1132,13 +1104,13 @@ msgstr "Хутка буду."
 msgid "Back soon"
 msgstr "Хутка буду"
 
+#, fuzzy
+msgid "Ban"
+msgstr "_Забараніць казанне"
+
 #, fuzzy, python-format
 msgid "Ban %s"
 msgstr "Чорны спіс"
-
-#, fuzzy
-msgid "Ban Participant"
-msgstr "Удзельнік"
 
 msgid "Ban…"
 msgstr ""
@@ -1171,9 +1143,6 @@ msgstr "Спіс прыватнасці для %s"
 
 msgid "Block…"
 msgstr ""
-
-msgid "Bold"
-msgstr "Тлусты"
 
 #, fuzzy
 msgid "Bookmarks"
@@ -1292,10 +1261,6 @@ msgid "Certificate signature failure"
 msgstr ""
 
 #, fuzzy
-msgid "Ch_ange"
-msgstr "Змяніць м_янушку"
-
-#, fuzzy
 msgid "Ch_ange Subject"
 msgstr "Змяніць _тэму"
 
@@ -1320,10 +1285,6 @@ msgstr "Змяніць _тэму"
 
 msgid "Change your account’s password, etc."
 msgstr ""
-
-#, fuzzy
-msgid "Change your nickname in a group chat"
-msgstr "Змяніць м_янушку"
 
 #, fuzzy
 msgid "Change your profile picture"
@@ -1452,16 +1413,8 @@ msgid "Clear Sound"
 msgstr "Выберыце гукавы файл"
 
 #, fuzzy
-msgid "Clear chat window"
-msgstr "Карыстанне: /%s, прыбірае тэкст у вакне."
-
-#, fuzzy
 msgid "Clear message entry"
 msgstr "Паведамленне адпраўленае"
-
-#, fuzzy
-msgid "Clear the text window"
-msgstr "Карыстанне: /%s, прыбірае тэкст у вакне."
 
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
@@ -1502,11 +1455,6 @@ msgstr "Колер"
 #, fuzzy
 msgid "Command List"
 msgstr "Загады: %s"
-
-msgid ""
-"Command disabled. This command can be enabled by setting "
-"'command_system_execute' to True in ACE (Advanced Configuration Editor)."
-msgstr ""
 
 #, fuzzy
 msgid "Commands"
@@ -1739,6 +1687,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr "_Скапіяваць адрас спасылкі"
 
+msgid "Correct"
+msgstr ""
+
 #, fuzzy
 msgid "Could not Open File"
 msgstr "Немагчыма загрузіць малюнак"
@@ -1930,14 +1881,6 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
-#, fuzzy
-msgid "Display names of all group chat participants"
-msgstr "Карыстанне: /%s, хавае кнопкі групавой размовы."
-
-#, fuzzy
-msgid "Display or change a group chat topic"
-msgstr "Пытацца пацверджання закрыцця групавой размовы."
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Хочаце задаволіць гэты запыт?"
@@ -1998,10 +1941,6 @@ msgstr "%d нечытанае паведамленне"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Піша"
-
-#, fuzzy
-msgid "Drop Files or Contacts"
-msgstr "Людзі"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2100,23 +2039,26 @@ msgid "Encrypting file…"
 msgstr "Шыфраванне адключанае"
 
 #, fuzzy
+msgid "Encryption error"
+msgstr "Шыфраванне дзейнічае"
+
+#, fuzzy
 msgid "Encryption required"
 msgstr "Шыфраванне дзейнічае"
 
 msgid "End call"
 msgstr ""
 
-#, fuzzy
-msgid "Enter Nickname"
-msgstr "Уставіць мянушку"
-
-#, fuzzy
-msgid "Enter Password"
-msgstr "Увядзіце новы пароль:"
+msgid "Enter a password to join this chat"
+msgstr ""
 
 #, fuzzy
 msgid "Enter new password..."
 msgstr "Увядзіце новы пароль:"
+
+#, fuzzy
+msgid "Enter your new nickname"
+msgstr "Уставіць мянушку"
 
 msgid ""
 "Enter your nickname. This is how your name is displayed to your contacts."
@@ -2128,9 +2070,6 @@ msgstr ""
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Выберыце малюнак"
-
-msgid "Error during command execution!"
-msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2172,10 +2111,6 @@ msgstr "Памылка Avahi"
 msgid "Error: %s"
 msgstr "Памылка: %s"
 
-#, fuzzy
-msgid "Error: Could not process image"
-msgstr "Немагчыма загрузіць малюнак"
-
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr "Памылка: немагчыма прачытаць %s"
@@ -2199,12 +2134,6 @@ msgstr "_Выканаць загад..."
 #, fuzzy
 msgid "Execute Command…"
 msgstr "_Выканаць загад..."
-
-msgid "Execute expression inside a shell, send output"
-msgstr ""
-
-msgid "Execute expression inside a shell, show output"
-msgstr ""
 
 #, fuzzy
 msgid "Executing…"
@@ -2408,9 +2337,6 @@ msgstr ""
 msgid "For example: \"Julia is now online\""
 msgstr ""
 
-msgid "Forbid a participant to send you public or private messages"
-msgstr ""
-
 #, fuzzy
 msgid "Force Bookmark 2 usage"
 msgstr "_Змясціць у закладках"
@@ -2418,6 +2344,10 @@ msgstr "_Змясціць у закладках"
 #, fuzzy
 msgid "Forever"
 msgstr "_Ніколі"
+
+#, fuzzy
+msgid "Forget Group Chat"
+msgstr "Сысці з групавых размоў"
 
 #, fuzzy
 msgid "Forget this Group Chat"
@@ -2438,10 +2368,6 @@ msgstr ""
 #, fuzzy
 msgid "Format your message"
 msgstr "%d нечытанае паведамленне"
-
-#, fuzzy
-msgid "Format your message…"
-msgstr "Новае прыватнае паведамленне"
 
 msgid "Free for Chat"
 msgstr "Магу размаўляць"
@@ -2505,12 +2431,6 @@ msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
 msgstr ""
-
-#, fuzzy
-msgid "Gajim will not try to join this group chat again"
-msgstr ""
-"Калі гэтая опцыя ўключаная, Gajim далучыцца да гэтай групавой размовы пры "
-"запуску"
 
 msgid "Gajim will now exit"
 msgstr "Gajim сканчвае работу"
@@ -2664,6 +2584,10 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
+#, fuzzy
+msgid "Hide chat list"
+msgstr "Удзельнік"
+
 msgid "Hide this menu"
 msgstr "Схаваць гэтае меню"
 
@@ -2756,9 +2680,6 @@ msgstr ""
 "Калі гэтая опцыя ўключаная, Gajim паказвае аватары ў галоўным вакне і ў "
 "групавых размовах"
 
-msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
-msgstr ""
-
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 
@@ -2791,7 +2712,7 @@ msgstr ""
 "ад Вашага сервера."
 
 #, fuzzy, python-format
-msgid "If you close this chat, you will leave '%s'."
+msgid "If you close this chat, you will leave \"%s\"."
 msgstr "Калі Вы закрыеце гэтае вакно, Вы выйдзеце з гэтай групавой размовы."
 
 msgid ""
@@ -2889,20 +2810,12 @@ msgid "Invalid XMPP Address"
 msgstr "Няправільны файл"
 
 #, fuzzy
-msgid "Invalid affiliation given"
-msgstr "Адносіны: "
-
-#, fuzzy
 msgid "Invalid domain name"
 msgstr "Няправільная назва рахунка"
 
 #, fuzzy
-msgid "Invalid nickname"
-msgstr "Няправільнае імя карыстальніка"
-
-#, fuzzy
-msgid "Invalid role given"
-msgstr "Няправільнае імя карыстальніка"
+msgid "Invite"
+msgstr "За_прасіць"
 
 #, fuzzy
 msgid "Invite Contacts"
@@ -2915,9 +2828,6 @@ msgstr "Людзі"
 #, fuzzy
 msgid "Invite New Contact"
 msgstr "Людзі"
-
-msgid "Invite a user to a group chat for a reason"
-msgstr ""
 
 msgid "Invite friends to group chats or join one"
 msgstr ""
@@ -2950,9 +2860,6 @@ msgstr ""
 
 msgid "It is not possible to send empty files"
 msgstr "Немагчыма адправіць пусты файл"
-
-msgid "Italic"
-msgstr "Нахілены"
 
 #, fuzzy
 msgid "I’m eating."
@@ -3007,10 +2914,6 @@ msgid "Join Support Chat"
 msgstr "Удзельнічаць у групавой размове"
 
 #, fuzzy
-msgid "Join a group chat given by an XMPP Address"
-msgstr "Удзельнічаць у _групавой размове"
-
-#, fuzzy
 msgid "Joining…"
 msgstr "Забараніць казанне..."
 
@@ -3031,17 +2934,13 @@ msgstr ""
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
+#, fuzzy
+msgid "Kick"
+msgstr "_Выкінуць"
+
 #, fuzzy, python-format
 msgid "Kick %s"
 msgstr "Пакаранне %s"
-
-#, fuzzy
-msgid "Kick Participant"
-msgstr "Удзельнік"
-
-#, fuzzy
-msgid "Kick user from group chat by nickname"
-msgstr "Вы не ўвайшлі ў пакой групавой размовы."
 
 #, fuzzy
 msgid "Kick…"
@@ -3061,17 +2960,10 @@ msgstr "Апошняе паведамленне: %s"
 msgid "Leave Group Chat"
 msgstr "Сысці з групавых размоў"
 
-#, fuzzy
-msgid "Leave the group chat"
-msgstr "Сысці з групавых размоў"
-
 msgid "Left Click Action"
 msgstr ""
 
 msgid "Let others know if you read up to this point"
-msgstr ""
-
-msgid "Limit must be an integer"
 msgstr ""
 
 #, fuzzy
@@ -3261,11 +3153,10 @@ msgstr "_Пісаць у журнал паведамленні аб змене �
 msgid "Miscellaneous"
 msgstr "<b>Рознае</b>"
 
-#, fuzzy
-msgid "Missing arguments"
-msgstr "Не хапае аргумента \"contact_jid\""
-
 msgid "Missing dependencies for Audio/Video"
+msgstr ""
+
+msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
@@ -3335,23 +3226,15 @@ msgstr "Пошук"
 msgid "New Workspace"
 msgstr "Змяніць імя чалавека"
 
-#, fuzzy, python-format
-msgid "New message from %s"
+#, fuzzy
+msgid "New message from"
 msgstr "Новае паведамленне ад %(nickname)s"
 
 msgid "Next"
 msgstr ""
 
-#, fuzzy
-msgid "Next sent messages"
-msgstr "Стандартныя паведамленні:"
-
 msgid "Nickname"
 msgstr "Мянушка"
-
-#, fuzzy
-msgid "Nickname not found"
-msgstr "Мянушка не знойдзеная: %s"
 
 #, fuzzy
 msgid "No"
@@ -3408,10 +3291,6 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "Рахункаў няма"
-
-#, fuzzy
-msgid "No open voice chats with the contact"
-msgstr "Пстрыкніце, каб праглядзець былыя размовы з гэтым чалавекам"
 
 #, fuzzy
 msgid "No proxy used"
@@ -3540,18 +3419,6 @@ msgstr "Памылка злучэння"
 #, fuzzy
 msgid "Open _Folder"
 msgstr "_Адкрыць дырэкторыю з файлам"
-
-#, fuzzy
-msgid "Open a private chat window with a specified participant"
-msgstr ""
-"Карыстанне: /%s <мянушка>, адкрывае вакно прыватнай размовы з чалавекам."
-
-#, fuzzy
-msgid ""
-"Open a private chat window with a specified participant and send him a "
-"message"
-msgstr ""
-"Карыстанне: /%s <мянушка>, адкрывае вакно прыватнай размовы з чалавекам."
 
 msgid "Open as _Link"
 msgstr "Адкрыць _спасылку"
@@ -3715,13 +3582,6 @@ msgstr "Мянушка не знойдзеная: %s"
 msgid "Pin Chat"
 msgstr "Запыт на перадачу файла"
 
-msgid "Ping?"
-msgstr ""
-
-#, python-format
-msgid "Ping? (%s)"
-msgstr ""
-
 msgid "Pinned"
 msgstr ""
 
@@ -3812,14 +3672,6 @@ msgstr ""
 msgid "Plugins Updated Successfully"
 msgstr "Памылка злучэння"
 
-#, python-format
-msgid "Pong! (%(nick)s %(delay)s s.)"
-msgstr ""
-
-#, python-format
-msgid "Pong! (%s seconds)"
-msgstr ""
-
 #, fuzzy
 msgid "Port"
 msgstr "_Порт:"
@@ -3864,10 +3716,6 @@ msgstr ""
 #, fuzzy
 msgid "Previous"
 msgstr "спасылка"
-
-#, fuzzy
-msgid "Previously sent message"
-msgstr "Стандартныя паведамленні:"
 
 msgid "Print XML stanzas and other debug information"
 msgstr ""
@@ -3940,14 +3788,6 @@ msgstr "_Выйсці"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quote next message"
-msgstr "Адправіць паведамленне"
-
-#, fuzzy
-msgid "Quote previous message"
-msgstr "паведамленне стану"
 
 #, fuzzy
 msgid "Quote…"
@@ -4446,9 +4286,6 @@ msgstr "Апошняе паведамленне: %s"
 msgid "Send Chatstate in Group Chats"
 msgstr "Немагчыма ўвайсці ў групавую размову"
 
-msgid "Send DTMF sequence through an open voice chat"
-msgstr ""
-
 #, fuzzy
 msgid "Send File"
 msgstr "Адправіць _файл"
@@ -4485,24 +4322,6 @@ msgstr "Адпраўляць праверачныя пакункі сервер�
 msgid "Send _Report"
 msgstr "_Паведаміць пра памылку"
 
-msgid "Send a disco info request"
-msgstr ""
-
-#, fuzzy
-msgid "Send a message to the contact"
-msgstr "Карыстанне: /%s, хавае кнопкі размовы."
-
-#, fuzzy
-msgid "Send a message to the contact that will attract their attention"
-msgstr "Карыстанне: /%s, хавае кнопкі размовы."
-
-#, fuzzy
-msgid "Send a ping to the contact"
-msgstr "Адправіць файл чалавеку"
-
-msgid "Send action (in the third person) to the current chat"
-msgstr ""
-
 #, fuzzy
 msgid "Send message on Ctrl+Enter and make a new line with Enter."
 msgstr ""
@@ -4515,9 +4334,6 @@ msgstr "Адправіць паведамленне"
 
 msgid "Sender: "
 msgstr "Адпраўнік:"
-
-msgid "Sending private message failed"
-msgstr "Памылка адпраўкі прыватнага паведамлення"
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4580,27 +4396,9 @@ msgstr "Сервер"
 msgid "Set configuration directory"
 msgstr "Настаўленні пакоя"
 
-msgid ""
-"Set participant affiliation in group chat.\n"
-"    Affiliation can be given as one of the following values:\n"
-"    owner, admin, member, outcast, none"
-msgstr ""
-
-msgid ""
-"Set participant role in group chat.\n"
-"    Role can be given as one of the following values:\n"
-"    moderator, participant, visitor, none"
-msgstr ""
-
 #, fuzzy
 msgid "Set status message"
 msgstr "паведамленне стану"
-
-msgid "Set the current status to away"
-msgstr ""
-
-msgid "Set the current status to online"
-msgstr ""
 
 msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
@@ -4715,9 +4513,9 @@ msgstr ""
 msgid "Show all warnings"
 msgstr "Паказаць нягледжаныя _падзеі"
 
-msgid ""
-"Show help on a given command or a list of available commands if -a is given"
-msgstr ""
+#, fuzzy
+msgid "Show chat list"
+msgstr "Змяненне рахунка"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -4726,9 +4524,6 @@ msgstr "Паказаць _транспарты"
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
-msgstr ""
-
-msgid "Show logged messages which mention given text"
 msgstr ""
 
 msgid ""
@@ -4965,10 +4760,6 @@ msgid "Street"
 msgstr "Вуліца:"
 
 #, fuzzy
-msgid "Strike"
-msgstr "Мянушка"
-
-#, fuzzy
 msgid "Style"
 msgstr "Марнаванне часу"
 
@@ -5056,9 +4847,6 @@ msgstr "<b>Адмысловы</b>"
 msgid "TLS verification failed: %s"
 msgstr "Дадаць асабістае нагадванне для %s"
 
-msgid "T_ry Again"
-msgstr ""
-
 msgid "Tabbed chat window"
 msgstr ""
 
@@ -5114,9 +4902,6 @@ msgid ""
 msgstr ""
 
 msgid "The last message was written on a mobile client"
-msgstr ""
-
-msgid "The same as using a doc-string, except it supports translation"
 msgstr ""
 
 #, fuzzy
@@ -5307,19 +5092,9 @@ msgstr "Калі Вы хочаце ўжыць усе зробленыя змен
 msgid "Toggle Chat List"
 msgstr "Удзельнік"
 
-msgid "Toggle Video Chat"
-msgstr ""
-
-msgid "Toggle Voice Chat"
-msgstr ""
-
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Удзельнік"
-
-#, fuzzy
-msgid "Too many arguments"
-msgstr "Не хапае аргумента \"contact_jid\""
 
 msgid "Topic"
 msgstr ""
@@ -5438,10 +5213,6 @@ msgstr ""
 
 #, fuzzy
 msgid "Unknown language"
-msgstr "_Пасля мянушкі:"
-
-#, fuzzy
-msgid "Unknown nickname"
 msgstr "_Пасля мянушкі:"
 
 #, fuzzy
@@ -5599,10 +5370,6 @@ msgstr "Прыватная размова"
 msgid "Video calls are not available on Windows"
 msgstr "Няма злучэння"
 
-#, fuzzy
-msgid "Video chats are not available"
-msgstr "Няма злучэння"
-
 msgid "Video test"
 msgstr ""
 
@@ -5625,10 +5392,6 @@ msgstr "<b>Візуальныя нагадванні</b>"
 #, fuzzy
 msgid "Voice Request"
 msgstr "Запыт на перадачу файла"
-
-#, fuzzy
-msgid "Voice chats are not available"
-msgstr "Няма злучэння"
 
 #, fuzzy
 msgid "Waiting…"
@@ -5749,11 +5512,6 @@ msgstr "Вы сапраўды хочаце сысці з групавой раз
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "Хочаце выдаліць групу %s з кантактнага ліста?"
-
-#, fuzzy, python-format
-msgid ""
-"You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
-msgstr "Вы выйшлі з пакоя \"%s\", альбо \"%s\" сышоў."
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5963,9 +5721,6 @@ msgstr ""
 msgid "_Back"
 msgstr "Хутка буду"
 
-msgid "_Ban"
-msgstr "_Забараніць казанне"
-
 msgid "_Block"
 msgstr ""
 
@@ -6053,10 +5808,6 @@ msgstr "Здольнасці сервера"
 msgid "_File Transfer"
 msgstr "Перадача файлаў"
 
-#, fuzzy
-msgid "_Forget Group Chat"
-msgstr "Сысці з групавых размоў"
-
 msgid "_Free for Chat"
 msgstr "_Магу размаўляць"
 
@@ -6081,9 +5832,6 @@ msgstr "_Далучыцца"
 
 msgid "_Keyboard Shortcuts"
 msgstr ""
-
-msgid "_Kick"
-msgstr "_Выкінуць"
 
 msgid "_Later"
 msgstr ""
@@ -6229,9 +5977,6 @@ msgstr ""
 msgid "_Subscribe"
 msgstr "Падп_ісацца"
 
-msgid "_Try Again"
-msgstr ""
-
 #, fuzzy
 msgid "_Type"
 msgstr "Тып:"
@@ -6293,6 +6038,9 @@ msgstr ""
 msgid "bearing"
 msgstr "мора"
 
+msgid "bold"
+msgstr ""
+
 #, fuzzy
 msgid "building"
 msgstr "Пакаранне %s"
@@ -6339,9 +6087,6 @@ msgstr "спіс файлаў у чарзе на перадачу"
 msgid "floor"
 msgstr ""
 
-msgid "has closed the chat window or tab"
-msgstr "закрыў вакно / картку размовы"
-
 #, fuzzy
 msgid ""
 "has invited you to a group chat.\n"
@@ -6358,8 +6103,9 @@ msgstr "піша паведамленне..."
 msgid "is doing something else"
 msgstr "заняты чымсьці іншым"
 
-msgid "is paying attention to the conversation"
-msgstr "сочыць за размовай"
+#, fuzzy
+msgid "italic"
+msgstr "Нахілены"
 
 msgid "lat"
 msgstr ""
@@ -6406,6 +6152,10 @@ msgstr ""
 
 msgid "street"
 msgstr ""
+
+#, fuzzy
+msgid "strike"
+msgstr "Мянушка"
 
 msgid "text"
 msgstr ""
@@ -6467,6 +6217,10 @@ msgstr ""
 #~ msgstr "%s не знойдзены"
 
 #, fuzzy
+#~ msgid "%s: Nothing found"
+#~ msgstr "%s не знойдзены"
+
+#, fuzzy
 #~ msgid ""
 #~ "'%s' is not in your contact list.\n"
 #~ "Please specify account for sending the message."
@@ -6509,11 +6263,26 @@ msgstr ""
 #~ msgid "Arguments:"
 #~ msgstr "Аргументы:"
 
+#, fuzzy
+#~ msgid "Ban Participant"
+#~ msgstr "Удзельнік"
+
+#~ msgid "Bold"
+#~ msgstr "Тлусты"
+
+#, fuzzy
+#~ msgid "Ch_ange"
+#~ msgstr "Змяніць м_янушку"
+
 #~ msgid "Change status"
 #~ msgstr "Змяніць стан"
 
 #~ msgid "Change status information"
 #~ msgstr "Змяніць звесткі аб стане"
+
+#, fuzzy
+#~ msgid "Change your nickname in a group chat"
+#~ msgstr "Змяніць м_янушку"
 
 #, fuzzy
 #~ msgid "Changes the priority of account(s)"
@@ -6527,11 +6296,39 @@ msgstr ""
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Праверце, ці працуе avahi-daemon."
 
+#, fuzzy
+#~ msgid "Clear chat window"
+#~ msgstr "Карыстанне: /%s, прыбірае тэкст у вакне."
+
+#, fuzzy
+#~ msgid "Clear the text window"
+#~ msgstr "Карыстанне: /%s, прыбірае тэкст у вакне."
+
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr "D-Bus няма на гэтым кампутары, альбо няма адпаведнага модуля python"
 
+#, fuzzy
+#~ msgid "Display names of all group chat participants"
+#~ msgstr "Карыстанне: /%s, хавае кнопкі групавой размовы."
+
+#, fuzzy
+#~ msgid "Display or change a group chat topic"
+#~ msgstr "Пытацца пацверджання закрыцця групавой размовы."
+
 #~ msgid "Do not disturb"
 #~ msgstr "Не турбаваць"
+
+#, fuzzy
+#~ msgid "Drop Files or Contacts"
+#~ msgstr "Людзі"
+
+#, fuzzy
+#~ msgid "Enter Password"
+#~ msgstr "Увядзіце новы пароль:"
+
+#, fuzzy
+#~ msgid "Error: Could not process image"
+#~ msgstr "Немагчыма загрузіць малюнак"
 
 #~ msgid "Extended away"
 #~ msgstr "Пашыраны рэжым адсутнасці"
@@ -6539,8 +6336,18 @@ msgstr ""
 #~ msgid "File path"
 #~ msgstr "Месца файла"
 
+#, fuzzy
+#~ msgid "Format your message…"
+#~ msgstr "Новае прыватнае паведамленне"
+
 #~ msgid "Free for chat"
 #~ msgstr "Вольны для размовы"
+
+#, fuzzy
+#~ msgid "Gajim will not try to join this group chat again"
+#~ msgstr ""
+#~ "Калі гэтая опцыя ўключаная, Gajim далучыцца да гэтай групавой размовы пры "
+#~ "запуску"
 
 #~ msgid "Gets detailed info on a account"
 #~ msgstr "Атрымаць падрабязныя звесткі аб рахунку"
@@ -6562,6 +6369,34 @@ msgstr ""
 #~ "настаўленне ўлічваецца толькі разам з значкай прасторы паведамленняў."
 
 #, fuzzy
+#~ msgid "Invalid affiliation given"
+#~ msgstr "Адносіны: "
+
+#, fuzzy
+#~ msgid "Invalid nickname"
+#~ msgstr "Няправільнае імя карыстальніка"
+
+#, fuzzy
+#~ msgid "Invalid role given"
+#~ msgstr "Няправільнае імя карыстальніка"
+
+#, fuzzy
+#~ msgid "Join a group chat given by an XMPP Address"
+#~ msgstr "Удзельнічаць у _групавой размове"
+
+#, fuzzy
+#~ msgid "Kick Participant"
+#~ msgstr "Удзельнік"
+
+#, fuzzy
+#~ msgid "Kick user from group chat by nickname"
+#~ msgstr "Вы не ўвайшлі ў пакой групавой размовы."
+
+#, fuzzy
+#~ msgid "Leave the group chat"
+#~ msgstr "Сысці з групавых размоў"
+
+#, fuzzy
 #~ msgid "Lists all contacts in the contact list, one for each line"
 #~ msgstr ""
 #~ "Паказаць спіс усіх людзей у кантактным лісце. Звесткі пра кожнага "
@@ -6570,8 +6405,24 @@ msgstr ""
 #~ msgid "Missing argument \"contact_jid\""
 #~ msgstr "Не хапае аргумента \"contact_jid\""
 
+#, fuzzy
+#~ msgid "Missing arguments"
+#~ msgstr "Не хапае аргумента \"contact_jid\""
+
 #~ msgid "Name of the account"
 #~ msgstr "Назва рахунка"
+
+#, fuzzy
+#~ msgid "Next sent messages"
+#~ msgstr "Стандартныя паведамленні:"
+
+#, fuzzy
+#~ msgid "Nickname not found"
+#~ msgstr "Мянушка не знойдзеная: %s"
+
+#, fuzzy
+#~ msgid "No open voice chats with the contact"
+#~ msgstr "Пстрыкніце, каб праглядзець былыя размовы з гэтым чалавекам"
 
 #~ msgid "Offline - disconnect"
 #~ msgstr "Адлучаны - па-за сеткай"
@@ -6579,11 +6430,35 @@ msgstr ""
 #~ msgid "Online"
 #~ msgstr "У сетцы"
 
+#, fuzzy
+#~ msgid "Open a private chat window with a specified participant"
+#~ msgstr ""
+#~ "Карыстанне: /%s <мянушка>, адкрывае вакно прыватнай размовы з чалавекам."
+
+#, fuzzy
+#~ msgid ""
+#~ "Open a private chat window with a specified participant and send him a "
+#~ "message"
+#~ msgstr ""
+#~ "Карыстанне: /%s <мянушка>, адкрывае вакно прыватнай размовы з чалавекам."
+
 #~ msgid "Presence description:"
 #~ msgstr "Апісанне прысутнасці:"
 
+#, fuzzy
+#~ msgid "Previously sent message"
+#~ msgstr "Стандартныя паведамленні:"
+
 #~ msgid "Prints a list of registered accounts"
 #~ msgstr "Паказаць спіс зарэгістраваных рахункаў"
+
+#, fuzzy
+#~ msgid "Quote next message"
+#~ msgstr "Адправіць паведамленне"
+
+#, fuzzy
+#~ msgid "Quote previous message"
+#~ msgstr "паведамленне стану"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6601,6 +6476,21 @@ msgstr ""
 
 #~ msgid "Returns number of unread messages"
 #~ msgstr "Вяртае колькасць нечытаных паведамленняў"
+
+#, fuzzy
+#~ msgid "Send a message to the contact"
+#~ msgstr "Карыстанне: /%s, хавае кнопкі размовы."
+
+#, fuzzy
+#~ msgid "Send a message to the contact that will attract their attention"
+#~ msgstr "Карыстанне: /%s, хавае кнопкі размовы."
+
+#, fuzzy
+#~ msgid "Send a ping to the contact"
+#~ msgstr "Адправіць файл чалавеку"
+
+#~ msgid "Sending private message failed"
+#~ msgstr "Памылка адпраўкі прыватнага паведамлення"
 
 #, fuzzy
 #~ msgid ""
@@ -6651,12 +6541,20 @@ msgstr ""
 #~ msgstr "Стан змяніўся."
 
 #, fuzzy
+#~ msgid "Too many arguments"
+#~ msgstr "Не хапае аргумента \"contact_jid\""
+
+#, fuzzy
 #~ msgid ""
 #~ "Too many arguments. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
 #~ msgstr ""
 #~ "Надта шмат аргументаў. \n"
 #~ "Увядзіце \"%s help %s\" для падрабязнейшых звестак"
+
+#, fuzzy
+#~ msgid "Unknown nickname"
+#~ msgstr "_Пасля мянушкі:"
 
 #, fuzzy
 #~ msgid ""
@@ -6667,6 +6565,14 @@ msgstr ""
 #~ msgstr ""
 #~ "Карыстанне: %s загад [аргументы]\n"
 #~ "Загад ёсць адным з:\n"
+
+#, fuzzy
+#~ msgid "Video chats are not available"
+#~ msgstr "Няма злучэння"
+
+#, fuzzy
+#~ msgid "Voice chats are not available"
+#~ msgstr "Няма злучэння"
 
 #~ msgid "XML to send"
 #~ msgstr "Адправіць XML"
@@ -6682,6 +6588,11 @@ msgstr ""
 #, fuzzy
 #~ msgid "XMPP Address of the group chat that will receive the message"
 #~ msgstr "JID чалавека, які атрымае паведамленне"
+
+#, fuzzy
+#~ msgid ""
+#~ "You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
+#~ msgstr "Вы выйшлі з пакоя \"%s\", альбо \"%s\" сышоў."
 
 #~ msgid "You have no active account"
 #~ msgstr "У Вас няма актыўнага рахунка"
@@ -6707,6 +6618,9 @@ msgstr ""
 #~ msgid "file"
 #~ msgstr "файл"
 
+#~ msgid "has closed the chat window or tab"
+#~ msgstr "закрыў вакно / картку размовы"
+
 #~ msgid "if specified, contact is taken from the contact list of this account"
 #~ msgstr "Калі вызначана, то імя чалавека выбіраецца з спіса гэтага рахунка"
 
@@ -6715,6 +6629,9 @@ msgstr ""
 
 #~ msgid "if specified, the message will be sent using this account"
 #~ msgstr "Калі вызначана, паведамленне будзе адпраўленае праз гэты рахунак"
+
+#~ msgid "is paying attention to the conversation"
+#~ msgstr "сочыць за размовай"
 
 #~ msgid "message contents"
 #~ msgstr "змест паведамлення"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-24 12:49+0000\n"
+"POT-Creation-Date: 2022-08-13 16:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,23 +17,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-
-msgid ""
-"\n"
-"    Ban user by a nick or a JID from a groupchat\n"
-"\n"
-"    If given nickname is not found it will be treated as a JID.\n"
-"    "
-msgstr ""
-
-msgid ""
-"\n"
-"    Set the current status\n"
-"\n"
-"    Status can be given as one of the following values:\n"
-"    online, away, chat, xa, dnd.\n"
-"    "
-msgstr ""
 
 msgid " (Video Call)"
 msgstr ""
@@ -151,10 +134,6 @@ msgid "%s is not a valid loglevel"
 msgstr ""
 
 #, python-format
-msgid "%s is not a valid tone"
-msgstr ""
-
-#, python-format
 msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the file to."
@@ -174,10 +153,6 @@ msgstr ""
 
 #, python-format
 msgid "%s wants to send you a file"
-msgstr ""
-
-#, python-format
-msgid "%s: Nothing found"
 msgstr ""
 
 #, python-format
@@ -753,9 +728,6 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allow a participant to send you public or private messages"
-msgstr ""
-
 msgid "Allowed File Size"
 msgstr ""
 
@@ -977,11 +949,11 @@ msgstr ""
 msgid "Back soon"
 msgstr ""
 
-#, python-format
-msgid "Ban %s"
+msgid "Ban"
 msgstr ""
 
-msgid "Ban Participant"
+#, python-format
+msgid "Ban %s"
 msgstr ""
 
 msgid "Ban…"
@@ -1010,9 +982,6 @@ msgid "Blocking List for %s"
 msgstr ""
 
 msgid "Block…"
-msgstr ""
-
-msgid "Bold"
 msgstr ""
 
 msgid "Bookmarks"
@@ -1122,9 +1091,6 @@ msgstr ""
 msgid "Certificate signature failure"
 msgstr ""
 
-msgid "Ch_ange"
-msgstr ""
-
 msgid "Ch_ange Subject"
 msgstr ""
 
@@ -1144,9 +1110,6 @@ msgid "Change Subject"
 msgstr ""
 
 msgid "Change your account’s password, etc."
-msgstr ""
-
-msgid "Change your nickname in a group chat"
 msgstr ""
 
 msgid "Change your profile picture"
@@ -1257,13 +1220,7 @@ msgstr ""
 msgid "Clear Sound"
 msgstr ""
 
-msgid "Clear chat window"
-msgstr ""
-
 msgid "Clear message entry"
-msgstr ""
-
-msgid "Clear the text window"
 msgstr ""
 
 msgid "Click on contacts you would like to invite to this group chat."
@@ -1298,11 +1255,6 @@ msgid "Color"
 msgstr ""
 
 msgid "Command List"
-msgstr ""
-
-msgid ""
-"Command disabled. This command can be enabled by setting "
-"'command_system_execute' to True in ACE (Advanced Configuration Editor)."
 msgstr ""
 
 msgid "Commands"
@@ -1493,6 +1445,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr ""
 
+msgid "Correct"
+msgstr ""
+
 msgid "Could not Open File"
 msgstr ""
 
@@ -1648,12 +1603,6 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
-msgid "Display names of all group chat participants"
-msgstr ""
-
-msgid "Display or change a group chat topic"
-msgstr ""
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr ""
@@ -1705,9 +1654,6 @@ msgid "Downloaded %s messages"
 msgstr ""
 
 msgid "Downloading…"
-msgstr ""
-
-msgid "Drop Files or Contacts"
 msgstr ""
 
 msgid "Drop files or contacts"
@@ -1794,19 +1740,22 @@ msgstr ""
 msgid "Encrypting file…"
 msgstr ""
 
+msgid "Encryption error"
+msgstr ""
+
 msgid "Encryption required"
 msgstr ""
 
 msgid "End call"
 msgstr ""
 
-msgid "Enter Nickname"
-msgstr ""
-
-msgid "Enter Password"
+msgid "Enter a password to join this chat"
 msgstr ""
 
 msgid "Enter new password..."
+msgstr ""
+
+msgid "Enter your new nickname"
 msgstr ""
 
 msgid ""
@@ -1817,9 +1766,6 @@ msgid "Error"
 msgstr ""
 
 msgid "Error Loading Image"
-msgstr ""
-
-msgid "Error during command execution!"
 msgstr ""
 
 #, python-format
@@ -1854,9 +1800,6 @@ msgstr ""
 msgid "Error: %s"
 msgstr ""
 
-msgid "Error: Could not process image"
-msgstr ""
-
 #, python-format
 msgid "Error: cannot open %s for reading"
 msgstr ""
@@ -1877,12 +1820,6 @@ msgid "Execute"
 msgstr ""
 
 msgid "Execute Command…"
-msgstr ""
-
-msgid "Execute expression inside a shell, send output"
-msgstr ""
-
-msgid "Execute expression inside a shell, show output"
 msgstr ""
 
 msgid "Executing…"
@@ -2053,13 +1990,13 @@ msgstr ""
 msgid "For example: \"Julia is now online\""
 msgstr ""
 
-msgid "Forbid a participant to send you public or private messages"
-msgstr ""
-
 msgid "Force Bookmark 2 usage"
 msgstr ""
 
 msgid "Forever"
+msgstr ""
+
+msgid "Forget Group Chat"
 msgstr ""
 
 msgid "Forget this Group Chat"
@@ -2078,9 +2015,6 @@ msgid "Format error in certificate's notBefore field"
 msgstr ""
 
 msgid "Format your message"
-msgstr ""
-
-msgid "Format your message…"
 msgstr ""
 
 msgid "Free for Chat"
@@ -2140,9 +2074,6 @@ msgstr ""
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
 "correct."
-msgstr ""
-
-msgid "Gajim will not try to join this group chat again"
 msgstr ""
 
 msgid "Gajim will now exit"
@@ -2272,6 +2203,9 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
+msgid "Hide chat list"
+msgstr ""
+
 msgid "Hide this menu"
 msgstr ""
 
@@ -2345,9 +2279,6 @@ msgstr ""
 msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 
-msgid "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
-msgstr ""
-
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 
@@ -2375,7 +2306,7 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "If you close this chat, you will leave '%s'."
+msgid "If you close this chat, you will leave \"%s\"."
 msgstr ""
 
 msgid ""
@@ -2457,16 +2388,10 @@ msgstr ""
 msgid "Invalid XMPP Address"
 msgstr ""
 
-msgid "Invalid affiliation given"
-msgstr ""
-
 msgid "Invalid domain name"
 msgstr ""
 
-msgid "Invalid nickname"
-msgstr ""
-
-msgid "Invalid role given"
+msgid "Invite"
 msgstr ""
 
 msgid "Invite Contacts"
@@ -2476,9 +2401,6 @@ msgid "Invite Contacts…"
 msgstr ""
 
 msgid "Invite New Contact"
-msgstr ""
-
-msgid "Invite a user to a group chat for a reason"
 msgstr ""
 
 msgid "Invite friends to group chats or join one"
@@ -2510,9 +2432,6 @@ msgid "Issued to\n"
 msgstr ""
 
 msgid "It is not possible to send empty files"
-msgstr ""
-
-msgid "Italic"
 msgstr ""
 
 msgid "I’m eating."
@@ -2557,9 +2476,6 @@ msgstr ""
 msgid "Join Support Chat"
 msgstr ""
 
-msgid "Join a group chat given by an XMPP Address"
-msgstr ""
-
 msgid "Joining…"
 msgstr ""
 
@@ -2578,14 +2494,11 @@ msgstr ""
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
+msgid "Kick"
+msgstr ""
+
 #, python-format
 msgid "Kick %s"
-msgstr ""
-
-msgid "Kick Participant"
-msgstr ""
-
-msgid "Kick user from group chat by nickname"
 msgstr ""
 
 msgid "Kick…"
@@ -2604,16 +2517,10 @@ msgstr ""
 msgid "Leave Group Chat"
 msgstr ""
 
-msgid "Leave the group chat"
-msgstr ""
-
 msgid "Left Click Action"
 msgstr ""
 
 msgid "Let others know if you read up to this point"
-msgstr ""
-
-msgid "Limit must be an integer"
 msgstr ""
 
 msgid ""
@@ -2770,10 +2677,10 @@ msgstr ""
 msgid "Miscellaneous"
 msgstr ""
 
-msgid "Missing arguments"
+msgid "Missing dependencies for Audio/Video"
 msgstr ""
 
-msgid "Missing dependencies for Audio/Video"
+msgid "Missing necessary encryption plugin"
 msgstr ""
 
 msgid "Moderation"
@@ -2833,20 +2740,13 @@ msgstr ""
 msgid "New Workspace"
 msgstr ""
 
-#, python-format
-msgid "New message from %s"
+msgid "New message from"
 msgstr ""
 
 msgid "Next"
 msgstr ""
 
-msgid "Next sent messages"
-msgstr ""
-
 msgid "Nickname"
-msgstr ""
-
-msgid "Nickname not found"
 msgstr ""
 
 msgid "No"
@@ -2896,9 +2796,6 @@ msgid "No devices online"
 msgstr ""
 
 msgid "No info available"
-msgstr ""
-
-msgid "No open voice chats with the contact"
 msgstr ""
 
 msgid "No proxy used"
@@ -3004,14 +2901,6 @@ msgid "Open Plugins…"
 msgstr ""
 
 msgid "Open _Folder"
-msgstr ""
-
-msgid "Open a private chat window with a specified participant"
-msgstr ""
-
-msgid ""
-"Open a private chat window with a specified participant and send him a "
-"message"
 msgstr ""
 
 msgid "Open as _Link"
@@ -3158,13 +3047,6 @@ msgstr ""
 msgid "Pin Chat"
 msgstr ""
 
-msgid "Ping?"
-msgstr ""
-
-#, python-format
-msgid "Ping? (%s)"
-msgstr ""
-
 msgid "Pinned"
 msgstr ""
 
@@ -3242,14 +3124,6 @@ msgstr ""
 msgid "Plugins Updated Successfully"
 msgstr ""
 
-#, python-format
-msgid "Pong! (%(nick)s %(delay)s s.)"
-msgstr ""
-
-#, python-format
-msgid "Pong! (%s seconds)"
-msgstr ""
-
 msgid "Port"
 msgstr ""
 
@@ -3287,9 +3161,6 @@ msgid "Preview new messages in notification popup?"
 msgstr ""
 
 msgid "Previous"
-msgstr ""
-
-msgid "Previously sent message"
 msgstr ""
 
 msgid "Print XML stanzas and other debug information"
@@ -3349,12 +3220,6 @@ msgid "Quit"
 msgstr ""
 
 msgid "Quit Gajim"
-msgstr ""
-
-msgid "Quote next message"
-msgstr ""
-
-msgid "Quote previous message"
 msgstr ""
 
 msgid "Quote…"
@@ -3774,9 +3639,6 @@ msgstr ""
 msgid "Send Chatstate in Group Chats"
 msgstr ""
 
-msgid "Send DTMF sequence through an open voice chat"
-msgstr ""
-
 msgid "Send File"
 msgstr ""
 
@@ -3805,21 +3667,6 @@ msgstr ""
 msgid "Send _Report"
 msgstr ""
 
-msgid "Send a disco info request"
-msgstr ""
-
-msgid "Send a message to the contact"
-msgstr ""
-
-msgid "Send a message to the contact that will attract their attention"
-msgstr ""
-
-msgid "Send a ping to the contact"
-msgstr ""
-
-msgid "Send action (in the third person) to the current chat"
-msgstr ""
-
 msgid "Send message on Ctrl+Enter and make a new line with Enter."
 msgstr ""
 
@@ -3827,9 +3674,6 @@ msgid "Send the message"
 msgstr ""
 
 msgid "Sender: "
-msgstr ""
-
-msgid "Sending private message failed"
 msgstr ""
 
 #, python-format
@@ -3883,25 +3727,7 @@ msgstr ""
 msgid "Set configuration directory"
 msgstr ""
 
-msgid ""
-"Set participant affiliation in group chat.\n"
-"    Affiliation can be given as one of the following values:\n"
-"    owner, admin, member, outcast, none"
-msgstr ""
-
-msgid ""
-"Set participant role in group chat.\n"
-"    Role can be given as one of the following values:\n"
-"    moderator, participant, visitor, none"
-msgstr ""
-
 msgid "Set status message"
-msgstr ""
-
-msgid "Set the current status to away"
-msgstr ""
-
-msgid "Set the current status to online"
 msgstr ""
 
 msgid "Set your activity or tune to show your friends how you are feeling"
@@ -3993,8 +3819,7 @@ msgstr ""
 msgid "Show all warnings"
 msgstr ""
 
-msgid ""
-"Show help on a given command or a list of available commands if -a is given"
+msgid "Show chat list"
 msgstr ""
 
 msgid "Show in Taskbar"
@@ -4003,9 +3828,6 @@ msgstr ""
 msgid ""
 "Show labels describing confidentiality of messages, if the server supports "
 "XEP-0258"
-msgstr ""
-
-msgid "Show logged messages which mention given text"
 msgstr ""
 
 msgid ""
@@ -4203,9 +4025,6 @@ msgstr ""
 msgid "Street"
 msgstr ""
 
-msgid "Strike"
-msgstr ""
-
 msgid "Style"
 msgstr ""
 
@@ -4285,9 +4104,6 @@ msgstr ""
 msgid "TLS verification failed: %s"
 msgstr ""
 
-msgid "T_ry Again"
-msgstr ""
-
 msgid "Tabbed chat window"
 msgstr ""
 
@@ -4340,9 +4156,6 @@ msgid ""
 msgstr ""
 
 msgid "The last message was written on a mobile client"
-msgstr ""
-
-msgid "The same as using a doc-string, except it supports translation"
 msgstr ""
 
 msgid "The server has assigned or modified your nickname in this group chat"
@@ -4510,16 +4323,7 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr ""
 
-msgid "Toggle Video Chat"
-msgstr ""
-
-msgid "Toggle Voice Chat"
-msgstr ""
-
 msgid "Toggle participants list"
-msgstr ""
-
-msgid "Too many arguments"
 msgstr ""
 
 msgid "Topic"
@@ -4631,9 +4435,6 @@ msgid "Unknown Title"
 msgstr ""
 
 msgid "Unknown language"
-msgstr ""
-
-msgid "Unknown nickname"
 msgstr ""
 
 msgid "Unknown validation error"
@@ -4768,9 +4569,6 @@ msgstr ""
 msgid "Video calls are not available on Windows"
 msgstr ""
 
-msgid "Video chats are not available"
-msgstr ""
-
 msgid "Video test"
 msgstr ""
 
@@ -4790,9 +4588,6 @@ msgid "Visual Notifications"
 msgstr ""
 
 msgid "Voice Request"
-msgstr ""
-
-msgid "Voice chats are not available"
 msgstr ""
 
 msgid "Waiting…"
@@ -4902,11 +4697,6 @@ msgstr ""
 
 #, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
-msgstr ""
-
-#, python-format
-msgid ""
-"You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
 msgstr ""
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
@@ -5082,9 +4872,6 @@ msgstr ""
 msgid "_Back"
 msgstr ""
 
-msgid "_Ban"
-msgstr ""
-
 msgid "_Block"
 msgstr ""
 
@@ -5154,9 +4941,6 @@ msgstr ""
 msgid "_File Transfer"
 msgstr ""
 
-msgid "_Forget Group Chat"
-msgstr ""
-
 msgid "_Free for Chat"
 msgstr ""
 
@@ -5176,9 +4960,6 @@ msgid "_Join"
 msgstr ""
 
 msgid "_Keyboard Shortcuts"
-msgstr ""
-
-msgid "_Kick"
 msgstr ""
 
 msgid "_Later"
@@ -5301,9 +5082,6 @@ msgstr ""
 msgid "_Subscribe"
 msgstr ""
 
-msgid "_Try Again"
-msgstr ""
-
 msgid "_Type"
 msgstr ""
 
@@ -5355,6 +5133,9 @@ msgstr ""
 msgid "bearing"
 msgstr ""
 
+msgid "bold"
+msgstr ""
+
 msgid "building"
 msgstr ""
 
@@ -5396,9 +5177,6 @@ msgstr ""
 msgid "floor"
 msgstr ""
 
-msgid "has closed the chat window or tab"
-msgstr ""
-
 msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
@@ -5413,7 +5191,7 @@ msgstr ""
 msgid "is doing something else"
 msgstr ""
 
-msgid "is paying attention to the conversation"
+msgid "italic"
 msgstr ""
 
 msgid "lat"
@@ -5458,6 +5236,9 @@ msgid "speed"
 msgstr ""
 
 msgid "street"
+msgstr ""
+
+msgid "strike"
 msgstr ""
 
 msgid "text"
