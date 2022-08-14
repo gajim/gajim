@@ -570,6 +570,10 @@ class ChatRow(Gtk.ListBoxRow):
             self.contact.connect('user-status-show-changed',
                                  self._on_muc_user_update)
 
+            self.contact.room.connect('room-left', self._on_muc_update)
+            self.contact.room.connect('room-destroyed', self._on_muc_update)
+            self.contact.room.connect('room-kicked', self._on_muc_update)
+
         self.contact_name: str = self.contact.name
         self.timestamp: float = 0
         self.stanza_id: Optional[str] = None
@@ -777,6 +781,13 @@ class ChatRow(Gtk.ListBoxRow):
                             ) -> None:
         self.update_avatar()
 
+    def _on_muc_update(self,
+                       _contact: GroupchatContact,
+                       _signal_name: str,
+                       *args: Any
+                       ) -> None:
+        self.update_avatar()
+
     def update_avatar(self) -> None:
         scale = self.get_scale_factor()
         surface = self.contact.get_avatar(AvatarSize.ROSTER, scale)
@@ -908,6 +919,9 @@ class ChatRow(Gtk.ListBoxRow):
 
     def _on_destroy(self, _row: ChatRow) -> None:
         self.contact.disconnect_all_from_obj(self)
+        if isinstance(self.contact, GroupchatParticipant):
+            self.contact.room.disconnect_all_from_obj(self)
+
         app.check_finalize(self)
 
     def _on_close_button_clicked(self, _button: Gtk.Button) -> None:
