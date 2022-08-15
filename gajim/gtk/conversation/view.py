@@ -130,10 +130,11 @@ class ConversationView(Gtk.ListBox):
 
     def reset(self) -> None:
         for row in self.get_children()[2:]:
+            if isinstance(row, ReadMarkerRow):
+                continue
             row.destroy()
 
         self._row_count = 0
-        self._read_marker_row = None
         self._active_date_rows = set()
         self._message_id_row_map = {}
 
