@@ -175,8 +175,10 @@ class MessageInputTextView(Gtk.TextView):
         for block in result.blocks:
             if isinstance(block, PlainBlock):
                 for span in block.spans:
-                    start_iter = buf.get_iter_at_offset(span.start)
-                    end_iter = buf.get_iter_at_offset(span.end)
+                    start_iter = buf.get_iter_at_offset(
+                        span.start + block.start)
+                    end_iter = buf.get_iter_at_offset(
+                        span.end + block.start)
                     buf.apply_tag_by_name(span.name, start_iter, end_iter)
 
     def insert_text(self, text: str) -> None:
