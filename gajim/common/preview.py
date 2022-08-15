@@ -388,6 +388,7 @@ class PreviewManager:
     def download_content(self,
                          preview: Preview,
                          force: bool = False) -> None:
+        preview.reset_received_size()
         if preview.account is None:
             # History Window can be opened without account context
             # This means we can not apply proxy settings
@@ -552,5 +553,6 @@ class PreviewManager:
         preview.update_widget(data=pixbuf)
 
     def cancel_download(self, preview: Preview) -> None:
+        preview.reset_received_size()
         session = self._get_session(preview.account)
         session.cancel_message(preview.soup_message, Soup.Status.CANCELLED)
