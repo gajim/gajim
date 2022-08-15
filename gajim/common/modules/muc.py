@@ -974,7 +974,7 @@ class MUC(BaseModule):
         password = self._mucs[str(room)].password
         self._log.info('Invite %s to %s', jid, room)
         return self._nbxmpp('MUC').invite(
-            room, jid, reason, password, continue_, type_)
+            room, jid, password, reason, continue_, type_)
 
     def _on_client_state_changed(self,
                                  _client: types.Client,
