@@ -499,7 +499,8 @@ class ChatControl(EventHelper):
         if isinstance(self.contact, GroupchatParticipant):
             muc_data = self.client.get_module('MUC').get_muc_data(
                 self.contact.jid.bare)
-            return muc_data.nick
+            if muc_data is not None:
+                return muc_data.nick
 
         return app.nicks[self.contact.account]
 
