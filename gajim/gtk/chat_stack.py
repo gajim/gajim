@@ -742,14 +742,14 @@ class ChatStack(Gtk.Stack, EventHelper):
                           message_actions_box: MessageActionsBox,
                           error: str) -> None:
 
-        self._chat_control.add_info_message(error)
+        self._chat_control.add_command_output(error, True)
 
     def _on_command_not_found(self,
                               message_actions_box: MessageActionsBox,
                               error: str
                               ) -> None:
 
-        self._chat_control.add_info_message(error)
+        self._chat_control.add_command_output(error, True)
 
 
 class ChatPlaceholderBox(Gtk.Box):

@@ -507,6 +507,9 @@ class ChatControl(EventHelper):
     def _allow_add_message(self) -> bool:
         return self._scrolled_view.get_lower_complete()
 
+    def add_command_output(self, text: str, is_error: bool) -> None:
+        self.conversation_view.add_command_output(text, is_error)
+
     def add_info_message(self,
                          text: str,
                          timestamp: Optional[float] = None
