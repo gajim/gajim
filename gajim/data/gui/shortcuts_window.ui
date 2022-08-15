@@ -130,7 +130,7 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
-                <property name="accelerator">&lt;primary&gt;h</property>
+                <property name="accelerator">&lt;primary&gt;f</property>
                 <property name="title" translatable="yes">Open search bar</property>
               </object>
             </child>
@@ -139,7 +139,7 @@
         <child>
           <object class="GtkShortcutsGroup">
             <property name="visible">1</property>
-            <property name="title" translatable="yes">Tabs</property>
+            <property name="title" translatable="yes">Chat List</property>
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
