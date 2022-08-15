@@ -19,7 +19,6 @@ from typing import Optional
 import time
 from datetime import datetime
 
-from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common.const import AvatarSize
@@ -41,8 +40,6 @@ class InfoMessage(BaseRow):
         current_timestamp = timestamp or time.time()
         self.timestamp = datetime.fromtimestamp(current_timestamp)
         self.db_timestamp = current_timestamp
-
-        text = GLib.markup_escape_text(text)
 
         avatar_placeholder = Gtk.Box()
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
