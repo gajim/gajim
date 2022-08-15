@@ -127,6 +127,9 @@ class BlockingList(Gtk.ApplicationWindow):
 
         blocked_jids: set[JID] = set()
         for item in self._ui.blocking_store:
+            if not item[0]:
+                # No address/placeholder
+                continue
             blocked_jids.add(JID.from_string(item[0].lower()))
 
         unblock_jids = self._prev_blocked_jids - blocked_jids
