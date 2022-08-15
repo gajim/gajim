@@ -33,6 +33,7 @@ from gi.repository import Pango
 from nbxmpp.protocol import JID
 
 from gajim.common import app
+from gajim.common.i18n import LANG
 from gajim.common.i18n import _
 from gajim.common.styling import process
 from gajim.common.styling import PlainBlock
@@ -93,7 +94,65 @@ class MessageInputTextView(Gtk.TextView):
         self.connect('destroy', self._on_destroy)
         self.connect('populate-popup', self._on_populate_popup)
 
+        self._language_handler_id = self._init_spell_checker()
+        app.settings.connect_signal('use_speller', self._on_toggle_spell_check)
+
         app.plugin_manager.gui_extension_point('message_input', self)
+
+    def _init_spell_checker(self) -> int:
+        if not app.is_installed('GSPELL'):
+            return 0
+
+        checker = Gspell.Checker.new(Gspell.language_get_default())
+
+        buffer = Gspell.TextBuffer.get_from_gtk_text_buffer(self.get_buffer())
+        buffer.set_spell_checker(checker)
+
+        view = Gspell.TextView.get_from_gtk_text_view(self)
+        view.set_enable_language_menu(True)
+
+        self._on_toggle_spell_check()
+
+        return checker.connect('notify::language', self._on_language_changed)
+
+    def _set_spell_checker_language(self, contact: ChatContactT) -> None:
+        if not app.is_installed('GSPELL'):
+            return
+
+        buffer = Gspell.TextBuffer.get_from_gtk_text_buffer(self.get_buffer())
+        checker = buffer.get_spell_checker()
+        assert checker is not None
+        lang = self._get_spell_checker_language(contact)
+
+        with checker.handler_block(self._language_handler_id):
+            checker.set_language(lang)
+
+    def _get_spell_checker_language(self,
+                                    contact: ChatContactT
+                                    ) -> Optional[Gspell.Language]:
+
+        lang = contact.settings.get('speller_language')
+        if not lang:
+            # use the default one
+            lang = app.settings.get('speller_language')
+            if not lang:
+                lang = LANG
+
+        assert isinstance(lang, str)
+        lang = Gspell.language_lookup(lang)
+        if lang is None:
+            lang = Gspell.language_get_default()
+        return lang
+
+    def _on_language_changed(self,
+                             checker: Gspell.Checker,
+                             _param: Any) -> None:
+
+        gspell_lang = checker.get_language()
+        if gspell_lang is not None:
+            assert self._contact is not None
+            self._contact.settings.set('speller_language',
+                                       gspell_lang.get_code())
 
     def switch_contact(self, contact: ChatContactT) -> None:
         if self._contact is not None:
@@ -111,6 +170,7 @@ class MessageInputTextView(Gtk.TextView):
 
         self._contact = contact
         self._chat_action_processor.switch_contact(contact)
+        self._set_spell_checker_language(contact)
 
     def _on_destroy(self, _widget: Gtk.Widget) -> None:
         # We restore the TextView’s drag destination to avoid a GTK warning
@@ -129,7 +189,7 @@ class MessageInputTextView(Gtk.TextView):
                      _widget: Gtk.Widget,
                      _event: Gdk.EventFocus
                      ) -> bool:
-        self.toggle_speller(True)
+
         scrolled = self.get_parent()
         assert scrolled
         scrolled.get_style_context().add_class('message-input-focus')
@@ -139,11 +199,10 @@ class MessageInputTextView(Gtk.TextView):
                       _widget: Gtk.Widget,
                       _event: Gdk.EventFocus
                       ) -> bool:
+
         scrolled = self.get_parent()
         assert scrolled
         scrolled.get_style_context().remove_class('message-input-focus')
-        if not self.has_text:
-            self.toggle_speller(False)
         return False
 
     def _clear_tags(self) -> None:
@@ -210,10 +269,13 @@ class MessageInputTextView(Gtk.TextView):
     def get_draft(self, account: str, jid: JID) -> Optional[str]:
         return self._drafts.get((account, jid))
 
-    def toggle_speller(self, activate: bool) -> None:
-        if app.is_installed('GSPELL') and app.settings.get('use_speller'):
-            spell_view = Gspell.TextView.get_from_gtk_text_view(self)
-            spell_view.set_inline_spell_checking(activate)
+    def _on_toggle_spell_check(self, *args: Any) -> None:
+        if not app.is_installed('GSPELL'):
+            return
+
+        use_spell_check = app.settings.get('use_speller')
+        spell_view = Gspell.TextView.get_from_gtk_text_view(self)
+        spell_view.set_inline_spell_checking(use_spell_check)
 
     @staticmethod
     def _after_paste_clipboard(textview: Gtk.TextView) -> None:

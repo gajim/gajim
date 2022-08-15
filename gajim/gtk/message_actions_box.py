@@ -36,7 +36,6 @@ from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common import events
-from gajim.common import i18n
 from gajim.common import ged
 from gajim.common.commands import ArgumentParserError
 from gajim.common.commands import CommandError
@@ -63,8 +62,6 @@ from .menus import get_self_contact_menu
 from .menus import get_singlechat_menu
 from .message_input import MessageInputTextView
 
-if app.is_installed('GSPELL'):
-    from gi.repository import Gspell  # pylint: disable=ungrouped-imports
 
 log = logging.getLogger('gajim.gui.messageactionsbox')
 
@@ -122,9 +119,6 @@ class MessageActionsBox(Gtk.Grid, ged.EventHelper):
         self._ui.quick_invite_button.set_action_name('win.muc-invite')
 
         self._init_emoticon_popover()
-        # TODO init spellchecker uses a contact on callback, contact might
-        # be None
-        self._language_handler_id = self._init_spell_checker()
 
         self.show_all()
         self._ui.connect_signals(self)
@@ -237,7 +231,6 @@ class MessageActionsBox(Gtk.Grid, ged.EventHelper):
         self._set_encryption_state(encryption)
         self._set_encryption_details(encryption)
 
-        self._set_spell_checker_language(contact)
         self._set_chatstate(True)
 
         self.msg_textview.switch_contact(contact)
@@ -426,69 +419,6 @@ class MessageActionsBox(Gtk.Grid, ged.EventHelper):
             popover.show()
         else:
             self.msg_textview.emit('insert-emoji')
-
-    def _init_spell_checker(self) -> int:
-        if not app.is_installed('GSPELL'):
-            return 0
-
-        checker = Gspell.Checker.new(Gspell.language_get_default())
-
-        buffer = Gspell.TextBuffer.get_from_gtk_text_buffer(
-            self.msg_textview.get_buffer())
-        buffer.set_spell_checker(checker)
-
-        use_spell_check = app.settings.get('use_speller')
-        view = Gspell.TextView.get_from_gtk_text_view(self.msg_textview)
-        view.set_inline_spell_checking(use_spell_check)
-        view.set_enable_language_menu(True)
-
-        return checker.connect('notify::language', self._on_language_changed)
-
-    def toggle_spell_checker(self) -> None:
-        if not app.is_installed('GSPELL'):
-            return
-        use_spell_check = app.settings.get('use_speller')
-        view = Gspell.TextView.get_from_gtk_text_view(self.msg_textview)
-        view.set_inline_spell_checking(use_spell_check)
-
-    def _set_spell_checker_language(self, contact: ChatContactT) -> None:
-        if not app.is_installed('GSPELL'):
-            return
-
-        buffer = Gspell.TextBuffer.get_from_gtk_text_buffer(
-            self.msg_textview.get_buffer())
-        checker = buffer.get_spell_checker()
-        assert checker is not None
-        lang = self._get_spell_checker_language(contact)
-
-        with checker.handler_block(self._language_handler_id):
-            checker.set_language(lang)
-
-    def _get_spell_checker_language(self,
-                                    contact: ChatContactT
-                                    ) -> Optional[Gspell.Language]:
-
-        lang = contact.settings.get('speller_language')
-        if not lang:
-            # use the default one
-            lang = app.settings.get('speller_language')
-            if not lang:
-                lang = i18n.LANG
-
-        assert isinstance(lang, str)
-        lang = Gspell.language_lookup(lang)
-        if lang is None:
-            lang = Gspell.language_get_default()
-        return lang
-
-    def _on_language_changed(self,
-                             checker: Gspell.Checker,
-                             _param: Any) -> None:
-
-        gspell_lang = checker.get_language()
-        if gspell_lang is not None:
-            contact = self.get_current_contact()
-            contact.settings.set('speller_language', gspell_lang.get_code())
 
     def _on_send_file_enabled_changed(self,
                                       action: Gio.SimpleAction,

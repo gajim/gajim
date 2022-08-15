@@ -271,8 +271,7 @@ class Chats(PreferenceBox):
                     SettingType.CONFIG,
                     'use_speller',
                     desc=speller_desc,
-                    enabled_func=self._speller_available,
-                    callback=self._on_use_speller),
+                    enabled_func=self._speller_available),
 
             Setting(SettingKind.SWITCH,
                     _('Message Receipts (✔)'),
@@ -316,23 +315,6 @@ class Chats(PreferenceBox):
     @staticmethod
     def _speller_available() -> bool:
         return app.is_installed('GSPELL')
-
-    @staticmethod
-    def _on_use_speller(value: bool, *args: Any) -> None:
-        # TODO
-        # if not value:
-        #     return
-
-        # lang = app.settings.get('speller_language')
-        # gspell_lang = Gspell.language_lookup(lang)
-        # if gspell_lang is None:
-        #     gspell_lang = Gspell.language_get_default()
-        # if gspell_lang is None:
-        #     return
-        # app.settings.set('speller_language', gspell_lang.get_code())
-        # for ctrl in app.window.get_controls():
-        #     ctrl.set_speller()
-        pass
 
     @staticmethod
     def _on_show_send_message_button(show_button: bool, *args: Any) -> None:
