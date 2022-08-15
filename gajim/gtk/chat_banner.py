@@ -78,9 +78,6 @@ class ChatBanner(Gtk.Box, EventHelper):
 
         self.unregister_events()
 
-        self._contact = None
-        self._client = None
-
     def switch_contact(self, contact: types.ChatContactT) -> None:
         self._update_account_badge(contact.account)
 
