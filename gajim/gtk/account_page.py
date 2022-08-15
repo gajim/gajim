@@ -18,6 +18,8 @@ from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import Gtk
 
+from nbxmpp.protocol import JID
+
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
@@ -102,6 +104,10 @@ class AccountPage(Gtk.Box, EventHelper):
     def _on_account_settings(self, _button: Gtk.Button) -> None:
         window = open_window('AccountsWindow')
         window.select_account(self._account)
+
+    def _on_adhoc_commands(self, _button: Gtk.Button) -> None:
+        server_jid = JID.from_string(self._jid).domain
+        open_window('AdHocCommands', account=self._account, jid=server_jid)
 
     def _on_search_changed(self, widget: Gtk.SearchEntry) -> None:
         text = widget.get_text().lower()
