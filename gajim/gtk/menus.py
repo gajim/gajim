@@ -213,7 +213,7 @@ def get_conv_action_context_menu(account: str,
                                            placeholder='…')
 
     action_menu_item = Gtk.MenuItem.new_with_mnemonic(
-        _('_Actions for "%s"') % selected_text_short)
+        _('_Actions for "%s"') % escape_mnemonic(selected_text_short))
     submenu = Gtk.Menu()
     action_menu_item.set_submenu(submenu)
 
