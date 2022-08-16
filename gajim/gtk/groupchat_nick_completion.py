@@ -15,12 +15,12 @@
 from __future__ import annotations
 
 from typing import Optional
-from typing import TYPE_CHECKING
 
 import logging
 
 from nbxmpp.structs import PresenceProperties
 
+from gi.repository import Gtk
 from gi.repository import Gdk
 
 from gajim.common import app
@@ -31,8 +31,6 @@ from gajim.common.ged import EventHelper
 from gajim.common.helpers import jid_is_blocked
 from gajim.common.helpers import message_needs_highlight
 
-if TYPE_CHECKING:
-    from .message_input import MessageInputTextView
 
 log = logging.getLogger('gajim.gui.groupchat_nick_completion')
 
@@ -186,7 +184,7 @@ class GroupChatNickCompletion(EventHelper):
         return matches + other_nicks
 
     def process_key_press(self,
-                          textview: MessageInputTextView,
+                          textview: Gtk.TextView,
                           event: Gdk.EventKey
                           ) -> bool:
         if (event.get_state() & Gdk.ModifierType.SHIFT_MASK or

@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import cast
 from typing import Optional
-from typing import TYPE_CHECKING
 
 from gi.repository import Gdk
 from gi.repository import Gio
@@ -31,14 +30,12 @@ from gajim.common.modules.contacts import GroupchatContact
 from .emoji_data_gtk import get_emoji_data
 from .groupchat_nick_completion import GroupChatNickCompletion
 
-if TYPE_CHECKING:
-    from .message_input import MessageInputTextView
 
 MAX_ENTRIES = 5
 
 
 class ChatActionProcessor(Gtk.Popover):
-    def __init__(self, message_input: MessageInputTextView) -> None:
+    def __init__(self, message_input: Gtk.TextView) -> None:
         Gtk.Popover.__init__(self)
         self._menu = Gio.Menu()
         self.bind_model(self._menu)
@@ -75,7 +72,7 @@ class ChatActionProcessor(Gtk.Popover):
         app.check_finalize(self)
 
     def _on_key_press(self,
-                      textview: MessageInputTextView,
+                      textview: Gtk.TextView,
                       event: Gdk.EventKey
                       ) -> bool:
         if isinstance(self._contact, GroupchatContact):
@@ -125,7 +122,7 @@ class ChatActionProcessor(Gtk.Popover):
         assert self._contact is not None
         return app.commands.get_commands(self._contact.type_string)
 
-    def _on_changed(self, _textview: MessageInputTextView) -> None:
+    def _on_changed(self, _text_buffer: Gtk.TextBuffer) -> None:
         insert = self._buf.get_insert()
         self._current_iter = self._buf.get_iter_at_mark(insert)
         current_offset = self._current_iter.get_offset()
