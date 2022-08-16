@@ -16,6 +16,7 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Literal
+from typing import TYPE_CHECKING
 
 import logging
 
@@ -36,7 +37,6 @@ from .chat_list_stack import ChatListStack
 from .chat_stack import ChatStack
 from .search_view import SearchView
 
-from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .control import ChatControl
 

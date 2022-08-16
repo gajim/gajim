@@ -17,6 +17,7 @@ from __future__ import annotations
 from typing import Any
 from typing import cast
 from typing import Optional
+from typing import TYPE_CHECKING
 
 import logging
 
@@ -63,7 +64,6 @@ from .structs import AccountJidParam
 from .structs import AddChatActionParams
 from .structs import actionmethod
 
-from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .control import ChatControl
 
