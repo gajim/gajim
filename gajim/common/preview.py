@@ -531,7 +531,10 @@ class PreviewManager:
 
         if error is not None:
             log.error('%s: %s', preview.thumb_path.name, error)
-            return
+            if not preview.thumb_exists:
+                # Generating a preview can fail if the file already exists
+                # Only abort if thumbnail has not been stored in preview
+                return
 
         log.info('Thumbnail stored: %s ', preview.thumb_path.name)
 
