@@ -39,6 +39,7 @@ class ScrollHintRow(BaseRow):
         self.grid.attach(self.label, 0, 1, 1, 1)
 
         self.set_history_complete(False)
+        self.show_all()
 
     def set_history_complete(self, complete: bool) -> None:
         if complete:

@@ -26,8 +26,8 @@ from .base import BaseRow
 
 
 class ReadMarkerRow(BaseRow):
-    def __init__(self, account: str, contact: ChatContactT) -> None:
-        BaseRow.__init__(self, account, widget='label')
+    def __init__(self, contact: ChatContactT) -> None:
+        BaseRow.__init__(self, contact.account, widget='label')
         self.set_activatable(False)
         self.type = 'read_marker'
         self.timestamp = datetime.fromtimestamp(0)

@@ -119,24 +119,27 @@ class ConversationView(Gtk.ListBox):
                                     account=contact.account,
                                     jid=contact.jid)
 
-        self._read_marker_row = ReadMarkerRow(contact.account, contact)
-        self.add(self._read_marker_row)
-
-        self._scroll_hint_row = ScrollHintRow(contact.account)
-        self.add(self._scroll_hint_row)
-
     def get_row_at_index(self, index: int) -> BaseRow:
         return cast(BaseRow, Gtk.ListBox.get_row_at_index(self, index))
 
     def reset(self) -> None:
-        for row in self.get_children()[2:]:
-            if isinstance(row, ReadMarkerRow):
-                continue
+        for row in self.get_children():
             row.destroy()
 
         self._row_count = 0
         self._active_date_rows = set()
         self._message_id_row_map = {}
+        self._read_marker_row = None
+        self._scroll_hint_row = None
+
+        if self._contact is not None:
+            # These need to be present if ConversationView is reset
+            # without switch_contact being invoked
+            self._read_marker_row = ReadMarkerRow(self._contact)
+            self.add(self._read_marker_row)
+
+            self._scroll_hint_row = ScrollHintRow(self._contact.account)
+            self.add(self._scroll_hint_row)
 
     def get_first_message_row(self) -> Optional[MessageRow]:
         for row in self.get_children():
