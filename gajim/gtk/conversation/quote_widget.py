@@ -14,12 +14,7 @@
 
 from __future__ import annotations
 
-import typing
-
 from gi.repository import Gtk
-
-if typing.TYPE_CHECKING:
-    from .message_widget import MessageWidget
 
 
 class QuoteWidget(Gtk.Box):
@@ -32,16 +27,3 @@ class QuoteWidget(Gtk.Box):
         quote_bar.set_margin_end(6)
         quote_bar.get_style_context().add_class('conversation-quote-bar')
         self.add(quote_bar)
-
-        self._account = account
-
-        self._message_widget = None
-
-    def attach_message_widget(self, message_widget: MessageWidget) -> None:
-
-        # Purpose of this method is to prevent circular imports
-        if self._message_widget is not None:
-            raise ValueError(
-                'QuoteWidget already has a MessageWidget attached')
-        self._message_widget = message_widget
-        self.add(message_widget)

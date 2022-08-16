@@ -2,7 +2,6 @@
     "pythonPlatform": "All",
     "pythonVersion": "3.9",
     "typeCheckingMode": "strict",
-    "reportImportCycles": "none",
     "reportUnnecessaryTypeIgnoreComment": "error",
     "reportPropertyTypeMismatch": "error",
     "reportMissingModuleSource": "none",

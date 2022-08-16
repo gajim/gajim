@@ -86,7 +86,7 @@ class MessageWidget(Gtk.Box):
                 message_widget = MessageWidget(self._account, self._selectable)
                 message_widget.add_content(block)
                 widget = QuoteWidget(self._account)
-                widget.attach_message_widget(message_widget)
+                widget.add(message_widget)
                 self.add(widget)
                 continue
 
