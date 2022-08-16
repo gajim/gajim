@@ -63,6 +63,10 @@ from .structs import AccountJidParam
 from .structs import AddChatActionParams
 from .structs import actionmethod
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .control import ChatControl
+
 log = logging.getLogger('gajim.gui.main')
 
 
@@ -749,7 +753,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                         message: Optional[str] = None) -> None:
         self._app_page.add_app_message(category, message)
 
-    def get_control(self) -> Any:
+    def get_control(self) -> ChatControl:
         return self._chat_page.get_control()
 
     def chat_exists(self, account: str, jid: JID) -> bool:

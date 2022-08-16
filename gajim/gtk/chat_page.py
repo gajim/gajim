@@ -12,6 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Any
 from typing import Literal
 
@@ -33,7 +35,10 @@ from .chat_list import ChatList
 from .chat_list_stack import ChatListStack
 from .chat_stack import ChatStack
 from .search_view import SearchView
-from .types import ControlT
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .control import ChatControl
 
 
 log = logging.getLogger('gajim.gui.chat_page')
@@ -293,7 +298,7 @@ class ChatPage(Gtk.Box):
             if self._chat_control.contact.account == account:
                 self._chat_control.clear()
 
-    def get_control(self) -> ControlT:
+    def get_control(self) -> ChatControl:
         return self._chat_control
 
     def hide_search(self) -> bool:
