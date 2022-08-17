@@ -151,35 +151,35 @@
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;Page_Up</property>
-                <property name="title" translatable="yes">Switch to the previous tab</property>
+                <property name="title" translatable="yes">Switch to the previous chat</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;Page_Down</property>
-                <property name="title" translatable="yes">Switch to the next tab</property>
+                <property name="title" translatable="yes">Switch to the next chat</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;Alt&gt;1...9</property>
-                <property name="title" translatable="yes">Switch to the first - ninth tab</property>
+                <property name="title" translatable="yes">Switch to the first - ninth chat</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;&lt;shift&gt;Tab</property>
-                <property name="title" translatable="yes">Switch to the previous unread tab</property>
+                <property name="title" translatable="yes">Switch to the previous unread chat</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;Tab</property>
-                <property name="title" translatable="yes">Switch to the next unread tab</property>
+                <property name="title" translatable="yes">Switch to the next unread chat</property>
               </object>
             </child>
             <child>
@@ -187,6 +187,13 @@
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;w</property>
                 <property name="title" translatable="yes">Close chat</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;primary&gt;1...9</property>
+                <property name="title" translatable="yes">Switch to the first - ninth workspace</property>
               </object>
             </child>
           </object>

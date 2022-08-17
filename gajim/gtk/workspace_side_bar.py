@@ -218,9 +218,8 @@ class WorkspaceSideBar(Gtk.ListBox):
         self.insert(row, len(self.get_children()) - 1)
 
     def store_workspace_order(self) -> None:
-        workspaces: list[CommonWorkspace] = cast(
-            list[CommonWorkspace], self.get_children())
-        order: list[str] = [row.workspace_id for row in workspaces]
+        workspaces = cast(list[CommonWorkspace], self.get_children())
+        order = [row.workspace_id for row in workspaces]
         order.remove('add')
         app.settings.set_app_setting('workspace_order', order)
 
@@ -239,6 +238,11 @@ class WorkspaceSideBar(Gtk.ListBox):
         row = self._workspaces[workspace_id]
         self.select_row(row)
 
+    def activate_workspace_number(self, number: int) -> None:
+        row = cast(CommonWorkspace, self.get_row_at_index(number))
+        if row is not None and row.workspace_id != 'add':
+            app.window.activate_workspace(row.workspace_id)
+
     def get_active_workspace(self) -> Optional[str]:
         row = cast(CommonWorkspace, self.get_selected_row())
         if row is None:
@@ -246,8 +250,7 @@ class WorkspaceSideBar(Gtk.ListBox):
         return row.workspace_id
 
     def get_first_workspace(self) -> str:
-        workspaces: list[CommonWorkspace] = cast(
-            list[CommonWorkspace], self.get_children())
+        workspaces = cast(list[CommonWorkspace], self.get_children())
         for row in workspaces:
             return row.workspace_id
         return ''
@@ -255,8 +258,7 @@ class WorkspaceSideBar(Gtk.ListBox):
     def get_workspace_by_id(self,
                             workspace_id: str
                             ) -> Optional[CommonWorkspace]:
-        workspaces: list[CommonWorkspace] = cast(
-            list[CommonWorkspace], self.get_children())
+        workspaces = cast(list[CommonWorkspace], self.get_children())
         for row in workspaces:
             if row.workspace_id == workspace_id:
                 return row
