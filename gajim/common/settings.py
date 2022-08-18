@@ -56,7 +56,7 @@ from gajim.common.setting_values import IntGroupChatSettings
 from gajim.common.setting_values import StringGroupChatSettings
 from gajim.common.setting_values import AllWorkspaceSettings
 from gajim.common.setting_values import AllWorkspaceSettingsT
-from gajim.common.setting_values import OpenChatSettingT
+from gajim.common.setting_values import OpenChatsSettingT
 from gajim.common.setting_values import StringWorkspaceSettings
 from gajim.common.setting_values import ACCOUNT_SETTINGS
 from gajim.common.setting_values import PROXY_SETTINGS
@@ -82,6 +82,8 @@ SETTING_TYPE = Union[bool, int, str, object]
 
 log = logging.getLogger('gajim.c.settings')
 
+CURRENT_USER_VERSION = 2
+
 CREATE_SQL = '''
     CREATE TABLE settings (
             name TEXT UNIQUE,
@@ -100,10 +102,11 @@ CREATE_SQL = '''
     INSERT INTO settings(name, settings) VALUES ('plugins', '{}');
     INSERT INTO settings(name, settings) VALUES ('workspaces', '%s');
 
-    PRAGMA user_version=1;
+    PRAGMA user_version=%s;
     ''' % (json.dumps(STATUS_PRESET_EXAMPLES),
            json.dumps(PROXY_EXAMPLES),
-           json.dumps(INITAL_WORKSPACE))
+           json.dumps(INITAL_WORKSPACE),
+           CURRENT_USER_VERSION)
 
 
 _SignalCallable = Callable[[Any, str, Optional[str], Optional[JID]], Any]
@@ -217,6 +220,7 @@ class Settings:
             self._commit()
         self._migrate_database()
         self._load_app_overrides()
+        self._commit()
 
     @staticmethod
     def _setup_installation_defaults() -> None:
@@ -310,6 +314,8 @@ class Settings:
             self._con.close()
             log.exception('Error')
             sys.exit()
+        else:
+            self._commit_settings('workspaces')
 
     def _migrate(self) -> None:
         version = self._get_user_version()
@@ -319,6 +325,21 @@ class Settings:
             self._con.execute(sql, (json.dumps(INITAL_WORKSPACE),))
             self._settings['workspaces'] = INITAL_WORKSPACE
             self._set_user_version(1)
+
+        if version < 2:
+            # Migrate open chats tuple to dict
+            for workspace in self._settings['workspaces'].values():
+                open_chats = []
+                for open_chat in workspace.get('open_chats', []):
+                    account, jid, type_, pinned = open_chat
+                    open_chats.append({'account': account,
+                                       'jid': jid,
+                                       'type': type_,
+                                       'pinned': pinned,
+                                       'position': -1})
+
+                workspace['open_chats'] = open_chats
+            self._set_user_version(2)
 
     def _migrate_old_config(self) -> None:
         config_file = configpaths.get('CONFIG_FILE')
@@ -1175,7 +1196,7 @@ class Settings:
     def set_workspace_setting(self,
                               workspace_id: str,
                               setting: Literal['open_chats'],
-                              value: list[tuple[str, JID, str, bool]]
+                              value: OpenChatsSettingT
                               ) -> None:
         ...
 
@@ -1202,7 +1223,7 @@ class Settings:
     def get_workspace_setting(self,
                               workspace_id: str,
                               setting: Literal['open_chats']
-                              ) -> OpenChatSettingT:
+                              ) -> OpenChatsSettingT:
         ...
 
     @overload

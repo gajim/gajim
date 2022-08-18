@@ -22,6 +22,7 @@ from typing import Union
 import logging
 import time
 import pickle
+import operator
 
 from gi.repository import Gio
 from gi.repository import Gdk
@@ -47,6 +48,7 @@ from gajim.common.helpers import message_needs_highlight
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.preview_helpers import filename_from_uri
 from gajim.common.preview_helpers import guess_simple_file_type
+from gajim.common.setting_values import OpenChatsSettingT
 from gajim.common.types import ChatContactT
 from gajim.common.types import OneOnOneContactT
 from gajim.common.modules.contacts import BareContact
@@ -73,6 +75,7 @@ class ChatList(Gtk.ListBox, EventHelper):
         self._chats: dict[tuple[str, JID], Any] = {}
         self._current_filter: str = 'all'
         self._current_filter_text: str = ''
+        self._chat_order: dict[tuple[str, JID], int] = {}
 
         self.get_style_context().add_class('chatlist')
         self.set_filter_func(self._filter_func)
@@ -198,9 +201,11 @@ class ChatList(Gtk.ListBox, EventHelper):
             log.debug('Mouseover active, don’t sort rows')
             return 0
 
-        # Don’t sort pinned rows themselves
+        # Sort pinned rows according to stored order
         if row1.is_pinned and row2.is_pinned:
-            return 0
+            if row1.position > row2.position:
+                return 1
+            return -1
 
         # Sort pinned rows to top
         if row1.is_pinned > row2.is_pinned:
@@ -250,14 +255,29 @@ class ChatList(Gtk.ListBox, EventHelper):
             return row.type
         return None
 
-    def add_chat(self, account: str, jid: JID, type_: str,
-                 pinned: bool = False) -> None:
-        if self._chats.get((account, jid)) is not None:
+    def add_chat(self,
+                 account: str,
+                 jid: JID,
+                 type_: str,
+                 pinned: bool,
+                 position: int
+                 ) -> None:
+
+        key = (account, jid)
+        if self._chats.get(key) is not None:
             # Chat is already in the List
             return
 
-        row = ChatRow(self._workspace_id, account, jid, type_, pinned)
-        self._chats[(account, jid)] = row
+        row = ChatRow(self._workspace_id,
+                      account,
+                      jid,
+                      type_,
+                      pinned,
+                      self._chat_order)
+
+        self._chat_order[key] = position
+        self._chats[key] = row
+
         self.add(row)
 
     def select_chat(self, account: str, jid: JID) -> None:
@@ -335,8 +355,12 @@ class ChatList(Gtk.ListBox, EventHelper):
         row.toggle_pinned()
         self.invalidate_sort()
 
-    def remove_chat(self, account: str, jid: JID,
-                    emit_unread: bool = True) -> None:
+    def remove_chat(self,
+                    account: str,
+                    jid: JID,
+                    emit_unread: bool = True
+                    ) -> None:
+
         row = self._chats.pop((account, jid))
         self.remove(row)
         row.destroy()
@@ -359,10 +383,15 @@ class ChatList(Gtk.ListBox, EventHelper):
     def contains_chat(self, account: str, jid: JID) -> bool:
         return self._chats.get((account, jid)) is not None
 
-    def get_open_chats(self) -> list[tuple[str, JID, str, bool]]:
-        open_chats: list[tuple[str, JID, str, bool]] = []
-        for key, value in self._chats.items():
-            open_chats.append(key + (value.type, value.is_pinned))
+    def get_open_chats(self) -> OpenChatsSettingT:
+        open_chats: OpenChatsSettingT = []
+        for key, row in self._chats.items():
+            account, jid = key
+            open_chats.append({'account': account,
+                               'jid': jid,
+                               'type': row.type,
+                               'pinned': row.is_pinned,
+                               'position': row.position})
         return open_chats
 
     def update_time(self) -> None:
@@ -534,16 +563,47 @@ class ChatList(Gtk.ListBox, EventHelper):
         for row in rows:
             row.update_name()
 
+    def _change_pinned_order(self,
+                             row: ChatRow,
+                             row_after: Optional[ChatRow]) -> None:
+
+        # Make list ordered by position of tuple[account, JID]
+        order = [item[0] for item in sorted(self._chat_order.items(),
+                                            key=operator.itemgetter(1))]
+
+        key = (row.account, row.jid)
+
+        order.remove(key)
+        if row_after is None or not row_after.is_pinned:
+            order.append(key)
+        else:
+            pos = order.index((row_after.account, row_after.jid))
+            order.insert(pos, key)
+
+        self._chat_order.clear()
+        for pos, value in enumerate(order):
+            self._chat_order[value] = pos
+
+        self.invalidate_sort()
+
 
 class ChatRow(Gtk.ListBoxRow):
-    def __init__(self, workspace_id: str, account: str, jid: JID, type_: str,
-                 pinned: bool) -> None:
+    def __init__(self,
+                 workspace_id: str,
+                 account: str,
+                 jid: JID,
+                 type_: str,
+                 pinned: bool,
+                 position: dict[tuple[str, JID], int]
+                 ) -> None:
+
         Gtk.ListBoxRow.__init__(self)
 
         self.account = account
         self.jid = jid
         self.workspace_id = workspace_id
         self.type = type_
+        self._position = position
 
         self.active_label = ActiveHeader()
         self.conversations_label = ConversationsHeader()
@@ -704,6 +764,10 @@ class ChatRow(Gtk.ListBoxRow):
     @property
     def is_pinned(self) -> bool:
         return self._pinned
+
+    @property
+    def position(self) -> int:
+        return self._position.get((self.account, self.jid), -1)
 
     def _on_button_press(self,
                          _widget: Gtk.Widget,
