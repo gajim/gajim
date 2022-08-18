@@ -178,7 +178,6 @@ class MessageArchiveStorage(SqliteStorage):
         self._con.row_factory = self._namedtuple_factory
 
         self._con.create_function('like', 1, self._like)
-        self._con.create_function('get_timeout', 0, self._get_timeout)
 
         self._get_jid_ids_from_db()
 
@@ -256,18 +255,6 @@ class MessageArchiveStorage(SqliteStorage):
                 'PRAGMA user_version=5'
             ]
             self._execute_multiple(statements)
-
-    @staticmethod
-    def _get_timeout() -> int:
-        '''
-        returns the timeout in epoch
-        '''
-        timeout = app.settings.get('restore_timeout')
-
-        now = int(time.time())
-        if timeout > 0:
-            timeout = now - (timeout * 60)
-        return timeout
 
     @staticmethod
     def _like(search_str: str) -> str:

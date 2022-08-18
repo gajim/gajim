@@ -128,7 +128,6 @@ IntSettings = Literal[
     'notification_timeout',
     'preview_max_file_size',
     'preview_size',
-    'restore_timeout',
 ]
 
 StringSettings = Literal[
@@ -252,7 +251,6 @@ APP_SETTINGS = {
     'preview_verify_https': True,
     'print_status_in_chats': False,
     'remote_control': False,
-    'restore_timeout': -1,
     'roster_theme': 'default',
     'save_main_window_position': True,
     'search_engine': 'https://duckduckgo.com/?q=%s',
@@ -688,9 +686,6 @@ ADVANCED_SETTINGS = {
         'notify_on_all_muc_messages': '',
         'plugins_repository_enabled': _(
             'If enabled, Gajim offers to download plugins hosted on gajim.org'),
-        'restore_timeout': _(
-            'How far back in time (minutes) chat history is restored. -1 '
-            'means no limit.'),
         'save_main_window_position': _(
             'If enabled, Gajim will save the main window position when hiding '
             'it, and restore it when showing the window again.'),
