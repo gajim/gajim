@@ -161,8 +161,10 @@ class ChatListStack(Gtk.Stack, EventHelper):
     def remove_chat_list(self, workspace_id: str) -> None:
         chat_list = self._chat_lists[workspace_id]
         self.remove(chat_list)
-        for account, jid, _type, _pinned in chat_list.get_open_chats():
-            self.remove_chat(workspace_id, account, jid)
+        for open_chat in chat_list.get_open_chats():
+            self.remove_chat(workspace_id,
+                             open_chat['account'],
+                             open_chat['jid'])
 
         self._chat_lists.pop(workspace_id)
         chat_list.destroy()
@@ -187,12 +189,19 @@ class ChatListStack(Gtk.Stack, EventHelper):
 
         self.set_visible_child_name(workspace_id)
 
-    def add_chat(self, workspace_id: str, account: str, jid: JID, type_: str,
-                 pinned: bool = False) -> None:
+    def add_chat(self,
+                 workspace_id: str,
+                 account: str,
+                 jid: JID,
+                 type_: str,
+                 pinned: bool,
+                 position: int
+                 ) -> None:
+
         chat_list = self._chat_lists.get(workspace_id)
         if chat_list is None:
             chat_list = self.add_chat_list(workspace_id)
-        chat_list.add_chat(account, jid, type_, pinned)
+        chat_list.add_chat(account, jid, type_, pinned, position)
 
     def select_chat(self, account: str, jid: JID) -> None:
         chat_list = self.find_chat(account, jid)
@@ -235,7 +244,8 @@ class ChatListStack(Gtk.Stack, EventHelper):
         current_chatlist.remove_chat(params.account, params.jid)
 
         new_chatlist = self.get_chatlist(workspace_id)
-        new_chatlist.add_chat(params.account, params.jid, type_)
+        new_chatlist.add_chat(params.account, params.jid, type_, False, -1)
+
         self.store_open_chats(current_chatlist.workspace_id)
         self.store_open_chats(workspace_id)
 
