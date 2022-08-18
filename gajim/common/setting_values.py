@@ -46,7 +46,6 @@ BoolSettings = Literal[
     'chat_merge_consecutive_nickname',
     'check_for_update',
     'confirm_close_muc',
-    'confirm_close_multiple_tabs',
     'confirm_on_window_delete',
     'confirm_paste_image',
     'dev_force_bookmark_2',
@@ -192,7 +191,6 @@ APP_SETTINGS = {
     'check_for_update': True,
     'confirm_block': '',
     'confirm_close_muc': True,
-    'confirm_close_multiple_tabs': True,
     'confirm_on_window_delete': True,
     'confirm_paste_image': True,
     'dark_theme': 2,
@@ -649,9 +647,6 @@ ADVANCED_SETTINGS = {
             'Show a confirmation dialog to block a contact? Empty string '
             'means never show the dialog.'),
         'confirm_close_muc': _('Ask before closing a group chat tab/window.'),
-        'confirm_close_multiple_tabs': _(
-            'Ask before closing tabbed chat window if there are chats that '
-            'can lose data (chat, private chat).'),
         'confirm_on_window_delete': _(
             'Ask before quitting when Gajim’s window is closed'),
         'confirm_paste_image': _('Ask before pasting an image.'),
