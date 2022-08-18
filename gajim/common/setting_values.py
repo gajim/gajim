@@ -42,7 +42,6 @@ BoolSettings = Literal[
     'ask_online_status',
     'autoaway',
     'autoxa',
-    'change_roster_title',
     'chat_merge_consecutive_nickname',
     'check_for_update',
     'confirm_close_muc',
@@ -120,7 +119,6 @@ IntSettings = Literal[
     'gc_sync_threshold_private_default',
     'gc_sync_threshold_public_default',
     'groupchat_roster_width',
-    'key_up_lines',
     'mainwin_height',
     'mainwin_width',
     'mainwin_x_position',
@@ -184,7 +182,6 @@ APP_SETTINGS = {
     'autoxa': True,
     'autoxa_message': '',
     'autoxatime': 15,
-    'change_roster_title': True,
     'chat_handle_position': 350,
     'chat_merge_consecutive_nickname': True,
     'chat_timestamp_format': '%H:%M',
@@ -219,7 +216,6 @@ APP_SETTINGS = {
     'hide_groupchat_banner': False,
     'hide_groupchat_occupants_list': False,
     'ignore_incoming_attention': False,
-    'key_up_lines': 25,
     'is_window_visible': True,
     'last_save_dir': '',
     'last_send_dir': '',
@@ -635,9 +631,6 @@ ADVANCED_SETTINGS = {
         'always_english_wiktionary': '',
         'ascii_formatting': _(
             'Treat * / _ pairs as possible formatting characters.'),
-        'change_roster_title': _(
-            'If enabled, Gajim will add * and [n] in contact list '
-            'window title.'),
         'chat_merge_consecutive_nickname': _(
             'Show message meta data (avatar, nickname, timestamp) only once, '
             'if there are multiple messages from the same sender within a '
@@ -681,9 +674,6 @@ ADVANCED_SETTINGS = {
         'ignore_incoming_attention': _(
             'If enabled, Gajim will ignore incoming attention '
             'requests ("wizz").'),
-        'key_up_lines': _(
-            'How many lines to store for Ctrl+KeyUP '
-            '(previously sent messages).'),
         'log_contact_status_changes': '',
         'muc_highlight_words': _(
             'A list of words (semicolon separated) that will be '
