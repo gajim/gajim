@@ -95,8 +95,6 @@ class ChatListStack(Gtk.Stack, EventHelper):
         actions = [
             ('toggle-chat-pinned', 'a{sv}', self._toggle_chat_pinned),
             ('move-chat-to-workspace', 'a{sv}', self._move_chat_to_workspace),
-            ('move-chat-to-new-workspace', 'a{sv}',
-             self._move_chat_to_new_workspace),
             ('mark-as-read', 'a{sv}', self._mark_as_read),
         ]
 
@@ -226,23 +224,20 @@ class ChatListStack(Gtk.Stack, EventHelper):
                                 params: structs.ChatListEntryParam
                                 ) -> None:
 
+        workspace_id = params.workspace_id
+        if not workspace_id:
+            workspace_id = app.window.add_workspace(switch=False)
+
         current_chatlist = cast(ChatList, self.get_visible_child())
         type_ = current_chatlist.get_chat_type(params.account, params.jid)
         if type_ is None:
             return
         current_chatlist.remove_chat(params.account, params.jid)
 
-        new_chatlist = self.get_chatlist(params.workspace_id)
+        new_chatlist = self.get_chatlist(workspace_id)
         new_chatlist.add_chat(params.account, params.jid, type_)
         self.store_open_chats(current_chatlist.workspace_id)
-        self.store_open_chats(params.workspace_id)
-
-    @structs.actionmethod
-    def _move_chat_to_new_workspace(self,
-                                    _action: Gio.SimpleAction,
-                                    params: structs.AccountJidParam
-                                    ) -> None:
-        app.window.move_chat_to_new_workspace(params.account, params.jid)
+        self.store_open_chats(workspace_id)
 
     @structs.actionmethod
     def _mark_as_read(self,

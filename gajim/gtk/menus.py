@@ -422,9 +422,12 @@ def get_chat_list_row_menu(workspace_id: str,
         for name, params in get_workspace_params(workspace_id, account, jid):
             submenu.add_item(name, 'win.move-chat-to-workspace', params)
 
-    params = AccountJidParam(account=account, jid=jid)
+    params = ChatListEntryParam(workspace_id='',
+                                account=account,
+                                jid=jid)
+
     submenu.add_item(
-        _('New Workspace'), 'win.move-chat-to-new-workspace', params)
+        _('New Workspace'), 'win.move-chat-to-workspace', params)
 
     if can_add_to_roster(contact):
         params = AccountJidParam(account=account, jid=jid)

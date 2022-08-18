@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import cast
 from typing import Optional
 from typing import TYPE_CHECKING
 
@@ -591,13 +590,21 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         if workspace_id is not None:
             self.add_workspace(workspace_id)
 
-    def add_workspace(self, workspace_id: str) -> None:
+    def add_workspace(self,
+                      workspace_id: Optional[str] = None,
+                      switch: bool = True) -> str:
+
+        if workspace_id is None:
+            workspace_id = app.settings.add_workspace(_('My Workspace'))
+
         self._workspace_side_bar.add_workspace(workspace_id)
         self._chat_page.add_chat_list(workspace_id)
 
-        if self._startup_finished:
+        if self._startup_finished and switch:
             self.activate_workspace(workspace_id)
             self._workspace_side_bar.store_workspace_order()
+
+        return workspace_id
 
     def _edit_workspace(self,
                         _action: Gio.SimpleAction,
@@ -650,24 +657,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def get_chat_list(self, workspace_id: str) -> ChatList:
         chat_list_stack = self._chat_page.get_chat_list_stack()
         return chat_list_stack.get_chatlist(workspace_id)
-
-    def move_chat_to_new_workspace(self,
-                                   account: str,
-                                   jid: JID
-                                   ) -> None:
-        chat_list_stack = self._chat_page.get_chat_list_stack()
-        current_chatlist = cast(ChatList, chat_list_stack.get_visible_child())
-        type_ = current_chatlist.get_chat_type(account, jid)
-        if type_ is None:
-            return
-        current_chatlist.remove_chat(account, jid)
-
-        workspace_id = app.settings.add_workspace(_('My Workspace'))
-        app.window.add_workspace(workspace_id)
-        new_chatlist = self.get_chat_list(workspace_id)
-        new_chatlist.add_chat(account, jid, type_)
-        chat_list_stack.store_open_chats(current_chatlist.workspace_id)
-        chat_list_stack.store_open_chats(workspace_id)
 
     def _add_group_chat(self,
                         _action: Gio.SimpleAction,
