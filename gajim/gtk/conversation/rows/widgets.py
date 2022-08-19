@@ -21,7 +21,7 @@ from gi.repository import Pango
 from gi.repository import GLib
 
 from gajim.common import app
-from gajim.common.i18n import _
+from gajim.common.i18n import Q_
 from gajim.common.helpers import is_retraction_allowed
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.types import ChatContactT
@@ -111,7 +111,7 @@ class MoreMenuButton(Gtk.Button):
         quote_button = Gtk.ModelButton()
         quote_button.set_halign(Gtk.Align.START)
         quote_button.connect('clicked', self._row.on_quote_message)
-        quote_button.set_label(_('Quote…'))
+        quote_button.set_label(Q_('?Message row action:Quote…'))
         quote_button.set_image(Gtk.Image.new_from_icon_name(
             'mail-reply-sender-symbolic', Gtk.IconSize.MENU))
         quote_button.set_sensitive(quote_enabled)
@@ -120,7 +120,7 @@ class MoreMenuButton(Gtk.Button):
         copy_button = Gtk.ModelButton()
         copy_button.set_halign(Gtk.Align.START)
         copy_button.connect('clicked', self._row.on_copy_message)
-        copy_button.set_label(_('Copy'))
+        copy_button.set_label(Q_('?Message row action:Copy'))
         copy_button.set_image(Gtk.Image.new_from_icon_name(
             'edit-copy-symbolic', Gtk.IconSize.MENU))
         menu_box.add(copy_button)
@@ -130,7 +130,7 @@ class MoreMenuButton(Gtk.Button):
             correct_button.set_halign(Gtk.Align.START)
             correct_button.connect(
                 'clicked', self._row.on_correct_message)
-            correct_button.set_label(_('Correct'))
+            correct_button.set_label(Q_('?Message row action:Correct'))
             correct_button.set_image(Gtk.Image.new_from_icon_name(
                 'document-edit-symbolic', Gtk.IconSize.MENU))
             menu_box.add(correct_button)
@@ -140,7 +140,7 @@ class MoreMenuButton(Gtk.Button):
             retract_button.set_halign(Gtk.Align.START)
             retract_button.connect(
                 'clicked', self._row.on_retract_message)
-            retract_button.set_label(_('Retract'))
+            retract_button.set_label(Q_('?Message row action:Retract'))
             retract_button.set_image(Gtk.Image.new_from_icon_name(
                 'edit-undo-symbolic', Gtk.IconSize.MENU))
             menu_box.add(retract_button)
