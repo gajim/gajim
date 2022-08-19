@@ -243,16 +243,21 @@ class ChatListStack(Gtk.Stack, EventHelper):
         if not workspace_id:
             workspace_id = app.window.add_workspace(switch=False)
 
-        current_chatlist = cast(ChatList, self.get_visible_child())
-        type_ = current_chatlist.get_chat_type(params.account, params.jid)
+        if params.source_workspace_id:
+            source_chatlist = self.get_chatlist(params.source_workspace_id)
+        else:
+            source_chatlist = cast(ChatList, self.get_visible_child())
+
+        type_ = source_chatlist.get_chat_type(params.account, params.jid)
         if type_ is None:
             return
-        current_chatlist.remove_chat(params.account, params.jid)
+
+        source_chatlist.remove_chat(params.account, params.jid)
 
         new_chatlist = self.get_chatlist(workspace_id)
         new_chatlist.add_chat(params.account, params.jid, type_, False, -1)
 
-        self.store_open_chats(current_chatlist.workspace_id)
+        self.store_open_chats(source_chatlist.workspace_id)
         self.store_open_chats(workspace_id)
 
     @structs.actionmethod

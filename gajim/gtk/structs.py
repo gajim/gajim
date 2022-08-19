@@ -55,6 +55,7 @@ class AddChatActionParams(VariantMixin):
 @dataclass
 class ChatListEntryParam(VariantMixin):
     workspace_id: str
+    source_workspace_id: str
     account: str
     jid: JID
 

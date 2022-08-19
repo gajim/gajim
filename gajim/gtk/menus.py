@@ -410,6 +410,7 @@ def get_chat_list_row_menu(workspace_id: str,
     menu = GajimMenu()
 
     params = ChatListEntryParam(workspace_id=workspace_id,
+                                source_workspace_id='',
                                 account=account,
                                 jid=jid)
 
@@ -423,6 +424,7 @@ def get_chat_list_row_menu(workspace_id: str,
             submenu.add_item(name, 'win.move-chat-to-workspace', params)
 
     params = ChatListEntryParam(workspace_id='',
+                                source_workspace_id='',
                                 account=account,
                                 jid=jid)
 
@@ -450,6 +452,7 @@ def get_workspace_params(current_workspace_id: str,
             continue
         name = app.settings.get_workspace_setting(workspace_id, 'name')
         params = ChatListEntryParam(workspace_id=workspace_id,
+                                    source_workspace_id=current_workspace_id,
                                     account=account,
                                     jid=jid)
         yield name, params
@@ -577,8 +580,11 @@ def get_format_menu() -> GajimMenu:
 def get_workspace_menu(workspace_id: str) -> GajimMenu:
     menuitems: MenuItemListT = [
         (_('Edit…'), 'win.edit-workspace', f'"{workspace_id}"'),
-        (_('Remove'), 'win.remove-workspace', f'"{workspace_id}"'),
     ]
+
+    if len(app.settings.get_workspaces()) > 1:
+        menuitems.append(
+            (_('Remove'), 'win.remove-workspace', f'"{workspace_id}"'))
 
     return GajimMenu.from_list(menuitems)
 

@@ -158,6 +158,7 @@ class WorkspaceSideBar(Gtk.ListBox):
             workspace_id = ''
 
         params = ChatListEntryParam(workspace_id=workspace_id,
+                                    source_workspace_id='',
                                     account=account,
                                     jid=jid)
         app.window.activate_action('move-chat-to-workspace',
@@ -221,12 +222,18 @@ class WorkspaceSideBar(Gtk.ListBox):
         order.remove('add')
         app.settings.set_app_setting('workspace_order', order)
 
-    def remove_workspace(self, workspace_id: str) -> bool:
-        if len(self._workspaces) == 1:
-            return False
+    def remove_workspace(self, workspace_id: str) -> None:
         row = self._workspaces.pop(workspace_id)
         self.remove(row)
-        return True
+
+    def get_other_workspace(self,
+                            exclude_workspace_id: str
+                            ) -> Optional[str]:
+
+        for workspace in self._workspaces.values():
+            if workspace.workspace_id != exclude_workspace_id:
+                return workspace.workspace_id
+        return None
 
     def activate_workspace(self, workspace_id: str) -> None:
         row = cast(CommonWorkspace, self.get_selected_row())
