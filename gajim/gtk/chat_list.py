@@ -22,11 +22,11 @@ from typing import Union
 import logging
 import time
 import pickle
-import operator
 
 from gi.repository import Gio
 from gi.repository import Gdk
 from gi.repository import GLib
+from gi.repository import GObject
 from gi.repository import Gtk
 import cairo
 
@@ -67,6 +67,13 @@ MessageEventT = Union[events.MessageReceived,
 
 
 class ChatList(Gtk.ListBox, EventHelper):
+
+    __gsignals__ = {
+        'chat-order-changed': (GObject.SignalFlags.RUN_LAST,
+                               None,
+                               ()),
+    }
+
     def __init__(self, workspace_id: str) -> None:
         Gtk.ListBox.__init__(self)
         EventHelper.__init__(self)
@@ -75,7 +82,6 @@ class ChatList(Gtk.ListBox, EventHelper):
         self._chats: dict[tuple[str, JID], Any] = {}
         self._current_filter: str = 'all'
         self._current_filter_text: str = ''
-        self._chat_order: dict[tuple[str, JID], int] = {}
 
         self.get_style_context().add_class('chatlist')
         self.set_filter_func(self._filter_func)
@@ -97,12 +103,16 @@ class ChatList(Gtk.ListBox, EventHelper):
             entries,
             Gdk.DragAction.MOVE)
 
+        self._drag_row: Optional[ChatRow] = None
+        self._chat_order: list[ChatRow] = []
+
         self.register_events([
             ('account-enabled', ged.GUI2, self._on_account_changed),
             ('account-disabled', ged.GUI2, self._on_account_changed),
             ('bookmarks-received', ged.GUI1, self._on_bookmarks_received),
         ])
 
+        self.connect('drag-data-received', self._on_drag_data_received)
         self.connect('destroy', self._on_destroy)
 
         self._timer_id = GLib.timeout_add_seconds(60, self._update_timer)
@@ -148,6 +158,94 @@ class ChatList(Gtk.ListBox, EventHelper):
         chat_list.emit('unread-count-changed',
                        self._workspace_id,
                        count)
+
+    def _get_row_before(self, row: ChatRow) -> Optional[ChatRow]:
+        row = cast(ChatRow, self.get_row_at_index(row.get_index() - 1))
+        return row
+
+    def _get_row_after(self, row: ChatRow) -> Optional[ChatRow]:
+        row = cast(ChatRow, self.get_row_at_index(row.get_index() + 1))
+        return row
+
+    def _get_last_row(self) -> ChatRow:
+        row = cast(ChatRow, self.get_row_at_index(len(self.get_children())))
+        return row
+
+    def set_drag_row(self, row: ChatRow) -> None:
+        self._drag_row = row
+
+    def _on_drag_data_received(self,
+                               _widget: Gtk.Widget,
+                               _drag_context: Gdk.DragContext,
+                               _x_coord: int,
+                               y_coord: int,
+                               selection_data: Gtk.SelectionData,
+                               _info: int,
+                               _time: int
+                               ) -> None:
+
+        item_type = selection_data.get_data_type().name()
+        if item_type == 'CHAT_LIST_ITEM':
+            row = cast(ChatRow, self.get_row_at_y(y_coord))
+            if row:
+                alloc = row.get_allocation()
+                hover_row_y = alloc.y
+                hover_row_height = alloc.height
+
+                if y_coord < hover_row_y + hover_row_height / 2:
+                    row_before = self._get_row_before(row)
+                    row_after = row
+                else:
+                    row_before = row
+                    row_after = self._get_row_after(row)
+            else:
+                row_before = self._get_last_row()
+                row_after = None
+
+            if self._drag_row in (row_before, row_after):
+                return
+
+            self._change_pinned_order(row_before, row_after)
+        else:
+            log.debug('Unknown item type dropped')
+
+    def _change_pinned_order(self,
+                             row_before: Optional[ChatRow],
+                             row_after: Optional[ChatRow]
+                             ) -> None:
+
+        assert self._drag_row is not None
+
+        if not self._drag_row.is_pinned:
+            log.debug('Dropped row is not pinned')
+            return
+
+        if self._drag_row in (row_before, row_after):
+            # TODO: already checked this case!?
+            log.debug('Dropped row on self')
+            return
+
+        if row_after is None:
+            log.debug('Dropped row into empty space')
+            return
+
+        self._chat_order.remove(self._drag_row)
+
+        if row_before is None:
+            self._chat_order.insert(0, self._drag_row)
+        else:
+            if row_before.position < self._drag_row.position:
+                offset = 1
+            else:
+                offset = 0
+            self._chat_order.insert(
+                row_before.position + offset, self._drag_row)
+
+        for row in self._chat_order:
+            row.position = self._chat_order.index(row)
+
+        self.emit('chat-order-changed')
+        self.invalidate_sort()
 
     def _on_destroy(self, _widget: Gtk.Widget) -> None:
         GLib.source_remove(self._timer_id)
@@ -273,10 +371,11 @@ class ChatList(Gtk.ListBox, EventHelper):
                       jid,
                       type_,
                       pinned,
-                      self._chat_order)
+                      position)
 
-        self._chat_order[key] = position
         self._chats[key] = row
+        if position != -1:
+            self._chat_order.insert(position, row)
 
         self.add(row)
 
@@ -353,6 +452,16 @@ class ChatList(Gtk.ListBox, EventHelper):
     def toggle_chat_pinned(self, account: str, jid: JID) -> None:
         row = self._chats[(account, jid)]
         row.toggle_pinned()
+
+        self._chat_order.clear()
+        chat_rows = cast(list[ChatRow], self.get_children())
+        for row in chat_rows:
+            if row.is_pinned:
+                row.position = chat_rows.index(row)
+                self._chat_order.append(row)
+            else:
+                row.position = -1
+
         self.invalidate_sort()
 
     def remove_chat(self,
@@ -362,6 +471,8 @@ class ChatList(Gtk.ListBox, EventHelper):
                     ) -> None:
 
         row = self._chats.pop((account, jid))
+        if row.position != -1:
+            self._chat_order.remove(row)
         self.remove(row)
         row.destroy()
         if emit_unread:
@@ -563,29 +674,6 @@ class ChatList(Gtk.ListBox, EventHelper):
         for row in rows:
             row.update_name()
 
-    def _change_pinned_order(self,
-                             row: ChatRow,
-                             row_after: Optional[ChatRow]) -> None:
-
-        # Make list ordered by position of tuple[account, JID]
-        order = [item[0] for item in sorted(self._chat_order.items(),
-                                            key=operator.itemgetter(1))]
-
-        key = (row.account, row.jid)
-
-        order.remove(key)
-        if row_after is None or not row_after.is_pinned:
-            order.append(key)
-        else:
-            pos = order.index((row_after.account, row_after.jid))
-            order.insert(pos, key)
-
-        self._chat_order.clear()
-        for pos, value in enumerate(order):
-            self._chat_order[value] = pos
-
-        self.invalidate_sort()
-
 
 class ChatRow(Gtk.ListBoxRow):
     def __init__(self,
@@ -594,7 +682,7 @@ class ChatRow(Gtk.ListBoxRow):
                  jid: JID,
                  type_: str,
                  pinned: bool,
-                 position: dict[tuple[str, JID], int]
+                 position: int
                  ) -> None:
 
         Gtk.ListBoxRow.__init__(self)
@@ -767,7 +855,11 @@ class ChatRow(Gtk.ListBoxRow):
 
     @property
     def position(self) -> int:
-        return self._position.get((self.account, self.jid), -1)
+        return self._position
+
+    @position.setter
+    def position(self, position: int) -> None:
+        self._position = position
 
     def _on_button_press(self,
                          _widget: Gtk.Widget,
@@ -799,6 +891,10 @@ class ChatRow(Gtk.ListBoxRow):
                        widget: Gtk.Widget,
                        drag_context: Gdk.DragContext
                        ) -> None:
+
+        chat_list = cast(ChatList, self.get_parent())
+        chat_list.set_drag_row(self)
+
         # Use rendered ChatListRow as drag icon
         alloc = self.get_allocation()
         surface = cairo.ImageSurface(

@@ -14,7 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Dict
 from typing import Optional
 from typing import cast
 
@@ -66,7 +65,7 @@ class ChatListStack(Gtk.Stack, EventHelper):
         self.set_vexpand(True)
         self.set_vhomogeneous(False)
 
-        self._chat_lists: Dict[str, ChatList] = {}
+        self._chat_lists: dict[str, ChatList] = {}
 
         self._last_visible_child_name: str = 'default'
 
@@ -153,6 +152,7 @@ class ChatListStack(Gtk.Stack, EventHelper):
     def add_chat_list(self, workspace_id: str) -> ChatList:
         chat_list = ChatList(workspace_id)
         chat_list.connect('row-selected', self._on_row_selected)
+        chat_list.connect('chat-order-changed', self._on_chat_order_changed)
 
         self._chat_lists[workspace_id] = chat_list
         self.add_named(chat_list, workspace_id)
@@ -178,6 +178,12 @@ class ChatListStack(Gtk.Stack, EventHelper):
             return
 
         self.emit('chat-selected', row.workspace_id, row.account, row.jid)
+
+    def _on_chat_order_changed(self,
+                               chat_list: ChatList
+                               ) -> None:
+
+        self.store_open_chats(chat_list.workspace_id)
 
     def show_chat_list(self, workspace_id: str) -> None:
         cur_workspace_id = self.get_visible_child_name()
