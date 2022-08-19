@@ -130,7 +130,7 @@ class MoreMenuButton(Gtk.Button):
             correct_button.set_halign(Gtk.Align.START)
             correct_button.connect(
                 'clicked', self._row.on_correct_message)
-            correct_button.set_label(Q_('?Message row action:Correct'))
+            correct_button.set_label(Q_('?Message row action:Correct…'))
             correct_button.set_image(Gtk.Image.new_from_icon_name(
                 'document-edit-symbolic', Gtk.IconSize.MENU))
             menu_box.add(correct_button)
@@ -140,7 +140,7 @@ class MoreMenuButton(Gtk.Button):
             retract_button.set_halign(Gtk.Align.START)
             retract_button.connect(
                 'clicked', self._row.on_retract_message)
-            retract_button.set_label(Q_('?Message row action:Retract'))
+            retract_button.set_label(Q_('?Message row action:Retract…'))
             retract_button.set_image(Gtk.Image.new_from_icon_name(
                 'edit-undo-symbolic', Gtk.IconSize.MENU))
             menu_box.add(retract_button)
