@@ -62,6 +62,7 @@ from .util import set_urgency_hint
 from .structs import AccountJidParam
 from .structs import AddChatActionParams
 from .structs import actionmethod
+from .structs import ChatListEntryParam
 
 if TYPE_CHECKING:
     from .control import ChatControl
@@ -626,18 +627,52 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self.remove_workspace(workspace_id)
 
     def remove_workspace(self, workspace_id: str) -> None:
-        was_active = self.get_active_workspace() == workspace_id
-
-        success = self._workspace_side_bar.remove_workspace(workspace_id)
-        if not success:
+        if len(app.settings.get_workspaces()) == 1:
+            log.warning('Tried to remove the only workspace')
             return
 
-        if was_active:
-            new_active_id = self._workspace_side_bar.get_first_workspace()
-            self.activate_workspace(new_active_id)
+        was_active = self.get_active_workspace() == workspace_id
+        chat_list = self.get_chat_list(workspace_id)
+        open_chats = chat_list.get_open_chats()
 
-        self._chat_page.remove_chat_list(workspace_id)
-        app.settings.remove_workspace(workspace_id)
+        def _continue_removing_workspace():
+            new_workspace_id = self._workspace_side_bar.get_other_workspace(
+                workspace_id)
+            if new_workspace_id is None:
+                log.warning('No other workspaces found')
+                return
+
+            for open_chat in open_chats:
+                params = ChatListEntryParam(
+                    workspace_id=new_workspace_id,
+                    source_workspace_id=workspace_id,
+                    account=open_chat['account'],
+                    jid=open_chat['jid'])
+                self.activate_action('move-chat-to-workspace',
+                                     params.to_variant())
+
+            if was_active:
+                self.activate_workspace(new_workspace_id)
+
+            self._workspace_side_bar.remove_workspace(workspace_id)
+            self._chat_page.remove_chat_list(workspace_id)
+            app.settings.remove_workspace(workspace_id)
+
+        if open_chats:
+            ConfirmationDialog(
+                _('Remove Workspace'),
+                _('Remove Workspace'),
+                _('This workspace contains chats. All chats will be moved to '
+                  'the next workspace. Remove anyway?'),
+                [DialogButton.make('Cancel',
+                                   text=_('_No')),
+                 DialogButton.make('Remove',
+                                   callback=_continue_removing_workspace)]
+            ).show()
+            return
+
+        # No chats in chat list, it is save to remove this workspace
+        _continue_removing_workspace()
 
     def _activate_workspace(self,
                             _action: Gio.SimpleAction,
