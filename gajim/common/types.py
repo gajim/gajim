@@ -25,8 +25,11 @@ import weakref
 from gi.repository import GdkPixbuf
 
 import nbxmpp
+from nbxmpp.const import PresenceShow
 from nbxmpp.protocol import JID
 from nbxmpp.structs import BookmarkData
+
+from gajim.common.const import PresenceShowExt
 
 if TYPE_CHECKING:
     from gajim.common.client import Client
@@ -48,7 +51,6 @@ if TYPE_CHECKING:
                      ResourceContact,
                      GroupchatContact,
                      GroupchatParticipant]
-
 
 InterfaceT = Union['Interface']
 PluginManagerT = Union['PluginManager']
@@ -78,3 +80,5 @@ BareContactT = Union['BareContact']
 ChatContactT = Union['BareContact', 'GroupchatContact', 'GroupchatParticipant']
 OneOnOneContactT = Union['BareContact', 'GroupchatParticipant']
 GroupchatContactT = Union['GroupchatContact']
+
+PresenceShowT = Union[PresenceShowExt, PresenceShow]

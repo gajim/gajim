@@ -51,6 +51,7 @@
         "gajim/gtk/app_side_bar.py",
         "gajim/gtk/application.py",
         "gajim/gtk/apply_button_box.py",
+        "gajim/gtk/avatar.py",
         "gajim/gtk/avatar_selector.py",
         "gajim/gtk/blocking.py",
         "gajim/gtk/bookmarks.py",

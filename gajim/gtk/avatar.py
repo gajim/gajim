@@ -102,7 +102,7 @@ def generate_avatar(letters: str,
     context.set_operator(cairo.Operator.OVER)
     context.show_text(letters)
 
-    return context.get_target()
+    return context.get_target()  # pyright: ignore
 
 
 @lru_cache(maxsize=None)
@@ -132,7 +132,8 @@ def make_workspace_avatar(letter: str,
 
 
 def add_status_to_avatar(surface: cairo.ImageSurface,
-                         show: str) -> cairo.ImageSurface:
+                         show: str
+                         ) -> cairo.ImageSurface:
 
     width = surface.get_width()
     height = surface.get_height()
@@ -179,11 +180,15 @@ def add_status_to_avatar(surface: cairo.ImageSurface,
         context.set_line_width(clip_radius / 4)
         context.stroke()
 
-    return context.get_target()
+    return context.get_target()  # pyright: ignore
 
 
 @lru_cache(maxsize=128)
-def get_show_circle(show, size: int, scale: int) -> cairo.ImageSurface:
+def get_show_circle(show: Union[str, types.PresenceShowT],
+                    size: int,
+                    scale: int
+                    ) -> cairo.ImageSurface:
+
     if not isinstance(show, str):
         show = show.value
 
@@ -212,7 +217,7 @@ def get_show_circle(show, size: int, scale: int) -> cairo.ImageSurface:
         context.set_line_width(size / 10)
         context.stroke()
 
-    return context.get_target()
+    return context.get_target()  # pyright: ignore
 
 
 def fit(surface: cairo.ImageSurface, size: int) -> cairo.ImageSurface:
@@ -235,7 +240,7 @@ def fit(surface: cairo.ImageSurface, size: int) -> cairo.ImageSurface:
     context.scale(factor, factor)
     context.set_source_surface(square_surface, 0, 0)
     context.paint()
-    return context.get_target()
+    return context.get_target()  # pyright: ignore
 
 
 def square(surface: cairo.ImageSurface, size: int) -> cairo.ImageSurface:
@@ -259,7 +264,7 @@ def square(surface: cairo.ImageSurface, size: int) -> cairo.ImageSurface:
 
     context.set_source_surface(surface, x_pos, y_pos)
     context.paint()
-    return context.get_target()
+    return context.get_target()  # pyright: ignore
 
 
 def clip(surface: cairo.ImageSurface, mode: str) -> cairo.ImageSurface:
@@ -289,7 +294,7 @@ def clip_circle(surface: cairo.ImageSurface) -> cairo.ImageSurface:
     context.clip()
     context.paint()
 
-    return context.get_target()
+    return context.get_target()  # pyright: ignore
 
 
 def round_corners(surface: cairo.ImageSurface) -> cairo.ImageSurface:
@@ -320,7 +325,7 @@ def round_corners(surface: cairo.ImageSurface) -> cairo.ImageSurface:
 
     context.paint()
 
-    return context.get_target()
+    return context.get_target()  # pyright: ignore
 
 
 def convert_to_greyscale(surface: cairo.ImageSurface) -> cairo.ImageSurface:
@@ -333,7 +338,7 @@ def convert_to_greyscale(surface: cairo.ImageSurface) -> cairo.ImageSurface:
     context.set_source_rgba(1, 1, 1, 0.5)
     context.rectangle(0, 0, surface.get_width(), surface.get_height())
     context.fill()
-    return context.get_target()
+    return context.get_target()  # pyright: ignore
 
 
 class AvatarStorage(metaclass=Singleton):
@@ -373,6 +378,7 @@ class AvatarStorage(metaclass=Singleton):
 
         if transport_icon is not None:
             surface = load_icon_surface(transport_icon, size, scale)
+            assert surface is not None
             if show is not None:
                 surface = add_status_to_avatar(surface, show)
             self._cache[jid][(size, scale, show)] = surface
@@ -412,6 +418,7 @@ class AvatarStorage(metaclass=Singleton):
 
         if transport_icon is not None:
             surface = load_icon_surface(transport_icon, size, scale)
+            assert surface is not None
             self._cache[jid][(size, scale, None)] = surface
             return surface
 
@@ -483,6 +490,7 @@ class AvatarStorage(metaclass=Singleton):
                                          height,
                                          GdkPixbuf.InterpType.BILINEAR)
 
+        assert pixbuf is not None
         return pixbuf.save_to_bufferv('png', [], [])
 
     @staticmethod
