@@ -52,8 +52,8 @@ from .util import make_rgba
 log = logging.getLogger('gajim.gui.avatar')
 
 
-AvatarCacheT = dict[JID, dict[tuple[int, int, Optional[str]],
-                              cairo.ImageSurface]]
+AvatarCacheT = dict[Union[JID, str], dict[tuple[int, int, Optional[str]],
+                                          cairo.ImageSurface]]
 
 
 def generate_avatar(letters: str,
@@ -340,7 +340,7 @@ class AvatarStorage(metaclass=Singleton):
     def __init__(self):
         self._cache: AvatarCacheT = defaultdict(dict)
 
-    def invalidate_cache(self, jid: JID) -> None:
+    def invalidate_cache(self, jid: Union[JID, str]) -> None:
         self._cache.pop(jid, None)
 
     def get_pixbuf(self,
@@ -412,11 +412,11 @@ class AvatarStorage(metaclass=Singleton):
 
         if transport_icon is not None:
             surface = load_icon_surface(transport_icon, size, scale)
-            self._cache[jid][(size, scale)] = surface
+            self._cache[jid][(size, scale, None)] = surface
             return surface
 
         if not default:
-            surface = self._cache[jid].get((size, scale))
+            surface = self._cache[jid].get((size, scale, None))
             if surface is not None:
                 return surface
 
@@ -425,7 +425,7 @@ class AvatarStorage(metaclass=Singleton):
                 surface = self.surface_from_filename(avatar_sha, size, scale)
                 if surface is not None:
                     surface = clip(surface, style)
-                    self._cache[jid][(size, scale)] = surface
+                    self._cache[jid][(size, scale, None)] = surface
                     return surface
 
                 # avatar_sha set, but image is missing
@@ -436,7 +436,7 @@ class AvatarStorage(metaclass=Singleton):
         name = get_groupchat_name(con, jid)
         letter = self._generate_letter(name)
         surface = generate_default_avatar(letter, str(jid), size, scale, style)
-        self._cache[jid][(size, scale)] = surface
+        self._cache[jid][(size, scale, None)] = surface
         return surface
 
     def get_workspace_surface(self,
@@ -444,7 +444,7 @@ class AvatarStorage(metaclass=Singleton):
                               size: int,
                               scale: int) -> Optional[cairo.ImageSurface]:
 
-        surface = self._cache[workspace_id].get((size, scale))
+        surface = self._cache[workspace_id].get((size, scale, None))
         if surface is not None:
             return surface
 
@@ -465,7 +465,7 @@ class AvatarStorage(metaclass=Singleton):
         letter = name[:1].upper()
         surface = make_workspace_avatar(
             letter, rgba_to_float(rgba), size, scale)
-        self._cache[workspace_id][(size, scale)] = surface
+        self._cache[workspace_id][(size, scale, None)] = surface
         return surface
 
     @staticmethod
