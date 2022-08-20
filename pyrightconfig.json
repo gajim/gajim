@@ -123,6 +123,7 @@
         "gajim/gtk/util.py",
         "gajim/gtk/video_preview.py",
         "gajim/gtk/workspace_dialog.py",
+        "gajim/gtk/workspace_side_bar.py",
         "gajim/gtk/xml_console.py",
         "gajim/plugins/gajimplugin.py",
         "gajim/plugins/helpers.py",
