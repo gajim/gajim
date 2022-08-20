@@ -574,6 +574,14 @@ def get_format_menu() -> GajimMenu:
     return GajimMenu.from_list(menuitems)
 
 
+def get_workspace_menu(workspace_id: str) -> GajimMenu:
+    menuitems: MenuItemListT = [
+        (_('Edit…'), 'win.edit-workspace', f'"{workspace_id}"'),
+    ]
+
+    return GajimMenu.from_list(menuitems)
+
+
 def escape_mnemonic(label: Optional[str]) -> Optional[str]:
     if label is None:
         return None

@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import List
 from typing import Optional
 from typing import cast
 
@@ -23,8 +22,6 @@ import logging
 import pickle
 
 from gi.repository import Gdk
-from gi.repository import Gio
-from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp.protocol import JID
 
@@ -34,6 +31,7 @@ from gajim.common.i18n import _
 
 from .chat_list_stack import ChatListStack
 from .chat_page import ChatPage
+from .menus import get_workspace_menu
 from .structs import ChatListEntryParam
 from .util import open_window
 
@@ -323,7 +321,7 @@ class Workspace(CommonWorkspace):
         if event.button != 3:  # right click
             return
 
-        menu = self._get_workspace_menu()
+        menu = get_workspace_menu(self.workspace_id)
 
         rectangle = Gdk.Rectangle()
         rectangle.x = int(event.x)
@@ -335,20 +333,6 @@ class Workspace(CommonWorkspace):
         popover.set_position(Gtk.PositionType.RIGHT)
         popover.set_pointing_to(rectangle)
         popover.popup()
-
-    def _get_workspace_menu(self) -> Gio.Menu:
-        menu_items: List[Any] = [
-            ('edit-workspace', _('Edit…')),
-        ]
-        menu = Gio.Menu()
-        for item in menu_items:
-            action, label = item
-            action = f'win.{action}'
-            menuitem = Gio.MenuItem.new(label, action)
-            variant = GLib.Variant('s', self.workspace_id)
-            menuitem.set_action_and_target_value(action, variant)
-            menu.append_item(menuitem)
-        return menu
 
     def update_avatar(self) -> None:
         self._image.update()
