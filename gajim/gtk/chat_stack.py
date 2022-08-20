@@ -34,6 +34,7 @@ from gajim.common import app
 from gajim.common import events
 from gajim.common import helpers
 from gajim.common import preview_helpers
+from gajim.common.commands import ChatCommands
 from gajim.common.i18n import _
 from gajim.common.const import CallType
 from gajim.common.modules.contacts import BareContact
@@ -76,10 +77,10 @@ class ChatStack(Gtk.Stack, EventHelper):
         self._chat_banner = ChatBanner()
         self._chat_control = ChatControl()
         self._message_action_box = MessageActionsBox()
-        self._message_action_box.connect('command-error',
-                                         self._on_command_error)
-        self._message_action_box.connect('command-not-found',
-                                         self._on_command_not_found)
+
+        app.commands.connect('command-error', self._on_command_signal)
+        app.commands.connect('command-not-found', self._on_command_signal)
+        app.commands.connect('command-result', self._on_command_signal)
 
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         box.add(self._chat_banner)
@@ -741,18 +742,14 @@ class ChatStack(Gtk.Stack, EventHelper):
         self._message_action_box.clear()
         self._chat_control.clear()
 
-    def _on_command_error(self,
-                          message_actions_box: MessageActionsBox,
-                          error: str) -> None:
+    def _on_command_signal(self,
+                           chat_commands: ChatCommands,
+                           signal_name: str,
+                           text: str
+                           ) -> None:
 
-        self._chat_control.add_command_output(error, True)
-
-    def _on_command_not_found(self,
-                              message_actions_box: MessageActionsBox,
-                              error: str
-                              ) -> None:
-
-        self._chat_control.add_command_output(error, True)
+        is_error = signal_name != 'command-result'
+        self._chat_control.add_command_output(text, is_error)
 
 
 class ChatPlaceholderBox(Gtk.Box):

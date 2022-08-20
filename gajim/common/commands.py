@@ -52,12 +52,15 @@ def split_argument_string(string: str) -> list[str]:
     return result
 
 
-def get_usage_from_command(cmd: argparse.ArgumentParser) -> str:
+def get_usage_from_command(cmd: argparse.ArgumentParser,
+                           command_name: str
+                           ) -> str:
+
     with io.StringIO() as output:
         cmd.print_usage(file=output)
         usage = output.getvalue()
 
-    usage = usage.split('[-h] ')[1]
+    usage = usage.split(f'ChatCommands {command_name}')[1]
     return usage.strip()
 
 
@@ -69,7 +72,7 @@ class CommandError(Exception):
     pass
 
 
-class CommandNotFoundError(Exception):
+class CommandFailed(Exception):
     pass
 
 
@@ -82,7 +85,7 @@ class ChatCommands(Observable):
     def __init__(self) -> None:
         Observable.__init__(self)
         self._parser = ArgumentParser(prog='ChatCommands')
-        self._sub_parser = self._parser.add_subparsers()
+        self._sub_parser = self._parser.add_subparsers(title='Commands')
         self._commands: dict[str, tuple[list[str], str]] = {}
 
         self._create_commands()
@@ -95,6 +98,16 @@ class ChatCommands(Observable):
         commands.sort(key=operator.itemgetter(0))
         return commands
 
+    def _generate_help(self, used_in: str) -> str:
+        help_text = 'Commands:\n\n'
+        commands = self.get_commands(used_in)
+        for command in commands:
+            name, usage = command
+            if name == 'help':
+                continue
+            help_text += f'  {name:<15} {usage}\n'
+        return help_text
+
     def make_parser(self,
                     command_name: str,
                     callback: Callable[..., Any],
@@ -104,9 +117,11 @@ class ChatCommands(Observable):
         it with the command name.
         '''
 
-        parser = self._sub_parser.add_parser(command_name, **kwargs)
-        parser.set_defaults(command_name=command_name)
-        self.connect(command_name, callback)
+        parser = self._sub_parser.add_parser(command_name,
+                                             add_help=False,
+                                             **kwargs)
+        parser.set_defaults(command_name=command_name,
+                            exec=callback)
         return parser
 
     def add_command(self,
@@ -115,7 +130,7 @@ class ChatCommands(Observable):
                     cmd: argparse.ArgumentParser
                     ) -> None:
 
-        usage = get_usage_from_command(cmd)
+        usage = get_usage_from_command(cmd, command_name)
         self._commands[command_name] = (used_in, usage)
 
     def parse(self, type_: str, arg_string: str) -> None:
@@ -124,13 +139,33 @@ class ChatCommands(Observable):
         command_name = arg_list[0]
         command = self._commands.get(command_name)
         if command is None or type_ not in command[0]:
-            raise CommandNotFoundError(_('Unknown command: %s' % command_name))
+            self.notify('command-not-found',
+                        _('Unknown command: %s' % command_name))
+            raise CommandFailed
 
-        args = self._parser.parse_args(arg_list)
+        try:
+            args = self._parser.parse_args(arg_list)
+        except ArgumentParserError as error:
+            self.notify('command-error', str(error))
+            raise CommandFailed
 
-        self.notify(args.command_name, args)
+        args.used_in = type_
+
+        try:
+            result = args.exec(args)
+        except CommandError as error:
+            self.notify('command-error', str(error))
+            raise CommandFailed
+
+        if result is None:
+            result = _('Command executed successfully')
+
+        self.notify('command-result', result)
 
     def _create_commands(self) -> None:
+        parser = self.make_parser('help', self._help_command)
+        self.add_command('help', ['chat', 'groupchat', 'pm'], parser)
+
         parser = self.make_parser('status', self._status_command)
         parser.add_argument('status',
                             choices=['online', 'away', 'xa', 'dnd'])
@@ -164,12 +199,10 @@ class ChatCommands(Observable):
                             choices=['moderator', 'participant', 'visitor'])
         self.add_command('role', ['groupchat'], parser)
 
-    def _status_command(self,
-                        chat_commands: Any,
-                        signal_name: str,
-                        args: Any
-                        ) -> None:
+    def _help_command(self, args: Any) -> str:
+        return self._generate_help(args.used_in)
 
+    def _status_command(self, args: Any) -> None:
         for client in app.get_clients():
             if not app.settings.get_account_setting(client.account,
                                                     'sync_with_global_status'):
@@ -189,12 +222,7 @@ class ChatCommands(Observable):
                                  'joined this group chat'))
         return contact
 
-    def _invite_command(self,
-                        chat_commands: Any,
-                        signal_name: str,
-                        args: Any
-                        ) -> None:
-
+    def _invite_command(self, args: Any) -> None:
         contact = self._check_if_joined()
 
         try:
@@ -242,20 +270,10 @@ class ChatCommands(Observable):
             {jid: {'affiliation': affiliation,
                    'reason': reason}})
 
-    def _ban_command(self,
-                     chat_commands: Any,
-                     signal_name: str,
-                     args: Any
-                     ) -> None:
-
+    def _ban_command(self, args: Any) -> None:
         self._change_affiliation(args.who, 'outcast', args.reason)
 
-    def _affiliate_command(self,
-                           chat_commands: Any,
-                           signal_name: str,
-                           args: Any
-                           ) -> None:
-
+    def _affiliate_command(self, args: Any) -> None:
         self._change_affiliation(args.who, args.affiliation, None)
 
     def _change_role(self, nick: str, role: str, reason: Optional[str]) -> None:
@@ -278,18 +296,8 @@ class ChatCommands(Observable):
                                           role,
                                           reason)
 
-    def _kick_command(self,
-                      chat_commands: Any,
-                      signal_name: str,
-                      args: Any
-                      ) -> None:
-
+    def _kick_command(self, args: Any) -> None:
         self._change_role(args.who, 'none', args.reason)
 
-    def _role_command(self,
-                      chat_commands: Any,
-                      signal_name: str,
-                      args: Any
-                      ) -> None:
-
+    def _role_command(self, args: Any) -> None:
         self._change_role(args.who, args.role, None)

@@ -37,9 +37,7 @@ from nbxmpp.protocol import JID
 from gajim.common import app
 from gajim.common import events
 from gajim.common import ged
-from gajim.common.commands import ArgumentParserError
-from gajim.common.commands import CommandError
-from gajim.common.commands import CommandNotFoundError
+from gajim.common.commands import CommandFailed
 from gajim.common.i18n import _
 from gajim.common.client import Client
 from gajim.common.const import SimpleClientState
@@ -67,12 +65,6 @@ log = logging.getLogger('gajim.gui.messageactionsbox')
 
 
 class MessageActionsBox(Gtk.Grid, ged.EventHelper):
-
-    __gsignals__ = {
-        'command-error': (GObject.SignalFlags.RUN_FIRST, None, (str,)),
-        'command-not-found': (GObject.SignalFlags.RUN_FIRST, None, (str,))
-    }
-
     def __init__(self) -> None:
         Gtk.Grid.__init__(self)
         ged.EventHelper.__init__(self)
@@ -544,10 +536,8 @@ class MessageActionsBox(Gtk.Grid, ged.EventHelper):
                     not message.startswith('/me ')):
                 try:
                     app.commands.parse(self._contact.type_string, message)
-                except (ArgumentParserError, CommandError) as error:
-                    self.emit('command-error', error)
-                except CommandNotFoundError as error:
-                    self.emit('command-not-found', error)
+                except CommandFailed:
+                    pass
                 else:
                     self.msg_textview.clear()
                 return True
