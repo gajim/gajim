@@ -577,6 +577,7 @@ def get_format_menu() -> GajimMenu:
 def get_workspace_menu(workspace_id: str) -> GajimMenu:
     menuitems: MenuItemListT = [
         (_('Edit…'), 'win.edit-workspace', f'"{workspace_id}"'),
+        (_('Remove'), 'win.remove-workspace', f'"{workspace_id}"'),
     ]
 
     return GajimMenu.from_list(menuitems)

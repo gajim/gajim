@@ -305,7 +305,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         actions = [
             ('add-workspace', 's', self._add_workspace),
             ('edit-workspace', 's', self._edit_workspace),
-            ('remove-workspace', None, self._remove_workspace),
+            ('remove-workspace', 's', self._remove_workspace),
             ('activate-workspace', 's', self._activate_workspace),
             ('add-chat', 'a{sv}', self._add_chat),
             ('add-group-chat', 'as', self._add_group_chat),
@@ -616,9 +616,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _remove_workspace(self,
                           _action: Gio.SimpleAction,
-                          _param: Optional[GLib.Variant]) -> None:
+                          param: GLib.Variant) -> None:
 
-        workspace_id = self.get_active_workspace()
+        workspace_id = param.get_string() or None
+        if workspace_id is None:
+            workspace_id = self.get_active_workspace()
+
         if workspace_id is not None:
             self.remove_workspace(workspace_id)
 
