@@ -585,6 +585,12 @@ class Settings:
                         value: Optional[int]) -> None:
         ...
 
+    @overload
+    def set_app_setting(self,
+                        setting: Literal['workspace_order'],
+                        value: list[str]) -> None:
+        ...
+
     def set_app_setting(self,
                         setting: str,
                         value: Optional[AllSettingsT]) -> None:

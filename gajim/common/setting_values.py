@@ -164,7 +164,7 @@ StringSettings = Literal[
 ]
 
 AllSettings = Literal[BoolSettings, IntSettings, StringSettings]
-AllSettingsT = Union[str, int, bool]
+AllSettingsT = Union[str, int, bool, list[str]]
 
 APP_SETTINGS = {
     'always_english_wikipedia': False,
