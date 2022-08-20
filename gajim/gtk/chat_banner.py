@@ -236,7 +236,7 @@ class ChatBanner(Gtk.Box, EventHelper):
         scale = app.window.get_scale_factor()
         assert self._contact
         surface = self._contact.get_avatar(AvatarSize.CHAT, scale)
-        assert isinstance(surface, cairo.Surface)
+        assert isinstance(surface, cairo.ImageSurface)
         self._ui.avatar_image.set_from_surface(surface)
 
     def _update_content(self) -> None:

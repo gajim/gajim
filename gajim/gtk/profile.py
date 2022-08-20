@@ -94,7 +94,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._add_actions()
 
         self._avatar_selector: Optional[AvatarSelector] = None
-        self._current_avatar: Optional[cairo.Surface] = None
+        self._current_avatar: Optional[cairo.ImageSurface] = None
         self._current_vcard: Optional[VCard] = None
         self._avatar_nick_public: Optional[bool] = None
 

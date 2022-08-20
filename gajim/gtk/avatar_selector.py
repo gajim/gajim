@@ -178,7 +178,9 @@ class AvatarSelector(Gtk.Box):
             return scaled_pixbuf, width, height
         return pixbuf, width, height
 
-    def get_avatar_surface(self) -> Optional[tuple[cairo.Surface, int, int]]:
+    def get_avatar_surface(self) -> Optional[tuple[cairo.ImageSurface,
+                                                   int,
+                                                   int]]:
         pixbuf = self._crop_area.get_pixbuf()
         if pixbuf is None:
             return None

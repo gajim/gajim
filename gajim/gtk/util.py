@@ -106,7 +106,7 @@ def load_icon_surface(
         size: int = 16,
         scale: Optional[int] = None,
         flags: Gtk.IconLookupFlags = Gtk.IconLookupFlags.FORCE_SIZE
-) -> Optional[cairo.Surface]:
+) -> Optional[cairo.ImageSurface]:
 
     icon_info = load_icon_info(icon_name, size, scale, flags)
     if icon_info is None:
