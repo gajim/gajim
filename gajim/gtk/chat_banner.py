@@ -240,8 +240,8 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._ui.avatar_image.set_from_surface(surface)
 
     def _update_content(self) -> None:
-        if self._client is None or self._contact is None:
-            return
+        assert self._contact is not None
+        assert self._client is not None
 
         name = self._contact.name
 
