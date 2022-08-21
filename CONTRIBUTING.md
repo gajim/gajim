@@ -58,3 +58,15 @@ Further the first letter after the tag must be upper case
 Example:
 
 `feat: New Button which does something`
+
+# Man Pages
+
+Man pages are written in markdown and converted with pandoc
+
+While developing this command is useful to preview the manpage
+
+    $ pandoc gajim.1.md -s -t man | /usr/bin/man -l -
+
+To convert the markdown
+
+    $ pandoc gajim.1.md -s -t man -o gajim.1
