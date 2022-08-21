@@ -449,17 +449,15 @@ class ChatList(Gtk.ListBox, EventHelper):
 
     def toggle_chat_pinned(self, account: str, jid: JID) -> None:
         row = self._chats[(account, jid)]
+
+        if row.is_pinned:
+            self._chat_order.remove(row)
+            row.position = -1
+        else:
+            self._chat_order.append(row)
+            row.position = self._chat_order.index(row)
+
         row.toggle_pinned()
-
-        self._chat_order.clear()
-        chat_rows = cast(list[ChatRow], self.get_children())
-        for row in chat_rows:
-            if row.is_pinned:
-                row.position = chat_rows.index(row)
-                self._chat_order.append(row)
-            else:
-                row.position = -1
-
         self.invalidate_sort()
 
     def remove_chat(self,
