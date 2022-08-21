@@ -372,7 +372,7 @@ class ChatList(Gtk.ListBox, EventHelper):
                       position)
 
         self._chats[key] = row
-        if position != -1:
+        if pinned:
             self._chat_order.insert(position, row)
 
         self.add(row)
@@ -469,7 +469,7 @@ class ChatList(Gtk.ListBox, EventHelper):
                     ) -> None:
 
         row = self._chats.pop((account, jid))
-        if row.position != -1:
+        if row.is_pinned:
             self._chat_order.remove(row)
         self.remove(row)
         row.destroy()
