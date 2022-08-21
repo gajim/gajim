@@ -233,10 +233,9 @@ class ChatList(Gtk.ListBox, EventHelper):
         if row_before is None:
             self._chat_order.insert(0, self._drag_row)
         else:
+            offset = 0
             if row_before.position < self._drag_row.position:
                 offset = 1
-            else:
-                offset = 0
             self._chat_order.insert(
                 row_before.position + offset, self._drag_row)
 
