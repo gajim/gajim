@@ -205,7 +205,18 @@ class ChatList(Gtk.ListBox, EventHelper):
             row_before = self._get_last_row()
             row_after = None
 
+        assert self._drag_row is not None
+
         if self._drag_row in (row_before, row_after):
+            log.debug('Dropped row on self')
+            return
+
+        if not self._drag_row.is_pinned:
+            log.debug('Dropped row is not pinned')
+            return
+
+        if row_after is None:
+            log.debug('Dropped row into empty space')
             return
 
         self._change_pinned_order(row_before, row_after)
@@ -216,19 +227,6 @@ class ChatList(Gtk.ListBox, EventHelper):
                              ) -> None:
 
         assert self._drag_row is not None
-
-        if not self._drag_row.is_pinned:
-            log.debug('Dropped row is not pinned')
-            return
-
-        if self._drag_row in (row_before, row_after):
-            # TODO: already checked this case!?
-            log.debug('Dropped row on self')
-            return
-
-        if row_after is None:
-            log.debug('Dropped row into empty space')
-            return
 
         self._chat_order.remove(self._drag_row)
 
