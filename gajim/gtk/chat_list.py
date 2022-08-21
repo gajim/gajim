@@ -185,29 +185,30 @@ class ChatList(Gtk.ListBox, EventHelper):
                                ) -> None:
 
         item_type = selection_data.get_data_type().name()
-        if item_type == 'CHAT_LIST_ITEM':
-            row = cast(ChatRow, self.get_row_at_y(y_coord))
-            if row:
-                alloc = row.get_allocation()
-                hover_row_y = alloc.y
-                hover_row_height = alloc.height
-
-                if y_coord < hover_row_y + hover_row_height / 2:
-                    row_before = self._get_row_before(row)
-                    row_after = row
-                else:
-                    row_before = row
-                    row_after = self._get_row_after(row)
-            else:
-                row_before = self._get_last_row()
-                row_after = None
-
-            if self._drag_row in (row_before, row_after):
-                return
-
-            self._change_pinned_order(row_before, row_after)
-        else:
+        if item_type != 'CHAT_LIST_ITEM':
             log.debug('Unknown item type dropped')
+            return
+
+        row = cast(ChatRow, self.get_row_at_y(y_coord))
+        if row:
+            alloc = row.get_allocation()
+            hover_row_y = alloc.y
+            hover_row_height = alloc.height
+
+            if y_coord < hover_row_y + hover_row_height / 2:
+                row_before = self._get_row_before(row)
+                row_after = row
+            else:
+                row_before = row
+                row_after = self._get_row_after(row)
+        else:
+            row_before = self._get_last_row()
+            row_after = None
+
+        if self._drag_row in (row_before, row_after):
+            return
+
+        self._change_pinned_order(row_before, row_after)
 
     def _change_pinned_order(self,
                              row_before: Optional[ChatRow],
