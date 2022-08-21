@@ -689,7 +689,7 @@ class ChatRow(Gtk.ListBoxRow):
         self.jid = jid
         self.workspace_id = workspace_id
         self.type = type_
-        self._position = position
+        self.position = position
 
         self.active_label = ActiveHeader()
         self.conversations_label = ConversationsHeader()
@@ -850,14 +850,6 @@ class ChatRow(Gtk.ListBoxRow):
     @property
     def is_pinned(self) -> bool:
         return self._pinned
-
-    @property
-    def position(self) -> int:
-        return self._position
-
-    @position.setter
-    def position(self, position: int) -> None:
-        self._position = position
 
     def _on_button_press(self,
                          _widget: Gtk.Widget,
