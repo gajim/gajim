@@ -36,6 +36,8 @@ from gajim.common import types
 from gajim.common.const import ClientState
 from gajim.common.structs import OutgoingMessage
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.modules.contacts import BareContact
 
 INACTIVE_AFTER = 60
 PAUSED_AFTER = 10
@@ -270,9 +272,9 @@ class Chatstate(BaseModule):
         if setting == 'disabled':
             # Send a last 'active' state after user disabled chatstates
             if current_state is not None:
-                self._log.info('Disabled for %s', contact.jid)
+                self._log.info('Disabled for %s', contact)
                 self._log.info('Send last state: %-10s - %s',
-                               State.ACTIVE, contact.jid)
+                               State.ACTIVE, contact)
 
                 self._send_chatstate(contact, State.ACTIVE)
 
@@ -281,22 +283,23 @@ class Chatstate(BaseModule):
             self._last_keyboard_activity.pop(contact.jid, None)
             return
 
-        if not contact.is_groupchat:
-            # Don’t leak presence to contacts
-            # which are not allowed to see our status
-            if not contact.is_pm_contact:
-                # TODO
-                # if contact and contact.sub in ('to', 'none'):
-                #     self._log.info('Contact not subscribed: %s', contact.jid)
-                #     return
-                pass
-
-            if not contact.is_available:
-                self._log.info('Contact offline: %s', contact.jid)
+        if isinstance(contact, BareContact):
+            if not contact.is_subscribed:
+                self._log.debug('Contact not subscribed: %s', contact)
                 return
 
-            if not contact.supports(Namespace.CHATSTATES):
-                self._log.info('Chatstates not supported: %s', contact.jid)
+            if not contact.is_available:
+                self._log.debug('Contact offline: %s', contact)
+                return
+
+        elif isinstance(contact, GroupchatParticipant):
+            if not contact.is_available:
+                self._log.debug('Contact offline: %s', contact)
+                return
+
+        else:
+            if not contact.is_joined:
+                self._log.debug('Groupchat not joined: %s', contact)
                 return
 
         if state in (State.ACTIVE, State.COMPOSING):
@@ -309,7 +312,7 @@ class Chatstate(BaseModule):
         if current_state == state:
             return
 
-        self._log.info('Send: %-10s - %s', state, contact.jid)
+        self._log.info('Send: %-10s - %s', state, contact)
 
         self._send_chatstate(contact, state)
 
