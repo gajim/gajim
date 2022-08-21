@@ -5,7 +5,6 @@
     "app.plugins": ["<Primary>E"],
     "app.xml-console": ["<Primary><Shift>X"],
     "app.file-transfer": ["<Primary>T"],
-    "app.ipython": ["<Primary><Alt>I"],
     "app.start-chat::": ["<Primary>N"],
     "app.create-groupchat::": ["<Primary>G"],
     "win.change-nickname": ["<Primary><Shift>N"],

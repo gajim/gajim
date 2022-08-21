@@ -75,7 +75,6 @@ version = gajim.__version__
 connections: dict[str, types.Client] = {}
 avatar_cache: dict[str, dict[str, Any]] = {}
 bob_cache: dict[str, bytes] = {}
-ipython_window = None
 app = None  # type: GajimApplication
 window = None  # type: MainWindow
 commands = None  # type: ChatCommands

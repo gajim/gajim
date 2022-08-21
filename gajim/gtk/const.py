@@ -171,7 +171,6 @@ APP_ACTIONS = [
     ('file-transfer', None),
     ('forget-groupchat', 'a{sv}'),
     ('groupchat-join', 'as'),
-    ('ipython', None),
     ('join-support-chat', None),
     ('manage-proxies', None),
     ('open-link', 'as'),

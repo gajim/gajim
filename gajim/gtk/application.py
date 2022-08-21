@@ -166,13 +166,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
             _('Show all warnings'))
 
         self.add_main_option(
-            'ipython',
-            ord('i'),
-            GLib.OptionFlags.NONE,
-            GLib.OptionArg.NONE,
-            _('Open IPython shell'))
-
-        self.add_main_option(
             'gdebug',
             0,
             GLib.OptionFlags.NONE,
@@ -345,7 +338,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
         options = command_line.get_options_dict()
 
         remote_commands = [
-            ('ipython', None),
             ('start-chat', GLib.Variant('s', '')),
             ('show', None)
         ]
@@ -417,7 +409,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
             ('join-support-chat', self._on_join_support_chat),
             ('about', self._on_about_action),
             ('faq', self._on_faq_action),
-            ('ipython', self._on_ipython_action),
             ('start-chat', self._on_new_chat_action),
             ('accounts', self._on_accounts_action),
             ('add-contact', self._on_add_contact_action),
@@ -741,18 +732,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
                                 params: structs.AccountJidParam) -> None:
 
         app.window.mark_as_read(params.account, params.jid)
-
-    @staticmethod
-    def _on_ipython_action(_action: Gio.SimpleAction,
-                           _param: Optional[GLib.Variant]) -> None:
-        '''
-        Show/hide the ipython window
-        '''
-        win = cast(Gtk.Window, app.ipython_window)
-        if win and win.is_visible():
-            win.present()
-        else:
-            app.interface.create_ipython_window()
 
     @staticmethod
     def _on_open_mail_action(_action: Gio.SimpleAction,

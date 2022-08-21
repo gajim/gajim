@@ -38,13 +38,11 @@ from typing import Dict
 from typing import Optional
 from typing import Union
 
-import os
 import sys
 import time
 import logging
 from functools import partial
 from threading import Thread
-from importlib.util import find_spec
 
 from gi.repository import Gtk
 from gi.repository import GLib
@@ -677,47 +675,6 @@ class Interface:
 
     def avatar_exists(self, filename: str) -> bool:
         return app.app.avatar_storage.get_avatar_path(filename) is not None
-
-    @staticmethod
-    def create_ipython_window() -> None:
-        # Check if IPython is installed
-        ipython = find_spec('IPython')
-        is_installed = ipython is not None
-        if not is_installed:
-            # Abort early to avoid tracebacks
-            print('IPython is not installed')
-            return
-        try:
-            from gajim.dev.ipython_view import IPythonView
-        except ImportError:
-            print('ipython_view not found')
-            return
-        from gi.repository import Pango
-
-        if os.name == 'nt':
-            font = 'Lucida Console 9'
-        else:
-            font = 'Luxi Mono 10'
-
-        window = Gtk.Window()
-        window.set_title(_('Gajim: IPython Console'))
-        window.set_size_request(750, 550)
-        window.set_resizable(True)
-        sw = Gtk.ScrolledWindow()
-        sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-        view = IPythonView()
-        view.override_font(Pango.FontDescription(font))
-        view.set_wrap_mode(Gtk.WrapMode.CHAR)
-        sw.add(view)
-        window.add(sw)
-        window.show_all()
-
-        def _on_delete(win, _event):
-            win.hide()
-            return True
-        window.connect('delete_event', _on_delete)
-        view.updateNamespace({'gajim': app})
-        app.ipython_window = window
 
     def run(self, _application: Gtk.Application) -> None:
         # Creating plugin manager
