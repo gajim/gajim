@@ -160,16 +160,22 @@ class ChatList(Gtk.ListBox, EventHelper):
                        count)
 
     def _get_row_before(self, row: ChatRow) -> Optional[ChatRow]:
-        row = cast(ChatRow, self.get_row_at_index(row.get_index() - 1))
-        return row
+        row_before = self.get_row_at_index(row.get_index() - 1)
+        if row_before is None:
+            return
+        return cast(ChatRow, row_before)
 
     def _get_row_after(self, row: ChatRow) -> Optional[ChatRow]:
-        row = cast(ChatRow, self.get_row_at_index(row.get_index() + 1))
-        return row
+        row_after = self.get_row_at_index(row.get_index() + 1)
+        if row_after is None:
+            return
+        return cast(ChatRow, row_after)
 
     def _get_last_row(self) -> ChatRow:
-        row = cast(ChatRow, self.get_row_at_index(len(self.get_children())))
-        return row
+        index = len(self.get_children()) - 1
+        last_row = self.get_row_at_index(index)
+        assert last_row is not None
+        return cast(ChatRow, last_row)
 
     def set_drag_row(self, row: ChatRow) -> None:
         self._drag_row = row
@@ -189,8 +195,14 @@ class ChatList(Gtk.ListBox, EventHelper):
             log.debug('Unknown item type dropped')
             return
 
+        assert self._drag_row is not None
+
+        if not self._drag_row.is_pinned:
+            log.debug('Dropped row is not pinned')
+            return
+
         row = cast(ChatRow, self.get_row_at_y(y_coord))
-        if row:
+        if row is not None:
             alloc = row.get_allocation()
             hover_row_y = alloc.y
             hover_row_height = alloc.height
@@ -205,27 +217,17 @@ class ChatList(Gtk.ListBox, EventHelper):
             row_before = self._get_last_row()
             row_after = None
 
-        assert self._drag_row is not None
-
         if self._drag_row in (row_before, row_after):
             log.debug('Dropped row on self')
             return
 
-        if not self._drag_row.is_pinned:
-            log.debug('Dropped row is not pinned')
+        if row_before is not None and not row_before.is_pinned:
+            log.debug('Dropped under not pinned row')
             return
 
-        if row_after is None:
-            log.debug('Dropped row into empty space')
-            return
+        self._change_pinned_order(row_before)
 
-        self._change_pinned_order(row_before, row_after)
-
-    def _change_pinned_order(self,
-                             row_before: Optional[ChatRow],
-                             row_after: Optional[ChatRow]
-                             ) -> None:
-
+    def _change_pinned_order(self, row_before: Optional[ChatRow]) -> None:
         assert self._drag_row is not None
 
         self._chat_order.remove(self._drag_row)
