@@ -219,9 +219,8 @@ class MessageActionsBox(Gtk.Grid, ged.EventHelper):
 
         self._set_settings_menu(contact)
 
-        encryption = self._contact.settings.get('encryption')
-        self._set_encryption_state(encryption)
-        self._set_encryption_details(encryption)
+        self._update_encryption_button()
+        self._update_encryption_details_button()
 
         self._set_chatstate(True)
 
@@ -286,18 +285,6 @@ class MessageActionsBox(Gtk.Grid, ged.EventHelper):
             self._client.get_module('Chatstate').set_chatstate(
                 self._contact, Chatstate.INACTIVE)
 
-    def _set_encryption_state(self, state: str) -> None:
-        action = app.window.get_action('set-encryption')
-        action.set_state(GLib.Variant('s', state))
-
-        if state in ('OMEMO', 'OpenPGP', 'PGP'):
-            icon_name = 'channel-secure-symbolic'
-        else:
-            icon_name = 'channel-insecure-symbolic'
-
-        self._ui.encryption_image.set_from_icon_name(icon_name,
-                                                     Gtk.IconSize.MENU)
-
     def _change_encryption(self,
                            action: Gio.SimpleAction,
                            param: GLib.Variant
@@ -319,13 +306,43 @@ class MessageActionsBox(Gtk.Grid, ged.EventHelper):
             if not plugin.activate_encryption(app.window.get_control()):
                 return
 
-        self._set_encryption_state(new_state)
         contact = self.get_current_contact()
         contact.settings.set('encryption', new_state)
 
-        self._set_encryption_details(new_state)
+        self._update_encryption_button()
+        self._update_encryption_details_button()
 
-    def _set_encryption_details(self, state: str) -> None:
+    def _update_encryption_button(self) -> None:
+        contact = self.get_current_contact()
+        state = contact.settings.get('encryption')
+
+        action = app.window.get_action('set-encryption')
+        action.set_state(GLib.Variant('s', state))
+
+        sensitive = True
+        tooltip = _('Choose encryption')
+
+        if state in ('OMEMO', 'OpenPGP', 'PGP'):
+            icon_name = 'channel-secure-symbolic'
+        else:
+            icon_name = 'channel-insecure-symbolic'
+
+        if isinstance(self._contact, GroupchatContact):
+            if not self._contact.encryption_available:
+                sensitive = False
+                tooltip = _('This is a public group chat. '
+                            'Encryption is not available.')
+                icon_name = 'channel-insecure-symbolic'
+
+        self._ui.encryption_menu_button.set_sensitive(sensitive)
+        self._ui.encryption_menu_button.set_tooltip_text(tooltip)
+        self._ui.encryption_image.set_from_icon_name(
+            icon_name, Gtk.IconSize.MENU)
+
+    def _update_encryption_details_button(self) -> None:
+        contact = self.get_current_contact()
+        state = contact.settings.get('encryption')
+
         encryption_state = {'visible': bool(state),
                             'enc_type': state,
                             'authenticated': False}
@@ -341,19 +358,22 @@ class MessageActionsBox(Gtk.Grid, ged.EventHelper):
 
         if authenticated:
             authenticated_string = _('and authenticated')
-            self._ui.encryption_details_image.set_from_icon_name(
-                'security-high-symbolic', Gtk.IconSize.MENU)
+            icon_name = 'security-high-symbolic'
         else:
             authenticated_string = _('and NOT authenticated')
-            self._ui.encryption_details_image.set_from_icon_name(
-                'security-low-symbolic', Gtk.IconSize.MENU)
+            icon_name = 'security-low-symbolic'
 
         tooltip = _('%(type)s encryption is active %(authenticated)s.') % {
-            'type': enc_type, 'authenticated': authenticated_string}
+            'type': enc_type,
+            'authenticated': authenticated_string}
 
-        self._ui.encryption_details_button.set_tooltip_text(tooltip)
+        if isinstance(self._contact, GroupchatContact) and visible:
+            visible = self._contact.encryption_available
+
         self._ui.encryption_details_button.set_visible(visible)
-        self._ui.encryption_details_image.set_sensitive(visible)
+        self._ui.encryption_details_button.set_tooltip_text(tooltip)
+        self._ui.encryption_details_image.set_from_icon_name(
+            icon_name, Gtk.IconSize.MENU)
 
     def _on_encryption_details_clicked(self, _button: Gtk.Button) -> None:
         contact = self.get_current_contact()
