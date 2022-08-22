@@ -18,6 +18,7 @@ from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import GObject
+from gi.repository import Pango
 
 import cairo
 
@@ -56,9 +57,10 @@ class AboutDialog(Gtk.AboutDialog):
         comments.append('')
         comments.append(_('GTK Version: %s') % gtk_ver)
         comments.append(_('GLib Version: %s') % glib_ver)
+        comments.append(_('Pango Version: %s') % Pango.version_string())
         comments.append(_('PyGObject Version: %s') % gobject_ver)
-        comments.append(_('Cairo Version: %s') % cairo_ver)
-        comments.append(_('python-cairo Version: %s') % python_cairo_ver)
+        comments.append(_('cairo Version: %s') % cairo_ver)
+        comments.append(_('pycairo Version: %s') % python_cairo_ver)
         comments.append(_('python-nbxmpp Version: %s') % nbxmpp.__version__)
 
         self.set_comments('\n'.join(comments))

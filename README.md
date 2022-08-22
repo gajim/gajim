@@ -5,6 +5,7 @@
 - [Python](https://www.python.org/) (>=3.9)
 - [PyGObject](https://pypi.org/project/PyGObject/)
 - [pycairo](https://pypi.org/project/pycairo/)
+- [cairo](https://gitlab.freedesktop.org/cairo/cairo) (>=1.16.0)
 - [nbxmpp](https://pypi.org/project/nbxmpp/) (>=3.1.1)
 - [pyOpenSSL](https://pypi.org/project/pyOpenSSL/) (>=16.2)
 - [css-parser](https://pypi.org/project/css-parser/)
@@ -13,9 +14,10 @@
 - [packaging](https://pypi.org/project/packaging/)
 - [Pillow](https://pypi.org/project/Pillow/)
 - [setuptools](https://pypi.org/project/setuptools/)
-- [Gtk3](https://gitlab.com/gnome/gtk) (>=3.22)
+- [Gtk3](https://gitlab.com/gnome/gtk) (>=3.24.30)
 - [GLib](https://gitlab.com/gnome/glib) (>=2.60.0)
 - [GtkSourceView](https://gitlab.gnome.org/GNOME/gtksourceview)
+- [Pango](https://gitlab.gnome.org/GNOME/pango) (>=1.50.0)
 - [libsoup](https://gitlab.gnome.org/GNOME/libsoup/)
 
 ### Optional Runtime Requirements
