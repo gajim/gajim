@@ -232,7 +232,10 @@ class GtkStatusIcon(GtkMenuBackend):
         self._status_icon.set_visible(True)
 
         if not init and app.window.get_total_unread_count():
-            self._status_icon.set_from_icon_name('mail-message-new')
+            icon_name = 'dcraven-message-new'
+            if app.is_flatpak():
+                icon_name = 'mail-message-new'
+            self._status_icon.set_from_icon_name(icon_name)
             return
 
         show = get_global_show()
@@ -316,7 +319,9 @@ class AppIndicator(GtkMenuBackend):
         self._status_icon.set_status(appindicator.IndicatorStatus.ACTIVE)
 
         if not init and app.window.get_total_unread_count():
-            icon_name = 'mail-message-new'
+            icon_name = 'dcraven-message-new'
+            if app.is_flatpak():
+                icon_name = 'mail-message-new'
             self._status_icon.set_icon_full(icon_name, _('Pending Event'))
             return
 
