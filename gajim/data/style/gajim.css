@@ -95,7 +95,7 @@ row:backdrop { transition: none; }
     font-size: 90%;
 }
 .conversation-meta {
-    color: @insensitive_fg_color;
+    opacity: 0.6;
     font-size: 90%;
 }
 .conversation-read-marker {
