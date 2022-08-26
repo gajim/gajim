@@ -653,6 +653,13 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._main_stack.show_chats(workspace_id)
         self._workspace_side_bar.activate_workspace(workspace_id)
 
+        # Show chatlist if it is hidden
+        chat_list_stack = self._chat_page.get_chat_list_stack()
+        chat_list = chat_list_stack.get_current_chat_list()
+        if chat_list is not None:
+            if not chat_list.is_visible():
+                self._toggle_chat_list()
+
     def update_workspace(self, workspace_id: str) -> None:
         self._chat_page.update_workspace(workspace_id)
         self._workspace_side_bar.update_avatar(workspace_id)
