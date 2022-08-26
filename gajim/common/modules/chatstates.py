@@ -253,6 +253,11 @@ class Chatstate(BaseModule):
         # Used when we go from Composing -> Active after deleting all text
         # from the Textview. We delay the Active state because maybe the
         # User starts writing again.
+
+        # Don’t send chatstates to ourself
+        if self._con.get_own_jid().bare_match(contact.jid):
+            return
+
         self.remove_delay_timeout(contact)
         self._delay_timeout_ids[contact.jid] = GLib.timeout_add_seconds(
             2, self.set_chatstate, contact, state)
