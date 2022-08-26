@@ -45,6 +45,7 @@ from cryptography.hazmat.primitives.ciphers import Cipher
 from cryptography.hazmat.primitives.ciphers import algorithms
 from cryptography.hazmat.primitives.ciphers.modes import GCM
 
+from gajim.common.helpers import sanitize_filename
 from gajim.common.i18n import _
 
 log = logging.getLogger('gajim.c.preview_helpers')
@@ -308,12 +309,7 @@ def get_image_paths(uri: str,
     web_stem = path.stem
     extension = path.suffix
 
-    if len(web_stem) > 90:
-        # Many Filesystems have a limit on filename length
-        # Most have 255, some encrypted ones only 143
-        # We add around 50 chars for the hash,
-        # so the filename should not exceed 90
-        web_stem = web_stem[:90]
+    web_stem = sanitize_filename(web_stem)
 
     name_hash = hashlib.sha1(str(uri).encode()).hexdigest()
 

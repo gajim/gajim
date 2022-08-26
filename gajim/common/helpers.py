@@ -37,7 +37,6 @@ import sys
 import re
 import os
 import subprocess
-import base64
 import hashlib
 import shlex
 import socket
@@ -58,10 +57,10 @@ from datetime import datetime
 from datetime import timedelta
 from urllib.parse import unquote
 from urllib.parse import urlparse
-from encodings.punycode import punycode_encode
 from functools import wraps
 from pathlib import Path
 from packaging.version import Version as V
+import unicodedata
 
 from nbxmpp.namespaces import Namespace
 from nbxmpp.const import Role
@@ -358,28 +357,40 @@ def get_file_path_from_dnd_dropped_uri(uri: str) -> str:
 
 def sanitize_filename(filename: str) -> str:
     '''
-    Make sure the filename we will write does contain only acceptable and latin
-    characters, and is not too long (in that case hash it)
+    Sanitize filename of elements not allowed on Windows
+    https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
+    Limit filename length to 50 chars on all systems
     '''
-    # 48 is the limit
-    if len(filename) > 48:
-        hash_ = hashlib.md5(filename.encode('utf-8'))
-        filename = base64.b64encode(hash_.digest()).decode('utf-8')
+    if sys.platform == 'win32':
+        blacklist = ['\\', '/', ':', '*', '?', '"', '<', '>', '|', '\0']
+        reserved_filenames = [
+            'CON', 'PRN', 'AUX', 'NUL', 'COM1', 'COM2', 'COM3', 'COM4', 'COM5',
+            'COM6', 'COM7', 'COM8', 'COM9', 'LPT1', 'LPT2', 'LPT3', 'LPT4',
+            'LPT5', 'LPT6', 'LPT7', 'LPT8', 'LPT9',
+        ]
+        filename = ''.join(char for char in filename if char not in blacklist)
 
-    # make it latin chars only
-    filename = punycode_encode(filename).decode('utf-8')
-    filename = filename.replace('/', '_')
-    if os.name == 'nt':
-        filename = filename.replace('?', '_')\
-                           .replace(':', '_')\
-                           .replace('\\', '_')\
-                           .replace('"', "'")\
-                           .replace('|', '_')\
-                           .replace('*', '_')\
-                           .replace('<', '_')\
-                           .replace('>', '_')
+        filename = ''.join(char for char in filename if 31 < ord(char))
 
-    return filename
+        filename = unicodedata.normalize('NFKD', filename)
+        filename = filename.rstrip('. ')
+        filename = filename.strip()
+
+        if all(char == '.' for char in filename):
+            filename = f'__{filename}'
+        if filename.upper() in reserved_filenames:
+            filename = f'__{filename}'
+        if len(filename) == 0:
+            filename = '__'
+
+    extension = Path(filename).suffix[:10]
+    filename = Path(filename).stem
+    final_length = 50 - len(extension)
+
+    # Many Filesystems have a limit on filename length: keep it short
+    filename = filename[:final_length]
+
+    return f'{filename}{extension}'
 
 
 def get_contact_dict_for_account(account: str) -> dict[str, types.BareContact]:
