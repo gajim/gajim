@@ -176,7 +176,7 @@ class ConversationView(Gtk.ListBox):
 
     def add_muc_user_left(self,
                           nick: str,
-                          reason: str,
+                          reason: Optional[str],
                           error: bool = False) -> None:
         assert isinstance(self._contact, GroupchatContact)
         if not self._contact.settings.get('print_join_left'):

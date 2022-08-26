@@ -25,7 +25,6 @@ from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GLib
 from nbxmpp.const import Affiliation
-from nbxmpp.structs import PresenceProperties
 
 from gajim.common import app
 from gajim.common import ged
@@ -36,6 +35,7 @@ from gajim.common.helpers import jid_is_blocked
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 from gajim.common.events import ApplicationEvent
+from gajim.common.events import MUCNicknameChanged
 from gajim.common.modules.contacts import GroupchatContact
 
 from .menus import get_groupchat_roster_menu
@@ -281,11 +281,11 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         self._add_contact(user_contact)
 
     def _on_user_nickname_changed(self,
-                                  contact: types.GroupchatContact,
+                                  _contact: types.GroupchatContact,
                                   _signal_name: str,
+                                  _event: MUCNicknameChanged,
                                   old_contact: types.GroupchatParticipant,
-                                  new_contact: types.GroupchatParticipant,
-                                  properties: PresenceProperties
+                                  new_contact: types.GroupchatParticipant
                                   ) -> None:
 
         self._remove_contact(old_contact)

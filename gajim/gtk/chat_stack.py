@@ -28,7 +28,6 @@ from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
 from nbxmpp.protocol import JID
 from nbxmpp.structs import MessageProperties
-from nbxmpp.structs import PresenceProperties
 
 from gajim.common import app
 from gajim.common import events
@@ -297,23 +296,25 @@ class ChatStack(Gtk.Stack, EventHelper):
                         contact: GroupchatContact,
                         _signal_name: str,
                         _user_contact: GroupchatParticipant,
-                        _properties: PresenceProperties
+                        _event: events.MUCUserJoined
                         ) -> None:
+
         self._update_group_chat_actions(contact)
 
     def _on_user_role_changed(self,
                               contact: GroupchatContact,
                               _signal_name: str,
                               _user_contact: GroupchatParticipant,
-                              _properties: PresenceProperties
+                              _event: events.MUCUserRoleChanged
                               ) -> None:
+
         self._update_group_chat_actions(contact)
 
     def _on_user_affiliation_changed(self,
                                      contact: GroupchatContact,
                                      _signal_name: str,
                                      _user_contact: GroupchatParticipant,
-                                     _properties: PresenceProperties
+                                     _event: events.MUCUserAffiliationChanged
                                      ) -> None:
         self._update_group_chat_actions(contact)
 

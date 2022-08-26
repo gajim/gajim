@@ -45,6 +45,7 @@ from nbxmpp.task import Task
 from gi.repository import GLib
 
 from gajim.common import app
+from gajim.common import events
 from gajim.common import helpers
 from gajim.common import types
 from gajim.common.const import ClientState, KindConstant
@@ -460,7 +461,11 @@ class MUC(BaseModule):
         self._log.info('Configuration finished: %s', jid)
 
         room = self._get_contact(jid.bare)
-        room.notify('room-config-finished')
+        event = events.MUCRoomConfigFinished(timestamp=time.time())
+
+        assert isinstance(room, GroupchatContact)
+        app.storage.events.store(room, event)
+        room.notify('room-config-finished', event)
 
     def update_presence(self) -> None:
         mucs = self._get_mucs_with_state([MUCJoinedState.JOINED,
@@ -540,6 +545,11 @@ class MUC(BaseModule):
             self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
 
         else:
+            event = events.MUCRoomPresenceError(
+                timestamp=time.time(),
+                error=properties.error)
+            assert isinstance(room, GroupchatContact)
+            app.storage.events.store(room, event)
             room.notify('room-presence-error', properties)
 
     def _on_muc_user_presence(self,
@@ -564,7 +574,15 @@ class MUC(BaseModule):
             self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
             self._con.get_module('Bookmarks').remove(room_jid)
             room.set_not_joined()
-            room.notify('room-destroyed', properties)
+
+            event = events.MUCRoomDestroyed(
+                timestamp=time.time(),
+                reason=properties.muc_destroyed.reason,
+                alternate=properties.muc_destroyed.alternate)
+            assert isinstance(room, GroupchatContact)
+            app.storage.events.store(room, event)
+
+            room.notify('room-destroyed', event)
             return
 
         if properties.is_nickname_changed:
@@ -592,10 +610,16 @@ class MUC(BaseModule):
                                                    presence,
                                                    occupant)
 
-            room.notify('user-nickname-changed',
-                        occupant,
-                        new_occupant,
-                        properties)
+            event = events.MUCNicknameChanged(
+                timestamp=time.time(),
+                is_self=properties.is_muc_self_presence,
+                new_name=new_occupant.name,
+                old_name=occupant.name)
+
+            assert isinstance(room, GroupchatContact)
+            app.storage.events.store(room, event)
+
+            room.notify('user-nickname-changed', event, occupant, new_occupant)
             return
 
         is_joined = self._is_user_joined(properties.jid)
@@ -624,7 +648,16 @@ class MUC(BaseModule):
         if properties.is_muc_self_presence and properties.is_kicked:
             self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
             room.set_not_joined()
-            room.notify('room-kicked', properties)
+
+            event = events.MUCRoomKicked(
+                timestamp=time.time(),
+                status_codes=properties.muc_status_codes,
+                reason=properties.muc_user.reason,
+                actor=properties.muc_user.actor)
+            assert isinstance(room, GroupchatContact)
+            app.storage.events.store(room, event)
+            room.notify('room-kicked', event)
+
             status_codes = properties.muc_status_codes or []
             if StatusCode.REMOVED_SERVICE_SHUTDOWN in status_codes:
                 self._start_rejoin_timeout(room_jid)
@@ -652,29 +685,72 @@ class MUC(BaseModule):
             presence: MUCPresenceData,
             occupant: GroupchatParticipant) -> None:
 
+        timestamp = time.time()
+
         if not occupant.is_available and presence.available:
+
+            event = events.MUCUserJoined(
+                timestamp=timestamp,
+                is_self=properties.is_muc_self_presence,
+                nick=self.name,
+                status_codes=properties.muc_status_codes)
+
             occupant.update_presence(presence)
             occupant.notify('user-joined', properties)
             return
 
         if not presence.available:
+            event = events.MUCUserLeft(
+                timestamp=timestamp,
+                is_self=properties.is_muc_self_presence,
+                nick=self.name,
+                status_codes=properties.muc_status_codes,
+                reason=properties.muc_user.reason,
+                actor=properties.muc_user.actor)
+
             occupant.update_presence(presence)
             occupant.notify('user-left', properties)
             return
 
-        signals: list[str] = []
+        signals_and_events: list[tuple[str, Any]] = []
+
         if occupant.affiliation != presence.affiliation:
-            signals.append('user-affiliation-changed')
+            event = events.MUCUserAffiliationChanged(
+                timestamp=timestamp,
+                is_self=properties.is_muc_self_presence,
+                nick=self.name,
+                affiliation=self.affiliation,
+                reason=properties.muc_user.reason,
+                actor=properties.muc_user.actor)
+
+            signals_and_events.append(('user-affiliation-changed', event))
 
         if occupant.role != presence.role:
-            signals.append('user-role-changed')
+            event = events.MUCUserRoleChanged(
+                timestamp=timestamp,
+                is_self=properties.is_muc_self_presence,
+                nick=self.name,
+                role=self.role,
+                reason=properties.muc_user.reason,
+                actor=properties.muc_user.actor)
+
+            signals_and_events.append(('user-role-changed', event))
 
         if (occupant.status != presence.status or
                 occupant.show != presence.show):
-            signals.append('user-status-show-changed')
+
+            event = events.MUCUserStatusShowChanged(
+                timestamp=timestamp,
+                is_self=properties.is_muc_self_presence,
+                nick=self.name,
+                status=properties.status,
+                show_value=properties.show.value)
+
+            signals_and_events.append(('user-status-show-changed', event))
 
         occupant.update_presence(presence)
-        for signal in signals:
+        for signal, event in signals_and_events:
+            app.storage.events.store(self.room, event)
             occupant.notify(signal, properties)
 
     def _process_user_presence(self,
@@ -953,12 +1029,21 @@ class MUC(BaseModule):
         if not properties.is_muc_config_change:
             return
 
-        room_jid = str(properties.muc_jid)
         self._log.info('Received config change: %s %s',
-                       room_jid, properties.muc_status_codes)
+                       properties.muc_jid, properties.muc_status_codes)
 
-        room = self._get_contact(room_jid)
-        room.notify('room-config-changed', properties)
+        assert properties.muc_status_codes is not None
+        event = events.MUCRoomConfigChanged(
+            timestamp=time.time(),
+            status_codes=properties.muc_status_codes)
+
+        assert properties.muc_jid is not None
+        room = self._get_contact(properties.muc_jid)
+
+        assert isinstance(room, GroupchatContact)
+        app.storage.events.store(room, event)
+
+        room.notify('room-config-changed', event)
 
         raise nbxmpp.NodeProcessed
 

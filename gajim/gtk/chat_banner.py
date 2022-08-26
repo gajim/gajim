@@ -21,8 +21,6 @@ from gi.repository import Gtk
 
 import cairo
 
-from nbxmpp.structs import PresenceProperties
-
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import types
@@ -195,13 +193,7 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._voice_requests_button.set_no_show_all(False)
         self._voice_requests_button.show_all()
 
-    def _on_user_role_changed(self,
-                              _contact: GroupchatContact,
-                              _signal_name: str,
-                              user_contact: GroupchatParticipant,
-                              properties: PresenceProperties
-                              ) -> None:
-
+    def _on_user_role_changed(self, *args: Any) -> None:
         self._update_content()
 
     def _on_user_state_changed(self, *args: Any) -> None:
