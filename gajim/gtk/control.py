@@ -779,15 +779,6 @@ class ChatControl(EventHelper):
                                                                status=status)
         self.add_info_message(message)
 
-    def invite(self, invited_jid: JID) -> None:
-        # TODO: Remove, used by command system
-        self.client.get_module('MUC').invite(
-            self.contact.jid, invited_jid)
-        invited_contact = self.client.get_module('Contacts').get_contact(
-            invited_jid)
-        self.add_info_message(
-            _('%s has been invited to this group chat') % invited_contact.name)
-
     def _on_room_voice_request(self,
                                _contact: GroupchatContact,
                                _signal_name: str,
