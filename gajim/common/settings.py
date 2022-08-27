@@ -314,8 +314,6 @@ class Settings:
             self._con.close()
             log.exception('Error')
             sys.exit()
-        else:
-            self._commit_settings('workspaces')
 
     def _migrate(self) -> None:
         version = self._get_user_version()
@@ -340,6 +338,7 @@ class Settings:
 
                 workspace['chats'] = open_chats
                 workspace.pop('open_chats', None)
+
             self._set_user_version(2)
 
     def _migrate_old_config(self) -> None:
