@@ -221,7 +221,7 @@ class ChatListStack(Gtk.Stack, EventHelper):
         chat_list = self._chat_lists[workspace_id]
         open_chats = chat_list.get_open_chats()
         app.settings.set_workspace_setting(
-            workspace_id, 'open_chats', open_chats)
+            workspace_id, 'chats', open_chats)
 
     @structs.actionmethod
     def _toggle_chat_pinned(self,

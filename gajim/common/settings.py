@@ -327,7 +327,7 @@ class Settings:
             self._set_user_version(1)
 
         if version < 2:
-            # Migrate open chats tuple to dict
+            # Migrate open chats to new key and format
             for workspace in self._settings['workspaces'].values():
                 open_chats = []
                 for open_chat in workspace.get('open_chats', []):
@@ -338,7 +338,8 @@ class Settings:
                                        'pinned': pinned,
                                        'position': -1})
 
-                workspace['open_chats'] = open_chats
+                workspace['chats'] = open_chats
+                workspace.pop('open_chats', None)
             self._set_user_version(2)
 
     def _migrate_old_config(self) -> None:
@@ -1201,7 +1202,7 @@ class Settings:
     @overload
     def set_workspace_setting(self,
                               workspace_id: str,
-                              setting: Literal['open_chats'],
+                              setting: Literal['chats'],
                               value: OpenChatsSettingT
                               ) -> None:
         ...
@@ -1228,7 +1229,7 @@ class Settings:
     @overload
     def get_workspace_setting(self,
                               workspace_id: str,
-                              setting: Literal['open_chats']
+                              setting: Literal['chats']
                               ) -> OpenChatsSettingT:
         ...
 

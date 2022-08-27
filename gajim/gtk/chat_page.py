@@ -250,7 +250,7 @@ class ChatPage(Gtk.Box):
 
     def load_workspace_chats(self, workspace_id: str) -> None:
         open_chats = app.settings.get_workspace_setting(workspace_id,
-                                                        'open_chats')
+                                                        'chats')
 
         active_accounts = app.settings.get_active_accounts()
         for open_chat in open_chats:

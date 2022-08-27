@@ -506,7 +506,7 @@ StringWorkspaceSettings = Literal[
     'name',
 ]
 
-AllWorkspaceSettings = Literal[StringWorkspaceSettings, 'open_chats']
+AllWorkspaceSettings = Literal[StringWorkspaceSettings, 'chats']
 
 
 class OpenChatSettingDetails(TypedDict):
@@ -525,14 +525,14 @@ class WorkspaceSettings(TypedDict):
     name: str
     color: str
     avatar_sha: str
-    open_chats: OpenChatsSettingT
+    chats: OpenChatsSettingT
 
 
 WORKSPACE_SETTINGS: WorkspaceSettings = {
     'name': _('My Workspace'),
     'color': '',
     'avatar_sha': '',
-    'open_chats': [],
+    'chats': [],
 }
 
 
