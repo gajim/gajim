@@ -506,24 +506,33 @@ StringWorkspaceSettings = Literal[
     'name',
 ]
 
-AllWorkspaceSettings = Literal[StringWorkspaceSettings, 'open_chats']
+AllWorkspaceSettings = Literal[StringWorkspaceSettings, 'chats']
 
-OpenChatSettingT = list[tuple[str, JID, str, bool]]
-AllWorkspaceSettingsT = Union[str, OpenChatSettingT]
+
+class OpenChatSettingDetails(TypedDict):
+    account: str
+    jid: JID
+    type: str
+    pinned: bool
+    position: int
+
+
+OpenChatsSettingT = list[OpenChatSettingDetails]
+AllWorkspaceSettingsT = Union[str, OpenChatsSettingT]
 
 
 class WorkspaceSettings(TypedDict):
     name: str
     color: str
     avatar_sha: str
-    open_chats: OpenChatSettingT
+    chats: OpenChatsSettingT
 
 
 WORKSPACE_SETTINGS: WorkspaceSettings = {
     'name': _('My Workspace'),
     'color': '',
     'avatar_sha': '',
-    'open_chats': [],
+    'chats': [],
 }
 
 

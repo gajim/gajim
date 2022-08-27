@@ -221,6 +221,7 @@ class ChatPage(Gtk.Box):
                                jid: JID,
                                type_: str,
                                pinned: bool = False,
+                               position: int = -1,
                                select: bool = False) -> None:
 
         client = app.get_client(account)
@@ -240,7 +241,7 @@ class ChatPage(Gtk.Box):
             return
 
         self._chat_list_stack.add_chat(workspace_id, account, jid, type_,
-                                       pinned)
+                                       pinned, position)
 
         if self._startup_finished:
             if select:
@@ -249,18 +250,20 @@ class ChatPage(Gtk.Box):
 
     def load_workspace_chats(self, workspace_id: str) -> None:
         open_chats = app.settings.get_workspace_setting(workspace_id,
-                                                        'open_chats')
+                                                        'chats')
 
         active_accounts = app.settings.get_active_accounts()
-        for account, jid, type_, pinned in open_chats:
+        for open_chat in open_chats:
+            account = open_chat['account']
             if account not in active_accounts:
                 continue
 
             self.add_chat_for_workspace(workspace_id,
                                         account,
-                                        jid,
-                                        type_,
-                                        pinned=pinned)
+                                        open_chat['jid'],
+                                        open_chat['type'],
+                                        pinned=open_chat['pinned'],
+                                        position=open_chat['position'])
 
     def is_chat_active(self, account: str, jid: JID) -> bool:
         return self._chat_list_stack.is_chat_active(account, jid)
