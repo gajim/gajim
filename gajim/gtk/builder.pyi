@@ -18,7 +18,6 @@ class AccountPageBuilder(Builder):
     avatar_image: Gtk.Image
     account_label: Gtk.Label
     account_action_box: Gtk.Box
-    account_settings: Gtk.Button
     status_message_box: Gtk.Box
 
 
@@ -202,7 +201,7 @@ class ChatBannerBuilder(Builder):
     phone_image: Gtk.Image
     toggle_roster_button: Gtk.Button
     toggle_roster_image: Gtk.Image
-    account_badge_box: Gtk.Box
+    additional_items_box: Gtk.Box
     visitor_box: Gtk.Box
     visitor_menu_button: Gtk.MenuButton
     visitor_popover: Gtk.Popover

@@ -40,6 +40,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 
 from .builder import get_builder
+from .groupchat_voice_requests_button import VoiceRequestsButton
 from .util import AccountBadge
 
 
@@ -58,6 +59,9 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._ui.connect_signals(self)
 
         self._account_badge: Optional[AccountBadge] = None
+        self._voice_requests_button = VoiceRequestsButton()
+        self._ui.additional_items_box.pack_start(
+            self._voice_requests_button, False, True, 0)
 
         hide_roster = app.settings.get('hide_groupchat_occupants_list')
         self._set_toggle_roster_button_icon(hide_roster)
@@ -103,7 +107,8 @@ class ChatBanner(Gtk.Box, EventHelper):
         if isinstance(self._contact, GroupchatContact):
             self._contact.multi_connect({
                 'user-role-changed': self._on_user_role_changed,
-                'state-changed': self._on_muc_state_changed
+                'state-changed': self._on_muc_state_changed,
+                'room-voice-request': self._on_room_voice_request
             })
             self._ui.toggle_roster_button.show()
             hide_banner = app.settings.get('hide_groupchat_banner')
@@ -129,6 +134,8 @@ class ChatBanner(Gtk.Box, EventHelper):
 
         self._ui.phone_image.set_visible(
             self._contact in self._last_message_from_phone)
+
+        self._voice_requests_button.switch_contact(self._contact)
 
         if hide_banner:
             self.set_no_show_all(True)
@@ -183,6 +190,10 @@ class ChatBanner(Gtk.Box, EventHelper):
                               ) -> None:
         if contact.is_joined:
             self._update_content()
+
+    def _on_room_voice_request(self, *args: Any) -> None:
+        self._voice_requests_button.set_no_show_all(False)
+        self._voice_requests_button.show_all()
 
     def _on_user_role_changed(self,
                               _contact: GroupchatContact,
@@ -284,7 +295,8 @@ class ChatBanner(Gtk.Box, EventHelper):
         enabled_accounts = app.get_enabled_accounts_with_labels()
         if len(enabled_accounts) > 1:
             self._account_badge = AccountBadge(account)
-            self._ui.account_badge_box.add(self._account_badge)
+            self._ui.additional_items_box.pack_end(
+                self._account_badge, False, True, 0)
 
     def _on_request_voice_clicked(self, _button: Gtk.Button) -> None:
         self._ui.visitor_popover.popdown()

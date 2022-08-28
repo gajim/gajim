@@ -57,8 +57,6 @@ from gajim.common.storage.archive import ConversationRow
 from gajim.gui.conversation.scrolled import ScrolledView
 from gajim.gui.conversation.jump_to_end_button import JumpToEndButton
 from gajim.gui.builder import get_builder
-from gajim.gui.dialogs import DialogButton
-from gajim.gui.dialogs import ConfirmationDialog
 from gajim.gui.groupchat_roster import GroupchatRoster
 from gajim.gui.groupchat_state import GroupchatState
 
@@ -200,7 +198,6 @@ class ChatControl(EventHelper):
                 'room-config-finished': self._on_room_config_finished,
                 'room-config-changed': self._on_room_config_changed,
                 'room-presence-error': self._on_room_presence_error,
-                'room-voice-request': self._on_room_voice_request,
                 'room-subject': self._on_room_subject,
             })
 
@@ -778,29 +775,6 @@ class ChatControl(EventHelper):
                                                                show=show,
                                                                status=status)
         self.add_info_message(message)
-
-    def _on_room_voice_request(self,
-                               _contact: GroupchatContact,
-                               _signal_name: str,
-                               properties: MessageProperties
-                               ) -> None:
-        voice_request = properties.voice_request
-        assert voice_request is not None
-
-        def on_approve() -> None:
-            self.client.get_module('MUC').approve_voice_request(
-                self.contact.jid, voice_request)
-
-        ConfirmationDialog(
-            _('Voice Request'),
-            _('Voice Request'),
-            _('<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice') % {
-                'nick': voice_request.nick, 'room_name': self.contact.name},
-            [DialogButton.make('Cancel'),
-             DialogButton.make('Accept',
-                               text=_('_Approve'),
-                               callback=on_approve)],
-            modal=False).show()
 
     def add_muc_message(self,
                         text: str,

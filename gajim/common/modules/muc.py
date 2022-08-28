@@ -39,6 +39,7 @@ from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import PresenceProperties
 from nbxmpp.structs import StanzaHandler
+from nbxmpp.structs import VoiceRequest
 from nbxmpp.task import Task
 
 from gi.repository import GLib
@@ -149,6 +150,8 @@ class MUC(BaseModule):
             str, dict[str, MUCPresenceData]] = defaultdict(dict)
         self._mucs: dict[str, MUCData] = {}
         self._muc_nicknames = {}
+        self._voice_requests: dict[
+            GroupchatContact, list[VoiceRequest]] = defaultdict(list)
 
     def _on_resume_failed(self,
                           _client: types.Client,
@@ -808,9 +811,34 @@ class MUC(BaseModule):
             return
 
         room = self._get_contact(properties.jid.bare)
+        assert isinstance(room, GroupchatContact)
+        assert properties.voice_request is not None
+
+        self._voice_requests[room].append(properties.voice_request)
         room.notify('room-voice-request', properties)
 
         raise nbxmpp.NodeProcessed
+
+    def get_voice_requests(self,
+                           contact: GroupchatContact
+                           ) -> list[VoiceRequest]:
+
+        return self._voice_requests.get(contact, [])
+
+    def approve_voice_request(self,
+                              contact: GroupchatContact,
+                              voice_request: VoiceRequest
+                              ) -> None:
+
+        self._voice_requests[contact].remove(voice_request)
+        self._nbxmpp('MUC').approve_voice_request(contact.jid, voice_request)
+
+    def decline_voice_request(self,
+                              contact: GroupchatContact,
+                              voice_request: VoiceRequest
+                              ) -> None:
+
+        self._voice_requests[contact].remove(voice_request)
 
     def _on_captcha_challenge(self,
                               _con: types.xmppClient,

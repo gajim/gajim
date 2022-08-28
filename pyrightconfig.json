@@ -90,6 +90,7 @@
         "gajim/gtk/groupchat_roster.py",
         "gajim/gtk/groupchat_settings.py",
         "gajim/gtk/groupchat_state.py",
+        "gajim/gtk/groupchat_voice_requests_button.py",
         "gajim/gtk/gstreamer.py",
         "gajim/gtk/history_export.py",
         "gajim/gtk/history_sync.py",

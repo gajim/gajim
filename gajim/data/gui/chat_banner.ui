@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkBox" id="banner_box">
@@ -125,7 +125,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="account_badge_box">
+          <object class="GtkBox" id="additional_items_box">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="halign">end</property>

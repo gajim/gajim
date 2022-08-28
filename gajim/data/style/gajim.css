@@ -813,6 +813,18 @@ button.flat.link { padding: 0; border: 0; }
     font-weight: bold;
 }
 
+@keyframes pulse-opacity {
+    0%  { opacity: 1.0; }
+    20% { opacity: 0.5; }
+    45% { opacity: 1.0; }
+}
+.pulse-opacity {
+    animation-name: pulse-opacity;
+    animation-duration: 2.0s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+
 @keyframes pulse {
     0%  { -gtk-icon-transform: scale(1.0); }
     20% { -gtk-icon-transform: scale(1.1); }
