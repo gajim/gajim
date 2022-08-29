@@ -243,11 +243,7 @@ class ChatListStack(Gtk.Stack, EventHelper):
         if not workspace_id:
             workspace_id = app.window.add_workspace(switch=False)
 
-        if params.source_workspace_id:
-            source_chatlist = self.get_chatlist(params.source_workspace_id)
-        else:
-            source_chatlist = cast(ChatList, self.get_visible_child())
-
+        source_chatlist = self.get_chatlist(params.source_workspace_id)
         type_ = source_chatlist.get_chat_type(params.account, params.jid)
         if type_ is None:
             return
