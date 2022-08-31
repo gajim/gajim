@@ -157,8 +157,10 @@ class WorkspaceSideBar(Gtk.ListBox):
         if workspace_row.workspace_id == 'add':
             workspace_id = ''
 
+        source_workspace = app.window.get_active_workspace()
+        assert source_workspace is not None
         params = ChatListEntryParam(workspace_id=workspace_id,
-                                    source_workspace_id='',
+                                    source_workspace_id=source_workspace,
                                     account=account,
                                     jid=jid)
         app.window.activate_action('move-chat-to-workspace',
