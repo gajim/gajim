@@ -97,9 +97,6 @@ class ChatControl(EventHelper):
         # Used with encryption plugins
         self.sendmessage = False
 
-        # XEP-0333 Chat Markers
-        self.last_msg_id: Optional[str] = None
-
         self._muc_subjects: dict[
             types.ChatContactT, tuple[float, MucSubject]] = {}
 
@@ -153,7 +150,6 @@ class ChatControl(EventHelper):
 
         self._contact = None
         self._client = None
-        self.last_msg_id = None
         self.reset_view()
         self._scrolled_view.clear()
         self._groupchat_state.clear()
@@ -456,13 +452,6 @@ class ChatControl(EventHelper):
     def mark_as_read(self, send_marker: bool = True) -> None:
         self._jump_to_end_button.reset_unread_count()
 
-        if send_marker and self.last_msg_id is not None:
-            # XEP-0333 Send <displayed> marker
-            self.client.get_module('ChatMarkers').send_displayed_marker(
-                self.contact,
-                self.last_msg_id)
-            self.last_msg_id = None
-
     def _on_autoscroll_changed(self,
                                _widget: ScrolledView,
                                autoscroll: bool
@@ -568,12 +557,6 @@ class ChatControl(EventHelper):
                     self._jump_to_end_button.add_unread_count()
         else:
             self._jump_to_end_button.add_unread_count()
-
-        if message_id and kind == 'incoming':
-            if self.is_groupchat:
-                self.last_msg_id = stanza_id or message_id
-            else:
-                self.last_msg_id = message_id
 
     def reset_view(self) -> None:
         self._scrolled_view.reset()

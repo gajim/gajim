@@ -840,16 +840,29 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                      send_marker: bool = True
                      ) -> None:
 
+        unread_count = self.get_chat_unread_count(account, jid)
+
         set_urgency_hint(self, False)
         control = self.get_control()
         if control.has_active_chat():
-            # Send displayed marker and
-            # reset jump to bottom button unread counter
+            # Reset jump to bottom button unread counter
             control.mark_as_read(send_marker=send_marker)
 
         # Reset chat list unread counter (emits unread-count-changed)
         chat_list_stack = self._chat_page.get_chat_list_stack()
         chat_list_stack.mark_as_read(account, jid)
+
+        if not send_marker or not unread_count:
+            # Read marker must be sent only once
+            return
+
+        last_message = app.storage.archive.get_last_conversation_line(
+            account, jid)
+        client = app.get_client(account)
+        contact = client.get_module('Contacts').get_contact(jid)
+        client.get_module('ChatMarkers').send_displayed_marker(
+            contact,
+            last_message.message_id)
 
     def _on_window_active(self,
                           window: Gtk.ApplicationWindow,
@@ -966,12 +979,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         else:
             jid = event.jid
 
-        control = self.get_control()
-        if not control.is_loaded(event.account, jid):
-            return
+        last_message = app.storage.archive.get_last_conversation_line(
+            event.account, jid)
 
-        # TODO: last_msg_id does not work and needs to be refactored
-        if event.marker_id != control.last_msg_id:
+        if event.marker_id != last_message.message_id:
             return
 
         self.mark_as_read(event.account, jid, send_marker=False)

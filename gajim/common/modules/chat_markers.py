@@ -76,6 +76,7 @@ class ChatMarkers(BaseModule):
 
         if properties.is_mam_message:
             if properties.from_.bare_match(self._client.get_own_jid()):
+                self._raise_event('read-state-sync', properties)
                 return
 
         self._raise_event('displayed-received', properties)
