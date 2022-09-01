@@ -19,19 +19,25 @@ from __future__ import annotations
 from typing import Any
 from typing import Union
 
+import logging
 from logging import LoggerAdapter
 from functools import wraps
 from functools import partial
 
 import nbxmpp
+from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
 from nbxmpp.structs import EMEData
 from nbxmpp.structs import MessageProperties
+from nbxmpp.const import MessageType
 from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common import types
 from gajim.common.const import EME_MESSAGES
+from gajim.common.const import KindConstant
+from gajim.common.events import MessageUpdated
+from gajim.common.modules.misc import parse_correction
 
 
 def from_xs_boolean(value: Union[str, bool]) -> bool:
@@ -115,3 +121,57 @@ def as_task(func):
         task_.start()
         return task_
     return func_wrapper
+
+
+def check_if_message_correction(properties: MessageProperties,
+                                account: str,
+                                jid: JID,
+                                msgtxt: str,
+                                kind: KindConstant,
+                                logger: LoggerAdapter[logging.Logger]) -> bool:
+
+    correct_id = parse_correction(properties)
+    if correct_id is None:
+        return False
+
+    if properties.type not in (MessageType.GROUPCHAT, MessageType.CHAT):
+        logger.warning('Ignore correction with message type: %s',
+                       properties.type)
+        return False
+
+    nickname = None
+    if properties.type.is_groupchat:
+        if jid.is_bare:
+            logger.warning(
+                'Ignore correction from bare groupchat jid: %s', jid)
+            return False
+
+        nickname = jid.resource
+        jid = jid.new_as_bare()
+
+    elif not properties.is_muc_pm:
+        jid = jid.new_as_bare()
+
+    successful = app.storage.archive.try_message_correction(
+        account,
+        jid,
+        nickname,
+        msgtxt,
+        correct_id,
+        kind)
+
+    if not successful:
+        logger.info('Message correction not successful')
+        return False
+
+    nickname = properties.muc_nickname or properties.nickname
+
+    event = MessageUpdated(account=account,
+                           jid=jid,
+                           msgtxt=msgtxt,
+                           nickname=nickname,
+                           properties=properties,
+                           correct_id=correct_id)
+
+    app.ged.raise_event(event)
+    return True

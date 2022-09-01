@@ -32,13 +32,12 @@ from gajim.common import types
 from gajim.common.events import GcMessageReceived
 from gajim.common.events import MessageError
 from gajim.common.events import MessageReceived
-from gajim.common.events import MessageUpdated
 from gajim.common.events import RawMessageReceived
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.const import KindConstant
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.util import check_if_message_correction
 from gajim.common.modules.util import get_eme_message
-from gajim.common.modules.misc import parse_correction
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_xhtml
 from gajim.common.structs import OutgoingMessage
@@ -190,23 +189,19 @@ class Message(BaseModule):
             'properties': properties,
         }
 
-        correct_id = parse_correction(properties)
-        if correct_id is not None:
-            nickname = properties.muc_nickname or properties.nickname
-            event = MessageUpdated(account=self._account,
-                                   jid=event_attr['jid'],
-                                   msgtxt=msgtxt,
-                                   nickname=nickname,
-                                   properties=properties,
-                                   correct_id=correct_id)
+        if type_.is_groupchat:
+            kind = KindConstant.GC_MSG
+        elif properties.is_sent_carbon:
+            kind = KindConstant.CHAT_MSG_SENT
+        else:
+            kind = KindConstant.CHAT_MSG_RECV
 
-            app.storage.archive.store_message_correction(
-                self._account,
-                jid,
-                correct_id,
-                msgtxt,
-                properties.type.is_groupchat)
-            app.ged.raise_event(event)
+        if check_if_message_correction(properties,
+                                       self._account,
+                                       from_,
+                                       msgtxt,
+                                       kind,
+                                       self._log):
             return
 
         if type_.is_groupchat:
@@ -224,10 +219,6 @@ class Message(BaseModule):
 
         app.ged.raise_event(MessageReceived(**event_attr))
 
-        log_type = KindConstant.CHAT_MSG_RECV
-        if properties.is_sent_carbon:
-            log_type = KindConstant.CHAT_MSG_SENT
-
         if not msgtxt:
             return
 
@@ -235,7 +226,7 @@ class Message(BaseModule):
             self._account,
             fjid if properties.is_muc_pm else jid,
             properties.timestamp,
-            log_type,
+            kind,
             message=msgtxt,
             subject=properties.subject,
             additional_data=additional_data,
@@ -399,12 +390,13 @@ class Message(BaseModule):
             return
 
         if message.correct_id is not None:
-            app.storage.archive.store_message_correction(
+            app.storage.archive.try_message_correction(
                 self._account,
                 message.jid,
-                message.correct_id,
+                None,
                 message.message,
-                message.is_groupchat)
+                message.correct_id,
+                KindConstant.CHAT_MSG_SENT)
             return
 
         app.storage.archive.insert_into_logs(

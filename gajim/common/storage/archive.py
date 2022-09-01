@@ -42,6 +42,7 @@ from nbxmpp.structs import MessageProperties
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.helpers import AdditionalDataDict
+from gajim.common.const import MAX_MESSAGE_CORRECTION_DELAY
 from gajim.common.const import ShowConstant
 from gajim.common.const import KindConstant
 from gajim.common.const import JIDConstant
@@ -991,7 +992,7 @@ class MessageArchiveStorage(SqliteStorage):
         '''
         jids = [jid]
         account_id = self.get_account_id(account)
-        min_time = time.time() - 5 * 60
+        min_time = time.time() - MAX_MESSAGE_CORRECTION_DELAY
 
         sql = '''
             SELECT contact_name, time, kind, message, stanza_id, message_id,
@@ -1008,29 +1009,57 @@ class MessageArchiveStorage(SqliteStorage):
             tuple(jids) + (message_id, min_time)).fetchone()
 
     @timeit
-    def store_message_correction(self,
-                                 account: str,
-                                 jid: JID,
-                                 correct_id: str,
-                                 corrected_text: str,
-                                 is_groupchat: bool) -> None:
-        type_ = JIDConstant.NORMAL_TYPE
-        if is_groupchat:
-            type_ = JIDConstant.ROOM_TYPE
+    def try_message_correction(self,
+                               account: str,
+                               jid: JID,
+                               nickname: Optional[str],
+                               corrected_text: str,
+                               correct_id: str,
+                               kind: KindConstant) -> bool:
 
-        jid_id = self.get_jid_id(str(jid), type_=type_)
+        '''Try to correct a message
+
+        :param jid:  This can be a full jid or bare jid. A full jid only if the
+                     message is a MUC PM, otherwise a bare jid needs to be
+                     passed. `nickname` should only be passed if the message
+                     is a group chat message.
+        '''
+
         account_id = self.get_account_id(account)
-        sql = '''
-            SELECT log_line_id, message, additional_data
-            FROM logs
-            WHERE +jid_id = ?
-            AND account_id = ?
-            AND message_id = ?
-            '''
-        row = self._con.execute(
-            sql, (jid_id, account_id, correct_id)).fetchone()
-        if row is None:
-            return
+        max_timestamp = time.time() - MAX_MESSAGE_CORRECTION_DELAY
+
+        self._log.debug(
+            'Check if message is correctable, parameters: %s %s %s %s %s',
+            jid, account_id, nickname, correct_id, max_timestamp)
+
+        sql = '''SELECT log_line_id, message, additional_data
+                 FROM logs
+                 NATURAL JOIN jids jid_id
+                 WHERE +jid = ?
+                 AND account_id = ?
+                 AND contact_name IS ?
+                 AND message_id = ?
+                 AND kind = ?
+                 AND time > ?
+                 '''
+
+        rows = self._con.execute(sql, (jid,
+                                       account_id,
+                                       nickname,
+                                       correct_id,
+                                       kind,
+                                       max_timestamp
+                                       )).fetchall()
+
+        if not rows:
+            self._log.debug('No correctable messages found')
+            return False
+
+        if len(rows) != 1:
+            self._log.warning('More than one correctable message found')
+            return False
+
+        row = rows[0]
 
         if row.additional_data is None:
             additional_data = AdditionalDataDict()
@@ -1051,6 +1080,8 @@ class MessageArchiveStorage(SqliteStorage):
             '''
         self._con.execute(
             sql, (corrected_text, serialized_dict, row.log_line_id))
+
+        return True
 
     @timeit
     def update_additional_data(self,

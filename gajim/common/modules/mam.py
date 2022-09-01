@@ -43,7 +43,6 @@ from gajim.common import types
 from gajim.common.events import ArchivingIntervalFinished
 from gajim.common.events import FeatureDiscovered
 from gajim.common.events import MamMessageReceived
-from gajim.common.events import MessageUpdated
 from gajim.common.events import RawMamMessageReceived
 from gajim.common.const import ArchiveState, ClientState
 from gajim.common.const import KindConstant
@@ -51,7 +50,7 @@ from gajim.common.const import SyncThreshold
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_retraction_text
 from gajim.common.modules.misc import parse_oob
-from gajim.common.modules.misc import parse_correction
+from gajim.common.modules.util import check_if_message_correction
 from gajim.common.modules.util import get_eme_message
 from gajim.common.modules.util import as_task
 from gajim.common.modules.base import BaseModule
@@ -311,21 +310,12 @@ class MAM(BaseModule):
             'kind': kind,
         }
 
-        correct_id = parse_correction(properties)
-        if correct_id is not None:
-            nickname = properties.muc_nickname or properties.nickname
-            app.ged.raise_event(MessageUpdated(account=self._account,
-                                               jid=jid,
-                                               msgtxt=properties.body,
-                                               nickname=nickname,
-                                               properties=properties,
-                                               correct_id=correct_id))
-            app.storage.archive.store_message_correction(
-                self._account,
-                jid,
-                correct_id,
-                properties.body,
-                properties.type.is_groupchat)
+        if check_if_message_correction(properties,
+                                       self._account,
+                                       properties.jid,
+                                       properties.body,
+                                       kind,
+                                       self._log):
             return
 
         app.storage.archive.insert_into_logs(
