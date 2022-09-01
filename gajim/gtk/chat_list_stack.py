@@ -283,7 +283,7 @@ class ChatListStack(Gtk.Stack, EventHelper):
             return
 
         client = app.get_client(account)
-        contact = client.get_module('Contacts').get_group_chat_contact(jid)
+        contact = client.get_module('Contacts').get_contact(jid, groupchat=True)
 
         if contact.is_not_joined:
             _remove()

@@ -222,15 +222,6 @@ class Contacts(BaseModule):
         '''
         return self._contacts[jid]
 
-    def get_group_chat_contact(self,
-                               jid: Union[str, JID]
-                               ) -> Union[BareContact,
-                                          ResourceContact,
-                                          GroupchatContact,
-                                          GroupchatParticipant]:
-
-        return self.get_contact(jid, groupchat=True)
-
     def get_contacts_with_domain(self,
                                  domain: str
                                  ) -> list[Union[BareContact,
