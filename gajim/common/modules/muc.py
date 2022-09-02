@@ -984,10 +984,15 @@ class MUC(BaseModule):
                reason: Optional[str] = None,
                continue_: bool = False
                ) -> str:
-        if helpers.get_muc_context(room) == 'private':
-            room_contact = self._get_contact(room)
-            assert isinstance(room_contact, GroupchatContact)
+
+        room_contact = self._get_contact(room, groupchat=True)
+        assert isinstance(room_contact, GroupchatContact)
+        disco = room_contact.get_disco()
+        assert disco is not None
+
+        if disco.muc_is_members_only:
             self_contact = room_contact.get_self()
+            assert self_contact is not None
             affiliation = self_contact.affiliation
             admin = affiliation.is_owner or affiliation.is_admin
             if admin:
