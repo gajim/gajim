@@ -61,6 +61,7 @@ from gajim.common.structs import MUCPresenceData
 from gajim.common.modules.bits_of_binary import store_bob_data
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 
 log = logging.getLogger('gajim.c.m.muc')
 
@@ -587,7 +588,9 @@ class MUC(BaseModule):
             self._joined_users[room.jid][nickname] = occupant.presence
 
             presence = self._process_user_presence(properties)
-            occupant.update_presence(presence, properties)
+            self._process_occupant_presence_change(properties,
+                                                   presence,
+                                                   occupant)
 
             room.notify('user-nickname-changed',
                         occupant,
@@ -613,7 +616,9 @@ class MUC(BaseModule):
                 self._start_join_timeout(room_jid)
 
             presence = self._process_user_presence(properties)
-            occupant.update_presence(presence, properties)
+            self._process_occupant_presence_change(properties,
+                                                   presence,
+                                                   occupant)
             return
 
         if properties.is_muc_self_presence and properties.is_kicked:
@@ -639,7 +644,38 @@ class MUC(BaseModule):
             log.warning(stanza)
             return
 
-        occupant.update_presence(presence, properties)
+        self._process_occupant_presence_change(properties, presence, occupant)
+
+    def _process_occupant_presence_change(
+            self,
+            properties: PresenceProperties,
+            presence: MUCPresenceData,
+            occupant: GroupchatParticipant) -> None:
+
+        if not occupant.is_available and presence.available:
+            occupant.update_presence(presence)
+            occupant.notify('user-joined', properties)
+            return
+
+        if not presence.available:
+            occupant.update_presence(presence)
+            occupant.notify('user-left', properties)
+            return
+
+        signals: list[str] = []
+        if occupant.affiliation != presence.affiliation:
+            signals.append('user-affiliation-changed')
+
+        if occupant.role != presence.role:
+            signals.append('user-role-changed')
+
+        if (occupant.status != presence.status or
+                occupant.show != presence.show):
+            signals.append('user-status-show-changed')
+
+        occupant.update_presence(presence)
+        for signal in signals:
+            occupant.notify(signal, properties)
 
     def _process_user_presence(self,
                                properties: PresenceProperties

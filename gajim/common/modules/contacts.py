@@ -797,7 +797,7 @@ class GroupchatContact(CommonContact):
 
     def set_not_joined(self) -> None:
         for contact in self._resources.values():
-            contact.update_presence(UNKNOWN_MUC_PRESENCE, notify=False)
+            contact.update_presence(UNKNOWN_MUC_PRESENCE)
 
     def get_user_nicknames(self) -> list[str]:
         client = app.get_client(self._account)
@@ -922,39 +922,8 @@ class GroupchatParticipant(CommonContact):
         return app.app.avatar_storage.get_surface(
             self, size, scale, show, style=style)
 
-    def update_presence(self,
-                        presence: MUCPresenceData,
-                        *args: Any,
-                        notify: bool = True
-                        ) -> None:
-        if not notify:
-            self._presence = presence
-            return
-
-        if not self._presence.available and presence.available:
-            self._presence = presence
-            self.notify('user-joined', *args)
-            return
-
-        if not presence.available:
-            self._presence = presence
-            self.notify('user-left', *args)
-            return
-
-        signals: list[str] = []
-        if self._presence.affiliation != presence.affiliation:
-            signals.append('user-affiliation-changed')
-
-        if self._presence.role != presence.role:
-            signals.append('user-role-changed')
-
-        if (self._presence.status != presence.status or
-                self._presence.show != presence.show):
-            signals.append('user-status-show-changed')
-
+    def update_presence(self, presence: MUCPresenceData) -> None:
         self._presence = presence
-        for signal in signals:
-            self.notify(signal, *args)
 
     def update_avatar(self, *args: Any) -> None:
         app.app.avatar_storage.invalidate_cache(self._jid)
