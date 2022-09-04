@@ -692,11 +692,11 @@ class MUC(BaseModule):
             event = events.MUCUserJoined(
                 timestamp=timestamp,
                 is_self=properties.is_muc_self_presence,
-                nick=self.name,
+                nick=occupant.name,
                 status_codes=properties.muc_status_codes)
 
             occupant.update_presence(presence)
-            app.storage.events.store(self.room, event)
+            app.storage.events.store(occupant.room, event)
             occupant.notify('user-joined', event)
             return
 
@@ -705,13 +705,13 @@ class MUC(BaseModule):
             event = events.MUCUserLeft(
                 timestamp=timestamp,
                 is_self=properties.is_muc_self_presence,
-                nick=self.name,
+                nick=occupant.name,
                 status_codes=properties.muc_status_codes,
                 reason=properties.muc_user.reason,
                 actor=properties.muc_user.actor)
 
             occupant.update_presence(presence)
-            app.storage.events.store(self.room, event)
+            app.storage.events.store(occupant.room, event)
             occupant.notify('user-left', event)
             return
 
@@ -722,8 +722,8 @@ class MUC(BaseModule):
             event = events.MUCUserAffiliationChanged(
                 timestamp=timestamp,
                 is_self=properties.is_muc_self_presence,
-                nick=self.name,
-                affiliation=self.affiliation,
+                nick=occupant.name,
+                affiliation=presence.affiliation,
                 reason=properties.muc_user.reason,
                 actor=properties.muc_user.actor)
 
@@ -734,8 +734,8 @@ class MUC(BaseModule):
             event = events.MUCUserRoleChanged(
                 timestamp=timestamp,
                 is_self=properties.is_muc_self_presence,
-                nick=self.name,
-                role=self.role,
+                nick=occupant.name,
+                role=presence.role,
                 reason=properties.muc_user.reason,
                 actor=properties.muc_user.actor)
 
@@ -747,7 +747,7 @@ class MUC(BaseModule):
             event = events.MUCUserStatusShowChanged(
                 timestamp=timestamp,
                 is_self=properties.is_muc_self_presence,
-                nick=self.name,
+                nick=occupant.name,
                 status=properties.status,
                 show_value=properties.show.value)
 
@@ -755,7 +755,7 @@ class MUC(BaseModule):
 
         occupant.update_presence(presence)
         for signal, event in signals_and_events:
-            app.storage.events.store(self.room, event)
+            app.storage.events.store(occupant.room, event)
             occupant.notify(signal, event)
 
     def _process_user_presence(self,

@@ -29,7 +29,6 @@ from gi.repository import GLib
 from nbxmpp import JID
 from nbxmpp.const import StatusCode
 from nbxmpp.structs import MucSubject
-from nbxmpp.structs import PresenceProperties
 from nbxmpp.modules.security_labels import Displaymarking
 
 from gajim.common import app
@@ -167,7 +166,8 @@ class ChatControl(EventHelper):
 
         if isinstance(contact, GroupchatParticipant):
             contact.multi_connect({
-                'user-status-show-changed': self._on_user_status_show_changed,
+                'user-status-show-changed':
+                    self._on_participant_status_show_changed,
             })
 
         elif isinstance(contact, GroupchatContact):
@@ -176,8 +176,7 @@ class ChatControl(EventHelper):
                 'user-left': self._on_user_left,
                 'user-affiliation-changed': self._on_user_affiliation_changed,
                 'user-role-changed': self._on_user_role_changed,
-                'user-status-show-changed':
-                    self._on_muc_user_status_show_changed,
+                'user-status-show-changed': self._on_user_status_show_changed,
                 'user-nickname-changed': self._on_user_nickname_changed,
                 'room-kicked': self._on_room_kicked,
                 'room-destroyed': self._on_room_destroyed,
@@ -881,10 +880,19 @@ class ChatControl(EventHelper):
         self.add_info_message(message, event.timestamp)
 
     def _on_user_status_show_changed(self,
-                                     _user_contact: GroupchatParticipant,
+                                     contact: GroupchatContact,
                                      _signal_name: str,
+                                     _user_contact: GroupchatParticipant,
                                      event: events.MUCUserStatusShowChanged
                                      ) -> None:
+
+        self._process_muc_user_status_show_changed(event)
+
+    def _on_participant_status_show_changed(
+            self,
+            contact: GroupchatParticipant,
+            _signal_name: str,
+            event: events.MUCUserStatusShowChanged) -> None:
 
         self._process_muc_user_status_show_changed(event)
 
@@ -892,14 +900,20 @@ class ChatControl(EventHelper):
             self,
             event: events.MUCUserStatusShowChanged) -> None:
 
+        if isinstance(self._contact, GroupchatContact):
+            contact = self._contact
+        elif isinstance(self._contact, GroupchatParticipant):
+            contact = self._contact.room
+        else:
+            raise AssertionError
+
+        if not contact.settings.get('print_status'):
+            return
+
         nick = event.nick
         status = event.status
         status = '' if not status else f' - {status}'
         show = helpers.get_uf_show(event.show_value)
-
-        assert isinstance(self.contact, GroupchatParticipant)
-        if not self.contact.room.settings.get('print_status'):
-            return
 
         if event.is_self:
             message = _('You are now {show}{status}').format(show=show,
@@ -1110,20 +1124,6 @@ class ChatControl(EventHelper):
             return
 
         self.add_info_message(message, event.timestamp)
-
-    def _on_muc_user_status_show_changed(self,
-                                         contact: GroupchatContact,
-                                         _signal_name: str,
-                                         user_contact: GroupchatParticipant,
-                                         properties: PresenceProperties
-                                         ) -> None:
-
-        if not contact.settings.get('print_status'):
-            return
-
-        self.conversation_view.add_user_status(user_contact.name,
-                                               user_contact.show.value,
-                                               user_contact.status)
 
     def add_muc_message(self,
                         text: str,
