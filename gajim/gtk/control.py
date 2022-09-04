@@ -1169,6 +1169,3 @@ class ChatControl(EventHelper):
         if (app.settings.get('show_subject_on_join') or
                 not contact.is_joining):
             self.conversation_view.add_muc_subject(subject)
-
-    def rejoin(self) -> None:
-        self.client.get_module('MUC').join(self.contact.jid)
