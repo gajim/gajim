@@ -19,6 +19,7 @@
 - [GtkSourceView](https://gitlab.gnome.org/GNOME/gtksourceview)
 - [Pango](https://gitlab.gnome.org/GNOME/pango) (>=1.50.0)
 - [libsoup](https://gitlab.gnome.org/GNOME/libsoup/)
+- [sqlite](https://www.sqlite.org/) (>=3.33.0)
 
 ### Optional Runtime Requirements
 

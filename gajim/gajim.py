@@ -21,6 +21,7 @@ from typing import Optional
 import os
 import sys
 import signal
+import sqlite3
 import platform
 from ctypes import CDLL, byref, create_string_buffer
 from ctypes.util import find_library
@@ -36,6 +37,7 @@ _MIN_CAIRO_VER = '1.16.0'
 _MIN_PYGOBJECT_VER = '3.32.0'
 _MIN_GLIB_VER = '2.60.0'
 _MIN_PANGO_VER = '1.50.0'
+_MIN_SQLITE_VER = '3.33.0'
 
 
 def check_version(dep_name: str, current_ver: str, min_ver: str) -> None:
@@ -92,6 +94,7 @@ def _check_required_deps() -> None:
     check_version('gtk3', gtk_ver, _MIN_GTK_VER)
     check_version('glib', glib_ver, _MIN_GLIB_VER)
     check_version('pango', Pango.version_string(), _MIN_PANGO_VER)
+    check_version('sqlite', sqlite3.sqlite_version, _MIN_SQLITE_VER)
 
 
 def _init_gui(gui: str) -> None:
