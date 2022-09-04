@@ -696,10 +696,12 @@ class MUC(BaseModule):
                 status_codes=properties.muc_status_codes)
 
             occupant.update_presence(presence)
-            occupant.notify('user-joined', properties)
+            app.storage.events.store(self.room, event)
+            occupant.notify('user-joined', event)
             return
 
         if not presence.available:
+
             event = events.MUCUserLeft(
                 timestamp=timestamp,
                 is_self=properties.is_muc_self_presence,
@@ -709,12 +711,14 @@ class MUC(BaseModule):
                 actor=properties.muc_user.actor)
 
             occupant.update_presence(presence)
-            occupant.notify('user-left', properties)
+            app.storage.events.store(self.room, event)
+            occupant.notify('user-left', event)
             return
 
         signals_and_events: list[tuple[str, Any]] = []
 
         if occupant.affiliation != presence.affiliation:
+
             event = events.MUCUserAffiliationChanged(
                 timestamp=timestamp,
                 is_self=properties.is_muc_self_presence,
@@ -726,6 +730,7 @@ class MUC(BaseModule):
             signals_and_events.append(('user-affiliation-changed', event))
 
         if occupant.role != presence.role:
+
             event = events.MUCUserRoleChanged(
                 timestamp=timestamp,
                 is_self=properties.is_muc_self_presence,
@@ -751,7 +756,7 @@ class MUC(BaseModule):
         occupant.update_presence(presence)
         for signal, event in signals_and_events:
             app.storage.events.store(self.room, event)
-            occupant.notify(signal, properties)
+            occupant.notify(signal, event)
 
     def _process_user_presence(self,
                                properties: PresenceProperties
