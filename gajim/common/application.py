@@ -44,6 +44,7 @@ from gajim.common.events import AllowGajimUpdateCheck
 from gajim.common.events import GajimUpdateAvailable
 from gajim.common.client import Client
 from gajim.common.helpers import make_http_request
+from gajim.common.storage.events import EventStorage
 from gajim.common.task_manager import TaskManager
 from gajim.common.settings import Settings
 from gajim.common.settings import LegacyConfig
@@ -73,6 +74,9 @@ class CoreApplication:
 
         app.storage.cache = CacheStorage()
         app.storage.cache.init()
+
+        app.storage.events = EventStorage()
+        app.storage.events.init()
 
         app.storage.archive = MessageArchiveStorage()
         app.storage.archive.init()

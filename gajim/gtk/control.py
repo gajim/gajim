@@ -19,9 +19,6 @@ from typing import Optional
 from typing import Union
 from typing import cast
 
-from collections import defaultdict
-from collections import deque
-from functools import partial
 import os
 import logging
 import time
@@ -31,9 +28,7 @@ from gi.repository import GLib
 
 from nbxmpp import JID
 from nbxmpp.const import StatusCode
-from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import MucSubject
-from nbxmpp.structs import PresenceProperties
 from nbxmpp.modules.security_labels import Displaymarking
 
 from gajim.common import app
@@ -99,12 +94,6 @@ class ChatControl(EventHelper):
 
         self._muc_subjects: dict[
             types.ChatContactT, tuple[float, MucSubject]] = {}
-
-        # Store 100 info messages per contact on a FIFO basis
-        self._info_messages: dict[
-            types.ChatContactT,
-            deque[tuple[float, str]]] = defaultdict(
-                partial(deque, maxlen=100))  # pyright: ignore
 
         self.widget = cast(Gtk.Box, self._ui.get_object('control_box'))
         self.widget.show_all()
@@ -177,7 +166,8 @@ class ChatControl(EventHelper):
 
         if isinstance(contact, GroupchatParticipant):
             contact.multi_connect({
-                'user-status-show-changed': self._on_user_status_show_changed,
+                'user-status-show-changed':
+                    self._on_participant_status_show_changed,
             })
 
         elif isinstance(contact, GroupchatContact):
@@ -186,8 +176,7 @@ class ChatControl(EventHelper):
                 'user-left': self._on_user_left,
                 'user-affiliation-changed': self._on_user_affiliation_changed,
                 'user-role-changed': self._on_user_role_changed,
-                'user-status-show-changed':
-                    self._on_muc_user_status_show_changed,
+                'user-status-show-changed': self._on_user_status_show_changed,
                 'user-nickname-changed': self._on_user_nickname_changed,
                 'room-kicked': self._on_room_kicked,
                 'room-destroyed': self._on_room_destroyed,
@@ -204,9 +193,6 @@ class ChatControl(EventHelper):
         if transfers is not None:
             for transfer in transfers:
                 self.add_file_transfer(transfer)
-
-        for timestamp, message in self._info_messages[contact]:
-            self.add_info_message(message, timestamp)
 
         if isinstance(contact, GroupchatContact):
             if (app.settings.get('show_subject_on_join') or
@@ -501,10 +487,6 @@ class ChatControl(EventHelper):
                          timestamp: Optional[float] = None
                          ) -> None:
 
-        if timestamp is None:
-            assert self._contact is not None
-            self._info_messages[self._contact].append((time.time(), text))
-
         self.conversation_view.add_info_message(text, timestamp)
 
     def add_file_transfer(self, transfer: HTTPFileTransfer) -> None:
@@ -619,6 +601,43 @@ class ChatControl(EventHelper):
         #    if self.conversation_view.reduce_message_count(before):
         #        self._scrolled_view.set_history_complete(before, False)
 
+        assert self._contact is not None
+        for event in app.storage.events.load(self._contact, before, timestamp):
+            if isinstance(event, events.MUCUserJoined):
+                self._process_muc_user_joined(event)
+
+            elif isinstance(event, events.MUCUserLeft):
+                self._process_muc_user_left(event)
+
+            elif isinstance(event, events.MUCNicknameChanged):
+                self._process_muc_nickname_changed(event)
+
+            elif isinstance(event, events.MUCRoomKicked):
+                self._process_muc_room_kicked(event)
+
+            elif isinstance(event, events.MUCUserAffiliationChanged):
+                self._process_muc_user_affiliation_changed(event)
+
+            elif isinstance(event, events.MUCUserRoleChanged):
+                self._process_muc_user_role_changed(event)
+
+            elif isinstance(event, events.MUCUserStatusShowChanged):
+                self._process_muc_user_status_show_changed(event)
+
+            elif isinstance(event, events.MUCRoomConfigChanged):
+                self._process_muc_room_config_changed(event)
+
+            elif isinstance(event, events.MUCRoomConfigFinished):
+                self._process_muc_room_config_finished(event)
+
+            elif isinstance(event, events.MUCRoomPresenceError):
+                self._process_muc_room_presence_error(event)
+
+            elif isinstance(event, events.MUCRoomDestroyed):
+                self._process_muc_room_destroyed(event)
+            else:
+                raise ValueError('Unknown event: %s' % event)
+
         self._scrolled_view.block_signals(False)
 
     def add_messages(self, messages: list[ConversationRow]):
@@ -703,61 +722,406 @@ class ChatControl(EventHelper):
                           additional_data=additional_data)
 
     def _on_user_nickname_changed(self,
-                                  contact: types.GroupchatContact,
+                                  _contact: types.GroupchatContact,
                                   _signal_name: str,
-                                  old_contact: types.GroupchatParticipant,
-                                  new_contact: types.GroupchatParticipant,
-                                  properties: PresenceProperties
+                                  event: events.MUCNicknameChanged,
+                                  _old_contact: types.GroupchatParticipant,
+                                  _new_contact: types.GroupchatParticipant
                                   ) -> None:
 
-        if properties.is_muc_self_presence:
-            message = _('You are now known as %s') % new_contact.name
+        self._process_muc_nickname_changed(event)
+
+    def _process_muc_nickname_changed(self,
+                                      event: events.MUCNicknameChanged
+                                      ) -> None:
+
+        if event.is_self:
+            message = _('You are now known as %s') % event.new_name
         else:
             message = _('{nick} is now known '
-                        'as {new_nick}').format(nick=old_contact.name,
-                                                new_nick=new_contact.name)
+                        'as {new_nick}').format(nick=event.old_name,
+                                                new_nick=event.new_name)
+        self.add_info_message(message, event.timestamp)
 
-        self.add_info_message(message)
+    def _on_room_kicked(self,
+                        _contact: GroupchatContact,
+                        _signal_name: str,
+                        event: events.MUCRoomKicked
+                        ) -> None:
 
-    def _on_muc_user_status_show_changed(self,
-                                         contact: GroupchatContact,
-                                         _signal_name: str,
-                                         user_contact: GroupchatParticipant,
-                                         properties: PresenceProperties
-                                         ) -> None:
+        self._process_muc_room_kicked(event)
+
+    def _process_muc_room_kicked(self, event: events.MUCRoomKicked) -> None:
+        status_codes = event.status_codes or []
+
+        reason = event.reason
+        reason = '' if reason is None else f': {reason}'
+
+        actor = event.actor
+        # Group Chat: You have been kicked by Alice
+        actor = '' if actor is None else _(' by {actor}').format(
+            actor=actor)
+
+        # Group Chat: We have been removed from the room by Alice: reason
+        message = _('You have been removed from the '
+                    'group chat{actor}{reason}')
+
+        if StatusCode.REMOVED_ERROR in status_codes:
+            # Handle 333 before 307, some MUCs add both
+            # Group Chat: Server kicked us because of an server error
+            message = _('You have left due '
+                        'to an error{reason}').format(reason=reason)
+
+        elif StatusCode.REMOVED_KICKED in status_codes:
+            # Group Chat: We have been kicked by Alice: reason
+            message = _('You have been '
+                        'kicked{actor}{reason}').format(actor=actor,
+                                                        reason=reason)
+
+        elif StatusCode.REMOVED_BANNED in status_codes:
+            # Group Chat: We have been banned by Alice: reason
+            message = _('You have been '
+                        'banned{actor}{reason}').format(actor=actor,
+                                                        reason=reason)
+
+        elif StatusCode.REMOVED_AFFILIATION_CHANGE in status_codes:
+            # Group Chat: We were removed because of an affiliation change
+            reason = _(': Affiliation changed')
+            message = message.format(actor=actor, reason=reason)
+
+        elif StatusCode.REMOVED_NONMEMBER_IN_MEMBERS_ONLY in status_codes:
+            # Group Chat: Room configuration changed
+            reason = _(': Group chat configuration changed to members-only')
+            message = message.format(actor=actor, reason=reason)
+
+        elif StatusCode.REMOVED_SERVICE_SHUTDOWN in status_codes:
+            # Group Chat: Kicked because of server shutdown
+            reason = ': System shutdown'
+            message = message.format(actor=actor, reason=reason)
+
+        else:
+            # No formatted message available
+            return
+
+        self.add_info_message(message, event.timestamp)
+
+    def _on_user_affiliation_changed(self,
+                                     _contact: GroupchatContact,
+                                     _signal_name: str,
+                                     user_contact: GroupchatParticipant,
+                                     event: events.MUCUserAffiliationChanged
+                                     ) -> None:
+
+        self._process_muc_user_affiliation_changed(event)
+
+    def _process_muc_user_affiliation_changed(
+            self,
+            event: events.MUCUserAffiliationChanged) -> None:
+
+        affiliation = helpers.get_uf_affiliation(event.affiliation)
+
+        reason = event.reason
+        reason = '' if reason is None else f': {reason}'
+
+        actor = event.actor
+        # Group Chat: You have been kicked by Alice
+        actor = '' if actor is None else _(' by {actor}').format(
+            actor=actor)
+
+        if event.is_self:
+            message = _('** Your Affiliation has been set to '
+                        '{affiliation}{actor}{reason}').format(
+                            affiliation=affiliation,
+                            actor=actor,
+                            reason=reason)
+        else:
+            message = _('** Affiliation of {nick} has been set to '
+                        '{affiliation}{actor}{reason}').format(
+                            nick=event.nick,
+                            affiliation=affiliation,
+                            actor=actor,
+                            reason=reason)
+
+        self.add_info_message(message, event.timestamp)
+
+    def _on_user_role_changed(self,
+                              _contact: GroupchatContact,
+                              _signal_name: str,
+                              user_contact: GroupchatParticipant,
+                              event: events.MUCUserRoleChanged
+                              ) -> None:
+
+        self._process_muc_user_role_changed(event)
+
+    def _process_muc_user_role_changed(self,
+                                       event: events.MUCUserRoleChanged
+                                       ) -> None:
+
+        role = helpers.get_uf_role(event.role)
+        nick = event.nick
+
+        reason = event.reason
+        reason = '' if reason is None else f': {reason}'
+
+        actor = event.actor
+        # Group Chat: You have been kicked by Alice
+        actor = '' if actor is None else _(' by {actor}').format(actor=actor)
+
+        if event.is_self:
+            message = _('** Your Role has been set to '
+                        '{role}{actor}{reason}').format(role=role,
+                                                        actor=actor,
+                                                        reason=reason)
+        else:
+            message = _('** Role of {nick} has been set to '
+                        '{role}{actor}{reason}').format(nick=nick,
+                                                        role=role,
+                                                        actor=actor,
+                                                        reason=reason)
+        self.add_info_message(message, event.timestamp)
+
+    def _on_user_status_show_changed(self,
+                                     contact: GroupchatContact,
+                                     _signal_name: str,
+                                     _user_contact: GroupchatParticipant,
+                                     event: events.MUCUserStatusShowChanged
+                                     ) -> None:
+
+        self._process_muc_user_status_show_changed(event)
+
+    def _on_participant_status_show_changed(
+            self,
+            contact: GroupchatParticipant,
+            _signal_name: str,
+            event: events.MUCUserStatusShowChanged) -> None:
+
+        self._process_muc_user_status_show_changed(event)
+
+    def _process_muc_user_status_show_changed(
+            self,
+            event: events.MUCUserStatusShowChanged) -> None:
+
+        if isinstance(self._contact, GroupchatContact):
+            contact = self._contact
+        elif isinstance(self._contact, GroupchatParticipant):
+            contact = self._contact.room
+        else:
+            raise AssertionError
 
         if not contact.settings.get('print_status'):
             return
 
-        self.conversation_view.add_user_status(user_contact.name,
-                                               user_contact.show.value,
-                                               user_contact.status)
-
-    def _on_user_status_show_changed(self,
-                                     _user_contact: GroupchatParticipant,
-                                     _signal_name: str,
-                                     properties: PresenceProperties
-                                     ) -> None:
-
-        nick = properties.muc_nickname
-        status = properties.status
+        nick = event.nick
+        status = event.status
         status = '' if not status else f' - {status}'
-        assert properties.show is not None
-        show = helpers.get_uf_show(properties.show.value)
+        show = helpers.get_uf_show(event.show_value)
 
-        assert isinstance(self.contact, GroupchatParticipant)
-        if not self.contact.room.settings.get('print_status'):
-            return
-
-        if properties.is_muc_self_presence:
+        if event.is_self:
             message = _('You are now {show}{status}').format(show=show,
                                                              status=status)
 
         else:
-            message = _('{nick} is now {show}{status}').format(nick=nick,
-                                                               show=show,
-                                                               status=status)
-        self.add_info_message(message)
+            message = _('{nick} is now {show}{status}').format(
+                nick=nick,
+                show=show,
+                status=status)
+
+        self.add_info_message(message, event.timestamp)
+
+    def _on_room_config_changed(self,
+                                _contact: GroupchatContact,
+                                _signal_name: str,
+                                event: events.MUCRoomConfigChanged
+                                ) -> None:
+
+        self._process_muc_room_config_changed(event)
+
+    def _process_muc_room_config_changed(self,
+                                         event: events.MUCRoomConfigChanged
+                                         ) -> None:
+
+        # http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
+        status_codes = event.status_codes
+        changes: list[str] = []
+
+        if StatusCode.SHOWING_UNAVAILABLE in status_codes:
+            changes.append(_('Group chat now shows unavailable members'))
+
+        if StatusCode.NOT_SHOWING_UNAVAILABLE in status_codes:
+            changes.append(_('Group chat now does not show '
+                             'unavailable members'))
+
+        if StatusCode.CONFIG_NON_PRIVACY_RELATED in status_codes:
+            changes.append(_('A setting not related to privacy has been '
+                             'changed'))
+            self.client.get_module('Discovery').disco_muc(self.contact.jid)
+
+        if StatusCode.CONFIG_ROOM_LOGGING in status_codes:
+            # Can be a presence
+            # (see chg_contact_status in groupchat_control.py)
+            changes.append(_('Conversations are stored on the server'))
+
+        if StatusCode.CONFIG_NO_ROOM_LOGGING in status_codes:
+            changes.append(_('Conversations are not stored on the server'))
+
+        if StatusCode.CONFIG_NON_ANONYMOUS in status_codes:
+            changes.append(_('Group chat is now non-anonymous'))
+
+        if StatusCode.CONFIG_SEMI_ANONYMOUS in status_codes:
+            changes.append(_('Group chat is now semi-anonymous'))
+
+        if StatusCode.CONFIG_FULL_ANONYMOUS in status_codes:
+            changes.append(_('Group chat is now fully anonymous'))
+
+        for message in changes:
+            self.add_info_message(message, event.timestamp)
+
+    def _on_room_config_finished(self,
+                                 _contact: GroupchatContact,
+                                 _signal_name: str,
+                                 event: events.MUCRoomConfigFinished
+                                 ) -> None:
+        self._process_muc_room_config_finished(event)
+
+    def _process_muc_room_config_finished(self,
+                                          event: events.MUCRoomConfigFinished
+                                          ) -> None:
+
+        self.add_info_message(_('A new group chat has been created'))
+
+    def _on_room_presence_error(self,
+                                _contact: GroupchatContact,
+                                _signal_name: str,
+                                event: events.MUCRoomPresenceError
+                                ) -> None:
+
+        self._process_muc_room_presence_error(event)
+
+    def _process_muc_room_presence_error(self,
+                                         event: events.MUCRoomPresenceError
+                                         ) -> None:
+
+        error_message = to_user_string(event.error)
+        self.add_info_message(_('Error: %s') % error_message)
+
+    def _on_room_destroyed(self,
+                           _contact: GroupchatContact,
+                           _signal_name: str,
+                           event: events.MUCRoomDestroyed
+                           ) -> None:
+
+        self._process_muc_room_destroyed(event)
+
+    def _process_muc_room_destroyed(self,
+                                    event: events.MUCRoomDestroyed
+                                    ) -> None:
+
+        reason = event.reason
+        reason = '' if reason is None else f': {reason}'
+
+        message = _('Group chat has been destroyed')
+
+        if event.alternate is not None:
+            message += '\n' + _('You can join this group chat instead: '
+                                'xmpp:%s?join') % str(event.alternate)
+
+        self.add_info_message(message, event.timestamp)
+
+    def _on_user_joined(self,
+                        _contact: GroupchatContact,
+                        _signal_name: str,
+                        _user_contact: GroupchatParticipant,
+                        event: events.MUCUserJoined
+                        ) -> None:
+
+        self._process_muc_user_joined(event)
+
+    def _process_muc_user_joined(self, event: events.MUCUserJoined) -> None:
+        assert isinstance(self.contact, GroupchatContact)
+
+        if not event.is_self:
+            if self.contact.is_joined:
+                self.conversation_view.add_muc_user_joined(event)
+            return
+
+        status_codes = event.status_codes or []
+
+        message = None
+        if not self.contact.is_joined:
+            # We just joined the room
+            message = _('You (%s) joined the group chat') % event.nick
+
+        if StatusCode.NON_ANONYMOUS in status_codes:
+            message = _('Any participant is allowed to see your full '
+                        'XMPP Address')
+
+        if StatusCode.CONFIG_ROOM_LOGGING in status_codes:
+            message = _('Conversations are stored on the server')
+
+        if StatusCode.NICKNAME_MODIFIED in status_codes:
+            message = _('The server has assigned or modified your '
+                        'nickname in this group chat')
+
+        if message is not None:
+            self.add_info_message(message, event.timestamp)
+
+    def _on_user_left(self,
+                      _contact: GroupchatContact,
+                      _signal_name: str,
+                      _user_contact: GroupchatParticipant,
+                      event: events.MUCUserLeft
+                      ) -> None:
+
+        self._process_muc_user_left(event)
+
+    def _process_muc_user_left(self, event: events.MUCUserLeft) -> None:
+        if event.is_self:
+            return
+
+        status_codes = event.status_codes or []
+        nick = event.nick
+
+        if StatusCode.REMOVED_ERROR in status_codes:
+            # Handle 333 before 307, some MUCs add both
+            self.conversation_view.add_muc_user_left(event, error=True)
+            return
+
+        reason = event.reason
+        reason = '' if reason is None else f': {reason}'
+
+        actor = event.actor
+        # Group Chat: You have been kicked by Alice
+        actor = '' if actor is None else _(' by {actor}').format(
+            actor=actor)
+
+        message = _('{nick} has been removed from the group '
+                    'chat{by}{reason}')
+
+        if StatusCode.REMOVED_KICKED in status_codes:
+            message = _('{nick} has been '
+                        'kicked{actor}{reason}').format(nick=nick,
+                                                        actor=actor,
+                                                        reason=reason)
+
+        elif StatusCode.REMOVED_BANNED in status_codes:
+            message = _('{nick} has been '
+                        'banned{actor}{reason}').format(nick=nick,
+                                                        actor=actor,
+                                                        reason=reason)
+
+        elif StatusCode.REMOVED_AFFILIATION_CHANGE in status_codes:
+            reason = _(': Affiliation changed')
+            message = message.format(nick=nick, by=actor, reason=reason)
+
+        elif StatusCode.REMOVED_NONMEMBER_IN_MEMBERS_ONLY in status_codes:
+            reason = _(': Group chat configuration changed to members-only')
+            message = message.format(nick=nick, by=actor, reason=reason)
+
+        else:
+            self.conversation_view.add_muc_user_left(event)
+            return
+
+        self.add_info_message(message, event.timestamp)
 
     def add_muc_message(self,
                         text: str,
@@ -806,291 +1170,5 @@ class ChatControl(EventHelper):
                 not contact.is_joining):
             self.conversation_view.add_muc_subject(subject)
 
-    def _on_room_config_changed(self,
-                                _contact: GroupchatContact,
-                                _signal_name: str,
-                                properties: MessageProperties
-                                ) -> None:
-        # http://www.xmpp.org/extensions/xep-0045.html#roomconfig-notify
-
-        status_codes = properties.muc_status_codes
-        assert status_codes is not None
-
-        changes: list[str] = []
-        if StatusCode.SHOWING_UNAVAILABLE in status_codes:
-            changes.append(_('Group chat now shows unavailable members'))
-
-        if StatusCode.NOT_SHOWING_UNAVAILABLE in status_codes:
-            changes.append(_('Group chat now does not show '
-                             'unavailable members'))
-
-        if StatusCode.CONFIG_NON_PRIVACY_RELATED in status_codes:
-            changes.append(_('A setting not related to privacy has been '
-                             'changed'))
-            self.client.get_module('Discovery').disco_muc(self.contact.jid)
-
-        if StatusCode.CONFIG_ROOM_LOGGING in status_codes:
-            # Can be a presence (see chg_contact_status in groupchat_control.py)
-            changes.append(_('Conversations are stored on the server'))
-
-        if StatusCode.CONFIG_NO_ROOM_LOGGING in status_codes:
-            changes.append(_('Conversations are not stored on the server'))
-
-        if StatusCode.CONFIG_NON_ANONYMOUS in status_codes:
-            changes.append(_('Group chat is now non-anonymous'))
-
-        if StatusCode.CONFIG_SEMI_ANONYMOUS in status_codes:
-            changes.append(_('Group chat is now semi-anonymous'))
-
-        if StatusCode.CONFIG_FULL_ANONYMOUS in status_codes:
-            changes.append(_('Group chat is now fully anonymous'))
-
-        for change in changes:
-            self.add_info_message(change)
-
     def rejoin(self) -> None:
         self.client.get_module('MUC').join(self.contact.jid)
-
-    def _on_user_joined(self,
-                        contact: GroupchatContact,
-                        _signal_name: str,
-                        user_contact: GroupchatParticipant,
-                        properties: PresenceProperties
-                        ) -> None:
-
-        nick = user_contact.name
-        if not properties.is_muc_self_presence:
-            if contact.is_joined:
-                self.conversation_view.add_muc_user_joined(nick)
-            return
-
-        status_codes = properties.muc_status_codes or []
-
-        if not contact.is_joined:
-            # We just joined the room
-            self.add_info_message(_('You (%s) joined the group chat') % nick)
-
-        if StatusCode.NON_ANONYMOUS in status_codes:
-            self.add_info_message(
-                _('Any participant is allowed to see your full XMPP Address'))
-
-        if StatusCode.CONFIG_ROOM_LOGGING in status_codes:
-            self.add_info_message(_('Conversations are stored on the server'))
-
-        if StatusCode.NICKNAME_MODIFIED in status_codes:
-            self.add_info_message(
-                _('The server has assigned or modified your nickname in this '
-                  'group chat'))
-
-    def _on_room_config_finished(self,
-                                 _contact: GroupchatContact,
-                                 _signal_name: str
-                                 ) -> None:
-        self.add_info_message(_('A new group chat has been created'))
-
-    def _on_user_affiliation_changed(self,
-                                     _contact: GroupchatContact,
-                                     _signal_name: str,
-                                     user_contact: GroupchatParticipant,
-                                     properties: PresenceProperties
-                                     ) -> None:
-        affiliation = helpers.get_uf_affiliation(user_contact.affiliation)
-        nick = user_contact.name
-
-        assert properties.muc_user is not None
-        reason = properties.muc_user.reason
-        reason = '' if reason is None else f': {reason}'
-
-        actor = properties.muc_user.actor
-        # Group Chat: You have been kicked by Alice
-        actor = '' if actor is None else _(' by {actor}').format(actor=actor)
-
-        if properties.is_muc_self_presence:
-            message = _('** Your Affiliation has been set to '
-                        '{affiliation}{actor}{reason}').format(
-                            affiliation=affiliation,
-                            actor=actor,
-                            reason=reason)
-        else:
-            message = _('** Affiliation of {nick} has been set to '
-                        '{affiliation}{actor}{reason}').format(
-                            nick=nick,
-                            affiliation=affiliation,
-                            actor=actor,
-                            reason=reason)
-
-        self.add_info_message(message)
-
-    def _on_user_role_changed(self,
-                              _contact: GroupchatContact,
-                              _signal_name: str,
-                              user_contact: GroupchatParticipant,
-                              properties: PresenceProperties
-                              ) -> None:
-        role = helpers.get_uf_role(user_contact.role)
-        nick = user_contact.name
-
-        assert properties.muc_user is not None
-        reason = properties.muc_user.reason
-        reason = '' if reason is None else f': {reason}'
-
-        actor = properties.muc_user.actor
-        # Group Chat: You have been kicked by Alice
-        actor = '' if actor is None else _(' by {actor}').format(actor=actor)
-
-        if properties.is_muc_self_presence:
-            message = _('** Your Role has been set to '
-                        '{role}{actor}{reason}').format(role=role,
-                                                        actor=actor,
-                                                        reason=reason)
-        else:
-            message = _('** Role of {nick} has been set to '
-                        '{role}{actor}{reason}').format(nick=nick,
-                                                        role=role,
-                                                        actor=actor,
-                                                        reason=reason)
-
-        self.add_info_message(message)
-
-    def _on_room_kicked(self,
-                        _contact: GroupchatContact,
-                        _signal_name: str,
-                        properties: MessageProperties
-                        ) -> None:
-        status_codes = properties.muc_status_codes or []
-
-        assert properties.muc_user is not None
-        reason = properties.muc_user.reason
-        reason = '' if reason is None else f': {reason}'
-
-        actor = properties.muc_user.actor
-        # Group Chat: You have been kicked by Alice
-        actor = '' if actor is None else _(' by {actor}').format(actor=actor)
-
-        # Group Chat: We have been removed from the room by Alice: reason
-        message = _('You have been removed from the group chat{actor}{reason}')
-
-        if StatusCode.REMOVED_ERROR in status_codes:
-            # Handle 333 before 307, some MUCs add both
-            # Group Chat: Server kicked us because of an server error
-            message = _('You have left due '
-                        'to an error{reason}').format(reason=reason)
-            self.add_info_message(message)
-
-        elif StatusCode.REMOVED_KICKED in status_codes:
-            # Group Chat: We have been kicked by Alice: reason
-            message = _('You have been '
-                        'kicked{actor}{reason}').format(actor=actor,
-                                                        reason=reason)
-            self.add_info_message(message)
-
-        elif StatusCode.REMOVED_BANNED in status_codes:
-            # Group Chat: We have been banned by Alice: reason
-            message = _('You have been '
-                        'banned{actor}{reason}').format(actor=actor,
-                                                        reason=reason)
-            self.add_info_message(message)
-
-        elif StatusCode.REMOVED_AFFILIATION_CHANGE in status_codes:
-            # Group Chat: We were removed because of an affiliation change
-            reason = _(': Affiliation changed')
-            message = message.format(actor=actor, reason=reason)
-            self.add_info_message(message)
-
-        elif StatusCode.REMOVED_NONMEMBER_IN_MEMBERS_ONLY in status_codes:
-            # Group Chat: Room configuration changed
-            reason = _(': Group chat configuration changed to members-only')
-            message = message.format(actor=actor, reason=reason)
-            self.add_info_message(message)
-
-        elif StatusCode.REMOVED_SERVICE_SHUTDOWN in status_codes:
-            # Group Chat: Kicked because of server shutdown
-            reason = ': System shutdown'
-            message = message.format(actor=actor, reason=reason)
-            self.add_info_message(message)
-
-    def _on_user_left(self,
-                      _contact: GroupchatContact,
-                      _signal_name: str,
-                      user_contact: GroupchatParticipant,
-                      properties: MessageProperties
-                      ) -> None:
-        status_codes = properties.muc_status_codes or []
-        nick = user_contact.name
-
-        assert properties.muc_user is not None
-        reason = properties.muc_user.reason
-        reason = '' if reason is None else f': {reason}'
-
-        actor = properties.muc_user.actor
-        # Group Chat: You have been kicked by Alice
-        actor = '' if actor is None else _(' by {actor}').format(actor=actor)
-
-        # Group Chat: We have been removed from the room
-        message = _('{nick} has been removed from the group chat{by}{reason}')
-
-        if StatusCode.REMOVED_ERROR in status_codes:
-            # Handle 333 before 307, some MUCs add both
-            self.conversation_view.add_muc_user_left(
-                nick, properties.muc_user.reason, error=True)
-
-        elif StatusCode.REMOVED_KICKED in status_codes:
-            # Group Chat: User was kicked by Alice: reason
-            message = _('{nick} has been '
-                        'kicked{actor}{reason}').format(nick=nick,
-                                                        actor=actor,
-                                                        reason=reason)
-            self.add_info_message(message)
-
-        elif StatusCode.REMOVED_BANNED in status_codes:
-            # Group Chat: User was banned by Alice: reason
-            message = _('{nick} has been '
-                        'banned{actor}{reason}').format(nick=nick,
-                                                        actor=actor,
-                                                        reason=reason)
-            self.add_info_message(message)
-
-        elif StatusCode.REMOVED_AFFILIATION_CHANGE in status_codes:
-            reason = _(': Affiliation changed')
-            message = message.format(nick=nick, by=actor, reason=reason)
-            self.add_info_message(message)
-
-        elif StatusCode.REMOVED_NONMEMBER_IN_MEMBERS_ONLY in status_codes:
-            reason = _(': Group chat configuration changed to members-only')
-            message = message.format(nick=nick, by=actor, reason=reason)
-            self.add_info_message(message)
-
-        else:
-            self.conversation_view.add_muc_user_left(
-                nick, properties.muc_user.reason)
-
-    def _on_room_presence_error(self,
-                                _contact: GroupchatContact,
-                                _signal_name: str,
-                                properties: PresenceProperties
-                                ) -> None:
-
-        assert properties.error is not None
-        error_message = to_user_string(properties.error)
-        self.add_info_message(_('Error: %s') % error_message)
-
-    def _on_room_destroyed(self,
-                           _contact: GroupchatContact,
-                           _signal_name: str,
-                           properties: PresenceProperties
-                           ) -> None:
-
-        destroyed = properties.muc_destroyed
-        assert destroyed is not None
-
-        reason = destroyed.reason
-        reason = '' if reason is None else f': {reason}'
-
-        message = _('Group chat has been destroyed')
-        self.add_info_message(message)
-
-        alternate = destroyed.alternate
-        if alternate is not None:
-            join_message = _('You can join this group chat '
-                             'instead: xmpp:%s?join') % str(alternate)
-            self.add_info_message(join_message)

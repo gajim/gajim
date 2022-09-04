@@ -37,9 +37,7 @@ from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common import types
-from gajim.common.events import JingleRequestReceived
-from gajim.common.events import FileRequestReceivedEvent
-from gajim.common.events import FileRequestSent
+from gajim.common import events
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_start_of_day
@@ -175,26 +173,29 @@ class ConversationView(Gtk.ListBox):
         self._insert_message(muc_subject)
 
     def add_muc_user_left(self,
-                          nick: str,
-                          reason: str,
-                          error: bool = False) -> None:
+                          event: events.MUCUserLeft,
+                          error: bool = False
+                          ) -> None:
+
         assert isinstance(self._contact, GroupchatContact)
         if not self._contact.settings.get('print_join_left'):
             return
         join_left = MUCJoinLeft('muc-user-left',
                                 self._contact.account,
-                                nick,
-                                reason=reason,
-                                error=error)
+                                event.nick,
+                                reason=event.reason,
+                                error=error,
+                                timestamp=event.timestamp)
         self._insert_message(join_left)
 
-    def add_muc_user_joined(self, nick: str) -> None:
+    def add_muc_user_joined(self, event: events.MUCUserJoined) -> None:
         assert isinstance(self._contact, GroupchatContact)
         if not self._contact.settings.get('print_join_left'):
             return
         join_left = MUCJoinLeft('muc-user-joined',
                                 self._contact.account,
-                                nick)
+                                event.nick,
+                                timestamp=event.timestamp)
         self._insert_message(join_left)
 
     def add_user_status(self, name: str, show: str, status: str) -> None:
@@ -215,8 +216,8 @@ class ConversationView(Gtk.ListBox):
 
     def add_jingle_file_transfer(self,
                                  event: Union[
-                                     FileRequestReceivedEvent,
-                                     FileRequestSent,
+                                     events.FileRequestReceivedEvent,
+                                     events.FileRequestSent,
                                      None] = None,
                                  db_message: Optional[ConversationRow] = None
                                  ) -> None:
@@ -230,7 +231,7 @@ class ConversationView(Gtk.ListBox):
         self._insert_message(jingle_transfer_row)
 
     def add_call_message(self,
-                         event: Optional[JingleRequestReceived] = None,
+                         event: Optional[events.JingleRequestReceived] = None,
                          db_message: Optional[ConversationRow] = None
                          ) -> None:
         assert isinstance(self._contact, BareContact)

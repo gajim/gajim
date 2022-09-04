@@ -30,11 +30,15 @@ from pathlib import Path
 
 from gi.repository import GLib
 
+import nbxmpp.const
 from nbxmpp.protocol import Iq
 from nbxmpp.protocol import JID
 from nbxmpp.structs import RosterItem
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import CommonError
+from nbxmpp.const import Role
+from nbxmpp.const import Affiliation
+from nbxmpp.const import StatusCode
 from nbxmpp.modules.discovery import parse_disco_info
 
 
@@ -98,6 +102,13 @@ sqlite3.register_converter('disco_info', _convert_disco_info)
 sqlite3.register_adapter(DiscoInfo, _adapt_disco_info)
 
 
+def _convert_json(json_string: bytes) -> dict[str, Any]:
+    return json.loads(json_string, object_hook=json_decoder)
+
+
+sqlite3.register_converter('JSON', _convert_json)
+
+
 class Encoder(json.JSONEncoder):
     def default(self, o: Any) -> Any:
         if isinstance(o, set):
@@ -111,6 +122,10 @@ class Encoder(json.JSONEncoder):
             dct['__type'] = 'RosterItem'
             return dct
 
+        if isinstance(o, (Affiliation, Role, StatusCode)):
+            return {'value': o.value,
+                    '__type': o.__class__.__name__}
+
         return json.JSONEncoder.default(self, o)
 
 
@@ -118,8 +133,10 @@ def json_decoder(dct: dict[str, Any]) -> Any:
     type_ = dct.get('__type')
     if type_ is None:
         return dct
+
     if type_ == 'JID':
         return JID.from_string(dct['value'])
+
     if type_ == 'RosterItem':
         return RosterItem(jid=dct['jid'],
                           name=dct['name'],
@@ -127,6 +144,10 @@ def json_decoder(dct: dict[str, Any]) -> Any:
                           subscription=dct['subscription'],
                           approved=dct['approved'],
                           groups=set(dct['groups']))
+
+    if type_ in ('Affiliation', 'Role', 'StatusCode'):
+        return getattr(nbxmpp.const, type_)(dct['value'])
+
     return dct
 
 

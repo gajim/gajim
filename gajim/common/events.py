@@ -32,7 +32,10 @@ from nbxmpp.structs import ModerationData
 from nbxmpp.structs import LocationData
 from nbxmpp.structs import RosterItem
 from nbxmpp.structs import TuneData
+from nbxmpp.const import Affiliation
 from nbxmpp.const import InviteType
+from nbxmpp.const import Role
+from nbxmpp.const import StatusCode
 
 from gajim.common.file_props import FileProp
 from gajim.common.const import JingleState
@@ -676,3 +679,101 @@ class AllowGajimUpdateCheck(ApplicationEvent):
 class GajimUpdateAvailable(ApplicationEvent):
     name: str = field(init=False, default='gajim-update-available')
     version: str
+
+
+@dataclass
+class MUCNicknameChanged(ApplicationEvent):
+    name: str = field(init=False, default='muc-nickname-changed')
+    is_self: bool
+    new_name: str
+    old_name: str
+    timestamp: float
+
+
+@dataclass
+class MUCRoomConfigChanged(ApplicationEvent):
+    name: str = field(init=False, default='muc-room-config-changed')
+    timestamp: float
+    status_codes: set[StatusCode]
+
+
+@dataclass
+class MUCRoomConfigFinished(ApplicationEvent):
+    name: str = field(init=False, default='muc-room-config-finished')
+    timestamp: float
+
+
+@dataclass
+class MUCRoomPresenceError(ApplicationEvent):
+    name: str = field(init=False, default='muc-room-presence-error')
+    timestamp: float
+    error: Any
+
+
+@dataclass
+class MUCRoomKicked(ApplicationEvent):
+    name: str = field(init=False, default='muc-room-kicked')
+    timestamp: float
+    status_codes: Optional[set[StatusCode]]
+    reason: Optional[str]
+    actor: Optional[str]
+
+
+@dataclass
+class MUCRoomDestroyed(ApplicationEvent):
+    name: str = field(init=False, default='muc-room-destroyed')
+    timestamp: float
+    reason: Optional[str]
+    alternate: Optional[JID]
+
+
+@dataclass
+class MUCUserJoined(ApplicationEvent):
+    name: str = field(init=False, default='muc-user-joined')
+    timestamp: float
+    is_self: bool
+    nick: str
+    status_codes: Optional[set[StatusCode]]
+
+
+@dataclass
+class MUCUserLeft(ApplicationEvent):
+    name: str = field(init=False, default='muc-user-left')
+    timestamp: float
+    is_self: bool
+    nick: str
+    status_codes: Optional[set[StatusCode]]
+    reason: Optional[str]
+    actor: Optional[str]
+
+
+@dataclass
+class MUCUserRoleChanged(ApplicationEvent):
+    name: str = field(init=False, default='muc-user-role-changed')
+    timestamp: float
+    is_self: bool
+    nick: str
+    role: Role
+    reason: Optional[str]
+    actor: Optional[str]
+
+
+@dataclass
+class MUCUserAffiliationChanged(ApplicationEvent):
+    name: str = field(init=False, default='muc-user-affiliation-changed')
+    timestamp: float
+    is_self: bool
+    nick: str
+    affiliation: Affiliation
+    reason: Optional[str]
+    actor: Optional[str]
+
+
+@dataclass
+class MUCUserStatusShowChanged(ApplicationEvent):
+    name: str = field(init=False, default='muc-user-status-show-changed')
+    timestamp: float
+    is_self: bool
+    nick: str
+    status: str
+    show_value: str

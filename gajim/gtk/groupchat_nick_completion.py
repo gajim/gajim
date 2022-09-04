@@ -18,7 +18,6 @@ from typing import Optional
 
 import logging
 
-from nbxmpp.structs import PresenceProperties
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -27,6 +26,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common import types
 from gajim.common.events import GcMessageReceived
+from gajim.common.events import MUCNicknameChanged
 from gajim.common.ged import EventHelper
 from gajim.common.helpers import jid_is_blocked
 from gajim.common.helpers import message_needs_highlight
@@ -76,12 +76,12 @@ class GroupChatNickCompletion(EventHelper):
     def _on_user_nickname_changed(self,
                                   _contact: types.GroupchatContact,
                                   _signal_name: str,
+                                  event: MUCNicknameChanged,
                                   old_contact: types.GroupchatParticipant,
-                                  new_contact: types.GroupchatParticipant,
-                                  properties: PresenceProperties
+                                  new_contact: types.GroupchatParticipant
                                   ) -> None:
 
-        if properties.is_muc_self_presence:
+        if event.is_self:
             return
 
         old_name = old_contact.name
