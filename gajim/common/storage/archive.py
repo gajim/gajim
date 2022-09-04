@@ -222,7 +222,7 @@ class MessageArchiveStorage(SqliteStorage):
                     )''',
 
                 '''CREATE INDEX IF NOT EXISTS idx_logs_stanza_id
-                    ON logs(stanza_id)''',
+                   ON logs(stanza_id)''',
                 'PRAGMA user_version=1'
             ]
 
@@ -252,7 +252,8 @@ class MessageArchiveStorage(SqliteStorage):
 
         if user_version < 5:
             statements = [
-                'CREATE INDEX idx_logs_message_id ON logs (message_id)',
+                '''CREATE INDEX IF NOT EXISTS idx_logs_message_id
+                   ON logs (message_id)''',
                 'PRAGMA user_version=5'
             ]
             self._execute_multiple(statements)
