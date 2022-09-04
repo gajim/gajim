@@ -16,6 +16,7 @@ from __future__ import annotations
 import dataclasses
 
 from typing import Any
+from typing import Iterator
 from typing import NamedTuple
 
 import json
@@ -116,7 +117,7 @@ class EventStorage(SqliteStorage):
              contact: ChatContactT,
              before: bool,
              timestamp: float
-             ) -> list[EventRow]:
+             ) -> Iterator[EventRow]:
 
         time_operator = '<' if before else '>'
 

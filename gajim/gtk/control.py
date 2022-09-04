@@ -601,6 +601,7 @@ class ChatControl(EventHelper):
         #    if self.conversation_view.reduce_message_count(before):
         #        self._scrolled_view.set_history_complete(before, False)
 
+        assert self._contact is not None
         for event in app.storage.events.load(self._contact, before, timestamp):
             if isinstance(event, events.MUCUserJoined):
                 self._process_muc_user_joined(event)
@@ -1040,7 +1041,7 @@ class ChatControl(EventHelper):
 
         if not event.is_self:
             if self.contact.is_joined:
-                self.conversation_view.add_muc_user_joined(event.nick)
+                self.conversation_view.add_muc_user_joined(event)
             return
 
         status_codes = event.status_codes or []
@@ -1080,6 +1081,11 @@ class ChatControl(EventHelper):
         status_codes = event.status_codes or []
         nick = event.nick
 
+        if StatusCode.REMOVED_ERROR in status_codes:
+            # Handle 333 before 307, some MUCs add both
+            self.conversation_view.add_muc_user_left(event, error=True)
+            return
+
         reason = event.reason
         reason = '' if reason is None else f': {reason}'
 
@@ -1088,24 +1094,16 @@ class ChatControl(EventHelper):
         actor = '' if actor is None else _(' by {actor}').format(
             actor=actor)
 
-        # Group Chat: We have been removed from the room
         message = _('{nick} has been removed from the group '
                     'chat{by}{reason}')
 
-        if StatusCode.REMOVED_ERROR in status_codes:
-            # Handle 333 before 307, some MUCs add both
-            self.conversation_view.add_muc_user_left(
-                nick, event.reason, error=True)
-
-        elif StatusCode.REMOVED_KICKED in status_codes:
-            # Group Chat: User was kicked by Alice: reason
+        if StatusCode.REMOVED_KICKED in status_codes:
             message = _('{nick} has been '
                         'kicked{actor}{reason}').format(nick=nick,
                                                         actor=actor,
                                                         reason=reason)
 
         elif StatusCode.REMOVED_BANNED in status_codes:
-            # Group Chat: User was banned by Alice: reason
             message = _('{nick} has been '
                         'banned{actor}{reason}').format(nick=nick,
                                                         actor=actor,
@@ -1120,7 +1118,7 @@ class ChatControl(EventHelper):
             message = message.format(nick=nick, by=actor, reason=reason)
 
         else:
-            self.conversation_view.add_muc_user_left(nick, event.reason)
+            self.conversation_view.add_muc_user_left(event)
             return
 
         self.add_info_message(message, event.timestamp)

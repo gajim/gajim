@@ -695,8 +695,11 @@ class MUC(BaseModule):
                 nick=occupant.name,
                 status_codes=properties.muc_status_codes)
 
+            if occupant.room.is_joined or properties.is_muc_self_presence:
+                # Don’t store initial presences on join
+                app.storage.events.store(occupant.room, event)
+
             occupant.update_presence(presence)
-            app.storage.events.store(occupant.room, event)
             occupant.notify('user-joined', event)
             return
 
@@ -710,8 +713,8 @@ class MUC(BaseModule):
                 reason=properties.muc_user.reason,
                 actor=properties.muc_user.actor)
 
-            occupant.update_presence(presence)
             app.storage.events.store(occupant.room, event)
+            occupant.update_presence(presence)
             occupant.notify('user-left', event)
             return
 
@@ -727,6 +730,7 @@ class MUC(BaseModule):
                 reason=properties.muc_user.reason,
                 actor=properties.muc_user.actor)
 
+            app.storage.events.store(occupant.room, event)
             signals_and_events.append(('user-affiliation-changed', event))
 
         if occupant.role != presence.role:
@@ -739,6 +743,7 @@ class MUC(BaseModule):
                 reason=properties.muc_user.reason,
                 actor=properties.muc_user.actor)
 
+            app.storage.events.store(occupant.room, event)
             signals_and_events.append(('user-role-changed', event))
 
         if (occupant.status != presence.status or
@@ -751,11 +756,12 @@ class MUC(BaseModule):
                 status=properties.status,
                 show_value=properties.show.value)
 
+            app.storage.events.store(occupant, event)
+            app.storage.events.store(occupant.room, event)
             signals_and_events.append(('user-status-show-changed', event))
 
         occupant.update_presence(presence)
         for signal, event in signals_and_events:
-            app.storage.events.store(occupant.room, event)
             occupant.notify(signal, event)
 
     def _process_user_presence(self,

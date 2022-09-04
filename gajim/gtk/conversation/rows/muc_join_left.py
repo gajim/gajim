@@ -27,13 +27,19 @@ from .base import BaseRow
 
 
 class MUCJoinLeft(BaseRow):
-    def __init__(self, type_: str, account: str, nick: str,
+    def __init__(self,
+                 type_: str,
+                 account: str,
+                 nick: str,
                  reason: Optional[str] = None,
-                 error: bool = False):
+                 error: bool = False,
+                 timestamp: Optional[float] = None
+                 ) -> None:
+
         BaseRow.__init__(self, account)
 
         self.type = type_
-        timestamp = time.time()
+        timestamp = timestamp or time.time()
         self.timestamp = datetime.fromtimestamp(timestamp)
         self.db_timestamp = timestamp
 
