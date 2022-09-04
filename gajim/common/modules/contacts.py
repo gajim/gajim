@@ -15,13 +15,10 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import cast
 from typing import Iterator
 from typing import Optional
 from typing import Union
 from typing import overload
-
-import time
 
 import cairo
 from nbxmpp.const import Affiliation
@@ -32,12 +29,9 @@ from nbxmpp.protocol import JID
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import LocationData
 from nbxmpp.structs import TuneData
-from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import MucSubject
-from nbxmpp.structs import PresenceProperties
 
 from gajim.common import app
-from gajim.common import events
 from gajim.common import types
 from gajim.common.const import PresenceShowExt
 from gajim.common.const import SimpleClientState
