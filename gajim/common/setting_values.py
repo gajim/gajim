@@ -674,8 +674,6 @@ ADVANCED_SETTINGS = {
         'groupchat_roster_width': _('Width of group chat roster in pixel'),
         'hide_chat_banner': _('Hides the banner in a 1:1 chat window.'),
         'hide_groupchat_banner': _('Hides the banner in a group chat window.'),
-        'hide_groupchat_occupants_list': _(
-            'Hides the group chat participants list in a group chat window.'),
         'ignore_incoming_attention': _(
             'If enabled, Gajim will ignore incoming attention '
             'requests ("wizz").'),
