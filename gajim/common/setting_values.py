@@ -63,7 +63,6 @@ BoolSettings = Literal[
     'hide_groupchat_occupants_list',
     'ignore_incoming_attention',
     'is_window_visible',
-    'log_contact_status_changes',
     'muc_prefer_direct_msg',
     'notification_preview_message',
     'notify_on_all_muc_messages',
@@ -221,7 +220,6 @@ APP_SETTINGS = {
     'last_sounds_dir': '',
     'last_update_check': '',
     'latest_disco_addresses': '',
-    'log_contact_status_changes': False,
     'mainwin_height': 500,
     'mainwin_width': 1000,
     'mainwin_x_position': 0,
@@ -681,7 +679,6 @@ ADVANCED_SETTINGS = {
         'ignore_incoming_attention': _(
             'If enabled, Gajim will ignore incoming attention '
             'requests ("wizz").'),
-        'log_contact_status_changes': '',
         'muc_highlight_words': _(
             'A list of words (semicolon separated) that will be '
             'highlighted in group chats.'),

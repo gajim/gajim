@@ -38,8 +38,6 @@ from gajim.common.events import SubscribedPresenceReceived
 from gajim.common.events import UnsubscribedPresenceReceived
 from gajim.common.i18n import _
 from gajim.common.structs import PresenceData
-from gajim.common.const import KindConstant
-from gajim.common.const import ShowConstant
 from gajim.common.modules.base import BaseModule
 
 
@@ -155,23 +153,6 @@ class Presence(BaseModule):
         }
 
         app.ged.raise_event(PresenceReceived(**event_attrs))
-
-        self._log_presence(properties)
-
-    def _log_presence(self, properties: PresenceProperties) -> None:
-        if not app.settings.get('log_contact_status_changes'):
-            return
-
-        show = ShowConstant[properties.show.name]
-        if properties.type.is_unavailable:
-            show = ShowConstant.OFFLINE
-
-        app.storage.archive.insert_into_logs(self._account,
-                                             properties.jid.bare,
-                                             time.time(),
-                                             KindConstant.STATUS,
-                                             message=properties.status,
-                                             show=show)
 
     def _subscribe_received(self,
                             _con: types.xmppClient,

@@ -43,7 +43,6 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.const import MAX_MESSAGE_CORRECTION_DELAY
-from gajim.common.const import ShowConstant
 from gajim.common.const import KindConstant
 from gajim.common.const import JIDConstant
 
@@ -339,31 +338,6 @@ class MessageArchiveStorage(SqliteStorage):
                                           type=type_)
         self._delayed_commit()
         return lastrowid
-
-    @staticmethod
-    def convert_show_values_to_db_api_values(show: Optional[str]
-                                             ) -> Optional[ShowConstant]:
-        '''
-        Convert from string style to constant ints for db
-        '''
-
-        if show == 'online':
-            return ShowConstant.ONLINE
-        if show == 'chat':
-            return ShowConstant.CHAT
-        if show == 'away':
-            return ShowConstant.AWAY
-        if show == 'xa':
-            return ShowConstant.XA
-        if show == 'dnd':
-            return ShowConstant.DND
-        if show == 'offline':
-            return ShowConstant.OFFLINE
-        if show is None:
-            return ShowConstant.ONLINE
-        # invisible in GC when someone goes invisible
-        # it's a RFC violation .... but we should not crash
-        return None
 
     @timeit
     def get_conversation_before_after(self,

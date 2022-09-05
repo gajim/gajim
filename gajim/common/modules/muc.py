@@ -26,7 +26,6 @@ import time
 
 import nbxmpp
 from nbxmpp.const import InviteType
-from nbxmpp.const import PresenceType
 from nbxmpp.const import StatusCode
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules.dataforms import SimpleDataForm
@@ -48,13 +47,12 @@ from gajim.common import app
 from gajim.common import events
 from gajim.common import helpers
 from gajim.common import types
-from gajim.common.const import ClientState, KindConstant
+from gajim.common.const import ClientState
 from gajim.common.const import MUCJoinedState
 from gajim.common.events import MessageModerated
 from gajim.common.events import MucAdded
 from gajim.common.events import MucDecline
 from gajim.common.events import MucInvitation
-from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_default_muc_config
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.structs import MUCData
@@ -813,42 +811,6 @@ class MUC(BaseModule):
             self._log.info('Remove join timeout for: %s', room_jid)
             GLib.source_remove(id_)
             del self._join_timeouts[room_jid]
-
-    def _log_muc_event(self,
-                       event_name: str,
-                       properties: PresenceProperties
-                       ) -> None:
-        # TODO CURRENTLY NOT USED
-        if event_name not in ['muc-user-joined',
-                              'muc-user-left',
-                              'muc-user-status-show-changed']:
-            return
-
-        if not app.settings.get('log_contact_status_changes'):
-            return
-
-        additional_data = AdditionalDataDict()
-        if properties.muc_user is not None:
-            if properties.muc_user.jid is not None:
-                additional_data.set_value(
-                    'gajim', 'real_jid', str(properties.muc_user.jid))
-
-        # TODO: Refactor
-        if properties.type == PresenceType.UNAVAILABLE:
-            show = 'offline'
-        else:
-            show = properties.show.value
-        show = app.storage.archive.convert_show_values_to_db_api_values(show)
-
-        app.storage.archive.insert_into_logs(
-            self._account,
-            properties.jid.bare,
-            properties.timestamp,
-            KindConstant.GCSTATUS,
-            contact_name=properties.muc_nickname,
-            message=properties.status or None,
-            show=show,
-            additional_data=additional_data)
 
     def _on_subject_change(self,
                            _con: types.xmppClient,

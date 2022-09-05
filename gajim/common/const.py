@@ -114,16 +114,6 @@ class KindConstant(IntEnum):
 
 
 @unique
-class ShowConstant(IntEnum):
-    ONLINE = 0
-    CHAT = 1
-    AWAY = 2
-    XA = 3
-    DND = 4
-    OFFLINE = 5
-
-
-@unique
 class TypeConstant(IntEnum):
     AIM = 0
     GG = 1
