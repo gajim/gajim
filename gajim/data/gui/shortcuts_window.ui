@@ -61,13 +61,7 @@
             </child>
           </object>
         </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkShortcutsSection">
-        <property name="visible">1</property>
-        <property name="section-name">chat</property>
-        <property name="title" translatable="yes">Chat</property>
+
         <child>
           <object class="GtkShortcutsGroup">
             <property name="visible">1</property>
@@ -77,6 +71,13 @@
                 <property name="visible">1</property>
                 <property name="accelerator">Return</property>
                 <property name="title" translatable="yes">Send the message</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;primary&gt;Up</property>
+                <property name="title" translatable="yes">Correct the last message</property>
               </object>
             </child>
             <child>
@@ -132,6 +133,19 @@
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;f</property>
                 <property name="title" translatable="yes">Open search bar</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkShortcutsGroup">
+            <property name="visible">1</property>
+            <property name="title" translatable="yes">Workspaces</property>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;primary&gt;1...9</property>
+                <property name="title" translatable="yes">Swtich Workspace</property>
               </object>
             </child>
           </object>
