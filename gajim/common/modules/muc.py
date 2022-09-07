@@ -1025,10 +1025,10 @@ class MUC(BaseModule):
                               _stanza: Message,
                               properties: MessageProperties
                               ) -> None:
+
         if properties.muc_decline is not None:
             data = properties.muc_decline
-            if helpers.ignore_contact(self._account, data.from_):
-                raise nbxmpp.NodeProcessed
+            contact = self._get_contact(data.muc, groupchat=True)
 
             self._log.info('Invite declined from: %s, reason: %s',
                            data.from_, data.reason)
@@ -1040,12 +1040,10 @@ class MUC(BaseModule):
 
         if properties.muc_invite is not None:
             data = properties.muc_invite
-            if helpers.ignore_contact(self._account, data.from_):
-                raise nbxmpp.NodeProcessed
+            contact = self._get_contact(data.muc, groupchat=True)
 
             self._log.info('Invite from: %s, to: %s', data.from_, data.muc)
 
-            contact = self._get_contact(data.muc, groupchat=True)
             if contact.is_joined:
                 # We are already in groupchat. Ignore invitation
                 self._log.info('We are already in this room')
