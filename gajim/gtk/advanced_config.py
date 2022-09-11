@@ -43,6 +43,7 @@ class Column(IntEnum):
     NAME = 0
     VALUE = 1
     TYPE = 2
+    IS_DEFAULT = 3
 
 
 BOOL_DICT = {
@@ -72,7 +73,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
 
         treeview = self._ui.advanced_treeview
         self.treeview = treeview
-        self.model = Gtk.TreeStore(str, str, str)
+        self.model = Gtk.TreeStore(str, str, str, bool)
         self._fill_model()
         self.model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         self.modelfilter = self.model.filter_new()
@@ -83,6 +84,8 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         col = Gtk.TreeViewColumn(Q_('?config:Preference Name'),
                                  renderer_text, text=0)
         treeview.insert_column(col, -1)
+        col.set_cell_data_func(renderer_text,
+                               self._value_column_name_callback)
         col.set_expand(True)
         col.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
         col.set_resizable(True)
@@ -120,14 +123,30 @@ class AdvancedConfig(Gtk.ApplicationWindow):
 
         self.destroy()
 
+    def _value_column_name_callback(self,
+                                    _col: Gtk.TreeViewColumn,
+                                    cell: Gtk.CellRenderer,
+                                    model: Gtk.TreeModel,
+                                    iter_: Gtk.TreeIter,
+                                    _data: Optional[object]
+                                    ) -> None:
+
+        opt_is_default = model[iter_][Column.IS_DEFAULT]
+        cell.set_property('weight', 400 if opt_is_default else 700)
+
     def _value_column_data_callback(self,
                                     _col: Gtk.TreeViewColumn,
                                     cell: Gtk.CellRenderer,
                                     model: Gtk.TreeModel,
                                     iter_: Gtk.TreeIter,
-                                    _data: Optional[object]):
-        opttype = model[iter_][Column.TYPE]
-        cell.set_property('editable', opttype != SETTING_TYPES[bool])
+                                    _data: Optional[object]
+                                    ) -> None:
+
+        opt_type = model[iter_][Column.TYPE]
+        cell.set_property('editable', opt_type != SETTING_TYPES[bool])
+
+        opt_is_default = model[iter_][Column.IS_DEFAULT]
+        cell.set_property('weight', 400 if opt_is_default else 700)
 
     def _on_treeview_selection_changed(self,
                                        treeselection: Gtk.TreeSelection
@@ -158,20 +177,24 @@ class AdvancedConfig(Gtk.ApplicationWindow):
 
         setting_value = modelrow[Column.VALUE] != _('Activated')
         column_value = BOOL_DICT[setting_value]
+        default = APP_SETTINGS[setting]
 
         app.settings.set(setting, setting_value)
         modelrow[Column.VALUE] = column_value
+        modelrow[Column.IS_DEFAULT] = bool(setting_value == default)
 
     def _on_config_edited(self,
                           _cell: Gtk.CellRendererText,
                           path: str,
                           text: str
                           ) -> None:
+
         treepath = Gtk.TreePath.new_from_string(path)
         modelpath = self.modelfilter.convert_path_to_child_path(treepath)
         assert modelpath
         modelrow = self.model[modelpath]
         setting = modelrow[Column.NAME]
+        default = APP_SETTINGS[setting]
 
         value = text
         if modelrow[Column.TYPE] == SETTING_TYPES[int]:
@@ -179,6 +202,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
 
         app.settings.set(setting, value)
         modelrow[Column.VALUE] = text
+        modelrow[Column.IS_DEFAULT] = bool(value == default)
 
     def _on_reset_button_clicked(self, button: Gtk.Button) -> None:
         model, iter_ = self.treeview.get_selection().get_selected()
@@ -193,6 +217,8 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         else:
             model[iter_][Column.VALUE] = str(default)
 
+        model[iter_][Column.IS_DEFAULT] = True
+
         app.settings.set(setting, default)
         button.set_sensitive(False)
 
@@ -203,6 +229,9 @@ class AdvancedConfig(Gtk.ApplicationWindow):
 
             for setting in settings:
                 value = app.settings.get(setting)
+                default = APP_SETTINGS[setting]
+                is_default = bool(value == default)
+
                 if isinstance(value, bool):
                     value = BOOL_DICT[value]
                     type_ = SETTING_TYPES[bool]
@@ -217,7 +246,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
                 else:
                     raise ValueError
 
-                self.model.append(None, [setting, value, type_])
+                self.model.append(None, [setting, value, type_, is_default])
 
     def _visible_func(self,
                       model: Gtk.TreeModel,
