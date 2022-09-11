@@ -915,7 +915,7 @@ class XmlConsoleBuilder(Builder):
     scrolled: Gtk.ScrolledWindow
     sourceview: GtkSource.View
     scrolled_input: Gtk.ScrolledWindow
-    input_entry: Gtk.TextView
+    input_entry: GtkSource.View
     actionbar: Gtk.ActionBar
     paste: Gtk.Button
     menubutton: Gtk.MenuButton

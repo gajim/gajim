@@ -90,11 +90,13 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         source_manager = GtkSource.LanguageManager.get_default()
         lang = source_manager.get_language('xml')
         self._ui.sourceview.get_buffer().set_language(lang)
+        self._ui.input_entry.get_buffer().set_language(lang)
 
         self._style_scheme_manager = GtkSource.StyleSchemeManager.get_default()
         style_scheme = self._get_style_scheme()
         if style_scheme is not None:
             self._ui.sourceview.get_buffer().set_style_scheme(style_scheme)
+            self._ui.input_entry.get_buffer().set_style_scheme(style_scheme)
 
         self.show_all()
 
@@ -125,6 +127,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         style_scheme = self._get_style_scheme()
         if style_scheme is not None:
             self._ui.sourceview.get_buffer().set_style_scheme(style_scheme)
+            self._ui.input_entry.get_buffer().set_style_scheme(style_scheme)
 
     def _on_value_change(self, combo: Gtk.ComboBox) -> None:
         self._selected_send_account = combo.get_active_id()
