@@ -51,11 +51,13 @@ class VoiceRequestsButton(Gtk.Button):
         self._update()
 
     def _update(self) -> None:
+        self.set_no_show_all(True)
+        self.hide()
+
         assert self._contact is not None
         client = app.get_client(self._contact.account)
         voice_requests = client.get_module('MUC').get_voice_requests(
             self._contact)
-        self.hide()
         if voice_requests:
             self.set_no_show_all(False)
             self.show_all()
