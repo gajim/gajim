@@ -128,6 +128,7 @@ def check_if_message_correction(properties: MessageProperties,
                                 jid: JID,
                                 msgtxt: str,
                                 kind: KindConstant,
+                                timestamp: float,
                                 logger: LoggerAdapter[logging.Logger]) -> bool:
 
     correct_id = parse_correction(properties)
@@ -158,7 +159,8 @@ def check_if_message_correction(properties: MessageProperties,
         nickname,
         msgtxt,
         correct_id,
-        kind)
+        kind,
+        timestamp)
 
     if not successful:
         logger.info('Message correction not successful')

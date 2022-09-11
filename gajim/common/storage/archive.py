@@ -990,7 +990,8 @@ class MessageArchiveStorage(SqliteStorage):
                                nickname: Optional[str],
                                corrected_text: str,
                                correct_id: str,
-                               kind: KindConstant) -> bool:
+                               kind: KindConstant,
+                               timestamp: float) -> bool:
 
         '''Try to correct a message
 
@@ -1001,7 +1002,7 @@ class MessageArchiveStorage(SqliteStorage):
         '''
 
         account_id = self.get_account_id(account)
-        max_timestamp = time.time() - MAX_MESSAGE_CORRECTION_DELAY
+        max_timestamp = timestamp - MAX_MESSAGE_CORRECTION_DELAY
 
         self._log.debug(
             'Check if message is correctable, parameters: %s %s %s %s %s',

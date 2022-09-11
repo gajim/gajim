@@ -315,6 +315,7 @@ class MAM(BaseModule):
                                        properties.jid,
                                        properties.body,
                                        kind,
+                                       properties.mam.timestamp,
                                        self._log):
             return
 

@@ -201,6 +201,7 @@ class Message(BaseModule):
                                        from_,
                                        msgtxt,
                                        kind,
+                                       properties.timestamp,
                                        self._log):
             return
 
@@ -396,7 +397,8 @@ class Message(BaseModule):
                 None,
                 message.message,
                 message.correct_id,
-                KindConstant.CHAT_MSG_SENT)
+                KindConstant.CHAT_MSG_SENT,
+                message.timestamp)
             return
 
         app.storage.archive.insert_into_logs(
