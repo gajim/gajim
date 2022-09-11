@@ -92,9 +92,6 @@ class ChatControl(EventHelper):
         # Used with encryption plugins
         self.sendmessage = False
 
-        self._muc_subjects: dict[
-            types.ChatContactT, tuple[float, MucSubject]] = {}
-
         self.widget = cast(Gtk.Box, self._ui.get_object('control_box'))
         self.widget.show_all()
 
@@ -195,12 +192,15 @@ class ChatControl(EventHelper):
                 self.add_file_transfer(transfer)
 
         if isinstance(contact, GroupchatContact):
-            if (app.settings.get('show_subject_on_join') or
-                    not contact.is_joining):
-                timestamp, subject = self._muc_subjects.get(
-                    contact, (None, None))
-                if subject is not None:
-                    self.conversation_view.add_muc_subject(subject, timestamp)
+            if (not app.settings.get('show_subject_on_join') or
+                    contact.is_joining):
+                return
+
+            muc_data = self._client.get_module('MUC').get_muc_data(
+                str(contact.jid))
+            if muc_data is not None and muc_data.subject is not None:
+                self.conversation_view.add_muc_subject(
+                    muc_data.subject, muc_data.last_subject_timestamp)
 
     def _register_events(self) -> None:
         if self.has_events_registered():
@@ -1153,18 +1153,8 @@ class ChatControl(EventHelper):
     def _on_room_subject(self,
                          contact: GroupchatContact,
                          _signal_name: str,
-                         subject: Optional[MucSubject]
+                         subject: MucSubject
                          ) -> None:
-
-        if subject is None:
-            return
-
-        _timestamp, old_subject = self._muc_subjects.get(contact, (None, None))
-        if old_subject is not None and old_subject.text == subject.text:
-            # Probably a rejoin, we already showed that subject
-            return
-
-        self._muc_subjects[contact] = (time.time(), subject)
 
         if (app.settings.get('show_subject_on_join') or
                 not contact.is_joining):

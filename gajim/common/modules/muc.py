@@ -817,6 +817,7 @@ class MUC(BaseModule):
                            _stanza: Message,
                            properties: MessageProperties
                            ) -> None:
+
         if not properties.is_muc_subject:
             return
 
@@ -827,13 +828,26 @@ class MUC(BaseModule):
             self._log.warning('No MUCData found for %s', room_jid)
             return
 
-        muc_subject = properties.muc_subject
-        if muc_subject is not None and muc_subject.timestamp is None:
-            muc_subject = muc_subject._replace(timestamp=time.time())
+        room = self._get_contact(JID.from_string(room_jid))
+        assert isinstance(room, GroupchatContact)
 
+        old_subject = muc_data.subject
+
+        muc_subject = properties.muc_subject
         muc_data.subject = muc_subject
-        room = self._get_contact(room_jid)
-        room.notify('room-subject', muc_subject)
+
+        if muc_subject is not None:
+            if muc_subject.timestamp is None:
+                muc_subject = muc_subject._replace(timestamp=time.time())
+
+            if old_subject is None:
+                muc_data.last_subject_timestamp = time.time()
+                room.notify('room-subject', muc_subject)
+            else:
+                # Check if we already showed that subject (rejoin)
+                if old_subject.text != muc_subject.text:
+                    muc_data.last_subject_timestamp = time.time()
+                    room.notify('room-subject', muc_subject)
 
         if muc_data.state == MUCJoinedState.JOINING:
             self._room_join_complete(muc_data)

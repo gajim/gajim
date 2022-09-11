@@ -73,6 +73,7 @@ class MUCData:
         self.error: Optional[str] = None
         self.error_text: Optional[str] = None
         self.subject: Optional[MucSubject] = None
+        self.last_subject_timestamp: Optional[float] = None
 
     @property
     def jid(self) -> JID:
