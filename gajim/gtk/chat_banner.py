@@ -279,6 +279,9 @@ class ChatBanner(Gtk.Box, EventHelper):
             self_contact = self._contact.get_self()
             if self_contact:
                 self._ui.visitor_box.set_visible(self_contact.role.is_visitor)
+                return
+
+        self._ui.visitor_box.set_visible(False)
 
     def _update_account_badge(self, account: str) -> None:
         if self._account_badge is not None:
