@@ -87,6 +87,7 @@ class Features(Gtk.ApplicationWindow):
         self.feature_listbox.add(item)
 
     def _get_features(self) -> list[Feature]:
+        av_available = app.is_installed('AV') and sys.platform != 'win32'
         notification_sounds_available: bool = (
             app.is_installed('GSOUND') or sys.platform in ('win32', 'darwin'))
         notification_sounds_enabled: bool = app.settings.get('sounds_on')
@@ -105,7 +106,7 @@ class Features(Gtk.ApplicationWindow):
                     _('Feature not available under Windows'),
                     None),
             Feature(_('Audio / Video'),
-                    app.is_installed('AV'),
+                    av_available,
                     _('Enables Gajim to provide Audio and Video chats'),
                     _('Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, '
                       'gstreamer1.0-plugins-base, gstreamer1.0-plugins-ugly, '
