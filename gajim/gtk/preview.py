@@ -47,6 +47,14 @@ from .util import load_icon_pixbuf
 
 log = logging.getLogger('gajim.gui.preview')
 
+PREVIEW_CLICK_ACTIONS = {
+    'open': _('Open'),
+    'save_as': _('Save As…'),
+    'open_folder': _('Open Folder'),
+    'copy_link_location': _('Copy Link Location'),
+    'open_link_in_browser': _('Open Link in Browser'),
+}
+
 
 class PreviewWidget(Gtk.Box):
     def __init__(self, account: str) -> None:
@@ -66,12 +74,22 @@ class PreviewWidget(Gtk.Box):
         self._ui.connect_signals(self)
         self.add(self._ui.preview_box)
 
+        leftclick_action = app.settings.get('preview_leftclick_action')
+        self._ui.icon_button.set_tooltip_text(
+            PREVIEW_CLICK_ACTIONS[leftclick_action])
+        app.settings.connect_signal(
+            'preview_leftclick_action', self._update_icon_button_tooltip)
+
         self.connect('destroy', self._on_destroy)
 
         self.show_all()
 
     def _on_destroy(self, _widget: Gtk.Widget) -> None:
         self._destroyed = True
+
+    def _update_icon_button_tooltip(self, setting: str, *args: Any) -> None:
+        self._ui.icon_button.set_tooltip_text(
+            PREVIEW_CLICK_ACTIONS[setting])
 
     def get_text(self) -> str:
         if self._preview is None:
