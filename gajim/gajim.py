@@ -34,7 +34,7 @@ from gajim.common import i18n
 _MIN_NBXMPP_VER = '3.1.1'
 _MIN_GTK_VER = '3.24.30'
 _MIN_CAIRO_VER = '1.16.0'
-_MIN_PYGOBJECT_VER = '3.32.0'
+_MIN_PYGOBJECT_VER = '3.42.0'
 _MIN_GLIB_VER = '2.60.0'
 _MIN_PANGO_VER = '1.50.0'
 _MIN_SQLITE_VER = '3.33.0'

@@ -30,7 +30,7 @@ Depends:
     desktop-file-utils,
     python3 (>= 3.9),
     python3-css-parser (>= 1.0.2),
-    python3-gi (>= 3.32.0),
+    python3-gi (>= 3.42.0),
     python3-gi-cairo (>= 1.14.0~),
     python3-idna,
     python3-nbxmpp-nightly (>=20220727),
