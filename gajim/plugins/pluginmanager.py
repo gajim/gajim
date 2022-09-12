@@ -81,7 +81,13 @@ class PluginManifest:
     def is_usable(self) -> bool:
         if not self._check_requirements():
             return False
-        return sys.platform in self.platforms
+
+        platform = sys.platform
+        if platform not in ('win32', 'darwin'):
+            # sys.platform can return an unknown amount of unix/linux derivates
+            platform = 'others'
+
+        return platform in self.platforms
 
     @property
     def is_shipped(self) -> bool:
