@@ -156,6 +156,11 @@ class ChatStack(Gtk.Stack, EventHelper):
         if self.get_visible_child_name() == 'function':
             self._chat_function_page.process_escape()
             return True
+
+        if self._message_action_box.is_correcting:
+            self._message_action_box.toggle_message_correction()
+            return True
+
         return False
 
     def get_chat_control(self) -> ChatControl:
