@@ -261,6 +261,7 @@ ONLINE_ACCOUNT_ACTIONS = {
     'server-info',
     'services',
     'sync-history',
+    'mark-as-read',
 }
 
 
