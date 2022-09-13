@@ -3,7 +3,7 @@ Section: net
 Priority: optional
 Maintainer: Gajim Maintainers <ci@gajim.org>
 Build-Depends:
-    debhelper (>= 13),
+    debhelper-compat (>= 13),
     dh-python,
     gettext (>= 0.17-4),
     libglib2.0-dev,
