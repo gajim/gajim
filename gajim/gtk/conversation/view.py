@@ -28,6 +28,7 @@ from datetime import timedelta
 
 from gi.repository import GLib
 from gi.repository import Gtk
+from gi.repository import GObject
 
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules.security_labels import Displaymarking
@@ -64,13 +65,47 @@ from .rows.user_status import UserStatus
 log = logging.getLogger('gajim.gui.conversation_view')
 
 
-class ConversationView(Gtk.ListBox):
-    def __init__(self) -> None:
-        Gtk.ListBox.__init__(self)
-        self.set_selection_mode(Gtk.SelectionMode.NONE)
-        self.set_sort_func(self._sort_func)
+class ConversationView(Gtk.ScrolledWindow):
 
-        self._contact = None
+    __gsignals__ = {
+        'request-history': (
+            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
+            None,
+            (bool, )
+        ),
+        'autoscroll-changed': (
+            GObject.SignalFlags.RUN_LAST,
+            None,
+            (bool,)
+        )
+    }
+
+    def __init__(self) -> None:
+        Gtk.ScrolledWindow.__init__(self)
+
+        self.set_overlay_scrolling(False)
+        self.get_style_context().add_class('scrolled-no-border')
+        self.get_style_context().add_class('no-scroll-indicator')
+        self.get_style_context().add_class('scrollbar-style')
+        self.set_shadow_type(Gtk.ShadowType.IN)
+        self.set_vexpand(True)
+
+        self.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+
+        # This is a workaround: as soon as a line break occurs in Gtk.TextView
+        # with word-char wrapping enabled, a hyphen character is automatically
+        # inserted before the line break. This triggers the hscrollbar to show,
+        # see: https://gitlab.gnome.org/GNOME/gtk/-/issues/2384
+        # Using set_hscroll_policy(Gtk.Scrollable.Policy.NEVER) would cause bad
+        # performance during resize, and prevent the window from being shrunk
+        # horizontally under certain conditions (applies to GroupchatControl)
+        self.get_hscrollbar().hide()
+
+        self._list_box = Gtk.ListBox()
+        self._list_box.set_selection_mode(Gtk.SelectionMode.NONE)
+        self._list_box.set_sort_func(self._sort_func)
+
+        self._contact: Optional[ChatContactT] = None
         self._client = None
 
         # Keeps track of the number of rows shown in ConversationView
@@ -86,24 +121,54 @@ class ConversationView(Gtk.ListBox):
         self._read_marker_row = None
         self._scroll_hint_row = None
 
-    @property
-    def contact(self) -> types.ChatContactT:
-        assert self._contact is not None
-        return self._contact
+        self._current_upper: float = 0
+        self._autoscroll: bool = True
+        self._request_history_at_upper: Optional[float] = None
+        self._upper_complete: bool = False
+        self._lower_complete: bool = True
+        self._requesting: Optional[str] = None
+        self._block_signals = False
+
+        self._signal_handlers_enabled = False
+        self._signal_handler_ids = (0, 0)
+
+        self.add(self._list_box)
+        self.set_focus_vadjustment(Gtk.Adjustment())
+
+    def _enable_signal_handlers(self, enable: bool) -> None:
+        if self._signal_handlers_enabled == enable:
+            return
+
+        vadjustment = self.get_vadjustment()
+
+        if enable:
+            upper_id = vadjustment.connect('notify::upper',
+                                           self._on_adj_upper_changed)
+            value_id = vadjustment.connect('notify::value',
+                                           self._on_adj_value_changed)
+            self._signal_handler_ids = (upper_id, value_id)
+        else:
+            upper_id, value_id = self._signal_handler_ids
+            vadjustment.disconnect(upper_id)
+            vadjustment.disconnect(value_id)
+
+        self._signal_handlers_enabled = enable
 
     def clear(self) -> None:
+        app.settings.disconnect_signals(self)
+        self._enable_signal_handlers(False)
+        self._reset()
+
         self._contact = None
         self._client = None
-
-        app.settings.disconnect_signals(self)
-
-        self.reset()
 
     def switch_contact(self, contact: ChatContactT) -> None:
         self._contact = contact
         self._client = app.get_client(contact.account)
 
-        self.reset()
+        self._enable_signal_handlers(False)
+        self._block_signals = True
+        self._reset()
 
         app.settings.disconnect_signals(self)
 
@@ -117,11 +182,30 @@ class ConversationView(Gtk.ListBox):
                                     account=contact.account,
                                     jid=contact.jid)
 
-    def get_row_at_index(self, index: int) -> BaseRow:
-        return cast(BaseRow, Gtk.ListBox.get_row_at_index(self, index))
+        self._block_signals = False
+        self._enable_signal_handlers(True)
+        self._emit('request-history', True)
 
-    def reset(self) -> None:
-        for row in self.get_children():
+    def get_autoscroll(self) -> bool:
+        return self._autoscroll
+
+    def block_signals(self, value: bool) -> None:
+        self._block_signals = value
+
+    def _emit(self, signal_name: str, *args: Any) -> None:
+        if not self._block_signals:
+            log.debug('emit %s, %s', signal_name, args)
+            self.emit(signal_name, *args)
+
+    def _reset(self) -> None:
+        self._current_upper = 0
+        self._request_history_at_upper = None
+        self._upper_complete = False
+        self._lower_complete = True
+        self._requesting = None
+        self.set_history_complete(True, False)
+
+        for row in self._list_box.get_children():
             row.destroy()
 
         self._row_count = 0
@@ -134,29 +218,124 @@ class ConversationView(Gtk.ListBox):
             # These need to be present if ConversationView is reset
             # without switch_contact being invoked
             self._read_marker_row = ReadMarkerRow(self._contact)
-            self.add(self._read_marker_row)
+            self._list_box.add(self._read_marker_row)
 
             self._scroll_hint_row = ScrollHintRow(self._contact.account)
-            self.add(self._scroll_hint_row)
+            self._list_box.add(self._scroll_hint_row)
+
+    def reset(self) -> None:
+        assert self._contact is not None
+        self.switch_contact(self._contact)
+
+    def set_history_complete(self, before: bool, complete: bool) -> None:
+        if before:
+            self._upper_complete = complete
+            if self._scroll_hint_row is None:
+                return
+            self._scroll_hint_row.set_history_complete(complete)
+        else:
+            self._lower_complete = complete
+
+    def get_lower_complete(self) -> bool:
+        return self._lower_complete
+
+    def _on_adj_upper_changed(self,
+                              adj: Gtk.Adjustment,
+                              _pspec: GObject.ParamSpec) -> None:
+
+        upper = adj.get_upper()
+        diff = upper - self._current_upper
+
+        if diff != 0:
+            self._current_upper = upper
+            if self._autoscroll:
+                adj.set_value(adj.get_upper() - adj.get_page_size())
+            else:
+                # Workaround
+                # https://gitlab.gnome.org/GNOME/gtk/merge_requests/395
+                self.set_kinetic_scrolling(True)
+                if self._requesting == 'before':
+                    adj.set_value(adj.get_value() + diff)
+
+        if upper == adj.get_page_size():
+            # There is no scrollbar
+            if not self._block_signals:
+                self._emit('request-history', True)
+            self._lower_complete = True
+            self._autoscroll = True
+            self._emit('autoscroll-changed', self._autoscroll)
+
+        self._requesting = None
+
+    def _on_adj_value_changed(self,
+                              adj: Gtk.Adjustment,
+                              _pspec: GObject.ParamSpec) -> None:
+
+        if self._requesting is not None:
+            return
+
+        bottom = adj.get_upper() - adj.get_page_size()
+
+        self._autoscroll = bottom - adj.get_value() < 1
+        self._emit('autoscroll-changed', self._autoscroll)
+
+        if self._upper_complete:
+            self._request_history_at_upper = None
+            if self._lower_complete:
+                return
+
+        if self._request_history_at_upper == adj.get_upper():
+            # Abort here if we already did a history request and the upper
+            # did not change. This can happen if we scroll very fast and the
+            # value changes while the request has not been fulfilled.
+            return
+
+        self._request_history_at_upper = None
+
+        distance = adj.get_page_size() * 2
+        if adj.get_value() < distance:
+            # Load messages when we are near the top
+            if self._upper_complete:
+                return
+            self._request_history_at_upper = adj.get_upper()
+            # Workaround: https://gitlab.gnome.org/GNOME/gtk/merge_requests/395
+            self.set_kinetic_scrolling(False)
+            if not self._block_signals:
+                self._emit('request-history', True)
+            self._requesting = 'before'
+
+        elif (adj.get_upper() - (adj.get_value() + adj.get_page_size()) <
+                distance):
+            # ..or near the bottom
+            if self._lower_complete:
+                return
+            # Workaround: https://gitlab.gnome.org/GNOME/gtk/merge_requests/395
+            self.set_kinetic_scrolling(False)
+            if not self._block_signals:
+                self._emit('request-history', False)
+            self._requesting = 'after'
+
+    @property
+    def contact(self) -> types.ChatContactT:
+        assert self._contact is not None
+        return self._contact
+
+    def _get_row_at_index(self, index: int) -> BaseRow:
+        return cast(BaseRow, self._list_box.get_row_at_index(index))
 
     def get_first_message_row(self) -> Optional[MessageRow]:
-        for row in self.get_children():
+        for row in self._list_box.get_children():
             if isinstance(row, MessageRow):
                 return row
         return None
 
     def get_last_message_row(self) -> Optional[MessageRow]:
-        children = self.get_children()
+        children = self._list_box.get_children()
         children.reverse()
         for row in children:
             if isinstance(row, MessageRow):
                 return row
         return None
-
-    def set_history_complete(self, complete: bool) -> None:
-        if self._scroll_hint_row is None:
-            return
-        self._scroll_hint_row.set_history_complete(complete)
 
     @staticmethod
     def _sort_func(row1: BaseRow, row2: BaseRow) -> int:
@@ -293,7 +472,7 @@ class ConversationView(Gtk.ListBox):
         self._insert_message(message_row)
 
     def _insert_message(self, message: BaseRow) -> None:
-        self.add(message)
+        self._list_box.add(message)
         self._add_date_row(message.timestamp)
         self._check_for_merge(message)
         assert self._read_marker_row is not None
@@ -311,9 +490,9 @@ class ConversationView(Gtk.ListBox):
 
         date_row = DateRow(self.contact.account, start_of_day)
         self._active_date_rows.add(start_of_day)
-        self.add(date_row)
+        self._list_box.add(date_row)
 
-        row = self.get_row_at_index(date_row.get_index() + 1)
+        row = self._get_row_at_index(date_row.get_index() + 1)
         if row is None:
             return
 
@@ -340,7 +519,7 @@ class ConversationView(Gtk.ListBox):
         index = message.get_index()
         while index != 0:
             index -= 1
-            row = self.get_row_at_index(index)
+            row = self._get_row_at_index(index)
             if row is None:
                 return None
 
@@ -361,7 +540,7 @@ class ConversationView(Gtk.ListBox):
         index = message.get_index()
         while True:
             index += 1
-            row = self.get_row_at_index(index)
+            row = self._get_row_at_index(index)
             if row is None:
                 return
 
@@ -382,7 +561,7 @@ class ConversationView(Gtk.ListBox):
 
     def reduce_message_count(self, before: bool) -> bool:
         success = False
-        row_count = len(self.get_children())
+        row_count = len(self._list_box.get_children())
         while row_count > self._max_row_count:
             if before:
                 if self._reduce_messages_before():
@@ -399,8 +578,8 @@ class ConversationView(Gtk.ListBox):
         success = False
 
         # We want to keep relevant DateRows when removing rows
-        row1 = self.get_row_at_index(2)
-        row2 = self.get_row_at_index(3)
+        row1 = self._get_row_at_index(2)
+        row2 = self._get_row_at_index(3)
 
         if row1.type == 'date' and row2.type == 'date':
             # First two rows are date rows,
@@ -422,12 +601,12 @@ class ConversationView(Gtk.ListBox):
         return success
 
     def _reduce_messages_after(self) -> None:
-        row = self.get_row_at_index(len(self.get_children()) - 1)
+        row = self._get_row_at_index(len(self._list_box.get_children()) - 1)
         row.destroy()
 
     def scroll_to_message_and_highlight(self, log_line_id: int) -> None:
         highlight_row = None
-        for row in cast(list[BaseRow], self.get_children()):
+        for row in cast(list[BaseRow], self._list_box.get_children()):
             row.get_style_context().remove_class(
                 'conversation-search-highlight')
             if row.log_line_id == log_line_id:
@@ -443,7 +622,7 @@ class ConversationView(Gtk.ListBox):
         return self._message_id_row_map.get(id_)
 
     def get_row_by_log_line_id(self, log_line_id: int) -> Optional[MessageRow]:
-        for row in cast(list[BaseRow], self.get_children()):
+        for row in cast(list[BaseRow], self._list_box.get_children()):
             if not isinstance(row, MessageRow):
                 continue
             if row.log_line_id == log_line_id:
@@ -451,7 +630,7 @@ class ConversationView(Gtk.ListBox):
         return None
 
     def get_row_by_stanza_id(self, stanza_id: str) -> Optional[MessageRow]:
-        for row in cast(list[BaseRow], self.get_children()):
+        for row in cast(list[BaseRow], self._list_box.get_children()):
             if not isinstance(row, MessageRow):
                 continue
             if row.stanza_id == stanza_id:
@@ -459,7 +638,7 @@ class ConversationView(Gtk.ListBox):
         return None
 
     def iter_rows(self) -> Generator[BaseRow, None, None]:
-        for row in cast(list[BaseRow], self.get_children()):
+        for row in cast(list[BaseRow], self._list_box.get_children()):
             yield row
 
     def remove_rows_by_type(self, row_type: str) -> None:
@@ -468,7 +647,7 @@ class ConversationView(Gtk.ListBox):
                 row.destroy()
 
     def update_call_rows(self) -> None:
-        for row in cast(list[BaseRow], self.get_children()):
+        for row in cast(list[BaseRow], self._list_box.get_children()):
             if isinstance(row, CallRow):
                 row.update()
 
@@ -489,7 +668,7 @@ class ConversationView(Gtk.ListBox):
         self._read_marker_row.set_timestamp(timestamp)
 
     def update_avatars(self) -> None:
-        for row in cast(list[BaseRow], self.get_children()):
+        for row in cast(list[BaseRow], self._list_box.get_children()):
             if isinstance(row, MessageRow):
                 row.update_avatar()
 
@@ -538,5 +717,5 @@ class ConversationView(Gtk.ListBox):
             self.remove_rows_by_type('muc-user-status')
 
     def remove(self, widget: Gtk.Widget) -> None:
-        super().remove(widget)
+        self._list_box.remove(widget)
         widget.destroy()

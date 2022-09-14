@@ -48,8 +48,8 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive import ConversationRow
+from gajim.gtk.conversation.view import ConversationView
 
-from gajim.gui.conversation.scrolled import ScrolledView
 from gajim.gui.conversation.jump_to_end_button import JumpToEndButton
 from gajim.gui.builder import get_builder
 from gajim.gui.groupchat_roster import GroupchatRoster
@@ -69,14 +69,12 @@ class ChatControl(EventHelper):
 
         self._ui = get_builder('chat_control.ui')
 
-        self._scrolled_view = ScrolledView()
+        self._scrolled_view = ConversationView()
         self._scrolled_view.connect('autoscroll-changed',
                                     self._on_autoscroll_changed)
         self._scrolled_view.connect('request-history',
                                     self._fetch_n_lines_history, 20)
         self._ui.conv_view_overlay.add(self._scrolled_view)
-
-        self.conversation_view = self._scrolled_view.get_view()
 
         self._groupchat_state = GroupchatState()
         self._ui.conv_view_overlay.add_overlay(self._groupchat_state)
@@ -136,7 +134,6 @@ class ChatControl(EventHelper):
 
         self._contact = None
         self._client = None
-        self.reset_view()
         self._scrolled_view.clear()
         self._groupchat_state.clear()
         self._roster.clear()
@@ -199,7 +196,7 @@ class ChatControl(EventHelper):
             muc_data = self._client.get_module('MUC').get_muc_data(
                 str(contact.jid))
             if muc_data is not None and muc_data.subject is not None:
-                self.conversation_view.add_muc_subject(
+                self._scrolled_view.add_muc_subject(
                     muc_data.subject, muc_data.last_subject_timestamp)
 
     def _register_events(self) -> None:
@@ -245,9 +242,9 @@ class ChatControl(EventHelper):
         contact = self.client.get_module('Contacts').get_contact(event.fjid)
         if isinstance(contact, BareContact):
             return
-        self.conversation_view.add_user_status(self.contact.name,
-                                               contact.show.value,
-                                               contact.status)
+        self._scrolled_view.add_user_status(self.contact.name,
+                                            contact.show.value,
+                                            contact.status)
 
     def _on_message_sent(self, event: events.MessageSent) -> None:
         if not self._is_event_processable(event):
@@ -267,7 +264,7 @@ class ChatControl(EventHelper):
             displaymarking = None
 
         if event.correct_id:
-            self.conversation_view.correct_message(
+            self._scrolled_view.correct_message(
                 event.correct_id, event.message, self.get_our_nick())
             return
 
@@ -363,7 +360,7 @@ class ChatControl(EventHelper):
         if not self._is_event_processable(event):
             return
 
-        self.conversation_view.correct_message(
+        self._scrolled_view.correct_message(
             event.correct_id, event.msgtxt, event.nickname)
 
     def _on_message_moderated(self, event: events.MessageModerated) -> None:
@@ -374,32 +371,32 @@ class ChatControl(EventHelper):
             self.contact.account,
             event.moderation.moderator_jid,
             event.moderation.reason)
-        self.conversation_view.show_message_retraction(
+        self._scrolled_view.show_message_retraction(
             event.moderation.stanza_id, text)
 
     def _on_receipt_received(self, event: events.ReceiptReceived) -> None:
         if not self._is_event_processable(event):
             return
 
-        self.conversation_view.show_receipt(event.receipt_id)
+        self._scrolled_view.show_receipt(event.receipt_id)
 
     def _on_displayed_received(self, event: events.DisplayedReceived) -> None:
         if not self._is_event_processable(event):
             return
 
-        self.conversation_view.set_read_marker(event.marker_id)
+        self._scrolled_view.set_read_marker(event.marker_id)
 
     def _on_message_error(self, event: events.MessageError) -> None:
         if not self._is_event_processable(event):
             return
 
-        self.conversation_view.show_error(event.message_id, event.error)
+        self._scrolled_view.show_error(event.message_id, event.error)
 
     def _on_call_stopped(self, event: events.CallStopped) -> None:
         if not self._is_event_processable(event):
             return
 
-        self.conversation_view.update_call_rows()
+        self._scrolled_view.update_call_rows()
 
     def _on_jingle_request_received(self,
                                     event: events.JingleRequestReceived
@@ -439,7 +436,7 @@ class ChatControl(EventHelper):
         self._jump_to_end_button.reset_unread_count()
 
     def _on_autoscroll_changed(self,
-                               _widget: ScrolledView,
+                               _widget: ConversationView,
                                autoscroll: bool
                                ) -> None:
 
@@ -480,17 +477,17 @@ class ChatControl(EventHelper):
         return self._scrolled_view.get_lower_complete()
 
     def add_command_output(self, text: str, is_error: bool) -> None:
-        self.conversation_view.add_command_output(text, is_error)
+        self._scrolled_view.add_command_output(text, is_error)
 
     def add_info_message(self,
                          text: str,
                          timestamp: Optional[float] = None
                          ) -> None:
 
-        self.conversation_view.add_info_message(text, timestamp)
+        self._scrolled_view.add_info_message(text, timestamp)
 
     def add_file_transfer(self, transfer: HTTPFileTransfer) -> None:
-        self.conversation_view.add_file_transfer(transfer)
+        self._scrolled_view.add_file_transfer(transfer)
 
     def add_jingle_file_transfer(self,
                                  event: Union[
@@ -499,11 +496,11 @@ class ChatControl(EventHelper):
                                      None]
                                  ) -> None:
         if self._allow_add_message():
-            self.conversation_view.add_jingle_file_transfer(event)
+            self._scrolled_view.add_jingle_file_transfer(event)
 
     def add_call_message(self, event: events.JingleRequestReceived) -> None:
         if self._allow_add_message():
-            self.conversation_view.add_call_message(event=event)
+            self._scrolled_view.add_call_message(event=event)
 
     def _add_message(self,
                      text: str,
@@ -521,7 +518,7 @@ class ChatControl(EventHelper):
             additional_data = AdditionalDataDict()
 
         if self._allow_add_message():
-            self.conversation_view.add_message(
+            self._scrolled_view.add_message(
                 text,
                 kind,
                 name,
@@ -547,7 +544,7 @@ class ChatControl(EventHelper):
         return self._scrolled_view.get_autoscroll()
 
     def scroll_to_message(self, log_line_id: int, timestamp: float) -> None:
-        row = self.conversation_view.get_row_by_log_line_id(log_line_id)
+        row = self._scrolled_view.get_row_by_log_line_id(log_line_id)
         if row is None:
             # Clear view and reload conversation around timestamp
             self._scrolled_view.block_signals(True)
@@ -558,7 +555,7 @@ class ChatControl(EventHelper):
             self.add_messages(at_after)
 
         GLib.idle_add(
-            self.conversation_view.scroll_to_message_and_highlight,
+            self._scrolled_view.scroll_to_message_and_highlight,
             log_line_id)
         GLib.idle_add(self._scrolled_view.block_signals, False)
 
@@ -571,9 +568,9 @@ class ChatControl(EventHelper):
         self._scrolled_view.block_signals(True)
 
         if before:
-            row = self.conversation_view.get_first_message_row()
+            row = self._scrolled_view.get_first_message_row()
         else:
-            row = self.conversation_view.get_last_message_row()
+            row = self._scrolled_view.get_last_message_row()
 
         if row is None:
             timestamp = time.time()
@@ -598,7 +595,7 @@ class ChatControl(EventHelper):
             self._scrolled_view.set_history_complete(before, True)
 
         # if self._scrolled_view.get_autoscroll():
-        #    if self.conversation_view.reduce_message_count(before):
+        #    if self._scrolled_view.reduce_message_count(before):
         #        self._scrolled_view.set_history_complete(before, False)
 
         assert self._contact is not None
@@ -645,13 +642,13 @@ class ChatControl(EventHelper):
             if msg.kind in (KindConstant.FILE_TRANSFER_INCOMING,
                             KindConstant.FILE_TRANSFER_OUTGOING):
                 if msg.additional_data.get_value('gajim', 'type') == 'jingle':
-                    self.conversation_view.add_jingle_file_transfer(
+                    self._scrolled_view.add_jingle_file_transfer(
                         db_message=msg)
                 continue
 
             if msg.kind in (KindConstant.CALL_INCOMING,
                             KindConstant.CALL_OUTGOING):
-                self.conversation_view.add_call_message(db_message=msg)
+                self._scrolled_view.add_call_message(db_message=msg)
                 continue
 
             if not msg.message:
@@ -683,7 +680,7 @@ class ChatControl(EventHelper):
                     message_text = get_retraction_text(
                         self.contact.account, retracted_by, reason)
 
-            self.conversation_view.add_message(
+            self._scrolled_view.add_message(
                 message_text,
                 kind,
                 contact_name,
@@ -1041,7 +1038,7 @@ class ChatControl(EventHelper):
 
         if not event.is_self:
             if self.contact.is_joined:
-                self.conversation_view.add_muc_user_joined(event)
+                self._scrolled_view.add_muc_user_joined(event)
             return
 
         status_codes = event.status_codes or []
@@ -1083,7 +1080,7 @@ class ChatControl(EventHelper):
 
         if StatusCode.REMOVED_ERROR in status_codes:
             # Handle 333 before 307, some MUCs add both
-            self.conversation_view.add_muc_user_left(event, error=True)
+            self._scrolled_view.add_muc_user_left(event, error=True)
             return
 
         reason = event.reason
@@ -1118,7 +1115,7 @@ class ChatControl(EventHelper):
             message = message.format(nick=nick, by=actor, reason=reason)
 
         else:
-            self.conversation_view.add_muc_user_left(event)
+            self._scrolled_view.add_muc_user_left(event)
             return
 
         self.add_info_message(message, event.timestamp)
@@ -1158,4 +1155,4 @@ class ChatControl(EventHelper):
 
         if (app.settings.get('show_subject_on_join') or
                 not contact.is_joining):
-            self.conversation_view.add_muc_subject(subject)
+            self._scrolled_view.add_muc_subject(subject)
