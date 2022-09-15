@@ -982,6 +982,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         last_message = app.storage.archive.get_last_conversation_line(
             event.account, jid)
 
+        if last_message is None:
+            return
+
         if event.marker_id != last_message.message_id:
             return
 
