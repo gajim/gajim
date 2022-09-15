@@ -83,7 +83,7 @@ class PluginManifest:
             return False
 
         platform = sys.platform
-        if platform not in ('win32', 'darwin'):
+        if platform not in ('win32', 'darwin', 'linux'):
             # sys.platform can return an unknown amount of unix/linux derivates
             platform = 'others'
 
