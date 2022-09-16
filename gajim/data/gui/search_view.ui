@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkPopover" id="calendar_popover">
@@ -215,6 +215,10 @@
         <property name="primary-icon-name">edit-find-symbolic</property>
         <property name="primary-icon-activatable">False</property>
         <property name="primary-icon-sensitive">False</property>
+        <property name="primary-icon-tooltip-text" translatable="yes">Use filters to narrow down your search:
+from:username
+before:yyyy-mm-dd
+after:yyyy-mm-dd</property>
         <signal name="activate" handler="_on_search" swapped="no"/>
       </object>
       <packing>
