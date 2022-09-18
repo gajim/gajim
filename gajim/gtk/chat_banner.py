@@ -17,6 +17,7 @@ from __future__ import annotations
 from typing import Any
 from typing import Optional
 
+from gi.repository import GLib
 from gi.repository import Gtk
 
 import cairo
@@ -246,7 +247,7 @@ class ChatBanner(Gtk.Box, EventHelper):
         assert self._contact is not None
         assert self._client is not None
 
-        name = self._contact.name
+        name = GLib.markup_escape_text(self._contact.name)
 
         if self._contact.jid.bare_match(self._client.get_own_jid()):
             name = _('Note to myself')
@@ -254,7 +255,7 @@ class ChatBanner(Gtk.Box, EventHelper):
         if self._contact.is_pm_contact:
             gc_contact = self._client.get_module('Contacts').get_contact(
                 self._contact.jid.bare)
-            name = f'{name} ({gc_contact.name})'
+            name = f'{name} ({GLib.markup_escape_text(gc_contact.name)})'
 
         label_text = f'<span>{name}</span>'
         label_tooltip = name
@@ -273,7 +274,7 @@ class ChatBanner(Gtk.Box, EventHelper):
             label_tooltip = f'{name} {chatstate}'
 
         self._ui.name_label.set_markup(label_text)
-        self._ui.name_label.set_tooltip_text(label_tooltip)
+        self._ui.name_label.set_tooltip_markup(label_tooltip)
 
         if isinstance(self._contact, GroupchatContact):
             self_contact = self._contact.get_self()
