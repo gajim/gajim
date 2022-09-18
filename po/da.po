@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-13 16:07+0000\n"
+"POT-Creation-Date: 2022-09-16 20:54+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -241,10 +241,6 @@ msgstr ""
 msgid "<b>#</b>"
 msgstr "<b>Skrifttype</b>"
 
-#, python-format
-msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
-msgstr ""
-
 #, fuzzy
 msgid "<b>*</b>"
 msgstr "<b>Skrifttype</b>"
@@ -438,6 +434,21 @@ msgstr "?Group Chat Contact Role:Ingen"
 #, fuzzy
 msgid "?Group chat name:Vacation"
 msgstr "Gruppesamtale Invitation"
+
+#, fuzzy
+msgid "?Message row action:Copy"
+msgstr "Besked indhold"
+
+#, fuzzy
+msgid "?Message row action:Correct…"
+msgstr "Besked indhold"
+
+msgid "?Message row action:Quote…"
+msgstr ""
+
+#, fuzzy
+msgid "?Message row action:Retract…"
+msgstr "Første Besked er Modtaget"
 
 #, fuzzy
 msgid "?Message state:Received"
@@ -925,6 +936,9 @@ msgstr "Kunne ikke verificere programmet"
 msgid "Apply"
 msgstr ""
 
+msgid "Approve"
+msgstr ""
+
 #, fuzzy
 msgid "Archive"
 msgstr "Filen er tom"
@@ -978,14 +992,6 @@ msgstr "Spørg om status besked når jeg:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Spørg før et gruppesamtale vindue/faneblad lukkes."
-
-#, fuzzy
-msgid ""
-"Ask before closing tabbed chat window if there are chats that can lose data "
-"(chat, private chat)."
-msgstr ""
-"Spørg før et faneblad i samtale vinduet lukkes hvis der kan mistes dat "
-"(samtale, privat samtale, gruppe samtale som ikke vil minimere)"
 
 msgid "Ask before pasting an image."
 msgstr ""
@@ -1205,10 +1211,6 @@ msgstr "CRL er endnu ikke gyldigt"
 msgid "CRL signature failure"
 msgstr "CRL signatur fejl"
 
-#, fuzzy, python-format
-msgid "Cairo Version: %s"
-msgstr "GTK+ Version:"
-
 msgid "Call"
 msgstr ""
 
@@ -1340,10 +1342,6 @@ msgstr ""
 "en gruppesamtale."
 
 #, fuzzy
-msgid "Chat"
-msgstr "Samtaler"
-
-#, fuzzy
 msgid "Chat Banner: Background Color"
 msgstr "Kontakt er Tilsluttet"
 
@@ -1352,6 +1350,10 @@ msgstr ""
 
 msgid "Chat Banner: Text Font"
 msgstr ""
+
+#, fuzzy
+msgid "Chat List"
+msgstr "Kontakter"
 
 #, fuzzy
 msgid "Chat history"
@@ -1483,6 +1485,10 @@ msgstr "Farve"
 #, fuzzy
 msgid "Command List"
 msgstr "Liste over bandlyste"
+
+#, fuzzy
+msgid "Command executed successfully"
+msgstr "Kontoen er blevet tilføjet med succes"
 
 #, fuzzy
 msgid "Commands"
@@ -1715,8 +1721,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr "_Kopier Henvisning"
 
-msgid "Correct"
-msgstr ""
+#, fuzzy
+msgid "Correct the last message"
+msgstr "status besked"
 
 #, fuzzy
 msgid "Could not Open File"
@@ -2457,9 +2464,6 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Gajim vil nu slutte"
 
-msgid "Gajim: IPython Console"
-msgstr ""
-
 #, fuzzy
 msgid "Gathering information…"
 msgstr "Kontakt Information"
@@ -2622,10 +2626,6 @@ msgid "Hides the banner in a group chat window."
 msgstr "Skjuler banneret i et gruppesamtale vindue"
 
 #, fuzzy
-msgid "Hides the group chat participants list in a group chat window."
-msgstr "Skjuler gruppesamtale deltagerlisten i gruppesamtale vinduer."
-
-#, fuzzy
 msgid "Home"
 msgstr "<b>Hjemmeside:</b>"
 
@@ -2637,20 +2637,12 @@ msgstr "<b>Hjemmeside:</b>"
 msgid "Hostname"
 msgstr "_Værtsnavn:"
 
-msgid ""
-"How far back in time (minutes) chat history is restored. -1 means no limit."
-msgstr ""
-
 #, fuzzy
 msgid "How far back should the chat history be synchronised?"
 msgstr "Hvad vil du gøre?"
 
 msgid "How long Gajim should keep your chat history"
 msgstr ""
-
-#, fuzzy
-msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
-msgstr "Hvor mange linjer skal gemmes for Ctrl+KeyUP."
 
 #, fuzzy
 msgid "I can see contact's online status"
@@ -2695,10 +2687,6 @@ msgstr ""
 
 msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, Gajim will add * and [n] in contact list window title."
-msgstr "Hvis valgt vil Gajim vise kontakternes humør i kontaktvinduet"
 
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
@@ -2829,6 +2817,10 @@ msgstr "Ikke gyldigt server navn"
 
 #, fuzzy
 msgid "Invalid XMPP Address"
+msgstr "Ugyldig Fil"
+
+#, fuzzy, python-format
+msgid "Invalid address: %s"
 msgstr "Ugyldig Fil"
 
 #, fuzzy
@@ -3421,9 +3413,6 @@ msgstr "_Åbn E-post Program"
 msgid "Open Folder"
 msgstr "_Åbn folderen med filen"
 
-msgid "Open IPython shell"
-msgstr ""
-
 #, fuzzy
 msgid "Open Link in Browser"
 msgstr "_Åbn Henvisning i Netlæser"
@@ -3523,11 +3512,18 @@ msgstr "Alle filer"
 msgid "Pa_use/Resume"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Pango Version: %s"
+msgstr "GTK+ Version:"
+
 msgid "Participant"
 msgstr "Deltager"
 
 msgid "Participants"
 msgstr "Deltagere"
+
+msgid "Participants asking for voice:"
+msgstr ""
 
 msgid "Participants entering this group chat are allowed to send messages"
 msgstr ""
@@ -3582,6 +3578,10 @@ msgstr "Annuller filoverførsel"
 #, fuzzy
 msgid "Pending Event"
 msgstr "Vis Alle Ventende Hænd_elser"
+
+#, fuzzy
+msgid "Pending Voice Requests"
+msgstr "Filoverførsel Forespørgsel"
 
 #, fuzzy
 msgid "Personal notes about this contact"
@@ -3808,10 +3808,6 @@ msgstr "_Afslut"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quote…"
-msgstr "_Citat"
 
 #, fuzzy
 msgid "Re-Login"
@@ -4090,9 +4086,6 @@ msgid "Restore last state"
 msgstr "Sidste status: %s"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-msgid "Retract"
 msgstr ""
 
 #, fuzzy
@@ -4817,19 +4810,27 @@ msgstr ""
 msgid "Support for service discovery including nodes and search for users"
 msgstr "Opdag Tjenester med kontoen %s"
 
-msgid "Switch to the first - ninth tab"
+#, fuzzy
+msgid "Switch Workspace"
+msgstr "Omdøb Kontakt"
+
+msgid "Switch to the first - ninth chat"
 msgstr ""
 
-msgid "Switch to the next tab"
+msgid "Switch to the first - ninth workspace"
 msgstr ""
 
-msgid "Switch to the next unread tab"
+#, fuzzy
+msgid "Switch to the next chat"
+msgstr "Start Samtale"
+
+msgid "Switch to the next unread chat"
 msgstr ""
 
-msgid "Switch to the previous tab"
+msgid "Switch to the previous chat"
 msgstr ""
 
-msgid "Switch to the previous unread tab"
+msgid "Switch to the previous unread chat"
 msgstr ""
 
 msgid "Sync Threshold"
@@ -4871,9 +4872,6 @@ msgid "TLS verification failed: %s"
 msgstr "SSL certifikat fejl"
 
 msgid "Tabbed chat window"
-msgstr ""
-
-msgid "Tabs"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5034,6 +5032,9 @@ msgstr ""
 msgid "This group chat will be destroyed once the last participant left"
 msgstr ""
 
+msgid "This is a public group chat. Encryption is not available."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "This is the theme you are currently using.\n"
@@ -5093,7 +5094,9 @@ msgstr "Fjern kun k_ontoen fra Gajim"
 msgid "This will reset all introduction hints"
 msgstr ""
 
-msgid "This workspace contains chats. Remove anyway?"
+msgid ""
+"This workspace contains chats. All chats will be moved to the next "
+"workspace. Remove anyway?"
 msgstr ""
 
 msgid "Three Months"
@@ -5241,6 +5244,10 @@ msgstr "Ukendt SSL fejl: %d"
 msgid "Unknown Title"
 msgstr "Ukendt Titel"
 
+#, fuzzy, python-format
+msgid "Unknown command: %s"
+msgstr "Kommando"
+
 #, fuzzy
 msgid "Unknown language"
 msgstr "Ukendt Titel"
@@ -5348,6 +5355,13 @@ msgstr "Avanceret Konfigurations Behandler"
 msgid "Use file transfer proxies"
 msgstr "Brug fil transport proxy"
 
+msgid ""
+"Use filters to narrow down your search:\n"
+"from:username\n"
+"before:yyyy-mm-dd\n"
+"after:yyyy-mm-dd"
+msgstr ""
+
 msgid "Use proxy auth_entication"
 msgstr "Brug proxy godkendelse"
 
@@ -5356,6 +5370,10 @@ msgstr ""
 
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "User %s not found"
+msgstr "%s ikke fundet"
 
 msgid "Users"
 msgstr "Brugere"
@@ -5422,10 +5440,6 @@ msgid "Visual Notifications"
 msgstr "<b>Synlige Påmindelser</b>"
 
 #, fuzzy
-msgid "Voice Request"
-msgstr "Filoverførsel Forespørgsel"
-
-#, fuzzy
 msgid "Waiting…"
 msgstr "Skriver"
 
@@ -5488,6 +5502,10 @@ msgstr "Arbejder"
 msgid "Workspace Settings"
 msgstr "Avancerede Handlinger"
 
+#, fuzzy
+msgid "Workspaces"
+msgstr "Omdøb Kontakt"
+
 msgid "X11"
 msgstr ""
 
@@ -5547,6 +5565,10 @@ msgstr "Er du sikker på du vil afslutte Gajim?"
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "Du er ved at fjerne \"%(name)s\" (%(jid)s) fra dit kontaktvindue.\n"
+
+#, fuzzy
+msgid "You are currently not joined this group chat"
+msgstr "%s deltager nu i gruppe samtalen"
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5622,6 +5644,9 @@ msgstr ""
 #, fuzzy, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
 msgstr "%(nick)s er blevet fjernet fra rummet %(reason)s"
+
+msgid "You have insufficient permissions"
+msgstr ""
 
 #, python-brace-format
 msgid "You have left due to an error{reason}"
@@ -5745,9 +5770,6 @@ msgstr "_Adresse:"
 #, fuzzy
 msgid "_Advanced Settings"
 msgstr "Avancerede Handlinger"
-
-msgid "_Approve"
-msgstr ""
 
 #, fuzzy
 msgid "_Back"
@@ -6072,6 +6094,10 @@ msgstr ""
 msgid "building"
 msgstr "Skjult"
 
+#, fuzzy, python-format
+msgid "cairo Version: %s"
+msgstr "GTK+ Version:"
+
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
@@ -6161,7 +6187,7 @@ msgid "postalcode"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "python-cairo Version: %s"
+msgid "pycairo Version: %s"
 msgstr "GTK+ Version:"
 
 #, python-format
@@ -6242,9 +6268,6 @@ msgstr ""
 #~ msgid "%s is not a valid tone"
 #~ msgstr "%s er ikke et gyldigt logniveau"
 
-#~ msgid "%s not found"
-#~ msgstr "%s ikke fundet"
-
 #, fuzzy
 #~ msgid "%s: Nothing found"
 #~ msgstr "%s ikke fundet"
@@ -6280,6 +6303,10 @@ msgstr ""
 #~ "Den konto hvor XML vil blive sendt; hvis ikke den er specificeret, vil "
 #~ "XML blive sendt til alle konti"
 
+#, fuzzy
+#~ msgid "Ad-Hoc Commands…"
+#~ msgstr "_Kør Kommando"
+
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
@@ -6289,6 +6316,14 @@ msgstr ""
 
 #~ msgid "Arguments:"
 #~ msgstr "Argumenter:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Ask before closing tabbed chat window if there are chats that can lose "
+#~ "data (chat, private chat)."
+#~ msgstr ""
+#~ "Spørg før et faneblad i samtale vinduet lukkes hvis der kan mistes dat "
+#~ "(samtale, privat samtale, gruppe samtale som ikke vil minimere)"
 
 #, fuzzy
 #~ msgid "Ban Participant"
@@ -6316,6 +6351,10 @@ msgstr ""
 
 #~ msgid "Changes the status of account(s)"
 #~ msgstr "Ændrer status for kontoen eller konti"
+
+#, fuzzy
+#~ msgid "Chat"
+#~ msgstr "Samtaler"
 
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Kontroller om Gajim kører"
@@ -6378,6 +6417,14 @@ msgstr ""
 #~ msgid "Gets detailed info on a contact"
 #~ msgstr "Få detaljeret information om kontakten"
 
+#, fuzzy
+#~ msgid "Hides the group chat participants list in a group chat window."
+#~ msgstr "Skjuler gruppesamtale deltagerlisten i gruppesamtale vinduer."
+
+#, fuzzy
+#~ msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
+#~ msgstr "Hvor mange linjer skal gemmes for Ctrl+KeyUP."
+
 #~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 #~ msgstr ""
 #~ "Hvis valgt kan Gajim blive kontrolleret eksternt ved hjælp af gajim-"
@@ -6390,6 +6437,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Hvis Sandt, lukker Gajim når X knappen fra vindueshåndteringen klikkes. "
 #~ "Denne indstilling tages der kun hensyn til hvis et statusfelt ikon bruges."
+
+#, fuzzy
+#~ msgid "If enabled, Gajim will add * and [n] in contact list window title."
+#~ msgstr "Hvis valgt vil Gajim vise kontakternes humør i kontaktvinduet"
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"
@@ -6498,6 +6549,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Quote previous message"
 #~ msgstr "status besked"
+
+#, fuzzy
+#~ msgid "Quote…"
+#~ msgstr "_Citat"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6717,6 +6772,10 @@ msgstr ""
 
 #~ msgid "priority you want to give to the account"
 #~ msgstr "prioriteten du vil give til kontoen"
+
+#, fuzzy
+#~ msgid "python-cairo Version: %s"
+#~ msgstr "GTK+ Version:"
 
 #~ msgid "show help on command"
 #~ msgstr "Vis hjælp for kommando"

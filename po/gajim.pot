@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-13 16:07+0000\n"
+"POT-Creation-Date: 2022-09-16 20:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -226,10 +226,6 @@ msgstr ""
 msgid "<b>#</b>"
 msgstr ""
 
-#, python-format
-msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
-msgstr ""
-
 msgid "<b>*</b>"
 msgstr ""
 
@@ -381,6 +377,18 @@ msgid "?Group chat name:Team"
 msgstr ""
 
 msgid "?Group chat name:Vacation"
+msgstr ""
+
+msgid "?Message row action:Copy"
+msgstr ""
+
+msgid "?Message row action:Correct…"
+msgstr ""
+
+msgid "?Message row action:Quote…"
+msgstr ""
+
+msgid "?Message row action:Retract…"
 msgstr ""
 
 msgid "?Message state:Received"
@@ -783,6 +791,9 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
+msgid "Approve"
+msgstr ""
+
 msgid "Archive"
 msgstr ""
 
@@ -825,11 +836,6 @@ msgid "Ask For Status Message on…"
 msgstr ""
 
 msgid "Ask before closing a group chat tab/window."
-msgstr ""
-
-msgid ""
-"Ask before closing tabbed chat window if there are chats that can lose data "
-"(chat, private chat)."
 msgstr ""
 
 msgid "Ask before pasting an image."
@@ -1016,10 +1022,6 @@ msgstr ""
 msgid "CRL signature failure"
 msgstr ""
 
-#, python-format
-msgid "Cairo Version: %s"
-msgstr ""
-
 msgid "Call"
 msgstr ""
 
@@ -1133,9 +1135,6 @@ msgid ""
 "group chat."
 msgstr ""
 
-msgid "Chat"
-msgstr ""
-
 msgid "Chat Banner: Background Color"
 msgstr ""
 
@@ -1143,6 +1142,9 @@ msgid "Chat Banner: Foreground Color"
 msgstr ""
 
 msgid "Chat Banner: Text Font"
+msgstr ""
+
+msgid "Chat List"
 msgstr ""
 
 msgid "Chat history"
@@ -1255,6 +1257,9 @@ msgid "Color"
 msgstr ""
 
 msgid "Command List"
+msgstr ""
+
+msgid "Command executed successfully"
 msgstr ""
 
 msgid "Commands"
@@ -1445,7 +1450,7 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr ""
 
-msgid "Correct"
+msgid "Correct the last message"
 msgstr ""
 
 msgid "Could not Open File"
@@ -2079,9 +2084,6 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr ""
 
-msgid "Gajim: IPython Console"
-msgstr ""
-
 msgid "Gathering information…"
 msgstr ""
 
@@ -2215,9 +2217,6 @@ msgstr ""
 msgid "Hides the banner in a group chat window."
 msgstr ""
 
-msgid "Hides the group chat participants list in a group chat window."
-msgstr ""
-
 msgid "Home"
 msgstr ""
 
@@ -2227,17 +2226,10 @@ msgstr ""
 msgid "Hostname"
 msgstr ""
 
-msgid ""
-"How far back in time (minutes) chat history is restored. -1 means no limit."
-msgstr ""
-
 msgid "How far back should the chat history be synchronised?"
 msgstr ""
 
 msgid "How long Gajim should keep your chat history"
-msgstr ""
-
-msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
 msgstr ""
 
 msgid "I can see contact's online status"
@@ -2274,9 +2266,6 @@ msgid ""
 msgstr ""
 
 msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
-msgstr ""
-
-msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
@@ -2386,6 +2375,10 @@ msgid "Invalid Server Name"
 msgstr ""
 
 msgid "Invalid XMPP Address"
+msgstr ""
+
+#, python-format
+msgid "Invalid address: %s"
 msgstr ""
 
 msgid "Invalid domain name"
@@ -2888,9 +2881,6 @@ msgstr ""
 msgid "Open Folder"
 msgstr ""
 
-msgid "Open IPython shell"
-msgstr ""
-
 msgid "Open Link in Browser"
 msgstr ""
 
@@ -2979,10 +2969,17 @@ msgstr ""
 msgid "Pa_use/Resume"
 msgstr ""
 
+#, python-format
+msgid "Pango Version: %s"
+msgstr ""
+
 msgid "Participant"
 msgstr ""
 
 msgid "Participants"
+msgstr ""
+
+msgid "Participants asking for voice:"
 msgstr ""
 
 msgid "Participants entering this group chat are allowed to send messages"
@@ -3030,6 +3027,9 @@ msgid "Pause or resume file transfer"
 msgstr ""
 
 msgid "Pending Event"
+msgstr ""
+
+msgid "Pending Voice Requests"
 msgstr ""
 
 msgid "Personal notes about this contact"
@@ -3220,9 +3220,6 @@ msgid "Quit"
 msgstr ""
 
 msgid "Quit Gajim"
-msgstr ""
-
-msgid "Quote…"
 msgstr ""
 
 msgid "Re-Login"
@@ -3452,9 +3449,6 @@ msgid "Restore last state"
 msgstr ""
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-msgid "Retract"
 msgstr ""
 
 msgid "Retract Message"
@@ -4058,19 +4052,25 @@ msgstr ""
 msgid "Support for service discovery including nodes and search for users"
 msgstr ""
 
-msgid "Switch to the first - ninth tab"
+msgid "Switch Workspace"
 msgstr ""
 
-msgid "Switch to the next tab"
+msgid "Switch to the first - ninth chat"
 msgstr ""
 
-msgid "Switch to the next unread tab"
+msgid "Switch to the first - ninth workspace"
 msgstr ""
 
-msgid "Switch to the previous tab"
+msgid "Switch to the next chat"
 msgstr ""
 
-msgid "Switch to the previous unread tab"
+msgid "Switch to the next unread chat"
+msgstr ""
+
+msgid "Switch to the previous chat"
+msgstr ""
+
+msgid "Switch to the previous unread chat"
 msgstr ""
 
 msgid "Sync Threshold"
@@ -4105,9 +4105,6 @@ msgid "TLS verification failed: %s"
 msgstr ""
 
 msgid "Tabbed chat window"
-msgstr ""
-
-msgid "Tabs"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -4247,6 +4244,9 @@ msgstr ""
 msgid "This group chat will be destroyed once the last participant left"
 msgstr ""
 
+msgid "This is a public group chat. Encryption is not available."
+msgstr ""
+
 msgid ""
 "This is the theme you are currently using.\n"
 "Do you want to delete this theme?"
@@ -4299,7 +4299,9 @@ msgstr ""
 msgid "This will reset all introduction hints"
 msgstr ""
 
-msgid "This workspace contains chats. Remove anyway?"
+msgid ""
+"This workspace contains chats. All chats will be moved to the next "
+"workspace. Remove anyway?"
 msgstr ""
 
 msgid "Three Months"
@@ -4434,6 +4436,10 @@ msgstr ""
 msgid "Unknown Title"
 msgstr ""
 
+#, python-format
+msgid "Unknown command: %s"
+msgstr ""
+
 msgid "Unknown language"
 msgstr ""
 
@@ -4522,6 +4528,13 @@ msgstr ""
 msgid "Use file transfer proxies"
 msgstr ""
 
+msgid ""
+"Use filters to narrow down your search:\n"
+"from:username\n"
+"before:yyyy-mm-dd\n"
+"after:yyyy-mm-dd"
+msgstr ""
+
 msgid "Use proxy auth_entication"
 msgstr ""
 
@@ -4529,6 +4542,10 @@ msgid "Use your favorite emoticons, set your own profile picture"
 msgstr ""
 
 msgid "Use your system’s keyring to store passwords"
+msgstr ""
+
+#, python-format
+msgid "User %s not found"
 msgstr ""
 
 msgid "Users"
@@ -4585,9 +4602,6 @@ msgid "Visitors"
 msgstr ""
 
 msgid "Visual Notifications"
-msgstr ""
-
-msgid "Voice Request"
 msgstr ""
 
 msgid "Waiting…"
@@ -4648,6 +4662,9 @@ msgstr ""
 msgid "Workspace Settings"
 msgstr ""
 
+msgid "Workspaces"
+msgstr ""
+
 msgid "X11"
 msgstr ""
 
@@ -4697,6 +4714,9 @@ msgstr ""
 
 #, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
+msgstr ""
+
+msgid "You are currently not joined this group chat"
 msgstr ""
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
@@ -4765,6 +4785,9 @@ msgstr ""
 
 #, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
+msgstr ""
+
+msgid "You have insufficient permissions"
 msgstr ""
 
 #, python-brace-format
@@ -4864,9 +4887,6 @@ msgid "_Address"
 msgstr ""
 
 msgid "_Advanced Settings"
-msgstr ""
-
-msgid "_Approve"
 msgstr ""
 
 msgid "_Back"
@@ -5139,6 +5159,10 @@ msgstr ""
 msgid "building"
 msgstr ""
 
+#, python-format
+msgid "cairo Version: %s"
+msgstr ""
+
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
@@ -5219,7 +5243,7 @@ msgid "postalcode"
 msgstr ""
 
 #, python-format
-msgid "python-cairo Version: %s"
+msgid "pycairo Version: %s"
 msgstr ""
 
 #, python-format

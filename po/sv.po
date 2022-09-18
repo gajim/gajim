@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-13 16:07+0000\n"
+"POT-Creation-Date: 2022-09-16 20:54+0000\n"
 "PO-Revision-Date: 2009-10-29 10:21+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -238,10 +238,6 @@ msgstr ""
 msgid "<b>#</b>"
 msgstr "<b>Typsnitt</b>"
 
-#, python-format
-msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
-msgstr ""
-
 #, fuzzy
 msgid "<b>*</b>"
 msgstr "<b>Typsnitt</b>"
@@ -436,6 +432,21 @@ msgstr "?Gruppchatt kontaktroll:Ingen"
 #, fuzzy
 msgid "?Group chat name:Vacation"
 msgstr "Inbjudan till Gruppchatt"
+
+#, fuzzy
+msgid "?Message row action:Copy"
+msgstr "Meddelandeinnehåll"
+
+#, fuzzy
+msgid "?Message row action:Correct…"
+msgstr "Meddelandeinnehåll"
+
+msgid "?Message row action:Quote…"
+msgstr ""
+
+#, fuzzy
+msgid "?Message row action:Retract…"
+msgstr "Första meddelandet mottaget"
 
 #, fuzzy
 msgid "?Message state:Received"
@@ -918,6 +929,9 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
+msgid "Approve"
+msgstr ""
+
 #, fuzzy
 msgid "Archive"
 msgstr "Filen är tom"
@@ -969,11 +983,6 @@ msgstr "Fråga efter statusmeddelande när jag:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Fråga innan gruppchattflik eller -fönster stängs."
-
-msgid ""
-"Ask before closing tabbed chat window if there are chats that can lose data "
-"(chat, private chat)."
-msgstr ""
 
 msgid "Ask before pasting an image."
 msgstr ""
@@ -1192,10 +1201,6 @@ msgstr "Spärrlistan är ännu inte giltig"
 msgid "CRL signature failure"
 msgstr "Fel i spärrlistans signatur"
 
-#, fuzzy, python-format
-msgid "Cairo Version: %s"
-msgstr "GTK+ version:"
-
 msgid "Call"
 msgstr ""
 
@@ -1327,9 +1332,6 @@ msgstr ""
 "Tecken att lägga till efter smeknamnet när smeknamnskomplettering används "
 "(tabb) i gruppchatt."
 
-msgid "Chat"
-msgstr "Chatt"
-
 #, fuzzy
 msgid "Chat Banner: Background Color"
 msgstr "Kontakt loggade in"
@@ -1340,6 +1342,10 @@ msgstr ""
 #, fuzzy
 msgid "Chat Banner: Text Font"
 msgstr "Banderoll:"
+
+#, fuzzy
+msgid "Chat List"
+msgstr "Kontakter"
 
 #, fuzzy
 msgid "Chat history"
@@ -1473,6 +1479,10 @@ msgstr "Färg"
 #, fuzzy
 msgid "Command List"
 msgstr "Kommandon: %s"
+
+#, fuzzy
+msgid "Command executed successfully"
+msgstr "Kontot har lagts till"
 
 #, fuzzy
 msgid "Commands"
@@ -1705,8 +1715,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr "_Kopiera länkplats"
 
-msgid "Correct"
-msgstr ""
+#, fuzzy
+msgid "Correct the last message"
+msgstr "statusmeddelande"
 
 #, fuzzy
 msgid "Could not Open File"
@@ -2448,9 +2459,6 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Gajim kommer nu att avslutas"
 
-msgid "Gajim: IPython Console"
-msgstr ""
-
 #, fuzzy
 msgid "Gathering information…"
 msgstr "Kontaktinformation"
@@ -2613,10 +2621,6 @@ msgid "Hides the banner in a group chat window."
 msgstr "Döljer bannern i ett gruppchattfönster"
 
 #, fuzzy
-msgid "Hides the group chat participants list in a group chat window."
-msgstr "Döljer deltagarlistan i gruppchattfönster."
-
-#, fuzzy
 msgid "Home"
 msgstr "<b>Webbplats:</b>"
 
@@ -2628,20 +2632,12 @@ msgstr "<b>Webbplats:</b>"
 msgid "Hostname"
 msgstr "_Värdnamn:"
 
-msgid ""
-"How far back in time (minutes) chat history is restored. -1 means no limit."
-msgstr ""
-
 #, fuzzy
 msgid "How far back should the chat history be synchronised?"
 msgstr "Vad vill du göra?"
 
 msgid "How long Gajim should keep your chat history"
 msgstr ""
-
-#, fuzzy
-msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
-msgstr "Hur många rader skall sparas för Ctrl+KeyUP."
 
 #, fuzzy
 msgid "I can see contact's online status"
@@ -2686,12 +2682,6 @@ msgstr ""
 
 msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, Gajim will add * and [n] in contact list window title."
-msgstr ""
-"Om kryssad kommer Gajim att visa kontakters avatarer i register- och "
-"gruppchattsfönstren"
 
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
@@ -2815,6 +2805,10 @@ msgstr "Ogiltigt servernamn"
 
 #, fuzzy
 msgid "Invalid XMPP Address"
+msgstr "Ogiltig Fil"
+
+#, fuzzy, python-format
+msgid "Invalid address: %s"
 msgstr "Ogiltig Fil"
 
 #, fuzzy
@@ -3407,9 +3401,6 @@ msgstr "_Skriv e-post"
 msgid "Open Folder"
 msgstr "_Öppna mapp"
 
-msgid "Open IPython shell"
-msgstr ""
-
 #, fuzzy
 msgid "Open Link in Browser"
 msgstr "_Öppna länk i webbläsare"
@@ -3509,11 +3500,18 @@ msgstr "Alla filer"
 msgid "Pa_use/Resume"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Pango Version: %s"
+msgstr "GTK+ version:"
+
 msgid "Participant"
 msgstr "Deltagare"
 
 msgid "Participants"
 msgstr "Deltagare"
+
+msgid "Participants asking for voice:"
+msgstr ""
 
 msgid "Participants entering this group chat are allowed to send messages"
 msgstr ""
@@ -3569,6 +3567,10 @@ msgstr "Avbryt filöverföring"
 #, fuzzy
 msgid "Pending Event"
 msgstr "Visa alla väntande _händelser"
+
+#, fuzzy
+msgid "Pending Voice Requests"
+msgstr "Förfrågan om Filöverföring"
 
 #, fuzzy
 msgid "Personal notes about this contact"
@@ -3797,10 +3799,6 @@ msgstr "A_vsluta"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quote…"
-msgstr "A_vsluta"
 
 #, fuzzy
 msgid "Re-Login"
@@ -4079,9 +4077,6 @@ msgid "Restore last state"
 msgstr "Senaste status: %s"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-msgid "Retract"
 msgstr ""
 
 #, fuzzy
@@ -4803,19 +4798,27 @@ msgstr ""
 msgid "Support for service discovery including nodes and search for users"
 msgstr "Söker tjänster med konto %s"
 
-msgid "Switch to the first - ninth tab"
+#, fuzzy
+msgid "Switch Workspace"
+msgstr "Byt namn på kontakt"
+
+msgid "Switch to the first - ninth chat"
 msgstr ""
 
-msgid "Switch to the next tab"
+msgid "Switch to the first - ninth workspace"
 msgstr ""
 
-msgid "Switch to the next unread tab"
+#, fuzzy
+msgid "Switch to the next chat"
+msgstr "Starta Chatt"
+
+msgid "Switch to the next unread chat"
 msgstr ""
 
-msgid "Switch to the previous tab"
+msgid "Switch to the previous chat"
 msgstr ""
 
-msgid "Switch to the previous unread tab"
+msgid "Switch to the previous unread chat"
 msgstr ""
 
 msgid "Sync Threshold"
@@ -4857,9 +4860,6 @@ msgid "TLS verification failed: %s"
 msgstr "SSL-certifikatfel"
 
 msgid "Tabbed chat window"
-msgstr ""
-
-msgid "Tabs"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5020,6 +5020,9 @@ msgstr ""
 msgid "This group chat will be destroyed once the last participant left"
 msgstr ""
 
+msgid "This is a public group chat. Encryption is not available."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "This is the theme you are currently using.\n"
@@ -5079,7 +5082,9 @@ msgstr "Ta bort kontot _endast från Gajim"
 msgid "This will reset all introduction hints"
 msgstr ""
 
-msgid "This workspace contains chats. Remove anyway?"
+msgid ""
+"This workspace contains chats. All chats will be moved to the next "
+"workspace. Remove anyway?"
 msgstr ""
 
 msgid "Three Months"
@@ -5226,6 +5231,10 @@ msgstr "Okänt SSL-fel: %d"
 msgid "Unknown Title"
 msgstr "Okänd titel"
 
+#, fuzzy, python-format
+msgid "Unknown command: %s"
+msgstr "Kommandon: %s"
+
 #, fuzzy
 msgid "Unknown language"
 msgstr "Okänd titel"
@@ -5333,6 +5342,13 @@ msgstr "Avancerad konfigurationsredigerare"
 msgid "Use file transfer proxies"
 msgstr "Använd proxyservrar för filöverföringar"
 
+msgid ""
+"Use filters to narrow down your search:\n"
+"from:username\n"
+"before:yyyy-mm-dd\n"
+"after:yyyy-mm-dd"
+msgstr ""
+
 msgid "Use proxy auth_entication"
 msgstr "Använd autentiser_ing för proxyserver"
 
@@ -5341,6 +5357,10 @@ msgstr ""
 
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "User %s not found"
+msgstr "%s kunde inte hittas"
 
 msgid "Users"
 msgstr "Användare"
@@ -5406,10 +5426,6 @@ msgid "Visual Notifications"
 msgstr "<b>Visuella notifieringar</b>"
 
 #, fuzzy
-msgid "Voice Request"
-msgstr "Förfrågan om Filöverföring"
-
-#, fuzzy
 msgid "Waiting…"
 msgstr "Skriver"
 
@@ -5472,6 +5488,10 @@ msgstr "Arbetar"
 msgid "Workspace Settings"
 msgstr "Avancerade åtgärder"
 
+#, fuzzy
+msgid "Workspaces"
+msgstr "Byt namn på kontakt"
+
 msgid "X11"
 msgstr ""
 
@@ -5532,6 +5552,10 @@ msgstr "Är du säker på att du vill avsluta Gajim?"
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr ""
 "Du är på väg att ta bort \"%(name)s\" (%(jid)s) från din kontaktlista.\n"
+
+#, fuzzy
+msgid "You are currently not joined this group chat"
+msgstr "%s har gått in i gruppchatten"
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5609,6 +5633,9 @@ msgstr ""
 #, fuzzy, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
 msgstr "%(nick)s har tagits bort från rummet (%(reason)s)"
+
+msgid "You have insufficient permissions"
+msgstr ""
 
 #, python-brace-format
 msgid "You have left due to an error{reason}"
@@ -5732,9 +5759,6 @@ msgstr "_Adress:"
 #, fuzzy
 msgid "_Advanced Settings"
 msgstr "Avancerade åtgärder"
-
-msgid "_Approve"
-msgstr ""
 
 #, fuzzy
 msgid "_Back"
@@ -6063,6 +6087,10 @@ msgstr ""
 msgid "building"
 msgstr "Gömmer sig"
 
+#, fuzzy, python-format
+msgid "cairo Version: %s"
+msgstr "GTK+ version:"
+
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
@@ -6152,7 +6180,7 @@ msgid "postalcode"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "python-cairo Version: %s"
+msgid "pycairo Version: %s"
 msgstr "GTK+ version:"
 
 #, python-format
@@ -6239,9 +6267,6 @@ msgstr ""
 #~ msgid "%s is not a valid tone"
 #~ msgstr "%s är inte en giltig loggnivå"
 
-#~ msgid "%s not found"
-#~ msgstr "%s kunde inte hittas"
-
 #, fuzzy
 #~ msgid "%s: Nothing found"
 #~ msgstr "%s kunde inte hittas"
@@ -6277,6 +6302,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Konto för vilket XML kommer skickas. Om du inte specificerat kommer XML "
 #~ "skickas till alla konton"
+
+#, fuzzy
+#~ msgid "Ad-Hoc Commands…"
+#~ msgstr "_Kör kommando"
 
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
@@ -6316,6 +6345,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Changes the status of account(s)"
 #~ msgstr "Ändrar status för konto eller konton"
+
+#~ msgid "Chat"
+#~ msgstr "Chatt"
 
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Kontrollera om Gajim är igång"
@@ -6378,6 +6410,14 @@ msgstr ""
 #~ msgid "Gets detailed info on a contact"
 #~ msgstr "Hämta detaljerad information om kontakt"
 
+#, fuzzy
+#~ msgid "Hides the group chat participants list in a group chat window."
+#~ msgstr "Döljer deltagarlistan i gruppchattfönster."
+
+#, fuzzy
+#~ msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
+#~ msgstr "Hur många rader skall sparas för Ctrl+KeyUP."
+
 #~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 #~ msgstr "Om kryssad så kan Gajim fjärrstyras med gajim-remote."
 
@@ -6388,6 +6428,12 @@ msgstr ""
 #~ msgstr ""
 #~ "Om sant så avslutas Gajim när fönsterhanterarens X-knapp klickas. Denna "
 #~ "inställning behandlas endast när aktivitetsfältsikonen används."
+
+#, fuzzy
+#~ msgid "If enabled, Gajim will add * and [n] in contact list window title."
+#~ msgstr ""
+#~ "Om kryssad kommer Gajim att visa kontakters avatarer i register- och "
+#~ "gruppchattsfönstren"
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"
@@ -6500,6 +6546,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Quote previous message"
 #~ msgstr "Eller välj ett förinställt meddelande:"
+
+#, fuzzy
+#~ msgid "Quote…"
+#~ msgstr "A_vsluta"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6714,6 +6764,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "priority you want to give to the account"
 #~ msgstr "Jag vill _registrera ett nytt konto"
+
+#, fuzzy
+#~ msgid "python-cairo Version: %s"
+#~ msgstr "GTK+ version:"
 
 #~ msgid "show help on command"
 #~ msgstr "visar hjälp för kommando"

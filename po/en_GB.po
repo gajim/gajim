@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-13 16:07+0000\n"
+"POT-Creation-Date: 2022-09-16 20:54+0000\n"
 "PO-Revision-Date: 2009-11-20 20:49+1100\n"
 "Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: English <en_gb@li.org>\n"
@@ -234,10 +234,6 @@ msgstr ""
 msgid "<b>#</b>"
 msgstr "<b>Font</b>"
 
-#, python-format
-msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
-msgstr ""
-
 #, fuzzy
 msgid "<b>*</b>"
 msgstr "<b>Font</b>"
@@ -431,6 +427,21 @@ msgstr "None"
 #, fuzzy
 msgid "?Group chat name:Vacation"
 msgstr "Groupchat Invitation"
+
+#, fuzzy
+msgid "?Message row action:Copy"
+msgstr "Message content"
+
+#, fuzzy
+msgid "?Message row action:Correct…"
+msgstr "Message content"
+
+msgid "?Message row action:Quote…"
+msgstr ""
+
+#, fuzzy
+msgid "?Message row action:Retract…"
+msgstr "First Message Received"
 
 #, fuzzy
 msgid "?Message state:Received"
@@ -916,6 +927,9 @@ msgstr "Application verification failure"
 msgid "Apply"
 msgstr ""
 
+msgid "Approve"
+msgstr ""
+
 #, fuzzy
 msgid "Archive"
 msgstr "File is empty"
@@ -968,14 +982,6 @@ msgstr "Ask status message when I:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Ask before closing a group chat tab/window."
-
-#, fuzzy
-msgid ""
-"Ask before closing tabbed chat window if there are chats that can lose data "
-"(chat, private chat)."
-msgstr ""
-"Ask before closing tabbed chat window if there are controls that can lose "
-"data (chat, private chat, groupchat that will not be minimised)"
 
 msgid "Ask before pasting an image."
 msgstr ""
@@ -1193,10 +1199,6 @@ msgstr "CRL is not yet valid"
 msgid "CRL signature failure"
 msgstr "CRL signature failure"
 
-#, fuzzy, python-format
-msgid "Cairo Version: %s"
-msgstr "GTK+ Version:"
-
 msgid "Call"
 msgstr ""
 
@@ -1327,9 +1329,6 @@ msgstr ""
 "Character to add after nickname when using nick completion (tab) in group "
 "chat."
 
-msgid "Chat"
-msgstr "Chat"
-
 #, fuzzy
 msgid "Chat Banner: Background Color"
 msgstr "Contact Connected"
@@ -1339,6 +1338,10 @@ msgstr ""
 
 msgid "Chat Banner: Text Font"
 msgstr ""
+
+#, fuzzy
+msgid "Chat List"
+msgstr "Contacts"
 
 #, fuzzy
 msgid "Chat history"
@@ -1472,6 +1475,10 @@ msgstr "Colour"
 #, fuzzy
 msgid "Command List"
 msgstr "Commands: %s"
+
+#, fuzzy
+msgid "Command executed successfully"
+msgstr "Account has been added successfully"
 
 #, fuzzy
 msgid "Commands"
@@ -1704,8 +1711,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr "_Copy Link Location"
 
-msgid "Correct"
-msgstr ""
+#, fuzzy
+msgid "Correct the last message"
+msgstr "status message"
 
 #, fuzzy
 msgid "Could not Open File"
@@ -2447,9 +2455,6 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Gajim will now exit"
 
-msgid "Gajim: IPython Console"
-msgstr ""
-
 #, fuzzy
 msgid "Gathering information…"
 msgstr "Personal Information"
@@ -2612,10 +2617,6 @@ msgid "Hides the banner in a group chat window."
 msgstr "Hides the banner in a group chat window"
 
 #, fuzzy
-msgid "Hides the group chat participants list in a group chat window."
-msgstr "Hides the group chat occupants list in group chat window."
-
-#, fuzzy
 msgid "Home"
 msgstr "Homepage:"
 
@@ -2627,20 +2628,12 @@ msgstr "Homepage:"
 msgid "Hostname"
 msgstr "_Hostname:"
 
-msgid ""
-"How far back in time (minutes) chat history is restored. -1 means no limit."
-msgstr ""
-
 #, fuzzy
 msgid "How far back should the chat history be synchronised?"
 msgstr "What do you want to do?"
 
 msgid "How long Gajim should keep your chat history"
 msgstr ""
-
-#, fuzzy
-msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
-msgstr "How many lines to store for Ctrl+KeyUP."
 
 #, fuzzy
 msgid "I can see contact's online status"
@@ -2685,11 +2678,6 @@ msgstr ""
 
 msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, Gajim will add * and [n] in contact list window title."
-msgstr ""
-"If ticked, Gajim will display the mood of contacts in the roster window"
 
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
@@ -2818,6 +2806,10 @@ msgstr "Invalid Server Name"
 
 #, fuzzy
 msgid "Invalid XMPP Address"
+msgstr "Invalid File"
+
+#, fuzzy, python-format
+msgid "Invalid address: %s"
 msgstr "Invalid File"
 
 #, fuzzy
@@ -3410,9 +3402,6 @@ msgstr "_Open E-mail Composer"
 msgid "Open Folder"
 msgstr "_Open Containing Folder"
 
-msgid "Open IPython shell"
-msgstr ""
-
 #, fuzzy
 msgid "Open Link in Browser"
 msgstr "_Open Link in Browser"
@@ -3512,11 +3501,18 @@ msgstr "All files"
 msgid "Pa_use/Resume"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Pango Version: %s"
+msgstr "GTK+ Version:"
+
 msgid "Participant"
 msgstr "Participant"
 
 msgid "Participants"
 msgstr "Participants"
+
+msgid "Participants asking for voice:"
+msgstr ""
 
 msgid "Participants entering this group chat are allowed to send messages"
 msgstr ""
@@ -3572,6 +3568,10 @@ msgstr "Cancel file transfer"
 #, fuzzy
 msgid "Pending Event"
 msgstr "Show All Pending _Events"
+
+#, fuzzy
+msgid "Pending Voice Requests"
+msgstr "File Transfer Request"
 
 #, fuzzy
 msgid "Personal notes about this contact"
@@ -3799,10 +3799,6 @@ msgstr "_Quit"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quote…"
-msgstr "_Quote"
 
 #, fuzzy
 msgid "Re-Login"
@@ -4079,9 +4075,6 @@ msgid "Restore last state"
 msgstr "Last state"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-msgid "Retract"
 msgstr ""
 
 #, fuzzy
@@ -4807,19 +4800,27 @@ msgstr ""
 msgid "Support for service discovery including nodes and search for users"
 msgstr "Service Discovery using account %s"
 
-msgid "Switch to the first - ninth tab"
+#, fuzzy
+msgid "Switch Workspace"
+msgstr "Rename Contact"
+
+msgid "Switch to the first - ninth chat"
 msgstr ""
 
-msgid "Switch to the next tab"
+msgid "Switch to the first - ninth workspace"
 msgstr ""
 
-msgid "Switch to the next unread tab"
+#, fuzzy
+msgid "Switch to the next chat"
+msgstr "Start Chat"
+
+msgid "Switch to the next unread chat"
 msgstr ""
 
-msgid "Switch to the previous tab"
+msgid "Switch to the previous chat"
 msgstr ""
 
-msgid "Switch to the previous unread tab"
+msgid "Switch to the previous unread chat"
 msgstr ""
 
 msgid "Sync Threshold"
@@ -4861,9 +4862,6 @@ msgid "TLS verification failed: %s"
 msgstr "SSL certificate error"
 
 msgid "Tabbed chat window"
-msgstr ""
-
-msgid "Tabs"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5024,6 +5022,9 @@ msgstr ""
 msgid "This group chat will be destroyed once the last participant left"
 msgstr ""
 
+msgid "This is a public group chat. Encryption is not available."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "This is the theme you are currently using.\n"
@@ -5084,7 +5085,9 @@ msgstr "Remove account _only from Gajim"
 msgid "This will reset all introduction hints"
 msgstr ""
 
-msgid "This workspace contains chats. Remove anyway?"
+msgid ""
+"This workspace contains chats. All chats will be moved to the next "
+"workspace. Remove anyway?"
 msgstr ""
 
 msgid "Three Months"
@@ -5231,6 +5234,10 @@ msgstr "Unknown SSL error: %d"
 msgid "Unknown Title"
 msgstr "Unknown Title"
 
+#, fuzzy, python-format
+msgid "Unknown command: %s"
+msgstr "Commands: %s"
+
 #, fuzzy
 msgid "Unknown language"
 msgstr "Unknown Title"
@@ -5338,6 +5345,13 @@ msgstr "Advanced Configuration Editor"
 msgid "Use file transfer proxies"
 msgstr "Use file transfer proxies"
 
+msgid ""
+"Use filters to narrow down your search:\n"
+"from:username\n"
+"before:yyyy-mm-dd\n"
+"after:yyyy-mm-dd"
+msgstr ""
+
 msgid "Use proxy auth_entication"
 msgstr "Use proxy auth_entication"
 
@@ -5346,6 +5360,10 @@ msgstr ""
 
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "User %s not found"
+msgstr "%s not found"
 
 msgid "Users"
 msgstr "Users"
@@ -5411,10 +5429,6 @@ msgid "Visual Notifications"
 msgstr "<b>Visual Notifications</b>"
 
 #, fuzzy
-msgid "Voice Request"
-msgstr "File Transfer Request"
-
-#, fuzzy
 msgid "Waiting…"
 msgstr "Writing"
 
@@ -5477,6 +5491,10 @@ msgstr "Working"
 msgid "Workspace Settings"
 msgstr "Advanced Actions"
 
+#, fuzzy
+msgid "Workspaces"
+msgstr "Rename Contact"
+
 msgid "X11"
 msgstr ""
 
@@ -5535,6 +5553,10 @@ msgstr "Are you sure you want to quit Gajim?"
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "You are about to remove \"%(name)s\" (%(jid)s) from your roster.\n"
+
+#, fuzzy
+msgid "You are currently not joined this group chat"
+msgstr "%s has joined the group chat"
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5612,6 +5634,9 @@ msgstr ""
 #, fuzzy, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
 msgstr "%(nick)s has been removed from the room (%(reason)s)"
+
+msgid "You have insufficient permissions"
+msgstr ""
 
 #, python-brace-format
 msgid "You have left due to an error{reason}"
@@ -5735,9 +5760,6 @@ msgstr "_Address:"
 #, fuzzy
 msgid "_Advanced Settings"
 msgstr "Advanced Actions"
-
-msgid "_Approve"
-msgstr ""
 
 #, fuzzy
 msgid "_Back"
@@ -6064,6 +6086,10 @@ msgstr ""
 msgid "building"
 msgstr "Hiding"
 
+#, fuzzy, python-format
+msgid "cairo Version: %s"
+msgstr "GTK+ Version:"
+
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
@@ -6153,7 +6179,7 @@ msgid "postalcode"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "python-cairo Version: %s"
+msgid "pycairo Version: %s"
 msgstr "GTK+ Version:"
 
 #, python-format
@@ -6235,9 +6261,6 @@ msgstr ""
 #~ msgid "%s is not a valid tone"
 #~ msgstr "%s is not a valid loglevel"
 
-#~ msgid "%s not found"
-#~ msgstr "%s not found"
-
 #, fuzzy
 #~ msgid "%s: Nothing found"
 #~ msgstr "%s not found"
@@ -6274,6 +6297,10 @@ msgstr ""
 #~ "Account in which the xml will be sent; if not specified, xml will be sent "
 #~ "to all accounts"
 
+#, fuzzy
+#~ msgid "Ad-Hoc Commands…"
+#~ msgstr "_Execute Command"
+
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
@@ -6283,6 +6310,14 @@ msgstr ""
 
 #~ msgid "Arguments:"
 #~ msgstr "Arguments:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Ask before closing tabbed chat window if there are chats that can lose "
+#~ "data (chat, private chat)."
+#~ msgstr ""
+#~ "Ask before closing tabbed chat window if there are controls that can lose "
+#~ "data (chat, private chat, groupchat that will not be minimised)"
 
 #, fuzzy
 #~ msgid "Ban Participant"
@@ -6312,6 +6347,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Changes the status of account(s)"
 #~ msgstr "Changes the status of account or accounts"
+
+#~ msgid "Chat"
+#~ msgstr "Chat"
 
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Check if Gajim is running"
@@ -6373,6 +6411,14 @@ msgstr ""
 #~ msgid "Gets detailed info on a contact"
 #~ msgstr "Gets detailed info on a contact"
 
+#, fuzzy
+#~ msgid "Hides the group chat participants list in a group chat window."
+#~ msgstr "Hides the group chat occupants list in group chat window."
+
+#, fuzzy
+#~ msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
+#~ msgstr "How many lines to store for Ctrl+KeyUP."
+
 #~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 #~ msgstr "If ticked, Gajim can be controlled remotely using gajim-remote."
 
@@ -6383,6 +6429,11 @@ msgstr ""
 #~ msgstr ""
 #~ "If True, quits Gajim when X button of Window Manager is clicked. This "
 #~ "setting is taken into account only if trayicon is used."
+
+#, fuzzy
+#~ msgid "If enabled, Gajim will add * and [n] in contact list window title."
+#~ msgstr ""
+#~ "If ticked, Gajim will display the mood of contacts in the roster window"
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"
@@ -6493,6 +6544,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Quote previous message"
 #~ msgstr "status message"
+
+#, fuzzy
+#~ msgid "Quote…"
+#~ msgstr "_Quote"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6706,6 +6761,10 @@ msgstr ""
 
 #~ msgid "priority you want to give to the account"
 #~ msgstr "priority you want to give to the account"
+
+#, fuzzy
+#~ msgid "python-cairo Version: %s"
+#~ msgstr "GTK+ Version:"
 
 #~ msgid "show help on command"
 #~ msgstr "show help on command"

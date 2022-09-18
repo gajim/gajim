@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-13 16:07+0000\n"
+"POT-Creation-Date: 2022-09-16 20:54+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -237,10 +237,6 @@ msgstr ""
 msgid "<b>#</b>"
 msgstr "<b>#</b>"
 
-#, python-format
-msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
-msgstr ""
-
 msgid "<b>*</b>"
 msgstr "<b>*</b>"
 
@@ -425,6 +421,22 @@ msgstr "?Contactrol voor groepsgesprek:Geen"
 #, fuzzy
 msgid "?Group chat name:Vacation"
 msgstr "Uitnodiging voor groepsgesprek"
+
+#, fuzzy
+msgid "?Message row action:Copy"
+msgstr "Bericht opstellen"
+
+#, fuzzy
+msgid "?Message row action:Correct…"
+msgstr "Bericht opstellen"
+
+msgid "?Message row action:Quote…"
+msgstr ""
+
+# Eerste bericht ontvangen?
+#, fuzzy
+msgid "?Message row action:Retract…"
+msgstr "Eerste ontvangen bericht"
 
 # Eerste bericht ontvangen?
 #, fuzzy
@@ -902,6 +914,10 @@ msgstr "Toepassingsverificatie mislukt"
 msgid "Apply"
 msgstr ""
 
+#, fuzzy
+msgid "Approve"
+msgstr "approve"
+
 msgid "Archive"
 msgstr "Archiveren"
 
@@ -951,15 +967,6 @@ msgstr "Vraag om statusbericht wanneer ik"
 msgid "Ask before closing a group chat tab/window."
 msgstr ""
 "Vraag bevestiging voor het sluiten van een groepsgespreksvenster of -tab."
-
-#, fuzzy
-msgid ""
-"Ask before closing tabbed chat window if there are chats that can lose data "
-"(chat, private chat)."
-msgstr ""
-"Vraag bevestiging voor sluiten van gespreksvenster met tabbladen als er "
-"mogelijk gegevens verloren zouden gaan (in gesprekken, privégesprekken en "
-"groepsgesprekken die niet geminimaliseerd worden)"
 
 msgid "Ask before pasting an image."
 msgstr ""
@@ -1169,10 +1176,6 @@ msgstr "CRL is nog niet geldig"
 msgid "CRL signature failure"
 msgstr "CRL-handtekeningsfout"
 
-#, fuzzy, python-format
-msgid "Cairo Version: %s"
-msgstr "GTK+-versie: %s"
-
 msgid "Call"
 msgstr ""
 
@@ -1303,9 +1306,6 @@ msgstr ""
 "Teken om achter bijnaam in te voegen bij gebruik van bijnaamaanvulling (tab) "
 "in groepsgesprekken."
 
-msgid "Chat"
-msgstr "Gesprek"
-
 #, fuzzy
 msgid "Chat Banner: Background Color"
 msgstr "Banier achtergrondkleur"
@@ -1317,6 +1317,10 @@ msgstr "Banier voorgrondkleur"
 #, fuzzy
 msgid "Chat Banner: Text Font"
 msgstr "Gespreksbanner"
+
+#, fuzzy
+msgid "Chat List"
+msgstr "Contacten"
 
 msgid "Chat history"
 msgstr "Gespreksgeschiedenis"
@@ -1440,6 +1444,10 @@ msgstr "Kleur"
 
 msgid "Command List"
 msgstr "Opdrachtlijst"
+
+#, fuzzy
+msgid "Command executed successfully"
+msgstr "Account is toegevoegd"
 
 msgid "Commands"
 msgstr "Opdrachten"
@@ -1666,8 +1674,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr "Info kopiëren naar klembord"
 
-msgid "Correct"
-msgstr ""
+#, fuzzy
+msgid "Correct the last message"
+msgstr "Statusbericht instellen"
 
 #, fuzzy
 msgid "Could not Open File"
@@ -2413,9 +2422,6 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Gajim sluit nu af"
 
-msgid "Gajim: IPython Console"
-msgstr ""
-
 #, fuzzy
 msgid "Gathering information…"
 msgstr "Contactinformatie"
@@ -2575,10 +2581,6 @@ msgid "Hides the banner in a group chat window."
 msgstr "Verbergt de banner in een groepsgespreksvenster"
 
 #, fuzzy
-msgid "Hides the group chat participants list in a group chat window."
-msgstr "Verbergt de lijst met deelnemers in een groepsgespreksvenster."
-
-#, fuzzy
 msgid "Home"
 msgstr "Website"
 
@@ -2589,22 +2591,11 @@ msgid "Hostname"
 msgstr "Hostnaam"
 
 #, fuzzy
-msgid ""
-"How far back in time (minutes) chat history is restored. -1 means no limit."
-msgstr ""
-"Hoe ver terug in te de tijd (in minuten) geschiedenis wordt hersteld. -1 "
-"betekent geen limiet."
-
-#, fuzzy
 msgid "How far back should the chat history be synchronised?"
 msgstr "Hoe ver terug wil je gaan?"
 
 msgid "How long Gajim should keep your chat history"
 msgstr ""
-
-#, fuzzy
-msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
-msgstr "Hoeveel regels op te slaan voor Ctrl+Omhoog."
 
 #, fuzzy
 msgid "I can see contact's online status"
@@ -2648,12 +2639,6 @@ msgstr ""
 
 msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, Gajim will add * and [n] in contact list window title."
-msgstr ""
-"Indien aangevinkt zal Gajim de stemming van contacten in het roostervenster "
-"laten zien"
 
 #, fuzzy
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
@@ -2794,6 +2779,10 @@ msgstr "Ongeldige servernaam"
 
 #, fuzzy
 msgid "Invalid XMPP Address"
+msgstr "Ongeldig knooppunt"
+
+#, fuzzy, python-format
+msgid "Invalid address: %s"
 msgstr "Ongeldig knooppunt"
 
 #, fuzzy
@@ -3382,9 +3371,6 @@ msgstr "E-mailopsteller openen"
 msgid "Open Folder"
 msgstr "_Open bovenliggende map"
 
-msgid "Open IPython shell"
-msgstr "IPython-shell openen"
-
 msgid "Open Link in Browser"
 msgstr "Verwijzing openen in browser"
 
@@ -3486,11 +3472,18 @@ msgstr "PNG-bestanden"
 msgid "Pa_use/Resume"
 msgstr "He_rvatten"
 
+#, fuzzy, python-format
+msgid "Pango Version: %s"
+msgstr "GTK+-versie: %s"
+
 msgid "Participant"
 msgstr "Deelnemer"
 
 msgid "Participants"
 msgstr "Deelnemers"
+
+msgid "Participants asking for voice:"
+msgstr ""
 
 msgid "Participants entering this group chat are allowed to send messages"
 msgstr ""
@@ -3543,6 +3536,10 @@ msgstr "Bestandsoverdracht annuleren"
 #, fuzzy
 msgid "Pending Event"
 msgstr "Toon alle wachtende gebeurt_enissen"
+
+#, fuzzy
+msgid "Pending Voice Requests"
+msgstr "Audiogespreksverzoek"
 
 #, fuzzy
 msgid "Personal notes about this contact"
@@ -3760,10 +3757,6 @@ msgstr "_Afsluiten"
 
 msgid "Quit Gajim"
 msgstr "Gajim afsluiten"
-
-#, fuzzy
-msgid "Quote…"
-msgstr "_Citeren"
 
 #, fuzzy
 msgid "Re-Login"
@@ -4038,9 +4031,6 @@ msgid "Restore status and status message of your last session"
 msgstr ""
 "Indien aangevinkt zullen de status en het statusbericht gebruikt in de "
 "vorige sessie worden hersteld"
-
-msgid "Retract"
-msgstr ""
 
 #, fuzzy
 msgid "Retract Message"
@@ -4755,19 +4745,32 @@ msgstr ""
 "Ondersteuning voor dienstontdekking, inclusief knooppunten en zoeken naar "
 "gebruikers"
 
-msgid "Switch to the first - ninth tab"
+#, fuzzy
+msgid "Switch Workspace"
+msgstr "Contact hernoemen"
+
+#, fuzzy
+msgid "Switch to the first - ninth chat"
 msgstr "Wisselen naar het eerste - negende tabblad"
 
-msgid "Switch to the next tab"
+#, fuzzy
+msgid "Switch to the first - ninth workspace"
+msgstr "Wisselen naar het eerste - negende tabblad"
+
+#, fuzzy
+msgid "Switch to the next chat"
 msgstr "Wisselend naar het volgende tabblad"
 
-msgid "Switch to the next unread tab"
+#, fuzzy
+msgid "Switch to the next unread chat"
 msgstr "Wisselen naar het volgende ongelezen tabblad"
 
-msgid "Switch to the previous tab"
+#, fuzzy
+msgid "Switch to the previous chat"
 msgstr "Wisselen naar het vorig tabblad"
 
-msgid "Switch to the previous unread tab"
+#, fuzzy
+msgid "Switch to the previous unread chat"
 msgstr "Wisselen naar het vorige ongelezen tabblad"
 
 msgid "Sync Threshold"
@@ -4808,9 +4811,6 @@ msgstr "SSL-certificaatverificatie voor %s"
 
 msgid "Tabbed chat window"
 msgstr "Gespreksvenster met tabbladen"
-
-msgid "Tabs"
-msgstr "Tabbladen"
 
 msgid "Tell your contacts if you received a message"
 msgstr ""
@@ -4972,6 +4972,9 @@ msgstr ""
 msgid "This group chat will be destroyed once the last participant left"
 msgstr ""
 
+msgid "This is a public group chat. Encryption is not available."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "This is the theme you are currently using.\n"
@@ -5036,7 +5039,9 @@ msgstr "Verwijder account alleen van Gajim"
 msgid "This will reset all introduction hints"
 msgstr ""
 
-msgid "This workspace contains chats. Remove anyway?"
+msgid ""
+"This workspace contains chats. All chats will be moved to the next "
+"workspace. Remove anyway?"
 msgstr ""
 
 msgid "Three Months"
@@ -5182,6 +5187,10 @@ msgstr "Onbekende SSL-fout: %d"
 msgid "Unknown Title"
 msgstr "Onbekend nummer"
 
+#, fuzzy, python-format
+msgid "Unknown command: %s"
+msgstr "Opdrachten"
+
 #, fuzzy
 msgid "Unknown language"
 msgstr "Onbekend nummer"
@@ -5287,6 +5296,13 @@ msgstr "Gebruik opgegeven profiel in configuratiemap"
 msgid "Use file transfer proxies"
 msgstr "Gebruik bestandsoverdrachtsproxies"
 
+msgid ""
+"Use filters to narrow down your search:\n"
+"from:username\n"
+"before:yyyy-mm-dd\n"
+"after:yyyy-mm-dd"
+msgstr ""
+
 msgid "Use proxy auth_entication"
 msgstr "Gebruik proxy-auth_enticatie"
 
@@ -5295,6 +5311,10 @@ msgstr "Gebruik je favoriete emoticons, stel je eigen avatar in"
 
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "User %s not found"
+msgstr "%s niet gevonden"
 
 msgid "Users"
 msgstr "Gebruikers"
@@ -5356,10 +5376,6 @@ msgstr "Bezoekers"
 
 msgid "Visual Notifications"
 msgstr "Visuele meldingen"
-
-#, fuzzy
-msgid "Voice Request"
-msgstr "Audiogespreksverzoek"
 
 #, fuzzy
 msgid "Waiting…"
@@ -5429,6 +5445,10 @@ msgstr "Werken"
 msgid "Workspace Settings"
 msgstr "Gea_vanceerde Acties"
 
+#, fuzzy
+msgid "Workspaces"
+msgstr "Contact hernoemen"
+
 msgid "X11"
 msgstr ""
 
@@ -5490,6 +5510,10 @@ msgstr "Weet je zeker dat je Gajim wil afsluiten?"
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr ""
 "Je staat op het punt ‘%(name)s’ (%(jid)s) uit je rooster te verwijderen.\n"
+
+#, fuzzy
+msgid "You are currently not joined this group chat"
+msgstr "%s neemt nu deel aan het groepsgesprek"
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5573,6 +5597,9 @@ msgstr "Je bent uit het gesprek geschopt{actor}{reason}"
 #, fuzzy, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
 msgstr "Je bent uit het gesprek verwijderd{actor}{reason}"
+
+msgid "You have insufficient permissions"
+msgstr ""
 
 #, python-brace-format
 msgid "You have left due to an error{reason}"
@@ -5695,10 +5722,6 @@ msgstr "_Adres:"
 #, fuzzy
 msgid "_Advanced Settings"
 msgstr "Gea_vanceerde Acties"
-
-#, fuzzy
-msgid "_Approve"
-msgstr "approve"
 
 #, fuzzy
 msgid "_Back"
@@ -6018,6 +6041,10 @@ msgstr ""
 msgid "building"
 msgstr "bouwen"
 
+#, fuzzy, python-format
+msgid "cairo Version: %s"
+msgstr "GTK+-versie: %s"
+
 #, fuzzy
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "chat;messaging;berichten;gesprekken;im;xmpp;bonjour;voip;"
@@ -6103,8 +6130,8 @@ msgid "postalcode"
 msgstr "postcode"
 
 #, fuzzy, python-format
-msgid "python-cairo Version: %s"
-msgstr "python-nbxmpp-versie: %s"
+msgid "pycairo Version: %s"
+msgstr "GTK+-versie: %s"
 
 #, python-format
 msgid "python-nbxmpp Version: %s"
@@ -6214,9 +6241,6 @@ msgstr ""
 #~ msgid "%s is not a valid tone"
 #~ msgstr "%s is geen geldige toon"
 
-#~ msgid "%s not found"
-#~ msgstr "%s niet gevonden"
-
 #~ msgid "%s: Nothing found"
 #~ msgstr "%s: niets gevonden"
 
@@ -6248,6 +6272,10 @@ msgstr ""
 #~ "ze naar alle account verzonden worden"
 
 #, fuzzy
+#~ msgid "Ad-Hoc Commands…"
+#~ msgstr "Opdra_cht uitvoeren…"
+
+#, fuzzy
 #~ msgid "Allow a participant to send you public or private messages"
 #~ msgstr "Laat een deelnemer toe je openbare of privéberichten te sturen"
 
@@ -6268,6 +6296,15 @@ msgstr ""
 
 #~ msgid "Arguments:"
 #~ msgstr "Parameters:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Ask before closing tabbed chat window if there are chats that can lose "
+#~ "data (chat, private chat)."
+#~ msgstr ""
+#~ "Vraag bevestiging voor sluiten van gespreksvenster met tabbladen als er "
+#~ "mogelijk gegevens verloren zouden gaan (in gesprekken, privégesprekken en "
+#~ "groepsgesprekken die niet geminimaliseerd worden)"
 
 #, fuzzy
 #~ msgid "Ban Participant"
@@ -6294,6 +6331,9 @@ msgstr ""
 
 #~ msgid "Changes the status of account(s)"
 #~ msgstr "Verandert de status van de account(s)"
+
+#~ msgid "Chat"
+#~ msgstr "Gesprek"
 
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Controleer of Gajim wordt uitgevoerd"
@@ -6372,6 +6412,22 @@ msgstr ""
 #~ msgid "Gets detailed info on a contact"
 #~ msgstr "Haalt gedetailleerde informatie op over een contact"
 
+#, fuzzy
+#~ msgid "Hides the group chat participants list in a group chat window."
+#~ msgstr "Verbergt de lijst met deelnemers in een groepsgespreksvenster."
+
+#, fuzzy
+#~ msgid ""
+#~ "How far back in time (minutes) chat history is restored. -1 means no "
+#~ "limit."
+#~ msgstr ""
+#~ "Hoe ver terug in te de tijd (in minuten) geschiedenis wordt hersteld. -1 "
+#~ "betekent geen limiet."
+
+#, fuzzy
+#~ msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
+#~ msgstr "Hoeveel regels op te slaan voor Ctrl+Omhoog."
+
 #~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 #~ msgstr ""
 #~ "Indien aangevinkt zal Gajim bestuurd kunnen worden met gajim-remote."
@@ -6383,6 +6439,12 @@ msgstr ""
 #~ msgstr ""
 #~ "Indien ingeschakeld verbergt Gajim het roostervenster wanneer dit wordt "
 #~ "gesloten, in plaats van te minimaliseren naar het Dock."
+
+#, fuzzy
+#~ msgid "If enabled, Gajim will add * and [n] in contact list window title."
+#~ msgstr ""
+#~ "Indien aangevinkt zal Gajim de stemming van contacten in het "
+#~ "roostervenster laten zien"
 
 #, fuzzy
 #~ msgid "If enabled, Gajim will execute XEP-0146 Commands."
@@ -6464,6 +6526,9 @@ msgstr ""
 #~ msgid "Online"
 #~ msgstr "Online"
 
+#~ msgid "Open IPython shell"
+#~ msgstr "IPython-shell openen"
+
 #, fuzzy
 #~ msgid "Open a private chat window with a specified participant"
 #~ msgstr "Open een privé-gespreksvenster met opgegeven lid"
@@ -6502,6 +6567,10 @@ msgstr ""
 
 #~ msgid "Quote previous message"
 #~ msgstr "Vorig bericht citeren"
+
+#, fuzzy
+#~ msgid "Quote…"
+#~ msgstr "_Citeren"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6636,6 +6705,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "T_ry Again"
 #~ msgstr "Opnieuw verifiëren…"
+
+#~ msgid "Tabs"
+#~ msgstr "Tabbladen"
 
 #~ msgid "The same as using a doc-string, except it supports translation"
 #~ msgstr "The same as using a doc-string, except it supports translation"
@@ -6776,6 +6848,10 @@ msgstr ""
 
 #~ msgid "priority you want to give to the account"
 #~ msgstr "prioriteit die je aan de account wil geven"
+
+#, fuzzy
+#~ msgid "python-cairo Version: %s"
+#~ msgstr "python-nbxmpp-versie: %s"
 
 #~ msgid "show help on command"
 #~ msgstr "toont hulp bij opdracht"

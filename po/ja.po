@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-13 16:07+0000\n"
+"POT-Creation-Date: 2022-09-16 20:54+0000\n"
 "PO-Revision-Date: 2022-05-26 22:21+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -245,10 +245,6 @@ msgstr ""
 msgid "<b>#</b>"
 msgstr "<b>#</b>"
 
-#, python-format
-msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
-msgstr "<b>%(nick)s</b> が <b>%(room_name)s</b> で発言権を求めています"
-
 msgid "<b>*</b>"
 msgstr "<b>*</b>"
 
@@ -407,6 +403,21 @@ msgstr "チーム"
 
 msgid "?Group chat name:Vacation"
 msgstr "休暇について"
+
+#, fuzzy
+msgid "?Message row action:Copy"
+msgstr "メッセージ作成"
+
+#, fuzzy
+msgid "?Message row action:Correct…"
+msgstr "メッセージ作成"
+
+msgid "?Message row action:Quote…"
+msgstr ""
+
+#, fuzzy
+msgid "?Message row action:Retract…"
+msgstr "受信済"
 
 msgid "?Message state:Received"
 msgstr "受信済"
@@ -812,6 +823,10 @@ msgstr "アプリケーションの検証に失敗しました"
 msgid "Apply"
 msgstr "適用"
 
+#, fuzzy
+msgid "Approve"
+msgstr "承認 (_A)"
+
 msgid "Archive"
 msgstr "書庫"
 
@@ -856,13 +871,6 @@ msgstr "状況メッセージを求めるのは…"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "談話室のタブまたはウィンドウを閉じる前に確認を求めます。"
-
-msgid ""
-"Ask before closing tabbed chat window if there are chats that can lose data "
-"(chat, private chat)."
-msgstr ""
-"タブのあるチャットウィンドウを閉じる前に、データを失う可能性があるチャットが"
-"あることの確認を求めます (チャット、私信)。"
 
 msgid "Ask before pasting an image."
 msgstr "画像を貼り付ける前に確認します。"
@@ -1052,10 +1060,6 @@ msgstr "証明書失効リストは検証されていません"
 msgid "CRL signature failure"
 msgstr "証明書失効リストの署名の失敗"
 
-#, python-format
-msgid "Cairo Version: %s"
-msgstr "Cairo バージョン: %s"
-
 msgid "Call"
 msgstr "通話"
 
@@ -1176,9 +1180,6 @@ msgstr ""
 "談話室で、ニックネーム補完 (タブ) を使うとき、ニックネームの後ろにつけ加えら"
 "れる文字。"
 
-msgid "Chat"
-msgstr "チャット"
-
 msgid "Chat Banner: Background Color"
 msgstr "チャットバナー: 背景色"
 
@@ -1187,6 +1188,10 @@ msgstr "チャットバナー: 文字色"
 
 msgid "Chat Banner: Text Font"
 msgstr "チャットバナー: フォント"
+
+#, fuzzy
+msgid "Chat List"
+msgstr "相手先一覧"
 
 msgid "Chat history"
 msgstr "会話の履歴"
@@ -1301,6 +1306,10 @@ msgstr "色"
 
 msgid "Command List"
 msgstr "コマンド一覧"
+
+#, fuzzy
+msgid "Command executed successfully"
+msgstr "アカウントは無事に追加されました"
 
 msgid "Commands"
 msgstr "コマンド"
@@ -1493,8 +1502,9 @@ msgstr "コードスニペットをコピー"
 msgid "Copy info to clipboard"
 msgstr "情報をクリップボードにコピー"
 
-msgid "Correct"
-msgstr ""
+#, fuzzy
+msgid "Correct the last message"
+msgstr "状況メッセージを設定"
 
 msgid "Could not Open File"
 msgstr "ファイルを開けませんでした"
@@ -2154,9 +2164,6 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Gajim は終了します"
 
-msgid "Gajim: IPython Console"
-msgstr "Gajim: IPython コンソール"
-
 msgid "Gathering information…"
 msgstr "情報を収集…"
 
@@ -2293,9 +2300,6 @@ msgstr "1対1チャットウィンドウのバナーを表示しません。"
 msgid "Hides the banner in a group chat window."
 msgstr "談話室のバナーを表示しません。"
 
-msgid "Hides the group chat participants list in a group chat window."
-msgstr "談話室ウィンドウで、参加者一覧を表示しません。"
-
 msgid "Home"
 msgstr "自宅"
 
@@ -2305,18 +2309,11 @@ msgstr "ホームページ"
 msgid "Hostname"
 msgstr "ホスト名"
 
-msgid ""
-"How far back in time (minutes) chat history is restored. -1 means no limit."
-msgstr "履歴を復元する際に遡る時間 (単位は分) 。-1 は制限なし。"
-
 msgid "How far back should the chat history be synchronised?"
 msgstr "どのくらい遡りたいですか ?"
 
 msgid "How long Gajim should keep your chat history"
 msgstr "Gajim が会話の履歴を保持する期間"
-
-msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
-msgstr "Ctrl+KeyUP で遡ることのできる行数 (過去に送ったメッセージ)。"
 
 msgid "I can see contact's online status"
 msgstr "相手先の在席状況を見ることができます"
@@ -2355,10 +2352,6 @@ msgstr ""
 
 msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
 msgstr ""
-
-msgid "If enabled, Gajim will add * and [n] in contact list window title."
-msgstr ""
-"有効の場合、Gajim は相手先一覧ウィンドウのタイトルに * と [n] を付けます。"
 
 #, fuzzy
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
@@ -2484,6 +2477,10 @@ msgstr "サーバー名が正しくありません"
 
 msgid "Invalid XMPP Address"
 msgstr "XMPP アドレスが正しくありません"
+
+#, fuzzy, python-format
+msgid "Invalid address: %s"
+msgstr "アドレスが正しくありません"
 
 msgid "Invalid domain name"
 msgstr "ドメイン名が正しくありません"
@@ -3010,9 +3007,6 @@ msgstr "メール作成画面を開く"
 msgid "Open Folder"
 msgstr "フォルダを開く"
 
-msgid "Open IPython shell"
-msgstr "IPython のシェルを開く"
-
 msgid "Open Link in Browser"
 msgstr "リンク先をブラウザで開く"
 
@@ -3108,11 +3102,18 @@ msgstr "PNG ファイル"
 msgid "Pa_use/Resume"
 msgstr "一時中断/再開 (_U)"
 
+#, fuzzy, python-format
+msgid "Pango Version: %s"
+msgstr "Cairo バージョン: %s"
+
 msgid "Participant"
 msgstr "参加者"
 
 msgid "Participants"
 msgstr "参加者"
+
+msgid "Participants asking for voice:"
+msgstr ""
 
 msgid "Participants entering this group chat are allowed to send messages"
 msgstr "この談話室の参加者はメッセージを送ることができます"
@@ -3160,6 +3161,10 @@ msgstr "ファイルの転送を一時中断または再開します"
 
 msgid "Pending Event"
 msgstr "保留中のイベント"
+
+#, fuzzy
+msgid "Pending Voice Requests"
+msgstr "発言権の要求"
 
 msgid "Personal notes about this contact"
 msgstr "この相手先についての個人的な備考"
@@ -3360,9 +3365,6 @@ msgstr "終了 (_Q)"
 
 msgid "Quit Gajim"
 msgstr "Gajim を終了"
-
-msgid "Quote…"
-msgstr "引用…"
 
 msgid "Re-Login"
 msgstr "再ログイン"
@@ -3602,9 +3604,6 @@ msgstr "以前の状態を復元"
 
 msgid "Restore status and status message of your last session"
 msgstr "最後のセッションで用いられた状況と状況メッセージを復元します"
-
-msgid "Retract"
-msgstr "撤回"
 
 msgid "Retract Message"
 msgstr "メッセージを撤回"
@@ -4235,19 +4234,32 @@ msgstr "複数アカウントに対応"
 msgid "Support for service discovery including nodes and search for users"
 msgstr "ノードやユーザー検索などのサービス探索に対応"
 
-msgid "Switch to the first - ninth tab"
+#, fuzzy
+msgid "Switch Workspace"
+msgstr "My Workspace"
+
+#, fuzzy
+msgid "Switch to the first - ninth chat"
 msgstr "1--9番目のタブへ切替"
 
-msgid "Switch to the next tab"
+#, fuzzy
+msgid "Switch to the first - ninth workspace"
+msgstr "1--9番目のタブへ切替"
+
+#, fuzzy
+msgid "Switch to the next chat"
 msgstr "次のタブへ切替"
 
-msgid "Switch to the next unread tab"
+#, fuzzy
+msgid "Switch to the next unread chat"
 msgstr "次の未読タブへ切替"
 
-msgid "Switch to the previous tab"
+#, fuzzy
+msgid "Switch to the previous chat"
 msgstr "前のタブへ切替"
 
-msgid "Switch to the previous unread tab"
+#, fuzzy
+msgid "Switch to the previous unread chat"
 msgstr "前の未読タブへ切替"
 
 msgid "Sync Threshold"
@@ -4286,9 +4298,6 @@ msgstr "ファイルの検証に失敗しました"
 
 msgid "Tabbed chat window"
 msgstr "タブ化チャットウィンドウ"
-
-msgid "Tabs"
-msgstr "タブ"
 
 msgid "Tell your contacts if you received a message"
 msgstr "メッセージを受領したことを相手先に伝えます"
@@ -4440,6 +4449,9 @@ msgstr "この談話室は参加者がいなくなっても存続します"
 msgid "This group chat will be destroyed once the last participant left"
 msgstr "この談話室は最後の参加者が退出すると閉鎖されます"
 
+msgid "This is a public group chat. Encryption is not available."
+msgstr ""
+
 msgid ""
 "This is the theme you are currently using.\n"
 "Do you want to delete this theme?"
@@ -4501,7 +4513,10 @@ msgstr "アカウントを Gajim からします。"
 msgid "This will reset all introduction hints"
 msgstr "すべての紹介ヒントがリセットされます"
 
-msgid "This workspace contains chats. Remove anyway?"
+#, fuzzy
+msgid ""
+"This workspace contains chats. All chats will be moved to the next "
+"workspace. Remove anyway?"
 msgstr "この作業空間にはチャットがあります。それでも削除しますか ?"
 
 msgid "Three Months"
@@ -4639,6 +4654,10 @@ msgstr "未知の TLS エラー: '%s'"
 msgid "Unknown Title"
 msgstr "不明"
 
+#, fuzzy, python-format
+msgid "Unknown command: %s"
+msgstr "コマンドを表示する"
+
 #, fuzzy
 msgid "Unknown language"
 msgstr "不明"
@@ -4732,6 +4751,13 @@ msgstr "設定ディレクトリ内の設定ファイルを指定"
 msgid "Use file transfer proxies"
 msgstr "ファイル転送のプロキシを使う"
 
+msgid ""
+"Use filters to narrow down your search:\n"
+"from:username\n"
+"before:yyyy-mm-dd\n"
+"after:yyyy-mm-dd"
+msgstr ""
+
 msgid "Use proxy auth_entication"
 msgstr "プロキシの認証を使用する (_E)"
 
@@ -4740,6 +4766,10 @@ msgstr "お好みの絵文字の利用、プロフィール画像の設定"
 
 msgid "Use your system’s keyring to store passwords"
 msgstr "パスワード保存にシステムの鍵束を使います"
+
+#, fuzzy, python-format
+msgid "User %s not found"
+msgstr "%s は見つかりません"
 
 msgid "Users"
 msgstr "ユーザー数"
@@ -4797,9 +4827,6 @@ msgstr "傍聴者"
 
 msgid "Visual Notifications"
 msgstr "目への通知"
-
-msgid "Voice Request"
-msgstr "発言権の要求"
 
 msgid "Waiting…"
 msgstr "待機中…"
@@ -4859,6 +4886,10 @@ msgstr "仕事中"
 msgid "Workspace Settings"
 msgstr "作業空間の設定"
 
+#, fuzzy
+msgid "Workspaces"
+msgstr "My Workspace"
+
 msgid "X11"
 msgstr "X11"
 
@@ -4913,6 +4944,10 @@ msgstr "Gajim を終了しようとしています"
 #, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "%(name)s (%(jid)s) を相手先一覧から削除しようとしています。\n"
+
+#, fuzzy
+msgid "You are currently not joined this group chat"
+msgstr "誰でもこの談話室に参加できます"
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr "管理人や主宰者の分掌を変更する権限はありません"
@@ -4981,6 +5016,9 @@ msgstr "{actor} によって、あなたは蹴り出されました: {reason}"
 #, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
 msgstr "{actor} によって、この談話室から削除されました ({reason})"
+
+msgid "You have insufficient permissions"
+msgstr ""
 
 #, python-brace-format
 msgid "You have left due to an error{reason}"
@@ -5083,9 +5121,6 @@ msgstr "アドレス (_A)"
 
 msgid "_Advanced Settings"
 msgstr "詳細設定 (_A)"
-
-msgid "_Approve"
-msgstr "承認 (_A)"
 
 msgid "_Back"
 msgstr "戻る (_B)"
@@ -5363,6 +5398,10 @@ msgstr ""
 msgid "building"
 msgstr "建物"
 
+#, fuzzy, python-format
+msgid "cairo Version: %s"
+msgstr "Cairo バージョン: %s"
+
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "chat;messaging;im;xmpp;voip;"
 
@@ -5446,9 +5485,9 @@ msgstr "さんは書く手をちょっと止めています"
 msgid "postalcode"
 msgstr "郵便番号"
 
-#, python-format
-msgid "python-cairo Version: %s"
-msgstr "python-cairo バージョン: %s"
+#, fuzzy, python-format
+msgid "pycairo Version: %s"
+msgstr "Cairo バージョン: %s"
 
 #, python-format
 msgid "python-nbxmpp Version: %s"
@@ -5554,9 +5593,6 @@ msgstr "…またはここにドロップ"
 #~ msgid "%s is not a valid tone"
 #~ msgstr "%s は正しいトーンではありません"
 
-#~ msgid "%s not found"
-#~ msgstr "%s は見つかりません"
-
 #~ msgid "%s: Nothing found"
 #~ msgstr "%s: 見つかりません"
 
@@ -5566,6 +5602,9 @@ msgstr "…またはここにドロップ"
 #~ msgstr ""
 #~ "'%s' は相手先一覧にありません。\n"
 #~ "メッセージを送るためのアカウントを指定してください。"
+
+#~ msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
+#~ msgstr "<b>%(nick)s</b> が <b>%(room_name)s</b> で発言権を求めています"
 
 #~ msgid "?CLI:account"
 #~ msgstr "?CLI:アカウント"
@@ -5586,6 +5625,10 @@ msgstr "…またはここにドロップ"
 #~ "XML が送信されるアカウント。指定されない場合、XML はすべてのアカウントに送"
 #~ "信されます"
 
+#, fuzzy
+#~ msgid "Ad-Hoc Commands…"
+#~ msgstr "コマンド実行…"
+
 #~ msgid "Allow a participant to send you public or private messages"
 #~ msgstr "参加者がメッセージ (私信も含む) を送ってくることを許可します"
 
@@ -5605,6 +5648,13 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Arguments:"
 #~ msgstr "引数:"
+
+#~ msgid ""
+#~ "Ask before closing tabbed chat window if there are chats that can lose "
+#~ "data (chat, private chat)."
+#~ msgstr ""
+#~ "タブのあるチャットウィンドウを閉じる前に、データを失う可能性があるチャット"
+#~ "があることの確認を求めます (チャット、私信)。"
 
 #~ msgid "Ban Participant"
 #~ msgstr "参加者を締め出す"
@@ -5629,6 +5679,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Changes the status of account(s)"
 #~ msgstr "アカウントの在席状況の変更します"
+
+#~ msgid "Chat"
+#~ msgstr "チャット"
 
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Gajim が起動しているかチェックします"
@@ -5699,11 +5752,25 @@ msgstr "…またはここにドロップ"
 #~ msgid "Gajim will not try to join this group chat again"
 #~ msgstr "Gajim はもうこの談話室に参加しようとしません"
 
+#~ msgid "Gajim: IPython Console"
+#~ msgstr "Gajim: IPython コンソール"
+
 #~ msgid "Gets detailed info on a account"
 #~ msgstr "アカウントの詳細情報を取得します"
 
 #~ msgid "Gets detailed info on a contact"
 #~ msgstr "相手先の詳細情報を取得します"
+
+#~ msgid "Hides the group chat participants list in a group chat window."
+#~ msgstr "談話室ウィンドウで、参加者一覧を表示しません。"
+
+#~ msgid ""
+#~ "How far back in time (minutes) chat history is restored. -1 means no "
+#~ "limit."
+#~ msgstr "履歴を復元する際に遡る時間 (単位は分) 。-1 は制限なし。"
+
+#~ msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
+#~ msgstr "Ctrl+KeyUP で遡ることのできる行数 (過去に送ったメッセージ)。"
 
 #~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 #~ msgstr ""
@@ -5715,6 +5782,10 @@ msgstr "…またはここにドロップ"
 #~ msgstr ""
 #~ "有効の場合、Gajim は X ボタンが押された際に、相手先一覧ウィンドウを通知エ"
 #~ "リアに最小化するのではなく、閉じます。"
+
+#~ msgid "If enabled, Gajim will add * and [n] in contact list window title."
+#~ msgstr ""
+#~ "有効の場合、Gajim は相手先一覧ウィンドウのタイトルに * と [n] を付けます。"
 
 #~ msgid "If enabled, Gajim will execute XEP-0146 Commands."
 #~ msgstr "有効の場合、Gajim は XEP-0146 コマンドを実行します。"
@@ -5785,6 +5856,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Online"
 #~ msgstr "オンライン"
 
+#~ msgid "Open IPython shell"
+#~ msgstr "IPython のシェルを開く"
+
 #~ msgid "Open a private chat window with a specified participant"
 #~ msgstr "指定した在室者との私信のウィンドウを開きます"
 
@@ -5820,8 +5894,14 @@ msgstr "…またはここにドロップ"
 #~ msgid "Quote previous message"
 #~ msgstr "前のメッセージを引用"
 
+#~ msgid "Quote…"
+#~ msgstr "引用…"
+
 #~ msgid "Removes contact from contact list"
 #~ msgstr "相手先を相手先一覧から削除します"
+
+#~ msgid "Retract"
+#~ msgstr "撤回"
 
 #~ msgid "Returns current status (the global one unless account is specified)"
 #~ msgstr ""
@@ -5941,6 +6021,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "T_ry Again"
 #~ msgstr "再試行 (_R)"
+
+#~ msgid "Tabs"
+#~ msgstr "タブ"
 
 #~ msgid "The same as using a doc-string, except it supports translation"
 #~ msgstr "使う文章は同じものとします (翻訳は除く)"
@@ -6071,6 +6154,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "priority you want to give to the account"
 #~ msgstr "アカウントに設定する優先順位"
+
+#~ msgid "python-cairo Version: %s"
+#~ msgstr "python-cairo バージョン: %s"
 
 #~ msgid "show help on command"
 #~ msgstr "コマンドのヘルプを表示します"

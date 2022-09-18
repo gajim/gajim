@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-13 16:07+0000\n"
-"PO-Revision-Date: 2022-08-13 08:30+0000\n"
+"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"PO-Revision-Date: 2022-09-07 18:13+0000\n"
 "Last-Translator: Tommy He <lovenemesis@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
 "gajim/master/zh_Hans/>\n"
@@ -238,10 +238,6 @@ msgstr ""
 msgid "<b>#</b>"
 msgstr "<b>#</b>"
 
-#, python-format
-msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
-msgstr "来自 <b>%(room_name)s</b> 的 <b>%(nick)s</b> 请求语音聊天"
-
 msgid "<b>*</b>"
 msgstr "<b>*</b>"
 
@@ -400,6 +396,18 @@ msgstr "团队"
 
 msgid "?Group chat name:Vacation"
 msgstr "假期"
+
+msgid "?Message row action:Copy"
+msgstr "复制"
+
+msgid "?Message row action:Correct…"
+msgstr "修订…"
+
+msgid "?Message row action:Quote…"
+msgstr "引用…"
+
+msgid "?Message row action:Retract…"
+msgstr "撤回…"
 
 msgid "?Message state:Received"
 msgstr "已收到"
@@ -801,6 +809,9 @@ msgstr "应用程序验证失败"
 msgid "Apply"
 msgstr "应用"
 
+msgid "Approve"
+msgstr "批准"
+
 msgid "Archive"
 msgstr "归档"
 
@@ -844,11 +855,6 @@ msgstr "在下列情况时询问状态信息…"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "关闭群聊标签页/窗口前询问。"
-
-msgid ""
-"Ask before closing tabbed chat window if there are chats that can lose data "
-"(chat, private chat)."
-msgstr "在关闭可能会丢失数据（聊天、私信）的标签式聊天窗口前询问。"
 
 msgid "Ask before pasting an image."
 msgstr "在粘贴图片前询问"
@@ -1034,10 +1040,6 @@ msgstr "证书吊销列表还未生效"
 msgid "CRL signature failure"
 msgstr "吊销证书列表签名失败"
 
-#, python-format
-msgid "Cairo Version: %s"
-msgstr "Cairo 版本: %s"
-
 msgid "Call"
 msgstr "通话"
 
@@ -1153,9 +1155,6 @@ msgid ""
 "group chat."
 msgstr "当在群聊中使用昵称补全(Tab)时加到昵称后的字符。"
 
-msgid "Chat"
-msgstr "聊天"
-
 msgid "Chat Banner: Background Color"
 msgstr "聊天横幅: 背景颜色"
 
@@ -1164,6 +1163,9 @@ msgstr "聊天横幅: 前景颜色"
 
 msgid "Chat Banner: Text Font"
 msgstr "聊天横幅: 文字字体"
+
+msgid "Chat List"
+msgstr "聊天列表"
 
 msgid "Chat history"
 msgstr "聊天记录"
@@ -1276,6 +1278,9 @@ msgstr "颜色"
 
 msgid "Command List"
 msgstr "命令列表"
+
+msgid "Command executed successfully"
+msgstr "命令已成功执行"
 
 msgid "Commands"
 msgstr "命令"
@@ -1465,8 +1470,9 @@ msgstr "复制代码片段"
 msgid "Copy info to clipboard"
 msgstr "复制信息到剪贴板"
 
-msgid "Correct"
-msgstr "更正"
+#, fuzzy
+msgid "Correct the last message"
+msgstr "设置状态信息"
 
 msgid "Could not Open File"
 msgstr "无法打开文件"
@@ -2110,9 +2116,6 @@ msgstr "Gajim 无法访问服务器。请确保您的 XMPP 地址正确无误。
 msgid "Gajim will now exit"
 msgstr "Gajim 即将退出"
 
-msgid "Gajim: IPython Console"
-msgstr "Gajim: IPython 控制台"
-
 msgid "Gathering information…"
 msgstr "获取信息…"
 
@@ -2246,9 +2249,6 @@ msgstr "在私聊窗口中隐藏横幅。"
 msgid "Hides the banner in a group chat window."
 msgstr "在群聊窗口中隐藏横幅。"
 
-msgid "Hides the group chat participants list in a group chat window."
-msgstr "在群聊窗口中隐藏参与者列表。"
-
 msgid "Home"
 msgstr "主页"
 
@@ -2258,18 +2258,11 @@ msgstr "主页面"
 msgid "Hostname"
 msgstr "主机名"
 
-msgid ""
-"How far back in time (minutes) chat history is restored. -1 means no limit."
-msgstr "您想要回溯多久(分钟)之前的聊天记录。-1 代表没有限制。"
-
 msgid "How far back should the chat history be synchronised?"
 msgstr "你想要同步多久的记录？"
 
 msgid "How long Gajim should keep your chat history"
 msgstr "Gajim 应该保存您的聊天记录多久"
-
-msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
-msgstr "Ctrl+KeyUP 存储多少行（先前发送的消息）。"
 
 msgid "I can see contact's online status"
 msgstr "我可以看到联系人的在线状态"
@@ -2303,13 +2296,11 @@ msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
 "Window Managers) when holding pending events."
 msgstr ""
-"如果启用，Gajim 将在有挂起事件时使窗口闪烁（大多数窗口管理器中的默认行为）。"
+"如果启用，Gajim 将在遇到待处理事件时使窗口闪烁（大多数窗口管理器中的默认行"
+"为）。"
 
 msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
 msgstr "如果启用，Gajim 将提供托管在 gajim.org 的插件以供下载"
-
-msgid "If enabled, Gajim will add * and [n] in contact list window title."
-msgstr "如果启用，Gajim 会在联系人列表窗口标题中添加 * 和 [n]。"
 
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr "如果启用，Gajim 将忽略发送来的关注请求('wizz')。"
@@ -2428,6 +2419,10 @@ msgstr "无效服务器名"
 
 msgid "Invalid XMPP Address"
 msgstr "无效 XMPP 地址"
+
+#, python-format
+msgid "Invalid address: %s"
+msgstr "无效地址: %s"
 
 msgid "Invalid domain name"
 msgstr "无效的域名"
@@ -2941,9 +2936,6 @@ msgstr "打开邮件编辑器"
 msgid "Open Folder"
 msgstr "打开文件夹"
 
-msgid "Open IPython shell"
-msgstr "打开 IPython shell"
-
 msgid "Open Link in Browser"
 msgstr "在浏览器中打开链接"
 
@@ -3034,11 +3026,18 @@ msgstr "PNG 文件"
 msgid "Pa_use/Resume"
 msgstr "暂停 (_U)/继续"
 
+#, python-format
+msgid "Pango Version: %s"
+msgstr "Pango 版本: %s"
+
 msgid "Participant"
 msgstr "参与者"
 
 msgid "Participants"
 msgstr "参与者"
+
+msgid "Participants asking for voice:"
+msgstr "参与者请求语音:"
 
 msgid "Participants entering this group chat are allowed to send messages"
 msgstr "进入该群聊的参与者被允许发送消息"
@@ -3085,7 +3084,10 @@ msgid "Pause or resume file transfer"
 msgstr "暂停或恢复文件传输"
 
 msgid "Pending Event"
-msgstr "未处理事件"
+msgstr "待处理事件"
+
+msgid "Pending Voice Requests"
+msgstr "待处理语音请求"
 
 msgid "Personal notes about this contact"
 msgstr "关于此联系人的个人备注"
@@ -3281,9 +3283,6 @@ msgstr "退出"
 
 msgid "Quit Gajim"
 msgstr "退出 Gajim"
-
-msgid "Quote…"
-msgstr "引用…"
 
 msgid "Re-Login"
 msgstr "重新登录"
@@ -3514,9 +3513,6 @@ msgstr "恢复上次状态"
 
 msgid "Restore status and status message of your last session"
 msgstr "恢复您上次会话的状态和状态信息"
-
-msgid "Retract"
-msgstr "撤回"
 
 msgid "Retract Message"
 msgstr "撤回消息"
@@ -4123,20 +4119,27 @@ msgstr "支持多个账号"
 msgid "Support for service discovery including nodes and search for users"
 msgstr "支持包括用户搜索和节点在内的服务发现功能"
 
-msgid "Switch to the first - ninth tab"
-msgstr "切换至第一 - 第九标签页"
+#, fuzzy
+msgid "Switch Workspace"
+msgstr "新工作区"
 
-msgid "Switch to the next tab"
-msgstr "切换至下个标签页"
+msgid "Switch to the first - ninth chat"
+msgstr "切换至第一至第九聊天"
 
-msgid "Switch to the next unread tab"
-msgstr "切换至下个未读标签页"
+msgid "Switch to the first - ninth workspace"
+msgstr "切换至第一至第九工作区"
 
-msgid "Switch to the previous tab"
-msgstr "切换至上个标签页"
+msgid "Switch to the next chat"
+msgstr "切换至下个聊天"
 
-msgid "Switch to the previous unread tab"
-msgstr "切换至上个未读标签页"
+msgid "Switch to the next unread chat"
+msgstr "切换至下个未读聊天"
+
+msgid "Switch to the previous chat"
+msgstr "切换至上个聊天"
+
+msgid "Switch to the previous unread chat"
+msgstr "切换至上个未读聊天"
 
 msgid "Sync Threshold"
 msgstr "同步阈值"
@@ -4171,9 +4174,6 @@ msgstr "TLS 验证失败: %s"
 
 msgid "Tabbed chat window"
 msgstr "标签页式聊天窗口"
-
-msgid "Tabs"
-msgstr "标签页"
 
 msgid "Tell your contacts if you received a message"
 msgstr "如果您收到消息的话告诉您的联系人"
@@ -4316,6 +4316,9 @@ msgstr "即使没有任何参与者该群聊仍将持续存在"
 msgid "This group chat will be destroyed once the last participant left"
 msgstr "一旦最后一个参与者离开该群聊将被销毁"
 
+msgid "This is a public group chat. Encryption is not available."
+msgstr ""
+
 msgid ""
 "This is the theme you are currently using.\n"
 "Do you want to delete this theme?"
@@ -4375,7 +4378,10 @@ msgstr "这将从 Gajim 删除你的帐户。"
 msgid "This will reset all introduction hints"
 msgstr "这将重置所有的入门提示"
 
-msgid "This workspace contains chats. Remove anyway?"
+#, fuzzy
+msgid ""
+"This workspace contains chats. All chats will be moved to the next "
+"workspace. Remove anyway?"
 msgstr "该工作区包含聊天。仍然移除？"
 
 msgid "Three Months"
@@ -4510,6 +4516,10 @@ msgstr "未知的 TLS 错误 '%s'"
 msgid "Unknown Title"
 msgstr "未知标题"
 
+#, python-format
+msgid "Unknown command: %s"
+msgstr "未知的命令: %s"
+
 msgid "Unknown language"
 msgstr "未知语言"
 
@@ -4598,6 +4608,13 @@ msgstr "使用配置目录中定义的配置文件"
 msgid "Use file transfer proxies"
 msgstr "使用文件传输代理服务器"
 
+msgid ""
+"Use filters to narrow down your search:\n"
+"from:username\n"
+"before:yyyy-mm-dd\n"
+"after:yyyy-mm-dd"
+msgstr ""
+
 msgid "Use proxy auth_entication"
 msgstr "使用代理服务器需要认证"
 
@@ -4606,6 +4623,10 @@ msgstr "使用您最喜爱的表情图标，设置您专属的配置文件图片
 
 msgid "Use your system’s keyring to store passwords"
 msgstr "使用您系统的密钥环来保存密码"
+
+#, python-format
+msgid "User %s not found"
+msgstr "用户 %s 未找到"
 
 msgid "Users"
 msgstr "用户"
@@ -4662,9 +4683,6 @@ msgstr "访客"
 
 msgid "Visual Notifications"
 msgstr "可视化提示"
-
-msgid "Voice Request"
-msgstr "语音请求"
 
 msgid "Waiting…"
 msgstr "等待中…"
@@ -4724,6 +4742,10 @@ msgstr "工作中"
 msgid "Workspace Settings"
 msgstr "工作区设定"
 
+#, fuzzy
+msgid "Workspaces"
+msgstr "我的工作区"
+
 msgid "X11"
 msgstr "X11"
 
@@ -4776,6 +4798,9 @@ msgstr "您即将退出 Gajim"
 #, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "您将从您的联系人列表中将 \"%(name)s\" (%(jid)s) 移除。\n"
+
+msgid "You are currently not joined this group chat"
+msgstr "您当前尚未加入此群聊"
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr "您不被允许修改管理员和所有者的从属关系"
@@ -4844,6 +4869,9 @@ msgstr "您已被踢除{actor}{reason}"
 #, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
 msgstr "您已经被从群聊移除{actor}{reason}"
+
+msgid "You have insufficient permissions"
+msgstr "您没有足够的权限"
 
 #, python-brace-format
 msgid "You have left due to an error{reason}"
@@ -4943,9 +4971,6 @@ msgstr "地址(_A)"
 
 msgid "_Advanced Settings"
 msgstr "高级设定(_A)"
-
-msgid "_Approve"
-msgstr "批准(_A)"
 
 msgid "_Back"
 msgstr "返回 (_B)"
@@ -5217,6 +5242,10 @@ msgstr "加粗"
 msgid "building"
 msgstr "楼宇"
 
+#, python-format
+msgid "cairo Version: %s"
+msgstr "cairo 版本: %s"
+
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "chat;messaging;im;xmpp;voip;"
 
@@ -5299,8 +5328,8 @@ msgid "postalcode"
 msgstr "邮政编码"
 
 #, python-format
-msgid "python-cairo Version: %s"
-msgstr "python-cairo 版本：%s"
+msgid "pycairo Version: %s"
+msgstr "pycairo 版本: %s"
 
 #, python-format
 msgid "python-nbxmpp Version: %s"
@@ -5407,9 +5436,6 @@ msgstr "或者把图像拖放到这里"
 #~ msgid "%s is not a valid tone"
 #~ msgstr "%s 不是一个有效风格"
 
-#~ msgid "%s not found"
-#~ msgstr "%s 未找到"
-
 #~ msgid "%s: Nothing found"
 #~ msgstr "%s 未找到"
 
@@ -5419,6 +5445,9 @@ msgstr "或者把图像拖放到这里"
 #~ msgstr ""
 #~ "“%s” 不在您的联系人列表中。\n"
 #~ "请为发送此消息指定账户。"
+
+#~ msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
+#~ msgstr "来自 <b>%(room_name)s</b> 的 <b>%(nick)s</b> 请求语音聊天"
 
 #~ msgid "?CLI:account"
 #~ msgstr "账户"
@@ -5437,6 +5466,10 @@ msgstr "或者把图像拖放到这里"
 #~ "to all accounts"
 #~ msgstr "XML 将被发送的账户; 如果不指定, XML 将被发送至所有账户"
 
+#, fuzzy
+#~ msgid "Ad-Hoc Commands…"
+#~ msgstr "执行命令…"
+
 #~ msgid "Allow a participant to send you public or private messages"
 #~ msgstr "允许参与者向您发送公开或私人消息"
 
@@ -5454,6 +5487,11 @@ msgstr "或者把图像拖放到这里"
 
 #~ msgid "Arguments:"
 #~ msgstr "参数:"
+
+#~ msgid ""
+#~ "Ask before closing tabbed chat window if there are chats that can lose "
+#~ "data (chat, private chat)."
+#~ msgstr "在关闭可能会丢失数据（聊天、私信）的标签式聊天窗口前询问。"
 
 #~ msgid "Ban Participant"
 #~ msgstr "封禁参与者"
@@ -5479,6 +5517,9 @@ msgstr "或者把图像拖放到这里"
 #~ msgid "Changes the status of account(s)"
 #~ msgstr "更改账户状态"
 
+#~ msgid "Chat"
+#~ msgstr "聊天"
+
 #~ msgid "Check if Gajim is running"
 #~ msgstr "请检查 Gajim 是否正在运行"
 
@@ -5494,6 +5535,9 @@ msgstr "或者把图像拖放到这里"
 #~ msgstr ""
 #~ "命令被禁用。该命令可以通过在 ACE(高级配置编辑器) 中设定 "
 #~ "'command_system_execute' 为 True 来启用。"
+
+#~ msgid "Correct"
+#~ msgstr "更正"
 
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr "在这台计算机上没有 D-Bus 或者 Python 模块缺失"
@@ -5546,6 +5590,9 @@ msgstr "或者把图像拖放到这里"
 #~ msgid "Gajim will not try to join this group chat again"
 #~ msgstr "Gajim 将不会再次尝试加入此群聊"
 
+#~ msgid "Gajim: IPython Console"
+#~ msgstr "Gajim: IPython 控制台"
+
 #~ msgid "Gets detailed info on a account"
 #~ msgstr "获得账户的详细信息"
 
@@ -5555,6 +5602,17 @@ msgstr "或者把图像拖放到这里"
 #~ msgid "Hide window to system tray when minimized"
 #~ msgstr "窗口最小化时隐藏到系统托盘"
 
+#~ msgid "Hides the group chat participants list in a group chat window."
+#~ msgstr "在群聊窗口中隐藏参与者列表。"
+
+#~ msgid ""
+#~ "How far back in time (minutes) chat history is restored. -1 means no "
+#~ "limit."
+#~ msgstr "您想要回溯多久(分钟)之前的聊天记录。-1 代表没有限制。"
+
+#~ msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
+#~ msgstr "Ctrl+KeyUP 存储多少行（先前发送的消息）。"
+
 #~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 #~ msgstr "如果选中，Gajim 可以被 gajim-remote 远程控制。"
 
@@ -5563,6 +5621,9 @@ msgstr "或者把图像拖放到这里"
 #~ "instead of minimizing into the notification area."
 #~ msgstr ""
 #~ "如果启用， Gajim 将会在点按关闭按钮时隐藏主窗口而不是最小化到通知区域。"
+
+#~ msgid "If enabled, Gajim will add * and [n] in contact list window title."
+#~ msgstr "如果启用，Gajim 会在联系人列表窗口标题中添加 * 和 [n]。"
 
 #~ msgid "If enabled, Gajim will execute XEP-0146 Commands."
 #~ msgstr "如启用，Gajim执行XEP-0146中规定的命令."
@@ -5631,6 +5692,9 @@ msgstr "或者把图像拖放到这里"
 #~ msgid "Online"
 #~ msgstr "在线"
 
+#~ msgid "Open IPython shell"
+#~ msgstr "打开 IPython shell"
+
 #~ msgid "Open a private chat window with a specified participant"
 #~ msgstr "打开与指定参与者的私聊窗口"
 
@@ -5669,8 +5733,14 @@ msgstr "或者把图像拖放到这里"
 #~ msgid "Quote previous message"
 #~ msgstr "引用上一条信息"
 
+#~ msgid "Quote…"
+#~ msgstr "引用…"
+
 #~ msgid "Removes contact from contact list"
 #~ msgstr "从联系人列表删除联系人"
+
+#~ msgid "Retract"
+#~ msgstr "撤回"
 
 #~ msgid "Returns current status (the global one unless account is specified)"
 #~ msgstr "返回当前状态(如不指定账户将返回全局设置)"
@@ -5779,6 +5849,9 @@ msgstr "或者把图像拖放到这里"
 
 #~ msgid "T_ry Again"
 #~ msgstr "再试一次(_R)"
+
+#~ msgid "Tabs"
+#~ msgstr "标签页"
 
 #~ msgid "The same as using a doc-string, except it supports translation"
 #~ msgstr "与使用 doc-string 相同，只是它支持翻译"
@@ -5903,6 +5976,9 @@ msgstr "或者把图像拖放到这里"
 
 #~ msgid "priority you want to give to the account"
 #~ msgstr "您想要给予这个账户的优先级"
+
+#~ msgid "python-cairo Version: %s"
+#~ msgstr "python-cairo 版本：%s"
 
 #~ msgid "show help on command"
 #~ msgstr "为命令显示帮助"

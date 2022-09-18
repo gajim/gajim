@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-13 16:07+0000\n"
+"POT-Creation-Date: 2022-09-16 20:54+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -231,10 +231,6 @@ msgstr ""
 msgid "<b>#</b>"
 msgstr "<b>Sonioù</b>"
 
-#, python-format
-msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
-msgstr ""
-
 #, fuzzy
 msgid "<b>*</b>"
 msgstr "<b>Sonioù</b>"
@@ -430,6 +426,21 @@ msgstr "Hini ebet"
 #, fuzzy
 msgid "?Group chat name:Vacation"
 msgstr "Pedadenn evit ur sal-flapiñ"
+
+#, fuzzy
+msgid "?Message row action:Copy"
+msgstr "korf ar gemennadenn"
+
+#, fuzzy
+msgid "?Message row action:Correct…"
+msgstr "korf ar gemennadenn"
+
+msgid "?Message row action:Quote…"
+msgstr ""
+
+#, fuzzy
+msgid "?Message row action:Retract…"
+msgstr "Kemennadenn gentañ"
 
 #, fuzzy
 msgid "?Message state:Received"
@@ -907,6 +918,9 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
+msgid "Approve"
+msgstr ""
+
 #, fuzzy
 msgid "Archive"
 msgstr "Treug ar restr"
@@ -959,11 +973,6 @@ msgstr "Goulenn an titour-stad pa:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Goulenn a-raok serriñ un ivinell pe ur prenestr."
-
-msgid ""
-"Ask before closing tabbed chat window if there are chats that can lose data "
-"(chat, private chat)."
-msgstr ""
 
 msgid "Ask before pasting an image."
 msgstr ""
@@ -1178,10 +1187,6 @@ msgstr ""
 msgid "CRL signature failure"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "Cairo Version: %s"
-msgstr "Taolennadur: %s"
-
 msgid "Call"
 msgstr ""
 
@@ -1309,9 +1314,6 @@ msgid ""
 "group chat."
 msgstr ""
 
-msgid "Chat"
-msgstr "Flap"
-
 #, fuzzy
 msgid "Chat Banner: Background Color"
 msgstr "Darempred luget"
@@ -1321,6 +1323,10 @@ msgstr ""
 
 msgid "Chat Banner: Text Font"
 msgstr ""
+
+#, fuzzy
+msgid "Chat List"
+msgstr "Darempredoù"
 
 #, fuzzy
 msgid "Chat history"
@@ -1454,6 +1460,10 @@ msgstr ""
 #, fuzzy
 msgid "Command List"
 msgstr "Urzhioù: %s"
+
+#, fuzzy
+msgid "Command executed successfully"
+msgstr "Gant berzh eo bet ouzhpennet ar gont!"
 
 #, fuzzy
 msgid "Commands"
@@ -1686,8 +1696,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr "_Kopiañ chomlec'h an ere"
 
-msgid "Correct"
-msgstr ""
+#, fuzzy
+msgid "Correct the last message"
+msgstr "titour stad"
 
 #, fuzzy
 msgid "Could not Open File"
@@ -2431,9 +2442,6 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Emañ Gajim o vont da guitaat diouzhtu"
 
-msgid "Gajim: IPython Console"
-msgstr ""
-
 #, fuzzy
 msgid "Gathering information…"
 msgstr "Titouroù"
@@ -2596,10 +2604,6 @@ msgid "Hides the banner in a group chat window."
 msgstr "A guzha an nozelennoù er prenestr flapiñ"
 
 #, fuzzy
-msgid "Hides the group chat participants list in a group chat window."
-msgstr "A guzha roll ar berzhidi en ur prenestr webgaoz"
-
-#, fuzzy
 msgid "Home"
 msgstr "Lec'hienn hiniennel:"
 
@@ -2611,20 +2615,12 @@ msgstr "Lec'hienn hiniennel:"
 msgid "Hostname"
 msgstr "Servijer:"
 
-msgid ""
-"How far back in time (minutes) chat history is restored. -1 means no limit."
-msgstr ""
-
 #, fuzzy
 msgid "How far back should the chat history be synchronised?"
 msgstr "Petra a fell deoc'h ober?"
 
 msgid "How long Gajim should keep your chat history"
 msgstr ""
-
-#, fuzzy
-msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
-msgstr "Niver a linennoù da zerc'hel soñj evit Ctrl+BirLaez"
 
 #, fuzzy
 msgid "I can see contact's online status"
@@ -2665,12 +2661,6 @@ msgstr ""
 
 msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, Gajim will add * and [n] in contact list window title."
-msgstr ""
-"Si cette case est cochée, Gajim affichera l'avatar de chaque contact dans la "
-"fenêtre principale et les salons"
 
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
@@ -2795,6 +2785,10 @@ msgstr "Anv-arveriad-ez direizh"
 
 #, fuzzy
 msgid "Invalid XMPP Address"
+msgstr "Restr direizh"
+
+#, fuzzy, python-format
+msgid "Invalid address: %s"
 msgstr "Restr direizh"
 
 #, fuzzy
@@ -3386,9 +3380,6 @@ msgstr "_Digeriñ ar bostelerez"
 msgid "Open Folder"
 msgstr "_Digeriñ ar renkell pal"
 
-msgid "Open IPython shell"
-msgstr ""
-
 #, fuzzy
 msgid "Open Link in Browser"
 msgstr "_Digerién an ere er furcher web"
@@ -3488,11 +3479,18 @@ msgstr "An holl restroù"
 msgid "Pa_use/Resume"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Pango Version: %s"
+msgstr "Taolennadur: %s"
+
 msgid "Participant"
 msgstr "Perzhiad-ez"
 
 msgid "Participants"
 msgstr "Perzhidi"
+
+msgid "Participants asking for voice:"
+msgstr ""
 
 msgid "Participants entering this group chat are allowed to send messages"
 msgstr ""
@@ -3547,6 +3545,10 @@ msgstr "Nullañ an treuzkas"
 #, fuzzy
 msgid "Pending Event"
 msgstr "Diskouez an holl _zarvoudoù o c'hortoz"
+
+#, fuzzy
+msgid "Pending Voice Requests"
+msgstr "Goulenn treuzkas"
 
 #, fuzzy
 msgid "Personal notes about this contact"
@@ -3772,10 +3774,6 @@ msgstr "_Kuitaat"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quote…"
-msgstr "_Kuitaat"
 
 #, fuzzy
 msgid "Re-Login"
@@ -4049,9 +4047,6 @@ msgid "Restore last state"
 msgstr "Stad diwezhañ: %s"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-msgid "Retract"
 msgstr ""
 
 #, fuzzy
@@ -4769,19 +4764,27 @@ msgstr ""
 msgid "Support for service discovery including nodes and search for users"
 msgstr "Merañ servijoù ar gont %s"
 
-msgid "Switch to the first - ninth tab"
+#, fuzzy
+msgid "Switch Workspace"
+msgstr "Darempredoù"
+
+msgid "Switch to the first - ninth chat"
 msgstr ""
 
-msgid "Switch to the next tab"
+msgid "Switch to the first - ninth workspace"
 msgstr ""
 
-msgid "Switch to the next unread tab"
+#, fuzzy
+msgid "Switch to the next chat"
+msgstr "Kregiñ da flapiñ"
+
+msgid "Switch to the next unread chat"
 msgstr ""
 
-msgid "Switch to the previous tab"
+msgid "Switch to the previous chat"
 msgstr ""
 
-msgid "Switch to the previous unread tab"
+msgid "Switch to the previous unread chat"
 msgstr ""
 
 msgid "Sync Threshold"
@@ -4823,9 +4826,6 @@ msgid "TLS verification failed: %s"
 msgstr "Oc'h ouzhpennañ ur gelaouenn nevez evit %s"
 
 msgid "Tabbed chat window"
-msgstr ""
-
-msgid "Tabs"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -4981,6 +4981,9 @@ msgstr ""
 msgid "This group chat will be destroyed once the last participant left"
 msgstr ""
 
+msgid "This is a public group chat. Encryption is not available."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "This is the theme you are currently using.\n"
@@ -5041,7 +5044,9 @@ msgstr "Dilemel ar gont diwar Gajim _hepken"
 msgid "This will reset all introduction hints"
 msgstr ""
 
-msgid "This workspace contains chats. Remove anyway?"
+msgid ""
+"This workspace contains chats. All chats will be moved to the next "
+"workspace. Remove anyway?"
 msgstr ""
 
 msgid "Three Months"
@@ -5186,6 +5191,10 @@ msgstr "Aozadur D-Bus dianav: %s"
 msgid "Unknown Title"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Unknown command: %s"
+msgstr "Urzhioù: %s"
+
 #, fuzzy
 msgid "Unknown language"
 msgstr "Da _heul al lesanv:"
@@ -5292,6 +5301,13 @@ msgstr "Aozer kefluniañ dre ar munut"
 msgid "Use file transfer proxies"
 msgstr "Implij ar proksioù evit treuzkas restroù"
 
+msgid ""
+"Use filters to narrow down your search:\n"
+"from:username\n"
+"before:yyyy-mm-dd\n"
+"after:yyyy-mm-dd"
+msgstr ""
+
 #, fuzzy
 msgid "Use proxy auth_entication"
 msgstr "Implij an diskleriañ"
@@ -5301,6 +5317,10 @@ msgstr ""
 
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "User %s not found"
+msgstr "N'eo ket bet kavet %s"
 
 msgid "Users"
 msgstr "Arveridi"
@@ -5364,10 +5384,6 @@ msgid "Visual Notifications"
 msgstr "<b>Kelaouennoù dre welet</b>"
 
 #, fuzzy
-msgid "Voice Request"
-msgstr "Goulenn treuzkas"
-
-#, fuzzy
 msgid "Waiting…"
 msgstr "O labourat"
 
@@ -5429,6 +5445,10 @@ msgstr "O labourat"
 msgid "Workspace Settings"
 msgstr "Actions a_vancées"
 
+#, fuzzy
+msgid "Workspaces"
+msgstr "Darempredoù"
+
 msgid "X11"
 msgstr ""
 
@@ -5485,6 +5505,10 @@ msgstr "Êtes-vous sûr de vouloir quitter les salons \"%s\" ?"
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "Fellout a ra din emezelañ evit krouiñ ur gont"
+
+#, fuzzy
+msgid "You are currently not joined this group chat"
+msgstr "Er strollad"
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5560,6 +5584,9 @@ msgstr ""
 #, fuzzy, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
 msgstr "%(nick)s a zo bet skarzhet gant %(who)s : %(reason)s"
+
+msgid "You have insufficient permissions"
+msgstr ""
 
 #, python-brace-format
 msgid "You have left due to an error{reason}"
@@ -5683,9 +5710,6 @@ msgstr "_Chomlec'h:"
 #, fuzzy
 msgid "_Advanced Settings"
 msgstr "Actions a_vancées"
-
-msgid "_Approve"
-msgstr ""
 
 #, fuzzy
 msgid "_Back"
@@ -6015,6 +6039,10 @@ msgstr ""
 msgid "building"
 msgstr "Skarzhañ %s"
 
+#, fuzzy, python-format
+msgid "cairo Version: %s"
+msgstr "Taolennadur: %s"
+
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
@@ -6103,7 +6131,7 @@ msgid "postalcode"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "python-cairo Version: %s"
+msgid "pycairo Version: %s"
 msgstr "Taolennadur: %s"
 
 #, python-format
@@ -6183,9 +6211,6 @@ msgstr "%(nick)s a zo bremañ %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
-#~ msgid "%s not found"
-#~ msgstr "N'eo ket bet kavet %s"
-
 #, fuzzy
 #~ msgid "%s: Nothing found"
 #~ msgstr "N'eo ket bet kavet %s"
@@ -6213,6 +6238,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "?CLI:status"
 #~ msgstr "stad"
+
+#, fuzzy
+#~ msgid "Ad-Hoc Commands…"
+#~ msgstr "urzhiad"
 
 #~ msgid "Arguments:"
 #~ msgstr "Arguments :"
@@ -6247,6 +6276,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Changes the status of account(s)"
 #~ msgstr "A cheñch stad ar gont pe ar c'hontoù"
+
+#~ msgid "Chat"
+#~ msgstr "Flap"
 
 #, fuzzy
 #~ msgid "Clear chat window"
@@ -6304,9 +6336,23 @@ msgstr ""
 #~ msgid "Gets detailed info on a contact"
 #~ msgstr "Evit kargañ titouroù-munut un darempred"
 
+#, fuzzy
+#~ msgid "Hides the group chat participants list in a group chat window."
+#~ msgstr "A guzha roll ar berzhidi en ur prenestr webgaoz"
+
+#, fuzzy
+#~ msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
+#~ msgstr "Niver a linennoù da zerc'hel soñj evit Ctrl+BirLaez"
+
 #~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 #~ msgstr ""
 #~ "M'eo diuzet, e vo tu da sturiañ Gajim a-bell en ur implij gajim-remote."
+
+#, fuzzy
+#~ msgid "If enabled, Gajim will add * and [n] in contact list window title."
+#~ msgstr ""
+#~ "Si cette case est cochée, Gajim affichera l'avatar de chaque contact dans "
+#~ "la fenêtre principale et les salons"
 
 #, fuzzy
 #~ msgid "Invalid nickname"
@@ -6392,6 +6438,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Quote previous message"
 #~ msgstr "Ou choisissez votre message :"
+
+#, fuzzy
+#~ msgid "Quote…"
+#~ msgstr "_Kuitaat"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6566,6 +6616,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "priority you want to give to the account"
 #~ msgstr "Fellout a ra din emezelañ evit krouiñ ur gont"
+
+#, fuzzy
+#~ msgid "python-cairo Version: %s"
+#~ msgstr "Taolennadur: %s"
 
 #~ msgid "show help on command"
 #~ msgstr "diskouez ar skoazell evit an urzhiad"

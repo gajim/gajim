@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-13 16:07+0000\n"
+"POT-Creation-Date: 2022-09-16 20:54+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -232,10 +232,6 @@ msgstr ""
 msgid "<b>#</b>"
 msgstr "<b>Huki</b>"
 
-#, python-format
-msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
-msgstr ""
-
 #, fuzzy
 msgid "<b>*</b>"
 msgstr "<b>Huki</b>"
@@ -429,6 +425,21 @@ msgstr "?Funkcyja kantaktu ŭ pakoji:Niama"
 #, fuzzy
 msgid "?Group chat name:Vacation"
 msgstr "Zaprašeńnie ŭ pakoj"
+
+#, fuzzy
+msgid "?Message row action:Copy"
+msgstr "źmiest paviedamleńnia"
+
+#, fuzzy
+msgid "?Message row action:Correct…"
+msgstr "źmiest paviedamleńnia"
+
+msgid "?Message row action:Quote…"
+msgstr ""
+
+#, fuzzy
+msgid "?Message row action:Retract…"
+msgstr "Atrymanaje pieršaje paviedamleńnie"
 
 #, fuzzy
 msgid "?Message state:Received"
@@ -910,6 +921,9 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
+msgid "Approve"
+msgstr ""
+
 #, fuzzy
 msgid "Archive"
 msgstr "Ściežka da fajłu"
@@ -962,11 +976,6 @@ msgstr "Spytaj paviedamleńnia statusu, kali ja:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Pytajsia paćvierdžańnia pierad začynieńniem kartki/akna razmovy."
-
-msgid ""
-"Ask before closing tabbed chat window if there are chats that can lose data "
-"(chat, private chat)."
-msgstr ""
 
 msgid "Ask before pasting an image."
 msgstr ""
@@ -1180,10 +1189,6 @@ msgstr ""
 msgid "CRL signature failure"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "Cairo Version: %s"
-msgstr "Versija GTK+:"
-
 msgid "Call"
 msgstr ""
 
@@ -1313,9 +1318,6 @@ msgid ""
 msgstr ""
 "Znak, jaki dadajecca paśla mianuški pry dapaŭnieńni (klavišaj TAB) u pakoji."
 
-msgid "Chat"
-msgstr "Razmova"
-
 #, fuzzy
 msgid "Chat Banner: Background Color"
 msgstr "Kantakt dałučyŭsia"
@@ -1325,6 +1327,10 @@ msgstr ""
 
 msgid "Chat Banner: Text Font"
 msgstr ""
+
+#, fuzzy
+msgid "Chat List"
+msgstr "Kantakty"
 
 #, fuzzy
 msgid "Chat history"
@@ -1458,6 +1464,10 @@ msgstr "Koler"
 #, fuzzy
 msgid "Command List"
 msgstr "Zahady: %s"
+
+#, fuzzy
+msgid "Command executed successfully"
+msgstr "Kont paśpiachova dadany"
 
 #, fuzzy
 msgid "Commands"
@@ -1690,8 +1700,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr "S_kapijuj adras spasyłki"
 
-msgid "Correct"
-msgstr ""
+#, fuzzy
+msgid "Correct the last message"
+msgstr "paviedamlennie statusu"
 
 #, fuzzy
 msgid "Could not Open File"
@@ -2438,9 +2449,6 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Gajim zaviaršaje vykanańnie"
 
-msgid "Gajim: IPython Console"
-msgstr ""
-
 #, fuzzy
 msgid "Gathering information…"
 msgstr "Źviestki ab kantakcie"
@@ -2603,10 +2611,6 @@ msgid "Hides the banner in a group chat window."
 msgstr "Chavaje baner u aknie pakoju"
 
 #, fuzzy
-msgid "Hides the group chat participants list in a group chat window."
-msgstr "Chavaje śpis naviednikaŭ pakoju."
-
-#, fuzzy
 msgid "Home"
 msgstr "Chatniaja staronka:"
 
@@ -2618,20 +2622,12 @@ msgstr "Chatniaja staronka:"
 msgid "Hostname"
 msgstr "Nazva hosta: "
 
-msgid ""
-"How far back in time (minutes) chat history is restored. -1 means no limit."
-msgstr ""
-
 #, fuzzy
 msgid "How far back should the chat history be synchronised?"
 msgstr "Što chočaš zrabić?"
 
 msgid "How long Gajim should keep your chat history"
 msgstr ""
-
-#, fuzzy
-msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
-msgstr "Kolki radkoŭ zachoŭvać dla Ctrl+KeyUP."
 
 #, fuzzy
 msgid "I can see contact's online status"
@@ -2676,12 +2672,6 @@ msgstr ""
 
 msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, Gajim will add * and [n] in contact list window title."
-msgstr ""
-"Kali ŭklučanaja hetaja opcyja, Gajim budzie pakazvać avatary kantaktaŭ u "
-"śpisie kantaktaŭ i ŭ pakojach"
 
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
@@ -2811,6 +2801,10 @@ msgstr "Niapravilnaje imia karystalnika"
 
 #, fuzzy
 msgid "Invalid XMPP Address"
+msgstr "Niapravilny fajł"
+
+#, fuzzy, python-format
+msgid "Invalid address: %s"
 msgstr "Niapravilny fajł"
 
 #, fuzzy
@@ -3405,9 +3399,6 @@ msgstr "_Adčyni paštovuju prahramu"
 msgid "Open Folder"
 msgstr "_Adčyni kataloh z fajłam"
 
-msgid "Open IPython shell"
-msgstr ""
-
 #, fuzzy
 msgid "Open Link in Browser"
 msgstr "_Adčyni spasyłku ŭ hartačy"
@@ -3506,11 +3497,18 @@ msgstr "Usie fajły"
 msgid "Pa_use/Resume"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Pango Version: %s"
+msgstr "Versija GTK+:"
+
 msgid "Participant"
 msgstr "Udzielnik"
 
 msgid "Participants"
 msgstr "Udzielniki"
+
+msgid "Participants asking for voice:"
+msgstr ""
 
 msgid "Participants entering this group chat are allowed to send messages"
 msgstr ""
@@ -3566,6 +3564,10 @@ msgstr "Anuluj pieradaču fajła"
 #, fuzzy
 msgid "Pending Event"
 msgstr "Pakažy ŭsie niahledžanyja _padzieji"
+
+#, fuzzy
+msgid "Pending Voice Requests"
+msgstr "Zapyt na pieradaču fajłu"
 
 #, fuzzy
 msgid "Personal notes about this contact"
@@ -3792,10 +3794,6 @@ msgstr "_Skonč pracu"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quote…"
-msgstr "_Skonč pracu"
 
 #, fuzzy
 msgid "Re-Login"
@@ -4069,9 +4067,6 @@ msgid "Restore last state"
 msgstr "Apošni status: %s"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-msgid "Retract"
 msgstr ""
 
 #, fuzzy
@@ -4798,19 +4793,27 @@ msgstr ""
 msgid "Support for service discovery including nodes and search for users"
 msgstr "Prahlad servisaŭ dla kontu %s"
 
-msgid "Switch to the first - ninth tab"
+#, fuzzy
+msgid "Switch Workspace"
+msgstr "Źmiani nazvu kantaktu"
+
+msgid "Switch to the first - ninth chat"
 msgstr ""
 
-msgid "Switch to the next tab"
+msgid "Switch to the first - ninth workspace"
 msgstr ""
 
-msgid "Switch to the next unread tab"
+#, fuzzy
+msgid "Switch to the next chat"
+msgstr "Pačni razmovu"
+
+msgid "Switch to the next unread chat"
 msgstr ""
 
-msgid "Switch to the previous tab"
+msgid "Switch to the previous chat"
 msgstr ""
 
-msgid "Switch to the previous unread tab"
+msgid "Switch to the previous unread chat"
 msgstr ""
 
 msgid "Sync Threshold"
@@ -4852,9 +4855,6 @@ msgid "TLS verification failed: %s"
 msgstr "Dadajecca admysłovaje nahadvańnie dla %s"
 
 msgid "Tabbed chat window"
-msgstr ""
-
-msgid "Tabs"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5010,6 +5010,9 @@ msgstr ""
 msgid "This group chat will be destroyed once the last participant left"
 msgstr ""
 
+msgid "This is a public group chat. Encryption is not available."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "This is the theme you are currently using.\n"
@@ -5069,7 +5072,9 @@ msgstr "Vydal kont _tolki dla Gajim"
 msgid "This will reset all introduction hints"
 msgstr ""
 
-msgid "This workspace contains chats. Remove anyway?"
+msgid ""
+"This workspace contains chats. All chats will be moved to the next "
+"workspace. Remove anyway?"
 msgstr ""
 
 msgid "Three Months"
@@ -5215,6 +5220,10 @@ msgstr "Kanfihuracyja pakoju"
 msgid "Unknown Title"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Unknown command: %s"
+msgstr "Zahady: %s"
+
 #, fuzzy
 msgid "Unknown language"
 msgstr "_Пасля мянушкі:"
@@ -5321,6 +5330,13 @@ msgstr "Redaktar dadatkovych naładaŭ"
 msgid "Use file transfer proxies"
 msgstr "Skarystaj proxy dla pieradačy fajłaŭ"
 
+msgid ""
+"Use filters to narrow down your search:\n"
+"from:username\n"
+"before:yyyy-mm-dd\n"
+"after:yyyy-mm-dd"
+msgstr ""
+
 #, fuzzy
 msgid "Use proxy auth_entication"
 msgstr "Užyvaj aŭtaryzacyju"
@@ -5330,6 +5346,10 @@ msgstr ""
 
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "User %s not found"
+msgstr "%s nia znojdzieny"
 
 msgid "Users"
 msgstr "Karystalniki"
@@ -5394,10 +5414,6 @@ msgid "Visual Notifications"
 msgstr "<b>Vizualnyja nahadvańni</b>"
 
 #, fuzzy
-msgid "Voice Request"
-msgstr "Zapyt na pieradaču fajłu"
-
-#, fuzzy
 msgid "Waiting…"
 msgstr "Pracuju"
 
@@ -5459,6 +5475,10 @@ msgstr "Pracuju"
 msgid "Workspace Settings"
 msgstr "Admysłovyja dziejańni"
 
+#, fuzzy
+msgid "Workspaces"
+msgstr "Źmiani nazvu kantaktu"
+
 msgid "X11"
 msgstr ""
 
@@ -5515,6 +5535,10 @@ msgstr "Ty sapraŭdy chočaš pakinuć pakoj \"%s\"?"
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "Chočaš vydalić hrupu %s sa śpisu kantaktaŭ?"
+
+#, fuzzy
+msgid "You are currently not joined this group chat"
+msgstr "%s dałučyŭsia da pakoju"
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5595,6 +5619,9 @@ msgstr ""
 #, fuzzy, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
 msgstr "%(who)s vypchnuŭ %(nick)s: %(reason)s"
+
+msgid "You have insufficient permissions"
+msgstr ""
 
 #, python-brace-format
 msgid "You have left due to an error{reason}"
@@ -5718,9 +5745,6 @@ msgstr "_Adras:"
 #, fuzzy
 msgid "_Advanced Settings"
 msgstr "Admysłovyja dziejańni"
-
-msgid "_Approve"
-msgstr ""
 
 #, fuzzy
 msgid "_Back"
@@ -6050,6 +6074,10 @@ msgstr ""
 msgid "building"
 msgstr "Vypichvajecca %s"
 
+#, fuzzy, python-format
+msgid "cairo Version: %s"
+msgstr "Versija GTK+:"
+
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
@@ -6139,7 +6167,7 @@ msgid "postalcode"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "python-cairo Version: %s"
+msgid "pycairo Version: %s"
 msgstr "Versija GTK+:"
 
 #, python-format
@@ -6216,9 +6244,6 @@ msgstr "%(nick)s maje ciapier status %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
-#~ msgid "%s not found"
-#~ msgstr "%s nia znojdzieny"
-
 #, fuzzy
 #~ msgid "%s: Nothing found"
 #~ msgstr "%s nia znojdzieny"
@@ -6254,6 +6279,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Kont, na jaki budzie dasłany XML; kali kont nie akreśleny, XML budzie "
 #~ "dasłany na ŭsie konty"
+
+#, fuzzy
+#~ msgid "Ad-Hoc Commands…"
+#~ msgstr "_Vykanaj zahad..."
 
 #, fuzzy
 #~ msgid ""
@@ -6294,6 +6323,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Changes the status of account(s)"
 #~ msgstr "Źmianiaje status kontu albo kontaŭ"
+
+#~ msgid "Chat"
+#~ msgstr "Razmova"
 
 #, fuzzy
 #~ msgid "Check if Gajim is running"
@@ -6358,6 +6390,14 @@ msgstr ""
 #~ msgid "Gets detailed info on a contact"
 #~ msgstr "Atrymvaje padrabiaznyja źviestki ab kantakcie"
 
+#, fuzzy
+#~ msgid "Hides the group chat participants list in a group chat window."
+#~ msgstr "Chavaje śpis naviednikaŭ pakoju."
+
+#, fuzzy
+#~ msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
+#~ msgstr "Kolki radkoŭ zachoŭvać dla Ctrl+KeyUP."
+
 #~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 #~ msgstr ""
 #~ "Kali hetaja opcyja ŭklučanaja, Gajimam možna kiravać praz gajim-remote."
@@ -6370,6 +6410,12 @@ msgstr ""
 #~ "Kali opcyja maje vartaść True, Gajim zaviaršaje vykanańnie pa nacisku "
 #~ "knopki X Kiraŭnika voknaŭ. Hetaja nałada dziejničaje tolki ź dziejnaj "
 #~ "ikonaj pola nahadvańnia."
+
+#, fuzzy
+#~ msgid "If enabled, Gajim will add * and [n] in contact list window title."
+#~ msgstr ""
+#~ "Kali ŭklučanaja hetaja opcyja, Gajim budzie pakazvać avatary kantaktaŭ u "
+#~ "śpisie kantaktaŭ i ŭ pakojach"
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"
@@ -6464,6 +6510,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Quote previous message"
 #~ msgstr "paviedamlennie statusu"
+
+#, fuzzy
+#~ msgid "Quote…"
+#~ msgstr "_Skonč pracu"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6655,6 +6705,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "priority you want to give to the account"
 #~ msgstr "Ja chaču za_rehistravać novy kont"
+
+#, fuzzy
+#~ msgid "python-cairo Version: %s"
+#~ msgstr "Versija GTK+:"
 
 #~ msgid "show help on command"
 #~ msgstr "pakažy daviedku pa zahadzie"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-13 16:07+0000\n"
+"POT-Creation-Date: 2022-09-16 20:54+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -238,10 +238,6 @@ msgstr ""
 msgid "<b>#</b>"
 msgstr "<b>字型</b>"
 
-#, python-format
-msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
-msgstr ""
-
 #, fuzzy
 msgid "<b>*</b>"
 msgstr "<b>字型</b>"
@@ -435,6 +431,21 @@ msgstr "無"
 #, fuzzy
 msgid "?Group chat name:Vacation"
 msgstr "多人聊天邀請"
+
+#, fuzzy
+msgid "?Message row action:Copy"
+msgstr "訊息內容"
+
+#, fuzzy
+msgid "?Message row action:Correct…"
+msgstr "訊息內容"
+
+msgid "?Message row action:Quote…"
+msgstr ""
+
+#, fuzzy
+msgid "?Message row action:Retract…"
+msgstr "最初收到的訊息"
 
 #, fuzzy
 msgid "?Message state:Received"
@@ -913,6 +924,10 @@ msgid "Apply"
 msgstr ""
 
 #, fuzzy
+msgid "Approve"
+msgstr "approve"
+
+#, fuzzy
 msgid "Archive"
 msgstr "存檔為空"
 
@@ -962,14 +977,6 @@ msgstr "詢問狀態訊息，當我:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "關閉多人聊天標籤/視窗前詢問。"
-
-#, fuzzy
-msgid ""
-"Ask before closing tabbed chat window if there are chats that can lose data "
-"(chat, private chat)."
-msgstr ""
-"如果有可能丟失資料的控制項(不會被最小化的聊天，私人聊天，多人聊天)，在關\n"
-"閉有標籤的視窗前詢問。"
 
 msgid "Ask before pasting an image."
 msgstr ""
@@ -1189,10 +1196,6 @@ msgstr "證書吊銷清單還未生效"
 msgid "CRL signature failure"
 msgstr "吊銷證書清單簽名失敗"
 
-#, fuzzy, python-format
-msgid "Cairo Version: %s"
-msgstr "GTK+ 版本:"
-
 msgid "Call"
 msgstr ""
 
@@ -1322,10 +1325,6 @@ msgid ""
 msgstr "當在多人聊天中使用暱稱補全(Tab)時加到暱稱後的字元。"
 
 #, fuzzy
-msgid "Chat"
-msgstr "聊天"
-
-#, fuzzy
 msgid "Chat Banner: Background Color"
 msgstr "已連線的聯絡人"
 
@@ -1335,6 +1334,10 @@ msgstr ""
 #, fuzzy
 msgid "Chat Banner: Text Font"
 msgstr "聊天視窗上方橫幅"
+
+#, fuzzy
+msgid "Chat List"
+msgstr "聯絡人"
 
 #, fuzzy
 msgid "Chat history"
@@ -1467,6 +1470,10 @@ msgstr "Color"
 #, fuzzy
 msgid "Command List"
 msgstr "封禁名單"
+
+#, fuzzy
+msgid "Command executed successfully"
+msgstr "帳號已成功加入"
 
 #, fuzzy
 msgid "Commands"
@@ -1698,8 +1705,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr "複製連結位置(_C)"
 
-msgid "Correct"
-msgstr ""
+#, fuzzy
+msgid "Correct the last message"
+msgstr "狀態訊息"
 
 #, fuzzy
 msgid "Could not Open File"
@@ -2443,9 +2451,6 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Gajim 即將離開"
 
-msgid "Gajim: IPython Console"
-msgstr ""
-
 #, fuzzy
 msgid "Gathering information…"
 msgstr "聯絡人資訊"
@@ -2608,10 +2613,6 @@ msgid "Hides the banner in a group chat window."
 msgstr "在多人聊天視窗中隱藏標語"
 
 #, fuzzy
-msgid "Hides the group chat participants list in a group chat window."
-msgstr "在多人聊天視窗中隱藏室友清單。"
-
-#, fuzzy
 msgid "Home"
 msgstr "首頁:"
 
@@ -2623,20 +2624,12 @@ msgstr "首頁:"
 msgid "Hostname"
 msgstr "主機名稱(_H):"
 
-msgid ""
-"How far back in time (minutes) chat history is restored. -1 means no limit."
-msgstr ""
-
 #, fuzzy
 msgid "How far back should the chat history be synchronised?"
 msgstr "想做什麼?"
 
 msgid "How long Gajim should keep your chat history"
 msgstr ""
-
-#, fuzzy
-msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
-msgstr "為 Ctrl+KeyUP 儲存多少列。"
 
 #, fuzzy
 msgid "I can see contact's online status"
@@ -2680,10 +2673,6 @@ msgstr ""
 
 msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, Gajim will add * and [n] in contact list window title."
-msgstr "如果選取，Gajim 會在聯絡人清單視窗中顯示聯絡人的心情。"
 
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
@@ -2816,6 +2805,10 @@ msgstr "無效的伺服器名稱"
 
 #, fuzzy
 msgid "Invalid XMPP Address"
+msgstr "無效檔案"
+
+#, fuzzy, python-format
+msgid "Invalid address: %s"
 msgstr "無效檔案"
 
 #, fuzzy
@@ -3405,9 +3398,6 @@ msgstr "開啟郵件編輯器(_O)"
 msgid "Open Folder"
 msgstr "開啟資料夾(_O)"
 
-msgid "Open IPython shell"
-msgstr ""
-
 #, fuzzy
 msgid "Open Link in Browser"
 msgstr "在瀏覽器中開啟連結(_O)"
@@ -3508,11 +3498,18 @@ msgstr "所有檔案"
 msgid "Pa_use/Resume"
 msgstr "再續(_R)"
 
+#, fuzzy, python-format
+msgid "Pango Version: %s"
+msgstr "GTK+ 版本:"
+
 msgid "Participant"
 msgstr "參與者"
 
 msgid "Participants"
 msgstr "參與者"
+
+msgid "Participants asking for voice:"
+msgstr ""
 
 msgid "Participants entering this group chat are allowed to send messages"
 msgstr ""
@@ -3568,6 +3565,10 @@ msgstr "取消檔案傳輸"
 #, fuzzy
 msgid "Pending Event"
 msgstr "顯示所有未處理事件(_E)"
+
+#, fuzzy
+msgid "Pending Voice Requests"
+msgstr "語音聊天請求"
 
 #, fuzzy
 msgid "Personal notes about this contact"
@@ -3793,10 +3794,6 @@ msgstr ""
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quote…"
-msgstr "參照(_Q)"
 
 #, fuzzy
 msgid "Re-Login"
@@ -4072,9 +4069,6 @@ msgid "Restore last state"
 msgstr "最後狀態"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-msgid "Retract"
 msgstr ""
 
 #, fuzzy
@@ -4796,19 +4790,27 @@ msgstr ""
 msgid "Support for service discovery including nodes and search for users"
 msgstr "正在使用帳號 %s 來發掘服務"
 
-msgid "Switch to the first - ninth tab"
+#, fuzzy
+msgid "Switch Workspace"
+msgstr "重新命名聯絡人"
+
+msgid "Switch to the first - ninth chat"
 msgstr ""
 
-msgid "Switch to the next tab"
+msgid "Switch to the first - ninth workspace"
 msgstr ""
 
-msgid "Switch to the next unread tab"
+#, fuzzy
+msgid "Switch to the next chat"
+msgstr "開始聊天"
+
+msgid "Switch to the next unread chat"
 msgstr ""
 
-msgid "Switch to the previous tab"
+msgid "Switch to the previous chat"
 msgstr ""
 
-msgid "Switch to the previous unread tab"
+msgid "Switch to the previous unread chat"
 msgstr ""
 
 msgid "Sync Threshold"
@@ -4850,9 +4852,6 @@ msgid "TLS verification failed: %s"
 msgstr "SSL 憑證驗證"
 
 msgid "Tabbed chat window"
-msgstr ""
-
-msgid "Tabs"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5011,6 +5010,9 @@ msgstr ""
 msgid "This group chat will be destroyed once the last participant left"
 msgstr ""
 
+msgid "This is a public group chat. Encryption is not available."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "This is the theme you are currently using.\n"
@@ -5070,7 +5072,9 @@ msgstr "僅從 Gajim 移除帳號(_O)"
 msgid "This will reset all introduction hints"
 msgstr ""
 
-msgid "This workspace contains chats. Remove anyway?"
+msgid ""
+"This workspace contains chats. All chats will be moved to the next "
+"workspace. Remove anyway?"
 msgstr ""
 
 msgid "Three Months"
@@ -5217,6 +5221,10 @@ msgstr "不明的 SSL 錯誤: %d"
 msgid "Unknown Title"
 msgstr "不明標題"
 
+#, fuzzy, python-format
+msgid "Unknown command: %s"
+msgstr "命令"
+
 #, fuzzy
 msgid "Unknown language"
 msgstr "不明標題"
@@ -5324,6 +5332,13 @@ msgstr "進階設定編輯器"
 msgid "Use file transfer proxies"
 msgstr "使用檔案傳輸代理伺服器"
 
+msgid ""
+"Use filters to narrow down your search:\n"
+"from:username\n"
+"before:yyyy-mm-dd\n"
+"after:yyyy-mm-dd"
+msgstr ""
+
 msgid "Use proxy auth_entication"
 msgstr "代理伺服器需要認證"
 
@@ -5332,6 +5347,10 @@ msgstr ""
 
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "User %s not found"
+msgstr " %s 找不到"
 
 msgid "Users"
 msgstr "使用者"
@@ -5398,10 +5417,6 @@ msgid "Visual Notifications"
 msgstr "<b>可視化提示</b>"
 
 #, fuzzy
-msgid "Voice Request"
-msgstr "語音聊天請求"
-
-#, fuzzy
 msgid "Waiting…"
 msgstr "寫作"
 
@@ -5464,6 +5479,10 @@ msgstr "工作"
 msgid "Workspace Settings"
 msgstr "外掛程式"
 
+#, fuzzy
+msgid "Workspaces"
+msgstr "重新命名聯絡人"
+
 msgid "X11"
 msgstr ""
 
@@ -5522,6 +5541,10 @@ msgstr "您確定您要離開 Gajim 嗎?"
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "您將從您的聯絡人清單中將 \"%(name)s\" (%(jid)s) 移除。\n"
+
+#, fuzzy
+msgid "You are currently not joined this group chat"
+msgstr "%s 加入聊天室"
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5598,6 +5621,9 @@ msgstr ""
 #, fuzzy, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
 msgstr "%(nick)s 已經被從這個聊天室移除(%(reason)s)"
+
+msgid "You have insufficient permissions"
+msgstr ""
 
 #, python-brace-format
 msgid "You have left due to an error{reason}"
@@ -5719,10 +5745,6 @@ msgstr "位址(_A):"
 #, fuzzy
 msgid "_Advanced Settings"
 msgstr "外掛程式"
-
-#, fuzzy
-msgid "_Approve"
-msgstr "approve"
 
 #, fuzzy
 msgid "_Back"
@@ -6048,6 +6070,10 @@ msgstr ""
 msgid "building"
 msgstr "藏起來"
 
+#, fuzzy, python-format
+msgid "cairo Version: %s"
+msgstr "GTK+ 版本:"
+
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
@@ -6137,7 +6163,7 @@ msgid "postalcode"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "python-cairo Version: %s"
+msgid "pycairo Version: %s"
 msgstr "GTK+ 版本:"
 
 #, python-format
@@ -6224,9 +6250,6 @@ msgstr ""
 #~ msgid "%s is not a valid tone"
 #~ msgstr "%s 不是一個合法的日誌層級"
 
-#~ msgid "%s not found"
-#~ msgstr " %s 找不到"
-
 #, fuzzy
 #~ msgid "%s: Nothing found"
 #~ msgstr " %s 找不到"
@@ -6262,6 +6285,10 @@ msgstr ""
 #~ msgstr "XML 將被傳送的帳號; 如果不指定，XML 將被傳送至所有帳號"
 
 #, fuzzy
+#~ msgid "Ad-Hoc Commands…"
+#~ msgstr "執行命令(_E)…"
+
+#, fuzzy
 #~ msgid ""
 #~ "Allow to hide the contact list window even if the notification area icon "
 #~ "is not shown."
@@ -6276,6 +6303,14 @@ msgstr ""
 
 #~ msgid "Arguments:"
 #~ msgstr "參數:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Ask before closing tabbed chat window if there are chats that can lose "
+#~ "data (chat, private chat)."
+#~ msgstr ""
+#~ "如果有可能丟失資料的控制項(不會被最小化的聊天，私人聊天，多人聊天)，在關\n"
+#~ "閉有標籤的視窗前詢問。"
 
 #, fuzzy
 #~ msgid "Ban Participant"
@@ -6305,6 +6340,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Changes the status of account(s)"
 #~ msgstr "變更一個或多個帳號狀態"
+
+#, fuzzy
+#~ msgid "Chat"
+#~ msgstr "聊天"
 
 #~ msgid "Check if Gajim is running"
 #~ msgstr "請檢查 Gajim 是否正在執行"
@@ -6366,6 +6405,14 @@ msgstr ""
 #~ msgid "Gets detailed info on a contact"
 #~ msgstr "獲得聯絡人的詳細資訊"
 
+#, fuzzy
+#~ msgid "Hides the group chat participants list in a group chat window."
+#~ msgstr "在多人聊天視窗中隱藏室友清單。"
+
+#, fuzzy
+#~ msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
+#~ msgstr "為 Ctrl+KeyUP 儲存多少列。"
+
 #~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 #~ msgstr "如果選取，Gajim 可以被 gajim-remote 遠端控制。"
 
@@ -6376,6 +6423,10 @@ msgstr ""
 #~ msgstr ""
 #~ "如果為真，按一下視窗管理器的 X 按鈕會離開 Gajim。此一設定僅當啟用通知區域"
 #~ "圖示時會生效。"
+
+#, fuzzy
+#~ msgid "If enabled, Gajim will add * and [n] in contact list window title."
+#~ msgstr "如果選取，Gajim 會在聯絡人清單視窗中顯示聯絡人的心情。"
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"
@@ -6471,6 +6522,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Quote previous message"
 #~ msgstr "狀態訊息"
+
+#, fuzzy
+#~ msgid "Quote…"
+#~ msgstr "參照(_Q)"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6683,6 +6738,10 @@ msgstr ""
 
 #~ msgid "priority you want to give to the account"
 #~ msgstr "您想要給予這個帳號的優先等級"
+
+#, fuzzy
+#~ msgid "python-cairo Version: %s"
+#~ msgstr "GTK+ 版本:"
 
 #~ msgid "show help on command"
 #~ msgstr "為命令顯示求助"

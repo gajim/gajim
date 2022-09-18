@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-13 16:07+0000\n"
+"POT-Creation-Date: 2022-09-16 20:54+0000\n"
 "PO-Revision-Date: 2009-10-29 23:50+0100\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -240,10 +240,6 @@ msgstr ""
 msgid "<b>#</b>"
 msgstr "<b>Font</b>"
 
-#, python-format
-msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
-msgstr ""
-
 #, fuzzy
 msgid "<b>*</b>"
 msgstr "<b>Font</b>"
@@ -437,6 +433,21 @@ msgstr "?Uloga kontakta u grupnom razgovoru:Nikakva"
 #, fuzzy
 msgid "?Group chat name:Vacation"
 msgstr "Poziv na grupni razgovor"
+
+#, fuzzy
+msgid "?Message row action:Copy"
+msgstr "Sadržaj poruke"
+
+#, fuzzy
+msgid "?Message row action:Correct…"
+msgstr "Sadržaj poruke"
+
+msgid "?Message row action:Quote…"
+msgstr ""
+
+#, fuzzy
+msgid "?Message row action:Retract…"
+msgstr "Primljena Prva Poruka"
 
 #, fuzzy
 msgid "?Message state:Received"
@@ -925,6 +936,9 @@ msgstr "Verifikacija aplikacije neuspela"
 msgid "Apply"
 msgstr ""
 
+msgid "Approve"
+msgstr ""
+
 #, fuzzy
 msgid "Archive"
 msgstr "Datoteka je prazna"
@@ -977,15 +991,6 @@ msgstr "Pitaj za statusnu poruku pri:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Pitaj pre zatvaranja prozora/jezička grupnog razgovora."
-
-#, fuzzy
-msgid ""
-"Ask before closing tabbed chat window if there are chats that can lose data "
-"(chat, private chat)."
-msgstr ""
-"Pitaj pre zatvaranja jezička ćaskanja ako postoji kontrola koja može "
-"izgubiti podatke (ćaskanje, privatno ćaskanje, grupni razgovor koji neće "
-"biti minimizovan)"
 
 msgid "Ask before pasting an image."
 msgstr ""
@@ -1203,10 +1208,6 @@ msgstr "CRL nije još validan"
 msgid "CRL signature failure"
 msgstr "Greška u CRL sertifikata"
 
-#, fuzzy, python-format
-msgid "Cairo Version: %s"
-msgstr "GTK+ verzija:"
-
 msgid "Call"
 msgstr ""
 
@@ -1338,10 +1339,6 @@ msgstr ""
 "(tasterom tab) u grupnom razgovoru"
 
 #, fuzzy
-msgid "Chat"
-msgstr "Razgovori"
-
-#, fuzzy
 msgid "Chat Banner: Background Color"
 msgstr "Kontakt Na Vezi"
 
@@ -1350,6 +1347,10 @@ msgstr ""
 
 msgid "Chat Banner: Text Font"
 msgstr ""
+
+#, fuzzy
+msgid "Chat List"
+msgstr "Kontakti"
 
 #, fuzzy
 msgid "Chat history"
@@ -1483,6 +1484,10 @@ msgstr "Boja"
 #, fuzzy
 msgid "Command List"
 msgstr "Komanda: %s"
+
+#, fuzzy
+msgid "Command executed successfully"
+msgstr "Nalog je uspešno dodat"
 
 #, fuzzy
 msgid "Commands"
@@ -1715,8 +1720,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr "_Kopiraj lokaciju veze"
 
-msgid "Correct"
-msgstr ""
+#, fuzzy
+msgid "Correct the last message"
+msgstr "statusna poruka"
 
 #, fuzzy
 msgid "Could not Open File"
@@ -2460,9 +2466,6 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Gajim će se sada završiti"
 
-msgid "Gajim: IPython Console"
-msgstr ""
-
 #, fuzzy
 msgid "Gathering information…"
 msgstr "Informacije kontakta"
@@ -2625,10 +2628,6 @@ msgid "Hides the banner in a group chat window."
 msgstr "Sakriva baner u prozoru grupnog razgovora."
 
 #, fuzzy
-msgid "Hides the group chat participants list in a group chat window."
-msgstr "Sakriva listu učesnika u prozoru grupnog razgovora"
-
-#, fuzzy
 msgid "Home"
 msgstr "<b>Lična strana:</b>"
 
@@ -2640,20 +2639,12 @@ msgstr "<b>Lična strana:</b>"
 msgid "Hostname"
 msgstr "Ime hosta:"
 
-msgid ""
-"How far back in time (minutes) chat history is restored. -1 means no limit."
-msgstr ""
-
 #, fuzzy
 msgid "How far back should the chat history be synchronised?"
 msgstr "Šta želite da uradite?"
 
 msgid "How long Gajim should keep your chat history"
 msgstr ""
-
-#, fuzzy
-msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
-msgstr "Koliko linija sačuvati sa Ctrl+KeyUP"
 
 #, fuzzy
 msgid "I can see contact's online status"
@@ -2698,12 +2689,6 @@ msgstr ""
 
 msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, Gajim will add * and [n] in contact list window title."
-msgstr ""
-"Ako je označena, Gajim će prikazivati raspoloženje kontakata u listi "
-"kontakata"
 
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
@@ -2834,6 +2819,10 @@ msgstr "Neispravano ime servera"
 
 #, fuzzy
 msgid "Invalid XMPP Address"
+msgstr "Neispravna datoteka"
+
+#, fuzzy, python-format
+msgid "Invalid address: %s"
 msgstr "Neispravna datoteka"
 
 #, fuzzy
@@ -3425,9 +3414,6 @@ msgstr "_Otvori sastavljač e-mejla"
 msgid "Open Folder"
 msgstr "_Otvori sadržavajuću fasciklu"
 
-msgid "Open IPython shell"
-msgstr ""
-
 #, fuzzy
 msgid "Open Link in Browser"
 msgstr "_Otvori vezu u internet pregledaču"
@@ -3527,11 +3513,18 @@ msgstr "Sve datoteke"
 msgid "Pa_use/Resume"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Pango Version: %s"
+msgstr "GTK+ verzija:"
+
 msgid "Participant"
 msgstr "Učesnik"
 
 msgid "Participants"
 msgstr "Učesnici"
+
+msgid "Participants asking for voice:"
+msgstr ""
 
 msgid "Participants entering this group chat are allowed to send messages"
 msgstr ""
@@ -3587,6 +3580,10 @@ msgstr "Prekini prenos datoteke"
 #, fuzzy
 msgid "Pending Event"
 msgstr "Prikaži sv_e događaje na čekanju"
+
+#, fuzzy
+msgid "Pending Voice Requests"
+msgstr "Zahtev za prenosom datoteke"
 
 #, fuzzy
 msgid "Personal notes about this contact"
@@ -3814,10 +3811,6 @@ msgstr "_Izlaz"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quote…"
-msgstr "_Citat"
 
 #, fuzzy
 msgid "Re-Login"
@@ -4097,9 +4090,6 @@ msgid "Restore last state"
 msgstr "Poslednji status: %s"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-msgid "Retract"
 msgstr ""
 
 #, fuzzy
@@ -4826,19 +4816,27 @@ msgstr ""
 msgid "Support for service discovery including nodes and search for users"
 msgstr "Otkrivanje usluga sa naloga %s"
 
-msgid "Switch to the first - ninth tab"
+#, fuzzy
+msgid "Switch Workspace"
+msgstr "Preimenuj kontakt"
+
+msgid "Switch to the first - ninth chat"
 msgstr ""
 
-msgid "Switch to the next tab"
+msgid "Switch to the first - ninth workspace"
 msgstr ""
 
-msgid "Switch to the next unread tab"
+#, fuzzy
+msgid "Switch to the next chat"
+msgstr "Započni razgovor"
+
+msgid "Switch to the next unread chat"
 msgstr ""
 
-msgid "Switch to the previous tab"
+msgid "Switch to the previous chat"
 msgstr ""
 
-msgid "Switch to the previous unread tab"
+msgid "Switch to the previous unread chat"
 msgstr ""
 
 msgid "Sync Threshold"
@@ -4880,9 +4878,6 @@ msgid "TLS verification failed: %s"
 msgstr "Greška SSL sertifikata"
 
 msgid "Tabbed chat window"
-msgstr ""
-
-msgid "Tabs"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5043,6 +5038,9 @@ msgstr ""
 msgid "This group chat will be destroyed once the last participant left"
 msgstr ""
 
+msgid "This is a public group chat. Encryption is not available."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "This is the theme you are currently using.\n"
@@ -5102,7 +5100,9 @@ msgstr "Ukloni nalog samo iz Gajima"
 msgid "This will reset all introduction hints"
 msgstr ""
 
-msgid "This workspace contains chats. Remove anyway?"
+msgid ""
+"This workspace contains chats. All chats will be moved to the next "
+"workspace. Remove anyway?"
 msgstr ""
 
 msgid "Three Months"
@@ -5250,6 +5250,10 @@ msgstr "Nepoznata SSL greška: %d"
 msgid "Unknown Title"
 msgstr "Nepoznat naslov"
 
+#, fuzzy, python-format
+msgid "Unknown command: %s"
+msgstr "Komanda: %s"
+
 #, fuzzy
 msgid "Unknown language"
 msgstr "Nepoznat naslov"
@@ -5357,6 +5361,13 @@ msgstr "Napredna izmena konfiguracije"
 msgid "Use file transfer proxies"
 msgstr "Koristi proksi za prenos datoteka"
 
+msgid ""
+"Use filters to narrow down your search:\n"
+"from:username\n"
+"before:yyyy-mm-dd\n"
+"after:yyyy-mm-dd"
+msgstr ""
+
 msgid "Use proxy auth_entication"
 msgstr "Koristi proksi prijavljivanje"
 
@@ -5365,6 +5376,10 @@ msgstr ""
 
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "User %s not found"
+msgstr "%s nije pronađen"
 
 msgid "Users"
 msgstr "Korisnici"
@@ -5430,10 +5445,6 @@ msgid "Visual Notifications"
 msgstr "<b>Vizualna obaveštenja</b>"
 
 #, fuzzy
-msgid "Voice Request"
-msgstr "Zahtev za prenosom datoteke"
-
-#, fuzzy
 msgid "Waiting…"
 msgstr "Piše"
 
@@ -5496,6 +5507,10 @@ msgstr "Radim."
 msgid "Workspace Settings"
 msgstr "Napredne Akcije"
 
+#, fuzzy
+msgid "Workspaces"
+msgstr "Preimenuj kontakt"
+
 msgid "X11"
 msgstr ""
 
@@ -5554,6 +5569,10 @@ msgstr "Jeste li sigurni da želite zatvoriti Gajim?"
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "Upravo ćete ukloniti \"%(name)s\" (%(jid)s) iz vaše liste kontakata.\n"
+
+#, fuzzy
+msgid "You are currently not joined this group chat"
+msgstr "%s se pridružio grupnom razgovoru"
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5630,6 +5649,9 @@ msgstr ""
 #, fuzzy, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
 msgstr "%(nick)s je izbačen iz sobe (%(reason)s)"
+
+msgid "You have insufficient permissions"
+msgstr ""
 
 #, python-brace-format
 msgid "You have left due to an error{reason}"
@@ -5753,9 +5775,6 @@ msgstr "_Adresa:"
 #, fuzzy
 msgid "_Advanced Settings"
 msgstr "Napredne Akcije"
-
-msgid "_Approve"
-msgstr ""
 
 #, fuzzy
 msgid "_Back"
@@ -6081,6 +6100,10 @@ msgstr ""
 msgid "building"
 msgstr "Krije se"
 
+#, fuzzy, python-format
+msgid "cairo Version: %s"
+msgstr "GTK+ verzija:"
+
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
@@ -6170,7 +6193,7 @@ msgid "postalcode"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "python-cairo Version: %s"
+msgid "pycairo Version: %s"
 msgstr "GTK+ verzija:"
 
 #, python-format
@@ -6253,9 +6276,6 @@ msgstr ""
 #~ msgid "%s is not a valid tone"
 #~ msgstr "%s nije ispravan nivo logovanja"
 
-#~ msgid "%s not found"
-#~ msgstr "%s nije pronađen"
-
 #, fuzzy
 #~ msgid "%s: Nothing found"
 #~ msgstr "%s nije pronađen"
@@ -6292,6 +6312,10 @@ msgstr ""
 #~ "Nalog za koji će biti poslan xml ; ako nije određen, xml će biti poslat "
 #~ "za sve naloge"
 
+#, fuzzy
+#~ msgid "Ad-Hoc Commands…"
+#~ msgstr "_Izvrši naredbu"
+
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
@@ -6301,6 +6325,15 @@ msgstr ""
 
 #~ msgid "Arguments:"
 #~ msgstr "Argumenti:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Ask before closing tabbed chat window if there are chats that can lose "
+#~ "data (chat, private chat)."
+#~ msgstr ""
+#~ "Pitaj pre zatvaranja jezička ćaskanja ako postoji kontrola koja može "
+#~ "izgubiti podatke (ćaskanje, privatno ćaskanje, grupni razgovor koji neće "
+#~ "biti minimizovan)"
 
 #, fuzzy
 #~ msgid "Ban Participant"
@@ -6330,6 +6363,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Changes the status of account(s)"
 #~ msgstr "Menja status jednog ili više naloga"
+
+#, fuzzy
+#~ msgid "Chat"
+#~ msgstr "Razgovori"
 
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Molimo proverite da li je Gajim pokrenut"
@@ -6394,6 +6431,14 @@ msgstr ""
 #~ msgid "Gets detailed info on a contact"
 #~ msgstr "Daje detaljne informacije o kontaktu"
 
+#, fuzzy
+#~ msgid "Hides the group chat participants list in a group chat window."
+#~ msgstr "Sakriva listu učesnika u prozoru grupnog razgovora"
+
+#, fuzzy
+#~ msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
+#~ msgstr "Koliko linija sačuvati sa Ctrl+KeyUP"
+
 #~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 #~ msgstr ""
 #~ "Ako je označeno, Gajim se može kontrolisati korišćenjem gajim-remote."
@@ -6405,6 +6450,12 @@ msgstr ""
 #~ msgstr ""
 #~ "Ako je istinito, Gajim se završava kada se pritisne X dugme. Ovo "
 #~ "podešavanje se koristi samo ako je ikona sistemske kasete u upotrebi."
+
+#, fuzzy
+#~ msgid "If enabled, Gajim will add * and [n] in contact list window title."
+#~ msgstr ""
+#~ "Ako je označena, Gajim će prikazivati raspoloženje kontakata u listi "
+#~ "kontakata"
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"
@@ -6514,6 +6565,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Quote previous message"
 #~ msgstr "statusna poruka"
+
+#, fuzzy
+#~ msgid "Quote…"
+#~ msgstr "_Citat"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6730,6 +6785,10 @@ msgstr ""
 
 #~ msgid "priority you want to give to the account"
 #~ msgstr "prioritet koji želite da date ovom nalogu"
+
+#, fuzzy
+#~ msgid "python-cairo Version: %s"
+#~ msgstr "GTK+ verzija:"
 
 #~ msgid "show help on command"
 #~ msgstr "prikaži pomoć za komandu"

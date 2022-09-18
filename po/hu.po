@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-13 16:07+0000\n"
-"PO-Revision-Date: 2022-08-14 11:11+0000\n"
+"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"PO-Revision-Date: 2022-09-18 07:35+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -234,10 +234,6 @@ msgstr ""
 msgid "<b>#</b>"
 msgstr "<b>#</b>"
 
-#, python-format
-msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
-msgstr "<b>%(nick)s</b> szót kér ebben a társalgóban: <b>%(room_name)s</b>"
-
 msgid "<b>*</b>"
 msgstr "<b>*</b>"
 
@@ -397,6 +393,18 @@ msgstr "Csapat"
 
 msgid "?Group chat name:Vacation"
 msgstr "Szünidő"
+
+msgid "?Message row action:Copy"
+msgstr "Másolás"
+
+msgid "?Message row action:Correct…"
+msgstr "Helyesbítés…"
+
+msgid "?Message row action:Quote…"
+msgstr "Idézés…"
+
+msgid "?Message row action:Retract…"
+msgstr "Visszavonás…"
 
 msgid "?Message state:Received"
 msgstr "Kézbesített"
@@ -800,6 +808,9 @@ msgstr "Alkalmazásfüggő ellenőrzési hiba"
 msgid "Apply"
 msgstr "Alkalmaz"
 
+msgid "Approve"
+msgstr "Jóváhagyás"
+
 msgid "Archive"
 msgstr "Archiválás"
 
@@ -843,13 +854,6 @@ msgstr "Rákérdezés az állapotüzenetre…"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Megerősítés egy társalgó lapjának/ablakának bezárásakor."
-
-msgid ""
-"Ask before closing tabbed chat window if there are chats that can lose data "
-"(chat, private chat)."
-msgstr ""
-"Mindig legyen megerősítés több lap egyidejű bezárásakor, ha adatvesztés "
-"léphet fel (beszélgetések és társalgók)."
 
 msgid "Ask before pasting an image."
 msgstr "Megerősítés egy kép beszúrása előtt."
@@ -1035,10 +1039,6 @@ msgstr "A CRL még nem érvényes"
 msgid "CRL signature failure"
 msgstr "CRL-aláírási hiba"
 
-#, python-format
-msgid "Cairo Version: %s"
-msgstr "Cairo verzió: %s"
-
 msgid "Call"
 msgstr "Hívás"
 
@@ -1158,9 +1158,6 @@ msgstr ""
 "Egy társalgóban a névkiegészítés (TAB) használatakor a becenév után "
 "elhelyezendő karakter."
 
-msgid "Chat"
-msgstr "Beszélgetés"
-
 msgid "Chat Banner: Background Color"
 msgstr "A beszélgetés felső sávja: háttérszín"
 
@@ -1169,6 +1166,9 @@ msgstr "A beszélgetés felső sávja: előtérszín"
 
 msgid "Chat Banner: Text Font"
 msgstr "A beszélgetés felső sávja: betűkészlet"
+
+msgid "Chat List"
+msgstr "Beszélgetések"
 
 msgid "Chat history"
 msgstr "Előzmények"
@@ -1289,6 +1289,9 @@ msgstr "Szín"
 
 msgid "Command List"
 msgstr "Parancsok"
+
+msgid "Command executed successfully"
+msgstr "A parancs végrehajtása sikerült"
 
 msgid "Commands"
 msgstr "Parancsok"
@@ -1480,8 +1483,8 @@ msgstr "Kódrészlet másolása"
 msgid "Copy info to clipboard"
 msgstr "Másolás a vágólapra"
 
-msgid "Correct"
-msgstr "Helyesbítés"
+msgid "Correct the last message"
+msgstr "A legutóbbi üzenet helyesbítése"
 
 msgid "Could not Open File"
 msgstr "A fájl megnyitása nem sikerült"
@@ -2138,9 +2141,6 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "A Gajim most kilép"
 
-msgid "Gajim: IPython Console"
-msgstr "Gajim: IPython parancsértelmező"
-
 msgid "Gathering information…"
 msgstr "Információk lekérése…"
 
@@ -2277,9 +2277,6 @@ msgstr "A beszélgetés felső sávjak elrejtése."
 msgid "Hides the banner in a group chat window."
 msgstr "A társalgó felső sávjának elrejtése."
 
-msgid "Hides the group chat participants list in a group chat window."
-msgstr "A társalgóban a résztvevők listájának elrejtése."
-
 msgid "Home"
 msgstr "Otthoni"
 
@@ -2289,20 +2286,11 @@ msgstr "Weboldal"
 msgid "Hostname"
 msgstr "Kiszolgálónév"
 
-msgid ""
-"How far back in time (minutes) chat history is restored. -1 means no limit."
-msgstr ""
-"Az előzmények visszaidézésének (percben megadott) időkorlátja. -1 esetén "
-"korlátlan."
-
 msgid "How far back should the chat history be synchronised?"
 msgstr "Milyen régi üzenetek legyenek szinkronizálva?"
 
 msgid "How long Gajim should keep your chat history"
 msgstr "A korábbi beszélgetések tárolásának ideje"
-
-msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
-msgstr "A Ctrl+KeyUP (előzőleg küldött üzenetek) sorokban mért korlátja."
 
 msgid "I can see contact's online status"
 msgstr "A jelenléti állapot láthatósága"
@@ -2341,9 +2329,6 @@ msgstr ""
 
 msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
 msgstr "A gajim.org webhelyen lévő bővítmények letöltésének felajánlása"
-
-msgid "If enabled, Gajim will add * and [n] in contact list window title."
-msgstr "A névjegyek ablakfejlécében a * és [n] jelölők engedélyezése."
 
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr "A figyelemkérő üzenetek („wizz”) figyelmen kívül hagyása."
@@ -2468,6 +2453,10 @@ msgstr "Érvénytelen kiszolgálónév"
 
 msgid "Invalid XMPP Address"
 msgstr "Érvénytelen XMPP-cím"
+
+#, python-format
+msgid "Invalid address: %s"
+msgstr "Érvénytelen cím: %s"
 
 msgid "Invalid domain name"
 msgstr "Érvénytelen kiszolgálónév"
@@ -2985,9 +2974,6 @@ msgstr "Levelező _megnyitása"
 msgid "Open Folder"
 msgstr "Mappa megnyitása"
 
-msgid "Open IPython shell"
-msgstr "Az IPython parancsértelmező megnyitása"
-
 msgid "Open Link in Browser"
 msgstr "Hivatkozás megnyitása böngészőben"
 
@@ -3078,11 +3064,18 @@ msgstr "PNG-fájlok"
 msgid "Pa_use/Resume"
 msgstr "Szü_net/folytatás"
 
+#, python-format
+msgid "Pango Version: %s"
+msgstr "Pango verzió: %s"
+
 msgid "Participant"
 msgstr "Résztvevő"
 
 msgid "Participants"
 msgstr "Résztvevők"
+
+msgid "Participants asking for voice:"
+msgstr "Résztvevők, akik szót kértek:"
 
 msgid "Participants entering this group chat are allowed to send messages"
 msgstr "A társalgóba belépők küldhetnek üzeneteket"
@@ -3130,6 +3123,9 @@ msgstr "A fájlátvitel szüneteltetése vagy folytatása"
 
 msgid "Pending Event"
 msgstr "Várakozó események"
+
+msgid "Pending Voice Requests"
+msgstr "Várakozó szólási kérelmek"
 
 msgid "Personal notes about this contact"
 msgstr "Személyes megjegyzések a névjegyhez"
@@ -3326,9 +3322,6 @@ msgstr "Kilépés"
 
 msgid "Quit Gajim"
 msgstr "Kilépés a programból"
-
-msgid "Quote…"
-msgstr "Idézés…"
 
 msgid "Re-Login"
 msgstr "Ismételt bejelentkezés"
@@ -3565,9 +3558,6 @@ msgid "Restore status and status message of your last session"
 msgstr ""
 "A legutóbbi munkamenet jelenléti állapotának és állapotüzenetének "
 "visszaállítása"
-
-msgid "Retract"
-msgstr "Visszavonás"
 
 msgid "Retract Message"
 msgstr "Üzenet visszavonása"
@@ -4185,20 +4175,26 @@ msgid "Support for service discovery including nodes and search for users"
 msgstr ""
 "A csomópontokat is érintő szolgáltatásfelderítés és felhasználók keresése"
 
-msgid "Switch to the first - ninth tab"
-msgstr "Váltás az n-edik lapra"
+msgid "Switch Workspace"
+msgstr "Munkaterület-váltás"
 
-msgid "Switch to the next tab"
-msgstr "Váltás a következő lapra"
+msgid "Switch to the first - ninth chat"
+msgstr "Váltás az első … kilencedik beszélgetésre"
 
-msgid "Switch to the next unread tab"
-msgstr "Váltás a következő olvasatlan lapra"
+msgid "Switch to the first - ninth workspace"
+msgstr "Váltás az első … kilencedik munkaterületre"
 
-msgid "Switch to the previous tab"
-msgstr "Váltás az előző lapra"
+msgid "Switch to the next chat"
+msgstr "Váltás a következő beszélgetésre"
 
-msgid "Switch to the previous unread tab"
-msgstr "Váltás az előző olvasatlan lapra"
+msgid "Switch to the next unread chat"
+msgstr "Váltás a következő olvasatlan beszélgetésre"
+
+msgid "Switch to the previous chat"
+msgstr "Váltás az előző beszélgetésre"
+
+msgid "Switch to the previous unread chat"
+msgstr "Váltás az előző olvasatlan beszélgetésre"
 
 msgid "Sync Threshold"
 msgstr "Szinkronizálási küszöb"
@@ -4233,9 +4229,6 @@ msgstr "A TLS-ellenőrzés sikertelen: %s"
 
 msgid "Tabbed chat window"
 msgstr "Beszélgetések külön lapokon"
-
-msgid "Tabs"
-msgstr "Lapok"
 
 msgid "Tell your contacts if you received a message"
 msgstr "A küldő értesítése az üzenete beérkezéséről"
@@ -4384,6 +4377,9 @@ msgstr "A társalgó azután is létezik, ha már nem tartózkodik benne senki"
 msgid "This group chat will be destroyed once the last participant left"
 msgstr "A társalgó megszűnik, miután az utolsó résztvevő is elhagyja"
 
+msgid "This is a public group chat. Encryption is not available."
+msgstr "Ez nyilvános társalgó, az üzeneteket nem lehet titkosítani."
+
 msgid ""
 "This is the theme you are currently using.\n"
 "Do you want to delete this theme?"
@@ -4444,8 +4440,12 @@ msgstr "Ez a művelet törli a fiókot a Gajimból."
 msgid "This will reset all introduction hints"
 msgstr "A bevezető javaslatok alaphelyzetbe állítása"
 
-msgid "This workspace contains chats. Remove anyway?"
-msgstr "A munkaterület beszélgetéseket tartalmaz. Mégis törölhető?"
+msgid ""
+"This workspace contains chats. All chats will be moved to the next "
+"workspace. Remove anyway?"
+msgstr ""
+"A munkaterület beszélgetései a következő munkaterületre lesznek áthelyezve. "
+"Biztosan törölhető?"
 
 msgid "Three Months"
 msgstr "Három hónap"
@@ -4467,7 +4467,7 @@ msgstr ""
 "Az összes változás azonnali érvényesítéséhez ismét be kell jelentkezni."
 
 msgid "Toggle Chat List"
-msgstr "Beszélgetések listája ki-/be"
+msgstr "Oldalsáv ki-/be"
 
 msgid "Toggle participants list"
 msgstr "Résztvevők megjelenítése/elrejtése"
@@ -4580,6 +4580,10 @@ msgstr "Ismeretlen TLS-hiba: „%s”"
 msgid "Unknown Title"
 msgstr "Ismeretlen cím"
 
+#, python-format
+msgid "Unknown command: %s"
+msgstr "Ismeretlen parancs: %s"
+
 msgid "Unknown language"
 msgstr "Ismeretlen nyelv"
 
@@ -4668,6 +4672,17 @@ msgstr "A megadott nevű profil használata"
 msgid "Use file transfer proxies"
 msgstr "Fájlküldő proxy használata"
 
+msgid ""
+"Use filters to narrow down your search:\n"
+"from:username\n"
+"before:yyyy-mm-dd\n"
+"after:yyyy-mm-dd"
+msgstr ""
+"Szűrőkifejezések is alkalmazhatók:\n"
+"from:felhasználónév\n"
+"before:ÉÉÉÉ-HH-NN\n"
+"after:ÉÉÉÉ-HH-NN"
+
 msgid "Use proxy auth_entication"
 msgstr "Hit_elesítés szükséges"
 
@@ -4676,6 +4691,10 @@ msgstr "Választható hangulatjelkészletek, személyre szabható profilkép"
 
 msgid "Use your system’s keyring to store passwords"
 msgstr "A rendszer kulcstartójának használata a jelszavak tárolására"
+
+#, python-format
+msgid "User %s not found"
+msgstr "Nincs %s nevű felhasználó"
 
 msgid "Users"
 msgstr "Felhasználók"
@@ -4732,9 +4751,6 @@ msgstr "Látogatók"
 
 msgid "Visual Notifications"
 msgstr "Vizuális értesítések"
-
-msgid "Voice Request"
-msgstr "Engedélykérés szólásra"
 
 msgid "Waiting…"
 msgstr "Várakozás…"
@@ -4796,6 +4812,9 @@ msgstr "Munkavégzés"
 msgid "Workspace Settings"
 msgstr "Munkaterület beállításai"
 
+msgid "Workspaces"
+msgstr "Munkaterületek"
+
 msgid "X11"
 msgstr "X11"
 
@@ -4849,6 +4868,9 @@ msgstr "Kilépés a programból"
 #, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "%(name)s (%(jid)s) törölve lesz a névjegyek közül.\n"
+
+msgid "You are currently not joined this group chat"
+msgstr "A parancs kiadása előtt be kell lépni a társalgóba"
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -4919,6 +4941,9 @@ msgstr "Ki lettem dobva a társalgóból{actor}{reason}"
 #, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
 msgstr "El lettem távolítva a társalgóból{actor}{reason}"
+
+msgid "You have insufficient permissions"
+msgstr "Nincs engedélyezve a művelet"
 
 #, python-brace-format
 msgid "You have left due to an error{reason}"
@@ -5021,9 +5046,6 @@ msgstr "_Cím"
 
 msgid "_Advanced Settings"
 msgstr "_Speciális beállítások"
-
-msgid "_Approve"
-msgstr "_Jóváhagyás"
 
 msgid "_Back"
 msgstr "_Vissza"
@@ -5295,6 +5317,10 @@ msgstr "Félkövér"
 msgid "building"
 msgstr "épület"
 
+#, python-format
+msgid "cairo Version: %s"
+msgstr "cairo verzió: %s"
+
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "csevegés;üzenetküldés;azonnali üzenetküldő;xmpp;voip;"
 
@@ -5377,8 +5403,8 @@ msgid "postalcode"
 msgstr "irányítószám"
 
 #, python-format
-msgid "python-cairo Version: %s"
-msgstr "python-cairo verzió: %s"
+msgid "pycairo Version: %s"
+msgstr "pycairo verzió: %s"
 
 #, python-format
 msgid "python-nbxmpp Version: %s"
@@ -5486,9 +5512,6 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "%s is not a valid tone"
 #~ msgstr "Érvénytelen hang: %s"
 
-#~ msgid "%s not found"
-#~ msgstr "%s nincs meg"
-
 #~ msgid "%s: Nothing found"
 #~ msgstr "%s: nem található"
 
@@ -5499,6 +5522,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgstr ""
 #~ "'%s' is not in your roster.\n"
 #~ "Please specify account for sending the message."
+
+#~ msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
+#~ msgstr "<b>%(nick)s</b> szót kér ebben a társalgóban: <b>%(room_name)s</b>"
 
 #, fuzzy
 #~ msgid "?CLI:account"
@@ -5524,6 +5550,10 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ "Account in which the xml will be sent; if not specified, xml will be sent "
 #~ "to all accounts"
 
+#, fuzzy
+#~ msgid "Ad-Hoc Commands…"
+#~ msgstr "Parancsvégrehajtás…"
+
 #~ msgid "Allow a participant to send you public or private messages"
 #~ msgstr "Egy résztvevő publikus vagy privát üzeneteinek engedélyezése"
 
@@ -5537,6 +5567,13 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Arguments:"
 #~ msgstr "Argumentumok:"
+
+#~ msgid ""
+#~ "Ask before closing tabbed chat window if there are chats that can lose "
+#~ "data (chat, private chat)."
+#~ msgstr ""
+#~ "Mindig legyen megerősítés több lap egyidejű bezárásakor, ha adatvesztés "
+#~ "léphet fel (beszélgetések és társalgók)."
 
 #~ msgid "Ban Participant"
 #~ msgstr "Résztvevő kitiltása"
@@ -5564,6 +5601,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Changes the status of account(s)"
 #~ msgstr "Megváltoztatja az állapotát egy fióknak vagy több fióknak"
 
+#~ msgid "Chat"
+#~ msgstr "Beszélgetés"
+
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Ellenőrizd, hogy fut-e a Gajim"
 
@@ -5579,6 +5619,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgstr ""
 #~ "A parancsvégrehajtás tiltva van. Az ACE (Speciális beállításszerkesztő) "
 #~ "„command_system_execute” opciójával lehet engedélyezni."
+
+#~ msgid "Correct"
+#~ msgstr "Helyesbítés"
 
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr ""
@@ -5629,11 +5672,27 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Gajim will not try to join this group chat again"
 #~ msgstr "A program ezután nem fog bejelentkezni a társalgóba"
 
+#~ msgid "Gajim: IPython Console"
+#~ msgstr "Gajim: IPython parancsértelmező"
+
 #~ msgid "Gets detailed info on a account"
 #~ msgstr "Részletes információkat kér le a fiókról"
 
 #~ msgid "Gets detailed info on a contact"
 #~ msgstr "Részletes információkat kér le a partnerről"
+
+#~ msgid "Hides the group chat participants list in a group chat window."
+#~ msgstr "A társalgóban a résztvevők listájának elrejtése."
+
+#~ msgid ""
+#~ "How far back in time (minutes) chat history is restored. -1 means no "
+#~ "limit."
+#~ msgstr ""
+#~ "Az előzmények visszaidézésének (percben megadott) időkorlátja. -1 esetén "
+#~ "korlátlan."
+
+#~ msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
+#~ msgstr "A Ctrl+KeyUP (előzőleg küldött üzenetek) sorokban mért korlátja."
 
 #, fuzzy
 #~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
@@ -5646,6 +5705,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgstr ""
 #~ "If True, quits Gajim when X button of Window Manager is clicked. This "
 #~ "setting is taken into account only if trayicon is used."
+
+#~ msgid "If enabled, Gajim will add * and [n] in contact list window title."
+#~ msgstr "A névjegyek ablakfejlécében a * és [n] jelölők engedélyezése."
 
 #~ msgid ""
 #~ "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
@@ -5711,6 +5773,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Online"
 #~ msgstr "Online"
 
+#~ msgid "Open IPython shell"
+#~ msgstr "Az IPython parancsértelmező megnyitása"
+
 #~ msgid "Open a private chat window with a specified participant"
 #~ msgstr "Privát beszélgetés kezdeményezése az egyik résztvevővel"
 
@@ -5747,9 +5812,15 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Quote previous message"
 #~ msgstr "Az előző üzenet idézése"
 
+#~ msgid "Quote…"
+#~ msgstr "Idézés…"
+
 #, fuzzy
 #~ msgid "Removes contact from contact list"
 #~ msgstr "Eltávolítja a partnert a névsorról"
+
+#~ msgid "Retract"
+#~ msgstr "Visszavonás"
 
 #~ msgid "Returns current status (the global one unless account is specified)"
 #~ msgstr ""
@@ -5872,6 +5943,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "T_ry Again"
 #~ msgstr "Új_ra"
+
+#~ msgid "Tabs"
+#~ msgstr "Lapok"
 
 #~ msgid "The same as using a doc-string, except it supports translation"
 #~ msgstr "Akárcsak egy doc-string, de támogatja a fordítást"
@@ -6008,6 +6082,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "priority you want to give to the account"
 #~ msgstr "a prioritás amit hozzá szeretnél rendelni egy fiókhoz"
+
+#~ msgid "python-cairo Version: %s"
+#~ msgstr "python-cairo verzió: %s"
 
 #~ msgid "show help on command"
 #~ msgstr "mutass súgót az egyes parancsoknál"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-13 16:07+0000\n"
+"POT-Creation-Date: 2022-09-16 20:54+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -239,10 +239,6 @@ msgstr ""
 msgid "<b>#</b>"
 msgstr "<b>Ιστορικό</b>"
 
-#, python-format
-msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
-msgstr ""
-
 #, fuzzy
 msgid "<b>*</b>"
 msgstr "<b>Ιστορικό</b>"
@@ -437,6 +433,21 @@ msgstr "Κανένας"
 #, fuzzy
 msgid "?Group chat name:Vacation"
 msgstr "Πρόσκληση ομαδικής κουβέντας"
+
+#, fuzzy
+msgid "?Message row action:Copy"
+msgstr "περιεχόμενα μηνύματος"
+
+#, fuzzy
+msgid "?Message row action:Correct…"
+msgstr "περιεχόμενα μηνύματος"
+
+msgid "?Message row action:Quote…"
+msgstr ""
+
+#, fuzzy
+msgid "?Message row action:Retract…"
+msgstr "Λήφθηκε το πρώτο μήνυμα"
 
 #, fuzzy
 msgid "?Message state:Received"
@@ -917,6 +928,9 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
+msgid "Approve"
+msgstr ""
+
 #, fuzzy
 msgid "Archive"
 msgstr "Διαδρομή αρχείου"
@@ -969,11 +983,6 @@ msgstr "Ερώτηση μηνύματος κατάστασης όταν γίνο
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Ερώτηση πριν το κλείσιμο καρτέλας/παραθύρου ομαδικής κουβέντας."
-
-msgid ""
-"Ask before closing tabbed chat window if there are chats that can lose data "
-"(chat, private chat)."
-msgstr ""
 
 msgid "Ask before pasting an image."
 msgstr ""
@@ -1188,10 +1197,6 @@ msgstr ""
 msgid "CRL signature failure"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "Cairo Version: %s"
-msgstr "Έκδοση GTK+:"
-
 msgid "Call"
 msgstr ""
 
@@ -1320,9 +1325,6 @@ msgid ""
 "group chat."
 msgstr ""
 
-msgid "Chat"
-msgstr "Κουβέντα"
-
 #, fuzzy
 msgid "Chat Banner: Background Color"
 msgstr "Σύνδεση επαφής"
@@ -1333,6 +1335,10 @@ msgstr ""
 #, fuzzy
 msgid "Chat Banner: Text Font"
 msgstr "Πανό:"
+
+#, fuzzy
+msgid "Chat List"
+msgstr "Επαφές"
 
 #, fuzzy
 msgid "Chat history"
@@ -1466,6 +1472,10 @@ msgstr "Χρώμα"
 #, fuzzy
 msgid "Command List"
 msgstr "Εντολές: %s"
+
+#, fuzzy
+msgid "Command executed successfully"
+msgstr "Ο λογαριασμός προστέθηκε με επιτυχία"
 
 #, fuzzy
 msgid "Commands"
@@ -1698,8 +1708,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr "_Αντιγραφή τοποθεσίας δεσμού"
 
-msgid "Correct"
-msgstr ""
+#, fuzzy
+msgid "Correct the last message"
+msgstr "μήνυμα κατάστασης"
 
 #, fuzzy
 msgid "Could not Open File"
@@ -2448,9 +2459,6 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Το Gajim τώρα θα κλείσει"
 
-msgid "Gajim: IPython Console"
-msgstr ""
-
 #, fuzzy
 msgid "Gathering information…"
 msgstr "Πληροφορίες επαφής"
@@ -2613,10 +2621,6 @@ msgid "Hides the banner in a group chat window."
 msgstr "Ερώτηση πριν το κλείσιμο καρτέλας/ παραθύρου ομαδικής κουβέντας."
 
 #, fuzzy
-msgid "Hides the group chat participants list in a group chat window."
-msgstr "Αποκρύπτει τη λίστα συμμετεχόντων στο παράθυρο ομαδικής κουβέντας"
-
-#, fuzzy
 msgid "Home"
 msgstr "_Ξένιος υπολογιστής:"
 
@@ -2628,20 +2632,12 @@ msgstr "Προσωπ. σελίδα:"
 msgid "Hostname"
 msgstr "Εξυπηρετητής:"
 
-msgid ""
-"How far back in time (minutes) chat history is restored. -1 means no limit."
-msgstr ""
-
 #, fuzzy
 msgid "How far back should the chat history be synchronised?"
 msgstr "Τι θέλετε να κάνετε;"
 
 msgid "How long Gajim should keep your chat history"
 msgstr ""
-
-#, fuzzy
-msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
-msgstr "Πόσες γραμμές να αποθηκευτούν για το Ctrl+KeyUP."
 
 #, fuzzy
 msgid "I can see contact's online status"
@@ -2686,12 +2682,6 @@ msgstr ""
 
 msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, Gajim will add * and [n] in contact list window title."
-msgstr ""
-"Αν επιλεγεί, το Gajim θα εμφανίζει τα άβαταρ των επαφών στην λίστα επαφών "
-"και στις ομαδικές κουβέντες"
 
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
@@ -2817,6 +2807,10 @@ msgstr "Μη έγκυρο όνομα χρήστη"
 
 #, fuzzy
 msgid "Invalid XMPP Address"
+msgstr "Μη έγκυρο αρχείο"
+
+#, fuzzy, python-format
+msgid "Invalid address: %s"
 msgstr "Μη έγκυρο αρχείο"
 
 #, fuzzy
@@ -3409,9 +3403,6 @@ msgstr "_Άνοιγμα προγράμματος αλληλογραφίας"
 msgid "Open Folder"
 msgstr "_Άνοιγμα του περιέχοντος φακέλου"
 
-msgid "Open IPython shell"
-msgstr ""
-
 #, fuzzy
 msgid "Open Link in Browser"
 msgstr "_Άνοιγμα δεσμού στον περιηγητή"
@@ -3511,11 +3502,18 @@ msgstr "Όλα τα αρχεία"
 msgid "Pa_use/Resume"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Pango Version: %s"
+msgstr "Έκδοση GTK+:"
+
 msgid "Participant"
 msgstr "Συμμετέχων"
 
 msgid "Participants"
 msgstr "Συμμετέχοντες"
+
+msgid "Participants asking for voice:"
+msgstr ""
 
 msgid "Participants entering this group chat are allowed to send messages"
 msgstr ""
@@ -3571,6 +3569,10 @@ msgstr "Ακύρωση μεταφοράς αρχείου"
 #, fuzzy
 msgid "Pending Event"
 msgstr "Εμφάνιση όλων των γεγονότων που εκκρεμούν"
+
+#, fuzzy
+msgid "Pending Voice Requests"
+msgstr "Αίτηση μεταφοράς αρχείου"
 
 #, fuzzy
 msgid "Personal notes about this contact"
@@ -3798,10 +3800,6 @@ msgstr "_Έξοδος"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quote…"
-msgstr "_Έξοδος"
 
 #, fuzzy
 msgid "Re-Login"
@@ -4078,9 +4076,6 @@ msgid "Restore last state"
 msgstr "Τελευταία κατάσταση: %s"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-msgid "Retract"
 msgstr ""
 
 #, fuzzy
@@ -4802,19 +4797,27 @@ msgstr ""
 msgid "Support for service discovery including nodes and search for users"
 msgstr "Ανακάλυψη υπηρεσιών χρησιμοποιώντας το λογαριασμό %s"
 
-msgid "Switch to the first - ninth tab"
+#, fuzzy
+msgid "Switch Workspace"
+msgstr "_Μετονομασία αρχείων"
+
+msgid "Switch to the first - ninth chat"
 msgstr ""
 
-msgid "Switch to the next tab"
+msgid "Switch to the first - ninth workspace"
 msgstr ""
 
-msgid "Switch to the next unread tab"
+#, fuzzy
+msgid "Switch to the next chat"
+msgstr "Έναρξη κουβέντας"
+
+msgid "Switch to the next unread chat"
 msgstr ""
 
-msgid "Switch to the previous tab"
+msgid "Switch to the previous chat"
 msgstr ""
 
-msgid "Switch to the previous unread tab"
+msgid "Switch to the previous unread chat"
 msgstr ""
 
 msgid "Sync Threshold"
@@ -4856,9 +4859,6 @@ msgid "TLS verification failed: %s"
 msgstr "Προσθήκη ειδικής ειδοποίησης για το %s"
 
 msgid "Tabbed chat window"
-msgstr ""
-
-msgid "Tabs"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -5014,6 +5014,9 @@ msgstr ""
 msgid "This group chat will be destroyed once the last participant left"
 msgstr ""
 
+msgid "This is a public group chat. Encryption is not available."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "This is the theme you are currently using.\n"
@@ -5074,7 +5077,9 @@ msgstr "Αφαίρεση λογαριασμού μόν_ο από το Gajim"
 msgid "This will reset all introduction hints"
 msgstr ""
 
-msgid "This workspace contains chats. Remove anyway?"
+msgid ""
+"This workspace contains chats. All chats will be moved to the next "
+"workspace. Remove anyway?"
 msgstr ""
 
 msgid "Three Months"
@@ -5224,6 +5229,10 @@ msgstr "Άγνωστη έκδοση του D-Bus: %s"
 msgid "Unknown Title"
 msgstr "Άγνωστος τύπος %s "
 
+#, fuzzy, python-format
+msgid "Unknown command: %s"
+msgstr "Εντολές: %s"
+
 #, fuzzy
 msgid "Unknown language"
 msgstr "Άγνωστος τύπος %s "
@@ -5330,6 +5339,13 @@ msgstr "Επεξεργασία ρυθμίσεων για προχωρημένο�
 msgid "Use file transfer proxies"
 msgstr "Χρήση μεσολαβητών μεταφοράς αρχείων"
 
+msgid ""
+"Use filters to narrow down your search:\n"
+"from:username\n"
+"before:yyyy-mm-dd\n"
+"after:yyyy-mm-dd"
+msgstr ""
+
 #, fuzzy
 msgid "Use proxy auth_entication"
 msgstr "Χρήση πιστοποίησης"
@@ -5339,6 +5355,10 @@ msgstr ""
 
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "User %s not found"
+msgstr "μη υπαρκτό %s"
 
 msgid "Users"
 msgstr "Χρήστες"
@@ -5403,10 +5423,6 @@ msgid "Visual Notifications"
 msgstr "<b>Οπτικές γνωστοποιήσεις</b>"
 
 #, fuzzy
-msgid "Voice Request"
-msgstr "Αίτηση μεταφοράς αρχείου"
-
-#, fuzzy
 msgid "Waiting…"
 msgstr "Δουλειά"
 
@@ -5468,6 +5484,10 @@ msgstr "Δουλειά"
 msgid "Workspace Settings"
 msgstr "Προχωρημένες ενέργειες"
 
+#, fuzzy
+msgid "Workspaces"
+msgstr "_Μετονομασία αρχείων"
+
 msgid "X11"
 msgstr ""
 
@@ -5525,6 +5545,10 @@ msgstr "Είστε σίγουροι ότι θέλετε να φύγετε από
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "_Επιλέξτε εάν επιθυμείτε να καταχωρήσετε νέο jabber λογαριασμό"
+
+#, fuzzy
+msgid "You are currently not joined this group chat"
+msgstr "Ο/Η %s μπήκε στο δωμάτιο"
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5607,6 +5631,9 @@ msgstr ""
 #, fuzzy, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
 msgstr "Ο %(nick)s πετάχτηκε έξω από τον %(who)s: %(reason)s"
+
+msgid "You have insufficient permissions"
+msgstr ""
 
 #, python-brace-format
 msgid "You have left due to an error{reason}"
@@ -5730,9 +5757,6 @@ msgstr "_Διεύθυνση:"
 #, fuzzy
 msgid "_Advanced Settings"
 msgstr "Προχωρημένες ενέργειες"
-
-msgid "_Approve"
-msgstr ""
 
 #, fuzzy
 msgid "_Back"
@@ -6065,6 +6089,10 @@ msgstr ""
 msgid "building"
 msgstr "Διώχνοντας τον %s"
 
+#, fuzzy, python-format
+msgid "cairo Version: %s"
+msgstr "Έκδοση GTK+:"
+
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
@@ -6155,7 +6183,7 @@ msgid "postalcode"
 msgstr "Τ.Κ.:"
 
 #, fuzzy, python-format
-msgid "python-cairo Version: %s"
+msgid "pycairo Version: %s"
 msgstr "Έκδοση GTK+:"
 
 #, python-format
@@ -6237,9 +6265,6 @@ msgstr "Ο %(nick)s είναι τώρα %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
-#~ msgid "%s not found"
-#~ msgstr "μη υπαρκτό %s"
-
 #, fuzzy
 #~ msgid "%s: Nothing found"
 #~ msgstr "μη υπαρκτό %s"
@@ -6267,6 +6292,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "?CLI:status"
 #~ msgstr "κατάσταση"
+
+#, fuzzy
+#~ msgid "Ad-Hoc Commands…"
+#~ msgstr "_Εκτέλεση εντολής..."
 
 #, fuzzy
 #~ msgid ""
@@ -6307,6 +6336,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Changes the status of account(s)"
 #~ msgstr "Αλλάζει την κατάσταση ενός ή πολλών λογαριασμών"
+
+#~ msgid "Chat"
+#~ msgstr "Κουβέντα"
 
 #, fuzzy
 #~ msgid "Check if Gajim is running"
@@ -6370,6 +6402,14 @@ msgstr ""
 #~ msgid "Gets detailed info on a contact"
 #~ msgstr "Λήψη αναλυτικών πληροφοριών για μία επαφή"
 
+#, fuzzy
+#~ msgid "Hides the group chat participants list in a group chat window."
+#~ msgstr "Αποκρύπτει τη λίστα συμμετεχόντων στο παράθυρο ομαδικής κουβέντας"
+
+#, fuzzy
+#~ msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
+#~ msgstr "Πόσες γραμμές να αποθηκευτούν για το Ctrl+KeyUP."
+
 #~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 #~ msgstr ""
 #~ "Εαν είναι επιλεγμένο, το Gajim μπορεί να ελεγχθεί από μακριά "
@@ -6383,6 +6423,12 @@ msgstr ""
 #~ "Αν είναι αληθές, το Gajim κλείνει όταν πατιέται το κουμπί Χ του "
 #~ "διαχειριστή παραθύρων. Αυτή η ρύθμιση έχει νόημα μόνο εφόσον γίνεται "
 #~ "χρήση εικονιδίου στην μπάρα ειδοποιήσεων."
+
+#, fuzzy
+#~ msgid "If enabled, Gajim will add * and [n] in contact list window title."
+#~ msgstr ""
+#~ "Αν επιλεγεί, το Gajim θα εμφανίζει τα άβαταρ των επαφών στην λίστα επαφών "
+#~ "και στις ομαδικές κουβέντες"
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"
@@ -6474,6 +6520,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Quote previous message"
 #~ msgstr "Ή διαλέξτε από τα προκαθορισμένα μηνύματα:"
+
+#, fuzzy
+#~ msgid "Quote…"
+#~ msgstr "_Έξοδος"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6673,6 +6723,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "priority you want to give to the account"
 #~ msgstr "_Επιλέξτε εάν επιθυμείτε να καταχωρήσετε νέο jabber λογαριασμό"
+
+#, fuzzy
+#~ msgid "python-cairo Version: %s"
+#~ msgstr "Έκδοση GTK+:"
 
 #~ msgid "show help on command"
 #~ msgstr "εμφάνιση βοήθειας στην εντολή"

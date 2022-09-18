@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-13 16:07+0000\n"
+"POT-Creation-Date: 2022-09-16 20:54+0000\n"
 "PO-Revision-Date: 2022-07-18 19:52+0000\n"
 "Last-Translator: Volodymyr Smoliar <v_2e@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -243,10 +243,6 @@ msgstr ""
 msgid "<b>#</b>"
 msgstr "<b>#</b>"
 
-#, python-format
-msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
-msgstr "<b>%(nick)s</b> з <b>%(room_name)s</b> запитує голос"
-
 msgid "<b>*</b>"
 msgstr "<b>*</b>"
 
@@ -423,6 +419,21 @@ msgstr "?Роль у груповій балачці:Немає"
 #, fuzzy
 msgid "?Group chat name:Vacation"
 msgstr "Запрошення до групової балачки"
+
+#, fuzzy
+msgid "?Message row action:Copy"
+msgstr "Вміст повідомлення"
+
+#, fuzzy
+msgid "?Message row action:Correct…"
+msgstr "Вміст повідомлення"
+
+msgid "?Message row action:Quote…"
+msgstr ""
+
+#, fuzzy
+msgid "?Message row action:Retract…"
+msgstr "?Message state:Отримано"
 
 msgid "?Message state:Received"
 msgstr "?Message state:Отримано"
@@ -835,6 +846,10 @@ msgstr "Помилка під час перевірки програми"
 msgid "Apply"
 msgstr "Застосувати"
 
+#, fuzzy
+msgid "Approve"
+msgstr "підтвердити"
+
 msgid "Archive"
 msgstr "Архів"
 
@@ -879,15 +894,6 @@ msgstr "Запитувати повідомлення про стан при…"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Запитувати перед закриттям вкладки або вікна групової балачки."
-
-#, fuzzy
-msgid ""
-"Ask before closing tabbed chat window if there are chats that can lose data "
-"(chat, private chat)."
-msgstr ""
-"Запитувати перед закриттям вікна розмови з вкладками, якщо це може призвести "
-"до втрати даних (діалог, приватний діалог, групова розмова що не може бути "
-"мінімізована)."
 
 msgid "Ask before pasting an image."
 msgstr ""
@@ -1082,10 +1088,6 @@ msgstr "Строк дії CRL ще не почався"
 msgid "CRL signature failure"
 msgstr "Помилка під час роботи з підписом списку відкликаних сертифікатів"
 
-#, python-format
-msgid "Cairo Version: %s"
-msgstr "Версія Cairo: %s"
-
 msgid "Call"
 msgstr "Дзвінок"
 
@@ -1207,9 +1209,6 @@ msgstr ""
 "Символ, який буде додано після псевдоніма при використанні автодоповнення "
 "псевдоніма (tab) у груповій балачці."
 
-msgid "Chat"
-msgstr "Балачка"
-
 msgid "Chat Banner: Background Color"
 msgstr "Заголовок балачки: колір тла"
 
@@ -1218,6 +1217,10 @@ msgstr "Заголовок балачки: колір тексту"
 
 msgid "Chat Banner: Text Font"
 msgstr "Заголовок балачки: шрифт"
+
+#, fuzzy
+msgid "Chat List"
+msgstr "Список контактів"
 
 msgid "Chat history"
 msgstr "Історія балачки"
@@ -1331,6 +1334,10 @@ msgstr "Колір"
 
 msgid "Command List"
 msgstr "Список команд"
+
+#, fuzzy
+msgid "Command executed successfully"
+msgstr "Обліковий запис було успішно додано"
 
 msgid "Commands"
 msgstr "Команди"
@@ -1523,8 +1530,9 @@ msgstr "Копіювати фрагмент коду"
 msgid "Copy info to clipboard"
 msgstr "Копіювати інформацію до буфера обміну"
 
-msgid "Correct"
-msgstr ""
+#, fuzzy
+msgid "Correct the last message"
+msgstr "повідомлення про стан"
 
 msgid "Could not Open File"
 msgstr "Не вдалося відкрити файл"
@@ -2188,9 +2196,6 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Зараз Gajim завершить роботу"
 
-msgid "Gajim: IPython Console"
-msgstr ""
-
 #, fuzzy
 msgid "Gathering information…"
 msgstr "Контактна інформація"
@@ -2352,10 +2357,6 @@ msgid "Hides the banner in a group chat window."
 msgstr "Приховує підпис у вікні групової балачки"
 
 #, fuzzy
-msgid "Hides the group chat participants list in a group chat window."
-msgstr "Ховає список учасників групової балачки у вікні групової балачки."
-
-#, fuzzy
 msgid "Home"
 msgstr "Домашня сторінка:"
 
@@ -2367,20 +2368,12 @@ msgstr "Домашня сторінка:"
 msgid "Hostname"
 msgstr "Назва _вузла:"
 
-msgid ""
-"How far back in time (minutes) chat history is restored. -1 means no limit."
-msgstr ""
-
 #, fuzzy
 msgid "How far back should the chat history be synchronised?"
 msgstr "Що ви хочете зробити?"
 
 msgid "How long Gajim should keep your chat history"
 msgstr ""
-
-#, fuzzy
-msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
-msgstr "Кількість рядків, які слід зберігати для Ctrl+Стрілка_вгору."
 
 #, fuzzy
 msgid "I can see contact's online status"
@@ -2425,12 +2418,6 @@ msgstr ""
 
 msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, Gajim will add * and [n] in contact list window title."
-msgstr ""
-"Якщо буде позначено цей пункт, Gajim показуватиме настрій контактів у вікні "
-"реєстру"
 
 #, fuzzy
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
@@ -2575,6 +2562,10 @@ msgstr "Некоректна назва сервера"
 
 #, fuzzy
 msgid "Invalid XMPP Address"
+msgstr "Некоректний файл"
+
+#, fuzzy, python-format
+msgid "Invalid address: %s"
 msgstr "Некоректний файл"
 
 #, fuzzy
@@ -3166,9 +3157,6 @@ msgstr "_Відкрити редактор поштових повідомлен
 msgid "Open Folder"
 msgstr "В_ідкриту теку, яка містить цей файл"
 
-msgid "Open IPython shell"
-msgstr ""
-
 #, fuzzy
 msgid "Open Link in Browser"
 msgstr "_Відкрити посилання у веб-переглядачі"
@@ -3271,11 +3259,18 @@ msgstr "Всі файли"
 msgid "Pa_use/Resume"
 msgstr "_Продовжити"
 
+#, fuzzy, python-format
+msgid "Pango Version: %s"
+msgstr "Версія Cairo: %s"
+
 msgid "Participant"
 msgstr "Учасник"
 
 msgid "Participants"
 msgstr "Учасники"
+
+msgid "Participants asking for voice:"
+msgstr ""
 
 msgid "Participants entering this group chat are allowed to send messages"
 msgstr ""
@@ -3331,6 +3326,10 @@ msgstr "Скасувати передавання файла"
 #, fuzzy
 msgid "Pending Event"
 msgstr "Показати усі _події з черги"
+
+#, fuzzy
+msgid "Pending Voice Requests"
+msgstr "Запит на голосову розмову"
 
 #, fuzzy
 msgid "Personal notes about this contact"
@@ -3557,10 +3556,6 @@ msgstr ""
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quote…"
-msgstr "_Цитата"
 
 #, fuzzy
 msgid "Re-Login"
@@ -3836,9 +3831,6 @@ msgid "Restore last state"
 msgstr "Попередній стан: %"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-msgid "Retract"
 msgstr ""
 
 #, fuzzy
@@ -4560,19 +4552,27 @@ msgstr ""
 msgid "Support for service discovery including nodes and search for users"
 msgstr "Підтримка пошуку служб включно з вузлами та пошуком користувачів"
 
-msgid "Switch to the first - ninth tab"
+#, fuzzy
+msgid "Switch Workspace"
+msgstr "Перейменувати контакт"
+
+msgid "Switch to the first - ninth chat"
 msgstr ""
 
-msgid "Switch to the next tab"
+msgid "Switch to the first - ninth workspace"
 msgstr ""
 
-msgid "Switch to the next unread tab"
+#, fuzzy
+msgid "Switch to the next chat"
+msgstr "Почати балачку"
+
+msgid "Switch to the next unread chat"
 msgstr ""
 
-msgid "Switch to the previous tab"
+msgid "Switch to the previous chat"
 msgstr ""
 
-msgid "Switch to the previous unread tab"
+msgid "Switch to the previous unread chat"
 msgstr ""
 
 msgid "Sync Threshold"
@@ -4613,9 +4613,6 @@ msgid "TLS verification failed: %s"
 msgstr "Перевірка сертифіката SSL для %s"
 
 msgid "Tabbed chat window"
-msgstr ""
-
-msgid "Tabs"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -4778,6 +4775,9 @@ msgstr ""
 msgid "This group chat will be destroyed once the last participant left"
 msgstr ""
 
+msgid "This is a public group chat. Encryption is not available."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "This is the theme you are currently using.\n"
@@ -4838,7 +4838,9 @@ msgstr "Вилучити обліковий запис _лише з Gajim"
 msgid "This will reset all introduction hints"
 msgstr ""
 
-msgid "This workspace contains chats. Remove anyway?"
+msgid ""
+"This workspace contains chats. All chats will be moved to the next "
+"workspace. Remove anyway?"
 msgstr ""
 
 msgid "Three Months"
@@ -4988,6 +4990,10 @@ msgstr "Невідома помилка SSL: %d"
 msgid "Unknown Title"
 msgstr "Невідома назва"
 
+#, fuzzy, python-format
+msgid "Unknown command: %s"
+msgstr "команда"
+
 #, fuzzy
 msgid "Unknown language"
 msgstr "Невідома назва"
@@ -5094,6 +5100,13 @@ msgstr "Використовувати призначений профіль у 
 msgid "Use file transfer proxies"
 msgstr "Використовувати проксі передавання файлів"
 
+msgid ""
+"Use filters to narrow down your search:\n"
+"from:username\n"
+"before:yyyy-mm-dd\n"
+"after:yyyy-mm-dd"
+msgstr ""
+
 msgid "Use proxy auth_entication"
 msgstr "Використовувати розпізнавання на проксі"
 
@@ -5102,6 +5115,10 @@ msgstr ""
 
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "User %s not found"
+msgstr "%s не знайдено"
 
 msgid "Users"
 msgstr "Користувачі"
@@ -5167,10 +5184,6 @@ msgid "Visual Notifications"
 msgstr "Візуальні сповіщення"
 
 #, fuzzy
-msgid "Voice Request"
-msgstr "Запит на голосову розмову"
-
-#, fuzzy
 msgid "Waiting…"
 msgstr "Пишу"
 
@@ -5234,6 +5247,10 @@ msgstr "Працюю"
 msgid "Workspace Settings"
 msgstr "Додаткові дії"
 
+#, fuzzy
+msgid "Workspaces"
+msgstr "Перейменувати контакт"
+
 msgid "X11"
 msgstr ""
 
@@ -5294,6 +5311,10 @@ msgstr "Ви справді бажаєте вийти з Gajim?"
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "Ви збираєтесь вилучити \"%(name)s\" (%(jid)s) з вашого реєстру.\n"
+
+#, fuzzy
+msgid "You are currently not joined this group chat"
+msgstr "Хто завгодно може приєднатися до цієї групової балачки"
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5373,6 +5394,9 @@ msgstr ""
 #, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
 msgstr "Вас вилучено з кімнати{actor} {reason}"
+
+msgid "You have insufficient permissions"
+msgstr ""
 
 #, python-brace-format
 msgid "You have left due to an error{reason}"
@@ -5496,10 +5520,6 @@ msgstr "_Адреса:"
 #, fuzzy
 msgid "_Advanced Settings"
 msgstr "Додаткові дії"
-
-#, fuzzy
-msgid "_Approve"
-msgstr "підтвердити"
 
 #, fuzzy
 msgid "_Back"
@@ -5823,6 +5843,10 @@ msgstr ""
 msgid "building"
 msgstr "будівля"
 
+#, fuzzy, python-format
+msgid "cairo Version: %s"
+msgstr "Версія Cairo: %s"
+
 #, fuzzy
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "chat;messaging;im;jabber;xmpp;bonjour;voip"
@@ -5908,8 +5932,8 @@ msgid "postalcode"
 msgstr "поштовий індекс"
 
 #, fuzzy, python-format
-msgid "python-cairo Version: %s"
-msgstr "Версія GTK+: %s"
+msgid "pycairo Version: %s"
+msgstr "Версія Cairo: %s"
 
 #, python-format
 msgid "python-nbxmpp Version: %s"
@@ -6019,9 +6043,6 @@ msgstr ""
 #~ msgid "%s is not a valid tone"
 #~ msgstr "%s не є коректним тоном"
 
-#~ msgid "%s not found"
-#~ msgstr "%s не знайдено"
-
 #~ msgid "%s: Nothing found"
 #~ msgstr "%s: не знайдено"
 
@@ -6032,6 +6053,9 @@ msgstr ""
 #~ msgstr ""
 #~ "«%s» немає у реєстрі.\n"
 #~ "Будь ласка, вкажіть обліковий запис для надсилання цього повідомлення."
+
+#~ msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
+#~ msgstr "<b>%(nick)s</b> з <b>%(room_name)s</b> запитує голос"
 
 #~ msgid "?CLI:account"
 #~ msgstr "?CLI:обліковий запис"
@@ -6053,6 +6077,10 @@ msgstr ""
 #~ "Обліковий запис, на який буде надіслано xml; якщо не вказано, xml буде "
 #~ "надіслано до всіх облікових записів"
 
+#, fuzzy
+#~ msgid "Ad-Hoc Commands…"
+#~ msgstr "Виконати команду…"
+
 #~ msgid "Allow a participant to send you public or private messages"
 #~ msgstr "Дозволити учаснику надсилати вам особисті або публічні повідомлення"
 
@@ -6073,6 +6101,15 @@ msgstr ""
 
 #~ msgid "Arguments:"
 #~ msgstr "Аргументи:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Ask before closing tabbed chat window if there are chats that can lose "
+#~ "data (chat, private chat)."
+#~ msgstr ""
+#~ "Запитувати перед закриттям вікна розмови з вкладками, якщо це може "
+#~ "призвести до втрати даних (діалог, приватний діалог, групова розмова що "
+#~ "не може бути мінімізована)."
 
 #~ msgid "Ban Participant"
 #~ msgstr "Заблокувати учасника"
@@ -6099,6 +6136,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Changes the status of account(s)"
 #~ msgstr "Змінює стан облікового запису або обліковий запис"
+
+#~ msgid "Chat"
+#~ msgstr "Балачка"
 
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Перевірити, чи запущено Gajim"
@@ -6177,6 +6217,14 @@ msgstr ""
 #~ msgid "Gets detailed info on a contact"
 #~ msgstr "Отримує докладні відомості щодо контакту"
 
+#, fuzzy
+#~ msgid "Hides the group chat participants list in a group chat window."
+#~ msgstr "Ховає список учасників групової балачки у вікні групової балачки."
+
+#, fuzzy
+#~ msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
+#~ msgstr "Кількість рядків, які слід зберігати для Ctrl+Стрілка_вгору."
+
 #~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 #~ msgstr ""
 #~ "Якщо позначено цей пункт, Gajim можна віддалено керувати за допомогою "
@@ -6190,6 +6238,12 @@ msgstr ""
 #~ "Якщо має значення «True», роботу Gajim буде завершено після натискання "
 #~ "кнопки з позначкою «X» у менеджері вікон. Цей параметр братиметься до "
 #~ "уваги, лише якщо використовується піктограма лотка."
+
+#, fuzzy
+#~ msgid "If enabled, Gajim will add * and [n] in contact list window title."
+#~ msgstr ""
+#~ "Якщо буде позначено цей пункт, Gajim показуватиме настрій контактів у "
+#~ "вікні реєстру"
 
 #~ msgid "Invalid affiliation given"
 #~ msgstr "Вказано невірні права"
@@ -6306,6 +6360,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Quote previous message"
 #~ msgstr "повідомлення про стан"
+
+#, fuzzy
+#~ msgid "Quote…"
+#~ msgstr "_Цитата"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6578,6 +6636,10 @@ msgstr ""
 
 #~ msgid "priority you want to give to the account"
 #~ msgstr "пріоритет який ви бажаєте надати обліковому запису"
+
+#, fuzzy
+#~ msgid "python-cairo Version: %s"
+#~ msgstr "Версія GTK+: %s"
 
 #~ msgid "show help on command"
 #~ msgstr "показати довідку щодо команди"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-13 16:07+0000\n"
-"PO-Revision-Date: 2022-08-13 08:30+0000\n"
+"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"PO-Revision-Date: 2022-09-07 20:53+0000\n"
 "Last-Translator: El gran Pirujo <boina@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
@@ -241,10 +241,6 @@ msgstr ""
 msgid "<b>#</b>"
 msgstr "<b>#</b>"
 
-#, python-format
-msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
-msgstr "Petición de voz de <b>%(nick)s</b> desde <b>%(room_name)s</b>"
-
 msgid "<b>*</b>"
 msgstr "<b>*</b>"
 
@@ -403,6 +399,18 @@ msgstr "?Group chat name:Equipo"
 
 msgid "?Group chat name:Vacation"
 msgstr "?Group chat name:Vacaciones"
+
+msgid "?Message row action:Copy"
+msgstr "?Message row action:Copiar"
+
+msgid "?Message row action:Correct…"
+msgstr "?Message row action:Corregir…"
+
+msgid "?Message row action:Quote…"
+msgstr "?Message row action:Citar…"
+
+msgid "?Message row action:Retract…"
+msgstr "?Message row action:Retractar…"
 
 msgid "?Message state:Received"
 msgstr "?Message state:Recibido"
@@ -815,6 +823,9 @@ msgstr "Falló la verificación de la aplicación"
 msgid "Apply"
 msgstr "Aplicar"
 
+msgid "Approve"
+msgstr "Aprobar"
+
 msgid "Archive"
 msgstr "Archivo"
 
@@ -858,13 +869,6 @@ msgstr "Solicitar mensaje de estado en…"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Preguntar antes de cerrar una ventana/petaña de salón de charla."
-
-msgid ""
-"Ask before closing tabbed chat window if there are chats that can lose data "
-"(chat, private chat)."
-msgstr ""
-"Preguntar antes de cerrar la ventana de chat con pestañas si hay chats que "
-"pueden perder datos (chat, conversación privada)."
 
 msgid "Ask before pasting an image."
 msgstr "Preguntar antes de pegar una imagen."
@@ -1050,10 +1054,6 @@ msgstr "El CRL todavía no es válido"
 msgid "CRL signature failure"
 msgstr "Fallo en la firma CRL"
 
-#, python-format
-msgid "Cairo Version: %s"
-msgstr "Versión Cairo: %s"
-
 msgid "Call"
 msgstr "Llamar"
 
@@ -1174,9 +1174,6 @@ msgstr ""
 "Carácter a añadir después del apodo cuando se usa el completado de apodos "
 "(tab) en salas de chat."
 
-msgid "Chat"
-msgstr "Charla"
-
 msgid "Chat Banner: Background Color"
 msgstr "Chat Banner: Color de fondo"
 
@@ -1185,6 +1182,9 @@ msgstr "Chat Banner: Color de primer plano"
 
 msgid "Chat Banner: Text Font"
 msgstr "Chat Banner: Tipografía de texto"
+
+msgid "Chat List"
+msgstr "Lista de conversaciones"
 
 msgid "Chat history"
 msgstr "Histórico de conversación"
@@ -1303,6 +1303,9 @@ msgstr "Color"
 
 msgid "Command List"
 msgstr "Lista de Comandos"
+
+msgid "Command executed successfully"
+msgstr "Comando ejecutado con éxito"
 
 msgid "Commands"
 msgstr "Comandos"
@@ -1493,8 +1496,8 @@ msgstr "Copiar fragmento de código"
 msgid "Copy info to clipboard"
 msgstr "Copiar información al portapapeles"
 
-msgid "Correct"
-msgstr "Corregir"
+msgid "Correct the last message"
+msgstr "Corregir el último mensaje"
 
 msgid "Could not Open File"
 msgstr "No se pudo abrir el fichero"
@@ -2154,9 +2157,6 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Gajim se cerrará ahora"
 
-msgid "Gajim: IPython Console"
-msgstr "Gajim: consola IPython"
-
 msgid "Gathering information…"
 msgstr "Reuniendo información…"
 
@@ -2294,9 +2294,6 @@ msgstr "Oculta el banner en una ventana de charla 1 a 1."
 msgid "Hides the banner in a group chat window."
 msgstr "Oculta el banner en una ventana de grupo de charla."
 
-msgid "Hides the group chat participants list in a group chat window."
-msgstr "Oculta la lista de participantes en la ventana de grupo de charla."
-
 msgid "Home"
 msgstr "Casa"
 
@@ -2306,21 +2303,11 @@ msgstr "Página web"
 msgid "Hostname"
 msgstr "Nombre del host"
 
-msgid ""
-"How far back in time (minutes) chat history is restored. -1 means no limit."
-msgstr ""
-"Cuantos minutos hacia atrás serán restaurados del historial de chat. -1 "
-"significa que no hay límite."
-
 msgid "How far back should the chat history be synchronised?"
 msgstr "¿Cuánto tiempo atrás debe sincronizarse el historial de chat?"
 
 msgid "How long Gajim should keep your chat history"
 msgstr "Cuanto tiempo debería Gajim retener tu historial de conversación"
-
-msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
-msgstr ""
-"Cuántas líneas almacenar para Ctrl+Arriba (mensajes enviados previamente)."
 
 msgid "I can see contact's online status"
 msgstr "Puedo ver el estado de los contactos"
@@ -2362,11 +2349,6 @@ msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
 msgstr ""
 "Si está habilitado, Gajim ofrece descargar los complementos alojados en "
 "gajim.org"
-
-msgid "If enabled, Gajim will add * and [n] in contact list window title."
-msgstr ""
-"Si está habilitado, Gajim agregará * y [n] en el título de la ventana de la "
-"lista de contactos."
 
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
@@ -2493,6 +2475,10 @@ msgstr "Nombre de servidor no válido"
 
 msgid "Invalid XMPP Address"
 msgstr "Dirección XMPP no válida"
+
+#, python-format
+msgid "Invalid address: %s"
+msgstr "Dirección no válida: %s"
 
 msgid "Invalid domain name"
 msgstr "Nombre de dominio no válido"
@@ -3011,9 +2997,6 @@ msgstr "Abrir el compositor de correo"
 msgid "Open Folder"
 msgstr "Abrir carpeta"
 
-msgid "Open IPython shell"
-msgstr "Abrir shell IPython"
-
 msgid "Open Link in Browser"
 msgstr "Abrir enlace en navegador"
 
@@ -3104,11 +3087,18 @@ msgstr "Archivos PNG"
 msgid "Pa_use/Resume"
 msgstr "Pa_usar/Reanudar"
 
+#, python-format
+msgid "Pango Version: %s"
+msgstr "Versión Pango: %s"
+
 msgid "Participant"
 msgstr "Participante"
 
 msgid "Participants"
 msgstr "Participantes"
+
+msgid "Participants asking for voice:"
+msgstr "Participantes pidiendo voz:"
 
 msgid "Participants entering this group chat are allowed to send messages"
 msgstr ""
@@ -3160,6 +3150,9 @@ msgstr "Pausar o reanudar la transferencia de fichero"
 
 msgid "Pending Event"
 msgstr "Evento Pendiente"
+
+msgid "Pending Voice Requests"
+msgstr "Peticiones de voz pendientes"
 
 msgid "Personal notes about this contact"
 msgstr "Notas personales sobre este contacto"
@@ -3358,9 +3351,6 @@ msgstr "Salir"
 
 msgid "Quit Gajim"
 msgstr "Salir de Gajim"
-
-msgid "Quote…"
-msgstr "Cita…"
 
 msgid "Re-Login"
 msgstr "Reconectar"
@@ -3593,9 +3583,6 @@ msgstr "Restaurar último estado"
 
 msgid "Restore status and status message of your last session"
 msgstr "Restaurar el estado y el mensaje de estado de tu última sesión"
-
-msgid "Retract"
-msgstr "Retirar"
 
 msgid "Retract Message"
 msgstr "Retirar mensaje"
@@ -4218,20 +4205,26 @@ msgstr ""
 "Soporte para descubrimiento de servicios incluyendo nodos y búsqueda de "
 "usuarios"
 
-msgid "Switch to the first - ninth tab"
-msgstr "Cambiar a la primera - novena pestaña"
+msgid "Switch Workspace"
+msgstr "Cambiar de espacio de trabajo"
 
-msgid "Switch to the next tab"
-msgstr "Cambiar a la pestaña siguiente"
+msgid "Switch to the first - ninth chat"
+msgstr "Cambiar a la primera - novena conversación"
 
-msgid "Switch to the next unread tab"
-msgstr "Cambiar a la siguiente pestaña no leída"
+msgid "Switch to the first - ninth workspace"
+msgstr "Cambiar al primer - noveno espacio de trabajo"
 
-msgid "Switch to the previous tab"
-msgstr "Cambiar a la pestaña anterior"
+msgid "Switch to the next chat"
+msgstr "Cambiar a la conversación siguiente"
 
-msgid "Switch to the previous unread tab"
-msgstr "Cambiar a la pestaña anterior no leída"
+msgid "Switch to the next unread chat"
+msgstr "Cambiar a la siguiente conversación no leída"
+
+msgid "Switch to the previous chat"
+msgstr "Cambiar a la conversación anterior"
+
+msgid "Switch to the previous unread chat"
+msgstr "Cambiar a la conversación anterior no leída"
 
 msgid "Sync Threshold"
 msgstr "Umbral de sincronización"
@@ -4266,9 +4259,6 @@ msgstr "Fallo de verificación de TLS: %s"
 
 msgid "Tabbed chat window"
 msgstr "Ventana de conversación con pestañas"
-
-msgid "Tabs"
-msgstr "Pestañas"
 
 msgid "Tell your contacts if you received a message"
 msgstr "Dile a tus contactos si recibiste un mensaje"
@@ -4419,6 +4409,9 @@ msgstr "Este grupo persiste incluso si no hay participantes"
 msgid "This group chat will be destroyed once the last participant left"
 msgstr "Este grupo será destruido cuando lo abandone el último participante"
 
+msgid "This is a public group chat. Encryption is not available."
+msgstr "Este es un grupo público. El cifrado no está disponible."
+
 msgid ""
 "This is the theme you are currently using.\n"
 "Do you want to delete this theme?"
@@ -4479,8 +4472,12 @@ msgstr "Esto eliminará tu cuenta de Gajim."
 msgid "This will reset all introduction hints"
 msgstr "Esto restablecerá todas las sugerencias de introducción"
 
-msgid "This workspace contains chats. Remove anyway?"
-msgstr "Esta área de trabajo contiene charlas. ¿Eliminar igualmente?"
+msgid ""
+"This workspace contains chats. All chats will be moved to the next "
+"workspace. Remove anyway?"
+msgstr ""
+"Esta área de trabajo contiene conversaciones. Se moverán todas al siguiente "
+"espacio de trabajo. ¿Eliminar igualmente?"
 
 msgid "Three Months"
 msgstr "Tres meses"
@@ -4615,6 +4612,10 @@ msgstr "Error TLS desconocido '%s'"
 msgid "Unknown Title"
 msgstr "Título desconocido"
 
+#, python-format
+msgid "Unknown command: %s"
+msgstr "Comando desconocido: %s"
+
 msgid "Unknown language"
 msgstr "Idioma desconocido"
 
@@ -4703,6 +4704,13 @@ msgstr "Usar perfil definido en el directorio de configuración"
 msgid "Use file transfer proxies"
 msgstr "Usar proxies para las transferencias de archivo"
 
+msgid ""
+"Use filters to narrow down your search:\n"
+"from:username\n"
+"before:yyyy-mm-dd\n"
+"after:yyyy-mm-dd"
+msgstr ""
+
 msgid "Use proxy auth_entication"
 msgstr "Usar aut_entificación del proxy"
 
@@ -4711,6 +4719,10 @@ msgstr "Usa tus emoticonos favoritos, configura tu propia foto de perfil"
 
 msgid "Use your system’s keyring to store passwords"
 msgstr "Usa tu llavero de sistema para almacenar contraseñas"
+
+#, python-format
+msgid "User %s not found"
+msgstr "Usuario %s no encontrado"
 
 msgid "Users"
 msgstr "Usuarios"
@@ -4767,9 +4779,6 @@ msgstr "Visitantes"
 
 msgid "Visual Notifications"
 msgstr "Notificaciones Visuales"
-
-msgid "Voice Request"
-msgstr "Petición de voz"
 
 msgid "Waiting…"
 msgstr "Esperando…"
@@ -4830,6 +4839,9 @@ msgstr "Trabajando"
 msgid "Workspace Settings"
 msgstr "Preferencias del Área de Trabajo"
 
+msgid "Workspaces"
+msgstr "Espacios de trabajo"
+
 msgid "X11"
 msgstr "X11"
 
@@ -4883,6 +4895,9 @@ msgstr "Estás a punto de salir de Gajim"
 #, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "Vas a eliminar a %(name)s (%(jid)s) de tu roster.\n"
+
+msgid "You are currently not joined this group chat"
+msgstr "Actualmente no estás unido a este grupo"
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -4954,6 +4969,9 @@ msgstr "Has sido expulsado{actor}{reason}"
 #, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
 msgstr "Has sido eliminado de la sala {actor}{reason}"
+
+msgid "You have insufficient permissions"
+msgstr "No tienes suficientes permisos"
 
 #, python-brace-format
 msgid "You have left due to an error{reason}"
@@ -5055,9 +5073,6 @@ msgstr "Dirección"
 
 msgid "_Advanced Settings"
 msgstr "Configuraciones _avanzadas"
-
-msgid "_Approve"
-msgstr "_Aprobar"
 
 msgid "_Back"
 msgstr "Volver"
@@ -5329,6 +5344,10 @@ msgstr "negrilla"
 msgid "building"
 msgstr "edificio"
 
+#, python-format
+msgid "cairo Version: %s"
+msgstr "Versión Cairo: %s"
+
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "chat;messaging;im;xmpp;bonjour;voip;"
 
@@ -5411,8 +5430,8 @@ msgid "postalcode"
 msgstr "código postal"
 
 #, python-format
-msgid "python-cairo Version: %s"
-msgstr "Versión python-cairo: %s"
+msgid "pycairo Version: %s"
+msgstr "Versión pycairo: %s"
 
 #, python-format
 msgid "python-nbxmpp Version: %s"
@@ -5517,9 +5536,6 @@ msgstr "…o soltarla aqui"
 #~ msgid "%s is not a valid tone"
 #~ msgstr "%s no es un tono válido"
 
-#~ msgid "%s not found"
-#~ msgstr "%s no encontrado"
-
 #~ msgid "%s: Nothing found"
 #~ msgstr "%s: No se ha encontrado nada"
 
@@ -5529,6 +5545,9 @@ msgstr "…o soltarla aqui"
 #~ msgstr ""
 #~ "'%s' no está en tu lista de contactos.\n"
 #~ "Por favor, especifica una cuenta para enviar el mensaje."
+
+#~ msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
+#~ msgstr "Petición de voz de <b>%(nick)s</b> desde <b>%(room_name)s</b>"
 
 #~ msgid "?CLI:account"
 #~ msgstr "?CLI:cuenta"
@@ -5549,6 +5568,9 @@ msgstr "…o soltarla aqui"
 #~ "Cuenta a la que se enviará el XML; si no se especifica, el XML será "
 #~ "enviado a todas las cuentas"
 
+#~ msgid "Ad-Hoc Commands…"
+#~ msgstr "Comandos ad-hoc…"
+
 #~ msgid "Allow a participant to send you public or private messages"
 #~ msgstr "Permitir a un participante enviarte mensajes públicos o privados"
 
@@ -5568,6 +5590,13 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "Arguments:"
 #~ msgstr "Argumentos:"
+
+#~ msgid ""
+#~ "Ask before closing tabbed chat window if there are chats that can lose "
+#~ "data (chat, private chat)."
+#~ msgstr ""
+#~ "Preguntar antes de cerrar la ventana de chat con pestañas si hay chats "
+#~ "que pueden perder datos (chat, conversación privada)."
 
 #~ msgid "Ban Participant"
 #~ msgstr "Prohibir al participante"
@@ -5593,6 +5622,9 @@ msgstr "…o soltarla aqui"
 #~ msgid "Changes the status of account(s)"
 #~ msgstr "Cambia el estado de cuenta(s)"
 
+#~ msgid "Chat"
+#~ msgstr "Charla"
+
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Comprueba si Gajim se encuentra en ejecución"
 
@@ -5609,6 +5641,9 @@ msgstr "…o soltarla aqui"
 #~ "Comando deshabilitado. Este comando se puede habilitar estableciendo "
 #~ "'command_system_execute' en Verdadero en ACE (Editor de configuración "
 #~ "avanzada)."
+
+#~ msgid "Correct"
+#~ msgstr "Corregir"
 
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr "D-Bus no está presente en esta máquina o falta el módulo python"
@@ -5662,6 +5697,9 @@ msgstr "…o soltarla aqui"
 #~ msgid "Gajim will not try to join this group chat again"
 #~ msgstr "Gajim no intentará unirse a este grupo otra vez"
 
+#~ msgid "Gajim: IPython Console"
+#~ msgstr "Gajim: consola IPython"
+
 #~ msgid "Gets detailed info on a account"
 #~ msgstr "Obtener información detallada de una cuenta"
 
@@ -5670,6 +5708,20 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "Hide window to system tray when minimized"
 #~ msgstr "Ocultar la ventana en la bandeja de sistema cuando se minimice"
+
+#~ msgid "Hides the group chat participants list in a group chat window."
+#~ msgstr "Oculta la lista de participantes en la ventana de grupo de charla."
+
+#~ msgid ""
+#~ "How far back in time (minutes) chat history is restored. -1 means no "
+#~ "limit."
+#~ msgstr ""
+#~ "Cuantos minutos hacia atrás serán restaurados del historial de chat. -1 "
+#~ "significa que no hay límite."
+
+#~ msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
+#~ msgstr ""
+#~ "Cuántas líneas almacenar para Ctrl+Arriba (mensajes enviados previamente)."
 
 #~ msgid "If checked, Gajim can be controlled remotely using gajim-remote."
 #~ msgstr ""
@@ -5682,6 +5734,11 @@ msgstr "…o soltarla aqui"
 #~ msgstr ""
 #~ "Si está habilitado, Gajim oculta la ventana principal al presionar el "
 #~ "botón X en lugar de minimizar en el área de notificación."
+
+#~ msgid "If enabled, Gajim will add * and [n] in contact list window title."
+#~ msgstr ""
+#~ "Si está habilitado, Gajim agregará * y [n] en el título de la ventana de "
+#~ "la lista de contactos."
 
 #~ msgid "If enabled, Gajim will execute XEP-0146 Commands."
 #~ msgstr "Si está habilitado, Gajim ejecutará comandos XEP-0146."
@@ -5753,6 +5810,9 @@ msgstr "…o soltarla aqui"
 #~ msgid "Online"
 #~ msgstr "En línea"
 
+#~ msgid "Open IPython shell"
+#~ msgstr "Abrir shell IPython"
+
 #~ msgid "Open a private chat window with a specified participant"
 #~ msgstr "Abrir una ventana de chat privado con un participante especificado"
 
@@ -5793,8 +5853,14 @@ msgstr "…o soltarla aqui"
 #~ msgid "Quote previous message"
 #~ msgstr "Citar mensaje anterior"
 
+#~ msgid "Quote…"
+#~ msgstr "Cita…"
+
 #~ msgid "Removes contact from contact list"
 #~ msgstr "Elimina contacto del roster"
+
+#~ msgid "Retract"
+#~ msgstr "Retirar"
 
 #~ msgid "Returns current status (the global one unless account is specified)"
 #~ msgstr ""
@@ -5912,6 +5978,9 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "T_ry Again"
 #~ msgstr "Intenta_r otra vez"
+
+#~ msgid "Tabs"
+#~ msgstr "Pestañas"
 
 #~ msgid "The same as using a doc-string, except it supports translation"
 #~ msgstr "Igual que usando doc-string, excepto que soporta traducción"
@@ -6042,6 +6111,9 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "priority you want to give to the account"
 #~ msgstr "prioridad que quieres dar a la cuenta"
+
+#~ msgid "python-cairo Version: %s"
+#~ msgstr "Versión python-cairo: %s"
 
 #~ msgid "show help on command"
 #~ msgstr "mostrar ayuda sobre un comando"

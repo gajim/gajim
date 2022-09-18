@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-13 16:07+0000\n"
+"POT-Creation-Date: 2022-09-16 20:54+0000\n"
 "PO-Revision-Date: 2022-01-13 21:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -233,10 +233,6 @@ msgstr ""
 msgid "<b>#</b>"
 msgstr "<b>Yazıtipi</b>"
 
-#, python-format
-msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
-msgstr ""
-
 #, fuzzy
 msgid "<b>*</b>"
 msgstr "<b>Yazıtipi</b>"
@@ -423,6 +419,21 @@ msgstr "?Group Chat Contact Role:Hiç biri"
 #, fuzzy
 msgid "?Group chat name:Vacation"
 msgstr "Grup Sohbeti Daveti"
+
+#, fuzzy
+msgid "?Message row action:Copy"
+msgstr "İletin içindekiler"
+
+#, fuzzy
+msgid "?Message row action:Correct…"
+msgstr "İletin içindekiler"
+
+msgid "?Message row action:Quote…"
+msgstr ""
+
+#, fuzzy
+msgid "?Message row action:Retract…"
+msgstr "Üyelik ileti _kaydet"
 
 #, fuzzy
 msgid "?Message state:Received"
@@ -901,6 +912,9 @@ msgstr "'%s' çözülürken geçici bozukluk"
 msgid "Apply"
 msgstr ""
 
+msgid "Approve"
+msgstr ""
+
 #, fuzzy
 msgid "Archive"
 msgstr "Dosya boş"
@@ -953,11 +967,6 @@ msgid "Ask For Status Message on…"
 msgstr "Durum ileti sor ben buysam:"
 
 msgid "Ask before closing a group chat tab/window."
-msgstr ""
-
-msgid ""
-"Ask before closing tabbed chat window if there are chats that can lose data "
-"(chat, private chat)."
 msgstr ""
 
 msgid "Ask before pasting an image."
@@ -1183,10 +1192,6 @@ msgstr "Sertifika henüz geçerli değil"
 msgid "CRL signature failure"
 msgstr "Hata: Yanlış imza"
 
-#, fuzzy, python-format
-msgid "Cairo Version: %s"
-msgstr "GTK+ Runtime Sürümü"
-
 msgid "Call"
 msgstr ""
 
@@ -1319,10 +1324,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Chat"
-msgstr "Sohbetler"
-
-#, fuzzy
 msgid "Chat Banner: Background Color"
 msgstr "Kişinin bağlantısı kesildi"
 
@@ -1332,6 +1333,10 @@ msgstr ""
 #, fuzzy
 msgid "Chat Banner: Text Font"
 msgstr "Sohbet Sancak"
+
+#, fuzzy
+msgid "Chat List"
+msgstr "Kişiler"
 
 #, fuzzy
 msgid "Chat history"
@@ -1465,6 +1470,10 @@ msgstr "Renk"
 #, fuzzy
 msgid "Command List"
 msgstr "Geçersiz Liste İsmi"
+
+#, fuzzy
+msgid "Command executed successfully"
+msgstr "'%s' (%d) öğesi zaten bir görüntüye eklenmiş"
 
 #, fuzzy
 msgid "Commands"
@@ -1696,8 +1705,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr ""
 
-msgid "Correct"
-msgstr ""
+#, fuzzy
+msgid "Correct the last message"
+msgstr "durum ileti"
 
 #, fuzzy
 msgid "Could not Open File"
@@ -2433,9 +2443,6 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Gajim'den gerçekten çıkılsın mı?"
 
-msgid "Gajim: IPython Console"
-msgstr ""
-
 #, fuzzy
 msgid "Gathering information…"
 msgstr "Kişisel Bilgisi"
@@ -2598,9 +2605,6 @@ msgstr "Konuşma penceresinde tüm düğmeleri gizle"
 msgid "Hides the banner in a group chat window."
 msgstr "%s mevcut bir grubun ismi değil"
 
-msgid "Hides the group chat participants list in a group chat window."
-msgstr ""
-
 #, fuzzy
 msgid "Home"
 msgstr "<b>Ana Sayfa:</b>"
@@ -2613,18 +2617,11 @@ msgstr "<b>Ana Sayfa:</b>"
 msgid "Hostname"
 msgstr "_Bilgisayar adı:"
 
-msgid ""
-"How far back in time (minutes) chat history is restored. -1 means no limit."
-msgstr ""
-
 #, fuzzy
 msgid "How far back should the chat history be synchronised?"
 msgstr "Ne yapmak istiyorsun?"
 
 msgid "How long Gajim should keep your chat history"
-msgstr ""
-
-msgid "How many lines to store for Ctrl+KeyUP (previously sent messages)."
 msgstr ""
 
 #, fuzzy
@@ -2665,9 +2662,6 @@ msgid ""
 msgstr ""
 
 msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
-msgstr ""
-
-msgid "If enabled, Gajim will add * and [n] in contact list window title."
 msgstr ""
 
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
@@ -2790,6 +2784,10 @@ msgstr "Geçersiz Sunucu Adı"
 
 #, fuzzy
 msgid "Invalid XMPP Address"
+msgstr "Geçersiz Dosya"
+
+#, fuzzy, python-format
+msgid "Invalid address: %s"
 msgstr "Geçersiz Dosya"
 
 #, fuzzy
@@ -3373,9 +3371,6 @@ msgstr "Gmail Gelen Kutusunu _Aç"
 msgid "Open Folder"
 msgstr "Gmail Gelen Kutusunu _Aç"
 
-msgid "Open IPython shell"
-msgstr ""
-
 #, fuzzy
 msgid "Open Link in Browser"
 msgstr "Gmail Gelen Kutusunu _Aç"
@@ -3477,11 +3472,18 @@ msgstr "Tüm dosyalar"
 msgid "Pa_use/Resume"
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Pango Version: %s"
+msgstr "GTK+ Runtime Sürümü"
+
 msgid "Participant"
 msgstr "Katılan"
 
 msgid "Participants"
 msgstr "Katılanlar"
+
+msgid "Participants asking for voice:"
+msgstr ""
 
 msgid "Participants entering this group chat are allowed to send messages"
 msgstr ""
@@ -3539,6 +3541,10 @@ msgstr "Dosya transferi iptal et"
 #, fuzzy
 msgid "Pending Event"
 msgstr "Bütün Bekleyen _Olayları Göster"
+
+#, fuzzy
+msgid "Pending Voice Requests"
+msgstr "Dosya Gönderme Soru"
 
 #, fuzzy
 msgid "Personal notes about this contact"
@@ -3766,10 +3772,6 @@ msgstr ""
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
-
-#, fuzzy
-msgid "Quote…"
-msgstr "Alıntı"
 
 #, fuzzy
 msgid "Re-Login"
@@ -4045,9 +4047,6 @@ msgid "Restore last state"
 msgstr "Son durum: %s"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-msgid "Retract"
 msgstr ""
 
 #, fuzzy
@@ -4772,19 +4771,27 @@ msgstr ""
 msgid "Support for service discovery including nodes and search for users"
 msgstr ""
 
-msgid "Switch to the first - ninth tab"
+#, fuzzy
+msgid "Switch Workspace"
+msgstr "Kişiyi yeniden adlandır"
+
+msgid "Switch to the first - ninth chat"
 msgstr ""
 
-msgid "Switch to the next tab"
+msgid "Switch to the first - ninth workspace"
 msgstr ""
 
-msgid "Switch to the next unread tab"
+#, fuzzy
+msgid "Switch to the next chat"
+msgstr "Sohbet _Başla"
+
+msgid "Switch to the next unread chat"
 msgstr ""
 
-msgid "Switch to the previous tab"
+msgid "Switch to the previous chat"
 msgstr ""
 
-msgid "Switch to the previous unread tab"
+msgid "Switch to the previous unread chat"
 msgstr ""
 
 msgid "Sync Threshold"
@@ -4827,9 +4834,6 @@ msgid "TLS verification failed: %s"
 msgstr "<b>Bir hata oluştu:</b>"
 
 msgid "Tabbed chat window"
-msgstr ""
-
-msgid "Tabs"
 msgstr ""
 
 msgid "Tell your contacts if you received a message"
@@ -4984,6 +4988,9 @@ msgstr ""
 msgid "This group chat will be destroyed once the last participant left"
 msgstr ""
 
+msgid "This is a public group chat. Encryption is not available."
+msgstr ""
+
 msgid ""
 "This is the theme you are currently using.\n"
 "Do you want to delete this theme?"
@@ -5039,7 +5046,9 @@ msgstr "İstemciyi hesap yöneticisi kontrolünden çıkarır."
 msgid "This will reset all introduction hints"
 msgstr ""
 
-msgid "This workspace contains chats. Remove anyway?"
+msgid ""
+"This workspace contains chats. All chats will be moved to the next "
+"workspace. Remove anyway?"
 msgstr ""
 
 msgid "Three Months"
@@ -5190,6 +5199,10 @@ msgstr "<b>Bir hata oluştu:</b>"
 msgid "Unknown Title"
 msgstr "Bilinmeyen Parça"
 
+#, fuzzy, python-format
+msgid "Unknown command: %s"
+msgstr "komut"
+
 #, fuzzy
 msgid "Unknown language"
 msgstr "Bilinmeyen Parça"
@@ -5298,6 +5311,13 @@ msgstr "İlerlemiş Ayarlama Editörü"
 msgid "Use file transfer proxies"
 msgstr "Dosya aktarım vekil sunucları kullan"
 
+msgid ""
+"Use filters to narrow down your search:\n"
+"from:username\n"
+"before:yyyy-mm-dd\n"
+"after:yyyy-mm-dd"
+msgstr ""
+
 msgid "Use proxy auth_entication"
 msgstr "Vergil do_ğrulama kullan"
 
@@ -5306,6 +5326,10 @@ msgstr ""
 
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "User %s not found"
+msgstr "%s bulunamadı"
 
 msgid "Users"
 msgstr "Kullanıcılar"
@@ -5372,10 +5396,6 @@ msgid "Visual Notifications"
 msgstr "<b>Görsel Bildirimler</b>"
 
 #, fuzzy
-msgid "Voice Request"
-msgstr "Dosya Gönderme Soru"
-
-#, fuzzy
 msgid "Waiting…"
 msgstr "%s yazılıyor..."
 
@@ -5439,6 +5459,10 @@ msgstr " Çalışılıyor"
 msgid "Workspace Settings"
 msgstr "İlerlemiş aksiyonlar"
 
+#, fuzzy
+msgid "Workspaces"
+msgstr "Kişiyi yeniden adlandır"
+
 msgid "X11"
 msgstr ""
 
@@ -5495,6 +5519,10 @@ msgstr "Onu kullanmak istediğinizden emin misiniz? (e/H) "
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
 msgstr "%s grupu kişi listesinden silmek istiyor musun?"
+
+#, fuzzy
+msgid "You are currently not joined this group chat"
+msgstr "%s grup sohbete katıldı"
 
 msgid "You are not allowed to modify the affiliation of Admins and Owners"
 msgstr ""
@@ -5569,6 +5597,9 @@ msgstr ""
 #, fuzzy, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
 msgstr "Öntanımlı veritabanı dil kodlaması %s olarak ayarlandı.\n"
+
+msgid "You have insufficient permissions"
+msgstr ""
 
 #, python-brace-format
 msgid "You have left due to an error{reason}"
@@ -5689,9 +5720,6 @@ msgstr "_Adres:"
 #, fuzzy
 msgid "_Advanced Settings"
 msgstr "İlerlemiş aksiyonlar"
-
-msgid "_Approve"
-msgstr ""
 
 #, fuzzy
 msgid "_Back"
@@ -6018,6 +6046,10 @@ msgstr ""
 msgid "building"
 msgstr "Saklanmada"
 
+#, fuzzy, python-format
+msgid "cairo Version: %s"
+msgstr "GTK+ Runtime Sürümü"
+
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
@@ -6107,7 +6139,7 @@ msgid "postalcode"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "python-cairo Version: %s"
+msgid "pycairo Version: %s"
 msgstr "GTK+ Runtime Sürümü"
 
 #, python-format
@@ -6187,9 +6219,6 @@ msgstr ""
 #~ msgid "%s is not a valid tone"
 #~ msgstr "Klasör \"%s\" yazılabilir değil"
 
-#~ msgid "%s not found"
-#~ msgstr "%s bulunamadı"
-
 #, fuzzy
 #~ msgid "%s: Nothing found"
 #~ msgstr "%s bulunamadı"
@@ -6209,6 +6238,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "?CLI:status"
 #~ msgstr "durum"
+
+#, fuzzy
+#~ msgid "Ad-Hoc Commands…"
+#~ msgstr "Komuta _Yürüt"
 
 #~ msgid "Arguments:"
 #~ msgstr "Argümanlar:"
@@ -6237,6 +6270,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Changes the status of account(s)"
 #~ msgstr "Durum satırı okunamadı"
+
+#, fuzzy
+#~ msgid "Chat"
+#~ msgstr "Sohbetler"
 
 #, fuzzy
 #~ msgid "Check if Gajim is running"
@@ -6390,6 +6427,10 @@ msgstr ""
 #~ msgstr "durum ileti"
 
 #, fuzzy
+#~ msgid "Quote…"
+#~ msgstr "Alıntı"
+
+#, fuzzy
 #~ msgid "Removes contact from contact list"
 #~ msgstr "Kişiyi listeden sil"
 
@@ -6512,6 +6553,10 @@ msgstr ""
 
 #~ msgid "message subject"
 #~ msgstr "iletinin konusu"
+
+#, fuzzy
+#~ msgid "python-cairo Version: %s"
+#~ msgstr "GTK+ Runtime Sürümü"
 
 #~ msgid "show help on command"
 #~ msgstr "komut yardımını göster"
