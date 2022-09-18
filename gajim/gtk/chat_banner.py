@@ -63,37 +63,54 @@ class ChatBanner(Gtk.Box, EventHelper):
 
         hide_roster = app.settings.get('hide_groupchat_occupants_list')
         self._set_toggle_roster_button_icon(hide_roster)
+
         app.settings.connect_signal(
             'hide_groupchat_occupants_list',
             self._set_toggle_roster_button_icon)
 
+        app.settings.connect_signal(
+            'hide_chat_banner',
+            self._update_hide_banner)
+
+        app.settings.connect_signal(
+            'hide_groupchat_banner',
+            self._update_hide_banner)
+
         self.show_all()
 
     def clear(self) -> None:
-        if self._contact is not None:
-            self._contact.disconnect_all_from_obj(self)
-            self._contact = None
-
-        if self._client is not None:
-            self._client.disconnect_all_from_obj(self)
-            self._client = None
-
+        self._disconnect_signals()
         self.unregister_events()
 
     def switch_contact(self, contact: types.ChatContactT) -> None:
-        self._update_account_badge(contact.account)
-
-        if self._client is not None:
-            self._client.disconnect_all_from_obj(self)
-
+        self._disconnect_signals()
         self._client = app.get_client(contact.account)
-        self._client.connect_signal('state-changed',
-                                    self._on_client_state_changed)
-
-        if self._contact is not None:
-            self._contact.disconnect_all_from_obj(self)
-
         self._contact = contact
+        self._connect_signals()
+
+        if not self.has_events_registered():
+            self.register_events([
+                ('message-received', ged.GUI2, self._on_message_received),
+                ('muc-disco-update', ged.GUI2, self._on_muc_disco_update),
+                ('bookmarks-received', ged.GUI2, self._on_bookmarks_received),
+                ('account-enabled', ged.GUI2, self._on_account_changed),
+                ('account-disabled', ged.GUI2, self._on_account_changed)
+            ])
+
+        self._voice_requests_button.switch_contact(self._contact)
+
+        self._update_phone_image()
+        self._update_roster_button()
+        self._update_avatar()
+        self._update_visitor_button()
+        self._update_name_label()
+        self._update_account_badge()
+        self._update_hide_banner()
+
+    def _connect_signals(self) -> None:
+        assert self._contact is not None
+        assert self._client is not None
+
         self._contact.multi_connect({
             'chatstate-update': self._on_chatstate_update,
             'nickname-update': self._on_nickname_update,
@@ -108,43 +125,25 @@ class ChatBanner(Gtk.Box, EventHelper):
                 'state-changed': self._on_muc_state_changed,
                 'room-voice-request': self._on_room_voice_request
             })
-            self._ui.toggle_roster_button.show()
-            hide_banner = app.settings.get('hide_groupchat_banner')
-        else:
-            self._ui.toggle_roster_button.hide()
-            hide_banner = app.settings.get('hide_chat_banner')
 
-        if isinstance(self._contact, GroupchatParticipant):
+        elif isinstance(self._contact, GroupchatParticipant):
             self._contact.multi_connect({
                 'user-joined': self._on_user_state_changed,
                 'user-left': self._on_user_state_changed,
                 'user-avatar-update': self._on_user_avatar_update,
             })
 
-        if not self.has_events_registered():
-            self.register_events([
-                ('message-received', ged.GUI2, self._on_message_received),
-                ('muc-disco-update', ged.GUI2, self._on_muc_disco_update),
-                ('bookmarks-received', ged.GUI2, self._on_bookmarks_received),
-                ('account-enabled', ged.GUI2, self._on_account_changed),
-                ('account-disabled', ged.GUI2, self._on_account_changed)
-            ])
+        self._client.connect_signal('state-changed',
+                                    self._on_client_state_changed)
 
-        self._ui.phone_image.set_visible(
-            self._contact in self._last_message_from_phone)
+    def _disconnect_signals(self) -> None:
+        if self._contact is not None:
+            self._contact.disconnect_all_from_obj(self)
+            self._contact = None
 
-        self._voice_requests_button.switch_contact(self._contact)
-
-        if hide_banner:
-            self.set_no_show_all(True)
-            self.hide()
-        else:
-            self.set_no_show_all(False)
-            self.show_all()
-
-        self._update_avatar()
-        self._update_visitor_button()
-        self._update_name_label()
+        if self._client is not None:
+            self._client.disconnect_all_from_obj(self)
+            self._client = None
 
     def _on_client_state_changed(self,
                                  _client: types.Client,
@@ -222,8 +221,7 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._update_name_label()
 
     def _on_account_changed(self, event: AccountEnabled) -> None:
-        assert self._contact is not None
-        self._update_account_badge(self._contact.account)
+        self._update_account_badge()
 
     def _on_message_received(self, event: MessageReceived) -> None:
         if (not isinstance(self._contact, BareContact) or
@@ -239,7 +237,31 @@ class ChatBanner(Gtk.Box, EventHelper):
         else:
             self._last_message_from_phone.discard(self._contact)
 
-        self._ui.phone_image.set_visible(resource_contact.is_phone)
+        self._update_phone_image()
+
+    def _update_phone_image(self) -> None:
+        self._ui.phone_image.set_visible(
+            self._contact in self._last_message_from_phone)
+
+    def _update_roster_button(self) -> None:
+        self._ui.toggle_roster_button.set_visible(
+            isinstance(self._contact, GroupchatContact))
+
+    def _update_hide_banner(self, *args: Any) -> None:
+        if self._contact is None:
+            return
+
+        if isinstance(self._contact, GroupchatContact):
+            hide_banner = app.settings.get('hide_groupchat_banner')
+        else:
+            hide_banner = app.settings.get('hide_chat_banner')
+
+        if hide_banner:
+            self.set_no_show_all(True)
+            self.hide()
+        else:
+            self.set_no_show_all(False)
+            self.show_all()
 
     def _update_avatar(self) -> None:
         scale = app.window.get_scale_factor()
@@ -283,13 +305,15 @@ class ChatBanner(Gtk.Box, EventHelper):
 
         self._ui.name_label.set_tooltip_text(tooltip_text)
 
-    def _update_account_badge(self, account: str) -> None:
+    def _update_account_badge(self) -> None:
+        assert self._contact is not None
+
         if self._account_badge is not None:
             self._account_badge.destroy()
 
         enabled_accounts = app.get_enabled_accounts_with_labels()
         if len(enabled_accounts) > 1:
-            self._account_badge = AccountBadge(account)
+            self._account_badge = AccountBadge(self._contact.account)
             self._ui.additional_items_box.pack_end(
                 self._account_badge, False, True, 0)
 
@@ -309,7 +333,8 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._ui.toggle_roster_image.set_from_icon_name(
             icon, Gtk.IconSize.BUTTON)
 
-    def _get_name_from_contact(self, contact: types.ChatContactT) -> str:
+    @staticmethod
+    def _get_name_from_contact(contact: types.ChatContactT) -> str:
         name = contact.name
 
         if isinstance(contact, BareContact):
