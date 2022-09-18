@@ -704,9 +704,23 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         correct_id = None
         if self._message_action_box.is_correcting:
+            self._message_action_box.is_correcting = False
+            context = self._message_action_box.msg_textview.get_style_context()
+            context.remove_class('gajim-msg-correcting')
+
             correct_id = self._message_action_box.last_message_id.get(
                 (contact.account, contact.jid))
-            self._message_action_box.is_correcting = False
+            message_row = app.storage.archive.get_last_correctable_message(
+                contact.account, contact.jid, correct_id)
+            if message_row is None:
+                self._message_action_box.msg_textview.clear()
+                log.info('Trying to correct message older than threshold')
+                return
+
+            if message_row.message == message:
+                self._message_action_box.msg_textview.clear()
+                log.info('Trying to correct message with original text')
+                return
 
         chatstate = client.get_module('Chatstate').get_active_chatstate(
             contact)

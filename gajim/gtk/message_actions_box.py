@@ -659,6 +659,3 @@ class MessageActionsBox(Gtk.Grid, ged.EventHelper):
                 self.last_message_id[(account, jid)] = None
             else:
                 self.last_message_id[(account, jid)] = event.message_id
-
-        self.msg_textview.get_style_context().remove_class(
-            'gajim-msg-correcting')
