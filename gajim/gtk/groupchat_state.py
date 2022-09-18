@@ -18,7 +18,8 @@ from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.types import ChatContactT
+from gajim.common import types
+from gajim.common.const import SimpleClientState
 from gajim.common.modules.contacts import GroupchatContact
 
 from gajim.gui.builder import get_builder
@@ -32,6 +33,7 @@ class GroupchatState(Gtk.Box):
         self.set_no_show_all(True)
 
         self._contact = None
+        self._client = None
 
         self._ui = get_builder('groupchat_state.ui')
         self._ui.connect_signals(self)
@@ -43,10 +45,14 @@ class GroupchatState(Gtk.Box):
         if self._contact is not None:
             self._contact.disconnect_all_from_obj(self)
 
+        if self._client is not None:
+            self._client.disconnect_all_from_obj(self)
+
         self._contact = None
+        self._client = None
         self.hide()
 
-    def switch_contact(self, contact: ChatContactT) -> None:
+    def switch_contact(self, contact: types.ChatContactT) -> None:
         self.clear()
 
         if not isinstance(contact, GroupchatContact):
@@ -55,7 +61,19 @@ class GroupchatState(Gtk.Box):
         self._contact = contact
         self._contact.connect('state-changed', self._on_muc_state_changed)
 
+        self._client = app.get_client(contact.account)
+        self._client.connect_signal('state-changed',
+                                    self._on_client_state_changed)
+
         self._update_state(contact)
+
+    def _on_client_state_changed(self,
+                                 client: types.Client,
+                                 _signal_name: str,
+                                 _state: SimpleClientState) -> None:
+
+        assert self._contact is not None
+        self._update_state(self._contact)
 
     def _on_muc_state_changed(self,
                               contact: GroupchatContact,
@@ -71,7 +89,9 @@ class GroupchatState(Gtk.Box):
         elif contact.is_not_joined:
             self._ui.groupchat_state.set_visible_child_name('not-joined')
 
-        self.set_visible(not contact.is_joined)
+        assert self._client is not None
+        self.set_visible(self._client.state.is_available and
+                         not contact.is_joined)
 
     def set_fetching(self) -> None:
         self._ui.groupchat_state.set_visible_child_name('fetching')
