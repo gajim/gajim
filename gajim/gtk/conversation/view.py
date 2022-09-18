@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import Literal
 from typing import Optional
 from typing import Union
 from typing import Generator
@@ -29,6 +30,7 @@ from datetime import timedelta
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import GObject
+from gi.repository import Gio
 
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules.security_labels import Displaymarking
@@ -134,6 +136,22 @@ class ConversationView(Gtk.ScrolledWindow):
 
         self.add(self._list_box)
         self.set_focus_vadjustment(Gtk.Adjustment())
+
+        app.window.get_action('scroll-view-up').connect(
+            'activate', self._on_scroll_view)
+        app.window.get_action('scroll-view-down').connect(
+            'activate', self._on_scroll_view)
+
+    def _on_scroll_view(self,
+                        action: Gio.SimpleAction,
+                        _param: Literal[None]) -> None:
+
+        action_name = action.get_name()
+        if action_name == 'scroll-view-down':
+            self.emit('scroll-child', Gtk.ScrollType.PAGE_DOWN, False)
+
+        elif action_name == 'scroll-view-up':
+            self.emit('scroll-child', Gtk.ScrollType.PAGE_UP, False)
 
     def _enable_signal_handlers(self, enable: bool) -> None:
         if self._signal_handlers_enabled == enable:

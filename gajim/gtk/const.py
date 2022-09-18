@@ -214,6 +214,8 @@ MAIN_WIN_ACTIONS = [
     ('muc-change-role', 'as', False),
     ('muc-change-affiliation', 'as', False),
     ('muc-request-voice', None, False),
+    ('scroll-view-up', None, True),
+    ('scroll-view-down', None, True),
 ]
 
 

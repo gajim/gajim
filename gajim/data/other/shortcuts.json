@@ -37,5 +37,7 @@
     "win.switch-workspace-7": ["<Primary>7", "<Primary>KP_7"],
     "win.switch-workspace-8": ["<Primary>8", "<Primary>KP_8"],
     "win.switch-workspace-9": ["<Primary>9", "<Primary>KP_9"],
-    "win.toggle-chat-list": ["<Primary>R"]
+    "win.toggle-chat-list": ["<Primary>R"],
+    "win.scroll-view-up": ["<Shift>Page_Up"],
+    "win.scroll-view-down": ["<Shift>Page_Down"]
 }

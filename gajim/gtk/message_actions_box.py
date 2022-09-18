@@ -515,12 +515,6 @@ class MessageActionsBox(Gtk.Grid, ged.EventHelper):
                         Direction.PREV, unread_first=True)
                     return True
 
-            if event.keyval in (Gdk.KEY_Page_Down, Gdk.KEY_Page_Up):
-                control = app.window.get_control()
-                if control.has_active_chat():
-                    control.conversation_view.event(event)
-                    return True
-
         if event_state & Gdk.ModifierType.CONTROL_MASK:
             if event.keyval == Gdk.KEY_Tab:
                 app.window.select_next_chat(Direction.NEXT, unread_first=True)
