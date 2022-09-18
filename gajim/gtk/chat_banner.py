@@ -32,7 +32,6 @@ from gajim.common.events import BookmarksReceived
 from gajim.common.events import MessageReceived
 from gajim.common.events import MucDiscoUpdate
 from gajim.common.ged import EventHelper
-from gajim.common.helpers import get_uf_chatstate
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -144,58 +143,64 @@ class ChatBanner(Gtk.Box, EventHelper):
             self.show_all()
 
         self._update_avatar()
-        self._update_content()
+        self._update_visitor_button()
+        self._update_name_label()
 
     def _on_client_state_changed(self,
                                  _client: types.Client,
                                  _signal_name: str,
                                  state: SimpleClientState):
+
         self._update_avatar()
-        self._update_content()
 
     def _on_presence_update(self,
                             _contact: types.BareContact,
                             _signal_name: str
                             ) -> None:
+
         self._update_avatar()
 
     def _on_chatstate_update(self,
                              _contact: types.BareContact,
                              _signal_name: str
                              ) -> None:
-        self._update_content()
+
+        self._update_name_label()
 
     def _on_nickname_update(self,
                             _contact: types.BareContact,
                             _signal_name: str
                             ) -> None:
-        self._update_content()
+
+        self._update_name_label()
 
     def _on_avatar_update(self,
                           _contact: types.BareContact,
                           _signal_name: str
                           ) -> None:
+
         self._update_avatar()
 
     def _on_caps_update(self,
                         _contact: types.BareContact,
                         _signal_name: str
                         ) -> None:
+
         self._update_avatar()
 
     def _on_muc_state_changed(self,
                               contact: GroupchatContact,
                               _signal_name: str
                               ) -> None:
-        if contact.is_joined:
-            self._update_content()
+
+        self._update_visitor_button()
 
     def _on_room_voice_request(self, *args: Any) -> None:
         self._voice_requests_button.set_no_show_all(False)
         self._voice_requests_button.show_all()
 
     def _on_user_role_changed(self, *args: Any) -> None:
-        self._update_content()
+        self._update_visitor_button()
 
     def _on_user_state_changed(self, *args: Any) -> None:
         self._update_avatar()
@@ -207,14 +212,14 @@ class ChatBanner(Gtk.Box, EventHelper):
         if not isinstance(self._contact, GroupchatContact):
             return
 
-        self._update_content()
+        self._update_name_label()
 
     def _on_muc_disco_update(self, event: MucDiscoUpdate) -> None:
         assert self._contact is not None
         if event.jid != self._contact.jid:
             return
 
-        self._update_content()
+        self._update_name_label()
 
     def _on_account_changed(self, event: AccountEnabled) -> None:
         assert self._contact is not None
@@ -243,46 +248,40 @@ class ChatBanner(Gtk.Box, EventHelper):
         assert isinstance(surface, cairo.ImageSurface)
         self._ui.avatar_image.set_from_surface(surface)
 
-    def _update_content(self) -> None:
+    def _update_visitor_button(self) -> None:
+        if not isinstance(self._contact, GroupchatContact):
+            self._ui.visitor_box.set_visible(False)
+            return
+
+        if self._contact.is_not_joined:
+            self._ui.visitor_box.set_visible(False)
+            return
+
+        self_contact = self._contact.get_self()
+        assert self_contact is not None
+        self._ui.visitor_box.set_visible(self_contact.role.is_visitor)
+
+    def _update_name_label(self) -> None:
         assert self._contact is not None
-        assert self._client is not None
 
-        name = GLib.markup_escape_text(self._contact.name)
+        name = self._get_name_from_contact(self._contact)
 
-        if self._contact.jid.bare_match(self._client.get_own_jid()):
-            name = _('Note to myself')
+        chatstate = ''
+        if app.settings.get('show_chatstate_in_banner'):
+            chatstate = self._contact.chatstate_string
 
-        if self._contact.is_pm_contact:
-            gc_contact = self._client.get_module('Contacts').get_contact(
-                self._contact.jid.bare)
-            name = f'{name} ({GLib.markup_escape_text(gc_contact.name)})'
-
-        label_text = f'<span>{name}</span>'
-        label_tooltip = name
-        show_chatstate = app.settings.get('show_chatstate_in_banner')
-        if (show_chatstate and isinstance(
-                self._contact, (BareContact, GroupchatParticipant))):
-            chatstate = self._contact.chatstate
-            if chatstate is not None:
-                chatstate = get_uf_chatstate(chatstate.value)
-            else:
-                chatstate = ''
-
-            label_text = f'<span>{name}</span>' \
-                         f'<span size="60%" weight="light">' \
-                         f' {chatstate}</span>'
-            label_tooltip = f'{name} {chatstate}'
+        label_text = f'<span>{GLib.markup_escape_text(name)}</span>'
+        if chatstate:
+            label_markup = '<span size="60%" weight="light"> %s</span>'
+            label_text += label_markup % GLib.markup_escape_text(chatstate)
 
         self._ui.name_label.set_markup(label_text)
-        self._ui.name_label.set_tooltip_markup(label_tooltip)
 
-        if isinstance(self._contact, GroupchatContact):
-            self_contact = self._contact.get_self()
-            if self_contact:
-                self._ui.visitor_box.set_visible(self_contact.role.is_visitor)
-                return
+        tooltip_text = name
+        if chatstate:
+            tooltip_text = f'{name} {chatstate}'
 
-        self._ui.visitor_box.set_visible(False)
+        self._ui.name_label.set_tooltip_text(tooltip_text)
 
     def _update_account_badge(self, account: str) -> None:
         if self._account_badge is not None:
@@ -309,3 +308,16 @@ class ChatBanner(Gtk.Box, EventHelper):
         icon = 'go-next-symbolic' if not hide_roster else 'go-previous-symbolic'
         self._ui.toggle_roster_image.set_from_icon_name(
             icon, Gtk.IconSize.BUTTON)
+
+    def _get_name_from_contact(self, contact: types.ChatContactT) -> str:
+        name = contact.name
+
+        if isinstance(contact, BareContact):
+            if contact.is_self:
+                return _('Note to myself')
+            return name
+
+        if isinstance(contact, GroupchatParticipant):
+            return f'{name} ({contact.room.name})'
+
+        return name
