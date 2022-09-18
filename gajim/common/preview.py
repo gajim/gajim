@@ -237,8 +237,13 @@ class PreviewManager:
         if urlparts.scheme in ('https', 'http'):
             if app.settings.get('preview_allow_all_images'):
                 mime_type = guess_mime_type(uri)
-                if (mime_type not in MIME_TYPES or
-                        mime_type == 'application/octet-stream'):
+                if mime_type not in MIME_TYPES:
+                    return False
+
+                if mime_type == 'application/octet-stream' and uri != oob_url:
+                    # guess_mime_type yields 'application/octet-stream' for
+                    # paths without suffix. Check oob_url to make sure we
+                    # display a preview for files sent via http upload.
                     return False
                 return True
 
@@ -345,7 +350,7 @@ class PreviewManager:
             log.error('%s: %s', preview.orig_path.name, error)
             return
 
-        preview.mime_type = guess_mime_type(preview.orig_path)
+        preview.mime_type = guess_mime_type(preview.orig_path, data)
         preview.file_size = os.path.getsize(preview.orig_path)
         if preview.is_previewable:
             if preview.create_thumbnail(data):
@@ -368,7 +373,7 @@ class PreviewManager:
             return
 
         preview.thumbnail = data
-        preview.mime_type = guess_mime_type(preview.orig_path)
+        preview.mime_type = guess_mime_type(preview.orig_path, data)
         preview.file_size = os.path.getsize(preview.orig_path)
 
         try:
