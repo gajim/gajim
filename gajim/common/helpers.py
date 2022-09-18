@@ -64,6 +64,7 @@ import unicodedata
 
 from nbxmpp.namespaces import Namespace
 from nbxmpp.const import Role
+from nbxmpp.const import Chatstate
 from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
 from nbxmpp.const import Affiliation
@@ -304,17 +305,23 @@ def from_one_line(msg: str) -> str:
     return msg
 
 
-def get_uf_chatstate(chatstate: str) -> str:
-    '''
-    Remove chatstate jargon and returns user friendly messages
-    '''
-    if chatstate in ('inactive', 'gone'):
-        return _('is doing something else')
-    if chatstate == 'composing':
+def chatstate_to_string(chatstate: Optional[Chatstate]) -> str:
+    if chatstate is None:
+        return ''
+
+    if chatstate == Chatstate.ACTIVE:
+        return ''
+
+    if chatstate == Chatstate.COMPOSING:
         return _('is composing a message…')
-    if chatstate == 'paused':
+
+    if chatstate in (Chatstate.INACTIVE, Chatstate.GONE):
+        return _('is doing something else')
+
+    if chatstate == Chatstate.PAUSED:
         return _('paused composing a message')
-    return ''
+
+    raise ValueError('unknown value: %s' % chatstate)
 
 
 def exec_command(command: str,

@@ -45,6 +45,7 @@ from gajim.common.structs import PresenceData
 from gajim.common.structs import UNKNOWN_MUC_PRESENCE
 from gajim.common.structs import MUCPresenceData
 from gajim.common.helpers import Observable
+from gajim.common.helpers import chatstate_to_string
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import LogAdapter
 from gajim.common.helpers import get_groupchat_name
@@ -321,6 +322,14 @@ class CommonContact(Observable):
 
     def get_address(self, _prefer_real: bool = True) -> JID:
         return self._jid
+
+    @property
+    def chatstate(self) -> Optional[Chatstate]:
+        return None
+
+    @property
+    def chatstate_string(self) -> str:
+        return chatstate_to_string(self.chatstate)
 
     def __repr__(self) -> str:
         return f'{self.jid} ({self._account})'
