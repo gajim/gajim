@@ -1,4 +1,10 @@
-Gajim 1.5.0 (18 Sep 2022)
+Gajim 1.5.1 (19 Sep 2022)
+
+  Bug Fixes
+
+  * ChatBanner: Format markup string correctly
+
+Gajim 1.5.0 (19 Sep 2022)
 
   CVE-2022-39835
 
