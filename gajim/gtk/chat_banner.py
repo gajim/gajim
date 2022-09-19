@@ -294,8 +294,9 @@ class ChatBanner(Gtk.Box, EventHelper):
 
         label_text = f'<span>{GLib.markup_escape_text(name)}</span>'
         if chatstate:
-            label_markup = '<span size="60%" weight="light"> %s</span>'
-            label_text += label_markup % GLib.markup_escape_text(chatstate)
+            escaped_chatstate = GLib.markup_escape_text(chatstate)
+            label_markup = '<span size="60%" weight="light"> {}</span>'
+            label_text += label_markup.format(escaped_chatstate)
 
         self._ui.name_label.set_markup(label_text)
 
