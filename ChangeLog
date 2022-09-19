@@ -1,3 +1,109 @@
+Gajim 1.5.0 (18 Sep 2022)
+
+  CVE-2022-39835
+
+  This release fixes a vulnerability which allowed attackers to craft a XML
+  stanza in a way, so Gajim would accept it as message correction for messages
+  not originating from the attacker.
+
+  New
+
+  * Add drag and drop support for pinned chats
+  * Workspaces: Add shortcuts for switching
+  * Refactor ChatWidgets so they are only created once (#10987, #11038, #10973, #10119, #11052, #10945)
+
+  Improvements
+
+  * Preview: Improve mime type detection (#11150)
+  * SearchView: Add hint for search filters (#11136)
+  * Preview: Show left click action tooltip on icon (#11138)
+  * ACE: Highlight non-default values (#11120)
+  * XMLConsole: Use SourceView for XML input (#11121)
+  * Migration: Make archive migation more resilient
+  * Workspaces: Move chats when removing workspace (#11098)
+  * ChatList: Always show when switching workspace (#11108)
+  * MessageActionsBox: Disable encryption button if MUC is public (#10959)
+  * Increase contrast for message row meta elements
+  * StatusIcon: Use new icon for pending events
+  * WorkspaceSidebar: Allow removing workspace from context menu
+  * AccountPage: Add button for Ad-Hoc commands
+  * Don’t try to query avatars in MUCs which don’t allow it (#10937)
+  * Don’t disco MUC participants on presence
+  * Chatstate: Don’t make too many assumptions
+  * Windows: Increase default font size
+  * CSS: Use relative sizes for fonts
+  * ChatControl: Show error if encryption plugin is missing
+  * Store and restore running HTTP File Transfer uploads
+  * Add button for toggling chat list (#11035)
+  * ContactInfo/GroupchatDetails: Toggle icon when editing name
+
+  Change
+
+  * Raise nbxmpp version
+  * Raise PyGObject version (#11132)
+  * Add requirement for min sqlite version
+  * ChatBanner: Add button for managing voice requests
+  * Remove IPython support
+  * Rework ChatCommands
+  * Shortcuts: Use Ctrl+F for opening the search bar (#11073)
+  * Remove clear-chat action (Ctrl+L)
+  * Raise required nbxmpp version to 3.2.2
+
+  Performance
+
+  * Use Task Queue to request avatars on MUC join
+
+  Bug Fixes
+
+  * GroupchatState: Hide when we are offline
+  * Corrections: Don’t correct message if text has not changed (#11146)
+  * Make plugin usable check work on all unix/linux systems (#11134)
+  * MUC: Don’t ignore MUC invites when ignore_unknown_contacts is set (#11107)
+  * Make shortcuts more discoverable (#11122, #11127)
+  * Better validate message corrections
+  * MUC: Improve automatically adding members on invite
+  * Preview: Sanitize filename from disallowed chars (#11105#10752)
+  * Chatstates: Don’t sent chatstate delayed to ourself
+  * Don’t reset setting when closing single chat
+  * Preview: Don’t fail if thumb file already exists (#11091)
+  * MessageInputTextView: Account for having multiple blocks when applying style (#11015)
+  * ActionMenu: Correctly execute text actions if text contains underscore
+  * InfoMessage: Don’t escape text
+  * MUC: Send password and reason correctly on invite
+  * Preview: Reset received size before cancelling or downloading
+  * BlockingList: Don’t fail with placeholder address (#11084)
+  * ChatList: Update status for private chats correctly
+  * ChatList: Update avatar for all chats correctly
+  * GroupChat: Handle nickname changes correctly
+  * Roster: Add missing contact-info action
+  * Make switch-next-unread-tab action work
+  * ChatBanner: Use correct scaling for chatstates
+  * FileTransferRow: Don’t cancel transfer when switching chat
+  * ChatBanner: Don’t show phone icon for group chats
+  * Don’t handle message-sent even for groupchats
+  * ChatBanner: Display account badge again
+  * Make nick completion test pass
+  * Preview: Store last_save_dir with Save As
+  * Preview: Make sure the widget is not being destroyed while updating (#10920)
+  * Fix handling of URLs without scheme (#11059)
+  * GroupchatState: Call correct page for not-joined
+  * ChatControl: Don’t assume messages always have a resource (#11042)
+
+  Notes
+
+  * ChatCommands have been reworked. Only following commands are now available
+
+    - status
+    - invite
+    - ban
+    - affiliate
+    - kick
+    - role
+
+  * Ctrl+H for opening the search bar has been removed, please use the
+    commonly used Ctrl+F (find). The shortcut for starting a file transfer
+    has been dropped.
+
 Gajim 1.4.7 (24 Jul 2022)
 
   Improvements
