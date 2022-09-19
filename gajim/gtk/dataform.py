@@ -12,12 +12,26 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Any
+from typing import Callable
+from typing import cast
+from typing import Optional
+from typing import Union
+
 from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Pango
 
 from nbxmpp.modules.dataforms import extend_form
+from nbxmpp.modules.dataforms import DataField
+from nbxmpp.modules.dataforms import MultipleDataForm
+from nbxmpp.modules.dataforms import SimpleDataForm
+from nbxmpp.modules.dataforms import Uri
+from nbxmpp.protocol import InvalidJid
+from nbxmpp.simplexml import Node
 
 from gajim.common import app
 from gajim.common.i18n import _
@@ -44,7 +58,11 @@ class DataFormWidget(Gtk.ScrolledWindow):
 
     __gsignals__ = {'is-valid': (GObject.SignalFlags.RUN_LAST, None, (bool,))}
 
-    def __init__(self, form_node, options=None):
+    def __init__(self,
+                 form_node: Union[SimpleDataForm, MultipleDataForm],
+                 options: Optional[dict[str, Any]] = None
+                 ) -> None:
+
         Gtk.ScrolledWindow.__init__(self)
         self.set_hexpand(True)
         self.set_vexpand(True)
@@ -64,33 +82,33 @@ class DataFormWidget(Gtk.ScrolledWindow):
         self.add(self._form_grid)
 
     @property
-    def title(self):
+    def title(self) -> Optional[str]:
         return self._form_grid.title
 
     @property
-    def instructions(self):
+    def instructions(self) -> Optional[str]:
         return self._form_grid.instructions
 
-    def validate(self):
+    def validate(self) -> None:
         return self._form_grid.validate(True)
 
-    def get_form(self):
+    def get_form(self) -> Union[SimpleDataForm, MultipleDataForm]:
         return self._form_node
 
-    def get_submit_form(self):
+    def get_submit_form(self) -> Union[SimpleDataForm, MultipleDataForm]:
         self._form_node.type_ = 'submit'
         return self._form_node
 
-    def get_form_hash(self):
+    def get_form_hash(self) -> int:
         return hash(str(self._form_node))
 
-    def was_modified(self):
+    def was_modified(self) -> bool:
         return self._original_form_hash != self.get_form_hash()
 
-    def reset_form_hash(self):
+    def reset_form_hash(self) -> None:
         self._original_form_hash = self.get_form_hash()
 
-    def focus_first_entry(self):
+    def focus_first_entry(self) -> None:
         for row in range(0, self._form_grid.row_count):
             widget = self._form_grid.get_child_at(1, row)
             if isinstance(widget, Gtk.Entry):
@@ -99,21 +117,30 @@ class DataFormWidget(Gtk.ScrolledWindow):
 
 
 class FormGrid(Gtk.Grid):
-    def __init__(self, form_node, options):
+    def __init__(self,
+                 form_node: Union[SimpleDataForm, MultipleDataForm],
+                 options: dict[str, Any]
+                 ) -> None:
+
         Gtk.Grid.__init__(self)
         self.set_column_spacing(12)
         self.set_row_spacing(12)
         self.set_halign(Gtk.Align.CENTER)
         self.row_count = 0
-        self.rows = []
+
+        self.rows: list[Union[SizeAdjustment,
+                              Title,
+                              Instructions,
+                              Field,
+                              ImageMediaField]] = []
 
         form_width = options.get('form-width', 435)
         self.set_size_request(form_width, -1)
 
         self._data_form = form_node
 
-        self.title = None
-        self.instructions = None
+        self.title: Optional[str] = None
+        self.instructions: Optional[str] = None
 
         self._fields = {
             'boolean': BooleanField,
@@ -139,13 +166,23 @@ class FormGrid(Gtk.Grid):
         self._analyse_fields(form_node, options)
         self._parse_form(form_node, options)
 
-    def _add_row(self, field):
+    def _add_row(self,
+                 field: Union[SizeAdjustment,
+                              Title,
+                              Instructions,
+                              Field,
+                              ImageMediaField]
+                 ) -> None:
+
         field.add(self, self.row_count)
         self.row_count += 1
         self.rows.append(field)
 
     @staticmethod
-    def _analyse_fields(form_node, options):
+    def _analyse_fields(form_node: Union[SimpleDataForm, MultipleDataForm],
+                        options: dict[str, Any]
+                        ) -> None:
+
         if 'right-align' in options:
             # Don’t overwrite option
             return
@@ -162,7 +199,11 @@ class FormGrid(Gtk.Grid):
 
         options['right-align'] = max(label_lengths) < 30
 
-    def _parse_form(self, form_node, options):
+    def _parse_form(self,
+                    form_node: Union[SimpleDataForm, MultipleDataForm],
+                    options: dict[str, Any]
+                    ) -> None:
+
         for field in form_node.iter_fields():
             if field.type_ == 'hidden':
                 continue
@@ -179,7 +220,11 @@ class FormGrid(Gtk.Grid):
             widget = self._fields[field.type_]
             self._add_row(widget(field, self, options))
 
-    def _add_media_field(self, field, options):
+    def _add_media_field(self,
+                         field: DataField,
+                         options: dict[str, Any]
+                         ) -> bool:
+
         if field.type_ not in ('text-single', 'text-private', 'text-multi'):
             return False
 
@@ -194,13 +239,15 @@ class FormGrid(Gtk.Grid):
             return True
         return False
 
-    def validate(self, is_valid):
-        value = self._data_form.is_valid() if is_valid else False
-        self.get_parent().get_parent().emit('is-valid', value)
+    def validate(self, is_valid: bool) -> None:
+        value: bool = self._data_form.is_valid() if is_valid else False
+        viewport = cast(Gtk.Viewport, self.get_parent())
+        dataform_widget = cast(DataFormWidget, viewport.get_parent())
+        dataform_widget.emit('is-valid', value)
 
 
 class SizeAdjustment:
-    def __init__(self, options):
+    def __init__(self, options: dict[str, Any]) -> None:
         self._left_box = Gtk.Box()
         self._right_box = Gtk.Box()
 
@@ -208,7 +255,7 @@ class SizeAdjustment:
         self._left_box.set_size_request(left_width, -1)
         self._right_box.set_hexpand(True)
 
-    def add(self, form_grid, row_number):
+    def add(self, form_grid: FormGrid, row_number: int) -> None:
         form_grid.attach(self._left_box, 0, row_number, 1, 1)
         form_grid.attach_next_to(self._right_box,
                                  self._left_box,
@@ -216,35 +263,40 @@ class SizeAdjustment:
 
 
 class Title:
-    def __init__(self, title):
+    def __init__(self, title: str) -> None:
         self._label = Gtk.Label(label=title)
         self._label.set_line_wrap(True)
         self._label.set_line_wrap_mode(Pango.WrapMode.WORD)
         self._label.set_justify(Gtk.Justification.CENTER)
         self._label.get_style_context().add_class('data-form-title')
 
-    def add(self, form_grid, row_number):
+    def add(self, form_grid: FormGrid, row_number: int) -> None:
         form_grid.attach(self._label, 0, row_number, 2, 1)
 
 
 class Instructions:
-    def __init__(self, instructions):
+    def __init__(self, instructions: str) -> None:
         self._label = Gtk.Label()
         self._label.set_markup(make_href_markup(instructions))
         self._label.set_line_wrap(True)
         self._label.set_line_wrap_mode(Pango.WrapMode.WORD)
         self._label.set_justify(Gtk.Justification.CENTER)
 
-    def add(self, form_grid, row_number):
+    def add(self, form_grid: FormGrid, row_number: int) -> None:
         form_grid.attach(self._label, 0, row_number, 2, 1)
 
 
 class Field:
-    def __init__(self, field, form_grid, options):
-        self._widget = None
+    def __init__(self,
+                 field: DataField,
+                 form_grid: FormGrid,
+                 options: dict[str, Any]
+                 ) -> None:
+
+        self._widget: Optional[Gtk.Widget] = None
         self._field = field
         self._form_grid = form_grid
-        self._validate_source_id = None
+        self._validate_source_id: Optional[int] = None
         self._read_only = options.get('read-only', False)
 
         self._label = Gtk.Label(label=field.label)
@@ -266,10 +318,15 @@ class Field:
         self._warning_box.add(self._warning_image)
 
     @property
-    def read_only(self):
+    def read_only(self) -> bool:
         return self._read_only
 
-    def add(self, form_grid, row_number):
+    def add(self,
+            form_grid: FormGrid,
+            row_number: int
+            ) -> None:
+
+        assert self._widget is not None
         form_grid.attach(self._label, 0, row_number, 1, 1)
         form_grid.attach_next_to(self._widget,
                                  self._label,
@@ -287,7 +344,11 @@ class Field:
             is_valid, error = self._field.is_valid()
             self._set_warning(is_valid, error)
 
-    def _set_warning(self, is_valid, error):
+    def _set_warning(self,
+                     is_valid: bool,
+                     error: Union[str, InvalidJid]
+                     ) -> None:
+
         if not self._field.required and not is_valid and not error:
             # If its not valid and no error is given, its the initial call
             # to show all icons on required fields.
@@ -304,12 +365,12 @@ class Field:
         self._warning_image.set_tooltip_text(str(error))
         self._warning_image.set_visible(not is_valid)
 
-    def _validate(self):
+    def _validate(self) -> None:
         self._form_grid.validate(False)
         if self._validate_source_id is not None:
             GLib.source_remove(self._validate_source_id)
 
-        def _start_validation():
+        def _start_validation() -> None:
             is_valid, error = self._field.is_valid()
             self._set_warning(is_valid, error)
             self._form_grid.validate(is_valid)
@@ -319,7 +380,12 @@ class Field:
 
 
 class BooleanField(Field):
-    def __init__(self, field, form_grid, options):
+    def __init__(self,
+                 field: DataField,
+                 form_grid: FormGrid,
+                 options: dict[str, Any]
+                 ) -> None:
+
         Field.__init__(self, field, form_grid, options)
 
         if self.read_only:
@@ -332,13 +398,19 @@ class BooleanField(Field):
             self._widget.connect('toggled', self._toggled)
         self._widget.set_valign(Gtk.Align.CENTER)
 
-    def _toggled(self, _widget):
+    def _toggled(self, _widget: Gtk.CheckButton) -> None:
+        assert isinstance(self._widget, Gtk.CheckButton)
         self._field.value = self._widget.get_active()
         self._validate()
 
 
 class FixedField(Field):
-    def __init__(self, field, form_grid, options):
+    def __init__(self,
+                 field: DataField,
+                 form_grid: FormGrid,
+                 options: dict[str, Any]
+                 ) -> None:
+
         Field.__init__(self, field, form_grid, options)
 
         self._label.set_markup(make_href_markup(field.value))
@@ -350,7 +422,7 @@ class FixedField(Field):
         else:
             self._label.set_xalign(0.5)
 
-    def add(self, form_grid, row_number):
+    def add(self, form_grid: FormGrid, row_number: int) -> None:
         if len(self._field.value) < 40:
             form_grid.attach(self._label, 0, row_number, 1, 1)
         else:
@@ -358,7 +430,12 @@ class FixedField(Field):
 
 
 class ListSingleField(Field):
-    def __init__(self, field, form_grid, options):
+    def __init__(self,
+                 field: DataField,
+                 form_grid: FormGrid,
+                 options: dict[str, Any]
+                 ) -> None:
+
         Field.__init__(self, field, form_grid, options)
 
         self._widget = MaxWidthComboBoxText()
@@ -371,13 +448,18 @@ class ListSingleField(Field):
         self._widget.set_active_id(field.value)
         self._widget.connect('changed', self._changed)
 
-    def _changed(self, widget):
+    def _changed(self, widget: MaxWidthComboBoxText) -> None:
         self._field.value = widget.get_active_id()
         self._validate()
 
 
 class ListMultiField(Field):
-    def __init__(self, field, form_grid, options):
+    def __init__(self,
+                 field: DataField,
+                 form_grid: FormGrid,
+                 options: dict[str, Any]
+                 ) -> None:
+
         Field.__init__(self, field, form_grid, options)
         self._label.set_valign(Gtk.Align.START)
 
@@ -390,12 +472,16 @@ class ListMultiField(Field):
         self._widget.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         self._widget.add(self._treeview)
 
-    def validate(self):
+    def validate(self) -> None:
         self._validate()
 
 
 class ListMutliTreeView(Gtk.TreeView):
-    def __init__(self, field, multi_field):
+    def __init__(self,
+                 field: DataField,
+                 multi_field: ListMultiField
+                 ) -> None:
+
         Gtk.TreeView.__init__(self)
 
         self._field = field
@@ -436,16 +522,22 @@ class ListMutliTreeView(Gtk.TreeView):
 
         self.set_model(self._store)
 
-    def _toggled(self, _renderer, path):
+    def _toggled(self,
+                 _renderer: Gtk.CellRendererToggle,
+                 path: str
+                 ) -> None:
+
         iter_ = self._store.get_iter(path)
         current_value = self._store[iter_][3]
         self._store.set_value(iter_, 3, not current_value)
         self._set_values()
         self._multi_field.validate()
 
-    def _set_values(self):
-        values = []
-        for row in self.get_model():
+    def _set_values(self) -> None:
+        values: list[str] = []
+        model = self.get_model()
+        assert model is not None
+        for row in model:
             if not row[3]:
                 continue
             values.append(row[2])
@@ -453,7 +545,12 @@ class ListMutliTreeView(Gtk.TreeView):
 
 
 class JidMultiField(Field):
-    def __init__(self, field, form_grid, options):
+    def __init__(self,
+                 field: DataField,
+                 form_grid: FormGrid,
+                 options: dict[str, Any]
+                 ) -> None:
+
         Field.__init__(self, field, form_grid, options)
         self._label.set_valign(Gtk.Align.START)
 
@@ -483,29 +580,39 @@ class JidMultiField(Field):
         self._widget.pack_start(self._scrolled_window, True, True, 0)
         self._widget.pack_end(self._toolbar, False, False, 0)
 
-    def _add_clicked(self, _widget):
-        self._treeview.get_model().append([''])
+    def _add_clicked(self, _widget: Gtk.ToolButton) -> None:
+        model = self._treeview.get_model()
+        assert isinstance(model, Gtk.ListStore)
+        model.append([''])
 
-    def _remove_clicked(self, _widget):
+    def _remove_clicked(self, _widget: Gtk.ToolButton) -> None:
         mod, paths = self._treeview.get_selection().get_selected_rows()
         for path in paths:
             iter_ = mod.get_iter(path)
-            self._treeview.get_model().remove(iter_)
+            model = self._treeview.get_model()
+            assert isinstance(model, Gtk.ListStore)
+            model.remove(iter_)
 
-        jids = []
-        for row in self._treeview.get_model():
+        jids: list[str] = []
+        model = self._treeview.get_model()
+        assert model is not None
+        for row in model:
             if not row[0]:
                 continue
             jids.append(row[0])
         self._field.values = jids
         self._validate()
 
-    def validate(self):
+    def validate(self) -> None:
         self._validate()
 
 
 class JidMutliTreeView(Gtk.TreeView):
-    def __init__(self, field, multi_field):
+    def __init__(self,
+                 field: DataField,
+                 multi_field: JidMultiField
+                 ) -> None:
+
         Gtk.TreeView.__init__(self)
 
         self._field = field
@@ -529,14 +636,19 @@ class JidMutliTreeView(Gtk.TreeView):
 
         self.set_model(self._store)
 
-    def _jid_edited(self, _renderer, path, new_text):
+    def _jid_edited(self,
+                    _renderer: Gtk.CellRendererText,
+                    path: str,
+                    new_text: str
+                    ) -> None:
+
         iter_ = self._store.get_iter(path)
         self._store.set_value(iter_, 0, new_text)
         self._set_values()
         self._multi_field.validate()
 
-    def _set_values(self):
-        jids = []
+    def _set_values(self) -> None:
+        jids: list[str] = []
         for row in self._store:
             if not row[0]:
                 continue
@@ -545,7 +657,12 @@ class JidMutliTreeView(Gtk.TreeView):
 
 
 class TextSingleField(Field):
-    def __init__(self, field, form_grid, options):
+    def __init__(self,
+                 field: DataField,
+                 form_grid: FormGrid,
+                 options: dict[str, Any]
+                 ) -> None:
+
         Field.__init__(self, field, form_grid, options)
 
         if self.read_only:
@@ -560,25 +677,42 @@ class TextSingleField(Field):
                 self._widget.set_activates_default(True)
         self._widget.set_valign(Gtk.Align.CENTER)
 
-    def _changed(self, _widget):
+    def _changed(self, _widget: Gtk.Entry) -> None:
+        assert isinstance(self._widget, Gtk.Entry)
         self._field.value = self._widget.get_text()
         self._validate()
 
 
 class TextPrivateField(TextSingleField):
-    def __init__(self, field, form_grid, options):
+    def __init__(self,
+                 field: DataField,
+                 form_grid: FormGrid,
+                 options: dict[str, Any]
+                 ) -> None:
+
         TextSingleField.__init__(self, field, form_grid, options)
+        assert isinstance(self._widget, Gtk.Entry)
         self._widget.set_input_purpose(Gtk.InputPurpose.PASSWORD)
         self._widget.set_visibility(False)
 
 
 class JidSingleField(TextSingleField):
-    def __init__(self, field, form_grid, options):
+    def __init__(self,
+                 field: DataField,
+                 form_grid: FormGrid,
+                 options: dict[str, Any]
+                 ) -> None:
+
         TextSingleField.__init__(self, field, form_grid, options)
 
 
 class TextMultiField(Field):
-    def __init__(self, field, form_grid, options):
+    def __init__(self,
+                 field: DataField,
+                 form_grid: FormGrid,
+                 options: dict[str, Any]
+                 ) -> None:
+
         Field.__init__(self, field, form_grid, options)
         self._label.set_valign(Gtk.Align.START)
 
@@ -602,13 +736,18 @@ class TextMultiField(Field):
 
         self._widget.add(self._textview)
 
-    def _changed(self, widget):
+    def _changed(self, widget: Gtk.TextBuffer) -> None:
         self._field.value = widget.get_text(*widget.get_bounds(), False)
         self._validate()
 
 
 class ImageMediaField():
-    def __init__(self, uri, form_grid, _options):
+    def __init__(self,
+                 uri: Uri,
+                 form_grid: FormGrid,
+                 _options: dict[str, Any]
+                 ) -> None:
+
         self._uri = uri
         self._form_grid = form_grid
 
@@ -623,12 +762,12 @@ class ImageMediaField():
         self._image.set_halign(Gtk.Align.CENTER)
         self._image.get_style_context().add_class('preview-image')
 
-    def add(self, form_grid, row_number):
+    def add(self, form_grid: FormGrid, row_number: int) -> None:
         form_grid.attach(self._image, 1, row_number, 1, 1)
 
 
 class FakeDataFormWidget(Gtk.ScrolledWindow):
-    def __init__(self, fields):
+    def __init__(self, fields: dict[str, str]) -> None:
         Gtk.ScrolledWindow.__init__(self)
         self.set_hexpand(True)
         self.set_vexpand(True)
@@ -641,7 +780,7 @@ class FakeDataFormWidget(Gtk.ScrolledWindow):
         self._grid.set_halign(Gtk.Align.CENTER)
 
         self._fields = fields
-        self._entries = {}
+        self._entries: dict[str, Gtk.Entry] = {}
         self._row_count = 0
 
         instructions = fields.pop('instructions', None)
@@ -667,7 +806,7 @@ class FakeDataFormWidget(Gtk.ScrolledWindow):
         self.add(self._grid)
         self.show_all()
 
-    def _add_fields(self):
+    def _add_fields(self) -> None:
         for name, value in self._fields.items():
             if name in ('key', 'x', 'registered'):
                 continue
@@ -687,15 +826,22 @@ class FakeDataFormWidget(Gtk.ScrolledWindow):
             self._grid.attach_next_to(entry, label,
                                       Gtk.PositionType.RIGHT, 1, 1)
 
-    def get_submit_form(self):
-        fields = {}
+    def get_submit_form(self) -> dict[str, str]:
+        fields: dict[str, str] = {}
         for name, entry in self._entries.items():
             fields[name] = entry.get_text()
         return fields
 
 
 class DataFormDialog(Gtk.Dialog):
-    def __init__(self, title, transient_for, form, node, submit_callback):
+    def __init__(self,
+                 title: str,
+                 transient_for: Gtk.Window,
+                 form: SimpleDataForm,
+                 node: Node,
+                 submit_callback: Callable[..., Any]
+                 ) -> None:
+
         Gtk.Dialog.__init__(self,
                             title=title,
                             transient_for=transient_for,
@@ -718,7 +864,11 @@ class DataFormDialog(Gtk.Dialog):
         self.connect('response', self._on_response)
         self.show_all()
 
-    def _on_response(self, _dialog, response):
+    def _on_response(self,
+                     _dialog: Gtk.Window,
+                     response: Gtk.ResponseType
+                     ) -> None:
+
         if response == Gtk.ResponseType.OK:
             self._submit_callback(self._form.get_submit_form(), self._node)
         self.destroy()

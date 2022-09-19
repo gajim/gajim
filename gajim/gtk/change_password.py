@@ -227,7 +227,9 @@ class NextStage(Page):
 
     def get_submit_form(self) -> SimpleDataForm:
         assert self._current_form is not None
-        return self._current_form.get_submit_form()
+        form = self._current_form.get_submit_form()
+        assert isinstance(form, SimpleDataForm)
+        return form
 
     def get_visible_buttons(self) -> list[str]:
         return ['apply']
