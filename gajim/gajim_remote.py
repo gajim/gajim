@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # This file is part of Gajim.
 #
 # Gajim is free software; you can redistribute it and/or modify
