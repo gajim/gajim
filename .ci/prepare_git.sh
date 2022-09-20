@@ -1,7 +1,7 @@
 #!/bin/bash
 
-eval $(ssh-agent -s)
 echo "$2" | tr -d '\r' | ssh-add - > /dev/null
+ssh-add -l
 mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 ssh-keyscan "$1" >> ~/.ssh/known_hosts
