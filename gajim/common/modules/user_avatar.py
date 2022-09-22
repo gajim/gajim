@@ -61,28 +61,39 @@ class UserAvatar(BaseModule):
 
         if metadata is None or not metadata.infos:
             self._log.info('No avatar published: %s', jid)
-            app.storage.cache.set_contact(jid, 'avatar', None)
             contact.update_avatar(None)
+            return
 
-        else:
-            sha = contact.avatar_sha
-            if contact.avatar_sha:
-                if sha in metadata.avatar_shas:
-                    self._log.info('Avatar already known: %s %s', jid, sha)
-                    return
+        sha = contact.avatar_sha
+        if sha is not None:
+            if sha in metadata.avatar_shas and app.interface.avatar_exists(sha):
+                self._log.info('Avatar already known: %s %s', jid, sha)
+                return
 
-                if app.interface.avatar_exists(sha):
-                    contact.update_avatar(sha)
-                    return
+        if app.interface.avatar_exists(metadata.default):
+            self._log.info('Avatar found in cache, update: %s %s',
+                           jid, metadata.default)
+            contact.update_avatar(metadata.default)
+            return
 
-            self._log.info('Request: %s %s', jid, metadata.default)
-            self._request_avatar_data(contact, metadata.default)
+        # There are following cases this code is reached:
+        # - We lost the avatar cache
+        # - We use an outdated avatar
+        # - We currently have no avatar set
+        #
+        # Reset the sha, because we don’t know if the avatar data query will
+        # succeed. This forces an update of the avatar if the query succeeds.
+        contact.update_avatar(None)
+        self._request_avatar_data(contact, metadata.default)
 
     @as_task
     def _request_avatar_data(self,
                              contact: types.ChatContactT,
                              sha: str
                              ) -> Generator[Optional[AvatarData], None, None]:
+
+        self._log.info('Request: %s %s', contact.jid, sha)
+
         _task = yield  # noqa: F841
 
         avatar = yield self._nbxmpp('UserAvatar').request_avatar_data(
