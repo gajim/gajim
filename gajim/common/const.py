@@ -1184,3 +1184,12 @@ class PresenceShowExt(Enum):
         if not isinstance(other, PresenceShow):  # pyright: ignore
             return NotImplemented
         return True
+
+
+# Replace keys with Gio.TlsProtocolVersion enum once
+# we require GLib >= 2.69
+TLS_VERSION_STRINGS = {
+    3: '1.1',
+    4: '1.2',
+    5: '1.3',
+}

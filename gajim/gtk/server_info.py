@@ -35,6 +35,7 @@ from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common.const import TLS_VERSION_STRINGS
 from gajim.common.events import ServerDiscoReceived
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
@@ -147,6 +148,13 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         self._ui.websocket_label.set_visible(visible)
         self._ui.websocket.set_visible(visible)
         self._ui.websocket.set_text(address.uri or '')
+
+        tls_version = TLS_VERSION_STRINGS.get(nbxmpp_client.tls_version)
+        self._ui.tls_version.set_text(tls_version or _('Not available'))
+
+        visible = nbxmpp_client.ciphersuite is not None
+        self._ui.cipher_suite.set_text(nbxmpp_client.ciphersuite or
+                                       _('Not available'))
 
     def _add_contact_addresses(self, dataforms: list[SimpleDataForm]) -> None:
         fields = {
