@@ -131,7 +131,7 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
                 scale)
         else:
             surface = make_workspace_avatar(
-                name[:1].upper(),
+                name,
                 rgba_to_float(rgba),
                 AvatarSize.WORKSPACE_EDIT,
                 scale)

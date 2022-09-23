@@ -66,6 +66,7 @@ def _check_required_deps() -> None:
                              'GtkSource': '4',
                              'GObject': '2.0',
                              'Pango': '1.0',
+                             'PangoCairo': '1.0',
                              'Soup': '2.4'})
     except ValueError as error:
         sys.exit('Missing dependency: %s' % error)

@@ -26,6 +26,8 @@ from pathlib import Path
 
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
+from gi.repository import Pango
+from gi.repository import PangoCairo
 import cairo
 from nbxmpp.protocol import JID
 
@@ -38,8 +40,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 
 from .const import DEFAULT_WORKSPACE_COLOR
-from .emoji_data import is_emoji
-from .emoji_data import get_emoji_font
+from .emoji_data_gtk import get_emoji_data
 from .util import load_icon_surface
 from .util import load_pixbuf
 from .util import text_to_color
@@ -56,6 +57,23 @@ AvatarCacheT = dict[Union[JID, str], dict[tuple[int, int, Optional[str]],
                                           cairo.ImageSurface]]
 
 
+def generate_avatar_letter(text: str) -> str:
+    if not text:
+        return ''
+
+    if text[0].isalpha():
+        return text[0].upper()
+
+    emoji_data = get_emoji_data()
+
+    # Max (arbitrary) length for emoji ZJW sequences: 11
+    for length in range(11, 0, -1):
+        if text[:length] in emoji_data.values():
+            return text[:length]
+
+    return text[0].upper()
+
+
 def generate_avatar(letters: str,
                     color: tuple[float, float, float],
                     size: int,
@@ -70,7 +88,7 @@ def generate_avatar(letters: str,
 
     width = size
     height = size
-    font_size = size * 0.5
+    font_size = size * 0.4
 
     # Set up surface
     surface = cairo.ImageSurface(cairo.Format.ARGB32, width, height)
@@ -81,26 +99,25 @@ def generate_avatar(letters: str,
     context.fill()
 
     # Draw letters
-    if is_emoji(letters):
-        font_face = get_emoji_font()
-    else:
-        font_face = 'sans-serif'
-    context.select_font_face(font_face,
-                             cairo.FontSlant.NORMAL,
-                             cairo.FontWeight.NORMAL)
-    context.set_font_size(font_size)
-    extends = context.text_extents(letters)
-    x_bearing = extends.x_bearing
-    y_bearing = extends.y_bearing
-    ex_width = extends.width
-    ex_height = extends.height
+    layout = PangoCairo.create_layout(context)
+    layout.set_text(generate_avatar_letter(letters))
 
-    x_pos = width / 2 - (ex_width / 2 + x_bearing)
-    y_pos = height / 2 - (ex_height / 2 + y_bearing)
+    description = Pango.FontDescription()
+    description.set_family('Sans')
+    description.set_size(int(font_size * Pango.SCALE))
+
+    layout.set_font_description(description)
+
+    _ink_rect, logical_rect = layout.get_extents()
+    layout_width = logical_rect.width / Pango.SCALE
+    layout_height = logical_rect.height / Pango.SCALE
+    x_pos = (width - layout_width) / 2
+    y_pos = (height - layout_height) / 2
+
     context.move_to(x_pos, y_pos)
     context.set_source_rgb(0.95, 0.95, 0.95)
     context.set_operator(cairo.Operator.OVER)
-    context.show_text(letters)
+    PangoCairo.show_layout(context, layout)
 
     return context.get_target()  # pyright: ignore
 
@@ -399,7 +416,7 @@ class AvatarStorage(metaclass=Singleton):
         name = contact.name
         color_string = str(contact.jid)
 
-        letter = self._generate_letter(name)
+        letter = generate_avatar_letter(name)
         surface = generate_default_avatar(
             letter, color_string, size, scale, style=style)
         if show is not None:
@@ -441,7 +458,7 @@ class AvatarStorage(metaclass=Singleton):
 
         con = app.connections[account]
         name = get_groupchat_name(con, jid)
-        letter = self._generate_letter(name)
+        letter = generate_avatar_letter(name)
         surface = generate_default_avatar(letter, str(jid), size, scale, style)
         self._cache[jid][(size, scale, None)] = surface
         return surface
@@ -469,9 +486,8 @@ class AvatarStorage(metaclass=Singleton):
             app.settings.set_workspace_setting(workspace_id, 'avatar_sha', '')
 
         rgba = make_rgba(color or DEFAULT_WORKSPACE_COLOR)
-        letter = name[:1].upper()
         surface = make_workspace_avatar(
-            letter, rgba_to_float(rgba), size, scale)
+            name, rgba_to_float(rgba), size, scale)
         self._cache[workspace_id][(size, scale, None)] = surface
         return surface
 
@@ -571,10 +587,3 @@ class AvatarStorage(metaclass=Singleton):
         if surface is None:
             return None
         return clip(surface, style)
-
-    @staticmethod
-    def _generate_letter(name: str) -> str:
-        for letter in name:
-            if letter.isalpha():
-                return letter.capitalize()
-        return name[0].capitalize()
