@@ -1,6 +1,6 @@
 app-id: org.gajim.Gajim
 runtime: org.gnome.Platform
-runtime-version: '42'
+runtime-version: '43'
 sdk: org.gnome.Sdk
 command: gajim
 finish-args:
@@ -41,6 +41,7 @@ add-extensions:
 build-options:
   env:
     PIP_PREFIX: /app
+    PIP_DISABLE_PIP_VERSION_CHECK: "1"
 
 cleanup:
   - /include
@@ -102,33 +103,33 @@ modules:
   - name: python3-idna
     buildsystem: simple
     build-commands:
-      - pip3 install idna-3.3-py3-none-any.whl
+      - pip3 install idna-3.4-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/i/idna/idna-3.3-py3-none-any.whl
-        sha256: 84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff
+        url: https://files.pythonhosted.org/packages/py3/i/idna/idna-3.4-py3-none-any.whl
+        sha256: 90b77e79eaa3eba6de819a0c442c0b4ceefc341a7a2ab77d7562bf49f425c5c2
 
   - name: python3-cryptography
     buildsystem: simple
     only-arches:
       - aarch64
     build-commands:
-      - pip3 install cryptography-37.0.4-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+      - pip3 install cryptography-38.0.1-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp36/c/cryptography/cryptography-37.0.4-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
-        sha256: 80f49023dd13ba35f7c34072fa17f604d2f19bf0989f292cedf7ab5770b87a0b
+        url: https://files.pythonhosted.org/packages/cp36/c/cryptography/cryptography-38.0.1-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+        sha256: 194044c6b89a2f9f169df475cc167f6157eb9151cc69af8a2a163481d45cc407
 
   - name: python3-cryptography
     buildsystem: simple
     only-arches:
       - x86_64
     build-commands:
-      - pip3 install cryptography-37.0.4-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+      - pip3 install cryptography-38.0.1-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp36/c/cryptography/cryptography-37.0.4-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-        sha256: f2dcb0b3b63afb6df7fd94ec6fbddac81b5492513f7b0436210d390c14d46ee8
+        url: https://files.pythonhosted.org/packages/cp36/c/cryptography/cryptography-38.0.1-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+        sha256: ca9f6784ea96b55ff41708b92c3f6aeaebde4c560308e5fbbd3173fbc466e94e
 
   - name: python3-pyopenssl
     buildsystem: simple
@@ -145,8 +146,8 @@ modules:
         PYTHON_VERSION: '3'
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/d/dbus-python/dbus-python-1.2.18.tar.gz
-        sha256: 92bdd1e68b45596c833307a5ff4b217ee6929a1502f5341bae28fd120acf7260
+        url: https://files.pythonhosted.org/packages/source/d/dbus-python/dbus-python-1.3.2.tar.gz
+        sha256: ad67819308618b5069537be237f8e68ca1c7fcc95ee4a121fe6845b1418248f8
 
   - name: python3-jeepney
     buildsystem: simple
@@ -175,28 +176,40 @@ modules:
         url: https://files.pythonhosted.org/packages/py3/z/zipp/zipp-3.8.1-py3-none-any.whl
         sha256: 47c40d7fe183a6f21403a199b3e4192cca5774656965b0a4988ad2f8feb5f009
 
-  # keyring dependency
-  - name: python3-importlib-metadata
+  # jaraco.classes dependency
+  - name: python3-more-itertools
     buildsystem: simple
     build-commands:
-      - pip3 install importlib_metadata-4.12.0-py3-none-any.whl
+      - pip3 install more_itertools-8.14.0-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/i/importlib_metadata/importlib_metadata-4.12.0-py3-none-any.whl
-        sha256: 7401a975809ea1fdc658c3aa4f78cc2195a0e019c5cbc4c06122884e9ae80c23
+        url: https://files.pythonhosted.org/packages/py3/m/more_itertools/more_itertools-8.14.0-py3-none-any.whl
+        sha256: 1bc4f91ee5b1b31ac7ceacc17c09befe6a40a503907baf9c839c229b5095cfd2
+
+  # keyring dependency
+  - name: python3-jaraco.classes
+    buildsystem: simple
+    build-commands:
+      - pip3 install jaraco.classes-3.2.2-py3-none-any.whl
+    cleanup:
+      - /bin
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/py3/j/jaraco.classes/jaraco.classes-3.2.2-py3-none-any.whl
+        sha256: e6ef6fd3fcf4579a7a019d87d1e56a883f4e4c35cfe925f86731abc58804e647
 
   - name: python3-keyring
     buildsystem: simple
     build-commands:
-      - pip3 install keyring-23.8.2-py3-none-any.whl
+      - pip3 install keyring-23.9.3-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/k/keyring/keyring-23.8.2-py3-none-any.whl
-        sha256: 10d2a8639663fe2090705a00b8c47c687cacdf97598ea9c11456679fa974473a
+        url: https://files.pythonhosted.org/packages/py3/k/keyring/keyring-23.9.3-py3-none-any.whl
+        sha256: 69732a15cb1433bdfbc3b980a8a36a04878a6cfd7cb99f497b573f31618001c0
 
   - name: python3-css-parser
     buildsystem: simple
@@ -215,25 +228,6 @@ modules:
       - type: file
         url: https://files.pythonhosted.org/packages/py3/p/precis_i18n/precis_i18n-1.0.4-py3-none-any.whl
         sha256: 8b4f6100c2f5e44db61081d53c9c07ff92e50d0a7b36eedd2f4fb7d40c48576d
-
-  # gssapi dependency
-  - name: python3-decorator
-    buildsystem: simple
-    build-commands:
-      - pip3 install decorator-5.1.1-py3-none-any.whl
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/py3/d/decorator/decorator-5.1.1-py3-none-any.whl
-        sha256: b8c3f85900b9dc423225913c5aace94729fe1fa9763b38939a95226f02d37186
-
-  - name: python3-gssapi
-    buildsystem: simple
-    build-commands:
-      - pip3 install --no-build-isolation .
-    sources:
-      - type: archive
-        url: https://files.pythonhosted.org/packages/source/g/gssapi/gssapi-1.8.1.tar.gz
-        sha256: 893aa38ae769d1febe89963aa9f59194a966736ade2263fe14e0081126d64a72
 
   # GSound dependency
   - shared-modules/libcanberra/libcanberra.json
@@ -284,20 +278,40 @@ modules:
   - name: python3-certifi
     buildsystem: simple
     build-commands:
-      - pip3 install certifi-2022.6.15-py3-none-any.whl
+      - pip3 install certifi-2022.9.14-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/c/certifi/certifi-2022.6.15-py3-none-any.whl
-        sha256: fe86415d55e84719d75f8b69414f6438ac3547d2078ab91b67e779ef69378412
+        url: https://files.pythonhosted.org/packages/py3/c/certifi/certifi-2022.9.14-py3-none-any.whl
+        sha256: e232343de1ab72c2aa521b625c80f699e356830fd0e2c620b465b304b17b0516
 
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-1.9.5-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-1.9.8-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.9.5-py2.py3-none-any.whl
-        sha256: b4b41f90951ed83e7b4c176eef021b19ecba39da5b73aca106c97a9b7e279a90
+        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.9.8-py2.py3-none-any.whl
+        sha256: 7378c08d81da78a4860da7b4900ac51fef38be841d01bc5b7cb249ac51e070c6
+
+  # gssapi dependency
+  - name: python3-decorator
+    buildsystem: simple
+    build-commands:
+      - pip3 install decorator-5.1.1-py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/py3/d/decorator/decorator-5.1.1-py3-none-any.whl
+        sha256: b8c3f85900b9dc423225913c5aace94729fe1fa9763b38939a95226f02d37186
+
+  # nbxmpp dependency (optional)
+  - name: python3-gssapi
+    buildsystem: simple
+    build-commands:
+      - pip3 install -v --no-build-isolation .
+    sources:
+      - type: archive
+        url: https://files.pythonhosted.org/packages/source/g/gssapi/gssapi-1.8.1.tar.gz
+        sha256: 893aa38ae769d1febe89963aa9f59194a966736ade2263fe14e0081126d64a72
 
   - name: python3-nbxmpp
     buildsystem: simple
