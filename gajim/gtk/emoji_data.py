@@ -17,7 +17,6 @@
 from typing import Optional
 
 import re
-import sys
 import weakref
 from enum import IntEnum
 from collections import OrderedDict
@@ -60,12 +59,6 @@ def get_emoji_pixbuf(codepoints: str) -> Optional[GdkPixbuf.Pixbuf]:
                                  Emoji.TEXT_SIZE,
                                  GdkPixbuf.InterpType.HYPER)
     return pixbuf
-
-
-def get_emoji_font() -> str:
-    if sys.platform == 'win32':
-        return 'Segoe UI Emoji'
-    return 'Noto Color Emoji'
 
 
 class EmojiData(OrderedDict):
