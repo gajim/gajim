@@ -231,6 +231,10 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _on_public_private_toggled(self, _radiobutton: Gtk.RadioButton) -> None:
         is_public = self._ui.public_radio.get_active()
+        if is_public:
+            self._validate_jid(self._ui.address_entry.get_text())
+        else:
+            self._ui.create_button.set_sensitive(True)
         self._ui.address_label.set_visible(is_public)
         self._ui.address_entry.set_visible(is_public)
 
