@@ -53,7 +53,6 @@ from .dialogs import ConfirmationDialog
 from .dialogs import ConfirmationCheckDialog
 from .builder import get_builder
 from .util import get_app_window
-from .util import get_key_theme
 from .util import resize_window
 from .util import restore_main_window_position
 from .util import save_main_window_position
@@ -81,8 +80,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         app.window = self
 
         self._add_actions()
-        self._add_actions2()
         self._add_stateful_actions()
+        self._connect_actions()
 
         self._startup_finished: bool = False
 
@@ -303,22 +302,11 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self.add_group_chat(event.account, event.jid)
 
     def _add_actions(self) -> None:
-        actions = [
-            ('add-workspace', 's', self._add_workspace),
-            ('edit-workspace', 's', self._edit_workspace),
-            ('remove-workspace', 's', self._remove_workspace),
-            ('activate-workspace', 's', self._activate_workspace),
-            ('add-chat', 'a{sv}', self._add_chat),
-            ('add-group-chat', 'as', self._add_group_chat),
-            ('add-to-roster', 'a{sv}', self._add_to_roster),
-        ]
-
-        for action in actions:
-            action_name, variant, func = action
-            if variant is not None:
-                variant = GLib.VariantType.new(variant)
-            act = Gio.SimpleAction.new(action_name, variant)
-            act.connect('activate', func)
+        for action, variant_type, enabled in MAIN_WIN_ACTIONS:
+            if variant_type is not None:
+                variant_type = GLib.VariantType(variant_type)
+            act = Gio.SimpleAction.new(action, variant_type)
+            act.set_enabled(enabled)
             self.add_action(act)
 
     def _add_stateful_actions(self) -> None:
@@ -347,56 +335,47 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self.add_action(action)
 
-    def _add_actions2(self) -> None:
-        for action, variant_type, enabled in MAIN_WIN_ACTIONS:
-            if variant_type is not None:
-                variant_type = GLib.VariantType(variant_type)
-            act = Gio.SimpleAction.new(action, variant_type)
-            act.set_enabled(enabled)
-            self.add_action(act)
-
+    def _connect_actions(self) -> None:
         actions = [
-            'change-nickname',
-            'change-subject',
-            'escape',
-            'close-tab',
-            'switch-next-tab',
-            'switch-prev-tab',
-            'switch-next-unread-tab',
-            'switch-prev-unread-tab',
-            'switch-tab-1',
-            'switch-tab-2',
-            'switch-tab-3',
-            'switch-tab-4',
-            'switch-tab-5',
-            'switch-tab-6',
-            'switch-tab-7',
-            'switch-tab-8',
-            'switch-tab-9',
-            'switch-workspace-1',
-            'switch-workspace-2',
-            'switch-workspace-3',
-            'switch-workspace-4',
-            'switch-workspace-5',
-            'switch-workspace-6',
-            'switch-workspace-7',
-            'switch-workspace-8',
-            'switch-workspace-9',
-            'toggle-chat-list',
+            ('change-nickname', self._on_action),
+            ('change-subject', self._on_action),
+            ('escape', self._on_action),
+            ('close-tab', self._on_action),
+            ('switch-next-tab', self._on_action),
+            ('switch-prev-tab', self._on_action),
+            ('switch-next-unread-tab', self._on_action),
+            ('switch-prev-unread-tab', self._on_action),
+            ('switch-tab-1', self._on_action),
+            ('switch-tab-2', self._on_action),
+            ('switch-tab-3', self._on_action),
+            ('switch-tab-4', self._on_action),
+            ('switch-tab-5', self._on_action),
+            ('switch-tab-6', self._on_action),
+            ('switch-tab-7', self._on_action),
+            ('switch-tab-8', self._on_action),
+            ('switch-tab-9', self._on_action),
+            ('switch-workspace-1', self._on_action),
+            ('switch-workspace-2', self._on_action),
+            ('switch-workspace-3', self._on_action),
+            ('switch-workspace-4', self._on_action),
+            ('switch-workspace-5', self._on_action),
+            ('switch-workspace-6', self._on_action),
+            ('switch-workspace-7', self._on_action),
+            ('switch-workspace-8', self._on_action),
+            ('switch-workspace-9', self._on_action),
+            ('toggle-chat-list', self._on_action),
+            ('add-workspace', self._add_workspace),
+            ('edit-workspace', self._edit_workspace),
+            ('remove-workspace', self._remove_workspace),
+            ('activate-workspace', self._activate_workspace),
+            ('add-chat', self._add_chat),
+            ('add-group-chat', self._add_group_chat),
+            ('add-to-roster', self._add_to_roster),
         ]
 
-        disabled_for_emacs = (
-            'close-tab'
-        )
-
-        key_theme = get_key_theme()
-
-        for action in actions:
-            if key_theme == 'Emacs' and action in disabled_for_emacs:
-                continue
-            act = Gio.SimpleAction.new(action, None)
-            act.connect('activate', self._on_action)
-            self.add_action(act)
+        for action, func in actions:
+            act = self.get_action(action)
+            act.connect('activate', func)
 
     def _on_action(self,
                    action: Gio.SimpleAction,
