@@ -103,6 +103,9 @@ def load_emoji_data() -> dict[str, str]:
         # https://gitlab.gnome.org/GNOME/gtk/-/blob/main/gtk/emoji/
         # convert-emoji.c
 
+        # Replace colon by comma to improve emoji shortcode usability
+        shortcode = shortcode.replace(':', ',')
+
         if 0 not in c_sequence:
             # No skin tone modifiers present
             u_sequence = generate_unicode_sequence(c_sequence)
@@ -125,6 +128,8 @@ def load_emoji_data() -> dict[str, str]:
     # Add commonly used shortcodes
     emoji_data_dict['+1'] = '\U0001F44D'
     emoji_data_dict['-1'] = '\U0001F44E'
+
+    emoji_data_dict = dict(sorted(emoji_data_dict.items()))
 
     return emoji_data_dict
 
