@@ -340,20 +340,20 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('change-nickname', self._on_action),
             ('change-subject', self._on_action),
             ('escape', self._on_action),
-            ('close-tab', self._on_action),
-            ('switch-next-tab', self._on_action),
-            ('switch-prev-tab', self._on_action),
-            ('switch-next-unread-tab', self._on_action),
-            ('switch-prev-unread-tab', self._on_action),
-            ('switch-tab-1', self._on_action),
-            ('switch-tab-2', self._on_action),
-            ('switch-tab-3', self._on_action),
-            ('switch-tab-4', self._on_action),
-            ('switch-tab-5', self._on_action),
-            ('switch-tab-6', self._on_action),
-            ('switch-tab-7', self._on_action),
-            ('switch-tab-8', self._on_action),
-            ('switch-tab-9', self._on_action),
+            ('close-chat', self._on_action),
+            ('switch-next-chat', self._on_action),
+            ('switch-prev-chat', self._on_action),
+            ('switch-next-unread-chat', self._on_action),
+            ('switch-prev-unread-chat', self._on_action),
+            ('switch-chat-1', self._on_action),
+            ('switch-chat-2', self._on_action),
+            ('switch-chat-3', self._on_action),
+            ('switch-chat-4', self._on_action),
+            ('switch-chat-5', self._on_action),
+            ('switch-chat-6', self._on_action),
+            ('switch-chat-7', self._on_action),
+            ('switch-chat-8', self._on_action),
+            ('switch-chat-9', self._on_action),
             ('switch-workspace-1', self._on_action),
             ('switch-workspace-2', self._on_action),
             ('switch-workspace-3', self._on_action),
@@ -409,24 +409,24 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                                 control.contact.jid)
                     return None
 
-            elif action_name == 'close-tab':
+            elif action_name == 'close-chat':
                 self._chat_page.remove_chat(control.contact.account,
                                             control.contact.jid)
                 return None
 
-        if action_name == 'switch-next-tab':
+        if action_name == 'switch-next-chat':
             self.select_next_chat(Direction.NEXT)
 
-        elif action_name == 'switch-prev-tab':
+        elif action_name == 'switch-prev-chat':
             self.select_next_chat(Direction.PREV)
 
-        elif action_name == 'switch-next-unread-tab':
+        elif action_name == 'switch-next-unread-chat':
             self.select_next_chat(Direction.NEXT, unread_first=True)
 
-        elif action_name == 'switch-prev-unread-tab':
+        elif action_name == 'switch-prev-unread-chat':
             self.select_next_chat(Direction.PREV, unread_first=True)
 
-        elif action_name.startswith('switch-tab-'):
+        elif action_name.startswith('switch-chat-'):
             number = int(action_name[-1]) - 1
             self.select_chat_number(number)
 
