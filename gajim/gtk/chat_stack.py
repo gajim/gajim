@@ -145,6 +145,7 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         self.register_events([
             ('message-received', 85, self._on_message_received),
+            ('gc-message-received', 85, self._on_message_received),
             ('muc-disco-update', 85, self._on_muc_disco_update),
         ])
 
