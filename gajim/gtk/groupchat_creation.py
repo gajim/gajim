@@ -29,7 +29,7 @@ from gajim.common import ged
 from gajim.common.const import MUC_CREATION_EXAMPLES
 from gajim.common.const import MUC_DISCO_ERRORS
 from gajim.common.events import AccountConnected
-from gajim.common.events import AccountDisonnected
+from gajim.common.events import AccountDisconnected
 from gajim.common.ged import EventHelper
 from gajim.common.helpers import get_random_muc_localpart
 from gajim.common.helpers import validate_jid
@@ -85,7 +85,7 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
         self.set_focus(self._ui.address_entry)
 
     def _on_account_state(self,
-                          _event: Union[AccountConnected, AccountDisonnected]
+                          _event: Union[AccountConnected, AccountDisconnected]
                           ) -> None:
         any_account_connected = app.get_number_of_connected_accounts() > 0
         if any_account_connected:

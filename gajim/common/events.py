@@ -89,7 +89,7 @@ class AccountConnected(ApplicationEvent):
 
 
 @dataclass
-class AccountDisonnected(ApplicationEvent):
+class AccountDisconnected(ApplicationEvent):
     name: str = field(init=False, default='account-disconnected')
     account: str
 

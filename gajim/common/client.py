@@ -36,7 +36,7 @@ from gajim.common import modules
 from gajim.common import passwords
 from gajim.common.events import AccountConnected
 from gajim.common.events import MessageSent
-from gajim.common.events import AccountDisonnected
+from gajim.common.events import AccountDisconnected
 from gajim.common.events import PasswordRequired
 from gajim.common.events import PlainConnection
 from gajim.common.events import SignedIn
@@ -316,7 +316,7 @@ class Client(Observable):
             self._destroy_client = False
             self._create_client()
 
-        app.ged.raise_event(AccountDisonnected(account=self._account))
+        app.ged.raise_event(AccountDisconnected(account=self._account))
 
     def _on_connection_failed(self,
                               _client: NBXMPPClient,

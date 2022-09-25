@@ -39,7 +39,7 @@ from gajim.common import logging_helpers
 from gajim.common import passwords
 from gajim.common.commands import ChatCommands
 from gajim.common.dbus import logind
-from gajim.common.events import AccountDisonnected
+from gajim.common.events import AccountDisconnected
 from gajim.common.events import AllowGajimUpdateCheck
 from gajim.common.events import GajimUpdateAvailable
 from gajim.common.client import Client
@@ -167,7 +167,7 @@ class CoreApplication:
             self._quit_app()
             return
 
-        def _on_disconnect(event: AccountDisonnected) -> None:
+        def _on_disconnect(event: AccountDisconnected) -> None:
             accounts_to_disconnect.pop(event.account)
             if not accounts_to_disconnect:
                 self._quit_app()

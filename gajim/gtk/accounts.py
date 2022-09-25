@@ -30,7 +30,7 @@ from gi.repository import GObject
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import passwords
-from gajim.common.events import AccountDisonnected
+from gajim.common.events import AccountDisconnected
 from gajim.common.i18n import _
 from gajim.common.i18n import Q_
 from gajim.common.settings import AllSettingsT
@@ -541,7 +541,7 @@ class AccountRow(Gtk.ListBoxRow):
                           state: bool,
                           account: str
                           ) -> int:
-        def _on_disconnect(event: AccountDisonnected) -> None:
+        def _on_disconnect(event: AccountDisconnected) -> None:
             if event.account != account:
                 return
             app.ged.remove_event_handler('account-disconnected',

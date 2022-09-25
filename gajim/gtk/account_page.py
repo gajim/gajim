@@ -26,7 +26,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.events import AccountConnected
-from gajim.common.events import AccountDisonnected
+from gajim.common.events import AccountDisconnected
 from gajim.common.events import SubscribePresenceReceived
 from gajim.common.events import UnsubscribedPresenceReceived
 from gajim.common.events import MucInvitation
@@ -116,7 +116,7 @@ class AccountPage(Gtk.Box, EventHelper):
         open_window('AdHocCommands', account=self._account, jid=server_jid)
 
     def _on_account_state(self,
-                          event: Union[AccountConnected, AccountDisonnected]
+                          event: Union[AccountConnected, AccountDisconnected]
                           ) -> None:
 
         if event.account != self._account:

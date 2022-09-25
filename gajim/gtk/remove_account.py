@@ -25,7 +25,7 @@ from nbxmpp.task import Task
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.events import AccountConnected
-from gajim.common.events import AccountDisonnected
+from gajim.common.events import AccountDisconnected
 from gajim.common.i18n import _
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import event_filter
@@ -83,7 +83,7 @@ class RemoveAccount(Assistant):
         self._set_remove_from_server_checkbox()
 
     @event_filter(['account'])
-    def _on_account_disconnected(self, _event: AccountDisonnected) -> None:
+    def _on_account_disconnected(self, _event: AccountDisconnected) -> None:
         self._set_remove_from_server_checkbox()
 
         if self._account_removed:

@@ -172,7 +172,7 @@ class GtkMenuBackend(EventHelper):
 
     def _on_account_state(self,
                           _event: Union[events.AccountConnected,
-                                        events.AccountDisonnected]
+                                        events.AccountDisconnected]
                           ) -> None:
         account_connected = bool(app.get_number_of_connected_accounts() > 0)
         self._ui.start_chat_menuitem.set_sensitive(account_connected)
