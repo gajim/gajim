@@ -14,6 +14,8 @@
 
 from __future__ import annotations
 
+from typing import Union
+
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import Gtk
@@ -23,6 +25,8 @@ from nbxmpp.protocol import JID
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
+from gajim.common.events import AccountConnected
+from gajim.common.events import AccountDisonnected
 from gajim.common.events import SubscribePresenceReceived
 from gajim.common.events import UnsubscribedPresenceReceived
 from gajim.common.events import MucInvitation
@@ -88,6 +92,8 @@ class AccountPage(Gtk.Box, EventHelper):
              ged.GUI1, self._unsubscribed_received),
             ('muc-invitation', ged.GUI1, self._muc_invitation_received),
             ('muc-decline', ged.GUI1, self._muc_invitation_declined),
+            ('account-connected', ged.GUI2, self._on_account_state),
+            ('account-disconnected', ged.GUI2, self._on_account_state),
         ])
         # pylint: enable=line-too-long
 
@@ -108,6 +114,16 @@ class AccountPage(Gtk.Box, EventHelper):
     def _on_adhoc_commands(self, _button: Gtk.Button) -> None:
         server_jid = JID.from_string(self._jid).domain
         open_window('AdHocCommands', account=self._account, jid=server_jid)
+
+    def _on_account_state(self,
+                          event: Union[AccountConnected, AccountDisonnected]
+                          ) -> None:
+
+        if event.account != self._account:
+            return
+
+        self._ui.adhoc_commands_button.set_sensitive(
+            app.account_is_connected(event.account))
 
     def _on_search_changed(self, widget: Gtk.SearchEntry) -> None:
         text = widget.get_text().lower()

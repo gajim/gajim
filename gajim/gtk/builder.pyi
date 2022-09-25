@@ -18,6 +18,7 @@ class AccountPageBuilder(Builder):
     avatar_image: Gtk.Image
     account_label: Gtk.Label
     account_action_box: Gtk.Box
+    adhoc_commands_button: Gtk.Button
     status_message_box: Gtk.Box
 
 
