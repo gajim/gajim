@@ -55,7 +55,7 @@
 
 - [Arch Linux](https://www.archlinux.org/packages/community/any/gajim/)
 - [Debian](https://packages.debian.org/stable/gajim)
-- [Fedora](https://apps.fedoraproject.org/packages/gajim)
+- [Fedora](https://packages.fedoraproject.org/pkgs/gajim/)
 - [Ubuntu](https://packages.ubuntu.com/gajim)
 - [FreeBSD](https://www.freshports.org/net-im/gajim/)
 
