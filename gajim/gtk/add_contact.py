@@ -26,6 +26,7 @@ from gi.repository import Gtk
 from nbxmpp import JID
 from nbxmpp import Namespace
 from nbxmpp.errors import is_error
+from nbxmpp.errors import BaseError
 from nbxmpp.errors import StanzaError
 from nbxmpp.structs import DiscoInfo
 
@@ -145,9 +146,11 @@ class AddContact(Assistant):
 
         client = app.get_client(account)
 
-        result = yield client.get_module('Discovery').disco_info(address)
+        result = yield client.get_module('Discovery').disco_info(
+            address,
+            timeout=10)
         if is_error(result):
-            assert isinstance(result, StanzaError)
+            assert isinstance(result, BaseError)
             self._process_error(account, result)
             raise result
 
@@ -155,7 +158,11 @@ class AddContact(Assistant):
         assert isinstance(result, DiscoInfo)
         self._process_info(account, result)
 
-    def _process_error(self, account: str, result: StanzaError) -> None:
+    def _process_error(self,
+                       account: str,
+                       result: BaseError
+                       ) -> None:
+
         log.debug('Error received: %s', result)
         self._result = result
 
@@ -163,12 +170,14 @@ class AddContact(Assistant):
             'service-unavailable',  # Prosody
             'subscription-required'  # ejabberd
         ]
-        if result.condition in contact_conditions:
+        if (isinstance(self._result, StanzaError) and
+                result.condition in contact_conditions):
             # It seems to be a contact
             address_page = cast(Contact, self.get_page('contact'))
             address_page.prepare(account, result)
             self.show_page('contact', Gtk.StackTransitionType.SLIDE_LEFT)
         else:
+            # TimeoutStanzaError is handled here
             error_page = cast(ErrorPage, self.get_page('error'))
             error_page.set_text(result.get_text())
             self.show_page('error', Gtk.StackTransitionType.SLIDE_LEFT)
@@ -342,7 +351,7 @@ class Contact(Page):
         Page.__init__(self)
         self.title = _('Add Contact')
 
-        self._result: Union[DiscoInfo, StanzaError, None] = None
+        self._result: Union[DiscoInfo, BaseError, None] = None
         self._account: Optional[str] = None
         self._contact: Optional[types.BareContact] = None
 
