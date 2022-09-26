@@ -220,6 +220,7 @@ MAIN_WIN_ACTIONS = [
     ('change-subject', None, True),
     ('escape', None, True),
     ('close-chat', None, True),
+    ('restore-chat', None, True),
     ('switch-next-chat', None, True),
     ('switch-prev-chat', None, True),
     ('switch-next-unread-chat', None, True),

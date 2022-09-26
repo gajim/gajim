@@ -341,6 +341,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('change-subject', self._on_action),
             ('escape', self._on_action),
             ('close-chat', self._on_action),
+            ('restore-chat', self._on_action),
             ('switch-next-chat', self._on_action),
             ('switch-prev-chat', self._on_action),
             ('switch-next-unread-chat', self._on_action),
@@ -414,7 +415,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                             control.contact.jid)
                 return None
 
-        if action_name == 'switch-next-chat':
+        if action_name == 'restore-chat':
+            self._chat_page.restore_chat()
+
+        elif action_name == 'switch-next-chat':
             self.select_next_chat(Direction.NEXT)
 
         elif action_name == 'switch-prev-chat':

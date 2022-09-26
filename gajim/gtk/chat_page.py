@@ -98,6 +98,7 @@ class ChatPage(Gtk.Box):
         self._ui.paned.connect('button-release-event', self._on_button_release)
 
         self._startup_finished: bool = False
+        self._closed_chat_memory: list[tuple[str, JID, str]] = []
 
         self._add_actions()
 
@@ -273,6 +274,21 @@ class ChatPage(Gtk.Box):
     def is_chat_active(self, account: str, jid: JID) -> bool:
         return self._chat_list_stack.is_chat_active(account, jid)
 
+    def restore_chat(self) -> None:
+        if not self._closed_chat_memory:
+            return
+
+        account, jid, workspace_id = self._closed_chat_memory.pop()
+
+        client = app.get_client(account)
+        contact = client.get_module('Contacts').get_contact(jid)
+
+        self.add_chat_for_workspace(workspace_id,
+                                    account,
+                                    jid,
+                                    contact.type_string,
+                                    select=True)
+
     def _remove_chat(self,
                      _action: Gio.SimpleAction,
                      param: GLib.Variant) -> None:
@@ -285,6 +301,7 @@ class ChatPage(Gtk.Box):
     def remove_chat(self, account: str, jid: JID) -> None:
         for workspace_id in app.settings.get_workspaces():
             if self.chat_exists_for_workspace(workspace_id, account, jid):
+                self._closed_chat_memory.append((account, jid, workspace_id))
                 self._chat_list_stack.remove_chat(workspace_id, account, jid)
                 return
 

@@ -15,6 +15,7 @@
     "win.show-emoji-chooser": ["<Primary><Shift>M"],
     "win.input-clear": ["<Primary>U"],
     "win.close-chat": ["<Primary>W"],
+    "win.restore-chat": ["<Primary><Shift>W"],
     "win.switch-next-chat": ["<Primary>Page_Down"],
     "win.switch-prev-chat": ["<Primary>Page_Up"],
     "win.switch-next-unread-chat": ["<Primary>Tab"],
