@@ -30,8 +30,9 @@ from typing import Any
 from typing import Optional
 from typing import Union
 
-import sys
 import logging
+import sys
+import textwrap
 
 from gi.repository import GLib
 from gi.repository import Gio
@@ -187,7 +188,11 @@ class PopupNotification(Gtk.Window):
             icon_name = self._get_icon_name(event)
             self._ui.image.set_from_icon_name(icon_name, Gtk.IconSize.DIALOG)
         self._ui.event_type_label.set_text(event.title)
-        self._ui.event_description_label.set_text(event.text)
+        body = textwrap.fill(event.text,
+                             width=40,
+                             max_lines=3,
+                             placeholder='…')
+        self._ui.event_description_label.set_text(body)
 
         if timeout > 0:
             self._timeout_id = GLib.timeout_add_seconds(timeout, self.destroy)
