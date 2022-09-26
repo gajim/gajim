@@ -179,7 +179,7 @@ class GtkMenuBackend(EventHelper):
 
     @staticmethod
     def _on_new_chat(_widget: Gtk.MenuItem) -> None:
-        app.app.activate_action('start-chat', GLib.Variant('s', ''))
+        app.app.activate_action('start-chat', GLib.Variant('as', ['', '']))
 
     @staticmethod
     def _on_sounds_mute(widget: Gtk.CheckMenuItem) -> None:

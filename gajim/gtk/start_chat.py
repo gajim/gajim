@@ -68,7 +68,11 @@ class Search(IntEnum):
 
 
 class StartChatDialog(Gtk.ApplicationWindow):
-    def __init__(self, jid: Optional[str] = None) -> None:
+    def __init__(self,
+                 jid: Optional[str] = None,
+                 initial_message: Optional[str] = None
+                 ) -> None:
+
         Gtk.ApplicationWindow.__init__(self)
         self.set_name('StartChatDialog')
         self.set_application(app.app)
@@ -138,15 +142,14 @@ class StartChatDialog(Gtk.ApplicationWindow):
         if rows:
             self._load_contacts(rows)
 
+        self._initial_message: dict[str, Optional[str]] = {}
         if jid is not None:
-            self.set_search_text(jid)
+            self._initial_message[jid] = initial_message
+            self._ui.search_entry.set_text(jid)
 
         self.select_first_row()
         self._ui.connect_signals(self)
         self.show_all()
-
-    def set_search_text(self, text: str) -> None:
-        self._ui.search_entry.set_text(text)
 
     def remove_row(self, account: str, jid: str) -> None:
         for row in cast(list[ContactRow], self._ui.listbox.get_children()):
@@ -362,12 +365,14 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self._disco_muc(row.account, jid, request_vcard=row.is_new)
 
         else:
+            initial_message = self._initial_message.get(str(jid))
             app.window.add_chat(
                 row.account,
                 jid,
                 'contact',
                 select=True,
-                workspace='current')
+                workspace='current',
+                message=initial_message)
             self.ready_to_destroy = True
             self.destroy()
 

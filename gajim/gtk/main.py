@@ -712,18 +712,23 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                  jid: JID,
                  type_: str,
                  select: bool = False,
-                 workspace: str = 'default') -> None:
+                 workspace: str = 'default',
+                 message: Optional[str] = None
+                 ) -> None:
+
         if workspace == 'current':
             workspace_id = self.get_active_workspace()
             if workspace_id is None:
                 workspace_id = self._workspace_side_bar.get_first_workspace()
         else:
             workspace_id = self._workspace_side_bar.get_first_workspace()
+
         self._chat_page.add_chat_for_workspace(workspace_id,
                                                account,
                                                jid,
                                                type_,
-                                               select=select)
+                                               select=select,
+                                               message=message)
 
     def add_private_chat(self,
                          account: str,

@@ -337,7 +337,7 @@ class ChatList(Gtk.ListBox, EventHelper):
 
     @staticmethod
     def _on_start_chat_clicked(_button: Gtk.Button) -> None:
-        app.app.activate_action('start-chat', GLib.Variant('s', ''))
+        app.app.activate_action('start-chat', GLib.Variant('as', ['', '']))
 
     def set_filter(self, name: str) -> None:
         self._current_filter = name

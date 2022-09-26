@@ -794,4 +794,4 @@ class ChatPlaceholderBox(Gtk.Box):
         self.add(button)
 
     def _on_start_chatting(self, _button: Gtk.Button) -> None:
-        app.app.activate_action('start-chat', GLib.Variant('s', ''))
+        app.app.activate_action('start-chat', GLib.Variant('as', ['', '']))

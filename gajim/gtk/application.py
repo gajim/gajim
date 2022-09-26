@@ -305,7 +305,8 @@ class GajimApplication(Gtk.Application, CoreApplication):
                         'groupchat-join',
                         GLib.Variant('as', [accounts[0], jid]))
                 else:
-                    self.activate_action('start-chat', GLib.Variant('s', jid))
+                    self.activate_action(
+                        'start-chat', GLib.Variant('as', [jid, '']))
 
             elif cmd == 'roster':
                 self.activate_action('add-contact', GLib.Variant('s', jid))
@@ -338,7 +339,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
         options = command_line.get_options_dict()
 
         remote_commands = [
-            ('start-chat', GLib.Variant('s', '')),
+            ('start-chat', GLib.Variant('as', ['', ''])),
             ('show', None)
         ]
 
@@ -562,10 +563,11 @@ class GajimApplication(Gtk.Application, CoreApplication):
     @staticmethod
     def _on_new_chat_action(_action: Gio.SimpleAction,
                             param: GLib.Variant) -> None:
-        window = open_window('StartChatDialog')
-        search_text = param.get_string()
-        if search_text:
-            window.set_search_text(search_text)
+
+        jid, initial_message = param.get_strv()
+        open_window('StartChatDialog',
+                    jid=jid or None,
+                    initial_message=initial_message or None)
 
     @staticmethod
     def _on_profile_action(_action: Gio.SimpleAction,

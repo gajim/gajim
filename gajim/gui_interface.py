@@ -466,8 +466,8 @@ class Interface:
                 message_input.insert_text(message)
             return
 
-        # TODO: handle message arg in StartChat
-        app.app.activate_action('start-chat', GLib.Variant('s', str(jid)))
+        app.app.activate_action(
+            'start-chat', GLib.Variant('as', [str(jid), message or '']))
 
     @staticmethod
     def create_account(account: str,

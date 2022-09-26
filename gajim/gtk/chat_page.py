@@ -16,6 +16,7 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Literal
+from typing import Optional
 from typing import TYPE_CHECKING
 
 import logging
@@ -127,7 +128,7 @@ class ChatPage(Gtk.Box):
 
     @staticmethod
     def _on_start_chat_clicked(_button: Gtk.Button) -> None:
-        app.app.activate_action('start-chat', GLib.Variant('s', ''))
+        app.app.activate_action('start-chat', GLib.Variant('as', ['', '']))
 
     @staticmethod
     def _on_button_release(paned: Gtk.Paned, event: Gdk.EventButton) -> None:
@@ -222,7 +223,8 @@ class ChatPage(Gtk.Box):
                                type_: str,
                                pinned: bool = False,
                                position: int = -1,
-                               select: bool = False) -> None:
+                               select: bool = False,
+                               message: Optional[str] = None) -> None:
 
         client = app.get_client(account)
 
@@ -247,6 +249,9 @@ class ChatPage(Gtk.Box):
             if select:
                 self._chat_list_stack.select_chat(account, jid)
             self._chat_list_stack.store_open_chats(workspace_id)
+            if message is not None:
+                message_input = self._chat_stack.get_message_input()
+                message_input.insert_text(message)
 
     def load_workspace_chats(self, workspace_id: str) -> None:
         open_chats = app.settings.get_workspace_setting(workspace_id,
