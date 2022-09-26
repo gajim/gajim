@@ -224,6 +224,7 @@ function cleanup_install {
     rm -Rf "${MINGW_ROOT}"/share/fontconfig
     rm -Rf "${MINGW_ROOT}"/share/gettext-*
     rm -Rf "${MINGW_ROOT}"/share/terminfo
+    rm -Rf "${MINGW_ROOT}"/share/bullet
     rm -Rf "${MINGW_ROOT}"/share/OGRE
     rm -Rf "${MINGW_ROOT}"/share/opencv4
 
@@ -231,6 +232,7 @@ function cleanup_install {
         -name "*.compiled" -exec rm -f {} \;
 
     rm -Rf "${MINGW_ROOT}"/lib/"${PYTHON_ID}".*/test
+    rm -Rf "${MINGW_ROOT}"/lib/"${PYTHON_ID}"/dist-packages/Ogre
     rm -Rf "${MINGW_ROOT}"/lib/cmake
     rm -Rf "${MINGW_ROOT}"/lib/gettext
     rm -Rf "${MINGW_ROOT}"/lib/gtk-3.0
@@ -257,12 +259,11 @@ function cleanup_install {
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstschro.dll
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstcacasink.dll
 
+    rm -f "${MINGW_ROOT}"/bin/libBulletCollision.dll
+    rm -f "${MINGW_ROOT}"/bin/libBulletDynamics.dll
     rm -f "${MINGW_ROOT}"/bin/libharfbuzz-icu-0.dll
-    rm -f "${MINGW_ROOT}"/bin/libopencv_wechat_qrcode455.dll
-    rm -f "${MINGW_ROOT}"/bin/OgreMain.dll
-    rm -f "${MINGW_ROOT}"/bin/OgreOverlay.dll
-    rm -f "${MINGW_ROOT}"/bin/OgreRTShaderSystem.dll
-    rm -f "${MINGW_ROOT}"/bin/OgreBites.dll
+    rm -f "${MINGW_ROOT}"/bin/libopencv_*
+    rm -f "${MINGW_ROOT}"/bin/Ogre*
     rm -f "${MINGW_ROOT}"/bin/xvidcore.dll
 
     rm -f "${MINGW_ROOT}"/lib/"${PYTHON_ID}".*/lib-dynload/_tkinter*
@@ -320,5 +321,5 @@ function cleanup_install {
 
 function build_installer {
     (cd "$BUILD_ROOT" && makensis -NOCD -DVERSION="$QL_VERSION_DESC" -DARCH="${MINGW}" "${MISC}"/gajim.nsi)
-    (cd "$BUILD_ROOT" && makensis -NOCD -DVERSION="$QL_VERSION_DESC" -DARCH="${MINGW}" "${MISC}"/gajim-portable.nsi)
+    #(cd "$BUILD_ROOT" && makensis -NOCD -DVERSION="$QL_VERSION_DESC" -DARCH="${MINGW}" "${MISC}"/gajim-portable.nsi)
 }
