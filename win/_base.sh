@@ -321,5 +321,5 @@ function cleanup_install {
 
 function build_installer {
     (cd "$BUILD_ROOT" && makensis -NOCD -DVERSION="$QL_VERSION_DESC" -DARCH="${MINGW}" "${MISC}"/gajim.nsi)
-    #(cd "$BUILD_ROOT" && makensis -NOCD -DVERSION="$QL_VERSION_DESC" -DARCH="${MINGW}" "${MISC}"/gajim-portable.nsi)
+    (cd "$BUILD_ROOT" && makensis -NOCD -DVERSION="$QL_VERSION_DESC" -DARCH="${MINGW}" "${MISC}"/gajim-portable.nsi)
 }
