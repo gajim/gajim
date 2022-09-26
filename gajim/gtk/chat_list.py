@@ -539,8 +539,9 @@ class ChatList(Gtk.ListBox, EventHelper):
             row.set_timestamp(event.properties.mam.timestamp)
         else:
             row.set_timestamp(event.properties.timestamp)
+
         row.set_stanza_id(event.stanza_id)
-        row.set_message_id(event.unique_id)
+        row.set_message_id(event.properties.id)
         row.set_message_text(
             event.msgtxt,
             nickname=nick,
