@@ -124,7 +124,7 @@ class VideoPreview:
                      'OpenGL</span> accelerated')
 
         elif sink_name == 'gtksink':
-            text = _('<span color="yellow" font-weight="bold">'
+            text = _('<span color="orange" font-weight="bold">'
                      'Not accelerated</span>')
 
         self._ui.video_source_label.set_markup(text)
