@@ -118,16 +118,19 @@ class VideoPreview:
         self._av_pipeline = None
 
     def _set_sink_text(self, sink_name: str) -> None:
-        text = ''
+        label_markup = '<span color="%s" font-weight="bold">%s</span>'
+        color = 'black'
+        label_text = ''
         if sink_name == 'gtkglsink':
-            text = _('<span color="green" font-weight="bold">'
-                     'OpenGL</span> accelerated')
+            color = 'green'
+            label_text = _('OpenGL accelerated')
 
         elif sink_name == 'gtksink':
-            text = _('<span color="orange" font-weight="bold">'
-                     'Not accelerated</span>')
+            color = 'orange'
+            label_text = _('Not accelerated')
 
-        self._ui.video_source_label.set_markup(text)
+        label_markup = label_markup % (color, label_text)
+        self._ui.video_source_label.set_markup(label_markup)
 
     def _set_error_text(self) -> None:
         self._ui.video_source_label.set_text(
