@@ -425,7 +425,13 @@ class MessageInputTextView(Gtk.TextView):
         menu.prepend(item)
         item.connect('activate', self.clear)
 
-        paste_item = Gtk.MenuItem.new_with_label(_('Paste as quote'))
+        paste_code_block_item = Gtk.MenuItem.new_with_label(
+            _('Paste as Code Block'))
+        paste_code_block_item.connect(
+            'activate', self._paste_clipboard_as_code_block)
+        menu.append(paste_code_block_item)
+
+        paste_item = Gtk.MenuItem.new_with_label(_('Paste as Quote'))
         paste_item.connect('activate', self._paste_clipboard_as_quote)
         menu.append(paste_item)
 
@@ -442,9 +448,20 @@ class MessageInputTextView(Gtk.TextView):
         self.insert_text(text)
         self.grab_focus()
 
+    def insert_as_code_block(self, text: str) -> None:
+        self.insert_text(f'```\n{text}\n```')
+        self.grab_focus()
+
     def _paste_clipboard_as_quote(self, _item: Gtk.MenuItem) -> None:
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         text = clipboard.wait_for_text()
         if text is None:
             return
         self.insert_as_quote(text)
+
+    def _paste_clipboard_as_code_block(self, _item: Gtk.MenuItem) -> None:
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        text = clipboard.wait_for_text()
+        if text is None:
+            return
+        self.insert_as_code_block(text)
