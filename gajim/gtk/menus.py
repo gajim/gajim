@@ -74,9 +74,11 @@ def get_self_contact_menu(contact: types.BareContact) -> GajimMenu:
 def get_singlechat_menu(contact: types.BareContact) -> GajimMenu:
     account = contact.account
 
+    value = f'"{contact.jid}"'
+
     menu = GajimMenu()
     menu.add_item(_('Details'), 'win.show-contact-info')
-    menu.add_item(_('Block Contact…'), f'app.{account}-block-contact')
+    menu.add_item(_('Block Contact…'), f'app.{account}-block-contact', value)
 
     submenu = get_send_file_submenu()
     menu.append_submenu(_('Send File'), submenu)
