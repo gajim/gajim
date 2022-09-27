@@ -7,7 +7,7 @@
         <item>
           <attribute name="label" translatable="yes">_Start / Join Chat…</attribute>
           <attribute name="action">app.start-chat</attribute>
-          <attribute name="target"></attribute>
+          <attribute name="target" type="as">['', '']</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">Create _Group Chat…</attribute>
