@@ -326,8 +326,10 @@ EMAILS = [
     'asd@asd.at',
     'asd@asd.asd.at',
     'asd@asd.asd-asd.at',
+    'asd.asd@asd.asd-asd.at',
     'asd-asd@asd.asdasd.at',
     'mailto:foo@bar.com.uk',
+    'mailto:foo.foo.foo@bar.com.uk',
 ]
 
 EMAILS_WITH_TEXT = [
