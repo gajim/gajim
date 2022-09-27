@@ -80,6 +80,7 @@ class Preview:
         self.mime_type: str = ''
         self.file_size: int = 0
         self._received_size: int = 0
+        self.download_in_progress = False
 
         self.info_message: Optional[str] = None
 
@@ -170,6 +171,7 @@ class Preview:
         self._widget.update(self, data)
 
     def update_progress(self, size: int, message: Soup.Message) -> None:
+        self.download_in_progress = True
         self._soup_message = message
         self._received_size += size
         if self.file_size == 0 or self._received_size == 0:
@@ -392,7 +394,13 @@ class PreviewManager:
 
     def download_content(self,
                          preview: Preview,
-                         force: bool = False) -> None:
+                         force: bool = False
+                         ) -> None:
+
+        if preview.download_in_progress:
+            log.info('Download already in progress')
+            return
+
         preview.reset_received_size()
         if preview.account is None:
             # History Window can be opened without account context
@@ -469,7 +477,11 @@ class PreviewManager:
     def _on_finished(self,
                      _session: Soup.Session,
                      message: Soup.Message,
-                     preview: Preview) -> None:
+                     preview: Preview
+                     ) -> None:
+
+        preview.download_in_progress = False
+
         if message.status_code != Soup.Status.OK:
             log.warning('Download failed: %s', preview.request_uri)
             status_code = Soup.Status.get_phrase(message.status_code)

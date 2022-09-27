@@ -62,7 +62,6 @@ class PreviewWidget(Gtk.Box):
         self.account = account
         self._preview: Optional[Preview] = None
 
-        self._in_progress = False
         self._destroyed = False
 
         if app.settings.get('use_kib_mib'):
@@ -98,8 +97,6 @@ class PreviewWidget(Gtk.Box):
 
     @ensure_not_destroyed
     def update_progress(self, _preview: Preview, progress: float) -> None:
-        self._in_progress = True
-
         self._ui.download_button.hide()
 
         self._ui.progress_box.show()
@@ -112,7 +109,6 @@ class PreviewWidget(Gtk.Box):
     def update(self, preview: Preview, data: Optional[GdkPixbufType]) -> None:
         self._preview = preview
 
-        self._in_progress = False
         self._ui.progress_box.hide()
         self._ui.info_message.hide()
 
@@ -232,7 +228,7 @@ class PreviewWidget(Gtk.Box):
         if self._preview.orig_exists:
             menu.download.hide()
         else:
-            if self._in_progress:
+            if self._preview.download_in_progress:
                 menu.download.hide()
             menu.open.hide()
             menu.save_as.hide()

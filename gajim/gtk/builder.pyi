@@ -678,9 +678,9 @@ class PreviewBuilder(Builder):
     image_button: Gtk.Button
     link_button: Gtk.LinkButton
     button_box: Gtk.Box
-    download_button: Gtk.Button
     save_as_button: Gtk.Button
     open_folder_button: Gtk.Button
+    download_button: Gtk.Button
     file_name: Gtk.Label
     file_size: Gtk.Label
     info_message: Gtk.Label
@@ -793,6 +793,8 @@ class ServerInfoBuilder(Builder):
     dns: Gtk.Label
     ip_port: Gtk.Label
     websocket: Gtk.Label
+    tls_version: Gtk.Label
+    cipher_suite: Gtk.Label
     cert_scrolled: Gtk.ScrolledWindow
     features: Gtk.Box
     features_listbox: Gtk.ListBox
