@@ -371,7 +371,7 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         if isinstance(contact, GroupchatContact):
             msg_type = 'group-chat-message'
-            title += f' {contact.nickname} ({contact.name})'
+            title += f' {event.resource} ({contact.name})'
             assert contact.nickname is not None
             needs_highlight = helpers.message_needs_highlight(
                 text, contact.nickname, client.get_own_jid().bare)
