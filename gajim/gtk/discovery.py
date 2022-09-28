@@ -1423,8 +1423,6 @@ class ToplevelAgentBrowser(AgentBrowser):
             else:
                 self.register_button.set_label(_('Re_gister'))
             self.register_button.set_sensitive(True)
-        if self.join_button and Namespace.MUC in features:
-            self.join_button.set_sensitive(True)
 
     def _default_action(self, jid, node, identities, features, data):
         if AgentBrowser._default_action(self, jid, node, identities,
