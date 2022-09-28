@@ -872,6 +872,15 @@ class ChatRow(Gtk.ListBoxRow):
         rectangle.y = int(event.y)
         rectangle.width = rectangle.height = 1
 
+        event_widget = Gtk.get_event_widget(event)
+        if isinstance(event_widget, Gtk.Button):
+            # When the event is triggered by pressing the close button we get
+            # a x coordinate relative to the window of the close button, which
+            # would be a very low x integer as the close button is small, this
+            # leads to opening the menu far away from the mouse. We overwrite
+            # the x coordinate with an approx. position of the close button.
+            rectangle.x = int(self.get_allocated_width() - 10)
+
         popover = Gtk.Popover.new_from_model(self, menu)
         popover.set_relative_to(self)
         popover.set_position(Gtk.PositionType.RIGHT)
