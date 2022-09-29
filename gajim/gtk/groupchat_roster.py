@@ -38,7 +38,7 @@ from gajim.common.events import ApplicationEvent
 from gajim.common.events import MUCNicknameChanged
 from gajim.common.modules.contacts import GroupchatContact
 
-from .menus import get_groupchat_roster_menu
+from .menus import get_groupchat_participant_menu
 from .tooltips import GCTooltip
 from .builder import get_builder
 from .util import EventHelper
@@ -427,9 +427,9 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         self_contact = self._contact.get_self()
         assert self_contact is not None
         contact = self._contact.get_resource(nick)
-        menu = get_groupchat_roster_menu(self._contact.account,
-                                         self_contact,
-                                         contact)
+        menu = get_groupchat_participant_menu(self._contact.account,
+                                              self_contact,
+                                              contact)
 
         def destroy(popover: Gtk.Popover) -> None:
             app.check_finalize(popover)

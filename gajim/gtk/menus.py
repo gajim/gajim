@@ -465,6 +465,10 @@ def get_groupchat_admin_menu(self_contact: types.GroupchatParticipant,
 
     menu = GajimMenu()
 
+    if contact.real_jid is None:
+        menu.add_item(_('Not Available'), 'dummy', None)
+        return menu
+
     action = 'win.muc-change-affiliation'
 
     if is_affiliation_change_allowed(self_contact, contact, 'owner'):
@@ -499,6 +503,10 @@ def get_groupchat_mod_menu(self_contact: types.GroupchatParticipant,
 
     menu = GajimMenu()
 
+    if not contact.is_available:
+        menu.add_item(_('Not Available'), 'dummy', None)
+        return menu
+
     if is_role_change_allowed(self_contact, contact):
         value = f'"{contact.name}"'
         menu.add_item(_('Kick…'), 'win.muc-kick', value)
@@ -519,10 +527,10 @@ def get_groupchat_mod_menu(self_contact: types.GroupchatParticipant,
     return menu
 
 
-def get_groupchat_roster_menu(account: str,
-                              self_contact: types.GroupchatParticipant,
-                              contact: types.GroupchatParticipant
-                              ) -> GajimMenu:
+def get_groupchat_participant_menu(account: str,
+                                   self_contact: types.GroupchatParticipant,
+                                   contact: types.GroupchatParticipant
+                                   ) -> GajimMenu:
 
     value = f'"{contact.name}"'
 
