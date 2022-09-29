@@ -107,9 +107,14 @@ class SearchView(Gtk.Box):
         self._clear_results()
 
     def _clear_results(self) -> None:
+        # Unset the header_func to reduce load when clearing
+        self._ui.results_listbox.set_header_func(None)
+
         for row in self._ui.results_listbox.get_children():
             self._ui.results_listbox.remove(row)
             row.destroy()
+
+        self._ui.results_listbox.set_header_func(self._header_func)
 
     def _on_search(self, entry: Gtk.Entry) -> None:
         self._clear_results()
