@@ -326,6 +326,7 @@ class AppIndicator(GtkMenuBackend):
             return
 
         if app.is_flatpak():
+            self._status_icon.set_icon_full('org.gajim.Gajim', 'online')
             return
 
         show = get_global_show()
