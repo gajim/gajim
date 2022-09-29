@@ -89,6 +89,7 @@ function install_deps {
         mingw-w64-"${ARCH}"-python-pip \
         mingw-w64-"${ARCH}"-adwaita-icon-theme \
         mingw-w64-"${ARCH}"-libwebp \
+        mingw-w64-"${ARCH}"-libheif \
         mingw-w64-"${ARCH}"-sqlite3 \
         mingw-w64-"${ARCH}"-goocanvas \
         mingw-w64-"${ARCH}"-gspell \
