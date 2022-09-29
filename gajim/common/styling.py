@@ -18,6 +18,7 @@ from typing import Union
 from typing import Match
 
 import string
+import sys
 import re
 from dataclasses import dataclass
 from dataclasses import field
@@ -208,7 +209,11 @@ def process(text: Union[str, bytes], level: int = 0) -> ParsingResult:
             for line in block.text.splitlines(keepends=True):
                 block.spans += _parse_line(line, offset, offset_bytes)
                 block.uris += _parse_uris(line, offset, offset_bytes)
-                block.emojis += _parse_emojis(line, offset)
+                if sys.platform == 'darwin':
+                    # block.emojis is used for replacing emojis with Gtk.Images
+                    # Necessary for MessageTextview (darwin) only
+                    block.emojis += _parse_emojis(line, offset)
+
                 offset += len(line)
                 offset_bytes += len(line.encode())
 
