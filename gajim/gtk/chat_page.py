@@ -155,7 +155,10 @@ class ChatPage(Gtk.Box):
                           jid: JID) -> None:
 
         self._chat_stack.show_chat(account, jid)
-        self._search_view.set_context(account, jid)
+
+        if self._search_revealer.get_reveal_child():
+            self._search_view.set_context(account, jid)
+
         self.emit('chat-selected', workspace_id, account, jid)
 
     def _on_chat_unselected(self, _chat_list_stack: ChatListStack) -> None:
@@ -170,7 +173,6 @@ class ChatPage(Gtk.Box):
             self._search_view.set_context(self._chat_control.contact.account,
                                           self._chat_control.contact.jid)
 
-        self._search_view.clear()
         self._search_revealer.set_reveal_child(True)
         self._search_view.set_focus()
 

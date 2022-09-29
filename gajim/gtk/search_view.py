@@ -78,11 +78,10 @@ class SearchView(Gtk.Box):
         app.ged.register_event_handler('account-disabled',
                                        ged.GUI1,
                                        self._on_account_state)
-        self._update_calendar()
         self.show_all()
 
     def _on_account_state(self, _event: Any) -> None:
-        self.clear()
+        self._clear()
 
     @staticmethod
     def _header_func(row: ResultRow, before: ResultRow) -> None:
@@ -100,9 +99,9 @@ class SearchView(Gtk.Box):
 
     def _on_hide_clicked(self, _button: Gtk.Button) -> None:
         self.emit('hide-search')
-        self.clear()
+        self._clear()
 
-    def clear(self) -> None:
+    def _clear(self) -> None:
         self._ui.search_entry.set_text('')
         self._clear_results()
 
@@ -357,6 +356,8 @@ class SearchView(Gtk.Box):
 
     def set_focus(self) -> None:
         self._ui.search_entry.grab_focus()
+        self._clear()
+        self._update_calendar()
 
     def set_context(self, account: Optional[str], jid: Optional[JID]) -> None:
         self._account = account
