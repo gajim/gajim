@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 from typing import Optional
+from typing import Union
 
 import sys
 import logging
@@ -147,6 +148,8 @@ class ChatStack(Gtk.Stack, EventHelper):
             ('message-received', 85, self._on_message_received),
             ('gc-message-received', 85, self._on_message_received),
             ('muc-disco-update', 85, self._on_muc_disco_update),
+            ('account-connected', 85, self._on_account_state),
+            ('account-disconnected', 85, self._on_account_state),
         ])
 
     def _get_current_contact(self) -> ChatContactT:
@@ -189,6 +192,7 @@ class ChatStack(Gtk.Stack, EventHelper):
         self._message_action_box.switch_contact(self._current_contact)
 
         self._update_base_actions(self._current_contact)
+
         if isinstance(self._current_contact, GroupchatContact):
             self._current_contact.multi_connect({
                 'user-joined': self._on_user_joined,
@@ -332,6 +336,26 @@ class ChatStack(Gtk.Stack, EventHelper):
             return
 
         self._update_group_chat_actions(self._current_contact)
+
+    def _on_account_state(self,
+                          event: Union[events.AccountConnected,
+                                       events.AccountDisconnected]
+                          ) -> None:
+
+        if self._current_contact is None:
+            return
+
+        if event.account != self._current_contact.account:
+            return
+
+        self._update_base_actions(self._current_contact)
+
+        if isinstance(self._current_contact, GroupchatContact):
+            self._update_group_chat_actions(self._current_contact)
+        elif isinstance(self._current_contact, GroupchatParticipant):
+            self._update_participant_actions(self._current_contact)
+        else:
+            self._update_chat_actions(self._current_contact)
 
     def _on_message_received(self, event: events.MessageReceived) -> None:
         if not event.msgtxt or event.properties.is_sent_carbon:
