@@ -216,6 +216,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
     def _reset(self) -> None:
         self._current_upper = 0
+        self._autoscroll = True
         self._request_history_at_upper = None
         self._upper_complete = False
         self._lower_complete = True
@@ -632,6 +633,10 @@ class ConversationView(Gtk.ScrolledWindow):
                 'conversation-search-highlight')
             # This scrolls the ListBox to the highlighted row
             highlight_row.grab_focus()
+
+    def scroll_to_end(self) -> None:
+        adj = self.get_vadjustment()
+        adj.set_value(adj.get_upper() - adj.get_page_size())
 
     def _get_row_by_message_id(self, id_: str) -> Optional[MessageRow]:
         return self._message_id_row_map.get(id_)

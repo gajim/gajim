@@ -531,7 +531,7 @@ class ChatControl(EventHelper):
 
             if not self._scrolled_view.get_autoscroll():
                 if kind == 'outgoing':
-                    self.reset_view()
+                    self._scrolled_view.scroll_to_end()
                 else:
                     self._jump_to_end_button.add_unread_count()
         else:
