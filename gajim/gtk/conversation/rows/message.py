@@ -146,21 +146,7 @@ class MessageRow(BaseRow):
             if encryption_img:
                 self._meta_box.pack_start(encryption_img, False, True, 0)
 
-        if display_marking and app.settings.get_account_setting(
-                account, 'enable_security_labels'):
-            label_text = GLib.markup_escape_text(display_marking.name)
-            if label_text:
-                display_marking_label = Gtk.Label()
-                display_marking_label.set_ellipsize(Pango.EllipsizeMode.END)
-                display_marking_label.set_max_width_chars(30)
-                display_marking_label.set_tooltip_text(label_text)
-                bgcolor = display_marking.bgcolor
-                fgcolor = display_marking.fgcolor
-                label_text = (
-                    f'<span size="small" bgcolor="{bgcolor}" '
-                    f'fgcolor="{fgcolor}"><tt>{label_text}</tt></span>')
-                display_marking_label.set_markup(label_text)
-                self._meta_box.add(display_marking_label)
+        self._add_security_label(display_marking)
 
         self._message_icons = MessageIcons()
 
@@ -216,6 +202,31 @@ class MessageRow(BaseRow):
         self.grid.attach(self._bottom_box, 1, 1, 1, 1)
 
         self.show_all()
+
+    def _add_security_label(self,
+                            display_marking: Optional[Displaymarking]
+                            ) -> None:
+
+        if display_marking is None:
+            return
+
+        if not app.settings.get_account_setting(self._account,
+                                                'enable_security_labels'):
+            return
+
+        label_text = GLib.markup_escape_text(display_marking.name)
+        if label_text:
+            display_marking_label = Gtk.Label()
+            display_marking_label.set_ellipsize(Pango.EllipsizeMode.END)
+            display_marking_label.set_max_width_chars(30)
+            display_marking_label.set_tooltip_text(label_text)
+            bgcolor = display_marking.bgcolor
+            fgcolor = display_marking.fgcolor
+            label_text = (
+                f'<span size="small" bgcolor="{bgcolor}" '
+                f'fgcolor="{fgcolor}"><tt>{label_text}</tt></span>')
+            display_marking_label.set_markup(label_text)
+            self._meta_box.add(display_marking_label)
 
     def _check_for_highlight(self, text: str) -> None:
         assert isinstance(self._contact, GroupchatContact)
