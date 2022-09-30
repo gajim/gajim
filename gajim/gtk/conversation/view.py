@@ -27,7 +27,6 @@ import time
 from datetime import datetime
 from datetime import timedelta
 
-from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import GObject
 from gi.repository import Gio
@@ -498,8 +497,6 @@ class ConversationView(Gtk.ScrolledWindow):
         if message.kind == 'incoming':
             if message.timestamp > self._read_marker_row.timestamp:
                 self._read_marker_row.hide()
-
-        GLib.idle_add(message.queue_resize)
 
     def _add_date_row(self, timestamp: datetime) -> None:
         start_of_day = get_start_of_day(timestamp)
