@@ -503,6 +503,9 @@ class Client(Observable):
         message.set_sent_timestamp()
         message.message_id = self.send_stanza(message.stanza)
 
+        if not message.is_groupchat:
+            self.get_module('Message').log_message(message)
+
         app.ged.raise_event(
             MessageSent(jid=message.jid,
                         account=message.account,
@@ -514,11 +517,6 @@ class Client(Observable):
                         correct_id=message.correct_id,
                         message_id=message.message_id,
                         play_sound=message.play_sound))
-
-        if message.is_groupchat:
-            return
-
-        self.get_module('Message').log_message(message)
 
     def _prepare_for_connect(self) -> None:
         custom_host = get_custom_host(self._account)
