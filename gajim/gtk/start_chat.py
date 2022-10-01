@@ -56,7 +56,7 @@ from .chat_filter import ChatFilter
 from .groupchat_info import GroupChatInfoScrolled
 from .groupchat_nick import NickChooser
 from .builder import get_builder
-from .util import get_icon_name
+from .util import GajimPopover, get_icon_name
 from .util import AccountBadge
 
 ContactT = Union[BareContact, GroupchatContact]
@@ -829,15 +829,7 @@ class ContactRow(Gtk.ListBoxRow):
 
         menu = get_start_chat_row_menu(self.account, self.jid)
 
-        rectangle = Gdk.Rectangle()
-        rectangle.x = int(event.x)
-        rectangle.y = int(event.y)
-        rectangle.width = rectangle.height = 1
-
-        popover = Gtk.Popover.new_from_model(self, menu)
-        popover.set_relative_to(self)
-        popover.set_position(Gtk.PositionType.RIGHT)
-        popover.set_pointing_to(rectangle)
+        popover = GajimPopover(menu, relative_to=self, event=event)
         popover.popup()
 
     def _get_avatar_image(self, contact: ContactT) -> Gtk.Image:

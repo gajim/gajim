@@ -55,6 +55,7 @@ from ...dialogs import InputDialog
 from ...dialogs import DialogButton
 from ...menus import get_groupchat_participant_menu
 from ...preview import PreviewWidget
+from ...util import GajimPopover
 from ...util import format_fingerprint
 from ...util import get_cursor
 
@@ -270,14 +271,11 @@ class MessageRow(BaseRow):
             if event.button == 1:
                 app.window.activate_action('mention', GLib.Variant('s', name))
             elif event.button == 3:
-                rect = Gdk.Rectangle()
-                rect.x, rect.y = int(event.x), int(event.y)
-                rect.height, rect.width = 1, 1
-                self._show_participant_menu(name, rect)
+                self._show_participant_menu(name, event)
 
         return Gdk.EVENT_STOP
 
-    def _show_participant_menu(self, nick: str, rect: Gdk.Rectangle) -> None:
+    def _show_participant_menu(self, nick: str, event: Gdk.EventButton) -> None:
         assert isinstance(self._contact, GroupchatContact)
         if not self._contact.is_joined:
             return
@@ -294,13 +292,7 @@ class MessageRow(BaseRow):
                                               self_contact,
                                               contact)
 
-        def destroy(popover: Gtk.Popover) -> None:
-            app.check_finalize(popover)
-            GLib.idle_add(popover.set_relative_to, None)
-
-        popover = Gtk.Popover.new_from_model(self, menu)
-        popover.set_pointing_to(rect)
-        popover.connect('closed', destroy)
+        popover = GajimPopover(menu, relative_to=self, event=event)
         popover.popup()
 
     @staticmethod

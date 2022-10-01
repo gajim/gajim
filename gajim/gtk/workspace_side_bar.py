@@ -33,7 +33,9 @@ from .chat_list_stack import ChatListStack
 from .chat_page import ChatPage
 from .menus import get_workspace_menu
 from .structs import ChatListEntryParam
+from .util import GajimPopover
 from .util import open_window
+
 
 log = logging.getLogger('gajim.gui.workspace_sidebar')
 
@@ -332,15 +334,7 @@ class Workspace(CommonWorkspace):
 
         menu = get_workspace_menu(self.workspace_id)
 
-        rectangle = Gdk.Rectangle()
-        rectangle.x = int(event.x)
-        rectangle.y = int(event.y)
-        rectangle.width = rectangle.height = 1
-
-        popover = Gtk.Popover.new_from_model(self, menu)
-        popover.set_relative_to(self)
-        popover.set_position(Gtk.PositionType.RIGHT)
-        popover.set_pointing_to(rectangle)
+        popover = GajimPopover(menu, relative_to=self, event=event)
         popover.popup()
 
     def update_avatar(self) -> None:

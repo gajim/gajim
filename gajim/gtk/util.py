@@ -866,3 +866,47 @@ class GajimMenu(Gio.Menu):
         menu = GajimMenu()
         self.append_submenu(label, menu)
         return menu
+
+
+class GdkRectangle(Gdk.Rectangle):
+    def __init__(self,
+                 x: int,
+                 y: int,
+                 height: int = 1,
+                 width: int = 1
+                 ) -> None:
+
+        Gdk.Rectangle.__init__(self)
+        self.x = x
+        self.y = y
+        self.height = height
+        self.width = width
+
+
+class GajimPopover(Gtk.Popover):
+    def __init__(self,
+                 menu: Gio.MenuModel,
+                 relative_to: Optional[Gtk.Widget] = None,
+                 position: Gtk.PositionType = Gtk.PositionType.RIGHT,
+                 event: Optional[Gdk.EventButton] = None) -> None:
+
+        Gtk.Popover.__init__(self)
+
+        self.bind_model(menu)
+        self.set_relative_to(relative_to)
+        self.set_position(position)
+        if event is not None:
+            self.set_pointing_from_event(event)
+
+        self.connect('closed', self._destroy)
+
+    def set_pointing_from_event(self, event: Gdk.EventButton) -> None:
+        self.set_pointing_to_coord(event.x, event.y)
+
+    def set_pointing_to_coord(self, x: float, y: float) -> None:
+        rectangle = GdkRectangle(x=int(x), y=int(y))
+        self.set_pointing_to(rectangle)
+
+    def _destroy(self, popover: Gtk.Popover) -> None:
+        app.check_finalize(popover)
+        GLib.idle_add(popover.set_relative_to, None)

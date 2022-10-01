@@ -42,6 +42,7 @@ from .menus import get_groupchat_participant_menu
 from .tooltips import GCTooltip
 from .builder import get_builder
 from .util import EventHelper
+from .util import GajimPopover
 
 
 log = logging.getLogger('gajim.gui.groupchat_roster')
@@ -414,15 +415,12 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
             return
 
         if event.button == 3:  # right click
-            rec = Gdk.Rectangle()
-            rec.x, rec.y = int(event.x), int(event.y)
-            rec.height, rec.width = 1, 1
-            self._show_contact_menu(nick, rec)
+            self._show_contact_menu(nick, event)
 
         # if event.button == 2:  # middle click
             # self.roster.emit('row-activated', nick)
 
-    def _show_contact_menu(self, nick: str, rect: Gdk.Rectangle) -> None:
+    def _show_contact_menu(self, nick: str, event: Gdk.EventButton) -> None:
         assert self._contact is not None
         self_contact = self._contact.get_self()
         assert self_contact is not None
@@ -431,13 +429,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
                                               self_contact,
                                               contact)
 
-        def destroy(popover: Gtk.Popover) -> None:
-            app.check_finalize(popover)
-            GLib.idle_add(popover.set_relative_to, None)
-
-        popover = Gtk.Popover.new_from_model(self, menu)
-        popover.set_pointing_to(rect)
-        popover.connect('closed', destroy)
+        popover = GajimPopover(menu, relative_to=self, event=event)
         popover.popup()
 
     def _on_muc_state_changed(self,

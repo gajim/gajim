@@ -58,6 +58,8 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from .menus import get_chat_list_row_menu
 from .builder import get_builder
 from .util import EventHelper
+from .util import GajimPopover
+
 
 log = logging.getLogger('gajim.gui.chatlist')
 
@@ -867,24 +869,18 @@ class ChatRow(Gtk.ListBoxRow):
         menu = get_chat_list_row_menu(
             self.workspace_id, self.account, self.jid, self._pinned)
 
-        rectangle = Gdk.Rectangle()
-        rectangle.x = int(event.x)
-        rectangle.y = int(event.y)
-        rectangle.width = rectangle.height = 1
-
         event_widget = Gtk.get_event_widget(event)
+        x = event.x
         if isinstance(event_widget, Gtk.Button):
             # When the event is triggered by pressing the close button we get
             # a x coordinate relative to the window of the close button, which
             # would be a very low x integer as the close button is small, this
             # leads to opening the menu far away from the mouse. We overwrite
             # the x coordinate with an approx. position of the close button.
-            rectangle.x = int(self.get_allocated_width() - 10)
+            x = self.get_allocated_width() - 10
 
-        popover = Gtk.Popover.new_from_model(self, menu)
-        popover.set_relative_to(self)
-        popover.set_position(Gtk.PositionType.RIGHT)
-        popover.set_pointing_to(rectangle)
+        popover = GajimPopover(menu, relative_to=self)
+        popover.set_pointing_to_coord(x=x, y=event.y)
         popover.popup()
 
     def _on_drag_begin(self,

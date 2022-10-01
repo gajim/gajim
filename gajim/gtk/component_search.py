@@ -41,6 +41,7 @@ from .assistant import Page
 from .assistant import ProgressPage
 from .dataform import DataFormWidget
 from .menus import get_component_search_menu
+from .util import GajimPopover
 from .util import ensure_not_destroyed
 from .util import EventHelper
 
@@ -311,15 +312,7 @@ class Result(Page):
             jid = column_values[self._jid_col]
         menu = get_component_search_menu(jid, text)
 
-        rectangle = Gdk.Rectangle()
-        rectangle.x = int(event.x)
-        rectangle.y = int(event.y)
-        rectangle.width = rectangle.height = 1
-
-        popover = Gtk.Popover.new_from_model(self, menu)
-        popover.set_relative_to(self)
-        popover.set_position(Gtk.PositionType.RIGHT)
-        popover.set_pointing_to(rectangle)
+        popover = GajimPopover(menu, relative_to=self, event=event)
         popover.popup()
         return True
 

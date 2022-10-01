@@ -50,6 +50,7 @@ from .dialogs import ConfirmationDialog
 from .dialogs import DialogButton
 from .tooltips import RosterTooltip
 from .util import EventHelper
+from .util import GajimPopover
 from .builder import get_builder
 from .util import open_window
 
@@ -384,18 +385,9 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         contact = self._contacts.get_bare_contact(jid)
         gateway_register = contact.is_gateway and contact.supports(
             Namespace.REGISTER)
-        menu = get_roster_menu(
-            self._account, jid, gateway=gateway_register)
 
-        rectangle = Gdk.Rectangle()
-        rectangle.x = int(event.x)
-        rectangle.y = int(event.y)
-        rectangle.width = rectangle.height = 1
-
-        popover = Gtk.Popover.new_from_model(self, menu)
-        popover.set_relative_to(treeview)
-        popover.set_position(Gtk.PositionType.RIGHT)
-        popover.set_pointing_to(rectangle)
+        menu = get_roster_menu(self._account, jid, gateway=gateway_register)
+        popover = GajimPopover(menu, relative_to=treeview, event=event)
         popover.popup()
 
     def set_search_string(self, text: str) -> None:
