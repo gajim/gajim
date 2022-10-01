@@ -433,13 +433,14 @@ class StartChatDialog(Gtk.ApplicationWindow):
             jid,
             request_vcard=request_vcard,
             allow_redirect=True,
+            timeout=10,
             callback=self._muc_disco_info_received,
             user_data=account)
 
     def _muc_disco_info_received(self, task: Task) -> None:
         try:
             result = cast(DiscoInfo, task.finish())
-        except StanzaError as error:
+        except (StanzaError, TimeoutStanzaError) as error:
             self._set_error(error)
             return
 
@@ -455,12 +456,15 @@ class StartChatDialog(Gtk.ApplicationWindow):
         else:
             self._set_error_from_code('not-muc-service')
 
-    def _set_error(self, error: StanzaError) -> None:
-        text = MUC_DISCO_ERRORS.get(error.condition, to_user_string(error))
-        if error.condition == 'gone':
-            reason = error.get_text(get_rfc5646_lang())
-            if reason:
-                text = f'{text}:\n{reason}'
+    def _set_error(self, error: Union[StanzaError, TimeoutStanzaError]) -> None:
+        if isinstance(error, TimeoutStanzaError):
+            text = _('This address is not reachable.')
+        else:
+            text = MUC_DISCO_ERRORS.get(error.condition, to_user_string(error))
+            if error.condition == 'gone':
+                reason = error.get_text(get_rfc5646_lang())
+                if reason:
+                    text = f'{text}:\n{reason}'
         self._show_error_page(text)
 
     def _set_error_from_code(self, error_code: str) -> None:
