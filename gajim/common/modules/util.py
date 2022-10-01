@@ -111,8 +111,15 @@ class LogAdapter(LoggerAdapter):
 
 def as_task(func):
     @wraps(func)
-    def func_wrapper(self, *args, callback=None, user_data=None, **kwargs):
+    def func_wrapper(self,
+                     *args,
+                     timeout=None,
+                     callback=None,
+                     user_data=None,
+                     **kwargs):
+
         task_ = Task(func(self, *args, **kwargs))
+        task_.set_timeout(timeout)
         app.register_task(self, task_)
         task_.set_finalize_func(app.remove_task, id(self))
         task_.set_user_data(user_data)
