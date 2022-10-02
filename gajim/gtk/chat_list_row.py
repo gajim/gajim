@@ -215,12 +215,6 @@ class ChatListRow(Gtk.ListBoxRow):
                 self.get_toplevel().get_property('is-active'))
 
     @property
-    def is_recent(self) -> bool:
-        if self._unread_count:
-            return True
-        return False
-
-    @property
     def unread_count(self) -> int:
         if (self.contact.is_groupchat and not self.contact.can_notify() and
                 not self._needs_muc_highlight):
