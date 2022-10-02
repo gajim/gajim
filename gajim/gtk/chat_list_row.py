@@ -118,12 +118,11 @@ class ChatListRow(Gtk.ListBoxRow):
         self.get_style_context().add_class('chatlist-row')
 
         self._ui = get_builder('chat_list_row.ui')
+        self._ui.connect_signals(self)
         self.add(self._ui.eventbox)
 
         self.connect('state-flags-changed', self._on_state_flags_changed)
         self.connect('destroy', self._on_destroy)
-        self._ui.eventbox.connect('button-press-event', self._on_button_press)
-        self._ui.close_button.connect('clicked', self._on_close_button_clicked)
 
         # Drag and Drop
         entries = [Gtk.TargetEntry.new(
@@ -416,10 +415,10 @@ class ChatListRow(Gtk.ListBoxRow):
             'remove-chat',
             GLib.Variant('as', [self.account, str(self.jid)]))
 
-    def _on_button_press(self,
-                         _widget: Gtk.Widget,
-                         event: Gdk.EventButton
-                         ) -> None:
+    def _on_row_button_press_event(self,
+                                   _widget: Gtk.EventBox,
+                                   event: Gdk.EventButton
+                                   ) -> None:
         if event.button == 3:  # right click
             self._popup_menu(event)
         elif event.button == 2:  # middle click
