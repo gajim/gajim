@@ -51,9 +51,8 @@ class Entity(NamedTuple):
 
 
 class RowHeaderType(IntEnum):
-    ACTIVE = 0
-    CONVERSATIONS = 1
-    PINNED = 2
+    CONVERSATIONS = 0
+    PINNED = 1
 
 
 class AvatarSize(IntEnum):

@@ -78,7 +78,6 @@ class ChatListRow(Gtk.ListBoxRow):
         self.type = type_
         self.position = position
 
-        self.active_label = ActiveHeader()
         self.conversations_label = ConversationsHeader()
         self.pinned_label = PinnedHeader()
 
@@ -229,8 +228,6 @@ class ChatListRow(Gtk.ListBoxRow):
             self.set_header(None)
         elif type_ is RowHeaderType.PINNED:
             self.set_header(self.pinned_label)
-        elif type_ == RowHeaderType.ACTIVE:
-            self.set_header(self.active_label)
         else:
             self.set_header(self.conversations_label)
 
@@ -523,14 +520,6 @@ class BaseHeader(Gtk.Box):
         self.add(label)
         self.get_style_context().add_class('header-box')
         self.show_all()
-
-
-class ActiveHeader(BaseHeader):
-
-    def __init__(self):
-        BaseHeader.__init__(self,
-                            RowHeaderType.ACTIVE,
-                            _('Active'))
 
 
 class ConversationsHeader(BaseHeader):

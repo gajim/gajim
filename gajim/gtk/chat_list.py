@@ -264,8 +264,6 @@ class ChatList(Gtk.ListBox, EventHelper):
         if before is None:
             if row.is_pinned:
                 row.header = RowHeaderType.PINNED
-            # elif row.is_active():
-            #    row.header = RowHeaderType.ACTIVE
             else:
                 row.header = None
         else:
@@ -274,13 +272,7 @@ class ChatList(Gtk.ListBox, EventHelper):
                     row.header = None
                 else:
                     row.header = RowHeaderType.PINNED
-            # elif row.is_active():
-            #    if before.is_active() and not before.is_pinned:
-            #        row.header = None
-            #    else:
-            #        row.header = RowHeaderType.ACTIVE
             else:
-                # if before.is_active() or before.is_pinned:
                 if before.is_pinned:
                     row.header = RowHeaderType.CONVERSATIONS
                 else:
