@@ -131,10 +131,206 @@ class ChatList(Gtk.ListBox, EventHelper):
         if chat is not None:
             chat.unread_count = count
 
+    def set_filter(self, name: str) -> None:
+        self._current_filter = name
+        self.invalidate_filter()
+
+    def set_filter_text(self, text: str) -> None:
+        self._current_filter_text = text
+        self.invalidate_filter()
+
+    def get_chat_type(self, account: str, jid: JID) -> Optional[str]:
+        row = self._chats.get((account, jid))
+        if row is not None:
+            return row.type
+        return None
+
+    def get_selected_chat(self) -> Optional[ChatListRow]:
+        row = cast(ChatListRow, self.get_selected_row())
+        if row is None:
+            return None
+        return row
+
+    def get_open_chats(self) -> OpenChatsSettingT:
+        open_chats: OpenChatsSettingT = []
+        for key, row in self._chats.items():
+            account, jid = key
+            open_chats.append({'account': account,
+                               'jid': jid,
+                               'type': row.type,
+                               'pinned': row.is_pinned,
+                               'position': row.position})
+        return open_chats
+
     def mark_as_read(self, account: str, jid: JID) -> None:
         chat = self._chats.get((account, jid))
         if chat is not None:
             chat.reset_unread()
+
+    def toggle_chat_pinned(self, account: str, jid: JID) -> None:
+        row = self._chats[(account, jid)]
+
+        if row.is_pinned:
+            self._chat_order.remove(row)
+            row.position = -1
+        else:
+            self._chat_order.append(row)
+            row.position = self._chat_order.index(row)
+
+        row.toggle_pinned()
+        self.invalidate_sort()
+
+    def add_chat(self,
+                 account: str,
+                 jid: JID,
+                 type_: str,
+                 pinned: bool,
+                 position: int
+                 ) -> None:
+
+        key = (account, jid)
+        if self._chats.get(key) is not None:
+            # Chat is already in the List
+            return
+
+        row = ChatListRow(self._workspace_id,
+                          account,
+                          jid,
+                          type_,
+                          pinned,
+                          position)
+
+        self._chats[key] = row
+        if pinned:
+            self._chat_order.insert(position, row)
+
+        row.connect('drag-begin', self._on_row_drag_begin)
+        row.connect('unread-changed', self._on_row_unread_changed)
+
+        self.add(row)
+
+    def select_chat(self, account: str, jid: JID) -> None:
+        row = self._chats[(account, jid)]
+        self.select_row(row)
+
+    def select_next_chat(self, direction: Direction,
+                         unread_first: bool = False) -> None:
+        # Selects the next chat, but prioritizes chats with unread messages.
+        row = self.get_selected_chat()
+        if row is None:
+            row = self.get_row_at_index(0)
+            if row is None:
+                return
+            assert isinstance(row, ChatListRow)
+            self.select_chat(row.account, row.jid)
+            return
+
+        unread_found = False
+        if unread_first:
+            index = row.get_index()
+            current = index
+
+            # Loop until finding a chat with unread count or completing a cycle
+            while True:
+                if direction == Direction.NEXT:
+                    index += 1
+                    if index >= len(self.get_children()):
+                        index = 0
+                else:
+                    index -= 1
+                    if index < 0:
+                        index = len(self.get_children()) - 1
+
+                row = self.get_row_at_index(index)
+                if row is None:
+                    return
+                assert isinstance(row, ChatListRow)
+                if row.unread_count > 0:
+                    unread_found = True
+                    break
+                if index == current:
+                    break
+
+        if unread_found:
+            self.select_chat(row.account, row.jid)
+            return
+
+        index = row.get_index()
+        if direction == Direction.NEXT:
+            next_row = self.get_row_at_index(index + 1)
+        else:
+            next_row = self.get_row_at_index(index - 1)
+        if next_row is None:
+            if direction == Direction.NEXT:
+                next_row = self.get_row_at_index(0)
+            else:
+                last = len(self.get_children()) - 1
+                next_row = self.get_row_at_index(last)
+            assert isinstance(next_row, ChatListRow)
+            self.select_chat(next_row.account, next_row.jid)
+            return
+
+        assert isinstance(next_row, ChatListRow)
+        self.select_chat(next_row.account, next_row.jid)
+
+    def select_chat_number(self, number: int) -> None:
+        row = self.get_row_at_index(number)
+        if row is not None:
+            assert isinstance(row, ChatListRow)
+            self.select_chat(row.account, row.jid)
+
+    def remove_chat(self,
+                    account: str,
+                    jid: JID,
+                    emit_unread: bool = True
+                    ) -> None:
+
+        row = self._chats.pop((account, jid))
+        if row.is_pinned:
+            self._chat_order.remove(row)
+        self.remove(row)
+        row.destroy()
+        if emit_unread:
+            self._emit_unread_changed()
+
+    def remove_chats_for_account(self, account: str) -> None:
+        for row_account, jid in list(self._chats.keys()):
+            if row_account != account:
+                continue
+            self.remove_chat(account, jid)
+        self._emit_unread_changed()
+
+    def contains_chat(self, account: str, jid: JID) -> bool:
+        return self._chats.get((account, jid)) is not None
+
+    def process_event(self, event: events.ChatListEventT) -> None:
+        if isinstance(event, (events.MessageReceived,
+                              events.MamMessageReceived,
+                              events.GcMessageReceived)):
+            self._on_message_received(event)
+        elif isinstance(event, events.MessageUpdated):
+            self._on_message_updated(event)
+        elif isinstance(event, events.MessageModerated):
+            self._on_message_moderated(event)
+        elif isinstance(event, events.PresenceReceived):
+            self._on_presence_received(event)
+        elif isinstance(event, events.MessageSent):
+            self._on_message_sent(event)
+        elif isinstance(event, events.JingleRequestReceived):
+            self._on_jingle_request_received(event)
+        elif isinstance(event, events.FileRequestReceivedEvent):  # pyright: ignore [reportUnnecessaryIsInstance] # noqa
+            self._on_file_request_received(event)
+        else:
+            log.warning('Unhandled Event: %s', event.name)
+
+    def _set_placeholder(self) -> None:
+        button = Gtk.Button.new_with_label(_('Start Chat'))
+        button.get_style_context().add_class('suggested-action')
+        button.set_halign(Gtk.Align.CENTER)
+        button.set_valign(Gtk.Align.CENTER)
+        button.connect('clicked', self._on_start_chat_clicked)
+        button.show()
+        self.set_placeholder(button)
 
     def _emit_unread_changed(self) -> None:
         count = self.get_unread_count()
@@ -239,9 +435,6 @@ class ChatList(Gtk.ListBox, EventHelper):
         self.emit('chat-order-changed')
         self.invalidate_sort()
 
-    def _on_destroy(self, _widget: Gtk.Widget) -> None:
-        GLib.source_remove(self._timer_id)
-
     def _update_time(self) -> bool:
         for _key, row in self._chats.items():
             row.update_time()
@@ -312,205 +505,43 @@ class ChatList(Gtk.ListBox, EventHelper):
                 # Not hovering a Gtk.ListBoxRow (row is INFERIOR)
                 self._mouseover = False
 
-    def _set_placeholder(self) -> None:
-        button = Gtk.Button.new_with_label(_('Start Chat'))
-        button.get_style_context().add_class('suggested-action')
-        button.set_halign(Gtk.Align.CENTER)
-        button.set_valign(Gtk.Align.CENTER)
-        button.connect('clicked', self._on_start_chat_clicked)
-        button.show()
-        self.set_placeholder(button)
-
     @staticmethod
     def _on_start_chat_clicked(_button: Gtk.Button) -> None:
         app.app.activate_action('start-chat', GLib.Variant('as', ['', '']))
 
-    def set_filter(self, name: str) -> None:
-        self._current_filter = name
-        self.invalidate_filter()
+    @staticmethod
+    def _get_nick_for_received_message(event: MessageEventT) -> str:
+        nick = _('Me')
+        if event.properties.type.is_groupchat:
+            event_nick = event.properties.muc_nickname
+            our_nick = get_group_chat_nick(event.account, event.jid)
+            if event_nick != our_nick:
+                nick = event_nick
+        else:
+            con = app.get_client(event.account)
+            own_jid = con.get_own_jid()
+            if not own_jid.bare_match(event.properties.from_):
+                nick = ''
+        return nick
 
-    def set_filter_text(self, text: str) -> None:
-        self._current_filter_text = text
-        self.invalidate_filter()
-
-    def get_chat_type(self, account: str, jid: JID) -> Optional[str]:
-        row = self._chats.get((account, jid))
-        if row is not None:
-            return row.type
-        return None
-
-    def add_chat(self,
-                 account: str,
-                 jid: JID,
-                 type_: str,
-                 pinned: bool,
-                 position: int
-                 ) -> None:
-
-        key = (account, jid)
-        if self._chats.get(key) is not None:
-            # Chat is already in the List
-            return
-
-        row = ChatListRow(self._workspace_id,
-                          account,
-                          jid,
-                          type_,
-                          pinned,
-                          position)
-
-        self._chats[key] = row
-        if pinned:
-            self._chat_order.insert(position, row)
-
-        row.connect('drag-begin', self._on_row_drag_begin)
-        row.connect('unread-changed', self._on_row_unread_changed)
-
-        self.add(row)
-
-    def select_chat(self, account: str, jid: JID) -> None:
-        row = self._chats[(account, jid)]
-        self.select_row(row)
-
-    def select_next_chat(self, direction: Direction,
-                         unread_first: bool = False) -> None:
-        # Selects the next chat, but prioritizes chats with unread messages.
-        row = self.get_selected_chat()
-        if row is None:
-            row = self.get_row_at_index(0)
-            if row is None:
+    @staticmethod
+    def _add_unread(row: ChatListRow, event: MessageEventT) -> None:
+        if event.properties.is_carbon_message:
+            if event.properties.carbon.is_sent:
                 return
-            assert isinstance(row, ChatListRow)
-            self.select_chat(row.account, row.jid)
+
+        if event.properties.is_from_us():
+            # Last message was from us (1:1), reset counter
+            row.reset_unread()
             return
 
-        unread_found = False
-        if unread_first:
-            index = row.get_index()
-            current = index
-
-            # Loop until finding a chat with unread count or completing a cycle
-            while True:
-                if direction == Direction.NEXT:
-                    index += 1
-                    if index >= len(self.get_children()):
-                        index = 0
-                else:
-                    index -= 1
-                    if index < 0:
-                        index = len(self.get_children()) - 1
-
-                row = self.get_row_at_index(index)
-                if row is None:
-                    return
-                assert isinstance(row, ChatListRow)
-                if row.unread_count > 0:
-                    unread_found = True
-                    break
-                if index == current:
-                    break
-
-        if unread_found:
-            self.select_chat(row.account, row.jid)
+        our_nick = get_group_chat_nick(event.account, event.jid)
+        if event.properties.muc_nickname == our_nick:
+            # Last message was from us (MUC), reset counter
+            row.reset_unread()
             return
 
-        index = row.get_index()
-        if direction == Direction.NEXT:
-            next_row = self.get_row_at_index(index + 1)
-        else:
-            next_row = self.get_row_at_index(index - 1)
-        if next_row is None:
-            if direction == Direction.NEXT:
-                next_row = self.get_row_at_index(0)
-            else:
-                last = len(self.get_children()) - 1
-                next_row = self.get_row_at_index(last)
-            assert isinstance(next_row, ChatListRow)
-            self.select_chat(next_row.account, next_row.jid)
-            return
-
-        assert isinstance(next_row, ChatListRow)
-        self.select_chat(next_row.account, next_row.jid)
-
-    def select_chat_number(self, number: int) -> None:
-        row = self.get_row_at_index(number)
-        if row is not None:
-            assert isinstance(row, ChatListRow)
-            self.select_chat(row.account, row.jid)
-
-    def toggle_chat_pinned(self, account: str, jid: JID) -> None:
-        row = self._chats[(account, jid)]
-
-        if row.is_pinned:
-            self._chat_order.remove(row)
-            row.position = -1
-        else:
-            self._chat_order.append(row)
-            row.position = self._chat_order.index(row)
-
-        row.toggle_pinned()
-        self.invalidate_sort()
-
-    def remove_chat(self,
-                    account: str,
-                    jid: JID,
-                    emit_unread: bool = True
-                    ) -> None:
-
-        row = self._chats.pop((account, jid))
-        if row.is_pinned:
-            self._chat_order.remove(row)
-        self.remove(row)
-        row.destroy()
-        if emit_unread:
-            self._emit_unread_changed()
-
-    def remove_chats_for_account(self, account: str) -> None:
-        for row_account, jid in list(self._chats.keys()):
-            if row_account != account:
-                continue
-            self.remove_chat(account, jid)
-        self._emit_unread_changed()
-
-    def get_selected_chat(self) -> Optional[ChatListRow]:
-        row = cast(ChatListRow, self.get_selected_row())
-        if row is None:
-            return None
-        return row
-
-    def contains_chat(self, account: str, jid: JID) -> bool:
-        return self._chats.get((account, jid)) is not None
-
-    def get_open_chats(self) -> OpenChatsSettingT:
-        open_chats: OpenChatsSettingT = []
-        for key, row in self._chats.items():
-            account, jid = key
-            open_chats.append({'account': account,
-                               'jid': jid,
-                               'type': row.type,
-                               'pinned': row.is_pinned,
-                               'position': row.position})
-        return open_chats
-
-    def process_event(self, event: events.ChatListEventT) -> None:
-        if isinstance(event, (events.MessageReceived,
-                              events.MamMessageReceived,
-                              events.GcMessageReceived)):
-            self._on_message_received(event)
-        elif isinstance(event, events.MessageUpdated):
-            self._on_message_updated(event)
-        elif isinstance(event, events.MessageModerated):
-            self._on_message_moderated(event)
-        elif isinstance(event, events.PresenceReceived):
-            self._on_presence_received(event)
-        elif isinstance(event, events.MessageSent):
-            self._on_message_sent(event)
-        elif isinstance(event, events.JingleRequestReceived):
-            self._on_jingle_request_received(event)
-        elif isinstance(event, events.FileRequestReceivedEvent):  # pyright: ignore [reportUnnecessaryIsInstance] # noqa
-            self._on_file_request_received(event)
-        else:
-            log.warning('Unhandled Event: %s', event.name)
+        row.add_unread(event.msgtxt)
 
     def _on_message_received(self, event: MessageEventT) -> None:
         if not event.msgtxt:
@@ -534,21 +565,6 @@ class ChatList(Gtk.ListBox, EventHelper):
 
         self._add_unread(row, event)
         row.changed()
-
-    @staticmethod
-    def _get_nick_for_received_message(event: MessageEventT) -> str:
-        nick = _('Me')
-        if event.properties.type.is_groupchat:
-            event_nick = event.properties.muc_nickname
-            our_nick = get_group_chat_nick(event.account, event.jid)
-            if event_nick != our_nick:
-                nick = event_nick
-        else:
-            con = app.get_client(event.account)
-            own_jid = con.get_own_jid()
-            if not own_jid.bare_match(event.properties.from_):
-                nick = ''
-        return nick
 
     def _on_message_updated(self, event: events.MessageUpdated) -> None:
         row = self._chats.get((event.account, JID.from_string(event.jid)))
@@ -629,25 +645,6 @@ class ChatList(Gtk.ListBox, EventHelper):
         row.set_message_text(
             _('File'), icon_name='text-x-generic-symbolic')
 
-    @staticmethod
-    def _add_unread(row: ChatListRow, event: MessageEventT) -> None:
-        if event.properties.is_carbon_message:
-            if event.properties.carbon.is_sent:
-                return
-
-        if event.properties.is_from_us():
-            # Last message was from us (1:1), reset counter
-            row.reset_unread()
-            return
-
-        our_nick = get_group_chat_nick(event.account, event.jid)
-        if event.properties.muc_nickname == our_nick:
-            # Last message was from us (MUC), reset counter
-            row.reset_unread()
-            return
-
-        row.add_unread(event.msgtxt)
-
     def _on_account_changed(self, *args: Any) -> None:
         rows = cast(list[ChatListRow], self.get_children())
         for row in rows:
@@ -657,3 +654,6 @@ class ChatList(Gtk.ListBox, EventHelper):
         rows = cast(list[ChatListRow], self.get_children())
         for row in rows:
             row.update_name()
+
+    def _on_destroy(self, _widget: Gtk.Widget) -> None:
+        GLib.source_remove(self._timer_id)
