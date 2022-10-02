@@ -82,29 +82,9 @@ class ChatListRow(Gtk.ListBoxRow):
         self._pinned_label = PinnedHeader()
 
         self._client = app.get_client(account)
+
         self.contact = self._client.get_module('Contacts').get_contact(jid)
-
-        if isinstance(self.contact, BareContact):
-            self.contact.connect('presence-update', self._on_presence_update)
-            self.contact.connect('chatstate-update', self._on_chatstate_update)
-            self.contact.connect('nickname-update', self._on_nickname_update)
-            self.contact.connect('caps-update', self._on_avatar_update)
-            self.contact.connect('avatar-update', self._on_avatar_update)
-
-        elif isinstance(self.contact, GroupchatContact):
-            self.contact.connect('avatar-update', self._on_avatar_update)
-
-        elif isinstance(self.contact, GroupchatParticipant):
-            self.contact.connect('chatstate-update', self._on_chatstate_update)
-            self.contact.connect('user-joined', self._on_muc_user_update)
-            self.contact.connect('user-left', self._on_muc_user_update)
-            self.contact.connect('user-avatar-update', self._on_muc_user_update)
-            self.contact.connect('user-status-show-changed',
-                                 self._on_muc_user_update)
-
-            self.contact.room.connect('room-left', self._on_muc_update)
-            self.contact.room.connect('room-destroyed', self._on_muc_update)
-            self.contact.room.connect('room-kicked', self._on_muc_update)
+        self._connect_contact_signals()
 
         self.contact_name: str = self.contact.name
         self.timestamp: float = 0
@@ -470,6 +450,32 @@ class ChatListRow(Gtk.ListBoxRow):
         drop_type = Gdk.Atom.intern_static_string('CHAT_LIST_ITEM')
         byte_data = pickle.dumps((self.account, self.jid))
         selection_data.set(drop_type, 8, byte_data)
+
+    def _connect_contact_signals(self) -> None:
+        if isinstance(self.contact, BareContact):
+            self.contact.connect('presence-update', self._on_presence_update)
+            self.contact.connect('chatstate-update', self._on_chatstate_update)
+            self.contact.connect('nickname-update', self._on_nickname_update)
+            self.contact.connect('caps-update', self._on_avatar_update)
+            self.contact.connect('avatar-update', self._on_avatar_update)
+
+        elif isinstance(self.contact, GroupchatContact):
+            self.contact.connect('avatar-update', self._on_avatar_update)
+
+        elif isinstance(self.contact, GroupchatParticipant):
+            self.contact.connect('chatstate-update', self._on_chatstate_update)
+            self.contact.connect('user-joined', self._on_muc_user_update)
+            self.contact.connect('user-left', self._on_muc_user_update)
+            self.contact.connect('user-avatar-update', self._on_muc_user_update)
+            self.contact.connect('user-status-show-changed',
+                                 self._on_muc_user_update)
+
+            self.contact.room.connect('room-left', self._on_muc_update)
+            self.contact.room.connect('room-destroyed', self._on_muc_update)
+            self.contact.room.connect('room-kicked', self._on_muc_update)
+
+        else:
+            raise TypeError('Unkown contact type: %s' % type(self.contact))
 
     def _on_presence_update(self,
                             _contact: ChatContactT,
