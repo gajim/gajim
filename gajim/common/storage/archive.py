@@ -45,6 +45,7 @@ from gajim.common.helpers import AdditionalDataDict
 from gajim.common.const import MAX_MESSAGE_CORRECTION_DELAY
 from gajim.common.const import KindConstant
 from gajim.common.const import JIDConstant
+from gajim.common.modules.contacts import GroupchatContact
 
 from gajim.common.storage.base import SqliteStorage
 from gajim.common.storage.base import timeit
@@ -830,6 +831,38 @@ class MessageArchiveStorage(SqliteStorage):
         return self._con.execute(
             sql,
             tuple(jids) + (date_ts, delta_ts)).fetchone()
+
+    @timeit
+    def get_recent_muc_nicks(self, contact: GroupchatContact) -> list[str]:
+        '''
+        Queries the last 50 message rows and gathers nicknames in a list
+        '''
+        jids = [contact.jid]
+        account_id = self.get_account_id(contact.account)
+        kinds = map(str, [KindConstant.STATUS,
+                          KindConstant.GCSTATUS,
+                          KindConstant.ERROR])
+
+        sql = '''
+            SELECT contact_name
+            FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+            AND account_id = {account_id}
+            AND kind NOT IN ({kinds})
+            ORDER BY time DESC
+            '''.format(jids=', '.join('?' * len(jids)),
+                       account_id=account_id,
+                       kinds=', '.join(kinds))
+
+        result = self._con.execute(
+            sql,
+            tuple(jids)).fetchmany(50)
+
+        nicknames: list[str] = []
+        for row in result:
+            if row.contact_name not in nicknames:
+                nicknames.append(row.contact_name)
+
+        return nicknames
 
     @timeit
     def deduplicate_muc_message(self,

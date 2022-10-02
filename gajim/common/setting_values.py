@@ -79,7 +79,6 @@ BoolSettings = Literal[
     'remote_control',
     'save_main_window_position',
     'send_on_ctrl_enter',
-    'shell_like_completion',
     'show_chatstate_in_banner',
     'show_help_start_chat',
     'show_in_taskbar',
@@ -253,7 +252,6 @@ APP_SETTINGS = {
     'save_main_window_position': True,
     'search_engine': 'https://duckduckgo.com/?q=%s',
     'send_on_ctrl_enter': False,
-    'shell_like_completion': False,
     'show_chatstate_in_banner': True,
     'show_help_start_chat': True,
     'show_in_taskbar': True,
@@ -696,9 +694,6 @@ ADVANCED_SETTINGS = {
         'search_engine': '',
         'send_on_ctrl_enter': _(
             'Send message on Ctrl+Enter and make a new line with Enter.'),
-        'shell_like_completion': _(
-            'If enabled, completion in group chats will be like a shell '
-            'auto-completion.'),
         'stun_server': _('STUN server to use when using Jingle'),
         'trayicon_notification_on_events': _(
             'Notify of events in the notification area.'),
