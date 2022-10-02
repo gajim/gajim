@@ -883,8 +883,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                           window: Gtk.ApplicationWindow,
                           _param: Any
                           ) -> None:
-        is_active = window.get_property('is-active')
-        if not is_active:
+
+        if not window.is_active():
             return
 
         set_urgency_hint(self, False)
