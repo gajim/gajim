@@ -544,7 +544,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             additional_data=event.additional_data)
 
         self._add_unread(row, event)
-        self.invalidate_sort()
+        row.changed()
 
     @staticmethod
     def _get_nick_for_received_message(event: MessageEventT) -> str:
@@ -605,7 +605,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             event.message,
             nickname=app.nicks[event.account],
             additional_data=event.additional_data)
-        self.invalidate_sort()
+        row.changed()
 
     def _on_presence_received(self, event: events.PresenceReceived) -> None:
         row = self._chats.get((event.account, JID.from_string(event.jid)))
