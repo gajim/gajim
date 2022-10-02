@@ -273,8 +273,8 @@ class ChatPage(Gtk.Box):
                                         pinned=open_chat['pinned'],
                                         position=open_chat['position'])
 
-    def is_chat_active(self, account: str, jid: JID) -> bool:
-        return self._chat_list_stack.is_chat_active(account, jid)
+    def is_chat_selected(self, account: str, jid: JID) -> bool:
+        return self._chat_list_stack.is_chat_selected(account, jid)
 
     def restore_chat(self) -> None:
         if not self._closed_chat_memory:

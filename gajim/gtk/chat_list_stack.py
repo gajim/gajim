@@ -133,13 +133,11 @@ class ChatListStack(Gtk.Stack, EventHelper):
 
         return self._chat_lists[workspace_id]
 
-    def is_chat_active(self, account: str, jid: JID) -> bool:
+    def is_chat_selected(self, account: str, jid: JID) -> bool:
         chat = self.get_selected_chat()
         if chat is None:
             return False
-        if chat.account != account or chat.jid != jid:
-            return False
-        return chat.is_active
+        return chat.account == account and chat.jid == jid
 
     def _on_filter_changed(self, _filter: ChatFilter, name: str) -> None:
         chat_list = cast(ChatList, self.get_visible_child())

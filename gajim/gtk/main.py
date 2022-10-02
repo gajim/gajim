@@ -563,9 +563,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         return self._workspace_side_bar.get_active_workspace()
 
     def is_chat_active(self, account: str, jid: JID) -> bool:
-        if not self.get_property('has-toplevel-focus'):
+        if not self.has_toplevel_focus():
             return False
-        return self._chat_page.is_chat_active(account, jid)
+        return self._chat_page.is_chat_selected(account, jid)
 
     def highlight_dnd_targets(self, drag_row: Any, highlight: bool) -> None:
         css_class = 'dnd-target'
