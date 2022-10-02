@@ -63,6 +63,7 @@
         "gajim/gtk/chat_filter.py",
         "gajim/gtk/chat_function_page.py",
         "gajim/gtk/chat_list.py",
+        "gajim/gtk/chat_list_row.py",
         "gajim/gtk/chat_list_stack.py",
         "gajim/gtk/chat_page.py",
         "gajim/gtk/chat_stack.py",
