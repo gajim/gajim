@@ -457,20 +457,20 @@ class ChatList(Gtk.ListBox, EventHelper):
     def _header_func(row: ChatListRow, before: ChatListRow) -> None:
         if before is None:
             if row.is_pinned:
-                row.header = RowHeaderType.PINNED
+                row.set_header_type(RowHeaderType.PINNED)
             else:
-                row.header = None
+                row.set_header_type(None)
         else:
             if row.is_pinned:
                 if before.is_pinned:
-                    row.header = None
+                    row.set_header_type(None)
                 else:
-                    row.header = RowHeaderType.PINNED
+                    row.set_header_type(RowHeaderType.PINNED)
             else:
                 if before.is_pinned:
-                    row.header = RowHeaderType.CONVERSATIONS
+                    row.set_header_type(RowHeaderType.CONVERSATIONS)
                 else:
-                    row.header = None
+                    row.set_header_type(None)
 
     def _sort_func(self, row1: ChatListRow, row2: ChatListRow) -> int:
         if self._mouseover:

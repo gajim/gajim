@@ -187,25 +187,6 @@ class ChatListRow(Gtk.ListBoxRow):
         self.show_all()
 
     @property
-    def header(self) -> Optional[RowHeaderType]:
-        header = self.get_header()
-        if header is None:
-            return None
-        assert isinstance(header, BaseHeader)
-        return header.type
-
-    @header.setter
-    def header(self, type_: Optional[RowHeaderType]) -> None:
-        if type_ == self.header:
-            return
-        if type_ is None:
-            self.set_header(None)
-        elif type_ is RowHeaderType.PINNED:
-            self.set_header(self._pinned_label)
-        else:
-            self.set_header(self._conversations_label)
-
-    @property
     def is_pinned(self) -> bool:
         return self._pinned
 
@@ -226,6 +207,26 @@ class ChatListRow(Gtk.ListBoxRow):
         self._unread_count = value
         self._update_unread()
         self.emit('unread-changed')
+
+    def get_header_type(self) -> Optional[RowHeaderType]:
+        header = self.get_header()
+        if header is None:
+            return None
+        assert isinstance(header, BaseHeader)
+        return header.type
+
+    def set_header_type(self, header_type: Optional[RowHeaderType]) -> None:
+        if header_type == self.get_header_type():
+            return
+
+        if header_type is None:
+            self.set_header(None)
+
+        elif header_type == RowHeaderType.PINNED:
+            self.set_header(self._pinned_label)
+
+        else:
+            self.set_header(self._conversations_label)
 
     def set_message_id(self, message_id: str) -> None:
         self.message_id = message_id
