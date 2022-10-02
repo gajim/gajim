@@ -167,9 +167,7 @@ class ChatListRow(Gtk.ListBoxRow):
                 nickname=me_nickname,
                 additional_data=line.additional_data)
 
-            self.timestamp = line.time
-            uf_timestamp = get_uf_relative_time(line.time)
-            self._ui.timestamp_label.set_text(uf_timestamp)
+            self.set_timestamp(line.time)
 
             self.stanza_id = line.stanza_id
             self.message_id = line.message_id
@@ -178,17 +176,13 @@ class ChatListRow(Gtk.ListBoxRow):
                          KindConstant.FILE_TRANSFER_OUTGOING):
             self.set_message_text(
                 _('File'), icon_name='text-x-generic-symbolic')
-            self.timestamp = line.time
-            uf_timestamp = get_uf_relative_time(line.time)
-            self._ui.timestamp_label.set_text(uf_timestamp)
+            self.set_timestamp(line.time)
 
         if line.kind in (KindConstant.CALL_INCOMING,
                          KindConstant.CALL_OUTGOING):
             self.set_message_text(
                 _('Call'), icon_name='call-start-symbolic')
-            self.timestamp = line.time
-            uf_timestamp = get_uf_relative_time(line.time)
-            self._ui.timestamp_label.set_text(uf_timestamp)
+            self.set_timestamp(line.time)
 
         self.show_all()
 
@@ -285,7 +279,7 @@ class ChatListRow(Gtk.ListBoxRow):
     def set_stanza_id(self, stanza_id: str) -> None:
         self.stanza_id = stanza_id
 
-    def set_timestamp(self, timestamp: int) -> None:
+    def set_timestamp(self, timestamp: float) -> None:
         self.timestamp = timestamp
         self.update_time()
 
