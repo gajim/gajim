@@ -33,7 +33,7 @@ from gajim.common.i18n import _
 from . import structs
 from .chat_filter import ChatFilter
 from .chat_list import ChatList
-from .chat_list import ChatRow
+from .chat_list import ChatListRow
 from .dialogs import DialogButton
 from .dialogs import ConfirmationCheckDialog
 
@@ -120,7 +120,7 @@ class ChatListStack(Gtk.Stack, EventHelper):
     def get_chatlist(self, workspace_id: str) -> ChatList:
         return self._chat_lists[workspace_id]
 
-    def get_selected_chat(self) -> Optional[ChatRow]:
+    def get_selected_chat(self) -> Optional[ChatListRow]:
         chat_list = self.get_current_chat_list()
         if chat_list is None:
             return None
@@ -171,7 +171,7 @@ class ChatListStack(Gtk.Stack, EventHelper):
 
     def _on_row_selected(self,
                          _chat_list: ChatList,
-                         row: Optional[ChatRow]
+                         row: Optional[ChatListRow]
                          ) -> None:
         if row is None:
             self.emit('chat-unselected')

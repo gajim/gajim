@@ -39,7 +39,7 @@ from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_retraction_text
 from gajim.common.setting_values import OpenChatsSettingT
 
-from .chat_list_row import ChatRow
+from .chat_list_row import ChatListRow
 from .util import EventHelper
 
 
@@ -87,8 +87,8 @@ class ChatList(Gtk.ListBox, EventHelper):
             entries,
             Gdk.DragAction.MOVE)
 
-        self._drag_row: Optional[ChatRow] = None
-        self._chat_order: list[ChatRow] = []
+        self._drag_row: Optional[ChatListRow] = None
+        self._chat_order: list[ChatListRow] = []
 
         self.register_events([
             ('account-enabled', ged.GUI2, self._on_account_changed),
@@ -144,32 +144,32 @@ class ChatList(Gtk.ListBox, EventHelper):
                        self._workspace_id,
                        count)
 
-    def _get_row_before(self, row: ChatRow) -> Optional[ChatRow]:
+    def _get_row_before(self, row: ChatListRow) -> Optional[ChatListRow]:
         row_before = self.get_row_at_index(row.get_index() - 1)
         if row_before is None:
             return
-        return cast(ChatRow, row_before)
+        return cast(ChatListRow, row_before)
 
-    def _get_row_after(self, row: ChatRow) -> Optional[ChatRow]:
+    def _get_row_after(self, row: ChatListRow) -> Optional[ChatListRow]:
         row_after = self.get_row_at_index(row.get_index() + 1)
         if row_after is None:
             return
-        return cast(ChatRow, row_after)
+        return cast(ChatListRow, row_after)
 
-    def _get_last_row(self) -> ChatRow:
+    def _get_last_row(self) -> ChatListRow:
         index = len(self.get_children()) - 1
         last_row = self.get_row_at_index(index)
         assert last_row is not None
-        return cast(ChatRow, last_row)
+        return cast(ChatListRow, last_row)
 
     def _on_row_drag_begin(self,
-                           row: ChatRow,
+                           row: ChatListRow,
                            _drag_context: Gdk.DragContext
                            ) -> None:
 
         self._drag_row = row
 
-    def _on_row_unread_changed(self, row: ChatRow) -> None:
+    def _on_row_unread_changed(self, row: ChatListRow) -> None:
         self._emit_unread_changed()
 
     def _on_drag_data_received(self,
@@ -193,7 +193,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             log.debug('Dropped row is not pinned')
             return
 
-        row = cast(ChatRow, self.get_row_at_y(y_coord))
+        row = cast(ChatListRow, self.get_row_at_y(y_coord))
         if row is not None:
             alloc = row.get_allocation()
             hover_row_y = alloc.y
@@ -219,7 +219,7 @@ class ChatList(Gtk.ListBox, EventHelper):
 
         self._change_pinned_order(row_before)
 
-    def _change_pinned_order(self, row_before: Optional[ChatRow]) -> None:
+    def _change_pinned_order(self, row_before: Optional[ChatListRow]) -> None:
         assert self._drag_row is not None
 
         self._chat_order.remove(self._drag_row)
@@ -246,7 +246,7 @@ class ChatList(Gtk.ListBox, EventHelper):
         self.update_time()
         return True
 
-    def _filter_func(self, row: ChatRow) -> bool:
+    def _filter_func(self, row: ChatListRow) -> bool:
         is_groupchat = row.type == 'groupchat'
         if self._current_filter == 'chats' and is_groupchat:
             return False
@@ -260,7 +260,7 @@ class ChatList(Gtk.ListBox, EventHelper):
         return text in row.contact_name.lower()
 
     @staticmethod
-    def _header_func(row: ChatRow, before: ChatRow) -> None:
+    def _header_func(row: ChatListRow, before: ChatListRow) -> None:
         if before is None:
             if row.is_pinned:
                 row.header = RowHeaderType.PINNED
@@ -286,7 +286,7 @@ class ChatList(Gtk.ListBox, EventHelper):
                 else:
                     row.header = None
 
-    def _sort_func(self, row1: ChatRow, row2: ChatRow) -> int:
+    def _sort_func(self, row1: ChatListRow, row2: ChatListRow) -> int:
         if self._mouseover:
             log.debug('Mouseover active, don’t sort rows')
             return 0
@@ -359,12 +359,12 @@ class ChatList(Gtk.ListBox, EventHelper):
             # Chat is already in the List
             return
 
-        row = ChatRow(self._workspace_id,
-                      account,
-                      jid,
-                      type_,
-                      pinned,
-                      position)
+        row = ChatListRow(self._workspace_id,
+                          account,
+                          jid,
+                          type_,
+                          pinned,
+                          position)
 
         self._chats[key] = row
         if pinned:
@@ -387,7 +387,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             row = self.get_row_at_index(0)
             if row is None:
                 return
-            assert isinstance(row, ChatRow)
+            assert isinstance(row, ChatListRow)
             self.select_chat(row.account, row.jid)
             return
 
@@ -410,7 +410,7 @@ class ChatList(Gtk.ListBox, EventHelper):
                 row = self.get_row_at_index(index)
                 if row is None:
                     return
-                assert isinstance(row, ChatRow)
+                assert isinstance(row, ChatListRow)
                 if row.unread_count > 0:
                     unread_found = True
                     break
@@ -432,17 +432,17 @@ class ChatList(Gtk.ListBox, EventHelper):
             else:
                 last = len(self.get_children()) - 1
                 next_row = self.get_row_at_index(last)
-            assert isinstance(next_row, ChatRow)
+            assert isinstance(next_row, ChatListRow)
             self.select_chat(next_row.account, next_row.jid)
             return
 
-        assert isinstance(next_row, ChatRow)
+        assert isinstance(next_row, ChatListRow)
         self.select_chat(next_row.account, next_row.jid)
 
     def select_chat_number(self, number: int) -> None:
         row = self.get_row_at_index(number)
         if row is not None:
-            assert isinstance(row, ChatRow)
+            assert isinstance(row, ChatListRow)
             self.select_chat(row.account, row.jid)
 
     def toggle_chat_pinned(self, account: str, jid: JID) -> None:
@@ -479,8 +479,8 @@ class ChatList(Gtk.ListBox, EventHelper):
             self.remove_chat(account, jid)
         self._emit_unread_changed()
 
-    def get_selected_chat(self) -> Optional[ChatRow]:
-        row = cast(ChatRow, self.get_selected_row())
+    def get_selected_chat(self) -> Optional[ChatListRow]:
+        row = cast(ChatListRow, self.get_selected_row())
         if row is None:
             return None
         return row
@@ -641,7 +641,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             _('File'), icon_name='text-x-generic-symbolic')
 
     @staticmethod
-    def _add_unread(row: ChatRow, event: MessageEventT) -> None:
+    def _add_unread(row: ChatListRow, event: MessageEventT) -> None:
         if event.properties.is_carbon_message:
             if event.properties.carbon.is_sent:
                 return
@@ -660,11 +660,11 @@ class ChatList(Gtk.ListBox, EventHelper):
         row.add_unread(event.msgtxt)
 
     def _on_account_changed(self, *args: Any) -> None:
-        rows = cast(list[ChatRow], self.get_children())
+        rows = cast(list[ChatListRow], self.get_children())
         for row in rows:
             row.update_account_identifier()
 
     def _on_bookmarks_received(self, _event: events.BookmarksReceived) -> None:
-        rows = cast(list[ChatRow], self.get_children())
+        rows = cast(list[ChatListRow], self.get_children())
         for row in rows:
             row.update_name()

@@ -52,7 +52,7 @@ from .builder import get_builder
 from .util import GajimPopover
 
 
-class ChatRow(Gtk.ListBoxRow):
+class ChatListRow(Gtk.ListBoxRow):
 
     __gsignals__ = {
         'unread-changed': (
@@ -268,11 +268,11 @@ class ChatRow(Gtk.ListBoxRow):
         popover.popup()
 
     def _on_drag_begin(self,
-                       row: ChatRow,
+                       row: ChatListRow,
                        drag_context: Gdk.DragContext
                        ) -> None:
 
-        # Use rendered ChatRow as drag icon
+        # Use rendered ChatListRow as drag icon
         alloc = self.get_allocation()
         surface = cairo.ImageSurface(
             cairo.Format.ARGB32, alloc.width, alloc.height)
@@ -444,7 +444,7 @@ class ChatRow(Gtk.ListBoxRow):
         return False
 
     def _on_state_flags_changed(self,
-                                _row: ChatRow,
+                                _row: ChatListRow,
                                 _flags: Gtk.StateFlags
                                 ) -> None:
         state = self.get_state_flags()
@@ -453,7 +453,7 @@ class ChatRow(Gtk.ListBoxRow):
         else:
             self._ui.revealer.set_reveal_child(False)
 
-    def _on_destroy(self, _row: ChatRow) -> None:
+    def _on_destroy(self, _row: ChatListRow) -> None:
         self.contact.disconnect_all_from_obj(self)
         if isinstance(self.contact, GroupchatParticipant):
             self.contact.room.disconnect_all_from_obj(self)
