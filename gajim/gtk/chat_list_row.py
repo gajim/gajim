@@ -278,11 +278,6 @@ class ChatListRow(Gtk.ListBoxRow):
             cairo.Format.ARGB32, alloc.width, alloc.height)
         context = cairo.Context(surface)
         self.draw(context)
-        coords = row.translate_coordinates(self, 0, 0)
-        if coords is None:
-            return
-        dest_x, dest_y = coords
-        surface.set_device_offset(-dest_x, -dest_y)
         Gtk.drag_set_icon_surface(drag_context, surface)
 
     def _on_drag_data_get(self,
