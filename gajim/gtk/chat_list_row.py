@@ -78,8 +78,8 @@ class ChatListRow(Gtk.ListBoxRow):
         self.type = type_
         self.position = position
 
-        self._conversations_label = ConversationsHeader()
-        self._pinned_label = PinnedHeader()
+        self._conversations_header = RowHeader(RowHeaderType.CONVERSATIONS)
+        self._pinned_header = RowHeader(RowHeaderType.PINNED)
 
         self._client = app.get_client(account)
 
@@ -212,7 +212,7 @@ class ChatListRow(Gtk.ListBoxRow):
         header = self.get_header()
         if header is None:
             return None
-        assert isinstance(header, BaseHeader)
+        assert isinstance(header, RowHeader)
         return header.type
 
     def set_header_type(self, header_type: Optional[RowHeaderType]) -> None:
@@ -223,10 +223,10 @@ class ChatListRow(Gtk.ListBoxRow):
             self.set_header(None)
 
         elif header_type == RowHeaderType.PINNED:
-            self.set_header(self._pinned_label)
+            self.set_header(self._pinned_header)
 
         else:
-            self.set_header(self._conversations_label)
+            self.set_header(self._conversations_header)
 
     def set_message_id(self, message_id: str) -> None:
         self.message_id = message_id
@@ -508,29 +508,23 @@ class ChatListRow(Gtk.ListBoxRow):
         self.update_name()
 
 
-class BaseHeader(Gtk.Box):
-    def __init__(self, row_type: RowHeaderType, text: str) -> None:
+class RowHeader(Gtk.Box):
+    def __init__(self, header_type: RowHeaderType) -> None:
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
-        self.type = row_type
+        self.type = header_type
+
+        if header_type == RowHeaderType.CONVERSATIONS:
+            text = _('Conversations')
+        else:
+            text = _('Pinned')
+
         label = Gtk.Label(label=text)
         label.set_halign(Gtk.Align.START)
+
         self.add(label)
+
         self.get_style_context().add_class('header-box')
+        if header_type == RowHeaderType.PINNED:
+            self.get_style_context().add_class('header-box-first')
+
         self.show_all()
-
-
-class ConversationsHeader(BaseHeader):
-
-    def __init__(self):
-        BaseHeader.__init__(self,
-                            RowHeaderType.CONVERSATIONS,
-                            _('Conversations'))
-
-
-class PinnedHeader(BaseHeader):
-
-    def __init__(self):
-        BaseHeader.__init__(self,
-                            RowHeaderType.PINNED,
-                            _('Pinned'))
-        self.get_style_context().add_class('header-box-first')
