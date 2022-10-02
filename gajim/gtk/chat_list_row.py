@@ -78,8 +78,8 @@ class ChatListRow(Gtk.ListBoxRow):
         self.type = type_
         self.position = position
 
-        self.conversations_label = ConversationsHeader()
-        self.pinned_label = PinnedHeader()
+        self._conversations_label = ConversationsHeader()
+        self._pinned_label = PinnedHeader()
 
         self._client = app.get_client(account)
         self.contact = self._client.get_module('Contacts').get_contact(jid)
@@ -110,6 +110,7 @@ class ChatListRow(Gtk.ListBoxRow):
         self.timestamp: float = 0
         self.stanza_id: Optional[str] = None
         self.message_id: Optional[str] = None
+
         self._unread_count: int = 0
         self._needs_muc_highlight: bool = False
         self._pinned: bool = pinned
@@ -227,9 +228,9 @@ class ChatListRow(Gtk.ListBoxRow):
         if type_ is None:
             self.set_header(None)
         elif type_ is RowHeaderType.PINNED:
-            self.set_header(self.pinned_label)
+            self.set_header(self._pinned_label)
         else:
-            self.set_header(self.conversations_label)
+            self.set_header(self._conversations_label)
 
     @property
     def is_pinned(self) -> bool:
