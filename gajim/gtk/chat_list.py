@@ -99,7 +99,7 @@ class ChatList(Gtk.ListBox, EventHelper):
         self.connect('drag-data-received', self._on_drag_data_received)
         self.connect('destroy', self._on_destroy)
 
-        self._timer_id = GLib.timeout_add_seconds(60, self._update_timer)
+        self._timer_id = GLib.timeout_add_seconds(60, self._update_time)
 
         self.show_all()
 
@@ -242,8 +242,9 @@ class ChatList(Gtk.ListBox, EventHelper):
     def _on_destroy(self, _widget: Gtk.Widget) -> None:
         GLib.source_remove(self._timer_id)
 
-    def _update_timer(self) -> bool:
-        self.update_time()
+    def _update_time(self) -> bool:
+        for _key, row in self._chats.items():
+            row.update_time()
         return True
 
     def _filter_func(self, row: ChatListRow) -> bool:
@@ -490,10 +491,6 @@ class ChatList(Gtk.ListBox, EventHelper):
                                'pinned': row.is_pinned,
                                'position': row.position})
         return open_chats
-
-    def update_time(self) -> None:
-        for _key, row in self._chats.items():
-            row.update_time()
 
     def process_event(self, event: events.ChatListEventT) -> None:
         if isinstance(event, (events.MessageReceived,
