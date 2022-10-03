@@ -44,6 +44,7 @@ from gajim.common.helpers import get_muc_context
 from gajim.common.helpers import message_needs_highlight
 from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
+from gajim.common.i18n import is_rtl_text
 from gajim.common.i18n import Q_
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.types import ChatContactT
@@ -193,6 +194,10 @@ class MessageRow(BaseRow):
 
         self._bottom_box = Gtk.Box(spacing=6)
         self._bottom_box.add(self._message_widget)
+
+        if is_rtl_text(text):
+            self._bottom_box.set_halign(Gtk.Align.END)
+            self._message_widget.set_direction(Gtk.TextDirection.RTL)
 
         more_menu_button = MoreMenuButton(self, self._contact, name)
         more_menu_button.set_hexpand(True)
@@ -443,12 +448,26 @@ class MessageRow(BaseRow):
             self._message_widget.destroy()
             self._message_widget = MessageWidget(self._account)
             self._bottom_box.pack_start(self._message_widget, True, True, 0)
+            if is_rtl_text(text):
+                self._bottom_box.set_halign(Gtk.Align.END)
+                self._message_widget.set_direction(Gtk.TextDirection.RTL)
+            else:
+                self._bottom_box.set_halign(Gtk.Align.FILL)
+                self._message_widget.set_direction(Gtk.TextDirection.LTR)
+
         self._message_widget.add_with_styling(text)
         self.get_style_context().add_class('retracted-message')
 
     def set_correction(self, text: str, nickname: Optional[str]) -> None:
         if not isinstance(self._message_widget, PreviewWidget):
             self._message_widget.add_with_styling(text, nickname)
+
+            if is_rtl_text(text):
+                self._bottom_box.set_halign(Gtk.Align.END)
+                self._message_widget.set_direction(Gtk.TextDirection.RTL)
+            else:
+                self._bottom_box.set_halign(Gtk.Align.FILL)
+                self._message_widget.set_direction(Gtk.TextDirection.LTR)
 
         self._has_receipt = False
         self._message_icons.set_receipt_icon_visible(False)

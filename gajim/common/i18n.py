@@ -107,21 +107,19 @@ def get_short_lang_code(lang: Optional[str] = None) -> str:
     return lang[:2]
 
 
-def paragraph_direction_mark(text: str) -> str:
+def is_rtl_text(text: str) -> bool:
     '''
     Determine paragraph writing direction according to
     http://www.unicode.org/reports/tr9/#The_Paragraph_Level
-
-    Returns either Unicode LTR mark or RTL mark.
     '''
     for char in text:
         bidi = unicodedata.bidirectional(char)
         if bidi == 'L':
-            return '\u200E'
+            return False
         if bidi in ('AL', 'R'):
-            return '\u200F'
+            return True
 
-    return '\u200E'
+    return False
 
 
 def Q_(text: str) -> str:
