@@ -14,6 +14,7 @@
 
 from __future__ import annotations
 
+from typing import Any
 from typing import Optional
 
 import logging
@@ -28,6 +29,7 @@ from nbxmpp.simplexml import Node
 from nbxmpp.task import Task
 
 from gajim.common import app
+from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.helpers import to_user_string
 
@@ -35,14 +37,16 @@ from .dialogs import ErrorDialog
 from .dialogs import WarningDialog
 from .dataform import DataFormWidget
 from .builder import get_builder
+from .util import EventHelper
 from .util import get_source_view_style_scheme
 
 log = logging.getLogger('gajim.gui.pep_config')
 
 
-class PEPConfig(Gtk.ApplicationWindow):
+class PEPConfig(Gtk.ApplicationWindow, EventHelper):
     def __init__(self, account: str) -> None:
         Gtk.ApplicationWindow.__init__(self)
+        EventHelper.__init__(self)
         self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
@@ -70,12 +74,29 @@ class PEPConfig(Gtk.ApplicationWindow):
             self._ui.items_view.get_buffer().set_style_scheme(style_scheme)
 
         self._init_services()
-        self._ui.services_treeview.get_selection().connect(
+
+        selection = self._ui.services_treeview.get_selection()
+        self._changed_handler = selection.connect(
             'changed', self._on_services_selection_changed)
+
+        self.register_events([
+            ('style-changed', ged.GUI1, self._on_style_changed)
+        ])
 
         self.show_all()
         self.connect('key-press-event', self._on_key_press)
+        self.connect('destroy', self._on_destroy)
         self._ui.connect_signals(self)
+
+    def _on_destroy(self, *args: Any) -> None:
+        selection = self._ui.services_treeview.get_selection()
+        selection.disconnect(self._changed_handler)
+        app.check_finalize(self)
+
+    def _on_style_changed(self, *args: Any) -> None:
+        style_scheme = get_source_view_style_scheme()
+        if style_scheme is not None:
+            self._ui.items_view.get_buffer().set_style_scheme(style_scheme)
 
     def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
@@ -181,7 +202,7 @@ class PEPConfig(Gtk.ApplicationWindow):
 
         self._result_node = result.node
 
-        form = dataforms.extend_form(node=result.form)
+        form = dataforms.extend_form(node=result.form)  # pyright: ignore
         self._dataform_widget = DataFormWidget(form)
         self._dataform_widget.set_propagate_natural_height(True)
         self._dataform_widget.show_all()
