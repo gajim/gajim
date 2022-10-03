@@ -550,15 +550,6 @@ class MamPreferencesBuilder(Builder):
     save_button: Gtk.Button
 
 
-class ManagePepServicesWindowBuilder(Builder):
-    manage_pep_services: Gtk.Box
-    services_treeview: Gtk.TreeView
-    treeview_selection1: Gtk.TreeSelection
-    configure_button: Gtk.Button
-    image1: Gtk.Image
-    delete_button: Gtk.Button
-
-
 class ManageProxiesBuilder(Builder):
     liststore1: Gtk.ListStore
     box: Gtk.Box
@@ -607,6 +598,21 @@ class PasswordDialogBuilder(Builder):
     cancel_button: Gtk.Button
     ok_button: Gtk.Button
     keyring_hint: Gtk.Label
+
+
+class PepConfigBuilder(Builder):
+    stack: Gtk.Stack
+    overview_box: Gtk.Box
+    services_treeview: Gtk.TreeView
+    show_content_button: Gtk.Button
+    delete_button: Gtk.Button
+    configure_button: Gtk.Button
+    items_box: Gtk.Box
+    items_label: Gtk.Label
+    items_view: GtkSource.View
+    config_box: Gtk.Box
+    form_label: Gtk.Label
+    form_box: Gtk.Box
 
 
 class PluginsBuilder(Builder):
@@ -678,9 +684,9 @@ class PreviewBuilder(Builder):
     image_button: Gtk.Button
     link_button: Gtk.LinkButton
     button_box: Gtk.Box
+    download_button: Gtk.Button
     save_as_button: Gtk.Button
     open_folder_button: Gtk.Button
-    download_button: Gtk.Button
     file_name: Gtk.Label
     file_size: Gtk.Label
     info_message: Gtk.Label
@@ -1004,8 +1010,6 @@ def get_builder(file_name: Literal['main.ui'], widgets: list[str] = ...) -> Main
 @overload
 def get_builder(file_name: Literal['mam_preferences.ui'], widgets: list[str] = ...) -> MamPreferencesBuilder: ...
 @overload
-def get_builder(file_name: Literal['manage_pep_services_window.ui'], widgets: list[str] = ...) -> ManagePepServicesWindowBuilder: ...
-@overload
 def get_builder(file_name: Literal['manage_proxies.ui'], widgets: list[str] = ...) -> ManageProxiesBuilder: ...
 @overload
 def get_builder(file_name: Literal['manage_sounds.ui'], widgets: list[str] = ...) -> ManageSoundsBuilder: ...
@@ -1013,6 +1017,8 @@ def get_builder(file_name: Literal['manage_sounds.ui'], widgets: list[str] = ...
 def get_builder(file_name: Literal['message_actions_box.ui'], widgets: list[str] = ...) -> MessageActionsBoxBuilder: ...
 @overload
 def get_builder(file_name: Literal['password_dialog.ui'], widgets: list[str] = ...) -> PasswordDialogBuilder: ...
+@overload
+def get_builder(file_name: Literal['pep_config.ui'], widgets: list[str] = ...) -> PepConfigBuilder: ...
 @overload
 def get_builder(file_name: Literal['plugins.ui'], widgets: list[str] = ...) -> PluginsBuilder: ...
 @overload

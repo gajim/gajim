@@ -43,6 +43,7 @@ class PubSub(BaseModule):
         'set_node_configuration',
         'get_node_configuration',
         'get_access_model',
+        'request_items',
     ]
 
     def __init__(self, con: types.Client) -> None:

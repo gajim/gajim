@@ -105,7 +105,6 @@
         "gajim/gtk/notification.py",
         "gajim/gtk/notification_manager.py",
         "gajim/gtk/password_dialog.py",
-        "gajim/gtk/pep_config.py",
         "gajim/gtk/plugins.py",
         "gajim/gtk/preview.py",
         "gajim/gtk/preview_audio.py",
