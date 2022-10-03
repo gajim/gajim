@@ -36,6 +36,7 @@ from .util import at_the_end
 from .util import scroll_to_end
 from .util import MaxWidthComboBoxText
 from .util import EventHelper
+from .util import get_source_view_style_scheme
 from .dialogs import ErrorDialog
 from .settings import SettingsDialog
 from .const import Setting
@@ -92,8 +93,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.sourceview.get_buffer().set_language(lang)
         self._ui.input_entry.get_buffer().set_language(lang)
 
-        self._style_scheme_manager = GtkSource.StyleSchemeManager.get_default()
-        style_scheme = self._get_style_scheme()
+        style_scheme = get_source_view_style_scheme()
         if style_scheme is not None:
             self._ui.sourceview.get_buffer().set_style_scheme(style_scheme)
             self._ui.input_entry.get_buffer().set_style_scheme(style_scheme)
@@ -114,17 +114,8 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.popover.destroy()
         app.check_finalize(self)
 
-    def _get_style_scheme(self) -> Optional[GtkSource.StyleScheme]:
-        if app.css_config.prefer_dark:
-            style_scheme = self._style_scheme_manager.get_scheme(
-                'solarized-dark')
-        else:
-            style_scheme = self._style_scheme_manager.get_scheme(
-                'solarized-light')
-        return style_scheme
-
     def _on_style_changed(self, *args: Any) -> None:
-        style_scheme = self._get_style_scheme()
+        style_scheme = get_source_view_style_scheme()
         if style_scheme is not None:
             self._ui.sourceview.get_buffer().set_style_scheme(style_scheme)
             self._ui.input_entry.get_buffer().set_style_scheme(style_scheme)

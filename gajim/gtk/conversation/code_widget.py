@@ -24,8 +24,9 @@ from gi.repository import GtkSource
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.i18n import _
-
 from gajim.common.styling import PreBlock
+
+from ..util import get_source_view_style_scheme
 
 log = logging.getLogger('gajim.gui.conversation.code_widget')
 
@@ -102,27 +103,17 @@ class CodeTextview(GtkSource.View):
         self.get_buffer().set_highlight_matching_brackets(False)
 
         self._source_manager = GtkSource.LanguageManager.get_default()
-        self._style_scheme_manager = GtkSource.StyleSchemeManager.get_default()
 
         app.ged.register_event_handler('style-changed',
                                        ged.GUI1,
                                        self._on_style_changed)
 
-        style_scheme = self._get_style_scheme()
+        style_scheme = get_source_view_style_scheme()
         if style_scheme is not None:
             self.get_buffer().set_style_scheme(style_scheme)
 
-    def _get_style_scheme(self) -> Optional[GtkSource.StyleScheme]:
-        if app.css_config.prefer_dark:
-            style_scheme = self._style_scheme_manager.get_scheme(
-                'solarized-dark')
-        else:
-            style_scheme = self._style_scheme_manager.get_scheme(
-                'solarized-light')
-        return style_scheme
-
     def _on_style_changed(self, *args: Any) -> None:
-        style_scheme = self._get_style_scheme()
+        style_scheme = get_source_view_style_scheme()
         if style_scheme is not None:
             self.get_buffer().set_style_scheme(style_scheme)
 

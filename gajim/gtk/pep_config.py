@@ -35,6 +35,7 @@ from .dialogs import ErrorDialog
 from .dialogs import WarningDialog
 from .dataform import DataFormWidget
 from .builder import get_builder
+from .util import get_source_view_style_scheme
 
 log = logging.getLogger('gajim.gui.pep_config')
 
@@ -64,8 +65,7 @@ class PEPConfig(Gtk.ApplicationWindow):
         lang = source_manager.get_language('xml')
         self._ui.items_view.get_buffer().set_language(lang)
 
-        self._style_scheme_manager = GtkSource.StyleSchemeManager.get_default()
-        style_scheme = self._get_style_scheme()
+        style_scheme = get_source_view_style_scheme()
         if style_scheme is not None:
             self._ui.items_view.get_buffer().set_style_scheme(style_scheme)
 
@@ -76,15 +76,6 @@ class PEPConfig(Gtk.ApplicationWindow):
         self.show_all()
         self.connect('key-press-event', self._on_key_press)
         self._ui.connect_signals(self)
-
-    def _get_style_scheme(self) -> Optional[GtkSource.StyleScheme]:
-        if app.css_config.prefer_dark:
-            style_scheme = self._style_scheme_manager.get_scheme(
-                'solarized-dark')
-        else:
-            style_scheme = self._style_scheme_manager.get_scheme(
-                'solarized-light')
-        return style_scheme
 
     def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:

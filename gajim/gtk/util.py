@@ -36,6 +36,7 @@ from PIL import Image
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import Gtk
+from gi.repository import GtkSource
 from gi.repository import GLib
 from gi.repository import Pango
 from gi.repository import GdkPixbuf
@@ -222,6 +223,13 @@ def restore_main_window_position() -> None:
     move_window(app.window,
                 app.settings.get('mainwin_x_position'),
                 app.settings.get('mainwin_y_position'))
+
+
+def get_source_view_style_scheme() -> Optional[GtkSource.StyleScheme]:
+    style_scheme_manager = GtkSource.StyleSchemeManager.get_default()
+    if app.css_config.prefer_dark:
+        return style_scheme_manager.get_scheme('solarized-dark')
+    return style_scheme_manager.get_scheme('solarized-light')
 
 
 def get_completion_liststore(entry: Gtk.Entry) -> Gtk.ListStore:
