@@ -813,6 +813,14 @@ button.flat.link { padding: 0; border: 0; }
     font-weight: bold;
 }
 
+.dnd-target {
+    animation-name: pulse-opacity;
+    animation-duration: 2.0s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    border: 2px dashed @theme_selected_bg_color;
+}
+
 @keyframes pulse-opacity {
     0%  { opacity: 1.0; }
     20% { opacity: 0.5; }

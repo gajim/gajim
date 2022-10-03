@@ -322,6 +322,7 @@ class Workspace(CommonWorkspace):
             entries,
             Gdk.DragAction.MOVE)
         eventbox.connect('drag-begin', self._on_drag_begin)
+        eventbox.connect('drag-end', self._on_drag_end)
         eventbox.connect('drag-data-get', self._on_drag_data_get)
         eventbox.connect('button-press-event', self._popup_menu)
         eventbox.add(overlay)
@@ -348,9 +349,10 @@ class Workspace(CommonWorkspace):
         self._unread_label.set_visible(bool(count))
 
     def _on_drag_begin(self,
-                       _widget: Gtk.Widget,
+                       row: Workspace,
                        drag_context: Gdk.DragContext
                        ) -> None:
+
         scale = self.get_scale_factor()
         surface = app.app.avatar_storage.get_workspace_surface(
             self.workspace_id, AvatarSize.WORKSPACE, scale)
@@ -359,6 +361,15 @@ class Workspace(CommonWorkspace):
 
         listbox = cast(WorkspaceSideBar, self.get_parent())
         listbox.set_drag_row(self)
+
+        app.window.highlight_dnd_targets(row, True)
+
+    def _on_drag_end(self,
+                     row: Workspace,
+                     drag_context: Gdk.DragContext
+                     ) -> None:
+
+        app.window.highlight_dnd_targets(row, False)
 
     def _on_drag_data_get(self,
                           _widget: Gtk.Widget,

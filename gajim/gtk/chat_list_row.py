@@ -114,6 +114,7 @@ class ChatListRow(Gtk.ListBoxRow):
             entries,
             Gdk.DragAction.MOVE)
         self.connect('drag-begin', self._on_drag_begin)
+        self.connect('drag-end', self._on_drag_end)
         self.connect('drag-data-get', self._on_drag_data_get)
 
         if self.type == 'groupchat':
@@ -427,6 +428,15 @@ class ChatListRow(Gtk.ListBoxRow):
         context = cairo.Context(surface)
         self.draw(context)
         Gtk.drag_set_icon_surface(drag_context, surface)
+
+        app.window.highlight_dnd_targets(row, True)
+
+    def _on_drag_end(self,
+                     row: ChatListRow,
+                     _drag_context: Gdk.DragContext
+                     ) -> None:
+
+        app.window.highlight_dnd_targets(row, False)
 
     def _on_drag_data_get(self,
                           _widget: Gtk.Widget,

@@ -279,6 +279,9 @@ class ChatList(Gtk.ListBox, EventHelper):
             assert isinstance(row, ChatListRow)
             self.select_chat(row.account, row.jid)
 
+    def get_chat_list_rows(self) -> list[ChatListRow]:
+        return cast(list[ChatListRow], self.get_children())
+
     def remove_chat(self,
                     account: str,
                     jid: JID,

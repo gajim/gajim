@@ -46,6 +46,7 @@ from .workspace_side_bar import WorkspaceSideBar
 from .main_stack import MainStack
 from .call_window import CallWindow
 from .chat_list import ChatList
+from .chat_list_row import ChatListRow
 from .chat_stack import ChatStack
 from .const import MAIN_WIN_ACTIONS
 from .dialogs import DialogButton
@@ -565,6 +566,32 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         if not self.get_property('has-toplevel-focus'):
             return False
         return self._chat_page.is_chat_active(account, jid)
+
+    def highlight_dnd_targets(self, drag_row: Any, highlight: bool) -> None:
+        css_class = 'dnd-target'
+
+        if isinstance(drag_row, ChatListRow):
+            chat_list_stack = self._chat_page.get_chat_list_stack()
+            workspace = self.get_active_workspace()
+            if workspace is None:
+                return
+
+            if drag_row.is_pinned:
+                chat_list = chat_list_stack.get_chatlist(workspace)
+                for row in chat_list.get_chat_list_rows():
+                    if not row.is_pinned:
+                        continue
+
+                    if highlight:
+                        row.get_style_context().add_class(css_class)
+                    else:
+                        row.get_style_context().remove_class(css_class)
+
+        if highlight:
+            self._workspace_side_bar.get_style_context().add_class(css_class)
+        else:
+            self._workspace_side_bar.get_style_context().remove_class(
+                css_class)
 
     def _add_workspace(self,
                        _action: Gio.SimpleAction,
