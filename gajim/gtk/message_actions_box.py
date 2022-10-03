@@ -447,7 +447,9 @@ class MessageActionsBox(Gtk.Grid, ged.EventHelper):
             self._ui.sendfile_button.set_tooltip_text(tooltip_text)
             return
 
-        assert self._contact is not None
+        if self._contact is None:
+            return
+
         client = app.get_client(self._contact.account)
 
         tooltip_text = _('Send File…')
