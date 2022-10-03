@@ -32,7 +32,6 @@ from pathlib import Path
 from gi.repository import GLib
 
 DOMAIN = 'gajim'
-direction_mark = '\u200E'
 _translation = gettext.NullTranslations()
 
 
@@ -106,15 +105,6 @@ def get_short_lang_code(lang: Optional[str] = None) -> str:
     if lang is None:
         lang = LANG
     return lang[:2]
-
-
-def initialize_direction_mark() -> None:
-    from gi.repository import Gtk
-
-    global direction_mark  # pylint: disable=global-statement
-
-    if Gtk.Widget.get_default_direction() == Gtk.TextDirection.RTL:
-        direction_mark = '\u200F'
 
 
 def paragraph_direction_mark(text: str) -> str:

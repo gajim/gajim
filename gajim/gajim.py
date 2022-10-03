@@ -28,7 +28,6 @@ from ctypes.util import find_library
 from packaging.version import Version as V
 
 import gajim.gui
-from gajim.common import i18n
 
 
 _MIN_NBXMPP_VER = '3.2.2'
@@ -119,8 +118,6 @@ def _init_gtk() -> None:
 
     from gajim.gui import exception
     exception.init()
-
-    i18n.initialize_direction_mark()
 
 
 def _run_app() -> None:
