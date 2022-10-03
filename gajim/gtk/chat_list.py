@@ -544,6 +544,12 @@ class ChatList(Gtk.ListBox, EventHelper):
             row.reset_unread()
             return
 
+        control = app.window.get_control()
+        if (app.window.is_active() and
+                row.is_selected() and
+                control.get_autoscroll()):
+            return
+
         row.add_unread(event.msgtxt)
 
     def _on_message_received(self, event: MessageEventT) -> None:

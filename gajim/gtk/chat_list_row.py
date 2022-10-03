@@ -192,11 +192,6 @@ class ChatListRow(Gtk.ListBoxRow):
         return self._pinned
 
     @property
-    def is_active(self) -> bool:
-        return (self.is_selected() and
-                self.get_toplevel().get_property('is-active'))
-
-    @property
     def unread_count(self) -> int:
         if (self.contact.is_groupchat and not self.contact.can_notify() and
                 not self._needs_muc_highlight):
@@ -309,12 +304,6 @@ class ChatListRow(Gtk.ListBoxRow):
             get_uf_relative_time(self.timestamp))
 
     def add_unread(self, text: str) -> None:
-        control = app.window.get_control()
-        if (self.is_active and
-                control.is_loaded(self.account, self.jid) and
-                control.get_autoscroll()):
-            return
-
         self._unread_count += 1
         self._update_unread()
         app.storage.cache.set_unread_count(
