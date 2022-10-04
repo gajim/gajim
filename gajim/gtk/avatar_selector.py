@@ -69,7 +69,7 @@ class AvatarSelector(Gtk.Box):
     def __init__(self) -> None:
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL,
                          spacing=12)
-        self.get_style_context().add_class('padding-18')
+        self.get_style_context().add_class('avatar-selector')
 
         uri_entry = Gtk.TargetEntry.new(
             'text/uri-list', Gtk.TargetFlags.OTHER_APP, 80)

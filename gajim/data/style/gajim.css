@@ -158,6 +158,12 @@ row:backdrop { transition: none; }
 
 .link-button { min-height: 0px; }
 
+.avatar-selector {
+    border: 2px dotted @theme_selected_bg_color;
+    border-radius: 12px;
+    padding: 18px;
+}
+
 /* Main Window */
 .mainwindow-grid {
     background: @theme_base_color;
