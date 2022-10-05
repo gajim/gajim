@@ -56,10 +56,13 @@ class ChatBanner(Gtk.Box, EventHelper):
         self.add(self._ui.banner_box)
         self._ui.connect_signals(self)
 
-        self._account_badge: Optional[AccountBadge] = None
+        self._account_badge = AccountBadge()
         self._voice_requests_button = VoiceRequestsButton()
+
         self._ui.additional_items_box.pack_start(
             self._voice_requests_button, False, True, 0)
+        self._ui.additional_items_box.pack_end(
+            self._account_badge, False, True, 0)
 
         hide_roster = app.settings.get('hide_groupchat_occupants_list')
         self._set_toggle_roster_button_icon(hide_roster)
@@ -307,16 +310,15 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._ui.name_label.set_tooltip_text(tooltip_text)
 
     def _update_account_badge(self) -> None:
-        assert self._contact is not None
+        if self._contact is None:
+            self._account_badge.set_visible(False)
+            return
 
-        if self._account_badge is not None:
-            self._account_badge.destroy()
+        visible = app.get_number_of_accounts() > 1
+        if visible:
+            self._account_badge.set_account(self._contact.account)
 
-        enabled_accounts = app.get_enabled_accounts_with_labels()
-        if len(enabled_accounts) > 1:
-            self._account_badge = AccountBadge(self._contact.account)
-            self._ui.additional_items_box.pack_end(
-                self._account_badge, False, True, 0)
+        self._account_badge.set_visible(visible)
 
     def _on_request_voice_clicked(self, _button: Gtk.Button) -> None:
         self._ui.visitor_popover.popdown()
