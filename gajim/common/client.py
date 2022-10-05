@@ -160,16 +160,6 @@ class Client(Observable):
         self._remove_account = value
 
     def _create_client(self) -> None:
-        if self._destroyed:
-            # If we disable an account cleanup() is called and all
-            # modules are unregistered. Because disable_account() does not wait
-            # for the client to properly disconnect, handlers of the
-            # nbxmpp.Client() are emitted after we called cleanup().
-            # After nbxmpp.Client() disconnects and is destroyed we create a
-            # new instance with this method but modules.get_handlers() fails
-            # because modules are already unregistered.
-            # TODO: Make this nicer
-            return
         log.info('Create new nbxmpp client')
         self._client = NBXMPPClient(log_context=self._account)
         self.connection = self._client
@@ -648,12 +638,7 @@ class Client(Observable):
             Monitor.disconnect(self._idle_handler_id)
             app.app.disconnect(self._screensaver_handler_id)
         if self._client is not None:
-            # cleanup() is called before nbmxpp.Client has disconnected,
-            # when we disable the account. So we need to unregister
-            # handlers here.
-            # TODO: cleanup() should not be called before disconnect is finished
-            for handler in modules.get_handlers(self):
-                self._client.unregister_handler(handler)
+            self._client.destroy()
         modules.unregister_modules(self)
 
     def quit(self, kill_core: bool) -> None:
