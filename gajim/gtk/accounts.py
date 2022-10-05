@@ -545,13 +545,13 @@ class AccountRow(Gtk.ListBoxRow):
             if event.account != account:
                 return
             app.ged.remove_event_handler('account-disconnected',
-                                         ged.CORE,
+                                         ged.POSTGUI,
                                          _on_disconnect)
             app.interface.disable_account(account)
 
         def _disable() -> None:
             app.ged.register_event_handler('account-disconnected',
-                                           ged.CORE,
+                                           ged.POSTGUI,
                                            _on_disconnect)
             client = app.get_client(account)
             client.change_status('offline', 'offline')
