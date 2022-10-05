@@ -21,9 +21,12 @@ from typing import cast
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.helpers import get_client_status
 from gajim.common.i18n import _
+
+from .util import EventHelper
 
 
 class AccountSideBar(Gtk.ListBox):
@@ -67,13 +70,21 @@ class AccountSideBar(Gtk.ListBox):
                 break
 
 
-class Account(Gtk.ListBoxRow):
+class Account(Gtk.ListBoxRow, EventHelper):
     def __init__(self, account: str) -> None:
         Gtk.ListBoxRow.__init__(self)
+        EventHelper.__init__(self)
         self.get_style_context().add_class('account-sidebar-item')
 
         self.account = account
         self._account_class: Optional[str] = None
+
+        self.register_events([
+            ('account-enabled', ged.GUI1,
+             self._update_account_color_visibility),
+            ('account-disabled', ged.GUI1,
+             self._update_account_color_visibility),
+        ])
 
         selection_bar = Gtk.Box()
         selection_bar.set_size_request(6, -1)
@@ -89,9 +100,11 @@ class Account(Gtk.ListBoxRow):
         self._unread_label.set_valign(Gtk.Align.START)
 
         self._account_color_bar = Gtk.Box()
+        self._account_color_bar.set_no_show_all(True)
         self._account_color_bar.set_size_request(6, -1)
         self._account_color_bar.get_style_context().add_class(
             'account-identifier-bar')
+        self._update_account_color_visibility()
 
         account_box = Gtk.Box(spacing=3)
         account_box.set_tooltip_text(
@@ -99,7 +112,7 @@ class Account(Gtk.ListBoxRow):
         account_box.add(selection_bar)
         account_box.add(self._image)
         account_box.add(self._account_color_bar)
-        self._update_account_color()
+        self._set_account_color()
 
         overlay = Gtk.Overlay()
         overlay.add(account_box)
@@ -108,7 +121,7 @@ class Account(Gtk.ListBoxRow):
         self.add(overlay)
         self.show_all()
 
-    def _update_account_color(self) -> None:
+    def _set_account_color(self) -> None:
         context = self._account_color_bar.get_style_context()
         if self._account_class is not None:
             context.remove_class(self._account_class)
@@ -122,6 +135,10 @@ class Account(Gtk.ListBoxRow):
         else:
             self._unread_label.set_text('999+')
         self._unread_label.set_visible(bool(count))
+
+    def _update_account_color_visibility(self, *args: Any) -> None:
+        visible = app.get_number_of_accounts() > 1
+        self._account_color_bar.set_visible(visible)
 
 
 class AccountAvatar(Gtk.Image):
