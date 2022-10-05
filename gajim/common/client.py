@@ -150,6 +150,9 @@ class Client(Observable):
             return address.to_string().split(':')[0]
         return None
 
+    def is_destroyed(self) -> bool:
+        return self._destroyed
+
     def set_remove_account(self, value: bool) -> None:
         # Used by the RemoveAccount Assistant to make the Client
         # not react to any stream errors that happen while the
