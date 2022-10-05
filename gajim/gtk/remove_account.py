@@ -69,8 +69,9 @@ class RemoveAccount(Assistant):
         self.connect('destroy', self._on_destroy)
 
         self.register_events([
-            ('account-connected', ged.GUI1, self._on_account_connected),
-            ('account-disconnected', ged.GUI1, self._on_account_disconnected),
+            ('account-connected', ged.POSTGUI, self._on_account_connected),
+            ('account-disconnected', ged.POSTGUI,
+             self._on_account_disconnected),
         ])
 
         self._set_remove_from_server_checkbox()
