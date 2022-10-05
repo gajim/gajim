@@ -230,7 +230,7 @@ class MessageActionsBox(Gtk.Grid, ged.EventHelper):
         self._update_message_input_state()
 
     def clear(self) -> None:
-        if self._client is not None:
+        if self._client is not None and not self._client.is_destroyed():
             self._set_chatstate(False)
             self._client.disconnect_all_from_obj(self)
 
