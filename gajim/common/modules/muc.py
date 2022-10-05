@@ -216,12 +216,7 @@ class MUC(BaseModule):
         contact.notify('state-changed')
 
     def _reset_state(self) -> None:
-        for room_jid in list(self._rejoin_timeouts.keys()):
-            self._remove_rejoin_timeout(room_jid)
-
-        for room_jid in list(self._join_timeouts.keys()):
-            self._remove_join_timeout(room_jid)
-
+        self._remove_all_timeouts()
         for muc in self._mucs.values():
             self._joined_users.pop(muc.jid, None)
             self._set_muc_state(muc.jid, MUCJoinedState.NOT_JOINED)
@@ -1128,3 +1123,14 @@ class MUC(BaseModule):
                                  _signal_name: str
                                  ) -> None:
         self._reset_state()
+
+    def _remove_all_timeouts(self) -> None:
+        for room_jid in list(self._rejoin_timeouts.keys()):
+            self._remove_rejoin_timeout(room_jid)
+
+        for room_jid in list(self._join_timeouts.keys()):
+            self._remove_join_timeout(room_jid)
+
+    def cleanup(self) -> None:
+        super().cleanup()
+        self._remove_all_timeouts()
