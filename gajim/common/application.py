@@ -159,9 +159,9 @@ class CoreApplication:
 
         accounts_to_disconnect: dict[str, Client] = {}
 
-        for account, client in app.connections.items():
-            if app.account_is_available(account):
-                accounts_to_disconnect[account] = client
+        for client in app.get_clients():
+            if client.state.is_available:
+                accounts_to_disconnect[client.account] = client
 
         if not accounts_to_disconnect:
             self._quit_app()
@@ -224,10 +224,10 @@ class CoreApplication:
             self._log.info('Network connection available')
         else:
             self._log.info('Network connection lost')
-            for connection in app.connections.values():
-                if (connection.state.is_connected or
-                        connection.state.is_available):
-                    connection.disconnect(gracefully=False, reconnect=True)
+            for client in app.get_clients():
+                if (client.state.is_connected or
+                        client.state.is_available):
+                    client.disconnect(gracefully=False, reconnect=True)
 
     def _check_for_updates(self) -> None:
         if not app.settings.get('check_for_update'):

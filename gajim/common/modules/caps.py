@@ -193,9 +193,9 @@ class Caps(BaseModule):
         if not app.account_is_available(self._account):
             return
 
-        app.connections[self._account].change_status(
-            app.connections[self._account].status,
-            app.connections[self._account].status_message)
+        client = app.get_client(self._account)
+        client.change_status(client.status,
+                             client.status_message)
 
     def cleanup(self) -> None:
         self._remove_all_tasks()

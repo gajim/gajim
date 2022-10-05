@@ -47,7 +47,7 @@ class MamPreferences(Gtk.ApplicationWindow, EventHelper):
         self.connect_after('key-press-event', self._on_key_press)
 
         self.account = account
-        self._con = app.connections[account]
+        self._client = app.get_client(account)
         self._destroyed = False
 
         self._ui = get_builder('mam_preferences.ui')
@@ -63,7 +63,7 @@ class MamPreferences(Gtk.ApplicationWindow, EventHelper):
 
         self._activate_spinner()
 
-        self._con.get_module('MAM').request_preferences(
+        self._client.get_module('MAM').request_preferences(
             callback=self._mam_prefs_received)
 
     def _on_destroy(self, widget: MamPreferences) -> None:
@@ -156,7 +156,7 @@ class MamPreferences(Gtk.ApplicationWindow, EventHelper):
                 always.append(jid)
             else:
                 never.append(jid)
-        self._con.get_module('MAM').set_preferences(
+        self._client.get_module('MAM').set_preferences(
             default, always, never, callback=self._mam_prefs_saved)
 
     def _activate_spinner(self) -> None:

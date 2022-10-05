@@ -480,7 +480,7 @@ class PluginManager(metaclass=Singleton):
     def _register_modules_with_handlers(self, plugin: GajimPlugin) -> None:
         if not hasattr(plugin, 'modules'):
             return
-        for client in app.connections.values():
+        for client in app.get_clients():
             for module in plugin.modules:
                 instance, name = module.get_instance(client)
                 modules.register_single_module(client, instance, name)
@@ -491,7 +491,7 @@ class PluginManager(metaclass=Singleton):
     def _unregister_modules_with_handlers(self, plugin: GajimPlugin) -> None:
         if not hasattr(plugin, 'modules'):
             return
-        for client in app.connections.values():
+        for client in app.get_clients():
             for module in plugin.modules:
                 instance = client.get_module(module.name)
                 modules.unregister_single_module(client, module.name)

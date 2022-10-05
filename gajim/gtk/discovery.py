@@ -368,8 +368,8 @@ class ServicesCache:
             self._cbs[cbkey].append(cb)
         else:
             self._cbs[cbkey] = [cb]
-            con = app.connections[self.account]
-            con.get_module('Discovery').disco_info(
+            client = app.get_client(self.account)
+            client.get_module('Discovery').disco_info(
                 jid, node, callback=self._disco_info_received)
 
     def get_items(self, jid, node, cb, force=False, nofetch=False, args=()):
@@ -394,8 +394,8 @@ class ServicesCache:
             self._cbs[cbkey].append(cb)
         else:
             self._cbs[cbkey] = [cb]
-            con = app.connections[self.account]
-            con.get_module('Discovery').disco_items(
+            client = app.get_client(self.account)
+            client.get_module('Discovery').disco_items(
                 jid, node, callback=self._disco_items_received)
 
     def _disco_info_received(self, task):
@@ -526,10 +526,10 @@ class ServiceDiscoveryWindow:
 
         # Get a ServicesCache object.
         try:
-            self.cache = app.connections[account].services_cache
+            self.cache = app.get_client(account).services_cache
         except AttributeError:
             self.cache = ServicesCache(account)
-            app.connections[account].services_cache = self.cache
+            app.get_client(account).services_cache = self.cache
 
         if initial_identities:
             self.cache._on_agent_info(jid, node, initial_identities, [], None)
@@ -1871,8 +1871,8 @@ class DiscussionGroupsBrowser(AgentBrowser):
         self.subscribe_button = None
         self.unsubscribe_button = None
 
-        con = app.connections[account]
-        con.get_module('PubSub').send_pb_subscription_query(
+        client = app.get_client(account)
+        client.get_module('PubSub').send_pb_subscription_query(
             jid, self._on_pep_subscriptions)
 
     def _create_treemodel(self):
@@ -2062,8 +2062,8 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
         node = model.get_value(iter_, 1)   # 1 = groupnode
 
-        con = app.connections[self.account]
-        con.get_module('PubSub').send_pb_subscribe(
+        client = app.get_client(self.account)
+        client.get_module('PubSub').send_pb_subscribe(
             self.jid, node, self._on_pep_subscribe, groupnode=node)
 
     def _on_unsubscribe_button_clicked(self, widget):
@@ -2077,8 +2077,8 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
         node = model.get_value(iter_, 1)  # 1 = groupnode
 
-        con = app.connections[self.account]
-        con.get_module('PubSub').send_pb_unsubscribe(
+        client = app.get_client(self.account)
+        client.get_module('PubSub').send_pb_unsubscribe(
             self.jid, node, self._on_pep_unsubscribe, groupnode=node)
 
     def _on_pep_subscriptions(self, _nbxmpp_client, request):
@@ -2185,10 +2185,10 @@ class GroupsPostWindow:
                        True)])
 
         # Publish it to node
-        con = app.connections[self.account]
-        con.get_module('PubSub').publish(self.groupid,
-                                         item,
-                                         jid=self.servicejid)
+        client = app.get_client(self.account)
+        client.get_module('PubSub').publish(self.groupid,
+                                            item,
+                                            jid=self.servicejid)
 
         # Close the window
         self.window.destroy()

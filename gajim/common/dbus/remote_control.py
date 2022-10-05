@@ -307,10 +307,12 @@ class GajimRemote(Server):
             status = ''
         if account:
             if not status:
-                if account not in app.connections:
+                if account not in app.settings.get_active_accounts():
                     return False
-                status = app.connections[account].status
-            GLib.idle_add(app.connections[account].change_status, status,
+                status = app.get_client(account).status
+
+            GLib.idle_add(app.get_client(account).change_status,
+                          status,
                           message)  # pyright: ignore
         else:
             # account not specified, so change the status of all accounts
@@ -318,13 +320,12 @@ class GajimRemote(Server):
                 if not app.settings.get_account_setting(
                         acc, 'sync_with_global_status'):
                     continue
-                if status:
-                    status_ = status
-                else:
-                    if acc not in app.connections:
-                        continue
-                    status_ = app.connections[acc].status
-                GLib.idle_add(app.connections[acc].change_status, status_,
+
+                if not status:
+                    status = app.get_client(acc).status
+
+                GLib.idle_add(app.get_client(acc).change_status,
+                              status,
                               message)  # pyright: ignore
         return False
 
@@ -346,15 +347,15 @@ class GajimRemote(Server):
         Show info on account: resource, jid, nick, prio, message
         '''
         result: dict[str, str] = {}
-        if account in app.connections:
+        if account in app.settings.get_active_accounts():
             # account is valid
-            con = app.connections[account]
-            result['status'] = con.status
-            result['name'] = con.name
-            result['jid'] = app.get_jid_from_account(con.name)
-            result['message'] = con.status_message
-            result['priority'] = str(con.priority)
-            result['resource'] = app.settings.get_account_setting(con.name,
+            client = app.get_client(account)
+            result['status'] = client.status
+            result['name'] = client.name
+            result['jid'] = app.get_jid_from_account(client.name)
+            result['message'] = client.status_message
+            result['priority'] = str(client.priority)
+            result['resource'] = app.settings.get_account_setting(client.name,
                                                                   'resource')
         return result
 

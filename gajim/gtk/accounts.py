@@ -558,12 +558,12 @@ class AccountRow(Gtk.ListBoxRow):
             switch.set_state(state)
             self._set_label(state)
 
-        old_state = app.settings.get_account_setting(account, 'active')
-        if old_state == state:
+        account_is_active = app.settings.get_account_setting(account, 'active')
+        if account_is_active == state:
             return Gdk.EVENT_PROPAGATE
 
-        if (account in app.connections and
-                not app.connections[account].state.is_disconnected):
+        if (account_is_active and
+                not app.get_client(account).state.is_disconnected):
             # Connecting or connected
             window = cast(AccountsWindow, get_app_window('AccountsWindow'))
             ConfirmationDialog(
@@ -1003,7 +1003,7 @@ class PriorityDialog(SettingsDialog):
 
     def on_destroy(self, *args: Any) -> None:
         # Update priority
-        if self.account not in app.connections:
+        if self.account not in app.settings.get_active_accounts():
             return
         client = app.get_client(self.account)
         show = client.status

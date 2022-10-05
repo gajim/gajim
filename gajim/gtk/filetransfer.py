@@ -601,7 +601,7 @@ class FileTransfersWindow:
         if file_props.tt_account:
             # file transfer is set
             account = file_props.tt_account
-            if account in app.connections:
+            if account in app.settings.get_active_accounts():
                 # there is a connection to the account
                 client = app.get_client(account)
                 client.get_module('Bytestream').remove_transfer(file_props)
@@ -937,7 +937,7 @@ class FileTransfersWindow:
     def cancel_transfer(self, file_props: FileProp) -> None:
         # TODO: does not cancel transfer somehow
         account = file_props.tt_account
-        if account is None or account not in app.connections:
+        if account is None or account not in app.settings.get_active_accounts():
             return
         client = app.get_client(account)
         # Check if we are in a IBB transfer

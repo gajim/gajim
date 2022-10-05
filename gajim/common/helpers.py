@@ -509,11 +509,11 @@ def get_client_status(account: str) -> str:
 
 def get_global_show() -> str:
     maxi = 0
-    for account in app.connections:
-        if not app.settings.get_account_setting(account,
+    for client in app.get_clients():
+        if not app.settings.get_account_setting(client.account,
                                                 'sync_with_global_status'):
             continue
-        status = get_client_status(account)
+        status = get_client_status(client.account)
         index = SHOW_LIST.index(status)
         if index > maxi:
             maxi = index
@@ -523,14 +523,14 @@ def get_global_show() -> str:
 def get_global_status_message() -> str:
     maxi = 0
     status_message = ''
-    for account, con in app.connections.items():
-        if not app.settings.get_account_setting(account,
+    for client in app.get_clients():
+        if not app.settings.get_account_setting(client.account,
                                                 'sync_with_global_status'):
             continue
-        index = SHOW_LIST.index(con.status)
+        index = SHOW_LIST.index(client.status)
         if index > maxi:
             maxi = index
-            status_message = con.status_message
+            status_message = client.status_message
     return status_message
 
 
@@ -539,7 +539,8 @@ def statuses_unified() -> bool:
     Test if all statuses are the same
     '''
     reference = None
-    for account in app.connections:
+    for client in app.get_clients():
+        account = client.account
         if not app.settings.get_account_setting(account,
                                                 'sync_with_global_status'):
             continue
@@ -670,9 +671,11 @@ def get_optional_features(account: str) -> list[str]:
 
     features.append(Namespace.NICK + '+notify')
 
-    if app.connections[account].get_module('Bookmarks').nativ_bookmarks_used:
+    client = app.get_client(account)
+
+    if client.get_module('Bookmarks').nativ_bookmarks_used:
         features.append(Namespace.BOOKMARKS_1 + '+notify')
-    elif app.connections[account].get_module('Bookmarks').pep_bookmarks_used:
+    elif client.get_module('Bookmarks').pep_bookmarks_used:
         features.append(Namespace.BOOKMARKS + '+notify')
     if app.is_installed('AV'):
         features.append(Namespace.JINGLE_RTP)
@@ -686,8 +689,8 @@ def get_optional_features(account: str) -> list[str]:
 
 
 def jid_is_blocked(account: str, jid: str) -> bool:
-    con = app.connections[account]
-    return jid in con.get_module('Blocking').blocked
+    client = app.get_client(account)
+    return jid in client.get_module('Blocking').blocked
 
 
 def get_subscription_request_msg(account: Optional[str] = None) -> str:

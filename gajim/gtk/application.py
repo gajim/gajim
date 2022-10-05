@@ -271,7 +271,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
         MainWindow()
 
     def _open_uris(self, uris: list[str]) -> None:
-        accounts = list(app.connections.keys())
+        accounts = app.settings.get_active_accounts()
         if not accounts:
             return
 
@@ -668,7 +668,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
     @staticmethod
     def _on_join_support_chat(_action: Gio.SimpleAction,
                               _param: Optional[GLib.Variant]) -> None:
-        accounts = list(app.connections.keys())
+        accounts = app.settings.get_active_accounts()
         if len(accounts) == 1:
             app.interface.show_add_join_groupchat(
                 accounts[0], GAJIM_SUPPORT_JID)

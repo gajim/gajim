@@ -38,8 +38,7 @@ class AccountSideBar(Gtk.ListBox):
         self.get_style_context().add_class('account-sidebar')
         self.connect('row-activated', self._on_row_activated)
 
-        self._accounts: list[str] = list(app.connections.keys())
-        for account in self._accounts:
+        for account in app.settings.get_active_accounts():
             self.add_account(account)
 
     def add_account(self, account: str) -> None:

@@ -145,8 +145,8 @@ def get_password(account_name: str) -> Optional[str]:
 
 
 def save_password(account_name: str, password: str) -> bool:
-    if account_name in app.connections:
-        app.connections[account_name].password = password
+    if account_name in app.settings.get_active_accounts():
+        app.get_client(account_name).password = password
 
     if not app.settings.get_account_setting(account_name, 'savepass'):
         return True
@@ -157,8 +157,8 @@ def save_password(account_name: str, password: str) -> bool:
 
 
 def delete_password(account_name: str) -> None:
-    if account_name in app.connections:
-        app.connections[account_name].password = None
+    if account_name in app.settings.get_active_accounts():
+        app.get_client(account_name).password = None
 
     if app.settings.get('use_keyring'):
         return SecretPasswordStorage.delete_password(account_name)

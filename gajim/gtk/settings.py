@@ -884,10 +884,10 @@ class ChangePasswordSetting(DialogSetting):
 
     def update_activatable(self) -> None:
         activatable = False
-        if self.account in app.connections:
-            con = app.connections[self.account]
-            activatable = (con.state.is_available and
-                           con.get_module('Register').supported)
+        if self.account in app.settings.get_active_accounts():
+            client = app.get_client(self.account)
+            activatable = (client.state.is_available and
+                           client.get_module('Register').supported)
         self.set_activatable(activatable)
 
 

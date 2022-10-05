@@ -90,20 +90,20 @@ class StatusMessageSelector(Gtk.Box, EventHelper):
             client = app.get_client(self._account)
             client.change_status(client.status, message)
         else:
-            for account in app.connections:
+            for client in app.get_clients():
                 if not app.settings.get_account_setting(
-                        account, 'sync_with_global_status'):
+                        client.account, 'sync_with_global_status'):
                     continue
-                client = app.get_client(account)
                 client.change_status(client.status, message)
 
     def update(self) -> None:
         if self._account is None:
             message = get_global_status_message()
         else:
-            if self._account not in app.connections:
+            try:
+                client = app.get_client(self._account)
+            except KeyError:
                 return
-            client = app.get_client(self._account)
             message = client.status_message
 
         self._entry.set_text(message)

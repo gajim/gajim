@@ -456,8 +456,8 @@ class AvatarStorage(metaclass=Singleton):
                 # (e.g. avatar cache deleted)
                 app.storage.cache.set_muc(jid, 'avatar', None)
 
-        con = app.connections[account]
-        name = get_groupchat_name(con, jid)
+        client = app.get_client(account)
+        name = get_groupchat_name(client, jid)
         letter = generate_avatar_letter(name)
         surface = generate_default_avatar(letter, str(jid), size, scale, style)
         self._cache[jid][(size, scale, None)] = surface

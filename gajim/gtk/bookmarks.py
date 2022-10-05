@@ -40,8 +40,8 @@ class Bookmarks(Gtk.ApplicationWindow):
         self._ui = get_builder('bookmarks.ui')
         self.add(self._ui.bookmarks_grid)
 
-        con = app.connections[account]
-        for bookmark in con.get_module('Bookmarks').bookmarks:
+        client = app.get_client(account)
+        for bookmark in client.get_module('Bookmarks').bookmarks:
             self._ui.bookmarks_store.append([str(bookmark.jid),
                                              bookmark.name,
                                              bookmark.nick,

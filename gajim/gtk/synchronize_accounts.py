@@ -93,7 +93,7 @@ class SynchronizeAccounts(Gtk.ApplicationWindow):
         model = self._ui.accounts_treeview.get_model()
         assert isinstance(model, Gtk.ListStore)
         model.clear()
-        for remote_account in app.connections:
+        for remote_account in app.settings.get_active_accounts():
             if remote_account == self.account:
                 # Do not show the account we're sync'ing
                 continue

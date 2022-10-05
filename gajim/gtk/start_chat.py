@@ -660,7 +660,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         accounts = app.get_connected_accounts()
         if not accounts:
             return
-        client = app.connections[accounts[0]].connection
+        client = app.get_client(accounts[0]).connection
 
         text = self._ui.search_entry.get_text().strip()
         self._global_search_listbox.start_search()

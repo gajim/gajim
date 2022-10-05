@@ -44,7 +44,7 @@ class MainStack(Gtk.Stack):
         self._chat_page.connect('chat-selected', self._on_chat_selected)
         self.add_named(self._chat_page, 'chats')
 
-        for account in list(app.connections.keys()):
+        for account in app.settings.get_active_accounts():
             self.add_account_page(account)
 
     def add_account_page(self, account: str) -> None:

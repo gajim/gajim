@@ -114,7 +114,7 @@ class Interface:
 
         self.instances: dict[str, Any] = {}
 
-        for acc in app.connections:
+        for acc in app.settings.get_active_accounts():
             self.instances[acc] = {
                 'infos': {},
                 'disco': {}
@@ -545,7 +545,7 @@ class Interface:
 
         app.ged.raise_event(AccountEnabled(account=account))
 
-        app.connections[account].change_status('online', '')
+        app.get_client(account).change_status('online', '')
         window = get_app_window('AccountsWindow')
         if window is not None:
             GLib.idle_add(window.enable_account, account, True)
@@ -563,7 +563,7 @@ class Interface:
         build_accounts_menu()
         app.app.update_app_actions_state()
 
-        app.connections[account].cleanup()
+        app.get_client(account).cleanup()
         del app.connections[account]
         del self.instances[account]
         del app.nicks[account]
@@ -592,8 +592,10 @@ class Interface:
         Auto connect at startup
         '''
 
-        for account, con in app.connections.items():
-            if not app.settings.get_account_setting(account, 'autoconnect'):
+        for client in app.get_clients():
+            account = client.account
+            if not app.settings.get_account_setting(account,
+                                                    'autoconnect'):
                 continue
 
             status = 'online'
@@ -606,7 +608,7 @@ class Interface:
                     account, 'last_status_msg')
                 status_message = helpers.from_one_line(status_message)
 
-            con.change_status(status, status_message)
+            client.change_status(status, status_message)
 
     def change_status(self,
                       status: str,
@@ -620,12 +622,12 @@ class Interface:
             self._change_status(account, status)
             return
 
-        for acc in app.connections:
-            if not app.settings.get_account_setting(acc,
+        for client in app.get_clients():
+            if not app.settings.get_account_setting(client.account,
                                                     'sync_with_global_status'):
                 continue
 
-            self._change_status(acc, status)
+            self._change_status(client.account, status)
 
     @staticmethod
     def _change_status(account: str, status: str) -> None:
@@ -684,8 +686,8 @@ class Interface:
 
         app.plugin_repository = PluginRepository()
 
-        for con in app.connections.values():
-            con.get_module('Roster').load_roster()
+        for client in app.get_clients():
+            client.get_module('Roster').load_roster()
 
         # get instances for windows/dialogs that will show_all()/hide()
         self.instances['file_transfers'] = FileTransfersWindow()
