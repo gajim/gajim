@@ -563,14 +563,14 @@ class Interface:
         build_accounts_menu()
         app.app.update_app_actions_state()
 
-        app.ged.raise_event(AccountDisabled(account=account))
-
         app.connections[account].cleanup()
         del app.connections[account]
         del self.instances[account]
         del app.nicks[account]
         del app.automatic_rooms[account]
         del app.to_be_removed[account]
+
+        app.ged.raise_event(AccountDisabled(account=account))
 
     def remove_account(self, account: str) -> None:
         if app.settings.get_account_setting(account, 'active'):
