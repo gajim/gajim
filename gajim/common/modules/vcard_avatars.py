@@ -257,9 +257,11 @@ class VCardAvatarsTask(Task):
         try:
             client = app.get_client(self._contact.account)
         except Exception:
+            self.set_obsolete()
             return False
 
         if not client.state.is_available:
+            self.set_obsolete()
             return False
 
         if isinstance(self._contact, GroupchatParticipant):
