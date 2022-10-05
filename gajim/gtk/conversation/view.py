@@ -187,6 +187,12 @@ class ConversationView(Gtk.ScrolledWindow):
         self._block_signals = True
         self._reset()
 
+        self._read_marker_row = ReadMarkerRow(self._contact)
+        self._list_box.add(self._read_marker_row)
+
+        self._scroll_hint_row = ScrollHintRow(self._contact.account)
+        self._list_box.add(self._scroll_hint_row)
+
         app.settings.disconnect_signals(self)
 
         app.settings.connect_signal('print_join_left',
@@ -231,15 +237,6 @@ class ConversationView(Gtk.ScrolledWindow):
         self._message_id_row_map = {}
         self._read_marker_row = None
         self._scroll_hint_row = None
-
-        if self._contact is not None:
-            # These need to be present if ConversationView is reset
-            # without switch_contact being invoked
-            self._read_marker_row = ReadMarkerRow(self._contact)
-            self._list_box.add(self._read_marker_row)
-
-            self._scroll_hint_row = ScrollHintRow(self._contact.account)
-            self._list_box.add(self._scroll_hint_row)
 
     def reset(self) -> None:
         assert self._contact is not None
