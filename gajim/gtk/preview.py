@@ -137,7 +137,8 @@ class PreviewWidget(Gtk.Box):
 
             location = split_geo_uri(preview.uri)
             self._ui.file_size.set_text(_('Lat: %s Lon: %s') % (
-                location.lat, location.lon))
+                round(float(location.lat), 5),
+                round(float(location.lon), 5)))
             self._ui.image_button.set_tooltip_text(
                 _('Location at Lat: %s Lon: %s') % (
                     location.lat, location.lon))
