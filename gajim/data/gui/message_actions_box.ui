@@ -173,7 +173,7 @@
           <object class="GtkImage">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="icon-name">document-send</property>
+            <property name="icon-name">gajim-send-message</property>
           </object>
         </child>
         <style>
