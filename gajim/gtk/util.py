@@ -782,21 +782,22 @@ def wrap_with_event_box(klass: Any) -> Any:
 
 
 class AccountBadge(Gtk.Label):
-    def __init__(self, account: str) -> None:
+    def __init__(self, account: Optional[str] = None) -> None:
         Gtk.Label.__init__(self)
         self.set_ellipsize(Pango.EllipsizeMode.END)
         self.set_max_width_chars(12)
         self.set_size_request(50, -1)
         self.get_style_context().add_class('badge')
-        self._account = account
+        self.set_no_show_all(True)
 
-        self.refresh()
-        self.show()
+        if account is not None:
+            self.set_account(account)
+            self.show()
 
-    def refresh(self) -> None:
-        label = app.get_account_label(self._account)
+    def set_account(self, account: str) -> None:
+        label = app.get_account_label(account)
         self.set_text(label)
-        account_class = app.css_config.get_dynamic_class(self._account)
+        account_class = app.css_config.get_dynamic_class(account)
         self.get_style_context().add_class(account_class)
         self.set_tooltip_text(_('Account: %s') % label)
 
