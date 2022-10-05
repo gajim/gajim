@@ -123,9 +123,6 @@ class Account(Gtk.ListBoxRow):
             self._unread_label.set_text('999+')
         self._unread_label.set_visible(bool(count))
 
-    def update(self) -> None:
-        self._update_account_color()
-
 
 class AccountAvatar(Gtk.Image):
     def __init__(self, account: str) -> None:
