@@ -114,3 +114,4 @@ class BaseModule(EventHelper):
 
     def cleanup(self) -> None:
         self.unregister_events()
+        self._client.disconnect_all_from_obj(self)
