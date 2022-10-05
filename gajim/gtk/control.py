@@ -405,6 +405,10 @@ class ChatControl(EventHelper):
         if not self._is_event_processable(event):
             return
 
+        if not any(item in ('audio', 'video') for item in event.contents):
+            # This is not a call
+            return
+
         active_jid = app.call_manager.get_active_call_jid()
         # Don't add a second row if contact upgrades to video
         if active_jid is None:
