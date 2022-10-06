@@ -24,7 +24,7 @@ class Test(unittest.TestCase):
             participant.name = name
             participants.append(participant)
 
-        app.connections = MagicMock()
+        app.get_client = MagicMock()
 
         app.storage.archive = MagicMock()
         app.storage.archive.get_recent_muc_nicks = MagicMock(
