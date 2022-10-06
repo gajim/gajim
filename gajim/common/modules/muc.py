@@ -143,7 +143,6 @@ class MUC(BaseModule):
                                  self._on_client_resume_failed)
 
         self._rejoin_muc: set[str] = set()
-        self._join_timeouts: dict[str, int] = {}
         self._rejoin_timeouts: dict[str, int] = {}
         self._muc_service_jid = None
         self._joined_users: defaultdict[
@@ -362,7 +361,6 @@ class MUC(BaseModule):
         if muc_data.state.is_not_joined:
             return
 
-        self._remove_join_timeout(room_jid)
         self._remove_rejoin_timeout(room_jid)
 
         self._con.get_module('Presence').send_presence(
@@ -563,7 +561,6 @@ class MUC(BaseModule):
 
         if properties.is_muc_destroyed:
             self._log.info('MUC destroyed: %s', room_jid)
-            self._remove_join_timeout(room_jid)
             self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
             self._con.get_module('Bookmarks').remove(room_jid)
             room.set_not_joined()
@@ -629,8 +626,6 @@ class MUC(BaseModule):
                 elif muc_data.state == MUCJoinedState.CREATING:
                     if properties.is_new_room:
                         self.configure_room(room_jid)
-
-                self._start_join_timeout(room_jid)
 
             presence = self._process_user_presence(properties)
             self._process_occupant_presence_change(properties,
@@ -793,20 +788,6 @@ class MUC(BaseModule):
             GLib.source_remove(id_)
             del self._rejoin_timeouts[room_jid]
 
-    def _start_join_timeout(self, room_jid: str) -> None:
-        self._remove_join_timeout(room_jid)
-        self._log.info('Start join timeout for: %s', room_jid)
-        id_ = GLib.timeout_add_seconds(
-            10, self._fake_subject_change, room_jid)
-        self._join_timeouts[room_jid] = id_
-
-    def _remove_join_timeout(self, room_jid: str) -> None:
-        id_ = self._join_timeouts.get(room_jid)
-        if id_ is not None:
-            self._log.info('Remove join timeout for: %s', room_jid)
-            GLib.source_remove(id_)
-            del self._join_timeouts[room_jid]
-
     def _on_subject_change(self,
                            _con: types.xmppClient,
                            _stanza: Message,
@@ -868,19 +849,10 @@ class MUC(BaseModule):
 
         raise nbxmpp.NodeProcessed
 
-    def _fake_subject_change(self, room_jid: str) -> None:
-        # This is for servers which don’t send empty subjects as part of the
-        # event order on joining a MUC. For example jabber.ru
-        self._log.warning('Fake subject received for %s', room_jid)
-        del self._join_timeouts[room_jid]
-        room = self._get_contact(room_jid)
-        room.notify('room-joined')
-
     def cancel_password_request(self, room_jid: str) -> None:
         self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
 
     def _room_join_complete(self, muc_data: MUCData):
-        self._remove_join_timeout(muc_data.jid)
         self._set_muc_state(muc_data.jid, MUCJoinedState.JOINED)
         self._remove_rejoin_timeout(muc_data.jid)
 
@@ -1127,9 +1099,6 @@ class MUC(BaseModule):
     def _remove_all_timeouts(self) -> None:
         for room_jid in list(self._rejoin_timeouts.keys()):
             self._remove_rejoin_timeout(room_jid)
-
-        for room_jid in list(self._join_timeouts.keys()):
-            self._remove_join_timeout(room_jid)
 
     def cleanup(self) -> None:
         super().cleanup()
