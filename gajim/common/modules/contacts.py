@@ -672,6 +672,16 @@ class GroupchatContact(CommonContact):
         return disco_info.is_irc
 
     @property
+    def muc_context(self) -> Optional[str]:
+        disco_info = self.get_disco()
+        if disco_info is None:
+            return None
+
+        if disco_info.muc_is_members_only and disco_info.muc_is_nonanonymous:
+            return 'private'
+        return 'public'
+
+    @property
     def encryption_available(self) -> bool:
         disco_info = self.get_disco()
         if disco_info is None:

@@ -1427,16 +1427,6 @@ def get_group_chat_nick(account: str, room_jid: Union[JID, str]) -> str:
     return nick
 
 
-def get_muc_context(jid: JID) -> Optional[str]:
-    disco_info = app.storage.cache.get_last_disco_info(jid)
-    if disco_info is None:
-        return None
-
-    if (disco_info.muc_is_members_only and disco_info.muc_is_nonanonymous):
-        return 'private'
-    return 'public'
-
-
 def get_random_muc_localpart() -> str:
     rand = random.randrange(4)
     is_vowel = bool(random.getrandbits(1))

@@ -34,7 +34,6 @@ from gajim.common.events import UnsubscribedPresenceReceived
 from gajim.common.events import MucInvitation
 from gajim.common.events import MucDecline
 from gajim.common.helpers import get_groupchat_name
-from gajim.common.helpers import get_muc_context
 
 from .menus import get_subscription_menu
 from .util import open_window
@@ -240,8 +239,9 @@ class NotificationManager(Gtk.ListBox):
         self.update_unread_count()
 
         jid = event.from_.bare
-        muc_context = get_muc_context(event.muc)
-        if (muc_context == 'private' and
+        client = app.get_client(event.account)
+        contact = client.get_module('Contacts').get_contact(event.muc)
+        if (contact.muc_context == 'private' and
                 not event.muc.bare_match(event.from_)):
             contact = self._client.get_module('Contacts').get_contact(jid)
             text = _('%(contact)s invited you to %(chat)s') % {
@@ -411,8 +411,9 @@ class InvitationReceivedRow(NotificationRow):
         title_label.get_style_context().add_class('bold')
         self.grid.attach(title_label, 2, 1, 1, 1)
 
-        muc_context = get_muc_context(event.muc)
-        if (muc_context == 'private' and
+        client = app.get_client(event.account)
+        contact = client.get_module('Contacts').get_contact(event.muc)
+        if (contact.muc_context == 'private' and
                 not event.muc.bare_match(event.from_)):
             contact = self._client.get_module('Contacts').get_contact(jid)
             invitation_text = _('%(contact)s invited you to %(chat)s') % {

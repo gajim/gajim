@@ -41,7 +41,6 @@ from gajim import IS_PORTABLE
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import optparser
-from gajim.common.helpers import get_muc_context
 from gajim.common.storage.base import Encoder
 from gajim.common.storage.base import json_decoder
 from gajim.common.setting_values import APP_SETTINGS
@@ -842,7 +841,9 @@ class Settings:
             return self._account_settings[account]['group_chat'][jid][setting]
         except KeyError:
 
-            context = get_muc_context(jid)
+            client = app.get_client(account)
+            contact = client.get_module('Contacts').get_contact(jid)
+            context = contact.muc_context
             if context is None:
                 # If there is no disco info available
                 # to determine the context assume public
@@ -905,7 +906,9 @@ class Settings:
         default = ACCOUNT_SETTINGS['group_chat'][setting]
         if default in (HAS_APP_DEFAULT, HAS_ACCOUNT_DEFAULT):
 
-            context = get_muc_context(jid)
+            client = app.get_client(account)
+            contact = client.get_module('Contacts').get_contact(jid)
+            context = contact.muc_context
             if context is None:
                 # If there is no disco info available
                 # to determine the context assume public
@@ -951,7 +954,9 @@ class Settings:
         for account, acc_settings in self._account_settings.items():
             for jid in acc_settings['group_chat']:
                 if context is not None:
-                    if get_muc_context(jid) != context:
+                    client = app.get_client(account)
+                    contact = client.get_module('Contacts').get_contact(jid)
+                    if contact.muc_context != context:
                         continue
                 self.set_group_chat_setting(account, jid, setting, value)
 

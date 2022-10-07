@@ -40,7 +40,6 @@ from gajim.common.const import TRUST_SYMBOL_DATA
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import from_one_line
 from gajim.common.helpers import get_group_chat_nick
-from gajim.common.helpers import get_muc_context
 from gajim.common.helpers import message_needs_highlight
 from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
@@ -118,12 +117,12 @@ class MessageRow(BaseRow):
                 text, additional_data)
 
         if is_previewable:
-            context = None
-            if self._is_groupchat:
-                context = get_muc_context(self._contact.jid)
+            muc_context = None
+            if isinstance(self._contact, GroupchatContact):
+                muc_context = self._contact.muc_context
             self._message_widget = PreviewWidget(account)
             app.preview_manager.create_preview(
-                text, self._message_widget, from_us, context)
+                text, self._message_widget, from_us, muc_context)
         else:
             self._message_widget = MessageWidget(account)
             self._message_widget.add_with_styling(text, nickname=name)
