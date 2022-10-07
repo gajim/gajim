@@ -38,6 +38,7 @@ from gajim.common.helpers import Singleton
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
+from gajim.common.modules.contacts import GroupchatParticipant
 
 from .const import DEFAULT_WORKSPACE_COLOR
 from .emoji_data_gtk import get_emoji_data
@@ -415,6 +416,12 @@ class AvatarStorage(metaclass=Singleton):
 
         name = contact.name
         color_string = str(contact.jid)
+        if isinstance(contact, GroupchatParticipant):
+            if contact.room.muc_context == 'public':
+                color_string = contact.name
+            else:
+                if contact.real_jid is not None:
+                    color_string = str(contact.real_jid)
 
         letter = generate_avatar_letter(name)
         surface = generate_default_avatar(
