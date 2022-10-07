@@ -87,6 +87,10 @@ class Features(Gtk.ApplicationWindow):
         self.feature_listbox.add(item)
 
     def _get_features(self) -> list[Feature]:
+        tray_icon_available = bool(
+            sys.platform == 'win32' or
+            app.is_installed('APPINDICATOR') or
+            app.is_installed('AYATANA_APPINDICATOR'))
         av_available = app.is_installed('AV') and sys.platform != 'win32'
         notification_sounds_available: bool = (
             app.is_installed('GSOUND') or sys.platform in ('win32', 'darwin'))
@@ -97,13 +101,11 @@ class Features(Gtk.ApplicationWindow):
         auto_status_enabled = bool(any(auto_status))
 
         return [
-            Feature(_('App Indicator Icon'),
-                    app.is_installed('APPINDICATOR') or
-                    app.is_installed('AYATANA_APPINDICATOR'),
-                    _('Enables Gajim to provide a system notification area '
-                      'icon'),
+            Feature(_('Notification Area Icon'),
+                    tray_icon_available,
+                    _('Enables Gajim to provide a notification area icon'),
                     _('Requires: libappindicator3'),
-                    _('Feature not available under Windows'),
+                    _('No additional requirements'),
                     None),
             Feature(_('Audio / Video'),
                     av_available,
@@ -111,11 +113,11 @@ class Features(Gtk.ApplicationWindow):
                     _('Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, '
                       'gstreamer1.0-plugins-base, gstreamer1.0-plugins-ugly, '
                       'gstreamer1.0-libav, and gstreamer1.0-gtk3'),
-                    _('Feature not available under Windows'),
+                    _('Feature not available on Windows'),
                     None),
             Feature(_('Automatic Status'),
                     self._idle_available(),
-                    _("Enables Gajim to measure your computer's idle time in "
+                    _('Enables Gajim to measure your computer’s idle time in '
                       'order to set your Status automatically'),
                     _('Requires: libxss'),
                     _('No additional requirements'),
@@ -131,22 +133,21 @@ class Features(Gtk.ApplicationWindow):
                     _('Enables Gajim to store Passwords securely instead of '
                       'storing them in plaintext'),
                     _('Requires: gnome-keyring or kwallet'),
-                    _('Windows Credential Vault is used for secure password '
-                      'storage'),
+                    _('No additional requirements'),
                     app.settings.get('use_keyring')),
             Feature(_('Spell Checker'),
                     app.is_installed('GSPELL'),
                     _('Enables Gajim to spell check your messages while '
                       'composing'),
                     _('Requires: Gspell'),
-                    _('Requires: Gspell'),
+                    _('No additional requirements'),
                     spell_check_enabled),
             Feature(_('UPnP-IGD Port Forwarding'),
                     app.is_installed('UPNP'),
                     _('Enables Gajim to request your router to forward ports '
                       'for file transfers'),
                     _('Requires: gir1.2-gupnpigd-1.0'),
-                    _('Feature not available under Windows'),
+                    _('Feature not available on Windows'),
                     None)
         ]
 
