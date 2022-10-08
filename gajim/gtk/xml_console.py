@@ -26,6 +26,8 @@ from gi.repository import GtkSource
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common.events import AccountDisabled
+from gajim.common.events import AccountEnabled
 from gajim.common.events import StanzaReceived
 from gajim.common.events import StanzaSent
 from gajim.common.const import Direction
@@ -55,7 +57,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self.set_show_menubar(False)
         self.set_name('XMLConsoleWindow')
 
-        self.selected_account = 'AllAccounts'
+        self._selected_account = 'AllAccounts'
         self._selected_send_account: Optional[str] = None
         self.presence = True
         self.message = True
@@ -105,9 +107,11 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.connect_signals(self)
 
         self.register_events([
-            ('stanza-received', ged.GUI1, self._nec_stanza_received),
-            ('stanza-sent', ged.GUI1, self._nec_stanza_sent),
-            ('style-changed', ged.GUI1, self._on_style_changed)
+            ('stanza-received', ged.GUI1, self._on_stanza_received),
+            ('stanza-sent', ged.GUI1, self._on_stanza_sent),
+            ('style-changed', ged.GUI1, self._on_style_changed),
+            ('account-enabled', ged.GUI1, self._on_account_changed),
+            ('account-disabled', ged.GUI1, self._on_account_changed)
         ])
 
     def _on_destroy(self, *args: Any) -> None:
@@ -124,13 +128,24 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._selected_send_account = combo.get_active_id()
 
     def _set_titlebar(self) -> None:
-        if self.selected_account == 'AllAccounts':
+        if self._selected_account == 'AllAccounts':
             title = _('All Accounts')
-        elif self.selected_account == 'AccountWizard':
+        elif self._selected_account == 'AccountWizard':
             title = _('Account Wizard')
         else:
-            title = app.get_jid_from_account(self.selected_account)
+            title = app.get_jid_from_account(self._selected_account)
         self._ui.headerbar.set_subtitle(title)
+
+    def _on_account_changed(self,
+                            event: Union[AccountEnabled, AccountDisabled]
+                            ) -> None:
+        buf = self._ui.sourceview.get_buffer()
+
+        if isinstance(event, AccountEnabled):
+            buf.create_tag(event.account)
+        else:
+            start, end = buf.get_bounds()
+            buf.remove_tag_by_name(event.account, start, end)
 
     def _create_tags(self) -> None:
         tags = [
@@ -141,6 +156,12 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
             'stream',
             'iq'
         ]
+
+        for account in app.settings.get_active_accounts():
+            tags.append(account)
+
+        tags.append('AccountWizard')
+
         for tag_name in tags:
             self._ui.sourceview.get_buffer().create_tag(tag_name)
 
@@ -328,7 +349,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
 
         settings = [
             Setting(SettingKind.COMBO, _('Account'),
-                    SettingType.VALUE, self.selected_account,
+                    SettingType.VALUE, self._selected_account,
                     callback=self._set_account,
                     props={'combo_items': combo_accounts}),
 
@@ -359,7 +380,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
             _('Filter'),
             Gtk.DialogFlags.DESTROY_WITH_PARENT,
             settings,
-            self.selected_account or 'AllAccounts')
+            self._selected_account or 'AllAccounts')
         self.filter_dialog.connect('destroy', self._on_filter_destroyed)
 
     def _on_filter_destroyed(self, _widget: Gtk.Widget) -> None:
@@ -369,8 +390,25 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.sourceview.get_buffer().set_text('')
 
     def _set_account(self, value: str, _data: Any) -> None:
-        self.selected_account = value
+        self._selected_account = value
         self._set_titlebar()
+
+        active_accounts = app.settings.get_active_accounts()
+        active_accounts.append('AccountWizard')
+
+        table = self._ui.sourceview.get_buffer().get_tag_table()
+
+        if value == 'AllAccounts':
+            for account in active_accounts:
+                tag = table.lookup(account)
+                if tag is not None:
+                    tag.set_property('invisible', False)
+            return
+
+        for account in active_accounts:
+            tag = table.lookup(account)
+            if tag is not None:
+                tag.set_property('invisible', account != value)
 
     def _on_setting(self, value: bool, data: str) -> None:
         setattr(self, data, value)
@@ -379,23 +417,19 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         tag = table.lookup(data)
         if tag is None:
             return
+
         if data in ('incoming', 'outgoing'):
             if value:
                 tag.set_priority(table.get_size() - 1)
             else:
                 tag.set_priority(0)
+
         tag.set_property('invisible', value)
 
-    def _nec_stanza_received(self, event: StanzaReceived):
-        if self.selected_account != 'AllAccounts':
-            if event.account != self.selected_account:
-                return
+    def _on_stanza_received(self, event: StanzaReceived):
         self._print_stanza(event, 'incoming')
 
-    def _nec_stanza_sent(self, event: StanzaSent):
-        if self.selected_account != 'AllAccounts':
-            if event.account != self.selected_account:
-                return
+    def _on_stanza_sent(self, event: StanzaSent):
         self._print_stanza(event, 'outgoing')
 
     def _print_stanza(self,
@@ -435,7 +469,8 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
             time=time.strftime('%c'),
             account=account_label,
             stanza=stanza)
-        buffer_.insert_with_tags_by_name(end_iter, stanza, type_, kind)
+        buffer_.insert_with_tags_by_name(
+            end_iter, stanza, type_, kind, event.account)
 
         if is_at_the_end:
             GLib.idle_add(scroll_to_end, self._ui.scrolled)
