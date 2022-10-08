@@ -30,7 +30,7 @@ from packaging.version import Version as V
 import gajim.gui
 
 
-_MIN_NBXMPP_VER = '3.2.2'
+_MIN_NBXMPP_VER = '3.2.4'
 _MIN_GTK_VER = '3.24.30'
 _MIN_CAIRO_VER = '1.16.0'
 _MIN_PYGOBJECT_VER = '3.42.0'
