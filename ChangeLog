@@ -1,3 +1,60 @@
+Gajim 1.5.2 (08 Oct 2022)
+
+  New
+
+  * PEPConfig: Add PEP item view
+  * Add shortcut to restore chats after closing (#11088)
+  * ServerInfo: Add TLS version and cipher suite
+
+  Improvements
+
+  * XMLConsole: Apply account filter to all visible stanzas (#11193)
+  * Features dialog: Simplify statements on Windows
+  * MessageRow: Set text direction for RTL text (#11148)
+  * AvatarSelector: Add border to mark drag and drop zone
+  * Drag and drop: Highlight target areas (#11173)
+  * GroupChatNickCompletion: Simplify suggestions (#11155)
+  * MUC: Add participant menu to avatar
+  * StartChat: Add timeout when requesting MUC disco info
+  * StartChat: Pass message body from XMPP URI (#11140)
+  * Windows: Ellipsize body text in notifications
+  * Emojis: Improve shortcode usability
+  * Avatars: Use PangoCairo for generate_avatar (#10960)
+  * Emojis: Extract codepoints for all emoji variants
+
+  Change
+
+  * Raise nbxmpp version
+  * Show account color bar only when multiple accounts are active
+
+  Performance
+
+  * Remove queue_resize leftover from MessageTextView
+  * SearchView: Update calendar only if widget is visible
+  * SearchView: Speed up clearing of search results (#11158)
+  * Styling: Parse emojis for Darwin only
+
+  Bug Fixes
+
+  * Control: Load events before messages (#11129)
+  * Fix disabling accounts while reconnecting (#11194)
+  * Use custom icon for 'Send Message' action
+  * MessageActionsBox: Don’t fail if no contact is set while updating file actions
+  * Scroll to end after sending message (#10871)
+  * Update chat actions when account state changes (#11184)
+  * StatusIcon: Reset unread state correctly when using Flatpak (#11069)
+  * Notifications: Show correct message sender for MUC notifications (#11177)
+  * Discovery: Don’t allow to join top level components (#11175)
+  * ChatList: Show context menu in correct position (#11165)
+  * Styling: Allow dots in local part of email addresses
+  * ChatList: Set message_id correctly (#11168)
+  * Notifications: React to incoming group chat messages (#11161)
+  * When removing a chat, clear view only if it's currently loaded (#11164)
+  * AccountPage: Disable Ad-Hoc Commands button when offline (#11167)
+  * CreateGroupchatWindow: Fix Create button state when switching MUC type (#11162)
+  * React correctly to UserAvatar updates (#11065)
+  * GajimRemote: Remove not needed shebang
+
 Gajim 1.5.1 (19 Sep 2022)
 
   Bug Fixes
