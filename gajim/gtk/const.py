@@ -248,6 +248,7 @@ MAIN_WIN_ACTIONS = [
     ('edit-workspace', 's', True),
     ('remove-workspace', 's', True),
     ('activate-workspace', 's', True),
+    ('mark-workspace-as-read', 's', True),
     ('add-chat', 'a{sv}', True),
     ('add-group-chat', 'as', True),
     ('add-to-roster', 'a{sv}', True),

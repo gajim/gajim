@@ -186,6 +186,22 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self.deiconify()
         self.present_with_time(Gtk.get_current_event_time())
 
+    def mark_workspace_as_read(self, workspace: str) -> None:
+        chat_list_stack = self._chat_page.get_chat_list_stack()
+        chat_list = chat_list_stack.get_chatlist(workspace)
+        open_chats = chat_list.get_open_chats()
+        for chat in open_chats:
+            self.mark_as_read(chat['account'], chat['jid'])
+
+    def _mark_workspace_as_read(self,
+                                _action: Gio.SimpleAction,
+                                param: GLib.Variant
+                                ) -> None:
+
+        workspace_id = param.get_string() or None
+        if workspace_id is not None:
+            self.mark_workspace_as_read(workspace_id)
+
     def _prepare_window(self) -> None:
         window_width = app.settings.get('mainwin_width')
         window_height = app.settings.get('mainwin_height')
@@ -370,6 +386,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('edit-workspace', self._edit_workspace),
             ('remove-workspace', self._remove_workspace),
             ('activate-workspace', self._activate_workspace),
+            ('mark-workspace-as-read', self._mark_workspace_as_read),
             ('add-chat', self._add_chat),
             ('add-group-chat', self._add_group_chat),
             ('add-to-roster', self._add_to_roster),
