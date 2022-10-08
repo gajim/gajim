@@ -581,27 +581,6 @@ class ChatControl(EventHelper):
         else:
             timestamp = row.db_timestamp
 
-        messages = app.storage.archive.get_conversation_before_after(
-            self.contact.account,
-            self.contact.jid,
-            before,
-            timestamp,
-            n_lines)
-
-        if not messages:
-            self._scrolled_view.set_history_complete(before, True)
-            self._scrolled_view.block_signals(False)
-            return
-
-        self.add_messages(messages)
-
-        if len(messages) < n_lines:
-            self._scrolled_view.set_history_complete(before, True)
-
-        # if self._scrolled_view.get_autoscroll():
-        #    if self._scrolled_view.reduce_message_count(before):
-        #        self._scrolled_view.set_history_complete(before, False)
-
         assert self._contact is not None
         for event in app.storage.events.load(self._contact, before, timestamp):
             if isinstance(event, events.MUCUserJoined):
@@ -638,6 +617,23 @@ class ChatControl(EventHelper):
                 self._process_muc_room_destroyed(event)
             else:
                 raise ValueError('Unknown event: %s' % event)
+
+        messages = app.storage.archive.get_conversation_before_after(
+            self.contact.account,
+            self.contact.jid,
+            before,
+            timestamp,
+            n_lines)
+
+        if not messages:
+            self._scrolled_view.set_history_complete(before, True)
+            self._scrolled_view.block_signals(False)
+            return
+
+        self.add_messages(messages)
+
+        if len(messages) < n_lines:
+            self._scrolled_view.set_history_complete(before, True)
 
         self._scrolled_view.block_signals(False)
 
