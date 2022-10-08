@@ -568,13 +568,14 @@ class Client(Observable):
     def _abort_reconnect(self) -> None:
         self._set_state(ClientState.DISCONNECTED)
         self._disable_reconnect_timer()
-        self.notify('state-changed', SimpleClientState.DISCONNECTED)
 
         if self._destroy_client:
             self._client.destroy()
             self._client = None
             self._destroy_client = False
             self._create_client()
+
+        self.notify('state-changed', SimpleClientState.DISCONNECTED)
 
     def _disable_reconnect_timer(self) -> None:
         if self._reconnect_timer_source is not None:

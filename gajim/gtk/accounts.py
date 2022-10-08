@@ -28,9 +28,8 @@ from gi.repository import Pango
 from gi.repository import GObject
 
 from gajim.common import app
-from gajim.common import ged
 from gajim.common import passwords
-from gajim.common.events import AccountDisconnected
+from gajim.common.const import ClientState
 from gajim.common.i18n import _
 from gajim.common.i18n import Q_
 from gajim.common.settings import AllSettingsT
@@ -541,19 +540,10 @@ class AccountRow(Gtk.ListBoxRow):
                           state: bool,
                           account: str
                           ) -> int:
-        def _on_disconnect(event: AccountDisconnected) -> None:
-            if event.account != account:
-                return
-            app.ged.remove_event_handler('account-disconnected',
-                                         ged.POSTGUI,
-                                         _on_disconnect)
-            app.interface.disable_account(account)
 
         def _disable() -> None:
-            app.ged.register_event_handler('account-disconnected',
-                                           ged.POSTGUI,
-                                           _on_disconnect)
             client = app.get_client(account)
+            client.connect_signal('state-changed', self._on_state_changed)
             client.change_status('offline', 'offline')
             switch.set_state(state)
             self._set_label(state)
@@ -584,6 +574,15 @@ class AccountRow(Gtk.ListBoxRow):
             app.interface.disable_account(account)
 
         return Gdk.EVENT_PROPAGATE
+
+    def _on_state_changed(self,
+                          client: types.Client,
+                          _signal_name: str,
+                          client_state: ClientState
+                          ) -> None:
+
+        if client_state.is_disconnected:
+            app.interface.disable_account(client.account)
 
 
 class AddNewAccountPage(Gtk.Box):
