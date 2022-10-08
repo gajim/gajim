@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -272,12 +272,6 @@ msgid "<empty>"
 msgstr ""
 
 msgid "<error>"
-msgstr ""
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr ""
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
 msgstr ""
 
 msgid "?Ask (for Subscription):None"
@@ -782,9 +776,6 @@ msgstr ""
 msgid "Anyone can join this group chat"
 msgstr ""
 
-msgid "App Indicator Icon"
-msgstr ""
-
 msgid "Application verification failure"
 msgstr ""
 
@@ -1210,6 +1201,9 @@ msgstr ""
 msgid "Choose the contact's groups"
 msgstr ""
 
+msgid "Cipher Suite"
+msgstr ""
+
 msgid "City"
 msgstr ""
 
@@ -1290,10 +1284,6 @@ msgid "Configuration"
 msgstr ""
 
 msgid "Configure"
-msgstr ""
-
-#, python-format
-msgid "Configure %s"
 msgstr ""
 
 msgid "Configure logging system"
@@ -1707,7 +1697,7 @@ msgid "Enabled"
 msgstr ""
 
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr ""
 
@@ -1717,7 +1707,7 @@ msgstr ""
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr ""
 
-msgid "Enables Gajim to provide a system notification area icon"
+msgid "Enables Gajim to provide a notification area icon"
 msgstr ""
 
 msgid ""
@@ -1875,7 +1865,7 @@ msgstr ""
 msgid "Fake audio output"
 msgstr ""
 
-msgid "Feature not available under Windows"
+msgid "Feature not available on Windows"
 msgstr ""
 
 msgid "Features"
@@ -2279,10 +2269,6 @@ msgstr ""
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
-msgstr ""
-
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
 msgstr ""
 
 msgid "If enabled, pressing Esc closes a tab/window."
@@ -2812,6 +2798,9 @@ msgstr ""
 msgid "Not Connected"
 msgstr ""
 
+msgid "Not accelerated"
+msgstr ""
+
 msgid "Not available"
 msgstr ""
 
@@ -2900,6 +2889,9 @@ msgid "Open folder"
 msgstr ""
 
 msgid "Open search bar"
+msgstr ""
+
+msgid "OpenGL accelerated"
 msgstr ""
 
 msgid "Operating System"
@@ -3017,7 +3009,10 @@ msgstr ""
 msgid "Paste Last Input"
 msgstr ""
 
-msgid "Paste as quote"
+msgid "Paste as Code Block"
+msgstr ""
+
+msgid "Paste as Quote"
 msgstr ""
 
 msgid "Path length constraint exceeded"
@@ -3445,6 +3440,9 @@ msgstr ""
 msgid "Restart Gajim for changes to take affect"
 msgstr ""
 
+msgid "Restore chat"
+msgstr ""
+
 msgid "Restore last state"
 msgstr ""
 
@@ -3755,6 +3753,9 @@ msgid "Show Commands"
 msgstr ""
 
 msgid "Show Contact Infos"
+msgstr ""
+
+msgid "Show Content"
 msgstr ""
 
 msgid "Show Gajim"
@@ -4098,6 +4099,9 @@ msgid "Synchronizing Chat History…"
 msgstr ""
 
 msgid "System"
+msgstr ""
+
+msgid "TLS Version"
 msgstr ""
 
 #, python-format
@@ -4645,9 +4649,6 @@ msgid "Width of group chat roster in pixel"
 msgstr ""
 
 msgid "Windows"
-msgstr ""
-
-msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
 msgid "Without a connection, you can not browse available services"

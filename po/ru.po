@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
 "PO-Revision-Date: 2022-07-23 19:36+0000\n"
 "Last-Translator: Elijah Draga <waytoroot@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -298,12 +298,6 @@ msgstr "пусто"
 
 msgid "<error>"
 msgstr "<error>"
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr "<span color=\"green\" font-weight=\"bold\">OpenGL</span> ускорение"
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
-msgstr "<span color=\"yellow\" font-weight=\"bold\">Без ускорения</span>"
 
 msgid "?Ask (for Subscription):None"
 msgstr "?Запрос (на подписку):Нет"
@@ -838,10 +832,6 @@ msgstr "Кто угодно может зайти в эту комнату"
 msgid "Anyone can join this group chat"
 msgstr "Кто угодно может зайти в эту комнату"
 
-#, fuzzy
-msgid "App Indicator Icon"
-msgstr "Приложения"
-
 msgid "Application verification failure"
 msgstr "Ошибка при проверке приложения"
 
@@ -1298,6 +1288,9 @@ msgstr "Выбирете из различных стилей эмодзи"
 msgid "Choose the contact's groups"
 msgstr "Показать информацию о контакте (Ctrl+I)"
 
+msgid "Cipher Suite"
+msgstr ""
+
 msgid "City"
 msgstr "Город"
 
@@ -1385,10 +1378,6 @@ msgstr "Конфигурация"
 
 msgid "Configure"
 msgstr "Настроить"
-
-#, python-format
-msgid "Configure %s"
-msgstr "Настроить %s"
 
 msgid "Configure logging system"
 msgstr "Настройки системы логирования"
@@ -1840,8 +1829,9 @@ msgstr "Включить"
 msgid "Enabled"
 msgstr "Включено"
 
+#, fuzzy
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr ""
 "Позволяет Gajim измерять время простоя вашего компьютера для автоматической "
@@ -1854,7 +1844,7 @@ msgid "Enables Gajim to provide Audio and Video chats"
 msgstr "Позволяет Gajim проводить аудио- и видеочаты"
 
 #, fuzzy
-msgid "Enables Gajim to provide a system notification area icon"
+msgid "Enables Gajim to provide a notification area icon"
 msgstr "Позволяет Gajim воспроизводить звуки для различных уведомлений"
 
 msgid ""
@@ -2032,7 +2022,8 @@ msgstr "Не удалось создать групповой чат"
 msgid "Fake audio output"
 msgstr "Виртуальный аудио выход"
 
-msgid "Feature not available under Windows"
+#, fuzzy
+msgid "Feature not available on Windows"
 msgstr "Функция недоступна в Windows"
 
 msgid "Features"
@@ -2483,12 +2474,6 @@ msgstr ""
 "Если включено, Gajim попытается использовать STUN-сервер при использовании "
 "Jingle, который указан опцией 'stun_server', либо предоставленный XMPP-"
 "сервером."
-
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
-msgstr ""
-"Если активно, автодополнение ников в групповых чатах будет работать как "
-"автодополнение в консоли."
 
 msgid "If enabled, pressing Esc closes a tab/window."
 msgstr "Если активно, то нажатие клавиши Escape будет закрывать вкладку/окно."
@@ -3070,6 +3055,10 @@ msgid "Not Connected"
 msgstr "Нет соединения"
 
 #, fuzzy
+msgid "Not accelerated"
+msgstr "Не зашифровано"
+
+#, fuzzy
 msgid "Not available"
 msgstr "Недоступен"
 
@@ -3163,6 +3152,9 @@ msgid "Open folder"
 msgstr "Открыть _директорию"
 
 msgid "Open search bar"
+msgstr ""
+
+msgid "OpenGL accelerated"
 msgstr ""
 
 #, fuzzy
@@ -3287,7 +3279,12 @@ msgstr "Вставить изображение"
 msgid "Paste Last Input"
 msgstr "Вставить последний ввод"
 
-msgid "Paste as quote"
+#, fuzzy
+msgid "Paste as Code Block"
+msgstr "Вставить как цитату"
+
+#, fuzzy
+msgid "Paste as Quote"
 msgstr "Вставить как цитату"
 
 msgid "Path length constraint exceeded"
@@ -3758,6 +3755,10 @@ msgid "Restart Gajim for changes to take affect"
 msgstr ""
 "Для вступления в силу некоторых настроек может потребоваться перезапуск"
 
+#, fuzzy
+msgid "Restore chat"
+msgstr "Восстановить последнее состояние"
+
 msgid "Restore last state"
 msgstr "Восстановить последнее состояние"
 
@@ -4101,6 +4102,10 @@ msgstr "Команды"
 
 #, fuzzy
 msgid "Show Contact Infos"
+msgstr "Показать только активных"
+
+#, fuzzy
+msgid "Show Content"
 msgstr "Показать только активных"
 
 #, fuzzy
@@ -4497,6 +4502,10 @@ msgstr "Синхронизировать историю…"
 
 msgid "System"
 msgstr "Система"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "Версия"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5096,11 +5105,6 @@ msgstr "Ширина списка групповых чатов в пиксел�
 
 msgid "Windows"
 msgstr "Windows"
-
-msgid "Windows Credential Vault is used for secure password storage"
-msgstr ""
-"Для безопасного хранения паролей используется хранилище учетных данных "
-"Windows"
 
 msgid "Without a connection, you can not browse available services"
 msgstr "Для просмотра сервисов необходимо сначала подключиться к серверу"
@@ -5852,6 +5856,13 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
 #~ msgstr "<b>%(nick)s</b> из <b>%(room_name)s</b> просит голос"
 
+#~ msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
+#~ msgstr "<span color=\"green\" font-weight=\"bold\">OpenGL</span> ускорение"
+
+#, fuzzy
+#~ msgid "<span color=\"orange\" font-weight=\"bold\">Not accelerated</span>"
+#~ msgstr "<span color=\"yellow\" font-weight=\"bold\">Без ускорения</span>"
+
 #~ msgid "?CLI:account"
 #~ msgstr "?CLI:учетная запись"
 
@@ -5884,6 +5895,10 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgstr ""
 #~ "Разрешить скрыть окно списка контактов, даже если значок области "
 #~ "уведомлений не отображается."
+
+#, fuzzy
+#~ msgid "App Indicator Icon"
+#~ msgstr "Приложения"
 
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
@@ -5947,6 +5962,9 @@ msgstr "Выберите изображение или перетащите ег
 #~ "Команда отключена. Эту команду можно включить, установив для параметра "
 #~ "command_system_execute значение True в ACE (Advanced Configuration "
 #~ "Editor)."
+
+#~ msgid "Configure %s"
+#~ msgstr "Настроить %s"
 
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr "На машине отсутствует D-Bus или модуль питона для нее"
@@ -6050,6 +6068,13 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgstr ""
 #~ "Если включено, то Gajim будет выполнять команды (/show, /sh, /execute, /"
 #~ "exec)."
+
+#~ msgid ""
+#~ "If enabled, completion in group chats will be like a shell auto-"
+#~ "completion."
+#~ msgstr ""
+#~ "Если активно, автодополнение ников в групповых чатах будет работать как "
+#~ "автодополнение в консоли."
 
 #~ msgid "Invalid affiliation given"
 #~ msgstr "Указана неверная принадлежность"
@@ -6336,6 +6361,11 @@ msgstr "Выберите изображение или перетащите ег
 
 #~ msgid "Voice chats are not available"
 #~ msgstr "Голосовые чаты недоступны"
+
+#~ msgid "Windows Credential Vault is used for secure password storage"
+#~ msgstr ""
+#~ "Для безопасного хранения паролей используется хранилище учетных данных "
+#~ "Windows"
 
 #~ msgid "XML to send"
 #~ msgstr "Отправляемый XML"

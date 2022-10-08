@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -323,12 +323,6 @@ msgstr "<ריק>"
 #, fuzzy
 msgid "<error>"
 msgstr "שגיאה"
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr ""
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
-msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "אין"
@@ -943,10 +937,6 @@ msgstr "%s נכנס/ה לשיחת קבוצה"
 msgid "Anyone can join this group chat"
 msgstr "%s נכנס/ה לשיחת קבוצה"
 
-#, fuzzy
-msgid "App Indicator Icon"
-msgstr "<b>יישומים</b>"
-
 msgid "Application verification failure"
 msgstr "כשל אימות פניה"
 
@@ -1453,6 +1443,9 @@ msgstr ""
 msgid "Choose the contact's groups"
 msgstr "הוספת איש קשר זה לרשימה (Ctrl+D)"
 
+msgid "Cipher Suite"
+msgstr ""
+
 msgid "City"
 msgstr ""
 
@@ -1551,10 +1544,6 @@ msgstr "תצורה"
 
 msgid "Configure"
 msgstr "תצורה"
-
-#, python-format
-msgid "Configure %s"
-msgstr "תצורת ‫%s"
 
 #, fuzzy
 msgid "Configure logging system"
@@ -2066,7 +2055,7 @@ msgstr "מאופשר"
 # על מנת להגדיר
 #, fuzzy
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr ""
 "יכולת למדוד את הזמן אשר בו המערכת מצויה בחוסר פעילות, בכדי לקבוע מצב חיבור "
@@ -2081,7 +2070,7 @@ msgid "Enables Gajim to provide Audio and Video chats"
 msgstr "יכולת לערוך שיחות קוליות וחזותיות."
 
 #, fuzzy
-msgid "Enables Gajim to provide a system notification area icon"
+msgid "Enables Gajim to provide a notification area icon"
 msgstr "יכולת לערוך שיחות קוליות וחזותיות."
 
 # העברת שערים
@@ -2283,7 +2272,7 @@ msgid "Fake audio output"
 msgstr "פלט שמע מזויף"
 
 #, fuzzy
-msgid "Feature not available under Windows"
+msgid "Feature not available on Windows"
 msgstr "תכונה זו לא זמינה תחת Windows."
 
 msgid "Features"
@@ -2771,14 +2760,6 @@ msgstr ""
 "כאשר מופעלת, Gajim ינסה לעשות שימש בשרת STUN כאשר jingle הינו מצוי בשימוש. "
 "זה אשר הוגדר בתוך אפשרות \"stun_server\", או בזה אשר ניתן על ידי שרת jabber "
 "נתון."
-
-# BUG: Dot at end
-#, fuzzy
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
-msgstr ""
-"כאשר מופעלת, השלמה בתוך שיחות קבוצה תיעשה בדומה להשלמה אוטומטית במעטפת "
-"(shell) של מסוף"
 
 #, fuzzy
 msgid "If enabled, pressing Esc closes a tab/window."
@@ -3416,6 +3397,10 @@ msgid "Not Connected"
 msgstr "מחובר"
 
 #, fuzzy
+msgid "Not accelerated"
+msgstr "לא הותחלה"
+
+#, fuzzy
 msgid "Not available"
 msgstr "לא זמין"
 
@@ -3519,6 +3504,9 @@ msgid "Open folder"
 msgstr "_פתח תיקיה מכילה"
 
 msgid "Open search bar"
+msgstr ""
+
+msgid "OpenGL accelerated"
 msgstr ""
 
 #, fuzzy
@@ -3650,8 +3638,13 @@ msgstr "בחירת תמונה"
 msgid "Paste Last Input"
 msgstr ""
 
-msgid "Paste as quote"
-msgstr ""
+#, fuzzy
+msgid "Paste as Code Block"
+msgstr "מיקוד דואר"
+
+#, fuzzy
+msgid "Paste as Quote"
+msgstr "בחירת תמונה"
 
 msgid "Path length constraint exceeded"
 msgstr "מגבלת אורך נתיב מוצתה"
@@ -4183,6 +4176,11 @@ msgstr "<b>הערה:</b> עליך לאתחל את Gajim כדי שהגדרות מ
 
 # By last state
 #, fuzzy
+msgid "Restore chat"
+msgstr "לפי מצב אחרון"
+
+# By last state
+#, fuzzy
 msgid "Restore last state"
 msgstr "לפי מצב אחרון"
 
@@ -4561,6 +4559,10 @@ msgstr "cli"
 
 #, fuzzy
 msgid "Show Contact Infos"
+msgstr "הצג אנשי קשר _פעילים בלבד"
+
+#, fuzzy
+msgid "Show Content"
 msgstr "הצג אנשי קשר _פעילים בלבד"
 
 # In Hebrew: גאג'ים
@@ -4983,6 +4985,10 @@ msgstr "סנכרון"
 #, fuzzy
 msgid "System"
 msgstr "<b>מערכת:</b>"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "גרסא:"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5614,9 +5620,6 @@ msgid "Width of group chat roster in pixel"
 msgstr ""
 
 msgid "Windows"
-msgstr ""
-
-msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
 # BUG: Dot
@@ -6499,6 +6502,10 @@ msgstr ""
 #~ msgstr "אפשר הסתרת הרשימה אפילו כאשר סמל מגש איננו מוצג."
 
 #, fuzzy
+#~ msgid "App Indicator Icon"
+#~ msgstr "<b>יישומים</b>"
+
+#, fuzzy
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
@@ -6558,6 +6565,9 @@ msgstr ""
 
 #~ msgid "Clear the text window"
 #~ msgstr "טיהור תמליל חלון"
+
+#~ msgid "Configure %s"
+#~ msgstr "תצורת ‫%s"
 
 #, fuzzy
 #~ msgid "Display names of all group chat participants"
@@ -6649,6 +6659,15 @@ msgstr ""
 #, fuzzy
 #~ msgid "If enabled, Gajim will add * and [n] in contact list window title."
 #~ msgstr "כאשר מסומן, Gajim יציג את מצבי הרוח של אנשי קשר בחלון הרשימה"
+
+# BUG: Dot at end
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, completion in group chats will be like a shell auto-"
+#~ "completion."
+#~ msgstr ""
+#~ "כאשר מופעלת, השלמה בתוך שיחות קבוצה תיעשה בדומה להשלמה אוטומטית במעטפת "
+#~ "(shell) של מסוף"
 
 #~ msgid "Invalid affiliation given"
 #~ msgstr "ניתן שיוך שגוי"

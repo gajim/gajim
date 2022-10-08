@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
 "PO-Revision-Date: 2022-01-13 21:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -290,12 +290,6 @@ msgstr ""
 #, fuzzy
 msgid "<error>"
 msgstr "Hata"
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr ""
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
-msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "?Ask (for Subscription):Hiç biri"
@@ -902,10 +896,6 @@ msgid "Anyone can join this group chat"
 msgstr "%s grup sohbete katıldı"
 
 #, fuzzy
-msgid "App Indicator Icon"
-msgstr "<b>Uygulamalar</b>"
-
-#, fuzzy
 msgid "Application verification failure"
 msgstr "'%s' çözülürken geçici bozukluk"
 
@@ -1412,6 +1402,9 @@ msgstr ""
 msgid "Choose the contact's groups"
 msgstr "Kişiyi listeye ekle"
 
+msgid "Cipher Suite"
+msgstr ""
+
 msgid "City"
 msgstr ""
 
@@ -1510,10 +1503,6 @@ msgstr "Oda Yerleştirme"
 
 #, fuzzy
 msgid "Configure"
-msgstr "_Yerleştir"
-
-#, fuzzy, python-format
-msgid "Configure %s"
 msgstr "_Yerleştir"
 
 msgid "Configure logging system"
@@ -2009,7 +1998,7 @@ msgid "Enabled"
 msgstr "Etkin"
 
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr ""
 
@@ -2019,7 +2008,7 @@ msgstr ""
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr ""
 
-msgid "Enables Gajim to provide a system notification area icon"
+msgid "Enables Gajim to provide a notification area icon"
 msgstr ""
 
 msgid ""
@@ -2206,8 +2195,9 @@ msgstr "Tam-Ekrandan Çık"
 msgid "Fake audio output"
 msgstr "Ses çıkış aygıtı"
 
-msgid "Feature not available under Windows"
-msgstr ""
+#, fuzzy
+msgid "Feature not available on Windows"
+msgstr "Hiç bir hesap bulunmiyor"
 
 msgid "Features"
 msgstr "Özellikler:"
@@ -2675,10 +2665,6 @@ msgstr ""
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
-msgstr ""
-
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
 msgstr ""
 
 msgid "If enabled, pressing Esc closes a tab/window."
@@ -3292,6 +3278,10 @@ msgid "Not Connected"
 msgstr "Bağlantılı"
 
 #, fuzzy
+msgid "Not accelerated"
+msgstr "Başlatılmadı"
+
+#, fuzzy
 msgid "Not available"
 msgstr "Mevcut Değil"
 
@@ -3396,6 +3386,9 @@ msgid "Open folder"
 msgstr "Gmail Gelen Kutusunu _Aç"
 
 msgid "Open search bar"
+msgstr ""
+
+msgid "OpenGL accelerated"
 msgstr ""
 
 #, fuzzy
@@ -3527,8 +3520,13 @@ msgstr "Resim seç"
 msgid "Paste Last Input"
 msgstr ""
 
-msgid "Paste as quote"
-msgstr ""
+#, fuzzy
+msgid "Paste as Code Block"
+msgstr "<b>Posta Kodu:</b>"
+
+#, fuzzy
+msgid "Paste as Quote"
+msgstr "Resim seç"
 
 #, fuzzy
 msgid "Path length constraint exceeded"
@@ -4043,6 +4041,10 @@ msgid "Restart Gajim for changes to take affect"
 msgstr ""
 
 #, fuzzy
+msgid "Restore chat"
+msgstr "Son durum: %s"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Son durum: %s"
 
@@ -4417,6 +4419,10 @@ msgstr "komut"
 
 #, fuzzy
 msgid "Show Contact Infos"
+msgstr "Sadece _Çecredeki Kişileri Göster"
+
+#, fuzzy
+msgid "Show Content"
 msgstr "Sadece _Çecredeki Kişileri Göster"
 
 #, fuzzy
@@ -4828,6 +4834,10 @@ msgstr "Kişileri eşzamana getir"
 #, fuzzy
 msgid "System"
 msgstr "<b>Sistem:</b>"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "GTK+ Runtime Sürümü"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5441,9 +5451,6 @@ msgid "Width of group chat roster in pixel"
 msgstr ""
 
 msgid "Windows"
-msgstr ""
-
-msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
 msgid "Without a connection, you can not browse available services"
@@ -6243,6 +6250,10 @@ msgstr ""
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "Komuta _Yürüt"
 
+#, fuzzy
+#~ msgid "App Indicator Icon"
+#~ msgstr "<b>Uygulamalar</b>"
+
 #~ msgid "Arguments:"
 #~ msgstr "Argümanlar:"
 
@@ -6286,6 +6297,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Clear the text window"
 #~ msgstr "Pencereyi gizler"
+
+#, fuzzy
+#~ msgid "Configure %s"
+#~ msgstr "_Yerleştir"
 
 #, fuzzy
 #~ msgid "Display names of all group chat participants"

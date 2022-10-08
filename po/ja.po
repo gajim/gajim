@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
 "PO-Revision-Date: 2022-05-26 22:21+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -298,12 +298,6 @@ msgstr "<なし>"
 
 msgid "<error>"
 msgstr "<エラー>"
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr "<span color=\"green\" font-weight=\"bold\">OpenGL</span> 高速化"
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
-msgstr "<span color=\"yellow\" font-weight=\"bold\">非高速化</span>"
 
 msgid "?Ask (for Subscription):None"
 msgstr "なし"
@@ -814,9 +808,6 @@ msgstr "誰でも参加できます"
 msgid "Anyone can join this group chat"
 msgstr "誰でもこの談話室に参加できます"
 
-msgid "App Indicator Icon"
-msgstr "App Indicator Icon"
-
 msgid "Application verification failure"
 msgstr "アプリケーションの検証に失敗しました"
 
@@ -1256,6 +1247,9 @@ msgstr "絵文字のスタイルを選択"
 msgid "Choose the contact's groups"
 msgstr "相手先のグループを選択"
 
+msgid "Cipher Suite"
+msgstr ""
+
 msgid "City"
 msgstr "市(区町村)"
 
@@ -1340,10 +1334,6 @@ msgstr "摘要"
 
 msgid "Configure"
 msgstr "調整"
-
-#, python-format
-msgid "Configure %s"
-msgstr "%s を調整"
 
 msgid "Configure logging system"
 msgstr "ログシステムを設定"
@@ -1766,8 +1756,9 @@ msgstr "有効"
 msgid "Enabled"
 msgstr "有効"
 
+#, fuzzy
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr "在席状況を自動的に変更するため、操作のない時間を計測します"
 
@@ -1777,7 +1768,8 @@ msgstr "さまざまな通知の音を鳴らします"
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr "音声・ビデオチャットを可能にします"
 
-msgid "Enables Gajim to provide a system notification area icon"
+#, fuzzy
+msgid "Enables Gajim to provide a notification area icon"
 msgstr "システム通知エリアのアイコンを使います"
 
 msgid ""
@@ -1940,7 +1932,8 @@ msgstr "アバターの生成に失敗しました。"
 msgid "Fake audio output"
 msgstr "偽の音声出力"
 
-msgid "Feature not available under Windows"
+#, fuzzy
+msgid "Feature not available on Windows"
 msgstr "Windows ではこの機能は無効です"
 
 msgid "Features"
@@ -2372,10 +2365,6 @@ msgstr ""
 "有効の場合、Gajim は Jingle を使う際に STUN サーバーを利用しようとします。"
 "サーバーは 'stun_server' オプションか、または XMPP サーバーによって与えられま"
 "す。"
-
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
-msgstr "有効の場合、談話室での補完をシェルの自動補完のようにします。"
 
 msgid "If enabled, pressing Esc closes a tab/window."
 msgstr "有効の場合、エスケープキーを押すことでタブまたはウィンドウを閉じます。"
@@ -2936,6 +2925,10 @@ msgstr "不在"
 msgid "Not Connected"
 msgstr "接続されていません"
 
+#, fuzzy
+msgid "Not accelerated"
+msgstr "暗号化されていません"
+
 msgid "Not available"
 msgstr "利用できません"
 
@@ -3030,6 +3023,9 @@ msgstr "フォルダを開く"
 
 msgid "Open search bar"
 msgstr "検索バーを開く"
+
+msgid "OpenGL accelerated"
+msgstr ""
 
 msgid "Operating System"
 msgstr "オペレーティングシステム"
@@ -3150,7 +3146,12 @@ msgstr "画像を貼り付け"
 msgid "Paste Last Input"
 msgstr "最後の入力を貼り付け"
 
-msgid "Paste as quote"
+#, fuzzy
+msgid "Paste as Code Block"
+msgstr "引用として貼付"
+
+#, fuzzy
+msgid "Paste as Quote"
 msgstr "引用として貼付"
 
 msgid "Path length constraint exceeded"
@@ -3599,6 +3600,11 @@ msgid "Restart Gajim for changes to take affect"
 msgstr "設定を有効にするには Gajim を再起動してください"
 
 # 起動時に名簿を表示するか
+#, fuzzy
+msgid "Restore chat"
+msgstr "以前の状態を復元"
+
+# 起動時に名簿を表示するか
 msgid "Restore last state"
 msgstr "以前の状態を復元"
 
@@ -3918,6 +3924,10 @@ msgid "Show Commands"
 msgstr "コマンドを表示する"
 
 msgid "Show Contact Infos"
+msgstr "相手先の情報を表示"
+
+#, fuzzy
+msgid "Show Content"
 msgstr "相手先の情報を表示"
 
 #, fuzzy
@@ -4291,6 +4301,10 @@ msgstr "履歴を同期…"
 
 msgid "System"
 msgstr "システム"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "バージョン"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -4870,9 +4884,6 @@ msgstr "談話室の名簿の幅(ピクセル)"
 
 msgid "Windows"
 msgstr "Windows"
-
-msgid "Windows Credential Vault is used for secure password storage"
-msgstr "安全なパスワード保存に Windows Credential Vault を使用します"
 
 msgid "Without a connection, you can not browse available services"
 msgstr "接続しないと、サービスを見ることはできません"
@@ -5606,6 +5617,13 @@ msgstr "…またはここにドロップ"
 #~ msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
 #~ msgstr "<b>%(nick)s</b> が <b>%(room_name)s</b> で発言権を求めています"
 
+#~ msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
+#~ msgstr "<span color=\"green\" font-weight=\"bold\">OpenGL</span> 高速化"
+
+#, fuzzy
+#~ msgid "<span color=\"orange\" font-weight=\"bold\">Not accelerated</span>"
+#~ msgstr "<span color=\"yellow\" font-weight=\"bold\">非高速化</span>"
+
 #~ msgid "?CLI:account"
 #~ msgstr "?CLI:アカウント"
 
@@ -5638,6 +5656,9 @@ msgstr "…またはここにドロップ"
 #~ msgstr ""
 #~ "トレイアイコンが表示されていない状態でも相手先一覧ウィンドウを閉じることを"
 #~ "許します。"
+
+#~ msgid "App Indicator Icon"
+#~ msgstr "App Indicator Icon"
 
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
@@ -5698,6 +5719,9 @@ msgstr "…またはここにドロップ"
 #~ msgstr ""
 #~ "コマンドは無効です。このコマンドは、詳細設定エディタ(ACE)で "
 #~ "'command_system_execute' を設定して、有効にできます。"
+
+#~ msgid "Configure %s"
+#~ msgstr "%s を調整"
 
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr ""
@@ -5794,6 +5818,11 @@ msgstr "…またはここにドロップ"
 #~ "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 #~ msgstr ""
 #~ "有効の場合、Gajim はコマンドを実行します(/show, /sh, /execute, /exec)。"
+
+#~ msgid ""
+#~ "If enabled, completion in group chats will be like a shell auto-"
+#~ "completion."
+#~ msgstr "有効の場合、談話室での補完をシェルの自動補完のようにします。"
 
 #~ msgid "Invalid affiliation given"
 #~ msgstr "分掌が正しくありません"
@@ -6073,6 +6102,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Voice chats are not available"
 #~ msgstr "音声チャットは有効ではありません"
+
+#~ msgid "Windows Credential Vault is used for secure password storage"
+#~ msgstr "安全なパスワード保存に Windows Credential Vault を使用します"
 
 #~ msgid "XML to send"
 #~ msgstr "送信する XML"

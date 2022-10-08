@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
 "PO-Revision-Date: 2022-07-18 19:52+0000\n"
 "Last-Translator: Volodymyr Smoliar <v_2e@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -296,12 +296,6 @@ msgstr "<порожньо>"
 
 msgid "<error>"
 msgstr "<помилка>"
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr "<span color=\"green\" font-weight=\"bold\">OpenGL</span> прискорення"
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
-msgstr "<span color=\"yellow\" font-weight=\"bold\">Без прискорення</span>"
 
 msgid "?Ask (for Subscription):None"
 msgstr "?Ask (for Subscription):Немає"
@@ -836,10 +830,6 @@ msgstr "Хто завгодно може приєднатися"
 msgid "Anyone can join this group chat"
 msgstr "Хто завгодно може приєднатися до цієї групової балачки"
 
-#, fuzzy
-msgid "App Indicator Icon"
-msgstr "Програми"
-
 msgid "Application verification failure"
 msgstr "Помилка під час перевірки програми"
 
@@ -1285,6 +1275,9 @@ msgstr "Виберіть стиль емодзі"
 msgid "Choose the contact's groups"
 msgstr "Обрати групи для контакту"
 
+msgid "Cipher Suite"
+msgstr ""
+
 msgid "City"
 msgstr "Місто"
 
@@ -1368,10 +1361,6 @@ msgstr "Налаштування"
 
 msgid "Configure"
 msgstr "Налаштувати"
-
-#, python-format
-msgid "Configure %s"
-msgstr "Налаштувати %s"
 
 msgid "Configure logging system"
 msgstr "Налаштувати ведення журналів"
@@ -1795,8 +1784,9 @@ msgstr "Увімкнути"
 msgid "Enabled"
 msgstr "Увімкнено"
 
+#, fuzzy
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr ""
 "Можливість вимірювання часу відсутності активності на комп'ютері для "
@@ -1808,7 +1798,8 @@ msgstr "Можливість програвати звуки сповіщень"
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr "Можливість проводити аудіо та відео розмови"
 
-msgid "Enables Gajim to provide a system notification area icon"
+#, fuzzy
+msgid "Enables Gajim to provide a notification area icon"
 msgstr "Можливість показувати значок в системному лотку"
 
 msgid ""
@@ -1969,7 +1960,8 @@ msgstr "Не вдалося згенерувати аватару."
 msgid "Fake audio output"
 msgstr "Фальшивий вихід аудіо"
 
-msgid "Feature not available under Windows"
+#, fuzzy
+msgid "Feature not available on Windows"
 msgstr "Функція недоступна у Windows"
 
 msgid "Features"
@@ -2439,13 +2431,6 @@ msgstr ""
 "Якщо ввімкнено, Gajim спробує використати STUN-сервер для Jingle. Буде "
 "використано значення параметру \"stun_server\", або отримане з серверу "
 "Jabber."
-
-#, fuzzy
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
-msgstr ""
-"Якщо Істино, доповнення у групових балачках будуть схожі на автодоповнення "
-"командної оболонки."
 
 #, fuzzy
 msgid "If enabled, pressing Esc closes a tab/window."
@@ -3078,6 +3063,10 @@ msgid "Not Connected"
 msgstr "З'єднано"
 
 #, fuzzy
+msgid "Not accelerated"
+msgstr "Не розпочато"
+
+#, fuzzy
 msgid "Not available"
 msgstr "Дуже далеко"
 
@@ -3181,6 +3170,9 @@ msgid "Open folder"
 msgstr "В_ідкриту теку, яка містить цей файл"
 
 msgid "Open search bar"
+msgstr ""
+
+msgid "OpenGL accelerated"
 msgstr ""
 
 #, fuzzy
@@ -3313,8 +3305,13 @@ msgstr "Вибрати зображення"
 msgid "Paste Last Input"
 msgstr ""
 
-msgid "Paste as quote"
-msgstr ""
+#, fuzzy
+msgid "Paste as Code Block"
+msgstr "поштовий індекс"
+
+#, fuzzy
+msgid "Paste as Quote"
+msgstr "Вибрати зображення"
 
 msgid "Path length constraint exceeded"
 msgstr "Перевищення обмеження на довжину адреси"
@@ -3827,6 +3824,10 @@ msgid "Restart Gajim for changes to take affect"
 msgstr "Ви маєте перезавантажити Gajim, щоб деякі з параметрів набули чинності"
 
 #, fuzzy
+msgid "Restore chat"
+msgstr "Попередній стан: %"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Попередній стан: %"
 
@@ -4196,6 +4197,10 @@ msgstr "команда"
 
 #, fuzzy
 msgid "Show Contact Infos"
+msgstr "Показувати лише _активні контакти"
+
+#, fuzzy
+msgid "Show Content"
 msgstr "Показувати лише _активні контакти"
 
 #, fuzzy
@@ -4607,6 +4612,10 @@ msgstr "Синхронізувати історію"
 
 msgid "System"
 msgstr "Система"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "Версія:"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5228,9 +5237,6 @@ msgid "Width of group chat roster in pixel"
 msgstr ""
 
 msgid "Windows"
-msgstr ""
-
-msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
 msgid "Without a connection, you can not browse available services"
@@ -6057,6 +6063,14 @@ msgstr ""
 #~ msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
 #~ msgstr "<b>%(nick)s</b> з <b>%(room_name)s</b> запитує голос"
 
+#~ msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
+#~ msgstr ""
+#~ "<span color=\"green\" font-weight=\"bold\">OpenGL</span> прискорення"
+
+#, fuzzy
+#~ msgid "<span color=\"orange\" font-weight=\"bold\">Not accelerated</span>"
+#~ msgstr "<span color=\"yellow\" font-weight=\"bold\">Без прискорення</span>"
+
 #~ msgid "?CLI:account"
 #~ msgstr "?CLI:обліковий запис"
 
@@ -6091,6 +6105,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Дозволити ховати вікно реєстру навіть якщо піктограму сповіщення не "
 #~ "задіяно"
+
+#, fuzzy
+#~ msgid "App Indicator Icon"
+#~ msgstr "Програми"
 
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
@@ -6156,6 +6174,9 @@ msgstr ""
 #~ "Команду заборонено. Її можна дозволити, встановивши параметр "
 #~ "«command_system_execute» у значення True в РДН (Редакторі додаткових "
 #~ "налаштувань)."
+
+#~ msgid "Configure %s"
+#~ msgstr "Налаштувати %s"
 
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr "У цій системі немає D-Bus або відсутній потрібний модуль python"
@@ -6244,6 +6265,14 @@ msgstr ""
 #~ msgstr ""
 #~ "Якщо буде позначено цей пункт, Gajim показуватиме настрій контактів у "
 #~ "вікні реєстру"
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, completion in group chats will be like a shell auto-"
+#~ "completion."
+#~ msgstr ""
+#~ "Якщо Істино, доповнення у групових балачках будуть схожі на "
+#~ "автодоповнення командної оболонки."
 
 #~ msgid "Invalid affiliation given"
 #~ msgstr "Вказано невірні права"

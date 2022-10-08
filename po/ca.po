@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -275,12 +275,6 @@ msgid "<empty>"
 msgstr ""
 
 msgid "<error>"
-msgstr ""
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr ""
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
 msgstr ""
 
 msgid "?Ask (for Subscription):None"
@@ -871,10 +865,6 @@ msgstr ""
 msgid "Anyone can join this group chat"
 msgstr ""
 
-#, fuzzy
-msgid "App Indicator Icon"
-msgstr "_Accions"
-
 msgid "Application verification failure"
 msgstr ""
 
@@ -1342,6 +1332,9 @@ msgstr ""
 msgid "Choose the contact's groups"
 msgstr "Mostra el perfil del contacte (Ctrl+I)"
 
+msgid "Cipher Suite"
+msgstr ""
+
 msgid "City"
 msgstr ""
 
@@ -1431,10 +1424,6 @@ msgstr ""
 #, fuzzy
 msgid "Configure"
 msgstr "_Configura"
-
-#, python-format
-msgid "Configure %s"
-msgstr ""
 
 msgid "Configure logging system"
 msgstr ""
@@ -1906,7 +1895,7 @@ msgid "Enabled"
 msgstr ""
 
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr ""
 
@@ -1916,7 +1905,7 @@ msgstr ""
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr ""
 
-msgid "Enables Gajim to provide a system notification area icon"
+msgid "Enables Gajim to provide a notification area icon"
 msgstr ""
 
 msgid ""
@@ -2092,8 +2081,9 @@ msgstr "Grups de xat"
 msgid "Fake audio output"
 msgstr ""
 
-msgid "Feature not available under Windows"
-msgstr ""
+#, fuzzy
+msgid "Feature not available on Windows"
+msgstr "Transferència de Fitxers"
 
 msgid "Features"
 msgstr "Característiques"
@@ -2544,10 +2534,6 @@ msgstr ""
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
-msgstr ""
-
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
 msgstr ""
 
 msgid "If enabled, pressing Esc closes a tab/window."
@@ -3136,6 +3122,10 @@ msgid "Not Connected"
 msgstr "Entrada següent"
 
 #, fuzzy
+msgid "Not accelerated"
+msgstr "Entrada següent"
+
+#, fuzzy
 msgid "Not available"
 msgstr "_No Disponible"
 
@@ -3237,6 +3227,9 @@ msgid "Open folder"
 msgstr "_Obre Carpeta Contenidora"
 
 msgid "Open search bar"
+msgstr ""
+
+msgid "OpenGL accelerated"
 msgstr ""
 
 #, fuzzy
@@ -3362,7 +3355,10 @@ msgstr ""
 msgid "Paste Last Input"
 msgstr ""
 
-msgid "Paste as quote"
+msgid "Paste as Code Block"
+msgstr ""
+
+msgid "Paste as Quote"
 msgstr ""
 
 msgid "Path length constraint exceeded"
@@ -3850,6 +3846,10 @@ msgstr ""
 "<b>NOTA:</b> Hauries de reiniciar Gajim per a que la configuració tingui "
 "efecte"
 
+#, fuzzy
+msgid "Restore chat"
+msgstr "Lliure per xatejar"
+
 msgid "Restore last state"
 msgstr ""
 
@@ -4204,6 +4204,10 @@ msgstr "_Copia la ubicació de l'enllaç"
 
 #, fuzzy
 msgid "Show Contact Infos"
+msgstr "Mostra Contactes Actius"
+
+#, fuzzy
+msgid "Show Content"
 msgstr "Mostra Contactes Actius"
 
 #, fuzzy
@@ -4592,6 +4596,10 @@ msgstr "Sincronitza els contactes"
 
 msgid "System"
 msgstr ""
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "Versió:"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5170,9 +5178,6 @@ msgid "Width of group chat roster in pixel"
 msgstr ""
 
 msgid "Windows"
-msgstr ""
-
-msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
 msgid "Without a connection, you can not browse available services"
@@ -5929,6 +5934,10 @@ msgstr ""
 #~ msgstr "_Executa Comanda...."
 
 #, fuzzy
+#~ msgid "App Indicator Icon"
+#~ msgstr "_Accions"
+
+#, fuzzy
 #~ msgid "Ban Participant"
 #~ msgstr "Accions Ocupant"
 
@@ -5954,9 +5963,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Format your message…"
 #~ msgstr "Envia missatge"
-
-#~ msgid "Free for chat"
-#~ msgstr "Lliure per xatejar"
 
 #, fuzzy
 #~ msgid "Gajim will not try to join this group chat again"

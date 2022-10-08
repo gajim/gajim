@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
 "PO-Revision-Date: 2020-08-19 19:27+0000\n"
 "Last-Translator: Vincent L <vincent.laporte+gajim@mailbox.org>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -296,12 +296,6 @@ msgstr ""
 #, fuzzy
 msgid "<error>"
 msgstr "Eraro de Avahi"
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr ""
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
-msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "Nenion"
@@ -905,10 +899,6 @@ msgstr "%s aliĝis al la babilejo"
 msgid "Anyone can join this group chat"
 msgstr "%s aliĝis al la babilejo"
 
-#, fuzzy
-msgid "App Indicator Icon"
-msgstr "<b>Programoj</b>"
-
 msgid "Application verification failure"
 msgstr ""
 
@@ -1403,6 +1393,9 @@ msgstr ""
 msgid "Choose the contact's groups"
 msgstr "Aligas kontakton en kontaktliston"
 
+msgid "Cipher Suite"
+msgstr ""
+
 #, fuzzy
 msgid "City"
 msgstr "Urbo:"
@@ -1502,10 +1495,6 @@ msgstr "Agordo de babilejo"
 
 #, fuzzy
 msgid "Configure"
-msgstr "_Daŭrigi"
-
-#, fuzzy, python-format
-msgid "Configure %s"
 msgstr "_Daŭrigi"
 
 msgid "Configure logging system"
@@ -2007,7 +1996,7 @@ msgid "Enabled"
 msgstr "Ebligi"
 
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr ""
 
@@ -2017,7 +2006,7 @@ msgstr ""
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr ""
 
-msgid "Enables Gajim to provide a system notification area icon"
+msgid "Enables Gajim to provide a notification area icon"
 msgstr ""
 
 msgid ""
@@ -2203,7 +2192,7 @@ msgid "Fake audio output"
 msgstr ""
 
 #, fuzzy
-msgid "Feature not available under Windows"
+msgid "Feature not available on Windows"
 msgstr "La aŭtomate nedisponebla statmesaĝo"
 
 #, fuzzy
@@ -2678,10 +2667,6 @@ msgstr ""
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
-msgstr ""
-
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
 msgstr ""
 
 #, fuzzy
@@ -3309,6 +3294,10 @@ msgid "Not Connected"
 msgstr "Konekto"
 
 #, fuzzy
+msgid "Not accelerated"
+msgstr "Ne lanĉitas"
+
+#, fuzzy
 msgid "Not available"
 msgstr "Nedisponebla"
 
@@ -3414,6 +3403,9 @@ msgid "Open folder"
 msgstr "_Malfermi enhavantan dosierujon"
 
 msgid "Open search bar"
+msgstr ""
+
+msgid "OpenGL accelerated"
 msgstr ""
 
 #, fuzzy
@@ -3542,8 +3534,13 @@ msgstr "Elektu bildon"
 msgid "Paste Last Input"
 msgstr ""
 
-msgid "Paste as quote"
-msgstr ""
+#, fuzzy
+msgid "Paste as Code Block"
+msgstr "Poŝtkodo:"
+
+#, fuzzy
+msgid "Paste as Quote"
+msgstr "Elektu bildon"
 
 msgid "Path length constraint exceeded"
 msgstr ""
@@ -4056,6 +4053,10 @@ msgstr ""
 "<b>RIMARKU:</b> Vi devas relanĉi gajim por efektigi kelkajn parametrojn"
 
 #, fuzzy
+msgid "Restore chat"
+msgstr "Lasta stato: %s"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Lasta stato: %s"
 
@@ -4429,6 +4430,10 @@ msgstr "Komandoj: %s"
 
 #, fuzzy
 msgid "Show Contact Infos"
+msgstr "Montri _senkonektajn kontaktojn"
+
+#, fuzzy
+msgid "Show Content"
 msgstr "Montri _senkonektajn kontaktojn"
 
 #, fuzzy
@@ -4842,6 +4847,10 @@ msgstr "Montri _senkonektajn kontaktojn"
 #, fuzzy
 msgid "System"
 msgstr "<b>Propraj</b>"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "Versio de GTK+:"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5451,9 +5460,6 @@ msgid "Width of group chat roster in pixel"
 msgstr ""
 
 msgid "Windows"
-msgstr ""
-
-msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
 msgid "Without a connection, you can not browse available services"
@@ -6279,6 +6285,10 @@ msgstr ""
 #~ msgstr "_Plenumi komandon..."
 
 #, fuzzy
+#~ msgid "App Indicator Icon"
+#~ msgstr "<b>Programoj</b>"
+
+#, fuzzy
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
@@ -6334,6 +6344,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Clear the text window"
 #~ msgstr "Uzado: /%s, - malplenigas la tekstan fenestron."
+
+#, fuzzy
+#~ msgid "Configure %s"
+#~ msgstr "_Daŭrigi"
 
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr "D-BUS aŭ konforma pitona modulo mankas ĉe tiu ĉi komputilo."

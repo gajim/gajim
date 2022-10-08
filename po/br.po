@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -296,12 +296,6 @@ msgstr ""
 #, fuzzy
 msgid "<error>"
 msgstr "Fazi en ur lenn ar restr:"
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr ""
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
-msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "Hini ebet"
@@ -908,10 +902,6 @@ msgstr "Er strollad"
 msgid "Anyone can join this group chat"
 msgstr "Er strollad"
 
-#, fuzzy
-msgid "App Indicator Icon"
-msgstr "<b>Poelladoù</b>"
-
 msgid "Application verification failure"
 msgstr ""
 
@@ -1401,6 +1391,9 @@ msgstr ""
 msgid "Choose the contact's groups"
 msgstr "Ouzhennañ an darempred d'ar roll"
 
+msgid "Cipher Suite"
+msgstr ""
+
 #, fuzzy
 msgid "City"
 msgstr "Kêr:"
@@ -1499,10 +1492,6 @@ msgstr "Kefluniañ ar webgaoz"
 
 #, fuzzy
 msgid "Configure"
-msgstr "_Kenderc'hel"
-
-#, fuzzy, python-format
-msgid "Configure %s"
 msgstr "_Kenderc'hel"
 
 msgid "Configure logging system"
@@ -2006,7 +1995,7 @@ msgid "Enabled"
 msgstr "Enaouiñ"
 
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr ""
 
@@ -2016,7 +2005,7 @@ msgstr ""
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr ""
 
-msgid "Enables Gajim to provide a system notification area icon"
+msgid "Enables Gajim to provide a notification area icon"
 msgstr ""
 
 msgid ""
@@ -2203,7 +2192,7 @@ msgid "Fake audio output"
 msgstr ""
 
 #, fuzzy
-msgid "Feature not available under Windows"
+msgid "Feature not available on Windows"
 msgstr "An emc'hemennadenn evit ar stad \"Dihegerz\""
 
 #, fuzzy
@@ -2673,10 +2662,6 @@ msgstr ""
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
-msgstr ""
-
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
 msgstr ""
 
 #, fuzzy
@@ -3300,6 +3285,10 @@ msgid "Not Connected"
 msgstr "Kevreadenn"
 
 #, fuzzy
+msgid "Not accelerated"
+msgstr "N'eo ket kroget"
+
+#, fuzzy
 msgid "Not available"
 msgstr "Dihegerz"
 
@@ -3404,6 +3393,9 @@ msgid "Open folder"
 msgstr "_Digeriñ ar renkell pal"
 
 msgid "Open search bar"
+msgstr ""
+
+msgid "OpenGL accelerated"
 msgstr ""
 
 #, fuzzy
@@ -3532,8 +3524,13 @@ msgstr "Pegañ ar skeudenn"
 msgid "Paste Last Input"
 msgstr ""
 
-msgid "Paste as quote"
-msgstr ""
+#, fuzzy
+msgid "Paste as Code Block"
+msgstr "Kod postel:"
+
+#, fuzzy
+msgid "Paste as Quote"
+msgstr "Pegañ ar skeudenn"
 
 msgid "Path length constraint exceeded"
 msgstr ""
@@ -4043,6 +4040,10 @@ msgstr ""
 "<b>NOTENN :</b> Dav eo deoc'h adloc'hañ Gajim evit ma vo efedus kemmoù 'zo"
 
 #, fuzzy
+msgid "Restore chat"
+msgstr "Stad diwezhañ: %s"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Stad diwezhañ: %s"
 
@@ -4414,6 +4415,10 @@ msgstr "Urzhioù: %s"
 
 #, fuzzy
 msgid "Show Contact Infos"
+msgstr "Diskouez an darempredoù _ezlinenn"
+
+#, fuzzy
+msgid "Show Content"
 msgstr "Diskouez an darempredoù _ezlinenn"
 
 #, fuzzy
@@ -4820,6 +4825,10 @@ msgstr "Diskouez an darempredoù _ezlinenn"
 #, fuzzy
 msgid "System"
 msgstr "<b>Personelaet</b>"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "Taolennadur: %s"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5427,9 +5436,6 @@ msgid "Width of group chat roster in pixel"
 msgstr ""
 
 msgid "Windows"
-msgstr ""
-
-msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
 msgid "Without a connection, you can not browse available services"
@@ -6243,6 +6249,10 @@ msgstr ""
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "urzhiad"
 
+#, fuzzy
+#~ msgid "App Indicator Icon"
+#~ msgstr "<b>Poelladoù</b>"
+
 #~ msgid "Arguments:"
 #~ msgstr "Arguments :"
 
@@ -6287,6 +6297,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Clear the text window"
 #~ msgstr "Usage : /%s, nettoie la fenêtre."
+
+#, fuzzy
+#~ msgid "Configure %s"
+#~ msgstr "_Kenderc'hel"
 
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr ""

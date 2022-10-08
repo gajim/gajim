@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
-"PO-Revision-Date: 2022-09-18 09:42+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"PO-Revision-Date: 2022-10-08 05:40+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
 "\n"
@@ -305,12 +305,6 @@ msgstr "<leer>"
 
 msgid "<error>"
 msgstr "<Fehler>"
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr "<span color=\"green\" font-weight=\"bold\">OpenGL</span> beschleunigt"
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
-msgstr "<span color=\"yellow\" font-weight=\"bold\">Nicht beschleunigt</span>"
 
 msgid "?Ask (for Subscription):None"
 msgstr "Keine Kontaktanfrage"
@@ -827,9 +821,6 @@ msgstr "Jeder kann beitreten"
 msgid "Anyone can join this group chat"
 msgstr "Jeder kann dem Gruppenchat beitreten"
 
-msgid "App Indicator Icon"
-msgstr "Benachrichtigungssymbol"
-
 msgid "Application verification failure"
 msgstr "Fehler beim Überprüfen des Programms"
 
@@ -1267,6 +1258,9 @@ msgstr "Wähle eines von vielen Emoji-Designs"
 msgid "Choose the contact's groups"
 msgstr "Wähle die Gruppen des Kontakts"
 
+msgid "Cipher Suite"
+msgstr "Cipher Suite"
+
 msgid "City"
 msgstr "Ort"
 
@@ -1348,10 +1342,6 @@ msgstr "Konfiguration"
 
 msgid "Configure"
 msgstr "Konfigurieren"
-
-#, python-format
-msgid "Configure %s"
-msgstr "%s konfigurieren"
 
 msgid "Configure logging system"
 msgstr "Logging-System konfigurieren"
@@ -1776,7 +1766,7 @@ msgid "Enabled"
 msgstr "Aktiviert"
 
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr ""
 "Ermöglicht Gajim die Ermittlung der Leerlaufzeit des Computers, um deinen "
@@ -1789,7 +1779,7 @@ msgstr ""
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr "Ermöglicht Gajim die Bereitstellung von Audio- und Video-Chats"
 
-msgid "Enables Gajim to provide a system notification area icon"
+msgid "Enables Gajim to provide a notification area icon"
 msgstr "Ermöglicht es Gajim, ein Icon im Benachrichtigungsbereich anzuzeigen"
 
 msgid ""
@@ -1954,7 +1944,7 @@ msgstr "Konnte das Profilbild nicht erstellen."
 msgid "Fake audio output"
 msgstr "Simulierte Audioausgabe"
 
-msgid "Feature not available under Windows"
+msgid "Feature not available on Windows"
 msgstr "Funktion unter Windows nicht verfügbar"
 
 msgid "Features"
@@ -2387,12 +2377,6 @@ msgstr ""
 "Falls aktiviert, wird Gajim versuchen einen STUN-Server für Jingle zu "
 "verwenden. Entweder jenen in der \"stun_server\"-Option oder einen vom XMPP-"
 "Server vorgegebenen Server."
-
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
-msgstr ""
-"Falls aktiviert, wird sich die Autovervollständigung in Gruppenchats ähnlich "
-"der Autovervollständigung in einer Kommandozeile verhalten."
 
 msgid "If enabled, pressing Esc closes a tab/window."
 msgstr "Falls aktiviert, schließt die Escape-Taste aktive Tabs/Fenster."
@@ -2952,6 +2936,9 @@ msgstr "Nicht verfügbar"
 msgid "Not Connected"
 msgstr "Nicht verbunden"
 
+msgid "Not accelerated"
+msgstr "Nicht beschleunigt"
+
 msgid "Not available"
 msgstr "Nicht verfügbar"
 
@@ -3042,6 +3029,9 @@ msgstr "Ordner öffnen"
 
 msgid "Open search bar"
 msgstr "Suchleiste öffnen"
+
+msgid "OpenGL accelerated"
+msgstr "OpenGL beschleunigt"
 
 msgid "Operating System"
 msgstr "Betriebssystem"
@@ -3163,7 +3153,10 @@ msgstr "Bild einfügen"
 msgid "Paste Last Input"
 msgstr "Zuletzt gemachte Eingabe einfügen"
 
-msgid "Paste as quote"
+msgid "Paste as Code Block"
+msgstr "Als Code-Block einfügen"
+
+msgid "Paste as Quote"
 msgstr "Als Zitat einfügen"
 
 msgid "Path length constraint exceeded"
@@ -3603,6 +3596,9 @@ msgstr "XMPP-Ressource"
 msgid "Restart Gajim for changes to take affect"
 msgstr "Starte Gajim neu, damit alle Änderungen in Kraft treten"
 
+msgid "Restore chat"
+msgstr "Chat wiederherstellen"
+
 msgid "Restore last state"
 msgstr "Wie zuletzt"
 
@@ -3922,6 +3918,9 @@ msgstr "Befehle anzeigen"
 
 msgid "Show Contact Infos"
 msgstr "Kontaktinfos anzeigen"
+
+msgid "Show Content"
+msgstr "Inhalt anzeigen"
 
 msgid "Show Gajim"
 msgstr "Gajim zeigen"
@@ -4278,6 +4277,9 @@ msgstr "Nachrichtenverlauf wird synchronisiert…"
 
 msgid "System"
 msgstr "System"
+
+msgid "TLS Version"
+msgstr "TLS-Version"
 
 #, python-format
 msgid "TLS verification failed: %s"
@@ -4876,11 +4878,6 @@ msgstr "Breite der Kontaktliste im Gruppenchat in Pixel"
 
 msgid "Windows"
 msgstr "Windows"
-
-msgid "Windows Credential Vault is used for secure password storage"
-msgstr ""
-"Die Windows Passwortverwaltung wird für die sichere Speicherung der "
-"Passwörter verwendet"
 
 msgid "Without a connection, you can not browse available services"
 msgstr "Du musst angemeldet sein, um die Dienste durchsuchen zu können"
@@ -5625,6 +5622,14 @@ msgstr "… oder hierher ziehen"
 #~ msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
 #~ msgstr "<b>%(nick)s</b> aus <b>%(room_name)s</b> fragt Schreibrechte an"
 
+#~ msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
+#~ msgstr ""
+#~ "<span color=\"green\" font-weight=\"bold\">OpenGL</span> beschleunigt"
+
+#~ msgid "<span color=\"orange\" font-weight=\"bold\">Not accelerated</span>"
+#~ msgstr ""
+#~ "<span color=\"orange\" font-weight=\"bold\">Nicht beschleunigt</span>"
+
 #~ msgid "?CLI:account"
 #~ msgstr "Konto"
 
@@ -5658,6 +5663,9 @@ msgstr "… oder hierher ziehen"
 #~ msgstr ""
 #~ "Erlaubt die Kontaktliste zu verstecken, auch wenn das "
 #~ "Benachrichtigungssymbol nicht angezeigt wird."
+
+#~ msgid "App Indicator Icon"
+#~ msgstr "Benachrichtigungssymbol"
 
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
@@ -5720,6 +5728,9 @@ msgstr "… oder hierher ziehen"
 #~ "Befehl deaktiviert. Dieser Befehl kann über die Einstellung "
 #~ "\"command_system_execute\" (True) im ACE (Erweiterter "
 #~ "Konfigurationseditor) aktiviert werden."
+
+#~ msgid "Configure %s"
+#~ msgstr "%s konfigurieren"
 
 #~ msgid "Correct"
 #~ msgstr "Korrigieren"
@@ -5829,6 +5840,13 @@ msgstr "… oder hierher ziehen"
 #~ msgstr ""
 #~ "Falls aktiviert, wird Gajim Befehle im Chatfenster ausführen (/show, /"
 #~ "sh, /execute, /exec)."
+
+#~ msgid ""
+#~ "If enabled, completion in group chats will be like a shell auto-"
+#~ "completion."
+#~ msgstr ""
+#~ "Falls aktiviert, wird sich die Autovervollständigung in Gruppenchats "
+#~ "ähnlich der Autovervollständigung in einer Kommandozeile verhalten."
 
 #~ msgid "Invalid affiliation given"
 #~ msgstr "Ungültige Gruppenzugehörigkeit angegeben"
@@ -6120,6 +6138,11 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Voice chats are not available"
 #~ msgstr "Sprachanrufe sind nicht verfügbar"
+
+#~ msgid "Windows Credential Vault is used for secure password storage"
+#~ msgstr ""
+#~ "Die Windows Passwortverwaltung wird für die sichere Speicherung der "
+#~ "Passwörter verwendet"
 
 #~ msgid "XML to send"
 #~ msgstr "Zu sendender XML-Code"

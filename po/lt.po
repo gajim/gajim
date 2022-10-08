@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -287,12 +287,6 @@ msgstr ""
 #, fuzzy
 msgid "<error>"
 msgstr "Avahi error"
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr ""
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
-msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "Joks"
@@ -901,10 +895,6 @@ msgstr "Unable to join group chat"
 msgid "Anyone can join this group chat"
 msgstr "Unable to join group chat"
 
-#, fuzzy
-msgid "App Indicator Icon"
-msgstr "<b>Programos</b>"
-
 msgid "Application verification failure"
 msgstr ""
 
@@ -1391,6 +1381,9 @@ msgstr ""
 msgid "Choose the contact's groups"
 msgstr "Įtraukti šį kontaktą į sąrašą (Ctrl+D)"
 
+msgid "Cipher Suite"
+msgstr ""
+
 #, fuzzy
 msgid "City"
 msgstr "Miestas:"
@@ -1486,10 +1479,6 @@ msgstr "Kambario nustatymai"
 
 #, fuzzy
 msgid "Configure"
-msgstr "_Konfigūruoti"
-
-#, fuzzy, python-format
-msgid "Configure %s"
 msgstr "_Konfigūruoti"
 
 msgid "Configure logging system"
@@ -1987,7 +1976,7 @@ msgid "Enabled"
 msgstr "Įjungtas"
 
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr ""
 
@@ -1997,7 +1986,7 @@ msgstr ""
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr ""
 
-msgid "Enables Gajim to provide a system notification area icon"
+msgid "Enables Gajim to provide a notification area icon"
 msgstr ""
 
 msgid ""
@@ -2184,7 +2173,7 @@ msgid "Fake audio output"
 msgstr ""
 
 #, fuzzy
-msgid "Feature not available under Windows"
+msgid "Feature not available on Windows"
 msgstr "Automatinio nebuvimo būklės žinutė"
 
 msgid "Features"
@@ -2653,10 +2642,6 @@ msgstr ""
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
-msgstr ""
-
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
 msgstr ""
 
 #, fuzzy
@@ -3275,6 +3260,10 @@ msgid "Not Connected"
 msgstr "Prisijungta"
 
 #, fuzzy
+msgid "Not accelerated"
+msgstr "Not in roster"
+
+#, fuzzy
 msgid "Not available"
 msgstr "Esu išėjęs"
 
@@ -3379,6 +3368,9 @@ msgid "Open folder"
 msgstr "_Atidaryti katalogą, kuriame yra failas"
 
 msgid "Open search bar"
+msgstr ""
+
+msgid "OpenGL accelerated"
 msgstr ""
 
 #, fuzzy
@@ -3506,8 +3498,13 @@ msgstr "Choose Image"
 msgid "Paste Last Input"
 msgstr ""
 
-msgid "Paste as quote"
-msgstr ""
+#, fuzzy
+msgid "Paste as Code Block"
+msgstr "<b>Pašto Kodas:</b>"
+
+#, fuzzy
+msgid "Paste as Quote"
+msgstr "Choose Image"
 
 msgid "Path length constraint exceeded"
 msgstr ""
@@ -4014,6 +4011,10 @@ msgstr ""
 "<b>PASTABA:</b> Kad įsigaliotų tam tikri nustatymai turite perkrauti Gajim"
 
 #, fuzzy
+msgid "Restore chat"
+msgstr "Last status: %s"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Last status: %s"
 
@@ -4385,6 +4386,10 @@ msgstr "Commands: %s"
 
 #, fuzzy
 msgid "Show Contact Infos"
+msgstr "Rodyti Tik _Aktyvius Kontaktus"
+
+#, fuzzy
+msgid "Show Content"
 msgstr "Rodyti Tik _Aktyvius Kontaktus"
 
 #, fuzzy
@@ -4797,6 +4802,10 @@ msgstr "Sinchronizuoti kontaktus"
 #, fuzzy
 msgid "System"
 msgstr "<b>Sistema:</b>"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "GTK+ Version:"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5397,9 +5406,6 @@ msgid "Width of group chat roster in pixel"
 msgstr ""
 
 msgid "Windows"
-msgstr ""
-
-msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
 msgid "Without a connection, you can not browse available services"
@@ -6212,6 +6218,10 @@ msgstr ""
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "_Vykdyti komandą"
 
+#, fuzzy
+#~ msgid "App Indicator Icon"
+#~ msgstr "<b>Programos</b>"
+
 #~ msgid "Arguments:"
 #~ msgstr "Arguments:"
 
@@ -6254,6 +6264,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Clear the text window"
 #~ msgstr "Usage: /%s, clears the text window."
+
+#, fuzzy
+#~ msgid "Configure %s"
+#~ msgstr "_Konfigūruoti"
 
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr "D-Bus is not present on this machine or python module is missing"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -301,12 +301,6 @@ msgstr ""
 #, fuzzy
 msgid "<error>"
 msgstr "Грешка."
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr ""
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
-msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "Няма"
@@ -921,10 +915,6 @@ msgstr "%s влезе в стаята"
 msgid "Anyone can join this group chat"
 msgstr "%s влезе в стаята"
 
-#, fuzzy
-msgid "App Indicator Icon"
-msgstr "<b>Програми</b>"
-
 msgid "Application verification failure"
 msgstr "Грешка на приложението за проверка"
 
@@ -1422,6 +1412,9 @@ msgstr ""
 msgid "Choose the contact's groups"
 msgstr "Показване на профила на контакта (Ctrl+I)"
 
+msgid "Cipher Suite"
+msgstr ""
+
 msgid "City"
 msgstr ""
 
@@ -1520,10 +1513,6 @@ msgstr "Настройки на стаята"
 
 #, fuzzy
 msgid "Configure"
-msgstr "_Настройване"
-
-#, fuzzy, python-format
-msgid "Configure %s"
 msgstr "_Настройване"
 
 msgid "Configure logging system"
@@ -2027,7 +2016,7 @@ msgstr "Включено"
 
 #, fuzzy
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr ""
 "Възможност за измерване на времето на бездействие, с цел да се установи "
@@ -2039,7 +2028,7 @@ msgstr ""
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr ""
 
-msgid "Enables Gajim to provide a system notification area icon"
+msgid "Enables Gajim to provide a notification area icon"
 msgstr ""
 
 msgid ""
@@ -2229,8 +2218,9 @@ msgstr "Излизане от стаите"
 msgid "Fake audio output"
 msgstr ""
 
-msgid "Feature not available under Windows"
-msgstr ""
+#, fuzzy
+msgid "Feature not available on Windows"
+msgstr "В момента няма връзка"
 
 msgid "Features"
 msgstr "Възможности"
@@ -2707,10 +2697,6 @@ msgstr ""
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
-msgstr ""
-
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
 msgstr ""
 
 #, fuzzy
@@ -3340,6 +3326,10 @@ msgid "Not Connected"
 msgstr "Свързан"
 
 #, fuzzy
+msgid "Not accelerated"
+msgstr "Не е започнал"
+
+#, fuzzy
 msgid "Not available"
 msgstr "Не съм на разположение"
 
@@ -3444,6 +3434,9 @@ msgid "Open folder"
 msgstr "_Отваряне на папката"
 
 msgid "Open search bar"
+msgstr ""
+
+msgid "OpenGL accelerated"
 msgstr ""
 
 #, fuzzy
@@ -3573,8 +3566,13 @@ msgstr "Избор на изображение"
 msgid "Paste Last Input"
 msgstr ""
 
-msgid "Paste as quote"
-msgstr ""
+#, fuzzy
+msgid "Paste as Code Block"
+msgstr "<b>Пощенски код:</b>"
+
+#, fuzzy
+msgid "Paste as Quote"
+msgstr "Избор на изображение"
 
 msgid "Path length constraint exceeded"
 msgstr "Максималната дължина на пътя е надвишена"
@@ -4092,6 +4090,10 @@ msgstr ""
 "настройките"
 
 #, fuzzy
+msgid "Restore chat"
+msgstr "Последно състояние: %s"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Последно състояние: %s"
 
@@ -4462,6 +4464,10 @@ msgstr "Команди: %s"
 
 #, fuzzy
 msgid "Show Contact Infos"
+msgstr "Показване на изкл_ючените контакти"
+
+#, fuzzy
+msgid "Show Content"
 msgstr "Показване на изкл_ючените контакти"
 
 #, fuzzy
@@ -4876,6 +4882,10 @@ msgstr "Синхронизиране"
 #, fuzzy
 msgid "System"
 msgstr "<b>Система:</b>"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "Версия на GTK+:"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5497,9 +5507,6 @@ msgid "Width of group chat roster in pixel"
 msgstr ""
 
 msgid "Windows"
-msgstr ""
-
-msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
 msgid "Without a connection, you can not browse available services"
@@ -6330,6 +6337,10 @@ msgstr ""
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "_Изпълнение на команда"
 
+#, fuzzy
+#~ msgid "App Indicator Icon"
+#~ msgstr "<b>Програми</b>"
+
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
@@ -6383,6 +6394,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Clear the text window"
 #~ msgstr "Употреба: /%s, изчиства текстовия прозорец."
+
+#, fuzzy
+#~ msgid "Configure %s"
+#~ msgstr "_Настройване"
 
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr "На тази машина няма инсталиран D-Bus или липсва модула за Питон"

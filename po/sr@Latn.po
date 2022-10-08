@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
 "PO-Revision-Date: 2009-10-29 23:50+0100\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -304,12 +304,6 @@ msgstr ""
 #, fuzzy
 msgid "<error>"
 msgstr "Greška"
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr ""
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
-msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "?Pitaj (za pretplatu):Nijedna"
@@ -926,10 +920,6 @@ msgstr "%s se pridružio grupnom razgovoru"
 msgid "Anyone can join this group chat"
 msgstr "%s se pridružio grupnom razgovoru"
 
-#, fuzzy
-msgid "App Indicator Icon"
-msgstr "<b>Aplikacije</b>"
-
 msgid "Application verification failure"
 msgstr "Verifikacija aplikacije neuspela"
 
@@ -1426,6 +1416,9 @@ msgstr ""
 msgid "Choose the contact's groups"
 msgstr "Prikaži profil kontakta (Ctrl+I)"
 
+msgid "Cipher Suite"
+msgstr ""
+
 msgid "City"
 msgstr ""
 
@@ -1524,10 +1517,6 @@ msgstr "Konfiguracija sobe"
 
 #, fuzzy
 msgid "Configure"
-msgstr "_Konfiguriši"
-
-#, fuzzy, python-format
-msgid "Configure %s"
 msgstr "_Konfiguriši"
 
 msgid "Configure logging system"
@@ -2031,7 +2020,7 @@ msgstr "Omogućen"
 
 #, fuzzy
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr ""
 "Daje mogućnost merenja vremena kada se ništa ne dešava, da se odredi auto "
@@ -2043,7 +2032,7 @@ msgstr ""
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr ""
 
-msgid "Enables Gajim to provide a system notification area icon"
+msgid "Enables Gajim to provide a notification area icon"
 msgstr ""
 
 msgid ""
@@ -2231,7 +2220,7 @@ msgid "Fake audio output"
 msgstr ""
 
 #, fuzzy
-msgid "Feature not available under Windows"
+msgid "Feature not available on Windows"
 msgstr "Mogućnost nije dostupna pod Vindouz sistemom."
 
 msgid "Features"
@@ -2702,13 +2691,6 @@ msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
-msgstr ""
-"Ako je True, dopunjavanje u grupnim razgovorima će biti kao dopunjavanje u "
-"konzoli"
 
 #, fuzzy
 msgid "If enabled, pressing Esc closes a tab/window."
@@ -3334,6 +3316,10 @@ msgid "Not Connected"
 msgstr "Na vezi"
 
 #, fuzzy
+msgid "Not accelerated"
+msgstr "Nije počeo"
+
+#, fuzzy
 msgid "Not available"
 msgstr "Nedostupan"
 
@@ -3438,6 +3424,9 @@ msgid "Open folder"
 msgstr "_Otvori sadržavajuću fasciklu"
 
 msgid "Open search bar"
+msgstr ""
+
+msgid "OpenGL accelerated"
 msgstr ""
 
 #, fuzzy
@@ -3567,8 +3556,13 @@ msgstr "Odaberite sliku"
 msgid "Paste Last Input"
 msgstr ""
 
-msgid "Paste as quote"
-msgstr ""
+#, fuzzy
+msgid "Paste as Code Block"
+msgstr "<b>Poštanski broj:</b>"
+
+#, fuzzy
+msgid "Paste as Quote"
+msgstr "Odaberite sliku"
 
 msgid "Path length constraint exceeded"
 msgstr "Prekoračena dužina putanje"
@@ -4086,6 +4080,10 @@ msgstr ""
 "podešavanja postale primenjene"
 
 #, fuzzy
+msgid "Restore chat"
+msgstr "Poslednji status: %s"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Poslednji status: %s"
 
@@ -4457,6 +4455,10 @@ msgstr "Komanda: %s"
 
 #, fuzzy
 msgid "Show Contact Infos"
+msgstr "Prikaži samo _aktivne kontakte"
+
+#, fuzzy
+msgid "Show Content"
 msgstr "Prikaži samo _aktivne kontakte"
 
 #, fuzzy
@@ -4872,6 +4874,10 @@ msgstr "Sinhronizuj"
 #, fuzzy
 msgid "System"
 msgstr "<b>Sistem:</b>"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "GTK+ verzija:"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5489,9 +5495,6 @@ msgid "Width of group chat roster in pixel"
 msgstr ""
 
 msgid "Windows"
-msgstr ""
-
-msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
 msgid "Without a connection, you can not browse available services"
@@ -6316,6 +6319,10 @@ msgstr ""
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "_Izvrši naredbu"
 
+#, fuzzy
+#~ msgid "App Indicator Icon"
+#~ msgstr "<b>Aplikacije</b>"
+
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
@@ -6378,6 +6385,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Clear the text window"
 #~ msgstr "Način korišćenja: /%s, prazni tekstualni prozor"
+
+#, fuzzy
+#~ msgid "Configure %s"
+#~ msgstr "_Konfiguriši"
 
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr "D-Bus ne postoji na ovom računaru ili nema python modula."
@@ -6456,6 +6467,14 @@ msgstr ""
 #~ msgstr ""
 #~ "Ako je označena, Gajim će prikazivati raspoloženje kontakata u listi "
 #~ "kontakata"
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, completion in group chats will be like a shell auto-"
+#~ "completion."
+#~ msgstr ""
+#~ "Ako je True, dopunjavanje u grupnim razgovorima će biti kao dopunjavanje "
+#~ "u konzoli"
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"

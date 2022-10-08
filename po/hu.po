@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
-"PO-Revision-Date: 2022-09-18 07:35+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"PO-Revision-Date: 2022-10-08 14:33+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -288,12 +288,6 @@ msgstr "<üres>"
 
 msgid "<error>"
 msgstr "<hiba>"
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr "<span color=\"green\" font-weight=\"bold\">OpenGL</span> gyorsítással"
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
-msgstr "<span color=\"yellow\" font-weight=\"bold\">Nincs gyorsítás</span>"
 
 msgid "?Ask (for Subscription):None"
 msgstr "Nincs"
@@ -799,9 +793,6 @@ msgstr "Bárki beléphet"
 msgid "Anyone can join this group chat"
 msgstr "Bárki beléphet ebbe a társalgóba"
 
-msgid "App Indicator Icon"
-msgstr "Alkalmazásjelző ikon"
-
 msgid "Application verification failure"
 msgstr "Alkalmazásfüggő ellenőrzési hiba"
 
@@ -1237,6 +1228,9 @@ msgstr "Választás különféle stílusú hangulatjelek közül"
 msgid "Choose the contact's groups"
 msgstr "A névjegy csoportjai"
 
+msgid "Cipher Suite"
+msgstr "Titkosítási készlet"
+
 msgid "City"
 msgstr "Város"
 
@@ -1322,10 +1316,6 @@ msgstr "Tulajdonságok"
 
 msgid "Configure"
 msgstr "Beállítások"
-
-#, python-format
-msgid "Configure %s"
-msgstr "%s beállítása"
 
 msgid "Configure logging system"
 msgstr "A naplózási szint megadása"
@@ -1748,7 +1738,7 @@ msgid "Enabled"
 msgstr "Engedélyezve"
 
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr ""
 "A tétlenül töltött idő alapján a jelenléti állapot automatikus beállítása"
@@ -1759,8 +1749,8 @@ msgstr "Hangok lejátszása a különféle értesítésekhez"
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr "Hang- és videóbeszélgetések a Gajimban"
 
-msgid "Enables Gajim to provide a system notification area icon"
-msgstr "A Gajim ikonjának megjelenítése a rendszerértesítési területen"
+msgid "Enables Gajim to provide a notification area icon"
+msgstr "A Gajim ikonjának megjelenítése az értesítési területen"
 
 msgid ""
 "Enables Gajim to request your router to forward ports for file transfers"
@@ -1921,7 +1911,7 @@ msgstr "Nem sikerült létrehozni a profilképet."
 msgid "Fake audio output"
 msgstr "Álkimenet"
 
-msgid "Feature not available under Windows"
+msgid "Feature not available on Windows"
 msgstr "A funkció Windows rendszeren nem érhető el"
 
 msgid "Features"
@@ -2347,12 +2337,6 @@ msgstr ""
 "A Jingle használata STUN-kiszolgáló segítségével. Vagy a „stun_server” "
 "beállításban megadott, vagy az XMPP-kiszolgáló által felajánlott lesz "
 "használva."
-
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
-msgstr ""
-"Társalgókban a parancsértelmezők automatikus kiegészítést biztosító "
-"funkciójához hasonló viselkedés."
 
 msgid "If enabled, pressing Esc closes a tab/window."
 msgstr "Az ESC billentyű bezárja a lapot/ablakot."
@@ -2904,6 +2888,9 @@ msgstr "Tartósan távol"
 msgid "Not Connected"
 msgstr "Nincs kapcsolat"
 
+msgid "Not accelerated"
+msgstr "Nincs gyorsítás"
+
 msgid "Not available"
 msgstr "Nem érhető el"
 
@@ -2994,6 +2981,9 @@ msgstr "Mappa megnyitása"
 
 msgid "Open search bar"
 msgstr "Keresőpanel megnyitása"
+
+msgid "OpenGL accelerated"
+msgstr "OpenGL gyorsítással"
 
 msgid "Operating System"
 msgstr "Operációs rendszer"
@@ -3112,8 +3102,11 @@ msgstr "Kép beszúrása"
 msgid "Paste Last Input"
 msgstr "A legutóbb bevitt adat beillesztése"
 
-msgid "Paste as quote"
-msgstr "Idézés"
+msgid "Paste as Code Block"
+msgstr "Beillesztés forráskódként"
+
+msgid "Paste as Quote"
+msgstr "Beillesztés idézetként"
 
 msgid "Path length constraint exceeded"
 msgstr "Az elérési út túl hosszú"
@@ -3551,6 +3544,9 @@ msgstr "Erőforrás"
 msgid "Restart Gajim for changes to take affect"
 msgstr "A változások érvényesítéséhez a Gajim újraindítása szükséges"
 
+msgid "Restore chat"
+msgstr "Beszélgetés újranyitása"
+
 msgid "Restore last state"
 msgstr "Legutóbbi állapot"
 
@@ -3868,6 +3864,9 @@ msgstr "Parancsok megjelenítése"
 
 msgid "Show Contact Infos"
 msgstr "A névjegy tulajdonságainak megjelenítése"
+
+msgid "Show Content"
+msgstr "Tartalom megjelenítése"
 
 msgid "Show Gajim"
 msgstr "A főablak megnyitása"
@@ -4222,6 +4221,9 @@ msgstr "Beszélgetési előzmények szinkronizálása…"
 
 msgid "System"
 msgstr "Rendszer"
+
+msgid "TLS Version"
+msgstr "TLS verzió"
 
 #, python-format
 msgid "TLS verification failed: %s"
@@ -4794,11 +4796,6 @@ msgstr "A társalgó résztvevőit megjelenítő panel szélessége pixelben"
 
 msgid "Windows"
 msgstr "Windows"
-
-msgid "Windows Credential Vault is used for secure password storage"
-msgstr ""
-"Windows rendszeren a biztonságos jelszótárolás a Hitelesítőadat-kezelőben "
-"történik"
 
 msgid "Without a connection, you can not browse available services"
 msgstr "Kapcsolat nélkül nem lehet tallózni az elérhető szolgáltatásokat"
@@ -5526,6 +5523,14 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
 #~ msgstr "<b>%(nick)s</b> szót kér ebben a társalgóban: <b>%(room_name)s</b>"
 
+#~ msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
+#~ msgstr ""
+#~ "<span color=\"green\" font-weight=\"bold\">OpenGL</span> gyorsítással"
+
+#, fuzzy
+#~ msgid "<span color=\"orange\" font-weight=\"bold\">Not accelerated</span>"
+#~ msgstr "<span color=\"yellow\" font-weight=\"bold\">Nincs gyorsítás</span>"
+
 #, fuzzy
 #~ msgid "?CLI:account"
 #~ msgstr "fiók"
@@ -5556,6 +5561,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Allow a participant to send you public or private messages"
 #~ msgstr "Egy résztvevő publikus vagy privát üzeneteinek engedélyezése"
+
+#~ msgid "App Indicator Icon"
+#~ msgstr "Alkalmazásjelző ikon"
 
 #, fuzzy
 #~ msgid ""
@@ -5619,6 +5627,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgstr ""
 #~ "A parancsvégrehajtás tiltva van. Az ACE (Speciális beállításszerkesztő) "
 #~ "„command_system_execute” opciójával lehet engedélyezni."
+
+#~ msgid "Configure %s"
+#~ msgstr "%s beállítása"
 
 #~ msgid "Correct"
 #~ msgstr "Helyesbítés"
@@ -5712,6 +5723,13 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid ""
 #~ "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 #~ msgstr "Parancsok (/show, /sh, /execute, /exec) végrehajtása."
+
+#~ msgid ""
+#~ "If enabled, completion in group chats will be like a shell auto-"
+#~ "completion."
+#~ msgstr ""
+#~ "Társalgókban a parancsértelmezők automatikus kiegészítést biztosító "
+#~ "funkciójához hasonló viselkedés."
 
 #~ msgid "Invalid affiliation given"
 #~ msgstr "Érvénytelen tagsági szint"
@@ -5996,6 +6014,11 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Voice chats are not available"
 #~ msgstr "Hanghívás nem lehetséges"
+
+#~ msgid "Windows Credential Vault is used for secure password storage"
+#~ msgstr ""
+#~ "Windows rendszeren a biztonságos jelszótárolás a Hitelesítőadat-kezelőben "
+#~ "történik"
 
 #~ msgid "XML to send"
 #~ msgstr "küldendő XML"

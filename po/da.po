@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -305,12 +305,6 @@ msgstr ""
 #, fuzzy
 msgid "<error>"
 msgstr "Fejl"
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr ""
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
-msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "?Ask (for Subscription):Intet"
@@ -926,10 +920,6 @@ msgstr "%s deltager nu i gruppe samtalen"
 msgid "Anyone can join this group chat"
 msgstr "%s deltager nu i gruppe samtalen"
 
-#, fuzzy
-msgid "App Indicator Icon"
-msgstr "<b>Programmer</b>"
-
 msgid "Application verification failure"
 msgstr "Kunne ikke verificere programmet"
 
@@ -1427,6 +1417,9 @@ msgstr ""
 msgid "Choose the contact's groups"
 msgstr "Vis kontaktens profil (Ctrl+I)"
 
+msgid "Cipher Suite"
+msgstr ""
+
 msgid "City"
 msgstr ""
 
@@ -1525,10 +1518,6 @@ msgstr "Rum Konfigurering"
 
 #, fuzzy
 msgid "Configure"
-msgstr "_Konfigurere"
-
-#, fuzzy, python-format
-msgid "Configure %s"
 msgstr "_Konfigurere"
 
 msgid "Configure logging system"
@@ -2030,7 +2019,7 @@ msgstr "Aktiveret"
 
 #, fuzzy
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr "Evnen til at måle tomgangs tid, for at kunne sætte automatisk status."
 
@@ -2043,7 +2032,7 @@ msgid "Enables Gajim to provide Audio and Video chats"
 msgstr "Understøtter start af lyd og billede chat."
 
 #, fuzzy
-msgid "Enables Gajim to provide a system notification area icon"
+msgid "Enables Gajim to provide a notification area icon"
 msgstr "Understøtter start af lyd og billede chat."
 
 msgid ""
@@ -2231,7 +2220,7 @@ msgid "Fake audio output"
 msgstr ""
 
 #, fuzzy
-msgid "Feature not available under Windows"
+msgid "Feature not available on Windows"
 msgstr "Egenskab ikke tilgængelig under Windows."
 
 msgid "Features"
@@ -2700,13 +2689,6 @@ msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
-msgstr ""
-"Hvis sandt, vil færdiggørelse i gruppe samtaler fungere på samme måde som "
-"færdiggørelse i kommandolinjen"
 
 #, fuzzy
 msgid "If enabled, pressing Esc closes a tab/window."
@@ -3333,6 +3315,10 @@ msgid "Not Connected"
 msgstr "Tilsluttet"
 
 #, fuzzy
+msgid "Not accelerated"
+msgstr "Ikke startet"
+
+#, fuzzy
 msgid "Not available"
 msgstr "Ikke Tilgængelig"
 
@@ -3437,6 +3423,9 @@ msgid "Open folder"
 msgstr "_Åbn folderen med filen"
 
 msgid "Open search bar"
+msgstr ""
+
+msgid "OpenGL accelerated"
 msgstr ""
 
 #, fuzzy
@@ -3565,7 +3554,12 @@ msgstr "Vælg billede"
 msgid "Paste Last Input"
 msgstr ""
 
-msgid "Paste as quote"
+#, fuzzy
+msgid "Paste as Code Block"
+msgstr "Indsæt som citat"
+
+#, fuzzy
+msgid "Paste as Quote"
 msgstr "Indsæt som citat"
 
 msgid "Path length constraint exceeded"
@@ -4082,6 +4076,10 @@ msgstr ""
 "kraft"
 
 #, fuzzy
+msgid "Restore chat"
+msgstr "Sidste status: %s"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Sidste status: %s"
 
@@ -4452,6 +4450,10 @@ msgstr "Kommando"
 
 #, fuzzy
 msgid "Show Contact Infos"
+msgstr "Vis Kun _Aktive Kontakter"
+
+#, fuzzy
+msgid "Show Content"
 msgstr "Vis Kun _Aktive Kontakter"
 
 #, fuzzy
@@ -4866,6 +4868,10 @@ msgstr "Synkroniser"
 #, fuzzy
 msgid "System"
 msgstr "<b>System:</b>"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "GTK+ Version:"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5484,9 +5490,6 @@ msgid "Width of group chat roster in pixel"
 msgstr ""
 
 msgid "Windows"
-msgstr ""
-
-msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
 msgid "Without a connection, you can not browse available services"
@@ -6307,6 +6310,10 @@ msgstr ""
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "_Kør Kommando"
 
+#, fuzzy
+#~ msgid "App Indicator Icon"
+#~ msgstr "<b>Programmer</b>"
+
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
@@ -6366,6 +6373,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Clear the text window"
 #~ msgstr "Skjuler vinduet"
+
+#, fuzzy
+#~ msgid "Configure %s"
+#~ msgstr "_Konfigurere"
 
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr ""
@@ -6441,6 +6452,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "If enabled, Gajim will add * and [n] in contact list window title."
 #~ msgstr "Hvis valgt vil Gajim vise kontakternes humør i kontaktvinduet"
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, completion in group chats will be like a shell auto-"
+#~ "completion."
+#~ msgstr ""
+#~ "Hvis sandt, vil færdiggørelse i gruppe samtaler fungere på samme måde som "
+#~ "færdiggørelse i kommandolinjen"
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"

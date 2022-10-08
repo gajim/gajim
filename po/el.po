@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -303,12 +303,6 @@ msgstr ""
 #, fuzzy
 msgid "<error>"
 msgstr "Σφάλμα:"
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr ""
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
-msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "Τίποτα"
@@ -918,10 +912,6 @@ msgstr "Ο/Η %s μπήκε στο δωμάτιο"
 msgid "Anyone can join this group chat"
 msgstr "Ο/Η %s μπήκε στο δωμάτιο"
 
-#, fuzzy
-msgid "App Indicator Icon"
-msgstr "<b>Εφαρμογές</b>"
-
 msgid "Application verification failure"
 msgstr ""
 
@@ -1413,6 +1403,9 @@ msgstr ""
 msgid "Choose the contact's groups"
 msgstr "Προσθέτει μια επαφή στη λίστα επαφών"
 
+msgid "Cipher Suite"
+msgstr ""
+
 #, fuzzy
 msgid "City"
 msgstr "Πόλη:"
@@ -1512,10 +1505,6 @@ msgstr "Ρυθμίσεις δωματίου"
 
 #, fuzzy
 msgid "Configure"
-msgstr "_Συνέχεια"
-
-#, fuzzy, python-format
-msgid "Configure %s"
 msgstr "_Συνέχεια"
 
 msgid "Configure logging system"
@@ -2021,7 +2010,7 @@ msgid "Enabled"
 msgstr "Ενεργοποίηση"
 
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr ""
 
@@ -2031,7 +2020,7 @@ msgstr ""
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr ""
 
-msgid "Enables Gajim to provide a system notification area icon"
+msgid "Enables Gajim to provide a notification area icon"
 msgstr ""
 
 msgid ""
@@ -2220,7 +2209,7 @@ msgid "Fake audio output"
 msgstr ""
 
 #, fuzzy
-msgid "Feature not available under Windows"
+msgid "Feature not available on Windows"
 msgstr "Αυτόματο μήνυμα για κατάσταση μη διαθέσιμος"
 
 #, fuzzy
@@ -2694,10 +2683,6 @@ msgstr ""
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
-msgstr ""
-
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
 msgstr ""
 
 #, fuzzy
@@ -3323,6 +3308,10 @@ msgid "Not Connected"
 msgstr "Σύνδεση"
 
 #, fuzzy
+msgid "Not accelerated"
+msgstr "Δεν έχει ξεκινήσει"
+
+#, fuzzy
 msgid "Not available"
 msgstr "Μη διαθέσιμος"
 
@@ -3428,6 +3417,9 @@ msgid "Open folder"
 msgstr "_Άνοιγμα του περιέχοντος φακέλου"
 
 msgid "Open search bar"
+msgstr ""
+
+msgid "OpenGL accelerated"
 msgstr ""
 
 #, fuzzy
@@ -3556,8 +3548,13 @@ msgstr "Επιλογή εικόνας"
 msgid "Paste Last Input"
 msgstr ""
 
-msgid "Paste as quote"
-msgstr ""
+#, fuzzy
+msgid "Paste as Code Block"
+msgstr "Τ.Κ.:"
+
+#, fuzzy
+msgid "Paste as Quote"
+msgstr "Επιλογή εικόνας"
 
 msgid "Path length constraint exceeded"
 msgstr ""
@@ -4072,6 +4069,10 @@ msgstr ""
 "μερικές ρυθμίσεις"
 
 #, fuzzy
+msgid "Restore chat"
+msgstr "Τελευταία κατάσταση: %s"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Τελευταία κατάσταση: %s"
 
@@ -4447,6 +4448,10 @@ msgstr "Εντολές: %s"
 
 #, fuzzy
 msgid "Show Contact Infos"
+msgstr "Εμφάνιση _αποσυνδεδεμένων χρηστών"
+
+#, fuzzy
+msgid "Show Content"
 msgstr "Εμφάνιση _αποσυνδεδεμένων χρηστών"
 
 #, fuzzy
@@ -4853,6 +4858,10 @@ msgstr "Εμφάνιση _αποσυνδεδεμένων χρηστών"
 #, fuzzy
 msgid "System"
 msgstr "<b>Προσαρμοσμένες ρυθμίσεις</b>"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "Έκδοση GTK+:"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5466,9 +5475,6 @@ msgid "Width of group chat roster in pixel"
 msgstr ""
 
 msgid "Windows"
-msgstr ""
-
-msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
 msgid "Without a connection, you can not browse available services"
@@ -6298,6 +6304,10 @@ msgstr ""
 #~ msgstr "_Εκτέλεση εντολής..."
 
 #, fuzzy
+#~ msgid "App Indicator Icon"
+#~ msgstr "<b>Εφαρμογές</b>"
+
+#, fuzzy
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
@@ -6351,6 +6361,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Clear the text window"
 #~ msgstr "Χρήση: /%s, καθαρίζει το παράθυρο από το κείμενο."
+
+#, fuzzy
+#~ msgid "Configure %s"
+#~ msgstr "_Συνέχεια"
 
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr ""

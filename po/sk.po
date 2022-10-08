@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -300,12 +300,6 @@ msgstr ""
 #, fuzzy
 msgid "<error>"
 msgstr "Chyba"
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr ""
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
-msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "?Vyžiadať (zápis): Žiadny"
@@ -917,10 +911,6 @@ msgstr "%s sa pripojil do diskusnej skupiny"
 msgid "Anyone can join this group chat"
 msgstr "%s sa pripojil do diskusnej skupiny"
 
-#, fuzzy
-msgid "App Indicator Icon"
-msgstr "<b>Aplikácie</b>"
-
 msgid "Application verification failure"
 msgstr "Zlyhalo overenie aplikácie"
 
@@ -1417,6 +1407,9 @@ msgstr ""
 msgid "Choose the contact's groups"
 msgstr "Zobraziť profil kontaktu (Ctrl+I)"
 
+msgid "Cipher Suite"
+msgstr ""
+
 msgid "City"
 msgstr ""
 
@@ -1516,10 +1509,6 @@ msgstr "Konfigurácia miestnosti"
 
 #, fuzzy
 msgid "Configure"
-msgstr "_Nastavovať"
-
-#, fuzzy, python-format
-msgid "Configure %s"
 msgstr "_Nastavovať"
 
 msgid "Configure logging system"
@@ -2023,7 +2012,7 @@ msgstr "Povolené"
 
 #, fuzzy
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr ""
 "Schopnosť odhadnúť čas nečinnosti v nastavení poradia automatických stavov."
@@ -2034,7 +2023,7 @@ msgstr ""
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr ""
 
-msgid "Enables Gajim to provide a system notification area icon"
+msgid "Enables Gajim to provide a notification area icon"
 msgstr ""
 
 msgid ""
@@ -2222,7 +2211,7 @@ msgid "Fake audio output"
 msgstr ""
 
 #, fuzzy
-msgid "Feature not available under Windows"
+msgid "Feature not available on Windows"
 msgstr "Funkcia nie je dostupná pod Windows."
 
 msgid "Features"
@@ -2692,10 +2681,6 @@ msgstr ""
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
-msgstr ""
-
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
 msgstr ""
 
 #, fuzzy
@@ -3317,6 +3302,10 @@ msgid "Not Connected"
 msgstr "Pripojený"
 
 #, fuzzy
+msgid "Not accelerated"
+msgstr "Nezačal"
+
+#, fuzzy
 msgid "Not available"
 msgstr "Neprítomný"
 
@@ -3421,6 +3410,9 @@ msgid "Open folder"
 msgstr "_Otvoriť priečinok s obsahom"
 
 msgid "Open search bar"
+msgstr ""
+
+msgid "OpenGL accelerated"
 msgstr ""
 
 #, fuzzy
@@ -3550,8 +3542,13 @@ msgstr "Vybrať obrázok"
 msgid "Paste Last Input"
 msgstr ""
 
-msgid "Paste as quote"
-msgstr ""
+#, fuzzy
+msgid "Paste as Code Block"
+msgstr "<b>PSČ:</b>"
+
+#, fuzzy
+msgid "Paste as Quote"
+msgstr "Vybrať obrázok"
 
 msgid "Path length constraint exceeded"
 msgstr ""
@@ -4066,6 +4063,10 @@ msgid "Restart Gajim for changes to take affect"
 msgstr "<b>POZNÁMKA:</b> Musíte reštartovať Gajim, aby boli použité zmeny"
 
 #, fuzzy
+msgid "Restore chat"
+msgstr "Posledný stav: %s"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Posledný stav: %s"
 
@@ -4438,6 +4439,10 @@ msgstr "príkaz"
 
 #, fuzzy
 msgid "Show Contact Infos"
+msgstr "Zobraziť len _aktívne kontakty"
+
+#, fuzzy
+msgid "Show Content"
 msgstr "Zobraziť len _aktívne kontakty"
 
 #, fuzzy
@@ -4853,6 +4858,10 @@ msgstr "Synchronizovať"
 #, fuzzy
 msgid "System"
 msgstr "<b>Systém:</b>"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "Verzia GTK+:"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5472,9 +5481,6 @@ msgid "Width of group chat roster in pixel"
 msgstr ""
 
 msgid "Windows"
-msgstr ""
-
-msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
 msgid "Without a connection, you can not browse available services"
@@ -6295,6 +6301,10 @@ msgstr ""
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "_Vykonať príkaz"
 
+#, fuzzy
+#~ msgid "App Indicator Icon"
+#~ msgstr "<b>Aplikácie</b>"
+
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
@@ -6348,6 +6358,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Clear the text window"
 #~ msgstr "Použitie: /%s, vyčistí textové okno."
+
+#, fuzzy
+#~ msgid "Configure %s"
+#~ msgstr "_Nastavovať"
 
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr "D-Bus nie je prítomný na tomto stroji alebo chýba modul pre python"

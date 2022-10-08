@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
-"PO-Revision-Date: 2022-09-15 07:46+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"PO-Revision-Date: 2022-09-22 19:32+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
 "ro/>\n"
@@ -297,12 +297,6 @@ msgstr "<gol>"
 
 msgid "<error>"
 msgstr "<eroare>"
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerat"
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
-msgstr "<span color=\"yellow\" font-weight=\"bold\">Nu este accelerat</span>"
 
 msgid "?Ask (for Subscription):None"
 msgstr "Nici unul"
@@ -815,9 +809,6 @@ msgstr "Oricine se poate alătura"
 msgid "Anyone can join this group chat"
 msgstr "Oricine se poate alătura acestui grup de chat"
 
-msgid "App Indicator Icon"
-msgstr "Pictograma indicatorului de aplicație"
-
 msgid "Application verification failure"
 msgstr "Eșecul verificării aplicației"
 
@@ -1254,6 +1245,9 @@ msgstr "Alegeți din diferite stiluri de emoji"
 msgid "Choose the contact's groups"
 msgstr "Alegeți grupurile de contacte"
 
+msgid "Cipher Suite"
+msgstr ""
+
 msgid "City"
 msgstr "Orașul"
 
@@ -1339,10 +1333,6 @@ msgstr "Configurația"
 
 msgid "Configure"
 msgstr "Configurare"
-
-#, python-format
-msgid "Configure %s"
-msgstr "Configurare %s"
 
 msgid "Configure logging system"
 msgstr "Configurați sistemul de logare"
@@ -1768,8 +1758,9 @@ msgstr "Activați"
 msgid "Enabled"
 msgstr "Activat"
 
+#, fuzzy
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr ""
 "Permite lui Gajim să măsoare timpul de inactivitate al computerului "
@@ -1781,7 +1772,8 @@ msgstr "Permite lui Gajim să redea sunete pentru diverse notificări"
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr "Permite Gajim să ofere chat-uri audio și video"
 
-msgid "Enables Gajim to provide a system notification area icon"
+#, fuzzy
+msgid "Enables Gajim to provide a notification area icon"
 msgstr ""
 "Permite lui Gajim să furnizeze o pictogramă în zona de notificare a "
 "sistemului"
@@ -1949,7 +1941,8 @@ msgstr "Nu s-a reușit generarea avatarului."
 msgid "Fake audio output"
 msgstr "Ieșire audio falsă"
 
-msgid "Feature not available under Windows"
+#, fuzzy
+msgid "Feature not available on Windows"
 msgstr "Funcția nu este disponibilă în Windows"
 
 msgid "Features"
@@ -2381,12 +2374,6 @@ msgstr ""
 "Dacă este activată, Gajim va încerca să utilizeze un server STUN atunci când "
 "utilizează Jingle. Cel din opțiunea \"stun_server\" sau cel furnizat de "
 "serverul XMPP."
-
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
-msgstr ""
-"Dacă este activată, finalizarea în conversațiile de grup va fi ca o "
-"autocompletare de tip shell."
 
 msgid "If enabled, pressing Esc closes a tab/window."
 msgstr "Dacă este activată, apăsarea tastei Esc închide o filă/ fereastră."
@@ -2945,6 +2932,10 @@ msgstr "Nu este disponibil"
 msgid "Not Connected"
 msgstr "Nu este conectat"
 
+#, fuzzy
+msgid "Not accelerated"
+msgstr "Necriptat"
+
 msgid "Not available"
 msgstr "Nu este disponibil"
 
@@ -3034,6 +3025,9 @@ msgstr "Deschideți folderul"
 
 msgid "Open search bar"
 msgstr "Deschideți bara de căutare"
+
+msgid "OpenGL accelerated"
+msgstr ""
 
 msgid "Operating System"
 msgstr "Sistem de operare"
@@ -3156,7 +3150,12 @@ msgstr "Lipiți imaginea"
 msgid "Paste Last Input"
 msgstr "Lipiți ultima intrare"
 
-msgid "Paste as quote"
+#, fuzzy
+msgid "Paste as Code Block"
+msgstr "Lipiți citatul"
+
+#, fuzzy
+msgid "Paste as Quote"
 msgstr "Lipiți citatul"
 
 msgid "Path length constraint exceeded"
@@ -3597,6 +3596,10 @@ msgstr "Resurse"
 msgid "Restart Gajim for changes to take affect"
 msgstr "Reporniți Gajim pentru ca modificările să aibă efect"
 
+#, fuzzy
+msgid "Restore chat"
+msgstr "Restabilirea ultimei stări"
+
 msgid "Restore last state"
 msgstr "Restabilirea ultimei stări"
 
@@ -3917,6 +3920,10 @@ msgid "Show Commands"
 msgstr "Afișați Comenzile"
 
 msgid "Show Contact Infos"
+msgstr "Afișați informațiile de contact"
+
+#, fuzzy
+msgid "Show Content"
 msgstr "Afișați informațiile de contact"
 
 msgid "Show Gajim"
@@ -4276,6 +4283,10 @@ msgstr "Sincronizarea istoricului de chat…"
 
 msgid "System"
 msgstr "Sistem"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "Versiunea"
 
 #, python-format
 msgid "TLS verification failed: %s"
@@ -4739,6 +4750,10 @@ msgid ""
 "before:yyyy-mm-dd\n"
 "after:yyyy-mm-dd"
 msgstr ""
+"Utilizați filtrele pentru a restrânge căutarea:\n"
+"de la:nume de utilizator\n"
+"înainte de:aaaa-ll-zz\n"
+"după: aaaa-ll-zz"
 
 msgid "Use proxy auth_entication"
 msgstr "Utilizați proxy auth_entication"
@@ -4852,10 +4867,6 @@ msgstr "Lățimea listei de chat de grup în pixeli"
 
 msgid "Windows"
 msgstr "Windows"
-
-msgid "Windows Credential Vault is used for secure password storage"
-msgstr ""
-"Windows Credential Vault este utilizat pentru stocarea securizată a parolelor"
 
 msgid "Without a connection, you can not browse available services"
 msgstr "Fără o conexiune, nu puteți naviga prin serviciile disponibile"
@@ -5585,6 +5596,14 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
 #~ msgstr "<b>%(nick)s</b> de la <b>%(room_name)s</b> solicită voce"
 
+#~ msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
+#~ msgstr "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerat"
+
+#, fuzzy
+#~ msgid "<span color=\"orange\" font-weight=\"bold\">Not accelerated</span>"
+#~ msgstr ""
+#~ "<span color=\"yellow\" font-weight=\"bold\">Nu este accelerat</span>"
+
 #~ msgid "?CLI:account"
 #~ msgstr "cont"
 
@@ -5617,6 +5636,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgstr ""
 #~ "Permiteți să ascundeți fereastra listei de contacte chiar dacă pictograma "
 #~ "din zona de notificare nu este afișată."
+
+#~ msgid "App Indicator Icon"
+#~ msgstr "Pictograma indicatorului de aplicație"
 
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
@@ -5678,6 +5700,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgstr ""
 #~ "Comandă dezactivată. Această comandă poate fi activată prin setarea "
 #~ "\"command_system_execute\" la True în ACE (Advanced Configuration Editor)."
+
+#~ msgid "Configure %s"
+#~ msgstr "Configurare %s"
 
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr "D-Bus nu este prezent pe această mașină sau modulul python lipsește"
@@ -5780,6 +5805,13 @@ msgstr "...sau lăsați-o aici"
 #~ "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 #~ msgstr ""
 #~ "Dacă este activat, Gajim va executa comenzi (/show, /sh, /execute, /exec)."
+
+#~ msgid ""
+#~ "If enabled, completion in group chats will be like a shell auto-"
+#~ "completion."
+#~ msgstr ""
+#~ "Dacă este activată, finalizarea în conversațiile de grup va fi ca o "
+#~ "autocompletare de tip shell."
 
 #~ msgid "Invalid affiliation given"
 #~ msgstr "Afilierea invalidă indicată"
@@ -6065,6 +6097,11 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Voice chats are not available"
 #~ msgstr "Conversațiile vocale nu sunt disponibile"
+
+#~ msgid "Windows Credential Vault is used for secure password storage"
+#~ msgstr ""
+#~ "Windows Credential Vault este utilizat pentru stocarea securizată a "
+#~ "parolelor"
 
 #~ msgid "XML to send"
 #~ msgstr "XML de trimis"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -292,12 +292,6 @@ msgstr "<leeg>"
 #, fuzzy
 msgid "<error>"
 msgstr "fout"
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr ""
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
-msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "?Vragen (voor abonnering):Geen"
@@ -904,10 +898,6 @@ msgstr "%s neemt nu deel aan het groepsgesprek"
 msgid "Anyone can join this group chat"
 msgstr "%s neemt nu deel aan het groepsgesprek"
 
-#, fuzzy
-msgid "App Indicator Icon"
-msgstr "Toepassingen"
-
 msgid "Application verification failure"
 msgstr "Toepassingsverificatie mislukt"
 
@@ -1391,6 +1381,9 @@ msgstr ""
 msgid "Choose the contact's groups"
 msgstr "Profiel van contact weergeven (Ctrl+I)"
 
+msgid "Cipher Suite"
+msgstr ""
+
 msgid "City"
 msgstr "Stad"
 
@@ -1483,10 +1476,6 @@ msgstr "Configuratie"
 
 msgid "Configure"
 msgstr "Configureren"
-
-#, python-format
-msgid "Configure %s"
-msgstr "%s configureren"
 
 msgid "Configure logging system"
 msgstr "Logboeksysteem configureren"
@@ -1978,8 +1967,9 @@ msgstr "Inschakelen"
 msgid "Enabled"
 msgstr "Ingeschakeld"
 
+#, fuzzy
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr ""
 "Geeft Gajim de mogelijkheid om de inactiviteitsduur van je computer te meten "
@@ -1993,7 +1983,7 @@ msgid "Enables Gajim to provide Audio and Video chats"
 msgstr "Geeft Gajim de mogelijkheid om audio- en videogesprekken aan te bieden"
 
 #, fuzzy
-msgid "Enables Gajim to provide a system notification area icon"
+msgid "Enables Gajim to provide a notification area icon"
 msgstr "Geeft Gajim de mogelijkheid om audio- en videogesprekken aan te bieden"
 
 msgid ""
@@ -2181,7 +2171,8 @@ msgstr "Groepsgesprekken verlaten"
 msgid "Fake audio output"
 msgstr "Valse audio-uitvoer"
 
-msgid "Feature not available under Windows"
+#, fuzzy
+msgid "Feature not available on Windows"
 msgstr "Functie niet beschikbaar voor Windows"
 
 msgid "Features"
@@ -2661,13 +2652,6 @@ msgstr ""
 "Indien ingeschakeld zal Gajim een STUN-server proberen gebruiken bij gebruik "
 "van Jingle, ofwel die in de optie ‘stun_server’, ofwel die gegeven door de "
 "XMPP-server."
-
-#, fuzzy
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
-msgstr ""
-"Indien ingeschakeld werkt aanvulling in groepsgesprekken als shell-auto-"
-"aanvulling"
 
 #, fuzzy
 msgid "If enabled, pressing Esc closes a tab/window."
@@ -3292,6 +3276,10 @@ msgid "Not Connected"
 msgstr "Verbonden"
 
 #, fuzzy
+msgid "Not accelerated"
+msgstr "Niet versleuteld"
+
+#, fuzzy
 msgid "Not available"
 msgstr "Niet beschikbaar"
 
@@ -3394,6 +3382,9 @@ msgid "Open folder"
 msgstr "_Bovenliggende map openen"
 
 msgid "Open search bar"
+msgstr ""
+
+msgid "OpenGL accelerated"
 msgstr ""
 
 #, fuzzy
@@ -3523,8 +3514,13 @@ msgstr "Kies afbeelding"
 msgid "Paste Last Input"
 msgstr ""
 
-msgid "Paste as quote"
-msgstr ""
+#, fuzzy
+msgid "Paste as Code Block"
+msgstr "Postcode"
+
+#, fuzzy
+msgid "Paste as Quote"
+msgstr "Kies afbeelding"
 
 msgid "Path length constraint exceeded"
 msgstr "Padlengtelimiet overschreden"
@@ -4023,6 +4019,10 @@ msgstr ""
 "Je moet Gajim herstarten vooraleer sommige instellingen in werking treden"
 
 #, fuzzy
+msgid "Restore chat"
+msgstr "Laatste toestand"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Laatste toestand"
 
@@ -4392,6 +4392,10 @@ msgstr "Opdrachten"
 
 #, fuzzy
 msgid "Show Contact Infos"
+msgstr "Alleen actieve contacten weergeven"
+
+#, fuzzy
+msgid "Show Content"
 msgstr "Alleen actieve contacten weergeven"
 
 #, fuzzy
@@ -4804,6 +4808,10 @@ msgstr "Geschiedenis synchroniseren"
 
 msgid "System"
 msgstr "Systeem"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "Versie"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5425,11 +5433,6 @@ msgstr "Nodig vrienden uit in groepsgesprekken, of neem eraan deel"
 #, fuzzy
 msgid "Windows"
 msgstr "venster1"
-
-msgid "Windows Credential Vault is used for secure password storage"
-msgstr ""
-"Windows-aanmeldingsgegevensbeheer wordt gebruikt voor veilige "
-"wachtwoordopslag"
 
 msgid "Without a connection, you can not browse available services"
 msgstr ""
@@ -6287,6 +6290,10 @@ msgstr ""
 #~ "Laat toe het roostervenster te verbergen zelfs als het "
 #~ "systeemvakpictogram niet weergegeven wordt."
 
+#, fuzzy
+#~ msgid "App Indicator Icon"
+#~ msgstr "Toepassingen"
+
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
@@ -6344,6 +6351,9 @@ msgstr ""
 
 #~ msgid "Clear the text window"
 #~ msgstr "Wis het tekstvenster"
+
+#~ msgid "Configure %s"
+#~ msgstr "%s configureren"
 
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr ""
@@ -6454,6 +6464,14 @@ msgstr ""
 #~ msgid ""
 #~ "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 #~ msgstr "Indien ingeschakeld zal Gajim XEP-0146-opdrachten uitvoeren."
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, completion in group chats will be like a shell auto-"
+#~ "completion."
+#~ msgstr ""
+#~ "Indien ingeschakeld werkt aanvulling in groepsgesprekken als shell-auto-"
+#~ "aanvulling"
 
 #~ msgid "Invalid affiliation given"
 #~ msgstr "Ongeldige aansluiting gegeven"
@@ -6758,6 +6776,11 @@ msgstr ""
 #, fuzzy
 #~ msgid "Voice chats are not available"
 #~ msgstr "Videosessies zijn niet beschikbaar"
+
+#~ msgid "Windows Credential Vault is used for secure password storage"
+#~ msgstr ""
+#~ "Windows-aanmeldingsgegevensbeheer wordt gebruikt voor veilige "
+#~ "wachtwoordopslag"
 
 #~ msgid "XML to send"
 #~ msgstr "Te versturen XML"

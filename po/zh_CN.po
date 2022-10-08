@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
-"PO-Revision-Date: 2022-09-07 18:13+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"PO-Revision-Date: 2022-09-27 11:13+0000\n"
 "Last-Translator: Tommy He <lovenemesis@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
 "gajim/master/zh_Hans/>\n"
@@ -291,12 +291,6 @@ msgstr "<空白>"
 
 msgid "<error>"
 msgstr "<错误>"
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr "<span color=\"green\" font-weight=\"bold\">OpenGL</span> 加速"
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
-msgstr "<span color=\"yellow\" font-weight=\"bold\">未加速</span>"
 
 msgid "?Ask (for Subscription):None"
 msgstr "无"
@@ -800,9 +794,6 @@ msgstr "任何人都可加入"
 msgid "Anyone can join this group chat"
 msgstr "任何人都可加入此群聊"
 
-msgid "App Indicator Icon"
-msgstr "应用提示图标"
-
 msgid "Application verification failure"
 msgstr "应用程序验证失败"
 
@@ -1230,6 +1221,9 @@ msgstr "从各式表情符号风格中选择"
 msgid "Choose the contact's groups"
 msgstr "选择联系人分组"
 
+msgid "Cipher Suite"
+msgstr "加密套件"
+
 msgid "City"
 msgstr "城市"
 
@@ -1311,10 +1305,6 @@ msgstr "配置"
 
 msgid "Configure"
 msgstr "配置"
-
-#, python-format
-msgid "Configure %s"
-msgstr "配置 %s"
 
 msgid "Configure logging system"
 msgstr "配置日志系统"
@@ -1470,9 +1460,8 @@ msgstr "复制代码片段"
 msgid "Copy info to clipboard"
 msgstr "复制信息到剪贴板"
 
-#, fuzzy
 msgid "Correct the last message"
-msgstr "设置状态信息"
+msgstr "修订上一条消息"
 
 msgid "Could not Open File"
 msgstr "无法打开文件"
@@ -1732,8 +1721,9 @@ msgstr "启用"
 msgid "Enabled"
 msgstr "已启用"
 
+#, fuzzy
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr "允许 Gajim 测量您的计算机的空闲时间以便自动设置您的状态"
 
@@ -1743,7 +1733,8 @@ msgstr "允许 Gajim 播放各种通知的声音"
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr "允许 Gajim 提供音频和视频聊天"
 
-msgid "Enables Gajim to provide a system notification area icon"
+#, fuzzy
+msgid "Enables Gajim to provide a notification area icon"
 msgstr "允许 Gajim 提供系统通知区域图标"
 
 msgid ""
@@ -1901,7 +1892,8 @@ msgstr "生成头像失败。"
 msgid "Fake audio output"
 msgstr "伪装音频输出"
 
-msgid "Feature not available under Windows"
+#, fuzzy
+msgid "Feature not available on Windows"
 msgstr "此功能在 Windows 下不可用"
 
 msgid "Features"
@@ -2317,10 +2309,6 @@ msgid ""
 msgstr ""
 "如果启用， Gajim 在使用 Jingle 时会尝试使用 STUN 服务器。服务器可以由"
 "\"stun_server\"选项给出，或由 XMPP 服务器给出。"
-
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
-msgstr "如果启用，群聊中的补全将会像 Shell 中的自动补全一样。"
 
 msgid "If enabled, pressing Esc closes a tab/window."
 msgstr "如果启用，按 Esc 键将关闭标签/窗口。"
@@ -2867,6 +2855,9 @@ msgstr "不可用"
 msgid "Not Connected"
 msgstr "没有连接"
 
+msgid "Not accelerated"
+msgstr "未加速"
+
 msgid "Not available"
 msgstr "不可用"
 
@@ -2956,6 +2947,9 @@ msgstr "打开文件夹"
 
 msgid "Open search bar"
 msgstr "打开搜索栏"
+
+msgid "OpenGL accelerated"
+msgstr "OpenGL 加速"
 
 msgid "Operating System"
 msgstr "操作系统"
@@ -3074,8 +3068,11 @@ msgstr "粘贴图像"
 msgid "Paste Last Input"
 msgstr "粘贴上一次输入"
 
-msgid "Paste as quote"
-msgstr "粘贴并引用"
+msgid "Paste as Code Block"
+msgstr "粘贴为代码块"
+
+msgid "Paste as Quote"
+msgstr "粘贴为引用"
 
 msgid "Path length constraint exceeded"
 msgstr "超过了路径长度限制"
@@ -3508,6 +3505,9 @@ msgstr "资源"
 msgid "Restart Gajim for changes to take affect"
 msgstr "需要重新启动 Gajim 来使得变更生效"
 
+msgid "Restore chat"
+msgstr "恢复聊天"
+
 msgid "Restore last state"
 msgstr "恢复上次状态"
 
@@ -3822,6 +3822,10 @@ msgstr "显示命令"
 msgid "Show Contact Infos"
 msgstr "显示联系人信息"
 
+#, fuzzy
+msgid "Show Content"
+msgstr "显示联系人信息"
+
 msgid "Show Gajim"
 msgstr "显示 Gajim"
 
@@ -4119,9 +4123,8 @@ msgstr "支持多个账号"
 msgid "Support for service discovery including nodes and search for users"
 msgstr "支持包括用户搜索和节点在内的服务发现功能"
 
-#, fuzzy
 msgid "Switch Workspace"
-msgstr "新工作区"
+msgstr "切换工作区"
 
 msgid "Switch to the first - ninth chat"
 msgstr "切换至第一至第九聊天"
@@ -4167,6 +4170,9 @@ msgstr "同步聊天记录中…"
 
 msgid "System"
 msgstr "系统"
+
+msgid "TLS Version"
+msgstr "TLS 版本"
 
 #, python-format
 msgid "TLS verification failed: %s"
@@ -4317,7 +4323,7 @@ msgid "This group chat will be destroyed once the last participant left"
 msgstr "一旦最后一个参与者离开该群聊将被销毁"
 
 msgid "This is a public group chat. Encryption is not available."
-msgstr ""
+msgstr "这是一个公开群聊。加密不可用。"
 
 msgid ""
 "This is the theme you are currently using.\n"
@@ -4378,11 +4384,10 @@ msgstr "这将从 Gajim 删除你的帐户。"
 msgid "This will reset all introduction hints"
 msgstr "这将重置所有的入门提示"
 
-#, fuzzy
 msgid ""
 "This workspace contains chats. All chats will be moved to the next "
 "workspace. Remove anyway?"
-msgstr "该工作区包含聊天。仍然移除？"
+msgstr "该工作区包含聊天。所有的聊天将被移动至下一个工作区。仍然移除？"
 
 msgid "Three Months"
 msgstr "三个月"
@@ -4614,6 +4619,10 @@ msgid ""
 "before:yyyy-mm-dd\n"
 "after:yyyy-mm-dd"
 msgstr ""
+"使用过滤器来缩小您的搜索：\n"
+"from:username\n"
+"before:yyyy-mm-dd\n"
+"after:yyyy-mm-dd"
 
 msgid "Use proxy auth_entication"
 msgstr "使用代理服务器需要认证"
@@ -4727,9 +4736,6 @@ msgstr "以像素为单位群聊通告的宽度"
 msgid "Windows"
 msgstr "窗口"
 
-msgid "Windows Credential Vault is used for secure password storage"
-msgstr "Windows 凭据保险箱被用来安全的保存密码"
-
 msgid "Without a connection, you can not browse available services"
 msgstr "没有连接的话，您无法浏览可用的服务"
 
@@ -4742,9 +4748,8 @@ msgstr "工作中"
 msgid "Workspace Settings"
 msgstr "工作区设定"
 
-#, fuzzy
 msgid "Workspaces"
-msgstr "我的工作区"
+msgstr "工作区"
 
 msgid "X11"
 msgstr "X11"
@@ -5449,6 +5454,13 @@ msgstr "或者把图像拖放到这里"
 #~ msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
 #~ msgstr "来自 <b>%(room_name)s</b> 的 <b>%(nick)s</b> 请求语音聊天"
 
+#~ msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
+#~ msgstr "<span color=\"green\" font-weight=\"bold\">OpenGL</span> 加速"
+
+#, fuzzy
+#~ msgid "<span color=\"orange\" font-weight=\"bold\">Not accelerated</span>"
+#~ msgstr "<span color=\"yellow\" font-weight=\"bold\">未加速</span>"
+
 #~ msgid "?CLI:account"
 #~ msgstr "账户"
 
@@ -5477,6 +5489,9 @@ msgstr "或者把图像拖放到这里"
 #~ "Allow to hide the contact list window even if the notification area icon "
 #~ "is not shown."
 #~ msgstr "允许以在提醒区域图标未显示时隐藏联系人列表窗口"
+
+#~ msgid "App Indicator Icon"
+#~ msgstr "应用提示图标"
 
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
@@ -5535,6 +5550,9 @@ msgstr "或者把图像拖放到这里"
 #~ msgstr ""
 #~ "命令被禁用。该命令可以通过在 ACE(高级配置编辑器) 中设定 "
 #~ "'command_system_execute' 为 True 来启用。"
+
+#~ msgid "Configure %s"
+#~ msgstr "配置 %s"
 
 #~ msgid "Correct"
 #~ msgstr "更正"
@@ -5631,6 +5649,11 @@ msgstr "或者把图像拖放到这里"
 #~ msgid ""
 #~ "If enabled, Gajim will execute commands (/show, /sh, /execute, /exec)."
 #~ msgstr "如果启用，Gajim将执行命令(/show, /sh, /execute, /exec)。"
+
+#~ msgid ""
+#~ "If enabled, completion in group chats will be like a shell auto-"
+#~ "completion."
+#~ msgstr "如果启用，群聊中的补全将会像 Shell 中的自动补全一样。"
 
 #~ msgid "Invalid affiliation given"
 #~ msgstr "指派的从属关系无效"
@@ -5901,6 +5924,9 @@ msgstr "或者把图像拖放到这里"
 
 #~ msgid "Voice chats are not available"
 #~ msgstr "语音聊天不可用"
+
+#~ msgid "Windows Credential Vault is used for secure password storage"
+#~ msgstr "Windows 凭据保险箱被用来安全的保存密码"
 
 #~ msgid "XML to send"
 #~ msgstr "要发送的 XML"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
 "PO-Revision-Date: 2009-11-20 20:49+1100\n"
 "Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: English <en_gb@li.org>\n"
@@ -298,12 +298,6 @@ msgstr ""
 #, fuzzy
 msgid "<error>"
 msgstr "Error"
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr ""
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
-msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "None"
@@ -917,10 +911,6 @@ msgstr "%s has joined the group chat"
 msgid "Anyone can join this group chat"
 msgstr "%s has joined the group chat"
 
-#, fuzzy
-msgid "App Indicator Icon"
-msgstr "<b>Applications</b>"
-
 msgid "Application verification failure"
 msgstr "Application verification failure"
 
@@ -1416,6 +1406,9 @@ msgstr ""
 msgid "Choose the contact's groups"
 msgstr "Show the contact's profile (Ctrl+I)"
 
+msgid "Cipher Suite"
+msgstr ""
+
 #, fuzzy
 msgid "City"
 msgstr "City:"
@@ -1515,10 +1508,6 @@ msgstr "Room Configuration"
 
 #, fuzzy
 msgid "Configure"
-msgstr "_Configure"
-
-#, fuzzy, python-format
-msgid "Configure %s"
 msgstr "_Configure"
 
 msgid "Configure logging system"
@@ -2022,7 +2011,7 @@ msgstr "Enabled"
 
 #, fuzzy
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr "Ability to measure idle time, in order to set auto status."
 
@@ -2032,7 +2021,7 @@ msgstr ""
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr ""
 
-msgid "Enables Gajim to provide a system notification area icon"
+msgid "Enables Gajim to provide a notification area icon"
 msgstr ""
 
 msgid ""
@@ -2220,7 +2209,7 @@ msgid "Fake audio output"
 msgstr ""
 
 #, fuzzy
-msgid "Feature not available under Windows"
+msgid "Feature not available on Windows"
 msgstr "Feature not available under Windows."
 
 msgid "Features"
@@ -2691,11 +2680,6 @@ msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
-
-#, fuzzy
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
-msgstr "If True, completion in groupchats will be like a shell auto-completion"
 
 #, fuzzy
 msgid "If enabled, pressing Esc closes a tab/window."
@@ -3322,6 +3306,10 @@ msgid "Not Connected"
 msgstr "Connected"
 
 #, fuzzy
+msgid "Not accelerated"
+msgstr "Not started"
+
+#, fuzzy
 msgid "Not available"
 msgstr "Not Available"
 
@@ -3426,6 +3414,9 @@ msgid "Open folder"
 msgstr "_Open Containing Folder"
 
 msgid "Open search bar"
+msgstr ""
+
+msgid "OpenGL accelerated"
 msgstr ""
 
 #, fuzzy
@@ -3555,8 +3546,13 @@ msgstr "Choose Image"
 msgid "Paste Last Input"
 msgstr ""
 
-msgid "Paste as quote"
-msgstr ""
+#, fuzzy
+msgid "Paste as Code Block"
+msgstr "<b>Postal Code:</b>"
+
+#, fuzzy
+msgid "Paste as Quote"
+msgstr "Choose Image"
 
 msgid "Path length constraint exceeded"
 msgstr "Path length constraint exceeded"
@@ -4071,6 +4067,10 @@ msgid "Restart Gajim for changes to take affect"
 msgstr "<b>NOTE:</b> You should restart Gajim for some settings to take effect"
 
 #, fuzzy
+msgid "Restore chat"
+msgstr "Last state"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Last state"
 
@@ -4442,6 +4442,10 @@ msgstr "Commands: %s"
 
 #, fuzzy
 msgid "Show Contact Infos"
+msgstr "Show Only _Active Contacts"
+
+#, fuzzy
+msgid "Show Content"
 msgstr "Show Only _Active Contacts"
 
 #, fuzzy
@@ -4856,6 +4860,10 @@ msgstr "Synchronise"
 #, fuzzy
 msgid "System"
 msgstr "<b>System:</b>"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "GTK+ Version:"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5473,9 +5481,6 @@ msgid "Width of group chat roster in pixel"
 msgstr ""
 
 msgid "Windows"
-msgstr ""
-
-msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
 msgid "Without a connection, you can not browse available services"
@@ -6301,6 +6306,10 @@ msgstr ""
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "_Execute Command"
 
+#, fuzzy
+#~ msgid "App Indicator Icon"
+#~ msgstr "<b>Applications</b>"
+
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
@@ -6361,6 +6370,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Clear the text window"
 #~ msgstr "Usage: /%s, clears the text window."
+
+#, fuzzy
+#~ msgid "Configure %s"
+#~ msgstr "_Configure"
 
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr "D-Bus is not present on this machine or python module is missing"
@@ -6434,6 +6447,13 @@ msgstr ""
 #~ msgid "If enabled, Gajim will add * and [n] in contact list window title."
 #~ msgstr ""
 #~ "If ticked, Gajim will display the mood of contacts in the roster window"
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, completion in group chats will be like a shell auto-"
+#~ "completion."
+#~ msgstr ""
+#~ "If True, completion in groupchats will be like a shell auto-completion"
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"

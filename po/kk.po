@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
 "PO-Revision-Date: 2020-07-22 17:59+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -302,12 +302,6 @@ msgstr "<бос>"
 #, fuzzy
 msgid "<error>"
 msgstr "Қате"
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr ""
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
-msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "?Ask (for Subscription):Жоқ"
@@ -900,10 +894,6 @@ msgstr "%s чат бөлмесіне кірді"
 msgid "Anyone can join this group chat"
 msgstr "%s чат бөлмесіне кірді"
 
-#, fuzzy
-msgid "App Indicator Icon"
-msgstr "<b>Қолданбалар</b>"
-
 msgid "Application verification failure"
 msgstr "Қолданбаны растау қатесі"
 
@@ -1394,6 +1384,9 @@ msgstr ""
 msgid "Choose the contact's groups"
 msgstr "Контакт профайлын көрсету (Ctrl+I)"
 
+msgid "Cipher Suite"
+msgstr ""
+
 msgid "City"
 msgstr "Қала"
 
@@ -1489,10 +1482,6 @@ msgstr "Баптаулар"
 
 msgid "Configure"
 msgstr "Баптау"
-
-#, python-format
-msgid "Configure %s"
-msgstr "%s баптау"
 
 #, fuzzy
 msgid "Configure logging system"
@@ -1979,7 +1968,7 @@ msgstr "Қосулы"
 
 #, fuzzy
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr ""
 "Қалып-күйді өзгерту үшін белсенді емес уақыт шамасын анықтау мүмкіндігі."
@@ -1993,7 +1982,7 @@ msgid "Enables Gajim to provide Audio and Video chats"
 msgstr "Аудио мен видео чаттарды іске асыру мүмкіндігі."
 
 #, fuzzy
-msgid "Enables Gajim to provide a system notification area icon"
+msgid "Enables Gajim to provide a notification area icon"
 msgstr "Аудио мен видео чаттарды іске асыру мүмкіндігі."
 
 msgid ""
@@ -2176,7 +2165,7 @@ msgid "Fake audio output"
 msgstr "Жалған аудио шығысы"
 
 #, fuzzy
-msgid "Feature not available under Windows"
+msgid "Feature not available on Windows"
 msgstr "Бұл мүмкіндік Windows-та қолжетерсіз."
 
 msgid "Features"
@@ -2641,12 +2630,6 @@ msgstr ""
 "Қосулы түрса, jingle қолдану кезде Gajim STUN серверін қолдануға тырысады. "
 "Ол сервер \"stun_server\" опциясында көрсетіледі не оны jabber сервердің өзі "
 "береді."
-
-#, fuzzy
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
-msgstr ""
-"Қосулы тұрса, топ чаттардағы мәтінді автотолықтыру қоршамдағыдай іске асады"
 
 #, fuzzy
 msgid "If enabled, pressing Esc closes a tab/window."
@@ -3262,6 +3245,10 @@ msgid "Not Connected"
 msgstr "Байланысқан"
 
 #, fuzzy
+msgid "Not accelerated"
+msgstr "Басталмаған"
+
+#, fuzzy
 msgid "Not available"
 msgstr "Қол жетерсіз"
 
@@ -3361,6 +3348,9 @@ msgid "Open folder"
 msgstr "_Орналасқан буманы ашу"
 
 msgid "Open search bar"
+msgstr ""
+
+msgid "OpenGL accelerated"
 msgstr ""
 
 #, fuzzy
@@ -3486,7 +3476,12 @@ msgstr "Суретті кірістіру"
 msgid "Paste Last Input"
 msgstr ""
 
-msgid "Paste as quote"
+#, fuzzy
+msgid "Paste as Code Block"
+msgstr "Дәйексөз ретінде кірістіру"
+
+#, fuzzy
+msgid "Paste as Quote"
 msgstr "Дәйексөз ретінде кірістіру"
 
 msgid "Path length constraint exceeded"
@@ -3987,6 +3982,10 @@ msgstr ""
 "<b>ЕСКЕРТУ:</b> Кейбір баптаулар іске асу үшін, Gajim-ді қайта қосуыңыз керек"
 
 #, fuzzy
+msgid "Restore chat"
+msgstr "Соңғы қалып-күйі: %s"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "Соңғы қалып-күйі: %s"
 
@@ -4345,6 +4344,10 @@ msgstr "Пәрмендер"
 
 #, fuzzy
 msgid "Show Contact Infos"
+msgstr "Те_к белсенді контакттарды көрсету"
+
+#, fuzzy
+msgid "Show Content"
 msgstr "Те_к белсенді контакттарды көрсету"
 
 #, fuzzy
@@ -4754,6 +4757,10 @@ msgstr "Тарихты синхрондау…"
 #, fuzzy
 msgid "System"
 msgstr "<b>Жүйе:</b>"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "Нұсқасы"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5364,9 +5371,6 @@ msgid "Width of group chat roster in pixel"
 msgstr ""
 
 msgid "Windows"
-msgstr ""
-
-msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
 msgid "Without a connection, you can not browse available services"
@@ -6164,6 +6168,10 @@ msgstr ""
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "Команданы орындау…"
 
+#, fuzzy
+#~ msgid "App Indicator Icon"
+#~ msgstr "<b>Қолданбалар</b>"
+
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
@@ -6225,6 +6233,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Clear the text window"
 #~ msgstr "Терезені жасырады"
+
+#~ msgid "Configure %s"
+#~ msgstr "%s баптау"
 
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr "D-Bus бұл машинада жоқ не керек python модулі жоқ"
@@ -6305,6 +6316,14 @@ msgstr ""
 #~ msgid "If enabled, Gajim will add * and [n] in contact list window title."
 #~ msgstr ""
 #~ "Белгіленген болса, Gajim ростердегі контакттар үшін көңіл-күйін көрсетеді"
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, completion in group chats will be like a shell auto-"
+#~ "completion."
+#~ msgstr ""
+#~ "Қосулы тұрса, топ чаттардағы мәтінді автотолықтыру қоршамдағыдай іске "
+#~ "асады"
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"

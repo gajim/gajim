@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-16 20:54+0000\n"
+"POT-Creation-Date: 2022-10-07 10:18+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -302,12 +302,6 @@ msgstr "<empty>"
 #, fuzzy
 msgid "<error>"
 msgstr "錯誤"
-
-msgid "<span color=\"green\" font-weight=\"bold\">OpenGL</span> accelerated"
-msgstr ""
-
-msgid "<span color=\"yellow\" font-weight=\"bold\">Not accelerated</span>"
-msgstr ""
 
 msgid "?Ask (for Subscription):None"
 msgstr "無"
@@ -913,10 +907,6 @@ msgstr "%s 加入聊天室"
 msgid "Anyone can join this group chat"
 msgstr "%s 加入聊天室"
 
-#, fuzzy
-msgid "App Indicator Icon"
-msgstr "<b>應用程式</b>"
-
 msgid "Application verification failure"
 msgstr "應用程式驗證失敗"
 
@@ -1412,6 +1402,9 @@ msgstr ""
 msgid "Choose the contact's groups"
 msgstr "顯示聯絡人的側寫"
 
+msgid "Cipher Suite"
+msgstr ""
+
 msgid "City"
 msgstr ""
 
@@ -1509,10 +1502,6 @@ msgstr "組態"
 
 msgid "Configure"
 msgstr "配置"
-
-#, python-format
-msgid "Configure %s"
-msgstr "組配 %s"
 
 #, fuzzy
 msgid "Configure logging system"
@@ -2012,7 +2001,7 @@ msgstr "啟用"
 
 #, fuzzy
 msgid ""
-"Enables Gajim to measure your computer's idle time in order to set your "
+"Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
 msgstr "測算閒置時間以自動調整狀態的能力。"
 
@@ -2025,7 +2014,7 @@ msgid "Enables Gajim to provide Audio and Video chats"
 msgstr "開始進行語音視訊通話的能力。"
 
 #, fuzzy
-msgid "Enables Gajim to provide a system notification area icon"
+msgid "Enables Gajim to provide a notification area icon"
 msgstr "開始進行語音視訊通話的能力。"
 
 #, fuzzy
@@ -2216,7 +2205,7 @@ msgid "Fake audio output"
 msgstr "偽裝音訊輸出"
 
 #, fuzzy
-msgid "Feature not available under Windows"
+msgid "Feature not available on Windows"
 msgstr "特性在 Windows 下無法使用。"
 
 msgid "Features"
@@ -2690,11 +2679,6 @@ msgid ""
 msgstr ""
 "如果為真，Gajim 在使用 jingle 時會嘗試使用 STUN 伺服器。伺服器可以由"
 "\"stun_server\"選項給出，或由 jabber 伺服器給出。"
-
-#, fuzzy
-msgid ""
-"If enabled, completion in group chats will be like a shell auto-completion."
-msgstr "如果為真，多人聊天中會像 shell 一樣自動補全"
 
 #, fuzzy
 msgid "If enabled, pressing Esc closes a tab/window."
@@ -3319,6 +3303,10 @@ msgid "Not Connected"
 msgstr "已連線"
 
 #, fuzzy
+msgid "Not accelerated"
+msgstr "未開始"
+
+#, fuzzy
 msgid "Not available"
 msgstr "離開很久了"
 
@@ -3422,6 +3410,9 @@ msgid "Open folder"
 msgstr "開啟資料夾(_O)"
 
 msgid "Open search bar"
+msgstr ""
+
+msgid "OpenGL accelerated"
 msgstr ""
 
 #, fuzzy
@@ -3552,8 +3543,13 @@ msgstr "選擇圖像"
 msgid "Paste Last Input"
 msgstr ""
 
-msgid "Paste as quote"
-msgstr ""
+#, fuzzy
+msgid "Paste as Code Block"
+msgstr "<b>郵遞區號:</b>"
+
+#, fuzzy
+msgid "Paste as Quote"
+msgstr "選擇圖像"
 
 msgid "Path length constraint exceeded"
 msgstr "超過了路徑長度限制"
@@ -4065,6 +4061,10 @@ msgid "Restart Gajim for changes to take affect"
 msgstr "<b>注意:</b>您必須重新啟動 gajim 以使某些設定生效"
 
 #, fuzzy
+msgid "Restore chat"
+msgstr "最後狀態"
+
+#, fuzzy
 msgid "Restore last state"
 msgstr "最後狀態"
 
@@ -4436,6 +4436,10 @@ msgstr "命令"
 
 #, fuzzy
 msgid "Show Contact Infos"
+msgstr "只顯示活動的聯絡人(_A)"
+
+#, fuzzy
+msgid "Show Content"
 msgstr "只顯示活動的聯絡人(_A)"
 
 #, fuzzy
@@ -4846,6 +4850,10 @@ msgstr "同步"
 #, fuzzy
 msgid "System"
 msgstr "<b>系統:</b>"
+
+#, fuzzy
+msgid "TLS Version"
+msgstr "版本:"
 
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
@@ -5461,9 +5469,6 @@ msgid "Width of group chat roster in pixel"
 msgstr ""
 
 msgid "Windows"
-msgstr ""
-
-msgid "Windows Credential Vault is used for secure password storage"
 msgstr ""
 
 msgid "Without a connection, you can not browse available services"
@@ -6294,6 +6299,10 @@ msgstr ""
 #~ "is not shown."
 #~ msgstr "即使系統匣圖示未顯示，仍然允許隱藏名冊視窗。"
 
+#, fuzzy
+#~ msgid "App Indicator Icon"
+#~ msgstr "<b>應用程式</b>"
+
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
@@ -6355,6 +6364,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Clear the text window"
 #~ msgstr "隱藏該視窗"
+
+#~ msgid "Configure %s"
+#~ msgstr "組配 %s"
 
 #~ msgid "D-Bus is not present on this machine or python module is missing"
 #~ msgstr "在這臺電腦上沒有 D-Bus 或是 Python 模組缺失"
@@ -6427,6 +6439,12 @@ msgstr ""
 #, fuzzy
 #~ msgid "If enabled, Gajim will add * and [n] in contact list window title."
 #~ msgstr "如果選取，Gajim 會在聯絡人清單視窗中顯示聯絡人的心情。"
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, completion in group chats will be like a shell auto-"
+#~ "completion."
+#~ msgstr "如果為真，多人聊天中會像 shell 一樣自動補全"
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"
