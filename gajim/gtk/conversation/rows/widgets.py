@@ -15,14 +15,18 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+from typing import Optional
 
 from datetime import datetime
 
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import Pango
 from gi.repository import GLib
+import cairo
 
 from gajim.common import app
+from gajim.common.const import AvatarSize
 from gajim.common.i18n import Q_
 from gajim.common.helpers import is_retraction_allowed
 from gajim.common.modules.contacts import GroupchatContact
@@ -31,7 +35,10 @@ from gajim.common.types import ChatContactT
 if TYPE_CHECKING:
     from .message import MessageRow
 
+from ...menus import get_groupchat_participant_menu
 from ...util import wrap_with_event_box
+from ...util import get_cursor
+from ...util import GajimPopover
 
 
 class SimpleLabel(Gtk.Label):
@@ -241,3 +248,74 @@ class MessageIcons(Gtk.Box):
 
     def set_error_tooltip(self, text: str) -> None:
         self._error_image.set_tooltip_markup(text)
+
+
+class AvatarBox(Gtk.EventBox):
+    def __init__(self,
+                 contact: ChatContactT,
+                 name: str,
+                 avatar: Optional[cairo.ImageSurface],
+                 ) -> None:
+
+        Gtk.EventBox.__init__(self)
+
+        self.set_size_request(AvatarSize.ROSTER, -1)
+        self.set_valign(Gtk.Align.START)
+
+        self._contact = contact
+
+        self._image = Gtk.Image.new_from_surface(avatar)
+        self.add(self._image)
+
+        if self._contact.is_groupchat:
+            self.connect('realize', self._on_realize)
+
+        self.connect('button-press-event',
+                     self._on_avatar_clicked, name)
+
+    def set_from_surface(self, surface: Optional[cairo.ImageSurface]) -> None:
+        self._image.set_from_surface(surface)
+
+    def set_merged(self, merged: bool) -> None:
+        self._image.set_no_show_all(merged)
+        self._image.set_visible(not merged)
+
+    @staticmethod
+    def _on_realize(event_box: Gtk.EventBox) -> None:
+        window = event_box.get_window()
+        if window is not None:
+            window.set_cursor(get_cursor('pointer'))
+
+    def _on_avatar_clicked(self,
+                           _widget: Gtk.Widget,
+                           event: Gdk.EventButton,
+                           name: str
+                           ) -> int:
+
+        if event.type == Gdk.EventType.BUTTON_PRESS:
+            if event.button == 1:
+                app.window.activate_action('mention', GLib.Variant('s', name))
+            elif event.button == 3:
+                self._show_participant_menu(name, event)
+
+        return Gdk.EVENT_STOP
+
+    def _show_participant_menu(self, nick: str, event: Gdk.EventButton) -> None:
+        assert isinstance(self._contact, GroupchatContact)
+        if not self._contact.is_joined:
+            return
+
+        self_contact = self._contact.get_self()
+        assert self_contact is not None
+
+        if nick == self_contact.name:
+            # Don’t show menu for us
+            return
+
+        contact = self._contact.get_resource(nick)
+        menu = get_groupchat_participant_menu(self._contact.account,
+                                              self_contact,
+                                              contact)
+
+        popover = GajimPopover(menu, relative_to=self, event=event)
+        popover.popup()

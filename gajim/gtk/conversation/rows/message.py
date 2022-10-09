@@ -48,6 +48,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.types import ChatContactT
 
 from .base import BaseRow
+from .widgets import AvatarBox
 from .widgets import DateTimeLabel
 from .widgets import NicknameLabel
 from .widgets import MessageIcons
@@ -55,11 +56,9 @@ from .widgets import MoreMenuButton
 from ..message_widget import MessageWidget
 from ...dialogs import InputDialog
 from ...dialogs import DialogButton
-from ...menus import get_groupchat_participant_menu
 from ...preview import PreviewWidget
-from ...util import GajimPopover
 from ...util import format_fingerprint
-from ...util import get_cursor
+
 
 MERGE_TIMEFRAME = timedelta(seconds=120)
 
@@ -179,19 +178,9 @@ class MessageRow(BaseRow):
                 self.set_receipt()
 
         self._meta_box.pack_start(self._message_icons, False, True, 0)
-        avatar = self._get_avatar(kind, name)
-        self._avatar_image = Gtk.Image.new_from_surface(avatar)
 
-        if self._is_groupchat:
-            avatar_placeholder = Gtk.EventBox()
-            avatar_placeholder.connect(
-                'button-press-event', self._on_avatar_clicked, name)
-            avatar_placeholder.connect('realize', self._on_realize)
-        else:
-            avatar_placeholder = Gtk.Box()
-        avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
-        avatar_placeholder.set_valign(Gtk.Align.START)
-        avatar_placeholder.add(self._avatar_image)
+        avatar = self._get_avatar(kind, name)
+        self._avatar_box = AvatarBox(self._contact, name, avatar)
 
         self._bottom_box = Gtk.Box(spacing=6)
         self._bottom_box.add(self._message_widget)
@@ -203,7 +192,7 @@ class MessageRow(BaseRow):
         more_menu_button = MoreMenuButton(self, self._contact, name)
         self._bottom_box.pack_end(more_menu_button, False, True, 0)
 
-        self.grid.attach(avatar_placeholder, 0, 0, 1, 2)
+        self.grid.attach(self._avatar_box, 0, 0, 1, 2)
         self.grid.attach(self._meta_box, 1, 0, 1, 1)
         self.grid.attach(self._bottom_box, 1, 1, 1, 1)
 
@@ -265,45 +254,6 @@ class MessageRow(BaseRow):
         avatar = contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
         assert not isinstance(avatar, GdkPixbuf.Pixbuf)
         return avatar
-
-    def _on_avatar_clicked(self,
-                           _widget: Gtk.Widget,
-                           event: Gdk.EventButton,
-                           name: str
-                           ) -> int:
-        if event.type == Gdk.EventType.BUTTON_PRESS:
-            if event.button == 1:
-                app.window.activate_action('mention', GLib.Variant('s', name))
-            elif event.button == 3:
-                self._show_participant_menu(name, event)
-
-        return Gdk.EVENT_STOP
-
-    def _show_participant_menu(self, nick: str, event: Gdk.EventButton) -> None:
-        assert isinstance(self._contact, GroupchatContact)
-        if not self._contact.is_joined:
-            return
-
-        self_contact = self._contact.get_self()
-        assert self_contact is not None
-
-        if nick == self_contact.name:
-            # Don’t show menu for us
-            return
-
-        contact = self._contact.get_resource(nick)
-        menu = get_groupchat_participant_menu(self._contact.account,
-                                              self_contact,
-                                              contact)
-
-        popover = GajimPopover(menu, relative_to=self, event=event)
-        popover.popup()
-
-    @staticmethod
-    def _on_realize(event_box: Gtk.EventBox) -> None:
-        window = event_box.get_window()
-        if window is not None:
-            window.set_cursor(get_cursor('pointer'))
 
     def is_same_sender(self, message: MessageRow) -> bool:
         return message.name == self.name
@@ -485,19 +435,17 @@ class MessageRow(BaseRow):
 
     def update_avatar(self) -> None:
         avatar = self._get_avatar(self.kind, self.name)
-        self._avatar_image.set_from_surface(avatar)
+        self._avatar_box.set_from_surface(avatar)
 
     def set_merged(self, merged: bool) -> None:
         self._merged = merged
         if merged:
             self.get_style_context().add_class('merged')
-            self._avatar_image.set_no_show_all(True)
-            self._avatar_image.hide()
             self._meta_box.set_no_show_all(True)
             self._meta_box.hide()
         else:
             self.get_style_context().remove_class('merged')
-            self._avatar_image.set_no_show_all(False)
-            self._avatar_image.show()
             self._meta_box.set_no_show_all(False)
             self._meta_box.show()
+
+        self._avatar_box.set_merged(merged)
