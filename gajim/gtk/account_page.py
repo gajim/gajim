@@ -14,6 +14,7 @@
 
 from __future__ import annotations
 
+from typing import Any
 from typing import Union
 
 from gi.repository import Gdk
@@ -57,6 +58,7 @@ class AccountPage(Gtk.Box, EventHelper):
         self._jid = app.get_jid_from_account(account)
         client = app.get_client(account)
         self._contact = client.get_module('Contacts').get_contact(self._jid)
+        self._contact.connect('avatar-update', self._on_avatar_update)
 
         self._ui = get_builder('account_page.ui')
         self.add(self._ui.paned)
@@ -103,6 +105,9 @@ class AccountPage(Gtk.Box, EventHelper):
 
     def _on_destroy(self, _widget: AccountPage) -> None:
         app.check_finalize(self)
+
+    def _on_avatar_update(self, *args: Any) -> None:
+        self.update()
 
     def _on_edit_profile(self, _button: Gtk.Button) -> None:
         open_window('ProfileWindow', account=self._account)
