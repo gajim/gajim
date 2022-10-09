@@ -31,6 +31,7 @@ from gajim.common.i18n import _
 from gajim.common.jingle_session import JingleSession
 from gajim.common.storage.archive import ConversationRow
 
+from .widgets import DateTimeLabel
 from .widgets import SimpleLabel
 from .base import BaseRow
 
@@ -141,7 +142,7 @@ class CallRow(BaseRow):
         name_widget.set_halign(Gtk.Align.START)
         name_widget.set_valign(Gtk.Align.START)
 
-        timestamp_widget = self.create_timestamp_widget(self.timestamp)
+        timestamp_widget = DateTimeLabel(self.timestamp)
         timestamp_widget.set_halign(Gtk.Align.START)
         timestamp_widget.set_valign(Gtk.Align.START)
 

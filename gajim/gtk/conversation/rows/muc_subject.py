@@ -26,6 +26,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 
 from .base import BaseRow
+from .widgets import DateTimeLabel
 from ..message_widget import MessageWidget
 
 
@@ -79,7 +80,7 @@ class MUCSubject(BaseRow):
         subject_box.add(message_widget)
         self.grid.attach(subject_box, 1, 0, 1, 1)
 
-        timestamp_widget = self.create_timestamp_widget(self.timestamp)
+        timestamp_widget = DateTimeLabel(self.timestamp)
         timestamp_widget.set_valign(Gtk.Align.START)
         self.grid.attach(timestamp_widget, 2, 0, 1, 1)
 

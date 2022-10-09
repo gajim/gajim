@@ -20,6 +20,7 @@ from gi.repository import Gtk
 
 from gajim.common.const import AvatarSize
 
+from .widgets import DateTimeLabel
 from .widgets import SimpleLabel
 from .base import BaseRow
 
@@ -43,7 +44,7 @@ class CommandOutputRow(BaseRow):
         avatar_placeholder.add(icon)
         self.grid.attach(avatar_placeholder, 0, 0, 1, 1)
 
-        timestamp_widget = self.create_timestamp_widget(self.timestamp)
+        timestamp_widget = DateTimeLabel(self.timestamp)
         timestamp_widget.set_valign(Gtk.Align.START)
         timestamp_widget.set_margin_start(0)
         self.grid.attach(timestamp_widget, 1, 0, 1, 1)

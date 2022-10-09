@@ -16,6 +16,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from datetime import datetime
+
 from gi.repository import Gtk
 from gi.repository import Pango
 from gi.repository import GLib
@@ -157,3 +159,22 @@ class MoreMenuButton(Gtk.Button):
     @staticmethod
     def _on_closed(popover: Gtk.Popover) -> None:
         GLib.idle_add(popover.destroy)
+
+
+class DateTimeLabel(Gtk.Label):
+    def __init__(self, timestamp: datetime) -> None:
+        Gtk.Label.__init__(self)
+
+        time_format = app.settings.get('chat_timestamp_format')
+        if timestamp.date() < datetime.today().date():
+            date_format = app.settings.get('date_timestamp_format')
+            time_format = f'{time_format} - {date_format}'
+        timestamp_formatted = timestamp.strftime(time_format)
+
+        self.set_label(timestamp_formatted)
+        self.set_halign(Gtk.Align.START)
+        self.set_valign(Gtk.Align.END)
+        self.set_margin_start(6)
+        self.set_margin_end(3)
+        self.get_style_context().add_class('conversation-meta')
+        self.set_tooltip_text(timestamp.strftime('%a, %d %b %Y - %X'))

@@ -23,7 +23,6 @@ from gi.repository import Gtk
 from gi.repository import Pango
 
 from gajim.common import app
-from gajim.common.helpers import from_one_line
 
 
 class BaseRow(Gtk.ListBoxRow):
@@ -59,23 +58,6 @@ class BaseRow(Gtk.ListBoxRow):
     @property
     def is_merged(self) -> bool:
         return self._merged
-
-    @staticmethod
-    def create_timestamp_widget(timestamp: datetime) -> Gtk.Label:
-        time_format = from_one_line(app.settings.get('chat_timestamp_format'))
-        if timestamp.date() < datetime.today().date():
-            date_format = from_one_line(
-                app.settings.get('date_timestamp_format'))
-            time_format = f'{time_format} - {date_format}'
-        timestamp_formatted = timestamp.strftime(time_format)
-        label = Gtk.Label(label=timestamp_formatted)
-        label.set_halign(Gtk.Align.START)
-        label.set_valign(Gtk.Align.END)
-        label.set_margin_start(6)
-        label.set_margin_end(3)
-        label.get_style_context().add_class('conversation-meta')
-        label.set_tooltip_text(timestamp.strftime('%a, %d %b %Y - %X'))
-        return label
 
     @staticmethod
     def create_name_widget(name: str, from_us: bool) -> Gtk.Label:

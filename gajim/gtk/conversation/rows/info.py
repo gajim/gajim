@@ -23,6 +23,7 @@ from gi.repository import Gtk
 
 from gajim.common.const import AvatarSize
 
+from .widgets import DateTimeLabel
 from .widgets import SimpleLabel
 from .base import BaseRow
 
@@ -55,7 +56,7 @@ class InfoMessage(BaseRow):
         self._label.set_text(text)
         self.grid.attach(self._label, 2, 0, 1, 1)
 
-        timestamp_widget = self.create_timestamp_widget(self.timestamp)
+        timestamp_widget = DateTimeLabel(self.timestamp)
         timestamp_widget.set_halign(Gtk.Align.START)
         timestamp_widget.set_valign(Gtk.Align.END)
         self.grid.attach(timestamp_widget, 3, 0, 1, 1)

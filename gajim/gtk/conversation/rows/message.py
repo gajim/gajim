@@ -49,6 +49,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.types import ChatContactT
 
 from .base import BaseRow
+from .widgets import DateTimeLabel
 from .widgets import MoreMenuButton
 from ..message_widget import MessageWidget
 from ...dialogs import InputDialog
@@ -140,7 +141,7 @@ class MessageRow(BaseRow):
         self._meta_box = Gtk.Box(spacing=6)
         self._meta_box.set_hexpand(True)
         self._meta_box.pack_start(name_widget, False, True, 0)
-        timestamp_label = self.create_timestamp_widget(self.timestamp)
+        timestamp_label = DateTimeLabel(self.timestamp)
         self._meta_box.pack_start(timestamp_label, False, True, 0)
 
         if additional_data is not None:

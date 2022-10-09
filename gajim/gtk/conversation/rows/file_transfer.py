@@ -27,7 +27,7 @@ from gajim.common.i18n import _
 from gajim.common.modules.httpupload import HTTPFileTransfer
 
 from .base import BaseRow
-
+from .widgets import DateTimeLabel
 from ...dialogs import ErrorDialog
 from ...util import EventHelper
 from ...builder import get_builder
@@ -62,7 +62,7 @@ class FileTransferRow(BaseRow, EventHelper):
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
         self.grid.attach(avatar_placeholder, 0, 0, 1, 1)
 
-        timestamp_widget = self.create_timestamp_widget(self.timestamp)
+        timestamp_widget = DateTimeLabel(self.timestamp)
         timestamp_widget.set_halign(Gtk.Align.START)
         timestamp_widget.set_valign(Gtk.Align.START)
         self.grid.attach(timestamp_widget, 1, 0, 1, 1)

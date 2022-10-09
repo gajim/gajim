@@ -23,6 +23,7 @@ from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
 
 from .widgets import SimpleLabel
+from .widgets import DateTimeLabel
 from .base import BaseRow
 
 
@@ -65,7 +66,7 @@ class MUCJoinLeft(BaseRow):
         self._label.get_style_context().add_class('gajim-status-message')
         self.grid.attach(self._label, 2, 0, 1, 1)
 
-        timestamp_widget = self.create_timestamp_widget(self.timestamp)
+        timestamp_widget = DateTimeLabel(self.timestamp)
         timestamp_widget.set_halign(Gtk.Align.START)
         timestamp_widget.set_valign(Gtk.Align.FILL)
         self.grid.attach(timestamp_widget, 3, 0, 1, 1)

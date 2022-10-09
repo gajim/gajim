@@ -48,6 +48,7 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.storage.archive import ConversationRow
 
 from .base import BaseRow
+from .widgets import DateTimeLabel
 from ...builder import get_builder
 from ...util import format_eta
 
@@ -125,7 +126,7 @@ class FileTransferJingleRow(BaseRow):
         name_widget.set_halign(Gtk.Align.START)
         name_widget.set_valign(Gtk.Align.START)
 
-        timestamp_widget = self.create_timestamp_widget(self.timestamp)
+        timestamp_widget = DateTimeLabel(self.timestamp)
         timestamp_widget.set_hexpand(True)
         timestamp_widget.set_valign(Gtk.Align.START)
 
