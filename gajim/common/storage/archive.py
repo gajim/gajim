@@ -527,7 +527,7 @@ class MessageArchiveStorage(SqliteStorage):
 
     @timeit
     def search_log(self,
-                   _account: str,
+                   account: str,
                    jid: JID,
                    query: str,
                    from_users: Optional[list[str]] = None,
@@ -555,6 +555,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         returns a list of namedtuples
         '''
+        account_id = self.get_account_id(account)
         jids = [jid]
 
         kinds = map(str, [KindConstant.STATUS,
@@ -579,12 +580,14 @@ class MessageArchiveStorage(SqliteStorage):
             SELECT account_id, jid_id, contact_name, time, kind, show, message,
                    subject, additional_data, log_line_id
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+            AND account_id = {account_id}
             AND message LIKE like(?)
             AND kind NOT IN ({kinds})
             {users_query}
             AND time BETWEEN ? AND ?
             ORDER BY time DESC, log_line_id
             '''.format(jids=', '.join('?' * len(jids)),
+                       account_id=account_id,
                        kinds=', '.join(kinds),
                        users_query=users_query_string)
 
