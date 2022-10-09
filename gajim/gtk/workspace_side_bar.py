@@ -122,8 +122,9 @@ class WorkspaceSideBar(Gtk.ListBox):
         if item_type == 'WORKSPACE_SIDEBAR_ITEM':
             self._process_workspace_drop(data.decode('utf-8'))
         elif item_type == 'CHAT_LIST_ITEM':
-            account, jid = pickle.loads(data)
-            self._process_chat_list_drop(account, jid, y_coord)
+            account, jid, source_workspace = pickle.loads(data)
+            self._process_chat_list_drop(
+                account, jid, source_workspace, y_coord)
         else:
             log.debug('Unknown item type dropped')
 
@@ -151,6 +152,7 @@ class WorkspaceSideBar(Gtk.ListBox):
     def _process_chat_list_drop(self,
                                 account: str,
                                 jid: JID,
+                                source_workspace: str,
                                 y_coord: int) -> None:
 
         workspace_row = cast(Workspace, self.get_row_at_y(y_coord))
@@ -159,8 +161,6 @@ class WorkspaceSideBar(Gtk.ListBox):
         if workspace_row.workspace_id == 'add':
             workspace_id = ''
 
-        source_workspace = app.window.get_active_workspace()
-        assert source_workspace is not None
         params = ChatListEntryParam(workspace_id=workspace_id,
                                     source_workspace_id=source_workspace,
                                     account=account,

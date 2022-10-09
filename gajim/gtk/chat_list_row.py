@@ -428,15 +428,16 @@ class ChatListRow(Gtk.ListBoxRow):
         app.window.highlight_dnd_targets(row, False)
 
     def _on_drag_data_get(self,
-                          _widget: Gtk.Widget,
+                          row: ChatListRow,
                           _drag_context: Gdk.DragContext,
                           selection_data: Gtk.SelectionData,
                           _info: int,
                           _time: int
                           ) -> None:
 
+        app.window.highlight_dnd_targets(row, False)
         drop_type = Gdk.Atom.intern_static_string('CHAT_LIST_ITEM')
-        byte_data = pickle.dumps((self.account, self.jid))
+        byte_data = pickle.dumps((self.account, self.jid, self.workspace_id))
         selection_data.set(drop_type, 8, byte_data)
 
     def _connect_contact_signals(self) -> None:
