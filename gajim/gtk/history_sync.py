@@ -20,6 +20,7 @@ from typing import Optional
 import logging
 from datetime import datetime
 from datetime import timedelta
+from datetime import timezone
 
 from gi.repository import Gtk
 from gi.repository import GLib
@@ -55,7 +56,7 @@ class HistorySyncAssistant(Assistant, EventHelper):
         self._client = app.get_client(account)
 
         self._timedelta: Optional[timedelta] = None
-        self._now = datetime.utcnow()
+        self._now = datetime.now(timezone.utc)
         self._query_id: Optional[str] = None
         self._start: Optional[datetime] = None
         self._end: Optional[datetime] = None
@@ -69,9 +70,10 @@ class HistorySyncAssistant(Assistant, EventHelper):
         if mam_start == ArchiveState.NEVER:
             self._current_start = self._now
         elif mam_start == ArchiveState.ALL:
-            self._current_start = datetime.utcfromtimestamp(0)
+            self._current_start = datetime.fromtimestamp(0, timezone.utc)
         else:
-            self._current_start = datetime.fromtimestamp(mam_start)
+            self._current_start = datetime.fromtimestamp(mam_start,
+                                                         timezone.utc)
 
         self.add_button('synchronize', _('Synchronize'), 'suggested-action')
         self.add_button('close', _('Close'))

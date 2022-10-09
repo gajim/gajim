@@ -21,6 +21,7 @@ from typing import Optional
 
 import logging
 from datetime import datetime
+from datetime import timezone
 
 from gi.repository import Gio
 from gi.repository import GLib
@@ -76,7 +77,7 @@ class LocationListener:
 
         # update data with info we just received
         self._data = {'lat': lat, 'lon': lon, 'alt': alt, 'accuracy': acc}
-        self._data['timestamp'] = self._timestamp_to_utc(timestamp)
+        self._data['timestamp'] = self._timestamp_to_string(timestamp)
         self._send_location()
 
     def _on_client_update(self,
@@ -132,6 +133,6 @@ class LocationListener:
         self._emit(info)
 
     @staticmethod
-    def _timestamp_to_utc(timestamp: float) -> str:
-        time = datetime.utcfromtimestamp(timestamp)
-        return time.strftime('%Y-%m-%dT%H:%MZ')
+    def _timestamp_to_string(timestamp: float) -> str:
+        utc_datetime = datetime.fromtimestamp(timestamp, timezone.utc)
+        return utc_datetime.strftime('%Y-%m-%dT%H:%MZ')

@@ -28,6 +28,7 @@ from functools import partial
 from enum import IntEnum
 from enum import unique
 from datetime import datetime
+from datetime import timezone
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -710,7 +711,7 @@ class FileTransfersWindow:
     @staticmethod
     def __convert_date(epoch: float) -> str:
         # Converts date-time from seconds from epoch to iso 8601
-        dt = datetime.utcfromtimestamp(epoch)
+        dt = datetime.fromtimestamp(epoch, timezone.utc)
         return dt.isoformat() + 'Z'
 
     def get_send_file_props(self,
