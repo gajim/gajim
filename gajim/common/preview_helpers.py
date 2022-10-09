@@ -147,15 +147,31 @@ def extract_and_resize_frames(image: Image.Image,
     return frames, result
 
 
-def create_thumbnail(data: bytes, size: int) -> Optional[bytes]:
+def create_thumbnail(data: bytes,
+                     size: int,
+                     mime_type: str
+                     ) -> Optional[bytes]:
+
     thumbnail = create_thumbnail_with_pil(data, size)
     if thumbnail is not None:
         return thumbnail
-    return create_thumbnail_with_pixbuf(data, size)
+    return create_thumbnail_with_pixbuf(data, size, mime_type)
 
 
-def create_thumbnail_with_pixbuf(data: bytes, size: int) -> Optional[bytes]:
-    loader = GdkPixbuf.PixbufLoader()
+def create_thumbnail_with_pixbuf(data: bytes,
+                                 size: int,
+                                 mime_type: str
+                                 ) -> Optional[bytes]:
+
+    try:
+        # Try to create GdKPixbuf loader with fixed mime-type to
+        # fix mime-type detection for HEIF images on some systems
+        loader = GdkPixbuf.PixbufLoader.new_with_mime_type(mime_type)
+    except GLib.Error as error:
+        log.warning('Creating pixbuf loader with mime '
+                    'type %s failed: %s', mime_type, error)
+        loader = GdkPixbuf.PixbufLoader()
+
     try:
         loader.write(data)
         loader.close()

@@ -157,7 +157,7 @@ class Preview:
         return self.orig_path.exists()
 
     def create_thumbnail(self, data: bytes) -> bool:
-        self.thumbnail = create_thumbnail(data, self.size)
+        self.thumbnail = create_thumbnail(data, self.size, self.mime_type)
         if self.thumbnail is None:
             self.info_message = _('Creating thumbnail failed')
             log.warning('Creating thumbnail failed for: %s', self.orig_path)
