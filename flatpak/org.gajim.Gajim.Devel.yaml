@@ -52,7 +52,6 @@ build-options:
 
 cleanup:
   - /include
-  - /lib/debug
   - /lib/pkgconfig
   - /share/gtk-doc
   - /share/man
