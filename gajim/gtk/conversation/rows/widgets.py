@@ -55,6 +55,7 @@ class MoreMenuButton(Gtk.Button):
         self.set_valign(Gtk.Align.START)
         self.set_halign(Gtk.Align.END)
         self.set_relief(Gtk.ReliefStyle.NONE)
+        self.set_hexpand(True)
 
         self.get_style_context().add_class('conversation-more-button')
 

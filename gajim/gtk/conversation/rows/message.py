@@ -201,8 +201,6 @@ class MessageRow(BaseRow):
             self._message_widget.set_direction(Gtk.TextDirection.RTL)
 
         more_menu_button = MoreMenuButton(self, self._contact, name)
-        more_menu_button.set_hexpand(True)
-        more_menu_button.set_halign(Gtk.Align.END)
         self._bottom_box.pack_end(more_menu_button, False, True, 0)
 
         self.grid.attach(avatar_placeholder, 0, 0, 1, 2)
