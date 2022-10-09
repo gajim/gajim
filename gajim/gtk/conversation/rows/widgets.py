@@ -196,3 +196,47 @@ class NicknameLabel(Gtk.Label):
             css_class = 'gajim-incoming-nickname'
 
         self.get_style_context().add_class(css_class)
+
+
+class MessageIcons(Gtk.Box):
+    def __init__(self) -> None:
+        Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL)
+
+        self._correction_image = Gtk.Image.new_from_icon_name(
+            'document-edit-symbolic', Gtk.IconSize.MENU)
+        self._correction_image.set_no_show_all(True)
+        self._correction_image.get_style_context().add_class('dim-label')
+
+        self._marker_image = Gtk.Image()
+        self._marker_image.set_no_show_all(True)
+        self._marker_image.get_style_context().add_class('dim-label')
+
+        self._error_image = Gtk.Image.new_from_icon_name(
+            'dialog-warning-symbolic', Gtk.IconSize.MENU)
+        self._error_image.get_style_context().add_class('warning-color')
+        self._error_image.set_no_show_all(True)
+
+        self.add(self._correction_image)
+        self.add(self._marker_image)
+        self.add(self._error_image)
+        self.show_all()
+
+    def set_receipt_icon_visible(self, visible: bool) -> None:
+        if not app.settings.get('positive_184_ack'):
+            return
+        self._marker_image.set_visible(visible)
+        self._marker_image.set_from_icon_name(
+            'feather-check-symbolic', Gtk.IconSize.MENU)
+        self._marker_image.set_tooltip_text(Q_('?Message state:Received'))
+
+    def set_correction_icon_visible(self, visible: bool) -> None:
+        self._correction_image.set_visible(visible)
+
+    def set_correction_tooltip(self, text: str) -> None:
+        self._correction_image.set_tooltip_markup(text)
+
+    def set_error_icon_visible(self, visible: bool) -> None:
+        self._error_image.set_visible(visible)
+
+    def set_error_tooltip(self, text: str) -> None:
+        self._error_image.set_tooltip_markup(text)
