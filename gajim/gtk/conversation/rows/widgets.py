@@ -171,7 +171,7 @@ class DateTimeLabel(Gtk.Label):
             time_format = f'{time_format} - {date_format}'
         timestamp_formatted = timestamp.strftime(time_format)
 
-        self.set_label(timestamp_formatted)
+        self.set_text(timestamp_formatted)
         self.set_halign(Gtk.Align.START)
         self.set_valign(Gtk.Align.END)
         self.set_margin_start(6)
