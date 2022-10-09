@@ -22,6 +22,7 @@ from typing import Optional
 import time
 from datetime import datetime
 from datetime import timedelta
+from datetime import timezone
 
 import nbxmpp
 from nbxmpp.errors import StanzaError
@@ -356,7 +357,7 @@ class MAM(BaseModule):
 
         else:
             # First Start, we request the last week
-            start_date = datetime.utcnow() - timedelta(days=7)
+            start_date = datetime.now(timezone.utc) - timedelta(days=7)
             self._log.info('Request archive: %s, after date %s',
                            own_jid, start_date)
         return mam_id, start_date
@@ -365,13 +366,15 @@ class MAM(BaseModule):
                               jid: JID,
                               threshold: SyncThreshold
                               ) -> tuple[Optional[str], Optional[datetime]]:
+
         archive = app.storage.archive.get_archive_infos(jid)
         mam_id = None
         start_date = None
+        now = datetime.now(timezone.utc)
 
         if archive is None or archive.last_mam_id is None:
             # First join
-            start_date = datetime.utcnow() - timedelta(days=1)
+            start_date = now - timedelta(days=1)
             self._log.info('Request archive: %s, after date %s',
                            jid, start_date)
 
@@ -390,10 +393,10 @@ class MAM(BaseModule):
                 self._log.info('No last muc timestamp found: %s', jid)
                 last_timestamp = 0
 
-            last = datetime.utcfromtimestamp(float(last_timestamp))
-            if datetime.utcnow() - last > timedelta(days=threshold):
+            last = datetime.fromtimestamp(float(last_timestamp), timezone.utc)
+            if now - last > timedelta(days=threshold):
                 # To much time has elapsed since last join, apply threshold
-                start_date = datetime.utcnow() - timedelta(days=threshold)
+                start_date = now - timedelta(days=threshold)
                 self._log.info('Too much time elapsed since last join, '
                                'request archive: %s, after date %s, '
                                'threshold: %s', jid, start_date, threshold)
