@@ -566,9 +566,8 @@ class MessageArchiveStorage(SqliteStorage):
         else:
             before_ts = before.timestamp()
 
-        if after is None:
-            after_ts = datetime.datetime(1971, 1, 1).timestamp()
-        else:
+        after_ts = 0
+        if after is not None:
             after_ts = after.timestamp()
 
         if from_users is None:
@@ -644,9 +643,8 @@ class MessageArchiveStorage(SqliteStorage):
         else:
             before_ts = before.timestamp()
 
-        if after is None:
-            after_ts = datetime.datetime(1971, 1, 1).timestamp()
-        else:
+        after_ts = 0
+        if after is not None:
             after_ts = after.timestamp()
 
         if from_users is None:
