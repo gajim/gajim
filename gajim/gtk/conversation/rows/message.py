@@ -50,6 +50,7 @@ from gajim.common.types import ChatContactT
 
 from .base import BaseRow
 from .widgets import DateTimeLabel
+from .widgets import NicknameLabel
 from .widgets import MoreMenuButton
 from ..message_widget import MessageWidget
 from ...dialogs import InputDialog
@@ -136,7 +137,7 @@ class MessageRow(BaseRow):
         if self._contact.jid == self._client.get_own_jid().bare:
             name = _('Me')
 
-        name_widget = self.create_name_widget(name, from_us)
+        name_widget = NicknameLabel(name, from_us)
 
         self._meta_box = Gtk.Box(spacing=6)
         self._meta_box.set_hexpand(True)

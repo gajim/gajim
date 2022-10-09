@@ -32,6 +32,7 @@ from gajim.common.jingle_session import JingleSession
 from gajim.common.storage.archive import ConversationRow
 
 from .widgets import DateTimeLabel
+from .widgets import NicknameLabel
 from .widgets import SimpleLabel
 from .base import BaseRow
 
@@ -138,7 +139,7 @@ class CallRow(BaseRow):
         avatar_image = Gtk.Image.new_from_surface(avatar)
         self._avatar_placeholder.add(avatar_image)
 
-        name_widget = self.create_name_widget(contact.name, is_self)
+        name_widget = NicknameLabel(contact.name, is_self)
         name_widget.set_halign(Gtk.Align.START)
         name_widget.set_valign(Gtk.Align.START)
 

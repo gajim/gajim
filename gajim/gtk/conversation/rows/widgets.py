@@ -178,3 +178,21 @@ class DateTimeLabel(Gtk.Label):
         self.set_margin_end(3)
         self.get_style_context().add_class('conversation-meta')
         self.set_tooltip_text(timestamp.strftime('%a, %d %b %Y - %X'))
+
+
+class NicknameLabel(Gtk.Label):
+    def __init__(self, name: str, from_us: bool) -> None:
+        Gtk.Label.__init__(self)
+
+        self.set_selectable(True)
+        self.set_ellipsize(Pango.EllipsizeMode.END)
+        self.set_valign(Gtk.Align.END)
+        self.get_style_context().add_class('conversation-nickname')
+        self.set_text(name)
+
+        if from_us:
+            css_class = 'gajim-outgoing-nickname'
+        else:
+            css_class = 'gajim-incoming-nickname'
+
+        self.get_style_context().add_class(css_class)

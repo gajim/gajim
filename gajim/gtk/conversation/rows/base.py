@@ -18,7 +18,6 @@ from typing import Optional
 
 from datetime import datetime
 
-from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
 
@@ -58,21 +57,6 @@ class BaseRow(Gtk.ListBoxRow):
     @property
     def is_merged(self) -> bool:
         return self._merged
-
-    @staticmethod
-    def create_name_widget(name: str, from_us: bool) -> Gtk.Label:
-        label = Gtk.Label()
-        label.set_selectable(True)
-        label.set_ellipsize(Pango.EllipsizeMode.END)
-        label.set_valign(Gtk.Align.END)
-        label.get_style_context().add_class('conversation-nickname')
-        label.set_markup(GLib.markup_escape_text(name))
-
-        if from_us:
-            label.get_style_context().add_class('gajim-outgoing-nickname')
-        else:
-            label.get_style_context().add_class('gajim-incoming-nickname')
-        return label
 
     @staticmethod
     def __destroy(widget: Gtk.Widget) -> None:

@@ -49,6 +49,7 @@ from gajim.common.storage.archive import ConversationRow
 
 from .base import BaseRow
 from .widgets import DateTimeLabel
+from .widgets import NicknameLabel
 from ...builder import get_builder
 from ...util import format_eta
 
@@ -122,7 +123,7 @@ class FileTransferJingleRow(BaseRow):
         avatar_image = Gtk.Image.new_from_surface(avatar)
         avatar_placeholder.add(avatar_image)
 
-        name_widget = self.create_name_widget(contact.name, is_self)
+        name_widget = NicknameLabel(contact.name, is_self)
         name_widget.set_halign(Gtk.Align.START)
         name_widget.set_valign(Gtk.Align.START)
 
