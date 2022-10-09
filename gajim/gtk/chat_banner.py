@@ -314,7 +314,7 @@ class ChatBanner(Gtk.Box, EventHelper):
             self._account_badge.set_visible(False)
             return
 
-        visible = app.get_number_of_accounts() > 1
+        visible = len(app.settings.get_active_accounts()) > 1
         if visible:
             self._account_badge.set_account(self._contact.account)
 

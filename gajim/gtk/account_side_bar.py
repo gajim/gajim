@@ -136,7 +136,7 @@ class Account(Gtk.ListBoxRow, EventHelper):
         self._unread_label.set_visible(bool(count))
 
     def _update_account_color_visibility(self, *args: Any) -> None:
-        visible = app.get_number_of_accounts() > 1
+        visible = len(app.settings.get_active_accounts()) > 1
         self._account_color_bar.set_visible(visible)
 
 

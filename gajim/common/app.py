@@ -341,13 +341,6 @@ def get_jid_without_resource(jid: str) -> str:
     return jid.split('/')[0]
 
 
-def get_number_of_accounts() -> int:
-    '''
-    Return the number of ALL accounts
-    '''
-    return len(connections.keys())
-
-
 def get_number_of_connected_accounts(
         accounts_list: Optional[list[str]] = None) -> int:
     '''
