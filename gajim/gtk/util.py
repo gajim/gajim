@@ -48,12 +48,14 @@ from nbxmpp.structs import TuneData
 
 from gajim.common import app
 from gajim.common import configpaths
+from gajim.common import types
 from gajim.common.i18n import _
 from gajim.common.helpers import URL_REGEX
 from gajim.common.const import LOCATION_DATA
 from gajim.common.const import Display
 from gajim.common.const import StyleAttr
 from gajim.common.ged import EventHelper as CommonEventHelper
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.styling import PlainBlock
 from gajim.common.structs import VariantMixin
 
@@ -505,6 +507,19 @@ def text_to_color(text: str) -> tuple[float, float, float]:
     else:
         background = (1, 1, 1)  # RGB (255, 255, 255) white
     return nbxmpp.util.text_to_color(text, background)  # type: ignore
+
+
+def get_contact_color(contact: types.ChatContactT
+                      ) -> tuple[float, float, float]:
+
+    if isinstance(contact, GroupchatParticipant):
+        if contact.room.muc_context in (None, 'public'):
+            return text_to_color(contact.name)
+
+        if contact.real_jid is not None:
+            return text_to_color(str(contact.real_jid))
+
+    return text_to_color(str(contact.jid))
 
 
 def get_color_for_account(account: str) -> str:

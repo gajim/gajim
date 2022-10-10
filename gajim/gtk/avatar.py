@@ -41,9 +41,9 @@ from gajim.common.const import StyleAttr
 
 from .const import DEFAULT_WORKSPACE_COLOR
 from .emoji_data_gtk import get_emoji_data
+from .util import get_contact_color
 from .util import load_icon_surface
 from .util import load_pixbuf
-from .util import text_to_color
 from .util import scale_with_ratio
 from .util import get_css_show_class
 from .util import convert_rgb_string_to_float
@@ -124,12 +124,11 @@ def generate_avatar(letters: str,
 
 @lru_cache(maxsize=None)
 def generate_default_avatar(letter: str,
-                            color_string: str,
+                            color: tuple[float, float, float],
                             size: int,
                             scale: int,
                             style: str = 'circle') -> cairo.ImageSurface:
 
-    color = text_to_color(color_string)
     surface = generate_avatar(letter, color, size, scale)
     surface = clip(surface, style)
     surface.set_device_scale(scale, scale)
@@ -414,11 +413,10 @@ class AvatarStorage(metaclass=Singleton):
                 return surface
 
         name = contact.name
-        color_string = str(contact.jid)
-
+        color = get_contact_color(contact)
         letter = generate_avatar_letter(name)
         surface = generate_default_avatar(
-            letter, color_string, size, scale, style=style)
+            letter, color, size, scale, style=style)
         if show is not None:
             surface = add_status_to_avatar(surface, show)
         self._cache[jid][(size, scale, show)] = surface
@@ -457,9 +455,12 @@ class AvatarStorage(metaclass=Singleton):
                 app.storage.cache.set_muc(jid, 'avatar', None)
 
         client = app.get_client(account)
+        contact = client.get_module('Contacts').get_bare_contact(jid)
+
         name = get_groupchat_name(client, jid)
+        color = get_contact_color(contact)
         letter = generate_avatar_letter(name)
-        surface = generate_default_avatar(letter, str(jid), size, scale, style)
+        surface = generate_default_avatar(letter, color, size, scale, style)
         self._cache[jid][(size, scale, None)] = surface
         return surface
 
