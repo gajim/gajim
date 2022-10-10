@@ -66,6 +66,8 @@ def get_emoji_data() -> dict[str, str]:
 
 
 def load_emoji_data() -> dict[str, str]:
+    # Sources of emoji data can be found at:
+    # https://gitlab.gnome.org/GNOME/gtk/-/tree/main/gtk/emoji
     # Location of emoji data resource changed in GTK >= 3.24.30
     if V(get_gtk_version()) >= V('3.24.30'):
         emoji_data_resource = '/org/gtk/libgtk/emoji/en.data'
