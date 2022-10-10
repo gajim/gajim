@@ -86,6 +86,7 @@ class Preferences(Gtk.ApplicationWindow):
         prefs: list[tuple[str, Type[PreferenceBox]]] = [
             ('window_behaviour', WindowBehaviour),
             ('plugins', Plugins),
+            ('general', General),
             ('chats', Chats),
             ('group_chats', GroupChats),
             ('file_preview', FilePreview),
@@ -259,7 +260,7 @@ class Plugins(PreferenceBox):
         PreferenceBox.__init__(self, settings)
 
 
-class Chats(PreferenceBox):
+class General(PreferenceBox):
     def __init__(self, *args: Any) -> None:
 
         speller_desc = None
@@ -268,6 +269,12 @@ class Chats(PreferenceBox):
 
         settings = [
             Setting(SettingKind.SWITCH,
+                    _('Show Send Message Button'),
+                    SettingType.CONFIG,
+                    'show_send_message_button',
+                    callback=self._on_show_send_message_button),
+
+            Setting(SettingKind.SWITCH,
                     _('Spell Checking'),
                     SettingType.CONFIG,
                     'use_speller',
@@ -275,34 +282,10 @@ class Chats(PreferenceBox):
                     enabled_func=self._speller_available),
 
             Setting(SettingKind.SWITCH,
-                    _('Message Receipts (✔)'),
-                    SettingType.CONFIG,
-                    'positive_184_ack',
-                    desc=_('Add a checkmark to received messages')),
-
-            # Setting(SettingKind.SWITCH,
-            #         _('XHTML Formatting'),
-            #         SettingType.CONFIG,
-            #         'show_xhtml',
-            #         desc=_('Render XHTML styles (colors, etc.) of incoming '
-            #                'messages')),
-
-            Setting(SettingKind.SWITCH,
-                    _('Show Send Message Button'),
-                    SettingType.CONFIG,
-                    'show_send_message_button',
-                    callback=self._on_show_send_message_button),
-            Setting(SettingKind.SWITCH,
                     _('Emoji Shortcodes'),
                     SettingType.CONFIG,
                     'enable_emoji_shortcodes',
                     desc=_('Show suggestions for shortcodes, e.g. :+1:')),
-            Setting(SettingKind.SWITCH,
-                    _('Show Status Changes'),
-                    SettingType.CONFIG,
-                    'print_status_in_chats',
-                    desc=_('For example: "Julia is now online"')),
-
         ]
 
         PreferenceBox.__init__(self, settings)
@@ -316,6 +299,27 @@ class Chats(PreferenceBox):
         # Bind to send_on_ctrl_enter to make this setting user-friendly
         # This way, users can press Enter to insert a new line, then click Send
         app.settings.set('send_on_ctrl_enter', show_button)
+
+
+class Chats(PreferenceBox):
+    def __init__(self, *args: Any) -> None:
+
+        settings = [
+            Setting(SettingKind.SWITCH,
+                    _('Message Receipts (✔)'),
+                    SettingType.CONFIG,
+                    'positive_184_ack',
+                    desc=_('Add a checkmark to received messages')),
+
+            Setting(SettingKind.SWITCH,
+                    _('Show Status Changes'),
+                    SettingType.CONFIG,
+                    'print_status_in_chats',
+                    desc=_('For example: "Julia is now online"')),
+
+        ]
+
+        PreferenceBox.__init__(self, settings)
 
 
 class GroupChats(PreferenceBox):
