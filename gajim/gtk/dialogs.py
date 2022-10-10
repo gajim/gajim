@@ -335,7 +335,7 @@ class ConfirmationCheckDialog(ConfirmationDialog):
         super()._on_response(_dialog, response)
 
 
-class PastePreviewDialog(ConfirmationCheckDialog):
+class PastePreviewDialog(ConfirmationDialog):
     def __init__(self,
                  title: str,
                  text: str,
@@ -346,14 +346,13 @@ class PastePreviewDialog(ConfirmationCheckDialog):
                  modal: bool = True,
                  transient_for: Optional[Gtk.Window] = None
                  ) -> None:
-        ConfirmationCheckDialog.__init__(self,
-                                         title,
-                                         text,
-                                         sec_text,
-                                         check_text,
-                                         buttons,
-                                         transient_for=transient_for,
-                                         modal=modal)
+        ConfirmationDialog.__init__(self,
+                                    title,
+                                    text,
+                                    sec_text,
+                                    buttons,
+                                    transient_for=transient_for,
+                                    modal=modal)
 
         preview = Gtk.Image()
         preview.set_halign(Gtk.Align.CENTER)

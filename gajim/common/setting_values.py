@@ -46,7 +46,6 @@ BoolSettings = Literal[
     'check_for_update',
     'confirm_close_muc',
     'confirm_on_window_delete',
-    'confirm_paste_image',
     'dev_force_bookmark_2',
     'dev_use_message_label',
     'developer_modus',
@@ -184,7 +183,6 @@ APP_SETTINGS = {
     'confirm_block': '',
     'confirm_close_muc': True,
     'confirm_on_window_delete': True,
-    'confirm_paste_image': True,
     'dark_theme': 2,
     'date_timestamp_format': '%x',
     'dev_force_bookmark_2': False,
@@ -641,7 +639,6 @@ ADVANCED_SETTINGS = {
         'confirm_close_muc': _('Ask before closing a group chat tab/window.'),
         'confirm_on_window_delete': _(
             'Ask before quitting when Gajim’s window is closed'),
-        'confirm_paste_image': _('Ask before pasting an image.'),
         'date_timestamp_format': 'https://docs.python.org/3/library/time.html#time.strftime',  # noqa: E501
         'dev_force_bookmark_2': _('Force Bookmark 2 usage'),
         'dev_use_message_label': '',

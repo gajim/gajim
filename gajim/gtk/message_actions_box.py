@@ -579,10 +579,6 @@ class MessageActionsBox(Gtk.Grid, ged.EventHelper):
         if image is None:
             return
 
-        if not app.settings.get('confirm_paste_image'):
-            self._paste_event_confirmed(True, image)
-            return
-
         PastePreviewDialog(
             _('Paste Image'),
             _('You are trying to paste an image'),
@@ -591,17 +587,14 @@ class MessageActionsBox(Gtk.Grid, ged.EventHelper):
             _('_Do not ask me again'),
             image,
             [DialogButton.make('Cancel'),
-                DialogButton.make('Accept',
-                                  text=_('_Paste'),
-                                  callback=self._paste_event_confirmed,
-                                  args=[image])]).show()
+             DialogButton.make('Accept',
+                               text=_('_Paste'),
+                               callback=self._paste_event_confirmed,
+                               args=[image])]).show()
 
     def _paste_event_confirmed(self,
-                               is_checked: bool,
                                image: GdkPixbuf.Pixbuf
                                ) -> None:
-        if is_checked:
-            app.settings.set('confirm_paste_image', False)
 
         dir_ = tempfile.gettempdir()
         path = os.path.join(dir_, f'{uuid.uuid4()}.png')
