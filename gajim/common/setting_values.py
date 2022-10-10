@@ -651,7 +651,7 @@ ADVANCED_SETTINGS = {
             'account in the Accounts window. BE CAREFUL, when you are logged '
             'in with a negative priority, you will NOT receive any message '
             'from your server.'),
-        'escape_key_closes': _('If enabled, pressing Esc closes a tab/window.'),
+        'escape_key_closes': _('Close a chat by pressing the Escape key'),
         'file_transfers_port': '',
         'ft_add_hosts_to_send': _(
             'List of send hosts (comma separated) in '

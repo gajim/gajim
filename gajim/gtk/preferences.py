@@ -269,6 +269,12 @@ class General(PreferenceBox):
 
         settings = [
             Setting(SettingKind.SWITCH,
+                    _('Close with Escape'),
+                    SettingType.CONFIG,
+                    'escape_key_closes',
+                    desc=_('Close a chat by pressing the Escape key')),
+
+            Setting(SettingKind.SWITCH,
                     _('Show Send Message Button'),
                     SettingType.CONFIG,
                     'show_send_message_button',
