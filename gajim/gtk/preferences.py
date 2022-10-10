@@ -303,12 +303,6 @@ class Chats(PreferenceBox):
                     'print_status_in_chats',
                     desc=_('For example: "Julia is now online"')),
 
-            Setting(SettingKind.SWITCH,
-                    _('Show Chat State In Banner'),
-                    SettingType.CONFIG,
-                    'show_chatstate_in_banner',
-                    desc=_('Show the contact’s chat state (e.g. typing) in '
-                           'the chats tab’s banner')),
         ]
 
         PreferenceBox.__init__(self, settings)

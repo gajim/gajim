@@ -685,6 +685,8 @@ ADVANCED_SETTINGS = {
         'search_engine': '',
         'send_on_ctrl_enter': _(
             'Send message on Ctrl+Enter and make a new line with Enter.'),
+        'show_chatstate_in_banner': _(
+            'Show chat state (e.g. "is typing…") next to your contact’s name'),
         'stun_server': _('STUN server to use when using Jingle'),
         'trayicon_notification_on_events': _(
             'Notify of events in the notification area.'),
