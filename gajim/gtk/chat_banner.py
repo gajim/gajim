@@ -71,14 +71,6 @@ class ChatBanner(Gtk.Box, EventHelper):
             'hide_groupchat_occupants_list',
             self._set_toggle_roster_button_icon)
 
-        app.settings.connect_signal(
-            'hide_chat_banner',
-            self._update_hide_banner)
-
-        app.settings.connect_signal(
-            'hide_groupchat_banner',
-            self._update_hide_banner)
-
         self.show_all()
 
     def clear(self) -> None:
@@ -108,7 +100,6 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._update_visitor_button()
         self._update_name_label()
         self._update_account_badge()
-        self._update_hide_banner()
 
     def _connect_signals(self) -> None:
         assert self._contact is not None
@@ -249,22 +240,6 @@ class ChatBanner(Gtk.Box, EventHelper):
     def _update_roster_button(self) -> None:
         self._ui.toggle_roster_button.set_visible(
             isinstance(self._contact, GroupchatContact))
-
-    def _update_hide_banner(self, *args: Any) -> None:
-        if self._contact is None:
-            return
-
-        if isinstance(self._contact, GroupchatContact):
-            hide_banner = app.settings.get('hide_groupchat_banner')
-        else:
-            hide_banner = app.settings.get('hide_chat_banner')
-
-        if hide_banner:
-            self.set_no_show_all(True)
-            self.hide()
-        else:
-            self.set_no_show_all(False)
-            self.show_all()
 
     def _update_avatar(self) -> None:
         scale = app.window.get_scale_factor()

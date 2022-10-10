@@ -58,8 +58,6 @@ BoolSettings = Literal[
     'gc_notify_on_all_messages_public_default',
     'gc_print_join_left_default',
     'gc_print_status_default',
-    'hide_chat_banner',
-    'hide_groupchat_banner',
     'hide_groupchat_occupants_list',
     'ignore_incoming_attention',
     'is_window_visible',
@@ -209,8 +207,6 @@ APP_SETTINGS = {
     'gc_sync_threshold_public_default': 1,
     'global_proxy': '',
     'groupchat_roster_width': 210,
-    'hide_chat_banner': False,
-    'hide_groupchat_banner': False,
     'hide_groupchat_occupants_list': False,
     'ignore_incoming_attention': False,
     'is_window_visible': True,
@@ -670,8 +666,6 @@ ADVANCED_SETTINGS = {
             'Character to add after nickname when using nickname completion '
             '(tab) in group chat.'),
         'groupchat_roster_width': _('Width of group chat roster in pixel'),
-        'hide_chat_banner': _('Hides the banner in a 1:1 chat window.'),
-        'hide_groupchat_banner': _('Hides the banner in a group chat window.'),
         'ignore_incoming_attention': _(
             'If enabled, Gajim will ignore incoming attention '
             'requests ("wizz").'),
