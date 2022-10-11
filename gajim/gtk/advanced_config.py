@@ -160,7 +160,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         desc = ADVANCED_SETTINGS['app'][setting]
 
         self._ui.description.set_text(desc or Q_('?config description:None'))
-        self._ui.reset_button.set_sensitive(True)
+        self._ui.reset_button.set_sensitive(not model[iter_][Column.IS_DEFAULT])
 
     def _on_treeview_row_activated(self,
                                    _treeview: Gtk.TreeView,
@@ -183,6 +183,8 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         modelrow[Column.VALUE] = column_value
         modelrow[Column.IS_DEFAULT] = bool(setting_value == default)
 
+        self._ui.reset_button.set_sensitive(setting_value != default)
+
     def _on_config_edited(self,
                           _cell: Gtk.CellRendererText,
                           path: str,
@@ -204,6 +206,8 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         modelrow[Column.VALUE] = text
         modelrow[Column.IS_DEFAULT] = bool(value == default)
 
+        self._ui.reset_button.set_sensitive(value != default)
+        
     def _on_reset_button_clicked(self, button: Gtk.Button) -> None:
         model, iter_ = self.treeview.get_selection().get_selected()
         if not iter_:
