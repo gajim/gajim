@@ -207,7 +207,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         modelrow[Column.IS_DEFAULT] = bool(value == default)
 
         self._ui.reset_button.set_sensitive(value != default)
-        
+
     def _on_reset_button_clicked(self, button: Gtk.Button) -> None:
         model, iter_ = self.treeview.get_selection().get_selected()
         if not iter_:
