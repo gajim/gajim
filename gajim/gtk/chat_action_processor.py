@@ -230,7 +230,7 @@ class ChatActionProcessor(Gtk.Popover):
             if not shortcode.startswith(action_text[1:]):
                 continue
             if menu_entry_count >= MAX_ENTRIES:
-                continue
+                break
             action_data = GLib.Variant('s', codepoint)
             menu_item = Gio.MenuItem()
             menu_item.set_label(f'{codepoint} {shortcode}')
