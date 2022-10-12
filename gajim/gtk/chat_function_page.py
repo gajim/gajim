@@ -25,10 +25,10 @@ from nbxmpp.protocol import JID
 from nbxmpp.protocol import validate_resourcepart
 
 from gajim.common import app
-from gajim.common.client import Client
+from gajim.common import types
+from gajim.common.const import SimpleClientState
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
-from gajim.common.types import ChatContactT
 
 from .dataform import DataFormWidget
 from .groupchat_inviter import GroupChatInviter
@@ -49,9 +49,11 @@ class ChatFunctionPage(Gtk.Box):
         self.set_valign(Gtk.Align.CENTER)
         self.get_style_context().add_class('padding-18')
 
-        self._client: Optional[Client] = None
-        self._contact: Optional[ChatContactT] = None
+        self._client: Optional[types.Client] = None
+        self._contact: Optional[types.ChatContactT] = None
         self._mode: Optional[str] = None
+        self._data: Optional[str] = None
+        self._ready_state = True
 
         self._widget: Optional[Gtk.Widget] = None
 
@@ -93,16 +95,16 @@ class ChatFunctionPage(Gtk.Box):
             'captcha-error')
         self.emit('finish', close_control)
 
-    def _clear(self) -> None:
+    def _reset(self) -> None:
+        if self._client is not None:
+            self._client.disconnect_all_from_obj(self)
+
         for child in self._content_box.get_children():
             child.destroy()
 
-    def set_mode(self,
-                 contact: ChatContactT,
-                 mode: str,
-                 data: Optional[str] = None
-                 ) -> None:
-        self._clear()
+        if self._widget is not None:
+            self._widget.destroy()
+
         self._confirm_button.get_style_context().remove_class(
             'destructive-action')
         self._confirm_button.get_style_context().remove_class(
@@ -110,16 +112,28 @@ class ChatFunctionPage(Gtk.Box):
         self._confirm_button.set_sensitive(False)
         self._confirm_button.grab_default()
 
+        self._forget_button.set_sensitive(True)
         self._forget_button.hide()
 
+        self._ready_state = True
+
+    def set_mode(self,
+                 contact: types.ChatContactT,
+                 mode: str,
+                 data: Optional[str] = None
+                 ) -> None:
+
+        self._reset()
+
         self._contact = contact
-        self._heading.set_text(self._contact.name)
         self._client = app.get_client(contact.account)
+        self._client.connect_signal(
+            'state-changed', self._on_client_state_changed)
+
         self._mode = mode
         self._data = data
 
-        if self._widget is not None:
-            self._widget.destroy()
+        self._heading.set_text(self._contact.name)
 
         if mode == 'invite':
             self._confirm_button.set_label(_('Invite'))
@@ -197,11 +211,31 @@ class ChatFunctionPage(Gtk.Box):
         elif isinstance(self._widget, DataFormWidget):
             self._widget.focus_first_entry()
 
+    def _on_client_state_changed(self,
+                                 _client: types.Client,
+                                 _signal_name: str,
+                                 _state: SimpleClientState
+                                 ) -> None:
+
+        self._update_button_state()
+
     def _on_ready(self,
                   _widget: Gtk.Widget,
                   state: bool
                   ) -> None:
-        self._confirm_button.set_sensitive(state)
+
+        self._ready_state = state
+        self._update_button_state()
+
+    def _update_button_state(self) -> None:
+        assert self._contact is not None
+        if app.account_is_connected(self._contact.account):
+            self._confirm_button.set_sensitive(self._ready_state)
+            self._forget_button.set_sensitive(True)
+            return
+
+        self._confirm_button.set_sensitive(False)
+        self._forget_button.set_sensitive(False)
 
     def _on_confirm_clicked(self, _button: Gtk.Button) -> None:
         if self._mode == 'invite':
@@ -263,27 +297,29 @@ class ChatFunctionPage(Gtk.Box):
         assert self._client is not None
         assert self._contact is not None
 
+        connected = app.account_is_connected(self._contact.account)
+        close_control = False
+
         if self._mode == 'captcha-request':
-            self._client.get_module('MUC').cancel_captcha(
-                self._contact.jid)
-            self.emit('finish', True)
-            return
+            if connected:
+                self._client.get_module('MUC').cancel_captcha(
+                    self._contact.jid)
+            close_control = True
 
         if self._mode == 'password-request':
-            self._client.get_module('MUC').cancel_password_request(
-                self._contact.jid)
-            self.emit('finish', True)
-            return
+            if connected:
+                self._client.get_module('MUC').cancel_password_request(
+                    self._contact.jid)
+            close_control = True
 
         if self._mode in (
                 'join-failed',
                 'creation-failed',
                 'config-failed',
                 'captcha-error'):
-            self.emit('finish', True)
-            return
+            close_control = True
 
-        self.emit('finish', False)
+        self.emit('finish', close_control)
 
     def _on_forget_clicked(self, _button: Gtk.Button) -> None:
         assert self._client is not None
@@ -310,7 +346,7 @@ class InputWidget(Gtk.Box):
     }
 
     def __init__(self,
-                 contact: ChatContactT,
+                 contact: types.ChatContactT,
                  mode: str,
                  data: Optional[str] = None
                  ) -> None:
