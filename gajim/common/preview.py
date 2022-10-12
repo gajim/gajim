@@ -208,6 +208,7 @@ class PreviewManager:
         session.add_feature_by_type(Soup.ContentSniffer)
         session.props.https_aliases = ['aesgcm']
         session.props.ssl_strict = False
+        session.props.user_agent = f'Gajim {app.version}'
 
         proxy = get_account_proxy(account)
         if proxy is None:
