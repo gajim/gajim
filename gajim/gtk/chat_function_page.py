@@ -16,6 +16,8 @@ from __future__ import annotations
 
 from typing import Optional
 
+from enum import Enum
+
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -32,6 +34,19 @@ from gajim.common.modules.contacts import GroupchatContact
 
 from .dataform import DataFormWidget
 from .groupchat_inviter import GroupChatInviter
+
+
+class FunctionMode(Enum):
+    INVITE = 'invite'
+    CHANGE_NICKNAME = 'change-nickname'
+    KICK = 'kick'
+    BAN = 'ban'
+    PASSWORD_REQUEST = 'password-request'
+    CAPTCHA_REQUEST = 'captcha-request'
+    CAPTCHA_ERROR = 'captcha-error'
+    JOIN_FAILED = 'join-failed'
+    CREATION_FAILED = 'creation-failed'
+    CONFIG_FAILED = 'config-failed'
 
 
 class ChatFunctionPage(Gtk.Box):
@@ -51,7 +66,7 @@ class ChatFunctionPage(Gtk.Box):
 
         self._client: Optional[types.Client] = None
         self._contact: Optional[types.ChatContactT] = None
-        self._mode: Optional[str] = None
+        self._mode: Optional[FunctionMode] = None
         self._data: Optional[str] = None
         self._ready_state = True
 
@@ -89,10 +104,10 @@ class ChatFunctionPage(Gtk.Box):
 
     def process_escape(self) -> None:
         close_control = self._mode in (
-            'join-failed',
-            'creation-failed',
-            'config-failed',
-            'captcha-error')
+            FunctionMode.JOIN_FAILED,
+            FunctionMode.CREATION_FAILED,
+            FunctionMode.CONFIG_FAILED,
+            FunctionMode.CAPTCHA_ERROR)
         self.emit('finish', close_control)
 
     def _reset(self) -> None:
@@ -119,7 +134,7 @@ class ChatFunctionPage(Gtk.Box):
 
     def set_mode(self,
                  contact: types.ChatContactT,
-                 mode: str,
+                 mode: FunctionMode,
                  data: Optional[str] = None
                  ) -> None:
 
@@ -135,7 +150,7 @@ class ChatFunctionPage(Gtk.Box):
 
         self._heading.set_text(self._contact.name)
 
-        if mode == 'invite':
+        if mode == FunctionMode.INVITE:
             self._confirm_button.set_label(_('Invite'))
             self._confirm_button.get_style_context().add_class(
                 'suggested-action')
@@ -144,35 +159,35 @@ class ChatFunctionPage(Gtk.Box):
             self._widget.connect('listbox-changed', self._on_ready)
             self._widget.load_contacts()
 
-        elif mode == 'change-nickname':
+        elif mode == FunctionMode.CHANGE_NICKNAME:
             self._confirm_button.set_label(_('Change'))
             self._confirm_button.get_style_context().add_class(
                 'suggested-action')
             self._widget = InputWidget(self._contact, mode)
             self._widget.connect('changed', self._on_ready)
 
-        elif mode == 'kick':
+        elif mode == FunctionMode.KICK:
             self._confirm_button.set_label(_('Kick'))
             self._confirm_button.set_sensitive(True)
             self._confirm_button.get_style_context().add_class(
                 'destructive-action')
             self._widget = InputWidget(self._contact, mode, data)
 
-        elif mode == 'ban':
+        elif mode == FunctionMode.BAN:
             self._confirm_button.set_label(_('Ban'))
             self._confirm_button.set_sensitive(True)
             self._confirm_button.get_style_context().add_class(
                 'destructive-action')
             self._widget = InputWidget(self._contact, mode, data)
 
-        elif mode == 'password-request':
+        elif mode == FunctionMode.PASSWORD_REQUEST:
             self._confirm_button.set_label(_('Join'))
             self._confirm_button.get_style_context().add_class(
                 'suggested-action')
             self._widget = InputWidget(self._contact, mode)
             self._widget.connect('changed', self._on_ready)
 
-        elif mode == 'captcha-request':
+        elif mode == FunctionMode.CAPTCHA_REQUEST:
             self._confirm_button.set_label(_('Join'))
             self._confirm_button.get_style_context().add_class(
                 'suggested-action')
@@ -186,23 +201,25 @@ class ChatFunctionPage(Gtk.Box):
             self._widget.show_all()
             self._widget.connect('is-valid', self._on_ready)
 
-        elif mode == 'captcha-error':
+        elif mode == FunctionMode.CAPTCHA_ERROR:
             self._confirm_button.set_label(_('Try Again'))
             self._confirm_button.set_sensitive(True)
             self._confirm_button.get_style_context().add_class(
                 'suggested-action')
             self._widget = ErrorWidget(error_text=data)
 
-        elif mode in ('join-failed', 'creation-failed', 'config-failed'):
+        elif mode in (FunctionMode.JOIN_FAILED,
+                      FunctionMode.CREATION_FAILED,
+                      FunctionMode.CONFIG_FAILED):
             self._confirm_button.set_label(_('Try Again'))
             self._confirm_button.set_sensitive(True)
             self._confirm_button.get_style_context().add_class(
                 'suggested-action')
-            if mode == 'join-failed':
+            if mode == FunctionMode.JOIN_FAILED:
                 is_bookmark = self._client.get_module('Bookmarks').is_bookmark(
                     self._contact.jid)
                 self._forget_button.set_visible(is_bookmark)
-            self._widget = ErrorWidget(error_mode=mode, error_text=data)
+            self._widget = ErrorWidget(mode=mode, error_text=data)
 
         assert self._widget is not None
         self._content_box.add(self._widget)
@@ -238,57 +255,49 @@ class ChatFunctionPage(Gtk.Box):
         self._forget_button.set_sensitive(False)
 
     def _on_confirm_clicked(self, _button: Gtk.Button) -> None:
-        if self._mode == 'invite':
+        assert self._client is not None
+        assert self._contact is not None
+
+        if self._mode == FunctionMode.INVITE:
             assert isinstance(self._widget, GroupChatInviter)
             invitees = self._widget.get_invitees()
             for jid in invitees:
                 self._invite(JID.from_string(jid))
 
-        elif self._mode == 'change-nickname':
+        elif self._mode == FunctionMode.CHANGE_NICKNAME:
             assert isinstance(self._widget, InputWidget)
             nickname = self._widget.get_text()
-            assert self._client is not None
-            assert self._contact is not None
             self._client.get_module('MUC').change_nick(
                 self._contact.jid, nickname)
 
-        elif self._mode == 'kick':
+        elif self._mode == FunctionMode.KICK:
             assert isinstance(self._widget, InputWidget)
             reason = self._widget.get_text()
-            assert self._client is not None
-            assert self._contact is not None
             self._client.get_module('MUC').set_role(
                 self._contact.jid, self._data, 'none', reason)
 
-        elif self._mode == 'ban':
+        elif self._mode == FunctionMode.BAN:
             assert isinstance(self._widget, InputWidget)
             reason = self._widget.get_text()
-            assert self._client is not None
-            assert self._contact is not None
             self._client.get_module('MUC').set_affiliation(
                 self._contact.jid,
                 {self._data: {'affiliation': 'outcast', 'reason': reason}})
 
-        elif self._mode == 'password-request':
+        elif self._mode == FunctionMode.PASSWORD_REQUEST:
             assert isinstance(self._widget, InputWidget)
             password = self._widget.get_text()
-            assert self._client is not None
-            assert self._contact is not None
             self._client.get_module('MUC').set_password(
                 self._contact.jid, password)
             self._client.get_module('MUC').join(self._contact.jid)
 
-        elif self._mode == 'captcha-request':
+        elif self._mode == FunctionMode.CAPTCHA_REQUEST:
             assert isinstance(self._widget, DataFormWidget)
             form_node = self._widget.get_submit_form()
-            assert self._client is not None
-            assert self._contact is not None
             self._client.get_module('MUC').send_captcha(
                 self._contact.jid, form_node)
 
-        elif self._mode in ('join-failed', 'captcha-error'):
-            assert self._client is not None
-            assert self._contact is not None
+        elif self._mode in (FunctionMode.JOIN_FAILED,
+                            FunctionMode.CAPTCHA_ERROR):
             self._client.get_module('MUC').join(self._contact.jid)
 
         self.emit('finish', False)
@@ -300,23 +309,23 @@ class ChatFunctionPage(Gtk.Box):
         connected = app.account_is_connected(self._contact.account)
         close_control = False
 
-        if self._mode == 'captcha-request':
+        if self._mode == FunctionMode.CAPTCHA_REQUEST:
             if connected:
                 self._client.get_module('MUC').cancel_captcha(
                     self._contact.jid)
             close_control = True
 
-        if self._mode == 'password-request':
+        elif self._mode == FunctionMode.PASSWORD_REQUEST:
             if connected:
                 self._client.get_module('MUC').cancel_password_request(
                     self._contact.jid)
             close_control = True
 
-        if self._mode in (
-                'join-failed',
-                'creation-failed',
-                'config-failed',
-                'captcha-error'):
+        elif self._mode in (
+                FunctionMode.JOIN_FAILED,
+                FunctionMode.CREATION_FAILED,
+                FunctionMode.CONFIG_FAILED,
+                FunctionMode.CAPTCHA_ERROR):
             close_control = True
 
         self.emit('finish', close_control)
@@ -347,9 +356,10 @@ class InputWidget(Gtk.Box):
 
     def __init__(self,
                  contact: types.ChatContactT,
-                 mode: str,
+                 mode: FunctionMode,
                  data: Optional[str] = None
                  ) -> None:
+
         Gtk.Box.__init__(self,
                          orientation=Gtk.Orientation.VERTICAL,
                          spacing=12)
@@ -372,21 +382,21 @@ class InputWidget(Gtk.Box):
         self._entry.connect('changed', self._on_entry_changed)
         self.add(self._entry)
 
-        if mode == 'change-nickname':
+        if mode == FunctionMode.CHANGE_NICKNAME:
             heading_label.set_text(_('Change Nickname'))
             sub_label.set_text(_('Enter your new nickname'))
             assert isinstance(self._contact, GroupchatContact)
             self._entry.set_text(self._contact.nickname or '')
 
-        elif mode == 'kick':
+        elif mode == FunctionMode.KICK:
             heading_label.set_text(_('Kick %s') % data)
             sub_label.set_text(_('Reason (optional)'))
 
-        elif mode == 'ban':
+        elif mode == FunctionMode.BAN:
             heading_label.set_text(_('Ban %s') % data)
             sub_label.set_text(_('Reason (optional)'))
 
-        elif mode == 'password-request':
+        elif mode == FunctionMode.PASSWORD_REQUEST:
             heading_label.set_text(_('Password Required'))
             sub_label.set_text(_('Enter a password to join this chat'))
             self._entry.set_input_purpose(Gtk.InputPurpose.PASSWORD)
@@ -401,7 +411,7 @@ class InputWidget(Gtk.Box):
     def _on_entry_changed(self, entry: Gtk.Entry) -> None:
         text = entry.get_text()
 
-        if self._mode == 'change-nickname':
+        if self._mode == FunctionMode.CHANGE_NICKNAME:
             assert isinstance(self._contact, GroupchatContact)
             if not text or text == self._contact.nickname:
                 self.emit('changed', False)
@@ -423,9 +433,10 @@ class InputWidget(Gtk.Box):
 
 class ErrorWidget(Gtk.Box):
     def __init__(self,
-                 error_mode: Optional[str] = None,
+                 mode: Optional[FunctionMode] = None,
                  error_text: Optional[str] = None
                  ) -> None:
+
         Gtk.Box.__init__(self,
                          orientation=Gtk.Orientation.VERTICAL,
                          spacing=12)
@@ -436,11 +447,11 @@ class ErrorWidget(Gtk.Box):
         heading = Gtk.Label()
         heading.get_style_context().add_class('bold16')
         heading_text = _('An Error Occurred')
-        if error_mode == 'join-failed':
+        if mode == FunctionMode.JOIN_FAILED:
             heading_text = _('Failed to Join Group Chat')
-        elif error_mode == 'creation-failed':
+        elif mode == FunctionMode.CREATION_FAILED:
             heading_text = _('Failed to Create Group Chat')
-        elif error_mode == 'config-failed':
+        elif mode == FunctionMode.CONFIG_FAILED:
             heading_text = _('Failed to Configure Group Chat')
         heading.set_text(heading_text)
 

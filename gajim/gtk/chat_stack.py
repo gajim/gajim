@@ -46,6 +46,7 @@ from gajim.gui.dialogs import ErrorDialog
 
 from .chat_banner import ChatBanner
 from .chat_function_page import ChatFunctionPage
+from .chat_function_page import FunctionMode
 from .const import TARGET_TYPE_URI_LIST
 from .control import ChatControl
 from .message_actions_box import MessageActionsBox
@@ -219,21 +220,25 @@ class ChatStack(Gtk.Stack, EventHelper):
                 str(self._current_contact.jid))
             if muc_data is not None:
                 if muc_data.state.is_captcha_request:
-                    self._show_chat_function_page('captcha-request')
+                    self._show_chat_function_page(FunctionMode.CAPTCHA_REQUEST)
                     return
 
                 if muc_data.state.is_password_request:
-                    self._show_chat_function_page('password-request')
+                    self._show_chat_function_page(FunctionMode.PASSWORD_REQUEST)
                     return
 
                 if not muc_data.state.is_joined:
                     if muc_data.error == 'captcha-failed':
                         self._show_chat_function_page(
-                            'captcha-error', muc_data.error_text)
+                            FunctionMode.CAPTCHA_ERROR, muc_data.error_text)
                         return
-                    if muc_data.error in ('join-failed', 'creation-failed'):
+                    if muc_data.error == 'join-failed':
                         self._show_chat_function_page(
-                            muc_data.error, muc_data.error_text)
+                            FunctionMode.JOIN_FAILED, muc_data.error_text)
+                        return
+                    if muc_data.error == 'creation-failed':
+                        self._show_chat_function_page(
+                            FunctionMode.CREATION_FAILED, muc_data.error_text)
                         return
 
         self.set_transition_type(Gtk.StackTransitionType.NONE)
@@ -254,47 +259,53 @@ class ChatStack(Gtk.Stack, EventHelper):
                                    _signal_name: str,
                                    _properties: MessageProperties
                                    ) -> None:
-        self._show_chat_function_page('password-request')
+
+        self._show_chat_function_page(FunctionMode.PASSWORD_REQUEST)
 
     def _on_room_captcha_challenge(self,
                                    contact: GroupchatContact,
                                    _signal_name: str,
-                                   properties: MessageProperties
+                                   _properties: MessageProperties
                                    ) -> None:
-        self._show_chat_function_page('captcha-request')
+
+        self._show_chat_function_page(FunctionMode.CAPTCHA_REQUEST)
 
     def _on_room_captcha_error(self,
                                _contact: GroupchatContact,
                                _signal_name: str,
                                error: StanzaError
                                ) -> None:
+
         error_text = helpers.to_user_string(error)
-        self._show_chat_function_page('captcha-error', error_text)
+        self._show_chat_function_page(FunctionMode.CAPTCHA_ERROR, error_text)
 
     def _on_room_creation_failed(self,
                                  _contact: GroupchatContact,
                                  _signal_name: str,
                                  properties: MessageProperties
                                  ) -> None:
+
         assert properties.error is not None
         error_text = helpers.to_user_string(properties.error)
-        self._show_chat_function_page('creation-failed', error_text)
+        self._show_chat_function_page(FunctionMode.CREATION_FAILED, error_text)
 
     def _on_room_join_failed(self,
                              _contact: GroupchatContact,
                              _signal_name: str,
                              error: StanzaError
                              ) -> None:
+
         self._show_chat_function_page(
-            'join-failed', helpers.to_user_string(error))
+            FunctionMode.JOIN_FAILED, helpers.to_user_string(error))
 
     def _on_room_config_failed(self,
                                _contact: GroupchatContact,
                                _signal_name: str,
                                error: StanzaError
                                ) -> None:
+
         self._show_chat_function_page(
-            'config-failed', helpers.to_user_string(error))
+            FunctionMode.CONFIG_FAILED, helpers.to_user_string(error))
 
     def _on_muc_state_changed(self,
                               contact: GroupchatContact,
@@ -587,10 +598,10 @@ class ChatStack(Gtk.Stack, EventHelper):
                 'ContactInfo', account=account, contact=resource_contact)
 
         elif action_name == 'muc-invite':
-            self._show_chat_function_page('invite')
+            self._show_chat_function_page(FunctionMode.INVITE)
 
         elif action_name == 'muc-change-nickname':
-            self._show_chat_function_page('change-nickname')
+            self._show_chat_function_page(FunctionMode.CHANGE_NICKNAME)
 
         elif action_name == 'muc-execute-command':
             nick = None
@@ -605,12 +616,12 @@ class ChatStack(Gtk.Stack, EventHelper):
         elif action_name == 'muc-kick':
             assert param is not None
             kick_nick = param.get_string()
-            self._show_chat_function_page('kick', data=kick_nick)
+            self._show_chat_function_page(FunctionMode.KICK, data=kick_nick)
 
         elif action_name == 'muc-ban':
             assert param is not None
             ban_jid = param.get_string()
-            self._show_chat_function_page('ban', data=ban_jid)
+            self._show_chat_function_page(FunctionMode.BAN, data=ban_jid)
 
         elif action_name == 'muc-change-role':
             assert param is not None
@@ -666,12 +677,13 @@ class ChatStack(Gtk.Stack, EventHelper):
         return True
 
     def _show_chat_function_page(self,
-                                 function: str,
+                                 function_mode: FunctionMode,
                                  data: Optional[str] = None
                                  ) -> None:
+
         assert self._current_contact is not None
         self._chat_function_page.set_mode(
-            self._current_contact, function, data)
+            self._current_contact, function_mode, data)
         self.set_transition_type(Gtk.StackTransitionType.SLIDE_UP_DOWN)
         self.set_visible_child_name('function')
 
