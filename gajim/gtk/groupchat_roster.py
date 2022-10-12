@@ -114,6 +114,8 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         self.set_reveal_child(
             not app.settings.get('hide_groupchat_occupants_list'))
 
+        self.connect('notify::reveal-child', self._on_reveal)
+
     def _hide_roster(self, hide_roster: bool, *args: Any) -> None:
         transition = Gtk.RevealerTransitionType.SLIDE_RIGHT
         if not hide_roster:
@@ -123,10 +125,17 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         self.set_transition_type(transition)
         self.set_reveal_child(not hide_roster)
 
+    def _on_reveal(self, revealer: Gtk.Revealer, param: Any) -> None:
+        if revealer.get_reveal_child():
+            self._load_roster()
+        else:
+            self._unload_roster()
+
     def clear(self) -> None:
-        log.info('Clear')
         if self._contact is None:
             return
+
+        log.info('Clear')
         self._unload_roster()
         self._contact.disconnect_signal(self, 'state-changed')
         self._contact = None
@@ -485,6 +494,9 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         self._store.set_sort_column_id(column, Gtk.SortType.ASCENDING)
 
     def _load_roster(self) -> None:
+        if not self.get_reveal_child():
+            return
+
         log.info('Load Roster')
         assert self._contact is not None
         self._contact.multi_connect({
@@ -505,6 +517,9 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         self._roster.expand_all()
 
     def _unload_roster(self) -> None:
+        if self._roster.get_model() is None:
+            return
+
         log.info('Unload Roster')
         assert self._contact is not None
         self._contact.multi_disconnect(self, CONTACT_SIGNALS)

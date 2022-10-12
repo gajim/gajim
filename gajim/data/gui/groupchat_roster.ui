@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkTreeStore" id="participant_store">
@@ -22,7 +22,6 @@
       <object class="GtkTreeView" id="roster_treeview">
         <property name="visible">True</property>
         <property name="can-focus">True</property>
-        <property name="model">participant_store</property>
         <property name="headers-visible">False</property>
         <property name="expander-column">expander</property>
         <property name="search-column">1</property>
@@ -30,6 +29,9 @@
         <signal name="focus-out-event" handler="_on_focus_out" swapped="no"/>
         <signal name="query-tooltip" handler="_query_tooltip" swapped="no"/>
         <signal name="row-activated" handler="_on_roster_row_activated" swapped="no"/>
+        <child internal-child="selection">
+          <object class="GtkTreeSelection"/>
+        </child>
         <child>
           <object class="GtkTreeViewColumn" id="contact_column">
             <property name="sizing">fixed</property>
