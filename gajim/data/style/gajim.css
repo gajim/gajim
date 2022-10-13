@@ -343,10 +343,9 @@ row:backdrop { transition: none; }
 }
 .chatlist-row {
     transition: none;
-    padding: 6px 0px 6px 6px;
-    margin-left: 12px;
-    margin-right: 12px;
-    margin-bottom: 3px;
+    padding: 4px 0px 4px 6px;
+    margin: 0 10px 3px 10px;
+    border: 2px solid transparent;
     border-radius: 6px;
 }
 .chatlist-row:active,
