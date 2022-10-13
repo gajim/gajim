@@ -761,6 +761,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                                type_,
                                                select=select,
                                                message=message)
+        if select:
+            self.activate_workspace(workspace_id)
 
     def add_private_chat(self,
                          account: str,
