@@ -54,6 +54,7 @@ class AppRow(Gtk.ListBoxRow):
     def __init__(self) -> None:
         Gtk.ListBoxRow.__init__(self)
         self.get_style_context().add_class('workspace-sidebar-item')
+        self.get_style_context().add_class('app-sidebar-row')
 
         self._unread_label = Gtk.Label()
         self._unread_label.get_style_context().add_class(
@@ -64,7 +65,6 @@ class AppRow(Gtk.ListBoxRow):
 
         surface = load_icon_surface('org.gajim.Gajim', 32)
         image = Gtk.Image.new_from_surface(surface)
-        image.get_style_context().add_class('app-sidebar-image')
 
         selection_bar = Gtk.Box()
         selection_bar.set_size_request(6, -1)

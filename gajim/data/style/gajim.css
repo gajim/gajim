@@ -187,10 +187,14 @@ row:backdrop { transition: none; }
     background: @theme_bg_color;
 }
 
-.app-sidebar-image {
+.app-sidebar-row {
+    margin: 2px 0 2px 2px;
+}
+.app-sidebar-row image {
     background: @unfocused_borders;
     padding: 4px;
 }
+
 .app-page-box {
     margin-top: 3px;
 }
@@ -236,8 +240,8 @@ row:backdrop { transition: none; }
     background-color: @theme_selected_bg_color;
 }
 .workspace-sidebar-item image {
-	border-radius: 9px;
-	margin: 6px;
+    border-radius: 9px;
+    margin: 4px 0 4px 4px;
 }
 .workspace-add:hover,
 .workspace-add:focus {
@@ -247,6 +251,9 @@ row:backdrop { transition: none; }
 }
 .workspace-add button {
     margin: 6px 8px 6px 14px;
+}
+.workspace-avatar {
+    border: 2px solid transparent;
 }
 
 /* Account sidebar */
@@ -824,12 +831,22 @@ button.flat.link { padding: 0; border: 0; }
     animation-duration: 2.0s;
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
+}
+.dnd-target .workspace-avatar {
+    border: 2px dashed @theme_selected_bg_color;
+}
+
+.dnd-target-chatlist {
+    animation-name: pulse-opacity;
+    animation-duration: 2.0s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
     border: 2px dashed @theme_selected_bg_color;
 }
 
 @keyframes pulse-opacity {
     0%  { opacity: 1.0; }
-    20% { opacity: 0.5; }
+    20% { opacity: 0.7; }
     45% { opacity: 1.0; }
 }
 .pulse-opacity {

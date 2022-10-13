@@ -568,8 +568,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         return self._chat_page.is_chat_selected(account, jid)
 
     def highlight_dnd_targets(self, drag_row: Any, highlight: bool) -> None:
-        css_class = 'dnd-target'
-
         if isinstance(drag_row, ChatListRow):
             chat_list_stack = self._chat_page.get_chat_list_stack()
             workspace = self.get_active_workspace()
@@ -583,15 +581,18 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                         continue
 
                     if highlight:
-                        row.get_style_context().add_class(css_class)
+                        row.get_style_context().add_class(
+                            'dnd-target-chatlist')
                     else:
-                        row.get_style_context().remove_class(css_class)
+                        row.get_style_context().remove_class(
+                            'dnd-target-chatlist')
 
         if highlight:
-            self._workspace_side_bar.get_style_context().add_class(css_class)
+            self._workspace_side_bar.get_style_context().add_class(
+                'dnd-target')
         else:
             self._workspace_side_bar.get_style_context().remove_class(
-                css_class)
+                'dnd-target')
 
     def _add_workspace(self,
                        _action: Gio.SimpleAction,

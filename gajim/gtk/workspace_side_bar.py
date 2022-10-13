@@ -404,6 +404,7 @@ class WorkspaceAvatar(Gtk.Image):
     def __init__(self, workspace_id: str) -> None:
         Gtk.Image.__init__(self)
         self._workspace_id = workspace_id
+        self.get_style_context().add_class('workspace-avatar')
         self.update()
 
     def update(self) -> None:
