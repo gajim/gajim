@@ -140,11 +140,6 @@ class OMEMO(BaseModule):
     def _on_muc_disco_update(self, event: MucDiscoUpdate) -> None:
         self._check_if_omemo_capable(str(event.jid))
 
-    def get_own_jid(self, stripped=False):
-        if stripped:
-            return self._client.get_own_jid().bare
-        return self._client.get_own_jid()
-
     @property
     def backend(self) -> OmemoState:
         return self._backend
@@ -156,22 +151,6 @@ class OMEMO(BaseModule):
 
     def is_omemo_groupchat(self, room_jid: str) -> bool:
         return room_jid in self._omemo_groupchats
-
-    def activate(self):
-        """ Method called when the Plugin is activated in the PluginManager
-        """
-        self._client.get_module('Caps').update_caps()
-
-        if app.account_is_connected(self._account):
-            self._log.info('Announce Support after Plugin Activation')
-            self._query_for_bundles = []
-            self.set_bundle()
-            self.request_devicelist()
-
-    def deactivate(self):
-        """ Method called when the Plugin is deactivated in the PluginManager
-        """
-        self._query_for_bundles = []
 
     def encrypt_message(self, event: OutgoingMessage) -> None:
         if not event.message:
