@@ -1259,6 +1259,9 @@ class Settings:
         except KeyError:
             return WORKSPACE_SETTINGS[setting]
 
+    def get_workspace_count(self) -> int:
+        return len(self._settings['workspaces'].keys())
+
     def get_workspaces(self) -> List[str]:
         workspace_order = app.settings.get_app_setting('workspace_order')
 

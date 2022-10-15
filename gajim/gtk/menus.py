@@ -420,8 +420,7 @@ def get_chat_list_row_menu(workspace_id: str,
     menu.add_item(toggle_label, 'win.toggle-chat-pinned', params)
 
     submenu = menu.add_submenu(_('Move Chat'))
-    workspaces = app.settings.get_workspaces()
-    if len(workspaces) > 1:
+    if app.settings.get_workspace_count() > 1:
         for name, params in get_workspace_params(workspace_id, account, jid):
             submenu.add_item(name, 'win.move-chat-to-workspace', params)
 
@@ -589,7 +588,7 @@ def get_format_menu() -> GajimMenu:
 
 def get_workspace_menu(workspace_id: str) -> GajimMenu:
     remove_action = 'win.dummy'
-    if len(app.settings.get_workspaces()) > 1:
+    if app.settings.get_workspace_count() > 1:
         remove_action = 'win.remove-workspace'
 
     menuitems: MenuItemListT = [

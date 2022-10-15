@@ -638,7 +638,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self.remove_workspace(workspace_id)
 
     def remove_workspace(self, workspace_id: str) -> None:
-        if len(app.settings.get_workspaces()) == 1:
+        if app.settings.get_workspace_count() == 1:
             log.warning('Tried to remove the only workspace')
             return
 

@@ -54,7 +54,7 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         color: Optional[str] = None
         self._avatar_sha: Optional[str] = None
 
-        if len(app.settings.get_workspaces()) == 1:
+        if app.settings.get_workspace_count() == 1:
             # Don't allow to remove last workspace
             self._ui.remove_workspace_button.set_sensitive(False)
 
