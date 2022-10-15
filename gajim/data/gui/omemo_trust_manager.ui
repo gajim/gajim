@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
+<interface>
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkPopover" id="search_popover">
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkSearchEntry" id="search">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="caps-lock-warning">False</property>
+        <property name="primary-icon-name">edit-find-symbolic</property>
+        <property name="primary-icon-activatable">False</property>
+        <property name="primary-icon-sensitive">False</property>
+        <signal name="search-changed" handler="_on_search_changed" swapped="no"/>
+      </object>
+    </child>
+  </object>
+  <object class="GtkPopover" id="qr_code_popover">
+    <property name="can-focus">False</property>
+    <property name="relative-to">qr_menu_button</property>
+    <property name="constrain-to">none</property>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">This Device</property>
+            <style>
+              <class name="bold16"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="comparing_instructions">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">13</property>
+            <property name="wrap">True</property>
+            <property name="max-width-chars">42</property>
+            <property name="xalign">0</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="our_fingerprint_2">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="selectable">True</property>
+            <style>
+              <class name="monospace"/>
+              <class name="small-label"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="qr_code_image">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">center</property>
+            <property name="icon_size">6</property>
+            <style>
+              <class name="border"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="qr_dependency_missing">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">For verification via QR-Code you have to install &lt;tt&gt;python-qrcode&lt;/tt&gt;.</property>
+            <property name="use-markup">True</property>
+            <property name="wrap">True</property>
+            <property name="max-width-chars">42</property>
+            <property name="xalign">0</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">4</property>
+          </packing>
+        </child>
+        <style>
+          <class name="padding-18"/>
+        </style>
+      </object>
+    </child>
+  </object>
+  <object class="GtkStack" id="stack">
+    <property name="width-request">400</property>
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
+    <property name="transition-type">crossfade</property>
+    <property name="interpolate-size">True</property>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">This Device</property>
+            <property name="xalign">0</property>
+            <style>
+              <class name="bold"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkListBox">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="selection-mode">none</property>
+            <child>
+              <object class="GtkListBoxRow">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="selectable">False</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="spacing">12</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">3</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="label" translatable="yes">Fingerprint for this Device</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="our_fingerprint_1">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="selectable">True</property>
+                            <property name="xalign">0</property>
+                            <style>
+                              <class name="monospace"/>
+                              <class name="small-label"/>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkMenuButton" id="qr_menu_button">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes">Scan QR Code</property>
+                        <property name="halign">end</property>
+                        <property name="valign">center</property>
+                        <property name="direction">up</property>
+                        <property name="popover">qr_code_popover</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="icon-name">qr-code-scan-symbolic</property>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="image-button"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="pack-type">end</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="manage_trust_button">
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="no-show-all">True</property>
+                        <property name="tooltip-text" translatable="yes">Manage your Devices…</property>
+                        <property name="valign">center</property>
+                        <signal name="clicked" handler="_on_manage_trust_clicked" swapped="no"/>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="icon-name">preferences-system-symbolic</property>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="image-button"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="pack-type">end</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <style>
+              <class name="settings-box"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="list_heading">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-top">12</property>
+            <property name="wrap">True</property>
+            <property name="max-width-chars">42</property>
+            <property name="xalign">0</property>
+            <style>
+              <class name="bold"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="list_heading_box">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="spacing">12</property>
+            <child>
+              <object class="GtkSwitch" id="show_inactive_switch">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="valign">center</property>
+                <signal name="notify::active" handler="_on_show_inactive" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="pack-type">end</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">Show Inactive Devices</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="pack-type">end</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="search_button">
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="no-show-all">True</property>
+                <property name="tooltip-text" translatable="yes">Search…</property>
+                <property name="halign">start</property>
+                <property name="valign">center</property>
+                <property name="popover">search_popover</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">edit-find-symbolic</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkListBox" id="list">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="selection-mode">none</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="clear_devices_button">
+            <property name="label" translatable="yes">Clear Devices…</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="no-show-all">True</property>
+            <property name="halign">start</property>
+            <signal name="clicked" handler="_on_clear_devices_clicked" swapped="no"/>
+            <style>
+              <class name="destructive-action"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">5</property>
+          </packing>
+        </child>
+        <style>
+          <class name="omemo-trust-manager"/>
+        </style>
+      </object>
+      <packing>
+        <property name="name">manage-keys</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="halign">center</property>
+        <property name="valign">center</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Account is not connected.</property>
+            <property name="wrap">True</property>
+            <property name="max-width-chars">42</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="name">no-connection</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+  </object>
+</interface>

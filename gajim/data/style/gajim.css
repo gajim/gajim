@@ -956,6 +956,27 @@ popover.combo scrollbar.vertical {
     border-bottom: 0px;
 }
 
+/* OMEMO */
+.fingerprint {
+    color: @insensitive_fg_color;
+    font-family: monospace;
+    font-size: 90%;
+}
+.omemo-inactive-color { color: @insensitive_fg_color; }
+
+.omemo-trust-manager list row {
+    border-bottom: 1px solid;
+    border-color: @unfocused_borders;
+    padding: 10px 20px 10px 10px;
+}
+.omemo-trust-manager list {
+    border: 1px solid;
+    border-color:@unfocused_borders;
+}
+.omemo-trust-manager list > row { outline: none; }
+
+.omemo-trust-popover row { padding: 10px 15px 10px 10px; }
+
 /* StartChatDialog */
 .start-chat-treeview { padding: 5px; }
 .start-chat-treeview:focus {outline: none; }

@@ -36,6 +36,7 @@ from gajim.common.commands import CommandFailed
 from gajim.common.const import Direction
 from gajim.common.const import SimpleClientState
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.types import ChatContactT
@@ -46,6 +47,7 @@ from gajim.gtk.menus import get_encryption_menu
 from gajim.gtk.menus import get_format_menu
 from gajim.gtk.message_input import MessageInputTextView
 from gajim.gtk.security_label_selector import SecurityLabelSelector
+from gajim.gtk.util import open_window
 
 log = logging.getLogger('gajim.gtk.messageactionsbox')
 
@@ -278,7 +280,7 @@ class MessageActionsBox(Gtk.Grid):
         if current_state == new_state:
             return
 
-        if new_state:
+        if new_state and new_state != 'OMEMO':
             plugin = app.plugin_manager.encryption_plugins.get(new_state)
             if plugin is None:
                 # TODO: Add GUI error here
@@ -334,6 +336,9 @@ class MessageActionsBox(Gtk.Grid):
                 app.window.get_control(),
                 encryption_state)
 
+        if state == 'OMEMO':
+            encryption_state['authenticated'] = True
+
         visible, enc_type, authenticated = encryption_state.values()
         assert isinstance(visible, bool)
 
@@ -359,6 +364,24 @@ class MessageActionsBox(Gtk.Grid):
     def _on_encryption_details_clicked(self, _button: Gtk.Button) -> None:
         contact = self.get_current_contact()
         encryption = contact.settings.get('encryption')
+        if encryption == 'OMEMO':
+            if contact.is_groupchat:
+                open_window('GroupchatDetails',
+                            contact=contact,
+                            page='encryption-omemo')
+                return
+
+            if isinstance(contact, BareContact) and contact.is_self:
+                window = open_window('AccountsWindow')
+                window.select_account(contact.account, page='encryption-omemo')
+                return
+
+            open_window('ContactInfo',
+                        account=contact.account,
+                        contact=contact,
+                        page='encryption-omemo')
+            return
+
         app.plugin_manager.extension_point(
             f'encryption_dialog{encryption}', app.window.get_control())
 

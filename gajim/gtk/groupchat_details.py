@@ -34,6 +34,7 @@ from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_manage import GroupchatManage
 from gajim.gtk.groupchat_outcasts import GroupchatOutcasts
 from gajim.gtk.groupchat_settings import GroupChatSettings
+from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
 from gajim.gtk.sidebar_switcher import SideBarSwitcher
 from gajim.gtk.structs import RemoveHistoryActionParams
 
@@ -71,6 +72,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
 
         self._add_groupchat_info()
         self._add_groupchat_settings()
+        self._add_groupchat_encryption()
         self._add_groupchat_manage()
         self._add_affiliations()
         self._add_outcasts()
@@ -172,6 +174,10 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         scrolled_window.add(main_box)
 
         self._ui.settings_box.add(scrolled_window)
+
+    def _add_groupchat_encryption(self) -> None:
+        self._ui.encryption_box.add(
+            OMEMOTrustManager(self._contact.account, self._contact))
 
     def _add_affiliations(self) -> None:
         affiliations = GroupchatAffiliation(self._client, self._contact)

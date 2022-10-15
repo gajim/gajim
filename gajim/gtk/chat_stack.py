@@ -743,7 +743,7 @@ class ChatStack(Gtk.Stack, EventHelper):
         assert contact is not None
 
         encryption = contact.settings.get('encryption')
-        if encryption:
+        if encryption and encryption != 'OMEMO':
             if encryption not in app.plugin_manager.encryption_plugins:
                 ErrorDialog(_('Encryption error'),
                             _('Missing necessary encryption plugin'))

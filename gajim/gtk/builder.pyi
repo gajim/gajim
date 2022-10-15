@@ -280,6 +280,8 @@ class ContactInfoBuilder(Builder):
     to_subscription_button: Gtk.Button
     contact_settings_box: Gtk.Box
     remove_history_button: Gtk.Button
+    encryption_scrolled: Gtk.ScrolledWindow
+    encryption_box: Gtk.Box
     groups_page_box: Gtk.Box
     groups_treeview: Gtk.TreeView
     tree_selection: Gtk.TreeSelection
@@ -414,6 +416,8 @@ class GroupchatDetailsBuilder(Builder):
     main_stack: Gtk.Stack
     info_box: Gtk.Box
     settings_box: Gtk.Box
+    encryption_scrolled: Gtk.ScrolledWindow
+    encryption_box: Gtk.Box
     manage_box: Gtk.Box
     affiliation_box: Gtk.Box
     outcasts_box: Gtk.Box
@@ -589,6 +593,26 @@ class MessageActionsBoxBuilder(Builder):
     send_message_button: Gtk.Button
     formattings_button: Gtk.MenuButton
     input_scrolled: Gtk.ScrolledWindow
+
+
+class OmemoTrustManagerBuilder(Builder):
+    search_popover: Gtk.Popover
+    search: Gtk.SearchEntry
+    qr_code_popover: Gtk.Popover
+    comparing_instructions: Gtk.Label
+    our_fingerprint_2: Gtk.Label
+    qr_code_image: Gtk.Image
+    qr_dependency_missing: Gtk.Label
+    stack: Gtk.Stack
+    our_fingerprint_1: Gtk.Label
+    qr_menu_button: Gtk.MenuButton
+    manage_trust_button: Gtk.Button
+    list_heading: Gtk.Label
+    list_heading_box: Gtk.Box
+    show_inactive_switch: Gtk.Switch
+    search_button: Gtk.MenuButton
+    list: Gtk.ListBox
+    clear_devices_button: Gtk.Button
 
 
 class PasswordDialogBuilder(Builder):
@@ -1027,6 +1051,8 @@ def get_builder(file_name: Literal['manage_sounds.ui'], widgets: list[str] = ...
 def get_builder(file_name: Literal['message_actions_box.ui'], widgets: list[str] = ...) -> MessageActionsBoxBuilder: ...  # noqa
 @overload
 def get_builder(file_name: Literal['password_dialog.ui'], widgets: list[str] = ...) -> PasswordDialogBuilder: ...  # noqa
+@overload
+def get_builder(file_name: Literal['omemo_trust_manager.ui'], widgets: list[str] = ...) -> OmemoTrustManagerBuilder: ...  #noqa
 @overload
 def get_builder(file_name: Literal['pep_config.ui'], widgets: list[str] = ...) -> PepConfigBuilder: ...  # noqa
 @overload
