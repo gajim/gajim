@@ -185,9 +185,6 @@ class ChatListStack(Gtk.Stack, EventHelper):
 
     def show_chat_list(self, workspace_id: str) -> None:
         cur_workspace_id = self.get_visible_child_name()
-        if cur_workspace_id == workspace_id:
-            return
-
         if cur_workspace_id != 'default' and cur_workspace_id is not None:
             self._chat_lists[cur_workspace_id].unselect_all()
 

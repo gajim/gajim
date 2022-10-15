@@ -371,7 +371,6 @@ class StartChatDialog(Gtk.ApplicationWindow):
                 jid,
                 'contact',
                 select=True,
-                workspace='current',
                 message=initial_message)
             self.ready_to_destroy = True
             self.destroy()

@@ -714,6 +714,29 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         chat_list_stack = self._chat_page.get_chat_list_stack()
         return chat_list_stack.get_chatlist(workspace_id)
 
+    def _get_suitable_workspace(self,
+                                account: str,
+                                jid: JID,
+                                private_chat: bool = False
+                                ) -> str:
+
+        if private_chat:
+            # Try to add private chat to the same workspace the MUC resides in
+            chat_list_stack = self._chat_page.get_chat_list_stack()
+            chat_list = chat_list_stack.find_chat(account, jid.new_as_bare())
+            if chat_list is not None:
+                return chat_list.workspace_id
+
+        default = app.settings.get_account_setting(account, 'default_workspace')
+        workspaces = app.settings.get_workspaces()
+        if default in workspaces:
+            return default
+
+        workspace_id = self.get_active_workspace()
+        if workspace_id is not None:
+            return workspace_id
+        return self._workspace_side_bar.get_first_workspace()
+
     def _add_group_chat(self,
                         _action: Gio.SimpleAction,
                         param: GLib.Variant) -> None:
@@ -721,11 +744,13 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         account, jid, select = param.unpack()
         self.add_group_chat(account, JID.from_string(jid), select)
 
-    def add_group_chat(self, account: str, jid: JID,
-                       select: bool = False) -> None:
-        workspace_id = self.get_active_workspace()
-        if workspace_id is None:
-            workspace_id = self._workspace_side_bar.get_first_workspace()
+    def add_group_chat(self,
+                       account: str,
+                       jid: JID,
+                       select: bool = False
+                       ) -> None:
+
+        workspace_id = self._get_suitable_workspace(account, jid)
         self._chat_page.add_chat_for_workspace(workspace_id,
                                                account,
                                                jid,
@@ -744,38 +769,26 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                  jid: JID,
                  type_: str,
                  select: bool = False,
-                 workspace: str = 'default',
                  message: Optional[str] = None
                  ) -> None:
 
-        if workspace == 'current':
-            workspace_id = self.get_active_workspace()
-            if workspace_id is None:
-                workspace_id = self._workspace_side_bar.get_first_workspace()
-        else:
-            workspace_id = self._workspace_side_bar.get_first_workspace()
-
+        workspace_id = self._get_suitable_workspace(account, jid)
         self._chat_page.add_chat_for_workspace(workspace_id,
                                                account,
                                                jid,
                                                type_,
                                                select=select,
                                                message=message)
-        if select:
-            self.activate_workspace(workspace_id)
 
     def add_private_chat(self,
                          account: str,
                          jid: JID,
-                         select: bool = False) -> None:
-        # Try to add private chat to the same workspace the MUC resides in
-        chat_list_stack = self._chat_page.get_chat_list_stack()
-        chat_list = chat_list_stack.find_chat(account, jid.new_as_bare())
-        if chat_list is not None:
-            workspace_id = chat_list.workspace_id
-        else:
-            workspace_id = self._workspace_side_bar.get_first_workspace()
+                         select: bool = False
+                         ) -> None:
 
+        workspace_id = self._get_suitable_workspace(account,
+                                                    jid,
+                                                    private_chat=True)
         self._chat_page.add_chat_for_workspace(workspace_id,
                                                account,
                                                jid,

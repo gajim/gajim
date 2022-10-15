@@ -645,12 +645,22 @@ class GeneralPage(GenericSettingPage):
 
     def __init__(self, account: str) -> None:
 
+        workspaces = self._get_workspaces()
+
         settings = [
             Setting(SettingKind.ENTRY,
                     _('Label'),
                     SettingType.ACCOUNT_CONFIG,
                     'account_label',
                     callback=self._on_account_name_change),
+
+            Setting(SettingKind.POPOVER,
+                    _('Default Workspace'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'default_workspace',
+                    props={'entries': workspaces},
+                    desc=_('Chats from this account will use this workspace by '
+                           'default')),
 
             Setting(SettingKind.COLOR,
                     _('Color'),
@@ -703,6 +713,14 @@ class GeneralPage(GenericSettingPage):
                     'use_ft_proxies'),
         ]
         GenericSettingPage.__init__(self, account, settings)
+
+    @staticmethod
+    def _get_workspaces() -> dict[str, str]:
+        workspaces: dict[str, str] = {'': _('Disabled')}
+        for workspace_id in app.settings.get_workspaces():
+            name = app.settings.get_workspace_setting(workspace_id, 'name')
+            workspaces[workspace_id] = name
+        return workspaces
 
     def _on_account_name_change(self, *args: Any) -> None:
         window = cast(AccountsWindow, get_app_window('AccountsWindow'))

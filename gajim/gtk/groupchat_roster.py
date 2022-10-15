@@ -388,8 +388,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
             app.window.add_chat(self._contact.account,
                                 participant.real_jid,
                                 'contact',
-                                select=True,
-                                workspace='current')
+                                select=True)
         else:
             contact = self._contact.get_resource(nick)
             app.window.add_private_chat(self._contact.account,
