@@ -15,8 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with OMEMO Gajim Plugin. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Any
+from typing import Optional
+
 import time
 from collections import defaultdict
+from pathlib import Path
 
 from nbxmpp.structs import OMEMOBundle
 from nbxmpp.structs import OMEMOMessage
@@ -24,6 +30,7 @@ from nbxmpp.structs import OMEMOMessage
 from axolotl.ecc.djbec import DjbECPublicKey
 from axolotl.identitykey import IdentityKey
 
+from axolotl.identitykeypair import IdentityKeyPair
 from axolotl.protocol.prekeywhispermessage import PreKeyWhisperMessage
 from axolotl.protocol.whispermessage import WhisperMessage
 from axolotl.sessionbuilder import SessionBuilder
@@ -32,6 +39,7 @@ from axolotl.state.prekeybundle import PreKeyBundle
 from axolotl.util.keyhelper import KeyHelper
 from axolotl.duplicatemessagexception import DuplicateMessageException
 
+from gajim.common import types
 from gajim.common.modules.omemobackend.aes import aes_decrypt
 from gajim.common.modules.omemobackend.aes import aes_encrypt
 from gajim.common.modules.omemobackend.aes import get_new_key
@@ -39,21 +47,28 @@ from gajim.common.modules.omemobackend.aes import get_new_iv
 from gajim.common.modules.omemobackend.devices import DeviceManager
 from gajim.common.modules.omemobackend.devices import NoDevicesFound
 from gajim.common.modules.omemobackend.liteaxolotlstore import LiteAxolotlStore
-from gajim.common.modules.util import get_fingerprint
-from gajim.common.modules.util import Trust
-from gajim.common.modules.util import DEFAULT_PREKEY_AMOUNT
-from gajim.common.modules.util import MIN_PREKEY_AMOUNT
-from gajim.common.modules.util import SPK_CYCLE_TIME
-from gajim.common.modules.util import SPK_ARCHIVE_TIME
-from gajim.common.modules.util import UNACKNOWLEDGED_COUNT
+from gajim.common.modules.omemobackend.util import get_fingerprint
+from gajim.common.modules.omemobackend.util import Trust
+from gajim.common.modules.omemobackend.util import DEFAULT_PREKEY_AMOUNT
+from gajim.common.modules.omemobackend.util import MIN_PREKEY_AMOUNT
+from gajim.common.modules.omemobackend.util import SPK_CYCLE_TIME
+from gajim.common.modules.omemobackend.util import SPK_ARCHIVE_TIME
+from gajim.common.modules.omemobackend.util import UNACKNOWLEDGED_COUNT
 
 
 class OmemoState(DeviceManager):
-    def __init__(self, own_jid, db_path, account, xmpp_con):
+    def __init__(self,
+                 own_jid: str,
+                 db_path: Path,
+                 account: str,
+                 xmpp_con: types.xmppClient
+                 ) -> None:
+
         self._account = account
         self._own_jid = own_jid
         self._log = xmpp_con._log
-        self._session_ciphers = defaultdict(dict)
+        self._session_ciphers: dict[
+            str, dict[int, SessionCipher]] = defaultdict(dict)
         self._storage = LiteAxolotlStore(account, db_path, self._log)
 
         DeviceManager.__init__(self)
@@ -63,7 +78,12 @@ class OmemoState(DeviceManager):
         self._log.info('%s PreKeys available',
                        self._storage.getPreKeyCount())
 
-    def build_session(self, jid, device_id, bundle):
+    def build_session(self,
+                      jid: str,
+                      device_id: int,
+                      bundle: OMEMOBundle
+                      ) -> None:
+
         session = SessionBuilder(self._storage, self._storage, self._storage,
                                  self._storage, jid, device_id)
 
@@ -88,18 +108,18 @@ class OmemoState(DeviceManager):
         self._get_session_cipher(jid, device_id)
 
     @property
-    def storage(self):
+    def storage(self) -> LiteAxolotlStore:
         return self._storage
 
     @property
-    def own_fingerprint(self):
+    def own_fingerprint(self) -> str:
         return get_fingerprint(self._storage.getIdentityKeyPair())
 
     @property
-    def bundle(self):
+    def bundle(self) -> OMEMOBundle:
         self._check_pre_key_count()
 
-        bundle = {'otpks': []}
+        bundle: dict[str, Any] = {'otpks': []}
         for k in self._storage.loadPendingPreKeys():
             key = k.getKeyPair().getPublicKey().serialize()
             bundle['otpks'].append({'key': key, 'id': k.getId()})
@@ -117,7 +137,11 @@ class OmemoState(DeviceManager):
 
         return OMEMOBundle(**bundle)
 
-    def decrypt_message(self, omemo_message, jid):
+    def decrypt_message(self,
+                        omemo_message: OMEMOMessage,
+                        jid: str
+                        ) -> tuple[str, str, Trust]:
+
         if omemo_message.sid == self.own_device:
             self._log.info('Received previously sent message by us')
             raise SelfMessage
@@ -157,13 +181,18 @@ class OmemoState(DeviceManager):
         self._log.debug("Decrypted Message => %s", result)
         return result, fingerprint, trust
 
-    def _get_whisper_message(self, jid, device, key):
+    def _get_whisper_message(self,
+                             jid: str,
+                             device: int,
+                             key: bytes
+                             ) -> tuple[bytes, bool]:
+
         cipher = self._get_session_cipher(jid, device)
         cipher_key = cipher.encrypt(key)
         prekey = isinstance(cipher_key, PreKeyWhisperMessage)
         return cipher_key.serialize(), prekey
 
-    def encrypt(self, jid, plaintext):
+    def encrypt(self, jid: str, plaintext: str) -> Optional[OMEMOMessage]:
         try:
             devices_for_encryption = self.get_devices_for_encryption(jid)
         except NoDevicesFound:
@@ -171,7 +200,8 @@ class OmemoState(DeviceManager):
             return
 
         result = aes_encrypt(plaintext)
-        whisper_messages = defaultdict(dict)
+        whisper_messages: dict[
+            str, dict[int, tuple[bytes, bool]]] = defaultdict(dict)
 
         for jid_, device in devices_for_encryption:
             count = self._storage.getUnacknowledgedCount(jid_, device)
@@ -194,7 +224,7 @@ class OmemoState(DeviceManager):
             self._log.error('Encrypted keys empty')
             return
 
-        encrypted_keys = {}
+        encrypted_keys: dict[int, tuple[bytes, bool]] = {}
         for jid_ in whisper_messages:
             encrypted_keys.update(whisper_messages[jid_])
 
@@ -204,8 +234,13 @@ class OmemoState(DeviceManager):
                             iv=result.iv,
                             payload=result.payload)
 
-    def encrypt_key_transport(self, jid, devices):
-        whisper_messages = defaultdict(dict)
+    def encrypt_key_transport(self,
+                              jid: str,
+                              devices: list[int]
+                              ) -> Optional[OMEMOMessage]:
+
+        whisper_messages: dict[
+            str, dict[int, tuple[bytes, bool]]] = defaultdict(dict)
         for device in devices:
             try:
                 whisper_messages[jid][device] = self._get_whisper_message(
@@ -224,12 +259,12 @@ class OmemoState(DeviceManager):
                             iv=get_new_iv(),
                             payload=None)
 
-    def has_trusted_keys(self, jid):
+    def has_trusted_keys(self, jid: str) -> bool:
         inactive = self._storage.getInactiveSessionsKeys(jid)
         trusted = self._storage.getTrustedFingerprints(jid)
         return bool(set(trusted) - set(inactive))
 
-    def devices_without_sessions(self, jid):
+    def devices_without_sessions(self, jid: str) -> list[int]:
         known_devices = self.get_devices(jid, without_self=True)
         missing_devices = [dev
                            for dev in known_devices
@@ -239,7 +274,7 @@ class OmemoState(DeviceManager):
                            jid, missing_devices)
         return missing_devices
 
-    def _get_session_cipher(self, jid, device_id):
+    def _get_session_cipher(self, jid: str, device_id: int) -> SessionCipher:
         try:
             return self._session_ciphers[jid][device_id]
         except KeyError:
@@ -248,7 +283,12 @@ class OmemoState(DeviceManager):
             self._session_ciphers[jid][device_id] = cipher
             return cipher
 
-    def _process_pre_key_message(self, jid, device, key):
+    def _process_pre_key_message(self,
+                                 jid: str,
+                                 device: int,
+                                 key: bytes
+                                 ) -> tuple[bytes, str, Trust]:
+
         self._log.info('Process pre key message from %s', jid)
         pre_key_message = PreKeyWhisperMessage(serialized=key)
         if not pre_key_message.getPreKeyId():
@@ -268,7 +308,12 @@ class OmemoState(DeviceManager):
         self.add_device(jid, device)
         return key, fingerprint, trust
 
-    def _process_message(self, jid, device, key):
+    def _process_message(self,
+                         jid: str,
+                         device: int,
+                         key: bytes
+                         ) -> tuple[bytes, str, Trust]:
+
         self._log.info('Process message from %s', jid)
         message = WhisperMessage(serialized=key)
 
@@ -290,15 +335,23 @@ class OmemoState(DeviceManager):
         pre_key_message = PreKeyWhisperMessage(serialized=key)
         return pre_key_message.getIdentityKey()
 
-    def _get_identity_key_from_device(self, jid, device):
+    def _get_identity_key_from_device(self,
+                                      jid: str,
+                                      device: int
+                                      ) -> Optional[IdentityKey]:
+
         session_record = self._storage.loadSession(jid, device)
         return session_record.getSessionState().getRemoteIdentityKey()
 
-    def _get_trust_from_identity_key(self, jid, identity_key):
+    def _get_trust_from_identity_key(self,
+                                     jid: str,
+                                     identity_key: IdentityKey
+                                     ) -> Trust:
+
         trust = self._storage.getTrustForIdentity(jid, identity_key)
         return Trust(trust) if trust is not None else Trust.UNDECIDED
 
-    def _check_pre_key_count(self):
+    def _check_pre_key_count(self) -> None:
         # Check if enough PreKeys are available
         pre_key_count = self._storage.getPreKeyCount()
         if pre_key_count < MIN_PREKEY_AMOUNT:
@@ -306,7 +359,7 @@ class OmemoState(DeviceManager):
             self._storage.generateNewPreKeys(missing_count)
             self._log.info('%s PreKeys created', missing_count)
 
-    def _cycle_signed_pre_key(self, ik_pair):
+    def _cycle_signed_pre_key(self, ik_pair: IdentityKeyPair) -> None:
         # Publish every SPK_CYCLE_TIME a new SignedPreKey
         # Delete all exsiting SignedPreKeys that are older
         # then SPK_ARCHIVE_TIME

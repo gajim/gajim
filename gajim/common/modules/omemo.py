@@ -16,25 +16,40 @@
 
 # XEP-0384: OMEMO Encryption
 
+from __future__ import annotations
+
+from typing import Any
+from typing import Optional
+
 from pathlib import Path
 
 from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import Message
 from nbxmpp.protocol import NodeProcessed
+from nbxmpp.protocol import Presence
 from nbxmpp.errors import StanzaError
 from nbxmpp.const import PresenceType
 from nbxmpp.const import Affiliation
+from nbxmpp.structs import MessageProperties
+from nbxmpp.structs import OMEMOMessage
+from nbxmpp.structs import PresenceProperties
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.modules.omemo import create_omemo_message
 from nbxmpp.modules.omemo import get_key_transport_message
 from nbxmpp.modules.util import is_error
+from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import ged
+from gajim.common import types
 from gajim.common.structs import OutgoingMessage
 from gajim.common.const import EncryptionData
 from gajim.common.const import Trust as GajimTrust
+from gajim.common.events import MucDiscoUpdate
+from gajim.common.events import SignedIn
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import as_task
 
@@ -85,8 +100,8 @@ class OMEMO(BaseModule):
         'request_bundle',
     ]
 
-    def __init__(self, con):
-        BaseModule.__init__(self, con)
+    def __init__(self, client: types.Client) -> None:
+        BaseModule.__init__(self, client)
 
         self.handlers = [
             StanzaHandler(name='message',
@@ -101,50 +116,51 @@ class OMEMO(BaseModule):
 
         self._register_pubsub_handler(self._devicelist_notification_received)
         self.register_event('signed-in', ged.CORE, self._on_signed_in)
-        self.register_event('muc-disco-update', ged.GUI1, self._on_muc_disco_update)
+        self.register_event(
+            'muc-disco-update', ged.GUI1, self._on_muc_disco_update)
 
         self.encryption_name = 'OMEMO'
         self.allow_groupchat = True
 
-        self._own_jid = self._con.get_own_jid().bare
+        self._own_jid = self._client.get_own_jid().bare
         self._backend = self._get_backend()
 
-        self._omemo_groupchats = set()
-        self._muc_temp_store = {}
-        self._query_for_bundles = []
-        self._device_bundle_querys = []
-        self._query_for_devicelists = []
+        self._omemo_groupchats: set[str] = set()
+        self._muc_temp_store: dict[bytes, str] = {}
+        self._query_for_bundles: list[str] = []
+        self._device_bundle_querys: list[int] = []
+        self._query_for_devicelists: list[str] = []
 
-    def _on_signed_in(self, event) -> None:
+    def _on_signed_in(self, _event: SignedIn) -> None:
         self._log.info('Announce Support after Sign In')
         self._query_for_bundles = []
         self.set_bundle()
         self.request_devicelist()
 
-    def on_muc_disco_update(self, event):
-        self._check_if_omemo_capable(event.jid)
+    def _on_muc_disco_update(self, event: MucDiscoUpdate) -> None:
+        self._check_if_omemo_capable(str(event.jid))
 
     def get_own_jid(self, stripped=False):
         if stripped:
-            return self._con.get_own_jid().bare
-        return self._con.get_own_jid()
+            return self._client.get_own_jid().bare
+        return self._client.get_own_jid()
 
     @property
-    def backend(self):
+    def backend(self) -> OmemoState:
         return self._backend
 
-    def _get_backend(self):
+    def _get_backend(self) -> OmemoState:
         data_dir = Path(configpaths.get('MY_DATA'))
         db_path = data_dir / f'omemo_{self._own_jid}.db'
         return OmemoState(self._own_jid, db_path, self._account, self)
 
-    def is_omemo_groupchat(self, room_jid):
+    def is_omemo_groupchat(self, room_jid: str) -> bool:
         return room_jid in self._omemo_groupchats
 
     def activate(self):
         """ Method called when the Plugin is activated in the PluginManager
         """
-        self._con.get_module('Caps').update_caps()
+        self._client.get_module('Caps').update_caps()
 
         if app.account_is_connected(self._account):
             self._log.info('Announce Support after Plugin Activation')
@@ -161,7 +177,7 @@ class OMEMO(BaseModule):
         if not event.message:
             return
 
-        omemo_message = self.backend.encrypt(event.jid, event.message)
+        omemo_message = self.backend.encrypt(str(event.jid), event.message)
         if omemo_message is None:
             raise Exception('Encryption error')
 
@@ -179,7 +195,12 @@ class OMEMO(BaseModule):
 
         self._debug_print_stanza(event.stanza)
 
-    def _send_key_transport_message(self, typ, jid, devices):
+    def _send_key_transport_message(self,
+                                    typ: str,
+                                    jid: str,
+                                    devices: list[int]
+                                    ) -> None:
+
         omemo_message = self.backend.encrypt_key_transport(jid, devices)
         if omemo_message is None:
             self._log.warning('Key transport message to %s (%s) failed',
@@ -188,9 +209,14 @@ class OMEMO(BaseModule):
 
         transport_message = get_key_transport_message(typ, jid, omemo_message)
         self._log.info('Send key transport message %s (%s)', jid, devices)
-        self._con.connection.send(transport_message)
+        self._client.connection.send(transport_message)
 
-    def _message_received(self, _con, stanza, properties):
+    def _message_received(self,
+                          _client: types.xmppClient,
+                          stanza: Message,
+                          properties: MessageProperties
+                          ) -> None:
+
         if not properties.is_omemo:
             return
 
@@ -211,6 +237,7 @@ class OMEMO(BaseModule):
 
         self._log.info('Message received from: %s', from_jid)
 
+        assert isinstance(properties.omemo, OMEMOMessage)
         try:
             plaintext, fingerprint, trust = self.backend.decrypt_message(
                 properties.omemo, from_jid)
@@ -247,28 +274,38 @@ class OMEMO(BaseModule):
 
         prepare_stanza(stanza, plaintext)
         self._debug_print_stanza(stanza)
-        properties.encrypted = EncryptionData({'name': ENCRYPTION_NAME,
-                                               'fingerprint': fingerprint,
-                                               'trust': GajimTrust[trust.name]})
+        properties.encrypted = EncryptionData({
+            'name': ENCRYPTION_NAME,
+            'fingerprint': fingerprint,
+            'trust': GajimTrust[trust.name]})
 
-    def _process_muc_message(self, properties):
+    def _process_muc_message(self,
+                             properties: MessageProperties
+                             ) -> Optional[str]:
+
         resource = properties.jid.resource
         if properties.muc_ofrom is not None:
             # History Message from MUC
             return properties.muc_ofrom.bare
 
-        contact = self._con.get_module('Contacts').get_contact(properties.jid)
+        contact = self._client.get_module('Contacts').get_contact(
+            properties.jid)
         if contact.real_jid is not None:
             return contact.real_jid.bare
 
+        assert isinstance(properties.omemo, OMEMOMessage)
         self._log.info('Groupchat: Last resort trying to find SID in DB')
         from_jid = self.backend.storage.getJidFromDevice(properties.omemo.sid)
         if not from_jid:
-            self._log.error("Can't decrypt GroupChat Message from %s", resource)
+            self._log.error(
+                "Can't decrypt GroupChat Message from %s", resource)
             return
         return from_jid
 
-    def _process_mam_message(self, properties):
+    def _process_mam_message(self,
+                             properties: MessageProperties
+                             ) -> Optional[str]:
+
         self._log.info('Message received, archive: %s', properties.mam.archive)
         if properties.from_muc:
             self._log.info('MUC MAM Message received')
@@ -279,7 +316,12 @@ class OMEMO(BaseModule):
             return properties.muc_user.jid.bare
         return properties.from_.bare
 
-    def _on_muc_user_presence(self, _con, _stanza, properties):
+    def _on_muc_user_presence(self,
+                              _client: types.xmppClient,
+                              _stanza: Presence,
+                              properties: PresenceProperties
+                              ) -> None:
+
         if properties.type == PresenceType.ERROR:
             return
 
@@ -305,7 +347,7 @@ class OMEMO(BaseModule):
                 self._log.info('%s not in Roster, query devicelist...', jid)
                 self.request_devicelist(jid)
 
-    def get_affiliation_list(self, room_jid):
+    def get_affiliation_list(self, room_jid: str) -> None:
         for affiliation in ('owner', 'admin', 'member'):
             self._nbxmpp('MUC').get_affiliation(
                 room_jid,
@@ -313,7 +355,7 @@ class OMEMO(BaseModule):
                 callback=self._on_affiliations_received,
                 user_data=room_jid)
 
-    def _on_affiliations_received(self, task):
+    def _on_affiliations_received(self, task: Task) -> None:
         room_jid = task.get_user_data()
         try:
             result = task.finish()
@@ -330,24 +372,24 @@ class OMEMO(BaseModule):
                 self._log.info('%s not in Roster, query devicelist...', jid)
                 self.request_devicelist(jid)
 
-    def is_contact_in_roster(self, jid):
+    def is_contact_in_roster(self, jid: str) -> bool:
         if jid == self._own_jid:
             return True
 
-        roster_item = self._con.get_module('Roster').get_item(jid)
+        roster_item = self._client.get_module('Roster').get_item(jid)
         if roster_item is None:
             return False
 
-        contact = self._con.get_module('Contacts').get_contact(jid)
+        contact = self._client.get_module('Contacts').get_contact(jid)
         return contact.subscription == 'both'
 
-    def on_room_joined(self, contact):
+    def on_room_joined(self, contact: GroupchatContact) -> None:
         jid = str(contact.jid)
         self._check_if_omemo_capable(jid)
         if self.is_omemo_groupchat(jid):
             self.get_affiliation_list(jid)
 
-    def _check_if_omemo_capable(self, jid):
+    def _check_if_omemo_capable(self, jid: str) -> None:
         disco_info = app.storage.cache.get_last_disco_info(jid)
         if disco_info.muc_is_members_only and disco_info.muc_is_nonanonymous:
             self._log.info('OMEMO room discovered: %s', jid)
@@ -356,7 +398,7 @@ class OMEMO(BaseModule):
             self._log.info('OMEMO room removed due to config change: %s', jid)
             self._omemo_groupchats.discard(jid)
 
-    def _check_for_missing_sessions(self, jid):
+    def _check_for_missing_sessions(self, jid: str) -> None:
         devices_without_session = self.backend.devices_without_sessions(jid)
         for device_id in devices_without_session:
             if device_id in self._device_bundle_querys:
@@ -364,7 +406,7 @@ class OMEMO(BaseModule):
             self._device_bundle_querys.append(device_id)
             self.request_bundle(jid, device_id)
 
-    def are_keys_missing(self, contact_jid):
+    def are_keys_missing(self, contact_jid: str) -> bool:
         """ Checks if devicekeys are missing and queries the
             bundles
 
@@ -407,12 +449,12 @@ class OMEMO(BaseModule):
             return False
         return True
 
-    def set_bundle(self):
+    def set_bundle(self) -> None:
         self._nbxmpp('OMEMO').set_bundle(self.backend.bundle,
                                          self.backend.own_device)
 
     @as_task
-    def request_bundle(self, jid, device_id):
+    def request_bundle(self, jid: str, device_id: int):
         _task = yield
 
         self._log.info('Fetch device bundle %s %s', device_id, jid)
@@ -437,19 +479,20 @@ class OMEMO(BaseModule):
         if ctrl:
             app.ged.raise_event(OMEMONewFingerprint(chat_control=ctrl))
 
-    def set_devicelist(self, devicelist=None):
-        devicelist_ = set([self.backend.own_device])
+    def set_devicelist(self, devicelist: Optional[list[int]] = None) -> None:
+        devicelist_: set[int] = set([self.backend.own_device])
         if devicelist is not None:
             devicelist_.update(devicelist)
         self._log.info('Publishing own devicelist: %s', devicelist_)
         self._nbxmpp('OMEMO').set_devicelist(devicelist_)
 
-    def clear_devicelist(self):
-        self.backend.update_devicelist(self._own_jid, [self.backend.own_device])
+    def clear_devicelist(self) -> None:
+        self.backend.update_devicelist(
+            self._own_jid, [self.backend.own_device])
         self.set_devicelist()
 
     @as_task
-    def request_devicelist(self, jid=None):
+    def request_devicelist(self, jid: Optional[str] = None):
         _task = yield
 
         if jid is None:
@@ -468,7 +511,12 @@ class OMEMO(BaseModule):
         self._process_devicelist_update(jid, devicelist)
 
     @event_node(Namespace.OMEMO_TEMP_DL)
-    def _devicelist_notification_received(self, _con, _stanza, properties):
+    def _devicelist_notification_received(self,
+                                          _client: types.xmppClient,
+                                          _stanza: Message,
+                                          properties: MessageProperties
+                                          ) -> None:
+
         if properties.pubsub_event.retracted:
             return
 
@@ -476,8 +524,12 @@ class OMEMO(BaseModule):
 
         self._process_devicelist_update(str(properties.jid), devicelist)
 
-    def _process_devicelist_update(self, jid, devicelist):
-        own_devices = jid is None or self._con.get_own_jid().bare_match(jid)
+    def _process_devicelist_update(self,
+                                   jid: str,
+                                   devicelist: list[int]
+                                   ) -> None:
+
+        own_devices = jid is None or self._client.get_own_jid().bare_match(jid)
         if own_devices:
             jid = self._own_jid
 
@@ -496,7 +548,7 @@ class OMEMO(BaseModule):
 
         self._check_for_missing_sessions(jid)
 
-    def _debug_print_stanza(self, stanza):
+    def _debug_print_stanza(self, stanza: Any) -> None:
         stanzastr = '\n' + stanza.__str__(fancy=True)
         stanzastr = stanzastr[0:-1]
         self._log.debug(stanzastr)

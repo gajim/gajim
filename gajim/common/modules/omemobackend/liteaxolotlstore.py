@@ -15,9 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with OMEMO Gajim Plugin. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import Any
+from typing import NamedTuple
+from typing import Optional
+
 import time
 import sqlite3
 from collections import namedtuple
+from pathlib import Path
 
 from axolotl.state.axolotlstore import AxolotlStore
 from axolotl.state.signedprekeyrecord import SignedPreKeyRecord
@@ -26,28 +33,29 @@ from axolotl.state.prekeyrecord import PreKeyRecord
 from axolotl.invalidkeyidexception import InvalidKeyIdException
 from axolotl.ecc.djbec import DjbECPrivateKey
 from axolotl.ecc.djbec import DjbECPublicKey
+from axolotl.identitykey import IdentityKey
 from axolotl.identitykeypair import IdentityKeyPair
 from axolotl.util.medium import Medium
 from axolotl.util.keyhelper import KeyHelper
 
 from gajim.common import app
-
-from gajim.common.modules.util import Trust
-from gajim.common.modules.util import IdentityKeyExtended
-from gajim.common.modules.util import DEFAULT_PREKEY_AMOUNT
+from gajim.common.modules.omemobackend.util import Trust
+from gajim.common.modules.omemobackend.util import IdentityKeyExtended
+from gajim.common.modules.omemobackend.util import DEFAULT_PREKEY_AMOUNT
+from gajim.common.modules.util import LogAdapter
 
 
 def _convert_to_string(text):
     return text.decode()
 
 
-def _convert_identity_key(key):
+def _convert_identity_key(key: bytes) -> Optional[IdentityKeyExtended]:
     if not key:
         return
     return IdentityKeyExtended(DjbECPublicKey(key[1:]))
 
 
-def _convert_record(record):
+def _convert_record(record: bytes) -> SessionRecord:
     return SessionRecord(serialized=record)
 
 
@@ -56,7 +64,7 @@ sqlite3.register_converter('session_record', _convert_record)
 
 
 class LiteAxolotlStore(AxolotlStore):
-    def __init__(self, account: str, db_path, log):
+    def __init__(self, account: str, db_path: Path, log: LogAdapter) -> None:
         self._log = log
         self._account = account
         self._con = sqlite3.connect(db_path,
@@ -78,13 +86,16 @@ class LiteAxolotlStore(AxolotlStore):
             self._log.info("Generating OMEMO keys")
             self._generate_axolotl_keys()
 
-    def _is_blind_trust_enabled(self):
+    def _is_blind_trust_enabled(self) -> bool:
         return app.settings.get_account_setting(self._account,
                                                 'omemo_blind_trust')
 
     @staticmethod
-    def _namedtuple_factory(cursor, row):
-        fields = []
+    def _namedtuple_factory(cursor: sqlite3.Cursor,
+                            row: tuple[Any, ...]
+                            ) -> NamedTuple:
+
+        fields: list[str] = []
         for col in cursor.description:
             if col[0] == '_id':
                 fields.append('id')
@@ -98,7 +109,7 @@ class LiteAxolotlStore(AxolotlStore):
                 fields.append(col[0])
         return namedtuple("Row", fields)(*row)
 
-    def _generate_axolotl_keys(self):
+    def _generate_axolotl_keys(self) -> None:
         identity_key_pair = KeyHelper.generateIdentityKeyPair()
         registration_id = KeyHelper.getRandomSequence(2147483647)
         pre_keys = KeyHelper.generatePreKeys(
@@ -114,10 +125,10 @@ class LiteAxolotlStore(AxolotlStore):
         for pre_key in pre_keys:
             self.storePreKey(pre_key.getId(), pre_key)
 
-    def user_version(self):
+    def user_version(self) -> int:
         return self._con.execute('PRAGMA user_version').fetchone()[0]
 
-    def createDb(self):
+    def createDb(self) -> None:
         if self.user_version() == 0:
 
             create_tables = '''
@@ -159,7 +170,7 @@ class LiteAxolotlStore(AxolotlStore):
                 """ % (create_tables)
             self._con.executescript(create_db_sql)
 
-    def migrateDb(self):
+    def migrateDb(self) -> None:
         """ Migrates the DB
         """
 
@@ -377,7 +388,7 @@ class LiteAxolotlStore(AxolotlStore):
             self._con.execute('PRAGMA user_version=12')
             self._con.commit()
 
-    def loadSignedPreKey(self, signedPreKeyId):
+    def loadSignedPreKey(self, signedPreKeyId: int) -> SignedPreKeyRecord:
         query = 'SELECT record FROM signed_prekeys WHERE prekey_id = ?'
         result = self._con.execute(query, (signedPreKeyId, )).fetchone()
         if result is None:
@@ -385,39 +396,43 @@ class LiteAxolotlStore(AxolotlStore):
                                         signedPreKeyId)
         return SignedPreKeyRecord(serialized=result.record)
 
-    def loadSignedPreKeys(self):
+    def loadSignedPreKeys(self) -> list[SignedPreKeyRecord]:
         query = 'SELECT record FROM signed_prekeys'
         results = self._con.execute(query).fetchall()
         return [SignedPreKeyRecord(serialized=row.record) for row in results]
 
-    def storeSignedPreKey(self, signedPreKeyId, signedPreKeyRecord):
+    def storeSignedPreKey(self,
+                          signedPreKeyId: int,
+                          signedPreKeyRecord: SignedPreKeyRecord
+                          ) -> None:
+
         query = 'INSERT INTO signed_prekeys (prekey_id, record) VALUES(?,?)'
         self._con.execute(query, (signedPreKeyId,
                                   signedPreKeyRecord.serialize()))
         self._con.commit()
 
-    def containsSignedPreKey(self, signedPreKeyId):
+    def containsSignedPreKey(self, signedPreKeyId: int) -> bool:
         query = 'SELECT record FROM signed_prekeys WHERE prekey_id = ?'
         result = self._con.execute(query, (signedPreKeyId,)).fetchone()
         return result is not None
 
-    def removeSignedPreKey(self, signedPreKeyId):
+    def removeSignedPreKey(self, signedPreKeyId: int) -> None:
         query = 'DELETE FROM signed_prekeys WHERE prekey_id = ?'
         self._con.execute(query, (signedPreKeyId,))
         self._con.commit()
 
-    def getNextSignedPreKeyId(self):
+    def getNextSignedPreKeyId(self) -> int:
         result = self.getCurrentSignedPreKeyId()
         if result is None:
             return 1  # StartId if no SignedPreKeys exist
         return (result % (Medium.MAX_VALUE - 1)) + 1
 
-    def getCurrentSignedPreKeyId(self):
+    def getCurrentSignedPreKeyId(self) -> Optional[int]:
         query = 'SELECT MAX(prekey_id) FROM signed_prekeys'
         result = self._con.execute(query).fetchone()
         return result.max_prekey_id if result is not None else None
 
-    def getSignedPreKeyTimestamp(self, signedPreKeyId):
+    def getSignedPreKeyTimestamp(self, signedPreKeyId: int) -> int:
         query = '''SELECT strftime('%s', timestamp) FROM
                    signed_prekeys WHERE prekey_id = ?'''
 
@@ -428,19 +443,19 @@ class LiteAxolotlStore(AxolotlStore):
 
         return result.formated_time
 
-    def removeOldSignedPreKeys(self, timestamp):
+    def removeOldSignedPreKeys(self, timestamp: int) -> None:
         query = '''DELETE FROM signed_prekeys
                    WHERE timestamp < datetime(?, "unixepoch")'''
         self._con.execute(query, (timestamp,))
         self._con.commit()
 
-    def loadSession(self, recipientId, deviceId):
+    def loadSession(self, recipientId: str, deviceId: int) -> SessionRecord:
         query = '''SELECT record as "record [session_record]"
                    FROM sessions WHERE recipient_id = ? AND device_id = ?'''
         result = self._con.execute(query, (recipientId, deviceId)).fetchone()
         return result.record if result is not None else SessionRecord()
 
-    def getJidFromDevice(self, device_id):
+    def getJidFromDevice(self, device_id: int) -> Optional[str]:
         query = '''SELECT recipient_id
                    FROM sessions WHERE device_id = ?'''
         result = self._con.execute(query, (device_id, )).fetchone()
@@ -451,7 +466,12 @@ class LiteAxolotlStore(AxolotlStore):
                    FROM sessions WHERE active = 1'''
         return self._con.execute(query).fetchall()
 
-    def storeSession(self, recipientId, deviceId, sessionRecord):
+    def storeSession(self,
+                     recipientId: str,
+                     deviceId: int,
+                     sessionRecord: SessionRecord
+                     ) -> None:
+
         query = '''INSERT INTO sessions(recipient_id, device_id, record)
                    VALUES(?,?,?)'''
         try:
@@ -467,24 +487,24 @@ class LiteAxolotlStore(AxolotlStore):
 
         self._con.commit()
 
-    def containsSession(self, recipientId, deviceId):
+    def containsSession(self, recipientId: str, deviceId: int) -> bool:
         query = '''SELECT record FROM sessions
                    WHERE recipient_id = ? AND device_id = ?'''
         result = self._con.execute(query, (recipientId, deviceId)).fetchone()
         return result is not None
 
-    def deleteSession(self, recipientId, deviceId):
+    def deleteSession(self, recipientId: str, deviceId: int) -> None:
         self._log.info('Delete session for %s %s', recipientId, deviceId)
         query = "DELETE FROM sessions WHERE recipient_id = ? AND device_id = ?"
         self._con.execute(query, (recipientId, deviceId))
         self._con.commit()
 
-    def deleteAllSessions(self, recipientId):
+    def deleteAllSessions(self, recipientId: str) -> None:
         query = 'DELETE FROM sessions WHERE recipient_id = ?'
         self._con.execute(query, (recipientId,))
         self._con.commit()
 
-    def getSessionsFromJid(self, recipientId):
+    def getSessionsFromJid(self, recipientId: str):
         query = '''SELECT recipient_id,
                           device_id,
                           record as "record [session_record]",
@@ -492,7 +512,7 @@ class LiteAxolotlStore(AxolotlStore):
                    FROM sessions WHERE recipient_id = ?'''
         return self._con.execute(query, (recipientId,)).fetchall()
 
-    def getSessionsFromJids(self, recipientIds):
+    def getSessionsFromJids(self, recipientIds: list[str]):
         query = '''SELECT recipient_id,
                           device_id,
                           record as "record [session_record]",
@@ -502,7 +522,7 @@ class LiteAxolotlStore(AxolotlStore):
                        ', '.join(['?'] * len(recipientIds)))
         return self._con.execute(query, recipientIds).fetchall()
 
-    def setActiveState(self, jid, devicelist):
+    def setActiveState(self, jid: str, devicelist: list[int]) -> None:
         query = '''UPDATE sessions SET active = 1
                    WHERE recipient_id = ? AND device_id IN ({})'''.format(
                        ', '.join(['?'] * len(devicelist)))
@@ -514,24 +534,27 @@ class LiteAxolotlStore(AxolotlStore):
         self._con.execute(query, (jid,) + tuple(devicelist))
         self._con.commit()
 
-    def setInactive(self, jid, device_id):
+    def setInactive(self, jid: str, device_id: int) -> None:
         query = '''UPDATE sessions SET active = 0
                    WHERE recipient_id = ? AND device_id = ?'''
         self._con.execute(query, (jid, device_id))
         self._con.commit()
 
-    def getInactiveSessionsKeys(self, recipientId):
+    def getInactiveSessionsKeys(self,
+                                recipientId: str
+                                ) -> list[IdentityKeyExtended]:
+
         query = '''SELECT record as "record [session_record]" FROM sessions
                    WHERE active = 0 AND recipient_id = ?'''
         results = self._con.execute(query, (recipientId,)).fetchall()
 
-        keys = []
+        keys: list[IdentityKeyExtended] = []
         for result in results:
             key = result.record.getSessionState().getRemoteIdentityKey()
             keys.append(IdentityKeyExtended(key.getPublicKey()))
         return keys
 
-    def loadPreKey(self, preKeyId):
+    def loadPreKey(self, preKeyId: int) -> PreKeyRecord:
         query = '''SELECT record FROM prekeys WHERE prekey_id = ?'''
 
         result = self._con.execute(query, (preKeyId,)).fetchone()
@@ -539,41 +562,41 @@ class LiteAxolotlStore(AxolotlStore):
             raise Exception("No such prekeyRecord!")
         return PreKeyRecord(serialized=result.record)
 
-    def loadPendingPreKeys(self):
+    def loadPendingPreKeys(self) -> list[PreKeyRecord]:
         query = '''SELECT record FROM prekeys'''
         result = self._con.execute(query).fetchall()
         return [PreKeyRecord(serialized=row.record) for row in result]
 
-    def storePreKey(self, preKeyId, preKeyRecord):
+    def storePreKey(self, preKeyId: int, preKeyRecord: PreKeyRecord) -> None:
         query = 'INSERT INTO prekeys (prekey_id, record) VALUES(?,?)'
         self._con.execute(query, (preKeyId, preKeyRecord.serialize()))
         self._con.commit()
 
-    def containsPreKey(self, preKeyId):
+    def containsPreKey(self, preKeyId: int) -> bool:
         query = 'SELECT record FROM prekeys WHERE prekey_id = ?'
         result = self._con.execute(query, (preKeyId,)).fetchone()
         return result is not None
 
-    def removePreKey(self, preKeyId):
+    def removePreKey(self, preKeyId: int) -> None:
         query = 'DELETE FROM prekeys WHERE prekey_id = ?'
         self._con.execute(query, (preKeyId,))
         self._con.commit()
 
-    def getCurrentPreKeyId(self):
+    def getCurrentPreKeyId(self) -> int:
         query = 'SELECT MAX(prekey_id) FROM prekeys'
         return self._con.execute(query).fetchone().max_prekey_id
 
-    def getPreKeyCount(self):
+    def getPreKeyCount(self) -> int:
         query = 'SELECT COUNT(prekey_id) FROM prekeys'
         return self._con.execute(query).fetchone().count_prekey_id
 
-    def generateNewPreKeys(self, count):
+    def generateNewPreKeys(self, count: int) -> None:
         prekey_id = self.getCurrentPreKeyId() or 0
         pre_keys = KeyHelper.generatePreKeys(prekey_id + 1, count)
         for pre_key in pre_keys:
             self.storePreKey(pre_key.getId(), pre_key)
 
-    def getIdentityKeyPair(self):
+    def getIdentityKeyPair(self) -> IdentityKeyPair:
         query = '''SELECT public_key as "public_key [pk]", private_key
                    FROM secret LIMIT 1'''
         result = self._con.execute(query).fetchone()
@@ -581,12 +604,16 @@ class LiteAxolotlStore(AxolotlStore):
         return IdentityKeyPair(result.public_key,
                                DjbECPrivateKey(result.private_key))
 
-    def getLocalRegistrationId(self):
+    def getLocalRegistrationId(self) -> Optional[int]:
         query = 'SELECT device_id FROM secret LIMIT 1'
         result = self._con.execute(query).fetchone()
         return result.device_id if result is not None else None
 
-    def storeLocalData(self, device_id, identityKeyPair):
+    def storeLocalData(self,
+                       device_id: int,
+                       identityKeyPair: IdentityKeyPair
+                       ) -> None:
+
         query = 'SELECT * FROM secret'
         result = self._con.execute(query).fetchone()
         if result is not None:
@@ -602,7 +629,7 @@ class LiteAxolotlStore(AxolotlStore):
         self._con.execute(query, (device_id, public_key, private_key))
         self._con.commit()
 
-    def saveIdentity(self, recipientId, identityKey):
+    def saveIdentity(self, recipientId: int, identityKey: IdentityKey) -> None:
         query = '''INSERT INTO identities (recipient_id, public_key, trust, shown)
                    VALUES(?, ?, ?, ?)'''
         if not self.containsIdentity(recipientId, identityKey):
@@ -613,7 +640,11 @@ class LiteAxolotlStore(AxolotlStore):
                                       1 if trust == Trust.BLIND else 0))
             self._con.commit()
 
-    def containsIdentity(self, recipientId, identityKey):
+    def containsIdentity(self,
+                         recipientId: str,
+                         identityKey: IdentityKey
+                         ) -> bool:
+
         query = '''SELECT * FROM identities WHERE recipient_id = ?
                    AND public_key = ?'''
 
@@ -623,24 +654,36 @@ class LiteAxolotlStore(AxolotlStore):
 
         return result is not None
 
-    def deleteIdentity(self, recipientId, identityKey):
+    def deleteIdentity(self,
+                       recipientId: str,
+                       identityKey: IdentityKey
+                       ) -> None:
+
         query = '''DELETE FROM identities
                    WHERE recipient_id = ? AND public_key = ?'''
         public_key = identityKey.getPublicKey().serialize()
         self._con.execute(query, (recipientId, public_key))
         self._con.commit()
 
-    def isTrustedIdentity(self, recipientId, identityKey):
+    def isTrustedIdentity(self,
+                          recipientId: str,
+                          identityKey: IdentityKey
+                          ) -> bool:
+
         return True
 
-    def getTrustForIdentity(self, recipientId, identityKey):
+    def getTrustForIdentity(self,
+                            recipientId: str,
+                            identityKey: IdentityKey
+                            ) -> Optional[Trust]:
+
         query = '''SELECT trust FROM identities WHERE recipient_id = ?
                    AND public_key = ?'''
         public_key = identityKey.getPublicKey().serialize()
         result = self._con.execute(query, (recipientId, public_key)).fetchone()
         return result.trust if result is not None else None
 
-    def getFingerprints(self, jid):
+    def getFingerprints(self, jid: str):
         query = '''SELECT recipient_id,
                           public_key as "public_key [pk]",
                           trust,
@@ -649,7 +692,7 @@ class LiteAxolotlStore(AxolotlStore):
                    WHERE recipient_id = ? ORDER BY trust ASC'''
         return self._con.execute(query, (jid,)).fetchall()
 
-    def getMucFingerprints(self, jids):
+    def getMucFingerprints(self, jids: list[str]):
         query = '''
             SELECT recipient_id,
                    public_key as "public_key [pk]",
@@ -661,7 +704,7 @@ class LiteAxolotlStore(AxolotlStore):
 
         return self._con.execute(query, jids).fetchall()
 
-    def hasUndecidedFingerprints(self, jid):
+    def hasUndecidedFingerprints(self, jid: str) -> bool:
         query = '''SELECT public_key as "public_key [pk]" FROM identities
                    WHERE recipient_id = ? AND trust = ?'''
         result = self._con.execute(query, (jid, Trust.UNDECIDED)).fetchall()
@@ -671,7 +714,7 @@ class LiteAxolotlStore(AxolotlStore):
         undecided = set(undecided) - set(inactive)
         return bool(undecided)
 
-    def getDefaultTrust(self, jid):
+    def getDefaultTrust(self, jid: str) -> Trust:
         if not self._is_blind_trust_enabled():
             return Trust.UNDECIDED
 
@@ -682,33 +725,38 @@ class LiteAxolotlStore(AxolotlStore):
             return Trust.BLIND
         return Trust.UNDECIDED
 
-    def getTrustedFingerprints(self, jid):
+    def getTrustedFingerprints(self, jid: str) -> list[IdentityKeyExtended]:
         query = '''SELECT public_key as "public_key [pk]" FROM identities
                    WHERE recipient_id = ? AND trust IN(1, 3)'''
         result = self._con.execute(query, (jid,)).fetchall()
         return [row.public_key for row in result]
 
-    def getNewFingerprints(self, jid):
+    def getNewFingerprints(self, jid: str) -> list[int]:
         query = '''SELECT _id FROM identities WHERE shown = 0
                    AND recipient_id = ?'''
 
         result = self._con.execute(query, (jid,)).fetchall()
         return [row.id for row in result]
 
-    def setShownFingerprints(self, fingerprints):
+    def setShownFingerprints(self, fingerprints: list[int]) -> None:
         query = 'UPDATE identities SET shown = 1 WHERE _id IN ({})'.format(
             ', '.join(['?'] * len(fingerprints)))
         self._con.execute(query, fingerprints)
         self._con.commit()
 
-    def setTrust(self, recipient_id, identityKey, trust):
+    def setTrust(self,
+                 recipient_id: str,
+                 identityKey: IdentityKey,
+                 trust: Trust
+                 ) -> None:
+
         query = '''UPDATE identities SET trust = ? WHERE public_key = ?
                    AND recipient_id = ?'''
         public_key = identityKey.getPublicKey().serialize()
         self._con.execute(query, (trust, public_key, recipient_id))
         self._con.commit()
 
-    def isTrusted(self, recipient_id, device_id):
+    def isTrusted(self, recipient_id: str, device_id: int) -> bool:
         record = self.loadSession(recipient_id, device_id)
         if record.isFresh():
             return False
@@ -716,7 +764,11 @@ class LiteAxolotlStore(AxolotlStore):
         return self.getTrustForIdentity(
             recipient_id, identity_key) in (Trust.VERIFIED, Trust.BLIND)
 
-    def getIdentityLastSeen(self, recipient_id, identity_key):
+    def getIdentityLastSeen(self,
+                            recipient_id: str,
+                            identity_key: IdentityKey
+                            ) -> Optional[int]:
+
         identity_key = identity_key.getPublicKey().serialize()
         query = '''SELECT timestamp FROM identities
                    WHERE recipient_id = ? AND public_key = ?'''
@@ -724,7 +776,11 @@ class LiteAxolotlStore(AxolotlStore):
                                            identity_key)).fetchone()
         return result.timestamp if result is not None else None
 
-    def setIdentityLastSeen(self, recipient_id, identity_key):
+    def setIdentityLastSeen(self,
+                            recipient_id: str,
+                            identity_key: IdentityKey
+                            ) -> None:
+
         timestamp = int(time.time())
         identity_key = identity_key.getPublicKey().serialize()
         self._log.info('Set last seen for %s %s', recipient_id, timestamp)
@@ -733,7 +789,7 @@ class LiteAxolotlStore(AxolotlStore):
         self._con.execute(query, (timestamp, recipient_id, identity_key))
         self._con.commit()
 
-    def getUnacknowledgedCount(self, recipient_id, device_id):
+    def getUnacknowledgedCount(self, recipient_id: str, device_id: int) -> int:
         record = self.loadSession(recipient_id, device_id)
         if record.isFresh():
             return 0

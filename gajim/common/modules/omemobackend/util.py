@@ -14,11 +14,15 @@
 # You should have received a copy of the GNU General Public License
 # along with OMEMO Gajim Plugin. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import binascii
 import textwrap
 from enum import IntEnum
 
 from axolotl.identitykey import IdentityKey
+from axolotl.identitykeypair import IdentityKeyPair
+
 
 DEFAULT_PREKEY_AMOUNT = 100
 MIN_PREKEY_AMOUNT = 80
@@ -34,7 +38,10 @@ class Trust(IntEnum):
     BLIND = 3
 
 
-def get_fingerprint(identity_key, formatted=False):
+def get_fingerprint(identity_key: IdentityKeyPair,
+                    formatted: bool = False
+                    ) -> str:
+
     public_key = identity_key.getPublicKey().serialize()
     fingerprint = binascii.hexlify(public_key).decode()[2:]
     if not formatted:
@@ -49,8 +56,8 @@ def get_fingerprint(identity_key, formatted=False):
 
 
 class IdentityKeyExtended(IdentityKey):
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.publicKey.serialize())
 
-    def get_fingerprint(self, formatted=False):
+    def get_fingerprint(self, formatted: bool = False) -> str:
         return get_fingerprint(self, formatted=formatted)
