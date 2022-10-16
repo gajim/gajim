@@ -174,8 +174,6 @@ class Client(Observable):
             self.password = passwords.get_password(self._account)
 
         self._client.set_password(self.password)
-        self._client.set_accepted_certificates(
-            app.cert_store.get_certificates())
 
         self._client.subscribe('resume-failed', self._on_resume_failed)
         self._client.subscribe('resume-successful', self._on_resume_successful)
@@ -544,6 +542,8 @@ class Client(Observable):
 
         log.info('Connect')
 
+        self._client.set_accepted_certificates(
+            app.cert_store.get_certificates())
         self._client.set_ignored_tls_errors(ignored_tls_errors)
         self._reconnect = True
         self._disable_reconnect_timer()
