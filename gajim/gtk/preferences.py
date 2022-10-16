@@ -35,7 +35,7 @@ from gajim.common.multimedia_helpers import AudioOutputManager
 from gajim.common.multimedia_helpers import VideoInputManager
 from gajim.common.events import StyleChanged
 from gajim.common.events import ThemeUpdate
-from gajim.common.setting_values import AllSettings
+from gajim.common.setting_values import BoolSettings
 
 from .const import Setting
 from .const import SettingKind
@@ -912,7 +912,7 @@ class Video(PreferenceBox):
 
 class Miscellaneous(PreferenceBox):
     def __init__(self, pref_window: Preferences) -> None:
-        self._hints_list: list[AllSettings] = [
+        self._hints_list: list[BoolSettings] = [
             'show_help_start_chat',
         ]
 
@@ -946,7 +946,7 @@ class Miscellaneous(PreferenceBox):
 
         reset_button = pref_window.get_ui().reset_button
         reset_button.connect('clicked', self._on_reset_hints)
-        reset_button.set_sensitive(self._check_hints_reset)
+        reset_button.set_sensitive(self._check_hints_reset())
 
         purge_history_button = pref_window.get_ui().purge_history_button
         purge_history_button.connect('clicked', self._on_purge_history_clicked)
