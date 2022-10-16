@@ -50,7 +50,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.storage.base import SqliteStorage
 from gajim.common.storage.base import timeit
 
-CURRENT_USER_VERSION = 6
+CURRENT_USER_VERSION = 7
 
 ARCHIVE_SQL_STATEMENT = '''
     CREATE TABLE jids(
@@ -63,6 +63,8 @@ ARCHIVE_SQL_STATEMENT = '''
             account_id INTEGER,
             jid_id INTEGER,
             contact_name TEXT,
+            occupant_id TEXT,
+            real_jid TEXT,
             time INTEGER,
             kind INTEGER,
             show INTEGER,
@@ -255,6 +257,14 @@ class MessageArchiveStorage(SqliteStorage):
                 '''CREATE INDEX IF NOT EXISTS idx_logs_message_id
                    ON logs (message_id)''',
                 'PRAGMA user_version=5'
+            ]
+            self._execute_multiple(statements)
+
+        if user_version < 7:
+            statements = [
+                'ALTER TABLE logs ADD COLUMN "real_jid" TEXT',
+                'ALTER TABLE logs ADD COLUMN "occupant_id" TEXT',
+                'PRAGMA user_version=7'
             ]
             self._execute_multiple(statements)
 
