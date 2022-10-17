@@ -126,18 +126,6 @@ class Message(BaseModule):
 
         stanza_id, message_id = self._get_unique_id(properties)
 
-        if properties.type.is_groupchat and properties.has_server_delay:
-            # Only for XEP-0045 MUC History
-            # Don’t check for message text because the message could be
-            # encrypted.
-            if app.storage.archive.deduplicate_muc_message(
-                    self._account,
-                    properties.jid.bare,
-                    properties.jid.resource,
-                    properties.timestamp,
-                    properties.id):
-                raise nbxmpp.NodeProcessed
-
         if (properties.is_self_message or properties.is_muc_pm):
             archive_jid = self._con.get_own_jid().bare
             if app.storage.archive.find_stanza_id(

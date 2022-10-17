@@ -876,59 +876,6 @@ class MessageArchiveStorage(SqliteStorage):
         return nicknames
 
     @timeit
-    def deduplicate_muc_message(self,
-                                account: str,
-                                jid: str,
-                                resource: str,
-                                timestamp: float,
-                                message_id: str
-                                ) -> bool:
-        '''
-        Check if a message is already in the `logs` table
-
-        :param account:     The account
-
-        :param jid:         The muc jid as string
-
-        :param resource:    The resource
-
-        :param timestamp:   The timestamp in UTC epoch
-
-        :param message_id:  The message-id
-        '''
-
-        # Add 60 seconds around the timestamp
-        start_time = timestamp - 60
-        end_time = timestamp + 60
-
-        account_id = self.get_account_id(account)
-        log.debug('Search for MUC duplicate')
-        log.debug('start: %s, end: %s, jid: %s, resource: %s, message-id: %s',
-                  start_time, end_time, jid, resource, message_id)
-
-        sql = '''
-            SELECT * FROM logs
-            NATURAL JOIN jids WHERE
-            jid = ? AND
-            contact_name = ? AND
-            message_id = ? AND
-            account_id = ? AND
-            time BETWEEN ? AND ?
-            '''
-
-        result = self._con.execute(sql, (jid,
-                                         resource,
-                                         message_id,
-                                         account_id,
-                                         start_time,
-                                         end_time)).fetchone()
-
-        if result is not None:
-            log.debug('Found duplicate')
-            return True
-        return False
-
-    @timeit
     def find_stanza_id(self,
                        account: str,
                        archive_jid: str,
