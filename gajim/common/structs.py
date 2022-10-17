@@ -158,7 +158,6 @@ class OutgoingMessage:
         self.timestamp = None
         self.message_id = None
         self.stanza = None
-        self.session = None
         self.delayed = None  # TODO never set
 
         self.is_loggable = True

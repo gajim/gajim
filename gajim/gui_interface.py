@@ -128,7 +128,6 @@ class Interface:
         self.handlers = {
             'signed-in': [self.handle_event_signed_in],
             'message-sent': [self.handle_event_msgsent],
-            'message-not-sent': [self.handle_event_msgnotsent],
         }
         # pylint: enable=line-too-long
 
@@ -178,24 +177,6 @@ class Interface:
             if isinstance(event.jid, list) and len(event.jid) > 1:
                 return
             helpers.play_sound('message_sent', event.account)
-
-    @staticmethod
-    def handle_event_msgnotsent(event):
-        # ('MSGNOTSENT', account, (jid, ierror_msg, msg, time, session))
-        msg = _('error while sending %(message)s ( %(error)s )') % {
-            'message': event.message,
-            'error': event.error}
-        if not event.session:
-            # No session. This can happen when sending a message from
-            # gajim-remote
-            log.warning(msg)
-            return
-        event.session.roster_message(
-            event.jid,
-            msg,
-            event.time_,
-            event.conn.name,
-            msg_type='error')
 
     # Jingle File Transfer
     @staticmethod

@@ -393,7 +393,6 @@ class MessageReceived(ApplicationEvent):
     stanza_id: str
     fjid: str
     resource: str
-    session: Any
     delayed: Optional[float]
     msg_log_id: int
     displaymarking: Optional[Displaymarking]

@@ -138,8 +138,6 @@ class Message(BaseModule):
 
         msgtxt = properties.body
 
-        session = None
-
         additional_data = AdditionalDataDict()
 
         if properties.has_user_delay:
@@ -170,7 +168,6 @@ class Message(BaseModule):
             'stanza_id': stanza_id,
             'unique_id': stanza_id or message_id,
             'msgtxt': msgtxt,
-            'session': session,
             'delayed': properties.user_timestamp is not None,
             'msg_log_id': None,
             'displaymarking': displaymarking,
