@@ -83,7 +83,6 @@ from gajim.gui.filetransfer import FileTransfersWindow
 from gajim.gui.menus import build_accounts_menu
 from gajim.gui.util import get_app_window
 from gajim.gui.util import get_app_windows
-from gajim.gui.util import get_color_for_account
 from gajim.gui.control import ChatControl
 from gajim.plugins.repository import PluginRepository
 
@@ -466,7 +465,6 @@ class Interface:
         config['name'] = username
         config['resource'] = f'gajim.{helpers.get_random_string(8)}'
         config['account_label'] = account_label
-        config['account_color'] = get_color_for_account(f'{username}@{domain}')
         config['hostname'] = domain
         config['savepass'] = True
         config['anonymous_auth'] = anonymous

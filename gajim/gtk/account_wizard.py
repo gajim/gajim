@@ -1080,6 +1080,7 @@ class Success(SuccessPage):
         self._ui.account_color_button.set_rgba(rgba)
         self._color = rgba.to_string()
         self._set_badge_color(self._color)
+        self._save_config()
 
     @property
     def account(self) -> Optional[str]:
