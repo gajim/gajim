@@ -461,15 +461,11 @@ class Interface:
             account_label = f'anon@{domain}'
 
         config = {}
-        config['active'] = False
         config['name'] = username
         config['resource'] = f'gajim.{helpers.get_random_string(8)}'
         config['account_label'] = account_label
         config['hostname'] = domain
-        config['savepass'] = True
         config['anonymous_auth'] = anonymous
-        config['autoconnect'] = True
-        config['sync_with_global_status'] = True
 
         if proxy_name is not None:
             config['proxy'] = proxy_name
