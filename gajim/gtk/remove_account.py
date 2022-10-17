@@ -89,7 +89,7 @@ class RemoveAccount(Assistant):
 
         if self._account_removed:
             self.show_page('success')
-            app.interface.remove_account(self.account)
+            app.app.remove_account(self.account)
 
     def _set_remove_from_server_checkbox(self) -> None:
         enabled = self._client is not None and self._client.state.is_available
@@ -126,7 +126,7 @@ class RemoveAccount(Assistant):
             return
 
         if self._client is None or self._client.state.is_disconnected:
-            app.interface.remove_account(self.account)
+            app.app.remove_account(self.account)
             self.show_page('success')
             return
 

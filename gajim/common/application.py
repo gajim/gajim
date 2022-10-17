@@ -31,6 +31,8 @@ from packaging.version import Version as V
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Soup
+from nbxmpp.const import ConnectionType
+from nbxmpp.const import ConnectionProtocol
 
 from gajim.common import app
 from gajim.common import ged
@@ -40,10 +42,13 @@ from gajim.common import passwords
 from gajim.common.commands import ChatCommands
 from gajim.common.dbus import logind
 from gajim.common.events import AccountDisconnected
+from gajim.common.events import AccountDisabled
+from gajim.common.events import AccountEnabled
 from gajim.common.events import AllowGajimUpdateCheck
 from gajim.common.events import GajimUpdateAvailable
 from gajim.common.client import Client
 from gajim.common.helpers import make_http_request
+from gajim.common.helpers import get_random_string
 from gajim.common.storage.events import EventStorage
 from gajim.common.task_manager import TaskManager
 from gajim.common.settings import Settings
@@ -270,3 +275,88 @@ class CoreApplication:
             return
 
         self._log.info('Gajim is up to date')
+
+    def create_account(self,
+                       account: str,
+                       username: str,
+                       domain: str,
+                       password: str,
+                       proxy_name: str,
+                       custom_host: tuple[str,
+                                          ConnectionProtocol,
+                                          ConnectionType],
+                       anonymous: bool = False
+                       ) -> None:
+
+        account_label = f'{username}@{domain}'
+        if anonymous:
+            username = 'anon'
+            account_label = f'anon@{domain}'
+
+        config: dict[str, Union[str, int, bool]] = {
+            'name': username,
+            'resource': f'gajim.{get_random_string(8)}',
+            'account_label': account_label,
+            'hostname': domain,
+            'anonymous_auth': anonymous,
+        }
+
+        if proxy_name is not None:
+            config['proxy'] = proxy_name
+
+        use_custom_host = custom_host is not None
+        config['use_custom_host'] = use_custom_host
+        if custom_host:
+            host, _protocol, type_ = custom_host
+            host, port = host.rsplit(':', maxsplit=1)
+            config['custom_port'] = int(port)
+            config['custom_host'] = host
+            config['custom_type'] = type_.value
+
+        app.settings.add_account(account)
+        for opt, value in config.items():
+            app.settings.set_account_setting(account, opt, value)  # pyright: ignore  # noqa
+
+        # Password module depends on existing config
+        passwords.save_password(account, password)
+
+    def enable_account(self, account: str) -> None:
+        app.connections[account] = Client(account)
+
+        app.plugin_manager.register_modules_for_account(
+            app.connections[account])
+
+        app.automatic_rooms[account] = {}
+        app.to_be_removed[account] = []
+        app.nicks[account] = app.settings.get_account_setting(account, 'name')
+        app.settings.set_account_setting(account, 'active', True)
+
+        app.ged.raise_event(AccountEnabled(account=account))
+
+        app.get_client(account).change_status('online', '')
+
+    def disable_account(self, account: str) -> None:
+        app.settings.set_account_setting(account, 'roster_version', '')
+        app.settings.set_account_setting(account, 'active', False)
+
+        # Code in account-disabled handlers may use app.get_client()
+        app.ged.raise_event(AccountDisabled(account=account))
+
+        app.get_client(account).cleanup()
+        del app.connections[account]
+        if account in app.interface.instances:
+            del app.interface.instances[account]
+        del app.nicks[account]
+        del app.automatic_rooms[account]
+        del app.to_be_removed[account]
+
+    def remove_account(self, account: str) -> None:
+        if app.settings.get_account_setting(account, 'active'):
+            self.disable_account(account)
+
+        app.storage.cache.remove_roster(account)
+        # Delete password must be before del_per() because it calls set_per()
+        # which would recreate the account with defaults values if not found
+        passwords.delete_password(account)
+        app.settings.remove_account(account)
+        app.app.remove_account_actions(account)

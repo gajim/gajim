@@ -215,7 +215,7 @@ class AccountWizard(Assistant):
 
         elif button_name == 'connect':
             if page == 'success':
-                app.interface.enable_account(self.get_page('success').account)
+                app.app.enable_account(self.get_page('success').account)
                 self.destroy()
 
         elif button_name == 'back':
@@ -371,12 +371,12 @@ class AccountWizard(Assistant):
         if client.proxy is not None:
             proxy_name = self.get_page('advanced').get_proxy()
 
-        app.interface.create_account(account,
-                                     client.username,
-                                     client.domain,
-                                     client.password,
-                                     proxy_name,
-                                     client.custom_host)
+        app.app.create_account(account,
+                               client.username,
+                               client.domain,
+                               client.password,
+                               proxy_name,
+                               client.custom_host)
         self.get_page('success').set_account(account)
         self.show_page('success', Gtk.StackTransitionType.SLIDE_LEFT)
 
@@ -393,13 +393,13 @@ class AccountWizard(Assistant):
         if client.proxy is not None:
             proxy_name = self.get_page('advanced').get_proxy()
 
-        app.interface.create_account(account,
-                                     None,
-                                     client.domain,
-                                     client.password,
-                                     proxy_name,
-                                     client.custom_host,
-                                     anonymous=True)
+        app.app.create_account(account,
+                               None,
+                               client.domain,
+                               client.password,
+                               proxy_name,
+                               client.custom_host,
+                               anonymous=True)
         self.get_page('success').set_account(account)
         self.show_page('success', Gtk.StackTransitionType.SLIDE_LEFT)
 
@@ -549,12 +549,12 @@ class AccountWizard(Assistant):
         if self._client.proxy is not None:
             proxy_name = self.get_page('advanced').get_proxy()
 
-        app.interface.create_account(account,
-                                     username,
-                                     self._client.domain,
-                                     password,
-                                     proxy_name,
-                                     self._client.custom_host)
+        app.app.create_account(account,
+                               username,
+                               self._client.domain,
+                               password,
+                               proxy_name,
+                               self._client.custom_host)
 
         self.get_page('success').set_account(account)
         self.show_page('success', Gtk.StackTransitionType.SLIDE_LEFT)

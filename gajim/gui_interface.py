@@ -57,10 +57,7 @@ from gajim.common import exceptions
 from gajim.common import proxy65_manager
 from gajim.common import socks5
 from gajim.common import helpers
-from gajim.common import passwords
 
-from gajim.common.events import AccountEnabled
-from gajim.common.events import AccountDisabled
 from gajim.common.events import FileCompleted
 from gajim.common.events import FileHashError
 from gajim.common.events import FileProgress
@@ -69,7 +66,6 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.structs import OutgoingMessage
 from gajim.common.i18n import _
-from gajim.common.client import Client
 from gajim.common.const import FTState
 from gajim.common.file_props import FileProp
 from gajim.common.types import ChatContactT
@@ -80,9 +76,6 @@ from gajim.gui.dialogs import ErrorDialog
 from gajim.gui.filechoosers import FileChooserDialog
 from gajim.gui.file_transfer_send import SendFileDialog
 from gajim.gui.filetransfer import FileTransfersWindow
-from gajim.gui.menus import build_accounts_menu
-from gajim.gui.util import get_app_window
-from gajim.gui.util import get_app_windows
 from gajim.gui.control import ChatControl
 from gajim.plugins.repository import PluginRepository
 
@@ -444,115 +437,6 @@ class Interface:
 
         app.app.activate_action(
             'start-chat', GLib.Variant('as', [str(jid), message or '']))
-
-    @staticmethod
-    def create_account(account: str,
-                       username: str,
-                       domain: str,
-                       password: str,
-                       proxy_name: str,
-                       custom_host: str,
-                       anonymous: bool = False
-                       ) -> None:
-
-        account_label = f'{username}@{domain}'
-        if anonymous:
-            username = 'anon'
-            account_label = f'anon@{domain}'
-
-        config = {}
-        config['name'] = username
-        config['resource'] = f'gajim.{helpers.get_random_string(8)}'
-        config['account_label'] = account_label
-        config['hostname'] = domain
-        config['anonymous_auth'] = anonymous
-
-        if proxy_name is not None:
-            config['proxy'] = proxy_name
-
-        use_custom_host = custom_host is not None
-        config['use_custom_host'] = use_custom_host
-        if custom_host:
-            host, _protocol, type_ = custom_host
-            host, port = host.rsplit(':', maxsplit=1)
-            config['custom_port'] = int(port)
-            config['custom_host'] = host
-            config['custom_type'] = type_.value
-
-        app.settings.add_account(account)
-        for opt, value in config.items():
-            app.settings.set_account_setting(account, opt, value)
-
-        # Password module depends on existing config
-        passwords.save_password(account, password)
-
-        app.css_config.refresh()
-
-        # Action must be added before account window is updated
-        app.app.add_account_actions(account)
-
-        window = get_app_window('AccountsWindow')
-        if window is not None:
-            window.add_account(account)
-
-    def enable_account(self, account: str) -> None:
-        app.connections[account] = Client(account)
-
-        app.plugin_manager.register_modules_for_account(
-            app.connections[account])
-
-        app.automatic_rooms[account] = {}
-        app.to_be_removed[account] = []
-        app.nicks[account] = app.settings.get_account_setting(account, 'name')
-        app.settings.set_account_setting(account, 'active', True)
-        build_accounts_menu()
-        app.app.update_app_actions_state()
-
-        app.ged.raise_event(AccountEnabled(account=account))
-
-        app.get_client(account).change_status('online', '')
-        window = get_app_window('AccountsWindow')
-        if window is not None:
-            GLib.idle_add(window.enable_account, account, True)
-
-    def disable_account(self, account: str) -> None:
-        for win in get_app_windows(account):
-            # Close all account specific windows, except the RemoveAccount
-            # dialog. It shows if the removal was successful.
-            if type(win).__name__ == 'RemoveAccount':
-                continue
-            win.destroy()
-
-        app.settings.set_account_setting(account, 'roster_version', '')
-        app.settings.set_account_setting(account, 'active', False)
-        build_accounts_menu()
-        app.app.update_app_actions_state()
-
-        # Code in account-disabled handlers may use app.get_client()
-        app.ged.raise_event(AccountDisabled(account=account))
-
-        app.get_client(account).cleanup()
-        del app.connections[account]
-        if account in self.instances:
-            del self.instances[account]
-        del app.nicks[account]
-        del app.automatic_rooms[account]
-        del app.to_be_removed[account]
-
-    def remove_account(self, account: str) -> None:
-        if app.settings.get_account_setting(account, 'active'):
-            self.disable_account(account)
-
-        app.storage.cache.remove_roster(account)
-        # Delete password must be before del_per() because it calls set_per()
-        # which would recreate the account with defaults values if not found
-        passwords.delete_password(account)
-        app.settings.remove_account(account)
-        app.app.remove_account_actions(account)
-
-        window = get_app_window('AccountsWindow')
-        if window is not None:
-            window.remove_account(account)
 
     def autoconnect(self) -> None:
         '''

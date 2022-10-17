@@ -47,6 +47,8 @@ from urllib.parse import unquote
 from nbxmpp.namespaces import Namespace
 from nbxmpp import JID
 from nbxmpp.protocol import InvalidJid
+from nbxmpp.const import ConnectionType
+from nbxmpp.const import ConnectionProtocol
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -70,6 +72,7 @@ from gajim.common.i18n import _
 from gajim.gui import menus
 from gajim.gui import structs
 from gajim.gui.about import AboutDialog
+from gajim.gui.accounts import AccountsWindow
 from gajim.gui.avatar import AvatarStorage
 from gajim.gui.builder import get_builder
 from gajim.gui.const import ACCOUNT_ACTIONS
@@ -83,6 +86,7 @@ from gajim.gui.dialogs import ShortcutsWindow
 from gajim.gui.discovery import ServiceDiscoveryWindow
 from gajim.gui.start_chat import StartChatDialog
 from gajim.gui.util import get_app_window
+from gajim.gui.util import get_app_windows
 from gajim.gui.util import load_user_iconsets
 from gajim.gui.util import open_window
 
@@ -520,6 +524,66 @@ class GajimApplication(Gtk.Application, CoreApplication):
             self.set_action_state(action, True)
             action = '%s-block-contact' % event.account
             self.set_action_state(action, True)
+
+    def create_account(self,
+                       account: str,
+                       username: str,
+                       domain: str,
+                       password: str,
+                       proxy_name: str,
+                       custom_host: tuple[str,
+                                          ConnectionProtocol,
+                                          ConnectionType],
+                       anonymous: bool = False
+                       ) -> None:
+
+        CoreApplication.create_account(self,
+                                       account,
+                                       username,
+                                       domain,
+                                       password,
+                                       proxy_name,
+                                       custom_host,
+                                       anonymous)
+
+        app.css_config.refresh()
+
+        # Action must be added before account window is updated
+        self.add_account_actions(account)
+
+        window = cast(AccountsWindow, get_app_window('AccountsWindow'))
+        if window is not None:
+            window.add_account(account)
+
+    def enable_account(self, account: str) -> None:
+        CoreApplication.enable_account(self, account)
+        menus.build_accounts_menu()
+        self.update_app_actions_state()
+        window = cast(AccountsWindow, get_app_window('AccountsWindow'))
+        if window is not None:
+            window.enable_account(account, True)
+
+    def disable_account(self, account: str) -> None:
+        for win in get_app_windows(account):
+            # Close all account specific windows, except the RemoveAccount
+            # dialog. It shows if the removal was successful.
+            if type(win).__name__ == 'RemoveAccount':
+                continue
+            win.destroy()
+
+        CoreApplication.disable_account(self, account)
+
+        menus.build_accounts_menu()
+        self.update_app_actions_state()
+
+    def remove_account(self, account: str) -> None:
+        CoreApplication.remove_account(self, account)
+
+        self.remove_account_actions(account)
+
+        window = cast(AccountsWindow, get_app_window('AccountsWindow'))
+        if window is not None:
+            window.remove_account(account)
 
     # Action Callbacks
 

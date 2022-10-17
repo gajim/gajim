@@ -569,9 +569,9 @@ class AccountRow(Gtk.ListBoxRow):
             return Gdk.EVENT_STOP
 
         if state:
-            app.interface.enable_account(account)
+            app.app.enable_account(account)
         else:
-            app.interface.disable_account(account)
+            app.app.disable_account(account)
 
         return Gdk.EVENT_PROPAGATE
 
@@ -582,7 +582,7 @@ class AccountRow(Gtk.ListBoxRow):
                           ) -> None:
 
         if client_state.is_disconnected:
-            app.interface.disable_account(client.account)
+            app.app.disable_account(client.account)
 
 
 class AddNewAccountPage(Gtk.Box):
