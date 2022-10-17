@@ -116,7 +116,7 @@ class AudioWidget(Gtk.Box):
             is_paused = self._get_paused()
             if (duration > 0 and not is_paused and
                     not self._has_timeout):
-                GLib.timeout_add(500, self._update_seek_bar)
+                GLib.timeout_add(50, self._update_seek_bar)
                 self._has_timeout = True
 
     def _on_seek(self,
