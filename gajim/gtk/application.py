@@ -580,6 +580,9 @@ class GajimApplication(Gtk.Application, CoreApplication):
                             param: GLib.Variant) -> None:
         account = param.get_string()
         server_jid = app.settings.get_account_setting(account, 'hostname')
+        if account not in app.interface.instances:
+            app.interface.instances[account] = {'disco': {}}
+
         disco = app.interface.instances[account]['disco']
         if server_jid in disco:
             disco[server_jid].window.present()

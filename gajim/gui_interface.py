@@ -115,10 +115,6 @@ class Interface:
         self.instances: dict[str, Any] = {}
 
         for acc in app.settings.get_active_accounts():
-            self.instances[acc] = {
-                'infos': {},
-                'disco': {}
-            }
             app.automatic_rooms[acc] = {}
             app.to_be_removed[acc] = []
             app.nicks[acc] = app.settings.get_account_setting(acc, 'name')
@@ -511,12 +507,6 @@ class Interface:
         app.plugin_manager.register_modules_for_account(
             app.connections[account])
 
-        # update variables
-        self.instances[account] = {
-            'infos': {},
-            'disco': {}
-        }
-
         app.automatic_rooms[account] = {}
         app.to_be_removed[account] = []
         app.nicks[account] = app.settings.get_account_setting(account, 'name')
@@ -549,7 +539,8 @@ class Interface:
 
         app.get_client(account).cleanup()
         del app.connections[account]
-        del self.instances[account]
+        if account in self.instances:
+            del self.instances[account]
         del app.nicks[account]
         del app.automatic_rooms[account]
         del app.to_be_removed[account]
