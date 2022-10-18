@@ -73,17 +73,17 @@ class LiteAxolotlStore(AxolotlStore):
         self.createDb()
         self.migrateDb()
 
-        self._con.execute("PRAGMA secure_delete=1")
-        self._con.execute("PRAGMA synchronous=NORMAL;")
-        mode = self._con.execute("PRAGMA journal_mode;").fetchone()[0]
+        self._con.execute('PRAGMA secure_delete=1')
+        self._con.execute('PRAGMA synchronous=NORMAL;')
+        mode = self._con.execute('PRAGMA journal_mode;').fetchone()[0]
 
         # WAL is a persistent DB mode, don't override it if user has set it
         if mode != 'wal':
-            self._con.execute("PRAGMA journal_mode=MEMORY;")
+            self._con.execute('PRAGMA journal_mode=MEMORY;')
         self._con.commit()
 
         if not self.getLocalRegistrationId():
-            self._log.info("Generating OMEMO keys")
+            self._log.info('Generating OMEMO keys')
             self._generate_axolotl_keys()
 
     def _is_blind_trust_enabled(self) -> bool:
@@ -107,7 +107,7 @@ class LiteAxolotlStore(AxolotlStore):
                 fields.append(col_name.lower())
             else:
                 fields.append(col[0])
-        return namedtuple("Row", fields)(*row)
+        return namedtuple('Row', fields)(*row)
 
     def _generate_axolotl_keys(self) -> None:
         identity_key_pair = KeyHelper.generateIdentityKeyPair()
@@ -162,66 +162,66 @@ class LiteAxolotlStore(AxolotlStore):
 
                 '''
 
-            create_db_sql = """
+            create_db_sql = '''
                 BEGIN TRANSACTION;
                 %s
                 PRAGMA user_version=12;
                 END TRANSACTION;
-                """ % (create_tables)
+                ''' % (create_tables)
             self._con.executescript(create_db_sql)
 
     def migrateDb(self) -> None:
-        """ Migrates the DB
-        """
+        ''' Migrates the DB
+        '''
 
         # Find all double entries and delete them
         if self.user_version() < 2:
-            delete_dupes = """ DELETE FROM identities WHERE _id not in (
+            delete_dupes = ''' DELETE FROM identities WHERE _id not in (
                                 SELECT MIN(_id)
                                 FROM identities
                                 GROUP BY
                                 recipient_id, public_key
                                 );
-                            """
+                            '''
 
             self._con.executescript(
-                """ BEGIN TRANSACTION;
+                ''' BEGIN TRANSACTION;
                     %s
                     PRAGMA user_version=2;
                     END TRANSACTION;
-                """ % (delete_dupes))
+                ''' % (delete_dupes))
 
         if self.user_version() < 3:
             # Create a UNIQUE INDEX so every public key/recipient_id tuple
             # can only be once in the db
-            add_index = """ CREATE UNIQUE INDEX IF NOT EXISTS
+            add_index = ''' CREATE UNIQUE INDEX IF NOT EXISTS
                             public_key_index
                             ON identities (public_key, recipient_id);
-                        """
+                        '''
 
             self._con.executescript(
-                """ BEGIN TRANSACTION;
+                ''' BEGIN TRANSACTION;
                     %s
                     PRAGMA user_version=3;
                     END TRANSACTION;
-                """ % (add_index))
+                ''' % (add_index))
 
         if self.user_version() < 4:
-            # Adds column "active" to the sessions table
-            add_active = """ ALTER TABLE sessions
+            # Adds column 'active' to the sessions table
+            add_active = ''' ALTER TABLE sessions
                              ADD COLUMN active INTEGER DEFAULT 1;
-                         """
+                         '''
 
             self._con.executescript(
-                """ BEGIN TRANSACTION;
+                ''' BEGIN TRANSACTION;
                     %s
                     PRAGMA user_version=4;
                     END TRANSACTION;
-                """ % (add_active))
+                ''' % (add_active))
 
         if self.user_version() < 5:
             # Adds DEFAULT Timestamp
-            add_timestamp = """
+            add_timestamp = '''
                 DROP TABLE signed_prekeys;
                 CREATE TABLE IF NOT EXISTS signed_prekeys (
                     _id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -229,47 +229,47 @@ class LiteAxolotlStore(AxolotlStore):
                     timestamp NUMERIC DEFAULT CURRENT_TIMESTAMP, record BLOB);
                 ALTER TABLE identities ADD COLUMN shown INTEGER DEFAULT 0;
                 UPDATE identities SET shown = 1;
-            """
+            '''
 
             self._con.executescript(
-                """ BEGIN TRANSACTION;
+                ''' BEGIN TRANSACTION;
                     %s
                     PRAGMA user_version=5;
                     END TRANSACTION;
-                """ % (add_timestamp))
+                ''' % (add_timestamp))
 
         if self.user_version() < 6:
             # Move secret data into own table
             # We add +1 to registration id because we did that in other code in
             # earlier versions. On this migration we correct this mistake now.
-            move = """
+            move = '''
                 CREATE TABLE IF NOT EXISTS secret (
                     device_id INTEGER, public_key BLOB, private_key BLOB);
                 INSERT INTO secret (device_id, public_key, private_key)
                 SELECT registration_id + 1, public_key, private_key
                 FROM identities
                 WHERE recipient_id = -1;
-            """
+            '''
 
             self._con.executescript(
-                """ BEGIN TRANSACTION;
+                ''' BEGIN TRANSACTION;
                     %s
                     PRAGMA user_version=6;
                     END TRANSACTION;
-                """ % move)
+                ''' % move)
 
         if self.user_version() < 7:
             # Convert old device ids to integer
-            convert = """
+            convert = '''
                 UPDATE secret SET device_id = device_id % 2147483646;
-            """
+            '''
 
             self._con.executescript(
-                """ BEGIN TRANSACTION;
+                ''' BEGIN TRANSACTION;
                     %s
                     PRAGMA user_version=7;
                     END TRANSACTION;
-                """ % convert)
+                ''' % convert)
 
         if self.user_version() < 8:
             # Sanitize invalid BLOBs from the python2 days
@@ -392,7 +392,7 @@ class LiteAxolotlStore(AxolotlStore):
         query = 'SELECT record FROM signed_prekeys WHERE prekey_id = ?'
         result = self._con.execute(query, (signedPreKeyId, )).fetchone()
         if result is None:
-            raise InvalidKeyIdException("No such signedprekeyrecord! %s " %
+            raise InvalidKeyIdException('No such signedprekeyrecord! %s ' %
                                         signedPreKeyId)
         return SignedPreKeyRecord(serialized=result.record)
 
@@ -495,7 +495,7 @@ class LiteAxolotlStore(AxolotlStore):
 
     def deleteSession(self, recipientId: str, deviceId: int) -> None:
         self._log.info('Delete session for %s %s', recipientId, deviceId)
-        query = "DELETE FROM sessions WHERE recipient_id = ? AND device_id = ?"
+        query = 'DELETE FROM sessions WHERE recipient_id = ? AND device_id = ?'
         self._con.execute(query, (recipientId, deviceId))
         self._con.commit()
 
@@ -513,24 +513,27 @@ class LiteAxolotlStore(AxolotlStore):
         return self._con.execute(query, (recipientId,)).fetchall()
 
     def getSessionsFromJids(self, recipientIds: list[str]):
-        query = '''SELECT recipient_id,
-                          device_id,
-                          record as "record [session_record]",
-                          active
-                   FROM sessions
-                   WHERE recipient_id IN ({})'''.format(
-                       ', '.join(['?'] * len(recipientIds)))
+        query = '''
+        SELECT recipient_id,
+               device_id,
+               record as "record [session_record]",
+               active
+        FROM sessions
+        WHERE recipient_id IN ({})'''.format(
+            ', '.join(['?'] * len(recipientIds)))
         return self._con.execute(query, recipientIds).fetchall()
 
     def setActiveState(self, jid: str, devicelist: list[int]) -> None:
-        query = '''UPDATE sessions SET active = 1
-                   WHERE recipient_id = ? AND device_id IN ({})'''.format(
-                       ', '.join(['?'] * len(devicelist)))
+        query = '''
+        UPDATE sessions SET active = 1
+        WHERE recipient_id = ? AND device_id IN ({})'''.format(
+            ', '.join(['?'] * len(devicelist)))
         self._con.execute(query, (jid,) + tuple(devicelist))
 
-        query = '''UPDATE sessions SET active = 0
-                   WHERE recipient_id = ? AND device_id NOT IN ({})'''.format(
-                       ', '.join(['?'] * len(devicelist)))
+        query = '''
+        UPDATE sessions SET active = 0
+        WHERE recipient_id = ? AND device_id NOT IN ({})'''.format(
+            ', '.join(['?'] * len(devicelist)))
         self._con.execute(query, (jid,) + tuple(devicelist))
         self._con.commit()
 
@@ -559,7 +562,7 @@ class LiteAxolotlStore(AxolotlStore):
 
         result = self._con.execute(query, (preKeyId,)).fetchone()
         if result is None:
-            raise Exception("No such prekeyRecord!")
+            raise Exception('No such prekeyRecord!')
         return PreKeyRecord(serialized=result.record)
 
     def loadPendingPreKeys(self) -> list[PreKeyRecord]:

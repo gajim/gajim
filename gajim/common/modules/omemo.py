@@ -299,7 +299,7 @@ class OMEMO(BaseModule):
         if not from_jid:
             self._log.error(
                 "Can't decrypt GroupChat Message from %s", resource)
-            return
+            return None
         return from_jid
 
     def _process_mam_message(self,
@@ -312,7 +312,7 @@ class OMEMO(BaseModule):
             if properties.muc_user is None or properties.muc_user.jid is None:
                 self._log.warning('Received MAM Message which can '
                                   'not be mapped to a real jid')
-                return
+                return None
             return properties.muc_user.jid.bare
         return properties.from_.bare
 
@@ -407,7 +407,7 @@ class OMEMO(BaseModule):
             self.request_bundle(jid, device_id)
 
     def are_keys_missing(self, contact_jid: str) -> bool:
-        """ Checks if devicekeys are missing and queries the
+        ''' Checks if devicekeys are missing and queries the
             bundles
 
             Parameters
@@ -419,7 +419,7 @@ class OMEMO(BaseModule):
             -------
             bool
                 Returns True if there are no trusted Fingerprints
-        """
+        '''
 
         # Fetch Bundles of own other Devices
         if self._own_jid not in self._query_for_bundles:
@@ -455,7 +455,7 @@ class OMEMO(BaseModule):
 
     @as_task
     def request_bundle(self, jid: str, device_id: int):
-        _task = yield
+        _task = yield  # noqa: F841
 
         self._log.info('Fetch device bundle %s %s', device_id, jid)
 
@@ -549,6 +549,6 @@ class OMEMO(BaseModule):
         self._check_for_missing_sessions(jid)
 
     def _debug_print_stanza(self, stanza: Any) -> None:
-        stanzastr = '\n' + stanza.__str__(fancy=True)
+        stanzastr = '\n' + stanza.__str__(fancy=True)  # pylint: ignore
         stanzastr = stanzastr[0:-1]
         self._log.debug(stanzastr)

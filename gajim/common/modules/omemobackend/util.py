@@ -49,8 +49,8 @@ def get_fingerprint(identity_key: IdentityKeyPair,
     fplen = len(fingerprint)
     wordsize = fplen // 8
     buf = ''
-    for w in range(0, fplen, wordsize):
-        buf += '{0} '.format(fingerprint[w:w + wordsize])
+    for word in range(0, fplen, wordsize):
+        buf += '{0} '.format(fingerprint[word:word + wordsize])
     buf = textwrap.fill(buf, width=36)
     return buf.rstrip().upper()
 

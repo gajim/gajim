@@ -169,7 +169,7 @@ class OmemoState(DeviceManager):
             raise DecryptionFailed
 
         if omemo_message.payload is None:
-            self._log.debug("Decrypted Key Exchange Message")
+            self._log.debug('Decrypted Key Exchange Message')
             raise KeyExchangeMessage
 
         try:
@@ -178,7 +178,7 @@ class OmemoState(DeviceManager):
             self._log.warning(error)
             raise DecryptionFailed
 
-        self._log.debug("Decrypted Message => %s", result)
+        self._log.debug('Decrypted Message => %s', result)
         return result, fingerprint, trust
 
     def _get_whisper_message(self,
@@ -361,7 +361,7 @@ class OmemoState(DeviceManager):
 
     def _cycle_signed_pre_key(self, ik_pair: IdentityKeyPair) -> None:
         # Publish every SPK_CYCLE_TIME a new SignedPreKey
-        # Delete all exsiting SignedPreKeys that are older
+        # Delete all existing SignedPreKeys that are older
         # then SPK_ARCHIVE_TIME
 
         # Check if SignedPreKey exist and create if not
