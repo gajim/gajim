@@ -19,8 +19,11 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import Callable
 from typing import Optional
 
+import binascii
+import threading
 from pathlib import Path
 
 from nbxmpp.namespaces import Namespace
@@ -39,6 +42,8 @@ from nbxmpp.modules.omemo import get_key_transport_message
 from nbxmpp.modules.util import is_error
 from nbxmpp.task import Task
 
+from gi.repository import GLib
+
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import ged
@@ -46,15 +51,15 @@ from gajim.common import types
 from gajim.common.structs import OutgoingMessage
 from gajim.common.const import EncryptionData
 from gajim.common.const import Trust as GajimTrust
+from gajim.common.i18n import _
 from gajim.common.events import MucDiscoUpdate
 from gajim.common.events import SignedIn
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import as_task
-
-from gajim.plugins.plugins_i18n import _
-
+from gajim.common.modules.httpupload import HTTPFileTransfer
+from gajim.common.modules.omemobackend.aes import aes_encrypt_file
 from gajim.common.modules.omemobackend.state import OmemoState
 from gajim.common.modules.omemobackend.state import KeyExchangeMessage
 from gajim.common.modules.omemobackend.state import SelfMessage
@@ -173,6 +178,31 @@ class OMEMO(BaseModule):
                 'trust': GajimTrust[Trust.VERIFIED.name]}
 
         self._debug_print_stanza(event.stanza)
+
+    def encrypt_file(self,
+                     transfer: HTTPFileTransfer,
+                     callback: Callable[..., Any]
+                     ) -> None:
+
+        thread = threading.Thread(target=self._encrypt_file_thread,
+                                  args=(transfer, callback))
+        thread.daemon = True
+        thread.start()
+
+    @staticmethod
+    def _encrypt_file_thread(transfer: HTTPFileTransfer,
+                             callback: Callable[..., Any],
+                             *args: Any,
+                             **kwargs: Any
+                             ) -> None:
+
+        result = aes_encrypt_file(transfer.get_data())
+        transfer.size = len(result.payload)
+        fragment = binascii.hexlify(result.iv + result.key).decode()
+        transfer.set_uri_transform_func(
+            lambda uri: 'aesgcm%s#%s' % (uri[5:], fragment))
+        transfer.set_encrypted_data(result.payload)
+        GLib.idle_add(callback, transfer)
 
     def _send_key_transport_message(self,
                                     typ: str,
