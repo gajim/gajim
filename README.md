@@ -21,6 +21,7 @@
 - [GtkSourceView](https://gitlab.gnome.org/GNOME/gtksourceview)
 - [Pango](https://gitlab.gnome.org/GNOME/pango) (>=1.50.0)
 - [sqlite](https://www.sqlite.org/) (>=3.33.0)
+- [axolotl](https://pypi.org/project/python-axolotl/)
 
 ### Optional Runtime Requirements
 
