@@ -166,9 +166,9 @@ class AccountsWindow(Gtk.ApplicationWindow):
         if not initial:
             self._accounts[account].show()
 
-    def select_account(self, account: str) -> None:
+    def select_account(self, account: str, page: Optional[str] = None) -> None:
         try:
-            self._accounts[account].select()
+            self._accounts[account].select(page)
         except KeyError:
             log.warning('select_account() failed, account %s not found',
                         account)
@@ -292,6 +292,12 @@ class AccountMenu(Gtk.Box):
                       listbox.account,
                       f'{listbox.account}-{row.name}')
 
+    def set_page(self, account: str, page_name: str) -> None:
+        sub_menu = cast(
+            AccountSubMenu, self._stack.get_child_by_name(f'{account}-menu'))
+        sub_menu.select_row_by_name(page_name)
+        self.emit('menu-activated', account, f'{account}-{page_name}')
+
     def update_account_label(self, account: str) -> None:
         self._accounts_listbox.invalidate_sort()
         sub_menu = cast(
@@ -324,6 +330,14 @@ class AccountSubMenu(Gtk.ListBox):
     @property
     def account(self) -> str:
         return self._account
+
+    def select_row_by_name(self, row_name: str) -> None:
+        for row in self.get_children():
+            if not isinstance(row, PageMenuItem):
+                continue
+            if row.name == row_name:
+                self.select_row(row)
+                return
 
     def update(self) -> None:
         self.emit('update', self._account)
@@ -443,8 +457,10 @@ class Account:
         self._account_row = AccountRow(account)
         self._menu.add_account(self._account_row)
 
-    def select(self) -> None:
+    def select(self, page_name: Optional[str] = None) -> None:
         self._account_row.emit('activate')
+        if page_name is not None:
+            self._menu.set_page(self._account, page_name)
 
     def show(self) -> None:
         self._menu.show_all()
