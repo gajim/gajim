@@ -89,7 +89,10 @@ class Preview:
         self.key: Optional[bytes] = None
         self.iv: Optional[bytes] = None
         if self.is_aes_encrypted and urlparts is not None:
-            self.key, self.iv = parse_fragment(urlparts.fragment)
+            try:
+                self.key, self.iv = parse_fragment(urlparts.fragment)
+            except ValueError as err:
+                log.error('Parsing fragment for AES decryption failed:', err)
 
     @property
     def is_geo_uri(self) -> bool:
