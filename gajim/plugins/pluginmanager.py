@@ -51,6 +51,9 @@ from gajim.plugins.gajimplugin import GajimPluginException
 
 log = logging.getLogger('gajim.p.manager')
 
+
+BLOCKED_PLUGINS = []
+
 FIELDS = ('name',
           'short_name',
           'version',
@@ -79,6 +82,9 @@ class PluginManifest:
 
     @property
     def is_usable(self) -> bool:
+        if self.short_name in BLOCKED_PLUGINS:
+            return False
+
         if not self._check_requirements():
             return False
 
