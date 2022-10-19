@@ -29,9 +29,11 @@ from gajim.common.modules.contacts import GroupchatContact
 
 from .emoji_data_gtk import get_emoji_data
 from .groupchat_nick_completion import GroupChatNickCompletion
+from .menus import escape_mnemonic
 
 
-MAX_ENTRIES = 5
+EMOJI_NUM_GENDERS = len(['f', 'm', 'n'])
+MENUS_MAX_ENTRIES = 2 * EMOJI_NUM_GENDERS
 
 
 class ChatActionProcessor(Gtk.Popover):
@@ -173,7 +175,7 @@ class ChatActionProcessor(Gtk.Popover):
         for command, usage in command_list:
             if not command.startswith(action_text[1:]):
                 continue
-            if num_entries >= MAX_ENTRIES:
+            if num_entries >= MENUS_MAX_ENTRIES:
                 continue
 
             action_data = GLib.Variant('s', f'/{command}')
@@ -210,11 +212,16 @@ class ChatActionProcessor(Gtk.Popover):
                 if not text.startswith(':'):
                     return False
 
-            action_text = self._buf.get_text(start, self._current_iter, False)
+            action_text = self._buf.get_text(
+                start, self._current_iter, False)[1:]
             if self._start_mark is None:
                 self._start_mark = Gtk.TextMark.new('chat-action-start', True)
                 self._buf.add_mark(self._start_mark, start)
-            self._update_emoji_menu(action_text, start)
+            if self._active or len(action_text) > 1:
+                # Don't activate until a sufficient # of chars has been typed,
+                # which is chosen to be > 1 to not interfere with ASCII smilies
+                # consisting of a colon and 1 single other char.
+                self._update_emoji_menu(action_text.casefold(), start)
             return True
 
         return False
@@ -225,18 +232,24 @@ class ChatActionProcessor(Gtk.Popover):
                            ) -> None:
         self._menu.remove_all()
         emoji_data = get_emoji_data()
-        menu_entry_count = 0
-        for shortcode, codepoint in emoji_data.items():
-            if not shortcode.startswith(action_text[1:]):
-                continue
-            if menu_entry_count >= MAX_ENTRIES:
+
+        for keyword, entries in emoji_data.items():
+            for short_name in entries.keys():
+                if not keyword.startswith(action_text):
+                    continue
+                emoji = entries[short_name]
+                label = f'{emoji} {short_name}'
+                if keyword != short_name:
+                    label += f'  [{keyword}]'
+                action_data = GLib.Variant('s', emoji)
+                menu_item = Gio.MenuItem()
+                menu_item.set_label(escape_mnemonic(label))
+                menu_item.set_attribute_value('action-data', action_data)
+                self._menu.append_item(menu_item)
+                if self._menu.get_n_items() >= MENUS_MAX_ENTRIES:
+                    break
+            if self._menu.get_n_items() >= MENUS_MAX_ENTRIES:
                 break
-            action_data = GLib.Variant('s', codepoint)
-            menu_item = Gio.MenuItem()
-            menu_item.set_label(f'{codepoint} {shortcode}')
-            menu_item.set_attribute_value('action-data', action_data)
-            self._menu.append_item(menu_item)
-            menu_entry_count += 1
 
         if self._menu.get_n_items() > 0:
             self._show_menu(start)

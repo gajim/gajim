@@ -68,8 +68,11 @@ def generate_avatar_letter(text: str) -> str:
 
     # Max (arbitrary) length for emoji ZJW sequences: 11
     for length in range(11, 0, -1):
-        if text[:length] in emoji_data.values():
-            return text[:length]
+        prefix = text[:length]
+        for entries in emoji_data.values():
+            for emoji in entries.values():
+                if prefix == emoji:
+                    return prefix
 
     return text[0].upper()
 
