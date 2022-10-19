@@ -322,6 +322,43 @@ modules:
         url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-4.2.2-py3-none-any.whl
         sha256: 807d8bbe19dcc77e23cd2b0420581fecd1168ad5cb88b201a15ec7d0b1f8aff3
 
+  # OMEMO dependenies
+  - name: protobuf
+    buildsystem: simple
+    build-commands:
+      - pip3 install --no-deps protobuf-4.21.1-py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-4.21.1-py3-none-any.whl
+        sha256: 79cd8d0a269b714f6b32641f86928c718e8d234466919b3f552bfb069dbb159b
+
+  - name: python3-axolotl-curve25519
+    buildsystem: simple
+    build-commands:
+      - pip3 install .
+    sources:
+      - type: archive
+        url: https://files.pythonhosted.org/packages/source/p/python-axolotl-curve25519/python-axolotl-curve25519-0.4.1.post2.tar.gz
+        sha256: 0705a66297ebd2f508a60dc94e22881c754301eb81db93963322f6b3bdcb63a3
+
+  - name: python3-axolotl
+    buildsystem: simple
+    build-commands:
+      - pip3 install --no-deps python_axolotl-0.2.3-py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/0f/b3/4a0b0e664435691bba36fac6e366cece506d002294c293bd3dcb40c2b2ba/python_axolotl-0.2.3-py3-none-any.whl
+        sha256: 6a22acbf646c3b736ea1a4663ab5c52687fce6612e92ae6a7fe63803c212fb9e
+
+  - name: python3-qrcode
+    buildsystem: simple
+    build-commands:
+      - pip3 install .
+    sources:
+      - type: archive
+        url: https://files.pythonhosted.org/packages/source/q/qrcode/qrcode-7.3.1.tar.gz
+        sha256: 375a6ff240ca9bd41adc070428b5dfc1dcfbb0f2507f1ac848f6cded38956578
+
   - name: gajim
     buildsystem: simple
     build-commands:
