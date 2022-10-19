@@ -81,7 +81,7 @@ SETTING_TYPE = Union[bool, int, str, object]
 
 log = logging.getLogger('gajim.c.settings')
 
-CURRENT_USER_VERSION = 2
+CURRENT_USER_VERSION = 3
 
 CREATE_SQL = '''
     CREATE TABLE settings (
@@ -339,6 +339,14 @@ class Settings:
                 workspace.pop('open_chats', None)
 
             self._set_user_version(2)
+
+        if version < 3:
+            # Migrate open chats to new key and format
+            for account_settings in self._account_settings.values():
+                if account_settings['account'].get('active') is None:
+                    account_settings['account']['active'] = True
+
+            self._set_user_version(3)
 
     def _migrate_old_config(self) -> None:
         config_file = configpaths.get('CONFIG_FILE')
