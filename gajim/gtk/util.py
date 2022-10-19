@@ -850,6 +850,24 @@ def make_pango_attributes(block: PlainBlock) -> Pango.AttrList:
     return attrlist
 
 
+_grapheme_buffer = Gtk.TextBuffer()
+
+
+def get_first_graphemes(text: str, n: int) -> str:
+    # This should be possible with lower-level APIs like Pango.break_* or
+    # Pango.get_log_attrs, but their Python bindings seem totally broken.
+    # The re-use of one global buffer is to mitigate very probable memory leaks.
+    _grapheme_buffer.set_text(text)
+    cursor = _grapheme_buffer.get_start_iter()
+    cursor.forward_cursor_positions(n)
+    return _grapheme_buffer.get_slice(
+        _grapheme_buffer.get_start_iter(), cursor, False)
+
+
+def get_first_grapheme(text: str) -> str:
+    return get_first_graphemes(text, 1)
+
+
 def get_style_attribute_with_name(name: str) -> Pango.Attribute:
     if name == 'strong':
         return Pango.attr_weight_new(Pango.Weight.BOLD)

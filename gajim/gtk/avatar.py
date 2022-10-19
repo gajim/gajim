@@ -40,8 +40,8 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 
 from .const import DEFAULT_WORKSPACE_COLOR
-from .emoji_data_gtk import get_emoji_data
 from .util import get_contact_color
+from .util import get_first_graphemes
 from .util import load_icon_surface
 from .util import load_pixbuf
 from .util import scale_with_ratio
@@ -58,23 +58,7 @@ AvatarCacheT = dict[Union[JID, str], dict[tuple[int, int, Optional[str]],
 
 
 def generate_avatar_letter(text: str) -> str:
-    if not text:
-        return ''
-
-    if text[0].isalpha():
-        return text[0].upper()
-
-    emoji_data = get_emoji_data()
-
-    # Max (arbitrary) length for emoji ZJW sequences: 11
-    for length in range(11, 0, -1):
-        prefix = text[:length]
-        for entries in emoji_data.values():
-            for emoji in entries.values():
-                if prefix == emoji:
-                    return prefix
-
-    return text[0].upper()
+    return get_first_graphemes(text.lstrip(), 1).upper()
 
 
 def generate_avatar(letters: str,
