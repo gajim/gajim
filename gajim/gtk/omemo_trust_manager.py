@@ -26,9 +26,6 @@ import time
 import locale
 import logging
 import tempfile
-from packaging.version import Version as V
-
-from pkg_resources import get_distribution
 
 from axolotl.identitykeypair import IdentityKeyPair  # pyright: ignore
 
@@ -249,16 +246,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
         qr.add_data(ver_string)
         qr.make(fit=True)
 
-        fill_color = 'black'
-        back_color = 'white'
-        if V(get_distribution('qrcode').version) < V('6.0'):
-            # meaning of fill_color and back_color were switched
-            # before this commit in qrcode between versions 5.3
-            # and 6.0: https://github.com/lincolnloop/python-qrcode/
-            # commit/01f440d64b7d1f61bb75161ce118b86eca85b15c
-            back_color, fill_color = fill_color, back_color
-
-        img = qr.make_image(fill_color=fill_color, back_color=back_color)
+        img = qr.make_image(fill_color='black', back_color='white')
         img.save(path)
         return path
 
