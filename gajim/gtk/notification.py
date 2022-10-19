@@ -413,8 +413,7 @@ def _get_avatar_for_notification(account: str,
     size = AvatarSize.NOTIFICATION
     client = app.get_client(account)
     contact = client.get_module('Contacts').get_contact(jid)
-    avatar_surface = contact.get_avatar(size, scale)
-    pixbuf = Gdk.pixbuf_get_from_surface(avatar_surface, 0, 0, size, size)
+    pixbuf = contact.get_avatar(size, scale, pixbuf=True)
     assert pixbuf is not None
     return pixbuf
 

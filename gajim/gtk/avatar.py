@@ -380,7 +380,11 @@ class AvatarStorage(metaclass=Singleton):
 
         surface = self.get_surface(
             contact, size, scale, show, default, transport_icon, style)
-        return Gdk.pixbuf_get_from_surface(surface, 0, 0, size, size)
+        return Gdk.pixbuf_get_from_surface(surface,
+                                           0,
+                                           0,
+                                           size * scale,
+                                           size * scale)
 
     def get_surface(self,
                     contact: Union[types.BareContact,
