@@ -63,7 +63,7 @@ sqlite3.register_converter('pk', _convert_identity_key)
 sqlite3.register_converter('session_record', _convert_record)
 
 
-class LiteAxolotlStore(AxolotlStore):
+class OMEMOStorage(AxolotlStore):
     def __init__(self, account: str, db_path: Path, log: LogAdapter) -> None:
         self._log = log
         self._account = account

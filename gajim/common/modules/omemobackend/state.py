@@ -40,13 +40,13 @@ from axolotl.util.keyhelper import KeyHelper
 from axolotl.duplicatemessagexception import DuplicateMessageException
 
 from gajim.common import types
+from gajim.common.storage.omemo import OMEMOStorage
 from gajim.common.modules.omemobackend.aes import aes_decrypt
 from gajim.common.modules.omemobackend.aes import aes_encrypt
 from gajim.common.modules.omemobackend.aes import get_new_key
 from gajim.common.modules.omemobackend.aes import get_new_iv
 from gajim.common.modules.omemobackend.devices import DeviceManager
 from gajim.common.modules.omemobackend.devices import NoDevicesFound
-from gajim.common.modules.omemobackend.liteaxolotlstore import LiteAxolotlStore
 from gajim.common.modules.omemobackend.util import get_fingerprint
 from gajim.common.modules.omemobackend.util import Trust
 from gajim.common.modules.omemobackend.util import DEFAULT_PREKEY_AMOUNT
@@ -69,7 +69,7 @@ class OmemoState(DeviceManager):
         self._log = xmpp_con._log
         self._session_ciphers: dict[
             str, dict[int, SessionCipher]] = defaultdict(dict)
-        self._storage = LiteAxolotlStore(account, db_path, self._log)
+        self._storage = OMEMOStorage(account, db_path, self._log)
 
         DeviceManager.__init__(self)
 
@@ -108,7 +108,7 @@ class OmemoState(DeviceManager):
         self._get_session_cipher(jid, device_id)
 
     @property
-    def storage(self) -> LiteAxolotlStore:
+    def storage(self) -> OMEMOStorage:
         return self._storage
 
     @property
