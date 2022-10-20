@@ -40,20 +40,20 @@ from axolotl.util.keyhelper import KeyHelper
 from axolotl.duplicatemessagexception import DuplicateMessageException
 
 from gajim.common import types
+from gajim.common.omemo.aes import aes_decrypt
+from gajim.common.omemo.aes import aes_encrypt
+from gajim.common.omemo.aes import get_new_key
+from gajim.common.omemo.aes import get_new_iv
 from gajim.common.storage.omemo import OMEMOStorage
-from gajim.common.modules.omemobackend.aes import aes_decrypt
-from gajim.common.modules.omemobackend.aes import aes_encrypt
-from gajim.common.modules.omemobackend.aes import get_new_key
-from gajim.common.modules.omemobackend.aes import get_new_iv
-from gajim.common.modules.omemobackend.devices import DeviceManager
-from gajim.common.modules.omemobackend.devices import NoDevicesFound
-from gajim.common.modules.omemobackend.util import get_fingerprint
-from gajim.common.modules.omemobackend.util import Trust
-from gajim.common.modules.omemobackend.util import DEFAULT_PREKEY_AMOUNT
-from gajim.common.modules.omemobackend.util import MIN_PREKEY_AMOUNT
-from gajim.common.modules.omemobackend.util import SPK_CYCLE_TIME
-from gajim.common.modules.omemobackend.util import SPK_ARCHIVE_TIME
-from gajim.common.modules.omemobackend.util import UNACKNOWLEDGED_COUNT
+from gajim.common.omemo.devices import DeviceManager
+from gajim.common.omemo.devices import NoDevicesFound
+from gajim.common.omemo.util import get_fingerprint
+from gajim.common.omemo.util import Trust
+from gajim.common.omemo.util import DEFAULT_PREKEY_AMOUNT
+from gajim.common.omemo.util import MIN_PREKEY_AMOUNT
+from gajim.common.omemo.util import SPK_CYCLE_TIME
+from gajim.common.omemo.util import SPK_ARCHIVE_TIME
+from gajim.common.omemo.util import UNACKNOWLEDGED_COUNT
 
 
 class OmemoState(DeviceManager):

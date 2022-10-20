@@ -42,9 +42,9 @@ from gajim.common.events import AccountDisconnected
 from gajim.common.i18n import _
 from gajim.common.ged import EventHelper
 from gajim.common.modules.contacts import BareContact
-from gajim.common.modules.omemobackend.util import Trust
-from gajim.common.modules.omemobackend.util import IdentityKeyExtended
-from gajim.common.modules.omemobackend.util import get_fingerprint
+from gajim.common.omemo.util import Trust
+from gajim.common.omemo.util import IdentityKeyExtended
+from gajim.common.omemo.util import get_fingerprint
 
 from .builder import get_builder
 from .dialogs import ConfirmationDialog

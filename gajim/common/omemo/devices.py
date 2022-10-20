@@ -20,7 +20,7 @@ from collections import defaultdict
 
 from gajim.common import app
 
-from gajim.common.modules.omemobackend.util import UNACKNOWLEDGED_COUNT
+from gajim.common.omemo.util import UNACKNOWLEDGED_COUNT
 
 
 class DeviceManager:

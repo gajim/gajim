@@ -59,14 +59,14 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import as_task
 from gajim.common.modules.httpupload import HTTPFileTransfer
-from gajim.common.modules.omemobackend.aes import aes_encrypt_file
-from gajim.common.modules.omemobackend.state import OmemoState
-from gajim.common.modules.omemobackend.state import KeyExchangeMessage
-from gajim.common.modules.omemobackend.state import SelfMessage
-from gajim.common.modules.omemobackend.state import MessageNotForDevice
-from gajim.common.modules.omemobackend.state import DecryptionFailed
-from gajim.common.modules.omemobackend.state import DuplicateMessage
-from gajim.common.modules.omemobackend.util import Trust
+from gajim.common.omemo.aes import aes_encrypt_file
+from gajim.common.omemo.state import OmemoState
+from gajim.common.omemo.state import KeyExchangeMessage
+from gajim.common.omemo.state import SelfMessage
+from gajim.common.omemo.state import MessageNotForDevice
+from gajim.common.omemo.state import DecryptionFailed
+from gajim.common.omemo.state import DuplicateMessage
+from gajim.common.omemo.util import Trust
 from gajim.common.events import OMEMONewFingerprint
 from gajim.common.modules.util import prepare_stanza
 

@@ -39,9 +39,9 @@ from axolotl.util.medium import Medium
 from axolotl.util.keyhelper import KeyHelper
 
 from gajim.common import app
-from gajim.common.modules.omemobackend.util import Trust
-from gajim.common.modules.omemobackend.util import IdentityKeyExtended
-from gajim.common.modules.omemobackend.util import DEFAULT_PREKEY_AMOUNT
+from gajim.common.omemo.util import Trust
+from gajim.common.omemo.util import IdentityKeyExtended
+from gajim.common.omemo.util import DEFAULT_PREKEY_AMOUNT
 from gajim.common.modules.util import LogAdapter
 
 
