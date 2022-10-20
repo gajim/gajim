@@ -633,7 +633,8 @@ class OMEMOStorage(AxolotlStore):
         self._con.commit()
 
     def saveIdentity(self, recipientId: int, identityKey: IdentityKey) -> None:
-        query = '''INSERT INTO identities (recipient_id, public_key, trust, shown)
+        query = '''INSERT INTO identities
+                   (recipient_id, public_key, trust, shown)
                    VALUES(?, ?, ?, ?)'''
         if not self.containsIdentity(recipientId, identityKey):
             trust = self.getDefaultTrust(recipientId)
@@ -798,3 +799,7 @@ class OMEMOStorage(AxolotlStore):
             return 0
         state = record.getSessionState()
         return state.getSenderChainKey().getIndex()
+
+    def getSubDeviceSessions(self) -> None:
+        # Not used
+        return None

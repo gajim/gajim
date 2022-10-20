@@ -502,7 +502,7 @@ class OMEMO(BaseModule):
 
     @as_task
     def request_devicelist(self, jid: Optional[str] = None):
-        _task = yield
+        _task = yield  # noqa
 
         if jid is None:
             jid = self._own_jid
@@ -558,6 +558,6 @@ class OMEMO(BaseModule):
         self._check_for_missing_sessions(jid)
 
     def _debug_print_stanza(self, stanza: Any) -> None:
-        stanzastr = '\n' + stanza.__str__(fancy=True)  # pylint: ignore
+        stanzastr = '\n' + stanza.__str__(fancy=True)  # pylint: disable=unnecessary-dunder-call # noqa
         stanzastr = stanzastr[0:-1]
         self._log.debug(stanzastr)
