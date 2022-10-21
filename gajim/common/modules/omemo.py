@@ -52,6 +52,7 @@ from gajim.common.structs import OutgoingMessage
 from gajim.common.const import EncryptionData
 from gajim.common.const import Trust as GajimTrust
 from gajim.common.i18n import _
+from gajim.common.events import MucAdded
 from gajim.common.events import MucDiscoUpdate
 from gajim.common.events import SignedIn
 from gajim.common.modules.base import BaseModule
@@ -120,9 +121,11 @@ class OMEMO(BaseModule):
         ]
 
         self._register_pubsub_handler(self._devicelist_notification_received)
-        self.register_event('signed-in', ged.CORE, self._on_signed_in)
-        self.register_event(
-            'muc-disco-update', ged.GUI1, self._on_muc_disco_update)
+        self.register_events([
+            ('signed-in', ged.CORE, self._on_signed_in),
+            ('muc-disco-update', ged.GUI1, self._on_muc_disco_update),
+            ('muc-added', ged.GUI1, self._on_muc_added)
+        ])
 
         self.encryption_name = 'OMEMO'
         self.allow_groupchat = True
@@ -144,6 +147,27 @@ class OMEMO(BaseModule):
 
     def _on_muc_disco_update(self, event: MucDiscoUpdate) -> None:
         self._check_if_omemo_capable(str(event.jid))
+
+    def _on_muc_added(self, event: MucAdded) -> None:
+        client = app.get_client(event.account)
+        contact = client.get_module('Contacts').get_contact(event.jid)
+        if not isinstance(contact, GroupchatContact):
+            self._log.warning('%s is not a groupchat contact', contact)
+            return
+
+        # Event is triggert on every join, avoid multiple connects
+        contact.disconnect_all_from_obj(self)
+        contact.connect('room-joined', self._on_room_joined)
+
+    def _on_room_joined(self,
+                        contact: GroupchatContact,
+                        _signal_name: str
+                        ) -> None:
+
+        jid = str(contact.jid)
+        self._check_if_omemo_capable(jid)
+        if self.is_omemo_groupchat(jid):
+            self.get_affiliation_list(jid)
 
     @property
     def backend(self) -> OmemoState:
@@ -391,12 +415,6 @@ class OMEMO(BaseModule):
 
         contact = self._client.get_module('Contacts').get_contact(jid)
         return contact.subscription == 'both'
-
-    def on_room_joined(self, contact: GroupchatContact) -> None:
-        jid = str(contact.jid)
-        self._check_if_omemo_capable(jid)
-        if self.is_omemo_groupchat(jid):
-            self.get_affiliation_list(jid)
 
     def _check_if_omemo_capable(self, jid: str) -> None:
         disco_info = app.storage.cache.get_last_disco_info(jid)
