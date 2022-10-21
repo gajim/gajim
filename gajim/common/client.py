@@ -474,7 +474,10 @@ class Client(Observable):
 
         if method == 'OMEMO':
             try:
-                self.get_module('OMEMO').encrypt_message(message)
+                can_send = self.get_module('OMEMO').encrypt_message(message)
+                if not can_send:
+                    return
+
             except Exception:
                 app.ged.raise_event(
                     MessageNotSent(client=self._client,

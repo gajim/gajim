@@ -42,6 +42,18 @@ class EncryptionData(NamedTuple):
     additional_data: Any = None
 
 
+class EncryptionInfoMsg(Enum):
+    BAD_OMEMO_CONFIG = _('This chat’s configuration is unsuitable for '
+                         'encryption with OMEMO. To use OMEMO in this chat, '
+                         'it should be non-anonymous and members-only.')
+    NO_FINGERPRINTS = _('To send an encrypted message, you have to decide '
+                        'whether to trust the device of your contact.')
+    QUERY_DEVICES = _('No devices found to encypt this message to. '
+                      'Querying for devices now…')
+    UNDECIDED_FINGERPRINTS = _('There are devices for which you have not made '
+                               'a trust decision yet.')
+
+
 class Entity(NamedTuple):
     jid: JID
     node: str

@@ -37,6 +37,7 @@ from nbxmpp.structs import ModerationData
 from nbxmpp.structs import RosterItem
 from nbxmpp.structs import TuneData
 
+from gajim.common.const import EncryptionInfoMsg
 from gajim.common.const import JingleState
 from gajim.common.const import KindConstant
 from gajim.common.file_props import FileProp
@@ -783,6 +784,8 @@ class MUCUserStatusShowChanged(ApplicationEvent):
 
 
 @dataclass
-class OMEMONewFingerprint(ApplicationEvent):
-    name: str = field(init=False, default='omemo-new-fingerprint')
-    chat_control: Any
+class EncryptionAnnouncement(ApplicationEvent):
+    name: str = field(init=False, default='encryption-check')
+    account: str
+    jid: JID
+    message: EncryptionInfoMsg

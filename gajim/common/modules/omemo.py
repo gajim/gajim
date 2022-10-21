@@ -27,6 +27,7 @@ import threading
 from pathlib import Path
 
 from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
 from nbxmpp.protocol import NodeProcessed
 from nbxmpp.protocol import Presence
@@ -49,9 +50,11 @@ from gajim.common import configpaths
 from gajim.common import ged
 from gajim.common import types
 from gajim.common.structs import OutgoingMessage
+from gajim.common.const import EncryptionInfoMsg
 from gajim.common.const import EncryptionData
 from gajim.common.const import Trust as GajimTrust
 from gajim.common.i18n import _
+from gajim.common.events import EncryptionAnnouncement
 from gajim.common.events import MucAdded
 from gajim.common.events import MucDiscoUpdate
 from gajim.common.events import SignedIn
@@ -68,7 +71,6 @@ from gajim.common.omemo.state import MessageNotForDevice
 from gajim.common.omemo.state import DecryptionFailed
 from gajim.common.omemo.state import DuplicateMessage
 from gajim.common.omemo.util import Trust
-from gajim.common.events import OMEMONewFingerprint
 from gajim.common.modules.util import prepare_stanza
 
 
@@ -178,12 +180,91 @@ class OMEMO(BaseModule):
         db_path = data_dir / f'omemo_{self._own_jid}.db'
         return OmemoState(self._own_jid, db_path, self._account, self)
 
+    def _can_send_message(self, event: OutgoingMessage) -> bool:
+        contact = event.contact
+        jid = str(contact.jid)
+        if contact.is_groupchat:
+            if not self.is_omemo_groupchat(jid):
+                app.ged.raise_event(EncryptionAnnouncement(
+                    account=contact.account,
+                    jid=contact.jid,
+                    message=EncryptionInfoMsg.BAD_OMEMO_CONFIG))
+                return False
+
+            missing = True
+            for member_jid in self.backend.get_muc_members(jid):
+                if not self.are_keys_missing(member_jid):
+                    missing = False
+            if missing:
+                self._log.info('%s => No Trusted Fingerprints for %s',
+                               contact.account, jid)
+                app.ged.raise_event(EncryptionAnnouncement(
+                    account=contact.account,
+                    jid=contact.jid,
+                    message=EncryptionInfoMsg.NO_FINGERPRINTS))
+                return False
+        else:
+            # check if we have devices for the contact
+            if not self.backend.get_devices(jid, without_self=True):
+                self.request_devicelist(jid)
+                app.ged.raise_event(EncryptionAnnouncement(
+                    account=contact.account,
+                    jid=contact.jid,
+                    message=EncryptionInfoMsg.QUERY_DEVICES))
+                return False
+
+            # check if bundles are missing for some devices
+            if self.backend.storage.hasUndecidedFingerprints(jid):
+                self._log.info('%s => Undecided Fingerprints for %s',
+                               contact.account, jid)
+                app.ged.raise_event(EncryptionAnnouncement(
+                    account=contact.account,
+                    jid=contact.jid,
+                    message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
+                return False
+
+            self._log.debug('%s => Sending Message to %s',
+                            contact.account, jid)
+
+        return True
+
+    def _new_fingerprints_available(self, event: OutgoingMessage) -> bool:
+        contact = event.contact
+        if contact.is_groupchat:
+            for member_jid in self.backend.get_muc_members(str(contact.jid),
+                                                           without_self=False):
+                fingerprints = self.backend.storage.getNewFingerprints(
+                    member_jid)
+                if fingerprints:
+                    app.ged.raise_event(EncryptionAnnouncement(
+                        account=contact.account,
+                        jid=contact.jid,
+                        message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
+                    return True
+        else:
+            fingerprints = self.backend.storage.getNewFingerprints(
+                str(contact.jid))
+            if fingerprints:
+                app.ged.raise_event(EncryptionAnnouncement(
+                    account=contact.account,
+                    jid=contact.jid,
+                    message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
+                return True
+
+        return False
+
     def is_omemo_groupchat(self, room_jid: str) -> bool:
         return room_jid in self._omemo_groupchats
 
-    def encrypt_message(self, event: OutgoingMessage) -> None:
+    def encrypt_message(self, event: OutgoingMessage) -> bool:
         if not event.message:
-            return
+            return False
+
+        if self._new_fingerprints_available(event):
+            return False
+
+        if not self._can_send_message(event):
+            return False
 
         omemo_message = self.backend.encrypt(str(event.jid), event.message)
         if omemo_message is None:
@@ -202,6 +283,7 @@ class OMEMO(BaseModule):
                 'trust': GajimTrust[Trust.VERIFIED.name]}
 
         self._debug_print_stanza(event.stanza)
+        return True
 
     def encrypt_file(self,
                      transfer: HTTPFileTransfer,
@@ -451,8 +533,8 @@ class OMEMO(BaseModule):
         # Fetch Bundles of own other Devices
         if self._own_jid not in self._query_for_bundles:
 
-            devices_without_session = self.backend \
-                .devices_without_sessions(self._own_jid)
+            devices_without_session = self.backend.devices_without_sessions(
+                self._own_jid)
 
             self._query_for_bundles.append(self._own_jid)
 
@@ -463,8 +545,8 @@ class OMEMO(BaseModule):
         # Fetch Bundles of contacts devices
         if contact_jid not in self._query_for_bundles:
 
-            devices_without_session = self.backend \
-                .devices_without_sessions(contact_jid)
+            devices_without_session = self.backend.devices_without_sessions(
+                contact_jid)
 
             self._query_for_bundles.append(contact_jid)
 
@@ -486,9 +568,7 @@ class OMEMO(BaseModule):
 
         self._log.info('Fetch device bundle %s %s', device_id, jid)
 
-        bundle = yield self._nbxmpp('OMEMO').request_bundle(
-            jid,
-            device_id)
+        bundle = yield self._nbxmpp('OMEMO').request_bundle(jid, device_id)
 
         if is_error(bundle) or bundle is None:
             self._log.info('Bundle request failed: %s %s: %s',
@@ -502,9 +582,10 @@ class OMEMO(BaseModule):
 
         # Trigger dialog to trust new Fingerprints if
         # the Chat Window is Open
-        ctrl = app.window.get_control(self._account, jid)
-        if ctrl:
-            app.ged.raise_event(OMEMONewFingerprint(chat_control=ctrl))
+        app.ged.raise_event(EncryptionAnnouncement(
+            account=self._account,
+            jid=JID.from_string(jid),
+            message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
 
     def set_devicelist(self, devicelist: Optional[list[int]] = None) -> None:
         devicelist_: set[int] = set([self.backend.own_device])
