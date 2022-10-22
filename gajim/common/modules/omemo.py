@@ -180,8 +180,7 @@ class OMEMO(BaseModule):
         db_path = data_dir / f'omemo_{self._own_jid}.db'
         return OmemoState(self._own_jid, db_path, self._account, self)
 
-    def _can_send_message(self, event: OutgoingMessage) -> bool:
-        contact = event.contact
+    def check_send_preconditions(self, contact: types.ChatContactT) -> bool:
         jid = str(contact.jid)
         if contact.is_groupchat:
             if not self.is_omemo_groupchat(jid):
@@ -223,47 +222,43 @@ class OMEMO(BaseModule):
                     message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
                 return False
 
-            self._log.debug('%s => Sending Message to %s',
-                            contact.account, jid)
+        if self._new_fingerprints_available(contact):
+            return False
+
+        self._log.debug('%s => Sending Message to %s',
+                        contact.account, jid)
 
         return True
 
-    def _new_fingerprints_available(self, event: OutgoingMessage) -> bool:
-        contact = event.contact
+    def _new_fingerprints_available(self, contact: types.ChatContactT) -> bool:
+        fingerprints: list[int] = []
         if contact.is_groupchat:
             for member_jid in self.backend.get_muc_members(str(contact.jid),
                                                            without_self=False):
                 fingerprints = self.backend.storage.getNewFingerprints(
                     member_jid)
                 if fingerprints:
-                    app.ged.raise_event(EncryptionAnnouncement(
-                        account=contact.account,
-                        jid=contact.jid,
-                        message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
-                    return True
+                    break
+
         else:
             fingerprints = self.backend.storage.getNewFingerprints(
                 str(contact.jid))
-            if fingerprints:
-                app.ged.raise_event(EncryptionAnnouncement(
-                    account=contact.account,
-                    jid=contact.jid,
-                    message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
-                return True
 
-        return False
+        if not fingerprints:
+            return False
+
+        app.ged.raise_event(EncryptionAnnouncement(
+            account=contact.account,
+            jid=contact.jid,
+            message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
+
+        return True
 
     def is_omemo_groupchat(self, room_jid: str) -> bool:
         return room_jid in self._omemo_groupchats
 
     def encrypt_message(self, event: OutgoingMessage) -> bool:
         if not event.message:
-            return False
-
-        if self._new_fingerprints_available(event):
-            return False
-
-        if not self._can_send_message(event):
             return False
 
         omemo_message = self.backend.encrypt(str(event.jid), event.message)
