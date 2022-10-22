@@ -27,17 +27,17 @@ from pathlib import Path
 from nbxmpp.structs import OMEMOBundle
 from nbxmpp.structs import OMEMOMessage
 
-from axolotl.ecc.djbec import DjbECPublicKey
-from axolotl.identitykey import IdentityKey
+from omemo_dr.ecc.djbec import CurvePublicKey
+from omemo_dr.identitykey import IdentityKey
 
-from axolotl.identitykeypair import IdentityKeyPair
-from axolotl.protocol.prekeywhispermessage import PreKeyWhisperMessage
-from axolotl.protocol.whispermessage import WhisperMessage
-from axolotl.sessionbuilder import SessionBuilder
-from axolotl.sessioncipher import SessionCipher
-from axolotl.state.prekeybundle import PreKeyBundle
-from axolotl.util.keyhelper import KeyHelper
-from axolotl.duplicatemessagexception import DuplicateMessageException
+from omemo_dr.identitykeypair import IdentityKeyPair
+from omemo_dr.protocol.prekeywhispermessage import PreKeyWhisperMessage
+from omemo_dr.protocol.whispermessage import WhisperMessage
+from omemo_dr.sessionbuilder import SessionBuilder
+from omemo_dr.sessioncipher import SessionCipher
+from omemo_dr.state.prekeybundle import PreKeyBundle
+from omemo_dr.util.keyhelper import KeyHelper
+from omemo_dr.duplicatemessagexception import DuplicateMessageException
 
 from gajim.common import app
 from gajim.common import configpaths
@@ -105,10 +105,10 @@ class OmemoState:
         registration_id = self._storage.getLocalRegistrationId()
 
         prekey = bundle.pick_prekey()
-        otpk = DjbECPublicKey(prekey['key'][1:])
+        otpk = CurvePublicKey(prekey['key'][1:])
 
-        spk = DjbECPublicKey(bundle.spk['key'][1:])
-        ik = IdentityKey(DjbECPublicKey(bundle.ik[1:]))
+        spk = CurvePublicKey(bundle.spk['key'][1:])
+        ik = IdentityKey(CurvePublicKey(bundle.ik[1:]))
 
         prekey_bundle = PreKeyBundle(registration_id,
                                      device_id,
@@ -305,7 +305,7 @@ class OmemoState:
                                  ) -> tuple[bytes, str, Trust]:
 
         self._log.info('Process pre key message from %s', jid)
-        pre_key_message = PreKeyWhisperMessage(serialized=key)
+        pre_key_message = PreKeyWhisperMessage.from_bytes(key)
         if not pre_key_message.getPreKeyId():
             raise Exception('Received Pre Key Message '
                             'without PreKey => %s' % jid)
@@ -330,10 +330,10 @@ class OmemoState:
                          ) -> tuple[bytes, str, Trust]:
 
         self._log.info('Process message from %s', jid)
-        message = WhisperMessage(serialized=key)
+        message = WhisperMessage.from_bytes(key)
 
         session_cipher = self._get_session_cipher(jid, device)
-        key = session_cipher.decryptMsg(message, textMsg=False)
+        key = session_cipher.decryptMsg(message)
 
         identity_key = self._get_identity_key_from_device(jid, device)
         trust = self._get_trust_from_identity_key(jid, identity_key)
@@ -347,7 +347,7 @@ class OmemoState:
 
     @staticmethod
     def _get_identity_key_from_pk_message(key):
-        pre_key_message = PreKeyWhisperMessage(serialized=key)
+        pre_key_message = PreKeyWhisperMessage.from_bytes(key)
         return pre_key_message.getIdentityKey()
 
     def _get_identity_key_from_device(self,

@@ -27,7 +27,7 @@ import locale
 import logging
 import tempfile
 
-from axolotl.identitykeypair import IdentityKeyPair  # pyright: ignore
+from omemo_dr.identitykeypair import IdentityKeyPair
 
 from nbxmpp.protocol import JID
 

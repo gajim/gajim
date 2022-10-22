@@ -26,17 +26,17 @@ import sqlite3
 from collections import namedtuple
 from pathlib import Path
 
-from axolotl.state.axolotlstore import AxolotlStore
-from axolotl.state.signedprekeyrecord import SignedPreKeyRecord
-from axolotl.state.sessionrecord import SessionRecord
-from axolotl.state.prekeyrecord import PreKeyRecord
-from axolotl.invalidkeyidexception import InvalidKeyIdException
-from axolotl.ecc.djbec import DjbECPrivateKey
-from axolotl.ecc.djbec import DjbECPublicKey
-from axolotl.identitykey import IdentityKey
-from axolotl.identitykeypair import IdentityKeyPair
-from axolotl.util.medium import Medium
-from axolotl.util.keyhelper import KeyHelper
+from omemo_dr.state.axolotlstore import AxolotlStore
+from omemo_dr.state.signedprekeyrecord import SignedPreKeyRecord
+from omemo_dr.state.sessionrecord import SessionRecord
+from omemo_dr.state.prekeyrecord import PreKeyRecord
+from omemo_dr.invalidkeyidexception import InvalidKeyIdException
+from omemo_dr.ecc.djbec import DjbECPrivateKey
+from omemo_dr.ecc.djbec import CurvePublicKey
+from omemo_dr.identitykey import IdentityKey
+from omemo_dr.identitykeypair import IdentityKeyPair
+from omemo_dr.util.medium import Medium
+from omemo_dr.util.keyhelper import KeyHelper
 
 from gajim.common import app
 from gajim.common.omemo.util import Trust
@@ -48,7 +48,7 @@ from gajim.common.modules.util import LogAdapter
 def _convert_identity_key(key: bytes) -> Optional[IdentityKeyExtended]:
     if not key:
         return
-    return IdentityKeyExtended(DjbECPublicKey(key[1:]))
+    return IdentityKeyExtended(CurvePublicKey(key[1:]))
 
 
 def _convert_record(record: bytes) -> SessionRecord:
@@ -390,12 +390,12 @@ class OMEMOStorage(AxolotlStore):
         if result is None:
             raise InvalidKeyIdException('No such signedprekeyrecord! %s ' %
                                         signedPreKeyId)
-        return SignedPreKeyRecord(serialized=result.record)
+        return SignedPreKeyRecord.from_bytes(result.record)
 
     def loadSignedPreKeys(self) -> list[SignedPreKeyRecord]:
         query = 'SELECT record FROM signed_prekeys'
         results = self._con.execute(query).fetchall()
-        return [SignedPreKeyRecord(serialized=row.record) for row in results]
+        return [SignedPreKeyRecord.from_bytes(row.record) for row in results]
 
     def storeSignedPreKey(self,
                           signedPreKeyId: int,
@@ -559,12 +559,12 @@ class OMEMOStorage(AxolotlStore):
         result = self._con.execute(query, (preKeyId,)).fetchone()
         if result is None:
             raise Exception('No such prekeyRecord!')
-        return PreKeyRecord(serialized=result.record)
+        return PreKeyRecord.from_bytes(result.record)
 
     def loadPendingPreKeys(self) -> list[PreKeyRecord]:
         query = '''SELECT record FROM prekeys'''
         result = self._con.execute(query).fetchall()
-        return [PreKeyRecord(serialized=row.record) for row in result]
+        return [PreKeyRecord.from_bytes(row.record) for row in result]
 
     def storePreKey(self, preKeyId: int, preKeyRecord: PreKeyRecord) -> None:
         query = 'INSERT INTO prekeys (prekey_id, record) VALUES(?,?)'
@@ -600,8 +600,8 @@ class OMEMOStorage(AxolotlStore):
                    FROM secret LIMIT 1'''
         result = self._con.execute(query).fetchone()
 
-        return IdentityKeyPair(result.public_key,
-                               DjbECPrivateKey(result.private_key))
+        return IdentityKeyPair.new(result.public_key,
+                                   DjbECPrivateKey(result.private_key))
 
     def getLocalRegistrationId(self) -> Optional[int]:
         query = 'SELECT device_id FROM secret LIMIT 1'

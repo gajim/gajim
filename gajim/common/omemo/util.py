@@ -20,8 +20,8 @@ import binascii
 import textwrap
 from enum import IntEnum
 
-from axolotl.identitykey import IdentityKey
-from axolotl.identitykeypair import IdentityKeyPair
+from omemo_dr.identitykey import IdentityKey
+from omemo_dr.identitykeypair import IdentityKeyPair
 
 
 DEFAULT_PREKEY_AMOUNT = 100
