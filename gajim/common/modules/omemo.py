@@ -24,7 +24,6 @@ from typing import Optional
 
 import binascii
 import threading
-from pathlib import Path
 
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
@@ -46,7 +45,6 @@ from nbxmpp.task import Task
 from gi.repository import GLib
 
 from gajim.common import app
-from gajim.common import configpaths
 from gajim.common import ged
 from gajim.common import types
 from gajim.common.structs import OutgoingMessage
