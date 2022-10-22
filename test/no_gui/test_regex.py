@@ -1,25 +1,36 @@
 from typing import Any
 
 import unittest
+import re
 
-from gajim.common.styling import URI_RX
-from gajim.common.styling import ADDRESS_RX
+from gajim.common import regex
 
 
 TEST_URIS = [
+    'scheme:',
+    'http:///',
+    'http://',
     'http://google.com/',
     'http://google.com',
     'http://www.google.ca/search?q=xmpp',
     'http://tools.ietf.org/html/draft-saintandre-rfc3920bis-05#section-12.3',
     'http://en.wikipedia.org/wiki/Protocol_(computing)',
     'http://en.wikipedia.org/wiki/Protocol_%28computing%29',
-]
-
-ADDRESSES = [
     'mailto:test@example.org',
     'xmpp:example-node@example.com',
-    # 'xmpp:example-node@example.com/some-resource', FIXME
+    'xmpp:example-node@example.com/some-resource',
     'xmpp:example-node@example.com?message',
+]
+
+JIDS = [
+    'example-node@example.com',
+    'me@[::1]',
+    'myself@127.13.42.69',
+    #'myself@127.13.42.69/localhost',  TODO
+    '#room%irc.example@biboumi.xmpp.example',
+    r'here\27s_a_wild_\26_\2fcr%zy\2f_address_for\3a\3cwv\3e(\22IMPS\22)@example.com',
+    r'CN=D\27Artagnan\20Saint-Andr\E9,O=Example\20\26\20Company,\20Inc.,DC=example,DC=com@st.example.com',
+    'δοκιμή@παράδειγμα.δοκιμή',
 ]
 
 
@@ -34,10 +45,10 @@ class Test(unittest.TestCase):
             self.assertEqual(m.span(), str_span, uri_str)
 
         for uri in TEST_URIS:
-            assert_matches_all(URI_RX, uri)
+            assert_matches_all(re.compile(regex.IRI), uri)
 
-        for addr in ADDRESSES:
-            assert_matches_all(ADDRESS_RX, addr)
+        for addr in JIDS:
+            assert_matches_all(re.compile(regex.XMPP.jid), addr)
 
 
 if __name__ == '__main__':

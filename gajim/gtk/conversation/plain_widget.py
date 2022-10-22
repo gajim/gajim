@@ -31,7 +31,7 @@ from gajim.common.const import StyleAttr
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import parse_uri
 from gajim.common.structs import URI
-from gajim.common.styling import BaseUri
+from gajim.common.styling import BaseHyperlink
 from gajim.common.styling import PlainBlock
 from gajim.common.styling import process_uris
 
@@ -44,7 +44,7 @@ from ..util import make_pango_attributes
 
 log = logging.getLogger('gajim.gui.conversaion.plain_widget')
 
-URI_TAGS = ['uri', 'address', 'xmppadr', 'mailadr']
+URI_TAGS = ['uri', 'xmppadr', 'mailadr']
 STYLE_TAGS = ['strong', 'emphasis', 'strike', 'pre']
 
 
@@ -106,7 +106,7 @@ class MessageLabel(Gtk.Label):
         menu.prepend(action_menu_item)
         menu.show_all()
 
-    def _build_link_markup(self, text: str, uris: list[BaseUri]) -> str:
+    def _build_link_markup(self, text: str, uris: list[BaseHyperlink]) -> str:
         markup_text = ''
         after = GLib.markup_escape_text(text.strip())
         for uri in uris:

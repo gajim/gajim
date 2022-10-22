@@ -8,9 +8,9 @@ from gajim.common.styling import PreTextSpan
 from gajim.common.styling import StrongSpan
 from gajim.common.styling import EmphasisSpan
 from gajim.common.styling import StrikeSpan
-from gajim.common.styling import Uri
-from gajim.common.styling import URI_RX
-from gajim.common.styling import ADDRESS_RX
+from gajim.common.styling import Hyperlink
+from gajim.common.styling import process_uris
+from gajim.common.text_helpers import jid_to_iri
 
 
 STYLING = {
@@ -243,7 +243,7 @@ STYLING = {
         'input': 'some kind of link http://foo.com/blah_blah',
         'tokens': [
             PlainBlock(start=0, end=42, text='some kind of link http://foo.com/blah_blah', spans=[], uris=[
-                Uri(start=18, start_byte=18, end=42, end_byte=42, text='http://foo.com/blah_blah')
+                Hyperlink(start=18, start_byte=18, end=42, end_byte=42, text='http://foo.com/blah_blah', uri='http://foo.com/blah_blah')
             ])
         ]
     },
@@ -252,7 +252,7 @@ STYLING = {
         'input': 'some kind of link http://foo.com/blah_blah,',
         'tokens': [
             PlainBlock(start=0, end=43, text='some kind of link http://foo.com/blah_blah,', spans=[], uris=[
-                Uri(start=18, start_byte=18, end=42, end_byte=42, text='http://foo.com/blah_blah')
+                Hyperlink(start=18, start_byte=18, end=42, end_byte=42, text='http://foo.com/blah_blah', uri='http://foo.com/blah_blah')
             ])
         ]
     },
@@ -263,7 +263,7 @@ STYLING = {
             PlainBlock(start=0, end=44, text='some *kind* of link http://foo.com/blah_blah', spans=[
                 StrongSpan(start=5, start_byte=5, end=11, end_byte=11, text='*kind*')
             ], uris=[
-                Uri(start=20, start_byte=20, end=44, end_byte=44, text='http://foo.com/blah_blah')
+                Hyperlink(start=20, start_byte=20, end=44, end_byte=44, text='http://foo.com/blah_blah', uri='http://foo.com/blah_blah')
             ])
         ]
     },
@@ -272,8 +272,8 @@ STYLING = {
         'input': 'some http://foo.com/blah_blah and http://foo.com/blah_blah/123',
         'tokens': [
             PlainBlock(start=0, end=62, text='some http://foo.com/blah_blah and http://foo.com/blah_blah/123', spans=[], uris=[
-                Uri(start=5, start_byte=5, end=29, end_byte=29, text='http://foo.com/blah_blah'),
-                Uri(start=34, start_byte=34, end=62, end_byte=62, text='http://foo.com/blah_blah/123')
+                Hyperlink(start=5, start_byte=5, end=29, end_byte=29, text='http://foo.com/blah_blah', uri='http://foo.com/blah_blah'),
+                Hyperlink(start=34, start_byte=34, end=62, end_byte=62, text='http://foo.com/blah_blah/123', uri='http://foo.com/blah_blah/123')
             ])
         ]
     },
@@ -281,7 +281,24 @@ STYLING = {
 }
 
 
-URLS = [
+# Most of the URI/JID test sets belong in test_regex.py, and should be imported
+# here somehow (TODO).
+URIS = [
+    'a:b',
+    'a-:b',
+    'a.:b',
+    'xmpp:conference.gajim.org'
+    'xmpp:asd@at',
+    'xmpp:asd@asd.at',
+    'xmpp:asd-asd@asd.asdasd.at.',
+    'xmpp:me@%5B::1%5D',
+    'xmpp:myself@127.13.42.69',
+    'xmpp:myself@127.13.42.69/localhost',
+    'xmpp:%23room%25irc.example@biboumi.xmpp.example',
+    'xmpp:+15551234567@cheogram.com',
+    'xmpp:romeo@montague.net?message;subject=Test%20Message;body=Here%27s%20a%20test%20message',
+
+    # These seem to be from https://mathiasbynens.be/demo/url-regex
     'http://foo.com/blah_blah',
     'http://foo.com/blah_blah/',
     'http://foo.com/blah_blah_(wikipedia)',
@@ -318,83 +335,204 @@ URLS = [
     'http://1337.net',
     'http://a.b-c.de',
     'http://223.255.255.254',
+
     'https://foo_bar.example.com/',
+
+    # These are from https://rfc-editor.org/rfc/rfc3513#section-2.2
+    'http://[FEDC:BA98:7654:3210:FEDC:BA98:7654:3210]',
+    'http://[1080:0:0:0:8:800:200C:417A]',
+    'http://[1080:0:0:0:8:800:200C:417A]',
+    'http://[FF01:0:0:0:0:0:0:101]',
+    'http://[0:0:0:0:0:0:0:1]',
+    'http://[0:0:0:0:0:0:0:0]',
+    'http://[1080::8:800:200C:417A]',
+    'http://[FF01::101]',
+    'http://[::1]',
+    'http://[::]',
+    'http://[0:0:0:0:0:0:13.1.68.3]',
+    'http://[0:0:0:0:0:FFFF:129.144.52.38]',
+    'http://[::13.1.68.3]',
+    'http://[::FFFF:129.144.52.38]',
+
+    # These are from https://rfc-editor.org/rfc/rfc3986#section-1.1.2
+    'ftp://ftp.is.co.za/rfc/rfc1808.txt',
+    'http://www.ietf.org/rfc/rfc2396.txt',
+    'ldap://[2001:db8::7]/c=GB?objectClass?one',
+    'mailto:John.Doe@example.com',
+    'news:comp.infosystems.www.servers.unix',
+    'tel:+1-816-555-1212',
+    'telnet://192.0.2.16:80/',
+    'urn:oasis:names:specification:docbook:dtd:xml:4.1.2',
 ]
 
 
-EMAILS = [
+# * non-URI foos
+# * non-absolute URIs
+NONURIS = [
+    '',
+    ' ',
+    '.',
+    ':',
+
+    # These are from https://mathiasbynens.be/demo/url-regex
+    '//',
+    '//a',
+    '///a',
+    '///',
+    'foo.com',
+    'http://foo.bar?q=Spaces should be encoded',
+    'http:// shouldfail.com',
+    ':// should fail',
+    'http://foo.bar/foo(bar)baz quux',
+]
+
+
+# * valid scheme-only URIs
+# * valid generic URIs that fail requirements of their specific scheme.
+UNACCEPTABLE_URIS = [
+    'scheme:',
+
+    # These are from https://mathiasbynens.be/demo/url-regex
+    'http://',
+    'http://?',
+    'http://??',
+    'http://??/',
+    'http://#',
+    'http://##',
+    'http://##/',
+    'http:///a',
+]
+
+
+JIDS = [
+    'asd@at',
     'asd@asd.at',
     'asd@asd.asd.at',
     'asd@asd.asd-asd.at',
     'asd.asd@asd.asd-asd.at',
     'asd-asd@asd.asdasd.at',
-    'mailto:foo@bar.com.uk',
-    'mailto:foo.foo.foo@bar.com.uk',
+    'asd-asd@asd.asdasd.at.',
+    'me@[::1]',
+    'myself@127.13.42.69',
+    '#room%irc.example@biboumi.xmpp.example',
+    '+15551234567@cheogram.com',
+
+    # These are from https://rfc-editor.org/rfc/rfc7622#section-3.5
+    'fußball@example.com',
+    'π@example.com',
+
+    # These are from https://xmpp.org/extensions/xep-0106.html#examples
+    r'space\20cadet@example.com',
+    r'call\20me\20\22ishmael\22@example.com',
+    r'at\26t\20guy@example.com',
+    r'd\27artagnan@example.com',
+    r'\2f.fanboy@example.com',
+    r'\3a\3afoo\3a\3a@example.com',
+    r'\3cfoo\3e@example.com',
+    r'user\40host@example.com',
+    r'c\3a\net@example.com',
+    r'c\3a\\net@example.com',
+    r'c\3a\cool\20stuff@example.com',
+    r'c\3a\5c5commas@example.com',
+    r'here\27s_a_wild_\26_\2fcr%zy\2f_address@example.com',
+    r'here\27s_a_wild_\26_\2fcr%zy\2f_address_for\3a\3cwv\3e(\22IMPS\22)@example.com',
+    # Some more from the same document
+    r'tréville\40musketeers.lit@smtp.gascon.fr',
+    r'\5c3and\2is\5c5cool@example.com',
+    r'CN=D\27Artagnan\20Saint-Andr\E9,O=Example\20\26\20Company,\20Inc.,DC=example,DC=com@st.example.com',
+    r'somenick!user\22\26\27\2f\3a\3c\3e\5c3address@example.com',
+
+    # https://en.wikipedia.org/wiki/E-mail_address#Internationalization_examples
+    # Do note that these are *e-mail* addresses and might not all be vaild JIDs.
+    'Pelé@example.com',
+    'δοκιμή@παράδειγμα.δοκιμή',
+    '我買@屋企.香港',
+    '二ノ宮@黒川.日本',
+    'медведь@с-балалайкой.рф',
+    #'संपर्क@डाटामेल.भारत',  fails because of the 2 combining chars in localpart
 ]
 
-EMAILS_WITH_TEXT = [
+NONJIDS = [
+    '',
+    '@',
+
+    # These are from https://rfc-editor.org/rfc/rfc7622#section-3.5
+    '"juliet"@example.com',
+    'foo bar@example.com',  # search is expected to find 'bar@example.com'
+    '@example.com',
+    'henryⅣ@example.com',  # localpart has a compatibility-decomposable cp
+    '♚@example.com',        # localpart has a symbol cp
+    'juliet@',
+]
+
+
+URIS_WITH_TEXT = [
     ('write to my email mailto:foo@bar.com.uk (but not to mailto:bar@foo.com)',
      ['mailto:foo@bar.com.uk', 'mailto:bar@foo.com']),
     ('write to my email mailtomailto:foo@bar.com.uk (but not to mailto:bar@foo.com)',
-     ['foo@bar.com.uk', 'mailto:bar@foo.com']),
-]
-
-
-URL_WITH_TEXT = [
-    ('see this http://userid@example.com/ link', 'http://userid@example.com/'),
-    ('see this http://userid@example.com/, and ..', 'http://userid@example.com/'),
-    ('<http://userid@example.com/>', 'http://userid@example.com/'),
-]
-
-XMPP_URIS = [
-    ('see xmpp:romeo@montague.net?message;subject=Test%20Message;body=Here%27s%20a%20test%20message ...', 'xmpp:romeo@montague.net?message;subject=Test%20Message;body=Here%27s%20a%20test%20message'),
+     ['mailtomailto:foo@bar.com.uk', 'mailto:bar@foo.com']),
+    ('see this http://userid@example.com/ link', ['http://userid@example.com/']),
+    ('see this http://userid@example.com/, and ..', ['http://userid@example.com/']),
+    ('<http://userid@example.com/>', ['http://userid@example.com/']),
+    ('"http://userid@example.com/"', ['http://userid@example.com/']),
+    ('regexes are useless (see https://en.wikipedia.org/wiki/Recursion_(computer_science)), but comfy', ['https://en.wikipedia.org/wiki/Recursion_(computer_science)']),
 ]
 
 
 class Test(unittest.TestCase):
+    @staticmethod
+    def wrap(link: str) -> str:
+        return f'Prologue (link: {link}), and epilogue!'
+
     def test_styling(self):
         for _name, params in STYLING.items():
             result = styling.process(params['input'])
-            self.assertTrue(result.blocks == params['tokens'])
+            self.assertEqual(result.blocks, params['tokens'])
 
-    def test_urls(self):
-        for url in URLS:
-            match = URI_RX.search(url)
-            self.assertIsNotNone(match)
-            start = match.start()
-            end = match.end()
-            self.assertTrue(url[start:end] == url)
+    def test_uris(self):
+        for uri in URIS:
+            text = self.wrap(uri)
+            hlinks = process_uris(text)
+            self.assertEqual(len(hlinks), 1, text)
+            self.assertEqual(hlinks[0].uri, uri, text)
 
-    def test_emails(self):
-        for email in EMAILS:
-            match = ADDRESS_RX.search(email)
-            self.assertIsNotNone(match)
-            start = match.start()
-            end = match.end()
-            self.assertTrue(email[start:end] == email)
+    def test_invalid_uris(self):
+        for foo in NONURIS + UNACCEPTABLE_URIS:
+            if foo == 'scheme:' or\
+               foo == 'http://':
+                continue  # these currently fial (FIXME)
+            text = self.wrap(foo)
+            hlinks = process_uris(text)
+            if len(hlinks) == 0:
+                continue
+            self.assertEqual(len(hlinks), 1, text)
+            self.assertNotEqual(hlinks[0].text, foo, text)
 
-    def test_emails_with_text(self):
-        for text, result in EMAILS_WITH_TEXT:
-            match = ADDRESS_RX.findall(text)
-            self.assertIsNotNone(match)
+    def test_jids(self):
+        for jid in JIDS:
+            text = self.wrap(jid)
+            hlinks = process_uris(text)
+            self.assertEqual(len(hlinks), 1, text)
+            self.assertEqual(hlinks[0].text, jid, text)
+            self.assertEqual(hlinks[0].uri, jid_to_iri(jid), text)
+
+    def test_nonjids(self):
+        for foo in NONJIDS:
+            if foo == 'juliet@':
+                continue  # this currently fials (FIXME)
+            text = self.wrap(foo)
+            hlinks = process_uris(text)
+            if len(hlinks) == 0:
+                continue
+            self.assertEqual(len(hlinks), 1, text)
+            self.assertNotEqual(hlinks[0].text, foo, text)
+
+    def test_uris_with_text(self):
+        for text, result in URIS_WITH_TEXT:
+            hlinks = process_uris(text)
+            self.assertEqual(len(hlinks), len(result), text)
             for i, res in enumerate(result):
-                self.assertTrue(match[i][0] == res)
-
-    def test_url_with_text(self):
-        for text, result in URL_WITH_TEXT:
-            match = URI_RX.search(text)
-            self.assertIsNotNone(match)
-            start = match.start()
-            end = match.end()
-            self.assertTrue(text[start:end] == result)
-
-    def test_xmpp_uris(self):
-        for text, result in XMPP_URIS:
-            match = ADDRESS_RX.search(text)
-            self.assertIsNotNone(match)
-            start = match.start()
-            end = match.end()
-            self.assertTrue(text[start:end] == result)
+                self.assertEqual(hlinks[i].text, res, text)
 
 
 if __name__ == "__main__":

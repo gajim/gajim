@@ -25,6 +25,8 @@ from dataclasses import field
 
 from gi.repository import GLib
 
+from gajim.common import regex
+from gajim.common.text_helpers import jid_to_iri
 from gajim.gui.emoji_data import emoji_data
 
 PRE = '`'
@@ -44,13 +46,7 @@ BLOCK_RX = re.compile(PRE_RX + '|' + QUOTE_RX, re.S | re.M)
 BLOCK_NESTED_RX = re.compile(PRE_NESTED_RX + '|' + QUOTE_RX, re.S | re.M)
 UNQUOTE_RX = re.compile(r'^> |^>', re.M)
 
-URI_RX = r'(?P<uri>([\w-]+://|www[.])[\S()<>]+?(?=[,>]?(\s|\Z)+))'
-ADDRESS_RX = r'(?P<address>\b((xmpp|mailto):)?[\w-]+(\.[\w-]+)*@([\w-]*?\.)+[\w]+([\?].*?(?=([\s\),]|$)))?)'  # noqa: E501
-URI_ADDRESS_RX = URI_RX + '|' + ADDRESS_RX
-
-URI_RX = re.compile(URI_RX)
-ADDRESS_RX = re.compile(ADDRESS_RX)
-URI_ADDRESS_RX = re.compile(URI_ADDRESS_RX)
+URI_OR_JID_RX = re.compile(fr'(?P<uri>{regex.IRI})|(?P<jid>{regex.XMPP.jid})')
 
 EMOJI_RX = emoji_data.get_regex()
 EMOJI_RX = re.compile(EMOJI_RX)
@@ -68,33 +64,31 @@ class StyleObject:
 
 
 @dataclass
-class BaseUri(StyleObject):
+class BaseHyperlink(StyleObject):
     name: str
+    uri: str
     start_byte: int
     end_byte: int
 
     def get_markup_string(self) -> str:
+        href = GLib.markup_escape_text(self.uri)
         text = GLib.markup_escape_text(self.text)
-        return f'<a href="{text}">{text}</a>'
+        title = '' if href == text else f' title="{href}"'
+        return f'<a href="{href}"{title}>{text}</a>'
 
 
 @dataclass
-class Uri(BaseUri):
+class Hyperlink(BaseHyperlink):
     name: str = field(default='uri', init=False)
 
 
 @dataclass
-class Address(BaseUri):
-    name: str = field(default='address', init=False)
-
-
-@dataclass
-class XMPPAddress(BaseUri):
+class XMPPAddress(BaseHyperlink):
     name: str = field(default='xmppadr', init=False)
 
 
 @dataclass
-class MailAddress(BaseUri):
+class MailAddress(BaseHyperlink):
     name: str = field(default='mailadr', init=False)
 
 
@@ -117,7 +111,7 @@ class Block(StyleObject):
 class PlainBlock(Block):
     name: str = field(default='plain', init=False)
     spans: list[Span] = field(default_factory=list)
-    uris: list[BaseUri] = field(default_factory=list)
+    uris: list[BaseHyperlink] = field(default_factory=list)
     emojis: list[Emoji] = field(default_factory=list)
 
     @classmethod
@@ -224,11 +218,11 @@ def process(text: Union[str, bytes], level: int = 0) -> ParsingResult:
     return ParsingResult(text, blocks)
 
 
-def process_uris(text: Union[str, bytes]) -> list[BaseUri]:
+def process_uris(text: Union[str, bytes]) -> list[BaseHyperlink]:
     if isinstance(text, bytes):
         text = text.decode()
 
-    uris: list[BaseUri] = []
+    uris: list[BaseHyperlink] = []
     offset = 0
     offset_bytes = 0
     for line in text.splitlines(keepends=True):
@@ -330,20 +324,36 @@ def _parse_line(line: str, offset: int, offset_bytes: int) -> list[Span]:
     return spans
 
 
-def _parse_uris(line: str, offset: int, offset_bytes: int) -> list[BaseUri]:
-    uris: list[BaseUri] = []
+def _parse_uris(line: str,
+                offset: int,
+                offset_bytes: int) -> list[BaseHyperlink]:
+    uris: list[BaseHyperlink] = []
 
-    def make(match: Match[str], is_address: bool) -> BaseUri:
-        return _make_link(line,
-                          match.start(),
-                          match.end() - 1,
-                          offset,
-                          offset_bytes,
-                          is_address)
+    def make(start: int, end: int, is_jid: bool) -> BaseHyperlink:
+        if line[end - 1] == ',':
+            # Trim one trailing comma
+            end -= 1
+        if '(' in line[:start] and line[end - 1] == ')':
+            # Trim one trailing closing parenthesis if the match is preceded
+            # by an opening one somewhere on the line
+            end -= 1
+        return _make_hyperlink(line,
+                               start,
+                               end - 1,
+                               offset,
+                               offset_bytes,
+                               is_jid)
 
-    for match in URI_ADDRESS_RX.finditer(line):
-        uri = make(match, bool(match.group('address')))
-        uris.append(uri)
+    for match in URI_OR_JID_RX.finditer(line):
+        start, end = match.span()
+        if match.group('jid') is not None:
+            uris.append(make(start, end, True))
+        elif not re.fullmatch('[^:]+:', line[start:end]) and\
+            (not re.fullmatch('https?', match.group('scheme'), re.IGNORECASE) or
+             match.group('host')):
+            # URIs that consist only of a scheme are thusly excluded.
+            # http(s) URIs without host or with empty host are excluded too.
+            uris.append(make(start, end, False))
 
     return uris
 
@@ -407,12 +417,12 @@ def _make_span(line: str,
                       text=text)
 
 
-def _make_link(line: str,
-               start: int,
-               end: int,
-               offset: int,
-               offset_bytes: int,
-               is_address: bool) -> BaseUri:
+def _make_hyperlink(line: str,
+                    start: int,
+                    end: int,
+                    offset: int,
+                    offset_bytes: int,
+                    is_jid: bool) -> BaseHyperlink:
 
     text = line[start:end + 1]
 
@@ -422,22 +432,22 @@ def _make_link(line: str,
     start += offset
     end += offset + 1
 
-    if not is_address:
-        cls_ = Uri
-
-    elif text.startswith('xmpp'):
+    uri = text
+    if is_jid:
         cls_ = XMPPAddress
-
-    elif text.startswith('mailto'):
+        uri = jid_to_iri(text)
+    elif re.match('xmpp:', text, re.IGNORECASE):
+        cls_ = XMPPAddress
+    elif re.match('mailto:', text, re.IGNORECASE):
         cls_ = MailAddress
-
     else:
-        cls_ = Address
+        cls_ = Hyperlink
 
     return cls_(start=start,
                 start_byte=start_byte,
                 end=end,
                 end_byte=end_byte,
+                uri=uri,
                 text=text)
 
 
