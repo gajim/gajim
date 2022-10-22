@@ -784,7 +784,7 @@ class MUCUserStatusShowChanged(ApplicationEvent):
 
 
 @dataclass
-class EncryptionAnnouncement(ApplicationEvent):
+class EncryptionInfo(ApplicationEvent):
     name: str = field(init=False, default='encryption-check')
     account: str
     jid: JID

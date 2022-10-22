@@ -19,7 +19,7 @@ from gi.repository import Gtk
 
 from gajim.common.const import AvatarSize
 from gajim.common.const import EncryptionInfoMsg
-from gajim.common.events import EncryptionAnnouncement
+from gajim.common.events import EncryptionInfo
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 
@@ -30,11 +30,11 @@ from .widgets import SimpleLabel
 from ...util import open_window
 
 
-class EncryptionAnnouncementRow(BaseRow):
-    def __init__(self, event: EncryptionAnnouncement) -> None:
+class EncryptionInfoRow(BaseRow):
+    def __init__(self, event: EncryptionInfo) -> None:
         BaseRow.__init__(self, event.account)
 
-        self.type = 'encryption_announcement'
+        self.type = 'encryption_info'
         timestamp = time.time()
         self.timestamp = datetime.fromtimestamp(timestamp)
         self._event = event

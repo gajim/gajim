@@ -232,7 +232,7 @@ class ChatControl(EventHelper):
             ('file-request-sent', ged.GUI2, self._on_file_request_event),
             ('http-upload-started', ged.GUI2, self._on_http_upload_started),
             ('http-upload-error', ged.GUI2, self._on_http_upload_error),
-            ('encryption-check', ged.GUI2, self._on_encryption_announcement),
+            ('encryption-check', ged.GUI2, self._on_encryption_info),
         ])
 
     def _is_event_processable(self, event: Any) -> bool:
@@ -446,15 +446,12 @@ class ChatControl(EventHelper):
     def _on_http_upload_error(self, event: events.HTTPUploadError) -> None:
         self.add_info_message(event.error_msg)
 
-    def _on_encryption_announcement(self,
-                                    event: events.EncryptionAnnouncement
-                                    ) -> None:
-
+    def _on_encryption_info(self, event: events.EncryptionInfo) -> None:
         if not self._is_event_processable(event):
             return
 
         if self._allow_add_message():
-            self._scrolled_view.add_encryption_announcement(event)
+            self._scrolled_view.add_encryption_info(event)
 
     @property
     def is_chat(self) -> bool:

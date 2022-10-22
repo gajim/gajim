@@ -54,7 +54,7 @@ from gajim.common.const import EncryptionInfoMsg
 from gajim.common.const import EncryptionData
 from gajim.common.const import Trust as GajimTrust
 from gajim.common.i18n import _
-from gajim.common.events import EncryptionAnnouncement
+from gajim.common.events import EncryptionInfo
 from gajim.common.events import MucAdded
 from gajim.common.events import MucDiscoUpdate
 from gajim.common.events import SignedIn
@@ -184,7 +184,7 @@ class OMEMO(BaseModule):
         jid = str(contact.jid)
         if contact.is_groupchat:
             if not self.is_omemo_groupchat(jid):
-                app.ged.raise_event(EncryptionAnnouncement(
+                app.ged.raise_event(EncryptionInfo(
                     account=contact.account,
                     jid=contact.jid,
                     message=EncryptionInfoMsg.BAD_OMEMO_CONFIG))
@@ -197,7 +197,7 @@ class OMEMO(BaseModule):
             if missing:
                 self._log.info('%s => No Trusted Fingerprints for %s',
                                contact.account, jid)
-                app.ged.raise_event(EncryptionAnnouncement(
+                app.ged.raise_event(EncryptionInfo(
                     account=contact.account,
                     jid=contact.jid,
                     message=EncryptionInfoMsg.NO_FINGERPRINTS))
@@ -206,7 +206,7 @@ class OMEMO(BaseModule):
             # check if we have devices for the contact
             if not self.backend.get_devices(jid, without_self=True):
                 self.request_devicelist(jid)
-                app.ged.raise_event(EncryptionAnnouncement(
+                app.ged.raise_event(EncryptionInfo(
                     account=contact.account,
                     jid=contact.jid,
                     message=EncryptionInfoMsg.QUERY_DEVICES))
@@ -216,7 +216,7 @@ class OMEMO(BaseModule):
             if self.backend.storage.hasUndecidedFingerprints(jid):
                 self._log.info('%s => Undecided Fingerprints for %s',
                                contact.account, jid)
-                app.ged.raise_event(EncryptionAnnouncement(
+                app.ged.raise_event(EncryptionInfo(
                     account=contact.account,
                     jid=contact.jid,
                     message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
@@ -247,7 +247,7 @@ class OMEMO(BaseModule):
         if not fingerprints:
             return False
 
-        app.ged.raise_event(EncryptionAnnouncement(
+        app.ged.raise_event(EncryptionInfo(
             account=contact.account,
             jid=contact.jid,
             message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
@@ -577,7 +577,7 @@ class OMEMO(BaseModule):
 
         # Trigger dialog to trust new Fingerprints if
         # the Chat Window is Open
-        app.ged.raise_event(EncryptionAnnouncement(
+        app.ged.raise_event(EncryptionInfo(
             account=self._account,
             jid=JID.from_string(jid),
             message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))

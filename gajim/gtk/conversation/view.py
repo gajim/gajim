@@ -52,8 +52,7 @@ from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.call import CallRow
 from gajim.gtk.conversation.rows.command_output import CommandOutputRow
 from gajim.gtk.conversation.rows.date import DateRow
-from gajim.gtk.conversation.rows.encryption_announcement import \
-    EncryptionAnnouncementRow
+from gajim.gtk.conversation.rows.encryption_info import EncryptionInfoRow
 from gajim.gtk.conversation.rows.file_transfer import FileTransferRow
 from gajim.gtk.conversation.rows.file_transfer_jingle import \
     FileTransferJingleRow
@@ -478,12 +477,9 @@ class ConversationView(Gtk.ScrolledWindow):
             db_message=db_message)
         self._insert_message(jingle_transfer_row)
 
-    def add_encryption_announcement(self,
-                                    event: events.EncryptionAnnouncement
-                                    ) -> None:
-
+    def add_encryption_info(self, event: events.EncryptionInfo) -> None:
         assert self._contact is not None
-        self._insert_message(EncryptionAnnouncementRow(event))
+        self._insert_message(EncryptionInfoRow(event))
 
     def add_call_message(self,
                          event: Optional[events.JingleRequestReceived] = None,
