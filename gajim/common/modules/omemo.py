@@ -126,7 +126,7 @@ class OMEMO(BaseModule):
         self.allow_groupchat = True
 
         self._own_jid = self._client.get_own_jid().bare
-        self._backend = self._get_backend()
+        self._backend = OmemoState(self._account, self._own_jid, self)
 
         self._omemo_groupchats: set[str] = set()
         self._muc_temp_store: dict[bytes, str] = {}
@@ -167,11 +167,6 @@ class OMEMO(BaseModule):
     @property
     def backend(self) -> OmemoState:
         return self._backend
-
-    def _get_backend(self) -> OmemoState:
-        data_dir = Path(configpaths.get('MY_DATA'))
-        db_path = data_dir / f'omemo_{self._own_jid}.db'
-        return OmemoState(self._own_jid, db_path, self._account, self)
 
     def check_send_preconditions(self, contact: types.ChatContactT) -> bool:
         jid = str(contact.jid)

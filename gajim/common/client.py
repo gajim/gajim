@@ -476,6 +476,7 @@ class Client(Observable):
             try:
                 self.get_module('OMEMO').encrypt_message(message)
             except Exception:
+                log.exception('Error')
                 app.ged.raise_event(
                     MessageNotSent(client=self._client,
                                    jid=message.jid,
