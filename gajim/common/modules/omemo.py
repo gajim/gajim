@@ -265,7 +265,6 @@ class OMEMO(BaseModule):
             self._muc_temp_store[omemo_message.payload] = event.message
         else:
             event.xhtml = None
-            event.encrypted = 'OMEMO'
             event.additional_data['encrypted'] = {
                 'name': 'OMEMO',
                 'trust': GajimTrust[Trust.VERIFIED.name]}
@@ -312,7 +311,7 @@ class OMEMO(BaseModule):
 
         transport_message = get_key_transport_message(typ, jid, omemo_message)
         self._log.info('Send key transport message %s (%s)', jid, devices)
-        self._client.connection.send(transport_message)
+        self._client.send_stanza(transport_message)
 
     def _message_received(self,
                           _client: types.xmppClient,
