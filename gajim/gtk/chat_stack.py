@@ -762,7 +762,6 @@ class ChatStack(Gtk.Stack, EventHelper):
             if not self._chat_control.sendmessage:
                 return
 
-
         message = remove_invalid_xml_chars(message)
         if message in ('', '\n'):
             return
