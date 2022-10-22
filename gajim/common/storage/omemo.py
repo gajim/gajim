@@ -45,10 +45,6 @@ from gajim.common.omemo.util import DEFAULT_PREKEY_AMOUNT
 from gajim.common.modules.util import LogAdapter
 
 
-def _convert_to_string(text):
-    return text.decode()
-
-
 def _convert_identity_key(key: bytes) -> Optional[IdentityKeyExtended]:
     if not key:
         return

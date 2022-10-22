@@ -91,12 +91,6 @@ ALLOWED_TAGS = [
     ('origin-id', Namespace.SID),
 ]
 
-ENCRYPTION_NAME = 'OMEMO'
-
-# Module name
-name = 'OMEMO'
-zeroconf = False
-
 
 class OMEMO(BaseModule):
 
@@ -129,7 +123,6 @@ class OMEMO(BaseModule):
             ('muc-added', ged.GUI1, self._on_muc_added)
         ])
 
-        self.encryption_name = 'OMEMO'
         self.allow_groupchat = True
 
         self._own_jid = self._client.get_own_jid().bare
@@ -272,9 +265,9 @@ class OMEMO(BaseModule):
             self._muc_temp_store[omemo_message.payload] = event.message
         else:
             event.xhtml = None
-            event.encrypted = ENCRYPTION_NAME
+            event.encrypted = 'OMEMO'
             event.additional_data['encrypted'] = {
-                'name': ENCRYPTION_NAME,
+                'name': 'OMEMO',
                 'trust': GajimTrust[Trust.VERIFIED.name]}
 
         self._debug_print_stanza(event.stanza)
@@ -385,7 +378,7 @@ class OMEMO(BaseModule):
         prepare_stanza(stanza, plaintext)
         self._debug_print_stanza(stanza)
         properties.encrypted = EncryptionData({
-            'name': ENCRYPTION_NAME,
+            'name': 'OMEMO',
             'fingerprint': fingerprint,
             'trust': GajimTrust[trust.name]})
 
