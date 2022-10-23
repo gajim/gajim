@@ -103,7 +103,7 @@ class OMEMOStorage(AxolotlStore):
                 fields.append(col_name.lower())
             else:
                 fields.append(col[0])
-        return namedtuple('Row', fields)(*row)
+        return namedtuple('Row', fields)(*row)  # pyright: ignore
 
     def _generate_axolotl_keys(self) -> None:
         identity_key_pair = KeyHelper.generateIdentityKeyPair()
@@ -628,7 +628,7 @@ class OMEMOStorage(AxolotlStore):
         self._con.execute(query, (device_id, public_key, private_key))
         self._con.commit()
 
-    def saveIdentity(self, recipientId: int, identityKey: IdentityKey) -> None:
+    def saveIdentity(self, recipientId: str, identityKey: IdentityKey) -> None:
         query = '''INSERT INTO identities
                    (recipient_id, public_key, trust, shown)
                    VALUES(?, ?, ?, ?)'''
@@ -769,11 +769,11 @@ class OMEMOStorage(AxolotlStore):
                             identity_key: IdentityKey
                             ) -> Optional[int]:
 
-        identity_key = identity_key.getPublicKey().serialize()
+        serialized = identity_key.getPublicKey().serialize()
         query = '''SELECT timestamp FROM identities
                    WHERE recipient_id = ? AND public_key = ?'''
         result = self._con.execute(query, (recipient_id,
-                                           identity_key)).fetchone()
+                                           serialized)).fetchone()
         return result.timestamp if result is not None else None
 
     def setIdentityLastSeen(self,
@@ -782,11 +782,11 @@ class OMEMOStorage(AxolotlStore):
                             ) -> None:
 
         timestamp = int(time.time())
-        identity_key = identity_key.getPublicKey().serialize()
+        serialized = identity_key.getPublicKey().serialize()
         self._log.info('Set last seen for %s %s', recipient_id, timestamp)
         query = '''UPDATE identities SET timestamp = ?
                    WHERE recipient_id = ? AND public_key = ?'''
-        self._con.execute(query, (timestamp, recipient_id, identity_key))
+        self._con.execute(query, (timestamp, recipient_id, serialized))
         self._con.commit()
 
     def getUnacknowledgedCount(self, recipient_id: str, device_id: int) -> int:
@@ -796,6 +796,6 @@ class OMEMOStorage(AxolotlStore):
         state = record.getSessionState()
         return state.getSenderChainKey().getIndex()
 
-    def getSubDeviceSessions(self) -> None:
+    def getSubDeviceSessions(self, recipientId: str) -> list[int]:
         # Not used
-        return None
+        return []
