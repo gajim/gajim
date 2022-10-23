@@ -197,6 +197,7 @@ function cleanup_install {
     rm -Rf "${MINGW_ROOT}"/include
     rm -Rf "${MINGW_ROOT}"/var
     rm -Rf "${MINGW_ROOT}"/share/gtk-doc
+    rm -Rf "${MINGW_ROOT}"/share/xml/docbook
     rm -Rf "${MINGW_ROOT}"/share/zsh
     rm -Rf "${MINGW_ROOT}"/share/pixmaps
     rm -Rf "${MINGW_ROOT}"/share/gnome-shell
@@ -228,12 +229,14 @@ function cleanup_install {
     rm -Rf "${MINGW_ROOT}"/share/bullet
     rm -Rf "${MINGW_ROOT}"/share/OGRE
     rm -Rf "${MINGW_ROOT}"/share/opencv4
+    rm -Rf "${MINGW_ROOT}"/share/tessdata
+    rm -Rf "${MINGW_ROOT}"/share/vulkan
 
     find "${MINGW_ROOT}"/share/glib-2.0 -type f ! \
         -name "*.compiled" -exec rm -f {} \;
 
     rm -Rf "${MINGW_ROOT}"/lib/"${PYTHON_ID}".*/test
-    rm -Rf "${MINGW_ROOT}"/lib/"${PYTHON_ID}"/dist-packages/Ogre
+    rm -Rf "${MINGW_ROOT}"/lib/"${PYTHON_ID}".*/dist-packages/Ogre
     rm -Rf "${MINGW_ROOT}"/lib/cmake
     rm -Rf "${MINGW_ROOT}"/lib/gettext
     rm -Rf "${MINGW_ROOT}"/lib/gtk-3.0
