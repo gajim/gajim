@@ -815,6 +815,21 @@ class AccountBadge(Gtk.Label):
         account_class = app.css_config.get_dynamic_class(account)
         self.get_style_context().add_class(account_class)
         self.set_tooltip_text(_('Account: %s') % label)
+        app.settings.disconnect_signals(self)
+        app.settings.connect_signal(
+            'account_label',
+            self._on_account_label_changed,
+            account)
+
+    def _on_account_label_changed(self,
+                                  _value: str,
+                                  _setting: str,
+                                  account: Optional[str],
+                                  *args: Any
+                                  ) -> None:
+
+        assert account is not None
+        self.set_account(account)
 
 
 def make_pango_attributes(block: PlainBlock) -> Pango.AttrList:

@@ -40,6 +40,7 @@ from .dialogs import ConfirmationDialog
 from .const import Setting
 from .const import SettingKind
 from .const import SettingType
+from .menus import build_accounts_menu
 from .settings import SettingsDialog
 from .settings import SettingsBox
 from .settings import PopoverSetting
@@ -741,6 +742,7 @@ class GeneralPage(GenericSettingPage):
     def _on_account_name_change(self, *args: Any) -> None:
         window = cast(AccountsWindow, get_app_window('AccountsWindow'))
         window.update_account_label(self.account)
+        build_accounts_menu()
 
 
 class PrivacyPage(GenericSettingPage):

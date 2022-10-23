@@ -85,6 +85,11 @@ class Account(Gtk.ListBoxRow, EventHelper):
              self._update_account_color_visibility),
         ])
 
+        app.settings.connect_signal(
+            'account_label',
+            self._on_account_label_changed,
+            account)
+
         selection_bar = Gtk.Box()
         selection_bar.set_size_request(6, -1)
         selection_bar.get_style_context().add_class('selection-bar')
@@ -105,20 +110,24 @@ class Account(Gtk.ListBoxRow, EventHelper):
             'account-identifier-bar')
         self._update_account_color_visibility()
 
-        account_box = Gtk.Box(spacing=3)
-        account_box.set_tooltip_text(
+        self._account_box = Gtk.Box(spacing=3)
+        self._account_box.set_tooltip_text(
             _('Account: %s') % app.get_account_label(account))
-        account_box.add(selection_bar)
-        account_box.add(self._image)
-        account_box.add(self._account_color_bar)
+        self._account_box.add(selection_bar)
+        self._account_box.add(self._image)
+        self._account_box.add(self._account_color_bar)
         self._set_account_color()
 
         overlay = Gtk.Overlay()
-        overlay.add(account_box)
+        overlay.add(self._account_box)
         overlay.add_overlay(self._unread_label)
 
         self.add(overlay)
         self.show_all()
+
+    def _on_account_label_changed(self, value: str, *args: Any) -> None:
+        self._account_box.set_tooltip_text(
+            _('Account: %s') % value)
 
     def _set_account_color(self) -> None:
         context = self._account_color_bar.get_style_context()

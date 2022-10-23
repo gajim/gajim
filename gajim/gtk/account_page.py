@@ -87,6 +87,11 @@ class AccountPage(Gtk.Box, EventHelper):
 
         self._ui.connect_signals(self)
 
+        app.settings.connect_signal(
+            'account_label',
+            self._on_account_label_changed,
+            account)
+
         # pylint: disable=line-too-long
         self.register_events([
             ('subscribe-presence-received', ged.GUI1, self._subscribe_received),
@@ -105,6 +110,9 @@ class AccountPage(Gtk.Box, EventHelper):
 
     def _on_destroy(self, _widget: AccountPage) -> None:
         app.check_finalize(self)
+
+    def _on_account_label_changed(self, value: str, *args: Any) -> None:
+        self.update()
 
     def _on_avatar_update(self, *args: Any) -> None:
         self.update()
