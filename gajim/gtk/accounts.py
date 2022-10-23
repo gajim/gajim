@@ -573,9 +573,10 @@ class AccountRow(Gtk.ListBoxRow):
                 not app.get_client(account).state.is_disconnected):
             # Connecting or connected
             window = cast(AccountsWindow, get_app_window('AccountsWindow'))
+            account_label = app.get_account_label(account)
             ConfirmationDialog(
                 _('Disable Account'),
-                _('Account %s is still connected') % account,
+                _('Account %s is still connected') % account_label,
                 _('All chat and group chat windows will be closed.'),
                 [DialogButton.make('Cancel',
                                    callback=lambda: switch.set_active(True)),
