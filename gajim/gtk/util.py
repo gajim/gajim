@@ -812,8 +812,15 @@ class AccountBadge(Gtk.Label):
     def set_account(self, account: str) -> None:
         label = app.get_account_label(account)
         self.set_text(label)
+
+        style_context = self.get_style_context()
+        for style_class in style_context.list_classes():
+            if style_class != 'badge':
+                style_context.remove_class(style_class)
+
         account_class = app.css_config.get_dynamic_class(account)
-        self.get_style_context().add_class(account_class)
+        style_context.add_class(account_class)
+
         self.set_tooltip_text(_('Account: %s') % label)
         app.settings.disconnect_signals(self)
         app.settings.connect_signal(
