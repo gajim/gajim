@@ -30,7 +30,7 @@ from omemo_dr.state.axolotlstore import AxolotlStore
 from omemo_dr.state.signedprekeyrecord import SignedPreKeyRecord
 from omemo_dr.state.sessionrecord import SessionRecord
 from omemo_dr.state.prekeyrecord import PreKeyRecord
-from omemo_dr.invalidkeyidexception import InvalidKeyIdException
+from omemo_dr.exceptions import InvalidKeyIdException
 from omemo_dr.ecc.djbec import DjbECPrivateKey
 from omemo_dr.ecc.djbec import CurvePublicKey
 from omemo_dr.identitykey import IdentityKey

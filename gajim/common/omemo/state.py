@@ -37,7 +37,7 @@ from omemo_dr.sessionbuilder import SessionBuilder
 from omemo_dr.sessioncipher import SessionCipher
 from omemo_dr.state.prekeybundle import PreKeyBundle
 from omemo_dr.util.keyhelper import KeyHelper
-from omemo_dr.duplicatemessagexception import DuplicateMessageException
+from omemo_dr.exceptions import DuplicateMessageException
 
 from gajim.common import app
 from gajim.common import configpaths
