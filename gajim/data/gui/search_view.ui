@@ -273,7 +273,7 @@ after:yyyy-mm-dd</property>
       </packing>
     </child>
     <child>
-      <object class="GtkScrolledWindow">
+      <object class="GtkScrolledWindow" id="results_scrolled">
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <signal name="edge-reached" handler="_on_edge_reached" swapped="no"/>

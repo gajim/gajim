@@ -114,6 +114,7 @@ class SearchView(Gtk.Box):
             row.destroy()
 
         self._ui.results_listbox.set_header_func(self._header_func)
+        self._ui.results_scrolled.get_vadjustment().set_value(0)
 
     def _on_search(self, entry: Gtk.Entry) -> None:
         self._clear_results()

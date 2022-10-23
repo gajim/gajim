@@ -649,6 +649,7 @@ class PreferencesBuilder(Builder):
     stack: Gtk.Stack
     window_behaviour: Gtk.Grid
     plugins: Gtk.Grid
+    general: Gtk.Grid
     chats: Gtk.Grid
     group_chats: Gtk.Grid
     file_preview: Gtk.Grid
@@ -770,6 +771,7 @@ class SearchViewBuilder(Builder):
     search_entry: Gtk.SearchEntry
     search_checkbutton: Gtk.CheckButton
     date_hint: Gtk.Label
+    results_scrolled: Gtk.ScrolledWindow
     results_listbox: Gtk.ListBox
     placeholder: Gtk.Box
     header_box: Gtk.Box
