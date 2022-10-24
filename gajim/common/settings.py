@@ -913,15 +913,16 @@ class Settings:
 
         default = ACCOUNT_SETTINGS['group_chat'][setting]
         if default in (HAS_APP_DEFAULT, HAS_ACCOUNT_DEFAULT):
-
-            client = app.get_client(account)
-            contact = client.get_module('Contacts').get_contact(jid)
-            context = contact.muc_context
-            if context is None:
-                # If there is no disco info available
-                # to determine the context assume public
-                log.warning('Unable to determine context for: %s', jid)
-                context = 'public'
+            context = 'public'
+            if app.account_is_connected(account):
+                client = app.get_client(account)
+                contact = client.get_module('Contacts').get_contact(jid)
+                context = contact.muc_context
+                if context is None:
+                    # If there is no disco info available
+                    # to determine the context assume public
+                    log.warning('Unable to determine context for: %s', jid)
+                    context = 'public'
 
             default_store = APP_SETTINGS
             if default is HAS_ACCOUNT_DEFAULT:
@@ -957,7 +958,8 @@ class Settings:
     def set_group_chat_settings(self,
                                 setting: str,
                                 value: SETTING_TYPE,
-                                context: str = None) -> None:
+                                context: Optional[str] = None
+                                ) -> None:
 
         for account, acc_settings in self._account_settings.items():
             for jid in acc_settings['group_chat']:
