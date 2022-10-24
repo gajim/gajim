@@ -725,7 +725,6 @@ class TextMultiField(Field):
 
         if self.read_only:
             self._textview = MultiLineLabel(label=field.value)
-            self._textview.set_selectable(True)
             self._textview.set_xalign(0)
             self._textview.set_yalign(0)
         else:
