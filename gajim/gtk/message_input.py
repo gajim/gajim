@@ -30,8 +30,6 @@ from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Pango
 
-from nbxmpp.protocol import JID
-
 from gajim.common import app
 from gajim.common.i18n import LANG
 from gajim.common.i18n import _
@@ -78,7 +76,6 @@ class MessageInputTextView(Gtk.TextView):
         self.undo_pressed: bool = False
 
         self._contact: Optional[ChatContactT] = None
-        self._drafts: dict[tuple[str, JID], str] = {}
 
         self._chat_action_processor = ChatActionProcessor(self)
 
@@ -156,15 +153,10 @@ class MessageInputTextView(Gtk.TextView):
 
     def switch_contact(self, contact: ChatContactT) -> None:
         if self._contact is not None:
-            account = self._contact.account
-            jid = self._contact.jid
-            if self.has_text:
-                self._drafts[(account, jid)] = self.get_text()
-            else:
-                self._drafts.pop((account, jid), None)
+            app.storage.drafts.set(self._contact, self.get_text())
 
         self.clear()
-        draft = self._drafts.get((contact.account, contact.jid))
+        draft = app.storage.drafts.get(contact)
         if draft is not None:
             self.insert_text(draft)
 
@@ -265,9 +257,6 @@ class MessageInputTextView(Gtk.TextView):
         start, end = buf.get_bounds()
         text = self.get_buffer().get_text(start, end, True)
         return text
-
-    def get_draft(self, account: str, jid: JID) -> Optional[str]:
-        return self._drafts.get((account, jid))
 
     def _on_toggle_spell_check(self, *args: Any) -> None:
         if not app.is_installed('GSPELL'):

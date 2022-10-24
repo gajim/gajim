@@ -60,6 +60,7 @@ if typing.TYPE_CHECKING:
     from gajim.common.storage.cache import CacheStorage
     from gajim.common.storage.archive import MessageArchiveStorage
     from gajim.common.storage.events import EventStorage
+    from gajim.common.storage.draft import DraftStorage
     from gajim.common.cert_store import CertificateStore
     from gajim.common.call_manager import CallManager
     from gajim.common.preview import PreviewManager
@@ -90,6 +91,7 @@ class Storage:
         self.cache: CacheStorage = None
         self.archive: MessageArchiveStorage = None
         self.events: EventStorage = None
+        self.drafts: DraftStorage = None
 
 
 storage = Storage()

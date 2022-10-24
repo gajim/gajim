@@ -55,6 +55,7 @@ from gajim.common.settings import Settings
 from gajim.common.settings import LegacyConfig
 from gajim.common.cert_store import CertificateStore
 from gajim.common.storage.cache import CacheStorage
+from gajim.common.storage.draft import DraftStorage
 from gajim.common.storage.archive import MessageArchiveStorage
 
 
@@ -85,6 +86,8 @@ class CoreApplication:
 
         app.storage.archive = MessageArchiveStorage()
         app.storage.archive.init()
+
+        app.storage.drafts = DraftStorage()
 
         app.cert_store = CertificateStore()
         app.task_manager = TaskManager()
