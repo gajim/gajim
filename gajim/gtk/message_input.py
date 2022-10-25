@@ -249,6 +249,11 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
             self.insert_text(draft)
 
         self._contact = contact
+        if self.correcting:
+            self.get_style_context().add_class('gajim-msg-correcting')
+        else:
+            self.get_style_context().remove_class('gajim-msg-correcting')
+
         self._chat_action_processor.switch_contact(contact)
         self._set_spell_checker_language(contact)
 
