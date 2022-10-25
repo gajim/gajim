@@ -765,6 +765,7 @@ class ChatStack(Gtk.Stack, EventHelper):
         client.send_message(message_)
 
         self._message_action_box.msg_textview.clear()
+        app.storage.drafts.set(contact, '')
 
     def get_last_message_id(self, contact: ChatContactT) -> Optional[str]:
         return self._message_action_box.get_last_message_id(contact)

@@ -46,6 +46,7 @@ from gajim.common.types import OneOnOneContactT
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.storage.draft import DraftStorage
 
 from .menus import get_chat_list_row_menu
 from .builder import get_builder
@@ -124,14 +125,18 @@ class ChatListRow(Gtk.ListBoxRow):
         self.update_name()
         self.update_account_identifier()
 
+        app.storage.drafts.connect('draft-update', self._on_draft_update)
+
         if (isinstance(self.contact, GroupchatContact) and
                 not self.contact.can_notify()):
             self._ui.unread_label.get_style_context().add_class(
                 'unread-counter-silent')
 
-        # Get last chat message from archive
-        line = app.storage.archive.get_last_conversation_line(account, jid)
+        self._display_last_conversation_line()
 
+    def _display_last_conversation_line(self) -> None:
+        line = app.storage.archive.get_last_conversation_line(
+            self.contact.account, self.contact.jid)
         if line is None:
             self.show_all()
             return
@@ -152,10 +157,11 @@ class ChatListRow(Gtk.ListBoxRow):
             if line.kind in (KindConstant.CHAT_MSG_SENT,
                              KindConstant.SINGLE_MSG_SENT):
                 self.set_nick(_('Me'))
-                me_nickname = app.nicks[account]
+                me_nickname = app.nicks[self.contact.account]
 
             if line.kind == KindConstant.GC_MSG:
-                our_nick = get_group_chat_nick(account, jid)
+                our_nick = get_group_chat_nick(
+                    self.contact.account, self.contact.jid)
                 if line.contact_name == our_nick:
                     self.set_nick(_('Me'))
                     me_nickname = our_nick
@@ -233,6 +239,14 @@ class ChatListRow(Gtk.ListBoxRow):
                          icon_name: Optional[str] = None,
                          additional_data: Optional[AdditionalDataDict] = None
                          ) -> None:
+
+        draft = app.storage.drafts.get(self.contact)
+        if draft is not None:
+            self._show_draft(draft)
+            return
+
+        self._ui.message_label.get_style_context().remove_class('draft')
+
         icon = None
         if icon_name is not None:
             icon = Gio.Icon.new_for_string(icon_name)
@@ -351,6 +365,28 @@ class ChatListRow(Gtk.ListBoxRow):
         if count < 1000:
             return str(count)
         return '999+'
+
+    def _on_draft_update(self,
+                         _draft_storage: DraftStorage,
+                         _signal_name: str,
+                         contact: ChatContactT,
+                         draft: str
+                         ) -> None:
+
+        if contact != self.contact:
+            return
+
+        self._show_draft(draft)
+
+    def _show_draft(self, draft: str) -> None:
+        if not draft:
+            self._ui.message_label.get_style_context().remove_class('draft')
+            self._display_last_conversation_line()
+            return
+
+        self.set_nick('')
+        self._ui.message_label.set_text(_('Draft: %s') % draft)
+        self._ui.message_label.get_style_context().add_class('draft')
 
     def _on_state_flags_changed(self,
                                 _row: ChatListRow,

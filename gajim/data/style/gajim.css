@@ -768,6 +768,11 @@ infobar.error > revealer > box {
 }
 .insensitive-fg-color {color: @insensitive_fg_color;}
 
+.draft {
+    font-style: italic;
+    color: @warning_color;
+}
+
 /* Padding/Margins */
 .margin-right18 { margin-right: 18px; }
 .margin-top6 { margin-top: 6px; }
