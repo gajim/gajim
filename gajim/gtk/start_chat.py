@@ -549,6 +549,12 @@ class StartChatDialog(Gtk.ApplicationWindow):
             return
 
         search_text = search_entry.get_text()
+        if search_text.startswith('xmpp:'):
+            search_text = search_text.removeprefix('xmpp:')
+            search_text = search_text.removesuffix('?join')
+            search_entry.set_text(search_text)
+            return
+
         if '@' in search_text:
             try:
                 validate_jid(search_text)
