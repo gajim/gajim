@@ -115,14 +115,9 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
         app.plugin_manager.gui_extension_point('message_input', self)
 
     @property
-    def correcting(self) -> bool:
+    def is_correcting(self) -> bool:
         assert self._contact is not None
         return self._correcting[self._contact]
-
-    @correcting.setter
-    def correcting(self, state: bool) -> None:
-        assert self._contact is not None
-        self._correcting[self._contact] = state
 
     def get_last_message_id(self, contact: ChatContactT) -> Optional[str]:
         return self._last_message_id.get(contact)
@@ -131,8 +126,8 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
         self.clear()
         self.grab_focus()
 
-        if self.correcting:
-            self.correcting = False
+        if self.is_correcting:
+            self._set_correcting(False)
             self.get_style_context().remove_class('gajim-msg-correcting')
             return
 
@@ -146,13 +141,13 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
         if message_row is None:
             return
 
-        self.correcting = True
+        self._set_correcting(True)
         self.get_style_context().add_class('gajim-msg-correcting')
         self.insert_text(message_row.message)
 
     def try_message_correction(self, message: str) -> Optional[str]:
         assert self._contact is not None
-        if not self.correcting:
+        if not self.is_correcting:
             return None
 
         self.toggle_message_correction()
@@ -169,6 +164,10 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
             return None
 
         return correct_id
+
+    def _set_correcting(self, state: bool) -> None:
+        assert self._contact is not None
+        self._correcting[self._contact] = state
 
     def _on_message_sent(self, event: MessageSent) -> None:
         if not event.message:
@@ -249,7 +248,7 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
             self.insert_text(draft)
 
         self._contact = contact
-        if self.correcting:
+        if self.is_correcting:
             self.get_style_context().add_class('gajim-msg-correcting')
         else:
             self.get_style_context().remove_class('gajim-msg-correcting')

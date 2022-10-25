@@ -229,7 +229,7 @@ class MessageActionsBox(Gtk.Grid):
 
     @property
     def is_correcting(self) -> bool:
-        return self.msg_textview.correcting
+        return self.msg_textview.is_correcting
 
     def toggle_message_correction(self) -> None:
         self.msg_textview.toggle_message_correction()
