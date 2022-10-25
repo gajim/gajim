@@ -97,7 +97,7 @@ class MoreMenuButton(Gtk.Button):
         show_correction = False
         if self._row.message_id is not None:
             show_correction = app.window.is_message_correctable(
-                self._contact.account, self._contact.jid, self._row.message_id)
+                self._contact, self._row.message_id)
 
         self._create_popover(show_retract=show_retract,
                              show_correction=show_correction)

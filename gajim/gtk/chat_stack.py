@@ -741,22 +741,9 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         correct_id = None
         if self._message_action_box.is_correcting:
-            self._message_action_box.is_correcting = False
-            context = self._message_action_box.msg_textview.get_style_context()
-            context.remove_class('gajim-msg-correcting')
-
-            correct_id = self._message_action_box.last_message_id.get(
-                (contact.account, contact.jid))
-            message_row = app.storage.archive.get_last_correctable_message(
-                contact.account, contact.jid, correct_id)
-            if message_row is None:
-                self._message_action_box.msg_textview.clear()
-                log.info('Trying to correct message older than threshold')
-                return
-
-            if message_row.message == message:
-                self._message_action_box.msg_textview.clear()
-                log.info('Trying to correct message with original text')
+            correct_id = self._message_action_box.try_message_correction(
+                message)
+            if correct_id is None:
                 return
 
         chatstate = client.get_module('Chatstate').get_active_chatstate(
@@ -779,8 +766,8 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         self._message_action_box.msg_textview.clear()
 
-    def get_last_message_id(self, account: str, jid: JID) -> Optional[str]:
-        return self._message_action_box.last_message_id.get((account, jid))
+    def get_last_message_id(self, contact: ChatContactT) -> Optional[str]:
+        return self._message_action_box.get_last_message_id(contact)
 
     def _close_control(self) -> None:
         assert self._current_contact is not None

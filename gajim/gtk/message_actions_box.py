@@ -32,11 +32,8 @@ from gi.repository import GObject
 
 from nbxmpp.const import Chatstate
 from nbxmpp.modules.security_labels import SecurityLabel
-from nbxmpp.protocol import JID
 
 from gajim.common import app
-from gajim.common import events
-from gajim.common import ged
 from gajim.common.commands import CommandFailed
 from gajim.common.i18n import _
 from gajim.common.client import Client
@@ -60,14 +57,12 @@ from .menus import get_self_contact_menu
 from .menus import get_singlechat_menu
 from .message_input import MessageInputTextView
 
-
 log = logging.getLogger('gajim.gui.messageactionsbox')
 
 
-class MessageActionsBox(Gtk.Grid, ged.EventHelper):
+class MessageActionsBox(Gtk.Grid):
     def __init__(self) -> None:
         Gtk.Grid.__init__(self)
-        ged.EventHelper.__init__(self)
 
         self._client: Optional[Client] = None
         self._contact: Optional[ChatContactT] = None
@@ -79,10 +74,6 @@ class MessageActionsBox(Gtk.Grid, ged.EventHelper):
 
         # For undo
         self.space_pressed = False
-
-        # XEP-0308 Message Correction
-        self.is_correcting = False
-        self.last_message_id: dict[tuple[str, JID], Optional[str]] = {}
 
         self._ui.send_message_button.set_visible(
             app.settings.get('show_send_message_button'))
@@ -116,10 +107,6 @@ class MessageActionsBox(Gtk.Grid, ged.EventHelper):
         self._ui.connect_signals(self)
 
         self._connect_actions()
-
-        self.register_events([
-            ('message-sent', ged.GUI2, self._on_message_sent)
-        ])
 
         app.plugin_manager.gui_extension_point(
             'message_actions_box', self, self._ui.box)
@@ -239,6 +226,19 @@ class MessageActionsBox(Gtk.Grid, ged.EventHelper):
 
         self._contact = None
         self._client = None
+
+    @property
+    def is_correcting(self) -> bool:
+        return self.msg_textview.correcting
+
+    def toggle_message_correction(self) -> None:
+        self.msg_textview.toggle_message_correction()
+
+    def try_message_correction(self, message: str) -> Optional[str]:
+        return self.msg_textview.try_message_correction(message)
+
+    def get_last_message_id(self, contact: ChatContactT) -> Optional[str]:
+        return self.msg_textview.get_last_message_id(contact)
 
     def _on_client_state_changed(self,
                                  _client: Client,
@@ -606,45 +606,3 @@ class MessageActionsBox(Gtk.Grid, ged.EventHelper):
 
         assert self._contact is not None
         app.interface.start_file_transfer(self._contact, path)
-
-    def toggle_message_correction(self) -> None:
-        if self.is_correcting:
-            self.is_correcting = False
-            self.msg_textview.clear()
-            self.msg_textview.get_style_context().remove_class(
-                'gajim-msg-correcting')
-            self.msg_textview.grab_focus()
-            return
-
-        assert self._contact is not None
-        last_message_id = self.last_message_id.get(
-            (self._contact.account, self._contact.jid))
-        if last_message_id is None:
-            return
-
-        message_row = app.storage.archive.get_last_correctable_message(
-            self._contact.account, self._contact.jid, last_message_id)
-        if message_row is None:
-            return
-
-        self.is_correcting = True
-        self.msg_textview.clear()
-        self.msg_textview.insert_text(message_row.message)
-        self.msg_textview.get_style_context().add_class('gajim-msg-correcting')
-        self.msg_textview.grab_focus()
-
-    def _on_message_sent(self, event: events.MessageSent) -> None:
-        if not event.message:
-            return
-
-        if event.correct_id is None:
-            # This wasn't a corrected message
-            assert self._contact is not None
-            oob_url = event.additional_data.get_value('gajim', 'oob_url')
-            account = self._contact.account
-            jid = self._contact.jid
-            if oob_url == event.message:
-                # Don't allow to correct HTTP Upload file transfer URLs
-                self.last_message_id[(account, jid)] = None
-            else:
-                self.last_message_id[(account, jid)] = event.message_id

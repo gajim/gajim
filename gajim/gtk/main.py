@@ -30,6 +30,7 @@ from nbxmpp import JID
 from gajim.common import app
 from gajim.common import events
 from gajim.common import ged
+from gajim.common import types
 from gajim.common.client import Client
 from gajim.common.const import Direction
 from gajim.common.const import Display
@@ -855,17 +856,17 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         return self._chat_page.chat_exists(account, jid)
 
     def is_message_correctable(self,
-                               account: str,
-                               jid: JID,
+                               contact: types.ChatContactT,
                                message_id: str
                                ) -> bool:
+
         chat_stack = self._chat_page.get_chat_stack()
-        last_message_id = chat_stack.get_last_message_id(account, jid)
+        last_message_id = chat_stack.get_last_message_id(contact)
         if last_message_id is None or last_message_id != message_id:
             return False
 
         message_row = app.storage.archive.get_last_correctable_message(
-            account, jid, last_message_id)
+            contact.account, contact.jid, last_message_id)
         return message_row is not None
 
     def get_total_unread_count(self) -> int:

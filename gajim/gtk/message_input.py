@@ -22,6 +22,9 @@ from __future__ import annotations
 from typing import Any
 from typing import Optional
 
+from collections import defaultdict
+
+import logging
 import sys
 
 from gi.repository import Gtk
@@ -31,6 +34,9 @@ from gi.repository import GLib
 from gi.repository import Pango
 
 from gajim.common import app
+from gajim.common import ged
+from gajim.common.events import MessageSent
+from gajim.common.ged import EventHelper
 from gajim.common.i18n import LANG
 from gajim.common.i18n import _
 from gajim.common.styling import process
@@ -52,13 +58,17 @@ FORMAT_CHARS: dict[str, str] = {
     'pre': '`',
 }
 
+log = logging.getLogger('gajim.gui.message_input')
 
-class MessageInputTextView(Gtk.TextView):
+
+class MessageInputTextView(Gtk.TextView, EventHelper):
     '''
     A Gtk.Textview for chat message input
     '''
     def __init__(self) -> None:
         Gtk.TextView.__init__(self)
+        EventHelper.__init__(self)
+
         self.set_border_width(3)
         self.set_accepts_tab(True)
         self.set_editable(True)
@@ -77,6 +87,10 @@ class MessageInputTextView(Gtk.TextView):
 
         self._contact: Optional[ChatContactT] = None
 
+        # XEP-0308 Message Correction
+        self._correcting: dict[ChatContactT, bool] = defaultdict(lambda: False)
+        self._last_message_id: dict[ChatContactT, Optional[str]] = {}
+
         self._chat_action_processor = ChatActionProcessor(self)
 
         self.get_buffer().create_tag('strong', weight=Pango.Weight.BOLD)
@@ -91,10 +105,84 @@ class MessageInputTextView(Gtk.TextView):
         self.connect('destroy', self._on_destroy)
         self.connect('populate-popup', self._on_populate_popup)
 
+        self.register_events([
+            ('message-sent', ged.GUI2, self._on_message_sent)
+        ])
+
         self._language_handler_id = self._init_spell_checker()
         app.settings.connect_signal('use_speller', self._on_toggle_spell_check)
 
         app.plugin_manager.gui_extension_point('message_input', self)
+
+    @property
+    def correcting(self) -> bool:
+        assert self._contact is not None
+        return self._correcting[self._contact]
+
+    @correcting.setter
+    def correcting(self, state: bool) -> None:
+        assert self._contact is not None
+        self._correcting[self._contact] = state
+
+    def get_last_message_id(self, contact: ChatContactT) -> Optional[str]:
+        return self._last_message_id.get(contact)
+
+    def toggle_message_correction(self) -> None:
+        self.clear()
+        self.grab_focus()
+
+        if self.correcting:
+            self.correcting = False
+            self.get_style_context().remove_class('gajim-msg-correcting')
+            return
+
+        assert self._contact is not None
+        last_message_id = self._last_message_id.get(self._contact)
+        if last_message_id is None:
+            return
+
+        message_row = app.storage.archive.get_last_correctable_message(
+            self._contact.account, self._contact.jid, last_message_id)
+        if message_row is None:
+            return
+
+        self.correcting = True
+        self.get_style_context().add_class('gajim-msg-correcting')
+        self.insert_text(message_row.message)
+
+    def try_message_correction(self, message: str) -> Optional[str]:
+        assert self._contact is not None
+        if not self.correcting:
+            return None
+
+        self.toggle_message_correction()
+
+        correct_id = self._last_message_id.get(self._contact)
+        message_row = app.storage.archive.get_last_correctable_message(
+            self._contact.account, self._contact.jid, correct_id)
+        if message_row is None:
+            log.info('Trying to correct message older than threshold')
+            return None
+
+        if message_row.message == message:
+            log.info('Trying to correct message with original text')
+            return None
+
+        return correct_id
+
+    def _on_message_sent(self, event: MessageSent) -> None:
+        if not event.message:
+            return
+
+        if event.correct_id is None:
+            # This wasn't a corrected message
+            assert self._contact is not None
+            oob_url = event.additional_data.get_value('gajim', 'oob_url')
+            if oob_url == event.message:
+                # Don't allow to correct HTTP Upload file transfer URLs
+                self._last_message_id.pop(self._contact)
+            else:
+                self._last_message_id[self._contact] = event.message_id
 
     def _init_spell_checker(self) -> int:
         if not app.is_installed('GSPELL'):
