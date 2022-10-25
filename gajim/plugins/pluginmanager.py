@@ -52,7 +52,12 @@ from gajim.plugins.gajimplugin import GajimPluginException
 log = logging.getLogger('gajim.p.manager')
 
 
-BLOCKED_PLUGINS = []
+BLOCKED_PLUGINS = [
+    'appindicator_integration',
+    'plugin_installer',
+    'syntax_highlight',
+    'url_image_preview'
+]
 
 FIELDS = ('name',
           'short_name',
