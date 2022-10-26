@@ -282,12 +282,11 @@ class PreviewManager:
         if not self._accept_uri(urlparts, uri, additional_data):
             return False
 
-        if uri.startswith('geo:'):
+        if urlparts.scheme == 'geo':
             try:
                 split_geo_uri(uri)
             except Exception as err:
-                log.error(uri)
-                log.error(err)
+                log.info('Bad geo URI %s: %s', uri, err)
                 return False
 
         return True

@@ -33,6 +33,7 @@ from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 from gajim.common.preview import Preview
 from gajim.common.preview_helpers import split_geo_uri
+from gajim.common.preview_helpers import format_geo_coords
 from gajim.common.preview_helpers import contains_audio_streams
 from gajim.common.preview_helpers import get_icon_for_mime_type
 from gajim.common.types import GdkPixbufType
@@ -136,12 +137,10 @@ class PreviewWidget(Gtk.Box):
             self._ui.download_button.hide()
 
             location = split_geo_uri(preview.uri)
-            self._ui.file_size.set_text(_('Lat: %s Lon: %s') % (
-                round(float(location.lat), 5),
-                round(float(location.lon), 5)))
+            text = format_geo_coords(float(location.lat), float(location.lon))
+            self._ui.file_size.set_text(text)
             self._ui.image_button.set_tooltip_text(
-                _('Location at Lat: %s Lon: %s') % (
-                    location.lat, location.lon))
+                _('Location at %s') % text)
             self._ui.preview_box.set_size_request(160, -1)
             return
 

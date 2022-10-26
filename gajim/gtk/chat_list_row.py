@@ -18,6 +18,7 @@ from typing import Optional
 from typing import Any
 
 import pickle
+from urllib.parse import urlparse
 
 from gi.repository import Gdk
 from gi.repository import Gio
@@ -39,6 +40,8 @@ from gajim.common.helpers import get_retraction_text
 from gajim.common.helpers import get_uf_relative_time
 from gajim.common.helpers import message_needs_highlight
 from gajim.common.helpers import AdditionalDataDict
+from gajim.common.preview_helpers import split_geo_uri
+from gajim.common.preview_helpers import format_geo_coords
 from gajim.common.preview_helpers import filename_from_uri
 from gajim.common.preview_helpers import guess_simple_file_type
 from gajim.common.types import ChatContactT
@@ -252,9 +255,16 @@ class ChatListRow(Gtk.ListBoxRow):
             icon = Gio.Icon.new_for_string(icon_name)
         if additional_data is not None:
             if app.preview_manager.is_previewable(text, additional_data):
-                file_name = filename_from_uri(text)
-                icon, file_type = guess_simple_file_type(text)
-                text = f'{file_type} ({file_name})'
+                scheme = urlparse(text).scheme
+                if scheme == 'geo':
+                    location = split_geo_uri(text)
+                    icon = Gio.Icon.new_for_string('mark-location')
+                    text = format_geo_coords(
+                        float(location.lat), float(location.lon))
+                else:
+                    file_name = filename_from_uri(text)
+                    icon, file_type = guess_simple_file_type(text)
+                    text = f'{file_type} ({file_name})'
 
         text = GLib.markup_escape_text(text)
         if text.startswith('/me') and nickname is not None:

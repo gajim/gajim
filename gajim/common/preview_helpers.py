@@ -47,6 +47,7 @@ from cryptography.hazmat.primitives.ciphers.modes import GCM
 
 from gajim.common.helpers import sanitize_filename
 from gajim.common.i18n import _
+from gajim.common.i18n import P_
 
 log = logging.getLogger('gajim.c.preview_helpers')
 
@@ -382,6 +383,26 @@ def split_geo_uri(uri: str) -> Coords:
     return Coords(location=location, lat=lat, lon=lon)
 
 
+def format_geo_coords(lat: float, lon: float) -> str:
+    def fmt(f: float) -> str:
+        i = int(round(f * 3600.0))
+        seconds = i % 60
+        i //= 60
+        minutes = i % 60
+        i //= 60
+        degrees = i
+        return '%d°%02d′%02d′′' % (degrees, minutes, seconds)
+    if lat >= 0:
+        slat = P_('positive latitude', '%sN') % fmt(lat)
+    else:
+        slat = P_('negative latitude', '%sS') % fmt(-lat)
+    if lon >= 0:
+        slon = P_('positive longitude', '%sE') % fmt(lon)
+    else:
+        slon = P_('negative longitude', '%sW') % fmt(-lon)
+    return '%s %s' % (slat, slon)
+
+
 def filename_from_uri(uri: str) -> str:
     urlparts = urlparse(unquote(uri))
     path = Path(urlparts.path)
@@ -389,7 +410,7 @@ def filename_from_uri(uri: str) -> str:
 
 
 def aes_decrypt(key: bytes, iv: bytes, payload: bytes) -> bytes:
-    # Use AES128 GCM with the given key and iv to decrypt the payload
+    # Use AES256 GCM with the given key and iv to decrypt the payload
     data = payload[:-16]
     tag = payload[-16:]
     decryptor = Cipher(algorithms.AES(key),
@@ -447,8 +468,6 @@ def guess_simple_file_type(file_path: str,
     if mime_type == 'application/octet-stream':
         mime_type = ''
     icon = get_icon_for_mime_type(mime_type)
-    if file_path.startswith('geo:'):
-        return icon, _('Location')
     if mime_type.startswith('audio/'):
         return icon, _('Audio File')
     if mime_type.startswith('image/'):

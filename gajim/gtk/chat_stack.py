@@ -20,6 +20,7 @@ from typing import Union
 import sys
 import logging
 import time
+from urllib.parse import urlparse
 
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -40,6 +41,8 @@ from gajim.common.const import CallType
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.preview_helpers import split_geo_uri
+from gajim.common.preview_helpers import format_geo_coords
 from gajim.common.structs import OutgoingMessage
 from gajim.common.types import ChatContactT
 from gajim.gui.dialogs import ErrorDialog
@@ -389,8 +392,11 @@ class ChatStack(Gtk.Stack, EventHelper):
         is_previewable = app.preview_manager.is_previewable(
             text, additional_data)
         if is_previewable:
-            if text.startswith('geo:'):
-                text = _('Location')
+            scheme = urlparse(text).scheme
+            if scheme == 'geo':
+                location = split_geo_uri(text)
+                text = format_geo_coords(
+                    float(location.lat), float(location.lon))
             else:
                 file_name = preview_helpers.filename_from_uri(text)
                 _icon, file_type = preview_helpers.guess_simple_file_type(text)
