@@ -152,7 +152,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
             return True
 
         if row[Column.RESTART]:
-            tooltip.set_text(_('Restart Gajim for changes to take affect'))
+            tooltip.set_text(_('Restart Gajim for changes to take effect'))
             return True
 
         if row[Column.HAS_ERROR]:
