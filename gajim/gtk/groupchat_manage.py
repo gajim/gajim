@@ -120,12 +120,14 @@ class GroupchatManage(Gtk.Box):
     def _on_room_subject(self,
                          _contact: GroupchatContact,
                          _signal_name: str,
-                         subject: Optional[MucSubject]
+                         subject: MucSubject
                          ) -> None:
-        if subject is None:
-            return
 
         self._ui.subject_textview.get_buffer().set_text(subject.text)
+
+        assert self._contact.subject is not None
+        self._ui.subject_change_button.set_sensitive(
+            subject.text != self._contact.subject.text)
 
     def _prepare_manage(self) -> None:
         joined = self._contact.is_joined

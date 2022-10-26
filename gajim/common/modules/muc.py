@@ -810,20 +810,20 @@ class MUC(BaseModule):
         old_subject = muc_data.subject
 
         muc_subject = properties.muc_subject
+        assert muc_subject is not None
         muc_data.subject = muc_subject
 
-        if muc_subject is not None:
-            if muc_subject.timestamp is None:
-                muc_subject = muc_subject._replace(timestamp=time.time())
+        if muc_subject.timestamp is None:
+            muc_subject = muc_subject._replace(timestamp=time.time())
 
-            if old_subject is None:
-                muc_data.last_subject_timestamp = time.time()
-                room.notify('room-subject', muc_subject)
-            else:
-                # Check if we already showed that subject (rejoin)
-                if old_subject.text != muc_subject.text:
-                    muc_data.last_subject_timestamp = time.time()
-                    room.notify('room-subject', muc_subject)
+        if old_subject is None:
+            muc_data.last_subject_timestamp = time.time()
+            room.notify('room-subject', muc_subject)
+
+        elif old_subject.text != muc_subject.text:
+            # Check if we already showed that subject (rejoin)
+            muc_data.last_subject_timestamp = time.time()
+            room.notify('room-subject', muc_subject)
 
         if muc_data.state == MUCJoinedState.JOINING:
             self._room_join_complete(muc_data)
