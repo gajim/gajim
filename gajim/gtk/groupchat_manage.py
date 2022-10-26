@@ -12,7 +12,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
-from typing import Optional
 
 import logging
 
