@@ -126,11 +126,16 @@ class ExceptionDialog(Gtk.ApplicationWindow):
         buffer_ = self._ui.exception_view.get_buffer()
         buffer_.set_text(self._issue_text)
 
+        self.connect('key-press-event', self._on_key_press)
         self._ui.connect_signals(self)
         self.show_all()
 
         if self._sentry_available:
             self._ui.user_feedback_entry.grab_focus()
+
+    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
+        if event.keyval == Gdk.KEY_Escape:
+            self.destroy()
 
     def _on_report_clicked(self, _button: Gtk.Button) -> None:
         if self._sentry_available and determine_proxy() is not None:
