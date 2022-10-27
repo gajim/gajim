@@ -41,12 +41,15 @@ class MessageWidget(Gtk.Box):
         self._selectable = selectable
 
         self._content = cast(ContentT, None)
+        self._action_phrase_text = ''
 
     def get_content(self) -> ContentT:
         return self._content
 
     def get_text(self) -> str:
-        return self._content.text
+        if self._content is not None:
+            return self._content.text
+        return self._action_phrase_text
 
     def add_with_styling(self,
                          text: str,
@@ -65,6 +68,8 @@ class MessageWidget(Gtk.Box):
         widget.add_action_phrase(text, nickname)
         widget.show_all()
         self.add(widget)
+
+        self._action_phrase_text = text.replace('/me', f'* {nickname}', 1)
 
     def add_content(self, content: ContentT) -> None:
         self.clear()
