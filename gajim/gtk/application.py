@@ -630,7 +630,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         jid, initial_message = param.get_strv()
         open_window('StartChatDialog',
-                    jid=jid or None,
+                    initial_jid=jid or None,
                     initial_message=initial_message or None)
 
     @staticmethod
@@ -740,7 +740,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
             app.interface.show_add_join_groupchat(
                 accounts[0], GAJIM_SUPPORT_JID)
             return
-        open_window('StartChatDialog', jid=GAJIM_SUPPORT_JID)
+        open_window('StartChatDialog', initial_jid=GAJIM_SUPPORT_JID)
 
     @staticmethod
     def _on_faq_action(_action: Gio.SimpleAction,
