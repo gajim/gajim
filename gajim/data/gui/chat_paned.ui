@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkPaned" id="paned">
@@ -129,11 +129,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="start_chat_button">
+                  <object class="GtkMenuButton" id="start_chat_menu_button">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="receives-default">True</property>
-                    <property name="tooltip-text" translatable="yes">Start Chat</property>
+                    <property name="tooltip-text" translatable="yes">Start Chat…</property>
                     <child>
                       <object class="GtkImage">
                         <property name="visible">True</property>
@@ -141,11 +142,14 @@
                         <property name="icon-name">list-add-symbolic</property>
                       </object>
                     </child>
+                    <style>
+                      <class name="suggested-action"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>
