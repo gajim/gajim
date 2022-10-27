@@ -19,6 +19,7 @@ from typing import Union
 
 from gi.repository import Gdk
 from gi.repository import Gio
+from gi.repository import GLib
 from gi.repository import Gtk
 
 from nbxmpp.protocol import JID
@@ -85,6 +86,11 @@ class AccountPage(Gtk.Box, EventHelper):
             roster_menu.append(label, f'win.{action}')
         self._ui.roster_menu_button.set_menu_model(roster_menu)
 
+        self._ui.edit_profile_button.set_action_name(
+            f'app.{self._account}-profile')
+        self._ui.edit_profile_button.set_action_target_value(
+            GLib.Variant('s', self._account))
+
         self._ui.connect_signals(self)
 
         app.settings.connect_signal(
@@ -116,9 +122,6 @@ class AccountPage(Gtk.Box, EventHelper):
 
     def _on_avatar_update(self, *args: Any) -> None:
         self.update()
-
-    def _on_edit_profile(self, _button: Gtk.Button) -> None:
-        open_window('ProfileWindow', account=self._account)
 
     def _on_account_settings(self, _button: Gtk.Button) -> None:
         window = open_window('AccountsWindow')

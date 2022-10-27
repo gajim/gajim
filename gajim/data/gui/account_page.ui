@@ -154,14 +154,13 @@
                           </packing>
                         </child>
                         <child type="overlay">
-                          <object class="GtkButton">
+                          <object class="GtkButton" id='edit_profile_button'>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="receives-default">True</property>
                             <property name="tooltip-text" translatable="yes">Edit Profile…</property>
                             <property name="halign">end</property>
                             <property name="valign">start</property>
-                            <signal name="clicked" handler="_on_edit_profile" swapped="no"/>
                             <child>
                               <object class="GtkImage">
                                 <property name="visible">True</property>
