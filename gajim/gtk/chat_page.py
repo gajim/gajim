@@ -317,7 +317,7 @@ class ChatPage(Gtk.Box):
         if self._chat_control.is_loaded(account, jid):
             self._chat_control.clear()
 
-        if type_ == 'groupchat':
+        if type_ == 'groupchat' and app.account_is_connected(account):
             client = app.get_client(account)
             client.get_module('MUC').leave(jid)
 
