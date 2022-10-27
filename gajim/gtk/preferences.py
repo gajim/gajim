@@ -277,8 +277,12 @@ class General(PreferenceBox):
             Setting(SettingKind.SWITCH,
                     _('Show Send Message Button'),
                     SettingType.CONFIG,
-                    'show_send_message_button',
-                    callback=self._on_show_send_message_button),
+                    'show_send_message_button'),
+
+            Setting(SettingKind.SWITCH,
+                    _('Send Messages with Control+Enter'),
+                    SettingType.CONFIG,
+                    'send_on_ctrl_enter'),
 
             Setting(SettingKind.SWITCH,
                     _('Spell Checking'),
@@ -299,12 +303,6 @@ class General(PreferenceBox):
     @staticmethod
     def _speller_available() -> bool:
         return app.is_installed('GSPELL')
-
-    @staticmethod
-    def _on_show_send_message_button(show_button: bool, *args: Any) -> None:
-        # Bind to send_on_ctrl_enter to make this setting user-friendly
-        # This way, users can press Enter to insert a new line, then click Send
-        app.settings.set('send_on_ctrl_enter', show_button)
 
 
 class Chats(PreferenceBox):
