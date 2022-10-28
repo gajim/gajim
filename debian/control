@@ -16,6 +16,7 @@ Build-Depends:
     python3-packaging,
     python3-pil,
     gir1.2-gtk-3.0 (>=3.24.30),
+    gir1.2-gtksource-4,
 Rules-Requires-Root: no
 Standards-Version: 4.1.4
 Homepage: https://gajim.org/
