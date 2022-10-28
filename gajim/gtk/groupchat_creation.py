@@ -23,6 +23,7 @@ from gi.repository import Gdk
 
 from nbxmpp.errors import StanzaError
 from nbxmpp.task import Task
+from nbxmpp.protocol import  JID
 
 from gajim.common import app
 from gajim.common import ged
@@ -294,10 +295,15 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
 
         # Create new group chat by joining
         assert self._account is not None
-        app.interface.create_groupchat(
-            self._account,
-            str(room_jid),
-            config)
+
+        if app.window.chat_exists(self._account, JID.from_string(room_jid)):
+            log.error('Trying to create groupchat '
+                      'which is already added as chat')
+            self.destroy()
+            return
+
+        client = app.get_client(self._account)
+        client.get_module('MUC').create(room_jid, config)
 
         self.destroy()
 

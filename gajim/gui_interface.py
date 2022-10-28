@@ -34,9 +34,7 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Dict
 from typing import Optional
-from typing import Union
 
 import sys
 import time
@@ -333,19 +331,6 @@ class Interface:
                 contact.account,
                 contact)
             SendFileDialog(contact, send_callback, app.window, [path])
-
-    @staticmethod
-    def create_groupchat(account: str,
-                         room_jid: str,
-                         config: Dict[str, Union[str, bool]]
-                         ) -> None:
-        if app.window.chat_exists(account, JID.from_string(room_jid)):
-            log.error('Trying to create groupchat '
-                      'which is already added as chat')
-            return
-
-        client = app.get_client(account)
-        client.get_module('MUC').create(room_jid, config)
 
     @staticmethod
     def show_add_join_groupchat(account: str,
