@@ -768,7 +768,7 @@ RFC5646_LANGUAGE_TAGS = {
     'uz-UZ': 'Uzbek (Latin) (Uzbekistan)',
     'uz-Cyrl-UZ': 'Uzbek (Cyrillic) (Uzbekistan)',
     'vi': 'Vietnamese',
-    'vi-VN': 'Vietnamese (Viet Nam)',
+    'vi-VN': 'Vietnamese (Vietnam)',
     'xh': 'Xhosa',
     'xh-ZA': 'Xhosa (South Africa)',
     'zh': 'Chinese',
