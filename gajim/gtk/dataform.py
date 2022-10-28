@@ -254,6 +254,7 @@ class SizeAdjustment:
         left_width = options.get('left-width', 100)
         self._left_box.set_size_request(left_width, -1)
         self._right_box.set_hexpand(True)
+        self._right_box.set_size_request(250, -1)
 
     def add(self, form_grid: FormGrid, row_number: int) -> None:
         form_grid.attach(self._left_box, 0, row_number, 1, 1)
