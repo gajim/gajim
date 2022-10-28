@@ -79,17 +79,6 @@ class AddContactBuilder(Builder):
     commands_button: Gtk.Button
 
 
-class AdhocMucBuilder(Builder):
-    guests_store: Gtk.ListStore
-    server_store: Gtk.ListStore
-    adhoc_box: Gtk.Box
-    description_label: Gtk.Label
-    guests_treeview: Gtk.TreeView
-    server_combobox: Gtk.ComboBox
-    server_entry: Gtk.Entry
-    invite_button: Gtk.Button
-
-
 class AdvancedConfigurationBuilder(Builder):
     box: Gtk.Box
     search_entry: Gtk.SearchEntry
@@ -940,8 +929,6 @@ def get_builder(file_name: Literal['account_page.ui'], widgets: list[str] = ...)
 def get_builder(file_name: Literal['account_wizard.ui'], widgets: list[str] = ...) -> AccountWizardBuilder: ...
 @overload
 def get_builder(file_name: Literal['add_contact.ui'], widgets: list[str] = ...) -> AddContactBuilder: ...
-@overload
-def get_builder(file_name: Literal['adhoc_muc.ui'], widgets: list[str] = ...) -> AdhocMucBuilder: ...
 @overload
 def get_builder(file_name: Literal['advanced_configuration.ui'], widgets: list[str] = ...) -> AdvancedConfigurationBuilder: ...
 @overload

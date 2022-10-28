@@ -449,7 +449,6 @@ class ChatStack(Gtk.Stack, EventHelper):
     def _connect_actions(self) -> None:
         actions = [
             'add-to-roster',
-            'invite-contacts',
             'send-file',
             'send-file-httpupload',
             'send-file-jingle',
@@ -573,9 +572,6 @@ class ChatStack(Gtk.Stack, EventHelper):
                 return
 
             app.interface.start_file_transfer(contact)
-
-        elif action_name == 'invite-contacts':
-            open_window('AdhocMUC', account=account, contact=contact)
 
         elif action_name == 'add-to-roster':
             if (isinstance(contact, GroupchatParticipant) and
