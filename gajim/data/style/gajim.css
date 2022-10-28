@@ -686,6 +686,15 @@ infobar.error > revealer > box {
 }
 #GroupchatConfig treeview { padding: 5px; }
 
+.message-selection-box {
+    background-color: alpha(rgb(70, 70, 70), 0.9);
+    padding: 12px;
+    border-radius: 6px;
+}
+.message-selection-box > label {
+    color: rgb(230, 230, 230);
+}
+
 .groupchat-state box {
     background-color: alpha(rgb(70, 70, 70), 0.9);
     padding: 12px;

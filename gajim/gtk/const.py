@@ -192,6 +192,7 @@ MAIN_WIN_ACTIONS = [
     ('input-strike', None, True),
     ('input-clear', None, True),
     ('show-emoji-chooser', None, True),
+    ('activate-message-selection', 'u', True),
     ('correct-message', None, False),
     ('quote', 's', False),
     ('mention', 's', False),

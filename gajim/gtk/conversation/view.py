@@ -27,6 +27,7 @@ import time
 from datetime import datetime
 from datetime import timedelta
 
+from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GObject
 from gi.repository import Gio
@@ -41,6 +42,7 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common import events
 from gajim.common.helpers import AdditionalDataDict
+from gajim.common.helpers import from_one_line
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_start_of_day
 from gajim.common.modules.contacts import GroupchatContact
@@ -141,6 +143,42 @@ class ConversationView(Gtk.ScrolledWindow):
         app.window.get_action('scroll-view-down').connect(
             'activate', self._on_scroll_view)
 
+    def copy_selected_messages(self) -> None:
+        time_format = from_one_line(app.settings.get('chat_timestamp_format'))
+        selection_text = ''
+        for row in cast(list[BaseRow], self._list_box.get_selected_rows()):
+            if isinstance(row, MessageRow):
+                timestamp_formatted = row.timestamp.strftime(time_format)
+                selection_text += (f'{timestamp_formatted} - {row.name}: '
+                                   f'{row.get_text()}\n')
+
+        clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        clip.set_text(selection_text, -1)
+
+        self.disable_message_selection()
+
+    def enable_message_selection(self,
+                                 log_line_id: Optional[int]
+                                 ) -> None:
+
+        self._list_box.set_selection_mode(Gtk.SelectionMode.MULTIPLE)
+
+        if log_line_id is not None:
+            row = self.get_row_by_log_line_id(log_line_id)
+            self._list_box.select_row(row)
+
+        for row in self.iter_rows():
+            if isinstance(row, MessageRow):
+                row.enable_selection_mode()
+
+    def disable_message_selection(self) -> None:
+        self._list_box.unselect_all()
+        self._list_box.set_selection_mode(Gtk.SelectionMode.NONE)
+
+        for row in self.iter_rows():
+            if isinstance(row, MessageRow):
+                row.disable_selection_mode()
+
     def _on_scroll_view(self,
                         action: Gio.SimpleAction,
                         _param: Literal[None]) -> None:
@@ -186,6 +224,8 @@ class ConversationView(Gtk.ScrolledWindow):
         self._enable_signal_handlers(False)
         self._block_signals = True
         self._reset()
+
+        self.disable_message_selection()
 
         self._read_marker_row = ReadMarkerRow(self._contact)
         self._list_box.add(self._read_marker_row)

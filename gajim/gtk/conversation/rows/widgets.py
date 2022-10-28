@@ -79,7 +79,7 @@ class MoreMenuButton(Gtk.Button):
         show_retract = False
         if isinstance(self._contact, GroupchatContact):
             if not self._contact.is_joined:
-                self._create_popover(show_retract=False)
+                self._create_popover()
                 return
 
             contact = self._contact.get_resource(self._name)
@@ -99,13 +99,14 @@ class MoreMenuButton(Gtk.Button):
             show_correction = app.window.is_message_correctable(
                 self._contact, self._row.message_id)
 
-        self._create_popover(show_retract=show_retract,
-                             show_correction=show_correction)
+        self._create_popover(show_retract,
+                             show_correction)
 
     def _create_popover(self,
                         show_retract: bool = False,
                         show_correction: bool = False
                         ) -> None:
+
         menu_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         menu_box.get_style_context().add_class('padding-6')
 
@@ -135,6 +136,14 @@ class MoreMenuButton(Gtk.Button):
             'edit-copy-symbolic', Gtk.IconSize.MENU))
         menu_box.add(copy_button)
 
+        select_button = Gtk.ModelButton()
+        select_button.set_halign(Gtk.Align.START)
+        select_button.connect('clicked', self._on_activate_message_selection)
+        select_button.set_label(Q_('?Message row action:Select Messages…'))
+        select_button.set_image(Gtk.Image.new_from_icon_name(
+            'edit-select-symbolic', Gtk.IconSize.MENU))
+        menu_box.add(select_button)
+
         if show_correction:
             correct_button = Gtk.ModelButton()
             correct_button.set_halign(Gtk.Align.START)
@@ -163,6 +172,11 @@ class MoreMenuButton(Gtk.Button):
         popover.set_position(Gtk.PositionType.BOTTOM)
         popover.connect('closed', self._on_closed)
         popover.popup()
+
+    def _on_activate_message_selection(self, _button: Gtk.ModelButton) -> None:
+        app.window.activate_action(
+            'activate-message-selection',
+            GLib.Variant('u', self._row.log_line_id))
 
     @staticmethod
     def _on_closed(popover: Gtk.Popover) -> None:

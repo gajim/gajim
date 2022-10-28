@@ -39,6 +39,7 @@ class BaseRow(Gtk.ListBoxRow):
         self.text: str = ''
         self._merged: bool = False
 
+        self.set_selectable(False)
         self.set_can_focus(False)
         self.get_style_context().add_class('conversation-row')
 

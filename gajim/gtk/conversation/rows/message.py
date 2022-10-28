@@ -92,6 +92,8 @@ class MessageRow(BaseRow):
         self.additional_data = additional_data
         self.display_marking = display_marking
 
+        self.set_selectable(True)
+
         self._account = account
         self._contact = contact
 
@@ -198,6 +200,14 @@ class MessageRow(BaseRow):
 
         self.show_all()
 
+    def enable_selection_mode(self) -> None:
+        if isinstance(self._message_widget, MessageWidget):
+            self._message_widget.set_selectable(False)
+
+    def disable_selection_mode(self) -> None:
+        if isinstance(self._message_widget, MessageWidget):
+            self._message_widget.set_selectable(True)
+
     def _add_security_label(self,
                             display_marking: Optional[Displaymarking]
                             ) -> None:
@@ -299,17 +309,20 @@ class MessageRow(BaseRow):
             return False
         return abs(message.timestamp - self.timestamp) < MERGE_TIMEFRAME
 
+    def get_text(self) -> str:
+        return self._message_widget.get_text()
+
     def on_copy_message(self, _widget: Gtk.Widget) -> None:
         time_format = from_one_line(app.settings.get('chat_timestamp_format'))
         timestamp_formatted = self.timestamp.strftime(time_format)
 
         clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        text = self._message_widget.get_text()
+        text = self.get_text()
         clip.set_text(f'{timestamp_formatted} - {self.name}: {text}', -1)
 
     def on_quote_message(self, _widget: Gtk.Widget) -> None:
         app.window.activate_action(
-            'quote', GLib.Variant('s', self._message_widget.get_text()))
+            'quote', GLib.Variant('s', self.get_text()))
 
     def on_correct_message(self, _widget: Gtk.Widget) -> None:
         app.window.activate_action('correct-message', None)
