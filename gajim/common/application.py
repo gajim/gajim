@@ -41,11 +41,12 @@ from gajim.common import logging_helpers
 from gajim.common import passwords
 from gajim.common.commands import ChatCommands
 from gajim.common.dbus import logind
-from gajim.common.events import AccountDisconnected
 from gajim.common.events import AccountDisabled
+from gajim.common.events import AccountDisconnected
 from gajim.common.events import AccountEnabled
 from gajim.common.events import AllowGajimUpdateCheck
 from gajim.common.events import GajimUpdateAvailable
+from gajim.common.events import SignedIn
 from gajim.common.client import Client
 from gajim.common.helpers import make_http_request
 from gajim.common.helpers import get_random_string
@@ -59,8 +60,9 @@ from gajim.common.storage.draft import DraftStorage
 from gajim.common.storage.archive import MessageArchiveStorage
 
 
-class CoreApplication:
+class CoreApplication(ged.EventHelper):
     def __init__(self) -> None:
+        ged.EventHelper.__init__(self)
         self._profiling_session = None
 
     def _init_core(self) -> None:
@@ -110,6 +112,10 @@ class CoreApplication:
 
         for account in app.settings.get_active_accounts():
             app.connections[account] = Client(account)
+
+        self.register_events([
+            ('signed-in', ged.CORE, self._on_signed_in),
+        ])
 
     @property
     def _log(self) -> logging.Logger:
@@ -363,3 +369,10 @@ class CoreApplication:
         passwords.delete_password(account)
         app.settings.remove_account(account)
         app.app.remove_account_actions(account)
+
+    def _on_signed_in(self, event: SignedIn) -> None:
+        client = app.get_client(event.account)
+        app.storage.archive.insert_jid(client.get_own_jid().bare)
+
+        if client.get_module('MAM').available:
+            client.get_module('MAM').request_archive_on_signin()

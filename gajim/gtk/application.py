@@ -267,9 +267,9 @@ class GajimApplication(Gtk.Application, CoreApplication):
         menus.build_accounts_menu()
         self.update_app_actions_state()
 
-        app.ged.register_event_handler('feature-discovered',
-                                       ged.CORE,
-                                       self._on_feature_discovered)
+        self.register_event('feature-discovered',
+                            ged.CORE,
+                            self._on_feature_discovered)
 
         from gajim.gui.main import MainWindow
         MainWindow()

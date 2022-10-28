@@ -52,7 +52,6 @@ from nbxmpp import Hashes2
 from nbxmpp import JID
 
 from gajim.common import app
-from gajim.common import ged
 from gajim.common import exceptions
 from gajim.common import proxy65_manager
 from gajim.common import socks5
@@ -87,8 +86,6 @@ class Interface:
         app.interface = self
         app.thread_interface = ThreadInterface
 
-        self.handlers = {}
-
         app.idlequeue = idlequeue.get_idlequeue()
         # resolve and keep current record of resolved hosts
         app.socks5queue = socks5.SocksQueue(
@@ -101,7 +98,6 @@ class Interface:
 
         app.proxy65_manager = proxy65_manager.Proxy65Manager(app.idlequeue)
 
-        self._create_core_handlers_list()
         self._register_core_handlers()
 
         self.instances: dict[str, Any] = {}
@@ -110,61 +106,6 @@ class Interface:
             app.automatic_rooms[acc] = {}
             app.to_be_removed[acc] = []
             app.nicks[acc] = app.settings.get_account_setting(acc, 'name')
-
-    def _create_core_handlers_list(self) -> None:
-        # pylint: disable=line-too-long
-        self.handlers = {
-            'signed-in': [self.handle_event_signed_in],
-            'message-sent': [self.handle_event_msgsent],
-        }
-        # pylint: enable=line-too-long
-
-    def _register_core_handlers(self) -> None:
-        '''
-        Register core handlers in Global Events Dispatcher (GED).
-
-        This is part of rewriting whole events handling system to use GED.
-        '''
-        for event_name, event_handlers in self.handlers.items():
-            for event_handler in event_handlers:
-                prio = ged.GUI1
-                if isinstance(event_handler, tuple):
-                    prio = event_handler[1]
-                    event_handler = event_handler[0]
-                app.ged.register_event_handler(
-                    event_name,
-                    prio,
-                    event_handler)
-
-    @staticmethod
-    def handle_event_signed_in(event):
-        '''
-        SIGNED_IN event is emitted when we sign in, so handle it
-        '''
-        # ('SIGNED_IN', account, ())
-        # block signed in notifications for 30 seconds
-
-        # Add our own JID into the DB
-        app.storage.archive.insert_jid(event.conn.get_own_jid().bare)
-        account = event.conn.name
-
-        if event.conn.get_module('MAM').available:
-            event.conn.get_module('MAM').request_archive_on_signin()
-
-        if app.settings.get('ask_online_status'):
-            app.window.show_account_page(account)
-
-    @staticmethod
-    def handle_event_msgsent(event):
-        if not event.play_sound:
-            return
-
-        enabled = app.settings.get_soundevent_settings(
-            'message_sent')['enabled']
-        if enabled:
-            if isinstance(event.jid, list) and len(event.jid) > 1:
-                return
-            helpers.play_sound('message_sent', event.account)
 
     # Jingle File Transfer
     @staticmethod

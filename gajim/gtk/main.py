@@ -37,6 +37,7 @@ from gajim.common.const import Display
 from gajim.common.const import SimpleClientState
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
+from gajim.common.helpers import play_sound
 from gajim.common.modules.bytestream import is_transfer_active
 from gajim.plugins.pluginmanager import PluginManifest
 from gajim.plugins.repository import PluginRepository
@@ -129,6 +130,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('password-required', ged.GUI1, self._on_password_required),
             ('http-auth', ged.GUI1, self._on_http_auth),
             ('muc-added', ged.GUI1, self._on_muc_added),
+            ('message-sent', ged.GUI1, self._on_message_sent),
+            ('signed-in', ged.GUI1, self._on_signed_in),
         ])
 
         app.plugin_repository.connect('plugin-updates-available',
@@ -318,6 +321,21 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             return
 
         self.add_group_chat(event.account, event.jid)
+
+    def _on_message_sent(self, event: events.MessageSent) -> None:
+        if not event.play_sound:
+            return
+
+        enabled = app.settings.get_soundevent_settings(
+            'message_sent')['enabled']
+        if enabled:
+            if isinstance(event.jid, list) and len(event.jid) > 1:
+                return
+            play_sound('message_sent', event.account)
+
+    def _on_signed_in(self, event: events.SignedIn) -> None:
+        if app.settings.get('ask_online_status'):
+            self.show_account_page(event.account)
 
     def _add_actions(self) -> None:
         for action, variant_type, enabled in MAIN_WIN_ACTIONS:
