@@ -284,9 +284,9 @@ class FileTransferJingleRow(BaseRow):
             if self._start_time == 0:
                 self._start_time = time_now
                 return
-            if not file_props.transfered_size:
+            if not file_props.transferred_size:
                 return
-            transferred_size = file_props.transfered_size[-1][1]
+            transferred_size = file_props.transferred_size[-1][1]
         else:
             # We're receiving a file
             transferred_size = file_props.received_len

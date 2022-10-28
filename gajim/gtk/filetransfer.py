@@ -571,27 +571,27 @@ class FileTransfersWindow:
         _str += str(percent) + '%          \n'
         return _str
 
-    def _get_eta_and_speed(self, full_size, transfered_size, file_props):
-        if not file_props.transfered_size:
+    def _get_eta_and_speed(self, full_size, transferred_size, file_props):
+        if not file_props.transferred_size:
             return 0., 0.
 
         if file_props.elapsed_time == 0:
             return 0., 0.
 
-        if len(file_props.transfered_size) == 1:
-            speed = round(float(transfered_size) / file_props.elapsed_time)
+        if len(file_props.transferred_size) == 1:
+            speed = round(float(transferred_size) / file_props.elapsed_time)
         else:
-            # first and last are (time, transfered_size)
-            first = file_props.transfered_size[0]
-            last = file_props.transfered_size[-1]
-            transfered = last[1] - first[1]
+            # first and last are (time, transferred_size)
+            first = file_props.transferred_size[0]
+            last = file_props.transferred_size[-1]
+            transferred = last[1] - first[1]
             tim = last[0] - first[0]
             if tim == 0:
                 return 0., 0.
-            speed = round(float(transfered) / tim)
+            speed = round(float(transferred) / tim)
         if speed == 0.:
             return 0., 0.
-        remaining_size = full_size - transfered_size
+        remaining_size = full_size - transferred_size
         eta = remaining_size / speed
         return eta, speed
 
@@ -616,9 +616,9 @@ class FileTransfersWindow:
             event.file_props.sid,
             event.file_props.received_len)
 
-    def set_progress(self, typ, sid, transfered_size, iter_=None):
+    def set_progress(self, typ, sid, transferred_size, iter_=None):
         '''
-        Change the progress of a transfer with new transfered size
+        Change the progress of a transfer with new transferred size
         '''
         if time.time() - self._last_progress_update < 0.5:
             # Update window every 500ms only
@@ -633,7 +633,7 @@ class FileTransfersWindow:
         if full_size == 0:
             percent = 0
         else:
-            percent = round(float(transfered_size) / full_size * 100, 1)
+            percent = round(float(transferred_size) / full_size * 100, 1)
         if iter_ is None:
             iter_ = self.get_iter_by_sid(typ, sid)
         if iter_ is not None:
@@ -641,24 +641,24 @@ class FileTransfersWindow:
             if self.model[iter_][Column.PERCENT] == 0 and int(percent > 0):
                 just_began = True
             text = self._format_percent(percent)
-            if transfered_size == 0:
+            if transferred_size == 0:
                 text += '0'
             else:
-                text += GLib.format_size_full(transfered_size, self.units)
+                text += GLib.format_size_full(transferred_size, self.units)
             text += '/' + GLib.format_size_full(full_size, self.units)
             # Kb/s
 
             # remaining time
             if file_props.offset:
-                transfered_size -= file_props.offset
+                transferred_size -= file_props.offset
                 full_size -= file_props.offset
 
             if file_props.elapsed_time > 0:
-                file_props.transfered_size.append((file_props.last_time,
-                                                   transfered_size))
-            if len(file_props.transfered_size) > 6:
-                file_props.transfered_size.pop(0)
-            eta, speed = self._get_eta_and_speed(full_size, transfered_size,
+                file_props.transferred_size.append((file_props.last_time,
+                                                   transferred_size))
+            if len(file_props.transferred_size) > 6:
+                file_props.transferred_size.pop(0)
+            eta, speed = self._get_eta_and_speed(full_size, transferred_size,
                                                  file_props)
 
             self.model.set(iter_, Column.PROGRESS, text)
@@ -684,7 +684,7 @@ class FileTransfersWindow:
             if file_props.connected is False:
                 status = 'stop'
             self.model.set(iter_, 0, self.icons[status])
-            if transfered_size == full_size:
+            if transferred_size == full_size:
                 # If we are receiver and this is a jingle session
                 if (file_props.type_ == 'r' and
                         file_props.session_type == 'jingle' and
@@ -923,7 +923,7 @@ class FileTransfersWindow:
             file_props.paused = True
             self.set_status(file_props, 'pause')
             # Reset that to compute speed only when we resume
-            file_props.transfered_size = []
+            file_props.transferred_size = []
             self._toggle_pause_continue(False)
 
     def _on_cancel_button_clicked(self, widget):

@@ -112,7 +112,7 @@ class FileProp:
         # Do not instantiate this class directly!
         # Call FilesProp.getNeFileProp instead
         self.streamhosts = []
-        self.transfered_size: list[tuple[float, int]] = []
+        self.transferred_size: list[tuple[float, int]] = []
         self.started: bool = False
         self.completed: bool = False
         self.paused: bool = False

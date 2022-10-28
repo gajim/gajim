@@ -329,11 +329,11 @@ class FileTransfersTooltip:
         properties.append((Q_('?transfer type:Type: '), type_))
         properties.append((actor, GLib.markup_escape_text(name)))
 
-        transfered_len = file_prop.received_len
-        if not transfered_len:
-            transfered_len = 0
+        transferred_len = file_prop.received_len
+        if not transferred_len:
+            transferred_len = 0
         properties.append((Q_('?transfer status:Transferred: '),
-                           GLib.format_size_full(transfered_len, self.units)))
+                           GLib.format_size_full(transferred_len, self.units)))
         status = self._get_current_status(file_prop)
         properties.append((Q_('?transfer status:Status: '), status))
         file_desc = file_prop.desc or ''

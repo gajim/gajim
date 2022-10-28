@@ -123,7 +123,7 @@ class JingleFileTransfer(JingleContent):
             self.file_props.receiver = self.session.peerjid
         self.file_props.session_type = 'jingle'
         self.file_props.sid = session.sid
-        self.file_props.transfered_size = []
+        self.file_props.transferred_size = []
         self.file_props.transport_sid = self.transport.sid
 
         self.session = session
@@ -262,7 +262,7 @@ class JingleFileTransfer(JingleContent):
         file_desc_tag = file_tag.getTag('desc')
         if file_desc_tag is not None:
             file_props.desc = file_desc_tag.getData()
-        file_props.transfered_size = []
+        file_props.transferred_size = []
 
         app.ged.raise_event(FileRequestReceivedEvent(
             conn=con,
