@@ -72,6 +72,7 @@ class GroupchatConfig(Gtk.Box):
     def _set_form(self, form: Any) -> None:
         self._data_form_widget = DataFormWidget(form)
         self._data_form_widget.connect('is-valid', self._on_is_valid)
+        self._data_form_widget.get_style_context().add_class('padding-12')
         self._data_form_widget.show_all()
         self._ui.config_box.add(self._data_form_widget)
         self._ui.stack.set_visible_child_name('config')
