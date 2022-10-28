@@ -98,8 +98,6 @@ class Interface:
 
         app.proxy65_manager = proxy65_manager.Proxy65Manager(app.idlequeue)
 
-        self._register_core_handlers()
-
         self.instances: dict[str, Any] = {}
 
         for acc in app.settings.get_active_accounts():
