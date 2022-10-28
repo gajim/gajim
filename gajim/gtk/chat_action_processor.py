@@ -14,6 +14,7 @@
 
 from __future__ import annotations
 
+from typing import Any
 from typing import cast
 from typing import Optional
 
@@ -53,6 +54,7 @@ class ChatActionProcessor(Gtk.Popover):
 
         self._message_input = message_input
         self._message_input.connect('key-press-event', self._on_key_press)
+        self._message_input.connect('focus-out-event', self._on_focus_out)
 
         self._buf = message_input.get_buffer()
         self._buf.connect('changed', self._on_changed)
@@ -103,6 +105,10 @@ class ChatActionProcessor(Gtk.Popover):
             self.popdown()
             return True
 
+        return False
+
+    def _on_focus_out(self, *args: Any) -> bool:
+        self.popdown()
         return False
 
     def _on_popover_closed(self, _popover: Gtk.Popover) -> None:
