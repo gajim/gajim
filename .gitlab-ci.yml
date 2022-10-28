@@ -14,7 +14,7 @@ stages:
 test-other:
   stage: test
   script:
-    - codespell -I codespell.conf --skip="*__pycache__*,gajim/data/icons,gajim/data/sounds,gajim/data/emoticons" gajim
+    - codespell gajim
     - python3 setup.py build
     - appstream-util validate build/data/org.gajim.Gajim.appdata.xml
   interruptible: true
