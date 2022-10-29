@@ -53,7 +53,6 @@ from gajim.common import app
 from gajim.common import exceptions
 from gajim.common import proxy65_manager
 from gajim.common import socks5
-from gajim.common import helpers
 
 from gajim.common.events import FileCompleted
 from gajim.common.events import FileHashError
@@ -332,29 +331,6 @@ class Interface:
                 contact)
             SendFileDialog(contact, send_callback, app.window, [path])
 
-    def autoconnect(self) -> None:
-        '''
-        Auto connect at startup
-        '''
-
-        for client in app.get_clients():
-            account = client.account
-            if not app.settings.get_account_setting(account,
-                                                    'autoconnect'):
-                continue
-
-            status = 'online'
-            status_message = ''
-
-            if app.settings.get_account_setting(account, 'restore_last_status'):
-                status = app.settings.get_account_setting(
-                    account, 'last_status')
-                status_message = app.settings.get_account_setting(
-                    account, 'last_status_msg')
-                status_message = helpers.from_one_line(status_message)
-
-            client.change_status(status, status_message)
-
     def process_connections(self) -> bool:
         '''
         Called each foo (200) milliseconds. Check for idlequeue timeouts
@@ -402,7 +378,6 @@ class Interface:
         # get instances for windows/dialogs that will show_all()/hide()
         self.instances['file_transfers'] = FileTransfersWindow()
 
-        GLib.timeout_add(100, self.autoconnect)
         if sys.platform == 'win32':
             timeout, in_seconds = 20, None
         else:

@@ -51,6 +51,7 @@ from gajim.common.client import Client
 from gajim.common.helpers import make_http_request
 from gajim.common.helpers import get_random_string
 from gajim.common.helpers import get_global_show
+from gajim.common.helpers import from_one_line
 from gajim.common.storage.events import EventStorage
 from gajim.common.task_manager import TaskManager
 from gajim.common.settings import Settings
@@ -153,6 +154,25 @@ class CoreApplication(ged.EventHelper):
 
         if options.contains('warnings'):
             self._show_warnings()
+
+    def _auto_connect(self) -> None:
+        for client in app.get_clients():
+            account = client.account
+            if not app.settings.get_account_setting(account,
+                                                    'autoconnect'):
+                continue
+
+            status = 'online'
+            status_message = ''
+
+            if app.settings.get_account_setting(account, 'restore_last_status'):
+                status = app.settings.get_account_setting(
+                    account, 'last_status')
+                status_message = app.settings.get_account_setting(
+                    account, 'last_status_msg')
+                status_message = from_one_line(status_message)
+
+            client.change_status(status, status_message)
 
     def start_profiling(self) -> None:
         self._log.info('Start profiling')

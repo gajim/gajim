@@ -274,6 +274,8 @@ class GajimApplication(Gtk.Application, CoreApplication):
         from gajim.gui.main import MainWindow
         MainWindow()
 
+        GLib.timeout_add(100, self._auto_connect)
+
     def _open_uris(self, uris: list[str]) -> None:
         accounts = app.settings.get_active_accounts()
         if not accounts:
