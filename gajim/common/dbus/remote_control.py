@@ -305,6 +305,7 @@ class GajimRemote(Server):
         '''
         if status not in ('offline', 'online', 'chat', 'away', 'xa', 'dnd'):
             status = ''
+
         if account:
             if not status:
                 if account not in app.settings.get_active_accounts():
@@ -327,7 +328,7 @@ class GajimRemote(Server):
                 GLib.idle_add(app.get_client(acc).change_status,
                               status,
                               message)  # pyright: ignore
-        return False
+        return True
 
     @staticmethod
     def list_accounts() -> list[str]:
