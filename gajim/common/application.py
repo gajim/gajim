@@ -50,6 +50,7 @@ from gajim.common.events import SignedIn
 from gajim.common.client import Client
 from gajim.common.helpers import make_http_request
 from gajim.common.helpers import get_random_string
+from gajim.common.helpers import get_global_show
 from gajim.common.storage.events import EventStorage
 from gajim.common.task_manager import TaskManager
 from gajim.common.settings import Settings
@@ -376,3 +377,34 @@ class CoreApplication(ged.EventHelper):
 
         if client.get_module('MAM').available:
             client.get_module('MAM').request_archive_on_signin()
+
+    def change_status(self,
+                      status: str,
+                      account: Optional[str] = None
+                      ) -> None:
+
+        if status is None:
+            status = get_global_show()
+
+        if account is not None:
+            self._change_status(account, status)
+            return
+
+        for client in app.get_clients():
+            if not app.settings.get_account_setting(client.account,
+                                                    'sync_with_global_status'):
+                continue
+
+            self._change_status(client.account, status)
+
+    @staticmethod
+    def _change_status(account: str, status: str) -> None:
+        client = app.get_client(account)
+        message = client.status_message
+
+        if status == 'offline':
+            # TODO delete pep
+            # self.delete_pep(app.get_jid_from_account(account), account)
+            pass
+
+        client.change_status(status, message)

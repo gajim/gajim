@@ -203,7 +203,7 @@ class GtkMenuBackend(EventHelper):
 
     @staticmethod
     def _on_show(_widget: Gtk.MenuItem, show: str) -> None:
-        app.interface.change_status(status=show)
+        app.app.change_status(status=show)
 
 
 class GtkStatusIcon(GtkMenuBackend):

@@ -132,7 +132,7 @@ class StatusSelector(Gtk.MenuButton, EventHelper):
     def _on_change_status(self, button: Gtk.Button) -> None:
         self._status_popover.popdown()
         new_status = button.get_name()
-        app.interface.change_status(status=new_status, account=self._account)
+        app.app.change_status(status=new_status, account=self._account)
 
     def update(self) -> None:
         if self._account is None:
