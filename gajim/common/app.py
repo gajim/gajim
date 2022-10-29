@@ -28,7 +28,6 @@ from __future__ import annotations
 
 import typing
 from typing import Any
-from typing import NamedTuple
 from typing import Optional
 from typing import cast
 
@@ -40,7 +39,6 @@ import weakref
 import pprint
 from collections import defaultdict
 
-import nbxmpp
 from nbxmpp.idlequeue import IdleQueue
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -141,12 +139,6 @@ _dependencies = {
 }
 
 _tasks: dict[int, list[Any]] = defaultdict(list)
-
-
-class RecentGroupchat(NamedTuple):
-    room: str
-    server: str
-    nickname: str
 
 
 def print_version() -> None:
@@ -428,10 +420,6 @@ def account_is_available(account: str) -> bool:
     return connections[account].state.is_available
 
 
-def account_is_disconnected(account: str) -> bool:
-    return not account_is_connected(account)
-
-
 def get_transport_name_from_jid(
         jid: str,
         use_config_setting: bool = True) -> Optional[str]:
@@ -487,12 +475,6 @@ def get_jid_from_account(account_name: str) -> str:
     return jid
 
 
-def get_account_from_jid(jid: str) -> Optional[str]:
-    for account in settings.get_accounts():
-        if jid == get_jid_from_account(account):
-            return account
-
-
 def get_hostname_from_account(account_name: str, use_srv: bool = False) -> str:
     '''
     Returns hostname (if custom hostname is used, that is returned)
@@ -502,43 +484,6 @@ def get_hostname_from_account(account_name: str, use_srv: bool = False) -> str:
     if settings.get_account_setting(account_name, 'use_custom_host'):
         return settings.get_account_setting(account_name, 'custom_host')
     return settings.get_account_setting(account_name, 'hostname')
-
-
-def get_notification_image_prefix(jid: str) -> str:
-    '''
-    Returns the prefix for the notification images
-    '''
-    transport_name = get_transport_name_from_jid(jid)
-    if transport_name in ['icq', 'facebook']:
-        prefix = transport_name
-    else:
-        prefix = 'jabber'
-    return prefix
-
-
-def get_recent_groupchats(account: str) -> list[RecentGroupchat]:
-    recent_groupchats = settings.get_account_setting(
-        account, 'recent_groupchats').split()
-
-    recent_list: list[RecentGroupchat] = []
-    for groupchat in recent_groupchats:
-        jid = nbxmpp.JID.from_string(groupchat)
-        recent = RecentGroupchat(jid.localpart, jid.domain, jid.resource)
-        recent_list.append(recent)
-    return recent_list
-
-
-def add_recent_groupchat(account: str, room_jid: str, nickname: str) -> None:
-    recent = settings.get_account_setting(
-        account, 'recent_groupchats').split()
-    full_jid = room_jid + '/' + nickname
-    if full_jid in recent:
-        recent.remove(full_jid)
-    recent.insert(0, full_jid)
-    if len(recent) > 10:
-        recent = recent[0:9]
-    config_value = ' '.join(recent)
-    settings.set_account_setting(account, 'recent_groupchats', config_value)
 
 
 def get_priority(account: str, show: str) -> int:
@@ -565,14 +510,6 @@ def log(domain: str) -> logging.Logger:
     if domain != 'gajim':
         domain = 'gajim.%s' % domain
     return logging.getLogger(domain)
-
-
-def prefers_app_menu() -> bool:
-    if sys.platform == 'darwin':
-        return True
-    if sys.platform == 'win32':
-        return False
-    return app.prefers_app_menu()
 
 
 def load_css_config() -> None:
