@@ -23,7 +23,7 @@ from gi.repository import Gdk
 
 from nbxmpp.errors import StanzaError
 from nbxmpp.task import Task
-from nbxmpp.protocol import  JID
+from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common import ged
