@@ -947,6 +947,20 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         if control.get_autoscroll():
             self.mark_as_read(control.contact.account, control.contact.jid)
 
+    def show_add_join_groupchat(self,
+                                account: str,
+                                jid: str,
+                                nickname: Optional[str] = None,
+                                password: Optional[str] = None
+                                ) -> None:
+
+        if not self.chat_exists(account, JID.from_string(jid)):
+            client = app.get_client(account)
+            client.get_module('MUC').join(
+                jid, nick=nickname, password=password)
+
+        self.add_group_chat(account, JID.from_string(jid), select=True)
+
     @staticmethod
     def contact_info(account: str, jid: str) -> None:
         client = app.get_client(account)

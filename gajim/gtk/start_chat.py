@@ -478,7 +478,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         jid = self._muc_info_box.get_jid()
         nickname = self._nick_chooser.get_text()
         assert account
-        app.interface.show_add_join_groupchat(
+        app.window.show_add_join_groupchat(
             account, str(jid), nickname=nickname)
 
         self.ready_to_destroy = True

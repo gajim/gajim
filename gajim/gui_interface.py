@@ -333,19 +333,6 @@ class Interface:
             SendFileDialog(contact, send_callback, app.window, [path])
 
     @staticmethod
-    def show_add_join_groupchat(account: str,
-                                jid: str,
-                                nickname: Optional[str] = None,
-                                password: Optional[str] = None
-                                ) -> None:
-        if not app.window.chat_exists(account, JID.from_string(jid)):
-            client = app.get_client(account)
-            client.get_module('MUC').join(
-                jid, nick=nickname, password=password)
-
-        app.window.add_group_chat(account, JID.from_string(jid), select=True)
-
-    @staticmethod
     def start_chat_from_jid(account: str,
                             jid: str,
                             message: Optional[str] = None

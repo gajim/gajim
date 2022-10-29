@@ -150,7 +150,7 @@ class GroupchatJoin(Gtk.ApplicationWindow):
     def _on_join(self, _button: Gtk.Button) -> None:
         nickname = self._nick_chooser.get_text()
 
-        app.interface.show_add_join_groupchat(
+        app.window.show_add_join_groupchat(
             self.account, self.jid, nickname=nickname)
         self.destroy()
 

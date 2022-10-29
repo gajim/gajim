@@ -1358,7 +1358,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         if not iter_:
             return
         service = model[iter_][0]
-        app.interface.show_add_join_groupchat(self.account, service)
+        app.window.show_add_join_groupchat(self.account, service)
 
     def update_actions(self):
         if self.execute_button:
@@ -1720,7 +1720,7 @@ class MucBrowser(AgentBrowser):
         if not iter_:
             return
         service = model[iter_][0]
-        app.interface.show_add_join_groupchat(self.account, service)
+        app.window.show_add_join_groupchat(self.account, service)
 
     def update_actions(self):
         sens = \

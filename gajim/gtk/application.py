@@ -737,7 +737,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
                               _param: Optional[GLib.Variant]) -> None:
         accounts = app.settings.get_active_accounts()
         if len(accounts) == 1:
-            app.interface.show_add_join_groupchat(
+            app.window.show_add_join_groupchat(
                 accounts[0], GAJIM_SUPPORT_JID)
             return
         open_window('StartChatDialog', initial_jid=GAJIM_SUPPORT_JID)
