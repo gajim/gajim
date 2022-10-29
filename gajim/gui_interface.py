@@ -97,10 +97,6 @@ class Interface:
 
         self.instances: dict[str, Any] = {}
 
-        for acc in app.settings.get_active_accounts():
-            app.to_be_removed[acc] = []
-            app.nicks[acc] = app.settings.get_account_setting(acc, 'name')
-
     # Jingle File Transfer
     @staticmethod
     def handle_event_file_error(title: str, message: str) -> None:

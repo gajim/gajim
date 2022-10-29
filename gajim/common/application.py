@@ -117,6 +117,9 @@ class CoreApplication(ged.EventHelper):
 
         for account in app.settings.get_active_accounts():
             app.connections[account] = Client(account)
+            app.to_be_removed[account] = []
+            app.nicks[account] = app.settings.get_account_setting(account,
+                                                                  'name')
 
         app.plugin_manager = PluginManager()
         app.plugin_manager.init_plugins()
