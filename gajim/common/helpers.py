@@ -1033,7 +1033,7 @@ def open_uri(uri: Union[URI, str], account: Optional[str] = None) -> None:
             Gio.AppInfo.launch_default_for_uri(uri.data)
 
     elif uri.type == URIType.AT:
-        app.interface.start_chat_from_jid(account, uri.data)
+        app.window.start_chat_from_jid(account, uri.data)
 
     elif uri.type == URIType.XMPP:
         if account is None:
@@ -1052,7 +1052,7 @@ def open_uri(uri: Union[URI, str], account: Optional[str] = None) -> None:
                 'groupchat-join',
                 GLib.Variant('as', [account, jid]))
         elif uri.action == URIAction.MESSAGE:
-            app.interface.start_chat_from_jid(account, jid, message=message)
+            app.window.start_chat_from_jid(account, jid, message=message)
         else:
             log.warning('Cant open URI: %s', uri)
 

@@ -961,6 +961,23 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self.add_group_chat(account, JID.from_string(jid), select=True)
 
+    def start_chat_from_jid(self,
+                            account: str,
+                            jid: str,
+                            message: Optional[str] = None
+                            ) -> None:
+
+        jid_ = JID.from_string(jid)
+        if self.chat_exists(account, jid_):
+            self.select_chat(account, jid_)
+            if message is not None:
+                message_input = self.get_chat_stack().get_message_input()
+                message_input.insert_text(message)
+            return
+
+        app.app.activate_action(
+            'start-chat', GLib.Variant('as', [str(jid), message or '']))
+
     @staticmethod
     def contact_info(account: str, jid: str) -> None:
         client = app.get_client(account)

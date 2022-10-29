@@ -326,7 +326,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
                     except Exception:
                         app.log('uri_handler').error('Invalid URI: %s', cmd)
 
-                app.interface.start_chat_from_jid(accounts[0], jid, message)
+                app.window.start_chat_from_jid(accounts[0], jid, message)
 
     def _shutdown(self, _application: GajimApplication) -> None:
         self._shutdown_core()
@@ -827,7 +827,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
     def _on_open_chat_action(_action: Gio.SimpleAction,
                              param: GLib.Variant) -> None:
         account, jid = param.get_strv()
-        app.interface.start_chat_from_jid(account, jid)
+        app.window.start_chat_from_jid(account, jid)
 
     @staticmethod
     @structs.actionfunction

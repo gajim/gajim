@@ -332,23 +332,6 @@ class Interface:
                 contact)
             SendFileDialog(contact, send_callback, app.window, [path])
 
-    @staticmethod
-    def start_chat_from_jid(account: str,
-                            jid: str,
-                            message: Optional[str] = None
-                            ) -> None:
-
-        jid_ = JID.from_string(jid)
-        if app.window.chat_exists(account, jid_):
-            app.window.select_chat(account, jid_)
-            if message is not None:
-                message_input = app.window.get_chat_stack().get_message_input()
-                message_input.insert_text(message)
-            return
-
-        app.app.activate_action(
-            'start-chat', GLib.Variant('as', [str(jid), message or '']))
-
     def autoconnect(self) -> None:
         '''
         Auto connect at startup
