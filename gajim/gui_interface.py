@@ -98,7 +98,6 @@ class Interface:
         self.instances: dict[str, Any] = {}
 
         for acc in app.settings.get_active_accounts():
-            app.automatic_rooms[acc] = {}
             app.to_be_removed[acc] = []
             app.nicks[acc] = app.settings.get_account_setting(acc, 'name')
 

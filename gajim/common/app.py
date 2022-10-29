@@ -100,11 +100,6 @@ css_config = cast(types.CSSConfigT, None)
 
 transport_type: dict[str, str] = {}
 
-# dict of rooms that must be automatically configured
-# and for which we have a list of invities
-# {account: {room_jid: {'invities': []}}}
-automatic_rooms: dict[str, dict[str, dict[str, list[str]]]] = {}
-
 # list of contacts that has just signed out
 to_be_removed: dict[str, list[str]] = {}
 

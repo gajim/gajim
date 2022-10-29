@@ -424,20 +424,6 @@ class MUC(BaseModule):
         self._con.get_module('Discovery').disco_muc(
             result.jid, callback=self._on_disco_result_after_config)
 
-        # If this is an automatic room creation
-        try:
-            invites = app.automatic_rooms[self._account][result.jid]['invities']
-        except KeyError:
-            return
-
-        user_list = {}
-        for jid in invites:
-            user_list[jid] = {'affiliation': 'member'}
-        self.set_affiliation(result.jid, user_list)
-
-        for jid in invites:
-            self.invite(result.jid, JID.from_string(jid))
-
     def _on_disco_result_after_config(self, task: Task) -> None:
         try:
             result = task.finish()

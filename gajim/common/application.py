@@ -378,7 +378,6 @@ class CoreApplication(ged.EventHelper):
         app.plugin_manager.register_modules_for_account(
             app.connections[account])
 
-        app.automatic_rooms[account] = {}
         app.to_be_removed[account] = []
         app.nicks[account] = app.settings.get_account_setting(account, 'name')
         app.settings.set_account_setting(account, 'active', True)
@@ -399,7 +398,6 @@ class CoreApplication(ged.EventHelper):
         if account in app.interface.instances:
             del app.interface.instances[account]
         del app.nicks[account]
-        del app.automatic_rooms[account]
         del app.to_be_removed[account]
 
     def remove_account(self, account: str) -> None:
