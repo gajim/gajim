@@ -73,7 +73,7 @@ from gajim.gui.filechoosers import FileChooserDialog
 from gajim.gui.file_transfer_send import SendFileDialog
 from gajim.gui.filetransfer import FileTransfersWindow
 from gajim.gui.control import ChatControl
-from gajim.plugins.repository import PluginRepository
+
 
 log = logging.getLogger('gajim.interface')
 
@@ -365,16 +365,6 @@ class Interface:
         return app.app.avatar_storage.get_avatar_path(filename) is not None
 
     def run(self, _application: Gtk.Application) -> None:
-        # Creating plugin manager
-        from gajim import plugins
-        app.plugin_manager = plugins.PluginManager()
-        app.plugin_manager.init_plugins()
-
-        app.plugin_repository = PluginRepository()
-
-        for client in app.get_clients():
-            client.get_module('Roster').load_roster()
-
         # get instances for windows/dialogs that will show_all()/hide()
         self.instances['file_transfers'] = FileTransfersWindow()
 
@@ -387,16 +377,6 @@ class Interface:
             GLib.timeout_add_seconds(timeout, self.process_connections)
         else:
             GLib.timeout_add(timeout, self.process_connections)
-
-        def remote_init():
-            if app.settings.get('remote_control'):
-                try:
-                    from gajim.common.dbus import remote_control
-                    remote_control.GajimRemote()
-                except Exception:
-                    log.exception('Failed to init remote control')
-
-        GLib.timeout_add_seconds(5, remote_init)
 
 
 class ThreadInterface:

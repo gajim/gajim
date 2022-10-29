@@ -61,6 +61,9 @@ from gajim.common.storage.cache import CacheStorage
 from gajim.common.storage.draft import DraftStorage
 from gajim.common.storage.archive import MessageArchiveStorage
 
+from gajim.plugins import PluginManager
+from gajim.plugins.repository import PluginRepository
+
 
 class CoreApplication(ged.EventHelper):
     def __init__(self) -> None:
@@ -114,6 +117,15 @@ class CoreApplication(ged.EventHelper):
 
         for account in app.settings.get_active_accounts():
             app.connections[account] = Client(account)
+
+        app.plugin_manager = PluginManager()
+        app.plugin_manager.init_plugins()
+        app.plugin_repository = PluginRepository()
+
+        for client in app.get_clients():
+            client.get_module('Roster').load_roster()
+
+        GLib.timeout_add_seconds(5, self._remote_init)
 
         self.register_events([
             ('signed-in', ged.CORE, self._on_signed_in),
@@ -173,6 +185,16 @@ class CoreApplication(ged.EventHelper):
                 status_message = from_one_line(status_message)
 
             client.change_status(status, status_message)
+
+    def _remote_init(self) -> None:
+        if not app.settings.get('remote_control'):
+            return
+
+        try:
+            from gajim.common.dbus import remote_control
+            remote_control.GajimRemote()
+        except Exception:
+            self._log.exception('Failed to init remote control')
 
     def start_profiling(self) -> None:
         self._log.info('Start profiling')
