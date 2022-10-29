@@ -415,7 +415,6 @@ class Config:
             return
 
         self.__options[1][optname] = value
-        self._timeout_save()
 
     def get(self, optname=None):
         if not optname:
@@ -457,7 +456,6 @@ class Config:
         opt[1][name] = {}
         for o in opt[0]:
             opt[1][name][o] = opt[0][o][Option.VAL]
-        self._timeout_save()
 
     def del_per(self, typename, name, subname=None): # per_group_of_option
         if typename not in self.__options_per_key:
@@ -469,7 +467,6 @@ class Config:
         # if subname is specified, delete the item in the group.
         elif subname in opt[1][name]:
             del opt[1][name][subname]
-        self._timeout_save()
 
     def del_all_per(self, typename, subname):
         # Deletes all settings per typename
@@ -483,7 +480,6 @@ class Config:
                 del opt[1][name][subname]
             except KeyError:
                 pass
-        self._timeout_save()
 
     def set_per(self, optname, key, subname, value): # per_group_of_option
         if optname not in self.__options_per_key:
@@ -501,7 +497,6 @@ class Config:
         if value is None:
             return
         obj[subname] = value
-        self._timeout_save()
 
     def get_per(self, optname, key=None, subname=None, default=None): # per_group_of_option
         if optname not in self.__options_per_key:
@@ -590,11 +585,6 @@ class Config:
             app.interface.save_config()
         self.save_timeout_id = None
         return False
-
-    def _timeout_save(self):
-        if self.save_timeout_id:
-            return
-        self.save_timeout_id = GLib.timeout_add(1000, self._really_save)
 
     def __init__(self):
         #init default values

@@ -430,10 +430,6 @@ class Interface:
             raise
         return True  # renew timeout (loop for ever)
 
-    @staticmethod
-    def save_config() -> None:
-        app.settings.save()
-
     def save_avatar(self, data: bytes) -> Optional[str]:
         return app.app.avatar_storage.save_avatar(data)
 
