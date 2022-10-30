@@ -27,8 +27,10 @@ from gi.repository import Gtk
 from gi.repository import GdkPixbuf
 from gi.repository import Gdk
 
-from gajim.common import app, configpaths
+from gajim.common import app
+from gajim.common import configpaths
 from gajim.common import ged
+from gajim.common.i18n import _
 from gajim.common.events import PluginAdded
 from gajim.common.events import PluginRemoved
 from gajim.common.exceptions import PluginsystemError
@@ -37,7 +39,6 @@ from gajim.common.types import PluginRepositoryT
 
 from gajim.plugins.helpers import GajimPluginActivateException
 from gajim.plugins.pluginmanager import PluginManifest
-from gajim.plugins.plugins_i18n import _
 
 from gajim.gui.dialogs import WarningDialog
 from gajim.gui.dialogs import DialogButton
