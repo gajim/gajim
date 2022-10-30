@@ -51,6 +51,11 @@ class MessageWidget(Gtk.Box):
             return self._content.text
         return self._action_phrase_text
 
+    def set_selectable(self, selectable: bool) -> None:
+        for widget in self.get_children():
+            if isinstance(widget, PlainWidget):
+                widget.set_selectable(selectable)
+
     def add_with_styling(self,
                          text: str,
                          nickname: Optional[str] = None) -> None:

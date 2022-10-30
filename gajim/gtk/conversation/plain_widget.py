@@ -68,6 +68,10 @@ class PlainWidget(Gtk.Box):
             self._text_widget = MessageLabel(self._account, selectable)
         self.add(self._text_widget)
 
+    def set_selectable(self, selectable: bool) -> None:
+        if isinstance(self._text_widget, MessageLabel):
+            self._text_widget.set_selectable(selectable)
+
     def add_content(self, block: PlainBlock) -> None:
         self._text_widget.print_text_with_styling(block)
 

@@ -23,6 +23,7 @@ import os
 import logging
 import time
 
+from gi.repository import Gio
 from gi.repository import Gtk
 from gi.repository import GLib
 
@@ -48,8 +49,9 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive import ConversationRow
-from gajim.gtk.conversation.view import ConversationView
 
+from gajim.gui.conversation.message_selection import MessageSelection
+from gajim.gui.conversation.view import ConversationView
 from gajim.gui.conversation.jump_to_end_button import JumpToEndButton
 from gajim.gui.builder import get_builder
 from gajim.gui.groupchat_roster import GroupchatRoster
@@ -79,6 +81,11 @@ class ChatControl(EventHelper):
         self._groupchat_state = GroupchatState()
         self._ui.conv_view_overlay.add_overlay(self._groupchat_state)
 
+        self._message_selection = MessageSelection()
+        self._message_selection.connect('copy', self._on_copy_selection)
+        self._message_selection.connect('cancel', self._on_cancel_selection)
+        self._ui.conv_view_overlay.add_overlay(self._message_selection)
+
         self._jump_to_end_button = JumpToEndButton()
         self._jump_to_end_button.connect('clicked', self._on_jump_to_end)
         self._ui.conv_view_overlay.add_overlay(self._jump_to_end_button)
@@ -89,6 +96,9 @@ class ChatControl(EventHelper):
 
         # Used with encryption plugins
         self.sendmessage = False
+
+        app.window.get_action('activate-message-selection').connect(
+            'activate', self._on_activate_message_selection)
 
         self.widget = cast(Gtk.Box, self._ui.get_object('control_box'))
         self.widget.show_all()
@@ -155,6 +165,9 @@ class ChatControl(EventHelper):
         self._scrolled_view.switch_contact(contact)
         self._groupchat_state.switch_contact(contact)
         self._roster.switch_contact(contact)
+
+        self._message_selection.set_no_show_all(True)
+        self._message_selection.hide()
 
         self._register_events()
 
@@ -451,6 +464,22 @@ class ChatControl(EventHelper):
         self._jump_to_end_button.toggle(False)
         if app.window.is_chat_active(self.contact.account, self.contact.jid):
             app.window.mark_as_read(self.contact.account, self.contact.jid)
+
+    def _on_activate_message_selection(self,
+                                       _action: Gio.SimpleAction,
+                                       param: GLib.Variant
+                                       ) -> None:
+
+        log_line_id = param.get_uint32()
+        self._scrolled_view.enable_row_selection(log_line_id)
+        self._message_selection.set_no_show_all(False)
+        self._message_selection.show_all()
+
+    def _on_copy_selection(self, _widget: MessageSelection) -> None:
+        self._scrolled_view.copy_selected_messages()
+
+    def _on_cancel_selection(self, _widget: MessageSelection) -> None:
+        self._scrolled_view.disable_row_selection()
 
     def _on_jump_to_end(self, _button: Gtk.Button) -> None:
         self.reset_view()

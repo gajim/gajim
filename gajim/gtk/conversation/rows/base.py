@@ -39,6 +39,7 @@ class BaseRow(Gtk.ListBoxRow):
         self.text: str = ''
         self._merged: bool = False
 
+        self.set_selectable(False)
         self.set_can_focus(False)
         self.get_style_context().add_class('conversation-row')
 
@@ -53,6 +54,12 @@ class BaseRow(Gtk.ListBoxRow):
             self.label.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
 
         self.connect('destroy', self.__destroy)
+
+    def enable_selection_mode(self) -> None:
+        return
+
+    def disable_selection_mode(self) -> None:
+        return
 
     @property
     def is_merged(self) -> bool:
