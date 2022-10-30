@@ -376,7 +376,7 @@ class UnsubscribedRow(NotificationRow):
 
         remove_button = Gtk.Button.new_with_label(label=_('Remove'))
         remove_button.set_valign(Gtk.Align.CENTER)
-        remove_button.set_tooltip_text('Remove from contact list')
+        remove_button.set_tooltip_text(_('Remove from contact list'))
         remove_button.set_action_name(
             f'win.{self._account}-remove-contact')
         remove_button.set_action_target_value(GLib.Variant('s', str(self.jid)))
@@ -431,13 +431,13 @@ class InvitationReceivedRow(NotificationRow):
         show_button = Gtk.Button.new_with_label(label=_('Show'))
         show_button.set_valign(Gtk.Align.CENTER)
         show_button.set_halign(Gtk.Align.END)
-        show_button.set_tooltip_text('Show Invitation')
+        show_button.set_tooltip_text(_('Show Invitation'))
         show_button.connect('clicked', self._on_show_invitation)
         self.grid.attach(show_button, 3, 1, 1, 2)
 
         decline_button = Gtk.Button.new_with_label(label=_('Decline'))
         decline_button.set_valign(Gtk.Align.CENTER)
-        decline_button.set_tooltip_text('Decline Invitation')
+        decline_button.set_tooltip_text(_('Decline Invitation'))
         decline_button.connect('clicked', self._on_decline_invitation)
         self.grid.attach(decline_button, 4, 1, 1, 2)
 

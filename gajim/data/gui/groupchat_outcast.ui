@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkPopover" id="info_popover">
@@ -61,7 +61,7 @@
                 <property name="resizable">True</property>
                 <property name="sizing">fixed</property>
                 <property name="min-width">150</property>
-                <property name="title">XMPP Address</property>
+                <property name="title" translatable="yes">XMPP Address</property>
                 <property name="expand">True</property>
                 <property name="clickable">True</property>
                 <property name="sort-indicator">True</property>
@@ -90,7 +90,6 @@
                 <property name="sort-column-id">1</property>
                 <child>
                   <object class="GtkCellRendererText">
-                    <property name="placeholder-text">Spam</property>
                     <signal name="edited" handler="_on_reason_edited" swapped="no"/>
                   </object>
                   <attributes>
