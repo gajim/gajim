@@ -191,7 +191,6 @@ MAIN_WIN_ACTIONS = [
     ('input-italic', None, True),
     ('input-strike', None, True),
     ('input-clear', None, True),
-    ('show-emoji-chooser', None, False),
     ('show-emoji-chooser', None, True),
     ('correct-message', None, False),
     ('quote', 's', False),
