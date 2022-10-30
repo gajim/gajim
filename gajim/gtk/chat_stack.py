@@ -494,11 +494,6 @@ class ChatStack(Gtk.Stack, EventHelper):
         app.window.get_action('show-contact-info').set_enabled(online)
         app.window.get_action('correct-message').set_enabled(online)
 
-        app.window.get_action('input-bold').set_enabled(True)
-        app.window.get_action('input-italic').set_enabled(True)
-        app.window.get_action('input-strike').set_enabled(True)
-        app.window.get_action('input-clear').set_enabled(True)
-
     def _update_chat_actions(self, contact: BareContact) -> None:
         account = contact.account
         online = app.account_is_connected(account)

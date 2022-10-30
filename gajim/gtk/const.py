@@ -187,10 +187,10 @@ APP_ACTIONS = [
 
 MAIN_WIN_ACTIONS = [
     # action name, variant type, enabled
-    ('input-bold', None, False),
-    ('input-italic', None, False),
-    ('input-strike', None, False),
-    ('input-clear', None, False),
+    ('input-bold', None, True),
+    ('input-italic', None, True),
+    ('input-strike', None, True),
+    ('input-clear', None, True),
     ('show-emoji-chooser', None, False),
     ('correct-message', None, False),
     ('quote', 's', False),
