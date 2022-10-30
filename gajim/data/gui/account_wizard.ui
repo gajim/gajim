@@ -330,7 +330,7 @@
         <property name="can-focus">True</property>
         <property name="tooltip-text" translatable="yes">Your XMPP address (e.g. user@example.org)</property>
         <property name="activates-default">True</property>
-        <property name="placeholder-text" translatable="yes">user@example.org</property>
+        <property name="placeholder-text">user@example.org</property>
         <property name="completion">entrycompletion1</property>
       </object>
       <packing>
