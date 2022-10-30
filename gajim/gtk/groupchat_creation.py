@@ -132,7 +132,7 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.name_entry.set_placeholder_text(
             _('e.g. %s') % placeholder[0])
         self._ui.description_entry.set_placeholder_text(
-            _('e.g. %s' % placeholder[1]))
+            _('e.g. %s') % placeholder[1])
         self._ui.address_entry.set_placeholder_text(
             f'{placeholder[2]}@{server}')
 
