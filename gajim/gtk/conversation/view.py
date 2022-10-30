@@ -155,11 +155,11 @@ class ConversationView(Gtk.ScrolledWindow):
         clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         clip.set_text(selection_text, -1)
 
-        self.disable_message_selection()
+        self.disable_row_selection()
 
-    def enable_message_selection(self,
-                                 log_line_id: Optional[int]
-                                 ) -> None:
+    def enable_row_selection(self,
+                             log_line_id: Optional[int]
+                             ) -> None:
 
         self._list_box.set_selection_mode(Gtk.SelectionMode.MULTIPLE)
 
@@ -171,7 +171,7 @@ class ConversationView(Gtk.ScrolledWindow):
             if isinstance(row, MessageRow):
                 row.enable_selection_mode()
 
-    def disable_message_selection(self) -> None:
+    def disable_row_selection(self) -> None:
         self._list_box.unselect_all()
         self._list_box.set_selection_mode(Gtk.SelectionMode.NONE)
 
@@ -225,7 +225,7 @@ class ConversationView(Gtk.ScrolledWindow):
         self._block_signals = True
         self._reset()
 
-        self.disable_message_selection()
+        self.disable_row_selection()
 
         self._read_marker_row = ReadMarkerRow(self._contact)
         self._list_box.add(self._read_marker_row)

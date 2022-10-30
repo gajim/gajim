@@ -471,7 +471,7 @@ class ChatControl(EventHelper):
                                        ) -> None:
 
         log_line_id = param.get_uint32()
-        self._scrolled_view.enable_message_selection(log_line_id)
+        self._scrolled_view.enable_row_selection(log_line_id)
         self._message_selection.set_no_show_all(False)
         self._message_selection.show_all()
 
@@ -479,7 +479,7 @@ class ChatControl(EventHelper):
         self._scrolled_view.copy_selected_messages()
 
     def _on_cancel_selection(self, _widget: MessageSelection) -> None:
-        self._scrolled_view.disable_message_selection()
+        self._scrolled_view.disable_row_selection()
 
     def _on_jump_to_end(self, _button: Gtk.Button) -> None:
         self.reset_view()
