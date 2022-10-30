@@ -168,16 +168,14 @@ class ConversationView(Gtk.ScrolledWindow):
             self._list_box.select_row(row)
 
         for row in self.iter_rows():
-            if isinstance(row, MessageRow):
-                row.enable_selection_mode()
+            row.enable_selection_mode()
 
     def disable_row_selection(self) -> None:
         self._list_box.unselect_all()
         self._list_box.set_selection_mode(Gtk.SelectionMode.NONE)
 
         for row in self.iter_rows():
-            if isinstance(row, MessageRow):
-                row.disable_selection_mode()
+            row.disable_selection_mode()
 
     def _on_scroll_view(self,
                         action: Gio.SimpleAction,

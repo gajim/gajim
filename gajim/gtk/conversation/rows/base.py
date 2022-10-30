@@ -55,6 +55,12 @@ class BaseRow(Gtk.ListBoxRow):
 
         self.connect('destroy', self.__destroy)
 
+    def enable_selection_mode(self) -> None:
+        return
+
+    def disable_selection_mode(self) -> None:
+        return
+
     @property
     def is_merged(self) -> bool:
         return self._merged
