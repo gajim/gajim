@@ -179,7 +179,7 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
             oob_url = event.additional_data.get_value('gajim', 'oob_url')
             if oob_url == event.message:
                 # Don't allow to correct HTTP Upload file transfer URLs
-                self._last_message_id.pop(self._contact)
+                self._last_message_id[self._contact] = None
             else:
                 self._last_message_id[self._contact] = event.message_id
 
