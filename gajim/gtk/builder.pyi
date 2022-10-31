@@ -326,13 +326,17 @@ class FileTransferJingleBuilder(Builder):
     progress_bar: Gtk.ProgressBar
 
 
-class FileTransferSendBuilder(Builder):
-    send_stack: Gtk.Stack
+class FileTransferSelectorBuilder(Builder):
+    file_box: Gtk.Box
+    preview_image_box: Gtk.Box
+    preview_image: Gtk.Image
+    file_name_label: Gtk.Label
+    file_size_label: Gtk.Label
+    warning_label: Gtk.Label
+    remove_file_button: Gtk.Button
+    stack: Gtk.Stack
     listbox: Gtk.ListBox
-    description: Gtk.TextView
-    files_send: Gtk.Button
     resource_box: Gtk.Box
-    resource_send: Gtk.Button
     resource_instructions: Gtk.Label
 
 
@@ -964,7 +968,7 @@ def get_builder(file_name: Literal['file_transfer.ui'], widgets: list[str] = ...
 @overload
 def get_builder(file_name: Literal['file_transfer_jingle.ui'], widgets: list[str] = ...) -> FileTransferJingleBuilder: ...
 @overload
-def get_builder(file_name: Literal['file_transfer_send.ui'], widgets: list[str] = ...) -> FileTransferSendBuilder: ...
+def get_builder(file_name: Literal['file_transfer_selector.ui'], widgets: list[str] = ...) -> FileTransferSelectorBuilder: ...
 @overload
 def get_builder(file_name: Literal['filetransfers.ui'], widgets: list[str] = ...) -> FiletransfersBuilder: ...
 @overload

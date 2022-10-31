@@ -564,16 +564,19 @@ class ChatStack(Gtk.Stack, EventHelper):
             app.call_manager.start_call(account, jid, CallType.VIDEO)
 
         elif action_name.startswith('send-file'):
+            method = None
             name = action.get_name()
             if 'httpupload' in name:
-                app.interface.start_file_transfer(contact, method='httpupload')
-                return
+                method = 'httpupload'
 
             if 'jingle' in name:
-                app.interface.start_file_transfer(contact, method='jingle')
-                return
+                method = 'jingle'
 
-            app.interface.start_file_transfer(contact)
+            file_paths = None
+            if param is not None:
+                file_paths = param.get_strv() or None
+            self._show_chat_function_page(
+                FunctionMode.SEND_FILE, method, file_paths)
 
         elif action_name == 'add-to-roster':
             if (isinstance(contact, GroupchatParticipant) and
@@ -676,12 +679,13 @@ class ChatStack(Gtk.Stack, EventHelper):
 
     def _show_chat_function_page(self,
                                  function_mode: FunctionMode,
-                                 data: Optional[str] = None
+                                 data: Optional[str] = None,
+                                 files: Optional[list[str]] = None
                                  ) -> None:
 
         assert self._current_contact is not None
         self._chat_function_page.set_mode(
-            self._current_contact, function_mode, data)
+            self._current_contact, function_mode, data, files)
         self.set_transition_type(Gtk.StackTransitionType.SLIDE_UP_DOWN)
         self.set_visible_child_name('function')
 

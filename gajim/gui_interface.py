@@ -39,7 +39,6 @@ from typing import Optional
 import sys
 import time
 import logging
-from functools import partial
 from threading import Thread
 
 from gi.repository import Gtk
@@ -50,30 +49,16 @@ from nbxmpp import Hashes2
 from nbxmpp import JID
 
 from gajim.common import app
-from gajim.common import exceptions
 from gajim.common import proxy65_manager
 from gajim.common import socks5
-
 from gajim.common.events import FileCompleted
 from gajim.common.events import FileHashError
 from gajim.common.events import FileProgress
 from gajim.common.events import FileError
-from gajim.common.modules.contacts import BareContact
-from gajim.common.modules.contacts import GroupchatContact
-from gajim.common.structs import OutgoingMessage
-from gajim.common.i18n import _
-from gajim.common.const import FTState
 from gajim.common.file_props import FileProp
-from gajim.common.types import ChatContactT
-
-from gajim.common.modules.httpupload import HTTPFileTransfer
 
 from gajim.gui.dialogs import ErrorDialog
-from gajim.gui.filechoosers import FileChooserDialog
-from gajim.gui.file_transfer_send import SendFileDialog
 from gajim.gui.filetransfer import FileTransfersWindow
-from gajim.gui.control import ChatControl
-
 
 log = logging.getLogger('gajim.interface')
 
@@ -201,130 +186,6 @@ class Interface:
             jid=None, sid=file_props.sid)
         if session:
             session.end_session()
-
-    def send_httpupload(self,
-                        chat_control: ChatControl,
-                        path: Optional[str] = None
-                        ) -> None:
-        if path is not None:
-            self._send_httpupload(chat_control, path)
-            return
-
-        accept_cb = partial(self._on_file_dialog_ok, chat_control)
-        FileChooserDialog(accept_cb,
-                          select_multiple=True,
-                          transient_for=app.window)
-
-    def _on_file_dialog_ok(self,
-                           chat_control: ChatControl,
-                           paths: list[str]
-                           ) -> None:
-        for path in paths:
-            self._send_httpupload(chat_control, path)
-
-    def _send_httpupload(self, chat_control: ChatControl, path: str) -> None:
-        client = app.get_client(chat_control.contact.account)
-        encryption = chat_control.contact.settings.get('encryption') or None
-        try:
-            transfer = client.get_module('HTTPUpload').make_transfer(
-                path,
-                encryption,
-                chat_control.contact,
-                chat_control.is_groupchat)
-        except exceptions.FileError as error:
-            ErrorDialog(_('Could not Open File'), str(error))
-            return
-
-        transfer.connect('cancel', self._on_cancel_upload)
-        transfer.connect('state-changed',
-                         self._on_http_upload_state_changed)
-        chat_control.add_file_transfer(transfer)
-        client.get_module('HTTPUpload').start_transfer(transfer)
-
-    def _on_http_upload_state_changed(self,
-                                      transfer: HTTPFileTransfer,
-                                      _signal_name: str,
-                                      state: FTState
-                                      ) -> None:
-        # Note: This has to be a bound method in order to connect the signal
-        if state.is_finished:
-            uri = transfer.get_transformed_uri()
-
-            type_ = 'chat'
-            if transfer.is_groupchat:
-                type_ = 'groupchat'
-
-            message = OutgoingMessage(account=transfer.account,
-                                      contact=transfer.contact,
-                                      message=uri,
-                                      type_=type_,
-                                      oob_url=uri)
-
-            client = app.get_client(transfer.account)
-            client.send_message(message)
-
-    def _on_cancel_upload(self,
-                          transfer: HTTPFileTransfer,
-                          _signal_name: str
-                          ) -> None:
-        # Note: This has to be a bound method in order to connect the signal
-        client = app.get_client(transfer.account)
-        client.get_module('HTTPUpload').cancel_transfer(transfer)
-
-    def _get_pref_ft_method(self, contact: ChatContactT) -> Optional[str]:
-        ft_pref = app.settings.get_account_setting(contact.account,
-                                                   'filetransfer_preference')
-        httpupload = app.window.get_action_enabled('send-file-httpupload')
-        jingle = app.window.get_action_enabled('send-file-jingle')
-
-        if isinstance(contact, GroupchatContact):
-            if httpupload:
-                return 'httpupload'
-            return None
-
-        if httpupload and jingle:
-            return ft_pref
-
-        if httpupload:
-            return 'httpupload'
-
-        if jingle:
-            return 'jingle'
-        return None
-
-    def start_file_transfer(self,
-                            contact: ChatContactT,
-                            path: Optional[str] = None,
-                            method: Optional[str] = None
-                            ) -> None:
-
-        if method is None:
-            method = self._get_pref_ft_method(contact)
-            if method is None:
-                return
-
-        control = app.window.get_control()
-        if not control.has_active_chat():
-            return
-
-        if path is None:
-            if method == 'httpupload':
-                self.send_httpupload(control)
-                return
-            if method == 'jingle':
-                self.instances['file_transfers'].show_file_send_request(
-                    contact.account, contact)
-            return
-
-        if method == 'httpupload':
-            self.send_httpupload(control, path)
-        else:
-            assert isinstance(contact, BareContact)
-            send_callback = partial(
-                self.instances['file_transfers'].send_file,
-                contact.account,
-                contact)
-            SendFileDialog(contact, send_callback, app.window, [path])
 
     def process_connections(self) -> bool:
         '''

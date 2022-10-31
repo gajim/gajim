@@ -25,7 +25,6 @@ import uuid
 
 from gi.repository import GLib
 from gi.repository import Gdk
-from gi.repository import GdkPixbuf
 from gi.repository import Gio
 from gi.repository import Gtk
 from gi.repository import GObject
@@ -45,9 +44,7 @@ from gajim.common.types import ChatContactT
 from gajim.gui.security_label_selector import SecurityLabelSelector
 
 from .builder import get_builder
-from .dialogs import DialogButton
 from .dialogs import ErrorDialog
-from .dialogs import PastePreviewDialog
 from .emoji_chooser import emoji_chooser
 from .menus import get_encryption_menu
 from .menus import get_format_menu
@@ -577,32 +574,16 @@ class MessageActionsBox(Gtk.Grid):
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         image = clipboard.wait_for_image()
         if image is None:
+            log.info('No image pasted')
             return
 
-        PastePreviewDialog(
-            _('Paste Image'),
-            _('You are trying to paste an image'),
-            _('Are you sure you want to paste your '
-              "clipboard's image into the chat window?"),
-            _('_Do not ask me again'),
-            image,
-            [DialogButton.make('Cancel'),
-             DialogButton.make('Accept',
-                               text=_('_Paste'),
-                               callback=self._paste_event_confirmed,
-                               args=[image])]).show()
+        temp_dir = tempfile.gettempdir()
+        image_path = os.path.join(temp_dir, f'{uuid.uuid4()}.png')
 
-    def _paste_event_confirmed(self,
-                               image: GdkPixbuf.Pixbuf
-                               ) -> None:
-
-        dir_ = tempfile.gettempdir()
-        path = os.path.join(dir_, f'{uuid.uuid4()}.png')
+        image.savev(image_path, 'png', [], [])
         if image is None:
             log.error('Could not process pasted image')
             return
 
-        image.savev(path, 'png', [], [])
-
-        assert self._contact is not None
-        app.interface.start_file_transfer(self._contact, path)
+        app.window.activate_action(
+            'send-file', GLib.Variant('as', [image_path]))

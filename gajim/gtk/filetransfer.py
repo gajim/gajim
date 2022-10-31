@@ -414,7 +414,7 @@ class FileTransfersWindow:
 
     def send_file(self,
                   account: str,
-                  contact: types.BareContact,
+                  contact: types.ResourceContact,
                   resource_jid: JID,
                   file_path: str,
                   file_desc: str = ''

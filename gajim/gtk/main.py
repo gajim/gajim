@@ -39,6 +39,7 @@ from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.helpers import play_sound
 from gajim.common.modules.bytestream import is_transfer_active
+from gajim.common.modules.contacts import GroupchatContact
 from gajim.plugins.pluginmanager import PluginManifest
 from gajim.plugins.repository import PluginRepository
 
@@ -983,6 +984,33 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         if control.get_autoscroll():
             self.mark_as_read(control.contact.account, control.contact.jid)
+
+    def get_preferred_ft_method(self,
+                                contact: types.ChatContactT
+                                ) -> Optional[str]:
+
+        ft_pref = app.settings.get_account_setting(
+            contact.account,
+            'filetransfer_preference')
+        httpupload_enabled = app.window.get_action_enabled(
+            'send-file-httpupload')
+        jingle_enabled = app.window.get_action_enabled('send-file-jingle')
+
+        if isinstance(contact, GroupchatContact):
+            if httpupload_enabled:
+                return 'httpupload'
+            return None
+
+        if httpupload_enabled and jingle_enabled:
+            return ft_pref
+
+        if httpupload_enabled:
+            return 'httpupload'
+
+        if jingle_enabled:
+            return 'jingle'
+
+        return None
 
     def show_add_join_groupchat(self,
                                 account: str,

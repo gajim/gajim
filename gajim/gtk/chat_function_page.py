@@ -17,6 +17,7 @@ from __future__ import annotations
 from typing import Optional
 
 from enum import Enum
+from pathlib import Path
 
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -33,11 +34,13 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 
 from .dataform import DataFormWidget
+from .file_transfer_selector import FileTransferSelector
 from .groupchat_inviter import GroupChatInviter
 
 
 class FunctionMode(Enum):
     INVITE = 'invite'
+    SEND_FILE = 'send-file'
     CHANGE_NICKNAME = 'change-nickname'
     KICK = 'kick'
     BAN = 'ban'
@@ -135,7 +138,8 @@ class ChatFunctionPage(Gtk.Box):
     def set_mode(self,
                  contact: types.ChatContactT,
                  mode: FunctionMode,
-                 data: Optional[str] = None
+                 data: Optional[str] = None,
+                 files: Optional[list[str]] = None
                  ) -> None:
 
         self._reset()
@@ -158,6 +162,15 @@ class ChatFunctionPage(Gtk.Box):
             self._widget.set_size_request(-1, 500)
             self._widget.connect('listbox-changed', self._on_ready)
             self._widget.load_contacts()
+
+        elif mode == FunctionMode.SEND_FILE:
+            self._confirm_button.set_label(_('Send Files'))
+            self._confirm_button.get_style_context().add_class(
+                'suggested-action')
+            self._widget = FileTransferSelector(self._contact, data)
+            self._widget.connect('changed', self._on_ready)
+            if files is not None:
+                self._widget.add_files(files)
 
         elif mode == FunctionMode.CHANGE_NICKNAME:
             self._confirm_button.set_label(_('Change'))
@@ -264,6 +277,13 @@ class ChatFunctionPage(Gtk.Box):
             for jid in invitees:
                 self._invite(JID.from_string(jid))
 
+        elif self._mode == FunctionMode.SEND_FILE:
+            assert isinstance(self._widget, FileTransferSelector)
+            if self._widget.transfer_resource_required():
+                return
+
+            self._send_files(self._widget.get_catalog())
+
         elif self._mode == FunctionMode.CHANGE_NICKNAME:
             assert isinstance(self._widget, InputWidget)
             nickname = self._widget.get_text()
@@ -346,6 +366,24 @@ class ChatFunctionPage(Gtk.Box):
         self.emit(
             'message',
             _('%s has been invited to this group chat') % invited_contact.name)
+
+    def _send_files(self, catalog: list[tuple[Path, str, JID]]) -> None:
+        assert self._contact is not None
+        client = app.get_client(self._contact.account)
+
+        # catalog: list[(file Path, transfer method, recipient JID)]
+        for path, method, jid in catalog:
+            if method == 'httpupload':
+                client.get_module('HTTPUpload').send_file(
+                    self._contact, path)
+                continue
+
+            # Send using Jingle
+            app.interface.instances['file_transfers'].send_file(
+                self._contact.account,
+                self._contact,
+                jid,
+                str(path))
 
 
 class InputWidget(Gtk.Box):

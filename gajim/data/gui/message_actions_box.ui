@@ -117,6 +117,7 @@
         <property name="focus-on-click">False</property>
         <property name="receives-default">True</property>
         <property name="action-name">win.send-file</property>
+        <property name="action-target">['']</property>
         <property name="relief">none</property>
         <child>
           <object class="GtkImage">

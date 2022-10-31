@@ -25,6 +25,7 @@ import io
 from urllib.parse import urlparse
 import mimetypes
 from collections import defaultdict
+from pathlib import Path
 
 from nbxmpp.errors import StanzaError
 from nbxmpp.errors import MalformedStanzaError
@@ -42,6 +43,8 @@ from gi.repository import Soup
 
 from gajim.common import app
 from gajim.common import types
+from gajim.common.events import HTTPUploadError
+from gajim.common.events import HTTPUploadStarted
 from gajim.common.i18n import _
 from gajim.common.helpers import get_tls_error_phrase
 from gajim.common.helpers import get_account_proxy
@@ -49,6 +52,7 @@ from gajim.common.const import FTState
 from gajim.common.filetransfer import FileTransfer
 from gajim.common.modules.base import BaseModule
 from gajim.common.exceptions import FileError
+from gajim.common.structs import OutgoingMessage
 
 
 class HTTPUpload(BaseModule):
@@ -105,18 +109,44 @@ class HTTPUpload(BaseModule):
 
         return self._running_transfers.get((contact.account, contact.jid))
 
-    def make_transfer(self,
-                      path: str,
-                      encryption: Optional[str],
-                      contact: types.ContactT,
-                      groupchat: bool = False
-                      ) -> HTTPFileTransfer:
-        if not path or not os.path.exists(path):
+    def send_file(self, contact: types.ChatContactT, path: Path) -> None:
+        encryption = contact.settings.get('encryption') or None
+
+        try:
+            transfer = self._make_transfer(
+                path,
+                encryption,
+                contact)
+        except FileError as error:
+            event = HTTPUploadError(
+                contact.account,
+                contact.jid,
+                _('Could not open file (%s)') % str(error))
+            app.ged.raise_event(event)
+            return
+
+        transfer.connect('cancel', self._on_cancel_upload)
+        transfer.connect('state-changed', self._on_http_upload_state_changed)
+
+        event = HTTPUploadStarted(
+            contact.account,
+            contact.jid,
+            transfer)
+        app.ged.raise_event(event)
+        self._start_transfer(transfer)
+
+    def _make_transfer(self,
+                       path: Path,
+                       encryption: Optional[str],
+                       contact: types.ChatContactT,
+                       ) -> HTTPFileTransfer:
+
+        if not path or not path.exists():
             raise FileError(_('Could not access file'))
 
         invalid_file = False
         msg = ''
-        stat = os.stat(path)
+        stat = path.stat()
 
         if os.path.isfile(path):
             if stat[6] == 0:
@@ -143,18 +173,43 @@ class HTTPUpload(BaseModule):
         self._log.info('Detected MIME type of file: %s', mime)
 
         transfer = HTTPFileTransfer(self._account,
-                                    path,
+                                    str(path),
                                     contact,
                                     mime,
                                     encryption,
-                                    groupchat)
+                                    contact.is_groupchat)
 
         key = (contact.account, contact.jid)
         self._running_transfers[key].add(transfer)
 
         return transfer
 
-    def cancel_transfer(self, transfer: HTTPFileTransfer) -> None:
+    def _on_http_upload_state_changed(self,
+                                      transfer: HTTPFileTransfer,
+                                      _signal_name: str,
+                                      state: FTState
+                                      ) -> None:
+
+        if state.is_finished:
+            uri = transfer.get_transformed_uri()
+
+            type_ = 'chat'
+            if transfer.is_groupchat:
+                type_ = 'groupchat'
+
+            message = OutgoingMessage(account=transfer.account,
+                                      contact=transfer.contact,
+                                      message=uri,
+                                      type_=type_,
+                                      oob_url=uri)
+
+            self._client.send_message(message)
+
+    def _on_cancel_upload(self,
+                          transfer: HTTPFileTransfer,
+                          _signal_name: str
+                          ) -> None:
+
         transfer.set_cancelled()
 
         key = (transfer.account, transfer.contact.jid)
@@ -166,14 +221,14 @@ class HTTPUpload(BaseModule):
 
         self._session.cancel_message(message, Soup.Status.CANCELLED)
 
-    def start_transfer(self, transfer: HTTPFileTransfer) -> None:
+    def _start_transfer(self, transfer: HTTPFileTransfer) -> None:
         if transfer.encryption is not None and not transfer.is_encrypted:
             transfer.set_encrypting()
             plugin = app.plugin_manager.encryption_plugins[transfer.encryption]
             if hasattr(plugin, 'encrypt_file'):
                 plugin.encrypt_file(transfer,
                                     self._account,
-                                    self.start_transfer)
+                                    self._start_transfer)
             else:
                 transfer.set_error('encryption-not-available')
 

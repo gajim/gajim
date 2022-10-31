@@ -103,7 +103,7 @@ def get_singlechat_menu(contact: types.BareContact) -> GajimMenu:
 def get_private_chat_menu(contact: types.GroupchatParticipant) -> GajimMenu:
     menu = GajimMenu()
     menu.add_item(_('Details'), 'win.show-contact-info')
-    menu.add_item(_('Upload File…'), 'win.send-file-httpupload')
+    menu.add_item(_('Upload File…'), 'win.send-file-httpupload([""])')
     menu.add_item(_('Search…'), 'win.search-history')
 
     if can_add_to_roster(contact):
@@ -116,8 +116,8 @@ def get_private_chat_menu(contact: types.GroupchatParticipant) -> GajimMenu:
 def get_send_file_submenu() -> GajimMenu:
     menu = GajimMenu()
 
-    menu.add_item(_('Upload File…'), 'win.send-file-httpupload')
-    menu.add_item(_('Send File Directly…'), 'win.send-file-jingle')
+    menu.add_item(_('Upload File…'), 'win.send-file-httpupload([""])')
+    menu.add_item(_('Send File Directly…'), 'win.send-file-jingle([""])')
     return menu
 
 

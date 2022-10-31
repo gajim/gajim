@@ -233,6 +233,8 @@ class ChatControl(EventHelper):
              ged.GUI2, self._on_jingle_request_received),
             ('file-request-received', ged.GUI2, self._on_file_request_event),
             ('file-request-sent', ged.GUI2, self._on_file_request_event),
+            ('http-upload-started', ged.GUI2, self._on_http_upload_started),
+            ('http-upload-error', ged.GUI2, self._on_http_upload_error),
         ])
 
     def _is_event_processable(self, event: Any) -> bool:
@@ -440,6 +442,12 @@ class ChatControl(EventHelper):
 
         self.add_jingle_file_transfer(event=event)
 
+    def _on_http_upload_started(self, event: events.HTTPUploadStarted) -> None:
+        self.add_file_transfer(event.transfer)
+
+    def _on_http_upload_error(self, event: events.HTTPUploadError) -> None:
+        self.add_info_message(event.error_msg)
+
     @property
     def is_chat(self) -> bool:
         return isinstance(self.contact, BareContact)
@@ -488,22 +496,18 @@ class ChatControl(EventHelper):
         self.reset_view()
 
     def drag_data_file_transfer(self, selection: Gtk.SelectionData) -> None:
-        # we may have more than one file dropped
-        uri_splitted = selection.get_uris()
-        for uri in uri_splitted:
+        uris = selection.get_uris()
+        paths: list[str] = []
+        for uri in uris:
             path = get_file_path_from_dnd_dropped_uri(uri)
-            if not path:
+            if path is None or not path.is_file():
                 self.add_info_message(
-                    _('The following address was not understood and was '
-                      'not uploaded: %s') % uri)
+                    _('You dropped something Gajim could not '
+                      'process: %s' % path))
                 continue
-            if not path.is_file():  # is it a regular file?
-                self.add_info_message(
-                    _('The following file could not be accessed and was '
-                      'not uploaded: %s') % path)
-                continue
+            paths.append(str(path))
 
-            app.interface.start_file_transfer(self.contact, str(path))
+        app.window.activate_action('send-file', GLib.Variant('as', paths))
 
     def get_our_nick(self) -> str:
         if isinstance(self.contact, GroupchatParticipant):

@@ -44,8 +44,8 @@ from gajim.common.helpers import AdditionalDataDict
 
 if typing.TYPE_CHECKING:
     from gajim.common.client import Client
+    from gajim.common.modules.httpupload import HTTPFileTransfer
     from gajim.plugins.pluginmanager import PluginManifest
-
 
 ChatListEventT = Union[
     'MessageReceived',
@@ -235,6 +235,22 @@ class FileSendError(ApplicationEvent):
     file_props: FileProp
     jid: str
     error_msg: str = ''
+
+
+@dataclass
+class HTTPUploadStarted(ApplicationEvent):
+    name: str = field(init=False, default='http-upload-started')
+    account: str
+    jid: JID
+    transfer: HTTPFileTransfer
+
+
+@dataclass
+class HTTPUploadError(ApplicationEvent):
+    name: str = field(init=False, default='http-upload-error')
+    account: str
+    jid: JID
+    error_msg: str
 
 
 @dataclass
