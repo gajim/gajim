@@ -1,3 +1,77 @@
+Gajim 1.5.3 (31 Oct 2022)
+
+  New
+
+  * Allow to copy multiple messages
+  * Accounts: Add setting for default workspace (#11208)
+
+  Improvements
+
+  * Preferences: Add send_on_ctrl_enter setting (#11242)
+  * Add actions menu to Start Chat button (#11241)
+  * ExceptionDialog: Close dialog with ESC
+  * ChatList: Show drafts
+  * StartChat: Recognize input of xmpp uris
+  * Workspaces: Add 'Mark as read' menu item (#11198)
+  * Improve emoji completion
+  * ACE: Enable reset button only for changed values
+  * Avatar: Follow modernxmpps suggestions for color generation
+
+  Change
+
+  * Raise nbxmpp version
+  * Preferences: Add escape_key_closes to "Chat" section
+  * Preferences: Reorder "Chat" settings and add a "General" section
+  * Preferences: Move show_chatstate_in_banner to ACE settings
+  * Remove confirm_paste_image setting
+  * Remove setting to hide the chat banner
+
+  Performance
+
+  * GroupchatRoster: Don’t load roster when its hidden
+  * Emoji completion: Abort early if max menu entry count reached
+
+  Bug Fixes
+
+  * Disable loading of GUPnPIgd library (#11183)
+  * Remote: Make get_status() return correct status when offline
+  * Plugins: Use correct gettext import
+  * Make strings translatable
+  * Enable emoji chooser action
+  * AvatarBox: Only react to clicks for GroupchatContacts
+  * Remote: Return True for change_status
+  * ChatActionProcessor: Popdown on focus out event (#11254)
+  * Avatar placeholders: Correctly use the first grapheme as the "letter"
+  * Fix quoting /me messages (#11224)
+  * StartChat: Don’t use jid argument for global dialog
+  * Try leaving group chat only if account is online (#11247)
+  * AccountPage: Disable profile button when not connected (#11249)
+  * MUC: Allow changing subject if there is none (#11250)
+  * PluginsWindow: Fix typo in plugin tooltip
+  * PluginManager: Block plugins which have been integrated into Gajim (#11244)
+  * MessageInputTextView: Fix correction mode when switching chats (#11213)
+  * AdHoc: Make MultiLineLabel selectable
+  * Settings: Check if account is connected before trying to get context (#11243)
+  * Styling: Various link parsing issues (#11218#11144)
+  * Windows build: Remove build time package remnants (#11234)
+  * Send message icon: Increase line width and make icon symbolic
+  * Accounts: Use account label for disable confirmation
+  * AccountBadge: Update colors correctly
+  * Update account label when changing label setting (#11238)
+  * SearchView: Scroll to to when resetting (#11240)
+  * Notification: Draw avatar correctly on scale > 1 (#11229)
+  * Preview: Don’t fail hard when parsing fragments
+  * PreviewAudio: Increase update rate for seek bar (#11215)
+  * AccountPage: Disable Excute Command button by default (#11216)
+  * Client: Load trusted certificates on connect() (#11220)
+  * ChatList: Don’t increase in width while drag and drop
+  * Roster: Always show workspace when starting chat
+  * WorkspaceSidebar: Don't increase in width while drag and drop (#11210)
+  * ChatFunctionPage: React to connection changes (#11206)
+  * Preview: Set user-agent for session (#11205)
+  * SearchView: Limit displayed results to account_id of contact
+  * Don’t fail when disabling accounts (#11199)
+
 Gajim 1.5.2 (08 Oct 2022)
 
   New
