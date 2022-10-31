@@ -40,6 +40,8 @@ from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common.const import Direction
+from gajim.common.const import URIType
+from gajim.common.helpers import parse_uri
 from gajim.common.helpers import validate_jid
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_group_chat_nick
@@ -549,10 +551,9 @@ class StartChatDialog(Gtk.ApplicationWindow):
             return
 
         search_text = search_entry.get_text()
-        if search_text.startswith('xmpp:'):
-            search_text = search_text.removeprefix('xmpp:')
-            search_text = search_text.removesuffix('?join')
-            search_entry.set_text(search_text)
+        uri = parse_uri(search_text)
+        if uri.type == URIType.XMPP:
+            search_entry.set_text(uri.data['jid'])
             return
 
         if '@' in search_text:

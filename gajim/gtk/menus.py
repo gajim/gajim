@@ -38,7 +38,7 @@ from gajim.common.helpers import jid_is_blocked
 from gajim.common.i18n import _
 from gajim.common.i18n import get_short_lang_code
 from gajim.common.const import URIType
-from gajim.common.const import URIAction
+from gajim.common.const import XmppUriQuery
 from gajim.common.structs import URI
 from gajim.common.structs import VariantMixin
 from gajim.common.modules.contacts import GroupchatContact
@@ -281,7 +281,7 @@ def get_conv_action_context_menu(account: str,
 
 def get_conv_uri_context_menu(account: str, uri: URI) -> Optional[Gtk.Menu]:
     if uri.type == URIType.XMPP:
-        if uri.action == URIAction.JOIN:
+        if XmppUriQuery.from_str(uri.query_type) == XmppUriQuery.JOIN:
             context_menu = [
                 ('copy-text', _('Copy XMPP Address')),
                 ('groupchat-join', _('Join Groupchat')),

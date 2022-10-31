@@ -94,7 +94,7 @@ from gajim.common.i18n import get_rfc5646_lang
 from gajim.common.const import SHOW_STRING
 from gajim.common.const import SHOW_STRING_MNEMONIC
 from gajim.common.const import URIType
-from gajim.common.const import URIAction
+from gajim.common.const import XmppUriQuery
 from gajim.common.const import GIO_TLS_ERRORS
 from gajim.common.const import SHOW_LIST
 from gajim.common.const import CONSONANTS
@@ -936,26 +936,30 @@ def catch_exceptions(func):
     return func_wrapper
 
 
-def parse_uri_actions(uri: str) -> tuple[str, dict[str, str]]:
-    uri = uri[5:]
-    if '?' not in uri:
-        return 'message', {'jid': uri}
+def parse_xmpp_uri_query(pct_iquerycomp: str) -> tuple[str, dict[str, str]]:
+    '''
+    Parses 'mess%61ge;b%6Fdy=Hello%20%F0%9F%8C%90%EF%B8%8F' into
+    ('message', {'body': 'Hello 🌐️'}), empty string into ('', {}).
+    '''
+    # Syntax and terminology from
+    # <https://rfc-editor.org/rfc/rfc5122#section-2.2>; the pct_ prefix means
+    # percent encoding not being undone yet.
 
-    jid, action = uri.split('?', 1)
-    data = {'jid': jid}
-    if ';' in action:
-        action, keys = action.split(';', 1)
-        action_keys = keys.split(';')
-        for key in action_keys:
-            if key.startswith('subject='):
-                data['subject'] = unquote(key[8:])
+    if not pct_iquerycomp:
+        return '', {}
 
-            elif key.startswith('body='):
-                data['body'] = unquote(key[5:])
+    pct_iquerytype, _, pct_ipairs = pct_iquerycomp.partition(';')
+    iquerytype = unquote(pct_iquerytype, errors='strict')
+    if not pct_ipairs:
+        return iquerytype, {}
 
-            elif key.startswith('thread='):
-                data['thread'] = key[7:]
-    return action, data
+    pairs: dict[str, str] = {}
+    for pct_ipair in pct_ipairs.split(';'):
+        pct_ikey, _, pct_ival = pct_ipair.partition('=')
+        pairs[
+            unquote(pct_ikey, errors='strict')
+        ] = unquote(pct_ival, errors='replace')
+    return iquerytype, pairs
 
 
 def parse_uri(uri: str) -> URI:
@@ -979,15 +983,24 @@ def parse_uri(uri: str) -> URI:
         return URI(URIType.WEB, uri, data=uri)
 
     if scheme == 'xmpp':
-        action, data = parse_uri_actions(uri)
+        if not urlparts.path.startswith('/'):
+            pct_jid = urlparts.path
+        else:
+            pct_jid = urlparts.path[1:]
+
+        data: dict[str, str] = {}
         try:
+            data['jid'] = unquote(pct_jid, errors='strict')
             validate_jid(data['jid'])
-            return URI(URIType.XMPP, uri,
-                       action=URIAction(action),
-                       data=data)
-        except ValueError:
-            # Unknown action
-            return URI(URIType.UNKNOWN, uri)
+            qtype, qparams = parse_xmpp_uri_query(urlparts.query)
+        except ValueError as err:
+            data['error'] = str(err)
+            return URI(URIType.INVALID, uri, data=data)
+
+        return URI(URIType.XMPP, uri,
+                   query_type=qtype,
+                   query_params=qparams,
+                   data=data)
 
     if scheme == 'mailto':
         data = uri[7:]
@@ -1051,19 +1064,29 @@ def open_uri(uri: Union[URI, str], account: Optional[str] = None) -> None:
 
         if isinstance(uri.data, dict):
             jid = uri.data['jid']
-            message = uri.data.get('body')
         else:
             log.warning('Cant open URI: %s', uri)
             return
 
-        if uri.action == URIAction.JOIN:
+        qtype, qparams = XmppUriQuery.from_str(uri.query_type), uri.query_params
+        if not qtype:
+            log.info('open_uri: can\'t "%s": '
+                     'unsupported query type in %s', uri.query_type, uri)
+            # From <rfc5122#section-2.5>:
+            # > If the processing application does not understand [...] the
+            # > specified query type, it MUST ignore the query component and
+            # > treat the IRI/URI as consisting of, for example,
+            # > <xmpp:example-node@example.com> rather than
+            # > <xmpp:example-node@example.com?query>."
+            qtype, qparams = XmppUriQuery.NONE, {}
+
+        if qtype == XmppUriQuery.JOIN:
             app.app.activate_action(
                 'groupchat-join',
                 GLib.Variant('as', [account, jid]))
-        elif uri.action == URIAction.MESSAGE:
-            app.window.start_chat_from_jid(account, jid, message=message)
         else:
-            log.warning('Cant open URI: %s', uri)
+            message = qparams.get('body')
+            app.window.start_chat_from_jid(account, jid, message=message)
 
     else:
         log.warning('Cant open URI: %s', uri)

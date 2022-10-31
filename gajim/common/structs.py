@@ -42,7 +42,6 @@ from gajim.common.const import MUCJoinedState
 from gajim.common.const import KindConstant
 from gajim.common.const import PresenceShowExt
 from gajim.common.const import URIType
-from gajim.common.const import URIAction
 
 
 _T = TypeVar('_T')
@@ -51,7 +50,8 @@ _T = TypeVar('_T')
 class URI(NamedTuple):
     type: URIType
     source: str
-    action: Optional[URIAction] = None
+    query_type: str = ''
+    query_params: dict[str, str] = {}
     data: Optional[Union[dict[str, str], str]] = None
 
 

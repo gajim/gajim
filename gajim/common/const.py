@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import Optional
 from typing import Union
 from typing import NamedTuple
 
@@ -226,10 +227,18 @@ class URIType(Enum):
     TEL = 'tel'
 
 
-class URIAction(Enum):
+# https://xmpp.org/registrar/querytypes.html
+class XmppUriQuery(Enum):
+    NONE = ''
     MESSAGE = 'message'
     JOIN = 'join'
-    SUBSCRIBE = 'subscribe'
+
+    @staticmethod
+    def from_str(s: str) -> Optional[XmppUriQuery]:
+        try:
+            return XmppUriQuery(s)
+        except ValueError:
+            return None
 
 
 class MUCJoinedState(Enum):
