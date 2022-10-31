@@ -301,6 +301,8 @@ URIS = [
     'xmpp:%23room%25irc.example@biboumi.xmpp.example',
     'xmpp:+15551234567@cheogram.com',
     'xmpp:romeo@montague.net?message;subject=Test%20Message;body=Here%27s%20a%20test%20message',
+    'geo:1,2',
+    'geo:1,2,3',
 
     # These seem to be from https://mathiasbynens.be/demo/url-regex
     'http://foo.com/blah_blah',
@@ -405,6 +407,16 @@ UNACCEPTABLE_URIS = [
     'http://##',
     'http://##/',
     'http:///a',
+
+    'geo:1,',
+    'geo:,2',
+    #'geo:1,2,',  FIXME: wrongly parsed as valid
+    'geo:1,,3',
+    'geo:,2,3',
+    'geo:1,,',
+    'geo:,2,',
+    'geo:,,3',
+    'geo:,,',
 ]
 
 

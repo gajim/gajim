@@ -1012,8 +1012,13 @@ def parse_uri(uri: str) -> URI:
         return URI(URIType.TEL, uri, data=data)
 
     if scheme == 'geo':
-        location = uri[4:]
-        lat, _, lon = location.partition(',')
+        # TODO: unify with .preview_helpers.split_geo_uri
+        # https://rfc-editor.org/rfc/rfc5870#section-3.3
+        lat, _, lon_alt = urlparts.path.partition(',')
+        if not lat or not lon_alt:
+            return URI(URIType.INVALID, uri, data={
+                       'error': 'No latitude or longitude'})
+        lon, _, alt = lon_alt.partition(',')
         if not lon:
             return URI(URIType.INVALID, uri, data={'error': 'No longitude'})
 
