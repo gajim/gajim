@@ -222,14 +222,17 @@ def detect_dependencies() -> None:
         pass
 
     # UPNP
-    try:
-        gi.require_version('GUPnPIgd', '1.0')
-        from gi.repository import GUPnPIgd
-        global gupnp_igd  # pylint: disable=global-statement
-        gupnp_igd = GUPnPIgd.SimpleIgd()
-        _dependencies['UPNP'] = True
-    except ValueError:
-        pass
+    # GUPnPidg uses libsoup3 which is incompatible with Gajim.
+    # Don’t load until Gajim is ported to libsoup3
+    #
+    # try:
+    #     gi.require_version('GUPnPIgd', '1.0')
+    #     from gi.repository import GUPnPIgd
+    #     global gupnp_igd  # pylint: disable=global-statement
+    #     gupnp_igd = GUPnPIgd.SimpleIgd()
+    #     _dependencies['UPNP'] = True
+    # except ValueError:
+    #     pass
 
     # IDLE
     try:
