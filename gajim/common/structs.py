@@ -50,6 +50,7 @@ _T = TypeVar('_T')
 
 class URI(NamedTuple):
     type: URIType
+    source: str
     action: Optional[URIAction] = None
     data: Optional[Union[dict[str, str], str]] = None
 

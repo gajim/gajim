@@ -960,59 +960,59 @@ def parse_uri_actions(uri: str) -> tuple[str, dict[str, str]]:
 
 def parse_uri(uri: str) -> URI:
     if STH_AT_STH_DOT_STH_REGEX.match(uri):
-        return URI(type=URIType.AT, data=uri)
+        return URI(URIType.AT, uri, data=uri)
 
     try:
         urlparts = urlparse(uri)
     except Exception as err:
-        return URI(URIType.INVALID, data={'error': uri + ': ' + str(err)})
+        return URI(URIType.INVALID, uri, data={'error': str(err)})
 
     if not urlparts.scheme:
-        return URI(URIType.INVALID, data={'error': uri + ': Relative URI'})
+        return URI(URIType.INVALID, uri, data={'error': 'Relative URI'})
 
     scheme = urlparts.scheme  # urlparse is expected to return it in lower case
 
     if scheme in ('https', 'http'):
         if not urlparts.netloc:
             err = f'No host or empty host in an {scheme} URI'
-            return URI(URIType.INVALID, data={'error': uri + ': ' + err})
-        return URI(URIType.WEB, data=uri)
+            return URI(URIType.INVALID, uri, data={'error': err})
+        return URI(URIType.WEB, uri, data=uri)
 
     if scheme == 'xmpp':
         action, data = parse_uri_actions(uri)
         try:
             validate_jid(data['jid'])
-            return URI(type=URIType.XMPP,
+            return URI(URIType.XMPP, uri,
                        action=URIAction(action),
                        data=data)
         except ValueError:
             # Unknown action
-            return URI(type=URIType.UNKNOWN)
+            return URI(URIType.UNKNOWN, uri)
 
     if scheme == 'mailto':
-        uri = uri[7:]
-        return URI(type=URIType.MAIL, data=uri)
+        data = uri[7:]
+        return URI(URIType.MAIL, uri, data=data)
 
     if scheme == 'tel':
-        uri = uri[4:]
-        return URI(type=URIType.TEL, data=uri)
+        data = uri[4:]
+        return URI(URIType.TEL, uri, data=data)
 
     if scheme == 'geo':
         location = uri[4:]
         lat, _, lon = location.partition(',')
         if not lon:
-            return URI(type=URIType.UNKNOWN, data=uri)
+            return URI(URIType.UNKNOWN, uri, data=uri)
 
         if Gio.AppInfo.get_default_for_uri_scheme('geo'):
-            return URI(type=URIType.GEO, data=uri)
+            return URI(URIType.GEO, uri, data=uri)
 
-        uri = geo_provider_from_location(lat, lon)
-        return URI(type=URIType.GEO, data=uri)
+        data = geo_provider_from_location(lat, lon)
+        return URI(URIType.GEO, uri, data=data)
 
     if scheme == 'file':
-        return URI(type=URIType.FILE, data=uri)
+        return URI(URIType.FILE, uri, data=uri)
 
-    return URI(type=URIType.WEB, data=uri)
+    return URI(URIType.WEB, uri, data=uri)
 
 
 @catch_exceptions

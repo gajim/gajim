@@ -253,7 +253,7 @@ class ValueLabel(Gtk.Label):
 
     def set_value(self, value: str) -> None:
         if self._prop.name == 'email':
-            self._uri = URI(type=URIType.MAIL, data=value)
+            self._uri = URI(URIType.MAIL, value, data=value)
             self.set_markup(value)
 
         elif self._prop.name in ('impp', 'tel'):
