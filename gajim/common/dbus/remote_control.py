@@ -248,7 +248,7 @@ class GajimRemote(Server):
     def get_status(account: str) -> str:
         if not account:
             return helpers.get_global_show()
-        return app.get_client(account).status
+        return helpers.get_client_status(account)
 
     @staticmethod
     def get_status_message(account: str) -> str:
