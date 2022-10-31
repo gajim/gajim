@@ -22,6 +22,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
+from typing import Literal
 from typing import Iterator
 from typing import KeysView
 from typing import NamedTuple
@@ -1238,20 +1239,12 @@ class MessageArchiveStorage(SqliteStorage):
                    account_jid: str,
                    jid: str,
                    message_id: str,
-                   state: str
+                   state: Literal['received', 'displayed']
                    ) -> None:
         '''
         Update the marker state of the corresponding message
-
-        :param account_jid: The jid of the account
-
-        :param jid:         The jid that belongs to the avatar
-
-        :param message_id:  The id of the message
-
-        :param state:       The state, 'received' or 'displayed'
-
         '''
+
         if state not in ('received', 'displayed'):
             raise ValueError('Invalid marker state')
 
