@@ -999,7 +999,12 @@ def parse_uri(uri: str) -> URI:
                    data=data)
 
     if scheme == 'mailto':
-        data = uri[7:]
+        try:
+            data = unquote(urlparts.path, errors='strict')
+            validate_jid(data, 'bare')  # meh, good enuf
+        except ValueError as err:
+            data = {'error': str(err)}
+            return URI(URIType.INVALID, uri, data=data)
         return URI(URIType.MAIL, uri, data=data)
 
     if scheme == 'tel':
@@ -1040,9 +1045,9 @@ def open_uri(uri: Union[URI, str], account: Optional[str] = None) -> None:
 
     elif uri.type == URIType.MAIL:
         if sys.platform == 'win32':
-            webbrowser.open(f'mailto:{uri.data}')
+            webbrowser.open(uri.source)
         else:
-            Gio.AppInfo.launch_default_for_uri(f'mailto:{uri.data}')
+            Gio.AppInfo.launch_default_for_uri(uri.source)
 
     elif uri.type in (URIType.WEB, URIType.GEO):
         if sys.platform == 'win32':

@@ -30,6 +30,7 @@ from gajim.common.const import URIType
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import parse_uri
 from gajim.common.structs import URI
+from gajim.common.text_helpers import escape_iri_path_segment
 from gajim.gui.util import gtk_month
 from gajim.gui.util import python_month
 
@@ -253,7 +254,9 @@ class ValueLabel(Gtk.Label):
 
     def set_value(self, value: str) -> None:
         if self._prop.name == 'email':
-            self._uri = URI(URIType.MAIL, value, data=value)
+            # https://rfc-editor.org/rfc/rfc6350#section-6.4.2
+            uri = 'mailto:' + escape_iri_path_segment(value)
+            self._uri = parse_uri(uri)
             self.set_markup(value)
 
         elif self._prop.name in ('impp', 'tel'):
