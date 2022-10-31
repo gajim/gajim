@@ -456,7 +456,6 @@ class BareContact(CommonContact):
                    size: int,
                    scale: int,
                    add_show: bool = True,
-                   pixbuf: bool = False,
                    default: bool = False,
                    style: str = 'circle'):
 
@@ -479,15 +478,6 @@ class BareContact(CommonContact):
         if self.avatar_sha is not None:
             transport_icon = None
 
-        if pixbuf:
-            return app.app.avatar_storage.get_pixbuf(
-                self,
-                size,
-                scale,
-                show,
-                default=default,
-                transport_icon=transport_icon,
-                style=style)
         return app.app.avatar_storage.get_surface(
             self,
             size,
