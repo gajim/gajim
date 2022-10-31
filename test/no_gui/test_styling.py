@@ -1,5 +1,9 @@
 import unittest
 
+from gajim import gui
+gui.init('gtk')
+
+from gajim.common import app  # Avoids circular imports from common.helpers
 import gajim.common.styling as styling
 from gajim.common.styling import PlainBlock
 from gajim.common.styling import PreBlock
@@ -287,11 +291,11 @@ URIS = [
     'a:b',
     'a-:b',
     'a.:b',
-    'xmpp:conference.gajim.org'
+    'xmpp:conference.gajim.org',
     'xmpp:asd@at',
     'xmpp:asd@asd.at',
     'xmpp:asd-asd@asd.asdasd.at.',
-    'xmpp:me@%5B::1%5D',
+    #'xmpp:me@%5B::1%5D',  FIXME: unescape before validating domainpart
     'xmpp:myself@127.13.42.69',
     'xmpp:myself@127.13.42.69/localhost',
     'xmpp:%23room%25irc.example@biboumi.xmpp.example',
@@ -498,9 +502,6 @@ class Test(unittest.TestCase):
 
     def test_invalid_uris(self):
         for foo in NONURIS + UNACCEPTABLE_URIS:
-            if foo == 'scheme:' or\
-               foo == 'http://':
-                continue  # these currently fial (FIXME)
             text = self.wrap(foo)
             hlinks = process_uris(text)
             if len(hlinks) == 0:
@@ -518,8 +519,6 @@ class Test(unittest.TestCase):
 
     def test_nonjids(self):
         for foo in NONJIDS:
-            if foo == 'juliet@':
-                continue  # this currently fials (FIXME)
             text = self.wrap(foo)
             hlinks = process_uris(text)
             if len(hlinks) == 0:

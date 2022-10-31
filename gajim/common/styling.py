@@ -16,6 +16,7 @@ from __future__ import annotations
 
 from typing import Union
 from typing import Match
+from typing import Optional
 
 import string
 import sys
@@ -26,6 +27,9 @@ from dataclasses import field
 from gi.repository import GLib
 
 from gajim.common import regex
+from gajim.common.const import URIType
+from gajim.common.helpers import parse_uri as analyze_uri
+from gajim.common.helpers import validate_jid
 from gajim.common.text_helpers import jid_to_iri
 from gajim.gui.emoji_data import emoji_data
 
@@ -329,7 +333,7 @@ def _parse_uris(line: str,
                 offset_bytes: int) -> list[BaseHyperlink]:
     uris: list[BaseHyperlink] = []
 
-    def make(start: int, end: int, is_jid: bool) -> BaseHyperlink:
+    def make(start: int, end: int, is_jid: bool) -> Optional[BaseHyperlink]:
         if line[end - 1] == ',':
             # Trim one trailing comma
             end -= 1
@@ -337,6 +341,9 @@ def _parse_uris(line: str,
             # Trim one trailing closing parenthesis if the match is preceded
             # by an opening one somewhere on the line
             end -= 1
+        if re.fullmatch('[^:]+:', line[start:end]):
+            # URIs that consist only of a scheme are thusly excluded
+            return None
         return _make_hyperlink(line,
                                start,
                                end - 1,
@@ -346,14 +353,9 @@ def _parse_uris(line: str,
 
     for match in URI_OR_JID_RX.finditer(line):
         start, end = match.span()
-        if match.group('jid') is not None:
-            uris.append(make(start, end, True))
-        elif not re.fullmatch('[^:]+:', line[start:end]) and\
-            (not re.fullmatch('https?', match.group('scheme'), re.IGNORECASE) or
-             match.group('host')):
-            # URIs that consist only of a scheme are thusly excluded.
-            # http(s) URIs without host or with empty host are excluded too.
-            uris.append(make(start, end, False))
+        hyperlink = make(start, end, bool(match.group('jid')))
+        if hyperlink:
+            uris.append(hyperlink)
 
     return uris
 
@@ -422,7 +424,7 @@ def _make_hyperlink(line: str,
                     end: int,
                     offset: int,
                     offset_bytes: int,
-                    is_jid: bool) -> BaseHyperlink:
+                    is_jid: bool) -> Optional[BaseHyperlink]:
 
     text = line[start:end + 1]
 
@@ -435,13 +437,27 @@ def _make_hyperlink(line: str,
     uri = text
     if is_jid:
         cls_ = XMPPAddress
+        try:
+            validate_jid(text)
+        except ValueError:
+            return None
         uri = jid_to_iri(text)
-    elif re.match('xmpp:', text, re.IGNORECASE):
-        cls_ = XMPPAddress
-    elif re.match('mailto:', text, re.IGNORECASE):
-        cls_ = MailAddress
+
     else:
-        cls_ = Hyperlink
+        uri = text
+        auri = analyze_uri(uri)
+        if auri.type == URIType.XMPP:
+            cls_ = XMPPAddress
+        elif auri.type == URIType.MAIL:
+            cls_ = MailAddress
+        elif auri.type == URIType.INVALID:
+            return None
+        elif auri.type == URIType.UNKNOWN:
+            # The meaning of `UNKNOWN` is currently a jumble of "invalid" and
+            # "unsupported".  Rejecting as invalid, for now.
+            return None
+        else:
+            cls_ = Hyperlink
 
     return cls_(start=start,
                 start_byte=start_byte,

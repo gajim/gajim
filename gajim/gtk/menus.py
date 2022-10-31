@@ -269,7 +269,7 @@ def get_conv_action_context_menu(account: str,
     submenu.append(item)
 
     item = Gtk.MenuItem.new_with_mnemonic(_('Open as _Link'))
-    value = GLib.Variant.new_strv([account, uri_text])
+    value = GLib.Variant.new_strv([account, f'https://{uri_text}'])
     item.set_action_target_value(value)
     submenu.append(item)
 

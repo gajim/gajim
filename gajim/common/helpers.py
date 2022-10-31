@@ -959,7 +959,26 @@ def parse_uri_actions(uri: str) -> tuple[str, dict[str, str]]:
 
 
 def parse_uri(uri: str) -> URI:
-    if uri.startswith('xmpp:'):
+    if STH_AT_STH_DOT_STH_REGEX.match(uri):
+        return URI(type=URIType.AT, data=uri)
+
+    try:
+        urlparts = urlparse(uri)
+    except Exception as err:
+        return URI(URIType.INVALID, data={'error': uri + ': ' + str(err)})
+
+    if not urlparts.scheme:
+        return URI(URIType.INVALID, data={'error': uri + ': Relative URI'})
+
+    scheme = urlparts.scheme  # urlparse is expected to return it in lower case
+
+    if scheme in ('https', 'http'):
+        if not urlparts.netloc:
+            err = f'No host or empty host in an {scheme} URI'
+            return URI(URIType.INVALID, data={'error': uri + ': ' + err})
+        return URI(URIType.WEB, data=uri)
+
+    if scheme == 'xmpp':
         action, data = parse_uri_actions(uri)
         try:
             validate_jid(data['jid'])
@@ -970,18 +989,15 @@ def parse_uri(uri: str) -> URI:
             # Unknown action
             return URI(type=URIType.UNKNOWN)
 
-    if uri.startswith('mailto:'):
+    if scheme == 'mailto':
         uri = uri[7:]
         return URI(type=URIType.MAIL, data=uri)
 
-    if uri.startswith('tel:'):
+    if scheme == 'tel':
         uri = uri[4:]
         return URI(type=URIType.TEL, data=uri)
 
-    if STH_AT_STH_DOT_STH_REGEX.match(uri):
-        return URI(type=URIType.AT, data=uri)
-
-    if uri.startswith('geo:'):
+    if scheme == 'geo':
         location = uri[4:]
         lat, _, lon = location.partition(',')
         if not lon:
@@ -993,15 +1009,8 @@ def parse_uri(uri: str) -> URI:
         uri = geo_provider_from_location(lat, lon)
         return URI(type=URIType.GEO, data=uri)
 
-    if uri.startswith('file://'):
+    if scheme == 'file':
         return URI(type=URIType.FILE, data=uri)
-
-    try:
-        urlparts = urlparse(uri)
-        if not urlparts.scheme:
-            return URI(type=URIType.WEB, data=f'http://{uri}')
-    except Exception:
-        pass
 
     return URI(type=URIType.WEB, data=uri)
 
