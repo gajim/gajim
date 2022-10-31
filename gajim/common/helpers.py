@@ -100,7 +100,6 @@ from gajim.common.const import SHOW_LIST
 from gajim.common.const import CONSONANTS
 from gajim.common.const import VOWELS
 from gajim.common.regex import INVALID_XML_CHARS_REGEX
-from gajim.common.regex import STH_AT_STH_DOT_STH_REGEX
 from gajim.common.structs import URI
 from gajim.common import types
 if TYPE_CHECKING:
@@ -963,9 +962,6 @@ def parse_xmpp_uri_query(pct_iquerycomp: str) -> tuple[str, dict[str, str]]:
 
 
 def parse_uri(uri: str) -> URI:
-    if STH_AT_STH_DOT_STH_REGEX.match(uri):
-        return URI(URIType.AT, uri, data=uri)
-
     try:
         urlparts = urlparse(uri)
     except Exception as err:
@@ -1014,7 +1010,7 @@ def parse_uri(uri: str) -> URI:
         location = uri[4:]
         lat, _, lon = location.partition(',')
         if not lon:
-            return URI(URIType.UNKNOWN, uri, data=uri)
+            return URI(URIType.INVALID, uri, data={'error': 'No longitude'})
 
         if Gio.AppInfo.get_default_for_uri_scheme('geo'):
             return URI(URIType.GEO, uri, data=uri)
@@ -1054,19 +1050,15 @@ def open_uri(uri: Union[URI, str], account: Optional[str] = None) -> None:
         else:
             Gio.AppInfo.launch_default_for_uri(uri.data)
 
-    elif uri.type == URIType.AT:
-        app.window.start_chat_from_jid(account, uri.data)
-
-    elif uri.type == URIType.XMPP:
+    elif uri.type in (URIType.XMPP, URIType.AT):
         if account is None:
             log.warning('Account must be specified to open XMPP uri')
             return
 
-        if isinstance(uri.data, dict):
+        if uri.type == URIType.XMPP:
             jid = uri.data['jid']
         else:
-            log.warning('Cant open URI: %s', uri)
-            return
+            jid = uri.data
 
         qtype, qparams = XmppUriQuery.from_str(uri.query_type), uri.query_params
         if not qtype:

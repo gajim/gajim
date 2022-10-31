@@ -19,10 +19,6 @@ from typing import Any
 INVALID_XML_CHARS_REGEX = re.compile(
     '[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x1f]|[\ud800-\udfff]|[\ufffe-\uffff]')
 
-# at least one character in 3 parts (before @, after @, after .)
-STH_AT_STH_DOT_STH_REGEX = re.compile(
-    r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
-
 
 # Universal/Internationalized Resource Identifiers and their components, as
 # defined in [ABNF for IRI References and IRIs]

@@ -452,10 +452,6 @@ def _make_hyperlink(line: str,
             cls_ = MailAddress
         elif auri.type == URIType.INVALID:
             return None
-        elif auri.type == URIType.UNKNOWN:
-            # The meaning of `UNKNOWN` is currently a jumble of "invalid" and
-            # "unsupported".  Rejecting as invalid, for now.
-            return None
         else:
             cls_ = Hyperlink
 

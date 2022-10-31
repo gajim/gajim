@@ -217,7 +217,6 @@ class Display(Enum):
 
 class URIType(Enum):
     INVALID = 'invalid'
-    UNKNOWN = 'unknown'
     XMPP = 'xmpp'
     MAIL = 'mail'
     GEO = 'geo'
