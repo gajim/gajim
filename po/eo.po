@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2020-08-19 19:27+0000\n"
 "Last-Translator: Vincent L <vincent.laporte+gajim@mailbox.org>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -436,6 +436,10 @@ msgid "?Message row action:Retract…"
 msgstr "Unua mesaĝo ricevita"
 
 #, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "mesaĝenhavo"
+
+#, fuzzy
 msgid "?Message state:Received"
 msgstr "Unua mesaĝo ricevita"
 
@@ -701,6 +705,10 @@ msgid "Add Contact"
 msgstr "_Aldoni kontakton..."
 
 #, fuzzy
+msgid "Add Contact…"
+msgstr "_Aldoni kontakton..."
+
+#, fuzzy
 msgid "Add Entry"
 msgstr "Lando:"
 
@@ -767,10 +775,6 @@ msgstr "Adreso"
 #, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "Tio ne estas babilejo"
-
-#, fuzzy
-msgid "Adhoc Group Chat"
-msgstr "Eniri babilejen"
 
 #, fuzzy
 msgid "Adjust to Status"
@@ -960,9 +964,6 @@ msgstr "Demandi statmesaĝon kiam mi:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Demandi antaŭ fermi babilejan fenestron/slipon."
-
-msgid "Ask before pasting an image."
-msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -1333,6 +1334,9 @@ msgstr ""
 msgid "Chats"
 msgstr "Babilejoj"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr ""
 
@@ -1416,6 +1420,9 @@ msgstr "Elektu sonon"
 msgid "Clear message entry"
 msgstr "Mesaĝo sendita"
 
+msgid "Click messages to select them"
+msgstr ""
+
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(nick)s estas elpelita de %(who)s: %(reason)s"
@@ -1439,7 +1446,13 @@ msgstr "_Sendi kaj fermi"
 msgid "Close Search"
 msgstr "Serĉi"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
+msgstr ""
+
+msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
@@ -1673,6 +1686,10 @@ msgid "Copy Location"
 msgstr "_Kopii ligilan lokon"
 
 #, fuzzy
+msgid "Copy Text"
+msgstr "Babilejo:"
+
+#, fuzzy
 msgid "Copy XMPP Address"
 msgstr "_Kopii JID/retpoŝtan adreson"
 
@@ -1709,6 +1726,10 @@ msgstr "Forigado de konto %s"
 
 #, fuzzy
 msgid "Create Group Chat"
+msgstr "Nova babilejo"
+
+#, fuzzy
+msgid "Create Group Chat…"
 msgstr "Nova babilejo"
 
 #, fuzzy
@@ -1760,11 +1781,18 @@ msgstr "_Aliĝi"
 msgid "Decline"
 msgstr "_Senkonekta"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "Defaŭlte"
 
 msgid "Default Sync Threshold"
 msgstr ""
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Renomigado de kontakto"
 
 #, fuzzy
 msgid "Default device"
@@ -1939,6 +1967,10 @@ msgstr " %d nelegita mesaĝo"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Tajpas mesaĝon"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Stato: "
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2586,14 +2618,6 @@ msgid "Hide this menu"
 msgstr "Kaŝi tiun ĉi menuon"
 
 #, fuzzy
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "Kaŝas rubandon en babileja fenestro"
-
-#, fuzzy
-msgid "Hides the banner in a group chat window."
-msgstr "Kaŝas rubandon en babileja fenestro"
-
-#, fuzzy
 msgid "Home"
 msgstr "Hejmpaĝo:"
 
@@ -2668,10 +2692,6 @@ msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr "Se \"True\", premo de la klavo \"Escape\" fermas slipon/fenestron."
 
 #, fuzzy
 msgid ""
@@ -2806,10 +2826,6 @@ msgid "Invite New Contact"
 msgstr "Kontaktoj"
 
 msgid "Invite friends to group chats or join one"
-msgstr ""
-
-#, python-format
-msgid "Invite someone to your chat with %s"
 msgstr ""
 
 #, fuzzy
@@ -3938,6 +3954,10 @@ msgstr ""
 msgid "Remove contact from contact list"
 msgstr "Forigas kontakton el kontaktlisto"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Forigas kontakton el kontaktlisto"
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -4048,7 +4068,7 @@ msgid "Resource"
 msgstr "Risurco:"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr ""
 "<b>RIMARKU:</b> Vi devas relanĉi gajim por efektigi kelkajn parametrojn"
 
@@ -4224,6 +4244,10 @@ msgid "Select Account"
 msgstr "Forigado de konto %s"
 
 #, fuzzy
+msgid "Select Contacts"
+msgstr "Kontaktoj"
+
+#, fuzzy
 msgid "Select File…"
 msgstr "Sendi _dosieron"
 
@@ -4306,6 +4330,10 @@ msgstr "Sendi mesaĝon"
 #, fuzzy
 msgid "Send Message Receipts"
 msgstr "Unua mesaĝo ricevita"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Uzado: /%s, - kaŝas la babiladajn butonojn."
 
 #, fuzzy
 msgid "Send Read Markers"
@@ -4421,10 +4449,6 @@ msgid "Show"
 msgstr ""
 
 #, fuzzy
-msgid "Show Chat State In Banner"
-msgstr "Montri kaŝ_bildetojn de kontaktojn en kontaktlisto"
-
-#, fuzzy
 msgid "Show Commands"
 msgstr "Komandoj: %s"
 
@@ -4439,6 +4463,10 @@ msgstr "Montri _senkonektajn kontaktojn"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Konta korektado"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4514,6 +4542,9 @@ msgstr "Montri ĉiujn nelegitajn _eventojn"
 msgid "Show chat list"
 msgstr "Konta korektado"
 
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+
 #, fuzzy
 msgid "Show in Taskbar"
 msgstr "Montri Trans_portilojn"
@@ -4550,9 +4581,6 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Uzi pletpiktogramon"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
 
 #, fuzzy
 msgid "Show window in the taskbar"
@@ -5850,10 +5878,6 @@ msgstr "_Retnodo:"
 msgid "_Hostname"
 msgstr "Servilnomo: "
 
-#, fuzzy
-msgid "_Invite"
-msgstr "In_viti al"
-
 msgid "_Join"
 msgstr "_Aliĝi"
 
@@ -6088,6 +6112,9 @@ msgstr "Konto"
 msgid "countrycode"
 msgstr "Konto"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr ""
 
@@ -6102,10 +6129,6 @@ msgstr ""
 #, fuzzy
 msgid "error"
 msgstr "Eraro de Avahi"
-
-#, fuzzy, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "eraro dum sendado %s ( %s )"
 
 msgid "example.org"
 msgstr ""
@@ -6139,6 +6162,9 @@ msgstr "Kursiva"
 msgid "lat"
 msgstr ""
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr ""
 
@@ -6147,6 +6173,15 @@ msgid "lon"
 msgstr "unu"
 
 msgid "macOS"
+msgstr ""
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
 msgstr ""
 
 #, fuzzy
@@ -6194,9 +6229,6 @@ msgstr ""
 
 msgid "translator-credits"
 msgstr "Sergio Ĥlutĉin <Sergey.Khlutchin@gmail.com>"
-
-msgid "user@example.org"
-msgstr ""
 
 msgid "video input"
 msgstr ""
@@ -6283,6 +6315,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "_Plenumi komandon..."
+
+#, fuzzy
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Eniri babilejen"
 
 #, fuzzy
 #~ msgid "App Indicator Icon"
@@ -6398,6 +6434,14 @@ msgstr ""
 #~ msgstr "Ricevas detalan informon pri kontakto"
 
 #, fuzzy
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "Kaŝas rubandon en babileja fenestro"
+
+#, fuzzy
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "Kaŝas rubandon en babileja fenestro"
+
+#, fuzzy
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr "Kaŝas la liston de partoprenantoj en la babileja fenestro."
 
@@ -6422,6 +6466,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Se markitas, Gajim montros kaŝbildetojn de kontaktoj en kontaktlista "
 #~ "fenestro kaj en babilejoj"
+
+#, fuzzy
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr "Se \"True\", premo de la klavo \"Escape\" fermas slipon/fenestron."
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"
@@ -6536,10 +6584,6 @@ msgstr ""
 #~ msgstr "Donas kvanton de nelegitaj mesaĝoj"
 
 #, fuzzy
-#~ msgid "Send a message to the contact"
-#~ msgstr "Uzado: /%s, - kaŝas la babiladajn butonojn."
-
-#, fuzzy
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "Uzado: /%s, - kaŝas la babiladajn butonojn."
 
@@ -6579,6 +6623,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Seancbuso nedisponeblas.\n"
 #~ "Provu legi http://trac.gajim.org/wiki/GajimDBus"
+
+#, fuzzy
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Montri kaŝ_bildetojn de kontaktojn en kontaktlisto"
 
 #~ msgid "Shows a help on specific command"
 #~ msgstr "Montri helpon pri specifita komando"
@@ -6648,6 +6696,10 @@ msgstr ""
 #~ msgid "You have no active account"
 #~ msgstr "Vi ne havas aktivan konton"
 
+#, fuzzy
+#~ msgid "_Invite"
+#~ msgstr "In_viti al"
+
 #~ msgid ""
 #~ "change status of account \"account\". If not specified, try to change "
 #~ "status of all accounts that have \"sync with global status\" option set"
@@ -6667,6 +6719,10 @@ msgstr ""
 
 #~ msgid "command"
 #~ msgstr "komando"
+
+#, fuzzy
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "eraro dum sendado %s ( %s )"
 
 #~ msgid "file"
 #~ msgstr "dosiero"

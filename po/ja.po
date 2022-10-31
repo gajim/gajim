@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2022-05-26 22:21+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -413,6 +413,10 @@ msgstr ""
 msgid "?Message row action:Retract…"
 msgstr "受信済"
 
+#, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "メッセージ作成"
+
 msgid "?Message state:Received"
 msgstr "受信済"
 
@@ -640,6 +644,10 @@ msgstr "アカウントを追加"
 msgid "Add Contact"
 msgstr "相手先を追加"
 
+#, fuzzy
+msgid "Add Contact…"
+msgstr "相手先を追加…(_C)"
+
 msgid "Add Entry"
 msgstr "項目を追加"
 
@@ -696,9 +704,6 @@ msgstr "アドレス"
 
 msgid "Address does not belong to a group chat server"
 msgstr "アドレスは談話室のサーバーのものではありません"
-
-msgid "Adhoc Group Chat"
-msgstr "アドホック談話室"
 
 msgid "Adjust to Status"
 msgstr "在席状況に合わせる"
@@ -862,9 +867,6 @@ msgstr "状況メッセージを求めるのは…"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "談話室のタブまたはウィンドウを閉じる前に確認を求めます。"
-
-msgid "Ask before pasting an image."
-msgstr "画像を貼り付ける前に確認します。"
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -1196,6 +1198,9 @@ msgstr "OMEMO または OpenPGP での端末間暗号化による安全なチャ
 msgid "Chats"
 msgstr "チャット"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr "更新をチェック"
 
@@ -1265,6 +1270,9 @@ msgstr "サウンドを消去"
 msgid "Clear message entry"
 msgstr "メッセージ入力欄を消去"
 
+msgid "Click messages to select them"
+msgstr ""
+
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "この談話室に招待したい相手先をクリックしてください。"
 
@@ -1285,8 +1293,15 @@ msgstr "閉じる"
 msgid "Close Search"
 msgstr "検索を閉じる"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
 msgstr "チャットを閉じる"
+
+#, fuzzy
+msgid "Close with Escape"
+msgstr "%s さんと通話"
 
 msgid "Code snippet"
 msgstr "コードスニペット"
@@ -1480,6 +1495,10 @@ msgstr "リンクの場所をコピー"
 msgid "Copy Location"
 msgstr "場所をコピー"
 
+#, fuzzy
+msgid "Copy Text"
+msgstr "コピー"
+
 msgid "Copy XMPP Address"
 msgstr "XMPP アドレスをコピー"
 
@@ -1510,6 +1529,10 @@ msgstr "アカウントを作成"
 
 msgid "Create Group Chat"
 msgstr "談話室を作成"
+
+#, fuzzy
+msgid "Create Group Chat…"
+msgstr "談話室を作成…(_G)"
 
 msgid "Create New Account"
 msgstr "新しいアカウントを作成"
@@ -1550,11 +1573,18 @@ msgstr "デバッグ記録"
 msgid "Decline"
 msgstr "拒否"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "デフォルト"
 
 msgid "Default Sync Threshold"
 msgstr "デフォルトの同期の制限値"
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "My Workspace"
 
 msgid "Default device"
 msgstr "デフォルトのデバイス"
@@ -1708,6 +1738,10 @@ msgstr "%s件のメッセージをダウンロードしました"
 #, fuzzy
 msgid "Downloading…"
 msgstr "読み込み中…"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "在席状況: %s"
 
 msgid "Drop files or contacts"
 msgstr "ファイルまたは相手先をドロップ"
@@ -2287,12 +2321,6 @@ msgstr "音声チャットにする/しない"
 msgid "Hide this menu"
 msgstr "このメニューを表示しない"
 
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "1対1チャットウィンドウのバナーを表示しません。"
-
-msgid "Hides the banner in a group chat window."
-msgstr "談話室のバナーを表示しません。"
-
 msgid "Home"
 msgstr "自宅"
 
@@ -2365,9 +2393,6 @@ msgstr ""
 "有効の場合、Gajim は Jingle を使う際に STUN サーバーを利用しようとします。"
 "サーバーは 'stun_server' オプションか、または XMPP サーバーによって与えられま"
 "す。"
-
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr "有効の場合、エスケープキーを押すことでタブまたはウィンドウを閉じます。"
 
 msgid ""
 "If enabled, you will be able to set a negative priority to your account in "
@@ -2489,10 +2514,6 @@ msgstr "新しい相手先を招待"
 
 msgid "Invite friends to group chats or join one"
 msgstr "談話室への招待と参加"
-
-#, python-format
-msgid "Invite someone to your chat with %s"
-msgstr "%s さんとの会話に誰かを招待"
 
 msgid "Invitees"
 msgstr "招待者"
@@ -3494,6 +3515,10 @@ msgstr "一覧から、完了・中止・失敗したファイル転送を削除
 msgid "Remove contact from contact list"
 msgstr "相手先を相手先一覧から削除します"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "相手先を相手先一覧から削除します"
+
 msgid "Remove this workspace"
 msgstr "この作業空間を削除"
 
@@ -3596,7 +3621,8 @@ msgstr "値をデフォルトに戻します"
 msgid "Resource"
 msgstr "リソース"
 
-msgid "Restart Gajim for changes to take affect"
+#, fuzzy
+msgid "Restart Gajim for changes to take effect"
 msgstr "設定を有効にするには Gajim を再起動してください"
 
 # 起動時に名簿を表示するか
@@ -3749,6 +3775,10 @@ msgstr "セキュリティ警告"
 msgid "Select Account"
 msgstr "アカウントを選択"
 
+#, fuzzy
+msgid "Select Contacts"
+msgstr "送った相手先:"
+
 msgid "Select File…"
 msgstr "ファイルを選択…"
 
@@ -3821,6 +3851,10 @@ msgstr "メッセージを送信"
 
 msgid "Send Message Receipts"
 msgstr "メッセージ受領を送信"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "相手先にメッセージを送信します"
 
 msgid "Send Read Markers"
 msgstr "既読マークを送信"
@@ -3917,9 +3951,6 @@ msgstr "在席状況を知らせる"
 msgid "Show"
 msgstr "表示"
 
-msgid "Show Chat State In Banner"
-msgstr "チャット状態をバナーに表示する"
-
 msgid "Show Commands"
 msgstr "コマンドを表示する"
 
@@ -3933,6 +3964,10 @@ msgstr "相手先の情報を表示"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "位置を表示"
 
 msgid "Show Join/Leave"
 msgstr "入室/退出を表示する"
@@ -3994,6 +4029,10 @@ msgid "Show chat list"
 msgstr "位置を表示"
 
 #, fuzzy
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr "チャットのタブのバナーに相手先のチャット状態(入力中など)を表示します"
+
+#, fuzzy
 msgid "Show in Taskbar"
 msgstr "中継先を表示"
 
@@ -4030,9 +4069,6 @@ msgstr ""
 
 msgid "Show the application's version"
 msgstr "アプリケーションのバージョンを表示"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr "チャットのタブのバナーに相手先のチャット状態(入力中など)を表示します"
 
 #, fuzzy
 msgid "Show window in the taskbar"
@@ -5218,9 +5254,6 @@ msgstr "ホスト名 (_H)"
 msgid "_Hostname"
 msgstr "ホスト名 (_H)"
 
-msgid "_Invite"
-msgstr "招待 (_I)"
-
 msgid "_Join"
 msgstr "参加 (_J)"
 
@@ -5425,6 +5458,9 @@ msgstr "国"
 msgid "countrycode"
 msgstr "国コード"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr "データ"
 
@@ -5437,10 +5473,6 @@ msgstr "例: %s"
 
 msgid "error"
 msgstr "誤差"
-
-#, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "%(message)s を送信する際にエラー ( %(error)s )"
 
 msgid "example.org"
 msgstr "example.org"
@@ -5474,6 +5506,9 @@ msgstr "イタリック"
 msgid "lat"
 msgstr "緯度"
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr "市(区町村)"
 
@@ -5482,6 +5517,15 @@ msgstr "経度"
 
 msgid "macOS"
 msgstr "macOS"
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
+msgstr ""
 
 # 固有名詞(プロキシ・サーバー The Onion Router)
 msgid "or"
@@ -5528,9 +5572,6 @@ msgstr "日付・時刻"
 
 msgid "translator-credits"
 msgstr "Mako N (mako AT pasero.net)"
-
-msgid "user@example.org"
-msgstr "user@example.org"
 
 msgid "video input"
 msgstr "ビデオ入力"
@@ -5647,6 +5688,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "コマンド実行…"
 
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "アドホック談話室"
+
 #~ msgid "Allow a participant to send you public or private messages"
 #~ msgstr "参加者がメッセージ (私信も含む) を送ってくることを許可します"
 
@@ -5676,6 +5720,9 @@ msgstr "…またはここにドロップ"
 #~ msgstr ""
 #~ "タブのあるチャットウィンドウを閉じる前に、データを失う可能性があるチャット"
 #~ "があることの確認を求めます (チャット、私信)。"
+
+#~ msgid "Ask before pasting an image."
+#~ msgstr "画像を貼り付ける前に確認します。"
 
 #~ msgid "Ban Participant"
 #~ msgstr "参加者を締め出す"
@@ -5785,6 +5832,12 @@ msgstr "…またはここにドロップ"
 #~ msgid "Gets detailed info on a contact"
 #~ msgstr "相手先の詳細情報を取得します"
 
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "1対1チャットウィンドウのバナーを表示しません。"
+
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "談話室のバナーを表示しません。"
+
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr "談話室ウィンドウで、参加者一覧を表示しません。"
 
@@ -5824,6 +5877,10 @@ msgstr "…またはここにドロップ"
 #~ "completion."
 #~ msgstr "有効の場合、談話室での補完をシェルの自動補完のようにします。"
 
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr ""
+#~ "有効の場合、エスケープキーを押すことでタブまたはウィンドウを閉じます。"
+
 #~ msgid "Invalid affiliation given"
 #~ msgstr "分掌が正しくありません"
 
@@ -5835,6 +5892,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Invite a user to a group chat for a reason"
 #~ msgstr "理由を添えて、談話室に招待します"
+
+#~ msgid "Invite someone to your chat with %s"
+#~ msgstr "%s さんとの会話に誰かを招待"
 
 #~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
 #~ msgstr ""
@@ -5953,9 +6013,6 @@ msgstr "…またはここにドロップ"
 #~ msgid "Send a disco info request"
 #~ msgstr "disco info 要求を送信"
 
-#~ msgid "Send a message to the contact"
-#~ msgstr "相手先にメッセージを送信します"
-
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "相手先に注目させるためのメッセージを送信します"
 
@@ -6028,6 +6085,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Set the presence type and description"
 #~ msgstr "在席状況の種類と説明の設定"
+
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "チャット状態をバナーに表示する"
 
 #~ msgid ""
 #~ "Show help on a given command or a list of available commands if -a is "
@@ -6130,6 +6190,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "Gajim を閉じると常に終了する (_A)"
 
+#~ msgid "_Invite"
+#~ msgstr "招待 (_I)"
+
 #~ msgid "_Try Again"
 #~ msgstr "再試行 (_T)"
 
@@ -6151,6 +6214,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "command"
 #~ msgstr "コマンド"
+
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "%(message)s を送信する際にエラー ( %(error)s )"
 
 #~ msgid "file"
 #~ msgstr "ファイル"
@@ -6201,3 +6267,6 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "subject"
 #~ msgstr "件名"
+
+#~ msgid "user@example.org"
+#~ msgstr "user@example.org"

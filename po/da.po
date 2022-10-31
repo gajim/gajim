@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -445,6 +445,10 @@ msgid "?Message row action:Retract…"
 msgstr "Første Besked er Modtaget"
 
 #, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "Besked indhold"
+
+#, fuzzy
 msgid "?Message state:Received"
 msgstr "Første Besked er Modtaget"
 
@@ -713,6 +717,10 @@ msgid "Add Contact"
 msgstr "_Tilføj Kontakt..."
 
 #, fuzzy
+msgid "Add Contact…"
+msgstr "_Tilføj Kontakt..."
+
+#, fuzzy
 msgid "Add Entry"
 msgstr "Indgang:"
 
@@ -783,10 +791,6 @@ msgstr "_Adresse:"
 #, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "Dette er ikke en gruppe samtale"
-
-#, fuzzy
-msgid "Adhoc Group Chat"
-msgstr "Bliv med i en Gruppe Samtale"
 
 #, fuzzy
 msgid "Adjust to Status"
@@ -982,9 +986,6 @@ msgstr "Spørg om status besked når jeg:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Spørg før et gruppesamtale vindue/faneblad lukkes."
-
-msgid "Ask before pasting an image."
-msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -1359,6 +1360,9 @@ msgstr ""
 msgid "Chats"
 msgstr "Samtaler"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr ""
 
@@ -1439,6 +1443,9 @@ msgstr "Vælg Lyd"
 msgid "Clear message entry"
 msgstr "Besked er Sendt"
 
+msgid "Click messages to select them"
+msgstr ""
+
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(nick)s er blevet fjernet fra rummet %(reason)s"
@@ -1462,7 +1469,13 @@ msgstr "_Send & Luk"
 msgid "Close Search"
 msgstr "Søg"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
+msgstr ""
+
+msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
@@ -1696,6 +1709,10 @@ msgid "Copy Location"
 msgstr "_Kopier Henvisning"
 
 #, fuzzy
+msgid "Copy Text"
+msgstr "Rum JID"
+
+#, fuzzy
 msgid "Copy XMPP Address"
 msgstr "_Kopier JID/E-post Adresse"
 
@@ -1732,6 +1749,10 @@ msgstr "Fjerne kontoen med navnet %s"
 
 #, fuzzy
 msgid "Create Group Chat"
+msgstr "Forlad Gruppesamtaler"
+
+#, fuzzy
+msgid "Create Group Chat…"
 msgstr "Forlad Gruppesamtaler"
 
 #, fuzzy
@@ -1782,11 +1803,18 @@ msgstr "Jogger"
 msgid "Decline"
 msgstr "_Afkoblet"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "Standard"
 
 msgid "Default Sync Threshold"
 msgstr ""
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Omdøb Kontakt"
 
 #, fuzzy
 msgid "Default device"
@@ -1962,6 +1990,10 @@ msgstr "Videresend ulæste beskeder"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Koder"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Status: "
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2607,14 +2639,6 @@ msgid "Hide this menu"
 msgstr "Skjul denne menu"
 
 #, fuzzy
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "Skjuler banneret i et gruppesamtale vindue"
-
-#, fuzzy
-msgid "Hides the banner in a group chat window."
-msgstr "Skjuler banneret i et gruppesamtale vindue"
-
-#, fuzzy
 msgid "Home"
 msgstr "<b>Hjemmeside:</b>"
 
@@ -2689,10 +2713,6 @@ msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr "Hvis Sandt vil tryk på escape tasten lukke et vindue/faneblad."
 
 #, fuzzy
 msgid ""
@@ -2826,10 +2846,6 @@ msgid "Invite New Contact"
 msgstr "Inviter _Kontakter"
 
 msgid "Invite friends to group chats or join one"
-msgstr ""
-
-#, python-format
-msgid "Invite someone to your chat with %s"
 msgstr ""
 
 #, fuzzy
@@ -3956,6 +3972,10 @@ msgstr "Fjerner færdige, annullerede og mislykkede filoverførsler fra listen"
 msgid "Remove contact from contact list"
 msgstr "Fjerner kontakt fra kontaktvinduet"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Fjerner kontakt fra kontaktvinduet"
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -4070,7 +4090,7 @@ msgid "Resource"
 msgstr "Resource:"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr ""
 "<b>NOTE:</b> Du skal genstarte Gajim for at nogle af ændringerne kan træde i "
 "kraft"
@@ -4246,6 +4266,10 @@ msgid "Select Account"
 msgstr "Fjerne kontoen med navnet %s"
 
 #, fuzzy
+msgid "Select Contacts"
+msgstr "Sendte kontakter:"
+
+#, fuzzy
 msgid "Select File…"
 msgstr "Send _Fil"
 
@@ -4327,6 +4351,10 @@ msgstr "Send besked"
 #, fuzzy
 msgid "Send Message Receipts"
 msgstr "Første Besked er Modtaget"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Send en fil til en kontakt"
 
 #, fuzzy
 msgid "Send Read Markers"
@@ -4441,10 +4469,6 @@ msgid "Show"
 msgstr ""
 
 #, fuzzy
-msgid "Show Chat State In Banner"
-msgstr "Vis kontakternes a_vatarer i kontaktvinduet"
-
-#, fuzzy
 msgid "Show Commands"
 msgstr "Kommando"
 
@@ -4459,6 +4483,10 @@ msgstr "Vis Kun _Aktive Kontakter"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Påmindelse"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4534,6 +4562,9 @@ msgstr "Vis Alle Ventende Hænd_elser"
 msgid "Show chat list"
 msgstr "Påmindelse"
 
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+
 #, fuzzy
 msgid "Show in Taskbar"
 msgstr "Vis Trans_porter"
@@ -4570,9 +4601,6 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Vis et faneblad når der kun er en samtale?"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
 
 #, fuzzy
 msgid "Show window in the taskbar"
@@ -5879,10 +5907,6 @@ msgstr "_Værtsnavn:"
 msgid "_Hostname"
 msgstr "_Værtsnavn:"
 
-#, fuzzy
-msgid "_Invite"
-msgstr "In_viter"
-
 msgid "_Join"
 msgstr "_Bliv med:"
 
@@ -6115,6 +6139,9 @@ msgstr "Konto"
 msgid "countrycode"
 msgstr "Konto"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr ""
 
@@ -6129,10 +6156,6 @@ msgstr ""
 #, fuzzy
 msgid "error"
 msgstr "Fejl"
-
-#, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "fejl opstod under sending %(message)s ( %(error)s )"
 
 msgid "example.org"
 msgstr ""
@@ -6166,6 +6189,9 @@ msgstr "Kursiv"
 msgid "lat"
 msgstr ""
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr ""
 
@@ -6174,6 +6200,15 @@ msgid "lon"
 msgstr "en"
 
 msgid "macOS"
+msgstr ""
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
 msgstr ""
 
 #, fuzzy
@@ -6221,9 +6256,6 @@ msgstr ""
 
 msgid "translator-credits"
 msgstr "Niels Felsted Thorsen <felsted@fsfe.org>"
-
-msgid "user@example.org"
-msgstr ""
 
 msgid "video input"
 msgstr ""
@@ -6309,6 +6341,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "_Kør Kommando"
+
+#, fuzzy
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Bliv med i en Gruppe Samtale"
 
 #, fuzzy
 #~ msgid "App Indicator Icon"
@@ -6429,6 +6465,14 @@ msgstr ""
 #~ msgstr "Få detaljeret information om kontakten"
 
 #, fuzzy
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "Skjuler banneret i et gruppesamtale vindue"
+
+#, fuzzy
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "Skjuler banneret i et gruppesamtale vindue"
+
+#, fuzzy
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr "Skjuler gruppesamtale deltagerlisten i gruppesamtale vinduer."
 
@@ -6460,6 +6504,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Hvis sandt, vil færdiggørelse i gruppe samtaler fungere på samme måde som "
 #~ "færdiggørelse i kommandolinjen"
+
+#, fuzzy
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr "Hvis Sandt vil tryk på escape tasten lukke et vindue/faneblad."
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"
@@ -6597,10 +6645,6 @@ msgstr ""
 #~ msgstr "Sendte modtagelses forespørgsler"
 
 #, fuzzy
-#~ msgid "Send a message to the contact"
-#~ msgstr "Send en fil til en kontakt"
-
-#, fuzzy
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "Send en fil til en kontakt"
 
@@ -6647,6 +6691,10 @@ msgstr ""
 
 #~ msgid "Set the presence type and description"
 #~ msgstr "Sæt tilstedeværelses type og beskrivelse"
+
+#, fuzzy
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Vis kontakternes a_vatarer i kontaktvinduet"
 
 #~ msgid "Shows a help on specific command"
 #~ msgstr "Viser hjælp for en specifik kommando"
@@ -6736,6 +6784,10 @@ msgstr ""
 #~ msgstr "Altid afslut Gajim"
 
 #, fuzzy
+#~ msgid "_Invite"
+#~ msgstr "In_viter"
+
+#, fuzzy
 #~ msgid "_Try Again"
 #~ msgstr "Verificer igen..."
 
@@ -6757,6 +6809,9 @@ msgstr ""
 
 #~ msgid "command"
 #~ msgstr "Kommando"
+
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "fejl opstod under sending %(message)s ( %(error)s )"
 
 #~ msgid "file"
 #~ msgstr "fil"

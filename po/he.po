@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -463,6 +463,10 @@ msgid "?Message row action:Retract…"
 msgstr "הודעה ראשונה אשר התקבלה"
 
 #, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "cli"
+
+#, fuzzy
 msgid "?Message state:Received"
 msgstr "הודעה ראשונה אשר התקבלה"
 
@@ -727,6 +731,10 @@ msgid "Add Contact"
 msgstr "הוסף _איש קשר..."
 
 #, fuzzy
+msgid "Add Contact…"
+msgstr "הוסף _איש קשר..."
+
+#, fuzzy
 msgid "Add Entry"
 msgstr "רשומה:"
 
@@ -798,10 +806,6 @@ msgstr "_כתובת:"
 #, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "‏%s אינו שרת שיחת קבוצה"
-
-#, fuzzy
-msgid "Adhoc Group Chat"
-msgstr "הצטרף לשיחת קבוצה"
 
 #, fuzzy
 msgid "Adjust to Status"
@@ -1000,9 +1004,6 @@ msgstr "שאל אותי עבור הודעת מצב בעת:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "שאל בטרם סגירת חלון/כרטיסייה של שיחת קבוצה."
-
-msgid "Ask before pasting an image."
-msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -1384,6 +1385,9 @@ msgstr ""
 msgid "Chats"
 msgstr "שיחות"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr ""
 
@@ -1465,6 +1469,9 @@ msgstr "בחירת צליל"
 msgid "Clear message entry"
 msgstr "הודעה נשלחה"
 
+msgid "Click messages to select them"
+msgstr ""
+
 # in or to?
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
@@ -1489,7 +1496,13 @@ msgstr "_שלח וסגור"
 msgid "Close Search"
 msgstr "חיפוש"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
+msgstr ""
+
+msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
@@ -1727,6 +1740,10 @@ msgid "Copy Location"
 msgstr "ה_עתק מיקום קישור"
 
 #, fuzzy
+msgid "Copy Text"
+msgstr "cli"
+
+#, fuzzy
 msgid "Copy XMPP Address"
 msgstr "ה_עתק כתובת JID/דוא״ל"
 
@@ -1763,6 +1780,10 @@ msgstr "הסרת חשבון ‫%s"
 
 #, fuzzy
 msgid "Create Group Chat"
+msgstr "עזוב שיחות קבוצה"
+
+#, fuzzy
+msgid "Create Group Chat…"
 msgstr "עזוב שיחות קבוצה"
 
 #, fuzzy
@@ -1813,11 +1834,18 @@ msgstr "ג׳וגינג"
 msgid "Decline"
 msgstr "לא מ_קוון"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "ברירת מחדל"
 
 msgid "Default Sync Threshold"
 msgstr ""
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "שינוי שם איש קשר"
 
 #, fuzzy
 msgid "Default device"
@@ -1996,6 +2024,10 @@ msgstr "קדם הודעות אשר לא נקראו"
 #, fuzzy
 msgid "Downloading…"
 msgstr "כעת טוען"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "מצב: "
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2666,14 +2698,6 @@ msgid "Hide this menu"
 msgstr "הסתר תפריט זה"
 
 #, fuzzy
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "הסתרת הכרזה בחלון שיחת קבוצה"
-
-#, fuzzy
-msgid "Hides the banner in a group chat window."
-msgstr "הסתרת הכרזה בחלון שיחת קבוצה"
-
-#, fuzzy
 msgid "Home"
 msgstr "עמוד בית:"
 
@@ -2760,10 +2784,6 @@ msgstr ""
 "כאשר מופעלת, Gajim ינסה לעשות שימש בשרת STUN כאשר jingle הינו מצוי בשימוש. "
 "זה אשר הוגדר בתוך אפשרות \"stun_server\", או בזה אשר ניתן על ידי שרת jabber "
 "נתון."
-
-#, fuzzy
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr "כאשר מופעלת, לחיצה על המקש Esc תוביל לסגירת חלון/כרטיסייה."
 
 #, fuzzy
 msgid ""
@@ -2898,10 +2918,6 @@ msgid "Invite New Contact"
 msgstr "הזמן _אנשי קשר"
 
 msgid "Invite friends to group chats or join one"
-msgstr ""
-
-#, python-format
-msgid "Invite someone to your chat with %s"
 msgstr ""
 
 #, fuzzy
@@ -4057,6 +4073,10 @@ msgstr "הסרת העברות קבצים שלמות, מבוטלות וכושלו
 msgid "Remove contact from contact list"
 msgstr "cli"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "cli"
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -4171,7 +4191,7 @@ msgid "Resource"
 msgstr "משאב:"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr "<b>הערה:</b> עליך לאתחל את Gajim כדי שהגדרות מסוימות ייכנסו לתוקף"
 
 # By last state
@@ -4351,6 +4371,10 @@ msgid "Select Account"
 msgstr "הסרת חשבון ‫%s"
 
 #, fuzzy
+msgid "Select Contacts"
+msgstr "אנשי קשר אשר נשלחו:"
+
+#, fuzzy
 msgid "Select File…"
 msgstr "שלח _קובץ"
 
@@ -4436,6 +4460,10 @@ msgstr "מסירת הודעה"
 #, fuzzy
 msgid "Send Message Receipts"
 msgstr "התקבלה הודעת הקשב"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "מסירת הודעה לאיש קשר"
 
 #, fuzzy
 msgid "Send Read Markers"
@@ -4550,10 +4578,6 @@ msgid "Show"
 msgstr ""
 
 #, fuzzy
-msgid "Show Chat State In Banner"
-msgstr "הצג _אווטארים של אנשי קשר ברשימה"
-
-#, fuzzy
 msgid "Show Commands"
 msgstr "cli"
 
@@ -4569,6 +4593,10 @@ msgstr "הצג אנשי קשר _פעילים בלבד"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "‫Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "מיקום: "
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4644,6 +4672,9 @@ msgstr "הצג _אירועים ממתינים"
 msgid "Show chat list"
 msgstr "מיקום: "
 
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+
 #, fuzzy
 msgid "Show in Taskbar"
 msgstr "הצג מו_בילים"
@@ -4680,9 +4711,6 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "הצג סמל אזור התראה:"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
 
 #, fuzzy
 msgid "Show window in the taskbar"
@@ -6029,10 +6057,6 @@ msgstr "שם מ_ארח:"
 msgid "_Hostname"
 msgstr "שם מ_ארח:"
 
-#, fuzzy
-msgid "_Invite"
-msgstr "ה_זמן"
-
 msgid "_Join"
 msgstr "ה_צטרף"
 
@@ -6265,6 +6289,9 @@ msgstr "ארץ"
 msgid "countrycode"
 msgstr "מיקוד מדינה"
 
+msgid "dark skin"
+msgstr ""
+
 # GPS datum
 msgid "datum"
 msgstr "נתון"
@@ -6278,10 +6305,6 @@ msgstr ""
 
 msgid "error"
 msgstr "שגיאה"
-
-#, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "שגיאה בעת מסירת %(message)s ‏( %(error)s )"
 
 msgid "example.org"
 msgstr ""
@@ -6316,6 +6339,9 @@ msgstr "נטוי"
 msgid "lat"
 msgstr "קו רוחב"
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr "מקומיות"
 
@@ -6323,6 +6349,15 @@ msgid "lon"
 msgstr "קו אורך"
 
 msgid "macOS"
+msgstr ""
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
 msgstr ""
 
 #, fuzzy
@@ -6379,9 +6414,6 @@ msgstr ""
 "\n"
 "Rahut Contributors:\n"
 "  Isratine Citizen (genghiskhan AT gmx.ca)"
-
-msgid "user@example.org"
-msgstr ""
 
 msgid "video input"
 msgstr "קלט וידאו"
@@ -6490,6 +6522,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "הרץ _פקודה"
+
+#, fuzzy
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "הצטרף לשיחת קבוצה"
 
 #, fuzzy
 #~ msgid "Allow a participant to send you public or private messages"
@@ -6634,6 +6670,14 @@ msgstr ""
 #~ msgid "Gets detailed info on a contact"
 #~ msgstr "cli"
 
+#, fuzzy
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "הסתרת הכרזה בחלון שיחת קבוצה"
+
+#, fuzzy
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "הסתרת הכרזה בחלון שיחת קבוצה"
+
 # הסתרת רשימת הנוכחים בשיחת קבוצה בתוך חלון שיחת קבוצה
 #, fuzzy
 #~ msgid "Hides the group chat participants list in a group chat window."
@@ -6668,6 +6712,10 @@ msgstr ""
 #~ msgstr ""
 #~ "כאשר מופעלת, השלמה בתוך שיחות קבוצה תיעשה בדומה להשלמה אוטומטית במעטפת "
 #~ "(shell) של מסוף"
+
+#, fuzzy
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr "כאשר מופעלת, לחיצה על המקש Esc תוביל לסגירת חלון/כרטיסייה."
 
 #~ msgid "Invalid affiliation given"
 #~ msgstr "ניתן שיוך שגוי"
@@ -6823,9 +6871,6 @@ msgstr ""
 #~ msgid "Send a disco info request"
 #~ msgstr "בקשות קבלה אשר נשלחו"
 
-#~ msgid "Send a message to the contact"
-#~ msgstr "מסירת הודעה לאיש קשר"
-
 # BUG: him or her or they
 # he she
 #, fuzzy
@@ -6909,6 +6954,10 @@ msgstr ""
 
 #~ msgid "Set the presence type and description"
 #~ msgstr "קביעת טיפוס ותיאור הנוכחות"
+
+#, fuzzy
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "הצג _אווטארים של אנשי קשר ברשימה"
 
 #~ msgid ""
 #~ "Show help on a given command or a list of available commands if -a is "
@@ -7010,6 +7059,10 @@ msgstr ""
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "סגור את Gajim תמיד"
 
+#, fuzzy
+#~ msgid "_Invite"
+#~ msgstr "ה_זמן"
+
 # מאמת
 #, fuzzy
 #~ msgid "_Try Again"
@@ -7030,6 +7083,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "command"
 #~ msgstr "cli"
+
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "שגיאה בעת מסירת %(message)s ‏( %(error)s )"
 
 #, fuzzy
 #~ msgid "file"

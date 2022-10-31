@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -440,6 +440,10 @@ msgid "?Message row action:Retract…"
 msgstr "Prvá prijatá správa"
 
 #, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "Obsah správy"
+
+#, fuzzy
 msgid "?Message state:Received"
 msgstr "Prvá prijatá správa"
 
@@ -704,6 +708,10 @@ msgid "Add Contact"
 msgstr "_Pridať kontakt..."
 
 #, fuzzy
+msgid "Add Contact…"
+msgstr "_Pridať kontakt..."
+
+#, fuzzy
 msgid "Add Entry"
 msgstr "Záznam:"
 
@@ -775,10 +783,6 @@ msgstr "_Adresa:"
 #, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "Toto nie je diskusná skupina"
-
-#, fuzzy
-msgid "Adhoc Group Chat"
-msgstr "Pripojiť sa k diskusnej skupine"
 
 #, fuzzy
 msgid "Adjust to Status"
@@ -971,9 +975,6 @@ msgstr "Vyžiadať správu o stave, keď som:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Spýtať sa pred zatvorením okna/záložky pre diskusnú skupinu."
-
-msgid "Ask before pasting an image."
-msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -1347,6 +1348,9 @@ msgstr ""
 msgid "Chats"
 msgstr "Rozhovory"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr ""
 
@@ -1429,6 +1433,9 @@ msgstr "Vybrať zvuk"
 msgid "Clear message entry"
 msgstr "Správa odoslaná"
 
+msgid "Click messages to select them"
+msgstr ""
+
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(nick)s bol odstránený z miestnosti (%(reason)s)"
@@ -1452,9 +1459,15 @@ msgstr "_Poslať a zatvoriť"
 msgid "Close Search"
 msgstr "Hľadať"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 #, fuzzy
 msgid "Close chat"
 msgstr "Zavrieť"
+
+msgid "Close with Escape"
+msgstr ""
 
 msgid "Code snippet"
 msgstr ""
@@ -1687,6 +1700,10 @@ msgid "Copy Location"
 msgstr "_Kopírovať umiestnenie odkazu"
 
 #, fuzzy
+msgid "Copy Text"
+msgstr "JID miestnosti"
+
+#, fuzzy
 msgid "Copy XMPP Address"
 msgstr "_Kopírovať JID/e-mailovú adresu"
 
@@ -1723,6 +1740,10 @@ msgstr "Odstraňuje sa účet %s"
 
 #, fuzzy
 msgid "Create Group Chat"
+msgstr "Opustiť diskusnú skupinu"
+
+#, fuzzy
+msgid "Create Group Chat…"
 msgstr "Opustiť diskusnú skupinu"
 
 #, fuzzy
@@ -1773,11 +1794,18 @@ msgstr "Klusám"
 msgid "Decline"
 msgstr "_Odhlásený"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "Predvolené"
 
 msgid "Default Sync Threshold"
 msgstr ""
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Premenovať kontakt"
 
 #, fuzzy
 msgid "Default device"
@@ -1955,6 +1983,10 @@ msgstr "Preposlať neprečítané správy"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Kódim"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Stav: "
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2600,14 +2632,6 @@ msgid "Hide this menu"
 msgstr "Skryť toto menu"
 
 #, fuzzy
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "Skrývanie titulku v okne s diskusnou skupinou"
-
-#, fuzzy
-msgid "Hides the banner in a group chat window."
-msgstr "Skrývanie titulku v okne s diskusnou skupinou"
-
-#, fuzzy
 msgid "Home"
 msgstr "<b>Domovská stránka:</b>"
 
@@ -2682,10 +2706,6 @@ msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr "Ak je pravda, stlačením Esc klávesy zatvoríte kartu/okno."
 
 #, fuzzy
 msgid ""
@@ -2817,10 +2837,6 @@ msgid "Invite New Contact"
 msgstr "Pozvať _kontakty"
 
 msgid "Invite friends to group chats or join one"
-msgstr ""
-
-#, python-format
-msgid "Invite someone to your chat with %s"
 msgstr ""
 
 #, fuzzy
@@ -3944,6 +3960,10 @@ msgstr "Odstráni dokončené, zrušené a zlyhané prenosy súborov zo zoznamu"
 msgid "Remove contact from contact list"
 msgstr "Odstráni kontakt zo zoznamu"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Odstráni kontakt zo zoznamu"
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -4059,7 +4079,7 @@ msgid "Resource"
 msgstr "Zdroj:"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr "<b>POZNÁMKA:</b> Musíte reštartovať Gajim, aby boli použité zmeny"
 
 #, fuzzy
@@ -4234,6 +4254,10 @@ msgid "Select Account"
 msgstr "Odstraňuje sa účet %s"
 
 #, fuzzy
+msgid "Select Contacts"
+msgstr "Poslať kontakty:"
+
+#, fuzzy
 msgid "Select File…"
 msgstr "Poslať _súbor"
 
@@ -4315,6 +4339,10 @@ msgstr "Poslať správu"
 #, fuzzy
 msgid "Send Message Receipts"
 msgstr "Prvá prijatá správa"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Použitie: /%s, pošle správu kontaktu"
 
 #, fuzzy
 msgid "Send Read Markers"
@@ -4430,10 +4458,6 @@ msgid "Show"
 msgstr ""
 
 #, fuzzy
-msgid "Show Chat State In Banner"
-msgstr "Zobraziť a_vatary v zozname kontaktov"
-
-#, fuzzy
 msgid "Show Commands"
 msgstr "príkaz"
 
@@ -4448,6 +4472,10 @@ msgstr "Zobraziť len _aktívne kontakty"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Umiestnenie:"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4523,6 +4551,9 @@ msgstr "Zobraziť všetky čakajúce _udalosti"
 msgid "Show chat list"
 msgstr "Umiestnenie:"
 
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+
 #, fuzzy
 msgid "Show in Taskbar"
 msgstr "Zobraziť trans_porty"
@@ -4559,9 +4590,6 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Notification-daemon"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
 
 #, fuzzy
 msgid "Show window in the taskbar"
@@ -5871,10 +5899,6 @@ msgstr "_Hostiteľ:"
 msgid "_Hostname"
 msgstr "Názov _hostiteľa:"
 
-#, fuzzy
-msgid "_Invite"
-msgstr "Poz_vať"
-
 msgid "_Join"
 msgstr "_Pripojiť"
 
@@ -6107,6 +6131,9 @@ msgstr "Účet"
 msgid "countrycode"
 msgstr "Účet"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr ""
 
@@ -6121,10 +6148,6 @@ msgstr ""
 #, fuzzy
 msgid "error"
 msgstr "Chyba"
-
-#, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "chyba pri odosielaní %(message)s ( %(error)s )"
 
 msgid "example.org"
 msgstr ""
@@ -6158,6 +6181,9 @@ msgstr "Kurzíva"
 msgid "lat"
 msgstr ""
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr ""
 
@@ -6166,6 +6192,15 @@ msgid "lon"
 msgstr "jeden"
 
 msgid "macOS"
+msgstr ""
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
 msgstr ""
 
 #, fuzzy
@@ -6215,9 +6250,6 @@ msgid "translator-credits"
 msgstr ""
 "Juraj Michálek (juraj.michalek AT asinus.org)\n"
 "Pavol Klačanský <pavol@klacansky.com>"
-
-msgid "user@example.org"
-msgstr ""
 
 msgid "video input"
 msgstr "video vstup"
@@ -6300,6 +6332,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "_Vykonať príkaz"
+
+#, fuzzy
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Pripojiť sa k diskusnej skupine"
 
 #, fuzzy
 #~ msgid "App Indicator Icon"
@@ -6410,6 +6446,14 @@ msgstr ""
 #~ msgstr "Získať podrobné informácie o kontakte"
 
 #, fuzzy
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "Skrývanie titulku v okne s diskusnou skupinou"
+
+#, fuzzy
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "Skrývanie titulku v okne s diskusnou skupinou"
+
+#, fuzzy
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr "Skrývanie zoznamu účastníkov v okne s diskusnou skupinou."
 
@@ -6436,6 +6480,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Ak je zaškrtnuté, Gajim bude zobrazovať náladu kontaktov v okne so "
 #~ "zoznamom kontaktovi."
+
+#, fuzzy
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr "Ak je pravda, stlačením Esc klávesy zatvoríte kartu/okno."
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"
@@ -6568,10 +6616,6 @@ msgstr ""
 #~ msgstr "Vráti počet neprečítaných správ"
 
 #, fuzzy
-#~ msgid "Send a message to the contact"
-#~ msgstr "Použitie: /%s, pošle správu kontaktu"
-
-#, fuzzy
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "Použitie: /%s, pošle správu kontaktu"
 
@@ -6615,6 +6659,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Zbernica relácie nie je k dispozícii.\n"
 #~ "Skúste si prečítať %(url)s"
+
+#, fuzzy
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Zobraziť a_vatary v zozname kontaktov"
 
 #~ msgid "Shows a help on specific command"
 #~ msgstr "Zobrazí pomocníka pre daný príkaz"
@@ -6701,6 +6749,10 @@ msgstr ""
 #~ msgstr "Vždy zavrieť Gajim"
 
 #, fuzzy
+#~ msgid "_Invite"
+#~ msgstr "Poz_vať"
+
+#, fuzzy
 #~ msgid "_Try Again"
 #~ msgstr "Overiť znovu..."
 
@@ -6723,6 +6775,9 @@ msgstr ""
 
 #~ msgid "command"
 #~ msgstr "príkaz"
+
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "chyba pri odosielaní %(message)s ( %(error)s )"
 
 #~ msgid "file"
 #~ msgstr "súbor"

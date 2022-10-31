@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2009-10-29 23:50+0100\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -444,6 +444,10 @@ msgid "?Message row action:Retract…"
 msgstr "Primljena Prva Poruka"
 
 #, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "Sadržaj poruke"
+
+#, fuzzy
 msgid "?Message state:Received"
 msgstr "Primljena Prva Poruka"
 
@@ -711,6 +715,10 @@ msgid "Add Contact"
 msgstr "_Dodaj kontakt..."
 
 #, fuzzy
+msgid "Add Contact…"
+msgstr "_Dodaj kontakt..."
+
+#, fuzzy
 msgid "Add Entry"
 msgstr "Unos:"
 
@@ -782,10 +790,6 @@ msgstr "_Adresa:"
 #, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "Ovo nije grupni razgovor"
-
-#, fuzzy
-msgid "Adhoc Group Chat"
-msgstr "Pridruži se grupnom razgovoru"
 
 #, fuzzy
 msgid "Adjust to Status"
@@ -981,9 +985,6 @@ msgstr "Pitaj za statusnu poruku pri:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Pitaj pre zatvaranja prozora/jezička grupnog razgovora."
-
-msgid "Ask before pasting an image."
-msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -1356,6 +1357,9 @@ msgstr ""
 msgid "Chats"
 msgstr "Razgovori"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr ""
 
@@ -1438,6 +1442,9 @@ msgstr "Odaberite zvuk"
 msgid "Clear message entry"
 msgstr "Poruka Poslata"
 
+msgid "Click messages to select them"
+msgstr ""
+
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(nick)s je izbačen iz sobe (%(reason)s)"
@@ -1461,7 +1468,13 @@ msgstr "_Pošalji i zatvori"
 msgid "Close Search"
 msgstr "Pretraga"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
+msgstr ""
+
+msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
@@ -1695,6 +1708,10 @@ msgid "Copy Location"
 msgstr "_Kopiraj lokaciju veze"
 
 #, fuzzy
+msgid "Copy Text"
+msgstr "Džaber ID sobe:"
+
+#, fuzzy
 msgid "Copy XMPP Address"
 msgstr "_Kopiraj džaber ID/e-mejl adresu"
 
@@ -1731,6 +1748,10 @@ msgstr "Uklanjanje računa %s"
 
 #, fuzzy
 msgid "Create Group Chat"
+msgstr "Napusti grupne razgovore"
+
+#, fuzzy
+msgid "Create Group Chat…"
 msgstr "Napusti grupne razgovore"
 
 #, fuzzy
@@ -1781,11 +1802,18 @@ msgstr "Džogira"
 msgid "Decline"
 msgstr "_Nije na vezi"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "Podrazumevano"
 
 msgid "Default Sync Threshold"
 msgstr ""
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Preimenuj kontakt"
 
 #, fuzzy
 msgid "Default device"
@@ -1963,6 +1991,10 @@ msgstr "Prosledi nepročitane poruke"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Programira"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Status: "
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2609,14 +2641,6 @@ msgid "Hide this menu"
 msgstr "Sakrij ovaj meni"
 
 #, fuzzy
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "Sakriva baner u prozoru grupnog razgovora."
-
-#, fuzzy
-msgid "Hides the banner in a group chat window."
-msgstr "Sakriva baner u prozoru grupnog razgovora."
-
-#, fuzzy
 msgid "Home"
 msgstr "<b>Lična strana:</b>"
 
@@ -2691,10 +2715,6 @@ msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr "Ako je istinito, pritisak na taster 'esc' zatvara jezičak/prozor."
 
 #, fuzzy
 msgid ""
@@ -2828,10 +2848,6 @@ msgid "Invite New Contact"
 msgstr "Pozovi kontakte"
 
 msgid "Invite friends to group chats or join one"
-msgstr ""
-
-#, python-format
-msgid "Invite someone to your chat with %s"
 msgstr ""
 
 #, fuzzy
@@ -3959,6 +3975,10 @@ msgstr "Ukloni završene, prekinute i neuspele prenose datoteka iz liste"
 msgid "Remove contact from contact list"
 msgstr "Uklanja kontakt sa liste"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Uklanja kontakt sa liste"
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -4074,7 +4094,7 @@ msgid "Resource"
 msgstr "Resurs:"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr ""
 "<b>NAPOMENA:</b> Trebalo bi da ponovo pokrenete Gajim da bi neke izmene "
 "podešavanja postale primenjene"
@@ -4251,6 +4271,10 @@ msgid "Select Account"
 msgstr "Uklanjanje računa %s"
 
 #, fuzzy
+msgid "Select Contacts"
+msgstr "Poslati kontakti:"
+
+#, fuzzy
 msgid "Select File…"
 msgstr "Pošalji _datoteku"
 
@@ -4332,6 +4356,10 @@ msgstr "Pošalji poruku"
 #, fuzzy
 msgid "Send Message Receipts"
 msgstr "Primljena Prva Poruka"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Način korišćenja: /%s, šalje poruku kontaktu"
 
 #, fuzzy
 msgid "Send Read Markers"
@@ -4446,10 +4474,6 @@ msgid "Show"
 msgstr ""
 
 #, fuzzy
-msgid "Show Chat State In Banner"
-msgstr "Prikaži _avatare kontakata na listi"
-
-#, fuzzy
 msgid "Show Commands"
 msgstr "Komanda: %s"
 
@@ -4464,6 +4488,10 @@ msgstr "Prikaži samo _aktivne kontakte"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Obaveštenje"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4539,6 +4567,9 @@ msgstr "Prikaži sv_e događaje na čekanju"
 msgid "Show chat list"
 msgstr "Obaveštenje"
 
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+
 #, fuzzy
 msgid "Show in Taskbar"
 msgstr "Prikaži trans_porte"
@@ -4575,9 +4606,6 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Notification-daemon"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
 
 #, fuzzy
 msgid "Show window in the taskbar"
@@ -5885,10 +5913,6 @@ msgstr "_Host:"
 msgid "_Hostname"
 msgstr "Ime hosta:"
 
-#, fuzzy
-msgid "_Invite"
-msgstr "Pozo_vi"
-
 msgid "_Join"
 msgstr "_Pridruži se"
 
@@ -6121,6 +6145,9 @@ msgstr "Nalog"
 msgid "countrycode"
 msgstr "Nalog"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr ""
 
@@ -6135,10 +6162,6 @@ msgstr ""
 #, fuzzy
 msgid "error"
 msgstr "Greška"
-
-#, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "greška prilikom slanja %(message)s ( %(error)s )"
 
 msgid "example.org"
 msgstr ""
@@ -6172,6 +6195,9 @@ msgstr "Kurziv"
 msgid "lat"
 msgstr ""
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr ""
 
@@ -6180,6 +6206,15 @@ msgid "lon"
 msgstr "jedan"
 
 msgid "macOS"
+msgstr ""
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
 msgstr ""
 
 #, fuzzy
@@ -6227,9 +6262,6 @@ msgstr ""
 
 msgid "translator-credits"
 msgstr "B. Kokanović. <branko.kokanovic@gmail.com>"
-
-msgid "user@example.org"
-msgstr ""
 
 msgid "video input"
 msgstr ""
@@ -6318,6 +6350,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "_Izvrši naredbu"
+
+#, fuzzy
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Pridruži se grupnom razgovoru"
 
 #, fuzzy
 #~ msgid "App Indicator Icon"
@@ -6443,6 +6479,14 @@ msgstr ""
 #~ msgstr "Daje detaljne informacije o kontaktu"
 
 #, fuzzy
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "Sakriva baner u prozoru grupnog razgovora."
+
+#, fuzzy
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "Sakriva baner u prozoru grupnog razgovora."
+
+#, fuzzy
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr "Sakriva listu učesnika u prozoru grupnog razgovora"
 
@@ -6475,6 +6519,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Ako je True, dopunjavanje u grupnim razgovorima će biti kao dopunjavanje "
 #~ "u konzoli"
+
+#, fuzzy
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr "Ako je istinito, pritisak na taster 'esc' zatvara jezičak/prozor."
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"
@@ -6609,10 +6657,6 @@ msgstr ""
 #~ msgstr "Poslati zahtev primanja"
 
 #, fuzzy
-#~ msgid "Send a message to the contact"
-#~ msgstr "Način korišćenja: /%s, šalje poruku kontaktu"
-
-#, fuzzy
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "Način korišćenja: /%s, šalje poruku kontaktu"
 
@@ -6660,6 +6704,10 @@ msgstr ""
 
 #~ msgid "Set the presence type and description"
 #~ msgstr "Postavi tip prisutnosti i opis"
+
+#, fuzzy
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Prikaži _avatare kontakata na listi"
 
 #~ msgid "Shows a help on specific command"
 #~ msgstr "Prikazuje pomoć za određenu naredbu"
@@ -6748,6 +6796,10 @@ msgstr ""
 #~ msgstr "Uvek zatvori Gajim"
 
 #, fuzzy
+#~ msgid "_Invite"
+#~ msgstr "Pozo_vi"
+
+#, fuzzy
 #~ msgid "_Try Again"
 #~ msgstr "Potvrdite ponovo..."
 
@@ -6769,6 +6821,9 @@ msgstr ""
 
 #~ msgid "command"
 #~ msgstr "naredba"
+
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "greška prilikom slanja %(message)s ( %(error)s )"
 
 #~ msgid "file"
 #~ msgstr "datoteka"

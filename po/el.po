@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -444,6 +444,10 @@ msgid "?Message row action:Retract…"
 msgstr "Λήφθηκε το πρώτο μήνυμα"
 
 #, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "περιεχόμενα μηνύματος"
+
+#, fuzzy
 msgid "?Message state:Received"
 msgstr "Λήφθηκε το πρώτο μήνυμα"
 
@@ -712,6 +716,10 @@ msgid "Add Contact"
 msgstr "_Προσθήκη επαφής..."
 
 #, fuzzy
+msgid "Add Contact…"
+msgstr "_Προσθήκη επαφής..."
+
+#, fuzzy
 msgid "Add Entry"
 msgstr "Εγγραφή:"
 
@@ -778,10 +786,6 @@ msgstr "Διεύθυνση"
 #, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "Αυτή η μορφή συμπίεσης δεν υποστηρίζεται:"
-
-#, fuzzy
-msgid "Adhoc Group Chat"
-msgstr "Συμμετοχή σε ομαδική κουβέντα"
 
 #, fuzzy
 msgid "Adjust to Status"
@@ -973,9 +977,6 @@ msgstr "Ερώτηση μηνύματος κατάστασης όταν γίνο
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Ερώτηση πριν το κλείσιμο καρτέλας/παραθύρου ομαδικής κουβέντας."
-
-msgid "Ask before pasting an image."
-msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -1343,6 +1344,9 @@ msgstr ""
 msgid "Chats"
 msgstr "Συζητήσεις"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr ""
 
@@ -1426,6 +1430,9 @@ msgstr "Επιλογή ήχου"
 msgid "Clear message entry"
 msgstr "Το μήνυμα στάλθηκε"
 
+msgid "Click messages to select them"
+msgstr ""
+
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "Ο %(nick)s πετάχτηκε έξω από τον %(who)s: %(reason)s"
@@ -1449,7 +1456,13 @@ msgstr "_Αποστολή & κλείσιμο"
 msgid "Close Search"
 msgstr "Αναζήτηση"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
+msgstr ""
+
+msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
@@ -1683,6 +1696,10 @@ msgid "Copy Location"
 msgstr "_Αντιγραφή τοποθεσίας δεσμού"
 
 #, fuzzy
+msgid "Copy Text"
+msgstr "Δωμάτιο:"
+
+#, fuzzy
 msgid "Copy XMPP Address"
 msgstr "Α_ντιγραφή JID/Email διεύθυνσης"
 
@@ -1719,6 +1736,10 @@ msgstr "Aφαίρεση του λογαριασμού %s"
 
 #, fuzzy
 msgid "Create Group Chat"
+msgstr "Ομαδικές συζητήσεις"
+
+#, fuzzy
+msgid "Create Group Chat…"
 msgstr "Ομαδικές συζητήσεις"
 
 #, fuzzy
@@ -1770,11 +1791,18 @@ msgstr "_Συμμετοχή"
 msgid "Decline"
 msgstr "Απ_οσυνδεδεμένος"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "Προεπιλογή"
 
 msgid "Default Sync Threshold"
 msgstr ""
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "_Μετονομασία αρχείων"
 
 #, fuzzy
 msgid "Default device"
@@ -1953,6 +1981,10 @@ msgstr "%d μη αναγνωσμένο μήνυμα"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Σύνθεση"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Κατάσταση: "
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2602,14 +2634,6 @@ msgid "Hide this menu"
 msgstr "Απόκρυψη αυτού του μενού"
 
 #, fuzzy
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "Ερώτηση πριν το κλείσιμο καρτέλας/ παραθύρου ομαδικής κουβέντας."
-
-#, fuzzy
-msgid "Hides the banner in a group chat window."
-msgstr "Ερώτηση πριν το κλείσιμο καρτέλας/ παραθύρου ομαδικής κουβέντας."
-
-#, fuzzy
 msgid "Home"
 msgstr "_Ξένιος υπολογιστής:"
 
@@ -2684,11 +2708,6 @@ msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr ""
-"Αν Αληθές, πατώντας το πλήκτρο διαφυγής, κλείνει η καρτέλα/το παράθυρο."
 
 msgid ""
 "If enabled, you will be able to set a negative priority to your account in "
@@ -2819,10 +2838,6 @@ msgid "Invite New Contact"
 msgstr "Επαφές"
 
 msgid "Invite friends to group chats or join one"
-msgstr ""
-
-#, python-format
-msgid "Invite someone to your chat with %s"
 msgstr ""
 
 #, fuzzy
@@ -3952,6 +3967,10 @@ msgstr ""
 msgid "Remove contact from contact list"
 msgstr "Αφαιρεί μια επαφή από τη λίστα επαφών"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Αφαιρεί μια επαφή από τη λίστα επαφών"
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -4063,7 +4082,7 @@ msgid "Resource"
 msgstr "Πόρος:"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr ""
 "<b>ΣΗΜΕΙΩΣΗ:</b> Θα πρέπει να επανεκκινήσετε το gajim για να εφαρμοστούν "
 "μερικές ρυθμίσεις"
@@ -4241,6 +4260,10 @@ msgid "Select Account"
 msgstr "Aφαίρεση του λογαριασμού %s"
 
 #, fuzzy
+msgid "Select Contacts"
+msgstr "Επαφές"
+
+#, fuzzy
 msgid "Select File…"
 msgstr "Αποστολή _αρχείου"
 
@@ -4324,6 +4347,10 @@ msgstr "Αποστολή μηνύματος"
 #, fuzzy
 msgid "Send Message Receipts"
 msgstr "Λήφθηκε το πρώτο μήνυμα"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Χρήση: /%s, αποκρύπτει τα κουμπιά της κουβέντας."
 
 #, fuzzy
 msgid "Send Read Markers"
@@ -4439,10 +4466,6 @@ msgid "Show"
 msgstr ""
 
 #, fuzzy
-msgid "Show Chat State In Banner"
-msgstr "Εμφάνιση των ά_βαταρ των επαφών στη λίστα επαφών"
-
-#, fuzzy
 msgid "Show Commands"
 msgstr "Εντολές: %s"
 
@@ -4457,6 +4480,10 @@ msgstr "Εμφάνιση _αποσυνδεδεμένων χρηστών"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Τροποποίηση λογαριασμού"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4526,6 +4553,9 @@ msgstr "Εμφάνιση όλων των γεγονότων που εκκρεμ�
 msgid "Show chat list"
 msgstr "Τροποποίηση λογαριασμού"
 
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+
 #, fuzzy
 msgid "Show in Taskbar"
 msgstr "Προβολή ιδιοτήτων εκτυπωτή"
@@ -4562,9 +4592,6 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "_Εικονίδιο στην περιοχή γνωστοποίησης"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
 
 msgid "Show window in the taskbar"
 msgstr ""
@@ -5870,10 +5897,6 @@ msgstr "Ε_ξυπηρετητής:"
 msgid "_Hostname"
 msgstr "Εξυπηρετητής:"
 
-#, fuzzy
-msgid "_Invite"
-msgstr "Αδυναμία φόρτωσης"
-
 msgid "_Join"
 msgstr "_Συμμετοχή"
 
@@ -6113,6 +6136,9 @@ msgstr "Χώρα:"
 msgid "countrycode"
 msgstr "Λογαριασμός"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr ""
 
@@ -6127,10 +6153,6 @@ msgstr ""
 #, fuzzy
 msgid "error"
 msgstr "Σφάλμα:"
-
-#, fuzzy, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "σφάλμα κατά την αποστολή του %s ( %s )"
 
 msgid "example.org"
 msgstr ""
@@ -6164,6 +6186,9 @@ msgstr "Πλάγια"
 msgid "lat"
 msgstr ""
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr ""
 
@@ -6172,6 +6197,15 @@ msgid "lon"
 msgstr "ένα"
 
 msgid "macOS"
+msgstr ""
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
 msgstr ""
 
 #, fuzzy
@@ -6225,9 +6259,6 @@ msgstr ""
 "Φίλιππος Παπαδόπουλος <psybases@gmail.com>\n"
 "Σταύρος Γιαννούρης <stavrosg@hellug.gr>\n"
 "Στάθης Καμπέρης <ekamperi@auth.gr>"
-
-msgid "user@example.org"
-msgstr ""
 
 msgid "video input"
 msgstr ""
@@ -6302,6 +6333,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "_Εκτέλεση εντολής..."
+
+#, fuzzy
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Συμμετοχή σε ομαδική κουβέντα"
 
 #, fuzzy
 #~ msgid "App Indicator Icon"
@@ -6417,6 +6452,14 @@ msgstr ""
 #~ msgstr "Λήψη αναλυτικών πληροφοριών για μία επαφή"
 
 #, fuzzy
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "Ερώτηση πριν το κλείσιμο καρτέλας/ παραθύρου ομαδικής κουβέντας."
+
+#, fuzzy
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "Ερώτηση πριν το κλείσιμο καρτέλας/ παραθύρου ομαδικής κουβέντας."
+
+#, fuzzy
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr "Αποκρύπτει τη λίστα συμμετεχόντων στο παράθυρο ομαδικής κουβέντας"
 
@@ -6443,6 +6486,11 @@ msgstr ""
 #~ msgstr ""
 #~ "Αν επιλεγεί, το Gajim θα εμφανίζει τα άβαταρ των επαφών στην λίστα επαφών "
 #~ "και στις ομαδικές κουβέντες"
+
+#, fuzzy
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr ""
+#~ "Αν Αληθές, πατώντας το πλήκτρο διαφυγής, κλείνει η καρτέλα/το παράθυρο."
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"
@@ -6560,10 +6608,6 @@ msgstr ""
 #~ msgstr "Αναφέρει τον αριθμό των μη αναγνωσμένων μηνυμάτων"
 
 #, fuzzy
-#~ msgid "Send a message to the contact"
-#~ msgstr "Χρήση: /%s, αποκρύπτει τα κουμπιά της κουβέντας."
-
-#, fuzzy
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "Χρήση: /%s, αποκρύπτει τα κουμπιά της κουβέντας."
 
@@ -6604,6 +6648,10 @@ msgstr ""
 #~ "Session bus is not available.\n"
 #~ "Try reading %(url)s"
 #~ msgstr "Ο δίαυλος του session δεν είναι διαθέσιμος."
+
+#, fuzzy
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Εμφάνιση των ά_βαταρ των επαφών στη λίστα επαφών"
 
 #, fuzzy
 #~ msgid "Shows a help on specific command"
@@ -6678,6 +6726,10 @@ msgstr ""
 #~ msgid "You have no active account"
 #~ msgstr "Δεν έχετε κανέναν ενεργό λογαριασμό"
 
+#, fuzzy
+#~ msgid "_Invite"
+#~ msgstr "Αδυναμία φόρτωσης"
+
 #~ msgid ""
 #~ "change status of account \"account\". If not specified, try to change "
 #~ "status of all accounts that have \"sync with global status\" option set"
@@ -6697,6 +6749,10 @@ msgstr ""
 
 #~ msgid "command"
 #~ msgstr "εντολή"
+
+#, fuzzy
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "σφάλμα κατά την αποστολή του %s ( %s )"
 
 #~ msgid "file"
 #~ msgstr "αρχείο"

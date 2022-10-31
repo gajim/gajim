@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2022-09-22 19:32+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -409,6 +409,10 @@ msgstr "?Acțiunea rândului de mesaje: Citat…"
 msgid "?Message row action:Retract…"
 msgstr "?Acțiunea rândului de mesaje:Retrageți…"
 
+#, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "?Acțiunea rândului de mesaje:Corect…"
+
 msgid "?Message state:Received"
 msgstr "Recepționat"
 
@@ -636,6 +640,10 @@ msgstr "Adăugați un cont"
 msgid "Add Contact"
 msgstr "Adăugați un contact"
 
+#, fuzzy
+msgid "Add Contact…"
+msgstr "Adăugați _Contact…"
+
 msgid "Add Entry"
 msgstr "Adaugă intrare"
 
@@ -693,9 +701,6 @@ msgstr "Adresă"
 
 msgid "Address does not belong to a group chat server"
 msgstr "Adresa nu aparține unui server de chat de grup"
-
-msgid "Adhoc Group Chat"
-msgstr "Chat de grup ad-hoc"
 
 msgid "Adjust to Status"
 msgstr "Ajustarea la statut"
@@ -863,9 +868,6 @@ msgstr "Cereți un mesaj de stare pe…"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Întrebați înainte de închiderea unei file/ferestre de chat în grup."
-
-msgid "Ask before pasting an image."
-msgstr "Întrebați înainte de a lipi o imagine."
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr "Întrebați înainte de a părăsi când fereastra lui Gajim este închisă"
@@ -1194,6 +1196,9 @@ msgstr "Discutați în siguranță cu criptare End-to-End prin OMEMO sau OpenPGP
 msgid "Chats"
 msgstr "Chat-uri"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr "Verificați pentru actualizări"
 
@@ -1263,6 +1268,9 @@ msgstr "Sunet clar"
 msgid "Clear message entry"
 msgstr "Introducerea mesajului de ștergere"
 
+msgid "Click messages to select them"
+msgstr ""
+
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr ""
 "Faceți clic pe contactele pe care doriți să le invitați la acest chat de "
@@ -1285,8 +1293,15 @@ msgstr "Închideți"
 msgid "Close Search"
 msgstr "Închideți căutarea"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
 msgstr "Închideți chat-ul"
+
+#, fuzzy
+msgid "Close with Escape"
+msgstr "Apel cu %s"
 
 msgid "Code snippet"
 msgstr "Fragment de cod"
@@ -1478,6 +1493,10 @@ msgstr "Copiați locația linkului"
 msgid "Copy Location"
 msgstr "Copiați locația"
 
+#, fuzzy
+msgid "Copy Text"
+msgstr "Copiați"
+
 msgid "Copy XMPP Address"
 msgstr "Copiați adresa XMPP"
 
@@ -1507,6 +1526,10 @@ msgstr "Creați un cont"
 
 msgid "Create Group Chat"
 msgstr "Creați un chat de grup"
+
+#, fuzzy
+msgid "Create Group Chat…"
+msgstr "Creați _Group Chat…"
 
 msgid "Create New Account"
 msgstr "Creați un cont nou"
@@ -1547,11 +1570,18 @@ msgstr "Jurnalizare de depanare"
 msgid "Decline"
 msgstr "Declin"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "Implicit"
 
 msgid "Default Sync Threshold"
 msgstr "Prag de sincronizare implicit"
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Spațiu de lucru nou"
 
 msgid "Default device"
 msgstr "Dispozitiv implicit"
@@ -1708,6 +1738,10 @@ msgstr "Mesaje descărcate %s"
 
 msgid "Downloading…"
 msgstr "Descărcarea…"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Stare: %s"
 
 msgid "Drop files or contacts"
 msgstr "Aruncați fișiere sau contacte"
@@ -2293,12 +2327,6 @@ msgstr "Ascundeți lista de chat"
 msgid "Hide this menu"
 msgstr "Ascundeți acest meniu"
 
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "Ascunde bannerul într-o fereastră de chat 1:1."
-
-msgid "Hides the banner in a group chat window."
-msgstr "Ascunde bannerul într-o fereastră de chat în grup."
-
 msgid "Home"
 msgstr "Acasă"
 
@@ -2374,9 +2402,6 @@ msgstr ""
 "Dacă este activată, Gajim va încerca să utilizeze un server STUN atunci când "
 "utilizează Jingle. Cel din opțiunea \"stun_server\" sau cel furnizat de "
 "serverul XMPP."
-
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr "Dacă este activată, apăsarea tastei Esc închide o filă/ fereastră."
 
 msgid ""
 "If enabled, you will be able to set a negative priority to your account in "
@@ -2499,10 +2524,6 @@ msgstr "Invitați un nou contact"
 
 msgid "Invite friends to group chats or join one"
 msgstr "Invitați-vă prietenii la discuții de grup sau alăturați-vă la una"
-
-#, python-format
-msgid "Invite someone to your chat with %s"
-msgstr "Invitați pe cineva la chat cu %s"
 
 msgid "Invitees"
 msgstr "Invitați"
@@ -3495,6 +3516,10 @@ msgstr ""
 msgid "Remove contact from contact list"
 msgstr "Eliminarea contactului din lista de contacte"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Eliminarea contactului din lista de contacte"
+
 msgid "Remove this workspace"
 msgstr "Eliminați acest spațiu de lucru"
 
@@ -3593,7 +3618,8 @@ msgstr "Resetează valoarea la implicit"
 msgid "Resource"
 msgstr "Resurse"
 
-msgid "Restart Gajim for changes to take affect"
+#, fuzzy
+msgid "Restart Gajim for changes to take effect"
 msgstr "Reporniți Gajim pentru ca modificările să aibă efect"
 
 #, fuzzy
@@ -3741,6 +3767,10 @@ msgstr "Avertisment de securitate"
 msgid "Select Account"
 msgstr "Selectați contul"
 
+#, fuzzy
+msgid "Select Contacts"
+msgstr "Contacte trimise:"
+
 msgid "Select File…"
 msgstr "Selectați File…"
 
@@ -3813,6 +3843,10 @@ msgstr "Trimiteți un mesaj"
 
 msgid "Send Message Receipts"
 msgstr "Trimiterea de confirmări de primire a mesajelor"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Trimiteți un mesaj către persoana de contact"
 
 msgid "Send Read Markers"
 msgstr "Trimiteți markeri de citire"
@@ -3913,9 +3947,6 @@ msgstr "Împărtășește statutul meu online"
 msgid "Show"
 msgstr "Afișați"
 
-msgid "Show Chat State In Banner"
-msgstr "Afișați starea chat-ului în banner"
-
 msgid "Show Commands"
 msgstr "Afișați Comenzile"
 
@@ -3928,6 +3959,10 @@ msgstr "Afișați informațiile de contact"
 
 msgid "Show Gajim"
 msgstr "Afișați Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Arată locația"
 
 msgid "Show Join/Leave"
 msgstr "Afișați Join/Leave"
@@ -3987,6 +4022,12 @@ msgstr "Afișați toate avertismentele"
 msgid "Show chat list"
 msgstr "Afișați lista de chat"
 
+#, fuzzy
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+"Afișați starea de chat a contactului (de exemplu, tastatura) în bannerul din "
+"fila Chat-uri"
+
 msgid "Show in Taskbar"
 msgstr "Afișare în bara de activități"
 
@@ -4022,11 +4063,6 @@ msgstr "Afișați sugestii pentru shortcodes, de exemplu :+1:"
 
 msgid "Show the application's version"
 msgstr "Afișați versiunea aplicației"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
-"Afișați starea de chat a contactului (de exemplu, tastatura) în bannerul din "
-"fila Chat-uri"
 
 msgid "Show window in the taskbar"
 msgstr "Afișarea ferestrei în bara de activități"
@@ -5203,9 +5239,6 @@ msgstr "_Gazdă"
 msgid "_Hostname"
 msgstr "_Numele gazdei"
 
-msgid "_Invite"
-msgstr "_Invitați"
-
 msgid "_Join"
 msgstr "_Alăturați-vă"
 
@@ -5406,6 +5439,9 @@ msgstr "țară"
 msgid "countrycode"
 msgstr "cod de țară"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr "data"
 
@@ -5418,10 +5454,6 @@ msgstr "de exemplu, %s"
 
 msgid "error"
 msgstr "eroare"
-
-#, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "eroare în timpul trimiterii %(message)s ( %(error)s )"
 
 msgid "example.org"
 msgstr "exemplu.org"
@@ -5454,6 +5486,9 @@ msgstr "Italic"
 msgid "lat"
 msgstr "lat"
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr "localitate"
 
@@ -5462,6 +5497,15 @@ msgstr "lon"
 
 msgid "macOS"
 msgstr "macOS"
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
+msgstr ""
 
 msgid "or"
 msgstr "sau"
@@ -5506,9 +5550,6 @@ msgstr "marcaj de timp"
 
 msgid "translator-credits"
 msgstr "credite de traducător"
-
-msgid "user@example.org"
-msgstr "utilizator@exemplu.org"
 
 msgid "video input"
 msgstr "intrare video"
@@ -5627,6 +5668,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "Executați comanda…"
 
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Chat de grup ad-hoc"
+
 #~ msgid "Allow a participant to send you public or private messages"
 #~ msgstr "Permiteți unui participant să vă trimită mesaje publice sau private"
 
@@ -5657,6 +5701,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgstr ""
 #~ "Întrebați înainte de a închide fereastra de chat cu file dacă există chat-"
 #~ "uri care pot pierde date (chat, chat privat)."
+
+#~ msgid "Ask before pasting an image."
+#~ msgstr "Întrebați înainte de a lipi o imagine."
 
 #~ msgid "Ban Participant"
 #~ msgstr "Participant interzis"
@@ -5765,6 +5812,12 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Gets detailed info on a contact"
 #~ msgstr "Obține informații detaliate despre un contact"
 
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "Ascunde bannerul într-o fereastră de chat 1:1."
+
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "Ascunde bannerul într-o fereastră de chat în grup."
+
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr ""
 #~ "Ascunde lista participanților la grupul de chat într-o fereastră de chat "
@@ -5813,6 +5866,9 @@ msgstr "...sau lăsați-o aici"
 #~ "Dacă este activată, finalizarea în conversațiile de grup va fi ca o "
 #~ "autocompletare de tip shell."
 
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr "Dacă este activată, apăsarea tastei Esc închide o filă/ fereastră."
+
 #~ msgid "Invalid affiliation given"
 #~ msgstr "Afilierea invalidă indicată"
 
@@ -5824,6 +5880,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Invite a user to a group chat for a reason"
 #~ msgstr "Invitați un utilizator la un chat de grup pentru un motiv anume"
+
+#~ msgid "Invite someone to your chat with %s"
+#~ msgstr "Invitați pe cineva la chat cu %s"
 
 #~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
 #~ msgstr "Se pare că Gajim nu merge. Deci, nu puteți utiliza gajim-remote."
@@ -5944,9 +6003,6 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Send a disco info request"
 #~ msgstr "Trimiteți o cerere de informații despre disco"
 
-#~ msgid "Send a message to the contact"
-#~ msgstr "Trimiteți un mesaj către persoana de contact"
-
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr ""
 #~ "Trimiteți un mesaj către persoana de contact care să îi atragă atenția"
@@ -6021,6 +6077,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Set the presence type and description"
 #~ msgstr "Setați tipul prezentării și descrierea"
+
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Afișați starea chat-ului în banner"
 
 #~ msgid ""
 #~ "Show help on a given command or a list of available commands if -a is "
@@ -6127,6 +6186,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "_Întotdeauna ieșiți atunci când închideți Gajim"
 
+#~ msgid "_Invite"
+#~ msgstr "_Invitați"
+
 #~ msgid "_Try Again"
 #~ msgstr "_Încercați din nou"
 
@@ -6148,6 +6210,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "command"
 #~ msgstr "comandă"
+
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "eroare în timpul trimiterii %(message)s ( %(error)s )"
 
 #~ msgid "file"
 #~ msgstr "fișier"
@@ -6199,3 +6264,6 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "subject"
 #~ msgstr "subiect"
+
+#~ msgid "user@example.org"
+#~ msgstr "utilizator@exemplu.org"

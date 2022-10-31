@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2022-01-13 21:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -430,6 +430,10 @@ msgid "?Message row action:Retract…"
 msgstr "Üyelik ileti _kaydet"
 
 #, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "İletin içindekiler"
+
+#, fuzzy
 msgid "?Message state:Received"
 msgstr "Üyelik ileti _kaydet"
 
@@ -693,6 +697,10 @@ msgid "Add Contact"
 msgstr "Kişi _ekle"
 
 #, fuzzy
+msgid "Add Contact…"
+msgstr "Kişi _ekle"
+
+#, fuzzy
 msgid "Add Entry"
 msgstr "Kayıt:"
 
@@ -762,10 +770,6 @@ msgstr "_Adres:"
 #, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "%s mevcut bir grubun ismi değil"
-
-#, fuzzy
-msgid "Adhoc Group Chat"
-msgstr "Grup Sohbete Katıl"
 
 #, fuzzy
 msgid "Adjust to Status"
@@ -957,9 +961,6 @@ msgid "Ask For Status Message on…"
 msgstr "Durum ileti sor ben buysam:"
 
 msgid "Ask before closing a group chat tab/window."
-msgstr ""
-
-msgid "Ask before pasting an image."
 msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
@@ -1342,6 +1343,9 @@ msgstr ""
 msgid "Chats"
 msgstr "Sohbetler"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr ""
 
@@ -1424,6 +1428,9 @@ msgstr "Ses seç"
 msgid "Clear message entry"
 msgstr "Ileti alınıyor"
 
+msgid "Click messages to select them"
+msgstr ""
+
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%s grup sohbete katıldı"
@@ -1447,7 +1454,13 @@ msgstr "_Gönder & Kapat"
 msgid "Close Search"
 msgstr "Ara"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
+msgstr ""
+
+msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
@@ -1682,6 +1695,10 @@ msgid "Copy Location"
 msgstr "Yer:"
 
 #, fuzzy
+msgid "Copy Text"
+msgstr "Oda JID"
+
+#, fuzzy
 msgid "Copy XMPP Address"
 msgstr "AIM Adres:"
 
@@ -1716,6 +1733,10 @@ msgstr "XMPP hesabı %s@%s"
 
 #, fuzzy
 msgid "Create Group Chat"
+msgstr "Tam-Ekrandan Çık"
+
+#, fuzzy
+msgid "Create Group Chat…"
 msgstr "Tam-Ekrandan Çık"
 
 #, fuzzy
@@ -1766,11 +1787,18 @@ msgstr "Koşuda"
 msgid "Decline"
 msgstr "Bağlı _değil"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "Öntanımlı"
 
 msgid "Default Sync Threshold"
 msgstr ""
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Kişiyi yeniden adlandır"
 
 #, fuzzy
 msgid "Default device"
@@ -1942,6 +1970,10 @@ msgstr "Okunmamış iletler var"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Kodlamada"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Durum:"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2588,14 +2620,6 @@ msgid "Hide this menu"
 msgstr "Menüyi gizle"
 
 #, fuzzy
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "Konuşma penceresinde tüm düğmeleri gizle"
-
-#, fuzzy
-msgid "Hides the banner in a group chat window."
-msgstr "%s mevcut bir grubun ismi değil"
-
-#, fuzzy
 msgid "Home"
 msgstr "<b>Ana Sayfa:</b>"
 
@@ -2665,9 +2689,6 @@ msgstr ""
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
-msgstr ""
-
-msgid "If enabled, pressing Esc closes a tab/window."
 msgstr ""
 
 msgid ""
@@ -2797,10 +2818,6 @@ msgid "Invite New Contact"
 msgstr "Kişi Davet _Et"
 
 msgid "Invite friends to group chats or join one"
-msgstr ""
-
-#, python-format
-msgid "Invite someone to your chat with %s"
 msgstr ""
 
 #, fuzzy
@@ -3925,6 +3942,10 @@ msgstr "Dosya aktarımları listeden sil."
 msgid "Remove contact from contact list"
 msgstr "Kişiyi listeden sil"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Kişiyi listeden sil"
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -4037,7 +4058,7 @@ msgstr "Öntanımlı değerlerine geri al"
 msgid "Resource"
 msgstr "Kaynak:"
 
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr ""
 
 #, fuzzy
@@ -4213,6 +4234,10 @@ msgid "Select Account"
 msgstr "XMPP hesabı %s@%s"
 
 #, fuzzy
+msgid "Select Contacts"
+msgstr "Kişileri eşzamana getir"
+
+#, fuzzy
 msgid "Select File…"
 msgstr "_Dosya Gönder…"
 
@@ -4297,6 +4322,10 @@ msgstr "Mesajı gönder"
 #, fuzzy
 msgid "Send Message Receipts"
 msgstr "Üyelik ileti _kaydet"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Dosyayı bir kişiye gönderir"
 
 #, fuzzy
 msgid "Send Read Markers"
@@ -4410,10 +4439,6 @@ msgid "Show"
 msgstr ""
 
 #, fuzzy
-msgid "Show Chat State In Banner"
-msgstr "Kişi listesindeki olayları göster"
-
-#, fuzzy
 msgid "Show Commands"
 msgstr "komut"
 
@@ -4428,6 +4453,10 @@ msgstr "Sadece _Çecredeki Kişileri Göster"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Yer:"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4497,6 +4526,9 @@ msgstr "Bütün Bekleyen _Olayları Göster"
 msgid "Show chat list"
 msgstr "Yer:"
 
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+
 #, fuzzy
 msgid "Show in Taskbar"
 msgstr "_XML Konsolu Göster"
@@ -4531,9 +4563,6 @@ msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
 
 msgid "Show the application's version"
-msgstr ""
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
 msgstr ""
 
 #, fuzzy
@@ -5834,10 +5863,6 @@ msgstr "_Bilgisayar adı:"
 msgid "_Hostname"
 msgstr "_Bilgisayar adı:"
 
-#, fuzzy
-msgid "_Invite"
-msgstr "Davet _et"
-
 msgid "_Join"
 msgstr "_Katıl"
 
@@ -6071,6 +6096,9 @@ msgstr "Hesap"
 msgid "countrycode"
 msgstr "Hesap sırası"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr ""
 
@@ -6085,10 +6113,6 @@ msgstr ""
 #, fuzzy
 msgid "error"
 msgstr "Hata"
-
-#, fuzzy, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "Kişisel ilet gönderimi başarısız"
 
 msgid "example.org"
 msgstr ""
@@ -6122,6 +6146,9 @@ msgstr "Italik"
 msgid "lat"
 msgstr ""
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr ""
 
@@ -6130,6 +6157,15 @@ msgid "lon"
 msgstr "bir"
 
 msgid "macOS"
+msgstr ""
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
 msgstr ""
 
 #, fuzzy
@@ -6176,9 +6212,6 @@ msgid "timestamp"
 msgstr ""
 
 msgid "translator-credits"
-msgstr ""
-
-msgid "user@example.org"
 msgstr ""
 
 msgid "video input"
@@ -6249,6 +6282,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "Komuta _Yürüt"
+
+#, fuzzy
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Grup Sohbete Katıl"
 
 #, fuzzy
 #~ msgid "App Indicator Icon"
@@ -6341,6 +6378,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Gajim will not try to join this group chat again"
 #~ msgstr "%s grup sohbete katıldı"
+
+#, fuzzy
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "Konuşma penceresinde tüm düğmeleri gizle"
+
+#, fuzzy
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "%s mevcut bir grubun ismi değil"
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"
@@ -6457,10 +6502,6 @@ msgstr ""
 #~ msgstr "     İsteklerin gideceği adres: %(requestaddr)s"
 
 #, fuzzy
-#~ msgid "Send a message to the contact"
-#~ msgstr "Dosyayı bir kişiye gönderir"
-
-#, fuzzy
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "Dosyayı bir kişiye gönderir"
 
@@ -6487,6 +6528,10 @@ msgstr ""
 #~ "Sends new chat message to a contact in the contact list. Account is "
 #~ "optional."
 #~ msgstr "Dosyayı bir kişiye gönderir"
+
+#, fuzzy
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Kişi listesindeki olayları göster"
 
 #~ msgid "Shows a help on specific command"
 #~ msgstr "Belirtilen komutla ilgili yardımı gösterir"
@@ -6551,11 +6596,19 @@ msgstr ""
 #~ msgstr "Gajimi her zaman kapat"
 
 #, fuzzy
+#~ msgid "_Invite"
+#~ msgstr "Davet _et"
+
+#, fuzzy
 #~ msgid "_Try Again"
 #~ msgstr "Tekrar dene ? [e/H] "
 
 #~ msgid "command"
 #~ msgstr "komut"
+
+#, fuzzy
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "Kişisel ilet gönderimi başarısız"
 
 #~ msgid "file"
 #~ msgstr "dosya"

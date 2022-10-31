@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
-"PO-Revision-Date: 2022-10-08 14:33+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
+"PO-Revision-Date: 2022-10-31 09:23+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -27,7 +27,7 @@ msgstr " (Hanghívás)"
 
 #, python-brace-format
 msgid " by {actor}"
-msgstr " , {actor} döntése alapján"
+msgstr " {actor} döntése alapján"
 
 #, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
@@ -400,6 +400,9 @@ msgstr "Idézés…"
 msgid "?Message row action:Retract…"
 msgstr "Visszavonás…"
 
+msgid "?Message row action:Select Messages…"
+msgstr "Üzenetek kijelölése…"
+
 msgid "?Message state:Received"
 msgstr "Kézbesített"
 
@@ -623,6 +626,9 @@ msgstr "Új fiók"
 msgid "Add Contact"
 msgstr "Új névjegy"
 
+msgid "Add Contact…"
+msgstr "Névjegy felvétele…"
+
 msgid "Add Entry"
 msgstr "Új bejegyzés"
 
@@ -679,9 +685,6 @@ msgstr "Cím"
 
 msgid "Address does not belong to a group chat server"
 msgstr "Az adott címen nincs társalgó"
-
-msgid "Adhoc Group Chat"
-msgstr "Alkalmi társalgó"
 
 msgid "Adjust to Status"
 msgstr "Jelenléti állapot szerint"
@@ -845,9 +848,6 @@ msgstr "Rákérdezés az állapotüzenetre…"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Megerősítés egy társalgó lapjának/ablakának bezárásakor."
-
-msgid "Ask before pasting an image."
-msgstr "Megerősítés egy kép beszúrása előtt."
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr "A Gajim ablakának bezárásakor kilépés előtt legyen megerősítés"
@@ -1177,6 +1177,10 @@ msgstr ""
 msgid "Chats"
 msgstr "Beszélgetések"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+"A fiók beszélgetései alapértelmezés szerint erre a munkaterületre kerülnek"
+
 msgid "Check For Updates"
 msgstr "Frissítések keresése"
 
@@ -1246,6 +1250,9 @@ msgstr "Hang eltávolítása"
 msgid "Clear message entry"
 msgstr "Az üzenetbeviteli mező törlése"
 
+msgid "Click messages to select them"
+msgstr "Az üzenetekre kattintva bővíthető a kijelölés"
+
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr ""
 "Névjegyeik kiválasztásával egy ebbe a társalgóba szóló meghívó küldhető az "
@@ -1268,8 +1275,14 @@ msgstr "Bezárás"
 msgid "Close Search"
 msgstr "A keresés bezárása"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr "Az ESC billentyű bezárja a beszélgetést"
+
 msgid "Close chat"
 msgstr "A beszélgetés bezárása"
+
+msgid "Close with Escape"
+msgstr "Bezárás ESC billentyűvel"
 
 msgid "Code snippet"
 msgstr "Kódrészlet"
@@ -1461,6 +1474,9 @@ msgstr "Hivatkozás címének másolása"
 msgid "Copy Location"
 msgstr "Hely másolása"
 
+msgid "Copy Text"
+msgstr "Szöveg másolása"
+
 msgid "Copy XMPP Address"
 msgstr "XMPP-cím másolása"
 
@@ -1490,6 +1506,9 @@ msgstr "Fiók létrehozása"
 
 msgid "Create Group Chat"
 msgstr "Társalgó létrehozása"
+
+msgid "Create Group Chat…"
+msgstr "Társalgó létrehozása…"
 
 msgid "Create New Account"
 msgstr "Új fiók létrehozása"
@@ -1530,11 +1549,17 @@ msgstr "Hibakeresési naplózás"
 msgid "Decline"
 msgstr "Elutasítás"
 
+msgid "Decline Invitation"
+msgstr "A meghívás elutasítása"
+
 msgid "Default"
 msgstr "Alapértelmezett"
 
 msgid "Default Sync Threshold"
 msgstr "Alapértelmezett szinkronizálási küszöb"
+
+msgid "Default Workspace"
+msgstr "Alapértelmezett munkaterület"
 
 msgid "Default device"
 msgstr "Alapértelmezett eszköz"
@@ -1687,6 +1712,10 @@ msgstr "%s üzenet lett letöltve"
 
 msgid "Downloading…"
 msgstr "Letöltés…"
+
+#, python-format
+msgid "Draft: %s"
+msgstr "Piszkozat: %s"
 
 msgid "Drop files or contacts"
 msgstr "Ide ejthetők fájlok vagy névjegyek"
@@ -2014,7 +2043,7 @@ msgid "Filter Chats"
 msgstr "Beszélgetések szűrése"
 
 msgid "Filter Chats…"
-msgstr "Beszélgetések szűrése…"
+msgstr "A beszélgetések szűrése…"
 
 msgid "Fingerprints"
 msgstr "Ujjlenyomatok"
@@ -2261,12 +2290,6 @@ msgstr "A beszélgetéslista elrejtése"
 msgid "Hide this menu"
 msgstr "E menü elrejtése"
 
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "A beszélgetés felső sávjak elrejtése."
-
-msgid "Hides the banner in a group chat window."
-msgstr "A társalgó felső sávjának elrejtése."
-
 msgid "Home"
 msgstr "Otthoni"
 
@@ -2337,9 +2360,6 @@ msgstr ""
 "A Jingle használata STUN-kiszolgáló segítségével. Vagy a „stun_server” "
 "beállításban megadott, vagy az XMPP-kiszolgáló által felajánlott lesz "
 "használva."
-
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr "Az ESC billentyű bezárja a lapot/ablakot."
 
 msgid ""
 "If enabled, you will be able to set a negative priority to your account in "
@@ -2460,10 +2480,6 @@ msgstr "Új ismerős meghívása"
 msgid "Invite friends to group chats or join one"
 msgstr ""
 "A barátokat meg lehet hívni társalgókba, csatlakozni lehet társalgókhoz"
-
-#, python-format
-msgid "Invite someone to your chat with %s"
-msgstr "%s mellé másokat is meg lehet hívni a beszélgetésbe"
 
 msgid "Invitees"
 msgstr "Meghívottak"
@@ -3443,6 +3459,9 @@ msgstr ""
 msgid "Remove contact from contact list"
 msgstr "Egy ismerős törlése a névjegyek közül"
 
+msgid "Remove from contact list"
+msgstr "Törlés a névjegyekből"
+
 msgid "Remove this workspace"
 msgstr "A munkaterület törlése"
 
@@ -3541,7 +3560,7 @@ msgstr "Visszaállítás az alapértelmezett értékre"
 msgid "Resource"
 msgstr "Erőforrás"
 
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr "A változások érvényesítéséhez a Gajim újraindítása szükséges"
 
 msgid "Restore chat"
@@ -3690,6 +3709,9 @@ msgstr "Biztonsági figyelmeztetés"
 msgid "Select Account"
 msgstr "Fiókválasztás"
 
+msgid "Select Contacts"
+msgstr "Névjegyek választása"
+
 msgid "Select File…"
 msgstr "Fájl választása…"
 
@@ -3760,6 +3782,9 @@ msgstr "Üzenet küldése"
 
 msgid "Send Message Receipts"
 msgstr "Üzenetnyugták küldése"
+
+msgid "Send Messages with Control+Enter"
+msgstr "Küldés a Ctrl+Enter billentyűkombinációval"
 
 msgid "Send Read Markers"
 msgstr "Olvasás visszajelzése"
@@ -3856,9 +3881,6 @@ msgstr "Láthatja a jelenléti állapotomat"
 msgid "Show"
 msgstr "Megjelenítés"
 
-msgid "Show Chat State In Banner"
-msgstr "Beszélgetésállapot a felső sávon"
-
 msgid "Show Commands"
 msgstr "Parancsok megjelenítése"
 
@@ -3870,6 +3892,9 @@ msgstr "Tartalom megjelenítése"
 
 msgid "Show Gajim"
 msgstr "A főablak megnyitása"
+
+msgid "Show Invitation"
+msgstr "A meghívás részletei"
 
 msgid "Show Join/Leave"
 msgstr "Be- és kilépések jelzése"
@@ -3929,6 +3954,10 @@ msgstr "Minden figyelmeztetés megjelenítése"
 msgid "Show chat list"
 msgstr "Beszélgetéslista megjelenítése"
 
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+"A beszélgetésállapot (pl. „éppen gépel”) jelzése a beszélgetőtárs neve után"
+
 msgid "Show in Taskbar"
 msgstr "Megjelenés a feladatsávon"
 
@@ -3964,10 +3993,6 @@ msgstr "Javaslatok megjelenítése hangulatjelkódok (pl. :+1:) beírásakor"
 
 msgid "Show the application's version"
 msgstr "Az alkalmazás verziószámának megjelenítése"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
-"A másik fél beszélgetésállapotának (pl. éppen gépel) jelzése a felső sávon"
 
 msgid "Show window in the taskbar"
 msgstr "Az ablak megjelenítése a feladatsávon"
@@ -5128,9 +5153,6 @@ msgstr "_Gép"
 msgid "_Hostname"
 msgstr "_Gépnév"
 
-msgid "_Invite"
-msgstr "_Meghívás"
-
 msgid "_Join"
 msgstr "_Belépés"
 
@@ -5330,6 +5352,9 @@ msgstr "ország"
 msgid "countrycode"
 msgstr "országkód"
 
+msgid "dark skin"
+msgstr "fekete bőrű"
+
 msgid "datum"
 msgstr "irányjel"
 
@@ -5342,10 +5367,6 @@ msgstr "pl. %s"
 
 msgid "error"
 msgstr "hiba"
-
-#, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "hiba a küldés során: %(message)s (%(error)s)"
 
 msgid "example.org"
 msgstr "pelda.hu"
@@ -5378,6 +5399,9 @@ msgstr "Dőlt"
 msgid "lat"
 msgstr "szélesség"
 
+msgid "light skin"
+msgstr "fehér bőrű"
+
 msgid "locality"
 msgstr "fekvés"
 
@@ -5386,6 +5410,15 @@ msgstr "hosszúság"
 
 msgid "macOS"
 msgstr "macOS"
+
+msgid "medium skin tone"
+msgstr "kreol bőrű"
+
+msgid "medium-dark skin"
+msgstr "barna bőrű"
+
+msgid "medium-light skin"
+msgstr "világos bőrű"
 
 msgid "or"
 msgstr "vagy"
@@ -5433,9 +5466,6 @@ msgstr ""
 "cr04ch <cr04ch AT disroot.org>\n"
 "Gabriel Papp <gabriel.papp@gmx.com>\n"
 "Göller Bertalan <>"
-
-msgid "user@example.org"
-msgstr "felhasznalo@pelda.hu"
 
 msgid "video input"
 msgstr "videobemenet"
@@ -5559,6 +5589,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "Parancsvégrehajtás…"
 
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Alkalmi társalgó"
+
 #~ msgid "Allow a participant to send you public or private messages"
 #~ msgstr "Egy résztvevő publikus vagy privát üzeneteinek engedélyezése"
 
@@ -5582,6 +5615,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgstr ""
 #~ "Mindig legyen megerősítés több lap egyidejű bezárásakor, ha adatvesztés "
 #~ "léphet fel (beszélgetések és társalgók)."
+
+#~ msgid "Ask before pasting an image."
+#~ msgstr "Megerősítés egy kép beszúrása előtt."
 
 #~ msgid "Ban Participant"
 #~ msgstr "Résztvevő kitiltása"
@@ -5692,6 +5728,12 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Gets detailed info on a contact"
 #~ msgstr "Részletes információkat kér le a partnerről"
 
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "A beszélgetés felső sávjak elrejtése."
+
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "A társalgó felső sávjának elrejtése."
+
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr "A társalgóban a résztvevők listájának elrejtése."
 
@@ -5731,6 +5773,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ "Társalgókban a parancsértelmezők automatikus kiegészítést biztosító "
 #~ "funkciójához hasonló viselkedés."
 
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr "Az ESC billentyű bezárja a lapot/ablakot."
+
 #~ msgid "Invalid affiliation given"
 #~ msgstr "Érvénytelen tagsági szint"
 
@@ -5742,6 +5787,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Invite a user to a group chat for a reason"
 #~ msgstr "Meghívás társalgóba indoklással"
+
+#~ msgid "Invite someone to your chat with %s"
+#~ msgstr "%s mellé másokat is meg lehet hívni a beszélgetésbe"
 
 #~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
 #~ msgstr "Úgy tűnik nem fut a Gajim, tehát nem használhatod a gajim-remote-t"
@@ -5861,9 +5909,6 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Send a disco info request"
 #~ msgstr "Felderítési kérés küldése"
 
-#~ msgid "Send a message to the contact"
-#~ msgstr "Üzenet küldése"
-
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "Figyelemfelhívó üzenet küldése"
 
@@ -5937,6 +5982,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Set the presence type and description"
 #~ msgstr "Jelenlét típusának és leírásának beállítása"
+
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Beszélgetésállapot a felső sávon"
 
 #~ msgid ""
 #~ "Show help on a given command or a list of available commands if -a is "
@@ -6047,6 +6095,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "Always close Gajim"
 
+#~ msgid "_Invite"
+#~ msgstr "_Meghívás"
+
 #~ msgid "_Try Again"
 #~ msgstr "Újr_a"
 
@@ -6068,6 +6119,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "command"
 #~ msgstr "parancs"
+
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "hiba a küldés során: %(message)s (%(error)s)"
 
 #~ msgid "file"
 #~ msgstr "file"
@@ -6121,3 +6175,6 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "subject"
 #~ msgstr "tárgy"
+
+#~ msgid "user@example.org"
+#~ msgstr "felhasznalo@pelda.hu"

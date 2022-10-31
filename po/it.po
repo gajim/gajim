@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2022-09-28 18:27+0000\n"
 "Last-Translator: pjammo <adrianoghr@hotmail.it>\n"
 "Language-Team: Italian <https://translate.gajim.org/projects/gajim/master/it/"
@@ -418,6 +418,10 @@ msgstr "?Azione riga messaggio:Cita…"
 msgid "?Message row action:Retract…"
 msgstr "?Azione riga messaggio:Ritira…"
 
+#, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "?Azione riga messaggio:Correggi…"
+
 msgid "?Message state:Received"
 msgstr "?Message state:Ricevuto"
 
@@ -645,6 +649,10 @@ msgstr "Aggiungi Account"
 msgid "Add Contact"
 msgstr "Aggiungi Contatto"
 
+#, fuzzy
+msgid "Add Contact…"
+msgstr "Aggiungi _Contatto…"
+
 msgid "Add Entry"
 msgstr "Aggiungi voce"
 
@@ -701,9 +709,6 @@ msgstr "Indirizzo"
 
 msgid "Address does not belong to a group chat server"
 msgstr "L'indirizzo non appartiene al server di una conversazione di gruppo"
-
-msgid "Adhoc Group Chat"
-msgstr "Chat di gruppo adhoc"
 
 msgid "Adjust to Status"
 msgstr "Adatta allo Stato"
@@ -869,9 +874,6 @@ msgstr "Chiedi Messaggio di Stato in fase di…"
 msgid "Ask before closing a group chat tab/window."
 msgstr ""
 "Chiedi prima di chiudere la scheda/finestra di una conversazione di gruppo."
-
-msgid "Ask before pasting an image."
-msgstr "Chiedi prima di incollare un'immagine."
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr "Chiedi prima di uscire, quando la finestra di Gajim è chiusa"
@@ -1196,6 +1198,9 @@ msgstr "Conversazioni sicure, cifrate End-to-End tramite OMEMO o OpenPGP."
 msgid "Chats"
 msgstr "Conversazioni"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr "Controlla Aggiornamenti"
 
@@ -1265,6 +1270,9 @@ msgstr "Rimuovi Suono"
 msgid "Clear message entry"
 msgstr "Pulisci campo di testo"
 
+msgid "Click messages to select them"
+msgstr ""
+
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "Clicca sui contatti da invitare alla conversazione di gruppo."
 
@@ -1285,8 +1293,15 @@ msgstr "Chiudi"
 msgid "Close Search"
 msgstr "Chiudi ricerca"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
 msgstr "Chiudi conversazione"
+
+#, fuzzy
+msgid "Close with Escape"
+msgstr "Chiamata con %s"
 
 msgid "Code snippet"
 msgstr "Parte di codice"
@@ -1478,6 +1493,10 @@ msgstr "Copia Collegamento Posizione"
 msgid "Copy Location"
 msgstr "Copia Posizione"
 
+#, fuzzy
+msgid "Copy Text"
+msgstr "Copia"
+
 msgid "Copy XMPP Address"
 msgstr "Copia Indirizzo XMPP"
 
@@ -1507,6 +1526,10 @@ msgstr "Creazione Account"
 
 msgid "Create Group Chat"
 msgstr "Crea Conversazione di Gruppo"
+
+#, fuzzy
+msgid "Create Group Chat…"
+msgstr "Crea Conversazione di Gruppo…"
 
 msgid "Create New Account"
 msgstr "Crea Nuovo Account"
@@ -1547,11 +1570,18 @@ msgstr "Log di Debug"
 msgid "Decline"
 msgstr "Rifiuta"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "Predefinito"
 
 msgid "Default Sync Threshold"
 msgstr "Soglia Sincronizzazione Predefinita"
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Aggiungi spazio di lavoro"
 
 msgid "Default device"
 msgstr "Dispositivo predefinito"
@@ -1710,6 +1740,10 @@ msgstr "%s messaggi scaricati"
 
 msgid "Downloading…"
 msgstr "Scaricamento…"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Stato: %s"
 
 msgid "Drop files or contacts"
 msgstr "Trascina file o contatti"
@@ -2314,12 +2348,6 @@ msgstr "Attiva/Disattiva Conversazione Vocale"
 msgid "Hide this menu"
 msgstr "Nascondi questo menù"
 
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "Il banner sarà nascosto nelle finestre delle conversazioni 1:1."
-
-msgid "Hides the banner in a group chat window."
-msgstr "Il banner sarà nascosto nelle finestre delle conversazioni di gruppo."
-
 #, fuzzy
 msgid "Home"
 msgstr "Sito"
@@ -2399,10 +2427,6 @@ msgid ""
 msgstr ""
 "Se attiva, Gajim proverà ad usare un server STUN quando si usa Jingle. "
 "Quello nell'opzione \"stun_server\", o quello fornito dal server XMPP."
-
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr ""
-"Se attiva, sarà possibile premere il tasto Esc per chiudere schede/finestre."
 
 msgid ""
 "If enabled, you will be able to set a negative priority to your account in "
@@ -2523,10 +2547,6 @@ msgstr "Invita Contatti"
 
 msgid "Invite friends to group chats or join one"
 msgstr "Invita gli amici alle conversazioni di gruppo oppure unisciti ad una"
-
-#, python-format
-msgid "Invite someone to your chat with %s"
-msgstr "Invitare qualcuno alla tua conversazione con %s"
 
 msgid "Invitees"
 msgstr "Invitati"
@@ -3561,6 +3581,10 @@ msgstr ""
 msgid "Remove contact from contact list"
 msgstr "Rimuovi il contatto dalla lista contatti"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Rimuovi il contatto dalla lista contatti"
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -3669,7 +3693,7 @@ msgid "Resource"
 msgstr "Risorsa"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr "Alcune modifiche avranno effetto solo dopo aver riavviato il programma"
 
 #, fuzzy
@@ -3830,6 +3854,10 @@ msgid "Select Account"
 msgstr "Seleziona Account"
 
 #, fuzzy
+msgid "Select Contacts"
+msgstr "Contatti inviati:"
+
+#, fuzzy
 msgid "Select File…"
 msgstr "Invia File…"
 
@@ -3900,6 +3928,10 @@ msgstr "Invia Messaggio"
 
 msgid "Send Message Receipts"
 msgstr "Invia Ricevute di Ritorno"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Invia messaggio al contatto"
 
 msgid "Send Read Markers"
 msgstr "Invia Conferme di Lettura"
@@ -4010,9 +4042,6 @@ msgstr "Modifica stato"
 msgid "Show"
 msgstr "Mostra Umore"
 
-msgid "Show Chat State In Banner"
-msgstr "Mostra Stato di Conversazione nel Banner"
-
 #, fuzzy
 msgid "Show Commands"
 msgstr "Comandi"
@@ -4028,6 +4057,10 @@ msgstr "Mostra la lista dei contatti"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Mostra Posizione"
 
 msgid "Show Join/Leave"
 msgstr "Mostra chi si Unisce/Abbandona"
@@ -4093,6 +4126,12 @@ msgid "Show chat list"
 msgstr "Mostra Posizione"
 
 #, fuzzy
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+"Mostra lo stato di conversazione dei contatti (es. \"sta scrivendo...\") nel "
+"banner delle schede delle conversazioni"
+
+#, fuzzy
 msgid "Show in Taskbar"
 msgstr "Mostra Transport"
 
@@ -4125,11 +4164,6 @@ msgstr ""
 
 msgid "Show the application's version"
 msgstr "Mostra la versione dell'applicazione"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
-"Mostra lo stato di conversazione dei contatti (es. \"sta scrivendo...\") nel "
-"banner delle schede delle conversazioni"
 
 msgid "Show window in the taskbar"
 msgstr "Mostra finestra nella barra delle applicazioni"
@@ -5368,9 +5402,6 @@ msgstr "_Host"
 msgid "_Hostname"
 msgstr "_Host"
 
-msgid "_Invite"
-msgstr "_Invita"
-
 msgid "_Join"
 msgstr "_Unisciti"
 
@@ -5574,6 +5605,9 @@ msgstr "paese"
 msgid "countrycode"
 msgstr "codicepaese"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr "dato"
 
@@ -5586,10 +5620,6 @@ msgstr ""
 
 msgid "error"
 msgstr "errore"
-
-#, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "errore durante l'invio del %(message)s ( %(error)s )"
 
 msgid "example.org"
 msgstr "example.org"
@@ -5623,6 +5653,9 @@ msgstr "Corsivo"
 msgid "lat"
 msgstr "lat"
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr "località"
 
@@ -5631,6 +5664,15 @@ msgstr "lon"
 
 msgid "macOS"
 msgstr "macOS"
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
+msgstr ""
 
 msgid "or"
 msgstr "oppure"
@@ -5679,9 +5721,6 @@ msgstr ""
 "Alberto Paro, Alessandro Falappa, Andrea Ratti, Andrea Zagli (2006-2008), "
 "Daniel Coppi, Davide Pizzetti, Marco Ciampa, Matteo Dell'Amico, Mauro "
 "Brenna, Milo Casagrande"
-
-msgid "user@example.org"
-msgstr "user@example.org"
 
 msgid "video input"
 msgstr "ingresso video"
@@ -5803,6 +5842,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "Esegui Comando…"
 
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Chat di gruppo adhoc"
+
 #~ msgid "Allow a participant to send you public or private messages"
 #~ msgstr "Consenti ad un partecipante di inviarti messaggi pubblici o privati"
 
@@ -5832,6 +5874,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgstr ""
 #~ "Chiedere prima di chiudere la finestra di chat a schede se ci sono chat "
 #~ "che possono perdere dati (chat, private)."
+
+#~ msgid "Ask before pasting an image."
+#~ msgstr "Chiedi prima di incollare un'immagine."
 
 #~ msgid "Ban Participant"
 #~ msgstr "Bandisci Partecipante"
@@ -5942,6 +5987,13 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Gets detailed info on a contact"
 #~ msgstr "Ottiene informazioni dettagliate su un contatto"
 
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "Il banner sarà nascosto nelle finestre delle conversazioni 1:1."
+
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr ""
+#~ "Il banner sarà nascosto nelle finestre delle conversazioni di gruppo."
+
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr ""
 #~ "Nella finestra delle conversazioni di gruppo sarà nascosta la lista dei "
@@ -5991,6 +6043,11 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ "Se attiva, il completamento nelle conversazioni di gruppo funzionerà come "
 #~ "l'auto-completamento della shell."
 
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr ""
+#~ "Se attiva, sarà possibile premere il tasto Esc per chiudere schede/"
+#~ "finestre."
+
 #~ msgid "Invalid affiliation given"
 #~ msgstr "Affiliazione non valida"
 
@@ -6002,6 +6059,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 
 #~ msgid "Invite a user to a group chat for a reason"
 #~ msgstr "Invita un utente ad una conversazione di gruppo per un motivo"
+
+#~ msgid "Invite someone to your chat with %s"
+#~ msgstr "Invitare qualcuno alla tua conversazione con %s"
 
 #~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
 #~ msgstr ""
@@ -6126,9 +6186,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Send a disco info request"
 #~ msgstr "Invia una richiesta di raccolta di informazioni (disco#info)."
 
-#~ msgid "Send a message to the contact"
-#~ msgstr "Invia messaggio al contatto"
-
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "Invia al contatto un messaggio che attirerà la sua attenzione"
 
@@ -6201,6 +6258,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 
 #~ msgid "Set the presence type and description"
 #~ msgstr "Imposta tipo e descrizione della presenza"
+
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Mostra Stato di Conversazione nel Banner"
 
 #~ msgid ""
 #~ "Show help on a given command or a list of available commands if -a is "
@@ -6307,6 +6367,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "Esci _sempre quando chiudi Gajim"
 
+#~ msgid "_Invite"
+#~ msgstr "_Invita"
+
 #~ msgid "_Try Again"
 #~ msgstr "_Riprova"
 
@@ -6328,6 +6391,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 
 #~ msgid "command"
 #~ msgstr "comando"
+
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "errore durante l'invio del %(message)s ( %(error)s )"
 
 #~ msgid "file"
 #~ msgstr "file"
@@ -6379,3 +6445,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 
 #~ msgid "subject"
 #~ msgstr "oggetto"
+
+#~ msgid "user@example.org"
+#~ msgstr "user@example.org"

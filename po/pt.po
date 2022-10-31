@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2022-07-18 19:51+0000\n"
 "Last-Translator: Rogério A. Matos <rogerio.matos@me.com>\n"
 "Language-Team: Portuguese <https://translate.gajim.org/projects/gajim/master/"
@@ -407,6 +407,10 @@ msgstr ""
 msgid "?Message row action:Retract…"
 msgstr "?Message state:Recebido"
 
+#, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "Composição da mensagem"
+
 msgid "?Message state:Received"
 msgstr "?Message state:Recebido"
 
@@ -638,6 +642,10 @@ msgstr "Adicionar Conta"
 msgid "Add Contact"
 msgstr "Adicionar Contato"
 
+#, fuzzy
+msgid "Add Contact…"
+msgstr "Adicionar _Contato…"
+
 msgid "Add Entry"
 msgstr "Adicionar Entrada"
 
@@ -694,9 +702,6 @@ msgstr "Endereço"
 
 msgid "Address does not belong to a group chat server"
 msgstr "O endereço não pertence a um servidor de bate-papo em grupo"
-
-msgid "Adhoc Group Chat"
-msgstr "Bate-papo de Grupo Adhoc"
 
 msgid "Adjust to Status"
 msgstr "Ajustar ao status"
@@ -866,9 +871,6 @@ msgstr "Pedir mensagem de status em…"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Pergunte antes de fechar uma guia/janela de bate-papo em grupo."
-
-msgid "Ask before pasting an image."
-msgstr "Pergunte antes de colar uma imagem."
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr "Pergunte antes de sair quando a janela de Gajim estiver fechada"
@@ -1201,6 +1203,9 @@ msgstr ""
 msgid "Chats"
 msgstr "Bate-papos"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr "Verificar Atualizações"
 
@@ -1270,6 +1275,9 @@ msgstr "Limpar Som"
 msgid "Clear message entry"
 msgstr "Limpar Entrada de Mensagem"
 
+msgid "Click messages to select them"
+msgstr ""
+
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr ""
 "Clique nos contatos que você gostaria de convidar para este bate-papo em "
@@ -1292,8 +1300,15 @@ msgstr "Fechar"
 msgid "Close Search"
 msgstr "Fechar Pesquisa"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
 msgstr "Fechar Bate-papo"
+
+#, fuzzy
+msgid "Close with Escape"
+msgstr "Chamada com %s"
 
 msgid "Code snippet"
 msgstr "Fragmento de código"
@@ -1484,6 +1499,10 @@ msgstr "Copiar Link de Localização"
 msgid "Copy Location"
 msgstr "Copiar Localização"
 
+#, fuzzy
+msgid "Copy Text"
+msgstr "Copiar"
+
 msgid "Copy XMPP Address"
 msgstr "Copiar Endereço XMPP"
 
@@ -1514,6 +1533,10 @@ msgstr "Criar Conta"
 
 msgid "Create Group Chat"
 msgstr "Criar Grupo de Bate-papo"
+
+#, fuzzy
+msgid "Create Group Chat…"
+msgstr "Criar _Grupo de Bate-papo…"
 
 msgid "Create New Account"
 msgstr "Criar Nova Conta"
@@ -1554,11 +1577,18 @@ msgstr "Registro de Depuração"
 msgid "Decline"
 msgstr "Recusou"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "Padrão"
 
 msgid "Default Sync Threshold"
 msgstr "Limite de Sincronização Padrão"
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Nova Área-de-Trabalho"
 
 msgid "Default device"
 msgstr "Dispositivo Padrão"
@@ -1714,6 +1744,10 @@ msgstr "%s mensagens baixadas"
 
 msgid "Downloading…"
 msgstr "Baixando…"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Status: %s"
 
 msgid "Drop files or contacts"
 msgstr "Solte arquivos ou contatos"
@@ -2297,12 +2331,6 @@ msgstr "Alternar Lista de Bate-papo"
 msgid "Hide this menu"
 msgstr "Ocultar este menu"
 
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "Oculta o banner em uma janela de bate-papo 1:1."
-
-msgid "Hides the banner in a group chat window."
-msgstr "Oculta o banner em uma janela de bate-papo em grupo."
-
 msgid "Home"
 msgstr "Início"
 
@@ -2376,9 +2404,6 @@ msgid ""
 msgstr ""
 "Se ativado, o Gajim tentará usar um servidor STUN ao usar o Jingle. O da "
 "opção 'stun_server' ou o fornecido pelo servidor XMPP."
-
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr "Se ativado, pressionar Esc fecha uma guia/janela."
 
 msgid ""
 "If enabled, you will be able to set a negative priority to your account in "
@@ -2499,10 +2524,6 @@ msgstr "Convidar Novo Contato"
 
 msgid "Invite friends to group chats or join one"
 msgstr "Convide amigos para bate-papos em grupo ou participe de um"
-
-#, python-format
-msgid "Invite someone to your chat with %s"
-msgstr "Convide alguém para seu bate-papo com %s"
 
 msgid "Invitees"
 msgstr "Convidados"
@@ -3497,6 +3518,10 @@ msgstr ""
 msgid "Remove contact from contact list"
 msgstr "Remover contato da lista de contatos"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Remover contato da lista de contatos"
+
 msgid "Remove this workspace"
 msgstr "Remover esta Área-de-Trabalho"
 
@@ -3594,7 +3619,8 @@ msgstr "Redefinir o valor para o padrão"
 msgid "Resource"
 msgstr "Recurso"
 
-msgid "Restart Gajim for changes to take affect"
+#, fuzzy
+msgid "Restart Gajim for changes to take effect"
 msgstr "Reinicie o Gajim para que as alterações tenham efeito"
 
 #, fuzzy
@@ -3742,6 +3768,10 @@ msgstr "Avisos de Segurança"
 msgid "Select Account"
 msgstr "Selecione a Conta"
 
+#, fuzzy
+msgid "Select Contacts"
+msgstr "Enviar Contatos:"
+
 msgid "Select File…"
 msgstr "Selecione o Arquivo…"
 
@@ -3815,6 +3845,10 @@ msgstr "Enviar Mensagem"
 
 msgid "Send Message Receipts"
 msgstr "Enviar Recibos de Mensagens"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Envie uma mensagem para o contato"
 
 msgid "Send Read Markers"
 msgstr "Enviar Favoritos de Leitura"
@@ -3915,9 +3949,6 @@ msgstr "Compartilhar meu status online"
 msgid "Show"
 msgstr "Mostrar"
 
-msgid "Show Chat State In Banner"
-msgstr "Mostrar Estado do Bate-papo no Banner"
-
 msgid "Show Commands"
 msgstr "Mostrar Comandos"
 
@@ -3930,6 +3961,10 @@ msgstr "Mostrar Informações de Contato"
 
 msgid "Show Gajim"
 msgstr "Mostrar Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Mostrar Localização"
 
 msgid "Show Join/Leave"
 msgstr "Mostrar Entrar/Sair"
@@ -3992,6 +4027,12 @@ msgstr "Mostrar todos os avisos"
 msgid "Show chat list"
 msgstr "Mostrar Localização"
 
+#, fuzzy
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+"Mostrar o estado de bate-papo do contato (por exemplo, digitando) no banner "
+"da guia de bate-papos"
+
 msgid "Show in Taskbar"
 msgstr "Mostrar na Barra de Tarefas"
 
@@ -4028,11 +4069,6 @@ msgstr "Mostrar sugestões para códigos de acesso, por exemplo :+1:"
 
 msgid "Show the application's version"
 msgstr "Mostrar a versão do aplicativo"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
-"Mostrar o estado de bate-papo do contato (por exemplo, digitando) no banner "
-"da guia de bate-papos"
 
 msgid "Show window in the taskbar"
 msgstr "Mostrar janela na barra de tarefas"
@@ -5216,9 +5252,6 @@ msgstr "_Host"
 msgid "_Hostname"
 msgstr "_Nome do Host"
 
-msgid "_Invite"
-msgstr "_Convidar"
-
 msgid "_Join"
 msgstr "_Entrar"
 
@@ -5418,6 +5451,9 @@ msgstr "país"
 msgid "countrycode"
 msgstr "código do país"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr "dado"
 
@@ -5430,10 +5466,6 @@ msgstr "por exemplo %s"
 
 msgid "error"
 msgstr "Erro"
-
-#, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "erro ao enviar %(message)s ( %(error)s )"
 
 msgid "example.org"
 msgstr "exemplo.org"
@@ -5467,6 +5499,9 @@ msgstr "Itálico"
 msgid "lat"
 msgstr "lati"
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr "localidade"
 
@@ -5475,6 +5510,15 @@ msgstr "long"
 
 msgid "macOS"
 msgstr "macOS"
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
+msgstr ""
 
 msgid "or"
 msgstr "ou"
@@ -5520,9 +5564,6 @@ msgstr "carimbo de data/hora"
 
 msgid "translator-credits"
 msgstr "créditos ao tradutor"
-
-msgid "user@example.org"
-msgstr "usuario@exemplo.org"
 
 msgid "video input"
 msgstr "entrada de vídeo"
@@ -5638,6 +5679,9 @@ msgstr "…ou solte aqui"
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "Executar comando…"
 
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Bate-papo de Grupo Adhoc"
+
 #~ msgid "Allow a participant to send you public or private messages"
 #~ msgstr ""
 #~ "Permitir que um participante lhe envie mensagens públicas ou privadas"
@@ -5662,6 +5706,9 @@ msgstr "…ou solte aqui"
 #~ msgstr ""
 #~ "Pergunte antes de fechar a janela com guias se houver bate-papos que "
 #~ "podem perder dados (bate-papo, bate-papo privado)."
+
+#~ msgid "Ask before pasting an image."
+#~ msgstr "Pergunte antes de colar uma imagem."
 
 #~ msgid "Ban Participant"
 #~ msgstr "Banir Participante"
@@ -5765,6 +5812,12 @@ msgstr "…ou solte aqui"
 #~ msgid "Gets detailed info on a contact"
 #~ msgstr "Busca informações detalhadas sobre um contacto"
 
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "Oculta o banner em uma janela de bate-papo 1:1."
+
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "Oculta o banner em uma janela de bate-papo em grupo."
+
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr ""
 #~ "Oculta a lista de participantes do bate-papo em grupo em uma janela de "
@@ -5812,6 +5865,9 @@ msgstr "…ou solte aqui"
 #~ "Se ativado, a conclusão em bate-papos em grupo será como um preenchimento "
 #~ "automático de shell."
 
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr "Se ativado, pressionar Esc fecha uma guia/janela."
+
 #~ msgid "Invalid affiliation given"
 #~ msgstr "Afiliação inválida fornecida"
 
@@ -5823,6 +5879,9 @@ msgstr "…ou solte aqui"
 
 #~ msgid "Invite a user to a group chat for a reason"
 #~ msgstr "Convidar um usuário para um bate-papo em grupo por um motivo"
+
+#~ msgid "Invite someone to your chat with %s"
+#~ msgstr "Convide alguém para seu bate-papo com %s"
 
 #~ msgid "Join a group chat given by an XMPP Address"
 #~ msgstr "Participe de um bate-papo em grupo fornecido por um endereço XMPP"
@@ -5943,9 +6002,6 @@ msgstr "…ou solte aqui"
 #~ msgid "Send a disco info request"
 #~ msgstr "Envie uma solicitação de informações de disco"
 
-#~ msgid "Send a message to the contact"
-#~ msgstr "Envie uma mensagem para o contato"
-
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "Envie uma mensagem para o contato que atrairá sua atenção"
 
@@ -6007,6 +6063,9 @@ msgstr "…ou solte aqui"
 
 #~ msgid "Set the current status to online"
 #~ msgstr "Definir o status atual como online"
+
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Mostrar Estado do Bate-papo no Banner"
 
 #~ msgid ""
 #~ "Show help on a given command or a list of available commands if -a is "
@@ -6104,6 +6163,9 @@ msgstr "…ou solte aqui"
 #~ msgid "You have no active account"
 #~ msgstr "Não tem nenhuma conta activa"
 
+#~ msgid "_Invite"
+#~ msgstr "_Convidar"
+
 #~ msgid "_Try Again"
 #~ msgstr "_Tentar Novamente"
 
@@ -6126,6 +6188,9 @@ msgstr "…ou solte aqui"
 
 #~ msgid "command"
 #~ msgstr "comando"
+
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "erro ao enviar %(message)s ( %(error)s )"
 
 #~ msgid "file"
 #~ msgstr "Ficheiro"
@@ -6180,3 +6245,6 @@ msgstr "…ou solte aqui"
 #, fuzzy
 #~ msgid "subject"
 #~ msgstr "Assunto:"
+
+#~ msgid "user@example.org"
+#~ msgstr "usuario@exemplo.org"

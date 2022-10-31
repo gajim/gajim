@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -436,6 +436,10 @@ msgid "?Message row action:Retract…"
 msgstr "Atrymanaje pieršaje paviedamleńnie"
 
 #, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "źmiest paviedamleńnia"
+
+#, fuzzy
 msgid "?Message state:Received"
 msgstr "Atrymanaje pieršaje paviedamleńnie"
 
@@ -703,6 +707,10 @@ msgid "Add Contact"
 msgstr "_Dadaj kantakt..."
 
 #, fuzzy
+msgid "Add Contact…"
+msgstr "_Dadaj kantakt..."
+
+#, fuzzy
 msgid "Add Entry"
 msgstr "Zapis:"
 
@@ -771,10 +779,6 @@ msgstr "_Adras:"
 #, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "Heta nie pakoj"
-
-#, fuzzy
-msgid "Adhoc Group Chat"
-msgstr "Dałučysia da pakoju"
 
 #, fuzzy
 msgid "Adjust to Status"
@@ -966,9 +970,6 @@ msgstr "Spytaj paviedamleńnia statusu, kali ja:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Pytajsia paćvierdžańnia pierad začynieńniem kartki/akna razmovy."
-
-msgid "Ask before pasting an image."
-msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -1335,6 +1336,9 @@ msgstr ""
 msgid "Chats"
 msgstr "Razmovy"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr ""
 
@@ -1418,6 +1422,9 @@ msgstr "Abiary hukavy fajł"
 msgid "Clear message entry"
 msgstr "Paviedamleńnie dasłanaje"
 
+msgid "Click messages to select them"
+msgstr ""
+
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(who)s vypchnuŭ %(nick)s: %(reason)s"
@@ -1441,7 +1448,13 @@ msgstr "_Dašli i začyni"
 msgid "Close Search"
 msgstr "Šukaj"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
+msgstr ""
+
+msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
@@ -1675,6 +1688,10 @@ msgid "Copy Location"
 msgstr "S_kapijuj adras spasyłki"
 
 #, fuzzy
+msgid "Copy Text"
+msgstr "Pakoj:"
+
+#, fuzzy
 msgid "Copy XMPP Address"
 msgstr "S_kapijuj JID/Email"
 
@@ -1711,6 +1728,10 @@ msgstr "Vydalajecca kont %s"
 
 #, fuzzy
 msgid "Create Group Chat"
+msgstr "Pakiń pakoji"
+
+#, fuzzy
+msgid "Create Group Chat…"
 msgstr "Pakiń pakoji"
 
 #, fuzzy
@@ -1761,11 +1782,18 @@ msgstr "_Dałučysia"
 msgid "Decline"
 msgstr "Adł_učany"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "Zmoŭčany"
 
 msgid "Default Sync Threshold"
 msgstr ""
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Źmiani nazvu kantaktu"
 
 #, fuzzy
 msgid "Default device"
@@ -1944,6 +1972,10 @@ msgstr "%d niečytanaje paviedamleńnie"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Uvod paviedamleńnia"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Status: "
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2592,14 +2624,6 @@ msgid "Hide this menu"
 msgstr "Schavaj hetaje menu"
 
 #, fuzzy
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "Chavaje baner u aknie pakoju"
-
-#, fuzzy
-msgid "Hides the banner in a group chat window."
-msgstr "Chavaje baner u aknie pakoju"
-
-#, fuzzy
 msgid "Home"
 msgstr "Chatniaja staronka:"
 
@@ -2674,11 +2698,6 @@ msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr ""
-"Kali opcyja maje vartaść True, nacisk klavišy Escape začyniaje kartku/akno."
 
 #, fuzzy
 msgid ""
@@ -2813,10 +2832,6 @@ msgid "Invite New Contact"
 msgstr "Kantakty"
 
 msgid "Invite friends to group chats or join one"
-msgstr ""
-
-#, python-format
-msgid "Invite someone to your chat with %s"
 msgstr ""
 
 #, fuzzy
@@ -3945,6 +3960,10 @@ msgstr "Vydal skončanyja, anulavanyja i chibnyja pieradačy fajłaŭ ź śpisa"
 msgid "Remove contact from contact list"
 msgstr "Vydalaje kantakt sa śpisu"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Vydalaje kantakt sa śpisu"
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -4056,7 +4075,7 @@ msgid "Resource"
 msgstr "Krynica:"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr "<b>UVAHA:</b> Kab ubačyć niekatoryja źmieny, uruchom Gajim"
 
 #, fuzzy
@@ -4231,6 +4250,10 @@ msgid "Select Account"
 msgstr "Vydalajecca kont %s"
 
 #, fuzzy
+msgid "Select Contacts"
+msgstr "Kantakty"
+
+#, fuzzy
 msgid "Select File…"
 msgstr "Vyšli _fajł"
 
@@ -4313,6 +4336,10 @@ msgstr "Dašli paviedamleńnie"
 #, fuzzy
 msgid "Send Message Receipts"
 msgstr "Atrymanaje pieršaje paviedamleńnie"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Užyvańnie: /%s, chavaje knopki razmovy."
 
 #, fuzzy
 msgid "Send Read Markers"
@@ -4428,10 +4455,6 @@ msgid "Show"
 msgstr ""
 
 #, fuzzy
-msgid "Show Chat State In Banner"
-msgstr "Pakazvaj a_vatary kantaktaŭ u śpisie kantaktaŭ"
-
-#, fuzzy
 msgid "Show Commands"
 msgstr "Zahady: %s"
 
@@ -4446,6 +4469,10 @@ msgstr "Pakažy _adłučanyja kantakty"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Madyfikacyja kontu"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4521,6 +4548,9 @@ msgstr "Pakažy ŭsie niahledžanyja _padzieji"
 msgid "Show chat list"
 msgstr "Madyfikacyja kontu"
 
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+
 #, fuzzy
 msgid "Show in Taskbar"
 msgstr "Pakažy _transparty"
@@ -4557,9 +4587,6 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Pakazvaj _ikonu ŭ poli nahadvańnia"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
 
 #, fuzzy
 msgid "Show window in the taskbar"
@@ -5858,10 +5885,6 @@ msgstr "_Host:"
 msgid "_Hostname"
 msgstr "Nazva hosta: "
 
-#, fuzzy
-msgid "_Invite"
-msgstr "_Zaprasi"
-
 msgid "_Join"
 msgstr "_Dałučysia"
 
@@ -6098,6 +6121,9 @@ msgstr "Krajina:"
 msgid "countrycode"
 msgstr "Kont"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr ""
 
@@ -6112,10 +6138,6 @@ msgstr ""
 #, fuzzy
 msgid "error"
 msgstr "Pamyłka Avahi"
-
-#, fuzzy, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "pamyłka dasyłańnia %s ( %s )"
 
 msgid "example.org"
 msgstr ""
@@ -6149,6 +6171,9 @@ msgstr "Nachileny"
 msgid "lat"
 msgstr ""
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr ""
 
@@ -6157,6 +6182,15 @@ msgid "lon"
 msgstr "pieršaja"
 
 msgid "macOS"
+msgstr ""
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
 msgstr ""
 
 #, fuzzy
@@ -6204,9 +6238,6 @@ msgstr ""
 
 msgid "translator-credits"
 msgstr "Ihar Hrachyshka <ihar.hrachyshka@gmail.com>"
-
-msgid "user@example.org"
-msgstr ""
 
 msgid "video input"
 msgstr ""
@@ -6289,6 +6320,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "_Vykanaj zahad..."
+
+#, fuzzy
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Dałučysia da pakoju"
 
 #, fuzzy
 #~ msgid "App Indicator Icon"
@@ -6405,6 +6440,14 @@ msgstr ""
 #~ msgstr "Atrymvaje padrabiaznyja źviestki ab kantakcie"
 
 #, fuzzy
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "Chavaje baner u aknie pakoju"
+
+#, fuzzy
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "Chavaje baner u aknie pakoju"
+
+#, fuzzy
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr "Chavaje śpis naviednikaŭ pakoju."
 
@@ -6430,6 +6473,12 @@ msgstr ""
 #~ msgstr ""
 #~ "Kali ŭklučanaja hetaja opcyja, Gajim budzie pakazvać avatary kantaktaŭ u "
 #~ "śpisie kantaktaŭ i ŭ pakojach"
+
+#, fuzzy
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr ""
+#~ "Kali opcyja maje vartaść True, nacisk klavišy Escape začyniaje kartku/"
+#~ "akno."
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"
@@ -6547,10 +6596,6 @@ msgstr ""
 #~ msgstr "Viartaje kolkaść niečytanych paviedamleńniaŭ"
 
 #, fuzzy
-#~ msgid "Send a message to the contact"
-#~ msgstr "Užyvańnie: /%s, chavaje knopki razmovy."
-
-#, fuzzy
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "Užyvańnie: /%s, chavaje knopki razmovy."
 
@@ -6594,6 +6639,10 @@ msgstr ""
 
 #~ msgid "Set the presence type and description"
 #~ msgstr "Akreśli typ bačnaści i apisańnie"
+
+#, fuzzy
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Pakazvaj a_vatary kantaktaŭ u śpisie kantaktaŭ"
 
 #~ msgid "Shows a help on specific command"
 #~ msgstr "Pakazvaje daviedku pa akreślenym zahadzie"
@@ -6666,6 +6715,10 @@ msgstr ""
 #~ msgid "You have no active account"
 #~ msgstr "Nivodny kont nia dziejny"
 
+#, fuzzy
+#~ msgid "_Invite"
+#~ msgstr "_Zaprasi"
+
 #~ msgid ""
 #~ "change status of account \"account\". If not specified, try to change "
 #~ "status of all accounts that have \"sync with global status\" option set"
@@ -6685,6 +6738,10 @@ msgstr ""
 
 #~ msgid "command"
 #~ msgstr "zahad"
+
+#, fuzzy
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "pamyłka dasyłańnia %s ( %s )"
 
 #~ msgid "file"
 #~ msgstr "fajł"

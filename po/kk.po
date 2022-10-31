@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2020-07-22 17:59+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -442,6 +442,10 @@ msgid "?Message row action:Retract…"
 msgstr "Бірінші хабарлама алынды"
 
 #, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "Хабарлама құрамасы"
+
+#, fuzzy
 msgid "?Message state:Received"
 msgstr "Бірінші хабарлама алынды"
 
@@ -702,6 +706,10 @@ msgid "Add Contact"
 msgstr "_Контакт қосу..."
 
 #, fuzzy
+msgid "Add Contact…"
+msgstr "Контактты қосу…"
+
+#, fuzzy
 msgid "Add Entry"
 msgstr "Жазба:"
 
@@ -764,10 +772,6 @@ msgstr "_Адресі:"
 #, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "Бұл топтық чат"
-
-#, fuzzy
-msgid "Adhoc Group Chat"
-msgstr "Бөлмеге кіру"
 
 #, fuzzy
 msgid "Adjust to Status"
@@ -954,9 +958,6 @@ msgstr "Күй хабарламасын сұрау:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Топ чат беті/терезесін жабу алдында сұрау."
-
-msgid "Ask before pasting an image."
-msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -1329,6 +1330,9 @@ msgstr ""
 msgid "Chats"
 msgstr "Чаттар"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr ""
 
@@ -1405,6 +1409,9 @@ msgstr "Дыбысты тазарту"
 msgid "Clear message entry"
 msgstr "Хабарлама жіберілді"
 
+msgid "Click messages to select them"
+msgstr ""
+
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(nick)s бөлімнен шығарылған (%(reason)s)"
@@ -1428,7 +1435,13 @@ msgstr "_Жіберу мен жабу"
 msgid "Close Search"
 msgstr "Іздеу"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
+msgstr ""
+
+msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
@@ -1651,6 +1664,10 @@ msgstr "Сілтеме адресін көшіру"
 msgid "Copy Location"
 msgstr "Орналасуды көшіру"
 
+#, fuzzy
+msgid "Copy Text"
+msgstr "Көшіріп алу"
+
 msgid "Copy XMPP Address"
 msgstr "XMPP адресін көшіру"
 
@@ -1686,6 +1703,10 @@ msgstr "%s тіркелгісі өшірілуде"
 #, fuzzy
 msgid "Create Group Chat"
 msgstr "Топ чаттардан шығу"
+
+#, fuzzy
+msgid "Create Group Chat…"
+msgstr "_Топтық чатты жасау…"
 
 #, fuzzy
 msgid "Create New Account"
@@ -1733,11 +1754,18 @@ msgstr "Жайлап жүгіру"
 msgid "Decline"
 msgstr "Желі_де емес"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "Бастапқысы"
 
 msgid "Default Sync Threshold"
 msgstr ""
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Контакт атын ауыстыру"
 
 msgid "Default device"
 msgstr "Негізгі құрылғы"
@@ -1911,6 +1939,10 @@ msgstr "%s хабарлама жүктеп алынды"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Код жазуда"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Қалып-күй:"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2546,14 +2578,6 @@ msgid "Hide this menu"
 msgstr "Бұл мәзірді жасыру"
 
 #, fuzzy
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "Топтық чат терезесінде тақырыпты жасырады"
-
-#, fuzzy
-msgid "Hides the banner in a group chat window."
-msgstr "Топтық чат терезесінде тақырыпты жасырады"
-
-#, fuzzy
 msgid "Home"
 msgstr "Үй парағы"
 
@@ -2630,10 +2654,6 @@ msgstr ""
 "Қосулы түрса, jingle қолдану кезде Gajim STUN серверін қолдануға тырысады. "
 "Ол сервер \"stun_server\" опциясында көрсетіледі не оны jabber сервердің өзі "
 "береді."
-
-#, fuzzy
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr "Белсенді болса, escape батырмасы бет/терезені жабады"
 
 #, fuzzy
 msgid ""
@@ -2764,10 +2784,6 @@ msgid "Invite New Contact"
 msgstr "Контакттарды _шақыру"
 
 msgid "Invite friends to group chats or join one"
-msgstr ""
-
-#, python-format
-msgid "Invite someone to your chat with %s"
 msgstr ""
 
 #, fuzzy
@@ -3865,6 +3881,10 @@ msgstr ""
 msgid "Remove contact from contact list"
 msgstr "Ростерден контактты өшіреді"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Ростерден контактты өшіреді"
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -3977,7 +3997,7 @@ msgid "Resource"
 msgstr "Ресурс"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr ""
 "<b>ЕСКЕРТУ:</b> Кейбір баптаулар іске асу үшін, Gajim-ді қайта қосуыңыз керек"
 
@@ -4148,6 +4168,10 @@ msgid "Select Account"
 msgstr "Тіркелгіні таңдау"
 
 #, fuzzy
+msgid "Select Contacts"
+msgstr "Жіберілген контакттар:"
+
+#, fuzzy
 msgid "Select File…"
 msgstr "Файлды жіберу…"
 
@@ -4225,6 +4249,10 @@ msgstr "Хабарламаны жіберу"
 #, fuzzy
 msgid "Send Message Receipts"
 msgstr "Бірінші хабарлама алынды"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Контактқа хабарламаны жіберу"
 
 #, fuzzy
 msgid "Send Read Markers"
@@ -4335,10 +4363,6 @@ msgid "Show"
 msgstr ""
 
 #, fuzzy
-msgid "Show Chat State In Banner"
-msgstr "Ростердегі контакттардың а_ватарларын көрсету"
-
-#, fuzzy
 msgid "Show Commands"
 msgstr "Пәрмендер"
 
@@ -4353,6 +4377,10 @@ msgstr "Те_к белсенді контакттарды көрсету"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Орналасуды көрсету"
 
 msgid "Show Join/Leave"
 msgstr "Кіру/шығуды көрсету"
@@ -4427,6 +4455,9 @@ msgstr "Қат_ыспаған оқиғаларды көрсету"
 msgid "Show chat list"
 msgstr "Орналасуды көрсету"
 
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+
 #, fuzzy
 msgid "Show in Taskbar"
 msgstr "Транс_порттарды көрсету"
@@ -4462,9 +4493,6 @@ msgstr ""
 
 msgid "Show the application's version"
 msgstr "Қолданба нұсқасын көрсету"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
 
 #, fuzzy
 msgid "Show window in the taskbar"
@@ -5749,9 +5777,6 @@ msgstr "_Хост"
 msgid "_Hostname"
 msgstr "_Хост аты:"
 
-msgid "_Invite"
-msgstr "_Шақыру"
-
 msgid "_Join"
 msgstr "_Кіру"
 
@@ -5970,6 +5995,9 @@ msgstr "Тіркелгі"
 msgid "countrycode"
 msgstr "Тіркелгі бағаны"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr ""
 
@@ -5984,10 +6012,6 @@ msgstr ""
 #, fuzzy
 msgid "error"
 msgstr "Қате"
-
-#, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "%(message)s жіберу кезіндегі қате ( %(error)s )"
 
 msgid "example.org"
 msgstr ""
@@ -6020,6 +6044,9 @@ msgstr "Көлбеу"
 msgid "lat"
 msgstr ""
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr ""
 
@@ -6028,6 +6055,15 @@ msgid "lon"
 msgstr "бір"
 
 msgid "macOS"
+msgstr ""
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
 msgstr ""
 
 msgid "or"
@@ -6075,9 +6111,6 @@ msgstr ""
 
 msgid "translator-credits"
 msgstr "Baurzhan Muftakhidinov <baurthefirst@gmail.com>"
-
-msgid "user@example.org"
-msgstr ""
 
 msgid "video input"
 msgstr "видео кірісі"
@@ -6167,6 +6200,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "Команданы орындау…"
+
+#, fuzzy
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Бөлмеге кіру"
 
 #, fuzzy
 #~ msgid "App Indicator Icon"
@@ -6292,6 +6329,14 @@ msgstr ""
 #~ msgstr "Контакттың толық ақпаратын алу"
 
 #, fuzzy
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "Топтық чат терезесінде тақырыпты жасырады"
+
+#, fuzzy
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "Топтық чат терезесінде тақырыпты жасырады"
+
+#, fuzzy
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr "Топтық чат терезесінде мүшелер тізімін жасырады"
 
@@ -6324,6 +6369,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Қосулы тұрса, топ чаттардағы мәтінді автотолықтыру қоршамдағыдай іске "
 #~ "асады"
+
+#, fuzzy
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr "Белсенді болса, escape батырмасы бет/терезені жабады"
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"
@@ -6457,9 +6506,6 @@ msgstr ""
 #~ msgid "Send a disco info request"
 #~ msgstr "Алу сұранымы жіберілді"
 
-#~ msgid "Send a message to the contact"
-#~ msgstr "Контактқа хабарламаны жіберу"
-
 #, fuzzy
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "Контактқа файлды жібереді"
@@ -6510,6 +6556,10 @@ msgstr ""
 
 #~ msgid "Set the presence type and description"
 #~ msgstr "Бар болудың түрін мен анықтамасын орнату"
+
+#, fuzzy
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Ростердегі контакттардың а_ватарларын көрсету"
 
 #~ msgid "Shows a help on specific command"
 #~ msgstr "Көрсетілген команда үшін көмекті көрсетеді"
@@ -6606,6 +6656,9 @@ msgstr ""
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "Gajim-ді әрқашан жабу"
 
+#~ msgid "_Invite"
+#~ msgstr "_Шақыру"
+
 #, fuzzy
 #~ msgid "_Try Again"
 #~ msgstr "Қайтадан растау..."
@@ -6626,6 +6679,9 @@ msgstr ""
 
 #~ msgid "command"
 #~ msgstr "команда"
+
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "%(message)s жіберу кезіндегі қате ( %(error)s )"
 
 #~ msgid "file"
 #~ msgstr "файл"

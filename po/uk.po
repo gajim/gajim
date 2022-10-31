@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2022-07-18 19:52+0000\n"
 "Last-Translator: Volodymyr Smoliar <v_2e@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -429,6 +429,10 @@ msgstr ""
 msgid "?Message row action:Retract…"
 msgstr "?Message state:Отримано"
 
+#, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "Вміст повідомлення"
+
 msgid "?Message state:Received"
 msgstr "?Message state:Отримано"
 
@@ -656,6 +660,10 @@ msgstr "Додати обліковий запис"
 msgid "Add Contact"
 msgstr "Додати контакт"
 
+#, fuzzy
+msgid "Add Contact…"
+msgstr "Додати _контакт…"
+
 msgid "Add Entry"
 msgstr "Додати запис"
 
@@ -713,10 +721,6 @@ msgstr "Адреса"
 
 msgid "Address does not belong to a group chat server"
 msgstr "Адреса не належить серверові групових балачок"
-
-#, fuzzy
-msgid "Adhoc Group Chat"
-msgstr "Одноразова групова балачка"
 
 msgid "Adjust to Status"
 msgstr "Узгодити зі станом"
@@ -884,9 +888,6 @@ msgstr "Запитувати повідомлення про стан при…"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Запитувати перед закриттям вкладки або вікна групової балачки."
-
-msgid "Ask before pasting an image."
-msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -1224,6 +1225,9 @@ msgstr "Спілкуватися з наскрізним шифруванням 
 msgid "Chats"
 msgstr "Балачки"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr "Перевірити оновлення"
 
@@ -1293,6 +1297,9 @@ msgstr "Очистити звук"
 msgid "Clear message entry"
 msgstr "Очистити вміст повідомлення"
 
+msgid "Click messages to select them"
+msgstr ""
+
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "Оберіть контакти для запрошення до цієї кімнати."
 
@@ -1312,8 +1319,15 @@ msgstr "Закрити"
 msgid "Close Search"
 msgstr "Закрити пошук"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
 msgstr "Закрити балачку"
+
+#, fuzzy
+msgid "Close with Escape"
+msgstr "Дзвінок з %s"
 
 msgid "Code snippet"
 msgstr "Фрагмент коду"
@@ -1507,6 +1521,10 @@ msgstr "Копіювати посилання"
 msgid "Copy Location"
 msgstr "Копіювати місцезнаходження"
 
+#, fuzzy
+msgid "Copy Text"
+msgstr "Копіювати"
+
 msgid "Copy XMPP Address"
 msgstr "Копіювати XMPP адресу"
 
@@ -1538,6 +1556,10 @@ msgstr "Створити обліковий запис"
 
 msgid "Create Group Chat"
 msgstr "Створити групову балачку"
+
+#, fuzzy
+msgid "Create Group Chat…"
+msgstr "Створити _Групову балачку…"
 
 msgid "Create New Account"
 msgstr "Створити новий обліковий запис"
@@ -1579,11 +1601,18 @@ msgstr "Налагоджувальне журналювання"
 msgid "Decline"
 msgstr "Відхилити"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "Типовий"
 
 msgid "Default Sync Threshold"
 msgstr "Типовий період синхронізації"
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Перейменувати контакт"
 
 msgid "Default device"
 msgstr "Типовий пристрій"
@@ -1736,6 +1765,10 @@ msgstr "Завантажено %s повідомлень"
 
 msgid "Downloading…"
 msgstr "Завантаження…"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Стан: "
 
 msgid "Drop files or contacts"
 msgstr "Перетягніть файли або контакти"
@@ -2341,14 +2374,6 @@ msgid "Hide this menu"
 msgstr "Сховати це меню"
 
 #, fuzzy
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "Приховує підпис у вікні групової балачки"
-
-#, fuzzy
-msgid "Hides the banner in a group chat window."
-msgstr "Приховує підпис у вікні групової балачки"
-
-#, fuzzy
 msgid "Home"
 msgstr "Домашня сторінка:"
 
@@ -2431,12 +2456,6 @@ msgstr ""
 "Якщо ввімкнено, Gajim спробує використати STUN-сервер для Jingle. Буде "
 "використано значення параметру \"stun_server\", або отримане з серверу "
 "Jabber."
-
-#, fuzzy
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr ""
-"Якщо цей параметр матиме значення «True», натискання клавіші escape "
-"закриватиме вкладку або вікно програми."
 
 #, fuzzy
 msgid ""
@@ -2574,10 +2593,6 @@ msgid "Invite New Contact"
 msgstr "Запросити _контакти"
 
 msgid "Invite friends to group chats or join one"
-msgstr ""
-
-#, python-format
-msgid "Invite someone to your chat with %s"
 msgstr ""
 
 #, fuzzy
@@ -3705,6 +3720,10 @@ msgstr "Вилучає завершені, скасовані та невдал�
 msgid "Remove contact from contact list"
 msgstr "Вилучає контакт з реєстру"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Вилучає контакт з реєстру"
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -3820,7 +3839,7 @@ msgid "Resource"
 msgstr "Ресурс:"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr "Ви маєте перезавантажити Gajim, щоб деякі з параметрів набули чинності"
 
 #, fuzzy
@@ -3996,6 +4015,10 @@ msgid "Select Account"
 msgstr "Виберіть обліковий запис"
 
 #, fuzzy
+msgid "Select Contacts"
+msgstr "Надіслати контакти:"
+
+#, fuzzy
 msgid "Select File…"
 msgstr "Надіслати файл…"
 
@@ -4076,6 +4099,10 @@ msgstr "Надіслати повідомлення"
 #, fuzzy
 msgid "Send Message Receipts"
 msgstr "Отримано повідомлення уваги"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Надіслати повідомлення контакту"
 
 #, fuzzy
 msgid "Send Read Markers"
@@ -4188,10 +4215,6 @@ msgid "Show"
 msgstr ""
 
 #, fuzzy
-msgid "Show Chat State In Banner"
-msgstr "Показувати _аватари контактів у реєстрі"
-
-#, fuzzy
 msgid "Show Commands"
 msgstr "команда"
 
@@ -4206,6 +4229,10 @@ msgstr "Показувати лише _активні контакти"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Положення:"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4281,6 +4308,9 @@ msgstr "Показати усі _події з черги"
 msgid "Show chat list"
 msgstr "Положення:"
 
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+
 #, fuzzy
 msgid "Show in Taskbar"
 msgstr "Показувати транс_порти"
@@ -4316,9 +4346,6 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Показувати піктограму зони сповіщень"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
 
 #, fuzzy
 msgid "Show window in the taskbar"
@@ -5632,10 +5659,6 @@ msgstr "Назва _вузла:"
 msgid "_Hostname"
 msgstr "Назва _вузла:"
 
-#, fuzzy
-msgid "_Invite"
-msgstr "_Запросити"
-
 msgid "_Join"
 msgstr "При_єднатися"
 
@@ -5866,6 +5889,9 @@ msgstr "країні"
 msgid "countrycode"
 msgstr "код країни"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr "характеристика"
 
@@ -5878,10 +5904,6 @@ msgstr ""
 
 msgid "error"
 msgstr "помилка"
-
-#, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "помилка під час надсилання %(message)s ( %(error)s )"
 
 msgid "example.org"
 msgstr ""
@@ -5915,6 +5937,9 @@ msgstr "Курсив"
 msgid "lat"
 msgstr "широта"
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr "місцевість"
 
@@ -5922,6 +5947,15 @@ msgid "lon"
 msgstr "довгота"
 
 msgid "macOS"
+msgstr ""
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
 msgstr ""
 
 #, fuzzy
@@ -5969,9 +6003,6 @@ msgstr "мітка часу"
 
 msgid "translator-credits"
 msgstr "Сергій Єгоров"
-
-msgid "user@example.org"
-msgstr ""
 
 msgid "video input"
 msgstr "відео вхід"
@@ -6094,6 +6125,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "Виконати команду…"
+
+#, fuzzy
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Одноразова групова балачка"
 
 #~ msgid "Allow a participant to send you public or private messages"
 #~ msgstr "Дозволити учаснику надсилати вам особисті або публічні повідомлення"
@@ -6239,6 +6274,14 @@ msgstr ""
 #~ msgstr "Отримує докладні відомості щодо контакту"
 
 #, fuzzy
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "Приховує підпис у вікні групової балачки"
+
+#, fuzzy
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "Приховує підпис у вікні групової балачки"
+
+#, fuzzy
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr "Ховає список учасників групової балачки у вікні групової балачки."
 
@@ -6273,6 +6316,12 @@ msgstr ""
 #~ msgstr ""
 #~ "Якщо Істино, доповнення у групових балачках будуть схожі на "
 #~ "автодоповнення командної оболонки."
+
+#, fuzzy
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr ""
+#~ "Якщо цей параметр матиме значення «True», натискання клавіші escape "
+#~ "закриватиме вкладку або вікно програми."
 
 #~ msgid "Invalid affiliation given"
 #~ msgstr "Вказано невірні права"
@@ -6421,9 +6470,6 @@ msgstr ""
 #~ msgid "Send a disco info request"
 #~ msgstr "Надіслані запити на підтвердження отримання"
 
-#~ msgid "Send a message to the contact"
-#~ msgstr "Надіслати повідомлення контакту"
-
 #, fuzzy
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "Надіслати повідомлення контакту щоб привернути його (її) увагу"
@@ -6500,6 +6546,10 @@ msgstr ""
 
 #~ msgid "Set the presence type and description"
 #~ msgstr "Вказати тип присутності і опис"
+
+#, fuzzy
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Показувати _аватари контактів у реєстрі"
 
 #~ msgid ""
 #~ "Show help on a given command or a list of available commands if -a is "
@@ -6606,6 +6656,10 @@ msgstr ""
 #~ msgstr "Завжди закривати Gajim"
 
 #, fuzzy
+#~ msgid "_Invite"
+#~ msgstr "_Запросити"
+
+#, fuzzy
 #~ msgid "_Try Again"
 #~ msgstr "Повторити перевірку..."
 
@@ -6627,6 +6681,9 @@ msgstr ""
 
 #~ msgid "command"
 #~ msgstr "команда"
+
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "помилка під час надсилання %(message)s ( %(error)s )"
 
 #~ msgid "file"
 #~ msgstr "файл"

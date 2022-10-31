@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2009-10-29 10:21+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -443,6 +443,10 @@ msgid "?Message row action:Retract…"
 msgstr "Första meddelandet mottaget"
 
 #, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "Meddelandeinnehåll"
+
+#, fuzzy
 msgid "?Message state:Received"
 msgstr "Första meddelandet mottaget"
 
@@ -710,6 +714,10 @@ msgid "Add Contact"
 msgstr "_Lägg till kontakt..."
 
 #, fuzzy
+msgid "Add Contact…"
+msgstr "_Lägg till kontakt..."
+
+#, fuzzy
 msgid "Add Entry"
 msgstr "Proxyserver:"
 
@@ -779,10 +787,6 @@ msgstr "Adress"
 #, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "Det här är ingen gruppchatt"
-
-#, fuzzy
-msgid "Adhoc Group Chat"
-msgstr "Gå in i gruppchatt"
 
 #, fuzzy
 msgid "Adjust to Status"
@@ -973,9 +977,6 @@ msgstr "Fråga efter statusmeddelande när jag:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Fråga innan gruppchattflik eller -fönster stängs."
-
-msgid "Ask before pasting an image."
-msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -1350,6 +1351,9 @@ msgstr ""
 msgid "Chats"
 msgstr "Chattar"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr ""
 
@@ -1433,6 +1437,9 @@ msgstr "Välj ljud"
 msgid "Clear message entry"
 msgstr "Meddelande skickat"
 
+msgid "Click messages to select them"
+msgstr ""
+
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(nick)s har tagits bort från rummet (%(reason)s)"
@@ -1456,7 +1463,13 @@ msgstr "_Skicka och stäng"
 msgid "Close Search"
 msgstr "Sök"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
+msgstr ""
+
+msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
@@ -1690,6 +1703,10 @@ msgid "Copy Location"
 msgstr "_Kopiera länkplats"
 
 #, fuzzy
+msgid "Copy Text"
+msgstr "Rummets JID"
+
+#, fuzzy
 msgid "Copy XMPP Address"
 msgstr "_Kopiera JID/e-postadress"
 
@@ -1726,6 +1743,10 @@ msgstr "Tar bort %s konto"
 
 #, fuzzy
 msgid "Create Group Chat"
+msgstr "Lämna gruppchattar"
+
+#, fuzzy
+msgid "Create Group Chat…"
 msgstr "Lämna gruppchattar"
 
 #, fuzzy
@@ -1776,11 +1797,18 @@ msgstr "Joggar"
 msgid "Decline"
 msgstr "_Frånkopplad"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "Standard"
 
 msgid "Default Sync Threshold"
 msgstr ""
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Byt namn på kontakt"
 
 #, fuzzy
 msgid "Default device"
@@ -1958,6 +1986,10 @@ msgstr "Vidarebefordra olästa meddelanden"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Programmerar"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Status: "
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2602,14 +2634,6 @@ msgid "Hide this menu"
 msgstr "Dölj denna meny"
 
 #, fuzzy
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "Döljer bannern i ett gruppchattfönster"
-
-#, fuzzy
-msgid "Hides the banner in a group chat window."
-msgstr "Döljer bannern i ett gruppchattfönster"
-
-#, fuzzy
 msgid "Home"
 msgstr "<b>Webbplats:</b>"
 
@@ -2684,10 +2708,6 @@ msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr "Om True kommer escape att stänga en tabb eller ett fönster"
 
 msgid ""
 "If enabled, you will be able to set a negative priority to your account in "
@@ -2817,10 +2837,6 @@ msgid "Invite New Contact"
 msgstr "Bjud in _kontakter"
 
 msgid "Invite friends to group chats or join one"
-msgstr ""
-
-#, python-format
-msgid "Invite someone to your chat with %s"
 msgstr ""
 
 #, fuzzy
@@ -3949,6 +3965,10 @@ msgstr "Tar bort färdiga, avbrutna och misslyckade filöverföringar från list
 msgid "Remove contact from contact list"
 msgstr "Ta bort en kontakt från kontaktlista"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Ta bort en kontakt från kontaktlista"
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -4064,7 +4084,7 @@ msgid "Resource"
 msgstr "Resurs:"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr ""
 "<b>OBSERVERA:</b> Du bör starta om Gajim för att vissa inställningar ska bli "
 "aktiva"
@@ -4241,6 +4261,10 @@ msgid "Select Account"
 msgstr "Tar bort %s konto"
 
 #, fuzzy
+msgid "Select Contacts"
+msgstr "Bjud in _kontakter"
+
+#, fuzzy
 msgid "Select File…"
 msgstr "Skicka _fil"
 
@@ -4323,6 +4347,10 @@ msgstr "Skicka meddelande"
 #, fuzzy
 msgid "Send Message Receipts"
 msgstr "Första meddelandet mottaget"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Användning: /%s, skickar meddelandet till kontakten"
 
 #, fuzzy
 msgid "Send Read Markers"
@@ -4438,10 +4466,6 @@ msgid "Show"
 msgstr ""
 
 #, fuzzy
-msgid "Show Chat State In Banner"
-msgstr "Visa a_vatarer för kontakter i kontaktlista"
-
-#, fuzzy
 msgid "Show Commands"
 msgstr "Kommandon: %s"
 
@@ -4456,6 +4480,10 @@ msgstr "Visa endast _aktiva kontakter"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Notifiering"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4525,6 +4553,9 @@ msgstr "Visa alla väntande _händelser"
 msgid "Show chat list"
 msgstr "Notifiering"
 
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+
 #, fuzzy
 msgid "Show in Taskbar"
 msgstr "Visa _transporter"
@@ -4561,9 +4592,6 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Använd _aktivitetsfältet (aka. notifieringsyta)"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
 
 #, fuzzy
 msgid "Show window in the taskbar"
@@ -5872,10 +5900,6 @@ msgstr "_Värd:"
 msgid "_Hostname"
 msgstr "_Värdnamn:"
 
-#, fuzzy
-msgid "_Invite"
-msgstr "Bjud _in"
-
 msgid "_Join"
 msgstr "_Gå in i"
 
@@ -6111,6 +6135,9 @@ msgstr "Land:"
 msgid "countrycode"
 msgstr "Konto"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr ""
 
@@ -6125,10 +6152,6 @@ msgstr ""
 #, fuzzy
 msgid "error"
 msgstr "Fel."
-
-#, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "fel vid sändning av %(message)s ( %(error)s )"
 
 msgid "example.org"
 msgstr ""
@@ -6162,6 +6185,9 @@ msgstr "Kursiv"
 msgid "lat"
 msgstr ""
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr ""
 
@@ -6170,6 +6196,15 @@ msgid "lon"
 msgstr "ett"
 
 msgid "macOS"
+msgstr ""
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
 msgstr ""
 
 #, fuzzy
@@ -6223,9 +6258,6 @@ msgstr ""
 "\n"
 "Skicka synpunkter på översättningen till\n"
 "<tp-sv@listor.tp-sv.se>."
-
-msgid "user@example.org"
-msgstr ""
 
 msgid "video input"
 msgstr ""
@@ -6312,6 +6344,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "_Kör kommando"
+
+#, fuzzy
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Gå in i gruppchatt"
 
 #, fuzzy
 #~ msgid "App Indicator Icon"
@@ -6425,6 +6461,14 @@ msgstr ""
 #~ msgstr "Hämta detaljerad information om kontakt"
 
 #, fuzzy
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "Döljer bannern i ett gruppchattfönster"
+
+#, fuzzy
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "Döljer bannern i ett gruppchattfönster"
+
+#, fuzzy
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr "Döljer deltagarlistan i gruppchattfönster."
 
@@ -6448,6 +6492,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Om kryssad kommer Gajim att visa kontakters avatarer i register- och "
 #~ "gruppchattsfönstren"
+
+#, fuzzy
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr "Om True kommer escape att stänga en tabb eller ett fönster"
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"
@@ -6584,10 +6632,6 @@ msgstr ""
 #~ msgstr "Returnerar antalet olästa meddelanden"
 
 #, fuzzy
-#~ msgid "Send a message to the contact"
-#~ msgstr "Användning: /%s, skickar meddelandet till kontakten"
-
-#, fuzzy
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "Användning: /%s, skickar meddelandet till kontakten"
 
@@ -6632,6 +6676,10 @@ msgstr ""
 
 #~ msgid "Set the presence type and description"
 #~ msgstr "Ställ in närvarotypen och en beskrivning"
+
+#, fuzzy
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Visa a_vatarer för kontakter i kontaktlista"
 
 #~ msgid "Shows a help on specific command"
 #~ msgstr "Visar hjälp för ett specifikt kommando"
@@ -6721,6 +6769,10 @@ msgstr ""
 #~ msgstr "Stäng alltid Gajim"
 
 #, fuzzy
+#~ msgid "_Invite"
+#~ msgstr "Bjud _in"
+
+#, fuzzy
 #~ msgid "_Try Again"
 #~ msgstr "Verifiera igen..."
 
@@ -6743,6 +6795,9 @@ msgstr ""
 
 #~ msgid "command"
 #~ msgstr "kommando"
+
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "fel vid sändning av %(message)s ( %(error)s )"
 
 #~ msgid "file"
 #~ msgstr "fil"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -427,6 +427,10 @@ msgid "?Message row action:Retract…"
 msgstr "First Message Received"
 
 #, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "message contents"
+
+#, fuzzy
 msgid "?Message state:Received"
 msgstr "First Message Received"
 
@@ -693,6 +697,10 @@ msgid "Add Contact"
 msgstr "_Įtraukti asmenį..."
 
 #, fuzzy
+msgid "Add Contact…"
+msgstr "_Įtraukti asmenį..."
+
+#, fuzzy
 msgid "Add Entry"
 msgstr "Įrašas:"
 
@@ -760,10 +768,6 @@ msgstr "_Adresas:"
 #, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "This is not a group chat"
-
-#, fuzzy
-msgid "Adhoc Group Chat"
-msgstr "Prisijungti prie pokalbio grupėje"
 
 #, fuzzy
 msgid "Adjust to Status"
@@ -952,9 +956,6 @@ msgstr "Prašyti įvesti būklės žinutę, kai aš:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Ask before closing a group chat tab/window."
-
-msgid "Ask before pasting an image."
-msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -1321,6 +1322,9 @@ msgstr ""
 msgid "Chats"
 msgstr "Chats"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr ""
 
@@ -1403,6 +1407,9 @@ msgstr "Choose Sound"
 msgid "Clear message entry"
 msgstr "Message Sent"
 
+msgid "Click messages to select them"
+msgstr ""
+
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr ""
 
@@ -1425,7 +1432,13 @@ msgstr "_Išsiųsti "
 msgid "Close Search"
 msgstr "Ieškoti"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
+msgstr ""
+
+msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
@@ -1658,6 +1671,10 @@ msgid "Copy Location"
 msgstr "_Kopijuoti nuorodos adresą"
 
 #, fuzzy
+msgid "Copy Text"
+msgstr "Kambario JID"
+
+#, fuzzy
 msgid "Copy XMPP Address"
 msgstr "_Kopijuoti JID/El. pašto adresą"
 
@@ -1694,6 +1711,10 @@ msgstr "Gajim account %s"
 
 #, fuzzy
 msgid "Create Group Chat"
+msgstr "Leave Groupchats"
+
+#, fuzzy
+msgid "Create Group Chat…"
 msgstr "Leave Groupchats"
 
 #, fuzzy
@@ -1743,11 +1764,18 @@ msgstr ""
 msgid "Decline"
 msgstr "A_tsijungęs"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "Default"
 
 msgid "Default Sync Threshold"
 msgstr ""
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Removes contact from roster"
 
 #, fuzzy
 msgid "Default device"
@@ -1920,6 +1948,10 @@ msgstr "Persiųsti neskaitytas žinutes"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Banning..."
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Status: "
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2561,14 +2593,6 @@ msgid "Hide this menu"
 msgstr "Hide this menu"
 
 #, fuzzy
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "Hides the banner in a group chat window"
-
-#, fuzzy
-msgid "Hides the banner in a group chat window."
-msgstr "Hides the banner in a group chat window"
-
-#, fuzzy
 msgid "Home"
 msgstr "<b>Asmeninė svetainė:</b>"
 
@@ -2643,10 +2667,6 @@ msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr "If True, pressing the escape key closes a tab/window."
 
 #, fuzzy
 msgid ""
@@ -2778,10 +2798,6 @@ msgid "Invite New Contact"
 msgstr "Kviesti Kontaktus"
 
 msgid "Invite friends to group chats or join one"
-msgstr ""
-
-#, python-format
-msgid "Invite someone to your chat with %s"
 msgstr ""
 
 #, fuzzy
@@ -3897,6 +3913,10 @@ msgstr "Pašalinti užbaigtus, atšauktus ir lūžusius failų siuntimus iš są
 msgid "Remove contact from contact list"
 msgstr "Removes contact from roster"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Removes contact from roster"
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -4006,7 +4026,7 @@ msgid "Resource"
 msgstr "Šaltinis:"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr ""
 "<b>PASTABA:</b> Kad įsigaliotų tam tikri nustatymai turite perkrauti Gajim"
 
@@ -4182,6 +4202,10 @@ msgid "Select Account"
 msgstr "Gajim account %s"
 
 #, fuzzy
+msgid "Select Contacts"
+msgstr "Siųsti kontaktus:"
+
+#, fuzzy
 msgid "Select File…"
 msgstr "Siųsti _Failą"
 
@@ -4263,6 +4287,10 @@ msgstr "Siųsti žinutę"
 #, fuzzy
 msgid "Send Message Receipts"
 msgstr "First Message Received"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Usage: /%s, hide the chat buttons."
 
 #, fuzzy
 msgid "Send Read Markers"
@@ -4377,10 +4405,6 @@ msgid "Show"
 msgstr ""
 
 #, fuzzy
-msgid "Show Chat State In Banner"
-msgstr "Rodyti asmenų _paveiksliukus kontaktų sąraše"
-
-#, fuzzy
 msgid "Show Commands"
 msgstr "Commands: %s"
 
@@ -4395,6 +4419,10 @@ msgstr "Rodyti Tik _Aktyvius Kontaktus"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Padėtis:"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4470,6 +4498,9 @@ msgstr "Rodyti Visus Laukiančius Į_vykius"
 msgid "Show chat list"
 msgstr "Padėtis:"
 
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+
 #, fuzzy
 msgid "Show in Taskbar"
 msgstr "Rodyti _Pernašas"
@@ -4506,9 +4537,6 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Naudoti piktogramą trėjuje (pranešimų panelės piktograma)"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
 
 #, fuzzy
 msgid "Show window in the taskbar"
@@ -5790,10 +5818,6 @@ msgstr "_Hostas:"
 msgid "_Hostname"
 msgstr "_Serverio adresas: "
 
-#, fuzzy
-msgid "_Invite"
-msgstr "Pak_viesti"
-
 msgid "_Join"
 msgstr "_Jungtis"
 
@@ -6025,6 +6049,9 @@ msgstr "Šalis:"
 msgid "countrycode"
 msgstr "Prieiga"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr ""
 
@@ -6039,10 +6066,6 @@ msgstr ""
 #, fuzzy
 msgid "error"
 msgstr "Avahi error"
-
-#, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr ""
 
 msgid "example.org"
 msgstr ""
@@ -6076,6 +6099,9 @@ msgstr "Pasviręs"
 msgid "lat"
 msgstr ""
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr ""
 
@@ -6084,6 +6110,15 @@ msgid "lon"
 msgstr "vienas"
 
 msgid "macOS"
+msgstr ""
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
 msgstr ""
 
 #, fuzzy
@@ -6131,9 +6166,6 @@ msgstr ""
 
 msgid "translator-credits"
 msgstr "Jeff Bailes <thepizzaking@gmail.com>"
-
-msgid "user@example.org"
-msgstr ""
 
 msgid "video input"
 msgstr ""
@@ -6217,6 +6249,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "_Vykdyti komandą"
+
+#, fuzzy
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Prisijungti prie pokalbio grupėje"
 
 #, fuzzy
 #~ msgid "App Indicator Icon"
@@ -6319,6 +6355,14 @@ msgstr ""
 #~ msgstr "Gets detailed info on a contact"
 
 #, fuzzy
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "Hides the banner in a group chat window"
+
+#, fuzzy
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "Hides the banner in a group chat window"
+
+#, fuzzy
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr "Hides the group chat occupants list in group chat window."
 
@@ -6340,6 +6384,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "If enabled, Gajim will add * and [n] in contact list window title."
 #~ msgstr "Jei pažymėta, Gajim rodys kontaktų nuotaiką sąrašo lange"
+
+#, fuzzy
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr "If True, pressing the escape key closes a tab/window."
 
 #, fuzzy
 #~ msgid "Invalid role given"
@@ -6449,10 +6497,6 @@ msgstr ""
 #~ msgstr "Returns number of unread messages"
 
 #, fuzzy
-#~ msgid "Send a message to the contact"
-#~ msgstr "Usage: /%s, hide the chat buttons."
-
-#, fuzzy
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "Usage: /%s, hide the chat buttons."
 
@@ -6495,6 +6539,10 @@ msgstr ""
 
 #~ msgid "Set the presence type and description"
 #~ msgstr "Set the presence type and description"
+
+#, fuzzy
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Rodyti asmenų _paveiksliukus kontaktų sąraše"
 
 #~ msgid "Shows a help on specific command"
 #~ msgstr "Shows a help on specific command"
@@ -6553,6 +6601,10 @@ msgstr ""
 
 #~ msgid "You have no active account"
 #~ msgstr "You have no active account"
+
+#, fuzzy
+#~ msgid "_Invite"
+#~ msgstr "Pak_viesti"
 
 #~ msgid ""
 #~ "change status of account \"account\". If not specified, try to change "

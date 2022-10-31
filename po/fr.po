@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2022-08-18 18:15+0000\n"
 "Last-Translator: pitchum <pitchum@gramaton.org>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
@@ -411,6 +411,10 @@ msgstr ""
 msgid "?Message row action:Retract…"
 msgstr "Reçu"
 
+#, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "Composition d'un message"
+
 msgid "?Message state:Received"
 msgstr "Reçu"
 
@@ -640,6 +644,10 @@ msgstr "Ajouter un compte"
 msgid "Add Contact"
 msgstr "Ajouter un contact"
 
+#, fuzzy
+msgid "Add Contact…"
+msgstr "Ajouter un _contact…"
+
 msgid "Add Entry"
 msgstr "Ajouter une entrée"
 
@@ -696,9 +704,6 @@ msgstr "Adresse"
 
 msgid "Address does not belong to a group chat server"
 msgstr "L’adresse n’est pas un serveur de salons de discussion"
-
-msgid "Adhoc Group Chat"
-msgstr "Salon Adhoc"
 
 msgid "Adjust to Status"
 msgstr "Ajuster selon l’état"
@@ -874,9 +879,6 @@ msgstr "Demander un message d'état…"
 msgid "Ask before closing a group chat tab/window."
 msgstr ""
 "Demander avant de fermer un onglet ou une fenêtre de discussion de salon."
-
-msgid "Ask before pasting an image."
-msgstr "Demander avant de coller une image."
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr "Demander avant de quitter lorsque la fenêtre de Gajim est fermée"
@@ -1206,6 +1208,9 @@ msgstr ""
 msgid "Chats"
 msgstr "Discussions"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr "Vérifier mises à jour"
 
@@ -1275,6 +1280,9 @@ msgstr "Effacer le son"
 msgid "Clear message entry"
 msgstr "Vide la boîte de saisie des messages"
 
+msgid "Click messages to select them"
+msgstr ""
+
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr ""
 "Cliquez sur les contacts que vous souhaitez inviter dans ce salon de "
@@ -1297,8 +1305,15 @@ msgstr "Fermer"
 msgid "Close Search"
 msgstr "Fermer la recherche"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
 msgstr "Clore la discussion"
+
+#, fuzzy
+msgid "Close with Escape"
+msgstr "Appel avec %s"
 
 msgid "Code snippet"
 msgstr "Bout de code"
@@ -1490,6 +1505,10 @@ msgstr "Copier l'adresse du lien"
 msgid "Copy Location"
 msgstr "Copier l'emplacement"
 
+#, fuzzy
+msgid "Copy Text"
+msgstr "Copier"
+
 msgid "Copy XMPP Address"
 msgstr "Copier l’adresse XMPP"
 
@@ -1520,6 +1539,10 @@ msgstr "Créer un compte"
 
 msgid "Create Group Chat"
 msgstr "Créer un salon de discussion"
+
+#, fuzzy
+msgid "Create Group Chat…"
+msgstr "Créer un _salon de discussion…"
 
 msgid "Create New Account"
 msgstr "Créer un nouveau compte"
@@ -1560,11 +1583,18 @@ msgstr "Journalisation de debogage"
 msgid "Decline"
 msgstr "Décliner"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "Par défaut"
 
 msgid "Default Sync Threshold"
 msgstr "Seuil de synchronisation par défaut"
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Nouvel espace de travail"
 
 msgid "Default device"
 msgstr "Périphérique par défaut"
@@ -1722,6 +1752,10 @@ msgstr "%s messages téléchargés"
 
 msgid "Downloading…"
 msgstr "Téléchargement…"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "État : %s"
 
 msgid "Drop files or contacts"
 msgstr "Déposer des fichiers ou des contacts"
@@ -2307,12 +2341,6 @@ msgstr "Masquer la liste des discussions"
 msgid "Hide this menu"
 msgstr "Cacher ce menu"
 
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "Cacher la bannière dans la fenêtre de discussion 1:1."
-
-msgid "Hides the banner in a group chat window."
-msgstr "Cacher la bannière dans la fenêtre de salon de discussion."
-
 msgid "Home"
 msgstr "Domicile"
 
@@ -2388,11 +2416,6 @@ msgstr ""
 "Si activé, Gajim essaiera d'utiliser un serveur STUN lors de l'utilisation "
 "de Jingle. Celui défini dans l'option \"stun_server\", ou celui fourni par "
 "le serveur XMPP."
-
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr ""
-"Si activé, appuyer sur la touche d'échappement fermera l'onglet ou la "
-"fenêtre de conversation."
 
 msgid ""
 "If enabled, you will be able to set a negative priority to your account in "
@@ -2517,10 +2540,6 @@ msgstr "Inviter un nouveau contact"
 
 msgid "Invite friends to group chats or join one"
 msgstr "Inviter des amis dans un salon de discussion ou en rejoindre un"
-
-#, python-format
-msgid "Invite someone to your chat with %s"
-msgstr "Inviter quelqu'un dans votre discussion avec %s"
 
 msgid "Invitees"
 msgstr "Invités"
@@ -3516,6 +3535,10 @@ msgstr ""
 msgid "Remove contact from contact list"
 msgstr "Enlever le contact de la liste de contacts"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Enlever le contact de la liste de contacts"
+
 msgid "Remove this workspace"
 msgstr "Supprimer cet espace de travail"
 
@@ -3614,7 +3637,8 @@ msgstr "Rétablit la valeur par défaut"
 msgid "Resource"
 msgstr "Ressource"
 
-msgid "Restart Gajim for changes to take affect"
+#, fuzzy
+msgid "Restart Gajim for changes to take effect"
 msgstr "Redémarrez Gajim pour que les changements soient pris en compte"
 
 #, fuzzy
@@ -3762,6 +3786,10 @@ msgstr "Avertissement de sécurité"
 msgid "Select Account"
 msgstr "Sélectionner un compte"
 
+#, fuzzy
+msgid "Select Contacts"
+msgstr "Contacts envoyés :"
+
 msgid "Select File…"
 msgstr "Choisir un fichier …"
 
@@ -3834,6 +3862,10 @@ msgstr "Envoyer le message"
 
 msgid "Send Message Receipts"
 msgstr "Émettre les accusés de réception"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Envoie un message a un contact"
 
 msgid "Send Read Markers"
 msgstr "Envoyer les accusés de lecture"
@@ -3934,9 +3966,6 @@ msgstr "Partager mon état de connexion"
 msgid "Show"
 msgstr "Afficher"
 
-msgid "Show Chat State In Banner"
-msgstr "Afficher le statut dans la bannière"
-
 msgid "Show Commands"
 msgstr "Afficher les commandes"
 
@@ -3949,6 +3978,10 @@ msgstr "Afficher les informations du contact"
 
 msgid "Show Gajim"
 msgstr "Montrer Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Montrer l'emplacement"
 
 msgid "Show Join/Leave"
 msgstr "Montrer connecté/parti"
@@ -4010,6 +4043,12 @@ msgstr "Afficher tous les avertissements"
 msgid "Show chat list"
 msgstr "Montrer la liste des discussions"
 
+#, fuzzy
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+"Afficher l'état du contact (ex. \"en train d'écrire\") dans la bannière de "
+"la discussion"
+
 msgid "Show in Taskbar"
 msgstr "Afficher dans la barre de tâches"
 
@@ -4045,11 +4084,6 @@ msgstr "Afficher des suggestions pour les codes courts, par ex. :+1:"
 
 msgid "Show the application's version"
 msgstr "Afficher la version de l’application"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
-"Afficher l'état du contact (ex. \"en train d'écrire\") dans la bannière de "
-"la discussion"
 
 msgid "Show window in the taskbar"
 msgstr "Afficher la fenêtre dans la barre des tâches"
@@ -5237,9 +5271,6 @@ msgstr "Nom d'_Hôte"
 msgid "_Hostname"
 msgstr "Nom d'_Hôte"
 
-msgid "_Invite"
-msgstr "_Inviter"
-
 msgid "_Join"
 msgstr "Re_joindre"
 
@@ -5439,6 +5470,9 @@ msgstr "pays"
 msgid "countrycode"
 msgstr "code du pays"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr "donnée"
 
@@ -5451,10 +5485,6 @@ msgstr "par ex. %s"
 
 msgid "error"
 msgstr "erreur"
-
-#, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "erreur en envoyant %(message)s ( %(error)s )"
 
 msgid "example.org"
 msgstr "exemple.org"
@@ -5487,6 +5517,9 @@ msgstr "Italique"
 msgid "lat"
 msgstr "lat"
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr "ville"
 
@@ -5495,6 +5528,15 @@ msgstr "lon"
 
 msgid "macOS"
 msgstr "macOS"
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
+msgstr ""
 
 msgid "or"
 msgstr "ou bien"
@@ -5543,9 +5585,6 @@ msgstr ""
 "Jonathan Ernst <jonathan@ernstfamily.ch>\n"
 "Florent Le Coz <louizatakk@fedoraproject.org>\n"
 "ButterflyOfFire <butterflyoffire@protonmail.com>"
-
-msgid "user@example.org"
-msgstr "utilisateur@exemple.org"
 
 msgid "video input"
 msgstr "Entrée vidéo"
@@ -5665,6 +5704,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "Exécuter la commande…"
 
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Salon Adhoc"
+
 #~ msgid "Allow a participant to send you public or private messages"
 #~ msgstr "Autoriser un occupant à vous envoyer des messages publics ou privés"
 
@@ -5694,6 +5736,9 @@ msgstr "... ou bien déposez ici"
 #~ msgstr ""
 #~ "Demander avant de fermer une fenêtre contenant des onglets si des données "
 #~ "peuvent être perdues (conversations, conversations privées)."
+
+#~ msgid "Ask before pasting an image."
+#~ msgstr "Demander avant de coller une image."
 
 #~ msgid "Ban Participant"
 #~ msgstr "Bannir participant"
@@ -5807,6 +5852,12 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Gets detailed info on a contact"
 #~ msgstr "Récupère les informations détaillées d'un contact"
 
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "Cacher la bannière dans la fenêtre de discussion 1:1."
+
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "Cacher la bannière dans la fenêtre de salon de discussion."
+
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr ""
 #~ "Cache la liste des participants du salon dans la fenêtres des salons de "
@@ -5857,6 +5908,11 @@ msgstr "... ou bien déposez ici"
 #~ "Si cette case est cochée, la complétion dans les salons sera similaire à "
 #~ "celle d'un shell."
 
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr ""
+#~ "Si activé, appuyer sur la touche d'échappement fermera l'onglet ou la "
+#~ "fenêtre de conversation."
+
 #~ msgid "Invalid affiliation given"
 #~ msgstr "Affiliation non valide fournie"
 
@@ -5868,6 +5924,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Invite a user to a group chat for a reason"
 #~ msgstr "Inviter un contact dans un salon de discussion pour un motif donné"
+
+#~ msgid "Invite someone to your chat with %s"
+#~ msgstr "Inviter quelqu'un dans votre discussion avec %s"
 
 #~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
 #~ msgstr ""
@@ -5989,9 +6048,6 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Send a disco info request"
 #~ msgstr "Envoyer une requête \"disco info\""
 
-#~ msgid "Send a message to the contact"
-#~ msgstr "Envoie un message a un contact"
-
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "Envoie un message à ce contact qui attirera son attention"
 
@@ -6065,6 +6121,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Set the presence type and description"
 #~ msgstr "Choisissez le type de présence et la description"
+
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Afficher le statut dans la bannière"
 
 #~ msgid ""
 #~ "Show help on a given command or a list of available commands if -a is "
@@ -6169,6 +6228,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "_Toujours quitter en fermant Gajim"
 
+#~ msgid "_Invite"
+#~ msgstr "_Inviter"
+
 #~ msgid "_Try Again"
 #~ msgstr "_Essayer à nouveau"
 
@@ -6190,6 +6252,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "command"
 #~ msgstr "commande"
+
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "erreur en envoyant %(message)s ( %(error)s )"
 
 #~ msgid "file"
 #~ msgstr "fichier"
@@ -6240,3 +6305,6 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "subject"
 #~ msgstr "sujet"
+
+#~ msgid "user@example.org"
+#~ msgstr "utilisateur@exemple.org"

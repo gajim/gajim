@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -432,6 +432,10 @@ msgstr ""
 msgid "?Message row action:Retract…"
 msgstr "Eerste ontvangen bericht"
 
+#, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "Bericht opstellen"
+
 # Eerste bericht ontvangen?
 #, fuzzy
 msgid "?Message state:Received"
@@ -696,6 +700,10 @@ msgid "Add Contact"
 msgstr "Contact toevoegen"
 
 #, fuzzy
+msgid "Add Contact…"
+msgstr "Contact toevoegen…"
+
+#, fuzzy
 msgid "Add Entry"
 msgstr "Item:"
 
@@ -763,10 +771,6 @@ msgstr "Adres"
 #, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "%s is geen groepsgespreksserver"
-
-#, fuzzy
-msgid "Adhoc Group Chat"
-msgstr "Deelnemen aan groepsgesprek"
 
 msgid "Adjust to Status"
 msgstr "Aanpassen aan status"
@@ -957,9 +961,6 @@ msgstr "Vraag om statusbericht wanneer ik"
 msgid "Ask before closing a group chat tab/window."
 msgstr ""
 "Vraag bevestiging voor het sluiten van een groepsgespreksvenster of -tab."
-
-msgid "Ask before pasting an image."
-msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -1326,6 +1327,9 @@ msgstr "Chat veilig met eind-tot-eind-versleuteling via OMEMO of PGP"
 msgid "Chats"
 msgstr "Gesprekken"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr ""
 
@@ -1399,6 +1403,9 @@ msgstr "Geluid wissen"
 msgid "Clear message entry"
 msgstr "Berichtinvoer wissen"
 
+msgid "Click messages to select them"
+msgstr ""
+
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(jid)s is in dit groepsgesprek uitgenodigd"
@@ -1422,8 +1429,14 @@ msgstr "Sluiten"
 msgid "Close Search"
 msgstr "Zoeken"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
 msgstr "Gesprek sluiten"
+
+msgid "Close with Escape"
+msgstr ""
 
 msgid "Code snippet"
 msgstr ""
@@ -1650,6 +1663,10 @@ msgid "Copy Location"
 msgstr "Verwijzingslocatie kopiëren"
 
 #, fuzzy
+msgid "Copy Text"
+msgstr "JID kopiëren"
+
+#, fuzzy
 msgid "Copy XMPP Address"
 msgstr "E-mailadres kopiëren"
 
@@ -1684,6 +1701,10 @@ msgstr "Account %s wordt verwijderd"
 
 #, fuzzy
 msgid "Create Group Chat"
+msgstr "Groepsgesprekken verlaten"
+
+#, fuzzy
+msgid "Create Group Chat…"
 msgstr "Groepsgesprekken verlaten"
 
 #, fuzzy
@@ -1733,11 +1754,18 @@ msgstr "Joggen"
 msgid "Decline"
 msgstr "_Weigeren"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "Standaard"
 
 msgid "Default Sync Threshold"
 msgstr "Standaarddrempelwaarde voor synchronisatie"
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Contact hernoemen"
 
 msgid "Default device"
 msgstr "Standaardapparaat"
@@ -1912,6 +1940,10 @@ msgstr "%s berichten gedownload"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Bezig met laden"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Status: "
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2564,14 +2596,6 @@ msgid "Hide this menu"
 msgstr "Verberg dit menu"
 
 #, fuzzy
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "Verbergt de banner in een groepsgespreksvenster"
-
-#, fuzzy
-msgid "Hides the banner in a group chat window."
-msgstr "Verbergt de banner in een groepsgespreksvenster"
-
-#, fuzzy
 msgid "Home"
 msgstr "Website"
 
@@ -2652,12 +2676,6 @@ msgstr ""
 "Indien ingeschakeld zal Gajim een STUN-server proberen gebruiken bij gebruik "
 "van Jingle, ofwel die in de optie ‘stun_server’, ofwel die gegeven door de "
 "XMPP-server."
-
-#, fuzzy
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr ""
-"Indien ingeschakeld kan de Escape-toets gebruikt worden om een tabblad/"
-"venster te sluiten."
 
 #, fuzzy
 msgid ""
@@ -2791,10 +2809,6 @@ msgstr "Contacten uitnodigen"
 
 msgid "Invite friends to group chats or join one"
 msgstr "Nodig vrienden uit in groepsgesprekken, of neem eraan deel"
-
-#, fuzzy, python-format
-msgid "Invite someone to your chat with %s"
-msgstr "Organiseer je gesprekken met tabbladen"
 
 #, fuzzy
 msgid "Invitees"
@@ -3903,6 +3917,10 @@ msgstr ""
 msgid "Remove contact from contact list"
 msgstr "Verwijdert contact van rooster"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Verwijdert contact van rooster"
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -4014,7 +4032,7 @@ msgid "Resource"
 msgstr "Bron"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr ""
 "Je moet Gajim herstarten vooraleer sommige instellingen in werking treden"
 
@@ -4191,6 +4209,11 @@ msgstr "Waarschuwing"
 msgid "Select Account"
 msgstr "Account %s wordt verwijderd"
 
+# Verzonden aan contacten?
+#, fuzzy
+msgid "Select Contacts"
+msgstr "Verzonden contacten:"
+
 #, fuzzy
 msgid "Select File…"
 msgstr "Bestand verzenden…"
@@ -4270,6 +4293,10 @@ msgstr "Bericht verzenden"
 #, fuzzy
 msgid "Send Message Receipts"
 msgstr "Aandachtsbericht ontvangen"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Een bericht naar het contact sturen"
 
 #, fuzzy
 msgid "Send Read Markers"
@@ -4383,10 +4410,6 @@ msgid "Show"
 msgstr ""
 
 #, fuzzy
-msgid "Show Chat State In Banner"
-msgstr "Chatstatus tonen in banier"
-
-#, fuzzy
 msgid "Show Commands"
 msgstr "Opdrachten"
 
@@ -4401,6 +4424,10 @@ msgstr "Alleen actieve contacten weergeven"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Locatie:"
 
 #, fuzzy
 msgid "Show Join/Leave"
@@ -4477,6 +4504,9 @@ msgstr "Alle waarschuwingen weergeven"
 msgid "Show chat list"
 msgstr "Locatie:"
 
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+
 #, fuzzy
 msgid "Show in Taskbar"
 msgstr "Transporten weergeven"
@@ -4511,9 +4541,6 @@ msgstr ""
 
 msgid "Show the application's version"
 msgstr "Toepassingsversie weergeven"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
 
 #, fuzzy
 msgid "Show window in the taskbar"
@@ -5829,10 +5856,6 @@ msgstr "_Host:"
 msgid "_Hostname"
 msgstr "_Hostnaam:"
 
-#, fuzzy
-msgid "_Invite"
-msgstr "Uit_nodigen"
-
 msgid "_Join"
 msgstr "_Binnengaan"
 
@@ -6061,6 +6084,9 @@ msgstr "land"
 msgid "countrycode"
 msgstr "landcode"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr "datum"
 
@@ -6073,10 +6099,6 @@ msgstr ""
 
 msgid "error"
 msgstr "fout"
-
-#, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "fout bij versturen van %(message)s ( %(error)s )"
 
 #, fuzzy
 msgid "example.org"
@@ -6110,6 +6132,9 @@ msgstr "Schuingedrukt"
 msgid "lat"
 msgstr "breedte"
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr "plaats"
 
@@ -6117,6 +6142,15 @@ msgid "lon"
 msgstr "lengte"
 
 msgid "macOS"
+msgstr ""
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
 msgstr ""
 
 #, fuzzy
@@ -6166,9 +6200,6 @@ msgid "translator-credits"
 msgstr ""
 "Nathan Follens <nthn@unseen.is>\n"
 "Stéphan Kochen <stephan@kochen.nl>"
-
-msgid "user@example.org"
-msgstr "gebruiker@voorbeeld.nl"
 
 msgid "video input"
 msgstr "video-invoer"
@@ -6277,6 +6308,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "Opdra_cht uitvoeren…"
+
+#, fuzzy
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Deelnemen aan groepsgesprek"
 
 #, fuzzy
 #~ msgid "Allow a participant to send you public or private messages"
@@ -6423,6 +6458,14 @@ msgstr ""
 #~ msgstr "Haalt gedetailleerde informatie op over een contact"
 
 #, fuzzy
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "Verbergt de banner in een groepsgespreksvenster"
+
+#, fuzzy
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "Verbergt de banner in een groepsgespreksvenster"
+
+#, fuzzy
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr "Verbergt de lijst met deelnemers in een groepsgespreksvenster."
 
@@ -6473,6 +6516,12 @@ msgstr ""
 #~ "Indien ingeschakeld werkt aanvulling in groepsgesprekken als shell-auto-"
 #~ "aanvulling"
 
+#, fuzzy
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr ""
+#~ "Indien ingeschakeld kan de Escape-toets gebruikt worden om een tabblad/"
+#~ "venster te sluiten."
+
 #~ msgid "Invalid affiliation given"
 #~ msgstr "Ongeldige aansluiting gegeven"
 
@@ -6485,6 +6534,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Invite a user to a group chat for a reason"
 #~ msgstr "Nodig een gebruiker uit in een groepsgesprek voor een reden"
+
+#, fuzzy
+#~ msgid "Invite someone to your chat with %s"
+#~ msgstr "Organiseer je gesprekken met tabbladen"
 
 #~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
 #~ msgstr ""
@@ -6617,9 +6670,6 @@ msgstr ""
 #~ msgid "Send a disco info request"
 #~ msgstr "Verzonden ontvangstbevestigingen"
 
-#~ msgid "Send a message to the contact"
-#~ msgstr "Een bericht naar het contact sturen"
-
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr ""
 #~ "Stuur een bericht naar het contact dat zijn/haar aandacht zal trekken"
@@ -6698,6 +6748,10 @@ msgstr ""
 
 #~ msgid "Set the presence type and description"
 #~ msgstr "Stel het type en beschrijving van de aanwezigheid in"
+
+#, fuzzy
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Chatstatus tonen in banier"
 
 #~ msgid ""
 #~ "Show help on a given command or a list of available commands if -a is "
@@ -6812,6 +6866,10 @@ msgstr ""
 #~ msgstr "Gajim altijd sluiten"
 
 #, fuzzy
+#~ msgid "_Invite"
+#~ msgstr "Uit_nodigen"
+
+#, fuzzy
 #~ msgid "_Try Again"
 #~ msgstr "Opnieuw verifiëren…"
 
@@ -6833,6 +6891,9 @@ msgstr ""
 
 #~ msgid "command"
 #~ msgstr "opdracht"
+
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "fout bij versturen van %(message)s ( %(error)s )"
 
 #~ msgid "file"
 #~ msgstr "bestand"
@@ -6887,3 +6948,6 @@ msgstr ""
 
 #~ msgid "subject"
 #~ msgstr "onderwerp"
+
+#~ msgid "user@example.org"
+#~ msgstr "gebruiker@voorbeeld.nl"

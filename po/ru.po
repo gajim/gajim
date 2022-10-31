@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2022-07-23 19:36+0000\n"
 "Last-Translator: Elijah Draga <waytoroot@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -415,6 +415,10 @@ msgid "?Message row action:Retract…"
 msgstr "Спрятать станзы сообщений"
 
 #, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "Cодержимое сообщения"
+
+#, fuzzy
 msgid "?Message state:Received"
 msgstr "Спрятать станзы сообщений"
 
@@ -655,6 +659,10 @@ msgid "Add Contact"
 msgstr "Добавить контакт"
 
 #, fuzzy
+msgid "Add Contact…"
+msgstr "Добавить контакт…"
+
+#, fuzzy
 msgid "Add Entry"
 msgstr "Запись:"
 
@@ -715,10 +723,6 @@ msgstr "Адрес"
 
 msgid "Address does not belong to a group chat server"
 msgstr "Адрес не принадлежит серверу комнат"
-
-#, fuzzy
-msgid "Adhoc Group Chat"
-msgstr "Войти в комнату"
 
 msgid "Adjust to Status"
 msgstr "В зависимости от статуса"
@@ -886,9 +890,6 @@ msgstr "Запрашивать сообщение о статусе…"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Спрашивать перед закрытием окна/вкладки комнаты."
-
-msgid "Ask before pasting an image."
-msgstr "Спросить перед вставкой изображения."
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -1232,6 +1233,9 @@ msgstr ""
 msgid "Chats"
 msgstr "Чаты"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr "Проверить наличие обновлений"
 
@@ -1306,6 +1310,9 @@ msgstr "Удалить звук"
 msgid "Clear message entry"
 msgstr "Очистить поле ввода сообщения"
 
+msgid "Click messages to select them"
+msgstr ""
+
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr ""
 "Нажмите на контакты, которых Вы хотите пригласить в этот групповой чат."
@@ -1327,8 +1334,14 @@ msgstr "Закрыть"
 msgid "Close Search"
 msgstr "Новый поиск"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
 msgstr "Закрыть чат"
+
+msgid "Close with Escape"
+msgstr ""
 
 msgid "Code snippet"
 msgstr ""
@@ -1534,6 +1547,10 @@ msgstr "Копировать адрес ссылки"
 msgid "Copy Location"
 msgstr "Копировать местоположение"
 
+#, fuzzy
+msgid "Copy Text"
+msgstr "Копировать"
+
 msgid "Copy XMPP Address"
 msgstr "Копировать XMPP-адрес"
 
@@ -1565,6 +1582,10 @@ msgstr "Создать учетную запись"
 
 msgid "Create Group Chat"
 msgstr "Создать групповой чат"
+
+#, fuzzy
+msgid "Create Group Chat…"
+msgstr "Создать _Групповой чат…"
 
 msgid "Create New Account"
 msgstr "Создать новую учетную запись"
@@ -1606,11 +1627,18 @@ msgstr "Журнала отладки"
 msgid "Decline"
 msgstr "_Отклонить"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "По умолчанию"
 
 msgid "Default Sync Threshold"
 msgstr "Порог Синхронизации по умолчанию"
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Удалить контакт"
 
 msgid "Default device"
 msgstr "Устройство по умолчанию"
@@ -1777,6 +1805,10 @@ msgstr "Загружено %s сообщений"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Загрузка"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Статус: %s"
 
 msgid "Drop files or contacts"
 msgstr "Перетащите файлы или контакты"
@@ -2389,12 +2421,6 @@ msgstr "Переключить голосовой чат"
 msgid "Hide this menu"
 msgstr "Скрыть это меню"
 
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "Скрывает баннер в окне личного чата."
-
-msgid "Hides the banner in a group chat window."
-msgstr "Скрывает баннер в окне группового чата."
-
 #, fuzzy
 msgid "Home"
 msgstr "Домашняя страница"
@@ -2474,9 +2500,6 @@ msgstr ""
 "Если включено, Gajim попытается использовать STUN-сервер при использовании "
 "Jingle, который указан опцией 'stun_server', либо предоставленный XMPP-"
 "сервером."
-
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr "Если активно, то нажатие клавиши Escape будет закрывать вкладку/окно."
 
 msgid ""
 "If enabled, you will be able to set a negative priority to your account in "
@@ -2598,10 +2621,6 @@ msgstr "Пригласить новый контакт"
 
 msgid "Invite friends to group chats or join one"
 msgstr "Пригласите друзей в групповые чаты или присоединитесь к ним"
-
-#, fuzzy, python-format
-msgid "Invite someone to your chat with %s"
-msgstr "Организуйте свои чаты с помощью вкладок"
 
 msgid "Invitees"
 msgstr "Приглашенные"
@@ -3640,6 +3659,10 @@ msgstr "Удалить завершенные, отмененные и неуд�
 msgid "Remove contact from contact list"
 msgstr "Удалить контакт из списка контактов"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Удалить контакт из списка контактов"
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -3751,7 +3774,7 @@ msgid "Resource"
 msgstr "Ресурс"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr ""
 "Для вступления в силу некоторых настроек может потребоваться перезапуск"
 
@@ -3915,6 +3938,10 @@ msgid "Select Account"
 msgstr "Выбрать учётную запись"
 
 #, fuzzy
+msgid "Select Contacts"
+msgstr "Контакты для отправки:"
+
+#, fuzzy
 msgid "Select File…"
 msgstr "Отправить файл…"
 
@@ -3987,6 +4014,10 @@ msgstr "Отправить сообщение"
 
 msgid "Send Message Receipts"
 msgstr "Отправлять сообщения о доставке"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Послать сообщение контакту"
 
 #, fuzzy
 msgid "Send Read Markers"
@@ -4093,9 +4124,6 @@ msgstr "Контакт изменит статус"
 msgid "Show"
 msgstr "Показывать настроение"
 
-msgid "Show Chat State In Banner"
-msgstr "Показывать состояние чата в баннере"
-
 #, fuzzy
 msgid "Show Commands"
 msgstr "Команды"
@@ -4111,6 +4139,10 @@ msgstr "Показать только активных"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Показать местоположение"
 
 msgid "Show Join/Leave"
 msgstr "Показывать присоединение/выход"
@@ -4179,6 +4211,12 @@ msgid "Show chat list"
 msgstr "Показать местоположение"
 
 #, fuzzy
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+"Показывать состояние чата контактов (например, набор текста) на баннерах "
+"вкладок чатов"
+
+#, fuzzy
 msgid "Show in Taskbar"
 msgstr "Показать _транспорты"
 
@@ -4212,11 +4250,6 @@ msgstr ""
 
 msgid "Show the application's version"
 msgstr "Показать версию приложения"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
-"Показывать состояние чата контактов (например, набор текста) на баннерах "
-"вкладок чатов"
 
 #, fuzzy
 msgid "Show window in the taskbar"
@@ -5453,9 +5486,6 @@ msgstr "_Хост"
 msgid "_Hostname"
 msgstr "_Имя хоста"
 
-msgid "_Invite"
-msgstr "_Пригласить"
-
 msgid "_Join"
 msgstr "_Присоединиться"
 
@@ -5659,6 +5689,9 @@ msgstr "страна"
 msgid "countrycode"
 msgstr "код страны"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr "Данные"
 
@@ -5671,10 +5704,6 @@ msgstr ""
 
 msgid "error"
 msgstr "ошибка"
-
-#, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "ошибка при отправке %(message)s ( %(error)s )"
 
 msgid "example.org"
 msgstr "example.org"
@@ -5708,6 +5737,9 @@ msgstr "Курсив"
 msgid "lat"
 msgstr "широта"
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr "населенный пункт"
 
@@ -5716,6 +5748,15 @@ msgstr "долгота"
 
 msgid "macOS"
 msgstr "macOS"
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
+msgstr ""
 
 msgid "or"
 msgstr "или"
@@ -5766,9 +5807,6 @@ msgstr ""
 "Олег Стадник (mail@lokee.rv.ua)\n"
 "Денис Фомин (fominde@mail.ru)\n"
 "Григорий Сарницкий (sargrigory@ya.ru)"
-
-msgid "user@example.org"
-msgstr "user@example.org"
 
 msgid "video input"
 msgstr "видео вход"
@@ -5886,6 +5924,10 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "Выполнить команду…"
 
+#, fuzzy
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Войти в комнату"
+
 #~ msgid "Allow a participant to send you public or private messages"
 #~ msgstr "Разрешить участнику отправлять вам публичные или личные сообщения"
 
@@ -5918,6 +5960,9 @@ msgstr "Выберите изображение или перетащите ег
 #~ "Спрашивать перед закрытием окна разговора с вкладками, если существует "
 #~ "элемент, который может потерять данные (разговор, личный разговор, "
 #~ "разговор в групповом чате, которые не будут свернуты)."
+
+#~ msgid "Ask before pasting an image."
+#~ msgstr "Спросить перед вставкой изображения."
 
 #~ msgid "Ban Participant"
 #~ msgstr "Забанить участника"
@@ -6029,6 +6074,12 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Gets detailed info on a contact"
 #~ msgstr "Получает детальную информацию о контакте"
 
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "Скрывает баннер в окне личного чата."
+
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "Скрывает баннер в окне группового чата."
+
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr "Скрывает список участников группового чата в окне группового чата."
 
@@ -6076,6 +6127,10 @@ msgstr "Выберите изображение или перетащите ег
 #~ "Если активно, автодополнение ников в групповых чатах будет работать как "
 #~ "автодополнение в консоли."
 
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr ""
+#~ "Если активно, то нажатие клавиши Escape будет закрывать вкладку/окно."
+
 #~ msgid "Invalid affiliation given"
 #~ msgstr "Указана неверная принадлежность"
 
@@ -6087,6 +6142,10 @@ msgstr "Выберите изображение или перетащите ег
 
 #~ msgid "Invite a user to a group chat for a reason"
 #~ msgstr "Пригласить пользователя в групповой чат, указав причину"
+
+#, fuzzy
+#~ msgid "Invite someone to your chat with %s"
+#~ msgstr "Организуйте свои чаты с помощью вкладок"
 
 #~ msgid "It seems Gajim is not running. So you can't use gajim-remote."
 #~ msgstr ""
@@ -6208,9 +6267,6 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "Send a disco info request"
 #~ msgstr "Посылать запросы уведомления"
 
-#~ msgid "Send a message to the contact"
-#~ msgstr "Послать сообщение контакту"
-
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "Отправить сообщение контакту для привлечения внимания"
 
@@ -6285,6 +6341,9 @@ msgstr "Выберите изображение или перетащите ег
 
 #~ msgid "Set the presence type and description"
 #~ msgstr "Установка статуса и статусного сообщения"
+
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Показывать состояние чата в баннере"
 
 #~ msgid ""
 #~ "Show help on a given command or a list of available commands if -a is "
@@ -6390,6 +6449,9 @@ msgstr "Выберите изображение или перетащите ег
 #~ msgid "_Always quit when closing Gajim"
 #~ msgstr "_Всегда выходить при закрытии Gajim"
 
+#~ msgid "_Invite"
+#~ msgstr "_Пригласить"
+
 #~ msgid "_Try Again"
 #~ msgstr "_Попробовать снова"
 
@@ -6411,6 +6473,9 @@ msgstr "Выберите изображение или перетащите ег
 
 #~ msgid "command"
 #~ msgstr "команда"
+
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "ошибка при отправке %(message)s ( %(error)s )"
 
 #~ msgid "file"
 #~ msgstr "файл"
@@ -6465,3 +6530,6 @@ msgstr "Выберите изображение или перетащите ег
 
 #~ msgid "subject"
 #~ msgstr "тема"
+
+#~ msgid "user@example.org"
+#~ msgstr "user@example.org"

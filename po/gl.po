@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2009-08-19 23:51+0200\n"
 "Last-Translator: Iván Méndez López <>\n"
 "Language-Team:  <softwarelibre@udc.es>\n"
@@ -435,6 +435,10 @@ msgid "?Message row action:Retract…"
 msgstr "Recibiuse a primeira mensaxe"
 
 #, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "contido da mensaxe"
+
+#, fuzzy
 msgid "?Message state:Received"
 msgstr "Recibiuse a primeira mensaxe"
 
@@ -703,6 +707,10 @@ msgid "Add Contact"
 msgstr "_Engadir un contacto..."
 
 #, fuzzy
+msgid "Add Contact…"
+msgstr "_Engadir un contacto..."
+
+#, fuzzy
 msgid "Add Entry"
 msgstr "Entrada:"
 
@@ -770,10 +778,6 @@ msgstr "_Enderezo:"
 #, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "Isto non é un grupo de charla"
-
-#, fuzzy
-msgid "Adhoc Group Chat"
-msgstr "Entrar nunha sala de charlas"
 
 #, fuzzy
 msgid "Adjust to Status"
@@ -966,9 +970,6 @@ msgstr "Preguntar a mensaxe de estado cando estea: "
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Preguntar antes de pechar unha fiestra/separador da sala de charla."
-
-msgid "Ask before pasting an image."
-msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -1337,6 +1338,9 @@ msgstr ""
 msgid "Chats"
 msgstr "Charlas"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr ""
 
@@ -1420,6 +1424,9 @@ msgstr "Elixir un son"
 msgid "Clear message entry"
 msgstr "Enviouse a mensaxe"
 
+msgid "Click messages to select them"
+msgstr ""
+
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(nick)s foi expulsado por %(who)s: %(reason)s"
@@ -1443,7 +1450,13 @@ msgstr "_Enviar e pechar"
 msgid "Close Search"
 msgstr "Buscar"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
+msgstr ""
+
+msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
@@ -1677,6 +1690,10 @@ msgid "Copy Location"
 msgstr "_Copiar o enderezo da ligazón"
 
 #, fuzzy
+msgid "Copy Text"
+msgstr "Sala:"
+
+#, fuzzy
 msgid "Copy XMPP Address"
 msgstr "_Copiar o enderezo"
 
@@ -1713,6 +1730,10 @@ msgstr "A eliminar a conta %s"
 
 #, fuzzy
 msgid "Create Group Chat"
+msgstr "Novo grupo de charla"
+
+#, fuzzy
+msgid "Create Group Chat…"
 msgstr "Novo grupo de charla"
 
 #, fuzzy
@@ -1764,11 +1785,18 @@ msgstr "_Entrar"
 msgid "Decline"
 msgstr "D_esconectado"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "Por defecto"
 
 msgid "Default Sync Threshold"
 msgstr ""
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Renomear o contacto"
 
 #, fuzzy
 msgid "Default device"
@@ -1943,6 +1971,10 @@ msgstr "%d mensaxe sen ler"
 #, fuzzy
 msgid "Downloading…"
 msgstr "A compor"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Estado: "
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2591,14 +2623,6 @@ msgid "Hide this menu"
 msgstr "Ocultar este menú"
 
 #, fuzzy
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "Oculta o báner nunha fiestra de grupo de charla"
-
-#, fuzzy
-msgid "Hides the banner in a group chat window."
-msgstr "Oculta o báner nunha fiestra de grupo de charla"
-
-#, fuzzy
 msgid "Home"
 msgstr "Páxina web:"
 
@@ -2672,11 +2696,6 @@ msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr ""
-"Se é verdadeiro, ao premer a tecla escape pecha unha fiestra/separador."
 
 #, fuzzy
 msgid ""
@@ -2812,10 +2831,6 @@ msgid "Invite New Contact"
 msgstr "Contactos"
 
 msgid "Invite friends to group chats or join one"
-msgstr ""
-
-#, python-format
-msgid "Invite someone to your chat with %s"
 msgstr ""
 
 #, fuzzy
@@ -3943,6 +3958,10 @@ msgstr "Elimina da listaxe as transferencias rematadas, canceladas e erradas"
 msgid "Remove contact from contact list"
 msgstr "Elimina o contacto da listaxe"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Elimina o contacto da listaxe"
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -4053,7 +4072,7 @@ msgid "Resource"
 msgstr "Recurso:"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr ""
 "<b>NOTA:</b> Debe reiniciar o Gajim para que algúns cambios teñan efecto"
 
@@ -4229,6 +4248,10 @@ msgid "Select Account"
 msgstr "A eliminar a conta %s"
 
 #, fuzzy
+msgid "Select Contacts"
+msgstr "Contactos"
+
+#, fuzzy
 msgid "Select File…"
 msgstr "Enviar ficheiro"
 
@@ -4311,6 +4334,10 @@ msgstr "Enviar a mensaxe"
 #, fuzzy
 msgid "Send Message Receipts"
 msgstr "Recibiuse a primeira mensaxe"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Uso: /%s, oculta os botóns de charla."
 
 #, fuzzy
 msgid "Send Read Markers"
@@ -4426,10 +4453,6 @@ msgid "Show"
 msgstr ""
 
 #, fuzzy
-msgid "Show Chat State In Banner"
-msgstr "Amosar na listaxe os a_vatares dos contactos"
-
-#, fuzzy
 msgid "Show Commands"
 msgstr "Comandos: %s"
 
@@ -4444,6 +4467,10 @@ msgstr "Amosar os contactos desconectados"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Modificar a conta"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4519,6 +4546,9 @@ msgstr "Amosar todos os _eventos pendentes"
 msgid "Show chat list"
 msgstr "Modificar a conta"
 
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+
 #, fuzzy
 msgid "Show in Taskbar"
 msgstr "Amosar os trans_portes"
@@ -4555,9 +4585,6 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Usar a icona na á_rea de notificación"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
 
 #, fuzzy
 msgid "Show window in the taskbar"
@@ -5857,10 +5884,6 @@ msgstr "_Porto:"
 msgid "_Hostname"
 msgstr "Nome do host:"
 
-#, fuzzy
-msgid "_Invite"
-msgstr "Con_vidar"
-
 msgid "_Join"
 msgstr "_Entrar"
 
@@ -6097,6 +6120,9 @@ msgstr "País:"
 msgid "countrycode"
 msgstr "Conta"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr ""
 
@@ -6111,10 +6137,6 @@ msgstr ""
 #, fuzzy
 msgid "error"
 msgstr "Erro de Avahi"
-
-#, fuzzy, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "produciuse un erro mentres se enviaba %s ( %s )"
 
 msgid "example.org"
 msgstr ""
@@ -6148,6 +6170,9 @@ msgstr "Itálica"
 msgid "lat"
 msgstr ""
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr ""
 
@@ -6156,6 +6181,15 @@ msgid "lon"
 msgstr "unha"
 
 msgid "macOS"
+msgstr ""
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
 msgstr ""
 
 #, fuzzy
@@ -6204,9 +6238,6 @@ msgstr ""
 
 msgid "translator-credits"
 msgstr "Fran Alburquerque <membriskhan@gmail.com>"
-
-msgid "user@example.org"
-msgstr ""
 
 msgid "video input"
 msgstr ""
@@ -6291,6 +6322,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "Executar o _comando..."
+
+#, fuzzy
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Entrar nunha sala de charlas"
 
 #, fuzzy
 #~ msgid "App Indicator Icon"
@@ -6406,6 +6441,14 @@ msgstr ""
 #~ msgstr "Obter información detallada dun contacto"
 
 #, fuzzy
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "Oculta o báner nunha fiestra de grupo de charla"
+
+#, fuzzy
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "Oculta o báner nunha fiestra de grupo de charla"
+
+#, fuzzy
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr "Oculta os ocupantes nas fiestras de grupo de charla."
 
@@ -6432,6 +6475,11 @@ msgstr ""
 #~ msgstr ""
 #~ "Se isto está marcado, o Gajim amosará as circunstancias dos contactos na "
 #~ "listaxe e nos grupos de charla"
+
+#, fuzzy
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr ""
+#~ "Se é verdadeiro, ao premer a tecla escape pecha unha fiestra/separador."
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"
@@ -6547,10 +6595,6 @@ msgstr ""
 #~ msgstr "Devolve o número de mensaxes sen ler"
 
 #, fuzzy
-#~ msgid "Send a message to the contact"
-#~ msgstr "Uso: /%s, oculta os botóns de charla."
-
-#, fuzzy
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "Uso: /%s, oculta os botóns de charla."
 
@@ -6591,6 +6635,10 @@ msgstr ""
 #~ msgstr ""
 #~ "O bus da sesión non está dispoñíbel.\n"
 #~ "Probe a ler http://trac.gajim.org/wiki/GajimDBus"
+
+#, fuzzy
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Amosar na listaxe os a_vatares dos contactos"
 
 #~ msgid "Shows a help on specific command"
 #~ msgstr "Amosa axuda sobre un comando específico"
@@ -6661,6 +6709,10 @@ msgstr ""
 #~ msgid "You have no active account"
 #~ msgstr "Non ten contas activas"
 
+#, fuzzy
+#~ msgid "_Invite"
+#~ msgstr "Con_vidar"
+
 #~ msgid ""
 #~ "change status of account \"account\". If not specified, try to change "
 #~ "status of all accounts that have \"sync with global status\" option set"
@@ -6680,6 +6732,10 @@ msgstr ""
 
 #~ msgid "command"
 #~ msgstr "comando"
+
+#, fuzzy
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "produciuse un erro mentres se enviaba %s ( %s )"
 
 #~ msgid "file"
 #~ msgstr "ficheiro"

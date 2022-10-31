@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -437,6 +437,10 @@ msgid "?Message row action:Retract…"
 msgstr "Lehen Mezu Jasoa"
 
 #, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "mezuaren edukia"
+
+#, fuzzy
 msgid "?Message state:Received"
 msgstr "Lehen Mezu Jasoa"
 
@@ -704,6 +708,10 @@ msgid "Add Contact"
 msgstr "_Kontaktua Gehitu..."
 
 #, fuzzy
+msgid "Add Contact…"
+msgstr "_Kontaktua Gehitu..."
+
+#, fuzzy
 msgid "Add Entry"
 msgstr "Sarrera:"
 
@@ -770,10 +778,6 @@ msgstr "Helbidea"
 #, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "Hau ez da txat talde bat"
-
-#, fuzzy
-msgid "Adhoc Group Chat"
-msgstr "Txat Taldean Sartu"
 
 #, fuzzy
 msgid "Adjust to Status"
@@ -966,9 +970,6 @@ msgstr "Eskatu egoera mezua, nagoenean:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Galdetu leiho bat itxi baino lehen."
-
-msgid "Ask before pasting an image."
-msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -1337,6 +1338,9 @@ msgstr ""
 msgid "Chats"
 msgstr "Txat-ak"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr ""
 
@@ -1420,6 +1424,9 @@ msgstr "Aukeratu Soinua"
 msgid "Clear message entry"
 msgstr "Mezua Bidaltzean"
 
+msgid "Click messages to select them"
+msgstr ""
+
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(nick)s botata izan da %(who)s -engatik: %(reason)s"
@@ -1443,7 +1450,13 @@ msgstr "_Bidali eta Itxi"
 msgid "Close Search"
 msgstr "Bilatu"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
+msgstr ""
+
+msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
@@ -1677,6 +1690,10 @@ msgid "Copy Location"
 msgstr "_Lotura kokapena kopiatu"
 
 #, fuzzy
+msgid "Copy Text"
+msgstr "Gela:"
+
+#, fuzzy
 msgid "Copy XMPP Address"
 msgstr "_Kopiatu JID/Email-a"
 
@@ -1713,6 +1730,10 @@ msgstr "%s kontua ezabatzen"
 
 #, fuzzy
 msgid "Create Group Chat"
+msgstr "Txat Taldea Berria"
+
+#, fuzzy
+msgid "Create Group Chat…"
 msgstr "Txat Taldea Berria"
 
 #, fuzzy
@@ -1764,11 +1785,18 @@ msgstr "_Sartu"
 msgid "Decline"
 msgstr "_Deskonektatuta"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "Berezkoa"
 
 msgid "Default Sync Threshold"
 msgstr ""
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Berridatzi Kontaktua"
 
 #, fuzzy
 msgid "Default device"
@@ -1943,6 +1971,10 @@ msgstr "%d mezu irakurri gabe"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Sortzen"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Egoera: "
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2591,14 +2623,6 @@ msgid "Hide this menu"
 msgstr "Ezkutatu Menua"
 
 #, fuzzy
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "Ezkutatu banner-a txat talde leihoan"
-
-#, fuzzy
-msgid "Hides the banner in a group chat window."
-msgstr "Ezkutatu banner-a txat talde leihoan"
-
-#, fuzzy
 msgid "Home"
 msgstr "Web Pertsonala:"
 
@@ -2673,10 +2697,6 @@ msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr "Egia bada, ateratzeko botoila sakatzean tab/leihoa itxiko da."
 
 #, fuzzy
 msgid ""
@@ -2811,10 +2831,6 @@ msgid "Invite New Contact"
 msgstr "Kontaktua"
 
 msgid "Invite friends to group chats or join one"
-msgstr ""
-
-#, python-format
-msgid "Invite someone to your chat with %s"
 msgstr ""
 
 #, fuzzy
@@ -3942,6 +3958,10 @@ msgstr ""
 msgid "Remove contact from contact list"
 msgstr "Zerrendatik kontaktua ezabatu"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Zerrendatik kontaktua ezabatu"
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -4052,7 +4072,7 @@ msgid "Resource"
 msgstr "Baliabidea:"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr ""
 "<b>OHARRA:</b> Gajim berriro abiarazi beharko duzu aldagai batzuek efektua "
 "sor dezaten"
@@ -4229,6 +4249,10 @@ msgid "Select Account"
 msgstr "%s kontua ezabatzen"
 
 #, fuzzy
+msgid "Select Contacts"
+msgstr "Kontaktua"
+
+#, fuzzy
 msgid "Select File…"
 msgstr "Bidali _Fitxeroa"
 
@@ -4311,6 +4335,10 @@ msgstr "Bidali mezua"
 #, fuzzy
 msgid "Send Message Receipts"
 msgstr "Lehen Mezu Jasoa"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Erabilera:/%s, ezkutatu txat-eko botoilak."
 
 #, fuzzy
 msgid "Send Read Markers"
@@ -4426,10 +4454,6 @@ msgid "Show"
 msgstr ""
 
 #, fuzzy
-msgid "Show Chat State In Banner"
-msgstr "Kontaktuen a_batereak erakutsi zerrendan"
-
-#, fuzzy
 msgid "Show Commands"
 msgstr "Azalpenak: %s"
 
@@ -4444,6 +4468,10 @@ msgstr "Ikusi _Deskonektatutako Kontaktuak"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Kontu Eraldaketa"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4519,6 +4547,9 @@ msgstr "Ikusi Gabeko _Gertaerak"
 msgid "Show chat list"
 msgstr "Kontu Eraldaketa"
 
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+
 #, fuzzy
 msgid "Show in Taskbar"
 msgstr "Trans_porteak Erakutsi"
@@ -4555,9 +4586,6 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "E_rabili ikonifikazioa (aka. notification area)"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
 
 #, fuzzy
 msgid "Show window in the taskbar"
@@ -5857,10 +5885,6 @@ msgstr "_Host-a"
 msgid "_Hostname"
 msgstr "Hostname: "
 
-#, fuzzy
-msgid "_Invite"
-msgstr "Honera gonbidatu"
-
 msgid "_Join"
 msgstr "_Sartu"
 
@@ -6097,6 +6121,9 @@ msgstr "Estatua:"
 msgid "countrycode"
 msgstr "Kontua"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr ""
 
@@ -6111,10 +6138,6 @@ msgstr ""
 #, fuzzy
 msgid "error"
 msgstr "Avahi error"
-
-#, fuzzy, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "errorea bidaltzen zen bitartean %s ( %s )"
 
 msgid "example.org"
 msgstr ""
@@ -6148,6 +6171,9 @@ msgstr "Etzana"
 msgid "lat"
 msgstr ""
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr ""
 
@@ -6156,6 +6182,15 @@ msgid "lon"
 msgstr "bat"
 
 msgid "macOS"
+msgstr ""
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
 msgstr ""
 
 #, fuzzy
@@ -6204,9 +6239,6 @@ msgstr ""
 
 msgid "translator-credits"
 msgstr "Urtzi Alfaro <urtzi@altza.net>"
-
-msgid "user@example.org"
-msgstr ""
 
 msgid "video input"
 msgstr ""
@@ -6291,6 +6323,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "_Komandoa Exekutatu..."
+
+#, fuzzy
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Txat Taldean Sartu"
 
 #, fuzzy
 #~ msgid "App Indicator Icon"
@@ -6408,6 +6444,14 @@ msgstr ""
 #~ msgstr "Kontaktu baten informazioa lortu"
 
 #, fuzzy
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "Ezkutatu banner-a txat talde leihoan"
+
+#, fuzzy
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "Ezkutatu banner-a txat talde leihoan"
+
+#, fuzzy
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr "Ezkutatu gelako jendearen zerrenda txat taldeko leihoan."
 
@@ -6431,6 +6475,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Hautatua badago, Gajim-ek zerrendan eta txat taldeetan kontaktuen "
 #~ "abatereak azalaraziko ditu"
+
+#, fuzzy
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr "Egia bada, ateratzeko botoila sakatzean tab/leihoa itxiko da."
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"
@@ -6548,10 +6596,6 @@ msgstr ""
 #~ msgstr "Irakurri gabeko mezuen kontaketa itzuli"
 
 #, fuzzy
-#~ msgid "Send a message to the contact"
-#~ msgstr "Erabilera:/%s, ezkutatu txat-eko botoilak."
-
-#, fuzzy
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "Erabilera:/%s, ezkutatu txat-eko botoilak."
 
@@ -6592,6 +6636,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Bus saioa ez dago erabilgarri.\n"
 #~ "Saiatu irakurtzen http://trac.gajim.org/wiki/GajimDBus"
+
+#, fuzzy
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Kontaktuen a_batereak erakutsi zerrendan"
 
 #~ msgid "Shows a help on specific command"
 #~ msgstr "Shows a help on specific command"
@@ -6661,6 +6709,10 @@ msgstr ""
 #~ msgid "You have no active account"
 #~ msgstr "Ez duzu aktibatutako konturik"
 
+#, fuzzy
+#~ msgid "_Invite"
+#~ msgstr "Honera gonbidatu"
+
 #~ msgid ""
 #~ "change status of account \"account\". If not specified, try to change "
 #~ "status of all accounts that have \"sync with global status\" option set"
@@ -6680,6 +6732,10 @@ msgstr ""
 
 #~ msgid "command"
 #~ msgstr "command"
+
+#, fuzzy
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "errorea bidaltzen zen bitartean %s ( %s )"
 
 #~ msgid "file"
 #~ msgstr "fitxeroa"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -436,6 +436,10 @@ msgid "?Message row action:Retract…"
 msgstr "Атрыманае першае паведамленне"
 
 #, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "змест паведамлення"
+
+#, fuzzy
 msgid "?Message state:Received"
 msgstr "Атрыманае першае паведамленне"
 
@@ -701,6 +705,10 @@ msgid "Add Contact"
 msgstr "_Дадаць чалавека..."
 
 #, fuzzy
+msgid "Add Contact…"
+msgstr "_Дадаць чалавека..."
+
+#, fuzzy
 msgid "Add Entry"
 msgstr "Уваход:"
 
@@ -769,10 +777,6 @@ msgstr "_Адрас:"
 #, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "Гэта не групавая размова"
-
-#, fuzzy
-msgid "Adhoc Group Chat"
-msgstr "Удзельнічаць у групавой размове"
 
 #, fuzzy
 msgid "Adjust to Status"
@@ -964,9 +968,6 @@ msgstr "Запытацца аб паведамленні змены стану, 
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Пытацца пацверджання закрыцця групавой размовы."
-
-msgid "Ask before pasting an image."
-msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -1332,6 +1333,9 @@ msgstr ""
 msgid "Chats"
 msgstr "Размовы"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr ""
 
@@ -1415,6 +1419,9 @@ msgstr "Выберыце гукавы файл"
 msgid "Clear message entry"
 msgstr "Паведамленне адпраўленае"
 
+msgid "Click messages to select them"
+msgstr ""
+
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(who)s пакараў %(nick)s: %(reason)s"
@@ -1438,7 +1445,13 @@ msgstr "Ад_правіць і закрыць"
 msgid "Close Search"
 msgstr "Пошук"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
+msgstr ""
+
+msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
@@ -1672,6 +1685,10 @@ msgid "Copy Location"
 msgstr "_Скапіяваць адрас спасылкі"
 
 #, fuzzy
+msgid "Copy Text"
+msgstr "Пакой:"
+
+#, fuzzy
 msgid "Copy XMPP Address"
 msgstr "_Скапіяваць JID / паштовы адрас"
 
@@ -1708,6 +1725,10 @@ msgstr "Выдаленне рахунка %s"
 
 #, fuzzy
 msgid "Create Group Chat"
+msgstr "Сысці з групавых размоў"
+
+#, fuzzy
+msgid "Create Group Chat…"
 msgstr "Сысці з групавых размоў"
 
 #, fuzzy
@@ -1758,11 +1779,18 @@ msgstr "_Далучыцца"
 msgid "Decline"
 msgstr "_Адключаны"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "Прадвызначана"
 
 msgid "Default Sync Threshold"
 msgstr ""
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Змяніць імя чалавека"
 
 #, fuzzy
 msgid "Default device"
@@ -1941,6 +1969,10 @@ msgstr "%d нечытанае паведамленне"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Піша"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Стан: "
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2589,14 +2621,6 @@ msgid "Hide this menu"
 msgstr "Схаваць гэтае меню"
 
 #, fuzzy
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "Хавае банер у групавой размове"
-
-#, fuzzy
-msgid "Hides the banner in a group chat window."
-msgstr "Хавае банер у групавой размове"
-
-#, fuzzy
 msgid "Home"
 msgstr "У Сеціве:"
 
@@ -2671,10 +2695,6 @@ msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr "Калі true, клавіша Escape закрывае картку / вакно."
 
 #, fuzzy
 msgid ""
@@ -2809,10 +2829,6 @@ msgid "Invite New Contact"
 msgstr "Людзі"
 
 msgid "Invite friends to group chats or join one"
-msgstr ""
-
-#, python-format
-msgid "Invite someone to your chat with %s"
 msgstr ""
 
 #, fuzzy
@@ -3941,6 +3957,10 @@ msgstr "Выдаліць скончаныя, скасаваныя і хібны�
 msgid "Remove contact from contact list"
 msgstr "Выдаліць чалавека з спіса"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Выдаліць чалавека з спіса"
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -4052,7 +4072,7 @@ msgid "Resource"
 msgstr "Рэсурс:"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr "<b>Увага:</b> Каб ужыць некаторыя змены, трэба перазапусціць Gajim"
 
 #, fuzzy
@@ -4227,6 +4247,10 @@ msgid "Select Account"
 msgstr "Выдаленне рахунка %s"
 
 #, fuzzy
+msgid "Select Contacts"
+msgstr "Людзі"
+
+#, fuzzy
 msgid "Select File…"
 msgstr "Адправіць _файл"
 
@@ -4309,6 +4333,10 @@ msgstr "Адправіць паведамленне"
 #, fuzzy
 msgid "Send Message Receipts"
 msgstr "Атрыманае першае паведамленне"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Карыстанне: /%s, хавае кнопкі размовы."
 
 #, fuzzy
 msgid "Send Read Markers"
@@ -4424,10 +4452,6 @@ msgid "Show"
 msgstr ""
 
 #, fuzzy
-msgid "Show Chat State In Banner"
-msgstr "Паказваць _малюнкі ў галоўным вакне"
-
-#, fuzzy
 msgid "Show Commands"
 msgstr "Загады: %s"
 
@@ -4442,6 +4466,10 @@ msgstr "Паказаць _адлучаных людзей"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Змяненне рахунка"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4517,6 +4545,9 @@ msgstr "Паказаць нягледжаныя _падзеі"
 msgid "Show chat list"
 msgstr "Змяненне рахунка"
 
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+
 #, fuzzy
 msgid "Show in Taskbar"
 msgstr "Паказаць _транспарты"
@@ -4553,9 +4584,6 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "_Значка панэлі паведамленняў"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
 
 #, fuzzy
 msgid "Show window in the taskbar"
@@ -5853,10 +5881,6 @@ msgstr "_Вузел:"
 msgid "_Hostname"
 msgstr "Назва вузла: "
 
-#, fuzzy
-msgid "_Invite"
-msgstr "За_прасіць"
-
 msgid "_Join"
 msgstr "_Далучыцца"
 
@@ -6093,6 +6117,9 @@ msgstr "Краіна:"
 msgid "countrycode"
 msgstr "Рахунак"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr ""
 
@@ -6107,10 +6134,6 @@ msgstr ""
 #, fuzzy
 msgid "error"
 msgstr "Памылка Avahi"
-
-#, fuzzy, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "памылка адпраўкі %s ( %s )"
 
 msgid "example.org"
 msgstr ""
@@ -6144,6 +6167,9 @@ msgstr "Нахілены"
 msgid "lat"
 msgstr ""
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr ""
 
@@ -6152,6 +6178,15 @@ msgid "lon"
 msgstr "адзін"
 
 msgid "macOS"
+msgstr ""
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
 msgstr ""
 
 #, fuzzy
@@ -6199,9 +6234,6 @@ msgstr ""
 
 msgid "translator-credits"
 msgstr "Ihar Hrachyshka <ihar.hrachyshka@gmail.com>"
-
-msgid "user@example.org"
-msgstr ""
 
 msgid "video input"
 msgstr ""
@@ -6286,6 +6318,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "_Выканаць загад..."
+
+#, fuzzy
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Удзельнічаць у групавой размове"
 
 #, fuzzy
 #~ msgid "App Indicator Icon"
@@ -6402,6 +6438,14 @@ msgstr ""
 #~ msgstr "Атрымаць падрабязныя звесткі пра чалавека"
 
 #, fuzzy
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "Хавае банер у групавой размове"
+
+#, fuzzy
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "Хавае банер у групавой размове"
+
+#, fuzzy
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr "Схаваць спіс удзельнікаў групавой размовы."
 
@@ -6427,6 +6471,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Калі гэтая опцыя ўключаная, Gajim паказвае аватары ў галоўным вакне і ў "
 #~ "групавых размовах"
+
+#, fuzzy
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr "Калі true, клавіша Escape закрывае картку / вакно."
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"
@@ -6542,10 +6590,6 @@ msgstr ""
 #~ msgstr "Вяртае колькасць нечытаных паведамленняў"
 
 #, fuzzy
-#~ msgid "Send a message to the contact"
-#~ msgstr "Карыстанне: /%s, хавае кнопкі размовы."
-
-#, fuzzy
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "Карыстанне: /%s, хавае кнопкі размовы."
 
@@ -6589,6 +6633,10 @@ msgstr ""
 
 #~ msgid "Set the presence type and description"
 #~ msgstr "Выставіць тып прысутнасці і апісанне"
+
+#, fuzzy
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Паказваць _малюнкі ў галоўным вакне"
 
 #~ msgid "Shows a help on specific command"
 #~ msgstr "Паказвае даведку па вызначаным загадзе"
@@ -6661,6 +6709,10 @@ msgstr ""
 #~ msgid "You have no active account"
 #~ msgstr "У Вас няма актыўнага рахунка"
 
+#, fuzzy
+#~ msgid "_Invite"
+#~ msgstr "За_прасіць"
+
 #~ msgid ""
 #~ "change status of account \"account\". If not specified, try to change "
 #~ "status of all accounts that have \"sync with global status\" option set"
@@ -6678,6 +6730,10 @@ msgstr ""
 
 #~ msgid "command"
 #~ msgstr "загад"
+
+#, fuzzy
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "памылка адпраўкі %s ( %s )"
 
 #~ msgid "file"
 #~ msgstr "файл"

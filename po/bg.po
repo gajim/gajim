@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -441,6 +441,10 @@ msgid "?Message row action:Retract…"
 msgstr "Първо получено съобщение"
 
 #, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "текст на съобщението"
+
+#, fuzzy
 msgid "?Message state:Received"
 msgstr "Първо получено съобщение"
 
@@ -707,6 +711,10 @@ msgid "Add Contact"
 msgstr "_Добавяне на контакт…"
 
 #, fuzzy
+msgid "Add Contact…"
+msgstr "_Добавяне на контакт…"
+
+#, fuzzy
 msgid "Add Entry"
 msgstr "Запис:"
 
@@ -777,10 +785,6 @@ msgstr "_Адрес:"
 #, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "Това не е стая"
-
-#, fuzzy
-msgid "Adhoc Group Chat"
-msgstr "Влизане в стая"
 
 #, fuzzy
 msgid "Adjust to Status"
@@ -977,9 +981,6 @@ msgstr "Питане за съобщение за състояние при пр
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Питане преди затваряне на подпрозорец/прозорец на стая."
-
-msgid "Ask before pasting an image."
-msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -1352,6 +1353,9 @@ msgstr ""
 msgid "Chats"
 msgstr "Разговори"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr ""
 
@@ -1434,6 +1438,9 @@ msgstr "Избор на звук"
 msgid "Clear message entry"
 msgstr "Изпратено съобщение"
 
+msgid "Click messages to select them"
+msgstr ""
+
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(nick)s беше изритан от стаята (%(reason)s)"
@@ -1457,7 +1464,13 @@ msgstr "Изпра_щане и затваряне"
 msgid "Close Search"
 msgstr "Търсене"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
+msgstr ""
+
+msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
@@ -1691,6 +1704,10 @@ msgid "Copy Location"
 msgstr "_Копиране на адреса на връзката"
 
 #, fuzzy
+msgid "Copy Text"
+msgstr "JID на стая"
+
+#, fuzzy
 msgid "Copy XMPP Address"
 msgstr "Копиране на _JID/Е-поща"
 
@@ -1727,6 +1744,10 @@ msgstr "Премахване на акаунт „%s“"
 
 #, fuzzy
 msgid "Create Group Chat"
+msgstr "Излизане от стаите"
+
+#, fuzzy
+msgid "Create Group Chat…"
 msgstr "Излизане от стаите"
 
 #, fuzzy
@@ -1777,11 +1798,18 @@ msgstr "Тичам за здраве"
 msgid "Decline"
 msgstr "_Изключен"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr "По подразбиране"
 
 msgid "Default Sync Threshold"
 msgstr ""
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Преименуване на контакт"
 
 #, fuzzy
 msgid "Default device"
@@ -1959,6 +1987,10 @@ msgstr "Препращане на непрочетени съобщения"
 #, fuzzy
 msgid "Downloading…"
 msgstr "Програмирам"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Състояние: "
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2614,14 +2646,6 @@ msgid "Hide this menu"
 msgstr "Скриване на това меню"
 
 #, fuzzy
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "Скрива лентата в прозореца на стаята"
-
-#, fuzzy
-msgid "Hides the banner in a group chat window."
-msgstr "Скрива лентата в прозореца на стаята"
-
-#, fuzzy
 msgid "Home"
 msgstr "<b>Страница в Интернет:</b>"
 
@@ -2698,12 +2722,6 @@ msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr ""
-"Ако е активирана, натискането на клавиша „Escape“ затваря прозореца/"
-"подпрозореца."
 
 #, fuzzy
 msgid ""
@@ -2836,10 +2854,6 @@ msgid "Invite New Contact"
 msgstr "Покана на _контакти"
 
 msgid "Invite friends to group chats or join one"
-msgstr ""
-
-#, python-format
-msgid "Invite someone to your chat with %s"
 msgstr ""
 
 #, fuzzy
@@ -3970,6 +3984,10 @@ msgstr ""
 msgid "Remove contact from contact list"
 msgstr "Премахване на контакт от списъка"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Премахване на контакт от списъка"
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -4084,7 +4102,7 @@ msgid "Resource"
 msgstr "Ресурс:"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr ""
 "<b>ЗАБЕЛЕЖКА:</b> Трябва да рестартирате Gajim, за да влязат в сила някои от "
 "настройките"
@@ -4261,6 +4279,10 @@ msgid "Select Account"
 msgstr "Премахване на акаунт „%s“"
 
 #, fuzzy
+msgid "Select Contacts"
+msgstr "Покана на _контакти"
+
+#, fuzzy
 msgid "Select File…"
 msgstr "Изпращане на _файл"
 
@@ -4342,6 +4364,10 @@ msgstr "Изпращане на съобщение"
 #, fuzzy
 msgid "Send Message Receipts"
 msgstr "Първо получено съобщение"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Употреба: /%s, изпраща съобщение до контакта."
 
 #, fuzzy
 msgid "Send Read Markers"
@@ -4455,10 +4481,6 @@ msgid "Show"
 msgstr ""
 
 #, fuzzy
-msgid "Show Chat State In Banner"
-msgstr "Показване на _аватари на контактите в списъка"
-
-#, fuzzy
 msgid "Show Commands"
 msgstr "Команди: %s"
 
@@ -4473,6 +4495,10 @@ msgstr "Показване на изкл_ючените контакти"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Уведомления"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4548,6 +4574,9 @@ msgstr "Показване на всички _чакащи събития"
 msgid "Show chat list"
 msgstr "Уведомления"
 
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+
 #, fuzzy
 msgid "Show in Taskbar"
 msgstr "Показване на т_ранспорти"
@@ -4584,9 +4613,6 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Демон за уведомления"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
 
 #, fuzzy
 msgid "Show window in the taskbar"
@@ -5898,10 +5924,6 @@ msgstr "_Хост:"
 msgid "_Hostname"
 msgstr "_Хост:"
 
-#, fuzzy
-msgid "_Invite"
-msgstr "По_кана"
-
 msgid "_Join"
 msgstr "_Влизане"
 
@@ -6134,6 +6156,9 @@ msgstr "Акаунт"
 msgid "countrycode"
 msgstr "Акаунт"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr ""
 
@@ -6148,10 +6173,6 @@ msgstr ""
 #, fuzzy
 msgid "error"
 msgstr "Грешка."
-
-#, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "грешка при изпращане на %(message)s ( %(error)s )"
 
 msgid "example.org"
 msgstr ""
@@ -6185,6 +6206,9 @@ msgstr "Курсив"
 msgid "lat"
 msgstr ""
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr ""
 
@@ -6193,6 +6217,15 @@ msgid "lon"
 msgstr "един"
 
 msgid "macOS"
+msgstr ""
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
 msgstr ""
 
 #, fuzzy
@@ -6245,9 +6278,6 @@ msgstr ""
 "Проектът за превод на GNOME има нужда от подкрепа.\n"
 "Научете повече за нас на http://gnome.cult.bg\n"
 "Докладвайте за грешки на http://gnome.cult.bg/bugs"
-
-msgid "user@example.org"
-msgstr ""
 
 msgid "video input"
 msgstr ""
@@ -6336,6 +6366,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "_Изпълнение на команда"
+
+#, fuzzy
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Влизане в стая"
 
 #, fuzzy
 #~ msgid "App Indicator Icon"
@@ -6449,6 +6483,14 @@ msgstr ""
 #~ msgstr "Получаване на подробна информация за контакта"
 
 #, fuzzy
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "Скрива лентата в прозореца на стаята"
+
+#, fuzzy
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "Скрива лентата в прозореца на стаята"
+
+#, fuzzy
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr "Скрива списъка на участниците в прозореца на стаята."
 
@@ -6475,6 +6517,12 @@ msgstr ""
 #~ msgstr ""
 #~ "Ако тази опция е избрана, Gajim ще изобразява настроението на контактите "
 #~ "в списъка."
+
+#, fuzzy
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr ""
+#~ "Ако е активирана, натискането на клавиша „Escape“ затваря прозореца/"
+#~ "подпрозореца."
 
 #, fuzzy
 #~ msgid "Invalid affiliation given"
@@ -6614,10 +6662,6 @@ msgstr ""
 #~ msgstr "Изпратени заявки"
 
 #, fuzzy
-#~ msgid "Send a message to the contact"
-#~ msgstr "Употреба: /%s, изпраща съобщение до контакта."
-
-#, fuzzy
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "Употреба: /%s, изпраща съобщение до контакта."
 
@@ -6665,6 +6709,10 @@ msgstr ""
 
 #~ msgid "Set the presence type and description"
 #~ msgstr "Настройване на съобщението за състояние и описанието му"
+
+#, fuzzy
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Показване на _аватари на контактите в списъка"
 
 #~ msgid "Shows a help on specific command"
 #~ msgstr "Показва помощ за специфична команда"
@@ -6748,6 +6796,10 @@ msgstr ""
 #~ msgstr "Нямате активен акаунт"
 
 #, fuzzy
+#~ msgid "_Invite"
+#~ msgstr "По_кана"
+
+#, fuzzy
 #~ msgid "_Try Again"
 #~ msgstr "Проверка наново…"
 
@@ -6770,6 +6822,9 @@ msgstr ""
 
 #~ msgid "command"
 #~ msgstr "команда"
+
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "грешка при изпращане на %(message)s ( %(error)s )"
 
 #~ msgid "file"
 #~ msgstr "файл"

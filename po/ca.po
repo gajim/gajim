@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -409,6 +409,9 @@ msgstr ""
 msgid "?Message row action:Retract…"
 msgstr ""
 
+msgid "?Message row action:Select Messages…"
+msgstr ""
+
 msgid "?Message state:Received"
 msgstr ""
 
@@ -666,6 +669,10 @@ msgid "Add Contact"
 msgstr "_Afegeix Contacte..."
 
 #, fuzzy
+msgid "Add Contact…"
+msgstr "_Afegeix Contacte..."
+
+#, fuzzy
 msgid "Add Entry"
 msgstr "Entrada:"
 
@@ -734,10 +741,6 @@ msgstr "_Copia adreça JID/Email"
 
 msgid "Address does not belong to a group chat server"
 msgstr ""
-
-#, fuzzy
-msgid "Adhoc Group Chat"
-msgstr "Uneix-te al xat en grup"
 
 #, fuzzy
 msgid "Adjust to Status"
@@ -920,9 +923,6 @@ msgid "Ask For Status Message on…"
 msgstr "_Canvia Missatge d'Estat"
 
 msgid "Ask before closing a group chat tab/window."
-msgstr ""
-
-msgid "Ask before pasting an image."
 msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
@@ -1278,6 +1278,9 @@ msgstr ""
 msgid "Chats"
 msgstr "Inactiva"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr ""
 
@@ -1352,6 +1355,9 @@ msgstr "Neteja"
 msgid "Clear message entry"
 msgstr ""
 
+msgid "Click messages to select them"
+msgstr ""
+
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr ""
 
@@ -1373,7 +1379,13 @@ msgstr ""
 msgid "Close Search"
 msgstr "Cerca:"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
+msgstr ""
+
+msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
@@ -1595,6 +1607,9 @@ msgstr "_Copia la ubicació de l'enllaç"
 msgid "Copy Location"
 msgstr "_Copia la ubicació de l'enllaç"
 
+msgid "Copy Text"
+msgstr ""
+
 #, fuzzy
 msgid "Copy XMPP Address"
 msgstr "_Copia adreça JID/Email"
@@ -1630,6 +1645,10 @@ msgstr "Fusiona comptes"
 
 #, fuzzy
 msgid "Create Group Chat"
+msgstr "Grups de xat"
+
+#, fuzzy
+msgid "Create Group Chat…"
 msgstr "Grups de xat"
 
 #, fuzzy
@@ -1677,11 +1696,18 @@ msgstr ""
 msgid "Decline"
 msgstr "Desconnectat"
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr ""
 
 msgid "Default Sync Threshold"
 msgstr ""
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Afegeix un contacte nou"
 
 msgid "Default device"
 msgstr ""
@@ -1843,6 +1869,10 @@ msgstr "_Canvia Missatge d'Estat"
 
 msgid "Downloading…"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Estat"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2460,12 +2490,6 @@ msgstr "Accions Ocupant"
 msgid "Hide this menu"
 msgstr ""
 
-msgid "Hides the banner in a 1:1 chat window."
-msgstr ""
-
-msgid "Hides the banner in a group chat window."
-msgstr ""
-
 #, fuzzy
 msgid "Home"
 msgstr "Pàgina d'inici:"
@@ -2534,9 +2558,6 @@ msgstr ""
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
-msgstr ""
-
-msgid "If enabled, pressing Esc closes a tab/window."
 msgstr ""
 
 msgid ""
@@ -2664,10 +2685,6 @@ msgid "Invite New Contact"
 msgstr "Convida _Contactes"
 
 msgid "Invite friends to group chats or join one"
-msgstr ""
-
-#, python-format
-msgid "Invite someone to your chat with %s"
 msgstr ""
 
 #, fuzzy
@@ -3734,6 +3751,10 @@ msgstr ""
 msgid "Remove contact from contact list"
 msgstr "Esborra transferència de fitxer de la llista."
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Esborra transferència de fitxer de la llista."
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -3841,7 +3862,7 @@ msgid "Resource"
 msgstr "Recurs:"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr ""
 "<b>NOTA:</b> Hauries de reiniciar Gajim per a que la configuració tingui "
 "efecte"
@@ -4010,6 +4031,10 @@ msgid "Select Account"
 msgstr "Fusiona comptes"
 
 #, fuzzy
+msgid "Select Contacts"
+msgstr "Contactes blocats"
+
+#, fuzzy
 msgid "Select File…"
 msgstr "Envia _Fitxer"
 
@@ -4088,6 +4113,10 @@ msgstr "Envia missatge"
 
 #, fuzzy
 msgid "Send Message Receipts"
+msgstr "Envia missatge"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
 msgstr "Envia missatge"
 
 #, fuzzy
@@ -4195,10 +4224,6 @@ msgid "Show"
 msgstr ""
 
 #, fuzzy
-msgid "Show Chat State In Banner"
-msgstr "Mostra Contactes Actius"
-
-#, fuzzy
 msgid "Show Commands"
 msgstr "_Copia la ubicació de l'enllaç"
 
@@ -4213,6 +4238,10 @@ msgstr "Mostra Contactes Actius"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "_Copia la ubicació de l'enllaç"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4281,6 +4310,9 @@ msgstr ""
 msgid "Show chat list"
 msgstr "_Copia la ubicació de l'enllaç"
 
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+
 #, fuzzy
 msgid "Show in Taskbar"
 msgstr "Mostra Transports"
@@ -4314,9 +4346,6 @@ msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
 
 msgid "Show the application's version"
-msgstr ""
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
 msgstr ""
 
 msgid "Show window in the taskbar"
@@ -5542,10 +5571,6 @@ msgstr "Nom del servidor:"
 msgid "_Hostname"
 msgstr "Nom del servidor:"
 
-#, fuzzy
-msgid "_Invite"
-msgstr "Con_vida"
-
 msgid "_Join"
 msgstr "_Entra-hi"
 
@@ -5771,6 +5796,9 @@ msgstr ""
 msgid "countrycode"
 msgstr ""
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr ""
 
@@ -5782,10 +5810,6 @@ msgid "e.g. %s"
 msgstr ""
 
 msgid "error"
-msgstr ""
-
-#, python-format
-msgid "error while sending %(message)s ( %(error)s )"
 msgstr ""
 
 msgid "example.org"
@@ -5818,6 +5842,9 @@ msgstr "Cursiva"
 msgid "lat"
 msgstr ""
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr ""
 
@@ -5825,6 +5852,15 @@ msgid "lon"
 msgstr ""
 
 msgid "macOS"
+msgstr ""
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
 msgstr ""
 
 #, fuzzy
@@ -5871,9 +5907,6 @@ msgid "timestamp"
 msgstr ""
 
 msgid "translator-credits"
-msgstr ""
-
-msgid "user@example.org"
 msgstr ""
 
 msgid "video input"
@@ -5934,6 +5967,10 @@ msgstr ""
 #~ msgstr "_Executa Comanda...."
 
 #, fuzzy
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Uneix-te al xat en grup"
+
+#, fuzzy
 #~ msgid "App Indicator Icon"
 #~ msgstr "_Accions"
 
@@ -5988,6 +6025,10 @@ msgstr ""
 #~ msgstr "Esborra transferència de fitxer de la llista."
 
 #, fuzzy
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Mostra Contactes Actius"
+
+#, fuzzy
 #~ msgid "Status Change"
 #~ msgstr "Mostra els canvis d'estat"
 
@@ -6002,6 +6043,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Voice chats are not available"
 #~ msgstr "Transferència de Fitxers"
+
+#, fuzzy
+#~ msgid "_Invite"
+#~ msgstr "Con_vida"
 
 #, fuzzy
 #~ msgid "python-cairo Version: %s"

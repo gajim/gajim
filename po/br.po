@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -437,6 +437,10 @@ msgid "?Message row action:Retract…"
 msgstr "Kemennadenn gentañ"
 
 #, fuzzy
+msgid "?Message row action:Select Messages…"
+msgstr "korf ar gemennadenn"
+
+#, fuzzy
 msgid "?Message state:Received"
 msgstr "Kemennadenn gentañ"
 
@@ -702,6 +706,10 @@ msgid "Add Contact"
 msgstr "_Ouzhpennañ un darempred..."
 
 #, fuzzy
+msgid "Add Contact…"
+msgstr "_Ouzhpennañ un darempred..."
+
+#, fuzzy
 msgid "Add Entry"
 msgstr "Bro:"
 
@@ -767,10 +775,6 @@ msgstr "Chomlec'h"
 #, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "A guzha an nozelennoù er prenestr flapiñ"
-
-#, fuzzy
-msgid "Adhoc Group Chat"
-msgstr "Ebarzhiñ ur sal-flapiñ"
 
 #, fuzzy
 msgid "Adjust to Status"
@@ -963,9 +967,6 @@ msgstr "Goulenn an titour-stad pa:"
 
 msgid "Ask before closing a group chat tab/window."
 msgstr "Goulenn a-raok serriñ un ivinell pe ur prenestr."
-
-msgid "Ask before pasting an image."
-msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
@@ -1331,6 +1332,9 @@ msgstr ""
 msgid "Chats"
 msgstr "Flapoù"
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr ""
 
@@ -1414,6 +1418,9 @@ msgstr "Dibabit ur son"
 msgid "Clear message entry"
 msgstr "Kemennadenn gaset"
 
+msgid "Click messages to select them"
+msgstr ""
+
 #, fuzzy
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(nick)s a zo bet skarzhet gant %(who)s : %(reason)s"
@@ -1437,7 +1444,13 @@ msgstr "_Kas & Serriñ"
 msgid "Close Search"
 msgstr "Klask"
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
+msgstr ""
+
+msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
@@ -1671,6 +1684,10 @@ msgid "Copy Location"
 msgstr "_Kopiañ chomlec'h an ere"
 
 #, fuzzy
+msgid "Copy Text"
+msgstr "Webgaoz:"
+
+#, fuzzy
 msgid "Copy XMPP Address"
 msgstr "_Kopiañ ar JID/Chomlec'h postel"
 
@@ -1707,6 +1724,10 @@ msgstr "Lemel ar gont %s"
 
 #, fuzzy
 msgid "Create Group Chat"
+msgstr "Flap a-stroll"
+
+#, fuzzy
+msgid "Create Group Chat…"
 msgstr "Flap a-stroll"
 
 #, fuzzy
@@ -1758,12 +1779,19 @@ msgstr "E_barzhiñ"
 msgid "Decline"
 msgstr "_Ezlinenn"
 
+msgid "Decline Invitation"
+msgstr ""
+
 #, fuzzy
 msgid "Default"
 msgstr "Dilemel"
 
 msgid "Default Sync Threshold"
 msgstr ""
+
+#, fuzzy
+msgid "Default Workspace"
+msgstr "Darempredoù"
 
 #, fuzzy
 msgid "Default device"
@@ -1938,6 +1966,10 @@ msgstr "Gajim - %d gemennadenn nevez"
 #, fuzzy
 msgid "Downloading…"
 msgstr "O skrivañ"
+
+#, fuzzy, python-format
+msgid "Draft: %s"
+msgstr "Stad:"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2585,14 +2617,6 @@ msgid "Hide this menu"
 msgstr "Kuzhat ar meuziad-mañ"
 
 #, fuzzy
-msgid "Hides the banner in a 1:1 chat window."
-msgstr "A guzha an nozelennoù er prenestr flapiñ"
-
-#, fuzzy
-msgid "Hides the banner in a group chat window."
-msgstr "A guzha an nozelennoù er prenestr flapiñ"
-
-#, fuzzy
 msgid "Home"
 msgstr "Lec'hienn hiniennel:"
 
@@ -2663,11 +2687,6 @@ msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
-
-#, fuzzy
-msgid "If enabled, pressing Esc closes a tab/window."
-msgstr ""
-"M'eo gwir, klikit war an douchenn Echap evit serriñ un ivinell/prenestr"
 
 msgid ""
 "If enabled, you will be able to set a negative priority to your account in "
@@ -2797,10 +2816,6 @@ msgid "Invite New Contact"
 msgstr "Darempredoù"
 
 msgid "Invite friends to group chats or join one"
-msgstr ""
-
-#, python-format
-msgid "Invite someone to your chat with %s"
 msgstr ""
 
 #, fuzzy
@@ -3926,6 +3941,10 @@ msgstr "Diverkañ an treuzkasadoù echu, nullaet pe sac'het"
 msgid "Remove contact from contact list"
 msgstr "Dilemel an darempred diouzh ar roll"
 
+#, fuzzy
+msgid "Remove from contact list"
+msgstr "Dilemel an darempred diouzh ar roll"
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -4035,7 +4054,7 @@ msgid "Resource"
 msgstr "Une erreur de protocole s'est produite :"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr ""
 "<b>NOTENN :</b> Dav eo deoc'h adloc'hañ Gajim evit ma vo efedus kemmoù 'zo"
 
@@ -4210,6 +4229,10 @@ msgid "Select Account"
 msgstr "Lemel ar gont %s"
 
 #, fuzzy
+msgid "Select Contacts"
+msgstr "Darempredoù"
+
+#, fuzzy
 msgid "Select File…"
 msgstr "Kas ur _restr"
 
@@ -4293,6 +4316,10 @@ msgstr "Kas ur gemennadenn"
 #, fuzzy
 msgid "Send Message Receipts"
 msgstr "Kemennadenn gentañ"
+
+#, fuzzy
+msgid "Send Messages with Control+Enter"
+msgstr "Usage: /%s, cache les boutons de discussion."
 
 #, fuzzy
 msgid "Send Read Markers"
@@ -4406,10 +4433,6 @@ msgid "Show"
 msgstr ""
 
 #, fuzzy
-msgid "Show Chat State In Banner"
-msgstr "Diskouez _skeudennigoù an darempredoù er roll"
-
-#, fuzzy
 msgid "Show Commands"
 msgstr "Urzhioù: %s"
 
@@ -4424,6 +4447,10 @@ msgstr "Diskouez an darempredoù _ezlinenn"
 #, fuzzy
 msgid "Show Gajim"
 msgstr "Gajim"
+
+#, fuzzy
+msgid "Show Invitation"
+msgstr "Kemmañ ar gont"
 
 msgid "Show Join/Leave"
 msgstr ""
@@ -4493,6 +4520,9 @@ msgstr "Diskouez an holl _zarvoudoù o c'hortoz"
 msgid "Show chat list"
 msgstr "Kemmañ ar gont"
 
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+
 #, fuzzy
 msgid "Show in Taskbar"
 msgstr "Dorioù"
@@ -4529,9 +4559,6 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "_Implij an arlun-gelaouiñ (trayicon)"
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
-msgstr ""
 
 msgid "Show window in the taskbar"
 msgstr ""
@@ -5823,10 +5850,6 @@ msgstr "_Ostiz:"
 msgid "_Hostname"
 msgstr "Servijer:"
 
-#, fuzzy
-msgid "_Invite"
-msgstr "Diwelus"
-
 msgid "_Join"
 msgstr "E_barzhiñ"
 
@@ -6063,6 +6086,9 @@ msgstr "Bro:"
 msgid "countrycode"
 msgstr "Kont"
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr ""
 
@@ -6076,10 +6102,6 @@ msgstr ""
 
 msgid "error"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "error while sending %(message)s ( %(error)s )"
-msgstr "fazi en ur gas %s ( %s )"
 
 msgid "example.org"
 msgstr ""
@@ -6113,6 +6135,9 @@ msgstr "Stouet"
 msgid "lat"
 msgstr ""
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr ""
 
@@ -6121,6 +6146,15 @@ msgid "lon"
 msgstr "Hini ebet"
 
 msgid "macOS"
+msgstr ""
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
 msgstr ""
 
 #, fuzzy
@@ -6171,9 +6205,6 @@ msgid "translator-credits"
 msgstr ""
 "Troet e brezhoneg gant\n"
 "Giulia Fraboulet <djoulia@gmail.com>"
-
-msgid "user@example.org"
-msgstr ""
 
 msgid "video input"
 msgstr ""
@@ -6248,6 +6279,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Ad-Hoc Commands…"
 #~ msgstr "urzhiad"
+
+#, fuzzy
+#~ msgid "Adhoc Group Chat"
+#~ msgstr "Ebarzhiñ ur sal-flapiñ"
 
 #, fuzzy
 #~ msgid "App Indicator Icon"
@@ -6351,6 +6386,14 @@ msgstr ""
 #~ msgstr "Evit kargañ titouroù-munut un darempred"
 
 #, fuzzy
+#~ msgid "Hides the banner in a 1:1 chat window."
+#~ msgstr "A guzha an nozelennoù er prenestr flapiñ"
+
+#, fuzzy
+#~ msgid "Hides the banner in a group chat window."
+#~ msgstr "A guzha an nozelennoù er prenestr flapiñ"
+
+#, fuzzy
 #~ msgid "Hides the group chat participants list in a group chat window."
 #~ msgstr "A guzha roll ar berzhidi en ur prenestr webgaoz"
 
@@ -6367,6 +6410,11 @@ msgstr ""
 #~ msgstr ""
 #~ "Si cette case est cochée, Gajim affichera l'avatar de chaque contact dans "
 #~ "la fenêtre principale et les salons"
+
+#, fuzzy
+#~ msgid "If enabled, pressing Esc closes a tab/window."
+#~ msgstr ""
+#~ "M'eo gwir, klikit war an douchenn Echap evit serriñ un ivinell/prenestr"
 
 #, fuzzy
 #~ msgid "Invalid nickname"
@@ -6478,10 +6526,6 @@ msgstr ""
 #~ msgstr "A ro an niver a gemennadennoù chomet dilenn"
 
 #, fuzzy
-#~ msgid "Send a message to the contact"
-#~ msgstr "Usage: /%s, cache les boutons de discussion."
-
-#, fuzzy
 #~ msgid "Send a message to the contact that will attract their attention"
 #~ msgstr "Usage: /%s, cache les boutons de discussion."
 
@@ -6518,6 +6562,10 @@ msgstr ""
 #~ "Session bus is not available.\n"
 #~ "Try reading %(url)s"
 #~ msgstr "Le bus de session n'est pas disponible"
+
+#, fuzzy
+#~ msgid "Show Chat State In Banner"
+#~ msgstr "Diskouez _skeudennigoù an darempredoù er roll"
 
 #, fuzzy
 #~ msgid "Shows a help on specific command"
@@ -6577,6 +6625,10 @@ msgstr ""
 #~ msgid "You have no active account"
 #~ msgstr "N'ho peus kont bev ebet"
 
+#, fuzzy
+#~ msgid "_Invite"
+#~ msgstr "Diwelus"
+
 #~ msgid ""
 #~ "change status of account \"account\". If not specified, try to change "
 #~ "status of all accounts that have \"sync with global status\" option set"
@@ -6594,6 +6646,10 @@ msgstr ""
 
 #~ msgid "command"
 #~ msgstr "urzhiad"
+
+#, fuzzy
+#~ msgid "error while sending %(message)s ( %(error)s )"
+#~ msgstr "fazi en ur gas %s ( %s )"
 
 #~ msgid "file"
 #~ msgstr "restr"

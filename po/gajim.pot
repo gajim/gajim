@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 10:18+0000\n"
+"POT-Creation-Date: 2022-10-30 21:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -385,6 +385,9 @@ msgstr ""
 msgid "?Message row action:Retract…"
 msgstr ""
 
+msgid "?Message row action:Select Messages…"
+msgstr ""
+
 msgid "?Message state:Received"
 msgstr ""
 
@@ -608,6 +611,9 @@ msgstr ""
 msgid "Add Contact"
 msgstr ""
 
+msgid "Add Contact…"
+msgstr ""
+
 msgid "Add Entry"
 msgstr ""
 
@@ -663,9 +669,6 @@ msgid "Address"
 msgstr ""
 
 msgid "Address does not belong to a group chat server"
-msgstr ""
-
-msgid "Adhoc Group Chat"
 msgstr ""
 
 msgid "Adjust to Status"
@@ -827,9 +830,6 @@ msgid "Ask For Status Message on…"
 msgstr ""
 
 msgid "Ask before closing a group chat tab/window."
-msgstr ""
-
-msgid "Ask before pasting an image."
 msgstr ""
 
 msgid "Ask before quitting when Gajim’s window is closed"
@@ -1150,6 +1150,9 @@ msgstr ""
 msgid "Chats"
 msgstr ""
 
+msgid "Chats from this account will use this workspace by default"
+msgstr ""
+
 msgid "Check For Updates"
 msgstr ""
 
@@ -1219,6 +1222,9 @@ msgstr ""
 msgid "Clear message entry"
 msgstr ""
 
+msgid "Click messages to select them"
+msgstr ""
+
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr ""
 
@@ -1237,7 +1243,13 @@ msgstr ""
 msgid "Close Search"
 msgstr ""
 
+msgid "Close a chat by pressing the Escape key"
+msgstr ""
+
 msgid "Close chat"
+msgstr ""
+
+msgid "Close with Escape"
 msgstr ""
 
 msgid "Code snippet"
@@ -1428,6 +1440,9 @@ msgstr ""
 msgid "Copy Location"
 msgstr ""
 
+msgid "Copy Text"
+msgstr ""
+
 msgid "Copy XMPP Address"
 msgstr ""
 
@@ -1456,6 +1471,9 @@ msgid "Create Account"
 msgstr ""
 
 msgid "Create Group Chat"
+msgstr ""
+
+msgid "Create Group Chat…"
 msgstr ""
 
 msgid "Create New Account"
@@ -1497,10 +1515,16 @@ msgstr ""
 msgid "Decline"
 msgstr ""
 
+msgid "Decline Invitation"
+msgstr ""
+
 msgid "Default"
 msgstr ""
 
 msgid "Default Sync Threshold"
+msgstr ""
+
+msgid "Default Workspace"
 msgstr ""
 
 msgid "Default device"
@@ -1649,6 +1673,10 @@ msgid "Downloaded %s messages"
 msgstr ""
 
 msgid "Downloading…"
+msgstr ""
+
+#, python-format
+msgid "Draft: %s"
 msgstr ""
 
 msgid "Drop files or contacts"
@@ -2201,12 +2229,6 @@ msgstr ""
 msgid "Hide this menu"
 msgstr ""
 
-msgid "Hides the banner in a 1:1 chat window."
-msgstr ""
-
-msgid "Hides the banner in a group chat window."
-msgstr ""
-
 msgid "Home"
 msgstr ""
 
@@ -2269,9 +2291,6 @@ msgstr ""
 msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
-msgstr ""
-
-msgid "If enabled, pressing Esc closes a tab/window."
 msgstr ""
 
 msgid ""
@@ -2383,10 +2402,6 @@ msgid "Invite New Contact"
 msgstr ""
 
 msgid "Invite friends to group chats or join one"
-msgstr ""
-
-#, python-format
-msgid "Invite someone to your chat with %s"
 msgstr ""
 
 msgid "Invitees"
@@ -3342,6 +3357,9 @@ msgstr ""
 msgid "Remove contact from contact list"
 msgstr ""
 
+msgid "Remove from contact list"
+msgstr ""
+
 msgid "Remove this workspace"
 msgstr ""
 
@@ -3437,7 +3455,7 @@ msgstr ""
 msgid "Resource"
 msgstr ""
 
-msgid "Restart Gajim for changes to take affect"
+msgid "Restart Gajim for changes to take effect"
 msgstr ""
 
 msgid "Restore chat"
@@ -3582,6 +3600,9 @@ msgstr ""
 msgid "Select Account"
 msgstr ""
 
+msgid "Select Contacts"
+msgstr ""
+
 msgid "Select File…"
 msgstr ""
 
@@ -3651,6 +3672,9 @@ msgid "Send Message"
 msgstr ""
 
 msgid "Send Message Receipts"
+msgstr ""
+
+msgid "Send Messages with Control+Enter"
 msgstr ""
 
 msgid "Send Read Markers"
@@ -3746,9 +3770,6 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
-msgid "Show Chat State In Banner"
-msgstr ""
-
 msgid "Show Commands"
 msgstr ""
 
@@ -3759,6 +3780,9 @@ msgid "Show Content"
 msgstr ""
 
 msgid "Show Gajim"
+msgstr ""
+
+msgid "Show Invitation"
 msgstr ""
 
 msgid "Show Join/Leave"
@@ -3817,6 +3841,9 @@ msgstr ""
 msgid "Show chat list"
 msgstr ""
 
+msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+
 msgid "Show in Taskbar"
 msgstr ""
 
@@ -3846,9 +3873,6 @@ msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
 
 msgid "Show the application's version"
-msgstr ""
-
-msgid "Show the contact’s chat state (e.g. typing) in the chats tab’s banner"
 msgstr ""
 
 msgid "Show window in the taskbar"
@@ -4974,9 +4998,6 @@ msgstr ""
 msgid "_Hostname"
 msgstr ""
 
-msgid "_Invite"
-msgstr ""
-
 msgid "_Join"
 msgstr ""
 
@@ -5176,6 +5197,9 @@ msgstr ""
 msgid "countrycode"
 msgstr ""
 
+msgid "dark skin"
+msgstr ""
+
 msgid "datum"
 msgstr ""
 
@@ -5187,10 +5211,6 @@ msgid "e.g. %s"
 msgstr ""
 
 msgid "error"
-msgstr ""
-
-#, python-format
-msgid "error while sending %(message)s ( %(error)s )"
 msgstr ""
 
 msgid "example.org"
@@ -5222,6 +5242,9 @@ msgstr ""
 msgid "lat"
 msgstr ""
 
+msgid "light skin"
+msgstr ""
+
 msgid "locality"
 msgstr ""
 
@@ -5229,6 +5252,15 @@ msgid "lon"
 msgstr ""
 
 msgid "macOS"
+msgstr ""
+
+msgid "medium skin tone"
+msgstr ""
+
+msgid "medium-dark skin"
+msgstr ""
+
+msgid "medium-light skin"
 msgstr ""
 
 msgid "or"
@@ -5273,9 +5305,6 @@ msgid "timestamp"
 msgstr ""
 
 msgid "translator-credits"
-msgstr ""
-
-msgid "user@example.org"
 msgstr ""
 
 msgid "video input"
