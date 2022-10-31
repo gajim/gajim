@@ -330,7 +330,7 @@ modules:
   - name: gajim
     buildsystem: simple
     build-commands:
-      - pip3 install .
+      - pip3 install --no-build-isolation .
       - touch /app/share/run-as-flatpak
       - cp -t ${FLATPAK_DEST} app-overrides.json
       - echo -e '#!/bin/sh\ngajim --gapplication-app-id=org.gajim.Gajim.Devel "$@"' > /app/bin/gajim-devel
