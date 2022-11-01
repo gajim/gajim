@@ -162,6 +162,7 @@ class MessageSent(ApplicationEvent):
     jid: JID
     message: str
     message_id: str
+    msg_log_id: Optional[int]
     chatstate: Optional[str]
     timestamp: float
     additional_data: AdditionalDataDict
@@ -394,7 +395,7 @@ class MessageReceived(ApplicationEvent):
     fjid: str
     resource: str
     delayed: Optional[float]
-    msg_log_id: int
+    msg_log_id: Optional[int]
     displaymarking: Optional[Displaymarking]
 
 

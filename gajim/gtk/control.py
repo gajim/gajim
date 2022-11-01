@@ -286,6 +286,7 @@ class ChatControl(EventHelper):
                          tim=event.timestamp,
                          displaymarking=displaymarking,
                          message_id=message_id,
+                         msg_log_id=event.msg_log_id,
                          additional_data=event.additional_data)
 
     def _on_message_received(self, event: events.MessageReceived) -> None:
@@ -367,6 +368,7 @@ class ChatControl(EventHelper):
                                  displaymarking=event.displaymarking,
                                  message_id=event.properties.id,
                                  stanza_id=event.stanza_id,
+                                 msg_log_id=event.msg_log_id,
                                  additional_data=event.additional_data)
 
     def _on_message_updated(self, event: events.MessageUpdated) -> None:
@@ -1156,6 +1158,7 @@ class ChatControl(EventHelper):
                         displaymarking: Optional[Displaymarking] = None,
                         message_id: Optional[str] = None,
                         stanza_id: Optional[str] = None,
+                        msg_log_id: Optional[int] = None,
                         additional_data: Optional[AdditionalDataDict] = None,
                         ) -> None:
 
@@ -1174,6 +1177,7 @@ class ChatControl(EventHelper):
                           displaymarking=displaymarking,
                           message_id=message_id,
                           stanza_id=stanza_id,
+                          msg_log_id=msg_log_id,
                           additional_data=additional_data)
 
     def _on_room_subject(self,

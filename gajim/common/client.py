@@ -494,8 +494,9 @@ class Client(Observable):
         message.set_sent_timestamp()
         message.message_id = self.send_stanza(message.stanza)
 
+        log_line_id = None
         if not message.is_groupchat:
-            self.get_module('Message').log_message(message)
+            log_line_id = self.get_module('Message').log_message(message)
 
         app.ged.raise_event(
             MessageSent(jid=message.jid,
@@ -507,6 +508,7 @@ class Client(Observable):
                         label=message.label,
                         correct_id=message.correct_id,
                         message_id=message.message_id,
+                        msg_log_id=log_line_id,
                         play_sound=message.play_sound))
 
     def _prepare_for_connect(self) -> None:

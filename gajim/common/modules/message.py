@@ -197,18 +197,21 @@ class Message(BaseModule):
             event_attr.update({
                 'room_jid': jid,
             })
+
             event = GcMessageReceived(**event_attr)
-            app.ged.raise_event(event)
+
             # TODO: Some plugins modify msgtxt in the GUI event
-            self._log_muc_message(event)
+            msg_log_id = self._log_muc_message(event)
+            event.msg_log_id = msg_log_id
+            app.ged.raise_event(event)
             return
 
-        app.ged.raise_event(MessageReceived(**event_attr))
-
+        event = MessageReceived(**event_attr)
         if not msgtxt:
+            app.ged.raise_event(event)
             return
 
-        app.storage.archive.insert_into_logs(
+        msg_log_id = app.storage.archive.insert_into_logs(
             self._account,
             fjid if properties.is_muc_pm else jid,
             properties.timestamp,
@@ -218,6 +221,9 @@ class Message(BaseModule):
             additional_data=additional_data,
             stanza_id=stanza_id or message_id,
             message_id=properties.id)
+
+        event.msg_log_id = msg_log_id
+        app.ged.raise_event(event)
 
     def _message_error_received(self,
                                 _con: types.xmppClient,
@@ -243,11 +249,11 @@ class Message(BaseModule):
                          message_id=properties.id,
                          error=properties.error))
 
-    def _log_muc_message(self, event: GcMessageReceived) -> None:
+    def _log_muc_message(self, event: GcMessageReceived) -> Optional[int]:
         self._check_for_mam_compliance(event.room_jid, event.stanza_id)
 
         if event.msgtxt and event.properties.muc_nickname:
-            app.storage.archive.insert_into_logs(
+            msg_log_id = app.storage.archive.insert_into_logs(
                 self._account,
                 event.jid,
                 event.properties.timestamp,
@@ -257,6 +263,9 @@ class Message(BaseModule):
                 additional_data=event.additional_data,
                 stanza_id=event.stanza_id,
                 message_id=event.properties.id)
+            return msg_log_id
+
+        return None
 
     def _check_for_mam_compliance(self, room_jid: str, stanza_id: str) -> None:
         disco_info = app.storage.cache.get_last_disco_info(room_jid)
@@ -368,7 +377,7 @@ class Message(BaseModule):
 
         return stanza
 
-    def log_message(self, message: OutgoingMessage) -> None:
+    def log_message(self, message: OutgoingMessage) -> Optional[int]:
         if not message.is_loggable:
             return
 
@@ -384,9 +393,9 @@ class Message(BaseModule):
                 message.correct_id,
                 KindConstant.CHAT_MSG_SENT,
                 message.timestamp)
-            return
+            return None
 
-        app.storage.archive.insert_into_logs(
+        msg_log_id = app.storage.archive.insert_into_logs(
             self._account,
             message.jid,
             message.timestamp,
@@ -396,3 +405,4 @@ class Message(BaseModule):
             additional_data=message.additional_data,
             message_id=message.message_id,
             stanza_id=message.message_id)
+        return msg_log_id
