@@ -33,7 +33,7 @@ class MessageSelection(Gtk.Grid):
         self.set_halign(Gtk.Align.CENTER)
         self.set_valign(Gtk.Align.END)
 
-        self.get_style_context().add_class('message-selection-box')
+        self.get_style_context().add_class('floating-overlay-box')
 
         label = Gtk.Label(label=_('Click messages to select them'))
         self.attach(label, 0, 0, 2, 1)

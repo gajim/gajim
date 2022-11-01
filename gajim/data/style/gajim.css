@@ -1,5 +1,30 @@
 /* Gajim Application CSS File */
 
+/* GTK named colors
+Taken from: https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-3-24/gtk/theme/Adwaita/_colors-public.scss
+@theme_fg_color
+@theme_text_color
+@theme_bg_color
+@theme_base_color
+@theme_selected_bg_color
+@theme_selected_fg_color
+@insensitive_bg_color
+@insensitive_fg_color
+@insensitive_base_color
+@theme_unfocused_fg_color
+@theme_unfocused_text_color
+@theme_unfocused_bg_color
+@theme_unfocused_base_color
+@theme_unfocused_selected_bg_color
+@theme_unfocused_selected_fg_color
+@unfocused_insensitive_color
+@borders
+@unfocused_borders
+@warning_color
+@error_color
+@success_color
+*/
+
 .chatcontrol-actionbar-button {
 	padding: 0px 5px 0px 5px;
 	background-color: @theme_base_color; 
@@ -686,25 +711,14 @@ infobar.error > revealer > box {
 }
 #GroupchatConfig treeview { padding: 5px; }
 
-.message-selection-box {
-    background-color: alpha(rgb(70, 70, 70), 0.9);
+.floating-overlay-box {
+    background-color: alpha(shade(@theme_bg_color, 0.3), 0.9);
     padding: 12px;
     border-radius: 6px;
 }
-.message-selection-box > label {
-    color: rgb(230, 230, 230);
-}
-
-.groupchat-state box {
-    background-color: alpha(rgb(70, 70, 70), 0.9);
-    padding: 12px;
-    border-radius: 6px;
-}
-.groupchat-state box > label {
-    color: rgb(230, 230, 230);
-}
-.groupchat-state box > spinner {
-    color: rgb(230, 230, 230);
+.floating-overlay-box > label,
+.floating-overlay-box > spinner {
+    color: @theme_bg_color;
 }
 
 /* Popover Treeview */

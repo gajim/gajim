@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkStack" id="groupchat_state">
@@ -44,6 +44,9 @@
             <property name="position">2</property>
           </packing>
         </child>
+        <style>
+          <class name="floating-overlay-box"/>
+        </style>
       </object>
       <packing>
         <property name="name">not-joined</property>
@@ -94,6 +97,9 @@
             <property name="position">2</property>
           </packing>
         </child>
+        <style>
+          <class name="floating-overlay-box"/>
+        </style>
       </object>
       <packing>
         <property name="name">joining</property>
@@ -128,14 +134,14 @@
             <property name="position">1</property>
           </packing>
         </child>
+        <style>
+          <class name="floating-overlay-box"/>
+        </style>
       </object>
       <packing>
         <property name="name">fetching</property>
         <property name="position">2</property>
       </packing>
     </child>
-    <style>
-      <class name="groupchat-state"/>
-    </style>
   </object>
 </interface>
