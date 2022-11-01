@@ -18,7 +18,6 @@ from typing import Any
 from typing import Union
 
 from gi.repository import Gdk
-from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 
@@ -33,7 +32,6 @@ from gajim.common.events import SubscribePresenceReceived
 from gajim.common.events import UnsubscribedPresenceReceived
 from gajim.common.events import MucInvitation
 from gajim.common.events import MucDecline
-from gajim.common.i18n import _
 
 from .roster import Roster
 from .status_message_selector import StatusMessageSelector
@@ -42,12 +40,7 @@ from .notification_manager import NotificationManager
 from .builder import get_builder
 from .util import open_window
 from .util import EventHelper
-
-
-ROSTER_MENU_DICT = {
-    'show-offline': _('Show Offline Contacts'),
-    'sort-by-show': _('Sort by Status'),
-}
+from .menus import get_roster_view_menu
 
 
 class AccountPage(Gtk.Box, EventHelper):
@@ -81,10 +74,7 @@ class AccountPage(Gtk.Box, EventHelper):
         self._ui.paned.set_position(app.settings.get('chat_handle_position'))
         self._ui.paned.connect('button-release-event', self._on_button_release)
 
-        roster_menu = Gio.Menu()
-        for action, label in ROSTER_MENU_DICT.items():
-            roster_menu.append(label, f'win.{action}')
-        self._ui.roster_menu_button.set_menu_model(roster_menu)
+        self._ui.roster_menu_button.set_menu_model(get_roster_view_menu())
 
         self._ui.edit_profile_button.set_action_name(
             f'app.{self._account}-profile')

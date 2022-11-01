@@ -30,25 +30,19 @@ from gi.repository import GObject
 from nbxmpp import JID
 
 from gajim.common import app
-from gajim.common.i18n import _
 
 from .builder import get_builder
 from .chat_filter import ChatFilter
 from .chat_list import ChatList
 from .chat_list_stack import ChatListStack
 from .chat_stack import ChatStack
+from .menus import get_start_chat_button_menu
 from .search_view import SearchView
 
 if TYPE_CHECKING:
     from .control import ChatControl
 
 log = logging.getLogger('gajim.gui.chat_page')
-
-START_CHAT_MENU_DICT = {
-    'start-chat(["", ""])': _('Start Chat…'),
-    'create-groupchat::': _('Create Group Chat…'),
-    'add-contact::': _('Add Contact…'),
-}
 
 
 class ChatPage(Gtk.Box):
@@ -97,10 +91,8 @@ class ChatPage(Gtk.Box):
                                       self._on_chat_list_changed)
         self._ui.chat_list_scrolled.add(self._chat_list_stack)
 
-        start_chat_menu = Gio.Menu()
-        for action, label in START_CHAT_MENU_DICT.items():
-            start_chat_menu.append(label, f'app.{action}')
-        self._ui.start_chat_menu_button.set_menu_model(start_chat_menu)
+        self._ui.start_chat_menu_button.set_menu_model(
+            get_start_chat_button_menu())
 
         self._ui.paned.set_position(app.settings.get('chat_handle_position'))
         self._ui.paned.connect('button-release-event', self._on_button_release)

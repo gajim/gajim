@@ -374,6 +374,15 @@ def get_roster_menu(account: str, jid: str, gateway: bool = False) -> GajimMenu:
     return GajimMenu.from_list(menuitems)
 
 
+def get_roster_view_menu() -> GajimMenu:
+    menuitems: MenuItemListT = [
+        (_('Show Offline Contacts'), 'win.show-offline', None),
+        (_('Sort by Status'), 'win.sort-by-show', None),
+    ]
+
+    return GajimMenu.from_list(menuitems)
+
+
 def get_subscription_menu(account: str, jid: JID) -> GajimMenu:
     params = AddChatActionParams(account=account,
                                  jid=jid,
@@ -386,6 +395,16 @@ def get_subscription_menu(account: str, jid: JID) -> GajimMenu:
         (_('Block'), f'win.subscription-block-{account}', value),
         (_('Report'), f'win.subscription-report-{account}', value),
         (_('Deny'), f'win.subscription-deny-{account}', value),
+    ]
+
+    return GajimMenu.from_list(menuitems)
+
+
+def get_start_chat_button_menu() -> GajimMenu:
+    menuitems: MenuItemListT = [
+        (_('Start Chat…'), 'app.start-chat(["", ""])', None),
+        (_('Create Group Chat…'), 'app.create-groupchat::', None),
+        (_('Add Contact…'), 'app.add-contact::', None),
     ]
 
     return GajimMenu.from_list(menuitems)
