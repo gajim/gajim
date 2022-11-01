@@ -68,7 +68,7 @@ class MessageActionsBox(Gtk.Grid):
         self._contact: Optional[ChatContactT] = None
 
         self._ui = get_builder('message_actions_box.ui')
-        self.get_style_context().add_class('message-action-box')
+        self.get_style_context().add_class('message-actions-box')
 
         self.attach(self._ui.box, 0, 0, 1, 1)
 

@@ -202,13 +202,13 @@ class Commands(Page):
 
         self._commands: dict[str, AdHocCommand] = {}
         self._scrolled = Gtk.ScrolledWindow()
-        self._scrolled.get_style_context().add_class('adhoc-scrolled')
+        self._scrolled.get_style_context().add_class('gajim-scrolled')
         self._scrolled.set_max_content_height(400)
         self._scrolled.set_max_content_width(400)
         self._scrolled.set_policy(Gtk.PolicyType.NEVER,
                                   Gtk.PolicyType.AUTOMATIC)
         self._treeview = Gtk.TreeView()
-        self._treeview.get_style_context().add_class('adhoc-treeview')
+        self._treeview.get_style_context().add_class('gajim-treeview')
         self._store = Gtk.ListStore(str, str)
         self._treeview.set_model(self._store)
         column = Gtk.TreeViewColumn(_('Commands'))

@@ -366,7 +366,7 @@
             <property name="icon-name">audio-input-microphone-symbolic</property>
             <style>
               <class name="dim-label"/>
-              <class name="audio-mic-animation"/>
+              <class name="pulse-transform"/>
             </style>
           </object>
           <packing>

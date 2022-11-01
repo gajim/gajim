@@ -48,6 +48,7 @@ class GroupchatJoin(Gtk.ApplicationWindow):
         self.set_title(_('Join Group Chat'))
         self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.set_default_size(500, 550)
+        self.get_style_context().add_class('dialog-margin')
 
         self._destroyed = False
         self.account = account

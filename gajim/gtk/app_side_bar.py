@@ -54,7 +54,7 @@ class AppRow(Gtk.ListBoxRow):
     def __init__(self) -> None:
         Gtk.ListBoxRow.__init__(self)
         self.get_style_context().add_class('workspace-sidebar-item')
-        self.get_style_context().add_class('app-sidebar-row')
+        self.get_style_context().add_class('app-sidebar-item')
 
         self._unread_label = Gtk.Label()
         self._unread_label.get_style_context().add_class(

@@ -219,7 +219,7 @@ class Result(Page):
 
         self._scrolled = Gtk.ScrolledWindow()
         self._scrolled.set_propagate_natural_height(True)
-        self._scrolled.get_style_context().add_class('search-scrolled')
+        self._scrolled.get_style_context().add_class('gajim-scrolled')
         self._scrolled.set_no_show_all(True)
 
         self.add(self._label)
@@ -273,7 +273,7 @@ class Result(Page):
         self._treeview = Gtk.TreeView()
         self._treeview.set_hexpand(True)
         self._treeview.set_vexpand(True)
-        self._treeview.get_style_context().add_class('search-treeview')
+        self._treeview.get_style_context().add_class('gajim-treeview')
         self._treeview.connect('button-press-event', self._on_button_press)
 
         for field, counter in zip(form.reported.iter_fields(),

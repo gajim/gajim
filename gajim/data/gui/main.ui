@@ -59,7 +59,7 @@
               </packing>
             </child>
             <style>
-              <class name="app-page-box"/>
+              <class name="app-sidebar"/>
             </style>
           </object>
           <packing>
