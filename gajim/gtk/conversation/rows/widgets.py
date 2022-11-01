@@ -176,7 +176,7 @@ class MoreMenuButton(Gtk.Button):
     def _on_activate_message_selection(self, _button: Gtk.ModelButton) -> None:
         app.window.activate_action(
             'activate-message-selection',
-            GLib.Variant('u', self._row.log_line_id))
+            GLib.Variant('u', self._row.log_line_id or 0))
 
     @staticmethod
     def _on_closed(popover: Gtk.Popover) -> None:
