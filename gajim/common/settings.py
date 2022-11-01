@@ -129,9 +129,10 @@ class SettingsDictT(TypedDict):
 
 
 class Settings:
-    def __init__(self):
+    def __init__(self, in_memory: bool = False):
         self._con = cast(sqlite3.Connection, None)
         self._commit_scheduled = None
+        self._in_memory = in_memory
 
         self._settings: SettingsDictT = {}
         self._app_overrides: dict[str, AllSettingsT] = {}
@@ -220,7 +221,10 @@ class Settings:
 
     def init(self) -> None:
         self._setup_installation_defaults()
-        self._connect_database()
+        if self._in_memory:
+            self._connect_in_memory_database()
+        else:
+            self._connect_database()
         self._load_settings()
         self._load_account_settings()
         if not self._settings['app']:
@@ -268,6 +272,20 @@ class Settings:
         self._con = sqlite3.connect(path)
         self._con.row_factory = self._namedtuple_factory
 
+    def _connect_in_memory_database(self) -> None:
+        log.info('Creating in memory')
+        self._con = sqlite3.connect(':memory:')
+        self._con.row_factory = self._namedtuple_factory
+
+        try:
+            self._con.executescript(CREATE_SQL)
+        except Exception:
+            log.exception('Error')
+            self._con.close()
+            sys.exit()
+
+        self._con.commit()
+
     @staticmethod
     def _create_database(statement: str, path: Path) -> None:
         log.info('Creating %s', path)
@@ -313,6 +331,9 @@ class Settings:
         self._con.commit()
 
     def _migrate_database(self) -> None:
+        if self._in_memory:
+            return
+
         try:
             self._migrate()
         except Exception:
@@ -366,6 +387,9 @@ class Settings:
             self._set_user_version(4)
 
     def _migrate_old_config(self) -> None:
+        if self._in_memory:
+            return
+
         config_file = configpaths.get('CONFIG_FILE')
         if not config_file.exists():
             return
