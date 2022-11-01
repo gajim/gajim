@@ -101,6 +101,7 @@ from gajim.common.const import CONSONANTS
 from gajim.common.const import VOWELS
 from gajim.common.regex import INVALID_XML_CHARS_REGEX
 from gajim.common.structs import URI
+from gajim.common.text_helpers import escape_iri_path
 from gajim.common import types
 if TYPE_CHECKING:
     from gajim.common.modules.util import LogAdapter
@@ -346,19 +347,6 @@ def build_command(executable: str, parameter: str) -> str:
     parameter = parameter.replace('"', '\\"')  # but first escape "
     command = f'{executable} "{parameter}"'
     return command
-
-
-def get_file_path_from_dnd_dropped_uri(uri: str) -> str:
-    path = unquote(uri)  # escape special chars
-    path = path.strip('\r\n\x00')  # remove \r\n and NULL
-    # get the path to file
-    if re.match('^file:///[a-zA-Z]:/', path):  # windows
-        path = path[8:]  # 8 is len('file:///')
-    elif path.startswith('file://'):  # nautilus, rox
-        path = path[7:]  # 7 is len('file://')
-    elif path.startswith('file:'):  # xffm
-        path = path[5:]  # 5 is len('file:')
-    return path
 
 
 def sanitize_filename(filename: str) -> str:
@@ -1029,7 +1017,16 @@ def parse_uri(uri: str) -> URI:
         return URI(URIType.GEO, uri, data=data)
 
     if scheme == 'file':
-        return URI(URIType.FILE, uri, data=uri)
+        # https://rfc-editor.org/rfc/rfc8089.html
+        data: dict[str, str] = {}
+        try:
+            data['netloc'] = urlparts.netloc
+            data['path'] = Gio.File.new_for_uri(uri).get_path()
+            assert data['path']
+        except Exception as err:
+            data['error'] = str(err)
+            return URI(URIType.INVALID, uri, data=data)
+        return URI(URIType.FILE, uri, data=data)
 
     return URI(URIType.WEB, uri, data=uri)
 
@@ -1040,7 +1037,7 @@ def open_uri(uri: Union[URI, str], account: Optional[str] = None) -> None:
         uri = parse_uri(uri)
 
     if uri.type == URIType.FILE:
-        open_file(uri.data)
+        open_file_uri(uri.source)
 
     elif uri.type == URIType.TEL:
         if sys.platform == 'win32':
@@ -1094,6 +1091,16 @@ def open_uri(uri: Union[URI, str], account: Optional[str] = None) -> None:
         log.warning('Cant open URI: %s', uri)
 
 
+def open_file_uri(uri: str) -> None:
+    try:
+        if os.name != 'nt':
+            Gio.AppInfo.launch_default_for_uri(uri)
+        else:
+            os.startfile(uri)
+    except Exception as err:
+        log.info("Couldn't open file URI %s: %s", uri, err)
+
+
 @catch_exceptions
 def open_file(path: Union[str, Path]) -> None:
     if os.name == 'nt':
@@ -1101,9 +1108,26 @@ def open_file(path: Union[str, Path]) -> None:
     else:
         # Call str() to make it work with pathlib.Path
         path = str(path)
-        if not path.startswith('file://'):
-            path = 'file://' + path
-        Gio.AppInfo.launch_default_for_uri(path)
+        if path.startswith('/'):
+            open_file_uri('file://' + escape_iri_path(path))
+        else:
+            open_file_uri(path)
+
+
+def filesystem_path_from_uri(uri: str) -> Optional[Path]:
+    puri = parse_uri(uri)
+    if puri.type != URIType.FILE:
+        return None
+
+    netloc = puri.data['netloc']
+    if netloc and netloc.lower() != 'localhost' and sys.platform != 'win32':
+        return None
+    return Path(puri.data['path'])
+
+
+def get_file_path_from_dnd_dropped_uri(text: str) -> Optional[Path]:
+    uri = text.strip('\r\n\x00')  # remove \r\n and NULL
+    return filesystem_path_from_uri(uri)
 
 
 def file_is_locked(path_to_file: str) -> bool:

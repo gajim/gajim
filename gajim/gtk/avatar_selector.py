@@ -148,9 +148,9 @@ class AvatarSelector(Gtk.Box):
         if target_type == 80:
             uri_split = selection.get_uris()  # Might be more than one
             path = get_file_path_from_dnd_dropped_uri(uri_split[0])
-            if not os.path.isfile(path):
+            if not path or not path.is_file():
                 return
-            self.prepare_crop_area(path)
+            self.prepare_crop_area(str(path))
 
     @staticmethod
     def _get_pixbuf_from_path(path: str) -> Optional[GdkPixbuf.Pixbuf]:

@@ -491,13 +491,18 @@ class ChatControl(EventHelper):
         uri_splitted = selection.get_uris()
         for uri in uri_splitted:
             path = get_file_path_from_dnd_dropped_uri(uri)
-            if not os.path.isfile(path):  # is it a file?
+            if not path:
+                self.add_info_message(
+                    _('The following address was not understood and was '
+                      'not uploaded: %s') % uri)
+                continue
+            if not path.is_file():  # is it a regular file?
                 self.add_info_message(
                     _('The following file could not be accessed and was '
                       'not uploaded: %s') % path)
                 continue
 
-            app.interface.start_file_transfer(self.contact, path)
+            app.interface.start_file_transfer(self.contact, str(path))
 
     def get_our_nick(self) -> str:
         if isinstance(self.contact, GroupchatParticipant):

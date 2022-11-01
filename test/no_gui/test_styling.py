@@ -303,6 +303,11 @@ URIS = [
     'xmpp:romeo@montague.net?message;subject=Test%20Message;body=Here%27s%20a%20test%20message',
     'geo:1,2',
     'geo:1,2,3',
+    'file:/foo/bar/baz',  # xffm
+    'file:///foo/bar/baz',  # nautilus, rox
+    'file:///x:/foo/bar/baz',  # windows
+    'file://localhost/foo/bar/baz',
+    'file://nonlocalhost/foo/bar/baz',
 
     # These seem to be from https://mathiasbynens.be/demo/url-regex
     'http://foo.com/blah_blah',
@@ -417,6 +422,11 @@ UNACCEPTABLE_URIS = [
     'geo:,2,',
     'geo:,,3',
     'geo:,,',
+
+    'file:',
+    'file:a',
+    'file:a/',
+    'file:a/b',
 ]
 
 

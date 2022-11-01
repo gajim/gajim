@@ -21,13 +21,13 @@ import logging
 import time
 from datetime import datetime
 from pathlib import Path
-import sys
 
 from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.const import KindConstant
+from gajim.common.helpers import filesystem_path_from_uri
 from gajim.common.helpers import make_path_from_jid
 from gajim.common.i18n import _
 from gajim.common.storage.archive import MessageExportRow
@@ -203,11 +203,9 @@ class SelectAccountDir(Page):
     def _on_file_set(self, button: Gtk.FileChooserButton) -> None:
         uri = button.get_uri()
         assert uri is not None
-
-        if sys.platform == 'win32':
-            self._export_directory = uri.removeprefix('file:///')
-        else:
-            self._export_directory = uri.removeprefix('file://')
+        path = filesystem_path_from_uri(uri)
+        assert path is not None
+        self._export_directory = str(path)
 
     def get_account_and_directory(self) -> tuple[str, str]:
         assert self._account is not None
