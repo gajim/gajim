@@ -238,7 +238,7 @@ class ValueLabel(Gtk.Label):
     def __init__(self, prop, account):
         Gtk.Label.__init__(self)
         self._prop = prop
-        self._uri: Optional[str] = None
+        self._uri: Optional[URI] = None
         self._account = account
         self.set_selectable(True)
         self.set_xalign(0)
@@ -253,26 +253,45 @@ class ValueLabel(Gtk.Label):
             self.set_value(prop.value)
 
     def set_value(self, value: str) -> None:
+        # EMAIL https://rfc-editor.org/rfc/rfc6350#section-6.4.2
         if self._prop.name == 'email':
-            # https://rfc-editor.org/rfc/rfc6350#section-6.4.2
             uri = 'mailto:' + escape_iri_path_segment(value)
-            self._uri = parse_uri(uri)
-            self.set_markup(value)
+            self.set_value_with_uri(value, uri)
 
-        elif self._prop.name in ('impp', 'tel'):
-            self._uri = parse_uri(value)
-            self.set_markup(value)
+        # All the properties that can be (single) URIs:
+        # SOURCE    https://rfc-editor.org/rfc/rfc6350#section-6.1.3
+        # PHOTO     https://rfc-editor.org/rfc/rfc6350#section-6.2.4
+        # TEL       https://rfc-editor.org/rfc/rfc6350#section-6.4.1
+        # IMPP      https://rfc-editor.org/rfc/rfc6350#section-6.4.3
+        # TZ        https://rfc-editor.org/rfc/rfc6350#section-6.5.1
+        # GEO       https://rfc-editor.org/rfc/rfc6350#section-6.5.2
+        # LOGO      https://rfc-editor.org/rfc/rfc6350#section-6.6.3
+        # MEMBER    https://rfc-editor.org/rfc/rfc6350#section-6.6.5
+        # RELATED   https://rfc-editor.org/rfc/rfc6350#section-6.6.6
+        # SOUND     https://rfc-editor.org/rfc/rfc6350#section-6.7.5
+        # UID       https://rfc-editor.org/rfc/rfc6350#section-6.7.6
+        # URL       https://rfc-editor.org/rfc/rfc6350#section-6.7.8
+        # KEY       https://rfc-editor.org/rfc/rfc6350#section-6.8.1
+        # FBURL     https://rfc-editor.org/rfc/rfc6350#section-6.9.1
+        # CALADRURI https://rfc-editor.org/rfc/rfc6350#section-6.9.2
+        # CALURI    https://rfc-editor.org/rfc/rfc6350#section-6.9.3
+        elif self._prop.name in ('source', 'photo', 'tel', 'impp', 'tz', 'geo',
+                                 'logo', 'member', 'related', 'sound', 'uid',
+                                 'url', 'key', 'fburl', 'caladruri', 'caluri'):
+            self.set_value_with_uri(value, value)
 
         else:
             self.set_text(value)
 
-    def set_markup(self, text: str) -> None:
-        if not text:
-            self.set_text('')
+    def set_value_with_uri(self, value: str, uri: str) -> None:
+        puri = parse_uri(uri)
+        if puri.type == URIType.INVALID:
+            self.set_text(value)
             return
+        self._uri = puri
         super().set_markup('<a href="{}">{}</a>'.format(
-            GLib.markup_escape_text(text),
-            GLib.markup_escape_text(text)))
+            GLib.markup_escape_text(uri),
+            GLib.markup_escape_text(value)))
 
     def _on_activate_link(self, _label: Gtk.Label, _value: str) -> int:
         open_uri(self._uri, self._account)
