@@ -379,10 +379,10 @@ class Message(BaseModule):
 
     def log_message(self, message: OutgoingMessage) -> Optional[int]:
         if not message.is_loggable:
-            return
+            return None
 
         if message.message is None:
-            return
+            return None
 
         if message.correct_id is not None:
             app.storage.archive.try_message_correction(
