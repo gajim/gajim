@@ -1343,6 +1343,15 @@ class Settings:
         del self._settings['workspaces'][id_]
         self._commit_settings('workspaces')
 
+    def shutdown(self) -> None:
+        if self._commit_scheduled is not None:
+            GLib.source_remove(self._commit_scheduled)
+            self._commit_scheduled = None
+
+        self._commit()
+        self._con.close()
+        del self._con
+
 
 class LegacyConfig:
 

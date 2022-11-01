@@ -244,6 +244,7 @@ class CoreApplication(ged.EventHelper):
         app.storage.archive.cleanup_chat_history()
         app.storage.cache.shutdown()
         app.storage.archive.shutdown()
+        app.settings.shutdown()
         self.end_profiling()
         logind.shutdown()
 
