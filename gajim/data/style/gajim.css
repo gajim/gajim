@@ -56,6 +56,7 @@ infobar.error > revealer > box {
 /* ========================================================================= */
 /* Text style */
 .bold { font-weight: bold; }
+.monospace { font-family: monospace; }
 .bold16 {
     font-size: 1.33rem;
     font-weight: bold;
@@ -131,6 +132,7 @@ infobar.error > revealer > box {
 /* General purpose classes ================================================= */
 .dialog-margin > box { margin: 18px;}
 .solid-background { background-color: @theme_base_color; }
+.border { border: 1px solid @borders; }
 .no-border { border: none; }
 .scrolled-no-border { border: none; }
 .preview-image { box-shadow: 0px 0px 3px 0px alpha(@theme_text_color, 0.2); }
