@@ -49,6 +49,7 @@ include = [
     "gajim/common/modules/vcard4.py",
     "gajim/common/modules/vcard_temp.py",
     "gajim/common/passwords.py",
+    "gajim/common/preview_helpers.py",
     "gajim/common/regex.py",
     "gajim/common/setting_values.py",
     "gajim/common/sound.py",

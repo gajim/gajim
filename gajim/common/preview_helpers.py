@@ -59,7 +59,7 @@ class Coords(NamedTuple):
     lon: str
 
 
-def resize_gif(image: Image.Image,
+def resize_gif(image: ImageFile.ImageFile,
                output_file: BytesIO,
                resize_to: tuple[int, int]) -> None:
     frames, result = extract_and_resize_frames(image, resize_to)
@@ -73,7 +73,8 @@ def resize_gif(image: Image.Image,
                    loop=1000)
 
 
-def analyse_image(image: Image.Image) -> tuple[Image.Image, dict[str, Any]]:
+def analyse_image(image: ImageFile.ImageFile
+                  ) -> tuple[ImageFile.ImageFile, dict[str, Any]]:
     '''
     Pre-process pass over the image to determine the mode (full or additive).
     Necessary as assessing single frames isn't reliable. Need to know the mode
@@ -101,7 +102,7 @@ def analyse_image(image: Image.Image) -> tuple[Image.Image, dict[str, Any]]:
     return image, result
 
 
-def extract_and_resize_frames(image: Image.Image,
+def extract_and_resize_frames(image: ImageFile.ImageFile,
                               resize_to: tuple[int, int]
                               ) -> tuple[list[Image.Image], dict[str, Any]]:
 
@@ -111,7 +112,7 @@ def extract_and_resize_frames(image: Image.Image,
     palette = image.getpalette()
     last_frame = image.convert('RGBA')
 
-    frames = []
+    frames: list[Image.Image] = []
 
     try:
         while True:
@@ -120,6 +121,7 @@ def extract_and_resize_frames(image: Image.Image,
             # If not, we need to apply the global palette to the new frame.
 
             if not image.getpalette():
+                assert palette is not None
                 image.putpalette(palette)
 
             new_frame = Image.new('RGBA', image.size)
@@ -224,6 +226,7 @@ def create_thumbnail_with_pil(data: bytes, size: int) -> Optional[bytes]:
 
     try:
         if image.format == 'GIF' and image.n_frames > 1:
+            assert isinstance(image, ImageFile.ImageFile)
             resize_gif(image, output_file, (size, size))
         else:
             image.thumbnail((size, size))
@@ -270,7 +273,7 @@ def pixbuf_from_data(data: bytes) -> Optional[GdkPixbuf.Pixbuf]:
         # Fallback to Pillow
         input_file = BytesIO(data)
         image = Image.open(BytesIO(data)).convert('RGBA')
-        array = GLib.Bytes.new(image.tobytes())
+        array = GLib.Bytes.new(image.tobytes())  # type: ignore
         width, height = image.size
         pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(array,
                                                  GdkPixbuf.Colorspace.RGB,
