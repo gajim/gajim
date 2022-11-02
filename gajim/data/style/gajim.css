@@ -779,7 +779,7 @@ list.settings > row:not(:last-child) {
 }
 list.settings row { min-height: 52px; }
 list.settings > row > box {
-    margin: 6px 18px;
+    margin: 10px 20px 10px 10px;
 }
 
 /* Settings Window */
@@ -912,7 +912,7 @@ popover.combo scrollbar.vertical {
 /* AccountsWindow */
 .accounts-menu { border-right: 1px solid; border-color: @borders;}
 .accounts-settings-border {border: 1px solid; border-color: @borders;}
-.accounts-settings stack > box { margin:30px; }
+.accounts-settings stack > box.settings-page { margin: 30px; }
 .accounts-label-row {
     padding-top: 10px;
     padding-bottom: 10px;
