@@ -151,6 +151,26 @@ infobar.error > revealer > box {
     border-color:@unfocused_borders;
 }
 
+/* ListBox */
+.gajim-listbox {
+    background: transparent;
+}
+.gajim-listbox row {
+    padding: 12px;
+    border: 1px solid @borders;
+    border-bottom: 0px;
+}
+.gajim-listbox row:nth-last-child(2) {
+    border-bottom: 1px solid @borders;
+}
+
+/* Drag and drop */
+.dnd-area {
+    border: 2px dashed @theme_selected_bg_color;
+    border-radius: 6px;
+    padding: 18px;
+}
+
 /* .inline-toolbar linked from top */
 .ontop-bar {
     border-width: 1px;
