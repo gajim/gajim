@@ -501,24 +501,6 @@ infobar.error > revealer > box {
 
 /* ConversationView ======================================================== */
 
-/* Conversation row styles */
-.merged { padding-top: 1px;}
-.retracted-message { opacity: 0.4; }
-.transparent-selection > selection {
-    background-color: transparent;
-    color: @theme_fg_color;
-}
-@keyframes highlight {
-    from { background: rgb(140, 160, 180); }
-    to { background: transparent; }
-}
-.conversation-search-highlight {
-    animation-duration: 3s;
-    animation-timing-function: ease-out;
-    animation-iteration-count: 1;
-    animation-name: highlight;
-}
-
 /* BaseRow */
 .conversation-row {
     padding: 10px 3px 4px 6px;
@@ -558,7 +540,25 @@ infobar.error > revealer > box {
     padding: 12px;
 }
 
-/* Row widgets */
+/* Conversation row styles */
+.merged { padding-top: 1px; }
+.retracted-message { opacity: 0.4; }
+.transparent-selection > selection {
+    background-color: transparent;
+    color: @theme_fg_color;
+}
+@keyframes highlight {
+    from { background: rgb(140, 160, 180); }
+    to { background: transparent; }
+}
+.conversation-search-highlight {
+    animation-duration: 3s;
+    animation-timing-function: ease-out;
+    animation-iteration-count: 1;
+    animation-name: highlight;
+}
+
+/* Row widgets ============================================================ */
 .conversation-subject-box,
 .conversation-call-box {
     border-radius: 6px;
