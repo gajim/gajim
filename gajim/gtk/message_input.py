@@ -112,7 +112,7 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
         self._language_handler_id = self._init_spell_checker()
         app.settings.connect_signal('use_speller', self._on_toggle_spell_check)
 
-        app.plugin_manager.gui_extension_point('message_input', self)
+        app.plugin_manager.extension_point('message_input', self)
 
     @property
     def is_correcting(self) -> bool:

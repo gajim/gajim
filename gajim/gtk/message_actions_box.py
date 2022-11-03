@@ -108,7 +108,7 @@ class MessageActionsBox(Gtk.Grid):
 
         self._connect_actions()
 
-        app.plugin_manager.gui_extension_point(
+        app.plugin_manager.extension_point(
             'message_actions_box', self, self._ui.box)
 
     def get_current_contact(self) -> ChatContactT:

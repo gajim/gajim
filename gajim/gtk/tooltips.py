@@ -118,7 +118,7 @@ class GCTooltip:
         self._ui.avatar.show()
         self._ui.fillelement.show()
 
-        app.plugin_manager.gui_extension_point(
+        app.plugin_manager.extension_point(
             'gc_tooltip_populate', self, contact, self._ui.tooltip_grid)
 
     def destroy(self) -> None:
@@ -177,7 +177,7 @@ class RosterTooltip:
 
         self._append_pep_info(contact)
 
-        app.plugin_manager.gui_extension_point(
+        app.plugin_manager.extension_point(
             'roster_tooltip_populate', self, contact)
 
         # This sets the bottom-most widget to expand, in case the avatar
@@ -245,7 +245,7 @@ class RosterTooltip:
                 idle_label.set_xalign(0)
                 resource_box.add(idle_label)
 
-            app.plugin_manager.gui_extension_point(
+            app.plugin_manager.extension_point(
                 'roster_tooltip_resource_populate',
                 resource_box,
                 resource)
