@@ -907,7 +907,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                      send_marker: bool = True
                      ) -> None:
 
-        unread_count = self.get_chat_unread_count(account, jid)
+        unread_count = self.get_chat_unread_count(account,
+                                                  jid,
+                                                  include_silent=True)
 
         set_urgency_hint(self, False)
         control = self.get_control()
