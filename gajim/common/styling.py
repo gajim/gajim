@@ -50,7 +50,8 @@ BLOCK_RX = re.compile(PRE_RX + '|' + QUOTE_RX, re.S | re.M)
 BLOCK_NESTED_RX = re.compile(PRE_NESTED_RX + '|' + QUOTE_RX, re.S | re.M)
 UNQUOTE_RX = re.compile(r'^> |^>', re.M)
 
-URI_OR_JID_RX = re.compile(fr'(?P<uri>{regex.IRI})|(?P<jid>{regex.XMPP.jid})')
+URI_OR_JID_RX = re.compile(
+    fr'(?P<uri>(?<![\w+.-]){regex.IRI})|(?P<jid>{regex.XMPP.jid})')
 
 EMOJI_RX = emoji_data.get_regex()
 EMOJI_RX = re.compile(EMOJI_RX)

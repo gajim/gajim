@@ -389,6 +389,14 @@ NONURIS = [
     ' ',
     '.',
     ':',
+    '://',
+    'Böblingen:🌥',
+    'Bo\u0308blingen:🌥',  # finds blingen:🌥 but rejects an unregistered scheme
+    'path/to/file_na.me:123',
+    '_sche.me:body_',
+    '_sche+me:body_',
+    '.scheme:body',
+    '+scheme:body',
 
     # These are from https://mathiasbynens.be/demo/url-regex
     '//',
@@ -396,10 +404,6 @@ NONURIS = [
     '///a',
     '///',
     'foo.com',
-    'http://foo.bar?q=Spaces should be encoded',
-    'http:// shouldfail.com',
-    ':// should fail',
-    'http://foo.bar/foo(bar)baz quux',
 ]
 
 
@@ -491,7 +495,6 @@ NONJIDS = [
 
     # These are from https://rfc-editor.org/rfc/rfc7622#section-3.5
     '"juliet"@example.com',
-    'foo bar@example.com',  # search is expected to find 'bar@example.com'
     '@example.com',
     'henryⅣ@example.com',  # localpart has a compatibility-decomposable cp
     '♚@example.com',        # localpart has a symbol cp
@@ -507,6 +510,9 @@ URIS_WITH_TEXT = [
     ('<http://userid@example.com/>', ['http://userid@example.com/']),
     ('"http://userid@example.com/"', ['http://userid@example.com/']),
     ('regexes are useless (see https://en.wikipedia.org/wiki/Recursion_(computer_science)), but comfy', ['https://en.wikipedia.org/wiki/Recursion_(computer_science)']),
+    ('(scheme:body)', ['scheme:body']),
+    ('/scheme:body', ['scheme:body']),
+    ('!scheme:body', ['scheme:body']),
 ]
 
 
