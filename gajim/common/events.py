@@ -263,24 +263,22 @@ class BookmarksReceived(ApplicationEvent):
 
 
 @dataclass
-class BaseChatMarkerEvent(ApplicationEvent):
-    name: str
+class ReadStateSync(ApplicationEvent):
+    name: str = field(init=False, default='read-state-sync')
+    account: str
+    jid: JID
+    marker_id: str
+
+
+@dataclass
+class DisplayedReceived(ApplicationEvent):
+    name: str = field(init=False, default='displayed-received')
     account: str
     jid: JID
     properties: Any
     type: str
     is_muc_pm: bool
     marker_id: str
-
-
-@dataclass
-class ReadStateSync(BaseChatMarkerEvent):
-    name: str = field(init=False, default='read-state-sync')
-
-
-@dataclass
-class DisplayedReceived(BaseChatMarkerEvent):
-    name: str = field(init=False, default='displayed-received')
 
 
 @dataclass
