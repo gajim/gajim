@@ -907,13 +907,15 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                      send_marker: bool = True
                      ) -> None:
 
-        unread_count = self.get_chat_unread_count(account, jid)
+        unread_count = self.get_chat_unread_count(account,
+                                                  jid,
+                                                  include_silent=True)
 
         set_urgency_hint(self, False)
         control = self.get_control()
         if control.has_active_chat():
             # Reset jump to bottom button unread counter
-            control.mark_as_read(send_marker=send_marker)
+            control.mark_as_read()
 
         # Reset chat list unread counter (emits unread-count-changed)
         chat_list_stack = self._chat_page.get_chat_list_stack()
@@ -929,7 +931,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         contact = client.get_module('Contacts').get_contact(jid)
         client.get_module('ChatMarkers').send_displayed_marker(
             contact,
-            last_message.message_id)
+            last_message.message_id,
+            last_message.stanza_id)
 
     def _on_window_active(self,
                           window: Gtk.ApplicationWindow,
@@ -1072,21 +1075,17 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 self.add_chat(event.account, jid, 'contact')
 
     def _on_read_state_sync(self, event: events.ReadStateSync) -> None:
-        if event.is_muc_pm:
-            jid = JID.from_string(event.jid.bare)
-        else:
-            jid = event.jid
-
         last_message = app.storage.archive.get_last_conversation_line(
-            event.account, jid)
+            event.account, event.jid)
 
         if last_message is None:
             return
 
-        if event.marker_id != last_message.message_id:
+        if event.marker_id not in (last_message.message_id,
+                                   last_message.stanza_id):
             return
 
-        self.mark_as_read(event.account, jid, send_marker=False)
+        self.mark_as_read(event.account, event.jid, send_marker=False)
 
     def _on_call_started(self, event: events.CallStarted) -> None:
         # Make sure there is only one window

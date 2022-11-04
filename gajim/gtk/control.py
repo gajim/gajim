@@ -451,7 +451,7 @@ class ChatControl(EventHelper):
     def is_groupchat(self) -> bool:
         return isinstance(self.contact, GroupchatContact)
 
-    def mark_as_read(self, send_marker: bool = True) -> None:
+    def mark_as_read(self) -> None:
         self._jump_to_end_button.reset_unread_count()
 
     def _on_autoscroll_changed(self,
