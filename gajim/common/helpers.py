@@ -1037,24 +1037,14 @@ def open_uri(uri: Union[URI, str], account: Optional[str] = None) -> None:
     if not isinstance(uri, URI):
         uri = parse_uri(uri)
 
-    def open_externally(uri: str) -> None:
-        if sys.platform == 'win32':
-            webbrowser.open(uri, new=2)
-        else:
-            try:
-                Gio.AppInfo.launch_default_for_uri(uri)
-            except GLib.Error as err:
-                log.info(
-                    "open_uri: Couldn't launch default for %s: %s", uri, err)
-
     if uri.type == URIType.FILE:
         open_file_uri(uri.source)
 
     elif uri.type in (URIType.MAIL, URIType.TEL):
-        open_externally(uri.source)
+        open_uri_externally(uri.source)
 
     elif uri.type in (URIType.WEB, URIType.GEO):
-        open_externally(uri.data)
+        open_uri_externally(uri.data)
 
     elif uri.type in (URIType.XMPP, URIType.AT):
         if account is None:
@@ -1093,6 +1083,17 @@ def open_uri(uri: Union[URI, str], account: Optional[str] = None) -> None:
     else:
         log.error('open_uri: No handler for %s', uri)
         # TODO: this is a bug, so, `raise` maybe?
+
+
+def open_uri_externally(uri: str) -> None:
+    if sys.platform == 'win32':
+        webbrowser.open(uri, new=2)
+    else:
+        try:
+            Gio.AppInfo.launch_default_for_uri(uri)
+        except GLib.Error as err:
+            log.info('open_uri_externally: '
+                     "Couldn't launch default for %s: %s", uri, err)
 
 
 def open_file_uri(uri: str) -> None:
