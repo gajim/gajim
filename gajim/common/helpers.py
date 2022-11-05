@@ -1038,7 +1038,11 @@ def open_uri(uri: Union[URI, str], account: Optional[str] = None) -> None:
         uri = parse_uri(uri)
 
     if uri.type == URIType.FILE:
-        open_file_uri(uri.source)
+        opt_name = 'allow_open_file_uris'
+        if app.settings.get(opt_name):
+            open_file_uri(uri.source)
+        else:
+            log.info('Blocked opening a file URI, see %s option', opt_name)
 
     elif uri.type in (URIType.MAIL, URIType.TEL):
         open_uri_externally(uri.source)

@@ -36,6 +36,7 @@ HAS_ACCOUNT_DEFAULT = _ACCOUNT_DEFAULT()
 
 
 BoolSettings = Literal[
+    'allow_open_file_uris',
     'always_english_wikipedia',
     'always_english_wiktionary',
     'ascii_formatting',
@@ -162,6 +163,7 @@ AllSettings = Literal[BoolSettings, IntSettings, StringSettings]
 AllSettingsT = Union[str, int, bool, list[str]]
 
 APP_SETTINGS = {
+    'allow_open_file_uris': False,
     'always_english_wikipedia': False,
     'always_english_wiktionary': True,
     'ascii_formatting': True,
@@ -624,6 +626,7 @@ DEFAULT_SOUNDEVENT_SETTINGS = {
 
 ADVANCED_SETTINGS = {
     'app': {
+        'allow_open_file_uris': _('Allows opening file:/ URIs when clicked.'),
         'always_english_wikipedia': '',
         'always_english_wiktionary': '',
         'ascii_formatting': _(
