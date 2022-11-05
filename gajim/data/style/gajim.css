@@ -157,10 +157,6 @@ infobar.error > revealer > box {
 }
 .gajim-listbox row {
     padding: 12px;
-    border: 1px solid @borders;
-    border-bottom: 0px;
-}
-.gajim-listbox row:nth-last-child(2) {
     border-bottom: 1px solid @borders;
 }
 
