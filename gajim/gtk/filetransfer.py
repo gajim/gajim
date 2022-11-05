@@ -60,7 +60,6 @@ from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
 from .dialogs import ErrorDialog
 from .filechoosers import FileSaveDialog
-from .file_transfer_send import SendFileDialog
 from .tooltips import FileTransfersTooltip
 from .builder import get_builder
 from .util import format_eta
@@ -404,13 +403,6 @@ class FileTransfersWindow:
              DialogButton.make('Accept',
                                text=_('_Download Again'),
                                callback=_on_yes)]).show()
-
-    def show_file_send_request(self,
-                               account: str,
-                               contact: types.BareContact
-                               ) -> None:
-        send_callback = partial(self.send_file, account, contact)
-        SendFileDialog(contact, send_callback, self.window)
 
     def send_file(self,
                   account: str,

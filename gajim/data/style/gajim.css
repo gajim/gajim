@@ -920,9 +920,6 @@ popover.combo scrollbar.vertical {
 #FeaturesInfoGrid > list > label { padding:10px; color: @insensitive_fg_color; font-weight: bold; }
 #FeaturesInfoGrid > list > row.activatable:active { box-shadow: none; }
 
-/* SendFileDialog */
-#SendFileDialog grid list > row { padding: 10px 20px 10px 10px; }
-
 /* AccountsWindow */
 .accounts-menu {
     border-right: 1px solid @borders;
