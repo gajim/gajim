@@ -101,7 +101,6 @@ from gajim.common.const import CONSONANTS
 from gajim.common.const import VOWELS
 from gajim.common.regex import INVALID_XML_CHARS_REGEX
 from gajim.common.structs import URI
-from gajim.common.text_helpers import escape_iri_path
 from gajim.common import types
 if TYPE_CHECKING:
     from gajim.common.modules.util import LogAdapter
