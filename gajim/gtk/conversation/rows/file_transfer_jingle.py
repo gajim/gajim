@@ -18,9 +18,9 @@ from typing import Union
 from typing import Optional
 
 import logging
-import os
 import time
 from datetime import datetime
+from pathlib import Path
 
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
@@ -347,15 +347,14 @@ class FileTransferJingleRow(BaseRow):
     def _on_open_file(self, _button: Gtk.Button) -> None:
         assert self._file_props is not None
         assert self._file_props.file_name is not None
-        if os.path.exists(self._file_props.file_name):
-            open_file(self._file_props.file_name)
+        open_file(Path(self._file_props.file_name))
 
     def _on_open_folder(self, _button: Gtk.Button) -> None:
         assert self._file_props is not None
         assert self._file_props.file_name is not None
-        path = os.path.split(self._file_props.file_name)[0]
-        if os.path.exists(path) and os.path.isdir(path):
-            open_file(path)
+
+        folder = Path(self._file_props.file_name).parent
+        open_file(folder)
 
     def _on_bad_hash_retry(self, _button: Gtk.Button) -> None:
         app.interface.instances['file_transfers'].show_hash_error(

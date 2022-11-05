@@ -29,6 +29,7 @@ from enum import IntEnum
 from enum import unique
 from datetime import datetime
 from datetime import timezone
+from pathlib import Path
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -1030,9 +1031,9 @@ class FileTransfersWindow:
         file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
         if not file_props.file_name:
             return
-        path = os.path.split(file_props.file_name)[0]
-        if os.path.exists(path) and os.path.isdir(path):
-            open_file(path)
+
+        folder = Path(file_props.file_name).parent
+        open_file(folder)
 
     def _on_cancel_menuitem_activate(self, widget):
         self._on_cancel_button_clicked(widget)

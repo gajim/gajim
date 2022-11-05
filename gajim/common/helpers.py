@@ -1111,16 +1111,12 @@ def open_file_uri(uri: str) -> None:
 
 
 @catch_exceptions
-def open_file(path: Union[str, Path]) -> None:
-    if sys.platform == 'win32':
-        os.startfile(path)
-    else:
-        # Call str() to make it work with pathlib.Path
-        path = str(path)
-        if path.startswith('/'):
-            open_file_uri('file://' + escape_iri_path(path))
-        else:
-            open_file_uri(path)
+def open_file(path: Path) -> None:
+    if not path.exists():
+        log.warning('Unable to open file, path %s does not exist', path)
+        return
+
+    open_file_uri(path.as_uri())
 
 
 def filesystem_path_from_uri(uri: str) -> Optional[Path]:
