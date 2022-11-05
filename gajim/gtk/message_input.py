@@ -116,7 +116,9 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
 
     @property
     def is_correcting(self) -> bool:
-        assert self._contact is not None
+        if self._contact is None:
+            return False
+
         return self._correcting[self._contact]
 
     def get_last_message_id(self, contact: ChatContactT) -> Optional[str]:
