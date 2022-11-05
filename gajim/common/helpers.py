@@ -1102,7 +1102,7 @@ def open_uri_externally(uri: str) -> None:
 
 def open_file_uri(uri: str) -> None:
     try:
-        if os.name != 'nt':
+        if sys.platform != 'win32':
             Gio.AppInfo.launch_default_for_uri(uri)
         else:
             os.startfile(uri)
@@ -1112,7 +1112,7 @@ def open_file_uri(uri: str) -> None:
 
 @catch_exceptions
 def open_file(path: Union[str, Path]) -> None:
-    if os.name == 'nt':
+    if sys.platform == 'win32':
         os.startfile(path)
     else:
         # Call str() to make it work with pathlib.Path
