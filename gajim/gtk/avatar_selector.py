@@ -19,7 +19,6 @@ from typing import Any
 from typing import cast
 from typing import Optional
 
-import os
 import logging
 from enum import IntEnum
 from enum import unique

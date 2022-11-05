@@ -19,7 +19,6 @@ from typing import Optional
 from typing import Union
 from typing import cast
 
-import os
 import logging
 import time
 
