@@ -390,6 +390,20 @@ class ConversationView(Gtk.ScrolledWindow):
                 return row
         return None
 
+    def get_first_event_row(self) -> Optional[Union[InfoMessage, MUCJoinLeft]]:
+        for row in self._list_box.get_children():
+            if isinstance(row, (InfoMessage, MUCJoinLeft)):
+                return row
+        return None
+
+    def get_last_event_row(self) -> Optional[Union[InfoMessage, MUCJoinLeft]]:
+        children = self._list_box.get_children()
+        children.reverse()
+        for row in children:
+            if isinstance(row, (InfoMessage, MUCJoinLeft)):
+                return row
+        return None
+
     @staticmethod
     def _sort_func(row1: BaseRow, row2: BaseRow) -> int:
         if row1.timestamp == row2.timestamp:

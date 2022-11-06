@@ -56,10 +56,11 @@ from gajim.gui.builder import get_builder
 from gajim.gui.groupchat_roster import GroupchatRoster
 from gajim.gui.groupchat_state import GroupchatState
 
-log = logging.getLogger('gajim.gui.control')
-
+HistoryRowT = Union[events.ApplicationEvent, ConversationRow]
 
 REQUEST_LINES_COUNT = 20
+
+log = logging.getLogger('gajim.gui.control')
 
 
 class ChatControl(EventHelper):
@@ -67,7 +68,6 @@ class ChatControl(EventHelper):
         EventHelper.__init__(self)
 
         self.handlers: dict[int, Any] = {}
-
         self._contact = None
         self._client = None
 
@@ -600,13 +600,7 @@ class ChatControl(EventHelper):
             log_line_id)
         GLib.idle_add(self._scrolled_view.block_signals, False)
 
-    def _request_history(self,
-                         _scrolled: Gtk.ScrolledWindow,
-                         before: bool
-                         ) -> None:
-
-        self._scrolled_view.block_signals(True)
-
+    def _request_messages(self, before: bool) -> list[ConversationRow]:
         if before:
             row = self._scrolled_view.get_first_message_row()
         else:
@@ -617,61 +611,103 @@ class ChatControl(EventHelper):
         else:
             timestamp = row.db_timestamp
 
-        assert self._contact is not None
-        for event in app.storage.events.load(self._contact, before, timestamp):
-            if isinstance(event, events.MUCUserJoined):
-                self._process_muc_user_joined(event)
-
-            elif isinstance(event, events.MUCUserLeft):
-                self._process_muc_user_left(event)
-
-            elif isinstance(event, events.MUCNicknameChanged):
-                self._process_muc_nickname_changed(event)
-
-            elif isinstance(event, events.MUCRoomKicked):
-                self._process_muc_room_kicked(event)
-
-            elif isinstance(event, events.MUCUserAffiliationChanged):
-                self._process_muc_user_affiliation_changed(event)
-
-            elif isinstance(event, events.MUCUserRoleChanged):
-                self._process_muc_user_role_changed(event)
-
-            elif isinstance(event, events.MUCUserStatusShowChanged):
-                self._process_muc_user_status_show_changed(event)
-
-            elif isinstance(event, events.MUCRoomConfigChanged):
-                self._process_muc_room_config_changed(event)
-
-            elif isinstance(event, events.MUCRoomConfigFinished):
-                self._process_muc_room_config_finished(event)
-
-            elif isinstance(event, events.MUCRoomPresenceError):
-                self._process_muc_room_presence_error(event)
-
-            elif isinstance(event, events.MUCRoomDestroyed):
-                self._process_muc_room_destroyed(event)
-            else:
-                raise ValueError('Unknown event: %s' % event)
-
-        messages = app.storage.archive.get_conversation_before_after(
+        return app.storage.archive.get_conversation_before_after(
             self.contact.account,
             self.contact.jid,
             before,
             timestamp,
             REQUEST_LINES_COUNT)
 
-        if not messages:
-            self._scrolled_view.set_history_complete(before, True)
-            self._scrolled_view.block_signals(False)
-            return
+    def _request_events(self, before: bool) -> list[events.ApplicationEvent]:
+        if before:
+            row = self._scrolled_view.get_first_event_row()
+        else:
+            row = self._scrolled_view.get_last_event_row()
 
-        self.add_messages(messages)
+        if row is None:
+            timestamp = time.time()
+        else:
+            timestamp = row.db_timestamp
 
-        if len(messages) < REQUEST_LINES_COUNT:
+        assert self._contact is not None
+        return app.storage.events.load(self._contact,
+                                       before,
+                                       timestamp,
+                                       REQUEST_LINES_COUNT)
+
+    def _request_history(self,
+                         _scrolled: Gtk.ScrolledWindow,
+                         before: bool
+                         ) -> None:
+
+        self._scrolled_view.block_signals(True)
+
+        rows: list[HistoryRowT] = []
+
+        messages = self._request_messages(before)
+        event_rows = self._request_events(before)
+        rows = self._sort_request_rows(messages, event_rows, before)
+
+        assert self._contact is not None
+        for row in rows:
+            if not isinstance(row, events.ApplicationEvent):
+                self.add_messages([row])
+
+            elif isinstance(row, events.MUCUserJoined):
+                self._process_muc_user_joined(row)
+
+            elif isinstance(row, events.MUCUserLeft):
+                self._process_muc_user_left(row)
+
+            elif isinstance(row, events.MUCNicknameChanged):
+                self._process_muc_nickname_changed(row)
+
+            elif isinstance(row, events.MUCRoomKicked):
+                self._process_muc_room_kicked(row)
+
+            elif isinstance(row, events.MUCUserAffiliationChanged):
+                self._process_muc_user_affiliation_changed(row)
+
+            elif isinstance(row, events.MUCUserRoleChanged):
+                self._process_muc_user_role_changed(row)
+
+            elif isinstance(row, events.MUCUserStatusShowChanged):
+                self._process_muc_user_status_show_changed(row)
+
+            elif isinstance(row, events.MUCRoomConfigChanged):
+                self._process_muc_room_config_changed(row)
+
+            elif isinstance(row, events.MUCRoomConfigFinished):
+                self._process_muc_room_config_finished(row)
+
+            elif isinstance(row, events.MUCRoomPresenceError):
+                self._process_muc_room_presence_error(row)
+
+            elif isinstance(row, events.MUCRoomDestroyed):
+                self._process_muc_room_destroyed(row)
+
+            else:
+                raise ValueError('Unknown event: %s' % type(row))
+
+        if len(rows) < REQUEST_LINES_COUNT:
             self._scrolled_view.set_history_complete(before, True)
 
         self._scrolled_view.block_signals(False)
+
+    @staticmethod
+    def _sort_request_rows(messages: list[ConversationRow],
+                           event_rows: list[events.ApplicationEvent],
+                           before: bool
+                           ) -> list[HistoryRowT]:
+
+        def sort_func(obj: HistoryRowT) -> float:
+            if isinstance(obj, events.ApplicationEvent):
+                return obj.timestamp  # pyright: ignore
+            return obj.time
+
+        rows = messages + event_rows
+        rows.sort(key=sort_func, reverse=before)
+        return rows
 
     def add_messages(self, messages: list[ConversationRow]):
         for msg in messages:

@@ -13,11 +13,11 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import annotations
-import dataclasses
 
 from typing import Any
-from typing import Iterator
 from typing import NamedTuple
+
+import dataclasses
 
 import json
 import sqlite3
@@ -116,18 +116,26 @@ class EventStorage(SqliteStorage):
     def load(self,
              contact: ChatContactT,
              before: bool,
-             timestamp: float
-             ) -> Iterator[EventRow]:
+             timestamp: float,
+             n_lines: int,
+             ) -> list[events.ApplicationEvent]:
 
-        time_operator = '<' if before else '>'
+        if before:
+            time_order = 'AND timestamp < ? ORDER BY timestamp DESC'
+        else:
+            time_order = 'AND timestamp > ? ORDER BY timestamp ASC'
 
         insert_sql = '''
             SELECT account, jid, event, timestamp, data as "data [JSON]"
-            FROM events WHERE account=? AND jid=? AND timestamp %s ?
-            ''' % time_operator
+            FROM events WHERE account=? AND jid=? {time_order}
+            LIMIT ?'''.format(time_order=time_order)
 
+        event_list: list[events.ApplicationEvent] = []
         for row in self._con.execute(insert_sql, (contact.account,
                                                   contact.jid,
-                                                  timestamp)).fetchall():
+                                                  timestamp,
+                                                  n_lines)).fetchall():
             event_class = EVENT_CLASSES[row.event]
-            yield event_class(**row.data, timestamp=row.timestamp)
+            event_list.append(event_class(**row.data,
+                                          timestamp=row.timestamp))
+        return event_list
