@@ -519,8 +519,10 @@ class AccountRow(Gtk.ListBoxRow):
         self._switch.set_vexpand(False)
 
         self._switch_state_label = Gtk.Label()
-        self._switch_state_label.set_xalign(1)
+        self._switch_state_label.set_xalign(0)
         self._switch_state_label.set_valign(Gtk.Align.CENTER)
+        label_width = max(len(Q_('?switch:On')), len(Q_('?switch:Off')))
+        self._switch_state_label.set_width_chars(label_width)
         self._set_label(account_enabled)
 
         self._switch.connect(
