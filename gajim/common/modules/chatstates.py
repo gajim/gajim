@@ -20,6 +20,7 @@ from typing import Any
 from typing import Optional
 
 import time
+from itertools import chain
 from functools import wraps
 
 from nbxmpp.namespaces import Namespace
@@ -41,6 +42,7 @@ from gajim.common.modules.contacts import BareContact
 
 INACTIVE_AFTER = 60
 PAUSED_AFTER = 10
+REMOTE_PAUSED_AFTER = 30
 
 
 def ensure_enabled(func: Any) -> Any:
@@ -77,6 +79,8 @@ class Chatstate(BaseModule):
 
         # The current chatstate we received from a contact
         self._remote_chatstate: dict[JID, State] = {}
+
+        self._remote_chatstate_composing_timeouts: dict[JID, int] = {}
 
         self._last_keyboard_activity: dict[JID, float] = {}
         self._last_mouse_activity: dict[JID, float] = {}
@@ -162,16 +166,41 @@ class Chatstate(BaseModule):
                 properties.is_carbon_message and properties.carbon.is_sent):
             return
 
-        assert properties.jid is not None
-        self._remote_chatstate[properties.jid] = properties.chatstate
+        jid = properties.jid
+        assert jid is not None
 
-        self._log.info('Recv: %-10s - %s', properties.chatstate, properties.jid)
+        state = properties.chatstate
+        self._remote_chatstate[jid] = state
 
-        contact = self._get_contact(properties.jid)
+        self._log.info('Recv: %-10s - %s', state, jid)
+
+        contact = self._get_contact(jid)
         if contact is None:
             return
 
+        self._remove_remote_composing_timeout(contact)
+        if state == State.COMPOSING:
+            # the spec does not cover any timeout for the composing action,
+            # but if a contact's client does not send another chat state,
+            # we don't want the GUI to show that they are "composing" forever
+            self._remote_chatstate_composing_timeouts[jid] = \
+                GLib.timeout_add_seconds(REMOTE_PAUSED_AFTER,
+                                         self._on_remote_composing_timeout,
+                                         contact)
+
         contact.notify('chatstate-update')
+
+    def _on_remote_composing_timeout(self, contact: types.ContactT):
+        self._log.info(
+            'Automatically switching the chat state of %s to PAUSED', contact)
+        self._remote_chatstate[contact.jid] = State.PAUSED
+        contact.notify('chatstate-update')
+
+    def _remove_remote_composing_timeout(self, contact: types.ContactT):
+        source_id = self._delay_timeout_ids.pop(contact.jid, None)
+        if source_id is not None:
+            self._log.debug('Removing remote composing timeout of %s', contact)
+            GLib.source_remove(source_id)
 
     @ensure_enabled
     def _check_last_interaction(self) -> bool:
@@ -361,13 +390,16 @@ class Chatstate(BaseModule):
             GLib.source_remove(timeout)
             del self._delay_timeout_ids[contact.jid]
 
-    def remove_all_delay_timeouts(self) -> None:
-        for timeout in self._delay_timeout_ids.values():
+    def remove_all_timeouts(self) -> None:
+        for timeout in chain(
+                self._delay_timeout_ids.values(),
+                self._remote_chatstate_composing_timeouts.values()):
             GLib.source_remove(timeout)
         self._delay_timeout_ids.clear()
+        self._remote_chatstate_composing_timeouts.clear()
 
     def cleanup(self) -> None:
-        self.remove_all_delay_timeouts()
+        self.remove_all_timeouts()
         if self._timeout_id is not None:
             GLib.source_remove(self._timeout_id)
             self._timeout_id = None
