@@ -59,6 +59,9 @@ from gajim.gui.groupchat_state import GroupchatState
 log = logging.getLogger('gajim.gui.control')
 
 
+REQUEST_LINES_COUNT = 20
+
+
 class ChatControl(EventHelper):
     def __init__(self) -> None:
         EventHelper.__init__(self)
@@ -73,8 +76,7 @@ class ChatControl(EventHelper):
         self._scrolled_view = ConversationView()
         self._scrolled_view.connect('autoscroll-changed',
                                     self._on_autoscroll_changed)
-        self._scrolled_view.connect('request-history',
-                                    self._fetch_n_lines_history, 20)
+        self._scrolled_view.connect('request-history', self._request_history)
         self._ui.conv_view_overlay.add(self._scrolled_view)
 
         self._groupchat_state = GroupchatState()
@@ -598,11 +600,10 @@ class ChatControl(EventHelper):
             log_line_id)
         GLib.idle_add(self._scrolled_view.block_signals, False)
 
-    def _fetch_n_lines_history(self,
-                               _scrolled: Gtk.ScrolledWindow,
-                               before: bool,
-                               n_lines: int
-                               ) -> None:
+    def _request_history(self,
+                         _scrolled: Gtk.ScrolledWindow,
+                         before: bool
+                         ) -> None:
 
         self._scrolled_view.block_signals(True)
 
@@ -658,7 +659,7 @@ class ChatControl(EventHelper):
             self.contact.jid,
             before,
             timestamp,
-            n_lines)
+            REQUEST_LINES_COUNT)
 
         if not messages:
             self._scrolled_view.set_history_complete(before, True)
@@ -667,7 +668,7 @@ class ChatControl(EventHelper):
 
         self.add_messages(messages)
 
-        if len(messages) < n_lines:
+        if len(messages) < REQUEST_LINES_COUNT:
             self._scrolled_view.set_history_complete(before, True)
 
         self._scrolled_view.block_signals(False)
