@@ -27,7 +27,7 @@ from .settings import SettingsBox
 class ContactSettings(SettingsBox):
     def __init__(self, account: str, jid: JID) -> None:
         SettingsBox.__init__(self, account, str(jid))
-        self.get_style_context().add_class('settings-border')
+        self.get_style_context().add_class('border')
         self.set_selection_mode(Gtk.SelectionMode.NONE)
         self.set_size_request(700, -1)
         self.set_valign(Gtk.Align.START)

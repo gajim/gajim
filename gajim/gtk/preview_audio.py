@@ -55,7 +55,7 @@ class AudioWidget(Gtk.Box):
     def _build_audio_widget(self) -> None:
         play_button = Gtk.Button()
         play_button.get_style_context().add_class('flat')
-        play_button.get_style_context().add_class('preview-button')
+        play_button.get_style_context().add_class('border')
         play_button.set_tooltip_text(_('Start/stop playback'))
         self._play_icon = Gtk.Image.new_from_icon_name(
             'media-playback-start-symbolic',

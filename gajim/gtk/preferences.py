@@ -173,7 +173,7 @@ class Preferences(Gtk.ApplicationWindow):
 class PreferenceBox(SettingsBox):
     def __init__(self, settings: list[Setting]) -> None:
         SettingsBox.__init__(self, None)
-        self.get_style_context().add_class('settings-border')
+        self.get_style_context().add_class('border')
         self.set_selection_mode(Gtk.SelectionMode.NONE)
         self.set_vexpand(False)
         self.set_valign(Gtk.Align.END)

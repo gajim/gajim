@@ -637,9 +637,6 @@ infobar.error > revealer > box {
     text-shadow: none;
     box-shadow: none;
 }
-.preview-button {
-    border: 1px solid @borders;
-}
 
 /* Conversation meta elements */
 .conversation-meta {
@@ -760,16 +757,22 @@ popover#EmoticonPopover { padding: 5px; background-color: @theme_unfocused_base_
 /* Settings widgets ======================================================== */
 
 /* SettingsBox */
-.settings-box > row { border-bottom: 1px solid; border-color: @theme_unfocused_bg_color; }
+.settings-box > row {
+    border-bottom: 1px solid @theme_unfocused_bg_color;
+}
 .settings-box > row:last-child { border-bottom: 0px; }
 .settings-box > row.activatable:active { box-shadow: none; }
 .settings-box > row { padding: 10px 20px 10px 10px; }
 .settings-box > row:not(.activatable) label { color: @insensitive_fg_color; }
 
+.settings-stack > box,
+.settings-stack viewport > box {
+    margin: 30px 25px;
+}
+
 window.settings-dialog row {
     border-bottom: 0px;
 }
-
 window.settings-dialog list { 
     background: transparent;
     margin: 12px;
@@ -788,10 +791,10 @@ window.settings-dialog list {
 
 /* Settings ListBox */
 list.settings {
-    border: @borders 1px solid;
+    border: 1px solid @borders;
 }
 list.settings > row:not(:last-child) {
-	border-bottom: @theme_unfocused_bg_color 1px solid;
+	border-bottom: 1px solid @theme_unfocused_bg_color;
 }
 list.settings row { min-height: 52px; }
 list.settings > row > box {
@@ -827,17 +830,6 @@ popover.combo scrollbar.vertical { padding-top: 2px; padding-bottom: 2px; }
 popover.combo scrollbar.vertical {
     padding-top: 2px;
     padding-bottom: 2px;
-}
-
-.settings-stack viewport > box {
-    margin-left: 30px;
-    margin-right: 30px;
-    margin-bottom: 10px;
-    margin-top: 25px;
-}
-.settings-border {
-    border: 1px solid;
-    border-color: @borders;
 }
 
 /* Dialogs ================================================================= */
@@ -926,9 +918,13 @@ popover.combo scrollbar.vertical {
 #SendFileDialog grid list > row { padding: 10px 20px 10px 10px; }
 
 /* AccountsWindow */
-.accounts-menu { border-right: 1px solid; border-color: @borders;}
-.accounts-settings-border {border: 1px solid; border-color: @borders;}
-.accounts-settings stack > box.settings-page { margin: 30px; }
+.accounts-menu {
+    border-right: 1px solid @borders;
+}
+.accounts-menu-listbox > row {
+    border-bottom: 1px solid @theme_unfocused_bg_color;
+    padding: 10px 20px 10px 10px;
+}
 .accounts-label-row {
     padding-top: 10px;
     padding-bottom: 10px;

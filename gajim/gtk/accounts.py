@@ -186,8 +186,8 @@ class Settings(Gtk.ScrolledWindow):
         self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         self._stack = Gtk.Stack(vhomogeneous=False)
         self._stack.set_transition_type(Gtk.StackTransitionType.CROSSFADE)
+        self._stack.get_style_context().add_class('settings-stack')
         self._stack.add_named(AddNewAccountPage(), 'add-account')
-        self.get_style_context().add_class('accounts-settings')
 
         self.add(self._stack)
         self._page_signal_ids: dict[GenericSettingPage, int] = {}
@@ -236,7 +236,8 @@ class AccountMenu(Gtk.Box):
 
         self._accounts_listbox = Gtk.ListBox()
         self._accounts_listbox.set_sort_func(self._sort_func)
-        self._accounts_listbox.get_style_context().add_class('settings-box')
+        self._accounts_listbox.get_style_context().add_class(
+            'accounts-menu-listbox')
         self._accounts_listbox.connect('row-activated',
                                        self._on_account_row_activated)
 
@@ -316,7 +317,7 @@ class AccountSubMenu(Gtk.ListBox):
         Gtk.ListBox.__init__(self)
         self.set_vexpand(True)
         self.set_hexpand(True)
-        self.get_style_context().add_class('settings-box')
+        self.get_style_context().add_class('accounts-menu-listbox')
 
         self._account = account
 
@@ -639,7 +640,7 @@ class GenericSettingPage(Gtk.Box):
         self.account = account
 
         self.listbox = SettingsBox(account)
-        self.listbox.get_style_context().add_class('accounts-settings-border')
+        self.listbox.get_style_context().add_class('border')
         self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
         self.listbox.set_vexpand(False)
         self.listbox.set_valign(Gtk.Align.END)
