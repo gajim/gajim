@@ -14,6 +14,7 @@
 
 from __future__ import annotations
 
+from typing import Any
 from typing import Optional
 from typing import Union
 
@@ -184,6 +185,7 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         if self._current_contact is not None:
             self._current_contact.disconnect_all_from_obj(self)
+            app.settings.disconnect_signals(self)
 
         client = app.get_client(account)
         self._current_contact = client.get_module('Contacts').get_contact(jid)
@@ -191,6 +193,12 @@ class ChatStack(Gtk.Stack, EventHelper):
         self._chat_banner.switch_contact(self._current_contact)
         self._chat_control.switch_contact(self._current_contact)
         self._message_action_box.switch_contact(self._current_contact)
+
+        app.settings.connect_signal(
+            'encryption',
+            self._on_encryption_changed,
+            self._current_contact.account,
+            self._current_contact.jid)
 
         self._update_base_actions(self._current_contact)
 
@@ -253,6 +261,10 @@ class ChatStack(Gtk.Stack, EventHelper):
                           -1)
 
         GLib.idle_add(self._message_action_box.msg_textview.grab_focus)
+
+    def _on_encryption_changed(self, *args: Any) -> None:
+        assert self._current_contact is not None
+        self._update_base_actions(self._current_contact)
 
     def _on_room_password_required(self,
                                    _contact: GroupchatContact,
@@ -485,7 +497,9 @@ class ChatStack(Gtk.Stack, EventHelper):
                                client.get_module('HTTPUpload').available)
 
         jingle = app.window.get_action('send-file-jingle')
-        jingle.set_enabled(online and contact.is_jingle_available)
+        encryption_enabled = bool(contact.settings.get('encryption'))
+        jingle.set_enabled(online and contact.is_jingle_available and
+                           not encryption_enabled)
 
         app.window.get_action('send-file').set_enabled(
             jingle.get_enabled() or
