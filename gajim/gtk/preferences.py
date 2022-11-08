@@ -409,11 +409,11 @@ class GroupChats(PreferenceBox):
 class FilePreview(PreferenceBox):
     def __init__(self, *args: Any) -> None:
         sizes = {
-            262144: '256 KB',
-            524288: '512 KB',
-            1048576: '1 MB',
-            5242880: '5 MB',
-            10485760: '10 MB',
+            262144: '256 KiB',
+            524288: '512 KiB',
+            1048576: '1 MiB',
+            5242880: '5 MiB',
+            10485760: '10 MiB',
         }
 
         settings = [
