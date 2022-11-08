@@ -409,11 +409,11 @@ class GroupChats(PreferenceBox):
 class FilePreview(PreferenceBox):
     def __init__(self, *args: Any) -> None:
         sizes = {
-            262144: '256 KiB',
-            524288: '512 KiB',
-            1048576: '1 MiB',
-            5242880: '5 MiB',
-            10485760: '10 MiB',
+            262144: '256 KB',
+            524288: '512 KB',
+            1048576: '1 MB',
+            5242880: '5 MB',
+            10485760: '10 MB',
         }
 
         settings = [
@@ -426,15 +426,15 @@ class FilePreview(PreferenceBox):
                     _('Preview Size'),
                     SettingType.CONFIG,
                     'preview_size',
-                    desc=_('Size of preview image'),
+                    desc=_('Size of preview images in pixels'),
                     bind='enable_file_preview',
                     props={'range_': (100, 1000)}),
 
             Setting(SettingKind.POPOVER,
-                    _('Allowed File Size'),
+                    _('File Size Limit'),
                     SettingType.CONFIG,
                     'preview_max_file_size',
-                    desc=_('Maximum file size for preview generation'),
+                    desc=_('Maximum file size for preview downloads'),
                     bind='enable_file_preview',
                     props={'entries': sizes}),
 
@@ -442,7 +442,7 @@ class FilePreview(PreferenceBox):
                     _('Preview in Public Group Chats'),
                     SettingType.CONFIG,
                     'preview_anonymous_muc',
-                    desc=_('Generate preview automatically in public '
+                    desc=_('Show previews automatically in public '
                            'group chats (may disclose your data)'),
                     bind='enable_file_preview'),
 
@@ -450,7 +450,7 @@ class FilePreview(PreferenceBox):
                     _('Preview all Image URLs'),
                     SettingType.CONFIG,
                     'preview_allow_all_images',
-                    desc=_('Generate preview for any URLs containing images '
+                    desc=_('Show previews for any URLs containing images '
                            '(may be unsafe)'),
                     bind='enable_file_preview'),
 
@@ -458,7 +458,7 @@ class FilePreview(PreferenceBox):
                     _('Left Click Action'),
                     SettingType.CONFIG,
                     'preview_leftclick_action',
-                    desc=_('Action when left-clicking a preview'),
+                    desc=_('Action for left-clicking a preview'),
                     bind='enable_file_preview',
                     props={'entries': PREVIEW_CLICK_ACTIONS}),
 
@@ -466,7 +466,8 @@ class FilePreview(PreferenceBox):
                     _('HTTPS Verification'),
                     SettingType.CONFIG,
                     'preview_verify_https',
-                    desc=_('Whether to check for a valid certificate'),
+                    desc=_('Whether to check for a valid certificate before '
+                           'downloading (not safe to disable)'),
                     bind='enable_file_preview'),
         ]
 
