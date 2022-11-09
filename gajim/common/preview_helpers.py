@@ -154,7 +154,12 @@ def create_thumbnail(data: bytes,
                      mime_type: str
                      ) -> Optional[bytes]:
 
-    thumbnail = create_thumbnail_with_pil(data, size)
+    try:
+        thumbnail = create_thumbnail_with_pil(data, size)
+    except (Image.DecompressionBombError, Image.DecompressionBombWarning):
+        # Don't try to process image further
+        return None
+
     if thumbnail is not None:
         return thumbnail
     return create_thumbnail_with_pixbuf(data, size, mime_type)
@@ -210,6 +215,10 @@ def create_thumbnail_with_pil(data: bytes, size: int) -> Optional[bytes]:
     output_file = BytesIO()
     try:
         image = Image.open(input_file)
+    except (Image.DecompressionBombError,
+            Image.DecompressionBombWarning) as error:
+        log.warning('Decompression bomb detected: %s', error)
+        raise
     except Exception as error:
         log.warning('making pil thumbnail failed: %s', error)
         log.warning('fallback to pixbuf')
