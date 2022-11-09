@@ -22,11 +22,14 @@ from gi.repository import Gdk
 from gi.repository import GLib
 
 from gajim.common.helpers import open_uri
+from gajim.common.helpers import parse_uri
+from gajim.common.structs import URIType
 from gajim.common.styling import BaseHyperlink
 from gajim.common.styling import PlainBlock
 from gajim.common.styling import process_uris
 
 from ..menus import get_conv_action_context_menu
+from ..menus import repopulate_conv_uri_context_menu
 from ..util import make_pango_attributes
 
 log = logging.getLogger('gajim.gui.conversaion.plain_widget')
@@ -75,15 +78,17 @@ class MessageLabel(Gtk.Label):
         self.connect('focus-out-event', self._on_focus_out)
 
     def _on_populate_popup(self, label: Gtk.Label, menu: Gtk.Menu) -> None:
+        uri = label.get_current_uri()
         selected, start, end = label.get_selection_bounds()
-        if not selected:
-            menu.show_all()
-            return
-
-        selected_text = label.get_text()[start:end]
-        action_menu_item = get_conv_action_context_menu(
-            self._account, selected_text)
-        menu.prepend(action_menu_item)
+        if uri:
+            puri = parse_uri(uri)
+            assert puri.type != URIType.INVALID  # would be a common.styling bug
+            repopulate_conv_uri_context_menu(menu, self._account, puri)
+        elif selected:
+            selected_text = label.get_text()[start:end]
+            action_menu_item = get_conv_action_context_menu(
+                self._account, selected_text)
+            menu.prepend(action_menu_item)
         menu.show_all()
 
     def _build_link_markup(self, text: str, uris: list[BaseHyperlink]) -> str:

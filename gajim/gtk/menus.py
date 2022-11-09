@@ -285,7 +285,9 @@ def get_conv_action_context_menu(account: str,
     return action_menu_item
 
 
-def get_conv_uri_context_menu(account: str, uri: URI) -> Optional[Gtk.Menu]:
+def repopulate_conv_uri_context_menu(menu: Gtk.Menu,
+                                  account: str,
+                                  uri: URI) -> bool:
     if uri.type == URIType.XMPP:
         if XmppUriQuery.from_str(uri.query_type) == XmppUriQuery.JOIN:
             context_menu = [
@@ -326,9 +328,9 @@ def get_conv_uri_context_menu(account: str, uri: URI) -> Optional[Gtk.Menu]:
             ('-add-contact', _('Add to Contact List…')),
         ]
     else:
-        return None
+        return False
 
-    menu = Gtk.Menu()
+    menu.foreach(menu.remove)
     for item in context_menu:
         action, label = item
         menuitem = Gtk.MenuItem()
@@ -355,7 +357,7 @@ def get_conv_uri_context_menu(account: str, uri: URI) -> Optional[Gtk.Menu]:
         menuitem.set_action_target_value(value)
         menuitem.show()
         menu.append(menuitem)
-    return menu
+    return True
 
 
 def get_roster_menu(account: str, jid: str, gateway: bool = False) -> GajimMenu:
