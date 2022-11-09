@@ -26,10 +26,7 @@ import nbxmpp
 from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
-from gajim.common import configpaths
 from gajim.common.file_props import FileProp
-from gajim.common.jingle_xtls import SELF_SIGNED_CERTIFICATE
-from gajim.common.jingle_xtls import load_cert_file
 
 if TYPE_CHECKING:
     from gajim.common.jingle_transport import JingleTransport
@@ -84,7 +81,6 @@ class JingleContent:
 
         # These were found by the Politie
         self.file_props: Optional[FileProp] = None
-        self.use_security: Optional[bool] = None
 
         self.callbacks: dict[str, list[Callable[
             [nbxmpp.Node, nbxmpp.Node, Optional[nbxmpp.Node], str],
@@ -267,22 +263,6 @@ class JingleContent:
         desc = file_tag.setTag('desc')
         if self.file_props.desc:
             desc.setData(self.file_props.desc)
-        if self.use_security:
-            security = nbxmpp.simplexml.Node(
-                tag=Namespace.JINGLE_XTLS + ' security')
-            certpath = configpaths.get('MY_CERT')
-            certpath = certpath / f'{SELF_SIGNED_CERTIFICATE}.cert'
-            cert = load_cert_file(certpath)
-            if cert:
-                digest_algo = (cert.get_signature_algorithm()
-                               .decode('utf-8').split('With')[0])
-                security.addChild('fingerprint').addData(cert.digest(
-                    digest_algo).decode('utf-8'))
-                for m in ('x509', ):  # supported authentication methods
-                    method = nbxmpp.simplexml.Node(tag='method')
-                    method.setAttr('name', m)
-                    security.addChild(node=method)
-                content.addChild(node=security)
         content.addChild(node=description_node)
 
     def destroy(self) -> None:

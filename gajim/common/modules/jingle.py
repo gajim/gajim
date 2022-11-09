@@ -42,7 +42,6 @@ from nbxmpp.structs import StanzaHandler
 from nbxmpp.structs import IqProperties
 
 from gajim.common import helpers
-from gajim.common import jingle_xtls
 from gajim.common import types
 from gajim.common.file_props import FileProp
 from gajim.common.modules.base import BaseModule
@@ -71,14 +70,6 @@ class Jingle(BaseModule):
                           typ='set',
                           ns=Namespace.JINGLE,
                           callback=self._on_jingle_iq),
-            StanzaHandler(name='iq',
-                          typ='get',
-                          ns=Namespace.PUBKEY_PUBKEY,
-                          callback=self._on_pubkey_request),
-            StanzaHandler(name='iq',
-                          typ='result',
-                          ns=Namespace.PUBKEY_PUBKEY,
-                          callback=self._pubkey_result_received),
         ]
 
         # dictionary: sessionid => JingleSession object
@@ -99,26 +90,6 @@ class Jingle(BaseModule):
                 content.destroy()
             self._sessions[sid].callbacks = []
             del self._sessions[sid]
-
-    def _on_pubkey_request(self,
-                           con: types.xmppClient,
-                           stanza: Iq,
-                           _properties: IqProperties
-                           ) -> None:
-        jid_from = helpers.get_full_jid_from_iq(stanza)
-        self._log.info('Pubkey request from %s', jid_from)
-        sid = stanza.getAttr('id')
-        jingle_xtls.send_cert(con, jid_from, sid)
-        raise nbxmpp.NodeProcessed
-
-    def _pubkey_result_received(self,
-                                con: types.xmppClient,
-                                stanza: Iq,
-                                _properties: IqProperties
-                                ) -> None:
-        jid_from = helpers.get_full_jid_from_iq(stanza)
-        self._log.info('Pubkey result from %s', jid_from)
-        jingle_xtls.handle_new_cert(con, stanza, jid_from)
 
     def _on_jingle_iq(self,
                       _con: types.xmppClient,
@@ -236,7 +207,6 @@ class Jingle(BaseModule):
                             ) -> Optional[str]:
         logger.info('start file transfer with file: %s', file_props)
         contact = self._con.get_module('Contacts').get_contact(jid)
-        use_security = contact.supports(Namespace.JINGLE_XTLS)
         jingle = JingleSession(self._con,
                                weinitiate=True,
                                jid=jid,
@@ -261,7 +231,6 @@ class Jingle(BaseModule):
         transfer = JingleFileTransfer(jingle,
                                       transport=transport,
                                       file_props=file_props,
-                                      use_security=use_security,
                                       senders=senders)
         file_props.transport_sid = transport.sid
         file_props.algo = self.__hash_support(contact)

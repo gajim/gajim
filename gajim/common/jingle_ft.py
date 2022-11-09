@@ -33,8 +33,6 @@ from nbxmpp import JID
 from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
-from gajim.common import configpaths
-from gajim.common import jingle_xtls
 from gajim.common import helpers
 from gajim.common.const import KindConstant
 from gajim.common.helpers import AdditionalDataDict
@@ -80,7 +78,6 @@ class JingleFileTransfer(JingleContent):
                  session: JingleSession,
                  file_props: FileProp,
                  transport: Optional[JingleTransport] = None,
-                 use_security: bool = False,
                  senders: Optional[str] = None
                  ) -> None:
 
@@ -102,8 +99,6 @@ class JingleFileTransfer(JingleContent):
         self.callbacks['transport-info'] += [self.__on_transport_info]
         self.callbacks['iq-result'] += [self.__on_iq_result]
 
-        self.use_security = use_security
-        self.x509_fingerprint: Optional[str] = None
         self.file_props = file_props
         self.weinitiate = self.session.weinitiate
         self.werequest = self.session.werequest
@@ -138,12 +133,6 @@ class JingleFileTransfer(JingleContent):
             State.TRANSPORT_REPLACE: StateTransportReplace(self),
             State.CAND_SENT_AND_RECEIVED: StateCandSentAndRecv(self)
         }
-
-        cert_name = (configpaths.get('MY_CERT') /
-                     jingle_xtls.SELF_SIGNED_CERTIFICATE)
-        if not (cert_name.with_suffix('.cert').exists() and
-                cert_name.with_suffix('.pkey').exists()):
-            jingle_xtls.make_certs(cert_name, 'gajim')
 
     def __state_changed(self,
                         nextstate: State,
@@ -199,13 +188,6 @@ class JingleFileTransfer(JingleContent):
         jid = JID.from_string(jid)
         if not content:
             return
-
-        secu = content.getTag('security')
-        self.use_security = bool(secu)
-        if secu:
-            fingerprint = secu.getTag('fingerprint')
-            if fingerprint:
-                self.x509_fingerprint = fingerprint.getData()
 
         if not self.transport:
             self.transport = JingleTransportSocks5()
@@ -333,26 +315,6 @@ class JingleFileTransfer(JingleContent):
                             action: str
                             ) -> None:
         log.info('__on_session_accept')
-        con = self.session.connection
-        security = content.getTag('security')
-        if not security:  # responder can not verify our fingerprint
-            self.use_security = False
-        else:
-            fingerprint = security.getTag('fingerprint')
-            if fingerprint:
-                fingerprint = fingerprint.getData()
-                self.x509_fingerprint = fingerprint
-                if not jingle_xtls.check_cert(app.get_jid_without_resource(
-                        self.session.responder), fingerprint):
-                    id_ = jingle_xtls.send_cert_request(con,
-                                                        self.session.responder)
-                    jingle_xtls.key_exchange_pend(id_,
-                                                  self.continue_session_accept,
-                                                  [stanza])
-                    raise nbxmpp.NodeProcessed
-        self.continue_session_accept(stanza)
-
-    def continue_session_accept(self, stanza: nbxmpp.Node) -> None:
         if self.state == State.TRANSPORT_REPLACE:
             # If we are requesting we don't have the file
             if self.session.werequest:
@@ -371,16 +333,12 @@ class JingleFileTransfer(JingleContent):
             host['initiator'] = self.session.initiator
             host['target'] = self.session.responder
             host['sid'] = self.file_props.sid
-        fingerprint = None
-        if self.use_security:
-            fingerprint = 'client'
         if self.transport.type_ == TransportType.SOCKS5:
             sid = self.file_props.transport_sid
             app.socks5queue.connect_to_hosts(self.session.connection.name,
                                              sid,
                                              self.on_connect,
                                              self._on_connect_error,
-                                             fingerprint=fingerprint,
                                              receiving=False)
             raise nbxmpp.NodeProcessed
         self.__state_changed(State.TRANSFERRING)
@@ -550,15 +508,11 @@ class JingleFileTransfer(JingleContent):
                                        receiver)
         self.file_props.sha_str = sha_str
         port = app.settings.get('file_transfers_port')
-        fingerprint = None
-        if self.use_security:
-            fingerprint = 'server'
         listener = app.socks5queue.start_listener(
             port,
             sha_str,
             self._store_socks5_sid,
             self.file_props,
-            fingerprint=fingerprint,
             typ='sender' if self.weinitiate else 'receiver')
         if not listener:
             # send error message, notify the user

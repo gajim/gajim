@@ -61,14 +61,11 @@ class StateInitialized(JingleFileTransferStates):
             self.jft._listen_host()
             # Listen on configured port for file transfer
         else:
-            fingerprint = None
-            if self.jft.use_security:
-                fingerprint = 'client'
             # Connect to the candidate host, on success call on_connect method
             app.socks5queue.connect_to_hosts(
                 self.jft.session.connection.name,
                 self.jft.file_props.transport_sid, self.jft.on_connect,
-                self.jft._on_connect_error, fingerprint=fingerprint)
+                self.jft._on_connect_error)
 
 
 class StateCandSent(JingleFileTransferStates):
@@ -211,13 +208,13 @@ class StateTransfering(JingleFileTransferStates):
                                              app.socks5queue, _sock=None,
                                              host=str(streamhost_used['host']),
                                              port=int(streamhost_used['port']),
-                                             fingerprint=None, connected=False,
+                                             connected=False,
                                              file_props=self.jft.file_props)
             else:
                 sockobj = Socks5ReceiverClient(
                     app.idlequeue, streamhost_used,
                     transport_sid=self.jft.file_props.transport_sid,
-                    file_props=self.jft.file_props, fingerprint=None)
+                    file_props=self.jft.file_props)
             sockobj.proxy = True
             sockobj.streamhost = streamhost_used
             app.socks5queue.add_sockobj(self.jft.session.connection.name,

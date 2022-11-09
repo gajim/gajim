@@ -43,7 +43,6 @@ from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common import helpers
-from gajim.common import jingle_xtls
 from gajim.common import types
 from gajim.common.events import FileRequestError
 from gajim.common.file_props import FileProp
@@ -165,16 +164,6 @@ class Bytestream(BaseModule):
 
         if not session.accepted:
             content = session.get_content('file', content.name)
-            if content.use_security:
-                fingerprint = content.x509_fingerprint
-                if not jingle_xtls.check_cert(
-                        app.get_jid_without_resource(file_props.sender),
-                        fingerprint):
-                    id_ = jingle_xtls.send_cert_request(
-                        self._con, file_props.sender)
-                    jingle_xtls.key_exchange_pend(id_,
-                                                  content.on_cert_received, [])
-                    return
             session.approve_session()
 
         session.approve_content('file', content.name)
@@ -747,7 +736,6 @@ class Bytestream(BaseModule):
                                         _sock=None,
                                         host=str(proxy['host']),
                                         port=int(proxy['port']),
-                                        fingerprint=None,
                                         connected=False,
                                         file_props=file_props)
             sender.streamhost = proxy

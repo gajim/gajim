@@ -189,7 +189,6 @@ class ConfigPaths:
         unique_profile_paths = [
             # Data paths
             ('SECRETS_FILE', 'secrets', PathLocation.DATA, PathType.FILE),
-            ('MY_PEER_CERTS', 'certs', PathLocation.DATA, PathType.FOLDER),
             ('CERT_STORE', 'cert_store', PathLocation.DATA, PathType.FOLDER),
             ('DEBUG', 'debug', PathLocation.DATA, PathType.FOLDER),
             ('PLUGINS_DATA', 'plugins_data',
@@ -200,7 +199,6 @@ class ConfigPaths:
             ('CONFIG_FILE', 'config', PathLocation.CONFIG, PathType.FILE),
             ('PLUGINS_CONFIG_DIR',
              'pluginsconfig', PathLocation.CONFIG, PathType.FOLDER),
-            ('MY_CERT', 'localcerts', PathLocation.CONFIG, PathType.FOLDER),
             ('MY_SHORTCUTS', 'shortcuts.json',
              PathLocation.CONFIG, PathType.FILE),
         ]
