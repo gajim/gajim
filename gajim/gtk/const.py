@@ -173,7 +173,6 @@ APP_ACTIONS = [
     ('join-support-chat', None),
     ('manage-proxies', None),
     ('open-link', 'as'),
-    ('open-mail', 's'),
     ('plugins', None),
     ('preferences', None),
     ('quit', None),

@@ -239,6 +239,13 @@ class XmppUriQuery(Enum):
         except ValueError:
             return None
 
+    @staticmethod
+    def from_str_or_none(s: str) -> XmppUriQuery:
+        qtype = XmppUriQuery.from_str(s)
+        if qtype:
+            return qtype
+        return XmppUriQuery.NONE
+
 
 class MUCJoinedState(Enum):
     JOINED = 'joined'

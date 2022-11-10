@@ -415,7 +415,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
             ('add-contact', self._on_add_contact_action),
             ('copy-text', self._on_copy_text_action),
             ('open-link', self._on_open_link_action),
-            ('open-mail', self._on_open_mail_action),
             ('remove-history', self._on_remove_history_action),
             ('create-groupchat', self._on_create_groupchat_action),
             ('forget-groupchat', self._on_forget_groupchat_action),
@@ -797,14 +796,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
                                 params: structs.AccountJidParam) -> None:
 
         app.window.mark_as_read(params.account, params.jid)
-
-    @staticmethod
-    def _on_open_mail_action(_action: Gio.SimpleAction,
-                             param: GLib.Variant) -> None:
-        uri = param.get_string()
-        if not uri.startswith('mailto:'):
-            uri = 'mailto:%s' % uri
-        open_uri(uri)
 
     @staticmethod
     def _on_open_link_action(_action: Gio.SimpleAction,

@@ -29,7 +29,7 @@ from gajim.common.styling import PlainBlock
 from gajim.common.styling import process_uris
 
 from ..menus import get_conv_action_context_menu
-from ..menus import repopulate_conv_uri_context_menu
+from ..menus import populate_uri_context_menu
 from ..util import make_pango_attributes
 
 log = logging.getLogger('gajim.gui.conversaion.plain_widget')
@@ -83,7 +83,8 @@ class MessageLabel(Gtk.Label):
         if uri:
             puri = parse_uri(uri)
             assert puri.type != URIType.INVALID  # would be a common.styling bug
-            repopulate_conv_uri_context_menu(menu, self._account, puri)
+            menu.foreach(menu.remove)
+            populate_uri_context_menu(menu, self._account, puri)
         elif selected:
             selected_text = label.get_text()[start:end]
             action_menu_item = get_conv_action_context_menu(
