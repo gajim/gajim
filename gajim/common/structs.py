@@ -18,7 +18,6 @@ from typing import Any
 from typing import TypeVar
 from typing import NamedTuple
 from typing import Optional
-from typing import Union
 
 import time
 from dataclasses import dataclass
@@ -51,7 +50,7 @@ class URI(NamedTuple):
     source: str
     query_type: str = ''
     query_params: dict[str, str] = {}
-    data: Optional[Union[dict[str, str], str]] = None
+    data: dict[str, str] = {}
 
 
 class MUCData:

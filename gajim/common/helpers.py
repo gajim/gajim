@@ -942,7 +942,7 @@ def parse_uri(uri: str) -> URI:
         if not urlparts.netloc:
             err = f'No host or empty host in an {scheme} URI'
             return URI(URIType.INVALID, uri, data={'error': err})
-        return URI(URIType.WEB, uri, data=uri)
+        return URI(URIType.WEB, uri)
 
     if scheme == 'xmpp':
         if not urlparts.path.startswith('/'):
@@ -965,17 +965,19 @@ def parse_uri(uri: str) -> URI:
                    data=data)
 
     if scheme == 'mailto':
+        data: dict[str, str] = {}
         try:
-            data = unquote(urlparts.path, errors='strict')
-            validate_jid(data, 'bare')  # meh, good enuf
+            data['addr'] = unquote(urlparts.path, errors='strict')
+            validate_jid(data['addr'], 'bare')  # meh, good enuf
         except ValueError as err:
-            data = {'error': str(err)}
+            data['error'] = str(err)
             return URI(URIType.INVALID, uri, data=data)
         return URI(URIType.MAIL, uri, data=data)
 
     if scheme == 'tel':
-        data = uri[4:]
-        return URI(URIType.TEL, uri, data=data)
+        # https://rfc-editor.org/rfc/rfc3966#section-3
+        # TODO: extract number
+        return URI(URIType.TEL, uri)
 
     if scheme == 'geo':
         # TODO: unify with .preview_helpers.split_geo_uri
@@ -984,19 +986,15 @@ def parse_uri(uri: str) -> URI:
         if not lat or not lon_alt:
             return URI(URIType.INVALID, uri, data={
                        'error': 'No latitude or longitude'})
-        lon, _, _alt = lon_alt.partition(',')
+        lon, _, alt = lon_alt.partition(',')
         if not lon:
             return URI(URIType.INVALID, uri, data={'error': 'No longitude'})
 
-        # TODO: move redirection to open_uri, parsing needs to be unit-testable
-        if Gio.AppInfo.get_default_for_uri_scheme('geo'):
-            return URI(URIType.GEO, uri, data=uri)
-
-        data = geo_provider_from_location(lat, lon)
+        data = {'lat': lat, 'lon': lon, 'alt': alt}
         return URI(URIType.GEO, uri, data=data)
 
     if scheme == 'file':
-        # https://rfc-editor.org/rfc/rfc8089.html
+        # https://rfc-editor.org/rfc/rfc8089.html#section-2
         data: dict[str, str] = {}
         try:
             data['netloc'] = urlparts.netloc
@@ -1007,7 +1005,7 @@ def parse_uri(uri: str) -> URI:
             return URI(URIType.INVALID, uri, data=data)
         return URI(URIType.FILE, uri, data=data)
 
-    return URI(URIType.WEB, uri, data=uri)
+    return URI(URIType.WEB, uri)
 
 
 @catch_exceptions
@@ -1022,11 +1020,15 @@ def open_uri(uri: Union[URI, str], account: Optional[str] = None) -> None:
         else:
             log.info('Blocked opening a file URI, see %s option', opt_name)
 
-    elif uri.type in (URIType.MAIL, URIType.TEL):
+    elif uri.type in (URIType.MAIL, URIType.TEL, URIType.WEB):
         open_uri_externally(uri.source)
 
-    elif uri.type in (URIType.WEB, URIType.GEO):
-        open_uri_externally(uri.data)
+    elif uri.type == URIType.GEO:
+        if Gio.AppInfo.get_default_for_uri_scheme('geo'):
+            open_uri_externally(uri.source)
+        else:
+            open_uri(
+                geo_provider_from_location(uri.data['lat'], uri.data['lon']))
 
     elif uri.type in (URIType.XMPP, URIType.AT):
         if account is None:
@@ -1036,7 +1038,7 @@ def open_uri(uri: Union[URI, str], account: Optional[str] = None) -> None:
         if uri.type == URIType.XMPP:
             jid = uri.data['jid']
         else:
-            jid = uri.data
+            jid = uri.data['addr']
 
         qtype, qparams = XmppUriQuery.from_str(uri.query_type), uri.query_params
         if not qtype:

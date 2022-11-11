@@ -291,7 +291,7 @@ def get_conv_action_context_menu(account: str,
 
 
 def _xmpp_message_query_context_menu(uri: URI, account: str) -> UriMenuItemsT:
-    jid = cast(dict[str, str], uri.data)['jid']
+    jid = uri.data['jid']
     # qparams = uri.query_params
     return [
         ('copy-text', [uri.source], _('Copy Link Location')),
@@ -305,8 +305,8 @@ def _xmpp_message_query_context_menu(uri: URI, account: str) -> UriMenuItemsT:
 def _xmpp_join_query_context_menu(uri: URI, account: str) -> UriMenuItemsT:
     return [
         ('copy-text', [uri.source], _('Copy Link Location')),
-        ('copy-text', [cast(dict[str, str], uri.data)['jid']], _('Copy XMPP Address')),
-        ('groupchat-join', [account, cast(dict[str, str], uri.data)['jid']],
+        ('copy-text', [uri.data['jid']], _('Copy XMPP Address')),
+        ('groupchat-join', [account, uri.data['jid']],
             # ^ TODO: pass qparams ^
             _('Join Groupchat…')),
     ]
@@ -334,7 +334,7 @@ def _web_uri_context_menu(uri: URI, _account: str) -> UriMenuItemsT:
 def _mailto_uri_context_menu(uri: URI, _account: str) -> UriMenuItemsT:
     return [
         ('copy-text', [uri.source], _('Copy Link Location')),
-        ('copy-text', [cast(str, uri.data)], _('Copy Email Address')),
+        ('copy-text', [uri.data['addr']], _('Copy Email Address')),
         ('open-link', ['', uri.source], _('Open Email Composer')),
     ]
 
@@ -347,7 +347,7 @@ def _geo_uri_context_menu(uri: URI, _account: str) -> UriMenuItemsT:
 
 
 def _ambiguous_addr_context_menu(uri: URI, account: str) -> UriMenuItemsT:
-    addr = cast(dict[str, str], uri.data)['addr']
+    addr = uri.data['addr']
     mailto = 'mailto:' + escape_iri_path_segment(addr)
     return [
         ('copy-text', [addr], _('Copy XMPP Address/Email')),
