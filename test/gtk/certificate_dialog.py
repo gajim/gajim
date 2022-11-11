@@ -1,15 +1,15 @@
 import gi
+gi.require_version('Gio', '2.0')
 gi.require_version('Gtk', '3.0')
+from gi.repository import Gio
 from gi.repository import Gtk
-
-import OpenSSL
 
 from gajim import gui
 gui.init('gtk')
 
 from test.gtk import util
 from gajim.common.const import CSSPriority
-from gajim.gui.dialogs import CertificateDialog
+from gajim.gui.certificate_dialog import CertificateDialog
 
 util.load_style('gajim.css', CSSPriority.APPLICATION)
 
@@ -47,8 +47,8 @@ ejsJoYkpvcaiaLAyVymTY/n/oM2oQpv5Mqjit+18RB9c2P+ifH5iDKC/jTKn4NNz
 8xSTlUlCBTCozjzscZVeVDIojmejWclT
 -----END CERTIFICATE-----'''
 
-cert = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, cert)
-win = CertificateDialog(None, 'testacc', cert)
-win.connect("destroy", Gtk.main_quit)
+gio_cert = Gio.TlsCertificate.new_from_pem(cert, -1)
+win = CertificateDialog(None, 'testacc', gio_cert)
+win.connect('destroy', Gtk.main_quit)
 win.show_all()
 Gtk.main()

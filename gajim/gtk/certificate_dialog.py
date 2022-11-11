@@ -12,14 +12,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime
+from cryptography.hazmat.primitives import hashes
 
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.helpers import convert_gio_to_openssl_cert
+from gajim.common.helpers import get_x509_cert_from_gio_cert
 from gajim.common.i18n import _
 
 from .builder import get_builder
@@ -55,47 +55,55 @@ class CertificateDialog(Gtk.ApplicationWindow):
 
 
 class CertificateBox(Gtk.Box):
-    def __init__(self, account: str, cert: Gio.TlsCertificate) -> None:
+    def __init__(self, account: str, certificate: Gio.TlsCertificate) -> None:
         Gtk.Box.__init__(self)
 
         self._ui = get_builder('certificate.ui')
-
-        certificate = convert_gio_to_openssl_cert(cert)
-
-        issuer = certificate.get_issuer()
-        subject = certificate.get_subject()
-
         self._headline = _('Certificate for \n%s') % account
-        self._it_common_name = subject.commonName or ''
-        self._it_organization = subject.organizationName or ''
-        self._it_org_unit = subject.organizationalUnitName or ''
-        it_serial_no = str(certificate.get_serial_number())
+
+        cert = get_x509_cert_from_gio_cert(certificate)
+
+        self._it_common_name = ''
+        self._it_organization = ''
+        self._it_org_unit = ''
+        for attribute in cert.subject:
+            # See https://datatracker.ietf.org/doc/html/rfc4514.html
+            dotted_string = attribute.oid.dotted_string
+            if dotted_string == '2.5.4.3':
+                self._ib_common_name = str(attribute.value)
+            if dotted_string == '2.5.4.10':
+                self._ib_organization = str(attribute.value)
+            if dotted_string == '2.5.4.11':
+                self._ib_org_unit = str(attribute.value)
+
+        it_serial_no = str(cert.serial_number)
         it_serial_no_half = int(len(it_serial_no) / 2)
         self._it_serial_number = '%s\n%s' % (
             it_serial_no[:it_serial_no_half],
             it_serial_no[it_serial_no_half:])
-        self._ib_common_name = issuer.commonName or ''
-        self._ib_organization = issuer.organizationName or ''
-        self._ib_org_unit = issuer.organizationalUnitName or ''
 
-        before = certificate.get_notBefore()
-        if before is None:
-            self._issued = ''
-        else:
-            issued = datetime.strptime(before.decode('ascii'), '%Y%m%d%H%M%SZ')
-            self._issued = issued.strftime('%c %Z')
+        self._ib_common_name = ''
+        self._ib_organization = ''
+        self._ib_org_unit = ''
+        for attribute in cert.issuer:
+            # See https://datatracker.ietf.org/doc/html/rfc4514.html
+            dotted_string = attribute.oid.dotted_string
+            if dotted_string == '2.5.4.3':
+                self._ib_common_name = str(attribute.value)
+            if dotted_string == '2.5.4.10':
+                self._ib_organization = str(attribute.value)
+            if dotted_string == '2.5.4.11':
+                self._ib_org_unit = str(attribute.value)
 
-        after = certificate.get_notAfter()
-        if after is None:
-            self._expires = ''
-        else:
-            expires = datetime.strptime(after.decode('ascii'), '%Y%m%d%H%M%SZ')
-            self._expires = expires.strftime('%c %Z')
+        self._issued = cert.not_valid_before.strftime('%c %Z')
+        self._expires = cert.not_valid_after.strftime('%c %Z')
 
-        sha1 = certificate.digest('sha1').decode('utf-8')
+        sha1_bytes = cert.fingerprint(hashes.SHA1())
+        sha1 = ':'.join(f'{b:02X}' for b in sha1_bytes)
         self._sha1 = '%s\n%s' % (sha1[:29], sha1[30:])
 
-        sha256 = certificate.digest('sha256').decode('utf-8')
+        sha256_bytes = cert.fingerprint(hashes.SHA256())
+        sha256 = ':'.join(f'{b:02X}' for b in sha256_bytes)
         self._sha256 = '%s\n%s\n%s\n%s' % (
             sha256[:23], sha256[24:47], sha256[48:71], sha256[72:])
 

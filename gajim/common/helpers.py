@@ -62,6 +62,9 @@ from pathlib import Path
 from packaging.version import Version as V
 import unicodedata
 
+from cryptography import x509
+from cryptography.hazmat.backends import default_backend
+
 from nbxmpp.namespaces import Namespace
 from nbxmpp.const import Role
 from nbxmpp.const import Chatstate
@@ -74,9 +77,6 @@ from nbxmpp.structs import ProxyData
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import InvalidJid
 from nbxmpp.protocol import Iq
-
-from OpenSSL.crypto import X509, load_certificate
-from OpenSSL.crypto import FILETYPE_PEM
 
 from gi.repository import Gio
 from gi.repository import GLib
@@ -1429,8 +1429,10 @@ def load_file_async(path: Path,
     file.load_contents_async(None, _on_load_finished)
 
 
-def convert_gio_to_openssl_cert(cert: Gio.TlsCertificate) -> X509:
-    return load_certificate(FILETYPE_PEM, cert.props.certificate_pem.encode())
+def get_x509_cert_from_gio_cert(cert: Gio.TlsCertificate) -> x509.Certificate:
+    glib_bytes = GLib.ByteArray.free_to_bytes(cert.props.certificate)
+    return x509.load_der_x509_certificate(
+        glib_bytes.get_data(), default_backend())
 
 
 def get_custom_host(account: str) -> Optional[tuple[str,
