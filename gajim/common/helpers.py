@@ -1005,6 +1005,20 @@ def parse_uri(uri: str) -> URI:
             return URI(URIType.INVALID, uri, data=data)
         return URI(URIType.FILE, uri, data=data)
 
+    if scheme == 'about':
+        # https://rfc-editor.org/rfc/rfc6694#section-2.1
+        data: dict[str, str] = {}
+        try:
+            token = unquote(urlparts.path, errors='strict')
+            if token == 'ambiguous-address':  # noqa S105
+                data['addr'] = unquote(urlparts.query, errors='strict')
+                validate_jid(data['addr'], 'bare')
+                return URI(URIType.AT, uri, data=data)
+            raise Exception(f'Unrecognized about-token "{token}"')
+        except Exception as err:
+            data['error'] = str(err)
+            return URI(URIType.INVALID, uri, data=data)
+
     return URI(URIType.WEB, uri)
 
 

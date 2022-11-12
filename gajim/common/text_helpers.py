@@ -29,5 +29,10 @@ def escape_iri_path(s: str) -> str:
         s, _reserved_chars_allowed_in_path_segment + '/', True)
 
 
+def escape_iri_query(s: str) -> str:
+    return GLib.Uri.escape_string(
+        s, _reserved_chars_allowed_in_path_segment + '/?', True)
+
+
 def jid_to_iri(jid: str) -> str:
     return 'xmpp:' + escape_iri_path(jid)

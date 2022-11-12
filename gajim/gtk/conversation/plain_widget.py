@@ -34,7 +34,7 @@ from ..util import make_pango_attributes
 
 log = logging.getLogger('gajim.gui.conversaion.plain_widget')
 
-URI_TAGS = ['uri', 'xmppadr', 'mailadr']
+URI_TAGS = ['uri', 'address', 'xmppadr', 'mailadr']
 STYLE_TAGS = ['strong', 'emphasis', 'strike', 'pre']
 
 
@@ -120,7 +120,8 @@ class MessageLabel(Gtk.Label):
         self.set_markup(f'<i>{text}</i>')
 
     def _on_activate_link(self, _label: Gtk.Label, uri: str) -> int:
-        open_uri(uri, self._account)
+        puri = parse_uri(uri)
+        open_uri(puri, self._account)
         return Gdk.EVENT_STOP
 
     @staticmethod

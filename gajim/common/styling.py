@@ -29,7 +29,7 @@ from gajim.common import regex
 from gajim.common.const import URIType
 from gajim.common.helpers import parse_uri as analyze_uri
 from gajim.common.helpers import validate_jid
-from gajim.common.text_helpers import jid_to_iri
+from gajim.common.text_helpers import escape_iri_query
 
 PRE = '`'
 STRONG = '*'
@@ -73,13 +73,17 @@ class BaseHyperlink(StyleObject):
     def get_markup_string(self) -> str:
         href = GLib.markup_escape_text(self.uri)
         text = GLib.markup_escape_text(self.text)
-        title = '' if href == text else f' title="{href}"'
-        return f'<a href="{href}"{title}>{text}</a>'
+        return f'<a href="{href}">{text}</a>'
 
 
 @dataclass
 class Hyperlink(BaseHyperlink):
     name: str = field(default='uri', init=False)
+
+
+@dataclass
+class Address(BaseHyperlink):
+    name: str = field(default='address', init=False)
 
 
 @dataclass
@@ -406,12 +410,12 @@ def _make_hyperlink(line: str,
 
     uri = text
     if is_jid:
-        cls_ = XMPPAddress
+        cls_ = Address
         try:
             validate_jid(text)
         except ValueError:
             return None
-        uri = jid_to_iri(text)
+        uri = 'about:ambiguous-address?' + escape_iri_query(text)
 
     else:
         uri = text
