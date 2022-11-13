@@ -377,6 +377,13 @@ def _tel_uri_context_menu(uri: URI, account: str) -> UriMenuItemsT:
     ]
 
 
+def _other_uri_context_menu(uri: URI, account: str) -> UriMenuItemsT:
+    return [
+        ('copy-text', [uri.source], _('Copy Link Location')),
+        ('open-link', [account, uri.source], _('Open Link')),
+    ]
+
+
 _uri_context_menus: dict[URIType, UriMenuBuilderT] = {
     URIType.XMPP: _xmpp_uri_context_menu,
     URIType.MAIL: _mailto_uri_context_menu,
@@ -385,6 +392,7 @@ _uri_context_menus: dict[URIType, UriMenuBuilderT] = {
     URIType.FILE: _file_uri_context_menu,
     URIType.AT: _ambiguous_addr_context_menu,
     URIType.TEL: _tel_uri_context_menu,
+    URIType.OTHER: _other_uri_context_menu,
 }
 
 

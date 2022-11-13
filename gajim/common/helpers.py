@@ -1019,7 +1019,7 @@ def parse_uri(uri: str) -> URI:
             data['error'] = str(err)
             return URI(URIType.INVALID, uri, data=data)
 
-    return URI(URIType.WEB, uri)
+    return URI(URIType.OTHER, uri)
 
 
 def _handle_message_qtype(
@@ -1048,7 +1048,7 @@ def open_uri(uri: Union[URI, str], account: Optional[str] = None) -> None:
         else:
             log.info('Blocked opening a file URI, see %s option', opt_name)
 
-    elif uri.type in (URIType.MAIL, URIType.TEL, URIType.WEB):
+    elif uri.type in (URIType.MAIL, URIType.TEL, URIType.WEB, URIType.OTHER):
         open_uri_externally(uri.source)
 
     elif uri.type == URIType.GEO:

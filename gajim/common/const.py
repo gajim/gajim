@@ -224,6 +224,7 @@ class URIType(Enum):
     FILE = 'file'
     AT = 'at'
     TEL = 'tel'
+    OTHER = 'other'
 
 
 # https://xmpp.org/registrar/querytypes.html
