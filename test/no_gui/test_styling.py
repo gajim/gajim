@@ -530,41 +530,32 @@ class Test(unittest.TestCase):
         for uri in URIS:
             text = self.wrap(uri)
             hlinks = process_uris(text)
-            self.assertEqual(len(hlinks), 1, text)
-            self.assertEqual(hlinks[0].uri, uri, text)
+            self.assertEqual([l.uri for l in hlinks], [uri], text)
 
     def test_invalid_uris(self):
         for foo in NONURIS + UNACCEPTABLE_URIS:
             text = self.wrap(foo)
             hlinks = process_uris(text)
-            if len(hlinks) == 0:
-                continue
-            self.assertEqual(len(hlinks), 1, text)
-            self.assertNotEqual(hlinks[0].text, foo, text)
+            self.assertEqual([l.text for l in hlinks], [], text)
 
     def test_jids(self):
         for jid in JIDS:
             text = self.wrap(jid)
+            uri = jid_to_iri(jid)
             hlinks = process_uris(text)
-            self.assertEqual(len(hlinks), 1, text)
-            self.assertEqual(hlinks[0].text, jid, text)
-            self.assertEqual(hlinks[0].uri, jid_to_iri(jid), text)
+            self.assertEqual([(l.text, l.uri) for l in hlinks],
+                             [(jid, uri)], text)
 
     def test_nonjids(self):
         for foo in NONJIDS:
             text = self.wrap(foo)
             hlinks = process_uris(text)
-            if len(hlinks) == 0:
-                continue
-            self.assertEqual(len(hlinks), 1, text)
-            self.assertNotEqual(hlinks[0].text, foo, text)
+            self.assertEqual([l.text for l in hlinks], [], text)
 
     def test_uris_with_text(self):
-        for text, result in URIS_WITH_TEXT:
+        for text, results in URIS_WITH_TEXT:
             hlinks = process_uris(text)
-            self.assertEqual(len(hlinks), len(result), text)
-            for i, res in enumerate(result):
-                self.assertEqual(hlinks[i].text, res, text)
+            self.assertEqual([l.text for l in hlinks], results, text)
 
 
 if __name__ == "__main__":
