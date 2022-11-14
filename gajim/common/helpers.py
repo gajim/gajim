@@ -87,6 +87,7 @@ import precis_i18n.codec  # noqa: F401
 
 from gajim.common import app
 from gajim.common import configpaths
+from gajim.common import iana
 from gajim.common.i18n import Q_
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
@@ -922,6 +923,12 @@ def catch_exceptions(func):
     return func_wrapper
 
 
+def is_registered_uri_scheme(scheme: str) -> bool:
+    if scheme in iana.URI_SCHEMES:
+        return True
+    return scheme in app.settings.get('additional_uri_schemes').split()
+
+
 def parse_xmpp_uri_query(pct_iquerycomp: str) -> tuple[str, dict[str, str]]:
     '''
     Parses 'mess%61ge;b%6Fdy=Hello%20%F0%9F%8C%90%EF%B8%8F' into
@@ -958,6 +965,9 @@ def parse_uri(uri: str) -> URI:
         return URI(URIType.INVALID, uri, data={'error': 'Relative URI'})
 
     scheme = urlparts.scheme  # urlparse is expected to return it in lower case
+
+    if not is_registered_uri_scheme(scheme):
+        return URI(URIType.INVALID, uri, data={'error': 'Unregistered scheme'})
 
     if scheme in ('https', 'http'):
         if not urlparts.netloc:

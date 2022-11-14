@@ -36,6 +36,7 @@ HAS_ACCOUNT_DEFAULT = _ACCOUNT_DEFAULT()
 
 
 BoolSettings = Literal[
+    'additional_uri_schemes',
     'allow_open_file_uris',
     'always_english_wikipedia',
     'always_english_wiktionary',
@@ -164,6 +165,7 @@ AllSettings = Literal[BoolSettings, IntSettings, StringSettings]
 AllSettingsT = Union[str, int, bool, list[str]]
 
 APP_SETTINGS = {
+    'additional_uri_schemes': '',
     'allow_open_file_uris': False,
     'always_english_wikipedia': False,
     'always_english_wiktionary': True,
@@ -628,6 +630,9 @@ DEFAULT_SOUNDEVENT_SETTINGS = {
 
 ADVANCED_SETTINGS = {
     'app': {
+        'additional_uri_schemes': _(
+            'Clickable schemes in addition to the hard-coded list of '
+            'IANA-registered ones. Space-separated, lower-case, no colons.'),
         'allow_open_file_uris': _('Allows opening file:/ URIs when clicked.'),
         'always_english_wikipedia': '',
         'always_english_wiktionary': '',

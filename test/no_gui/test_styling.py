@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import MagicMock
 
 from gajim import gui
 gui.init('gtk')
@@ -15,6 +16,10 @@ from gajim.common.styling import StrikeSpan
 from gajim.common.styling import Hyperlink
 from gajim.common.styling import process_uris
 from gajim.common.text_helpers import jid_to_iri
+
+
+app.settings = MagicMock()
+app.settings.get.return_value = 'a a- a. scheme'  # additional_uri_schemes
 
 
 STYLING = {
@@ -427,6 +432,8 @@ UNACCEPTABLE_URIS = [
     'file:a',
     'file:a/',
     'file:a/b',
+
+    'mailtomailto:foo@bar.com.uk',
 ]
 
 
@@ -495,8 +502,6 @@ NONJIDS = [
 URIS_WITH_TEXT = [
     ('write to my email mailto:foo@bar.com.uk (but not to mailto:bar@foo.com)',
      ['mailto:foo@bar.com.uk', 'mailto:bar@foo.com']),
-    ('write to my email mailtomailto:foo@bar.com.uk (but not to mailto:bar@foo.com)',
-     ['mailtomailto:foo@bar.com.uk', 'mailto:bar@foo.com']),
     ('see this http://userid@example.com/ link', ['http://userid@example.com/']),
     ('see this http://userid@example.com/, and ..', ['http://userid@example.com/']),
     ('<http://userid@example.com/>', ['http://userid@example.com/']),
