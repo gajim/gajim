@@ -185,6 +185,7 @@ class ChatPage(Gtk.Box):
                                                   'name')
         self._ui.workspace_label.set_text(name)
         self._ui.search_entry.set_text('')
+        self._ui.chat_list_scrolled.get_vadjustment().set_value(0)
 
     def add_chat_list(self, workspace_id: str) -> None:
         self._chat_list_stack.add_chat_list(workspace_id)
