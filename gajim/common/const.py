@@ -923,7 +923,8 @@ COMMON_FEATURES = [
     Namespace.JINGLE_IBB,
     Namespace.AVATAR_METADATA + '+notify',
     Namespace.MESSAGE_MODERATE,
-    Namespace.OMEMO_TEMP_DL + '+notify'
+    Namespace.OMEMO_TEMP_DL + '+notify',
+    Namespace.REACTIONS,
 ]
 
 

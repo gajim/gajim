@@ -38,6 +38,7 @@ from collections.abc import KeysView
 from nbxmpp import JID
 from nbxmpp.structs import CommonError
 from nbxmpp.structs import MessageProperties
+from nbxmpp.structs import Reactions as ReactionStruct
 
 from gajim.common import app
 from gajim.common import configpaths
@@ -1309,6 +1310,35 @@ class MessageArchiveStorage(SqliteStorage):
             '''
         self._con.execute(sql, (state_int, account_id, jid_id, message_id))
         self._delayed_commit()
+
+    @timeit
+    def update_reactions(self,
+                         account: str,
+                         jid: JID,
+                         occupant_id: str,
+                         timestamp: float,
+                         reactions: ReactionStruct
+                         ) -> None:
+
+        # TODO:
+        # get message by account, jid, message_id;
+        # get reactions column content, parse it;
+        # update content, store it
+        # message_id = reactions.id
+        # emojis = reactions.emojis
+
+        # Possible structure
+        # test = {
+        #     '🤘️': [
+        #         {
+        #             'jid': 'test@example.net',
+        #             'occupant_id': 'asda-sdas-asda-asdf',
+        #             'timestamp': 123456678.123145,
+        #         },
+        #     ],
+        # }
+
+        pass
 
     @timeit
     def get_archive_infos(self, jid: str) -> LastArchiveMessageRow | None:
