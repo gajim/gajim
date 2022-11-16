@@ -864,6 +864,10 @@ class GroupchatParticipant(CommonContact):
         return self._module('Contacts').get_bare_contact(self.jid.bare)
 
     @property
+    def muc_context(self) -> Optional[str]:
+        return self.room.muc_context
+
+    @property
     def presence(self) -> MUCPresenceData:
         return self._presence
 

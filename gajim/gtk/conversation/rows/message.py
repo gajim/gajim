@@ -45,6 +45,7 @@ from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
 from gajim.common.i18n import is_rtl_text
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.types import ChatContactT
 
 from .base import BaseRow
@@ -121,7 +122,8 @@ class MessageRow(BaseRow):
 
         if is_previewable:
             muc_context = None
-            if isinstance(self._contact, GroupchatContact):
+            if isinstance(self._contact,
+                          (GroupchatContact, GroupchatParticipant)):
                 muc_context = self._contact.muc_context
             self._message_widget = PreviewWidget(account)
             app.preview_manager.create_preview(
