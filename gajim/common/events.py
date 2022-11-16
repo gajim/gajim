@@ -309,6 +309,14 @@ class DisplayedReceived(ApplicationEvent):
 
 
 @dataclass
+class ReactionReceived(ApplicationEvent):
+    name: str = field(init=False, default='reaction-received')
+    account: str
+    jid: JID
+    reaction_id: str
+
+
+@dataclass
 class HttpAuth(ApplicationEvent):
     name: str = field(init=False, default='http-auth')
     client: 'Client'

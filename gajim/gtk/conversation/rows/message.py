@@ -32,6 +32,7 @@ from gajim.common.storage.archive.models import Message
 from gajim.common.types import ChatContactT
 
 from gajim.gtk.conversation.message_widget import MessageWidget
+from gajim.gtk.conversation.reactions_bar import ReactionsBar
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import AvatarBox
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
@@ -195,6 +196,16 @@ class MessageRow(BaseRow):
         if message.moderation is not None:
             self.set_retracted(get_retraction_text(
                 message.moderation.by, message.moderation.reason))
+
+        # Reactions
+        if self._contact.is_groupchat:
+            reaction_id = self.stanza_id
+        else:
+            reaction_id = self.message_id
+        if reaction_id is not None:
+            self._reactions_bar = ReactionsBar(
+                self._contact, reaction_id, False)
+            self.grid.attach(self._reactions_bar, 1, 2, 1, 1)
 
         encryption_data = self._get_encryption_data(message.encryption)
         if encryption_data is not None:

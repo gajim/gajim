@@ -869,6 +869,7 @@ COMMON_FEATURES = [
     Namespace.REPLY,
     Namespace.OMEMO_TEMP_DL + '+notify',
     Namespace.STYLING,
+    Namespace.REACTIONS,
 ]
 
 

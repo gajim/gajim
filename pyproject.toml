@@ -142,6 +142,7 @@ include = [
     "gajim/common/logging_helpers.py",
     "gajim/common/modules/chat_markers.py",
     "gajim/common/modules/pep.py",
+    "gajim/common/modules/reactions.py",
     "gajim/common/modules/register.py",
     "gajim/common/modules/vcard4.py",
     "gajim/common/modules/vcard_temp.py",
