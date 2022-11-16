@@ -411,7 +411,7 @@ class ResultRow(Gtk.ListBoxRow):
         self.contact = self._client.get_module('Contacts').get_contact(
             jid, groupchat=self.type == 'groupchat')
 
-        self.get_style_context().add_class('conversation-row')
+        self.get_style_context().add_class('search-view-row')
         self._ui = get_builder('search_view.ui')
         self.add(self._ui.result_row_grid)
 
