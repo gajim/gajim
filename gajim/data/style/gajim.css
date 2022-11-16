@@ -523,6 +523,8 @@ infobar.error > revealer > box {
 .conversation-row {
     padding: 10px 3px 4px 6px;
     border-radius: 4px;
+    margin-left: 8px;
+    margin-right: 2px;
 }
 .conversation-row:hover button {
     opacity: 1;
