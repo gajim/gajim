@@ -124,6 +124,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
 
         self.set_transition_type(transition)
         self.set_reveal_child(not hide_roster)
+        self.set_visible(not hide_roster)
 
     def _on_reveal(self, revealer: Gtk.Revealer, param: Any) -> None:
         if revealer.get_reveal_child():
