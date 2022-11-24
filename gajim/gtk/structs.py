@@ -21,7 +21,9 @@ import sys
 import inspect
 import functools
 from dataclasses import dataclass
-from gi.repository import GLib, Gio
+
+from gi.repository import Gio
+from gi.repository import GLib
 
 from nbxmpp.protocol import JID
 
@@ -64,6 +66,13 @@ class ChatListEntryParam(VariantMixin):
 class AccountJidParam(VariantMixin):
     account: str
     jid: JID
+
+
+@dataclass
+class RetractMessageParam(VariantMixin):
+    account: str
+    jid: JID
+    stanza_id: str
 
 
 def get_params_class(func: Callable[..., Any]) -> Any:

@@ -54,6 +54,7 @@ from .const import MAIN_WIN_ACTIONS
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
 from .dialogs import ConfirmationCheckDialog
+from .dialogs import InputDialog
 from .builder import get_builder
 from .util import get_app_window
 from .util import resize_window
@@ -65,6 +66,7 @@ from .structs import AccountJidParam
 from .structs import AddChatActionParams
 from .structs import actionmethod
 from .structs import ChatListEntryParam
+from .structs import RetractMessageParam
 
 if TYPE_CHECKING:
     from .control import ChatControl
@@ -401,6 +403,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('switch-workspace-8', self._on_action),
             ('switch-workspace-9', self._on_action),
             ('toggle-chat-list', self._on_action),
+            ('copy-message', self._on_copy_message),
+            ('retract-message', self._on_retract_message),
             ('add-workspace', self._add_workspace),
             ('edit-workspace', self._edit_workspace),
             ('remove-workspace', self._remove_workspace),
@@ -509,6 +513,36 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 self._ui.toggle_chat_list_icon.set_from_icon_name(
                     'go-previous-symbolic', Gtk.IconSize.BUTTON)
         self._chat_page.toggle_chat_list()
+
+    def _on_copy_message(self,
+                         _action: Gio.SimpleAction,
+                         param: GLib.Variant
+                         ) -> None:
+
+        clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        clip.set_text(param.get_string(), -1)
+
+    @actionmethod
+    def _on_retract_message(self,
+                            _action: Gio.SimpleAction,
+                            params: RetractMessageParam
+                            ) -> None:
+
+        def _on_retract(reason: str) -> None:
+            client = app.get_client(params.account)
+            client.get_module('MUC').retract_message(
+                params.jid, params.stanza_id, reason or None)
+
+        InputDialog(
+            _('Retract Message'),
+            _('Retract message?'),
+            _('Why do you want to retract this message?'),
+            [DialogButton.make('Cancel'),
+             DialogButton.make('Remove',
+                               text=_('_Retract'),
+                               callback=_on_retract)],
+            input_str=_('Spam'),
+            transient_for=app.window).show()
 
     def _on_window_motion_notify(self,
                                  _widget: Gtk.ApplicationWindow,

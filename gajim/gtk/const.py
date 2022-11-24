@@ -194,6 +194,8 @@ MAIN_WIN_ACTIONS = [
     ('show-emoji-chooser', None, True),
     ('activate-message-selection', 'u', True),
     ('correct-message', None, False),
+    ('copy-message', 's', True),
+    ('retract-message', 'a{sv}', False),
     ('quote', 's', False),
     ('mention', 's', False),
     ('send-file-httpupload', None, False),

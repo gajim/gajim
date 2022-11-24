@@ -21,6 +21,7 @@ from typing import cast
 from typing import Optional
 from typing import Union
 
+from datetime import datetime
 import textwrap
 from urllib.parse import quote
 
@@ -32,10 +33,13 @@ from nbxmpp import JID
 
 from gajim.common import app
 from gajim.common import types
+from gajim.common.helpers import from_one_line
 from gajim.common.helpers import is_affiliation_change_allowed
+from gajim.common.helpers import is_retraction_allowed
 from gajim.common.helpers import is_role_change_allowed
 from gajim.common.helpers import jid_is_blocked
 from gajim.common.i18n import _
+from gajim.common.i18n import Q_
 from gajim.common.i18n import get_short_lang_code
 from gajim.common.const import URIType
 from gajim.common.const import XmppUriQuery
@@ -48,6 +52,7 @@ from gajim.gui.structs import AddChatActionParams
 from gajim.gui.structs import AccountJidParam
 from gajim.gui.structs import ChatListEntryParam
 from gajim.gui.structs import RemoveHistoryActionParams
+from gajim.gui.structs import RetractMessageParam
 from gajim.gui.util import GajimMenu
 
 
@@ -591,6 +596,77 @@ def get_component_search_menu(jid: Optional[str], copy_text: str) -> Gio.Menu:
         variant = GLib.Variant('s', data)
         menuitem.set_action_and_target_value(action, variant)
         menu.append_item(menuitem)
+    return menu
+
+
+def get_chat_row_menu(contact: types.ChatContactT,
+                      name: str,
+                      text: str,
+                      timestamp: datetime,
+                      message_id: Optional[str],
+                      stanza_id: Optional[str],
+                      log_line_id: Optional[int]
+                      ) -> GajimMenu:
+
+    menu_items: MenuItemListT = []
+
+    text = text.replace('"', '\\"')
+
+    time_format = from_one_line(app.settings.get('chat_timestamp_format'))
+    timestamp_formatted = timestamp.strftime(time_format)
+    copy_text = f'{timestamp_formatted} - {name}: {text}'
+    menu_items.append(
+        (Q_('?Message row action:Copy'), 'win.copy-message', f'"{copy_text}"'))
+
+    menu_items.append(
+        (Q_('?Message row action:Select Messages…'),
+         'win.activate-message-selection',
+         GLib.Variant('u', log_line_id or 0)))
+
+    show_quote = True
+    if isinstance(contact, GroupchatContact):
+        if contact.is_joined:
+            self_contact = contact.get_self()
+            assert self_contact is not None
+            show_quote = not self_contact.role.is_visitor
+        else:
+            show_quote = False
+    if show_quote:
+        menu_items.append((
+            Q_('?Message row action:Quote…'),
+            'win.quote',
+            f'"{text}"'))
+
+    show_correction = False
+    if message_id is not None:
+        show_correction = app.window.is_message_correctable(
+            contact, message_id)
+    if show_correction:
+        menu_items.append((
+            Q_('?Message row action:Correct…'), 'win.correct-message', None))
+
+    show_retract = False
+    if isinstance(contact, GroupchatContact) and contact.is_joined:
+        resource_contact = contact.get_resource(name)
+        self_contact = contact.get_self()
+        assert self_contact is not None
+        is_allowed = is_retraction_allowed(self_contact, resource_contact)
+
+        disco_info = app.storage.cache.get_last_disco_info(contact.jid)
+        assert disco_info is not None
+
+        if disco_info.has_message_moderation and is_allowed:
+            show_retract = True
+    if show_retract:
+        assert stanza_id is not None
+        param = RetractMessageParam(
+            account=contact.account,
+            jid=contact.jid,
+            stanza_id=stanza_id)
+        menu_items.append((
+            Q_('?Message row action:Retract…'), 'win.retract-message', param))
+
+    menu = GajimMenu.from_list(menu_items)
     return menu
 
 

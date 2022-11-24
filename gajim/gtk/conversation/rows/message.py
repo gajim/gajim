@@ -21,7 +21,6 @@ from datetime import datetime
 from datetime import timedelta
 import textwrap
 
-from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -38,7 +37,6 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import Trust
 from gajim.common.const import TRUST_SYMBOL_DATA
 from gajim.common.helpers import AdditionalDataDict
-from gajim.common.helpers import from_one_line
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import message_needs_highlight
 from gajim.common.helpers import to_user_string
@@ -55,8 +53,6 @@ from .widgets import NicknameLabel
 from .widgets import MessageIcons
 from .widgets import MoreMenuButton
 from ..message_widget import MessageWidget
-from ...dialogs import InputDialog
-from ...dialogs import DialogButton
 from ...preview import PreviewWidget
 from ...util import format_fingerprint
 
@@ -313,37 +309,6 @@ class MessageRow(BaseRow):
 
     def get_text(self) -> str:
         return self._message_widget.get_text()
-
-    def on_copy_message(self, _widget: Gtk.Widget) -> None:
-        time_format = from_one_line(app.settings.get('chat_timestamp_format'))
-        timestamp_formatted = self.timestamp.strftime(time_format)
-
-        clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        text = self.get_text()
-        clip.set_text(f'{timestamp_formatted} - {self.name}: {text}', -1)
-
-    def on_quote_message(self, _widget: Gtk.Widget) -> None:
-        app.window.activate_action(
-            'quote', GLib.Variant('s', self.get_text()))
-
-    def on_correct_message(self, _widget: Gtk.Widget) -> None:
-        app.window.activate_action('correct-message', None)
-
-    def on_retract_message(self, _widget: Gtk.Widget) -> None:
-        def _on_retract(reason: str) -> None:
-            self._client.get_module('MUC').retract_message(
-                self._contact.jid, self.stanza_id, reason or None)
-
-        InputDialog(
-            _('Retract Message'),
-            _('Retract message?'),
-            _('Why do you want to retract this message?'),
-            [DialogButton.make('Cancel'),
-             DialogButton.make('Remove',
-                               text=_('_Retract'),
-                               callback=_on_retract)],
-            input_str=_('Spam'),
-            transient_for=app.window).show()
 
     def _get_encryption_image(self,
                               additional_data: AdditionalDataDict,
