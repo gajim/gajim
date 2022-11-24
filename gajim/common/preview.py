@@ -20,6 +20,7 @@ import os
 from pathlib import Path
 from urllib.parse import urlparse
 from urllib.parse import ParseResult
+import uuid
 
 from gi.repository import Gio
 from gi.repository import GLib
@@ -64,6 +65,8 @@ class Preview:
                  from_us: bool = False,
                  context: Optional[str] = None
                  ) -> None:
+
+        self.id = str(uuid.uuid4())
         self._uri = uri
         self._urlparts = urlparts
         self._filename = filename_from_uri(uri)
@@ -194,11 +197,19 @@ class PreviewManager:
         self._orig_dir = Path(configpaths.get('MY_DATA')) / 'downloads'
         self._thumb_dir = Path(configpaths.get('MY_CACHE')) / 'downloads.thumb'
 
+        self._previews: dict[str, Preview] = {}
+
         if GLib.mkdir_with_parents(str(self._orig_dir), 0o700) != 0:
             log.error('Failed to create: %s', self._orig_dir)
 
         if GLib.mkdir_with_parents(str(self._thumb_dir), 0o700) != 0:
             log.error('Failed to create: %s', self._thumb_dir)
+
+    def get_preview(self, preview_id: str) -> Optional[Preview]:
+        return self._previews.get(preview_id)
+
+    def clear_previews(self) -> None:
+        self._previews.clear()
 
     def _get_session(self, account: str) -> Soup.Session:
         if account not in self._sessions:
@@ -300,9 +311,11 @@ class PreviewManager:
         if uri.startswith('geo:'):
             preview = Preview(uri, None, None, None, 96, widget)
             preview.update_widget()
+            self._previews[preview.id] = preview
             return
 
         preview = self._process_web_uri(uri, widget, from_us, context)
+        self._previews[preview.id] = preview
 
         if not preview.orig_exists:
             if context is not None and not from_us:

@@ -19,6 +19,9 @@ from typing import Optional
 from typing import TYPE_CHECKING
 
 import logging
+import os
+from pathlib import Path
+import shutil
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -37,6 +40,8 @@ from gajim.common.const import Display
 from gajim.common.const import SimpleClientState
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
+from gajim.common.helpers import open_file
+from gajim.common.helpers import open_uri
 from gajim.common.helpers import play_sound
 from gajim.common.modules.bytestream import is_transfer_active
 from gajim.common.modules.contacts import GroupchatContact
@@ -55,8 +60,10 @@ from .const import MAIN_WIN_ACTIONS
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
 from .dialogs import ConfirmationCheckDialog
+from .dialogs import ErrorDialog
 from .dialogs import InputDialog
 from .builder import get_builder
+from .filechoosers import FileSaveDialog
 from .util import get_app_window
 from .util import resize_window
 from .util import restore_main_window_position
@@ -404,6 +411,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('switch-workspace-8', self._on_action),
             ('switch-workspace-9', self._on_action),
             ('toggle-chat-list', self._on_action),
+            ('preview-download', self._on_preview_action),
+            ('preview-open', self._on_preview_action),
+            ('preview-save-as', self._on_preview_action),
+            ('preview-open-folder', self._on_preview_action),
+            ('preview-copy-link', self._on_preview_action),
+            ('preview-open-link', self._on_preview_action),
             ('copy-message', self._on_copy_message),
             ('retract-message', self._on_retract_message),
             ('add-workspace', self._add_workspace),
@@ -484,6 +497,91 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self._toggle_chat_list()
 
         return None
+
+    def _on_preview_action(self,
+                           action: Gio.SimpleAction,
+                           param: GLib.Variant
+                           ) -> None:
+
+        action_name = action.get_name()
+        preview = app.preview_manager.get_preview(param.get_string())
+        if preview is None:
+            return
+
+        if action_name == 'preview-download':
+            if not preview.orig_exists:
+                app.preview_manager.download_content(preview, force=True)
+
+        elif action_name == 'preview-open':
+            if preview.is_geo_uri:
+                open_uri(preview.uri)
+                return
+
+            if not preview.orig_exists:
+                app.preview_manager.download_content(preview, force=True)
+                return
+
+            assert preview.orig_path is not None
+            open_file(preview.orig_path)
+
+        elif action_name == 'preview-save-as':
+            def _on_ok(target: str) -> None:
+                assert preview is not None
+                assert preview.orig_path is not None
+
+                target_path = Path(target)
+                orig_ext = preview.orig_path.suffix
+                new_ext = target_path.suffix
+                if orig_ext != new_ext:
+                    # Windows file chooser selects the full file name including
+                    # extension. Starting to type will overwrite the extension
+                    # as well. Restore the extension if it's lost.
+                    target_path = target_path.with_suffix(orig_ext)
+                dirname = target_path.parent
+                if not os.access(dirname, os.W_OK):
+                    ErrorDialog(
+                        _('Directory "%s" is not writable') % dirname,
+                        _('You do not have the proper permissions to '
+                          'create files in this directory.'),
+                        transient_for=self)
+                    return
+
+                shutil.copyfile(preview.orig_path, target_path)
+                app.settings.set('last_save_dir', str(target_path.parent))
+
+            if not preview.orig_exists:
+                app.preview_manager.download_content(preview, force=True)
+                return
+
+            FileSaveDialog(_on_ok,
+                           path=app.settings.get('last_save_dir'),
+                           file_name=preview.filename,
+                           transient_for=self)
+
+        elif action_name == 'preview-open-folder':
+            if not preview.orig_exists:
+                app.preview_manager.download_content(preview, force=True)
+                return
+
+            assert preview.orig_path is not None
+            open_file(preview.orig_path.parent)
+
+        elif action_name == 'preview-copy-link':
+            display = Gdk.Display.get_default()
+            assert display is not None
+            clipboard = Gtk.Clipboard.get_default(display)
+            clipboard.set_text(preview.uri, -1)
+
+        elif action_name == 'preview-open-link':
+            if preview.is_aes_encrypted:
+                if preview.is_geo_uri:
+                    open_uri(preview.uri)
+                    return
+
+                assert preview.orig_path
+                open_file(preview.orig_path)
+            else:
+                open_uri(preview.uri)
 
     def _on_show_offline(self,
                          action: Gio.SimpleAction,

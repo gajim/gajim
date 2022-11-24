@@ -253,6 +253,12 @@ MAIN_WIN_ACTIONS = [
     ('add-chat', 'a{sv}', True),
     ('add-group-chat', 'as', True),
     ('add-to-roster', 'a{sv}', True),
+    ('preview-open', 's', True),
+    ('preview-save-as', 's', True),
+    ('preview-open-folder', 's', True),
+    ('preview-copy-link', 's', True),
+    ('preview-open-link', 's', True),
+    ('preview-download', 's', True),
 ]
 
 

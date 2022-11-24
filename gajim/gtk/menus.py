@@ -43,6 +43,7 @@ from gajim.common.i18n import Q_
 from gajim.common.i18n import get_short_lang_code
 from gajim.common.const import URIType
 from gajim.common.const import XmppUriQuery
+from gajim.common.preview import Preview
 from gajim.common.structs import URI
 from gajim.common.structs import VariantMixin
 from gajim.common.modules.contacts import GroupchatContact
@@ -668,6 +669,39 @@ def get_chat_row_menu(contact: types.ChatContactT,
 
     menu = GajimMenu.from_list(menu_items)
     return menu
+
+
+def get_preview_menu(preview: Preview) -> GajimMenu:
+    menu_items: MenuItemListT = []
+
+    variant = GLib.Variant('s', preview.id)
+
+    download = (_('_Download'), 'win.preview-download', variant)
+    open = (_('_Open'), 'win.preview-open', variant)
+    save_as = (_('_Save as'), 'win.preview-save-as', variant)
+    open_folder = (_('Open _Folder'), 'win.preview-open-folder', variant)
+    copy_link = (_('_Copy Link'), 'win.preview-copy-link', variant)
+    open_link = (_('Open Link in _Browser'), 'win.preview-open-link', variant)
+
+    if preview.is_geo_uri:
+        menu_items.append(open)
+        menu_items.append(copy_link)
+        return GajimMenu.from_list(menu_items)
+
+    if preview.orig_exists:
+        menu_items.append(open)
+        menu_items.append(save_as)
+        menu_items.append(open_folder)
+    else:
+        if not preview.download_in_progress:
+            menu_items.append(download)
+
+    menu_items.append(copy_link)
+
+    if not preview.is_aes_encrypted:
+        menu_items.append(open_link)
+
+    return GajimMenu.from_list(menu_items)
 
 
 def get_format_menu() -> GajimMenu:
