@@ -359,6 +359,17 @@ class Settings:
 
             self._set_user_version(3)
 
+        if version < 4:
+            value = self._settings['app'].get('chat_timestamp_format')
+            if value is not None:
+                self._settings['app']['time_format'] = value
+
+            value = self._settings['app'].get('date_timestamp_format')
+            if value is not None:
+                self._settings['app']['date_format'] = value
+
+            self._set_user_version(4)
+
     def _migrate_old_config(self) -> None:
         config_file = configpaths.get('CONFIG_FILE')
         if not config_file.exists():

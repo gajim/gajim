@@ -93,9 +93,9 @@ class DateTimeLabel(Gtk.Label):
     def __init__(self, timestamp: datetime) -> None:
         Gtk.Label.__init__(self)
 
-        time_format = app.settings.get('chat_timestamp_format')
+        time_format = app.settings.get('time_format')
         if timestamp.date() < datetime.today().date():
-            date_format = app.settings.get('date_timestamp_format')
+            date_format = app.settings.get('date_format')
             time_format = f'{time_format} - {date_format}'
         timestamp_formatted = timestamp.strftime(time_format)
 

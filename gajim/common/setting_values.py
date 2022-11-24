@@ -132,9 +132,9 @@ StringSettings = Literal[
     'audio_output_device',
     'autoaway_message',
     'autoxa_message',
-    'chat_timestamp_format',
     'confirm_block',
-    'date_timestamp_format',
+    'date_format',
+    'date_time_format',
     'dictionary_url',
     'emoticons_theme',
     'gc_refer_to_nick_char',
@@ -154,6 +154,7 @@ StringSettings = Literal[
     'show_main_window_on_startup',
     'speller_language',
     'stun_server',
+    'time_format',
     'video_framerate',
     'video_input_device',
     'video_size',
@@ -180,13 +181,13 @@ APP_SETTINGS = {
     'autoxatime': 15,
     'chat_handle_position': 350,
     'chat_merge_consecutive_nickname': True,
-    'chat_timestamp_format': '%H:%M',
     'check_for_update': True,
     'confirm_block': '',
     'confirm_close_muc': True,
     'confirm_on_window_delete': True,
     'dark_theme': 2,
-    'date_timestamp_format': '%x',
+    'date_format': '%x',
+    'date_time_format': '%c',
     'dev_force_bookmark_2': False,
     'dev_use_message_label': True,
     'developer_modus': False,
@@ -268,6 +269,7 @@ APP_SETTINGS = {
     'sounds_on': True,
     'speller_language': '',
     'stun_server': '',
+    'time_format': '%H:%M',
     'trayicon_notification_on_events': True,
     'use_keyring': True,
     'use_kib_mib': False,
@@ -635,14 +637,14 @@ ADVANCED_SETTINGS = {
             'Show message meta data (avatar, nickname, timestamp) only once, '
             'if there are multiple messages from the same sender within a '
             'specific timespan.'),
-        'chat_timestamp_format': 'https://docs.python.org/3/library/time.html#time.strftime',  # noqa: E501
         'confirm_block': _(
             'Show a confirmation dialog to block a contact? Empty string '
             'means never show the dialog.'),
         'confirm_close_muc': _('Ask before closing a group chat tab/window.'),
         'confirm_on_window_delete': _(
             'Ask before quitting when Gajim’s window is closed'),
-        'date_timestamp_format': 'https://docs.python.org/3/library/time.html#time.strftime',  # noqa: E501
+        'date_format': 'https://docs.python.org/3/library/time.html#time.strftime',  # noqa: E501
+        'date_time_format': 'https://docs.python.org/3/library/time.html#time.strftime',  # noqa: E501
         'dev_force_bookmark_2': _('Force Bookmark 2 usage'),
         'dev_use_message_label': '',
         'developer_modus': '',
@@ -691,6 +693,7 @@ ADVANCED_SETTINGS = {
         'show_chatstate_in_banner': _(
             'Show chat state (e.g. "is typing…") next to your contact’s name'),
         'stun_server': _('STUN server to use when using Jingle'),
+        'time_format': 'https://docs.python.org/3/library/time.html#time.strftime',  # noqa: E501
         'trayicon_notification_on_events': _(
             'Notify of events in the notification area.'),
         'use_kib_mib': _(
