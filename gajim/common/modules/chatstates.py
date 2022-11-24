@@ -192,8 +192,8 @@ class Chatstate(BaseModule):
 
     def _on_remote_composing_timeout(self, contact: types.ContactT):
         self._log.info(
-            'Automatically switching the chat state of %s to PAUSED', contact)
-        self._remote_chatstate[contact.jid] = State.PAUSED
+            'Automatically switching the chat state of %s to ACTIVE', contact)
+        self._remote_chatstate[contact.jid] = State.ACTIVE
         contact.notify('chatstate-update')
 
     def _remove_remote_composing_timeout(self, contact: types.ContactT):
