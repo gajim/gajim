@@ -87,7 +87,7 @@ class BaseFileChooser:
             return
         try:
             pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
-                path_to_file, *self._preivew_size)
+                path_to_file, *self._preview_size)
         except GLib.Error:
             preview.clear()
             return
@@ -103,7 +103,7 @@ class BaseFileOpenDialog:
 class BaseAvatarChooserDialog:
 
     _title = _('Choose Avatar…')
-    _preivew_size = (100, 100)
+    _preview_size = (100, 100)
 
     if _require_native():
         _filters = [Filter(_('PNG files'), '*.png', True),
@@ -179,7 +179,7 @@ class GtkFileChooserDialog(Gtk.FileChooserDialog, BaseFileChooser):
     _title = ''
     _filters: list[Filter] = []
     _action = Gtk.FileChooserAction.OPEN
-    _preivew_size = (200, 200)
+    _preview_size = (200, 200)
 
     def __init__(self,
                  accept_cb: Callable[..., Any],
