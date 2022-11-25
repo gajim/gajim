@@ -147,7 +147,8 @@ class Contacts(BaseModule):
         if contact is not None:
             if not isinstance(contact, GroupchatContact):
                 raise ValueError(f'Trying to add GroupchatContact {jid}, '
-                                 f'but contact exists already as {contact}')
+                                 f'but contact already exists as {contact} '
+                                 f'(in roster: {contact.is_in_roster})')
             return contact
 
         contact = GroupchatContact(self._log, jid, self._account)
