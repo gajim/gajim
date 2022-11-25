@@ -48,7 +48,7 @@ from .settings import SettingsBox
 from .settings import SettingsDialog
 from .sidebar_switcher import SideBarSwitcher
 from .video_preview import VideoPreview
-from .preview import PREVIEW_CLICK_ACTIONS
+from .preview import PREVIEW_ACTIONS
 from .util import open_window
 from .util import get_app_window
 from .builder import get_builder
@@ -416,6 +416,12 @@ class FilePreview(PreferenceBox):
             10485760: '10 MiB',
         }
 
+        preview_actions = {}
+        for action, data in PREVIEW_ACTIONS.items():
+            if action == 'download':
+                continue
+            preview_actions[action] = data[0]
+
         settings = [
             Setting(SettingKind.SWITCH,
                     _('File Preview'),
@@ -460,7 +466,7 @@ class FilePreview(PreferenceBox):
                     'preview_leftclick_action',
                     desc=_('Action for left-clicking a preview'),
                     bind='enable_file_preview',
-                    props={'entries': PREVIEW_CLICK_ACTIONS}),
+                    props={'entries': preview_actions}),
 
             Setting(SettingKind.SWITCH,
                     _('HTTPS Verification'),
