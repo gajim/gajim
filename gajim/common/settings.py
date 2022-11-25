@@ -17,11 +17,10 @@ from typing import Callable
 from typing import Literal
 from typing import NamedTuple
 from typing import Optional
-from typing import Dict
-from typing import List
 from typing import Union
 from typing import overload
 from typing import cast
+from typing import TypedDict
 
 import sys
 import json
@@ -43,6 +42,7 @@ from gajim.common import configpaths
 from gajim.common import optparser
 from gajim.common.storage.base import Encoder
 from gajim.common.storage.base import json_decoder
+from gajim.common.setting_values import WorkspaceSettings
 from gajim.common.setting_values import APP_SETTINGS
 from gajim.common.setting_values import AllContactSettings
 from gajim.common.setting_values import AllContactSettingsT
@@ -113,9 +113,19 @@ _CallbackDict = dict[tuple[str, Optional[str], Optional[JID]],
                      list[weakref.WeakMethod[_SignalCallable]]]
 
 if app.is_flatpak():
-    OVERRIDES_PATH = Path('/app/app-overrides.json')
+    app_overrides = '/app/app-overrides.json'
 else:
-    OVERRIDES_PATH = Path('/etc/gajim/app-overrides.json')
+    app_overrides = '/etc/gajim/app-overrides.json'
+OVERRIDES_PATH = Path(app_overrides)
+
+
+class SettingsDictT(TypedDict):
+    app: dict[str, Any]
+    plugins: dict[str, dict[str, Any]]
+    workspaces: dict[str, dict[str, WorkspaceSettings]]
+    soundevents: dict[str, dict[str, Any]]
+    status_presets: dict[str, dict[str, str]]
+    proxies: dict[str, dict[str, Any]]
 
 
 class Settings:
@@ -123,9 +133,10 @@ class Settings:
         self._con = cast(sqlite3.Connection, None)
         self._commit_scheduled = None
 
-        self._settings = {}
+        self._settings: SettingsDictT = {}
         self._app_overrides: dict[str, AllSettingsT] = {}
-        self._account_settings = {}
+        self._account_settings: dict[
+            str, Union[Any, dict[str, dict[Union[JID, str], Any]]]] = {}
 
         self._callbacks: _CallbackDict = defaultdict(list)
 
@@ -326,7 +337,7 @@ class Settings:
         if version < 2:
             # Migrate open chats to new key and format
             for workspace in self._settings['workspaces'].values():
-                open_chats = []
+                open_chats: list[dict[str, Any]] = []
                 for open_chat in workspace.get('open_chats', []):
                     account, jid, type_, pinned = open_chat
                     open_chats.append({'account': account,
@@ -433,6 +444,7 @@ class Settings:
             if account is None:
                 continue
 
+            assert jid is not None
             encryption = settings.get('encryption')
             if not encryption:
                 continue
@@ -665,7 +677,7 @@ class Settings:
         except KeyError:
             return PLUGIN_SETTINGS[setting]
 
-    def get_plugins(self) -> List[str]:
+    def get_plugins(self) -> list[str]:
         return list(self._settings['plugins'].keys())
 
     def set_plugin_setting(self,
@@ -714,11 +726,11 @@ class Settings:
             (account,))
         self._commit()
 
-    def get_accounts(self) -> List[str]:
+    def get_accounts(self) -> list[str]:
         return list(self._account_settings.keys())
 
-    def get_active_accounts(self) -> List[str]:
-        active = []
+    def get_active_accounts(self) -> list[str]:
+        active: list[str] = []
         for account in self._account_settings:
             if self.get_account_setting(account, 'active'):
                 active.append(account)
@@ -1102,7 +1114,9 @@ class Settings:
         self._commit_settings('soundevents')
 
     def get_soundevent_settings(self,
-                                event_name: str) -> Dict[str, SETTING_TYPE]:
+                                event_name: str
+                                ) -> dict[str, SETTING_TYPE]:
+
         if event_name not in DEFAULT_SOUNDEVENT_SETTINGS:
             raise ValueError(f'Invalid soundevent: {event_name}')
 
@@ -1131,7 +1145,7 @@ class Settings:
 
         self._commit_settings('status_presets')
 
-    def get_status_preset_settings(self, status_preset: str) -> Dict[str, str]:
+    def get_status_preset_settings(self, status_preset: str) -> dict[str, str]:
         if status_preset not in self._settings['status_presets']:
             raise ValueError(f'Invalid status preset name: {status_preset}')
 
@@ -1140,7 +1154,7 @@ class Settings:
         settings.update(user_settings)
         return settings
 
-    def get_status_presets(self) -> List[str]:
+    def get_status_presets(self) -> list[str]:
         return list(self._settings['status_presets'].keys())
 
     def remove_status_preset(self, status_preset: str) -> None:
@@ -1170,7 +1184,7 @@ class Settings:
 
         self._commit_settings('proxies')
 
-    def get_proxy_settings(self, proxy_name: str) -> Dict[str, SETTING_TYPE]:
+    def get_proxy_settings(self, proxy_name: str) -> dict[str, SETTING_TYPE]:
         if proxy_name not in self._settings['proxies']:
             raise ValueError(f'Unknown proxy: {proxy_name}')
 
@@ -1179,7 +1193,7 @@ class Settings:
         settings.update(user_settings)
         return settings
 
-    def get_proxies(self) -> List[str]:
+    def get_proxies(self) -> list[str]:
         return list(self._settings['proxies'].keys())
 
     def add_proxy(self, proxy_name: str) -> None:
@@ -1272,10 +1286,10 @@ class Settings:
     def get_workspace_count(self) -> int:
         return len(self._settings['workspaces'].keys())
 
-    def get_workspaces(self) -> List[str]:
+    def get_workspaces(self) -> list[str]:
         workspace_order = app.settings.get_app_setting('workspace_order')
 
-        def sort_workspaces(workspace_id):
+        def sort_workspaces(workspace_id: str) -> int:
             try:
                 return workspace_order.index(workspace_id)
             except ValueError:
