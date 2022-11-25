@@ -232,8 +232,8 @@ class Discovery(BaseModule):
         if result.vcard is not None:
             avatar, avatar_sha = result.vcard.get_avatar()
             if avatar is not None:
-                if not app.interface.avatar_exists(avatar_sha):
-                    app.interface.save_avatar(avatar)
+                if not app.app.avatar_storage.avatar_exists(avatar_sha):
+                    app.app.avatar_storage.save_avatar(avatar)
 
                 app.storage.cache.set_muc(result.info.jid, 'avatar', avatar_sha)
                 app.app.avatar_storage.invalidate_cache(result.info.jid)

@@ -154,7 +154,7 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         if use_image:
             data = self._get_avatar_data()
             if data is not None:
-                self._avatar_sha = app.interface.save_avatar(data)
+                self._avatar_sha = app.app.avatar_storage.save_avatar(data)
 
         if self._workspace_id is not None:
             app.settings.set_workspace_setting(

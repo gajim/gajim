@@ -66,11 +66,12 @@ class UserAvatar(BaseModule):
 
         sha = contact.avatar_sha
         if sha is not None:
-            if sha in metadata.avatar_shas and app.interface.avatar_exists(sha):
+            if (sha in metadata.avatar_shas and
+                    app.app.avatar_storage.avatar_exists(sha)):
                 self._log.info('Avatar already known: %s %s', jid, sha)
                 return
 
-        if app.interface.avatar_exists(metadata.default):
+        if app.app.avatar_storage.avatar_exists(metadata.default):
             self._log.info('Avatar found in cache, update: %s %s',
                            jid, metadata.default)
             contact.update_avatar(metadata.default)
@@ -109,5 +110,5 @@ class UserAvatar(BaseModule):
             return
 
         self._log.info('Received Avatar: %s %s', contact.jid, avatar.sha)
-        app.interface.save_avatar(avatar.data)
+        app.app.avatar_storage.save_avatar(avatar.data)
         contact.update_avatar(avatar.sha)

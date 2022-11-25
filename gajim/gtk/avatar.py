@@ -530,6 +530,9 @@ class AvatarStorage(metaclass=Singleton):
             return None
         return path
 
+    def avatar_exists(self, filename: str) -> bool:
+        return self.get_avatar_path(filename) is not None
+
     def surface_from_filename(self,
                               filename: str,
                               size: int,

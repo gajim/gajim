@@ -34,7 +34,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import sys
 import time
@@ -213,12 +212,6 @@ class Interface:
                 GLib.timeout_add(timeout, self.process_connections)
             raise
         return True  # renew timeout (loop for ever)
-
-    def save_avatar(self, data: bytes) -> Optional[str]:
-        return app.app.avatar_storage.save_avatar(data)
-
-    def avatar_exists(self, filename: str) -> bool:
-        return app.app.avatar_storage.get_avatar_path(filename) is not None
 
     def run(self, _application: Gtk.Application) -> None:
         # get instances for windows/dialogs that will show_all()/hide()

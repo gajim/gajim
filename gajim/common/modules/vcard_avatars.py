@@ -95,7 +95,7 @@ class VCardAvatars(BaseModule):
             return
 
         self._log.info('Received: %s %s', contact.jid, avatar_sha)
-        app.interface.save_avatar(avatar)
+        app.app.avatar_storage.save_avatar(avatar)
 
         if isinstance(contact, BareContact):
             app.storage.cache.set_contact(contact.jid, 'avatar', avatar_sha)
@@ -173,7 +173,7 @@ class VCardAvatars(BaseModule):
                 self._log.info('Avatar already known: %s %s', jid, avatar_sha)
                 return
 
-            if app.interface.avatar_exists(avatar_sha):
+            if app.app.avatar_storage.avatar_exists(avatar_sha):
                 # Check if the avatar is already in storage
                 self._log.info('Found avatar in storage')
                 if groupchat:
@@ -214,7 +214,7 @@ class VCardAvatars(BaseModule):
 
         else:
             self._log.info('Update: %s %s', nick, properties.avatar_sha)
-            if not app.interface.avatar_exists(properties.avatar_sha):
+            if not app.app.avatar_storage.avatar_exists(properties.avatar_sha):
                 if properties.avatar_sha not in self._requested_shas:
                     app.log('avatar').info('Request: %s', nick)
                     self._requested_shas.append(properties.avatar_sha)
