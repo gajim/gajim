@@ -107,7 +107,6 @@ class ChatFunctionPage(Gtk.Box):
 
     def process_escape(self) -> None:
         close_control = self._mode in (
-            FunctionMode.JOIN_FAILED,
             FunctionMode.CREATION_FAILED,
             FunctionMode.CONFIG_FAILED,
             FunctionMode.CAPTCHA_ERROR)
@@ -342,7 +341,6 @@ class ChatFunctionPage(Gtk.Box):
             close_control = True
 
         elif self._mode in (
-                FunctionMode.JOIN_FAILED,
                 FunctionMode.CREATION_FAILED,
                 FunctionMode.CONFIG_FAILED,
                 FunctionMode.CAPTCHA_ERROR):
