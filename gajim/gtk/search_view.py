@@ -201,7 +201,7 @@ class SearchView(Gtk.Box):
                 result_row = ResultRow(
                     msg,
                     accounts[msg.account_id],
-                    archive_jid.jid)
+                    JID.from_string(archive_jid.jid))
             else:
                 assert self._account is not None
                 assert self._jid is not None
@@ -347,8 +347,7 @@ class SearchView(Gtk.Box):
                 control.scroll_to_message(row.log_line_id, row.timestamp)
                 return
 
-        # Wrong chat or no control opened
-        # TODO: type 'pm' is KindConstant.CHAT_MSG_RECV, too
+        # Other chat or no control opened
         jid = JID.from_string(row.jid)
         app.window.add_chat(row.account, jid, row.type, select=True)
         control = app.window.get_control()
@@ -407,6 +406,8 @@ class ResultRow(Gtk.ListBoxRow):
         self.type = 'contact'
         if msg.kind == KindConstant.GC_MSG:
             self.type = 'groupchat'
+        if jid.is_full:
+            self.type = 'pm'
 
         self.contact = self._client.get_module('Contacts').get_contact(
             jid, groupchat=self.type == 'groupchat')
