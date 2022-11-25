@@ -12,7 +12,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from dataclasses import dataclass, field
 from typing import Any
+from typing import Callable
 from typing import Optional
 
 import logging
@@ -53,6 +57,19 @@ PREVIEWABLE_MIME_TYPES = get_previewable_mime_types()
 mime_types = set(MIME_TYPES)
 # Merge both: if it’s a previewable image, it should be allowed
 ALLOWED_MIME_TYPES = mime_types.union(PREVIEWABLE_MIME_TYPES)
+
+AudioSampleT = list[tuple[float, float]]
+
+
+@dataclass
+class AudioPreviewState:
+    duration: float = 0.0
+    position: float = 0.0
+    is_eos: bool = False
+    speed: float = 1.0
+    is_timestamp_positive: bool = True
+    samples: AudioSampleT = field(default_factory=list)
+    is_audio_analyzed = False
 
 
 class Preview:
@@ -198,19 +215,54 @@ class PreviewManager:
         self._orig_dir = Path(configpaths.get('MY_DATA')) / 'downloads'
         self._thumb_dir = Path(configpaths.get('MY_CACHE')) / 'downloads.thumb'
 
-        self._previews: dict[str, Preview] = {}
-
         if GLib.mkdir_with_parents(str(self._orig_dir), 0o700) != 0:
             log.error('Failed to create: %s', self._orig_dir)
 
         if GLib.mkdir_with_parents(str(self._thumb_dir), 0o700) != 0:
             log.error('Failed to create: %s', self._thumb_dir)
 
+        self._previews: dict[str, Preview] = {}
+
+        # Holds active audio preview sessions
+        # for resuming after switching chats
+        self._audio_sessions: dict[int, AudioPreviewState] = {}
+
+        # References a stop function for each audio preview, which allows us
+        # to stop previews by preview_id, see stop_audio_except(preview_id)
+        self._audio_stop_functions: dict[int, Callable[..., None]] = {}
+
     def get_preview(self, preview_id: str) -> Optional[Preview]:
         return self._previews.get(preview_id)
 
     def clear_previews(self) -> None:
         self._previews.clear()
+
+    def get_audio_state(self,
+                        preview_id: int
+                        ) -> AudioPreviewState:
+
+        state = self._audio_sessions.get(preview_id)
+        if state is not None:
+            return state
+        self._audio_sessions[preview_id] = AudioPreviewState()
+        return self._audio_sessions[preview_id]
+
+    def register_audio_stop_func(self,
+                                 preview_id: int,
+                                 stop_func: Callable[..., None]
+                                 ) -> None:
+
+        self._audio_stop_functions[preview_id] = stop_func
+
+    def unregister_audio_stop_func(self, preview_id: int) -> None:
+        self._audio_stop_functions.pop(preview_id, None)
+
+    def stop_audio_except(self, preview_id: int) -> None:
+        # Stops playback of all audio previews except of for preview_id.
+        # This makes sure that only one preview is played at the time.
+        for id_, stop_func in self._audio_stop_functions.items():
+            if id_ != preview_id:
+                stop_func()
 
     def _get_session(self, account: str) -> Soup.Session:
         if account not in self._sessions:

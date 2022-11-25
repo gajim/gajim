@@ -33,6 +33,8 @@ treeview.space { padding: 6px; }
 /* GtkLinkButton style */
 button.flat.link { padding: 0; border: 0; }
 
+.tabular-digits { font-feature-settings: "tnum"; }
+
 messagedialog.confirmation-dialog > box { margin-top: 18px; }
 
 /* InfoBar */

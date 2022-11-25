@@ -125,6 +125,8 @@ include = [
     "gajim/gtk/plugins.py",
     "gajim/gtk/preview.py",
     "gajim/gtk/preview_audio.py",
+    "gajim/gtk/preview_audio_analyzer.py",
+    "gajim/gtk/preview_audio_visualizer.py",
     "gajim/gtk/proxies.py",
     "gajim/gtk/remove_account.py",
     "gajim/gtk/resource_selector.py",

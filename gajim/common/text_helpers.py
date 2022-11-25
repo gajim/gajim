@@ -36,3 +36,26 @@ def escape_iri_query(s: str) -> str:
 
 def jid_to_iri(jid: str) -> str:
     return 'xmpp:' + escape_iri_path(jid)
+
+
+def format_duration(ns: float, total_ns: float) -> str:
+    seconds = ns / 1e9
+    minutes = seconds / 60
+    hours = minutes / 60
+
+    total_minutes = total_ns / 1e9 / 60
+    total_hours = total_minutes / 60
+
+    i_seconds = int(seconds) % 60
+    i_minutes = int(minutes) % 60
+    i_hours = int(hours)
+
+    if total_hours >= 1:
+        width = len(str(int(total_hours)))
+        return (f'%0{width}d' % i_hours) + f':{i_minutes:02d}:{i_seconds:02d}'
+
+    if total_minutes >= 1:
+        width = len(str(int(total_minutes)))
+        return (f'%0{width}d' % i_minutes) + f':{i_seconds:02d}'
+
+    return f'0:{i_seconds:02d}'

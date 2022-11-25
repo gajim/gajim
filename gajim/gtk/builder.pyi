@@ -652,7 +652,6 @@ class PreferencesBuilder(Builder):
     status_message: Gtk.Grid
     automatic_status: Gtk.Grid
     themes: Gtk.Grid
-    emoji: Gtk.Grid
     av_info_bar: Gtk.InfoBar
     button1: Gtk.Button
     av_info_bar_label: Gtk.Label
@@ -685,6 +684,26 @@ class PreviewBuilder(Builder):
     file_name: Gtk.Label
     file_size: Gtk.Label
     info_message: Gtk.Label
+
+
+class PreviewAudioBuilder(Builder):
+    seek_bar_adj: Gtk.Adjustment
+    speed_bar_adj: Gtk.Adjustment
+    preview_box: Gtk.Box
+    drawing_box: Gtk.Box
+    seek_bar: Gtk.Scale
+    progress_label: Gtk.Label
+    control_box: Gtk.Box
+    rewind_button: Gtk.Button
+    play_pause_button: Gtk.Button
+    play_icon: Gtk.Image
+    forward_button: Gtk.Button
+    speed_dec_button: Gtk.Button
+    speed_menubutton: Gtk.MenuButton
+    speed_label: Gtk.Label
+    speed_inc_button: Gtk.Button
+    speed_popover: Gtk.Popover
+    speed_bar: Gtk.Scale
 
 
 class ProfileBuilder(Builder):
@@ -1010,6 +1029,8 @@ def get_builder(file_name: Literal['popup_notification_window.ui'], widgets: lis
 def get_builder(file_name: Literal['preferences.ui'], widgets: list[str] = ...) -> PreferencesBuilder: ...
 @overload
 def get_builder(file_name: Literal['preview.ui'], widgets: list[str] = ...) -> PreviewBuilder: ...
+@overload
+def get_builder(file_name: Literal['preview_audio.ui'], widgets: list[str] = ...) -> PreviewAudioBuilder: ...
 @overload
 def get_builder(file_name: Literal['profile.ui'], widgets: list[str] = ...) -> ProfileBuilder: ...
 @overload
