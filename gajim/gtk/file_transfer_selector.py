@@ -232,7 +232,7 @@ class FileTransferSelector(Gtk.Box):
         FileChooserDialog(self.add_files,
                           select_multiple=True,
                           transient_for=app.window,
-                          path=app.settings.get('last_send_dir'))
+                          path=app.settings.get('last_send_dir') or None)
 
 
 class FileRow(Gtk.ListBoxRow):
