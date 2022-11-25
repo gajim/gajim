@@ -677,19 +677,19 @@ def get_preview_menu(preview: Preview) -> GajimMenu:
     variant = GLib.Variant('s', preview.id)
 
     download = (_('_Download'), 'win.preview-download', variant)
-    open = (_('_Open'), 'win.preview-open', variant)
+    open_file = (_('_Open'), 'win.preview-open', variant)
     save_as = (_('_Save as'), 'win.preview-save-as', variant)
     open_folder = (_('Open _Folder'), 'win.preview-open-folder', variant)
     copy_link = (_('_Copy Link'), 'win.preview-copy-link', variant)
     open_link = (_('Open Link in _Browser'), 'win.preview-open-link', variant)
 
     if preview.is_geo_uri:
-        menu_items.append(open)
+        menu_items.append(open_file)
         menu_items.append(copy_link)
         return GajimMenu.from_list(menu_items)
 
     if preview.orig_exists:
-        menu_items.append(open)
+        menu_items.append(open_file)
         menu_items.append(save_as)
         menu_items.append(open_folder)
     else:
