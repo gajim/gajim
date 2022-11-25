@@ -1277,11 +1277,9 @@ def is_retraction_allowed(self_contact: types.GroupchatParticipant,
     return self_contact.affiliation >= contact.affiliation
 
 
-def get_tls_error_phrase(tls_error: Gio.TlsCertificateFlags) -> str:
-    phrase = GIO_TLS_ERRORS.get(tls_error)
-    if phrase is None:
-        return GIO_TLS_ERRORS[Gio.TlsCertificateFlags.GENERIC_ERROR]
-    return phrase
+def get_tls_error_phrases(tls_errors: set[Gio.TlsCertificateFlags]
+                          ) -> list[str]:
+    return [GIO_TLS_ERRORS[err] for err in tls_errors]
 
 
 class Observable:

@@ -25,6 +25,7 @@ import uuid
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Soup
+from nbxmpp.util import convert_tls_error_flags
 
 from gajim.common import app
 from gajim.common import configpaths
@@ -32,7 +33,7 @@ from gajim.common.const import MIME_TYPES
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import load_file_async
 from gajim.common.helpers import write_file_async
-from gajim.common.helpers import get_tls_error_phrase
+from gajim.common.helpers import get_tls_error_phrases
 from gajim.common.helpers import get_account_proxy
 from gajim.common.i18n import _
 from gajim.common.preview_helpers import aes_decrypt
@@ -442,11 +443,12 @@ class PreviewManager:
             return
 
         if tls_errors:
-            phrase = get_tls_error_phrase(tls_errors)
-            log.warning('TLS verification failed: %s', phrase)
+            phrases = get_tls_error_phrases(convert_tls_error_flags(tls_errors))
+            log.warning(
+                'TLS verification failed: %s (0x%02x)', phrases, tls_errors)
             session = self._get_session(preview.account)
             session.cancel_message(message, Soup.Status.CANCELLED)
-            preview.info_message = _('TLS verification failed: %s') % phrase
+            preview.info_message = _('TLS verification failed: %s') % phrases[0]
             preview.update_widget()
 
     def _on_content_sniffed(self,

@@ -46,7 +46,7 @@ from gajim.common import types
 from gajim.common.events import HTTPUploadError
 from gajim.common.events import HTTPUploadStarted
 from gajim.common.i18n import _
-from gajim.common.helpers import get_tls_error_phrase
+from gajim.common.helpers import get_tls_error_phrases
 from gajim.common.helpers import get_account_proxy
 from gajim.common.const import FTState
 from gajim.common.filetransfer import FileTransfer
@@ -318,16 +318,14 @@ class HTTPUpload(BaseModule):
             self._session.cancel_message(message, Soup.Status.CANCELLED)
             return
 
-        tls_errors = convert_tls_error_flags(tls_errors)
-        if app.cert_store.verify(tls_certificate, tls_errors):
+        tls_error_set = convert_tls_error_flags(tls_errors)
+        if app.cert_store.verify(tls_certificate, tls_error_set):
             return
 
-        phrase = ''
-        for error in tls_errors:
-            phrase = get_tls_error_phrase(error)
-            self._log.warning('TLS verification failed: %s', phrase)
-
-        transfer.set_error('tls-verification-failed', phrase)
+        phrases = get_tls_error_phrases(tls_error_set)
+        self._log.warning(
+            'TLS verification failed: %s (0x%02x)', phrases, tls_errors)
+        transfer.set_error('tls-verification-failed', phrases[0])
         self._session.cancel_message(message, Soup.Status.CANCELLED)
 
     def _on_finish(self,
