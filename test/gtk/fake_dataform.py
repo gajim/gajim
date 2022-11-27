@@ -1,10 +1,13 @@
+import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 from gajim import gui
 gui.init('gtk')
 
-from gajim.gui.dataform import FakeDataFormWidget
 from gajim.common.const import CSSPriority
+
+from gajim.gui.dataform import FakeDataFormWidget
 
 from test.gtk import util
 util.load_style('gajim.css', CSSPriority.APPLICATION)
@@ -45,6 +48,6 @@ class DataFormWindow(Gtk.Window):
         self.show()
 
 win = DataFormWindow()
-win.connect("destroy", Gtk.main_quit)
+win.connect('destroy', Gtk.main_quit)
 win.show_all()
 Gtk.main()

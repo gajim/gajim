@@ -1,3 +1,5 @@
+from unittest.mock import MagicMock
+
 import time
 
 import gi
@@ -8,6 +10,7 @@ from nbxmpp.protocol import Iq
 from nbxmpp.modules.discovery import parse_disco_info
 from nbxmpp.structs import MucSubject
 
+from gajim.common import app
 from gajim.common.const import CSSPriority
 
 from gajim import gui
@@ -92,6 +95,9 @@ subject = ('Lorem ipsum dolor sit amet, consetetur sadipscing elitr sed '
            'diam nonumy eirmod tempor invidunt ut labore et dolore magna')
 
 disco_info = parse_disco_info(stanza)
+
+app.css_config = MagicMock()
+app.css_config.get_value = MagicMock(return_value='rgb(100, 100, 255)')
 
 class GroupchatInfo(Gtk.ApplicationWindow):
     def __init__(self):

@@ -47,7 +47,8 @@
 
 ### Running Tests
 
-`python -m unittest discover -s test`
+- `python -m unittest discover -s test` (no_gui directory)
+- `python -m unittest ./test/gtk/gui_file.py` (gtk directory)
 
 ### Installation Procedure
 

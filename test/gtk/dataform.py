@@ -1,6 +1,11 @@
+from unittest.mock import MagicMock
+
 from base64 import b64decode
 
+import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+
 import nbxmpp
 from nbxmpp.modules.dataforms import extend_form
 
@@ -42,6 +47,8 @@ MLFTQAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwn
 TEtMDRUMjM6NTA6NDQrMDE6MDBAxMf7AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE4LTExLTA0VDIzOjUwOjQ0KzAxOjAwMZl/RwAAAABJRU5ErkJggg=='''
 
 app.bob_cache['sha1+8f35fef110ffc5df08d579a50083ff9308fb6242'] = b64decode(image)
+app.css_config = MagicMock()
+app.css_config.get_value = MagicMock(return_value='rgb(100, 100, 255)')
 
 FORM = '''
 <x xmlns='jabber:x:data' type='form'>

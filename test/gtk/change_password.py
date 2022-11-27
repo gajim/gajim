@@ -1,3 +1,5 @@
+from unittest.mock import MagicMock
+
 from functools import partial
 
 import gi
@@ -12,10 +14,14 @@ from gajim.common.const import CSSPriority
 from gajim import gui
 gui.init('gtk')
 
+from gajim.common import app
+
 from gajim.gui.change_password import ChangePassword
 
 from test.gtk import util
 util.load_style('gajim.css', CSSPriority.APPLICATION)
+
+app.get_client = MagicMock()
 
 fields = [
     create_field(typ='text-single', label='Username', var='username'),
