@@ -678,7 +678,7 @@ def get_preview_menu(preview: Preview) -> GajimMenu:
 
     download = (_('_Download'), 'win.preview-download', variant)
     open_file = (_('_Open'), 'win.preview-open', variant)
-    save_as = (_('_Save as'), 'win.preview-save-as', variant)
+    save_as = (_('_Save as…'), 'win.preview-save-as', variant)
     open_folder = (_('Open _Folder'), 'win.preview-open-folder', variant)
     copy_link = (_('_Copy Link'), 'win.preview-copy-link', variant)
     open_link = (_('Open Link in _Browser'), 'win.preview-open-link', variant)
