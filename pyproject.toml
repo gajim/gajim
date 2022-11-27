@@ -93,7 +93,7 @@ include = [
     "gajim/gtk/emoji_data_gtk.py",
     "gajim/gtk/exception.py",
     "gajim/gtk/features.py",
-    "gajim/gtk/file_transfer_send.py",
+    "gajim/gtk/file_transfer_selector.py",
     "gajim/gtk/groupchat_affiliation.py",
     "gajim/gtk/groupchat_config.py",
     "gajim/gtk/groupchat_creation.py",
