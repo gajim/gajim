@@ -1,13 +1,17 @@
-import gi
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
+from unittest.mock import MagicMock
 
-import OpenSSL
+import gi
+gi.require_version('Gio', '2.0')
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gio
+from gi.repository import Gtk
 
 from gajim import gui
 gui.init('gtk')
 
 from test.gtk import util
+
+from gajim.common import app
 from gajim.common.const import CSSPriority
 from gajim.gui.ssl_error_dialog import SSLErrorDialog
 
@@ -47,9 +51,14 @@ ejsJoYkpvcaiaLAyVymTY/n/oM2oQpv5Mqjit+18RB9c2P+ifH5iDKC/jTKn4NNz
 8xSTlUlCBTCozjzscZVeVDIojmejWclT
 -----END CERTIFICATE-----'''
 
-cert = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, cert)
+
+app.settings = MagicMock()
+app.settings.get_account_setting = MagicMock(
+    return_value=['myhost@example.tld'])
+
+gio_cert = Gio.TlsCertificate.new_from_pem(cert, -1)
 ssl_error_num = 10
-win = SSLErrorDialog('testacc', None, cert, ssl_error_num)
+win = SSLErrorDialog('testacc', None, gio_cert, ssl_error_num)
 win.connect('destroy', Gtk.main_quit)
 win.show_all()
 Gtk.main()
