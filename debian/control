@@ -14,6 +14,7 @@ Build-Depends:
     python3-nbxmpp-nightly (>=20221027),
     python3-setuptools,
     python3-packaging,
+    python3-cryptography (>=3.4.8),
     python3-pil,
     gir1.2-gtk-3.0 (>=3.24.30),
     gir1.2-gtksource-4,
