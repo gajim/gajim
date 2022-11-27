@@ -98,7 +98,7 @@ function install_deps {
         mingw-w64-"${ARCH}"-python-setuptools \
         mingw-w64-"${ARCH}"-python-pillow \
         mingw-w64-"${ARCH}"-python-setuptools-scm \
-        mingw-w64-"${ARCH}"-python-pyopenssl \
+        mingw-w64-"${ARCH}"-python-cryptography \
         mingw-w64-"${ARCH}"-python-certifi \
         mingw-w64-"${ARCH}"-python-six \
         mingw-w64-"${ARCH}"-python-pygments \

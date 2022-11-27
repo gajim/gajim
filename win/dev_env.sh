@@ -15,7 +15,6 @@ function main {
         mingw-w64-x86_64-python-setuptools-scm \
         mingw-w64-x86_64-python-cryptography \
         mingw-w64-x86_64-python-certifi \
-        mingw-w64-x86_64-python-pyopenssl \
         mingw-w64-x86_64-python-pillow \
         mingw-w64-x86_64-python-six \
         mingw-w64-x86_64-python-pygments \

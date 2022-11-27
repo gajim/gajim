@@ -7,7 +7,7 @@
 - [pycairo](https://pypi.org/project/pycairo/)
 - [cairo](https://gitlab.freedesktop.org/cairo/cairo) (>=1.16.0)
 - [nbxmpp](https://pypi.org/project/nbxmpp/) (>=3.2.5)
-- [pyOpenSSL](https://pypi.org/project/pyOpenSSL/) (>=16.2)
+- [cryptography](https://pypi.org/project/cryptography/) (>=3.4.8)
 - [css-parser](https://pypi.org/project/css-parser/)
 - [keyring](https://pypi.org/project/keyring/)
 - [precis_i18n](https://pypi.org/project/precis-i18n/)
