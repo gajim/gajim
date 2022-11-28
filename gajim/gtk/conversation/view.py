@@ -144,7 +144,7 @@ class ConversationView(Gtk.ScrolledWindow):
             'activate', self._on_scroll_view)
 
     def copy_selected_messages(self) -> None:
-        time_format = from_one_line(app.settings.get('time_format'))
+        time_format = from_one_line(app.settings.get('date_time_format'))
         selection_text = ''
         for row in cast(list[BaseRow], self._list_box.get_selected_rows()):
             if isinstance(row, MessageRow):
