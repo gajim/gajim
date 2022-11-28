@@ -687,17 +687,6 @@ class PreviewBuilder(Builder):
     info_message: Gtk.Label
 
 
-class PreviewContextMenuBuilder(Builder):
-    context_menu: Gtk.Menu
-    download: Gtk.MenuItem
-    open: Gtk.MenuItem
-    save_as: Gtk.MenuItem
-    open_folder: Gtk.MenuItem
-    encryption_separator: Gtk.SeparatorMenuItem
-    copy_link_location: Gtk.MenuItem
-    open_link_in_browser: Gtk.MenuItem
-
-
 class ProfileBuilder(Builder):
     privacy_popover: Gtk.Popover
     avatar_nick_access: Gtk.Switch
@@ -1021,8 +1010,6 @@ def get_builder(file_name: Literal['popup_notification_window.ui'], widgets: lis
 def get_builder(file_name: Literal['preferences.ui'], widgets: list[str] = ...) -> PreferencesBuilder: ...
 @overload
 def get_builder(file_name: Literal['preview.ui'], widgets: list[str] = ...) -> PreviewBuilder: ...
-@overload
-def get_builder(file_name: Literal['preview_context_menu.ui'], widgets: list[str] = ...) -> PreviewContextMenuBuilder: ...
 @overload
 def get_builder(file_name: Literal['profile.ui'], widgets: list[str] = ...) -> ProfileBuilder: ...
 @overload
