@@ -215,7 +215,9 @@ class AccountWizard(Assistant):
 
         elif button_name == 'connect':
             if page == 'success':
-                app.app.enable_account(self.get_page('success').account)
+                account = self.get_page('success').account
+                assert account is not None
+                app.app.enable_account(account)
                 self.destroy()
 
         elif button_name == 'back':
@@ -787,7 +789,7 @@ class AdvancedSettings(Page):
 
     @staticmethod
     def _on_proxy_manager(_button: Gtk.Button) -> None:
-        app.app.activate_action('manage-proxies')
+        app.app.activate_action('manage-proxies', None)
 
     def update_proxy_list(self) -> None:
         model = Gtk.ListStore(str)
@@ -1001,10 +1003,12 @@ class Form(Page):
         self._current_form.show_all()
 
     def get_credentials(self) -> tuple[str, str]:
+        assert self._current_form is not None
         return (self._current_form.get_form()['username'].value,
                 self._current_form.get_form()['password'].value)
 
     def get_submit_form(self) -> Any:
+        assert self._current_form is not None
         return self._current_form.get_submit_form()
 
     def remove_form(self) -> None:
@@ -1016,6 +1020,7 @@ class Form(Page):
         self._current_form = None
 
     def focus(self) -> None:
+        assert self._current_form is not None
         self._current_form.focus_first_entry()
 
     def get_visible_buttons(self) -> list[str]:
@@ -1093,6 +1098,7 @@ class Success(SuccessPage):
         return provider
 
     def _on_name_changed(self, entry: Gtk.Entry):
+        assert self._our_jid is not None
         self._label = entry.get_text()
         self._ui.badge_preview.set_text(self._label or self._our_jid)
         self._save_config()
@@ -1108,6 +1114,7 @@ class Success(SuccessPage):
         self._provider.load_from_data(bytes(css.encode()))
 
     def _save_config(self) -> None:
+        assert self._account is not None
         app.settings.set_account_setting(
             self._account, 'account_color', self._color)
         if self._label:
