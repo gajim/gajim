@@ -143,6 +143,7 @@
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
         <property name="tooltip-text" translatable="yes">Show a list of emojis</property>
+        <property name="action-name">win.show-emoji-chooser</property>
         <property name="relief">none</property>
         <child>
           <object class="GtkImage">

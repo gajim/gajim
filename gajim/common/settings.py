@@ -237,11 +237,6 @@ class Settings:
         if IS_PORTABLE:
             APP_SETTINGS['use_keyring'] = False
 
-        if sys.platform in ('win32', 'darwin'):
-            # Cairo does not support color emojis fonts on
-            # Windows and MacOS
-            APP_SETTINGS['dev_use_message_label'] = False
-
     def _load_app_overrides(self) -> None:
         if not OVERRIDES_PATH.exists():
             return

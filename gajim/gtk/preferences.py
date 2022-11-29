@@ -26,7 +26,6 @@ from gi.repository import Gdk
 
 from gajim.common import app
 from gajim.common import configpaths
-from gajim.common import helpers
 from gajim.common.const import THRESHOLD_OPTIONS
 from gajim.common.i18n import _
 from gajim.common.helpers import open_file
@@ -42,7 +41,6 @@ from .const import SettingKind
 from .const import SettingType
 from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
-from .emoji_chooser import emoji_chooser
 from .settings import PopoverSetting
 from .settings import SettingsBox
 from .settings import SettingsDialog
@@ -81,8 +79,6 @@ class Preferences(Gtk.ApplicationWindow):
 
         self.add(self._ui.grid)
 
-        self._check_emoji_theme()
-
         prefs: list[tuple[str, Type[PreferenceBox]]] = [
             ('window_behaviour', WindowBehaviour),
             ('plugins', Plugins),
@@ -95,7 +91,6 @@ class Preferences(Gtk.ApplicationWindow):
             ('status_message', StatusMessage),
             ('automatic_status', AutomaticStatus),
             ('themes', Themes),
-            ('emoji', Emoji),
             ('server', Server),
             ('audio', Audio),
             ('video', Video),
@@ -117,10 +112,6 @@ class Preferences(Gtk.ApplicationWindow):
         self._ui.connect_signals(self)
 
         self.show_all()
-        if sys.platform != 'darwin':
-            # TODO: Remove if colored emoji rendering works well on
-            # Windows and MacOS
-            self._ui.emoji.hide()
 
     def get_ui(self):
         return self._ui
@@ -156,14 +147,6 @@ class Preferences(Gtk.ApplicationWindow):
     def update_proxy_list(self) -> None:
         miscellaneous = cast(Miscellaneous, self._prefs['miscellaneous'])
         miscellaneous.update_proxy_list()
-
-    @staticmethod
-    def _check_emoji_theme() -> None:
-        # Ensure selected emoji theme is valid
-        emoji_themes = helpers.get_available_emoticon_themes()
-        settings_theme = app.settings.get('emoticons_theme')
-        if settings_theme not in emoji_themes:
-            app.settings.set('emoticons_theme', 'font')
 
     def _on_destroy(self, _widget: Gtk.Widget) -> None:
         self._prefs.clear()
@@ -702,42 +685,6 @@ class Themes(PreferenceBox):
     def _on_dark_theme(value: str, *args: Any) -> None:
         app.css_config.set_dark_theme(int(value))
         app.ged.raise_event(StyleChanged())
-
-
-class Emoji(PreferenceBox):
-    def __init__(self, *args: Any) -> None:
-        if sys.platform != 'darwin':
-            # TODO: Remove if colored emoji rendering works well on
-            # Windows and MacOS
-            PreferenceBox.__init__(self, [])
-            return
-
-        emoji_themes_items: list[str] = []
-        for theme in helpers.get_available_emoticon_themes():
-            emoji_themes_items.append(theme)
-
-        settings = [
-            Setting(SettingKind.POPOVER,
-                    _('Emoji Theme'),
-                    SettingType.CONFIG,
-                    'emoticons_theme',
-                    desc=_('Choose from various emoji styles'),
-                    props={'entries': emoji_themes_items},
-                    callback=self._on_emoticons_theme)
-        ]
-
-        PreferenceBox.__init__(self, settings)
-
-    def _on_emoticons_theme(self, *args: Any) -> None:
-        emoji_chooser.load()
-        self._toggle_emoticons()
-
-    @staticmethod
-    def _toggle_emoticons() -> None:
-        # TODO
-        # for ctrl in app.window.get_controls():
-        #     ctrl.toggle_emoticons()
-        pass
 
 
 class Server(PreferenceBox):

@@ -18,7 +18,6 @@ from typing import Any
 from typing import Optional
 
 import os
-import sys
 import tempfile
 import logging
 import uuid
@@ -45,7 +44,6 @@ from gajim.gui.security_label_selector import SecurityLabelSelector
 
 from .builder import get_builder
 from .dialogs import ErrorDialog
-from .emoji_chooser import emoji_chooser
 from .menus import get_encryption_menu
 from .menus import get_format_menu
 from .menus import get_groupchat_menu
@@ -97,8 +95,6 @@ class MessageActionsBox(Gtk.Grid):
         self._ui.encryption_menu_button.set_menu_model(get_encryption_menu())
 
         self._ui.quick_invite_button.set_action_name('win.muc-invite')
-
-        self._init_emoticon_popover()
 
         self.show_all()
         self._ui.connect_signals(self)
@@ -157,7 +153,7 @@ class MessageActionsBox(Gtk.Grid):
             self._on_format(action_name)
 
         elif action_name == 'show-emoji-chooser':
-            self._on_show_emoji_chooser()
+            self.msg_textview.emit('insert-emoji')
 
         elif action_name == 'quote':
             assert param
@@ -389,45 +385,12 @@ class MessageActionsBox(Gtk.Grid):
             menu = get_singlechat_menu(contact)
         self._ui.settings_menu.set_menu_model(menu)
 
-    def _init_emoticon_popover(self) -> None:
-        if not app.settings.get('emoticons_theme'):
-            return
-
-        if sys.platform == 'darwin':
-            emoji_chooser.text_widget = self.msg_textview
-            self._ui.emoticons_button.set_popover(emoji_chooser)
-            return
-
-        self._ui.emoticons_button.set_sensitive(True)
-        self._ui.emoticons_button.connect('clicked',
-                                          self._on_emoticon_button_clicked)
-
-    def toggle_emoticons(self) -> None:
-        if app.settings.get('emoticons_theme'):
-            self._ui.emoticons_button.set_no_show_all(False)
-            self._ui.emoticons_button.show()
-        else:
-            self._ui.emoticons_button.set_no_show_all(True)
-            self._ui.emoticons_button.hide()
-
-    def _on_emoticon_button_clicked(self, _widget: Gtk.Button) -> None:
-        self.msg_textview.emit('insert-emoji')
-        self._ui.emoticons_button.set_active(False)
-
     def _on_format(self, name: str) -> None:
         name = name.removeprefix('input-')
         self.msg_textview.apply_formatting(name)
 
     def _on_clear(self) -> None:
         self.msg_textview.clear()
-
-    def _on_show_emoji_chooser(self) -> None:
-        if sys.platform == 'darwin':
-            popover = self._ui.emoticons_button.get_popover()
-            assert popover
-            popover.show()
-        else:
-            self.msg_textview.emit('insert-emoji')
 
     def _on_send_file_enabled_changed(self,
                                       action: Gio.SimpleAction,

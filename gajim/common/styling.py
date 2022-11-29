@@ -19,7 +19,6 @@ from typing import Match
 from typing import Optional
 
 import string
-import sys
 import re
 from dataclasses import dataclass
 from dataclasses import field
@@ -31,7 +30,6 @@ from gajim.common.const import URIType
 from gajim.common.helpers import parse_uri as analyze_uri
 from gajim.common.helpers import validate_jid
 from gajim.common.text_helpers import jid_to_iri
-from gajim.gui.emoji_data import emoji_data
 
 PRE = '`'
 STRONG = '*'
@@ -52,9 +50,6 @@ UNQUOTE_RX = re.compile(r'^> |^>', re.M)
 
 URI_OR_JID_RX = re.compile(
     fr'(?P<uri>(?<![\w+.-]){regex.IRI})|(?P<jid>{regex.XMPP.jid})')
-
-EMOJI_RX = emoji_data.get_regex()
-EMOJI_RX = re.compile(EMOJI_RX)
 
 SD = 0
 SD_POS = 1
@@ -98,11 +93,6 @@ class MailAddress(BaseHyperlink):
 
 
 @dataclass
-class Emoji(StyleObject):
-    name: str = field(default='emoji', init=False)
-
-
-@dataclass
 class Block(StyleObject):
 
     @classmethod
@@ -117,7 +107,6 @@ class PlainBlock(Block):
     name: str = field(default='plain', init=False)
     spans: list[Span] = field(default_factory=list)
     uris: list[BaseHyperlink] = field(default_factory=list)
-    emojis: list[Emoji] = field(default_factory=list)
 
     @classmethod
     def from_quote_match(cls, match: Match[str]) -> PlainBlock:
@@ -208,10 +197,6 @@ def process(text: Union[str, bytes], level: int = 0) -> ParsingResult:
             for line in block.text.splitlines(keepends=True):
                 block.spans += _parse_line(line, offset, offset_bytes)
                 block.uris += _parse_uris(line, offset, offset_bytes)
-                if sys.platform == 'darwin':
-                    # block.emojis is used for replacing emojis with Gtk.Images
-                    # Necessary for MessageTextview (darwin) only
-                    block.emojis += _parse_emojis(line, offset)
 
                 offset += len(line)
                 offset_bytes += len(line.encode())
@@ -361,22 +346,6 @@ def _parse_uris(line: str,
     return uris
 
 
-def _parse_emojis(line: str, offset: int) -> list[Emoji]:
-    emojis: list[Emoji] = []
-
-    def make(match: Match[str]) -> Emoji:
-        return _make_emoji(line,
-                           match.start(),
-                           match.end() - 1,
-                           offset)
-
-    for match in EMOJI_RX.finditer(line):
-        emoji = make(match)
-        emojis.append(emoji)
-
-    return emojis
-
-
 def _handle_pre_span(line: str,
                      index: int,
                      offset: int,
@@ -462,18 +431,6 @@ def _make_hyperlink(line: str,
                 end_byte=end_byte,
                 uri=uri,
                 text=text)
-
-
-def _make_emoji(line: str,
-                start: int,
-                end: int,
-                offset: int) -> Emoji:
-    text = line[start:end + 1]
-    start += offset
-    end += offset + 1
-    return Emoji(start=start,
-                 end=end,
-                 text=text)
 
 
 def _is_span_empty(sd: str, index: int, stack: list[tuple[str, int]]) -> bool:

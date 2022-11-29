@@ -712,7 +712,6 @@ class ChatStack(Gtk.Stack, EventHelper):
         self._chat_control.add_info_message(message)
 
     def _on_send_message(self) -> None:
-        self._message_action_box.msg_textview.replace_emojis()
         message = self._message_action_box.msg_textview.get_text()
         if message.startswith('//'):
             # Escape sequence for chat commands

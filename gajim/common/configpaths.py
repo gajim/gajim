@@ -125,7 +125,6 @@ class ConfigPaths:
         source_paths = [
             ('DATA', basedir / 'data'),
             ('STYLE', basedir / 'data' / 'style'),
-            ('EMOTICONS', basedir / 'data' / 'emoticons'),
             ('GUI', basedir / 'data' / 'gui'),
             ('ICONS', basedir / 'data' / 'icons'),
             ('HOME', Path.home()),
@@ -216,8 +215,6 @@ class ConfigPaths:
             ('PLUGINS_IMAGES', 'plugins_images',
              PathLocation.CACHE, PathType.FOLDER),
             ('PLUGINS_USER', 'plugins', PathLocation.DATA, PathType.FOLDER),
-            ('MY_EMOTS',
-             'emoticons', PathLocation.DATA, PathType.FOLDER_OPTIONAL),
             ('MY_ICONSETS',
              'iconsets', PathLocation.DATA, PathType.FOLDER_OPTIONAL),
 

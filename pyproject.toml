@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 
 [tool.codespell]
-skip = "*__pycache__*,gajim/gui,gajim/data/icons,gajim/data/sounds,gajim/data/emoticons"
+skip = "*__pycache__*,gajim/gui,gajim/data/icons,gajim/data/sounds"
 ignore-words-list = "claus,pres,ser,trough"
 
 

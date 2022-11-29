@@ -25,11 +25,9 @@ from typing import Optional
 from collections import defaultdict
 
 import logging
-import sys
 
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Pango
 
@@ -419,60 +417,6 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
         buf.select_range(
             buf.get_iter_at_offset(start_offset),
             buf.get_iter_at_offset(end_offset + 2))
-
-    def replace_emojis(self) -> None:
-        if sys.platform != 'darwin':
-            # TODO: Remove if colored emoji rendering works well on MacOS
-            return
-
-        theme = app.settings.get('emoticons_theme')
-        if not theme or theme == 'font':
-            return
-
-        def _replace(anchor: Gtk.TextChildAnchor) -> None:
-            if anchor is None:
-                return
-            image = anchor.get_widgets()[0]
-            if hasattr(image, 'codepoint'):
-                # found emoji
-                codepoint = getattr(image, 'codepoint')
-                self._replace_char_at_iter(iter_, codepoint)
-                image.destroy()
-
-        iter_ = self.get_buffer().get_start_iter()
-        _replace(iter_.get_child_anchor())
-
-        while iter_.forward_char():
-            _replace(iter_.get_child_anchor())
-
-    def _replace_char_at_iter(self,
-                              iter_: Gtk.TextIter,
-                              new_char: str
-                              ) -> None:
-        buf = self.get_buffer()
-        iter_2 = iter_.copy()
-        iter_2.forward_char()
-        buf.delete(iter_, iter_2)
-        buf.insert(iter_, new_char)
-
-    def insert_emoji(self, codepoint: str, pixbuf: GdkPixbuf.Pixbuf) -> None:
-        buf = self.get_buffer()
-        if buf.get_char_count():
-            # buffer contains text
-            buf.insert_at_cursor(' ')
-
-        insert_mark = buf.get_insert()
-        insert_iter = buf.get_iter_at_mark(insert_mark)
-
-        if pixbuf is None:
-            buf.insert(insert_iter, codepoint)
-        else:
-            anchor = buf.create_child_anchor(insert_iter)
-            image = Gtk.Image.new_from_pixbuf(pixbuf)
-            setattr(image, 'codepoint', codepoint)
-            image.show()
-            self.add_child_at_anchor(image, anchor)
-        buf.insert_at_cursor(' ')
 
     def clear(self, *args: Any) -> None:
         buf = self.get_buffer()

@@ -766,22 +766,6 @@ def version_condition(current_version: str, required_version: str) -> bool:
     return True
 
 
-def get_available_emoticon_themes() -> list[str]:
-    files: list[Path] = []
-    for folder in configpaths.get('EMOTICONS').iterdir():
-        if not folder.is_dir():
-            continue
-        files += [theme for theme in folder.iterdir() if theme.is_file()]
-
-    my_emots = configpaths.get('MY_EMOTS')
-    if my_emots.is_dir():
-        files += list(my_emots.iterdir())
-
-    emoticons_themes = ['font']
-    emoticons_themes += [file.stem for file in files if file.suffix == '.png']
-    return sorted(emoticons_themes)
-
-
 def call_counter(func):
     def helper(self, restart=False):
         if restart:
