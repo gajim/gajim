@@ -253,7 +253,7 @@ class ChatStack(Gtk.Stack, EventHelper):
             'switch_contact', self._current_contact)
 
         if old_primary_clipboard is not None:
-            GLib.idle_add(clipboard.set_text,  # pyright: ignore
+            GLib.idle_add(clipboard.set_text,
                           old_primary_clipboard,
                           -1)
 

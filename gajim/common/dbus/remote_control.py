@@ -314,7 +314,7 @@ class GajimRemote(Server):
 
             GLib.idle_add(app.get_client(account).change_status,
                           status,
-                          message)  # pyright: ignore
+                          message)
         else:
             # account not specified, so change the status of all accounts
             for acc in app.settings.get_active_accounts():
@@ -327,7 +327,7 @@ class GajimRemote(Server):
 
                 GLib.idle_add(app.get_client(acc).change_status,
                               status,
-                              message)  # pyright: ignore
+                              message)
         return True
 
     @staticmethod
