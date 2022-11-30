@@ -32,11 +32,6 @@ from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Gio
 
-try:
-    from gi.repository import GstPbutils
-except Exception:
-    pass
-
 from PIL import Image
 from PIL import ImageFile
 
@@ -421,6 +416,9 @@ def aes_decrypt(key: bytes, iv: bytes, payload: bytes) -> bytes:
 
 def contains_audio_streams(file_path: Path) -> bool:
     # Check if it is really an audio file
+
+    from gi.repository import GstPbutils
+
     has_audio = False
     discoverer = GstPbutils.Discoverer()
     try:
