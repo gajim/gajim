@@ -116,9 +116,9 @@ class Features(Gtk.ApplicationWindow):
             Feature(_('Audio / Video Calls'),
                     av_available,
                     _('Enables Gajim to provide Audio and Video chats'),
-                    _('Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, '
-                      'gstreamer1.0-plugins-base, gstreamer1.0-plugins-ugly, '
-                      'gstreamer1.0-libav, and gstreamer1.0-gtk3'),
+                    _('Requires: farstream-0.2, gstreamer-1.0, '
+                      'gst-plugins-base-1.0, gst-plugins-ugly-1.0, '
+                      'gst-libav and gstreamer-gtk3-plugin'),
                     _('Feature not available on Windows'),
                     None),
             Feature(_('Automatic Status'),
@@ -152,7 +152,7 @@ class Features(Gtk.ApplicationWindow):
                     app.is_installed('UPNP'),
                     _('Enables Gajim to request your router to forward ports '
                       'for file transfers'),
-                    _('Requires: gir1.2-gupnpigd-1.0'),
+                    _('Requires: gupnpigd-1.0'),
                     _('Feature not available on Windows'),
                     None)
         ]
