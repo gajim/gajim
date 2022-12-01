@@ -35,7 +35,8 @@ class MessageSelection(Gtk.Grid):
 
         self.get_style_context().add_class('floating-overlay-box')
 
-        label = Gtk.Label(label=_('Click messages to select them'))
+        label = Gtk.Label(label=_('Click messages to select them\n'
+                                  '(Ctrl + Double Click to deselect)'))
         self.attach(label, 0, 0, 2, 1)
 
         copy_button = Gtk.Button(label=_('Copy Text'))
