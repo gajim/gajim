@@ -210,13 +210,13 @@ infobar.error > revealer > box {
 .link-button { min-height: 0px; }
 
 .floating-overlay-box {
-    background-color: alpha(shade(@theme_bg_color, 0.3), 0.9);
+    background-color: alpha(shade(@theme_bg_color, 0.3), 0.8);
     padding: 12px;
     border-radius: 6px;
 }
 .floating-overlay-box > label,
 .floating-overlay-box > spinner {
-    color: @theme_bg_color;
+    color: shade(@theme_bg_color, 4.0);
 }
 
 /* Main Window ============================================================= */
@@ -532,6 +532,10 @@ infobar.error > revealer > box {
 }
 .conversation-row:hover button {
     opacity: 1;
+}
+.conversation-row:selected * {
+    background-color: @theme_selected_bg_color;
+    color: @theme_selected_fg_color;
 }
 .conversation-row grid textview:not(.sourceview),
 .conversation-row grid textview:not(.sourceview) text {
