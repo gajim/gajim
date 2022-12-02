@@ -33,6 +33,7 @@ from nbxmpp.protocol import JID
 from nbxmpp.structs import HTTPAuthData
 from nbxmpp.structs import LocationData
 from nbxmpp.structs import ModerationData
+from nbxmpp.structs import ReplyData
 from nbxmpp.structs import RosterItem
 from nbxmpp.structs import TuneData
 
@@ -174,6 +175,7 @@ class MessageSent(ApplicationEvent):
     additional_data: AdditionalDataDict
     label: SecurityLabel | None
     correct_id: str | None
+    reply_data: ReplyData | None
     play_sound: bool
 
 

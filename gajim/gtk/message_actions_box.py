@@ -28,6 +28,7 @@ from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp.const import Chatstate
 from nbxmpp.modules.security_labels import SecurityLabel
+from nbxmpp.structs import ReplyData
 
 from gajim.common import app
 from gajim.common.client import Client
@@ -39,12 +40,14 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.types import ChatContactT
+from gajim.common.util.text import quote_text
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.menus import get_encryption_menu
 from gajim.gtk.menus import get_format_menu
 from gajim.gtk.message_input import MessageInputTextView
+from gajim.gtk.referred_message_widget import ReferredMessageWidget
 from gajim.gtk.security_label_selector import SecurityLabelSelector
 from gajim.gtk.util import open_window
 
@@ -66,6 +69,11 @@ class MessageActionsBox(Gtk.Grid):
         # For undo
         self.space_pressed = False
 
+        # For message replies
+        self._reply_box = None
+        self._reply_data = None
+        self._reply_quoted_text = None
+
         self._ui.send_message_button.set_visible(
             app.settings.get('show_send_message_button'))
         app.settings.bind_signal('show_send_message_button',
@@ -73,7 +81,8 @@ class MessageActionsBox(Gtk.Grid):
                                  'set_visible')
 
         self._security_label_selector = SecurityLabelSelector()
-        self._ui.box.pack_start(self._security_label_selector, False, True, 0)
+        self._ui.action_box.pack_start(
+            self._security_label_selector, False, True, 0)
 
         self.msg_textview = MessageInputTextView()
         self.msg_textview.get_buffer().connect('changed',
@@ -96,7 +105,7 @@ class MessageActionsBox(Gtk.Grid):
         self._connect_actions()
 
         app.plugin_manager.gui_extension_point(
-            'message_actions_box', self, self._ui.box)
+            'message_actions_box', self, self._ui.action_box)
 
     def get_current_contact(self) -> ChatContactT:
         assert self._contact is not None
@@ -114,6 +123,7 @@ class MessageActionsBox(Gtk.Grid):
             'show-emoji-chooser',
             'quote',
             'mention',
+            'reply',
             'correct-message',
         ]
 
@@ -154,6 +164,11 @@ class MessageActionsBox(Gtk.Grid):
             assert param
             self.msg_textview.insert_as_quote(param.get_string())
 
+        elif action_name == 'reply':
+            assert param
+            reply_to_id, jid = param.get_strv()
+            self._enable_reply_mode(reply_to_id, jid)
+
         elif action_name == 'mention':
             assert param
             self.msg_textview.mention_participant(param.get_string())
@@ -172,6 +187,8 @@ class MessageActionsBox(Gtk.Grid):
         self._client = app.get_client(contact.account)
         self._client.connect_signal(
             'state-changed', self._on_client_state_changed)
+
+        self.disable_reply_mode()
 
         self._contact = contact
 
@@ -535,6 +552,55 @@ class MessageActionsBox(Gtk.Grid):
             return True
 
         return False
+
+    def _enable_reply_mode(self, reply_to_id: str, jid: str) -> None:
+        if self._reply_data is not None:
+            # If reply was called again, remove the last reply box first
+            self.disable_reply_mode()
+
+        assert self._contact is not None
+        referred_message_row = app.storage.archive.get_referred_message(
+            self._contact, reply_to_id)
+        assert referred_message_row is not None
+
+        self._reply_quoted_text = quote_text(referred_message_row.message)
+        self._reply_data = ReplyData(
+            to=jid,
+            id=reply_to_id,
+            fallback_start=0,
+            fallback_end=len(self._reply_quoted_text))
+
+        close_button = Gtk.Button.new_from_icon_name(
+            'window-close-symbolic', Gtk.IconSize.BUTTON)
+        close_button.set_valign(Gtk.Align.CENTER)
+        close_button.set_tooltip_text(_('Cancel'))
+        close_button.connect('clicked', self.disable_reply_mode)
+
+        ref_widget = ReferredMessageWidget(self._contact, referred_message_row)
+
+        self._reply_box = Gtk.Box(spacing=14)
+        self._reply_box.add(close_button)
+        self._reply_box.add(ref_widget)
+
+        self._ui.box.pack_start(self._reply_box, True, True, 0)
+        self._reply_box.show_all()
+
+        self.msg_textview.grab_focus()
+
+    def disable_reply_mode(self, *args: Any) -> None:
+        self._reply_data = None
+        self._reply_quoted_text = None
+        if self._reply_box is not None:
+            self._reply_box.destroy()
+            self._reply_box = None
+
+    def get_reply_data(self) -> tuple[ReplyData, str] | None:
+        if self._reply_data is None or self._reply_quoted_text is None:
+            return None
+
+        message = self.msg_textview.get_text()
+        fallback_text = f'{self._reply_quoted_text}{message}'
+        return self._reply_data, fallback_text
 
     def _on_paste_clipboard(self,
                             texview: MessageInputTextView

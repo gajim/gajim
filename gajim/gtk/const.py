@@ -223,6 +223,8 @@ MAIN_WIN_ACTIONS = [
     ('copy-message', 's', True),
     ('retract-message', 'a{sv}', False),
     ('quote', 's', False),
+    ('reply', 'as', False),
+    ('jump-to-message', 'au', True),
     ('mention', 's', False),
     ('send-file-httpupload', 'as', False),
     ('send-file-jingle', 'as', False),

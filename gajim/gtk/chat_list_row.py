@@ -49,6 +49,7 @@ from gajim.common.preview_helpers import split_geo_uri
 from gajim.common.storage.draft import DraftStorage
 from gajim.common.types import ChatContactT
 from gajim.common.types import OneOnOneContactT
+from gajim.common.util.text import remove_fallback_text
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.menus import get_chat_list_row_menu
@@ -156,6 +157,12 @@ class ChatListRow(Gtk.ListBoxRow):
 
         if line.message is not None:
             message_text = line.message
+
+            if line.reply_data is not None:
+                message_text = remove_fallback_text(
+                    line.message,
+                    line.reply_data.fallback_start,
+                    line.reply_data.fallback_end)
 
             if line.additional_data is not None:
                 retracted_by = line.additional_data.get_value(

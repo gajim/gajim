@@ -705,9 +705,24 @@ def get_chat_row_menu(contact: types.ChatContactT,
             show_quote = not self_contact.role.is_visitor
         else:
             show_quote = False
+
     if show_quote:
-        menu_items.append((
-            p_('Message row action', 'Quote…'), 'win.quote', text))
+        if isinstance(contact, GroupchatContact) and stanza_id is None:
+            # Use XEP-0393 quotes for MUCs without XEP-0359 IDs
+            menu_items.append((
+                p_('Message row action', 'Quote…'), 'win.quote', text))
+        else:
+            if isinstance(contact, GroupchatContact):
+                reply_to_id = stanza_id
+                resource_contact = contact.get_resource(name)
+                jid = str(resource_contact.real_jid or resource_contact.jid)
+            else:
+                reply_to_id = message_id
+                jid = contact.jid.bare
+            menu_items.append((
+                p_('Message row action', 'Reply…'),
+                'win.reply',
+                GLib.Variant('as', [reply_to_id, jid])))
 
     show_correction = False
     if message_id is not None:

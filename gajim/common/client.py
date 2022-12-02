@@ -518,6 +518,7 @@ class Client(Observable):
                         label=message.label,
                         correct_id=message.correct_id,
                         message_id=message.message_id,
+                        reply_data=message.reply_data,
                         msg_log_id=log_line_id,
                         play_sound=message.play_sound))
 

@@ -38,6 +38,7 @@ from gajim.common.i18n import get_default_lang
 from gajim.common.styling import PlainBlock
 from gajim.common.styling import process
 from gajim.common.types import ChatContactT
+from gajim.common.util.text import remove_fallback_text
 
 from gajim.gtk.chat_action_processor import ChatActionProcessor
 from gajim.gtk.const import MAX_MESSAGE_LENGTH
@@ -140,9 +141,16 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
         if message_row is None or message_row.message is None:
             return
 
+        text = message_row.message
+        if message_row.reply_data is not None:
+            text = remove_fallback_text(
+                message_row.message,
+                message_row.reply_data.fallback_start,
+                message_row.reply_data.fallback_end)
+
         self._set_correcting(True)
         self.get_style_context().add_class('gajim-msg-correcting')
-        self.insert_text(message_row.message)
+        self.insert_text(text)
 
     def try_message_correction(self, message: str) -> str | None:
         assert self._contact is not None

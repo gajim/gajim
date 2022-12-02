@@ -27,6 +27,7 @@ from nbxmpp import JID
 from nbxmpp.const import StatusCode
 from nbxmpp.modules.security_labels import Displaymarking
 from nbxmpp.structs import MucSubject
+from nbxmpp.structs import ReplyData
 
 from gajim.common import app
 from gajim.common import events
@@ -44,6 +45,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive import ConversationRow
+from gajim.common.util.text import remove_fallback_text
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.conversation.jump_to_end_button import JumpToEndButton
@@ -95,6 +97,8 @@ class ChatControl(EventHelper):
 
         app.window.get_action('activate-message-selection').connect(
             'activate', self._on_activate_message_selection)
+        app.window.get_action('jump-to-message').connect(
+            'activate', self._on_jump_to_message)
 
         self.widget = cast(Gtk.Box, self._ui.get_object('control_box'))
         self.widget.show_all()
@@ -347,7 +351,8 @@ class ChatControl(EventHelper):
                           msg_log_id=event.msg_log_id,
                           message_id=message_id,
                           stanza_id=None,
-                          additional_data=event.additional_data)
+                          additional_data=event.additional_data,
+                          reply_data=event.reply_data)
 
     def _on_message_received(self, event: events.MessageReceived) -> None:
         if not self._is_event_processable(event):
@@ -373,7 +378,8 @@ class ChatControl(EventHelper):
                           msg_log_id=event.msg_log_id,
                           message_id=event.properties.id,
                           stanza_id=event.stanza_id,
-                          additional_data=event.additional_data)
+                          additional_data=event.additional_data,
+                          reply_data=event.properties.reply_data)
 
     def _on_mam_message_received(self,
                                  event: events.MamMessageReceived) -> None:
@@ -417,7 +423,8 @@ class ChatControl(EventHelper):
                           msg_log_id=event.msg_log_id,
                           message_id=event.properties.id,
                           stanza_id=event.stanza_id,
-                          additional_data=event.additional_data)
+                          additional_data=event.additional_data,
+                          reply_data=event.properties.reply_data)
 
     def _on_gc_message_received(self, event: events.GcMessageReceived) -> None:
         if not self._is_event_processable(event):
@@ -439,7 +446,8 @@ class ChatControl(EventHelper):
                           msg_log_id=event.msg_log_id,
                           message_id=event.properties.id,
                           stanza_id=event.stanza_id,
-                          additional_data=event.additional_data)
+                          additional_data=event.additional_data,
+                          reply_data=event.properties.reply_data)
 
     def _on_message_updated(self, event: events.MessageUpdated) -> None:
         if not self._is_event_processable(event):
@@ -551,6 +559,14 @@ class ChatControl(EventHelper):
     def _on_cancel_selection(self, _widget: MessageSelection) -> None:
         self._scrolled_view.disable_row_selection()
 
+    def _on_jump_to_message(self,
+                            _action: Gio.SimpleAction,
+                            param: GLib.Variant
+                            ) -> None:
+
+        log_line_id, timestamp = param.unpack()
+        self.scroll_to_message(log_line_id, timestamp)
+
     def _on_jump_to_end(self, _button: Gtk.Button) -> None:
         self.reset_view()
 
@@ -590,11 +606,22 @@ class ChatControl(EventHelper):
                      msg_log_id: int | None,
                      message_id: str | None,
                      stanza_id: str | None,
-                     additional_data: AdditionalDataDict | None
+                     additional_data: AdditionalDataDict | None,
+                     reply_data: ReplyData | None
                      ) -> None:
 
         if additional_data is None:
             additional_data = AdditionalDataDict()
+
+        referred_message = None
+        if reply_data is not None:
+            referred_message = app.storage.archive.get_referred_message(
+                self._contact, reply_data.id)
+            if referred_message is not None:
+                text = remove_fallback_text(
+                    text,
+                    reply_data.fallback_start,
+                    reply_data.fallback_end)
 
         if self._allow_add_message():
             self._scrolled_view.add_message(
@@ -606,7 +633,8 @@ class ChatControl(EventHelper):
                 message_id=message_id,
                 stanza_id=stanza_id,
                 log_line_id=msg_log_id,
-                additional_data=additional_data)
+                additional_data=additional_data,
+                referred_message=referred_message)
 
             if not self._scrolled_view.get_autoscroll():
                 if kind == 'outgoing':
@@ -666,6 +694,16 @@ class ChatControl(EventHelper):
                     message_text = get_retraction_text(
                         self.contact.account, retracted_by, reason)
 
+            referred_message = None
+            if msg.reply_data is not None:
+                referred_message = app.storage.archive.get_referred_message(
+                    self._contact, msg.reply_data.id)
+                if referred_message is not None:
+                    message_text = remove_fallback_text(
+                        message_text,
+                        msg.reply_data.fallback_start,
+                        msg.reply_data.fallback_end)
+
             self._scrolled_view.add_message(
                 message_text,
                 kind,
@@ -676,7 +714,8 @@ class ChatControl(EventHelper):
                 stanza_id=msg.stanza_id,
                 log_line_id=msg.log_line_id,
                 marker=msg.marker,
-                error=msg.error)
+                error=msg.error,
+                referred_message=referred_message)
 
     def _request_messages(self, before: bool) -> list[ConversationRow]:
         if before:

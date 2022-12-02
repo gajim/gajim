@@ -37,6 +37,7 @@ from nbxmpp.protocol import Iq
 from nbxmpp.protocol import JID
 from nbxmpp.structs import CommonError
 from nbxmpp.structs import DiscoInfo
+from nbxmpp.structs import ReplyData
 from nbxmpp.structs import RosterItem
 
 _T = TypeVar('_T')
@@ -66,6 +67,22 @@ def _adapt_common_error(common_error: CommonError) -> str:
 
 sqlite3.register_converter('common_error', _convert_common_error)
 sqlite3.register_adapter(CommonError, _adapt_common_error)
+
+
+def _convert_reply_data(reply_data: bytes) -> ReplyData:
+    data = json.loads(reply_data)
+    return ReplyData(to=data['to'],
+                     id=data['id'],
+                     fallback_start=data['fallback_start'],
+                     fallback_end=data['fallback_end'])
+
+
+def _adapt_reply_data(reply_data: ReplyData) -> str:
+    return json.dumps(reply_data._asdict())
+
+
+sqlite3.register_converter('reply_data', _convert_reply_data)
+sqlite3.register_adapter(ReplyData, _adapt_reply_data)
 
 
 def _convert_marker(marker: bytes):

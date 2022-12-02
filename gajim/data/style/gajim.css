@@ -643,6 +643,12 @@ infobar.error > revealer > box {
     padding: 0;
 }
 
+/* ReferredMessageWidget */
+.referred-message {
+    border-left: 3px solid @borders;
+    padding: 3px 8px;
+}
+
 /* PreviewWidget */
 .preview-stack > box {
     border: 1px solid;

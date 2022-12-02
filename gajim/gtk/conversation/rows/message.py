@@ -39,6 +39,7 @@ from gajim.common.i18n import _
 from gajim.common.i18n import is_rtl_text
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.storage.archive import ReferredMessageRow
 from gajim.common.types import ChatContactT
 
 from gajim.gtk.conversation.message_widget import MessageWidget
@@ -50,6 +51,7 @@ from gajim.gtk.conversation.rows.widgets import MoreMenuButton
 from gajim.gtk.conversation.rows.widgets import NicknameLabel
 from gajim.gtk.menus import get_chat_row_menu
 from gajim.gtk.preview import PreviewWidget
+from gajim.gtk.referred_message_widget import ReferredMessageWidget
 from gajim.gtk.util import format_fingerprint
 from gajim.gtk.util import GajimPopover
 
@@ -70,7 +72,9 @@ class MessageRow(BaseRow):
                  display_marking: Displaymarking | None = None,
                  marker: str | None = None,
                  error: CommonError | StanzaError | None = None,
-                 log_line_id: int | None = None) -> None:
+                 log_line_id: int | None = None,
+                 referred_message: ReferredMessageRow | None = None
+                 ) -> None:
 
         BaseRow.__init__(self, account)
         self.type = 'chat'
@@ -100,6 +104,8 @@ class MessageRow(BaseRow):
         # Keep original text for message correction
         self._original_text: str = text
 
+        self._ref_message_widget = None
+
         if self._is_groupchat:
             our_nick = get_group_chat_nick(self._account, self._contact.jid)
             from_us = name == our_nick
@@ -115,6 +121,11 @@ class MessageRow(BaseRow):
             app.preview_manager.create_preview(
                 text, self._message_widget, from_us, muc_context)
         else:
+            if referred_message is not None:
+                self._ref_message_widget = ReferredMessageWidget(
+                    self._contact,
+                    referred_message)
+
             self._message_widget = MessageWidget(account)
             self._message_widget.add_with_styling(text, nickname=name)
             if self._is_groupchat:
@@ -173,7 +184,13 @@ class MessageRow(BaseRow):
         self._avatar_box = AvatarBox(self._contact, name, avatar)
 
         self._bottom_box = Gtk.Box(spacing=6)
-        self._bottom_box.add(self._message_widget)
+        if self._ref_message_widget is not None:
+            box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=3)
+            box.add(self._ref_message_widget)
+            box.add(self._message_widget)
+            self._bottom_box.add(box)
+        else:
+            self._bottom_box.add(self._message_widget)
 
         if is_rtl_text(text):
             self._bottom_box.set_halign(Gtk.Align.END)

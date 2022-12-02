@@ -38,9 +38,11 @@ from collections.abc import KeysView
 from nbxmpp import JID
 from nbxmpp.structs import CommonError
 from nbxmpp.structs import MessageProperties
+from nbxmpp.structs import ReplyData
 
 from gajim.common import app
 from gajim.common import configpaths
+from gajim.common import types
 from gajim.common.const import JIDConstant
 from gajim.common.const import KindConstant
 from gajim.common.const import MAX_MESSAGE_CORRECTION_DELAY
@@ -111,6 +113,7 @@ class ConversationRow(NamedTuple):
     stanza_id: str
     message_id: str
     marker: str
+    reply_data: ReplyData | None
 
 
 class LastConversationRow(NamedTuple):
@@ -121,6 +124,15 @@ class LastConversationRow(NamedTuple):
     additional_data: AdditionalDataDict | None
     message_id: str
     stanza_id: str
+    reply_data: ReplyData | None
+
+
+class ReferredMessageRow(NamedTuple):
+    log_line_id: int
+    contact_name: str
+    kind: int
+    time: float
+    message: str
 
 
 class SearchLogRow(NamedTuple):
@@ -268,6 +280,13 @@ class MessageArchiveStorage(SqliteStorage):
             ]
             self._execute_multiple(statements)
 
+        if user_version < 8:
+            statements = [
+                'ALTER TABLE logs ADD COLUMN "reply_data" TEXT',
+                'PRAGMA user_version=8'
+            ]
+            self._execute_multiple(statements)
+
     @staticmethod
     def _like(search_str: str) -> str:
         return f'%{search_str}%'
@@ -394,7 +413,8 @@ class MessageArchiveStorage(SqliteStorage):
                 additional_data,
                 stanza_id,
                 message_id,
-                marker as "marker [marker]"
+                marker as "marker [marker]",
+                reply_data as "reply_data [reply_data]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
             AND account_id = {account_id}
             AND kind NOT IN ({kinds})
@@ -433,7 +453,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         sql = '''
             SELECT contact_name, time, kind, message, stanza_id, message_id,
-            additional_data
+            additional_data, reply_data as "reply_data [reply_data]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
             AND account_id = {account_id}
             AND kind NOT IN ({kinds})
@@ -480,7 +500,8 @@ class MessageArchiveStorage(SqliteStorage):
                 additional_data,
                 stanza_id,
                 message_id,
-                marker as "marker [marker]"
+                marker as "marker [marker]",
+                reply_data as "reply_data [reply_data]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
             AND account_id = {account_id}
             AND kind NOT IN ({kinds})
@@ -503,7 +524,8 @@ class MessageArchiveStorage(SqliteStorage):
                 additional_data,
                 stanza_id,
                 message_id,
-                marker as "marker [marker]"
+                marker as "marker [marker]",
+                reply_data as "reply_data [reply_data]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
             AND account_id = {account_id}
             AND kind NOT IN ({kinds})
@@ -557,7 +579,8 @@ class MessageArchiveStorage(SqliteStorage):
                 additional_data,
                 stanza_id,
                 message_id,
-                marker as "marker [marker]"
+                marker as "marker [marker]",
+                reply_data as "reply_data [reply_data]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
             AND account_id = {account_id}
             AND kind NOT IN ({kinds})
@@ -996,7 +1019,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         sql = '''
             SELECT contact_name, time, kind, message, stanza_id, message_id,
-            additional_data
+            additional_data, reply_data as "reply_data [reply_data]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
             AND account_id = {account_id}
             AND message_id = ?
@@ -1083,6 +1106,30 @@ class MessageArchiveStorage(SqliteStorage):
             sql, (corrected_text, serialized_dict, row.log_line_id))
 
         return True
+
+    @timeit
+    def get_referred_message(self,
+                             contact: types.ChatContactT,
+                             message_id: str
+                             ) -> ReferredMessageRow | None:
+
+        jids = [contact.jid]
+        account_id = self.get_account_id(contact.account)
+        message_id_type = 'message_id'
+        if contact.is_groupchat:
+            message_id_type = 'stanza_id'
+
+        sql = '''
+            SELECT log_line_id, contact_name, kind, time, message
+            FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+            AND account_id = {account_id}
+            AND {message_id_type} = ?
+            '''.format(jids=', '.join('?' * len(jids)),
+                       account_id=account_id,
+                       message_id_type=message_id_type)
+        return self._con.execute(
+            sql,
+            tuple(jids) + (message_id, )).fetchone()
 
     @timeit
     def update_additional_data(self,

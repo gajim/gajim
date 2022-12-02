@@ -230,7 +230,8 @@ class Message(BaseModule):
             subject=properties.subject,
             additional_data=additional_data,
             stanza_id=stanza_id or message_id,
-            message_id=properties.id)
+            message_id=properties.id,
+            reply_data=properties.reply_data)
 
         event.msg_log_id = msg_log_id
         app.ged.raise_event(event)
@@ -279,7 +280,8 @@ class Message(BaseModule):
             stanza_id=event.stanza_id,
             message_id=event.properties.id,
             occupant_id=event.occupant_id,
-            real_Jid=event.real_jid)
+            real_Jid=event.real_jid,
+            reply_data=event.properties.reply_data)
 
     def _check_for_mam_compliance(self, room_jid: str, stanza_id: str) -> None:
         disco_info = app.storage.cache.get_last_disco_info(room_jid)
@@ -341,6 +343,14 @@ class Message(BaseModule):
         if message.correct_id:
             stanza.setTag('replace', attrs={'id': message.correct_id},
                           namespace=Namespace.CORRECT)
+
+        if message.reply_data is not None:
+            assert message.reply_data.fallback_start is not None
+            assert message.reply_data.fallback_end is not None
+            stanza.setReply(str(message.jid),
+                            message.reply_data.id,
+                            message.reply_data.fallback_start,
+                            message.reply_data.fallback_end)
 
         # XEP-0359
         message.message_id = generate_id()
@@ -430,5 +440,6 @@ class Message(BaseModule):
             subject=message.subject,
             additional_data=message.additional_data,
             message_id=message.message_id,
-            stanza_id=message.message_id)
+            stanza_id=message.message_id,
+            reply_data=message.reply_data)
         return msg_log_id

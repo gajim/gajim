@@ -44,6 +44,7 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive import ConversationRow
+from gajim.common.storage.archive import ReferredMessageRow
 from gajim.common.types import ChatContactT
 
 from gajim.gtk.conversation.rows.base import BaseRow
@@ -506,7 +507,8 @@ class ConversationView(Gtk.ScrolledWindow):
                     display_marking: Displaymarking | None = None,
                     additional_data: AdditionalDataDict | None = None,
                     marker: str | None = None,
-                    error: CommonError | StanzaError | None = None
+                    error: CommonError | StanzaError | None = None,
+                    referred_message: ReferredMessageRow | None = None
                     ) -> None:
 
         if not timestamp:
@@ -525,7 +527,8 @@ class ConversationView(Gtk.ScrolledWindow):
             display_marking=display_marking,
             marker=marker,
             error=error,
-            log_line_id=log_line_id)
+            log_line_id=log_line_id,
+            referred_message=referred_message)
 
         if message_id is not None:
             self._message_id_row_map[message_id] = message_row
