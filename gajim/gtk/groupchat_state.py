@@ -14,7 +14,6 @@
 
 from __future__ import annotations
 
-from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -103,7 +102,5 @@ class GroupchatState(Gtk.Box):
 
     def _on_abort_clicked(self, _button: Gtk.Button) -> None:
         assert self._contact is not None
-        app.window.activate_action(
-            'remove-chat',
-            GLib.Variant(
-                'as', [self._contact.account, str(self._contact.jid)]))
+        client = app.get_client(self._contact.account)
+        client.get_module('MUC').abort_join(self._contact.jid)

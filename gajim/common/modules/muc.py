@@ -374,6 +374,17 @@ class MUC(BaseModule):
         room.set_not_joined()
         room.notify('room-left')
 
+    def abort_join(self, room_jid: str) -> None:
+        self._remove_rejoin_timeout(room_jid)
+
+        muc = self._mucs[room_jid]
+        self._con.get_module('Presence').send_presence(
+            muc.occupant_jid,
+            typ='unavailable',
+            caps=False)
+
+        self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
+
     def configure_room(self, room_jid: str) -> None:
         self._nbxmpp('MUC').request_config(room_jid,
                                            callback=self._on_room_config)
