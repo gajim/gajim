@@ -82,6 +82,7 @@ ALLOWED_TAGS = [
     ('no-permanent-store', Namespace.HINTS),
     ('replace', Namespace.CORRECT),
     ('thread', None),
+    ('reply', Namespace.REPLY),
     ('origin-id', Namespace.SID),
 ]
 

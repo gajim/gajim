@@ -34,6 +34,7 @@ from gajim.common import configpaths
 from gajim.common.const import MAX_MESSAGE_CORRECTION_DELAY
 from gajim.common.events import DBMigration
 from gajim.common.helpers import get_random_string
+from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.storage.archive import migration
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
@@ -49,6 +50,7 @@ from gajim.common.storage.base import AlchemyStorage
 from gajim.common.storage.base import timeit
 from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.storage.base import with_session
+from gajim.common.types import ChatContactT
 from gajim.common.util.datetime import FIRST_UTC_DATETIME
 
 CURRENT_USER_VERSION = 8
@@ -304,6 +306,20 @@ class MessageArchiveStorage(AlchemyStorage):
         stmt = select(Message).where(Message.pk == pk)
         if options is not None:
             stmt = stmt.options(*options)
+        return session.scalar(stmt)
+
+    @with_session
+    @timeit
+    def get_referred_message(
+        self,
+        session: Session,
+        contact: ChatContactT,
+        reply_to_id: str
+    ) -> Message | None:
+        if isinstance(contact, GroupchatContact):
+            stmt = select(Message).where(Message.stanza_id == reply_to_id)
+        else:
+            stmt = select(Message).where(Message.id == reply_to_id)
         return session.scalar(stmt)
 
     @with_session

@@ -40,6 +40,7 @@ from gajim.gtk.conversation.rows.widgets import MoreMenuButton
 from gajim.gtk.conversation.rows.widgets import NicknameLabel
 from gajim.gtk.menus import get_chat_row_menu
 from gajim.gtk.preview import PreviewWidget
+from gajim.gtk.referred_message_widget import ReferredMessageWidget
 from gajim.gtk.util import format_fingerprint
 from gajim.gtk.util import GajimPopover
 
@@ -72,6 +73,8 @@ class MessageRow(BaseRow):
         self._is_retracted = message.moderation is not None
 
         self._avatar_box = AvatarBox(contact)
+
+        self._ref_message_widget = None
 
         self._meta_box = Gtk.Box(spacing=6)
         self._meta_box.set_hexpand(True)
@@ -138,12 +141,23 @@ class MessageRow(BaseRow):
                 self._message_from_us,
                 self._muc_context)
         else:
+            if message.reply is not None:
+                self._ref_message_widget = ReferredMessageWidget(
+                    self._contact,
+                    message.reply.id)
+
             self._message_widget = MessageWidget(self._contact.account)
             self._message_widget.add_with_styling(self.text, nickname=self.name)
             if self._contact.is_groupchat and not self._message_from_us:
                 self._apply_highlight(self.text)
 
-        self._bottom_box.pack_start(self._message_widget, True, True, 0)
+        if self._ref_message_widget is not None:
+            box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=3)
+            box.add(self._ref_message_widget)
+            box.add(self._message_widget)
+            self._bottom_box.add(box)
+        else:
+            self._bottom_box.add(self._message_widget)
 
         self._set_text_direction(self.text)
 

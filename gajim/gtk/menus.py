@@ -735,6 +735,29 @@ def get_chat_row_menu(contact: types.ChatContactT,
          'win.activate-message-selection',
          GLib.Variant('u', corrected_pk or 0)))
 
+    show_quote = True
+    if isinstance(contact, GroupchatContact):
+        if contact.is_joined:
+            self_contact = contact.get_self()
+            assert self_contact is not None
+            show_quote = not self_contact.role.is_visitor
+        else:
+            show_quote = False
+
+    if show_quote:
+        if isinstance(contact, GroupchatContact) and stanza_id is None:
+            # Use XEP-0393 quotes for MUCs without XEP-0359 IDs
+            menu_items.append((
+                p_('Message row action', 'Quote…'), 'win.quote', text))
+        else:
+            reply_to_id = message_id
+            if isinstance(contact, GroupchatContact):
+                reply_to_id = stanza_id
+            menu_items.append((
+                p_('Message row action', 'Reply…'),
+                'win.reply',
+                GLib.Variant('s', reply_to_id)))
+
     show_correction = False
     if message_id is not None:
         show_correction = app.window.is_message_correctable(

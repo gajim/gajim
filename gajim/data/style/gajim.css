@@ -659,6 +659,19 @@ infobar.error > revealer > box {
     padding: 0;
 }
 
+/* ReferredMessageWidget */
+.referred-message {
+    padding: 6px;
+    border: 1px solid @borders;
+    border-radius: 4px;
+    background-color: alpha(@insensitive_fg_color, 0.03);
+}
+
+.referred-message #quote-bar {
+    background-color: @borders;
+    border-radius: 3px;
+}
+
 /* PreviewWidget */
 .preview-stack > box {
     border: 1px solid;

@@ -530,6 +530,7 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         app.window.get_action('quote').set_enabled(online)
         app.window.get_action('mention').set_enabled(online)
+        app.window.get_action('reply').set_enabled(online)
 
     def _update_group_chat_actions(self, contact: GroupchatContact) -> None:
         joined = contact.is_joined
@@ -552,6 +553,7 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         app.window.get_action('quote').set_enabled(joined)
         app.window.get_action('mention').set_enabled(joined)
+        app.window.get_action('reply').set_enabled(joined)
         app.window.get_action('retract-message').set_enabled(joined)
 
     def _update_participant_actions(self,
@@ -835,6 +837,11 @@ class ChatStack(Gtk.Stack, EventHelper):
             if correct_id is None:
                 return
 
+        reply = None
+        message_reply = self._message_action_box.get_reply_data()
+        if message_reply is not None:
+            reply, message = message_reply
+
         chatstate = client.get_module('Chatstate').get_active_chatstate(
             contact)
 
@@ -849,13 +856,17 @@ class ChatStack(Gtk.Stack, EventHelper):
                                    chatstate=chatstate,
                                    label=label,
                                    control=self._chat_control,
-                                   correct_id=correct_id)
+                                   correct_id=correct_id,
+                                   reply=reply)
 
         client.send_message(message_)
 
         self._message_action_box.msg_textview.clear()
         self._last_quoted_id = None
         app.storage.drafts.set(contact, '')
+
+        if message_reply is not None:
+            self._message_action_box.disable_reply_mode()
 
     def get_last_message_id(self, contact: ChatContactT) -> str | None:
         return self._message_action_box.get_last_message_id(contact)

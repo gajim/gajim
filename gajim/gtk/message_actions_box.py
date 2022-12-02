@@ -18,6 +18,7 @@ from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp.const import Chatstate
 from nbxmpp.modules.security_labels import SecurityLabel
+from nbxmpp.structs import ReplyData
 
 from gajim.common import app
 from gajim.common.client import Client
@@ -35,6 +36,7 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.menus import get_encryption_menu
 from gajim.gtk.menus import get_format_menu
 from gajim.gtk.message_input import MessageInputTextView
+from gajim.gtk.referred_message_widget import ReplyBox
 from gajim.gtk.security_label_selector import SecurityLabelSelector
 from gajim.gtk.util import open_window
 
@@ -53,6 +55,10 @@ class MessageActionsBox(Gtk.Grid):
 
         self.attach(self._ui.box, 0, 0, 1, 1)
 
+        # For message replies
+        self._reply_box = ReplyBox()
+        self._ui.box.pack_start(self._reply_box, True, True, 0)
+
         self._ui.send_message_button.set_visible(
             app.settings.get('show_send_message_button'))
         app.settings.bind_signal('show_send_message_button',
@@ -60,7 +66,8 @@ class MessageActionsBox(Gtk.Grid):
                                  'set_visible')
 
         self._security_label_selector = SecurityLabelSelector()
-        self._ui.box.pack_start(self._security_label_selector, False, True, 0)
+        self._ui.action_box.pack_start(
+            self._security_label_selector, False, True, 0)
 
         self.msg_textview = MessageInputTextView()
         self.msg_textview.connect('buffer-changed',
@@ -83,7 +90,7 @@ class MessageActionsBox(Gtk.Grid):
         self._connect_actions()
 
         app.plugin_manager.gui_extension_point(
-            'message_actions_box', self, self._ui.box)
+            'message_actions_box', self, self._ui.action_box)
 
     def get_current_contact(self) -> ChatContactT:
         assert self._contact is not None
@@ -101,6 +108,7 @@ class MessageActionsBox(Gtk.Grid):
             'show-emoji-chooser',
             'quote',
             'mention',
+            'reply',
             'correct-message',
         ]
 
@@ -145,6 +153,10 @@ class MessageActionsBox(Gtk.Grid):
             assert param
             self.msg_textview.insert_as_quote(param.get_string())
 
+        elif action_name == 'reply':
+            assert param
+            self._enable_reply_mode(param.get_string())
+
         elif action_name == 'mention':
             assert param
             self.msg_textview.mention_participant(param.get_string())
@@ -163,6 +175,8 @@ class MessageActionsBox(Gtk.Grid):
         self._client = app.get_client(contact.account)
         self._client.connect_signal(
             'state-changed', self._on_client_state_changed)
+
+        self.disable_reply_mode()
 
         self._contact = contact
 
@@ -545,6 +559,22 @@ class MessageActionsBox(Gtk.Grid):
             return True
 
         return False
+
+    def _enable_reply_mode(self, reply_to_id: str) -> None:
+        assert self._contact is not None
+
+        self._reply_box.enable_reply_mode(self._contact, reply_to_id)
+        self.msg_textview.grab_focus()
+
+    def disable_reply_mode(self, *args: Any) -> None:
+        self._reply_box.disable_reply_mode()
+
+    def get_reply_data(self) -> tuple[ReplyData, str] | None:
+        reply_data = self._reply_box.get_reply_data()
+        if reply_data is None:
+            return None
+
+        return reply_data, self.msg_textview.get_text()
 
     def _on_paste_clipboard(self,
                             texview: MessageInputTextView

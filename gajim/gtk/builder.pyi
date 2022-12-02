@@ -619,6 +619,7 @@ class ManageSoundsBuilder(Builder):
 
 class MessageActionsBoxBuilder(Builder):
     box: Gtk.Box
+    action_box: Gtk.Box
     encryption_details_button: Gtk.Button
     encryption_details_image: Gtk.Image
     encryption_menu_button: Gtk.MenuButton

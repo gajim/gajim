@@ -22,6 +22,7 @@ from nbxmpp.modules.security_labels import SecurityLabel
 from nbxmpp.protocol import JID
 from nbxmpp.structs import MucSubject
 from nbxmpp.structs import PresenceProperties
+from nbxmpp.structs import ReplyData
 
 from gajim.common import types
 from gajim.common.const import KindConstant
@@ -93,6 +94,7 @@ class OutgoingMessage:
                  control: Any | None = None,
                  attention: bool | None = None,
                  correct_id: str | None = None,
+                 reply: ReplyData | None = None,
                  oob_url: str | None = None,
                  nodes: Any | None = None,
                  play_sound: bool = True
@@ -127,6 +129,8 @@ class OutgoingMessage:
         self.control = control
         self.attention = attention
         self.correct_id = correct_id
+        self.reply = reply
+
         self.oob_url = oob_url
         self.nodes = nodes
         self.play_sound = play_sound

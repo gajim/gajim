@@ -35,6 +35,7 @@ from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.structs import OutgoingMessage
+from gajim.common.util.text import remove_fallback_text
 
 
 class Message(BaseModule):
@@ -198,6 +199,17 @@ class Message(BaseModule):
                     updated_at=timestamp,
                 )
 
+        reply = None
+        if properties.reply_data is not None:
+            reply = mod.Reply(
+                id=properties.reply_data.id,
+                to=JID.from_string(properties.reply_data.to)
+            )
+            message_text = remove_fallback_text(
+                message_text,
+                properties.reply_data.fallback_start,
+                properties.reply_data.fallback_end)
+
         correction_id = None
         if properties.correction is not None:
             correction_id = properties.correction.id
@@ -219,6 +231,7 @@ class Message(BaseModule):
             occupant_=occupant,
             oob=oob_data,
             security_label_=securitylabel_data,
+            reply=reply,
             thread_id_=properties.thread,
         )
 
@@ -394,6 +407,15 @@ class Message(BaseModule):
             stanza.setTag('replace', attrs={'id': message.correct_id},
                           namespace=Namespace.CORRECT)
 
+        # XEP-0461
+        if message.reply is not None:
+            assert message.reply.fallback_start is not None
+            assert message.reply.fallback_end is not None
+            stanza.setReply(str(message.jid),
+                            message.reply.id,
+                            message.reply.fallback_start,
+                            message.reply.fallback_end)
+
         # XEP-0359
         message.message_id = generate_id()
         stanza.setID(message.message_id)
@@ -520,6 +542,13 @@ class Message(BaseModule):
                     updated_at=timestamp,
                 )
 
+        reply = None
+        if message.reply is not None:
+            reply = mod.Reply(
+                id=message.reply.id,
+                to=JID.from_string(message.reply.to)
+            )
+
         oob_data: list[mod.OOB] = []
         if message.oob_url is not None:
             oob_data.append(mod.OOB(url=message.oob_url, description=None))
@@ -539,6 +568,7 @@ class Message(BaseModule):
             correction_id=message.correct_id,
             encryption_=encryption_data,
             oob=oob_data,
+            reply=reply,
             security_label_=securitylabel_data,
             occupant_=occupant,
         )

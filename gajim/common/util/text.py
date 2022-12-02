@@ -40,6 +40,26 @@ def jid_to_iri(jid: str) -> str:
     return 'xmpp:' + escape_iri_path(jid)
 
 
+def remove_fallback_text(text: str,
+                         start: int | None,
+                         end: int | None
+                         ) -> str:
+
+    if start is None:
+        start = 0
+
+    if end is None:
+        return text[start:]
+
+    before = text[:start]
+    after = text[end:]
+    return before + after
+
+
+def quote_text(text: str) -> str:
+    return '> ' + text.replace('\n', '\n> ') + '\n'
+
+
 def format_duration(ns: float, total_ns: float) -> str:
     seconds = ns / 1e9
     minutes = seconds / 60
