@@ -160,3 +160,4 @@ publish-release:
     - git add -u
     - git commit -m "Release Gajim $CI_COMMIT_TAG"
     - git push
+    - .ci/make_release.py $CI_COMMIT_TAG "${PROJECT_TOKEN}"
