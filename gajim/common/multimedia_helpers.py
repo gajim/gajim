@@ -15,7 +15,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import annotations
-from typing import Dict
+
 from typing import Optional
 
 import logging
@@ -32,12 +32,12 @@ log = logging.getLogger('gajim.c.multimedia_helpers')
 
 class DeviceManager:
     def __init__(self) -> None:
-        self.devices: Dict[str, str] = {}
+        self.devices: dict[str, str] = {}
 
     def detect(self) -> None:
         self.devices = {}
 
-    def get_devices(self) -> Dict[str, str]:
+    def get_devices(self) -> dict[str, str]:
         if not self.devices:
             self.detect()
         return self.devices
@@ -73,7 +73,7 @@ class DeviceManager:
 
 class AudioInputManager(DeviceManager):
     def detect(self) -> None:
-        self.devices: Dict[str, str] = {}
+        self.devices: dict[str, str] = {}
         # Test src
         self.detect_element('audiotestsrc',
                             _('Audio test'),
@@ -94,7 +94,7 @@ class AudioInputManager(DeviceManager):
 
 class AudioOutputManager(DeviceManager):
     def detect(self) -> None:
-        self.devices: Dict[str, str] = {}
+        self.devices: dict[str, str] = {}
         # Fake sink
         self.detect_element('fakesink', _('Fake audio output'))
         # Auto sink
@@ -107,7 +107,7 @@ class AudioOutputManager(DeviceManager):
 
 class VideoInputManager(DeviceManager):
     def detect(self) -> None:
-        self.devices: Dict[str, str] = {}
+        self.devices: dict[str, str] = {}
         # Test src
         self.detect_element(
             'videotestsrc',

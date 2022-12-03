@@ -15,7 +15,6 @@
 from typing import Any
 from typing import Optional
 from typing import Union
-from typing import Type
 from typing import TextIO
 
 import os
@@ -258,7 +257,7 @@ class CoreApplication(ged.EventHelper):
         os.environ['GAJIM_LEAK'] = 'true'
 
         def warn_with_traceback(message: Union[Warning, str],
-                                category: Type[Warning],
+                                category: type[Warning],
                                 filename: str,
                                 lineno: int,
                                 _file: Optional[TextIO] = None,

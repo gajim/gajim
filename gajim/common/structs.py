@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Type
 from typing import TypeVar
 from typing import NamedTuple
 from typing import Optional
@@ -274,7 +273,7 @@ class VariantMixin:
     }
 
     def _get_type_and_variant_string(self,
-                                     field_type: str) -> tuple[Type[Any], str]:
+                                     field_type: str) -> tuple[type[Any], str]:
         variant_str = ''
         if 'Optional' in field_type:
             variant_str = 'm'
@@ -319,7 +318,7 @@ class VariantMixin:
         return GLib.Variant('a{sv}', vdict)
 
     @classmethod
-    def from_variant(cls: Type[_T], variant: GLib.Variant) -> _T:
+    def from_variant(cls: type[_T], variant: GLib.Variant) -> _T:
         vdict = variant.unpack()
         __types = vdict.pop('__types', None)
         if __types is not None:

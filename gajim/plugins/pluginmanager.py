@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Optional
-from typing import Type
 
 import os
 import sys
@@ -244,7 +243,7 @@ class PluginManager(metaclass=Singleton):
 
     def _load_plugin_module(self,
                             manifest: PluginManifest
-                            ) -> Optional[Type[GajimPlugin]]:
+                            ) -> Optional[type[GajimPlugin]]:
 
         assert manifest.path is not None
         module_path = manifest.path / '__init__.py'

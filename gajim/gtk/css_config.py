@@ -16,9 +16,9 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import annotations
+
 from typing import Optional
 from typing import Union
-from typing import Tuple
 
 import math
 import logging
@@ -348,7 +348,7 @@ class CSSConfig:
 
     def _get_attr_from_description(self,
                                    description: Pango.FontDescription
-                                   ) -> Tuple[Optional[str], float, str, int]:
+                                   ) -> tuple[Optional[str], float, str, int]:
         size = description.get_size() / Pango.SCALE
         style = self._get_string_from_pango_style(description.get_style())
         weight = self._pango_to_css_weight(int(description.get_weight()))

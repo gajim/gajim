@@ -18,7 +18,6 @@ from typing import cast
 from typing import Any
 from typing import Optional
 from typing import Union
-from typing import Type
 
 import logging
 import itertools
@@ -243,7 +242,7 @@ class Result(Page):
 
         form = dataforms.extend_form(node=form)
 
-        fieldtypes: list[Union[Type[bool], Type[str]]] = []
+        fieldtypes: list[Union[type[bool], type[str]]] = []
         fieldvars: list[Any] = []
         index = 0
         for field in form.reported.iter_fields():

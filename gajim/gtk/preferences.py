@@ -16,7 +16,6 @@ from __future__ import annotations
 from typing import Any
 from typing import Optional
 from typing import cast
-from typing import Type
 
 import logging
 import sys
@@ -79,7 +78,7 @@ class Preferences(Gtk.ApplicationWindow):
 
         self.add(self._ui.grid)
 
-        prefs: list[tuple[str, Type[PreferenceBox]]] = [
+        prefs: list[tuple[str, type[PreferenceBox]]] = [
             ('window_behaviour', WindowBehaviour),
             ('plugins', Plugins),
             ('general', General),
@@ -116,7 +115,7 @@ class Preferences(Gtk.ApplicationWindow):
     def get_ui(self):
         return self._ui
 
-    def _add_prefs(self, prefs: list[tuple[str, Type[PreferenceBox]]]):
+    def _add_prefs(self, prefs: list[tuple[str, type[PreferenceBox]]]):
         for ui_name, klass in prefs:
             pref_box = getattr(self._ui, ui_name)
             pref = klass(self)

@@ -20,7 +20,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Type
 from types import TracebackType
 
 import sys
@@ -76,7 +75,7 @@ ISSUE_TEXT = '''## Versions:
 ...'''
 
 
-def _hook(type_: Type[BaseException],
+def _hook(type_: type[BaseException],
           value: BaseException,
           tb: TracebackType
           ) -> None:
@@ -92,7 +91,7 @@ def _hook(type_: Type[BaseException],
 
 class ExceptionDialog(Gtk.ApplicationWindow):
     def __init__(self,
-                 type_: Type[BaseException],
+                 type_: type[BaseException],
                  value: BaseException,
                  tb: TracebackType
                  ) -> None:
