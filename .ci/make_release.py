@@ -44,7 +44,6 @@ if __name__ == '__main__':
     parser.add_argument('token', type=str, help='The API token')
     args = parser.parse_args()
 
-
     api = Gitlab(GITLAB_INSTANCE_URL, private_token=args.token)
     api.auth()
     project = api.projects.get(PROJECT_ID)
