@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-30 21:47+0000\n"
+"POT-Creation-Date: 2022-12-03 08:42+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -137,7 +137,7 @@ msgstr ""
 #, python-format
 msgid ""
 "%s is online with multiple devices.\n"
-"Choose the device you would like to send the file to."
+"Choose the device you would like to send the files to."
 msgstr ""
 
 #, python-format
@@ -155,6 +155,26 @@ msgstr "Dilemel an darempred diouzh ar roll"
 #, fuzzy, python-format
 msgid "%s wants to send you a file"
 msgstr "Fellout a ra da %s kas deoc'h ur restr."
+
+#, python-format
+msgctxt "positive longitude"
+msgid "%sE"
+msgstr ""
+
+#, python-format
+msgctxt "positive latitude"
+msgid "%sN"
+msgstr ""
+
+#, python-format
+msgctxt "negative latitude"
+msgid "%sS"
+msgstr ""
+
+#, python-format
+msgctxt "negative longitude"
+msgid "%sW"
+msgstr ""
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -211,15 +231,6 @@ msgstr "Taolennadur"
 #, fuzzy
 msgid "<Plugin Name>"
 msgstr "échec lors de la publication de votre vCard"
-
-msgid ""
-"<a href='https://conversations.im/compliance/'>conversations.im/compliance</"
-"a>"
-msgstr ""
-
-msgid ""
-"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
-msgstr ""
 
 #, python-format
 msgid ""
@@ -672,14 +683,14 @@ msgstr "Kontoù"
 msgid "Accounts"
 msgstr "Kontoù"
 
+msgid "Action for left-clicking a preview"
+msgstr ""
+
 #, fuzzy
 msgid "Action on Close"
 msgstr "Gajim"
 
 msgid "Action when closing Gajim’s window"
-msgstr ""
-
-msgid "Action when left-clicking a preview"
 msgstr ""
 
 #, fuzzy
@@ -714,7 +725,7 @@ msgid "Add Entry"
 msgstr "Bro:"
 
 #, fuzzy
-msgid "Add Files"
+msgid "Add Files…"
 msgstr "Restr:"
 
 #, fuzzy
@@ -852,7 +863,7 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allowed File Size"
+msgid "Allows opening file:/ URIs when clicked."
 msgstr ""
 
 msgid "Alternate venue (optional)..."
@@ -950,11 +961,6 @@ msgid "Are you sure you want to leave this group chat?"
 msgstr "Ha sur oc'h e fell deoc'h kuitaat ar flap \"%s\"?"
 
 #, fuzzy
-msgid ""
-"Are you sure you want to paste your clipboard's image into the chat window?"
-msgstr "Ha sur oc'h e fell deoc'h kuitaat ar flap \"%s\"?"
-
-#, fuzzy
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Êtes-vous sûr de vouloir quitter les salons \"%s\" ?"
 
@@ -978,8 +984,9 @@ msgstr "Kemennadenn gentañ"
 msgid "Audio"
 msgstr ""
 
-msgid "Audio / Video"
-msgstr ""
+#, fuzzy
+msgid "Audio / Video Calls"
+msgstr "Flap prevez"
 
 #, fuzzy
 msgid "Audio File"
@@ -992,6 +999,10 @@ msgstr "Titour-stad"
 #, fuzzy
 msgid "Audio Output Device"
 msgstr "Titour-stad"
+
+#, fuzzy
+msgid "Audio Preview"
+msgstr "Restr:"
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1373,10 +1384,6 @@ msgstr ""
 msgid "Choose Sound"
 msgstr "Dibabit ur son"
 
-#, fuzzy
-msgid "Choose a File to Send…"
-msgstr "Dibabit ur restr da gas..."
-
 msgid "Choose a color or select an image"
 msgstr ""
 
@@ -1387,9 +1394,6 @@ msgstr "Dibabit ur skeudenn"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Dibabit ur restr da gas..."
-
-msgid "Choose from various emoji styles"
-msgstr ""
 
 #, fuzzy
 msgid "Choose the contact's groups"
@@ -1418,7 +1422,9 @@ msgstr "Dibabit ur son"
 msgid "Clear message entry"
 msgstr "Kemennadenn gaset"
 
-msgid "Click messages to select them"
+msgid ""
+"Click messages to select them\n"
+"(Ctrl + Double Click to deselect)"
 msgstr ""
 
 #, fuzzy
@@ -1431,6 +1437,11 @@ msgstr ""
 #, fuzzy
 msgid "Click to view location"
 msgstr "_Kopiañ chomlec'h an ere"
+
+msgid ""
+"Clickable schemes in addition to the hard-coded list of IANA-registered "
+"ones. Space-separated, lower-case, no colons."
+msgstr ""
 
 #, fuzzy
 msgid "Client Certificate"
@@ -1676,6 +1687,10 @@ msgid "Copy Email Address"
 msgstr "_Kopiañ ar JID/Chomlec'h postel"
 
 #, fuzzy
+msgid "Copy Link"
+msgstr "_Kopiañ chomlec'h an ere"
+
+#, fuzzy
 msgid "Copy Link Location"
 msgstr "_Kopiañ chomlec'h an ere"
 
@@ -1707,11 +1722,11 @@ msgid "Correct the last message"
 msgstr "titour stad"
 
 #, fuzzy
-msgid "Could not Open File"
+msgid "Could not access file"
 msgstr "Dibosupl eo kargañ ar skeudenn"
 
-#, fuzzy
-msgid "Could not access file"
+#, fuzzy, python-format
+msgid "Could not open file (%s)"
 msgstr "Dibosupl eo kargañ ar skeudenn"
 
 #, fuzzy
@@ -1862,6 +1877,10 @@ msgid "Direct Messages"
 msgstr "Titour-stad"
 
 #, fuzzy
+msgid "Direct transfer (not encrypted)"
+msgstr "Sac'het an treuzkas"
+
+#, fuzzy
 msgid "Directory"
 msgstr "_Istoradur"
 
@@ -1948,6 +1967,10 @@ msgid "Download"
 msgstr "Pellgargañ"
 
 #, fuzzy
+msgid "Download File"
+msgstr "Pellgargañ"
+
+#, fuzzy
 msgid "Download Update"
 msgstr "Pellgargañ"
 
@@ -1970,6 +1993,10 @@ msgstr "O skrivañ"
 #, fuzzy, python-format
 msgid "Draft: %s"
 msgstr "Stad:"
+
+#, fuzzy
+msgid "Drop files here"
+msgstr "Kas ur restr d'un darempred"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2009,15 +2036,8 @@ msgstr ""
 msgid "Email"
 msgstr "Postel nevez"
 
-msgid "Emoji"
-msgstr ""
-
 msgid "Emoji Shortcodes"
 msgstr ""
-
-#, fuzzy
-msgid "Emoji Theme"
-msgstr "Gajim - %s"
 
 msgid "Enable"
 msgstr "Enaouiñ"
@@ -2035,6 +2055,9 @@ msgid "Enables Gajim to play sounds for various notifications"
 msgstr ""
 
 msgid "Enables Gajim to provide Audio and Video chats"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to provide a notification area icon"
@@ -2263,6 +2286,10 @@ msgid "File Preview"
 msgstr ""
 
 #, fuzzy
+msgid "File Size Limit"
+msgstr "Treug ar restr"
+
+#, fuzzy
 msgid "File Transfer"
 msgstr "Treuzkasoù"
 
@@ -2313,6 +2340,9 @@ msgstr ""
 msgid "File size unknown"
 msgstr ""
 
+msgid "File too big, will use direct transfer (not encrypted)"
+msgstr ""
+
 #, fuzzy
 msgid "File transfer stopped"
 msgstr "Sac'het an treuzkas"
@@ -2328,10 +2358,6 @@ msgstr "Restr: %s"
 #, python-format
 msgid "Filename: %s"
 msgstr "Anv ar restr: %s"
-
-#, fuzzy
-msgid "Files to send"
-msgstr "Dibabit ur restr da gas..."
 
 #, fuzzy
 msgid "Filetransfer Preference"
@@ -2473,13 +2499,6 @@ msgstr "Kaser:"
 
 msgid "General"
 msgstr "Hollek"
-
-msgid ""
-"Generate preview automatically in public group chats (may disclose your data)"
-msgstr ""
-
-msgid "Generate preview for any URLs containing images (may be unsafe)"
-msgstr ""
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2934,10 +2953,6 @@ msgstr ""
 msgid "Last but not least"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "Lat: %s Lon: %s"
-msgstr "Stad diwezhañ: %s"
-
 #, fuzzy
 msgid "Leave Group Chat"
 msgstr "Flap a-stroll"
@@ -2982,13 +2997,9 @@ msgstr ""
 msgid "Local Time"
 msgstr "dibaoe %s"
 
-#, fuzzy
-msgid "Location"
+#, fuzzy, python-format
+msgid "Location at %s"
 msgstr "Kemmañ ar gont"
-
-#, python-format
-msgid "Location at Lat: %s Lon: %s"
-msgstr ""
 
 #, fuzzy
 msgid "Location:"
@@ -3059,7 +3070,7 @@ msgstr ""
 msgid "Mark as read"
 msgstr ""
 
-msgid "Maximum file size for preview generation"
+msgid "Maximum file size for preview downloads"
 msgstr ""
 
 #, fuzzy
@@ -3533,9 +3544,6 @@ msgstr "Ne glot ket ar gerioù-kuzh"
 msgid "Past Developers"
 msgstr "Diorroerien kent:"
 
-msgid "Paste Image"
-msgstr "Pegañ ar skeudenn"
-
 msgid "Paste Last Input"
 msgstr ""
 
@@ -3894,10 +3902,6 @@ msgid "Remove Contact"
 msgstr "Darempredoù"
 
 #, fuzzy
-msgid "Remove Files"
-msgstr "_Dilemel"
-
-#, fuzzy
 msgid "Remove Group"
 msgstr "_Dilemel"
 
@@ -4007,11 +4011,8 @@ msgid "Requires: Gspell"
 msgstr ""
 
 msgid ""
-"Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
-"base, gstreamer1.0-plugins-ugly, gstreamer1.0-libav, and gstreamer1.0-gtk3"
-msgstr ""
-
-msgid "Requires: gir1.2-gupnpigd-1.0"
+"Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+"ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
 msgstr ""
 
 #, fuzzy
@@ -4020,6 +4021,13 @@ msgstr "Merour an istoradur"
 
 #, fuzzy
 msgid "Requires: gsound"
+msgstr "Ger-kuzh ret"
+
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
+#, fuzzy
+msgid "Requires: gupnpigd-1.0"
 msgstr "Ger-kuzh ret"
 
 msgid "Requires: libappindicator3"
@@ -4134,10 +4142,6 @@ msgid "Save"
 msgstr "Enrollet e-barzh: %s"
 
 #, fuzzy
-msgid "Save As…"
-msgstr "Enrollet e-barzh: %s"
-
-#, fuzzy
 msgid "Save File as…"
 msgstr "Enrollañ ar restr dindan..."
 
@@ -4147,6 +4151,10 @@ msgstr "Enrollañ ar ger-kuzh"
 
 #, fuzzy
 msgid "Save as..."
+msgstr "Enrollet e-barzh: %s"
+
+#, fuzzy
+msgid "Save as…"
 msgstr "Enrollet e-barzh: %s"
 
 #, fuzzy
@@ -4300,6 +4308,10 @@ msgstr "Enrollañ ar restr dindan..."
 #, fuzzy
 msgid "Send File Directly…"
 msgstr "Enrollañ ar restr dindan..."
+
+#, fuzzy
+msgid "Send Files"
+msgstr "Kas ur _restr"
 
 #, fuzzy
 msgid "Send Files Directly"
@@ -4549,6 +4561,13 @@ msgstr "Diskouez ar _roll-darempredoù"
 msgid "Show only critical errors"
 msgstr "Diskouez er _roll hepken"
 
+msgid ""
+"Show previews automatically in public group chats (may disclose your data)"
+msgstr ""
+
+msgid "Show previews for any URLs containing images (may be unsafe)"
+msgstr ""
+
 #, fuzzy
 msgid "Show previews for files"
 msgstr "N'eus ket tu da gevreañ"
@@ -4599,7 +4618,7 @@ msgstr ""
 msgid "Signup not allowed"
 msgstr "N'eus ket bet kavet al lesanv : %s"
 
-msgid "Size of preview image"
+msgid "Size of preview images in pixels"
 msgstr ""
 
 msgid "Sleeping"
@@ -4901,10 +4920,6 @@ msgid ""
 "The file %s has been received, but it seems to have been damaged along the "
 "way.\n"
 "Do you want to download it again?"
-msgstr ""
-
-#, python-format
-msgid "The following file could not be accessed and was not uploaded: %s"
 msgstr ""
 
 msgid ""
@@ -5449,7 +5464,9 @@ msgstr ""
 msgid "Where participants should go"
 msgstr ""
 
-msgid "Whether to check for a valid certificate"
+msgid ""
+"Whether to check for a valid certificate before downloading (not safe to "
+"disable)"
 msgstr ""
 
 msgid "Which server should I choose?"
@@ -5565,9 +5582,6 @@ msgstr "Anavezet oc'h bremañ gant an anv %s"
 msgid "You are offline."
 msgstr "Ezlinenn"
 
-msgid "You are trying to paste an image"
-msgstr "Emaoc'h o klask pegañ ur skeudenn"
-
 #, fuzzy, python-format
 msgid "You can join this group chat instead: xmpp:%s?join"
 msgstr "Er strollad"
@@ -5600,6 +5614,10 @@ msgstr ""
 
 msgid ""
 "You do not have the proper permissions to create files in this directory."
+msgstr ""
+
+#, python-format
+msgid "You dropped something Gajim could not process: %s"
 msgstr ""
 
 #, python-brace-format
@@ -5910,9 +5928,6 @@ msgstr "_Digeriñ ar renkell pal"
 msgid "_Overwrite"
 msgstr ""
 
-msgid "_Paste"
-msgstr ""
-
 #, fuzzy
 msgid "_Please choose a server"
 msgstr "Ebarzhiñ ur _webgaoz"
@@ -5958,7 +5973,7 @@ msgid "_Save"
 msgstr "Enrollet e-barzh: %s"
 
 #, fuzzy
-msgid "_Save as"
+msgid "_Save as…"
 msgstr "Enrollet e-barzh: %s"
 
 msgid "_Search"
@@ -5969,10 +5984,6 @@ msgstr ""
 
 msgid "_Send"
 msgstr "_Kas"
-
-#, fuzzy
-msgid "_Send Files"
-msgstr "Kas ur _restr"
 
 #, fuzzy
 msgid "_Show Certificate"
@@ -6288,6 +6299,12 @@ msgstr ""
 #~ msgid "App Indicator Icon"
 #~ msgstr "<b>Poelladoù</b>"
 
+#, fuzzy
+#~ msgid ""
+#~ "Are you sure you want to paste your clipboard's image into the chat "
+#~ "window?"
+#~ msgstr "Ha sur oc'h e fell deoc'h kuitaat ar flap \"%s\"?"
+
 #~ msgid "Arguments:"
 #~ msgstr "Arguments :"
 
@@ -6326,6 +6343,10 @@ msgstr ""
 #~ msgstr "Flap"
 
 #, fuzzy
+#~ msgid "Choose a File to Send…"
+#~ msgstr "Dibabit ur restr da gas..."
+
+#, fuzzy
 #~ msgid "Clear chat window"
 #~ msgstr "Usage : /%s, nettoie la fenêtre."
 
@@ -6356,6 +6377,10 @@ msgstr ""
 #~ msgstr "Darempredoù"
 
 #, fuzzy
+#~ msgid "Emoji Theme"
+#~ msgstr "Gajim - %s"
+
+#, fuzzy
 #~ msgid "Enter Password"
 #~ msgstr "Roit ur ger-kuzh nevez:"
 
@@ -6365,6 +6390,10 @@ msgstr ""
 
 #~ msgid "File path"
 #~ msgstr "Treug ar restr"
+
+#, fuzzy
+#~ msgid "Files to send"
+#~ msgstr "Dibabit ur restr da gas..."
 
 #, fuzzy
 #~ msgid "Format your message…"
@@ -6437,6 +6466,10 @@ msgstr ""
 #~ msgstr "Vous êtes banni de ce salon."
 
 #, fuzzy
+#~ msgid "Lat: %s Lon: %s"
+#~ msgstr "Stad diwezhañ: %s"
+
+#, fuzzy
 #~ msgid "Leave the group chat"
 #~ msgstr "Flap a-stroll"
 
@@ -6482,6 +6515,9 @@ msgstr ""
 #~ "Usage : /%s <surnom>, ouvre une fenêtre de discussion privée avec "
 #~ "l'occupant spécifié."
 
+#~ msgid "Paste Image"
+#~ msgstr "Pegañ ar skeudenn"
+
 #, fuzzy
 #~ msgid "Presence description:"
 #~ msgstr "Taolennadur"
@@ -6504,6 +6540,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Quote…"
 #~ msgstr "_Kuitaat"
+
+#, fuzzy
+#~ msgid "Remove Files"
+#~ msgstr "_Dilemel"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6622,12 +6662,19 @@ msgstr ""
 #~ "You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
 #~ msgstr "N'emaoc'h ket er webgaoz \"%s\" ken, pe neuze eo aet kuit \"%s\"."
 
+#~ msgid "You are trying to paste an image"
+#~ msgstr "Emaoc'h o klask pegañ ur skeudenn"
+
 #~ msgid "You have no active account"
 #~ msgstr "N'ho peus kont bev ebet"
 
 #, fuzzy
 #~ msgid "_Invite"
 #~ msgstr "Diwelus"
+
+#, fuzzy
+#~ msgid "_Save as"
+#~ msgstr "Enrollet e-barzh: %s"
 
 #~ msgid ""
 #~ "change status of account \"account\". If not specified, try to change "

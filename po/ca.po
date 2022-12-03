@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-30 21:47+0000\n"
+"POT-Creation-Date: 2022-12-03 08:42+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -136,7 +136,7 @@ msgstr ""
 #, python-format
 msgid ""
 "%s is online with multiple devices.\n"
-"Choose the device you would like to send the file to."
+"Choose the device you would like to send the files to."
 msgstr ""
 
 #, python-format
@@ -153,6 +153,26 @@ msgstr "Transferències de fitxers"
 
 #, python-format
 msgid "%s wants to send you a file"
+msgstr ""
+
+#, python-format
+msgctxt "positive longitude"
+msgid "%sE"
+msgstr ""
+
+#, python-format
+msgctxt "positive latitude"
+msgid "%sN"
+msgstr ""
+
+#, python-format
+msgctxt "negative latitude"
+msgid "%sS"
+msgstr ""
+
+#, python-format
+msgctxt "negative longitude"
+msgid "%sW"
 msgstr ""
 
 #, python-format
@@ -210,15 +230,6 @@ msgstr "Descripció:"
 #, fuzzy
 msgid "<Plugin Name>"
 msgstr "Connectors"
-
-msgid ""
-"<a href='https://conversations.im/compliance/'>conversations.im/compliance</"
-"a>"
-msgstr ""
-
-msgid ""
-"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
-msgstr ""
 
 #, python-format
 msgid ""
@@ -637,14 +648,14 @@ msgstr "Comptes"
 msgid "Accounts"
 msgstr "Comptes"
 
+msgid "Action for left-clicking a preview"
+msgstr ""
+
 #, fuzzy
 msgid "Action on Close"
 msgstr "_Minimitza en tancar"
 
 msgid "Action when closing Gajim’s window"
-msgstr ""
-
-msgid "Action when left-clicking a preview"
 msgstr ""
 
 #, fuzzy
@@ -677,7 +688,7 @@ msgid "Add Entry"
 msgstr "Entrada:"
 
 #, fuzzy
-msgid "Add Files"
+msgid "Add Files…"
 msgstr "Envia _Fitxer"
 
 #, fuzzy
@@ -817,7 +828,7 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allowed File Size"
+msgid "Allows opening file:/ URIs when clicked."
 msgstr ""
 
 msgid "Alternate venue (optional)..."
@@ -908,10 +919,6 @@ msgstr ""
 msgid "Are you sure you want to leave this group chat?"
 msgstr ""
 
-msgid ""
-"Are you sure you want to paste your clipboard's image into the chat window?"
-msgstr ""
-
 msgid "Are you sure you want to quit Gajim?"
 msgstr ""
 
@@ -934,8 +941,9 @@ msgstr ""
 msgid "Audio"
 msgstr ""
 
-msgid "Audio / Video"
-msgstr ""
+#, fuzzy
+msgid "Audio / Video Calls"
+msgstr "Disponible per parlar"
 
 #, fuzzy
 msgid "Audio File"
@@ -946,6 +954,10 @@ msgstr ""
 
 msgid "Audio Output Device"
 msgstr ""
+
+#, fuzzy
+msgid "Audio Preview"
+msgstr "Envia _Fitxer"
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1315,9 +1327,6 @@ msgstr ""
 msgid "Choose Sound"
 msgstr ""
 
-msgid "Choose a File to Send…"
-msgstr ""
-
 msgid "Choose a color or select an image"
 msgstr ""
 
@@ -1327,9 +1336,6 @@ msgstr ""
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Connexió"
-
-msgid "Choose from various emoji styles"
-msgstr ""
 
 #, fuzzy
 msgid "Choose the contact's groups"
@@ -1355,7 +1361,9 @@ msgstr "Neteja"
 msgid "Clear message entry"
 msgstr ""
 
-msgid "Click messages to select them"
+msgid ""
+"Click messages to select them\n"
+"(Ctrl + Double Click to deselect)"
 msgstr ""
 
 msgid "Click on contacts you would like to invite to this group chat."
@@ -1367,6 +1375,11 @@ msgstr ""
 #, fuzzy
 msgid "Click to view location"
 msgstr "_Copia la ubicació de l'enllaç"
+
+msgid ""
+"Clickable schemes in addition to the hard-coded list of IANA-registered "
+"ones. Space-separated, lower-case, no colons."
+msgstr ""
 
 #, fuzzy
 msgid "Client Certificate"
@@ -1600,6 +1613,10 @@ msgid "Copy Email Address"
 msgstr "_Copia adreça JID/Email"
 
 #, fuzzy
+msgid "Copy Link"
+msgstr "_Copia la ubicació de l'enllaç"
+
+#, fuzzy
 msgid "Copy Link Location"
 msgstr "_Copia la ubicació de l'enllaç"
 
@@ -1629,10 +1646,11 @@ msgstr "_Copia la ubicació de l'enllaç"
 msgid "Correct the last message"
 msgstr "_Canvia Missatge d'Estat"
 
-msgid "Could not Open File"
+msgid "Could not access file"
 msgstr ""
 
-msgid "Could not access file"
+#, python-format
+msgid "Could not open file (%s)"
 msgstr ""
 
 #, fuzzy
@@ -1774,6 +1792,9 @@ msgstr ""
 msgid "Direct Messages"
 msgstr "Missatges preconfigurats:"
 
+msgid "Direct transfer (not encrypted)"
+msgstr ""
+
 #, fuzzy
 msgid "Directory"
 msgstr "Historial"
@@ -1853,6 +1874,10 @@ msgstr ""
 msgid "Download"
 msgstr ""
 
+#, fuzzy
+msgid "Download File"
+msgstr "_Canvia Missatge d'Estat"
+
 msgid "Download Update"
 msgstr ""
 
@@ -1873,6 +1898,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Draft: %s"
 msgstr "Estat"
+
+#, fuzzy
+msgid "Drop files here"
+msgstr "Mostra els contactes desconnectats"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -1908,15 +1937,8 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-msgid "Emoji"
-msgstr ""
-
 msgid "Emoji Shortcodes"
 msgstr ""
-
-#, fuzzy
-msgid "Emoji Theme"
-msgstr "Personalització Temes Gajim"
 
 msgid "Enable"
 msgstr ""
@@ -1933,6 +1955,9 @@ msgid "Enables Gajim to play sounds for various notifications"
 msgstr ""
 
 msgid "Enables Gajim to provide Audio and Video chats"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to provide a notification area icon"
@@ -2149,6 +2174,9 @@ msgstr ""
 msgid "File Preview"
 msgstr ""
 
+msgid "File Size Limit"
+msgstr ""
+
 msgid "File Transfer"
 msgstr "Transferència de Fitxers"
 
@@ -2195,6 +2223,9 @@ msgstr ""
 msgid "File size unknown"
 msgstr ""
 
+msgid "File too big, will use direct transfer (not encrypted)"
+msgstr ""
+
 msgid "File transfer stopped"
 msgstr ""
 
@@ -2207,9 +2238,6 @@ msgstr ""
 
 #, python-format
 msgid "Filename: %s"
-msgstr ""
-
-msgid "Files to send"
 msgstr ""
 
 #, fuzzy
@@ -2349,13 +2377,6 @@ msgstr ""
 
 msgid "General"
 msgstr "General"
-
-msgid ""
-"Generate preview automatically in public group chats (may disclose your data)"
-msgstr ""
-
-msgid "Generate preview for any URLs containing images (may be unsafe)"
-msgstr ""
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2796,10 +2817,6 @@ msgstr ""
 msgid "Last but not least"
 msgstr ""
 
-#, python-format
-msgid "Lat: %s Lon: %s"
-msgstr ""
-
 #, fuzzy
 msgid "Leave Group Chat"
 msgstr "Grups de xat"
@@ -2839,13 +2856,9 @@ msgstr ""
 msgid "Local Time"
 msgstr ""
 
-#, fuzzy
-msgid "Location"
+#, fuzzy, python-format
+msgid "Location at %s"
 msgstr "_Copia la ubicació de l'enllaç"
-
-#, python-format
-msgid "Location at Lat: %s Lon: %s"
-msgstr ""
 
 msgid "Location:"
 msgstr ""
@@ -2914,7 +2927,7 @@ msgstr ""
 msgid "Mark as read"
 msgstr ""
 
-msgid "Maximum file size for preview generation"
+msgid "Maximum file size for preview downloads"
 msgstr ""
 
 msgid "Me"
@@ -3366,9 +3379,6 @@ msgstr ""
 msgid "Past Developers"
 msgstr ""
 
-msgid "Paste Image"
-msgstr ""
-
 msgid "Paste Last Input"
 msgstr ""
 
@@ -3703,10 +3713,6 @@ msgstr "Historial"
 msgid "Remove Contact"
 msgstr "Afegeix un contacte nou"
 
-#, fuzzy
-msgid "Remove Files"
-msgstr "Esborra"
-
 msgid "Remove Group"
 msgstr ""
 
@@ -3817,11 +3823,8 @@ msgid "Requires: Gspell"
 msgstr ""
 
 msgid ""
-"Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
-"base, gstreamer1.0-plugins-ugly, gstreamer1.0-libav, and gstreamer1.0-gtk3"
-msgstr ""
-
-msgid "Requires: gir1.2-gupnpigd-1.0"
+"Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+"ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
 msgstr ""
 
 msgid "Requires: gnome-keyring or kwallet"
@@ -3829,6 +3832,13 @@ msgstr ""
 
 #, fuzzy
 msgid "Requires: gsound"
+msgstr "requereix"
+
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
+#, fuzzy
+msgid "Requires: gupnpigd-1.0"
 msgstr "requereix"
 
 msgid "Requires: libappindicator3"
@@ -3941,9 +3951,6 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-msgid "Save As…"
-msgstr ""
-
 msgid "Save File as…"
 msgstr ""
 
@@ -3953,6 +3960,10 @@ msgstr "Desa la contrasenya"
 
 #, fuzzy
 msgid "Save as..."
+msgstr "Desa la contrasenya"
+
+#, fuzzy
+msgid "Save as…"
 msgstr "Desa la contrasenya"
 
 msgid "Saving Avatar Failed"
@@ -4098,6 +4109,10 @@ msgstr "Envia _Fitxer"
 
 msgid "Send File Directly…"
 msgstr ""
+
+#, fuzzy
+msgid "Send Files"
+msgstr "Envia _Fitxer"
 
 #, fuzzy
 msgid "Send Files Directly"
@@ -4338,6 +4353,13 @@ msgstr "C_onecta al servidor quan s'inicia"
 msgid "Show only critical errors"
 msgstr ""
 
+msgid ""
+"Show previews automatically in public group chats (may disclose your data)"
+msgstr ""
+
+msgid "Show previews for any URLs containing images (may be unsafe)"
+msgstr ""
+
 #, fuzzy
 msgid "Show previews for files"
 msgstr "Transferència de Fitxers"
@@ -4383,7 +4405,7 @@ msgstr ""
 msgid "Signup not allowed"
 msgstr ""
 
-msgid "Size of preview image"
+msgid "Size of preview images in pixels"
 msgstr ""
 
 msgid "Sleeping"
@@ -4672,10 +4694,6 @@ msgid ""
 "The file %s has been received, but it seems to have been damaged along the "
 "way.\n"
 "Do you want to download it again?"
-msgstr ""
-
-#, python-format
-msgid "The following file could not be accessed and was not uploaded: %s"
 msgstr ""
 
 msgid ""
@@ -5194,7 +5212,9 @@ msgstr ""
 msgid "Where participants should go"
 msgstr ""
 
-msgid "Whether to check for a valid certificate"
+msgid ""
+"Whether to check for a valid certificate before downloading (not safe to "
+"disable)"
 msgstr ""
 
 msgid "Which server should I choose?"
@@ -5304,9 +5324,6 @@ msgstr ""
 msgid "You are offline."
 msgstr ""
 
-msgid "You are trying to paste an image"
-msgstr ""
-
 #, python-format
 msgid "You can join this group chat instead: xmpp:%s?join"
 msgstr ""
@@ -5338,6 +5355,10 @@ msgstr ""
 
 msgid ""
 "You do not have the proper permissions to create files in this directory."
+msgstr ""
+
+#, python-format
+msgid "You dropped something Gajim could not process: %s"
 msgstr ""
 
 #, python-brace-format
@@ -5629,9 +5650,6 @@ msgstr "_Obre Carpeta Contenidora"
 msgid "_Overwrite"
 msgstr ""
 
-msgid "_Paste"
-msgstr ""
-
 #, fuzzy
 msgid "_Please choose a server"
 msgstr "Afegeix aquesta sala a les adreces d'interès"
@@ -5676,7 +5694,7 @@ msgid "_Save"
 msgstr ""
 
 #, fuzzy
-msgid "_Save as"
+msgid "_Save as…"
 msgstr "Desa la contrasenya"
 
 #, fuzzy
@@ -5688,10 +5706,6 @@ msgstr ""
 
 msgid "_Send"
 msgstr "Envia"
-
-#, fuzzy
-msgid "_Send Files"
-msgstr "Envia _Fitxer"
 
 #, fuzzy
 msgid "_Show Certificate"
@@ -5994,6 +6008,10 @@ msgstr ""
 #~ msgstr "Convida _Contactes"
 
 #, fuzzy
+#~ msgid "Emoji Theme"
+#~ msgstr "Personalització Temes Gajim"
+
+#, fuzzy
 #~ msgid "Enter Password"
 #~ msgstr "Desa la contrasenya"
 
@@ -6019,6 +6037,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Previously sent message"
 #~ msgstr "Missatges preconfigurats:"
+
+#, fuzzy
+#~ msgid "Remove Files"
+#~ msgstr "Esborra"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6047,6 +6069,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Invite"
 #~ msgstr "Con_vida"
+
+#, fuzzy
+#~ msgid "_Save as"
+#~ msgstr "Desa la contrasenya"
 
 #, fuzzy
 #~ msgid "python-cairo Version: %s"

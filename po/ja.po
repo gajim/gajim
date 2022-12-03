@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-30 21:47+0000\n"
+"POT-Creation-Date: 2022-12-03 08:42+0000\n"
 "PO-Revision-Date: 2022-05-26 22:21+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -141,10 +141,10 @@ msgstr "%s さんから着信"
 msgid "%s is not a valid loglevel"
 msgstr "%s は正しいログレベルではありません"
 
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "%s is online with multiple devices.\n"
-"Choose the device you would like to send the file to."
+"Choose the device you would like to send the files to."
 msgstr ""
 "%s さんは複数のデバイスでオンライン状態です。\n"
 "ファイルを送りたいデバイスを選んでください。"
@@ -164,6 +164,26 @@ msgstr "%s さんは転送を中止しました"
 #, python-format
 msgid "%s wants to send you a file"
 msgstr "%s さんがファイルを転送したがっています"
+
+#, python-format
+msgctxt "positive longitude"
+msgid "%sE"
+msgstr ""
+
+#, python-format
+msgctxt "positive latitude"
+msgid "%sN"
+msgstr ""
+
+#, python-format
+msgctxt "negative latitude"
+msgid "%sS"
+msgstr ""
+
+#, python-format
+msgctxt "negative longitude"
+msgid "%sW"
+msgstr ""
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -221,18 +241,6 @@ msgstr "<説明>"
 
 msgid "<Plugin Name>"
 msgstr "<プラグイン名>"
-
-msgid ""
-"<a href='https://conversations.im/compliance/'>conversations.im/compliance</"
-"a>"
-msgstr ""
-"<a href='https://conversations.im/compliance/'>conversations.im/compliance</"
-"a>"
-
-msgid ""
-"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
-msgstr ""
-"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
 
 #, python-format
 msgid ""
@@ -615,15 +623,16 @@ msgid "Accounts"
 msgstr "アカウント"
 
 #, fuzzy
+msgid "Action for left-clicking a preview"
+msgstr "プレビューを左クリックしたときの動作"
+
+#, fuzzy
 msgid "Action on Close"
 msgstr "閉じると Gajim を終了する"
 
 #, fuzzy
 msgid "Action when closing Gajim’s window"
 msgstr "Gajim のウィンドウを閉じると終了します"
-
-msgid "Action when left-clicking a preview"
-msgstr "プレビューを左クリックしたときの動作"
 
 #, fuzzy
 msgid "Activate"
@@ -651,7 +660,8 @@ msgstr "相手先を追加…(_C)"
 msgid "Add Entry"
 msgstr "項目を追加"
 
-msgid "Add Files"
+#, fuzzy
+msgid "Add Files…"
 msgstr "ファイルを追加"
 
 msgid "Add Group…"
@@ -767,8 +777,8 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allowed File Size"
-msgstr "許容されるファイルサイズ"
+msgid "Allows opening file:/ URIs when clicked."
+msgstr ""
 
 msgid "Alternate venue (optional)..."
 msgstr "また、代替の場所(省略可)…"
@@ -851,10 +861,6 @@ msgstr "%s の書庫の設定"
 msgid "Are you sure you want to leave this group chat?"
 msgstr "本当にこの談話室から退出しますか ?"
 
-msgid ""
-"Are you sure you want to paste your clipboard's image into the chat window?"
-msgstr "本当にクリップボードからチャットウィンドウに画像を貼り付けますか ?"
-
 msgid "Are you sure you want to quit Gajim?"
 msgstr "本当に Gajim を終了しますか ?"
 
@@ -877,7 +883,8 @@ msgstr "注目メッセージを受信した"
 msgid "Audio"
 msgstr "音声"
 
-msgid "Audio / Video"
+#, fuzzy
+msgid "Audio / Video Calls"
 msgstr "音声/ビデオ"
 
 msgid "Audio File"
@@ -888,6 +895,10 @@ msgstr "音声入力デバイス"
 
 msgid "Audio Output Device"
 msgstr "音声出力デバイス"
+
+#, fuzzy
+msgid "Audio Preview"
+msgstr "ファイルのプレビュー"
 
 msgid "Audio preview is not available"
 msgstr "音声のプレビューは無効です"
@@ -1234,9 +1245,6 @@ msgstr "履歴を書き出すディレクトリを選択"
 msgid "Choose Sound"
 msgstr "サウンドの選択"
 
-msgid "Choose a File to Send…"
-msgstr "転送するファイルを選択…"
-
 msgid "Choose a color or select an image"
 msgstr "色を選択または画像を選択"
 
@@ -1245,9 +1253,6 @@ msgstr "グループを選択…"
 
 msgid "Choose encryption"
 msgstr "暗号化方式を選択"
-
-msgid "Choose from various emoji styles"
-msgstr "絵文字のスタイルを選択"
 
 msgid "Choose the contact's groups"
 msgstr "相手先のグループを選択"
@@ -1270,7 +1275,9 @@ msgstr "サウンドを消去"
 msgid "Clear message entry"
 msgstr "メッセージ入力欄を消去"
 
-msgid "Click messages to select them"
+msgid ""
+"Click messages to select them\n"
+"(Ctrl + Double Click to deselect)"
 msgstr ""
 
 msgid "Click on contacts you would like to invite to this group chat."
@@ -1283,6 +1290,11 @@ msgstr ""
 
 msgid "Click to view location"
 msgstr "クリックして位置情報を見る"
+
+msgid ""
+"Clickable schemes in addition to the hard-coded list of IANA-registered "
+"ones. Space-separated, lower-case, no colons."
+msgstr ""
 
 msgid "Client Certificate"
 msgstr "クライアント証明書"
@@ -1489,6 +1501,10 @@ msgstr "証明書の情報をコピー"
 msgid "Copy Email Address"
 msgstr "Eメールアドレスをコピー"
 
+#, fuzzy
+msgid "Copy Link"
+msgstr "リンクをコピー (_C)"
+
 msgid "Copy Link Location"
 msgstr "リンクの場所をコピー"
 
@@ -1515,11 +1531,12 @@ msgstr "情報をクリップボードにコピー"
 msgid "Correct the last message"
 msgstr "状況メッセージを設定"
 
-msgid "Could not Open File"
-msgstr "ファイルを開けませんでした"
-
 msgid "Could not access file"
 msgstr "ファイルにアクセスできませんでした"
+
+#, fuzzy, python-format
+msgid "Could not open file (%s)"
+msgstr "ファイルを開けませんでした"
 
 msgid "Country"
 msgstr "国"
@@ -1642,6 +1659,10 @@ msgstr "辞書の URL に \"%s\" が含まれていません"
 msgid "Direct Messages"
 msgstr "ダイレクトメッセージ"
 
+#, fuzzy
+msgid "Direct transfer (not encrypted)"
+msgstr "ファイルの転送が中断しました"
+
 msgid "Directory"
 msgstr "ディレクトリ"
 
@@ -1721,6 +1742,10 @@ msgstr "次回からこのメッセージを表示しない"
 msgid "Download"
 msgstr "ダウンロード"
 
+#, fuzzy
+msgid "Download File"
+msgstr "ダウンロード"
+
 msgid "Download Update"
 msgstr "更新をダウンロード"
 
@@ -1742,6 +1767,10 @@ msgstr "読み込み中…"
 #, fuzzy, python-format
 msgid "Draft: %s"
 msgstr "在席状況: %s"
+
+#, fuzzy
+msgid "Drop files here"
+msgstr "ファイルまたは相手先をドロップ"
 
 msgid "Drop files or contacts"
 msgstr "ファイルまたは相手先をドロップ"
@@ -1775,14 +1804,8 @@ msgstr ""
 msgid "Email"
 msgstr "メール"
 
-msgid "Emoji"
-msgstr "絵文字"
-
 msgid "Emoji Shortcodes"
 msgstr ""
-
-msgid "Emoji Theme"
-msgstr "絵文字テーマ"
 
 msgid "Enable"
 msgstr "有効"
@@ -1800,6 +1823,10 @@ msgid "Enables Gajim to play sounds for various notifications"
 msgstr "さまざまな通知の音を鳴らします"
 
 msgid "Enables Gajim to provide Audio and Video chats"
+msgstr "音声・ビデオチャットを可能にします"
+
+#, fuzzy
+msgid "Enables Gajim to provide a Audio preview"
 msgstr "音声・ビデオチャットを可能にします"
 
 #, fuzzy
@@ -2000,6 +2027,10 @@ msgstr ""
 msgid "File Preview"
 msgstr "ファイルのプレビュー"
 
+#, fuzzy
+msgid "File Size Limit"
+msgstr "ファイルが空です"
+
 msgid "File Transfer"
 msgstr "ファイルを転送"
 
@@ -2043,6 +2074,9 @@ msgstr "ファイルが大きすぎます。最大ファイルサイズ: %s"
 msgid "File size unknown"
 msgstr "ファイルサイズは不明です"
 
+msgid "File too big, will use direct transfer (not encrypted)"
+msgstr ""
+
 msgid "File transfer stopped"
 msgstr "ファイルの転送が中断しました"
 
@@ -2056,9 +2090,6 @@ msgstr "ファイル: %s"
 #, python-format
 msgid "Filename: %s"
 msgstr "ファイル名: %s"
-
-msgid "Files to send"
-msgstr "送信するファイル"
 
 msgid "Filetransfer Preference"
 msgstr "ファイル転送設定"
@@ -2199,15 +2230,6 @@ msgstr "ジェンダー"
 
 msgid "General"
 msgstr "全般"
-
-msgid ""
-"Generate preview automatically in public group chats (may disclose your data)"
-msgstr ""
-"公開談話室で自動的にプレビューを生成します (あなたのデータを開示する可能性が"
-"あります)"
-
-msgid "Generate preview for any URLs containing images (may be unsafe)"
-msgstr "画像を含む URL のプレビューを生成します(安全でない可能性があります)"
 
 msgid "Global Group Chat Search"
 msgstr "全体的な談話室検索"
@@ -2618,10 +2640,6 @@ msgstr "ラベル"
 msgid "Last but not least"
 msgstr "最後に大切なことを付け加えますと、"
 
-#, python-format
-msgid "Lat: %s Lon: %s"
-msgstr "緯度: %s 軽度: %s"
-
 msgid "Leave Group Chat"
 msgstr "談話室から退出"
 
@@ -2662,12 +2680,9 @@ msgstr "ローカルのシステム時刻"
 msgid "Local Time"
 msgstr "現地時間"
 
-msgid "Location"
+#, fuzzy, python-format
+msgid "Location at %s"
 msgstr "位置"
-
-#, python-format
-msgid "Location at Lat: %s Lon: %s"
-msgstr "緯度: %s 軽度: %s"
 
 msgid "Location:"
 msgstr "位置:"
@@ -2730,7 +2745,8 @@ msgstr "既読としてマーク"
 msgid "Mark as read"
 msgstr "既読としてマーク"
 
-msgid "Maximum file size for preview generation"
+#, fuzzy
+msgid "Maximum file size for preview downloads"
 msgstr "プレビューを生成する最大ファイルサイズ"
 
 msgid "Me"
@@ -3161,9 +3177,6 @@ msgstr "パスワードが一致しません"
 msgid "Past Developers"
 msgstr "過去の開発者"
 
-msgid "Paste Image"
-msgstr "画像を貼り付け"
-
 msgid "Paste Last Input"
 msgstr "最後の入力を貼り付け"
 
@@ -3479,9 +3492,6 @@ msgstr "会話の履歴を消去しますか ?"
 msgid "Remove Contact"
 msgstr "相手先を削除"
 
-msgid "Remove Files"
-msgstr "ファイルを削除"
-
 msgid "Remove Group"
 msgstr "グループの削除"
 
@@ -3576,22 +3586,27 @@ msgstr "必須"
 msgid "Requires: Gspell"
 msgstr "Gspell が必要です"
 
+#, fuzzy
 msgid ""
-"Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
-"base, gstreamer1.0-plugins-ugly, gstreamer1.0-libav, and gstreamer1.0-gtk3"
+"Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+"ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
 msgstr ""
 "gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-base, "
 "gstreamer1.0-plugins-ugly, gstreamer1.0-libav, gstreamer1.0-gtk3 が必要です"
-
-# …
-msgid "Requires: gir1.2-gupnpigd-1.0"
-msgstr "gir1.2-gupnpigd-1.0 が必要です"
 
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "gnome-keyring または kwallet が必要です"
 
 msgid "Requires: gsound"
 msgstr "gsound が必要です"
+
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
+# …
+#, fuzzy
+msgid "Requires: gupnpigd-1.0"
+msgstr "gir1.2-gupnpigd-1.0 が必要です"
 
 msgid "Requires: libappindicator3"
 msgstr "libappindicator3 が必要です"
@@ -3693,9 +3708,6 @@ msgstr "セールス"
 msgid "Save"
 msgstr "保存"
 
-msgid "Save As…"
-msgstr "名前を付けて保存…"
-
 msgid "Save File as…"
 msgstr "名前を付けてファイルを保存…"
 
@@ -3703,6 +3715,10 @@ msgid "Save Password"
 msgstr "パスワードを保存"
 
 msgid "Save as..."
+msgstr "名前を付けて保存…"
+
+#, fuzzy
+msgid "Save as…"
 msgstr "名前を付けて保存…"
 
 msgid "Saving Avatar Failed"
@@ -3839,6 +3855,10 @@ msgstr "ファイルを送信 (最大 %s)…"
 
 msgid "Send File Directly…"
 msgstr "直接ファイルを送信…"
+
+#, fuzzy
+msgid "Send Files"
+msgstr "ファイルを送信 (_S)"
 
 msgid "Send Files Directly"
 msgstr "直接ファイルを送信"
@@ -4061,6 +4081,17 @@ msgid "Show only critical errors"
 msgstr "深刻なエラーのみ表示"
 
 #, fuzzy
+msgid ""
+"Show previews automatically in public group chats (may disclose your data)"
+msgstr ""
+"公開談話室で自動的にプレビューを生成します (あなたのデータを開示する可能性が"
+"あります)"
+
+#, fuzzy
+msgid "Show previews for any URLs containing images (may be unsafe)"
+msgstr "画像を含む URL のプレビューを生成します(安全でない可能性があります)"
+
+#, fuzzy
 msgid "Show previews for files"
 msgstr "音声のプレビューは無効です"
 
@@ -4108,7 +4139,8 @@ msgstr "選んだサーバーに新しいアカウントを登録します"
 msgid "Signup not allowed"
 msgstr "登録は許可されていません"
 
-msgid "Size of preview image"
+#, fuzzy
+msgid "Size of preview images in pixels"
 msgstr "プレビュー画像のサイズ"
 
 msgid "Sleeping"
@@ -4388,10 +4420,6 @@ msgid ""
 msgstr ""
 "ファイル %s を受け取りました。しかし、途中で損傷しているようです。\n"
 "もう一度ダウンロードしますか ?"
-
-#, python-format
-msgid "The following file could not be accessed and was not uploaded: %s"
-msgstr "次のファイルにアクセスできなかったためアップロードされませんでした: %s"
 
 msgid ""
 "The following warnings came up while trying to verify the server's "
@@ -4906,7 +4934,10 @@ msgstr "どうしましたか"
 msgid "Where participants should go"
 msgstr "参加者が向かうべきは"
 
-msgid "Whether to check for a valid certificate"
+#, fuzzy
+msgid ""
+"Whether to check for a valid certificate before downloading (not safe to "
+"disable)"
 msgstr "正しい証明書を確認するかどうか"
 
 msgid "Which server should I choose?"
@@ -5016,9 +5047,6 @@ msgstr "あなたは現在 {show}{status}"
 msgid "You are offline."
 msgstr "オフラインです。"
 
-msgid "You are trying to paste an image"
-msgstr "画像を貼り付けようとしています"
-
 #, python-format
 msgid "You can join this group chat instead: xmpp:%s?join"
 msgstr "代わりに次の談話室に参加できます: xmpp:%s?join"
@@ -5047,6 +5075,10 @@ msgstr "このディレクトリにファイルを作成する権限がありま
 msgid ""
 "You do not have the proper permissions to create files in this directory."
 msgstr "このディレクトリにファイルを作成する権限がありません。"
+
+#, python-format
+msgid "You dropped something Gajim could not process: %s"
+msgstr ""
 
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
@@ -5309,9 +5341,6 @@ msgstr "フォルダを開く (_O)"
 msgid "_Overwrite"
 msgstr "上書き (_O)"
 
-msgid "_Paste"
-msgstr "貼り付け (_P)"
-
 msgid "_Please choose a server"
 msgstr "サーバーを選択してください (_P)"
 
@@ -5348,8 +5377,9 @@ msgstr "撤回 (_R)"
 msgid "_Save"
 msgstr "保存 (_S)"
 
-msgid "_Save as"
-msgstr "名前を付けて保存 (_S)"
+#, fuzzy
+msgid "_Save as…"
+msgstr "名前を付けて保存…"
 
 msgid "_Search"
 msgstr "検索 (_S)"
@@ -5359,9 +5389,6 @@ msgstr "選択 (_S)"
 
 msgid "_Send"
 msgstr "送信 (_S)"
-
-msgid "_Send Files"
-msgstr "ファイルを送信 (_S)"
 
 msgid "_Show Certificate"
 msgstr "証明書を表示 (_S)"
@@ -5655,6 +5682,18 @@ msgstr "…またはここにドロップ"
 #~ "'%s' は相手先一覧にありません。\n"
 #~ "メッセージを送るためのアカウントを指定してください。"
 
+#~ msgid ""
+#~ "<a href='https://conversations.im/compliance/'>conversations.im/"
+#~ "compliance</a>"
+#~ msgstr ""
+#~ "<a href='https://conversations.im/compliance/'>conversations.im/"
+#~ "compliance</a>"
+
+#~ msgid ""
+#~ "<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
+#~ msgstr ""
+#~ "<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
+
 #~ msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
 #~ msgstr "<b>%(nick)s</b> が <b>%(room_name)s</b> で発言権を求めています"
 
@@ -5701,8 +5740,16 @@ msgstr "…またはここにドロップ"
 #~ "トレイアイコンが表示されていない状態でも相手先一覧ウィンドウを閉じることを"
 #~ "許します。"
 
+#~ msgid "Allowed File Size"
+#~ msgstr "許容されるファイルサイズ"
+
 #~ msgid "App Indicator Icon"
 #~ msgstr "App Indicator Icon"
+
+#~ msgid ""
+#~ "Are you sure you want to paste your clipboard's image into the chat "
+#~ "window?"
+#~ msgstr "本当にクリップボードからチャットウィンドウに画像を貼り付けますか ?"
 
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
@@ -5754,6 +5801,12 @@ msgstr "…またはここにドロップ"
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Gajim が起動しているかチェックします"
 
+#~ msgid "Choose a File to Send…"
+#~ msgstr "転送するファイルを選択…"
+
+#~ msgid "Choose from various emoji styles"
+#~ msgstr "絵文字のスタイルを選択"
+
 #~ msgid "Clear chat window"
 #~ msgstr "ウィンドウ内を消去"
 
@@ -5790,6 +5843,12 @@ msgstr "…またはここにドロップ"
 #~ msgid "Drop Files or Contacts"
 #~ msgstr "ファイルまたは相手先をドロップ"
 
+#~ msgid "Emoji"
+#~ msgstr "絵文字"
+
+#~ msgid "Emoji Theme"
+#~ msgstr "絵文字テーマ"
+
 #~ msgid "Enter Password"
 #~ msgstr "パスワードを入れてください"
 
@@ -5810,6 +5869,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "File path"
 #~ msgstr "ファイルの場所"
+
+#~ msgid "Files to send"
+#~ msgstr "送信するファイル"
 
 #~ msgid "Forbid a participant to send you public or private messages"
 #~ msgstr "参加者がメッセージ (私信も含む) を送ってくることを禁止します"
@@ -5909,6 +5971,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Kick user from group chat by nickname"
 #~ msgstr "ニックネームで指定するユーザーを談話室から蹴り出します"
 
+#~ msgid "Lat: %s Lon: %s"
+#~ msgstr "緯度: %s 軽度: %s"
+
 #~ msgid "Leave the group chat"
 #~ msgstr "談話室から退出"
 
@@ -5917,6 +5982,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Lists all contacts in the contact list, one for each line"
 #~ msgstr "相手先一覧にある相手先すべてを、それぞれ1行に表示します"
+
+#~ msgid "Location at Lat: %s Lon: %s"
+#~ msgstr "緯度: %s 軽度: %s"
 
 #~ msgid "Machine is going to sleep"
 #~ msgstr "コンピューターを終了しています"
@@ -5956,6 +6024,9 @@ msgstr "…またはここにドロップ"
 #~ "message"
 #~ msgstr "指定した参加者との私信のウィンドウを開き、メッセージを送信します"
 
+#~ msgid "Paste Image"
+#~ msgstr "画像を貼り付け"
+
 #~ msgid "Ping?"
 #~ msgstr "Ping?"
 
@@ -5985,6 +6056,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Quote…"
 #~ msgstr "引用…"
+
+#~ msgid "Remove Files"
+#~ msgstr "ファイルを削除"
 
 #~ msgid "Removes contact from contact list"
 #~ msgstr "相手先を相手先一覧から削除します"
@@ -6114,6 +6188,15 @@ msgstr "…またはここにドロップ"
 #~ msgid "Tabs"
 #~ msgstr "タブ"
 
+#, fuzzy
+#~ msgid "The following address was not understood and was not uploaded: %s"
+#~ msgstr ""
+#~ "次のファイルにアクセスできなかったためアップロードされませんでした: %s"
+
+#~ msgid "The following file could not be accessed and was not uploaded: %s"
+#~ msgstr ""
+#~ "次のファイルにアクセスできなかったためアップロードされませんでした: %s"
+
 #~ msgid "The same as using a doc-string, except it supports translation"
 #~ msgstr "使う文章は同じものとします (翻訳は除く)"
 
@@ -6184,6 +6267,9 @@ msgstr "…またはここにドロップ"
 #~ "あなたが既に談話室 \"%(room)s\" に参加していないか、あるいは \"%(nick)s\" "
 #~ "さんがいません。"
 
+#~ msgid "You are trying to paste an image"
+#~ msgstr "画像を貼り付けようとしています"
+
 #~ msgid "You have no active account"
 #~ msgstr "有効になっているアカウントがありません"
 
@@ -6192,6 +6278,12 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "_Invite"
 #~ msgstr "招待 (_I)"
+
+#~ msgid "_Paste"
+#~ msgstr "貼り付け (_P)"
+
+#~ msgid "_Save as"
+#~ msgstr "名前を付けて保存 (_S)"
 
 #~ msgid "_Try Again"
 #~ msgstr "再試行 (_T)"

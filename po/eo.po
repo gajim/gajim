@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-30 21:47+0000\n"
+"POT-Creation-Date: 2022-12-03 08:42+0000\n"
 "PO-Revision-Date: 2020-08-19 19:27+0000\n"
 "Last-Translator: Vincent L <vincent.laporte+gajim@mailbox.org>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -138,7 +138,7 @@ msgstr "%s ne estas valida protokola detalnivelo"
 #, python-format
 msgid ""
 "%s is online with multiple devices.\n"
-"Choose the device you would like to send the file to."
+"Choose the device you would like to send the files to."
 msgstr ""
 
 #, python-format
@@ -156,6 +156,26 @@ msgstr "Forigas kontakton el kontaktlisto"
 #, fuzzy, python-format
 msgid "%s wants to send you a file"
 msgstr "%s volas sendi dosieron al vi."
+
+#, python-format
+msgctxt "positive longitude"
+msgid "%sE"
+msgstr ""
+
+#, python-format
+msgctxt "positive latitude"
+msgid "%sN"
+msgstr ""
+
+#, python-format
+msgctxt "negative latitude"
+msgid "%sS"
+msgstr ""
+
+#, python-format
+msgctxt "negative longitude"
+msgid "%sW"
+msgstr ""
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -212,15 +232,6 @@ msgstr "Priskribo"
 #, fuzzy
 msgid "<Plugin Name>"
 msgstr "Konektado malsukcesis"
-
-msgid ""
-"<a href='https://conversations.im/compliance/'>conversations.im/compliance</"
-"a>"
-msgstr ""
-
-msgid ""
-"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
-msgstr ""
 
 #, python-format
 msgid ""
@@ -673,14 +684,14 @@ msgstr "Konto  : %s"
 msgid "Accounts"
 msgstr "Kontoj"
 
+msgid "Action for left-clicking a preview"
+msgstr ""
+
 #, fuzzy
 msgid "Action on Close"
 msgstr "Gajim"
 
 msgid "Action when closing Gajim’s window"
-msgstr ""
-
-msgid "Action when left-clicking a preview"
 msgstr ""
 
 #, fuzzy
@@ -713,7 +724,7 @@ msgid "Add Entry"
 msgstr "Lando:"
 
 #, fuzzy
-msgid "Add Files"
+msgid "Add Files…"
 msgstr "Dosiero: "
 
 #, fuzzy
@@ -852,7 +863,7 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allowed File Size"
+msgid "Allows opening file:/ URIs when clicked."
 msgstr ""
 
 msgid "Alternate venue (optional)..."
@@ -947,11 +958,6 @@ msgid "Are you sure you want to leave this group chat?"
 msgstr "Ĉu vi certe volas foriri el babilejo \"%s\"?"
 
 #, fuzzy
-msgid ""
-"Are you sure you want to paste your clipboard's image into the chat window?"
-msgstr "Ĉu vi certe volas foriri el babilejo \"%s\"?"
-
-#, fuzzy
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Ĉu vi certe volas foriri el babilejo \"%s\"?"
 
@@ -975,8 +981,9 @@ msgstr "Unua mesaĝo ricevita"
 msgid "Audio"
 msgstr ""
 
-msgid "Audio / Video"
-msgstr ""
+#, fuzzy
+msgid "Audio / Video Calls"
+msgstr "Privata interparolo"
 
 #, fuzzy
 msgid "Audio File"
@@ -989,6 +996,10 @@ msgstr "Defaŭlta statmesaĝo"
 #, fuzzy
 msgid "Audio Output Device"
 msgstr "Defaŭlta statmesaĝo"
+
+#, fuzzy
+msgid "Audio Preview"
+msgstr "Dosiero: "
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1375,10 +1386,6 @@ msgstr ""
 msgid "Choose Sound"
 msgstr "Elektu sonon"
 
-#, fuzzy
-msgid "Choose a File to Send…"
-msgstr "Elektu dosieron por sendi..."
-
 msgid "Choose a color or select an image"
 msgstr ""
 
@@ -1389,9 +1396,6 @@ msgstr "Elektu bildon"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Elektu dosieron por sendi..."
-
-msgid "Choose from various emoji styles"
-msgstr ""
 
 #, fuzzy
 msgid "Choose the contact's groups"
@@ -1420,7 +1424,9 @@ msgstr "Elektu sonon"
 msgid "Clear message entry"
 msgstr "Mesaĝo sendita"
 
-msgid "Click messages to select them"
+msgid ""
+"Click messages to select them\n"
+"(Ctrl + Double Click to deselect)"
 msgstr ""
 
 #, fuzzy
@@ -1433,6 +1439,11 @@ msgstr ""
 #, fuzzy
 msgid "Click to view location"
 msgstr "Klaku por starigi vian kaŝbildon"
+
+msgid ""
+"Clickable schemes in addition to the hard-coded list of IANA-registered "
+"ones. Space-separated, lower-case, no colons."
+msgstr ""
 
 #, fuzzy
 msgid "Client Certificate"
@@ -1678,6 +1689,10 @@ msgid "Copy Email Address"
 msgstr "_Kopii JID/retpoŝtan adreson"
 
 #, fuzzy
+msgid "Copy Link"
+msgstr "_Kopii ligilan lokon"
+
+#, fuzzy
 msgid "Copy Link Location"
 msgstr "_Kopii ligilan lokon"
 
@@ -1709,11 +1724,11 @@ msgid "Correct the last message"
 msgstr "statmesaĝo"
 
 #, fuzzy
-msgid "Could not Open File"
+msgid "Could not access file"
 msgstr "Ne povas alŝuti bildon"
 
-#, fuzzy
-msgid "Could not access file"
+#, fuzzy, python-format
+msgid "Could not open file (%s)"
 msgstr "Ne povas alŝuti bildon"
 
 #, fuzzy
@@ -1863,6 +1878,10 @@ msgid "Direct Messages"
 msgstr "Defaŭlta statmesaĝo"
 
 #, fuzzy
+msgid "Direct transfer (not encrypted)"
+msgstr "Dosiera transmeto haltitas"
+
+#, fuzzy
 msgid "Directory"
 msgstr "_Historio"
 
@@ -1949,6 +1968,10 @@ msgid "Download"
 msgstr "Elŝuti"
 
 #, fuzzy
+msgid "Download File"
+msgstr "Elŝuti"
+
+#, fuzzy
 msgid "Download Update"
 msgstr "Elŝuti"
 
@@ -1971,6 +1994,10 @@ msgstr "Tajpas mesaĝon"
 #, fuzzy, python-format
 msgid "Draft: %s"
 msgstr "Stato: "
+
+#, fuzzy
+msgid "Drop files here"
+msgstr "Sendi dosieron al kontakto"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2010,15 +2037,8 @@ msgstr ""
 msgid "Email"
 msgstr "Nova retletero"
 
-msgid "Emoji"
-msgstr ""
-
 msgid "Emoji Shortcodes"
 msgstr ""
-
-#, fuzzy
-msgid "Emoji Theme"
-msgstr "Gajim - %s"
 
 msgid "Enable"
 msgstr "Ebligi"
@@ -2036,6 +2056,9 @@ msgid "Enables Gajim to play sounds for various notifications"
 msgstr ""
 
 msgid "Enables Gajim to provide Audio and Video chats"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to provide a notification area icon"
@@ -2263,6 +2286,10 @@ msgid "File Preview"
 msgstr ""
 
 #, fuzzy
+msgid "File Size Limit"
+msgstr "Dosierindiko"
+
+#, fuzzy
 msgid "File Transfer"
 msgstr "Dosieraj transmetoj"
 
@@ -2313,6 +2340,9 @@ msgstr ""
 msgid "File size unknown"
 msgstr ""
 
+msgid "File too big, will use direct transfer (not encrypted)"
+msgstr ""
+
 #, fuzzy
 msgid "File transfer stopped"
 msgstr "Dosiera transmeto haltitas"
@@ -2328,10 +2358,6 @@ msgstr "Dosiero: %s"
 #, python-format
 msgid "Filename: %s"
 msgstr "Dosiernomo: %s"
-
-#, fuzzy
-msgid "Files to send"
-msgstr "Elektu dosieron por sendi..."
 
 #, fuzzy
 msgid "Filetransfer Preference"
@@ -2474,13 +2500,6 @@ msgstr "Sendanto: "
 
 msgid "General"
 msgstr "Ĝenerala"
-
-msgid ""
-"Generate preview automatically in public group chats (may disclose your data)"
-msgstr ""
-
-msgid "Generate preview for any URLs containing images (may be unsafe)"
-msgstr ""
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2944,10 +2963,6 @@ msgstr ""
 msgid "Last but not least"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "Lat: %s Lon: %s"
-msgstr "Lasta stato: %s"
-
 #, fuzzy
 msgid "Leave Group Chat"
 msgstr "Nova babilejo"
@@ -2995,13 +3010,9 @@ msgstr ""
 msgid "Local Time"
 msgstr "Loka JID:"
 
-#, fuzzy
-msgid "Location"
+#, fuzzy, python-format
+msgid "Location at %s"
 msgstr "Konta korektado"
-
-#, python-format
-msgid "Location at Lat: %s Lon: %s"
-msgstr ""
 
 #, fuzzy
 msgid "Location:"
@@ -3072,7 +3083,7 @@ msgstr ""
 msgid "Mark as read"
 msgstr ""
 
-msgid "Maximum file size for preview generation"
+msgid "Maximum file size for preview downloads"
 msgstr ""
 
 #, fuzzy
@@ -3543,10 +3554,6 @@ msgstr "Pasvortoj diversas"
 msgid "Past Developers"
 msgstr "Ĝisnunaj programistoj:"
 
-#, fuzzy
-msgid "Paste Image"
-msgstr "Elektu bildon"
-
 msgid "Paste Last Input"
 msgstr ""
 
@@ -3905,10 +3912,6 @@ msgstr "Antaŭ nelonge:"
 msgid "Remove Contact"
 msgstr "Renomigado de kontakto"
 
-#, fuzzy
-msgid "Remove Files"
-msgstr "_Forigi"
-
 msgid "Remove Group"
 msgstr "Forigi grupon"
 
@@ -4021,11 +4024,8 @@ msgid "Requires: Gspell"
 msgstr ""
 
 msgid ""
-"Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
-"base, gstreamer1.0-plugins-ugly, gstreamer1.0-libav, and gstreamer1.0-gtk3"
-msgstr ""
-
-msgid "Requires: gir1.2-gupnpigd-1.0"
+"Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+"ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
 msgstr ""
 
 #, fuzzy
@@ -4034,6 +4034,13 @@ msgstr "Historia administrilo"
 
 #, fuzzy
 msgid "Requires: gsound"
+msgstr "Pasvorto necesas"
+
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
+#, fuzzy
+msgid "Requires: gupnpigd-1.0"
 msgstr "Pasvorto necesas"
 
 msgid "Requires: libappindicator3"
@@ -4149,10 +4156,6 @@ msgid "Save"
 msgstr "Havas "
 
 #, fuzzy
-msgid "Save As…"
-msgstr "Havas "
-
-#, fuzzy
 msgid "Save File as…"
 msgstr "Konservi dosieron kiel..."
 
@@ -4162,6 +4165,10 @@ msgstr "Konservi pasvorton"
 
 #, fuzzy
 msgid "Save as..."
+msgstr "Havas "
+
+#, fuzzy
+msgid "Save as…"
 msgstr "Havas "
 
 #, fuzzy
@@ -4314,6 +4321,10 @@ msgstr "Konservi dosieron kiel..."
 #, fuzzy
 msgid "Send File Directly…"
 msgstr "Konservi dosieron kiel..."
+
+#, fuzzy
+msgid "Send Files"
+msgstr "Sendi _dosieron"
 
 #, fuzzy
 msgid "Send Files Directly"
@@ -4571,6 +4582,13 @@ msgstr "Montri _kontaktliston"
 msgid "Show only critical errors"
 msgstr "Montri nur en _kontaktlisto"
 
+msgid ""
+"Show previews automatically in public group chats (may disclose your data)"
+msgstr ""
+
+msgid "Show previews for any URLs containing images (may be unsafe)"
+msgstr ""
+
 #, fuzzy
 msgid "Show previews for files"
 msgstr "Konekto mankas"
@@ -4622,7 +4640,7 @@ msgstr ""
 msgid "Signup not allowed"
 msgstr "Kaŝnomo malpermesita: %s"
 
-msgid "Size of preview image"
+msgid "Size of preview images in pixels"
 msgstr ""
 
 msgid "Sleeping"
@@ -4924,10 +4942,6 @@ msgid ""
 "The file %s has been received, but it seems to have been damaged along the "
 "way.\n"
 "Do you want to download it again?"
-msgstr ""
-
-#, python-format
-msgid "The following file could not be accessed and was not uploaded: %s"
 msgstr ""
 
 msgid ""
@@ -5474,7 +5488,9 @@ msgstr ""
 msgid "Where participants should go"
 msgstr ""
 
-msgid "Whether to check for a valid certificate"
+msgid ""
+"Whether to check for a valid certificate before downloading (not safe to "
+"disable)"
 msgstr ""
 
 msgid "Which server should I choose?"
@@ -5590,10 +5606,6 @@ msgstr "Vi nomiĝas %s"
 msgid "You are offline."
 msgstr "senkonekta"
 
-#, fuzzy
-msgid "You are trying to paste an image"
-msgstr "Vi nekonektitas al la servilo"
-
 #, fuzzy, python-format
 msgid "You can join this group chat instead: xmpp:%s?join"
 msgstr "%s aliĝis al la babilejo"
@@ -5629,6 +5641,10 @@ msgstr "Vi ne havas permeson krei dosierojn en ĉi tiu dosierujo."
 msgid ""
 "You do not have the proper permissions to create files in this directory."
 msgstr "Vi ne havas permeson krei dosierojn en ĉi tiu dosierujo."
+
+#, python-format
+msgid "You dropped something Gajim could not process: %s"
+msgstr ""
 
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
@@ -5938,9 +5954,6 @@ msgstr "_Malfermi enhavantan dosierujon"
 msgid "_Overwrite"
 msgstr ""
 
-msgid "_Paste"
-msgstr ""
-
 #, fuzzy
 msgid "_Please choose a server"
 msgstr "Nova mesaĝo"
@@ -5986,7 +5999,7 @@ msgid "_Save"
 msgstr "Havas "
 
 #, fuzzy
-msgid "_Save as"
+msgid "_Save as…"
 msgstr "Havas "
 
 msgid "_Search"
@@ -5997,10 +6010,6 @@ msgstr ""
 
 msgid "_Send"
 msgstr "_Sendi"
-
-#, fuzzy
-msgid "_Send Files"
-msgstr "Sendi _dosieron"
 
 #, fuzzy
 msgid "_Show Certificate"
@@ -6326,6 +6335,12 @@ msgstr ""
 
 #, fuzzy
 #~ msgid ""
+#~ "Are you sure you want to paste your clipboard's image into the chat "
+#~ "window?"
+#~ msgstr "Ĉu vi certe volas foriri el babilejo \"%s\"?"
+
+#, fuzzy
+#~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
 #~ msgstr ""
@@ -6374,6 +6389,10 @@ msgstr ""
 #~ msgstr "Bonvolu certiĝi ke avahi-demono estas aktiva."
 
 #, fuzzy
+#~ msgid "Choose a File to Send…"
+#~ msgstr "Elektu dosieron por sendi..."
+
+#, fuzzy
 #~ msgid "Clear chat window"
 #~ msgstr "Uzado: /%s, - malplenigas la tekstan fenestron."
 
@@ -6405,6 +6424,10 @@ msgstr ""
 #~ msgstr "Sendi dosieron al kontakto"
 
 #, fuzzy
+#~ msgid "Emoji Theme"
+#~ msgstr "Gajim - %s"
+
+#, fuzzy
 #~ msgid "Enter Password"
 #~ msgstr "Enigu novan pasvorton:"
 
@@ -6414,6 +6437,10 @@ msgstr ""
 
 #~ msgid "File path"
 #~ msgstr "Dosierindiko"
+
+#, fuzzy
+#~ msgid "Files to send"
+#~ msgstr "Elektu dosieron por sendi..."
 
 #, fuzzy
 #~ msgid "Format your message…"
@@ -6496,6 +6523,10 @@ msgstr ""
 #~ msgstr "Al vi oni malpermesis esti en la babilejo."
 
 #, fuzzy
+#~ msgid "Lat: %s Lon: %s"
+#~ msgstr "Lasta stato: %s"
+
+#, fuzzy
 #~ msgid "Leave the group chat"
 #~ msgstr "Nova babilejo"
 
@@ -6546,6 +6577,10 @@ msgstr ""
 #~ "specifita persono."
 
 #, fuzzy
+#~ msgid "Paste Image"
+#~ msgstr "Elektu bildon"
+
+#, fuzzy
 #~ msgid "Presence description:"
 #~ msgstr "Priskribo"
 
@@ -6567,6 +6602,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Quote…"
 #~ msgstr "_Eliri"
+
+#, fuzzy
+#~ msgid "Remove Files"
+#~ msgstr "_Forigi"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6693,12 +6732,20 @@ msgstr ""
 #~ "You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
 #~ msgstr "Vi ne plu ĉeestas en babilejo \"%s\" aŭ \"%s\" foriris."
 
+#, fuzzy
+#~ msgid "You are trying to paste an image"
+#~ msgstr "Vi nekonektitas al la servilo"
+
 #~ msgid "You have no active account"
 #~ msgstr "Vi ne havas aktivan konton"
 
 #, fuzzy
 #~ msgid "_Invite"
 #~ msgstr "In_viti al"
+
+#, fuzzy
+#~ msgid "_Save as"
+#~ msgstr "Havas "
 
 #~ msgid ""
 #~ "change status of account \"account\". If not specified, try to change "

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-30 21:47+0000\n"
+"POT-Creation-Date: 2022-12-03 08:42+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -139,7 +139,7 @@ msgstr ""
 #, python-format
 msgid ""
 "%s is online with multiple devices.\n"
-"Choose the device you would like to send the file to."
+"Choose the device you would like to send the files to."
 msgstr ""
 
 #, python-format
@@ -157,6 +157,26 @@ msgstr "Zerrendatik kontaktua ezabatu"
 #, fuzzy, python-format
 msgid "%s wants to send you a file"
 msgstr "%s fitxero bat bidali nahi dizu"
+
+#, python-format
+msgctxt "positive longitude"
+msgid "%sE"
+msgstr ""
+
+#, python-format
+msgctxt "positive latitude"
+msgid "%sN"
+msgstr ""
+
+#, python-format
+msgctxt "negative latitude"
+msgid "%sS"
+msgstr ""
+
+#, python-format
+msgctxt "negative longitude"
+msgid "%sW"
+msgstr ""
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -213,15 +233,6 @@ msgstr "Deskribapena"
 #, fuzzy
 msgid "<Plugin Name>"
 msgstr "Konexioak huts egin du"
-
-msgid ""
-"<a href='https://conversations.im/compliance/'>conversations.im/compliance</"
-"a>"
-msgstr ""
-
-msgid ""
-"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
-msgstr ""
 
 #, python-format
 msgid ""
@@ -675,14 +686,14 @@ msgstr "Kontuak"
 msgid "Accounts"
 msgstr "Kontuak"
 
+msgid "Action for left-clicking a preview"
+msgstr ""
+
 #, fuzzy
 msgid "Action on Close"
 msgstr "Gajim"
 
 msgid "Action when closing Gajim’s window"
-msgstr ""
-
-msgid "Action when left-clicking a preview"
 msgstr ""
 
 #, fuzzy
@@ -716,7 +727,7 @@ msgid "Add Entry"
 msgstr "Sarrera:"
 
 #, fuzzy
-msgid "Add Files"
+msgid "Add Files…"
 msgstr "Fitxeroa:"
 
 #, fuzzy
@@ -855,7 +866,7 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allowed File Size"
+msgid "Allows opening file:/ URIs when clicked."
 msgstr ""
 
 msgid "Alternate venue (optional)..."
@@ -953,11 +964,6 @@ msgid "Are you sure you want to leave this group chat?"
 msgstr "Ziur al zaude \"%s\" gelatik atera nahi duzula?"
 
 #, fuzzy
-msgid ""
-"Are you sure you want to paste your clipboard's image into the chat window?"
-msgstr "Ziur al zaude \"%s\" gelatik atera nahi duzula?"
-
-#, fuzzy
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Ziur al zaude \"%s\" gelatik atera nahi duzula?"
 
@@ -981,8 +987,9 @@ msgstr "Lehen Mezu Jasoa"
 msgid "Audio"
 msgstr ""
 
-msgid "Audio / Video"
-msgstr ""
+#, fuzzy
+msgid "Audio / Video Calls"
+msgstr "Txat Pribatua"
 
 #, fuzzy
 msgid "Audio File"
@@ -995,6 +1002,10 @@ msgstr "Berezko Egoera Mezuak"
 #, fuzzy
 msgid "Audio Output Device"
 msgstr "Berezko Egoera Mezuak"
+
+#, fuzzy
+msgid "Audio Preview"
+msgstr "Fitxeroa:"
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1379,10 +1390,6 @@ msgstr ""
 msgid "Choose Sound"
 msgstr "Aukeratu Soinua"
 
-#, fuzzy
-msgid "Choose a File to Send…"
-msgstr "Aukeratu Bidaltzeko Fitxeroa..."
-
 msgid "Choose a color or select an image"
 msgstr ""
 
@@ -1393,9 +1400,6 @@ msgstr "Aukeratu Irudia"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Aukeratu Bidaltzeko Fitxeroa..."
-
-msgid "Choose from various emoji styles"
-msgstr ""
 
 #, fuzzy
 msgid "Choose the contact's groups"
@@ -1424,7 +1428,9 @@ msgstr "Aukeratu Soinua"
 msgid "Clear message entry"
 msgstr "Mezua Bidaltzean"
 
-msgid "Click messages to select them"
+msgid ""
+"Click messages to select them\n"
+"(Ctrl + Double Click to deselect)"
 msgstr ""
 
 #, fuzzy
@@ -1437,6 +1443,11 @@ msgstr ""
 #, fuzzy
 msgid "Click to view location"
 msgstr "Sakatu abatarea ezartzeko"
+
+msgid ""
+"Clickable schemes in addition to the hard-coded list of IANA-registered "
+"ones. Space-separated, lower-case, no colons."
+msgstr ""
 
 #, fuzzy
 msgid "Client Certificate"
@@ -1682,6 +1693,10 @@ msgid "Copy Email Address"
 msgstr "_Kopiatu JID/Email-a"
 
 #, fuzzy
+msgid "Copy Link"
+msgstr "_Lotura kokapena kopiatu"
+
+#, fuzzy
 msgid "Copy Link Location"
 msgstr "_Lotura kokapena kopiatu"
 
@@ -1713,11 +1728,11 @@ msgid "Correct the last message"
 msgstr "egoera mezua"
 
 #, fuzzy
-msgid "Could not Open File"
+msgid "Could not access file"
 msgstr "Ezin izan da irudia kargatu"
 
-#, fuzzy
-msgid "Could not access file"
+#, fuzzy, python-format
+msgid "Could not open file (%s)"
 msgstr "Ezin izan da irudia kargatu"
 
 #, fuzzy
@@ -1867,6 +1882,10 @@ msgid "Direct Messages"
 msgstr "Berezko Egoera Mezuak"
 
 #, fuzzy
+msgid "Direct transfer (not encrypted)"
+msgstr "Fitxero Transferentzia Gelditua"
+
+#, fuzzy
 msgid "Directory"
 msgstr "_Historiala"
 
@@ -1953,6 +1972,10 @@ msgid "Download"
 msgstr "Deskargatu"
 
 #, fuzzy
+msgid "Download File"
+msgstr "Deskargatu"
+
+#, fuzzy
 msgid "Download Update"
 msgstr "Deskargatu"
 
@@ -1975,6 +1998,10 @@ msgstr "Sortzen"
 #, fuzzy, python-format
 msgid "Draft: %s"
 msgstr "Egoera: "
+
+#, fuzzy
+msgid "Drop files here"
+msgstr "Fitxero bat bidali kontaktu bati"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2014,15 +2041,8 @@ msgstr ""
 msgid "Email"
 msgstr "E-Posta Berria"
 
-msgid "Emoji"
-msgstr ""
-
 msgid "Emoji Shortcodes"
 msgstr ""
-
-#, fuzzy
-msgid "Emoji Theme"
-msgstr "Gajim - %s"
 
 msgid "Enable"
 msgstr "Aktibatu"
@@ -2040,6 +2060,9 @@ msgid "Enables Gajim to play sounds for various notifications"
 msgstr ""
 
 msgid "Enables Gajim to provide Audio and Video chats"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to provide a notification area icon"
@@ -2269,6 +2292,10 @@ msgid "File Preview"
 msgstr ""
 
 #, fuzzy
+msgid "File Size Limit"
+msgstr "Fitxeroaren tokia"
+
+#, fuzzy
 msgid "File Transfer"
 msgstr "Fitxero Transferentzia"
 
@@ -2319,6 +2346,9 @@ msgstr ""
 msgid "File size unknown"
 msgstr ""
 
+msgid "File too big, will use direct transfer (not encrypted)"
+msgstr ""
+
 #, fuzzy
 msgid "File transfer stopped"
 msgstr "Fitxero Transferentzia Gelditua"
@@ -2334,10 +2364,6 @@ msgstr "Fitxeroa: %s"
 #, python-format
 msgid "Filename: %s"
 msgstr "Fitxeroaren izena: %s"
-
-#, fuzzy
-msgid "Files to send"
-msgstr "Aukeratu Bidaltzeko Fitxeroa..."
 
 #, fuzzy
 msgid "Filetransfer Preference"
@@ -2479,13 +2505,6 @@ msgstr "Bidaltzailea: "
 
 msgid "General"
 msgstr "Orokorra"
-
-msgid ""
-"Generate preview automatically in public group chats (may disclose your data)"
-msgstr ""
-
-msgid "Generate preview for any URLs containing images (may be unsafe)"
-msgstr ""
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2949,10 +2968,6 @@ msgstr ""
 msgid "Last but not least"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "Lat: %s Lon: %s"
-msgstr "Azken egoera: %s"
-
 #, fuzzy
 msgid "Leave Group Chat"
 msgstr "Txat Taldea Berria"
@@ -3000,13 +3015,9 @@ msgstr ""
 msgid "Local Time"
 msgstr "Tokiko jid-a:"
 
-#, fuzzy
-msgid "Location"
+#, fuzzy, python-format
+msgid "Location at %s"
 msgstr "Kontu Eraldaketa"
-
-#, python-format
-msgid "Location at Lat: %s Lon: %s"
-msgstr ""
 
 #, fuzzy
 msgid "Location:"
@@ -3077,7 +3088,7 @@ msgstr ""
 msgid "Mark as read"
 msgstr ""
 
-msgid "Maximum file size for preview generation"
+msgid "Maximum file size for preview downloads"
 msgstr ""
 
 #, fuzzy
@@ -3548,10 +3559,6 @@ msgstr "Pasahitzak desberdinak dira"
 msgid "Past Developers"
 msgstr "Aurre diseinatzaileak: "
 
-#, fuzzy
-msgid "Paste Image"
-msgstr "Aukeratu Irudia"
-
 msgid "Paste Last Input"
 msgstr ""
 
@@ -3909,10 +3916,6 @@ msgstr "Berriki:"
 msgid "Remove Contact"
 msgstr "Berridatzi Kontaktua"
 
-#, fuzzy
-msgid "Remove Files"
-msgstr "_Ezabatu"
-
 msgid "Remove Group"
 msgstr "Ezabatu Taldea"
 
@@ -4025,11 +4028,8 @@ msgid "Requires: Gspell"
 msgstr ""
 
 msgid ""
-"Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
-"base, gstreamer1.0-plugins-ugly, gstreamer1.0-libav, and gstreamer1.0-gtk3"
-msgstr ""
-
-msgid "Requires: gir1.2-gupnpigd-1.0"
+"Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+"ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
 msgstr ""
 
 #, fuzzy
@@ -4038,6 +4038,13 @@ msgstr "Historial Administratzailea"
 
 #, fuzzy
 msgid "Requires: gsound"
+msgstr "Pasahitza behar da"
+
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
+#, fuzzy
+msgid "Requires: gupnpigd-1.0"
 msgstr "Pasahitza behar da"
 
 msgid "Requires: libappindicator3"
@@ -4154,10 +4161,6 @@ msgid "Save"
 msgstr "daukadanean"
 
 #, fuzzy
-msgid "Save As…"
-msgstr "daukadanean"
-
-#, fuzzy
 msgid "Save File as…"
 msgstr "Gorde Bezala..."
 
@@ -4167,6 +4170,10 @@ msgstr "Gorde pasahitza"
 
 #, fuzzy
 msgid "Save as..."
+msgstr "daukadanean"
+
+#, fuzzy
+msgid "Save as…"
 msgstr "daukadanean"
 
 #, fuzzy
@@ -4319,6 +4326,10 @@ msgstr "Gorde Bezala..."
 #, fuzzy
 msgid "Send File Directly…"
 msgstr "Gorde Bezala..."
+
+#, fuzzy
+msgid "Send Files"
+msgstr "Bidali _Fitxeroa"
 
 #, fuzzy
 msgid "Send Files Directly"
@@ -4576,6 +4587,13 @@ msgstr "Ikusi _Zerrenda"
 msgid "Show only critical errors"
 msgstr "Ikusi _zerrendan bakarrik"
 
+msgid ""
+"Show previews automatically in public group chats (may disclose your data)"
+msgstr ""
+
+msgid "Show previews for any URLs containing images (may be unsafe)"
+msgstr ""
+
 #, fuzzy
 msgid "Show previews for files"
 msgstr "Konexioa ez dago erabilgarri"
@@ -4627,7 +4645,7 @@ msgstr ""
 msgid "Signup not allowed"
 msgstr "Baimenik gabeko izengoitia: %s"
 
-msgid "Size of preview image"
+msgid "Size of preview images in pixels"
 msgstr ""
 
 msgid "Sleeping"
@@ -4929,10 +4947,6 @@ msgid ""
 "The file %s has been received, but it seems to have been damaged along the "
 "way.\n"
 "Do you want to download it again?"
-msgstr ""
-
-#, python-format
-msgid "The following file could not be accessed and was not uploaded: %s"
 msgstr ""
 
 msgid ""
@@ -5481,7 +5495,9 @@ msgstr ""
 msgid "Where participants should go"
 msgstr ""
 
-msgid "Whether to check for a valid certificate"
+msgid ""
+"Whether to check for a valid certificate before downloading (not safe to "
+"disable)"
 msgstr ""
 
 msgid "Which server should I choose?"
@@ -5597,10 +5613,6 @@ msgstr "Orain %s bezala ezaguna zara"
 msgid "You are offline."
 msgstr "deskonektatuta"
 
-#, fuzzy
-msgid "You are trying to paste an image"
-msgstr "Ez zaude zerbitzarira konektatuta"
-
 #, fuzzy, python-format
 msgid "You can join this group chat instead: xmpp:%s?join"
 msgstr "%s gelan sartu da"
@@ -5636,6 +5648,10 @@ msgstr "Ez duzu baimenik kokapen honetan fitxerorik sortzeko."
 msgid ""
 "You do not have the proper permissions to create files in this directory."
 msgstr "Ez duzu baimenik kokapen honetan fitxerorik sortzeko."
+
+#, python-format
+msgid "You dropped something Gajim could not process: %s"
+msgstr ""
 
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
@@ -5945,9 +5961,6 @@ msgstr "_Ireki Fitxeroaren Edukia"
 msgid "_Overwrite"
 msgstr ""
 
-msgid "_Paste"
-msgstr ""
-
 #, fuzzy
 msgid "_Please choose a server"
 msgstr "Mezu berria sortu"
@@ -5993,7 +6006,7 @@ msgid "_Save"
 msgstr "daukadanean"
 
 #, fuzzy
-msgid "_Save as"
+msgid "_Save as…"
 msgstr "daukadanean"
 
 msgid "_Search"
@@ -6004,10 +6017,6 @@ msgstr ""
 
 msgid "_Send"
 msgstr "_Bidali"
-
-#, fuzzy
-msgid "_Send Files"
-msgstr "Bidali _Fitxeroa"
 
 #, fuzzy
 msgid "_Show Certificate"
@@ -6334,6 +6343,12 @@ msgstr ""
 
 #, fuzzy
 #~ msgid ""
+#~ "Are you sure you want to paste your clipboard's image into the chat "
+#~ "window?"
+#~ msgstr "Ziur al zaude \"%s\" gelatik atera nahi duzula?"
+
+#, fuzzy
+#~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
 #~ msgstr ""
@@ -6382,6 +6397,10 @@ msgstr ""
 #~ msgstr "Mesedez begiratu avahi-daemon martxan dagoen."
 
 #, fuzzy
+#~ msgid "Choose a File to Send…"
+#~ msgstr "Aukeratu Bidaltzeko Fitxeroa..."
+
+#, fuzzy
 #~ msgid "Clear chat window"
 #~ msgstr "Erabilera: %s, testu leihoa itxi."
 
@@ -6414,6 +6433,10 @@ msgstr ""
 #~ msgstr "Kontaktua"
 
 #, fuzzy
+#~ msgid "Emoji Theme"
+#~ msgstr "Gajim - %s"
+
+#, fuzzy
 #~ msgid "Enter Password"
 #~ msgstr "Sartu pasahitz berria:"
 
@@ -6423,6 +6446,10 @@ msgstr ""
 
 #~ msgid "File path"
 #~ msgstr "Fitxeroaren tokia"
+
+#, fuzzy
+#~ msgid "Files to send"
+#~ msgstr "Aukeratu Bidaltzeko Fitxeroa..."
 
 #, fuzzy
 #~ msgid "Format your message…"
@@ -6505,6 +6532,10 @@ msgstr ""
 #~ msgstr "Gela honetan ukatua izan zara."
 
 #, fuzzy
+#~ msgid "Lat: %s Lon: %s"
+#~ msgstr "Azken egoera: %s"
+
+#, fuzzy
 #~ msgid "Leave the group chat"
 #~ msgstr "Txat Taldea Berria"
 
@@ -6555,6 +6586,10 @@ msgstr ""
 #~ "erabiltzaileari."
 
 #, fuzzy
+#~ msgid "Paste Image"
+#~ msgstr "Aukeratu Irudia"
+
+#, fuzzy
 #~ msgid "Presence description:"
 #~ msgstr "Deskripzio errorea...."
 
@@ -6576,6 +6611,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Quote…"
 #~ msgstr "At_era"
+
+#, fuzzy
+#~ msgid "Remove Files"
+#~ msgstr "_Ezabatu"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6706,12 +6745,20 @@ msgstr ""
 #~ "You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
 #~ msgstr "Ez zaude gela honetan \"%s\"jadanik edo \"%s\" joan da."
 
+#, fuzzy
+#~ msgid "You are trying to paste an image"
+#~ msgstr "Ez zaude zerbitzarira konektatuta"
+
 #~ msgid "You have no active account"
 #~ msgstr "Ez duzu aktibatutako konturik"
 
 #, fuzzy
 #~ msgid "_Invite"
 #~ msgstr "Honera gonbidatu"
+
+#, fuzzy
+#~ msgid "_Save as"
+#~ msgstr "daukadanean"
 
 #~ msgid ""
 #~ "change status of account \"account\". If not specified, try to change "

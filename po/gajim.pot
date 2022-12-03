@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-30 21:47+0000\n"
+"POT-Creation-Date: 2022-12-03 08:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -136,7 +136,7 @@ msgstr ""
 #, python-format
 msgid ""
 "%s is online with multiple devices.\n"
-"Choose the device you would like to send the file to."
+"Choose the device you would like to send the files to."
 msgstr ""
 
 #, python-format
@@ -153,6 +153,26 @@ msgstr ""
 
 #, python-format
 msgid "%s wants to send you a file"
+msgstr ""
+
+#, python-format
+msgctxt "positive longitude"
+msgid "%sE"
+msgstr ""
+
+#, python-format
+msgctxt "positive latitude"
+msgid "%sN"
+msgstr ""
+
+#, python-format
+msgctxt "negative latitude"
+msgid "%sS"
+msgstr ""
+
+#, python-format
+msgctxt "negative longitude"
+msgid "%sW"
 msgstr ""
 
 #, python-format
@@ -206,15 +226,6 @@ msgid "<Description>"
 msgstr ""
 
 msgid "<Plugin Name>"
-msgstr ""
-
-msgid ""
-"<a href='https://conversations.im/compliance/'>conversations.im/compliance</"
-"a>"
-msgstr ""
-
-msgid ""
-"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
 msgstr ""
 
 #, python-format
@@ -584,13 +595,13 @@ msgstr ""
 msgid "Accounts"
 msgstr ""
 
+msgid "Action for left-clicking a preview"
+msgstr ""
+
 msgid "Action on Close"
 msgstr ""
 
 msgid "Action when closing Gajim’s window"
-msgstr ""
-
-msgid "Action when left-clicking a preview"
 msgstr ""
 
 msgid "Activate"
@@ -617,7 +628,7 @@ msgstr ""
 msgid "Add Entry"
 msgstr ""
 
-msgid "Add Files"
+msgid "Add Files…"
 msgstr ""
 
 msgid "Add Group…"
@@ -733,7 +744,7 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allowed File Size"
+msgid "Allows opening file:/ URIs when clicked."
 msgstr ""
 
 msgid "Alternate venue (optional)..."
@@ -816,10 +827,6 @@ msgstr ""
 msgid "Are you sure you want to leave this group chat?"
 msgstr ""
 
-msgid ""
-"Are you sure you want to paste your clipboard's image into the chat window?"
-msgstr ""
-
 msgid "Are you sure you want to quit Gajim?"
 msgstr ""
 
@@ -841,7 +848,7 @@ msgstr ""
 msgid "Audio"
 msgstr ""
 
-msgid "Audio / Video"
+msgid "Audio / Video Calls"
 msgstr ""
 
 msgid "Audio File"
@@ -851,6 +858,9 @@ msgid "Audio Input Device"
 msgstr ""
 
 msgid "Audio Output Device"
+msgstr ""
+
+msgid "Audio Preview"
 msgstr ""
 
 msgid "Audio preview is not available"
@@ -1186,9 +1196,6 @@ msgstr ""
 msgid "Choose Sound"
 msgstr ""
 
-msgid "Choose a File to Send…"
-msgstr ""
-
 msgid "Choose a color or select an image"
 msgstr ""
 
@@ -1196,9 +1203,6 @@ msgid "Choose a group…"
 msgstr ""
 
 msgid "Choose encryption"
-msgstr ""
-
-msgid "Choose from various emoji styles"
 msgstr ""
 
 msgid "Choose the contact's groups"
@@ -1222,7 +1226,9 @@ msgstr ""
 msgid "Clear message entry"
 msgstr ""
 
-msgid "Click messages to select them"
+msgid ""
+"Click messages to select them\n"
+"(Ctrl + Double Click to deselect)"
 msgstr ""
 
 msgid "Click on contacts you would like to invite to this group chat."
@@ -1232,6 +1238,11 @@ msgid "Click to view Gajim's wiki page on how to install plugins in Flatpak."
 msgstr ""
 
 msgid "Click to view location"
+msgstr ""
+
+msgid ""
+"Clickable schemes in addition to the hard-coded list of IANA-registered "
+"ones. Space-separated, lower-case, no colons."
 msgstr ""
 
 msgid "Client Certificate"
@@ -1434,6 +1445,9 @@ msgstr ""
 msgid "Copy Email Address"
 msgstr ""
 
+msgid "Copy Link"
+msgstr ""
+
 msgid "Copy Link Location"
 msgstr ""
 
@@ -1458,10 +1472,11 @@ msgstr ""
 msgid "Correct the last message"
 msgstr ""
 
-msgid "Could not Open File"
+msgid "Could not access file"
 msgstr ""
 
-msgid "Could not access file"
+#, python-format
+msgid "Could not open file (%s)"
 msgstr ""
 
 msgid "Country"
@@ -1583,6 +1598,9 @@ msgstr ""
 msgid "Direct Messages"
 msgstr ""
 
+msgid "Direct transfer (not encrypted)"
+msgstr ""
+
 msgid "Directory"
 msgstr ""
 
@@ -1658,6 +1676,9 @@ msgstr ""
 msgid "Download"
 msgstr ""
 
+msgid "Download File"
+msgstr ""
+
 msgid "Download Update"
 msgstr ""
 
@@ -1677,6 +1698,9 @@ msgstr ""
 
 #, python-format
 msgid "Draft: %s"
+msgstr ""
+
+msgid "Drop files here"
 msgstr ""
 
 msgid "Drop files or contacts"
@@ -1709,13 +1733,7 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-msgid "Emoji"
-msgstr ""
-
 msgid "Emoji Shortcodes"
-msgstr ""
-
-msgid "Emoji Theme"
 msgstr ""
 
 msgid "Enable"
@@ -1733,6 +1751,9 @@ msgid "Enables Gajim to play sounds for various notifications"
 msgstr ""
 
 msgid "Enables Gajim to provide Audio and Video chats"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to provide a notification area icon"
@@ -1926,6 +1947,9 @@ msgstr ""
 msgid "File Preview"
 msgstr ""
 
+msgid "File Size Limit"
+msgstr ""
+
 msgid "File Transfer"
 msgstr ""
 
@@ -1969,6 +1993,9 @@ msgstr ""
 msgid "File size unknown"
 msgstr ""
 
+msgid "File too big, will use direct transfer (not encrypted)"
+msgstr ""
+
 msgid "File transfer stopped"
 msgstr ""
 
@@ -1981,9 +2008,6 @@ msgstr ""
 
 #, python-format
 msgid "Filename: %s"
-msgstr ""
-
-msgid "Files to send"
 msgstr ""
 
 msgid "Filetransfer Preference"
@@ -2109,13 +2133,6 @@ msgid "Gender"
 msgstr ""
 
 msgid "General"
-msgstr ""
-
-msgid ""
-"Generate preview automatically in public group chats (may disclose your data)"
-msgstr ""
-
-msgid "Generate preview for any URLs containing images (may be unsafe)"
 msgstr ""
 
 msgid "Global Group Chat Search"
@@ -2504,10 +2521,6 @@ msgstr ""
 msgid "Last but not least"
 msgstr ""
 
-#, python-format
-msgid "Lat: %s Lon: %s"
-msgstr ""
-
 msgid "Leave Group Chat"
 msgstr ""
 
@@ -2546,11 +2559,8 @@ msgstr ""
 msgid "Local Time"
 msgstr ""
 
-msgid "Location"
-msgstr ""
-
 #, python-format
-msgid "Location at Lat: %s Lon: %s"
+msgid "Location at %s"
 msgstr ""
 
 msgid "Location:"
@@ -2612,7 +2622,7 @@ msgstr ""
 msgid "Mark as read"
 msgstr ""
 
-msgid "Maximum file size for preview generation"
+msgid "Maximum file size for preview downloads"
 msgstr ""
 
 msgid "Me"
@@ -3018,9 +3028,6 @@ msgstr ""
 msgid "Past Developers"
 msgstr ""
 
-msgid "Paste Image"
-msgstr ""
-
 msgid "Paste Last Input"
 msgstr ""
 
@@ -3321,9 +3328,6 @@ msgstr ""
 msgid "Remove Contact"
 msgstr ""
 
-msgid "Remove Files"
-msgstr ""
-
 msgid "Remove Group"
 msgstr ""
 
@@ -3415,17 +3419,20 @@ msgid "Requires: Gspell"
 msgstr ""
 
 msgid ""
-"Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
-"base, gstreamer1.0-plugins-ugly, gstreamer1.0-libav, and gstreamer1.0-gtk3"
-msgstr ""
-
-msgid "Requires: gir1.2-gupnpigd-1.0"
+"Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+"ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
 msgstr ""
 
 msgid "Requires: gnome-keyring or kwallet"
 msgstr ""
 
 msgid "Requires: gsound"
+msgstr ""
+
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
+msgid "Requires: gupnpigd-1.0"
 msgstr ""
 
 msgid "Requires: libappindicator3"
@@ -3522,9 +3529,6 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-msgid "Save As…"
-msgstr ""
-
 msgid "Save File as…"
 msgstr ""
 
@@ -3532,6 +3536,9 @@ msgid "Save Password"
 msgstr ""
 
 msgid "Save as..."
+msgstr ""
+
+msgid "Save as…"
 msgstr ""
 
 msgid "Saving Avatar Failed"
@@ -3660,6 +3667,9 @@ msgid "Send File (max. %s)…"
 msgstr ""
 
 msgid "Send File Directly…"
+msgstr ""
+
+msgid "Send Files"
 msgstr ""
 
 msgid "Send Files Directly"
@@ -3866,6 +3876,13 @@ msgstr ""
 msgid "Show only critical errors"
 msgstr ""
 
+msgid ""
+"Show previews automatically in public group chats (may disclose your data)"
+msgstr ""
+
+msgid "Show previews for any URLs containing images (may be unsafe)"
+msgstr ""
+
 msgid "Show previews for files"
 msgstr ""
 
@@ -3908,7 +3925,7 @@ msgstr ""
 msgid "Signup not allowed"
 msgstr ""
 
-msgid "Size of preview image"
+msgid "Size of preview images in pixels"
 msgstr ""
 
 msgid "Sleeping"
@@ -4169,10 +4186,6 @@ msgid ""
 "The file %s has been received, but it seems to have been damaged along the "
 "way.\n"
 "Do you want to download it again?"
-msgstr ""
-
-#, python-format
-msgid "The following file could not be accessed and was not uploaded: %s"
 msgstr ""
 
 msgid ""
@@ -4660,7 +4673,9 @@ msgstr ""
 msgid "Where participants should go"
 msgstr ""
 
-msgid "Whether to check for a valid certificate"
+msgid ""
+"Whether to check for a valid certificate before downloading (not safe to "
+"disable)"
 msgstr ""
 
 msgid "Which server should I choose?"
@@ -4764,9 +4779,6 @@ msgstr ""
 msgid "You are offline."
 msgstr ""
 
-msgid "You are trying to paste an image"
-msgstr ""
-
 #, python-format
 msgid "You can join this group chat instead: xmpp:%s?join"
 msgstr ""
@@ -4794,6 +4806,10 @@ msgstr ""
 
 msgid ""
 "You do not have the proper permissions to create files in this directory."
+msgstr ""
+
+#, python-format
+msgid "You dropped something Gajim could not process: %s"
 msgstr ""
 
 #, python-brace-format
@@ -5049,9 +5065,6 @@ msgstr ""
 msgid "_Overwrite"
 msgstr ""
 
-msgid "_Paste"
-msgstr ""
-
 msgid "_Please choose a server"
 msgstr ""
 
@@ -5088,7 +5101,7 @@ msgstr ""
 msgid "_Save"
 msgstr ""
 
-msgid "_Save as"
+msgid "_Save as…"
 msgstr ""
 
 msgid "_Search"
@@ -5098,9 +5111,6 @@ msgid "_Select"
 msgstr ""
 
 msgid "_Send"
-msgstr ""
-
-msgid "_Send Files"
 msgstr ""
 
 msgid "_Show Certificate"

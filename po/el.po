@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-30 21:47+0000\n"
+"POT-Creation-Date: 2022-12-03 08:42+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -145,7 +145,7 @@ msgstr ""
 #, python-format
 msgid ""
 "%s is online with multiple devices.\n"
-"Choose the device you would like to send the file to."
+"Choose the device you would like to send the files to."
 msgstr ""
 
 #, python-format
@@ -163,6 +163,26 @@ msgstr "Αφαιρεί μια επαφή από τη λίστα επαφών"
 #, fuzzy, python-format
 msgid "%s wants to send you a file"
 msgstr "O/Η %s επιθυμεί να σας στείλει ένα αρχείο."
+
+#, python-format
+msgctxt "positive longitude"
+msgid "%sE"
+msgstr ""
+
+#, python-format
+msgctxt "positive latitude"
+msgid "%sN"
+msgstr ""
+
+#, python-format
+msgctxt "negative latitude"
+msgid "%sS"
+msgstr ""
+
+#, python-format
+msgctxt "negative longitude"
+msgid "%sW"
+msgstr ""
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -219,15 +239,6 @@ msgstr "Περιγραφή"
 #, fuzzy
 msgid "<Plugin Name>"
 msgstr "Η δημοσιοποίηση της vCard απέτυχε"
-
-msgid ""
-"<a href='https://conversations.im/compliance/'>conversations.im/compliance</"
-"a>"
-msgstr ""
-
-msgid ""
-"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
-msgstr ""
 
 #, python-format
 msgid ""
@@ -684,14 +695,14 @@ msgstr "Λογαριασμοί"
 msgid "Accounts"
 msgstr "Λογαριασμοί"
 
+msgid "Action for left-clicking a preview"
+msgstr ""
+
 #, fuzzy
 msgid "Action on Close"
 msgstr "Gajim"
 
 msgid "Action when closing Gajim’s window"
-msgstr ""
-
-msgid "Action when left-clicking a preview"
 msgstr ""
 
 #, fuzzy
@@ -724,7 +735,7 @@ msgid "Add Entry"
 msgstr "Εγγραφή:"
 
 #, fuzzy
-msgid "Add Files"
+msgid "Add Files…"
 msgstr "Αρχείο:"
 
 #, fuzzy
@@ -862,7 +873,7 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allowed File Size"
+msgid "Allows opening file:/ URIs when clicked."
 msgstr ""
 
 msgid "Alternate venue (optional)..."
@@ -960,11 +971,6 @@ msgid "Are you sure you want to leave this group chat?"
 msgstr "Είστε σίγουροι ότι θέλετε να φύγετε από το δωμάτιο \"%s\";"
 
 #, fuzzy
-msgid ""
-"Are you sure you want to paste your clipboard's image into the chat window?"
-msgstr "Είστε σίγουροι ότι θέλετε να φύγετε από το δωμάτιο \"%s\";"
-
-#, fuzzy
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Είστε σίγουροι ότι θέλετε να φύγετε από τα δωμάτια \"%s\";"
 
@@ -988,8 +994,9 @@ msgstr "Λήφθηκε το πρώτο μήνυμα"
 msgid "Audio"
 msgstr ""
 
-msgid "Audio / Video"
-msgstr ""
+#, fuzzy
+msgid "Audio / Video Calls"
+msgstr "Προσωπική συζήτηση"
 
 #, fuzzy
 msgid "Audio File"
@@ -1002,6 +1009,10 @@ msgstr "Προεπιλεγμένα μηνύματα κατάστασης"
 #, fuzzy
 msgid "Audio Output Device"
 msgstr "Προεπιλεγμένα μηνύματα κατάστασης"
+
+#, fuzzy
+msgid "Audio Preview"
+msgstr "Αρχείο:"
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1385,10 +1396,6 @@ msgstr ""
 msgid "Choose Sound"
 msgstr "Επιλογή ήχου"
 
-#, fuzzy
-msgid "Choose a File to Send…"
-msgstr "Επιλέξτε το αρχείο που θα σταλεί..."
-
 msgid "Choose a color or select an image"
 msgstr ""
 
@@ -1399,9 +1406,6 @@ msgstr "Επιλογή εικόνας"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Επιλέξτε το αρχείο που θα σταλεί..."
-
-msgid "Choose from various emoji styles"
-msgstr ""
 
 #, fuzzy
 msgid "Choose the contact's groups"
@@ -1430,7 +1434,9 @@ msgstr "Επιλογή ήχου"
 msgid "Clear message entry"
 msgstr "Το μήνυμα στάλθηκε"
 
-msgid "Click messages to select them"
+msgid ""
+"Click messages to select them\n"
+"(Ctrl + Double Click to deselect)"
 msgstr ""
 
 #, fuzzy
@@ -1443,6 +1449,11 @@ msgstr ""
 #, fuzzy
 msgid "Click to view location"
 msgstr "_Αντιγραφή τοποθεσίας δεσμού"
+
+msgid ""
+"Clickable schemes in addition to the hard-coded list of IANA-registered "
+"ones. Space-separated, lower-case, no colons."
+msgstr ""
 
 #, fuzzy
 msgid "Client Certificate"
@@ -1688,6 +1699,10 @@ msgid "Copy Email Address"
 msgstr "Α_ντιγραφή JID/Email διεύθυνσης"
 
 #, fuzzy
+msgid "Copy Link"
+msgstr "_Αντιγραφή τοποθεσίας δεσμού"
+
+#, fuzzy
 msgid "Copy Link Location"
 msgstr "_Αντιγραφή τοποθεσίας δεσμού"
 
@@ -1719,11 +1734,11 @@ msgid "Correct the last message"
 msgstr "μήνυμα κατάστασης"
 
 #, fuzzy
-msgid "Could not Open File"
+msgid "Could not access file"
 msgstr "Δεν ήταν δυνατό το φόρτωμα της εικόνας"
 
-#, fuzzy
-msgid "Could not access file"
+#, fuzzy, python-format
+msgid "Could not open file (%s)"
 msgstr "Δεν ήταν δυνατό το φόρτωμα της εικόνας"
 
 #, fuzzy
@@ -1873,6 +1888,10 @@ msgid "Direct Messages"
 msgstr "Προεπιλεγμένα μηνύματα κατάστασης"
 
 #, fuzzy
+msgid "Direct transfer (not encrypted)"
+msgstr "Η μεταφορά αρχείου διακόπηκε"
+
+#, fuzzy
 msgid "Directory"
 msgstr "_Ιστορικό"
 
@@ -1963,6 +1982,10 @@ msgid "Download"
 msgstr "Λήψη"
 
 #, fuzzy
+msgid "Download File"
+msgstr "Λήψη"
+
+#, fuzzy
 msgid "Download Update"
 msgstr "Λήψη"
 
@@ -1985,6 +2008,10 @@ msgstr "Σύνθεση"
 #, fuzzy, python-format
 msgid "Draft: %s"
 msgstr "Κατάσταση: "
+
+#, fuzzy
+msgid "Drop files here"
+msgstr "Αποστολή αρχείου σε μία επαφή"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2024,15 +2051,8 @@ msgstr ""
 msgid "Email"
 msgstr "Νέο E-Mail"
 
-msgid "Emoji"
-msgstr ""
-
 msgid "Emoji Shortcodes"
 msgstr ""
-
-#, fuzzy
-msgid "Emoji Theme"
-msgstr "Gajim - %s"
 
 msgid "Enable"
 msgstr "Ενεργοποίηση"
@@ -2050,6 +2070,9 @@ msgid "Enables Gajim to play sounds for various notifications"
 msgstr ""
 
 msgid "Enables Gajim to provide Audio and Video chats"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to provide a notification area icon"
@@ -2280,6 +2303,10 @@ msgid "File Preview"
 msgstr ""
 
 #, fuzzy
+msgid "File Size Limit"
+msgstr "Διαδρομή αρχείου"
+
+#, fuzzy
 msgid "File Transfer"
 msgstr "Μεταφορές αρχείων"
 
@@ -2330,6 +2357,9 @@ msgstr ""
 msgid "File size unknown"
 msgstr ""
 
+msgid "File too big, will use direct transfer (not encrypted)"
+msgstr ""
+
 #, fuzzy
 msgid "File transfer stopped"
 msgstr "Η μεταφορά αρχείου διακόπηκε"
@@ -2345,10 +2375,6 @@ msgstr "Αρχείο: %s"
 #, python-format
 msgid "Filename: %s"
 msgstr "Όνομα αρχείου: %s"
-
-#, fuzzy
-msgid "Files to send"
-msgstr "Επιλέξτε το αρχείο που θα σταλεί..."
 
 #, fuzzy
 msgid "Filetransfer Preference"
@@ -2490,13 +2516,6 @@ msgstr "Αποστολέας: "
 
 msgid "General"
 msgstr "Γενικά"
-
-msgid ""
-"Generate preview automatically in public group chats (may disclose your data)"
-msgstr ""
-
-msgid "Generate preview for any URLs containing images (may be unsafe)"
-msgstr ""
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2956,10 +2975,6 @@ msgstr ""
 msgid "Last but not least"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "Lat: %s Lon: %s"
-msgstr "Τελευταία κατάσταση: %s"
-
 #, fuzzy
 msgid "Leave Group Chat"
 msgstr "Ομαδικές συζητήσεις"
@@ -3007,13 +3022,9 @@ msgstr ""
 msgid "Local Time"
 msgstr "Τοπικό jid:"
 
-#, fuzzy
-msgid "Location"
+#, fuzzy, python-format
+msgid "Location at %s"
 msgstr "Τροποποίηση λογαριασμού"
-
-#, python-format
-msgid "Location at Lat: %s Lon: %s"
-msgstr ""
 
 #, fuzzy
 msgid "Location:"
@@ -3084,7 +3095,7 @@ msgstr ""
 msgid "Mark as read"
 msgstr ""
 
-msgid "Maximum file size for preview generation"
+msgid "Maximum file size for preview downloads"
 msgstr ""
 
 #, fuzzy
@@ -3556,10 +3567,6 @@ msgstr "Οι κωδικοί δεν ταιριάζουν"
 msgid "Past Developers"
 msgstr "Προηγούμενοι δημιουργοί:"
 
-#, fuzzy
-msgid "Paste Image"
-msgstr "Επιλογή εικόνας"
-
 msgid "Paste Last Input"
 msgstr ""
 
@@ -3919,10 +3926,6 @@ msgstr "Καταγραφή ιστορικού"
 msgid "Remove Contact"
 msgstr "_Μετονομασία αρχείων"
 
-#, fuzzy
-msgid "Remove Files"
-msgstr "_Αφαίρεση"
-
 msgid "Remove Group"
 msgstr "Διαγραφή ομάδας"
 
@@ -4035,11 +4038,8 @@ msgid "Requires: Gspell"
 msgstr ""
 
 msgid ""
-"Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
-"base, gstreamer1.0-plugins-ugly, gstreamer1.0-libav, and gstreamer1.0-gtk3"
-msgstr ""
-
-msgid "Requires: gir1.2-gupnpigd-1.0"
+"Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+"ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
 msgstr ""
 
 #, fuzzy
@@ -4048,6 +4048,13 @@ msgstr "Διαχειριστής ιστορικού"
 
 #, fuzzy
 msgid "Requires: gsound"
+msgstr "Απαιτείται κωδικός"
+
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
+#, fuzzy
+msgid "Requires: gupnpigd-1.0"
 msgstr "Απαιτείται κωδικός"
 
 msgid "Requires: libappindicator3"
@@ -4164,10 +4171,6 @@ msgid "Save"
 msgstr "Έχει"
 
 #, fuzzy
-msgid "Save As…"
-msgstr "Έχει"
-
-#, fuzzy
 msgid "Save File as…"
 msgstr "Αποθήκευση αρχείου ως..."
 
@@ -4177,6 +4180,10 @@ msgstr "Αποθήκευση κωδικού"
 
 #, fuzzy
 msgid "Save as..."
+msgstr "Έχει"
+
+#, fuzzy
+msgid "Save as…"
 msgstr "Έχει"
 
 #, fuzzy
@@ -4331,6 +4338,10 @@ msgstr "Αποθήκευση αρχείου ως..."
 #, fuzzy
 msgid "Send File Directly…"
 msgstr "Αποθήκευση αρχείου ως..."
+
+#, fuzzy
+msgid "Send Files"
+msgstr "Αποστολή _αρχείου"
 
 #, fuzzy
 msgid "Send Files Directly"
@@ -4582,6 +4593,13 @@ msgstr "Εμφάνιση του κεντρικού παραθύρου κατά �
 msgid "Show only critical errors"
 msgstr "Εμφά_νιση το μόνο στο κύριο παράθυρο"
 
+msgid ""
+"Show previews automatically in public group chats (may disclose your data)"
+msgstr ""
+
+msgid "Show previews for any URLs containing images (may be unsafe)"
+msgstr ""
+
 #, fuzzy
 msgid "Show previews for files"
 msgstr "To Session bus δεν είναι διαθέσιμο"
@@ -4632,7 +4650,7 @@ msgstr ""
 msgid "Signup not allowed"
 msgstr "Δεν επιτρέπεται το ψευδώνυμο: %s"
 
-msgid "Size of preview image"
+msgid "Size of preview images in pixels"
 msgstr ""
 
 msgid "Sleeping"
@@ -4934,10 +4952,6 @@ msgid ""
 "The file %s has been received, but it seems to have been damaged along the "
 "way.\n"
 "Do you want to download it again?"
-msgstr ""
-
-#, python-format
-msgid "The following file could not be accessed and was not uploaded: %s"
 msgstr ""
 
 msgid ""
@@ -5488,7 +5502,9 @@ msgstr ""
 msgid "Where participants should go"
 msgstr ""
 
-msgid "Whether to check for a valid certificate"
+msgid ""
+"Whether to check for a valid certificate before downloading (not safe to "
+"disable)"
 msgstr ""
 
 msgid "Which server should I choose?"
@@ -5605,10 +5621,6 @@ msgstr "Είστε τώρα γνωστός ως %s"
 msgid "You are offline."
 msgstr "αποσυνδεδεμένος"
 
-#, fuzzy
-msgid "You are trying to paste an image"
-msgstr "Δεν είστε συνδεδεμένος στο διακομιστή"
-
 #, fuzzy, python-format
 msgid "You can join this group chat instead: xmpp:%s?join"
 msgstr "Ο/Η %s μπήκε στο δωμάτιο"
@@ -5648,6 +5660,10 @@ msgstr "Δε μπορείτε να δημιουργήσετε αρχεία σε 
 msgid ""
 "You do not have the proper permissions to create files in this directory."
 msgstr "Δε μπορείτε να δημιουργήσετε αρχεία σε αυτό τον κατάλογο."
+
+#, python-format
+msgid "You dropped something Gajim could not process: %s"
+msgstr ""
 
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
@@ -5958,9 +5974,6 @@ msgstr "_Άνοιγμα του περιέχοντος φακέλου"
 msgid "_Overwrite"
 msgstr ""
 
-msgid "_Paste"
-msgstr ""
-
 #, fuzzy
 msgid "_Please choose a server"
 msgstr "Δημιουργία νέου προφίλ"
@@ -6006,7 +6019,7 @@ msgid "_Save"
 msgstr "Έχει"
 
 #, fuzzy
-msgid "_Save as"
+msgid "_Save as…"
 msgstr "Έχει"
 
 msgid "_Search"
@@ -6017,10 +6030,6 @@ msgstr ""
 
 msgid "_Send"
 msgstr "_Αποστολή"
-
-#, fuzzy
-msgid "_Send Files"
-msgstr "Αποστολή _αρχείου"
 
 #, fuzzy
 msgid "_Show Certificate"
@@ -6344,6 +6353,12 @@ msgstr ""
 
 #, fuzzy
 #~ msgid ""
+#~ "Are you sure you want to paste your clipboard's image into the chat "
+#~ "window?"
+#~ msgstr "Είστε σίγουροι ότι θέλετε να φύγετε από το δωμάτιο \"%s\";"
+
+#, fuzzy
+#~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
 #~ msgstr ""
@@ -6390,6 +6405,10 @@ msgstr ""
 #~ msgstr "Το Gajim εκτελείται ήδη"
 
 #, fuzzy
+#~ msgid "Choose a File to Send…"
+#~ msgstr "Επιλέξτε το αρχείο που θα σταλεί..."
+
+#, fuzzy
 #~ msgid "Clear chat window"
 #~ msgstr "Χρήση: /%s, καθαρίζει το παράθυρο από το κείμενο."
 
@@ -6422,6 +6441,10 @@ msgstr ""
 #~ msgstr "Επαφές"
 
 #, fuzzy
+#~ msgid "Emoji Theme"
+#~ msgstr "Gajim - %s"
+
+#, fuzzy
 #~ msgid "Enter Password"
 #~ msgstr "Εισάγετε νέο κωδικό πρόσβασης:"
 
@@ -6431,6 +6454,10 @@ msgstr ""
 
 #~ msgid "File path"
 #~ msgstr "Διαδρομή αρχείου"
+
+#, fuzzy
+#~ msgid "Files to send"
+#~ msgstr "Επιλέξτε το αρχείο που θα σταλεί..."
 
 #, fuzzy
 #~ msgid "Format your message…"
@@ -6517,6 +6544,10 @@ msgstr ""
 #~ msgstr "Ο/Η %s μπήκε στο δωμάτιο"
 
 #, fuzzy
+#~ msgid "Lat: %s Lon: %s"
+#~ msgstr "Τελευταία κατάσταση: %s"
+
+#, fuzzy
 #~ msgid "Leave the group chat"
 #~ msgstr "Ομαδικές συζητήσεις"
 
@@ -6565,6 +6596,10 @@ msgstr ""
 #~ "Χρήση: /%s <ψευδώνυμο>, ανοίγει ένα παράθυρο προσωπικής κουβέντας με το "
 #~ "συγκεκριμένο χρήστη."
 
+#, fuzzy
+#~ msgid "Paste Image"
+#~ msgstr "Επιλογή εικόνας"
+
 #~ msgid "Presence description:"
 #~ msgstr "Περιγραφή παρουσίας:"
 
@@ -6586,6 +6621,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Quote…"
 #~ msgstr "_Έξοδος"
+
+#, fuzzy
+#~ msgid "Remove Files"
+#~ msgstr "_Αφαίρεση"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6723,12 +6762,20 @@ msgstr ""
 #~ "You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
 #~ msgstr "Δεν είστε πια στο δωμάτιο \"%s\" ή ο/η \"%s\" έφυγε."
 
+#, fuzzy
+#~ msgid "You are trying to paste an image"
+#~ msgstr "Δεν είστε συνδεδεμένος στο διακομιστή"
+
 #~ msgid "You have no active account"
 #~ msgstr "Δεν έχετε κανέναν ενεργό λογαριασμό"
 
 #, fuzzy
 #~ msgid "_Invite"
 #~ msgstr "Αδυναμία φόρτωσης"
+
+#, fuzzy
+#~ msgid "_Save as"
+#~ msgstr "Έχει"
 
 #~ msgid ""
 #~ "change status of account \"account\". If not specified, try to change "

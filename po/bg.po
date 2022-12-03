@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-30 21:47+0000\n"
+"POT-Creation-Date: 2022-12-03 08:42+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -140,7 +140,7 @@ msgstr "%s не е валидно ниво за дневник"
 #, python-format
 msgid ""
 "%s is online with multiple devices.\n"
-"Choose the device you would like to send the file to."
+"Choose the device you would like to send the files to."
 msgstr ""
 
 #, python-format
@@ -158,6 +158,26 @@ msgstr "Премахване на контакт от списъка"
 #, fuzzy, python-format
 msgid "%s wants to send you a file"
 msgstr "%s иска да ви изпрати файл."
+
+#, python-format
+msgctxt "positive longitude"
+msgid "%sE"
+msgstr ""
+
+#, python-format
+msgctxt "positive latitude"
+msgid "%sN"
+msgstr ""
+
+#, python-format
+msgctxt "negative latitude"
+msgid "%sS"
+msgstr ""
+
+#, python-format
+msgctxt "negative longitude"
+msgid "%sW"
+msgstr ""
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -215,15 +235,6 @@ msgstr "Описание"
 #, fuzzy
 msgid "<Plugin Name>"
 msgstr "Неуспех при свързването"
-
-msgid ""
-"<a href='https://conversations.im/compliance/'>conversations.im/compliance</"
-"a>"
-msgstr ""
-
-msgid ""
-"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
-msgstr ""
 
 #, python-format
 msgid ""
@@ -679,14 +690,14 @@ msgstr "Акаунти"
 msgid "Accounts"
 msgstr "Акаунти"
 
+msgid "Action for left-clicking a preview"
+msgstr ""
+
 #, fuzzy
 msgid "Action on Close"
 msgstr "Gajim"
 
 msgid "Action when closing Gajim’s window"
-msgstr ""
-
-msgid "Action when left-clicking a preview"
 msgstr ""
 
 #, fuzzy
@@ -719,7 +730,7 @@ msgid "Add Entry"
 msgstr "Запис:"
 
 #, fuzzy
-msgid "Add Files"
+msgid "Add Files…"
 msgstr "Файл: "
 
 #, fuzzy
@@ -864,7 +875,7 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allowed File Size"
+msgid "Allows opening file:/ URIs when clicked."
 msgstr ""
 
 #, fuzzy
@@ -964,11 +975,6 @@ msgid "Are you sure you want to leave this group chat?"
 msgstr "Сигурни ли сте, че искате да напуснете стаята „%s“?"
 
 #, fuzzy
-msgid ""
-"Are you sure you want to paste your clipboard's image into the chat window?"
-msgstr "Сигурни ли сте, че искате да напуснете стаята „%s“?"
-
-#, fuzzy
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Сигурни ли сте, че искате да напуснете стаята „%s“?"
 
@@ -992,8 +998,9 @@ msgstr "Първо получено съобщение"
 msgid "Audio"
 msgstr ""
 
-msgid "Audio / Video"
-msgstr ""
+#, fuzzy
+msgid "Audio / Video Calls"
+msgstr "Лични разговори"
 
 #, fuzzy
 msgid "Audio File"
@@ -1006,6 +1013,10 @@ msgstr "Стандартно съобщение"
 #, fuzzy
 msgid "Audio Output Device"
 msgstr "Стандартно съобщение"
+
+#, fuzzy
+msgid "Audio Preview"
+msgstr "Файл: "
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1394,10 +1405,6 @@ msgstr ""
 msgid "Choose Sound"
 msgstr "Избор на звук"
 
-#, fuzzy
-msgid "Choose a File to Send…"
-msgstr "Избор на файл за изпращане…"
-
 msgid "Choose a color or select an image"
 msgstr ""
 
@@ -1408,9 +1415,6 @@ msgstr "Избор на изображение"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Избор на файл за изпращане…"
-
-msgid "Choose from various emoji styles"
-msgstr ""
 
 #, fuzzy
 msgid "Choose the contact's groups"
@@ -1438,7 +1442,9 @@ msgstr "Избор на звук"
 msgid "Clear message entry"
 msgstr "Изпратено съобщение"
 
-msgid "Click messages to select them"
+msgid ""
+"Click messages to select them\n"
+"(Ctrl + Double Click to deselect)"
 msgstr ""
 
 #, fuzzy
@@ -1451,6 +1457,11 @@ msgstr ""
 #, fuzzy
 msgid "Click to view location"
 msgstr "Натиснете, за да настроите аватара си"
+
+msgid ""
+"Clickable schemes in addition to the hard-coded list of IANA-registered "
+"ones. Space-separated, lower-case, no colons."
+msgstr ""
 
 #, fuzzy
 msgid "Client Certificate"
@@ -1696,6 +1707,10 @@ msgid "Copy Email Address"
 msgstr "Копиране на _JID/Е-поща"
 
 #, fuzzy
+msgid "Copy Link"
+msgstr "_Копиране на адреса на връзката"
+
+#, fuzzy
 msgid "Copy Link Location"
 msgstr "_Копиране на адреса на връзката"
 
@@ -1727,11 +1742,11 @@ msgid "Correct the last message"
 msgstr "съобщение за състояние"
 
 #, fuzzy
-msgid "Could not Open File"
+msgid "Could not access file"
 msgstr "Неуспех при зареждането на изображението"
 
-#, fuzzy
-msgid "Could not access file"
+#, fuzzy, python-format
+msgid "Could not open file (%s)"
 msgstr "Неуспех при зареждането на изображението"
 
 #, fuzzy
@@ -1879,6 +1894,10 @@ msgid "Direct Messages"
 msgstr "Стандартно съобщение"
 
 #, fuzzy
+msgid "Direct transfer (not encrypted)"
+msgstr "Файловият трансфер е преустановен"
+
+#, fuzzy
 msgid "Directory"
 msgstr "Ист_ория"
 
@@ -1969,6 +1988,10 @@ msgid "Download"
 msgstr "Изтегляне"
 
 #, fuzzy
+msgid "Download File"
+msgstr "Изтегляне"
+
+#, fuzzy
 msgid "Download Update"
 msgstr "Изтегляне"
 
@@ -1991,6 +2014,10 @@ msgstr "Програмирам"
 #, fuzzy, python-format
 msgid "Draft: %s"
 msgstr "Състояние: "
+
+#, fuzzy
+msgid "Drop files here"
+msgstr "Изпращане на файл до контакт"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2030,15 +2057,8 @@ msgstr ""
 msgid "Email"
 msgstr "Нова е-поща"
 
-msgid "Emoji"
-msgstr ""
-
 msgid "Emoji Shortcodes"
 msgstr ""
-
-#, fuzzy
-msgid "Emoji Theme"
-msgstr "gajim-remote"
 
 msgid "Enable"
 msgstr "Активиране"
@@ -2058,6 +2078,9 @@ msgid "Enables Gajim to play sounds for various notifications"
 msgstr ""
 
 msgid "Enables Gajim to provide Audio and Video chats"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to provide a notification area icon"
@@ -2289,6 +2312,10 @@ msgid "File Preview"
 msgstr ""
 
 #, fuzzy
+msgid "File Size Limit"
+msgstr "Файлът не съдържа нищо"
+
+#, fuzzy
 msgid "File Transfer"
 msgstr "Файлови трансфери"
 
@@ -2337,6 +2364,9 @@ msgstr ""
 msgid "File size unknown"
 msgstr ""
 
+msgid "File too big, will use direct transfer (not encrypted)"
+msgstr ""
+
 #, fuzzy
 msgid "File transfer stopped"
 msgstr "Файловият трансфер е преустановен"
@@ -2352,10 +2382,6 @@ msgstr "Файл: %s"
 #, python-format
 msgid "Filename: %s"
 msgstr "Име на файл: %s"
-
-#, fuzzy
-msgid "Files to send"
-msgstr "Избор на файл за изпращане…"
 
 #, fuzzy
 msgid "Filetransfer Preference"
@@ -2501,13 +2527,6 @@ msgstr "Изпращач: "
 
 msgid "General"
 msgstr "Общи"
-
-msgid ""
-"Generate preview automatically in public group chats (may disclose your data)"
-msgstr ""
-
-msgid "Generate preview for any URLs containing images (may be unsafe)"
-msgstr ""
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2972,10 +2991,6 @@ msgstr ""
 msgid "Last but not least"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "Lat: %s Lon: %s"
-msgstr "Последно състояние: %s"
-
 #, fuzzy
 msgid "Leave Group Chat"
 msgstr "Излизане от стаите"
@@ -3024,13 +3039,9 @@ msgstr ""
 msgid "Local Time"
 msgstr "Локален JID:"
 
-#, fuzzy
-msgid "Location"
+#, fuzzy, python-format
+msgid "Location at %s"
 msgstr "Уведомления"
-
-#, python-format
-msgid "Location at Lat: %s Lon: %s"
-msgstr ""
 
 #, fuzzy
 msgid "Location:"
@@ -3100,7 +3111,7 @@ msgstr ""
 msgid "Mark as read"
 msgstr ""
 
-msgid "Maximum file size for preview generation"
+msgid "Maximum file size for preview downloads"
 msgstr ""
 
 #, fuzzy
@@ -3573,10 +3584,6 @@ msgstr "Паролите не съвпадат"
 msgid "Past Developers"
 msgstr "Бивши разработчици:"
 
-#, fuzzy
-msgid "Paste Image"
-msgstr "Избор на изображение"
-
 msgid "Paste Last Input"
 msgstr ""
 
@@ -3936,10 +3943,6 @@ msgstr "Скоро посетени:"
 msgid "Remove Contact"
 msgstr "Преименуване на контакт"
 
-#, fuzzy
-msgid "Remove Files"
-msgstr "_Премахване"
-
 msgid "Remove Group"
 msgstr "Премахване на група"
 
@@ -4052,13 +4055,9 @@ msgid "Requires: Gspell"
 msgstr "Изисква python-sexy."
 
 msgid ""
-"Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
-"base, gstreamer1.0-plugins-ugly, gstreamer1.0-libav, and gstreamer1.0-gtk3"
+"Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+"ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
 msgstr ""
-
-#, fuzzy
-msgid "Requires: gir1.2-gupnpigd-1.0"
-msgstr "Изисква python-gnome2."
 
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
@@ -4067,6 +4066,13 @@ msgstr "Изисква gnome-keyring и python-gnome2-desktop."
 #, fuzzy
 msgid "Requires: gsound"
 msgstr "Изисква python-dbus."
+
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
+#, fuzzy
+msgid "Requires: gupnpigd-1.0"
+msgstr "Изисква python-gnome2."
 
 #, fuzzy
 msgid "Requires: libappindicator3"
@@ -4184,10 +4190,6 @@ msgid "Save"
 msgstr "имам "
 
 #, fuzzy
-msgid "Save As…"
-msgstr "имам "
-
-#, fuzzy
 msgid "Save File as…"
 msgstr "Запазване на файла като…"
 
@@ -4197,6 +4199,10 @@ msgstr "Запазване на паролата"
 
 #, fuzzy
 msgid "Save as..."
+msgstr "имам "
+
+#, fuzzy
+msgid "Save as…"
 msgstr "имам "
 
 #, fuzzy
@@ -4348,6 +4354,10 @@ msgstr "Запазване на файла като…"
 #, fuzzy
 msgid "Send File Directly…"
 msgstr "Запазване на файла като…"
+
+#, fuzzy
+msgid "Send Files"
+msgstr "Изпращане на _файл"
 
 #, fuzzy
 msgid "Send Files Directly"
@@ -4603,6 +4613,13 @@ msgstr "П_оказване на списъка"
 msgid "Show only critical errors"
 msgstr "Показване на събитието в спис_ъка"
 
+msgid ""
+"Show previews automatically in public group chats (may disclose your data)"
+msgstr ""
+
+msgid "Show previews for any URLs containing images (may be unsafe)"
+msgstr ""
+
 #, fuzzy
 msgid "Show previews for files"
 msgstr "В момента няма връзка"
@@ -4654,7 +4671,7 @@ msgstr ""
 msgid "Signup not allowed"
 msgstr "Псевдонимът не е позволен: %s"
 
-msgid "Size of preview image"
+msgid "Size of preview images in pixels"
 msgstr ""
 
 msgid "Sleeping"
@@ -4958,10 +4975,6 @@ msgid ""
 "The file %s has been received, but it seems to have been damaged along the "
 "way.\n"
 "Do you want to download it again?"
-msgstr ""
-
-#, python-format
-msgid "The following file could not be accessed and was not uploaded: %s"
 msgstr ""
 
 msgid ""
@@ -5519,7 +5532,9 @@ msgid "Where participants should go"
 msgstr ""
 
 #, fuzzy
-msgid "Whether to check for a valid certificate"
+msgid ""
+"Whether to check for a valid certificate before downloading (not safe to "
+"disable)"
 msgstr "Пренебрегване на грешката за този сертификат."
 
 msgid "Which server should I choose?"
@@ -5637,10 +5652,6 @@ msgstr "Вече сте познати като %s"
 msgid "You are offline."
 msgstr ""
 
-#, fuzzy
-msgid "You are trying to paste an image"
-msgstr "Не сте свързани към сървъра."
-
 #, fuzzy, python-format
 msgid "You can join this group chat instead: xmpp:%s?join"
 msgstr "Вместо това може да влезете в тази стая: %s"
@@ -5675,6 +5686,10 @@ msgstr "Нямата права да създавате файлове в таз
 msgid ""
 "You do not have the proper permissions to create files in this directory."
 msgstr "Нямата права да създавате файлове в тази папка."
+
+#, python-format
+msgid "You dropped something Gajim could not process: %s"
+msgstr ""
 
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
@@ -5983,9 +5998,6 @@ msgstr "_Отваряне на папката"
 msgid "_Overwrite"
 msgstr ""
 
-msgid "_Paste"
-msgstr ""
-
 #, fuzzy
 msgid "_Please choose a server"
 msgstr "Създайте нова тема с желаното име."
@@ -6031,7 +6043,7 @@ msgid "_Save"
 msgstr "имам "
 
 #, fuzzy
-msgid "_Save as"
+msgid "_Save as…"
 msgstr "имам "
 
 msgid "_Search"
@@ -6042,10 +6054,6 @@ msgstr ""
 
 msgid "_Send"
 msgstr "_Изпращане"
-
-#, fuzzy
-msgid "_Send Files"
-msgstr "Изпращане на _файл"
 
 #, fuzzy
 msgid "_Show Certificate"
@@ -6375,6 +6383,12 @@ msgstr ""
 #~ msgid "App Indicator Icon"
 #~ msgstr "<b>Програми</b>"
 
+#, fuzzy
+#~ msgid ""
+#~ "Are you sure you want to paste your clipboard's image into the chat "
+#~ "window?"
+#~ msgstr "Сигурни ли сте, че искате да напуснете стаята „%s“?"
+
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
@@ -6422,6 +6436,10 @@ msgstr ""
 #~ msgstr "Проверка дали Gajim е стартиран"
 
 #, fuzzy
+#~ msgid "Choose a File to Send…"
+#~ msgstr "Избор на файл за изпращане…"
+
+#, fuzzy
 #~ msgid "Clear chat window"
 #~ msgstr "Употреба: /%s, изчиства текстовия прозорец."
 
@@ -6452,6 +6470,10 @@ msgstr ""
 #~ msgstr "Покана на _контакти"
 
 #, fuzzy
+#~ msgid "Emoji Theme"
+#~ msgstr "gajim-remote"
+
+#, fuzzy
 #~ msgid "Enter Password"
 #~ msgstr "Въведете нова парола:"
 
@@ -6464,6 +6486,10 @@ msgstr ""
 
 #~ msgid "File path"
 #~ msgstr "Път до файл"
+
+#, fuzzy
+#~ msgid "Files to send"
+#~ msgstr "Избор на файл за изпращане…"
 
 #, fuzzy
 #~ msgid "Format your message…"
@@ -6552,6 +6578,10 @@ msgstr ""
 #~ msgstr "Поканени сте в стая."
 
 #, fuzzy
+#~ msgid "Lat: %s Lon: %s"
+#~ msgstr "Последно състояние: %s"
+
+#, fuzzy
 #~ msgid "Leave the group chat"
 #~ msgstr "Излизане от стаите"
 
@@ -6603,6 +6633,10 @@ msgstr ""
 #~ "Употреба: /%s <псевдоним>, отваря прозорец за лично съобщение със "
 #~ "съответния участник."
 
+#, fuzzy
+#~ msgid "Paste Image"
+#~ msgstr "Избор на изображение"
+
 #~ msgid "Ping?"
 #~ msgstr "Пинг?"
 
@@ -6639,6 +6673,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Quote…"
 #~ msgstr "_Изход"
+
+#, fuzzy
+#~ msgid "Remove Files"
+#~ msgstr "_Премахване"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6792,12 +6830,20 @@ msgstr ""
 #~ "You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
 #~ msgstr "Вече не сте в стая „%(room)s“ или „%(nick)s“ е напуснал(а)."
 
+#, fuzzy
+#~ msgid "You are trying to paste an image"
+#~ msgstr "Не сте свързани към сървъра."
+
 #~ msgid "You have no active account"
 #~ msgstr "Нямате активен акаунт"
 
 #, fuzzy
 #~ msgid "_Invite"
 #~ msgstr "По_кана"
+
+#, fuzzy
+#~ msgid "_Save as"
+#~ msgstr "имам "
 
 #, fuzzy
 #~ msgid "_Try Again"

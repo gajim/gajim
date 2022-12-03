@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-30 21:47+0000\n"
+"POT-Creation-Date: 2022-12-03 08:42+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -138,7 +138,7 @@ msgstr ""
 #, python-format
 msgid ""
 "%s is online with multiple devices.\n"
-"Choose the device you would like to send the file to."
+"Choose the device you would like to send the files to."
 msgstr ""
 
 #, python-format
@@ -156,6 +156,26 @@ msgstr "Vydalaje kantakt sa śpisu"
 #, fuzzy, python-format
 msgid "%s wants to send you a file"
 msgstr "%s choča dasłać tabie fajł."
+
+#, python-format
+msgctxt "positive longitude"
+msgid "%sE"
+msgstr ""
+
+#, python-format
+msgctxt "positive latitude"
+msgid "%sN"
+msgstr ""
+
+#, python-format
+msgctxt "negative latitude"
+msgid "%sS"
+msgstr ""
+
+#, python-format
+msgctxt "negative longitude"
+msgid "%sW"
+msgstr ""
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -212,15 +232,6 @@ msgstr "Apisańnie"
 #, fuzzy
 msgid "<Plugin Name>"
 msgstr "Niemahvyma dałučycca"
-
-msgid ""
-"<a href='https://conversations.im/compliance/'>conversations.im/compliance</"
-"a>"
-msgstr ""
-
-msgid ""
-"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
-msgstr ""
 
 #, python-format
 msgid ""
@@ -674,14 +685,14 @@ msgstr "Konty"
 msgid "Accounts"
 msgstr "Konty"
 
+msgid "Action for left-clicking a preview"
+msgstr ""
+
 #, fuzzy
 msgid "Action on Close"
 msgstr "Gajim"
 
 msgid "Action when closing Gajim’s window"
-msgstr ""
-
-msgid "Action when left-clicking a preview"
 msgstr ""
 
 #, fuzzy
@@ -715,7 +726,7 @@ msgid "Add Entry"
 msgstr "Zapis:"
 
 #, fuzzy
-msgid "Add Files"
+msgid "Add Files…"
 msgstr "Fajł: "
 
 #, fuzzy
@@ -856,7 +867,7 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allowed File Size"
+msgid "Allows opening file:/ URIs when clicked."
 msgstr ""
 
 msgid "Alternate venue (optional)..."
@@ -953,11 +964,6 @@ msgid "Are you sure you want to leave this group chat?"
 msgstr "Ty sapraŭdy chočaš pakinuć pakoj \"%s\"?"
 
 #, fuzzy
-msgid ""
-"Are you sure you want to paste your clipboard's image into the chat window?"
-msgstr "Ty sapraŭdy chočaš pakinuć pakoj \"%s\"?"
-
-#, fuzzy
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Ty sapraŭdy chočaš pakinuć pakoj \"%s\"?"
 
@@ -981,8 +987,9 @@ msgstr "Atrymanaje pieršaje paviedamleńnie"
 msgid "Audio"
 msgstr ""
 
-msgid "Audio / Video"
-msgstr ""
+#, fuzzy
+msgid "Audio / Video Calls"
+msgstr "Прыватная размова"
 
 #, fuzzy
 msgid "Audio File"
@@ -995,6 +1002,10 @@ msgstr "Standartnyja šablony paviedamleńniaŭ statusu"
 #, fuzzy
 msgid "Audio Output Device"
 msgstr "Standartnyja šablony paviedamleńniaŭ statusu"
+
+#, fuzzy
+msgid "Audio Preview"
+msgstr "Fajł: "
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1377,10 +1388,6 @@ msgstr ""
 msgid "Choose Sound"
 msgstr "Abiary hukavy fajł"
 
-#, fuzzy
-msgid "Choose a File to Send…"
-msgstr "Abiary fajł dla adsyłańnia..."
-
 msgid "Choose a color or select an image"
 msgstr ""
 
@@ -1391,9 +1398,6 @@ msgstr "Abiary vyjavu"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Abiary fajł dla adsyłańnia..."
-
-msgid "Choose from various emoji styles"
-msgstr ""
 
 #, fuzzy
 msgid "Choose the contact's groups"
@@ -1422,7 +1426,9 @@ msgstr "Abiary hukavy fajł"
 msgid "Clear message entry"
 msgstr "Paviedamleńnie dasłanaje"
 
-msgid "Click messages to select them"
+msgid ""
+"Click messages to select them\n"
+"(Ctrl + Double Click to deselect)"
 msgstr ""
 
 #, fuzzy
@@ -1435,6 +1441,11 @@ msgstr ""
 #, fuzzy
 msgid "Click to view location"
 msgstr "Klikni, kab vystavić svoj avatar"
+
+msgid ""
+"Clickable schemes in addition to the hard-coded list of IANA-registered "
+"ones. Space-separated, lower-case, no colons."
+msgstr ""
 
 #, fuzzy
 msgid "Client Certificate"
@@ -1680,6 +1691,10 @@ msgid "Copy Email Address"
 msgstr "S_kapijuj JID/Email"
 
 #, fuzzy
+msgid "Copy Link"
+msgstr "S_kapijuj adras spasyłki"
+
+#, fuzzy
 msgid "Copy Link Location"
 msgstr "S_kapijuj adras spasyłki"
 
@@ -1711,11 +1726,11 @@ msgid "Correct the last message"
 msgstr "paviedamlennie statusu"
 
 #, fuzzy
-msgid "Could not Open File"
+msgid "Could not access file"
 msgstr "Niemahčyma adčytać vyjavu"
 
-#, fuzzy
-msgid "Could not access file"
+#, fuzzy, python-format
+msgid "Could not open file (%s)"
 msgstr "Niemahčyma adčytać vyjavu"
 
 #, fuzzy
@@ -1864,6 +1879,10 @@ msgid "Direct Messages"
 msgstr "Standartnyja šablony paviedamleńniaŭ statusu"
 
 #, fuzzy
+msgid "Direct transfer (not encrypted)"
+msgstr "Pieradača fajłu spyniena"
+
+#, fuzzy
 msgid "Directory"
 msgstr "_Žurnał razmoŭ"
 
@@ -1954,6 +1973,10 @@ msgid "Download"
 msgstr "Ściahni"
 
 #, fuzzy
+msgid "Download File"
+msgstr "Ściahni"
+
+#, fuzzy
 msgid "Download Update"
 msgstr "Ściahni"
 
@@ -1976,6 +1999,10 @@ msgstr "Uvod paviedamleńnia"
 #, fuzzy, python-format
 msgid "Draft: %s"
 msgstr "Status: "
+
+#, fuzzy
+msgid "Drop files here"
+msgstr "Dasyłaje kantaktu fajł"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2015,15 +2042,8 @@ msgstr ""
 msgid "Email"
 msgstr "Novy list"
 
-msgid "Emoji"
-msgstr ""
-
 msgid "Emoji Shortcodes"
 msgstr ""
-
-#, fuzzy
-msgid "Emoji Theme"
-msgstr "Gajim - %s"
 
 msgid "Enable"
 msgstr "Ukluč"
@@ -2041,6 +2061,9 @@ msgid "Enables Gajim to play sounds for various notifications"
 msgstr ""
 
 msgid "Enables Gajim to provide Audio and Video chats"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to provide a notification area icon"
@@ -2270,6 +2293,10 @@ msgid "File Preview"
 msgstr ""
 
 #, fuzzy
+msgid "File Size Limit"
+msgstr "Ściežka da fajłu"
+
+#, fuzzy
 msgid "File Transfer"
 msgstr "Pieradačy fajłaŭ"
 
@@ -2320,6 +2347,9 @@ msgstr ""
 msgid "File size unknown"
 msgstr ""
 
+msgid "File too big, will use direct transfer (not encrypted)"
+msgstr ""
+
 #, fuzzy
 msgid "File transfer stopped"
 msgstr "Pieradača fajłu spyniena"
@@ -2335,10 +2365,6 @@ msgstr "Fajł: %s"
 #, python-format
 msgid "Filename: %s"
 msgstr "Nazva fajłu: %s"
-
-#, fuzzy
-msgid "Files to send"
-msgstr "Abiary fajł dla adsyłańnia..."
 
 #, fuzzy
 msgid "Filetransfer Preference"
@@ -2480,13 +2506,6 @@ msgstr "Adpraŭnik:"
 
 msgid "General"
 msgstr "Ahulnaja"
-
-msgid ""
-"Generate preview automatically in public group chats (may disclose your data)"
-msgstr ""
-
-msgid "Generate preview for any URLs containing images (may be unsafe)"
-msgstr ""
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2950,10 +2969,6 @@ msgstr ""
 msgid "Last but not least"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "Lat: %s Lon: %s"
-msgstr "Apošni status: %s"
-
 #, fuzzy
 msgid "Leave Group Chat"
 msgstr "Pakiń pakoji"
@@ -3001,13 +3016,9 @@ msgstr ""
 msgid "Local Time"
 msgstr "Lakalny JID:"
 
-#, fuzzy
-msgid "Location"
+#, fuzzy, python-format
+msgid "Location at %s"
 msgstr "Madyfikacyja kontu"
-
-#, python-format
-msgid "Location at Lat: %s Lon: %s"
-msgstr ""
 
 #, fuzzy
 msgid "Location:"
@@ -3078,7 +3089,7 @@ msgstr ""
 msgid "Mark as read"
 msgstr ""
 
-msgid "Maximum file size for preview generation"
+msgid "Maximum file size for preview downloads"
 msgstr ""
 
 #, fuzzy
@@ -3551,10 +3562,6 @@ msgstr "Paroli roźniacca"
 msgid "Past Developers"
 msgstr "Byłyja raspracoŭniki:"
 
-#, fuzzy
-msgid "Paste Image"
-msgstr "Abiary vyjavu"
-
 msgid "Paste Last Input"
 msgstr ""
 
@@ -3913,10 +3920,6 @@ msgstr "Niadaŭna:"
 msgid "Remove Contact"
 msgstr "Źmiani nazvu kantaktu"
 
-#, fuzzy
-msgid "Remove Files"
-msgstr "_Vydal"
-
 msgid "Remove Group"
 msgstr "Vydal hrupu"
 
@@ -4028,11 +4031,8 @@ msgid "Requires: Gspell"
 msgstr ""
 
 msgid ""
-"Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
-"base, gstreamer1.0-plugins-ugly, gstreamer1.0-libav, and gstreamer1.0-gtk3"
-msgstr ""
-
-msgid "Requires: gir1.2-gupnpigd-1.0"
+"Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+"ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
 msgstr ""
 
 #, fuzzy
@@ -4041,6 +4041,13 @@ msgstr "Kiraŭnik žurnałaŭ"
 
 #, fuzzy
 msgid "Requires: gsound"
+msgstr "Vymahaje parolu"
+
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
+#, fuzzy
+msgid "Requires: gupnpigd-1.0"
 msgstr "Vymahaje parolu"
 
 msgid "Requires: libappindicator3"
@@ -4155,10 +4162,6 @@ msgid "Save"
 msgstr "Nie razmaŭlaju "
 
 #, fuzzy
-msgid "Save As…"
-msgstr "Nie razmaŭlaju "
-
-#, fuzzy
 msgid "Save File as…"
 msgstr "Zapišy fajł jak..."
 
@@ -4168,6 +4171,10 @@ msgstr "Zachavaj parol"
 
 #, fuzzy
 msgid "Save as..."
+msgstr "Nie razmaŭlaju "
+
+#, fuzzy
+msgid "Save as…"
 msgstr "Nie razmaŭlaju "
 
 #, fuzzy
@@ -4320,6 +4327,10 @@ msgstr "Zapišy fajł jak..."
 #, fuzzy
 msgid "Send File Directly…"
 msgstr "Zapišy fajł jak..."
+
+#, fuzzy
+msgid "Send Files"
+msgstr "Vyšli _fajł"
 
 #, fuzzy
 msgid "Send Files Directly"
@@ -4577,6 +4588,13 @@ msgstr "Pakažy _śpis kantaktaŭ"
 msgid "Show only critical errors"
 msgstr "Pakazvaj tolki ŭ śpisie _kantaktaŭ"
 
+msgid ""
+"Show previews automatically in public group chats (may disclose your data)"
+msgstr ""
+
+msgid "Show previews for any URLs containing images (may be unsafe)"
+msgstr ""
+
 #, fuzzy
 msgid "Show previews for files"
 msgstr "Złučeńnie niemahčymaje"
@@ -4628,7 +4646,7 @@ msgstr ""
 msgid "Signup not allowed"
 msgstr "Mianuška nie dazvolenaja: %s"
 
-msgid "Size of preview image"
+msgid "Size of preview images in pixels"
 msgstr ""
 
 msgid "Sleeping"
@@ -4930,10 +4948,6 @@ msgid ""
 "The file %s has been received, but it seems to have been damaged along the "
 "way.\n"
 "Do you want to download it again?"
-msgstr ""
-
-#, python-format
-msgid "The following file could not be accessed and was not uploaded: %s"
 msgstr ""
 
 msgid ""
@@ -5479,7 +5493,9 @@ msgstr ""
 msgid "Where participants should go"
 msgstr ""
 
-msgid "Whether to check for a valid certificate"
+msgid ""
+"Whether to check for a valid certificate before downloading (not safe to "
+"disable)"
 msgstr ""
 
 msgid "Which server should I choose?"
@@ -5595,10 +5611,6 @@ msgstr "Ciabie ciapier viedajuć jak %s"
 msgid "You are offline."
 msgstr "адключаны"
 
-#, fuzzy
-msgid "You are trying to paste an image"
-msgstr "Niama złučeńnia z serveram"
-
 #, fuzzy, python-format
 msgid "You can join this group chat instead: xmpp:%s?join"
 msgstr "%s dałučyŭsia da pakoju"
@@ -5636,6 +5648,10 @@ msgstr "Nie staje pravoŭ dla stvareńnia fajłaŭ u hetym katalohu."
 msgid ""
 "You do not have the proper permissions to create files in this directory."
 msgstr "Nie staje pravoŭ dla stvareńnia fajłaŭ u hetym katalohu."
+
+#, python-format
+msgid "You dropped something Gajim could not process: %s"
+msgstr ""
 
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
@@ -5945,9 +5961,6 @@ msgstr "_Adčyni kataloh z fajłam"
 msgid "_Overwrite"
 msgstr ""
 
-msgid "_Paste"
-msgstr ""
-
 #, fuzzy
 msgid "_Please choose a server"
 msgstr "Stvary novy zapis"
@@ -5993,7 +6006,7 @@ msgid "_Save"
 msgstr "Nie razmaŭlaju "
 
 #, fuzzy
-msgid "_Save as"
+msgid "_Save as…"
 msgstr "Nie razmaŭlaju "
 
 msgid "_Search"
@@ -6004,10 +6017,6 @@ msgstr ""
 
 msgid "_Send"
 msgstr "_Vyšli"
-
-#, fuzzy
-msgid "_Send Files"
-msgstr "Vyšli _fajł"
 
 #, fuzzy
 msgid "_Show Certificate"
@@ -6331,6 +6340,12 @@ msgstr ""
 
 #, fuzzy
 #~ msgid ""
+#~ "Are you sure you want to paste your clipboard's image into the chat "
+#~ "window?"
+#~ msgstr "Ty sapraŭdy chočaš pakinuć pakoj \"%s\"?"
+
+#, fuzzy
+#~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
 #~ msgstr ""
@@ -6377,6 +6392,10 @@ msgstr ""
 #~ msgstr "Kali łaska, pravier, ci pracuje avahi-daemon."
 
 #, fuzzy
+#~ msgid "Choose a File to Send…"
+#~ msgstr "Abiary fajł dla adsyłańnia..."
+
+#, fuzzy
 #~ msgid "Clear chat window"
 #~ msgstr "Užyvańnie: /%s, ačyščaje akno ad tekstu."
 
@@ -6407,6 +6426,10 @@ msgstr ""
 #~ msgstr "Kantakty"
 
 #, fuzzy
+#~ msgid "Emoji Theme"
+#~ msgstr "Gajim - %s"
+
+#, fuzzy
 #~ msgid "Enter Password"
 #~ msgstr "Uviadzi novy parol:"
 
@@ -6419,6 +6442,10 @@ msgstr ""
 
 #~ msgid "File path"
 #~ msgstr "Ściežka da fajłu"
+
+#, fuzzy
+#~ msgid "Files to send"
+#~ msgstr "Abiary fajł dla adsyłańnia..."
 
 #, fuzzy
 #~ msgid "Format your message…"
@@ -6505,6 +6532,10 @@ msgstr ""
 #~ msgstr "Ty nie dałučyŭsia da pakoju."
 
 #, fuzzy
+#~ msgid "Lat: %s Lon: %s"
+#~ msgstr "Apošni status: %s"
+
+#, fuzzy
 #~ msgid "Leave the group chat"
 #~ msgstr "Pakiń pakoji"
 
@@ -6556,6 +6587,10 @@ msgstr ""
 #~ "Užyvańnie: /%s <mianuška>, adčyniaje akno pryvatnaj razmovy z akreślenaj "
 #~ "asobaj."
 
+#, fuzzy
+#~ msgid "Paste Image"
+#~ msgstr "Abiary vyjavu"
+
 #~ msgid "Presence description:"
 #~ msgstr "Apisańnie statusu:"
 
@@ -6577,6 +6612,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Quote…"
 #~ msgstr "_Skonč pracu"
+
+#, fuzzy
+#~ msgid "Remove Files"
+#~ msgstr "_Vydal"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6712,12 +6751,20 @@ msgstr ""
 #~ "You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
 #~ msgstr "Ciabie niama ŭ pakoji \"%s\", albo \"%s\" pakinuŭ jaho."
 
+#, fuzzy
+#~ msgid "You are trying to paste an image"
+#~ msgstr "Niama złučeńnia z serveram"
+
 #~ msgid "You have no active account"
 #~ msgstr "Nivodny kont nia dziejny"
 
 #, fuzzy
 #~ msgid "_Invite"
 #~ msgstr "_Zaprasi"
+
+#, fuzzy
+#~ msgid "_Save as"
+#~ msgstr "Nie razmaŭlaju "
 
 #~ msgid ""
 #~ "change status of account \"account\". If not specified, try to change "

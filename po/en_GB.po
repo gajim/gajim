@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-30 21:47+0000\n"
+"POT-Creation-Date: 2022-12-03 08:42+0000\n"
 "PO-Revision-Date: 2009-11-20 20:49+1100\n"
 "Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: English <en_gb@li.org>\n"
@@ -136,7 +136,7 @@ msgstr "%s is not a valid loglevel"
 #, python-format
 msgid ""
 "%s is online with multiple devices.\n"
-"Choose the device you would like to send the file to."
+"Choose the device you would like to send the files to."
 msgstr ""
 
 #, python-format
@@ -154,6 +154,26 @@ msgstr "Remote contact stopped transfer"
 #, fuzzy, python-format
 msgid "%s wants to send you a file"
 msgstr "%s wants to send you a file."
+
+#, python-format
+msgctxt "positive longitude"
+msgid "%sE"
+msgstr ""
+
+#, python-format
+msgctxt "positive latitude"
+msgid "%sN"
+msgstr ""
+
+#, python-format
+msgctxt "negative latitude"
+msgid "%sS"
+msgstr ""
+
+#, python-format
+msgctxt "negative longitude"
+msgid "%sW"
+msgstr ""
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -212,15 +232,6 @@ msgstr "Description"
 #, fuzzy
 msgid "<Plugin Name>"
 msgstr "Registration failed"
-
-msgid ""
-"<a href='https://conversations.im/compliance/'>conversations.im/compliance</"
-"a>"
-msgstr ""
-
-msgid ""
-"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
-msgstr ""
 
 #, python-format
 msgid ""
@@ -675,6 +686,9 @@ msgstr "Accounts"
 msgid "Accounts"
 msgstr "Accounts"
 
+msgid "Action for left-clicking a preview"
+msgstr ""
+
 #, fuzzy
 msgid "Action on Close"
 msgstr "Gajim"
@@ -682,9 +696,6 @@ msgstr "Gajim"
 #, fuzzy
 msgid "Action when closing Gajim’s window"
 msgstr "Always close Gajim"
-
-msgid "Action when left-clicking a preview"
-msgstr ""
 
 #, fuzzy
 msgid "Activate"
@@ -716,7 +727,7 @@ msgid "Add Entry"
 msgstr "Entry:"
 
 #, fuzzy
-msgid "Add Files"
+msgid "Add Files…"
 msgstr "File: "
 
 #, fuzzy
@@ -860,7 +871,7 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allowed File Size"
+msgid "Allows opening file:/ URIs when clicked."
 msgstr ""
 
 #, fuzzy
@@ -959,11 +970,6 @@ msgstr ""
 msgid "Are you sure you want to leave this group chat?"
 msgstr "Are you sure you want to leave group chat \"%s\"?"
 
-#, fuzzy
-msgid ""
-"Are you sure you want to paste your clipboard's image into the chat window?"
-msgstr "Are you sure you want to leave group chat \"%s\"?"
-
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Are you sure you want to quit Gajim?"
 
@@ -987,8 +993,9 @@ msgstr "First Message Received"
 msgid "Audio"
 msgstr ""
 
-msgid "Audio / Video"
-msgstr ""
+#, fuzzy
+msgid "Audio / Video Calls"
+msgstr "Private Chat"
 
 #, fuzzy
 msgid "Audio File"
@@ -1001,6 +1008,10 @@ msgstr "Default Message"
 #, fuzzy
 msgid "Audio Output Device"
 msgstr "Default Message"
+
+#, fuzzy
+msgid "Audio Preview"
+msgstr "File: "
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1388,10 +1399,6 @@ msgstr ""
 msgid "Choose Sound"
 msgstr "Choose Sound"
 
-#, fuzzy
-msgid "Choose a File to Send…"
-msgstr "Choose File to Send..."
-
 msgid "Choose a color or select an image"
 msgstr ""
 
@@ -1402,9 +1409,6 @@ msgstr "Choose Image"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Choose File to Send..."
-
-msgid "Choose from various emoji styles"
-msgstr ""
 
 #, fuzzy
 msgid "Choose the contact's groups"
@@ -1433,7 +1437,9 @@ msgstr "Choose Sound"
 msgid "Clear message entry"
 msgstr "Message Sent"
 
-msgid "Click messages to select them"
+msgid ""
+"Click messages to select them\n"
+"(Ctrl + Double Click to deselect)"
 msgstr ""
 
 #, fuzzy
@@ -1446,6 +1452,11 @@ msgstr ""
 #, fuzzy
 msgid "Click to view location"
 msgstr "Click to set your avatar"
+
+msgid ""
+"Clickable schemes in addition to the hard-coded list of IANA-registered "
+"ones. Space-separated, lower-case, no colons."
+msgstr ""
 
 #, fuzzy
 msgid "Client Certificate"
@@ -1691,6 +1702,10 @@ msgid "Copy Email Address"
 msgstr "_Copy JID/E-mail Address"
 
 #, fuzzy
+msgid "Copy Link"
+msgstr "_Copy Link Location"
+
+#, fuzzy
 msgid "Copy Link Location"
 msgstr "_Copy Link Location"
 
@@ -1722,11 +1737,11 @@ msgid "Correct the last message"
 msgstr "status message"
 
 #, fuzzy
-msgid "Could not Open File"
+msgid "Could not access file"
 msgstr "Could not load image"
 
-#, fuzzy
-msgid "Could not access file"
+#, fuzzy, python-format
+msgid "Could not open file (%s)"
 msgstr "Could not load image"
 
 #, fuzzy
@@ -1874,6 +1889,10 @@ msgid "Direct Messages"
 msgstr "Default Message"
 
 #, fuzzy
+msgid "Direct transfer (not encrypted)"
+msgstr "File transfer stopped"
+
+#, fuzzy
 msgid "Directory"
 msgstr "_History"
 
@@ -1964,6 +1983,10 @@ msgid "Download"
 msgstr "Download"
 
 #, fuzzy
+msgid "Download File"
+msgstr "Download"
+
+#, fuzzy
 msgid "Download Update"
 msgstr "Download"
 
@@ -1986,6 +2009,10 @@ msgstr "Coding"
 #, fuzzy, python-format
 msgid "Draft: %s"
 msgstr "Status: "
+
+#, fuzzy
+msgid "Drop files here"
+msgstr "Sends file to a contact"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2025,15 +2052,8 @@ msgstr ""
 msgid "Email"
 msgstr "New E-mail"
 
-msgid "Emoji"
-msgstr ""
-
 msgid "Emoji Shortcodes"
 msgstr ""
-
-#, fuzzy
-msgid "Emoji Theme"
-msgstr "gajim-remote"
 
 msgid "Enable"
 msgstr "Enable"
@@ -2051,6 +2071,9 @@ msgid "Enables Gajim to play sounds for various notifications"
 msgstr ""
 
 msgid "Enables Gajim to provide Audio and Video chats"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to provide a notification area icon"
@@ -2279,6 +2302,10 @@ msgid "File Preview"
 msgstr ""
 
 #, fuzzy
+msgid "File Size Limit"
+msgstr "File is empty"
+
+#, fuzzy
 msgid "File Transfer"
 msgstr "File Transfers"
 
@@ -2327,6 +2354,9 @@ msgstr ""
 msgid "File size unknown"
 msgstr ""
 
+msgid "File too big, will use direct transfer (not encrypted)"
+msgstr ""
+
 msgid "File transfer stopped"
 msgstr "File transfer stopped"
 
@@ -2341,10 +2371,6 @@ msgstr "File: %s"
 #, python-format
 msgid "Filename: %s"
 msgstr "Filename: %s"
-
-#, fuzzy
-msgid "Files to send"
-msgstr "Choose File to Send..."
 
 #, fuzzy
 msgid "Filetransfer Preference"
@@ -2486,13 +2512,6 @@ msgstr "Sender: "
 
 msgid "General"
 msgstr "General"
-
-msgid ""
-"Generate preview automatically in public group chats (may disclose your data)"
-msgstr ""
-
-msgid "Generate preview for any URLs containing images (may be unsafe)"
-msgstr ""
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2955,10 +2974,6 @@ msgstr ""
 msgid "Last but not least"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "Lat: %s Lon: %s"
-msgstr "Last status: %s"
-
 #, fuzzy
 msgid "Leave Group Chat"
 msgstr "Leave Groupchats"
@@ -3006,13 +3021,9 @@ msgstr ""
 msgid "Local Time"
 msgstr "Local jid:"
 
-#, fuzzy
-msgid "Location"
+#, fuzzy, python-format
+msgid "Location at %s"
 msgstr "Notification"
-
-#, python-format
-msgid "Location at Lat: %s Lon: %s"
-msgstr ""
 
 #, fuzzy
 msgid "Location:"
@@ -3083,7 +3094,7 @@ msgstr ""
 msgid "Mark as read"
 msgstr ""
 
-msgid "Maximum file size for preview generation"
+msgid "Maximum file size for preview downloads"
 msgstr ""
 
 #, fuzzy
@@ -3555,10 +3566,6 @@ msgstr "Passwords do not match"
 msgid "Past Developers"
 msgstr "Past Developers:"
 
-#, fuzzy
-msgid "Paste Image"
-msgstr "Choose Image"
-
 msgid "Paste Last Input"
 msgstr ""
 
@@ -3918,10 +3925,6 @@ msgstr "Recently:"
 msgid "Remove Contact"
 msgstr "Rename Contact"
 
-#, fuzzy
-msgid "Remove Files"
-msgstr "_Remove"
-
 msgid "Remove Group"
 msgstr "Remove Group"
 
@@ -4033,13 +4036,9 @@ msgid "Requires: Gspell"
 msgstr "Requires libgtkspell."
 
 msgid ""
-"Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
-"base, gstreamer1.0-plugins-ugly, gstreamer1.0-libav, and gstreamer1.0-gtk3"
+"Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+"ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
 msgstr ""
-
-#, fuzzy
-msgid "Requires: gir1.2-gupnpigd-1.0"
-msgstr "Requires python-gnome2."
 
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
@@ -4048,6 +4047,13 @@ msgstr "Requires gnome-keyring and python-gnome2-desktop, or kwalletcli."
 #, fuzzy
 msgid "Requires: gsound"
 msgstr "Requires python-dbus."
+
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
+#, fuzzy
+msgid "Requires: gupnpigd-1.0"
+msgstr "Requires python-gnome2."
 
 #, fuzzy
 msgid "Requires: libappindicator3"
@@ -4163,10 +4169,6 @@ msgid "Save"
 msgstr "Have "
 
 #, fuzzy
-msgid "Save As…"
-msgstr "Have "
-
-#, fuzzy
 msgid "Save File as…"
 msgstr "Save File as..."
 
@@ -4176,6 +4178,10 @@ msgstr "Save password"
 
 #, fuzzy
 msgid "Save as..."
+msgstr "Have "
+
+#, fuzzy
+msgid "Save as…"
 msgstr "Have "
 
 #, fuzzy
@@ -4327,6 +4333,10 @@ msgstr "Save File as..."
 #, fuzzy
 msgid "Send File Directly…"
 msgstr "Save File as..."
+
+#, fuzzy
+msgid "Send Files"
+msgstr "Send _File"
 
 #, fuzzy
 msgid "Send Files Directly"
@@ -4583,6 +4593,13 @@ msgstr "Show _roster"
 msgid "Show only critical errors"
 msgstr "Show only in _roster"
 
+msgid ""
+"Show previews automatically in public group chats (may disclose your data)"
+msgstr ""
+
+msgid "Show previews for any URLs containing images (may be unsafe)"
+msgstr ""
+
 #, fuzzy
 msgid "Show previews for files"
 msgstr "A connection is not available"
@@ -4635,7 +4652,7 @@ msgstr ""
 msgid "Signup not allowed"
 msgstr "Character not allowed"
 
-msgid "Size of preview image"
+msgid "Size of preview images in pixels"
 msgstr ""
 
 msgid "Sleeping"
@@ -4938,10 +4955,6 @@ msgid ""
 "The file %s has been received, but it seems to have been damaged along the "
 "way.\n"
 "Do you want to download it again?"
-msgstr ""
-
-#, python-format
-msgid "The following file could not be accessed and was not uploaded: %s"
 msgstr ""
 
 msgid ""
@@ -5495,7 +5508,9 @@ msgid "Where participants should go"
 msgstr ""
 
 #, fuzzy
-msgid "Whether to check for a valid certificate"
+msgid ""
+"Whether to check for a valid certificate before downloading (not safe to "
+"disable)"
 msgstr "Ignore this error for this certificate."
 
 msgid "Which server should I choose?"
@@ -5613,10 +5628,6 @@ msgstr "You are now known as %s"
 msgid "You are offline."
 msgstr "offline"
 
-#, fuzzy
-msgid "You are trying to paste an image"
-msgstr "You are going to close several tabs"
-
 #, fuzzy, python-format
 msgid "You can join this group chat instead: xmpp:%s?join"
 msgstr "You can join this room instead: %s"
@@ -5651,6 +5662,10 @@ msgstr "You do not have permission to create files in this directory."
 msgid ""
 "You do not have the proper permissions to create files in this directory."
 msgstr "You do not have permission to create files in this directory."
+
+#, python-format
+msgid "You dropped something Gajim could not process: %s"
+msgstr ""
 
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
@@ -5960,9 +5975,6 @@ msgstr "_Open Containing Folder"
 msgid "_Overwrite"
 msgstr ""
 
-msgid "_Paste"
-msgstr ""
-
 #, fuzzy
 msgid "_Please choose a server"
 msgstr "Please create a clean new theme with your desired name."
@@ -6008,7 +6020,7 @@ msgid "_Save"
 msgstr "Have "
 
 #, fuzzy
-msgid "_Save as"
+msgid "_Save as…"
 msgstr "Have "
 
 msgid "_Search"
@@ -6019,10 +6031,6 @@ msgstr ""
 
 msgid "_Send"
 msgstr "_Send"
-
-#, fuzzy
-msgid "_Send Files"
-msgstr "Send _File"
 
 #, fuzzy
 msgid "_Show Certificate"
@@ -6346,6 +6354,12 @@ msgstr ""
 #~ msgid "App Indicator Icon"
 #~ msgstr "<b>Applications</b>"
 
+#, fuzzy
+#~ msgid ""
+#~ "Are you sure you want to paste your clipboard's image into the chat "
+#~ "window?"
+#~ msgstr "Are you sure you want to leave group chat \"%s\"?"
+
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
@@ -6400,6 +6414,10 @@ msgstr ""
 #~ msgstr "Check if Gajim is running"
 
 #, fuzzy
+#~ msgid "Choose a File to Send…"
+#~ msgstr "Choose File to Send..."
+
+#, fuzzy
 #~ msgid "Clear chat window"
 #~ msgstr "Usage: /%s, clears the text window."
 
@@ -6430,6 +6448,10 @@ msgstr ""
 #~ msgstr "Invite _Contacts"
 
 #, fuzzy
+#~ msgid "Emoji Theme"
+#~ msgstr "gajim-remote"
+
+#, fuzzy
 #~ msgid "Enter Password"
 #~ msgstr "Enter new password:"
 
@@ -6442,6 +6464,10 @@ msgstr ""
 
 #~ msgid "File path"
 #~ msgstr "File path"
+
+#, fuzzy
+#~ msgid "Files to send"
+#~ msgstr "Choose File to Send..."
 
 #, fuzzy
 #~ msgid "Format your message…"
@@ -6530,6 +6556,10 @@ msgstr ""
 #~ msgstr "You are invited to a groupchat"
 
 #, fuzzy
+#~ msgid "Lat: %s Lon: %s"
+#~ msgstr "Last status: %s"
+
+#, fuzzy
 #~ msgid "Leave the group chat"
 #~ msgstr "Leave Groupchats"
 
@@ -6580,6 +6610,10 @@ msgstr ""
 #~ "Usage: /%s <nickname>, opens a private chat window with the specified "
 #~ "occupant."
 
+#, fuzzy
+#~ msgid "Paste Image"
+#~ msgstr "Choose Image"
+
 #~ msgid "Ping?"
 #~ msgstr "Ping?"
 
@@ -6616,6 +6650,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Quote…"
 #~ msgstr "_Quote"
+
+#, fuzzy
+#~ msgid "Remove Files"
+#~ msgstr "_Remove"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6769,6 +6807,10 @@ msgstr ""
 #~ msgstr ""
 #~ "You are no longer in group chat \"%(room)s\" or \"%(nick)s\" has left."
 
+#, fuzzy
+#~ msgid "You are trying to paste an image"
+#~ msgstr "You are going to close several tabs"
+
 #~ msgid "You have no active account"
 #~ msgstr "You have no active account"
 
@@ -6779,6 +6821,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Invite"
 #~ msgstr "In_vite"
+
+#, fuzzy
+#~ msgid "_Save as"
+#~ msgstr "Have "
 
 #, fuzzy
 #~ msgid "_Try Again"

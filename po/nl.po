@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-30 21:47+0000\n"
+"POT-Creation-Date: 2022-12-03 08:42+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -140,7 +140,7 @@ msgstr "%s is geen geldig logniveau"
 #, python-format
 msgid ""
 "%s is online with multiple devices.\n"
-"Choose the device you would like to send the file to."
+"Choose the device you would like to send the files to."
 msgstr ""
 
 #, python-format
@@ -158,6 +158,26 @@ msgstr "Contact heeft de overdracht gestopt"
 #, fuzzy, python-format
 msgid "%s wants to send you a file"
 msgstr "%s wil je een bestand sturen."
+
+#, python-format
+msgctxt "positive longitude"
+msgid "%sE"
+msgstr ""
+
+#, python-format
+msgctxt "positive latitude"
+msgid "%sN"
+msgstr ""
+
+#, python-format
+msgctxt "negative latitude"
+msgid "%sS"
+msgstr ""
+
+#, python-format
+msgctxt "negative longitude"
+msgid "%sW"
+msgstr ""
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -216,15 +236,6 @@ msgstr "<Beschrijving>"
 
 msgid "<Plugin Name>"
 msgstr "<Naam van plug-in>"
-
-msgid ""
-"<a href='https://conversations.im/compliance/'>conversations.im/compliance</"
-"a>"
-msgstr ""
-
-msgid ""
-"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
-msgstr ""
 
 #, python-format
 msgid ""
@@ -668,6 +679,9 @@ msgstr "Accounts"
 msgid "Accounts"
 msgstr "Accounts"
 
+msgid "Action for left-clicking a preview"
+msgstr ""
+
 #, fuzzy
 msgid "Action on Close"
 msgstr "Gajim afsluiten"
@@ -675,9 +689,6 @@ msgstr "Gajim afsluiten"
 #, fuzzy
 msgid "Action when closing Gajim’s window"
 msgstr "Gajim altijd sluiten"
-
-msgid "Action when left-clicking a preview"
-msgstr ""
 
 #, fuzzy
 msgid "Activate"
@@ -708,7 +719,7 @@ msgid "Add Entry"
 msgstr "Item:"
 
 #, fuzzy
-msgid "Add Files"
+msgid "Add Files…"
 msgstr "Bestanden:"
 
 #, fuzzy
@@ -847,7 +858,7 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allowed File Size"
+msgid "Allows opening file:/ URIs when clicked."
 msgstr ""
 
 #, fuzzy
@@ -943,11 +954,6 @@ msgstr "Archiefvoorkeuren voor %s"
 msgid "Are you sure you want to leave this group chat?"
 msgstr "Weet je zeker dat je het groepsgesprek ‘%s’ wil verlaten?"
 
-#, fuzzy
-msgid ""
-"Are you sure you want to paste your clipboard's image into the chat window?"
-msgstr "Weet je zeker dat je het groepsgesprek ‘%s’ wil verlaten?"
-
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Weet je zeker dat je Gajim wil afsluiten?"
 
@@ -971,7 +977,8 @@ msgstr "Aandachtsbericht ontvangen"
 msgid "Audio"
 msgstr "Audio"
 
-msgid "Audio / Video"
+#, fuzzy
+msgid "Audio / Video Calls"
 msgstr "Audio / video"
 
 #, fuzzy
@@ -985,6 +992,10 @@ msgstr "_Audio-invoerapparaat"
 #, fuzzy
 msgid "Audio Output Device"
 msgstr "A_udio-uitvoerapparaat"
+
+#, fuzzy
+msgid "Audio Preview"
+msgstr "Bestanden:"
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1365,9 +1376,6 @@ msgstr ""
 msgid "Choose Sound"
 msgstr "Kies geluid"
 
-msgid "Choose a File to Send…"
-msgstr "Kies een bestand om te verzenden…"
-
 msgid "Choose a color or select an image"
 msgstr ""
 
@@ -1377,9 +1385,6 @@ msgstr "Kies avatar…"
 
 msgid "Choose encryption"
 msgstr "Kies een versleutelingstype"
-
-msgid "Choose from various emoji styles"
-msgstr ""
 
 #, fuzzy
 msgid "Choose the contact's groups"
@@ -1403,7 +1408,9 @@ msgstr "Geluid wissen"
 msgid "Clear message entry"
 msgstr "Berichtinvoer wissen"
 
-msgid "Click messages to select them"
+msgid ""
+"Click messages to select them\n"
+"(Ctrl + Double Click to deselect)"
 msgstr ""
 
 #, fuzzy
@@ -1418,6 +1425,11 @@ msgstr ""
 #, fuzzy
 msgid "Click to view location"
 msgstr "Klik om je avatar in te stellen"
+
+msgid ""
+"Clickable schemes in addition to the hard-coded list of IANA-registered "
+"ones. Space-separated, lower-case, no colons."
+msgstr ""
 
 msgid "Client Certificate"
 msgstr "Cliëntcertificaat"
@@ -1655,6 +1667,10 @@ msgstr "Contactinformatie"
 msgid "Copy Email Address"
 msgstr "E-mailadres kopiëren"
 
+#, fuzzy
+msgid "Copy Link"
+msgstr "Verwijzingslocatie kopiëren"
+
 msgid "Copy Link Location"
 msgstr "Verwijzingslocatie kopiëren"
 
@@ -1685,11 +1701,11 @@ msgid "Correct the last message"
 msgstr "Statusbericht instellen"
 
 #, fuzzy
-msgid "Could not Open File"
+msgid "Could not access file"
 msgstr "Kon bestand niet openen"
 
-#, fuzzy
-msgid "Could not access file"
+#, fuzzy, python-format
+msgid "Could not open file (%s)"
 msgstr "Kon bestand niet openen"
 
 msgid "Country"
@@ -1833,6 +1849,10 @@ msgid "Direct Messages"
 msgstr "Bericht verwijderen"
 
 #, fuzzy
+msgid "Direct transfer (not encrypted)"
+msgstr "Bestandsoverdracht gestopt"
+
+#, fuzzy
 msgid "Directory"
 msgstr "Geschiedenis"
 
@@ -1922,6 +1942,10 @@ msgid "Download"
 msgstr "?Znw:Download"
 
 #, fuzzy
+msgid "Download File"
+msgstr "?Znw:Download"
+
+#, fuzzy
 msgid "Download Update"
 msgstr "?Znw:Download"
 
@@ -1944,6 +1968,10 @@ msgstr "Bezig met laden"
 #, fuzzy, python-format
 msgid "Draft: %s"
 msgstr "Status: "
+
+#, fuzzy
+msgid "Drop files here"
+msgstr "Stuurt een bestand naar een contact"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -1982,16 +2010,8 @@ msgstr ""
 msgid "Email"
 msgstr "E-mail"
 
-#, fuzzy
-msgid "Emoji"
-msgstr "Emoji’s"
-
 msgid "Emoji Shortcodes"
 msgstr ""
-
-#, fuzzy
-msgid "Emoji Theme"
-msgstr "_Emoji-thema"
 
 msgid "Enable"
 msgstr "Inschakelen"
@@ -2012,6 +2032,10 @@ msgid "Enables Gajim to play sounds for various notifications"
 msgstr "Geeft Gajim de mogelijkheid om audio- en videogesprekken aan te bieden"
 
 msgid "Enables Gajim to provide Audio and Video chats"
+msgstr "Geeft Gajim de mogelijkheid om audio- en videogesprekken aan te bieden"
+
+#, fuzzy
+msgid "Enables Gajim to provide a Audio preview"
 msgstr "Geeft Gajim de mogelijkheid om audio- en videogesprekken aan te bieden"
 
 #, fuzzy
@@ -2240,6 +2264,10 @@ msgstr ""
 msgid "File Preview"
 msgstr ""
 
+#, fuzzy
+msgid "File Size Limit"
+msgstr "Bestand is leeg"
+
 msgid "File Transfer"
 msgstr "Bestandsoverdracht"
 
@@ -2286,6 +2314,9 @@ msgstr "Bestand is te groot, maximale bestandsgrootte is: %s"
 msgid "File size unknown"
 msgstr ""
 
+msgid "File too big, will use direct transfer (not encrypted)"
+msgstr ""
+
 msgid "File transfer stopped"
 msgstr "Bestandsoverdracht gestopt"
 
@@ -2299,10 +2330,6 @@ msgstr "Bestand: %s"
 #, python-format
 msgid "Filename: %s"
 msgstr "Bestandsnaam: %s"
-
-#, fuzzy
-msgid "Files to send"
-msgstr "Kies bestand om te verzenden"
 
 #, fuzzy
 msgid "Filetransfer Preference"
@@ -2455,13 +2482,6 @@ msgstr "Afzender: "
 
 msgid "General"
 msgstr "Algemeen"
-
-msgid ""
-"Generate preview automatically in public group chats (may disclose your data)"
-msgstr ""
-
-msgid "Generate preview for any URLs containing images (may be unsafe)"
-msgstr ""
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2926,10 +2946,6 @@ msgstr "Label"
 msgid "Last but not least"
 msgstr "Tenslotte"
 
-#, fuzzy, python-format
-msgid "Lat: %s Lon: %s"
-msgstr "Laatste status: %s"
-
 #, fuzzy
 msgid "Leave Group Chat"
 msgstr "Groepsgesprekken verlaten"
@@ -2978,13 +2994,9 @@ msgstr ""
 msgid "Local Time"
 msgstr "Lokale JID:"
 
-#, fuzzy
-msgid "Location"
+#, fuzzy, python-format
+msgid "Location at %s"
 msgstr "Locatie:"
-
-#, python-format
-msgid "Location at Lat: %s Lon: %s"
-msgstr ""
 
 msgid "Location:"
 msgstr "Locatie:"
@@ -3055,7 +3067,7 @@ msgstr ""
 msgid "Mark as read"
 msgstr ""
 
-msgid "Maximum file size for preview generation"
+msgid "Maximum file size for preview downloads"
 msgstr ""
 
 #, fuzzy
@@ -3521,10 +3533,6 @@ msgstr "Wachtwoord komt niet overeen"
 msgid "Past Developers"
 msgstr "Vroegere ontwikkelaars"
 
-#, fuzzy
-msgid "Paste Image"
-msgstr "Kies afbeelding"
-
 msgid "Paste Last Input"
 msgstr ""
 
@@ -3870,10 +3878,6 @@ msgstr "Gespreksgeschiedenis"
 msgid "Remove Contact"
 msgstr "Contact hernoemen"
 
-#, fuzzy
-msgid "Remove Files"
-msgstr "Verwijderen"
-
 msgid "Remove Group"
 msgstr "Groep verwijderen"
 
@@ -3984,14 +3988,11 @@ msgstr "Vereist: Gspell"
 
 #, fuzzy
 msgid ""
-"Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
-"base, gstreamer1.0-plugins-ugly, gstreamer1.0-libav, and gstreamer1.0-gtk3"
+"Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+"ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
 msgstr ""
 "Vereist: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav, "
 "gstreamer1.0-plugins-ugly"
-
-msgid "Requires: gir1.2-gupnpigd-1.0"
-msgstr "Vereist: gir1.2-gupnpigd-1.0"
 
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
@@ -4000,6 +4001,13 @@ msgstr "Vereist gnome-keyring en python-gnome2-desktop, of kwalletcli."
 #, fuzzy
 msgid "Requires: gsound"
 msgstr "Vereist: python-dbus"
+
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
+#, fuzzy
+msgid "Requires: gupnpigd-1.0"
+msgstr "Vereist: gir1.2-gupnpigd-1.0"
 
 #, fuzzy
 msgid "Requires: libappindicator3"
@@ -4117,10 +4125,6 @@ msgstr ""
 msgid "Save"
 msgstr "Opslaan _als"
 
-#, fuzzy
-msgid "Save As…"
-msgstr "Opslaan _als"
-
 msgid "Save File as…"
 msgstr "Bestand opslaan als…"
 
@@ -4129,6 +4133,10 @@ msgstr "Wachtwoord opslaan"
 
 #, fuzzy
 msgid "Save as..."
+msgstr "Opslaan _als"
+
+#, fuzzy
+msgid "Save as…"
 msgstr "Opslaan _als"
 
 #, fuzzy
@@ -4278,6 +4286,10 @@ msgstr "Bestand opslaan als…"
 
 msgid "Send File Directly…"
 msgstr "Bestand rechtstreeks verzenden…"
+
+#, fuzzy
+msgid "Send Files"
+msgstr "_Bestand Verzenden"
 
 #, fuzzy
 msgid "Send Files Directly"
@@ -4532,6 +4544,13 @@ msgstr "Roo_ster weergeven bij opstarten"
 msgid "Show only critical errors"
 msgstr "Alleen kritieke fouten weergeven"
 
+msgid ""
+"Show previews automatically in public group chats (may disclose your data)"
+msgstr ""
+
+msgid "Show previews for any URLs containing images (may be unsafe)"
+msgstr ""
+
 #, fuzzy
 msgid "Show previews for files"
 msgstr "Audiosessies zijn niet beschikbaar"
@@ -4583,7 +4602,7 @@ msgstr ""
 msgid "Signup not allowed"
 msgstr "Spaties zijn niet toegestaan"
 
-msgid "Size of preview image"
+msgid "Size of preview images in pixels"
 msgstr ""
 
 msgid "Sleeping"
@@ -4887,10 +4906,6 @@ msgid ""
 msgstr ""
 "Het bestand %(file)s is ontvangen, maar lijkt onderweg beschadigd te zijn.\n"
 "Wil je het opnieuw downloaden?"
-
-#, python-format
-msgid "The following file could not be accessed and was not uploaded: %s"
-msgstr ""
 
 msgid ""
 "The following warnings came up while trying to verify the server's "
@@ -5443,7 +5458,9 @@ msgid "Where participants should go"
 msgstr ""
 
 #, fuzzy
-msgid "Whether to check for a valid certificate"
+msgid ""
+"Whether to check for a valid certificate before downloading (not safe to "
+"disable)"
 msgstr "Negeer deze fout voor dit certificaat."
 
 msgid "Which server should I choose?"
@@ -5569,10 +5586,6 @@ msgstr "Je bent nu {show}{status}"
 msgid "You are offline."
 msgstr "offline"
 
-#, fuzzy
-msgid "You are trying to paste an image"
-msgstr "Je staat op het punt meerdere tabbladen te sluiten"
-
 #, fuzzy, python-format
 msgid "You can join this group chat instead: xmpp:%s?join"
 msgstr "Je kan in plaats daarvan aan dit groepsgesprek deelnemen: xmpp:%s?join"
@@ -5611,6 +5624,10 @@ msgstr "Je hebt geen toestemming om bestanden aan te maken in deze map."
 msgid ""
 "You do not have the proper permissions to create files in this directory."
 msgstr "Je hebt geen toestemming om bestanden aan te maken in deze map."
+
+#, python-format
+msgid "You dropped something Gajim could not process: %s"
+msgstr ""
 
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
@@ -5917,9 +5934,6 @@ msgstr "_Open bovenliggende map"
 msgid "_Overwrite"
 msgstr "Overschrijven?"
 
-msgid "_Paste"
-msgstr ""
-
 #, fuzzy
 msgid "_Please choose a server"
 msgstr "Kies een bijnaam"
@@ -5964,7 +5978,7 @@ msgid "_Save"
 msgstr "Opslaan _als"
 
 #, fuzzy
-msgid "_Save as"
+msgid "_Save as…"
 msgstr "Opslaan _als"
 
 msgid "_Search"
@@ -5976,10 +5990,6 @@ msgstr "Selecteer bestanden"
 
 msgid "_Send"
 msgstr "Ver_zenden"
-
-#, fuzzy
-msgid "_Send Files"
-msgstr "_Bestand Verzenden"
 
 #, fuzzy
 msgid "_Show Certificate"
@@ -6329,6 +6339,12 @@ msgstr ""
 #~ msgid "App Indicator Icon"
 #~ msgstr "Toepassingen"
 
+#, fuzzy
+#~ msgid ""
+#~ "Are you sure you want to paste your clipboard's image into the chat "
+#~ "window?"
+#~ msgstr "Weet je zeker dat je het groepsgesprek ‘%s’ wil verlaten?"
+
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
@@ -6380,6 +6396,9 @@ msgstr ""
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Controleer of Gajim wordt uitgevoerd"
 
+#~ msgid "Choose a File to Send…"
+#~ msgstr "Kies een bestand om te verzenden…"
+
 #, fuzzy
 #~ msgid "Clear chat window"
 #~ msgstr "Wis het tekstvenster"
@@ -6412,6 +6431,14 @@ msgstr ""
 #~ msgstr "Contacten importeren"
 
 #, fuzzy
+#~ msgid "Emoji"
+#~ msgstr "Emoji’s"
+
+#, fuzzy
+#~ msgid "Emoji Theme"
+#~ msgstr "_Emoji-thema"
+
+#, fuzzy
 #~ msgid "Enter Password"
 #~ msgstr "Voer nieuw wachtwoord in:"
 
@@ -6433,6 +6460,10 @@ msgstr ""
 
 #~ msgid "File path"
 #~ msgstr "Bestandspad"
+
+#, fuzzy
+#~ msgid "Files to send"
+#~ msgstr "Kies bestand om te verzenden"
 
 #, fuzzy
 #~ msgid "Forbid a participant to send you public or private messages"
@@ -6557,6 +6588,10 @@ msgstr ""
 #~ msgstr "Schop gebruiker met bijnaam uit een groepsgesprek"
 
 #, fuzzy
+#~ msgid "Lat: %s Lon: %s"
+#~ msgstr "Laatste status: %s"
+
+#, fuzzy
 #~ msgid "Leave the group chat"
 #~ msgstr "Groepsgesprekken verlaten"
 
@@ -6612,6 +6647,10 @@ msgstr ""
 #~ "Open een privé-gespreksvenster met opgegeven lid en stuur hem/haar een "
 #~ "bericht"
 
+#, fuzzy
+#~ msgid "Paste Image"
+#~ msgstr "Kies afbeelding"
+
 #~ msgid "Ping?"
 #~ msgstr "Ping?"
 
@@ -6642,6 +6681,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Quote…"
 #~ msgstr "_Citeren"
+
+#, fuzzy
+#~ msgid "Remove Files"
+#~ msgstr "Verwijderen"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6858,6 +6901,10 @@ msgstr ""
 #~ "Je bent niet meer in groepsgesprek ‘%(room)s’ of ‘%(nick)s’ heeft het "
 #~ "groepsgesprek verlaten."
 
+#, fuzzy
+#~ msgid "You are trying to paste an image"
+#~ msgstr "Je staat op het punt meerdere tabbladen te sluiten"
+
 #~ msgid "You have no active account"
 #~ msgstr "Je hebt geen actieve account"
 
@@ -6868,6 +6915,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Invite"
 #~ msgstr "Uit_nodigen"
+
+#, fuzzy
+#~ msgid "_Save as"
+#~ msgstr "Opslaan _als"
 
 #, fuzzy
 #~ msgid "_Try Again"

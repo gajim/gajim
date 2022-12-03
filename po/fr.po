@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-30 21:47+0000\n"
+"POT-Creation-Date: 2022-12-03 08:42+0000\n"
 "PO-Revision-Date: 2022-08-18 18:15+0000\n"
 "Last-Translator: pitchum <pitchum@gramaton.org>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
@@ -141,10 +141,10 @@ msgstr "%s vous appelle"
 msgid "%s is not a valid loglevel"
 msgstr "%s n'est pas un loglevel valide"
 
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "%s is online with multiple devices.\n"
-"Choose the device you would like to send the file to."
+"Choose the device you would like to send the files to."
 msgstr ""
 "%s est en ligne avec plusieurs appareils.\n"
 "Choisissez l'appareil auquel vous souhaitez envoyer le fichier."
@@ -164,6 +164,26 @@ msgstr "%s a stoppé le transfert"
 #, python-format
 msgid "%s wants to send you a file"
 msgstr "%s souhaite vous envoyer un fichier"
+
+#, python-format
+msgctxt "positive longitude"
+msgid "%sE"
+msgstr ""
+
+#, python-format
+msgctxt "positive latitude"
+msgid "%sN"
+msgstr ""
+
+#, python-format
+msgctxt "negative latitude"
+msgid "%sS"
+msgstr ""
+
+#, python-format
+msgctxt "negative longitude"
+msgid "%sW"
+msgstr ""
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -219,18 +239,6 @@ msgstr "<Description>"
 
 msgid "<Plugin Name>"
 msgstr "<Nom de l'extension>"
-
-msgid ""
-"<a href='https://conversations.im/compliance/'>conversations.im/compliance</"
-"a>"
-msgstr ""
-"<a href='https://conversations.im/compliance/'>conversations.im/compliance</"
-"a>"
-
-msgid ""
-"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
-msgstr ""
-"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
 
 #, python-format
 msgid ""
@@ -617,14 +625,15 @@ msgstr "Compte : %s"
 msgid "Accounts"
 msgstr "Comptes"
 
+#, fuzzy
+msgid "Action for left-clicking a preview"
+msgstr "Action lors d'un clic gauche sur un aperçu"
+
 msgid "Action on Close"
 msgstr "Action à la fermeture"
 
 msgid "Action when closing Gajim’s window"
 msgstr "Action au moment de fermer la fenêtre de Gajim"
-
-msgid "Action when left-clicking a preview"
-msgstr "Action lors d'un clic gauche sur un aperçu"
 
 msgid "Activate"
 msgstr "Activer"
@@ -651,7 +660,8 @@ msgstr "Ajouter un _contact…"
 msgid "Add Entry"
 msgstr "Ajouter une entrée"
 
-msgid "Add Files"
+#, fuzzy
+msgid "Add Files…"
 msgstr "Ajouter des fichiers"
 
 msgid "Add Group…"
@@ -774,8 +784,8 @@ msgstr ""
 "Autoriser Gajim à diffuser des informations utiles via D-Bus. Cela permet "
 "aussi à d'autres applications de contrôle Gajim à distance."
 
-msgid "Allowed File Size"
-msgstr "Taille d'image autorisée"
+msgid "Allows opening file:/ URIs when clicked."
+msgstr ""
 
 msgid "Alternate venue (optional)..."
 msgstr "Lieu alternatif (facultatif)…"
@@ -861,12 +871,6 @@ msgstr "Sauvegarde des préférences pour %s"
 msgid "Are you sure you want to leave this group chat?"
 msgstr "Êtes-vous sûr de vouloir quitter le salon ?"
 
-msgid ""
-"Are you sure you want to paste your clipboard's image into the chat window?"
-msgstr ""
-"Êtes-vous sûr de vouloir coller l'image du presse-papier dans la "
-"conversation ?"
-
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Êtes-vous sûr de vouloir quitter Gajim ?"
 
@@ -889,7 +893,8 @@ msgstr "Message demandant attention reçu"
 msgid "Audio"
 msgstr "Audio"
 
-msgid "Audio / Video"
+#, fuzzy
+msgid "Audio / Video Calls"
 msgstr "Audio / Vidéo"
 
 msgid "Audio File"
@@ -900,6 +905,10 @@ msgstr "Périphérique audio d’entrée"
 
 msgid "Audio Output Device"
 msgstr "Périphérique audio de sortie"
+
+#, fuzzy
+msgid "Audio Preview"
+msgstr "Aperçu de fichier"
 
 msgid "Audio preview is not available"
 msgstr "L'aperçu audio n'est pas disponible"
@@ -1244,9 +1253,6 @@ msgstr "Choisissez un dossier pour l'export d'historique"
 msgid "Choose Sound"
 msgstr "Choisissez un son"
 
-msgid "Choose a File to Send…"
-msgstr "Choisissez un fichier à envoyer…"
-
 msgid "Choose a color or select an image"
 msgstr "Choisir une couleur ou sélectionner une image"
 
@@ -1255,9 +1261,6 @@ msgstr "Choisir un groupe…"
 
 msgid "Choose encryption"
 msgstr "Choisir un chiffrement"
-
-msgid "Choose from various emoji styles"
-msgstr "Choisissez parmi divers styles d'émojis"
 
 msgid "Choose the contact's groups"
 msgstr "Choisissez les groupes du contact"
@@ -1280,7 +1283,9 @@ msgstr "Effacer le son"
 msgid "Clear message entry"
 msgstr "Vide la boîte de saisie des messages"
 
-msgid "Click messages to select them"
+msgid ""
+"Click messages to select them\n"
+"(Ctrl + Double Click to deselect)"
 msgstr ""
 
 msgid "Click on contacts you would like to invite to this group chat."
@@ -1295,6 +1300,11 @@ msgstr ""
 
 msgid "Click to view location"
 msgstr "Cliquer pour voir la géolocalisation"
+
+msgid ""
+"Clickable schemes in addition to the hard-coded list of IANA-registered "
+"ones. Space-separated, lower-case, no colons."
+msgstr ""
 
 msgid "Client Certificate"
 msgstr "Certificat client"
@@ -1499,6 +1509,10 @@ msgstr "Copier les informations du certificat"
 msgid "Copy Email Address"
 msgstr "Copier l’adresse électronique"
 
+#, fuzzy
+msgid "Copy Link"
+msgstr "_Copier le lien"
+
 msgid "Copy Link Location"
 msgstr "Copier l'adresse du lien"
 
@@ -1525,11 +1539,12 @@ msgstr "Copier l'information dans le presse-papier"
 msgid "Correct the last message"
 msgstr "Définir le message d'état"
 
-msgid "Could not Open File"
-msgstr "Impossible d’ouvrir le fichier"
-
 msgid "Could not access file"
 msgstr "Impossible d’accéder au fichier"
+
+#, fuzzy, python-format
+msgid "Could not open file (%s)"
+msgstr "Impossible d’ouvrir le fichier"
 
 msgid "Country"
 msgstr "Pays"
@@ -1653,6 +1668,10 @@ msgstr "Il manque un \"%s\" dans l'URL de dictionnaire"
 msgid "Direct Messages"
 msgstr "Messages directs"
 
+#, fuzzy
+msgid "Direct transfer (not encrypted)"
+msgstr "Transfert de fichier interrompu"
+
 msgid "Directory"
 msgstr "Répertoire"
 
@@ -1736,6 +1755,10 @@ msgstr "Ne plus afficher ceci à l'avenir"
 msgid "Download"
 msgstr "Télécharger"
 
+#, fuzzy
+msgid "Download File"
+msgstr "Télécharger"
+
 msgid "Download Update"
 msgstr "Télécharger mise à jour"
 
@@ -1756,6 +1779,10 @@ msgstr "Téléchargement…"
 #, fuzzy, python-format
 msgid "Draft: %s"
 msgstr "État : %s"
+
+#, fuzzy
+msgid "Drop files here"
+msgstr "Déposer des fichiers ou des contacts"
 
 msgid "Drop files or contacts"
 msgstr "Déposer des fichiers ou des contacts"
@@ -1791,14 +1818,8 @@ msgstr ""
 msgid "Email"
 msgstr "Courrier électronique"
 
-msgid "Emoji"
-msgstr "Émoji"
-
 msgid "Emoji Shortcodes"
 msgstr "Codes courts d'émojis"
-
-msgid "Emoji Theme"
-msgstr "Thème d'émojis"
 
 msgid "Enable"
 msgstr "Activer"
@@ -1818,6 +1839,10 @@ msgid "Enables Gajim to play sounds for various notifications"
 msgstr "Permet à Gajim de jouer des sons pour les différentes notifications"
 
 msgid "Enables Gajim to provide Audio and Video chats"
+msgstr "Active les conversations audio et vidéo dans Gajim"
+
+#, fuzzy
+msgid "Enables Gajim to provide a Audio preview"
 msgstr "Active les conversations audio et vidéo dans Gajim"
 
 #, fuzzy
@@ -2023,6 +2048,10 @@ msgstr "Fichier proposé…"
 msgid "File Preview"
 msgstr "Aperçu de fichier"
 
+#, fuzzy
+msgid "File Size Limit"
+msgstr "Le fichier est vide"
+
 msgid "File Transfer"
 msgstr "Transfert de fichiers"
 
@@ -2066,6 +2095,9 @@ msgstr "Fichier trop gros, la taille maximum autorisée est : %s"
 msgid "File size unknown"
 msgstr "Taille de fichier inconnue"
 
+msgid "File too big, will use direct transfer (not encrypted)"
+msgstr ""
+
 msgid "File transfer stopped"
 msgstr "Transfert de fichier interrompu"
 
@@ -2079,9 +2111,6 @@ msgstr "Fichier : %s"
 #, python-format
 msgid "Filename: %s"
 msgstr "Nom du Fichier : %s"
-
-msgid "Files to send"
-msgstr "Fichiers à envoyer"
 
 msgid "Filetransfer Preference"
 msgstr "Préférence de Transfert de fichier"
@@ -2218,17 +2247,6 @@ msgstr "Genre"
 
 msgid "General"
 msgstr "Général"
-
-msgid ""
-"Generate preview automatically in public group chats (may disclose your data)"
-msgstr ""
-"Génère automatiquement un aperçu dans les salons publics (pourrait révéler "
-"des informations vous concernant)"
-
-msgid "Generate preview for any URLs containing images (may be unsafe)"
-msgstr ""
-"Génère un aperçu pour tous les URLs contenant des images (pourrait être non-"
-"sûr)"
 
 msgid "Global Group Chat Search"
 msgstr "Recherche de salon de discussion au niveau mondial"
@@ -2643,10 +2661,6 @@ msgstr "Étiquette"
 msgid "Last but not least"
 msgstr "Enfin et surtout"
 
-#, python-format
-msgid "Lat: %s Lon: %s"
-msgstr "Lat : %s Lon : %s"
-
 msgid "Leave Group Chat"
 msgstr "Quitter le salon de discussion"
 
@@ -2688,12 +2702,9 @@ msgstr "Heure locale du système"
 msgid "Local Time"
 msgstr "Heure locale"
 
-msgid "Location"
+#, fuzzy, python-format
+msgid "Location at %s"
 msgstr "Géolocalisation"
-
-#, python-format
-msgid "Location at Lat: %s Lon: %s"
-msgstr "Localisé à Lat : %s Lon : %s"
 
 msgid "Location:"
 msgstr "Emplacement :"
@@ -2757,7 +2768,8 @@ msgstr "Marquer comme lu"
 msgid "Mark as read"
 msgstr "Marquer comme lu"
 
-msgid "Maximum file size for preview generation"
+#, fuzzy
+msgid "Maximum file size for preview downloads"
 msgstr "Taille maximale de fichier pour la génération d'aperçu"
 
 msgid "Me"
@@ -3184,9 +3196,6 @@ msgstr "Les mots de passe ne correspondent pas"
 msgid "Past Developers"
 msgstr "Anciens développeurs"
 
-msgid "Paste Image"
-msgstr "Coller l'image"
-
 msgid "Paste Last Input"
 msgstr "Coller le dernier texte saisi"
 
@@ -3498,9 +3507,6 @@ msgstr "Supprimer l'historique de discussion ?"
 msgid "Remove Contact"
 msgstr "Supprimer un contact"
 
-msgid "Remove Files"
-msgstr "Retirer des fichiers"
-
 msgid "Remove Group"
 msgstr "_Supprimer le Groupe"
 
@@ -3594,21 +3600,26 @@ msgstr "Requis"
 msgid "Requires: Gspell"
 msgstr "Nécessite : Gspell"
 
+#, fuzzy
 msgid ""
-"Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
-"base, gstreamer1.0-plugins-ugly, gstreamer1.0-libav, and gstreamer1.0-gtk3"
+"Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+"ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
 msgstr ""
 "Nécessite : gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
 "base, gstreamer1.0-plugins-ugly, gstreamer1.0-libav, et gstreamer1.0-gtk3"
-
-msgid "Requires: gir1.2-gupnpigd-1.0"
-msgstr "Nécessite : gir1.2-gupnpigd-1.0"
 
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Nécessite gnome-keyring or kwallet"
 
 msgid "Requires: gsound"
 msgstr "Nécessite : gsound"
+
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
+#, fuzzy
+msgid "Requires: gupnpigd-1.0"
+msgstr "Nécessite : gir1.2-gupnpigd-1.0"
 
 msgid "Requires: libappindicator3"
 msgstr "Nécessite : libappindicator3"
@@ -3706,9 +3717,6 @@ msgstr "Ventes"
 msgid "Save"
 msgstr "Enregistrer"
 
-msgid "Save As…"
-msgstr "Enregistrer sous…"
-
 msgid "Save File as…"
 msgstr "Enregistrer le Fichier sous…"
 
@@ -3717,6 +3725,10 @@ msgstr "Enregistrer le mot de passe"
 
 msgid "Save as..."
 msgstr "Enregistrer sous..."
+
+#, fuzzy
+msgid "Save as…"
+msgstr "Enregistrer sous…"
 
 msgid "Saving Avatar Failed"
 msgstr "L'enregistrement d'avatar a échoué"
@@ -3850,6 +3862,10 @@ msgstr "Envoyer le fichier (max. %s)…"
 
 msgid "Send File Directly…"
 msgstr "Enregistrer un fichier directement …"
+
+#, fuzzy
+msgid "Send Files"
+msgstr "Envoyer les _fichiers"
 
 msgid "Send Files Directly"
 msgstr "Envoyer les fichiers directement (via Jingle)"
@@ -4076,6 +4092,19 @@ msgstr "Afficher au démarrage"
 msgid "Show only critical errors"
 msgstr "Ne montrer que les erreurs critiques"
 
+#, fuzzy
+msgid ""
+"Show previews automatically in public group chats (may disclose your data)"
+msgstr ""
+"Génère automatiquement un aperçu dans les salons publics (pourrait révéler "
+"des informations vous concernant)"
+
+#, fuzzy
+msgid "Show previews for any URLs containing images (may be unsafe)"
+msgstr ""
+"Génère un aperçu pour tous les URLs contenant des images (pourrait être non-"
+"sûr)"
+
 msgid "Show previews for files"
 msgstr "Afficher des perçus pour les fichiers"
 
@@ -4118,7 +4147,8 @@ msgstr "Créez un nouveau compte sur un serveur de votre choix"
 msgid "Signup not allowed"
 msgstr "L'inscription n'est pas autorisée"
 
-msgid "Size of preview image"
+#, fuzzy
+msgid "Size of preview images in pixels"
 msgstr "Taille de l'image d'aperçu"
 
 msgid "Sleeping"
@@ -4392,10 +4422,6 @@ msgstr ""
 "Le fichier %s a été reçu mais il semble avoir été endommagé lors du "
 "transfert.\n"
 "Voulez-vous le re-télécharger de nouveau ?"
-
-#, python-format
-msgid "The following file could not be accessed and was not uploaded: %s"
-msgstr "Le fichier suivant n'a pas pu être accédé et n'a pas été envoyé : %s"
 
 msgid ""
 "The following warnings came up while trying to verify the server's "
@@ -4910,7 +4936,10 @@ msgstr "Ce qu'il s'est passé"
 msgid "Where participants should go"
 msgstr "Où est-ce que les participants devraient aller"
 
-msgid "Whether to check for a valid certificate"
+#, fuzzy
+msgid ""
+"Whether to check for a valid certificate before downloading (not safe to "
+"disable)"
 msgstr "S'il faut ou non vérifier la validité des certificats"
 
 msgid "Which server should I choose?"
@@ -5023,9 +5052,6 @@ msgstr "Vous êtes désormais {show}{status}"
 msgid "You are offline."
 msgstr "Vous êtes hors-ligne."
 
-msgid "You are trying to paste an image"
-msgstr "Vous essayez de coller une image"
-
 #, python-format
 msgid "You can join this group chat instead: xmpp:%s?join"
 msgstr "Vous pouvez rejoindre le salon xmpp:%s?join à la place"
@@ -5061,6 +5087,10 @@ msgid ""
 msgstr ""
 "Vous n’avez pas les permissions suffisantes pour créer des fichiers dans ce "
 "dossier."
+
+#, python-format
+msgid "You dropped something Gajim could not process: %s"
+msgstr ""
 
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
@@ -5322,9 +5352,6 @@ msgstr "_Ouvrir le répertoire de destination"
 msgid "_Overwrite"
 msgstr "É_craser"
 
-msgid "_Paste"
-msgstr "Co_ller"
-
 msgid "_Please choose a server"
 msgstr "Veuillez choisir un _serveur"
 
@@ -5361,8 +5388,9 @@ msgstr "_Rétracter"
 msgid "_Save"
 msgstr "_Enregistrer"
 
-msgid "_Save as"
-msgstr "Enregistrer _sous"
+#, fuzzy
+msgid "_Save as…"
+msgstr "Enregistrer sous…"
 
 msgid "_Search"
 msgstr "_Rechercher"
@@ -5372,9 +5400,6 @@ msgstr "_Sélectionner"
 
 msgid "_Send"
 msgstr "En_voyer"
-
-msgid "_Send Files"
-msgstr "Envoyer les _fichiers"
 
 msgid "_Show Certificate"
 msgstr "Voir le _certificat"
@@ -5669,6 +5694,18 @@ msgstr "... ou bien déposez ici"
 #~ "'%s' n'est pas dans votre liste de contact.\n"
 #~ "Veuillez précisez avec quel compte envoyer le message."
 
+#~ msgid ""
+#~ "<a href='https://conversations.im/compliance/'>conversations.im/"
+#~ "compliance</a>"
+#~ msgstr ""
+#~ "<a href='https://conversations.im/compliance/'>conversations.im/"
+#~ "compliance</a>"
+
+#~ msgid ""
+#~ "<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
+#~ msgstr ""
+#~ "<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
+
 #~ msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
 #~ msgstr "<b>%(nick)s</b> de <b>%(room_name)s</b> demande à parler"
 
@@ -5717,8 +5754,18 @@ msgstr "... ou bien déposez ici"
 #~ "Autoriser à cacher la liste des contacts même si l'icône de notification "
 #~ "n'est pas affichée."
 
+#~ msgid "Allowed File Size"
+#~ msgstr "Taille d'image autorisée"
+
 #~ msgid "App Indicator Icon"
 #~ msgstr "Icône App Indicator"
+
+#~ msgid ""
+#~ "Are you sure you want to paste your clipboard's image into the chat "
+#~ "window?"
+#~ msgstr ""
+#~ "Êtes-vous sûr de vouloir coller l'image du presse-papier dans la "
+#~ "conversation ?"
 
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
@@ -5770,6 +5817,12 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Vérifie si Gajim est lancé"
 
+#~ msgid "Choose a File to Send…"
+#~ msgstr "Choisissez un fichier à envoyer…"
+
+#~ msgid "Choose from various emoji styles"
+#~ msgstr "Choisissez parmi divers styles d'émojis"
+
 #~ msgid "Clear chat window"
 #~ msgstr "Vider la fenêtre de conversation"
 
@@ -5809,6 +5862,12 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Drop Files or Contacts"
 #~ msgstr "Déposer des fichiers ou des contacts"
 
+#~ msgid "Emoji"
+#~ msgstr "Émoji"
+
+#~ msgid "Emoji Theme"
+#~ msgstr "Thème d'émojis"
+
 #~ msgid "Enter Password"
 #~ msgstr "Saisir mot de passe"
 
@@ -5829,6 +5888,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "File path"
 #~ msgstr "Chemin du fichier"
+
+#~ msgid "Files to send"
+#~ msgstr "Fichiers à envoyer"
 
 #~ msgid "Forbid a participant to send you public or private messages"
 #~ msgstr ""
@@ -5942,6 +6004,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Kick user from group chat by nickname"
 #~ msgstr "Éjecter un utilisateur par son surnom d'un salon de discussion"
 
+#~ msgid "Lat: %s Lon: %s"
+#~ msgstr "Lat : %s Lon : %s"
+
 #~ msgid "Leave the group chat"
 #~ msgstr "Quitter le salon"
 
@@ -5950,6 +6015,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Lists all contacts in the contact list, one for each line"
 #~ msgstr "Liste tous les contacts de la liste de contacts, un par ligne"
+
+#~ msgid "Location at Lat: %s Lon: %s"
+#~ msgstr "Localisé à Lat : %s Lon : %s"
 
 #~ msgid "Machine is going to sleep"
 #~ msgstr "La machine se met en veille"
@@ -5992,6 +6060,9 @@ msgstr "... ou bien déposez ici"
 #~ "Ouvrir une fenêtre de conversation privée avec le participant spécifié et "
 #~ "lui envoyer un message"
 
+#~ msgid "Paste Image"
+#~ msgstr "Coller l'image"
+
 #~ msgid "Ping?"
 #~ msgstr "Ping ?"
 
@@ -6021,6 +6092,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Quote…"
 #~ msgstr "Citer…"
+
+#~ msgid "Remove Files"
+#~ msgstr "Retirer des fichiers"
 
 #~ msgid "Removes contact from contact list"
 #~ msgstr "Enlever le contact de la liste"
@@ -6150,6 +6224,15 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Tabs"
 #~ msgstr "Onglets"
 
+#, fuzzy
+#~ msgid "The following address was not understood and was not uploaded: %s"
+#~ msgstr ""
+#~ "Le fichier suivant n'a pas pu être accédé et n'a pas été envoyé : %s"
+
+#~ msgid "The following file could not be accessed and was not uploaded: %s"
+#~ msgstr ""
+#~ "Le fichier suivant n'a pas pu être accédé et n'a pas été envoyé : %s"
+
 #~ msgid "The same as using a doc-string, except it supports translation"
 #~ msgstr "Pareil qu'utiliser une doc-string, mais supporte la traduction"
 
@@ -6222,6 +6305,9 @@ msgstr "... ou bien déposez ici"
 #~ "Vous n’êtes plus dans le salon « %(room)s » ou bien « %(nick)s » l’a "
 #~ "quitté."
 
+#~ msgid "You are trying to paste an image"
+#~ msgstr "Vous essayez de coller une image"
+
 #~ msgid "You have no active account"
 #~ msgstr "Vous n'avez aucun compte actif"
 
@@ -6230,6 +6316,12 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "_Invite"
 #~ msgstr "_Inviter"
+
+#~ msgid "_Paste"
+#~ msgstr "Co_ller"
+
+#~ msgid "_Save as"
+#~ msgstr "Enregistrer _sous"
 
 #~ msgid "_Try Again"
 #~ msgstr "_Essayer à nouveau"

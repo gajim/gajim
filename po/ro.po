@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-30 21:47+0000\n"
-"PO-Revision-Date: 2022-09-22 19:32+0000\n"
+"POT-Creation-Date: 2022-12-03 08:42+0000\n"
+"PO-Revision-Date: 2022-11-16 11:33+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
 "ro/>\n"
@@ -142,10 +142,10 @@ msgstr "%s apelează"
 msgid "%s is not a valid loglevel"
 msgstr "%s nu este un nivel de jurnal valid"
 
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "%s is online with multiple devices.\n"
-"Choose the device you would like to send the file to."
+"Choose the device you would like to send the files to."
 msgstr ""
 "%s este online cu mai multe dispozitive.\n"
 "Alegeți dispozitivul la care doriți să trimiteți fișierul."
@@ -165,6 +165,26 @@ msgstr "%s a oprit transferul"
 #, python-format
 msgid "%s wants to send you a file"
 msgstr "%s vrea să vă trimită un fișier"
+
+#, python-format
+msgctxt "positive longitude"
+msgid "%sE"
+msgstr ""
+
+#, python-format
+msgctxt "positive latitude"
+msgid "%sN"
+msgstr ""
+
+#, python-format
+msgctxt "negative latitude"
+msgid "%sS"
+msgstr ""
+
+#, python-format
+msgctxt "negative longitude"
+msgid "%sW"
+msgstr ""
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -220,18 +240,6 @@ msgstr "<Descriere>"
 
 msgid "<Plugin Name>"
 msgstr "<Nume Plugin>"
-
-msgid ""
-"<a href='https://conversations.im/compliance/'>conversations.im/compliance</"
-"a>"
-msgstr ""
-"<a href='https://conversations.im/compliance/'>conversații.im/conformitate</"
-"a>"
-
-msgid ""
-"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
-msgstr ""
-"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
 
 #, python-format
 msgid ""
@@ -409,9 +417,8 @@ msgstr "?Acțiunea rândului de mesaje: Citat…"
 msgid "?Message row action:Retract…"
 msgstr "?Acțiunea rândului de mesaje:Retrageți…"
 
-#, fuzzy
 msgid "?Message row action:Select Messages…"
-msgstr "?Acțiunea rândului de mesaje:Corect…"
+msgstr "?Acțiune rând de mesaje:Selectați mesaje…"
 
 msgid "?Message state:Received"
 msgstr "Recepționat"
@@ -613,14 +620,14 @@ msgstr "Cont: %s"
 msgid "Accounts"
 msgstr "Conturi"
 
+msgid "Action for left-clicking a preview"
+msgstr "Acțiune pentru a face clic stânga pe o previzualizare"
+
 msgid "Action on Close"
 msgstr "Acțiune la închidere"
 
 msgid "Action when closing Gajim’s window"
 msgstr "Acțiune la închiderea ferestrei lui Gajim"
-
-msgid "Action when left-clicking a preview"
-msgstr "Acțiune atunci când se face clic stânga pe o previzualizare"
 
 msgid "Activate"
 msgstr "Activați"
@@ -640,14 +647,14 @@ msgstr "Adăugați un cont"
 msgid "Add Contact"
 msgstr "Adăugați un contact"
 
-#, fuzzy
 msgid "Add Contact…"
-msgstr "Adăugați _Contact…"
+msgstr "Adăugați Contact…"
 
 msgid "Add Entry"
 msgstr "Adaugă intrare"
 
-msgid "Add Files"
+#, fuzzy
+msgid "Add Files…"
 msgstr "Adăugați fișiere"
 
 msgid "Add Group…"
@@ -766,8 +773,8 @@ msgstr ""
 "Permiteți-i lui Gajim să transmită informații utile prin intermediul D-Bus. "
 "De asemenea, permite altor aplicații să controleze Gajim de la distanță."
 
-msgid "Allowed File Size"
-msgstr "Dimensiunea permisă a fișierului"
+msgid "Allows opening file:/ URIs when clicked."
+msgstr "Permite deschiderea URI-urilor file:/ atunci când se face clic pe ele."
 
 msgid "Alternate venue (optional)..."
 msgstr "Locul de desfășurare alternativ (opțional)..."
@@ -851,12 +858,6 @@ msgstr "Preferințe de arhivare pentru %s"
 msgid "Are you sure you want to leave this group chat?"
 msgstr "Ești sigur că vrei să părăsești acest grup de chat?"
 
-msgid ""
-"Are you sure you want to paste your clipboard's image into the chat window?"
-msgstr ""
-"Sunteți sigur că doriți să lipiți imaginea din clipboard în fereastra de "
-"chat?"
-
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Ești sigur că vrei să renunți la Gajim?"
 
@@ -878,7 +879,8 @@ msgstr "Atenție mesaj primit"
 msgid "Audio"
 msgstr "Audio"
 
-msgid "Audio / Video"
+#, fuzzy
+msgid "Audio / Video Calls"
 msgstr "Audio / Video"
 
 msgid "Audio File"
@@ -889,6 +891,10 @@ msgstr "Dispozitiv de intrare audio"
 
 msgid "Audio Output Device"
 msgstr "Dispozitiv de ieșire audio"
+
+#, fuzzy
+msgid "Audio Preview"
+msgstr "Previzualizare fișier"
 
 msgid "Audio preview is not available"
 msgstr "Previzualizarea audio nu este disponibilă"
@@ -1198,6 +1204,7 @@ msgstr "Chat-uri"
 
 msgid "Chats from this account will use this workspace by default"
 msgstr ""
+"Discuțiile din acest cont vor utiliza în mod implicit acest spațiu de lucru"
 
 msgid "Check For Updates"
 msgstr "Verificați pentru actualizări"
@@ -1232,9 +1239,6 @@ msgstr "Alegeți Directorul de export istoric"
 msgid "Choose Sound"
 msgstr "Alegeți Sunet"
 
-msgid "Choose a File to Send…"
-msgstr "Alegeți un fișier de trimis…"
-
 msgid "Choose a color or select an image"
 msgstr "Alegeți o culoare sau selectați o imagine"
 
@@ -1244,14 +1248,11 @@ msgstr "Alegeți un grup…"
 msgid "Choose encryption"
 msgstr "Alegeți criptarea"
 
-msgid "Choose from various emoji styles"
-msgstr "Alegeți din diferite stiluri de emoji"
-
 msgid "Choose the contact's groups"
 msgstr "Alegeți grupurile de contacte"
 
 msgid "Cipher Suite"
-msgstr ""
+msgstr "Suita de cifrare"
 
 msgid "City"
 msgstr "Orașul"
@@ -1268,8 +1269,11 @@ msgstr "Sunet clar"
 msgid "Clear message entry"
 msgstr "Introducerea mesajului de ștergere"
 
-msgid "Click messages to select them"
-msgstr ""
+#, fuzzy
+msgid ""
+"Click messages to select them\n"
+"(Ctrl + Double Click to deselect)"
+msgstr "Faceți clic pe mesaje pentru a le selecta"
 
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr ""
@@ -1284,6 +1288,11 @@ msgstr ""
 msgid "Click to view location"
 msgstr "Faceți clic pentru a vedea locația"
 
+msgid ""
+"Clickable schemes in addition to the hard-coded list of IANA-registered "
+"ones. Space-separated, lower-case, no colons."
+msgstr ""
+
 msgid "Client Certificate"
 msgstr "Certificat client"
 
@@ -1294,14 +1303,13 @@ msgid "Close Search"
 msgstr "Închideți căutarea"
 
 msgid "Close a chat by pressing the Escape key"
-msgstr ""
+msgstr "Închideți un chat prin apăsarea tastei Escape"
 
 msgid "Close chat"
 msgstr "Închideți chat-ul"
 
-#, fuzzy
 msgid "Close with Escape"
-msgstr "Apel cu %s"
+msgstr "Închideți cu Escape"
 
 msgid "Code snippet"
 msgstr "Fragment de cod"
@@ -1487,15 +1495,18 @@ msgstr "Copiați informațiile despre certificat"
 msgid "Copy Email Address"
 msgstr "Copiați adresa de e-mail"
 
+#, fuzzy
+msgid "Copy Link"
+msgstr "_Copiați link-ul"
+
 msgid "Copy Link Location"
 msgstr "Copiați locația linkului"
 
 msgid "Copy Location"
 msgstr "Copiați locația"
 
-#, fuzzy
 msgid "Copy Text"
-msgstr "Copiați"
+msgstr "Copiați Textul"
 
 msgid "Copy XMPP Address"
 msgstr "Copiați adresa XMPP"
@@ -1512,11 +1523,12 @@ msgstr "Copierea informațiilor în clipboard"
 msgid "Correct the last message"
 msgstr "Corectați ultimul mesaj"
 
-msgid "Could not Open File"
-msgstr "Nu s-a putut deschide fișierul"
-
 msgid "Could not access file"
 msgstr "Nu s-a putut accesa fișierul"
+
+#, fuzzy, python-format
+msgid "Could not open file (%s)"
+msgstr "Nu s-a putut deschide fișierul"
 
 msgid "Country"
 msgstr "Țara"
@@ -1527,9 +1539,8 @@ msgstr "Creați un cont"
 msgid "Create Group Chat"
 msgstr "Creați un chat de grup"
 
-#, fuzzy
 msgid "Create Group Chat…"
-msgstr "Creați _Group Chat…"
+msgstr "Creați Group Chat…"
 
 msgid "Create New Account"
 msgstr "Creați un cont nou"
@@ -1571,7 +1582,7 @@ msgid "Decline"
 msgstr "Declin"
 
 msgid "Decline Invitation"
-msgstr ""
+msgstr "Declinarea invitației"
 
 msgid "Default"
 msgstr "Implicit"
@@ -1579,9 +1590,8 @@ msgstr "Implicit"
 msgid "Default Sync Threshold"
 msgstr "Prag de sincronizare implicit"
 
-#, fuzzy
 msgid "Default Workspace"
-msgstr "Spațiu de lucru nou"
+msgstr "Spațiu de lucru implicit"
 
 msgid "Default device"
 msgstr "Dispozitiv implicit"
@@ -1638,6 +1648,10 @@ msgstr "La URL-ul dicționarului lipsește un \"%s\""
 
 msgid "Direct Messages"
 msgstr "Mesaje directe"
+
+#, fuzzy
+msgid "Direct transfer (not encrypted)"
+msgstr "Transfer de fișiere oprit"
 
 msgid "Directory"
 msgstr "Director"
@@ -1722,6 +1736,10 @@ msgstr "Nu mai aratați asta din nou"
 msgid "Download"
 msgstr "Descărcați"
 
+#, fuzzy
+msgid "Download File"
+msgstr "Descărcați"
+
 msgid "Download Update"
 msgstr "Descărcare actualizare"
 
@@ -1739,9 +1757,13 @@ msgstr "Mesaje descărcate %s"
 msgid "Downloading…"
 msgstr "Descărcarea…"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Draft: %s"
-msgstr "Stare: %s"
+msgstr "Schiță: %s"
+
+#, fuzzy
+msgid "Drop files here"
+msgstr "Aruncați fișiere sau contacte"
 
 msgid "Drop files or contacts"
 msgstr "Aruncați fișiere sau contacte"
@@ -1777,14 +1799,8 @@ msgstr ""
 msgid "Email"
 msgstr "E-mail"
 
-msgid "Emoji"
-msgstr "Emoticon"
-
 msgid "Emoji Shortcodes"
 msgstr "Shortcodes Emoji"
-
-msgid "Emoji Theme"
-msgstr "Tema Emoticon"
 
 msgid "Enable"
 msgstr "Activați"
@@ -1792,7 +1808,6 @@ msgstr "Activați"
 msgid "Enabled"
 msgstr "Activat"
 
-#, fuzzy
 msgid ""
 "Enables Gajim to measure your computer’s idle time in order to set your "
 "Status automatically"
@@ -1807,10 +1822,11 @@ msgid "Enables Gajim to provide Audio and Video chats"
 msgstr "Permite Gajim să ofere chat-uri audio și video"
 
 #, fuzzy
+msgid "Enables Gajim to provide a Audio preview"
+msgstr "Permite Gajim să ofere chat-uri audio și video"
+
 msgid "Enables Gajim to provide a notification area icon"
-msgstr ""
-"Permite lui Gajim să furnizeze o pictogramă în zona de notificare a "
-"sistemului"
+msgstr "Permite lui Gajim să furnizeze o pictogramă pentru zona de notificare"
 
 msgid ""
 "Enables Gajim to request your router to forward ports for file transfers"
@@ -1975,9 +1991,8 @@ msgstr "Nu s-a reușit generarea avatarului."
 msgid "Fake audio output"
 msgstr "Ieșire audio falsă"
 
-#, fuzzy
 msgid "Feature not available on Windows"
-msgstr "Funcția nu este disponibilă în Windows"
+msgstr "Funcția nu este valabilă pe Windows"
 
 msgid "Features"
 msgstr "Funcții"
@@ -2008,6 +2023,9 @@ msgstr "Fișier oferit…"
 
 msgid "File Preview"
 msgstr "Previzualizare fișier"
+
+msgid "File Size Limit"
+msgstr "Limita de dimensiune a fișierului"
 
 msgid "File Transfer"
 msgstr "Transfer de fișier"
@@ -2052,6 +2070,9 @@ msgstr "Fișierul este prea mare, dimensiunea maximă permisă este: %s"
 msgid "File size unknown"
 msgstr "Dimensiunea fișierului necunoscută"
 
+msgid "File too big, will use direct transfer (not encrypted)"
+msgstr ""
+
 msgid "File transfer stopped"
 msgstr "Transfer de fișiere oprit"
 
@@ -2065,9 +2086,6 @@ msgstr "Fișier: %s"
 #, python-format
 msgid "Filename: %s"
 msgstr "Numele fișierului: %s"
-
-msgid "Files to send"
-msgstr "Fișiere de trimis"
 
 msgid "Filetransfer Preference"
 msgstr "Preferința de transfer de fișiere"
@@ -2204,17 +2222,6 @@ msgstr "Gen"
 
 msgid "General"
 msgstr "Generic"
-
-msgid ""
-"Generate preview automatically in public group chats (may disclose your data)"
-msgstr ""
-"Generarea automată a previzualizării în discuțiile de grup publice (poate "
-"dezvălui datele dumneavoastră)"
-
-msgid "Generate preview for any URLs containing images (may be unsafe)"
-msgstr ""
-"Generarea unei previzualizări pentru orice URL-uri care conțin imagini "
-"(poate fi nesigur)"
 
 msgid "Global Group Chat Search"
 msgstr "Căutare globală de chat în grup"
@@ -2627,10 +2634,6 @@ msgstr "Etichetă"
 msgid "Last but not least"
 msgstr "Nu în ultimul rând"
 
-#, python-format
-msgid "Lat: %s Lon: %s"
-msgstr "Lat: %s Lon: %s"
-
 msgid "Leave Group Chat"
 msgstr "Părăsiți grupul de chat"
 
@@ -2672,12 +2675,9 @@ msgstr "Ora sistemului local"
 msgid "Local Time"
 msgstr "Ora locală"
 
-msgid "Location"
+#, fuzzy, python-format
+msgid "Location at %s"
 msgstr "Locație"
-
-#, python-format
-msgid "Location at Lat: %s Lon: %s"
-msgstr "Locație la Lat: %s Lon: %s"
 
 msgid "Location:"
 msgstr "Locație:"
@@ -2742,8 +2742,8 @@ msgstr "Marcați ca fiind citit"
 msgid "Mark as read"
 msgstr "Marcați ca citit"
 
-msgid "Maximum file size for preview generation"
-msgstr "Dimensiunea maximă a fișierului pentru generarea previzualizării"
+msgid "Maximum file size for preview downloads"
+msgstr "Dimensiunea maximă a fișierului pentru descărcările de previzualizare"
 
 msgid "Me"
 msgstr "Eu"
@@ -2953,9 +2953,8 @@ msgstr "Nu este disponibil"
 msgid "Not Connected"
 msgstr "Nu este conectat"
 
-#, fuzzy
 msgid "Not accelerated"
-msgstr "Necriptat"
+msgstr "Neaccelerat"
 
 msgid "Not available"
 msgstr "Nu este disponibil"
@@ -3048,7 +3047,7 @@ msgid "Open search bar"
 msgstr "Deschideți bara de căutare"
 
 msgid "OpenGL accelerated"
-msgstr ""
+msgstr "Accelerare OpenGL"
 
 msgid "Operating System"
 msgstr "Sistem de operare"
@@ -3165,19 +3164,14 @@ msgstr "Parolele nu se potrivesc"
 msgid "Past Developers"
 msgstr "Dezvoltatori din trecut"
 
-msgid "Paste Image"
-msgstr "Lipiți imaginea"
-
 msgid "Paste Last Input"
 msgstr "Lipiți ultima intrare"
 
-#, fuzzy
 msgid "Paste as Code Block"
-msgstr "Lipiți citatul"
+msgstr "Lipiți ca bloc de cod"
 
-#, fuzzy
 msgid "Paste as Quote"
-msgstr "Lipiți citatul"
+msgstr "Lipiți ca citat"
 
 msgid "Path length constraint exceeded"
 msgstr "Constrângerea de lungime a traseului a fost depășită"
@@ -3478,9 +3472,6 @@ msgstr "Eliminați istoricul conversațiilor?"
 msgid "Remove Contact"
 msgstr "Eliminați contactul"
 
-msgid "Remove Files"
-msgstr "Eliminarea fișierelor"
-
 msgid "Remove Group"
 msgstr "Eliminați grupul"
 
@@ -3516,9 +3507,8 @@ msgstr ""
 msgid "Remove contact from contact list"
 msgstr "Eliminarea contactului din lista de contacte"
 
-#, fuzzy
 msgid "Remove from contact list"
-msgstr "Eliminarea contactului din lista de contacte"
+msgstr "Eliminarea din lista de contacte"
 
 msgid "Remove this workspace"
 msgstr "Eliminați acest spațiu de lucru"
@@ -3575,21 +3565,26 @@ msgstr "Necesar"
 msgid "Requires: Gspell"
 msgstr "Necesită: Gspell"
 
+#, fuzzy
 msgid ""
-"Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
-"base, gstreamer1.0-plugins-ugly, gstreamer1.0-libav, and gstreamer1.0-gtk3"
+"Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+"ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
 msgstr ""
 "Necesită: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
 "base, gstreamer1.0-plugins-ugly, gstreamer1.0-libav și gstreamer1.0-gtk3"
-
-msgid "Requires: gir1.2-gupnpigd-1.0"
-msgstr "Necesită: gir1.2-gupnpigd-1.0"
 
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Necesită: gnome-keyring sau kwallet"
 
 msgid "Requires: gsound"
 msgstr "Necesită: gsound"
+
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
+#, fuzzy
+msgid "Requires: gupnpigd-1.0"
+msgstr "Necesită: gir1.2-gupnpigd-1.0"
 
 msgid "Requires: libappindicator3"
 msgstr "Necesită: libappindicator3"
@@ -3618,13 +3613,11 @@ msgstr "Resetează valoarea la implicit"
 msgid "Resource"
 msgstr "Resurse"
 
-#, fuzzy
 msgid "Restart Gajim for changes to take effect"
-msgstr "Reporniți Gajim pentru ca modificările să aibă efect"
+msgstr "Reporniți Gajim pentru ca modificările să intre în vigoare"
 
-#, fuzzy
 msgid "Restore chat"
-msgstr "Restabilirea ultimei stări"
+msgstr "Restaurați chat-ul"
 
 msgid "Restore last state"
 msgstr "Restabilirea ultimei stări"
@@ -3687,9 +3680,6 @@ msgstr "Vânzări"
 msgid "Save"
 msgstr "Salvați"
 
-msgid "Save As…"
-msgstr "Salvați ca…"
-
 msgid "Save File as…"
 msgstr "Salvați fișierul ca…"
 
@@ -3698,6 +3688,10 @@ msgstr "Salvați parola"
 
 msgid "Save as..."
 msgstr "Salvați ca..."
+
+#, fuzzy
+msgid "Save as…"
+msgstr "Salvați ca…"
 
 msgid "Saving Avatar Failed"
 msgstr "Salvarea Avatarului a eșuat"
@@ -3767,9 +3761,8 @@ msgstr "Avertisment de securitate"
 msgid "Select Account"
 msgstr "Selectați contul"
 
-#, fuzzy
 msgid "Select Contacts"
-msgstr "Contacte trimise:"
+msgstr "Selectați Contacte"
 
 msgid "Select File…"
 msgstr "Selectați File…"
@@ -3832,6 +3825,10 @@ msgstr "Trimiteți fișierul (max. %s)…"
 msgid "Send File Directly…"
 msgstr "Trimiteți fișierul direct…"
 
+#, fuzzy
+msgid "Send Files"
+msgstr "_Trimiteți fișiere"
+
 msgid "Send Files Directly"
 msgstr "Trimiteți fișierele direct"
 
@@ -3844,9 +3841,8 @@ msgstr "Trimiteți un mesaj"
 msgid "Send Message Receipts"
 msgstr "Trimiterea de confirmări de primire a mesajelor"
 
-#, fuzzy
 msgid "Send Messages with Control+Enter"
-msgstr "Trimiteți un mesaj către persoana de contact"
+msgstr "Trimiteți mesaje cu Control+Introducere"
 
 msgid "Send Read Markers"
 msgstr "Trimiteți markeri de citire"
@@ -3953,16 +3949,14 @@ msgstr "Afișați Comenzile"
 msgid "Show Contact Infos"
 msgstr "Afișați informațiile de contact"
 
-#, fuzzy
 msgid "Show Content"
-msgstr "Afișați informațiile de contact"
+msgstr "Arată conținutul"
 
 msgid "Show Gajim"
 msgstr "Afișați Gajim"
 
-#, fuzzy
 msgid "Show Invitation"
-msgstr "Arată locația"
+msgstr "Invitație la spectacol"
 
 msgid "Show Join/Leave"
 msgstr "Afișați Join/Leave"
@@ -4022,11 +4016,10 @@ msgstr "Afișați toate avertismentele"
 msgid "Show chat list"
 msgstr "Afișați lista de chat"
 
-#, fuzzy
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
-"Afișați starea de chat a contactului (de exemplu, tastatura) în bannerul din "
-"fila Chat-uri"
+"Afișați starea de chat (de exemplu, \"tastează...\") lângă numele "
+"contactului dumneavoastră"
 
 msgid "Show in Taskbar"
 msgstr "Afișare în bara de activități"
@@ -4054,6 +4047,17 @@ msgstr "Afișați la pornire"
 
 msgid "Show only critical errors"
 msgstr "Afișați numai erorile critice"
+
+msgid ""
+"Show previews automatically in public group chats (may disclose your data)"
+msgstr ""
+"Afișarea automată a previzualizărilor în discuțiile de grup publice (poate "
+"dezvălui datele dumneavoastră)"
+
+msgid "Show previews for any URLs containing images (may be unsafe)"
+msgstr ""
+"Afișați previzualizări pentru orice URL-uri care conțin imagini (poate fi "
+"nesigur)"
 
 msgid "Show previews for files"
 msgstr "Afișați previzualizări pentru fișiere"
@@ -4099,8 +4103,8 @@ msgstr "Înscrieți-vă pentru un cont nou pe un server ales de dumneavoastră"
 msgid "Signup not allowed"
 msgstr "Înscrierea nu este permisă"
 
-msgid "Size of preview image"
-msgstr "Dimensiunea imaginii de previzualizare"
+msgid "Size of preview images in pixels"
+msgstr "Dimensiunea imaginilor de previzualizare în pixeli"
 
 msgid "Sleeping"
 msgstr "Dormit"
@@ -4320,9 +4324,8 @@ msgstr "Sincronizarea istoricului de chat…"
 msgid "System"
 msgstr "Sistem"
 
-#, fuzzy
 msgid "TLS Version"
-msgstr "Versiunea"
+msgstr "Versiunea TLS"
 
 #, python-format
 msgid "TLS verification failed: %s"
@@ -4371,10 +4374,6 @@ msgid ""
 msgstr ""
 "Fișierul %s a fost primit, dar se pare că a fost deteriorat pe parcurs.\n"
 "Doriți să îl descărcați din nou?"
-
-#, python-format
-msgid "The following file could not be accessed and was not uploaded: %s"
-msgstr "Următorul fișier nu a putut fi accesat și nu a fost încărcat: %s"
 
 msgid ""
 "The following warnings came up while trying to verify the server's "
@@ -4889,8 +4888,12 @@ msgstr "Ce s-a întâmplat"
 msgid "Where participants should go"
 msgstr "Unde ar trebui să meargă participanții"
 
-msgid "Whether to check for a valid certificate"
-msgstr "Dacă trebuie să se verifice dacă există un certificat valabil"
+msgid ""
+"Whether to check for a valid certificate before downloading (not safe to "
+"disable)"
+msgstr ""
+"Dacă se verifică dacă se verifică un certificat valid înainte de descărcare "
+"(nu este sigur să fie dezactivat)"
 
 msgid "Which server should I choose?"
 msgstr "Ce server ar trebui să aleg?"
@@ -4999,9 +5002,6 @@ msgstr "Sunteți acum {show}{status}"
 msgid "You are offline."
 msgstr "Sunteți offline."
 
-msgid "You are trying to paste an image"
-msgstr "Încercați să lipiți o imagine"
-
 #, python-format
 msgid "You can join this group chat instead: xmpp:%s?join"
 msgstr "În schimb, vă puteți alătura acestui grup de chat: xmpp:%s?join"
@@ -5031,6 +5031,10 @@ msgid ""
 "You do not have the proper permissions to create files in this directory."
 msgstr ""
 "Nu aveți permisiunile necesare pentru a crea fișiere în acest director."
+
+#, python-format
+msgid "You dropped something Gajim could not process: %s"
+msgstr ""
 
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
@@ -5290,9 +5294,6 @@ msgstr "_Deschideți dosarul"
 msgid "_Overwrite"
 msgstr "_Suprascrieți"
 
-msgid "_Paste"
-msgstr "_Lipiți"
-
 msgid "_Please choose a server"
 msgstr "Vă rugăm să alegeți un server"
 
@@ -5329,8 +5330,9 @@ msgstr "_Retrageți"
 msgid "_Save"
 msgstr "_Salvați"
 
-msgid "_Save as"
-msgstr "_Salvează ca"
+#, fuzzy
+msgid "_Save as…"
+msgstr "Salvați ca…"
 
 msgid "_Search"
 msgstr "_Căutați"
@@ -5340,9 +5342,6 @@ msgstr "_Selectați"
 
 msgid "_Send"
 msgstr "_Trimiteți"
-
-msgid "_Send Files"
-msgstr "_Trimiteți fișiere"
 
 msgid "_Show Certificate"
 msgstr "_Arată certificatul"
@@ -5440,7 +5439,7 @@ msgid "countrycode"
 msgstr "cod de țară"
 
 msgid "dark skin"
-msgstr ""
+msgstr "pielea închisă la culoare"
 
 msgid "datum"
 msgstr "data"
@@ -5487,7 +5486,7 @@ msgid "lat"
 msgstr "lat"
 
 msgid "light skin"
-msgstr ""
+msgstr "piele deschisă"
 
 msgid "locality"
 msgstr "localitate"
@@ -5499,13 +5498,13 @@ msgid "macOS"
 msgstr "macOS"
 
 msgid "medium skin tone"
-msgstr ""
+msgstr "ton mediu al pielii"
 
 msgid "medium-dark skin"
-msgstr ""
+msgstr "ten mediu-închis"
 
 msgid "medium-light skin"
-msgstr ""
+msgstr "ten mediu deschis"
 
 msgid "or"
 msgstr "sau"
@@ -5634,6 +5633,18 @@ msgstr "...sau lăsați-o aici"
 #~ "'%s' nu se află în lista dumneavoastră de contacte.\n"
 #~ "Vă rugăm să specificați contul pentru trimiterea mesajului."
 
+#~ msgid ""
+#~ "<a href='https://conversations.im/compliance/'>conversations.im/"
+#~ "compliance</a>"
+#~ msgstr ""
+#~ "<a href='https://conversations.im/compliance/'>conversații.im/"
+#~ "conformitate</a>"
+
+#~ msgid ""
+#~ "<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
+#~ msgstr ""
+#~ "<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
+
 #~ msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
 #~ msgstr "<b>%(nick)s</b> de la <b>%(room_name)s</b> solicită voce"
 
@@ -5681,8 +5692,18 @@ msgstr "...sau lăsați-o aici"
 #~ "Permiteți să ascundeți fereastra listei de contacte chiar dacă pictograma "
 #~ "din zona de notificare nu este afișată."
 
+#~ msgid "Allowed File Size"
+#~ msgstr "Dimensiunea permisă a fișierului"
+
 #~ msgid "App Indicator Icon"
 #~ msgstr "Pictograma indicatorului de aplicație"
+
+#~ msgid ""
+#~ "Are you sure you want to paste your clipboard's image into the chat "
+#~ "window?"
+#~ msgstr ""
+#~ "Sunteți sigur că doriți să lipiți imaginea din clipboard în fereastra de "
+#~ "chat?"
 
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
@@ -5735,6 +5756,12 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Verificați dacă Gajim rulează"
 
+#~ msgid "Choose a File to Send…"
+#~ msgstr "Alegeți un fișier de trimis…"
+
+#~ msgid "Choose from various emoji styles"
+#~ msgstr "Alegeți din diferite stiluri de emoji"
+
 #~ msgid "Clear chat window"
 #~ msgstr "Ștergeți fereastra de chat"
 
@@ -5769,6 +5796,12 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Drop Files or Contacts"
 #~ msgstr "Aruncă fișiere sau contacte"
 
+#~ msgid "Emoji"
+#~ msgstr "Emoticon"
+
+#~ msgid "Emoji Theme"
+#~ msgstr "Tema Emoticon"
+
 #~ msgid "Enter Password"
 #~ msgstr "Introduceți parola"
 
@@ -5789,6 +5822,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "File path"
 #~ msgstr "Calea de acces la fișier"
+
+#~ msgid "Files to send"
+#~ msgstr "Fișiere de trimis"
 
 #~ msgid "Forbid a participant to send you public or private messages"
 #~ msgstr ""
@@ -5896,6 +5932,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Kick user from group chat by nickname"
 #~ msgstr "Loviți utilizatorul din chat-ul de grup prin pseudonim"
 
+#~ msgid "Lat: %s Lon: %s"
+#~ msgstr "Lat: %s Lon: %s"
+
 #~ msgid "Leave the group chat"
 #~ msgstr "Părăsiți grupul de chat"
 
@@ -5906,6 +5945,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgstr ""
 #~ "Listează toate contactele din lista de contacte, câte una pentru fiecare "
 #~ "linie"
+
+#~ msgid "Location at Lat: %s Lon: %s"
+#~ msgstr "Locație la Lat: %s Lon: %s"
 
 #~ msgid "Machine is going to sleep"
 #~ msgstr "Mașina merge la culcare"
@@ -5947,6 +5989,9 @@ msgstr "...sau lăsați-o aici"
 #~ "Deschideți o fereastră de chat privată cu un participant specificat și "
 #~ "trimiteți-i un mesaj"
 
+#~ msgid "Paste Image"
+#~ msgstr "Lipiți imaginea"
+
 #~ msgid "Ping?"
 #~ msgstr "Ping?"
 
@@ -5976,6 +6021,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Quote…"
 #~ msgstr "Citez…"
+
+#~ msgid "Remove Files"
+#~ msgstr "Eliminarea fișierelor"
 
 #~ msgid "Removes contact from contact list"
 #~ msgstr "Elimină contactul din lista de contacte"
@@ -6106,6 +6154,12 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Tabs"
 #~ msgstr "File"
 
+#~ msgid "The following address was not understood and was not uploaded: %s"
+#~ msgstr "Următoarea adresă nu a fost înțeleasă și nu a fost încărcată: %s"
+
+#~ msgid "The following file could not be accessed and was not uploaded: %s"
+#~ msgstr "Următorul fișier nu a putut fi accesat și nu a fost încărcat: %s"
+
 #~ msgid "The same as using a doc-string, except it supports translation"
 #~ msgstr ""
 #~ "Același lucru ca și utilizarea unui doc-string, cu excepția faptului că "
@@ -6180,6 +6234,9 @@ msgstr "...sau lăsați-o aici"
 #~ "Nu mai sunteți conectat la \"%(room)s\" sau \"%(nick)s\" a părăsit chat-"
 #~ "ul."
 
+#~ msgid "You are trying to paste an image"
+#~ msgstr "Încercați să lipiți o imagine"
+
 #~ msgid "You have no active account"
 #~ msgstr "Nu aveți un cont activ"
 
@@ -6188,6 +6245,12 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "_Invite"
 #~ msgstr "_Invitați"
+
+#~ msgid "_Paste"
+#~ msgstr "_Lipiți"
+
+#~ msgid "_Save as"
+#~ msgstr "_Salvează ca"
 
 #~ msgid "_Try Again"
 #~ msgstr "_Încercați din nou"

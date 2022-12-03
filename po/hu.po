@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-30 21:47+0000\n"
-"PO-Revision-Date: 2022-10-31 09:23+0000\n"
+"POT-Creation-Date: 2022-12-03 08:42+0000\n"
+"PO-Revision-Date: 2022-12-02 04:53+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -86,7 +86,7 @@ msgstr "%(received)s/%(max)s"
 
 #, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
-msgstr "%(type)s titkosítás %(authenticated)s."
+msgstr "%(authenticated)s %(type)s titkosítás"
 
 #, python-format
 msgid "%i min ago"
@@ -137,10 +137,10 @@ msgstr "Érvénytelen naplózási szint: %s"
 #, python-format
 msgid ""
 "%s is online with multiple devices.\n"
-"Choose the device you would like to send the file to."
+"Choose the device you would like to send the files to."
 msgstr ""
 "%s több eszközön is elérhető.\n"
-"Ki kell választani, hogy melyik eszközre legyen küldve a fájl."
+"Ki kell választani, hogy melyik eszköz legyen a fájlküldés célja."
 
 #, python-format
 msgid "%s s"
@@ -157,6 +157,26 @@ msgstr "%s leállította a fájlátvitelt"
 #, python-format
 msgid "%s wants to send you a file"
 msgstr "%s egy fájlt szeretne küldeni"
+
+#, python-format
+msgctxt "positive longitude"
+msgid "%sE"
+msgstr "k.h. %s"
+
+#, python-format
+msgctxt "positive latitude"
+msgid "%sN"
+msgstr "é.sz. %s"
+
+#, python-format
+msgctxt "negative latitude"
+msgid "%sS"
+msgstr "d.sz. %s"
+
+#, python-format
+msgctxt "negative longitude"
+msgid "%sW"
+msgstr "ny.h. %s"
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -210,18 +230,6 @@ msgstr "<Leírás>"
 
 msgid "<Plugin Name>"
 msgstr "<Bővítmény neve>"
-
-msgid ""
-"<a href='https://conversations.im/compliance/'>conversations.im/compliance</"
-"a>"
-msgstr ""
-"<a href='https://conversations.im/compliance/'>conversations.im/compliance</"
-"a>"
-
-msgid ""
-"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
-msgstr ""
-"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
 
 #, python-format
 msgid ""
@@ -599,14 +607,14 @@ msgstr "Fiók: %s"
 msgid "Accounts"
 msgstr "Fiókok"
 
+msgid "Action for left-clicking a preview"
+msgstr "Az előnézet bal egérgombos művelete"
+
 msgid "Action on Close"
 msgstr "Művelet bezáráskor"
 
 msgid "Action when closing Gajim’s window"
 msgstr "Az ablak bezárásakor végrehajtandó művelet"
-
-msgid "Action when left-clicking a preview"
-msgstr "Az előnézet bal egérgombos művelete"
 
 msgid "Activate"
 msgstr "Bekapcsolás"
@@ -632,8 +640,8 @@ msgstr "Névjegy felvétele…"
 msgid "Add Entry"
 msgstr "Új bejegyzés"
 
-msgid "Add Files"
-msgstr "Fájlok hozzáadása"
+msgid "Add Files…"
+msgstr "Fájlok kiválasztása…"
 
 msgid "Add Group…"
 msgstr "Csoport hozzáadása…"
@@ -750,8 +758,8 @@ msgstr ""
 "Lehetővé teszi a D-Bus felületen keresztüli információközlést, illetve a "
 "Gajim távirányítását."
 
-msgid "Allowed File Size"
-msgstr "Megengedett fájlméret"
+msgid "Allows opening file:/ URIs when clicked."
+msgstr "A file:/ URI megnyitásának engedélyezése."
 
 msgid "Alternate venue (optional)..."
 msgstr "Alternatív hely (nem kötelező)…"
@@ -833,10 +841,6 @@ msgstr "%s archiválási beállításai"
 msgid "Are you sure you want to leave this group chat?"
 msgstr "Biztos elhagyható a társalgó?"
 
-msgid ""
-"Are you sure you want to paste your clipboard's image into the chat window?"
-msgstr "Biztos beszúrható a vágólapon található kép a beszélgetésbe?"
-
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Biztos leállítható a Gajim?"
 
@@ -858,8 +862,8 @@ msgstr "Figyelemfelhívás érkezett"
 msgid "Audio"
 msgstr "Hang"
 
-msgid "Audio / Video"
-msgstr "Hang / Videó"
+msgid "Audio / Video Calls"
+msgstr "Hang- / videohívás"
 
 msgid "Audio File"
 msgstr "Hangfájl"
@@ -869,6 +873,9 @@ msgstr "Bemeneti eszköz"
 
 msgid "Audio Output Device"
 msgstr "Kimeneti eszköz"
+
+msgid "Audio Preview"
+msgstr "Hangbemutató"
 
 msgid "Audio preview is not available"
 msgstr "A hangbemutató nem áll rendelkezésre"
@@ -1214,9 +1221,6 @@ msgstr "Az exportálás célkönyvtárának kiválasztása"
 msgid "Choose Sound"
 msgstr "Hangfájl kiválasztása"
 
-msgid "Choose a File to Send…"
-msgstr "Küldendő fájl kiválasztása…"
-
 msgid "Choose a color or select an image"
 msgstr "Szín vagy kép kiválasztása"
 
@@ -1225,9 +1229,6 @@ msgstr "Csoport választása…"
 
 msgid "Choose encryption"
 msgstr "Titkosítási mód"
-
-msgid "Choose from various emoji styles"
-msgstr "Választás különféle stílusú hangulatjelek közül"
 
 msgid "Choose the contact's groups"
 msgstr "A névjegy csoportjai"
@@ -1250,8 +1251,12 @@ msgstr "Hang eltávolítása"
 msgid "Clear message entry"
 msgstr "Az üzenetbeviteli mező törlése"
 
-msgid "Click messages to select them"
-msgstr "Az üzenetekre kattintva bővíthető a kijelölés"
+msgid ""
+"Click messages to select them\n"
+"(Ctrl + Double Click to deselect)"
+msgstr ""
+"További üzenetekre kattintva bővíthető,\n"
+"Ctrl + dupla kattintással szűkíthető a kijelölés."
 
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr ""
@@ -1265,6 +1270,13 @@ msgstr ""
 
 msgid "Click to view location"
 msgstr "Kattintás a hely megtekintéséhez"
+
+msgid ""
+"Clickable schemes in addition to the hard-coded list of IANA-registered "
+"ones. Space-separated, lower-case, no colons."
+msgstr ""
+"A program által ismert IANA-bejegyzésű egységes erőforrás-azonosítók "
+"kiegészítése. Szóközökkel tagolt, kisbetűs, kettőspont nélküli felsorolás."
 
 msgid "Client Certificate"
 msgstr "Klienstanúsítvány"
@@ -1468,6 +1480,9 @@ msgstr "Tanúsítvány adatainak másolása"
 msgid "Copy Email Address"
 msgstr "E-mail-cím _másolása"
 
+msgid "Copy Link"
+msgstr "Hivatkozás másolása"
+
 msgid "Copy Link Location"
 msgstr "Hivatkozás címének másolása"
 
@@ -1492,11 +1507,12 @@ msgstr "Másolás a vágólapra"
 msgid "Correct the last message"
 msgstr "A legutóbbi üzenet helyesbítése"
 
-msgid "Could not Open File"
-msgstr "A fájl megnyitása nem sikerült"
-
 msgid "Could not access file"
 msgstr "A fájl nem nyitható meg"
+
+#, python-format
+msgid "Could not open file (%s)"
+msgstr "Nem sikerült megnyitni a fájlt (%s)"
 
 msgid "Country"
 msgstr "Ország"
@@ -1618,6 +1634,9 @@ msgstr "A szótár URL-jében nincs „%s”"
 msgid "Direct Messages"
 msgstr "Közvetlen üzenetek"
 
+msgid "Direct transfer (not encrypted)"
+msgstr "Közvetlen fájlátvitel (titkosítás nélkül)"
+
 msgid "Directory"
 msgstr "Könyvtár"
 
@@ -1696,6 +1715,9 @@ msgstr "Ne jelenjen meg újra"
 msgid "Download"
 msgstr "Letöltés"
 
+msgid "Download File"
+msgstr "Letöltés"
+
 msgid "Download Update"
 msgstr "Frissítés letöltése"
 
@@ -1716,6 +1738,9 @@ msgstr "Letöltés…"
 #, python-format
 msgid "Draft: %s"
 msgstr "Piszkozat: %s"
+
+msgid "Drop files here"
+msgstr "Ide ejthetők a fájlok"
 
 msgid "Drop files or contacts"
 msgstr "Ide ejthetők fájlok vagy névjegyek"
@@ -1751,14 +1776,8 @@ msgstr ""
 msgid "Email"
 msgstr "E-mail-cím"
 
-msgid "Emoji"
-msgstr "Hangulatjelek"
-
 msgid "Emoji Shortcodes"
 msgstr "Hangulatjelkódok"
-
-msgid "Emoji Theme"
-msgstr "Hangulatjelkészlet"
 
 msgid "Enable"
 msgstr "Engedélyez"
@@ -1777,6 +1796,9 @@ msgstr "Hangok lejátszása a különféle értesítésekhez"
 
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr "Hang- és videóbeszélgetések a Gajimban"
+
+msgid "Enables Gajim to provide a Audio preview"
+msgstr "Hangok kipróbálása a Gajimban"
 
 msgid "Enables Gajim to provide a notification area icon"
 msgstr "A Gajim ikonjának megjelenítése az értesítési területen"
@@ -1973,6 +1995,9 @@ msgstr "Felkínálva átvitelre…"
 msgid "File Preview"
 msgstr "Előnézet"
 
+msgid "File Size Limit"
+msgstr "Fájlméretkorlát"
+
 msgid "File Transfer"
 msgstr "Fájlátvitel"
 
@@ -2016,6 +2041,10 @@ msgstr "A fájl túl nagy, a megengedett méret: %s"
 msgid "File size unknown"
 msgstr "Ismeretlen fájlméret"
 
+msgid "File too big, will use direct transfer (not encrypted)"
+msgstr ""
+"A fájl mérete miatt az átvitel közvetlenül történik (titkosítás nélkül)"
+
 msgid "File transfer stopped"
 msgstr "Befejezett fájlátvitel"
 
@@ -2029,9 +2058,6 @@ msgstr "Fájl: %s"
 #, python-format
 msgid "Filename: %s"
 msgstr "Fájlnév: %s"
-
-msgid "Files to send"
-msgstr "Küldendő fájlok"
 
 msgid "Filetransfer Preference"
 msgstr "Fájlátvitel"
@@ -2168,16 +2194,6 @@ msgstr "Nem"
 
 msgid "General"
 msgstr "Általános"
-
-msgid ""
-"Generate preview automatically in public group chats (may disclose your data)"
-msgstr ""
-"Automatikusan készüljön előnézet a nyilvános társalgókban (személyes adatok "
-"felfedésével járhat)"
-
-msgid "Generate preview for any URLs containing images (may be unsafe)"
-msgstr ""
-"Készüljön előnézet minden URL-hez, amely képre hivatkozik (veszélyes lehet)"
 
 msgid "Global Group Chat Search"
 msgstr "Társalgó keresése globálisan"
@@ -2583,10 +2599,6 @@ msgstr "Címke"
 msgid "Last but not least"
 msgstr "Végül, de nem utolsó sorban"
 
-#, python-format
-msgid "Lat: %s Lon: %s"
-msgstr "Szélesség: %s, hosszúság: %s"
-
 msgid "Leave Group Chat"
 msgstr "Társalgó elhagyása"
 
@@ -2627,12 +2639,9 @@ msgstr "Helyi rendszeridő"
 msgid "Local Time"
 msgstr "Helyi idő"
 
-msgid "Location"
-msgstr "Hely"
-
 #, python-format
-msgid "Location at Lat: %s Lon: %s"
-msgstr "Tartózkodási hely: szélesség: %s, hosszúság: %s"
+msgid "Location at %s"
+msgstr "Hely: %s"
 
 msgid "Location:"
 msgstr "Tartózkodási hely:"
@@ -2695,8 +2704,8 @@ msgstr "Megjelölés olvasottként"
 msgid "Mark as read"
 msgstr "Megjelölés olvasottként"
 
-msgid "Maximum file size for preview generation"
-msgstr "Az előnézet létrehozásához megengedett legnagyobb fájlméret"
+msgid "Maximum file size for preview downloads"
+msgstr "Letöltési méretkorlát az előnézet létrehozásakor"
 
 msgid "Me"
 msgstr "Én"
@@ -3112,9 +3121,6 @@ msgstr "A jelszavak nem egyeznek"
 msgid "Past Developers"
 msgstr "Fejlesztők voltak"
 
-msgid "Paste Image"
-msgstr "Kép beszúrása"
-
 msgid "Paste Last Input"
 msgstr "A legutóbb bevitt adat beillesztése"
 
@@ -3421,9 +3427,6 @@ msgstr "Törölhetők az előzmények?"
 msgid "Remove Contact"
 msgstr "Névjegy törlése"
 
-msgid "Remove Files"
-msgstr "Fájlok eltávolítása"
-
 msgid "Remove Group"
 msgstr "Csoport törlése"
 
@@ -3517,21 +3520,23 @@ msgid "Requires: Gspell"
 msgstr "Követelmény: Gspell"
 
 msgid ""
-"Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
-"base, gstreamer1.0-plugins-ugly, gstreamer1.0-libav, and gstreamer1.0-gtk3"
+"Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+"ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
 msgstr ""
-"Követelmény: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-"
-"plugins-base, gstreamer1.0-plugins-ugly, gstreamer1.0-libav és gstreamer1.0-"
-"gtk3"
-
-msgid "Requires: gir1.2-gupnpigd-1.0"
-msgstr "Követelmény: gir1.2-gupnpigd-1.0"
+"Követelmény: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+"ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
 
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Követelmény: gnome-keyring vagy kwallet"
 
 msgid "Requires: gsound"
 msgstr "Követelmény: gsound"
+
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr "Követelmény: gstreamer-1.0, gst-plugins-base-1.0"
+
+msgid "Requires: gupnpigd-1.0"
+msgstr "Követelmény: gupnpigd-1.0"
 
 msgid "Requires: libappindicator3"
 msgstr "Követelmény: libappindicator3"
@@ -3629,9 +3634,6 @@ msgstr "Értékesítés"
 msgid "Save"
 msgstr "Mentés"
 
-msgid "Save As…"
-msgstr "Mentés másként…"
-
 msgid "Save File as…"
 msgstr "Fájl mentése másként…"
 
@@ -3639,6 +3641,9 @@ msgid "Save Password"
 msgstr "Jelszó megjegyzése"
 
 msgid "Save as..."
+msgstr "Mentés másként…"
+
+msgid "Save as…"
 msgstr "Mentés másként…"
 
 msgid "Saving Avatar Failed"
@@ -3770,6 +3775,9 @@ msgstr "Fájlküldés (max. %s)…"
 
 msgid "Send File Directly…"
 msgstr "Közvetlen fájlküldés…"
+
+msgid "Send Files"
+msgstr "Fájlküldés"
 
 msgid "Send Files Directly"
 msgstr "Közvetlen fájlküldés"
@@ -3985,6 +3993,15 @@ msgstr "Megjelenés indításkor"
 msgid "Show only critical errors"
 msgstr "Csak a kritikus hibák megjelenítése"
 
+msgid ""
+"Show previews automatically in public group chats (may disclose your data)"
+msgstr ""
+"Automatikus előnézet a nyilvános társalgókban (személyes adatok felfedésével "
+"járhat)"
+
+msgid "Show previews for any URLs containing images (may be unsafe)"
+msgstr "Előnézet minden URL-hez, amely képre hivatkozik (veszélyes lehet)"
+
 msgid "Show previews for files"
 msgstr "A fájlok előnézetének megjelenítése"
 
@@ -4027,8 +4044,8 @@ msgstr "Új fiók létrehozása egy tetszőleges kiszolgálón"
 msgid "Signup not allowed"
 msgstr "A regisztráció tiltott"
 
-msgid "Size of preview image"
-msgstr "Az előnézeti kép mérete"
+msgid "Size of preview images in pixels"
+msgstr "Az előnézeti képek pixelben megadott mérete"
 
 msgid "Sleeping"
 msgstr "Alvás"
@@ -4297,10 +4314,6 @@ msgstr ""
 "A fájl (%s) megérkezett, de az átvitel során valószínűleg megsérült.\n"
 "Meg kell próbálni újra a letöltést?"
 
-#, python-format
-msgid "The following file could not be accessed and was not uploaded: %s"
-msgstr "A következő fájl nem hozzáférhető, ezért nem lett feltöltve: %s"
-
 msgid ""
 "The following warnings came up while trying to verify the server's "
 "certificate"
@@ -4405,7 +4418,7 @@ msgid "This group chat will be destroyed once the last participant left"
 msgstr "A társalgó megszűnik, miután az utolsó résztvevő is elhagyja"
 
 msgid "This is a public group chat. Encryption is not available."
-msgstr "Ez nyilvános társalgó, az üzeneteket nem lehet titkosítani."
+msgstr "Nyilvános társalgóban az üzeneteket nem lehet titkosítani."
 
 msgid ""
 "This is the theme you are currently using.\n"
@@ -4807,8 +4820,12 @@ msgstr "Esetleírás"
 msgid "Where participants should go"
 msgstr "Egy társalgó, ahová a résztvevők átköltözhetnek"
 
-msgid "Whether to check for a valid certificate"
-msgstr "A tanúsítvány érvényességének ellenőrzése"
+msgid ""
+"Whether to check for a valid certificate before downloading (not safe to "
+"disable)"
+msgstr ""
+"Letöltés előtt a tanúsítvány érvényességének ellenőrzése (a tiltása "
+"veszélyes lehet)"
 
 msgid "Which server should I choose?"
 msgstr "Melyik kiszolgálót érdemes választani?"
@@ -4916,9 +4933,6 @@ msgstr "A jelenléti állapotom mostantól: {show}{status}"
 msgid "You are offline."
 msgstr "Nincs élő kapcsolat."
 
-msgid "You are trying to paste an image"
-msgstr "A kért művelet egy kép beszúrása"
-
 #, python-format
 msgid "You can join this group chat instead: xmpp:%s?join"
 msgstr "Ez a társalgó használható helyette: xmpp:%s?join"
@@ -4947,6 +4961,10 @@ msgstr "A könyvtár jogosultságai nem teszik lehetővé fájlok létrehozásá
 msgid ""
 "You do not have the proper permissions to create files in this directory."
 msgstr "A könyvtár jogosultságai nem teszik lehetővé fájlok létrehozását."
+
+#, python-format
+msgid "You dropped something Gajim could not process: %s"
+msgstr "Nem sikerült feldolgozni az ablakba ejtett fájlt: %s"
 
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
@@ -5204,9 +5222,6 @@ msgstr "M_appa megnyitása"
 msgid "_Overwrite"
 msgstr "_Felülírás"
 
-msgid "_Paste"
-msgstr "_Beszúrás"
-
 msgid "_Please choose a server"
 msgstr "_Kiszolgáló választása"
 
@@ -5243,8 +5258,8 @@ msgstr "_Visszavonás"
 msgid "_Save"
 msgstr "_Mentés"
 
-msgid "_Save as"
-msgstr "Menté_s másként"
+msgid "_Save as…"
+msgstr "Menté_s másként…"
 
 msgid "_Search"
 msgstr "_Keresés"
@@ -5254,9 +5269,6 @@ msgstr "_Kiválasztás"
 
 msgid "_Send"
 msgstr "_Küldés"
-
-msgid "_Send Files"
-msgstr "Fájlok _küldése"
 
 msgid "_Show Certificate"
 msgstr "A tanú_sítvány részletei"
@@ -5313,10 +5325,10 @@ msgid "alt"
 msgstr "magasság"
 
 msgid "and NOT authenticated"
-msgstr "és NEM hitelesített"
+msgstr "NEM hitelesített"
 
 msgid "and authenticated"
-msgstr "és hitelesített"
+msgstr "Hitelesített"
 
 msgid "area"
 msgstr "terület"
@@ -5550,6 +5562,18 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ "'%s' is not in your roster.\n"
 #~ "Please specify account for sending the message."
 
+#~ msgid ""
+#~ "<a href='https://conversations.im/compliance/'>conversations.im/"
+#~ "compliance</a>"
+#~ msgstr ""
+#~ "<a href='https://conversations.im/compliance/'>conversations.im/"
+#~ "compliance</a>"
+
+#~ msgid ""
+#~ "<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
+#~ msgstr ""
+#~ "<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
+
 #~ msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
 #~ msgstr "<b>%(nick)s</b> szót kér ebben a társalgóban: <b>%(room_name)s</b>"
 
@@ -5595,8 +5619,16 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Allow a participant to send you public or private messages"
 #~ msgstr "Egy résztvevő publikus vagy privát üzeneteinek engedélyezése"
 
+#~ msgid "Allowed File Size"
+#~ msgstr "Megengedett fájlméret"
+
 #~ msgid "App Indicator Icon"
 #~ msgstr "Alkalmazásjelző ikon"
+
+#~ msgid ""
+#~ "Are you sure you want to paste your clipboard's image into the chat "
+#~ "window?"
+#~ msgstr "Biztos beszúrható a vágólapon található kép a beszélgetésbe?"
 
 #, fuzzy
 #~ msgid ""
@@ -5651,6 +5683,12 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Check if Gajim is running"
 #~ msgstr "Ellenőrizd, hogy fut-e a Gajim"
 
+#~ msgid "Choose a File to Send…"
+#~ msgstr "Küldendő fájl kiválasztása…"
+
+#~ msgid "Choose from various emoji styles"
+#~ msgstr "Választás különféle stílusú hangulatjelek közül"
+
 #~ msgid "Clear chat window"
 #~ msgstr "Az üzenetek törlése az ablakból"
 
@@ -5686,6 +5724,12 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Drop Files or Contacts"
 #~ msgstr "Ide ejthetők fájlok vagy névjegyek"
 
+#~ msgid "Emoji"
+#~ msgstr "Hangulatjelek"
+
+#~ msgid "Emoji Theme"
+#~ msgstr "Hangulatjelkészlet"
+
 #~ msgid "Enter Password"
 #~ msgstr "Jelszó megadása"
 
@@ -5706,6 +5750,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "File path"
 #~ msgstr "File elérési útvonala"
+
+#~ msgid "Files to send"
+#~ msgstr "Küldendő fájlok"
 
 #~ msgid "Forbid a participant to send you public or private messages"
 #~ msgstr "Egy résztvevő publikus vagy privát üzeneteinek letiltása"
@@ -5803,6 +5850,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Kick user from group chat by nickname"
 #~ msgstr "Kidobás a társalgóból becenév alapján"
 
+#~ msgid "Lat: %s Lon: %s"
+#~ msgstr "Szélesség: %s, hosszúság: %s"
+
 #~ msgid "Leave the group chat"
 #~ msgstr "Kilépés a társlagóból"
 
@@ -5814,6 +5864,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgstr ""
 #~ "Kiír egy listát az összes névsoron lévő partnerről. Minden partner külön "
 #~ "sorba kerül"
+
+#~ msgid "Location at Lat: %s Lon: %s"
+#~ msgstr "Tartózkodási hely: szélesség: %s, hosszúság: %s"
 
 #~ msgid "Missing argument \"contact_jid\""
 #~ msgstr "Hiányzó argumentum \"contact_jid\""
@@ -5851,6 +5904,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgstr ""
 #~ "Privát beszélgetés kezdeményezése és üzenet küldése egy résztvevővek"
 
+#~ msgid "Paste Image"
+#~ msgstr "Kép beszúrása"
+
 #~ msgid "Ping?"
 #~ msgstr "Ping?"
 
@@ -5880,6 +5936,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Quote…"
 #~ msgstr "Idézés…"
+
+#~ msgid "Remove Files"
+#~ msgstr "Fájlok eltávolítása"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6013,6 +6072,12 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Tabs"
 #~ msgstr "Lapok"
 
+#~ msgid "The following address was not understood and was not uploaded: %s"
+#~ msgstr "A fájl elérési útja nem értelmezhető, ezért nem lett feltöltve: %s"
+
+#~ msgid "The following file could not be accessed and was not uploaded: %s"
+#~ msgstr "A következő fájl nem hozzáférhető, ezért nem lett feltöltve: %s"
+
 #~ msgid "The same as using a doc-string, except it supports translation"
 #~ msgstr "Akárcsak egy doc-string, de támogatja a fordítást"
 
@@ -6088,6 +6153,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ "You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
 #~ msgstr "A társalgó (%(room)s) el lett hagyva, vagy „%(nick)s” kilépett."
 
+#~ msgid "You are trying to paste an image"
+#~ msgstr "A kért művelet egy kép beszúrása"
+
 #~ msgid "You have no active account"
 #~ msgstr "Nincs aktív fiókod"
 
@@ -6097,6 +6165,12 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "_Invite"
 #~ msgstr "_Meghívás"
+
+#~ msgid "_Paste"
+#~ msgstr "_Beszúrás"
+
+#~ msgid "_Save as"
+#~ msgstr "Menté_s másként"
 
 #~ msgid "_Try Again"
 #~ msgstr "Újr_a"

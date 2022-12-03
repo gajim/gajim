@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-30 21:47+0000\n"
-"PO-Revision-Date: 2022-10-12 10:51+0000\n"
-"Last-Translator: Tommy He <lovenemesis@gmail.com>\n"
+"POT-Creation-Date: 2022-12-03 08:42+0000\n"
+"PO-Revision-Date: 2022-12-03 08:31+0000\n"
+"Last-Translator: Bob Huang (Ziyan Huang) <bc3104hzy@126.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
 "gajim/master/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -141,7 +141,7 @@ msgstr "%s 不是一个有效的日志级别"
 #, python-format
 msgid ""
 "%s is online with multiple devices.\n"
-"Choose the device you would like to send the file to."
+"Choose the device you would like to send the files to."
 msgstr ""
 "%s 有多台设备在线。\n"
 "选择您想发送文件的设备。"
@@ -161,6 +161,26 @@ msgstr "%s 停止了传输"
 #, python-format
 msgid "%s wants to send you a file"
 msgstr "%s 想发送给您一个文件"
+
+#, python-format
+msgctxt "positive longitude"
+msgid "%sE"
+msgstr "东经 %s"
+
+#, python-format
+msgctxt "positive latitude"
+msgid "%sN"
+msgstr "北纬 %s"
+
+#, python-format
+msgctxt "negative latitude"
+msgid "%sS"
+msgstr "南纬 %s"
+
+#, python-format
+msgctxt "negative longitude"
+msgid "%sW"
+msgstr "西经 %s"
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -214,18 +234,6 @@ msgstr "<描述>"
 
 msgid "<Plugin Name>"
 msgstr "<插件名称>"
-
-msgid ""
-"<a href='https://conversations.im/compliance/'>conversations.im/compliance</"
-"a>"
-msgstr ""
-"<a href='https://conversations.im/compliance/'>conversations.im/compliance</"
-"a>"
-
-msgid ""
-"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
-msgstr ""
-"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
 
 #, python-format
 msgid ""
@@ -403,9 +411,8 @@ msgstr "引用…"
 msgid "?Message row action:Retract…"
 msgstr "撤回…"
 
-#, fuzzy
 msgid "?Message row action:Select Messages…"
-msgstr "修订…"
+msgstr "多选…"
 
 msgid "?Message state:Received"
 msgstr "已收到"
@@ -603,14 +610,14 @@ msgstr "账户: %s"
 msgid "Accounts"
 msgstr "账户"
 
+msgid "Action for left-clicking a preview"
+msgstr "左击预览时的动作"
+
 msgid "Action on Close"
 msgstr "关闭时的动作"
 
 msgid "Action when closing Gajim’s window"
 msgstr "关闭 Gajim 窗口时的动作"
-
-msgid "Action when left-clicking a preview"
-msgstr "左击预览时的动作"
 
 msgid "Activate"
 msgstr "激活"
@@ -630,15 +637,14 @@ msgstr "添加账户"
 msgid "Add Contact"
 msgstr "添加联系人"
 
-#, fuzzy
 msgid "Add Contact…"
-msgstr "添加联系人(_C)…"
+msgstr "添加联系人…"
 
 msgid "Add Entry"
 msgstr "添加条目"
 
-msgid "Add Files"
-msgstr "添加文件"
+msgid "Add Files…"
+msgstr "添加文件…"
 
 msgid "Add Group…"
 msgstr "添加群组…"
@@ -753,8 +759,8 @@ msgid ""
 msgstr ""
 "允许 Gajim 通过 D-Bus 广播有用的信息。这也将允许其他应用远程控制 Gajim。"
 
-msgid "Allowed File Size"
-msgstr "可允许的文件尺寸"
+msgid "Allows opening file:/ URIs when clicked."
+msgstr "允许单击打开 file:/ URI。"
 
 msgid "Alternate venue (optional)..."
 msgstr "替代地点(可选)…"
@@ -836,10 +842,6 @@ msgstr "%s 的归档首选项"
 msgid "Are you sure you want to leave this group chat?"
 msgstr "您确定要离开该群聊么?"
 
-msgid ""
-"Are you sure you want to paste your clipboard's image into the chat window?"
-msgstr "您确定要将剪切板中的图片粘贴到当前聊天窗口中？"
-
 msgid "Are you sure you want to quit Gajim?"
 msgstr "您确定您要退出 Gajim 吗?"
 
@@ -861,8 +863,8 @@ msgstr "收到关注的消息"
 msgid "Audio"
 msgstr "音频"
 
-msgid "Audio / Video"
-msgstr "音频/视频"
+msgid "Audio / Video Calls"
+msgstr "音频/视频通话"
 
 msgid "Audio File"
 msgstr "音频文件"
@@ -872,6 +874,9 @@ msgstr "音频输入设备"
 
 msgid "Audio Output Device"
 msgstr "音频输出设备"
+
+msgid "Audio Preview"
+msgstr "音频预览"
 
 msgid "Audio preview is not available"
 msgstr "音频预览不可用"
@@ -1173,7 +1178,7 @@ msgid "Chats"
 msgstr "聊天"
 
 msgid "Chats from this account will use this workspace by default"
-msgstr ""
+msgstr "来自此联系人的聊天将默认使用此工作区"
 
 msgid "Check For Updates"
 msgstr "检查更新"
@@ -1208,9 +1213,6 @@ msgstr "选择聊天记录导出目录"
 msgid "Choose Sound"
 msgstr "选择声音"
 
-msgid "Choose a File to Send…"
-msgstr "选择要发送的文件…"
-
 msgid "Choose a color or select an image"
 msgstr "选择一个颜色或者一张图片"
 
@@ -1219,9 +1221,6 @@ msgstr "选择一个分组…"
 
 msgid "Choose encryption"
 msgstr "选择加密"
-
-msgid "Choose from various emoji styles"
-msgstr "从各式表情符号风格中选择"
 
 msgid "Choose the contact's groups"
 msgstr "选择联系人分组"
@@ -1244,8 +1243,12 @@ msgstr "清除声音"
 msgid "Clear message entry"
 msgstr "清除消息条目"
 
-msgid "Click messages to select them"
+msgid ""
+"Click messages to select them\n"
+"(Ctrl + Double Click to deselect)"
 msgstr ""
+"单击消息以选择\n"
+"(Ctrl + 双击以取消选择)"
 
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "点击您想要邀请到此群聊的联系人。"
@@ -1255,6 +1258,11 @@ msgstr "点击查看 Gajim 维基页面来了解如何在 Flatpak 下安装插�
 
 msgid "Click to view location"
 msgstr "点击来查看位置"
+
+msgid ""
+"Clickable schemes in addition to the hard-coded list of IANA-registered "
+"ones. Space-separated, lower-case, no colons."
+msgstr ""
 
 msgid "Client Certificate"
 msgstr "客户端证书"
@@ -1456,15 +1464,17 @@ msgstr "复制证书信息"
 msgid "Copy Email Address"
 msgstr "复制邮箱地址"
 
+msgid "Copy Link"
+msgstr "复制链接"
+
 msgid "Copy Link Location"
 msgstr "复制链接位置"
 
 msgid "Copy Location"
 msgstr "复制位置"
 
-#, fuzzy
 msgid "Copy Text"
-msgstr "复制"
+msgstr "复制文本"
 
 msgid "Copy XMPP Address"
 msgstr "复制 XMPP 地址"
@@ -1481,11 +1491,12 @@ msgstr "复制信息到剪贴板"
 msgid "Correct the last message"
 msgstr "修订上一条消息"
 
-msgid "Could not Open File"
-msgstr "无法打开文件"
-
 msgid "Could not access file"
 msgstr "无法访问文件"
+
+#, python-format
+msgid "Could not open file (%s)"
+msgstr "无法打开文件 (%s)"
 
 msgid "Country"
 msgstr "国家"
@@ -1496,9 +1507,8 @@ msgstr "创建账户"
 msgid "Create Group Chat"
 msgstr "创建群聊"
 
-#, fuzzy
 msgid "Create Group Chat…"
-msgstr "创建群聊(_G)…"
+msgstr "创建群聊…"
 
 msgid "Create New Account"
 msgstr "创建新账户"
@@ -1540,7 +1550,7 @@ msgid "Decline"
 msgstr "拒绝"
 
 msgid "Decline Invitation"
-msgstr ""
+msgstr "拒绝邀请"
 
 msgid "Default"
 msgstr "默认"
@@ -1548,9 +1558,8 @@ msgstr "默认"
 msgid "Default Sync Threshold"
 msgstr "默认同步阈值"
 
-#, fuzzy
 msgid "Default Workspace"
-msgstr "新工作区"
+msgstr "默认工作区"
 
 msgid "Default device"
 msgstr "默认设备"
@@ -1607,6 +1616,9 @@ msgstr "目录 URL 缺少 \"%s\""
 
 msgid "Direct Messages"
 msgstr "直接消息"
+
+msgid "Direct transfer (not encrypted)"
+msgstr "直接传输 (不加密)"
 
 msgid "Directory"
 msgstr "目录"
@@ -1686,6 +1698,9 @@ msgstr "不再显示此消息"
 msgid "Download"
 msgstr "下载"
 
+msgid "Download File"
+msgstr "下载文件"
+
 msgid "Download Update"
 msgstr "下载更新"
 
@@ -1703,9 +1718,12 @@ msgstr "已下载 %s 条信息"
 msgid "Downloading…"
 msgstr "下载中…"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Draft: %s"
-msgstr "状态: %s"
+msgstr "草稿: %s"
+
+msgid "Drop files here"
+msgstr "拖放文件到这里"
 
 msgid "Drop files or contacts"
 msgstr "拖放文件或联系人"
@@ -1739,14 +1757,8 @@ msgstr ""
 msgid "Email"
 msgstr "电子邮件"
 
-msgid "Emoji"
-msgstr "表情符号"
-
 msgid "Emoji Shortcodes"
 msgstr "表情符号快捷短语"
-
-msgid "Emoji Theme"
-msgstr "表情符号主题"
 
 msgid "Enable"
 msgstr "启用"
@@ -1764,6 +1776,9 @@ msgstr "允许 Gajim 播放各种通知的声音"
 
 msgid "Enables Gajim to provide Audio and Video chats"
 msgstr "允许 Gajim 提供音频和视频聊天"
+
+msgid "Enables Gajim to provide a Audio preview"
+msgstr "允许 Gajim 提供音频预览"
 
 msgid "Enables Gajim to provide a notification area icon"
 msgstr "允许 Gajim 提供系统通知区域图标"
@@ -1956,6 +1971,9 @@ msgstr "提供的文件…"
 msgid "File Preview"
 msgstr "文件预览"
 
+msgid "File Size Limit"
+msgstr "文件大小限制"
+
 msgid "File Transfer"
 msgstr "文件传输"
 
@@ -1999,6 +2017,9 @@ msgstr "文件太大，最大允许的文件尺寸为: %s"
 msgid "File size unknown"
 msgstr "文件尺寸未知"
 
+msgid "File too big, will use direct transfer (not encrypted)"
+msgstr "文件过大，将使用直接传输(不加密)"
+
 msgid "File transfer stopped"
 msgstr "文件传输已停止"
 
@@ -2012,9 +2033,6 @@ msgstr "文件: %s"
 #, python-format
 msgid "Filename: %s"
 msgstr "文件名: %s"
-
-msgid "Files to send"
-msgstr "要发送的文件"
 
 msgid "Filetransfer Preference"
 msgstr "文件传输首选项"
@@ -2146,13 +2164,6 @@ msgstr "性别"
 
 msgid "General"
 msgstr "常规"
-
-msgid ""
-"Generate preview automatically in public group chats (may disclose your data)"
-msgstr "在公共群聊中自动生成预览(可能公开您的数据)"
-
-msgid "Generate preview for any URLs containing images (may be unsafe)"
-msgstr "为包含图片的任何 URL 生成预览(可能不安全)"
 
 msgid "Global Group Chat Search"
 msgstr "全局群聊搜索"
@@ -2553,10 +2564,6 @@ msgstr "标签"
 msgid "Last but not least"
 msgstr "最后但同样重要的"
 
-#, python-format
-msgid "Lat: %s Lon: %s"
-msgstr "纬度: %s 经度: %s"
-
 msgid "Leave Group Chat"
 msgstr "离开群聊"
 
@@ -2597,12 +2604,9 @@ msgstr "本地系统时间"
 msgid "Local Time"
 msgstr "本地时间"
 
-msgid "Location"
-msgstr "位置"
-
 #, python-format
-msgid "Location at Lat: %s Lon: %s"
-msgstr "位置于纬度: %s 经度: %s"
+msgid "Location at %s"
+msgstr "位于 %s"
 
 msgid "Location:"
 msgstr "位置:"
@@ -2663,8 +2667,8 @@ msgstr "标记为已读"
 msgid "Mark as read"
 msgstr "标记为已读"
 
-msgid "Maximum file size for preview generation"
-msgstr "预览生成的最大文件尺寸"
+msgid "Maximum file size for preview downloads"
+msgstr "下载预览的最大文件尺寸"
 
 msgid "Me"
 msgstr "本人"
@@ -3079,9 +3083,6 @@ msgstr "密码不匹配"
 msgid "Past Developers"
 msgstr "既往开发者"
 
-msgid "Paste Image"
-msgstr "粘贴图像"
-
 msgid "Paste Last Input"
 msgstr "粘贴上一次输入"
 
@@ -3387,9 +3388,6 @@ msgstr "移除聊天记录？"
 msgid "Remove Contact"
 msgstr "移除联系人"
 
-msgid "Remove Files"
-msgstr "移除文件"
-
 msgid "Remove Group"
 msgstr "移除群组"
 
@@ -3423,9 +3421,8 @@ msgstr "从列表移除已完成、已取消和失败的文件传输"
 msgid "Remove contact from contact list"
 msgstr "从联系人列表删除联系人"
 
-#, fuzzy
 msgid "Remove from contact list"
-msgstr "从联系人列表删除联系人"
+msgstr "从联系人列表删除"
 
 msgid "Remove this workspace"
 msgstr "移除这个工作区"
@@ -3481,20 +3478,23 @@ msgid "Requires: Gspell"
 msgstr "需要: Gspell"
 
 msgid ""
-"Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
-"base, gstreamer1.0-plugins-ugly, gstreamer1.0-libav, and gstreamer1.0-gtk3"
+"Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+"ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
 msgstr ""
-"需要: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-base, "
-"gstreamer1.0-plugins-ugly, gstreamer1.0-libav, and gstreamer1.0-gtk3"
-
-msgid "Requires: gir1.2-gupnpigd-1.0"
-msgstr "需要: gir1.2-gupnpigd-1.0"
+"需要: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+"ugly-1.0, gst-libav, gstreamer-gtk3-plugin"
 
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "需要: gnome-keyring 或 kwallet"
 
 msgid "Requires: gsound"
 msgstr "需要: gsound"
+
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr "需要: gstreamer-1.0, gst-plugins-base-1.0"
+
+msgid "Requires: gupnpigd-1.0"
+msgstr "需要: gupnpigd-1.0"
 
 msgid "Requires: libappindicator3"
 msgstr "需要: libappindicator3"
@@ -3523,7 +3523,6 @@ msgstr "重置所有值为默认"
 msgid "Resource"
 msgstr "资源"
 
-#, fuzzy
 msgid "Restart Gajim for changes to take effect"
 msgstr "需要重新启动 Gajim 来使得变更生效"
 
@@ -3591,9 +3590,6 @@ msgstr "销售"
 msgid "Save"
 msgstr "保存"
 
-msgid "Save As…"
-msgstr "另存为…"
-
 msgid "Save File as…"
 msgstr "另存文件为…"
 
@@ -3601,6 +3597,9 @@ msgid "Save Password"
 msgstr "保存密码"
 
 msgid "Save as..."
+msgstr "另存为…"
+
+msgid "Save as…"
 msgstr "另存为…"
 
 msgid "Saving Avatar Failed"
@@ -3671,9 +3670,8 @@ msgstr "安全警告"
 msgid "Select Account"
 msgstr "选择账户"
 
-#, fuzzy
 msgid "Select Contacts"
-msgstr "已发送联系人:"
+msgstr "选择联系人"
 
 msgid "Select File…"
 msgstr "选择文件…"
@@ -3734,6 +3732,9 @@ msgstr "发送文件 (最大 %s)…"
 msgid "Send File Directly…"
 msgstr "直接发送文件…"
 
+msgid "Send Files"
+msgstr "发送文件"
+
 msgid "Send Files Directly"
 msgstr "直接发送文件"
 
@@ -3746,9 +3747,8 @@ msgstr "发送消息"
 msgid "Send Message Receipts"
 msgstr "发送消息回执"
 
-#, fuzzy
 msgid "Send Messages with Control+Enter"
-msgstr "向联系人发送消息"
+msgstr "使用Control+Enter来发送消息"
 
 msgid "Send Read Markers"
 msgstr "发送已读标记"
@@ -3855,9 +3855,8 @@ msgstr "显示内容"
 msgid "Show Gajim"
 msgstr "显示 Gajim"
 
-#, fuzzy
 msgid "Show Invitation"
-msgstr "显示位置"
+msgstr "显示邀请"
 
 msgid "Show Join/Leave"
 msgstr "显示加入/离开"
@@ -3942,6 +3941,13 @@ msgstr "在启动时显示"
 msgid "Show only critical errors"
 msgstr "仅显示严重错误"
 
+msgid ""
+"Show previews automatically in public group chats (may disclose your data)"
+msgstr "在公共群聊中自动生成预览(可能公开您的数据)"
+
+msgid "Show previews for any URLs containing images (may be unsafe)"
+msgstr "为包含图片的任何 URL 生成预览(可能不安全)"
+
 msgid "Show previews for files"
 msgstr "显示文件预览"
 
@@ -3984,8 +3990,8 @@ msgstr "在您选定的服务器上注册一个新账户"
 msgid "Signup not allowed"
 msgstr "不允许注册"
 
-msgid "Size of preview image"
-msgstr "预览图片尺寸"
+msgid "Size of preview images in pixels"
+msgstr "预览图片尺寸(像素)"
 
 msgid "Sleeping"
 msgstr "正在睡觉"
@@ -4248,10 +4254,6 @@ msgid ""
 msgstr ""
 "文件 %s 已经收到，但似乎在传送中损坏了。\n"
 "重新下载？"
-
-#, python-format
-msgid "The following file could not be accessed and was not uploaded: %s"
-msgstr "无法访问下列文件所以未能上传：%s"
 
 msgid ""
 "The following warnings came up while trying to verify the server's "
@@ -4601,7 +4603,7 @@ msgid "Updates"
 msgstr "更新"
 
 msgid "Updates will be installed next time Gajim is started"
-msgstr "更新将在下一次 Gajim 启动时安装。"
+msgstr "更新将在下一次 Gajim 启动时安装"
 
 msgid "Upload Files"
 msgstr "上传文件"
@@ -4751,8 +4753,10 @@ msgstr "发生了什么"
 msgid "Where participants should go"
 msgstr "参与者将前往何处"
 
-msgid "Whether to check for a valid certificate"
-msgstr "是否检查有效的证书"
+msgid ""
+"Whether to check for a valid certificate before downloading (not safe to "
+"disable)"
+msgstr "是否在下载前检查证书有效性(禁用会不安全)"
 
 msgid "Which server should I choose?"
 msgstr "我应该选择哪个服务器呢？"
@@ -4857,9 +4861,6 @@ msgstr "您现在状态是 {show}{status}"
 msgid "You are offline."
 msgstr "您已离线。"
 
-msgid "You are trying to paste an image"
-msgstr "您将要粘贴一张图片"
-
 #, python-format
 msgid "You can join this group chat instead: xmpp:%s?join"
 msgstr "作为替代, 您可以加入这个聊天室: xmpp:%s?join"
@@ -4888,6 +4889,10 @@ msgstr "您没有权限在这个目录里创建文件。"
 msgid ""
 "You do not have the proper permissions to create files in this directory."
 msgstr "您没有合适的权限在这个目录里创建文件。"
+
+#, python-format
+msgid "You dropped something Gajim could not process: %s"
+msgstr "您拖放了 Gajim 无法处理的对象: %s"
 
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
@@ -5142,9 +5147,6 @@ msgstr "打开文件夹(_O)"
 msgid "_Overwrite"
 msgstr "覆盖(_O)"
 
-msgid "_Paste"
-msgstr "粘贴(_P)"
-
 msgid "_Please choose a server"
 msgstr "请选择一个服务器(_P)"
 
@@ -5181,8 +5183,8 @@ msgstr "撤回(_R)"
 msgid "_Save"
 msgstr "保存(_S)"
 
-msgid "_Save as"
-msgstr "另存为(_S)"
+msgid "_Save as…"
+msgstr "另存为(_S)…"
 
 msgid "_Search"
 msgstr "搜索(_S)"
@@ -5192,9 +5194,6 @@ msgstr "选择(_S)"
 
 msgid "_Send"
 msgstr "发送(_S)"
-
-msgid "_Send Files"
-msgstr "发送文件(_S)"
 
 msgid "_Show Certificate"
 msgstr "显示证书(_S)"
@@ -5291,7 +5290,7 @@ msgid "countrycode"
 msgstr "国家代码"
 
 msgid "dark skin"
-msgstr ""
+msgstr "暗色皮肤"
 
 msgid "datum"
 msgstr "数据"
@@ -5338,7 +5337,7 @@ msgid "lat"
 msgstr "纬度"
 
 msgid "light skin"
-msgstr ""
+msgstr "浅色皮肤"
 
 msgid "locality"
 msgstr "地区"
@@ -5350,13 +5349,13 @@ msgid "macOS"
 msgstr "macOS"
 
 msgid "medium skin tone"
-msgstr ""
+msgstr "中性皮肤"
 
 msgid "medium-dark skin"
-msgstr ""
+msgstr "中深色皮肤"
 
 msgid "medium-light skin"
-msgstr ""
+msgstr "中浅色皮肤"
 
 msgid "or"
 msgstr "或者"
@@ -5486,6 +5485,18 @@ msgstr "或者把图像拖放到这里"
 #~ "“%s” 不在您的联系人列表中。\n"
 #~ "请为发送此消息指定账户。"
 
+#~ msgid ""
+#~ "<a href='https://conversations.im/compliance/'>conversations.im/"
+#~ "compliance</a>"
+#~ msgstr ""
+#~ "<a href='https://conversations.im/compliance/'>conversations.im/"
+#~ "compliance</a>"
+
+#~ msgid ""
+#~ "<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
+#~ msgstr ""
+#~ "<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
+
 #~ msgid "<b>%(nick)s</b> from <b>%(room_name)s</b> requests voice"
 #~ msgstr "来自 <b>%(room_name)s</b> 的 <b>%(nick)s</b> 请求语音聊天"
 
@@ -5528,8 +5539,16 @@ msgstr "或者把图像拖放到这里"
 #~ "is not shown."
 #~ msgstr "允许以在提醒区域图标未显示时隐藏联系人列表窗口"
 
+#~ msgid "Allowed File Size"
+#~ msgstr "可允许的文件尺寸"
+
 #~ msgid "App Indicator Icon"
 #~ msgstr "应用提示图标"
+
+#~ msgid ""
+#~ "Are you sure you want to paste your clipboard's image into the chat "
+#~ "window?"
+#~ msgstr "您确定要将剪切板中的图片粘贴到当前聊天窗口中？"
 
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
@@ -5579,6 +5598,12 @@ msgstr "或者把图像拖放到这里"
 #~ msgid "Check if Gajim is running"
 #~ msgstr "请检查 Gajim 是否正在运行"
 
+#~ msgid "Choose a File to Send…"
+#~ msgstr "选择要发送的文件…"
+
+#~ msgid "Choose from various emoji styles"
+#~ msgstr "从各式表情符号风格中选择"
+
 #~ msgid "Clear chat window"
 #~ msgstr "清除聊天窗口"
 
@@ -5616,6 +5641,12 @@ msgstr "或者把图像拖放到这里"
 #~ msgid "Drop Files or Contacts"
 #~ msgstr "拖放文件或联系人"
 
+#~ msgid "Emoji"
+#~ msgstr "表情符号"
+
+#~ msgid "Emoji Theme"
+#~ msgstr "表情符号主题"
+
 #~ msgid "Enter Password"
 #~ msgstr "输入密码"
 
@@ -5636,6 +5667,9 @@ msgstr "或者把图像拖放到这里"
 
 #~ msgid "File path"
 #~ msgstr "文件路径"
+
+#~ msgid "Files to send"
+#~ msgstr "要发送的文件"
 
 #~ msgid "Forbid a participant to send you public or private messages"
 #~ msgstr "禁止参与者向你发送公开或私人消息"
@@ -5732,6 +5766,9 @@ msgstr "或者把图像拖放到这里"
 #~ msgid "Kick user from group chat by nickname"
 #~ msgstr "依据昵称将用户从群聊踢出"
 
+#~ msgid "Lat: %s Lon: %s"
+#~ msgstr "纬度: %s 经度: %s"
+
 #~ msgid "Leave the group chat"
 #~ msgstr "离开群聊"
 
@@ -5740,6 +5777,9 @@ msgstr "或者把图像拖放到这里"
 
 #~ msgid "Lists all contacts in the contact list, one for each line"
 #~ msgstr "列出联系人列表中所有联系人，每个联系人一行"
+
+#~ msgid "Location at Lat: %s Lon: %s"
+#~ msgstr "位置于纬度: %s 经度: %s"
 
 #~ msgid "Machine is going to sleep"
 #~ msgstr "机器即将休眠"
@@ -5779,6 +5819,9 @@ msgstr "或者把图像拖放到这里"
 #~ "message"
 #~ msgstr "打开与指定参与者的私聊窗口并发送一条消息"
 
+#~ msgid "Paste Image"
+#~ msgstr "粘贴图像"
+
 #~ msgid "Ping?"
 #~ msgstr "Ping？"
 
@@ -5811,6 +5854,9 @@ msgstr "或者把图像拖放到这里"
 
 #~ msgid "Quote…"
 #~ msgstr "引用…"
+
+#~ msgid "Remove Files"
+#~ msgstr "移除文件"
 
 #~ msgid "Removes contact from contact list"
 #~ msgstr "从联系人列表删除联系人"
@@ -5929,6 +5975,12 @@ msgstr "或者把图像拖放到这里"
 #~ msgid "Tabs"
 #~ msgstr "标签页"
 
+#~ msgid "The following address was not understood and was not uploaded: %s"
+#~ msgstr "无法理解下列地址所以未能上传：%s"
+
+#~ msgid "The following file could not be accessed and was not uploaded: %s"
+#~ msgstr "无法访问下列文件所以未能上传：%s"
+
 #~ msgid "The same as using a doc-string, except it supports translation"
 #~ msgstr "与使用 doc-string 相同，只是它支持翻译"
 
@@ -5997,6 +6049,9 @@ msgstr "或者把图像拖放到这里"
 #~ "You are no longer joined \"%(room)s\" or \"%(nick)s\" has left the chat."
 #~ msgstr "您不再在聊天室\"%(room)s\"中或\"%(nick)s\"已离开。"
 
+#~ msgid "You are trying to paste an image"
+#~ msgstr "您将要粘贴一张图片"
+
 #~ msgid "You have no active account"
 #~ msgstr "您没有活跃的账户"
 
@@ -6005,6 +6060,12 @@ msgstr "或者把图像拖放到这里"
 
 #~ msgid "_Invite"
 #~ msgstr "邀请(_I)"
+
+#~ msgid "_Paste"
+#~ msgstr "粘贴(_P)"
+
+#~ msgid "_Save as"
+#~ msgstr "另存为(_S)"
 
 #~ msgid "_Try Again"
 #~ msgstr "重试(_T)"

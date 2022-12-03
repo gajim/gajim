@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-30 21:47+0000\n"
+"POT-Creation-Date: 2022-12-03 08:42+0000\n"
 "PO-Revision-Date: 2009-10-29 23:50+0100\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -142,7 +142,7 @@ msgstr "%s nije ispravan nivo logovanja"
 #, python-format
 msgid ""
 "%s is online with multiple devices.\n"
-"Choose the device you would like to send the file to."
+"Choose the device you would like to send the files to."
 msgstr ""
 
 #, python-format
@@ -160,6 +160,26 @@ msgstr "Udaljeni kontakt je prekinuo prenos"
 #, fuzzy, python-format
 msgid "%s wants to send you a file"
 msgstr "%s Vam želi poslati datoteku."
+
+#, python-format
+msgctxt "positive longitude"
+msgid "%sE"
+msgstr ""
+
+#, python-format
+msgctxt "positive latitude"
+msgid "%sN"
+msgstr ""
+
+#, python-format
+msgctxt "negative latitude"
+msgid "%sS"
+msgstr ""
+
+#, python-format
+msgctxt "negative longitude"
+msgid "%sW"
+msgstr ""
 
 #, python-format
 msgid "(%(filesize_unit)s/s)"
@@ -218,15 +238,6 @@ msgstr "Opis"
 #, fuzzy
 msgid "<Plugin Name>"
 msgstr "Registracija neuspela"
-
-msgid ""
-"<a href='https://conversations.im/compliance/'>conversations.im/compliance</"
-"a>"
-msgstr ""
-
-msgid ""
-"<a href='https://xmpp.org/getting-started/'>xmpp.org/getting-started</a>"
-msgstr ""
 
 #, python-format
 msgid ""
@@ -682,6 +693,9 @@ msgstr "Nalozi"
 msgid "Accounts"
 msgstr "Nalozi"
 
+msgid "Action for left-clicking a preview"
+msgstr ""
+
 #, fuzzy
 msgid "Action on Close"
 msgstr "Gajim"
@@ -689,9 +703,6 @@ msgstr "Gajim"
 #, fuzzy
 msgid "Action when closing Gajim’s window"
 msgstr "Uvek zatvori Gajim"
-
-msgid "Action when left-clicking a preview"
-msgstr ""
 
 #, fuzzy
 msgid "Activate"
@@ -723,7 +734,7 @@ msgid "Add Entry"
 msgstr "Unos:"
 
 #, fuzzy
-msgid "Add Files"
+msgid "Add Files…"
 msgstr "Datoteka: "
 
 #, fuzzy
@@ -869,7 +880,7 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 
-msgid "Allowed File Size"
+msgid "Allows opening file:/ URIs when clicked."
 msgstr ""
 
 #, fuzzy
@@ -968,11 +979,6 @@ msgstr ""
 msgid "Are you sure you want to leave this group chat?"
 msgstr "Jeste li sigurni da želite napustiti grupni razgovor \"%s\"?"
 
-#, fuzzy
-msgid ""
-"Are you sure you want to paste your clipboard's image into the chat window?"
-msgstr "Jeste li sigurni da želite napustiti grupni razgovor \"%s\"?"
-
 msgid "Are you sure you want to quit Gajim?"
 msgstr "Jeste li sigurni da želite zatvoriti Gajim?"
 
@@ -996,8 +1002,9 @@ msgstr "Primljena Prva Poruka"
 msgid "Audio"
 msgstr ""
 
-msgid "Audio / Video"
-msgstr ""
+#, fuzzy
+msgid "Audio / Video Calls"
+msgstr "Privatni Razgovori"
 
 #, fuzzy
 msgid "Audio File"
@@ -1010,6 +1017,10 @@ msgstr "Podrazumevana poruka"
 #, fuzzy
 msgid "Audio Output Device"
 msgstr "Podrazumevana poruka"
+
+#, fuzzy
+msgid "Audio Preview"
+msgstr "Datoteka: "
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1398,10 +1409,6 @@ msgstr ""
 msgid "Choose Sound"
 msgstr "Odaberite zvuk"
 
-#, fuzzy
-msgid "Choose a File to Send…"
-msgstr "Odaberite datoteku za slanje..."
-
 msgid "Choose a color or select an image"
 msgstr ""
 
@@ -1412,9 +1419,6 @@ msgstr "Odaberite sliku"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Odaberite datoteku za slanje..."
-
-msgid "Choose from various emoji styles"
-msgstr ""
 
 #, fuzzy
 msgid "Choose the contact's groups"
@@ -1442,7 +1446,9 @@ msgstr "Odaberite zvuk"
 msgid "Clear message entry"
 msgstr "Poruka Poslata"
 
-msgid "Click messages to select them"
+msgid ""
+"Click messages to select them\n"
+"(Ctrl + Double Click to deselect)"
 msgstr ""
 
 #, fuzzy
@@ -1455,6 +1461,11 @@ msgstr ""
 #, fuzzy
 msgid "Click to view location"
 msgstr "Kliknite da biste postavili Vaš avatar"
+
+msgid ""
+"Clickable schemes in addition to the hard-coded list of IANA-registered "
+"ones. Space-separated, lower-case, no colons."
+msgstr ""
 
 #, fuzzy
 msgid "Client Certificate"
@@ -1700,6 +1711,10 @@ msgid "Copy Email Address"
 msgstr "_Kopiraj džaber ID/e-mejl adresu"
 
 #, fuzzy
+msgid "Copy Link"
+msgstr "_Kopiraj lokaciju veze"
+
+#, fuzzy
 msgid "Copy Link Location"
 msgstr "_Kopiraj lokaciju veze"
 
@@ -1731,11 +1746,11 @@ msgid "Correct the last message"
 msgstr "statusna poruka"
 
 #, fuzzy
-msgid "Could not Open File"
+msgid "Could not access file"
 msgstr "Ne mogu učitati sliku"
 
-#, fuzzy
-msgid "Could not access file"
+#, fuzzy, python-format
+msgid "Could not open file (%s)"
 msgstr "Ne mogu učitati sliku"
 
 #, fuzzy
@@ -1883,6 +1898,10 @@ msgid "Direct Messages"
 msgstr "Podrazumevana poruka"
 
 #, fuzzy
+msgid "Direct transfer (not encrypted)"
+msgstr "Prenos datoteke zaustavljen"
+
+#, fuzzy
 msgid "Directory"
 msgstr "_Istorijat"
 
@@ -1973,6 +1992,10 @@ msgid "Download"
 msgstr "Skidanje"
 
 #, fuzzy
+msgid "Download File"
+msgstr "Skidanje"
+
+#, fuzzy
 msgid "Download Update"
 msgstr "Skidanje"
 
@@ -1995,6 +2018,10 @@ msgstr "Programira"
 #, fuzzy, python-format
 msgid "Draft: %s"
 msgstr "Status: "
+
+#, fuzzy
+msgid "Drop files here"
+msgstr "Šalje datoteku kontaktu"
 
 #, fuzzy
 msgid "Drop files or contacts"
@@ -2034,15 +2061,8 @@ msgstr ""
 msgid "Email"
 msgstr "Novi E-mejl"
 
-msgid "Emoji"
-msgstr ""
-
 msgid "Emoji Shortcodes"
 msgstr ""
-
-#, fuzzy
-msgid "Emoji Theme"
-msgstr "gajim-remote"
 
 msgid "Enable"
 msgstr "Omogući"
@@ -2062,6 +2082,9 @@ msgid "Enables Gajim to play sounds for various notifications"
 msgstr ""
 
 msgid "Enables Gajim to provide Audio and Video chats"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to provide a notification area icon"
@@ -2290,6 +2313,10 @@ msgid "File Preview"
 msgstr ""
 
 #, fuzzy
+msgid "File Size Limit"
+msgstr "Datoteka je prazna"
+
+#, fuzzy
 msgid "File Transfer"
 msgstr "Prenosi datoteka"
 
@@ -2338,6 +2365,9 @@ msgstr ""
 msgid "File size unknown"
 msgstr ""
 
+msgid "File too big, will use direct transfer (not encrypted)"
+msgstr ""
+
 msgid "File transfer stopped"
 msgstr "Prenos datoteke zaustavljen"
 
@@ -2352,10 +2382,6 @@ msgstr "Datoteka: %s"
 #, python-format
 msgid "Filename: %s"
 msgstr "Ime datoteke: %s"
-
-#, fuzzy
-msgid "Files to send"
-msgstr "Odaberite datoteku za slanje..."
 
 #, fuzzy
 msgid "Filetransfer Preference"
@@ -2497,13 +2523,6 @@ msgstr "Pošaljilac: "
 
 msgid "General"
 msgstr "Opšte"
-
-msgid ""
-"Generate preview automatically in public group chats (may disclose your data)"
-msgstr ""
-
-msgid "Generate preview for any URLs containing images (may be unsafe)"
-msgstr ""
 
 #, fuzzy
 msgid "Global Group Chat Search"
@@ -2966,10 +2985,6 @@ msgstr ""
 msgid "Last but not least"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "Lat: %s Lon: %s"
-msgstr "Poslednji status: %s"
-
 #, fuzzy
 msgid "Leave Group Chat"
 msgstr "Napusti grupne razgovore"
@@ -3017,13 +3032,9 @@ msgstr ""
 msgid "Local Time"
 msgstr "Lokalni džaber ID:"
 
-#, fuzzy
-msgid "Location"
+#, fuzzy, python-format
+msgid "Location at %s"
 msgstr "Obaveštenje"
-
-#, python-format
-msgid "Location at Lat: %s Lon: %s"
-msgstr ""
 
 #, fuzzy
 msgid "Location:"
@@ -3093,7 +3104,7 @@ msgstr ""
 msgid "Mark as read"
 msgstr ""
 
-msgid "Maximum file size for preview generation"
+msgid "Maximum file size for preview downloads"
 msgstr ""
 
 #, fuzzy
@@ -3565,10 +3576,6 @@ msgstr "Lozinke se ne poklapaju"
 msgid "Past Developers"
 msgstr "Prošli programeri:"
 
-#, fuzzy
-msgid "Paste Image"
-msgstr "Odaberite sliku"
-
 msgid "Paste Last Input"
 msgstr ""
 
@@ -3928,10 +3935,6 @@ msgstr "Nedavno:"
 msgid "Remove Contact"
 msgstr "Preimenuj kontakt"
 
-#, fuzzy
-msgid "Remove Files"
-msgstr "_Ukloni"
-
 msgid "Remove Group"
 msgstr "Ukloni grupu"
 
@@ -4044,13 +4047,9 @@ msgid "Requires: Gspell"
 msgstr "Zahteva libgtkspell."
 
 msgid ""
-"Requires: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-plugins-"
-"base, gstreamer1.0-plugins-ugly, gstreamer1.0-libav, and gstreamer1.0-gtk3"
+"Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+"ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
 msgstr ""
-
-#, fuzzy
-msgid "Requires: gir1.2-gupnpigd-1.0"
-msgstr "Zahteva python-gnome2."
 
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
@@ -4059,6 +4058,13 @@ msgstr "Zahteva gnome-keyring and python-gnome2-desktop, ili kwalletcli."
 #, fuzzy
 msgid "Requires: gsound"
 msgstr "Zahteva python-dbus."
+
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
+#, fuzzy
+msgid "Requires: gupnpigd-1.0"
+msgstr "Zahteva python-gnome2."
 
 #, fuzzy
 msgid "Requires: libappindicator3"
@@ -4176,10 +4182,6 @@ msgid "Save"
 msgstr "Imam "
 
 #, fuzzy
-msgid "Save As…"
-msgstr "Imam "
-
-#, fuzzy
 msgid "Save File as…"
 msgstr "Snimi datoteku kao..."
 
@@ -4189,6 +4191,10 @@ msgstr "Sačuvaj lozinku"
 
 #, fuzzy
 msgid "Save as..."
+msgstr "Imam "
+
+#, fuzzy
+msgid "Save as…"
 msgstr "Imam "
 
 #, fuzzy
@@ -4340,6 +4346,10 @@ msgstr "Snimi datoteku kao..."
 #, fuzzy
 msgid "Send File Directly…"
 msgstr "Snimi datoteku kao..."
+
+#, fuzzy
+msgid "Send Files"
+msgstr "Pošalji _datoteku"
 
 #, fuzzy
 msgid "Send Files Directly"
@@ -4596,6 +4606,13 @@ msgstr "_Prikaži listu kontakata"
 msgid "Show only critical errors"
 msgstr "Prikaži događaj u listi kontakata"
 
+msgid ""
+"Show previews automatically in public group chats (may disclose your data)"
+msgstr ""
+
+msgid "Show previews for any URLs containing images (may be unsafe)"
+msgstr ""
+
 #, fuzzy
 msgid "Show previews for files"
 msgstr "Veza nije dostupna"
@@ -4648,7 +4665,7 @@ msgstr ""
 msgid "Signup not allowed"
 msgstr "Karakter nije dozvoljen"
 
-msgid "Size of preview image"
+msgid "Size of preview images in pixels"
 msgstr ""
 
 msgid "Sleeping"
@@ -4952,10 +4969,6 @@ msgid ""
 "The file %s has been received, but it seems to have been damaged along the "
 "way.\n"
 "Do you want to download it again?"
-msgstr ""
-
-#, python-format
-msgid "The following file could not be accessed and was not uploaded: %s"
 msgstr ""
 
 msgid ""
@@ -5509,7 +5522,9 @@ msgid "Where participants should go"
 msgstr ""
 
 #, fuzzy
-msgid "Whether to check for a valid certificate"
+msgid ""
+"Whether to check for a valid certificate before downloading (not safe to "
+"disable)"
 msgstr "Ignoriši ovu grešku za ovaj sertifikat."
 
 msgid "Which server should I choose?"
@@ -5626,10 +5641,6 @@ msgstr "Od sada ste poznati kao %s"
 msgid "You are offline."
 msgstr ""
 
-#, fuzzy
-msgid "You are trying to paste an image"
-msgstr "Zatvorićete nekoliko jezičaka"
-
 #, fuzzy, python-format
 msgid "You can join this group chat instead: xmpp:%s?join"
 msgstr "Možete se priključiti sobi %s umesto ove"
@@ -5664,6 +5675,10 @@ msgstr "Nemate privilegija za pisanje u ovoj fascikli"
 msgid ""
 "You do not have the proper permissions to create files in this directory."
 msgstr "Nemate privilegija za pisanje u ovoj fascikli"
+
+#, python-format
+msgid "You dropped something Gajim could not process: %s"
+msgstr ""
 
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
@@ -5972,9 +5987,6 @@ msgstr "_Otvori sadržavajuću fasciklu"
 msgid "_Overwrite"
 msgstr ""
 
-msgid "_Paste"
-msgstr ""
-
 #, fuzzy
 msgid "_Please choose a server"
 msgstr "Molimo Vas napravite novu čistu temu sa željenim imenom."
@@ -6020,7 +6032,7 @@ msgid "_Save"
 msgstr "Imam "
 
 #, fuzzy
-msgid "_Save as"
+msgid "_Save as…"
 msgstr "Imam "
 
 msgid "_Search"
@@ -6031,10 +6043,6 @@ msgstr ""
 
 msgid "_Send"
 msgstr "_Pošalji"
-
-#, fuzzy
-msgid "_Send Files"
-msgstr "Pošalji _datoteku"
 
 #, fuzzy
 msgid "_Show Certificate"
@@ -6359,6 +6367,12 @@ msgstr ""
 #~ msgid "App Indicator Icon"
 #~ msgstr "<b>Aplikacije</b>"
 
+#, fuzzy
+#~ msgid ""
+#~ "Are you sure you want to paste your clipboard's image into the chat "
+#~ "window?"
+#~ msgstr "Jeste li sigurni da želite napustiti grupni razgovor \"%s\"?"
+
 #~ msgid ""
 #~ "Argument \"%(arg)s\" is not specified. \n"
 #~ "Type \"%(basename)s help %(command)s\" for more info"
@@ -6415,6 +6429,10 @@ msgstr ""
 #~ msgstr "Molimo proverite da li je Gajim pokrenut"
 
 #, fuzzy
+#~ msgid "Choose a File to Send…"
+#~ msgstr "Odaberite datoteku za slanje..."
+
+#, fuzzy
 #~ msgid "Clear chat window"
 #~ msgstr "Način korišćenja: /%s, prazni tekstualni prozor"
 
@@ -6446,6 +6464,10 @@ msgstr ""
 #~ msgstr "Pozovi kontakte"
 
 #, fuzzy
+#~ msgid "Emoji Theme"
+#~ msgstr "gajim-remote"
+
+#, fuzzy
 #~ msgid "Enter Password"
 #~ msgstr "Unesite novu lozinku:"
 
@@ -6458,6 +6480,10 @@ msgstr ""
 
 #~ msgid "File path"
 #~ msgstr "Putanja do datoteke"
+
+#, fuzzy
+#~ msgid "Files to send"
+#~ msgstr "Odaberite datoteku za slanje..."
 
 #, fuzzy
 #~ msgid "Format your message…"
@@ -6551,6 +6577,10 @@ msgstr ""
 #~ msgstr "Pozvani ste u grupni razgovor"
 
 #, fuzzy
+#~ msgid "Lat: %s Lon: %s"
+#~ msgstr "Poslednji status: %s"
+
+#, fuzzy
 #~ msgid "Leave the group chat"
 #~ msgstr "Napusti grupne razgovore"
 
@@ -6600,6 +6630,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Način korišćenja: /%s <nadimak>, otvara privatni razgovor sa učesnikom."
 
+#, fuzzy
+#~ msgid "Paste Image"
+#~ msgstr "Odaberite sliku"
+
 #~ msgid "Ping?"
 #~ msgstr "Ping?"
 
@@ -6636,6 +6670,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Quote…"
 #~ msgstr "_Citat"
+
+#, fuzzy
+#~ msgid "Remove Files"
+#~ msgstr "_Ukloni"
 
 #, fuzzy
 #~ msgid "Removes contact from contact list"
@@ -6788,6 +6826,10 @@ msgstr ""
 #~ msgstr ""
 #~ "Više niste u grupnom razgovoru \"%(room)s\" ili je \"%(nick)s\" otišao."
 
+#, fuzzy
+#~ msgid "You are trying to paste an image"
+#~ msgstr "Zatvorićete nekoliko jezičaka"
+
 #~ msgid "You have no active account"
 #~ msgstr "nemate aktivnih računa"
 
@@ -6798,6 +6840,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Invite"
 #~ msgstr "Pozo_vi"
+
+#, fuzzy
+#~ msgid "_Save as"
+#~ msgstr "Imam "
 
 #, fuzzy
 #~ msgid "_Try Again"
