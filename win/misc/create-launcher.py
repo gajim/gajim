@@ -50,8 +50,9 @@ def get_build_args() -> list[str]:
 
 def build_exe(source_path: str,
               resource_path: str,
-              is_gui: bool,
-              out_path: str) -> None:
+              out_path: str,
+              *,
+              is_gui: bool) -> None:
 
     args = ['gcc', '-s']
     if is_gui:
@@ -61,7 +62,7 @@ def build_exe(source_path: str,
     subprocess.check_call(args)
 
 
-def get_launcher_code(debug: bool) -> str:
+def get_launcher_code(*, debug: bool) -> str:
     template = '''\
 #include "Python.h"
 #define WIN32_LEAN_AND_MEAN
@@ -166,8 +167,9 @@ def build_launcher(out_path: str,
                    product_name: str,
                    product_version: str,
                    company_name: str,
+                   *,
                    is_gui: bool,
-                   debug: bool = False) -> None:
+                   debug: bool) -> None:
 
     src_ico = os.path.abspath(icon_path)
     target = os.path.abspath(out_path)
@@ -179,7 +181,7 @@ def build_launcher(out_path: str,
     try:
         os.chdir(temp)
         with open('launcher.c', 'w') as h:
-            h.write(get_launcher_code(debug))
+            h.write(get_launcher_code(debug=debug))
         shutil.copyfile(src_ico, 'launcher.ico')
         with open('launcher.rc', 'w') as h:
             h.write(get_resouce_code(
@@ -187,7 +189,7 @@ def build_launcher(out_path: str,
                 'launcher.ico', product_name, product_version, company_name))
 
         build_resource('launcher.rc', 'launcher.res')
-        build_exe('launcher.c', 'launcher.res', is_gui, target)
+        build_exe('launcher.c', 'launcher.res', target, is_gui=is_gui)
     finally:
         os.chdir(dir_)
         shutil.rmtree(temp)
@@ -205,12 +207,12 @@ def main() -> None:
     build_launcher(
         os.path.join(target, 'Gajim.exe'),
         os.path.join(misc, 'gajim.ico'), 'Gajim', 'Gajim',
-        version, company_name, True)
+        version, company_name, is_gui=True, debug=False)
 
     build_launcher(
         os.path.join(target, 'Gajim-Debug.exe'),
         os.path.join(misc, 'gajim.ico'), 'Gajim', 'Gajim',
-        version, company_name, False, debug=True)
+        version, company_name, is_gui=False, debug=True)
 
     # build_launcher(
     #     os.path.join(target, "history_manager.exe"),

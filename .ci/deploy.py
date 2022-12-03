@@ -4,6 +4,7 @@ from typing import Any
 from typing import Optional
 
 import functools
+import logging
 import json
 import os
 import sys
@@ -12,7 +13,6 @@ from ftplib import FTP_TLS
 from pathlib import Path
 
 import requests
-from rich.console import Console
 
 
 FTP_URL = 'panoramix.gajim.org'
@@ -27,17 +27,19 @@ LINUX_NIGHTLY_FOLDER = 'downloads/snap'
 
 RELEASE_FOLDER_BASE = 'downloads'
 
-console = Console()
+
+logging.basicConfig(level='INFO', format='%(levelname)s: %(message)s')
+log = logging.getLogger()
 
 
 def ftp_connection(func: Any) -> Any:
     @functools.wraps(func)
     def func_wrapper(filedir: Path) -> None:
         ftp = FTP_TLS(FTP_URL, FTP_USER, FTP_PASS)
-        console.print('Successfully connected to', FTP_URL)
+        log.info('Successfully connected to %s', FTP_URL)
         func(ftp, filedir)
         ftp.quit()
-        console.print('Quit')
+        log.info('Quit')
         return
     return func_wrapper
 
@@ -50,14 +52,14 @@ def get_release_folder_from_tag(tag: str) -> str:
 def get_gajim_tag() -> str:
     tag = os.environ.get('CI_COMMIT_TAG')
     if tag is None:
-        exit('No tag found')
+        sys.exit('No tag found')
     return tag
 
 
 def find_linux_tarball(filedir: Path) -> Path:
     files = list(filedir.glob('gajim-*.tar.gz'))
     if len(files) != 1:
-        exit('Unknown files found')
+        sys.exit('Unknown files found')
     return files[0]
 
 
@@ -86,7 +88,7 @@ def upload_file(ftp: FTP_TLS,
     if name is None:
         name = filepath.name
 
-    console.print('Upload file', filepath.name, 'as', name)
+    log.info('Upload file %s as %s', filepath.name, name)
     with open(filepath, 'rb') as f:
         ftp.storbinary('STOR ' + name, f)
 
@@ -103,7 +105,7 @@ def download_artifacts(path: Path) -> None:
             filename = artifact['fileName']
             file_url = artifact['fileUrl']
 
-            console.print('Download', filename, '...')
+            log.info('Download %s', filename)
 
             req = requests.get(file_url, headers=HEADERS)
             req.raise_for_status()

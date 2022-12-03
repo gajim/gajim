@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
-import re
 import argparse
 from datetime import datetime
 from pathlib import Path
+import re
 import subprocess
+import sys
 
 REPO_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,7 +24,7 @@ def get_current_version() -> str:
 
     match = re.search(VERSION_RX, content)
     if match is None:
-        exit('Unable to find current version')
+        sys.exit('Unable to find current version')
     return match[0]
 
 

@@ -12,11 +12,15 @@
 import subprocess
 import os
 import sys
+import logging
 from typing import Optional
 
 import gi
 gi.require_version('GIRepository', '2.0')
 from gi.repository import GIRepository  # noqa: E402
+
+logging.basicConfig(level='INFO', format='%(levelname)s: %(message)s')
+log = logging.getLogger()
 
 
 def get_required_by_typelibs() -> set[str]:
@@ -49,7 +53,7 @@ def get_dependencies(filename: str) -> list[str]:
     try:
         data = subprocess.getoutput('objdump -p %s' % filename)
     except Exception as error:
-        print(error)
+        log.error(error)
         return deps
 
     for line in data.splitlines():
@@ -79,12 +83,12 @@ def get_things_to_delete(root: str) -> list[str]:
                     all_libs.add(lib)
                     needed.add(lib)
                     if find_lib(root, lib) is None:
-                        print('MISSING:', path, lib)
+                        log.info('MISSING: %s %s', path, lib)
 
     for lib in get_required_by_typelibs():
         needed.add(lib)
         if find_lib(root, lib) is None:
-            print('MISSING:', lib)
+            log.info('MISSING: %s', lib)
 
     result: list[str] = []
     libs = all_libs - needed
@@ -106,7 +110,7 @@ def main() -> None:
     libs = get_things_to_delete(sys.prefix)
     while libs:
         for lib in libs:
-            print('DELETE:', lib)
+            log.info('DELETE: %s', lib)
             os.unlink(lib)
         libs = get_things_to_delete(sys.prefix)
 

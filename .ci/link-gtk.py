@@ -3,7 +3,9 @@
 # Creates links from gui folder to all files in the gtk folder
 # This is needed for pyright to work correctly with the dynamic gui imports
 
+import logging
 from pathlib import Path
+import sys
 
 IGNORED_FILES = ['__init__.py']
 IGNORED_DIRS = ['__pycache__']
@@ -11,10 +13,15 @@ IGNORED_DIRS = ['__pycache__']
 cwd = Path.cwd()
 
 if cwd.name != 'gajim':
-    exit('Script needs to be excecuted from gajim repository root directory')
+    sys.exit('Script needs to be excecuted from gajim repository '
+             'root directory')
 
 gui_path = cwd / 'gajim' / 'gui'
 gtk_path = cwd / 'gajim' / 'gtk'
+
+
+logging.basicConfig(level='INFO', format='%(levelname)s: %(message)s')
+log = logging.getLogger()
 
 
 def cleanup_dir(target_dir: Path) -> None:
@@ -31,7 +38,7 @@ def link(target: Path) -> None:
     source = source.replace('gajim/gtk', 'gajim/gui')
     source = Path(source)
     source.symlink_to(target)
-    print('create symlink from', source, 'to', target)
+    log.info('create symlink from %s -> %s', source, target)
 
 
 def link_files(source_dir: Path) -> None:

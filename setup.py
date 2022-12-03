@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import cast
 
+import logging
 import os
 import sys
 
@@ -38,6 +39,10 @@ BUILD_DIR = REPO_DIR / 'build'
 ALL_LINGUAS = sorted([lang.stem for lang in TRANS_DIR.glob('*.po')])
 
 
+logging.basicConfig(level='INFO', format='%(levelname)s: %(message)s')
+log = logging.getLogger()
+
+
 def newer(source: Path, target: Path) -> bool:
     if not source.exists():
         raise ValueError('file "%s" does not exist' % source.resolve())
@@ -67,7 +72,7 @@ def build_translation() -> None:
                            cwd=REPO_DIR,
                            check=True)
 
-            print('Compiling %s >> %s' % (po_file, mo_file))
+            log.info('Compiling %s >> %s', po_file, mo_file)
 
 
 def install_trans(data_files: DataFilesT) -> None:
@@ -99,7 +104,7 @@ def build_man() -> None:
         with open(filename, 'rb') as f_in,\
                 gzip.open(man_file_gz, 'wb') as f_out:
             f_out.writelines(f_in)
-            print('Compiling %s >> %s' % (filename, man_file_gz))
+            log.info('Compiling %s >> %s', filename, man_file_gz)
 
 
 def install_man(data_files: DataFilesT) -> None:
@@ -148,7 +153,7 @@ def merge(in_file: Path,
             msg = ('ERROR: %s was not merged into the translation files!\n' %
                    out_file)
             raise SystemExit(msg)
-        print('Compiling %s >> %s' % (in_file, out_file))
+        log.info('Compiling %s >> %s', in_file, out_file)
 
 
 class build(_build):

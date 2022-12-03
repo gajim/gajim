@@ -2,13 +2,13 @@
 
 from typing import Any
 
+import logging
 import json
 import os
 import requests
+import sys
 import time
 from pathlib import Path
-
-from rich.console import Console
 
 
 ACCOUNT = 'lovetox'
@@ -25,7 +25,8 @@ BUILDS_API_URL = f'{BASE_URL}/builds'
 PROJECT_API_URL = f'{BASE_URL}/projects/{ACCOUNT}/{PROJECT_SLUG}'
 
 
-console = Console()
+logging.basicConfig(level='INFO', format='%(levelname)s: %(message)s')
+log = logging.getLogger()
 
 
 def get_gajim_version() -> str:
@@ -34,13 +35,13 @@ def get_gajim_version() -> str:
 
     tag = os.environ.get('CI_COMMIT_TAG')
     if tag is None:
-        exit('No tag found')
+        sys.exit('No tag found')
     return tag
 
 
 def push_yaml_to_project() -> None:
-    console.print('Push settings ...')
-    with open('.ci/appveyor.yml', 'r') as file:
+    log.info('Push settings ...')
+    with open('.ci/appveyor.yml') as file:
         yaml = file.read()
 
     req = requests.put(SETTINGS_API_URL, data=yaml, headers=HEADERS)
@@ -48,7 +49,7 @@ def push_yaml_to_project() -> None:
 
 
 def start_build() -> str:
-    console.print('Start build ...')
+    log.info('Start build ...')
     payload = {
         'accountName': ACCOUNT,
         'projectSlug': PROJECT_SLUG,
@@ -66,7 +67,7 @@ def start_build() -> str:
 
 def is_build_finished(build: dict[str, str]) -> bool:
     if build['status'] in ('failed', 'cancelled'):
-        exit('Found failed job')
+        sys.exit('Found failed job')
 
     return build['status'] == 'success'
 
@@ -76,18 +77,18 @@ def check_for_response(build_id: str) -> None:
     while True:
         time.sleep(RETRY_TIMEOUT)
 
-        console.print('Check build status ...')
+        log.info('Check build status ...')
         req = requests.get(PROJECT_API_URL, headers=HEADERS)
         req.raise_for_status()
         response = req.json()
         build = response['build']
         if build_id != build['buildId']:
-            exit('Unable to find buildid: %s' % build_id)
+            sys.exit('Unable to find buildid: %s' % build_id)
 
         if is_build_finished(build):
             break
 
-        console.print('Build status:', build['status'])
+        log.info('Build status: %s', build['status'])
 
     build_folder = Path.cwd() / 'build'
     build_folder.mkdir()
@@ -96,7 +97,7 @@ def check_for_response(build_id: str) -> None:
         response = get_job_response(job['jobId'])
         result = build_folder / f'{job["jobId"]}.json'
         result.write_text(json.dumps(response))
-        console.print('Write job response:', result)
+        log.info('Write job response: %s', result)
 
 
 def get_job_response(job_id: str) -> list[dict[str, Any]]:

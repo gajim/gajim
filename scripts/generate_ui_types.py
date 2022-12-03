@@ -3,15 +3,21 @@
 # Reads all .ui files and creates builder.pyi
 # Excecute this script from the repo root dir
 
+import logging
+import sys
 from io import TextIOWrapper
 from pathlib import Path
-from xml.etree import ElementTree as ET
+from xml.etree import ElementTree
 
+
+logging.basicConfig(level='INFO', format='%(levelname)s: %(message)s')
+log = logging.getLogger()
 
 cwd = Path.cwd()
 
 if cwd.name != 'gajim':
-    exit('Script needs to be excecuted from gajim repository root directory')
+    sys.exit('Script needs to be excecuted from gajim repository '
+             'root directory')
 
 in_path = cwd / 'gajim' / 'data' / 'gui'
 out_path = cwd / 'gajim' / 'gtk' / 'builder.pyi'
@@ -45,14 +51,14 @@ def get_builder(file_name: str, widgets: list[str] = ...) -> Builder: ...'''
 def make_class_name(path: Path) -> str:
     name = path.name.removesuffix('.ui')
     names = name.split('_')
-    names = map(lambda x: x.capitalize(), names)
+    names = [name.capitalize() for name in names]
     return ''.join(names) + 'Builder'
 
 
 def parse(path: Path, file: TextIOWrapper) -> str:
-    print('read', path)
+    log.info('Read %s', path)
     lines: list[str] = []
-    tree = ET.parse(path)
+    tree = ElementTree.parse(path)
     for node in tree.iter(tag='object'):
         id_ = node.attrib.get('id')
         if id_ is None:
