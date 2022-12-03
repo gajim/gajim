@@ -1,3 +1,62 @@
+Gajim 1.5.4 (04 Dec 2022)
+
+  Improvements
+
+  * DataFormWidget: Set min width on right box (#11222)
+  * MUC: Add method for aborting join
+  * Message selection: Imrpove wording for deselecting messages
+  * Message selection: Improve styling
+  * Features: Add entry for Audio Preview
+  * Styling: Introduce URI scheme whitelisting (#11266)
+  * Message selection: Use date_time_format instead of time_format
+  * Settings: Unify timestamp settings (#10948)
+  * Prettify display of geographical locations
+  * ChatList: Scroll to top when switching workspace
+  * Preferences: Improve preview settings
+  * Chatstates: Add a timeout for the "composing" animation
+  * Accounts window: Use equal widths for account switch label
+  * VCardGrid: Linkify all URI-type fields iff they are valid URIs
+  * URI parsing: Detect invalid file URIs earlier
+  * Styling: Validate link syntax deeper and *after* parenthesis correction
+  * Add msg_log_id to live message events (#11263)
+
+  Change
+
+  * Dependencies: Remove pyOpenSSL, add python-cryptography
+  * Jingle: Remove XTLS support (#11160)
+  * Add FileTransferSelector as a central page for sending files (#9511)
+  * Block opening file:/ links by default (#11276)
+
+  Performance
+
+  * Control: Request history more efficiently
+
+  Bug Fixes
+
+  * Preview: Handle multiple simultaneous certificate verification errors
+  * Styling: Linkify URIs only if at the start of a word
+  * MessageInputTextView: Reintroduce gui_extension_point
+  * GUI tests: Adapt GUI tests to Gajim changes
+  * SSLErrorDialog: Fix test, remove OpenSSL usage
+  * ChatFunctionPage: Don't close control on cancelling join error (#11116)
+  * SearchView: Set chat type correctly for ResultRows (#11087)
+  * Chatstates: Switch to Chatstate.ACTIVE after timeout
+  * GroupchatRoster: Set visibility when hiding
+  * MessageActionsBox: Reintroduce gui_extension_point
+  * Preview: Respect MUC context for PMs (#11289)
+  * ConversationView: Fix scrollbar not being the right-most widget
+  * Preview: Stop further processing if decompression bomb detected (#11280)
+  * URI parsing: More robustness with geo URIs
+  * URI parsing: Properly unescape mailto URIs
+  * URI parsing: Properly unescape XMPP URIs and handle unknown query types
+  * MessageInputTextView: Handle is_correcting if no contact is set (#11272)
+  * Fix various issues with chat markers
+  * Plugins: Replace usage of gui_extention_point()
+  * CSS: Fix settings related inconsistencies
+  * CSS: Move overriding rules to bottom (#11269)
+  * Message selection: Don’t fail hard if log_line_id is None (#11263)
+  * Don’t fail when trying to reset last message id
+
 Gajim 1.5.3 (31 Oct 2022)
 
   New
