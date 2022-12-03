@@ -106,7 +106,7 @@ def generate_avatar(letters: str,
     context.set_operator(cairo.Operator.OVER)
     PangoCairo.show_layout(context, layout)
 
-    return context.get_target()  # pyright: ignore
+    return context.get_target()
 
 
 @lru_cache(maxsize=None)
@@ -183,7 +183,7 @@ def add_status_to_avatar(surface: cairo.ImageSurface,
         context.set_line_width(clip_radius / 4)
         context.stroke()
 
-    return context.get_target()  # pyright: ignore
+    return context.get_target()
 
 
 @lru_cache(maxsize=128)
@@ -220,7 +220,7 @@ def get_show_circle(show: Union[str, types.PresenceShowT],
         context.set_line_width(size / 10)
         context.stroke()
 
-    return context.get_target()  # pyright: ignore
+    return context.get_target()
 
 
 def fit(surface: cairo.ImageSurface, size: int) -> cairo.ImageSurface:
@@ -243,7 +243,7 @@ def fit(surface: cairo.ImageSurface, size: int) -> cairo.ImageSurface:
     context.scale(factor, factor)
     context.set_source_surface(square_surface, 0, 0)
     context.paint()
-    return context.get_target()  # pyright: ignore
+    return context.get_target()
 
 
 def square(surface: cairo.ImageSurface, size: int) -> cairo.ImageSurface:
@@ -267,7 +267,7 @@ def square(surface: cairo.ImageSurface, size: int) -> cairo.ImageSurface:
 
     context.set_source_surface(surface, x_pos, y_pos)
     context.paint()
-    return context.get_target()  # pyright: ignore
+    return context.get_target()
 
 
 def clip(surface: cairo.ImageSurface, mode: str) -> cairo.ImageSurface:
@@ -297,7 +297,7 @@ def clip_circle(surface: cairo.ImageSurface) -> cairo.ImageSurface:
     context.clip()
     context.paint()
 
-    return context.get_target()  # pyright: ignore
+    return context.get_target()
 
 
 def round_corners(surface: cairo.ImageSurface) -> cairo.ImageSurface:
@@ -328,7 +328,7 @@ def round_corners(surface: cairo.ImageSurface) -> cairo.ImageSurface:
 
     context.paint()
 
-    return context.get_target()  # pyright: ignore
+    return context.get_target()
 
 
 def convert_to_greyscale(surface: cairo.ImageSurface) -> cairo.ImageSurface:
@@ -341,7 +341,7 @@ def convert_to_greyscale(surface: cairo.ImageSurface) -> cairo.ImageSurface:
     context.set_source_rgba(1, 1, 1, 0.5)
     context.rectangle(0, 0, surface.get_width(), surface.get_height())
     context.fill()
-    return context.get_target()  # pyright: ignore
+    return context.get_target()
 
 
 class AvatarStorage(metaclass=Singleton):

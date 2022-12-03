@@ -16,6 +16,9 @@
 
 from typing import Union
 from typing import TYPE_CHECKING
+from typing import TypeVar
+
+import cairo
 
 
 if TYPE_CHECKING:
@@ -39,3 +42,5 @@ if TYPE_CHECKING:
 ControlT = Union['ChatControl']
 
 ConversationViewT = Union['ConversationView']
+
+SomeSurface = TypeVar('SomeSurface', bound=cairo.Surface)

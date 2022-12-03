@@ -34,6 +34,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 from gajim.common.helpers import get_file_path_from_dnd_dropped_uri
 
+from . import types
 from .dialogs import ErrorDialog
 from .filechoosers import AvatarChooserDialog
 from .util import scale_with_ratio
@@ -286,7 +287,11 @@ class CropArea(Gtk.DrawingArea):
         return GdkPixbuf.Pixbuf.new_subpixbuf(
             self._browse_pixbuf, self._crop.x, self._crop.y, width, height)
 
-    def _on_draw(self, _widget: Gtk.Widget, context: cairo.Context) -> bool:
+    def _on_draw(self,
+                 _widget: Gtk.Widget,
+                 context: cairo.Context[types.SomeSurface]
+                 ) -> bool:
+
         if self._browse_pixbuf is None:
             return False
 
