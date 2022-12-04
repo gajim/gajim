@@ -16,6 +16,7 @@ gajim/gui/*
 
 __pycache__/
 .mypy_cache/
+.ruff_cache/
 
 # Build folders
 

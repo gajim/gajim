@@ -33,23 +33,14 @@ test-pyright:
     - $(npm bin)/pyright
   interruptible: true
 
-test-flake8:
+test-ruff:
   stage: test
   rules:
     - changes:
       - "**/*.py"
   script:
-    - flake8
-  interruptible: true
-
-test-pylint:
-  stage: test
-  rules:
-    - changes:
-      - "**/*.py"
-  script:
-    - pip3 install -I git+https://dev.gajim.org/gajim/python-nbxmpp.git
-    - .ci/pylint.sh --jobs=2 gajim
+    - pip3 install ruff
+    - ruff .
   interruptible: true
 
 test-unittest:
