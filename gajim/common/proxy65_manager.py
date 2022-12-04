@@ -341,7 +341,7 @@ class HostTester(Socks5, IdleObject):
             self.disconnect()
             self.state += 1
         else:
-            assert False, 'unexpected state: %d' % self.state
+            raise AssertionError('unexpected state: %d' % self.state)
 
     def do_connect(self):
         try:
@@ -478,7 +478,7 @@ class ReceiverTester(Socks5, IdleObject):
             self.disconnect()
             self.state += 1
         else:
-            assert False, 'unexpected state: %d' % self.state
+            raise AssertionError('unexpected state: %d' % self.state)
 
     def do_connect(self):
         try:
