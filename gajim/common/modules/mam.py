@@ -342,7 +342,7 @@ class MAM(BaseModule):
         self._mam_query_ids[jid] = query_id
         return query_id
 
-    def _get_query_params(self) -> tuple[Optional[ſtr], Optional[datetime]]:
+    def _get_query_params(self) -> tuple[Optional[str], Optional[datetime]]:
         own_jid = self._con.get_own_jid().bare
         archive = app.storage.archive.get_archive_infos(own_jid)
 
