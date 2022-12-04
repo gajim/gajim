@@ -347,7 +347,7 @@ URIS = [
     'http://مثال.إختبار',
     'http://例子.测试',
     'http://उदाहरण.परीक्षा',
-    'http://-.~_!$&\'()*+,;=:%40:80%2f::::::@example.com',
+    "http://-.~_!$&'()*+,;=:%40:80%2f::::::@example.com",
     'http://1337.net',
     'http://a.b-c.de',
     'http://223.255.255.254',
@@ -530,33 +530,33 @@ class Test(unittest.TestCase):
         for uri in URIS:
             text = self.wrap(uri)
             hlinks = process_uris(text)
-            self.assertEqual([l.uri for l in hlinks], [uri], text)
+            self.assertEqual([link.uri for link in hlinks], [uri], text)
 
     def test_invalid_uris(self):
         for foo in NONURIS + UNACCEPTABLE_URIS:
             text = self.wrap(foo)
             hlinks = process_uris(text)
-            self.assertEqual([l.text for l in hlinks], [], text)
+            self.assertEqual([link.text for link in hlinks], [], text)
 
     def test_jids(self):
         for jid in JIDS:
             text = self.wrap(jid)
             uri = jid_to_iri(jid)
             hlinks = process_uris(text)
-            self.assertEqual([(l.text, l.uri) for l in hlinks],
+            self.assertEqual([(link.text, link.uri) for link in hlinks],
                              [(jid, uri)], text)
 
     def test_nonjids(self):
         for foo in NONJIDS:
             text = self.wrap(foo)
             hlinks = process_uris(text)
-            self.assertEqual([l.text for l in hlinks], [], text)
+            self.assertEqual([link.text for link in hlinks], [], text)
 
     def test_uris_with_text(self):
         for text, results in URIS_WITH_TEXT:
             hlinks = process_uris(text)
-            self.assertEqual([l.text for l in hlinks], results, text)
+            self.assertEqual([link.text for link in hlinks], results, text)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

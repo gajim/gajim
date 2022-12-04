@@ -13,7 +13,7 @@ class Test(unittest.TestCase):
 
         self.assertEqual(
             escape_iri_path_segment(''.join(chr(c) for c in range(0x20,0x7F))),
-            '%20!%22%23$%25&\'()*+,-.%2F0123456789:;%3C=%3E%3F@ABCDEFGHIJKLMN'
+            "%20!%22%23$%25&'()*+,-.%2F0123456789:;%3C=%3E%3F@ABCDEFGHIJKLMN"
             'OPQRSTUVWXYZ%5B%5C%5D%5E_%60abcdefghijklmnopqrstuvwxyz%7B%7C%7D~',
             'ASCII printable')
 

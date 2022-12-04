@@ -14,7 +14,8 @@ util.load_style('gajim.css', CSSPriority.APPLICATION)
 
 
 fake_form = {
-    'instructions': 'This is the a long long long long long long test instruction',
+    'instructions': ('This is the a long long long long long '
+                     'long test instruction'),
     'username': '',
     'nick': '',
     'password': '',
@@ -41,7 +42,7 @@ fake_form2 = {
 
 class DataFormWindow(Gtk.Window):
     def __init__(self):
-        Gtk.Window.__init__(self, title="Data Form Test")
+        Gtk.Window.__init__(self, title='Data Form Test')
         self.set_default_size(600, 600)
         self._widget = FakeDataFormWidget(fake_form2)
         self.add(self._widget)

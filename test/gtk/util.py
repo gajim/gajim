@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 from gi.repository import Gdk
@@ -14,10 +15,10 @@ def get_gajim_dir() -> Path:
 def load_style(filename: str, priority: CSSPriority) -> None:
     path = get_gajim_dir() / 'data' / 'style' / filename
     try:
-        with open(str(path), 'r', encoding='utf8') as file:
+        with open(str(path), encoding='utf8') as file:
             css = file.read()
-    except Exception as exc:
-        print(exc)
+    except Exception:
+        logging.exception('')
         return
     provider = Gtk.CssProvider()
     provider.load_from_data(bytes(css.encode('utf-8')))

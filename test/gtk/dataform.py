@@ -44,9 +44,9 @@ uulhdcJGwA53+9ttkLFo0KR4wwPQ8q+tkl30we/A0AjPb9nT3egrnwEAJS7WrzJCTn/neAbN2orrAAMN
 itner+hRS7W65wJLCJi6kp+XU1MORru7EvVkztO6ln3z4Nh123WLUNDjFUxvXaTcc6nMFcbfP1a9028z9gj2WIWqpqHu9QF/V7/CNxkeFYjA/llf+M3ulV5pdUduNZjoEtZtdLtL65vctPzc0SjmDE3uzL4XwEGaE59Wir0GODyhncVCiWBZ2GCfw2Y3y9MfwfzO5hO2
 v8AIg7mWYx8/rwAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTgtMTEtMDRUMjM6NTA6NDQrMDE6MDBAxMf7AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE4LTExLTA0VDIzOjUwOjQ0KzAxOjAwMZl/RwAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAoAAAAPAEAAAAAP
 MLFTQAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAJiS0dEAAHdihOkAAAAB3RJTUUH4gsEFzIsqSs7CAAAABBJREFUGNNj+A8CDKMkjUkAKsYq5D2hXoMAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTgtM
-TEtMDRUMjM6NTA6NDQrMDE6MDBAxMf7AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE4LTExLTA0VDIzOjUwOjQ0KzAxOjAwMZl/RwAAAABJRU5ErkJggg=='''
+TEtMDRUMjM6NTA6NDQrMDE6MDBAxMf7AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE4LTExLTA0VDIzOjUwOjQ0KzAxOjAwMZl/RwAAAABJRU5ErkJggg=='''  # noqa
 
-app.bob_cache['sha1+8f35fef110ffc5df08d579a50083ff9308fb6242'] = b64decode(image)
+app.bob_cache['sha1+8f35fef110ffc5df08d579a50083ff9308fb6242'] = b64decode(image)  # noqa
 app.css_config = MagicMock()
 app.css_config.get_value = MagicMock(return_value='rgb(100, 100, 255)')
 
@@ -118,12 +118,12 @@ FORM = '''
     <required/>
   </field>
 </x>
-'''
+'''  # noqa
 
 
 class DataFormWindow(Gtk.Window):
     def __init__(self):
-        Gtk.Window.__init__(self, title="Data Form Test")
+        Gtk.Window.__init__(self, title='Data Form Test')
         self.set_default_size(600, 600)
         options = {
             'left-width': 100,
@@ -135,6 +135,6 @@ class DataFormWindow(Gtk.Window):
         self.show()
 
 win = DataFormWindow()
-win.connect("destroy", Gtk.main_quit)
+win.connect('destroy', Gtk.main_quit)
 win.show_all()
 Gtk.main()
