@@ -321,7 +321,7 @@ class Bytestream(BaseModule):
             my_ips = [my_ip]
             # all IPs from local DNS
             for addr in socket.getaddrinfo(socket.gethostname(), None):
-                if (not addr[4][0] in my_ips and
+                if (addr[4][0] not in my_ips and
                         not addr[4][0].startswith('127') and
                         not addr[4][0] == '::1'):
                     my_ips.append(addr[4][0])
