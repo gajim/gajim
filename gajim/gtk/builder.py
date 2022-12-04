@@ -57,7 +57,7 @@ class Builder:
             self._builder.add_from_string(xml_text)
 
     @staticmethod
-    @functools.lru_cache(maxsize=None)
+    @functools.cache
     def _load_string_from_filename(filename: str, gettext_: Any) -> str:
         file_path = str(configpaths.get('GUI') / filename)
 

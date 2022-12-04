@@ -20,7 +20,7 @@ from typing import Union
 import logging
 import hashlib
 from math import pi
-from functools import lru_cache
+import functools
 from collections import defaultdict
 from pathlib import Path
 
@@ -109,7 +109,7 @@ def generate_avatar(letters: str,
     return context.get_target()
 
 
-@lru_cache(maxsize=None)
+@functools.cache
 def generate_default_avatar(letter: str,
                             color: tuple[float, float, float],
                             size: int,
@@ -122,7 +122,7 @@ def generate_default_avatar(letter: str,
     return surface
 
 
-@lru_cache(maxsize=None)
+@functools.cache
 def make_workspace_avatar(letter: str,
                           color: tuple[float, float, float],
                           size: int,
@@ -186,7 +186,7 @@ def add_status_to_avatar(surface: cairo.ImageSurface,
     return context.get_target()
 
 
-@lru_cache(maxsize=128)
+@functools.lru_cache(maxsize=128)
 def get_show_circle(show: Union[str, types.PresenceShowT],
                     size: int,
                     scale: int
