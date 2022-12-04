@@ -39,7 +39,7 @@ from gajim.common.helpers import is_retraction_allowed
 from gajim.common.helpers import is_role_change_allowed
 from gajim.common.helpers import jid_is_blocked
 from gajim.common.i18n import _
-from gajim.common.i18n import Q_
+from gajim.common.i18n import p_
 from gajim.common.i18n import get_short_lang_code
 from gajim.common.const import URIType
 from gajim.common.const import XmppUriQuery
@@ -617,10 +617,12 @@ def get_chat_row_menu(contact: types.ChatContactT,
     timestamp_formatted = timestamp.strftime(time_format)
     copy_text = f'{timestamp_formatted} - {name}: {text}'
     menu_items.append(
-        (Q_('?Message row action:Copy'), 'win.copy-message', f'"{copy_text}"'))
+        (p_('Message row action', 'Copy'),
+         'win.copy-message',
+         f'"{copy_text}"'))
 
     menu_items.append(
-        (Q_('?Message row action:Select Messages…'),
+        (p_('Message row action', 'Select Messages…'),
          'win.activate-message-selection',
          GLib.Variant('u', log_line_id or 0)))
 
@@ -634,7 +636,7 @@ def get_chat_row_menu(contact: types.ChatContactT,
             show_quote = False
     if show_quote:
         menu_items.append((
-            Q_('?Message row action:Quote…'),
+            p_('Message row action', 'Quote…'),
             'win.quote',
             f'"{text}"'))
 
@@ -644,7 +646,7 @@ def get_chat_row_menu(contact: types.ChatContactT,
             contact, message_id)
     if show_correction:
         menu_items.append((
-            Q_('?Message row action:Correct…'), 'win.correct-message', None))
+            p_('Message row action', 'Correct…'), 'win.correct-message', None))
 
     show_retract = False
     if isinstance(contact, GroupchatContact) and contact.is_joined:
@@ -665,7 +667,9 @@ def get_chat_row_menu(contact: types.ChatContactT,
             jid=contact.jid,
             stanza_id=stanza_id)
         menu_items.append((
-            Q_('?Message row action:Retract…'), 'win.retract-message', param))
+            p_('Message row action', 'Retract…'),
+            'win.retract-message',
+            param))
 
     menu = GajimMenu.from_list(menu_items)
     return menu

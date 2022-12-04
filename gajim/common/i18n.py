@@ -122,28 +122,7 @@ def is_rtl_text(text: str) -> bool:
     return False
 
 
-def Q_(text: str) -> str:
-    '''
-    Translate the given text, optionally qualified with a special
-    construction, which will help translators to disambiguate between
-    same terms, but in different contexts.
-
-    When translated text is returned - this rudimentary construction
-    will be stripped off, if it's present.
-
-    Here is the construction to use:
-        Q_("?vcard:Unknown")
-
-    Everything between ? and : - is the qualifier to convey the context
-    to the translators. Everything after : - is the text itself.
-    '''
-    text = _(text)
-    if text.startswith('?'):
-        text = text.split(':', 1)[1]
-    return text
-
-
-def P_(context: str, message: str) -> str:
+def p_(context: str, message: str) -> str:
     return _translation.pgettext(context, message)
 
 

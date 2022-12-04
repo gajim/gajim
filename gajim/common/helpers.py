@@ -88,7 +88,7 @@ import precis_i18n.codec  # noqa: F401
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import iana
-from gajim.common.i18n import Q_
+from gajim.common.i18n import p_
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
 from gajim.common.i18n import get_rfc5646_lang
@@ -183,24 +183,24 @@ def get_uf_show(show: str, use_mnemonic: bool = False) -> str:
 
 def get_uf_sub(sub: str) -> str:
     if sub == 'none':
-        uf_sub = Q_('?Subscription we already have:None')
+        uf_sub = p_('Contact subscription', 'None')
     elif sub == 'to':
-        uf_sub = _('To')
+        uf_sub = p_('Contact subscription', 'To')
     elif sub == 'from':
-        uf_sub = _('From')
+        uf_sub = p_('Contact subscription', 'From')
     elif sub == 'both':
-        uf_sub = _('Both')
+        uf_sub = p_('Contact subscription', 'Both')
     else:
-        uf_sub = _('Unknown')
+        uf_sub = p_('Contact subscription', 'Unknown')
 
     return uf_sub
 
 
 def get_uf_ask(ask: Union[str, None]) -> str:
     if ask is None:
-        uf_ask = Q_('?Ask (for Subscription):None')
+        uf_ask = p_('Contact subscription', 'None')
     elif ask == 'subscribe':
-        uf_ask = _('Subscribe')
+        uf_ask = p_('Contact subscription', 'Subscribe')
     else:
         uf_ask = ask
 
@@ -213,19 +213,19 @@ def get_uf_role(role: Union[Role, str], plural: bool = False) -> str:
         role = role.value
 
     if role == 'none':
-        return Q_('?Group Chat Contact Role:None')
+        return p_('Group chat contact role', 'None')
     if role == 'moderator':
         if plural:
-            return _('Moderators')
-        return _('Moderator')
+            return p_('Group chat contact role', 'Moderators')
+        return p_('Group chat contact role', 'Moderator')
     if role == 'participant':
         if plural:
-            return _('Participants')
-        return _('Participant')
+            return p_('Group chat contact role', 'Participants')
+        return p_('Group chat contact role', 'Participant')
     if role == 'visitor':
         if plural:
-            return _('Visitors')
-        return _('Visitor')
+            return p_('Group chat contact role', 'Visitors')
+        return p_('Group chat contact role', 'Visitor')
     return ''
 
 
@@ -237,19 +237,19 @@ def get_uf_affiliation(affiliation: Union[Affiliation, str],
         affiliation = affiliation.value
 
     if affiliation == 'none':
-        return Q_('?Group Chat Contact Affiliation:None')
+        return p_('Group chat contact affiliation', 'None')
     if affiliation == 'owner':
         if plural:
-            return _('Owners')
-        return _('Owner')
+            return p_('Group chat contact affiliation', 'Owners')
+        return p_('Group chat contact affiliation', 'Owner')
     if affiliation == 'admin':
         if plural:
-            return _('Administrators')
-        return _('Administrator')
+            return p_('Group chat contact affiliation', 'Administrators')
+        return p_('Group chat contact affiliation', 'Administrator')
     if affiliation == 'member':
         if plural:
-            return _('Members')
-        return _('Member')
+            return p_('Group chat contact affiliation', 'Members')
+        return p_('Group chat contact affiliation', 'Member')
     return ''
 
 

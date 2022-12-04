@@ -30,7 +30,7 @@ from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common.i18n import _
-from gajim.common.i18n import Q_
+from gajim.common.i18n import p_
 
 from gajim.common.setting_values import ADVANCED_SETTINGS
 from gajim.common.setting_values import APP_SETTINGS
@@ -53,9 +53,9 @@ BOOL_DICT = {
 
 
 SETTING_TYPES = {
-    bool: Q_('?config type:Boolean'),
-    int: Q_('?config type:Integer'),
-    str: Q_('?config type:Text'),
+    bool: p_('Configuration type', 'Boolean'),
+    int: p_('Configuration type', 'Integer'),
+    str: p_('Configuration type', 'Text'),
 }
 
 
@@ -81,7 +81,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
 
         renderer_text = Gtk.CellRendererText()
         renderer_text.set_property('ellipsize', Pango.EllipsizeMode.END)
-        col = Gtk.TreeViewColumn(Q_('?config:Preference Name'),
+        col = Gtk.TreeViewColumn(p_('Configuration', 'Preference Name'),
                                  renderer_text, text=0)
         treeview.insert_column(col, -1)
         col.set_cell_data_func(renderer_text,
@@ -94,7 +94,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         self.renderer_text.connect('edited', self._on_config_edited)
         self.renderer_text.set_property('ellipsize', Pango.EllipsizeMode.END)
         col = Gtk.TreeViewColumn(
-            Q_('?config:Value'), self.renderer_text, text=1)
+            p_('Configuration', 'Value'), self.renderer_text, text=1)
         treeview.insert_column(col, -1)
         col.set_cell_data_func(self.renderer_text,
                                self._value_column_data_callback)
@@ -103,7 +103,8 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         col.set_resizable(True)
 
         renderer_text = Gtk.CellRendererText()
-        col = Gtk.TreeViewColumn(Q_('?config:Type'), renderer_text, text=2)
+        col = Gtk.TreeViewColumn(
+            p_('Configuration', 'Type'), renderer_text, text=2)
         treeview.insert_column(col, -1)
         col.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
 
@@ -159,7 +160,8 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         setting = model[iter_][Column.NAME]
         desc = ADVANCED_SETTINGS['app'][setting]
 
-        self._ui.description.set_text(desc or Q_('?config description:None'))
+        self._ui.description.set_text(
+            desc or p_('Configuration description', 'None'))
         self._ui.reset_button.set_sensitive(not model[iter_][Column.IS_DEFAULT])
 
     def _on_treeview_row_activated(self,

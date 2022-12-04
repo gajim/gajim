@@ -31,7 +31,7 @@ from gajim.common import app
 from gajim.common import passwords
 from gajim.common.const import ClientState
 from gajim.common.i18n import _
-from gajim.common.i18n import Q_
+from gajim.common.i18n import p_
 from gajim.common.settings import AllSettingsT
 from gajim.common import types
 
@@ -522,7 +522,7 @@ class AccountRow(Gtk.ListBoxRow):
         self._switch_state_label = Gtk.Label()
         self._switch_state_label.set_xalign(0)
         self._switch_state_label.set_valign(Gtk.Align.CENTER)
-        label_width = max(len(Q_('?switch:On')), len(Q_('?switch:Off')))
+        label_width = max(len(p_('Switch', 'On')), len(p_('Switch', 'Off')))
         self._switch_state_label.set_width_chars(label_width)
         self._set_label(account_enabled)
 
@@ -552,7 +552,7 @@ class AccountRow(Gtk.ListBoxRow):
         self._set_label(state)
 
     def _set_label(self, active: bool) -> None:
-        text = Q_('?switch:On') if active else Q_('?switch:Off')
+        text = p_('Switch', 'On') if active else p_('Switch', 'Off')
         self._switch_state_label.set_text(text)
 
     def _on_enable_switch(self,

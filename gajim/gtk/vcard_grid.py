@@ -25,7 +25,7 @@ from gi.repository import GObject
 from nbxmpp.modules.vcard4 import VCard
 
 from gajim.common.i18n import _
-from gajim.common.i18n import Q_
+from gajim.common.i18n import p_
 from gajim.common.const import URIType
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import parse_uri
@@ -40,16 +40,16 @@ LABEL_DICT = {
     'n': _('Name'),
     'bday': _('Birthday'),
     'gender': _('Gender'),
-    'adr': Q_('?profile:Address'),
+    'adr': p_('Profile', 'Address'),
     'tel': _('Phone No.'),
     'email': _('Email'),
-    'impp': _('IM Address'),
-    'title': Q_('?profile:Title'),
-    'role': Q_('?profile:Role'),
-    'org': _('Organisation'),
-    'note': Q_('?profile:Note'),
+    'impp': p_('Profile', 'IM Address'),
+    'title': p_('Profile', 'Title'),
+    'role': p_('Profile', 'Role'),
+    'org': p_('Profile', 'Organisation'),
+    'note': p_('Profile', ':Note'),
     'url': _('URL'),
-    'key': Q_('?profile:Public Encryption Key'),
+    'key': p_('Profile', 'Public Encryption Key'),
 }
 
 
@@ -118,8 +118,8 @@ ORDER = [
 SEX_VALUES = {
     'M': _('Male'),
     'F': _('Female'),
-    'O': Q_('?Gender:Other'),
-    'N': Q_('?Gender:None'),
+    'O': p_('Gender', 'Other'),
+    'N': p_('Gender', 'None'),
     'U': _('Unknown')
 }
 

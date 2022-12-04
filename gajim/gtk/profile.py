@@ -36,7 +36,7 @@ from nbxmpp.task import Task
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
-from gajim.common.i18n import Q_
+from gajim.common.i18n import p_
 
 from gajim.gui.avatar import clip_circle
 from gajim.gui.avatar_selector import AvatarSelector
@@ -49,19 +49,19 @@ from gajim.gui.util import scroll_to_end
 log = logging.getLogger('gajim.gui.profile')
 
 MENU_DICT = {
-    'fn': Q_('?profile:Full Name'),
+    'fn': p_('Profile', 'Full Name'),
     'bday': _('Birthday'),
-    'gender': Q_('?profile:Gender'),
-    'adr': Q_('?profile:Address'),
+    'gender': p_('Profile', 'Gender'),
+    'adr': p_('Profile', 'Address'),
     'email': _('Email'),
-    'impp': Q_('?profile:IM Address'),
+    'impp': p_('Profile', 'IM Address'),
     'tel': _('Phone No.'),
-    'org': Q_('?profile:Organisation'),
-    'title': Q_('?profile:Title'),
-    'role': Q_('?profile:Role'),
+    'org': p_('Profile', 'Organisation'),
+    'title': p_('Profile', 'Title'),
+    'role': p_('Profile', 'Role'),
     'url': _('URL'),
-    'key': Q_('?profile:Public Encryption Key'),
-    'note': Q_('?profile:Note'),
+    'key': p_('Profile', 'Public Encryption Key'),
+    'note': p_('Profile', 'Note'),
 }
 
 

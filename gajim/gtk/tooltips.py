@@ -42,7 +42,7 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common import helpers
 from gajim.common.const import AvatarSize
-from gajim.common.i18n import Q_
+from gajim.common.i18n import p_
 from gajim.common.i18n import _
 from gajim.common.file_props import FileProp
 
@@ -316,26 +316,26 @@ class FileTransfersTooltip:
         assert file_prop.tt_account is not None
         client = app.get_client(file_prop.tt_account)
         if file_prop.type_ == 'r':
-            type_ = Q_('?Noun:Download')
+            type_ = p_('Noun', 'Download')
             actor = _('Sender: ')
             sender = JID.from_string(file_prop.sender)
             name = client.get_module('Contacts').get_contact(sender.bare).name
         else:
-            type_ = Q_('?Noun:Upload')
+            type_ = p_('Noun', 'Upload')
             actor = _('Recipient: ')
             receiver = JID.from_string(file_prop.receiver)
             name = client.get_module('Contacts').get_contact(
                 receiver.bare).name
-        properties.append((Q_('?transfer type:Type: '), type_))
+        properties.append((p_('File transfer type', 'Type: '), type_))
         properties.append((actor, GLib.markup_escape_text(name)))
 
         transferred_len = file_prop.received_len
         if not transferred_len:
             transferred_len = 0
-        properties.append((Q_('?transfer status:Transferred: '),
+        properties.append((p_('File transfer state', 'Transferred: '),
                            GLib.format_size_full(transferred_len, self.units)))
         status = self._get_current_status(file_prop)
-        properties.append((Q_('?transfer status:Status: '), status))
+        properties.append((p_('File transfer state', 'Status: '), status))
         file_desc = file_prop.desc or ''
         properties.append((_('Description: '),
                            GLib.markup_escape_text(file_desc)))
@@ -361,17 +361,17 @@ class FileTransfersTooltip:
     @staticmethod
     def _get_current_status(file_prop: FileProp) -> str:
         if file_prop.stopped:
-            return Q_('?transfer status:Aborted')
+            return p_('File transfer state', 'Aborted')
         if file_prop.completed:
-            return Q_('?transfer status:Completed')
+            return p_('File transfer state', 'Completed')
         if file_prop.paused:
-            return Q_('?transfer status:Paused')
+            return p_('File transfer state', 'Paused')
         if file_prop.stalled:
             # stalled is not paused. it is like 'frozen' it stopped alone
-            return Q_('?transfer status:Stalled')
+            return p_('File transfer state', 'Stalled')
 
         if file_prop.connected:
             if file_prop.started:
-                return Q_('?transfer status:Transferring')
-            return Q_('?transfer status:Not started')
-        return Q_('?transfer status:Not started')
+                return p_('File transfer state', 'Transferring')
+            return p_('File transfer state', 'Not started')
+        return p_('File transfer state', 'Not started')

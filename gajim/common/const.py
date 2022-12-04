@@ -31,7 +31,7 @@ from nbxmpp.const import PresenceShow
 from nbxmpp.protocol import JID
 
 from gajim.common.i18n import _
-from gajim.common.i18n import Q_
+from gajim.common.i18n import p_
 
 
 STOP_EVENT = True
@@ -354,21 +354,21 @@ class CallType(Enum):
 
 
 MUC_CREATION_EXAMPLES = [
-    (Q_('?Group chat name:Team'),
-     Q_('?Group chat description:Project discussion'),
-     Q_('?Group chat address:team')),
-    (Q_('?Group chat name:Family'),
-     Q_('?Group chat description:Spring gathering'),
-     Q_('?Group chat address:family')),
-    (Q_('?Group chat name:Vacation'),
-     Q_('?Group chat description:Trip planning'),
-     Q_('?Group chat address:vacation')),
-    (Q_('?Group chat name:Repairs'),
-     Q_('?Group chat description:Local help group'),
-     Q_('?Group chat address:repairs')),
-    (Q_('?Group chat name:News'),
-     Q_('?Group chat description:Local news and reports'),
-     Q_('?Group chat address:news')),
+    (p_('Group chat name', 'Team'),
+     p_('Group chat description', 'Project discussion'),
+     p_('Group chat address', 'team')),
+    (p_('Group chat name', 'Family'),
+     p_('Group chat description', 'Spring gathering'),
+     p_('Group chat address', 'family')),
+    (p_('Group chat name', 'Vacation'),
+     p_('Group chat description', 'Trip planning'),
+     p_('Group chat address', 'vacation')),
+    (p_('Group chat name', 'Repairs'),
+     p_('Group chat description', 'Local help group'),
+     p_('Group chat address', 'repairs')),
+    (p_('Group chat name', 'News'),
+     p_('Group chat description', 'Local news and reports'),
+     p_('Group chat address', 'news')),
 ]
 
 
@@ -921,22 +921,22 @@ SHOW_LIST = [
 ]
 
 SHOW_STRING = {
-    'dnd': _('Busy'),
-    'xa': _('Not Available'),
-    'chat': _('Free for Chat'),
-    'online': Q_('?user status:Available'),
+    'dnd': p_('User status', 'Busy'),
+    'xa': p_('User status', 'Not Available'),
+    'chat': p_('User status', 'Free for Chat'),
+    'online': p_('User status', 'Available'),
     'connecting': _('Connecting'),
-    'away': _('Away'),
+    'away': p_('User status', 'Away'),
     'offline': _('Offline'),
 }
 
 SHOW_STRING_MNEMONIC = {
-    'dnd': _('_Busy'),
-    'xa': _('_Not Available'),
-    'chat': _('_Free for Chat'),
-    'online': Q_('?user status:_Available'),
+    'dnd': p_('User status', '_Busy'),
+    'xa': p_('User status', '_Not Available'),
+    'chat': p_('User status', '_Free for Chat'),
+    'online': p_('User status', '_Available'),
     'connecting': _('Connecting'),
-    'away': _('A_way'),
+    'away': p_('User status', 'A_way'),
     'offline': _('_Offline'),
 }
 

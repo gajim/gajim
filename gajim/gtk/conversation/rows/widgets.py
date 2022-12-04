@@ -27,7 +27,7 @@ import cairo
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
-from gajim.common.i18n import Q_
+from gajim.common.i18n import p_
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.types import ChatContactT
 
@@ -155,7 +155,7 @@ class MessageIcons(Gtk.Box):
         self._marker_image.set_visible(visible)
         self._marker_image.set_from_icon_name(
             'feather-check-symbolic', Gtk.IconSize.MENU)
-        self._marker_image.set_tooltip_text(Q_('?Message state:Received'))
+        self._marker_image.set_tooltip_text(p_('Message state', 'Received'))
 
     def set_correction_icon_visible(self, visible: bool) -> None:
         self._correction_image.set_visible(visible)

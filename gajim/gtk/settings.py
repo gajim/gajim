@@ -34,7 +34,7 @@ from nbxmpp.protocol import JID
 from gajim.common import app
 from gajim.common import passwords
 from gajim.common.i18n import _
-from gajim.common.i18n import Q_
+from gajim.common.i18n import p_
 from gajim.common.setting_values import AllSettingsT
 
 from .util import get_image_button
@@ -450,7 +450,7 @@ class SwitchSetting(GenericSetting):
         self._set_label(value)
 
     def _set_label(self, active: bool) -> None:
-        text = Q_('?switch:On') if active else Q_('?switch:Off')
+        text = p_('Switch', 'On') if active else p_('Switch', 'Off')
         self._switch_state_label.set_text(text)
 
 
@@ -871,7 +871,7 @@ class CutstomHostnameSetting(DialogSetting):
     def get_setting_value(self) -> str:
         custom = app.settings.get_account_setting(self.account,
                                                   'use_custom_host')
-        return Q_('?switch:On') if custom else Q_('?switch:Off')
+        return p_('Switch', 'On') if custom else p_('Switch', 'Off')
 
 
 class ChangePasswordSetting(DialogSetting):
@@ -897,7 +897,7 @@ class CutstomAutoAwaySetting(DialogSetting):
 
     def get_setting_value(self) -> str:
         value = app.settings.get('autoaway')
-        return Q_('?switch:On') if value else Q_('?switch:Off')
+        return p_('Switch', 'On') if value else p_('Switch', 'Off')
 
 
 class CutstomAutoExtendedAwaySetting(DialogSetting):
@@ -906,7 +906,7 @@ class CutstomAutoExtendedAwaySetting(DialogSetting):
 
     def get_setting_value(self) -> str:
         value = app.settings.get('autoxa')
-        return Q_('?switch:On') if value else Q_('?switch:Off')
+        return p_('Switch', 'On') if value else p_('Switch', 'Off')
 
 
 class CustomStunServerSetting(DialogSetting):
@@ -915,7 +915,7 @@ class CustomStunServerSetting(DialogSetting):
 
     def get_setting_value(self) -> str:
         value = app.settings.get('use_stun_server')
-        return Q_('?switch:On') if value else Q_('?switch:Off')
+        return p_('Switch', 'On') if value else p_('Switch', 'Off')
 
 
 class NotificationsSetting(DialogSetting):
@@ -924,4 +924,4 @@ class NotificationsSetting(DialogSetting):
 
     def get_setting_value(self) -> str:
         value = app.settings.get('show_notifications')
-        return Q_('?switch:On') if value else Q_('?switch:Off')
+        return p_('Switch', 'On') if value else p_('Switch', 'Off')

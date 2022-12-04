@@ -42,7 +42,7 @@ from cryptography.hazmat.primitives.ciphers.modes import GCM
 
 from gajim.common.helpers import sanitize_filename
 from gajim.common.i18n import _
-from gajim.common.i18n import P_
+from gajim.common.i18n import p_
 
 log = logging.getLogger('gajim.c.preview_helpers')
 
@@ -388,13 +388,13 @@ def format_geo_coords(lat: float, lon: float) -> str:
         degrees = i
         return '%d°%02d′%02d′′' % (degrees, minutes, seconds)
     if lat >= 0:
-        slat = P_('positive latitude', '%sN') % fmt(lat)
+        slat = p_('positive latitude', '%sN') % fmt(lat)
     else:
-        slat = P_('negative latitude', '%sS') % fmt(-lat)
+        slat = p_('negative latitude', '%sS') % fmt(-lat)
     if lon >= 0:
-        slon = P_('positive longitude', '%sE') % fmt(lon)
+        slon = p_('positive longitude', '%sE') % fmt(lon)
     else:
-        slon = P_('negative longitude', '%sW') % fmt(-lon)
+        slon = p_('negative longitude', '%sW') % fmt(-lon)
     return '%s %s' % (slat, slon)
 
 

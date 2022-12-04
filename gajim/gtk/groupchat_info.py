@@ -27,7 +27,7 @@ from nbxmpp.structs import MucSubject
 
 from gajim.common import app
 from gajim.common.i18n import _
-from gajim.common.i18n import Q_
+from gajim.common.i18n import p_
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.const import RFC5646_LANGUAGE_TAGS
@@ -40,63 +40,63 @@ from .util import make_href_markup
 MUC_FEATURES = {
     'muc_open': (
         'feather-globe-symbolic',
-        Q_('?Group chat feature:Open'),
+        p_('Group chat feature', 'Open'),
         _('Anyone can join this group chat')),
     'muc_membersonly': (
         'feather-user-check-symbolic',
-        Q_('?Group chat feature:Members Only'),
+        p_('Group chat feature', 'Members Only'),
         _('This group chat is restricted '
           'to members only')),
     'muc_nonanonymous': (
         'feather-shield-off-symbolic',
-        Q_('?Group chat feature:Not Anonymous'),
+        p_('Group chat feature', 'Not Anonymous'),
         _('All other group chat participants '
           'can see your XMPP address')),
     'muc_semianonymous': (
         'feather-shield-symbolic',
-        Q_('?Group chat feature:Semi-Anonymous'),
+        p_('Group chat feature', 'Semi-Anonymous'),
         _('Only moderators can see your XMPP address')),
     'muc_moderated': (
         'feather-mic-off-symbolic',
-        Q_('?Group chat feature:Moderated'),
+        p_('Group chat feature', 'Moderated'),
         _('Participants entering this group chat need '
           'to request permission to send messages')),
     'muc_unmoderated': (
         'feather-mic-symbolic',
-        Q_('?Group chat feature:Not Moderated'),
+        p_('Group chat feature', 'Not Moderated'),
         _('Participants entering this group chat are '
           'allowed to send messages')),
     'muc_public': (
         'feather-eye-symbolic',
-        Q_('?Group chat feature:Public'),
+        p_('Group chat feature', 'Public'),
         _('Group chat can be found via search')),
     'muc_hidden': (
         'feather-eye-off-symbolic',
-        Q_('?Group chat feature:Hidden'),
+        p_('Group chat feature', 'Hidden'),
         _('This group chat can not be found via search')),
     'muc_passwordprotected': (
         'feather-lock-symbolic',
-        Q_('?Group chat feature:Password Required'),
+        p_('Group chat feature', 'Password Required'),
         _('This group chat '
           'does require a password upon entry')),
     'muc_unsecured': (
         'feather-unlock-symbolic',
-        Q_('?Group chat feature:No Password Required'),
+        p_('Group chat feature', 'No Password Required'),
         _('This group chat does not require '
           'a password upon entry')),
     'muc_persistent': (
         'feather-hard-drive-symbolic',
-        Q_('?Group chat feature:Persistent'),
+        p_('Group chat feature', 'Persistent'),
         _('This group chat persists '
           'even if there are no participants')),
     'muc_temporary': (
         'feather-clock-symbolic',
-        Q_('?Group chat feature:Temporary'),
+        p_('Group chat feature', 'Temporary'),
         _('This group chat will be destroyed '
           'once the last participant left')),
     'mam': (
         'feather-server-symbolic',
-        Q_('?Group chat feature:Archiving'),
+        p_('Group chat feature', 'Archiving'),
         _('Messages are archived on the server')),
 }
 
