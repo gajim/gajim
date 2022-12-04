@@ -46,11 +46,11 @@ from .util import open_window
 
 if app.is_installed('APPINDICATOR'):
     # pylint: disable=ungrouped-imports
-    from gi.repository import AppIndicator3 as appindicator
+    from gi.repository import AppIndicator3 as AppIndicator
 
 elif app.is_installed('AYATANA_APPINDICATOR'):
     # pylint: disable=ungrouped-imports
-    from gi.repository import AyatanaAppIndicator3 as appindicator
+    from gi.repository import AyatanaAppIndicator3 as AppIndicator
 
 
 log = logging.getLogger('gajim.gui.statusicon')
@@ -61,7 +61,7 @@ class StatusIcon:
         if self._can_use_libindicator():
             app.settings.connect_signal('show_trayicon',
                                         self._on_setting_changed)
-            self._backend = AppIndicator()
+            self._backend = AppIndicatorIcon()
             log.info('Use AppIndicator3 backend')
         elif app.is_display(Display.WAYLAND):
             self._backend = NoneBackend()
@@ -295,16 +295,16 @@ class GtkStatusIcon(GtkMenuBackend):
             None, None, None, None, button, event_time)
 
 
-class AppIndicator(GtkMenuBackend):
+class AppIndicatorIcon(GtkMenuBackend):
     def __init__(self) -> None:
         GtkMenuBackend.__init__(self)
 
-        self._status_icon = appindicator.Indicator.new(
+        self._status_icon = AppIndicator.Indicator.new(
             'Gajim',
             'org.gajim.Gajim',
-            appindicator.IndicatorCategory.COMMUNICATIONS)
+            AppIndicator.IndicatorCategory.COMMUNICATIONS)
         self._status_icon.set_icon_theme_path(str(configpaths.get('ICONS')))
-        self._status_icon.set_status(appindicator.IndicatorStatus.ACTIVE)
+        self._status_icon.set_status(AppIndicator.IndicatorStatus.ACTIVE)
         self._status_icon.set_menu(self._ui.systray_context_menu)
         self._status_icon.set_secondary_activate_target(
             self._ui.toggle_window_menuitem)
@@ -313,10 +313,10 @@ class AppIndicator(GtkMenuBackend):
 
     def update_state(self, init: bool = False) -> None:
         if not app.settings.get('show_trayicon'):
-            self._status_icon.set_status(appindicator.IndicatorStatus.PASSIVE)
+            self._status_icon.set_status(AppIndicator.IndicatorStatus.PASSIVE)
             return
 
-        self._status_icon.set_status(appindicator.IndicatorStatus.ACTIVE)
+        self._status_icon.set_status(AppIndicator.IndicatorStatus.ACTIVE)
 
         if not init and app.window.get_total_unread_count():
             icon_name = 'dcraven-message-new'
@@ -335,7 +335,7 @@ class AppIndicator(GtkMenuBackend):
 
     def is_visible(self) -> bool:
         status = self._status_icon.get_status()
-        return status == appindicator.IndicatorStatus.ACTIVE
+        return status == AppIndicator.IndicatorStatus.ACTIVE
 
     def shutdown(self) -> None:
         pass
