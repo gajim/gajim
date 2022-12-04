@@ -156,7 +156,7 @@ def merge(in_file: Path,
         log.info('Compiling %s >> %s', in_file, out_file)
 
 
-class build(_build):
+class Build(_build):
     def run(self):
         build_translation()
         if sys.platform != 'win32':
@@ -165,7 +165,7 @@ class build(_build):
         _build.run(self)
 
 
-class install(_install):
+class Install(_install):
     def run(self):
         data_files = cast(DataFilesT, self.distribution.data_files)  # pyright: ignore  # noqa: E501
         install_trans(data_files)
@@ -187,8 +187,8 @@ data_files: DataFilesT = data_files_app_icon
 
 setup(
     cmdclass={
-        'build_py': build,
-        'install': install,
+        'build_py': Build,
+        'install': Install,
     },
     entry_points={
         'console_scripts': [

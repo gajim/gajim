@@ -81,7 +81,7 @@ def parseAndSetLogLevels(arg: str) -> None:
                       file=sys.stderr)
 
 
-class colors:
+class Colors:
     NONE = chr(27) + '[0m'
     BLACK = chr(27) + '[30m'
     RED = chr(27) + '[31m'
@@ -102,19 +102,19 @@ class colors:
 
 
 def colorize(text: str, color: str) -> str:
-    return color + text + colors.NONE
+    return color + text + Colors.NONE
 
 
 class FancyFormatter(logging.Formatter):
     '''
-    An eye-candy formatter with colors
+    An eye-candy formatter with Colors
     '''
     colors_mapping = {
-        'DEBUG': colors.BLUE,
-        'INFO': colors.GREEN,
-        'WARNING': colors.BROWN,
-        'ERROR': colors.RED,
-        'CRITICAL': colors.BRIGHT_RED,
+        'DEBUG': Colors.BLUE,
+        'INFO': Colors.GREEN,
+        'WARNING': Colors.BROWN,
+        'ERROR': Colors.RED,
+        'CRITICAL': Colors.BRIGHT_RED,
     }
 
     def __init__(self,
@@ -129,7 +129,7 @@ class FancyFormatter(logging.Formatter):
                    datefmt: Optional[str] = None) -> str:
         f = logging.Formatter.formatTime(self, record, datefmt)
         if self.use_color:
-            f = colorize(f, colors.DARK_GRAY)
+            f = colorize(f, Colors.DARK_GRAY)
         return f
 
     def format(self, record: logging.LogRecord) -> str:
@@ -139,7 +139,7 @@ class FancyFormatter(logging.Formatter):
         if self.use_color:
             c = FancyFormatter.colors_mapping.get(level, '')
             record.levelname = colorize(record.levelname, c)
-            record.name = '%-25s' % colorize(record.name, colors.CYAN)
+            record.name = '%-25s' % colorize(record.name, Colors.CYAN)
         else:
             record.name = '%-25s|' % record.name
 

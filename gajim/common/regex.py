@@ -95,13 +95,13 @@ class PRECIS:
     IdentifierClass: Any
 
 
-class PRECIS_IdentifierClass:
+class PRECISIdentifierClass:
     _p = PRECIS
     Valid      = fr'{_p.LetterDigits}\x21-\x7e'
     Disallowed = fr'{_p.Spaces}{_p.Symbols}{_p.HasCompat}'  # there's a ton more
 
 
-PRECIS.IdentifierClass = PRECIS_IdentifierClass
+PRECIS.IdentifierClass = PRECISIdentifierClass
 
 
 # (Rough approximation of) Jabber IDs, as defined in [XMPP: Address Format]
