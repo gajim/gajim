@@ -20,6 +20,7 @@ from typing import Callable
 import logging
 import traceback
 import inspect
+import operator
 
 from nbxmpp import NodeProcessed
 
@@ -55,23 +56,17 @@ class GlobalEventsDispatcher:
                                priority: int,
                                handler: HandlerFuncT) -> None:
 
-        if event_name in self.handlers:
-            handlers_list = self.handlers[event_name]
-            if (priority, handler) in handlers_list:
-                # Don’t register same handler/prio multiple times
-                return
-
-            i = 0
-            for i, handler_tuple in enumerate(handlers_list):
-                if priority < handler_tuple[0]:
-                    break
-            else:
-                # no event with smaller prio found, put it at the end
-                i += 1
-
-            handlers_list.insert(i, (priority, handler))
-        else:
+        if event_name not in self.handlers:
             self.handlers[event_name] = [(priority, handler)]
+            return
+
+        handlers_list = self.handlers[event_name]
+        if (priority, handler) in handlers_list:
+            # Don’t register same handler/prio multiple times
+            return
+
+        handlers_list.append((priority, handler))
+        handlers_list.sort(key=operator.itemgetter(0))
 
     def remove_event_handler(self,
                              event_name: str,
