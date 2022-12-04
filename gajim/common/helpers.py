@@ -565,7 +565,7 @@ def get_auth_sha(sid: str, initiator: str, target: str) -> str:
     Return sha of sid + initiator + target used for proxy auth
     '''
     return hashlib.sha1(
-        (f'{sid}{initiator}{target}').encode('utf-8')).hexdigest()
+        (f'{sid}{initiator}{target}').encode()).hexdigest()
 
 
 def remove_invalid_xml_chars(string_: str) -> str:
@@ -851,7 +851,7 @@ class Singleton(type):
 
     def __call__(cls, *args: Any, **kwargs: Any):
         if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(
+            cls._instances[cls] = super().__call__(
                 *args, **kwargs)
         return cls._instances[cls]
 

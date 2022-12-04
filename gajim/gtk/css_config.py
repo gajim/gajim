@@ -169,7 +169,7 @@ class CSSConfig:
                             ) -> None:
         path = configpaths.get('STYLE') / filename
         try:
-            with open(path, 'r', encoding='utf8') as file_:
+            with open(path, encoding='utf8') as file_:
                 css = file_.read()
         except Exception as exc:
             log.error('Error loading css: %s', exc)
