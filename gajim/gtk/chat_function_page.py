@@ -44,7 +44,7 @@ class FunctionMode(Enum):
     CHANGE_NICKNAME = 'change-nickname'
     KICK = 'kick'
     BAN = 'ban'
-    PASSWORD_REQUEST = 'password-request'
+    PASSWORD_REQUEST = 'password-request'  # noqa: S105
     CAPTCHA_REQUEST = 'captcha-request'
     CAPTCHA_ERROR = 'captcha-error'
     JOIN_FAILED = 'join-failed'

@@ -247,7 +247,7 @@ class MUCJoinedState(Enum):
     CREATING = 'creating'
     CAPTCHA_REQUEST = 'captcha in progress'
     CAPTCHA_FAILED = 'captcha failed'
-    PASSWORD_REQUEST = 'password request'
+    PASSWORD_REQUEST = 'password request'  # noqa: S105
 
     def __str__(self):
         return self.name
