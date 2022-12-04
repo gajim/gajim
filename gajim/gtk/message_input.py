@@ -225,7 +225,7 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
         assert isinstance(lang, str)
         lang = Gspell.language_lookup(lang)
         if lang is None:
-            lang = Gspell.language_get_default()
+            return Gspell.language_get_default()
         return lang
 
     def _on_language_changed(self,
@@ -347,8 +347,7 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
     def get_text(self) -> str:
         buf = self.get_buffer()
         start, end = buf.get_bounds()
-        text = self.get_buffer().get_text(start, end, True)
-        return text
+        return self.get_buffer().get_text(start, end, True)
 
     def _on_toggle_spell_check(self, *args: Any) -> None:
         if not app.is_installed('GSPELL'):

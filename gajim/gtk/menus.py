@@ -671,8 +671,7 @@ def get_chat_row_menu(contact: types.ChatContactT,
             'win.retract-message',
             param))
 
-    menu = GajimMenu.from_list(menu_items)
-    return menu
+    return GajimMenu.from_list(menu_items)
 
 
 def get_preview_menu(preview: Preview) -> GajimMenu:

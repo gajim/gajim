@@ -406,11 +406,10 @@ def format_tune(data: TuneData) -> str:
     title = GLib.markup_escape_text(data.title or _('Unknown Title'))
     source = GLib.markup_escape_text(data.source or _('Unknown Source'))
 
-    tune_string = _('<b>"%(title)s"</b> by <i>%(artist)s</i>\n'
-                    'from <i>%(source)s</i>') % {'title': title,
-                                                 'artist': artist,
-                                                 'source': source}
-    return tune_string
+    return _('<b>"%(title)s"</b> by <i>%(artist)s</i>\n'
+             'from <i>%(source)s</i>') % {'title': title,
+                                          'artist': artist,
+                                          'source': source}
 
 
 def get_account_tune_icon_name(account: str) -> Optional[str]:
@@ -720,11 +719,10 @@ def open_window(name: str, **kwargs: Any) -> Any:
 
 
 def get_gtk_version() -> str:
-    gtk_ver = '%i.%i.%i' % (
+    return '%i.%i.%i' % (
         Gtk.get_major_version(),
         Gtk.get_minor_version(),
         Gtk.get_micro_version())
-    return gtk_ver
 
 
 class EventHelper(CommonEventHelper):

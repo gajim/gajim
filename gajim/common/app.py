@@ -474,8 +474,7 @@ def get_jid_from_account(account_name: str) -> str:
     '''
     name = settings.get_account_setting(account_name, 'name')
     hostname = settings.get_account_setting(account_name, 'hostname')
-    jid = name + '@' + hostname
-    return jid
+    return name + '@' + hostname
 
 
 def get_hostname_from_account(account_name: str, use_srv: bool = False) -> str:
@@ -502,10 +501,13 @@ def get_priority(account: str, show: str) -> int:
         prio = settings.get_account_setting(account, 'autopriority_' + show)
     else:
         prio = settings.get_account_setting(account, 'priority')
+
     if prio < -128:
-        prio = -128
-    elif prio > 127:
-        prio = 127
+        return -128
+
+    if prio > 127:
+        return 127
+
     return prio
 
 

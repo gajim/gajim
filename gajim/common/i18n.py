@@ -140,9 +140,10 @@ def ngettext(s_sing: str,
     '''
     text = _translation.ngettext(s_sing, s_plural, n)
     if n == 1 and replace_sing is not None:
-        text = text % replace_sing
-    elif n > 1 and replace_plural is not None:
-        text = text % replace_plural
+        return text % replace_sing
+
+    if n > 1 and replace_plural is not None:
+        return text % replace_plural
     return text
 
 

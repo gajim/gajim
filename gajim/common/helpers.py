@@ -183,28 +183,28 @@ def get_uf_show(show: str, use_mnemonic: bool = False) -> str:
 
 def get_uf_sub(sub: str) -> str:
     if sub == 'none':
-        uf_sub = p_('Contact subscription', 'None')
-    elif sub == 'to':
-        uf_sub = p_('Contact subscription', 'To')
-    elif sub == 'from':
-        uf_sub = p_('Contact subscription', 'From')
-    elif sub == 'both':
-        uf_sub = p_('Contact subscription', 'Both')
-    else:
-        uf_sub = p_('Contact subscription', 'Unknown')
+        return p_('Contact subscription', 'None')
 
-    return uf_sub
+    if sub == 'to':
+        return p_('Contact subscription', 'To')
+
+    if sub == 'from':
+        return p_('Contact subscription', 'From')
+
+    if sub == 'both':
+        return p_('Contact subscription', 'Both')
+
+    return p_('Contact subscription', 'Unknown')
 
 
 def get_uf_ask(ask: Union[str, None]) -> str:
     if ask is None:
-        uf_ask = p_('Contact subscription', 'None')
-    elif ask == 'subscribe':
-        uf_ask = p_('Contact subscription', 'Subscribe')
-    else:
-        uf_ask = ask
+        return p_('Contact subscription', 'None')
 
-    return uf_ask
+    if ask == 'subscribe':
+        return p_('Contact subscription', 'Subscribe')
+
+    return ask
 
 
 def get_uf_role(role: Union[Role, str], plural: bool = False) -> str:
@@ -280,13 +280,7 @@ def get_uf_relative_time(timestamp: float) -> str:
 
 def to_one_line(msg: str) -> str:
     msg = msg.replace('\\', '\\\\')
-    msg = msg.replace('\n', '\\n')
-    # s1 = 'test\ntest\\ntest'
-    # s11 = s1.replace('\\', '\\\\')
-    # s12 = s11.replace('\n', '\\n')
-    # s12
-    # 'test\\ntest\\\\ntest'
-    return msg
+    return msg.replace('\n', '\\n')
 
 
 def from_one_line(msg: str) -> str:
@@ -296,13 +290,7 @@ def from_one_line(msg: str) -> str:
     # So here match '\\n' but not if you have a '\' before that
     expr = re.compile(r'(?<!\\)\\n')
     msg = expr.sub('\n', msg)
-    msg = msg.replace('\\\\', '\\')
-    # s12 = 'test\\ntest\\\\ntest'
-    # s13 = re.sub('\n', s12)
-    # s14 s13.replace('\\\\', '\\')
-    # s14
-    # 'test\ntest\\ntest'
-    return msg
+    return msg.replace('\\\\', '\\')
 
 
 def chatstate_to_string(chatstate: Optional[Chatstate]) -> str:
@@ -345,8 +333,7 @@ def build_command(executable: str, parameter: str) -> str:
     # we add to the parameter (can hold path with spaces)
     # "" so we have good parsing from shell
     parameter = parameter.replace('"', '\\"')  # but first escape "
-    command = f'{executable} "{parameter}"'
-    return command
+    return f'{executable} "{parameter}"'
 
 
 def sanitize_filename(filename: str) -> str:
@@ -570,7 +557,7 @@ def get_auth_sha(sid: str, initiator: str, target: str) -> str:
 
 def remove_invalid_xml_chars(string_: str) -> str:
     if string_:
-        string_ = re.sub(INVALID_XML_CHARS_REGEX, '', string_)
+        return re.sub(INVALID_XML_CHARS_REGEX, '', string_)
     return string_
 
 
@@ -681,9 +668,8 @@ def jid_is_blocked(account: str, jid: str) -> bool:
 
 
 def get_subscription_request_msg(account: Optional[str] = None) -> str:
-    message = _('I would like to add you to my contact list.')
     if account is None:
-        return message
+        return _('I would like to add you to my contact list.')
 
     message = app.settings.get_account_setting(
         account, 'subscription_request_msg')
@@ -795,10 +781,9 @@ class AdditionalDataDict(collections.UserDict):
 
     @staticmethod
     def _get_path_childs(full_path: str) -> list[str]:
-        path_childs = [full_path]
         if ':' in full_path:
-            path_childs = full_path.split(':')
-        return path_childs
+            return full_path.split(':')
+        return [full_path]
 
     def set_value(self, full_path: str, key: str, value: Optional[str]) -> None:
         path_childs = self._get_path_childs(full_path)
@@ -1459,28 +1444,25 @@ def warn_about_plain_connection(account: str,
 def get_idle_status_message(state: str, status_message: str) -> str:
     message = app.settings.get(f'auto{state}_message')
     if not message:
-        message = status_message
-    else:
-        message = message.replace('$S', '%(status)s')
-        message = message.replace('$T', '%(time)s')
-        message = message % {
-            'status': status_message,
-            'time': app.settings.get(f'auto{state}time')
-        }
-    return message
+        return status_message
+
+    message = message.replace('$S', '%(status)s')
+    message = message.replace('$T', '%(time)s')
+    return message % {
+        'status': status_message,
+        'time': app.settings.get(f'auto{state}time')
+    }
 
 
 def get_group_chat_nick(account: str, room_jid: Union[JID, str]) -> str:
-    nick = app.nicks[account]
-
     client = app.get_client(account)
 
     bookmark = client.get_module('Bookmarks').get_bookmark(room_jid)
     if bookmark is not None:
         if bookmark.nick is not None:
-            nick = bookmark.nick
+            return bookmark.nick
 
-    return nick
+    return app.nicks[account]
 
 
 def get_random_muc_localpart() -> str:
@@ -1528,15 +1510,13 @@ def get_os_version() -> str:
 
 
 def get_gobject_version() -> str:
-    gobject_ver = '.'.join(map(str, GObject.pygobject_version))
-    return gobject_ver
+    return '.'.join(map(str, GObject.pygobject_version))
 
 
 def get_glib_version() -> str:
-    glib_ver = '.'.join(map(str, [GLib.MAJOR_VERSION,
-                                  GLib.MINOR_VERSION,
-                                  GLib.MICRO_VERSION]))
-    return glib_ver
+    return '.'.join(map(str, [GLib.MAJOR_VERSION,
+                              GLib.MINOR_VERSION,
+                              GLib.MICRO_VERSION]))
 
 
 def make_path_from_jid(base_path: Path, jid: JID) -> Path:
