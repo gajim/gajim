@@ -187,7 +187,7 @@ class FormGrid(Gtk.Grid):
             # Don’t overwrite option
             return
 
-        label_lengths = set([0])
+        label_lengths = {0}
         for field in form_node.iter_fields():
             if field.type_ == 'hidden':
                 continue

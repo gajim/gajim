@@ -91,7 +91,7 @@ class SSLErrorDialog(Gtk.ApplicationWindow):
 
         ignored_tls_errors = None
         if self._error == Gio.TlsCertificateFlags.EXPIRED:
-            ignored_tls_errors = set([Gio.TlsCertificateFlags.EXPIRED])
+            ignored_tls_errors = {Gio.TlsCertificateFlags.EXPIRED}
 
         self.destroy()
         self._client.connect(ignored_tls_errors=ignored_tls_errors)

@@ -185,13 +185,13 @@ class Roster(BaseModule):
     def remove_group(self, group: str) -> None:
         items = self._get_items_with_group(group)
         for item in items:
-            new_groups = item.groups - set([group])
+            new_groups = item.groups - {group}
             self.set_groups(item.jid, new_groups)
 
     def rename_group(self, group: str, new_group: str) -> None:
         items = self._get_items_with_group(group)
         for item in items:
-            new_groups = item.groups - set([group])
+            new_groups = item.groups - {group}
             new_groups.add(new_group)
             self.set_groups(item.jid, new_groups)
 

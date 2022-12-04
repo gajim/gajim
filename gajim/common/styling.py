@@ -37,7 +37,7 @@ STRIKE = '~'
 EMPH = '_'
 
 WHITESPACE = set(string.whitespace)
-SPAN_DIRS = set([PRE, STRONG, STRIKE, EMPH])
+SPAN_DIRS = {PRE, STRONG, STRIKE, EMPH}
 VALID_SPAN_START = WHITESPACE | SPAN_DIRS
 
 PRE_RX = r'(?P<pre>^```.+?(^```$(.|\Z)))'

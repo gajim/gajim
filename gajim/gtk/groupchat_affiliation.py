@@ -213,7 +213,7 @@ class GroupchatAffiliation(Gtk.Box):
             self._ui.remove_button.set_sensitive(True)
             return
 
-        if set(['owner', 'admin']).intersection(selected_affiliations):
+        if {'owner', 'admin'}.intersection(selected_affiliations):
             self._ui.remove_button.set_sensitive(False)
             self._ui.remove_button.set_tooltip_text(
                 _('You are not allowed to modify the affiliation '

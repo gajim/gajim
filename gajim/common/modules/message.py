@@ -61,8 +61,7 @@ class Message(BaseModule):
         ]
 
         # XEPs for which this message module should not be executed
-        self._message_namespaces = set([Namespace.ROSTERX,
-                                        Namespace.IBB])
+        self._message_namespaces = {Namespace.ROSTERX, Namespace.IBB}
 
     def _check_if_unknown_contact(self,
                                   _con: types.xmppClient,
