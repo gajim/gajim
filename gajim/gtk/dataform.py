@@ -516,9 +516,7 @@ class ListMutliTreeView(Gtk.TreeView):
             self._store.append(
                 [label, value, label, value in field.values])
 
-        labels_over_max_width = map(lambda x: len(x) > 40,
-                                    [option[0] for option in field.options])
-        if any(labels_over_max_width):
+        if any(filter(lambda x: len(x[0]) > 40, field.options)):
             self.set_tooltip_column(2)
 
         self.set_model(self._store)

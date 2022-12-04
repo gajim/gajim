@@ -329,9 +329,7 @@ class Stage(Page):
         self.update_page_complete()
 
     def get_visible_buttons(self) -> list[str]:
-        actions = list(map(lambda action: action.value,
-                           self._last_stage_data.actions))
-        return actions
+        return [action.value for action in self._last_stage_data.actions]
 
     def get_default_button(self) -> str:
         return self._last_stage_data.default.value
