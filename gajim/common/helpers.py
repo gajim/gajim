@@ -351,7 +351,7 @@ def sanitize_filename(filename: str) -> str:
         ]
         filename = ''.join(char for char in filename if char not in blacklist)
 
-        filename = ''.join(char for char in filename if 31 < ord(char))
+        filename = ''.join(char for char in filename if ord(char) > 31)
 
         filename = unicodedata.normalize('NFKD', filename)
         filename = filename.rstrip('. ')
