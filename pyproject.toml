@@ -163,24 +163,42 @@ select = [
   "C901",   # mccabe
   # "D",    # pydocstyle
   "E",      # pycodestyle
+  # "ERA",    # eradicate
   "F",      # pyflakes  
   # "FBT",    # flake8-boolean-trap
   # "I",    # flake8-tidy-imports, isort
-  "M",      # Meta rules
   "N",      # pep8-naming
+  "PGH",    # pylint
+  "PLC",    # pylint
+  "PLE",    # pylint
+  "PLR",    # pylint
+  "PLW",    # pylint
   "Q",      # flake8-quotes
   "RUF",    # Ruff-specific rules
+  # "RET",    # flake8-return
   "S",      # flake8-bandit
-  "T",      # flake8-debugger, flake8-print
-  "U",      # pyupgrade
+  # "T",      # flake8-debugger, flake8-print
+  "UP",     # pyupgrade
   "W",      # pycodestyle
   "YTT",    # flake8-2020
 ]
 
 ignore = [
-  "S101",   # Use of `assert` detected
-  "FBT003", # Boolean positional value in function call
+  "A003",   # Class attribute is shadowing python builtin
+  "B904",   # Within an except clause ..
   "BLE001", # Blind except Exception: statement
+  "C901",   # too complex
+  "FBT003", # Boolean positional value in function call
+  "N802",   # Function name should be lower case
+  "N806",   # Variable should be lower case
+  "N817",   # CamelCase imported as acronym
+  "N818",   # Exception name should be named with an Error suffix
+  "RUF001", # AmbiguousUnicodeCharacterString
+  "RUF002", # AmbiguousUnicodeCharacterDocstring
+  "RUF003", # AmbiguousUnicodeCharacterComment
+  "RUF100", # Unused `noqa` directive
+  "S101",   # Use of `assert` detected
+  "UP007",  # Use X | Y for type annotations
 ]
 
 exclude = [
@@ -197,7 +215,7 @@ exclude = [
   "typings",
   "gajim/common/config.py",     # legacy module, will be removed
   "gajim/common/optparser.py",  # legacy module, will be removed
-  "gajim/common/socks5.py",  # legacy module, will be removed
+  "gajim/common/socks5.py",     # legacy module, will be removed
 ]
 
 # Allow unused variables when underscore-prefixed.
