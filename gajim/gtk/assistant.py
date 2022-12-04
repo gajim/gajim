@@ -30,17 +30,17 @@ from .util import EventHelper
 
 class Assistant(Gtk.ApplicationWindow, EventHelper):
 
-    __gsignals__ = dict(
-        button_clicked=(
+    __gsignals__ = {
+        'button-clicked': (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
             None,
             (str, )
         ),
-        page_changed=(
+        'page-changed': (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
             None,
             (str, )
-        ))
+        )}
 
     def __init__(self,
                  transient_for: Optional[Gtk.Window] = None,
