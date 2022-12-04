@@ -21,8 +21,6 @@ from typing import Union
 from typing import Optional
 from typing import cast
 
-import functools
-
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.structs import BookmarkData
@@ -153,7 +151,6 @@ class Bookmarks(BaseModule):
         self._compat = Namespace.BOOKMARKS_COMPAT in info.features
         self._conversion = Namespace.BOOKMARK_CONVERSION in info.features
 
-    @functools.lru_cache(maxsize=1)
     def _bookmark_module(self) -> str:
         if not self._con.get_module('PubSub').publish_options:
             return 'PrivateBookmarks'
