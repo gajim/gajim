@@ -268,8 +268,8 @@ class PluginManager(metaclass=Singleton):
         for module_attr_name in dir(module):
             module_attr = getattr(module, module_attr_name)
             if issubclass(module_attr, GajimPlugin):
-                setattr(module_attr, 'manifest', manifest)
-                setattr(module_attr, '__path__', str(manifest.path))
+                module_attr.manifest = manifest
+                module_attr.__path__ = str(manifest.path)
                 return module_attr
         return None
 
