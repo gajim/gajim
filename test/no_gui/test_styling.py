@@ -5,7 +5,7 @@ from gajim import gui
 gui.init('gtk')
 
 from gajim.common import app  # Avoids circular imports from common.helpers
-import gajim.common.styling as styling
+from gajim.common import styling
 from gajim.common.styling import PlainBlock
 from gajim.common.styling import PreBlock
 from gajim.common.styling import QuoteBlock
