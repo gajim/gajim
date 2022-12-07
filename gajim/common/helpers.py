@@ -1008,6 +1008,20 @@ def parse_uri(uri: str) -> URI:
     return URI(URIType.WEB, uri)
 
 
+def _handle_message_qtype(
+        jid: str, params: dict[str, str], account: str) -> None:
+    body = params.get('body')
+    # ^ For JOIN, this is a non-standard, but nice extension
+    app.window.start_chat_from_jid(account, jid, message=body)
+
+
+_xmpp_query_type_handlers = {
+    XmppUriQuery.NONE: _handle_message_qtype,
+    XmppUriQuery.MESSAGE: _handle_message_qtype,
+    XmppUriQuery.JOIN: _handle_message_qtype,
+}
+
+
 @catch_exceptions
 def open_uri(uri: Union[URI, str], account: Optional[str] = None) -> None:
     if not isinstance(uri, URI):
@@ -1051,14 +1065,7 @@ def open_uri(uri: Union[URI, str], account: Optional[str] = None) -> None:
             # > <xmpp:example-node@example.com> rather than
             # > <xmpp:example-node@example.com?query>."
             qtype, qparams = XmppUriQuery.NONE, {}
-
-        if qtype == XmppUriQuery.JOIN:
-            app.app.activate_action(
-                'groupchat-join',
-                GLib.Variant('as', [account, jid]))
-        else:
-            message = qparams.get('body')
-            app.window.start_chat_from_jid(account, jid, message=message)
+        _xmpp_query_type_handlers[qtype](jid, qparams, account)
 
     elif uri.type == URIType.INVALID:
         log.warning('open_uri: Invalid %s', uri)
