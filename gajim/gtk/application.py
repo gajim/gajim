@@ -858,7 +858,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
     def _on_groupchat_join_action(_action: Gio.SimpleAction,
                                   param: GLib.Variant) -> None:
         account, jid = param.get_strv()
-        open_window('GroupchatJoin', account=account, jid=jid)
+        app.window.start_chat_from_jid(account, jid)
 
     @staticmethod
     def _on_show(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
