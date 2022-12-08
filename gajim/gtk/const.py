@@ -169,7 +169,6 @@ APP_ACTIONS = [
     ('features', None),
     ('file-transfer', None),
     ('forget-groupchat', 'a{sv}'),
-    ('groupchat-join', 'as'),
     ('join-support-chat', None),
     ('manage-proxies', None),
     ('open-link', 'as'),
@@ -180,6 +179,7 @@ APP_ACTIONS = [
     ('shortcuts', None),
     ('show', None),
     ('start-chat', 'as'),
+    ('open-chat', 'as'),
     ('xml-console', None),
 ]
 
@@ -274,7 +274,6 @@ ACCOUNT_ACTIONS = [
     ('export-history', 's'),
     ('import-contacts', 's'),
     ('mark-as-read', 'a{sv}'),
-    ('open-chat', 'as'),
     ('open-event', 'a{sv}'),
     ('pep-config', 's'),
     ('profile', 's'),
@@ -299,7 +298,6 @@ ONLINE_ACCOUNT_ACTIONS = {
     'modify-gateway',
     'bookmarks',
     'import-contacts',
-    'open-chat',
     'pep-config',
     'profile',
     'server-info',

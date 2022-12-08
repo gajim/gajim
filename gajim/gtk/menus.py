@@ -296,7 +296,7 @@ def _xmpp_message_query_context_menu(uri: URI, account: str) -> UriMenuItemsT:
     return [
         ('copy-text', [uri.source], _('Copy Link Location')),
         ('copy-text', [jid], _('Copy XMPP Address')),
-        (f'{account}-open-chat', [account, jid], _('Start Chat…')),
+        ('open-chat', [account, jid], _('Start Chat…')),
         # ^ TODO: pass qparams ^
         (f'{account}-add-contact', [account, jid], _('Add to Contact List…')),
     ]
@@ -306,7 +306,7 @@ def _xmpp_join_query_context_menu(uri: URI, account: str) -> UriMenuItemsT:
     return [
         ('copy-text', [uri.source], _('Copy Link Location')),
         ('copy-text', [uri.data['jid']], _('Copy XMPP Address')),
-        ('groupchat-join', [account, uri.data['jid']],
+        ('open-chat', [account, uri.data['jid']],
             # ^ TODO: pass qparams ^
             _('Join Groupchat…')),
     ]
@@ -352,8 +352,7 @@ def _ambiguous_addr_context_menu(uri: URI, account: str) -> UriMenuItemsT:
     return [
         ('copy-text', [addr], _('Copy XMPP Address/Email')),
         ('open-link', ['', mailto], _('Open Email Composer')),
-        (f'{account}-open-chat', [account, addr], _('Start Chat…')),
-        ('groupchat-join', [account, addr], _('Join Groupchat…')),
+        ('open-chat', [account, addr], _('Start Chat…')),
         (f'{account}-add-contact', [account, addr], _('Add to Contact List…')),
     ]
 

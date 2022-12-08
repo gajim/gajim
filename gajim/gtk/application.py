@@ -302,7 +302,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
             if cmd == 'join':
                 if len(accounts) == 1:
                     self.activate_action(
-                        'groupchat-join',
+                        'open-chat',
                         GLib.Variant('as', [accounts[0], jid]))
                 else:
                     self.activate_action(
@@ -418,7 +418,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
             ('remove-history', self._on_remove_history_action),
             ('create-groupchat', self._on_create_groupchat_action),
             ('forget-groupchat', self._on_forget_groupchat_action),
-            ('groupchat-join', self._on_groupchat_join_action),
+            ('open-chat', self._on_open_chat_action),
             ('show', self._on_show),
         ]
 
@@ -445,7 +445,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
     def _connect_account_actions(self, account: str) -> None:
         actions = [
             ('bookmarks', self._on_bookmarks_action),
-            ('open-chat', self._on_open_chat_action),
             ('add-contact', self._on_add_contact_account_action),
             ('services', self._on_services_action),
             ('profile', self._on_profile_action),
@@ -853,12 +852,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
         client.get_module('Bookmarks').remove(params.jid)
 
         app.storage.archive.remove_history(params.account, params.jid)
-
-    @staticmethod
-    def _on_groupchat_join_action(_action: Gio.SimpleAction,
-                                  param: GLib.Variant) -> None:
-        account, jid = param.get_strv()
-        app.window.start_chat_from_jid(account, jid)
 
     @staticmethod
     def _on_show(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
