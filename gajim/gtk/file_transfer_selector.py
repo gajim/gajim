@@ -168,7 +168,7 @@ class FileTransferSelector(Gtk.Box):
 
             row = FileRow(path, size_warning, jingle_warning)
             self._ui.listbox.add(row)
-            app.settings.set('last_send_dir', str(path))
+            app.settings.set('last_send_dir', str(path.parent))
 
         self._ui.listbox.show_all()
 
