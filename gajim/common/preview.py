@@ -21,6 +21,7 @@ from typing import Optional
 
 import logging
 import os
+import re
 from pathlib import Path
 from urllib.parse import urlparse
 from urllib.parse import ParseResult
@@ -33,6 +34,7 @@ from nbxmpp.util import convert_tls_error_flags
 
 from gajim.common import app
 from gajim.common import configpaths
+from gajim.common import regex
 from gajim.common.const import MIME_TYPES
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import load_file_async
@@ -52,6 +54,8 @@ from gajim.common.preview_helpers import pixbuf_from_data
 from gajim.common.types import GdkPixbufType
 
 log = logging.getLogger('gajim.c.preview')
+
+IRI_RX = re.compile(regex.IRI)
 
 PREVIEWABLE_MIME_TYPES = get_previewable_mime_types()
 mime_types = set(MIME_TYPES)
@@ -333,8 +337,9 @@ class PreviewManager:
     def is_previewable(self,
                        text: str,
                        additional_data: AdditionalDataDict) -> bool:
-        if len(text.split(' ')) > 1:
-            # urlparse doesn't recognise spaces as URL delimiter
+        if not IRI_RX.fullmatch(text):
+            # urlparse removes whitespace (and who knows what else) from URLs,
+            # so can't be used for validation.
             return False
 
         uri = text
