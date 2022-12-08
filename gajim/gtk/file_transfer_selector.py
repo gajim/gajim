@@ -17,7 +17,6 @@ from __future__ import annotations
 from typing import Any
 from typing import cast
 from typing import Optional
-from typing import Union
 
 import logging
 from pathlib import Path
@@ -154,12 +153,13 @@ class FileTransferSelector(Gtk.Box):
 
         return catalog
 
-    def add_files(self, file_paths: Union[list[Path], list[str]]) -> None:
-        for path in file_paths:
-            if isinstance(path, str):
-                path = Path(path)
-
-            if path.is_dir():
+    def add_files(self, uris: list[str]) -> None:
+        for uri in uris:
+            path = get_file_path_from_dnd_dropped_uri(uri)
+            if path is None or not path.is_file():
+                self._add_warning_message(
+                    'Could not add %s'
+                    % (str(path) if path else uri))
                 continue
 
             size_warning = bool(self._method == 'httpupload' and
@@ -171,6 +171,9 @@ class FileTransferSelector(Gtk.Box):
             app.settings.set('last_send_dir', str(path))
 
         self._ui.listbox.show_all()
+
+    def _add_warning_message(self, msg: str) -> None:
+        log.warning(msg)  # TODO: replace with UI
 
     def _on_destroy(self, _widget: FileTransferSelector) -> None:
         app.check_finalize(self)
@@ -195,16 +198,7 @@ class FileTransferSelector(Gtk.Box):
             return
 
         if target_type == 80:
-            uris = selection.get_uris()
-            paths: list[Path] = []
-            for uri in uris:
-                path = get_file_path_from_dnd_dropped_uri(uri)
-                if path is None or not path.is_file():
-                    log.warning('Could not add file %s', str(path))
-                    continue
-                paths.append(path)
-
-            self.add_files(paths)
+            self.add_files(selection.get_uris())
 
     def _on_files_changed(self, _listbox: Gtk.ListBox, _row: FileRow) -> None:
         file_paths = self._get_file_paths()

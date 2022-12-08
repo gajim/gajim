@@ -36,7 +36,6 @@ from gajim.common import events
 from gajim.common import ged
 from gajim.common import helpers
 from gajim.common import types
-from gajim.common.helpers import get_file_path_from_dnd_dropped_uri
 from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
 from gajim.common.ged import EventHelper
@@ -496,18 +495,8 @@ class ChatControl(EventHelper):
         self.reset_view()
 
     def drag_data_file_transfer(self, selection: Gtk.SelectionData) -> None:
-        uris = selection.get_uris()
-        paths: list[str] = []
-        for uri in uris:
-            path = get_file_path_from_dnd_dropped_uri(uri)
-            if path is None or not path.is_file():
-                self.add_info_message(
-                    _('You dropped something Gajim could not '
-                      'process: %s' % path))
-                continue
-            paths.append(str(path))
-
-        app.window.activate_action('send-file', GLib.Variant('as', paths))
+        app.window.activate_action('send-file',
+            GLib.Variant('as', selection.get_uris()))
 
     def get_our_nick(self) -> str:
         if isinstance(self.contact, GroupchatParticipant):

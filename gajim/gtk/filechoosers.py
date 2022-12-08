@@ -51,14 +51,11 @@ class BaseFileChooser:
     def _on_response(self,
                      dialog: Union[Gtk.FileChooser, Gtk.FileChooserNative],
                      response: Gtk.ResponseType,
-                     accept_cb: Callable[..., Any],
+                     accept_cb: Callable[[list[str]], None],
                      cancel_cb: Optional[Callable[..., Any]]
                      ) -> None:
         if response == Gtk.ResponseType.ACCEPT:
-            if self.get_select_multiple():
-                accept_cb(dialog.get_filenames())
-            else:
-                accept_cb(dialog.get_filename())
+            accept_cb(dialog.get_uris())
 
         if response in (Gtk.ResponseType.CANCEL,
                         Gtk.ResponseType.DELETE_EVENT):
@@ -182,7 +179,7 @@ class GtkFileChooserDialog(Gtk.FileChooserDialog, BaseFileChooser):
     _preview_size = (200, 200)
 
     def __init__(self,
-                 accept_cb: Callable[..., Any],
+                 accept_cb: Callable[[list[str]], None],
                  cancel_cb: Optional[Callable[..., Any]] = None,
                  transient_for: Optional[Gtk.Window] = None,
                  path: Optional[str] = None,

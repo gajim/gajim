@@ -17,7 +17,7 @@ from __future__ import annotations
 from typing import Any
 from typing import Optional
 
-import os
+from pathlib import Path
 import tempfile
 import logging
 import uuid
@@ -531,22 +531,30 @@ class MessageActionsBox(Gtk.Grid):
         return False
 
     def _on_paste_clipboard(self,
-                            _texview: MessageInputTextView
+                            texview: MessageInputTextView
                             ) -> None:
 
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+
+        uris = clipboard.wait_for_uris()
+        if uris:
+            app.window.activate_action('send-file', GLib.Variant('as', uris))
+            # prevent TextView from pasting the URIs as text:
+            texview.stop_emission_by_name('paste-clipboard')
+            return
+        log.info('No URIs pasted')
+
         image = clipboard.wait_for_image()
         if image is None:
             log.info('No image pasted')
             return
 
-        temp_dir = tempfile.gettempdir()
-        image_path = os.path.join(temp_dir, f'{uuid.uuid4()}.png')
+        temp_dir = Path(tempfile.gettempdir())
+        image_path = temp_dir / f'{uuid.uuid4()}.png'
 
-        image.savev(image_path, 'png', [], [])
-        if image is None:
+        if not image.savev(str(image_path), 'png', [], []):
             log.error('Could not process pasted image')
             return
 
         app.window.activate_action(
-            'send-file', GLib.Variant('as', [image_path]))
+            'send-file', GLib.Variant('as', [image_path.as_uri()]))

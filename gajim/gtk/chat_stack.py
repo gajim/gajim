@@ -574,11 +574,11 @@ class ChatStack(Gtk.Stack, EventHelper):
             if 'jingle' in name:
                 method = 'jingle'
 
-            file_paths = None
+            uris = None
             if param is not None:
-                file_paths = param.get_strv() or None
+                uris = param.get_strv() or None
             self._show_chat_function_page(
-                FunctionMode.SEND_FILE, method, file_paths)
+                FunctionMode.SEND_FILE, method, uris)
 
         elif action_name == 'add-to-roster':
             if (isinstance(contact, GroupchatParticipant) and
