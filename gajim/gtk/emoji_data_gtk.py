@@ -26,27 +26,31 @@ from gajim.common.i18n import _
 from gajim.common.i18n import get_default_lang
 from gajim.common.i18n import get_short_lang_code
 
-FALLBACK_LOCALE = 'en_US'
+FALLBACK_LOCALE = 'en'
 
 log = logging.getLogger('gajim.gtk.emoji_data_gtk')
 
 REPLACEMENT_CHARACTER = 0xFFFD
 
 SKIN_TONE_MODIFIERS = {
-    # The descriptions differ slightly from the official short names, see:
+    # The descriptions match the official short names, see:
     # https://github.com/unicode-org/cldr/blob/main/common/annotations/en.xml
-    0x1F3FB: _('light skin'),
-    0x1F3FC: _('medium-light skin'),
-    0x1F3FD: _('medium skin tone'),
-    0x1F3FE: _('medium-dark skin'),
-    0x1F3FF: _('dark skin')
+    # Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
+    # You can use the hex value to find the matching string.
+    _('light skin tone'): 0x1F3FB,
+    _('medium-light skin tone'): 0x1F3FC,
+    _('medium skin tone'): 0x1F3FD,
+    _('medium-dark skin tone'): 0x1F3FE,
+    _('dark skin tone'): 0x1F3FF
 }
 
-SKIN_TONE_MODIFIERS_INV: dict[str, int] = {}
-for cp, desc in SKIN_TONE_MODIFIERS.items():
-    if not desc.endswith(' tone'):
-        desc += ' tone'
-    SKIN_TONE_MODIFIERS_INV[desc] = cp
+SKIN_TONE_MODIFIERS_FALLBACK = {
+    'light skin tone': 0x1F3FB,
+    'medium-light skin tone': 0x1F3FC,
+    'medium skin tone': 0x1F3FD,
+    'medium-dark skin tone': 0x1F3FE,
+    'dark skin tone': 0x1F3FF
+}
 
 
 def generate_unicode_sequence(c_sequence: list[int]) -> str:
@@ -92,6 +96,14 @@ def try_load_raw_emoji_data(locale: str) -> Optional[GLib.Bytes]:
     # https://gitlab.gnome.org/GNOME/gtk/-/tree/main/gtk/emoji
     emoji_data_resource = f'/org/gtk/libgtk/emoji/{locale}.data'
 
+    # some distribution do not register locale emoji resources, so let's do it
+    try:
+        res = Gio.resource_load(f'/usr/share/gtk-3.0/emoji/{locale}.gresource')
+    except GLib.Error:
+        pass
+    else:
+        Gio.resources_register(res)
+
     try:
         bytes_ = Gio.resources_lookup_data(
             emoji_data_resource,
@@ -105,7 +117,9 @@ def try_load_raw_emoji_data(locale: str) -> Optional[GLib.Bytes]:
         return None
 
 
-def parse_emoji_data(bytes_data: GLib.Bytes) -> dict[str, dict[str, str]]:
+def parse_emoji_data(bytes_data: GLib.Bytes,
+                     loc: str
+                     ) -> dict[str, dict[str, str]]:
     variant = GLib.Variant.new_from_bytes(
         # Reference for the data format:
         # https://gitlab.gnome.org/GNOME/gtk/-/blob/3.24.34/gtk/emoji/
@@ -114,6 +128,12 @@ def parse_emoji_data(bytes_data: GLib.Bytes) -> dict[str, dict[str, str]]:
         bytes_data,
         True)
     iterable: list[tuple[list[int], str, list[str], int]] = variant.unpack()
+
+    # GTK 3 provides emoji translations only for the following locales
+    if loc in ['de', 'es', 'fr', 'zh']:
+        skin_tone_modifiers = SKIN_TONE_MODIFIERS
+    else:
+        skin_tone_modifiers = SKIN_TONE_MODIFIERS_FALLBACK
 
     emoji_data_dict: dict[str, dict[str, str]] = defaultdict(dict)
     for c_sequence, short_name, keywords, _group in iterable:
@@ -130,8 +150,8 @@ def parse_emoji_data(bytes_data: GLib.Bytes) -> dict[str, dict[str, str]]:
             # c_sequence *is* the skin tone placeholder itself... and we
             # don't know which. Let us find out!
             # Looks like a bug in GTK's data, present at least in 3.24.34.
-            if short_name in SKIN_TONE_MODIFIERS_INV:
-                c_sequence[0] = SKIN_TONE_MODIFIERS_INV[short_name]
+            if short_name in skin_tone_modifiers:
+                c_sequence[0] = skin_tone_modifiers[short_name]
                 log.debug('Null codepoint for short name "%s", found U+%04X',
                           short_name, c_sequence[0])
             else:
@@ -157,7 +177,7 @@ def parse_emoji_data(bytes_data: GLib.Bytes) -> dict[str, dict[str, str]]:
             emoji_data_dict[keyword][short_name] = u_sequence
 
             # Add variations with skin tone modifiers
-            for modifier, mod_desc in SKIN_TONE_MODIFIERS.items():
+            for mod_desc, modifier in skin_tone_modifiers.items():
                 new_keyword = f'{keyword}, {mod_desc.casefold()}'
                 new_short_name = f'{short_name}, {mod_desc}'
                 c_mod_sequence = replace_skin_tone_placeholder(
@@ -175,26 +195,20 @@ def parse_emoji_data(bytes_data: GLib.Bytes) -> dict[str, dict[str, str]]:
 def get_locale_fallbacks(desired: str) -> list[str]:
     '''
     Returns full list of locales to try loading emoji data in, in the order of
-    decreasing preference and specificity.  E.g., ['de_DE', 'de', 'en_US', 'en']
-    for desired == 'de_DE'.
+    decreasing preference and specificity.  E.g., ['de', 'en']
+    for desired == 'de'.
     '''
     result = [desired]
-    lang = get_short_lang_code(desired)
-    if lang not in result:
-        result.append(lang)
-
     if FALLBACK_LOCALE not in result:
         result.append(FALLBACK_LOCALE)
-    fallback_lang = get_short_lang_code(FALLBACK_LOCALE)
-    if fallback_lang not in result:
-        result.append(fallback_lang)
 
     return result
 
 
 app_locale = get_default_lang()
 log.info('Loading emoji data; application locale is %s', app_locale)
-locales = get_locale_fallbacks(app_locale)
+short_locale = get_short_lang_code(app_locale)
+locales = get_locale_fallbacks(short_locale)
 try:
     log.debug('Trying locales %s', locales)
     raw_emoji_data: Optional[GLib.Bytes] = None
@@ -202,10 +216,10 @@ try:
         raw_emoji_data = try_load_raw_emoji_data(loc)
         if raw_emoji_data:
             break
-    if not raw_emoji_data:
+    else:
         raise RuntimeError(f'No resource could be loaded; tried {locales}')
 
-    emoji_data = parse_emoji_data(raw_emoji_data)
+    emoji_data = parse_emoji_data(raw_emoji_data, loc)
 except Exception as err:
     log.warning('Unable to load emoji data: %s', err)
     emoji_data = {}
