@@ -42,7 +42,7 @@ def update_translation_template() -> bool:
     cmd = [
         'xgettext',
         '-o', '-',
-        '-c#',
+        '--add-comments=Translators',
         '--from-code=utf-8',
         '--keyword=p_:1c,2',
         '--no-location',
