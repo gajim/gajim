@@ -44,14 +44,15 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.preview_helpers import split_geo_uri
 from gajim.common.preview_helpers import format_geo_coords
 from gajim.common.structs import OutgoingMessage
+from gajim.common.text_helpers import remove_invalid_xml_chars
 from gajim.common.types import ChatContactT
-from gajim.gui.dialogs import ErrorDialog
 
 from .chat_banner import ChatBanner
 from .chat_function_page import ChatFunctionPage
 from .chat_function_page import FunctionMode
 from .const import TARGET_TYPE_URI_LIST
 from .control import ChatControl
+from .dialogs import ErrorDialog
 from .message_actions_box import MessageActionsBox
 from .message_input import MessageInputTextView
 from .util import EventHelper
@@ -736,8 +737,8 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         client = app.get_client(contact.account)
 
-        message = helpers.remove_invalid_xml_chars(message)
-        if message in ('', None, '\n'):
+        message = remove_invalid_xml_chars(message)
+        if message in ('', '\n'):
             return
 
         label = self._message_action_box.get_seclabel()

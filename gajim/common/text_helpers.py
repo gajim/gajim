@@ -12,11 +12,22 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+import re
+
 from gi.repository import GLib
+
 from gajim.common import regex
 
 # from RFC 3986, 3.3. Path (pchar without unreserved and pct-encoded):
 _reserved_chars_allowed_in_path_segment = regex.sub_delims + ':@'
+
+
+def remove_invalid_xml_chars(input_string: str) -> str:
+    if input_string:
+        return re.sub(regex.INVALID_XML_CHARS_REGEX, '', input_string)
+    return input_string
 
 
 def escape_iri_path_segment(s: str) -> str:

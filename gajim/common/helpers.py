@@ -100,7 +100,6 @@ from gajim.common.const import GIO_TLS_ERRORS
 from gajim.common.const import SHOW_LIST
 from gajim.common.const import CONSONANTS
 from gajim.common.const import VOWELS
-from gajim.common.regex import INVALID_XML_CHARS_REGEX
 from gajim.common.structs import URI
 from gajim.common import types
 if TYPE_CHECKING:
@@ -553,12 +552,6 @@ def get_auth_sha(sid: str, initiator: str, target: str) -> str:
     '''
     return hashlib.sha1(
         (f'{sid}{initiator}{target}').encode()).hexdigest()
-
-
-def remove_invalid_xml_chars(string_: str) -> str:
-    if string_:
-        return re.sub(INVALID_XML_CHARS_REGEX, '', string_)
-    return string_
 
 
 def get_random_string(count: int = 16) -> str:

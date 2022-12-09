@@ -3,9 +3,23 @@ import unittest
 from gajim.common.text_helpers import escape_iri_path_segment
 from gajim.common.text_helpers import jid_to_iri
 from gajim.common.text_helpers import format_duration
+from gajim.common.text_helpers import remove_invalid_xml_chars
 
 
 class Test(unittest.TestCase):
+
+    def test_remove_invalid_xml_chars(self) -> None:
+        invalid_chars = [
+            '\x0b',
+            '\udfff',
+            '\x08'
+        ]
+        for char in invalid_chars:
+            self.assertEqual(remove_invalid_xml_chars(char), '')
+
+        self.assertEqual(remove_invalid_xml_chars(''), '')
+        self.assertEqual(remove_invalid_xml_chars('ä'), 'ä')
+
     def test_escape_iri_path_segment(self):
         self.assertEqual(escape_iri_path_segment(''), '', '<empty string>')
 
