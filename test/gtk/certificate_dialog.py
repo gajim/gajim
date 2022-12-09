@@ -1,15 +1,14 @@
-import gi
-gi.require_version('Gio', '2.0')
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gio
 from gi.repository import Gtk
+
+from gajim.common.const import CSSPriority
 
 from gajim import gui
 gui.init('gtk')
 
-from test.gtk import util
-from gajim.common.const import CSSPriority
 from gajim.gui.certificate_dialog import CertificateDialog
+
+from . import util
 
 util.load_style('gajim.css', CSSPriority.APPLICATION)
 

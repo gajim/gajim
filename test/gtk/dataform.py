@@ -2,21 +2,21 @@ from unittest.mock import MagicMock
 
 from base64 import b64decode
 
-import gi
-gi.require_version('Gtk', '3.0')
+from nbxmpp.modules.dataforms import extend_form
+from nbxmpp.simplexml import Node
+
 from gi.repository import Gtk
 
-import nbxmpp
-from nbxmpp.modules.dataforms import extend_form
+from gajim.common import app
+from gajim.common.const import CSSPriority
 
 from gajim import gui
 gui.init('gtk')
 
 from gajim.gui.dataform import DataFormWidget
-from gajim.common.const import CSSPriority
-from gajim.common import app
 
-from test.gtk import util
+from . import util
+
 util.load_style('gajim.css', CSSPriority.APPLICATION)
 
 image = '''iVBORw0KGgoAAAANSUhEUgAAAIwAAAA8CAAAAACRYQ2XAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAHdElNRQfiCwQXMiypK
@@ -130,9 +130,10 @@ class DataFormWindow(Gtk.Window):
             'form-width': 435,
         }
         self._widget = DataFormWidget(
-            extend_form(node=nbxmpp.Node(node=FORM)), options)
+            extend_form(node=Node(node=FORM)), options)
         self.add(self._widget)
         self.show()
+
 
 win = DataFormWindow()
 win.connect('destroy', Gtk.main_quit)

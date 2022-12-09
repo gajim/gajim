@@ -1,12 +1,10 @@
 from unittest.mock import MagicMock
 
-import gi
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
-
 from nbxmpp.protocol import Iq
 from nbxmpp.modules.discovery import parse_disco_info
 from nbxmpp.structs import MucSubject
+
+from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common.const import CSSPriority
@@ -14,8 +12,9 @@ from gajim.common.const import CSSPriority
 from gajim import gui
 gui.init('gtk')
 
-from test.gtk import util
 from gajim.gui.groupchat_info import GroupChatInfoScrolled
+
+from . import util
 
 util.load_style('gajim.css', CSSPriority.APPLICATION)
 
@@ -96,6 +95,7 @@ disco_info = parse_disco_info(stanza)
 
 app.css_config = MagicMock()
 app.css_config.get_value = MagicMock(return_value='rgb(100, 100, 255)')
+
 
 class GroupchatInfo(Gtk.ApplicationWindow):
     def __init__(self):

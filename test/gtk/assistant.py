@@ -1,5 +1,3 @@
-import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 from gajim.common.const import CSSPriority
@@ -10,7 +8,8 @@ gui.init('gtk')
 from gajim.gui.assistant import Assistant
 from gajim.gui.assistant import Page
 
-from test.gtk import util
+from . import util
+
 util.load_style('gajim.css', CSSPriority.APPLICATION)
 
 
@@ -46,7 +45,7 @@ class TestAssistant(Assistant):
         self.show_all()
 
     @staticmethod
-    def _visible_func(_assistant, page_name):
+    def _visible_func(_assistant: Assistant, page_name: str) -> list[str]:
         if page_name == 'start':
             return ['forward']
 
@@ -60,7 +59,11 @@ class TestAssistant(Assistant):
             return ['back', 'close']
         raise ValueError('page %s unknown' % page_name)
 
-    def _on_button_clicked(self, _assistant, button_name):
+    def _on_button_clicked(self,
+                           _assistant: Assistant,
+                           button_name: str
+                           ) -> None:
+
         page = self.get_current_page()
         if button_name == 'forward':
             if page == 'start':
@@ -83,7 +86,7 @@ class TestAssistant(Assistant):
         if button_name == 'close':
             self.destroy()
 
-    def _on_page_changed(self, _assistant, page_name):
+    def _on_page_changed(self, _assistant: Assistant, page_name: str) -> None:
         if page_name == 'start':
             self.set_default_button('forward')
 
@@ -114,7 +117,8 @@ class Start(Page):
         label1.set_justify(Gtk.Justification.CENTER)
         label1.set_margin_bottom(24)
 
-        entry = Gtk.Entry(activates_default=True)
+        entry = Gtk.Entry()
+        entry.set_activates_default(True)
         entry.connect('changed', self._on_changed)
 
         self._server = Gtk.CheckButton.new_with_mnemonic('A fancy checkbox')
@@ -126,7 +130,7 @@ class Start(Page):
         self.pack_start(self._server, False, True, 0)
         self.show_all()
 
-    def _on_changed(self, entry):
+    def _on_changed(self, entry: Gtk.Entry) -> None:
         self.complete = bool(entry.get_text())
         self.update_page_complete()
 

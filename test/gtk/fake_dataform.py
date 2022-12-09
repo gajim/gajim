@@ -1,5 +1,3 @@
-import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
 from gajim import gui
@@ -9,7 +7,8 @@ from gajim.common.const import CSSPriority
 
 from gajim.gui.dataform import FakeDataFormWidget
 
-from test.gtk import util
+from . import util
+
 util.load_style('gajim.css', CSSPriority.APPLICATION)
 
 
@@ -40,6 +39,7 @@ fake_form2 = {
     'redirect-url': 'https://jabber.at/account/register/'
 }
 
+
 class DataFormWindow(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title='Data Form Test')
@@ -47,6 +47,7 @@ class DataFormWindow(Gtk.Window):
         self._widget = FakeDataFormWidget(fake_form2)
         self.add(self._widget)
         self.show()
+
 
 win = DataFormWindow()
 win.connect('destroy', Gtk.main_quit)
