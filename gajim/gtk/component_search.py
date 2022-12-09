@@ -75,7 +75,7 @@ class ComponentSearch(Assistant, EventHelper):
             'error': Error()
         })
 
-        progress = cast(ProgressPage, self.add_default_page('progress'))
+        progress = self.add_default_page('progress')
         progress.set_title(_('Searching'))
         progress.set_text(_('Searching…'))
 

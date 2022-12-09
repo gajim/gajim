@@ -32,7 +32,6 @@ from gajim.common.helpers import event_filter
 
 from .assistant import Assistant
 from .assistant import Page
-from .assistant import ProgressPage
 from .assistant import ErrorPage
 from .assistant import SuccessPage
 
@@ -61,7 +60,7 @@ class RemoveAccount(Assistant):
                         'error': Error(),
                         'success': Success()})
 
-        progress = cast(ProgressPage, self.add_default_page('progress'))
+        progress = self.add_default_page('progress')
         progress.set_title(_('Removing Account...'))
         progress.set_text(_('Trying to remove account...'))
 

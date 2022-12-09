@@ -32,7 +32,6 @@ from gajim.common.helpers import to_user_string
 from .assistant import Assistant
 from .assistant import Page
 from .assistant import ErrorPage
-from .assistant import ProgressPage
 from .assistant import SuccessPage
 from .dataform import DataFormWidget
 from .util import ensure_not_destroyed
@@ -58,7 +57,7 @@ class ChangePassword(Assistant):
                         'error': Error(),
                         'success': Success()})
 
-        progress = cast(ProgressPage, self.add_default_page('progress'))
+        progress = self.add_default_page('progress')
         progress.set_title(_('Changing Password...'))
         progress.set_text(_('Trying to change password...'))
 

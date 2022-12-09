@@ -40,7 +40,6 @@ from gajim.common.modules.util import as_task
 from .assistant import Assistant
 from .assistant import Page
 from .assistant import ErrorPage
-from .assistant import ProgressPage
 from .groupchat_info import GroupChatInfoScrolled
 from .builder import get_builder
 from .util import open_window
@@ -76,7 +75,7 @@ class AddContact(Assistant):
             'gateway': Gateway(),
         })
 
-        progress = cast(ProgressPage, self.add_default_page('progress'))
+        progress = self.add_default_page('progress')
         progress.set_title(_('Gathering information…'))
         progress.set_text(_('Trying to gather information on this address…'))
 

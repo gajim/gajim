@@ -16,8 +16,10 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Callable
-from typing import Optional
 from typing import cast
+from typing import Literal
+from typing import Optional
+from typing import overload
 
 from gi.repository import Gdk
 from gi.repository import Gtk
@@ -148,6 +150,15 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
             self._pages[name] = widget
             widget.connect('update-page-complete', self._update_page_complete)
             self._ui.stack.add_named(widget, name)
+
+    @overload
+    def add_default_page(self, name: Literal['success']) -> SuccessPage: ...
+
+    @overload
+    def add_default_page(self, name: Literal['error']) -> ErrorPage: ...
+
+    @overload
+    def add_default_page(self, name: Literal['progress']) -> ProgressPage: ...
 
     def add_default_page(self, name: str) -> Page:
         if name == 'success':

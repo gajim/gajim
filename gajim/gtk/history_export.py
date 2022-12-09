@@ -35,8 +35,6 @@ from gajim.common.storage.archive import MessageExportRow
 from .assistant import Assistant
 from .assistant import Page
 from .assistant import ErrorPage
-from .assistant import SuccessPage
-from .assistant import ProgressPage
 from .builder import get_builder
 
 log = logging.getLogger('gajim.gui.history_export')
@@ -58,16 +56,16 @@ class HistoryExport(Assistant):
 
         self.add_pages({'start': SelectAccountDir(account)})
 
-        progress_page = cast(ProgressPage, self.add_default_page('progress'))
+        progress_page = self.add_default_page('progress')
         progress_page.set_title(_('Exporting History...'))
         progress_page.set_text(_('Exporting your messages...'))
 
-        success_page = cast(SuccessPage, self.add_default_page('success'))
+        success_page = self.add_default_page('success')
         success_page.set_title(_('Export Finished'))
         success_page.set_text(
             _('Your messages have been exported successfully'))
 
-        error_page = cast(ErrorPage, self.add_default_page('error'))
+        error_page = self.add_default_page('error')
         error_page.set_title(_('Error while Exporting'))
         error_page.set_text(
             _('An error occurred while exporting your messages'))
