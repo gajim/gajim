@@ -26,7 +26,7 @@ JIDS = [
     'example-node@example.com',
     'me@[::1]',
     'myself@127.13.42.69',
-    #'myself@127.13.42.69/localhost',  TODO
+    # 'myself@127.13.42.69/localhost',  TODO
     '#room%irc.example@biboumi.xmpp.example',
     r'here\27s_a_wild_\26_\2fcr%zy\2f_address_for\3a\3cwv\3e(\22IMPS\22)@example.com',
     r'CN=D\27Artagnan\20Saint-Andr\E9,O=Example\20\26\20Company,\20Inc.,DC=example,DC=com@st.example.com',

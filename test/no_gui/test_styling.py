@@ -19,8 +19,8 @@ from gajim.common.text_helpers import escape_iri_query
 
 
 app.settings = MagicMock()
-app.settings.get.return_value = 'a a- a. scheme'  # additional_uri_schemes
-
+# additional_uri_schemes
+app.settings.get = MagicMock(return_value='a a- a. scheme')
 
 STYLING = {
     'pre cannot have children':  {
@@ -425,7 +425,7 @@ UNACCEPTABLE_URIS = [
 
     'geo:1,',
     'geo:,2',
-    #'geo:1,2,',  FIXME: wrongly parsed as valid
+    # 'geo:1,2,',  FIXME: wrongly parsed as valid
     'geo:1,,3',
     'geo:,2,3',
     'geo:1,,',
@@ -492,7 +492,7 @@ JIDS = [
     '我買@屋企.香港',
     '二ノ宮@黒川.日本',
     'медведь@с-балалайкой.рф',
-    #'संपर्क@डाटामेल.भारत',  fails because of the 2 combining chars in localpart
+    # 'संपर्क@डाटामेल.भारत',  fails because of the 2 combining chars in localpart
 ]
 
 NONJIDS = [

@@ -1,10 +1,11 @@
 import unittest
 
+from gajim.common.const import URIType
+from gajim.common.const import XmppUriQuery
+
 from gajim import gui
 gui.init('gtk')
 
-from gajim.common.const import URIType
-from gajim.common.const import XmppUriQuery
 from gajim.gtk.menus import _uri_context_menus
 from gajim.gtk.menus import _xmpp_uri_context_menus
 
