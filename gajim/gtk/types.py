@@ -14,7 +14,8 @@
 
 # Types for typechecking
 
-from typing import Union
+from __future__ import annotations
+
 from typing import TYPE_CHECKING
 from typing import TypeVar
 
@@ -22,7 +23,7 @@ import cairo
 
 
 if TYPE_CHECKING:
-    from .control import ChatControl
+    from .control import ChatControl  # noqa: F401
     from .conversation.message_widget import MessageWidget  # noqa: F401
     from .conversation.view import ConversationView  # noqa: F401
     from .conversation.rows.call import CallRow  # noqa: F401
@@ -38,9 +39,5 @@ if TYPE_CHECKING:
     from .conversation.rows.read_marker import ReadMarkerRow  # noqa: F401
     from .conversation.rows.scroll_hint import ScrollHintRow  # noqa: F401
 
-
-ControlT = Union['ChatControl']
-
-ConversationViewT = Union['ConversationView']
 
 SomeSurface = TypeVar('SomeSurface', bound=cairo.Surface)
