@@ -658,6 +658,7 @@ class FileTransfersWindow:
             self.model.set(iter_, Column.PERCENT, int(percent))
             text = format_eta(eta)
             text += '\n'
+            # Translators:
             # This should make the string KB/s,
             # where 'KB' part is taken from %s.
             # Only the 's' after / (which means second) should be translated.
