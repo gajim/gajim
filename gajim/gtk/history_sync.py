@@ -15,7 +15,9 @@
 from __future__ import annotations
 
 from typing import cast
+from typing import Literal
 from typing import Optional
+from typing import overload
 
 import logging
 from datetime import datetime
@@ -85,7 +87,7 @@ class HistorySyncAssistant(Assistant, EventHelper):
         })
 
         self.add_default_page('success')
-        success_page = cast(SuccessPage, self.get_page('success'))
+        success_page = self.get_page('success')
         success_page.set_title(_('Synchronize Chat History'))
         success_page.set_heading(_('Finished'))
 
@@ -107,6 +109,18 @@ class HistorySyncAssistant(Assistant, EventHelper):
             self.show_page('success')
 
         self.show_all()
+
+    @overload
+    def get_page(self, name: Literal['select']) -> SelectTime: ...
+
+    @overload
+    def get_page(self, name: Literal['progress']) -> Progress: ...
+
+    @overload
+    def get_page(self, name: Literal['success']) -> SuccessPage: ...
+
+    def get_page(self, name: str) -> Page:
+        return self._pages[name]
 
     @staticmethod
     def _visible_func(_assistant: Assistant, page_name: str) -> list[str]:
@@ -134,7 +148,7 @@ class HistorySyncAssistant(Assistant, EventHelper):
             self.destroy()
 
     def _prepare_query(self) -> None:
-        select_time_page = cast(SelectTime, self.get_page('select'))
+        select_time_page = self.get_page('select')
         self._timedelta = select_time_page.get_timedelta()
         if self._timedelta is not None:
             self._start = self._now - self._timedelta
@@ -159,8 +173,7 @@ class HistorySyncAssistant(Assistant, EventHelper):
             return
 
         if result.rsm.count is not None:
-            progress_page = cast(Progress, self.get_page('progress'))
-            progress_page.set_count(int(result.rsm.count))
+            self.get_page('progress').set_count(int(result.rsm.count))
         mam_module = self._client.get_module('MAM')
         self._query_id = mam_module.request_archive_interval(
             self._start, self._end)
@@ -171,10 +184,10 @@ class HistorySyncAssistant(Assistant, EventHelper):
             return
         self._query_id = None
         log.info('Query finished')
-        progress_page = cast(Progress, self.get_page('progress'))
+        progress_page = self.get_page('progress')
         GLib.idle_add(progress_page.set_finished)
         received_count = progress_page.get_received_count()
-        success_page = cast(SuccessPage, self.get_page('success'))
+        success_page = self.get_page('success')
         success_page.set_text(_('Finished synchronising chat history:\n'
                                 '%s messages downloaded') % received_count)
         self.show_page('success')
@@ -185,7 +198,7 @@ class HistorySyncAssistant(Assistant, EventHelper):
             return
 
         log.debug('Received message')
-        progress_page = cast(Progress, self.get_page('progress'))
+        progress_page = self.get_page('progress')
         GLib.idle_add(progress_page.set_fraction)
 
 

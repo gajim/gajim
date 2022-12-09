@@ -14,9 +14,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import cast
 from typing import Any
+from typing import Literal
 from typing import Optional
+from typing import overload
 from typing import Union
 
 import logging
@@ -91,13 +95,28 @@ class ComponentSearch(Assistant, EventHelper):
 
         self.show_all()
 
+    @overload
+    def get_page(self, name: Literal['prepare']) -> RequestForm: ...
+
+    @overload
+    def get_page(self, name: Literal['form']) -> SearchForm: ...
+
+    @overload
+    def get_page(self, name: Literal['result']) -> Result: ...
+
+    @overload
+    def get_page(self, name: Literal['error']) -> Error: ...
+
+    def get_page(self, name: str) -> Page:
+        return self._pages[name]
+
     def _on_button_clicked(self,
                            _assistant: Assistant,
                            button_name: str
                            ) -> None:
         if button_name == 'search':
             self.show_page('progress', Gtk.StackTransitionType.SLIDE_LEFT)
-            form = cast(SearchForm, self.get_page('form')).get_submit_form()
+            form = self.get_page('form').get_submit_form()
             self._client.get_module('Search').send_search_form(
                 self._jid, form, True)
             return
@@ -112,13 +131,12 @@ class ComponentSearch(Assistant, EventHelper):
     @ensure_not_destroyed
     def _search_form_received(self, event: SearchFormReceivedEvent) -> None:
         if not event.is_dataform:
-            error_page = cast(Error, self.get_page('error'))
-            error_page.set_text(_('Error while retrieving search form.'))
+            self.get_page('error').set_text(
+                _('Error while retrieving search form.'))
             self.show_page('error')
             return
 
-        form_page = cast(SearchForm, self.get_page('form'))
-        form_page.process_search_form(event.data)
+        self.get_page('form').process_search_form(event.data)
         self.show_page('form')
 
     @ensure_not_destroyed
@@ -131,8 +149,7 @@ class ComponentSearch(Assistant, EventHelper):
             self.show_page('error')
             return
 
-        result_page = cast(Result, self.get_page('result'))
-        result_page.process_result(event.data)
+        self.get_page('result').process_result(event.data)
         self.show_page('result')
 
     def _on_destroy(self, *args: Any) -> None:

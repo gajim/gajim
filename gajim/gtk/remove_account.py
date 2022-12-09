@@ -12,8 +12,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Any
-from typing import cast
+from typing import Literal
+from typing import overload
 
 import logging
 
@@ -77,6 +80,18 @@ class RemoveAccount(Assistant):
 
         self.show_all()
 
+    @overload
+    def get_page(self, name: Literal['remove_choice']) -> RemoveChoice: ...
+
+    @overload
+    def get_page(self, name: Literal['error']) -> Error: ...
+
+    @overload
+    def get_page(self, name: Literal['success']) -> Success: ...
+
+    def get_page(self, name: str) -> Page:
+        return self._pages[name]
+
     @event_filter(['account'])
     def _on_account_connected(self, _event: AccountConnected) -> None:
         self._client = app.get_client(self.account)
@@ -92,8 +107,7 @@ class RemoveAccount(Assistant):
 
     def _set_remove_from_server_checkbox(self) -> None:
         enabled = self._client is not None and self._client.state.is_available
-        remove_choice_page = cast(RemoveChoice, self.get_page('remove_choice'))
-        remove_choice_page.set_remove_from_server(enabled)
+        self.get_page('remove_choice').set_remove_from_server(enabled)
 
     def _on_button_clicked(self,
                            _assistant: Assistant,
@@ -116,7 +130,7 @@ class RemoveAccount(Assistant):
             self.destroy()
 
     def _on_remove(self, *args: Any) -> None:
-        remove_choice_page = cast(RemoveChoice, self.get_page('remove_choice'))
+        remove_choice_page = self.get_page('remove_choice')
         if remove_choice_page.remove_from_server:
             assert self._client is not None
             self._client.set_remove_account(True)
@@ -140,8 +154,7 @@ class RemoveAccount(Assistant):
             self._client.set_remove_account(False)
 
             error_text = to_user_string(error)
-            error_page = cast(Error, self.get_page('error'))
-            error_page.set_text(error_text)
+            self.get_page('error').set_text(error_text)
             self.show_page('error')
             return
 

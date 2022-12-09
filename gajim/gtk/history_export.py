@@ -15,7 +15,9 @@
 from __future__ import annotations
 
 from typing import cast
+from typing import Literal
 from typing import Optional
+from typing import overload
 
 import logging
 import time
@@ -33,8 +35,8 @@ from gajim.common.i18n import _
 from gajim.common.storage.archive import MessageExportRow
 
 from .assistant import Assistant
-from .assistant import Page
 from .assistant import ErrorPage
+from .assistant import Page
 from .builder import get_builder
 
 log = logging.getLogger('gajim.gui.history_export')
@@ -73,6 +75,15 @@ class HistoryExport(Assistant):
         self.connect('button-clicked', self._on_button_clicked)
         self.show_all()
 
+    @overload
+    def get_page(self, name: Literal['error']) -> ErrorPage: ...
+
+    @overload
+    def get_page(self, name: Literal['start']) -> SelectAccountDir: ...
+
+    def get_page(self, name: str) -> Page:
+        return self._pages[name]
+
     @staticmethod
     def _visible_func(_assistant: Assistant, page_name: str) -> list[str]:
         if page_name == 'start':
@@ -103,7 +114,7 @@ class HistoryExport(Assistant):
             self.destroy()
 
     def _on_export(self) -> None:
-        start_page = cast(SelectAccountDir, self.get_page('start'))
+        start_page = self.get_page('start')
         account, directory = start_page.get_account_and_directory()
 
         current_time = datetime.now()
@@ -121,8 +132,7 @@ class HistoryExport(Assistant):
             try:
                 file_path.mkdir(parents=True, exist_ok=True)
             except OSError as err:
-                error_page = cast(ErrorPage, self.get_page('error'))
-                error_page.set_text(
+                self.get_page('error').set_text(
                     _('An error occurred while trying to create a '
                       'file at %(path)s: %(error)s') % {
                           'path': file_path,
