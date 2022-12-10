@@ -13,6 +13,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import annotations
+
 from typing import Any
 from typing import Optional
 from typing import cast
@@ -118,7 +119,7 @@ class Preferences(Gtk.ApplicationWindow):
     def _add_prefs(self, prefs: list[tuple[str, type[PreferenceBox]]]):
         for ui_name, klass in prefs:
             pref_box = getattr(self._ui, ui_name)
-            pref = klass(self)
+            pref = klass(self)  # pyright: ignore
             pref_box.add(pref)
             self._prefs[ui_name] = pref
 
