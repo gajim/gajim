@@ -48,6 +48,15 @@ def _require_native() -> bool:
 # Notes: Adding mime types to Gtk.FileFilter forces non-native dialogs
 
 class BaseFileChooser:
+
+    _preview_size: tuple[int, int]
+
+    def add_filter(self, filter: Gtk.FileFilter) -> None:
+        pass
+
+    def set_filter(self, filter: Gtk.FileFilter) -> None:
+        pass
+
     def _on_response(self,
                      dialog: Union[Gtk.FileChooser, Gtk.FileChooserNative],
                      response: Gtk.ResponseType,
