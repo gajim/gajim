@@ -23,8 +23,9 @@ from typing import overload
 
 from gi.repository import Gdk
 from gi.repository import Gtk
-from gi.repository import Gio
 from gi.repository import GObject
+
+from gajim.common import app
 
 from .builder import get_builder
 from .util import EventHelper
@@ -51,7 +52,7 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
                  transition_duration: int = 200) -> None:
         Gtk.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
-        self.set_application(Gio.Application.get_default())
+        self.set_application(app.app)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
         self.set_name('Assistant')
