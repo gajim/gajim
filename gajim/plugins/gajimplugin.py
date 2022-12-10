@@ -23,6 +23,7 @@ import pickle
 from gajim.common import configpaths
 from gajim.common.events import ApplicationEvent
 from gajim.common.ged import HandlerFuncT
+from gajim.common.modules.base import BaseModule
 from gajim.common.types import PluginExtensionPoints
 
 
@@ -77,8 +78,8 @@ class GajimPlugin:
     events: list[ApplicationEvent] = []
     '''
     New network event classes to be registered in Network Events Controller.
-
     '''
+    modules: list[BaseModule] = []
 
     def __init__(self) -> None:
         self.config = GajimPluginConfig(self)
