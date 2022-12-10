@@ -100,10 +100,8 @@ class SynchronizeAccounts(Gtk.ApplicationWindow):
             iter_ = model.append()
             model.set(
                 iter_,
-                0,
-                remote_account,
-                1,
-                app.get_hostname_from_account(remote_account))
+                {0: remote_account,
+                 1: app.get_hostname_from_account(remote_account)})
 
     def _on_next_clicked(self, _button: Gtk.Button) -> None:
         selection = self._ui.accounts_treeview.get_selection()
@@ -146,7 +144,10 @@ class SynchronizeAccounts(Gtk.ApplicationWindow):
         for remote_jid in remote_jid_list:
             if remote_jid not in local_jid_list:
                 iter_ = model.append()
-                model.set(iter_, 0, True, 1, remote_jid)
+                model.set(
+                    iter_,
+                    {0: True,
+                     1: remote_jid})
 
     def _on_sync_toggled(self, cell: Gtk.CellRendererToggle, path: str) -> None:
         model = self._ui.contacts_treeview.get_model()
