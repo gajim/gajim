@@ -91,6 +91,7 @@ include = [
     "gajim/gtk/contacts_flowbox.py",
     "gajim/gtk/control.py",
     "gajim/gtk/conversation/*",
+    "gajim/gtk/css_config.py",
     "gajim/gtk/dialogs.py",
     "gajim/gtk/emoji_data_gtk.py",
     "gajim/gtk/exception.py",

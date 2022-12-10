@@ -25,14 +25,18 @@ import logging
 from pathlib import Path
 import sys
 
+import css_parser
+from css_parser.css import CSSStyleSheet
+from css_parser.css import CSSStyleRule
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
-import css_parser
 
 from gajim.common import app
 from gajim.common import configpaths
-from gajim.common.const import StyleAttr, CSSPriority
+from gajim.common.const import StyleAttr
+from gajim.common.const import CSSPriority
 from gajim.common.dbus.system_style import SystemStyleListener
 
 from .const import Theme
@@ -77,16 +81,16 @@ class CSSConfig:
         css_parser.ser.prefs.keepEmptyRules = False
 
         # Holds the currently selected theme in the Theme Editor
-        self._pre_css: Optional[css_parser.css.CSSStyleSheet] = None
+        self._pre_css: Optional[CSSStyleSheet] = None
         self._pre_css_path: Optional[Path] = None
 
         # Holds the default theme, its used if values are not found
         # in the selected theme
-        self._default_css: Optional[css_parser.css.CSSStyleSheet] = None
+        self._default_css: Optional[CSSStyleSheet] = None
         self._default_css_path: Optional[Path] = None
 
         # Holds the currently selected theme
-        self._css: Optional[css_parser.css.CSSStyleSheet] = None
+        self._css: Optional[CSSStyleSheet] = None
         self._css_path: Optional[Path] = None
 
         # User Theme CSS Provider
@@ -97,8 +101,10 @@ class CSSConfig:
         self._dynamic_dict: dict[str, str] = {}
         self.refresh()
 
+        screen = Gdk.Screen.get_default()
+        assert screen is not None
         Gtk.StyleContext.add_provider_for_screen(
-            Gdk.Screen.get_default(),
+            screen,
             self._dynamic_provider,
             CSSPriority.APPLICATION)
 
@@ -118,7 +124,7 @@ class CSSConfig:
         self._activate_theme()
 
         Gtk.StyleContext.add_provider_for_screen(
-            Gdk.Screen.get_default(),
+            screen,
             self._provider,
             CSSPriority.USER_THEME)
 
@@ -180,7 +186,9 @@ class CSSConfig:
         try:
             provider = Gtk.CssProvider()
             provider.load_from_data(bytes(css.encode('utf-8')))
-            Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(),
+            screen = Gdk.Screen.get_default()
+            assert screen is not None
+            Gtk.StyleContext.add_provider_for_screen(screen,
                                                      provider,
                                                      priority)
             self._load_selected()
@@ -198,7 +206,9 @@ class CSSConfig:
         '''
         provider = Gtk.CssProvider()
         provider.load_from_data(bytes(css.encode('utf-8')))
-        Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(),
+        screen = Gdk.Screen.get_default()
+        assert screen is not None
+        Gtk.StyleContext.add_provider_for_screen(screen,
                                                  provider,
                                                  CSSPriority.PRE_APPLICATION)
 
@@ -265,6 +275,9 @@ class CSSConfig:
         if pre:
             path = self._pre_css_path
             css = self._pre_css
+
+        assert path is not None
+        assert css is not None
         with open(path, 'w', encoding='utf-8') as file:
             file.write(css.cssText.decode('utf-8'))
 
@@ -275,12 +288,14 @@ class CSSConfig:
 
     def set_value(self,
                   selector: str,
-                  attr: StyleAttr,
+                  attr: Union[str, StyleAttr],
                   value: Union[str, Pango.FontDescription],
                   pre: bool = False
                   ) -> None:
+
         if attr == StyleAttr.FONT:
             # forward to set_font() for convenience
+            assert isinstance(value, Pango.FontDescription)
             self.set_font(selector, value, pre)
             return
 
@@ -290,6 +305,8 @@ class CSSConfig:
         css = self._css
         if pre:
             css = self._pre_css
+
+        assert css is not None
         for rule in css:
             if rule.type != rule.STYLE_RULE:
                 continue
@@ -303,7 +320,7 @@ class CSSConfig:
 
         # The rule was not found, so we add it to this theme
         log.info('Set %s %s %s', selector, attr, value)
-        rule = css_parser.css.CSSStyleRule(selectorText=selector)
+        rule = CSSStyleRule(selectorText=selector)
         rule.style[attr] = value
         css.add(rule)
         self._write(pre)
@@ -318,6 +335,7 @@ class CSSConfig:
             css = self._pre_css
         family, size, style, weight = self._get_attr_from_description(
             description)
+        assert css is not None
         for rule in css:
             if rule.type != rule.STYLE_RULE:
                 continue
@@ -338,7 +356,7 @@ class CSSConfig:
         # The rule was not found, so we add it to this theme
         log.info('Set Font for: %s %s %s %s %s',
                  selector, family, size, style, weight)
-        rule = css_parser.css.CSSStyleRule(selectorText=selector)
+        rule = CSSStyleRule(selectorText=selector)
         rule.style['font-family'] = family
         rule.style['font-style'] = style
         rule.style['font-size'] = f'{size}pt'
@@ -349,6 +367,7 @@ class CSSConfig:
     def _get_attr_from_description(self,
                                    description: Pango.FontDescription
                                    ) -> tuple[Optional[str], float, str, int]:
+
         size = description.get_size() / Pango.SCALE
         style = self._get_string_from_pango_style(description.get_style())
         weight = self._pango_to_css_weight(int(description.get_weight()))
@@ -357,8 +376,10 @@ class CSSConfig:
 
     def _get_default_rule(self,
                           selector: str,
-                          _attr: StyleAttr
-                          ) -> Optional[css_parser.css.CSSStyleRule]:
+                          _attr: str
+                          ) -> Optional[CSSStyleRule]:
+
+        assert self._default_css is not None
         for rule in self._default_css:
             if rule.type != rule.STYLE_RULE:
                 continue
@@ -376,7 +397,9 @@ class CSSConfig:
         else:
             css = self._css
             try:
-                return self._get_from_cache(selector, 'fontdescription')
+                font_desc = self._get_from_cache(selector, 'fontdescription')
+                if isinstance(font_desc, Pango.FontDescription):
+                    return font_desc
             except KeyError:
                 pass
 
@@ -408,6 +431,7 @@ class CSSConfig:
                                   style: Optional[str],
                                   weight: Optional[str]
                                   ) -> Optional[Pango.FontDescription]:
+
         if family is None:
             return None
         desc = Pango.FontDescription()
@@ -440,9 +464,10 @@ class CSSConfig:
 
     def get_value(self,
                   selector: str,
-                  attr: StyleAttr,
+                  attr: Union[str, StyleAttr],
                   pre: bool = False
                   ) -> Union[str, Pango.FontDescription, None]:
+
         if attr == StyleAttr.FONT:
             # forward to get_font() for convenience
             return self.get_font(selector, pre)
@@ -482,9 +507,10 @@ class CSSConfig:
 
     def remove_value(self,
                      selector: str,
-                     attr: StyleAttr,
+                     attr: Union[str, StyleAttr],
                      pre: bool = False
                      ) -> None:
+
         if attr == StyleAttr.FONT:
             # forward to remove_font() for convenience
             self.remove_font(selector, pre)
@@ -496,6 +522,8 @@ class CSSConfig:
         css = self._css
         if pre:
             css = self._pre_css
+
+        assert css is not None
         for rule in css:
             if rule.type != rule.STYLE_RULE:
                 continue
@@ -510,6 +538,7 @@ class CSSConfig:
         if pre:
             css = self._pre_css
 
+        assert css is not None
         for rule in css:
             if rule.type != rule.STYLE_RULE:
                 continue
@@ -566,6 +595,7 @@ class CSSConfig:
     def _activate_theme(self) -> None:
         log.info('Activate theme')
         self._invalidate_cache()
+        assert self._css is not None
         self._provider.load_from_data(self._css.cssText)
 
     def add_new_theme(self, theme: str) -> bool:
@@ -588,15 +618,17 @@ class CSSConfig:
 
     def _add_to_cache(self,
                       selector: str,
-                      attr: StyleAttr,
+                      attr: str,
                       value: Union[str, Pango.FontDescription, None]
                       ) -> None:
+
         self._cache[selector + attr] = value
 
     def _get_from_cache(self,
                         selector: str,
-                        attr: StyleAttr
+                        attr: str
                         ) -> Union[str, Pango.FontDescription, None]:
+
         return self._cache[selector + attr]
 
     def _invalidate_cache(self) -> None:
