@@ -144,8 +144,8 @@ class ComponentSearch(Assistant, EventHelper):
                                 event: SearchResultReceivedEvent
                                 ) -> None:
         if event.data is None:
-            error_page = cast(Error, self.get_page('error'))
-            error_page.set_text(_('Error while receiving search results.'))
+            self.get_page('error').set_text(
+                _('Error while receiving search results.'))
             self.show_page('error')
             return
 
@@ -320,7 +320,7 @@ class Result(Page):
         assert store is not None
         assert path is not None
         iter_ = store.get_iter(path)
-        column_values = store[iter_]
+        column_values = cast(str, store[iter_])
         text = ' '.join(column_values)
 
         jid = None
