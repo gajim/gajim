@@ -496,7 +496,7 @@ class ChatControl(EventHelper):
 
     def drag_data_file_transfer(self, selection: Gtk.SelectionData) -> None:
         app.window.activate_action('send-file',
-            GLib.Variant('as', selection.get_uris()))
+                                   GLib.Variant('as', selection.get_uris()))
 
     def get_our_nick(self) -> str:
         if isinstance(self.contact, GroupchatParticipant):
