@@ -142,7 +142,11 @@ class RosterItemExchange(Gtk.ApplicationWindow):
                 self.show_all()
                 assert isinstance(self._model, Gtk.ListStore)
                 iter_ = self._model.append()
-                self._model.set(iter_, 0, True, 1, jid, 2, name, 3, groups)
+                self._model.set(iter_,
+                                {0: True,
+                                 1: jid,
+                                 2: name,
+                                 3: groups})
 
         self._ui.accept_button.set_label(_('Add'))
 
@@ -169,7 +173,11 @@ class RosterItemExchange(Gtk.ApplicationWindow):
                 self.show_all()
                 assert isinstance(self._model, Gtk.ListStore)
                 iter_ = self._model.append()
-                self._model.set(iter_, 0, True, 1, jid, 2, name, 3, groups)
+                self._model.set(iter_,
+                                {0: True,
+                                 1: jid,
+                                 2: name,
+                                 3: groups})
 
         self._ui.accept_button.set_label(_('Modify'))
 
@@ -190,7 +198,11 @@ class RosterItemExchange(Gtk.ApplicationWindow):
                 self.show_all()
                 assert isinstance(self._model, Gtk.ListStore)
                 iter_ = self._model.append()
-                self._model.set(iter_, 0, True, 1, jid, 2, name, 3, groups)
+                self._model.set(iter_,
+                                {0: True,
+                                 1: jid,
+                                 2: name,
+                                 3: groups})
 
         self._ui.accept_button.set_label(_('Delete'))
 
