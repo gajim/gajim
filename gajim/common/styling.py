@@ -14,6 +14,7 @@
 
 from __future__ import annotations
 
+from typing import Any
 from typing import Union
 from typing import Match
 from typing import Optional
@@ -100,7 +101,7 @@ class MailAddress(BaseHyperlink):
 class Block(StyleObject):
 
     @classmethod
-    def from_match(cls, match: Match[str]) -> Block:
+    def from_match(cls: Any, match: Match[str]) -> Block:
         return cls(start=match.start(),
                    end=match.end(),
                    text=match.group(cls.name))
