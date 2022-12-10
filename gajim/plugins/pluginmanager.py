@@ -52,6 +52,7 @@ from gajim.plugins.gajimplugin import GajimPluginException
 
 log = logging.getLogger('gajim.p.manager')
 
+RmErrorT = tuple[type[BaseException], BaseException, TracebackType]
 
 BLOCKED_PLUGINS = [
     'appindicator_integration',
@@ -714,11 +715,9 @@ class PluginManager(metaclass=Singleton):
         return self.add_plugin(manifest)
 
     def delete_plugin_files(self, plugin_path: Path) -> None:
-        ErrorT = tuple[type[BaseException], BaseException, TracebackType]
-
         def _on_error(func: Callable[..., Any],
                       path: Path,
-                      error: ErrorT
+                      error: RmErrorT
                       ) -> None:
 
             if func is os.path.islink:
