@@ -27,6 +27,7 @@ include = [
     "launch.py",
     "setup.py",
     ".ci/*",
+    "mac/*",
     "scripts/*",
     "win/*",
     "gajim/common/application.py",

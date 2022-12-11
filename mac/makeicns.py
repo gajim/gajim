@@ -7,7 +7,7 @@ from subprocess import run
 ICON_SVG = 'gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim.svg'
 
 
-def create_icns(icon_path):
+def create_icns(icon_path: str) -> None:
     tmpdir = 'Gajim.iconset'
     if os.path.isdir(tmpdir):
         shutil.rmtree(tmpdir)
