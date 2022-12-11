@@ -131,7 +131,10 @@ class FileTransferRow(BaseRow, EventHelper):
         size_total = GLib.format_size_full(transfer.size, self._units)
         self._ui.file_size.set_text(size_total)
 
-        bytes_sec = int(round(transfer.seen / (time_now - self._start_time), 1))
+        progress = transfer.get_progress()
+        seen = transfer.size * progress
+
+        bytes_sec = int(round(seen / (time_now - self._start_time), 1))
         speed = f'{GLib.format_size_full(bytes_sec, self._units)}/s'
         self._ui.transfer_progress.set_tooltip_text(_('Speed: %s') % speed)
 
@@ -139,9 +142,8 @@ class FileTransferRow(BaseRow, EventHelper):
             eta = '∞'
         else:
             eta = format_eta(round(
-                (transfer.size - transfer.seen) / bytes_sec))
+                (transfer.size - seen) / bytes_sec))
 
-        progress = float(transfer.seen) / transfer.size
         self._ui.transfer_progress.set_text(
             _('%(progress)s %% (%(time)s remaining)') % {
                 'progress': round(progress * 100),

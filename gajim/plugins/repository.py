@@ -12,7 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Any
+from typing import Any, cast
 from typing import Iterable
 from typing import Optional
 
@@ -21,14 +21,14 @@ import json
 from io import BytesIO
 from zipfile import ZipFile
 
-from gi.repository import Soup
 from gi.repository import GLib
+from nbxmpp.http import HTTPRequest
 
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.helpers import Observable
-from gajim.common.helpers import make_http_request
 from gajim.plugins.manifest import PluginManifest
+from gajim.common.util.http import create_http_request
 
 
 log = logging.getLogger('gajim.p.repository')
@@ -60,28 +60,27 @@ class PluginRepository(Observable):
         self._download_queue: set[PluginManifest] = set()
 
         if app.settings.get('plugins_repository_enabled'):
-            make_http_request('https://gajim.org/updates.json',
-                              self._on_repository_received)
+            request = create_http_request()
+            request.send('GET', 'https://gajim.org/updates.json',
+                         callback=self._on_repository_received)
 
     @property
     def available(self):
         return bool(self._repository_url)
 
-    def _on_repository_received(self,
-                                _session: Soup.Session,
-                                message: Soup.Message) -> None:
+    def _on_repository_received(self, request: HTTPRequest) -> None:
 
-        if message.status_code != Soup.Status.OK:
-            log.warning('Repository retrieval failed')
-            log.warning(Soup.Status.get_phrase(message.status_code))
+        if not request.is_complete():
+            log.warning('Repository retrieval failed: %s',
+                        request.get_error_string())
             return
 
-        assert message.props.response_body_data is not None
-        data = message.props.response_body_data.get_data()
-        if data is None:
+        try:
+            updates = json.loads(request.get_data())
+        except Exception as error:
+            log.warning('Unable to parse repository information: %s', error)
             return
 
-        updates = json.loads(data.decode())
         repository_url = updates.get('plugin_repository')
         if repository_url is None:
             log.warning('No plugin repository url found')
@@ -148,56 +147,49 @@ class PluginRepository(Observable):
 
     def _refresh_plugin_index(self, callback: Optional[Any] = None) -> None:
         log.info('Refresh index')
-        make_http_request(self._repository_index_url,
-                          self._on_index_received,
-                          callback)
+        request = create_http_request()
+        request.set_user_data(callback)
+        request.send('GET', self._repository_index_url,
+                     callback=self._on_index_received)
 
-    def _on_index_received(self,
-                           _session: Soup.Session,
-                           message: Soup.Message,
-                           callback: Optional[Any] = None) -> None:
+    def _on_index_received(self, request: HTTPRequest) -> None:
 
-        if message.status_code != Soup.Status.OK:
-            log.warning('Refresh failed: %s', self._repository_index_url)
-            log.warning(Soup.Status.get_phrase(message.status_code))
+        if not request.is_complete():
+            log.warning('Refresh failed: %s %s',
+                        self._repository_index_url,
+                        request.get_error_string())
             return
 
-        assert message.props.response_body_data is not None
-        data = message.props.response_body_data.get_data()
-        if data is None:
+        try:
+            package_index = json.loads(request.get_data())
+        except Exception as error:
+            log.warning('Unable to parse repository index: %s', error)
             return
-
-        package_index = json.loads(data.decode())
 
         self._manifests = self._parse_package_json(package_index)
 
         image_path = package_index['metadata']['image_path']
-        make_http_request(f'{self._repository_url}/{image_path}',
-                          self._on_images_received)
+        callback = request.get_user_data()
+
+        request = create_http_request()
+        request.send('GET', f'{self._repository_url}/{image_path}',
+                     callback=self._on_images_received)
 
         log.info('Refresh successful')
 
         if callback is not None:
             callback()
 
-    def _on_images_received(self,
-                            _session: Soup.Session,
-                            message: Soup.Message) -> None:
+    def _on_images_received(self, request: HTTPRequest) -> None:
 
-        if message.status_code != Soup.Status.OK:
-            log.warning('Image download failed')
-            log.warning(Soup.Status.get_phrase(message.status_code))
-            return
-
-        assert message.props.response_body_data is not None
-        data = message.props.response_body_data.get_data()
-        if data is None:
+        if not request.is_complete():
+            log.warning('Image download failed: %s', request.get_error_string())
             return
 
         path = configpaths.get('PLUGINS_IMAGES')
 
         try:
-            zipfile = ZipFile(BytesIO(data))
+            zipfile = ZipFile(BytesIO(request.get_data()))
             zipfile.extractall(path)
         except Exception as error:
             log.warning('Failed to extract images: %s', error)
@@ -245,27 +237,25 @@ class PluginRepository(Observable):
     def _download_plugin(self, manifest: PluginManifest) -> None:
         log.info('Download plugin %s', manifest.short_name)
         url = manifest.get_remote_url(self._repository_url)
-        make_http_request(url, self._on_download_plugin_finished, manifest)
+        request = create_http_request()
+        request.set_user_data(manifest)
+        request.send('GET', url,
+                     callback=self._on_download_plugin_finished)
 
-    def _on_download_plugin_finished(self,
-                                     _session: Soup.Session,
-                                     message: Soup.Message,
-                                     manifest: PluginManifest) -> None:
+    def _on_download_plugin_finished(self, request: HTTPRequest) -> None:
 
+        manifest = cast(PluginManifest, request.get_user_data())
         self._download_queue.remove(manifest)
 
-        if message.status_code != Soup.Status.OK:
-            error = Soup.Status.get_phrase(message.status_code)
-            log.error('Download failed: %s',
-                      manifest.get_remote_url(self._repository_url))
-            log.error(error)
+        if not request.is_complete():
+            error = request.get_error_string()
+            log.error('Download failed: %s %s',
+                      manifest.get_remote_url(self._repository_url),
+                      error)
             self.notify('download-failed', manifest, error)
             return
 
-        assert message.props.response_body_data is not None
-        data = message.props.response_body_data.get_data()
-
-        with ZipFile(BytesIO(data)) as zip_file:
+        with ZipFile(BytesIO(request.get_data())) as zip_file:
             zip_file.extractall(self._download_path / manifest.short_name)
 
         log.info('Finished downloading %s', manifest.short_name)

@@ -20,12 +20,13 @@ from typing import cast
 from typing import Callable
 from typing import Optional
 
-import os
-import io
+from collections import defaultdict
+import functools
+from pathlib import Path
 from urllib.parse import urlparse
 import mimetypes
-from collections import defaultdict
-from pathlib import Path
+import os
+import tempfile
 
 from nbxmpp.errors import StanzaError
 from nbxmpp.errors import MalformedStanzaError
@@ -36,23 +37,25 @@ from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import HTTPUploadData
 from nbxmpp.task import Task
 from nbxmpp.util import convert_tls_error_flags
+from nbxmpp.http import HTTPRequest
+from nbxmpp.const import HTTPRequestError
 
 from gi.repository import Gio
 from gi.repository import GLib
-from gi.repository import Soup
 
 from gajim.common import app
 from gajim.common import types
 from gajim.common.events import HTTPUploadError
 from gajim.common.events import HTTPUploadStarted
 from gajim.common.i18n import _
+from gajim.common.helpers import get_random_string
 from gajim.common.helpers import get_tls_error_phrases
-from gajim.common.helpers import get_account_proxy
 from gajim.common.const import FTState
 from gajim.common.filetransfer import FileTransfer
 from gajim.common.modules.base import BaseModule
 from gajim.common.exceptions import FileError
 from gajim.common.structs import OutgoingMessage
+from gajim.common.util.http import create_http_request
 
 
 class HTTPUpload(BaseModule):
@@ -67,23 +70,10 @@ class HTTPUpload(BaseModule):
         self.httpupload_namespace: Optional[str] = None
         self.max_file_size: Optional[float] = None  # max file size in bytes
 
-        self._proxy_resolver: Optional[Gio.SimpleProxyResolver] = None
-        self._queued_messages: dict[int, Soup.Message] = {}
-        self._session = Soup.Session()
-        self._session.props.ssl_strict = False
-        self._session.props.user_agent = f'Gajim {app.version}'
+        self._requests_in_progress: dict[int, HTTPRequest] = {}
 
         self._running_transfers: dict[
             tuple[str, JID], set[HTTPFileTransfer]] = defaultdict(set)
-
-    def _set_proxy_if_available(self) -> None:
-        proxy = get_account_proxy(self._account)
-        if proxy is None:
-            self._proxy_resolver = None
-            self._session.props.proxy_resolver = None
-        else:
-            self._proxy_resolver = proxy.get_resolver()
-            self._session.props.proxy_resolver = self._proxy_resolver
 
     def pass_disco(self, info: DiscoInfo) -> None:
         if not info.has_httpupload:
@@ -215,11 +205,11 @@ class HTTPUpload(BaseModule):
         key = (transfer.account, transfer.contact.jid)
         self._running_transfers[key].discard(transfer)
 
-        message = self._queued_messages.get(id(transfer))
-        if message is None:
+        request = self._requests_in_progress.get(id(transfer))
+        if request is None:
             return
 
-        self._session.cancel_message(message, Soup.Status.CANCELLED)
+        request.cancel()
 
     def _start_transfer(self, transfer: HTTPFileTransfer) -> None:
         if transfer.encryption is not None and not transfer.is_encrypted:
@@ -283,106 +273,61 @@ class HTTPUpload(BaseModule):
         transfer.set_started()
 
         assert transfer.put_uri is not None
-        message = Soup.Message.new('PUT', transfer.put_uri)
-        message.connect('starting', self._check_certificate, transfer)
+        request = create_http_request(self._account)
+        request.set_user_data(transfer)
+        request.connect('accept-certificate', self._accept_certificate)
+        request.connect('request-progress', self._on_request_progress)
 
-        # Set CAN_REBUILD so chunks get discarded after they have been
-        # written to the network
-        message.set_flags(Soup.MessageFlags.CAN_REBUILD |
-                          Soup.MessageFlags.NO_REDIRECT)
+        request.set_request_body_from_path(transfer.mime, transfer.payload_path)
 
-        assert message.props.request_body is not None
-        message.props.request_body.set_accumulate(False)
-
-        assert message.props.request_headers is not None
-        message.props.request_headers.set_content_type(transfer.mime, None)
-        message.props.request_headers.set_content_length(transfer.size)
         for name, value in transfer.headers.items():
-            message.props.request_headers.append(name, value)
+            request.get_request_headers().append(name, value)
 
-        message.connect('wrote-headers', self._on_wrote_headers, transfer)
-        message.connect('wrote-chunk', self._on_wrote_chunk, transfer)
+        request.send('PUT', transfer.put_uri, callback=self._on_finish)
 
-        self._queued_messages[id(transfer)] = message
-        self._set_proxy_if_available()
-        self._session.queue_message(message, self._on_finish, transfer)
+        self._requests_in_progress[id(transfer)] = request
 
-    def _check_certificate(self,
-                           message: Soup.Message,
-                           transfer: HTTPFileTransfer
-                           ) -> None:
-        https_used, tls_certificate, tls_errors = message.get_https_status()
-        if not https_used:
-            self._log.warning('HTTPS was not used for upload')
-            transfer.set_error('unsecure')
-            self._session.cancel_message(message, Soup.Status.CANCELLED)
-            return
+    def _accept_certificate(self,
+                            request: HTTPRequest,
+                            _certificate: Gio.TlsCertificate,
+                            certificate_errors: Gio.TlsCertificateFlags,
+                            ) -> bool:
 
-        tls_error_set = convert_tls_error_flags(tls_errors)
-        if app.cert_store.verify(tls_certificate, tls_error_set):
-            return
-
-        phrases = get_tls_error_phrases(tls_error_set)
+        transfer = request.get_user_data()
+        phrases = get_tls_error_phrases(
+            convert_tls_error_flags(certificate_errors))
         self._log.warning(
-            'TLS verification failed: %s (0x%02x)', phrases, tls_errors)
+            'TLS verification failed: %s (0x%02x)', phrases, certificate_errors)
+
         transfer.set_error('tls-verification-failed', phrases[0])
-        self._session.cancel_message(message, Soup.Status.CANCELLED)
+        return False
 
-    def _on_finish(self,
-                   _session: Soup.Session,
-                   message: Soup.Message,
-                   transfer: HTTPFileTransfer
-                   ) -> None:
+    def _on_finish(self, request: HTTPRequest) -> None:
+        transfer = request.get_user_data()
 
-        self._queued_messages.pop(id(transfer), None)
+        self._requests_in_progress.pop(id(transfer), None)
 
         key = (transfer.account, transfer.contact.jid)
         self._running_transfers[key].discard(transfer)
 
-        if message.props.status_code == Soup.Status.CANCELLED:
-            self._log.info('Upload cancelled')
+        if not request.is_complete():
+            error = request.get_error_string()
+            if request.get_error() == HTTPRequestError.CANCELLED:
+                self._log.info('Upload cancelled')
+            else:
+                transfer.set_error('http-response', error)
             return
 
-        if message.props.status_code in (Soup.Status.OK, Soup.Status.CREATED):
-            self._log.info('Upload completed successfully')
-            transfer.set_finished()
+        transfer.set_finished()
+        self._log.info('Upload completed successfully')
 
-        else:
-            phrase = Soup.Status.get_phrase(message.props.status_code)
-            self._log.error('Got unexpected http upload response code: %s',
-                            phrase)
-            transfer.set_error('http-response', phrase)
+    def _on_request_progress(self,
+                             request: HTTPRequest,
+                             progress: float
+                             ) -> None:
 
-    def _on_wrote_chunk(self,
-                        message: Soup.Message,
-                        transfer: HTTPFileTransfer
-                        ) -> None:
-        transfer.update_progress()
-        if transfer.is_complete:
-            assert message.props.request_body is not None
-            message.props.request_body.complete()
-            return
-
-        bytes_ = transfer.get_chunk()
-        assert bytes_ is not None
-        self._session.pause_message(message)
-        GLib.idle_add(self._append, message, bytes_)
-
-    def _append(self, message: Soup.Message, bytes_: bytes) -> None:
-        if message.props.status_code == Soup.Status.CANCELLED:
-            return
-        self._session.unpause_message(message)
-        assert message.props.request_body is not None
-        message.props.request_body.append(bytes_)
-
-    @staticmethod
-    def _on_wrote_headers(message: Soup.Message,
-                          transfer: HTTPFileTransfer
-                          ) -> None:
-        bytes_ = transfer.get_chunk()
-        assert bytes_ is not None
-        assert message.props.request_body is not None
-        message.props.request_body.append(bytes_)
+        transfer = request.get_user_data()
+        transfer.set_progress(progress)
 
 
 class HTTPFileTransfer(FileTransfer):
@@ -410,22 +355,31 @@ class HTTPFileTransfer(FileTransfer):
 
         FileTransfer.__init__(self, account)
 
-        self._path = path
+        self._path = Path(path)
         self._encryption = encryption
         self._groupchat = groupchat
         self._contact = contact
         self._mime = mime
 
-        self.size = os.stat(path).st_size
         self.put_uri: Optional[str] = None
         self.get_uri: Optional[str] = None
         self._uri_transform_func: Optional[Callable[[str], str]] = None
 
-        self._stream = None
         self._data: Optional[bytes] = None
         self._headers: dict[str, str] = {}
 
         self._is_encrypted = False
+
+    @property
+    def size(self) -> int:
+        if self._encryption is not None and not self._is_encrypted:
+            raise ValueError('File size unknown at this point')
+        return self.payload_path.stat().st_size
+
+    @size.setter
+    def size(self, size: int) -> None:
+        # Backwards compatibility with plugins
+        pass
 
     @property
     def mime(self) -> str:
@@ -448,7 +402,13 @@ class HTTPFileTransfer(FileTransfer):
         return self._headers
 
     @property
-    def path(self) -> str:
+    def path(self) -> Path:
+        return self._path
+
+    @property
+    def payload_path(self) -> Path:
+        if self._encryption is not None:
+            return self.get_temp_path()
         return self._path
 
     @property
@@ -465,47 +425,30 @@ class HTTPFileTransfer(FileTransfer):
 
     @property
     def filename(self) -> str:
-        return os.path.basename(self._path)
+        return self._path.name
+
+    @staticmethod
+    @functools.cache
+    def get_temp_path() -> Path:
+        tempdir = tempfile.gettempdir()
+        return Path(tempdir) / get_random_string(16)
 
     def set_error(self, domain: str, text: str = '') -> None:
         if not text:
             text = self._errors[domain]
 
-        self._close()
         super().set_error(domain, text)
 
     def set_finished(self) -> None:
-        self._close()
         super().set_finished()
 
     def set_encrypted_data(self, data: bytes) -> None:
-        self._data = data
+        temp_path = self.get_temp_path()
+        temp_path.write_bytes(data)
         self._is_encrypted = True
 
-    def _close(self) -> None:
-        if self._stream is not None:
-            self._stream.close()
-
-    def get_chunk(self) -> Optional[bytes]:
-        if self._stream is None:
-            if self._encryption is None:
-                self._stream = open(self._path, 'rb')  # pylint: disable=consider-using-with  # noqa: E501
-            else:
-                self._stream = io.BytesIO(self._data)
-
-        data = self._stream.read(16384)
-        if not data:
-            self._close()
-            return None
-        self._seen += len(data)
-        if self.is_complete:
-            self._close()
-        return data
-
     def get_data(self) -> bytes:
-        with open(self._path, 'rb') as file:
-            data = file.read()
-        return data
+        return self._path.read_bytes()
 
     def process_result(self, result: HTTPUploadData) -> None:
         self.put_uri = result.put_uri

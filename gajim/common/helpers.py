@@ -81,7 +81,6 @@ from nbxmpp.protocol import Iq
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
-from gi.repository import Soup
 
 import precis_i18n.codec  # noqa: F401
 
@@ -1546,24 +1545,3 @@ def make_path_from_jid(base_path: Path, jid: JID) -> Path:
     if jid.resource is not None:
         return path / jid.resource[:30]
     return path
-
-
-def make_http_request(uri: str,
-                      callback: Any,
-                      user_data: Optional[Any] = None) -> None:
-
-    proxy = determine_proxy()
-    if proxy is None:
-        resolver = None
-
-    else:
-        resolver = proxy.get_resolver()
-
-    session = Soup.Session()
-    session.props.proxy_resolver = resolver
-    session.props.user_agent = f'Gajim {app.version}'
-    message = Soup.Message.new('GET', uri)
-    if user_data is None:
-        session.queue_message(message, callback)
-    else:
-        session.queue_message(message, callback, user_data)

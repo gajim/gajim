@@ -55,6 +55,7 @@ from gajim.common.idle import Monitor
 from gajim.common.idle import IdleMonitorManager
 from gajim.common.i18n import _
 from gajim.common.structs import OutgoingMessage
+from gajim.common.util.http import create_http_session
 
 from gajim.gui.util import open_window
 
@@ -174,6 +175,8 @@ class Client(Observable):
             self.password = passwords.get_password(self._account)
 
         self._client.set_password(self.password)
+
+        self._client.set_http_session(create_http_session())
 
         self._client.subscribe('resume-failed', self._on_resume_failed)
         self._client.subscribe('resume-successful', self._on_resume_successful)

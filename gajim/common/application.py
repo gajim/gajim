@@ -29,9 +29,9 @@ from packaging.version import Version as V
 
 from gi.repository import Gio
 from gi.repository import GLib
-from gi.repository import Soup
 from nbxmpp.const import ConnectionType
 from nbxmpp.const import ConnectionProtocol
+from nbxmpp.http import HTTPRequest
 
 from gajim.common import app
 from gajim.common import ged
@@ -48,7 +48,6 @@ from gajim.common.events import AllowGajimUpdateCheck
 from gajim.common.events import GajimUpdateAvailable
 from gajim.common.events import SignedIn
 from gajim.common.client import Client
-from gajim.common.helpers import make_http_request
 from gajim.common.helpers import get_random_string
 from gajim.common.helpers import get_global_show
 from gajim.common.helpers import from_one_line
@@ -60,6 +59,7 @@ from gajim.common.cert_store import CertificateStore
 from gajim.common.storage.cache import CacheStorage
 from gajim.common.storage.draft import DraftStorage
 from gajim.common.storage.archive import MessageArchiveStorage
+from gajim.common.util.http import create_http_request
 
 from gajim.plugins.pluginmanager import PluginManager
 from gajim.plugins.repository import PluginRepository
@@ -310,22 +310,21 @@ class CoreApplication(ged.EventHelper):
 
     def check_for_gajim_updates(self) -> None:
         self._log.info('Checking for Gajim updates')
-        make_http_request('https://gajim.org/current-version.json',
-                          self._on_update_response)
+        request = create_http_request()
+        request.send('GET', 'https://gajim.org/current-version.json',
+                     callback=self._on_update_response)
 
-    def _on_update_response(self,
-                            _session: Soup.Session,
-                            message: Soup.Message) -> None:
+    def _on_update_response(self, request: HTTPRequest) -> None:
+
+        if not request.is_complete():
+            self._log.warning('Error while performing gajim update check: %s',
+                              request.get_error(), request.get_status())
+            return
 
         now = datetime.now()
         app.settings.set('last_update_check', now.strftime('%Y-%m-%d %H:%M'))
 
-        response_body = message.props.response_body
-        if response_body is None or not response_body.data:
-            self._log.warning('Could not reach gajim.org for update check')
-            return
-
-        data = json.loads(response_body.data)
+        data = json.loads(request.get_data())
         latest_version = data['current_version']
 
         if V(latest_version) > V(app.version):

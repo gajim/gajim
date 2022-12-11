@@ -14,12 +14,14 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 from typing import Any
+from typing import cast
 from typing import Callable
 from typing import Optional
 
 import logging
+from dataclasses import dataclass
+from dataclasses import field
 import os
 import re
 from pathlib import Path
@@ -29,7 +31,8 @@ import uuid
 
 from gi.repository import Gio
 from gi.repository import GLib
-from gi.repository import Soup
+from nbxmpp.const import HTTPRequestError
+from nbxmpp.http import HTTPRequest
 from nbxmpp.util import convert_tls_error_flags
 
 from gajim.common import app
@@ -40,7 +43,6 @@ from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import load_file_async
 from gajim.common.helpers import write_file_async
 from gajim.common.helpers import get_tls_error_phrases
-from gajim.common.helpers import get_account_proxy
 from gajim.common.i18n import _
 from gajim.common.preview_helpers import aes_decrypt
 from gajim.common.preview_helpers import filename_from_uri
@@ -52,6 +54,7 @@ from gajim.common.preview_helpers import get_image_paths
 from gajim.common.preview_helpers import guess_mime_type
 from gajim.common.preview_helpers import pixbuf_from_data
 from gajim.common.types import GdkPixbufType
+from gajim.common.util.http import create_http_request
 
 log = logging.getLogger('gajim.c.preview')
 
@@ -104,12 +107,11 @@ class Preview:
         self.thumbnail: Optional[bytes] = None
         self.mime_type: str = ''
         self.file_size: int = 0
-        self._received_size: int = 0
         self.download_in_progress = False
 
         self.info_message: Optional[str] = None
 
-        self._soup_message: Optional[Soup.Message] = None
+        self._request = None
 
         self.key: Optional[bytes] = None
         self.iv: Optional[bytes] = None
@@ -154,8 +156,8 @@ class Preview:
         return self._filename
 
     @property
-    def soup_message(self) -> Soup.Message:
-        return self._soup_message
+    def request(self) -> HTTPRequest:
+        return self._request
 
     @property
     def request_uri(self) -> Optional[str]:
@@ -193,29 +195,17 @@ class Preview:
             return False
         return True
 
-    def reset_received_size(self) -> None:
-        self._received_size = 0
-
     def update_widget(self, data: Optional[GdkPixbufType] = None) -> None:
         self._widget.update(self, data)
 
-    def update_progress(self, size: int, message: Soup.Message) -> None:
+    def update_progress(self, progress: float, request: HTTPRequest) -> None:
         self.download_in_progress = True
-        self._soup_message = message
-        self._received_size += size
-        if self.file_size == 0 or self._received_size == 0:
-            return
-
-        progress = self._received_size / self.file_size
+        self._request = request
         self._widget.update_progress(self, progress)
 
 
 class PreviewManager:
     def __init__(self) -> None:
-        self._sessions: dict[
-            str,
-            tuple[Soup.Session, Optional[Gio.SimpleProxyResolver]]] = {}
-
         self._orig_dir = Path(configpaths.get('MY_DATA')) / 'downloads'
         self._thumb_dir = Path(configpaths.get('MY_CACHE')) / 'downloads.thumb'
 
@@ -267,29 +257,6 @@ class PreviewManager:
         for id_, stop_func in self._audio_stop_functions.items():
             if id_ != preview_id:
                 stop_func()
-
-    def _get_session(self, account: str) -> Soup.Session:
-        if account not in self._sessions:
-            self._sessions[account] = self._create_session(account)
-        return self._sessions[account][0]
-
-    @staticmethod
-    def _create_session(account: str) -> tuple[
-            Soup.Session, Optional[Gio.SimpleProxyResolver]]:
-        session = Soup.Session()
-        session.add_feature_by_type(Soup.ContentSniffer)
-        session.props.https_aliases = ['aesgcm']
-        session.props.ssl_strict = False
-        session.props.user_agent = f'Gajim {app.version}'
-
-        proxy = get_account_proxy(account)
-        if proxy is None:
-            resolver = None
-        else:
-            resolver = proxy.get_resolver()
-
-        session.props.proxy_resolver = resolver
-        return session, resolver
 
     @staticmethod
     def _accept_uri(urlparts: ParseResult,
@@ -476,58 +443,62 @@ class PreviewManager:
             log.info('Download already in progress')
             return
 
-        preview.reset_received_size()
         if preview.account is None:
             # History Window can be opened without account context
             # This means we can not apply proxy settings
             return
         log.info('Start downloading: %s', preview.request_uri)
-        message = Soup.Message.new('GET', preview.request_uri)
-        message.connect('starting', self._check_certificate, preview)
-        message.connect(
-            'content-sniffed', self._on_content_sniffed, preview, force)
-        message.connect('got-chunk', self._on_got_chunk, preview)
 
-        session = self._get_session(preview.account)
-        session.queue_message(message, self._on_finished, preview)
+        request = create_http_request(preview.account, sniffer=True)
+        request.set_user_data(preview)
+        request.connect('accept-certificate', self._accept_certificate)
+        request.connect('content-sniffed', self._on_content_sniffed, force)
+        request.connect('response-progress', self._on_response_progress)
 
-    def _check_certificate(self,
-                           message: Soup.Message,
-                           preview: Preview) -> None:
-        _https_used, _tls_certificate, tls_errors = message.get_https_status()
+        request.send('GET', preview.request_uri, callback=self._on_finished)
+
+    def _accept_certificate(self,
+                            request: HTTPRequest,
+                            certificate: Gio.TlsCertificate,
+                            certificate_errors: Gio.TlsCertificateFlags,
+                            ) -> bool:
 
         if not app.settings.get('preview_verify_https'):
-            return
+            return True
 
-        if tls_errors:
-            phrases = get_tls_error_phrases(convert_tls_error_flags(tls_errors))
-            log.warning(
-                'TLS verification failed: %s (0x%02x)', phrases, tls_errors)
-            session = self._get_session(preview.account)
-            session.cancel_message(message, Soup.Status.CANCELLED)
-            preview.info_message = _('TLS verification failed: %s') % phrases[0]
-            preview.update_widget()
+        phrases = get_tls_error_phrases(
+            convert_tls_error_flags(certificate_errors))
+        log.warning(
+            'TLS verification failed: %s (0x%02x)', phrases, certificate_errors)
+
+        preview = cast(Preview, request.get_user_data())
+        preview.info_message = _('TLS verification failed: %s') % phrases[0]
+        preview.update_widget()
+        return False
 
     def _on_content_sniffed(self,
-                            message: Soup.Message,
-                            type_: str,
+                            request: HTTPRequest,
+                            content_type: str,
                             _params: GLib.HashTable,
-                            preview: Preview,
-                            force: bool) -> None:
-        file_size = message.props.response_headers.get_content_length()
-        uri = message.props.uri.to_string(False)
-        session = self._get_session(preview.account)
-        preview.mime_type = type_
+                            force: bool
+                            ) -> None:
+
+        file_size = request.get_response_headers().get_content_length()
+        uri = request.get_uri().to_string()
+
+
+        preview = cast(Preview, request.get_user_data())
+        preview.mime_type = content_type
         preview.file_size = file_size
 
-        if type_ not in ALLOWED_MIME_TYPES and not force:
-            log.info('Not an allowed content type: %s, %s', type_, uri)
-            session.cancel_message(message, Soup.Status.CANCELLED)
+        if content_type not in ALLOWED_MIME_TYPES and not force:
+            log.info('Not an allowed content type: %s, %s', content_type, uri)
+            request.cancel()
             return
 
         if file_size == 0:
             log.info('File size is unknown (zero) for URL: "%s"', uri)
-            session.cancel_message(message, Soup.Status.CANCELLED)
+            request.cancel()
             return
 
         if file_size > int(app.settings.get('preview_max_file_size')):
@@ -537,42 +508,37 @@ class PreviewManager:
             if force:
                 preview.info_message = None
             else:
-                session.cancel_message(message, Soup.Status.CANCELLED)
+                request.cancel()
                 preview.info_message = _('Automatic preview disabled '
                                          '(file too big)')
 
         preview.update_widget()
 
-    def _on_got_chunk(self,
-                      message: Soup.Message,
-                      chunk: Soup.Buffer,
-                      preview: Preview
-                      ) -> None:
-        preview.update_progress(len(chunk.get_data()), message)
+    def _on_response_progress(self,
+                              request: HTTPRequest,
+                              progress: float,
+                              ) -> None:
 
-    def _on_finished(self,
-                     _session: Soup.Session,
-                     message: Soup.Message,
-                     preview: Preview
-                     ) -> None:
+        preview = cast(Preview, request.get_user_data())
+        preview.update_progress(progress, request)
 
+    def _on_finished(self, request: HTTPRequest) -> None:
+
+        preview = cast(Preview, request.get_user_data())
         preview.download_in_progress = False
 
-        if message.status_code != Soup.Status.OK:
-            log.warning('Download failed: %s', preview.request_uri)
-            status_code = Soup.Status.get_phrase(message.status_code)
-            log.warning(status_code)
-            preview.reset_received_size()
-            if message.status_code != 1:
-                # status_code 1: 'Cancelled'
-                preview.info_message = _('Download failed (%s)') % status_code
+        if not request.is_complete():
+            error = request.get_error_string()
+            log.warning('Download failed: %s - %s', preview.request_uri, error)
+            if request.get_error() != HTTPRequestError.CANCELLED:
+                preview.info_message = _('Download failed (%s)') % error
             preview.update_widget()
             return
 
         preview.info_message = None
 
-        data = message.props.response_body_data.get_data()
-        if data is None:
+        data = request.get_data()
+        if not data:
             return
 
         if preview.is_aes_encrypted:
@@ -649,6 +615,4 @@ class PreviewManager:
         preview.update_widget(data=pixbuf)
 
     def cancel_download(self, preview: Preview) -> None:
-        preview.reset_received_size()
-        session = self._get_session(preview.account)
-        session.cancel_message(preview.soup_message, Soup.Status.CANCELLED)
+        preview.request.cancel()

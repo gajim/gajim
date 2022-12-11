@@ -20,11 +20,11 @@
 from __future__ import annotations
 
 from typing import Any
-from types import TracebackType
 
 import sys
 import json
 import traceback
+from types import TracebackType
 import threading
 import webbrowser
 import pprint
@@ -33,9 +33,9 @@ from urllib.parse import urlencode
 
 from gi.repository import Gdk
 from gi.repository import Gtk
-from gi.repository import Soup
 
 import nbxmpp
+from nbxmpp.http import HTTPRequest
 
 import gajim
 from gajim.common import app
@@ -44,8 +44,8 @@ from gajim.common.helpers import get_gobject_version
 from gajim.common.helpers import get_os_name
 from gajim.common.helpers import get_os_version
 from gajim.common.helpers import determine_proxy
-from gajim.common.helpers import make_http_request
 from gajim.common.i18n import _
+from gajim.common.util.http import create_http_request
 
 from .builder import get_builder
 from .util import get_gtk_version
@@ -182,24 +182,17 @@ class ExceptionDialog(Gtk.ApplicationWindow):
         self._ui.report_spinner.show()
         self._ui.report_spinner.start()
 
-        make_http_request('https://gajim.org/updates.json',
-                          self._on_endpoint_received)
+        request = create_http_request()
+        request.send('GET', 'https://gajim.org/updates.json',
+                     callback=self._on_endpoint_received)
 
-    def _parse_endpoint(self, message: Soup.Message) -> str:
-        status = message.props.status_code
-        response_body = message.props.response_body
-
-        if status != Soup.Status.OK:
-            error = message.props.reason_phrase
+    def _parse_endpoint(self, request: HTTPRequest) -> str:
+        if not request.is_complete():
             raise ValueError('Failed to retrieve sentry endpoint: %s %s' % (
-                status, error))
-
-        if response_body is None or not response_body.data:
-            raise ValueError('Failed to retrieve sentry endpoint, '
-                             'no response body')
+                request.get_status(), request.get_error()))
 
         try:
-            data = json.loads(response_body.data)
+            data = json.loads(request.get_data())
         except Exception as error:
             raise ValueError('Json parsing error: %s' % error)
 
@@ -209,12 +202,9 @@ class ExceptionDialog(Gtk.ApplicationWindow):
 
         return endpoint
 
-    def _on_endpoint_received(self,
-                              _session: Soup.Session,
-                              message: Soup.Message
-                              ) -> None:
+    def _on_endpoint_received(self, request: HTTPRequest) -> None:
         try:
-            endpoint = self._parse_endpoint(message)
+            endpoint = self._parse_endpoint(request)
         except ValueError as error:
             print(error)
             self._report_with_browser()

@@ -27,8 +27,7 @@ class FileTransfer(Observable):
 
         self._account = account
 
-        self._seen: int = 0
-        self.size: int = 0
+        self._progress = 0
 
         self._state = FTState.INIT
         self._error_text: str = ''
@@ -43,16 +42,6 @@ class FileTransfer(Observable):
         return self._state
 
     @property
-    def seen(self) -> int:
-        return self._seen
-
-    @property
-    def is_complete(self) -> bool:
-        if self.size == 0:
-            return False
-        return self._seen >= self.size
-
-    @property
     def filename(self) -> str:
         raise NotImplementedError
 
@@ -63,6 +52,13 @@ class FileTransfer(Observable):
     @property
     def error_domain(self) -> Optional[str]:
         return self._error_domain
+
+    def get_progress(self) -> float:
+        return self._progress
+
+    def set_progress(self, progress: float) -> None:
+        self._progress = progress
+        self.update_progress()
 
     def get_state_description(self) -> str:
         if self._state is None:

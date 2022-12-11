@@ -22,7 +22,7 @@ function main {
         mingw-w64-x86_64-goocanvas \
         mingw-w64-x86_64-gspell \
         mingw-w64-x86_64-hunspell \
-        mingw-w64-x86_64-libsoup \
+        mingw-w64-x86_64-libsoup3 \
 
     PIP_REQUIREMENTS="\
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
