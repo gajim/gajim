@@ -14,20 +14,24 @@
 
 from __future__ import annotations
 
+from typing import Any
 from typing import Optional
 from typing import cast
+
+from datetime import datetime
 
 from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.common.helpers import from_one_line
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 from gajim.plugins.pluginmanager import PluginManifest
 
+from .builder import get_builder
 from .status_message_selector import StatusMessageSelector
 from .status_selector import StatusSelector
-from .builder import get_builder
 
 
 class AppPage(Gtk.Box):
@@ -99,10 +103,12 @@ class AppMessageListBox(Gtk.ListBox):
         self.set_size_request(400, -1)
         self.get_style_context().add_class('app-message-listbox')
 
-        placeholder = Gtk.Label(label=_('No updates available'))
-        placeholder.get_style_context().add_class('dim-label')
-        placeholder.show()
-        self.set_placeholder(placeholder)
+        self._placeholder = Gtk.Label(label=self._get_update_text())
+        self._placeholder.get_style_context().add_class('dim-label')
+        self._placeholder.show()
+        self.set_placeholder(self._placeholder)
+
+        app.settings.connect_signal('last_update_check', self._on_update_check)
 
         self.show_all()
 
@@ -120,6 +126,23 @@ class AppMessageListBox(Gtk.ListBox):
         self.remove(row)
         app_page = cast(AppPage, self.get_parent())
         app_page.remove_app_message()
+
+    def _on_update_check(self, *args: Any) -> None:
+        self._placeholder.set_text(self._get_update_text())
+
+    @staticmethod
+    def _get_update_text() -> str:
+        if not app.settings.get('check_for_update'):
+            return _('Update check disabled in preferences')
+
+        last_check = app.settings.get('last_update_check')
+        if not last_check:
+            return _('No updates available (last check: never)')
+
+        date = datetime.strptime(last_check, '%Y-%m-%d %H:%M')
+        format_string = from_one_line(app.settings.get('date_format'))
+        return _('No updates available (last check: %s)') % date.strftime(
+            format_string)
 
 
 class AppMessageRow(Gtk.ListBoxRow):
