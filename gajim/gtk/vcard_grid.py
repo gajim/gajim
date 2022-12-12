@@ -47,7 +47,7 @@ LABEL_DICT = {
     'title': p_('Profile', 'Title'),
     'role': p_('Profile', 'Role'),
     'org': p_('Profile', 'Organisation'),
-    'note': p_('Profile', ':Note'),
+    'note': p_('Profile', 'Note'),
     'url': _('URL'),
     'key': p_('Profile', 'Public Encryption Key'),
 }
