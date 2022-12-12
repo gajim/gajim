@@ -16,6 +16,8 @@ from datetime import datetime
 
 from gi.repository import Gtk
 
+from gajim.common import app
+
 from .base import BaseRow
 
 
@@ -30,7 +32,8 @@ class DateRow(BaseRow):
         self.timestamp = timestamp
         self.get_style_context().add_class('conversation-date-row')
 
-        self.label.set_text(timestamp.strftime('%a, %d %b %Y'))
+        format_string = app.settings.get('date_format')
+        self.label.set_text(timestamp.strftime('%a ' + format_string))
         self.label.set_halign(Gtk.Align.CENTER)
         self.label.set_hexpand(True)
         self.label.get_style_context().add_class('conversation-meta')

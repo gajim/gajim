@@ -35,7 +35,6 @@ from nbxmpp import JID
 from gajim.common import app
 from gajim.common import types
 from gajim.common.helpers import filesystem_path_from_uri
-from gajim.common.helpers import from_one_line
 from gajim.common.helpers import is_affiliation_change_allowed
 from gajim.common.helpers import is_retraction_allowed
 from gajim.common.helpers import is_role_change_allowed
@@ -665,8 +664,8 @@ def get_chat_row_menu(contact: types.ChatContactT,
 
     text = text.replace('"', '\\"')
 
-    time_format = from_one_line(app.settings.get('time_format'))
-    timestamp_formatted = timestamp.strftime(time_format)
+    format_string = app.settings.get('date_time_format')
+    timestamp_formatted = timestamp.strftime(format_string)
     copy_text = f'{timestamp_formatted} - {name}: {text}'
     menu_items.append(
         (p_('Message row action', 'Copy'),

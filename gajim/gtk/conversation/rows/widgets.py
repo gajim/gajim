@@ -93,19 +93,18 @@ class DateTimeLabel(Gtk.Label):
     def __init__(self, timestamp: datetime) -> None:
         Gtk.Label.__init__(self)
 
-        time_format = app.settings.get('time_format')
+        format_string = app.settings.get('time_format')
         if timestamp.date() < datetime.today().date():
-            date_format = app.settings.get('date_format')
-            time_format = f'{time_format} - {date_format}'
-        timestamp_formatted = timestamp.strftime(time_format)
+            format_string = app.settings.get('date_time_format')
 
-        self.set_text(timestamp_formatted)
+        self.set_text(timestamp.strftime(format_string))
         self.set_halign(Gtk.Align.START)
         self.set_valign(Gtk.Align.END)
         self.set_margin_start(6)
         self.set_margin_end(3)
         self.get_style_context().add_class('conversation-meta')
-        self.set_tooltip_text(timestamp.strftime('%a, %d %b %Y - %X'))
+        format_string = app.settings.get('date_time_format')
+        self.set_tooltip_text(timestamp.strftime(format_string))
 
 
 class NicknameLabel(Gtk.Label):

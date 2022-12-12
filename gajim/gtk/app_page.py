@@ -24,7 +24,6 @@ from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.helpers import from_one_line
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 from gajim.plugins.pluginmanager import PluginManifest
@@ -140,7 +139,7 @@ class AppMessageListBox(Gtk.ListBox):
             return _('No updates available (last check: never)')
 
         date = datetime.strptime(last_check, '%Y-%m-%d %H:%M')
-        format_string = from_one_line(app.settings.get('date_format'))
+        format_string = app.settings.get('date_format')
         return _('No updates available (last check: %s)') % date.strftime(
             format_string)
 

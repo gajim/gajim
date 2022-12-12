@@ -42,7 +42,6 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common import events
 from gajim.common.helpers import AdditionalDataDict
-from gajim.common.helpers import from_one_line
 from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_start_of_day
 from gajim.common.modules.contacts import GroupchatContact
@@ -144,11 +143,11 @@ class ConversationView(Gtk.ScrolledWindow):
             'activate', self._on_scroll_view)
 
     def copy_selected_messages(self) -> None:
-        time_format = from_one_line(app.settings.get('date_time_format'))
+        format_string = app.settings.get('date_time_format')
         selection_text = ''
         for row in cast(list[BaseRow], self._list_box.get_selected_rows()):
             if isinstance(row, MessageRow):
-                timestamp_formatted = row.timestamp.strftime(time_format)
+                timestamp_formatted = row.timestamp.strftime(format_string)
                 selection_text += (f'{timestamp_formatted} - {row.name}: '
                                    f'{row.get_text()}\n')
 

@@ -236,9 +236,11 @@ class RosterTooltip:
                 idle_time = datetime(*(idle_time[:6]))
                 current = datetime.now()
                 if idle_time.date() == current.date():
-                    formatted = idle_time.strftime('%X')
+                    format_string = app.settings.get('time_format')
+                    formatted = idle_time.strftime(format_string)
                 else:
-                    formatted = idle_time.strftime('%c')
+                    format_string = app.settings.get('date_time_format')
+                    formatted = idle_time.strftime(format_string)
                 idle_text = _('Idle since: %s') % formatted
                 idle_label = Gtk.Label(label=idle_text)
                 idle_label.set_halign(Gtk.Align.START)

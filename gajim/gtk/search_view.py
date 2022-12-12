@@ -434,7 +434,8 @@ class ResultRow(Gtk.ListBoxRow):
         self._ui.row_avatar.set_from_surface(avatar)
 
         local_time = time.localtime(msg.time)
-        date = time.strftime('%H:%M', local_time)
+        format_string = app.settings.get('time_format')
+        date = time.strftime(format_string, local_time)
         self._ui.row_time_label.set_label(date)
 
         message_widget = MessageWidget(account, selectable=False)
