@@ -44,8 +44,7 @@ def update_translation_template() -> bool:
         '-o', '-',
         '-c#',
         '--from-code=utf-8',
-        '--keyword=Q_',
-        '--keyword=P_:1c,2',
+        '--keyword=p_:1c,2',
         '--no-location',
         '--sort-output',
         '--package-name=Gajim'
