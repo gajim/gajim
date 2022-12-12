@@ -220,8 +220,8 @@ class GajimApplication(Gtk.Application, CoreApplication):
         return [option]
 
     def _startup(self) -> None:
-        if sys.platform == 'win32':
-            # Changing the PANGOCAIRO_BACKEND is necessary on Windows
+        if sys.platform in ('win32', 'darwin'):
+            # Changing the PANGOCAIRO_BACKEND is necessary on Windows/MacOS
             # to render colored emoji glyphs
             os.environ['PANGOCAIRO_BACKEND'] = 'fontconfig'
 
