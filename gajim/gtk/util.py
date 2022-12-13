@@ -893,8 +893,11 @@ def make_menu_item(label: str,
                    action: Optional[str] = None,
                    value: MenuValueT = None) -> Gio.MenuItem:
 
+    item = Gio.MenuItem.new(label)
+
     if value is None:
-        return Gio.MenuItem.new(label, action)
+        item.set_action_and_target_value(action, None)
+        return item
 
     item = Gio.MenuItem.new(label)
     if isinstance(value, str):
