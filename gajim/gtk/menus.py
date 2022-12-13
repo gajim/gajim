@@ -636,26 +636,17 @@ def get_groupchat_participant_menu(account: str,
     return menu
 
 
-def get_component_search_menu(jid: Optional[str], copy_text: str) -> Gio.Menu:
-    menu_items: list[tuple[str, str]] = [
-        ('app.copy-text', _('Copy')),
+def get_component_search_menu(jid: Optional[str], copy_text: str) -> GajimMenu:
+    menuitems: MenuItemListT = [
+        (_('Copy'), 'app.copy-text', copy_text),
     ]
-    if jid is not None:
-        menu_items.append(
-            ('app.start-chat', _('Start Chat…')))
 
-    menu = Gio.Menu()
-    for item in menu_items:
-        action, label = item
-        menuitem = Gio.MenuItem.new(label, action)
-        if action == 'app.copy-text':
-            data = copy_text
-        else:
-            data = jid
-        variant = GLib.Variant('s', data)
-        menuitem.set_action_and_target_value(action, variant)
-        menu.append_item(menuitem)
-    return menu
+    if jid is not None:
+        menuitems.append(
+            (_('Start Chat…'), 'app.start-chat', jid)
+        )
+
+    return GajimMenu.from_list(menuitems)
 
 
 def get_chat_row_menu(contact: types.ChatContactT,
