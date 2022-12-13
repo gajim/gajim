@@ -36,6 +36,10 @@ from gajim.common.i18n import _
 
 from .const import Filter
 
+SingleCallbackT = Callable[[str], None]
+MultplCallbackT = Callable[[list[str]], None]
+AcceptCallbackT = Union[SingleCallbackT,MultplCallbackT]
+
 
 def _require_native() -> bool:
     if app.is_flatpak():
@@ -60,11 +64,16 @@ class BaseFileChooser:
     def _on_response(self,
                      dialog: Union[Gtk.FileChooser, Gtk.FileChooserNative],
                      response: Gtk.ResponseType,
-                     accept_cb: Callable[[list[str]], None],
+                     accept_cb: AcceptCallbackT,
                      cancel_cb: Optional[Callable[..., Any]]
                      ) -> None:
         if response == Gtk.ResponseType.ACCEPT:
-            accept_cb(dialog.get_uris())
+            if dialog.get_select_multiple():
+                cast(MultplCallbackT, accept_cb)(dialog.get_filenames())
+            else:
+                fn = dialog.get_filename()
+                assert fn is not None
+                cast(SingleCallbackT, accept_cb)(fn)
 
         if response in (Gtk.ResponseType.CANCEL,
                         Gtk.ResponseType.DELETE_EVENT):
@@ -120,7 +129,7 @@ class NativeFileChooserDialog(Gtk.FileChooserNative, BaseFileChooser):
     _action = Gtk.FileChooserAction.OPEN
 
     def __init__(self,
-                 accept_cb: Callable[..., Any],
+                 accept_cb: AcceptCallbackT,
                  cancel_cb: Optional[Callable[..., Any]] = None,
                  transient_for: Optional[Gtk.Window] = None,
                  path: Optional[str] = None,
@@ -180,7 +189,7 @@ class GtkFileChooserDialog(Gtk.FileChooserDialog, BaseFileChooser):
     _preview_size = (200, 200)
 
     def __init__(self,
-                 accept_cb: Callable[[list[str]], None],
+                 accept_cb: AcceptCallbackT,
                  cancel_cb: Optional[Callable[..., Any]] = None,
                  transient_for: Optional[Gtk.Window] = None,
                  path: Optional[str] = None,

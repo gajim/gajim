@@ -223,7 +223,9 @@ class FileTransferSelector(Gtk.Box):
         self.emit('changed', state)
 
     def _on_choose_files_clicked(self, _button: Gtk.Button) -> None:
-        FileChooserDialog(self.add_files,
+        def _on_chosen(paths: list[str]) -> None:
+            self.add_files([Path(p).as_uri() for p in paths])
+        FileChooserDialog(_on_chosen,
                           select_multiple=True,
                           transient_for=app.window,
                           path=app.settings.get('last_send_dir') or None)
