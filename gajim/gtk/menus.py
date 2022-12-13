@@ -661,8 +661,6 @@ def get_chat_row_menu(contact: types.ChatContactT,
 
     menu_items: MenuItemListT = []
 
-    text = text.replace('"', '\\"')
-
     format_string = app.settings.get('date_time_format')
     timestamp_formatted = timestamp.strftime(format_string)
     copy_text = f'{timestamp_formatted} - {name}: {text}'
