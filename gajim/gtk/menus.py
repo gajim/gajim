@@ -20,7 +20,6 @@ from typing import Iterator
 from typing import Callable
 from typing import cast
 from typing import Optional
-from typing import Union
 
 from datetime import datetime
 import textwrap
@@ -46,7 +45,6 @@ from gajim.common.const import URIType
 from gajim.common.const import XmppUriQuery
 from gajim.common.preview import Preview
 from gajim.common.structs import URI
-from gajim.common.structs import VariantMixin
 from gajim.common.text_helpers import escape_iri_path_segment
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import can_add_to_roster
@@ -57,10 +55,9 @@ from gajim.gui.structs import ChatListEntryParam
 from gajim.gui.structs import RemoveHistoryActionParams
 from gajim.gui.structs import RetractMessageParam
 from gajim.gui.util import GajimMenu
+from gajim.gui.util import MenuItemListT
 
 
-MenuValueT = Union[None, str, GLib.Variant, VariantMixin]
-MenuItemListT = list[tuple[str, str, MenuValueT]]
 UriMenuItemsT = list[tuple[str, list[str], str]]
 UriMenuBuilderT = Callable[[URI, str], UriMenuItemsT]
 
