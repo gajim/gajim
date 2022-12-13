@@ -71,7 +71,7 @@ def get_self_contact_menu(contact: types.BareContact) -> GajimMenu:
 
     menu = GajimMenu()
 
-    menu.add_item(_('Profile'), f'app.{account}-profile', f'"{account}"')
+    menu.add_item(_('Profile'), f'app.{account}-profile', account)
     submenu = get_send_file_submenu()
     menu.append_submenu(_('Send File'), submenu)
 
