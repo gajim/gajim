@@ -237,7 +237,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._ui.nickname_entry.set_sensitive(False)
         self._ui.avatar_image.set_from_surface(self._current_avatar)
         self._ui.nickname_entry.set_text(app.nicks[self.account])
-        self._vcard_grid.set_vcard(self._current_vcard.copy())
+        self._vcard_grid.set_vcard(self._current_vcard.copy())  # pyright: ignore # noqa
         self._new_avatar = False
 
     def _on_save_clicked(self, _button: Gtk.Button) -> None:
@@ -256,7 +256,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._vcard_grid.sort()
 
         vcard = self._vcard_grid.get_vcard()
-        self._current_vcard = vcard.copy()
+        self._current_vcard = vcard.copy()  # pyright: ignore
 
         client = app.get_client(self.account)
         client.get_module('VCard4').set_vcard(
@@ -355,7 +355,8 @@ class ProfileWindow(Gtk.ApplicationWindow):
             return
 
         self._new_avatar = Avatar()
-        self._new_avatar.add_image_source(data, 'image/png', height, width)
+        self._new_avatar.add_image_source(data, 'image/png', height, width)  # pyright: ignore  # noqa
+        self._new_avatar = False
 
         scale = self.get_scale_factor()
         surface = app.app.avatar_storage.surface_from_filename(
