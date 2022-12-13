@@ -107,8 +107,11 @@ def get_singlechat_menu(contact: types.BareContact) -> GajimMenu:
 
 def get_private_chat_menu(contact: types.GroupchatParticipant) -> GajimMenu:
     menu = GajimMenu()
+
+    value = GLib.Variant('as', [''])
+
     menu.add_item(_('Details'), 'win.show-contact-info')
-    menu.add_item(_('Upload File…'), 'win.send-file-httpupload([""])')
+    menu.add_item(_('Upload File…'), 'win.send-file-httpupload', value)
     menu.add_item(_('Search…'), 'win.search-history')
 
     if can_add_to_roster(contact):
@@ -121,8 +124,10 @@ def get_private_chat_menu(contact: types.GroupchatParticipant) -> GajimMenu:
 def get_send_file_submenu() -> GajimMenu:
     menu = GajimMenu()
 
-    menu.add_item(_('Upload File…'), 'win.send-file-httpupload([""])')
-    menu.add_item(_('Send File Directly…'), 'win.send-file-jingle([""])')
+    value = GLib.Variant('as', [''])
+
+    menu.add_item(_('Upload File…'), 'win.send-file-httpupload', value)
+    menu.add_item(_('Send File Directly…'), 'win.send-file-jingle', value)
     return menu
 
 
@@ -456,10 +461,13 @@ def get_subscription_menu(account: str, jid: JID) -> GajimMenu:
 
 
 def get_start_chat_button_menu() -> GajimMenu:
+
+    value = GLib.Variant('as', ['', ''])
+
     menuitems: MenuItemListT = [
-        (_('Start Chat…'), 'app.start-chat(["", ""])', None),
-        (_('Create Group Chat…'), 'app.create-groupchat::', None),
-        (_('Add Contact…'), 'app.add-contact::', None),
+        (_('Start Chat…'), 'app.start-chat', value),
+        (_('Create Group Chat…'), 'app.create-groupchat', ''),
+        (_('Add Contact…'), 'app.add-contact', ''),
     ]
 
     return GajimMenu.from_list(menuitems)
