@@ -28,7 +28,7 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.const import THRESHOLD_OPTIONS
 from gajim.common.i18n import _
-from gajim.common.helpers import open_file
+from gajim.common.helpers import open_directory
 from gajim.common.multimedia_helpers import AudioInputManager
 from gajim.common.multimedia_helpers import AudioOutputManager
 from gajim.common.multimedia_helpers import VideoInputManager
@@ -978,7 +978,7 @@ class Advanced(PreferenceBox):
 
     @staticmethod
     def _on_open_debug_logs(*args: Any) -> None:
-        open_file(configpaths.get('DEBUG'))
+        open_directory(configpaths.get('DEBUG'))
 
     @staticmethod
     def _on_advanced_config_editor(*args: Any) -> None:

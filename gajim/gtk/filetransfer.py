@@ -47,9 +47,9 @@ from gajim.common.const import KindConstant
 from gajim.common.i18n import _
 from gajim.common.file_props import FilesProp
 from gajim.common.file_props import FileProp
-from gajim.common.helpers import open_file
 from gajim.common.helpers import file_is_locked
 from gajim.common.helpers import AdditionalDataDict
+from gajim.common.helpers import show_in_folder
 from gajim.common.modules.bytestream import is_transfer_active
 from gajim.common.modules.bytestream import is_transfer_paused
 from gajim.common.modules.bytestream import is_transfer_stopped
@@ -1026,8 +1026,7 @@ class FileTransfersWindow:
         if not file_props.file_name:
             return
 
-        folder = Path(file_props.file_name).parent
-        open_file(folder)
+        show_in_folder(Path(file_props.file_name))
 
     def _on_cancel_menuitem_activate(self, widget):
         self._on_cancel_button_clicked(widget)

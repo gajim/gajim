@@ -43,6 +43,7 @@ from gajim.common.i18n import _
 from gajim.common.helpers import open_file
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import play_sound
+from gajim.common.helpers import show_in_folder
 from gajim.common.modules.bytestream import is_transfer_active
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.plugins.pluginmanager import PluginManifest
@@ -565,7 +566,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 return
 
             assert preview.orig_path is not None
-            open_file(preview.orig_path.parent)
+            show_in_folder(preview.orig_path)
 
         elif action_name == 'preview-copy-link':
             display = Gdk.Display.get_default()

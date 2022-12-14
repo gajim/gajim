@@ -100,6 +100,7 @@ from gajim.common.const import GIO_TLS_ERRORS
 from gajim.common.const import SHOW_LIST
 from gajim.common.const import CONSONANTS
 from gajim.common.const import VOWELS
+from gajim.common.dbus.file_manager import DBusFileManager
 from gajim.common.structs import URI
 from gajim.common import types
 if TYPE_CHECKING:
@@ -1100,6 +1101,16 @@ def open_file(path: Path) -> None:
         return
 
     open_file_uri(path.as_uri())
+
+
+def open_directory(path: Path) -> None:
+    return open_file(path)
+
+
+def show_in_folder(path: Path) -> None:
+    if not DBusFileManager().show_items_sync([path.as_uri()]):
+        # Fall back to just opening the containing folder
+        open_directory(path.parent)
 
 
 def filesystem_path_from_uri(uri: str) -> Optional[Path]:

@@ -43,6 +43,7 @@ from gajim.common.events import JingleFtCancelledReceived
 from gajim.common.file_props import FileProp
 from gajim.common.file_props import FilesProp
 from gajim.common.helpers import open_file
+from gajim.common.helpers import show_in_folder
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.storage.archive import ConversationRow
@@ -352,9 +353,7 @@ class FileTransferJingleRow(BaseRow):
     def _on_open_folder(self, _button: Gtk.Button) -> None:
         assert self._file_props is not None
         assert self._file_props.file_name is not None
-
-        folder = Path(self._file_props.file_name).parent
-        open_file(folder)
+        show_in_folder(Path(self._file_props.file_name))
 
     def _on_bad_hash_retry(self, _button: Gtk.Button) -> None:
         app.interface.instances['file_transfers'].show_hash_error(
