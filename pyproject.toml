@@ -36,7 +36,6 @@ exclude = [
   "gajim/gtk/settings.py",
   "gajim/gtk/server_info.py",
   "gajim/gtk/groupchat_info.py",
-  "gajim/gtk/security_label_selector.py",
 ]
 include = [
     "launch.py",
