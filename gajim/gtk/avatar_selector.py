@@ -217,7 +217,7 @@ class CropArea(Gtk.DrawingArea):
         self._color_shifted_pixbuf: Optional[GdkPixbuf.Pixbuf] = None
         self._current_cursor: Optional[Gdk.CursorType] = None
 
-        self._scale = float(0.0)
+        self._scale = 1.0
         self._image.x = 0
         self._image.y = 0
         self._image.width = 0
@@ -266,7 +266,7 @@ class CropArea(Gtk.DrawingArea):
         self._crop.x = int(abs((width - self._crop.width) / 2))
         self._crop.y = int(abs((height - self._crop.height) / 2))
 
-        self._scale = 0.0
+        self._scale = 1.0
         self._image.x = 0
         self._image.y = 0
         self._image.width = 0
@@ -662,7 +662,7 @@ class CropArea(Gtk.DrawingArea):
 
             self._generate_color_shifted_pixbuf()
 
-            if self._scale == 0.0:
+            if self._scale == 1.0:
                 scale_to_80 = float(min(
                     (self._pixbuf.get_width() * 0.8 / self._base_width),
                     (self._pixbuf.get_height() * 0.8 / self._base_height)))
