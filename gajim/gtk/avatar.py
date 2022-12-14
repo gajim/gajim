@@ -34,10 +34,10 @@ from nbxmpp.protocol import JID
 from gajim.common import types
 from gajim.common import app
 from gajim.common import configpaths
-from gajim.common.helpers import Singleton
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
+from gajim.common.util.classes import Singleton
 
 from .const import DEFAULT_WORKSPACE_COLOR
 from .util import get_contact_color
