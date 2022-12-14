@@ -420,7 +420,8 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
                                    callback=_on_yes)],
                 transient_for=self).show()
 
-        def _try_install(zip_filename: str) -> None:
+        def _try_install(paths: list[str]) -> None:
+            zip_filename = paths[0]
             try:
                 plugin = app.plugin_manager.install_from_zip(zip_filename)
             except PluginsystemError as er_type:

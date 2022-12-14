@@ -11,6 +11,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import cast
 from typing import Any
 
 import logging
@@ -193,25 +194,25 @@ class GroupchatManage(Gtk.Box):
         self._ui.stack.set_visible_child_name('manage')
 
     def _on_change_avatar_clicked(self, _button: Gtk.Button) -> None:
-        def _on_accept(path: str) -> None:
-            self._avatar_selector.prepare_crop_area(path)
+        def _on_accept(paths: list[str]) -> None:
+            self._avatar_selector.prepare_crop_area(paths[0])
             self._ui.avatar_update_button.set_sensitive(
                 self._avatar_selector.get_prepared())
             self._ui.stack.set_visible_child_name('avatar')
             self._ui.avatar_update_button.grab_default()
 
         AvatarChooserDialog(_on_accept,
-                            transient_for=self.get_toplevel(),
+                            transient_for=cast(Gtk.Window, self.get_toplevel()),
                             modal=True)
 
     def _on_avatar_select_file_clicked(self, _button: Gtk.Button) -> None:
-        def _on_accept(path: str) -> None:
-            self._avatar_selector.prepare_crop_area(path)
+        def _on_accept(paths: list[str]) -> None:
+            self._avatar_selector.prepare_crop_area(paths[0])
             self._ui.avatar_update_button.set_sensitive(
                 self._avatar_selector.get_prepared())
 
         AvatarChooserDialog(_on_accept,
-                            transient_for=self.get_toplevel(),
+                            transient_for=cast(Gtk.Window, self.get_toplevel()),
                             modal=True)
 
     def _on_upload_avatar_result(self, task: Task) -> None:

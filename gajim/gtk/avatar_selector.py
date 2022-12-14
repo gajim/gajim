@@ -128,11 +128,11 @@ class AvatarSelector(Gtk.Box):
         self._crop_area.show()
 
     def _on_load_clicked(self, _button: Gtk.Button) -> None:
-        def _on_file_selected(path: str) -> None:
-            self.prepare_crop_area(path)
+        def _on_file_selected(paths: list[str]) -> None:
+            self.prepare_crop_area(paths[0])
 
         AvatarChooserDialog(_on_file_selected,
-                            transient_for=self.get_toplevel(),
+                            transient_for=cast(Gtk.Window, self.get_toplevel()),
                             modal=True)
 
     def _on_drag_data_received(self,

@@ -467,7 +467,8 @@ class FileTransfersWindow:
                                  contact: BareContact,
                                  file_props: FileProp
                                  ) -> None:
-        def _on_accepted(account, contact, file_props, file_path):
+        def _on_accepted(account, contact, file_props, file_paths):
+            file_path = file_paths[0]
             if os.path.exists(file_path):
                 app.settings.set('last_save_dir', os.path.dirname(file_path))
 

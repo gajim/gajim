@@ -319,18 +319,19 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._new_avatar = None
 
     def _on_edit_avatar(self, button: Gtk.Button) -> None:
-        def _on_file_selected(path: str) -> None:
+        def _on_file_selected(paths: list[str]) -> None:
             if self._avatar_selector is None:
                 self._avatar_selector = AvatarSelector()
                 self._ui.avatar_selector_box.add(self._avatar_selector)
 
-            self._avatar_selector.prepare_crop_area(path)
+            self._avatar_selector.prepare_crop_area(paths[0])
             self._ui.avatar_update_button.set_sensitive(
                 self._avatar_selector.get_prepared())
             self._ui.profile_stack.set_visible_child_name('avatar_selector')
 
         AvatarChooserDialog(_on_file_selected,
-                            transient_for=button.get_toplevel())
+                            transient_for=cast(Gtk.Window,
+                                               button.get_toplevel()))
 
     def _on_cancel_update_avatar(self, _button: Gtk.Button) -> None:
         self._ui.profile_stack.set_visible_child_name('profile')

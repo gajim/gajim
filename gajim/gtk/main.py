@@ -525,7 +525,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             open_file(preview.orig_path)
 
         elif action_name == 'preview-save-as':
-            def _on_ok(target: str) -> None:
+            def _on_ok(paths: list[str]) -> None:
+                target = paths[0]
                 assert preview is not None
                 assert preview.orig_path is not None
 

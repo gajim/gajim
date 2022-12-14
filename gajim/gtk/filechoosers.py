@@ -36,9 +36,7 @@ from gajim.common.i18n import _
 
 from .const import Filter
 
-SingleCallbackT = Callable[[str], None]
-MultplCallbackT = Callable[[list[str]], None]
-AcceptCallbackT = Union[SingleCallbackT,MultplCallbackT]
+AcceptCallbackT = Callable[[list[str]], None]
 
 
 def _require_native() -> bool:
@@ -68,12 +66,7 @@ class BaseFileChooser:
                      cancel_cb: Optional[Callable[..., Any]]
                      ) -> None:
         if response == Gtk.ResponseType.ACCEPT:
-            if dialog.get_select_multiple():
-                cast(MultplCallbackT, accept_cb)(dialog.get_filenames())
-            else:
-                fn = dialog.get_filename()
-                assert fn is not None
-                cast(SingleCallbackT, accept_cb)(fn)
+            accept_cb(dialog.get_filenames())
 
         if response in (Gtk.ResponseType.CANCEL,
                         Gtk.ResponseType.DELETE_EVENT):
@@ -241,18 +234,9 @@ class GtkAvatarChooserDialog(BaseAvatarChooserDialog, GtkFileChooserDialog):
     pass
 
 
-def FileChooserDialog(*args: Any,
-                      **kwargs: Any
-                      ) -> Union[NativeFileOpenDialog, GtkFileOpenDialog]:
-    if _require_native():
-        return NativeFileOpenDialog(*args, **kwargs)
-    return GtkFileOpenDialog(*args, **kwargs)
-
-
-def AvatarChooserDialog(*args: Any,
-                        **kwargs: Any
-                        ) -> Union[NativeAvatarChooserDialog,
-                                   GtkAvatarChooserDialog]:
-    if _require_native():
-        return NativeAvatarChooserDialog(*args, **kwargs)
-    return GtkAvatarChooserDialog(*args, **kwargs)
+if _require_native():
+    FileChooserDialog = NativeFileOpenDialog
+    AvatarChooserDialog = NativeAvatarChooserDialog
+else:
+    FileChooserDialog = GtkFileOpenDialog
+    AvatarChooserDialog = GtkAvatarChooserDialog
