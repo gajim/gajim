@@ -443,7 +443,7 @@ class ChatStack(Gtk.Stack, EventHelper):
             if text.startswith('/me') or text.startswith('/me\n'):
                 name = contact.name
                 if isinstance(contact, GroupchatContact):
-                    name = contact.nickname
+                    name = event.properties.muc_nickname
                 text = f'* {name} {text[3:]}'
 
         app.ged.raise_event(
