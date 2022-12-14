@@ -110,15 +110,7 @@ class BaseAvatarChooserDialog:
 
     _title = _('Choose Avatar…')
     _preview_size = (100, 100)
-
-    if _require_native():
-        _filters = [Filter(_('PNG files'), '*.png', True),
-                    Filter(_('JPEG files'), '*.jp*g', False),
-                    Filter(_('SVG files'), '*.svg', False)]
-    else:
-        _filters = [Filter(_('Images'), ['image/png',
-                                         'image/jpeg',
-                                         'image/svg+xml'], True)]
+    _filters = [Filter(_('Images'), ['image/*'], True)]
 
 
 class NativeFileChooserDialog(Gtk.FileChooserNative, BaseFileChooser):
