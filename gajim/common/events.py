@@ -616,7 +616,7 @@ class SecCatalogReceived(ApplicationEvent):
     name: str = field(init=False, default='sec-catalog-received')
     account: str
     jid: str
-    catalog: dict[str, Catalog]
+    catalog: Catalog
 
 
 @dataclass
