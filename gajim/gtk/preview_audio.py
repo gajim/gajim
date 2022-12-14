@@ -30,7 +30,7 @@ except Exception:
 
 from gajim.common import app
 from gajim.common.i18n import _
-from gajim.common.text_helpers import format_duration
+from gajim.common.util.text import format_duration
 from gajim.common.preview import AudioSampleT
 
 from .builder import get_builder

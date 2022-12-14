@@ -30,7 +30,7 @@ from gajim.common.const import URIType
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import parse_uri
 from gajim.common.structs import URI
-from gajim.common.text_helpers import escape_iri_path_segment
+from gajim.common.util.text import escape_iri_path_segment
 from gajim.gui.util import gtk_month
 from gajim.gui.util import python_month
 

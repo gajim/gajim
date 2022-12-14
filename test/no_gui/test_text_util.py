@@ -1,9 +1,9 @@
 import unittest
 
-from gajim.common.text_helpers import escape_iri_path_segment
-from gajim.common.text_helpers import jid_to_iri
-from gajim.common.text_helpers import format_duration
-from gajim.common.text_helpers import remove_invalid_xml_chars
+from gajim.common.util.text import escape_iri_path_segment
+from gajim.common.util.text import jid_to_iri
+from gajim.common.util.text import format_duration
+from gajim.common.util.text import remove_invalid_xml_chars
 
 
 class Test(unittest.TestCase):

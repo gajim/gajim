@@ -30,7 +30,7 @@ from gajim.common import regex
 from gajim.common.const import URIType
 from gajim.common.helpers import parse_uri as analyze_uri
 from gajim.common.helpers import validate_jid
-from gajim.common.text_helpers import escape_iri_query
+from gajim.common.util.text import escape_iri_query
 
 PRE = '`'
 STRONG = '*'

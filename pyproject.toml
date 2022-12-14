@@ -57,7 +57,6 @@ include = [
     "gajim/common/storage/*",
     "gajim/common/styling.py",
     "gajim/common/task_manager.py",
-    "gajim/common/text_helpers.py",
     "gajim/common/util/*",
     "gajim/gajim.py",
     "gajim/gajim_remote.py",

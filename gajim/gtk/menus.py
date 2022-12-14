@@ -45,7 +45,7 @@ from gajim.common.const import URIType
 from gajim.common.const import XmppUriQuery
 from gajim.common.preview import Preview
 from gajim.common.structs import URI
-from gajim.common.text_helpers import escape_iri_path_segment
+from gajim.common.util.text import escape_iri_path_segment
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import can_add_to_roster
 

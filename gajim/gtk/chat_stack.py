@@ -44,7 +44,7 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.preview_helpers import split_geo_uri
 from gajim.common.preview_helpers import format_geo_coords
 from gajim.common.structs import OutgoingMessage
-from gajim.common.text_helpers import remove_invalid_xml_chars
+from gajim.common.util.text import remove_invalid_xml_chars
 from gajim.common.types import ChatContactT
 
 from .chat_banner import ChatBanner

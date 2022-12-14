@@ -15,7 +15,7 @@ from gajim.common.styling import EmphasisSpan
 from gajim.common.styling import StrikeSpan
 from gajim.common.styling import Hyperlink
 from gajim.common.styling import process_uris
-from gajim.common.text_helpers import escape_iri_query
+from gajim.common.util.text import escape_iri_query
 
 
 app.settings = MagicMock()
