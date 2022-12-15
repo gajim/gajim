@@ -80,7 +80,7 @@ class Search(BaseModule):
         if is_form:
             item.addChild(node=form)
         else:
-            for i in form.keys():
+            for i in form:
                 item.setTagData(i, form[i])
 
         self._con.connection.SendAndCallForResponse(iq, self._received_result)

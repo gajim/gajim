@@ -240,7 +240,7 @@ class ChatActionProcessor(Gtk.Popover):
         emoji_data = get_emoji_data()
 
         for keyword, entries in emoji_data.items():
-            for short_name in entries.keys():
+            for short_name in entries:
                 if not keyword.startswith(action_text):
                     continue
                 emoji = entries[short_name]

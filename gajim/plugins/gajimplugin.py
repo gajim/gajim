@@ -146,7 +146,7 @@ class GajimPluginConfig:
         return key in self.data
 
     def __iter__(self):
-        for key in self.data.keys():
+        for key in self.data:
             yield key
 
     def keys(self):
