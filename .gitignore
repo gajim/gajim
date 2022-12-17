@@ -25,6 +25,8 @@ build/
 dist/
 gajim.egg-info/
 win/_build_root
+venv/
+.venv/
 
 # IDE files
 
