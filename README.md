@@ -40,7 +40,7 @@
 - [gst-plugins-ugly](https://gitlab.freedesktop.org/gstreamer/gst-plugins-ugly)
 - [gst-libav](https://gitlab.freedesktop.org/gstreamer/gst-libav)
 
-### Compile-time Requirements
+### Install Requirements
 
 - [setuptools](https://pypi.org/project/setuptools/)
 - [gettext](https://savannah.gnu.org/projects/gettext/)
@@ -79,10 +79,15 @@ see [Wiki](https://dev.gajim.org/gajim/gajim/-/wikis/help/Gajim-on-macOS)
 
 #### Developing
 
-For developing you don't have to install Gajim.
+To create a virutalenv you can execute
 
-After installing all dependencies execute
+    ./scripts/dev_env.sh
 
+Be sure all install requirements are available.
+
+Afterwards activate the vitual environment with
+
+    source .venv/bin/activate
     ./launch.py
 
 #### Windows
