@@ -201,7 +201,10 @@ class AdvancedConfig(Gtk.ApplicationWindow):
 
         value = text
         if modelrow[Column.TYPE] == SETTING_TYPES[int]:
-            value = int(text)
+            try:
+                value = int(text)
+            except ValueError:
+                return
 
         app.settings.set(setting, value)
         modelrow[Column.VALUE] = text
