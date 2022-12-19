@@ -95,6 +95,7 @@ select = [
   "C901",   # mccabe
   # "D",    # pydocstyle
   "E",      # pycodestyle
+  # "EM",     # flake8-errmsg
   # "ERA",    # eradicate
   "F",      # pyflakes  
   # "FBT",    # flake8-boolean-trap
