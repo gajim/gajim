@@ -91,7 +91,7 @@ sqlite3.register_adapter(JID, _jid_adapter)
 
 
 def _convert_disco_info(disco_info: bytes) -> DiscoInfo:
-    return parse_disco_info(Iq(node=disco_info))  # type: ignore
+    return parse_disco_info(Iq(node=disco_info))  # pyright: ignore
 
 
 def _adapt_disco_info(disco_info: DiscoInfo) -> str:
@@ -112,7 +112,7 @@ sqlite3.register_converter('JSON', _convert_json)
 class Encoder(json.JSONEncoder):
     def default(self, o: Any) -> Any:
         if isinstance(o, set):
-            return list(o)  # type: ignore
+            return list(o)  # pyright: ignore
 
         if isinstance(o, JID):
             return {'__type': 'JID', 'value': str(o)}

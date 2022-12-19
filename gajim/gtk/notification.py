@@ -299,7 +299,7 @@ class Linux(NotificationBackend):
                            res: Gio.AsyncResult) -> None:
             try:
                 proxy = Gio.DBusProxy.new_finish(res)
-                self._caps = proxy.GetCapabilities()  # type: ignore
+                self._caps = proxy.GetCapabilities()  # pyright: ignore
             except GLib.Error as error:
                 log.warning('Notifications D-Bus not available: %s', error)
             else:

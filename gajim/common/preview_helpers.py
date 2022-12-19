@@ -278,7 +278,7 @@ def pixbuf_from_data(data: bytes) -> Optional[GdkPixbuf.Pixbuf]:
         # Fallback to Pillow
         input_file = BytesIO(data)
         image = Image.open(BytesIO(data)).convert('RGBA')
-        array = GLib.Bytes.new(image.tobytes())  # type: ignore
+        array = GLib.Bytes.new(image.tobytes())  # pyright: ignore
         width, height = image.size
         pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(array,
                                                  GdkPixbuf.Colorspace.RGB,

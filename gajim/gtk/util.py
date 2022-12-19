@@ -506,7 +506,7 @@ def text_to_color(text: str) -> tuple[float, float, float]:
         background = (0, 0, 0)  # RGB (0, 0, 0) black
     else:
         background = (1, 1, 1)  # RGB (255, 255, 255) white
-    return nbxmpp.util.text_to_color(text, background)  # type: ignore
+    return nbxmpp.util.text_to_color(text, background)  # pyright: ignore
 
 
 def get_contact_color(contact: types.ChatContactT
@@ -566,7 +566,7 @@ def get_pixbuf_from_data(file_data: bytes) -> Optional[GdkPixbuf.Pixbuf]:
                     'convert avatar image using pillow')
         try:
             avatar = Image.open(BytesIO(file_data)).convert('RGBA')
-            array = GLib.Bytes.new(avatar.tobytes())  # type: ignore
+            array = GLib.Bytes.new(avatar.tobytes())  # pyright: ignore
             width, height = avatar.size
             pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
                 array, GdkPixbuf.Colorspace.RGB,
@@ -626,7 +626,7 @@ def load_pixbuf(path: Union[str, Path],
             log.debug('Error', exc_info=True)
             return None
 
-        array = GLib.Bytes.new(avatar.tobytes())  # type: ignore
+        array = GLib.Bytes.new(avatar.tobytes())  # pyright: ignore
         width, height = avatar.size
         pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
             array, GdkPixbuf.Colorspace.RGB, True,
@@ -681,7 +681,7 @@ def get_app_windows(account: str) -> list[Gtk.Window]:
     windows: list[Gtk.Window] = []
     for win in app.app.get_windows():
         if hasattr(win, 'account'):
-            if win.account == account:  # type: ignore
+            if win.account == account:  # pyright: ignore
                 windows.append(win)
     return windows
 
@@ -695,11 +695,11 @@ def get_app_window(name: str,
             continue
 
         if account is not None:
-            if account != win.account:  # type: ignore
+            if account != win.account:  # pyright: ignore
                 continue
 
         if jid is not None:
-            if jid != win.jid:  # type: ignore
+            if jid != win.jid:  # pyright: ignore
                 continue
         return win
     return None
@@ -728,7 +728,7 @@ def get_gtk_version() -> str:
 class EventHelper(CommonEventHelper):
     def __init__(self):
         CommonEventHelper.__init__(self)
-        self.connect('destroy', self.__on_destroy)  # type: ignore
+        self.connect('destroy', self.__on_destroy)  # pyright: ignore
 
     def __on_destroy(self, *args: Any) -> None:
         self.unregister_events()

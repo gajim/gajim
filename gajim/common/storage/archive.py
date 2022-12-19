@@ -191,7 +191,7 @@ class MessageArchiveStorage(SqliteStorage):
 
         assert cursor.description is not None
         fields = [col[0] for col in cursor.description]
-        Row = namedtuple('Row', fields)  # type: ignore
+        Row = namedtuple('Row', fields)  # pyright: ignore
         named_row = Row(*row)
         if 'additional_data' in fields:
             _dict = json.loads(named_row.additional_data or '{}')

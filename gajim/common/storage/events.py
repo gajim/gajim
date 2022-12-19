@@ -88,7 +88,7 @@ class EventStorage(SqliteStorage):
 
         assert cursor.description is not None
         fields = [col[0] for col in cursor.description]
-        Row = namedtuple('Row', fields)  # type: ignore
+        Row = namedtuple('Row', fields)  # pyright: ignore
         return Row(*row)
 
     def _migrate(self) -> None:
