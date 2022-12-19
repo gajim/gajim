@@ -442,7 +442,8 @@ class AudioWidget(Gtk.Box):
         if message.type == Gst.MessageType.EOS:
             self._state.is_eos = True
             self._set_pause(True)
-            self._ui.seek_bar.set_value(self._state.duration)
+            if not self._pause_seek:
+                self._ui.seek_bar.set_value(self._state.duration)
             self._audio_visualizer.draw_graph(1.0)
 
         elif message.type == Gst.MessageType.STATE_CHANGED:
