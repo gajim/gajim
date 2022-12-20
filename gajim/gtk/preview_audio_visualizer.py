@@ -28,7 +28,6 @@ from gajim.common.preview import AudioSampleT
 
 from .util import rgba_to_float
 
-
 log = logging.getLogger('gajim.gui.preview_audio_visualizer')
 
 
@@ -37,37 +36,29 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
                  width: int,
                  height: int,
                  x_offset: int,
-                 seek_bar_color: Gdk.RGBA
                  ) -> None:
 
         Gtk.DrawingArea.__init__(self)
 
+        self.set_name('AudioVisualizer')
+        self._update_colors()
         self._x_offset = x_offset
+        self._peak_width = 2  # in px
         self._width = width
         self._height = height
-        self._is_LTR = (self.get_direction() == Gtk.TextDirection.LTR)
-        self._amplitude_width = 2
+        self._is_LTR = bool(self.get_direction() == Gtk.TextDirection.LTR)
 
         self._num_samples = 0
         self._samples: AudioSampleT = []
         self._seek_position = -1.0
         self._position = 0.0
 
-        self._default_color = (0.6, 0.6, 0.6)  # gray
-        self._progress_color = rgba_to_float(seek_bar_color)
-
-        # Use a 50% lighter color to the seeking indicator
-        self._seek_color = tuple(
-            min(1.0, color * 1.5) for color in self._progress_color
-        )
-
-        self._surface: Optional[cairo.ImageSurface] = None
-
-        self.set_size_request(self._width, self._height)
-
         self.connect('draw', self._on_drawingarea_draw)
         self.connect('configure-event', self._on_drawingarea_changed)
+        self.connect('style-updated', self._on_style_updated)
 
+        self.set_size_request(self._width, self._height)
+        self._surface: Optional[cairo.ImageSurface] = None
         self._setup_surface()
 
     def update_params(self,
@@ -89,6 +80,45 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
 
         self.queue_draw()
 
+    def _on_drawingarea_draw(self,
+                             _drawing_area: Gtk.DrawingArea,
+                             ctx: cairo.Context[cairo.ImageSurface]
+                             ) -> None:
+
+        if self._num_samples != 0:
+            self._draw_surface(ctx)
+
+    def _on_drawingarea_changed(self,
+                                _drawing_area: Gtk.DrawingArea,
+                                _event: Gdk.EventConfigure
+                                ) -> None:
+
+        self._is_LTR = bool(self.get_direction() == Gtk.TextDirection.LTR)
+        self._setup_surface()
+        self.queue_draw()
+
+    def _on_style_updated(self,
+                          _event: Gdk.EventConfigure
+                          ) -> None:
+
+        self._update_colors()
+        self.queue_draw()
+
+    def _update_colors(self) -> None:
+        sc = self.get_style_context()
+        self._progress_color = rgba_to_float(
+            sc.get_color(Gtk.StateFlags.NORMAL)
+        )
+        self._default_color = rgba_to_float(
+            sc.get_background_color(Gtk.StateFlags.NORMAL)
+        )
+        self._outline_color = rgba_to_float(
+            sc.get_border_color(Gtk.StateFlags.NORMAL)
+        )
+        self._seek_color = rgba_to_float(
+            sc.get_color(Gtk.StateFlags.SELECTED)
+        )
+
     def _setup_surface(self) -> None:
         if self._surface:
             self._surface.finish()
@@ -103,9 +133,10 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
             self._draw_surface(ctx)
 
     def _process_samples(self) -> None:
-        # Pick a subset of all samples and average over three samples
-        w = int(self._width / (self._amplitude_width * 2))
-        n = math.floor(len(self._samples) / w) + 1
+        # Create a subset by taking the average of three samples
+        # around every nth sample
+        num_divisions = int(self._width / (self._peak_width * 2))
+        n = math.floor(len(self._samples) / num_divisions) + 1
 
         if n >= 2:
             samples: AudioSampleT = []
@@ -120,9 +151,18 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
 
         # Normalize both channels using the same scale
         max_elem = max(max(samples))
-        self._samples = [
-            (val1 / max_elem, val2 / max_elem) for val1, val2 in samples
-        ]
+        min_elem = min(min(samples))
+        delta = max_elem - min_elem
+        if delta > 0:
+            self._samples = [
+                (
+                    (val1 - min_elem) / delta,
+                    (val2 - min_elem) / delta
+                )
+                for val1, val2 in samples
+            ]
+        else:
+            self._samples = samples
 
     def _draw_surface(self, ctx: cairo.Context[cairo.ImageSurface]) -> None:
         # First draw the progress part from left
@@ -130,7 +170,8 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
         self._draw_rms_amplitudes(ctx,
                                   start=0,
                                   end=end,
-                                  color=self._progress_color)
+                                  color=self._progress_color
+                                  )
 
         if self._seek_position >= 0:
             # If state is PLAYING and the user seeks, determine whether the
@@ -152,7 +193,8 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
             self._draw_rms_amplitudes(ctx,
                                       start=start,
                                       end=end,
-                                      color=self._seek_color)
+                                      color=self._seek_color
+                                      )
 
         # Draw the default amplitudes for the rest of the timeline
         play_pos = min(round(
@@ -164,7 +206,8 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
         self._draw_rms_amplitudes(ctx,
                                   start=start_default,
                                   end=self._num_samples,
-                                  color=self._default_color)
+                                  color=self._default_color
+                                  )
 
     def _draw_rms_amplitudes(self,
                              ctx: cairo.Context[cairo.ImageSurface],
@@ -172,84 +215,98 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
                              end: int,
                              color: tuple[float, float, float]
                              ) -> None:
-
-        ctx.set_source_rgb(*color)
-
-        w = self._amplitude_width
-
-        # determines the spacing between the amplitudes
-        o = (self._width - 2 * w) / self._num_samples
-        y = self._height / 2
-        r = 1  # radius of the arcs on top and bottom of the amplitudes
-        s = self._height / 2 - r  # amplitude scaling factor
+        peak_width = self._peak_width
+        radius = 1  # radius of the arcs on top and bottom of the amplitudes
+        gap = 0.25  # between upper and lower peak in pixels
+        scaling = self._height / 2 - radius - gap / 2  # peak scaling factor
+        ctx.set_line_width(1.0)
 
         if self._is_LTR:
-            o = (self._width - 2 * w) / self._num_samples
-            x = self._x_offset + o * (start + 1)
+            # determines the spacing between the amplitudes
+            x_shift = (self._width - 2 * peak_width) / self._num_samples
+            x = self._x_offset + x_shift * (start + 1)
         else:
-            o = -(self._width - 2 * w) / self._num_samples
-            x = -o * (self._num_samples - start) + self._x_offset
+            x_shift = -(self._width - 2 * peak_width) / self._num_samples
+            x = -x_shift * (self._num_samples - start) + self._x_offset
 
         for i in range(start, end):
-            # Ensure that no empty area is drawn,
-            # thus use a minimum sample value
-
             if self._is_LTR:
-                sample1 = max(0.05, self._samples[i][0])
-                sample2 = max(0.05, self._samples[i][1])
+                sample1 = self._samples[i][0]
+                sample2 = self._samples[i][1]
             else:
-                sample1 = max(0.05, self._samples[i][1])
-                sample2 = max(0.05, self._samples[i][0])
+                sample1 = self._samples[i][1]
+                sample2 = self._samples[i][0]
 
-            self._draw_rounded_rec2(ctx, x, y, w, sample1 * s, sample2 * s, r)
+            self._draw_rounded_rec(
+                ctx,
+                x,
+                self._height / 2,
+                peak_width,
+                sample1 * scaling,
+                sample2 * scaling,
+                radius,
+                gap,
+            )
+
+            ctx.set_source_rgb(*self._outline_color)
+            ctx.stroke_preserve()
+
+            ctx.set_source_rgb(*color)
             ctx.fill()
-            x += o
 
-    def _on_drawingarea_draw(self,
-                             _drawing_area: Gtk.DrawingArea,
-                             ctx: cairo.Context[cairo.ImageSurface],
-                             ) -> None:
+            x += x_shift
 
-        if self._num_samples != 0:
-            self._draw_surface(ctx)
+    def _draw_rounded_rec(self,
+                          ctx: cairo.Context[cairo.ImageSurface],
+                          x: float,
+                          y: float,
+                          width: float,
+                          height1: float,
+                          height2: float,
+                          radius: float,
+                          gap_size: float,
+                          ) -> None:
 
-    def _on_drawingarea_changed(self,
-                                _drawing_area: Gtk.DrawingArea,
-                                _event: Gdk.EventConfigure,
-                                ) -> None:
+        # Don't insert a gap if bars are too small
+        if height1 + height2 < 3:
+            gap_size = 0.0
 
-        self._is_LTR = (self.get_direction() == Gtk.TextDirection.LTR)
-        self._setup_surface()
-        self.queue_draw()
+        # Set a minimum height to improve visibility for quasi silence
+        height1 = max(0.5, height1)
+        height2 = max(0.5, height2)
 
-    def _draw_rounded_rec2(self,
-                           context: cairo.Context[cairo.ImageSurface],
-                           x: float,
-                           y: float,
-                           w: float,
-                           h1: float,
-                           h2: float,
-                           r: float
-                           ) -> None:
-
-        '''
-        Draws a rectangle of width w and total height of h1+h2
-        The top and bottom edges are curved to the outside
-        '''
-        m = w / 2
-
+        # Draws a rectangle of width w and total height of h1+h2
+        # The top and bottom edges are curved to the outside
+        m = width / 2
         if not self._is_LTR:
             m = -m
-            w = -w
+            width = -width
 
-        context.curve_to(x, y + h1,
-                         x + m, y + h1 + r,
-                         x + w, y + h1)
+        # A --- B --- C
+        # |           |
+        # F --- E --- D
 
-        context.line_to(x + w, y - h2)
+        # Up
+        # A -- B -- C
+        ctx.curve_to(x, y + height1,
+                     x + m, y + height1 + radius,
+                     x + width, y + height1)
+        # C -- D
+        ctx.line_to(x + width, y + gap_size)
+        # D -- F
+        ctx.line_to(x, y + gap_size)
+        # F -- A
+        ctx.line_to(x, y + height1)
 
-        context.curve_to(x + w, y - h2,
-                         x + m, y - h2 - r,
-                         x, y - h2)
-
-        context.line_to(x, y + h1)
+        # Down
+        # C -- D
+        ctx.move_to(x + width, y - gap_size)
+        ctx.line_to(x + width, y - height2)
+        # D -- E -- F
+        ctx.curve_to(x + width, y - height2,
+                     x + m, y - height2 - radius,
+                     x, y - height2)
+        # F -- A
+        ctx.line_to(x, y - gap_size)
+        # A -- C
+        ctx.line_to(x + width, y - gap_size)

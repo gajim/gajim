@@ -257,13 +257,11 @@ class AudioWidget(Gtk.Box):
             return
 
         width -= 2 * SEEK_BAR_PADDING
-        seek_bar_rgba = self._ui.seek_bar.get_style_context().get_color(
-            Gtk.StateFlags.LINK)
         self._audio_visualizer = AudioVisualizerWidget(
             width,
             height,
             SEEK_BAR_PADDING,
-            seek_bar_rgba)
+        )
 
         self._ui.drawing_box.add(self._audio_visualizer)
 
@@ -272,8 +270,8 @@ class AudioWidget(Gtk.Box):
         dur = self._state.duration
 
         dur_str = format_duration(dur, dur)
-        ltr_char = u'\u202B'
-        pop_char = u'\u202C'
+        ltr_char = '\u202B'
+        pop_char = '\u202C'
 
         if self._state.is_timestamp_positive:
             cur_str = f'{format_duration(cur, dur)}'
@@ -445,9 +443,6 @@ class AudioWidget(Gtk.Box):
             if not self._pause_seek:
                 self._ui.seek_bar.set_value(self._state.duration)
                 self._audio_visualizer.draw_graph(1.0)
-            else:
-                self._audio_visualizer.draw_graph(
-                    self._state.position / self._state.duration)
 
         elif message.type == Gst.MessageType.STATE_CHANGED:
             is_paused = self._get_paused()

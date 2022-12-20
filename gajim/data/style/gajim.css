@@ -650,6 +650,17 @@ infobar.error > revealer > box {
     box-shadow: none;
 }
 
+/* Audiovisualizer */
+#AudioVisualizer {
+    color: @theme_selected_bg_color;
+    background-color: @insensitive_fg_color;
+    border-color: @theme_unfocused_bg_color;
+}
+
+#AudioVisualizer:selected {
+    color: lighter(@theme_selected_bg_color);
+}
+
 /* Conversation meta elements */
 .conversation-meta {
     opacity: 0.6;
