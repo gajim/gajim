@@ -444,7 +444,10 @@ class AudioWidget(Gtk.Box):
             self._set_pause(True)
             if not self._pause_seek:
                 self._ui.seek_bar.set_value(self._state.duration)
-            self._audio_visualizer.draw_graph(1.0)
+                self._audio_visualizer.draw_graph(1.0)
+            else:
+                self._audio_visualizer.draw_graph(
+                    self._state.position / self._state.duration)
 
         elif message.type == Gst.MessageType.STATE_CHANGED:
             is_paused = self._get_paused()
