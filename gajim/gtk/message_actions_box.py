@@ -509,7 +509,8 @@ class MessageActionsBox(Gtk.Grid):
             message = self.msg_textview.get_text()
             if (message.startswith('/') and
                     not message.startswith('//') and
-                    not message.startswith('/me ')):
+                    not message.startswith('/me ') and
+                    len(message) > 1):
                 try:
                     app.commands.parse(self._contact.type_string, message)
                 except CommandFailed:
