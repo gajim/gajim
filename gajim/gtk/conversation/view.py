@@ -614,13 +614,8 @@ class ConversationView(Gtk.ScrolledWindow):
             if not isinstance(row, MessageRow):
                 return
 
-            if message.is_mergeable(row):
-                row.set_merged(True)
-                continue
-
-            if message.is_same_sender(row):
-                row.set_merged(False)
-                self._update_descendants(row)
+            merge = message.is_mergeable(row)
+            row.set_merged(merge)
             return
 
     def reduce_message_count(self, before: bool) -> bool:
