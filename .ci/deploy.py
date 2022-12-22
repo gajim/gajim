@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from typing import Any
+from typing import cast
 from typing import Optional
 
 import functools
@@ -102,7 +103,7 @@ def download_artifacts(path: Path) -> None:
 
     for response in responses:
         for artifact in response:
-            filename = artifact['fileName']
+            filename = cast(str, artifact['fileName'])
             file_url = artifact['fileUrl']
 
             log.info('Download %s', filename)
