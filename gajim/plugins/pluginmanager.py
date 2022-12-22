@@ -21,19 +21,13 @@ from types import TracebackType
 
 import os
 import sys
-import json
 import zipfile
 import logging
 from shutil import rmtree, move
-from dataclasses import dataclass
 from pathlib import Path
 from importlib.util import spec_from_file_location
 from importlib.util import module_from_spec
 
-from packaging.version import Version as V
-from packaging.requirements import Requirement
-
-import gajim
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import modules
@@ -43,23 +37,16 @@ from gajim.common.events import PluginRemoved
 from gajim.common.i18n import _
 from gajim.common.exceptions import PluginsystemError
 from gajim.common.util.classes import Singleton
-from gajim.plugins.plugins_i18n import _ as p_
 
 from gajim.plugins.helpers import GajimPluginActivateException
 from gajim.plugins.helpers import is_shipped_plugin
 from gajim.plugins.gajimplugin import GajimPlugin
 from gajim.plugins.gajimplugin import GajimPluginException
+from gajim.plugins.manifest import PluginManifest
 
 log = logging.getLogger('gajim.p.manager')
 
 RmErrorT = tuple[type[BaseException], BaseException, TracebackType]
-
-BLOCKED_PLUGINS = [
-    'appindicator_integration',
-    'plugin_installer',
-    'syntax_highlight',
-    'url_image_preview'
-]
 
 FIELDS = ('name',
           'short_name',
@@ -67,89 +54,6 @@ FIELDS = ('name',
           'description',
           'authors',
           'homepage')
-
-GAJIM_VERSION = V(gajim.__version__.split('+', 1)[0]).base_version
-
-
-@dataclass(frozen=True, eq=True)
-class PluginManifest:
-    name: str
-    short_name: str
-    description: str
-    authors: list[str]
-    homepage: str
-    config_dialog: bool
-    version: V
-    requirements: list[Requirement]
-    platforms: list[str]
-    path: Optional[Path] = None
-
-    def __hash__(self):
-        return hash(f'{self.short_name}_{self.version}')
-
-    @property
-    def is_usable(self) -> bool:
-        if self.short_name in BLOCKED_PLUGINS:
-            return False
-
-        if not self._check_requirements():
-            return False
-
-        platform = sys.platform
-        if platform not in ('win32', 'darwin', 'linux'):
-            # sys.platform can return an unknown amount of unix/linux derivates
-            platform = 'others'
-
-        return platform in self.platforms
-
-    @property
-    def is_shipped(self) -> bool:
-        if self.path is None:
-            return False
-        return is_shipped_plugin(self.path)
-
-    def get_remote_url(self, repository_url: str) -> str:
-        filename = f'{self.short_name}_{self.version}.zip'
-        return f'{repository_url}/{self.short_name}/{filename}'
-
-    @classmethod
-    def from_path(cls, path: Path) -> PluginManifest:
-        manifest_path = path / 'plugin-manifest.json'
-        if not manifest_path.exists():
-            raise ValueError(f'Not a plugin path: {path}')
-
-        if manifest_path.is_dir():
-            raise ValueError(f'Not a plugin path: {path}')
-
-        with manifest_path.open(encoding='utf8') as f:
-            try:
-                manifest = json.load(f)
-            except Exception as error:
-                raise ValueError(f'Error while parsing manifest: '
-                                 f'{path}, {error}')
-        return cls.from_manifest_json(manifest, manifest_path)
-
-    def _check_requirements(self) -> bool:
-        for req in self.requirements:
-            if GAJIM_VERSION in req.specifier:
-                return True
-        return False
-
-    @classmethod
-    def from_manifest_json(cls,
-                           manifest: dict[str, Any],
-                           path: Optional[Path] = None) -> PluginManifest:
-        return cls(
-            name=manifest['name'],
-            short_name=manifest['short_name'],
-            description=p_(manifest['description']),
-            authors=manifest['authors'],
-            homepage=manifest['homepage'],
-            config_dialog=manifest['config_dialog'],
-            version=V(manifest['version']),
-            requirements=[Requirement(r) for r in manifest['requirements']],
-            platforms=manifest['platforms'],
-            path=path.parent if path is not None else path)
 
 
 class PluginManager(metaclass=Singleton):

@@ -38,7 +38,7 @@ from gajim.common.helpers import open_uri
 from gajim.common.types import PluginRepositoryT
 
 from gajim.plugins.helpers import GajimPluginActivateException
-from gajim.plugins.pluginmanager import PluginManifest
+from gajim.plugins.manifest import PluginManifest
 
 from gajim.gui.dialogs import WarningDialog
 from gajim.gui.dialogs import DialogButton

@@ -61,7 +61,7 @@ from gajim.common.storage.cache import CacheStorage
 from gajim.common.storage.draft import DraftStorage
 from gajim.common.storage.archive import MessageArchiveStorage
 
-from gajim.plugins import PluginManager
+from gajim.plugins.pluginmanager import PluginManager
 from gajim.plugins.repository import PluginRepository
 
 

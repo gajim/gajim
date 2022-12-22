@@ -45,7 +45,7 @@ from gajim.common.helpers import AdditionalDataDict
 if typing.TYPE_CHECKING:
     from gajim.common.client import Client
     from gajim.common.modules.httpupload import HTTPFileTransfer
-    from gajim.plugins.pluginmanager import PluginManifest
+    from gajim.plugins.manifest import PluginManifest
 
 ChatListEventT = Union[
     'MessageReceived',

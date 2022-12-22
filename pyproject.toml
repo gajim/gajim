@@ -36,6 +36,7 @@ exclude = [
   "gajim/gtk/settings.py",
   "gajim/gtk/server_info.py",
   "gajim/gtk/groupchat_info.py",
+  "gajim/plugins/pluginmanager.py",
 ]
 include = [
     "launch.py",
@@ -75,10 +76,7 @@ include = [
     "gajim/gajim.py",
     "gajim/gajim_remote.py",
     "gajim/gtk/*",
-    "gajim/plugins/gajimplugin.py",
-    "gajim/plugins/helpers.py",
-    "gajim/plugins/plugins_i18n.py",
-    "gajim/plugins/repository.py",
+    "gajim/plugins/*",
 ]
 
 

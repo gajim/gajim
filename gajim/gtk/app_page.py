@@ -26,7 +26,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
-from gajim.plugins.pluginmanager import PluginManifest
+from gajim.plugins.manifest import PluginManifest
 
 from .builder import get_builder
 from .status_message_selector import StatusMessageSelector

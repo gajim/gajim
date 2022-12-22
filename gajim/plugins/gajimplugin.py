@@ -26,6 +26,8 @@ from gajim.common.ged import HandlerFuncT
 from gajim.common.modules.base import BaseModule
 from gajim.common.types import PluginExtensionPoints
 
+from gajim.plugins.manifest import PluginManifest
+
 
 log = logging.getLogger('gajim.p.plugin')
 
@@ -38,7 +40,7 @@ class GajimPlugin:
     __path__: str = ''
 
     encryption_name: str = ''
-    manifest: Any
+    manifest: PluginManifest
 
     gui_extension_points: PluginExtensionPoints = {}
     '''
