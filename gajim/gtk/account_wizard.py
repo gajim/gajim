@@ -381,6 +381,7 @@ class AccountWizard(Assistant):
                                client.custom_host)
         self.get_page('success').set_account(account)
         self.show_page('success', Gtk.StackTransitionType.SLIDE_LEFT)
+        self._disconnect()
 
     def _on_connected(self, client: Client, _signal_name: str) -> None:
         client.get_module('Register').request_register_form(
@@ -402,8 +403,10 @@ class AccountWizard(Assistant):
                                proxy_name,
                                client.custom_host,
                                anonymous=True)
+
         self.get_page('success').set_account(account)
         self.show_page('success', Gtk.StackTransitionType.SLIDE_LEFT)
+        self._disconnect()
 
     def _on_disconnected(self, client: Client, _signal_name: str) -> None:
         domain, error, text = client.get_error()
@@ -429,15 +432,6 @@ class AccountWizard(Assistant):
                 self._show_error_page(_('Signup not allowed'),
                                       _('Signup not allowed'),
                                       _('This server does not allow signup.'))
-
-        elif domain == StreamError.STREAM:
-            # The credential test often ends with a stream error, because
-            # after auth there should be a stream restart but nbxmpp ends
-            # the stream with </stream> which is considered not-well-formed
-            # by the server. This ignores all stream errors if we already
-            # know that we succeeded.
-            if self.get_current_page() != 'success':
-                self._show_error_page(_('Error'), _('Error'), text or error)
 
         else:
             self._show_error_page(_('Error'), _('Error'), text or error)
