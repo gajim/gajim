@@ -26,7 +26,6 @@ from packaging.version import Version as V
 from packaging.requirements import Requirement
 
 import gajim
-from gajim.common.i18n import _
 
 from gajim.plugins.plugins_i18n import _ as p_
 from gajim.plugins.helpers import is_shipped_plugin
