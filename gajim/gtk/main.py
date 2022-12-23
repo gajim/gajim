@@ -46,7 +46,7 @@ from gajim.common.helpers import play_sound
 from gajim.common.helpers import show_in_folder
 from gajim.common.modules.bytestream import is_transfer_active
 from gajim.common.modules.contacts import GroupchatContact
-from gajim.plugins.pluginmanager import PluginManifest
+from gajim.plugins.manifest import PluginManifest
 from gajim.plugins.repository import PluginRepository
 
 from .account_side_bar import AccountSideBar
