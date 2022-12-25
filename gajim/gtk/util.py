@@ -41,8 +41,8 @@ from gi.repository import GLib
 from gi.repository import Pango
 from gi.repository import GdkPixbuf
 import cairo
-import nbxmpp
 from nbxmpp import JID
+from nbxmpp import util as nbxmpp_util
 from nbxmpp.structs import LocationData
 from nbxmpp.structs import TuneData
 
@@ -503,10 +503,10 @@ class MaxWidthComboBoxText(Gtk.ComboBoxText):
 
 def text_to_color(text: str) -> tuple[float, float, float]:
     if app.css_config.prefer_dark:
-        background = (0, 0, 0)  # RGB (0, 0, 0) black
+        lightness = 60
     else:
-        background = (1, 1, 1)  # RGB (255, 255, 255) white
-    return nbxmpp.util.text_to_color(text, background)  # pyright: ignore
+        lightness = 40
+    return nbxmpp_util.text_to_color(text, 100, lightness)
 
 
 def get_contact_color(contact: types.ChatContactT
