@@ -81,7 +81,7 @@ SETTING_TYPE = Union[bool, int, str, object]
 
 log = logging.getLogger('gajim.c.settings')
 
-CURRENT_USER_VERSION = 3
+CURRENT_USER_VERSION = 5
 
 CREATE_SQL = '''
     CREATE TABLE settings (
@@ -385,6 +385,10 @@ class Settings:
                 self._settings['app']['date_format'] = value
 
             self._set_user_version(4)
+
+        if version < 5:
+            self._settings['app'].pop('muclumbus_api_http_uri', None)
+            self._set_user_version(5)
 
     def _migrate_old_config(self) -> None:
         if self._in_memory:
