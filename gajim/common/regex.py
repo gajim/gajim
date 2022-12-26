@@ -16,6 +16,8 @@ import re
 from typing import Any
 
 
+COMMAND_REGEX = re.compile(r'^/[a-z]+')
+
 INVALID_XML_CHARS_REGEX = re.compile(
     '[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x1f]|[\ud800-\udfff]|[\ufffe-\uffff]')
 

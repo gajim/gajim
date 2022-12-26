@@ -507,16 +507,14 @@ class MessageActionsBox(Gtk.Grid):
             assert self._contact is not None
 
             message = self.msg_textview.get_text()
-            if (message.startswith('/') and
-                    not message.startswith('//') and
-                    not message.startswith('/me ') and
-                    len(message) > 1):
-                try:
-                    app.commands.parse(self._contact.type_string, message)
-                except CommandFailed:
-                    pass
-                else:
-                    self.msg_textview.clear()
+
+            try:
+                handled = app.commands.parse(self._contact.type_string, message)
+            except CommandFailed:
+                return True
+
+            if handled:
+                self.msg_textview.clear()
                 return True
 
             if not app.account_is_available(self._contact.account):

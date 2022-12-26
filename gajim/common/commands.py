@@ -29,6 +29,7 @@ from gajim.common.i18n import _
 from gajim.common.helpers import Observable, is_role_change_allowed
 from gajim.common.helpers import is_affiliation_change_allowed
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common import regex
 
 
 def split_argument_string(string: str) -> list[str]:
@@ -133,7 +134,13 @@ class ChatCommands(Observable):
         usage = get_usage_from_command(cmd, command_name)
         self._commands[command_name] = (used_in, usage)
 
-    def parse(self, type_: str, arg_string: str) -> None:
+    def parse(self, type_: str, arg_string: str) -> bool:
+        if arg_string.startswith('/me '):
+            return False
+
+        if regex.COMMAND_REGEX.match(arg_string) is None:
+            return False
+
         arg_list = split_argument_string(arg_string[1:])
 
         command_name = arg_list[0]
@@ -161,6 +168,7 @@ class ChatCommands(Observable):
             result = _('Command executed successfully')
 
         self.notify('command-result', result)
+        return True
 
     def _create_commands(self) -> None:
         parser = self.make_parser('help', self._help_command)
