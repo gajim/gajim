@@ -29,8 +29,8 @@ test-pyright:
     - PYGOBJECT_STUB_CONFIG=Gtk3,Gdk3 pip3 install git+https://github.com/pygobject/pygobject-stubs.git
     - npm install pyright
     - python3 .ci/link-gtk.py
-    - $(npm bin)/pyright --version
-    - $(npm bin)/pyright
+    - node_modules/.bin/pyright --version
+    - node_modules/.bin/pyright
   interruptible: true
 
 test-ruff:
