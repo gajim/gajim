@@ -293,7 +293,8 @@ class Result(Page):
         self._treeview.connect('button-press-event', self._on_button_press)
 
         for field, counter in zip(form.reported.iter_fields(),
-                                  itertools.count()):
+                                  itertools.count(),
+                                  strict=False):
             self._treeview.append_column(
                 Gtk.TreeViewColumn(field.label,
                                    Gtk.CellRendererText(),

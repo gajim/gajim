@@ -109,7 +109,7 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
 
         if n >= 2:
             samples: AudioSampleT = []
-            samples1, samples2 = zip(*self._samples)
+            samples1, samples2 = zip(*self._samples, strict=True)
             for i in range(2, int(len(self._samples) - n / 2), n):
                 index = int(i + n / 2)
                 avg1 = mean(samples1[index - 1:index + 1])
