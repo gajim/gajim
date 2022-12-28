@@ -2,7 +2,7 @@
 
 ### Runtime Requirements
 
-- [Python](https://www.python.org/) (>=3.9)
+- [Python](https://www.python.org/) (>=3.10)
 - [PyGObject](https://pypi.org/project/PyGObject/) (>=3.42.0)
 - [pycairo](https://pypi.org/project/pycairo/)
 - [cairo](https://gitlab.freedesktop.org/cairo/cairo) (>=1.16.0)

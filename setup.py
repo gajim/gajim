@@ -8,8 +8,8 @@ import logging
 import os
 import sys
 
-if sys.version_info < (3, 9):
-    sys.exit('Gajim needs Python 3.9+')
+if sys.version_info < (3, 10):
+    sys.exit('Gajim needs Python 3.10+')
 
 import subprocess
 from pathlib import Path
