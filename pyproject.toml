@@ -1,14 +1,81 @@
 [build-system]
 requires = [
-  "setuptools >= 43.0.0",
+  "setuptools >= 65.0.0",
 ]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "gajim"
+description = "A GTK XMPP Client"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "GPL-3.0-or-later"}
+authors = [
+    {name = "Philipp Hörist", email = "philipp@hoerist.com"},
+    {name = "Yann Leboulanger", email = "yann@leboulanger.org"},
+]
+keywords = ["chat", "messaging", "im", "xmpp", "voip"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: X11 Applications :: GTK",
+  "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.10",
+  "Topic :: Communications :: Chat",
+]
+dependencies = [
+  "css-parser",
+  "keyring",
+  "nbxmpp>=4.0.1,<5.0.0",
+  "packaging",
+  "pillow",
+  "precis-i18n>=1.0.0",
+  "cryptography>=3.4.8",
+  "pycairo>=1.16.0",
+  "PyGObject>=3.42.0",
+]
+dynamic = ["version"]
+
+[project.urls]
+homepage = "https://gajim.org"
+repository = "https://dev.gajim.org/gajim/gajim"
+
+[project.optional-dependencies]
+dev = [
+  "ruff",
+  "codespell[toml]",
+  "nbxmpp @ git+https://dev.gajim.org/gajim/python-nbxmpp.git",
+  "PyGObject-stubs @ git+https://github.com/pygobject/pygobject-stubs.git",
+  "python-gitlab",
+  "sentry-sdk",
+]
+
+[project.scripts]
+gajim-remote = "gajim.gajim_remote:main"
+
+[project.gui-scripts]
+gajim = "gajim.gajim:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["gajim*"]
+# Necessary so gajim.data is recogniced as namespace package and all files
+# under it are included as package-data
+namespaces = true
+
+[tool.setuptools.package-data]
+"gajim.data" = [
+  "icons/**/index.theme",
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "gajim.__version__"}
 
 [tool.codespell]
 skip = "*__pycache__*,build,test,*.egg-info,.git,*.po,*.nsi,*.spec"
 ignore-words-list = "claus,pres,ser,trough"
-
 
 [tool.pyright]
 pythonVersion = "3.10"
@@ -79,7 +146,6 @@ include = [
     "gajim/gtk/*",
     "gajim/plugins/*",
 ]
-
 
 [tool.ruff]
 line-length = 80
@@ -163,7 +229,6 @@ target-version = "py310"
 "test/*" = ["E402"]
 "test/common/test_styling.py" = ["RUF001", "E501"]
 "test/common/test_regex.py" = ["RUF001"]
-
 
 [tool.ruff.mccabe]
 max-complexity = 15

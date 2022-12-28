@@ -13,7 +13,7 @@
 - [precis_i18n](https://pypi.org/project/precis-i18n/)
 - [packaging](https://pypi.org/project/packaging/)
 - [Pillow](https://pypi.org/project/Pillow/)
-- [setuptools](https://pypi.org/project/setuptools/)
+- [setuptools](https://pypi.org/project/setuptools/) (>=65.0.0)
 - [Gtk3](https://gitlab.com/gnome/gtk) (>=3.24.30)
 - [GLib](https://gitlab.com/gnome/glib) (>=2.60.0)
 - [GtkSourceView](https://gitlab.gnome.org/GNOME/gtksourceview)
@@ -41,7 +41,7 @@
 
 ### Install Requirements
 
-- [setuptools](https://pypi.org/project/setuptools/)
+- [setuptools](https://pypi.org/project/setuptools/) (>=65.0.0)
 - [gettext](https://savannah.gnu.org/projects/gettext/)
 
 ### Running Tests

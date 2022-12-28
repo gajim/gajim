@@ -190,13 +190,5 @@ setup(
         'build_py': Build,
         'install': Install,
     },
-    entry_points={
-        'console_scripts': [
-            'gajim-remote = gajim.gajim_remote:main',
-        ],
-        'gui_scripts': [
-            'gajim = gajim.gajim:main',
-        ]
-    },
     data_files=data_files
 )
