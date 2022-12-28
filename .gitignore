@@ -27,6 +27,7 @@ gajim.egg-info/
 win/_build_root
 venv/
 .venv/
+node_modules/
 
 # IDE files
 
