@@ -449,7 +449,7 @@ class PreviewManager:
             return
         log.info('Start downloading: %s', preview.request_uri)
 
-        request = create_http_request(preview.account, sniffer=True)
+        request = create_http_request(preview.account)
         request.set_user_data(preview)
         request.connect('accept-certificate', self._accept_certificate)
         request.connect('content-sniffed', self._on_content_sniffed, force)
@@ -478,33 +478,25 @@ class PreviewManager:
 
     def _on_content_sniffed(self,
                             request: HTTPRequest,
+                            content_length: int,
                             content_type: str,
-                            _params: GLib.HashTable,
                             force: bool
                             ) -> None:
 
-        file_size = request.get_response_headers().get_content_length()
         uri = request.get_uri().to_string()
-
-
         preview = cast(Preview, request.get_user_data())
         preview.mime_type = content_type
-        preview.file_size = file_size
+        preview.file_size = content_length
 
         if content_type not in ALLOWED_MIME_TYPES and not force:
             log.info('Not an allowed content type: %s, %s', content_type, uri)
             request.cancel()
             return
 
-        if file_size == 0:
-            log.info('File size is unknown (zero) for URL: "%s"', uri)
-            request.cancel()
-            return
-
-        if file_size > int(app.settings.get('preview_max_file_size')):
+        if content_length > int(app.settings.get('preview_max_file_size')):
             log.info(
                 'File size (%s) too big for URL: "%s"',
-                file_size, uri)
+                content_length, uri)
             if force:
                 preview.info_message = None
             else:

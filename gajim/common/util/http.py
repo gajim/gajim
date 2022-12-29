@@ -22,12 +22,8 @@ from gajim.common.helpers import determine_proxy
 from gajim.common.helpers import get_account_proxy
 
 
-def create_http_session(account: Optional[str] = None,
-                        sniffer: bool = False
-                        ) -> HTTPSession:
-
-    session = HTTPSession(user_agent=f'Gajim {app.version}',
-                          sniffer=sniffer)
+def create_http_session(account: Optional[str] = None) -> HTTPSession:
+    session = HTTPSession(user_agent=f'Gajim {app.version}')
 
     if account is None:
         proxy = determine_proxy()
@@ -40,9 +36,6 @@ def create_http_session(account: Optional[str] = None,
     return session
 
 
-def create_http_request(account: Optional[str] = None,
-                        sniffer: bool = False
-                        ) -> HTTPRequest:
-
-    session = create_http_session(account, sniffer)
+def create_http_request(account: Optional[str] = None) -> HTTPRequest:
+    session = create_http_session(account)
     return session.create_request()
