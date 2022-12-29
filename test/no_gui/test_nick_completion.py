@@ -6,7 +6,7 @@ from gajim.common import app
 from gajim import gui
 gui.init('gtk')
 
-from gajim.gui.groupchat_nick_completion import GroupChatNickCompletion  # noqa
+from gajim.gui.groupchat_nick_completion import GroupChatNickCompletion
 
 
 class Test(unittest.TestCase):

@@ -237,7 +237,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._ui.nickname_entry.set_sensitive(False)
         self._ui.avatar_image.set_from_surface(self._current_avatar)
         self._ui.nickname_entry.set_text(app.nicks[self.account])
-        self._vcard_grid.set_vcard(self._current_vcard.copy())  # pyright: ignore # noqa
+        self._vcard_grid.set_vcard(self._current_vcard.copy())  # pyright: ignore # noqa: E501
         self._new_avatar = False
 
     def _on_save_clicked(self, _button: Gtk.Button) -> None:
@@ -356,7 +356,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
             return
 
         self._new_avatar = Avatar()
-        self._new_avatar.add_image_source(data, 'image/png', height, width)  # pyright: ignore  # noqa
+        self._new_avatar.add_image_source(data, 'image/png', height, width)  # pyright: ignore  # noqa: E501
         self._new_avatar = False
 
         scale = self.get_scale_factor()

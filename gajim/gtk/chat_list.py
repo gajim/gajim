@@ -321,7 +321,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             self._on_message_sent(event)
         elif isinstance(event, events.JingleRequestReceived):
             self._on_jingle_request_received(event)
-        elif isinstance(event, events.FileRequestReceivedEvent):  # pyright: ignore [reportUnnecessaryIsInstance] # noqa
+        elif isinstance(event, events.FileRequestReceivedEvent):  # pyright: ignore [reportUnnecessaryIsInstance] # noqa: E501
             self._on_file_request_received(event)
         else:
             log.warning('Unhandled Event: %s', event.name)

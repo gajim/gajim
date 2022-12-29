@@ -53,8 +53,8 @@ from gajim.common.i18n import LANG
 from gajim.common.const import Display
 
 if typing.TYPE_CHECKING:
-    from gajim.gui.main import MainWindow  # noqa
-    from gajim.gui.application import GajimApplication  # noqa
+    from gajim.gui.main import MainWindow  # noqa: F401
+    from gajim.gui.application import GajimApplication  # noqa: F401
     from gajim.common.storage.cache import CacheStorage
     from gajim.common.storage.archive import MessageArchiveStorage
     from gajim.common.storage.events import EventStorage
@@ -63,7 +63,7 @@ if typing.TYPE_CHECKING:
     from gajim.common.call_manager import CallManager
     from gajim.common.preview import PreviewManager
     from gajim.common.task_manager import TaskManager
-    from gajim.common.commands import ChatCommands  # noqa
+    from gajim.common.commands import ChatCommands  # noqa: F401
 
 
 interface = cast(types.InterfaceT, None)

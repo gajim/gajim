@@ -992,7 +992,7 @@ def parse_uri(uri: str) -> URI:
         data: dict[str, str] = {}
         try:
             token = unquote(urlparts.path, errors='strict')
-            if token == 'ambiguous-address':  # noqa S105
+            if token == 'ambiguous-address':  # noqa: S105
                 data['addr'] = unquote(urlparts.query, errors='strict')
                 validate_jid(data['addr'], 'bare')
                 return URI(URIType.AT, uri, data=data)

@@ -85,7 +85,7 @@ stanza = Iq(node='''
 </field>
 </x>
 </query>
-</iq>''')  # noqa
+</iq>''')  # noqa: E501
 
 
 subject = ('Lorem ipsum dolor sit amet, consetetur sadipscing elitr sed '

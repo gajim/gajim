@@ -53,10 +53,10 @@ class BaseFileChooser:
 
     _preview_size: tuple[int, int]
 
-    def add_filter(self, filter: Gtk.FileFilter) -> None:  # noqa
+    def add_filter(self, filter: Gtk.FileFilter) -> None:  # noqa: A002
         pass
 
-    def set_filter(self, filter: Gtk.FileFilter) -> None:  # noqa
+    def set_filter(self, filter: Gtk.FileFilter) -> None:  # noqa: A002
         pass
 
     def _on_response(self,
