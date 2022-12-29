@@ -67,8 +67,6 @@ if typing.TYPE_CHECKING:
 
 
 interface = cast(types.InterfaceT, None)
-# Interface to run a thread and then a callback
-thread_interface = None
 config = c_config.Config()
 settings = cast(types.SettingsT, None)
 version = gajim.__version__

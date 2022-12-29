@@ -65,7 +65,6 @@ log = logging.getLogger('gajim.interface')
 class Interface:
     def __init__(self):
         app.interface = self
-        app.thread_interface = ThreadInterface
 
         app.idlequeue = idlequeue.get_idlequeue()
         # resolve and keep current record of resolved hosts
@@ -226,20 +225,3 @@ class Interface:
             GLib.timeout_add_seconds(timeout, self.process_connections)
         else:
             GLib.timeout_add(timeout, self.process_connections)
-
-
-class ThreadInterface:
-    def __init__(self, func, func_args=(), callback=None, callback_args=()):
-        '''
-        Call a function in a thread
-        '''
-        def thread_function(func, func_args, callback, callback_args):
-            output = func(*func_args)
-            if callback:
-                GLib.idle_add(callback, output, *callback_args)
-
-        Thread(target=thread_function,
-               args=(func,
-                     func_args,
-                     callback,
-                     callback_args)).start()

@@ -36,9 +36,7 @@ from typing import TYPE_CHECKING
 import sys
 import re
 import os
-import subprocess
 import hashlib
-import shlex
 import socket
 import logging
 import json
@@ -309,30 +307,6 @@ def chatstate_to_string(chatstate: Optional[Chatstate]) -> str:
         return _('paused composing a message')
 
     raise ValueError('unknown value: %s' % chatstate)
-
-
-def exec_command(command: str,
-                 use_shell: bool = False,
-                 posix: bool = True
-                 ) -> None:
-    '''
-    execute a command. if use_shell is True, we run the command as is it was
-    typed in a console. So it may be dangerous if you are not sure about what
-    is executed.
-    '''
-    if use_shell:
-        subprocess.Popen(f'{command} &', shell=True).wait()
-    else:
-        args = shlex.split(command, posix=posix)
-        process = subprocess.Popen(args)
-        app.thread_interface(process.wait)
-
-
-def build_command(executable: str, parameter: str) -> str:
-    # we add to the parameter (can hold path with spaces)
-    # "" so we have good parsing from shell
-    parameter = parameter.replace('"', '\\"')  # but first escape "
-    return f'{executable} "{parameter}"'
 
 
 def sanitize_filename(filename: str) -> str:
