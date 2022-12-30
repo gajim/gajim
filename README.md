@@ -1,4 +1,6 @@
-# Welcome to Gajim
+[[_TOC_]]
+
+## Requirements
 
 ### Runtime Requirements
 
@@ -39,19 +41,67 @@
 - [gst-plugins-ugly](https://gitlab.freedesktop.org/gstreamer/gst-plugins-ugly)
 - [gst-libav](https://gitlab.freedesktop.org/gstreamer/gst-libav)
 
-### Install Requirements
+### Build Requirements
 
 - [setuptools](https://pypi.org/project/setuptools/) (>=65.0.0)
 - [gettext](https://savannah.gnu.org/projects/gettext/)
 
-### Running Tests
+To build Gajim a PEP517 build frontend like pip (https://pip.pypa.io/en/stable/) or build (https://pypa-build.readthedocs.io/en/stable/) must be used.
+
+The build frontend takes care of installing all python build requirements. Beware `gettext` is not a python library and cannot be installed by the build frontend.
+
+## Building
+
+### Building the metadata files (Unix only)
+
+```bash
+./pep517build/build_metadata.py -o dist/metadata
+```
+
+### Building the wheel
+
+This is only necessary if you need the wheel, otherwise you can skip to the Installing section.
+
+#### Using `build`
+
+```bash
+python -m build -w
+```
+
+#### Using `pip`
+
+```bash
+pip wheel --no-deps --use-pep517 -w dist .
+```
+
+## Installing
+
+### Installing with `pip`
+
+```bash
+pip install .
+```
+
+### Installing the wheel
+
+```bash
+pip install dist/name_of_wheel.whl
+```
+
+### Installing the metadata files (Unix only)
+
+```bash
+./pep517build/install_metadata.py dist/metadata --prefix=/usr
+```
+
+## Tests
 
 - `python -m unittest discover -s test`
 - `python -m unittest ./test/dialogs/gui_file.py` (for testing GUI files)
 
-### Installation Procedure
+## Packages and install instructions
 
-#### Packages
+### Packages
 
 - [Arch Linux](https://www.archlinux.org/packages/community/any/gajim/)
 - [Debian](https://packages.debian.org/stable/gajim)
@@ -59,24 +109,20 @@
 - [Ubuntu](https://packages.ubuntu.com/gajim)
 - [FreeBSD](https://www.freshports.org/net-im/gajim/)
 
-#### Flatpak
+### Flatpak
 
 see [README](./flatpak/README.md)
 
-#### Snapshots
+### Snapshots
 
 - [Daily Linux](https://www.gajim.org/downloads/snap/)
 - [Daily Windows](https://gajim.org/downloads/snap/win)
 
-#### Linux
-
-    pip install .
-
-#### Mac
+### Mac
 
 see [Wiki](https://dev.gajim.org/gajim/gajim/-/wikis/help/Gajim-on-macOS)
 
-#### Developing
+## Developing
 
 To create a virtualenv you can execute
 
@@ -89,17 +135,17 @@ Afterwards activate the virtual environment with
     source .venv/bin/activate
     ./launch.py
 
-#### Windows
+### Windows
 
 see [README](./win/README.md)
 
-### Miscellaneous
+## Miscellaneous
 
-#### Debugging
+### Debugging
 
 Execute gajim with `--verbose`
 
-#### Links
+### Links
 
 - [FAQ](https://dev.gajim.org/gajim/gajim/wikis/help/gajimfaq)
 - [Wiki](https://dev.gajim.org/gajim/gajim/wikis/home)

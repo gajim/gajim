@@ -2,7 +2,8 @@
 requires = [
   "setuptools >= 65.0.0",
 ]
-build-backend = "setuptools.build_meta"
+build-backend = "backend"
+backend-path = ["pep517build"]
 
 [project]
 name = "gajim"
@@ -56,25 +57,18 @@ gajim-remote = "gajim.gajim_remote:main"
 [project.gui-scripts]
 gajim = "gajim.gajim:main"
 
-[tool.setuptools]
-include-package-data = true
-
 [tool.setuptools.packages.find]
 include = ["gajim*"]
-# Necessary so gajim.data is recogniced as namespace package and all files
-# under it are included as package-data
-namespaces = true
 
 [tool.setuptools.package-data]
-"gajim.data" = [
-  "icons/**/index.theme",
-]
+gajim = ["py.typed"]
+"gajim.data" = ["**/*"]
 
 [tool.setuptools.dynamic]
 version = {attr = "gajim.__version__"}
 
 [tool.codespell]
-skip = "*__pycache__*,build,test,*.egg-info,.git,*.po,*.nsi,*.spec"
+skip = "*__pycache__*,build,dist,test,*.egg-info,.git,*.po,*.nsi,*.spec"
 ignore-words-list = "claus,pres,ser,trough"
 
 [tool.pyright]
@@ -113,6 +107,7 @@ include = [
     "mac/*",
     "scripts/*",
     "win/*",
+    "pep517build/*",
     "gajim/common/application.py",
     "gajim/common/call_manager.py",
     "gajim/common/cert_store.py",

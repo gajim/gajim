@@ -1,4 +1,7 @@
 include COPYING
+include ChangeLog
+recursive-include pep517build *
 recursive-include po *
 recursive-include data *.1 *.in
 recursive-include test *
+prune */__pycache__
