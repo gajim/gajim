@@ -11,6 +11,7 @@ syntax: glob
 
 gajim/gui/*
 !gajim/gui/__init__.py
+gajim/data/locale
 
 # Cache
 
