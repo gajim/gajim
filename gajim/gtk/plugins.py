@@ -333,8 +333,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
             try:
                 app.plugin_manager.activate_plugin(plugin)
             except GajimPluginActivateException as e:
-                WarningDialog(_('Plugin failed'), str(e),
-                              transient_for=self)
+                WarningDialog(_('Plugin failed'), str(e))
                 return
 
         self._update_selected_plugin()
@@ -361,7 +360,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
             app.plugin_manager.uninstall_plugin(plugin)
         except PluginsystemError as error:
             WarningDialog(_('Unable to properly remove the plugin'),
-                          str(error), self)
+                          str(error))
             return
 
     def _on_plugin_removed(self, event: PluginRemoved) -> None:
@@ -398,9 +397,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
     def _on_install_plugin_from_zip(self, _button: Gtk.ToolButton) -> None:
         def _show_warn_dialog() -> None:
             text = _('Archive is malformed')
-            dialog = WarningDialog(text, '', transient_for=self)
-            dialog.set_modal(False)
-            dialog.popup()
+            WarningDialog(text, transient_for=self)
 
         def _on_plugin_exists(zip_filename: str) -> None:
             def _on_yes():
@@ -430,7 +427,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
                     _on_plugin_exists(zip_filename)
                     return
 
-                WarningDialog(error_text, f'"{zip_filename}"', self)
+                WarningDialog(error_text, f'"{zip_filename}"')
                 return
             if not plugin:
                 _show_warn_dialog()

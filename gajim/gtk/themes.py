@@ -194,14 +194,13 @@ class Themes(Gtk.ApplicationWindow):
             ErrorDialog(
                 _('Invalid Name'),
                 _('Name <b>default</b> is not allowed'),
-                transient_for=self)
+                secondary_use_markup=True)
             return
 
         if ' ' in new_name:
             ErrorDialog(
                 _('Invalid Name'),
-                _('Spaces are not allowed'),
-                transient_for=self)
+                _('Spaces are not allowed'))
             return
 
         if new_name == '':

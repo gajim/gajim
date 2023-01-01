@@ -18,7 +18,6 @@ import logging
 
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import GLib
 
 from nbxmpp.errors import StanzaError
 from nbxmpp.protocol import JID
@@ -29,7 +28,7 @@ from gajim.common.i18n import _
 from gajim.common.helpers import to_user_string
 
 from .builder import get_builder
-from .dialogs import HigDialog
+from .dialogs import ErrorDialog
 
 log = logging.getLogger('gajim.gui.blocking_list')
 
@@ -64,11 +63,7 @@ class BlockingList(Gtk.ApplicationWindow):
             callback=self._on_blocking_list_received)
 
     def _show_error(self, error: str) -> None:
-        dialog = HigDialog(
-            self, Gtk.MessageType.INFO, Gtk.ButtonsType.OK,
-            _('Error!'),
-            GLib.markup_escape_text(error))
-        dialog.popup()
+        ErrorDialog(_('Error!'), error)
 
     def _on_blocking_list_received(self, task: Task) -> None:
         try:
