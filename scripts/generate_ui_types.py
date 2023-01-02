@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Reads all .ui files and creates builder.pyi
-# Excecute this script from the repo root dir
+# Execute this script from the repo root dir
 
 import logging
 import sys
@@ -16,7 +16,7 @@ log = logging.getLogger()
 cwd = Path.cwd()
 
 if cwd.name != 'gajim':
-    sys.exit('Script needs to be excecuted from gajim repository '
+    sys.exit('Script needs to be executed from gajim repository '
              'root directory')
 
 in_path = cwd / 'gajim' / 'data' / 'gui'

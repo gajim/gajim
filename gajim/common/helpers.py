@@ -924,7 +924,7 @@ def parse_uri(uri: str) -> URI:
         data: dict[str, str] = {}
         try:
             data['addr'] = unquote(urlparts.path, errors='strict')
-            validate_jid(data['addr'], 'bare')  # meh, good enuf
+            validate_jid(data['addr'], 'bare')  # meh, good enough
         except ValueError as err:
             data['error'] = str(err)
             return URI(URIType.INVALID, uri, data=data)

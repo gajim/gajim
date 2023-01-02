@@ -78,13 +78,13 @@ see [Wiki](https://dev.gajim.org/gajim/gajim/-/wikis/help/Gajim-on-macOS)
 
 #### Developing
 
-To create a virutalenv you can execute
+To create a virtualenv you can execute
 
     ./scripts/dev_env.sh
 
 Be sure all install requirements are available.
 
-Afterwards activate the vitual environment with
+Afterwards activate the virtual environment with
 
     source .venv/bin/activate
     ./launch.py

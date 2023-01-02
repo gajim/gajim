@@ -64,7 +64,7 @@ class Test(unittest.TestCase):
         self.assertEqual(
             get_first_grapheme(devanagari_kshi), '\u0915\u094D', 'क्षि -> क् ')
         # This probably won't fail on *any* locale, ever, again because the
-        # implementaion doesn't seem locale-specific.
+        # implementation doesn't seem locale-specific.
 
 
 if __name__ == '__main__':

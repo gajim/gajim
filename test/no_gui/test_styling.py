@@ -486,7 +486,7 @@ JIDS = [
     r'somenick!user\22\26\27\2f\3a\3c\3e\5c3address@example.com',
 
     # https://en.wikipedia.org/wiki/E-mail_address#Internationalization_examples
-    # Do note that these are *e-mail* addresses and might not all be vaild JIDs.
+    # Do note that these are *e-mail* addresses and might not all be valid JIDs.
     'Pelé@example.com',
     'δοκιμή@παράδειγμα.δοκιμή',
     '我買@屋企.香港',

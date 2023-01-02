@@ -61,7 +61,7 @@ Example:
 
 # Use pre-commit
 
-Execute the following inside the repositor dir
+Execute the following inside the repository dir
 
     $ pip install pre-commit
     $ pre-commit install

@@ -186,7 +186,7 @@ class AudioWidget(Gtk.Box):
     def _setup_audio_player(self, file_path: Path) -> None:
         assert self._playbin is not None
 
-        # Set up the whole pipline
+        # Set up the whole pipeline
         # For reference see
         # https://gstreamer.freedesktop.org/
         # documentation/audiofx/scaletempo.html

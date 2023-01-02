@@ -79,7 +79,7 @@ class GlobalEventsDispatcher:
             except ValueError as error:
                 log.warning(
                     '''Function (%s) with priority "%s" never
-                    registered as handler of event "%s". Couldn\'t remove.
+                    registered as handler of event "%s".
                     Error: %s''', handler, priority, event_name, error)
 
     def raise_event(self, event_obj: ApplicationEvent) -> Any:

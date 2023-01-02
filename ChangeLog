@@ -121,7 +121,7 @@ Gajim 1.5.3 (31 Oct 2022)
   * Notification: Draw avatar correctly on scale > 1 (#11229)
   * Preview: Don’t fail hard when parsing fragments
   * PreviewAudio: Increase update rate for seek bar (#11215)
-  * AccountPage: Disable Excute Command button by default (#11216)
+  * AccountPage: Disable Execute Command button by default (#11216)
   * Client: Load trusted certificates on connect() (#11220)
   * ChatList: Don’t increase in width while drag and drop
   * Roster: Always show workspace when starting chat
@@ -561,7 +561,7 @@ Gajim 1.4.0 (11 May 2022)
   * #8584  Display vcard-temp JABBERIDs somewhere
   * #8631  Vertical tabs can not be adjusted in width in latest master
   * #8742  Integrate the Appindicator plugin into Gajim
-  * #8745  Allow successive bookmarked MUC autojoins (in oposite to concurrent)
+  * #8745  Allow successive bookmarked MUC autojoins (in opposite to concurrent)
   * #8849  Error when disabling an account: Account iter of <the server> could not be found
   * #8897  Roster filter crashes
   * #8898  Roster tree elements have wrong collapse state during and after roster filtering
@@ -569,11 +569,11 @@ Gajim 1.4.0 (11 May 2022)
   * #9041  HTTPUpload: Add upload button to contact right-click menu
   * #9046  Add a "Minimize on close" in Preferences for all MUC rooms
   * #9145  Roster not showing number of contacts logged in per group
-  * #9164  Chatstates: Color of tab as "typing/composing" indicator get's lost on focus
+  * #9164  Chatstates: Color of tab as "typing/composing" indicator gets lost on focus
   * #9174  Changing status results in an error
   * #9202  No context menu on MUC's tab
   * #9321  Cannot allow contact to see my status
-  * #9360  Allow disabling keyboard shorcut ctrl+L (clear chat window)
+  * #9360  Allow disabling keyboard shortcut ctrl+L (clear chat window)
   * #9457  Add global search in History window
   * #9501  Mark corrected messages (LMC) in history browser
   * #9596  Add UI to search history from contact/chat window
@@ -599,7 +599,7 @@ Gajim 1.4.0 (11 May 2022)
   * #10166 AttributeError: 'NoneType' object has no attribute 'show'
   * #10205 Restoring conversation tabs fails if JID contains comma
   * #10236 MUC: Error in update_actions when clicking on tray notification
-  * #10242 Bug with roster:  Repeating error message: "too many values to unpack (exptected 2)"
+  * #10242 Bug with roster:  Repeating error message: "too many values to unpack (expected 2)"
   * #10248 logind timeout error (24) in _inhibit_sleep
   * #10249 StatusIcon: Show connection lost icon when at least one account is not connected
   * #10279 error after wake-up from hibernation
@@ -607,7 +607,7 @@ Gajim 1.4.0 (11 May 2022)
   * #10450 Clicking a link in the message window can cause Gajim 1.3 to crash
   * #10452 Various contact list issues
   * #10455 App crashing if quit from tray in Windows
-  * #10461 TypeError: can only concatenate str (not "NoneType") to str when receving bare jid presence from localpart@component.domain.tld
+  * #10461 TypeError: can only concatenate str (not "NoneType") to str when receiving bare jid presence from localpart@component.domain.tld
   * #10472 ConfirmationCheckDialog: DELETE_EVENT does not propagate checkbox state
   * #10483 Don't interrupt onboarding with update dialog
   * #10490 Gajim does not send XHTML in MUC
@@ -852,7 +852,7 @@ Gajim 1.2.1 (08 July 2020)
   * ServerInfo: Display status address
   * Add block and spam reporting in various places
   * Roster: Allow to add contacts from `Not in contact list` group via DND
-  * Roster: Allow sending message to serveral groups
+  * Roster: Allow sending message to several groups
   * Groupchat/Chat: Rework DND
   * Groupchat: Display recent history from the database
 
@@ -1009,12 +1009,12 @@ Gajim 1.1.0-beta2 / 1.0.99.1 (13 October 2018)
   * Support more media players for broadcasting the current tune
   * Windows: Add a debug logging switch in preferences
   * Preferences: enable/disable dark theme
-  * Preferences: enable/disable the MUC subject beeing shown on join
+  * Preferences: enable/disable the MUC subject being shown on join
   * Preferences: enable/disable ascii emoji conversion
 
   Bug fixes
 
-  * #9198 Creating new MUCs with captial letters is not possible
+  * #9198 Creating new MUCs with capital letters is not possible
   * #9210 Error when clicking on new message indicator
   * #9280 Inviting users to a MUC causes error
   * #9301 Error when opening service discovery window
@@ -1047,7 +1047,7 @@ Gajim 1.1.0-beta1 / 1.0.99 (19 August 2018)
 
   Bug fixes
 
-  * #8658 Translation doesnt work on Windows
+  * #8658 Translation doesn't work on Windows
   * #8750 Increase time frame for duplicate search in MUCs
   * #9138 Translation in Flatpak does not work
   * #9140 Error when clicking on the notification of an incoming message
@@ -1108,10 +1108,10 @@ Gajim 1.0.2 (30 April 2018)
   * #9055 Removing a bookmark causes error
   * #9057 Avatar is deleted when updating vCard
   * #9065 Account label isn't change in tooltip of notification area icon
-  * #9066 Placeholder text does't disappear
+  * #9066 Placeholder text doesn't disappear
   * #9068 Missing pulseaudio in Flatpak image
   * #9070 Fix History Manager search
-  * #9074 Proxy comobobox in accounts/connections doesn't get update after ManageProxies
+  * #9074 Proxy comobo-box in accounts/connections doesn't get update after ManageProxies
   * #9094 problem receiving file
   * #9101 Notification never autohides in gnome
 
@@ -1207,7 +1207,7 @@ Gajim 0.16.6 (02 October 2016)
 Gajim 0.16.5 (28 December 2015)
 
   * Improve MAM implementation
-  * Improve security on connexion and for roster managment
+  * Improve security on connection and for roster management
   * Ability for emoticons to be sorted in menu
 
 Gajim 0.16.4 (26 September 2015)
@@ -1282,7 +1282,7 @@ Gajim 0.15 (18 March 2012)
   * Plugin system
   * Whiteboard (via a plugin)
   * Message archiving
-  * Stream managment
+  * Stream management
   * IBB
   * Nested roster group
   * Roster filtrering
@@ -1299,7 +1299,7 @@ Gajim 0.14.3 (19 June 2011)
 
   * Fix history viewer
   * Fix closing roster window
-  * Prevent some erros with metacontacts
+  * Prevent some errors with metacontacts
 
 Gajim 0.14.2 (07 June 2011)
 
@@ -1429,7 +1429,7 @@ Gajim 0.12 (17 December 2008)
   * Better auto-away support
   * Fix banshee support
   * Quodlibet support
-  * Fix GSSAPI authentification 
+  * Fix GSSAPI authentication 
   * Fix IPV4 filetransfer on Windows Vista when IPV6 is used too
   * Fix caps usage
   * Fix end to end encryption autonegotiation
@@ -1533,7 +1533,7 @@ Gajim 0.11.2 (22 September 2007)
   * Improve idle, transports support
   * Enable ellipsization in roster and chatwindow
   * Fixed some metacontacts problems (#2156, #2761)
-  * Beter support of XEP-0070 (Verifying HTTP Requests via XMPP)
+  * Better support of XEP-0070 (Verifying HTTP Requests via XMPP)
   * Make the same height of a banner for all chat tabs
   * Fix a bug with french translation and invitations (#3043)
   * Fix a bug with UTF-8 and emoticons
@@ -1573,7 +1573,7 @@ Gajim 0.11 (19 December 2006)
   * Completion for "Start Chat" input dialog
   * Metacontacts across accounts (#1596)
   * Ability to have a different spellchecking language in each chat window. (#2383 and #746)
-  * Forbid to run multiple instances (but you can use differents profiles)
+  * Forbid to run multiple instances (but you can use different profiles)
   * Ability to save avatar with right click on avatar in chat banner
   * Annotations (XEP-0145)
   * XHTML Support 
@@ -1581,7 +1581,7 @@ Gajim 0.11 (19 December 2006)
   * Ability to operate on more than one contact at once in roster (#1514)
   * Send single message to a whole group 
   * Delete a whole group
-  * Gajim now remembers if GPG encyption was enabled per contact
+  * Gajim now remembers if GPG encryption was enabled per contact
   * Priority can be changed automatically when we change status
   * Fuzzyclock support
   * Mute sounds from systray menu
@@ -1685,7 +1685,7 @@ Gajim 0.8 (18 Aug 2005)
 
 Gajim 0.7.1 (5 Jun 2005)  
 
-  * Transports icon as an option and error/mesage icon for transports  
+  * Transports icon as an option and error/message icon for transports  
   * Gajim is more HIG compatible  
   * Editing registration information on transports  
   * Messages stanza without <body> element are not printed  

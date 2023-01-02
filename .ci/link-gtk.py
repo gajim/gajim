@@ -13,7 +13,7 @@ IGNORED_DIRS = ['__pycache__']
 cwd = Path.cwd()
 
 if cwd.name != 'gajim':
-    sys.exit('Script needs to be excecuted from gajim repository '
+    sys.exit('Script needs to be executed from gajim repository '
              'root directory')
 
 gui_path = cwd / 'gajim' / 'gui'
