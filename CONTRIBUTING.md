@@ -59,6 +59,19 @@ Example:
 
 `feat: New Button which does something`
 
+# Use pre-commit
+
+Execute the following inside the repositor dir
+
+    $ pip install pre-commit
+    $ pre-commit install
+
+Now pre-commit will run various checks before code can be committed.
+
+To update to the newest versions
+
+    $ pre-commit autoupdate
+
 # Man Pages
 
 Man pages are written in markdown and converted with pandoc
