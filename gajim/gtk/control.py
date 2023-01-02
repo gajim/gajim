@@ -15,43 +15,41 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import cast
 from typing import Optional
 from typing import Union
-from typing import cast
 
 import logging
 import time
 
 from gi.repository import Gio
-from gi.repository import Gtk
 from gi.repository import GLib
-
+from gi.repository import Gtk
 from nbxmpp import JID
 from nbxmpp.const import StatusCode
-from nbxmpp.structs import MucSubject
 from nbxmpp.modules.security_labels import Displaymarking
+from nbxmpp.structs import MucSubject
 
 from gajim.common import app
 from gajim.common import events
 from gajim.common import ged
 from gajim.common import helpers
 from gajim.common import types
-from gajim.common.helpers import to_user_string
-from gajim.common.i18n import _
+from gajim.common.const import KindConstant
 from gajim.common.ged import EventHelper
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_retraction_text
-from gajim.common.const import KindConstant
+from gajim.common.helpers import to_user_string
+from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
-from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive import ConversationRow
-
+from gajim.gui.builder import get_builder
+from gajim.gui.conversation.jump_to_end_button import JumpToEndButton
 from gajim.gui.conversation.message_selection import MessageSelection
 from gajim.gui.conversation.view import ConversationView
-from gajim.gui.conversation.jump_to_end_button import JumpToEndButton
-from gajim.gui.builder import get_builder
 from gajim.gui.groupchat_roster import GroupchatRoster
 from gajim.gui.groupchat_state import GroupchatState
 

@@ -18,12 +18,11 @@ from typing import Union
 import logging
 import random
 
-from gi.repository import Gtk
 from gi.repository import Gdk
-
+from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
-from nbxmpp.task import Task
 from nbxmpp.protocol import JID
+from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common import ged
@@ -33,12 +32,12 @@ from gajim.common.events import AccountConnected
 from gajim.common.events import AccountDisconnected
 from gajim.common.ged import EventHelper
 from gajim.common.helpers import get_random_muc_localpart
-from gajim.common.helpers import validate_jid
 from gajim.common.helpers import to_user_string
+from gajim.common.helpers import validate_jid
 from gajim.common.i18n import _
 
-from .dialogs import ErrorDialog
 from .builder import get_builder
+from .dialogs import ErrorDialog
 from .util import ensure_not_destroyed
 
 log = logging.getLogger('gajim.gui.groupchat_creation')

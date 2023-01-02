@@ -19,13 +19,13 @@ from __future__ import annotations
 from typing import Generator
 
 import nbxmpp
+from nbxmpp.modules.util import raise_if_error
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import Iq
 from nbxmpp.protocol import JID
 from nbxmpp.structs import BlockingProperties
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import StanzaHandler
-from nbxmpp.modules.util import raise_if_error
 
 from gajim.common import app
 from gajim.common import types

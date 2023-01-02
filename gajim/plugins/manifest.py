@@ -17,19 +17,17 @@ from __future__ import annotations
 from typing import Any
 from typing import Optional
 
-import sys
 import json
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-from packaging.version import Version as V
 from packaging.requirements import Requirement
+from packaging.version import Version as V
 
 import gajim
-
-from gajim.plugins.plugins_i18n import _ as p_
 from gajim.plugins.helpers import is_shipped_plugin
-
+from gajim.plugins.plugins_i18n import _ as p_
 
 BLOCKED_PLUGINS = [
     'appindicator_integration',

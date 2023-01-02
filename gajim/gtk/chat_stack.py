@@ -17,16 +17,15 @@ from __future__ import annotations
 from typing import Optional
 from typing import Union
 
-import sys
 import logging
+import sys
 import time
 from urllib.parse import urlparse
 
 from gi.repository import Gdk
-from gi.repository import GLib
 from gi.repository import Gio
+from gi.repository import GLib
 from gi.repository import Gtk
-
 from nbxmpp.errors import StanzaError
 from nbxmpp.protocol import JID
 from nbxmpp.structs import MessageProperties
@@ -36,16 +35,16 @@ from gajim.common import events
 from gajim.common import helpers
 from gajim.common import preview_helpers
 from gajim.common.commands import ChatCommands
-from gajim.common.i18n import _
 from gajim.common.const import CallType
+from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
-from gajim.common.preview_helpers import split_geo_uri
 from gajim.common.preview_helpers import format_geo_coords
+from gajim.common.preview_helpers import split_geo_uri
 from gajim.common.structs import OutgoingMessage
-from gajim.common.util.text import remove_invalid_xml_chars
 from gajim.common.types import ChatContactT
+from gajim.common.util.text import remove_invalid_xml_chars
 
 from .chat_banner import ChatBanner
 from .chat_function_page import ChatFunctionPage

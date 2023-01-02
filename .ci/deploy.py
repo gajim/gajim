@@ -5,8 +5,8 @@ from typing import cast
 from typing import Optional
 
 import functools
-import logging
 import json
+import logging
 import os
 import sys
 from datetime import date
@@ -14,7 +14,6 @@ from ftplib import FTP_TLS
 from pathlib import Path
 
 import requests
-
 
 FTP_URL = 'panoramix.gajim.org'
 FTP_USER = os.environ['FTP_USER']

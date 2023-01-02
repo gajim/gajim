@@ -25,7 +25,6 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
-
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 
@@ -37,8 +36,8 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.preview import PREVIEWABLE_MIME_TYPES
 from gajim.common.preview_helpers import create_thumbnail
-from gajim.common.preview_helpers import guess_mime_type
 from gajim.common.preview_helpers import get_icon_for_mime_type
+from gajim.common.preview_helpers import guess_mime_type
 from gajim.common.preview_helpers import pixbuf_from_data
 
 from .builder import get_builder

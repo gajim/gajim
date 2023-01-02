@@ -31,7 +31,6 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
-
 from gajim.common.setting_values import ADVANCED_SETTINGS
 from gajim.common.setting_values import APP_SETTINGS
 

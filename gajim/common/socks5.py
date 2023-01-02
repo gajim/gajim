@@ -18,24 +18,24 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+import hashlib
+import logging
+import os
 import socket
 import struct
-import hashlib
-import os
-import time
 import sys
-import logging
-from errno import EWOULDBLOCK
-from errno import ENOBUFS
+import time
+from errno import EAFNOSUPPORT
+from errno import EINPROGRESS
 from errno import EINTR
 from errno import EISCONN
-from errno import EINPROGRESS
-from errno import EAFNOSUPPORT
+from errno import ENOBUFS
+from errno import EWOULDBLOCK
 
 from nbxmpp.idlequeue import IdleObject
 
-from gajim.common.file_props import FilesProp
 from gajim.common import app
+from gajim.common.file_props import FilesProp
 
 log = logging.getLogger('gajim.c.socks5')
 MAX_BUFF_LEN = 65536

@@ -16,21 +16,20 @@
 
 from __future__ import annotations
 
-from typing import cast
 from typing import Any
+from typing import cast
 from typing import Literal
 from typing import Optional
 from typing import overload
 from typing import Union
 
-import logging
 import itertools
+import logging
 
 from gi.repository import Gdk
 from gi.repository import Gtk
-
-from nbxmpp.simplexml import Node
 from nbxmpp.modules import dataforms
+from nbxmpp.simplexml import Node
 
 from gajim.common import app
 from gajim.common import ged
@@ -44,9 +43,9 @@ from .assistant import Page
 from .assistant import ProgressPage
 from .dataform import DataFormWidget
 from .menus import get_component_search_menu
-from .util import GajimPopover
 from .util import ensure_not_destroyed
 from .util import EventHelper
+from .util import GajimPopover
 
 log = logging.getLogger('gajim.gui.search')
 

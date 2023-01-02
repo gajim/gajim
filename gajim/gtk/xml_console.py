@@ -20,30 +20,30 @@ import time
 
 import nbxmpp
 from gi.repository import Gdk
-from gi.repository import Gtk
 from gi.repository import GLib
+from gi.repository import Gtk
 from gi.repository import GtkSource
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common.const import Direction
 from gajim.common.events import AccountDisabled
 from gajim.common.events import AccountEnabled
 from gajim.common.events import StanzaReceived
 from gajim.common.events import StanzaSent
-from gajim.common.const import Direction
 from gajim.common.i18n import _
 
 from .builder import get_builder
-from .util import at_the_end
-from .util import scroll_to_end
-from .util import MaxWidthComboBoxText
-from .util import EventHelper
-from .util import get_source_view_style_scheme
-from .dialogs import ErrorDialog
-from .settings import SettingsDialog
 from .const import Setting
 from .const import SettingKind
 from .const import SettingType
+from .dialogs import ErrorDialog
+from .settings import SettingsDialog
+from .util import at_the_end
+from .util import EventHelper
+from .util import get_source_view_style_scheme
+from .util import MaxWidthComboBoxText
+from .util import scroll_to_end
 
 
 class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):

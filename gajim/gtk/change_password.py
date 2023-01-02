@@ -22,20 +22,19 @@ from typing import overload
 import logging
 
 from gi.repository import Gtk
-
-from nbxmpp.errors import StanzaError
 from nbxmpp.errors import ChangePasswordStanzaError
+from nbxmpp.errors import StanzaError
 from nbxmpp.modules.dataforms import SimpleDataForm
 from nbxmpp.task import Task
 
 from gajim.common import app
-from gajim.common.i18n import _
 from gajim.common import passwords
 from gajim.common.helpers import to_user_string
+from gajim.common.i18n import _
 
 from .assistant import Assistant
-from .assistant import Page
 from .assistant import ErrorPage
+from .assistant import Page
 from .assistant import SuccessPage
 from .dataform import DataFormWidget
 from .util import ensure_not_destroyed

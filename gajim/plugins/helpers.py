@@ -17,8 +17,8 @@ from typing import Optional
 from pathlib import Path
 
 from gajim.common import configpaths
-from gajim.plugins import plugins_i18n
 from gajim.gui.builder import Builder
+from gajim.plugins import plugins_i18n
 
 
 class GajimPluginActivateException(Exception):

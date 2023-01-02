@@ -19,9 +19,9 @@ from typing import NamedTuple
 from typing import Optional
 
 import json
-import time
-import sqlite3
 import logging
+import sqlite3
+import time
 from collections import defaultdict
 from collections import namedtuple
 
@@ -30,11 +30,10 @@ from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import RosterItem
 
 from gajim.common import configpaths
-from gajim.common.storage.base import SqliteStorage
-from gajim.common.storage.base import timeit
 from gajim.common.storage.base import Encoder
 from gajim.common.storage.base import json_decoder
-
+from gajim.common.storage.base import SqliteStorage
+from gajim.common.storage.base import timeit
 
 CURRENT_USER_VERSION = 9
 

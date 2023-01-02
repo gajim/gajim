@@ -20,7 +20,6 @@ from typing import Union
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
-
 from nbxmpp.protocol import JID
 
 from gajim.common import app
@@ -28,19 +27,19 @@ from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.events import AccountConnected
 from gajim.common.events import AccountDisconnected
+from gajim.common.events import MucDecline
+from gajim.common.events import MucInvitation
 from gajim.common.events import SubscribePresenceReceived
 from gajim.common.events import UnsubscribedPresenceReceived
-from gajim.common.events import MucInvitation
-from gajim.common.events import MucDecline
 
+from .builder import get_builder
+from .menus import get_roster_view_menu
+from .notification_manager import NotificationManager
 from .roster import Roster
 from .status_message_selector import StatusMessageSelector
 from .status_selector import StatusSelector
-from .notification_manager import NotificationManager
-from .builder import get_builder
-from .util import open_window
 from .util import EventHelper
-from .menus import get_roster_view_menu
+from .util import open_window
 
 
 class AccountPage(Gtk.Box, EventHelper):

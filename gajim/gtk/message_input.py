@@ -22,23 +22,22 @@ from __future__ import annotations
 from typing import Any
 from typing import Optional
 
+import logging
 from collections import defaultdict
 
-import logging
-
-from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
+from gi.repository import Gtk
 from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.events import MessageSent
 from gajim.common.ged import EventHelper
-from gajim.common.i18n import LANG
 from gajim.common.i18n import _
-from gajim.common.styling import process
+from gajim.common.i18n import LANG
 from gajim.common.styling import PlainBlock
+from gajim.common.styling import process
 from gajim.common.types import ChatContactT
 
 from .chat_action_processor import ChatActionProcessor

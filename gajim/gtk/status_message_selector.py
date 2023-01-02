@@ -20,8 +20,8 @@ from typing import Optional
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common import ged
 from gajim.common import events
+from gajim.common import ged
 from gajim.common.client import Client
 from gajim.common.const import SimpleClientState
 from gajim.common.helpers import get_global_status_message

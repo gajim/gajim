@@ -45,24 +45,23 @@ import types
 import weakref
 
 import nbxmpp
-from nbxmpp.structs import DiscoIdentity
-from nbxmpp.namespaces import Namespace
-from nbxmpp.protocol import JID
-from nbxmpp.errors import StanzaError
-
+from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
-from gi.repository import Gdk
+from nbxmpp.errors import StanzaError
+from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import JID
+from nbxmpp.structs import DiscoIdentity
 
 from gajim.common import app
 from gajim.common import helpers
-from gajim.common.i18n import _
 from gajim.common.const import StyleAttr
+from gajim.common.i18n import _
 
-from .dialogs import ErrorDialog
-from .component_search import ComponentSearch
-from .util import icon_exists
 from .builder import get_builder
+from .component_search import ComponentSearch
+from .dialogs import ErrorDialog
+from .util import icon_exists
 from .util import open_window
 
 LABELS = {

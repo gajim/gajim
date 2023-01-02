@@ -12,24 +12,23 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import cast
 from typing import Any
+from typing import cast
 
 import logging
 
-from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import Gtk
 from gi.repository import Pango
-
 from nbxmpp.errors import StanzaError
 from nbxmpp.task import Task
 
 from gajim.common import app
+from gajim.common.const import MUC_DISCO_ERRORS
+from gajim.common.helpers import get_group_chat_nick
+from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
 from gajim.common.i18n import get_rfc5646_lang
-from gajim.common.helpers import to_user_string
-from gajim.common.helpers import get_group_chat_nick
-from gajim.common.const import MUC_DISCO_ERRORS
 
 from .groupchat_info import GroupChatInfoScrolled
 from .groupchat_nick import NickChooser

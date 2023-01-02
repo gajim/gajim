@@ -18,8 +18,8 @@ from typing import Optional
 
 import logging
 
-from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import ged

@@ -22,23 +22,23 @@
 from typing import Any
 from typing import Union
 
-import sys
 import logging
+import sys
 
-from gi.repository import Gtk
 from gi.repository import GLib
+from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import configpaths
-from gajim.common import ged
 from gajim.common import events
+from gajim.common import ged
 from gajim.common.client import Client
 from gajim.common.const import Display
 from gajim.common.const import SimpleClientState
-from gajim.common.i18n import _
+from gajim.common.ged import EventHelper
 from gajim.common.helpers import get_global_show
 from gajim.common.helpers import get_uf_show
-from gajim.common.ged import EventHelper
+from gajim.common.i18n import _
 
 from .builder import get_builder
 from .util import get_icon_name

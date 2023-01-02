@@ -14,18 +14,17 @@
 
 from __future__ import annotations
 
-import logging
-from pathlib import Path
 from typing import Optional
 
-from gi.repository import GLib
+import logging
+from pathlib import Path
+
 from gi.repository import Gio
+from gi.repository import GLib
 
 from gajim.common import configpaths
-
 from gajim.common.helpers import get_random_string
 from gajim.common.helpers import write_file_async
-
 
 log = logging.getLogger('gajim.c.cert_store')
 

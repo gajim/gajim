@@ -1,16 +1,14 @@
+from base64 import b64decode
 from unittest.mock import MagicMock
 
-from base64 import b64decode
-
+from gi.repository import Gtk
 from nbxmpp.modules.dataforms import extend_form
 from nbxmpp.simplexml import Node
 
-from gi.repository import Gtk
-
+from gajim import gui
 from gajim.common import app
 from gajim.common.const import CSSPriority
 
-from gajim import gui
 gui.init('gtk')
 
 from gajim.gui.dataform import DataFormWidget

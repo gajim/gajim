@@ -12,8 +12,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import cast
 from typing import Any
+from typing import cast
 from typing import Optional
 
 import logging
@@ -27,17 +27,17 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.preview import Preview
-from gajim.common.preview_helpers import split_geo_uri
-from gajim.common.preview_helpers import format_geo_coords
 from gajim.common.preview_helpers import contains_audio_streams
+from gajim.common.preview_helpers import format_geo_coords
 from gajim.common.preview_helpers import get_icon_for_mime_type
+from gajim.common.preview_helpers import split_geo_uri
 from gajim.common.types import GdkPixbufType
 
-from .preview_audio import AudioWidget
 from .builder import get_builder
 from .menus import get_preview_menu
-from .util import GajimPopover
+from .preview_audio import AudioWidget
 from .util import ensure_not_destroyed
+from .util import GajimPopover
 from .util import get_cursor
 from .util import load_icon_pixbuf
 

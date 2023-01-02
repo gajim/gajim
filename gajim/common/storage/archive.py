@@ -22,18 +22,18 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
-from typing import Literal
 from typing import Iterator
 from typing import KeysView
+from typing import Literal
 from typing import NamedTuple
 from typing import Optional
 
-import time
-import datetime
 import calendar
+import datetime
 import json
 import logging
 import sqlite3 as sqlite
+import time
 from collections import namedtuple
 
 from nbxmpp import JID
@@ -42,12 +42,11 @@ from nbxmpp.structs import MessageProperties
 
 from gajim.common import app
 from gajim.common import configpaths
-from gajim.common.helpers import AdditionalDataDict
-from gajim.common.const import MAX_MESSAGE_CORRECTION_DELAY
-from gajim.common.const import KindConstant
 from gajim.common.const import JIDConstant
+from gajim.common.const import KindConstant
+from gajim.common.const import MAX_MESSAGE_CORRECTION_DELAY
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.modules.contacts import GroupchatContact
-
 from gajim.common.storage.base import SqliteStorage
 from gajim.common.storage.base import timeit
 

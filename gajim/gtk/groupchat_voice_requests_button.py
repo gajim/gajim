@@ -19,13 +19,12 @@ from typing import cast
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
-
 from nbxmpp.structs import VoiceRequest
 
 from gajim.common import app
-from gajim.common.types import ChatContactT
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.types import ChatContactT
 
 
 class VoiceRequestsButton(Gtk.Button):

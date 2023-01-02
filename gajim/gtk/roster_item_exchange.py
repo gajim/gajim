@@ -15,15 +15,14 @@
 from typing import Optional
 
 from gi.repository import Gtk
-
 from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common import i18n
 from gajim.common.i18n import _
 
-from .dialogs import InformationDialog
 from .builder import get_builder
+from .dialogs import InformationDialog
 
 
 class RosterItemExchange(Gtk.ApplicationWindow):

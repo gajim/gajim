@@ -21,14 +21,14 @@
 
 from __future__ import annotations
 
-from typing import Optional
 from typing import cast
+from typing import Optional
 
-import sys
-import time
 import ctypes
 import ctypes.util
 import logging
+import sys
+import time
 
 from gi.repository import Gio
 from gi.repository import GLib

@@ -1,9 +1,9 @@
 import unittest
 from unittest.mock import MagicMock
 
+from gajim import gui
 from gajim.common import app
 
-from gajim import gui
 gui.init('gtk')
 
 from gajim.gui.groupchat_nick_completion import GroupChatNickCompletion

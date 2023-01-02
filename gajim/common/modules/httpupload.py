@@ -16,44 +16,43 @@
 
 from __future__ import annotations
 
-from typing import cast
 from typing import Callable
+from typing import cast
 from typing import Optional
 
-from collections import defaultdict
 import functools
-from pathlib import Path
-from urllib.parse import urlparse
 import mimetypes
 import os
 import tempfile
+from collections import defaultdict
+from pathlib import Path
+from urllib.parse import urlparse
 
-from nbxmpp.errors import StanzaError
-from nbxmpp.errors import MalformedStanzaError
+from gi.repository import Gio
+from gi.repository import GLib
+from nbxmpp.const import HTTPRequestError
 from nbxmpp.errors import HTTPUploadStanzaError
+from nbxmpp.errors import MalformedStanzaError
+from nbxmpp.errors import StanzaError
+from nbxmpp.http import HTTPRequest
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import HTTPUploadData
 from nbxmpp.task import Task
 from nbxmpp.util import convert_tls_error_flags
-from nbxmpp.http import HTTPRequest
-from nbxmpp.const import HTTPRequestError
-
-from gi.repository import Gio
-from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common import types
+from gajim.common.const import FTState
 from gajim.common.events import HTTPUploadError
 from gajim.common.events import HTTPUploadStarted
-from gajim.common.i18n import _
+from gajim.common.exceptions import FileError
+from gajim.common.filetransfer import FileTransfer
 from gajim.common.helpers import get_random_string
 from gajim.common.helpers import get_tls_error_phrases
-from gajim.common.const import FTState
-from gajim.common.filetransfer import FileTransfer
+from gajim.common.i18n import _
 from gajim.common.modules.base import BaseModule
-from gajim.common.exceptions import FileError
 from gajim.common.structs import OutgoingMessage
 from gajim.common.util.http import create_http_request
 

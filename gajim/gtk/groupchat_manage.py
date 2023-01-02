@@ -11,19 +11,18 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import cast
 from typing import Any
+from typing import cast
 
 import logging
 
 from gi.repository import Gtk
-
 from nbxmpp.const import Affiliation
-from nbxmpp.task import Task
 from nbxmpp.errors import StanzaError
-from nbxmpp.structs import MucSubject
 from nbxmpp.modules.vcard_temp import VCard
 from nbxmpp.namespaces import Namespace
+from nbxmpp.structs import MucSubject
+from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common.const import AvatarSize

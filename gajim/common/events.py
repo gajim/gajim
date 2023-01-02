@@ -16,30 +16,30 @@ from __future__ import annotations
 
 import typing
 from typing import Any
-from typing import Union
-from typing import Optional
 from typing import Callable
+from typing import Optional
+from typing import Union
 
 from dataclasses import dataclass
 from dataclasses import field
 
-from nbxmpp.protocol import JID
-from nbxmpp.modules.security_labels import Catalog
-from nbxmpp.modules.security_labels import Displaymarking
-from nbxmpp.modules.security_labels import SecurityLabel
-from nbxmpp.structs import HTTPAuthData
-from nbxmpp.structs import ModerationData
-from nbxmpp.structs import LocationData
-from nbxmpp.structs import RosterItem
-from nbxmpp.structs import TuneData
 from nbxmpp.const import Affiliation
 from nbxmpp.const import InviteType
 from nbxmpp.const import Role
 from nbxmpp.const import StatusCode
+from nbxmpp.modules.security_labels import Catalog
+from nbxmpp.modules.security_labels import Displaymarking
+from nbxmpp.modules.security_labels import SecurityLabel
+from nbxmpp.protocol import JID
+from nbxmpp.structs import HTTPAuthData
+from nbxmpp.structs import LocationData
+from nbxmpp.structs import ModerationData
+from nbxmpp.structs import RosterItem
+from nbxmpp.structs import TuneData
 
-from gajim.common.file_props import FileProp
 from gajim.common.const import JingleState
 from gajim.common.const import KindConstant
+from gajim.common.file_props import FileProp
 from gajim.common.helpers import AdditionalDataDict
 
 if typing.TYPE_CHECKING:

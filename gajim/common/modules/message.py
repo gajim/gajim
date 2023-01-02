@@ -29,17 +29,17 @@ from nbxmpp.util import generate_id
 
 from gajim.common import app
 from gajim.common import types
+from gajim.common.const import KindConstant
 from gajim.common.events import GcMessageReceived
 from gajim.common.events import MessageError
 from gajim.common.events import MessageReceived
 from gajim.common.events import RawMessageReceived
 from gajim.common.helpers import AdditionalDataDict
-from gajim.common.const import KindConstant
 from gajim.common.modules.base import BaseModule
-from gajim.common.modules.util import check_if_message_correction
-from gajim.common.modules.util import get_eme_message
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_xhtml
+from gajim.common.modules.util import check_if_message_correction
+from gajim.common.modules.util import get_eme_message
 from gajim.common.structs import OutgoingMessage
 
 

@@ -37,22 +37,22 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Callable
-from typing import Optional
 from typing import cast
+from typing import Optional
 
 import os
 import sys
 from urllib.parse import unquote
 
-from nbxmpp.namespaces import Namespace
-from nbxmpp import JID
-from nbxmpp.protocol import InvalidJid
-from nbxmpp.const import ConnectionType
-from nbxmpp.const import ConnectionProtocol
+from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
-from gi.repository import Gdk
+from nbxmpp import JID
+from nbxmpp.const import ConnectionProtocol
+from nbxmpp.const import ConnectionType
+from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import InvalidJid
 
 import gajim
 from gajim.common import app
@@ -62,13 +62,12 @@ from gajim.common import ged
 from gajim.common import idle
 from gajim.common.application import CoreApplication
 from gajim.common.const import GAJIM_FAQ_URI
-from gajim.common.const import GAJIM_WIKI_URI
 from gajim.common.const import GAJIM_SUPPORT_JID
+from gajim.common.const import GAJIM_WIKI_URI
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common.helpers import load_json
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
-
 from gajim.gui import menus
 from gajim.gui import structs
 from gajim.gui.about import AboutDialog
@@ -80,8 +79,8 @@ from gajim.gui.const import ALWAYS_ACCOUNT_ACTIONS
 from gajim.gui.const import APP_ACTIONS
 from gajim.gui.const import FEATURE_ACCOUNT_ACTIONS
 from gajim.gui.const import ONLINE_ACCOUNT_ACTIONS
-from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ConfirmationDialog
+from gajim.gui.dialogs import DialogButton
 from gajim.gui.dialogs import ShortcutsWindow
 from gajim.gui.discovery import ServiceDiscoveryWindow
 from gajim.gui.start_chat import StartChatDialog
@@ -89,7 +88,6 @@ from gajim.gui.util import get_app_window
 from gajim.gui.util import get_app_windows
 from gajim.gui.util import load_user_iconsets
 from gajim.gui.util import open_window
-
 
 ActionListT = list[tuple[str,
                          Callable[[Gio.SimpleAction, GLib.Variant], Any]]]

@@ -30,85 +30,83 @@ from __future__ import annotations
 from typing import Any
 from typing import Callable
 from typing import Optional
-from typing import Union
 from typing import TYPE_CHECKING
+from typing import Union
 
-import sys
-import re
-import os
-import hashlib
-import socket
-import logging
-import json
-import copy
 import collections
-import platform
+import copy
 import functools
-from collections import defaultdict
-import random
-import weakref
+import hashlib
 import inspect
+import json
+import logging
+import os
+import platform
+import random
+import re
+import socket
 import string
+import sys
+import unicodedata
+import weakref
 import webbrowser
-from string import Template
+from collections import defaultdict
 from datetime import datetime
 from datetime import timedelta
-from urllib.parse import unquote
-from urllib.parse import urlparse
 from functools import wraps
 from pathlib import Path
-from packaging.version import Version as V
-import unicodedata
+from string import Template
+from urllib.parse import unquote
+from urllib.parse import urlparse
 
+import precis_i18n.codec  # noqa: F401
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
-
-from nbxmpp.namespaces import Namespace
-from nbxmpp.const import Role
-from nbxmpp.const import Chatstate
-from nbxmpp.const import ConnectionProtocol
-from nbxmpp.const import ConnectionType
-from nbxmpp.const import Affiliation
-from nbxmpp.errors import StanzaError
-from nbxmpp.structs import CommonError
-from nbxmpp.structs import ProxyData
-from nbxmpp.protocol import JID
-from nbxmpp.protocol import InvalidJid
-from nbxmpp.protocol import Iq
-
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
-
-import precis_i18n.codec  # noqa: F401
+from nbxmpp.const import Affiliation
+from nbxmpp.const import Chatstate
+from nbxmpp.const import ConnectionProtocol
+from nbxmpp.const import ConnectionType
+from nbxmpp.const import Role
+from nbxmpp.errors import StanzaError
+from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import InvalidJid
+from nbxmpp.protocol import Iq
+from nbxmpp.protocol import JID
+from nbxmpp.structs import CommonError
+from nbxmpp.structs import ProxyData
+from packaging.version import Version as V
 
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import iana
-from gajim.common.i18n import p_
-from gajim.common.i18n import _
-from gajim.common.i18n import ngettext
-from gajim.common.i18n import get_rfc5646_lang
+from gajim.common import types
+from gajim.common.const import CONSONANTS
+from gajim.common.const import GIO_TLS_ERRORS
+from gajim.common.const import SHOW_LIST
 from gajim.common.const import SHOW_STRING
 from gajim.common.const import SHOW_STRING_MNEMONIC
 from gajim.common.const import URIType
-from gajim.common.const import XmppUriQuery
-from gajim.common.const import GIO_TLS_ERRORS
-from gajim.common.const import SHOW_LIST
-from gajim.common.const import CONSONANTS
 from gajim.common.const import VOWELS
+from gajim.common.const import XmppUriQuery
 from gajim.common.dbus.file_manager import DBusFileManager
+from gajim.common.i18n import _
+from gajim.common.i18n import get_rfc5646_lang
+from gajim.common.i18n import ngettext
+from gajim.common.i18n import p_
 from gajim.common.structs import URI
-from gajim.common import types
+
 if TYPE_CHECKING:
     from gajim.common.modules.util import LogAdapter
 
 HAS_PYWIN32 = False
 if os.name == 'nt':
     try:
-        import win32file
-        import win32con
         import pywintypes
+        import win32con
+        import win32file
         HAS_PYWIN32 = True
     except ImportError:
         pass

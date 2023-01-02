@@ -17,6 +17,7 @@ from __future__ import annotations
 from typing import Optional
 
 from gi.repository import Gtk
+
 try:
     from gi.repository import Gst
 except Exception:

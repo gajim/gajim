@@ -21,16 +21,15 @@ import logging
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
-
 from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common import ged
-from gajim.common.ged import EventHelper
 from gajim.common.const import AvatarSize
 from gajim.common.const import CallType
 from gajim.common.const import JingleState
 from gajim.common.events import CallUpdated
+from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 
 from .builder import get_builder

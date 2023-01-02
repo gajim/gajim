@@ -17,10 +17,10 @@ from __future__ import annotations
 from typing import Optional
 
 import logging
-import cairo
 import math
 from statistics import mean
 
+import cairo
 from gi.repository import Gdk
 from gi.repository import Gtk
 

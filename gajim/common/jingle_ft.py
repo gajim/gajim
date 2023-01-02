@@ -35,20 +35,20 @@ from nbxmpp.namespaces import Namespace
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common.const import KindConstant
-from gajim.common.helpers import AdditionalDataDict
 from gajim.common.events import FileRequestReceivedEvent
 from gajim.common.file_props import FileProp
 from gajim.common.file_props import FilesProp
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.jingle_content import contents
 from gajim.common.jingle_content import JingleContent
+from gajim.common.jingle_ftstates import StateCandReceived
+from gajim.common.jingle_ftstates import StateCandSent
+from gajim.common.jingle_ftstates import StateCandSentAndRecv
+from gajim.common.jingle_ftstates import StateInitialized
+from gajim.common.jingle_ftstates import StateTransfering
+from gajim.common.jingle_ftstates import StateTransportReplace
 from gajim.common.jingle_transport import JingleTransportSocks5
 from gajim.common.jingle_transport import TransportType
-from gajim.common.jingle_ftstates import StateInitialized
-from gajim.common.jingle_ftstates import StateCandSent
-from gajim.common.jingle_ftstates import StateCandReceived
-from gajim.common.jingle_ftstates import StateTransfering
-from gajim.common.jingle_ftstates import StateCandSentAndRecv
-from gajim.common.jingle_ftstates import StateTransportReplace
 
 if TYPE_CHECKING:
     from gajim.common.jingle_session import JingleSession

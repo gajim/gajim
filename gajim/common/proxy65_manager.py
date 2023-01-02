@@ -16,19 +16,19 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-import socket
-import struct
 import errno
 import logging
+import socket
+import struct
 
 import nbxmpp
-from nbxmpp.namespaces import Namespace
 from nbxmpp.idlequeue import IdleObject
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common import helpers
-from gajim.common.socks5 import Socks5
 from gajim.common.file_props import FilesProp
+from gajim.common.socks5 import Socks5
 
 log = logging.getLogger('gajim.c.proxy65_manager')
 

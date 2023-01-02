@@ -22,28 +22,27 @@ import logging
 from enum import IntEnum
 
 from gi.repository import Gdk
-from gi.repository import Gtk
 from gi.repository import GLib
+from gi.repository import Gtk
 from nbxmpp.const import Affiliation
 
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import types
-from gajim.common.helpers import get_uf_role
-from gajim.common.helpers import get_uf_affiliation
-from gajim.common.helpers import jid_is_blocked
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 from gajim.common.events import ApplicationEvent
 from gajim.common.events import MUCNicknameChanged
+from gajim.common.helpers import get_uf_affiliation
+from gajim.common.helpers import get_uf_role
+from gajim.common.helpers import jid_is_blocked
 from gajim.common.modules.contacts import GroupchatContact
 
+from .builder import get_builder
 from .menus import get_groupchat_participant_menu
 from .tooltips import GCTooltip
-from .builder import get_builder
 from .util import EventHelper
 from .util import GajimPopover
-
 
 log = logging.getLogger('gajim.gui.groupchat_roster')
 

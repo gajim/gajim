@@ -24,7 +24,8 @@ from typing import Optional
 import logging
 import socket
 import uuid
-from enum import IntEnum, unique
+from enum import IntEnum
+from enum import unique
 
 import nbxmpp
 from nbxmpp.namespaces import Namespace
@@ -250,7 +251,10 @@ class JingleTransportSocks5(JingleTransport):
             pass  # ignore address-related errors for getaddrinfo
 
         try:
-            from netifaces import interfaces, ifaddresses, AF_INET, AF_INET6
+            from netifaces import AF_INET
+            from netifaces import AF_INET6
+            from netifaces import ifaddresses
+            from netifaces import interfaces
             for ifaceName in interfaces():
                 addresses = ifaddresses(ifaceName)
                 if AF_INET in addresses:

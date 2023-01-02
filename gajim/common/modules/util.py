@@ -20,16 +20,16 @@ from typing import Any
 from typing import Union
 
 import logging
-from logging import LoggerAdapter
-from functools import wraps
 from functools import partial
+from functools import wraps
+from logging import LoggerAdapter
 
 import nbxmpp
+from nbxmpp.const import MessageType
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
 from nbxmpp.structs import EMEData
 from nbxmpp.structs import MessageProperties
-from nbxmpp.const import MessageType
 from nbxmpp.task import Task
 
 from gajim.common import app

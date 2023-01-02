@@ -16,17 +16,15 @@ from __future__ import annotations
 
 from typing import Union
 
-from nbxmpp.protocol import JID
-
 from gi.repository import Gtk
+from nbxmpp.protocol import JID
 
 from gajim.common import app
 
+from .account_page import AccountPage
 from .app_page import AppPage
 from .chat_list import ChatList
 from .chat_page import ChatPage
-from .account_page import AccountPage
-
 
 PageT = Union[ChatPage, AccountPage, AppPage]
 

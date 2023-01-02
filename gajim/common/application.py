@@ -14,53 +14,52 @@
 
 from typing import Any
 from typing import Optional
-from typing import Union
 from typing import TextIO
+from typing import Union
 
-import os
-import sys
+import cProfile
 import json
 import logging
-import cProfile
+import os
 import pstats
-from pstats import SortKey
+import sys
 from datetime import datetime
-from packaging.version import Version as V
+from pstats import SortKey
 
 from gi.repository import Gio
 from gi.repository import GLib
-from nbxmpp.const import ConnectionType
 from nbxmpp.const import ConnectionProtocol
+from nbxmpp.const import ConnectionType
 from nbxmpp.http import HTTPRequest
+from packaging.version import Version as V
 
 from gajim.common import app
-from gajim.common import ged
 from gajim.common import configpaths
+from gajim.common import ged
 from gajim.common import logging_helpers
 from gajim.common import passwords
+from gajim.common.cert_store import CertificateStore
+from gajim.common.client import Client
 from gajim.common.commands import ChatCommands
-from gajim.common.dbus import logind
 from gajim.common.dbus import file_manager
+from gajim.common.dbus import logind
 from gajim.common.events import AccountDisabled
 from gajim.common.events import AccountDisconnected
 from gajim.common.events import AccountEnabled
 from gajim.common.events import AllowGajimUpdateCheck
 from gajim.common.events import GajimUpdateAvailable
 from gajim.common.events import SignedIn
-from gajim.common.client import Client
-from gajim.common.helpers import get_random_string
-from gajim.common.helpers import get_global_show
 from gajim.common.helpers import from_one_line
-from gajim.common.storage.events import EventStorage
-from gajim.common.task_manager import TaskManager
-from gajim.common.settings import Settings
+from gajim.common.helpers import get_global_show
+from gajim.common.helpers import get_random_string
 from gajim.common.settings import LegacyConfig
-from gajim.common.cert_store import CertificateStore
+from gajim.common.settings import Settings
+from gajim.common.storage.archive import MessageArchiveStorage
 from gajim.common.storage.cache import CacheStorage
 from gajim.common.storage.draft import DraftStorage
-from gajim.common.storage.archive import MessageArchiveStorage
+from gajim.common.storage.events import EventStorage
+from gajim.common.task_manager import TaskManager
 from gajim.common.util.http import create_http_request
-
 from gajim.plugins.pluginmanager import PluginManager
 from gajim.plugins.repository import PluginRepository
 

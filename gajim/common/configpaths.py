@@ -21,24 +21,23 @@
 
 from __future__ import annotations
 
+from typing import cast
 from typing import Generator
 from typing import Optional
 from typing import Union
-from typing import cast
 
+import importlib.resources
 import os
 import sys
 import tempfile
-import importlib.resources
 from pathlib import Path
 
 from gi.repository import GLib
 
 import gajim
-from gajim.common.i18n import _
-from gajim.common.const import PathType
 from gajim.common.const import PathLocation
-
+from gajim.common.const import PathType
+from gajim.common.i18n import _
 
 PathTupleT = tuple[Optional[PathLocation], Path, Optional[PathType]]
 

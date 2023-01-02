@@ -16,8 +16,8 @@ from __future__ import annotations
 
 from typing import Any
 
-import os
 import logging
+import os
 import pickle
 
 from gajim.common import configpaths
@@ -25,9 +25,7 @@ from gajim.common.events import ApplicationEvent
 from gajim.common.ged import HandlerFuncT
 from gajim.common.modules.base import BaseModule
 from gajim.common.types import PluginExtensionPoints
-
 from gajim.plugins.manifest import PluginManifest
-
 
 log = logging.getLogger('gajim.p.plugin')
 

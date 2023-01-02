@@ -21,7 +21,6 @@ from typing import overload
 import logging
 
 from gi.repository import Gtk
-
 from nbxmpp.errors import StanzaError
 from nbxmpp.task import Task
 
@@ -29,13 +28,13 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.events import AccountConnected
 from gajim.common.events import AccountDisconnected
-from gajim.common.i18n import _
-from gajim.common.helpers import to_user_string
 from gajim.common.helpers import event_filter
+from gajim.common.helpers import to_user_string
+from gajim.common.i18n import _
 
 from .assistant import Assistant
-from .assistant import Page
 from .assistant import ErrorPage
+from .assistant import Page
 from .assistant import SuccessPage
 
 log = logging.getLogger('gajim.gui.remove_account')

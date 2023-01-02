@@ -17,16 +17,17 @@ from __future__ import annotations
 from typing import Any
 from typing import Callable
 from typing import Optional
-from types import TracebackType
 
+import logging
 import os
 import sys
 import zipfile
-import logging
-from shutil import rmtree, move
-from pathlib import Path
-from importlib.util import spec_from_file_location
 from importlib.util import module_from_spec
+from importlib.util import spec_from_file_location
+from pathlib import Path
+from shutil import move
+from shutil import rmtree
+from types import TracebackType
 
 from gajim.common import app
 from gajim.common import configpaths
@@ -34,14 +35,13 @@ from gajim.common import modules
 from gajim.common.client import Client
 from gajim.common.events import PluginAdded
 from gajim.common.events import PluginRemoved
-from gajim.common.i18n import _
 from gajim.common.exceptions import PluginsystemError
+from gajim.common.i18n import _
 from gajim.common.util.classes import Singleton
-
-from gajim.plugins.helpers import GajimPluginActivateException
-from gajim.plugins.helpers import is_shipped_plugin
 from gajim.plugins.gajimplugin import GajimPlugin
 from gajim.plugins.gajimplugin import GajimPluginException
+from gajim.plugins.helpers import GajimPluginActivateException
+from gajim.plugins.helpers import is_shipped_plugin
 from gajim.plugins.manifest import PluginManifest
 
 log = logging.getLogger('gajim.p.manager')

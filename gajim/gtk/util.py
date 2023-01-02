@@ -25,42 +25,41 @@ import logging
 import math
 import sys
 import textwrap
-from io import BytesIO
-from importlib import import_module
-from functools import wraps
 from functools import lru_cache
+from functools import wraps
+from importlib import import_module
+from io import BytesIO
 from pathlib import Path
 from re import Match
 
-from PIL import Image
+import cairo
 from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 from gi.repository import Gio
+from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import GtkSource
-from gi.repository import GLib
 from gi.repository import Pango
-from gi.repository import GdkPixbuf
-import cairo
 from nbxmpp import JID
 from nbxmpp import util as nbxmpp_util
 from nbxmpp.structs import LocationData
 from nbxmpp.structs import TuneData
+from PIL import Image
 
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import types
-from gajim.common.i18n import _
-from gajim.common.helpers import URL_REGEX
-from gajim.common.const import LOCATION_DATA
 from gajim.common.const import Display
+from gajim.common.const import LOCATION_DATA
 from gajim.common.const import StyleAttr
 from gajim.common.ged import EventHelper as CommonEventHelper
+from gajim.common.helpers import URL_REGEX
+from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatParticipant
-from gajim.common.styling import PlainBlock
 from gajim.common.structs import VariantMixin
+from gajim.common.styling import PlainBlock
 
 from .const import WINDOW_MODULES
-
 
 log = logging.getLogger('gajim.gui.util')
 

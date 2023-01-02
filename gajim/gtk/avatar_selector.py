@@ -25,16 +25,16 @@ import logging
 from enum import IntEnum
 from enum import unique
 
+import cairo
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Gtk
-import cairo
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
-from gajim.common.i18n import _
 from gajim.common.helpers import get_file_path_from_dnd_dropped_uri
+from gajim.common.i18n import _
 
 from . import types
 from .dialogs import ErrorDialog

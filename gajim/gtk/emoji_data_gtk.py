@@ -14,10 +14,10 @@
 
 from __future__ import annotations
 
-from collections import defaultdict
 from typing import Optional
 
 import logging
+from collections import defaultdict
 
 from gi.repository import Gio
 from gi.repository import GLib

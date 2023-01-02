@@ -18,8 +18,8 @@ from typing import Any
 from typing import Callable
 from typing import Optional
 
-import sys
 import logging
+import sys
 
 from gi.repository import Gio
 from gi.repository import GLib

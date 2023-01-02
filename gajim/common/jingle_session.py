@@ -33,9 +33,10 @@ from typing import Callable
 from typing import Optional
 from typing import TYPE_CHECKING
 
-import time
 import logging
-from enum import Enum, unique
+import time
+from enum import Enum
+from enum import unique
 
 import nbxmpp
 from nbxmpp import JID
@@ -47,14 +48,15 @@ from gajim.common import app
 from gajim.common import events
 from gajim.common.client import Client
 from gajim.common.const import KindConstant
+from gajim.common.file_props import FilesProp
 from gajim.common.helpers import AdditionalDataDict
-from gajim.common.jingle_transport import get_jingle_transport
-from gajim.common.jingle_transport import JingleTransportIBB
 from gajim.common.jingle_content import get_jingle_content
 from gajim.common.jingle_content import JingleContent
 from gajim.common.jingle_content import JingleContentSetupException
 from gajim.common.jingle_ft import State
-from gajim.common.file_props import FilesProp
+from gajim.common.jingle_transport import get_jingle_transport
+from gajim.common.jingle_transport import JingleTransportIBB
+
 if TYPE_CHECKING:
     from gajim.common.jingle_transport import JingleTransport
 

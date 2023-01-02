@@ -17,16 +17,15 @@ from typing import cast
 
 import logging
 
-from gi.repository import GLib
 from gi.repository import Gio
+from gi.repository import GLib
 
 from gajim.common import app
+from gajim.common import events
 from gajim.common import ged
 from gajim.common import helpers
-from gajim.common import events
-from gajim.common.structs import OutgoingMessage
 from gajim.common.modules.contacts import BareContact
-
+from gajim.common.structs import OutgoingMessage
 
 log = logging.getLogger('gajim.c.dbus.remote_control')
 

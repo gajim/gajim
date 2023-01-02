@@ -20,23 +20,22 @@ from __future__ import annotations
 from typing import Optional
 from typing import Union
 
-import math
 import logging
-from pathlib import Path
+import math
 import sys
+from pathlib import Path
 
 import css_parser
-from css_parser.css import CSSStyleSheet
 from css_parser.css import CSSStyleRule
-
-from gi.repository import Gtk
+from css_parser.css import CSSStyleSheet
 from gi.repository import Gdk
+from gi.repository import Gtk
 from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common import configpaths
-from gajim.common.const import StyleAttr
 from gajim.common.const import CSSPriority
+from gajim.common.const import StyleAttr
 from gajim.common.dbus.system_style import SystemStyleListener
 
 from .const import Theme

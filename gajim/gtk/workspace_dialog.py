@@ -15,8 +15,8 @@
 from typing import Any
 from typing import Optional
 
-from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
@@ -25,9 +25,9 @@ from gajim.common.i18n import _
 from .avatar import make_workspace_avatar
 from .avatar_selector import AvatarSelector
 from .builder import get_builder
-from .util import rgba_to_float
-from .util import make_rgba
 from .const import DEFAULT_WORKSPACE_COLOR
+from .util import make_rgba
+from .util import rgba_to_float
 
 
 class WorkspaceDialog(Gtk.ApplicationWindow):

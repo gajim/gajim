@@ -24,26 +24,25 @@ from datetime import datetime
 from datetime import timedelta
 from datetime import timezone
 
-from gi.repository import Gtk
 from gi.repository import GLib
-
-from nbxmpp.errors import StanzaError
+from gi.repository import Gtk
 from nbxmpp.errors import MalformedStanzaError
+from nbxmpp.errors import StanzaError
 from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common import ged
-from gajim.common.i18n import _
 from gajim.common.const import ArchiveState
 from gajim.common.events import ArchivingIntervalFinished
 from gajim.common.events import RawMamMessageReceived
 from gajim.common.helpers import event_filter
+from gajim.common.i18n import _
 
 from .assistant import Assistant
 from .assistant import Page
 from .assistant import SuccessPage
-from .util import load_icon_surface
 from .util import EventHelper
+from .util import load_icon_surface
 
 log = logging.getLogger('gajim.gui.history_sync')
 

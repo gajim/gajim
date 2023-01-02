@@ -35,27 +35,25 @@ from __future__ import annotations
 
 from typing import Any
 
+import logging
 import sys
 import time
-import logging
 from threading import Thread
 
-from gi.repository import Gtk
 from gi.repository import GLib
-
-from nbxmpp import idlequeue
+from gi.repository import Gtk
 from nbxmpp import Hashes2
+from nbxmpp import idlequeue
 from nbxmpp import JID
 
 from gajim.common import app
 from gajim.common import proxy65_manager
 from gajim.common import socks5
 from gajim.common.events import FileCompleted
+from gajim.common.events import FileError
 from gajim.common.events import FileHashError
 from gajim.common.events import FileProgress
-from gajim.common.events import FileError
 from gajim.common.file_props import FileProp
-
 from gajim.gui.dialogs import ErrorDialog
 from gajim.gui.filetransfer import FileTransfersWindow
 

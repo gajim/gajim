@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 import argparse
-from datetime import datetime
-from pathlib import Path
 import re
 import subprocess
 import sys
+from datetime import datetime
+from pathlib import Path
 
 REPO_DIR = Path(__file__).resolve().parent.parent
 

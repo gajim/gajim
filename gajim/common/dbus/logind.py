@@ -23,8 +23,8 @@ from __future__ import annotations
 from typing import Any
 from typing import Optional
 
-import os
 import logging
+import os
 
 from gi.repository import Gio
 from gi.repository import GLib

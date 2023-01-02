@@ -13,23 +13,24 @@
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
-from typing import NoReturn
 from typing import Callable
+from typing import NoReturn
 from typing import Optional
 
-import io
 import argparse
-import shlex
+import io
 import operator
+import shlex
 
 from nbxmpp.protocol import JID
 
 from gajim.common import app
-from gajim.common.i18n import _
-from gajim.common.helpers import Observable, is_role_change_allowed
-from gajim.common.helpers import is_affiliation_change_allowed
-from gajim.common.modules.contacts import GroupchatContact
 from gajim.common import regex
+from gajim.common.helpers import is_affiliation_change_allowed
+from gajim.common.helpers import is_role_change_allowed
+from gajim.common.helpers import Observable
+from gajim.common.i18n import _
+from gajim.common.modules.contacts import GroupchatContact
 
 
 def split_argument_string(string: str) -> list[str]:

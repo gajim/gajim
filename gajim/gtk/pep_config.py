@@ -22,7 +22,6 @@ import logging
 from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GtkSource
-
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules import dataforms
 from nbxmpp.simplexml import Node
@@ -30,13 +29,13 @@ from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common import ged
-from gajim.common.i18n import _
 from gajim.common.helpers import to_user_string
+from gajim.common.i18n import _
 
+from .builder import get_builder
+from .dataform import DataFormWidget
 from .dialogs import ErrorDialog
 from .dialogs import WarningDialog
-from .dataform import DataFormWidget
-from .builder import get_builder
 from .util import EventHelper
 from .util import get_source_view_style_scheme
 

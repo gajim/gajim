@@ -19,12 +19,12 @@ from __future__ import annotations
 from typing import Union
 
 import nbxmpp
+from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import Iq
 from nbxmpp.protocol import Message
 from nbxmpp.structs import IqProperties
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import StanzaHandler
-from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common import types

@@ -20,25 +20,24 @@ from typing import Any
 from typing import Optional
 
 import time
-from itertools import chain
 from functools import wraps
+from itertools import chain
 
+from gi.repository import GLib
+from nbxmpp.const import Chatstate as State
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import Presence
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import PresenceProperties
 from nbxmpp.structs import StanzaHandler
-from nbxmpp.const import Chatstate as State
-
-from gi.repository import GLib
 
 from gajim.common import types
 from gajim.common.const import ClientState
-from gajim.common.structs import OutgoingMessage
 from gajim.common.modules.base import BaseModule
-from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.structs import OutgoingMessage
 
 INACTIVE_AFTER = 60
 PAUSED_AFTER = 10

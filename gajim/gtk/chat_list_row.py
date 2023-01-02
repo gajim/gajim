@@ -14,45 +14,44 @@
 
 from __future__ import annotations
 
-from typing import Optional
 from typing import Any
+from typing import Optional
 
 import pickle
 from urllib.parse import urlparse
 
+import cairo
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
-from gi.repository import Gtk
 from gi.repository import GObject
-import cairo
-
+from gi.repository import Gtk
 from nbxmpp import JID
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
 from gajim.common.const import RowHeaderType
-from gajim.common.i18n import _
-from gajim.common.helpers import get_groupchat_name
+from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_group_chat_nick
+from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import get_retraction_text
 from gajim.common.helpers import get_uf_relative_time
 from gajim.common.helpers import message_needs_highlight
-from gajim.common.helpers import AdditionalDataDict
-from gajim.common.preview_helpers import split_geo_uri
-from gajim.common.preview_helpers import format_geo_coords
-from gajim.common.preview_helpers import filename_from_uri
-from gajim.common.preview_helpers import guess_simple_file_type
-from gajim.common.types import ChatContactT
-from gajim.common.types import OneOnOneContactT
+from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.preview_helpers import filename_from_uri
+from gajim.common.preview_helpers import format_geo_coords
+from gajim.common.preview_helpers import guess_simple_file_type
+from gajim.common.preview_helpers import split_geo_uri
 from gajim.common.storage.draft import DraftStorage
+from gajim.common.types import ChatContactT
+from gajim.common.types import OneOnOneContactT
 
-from .menus import get_chat_list_row_menu
 from .builder import get_builder
+from .menus import get_chat_list_row_menu
 from .util import GajimPopover
 
 

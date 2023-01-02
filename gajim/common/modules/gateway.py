@@ -19,8 +19,8 @@ from __future__ import annotations
 from typing import Optional
 
 import nbxmpp
-from nbxmpp.protocol import Iq
 from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import Iq
 
 from gajim.common import app
 from gajim.common import types

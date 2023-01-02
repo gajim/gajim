@@ -13,38 +13,35 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import cast
 from typing import Any
+from typing import cast
 from typing import Optional
 from typing import Union
 
 import logging
 
-from gi.repository import Gio
-from gi.repository import Gdk
-from gi.repository import Gtk
-from gi.repository import GLib
-
 import cairo
-
+from gi.repository import Gdk
+from gi.repository import Gio
+from gi.repository import GLib
+from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
-from nbxmpp.namespaces import Namespace
-from nbxmpp.modules.vcard4 import VCard
 from nbxmpp.modules.user_avatar import Avatar
+from nbxmpp.modules.vcard4 import VCard
+from nbxmpp.namespaces import Namespace
 from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
-
 from gajim.gui.avatar import clip_circle
 from gajim.gui.avatar_selector import AvatarSelector
+from gajim.gui.builder import get_builder
 from gajim.gui.dialogs import ErrorDialog
 from gajim.gui.filechoosers import AvatarChooserDialog
-from gajim.gui.builder import get_builder
-from gajim.gui.vcard_grid import VCardGrid
 from gajim.gui.util import scroll_to_end
+from gajim.gui.vcard_grid import VCardGrid
 
 log = logging.getLogger('gajim.gui.profile')
 

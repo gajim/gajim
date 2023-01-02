@@ -8,7 +8,6 @@ import logging
 from gitlab import Gitlab
 from gitlab.v4.objects import Project
 
-
 logging.basicConfig(level='INFO', format='%(levelname)s: %(message)s')
 log = logging.getLogger()
 

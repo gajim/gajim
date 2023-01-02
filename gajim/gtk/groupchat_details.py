@@ -30,8 +30,8 @@ from gajim.gtk.groupchat_affiliation import GroupchatAffiliation
 from gajim.gtk.groupchat_outcasts import GroupchatOutcasts
 
 from .builder import get_builder
-from .groupchat_info import GroupChatInfoScrolled
 from .groupchat_config import GroupchatConfig
+from .groupchat_info import GroupChatInfoScrolled
 from .groupchat_manage import GroupchatManage
 from .groupchat_settings import GroupChatSettings
 from .sidebar_switcher import SideBarSwitcher

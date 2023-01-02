@@ -17,10 +17,9 @@ from __future__ import annotations
 from typing import Any
 from typing import Optional
 
+import cairo
 from gi.repository import GLib
 from gi.repository import Gtk
-
-import cairo
 
 from gajim.common import app
 from gajim.common import ged

@@ -15,19 +15,19 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import cast
 from typing import Callable
+from typing import cast
 from typing import Optional
 
 import logging
-from dataclasses import dataclass
-from dataclasses import field
 import os
 import re
-from pathlib import Path
-from urllib.parse import urlparse
-from urllib.parse import ParseResult
 import uuid
+from dataclasses import dataclass
+from dataclasses import field
+from pathlib import Path
+from urllib.parse import ParseResult
+from urllib.parse import urlparse
 
 from gi.repository import Gio
 from gi.repository import GLib
@@ -40,19 +40,19 @@ from gajim.common import configpaths
 from gajim.common import regex
 from gajim.common.const import MIME_TYPES
 from gajim.common.helpers import AdditionalDataDict
+from gajim.common.helpers import get_tls_error_phrases
 from gajim.common.helpers import load_file_async
 from gajim.common.helpers import write_file_async
-from gajim.common.helpers import get_tls_error_phrases
 from gajim.common.i18n import _
 from gajim.common.preview_helpers import aes_decrypt
-from gajim.common.preview_helpers import filename_from_uri
-from gajim.common.preview_helpers import parse_fragment
 from gajim.common.preview_helpers import create_thumbnail
-from gajim.common.preview_helpers import split_geo_uri
-from gajim.common.preview_helpers import get_previewable_mime_types
+from gajim.common.preview_helpers import filename_from_uri
 from gajim.common.preview_helpers import get_image_paths
+from gajim.common.preview_helpers import get_previewable_mime_types
 from gajim.common.preview_helpers import guess_mime_type
+from gajim.common.preview_helpers import parse_fragment
 from gajim.common.preview_helpers import pixbuf_from_data
+from gajim.common.preview_helpers import split_geo_uri
 from gajim.common.types import GdkPixbufType
 from gajim.common.util.http import create_http_request
 

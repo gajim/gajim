@@ -14,17 +14,17 @@
 
 # XEP-0145: Annotations
 
-from typing import Union
 from typing import Optional
+from typing import Union
 
-from nbxmpp.errors import StanzaError
 from nbxmpp.errors import MalformedStanzaError
-from nbxmpp.structs import AnnotationNote
+from nbxmpp.errors import StanzaError
 from nbxmpp.protocol import JID
+from nbxmpp.structs import AnnotationNote
 from nbxmpp.task import Task
 
-from gajim.common.types import ConnectionT
 from gajim.common.modules.base import BaseModule
+from gajim.common.types import ConnectionT
 
 
 class Annotations(BaseModule):

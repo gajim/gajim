@@ -20,13 +20,12 @@ from typing import cast
 from typing import Optional
 from typing import Union
 
-from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import GObject
+from gi.repository import Gtk
 from gi.repository import Pango
-
-from nbxmpp.modules.dataforms import extend_form
 from nbxmpp.modules.dataforms import DataField
+from nbxmpp.modules.dataforms import extend_form
 from nbxmpp.modules.dataforms import MultipleDataForm
 from nbxmpp.modules.dataforms import SimpleDataForm
 from nbxmpp.modules.dataforms import Uri
@@ -34,14 +33,13 @@ from nbxmpp.protocol import InvalidJid
 from nbxmpp.simplexml import Node
 
 from gajim.common import app
-from gajim.common.i18n import _
 from gajim.common.helpers import open_uri
+from gajim.common.i18n import _
 
-from .util import MultiLineLabel
-from .util import MaxWidthComboBoxText
 from .util import make_href_markup
+from .util import MaxWidthComboBoxText
+from .util import MultiLineLabel
 from .util import scale_pixbuf_from_data
-
 
 # Options
 

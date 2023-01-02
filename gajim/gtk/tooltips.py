@@ -26,30 +26,29 @@
 
 from __future__ import annotations
 
+import logging
 import os
 import time
-import logging
 from datetime import datetime
 
 from gi.repository import GdkPixbuf
-from gi.repository import Gtk
 from gi.repository import GLib
+from gi.repository import Gtk
 from gi.repository import Pango
-
 from nbxmpp import JID
 
 from gajim.common import app
-from gajim.common import types
 from gajim.common import helpers
+from gajim.common import types
 from gajim.common.const import AvatarSize
-from gajim.common.i18n import p_
-from gajim.common.i18n import _
 from gajim.common.file_props import FileProp
+from gajim.common.i18n import _
+from gajim.common.i18n import p_
 
 from .avatar import get_show_circle
 from .builder import get_builder
-from .util import format_tune
 from .util import format_location
+from .util import format_tune
 
 log = logging.getLogger('gajim.gui.tooltips')
 

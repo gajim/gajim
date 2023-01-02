@@ -2,7 +2,6 @@
 
 from typing import Optional
 
-
 class KeyringBackend:
 
     def get_password(self, service: str, username: str) -> Optional[str]: ...

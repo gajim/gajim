@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 
 import argparse
-from datetime import datetime
-from urllib.request import urlopen
 import csv
 import io
 import logging
-from pathlib import Path
 import re
 import sys
-
+from datetime import datetime
+from pathlib import Path
+from urllib.request import urlopen
 
 SCHEMES_URL = 'https://www.iana.org/assignments/uri-schemes/uri-schemes-1.csv'
 

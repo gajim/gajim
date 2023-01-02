@@ -33,12 +33,12 @@ from gajim.common import idle
 from gajim.common import types
 from gajim.common.events import PresenceReceived
 from gajim.common.events import ShowChanged
-from gajim.common.events import SubscribePresenceReceived
 from gajim.common.events import SubscribedPresenceReceived
+from gajim.common.events import SubscribePresenceReceived
 from gajim.common.events import UnsubscribedPresenceReceived
 from gajim.common.i18n import _
-from gajim.common.structs import PresenceData
 from gajim.common.modules.base import BaseModule
+from gajim.common.structs import PresenceData
 
 
 class Presence(BaseModule):

@@ -14,9 +14,9 @@
 
 from __future__ import annotations
 
-from typing import Optional
 from typing import Any
 from typing import cast
+from typing import Optional
 from typing import Union
 
 import logging
@@ -26,22 +26,20 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
-
 from nbxmpp import JID
 
 from gajim.common import app
-from gajim.common import ged
 from gajim.common import events
+from gajim.common import ged
 from gajim.common.const import Direction
 from gajim.common.const import RowHeaderType
-from gajim.common.i18n import _
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_retraction_text
+from gajim.common.i18n import _
 from gajim.common.setting_values import OpenChatsSettingT
 
 from .chat_list_row import ChatListRow
 from .util import EventHelper
-
 
 log = logging.getLogger('gajim.gui.chatlist')
 

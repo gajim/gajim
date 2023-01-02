@@ -17,8 +17,8 @@ from __future__ import annotations
 from typing import Optional
 
 import functools
-import queue
 import logging
+import queue
 
 from gi.repository import GLib
 

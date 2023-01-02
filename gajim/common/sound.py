@@ -17,8 +17,8 @@ from __future__ import annotations
 from typing import Any
 from typing import Optional
 
-import sys
 import logging
+import sys
 from pathlib import Path
 
 from gi.repository import Gio

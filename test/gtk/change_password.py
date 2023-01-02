@@ -1,16 +1,14 @@
+from functools import partial
 from unittest.mock import MagicMock
 
-from functools import partial
-
+from gi.repository import Gtk
 from nbxmpp.modules.dataforms import create_field
 from nbxmpp.modules.dataforms import SimpleDataForm
 
-from gi.repository import Gtk
-
+from gajim import gui
 from gajim.common import app
 from gajim.common.const import CSSPriority
 
-from gajim import gui
 gui.init('gtk')
 
 from gajim.gui.change_password import ChangePassword

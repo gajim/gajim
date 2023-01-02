@@ -17,8 +17,8 @@ from __future__ import annotations
 from typing import Any
 from typing import Iterator
 from typing import Optional
-from typing import Union
 from typing import overload
+from typing import Union
 
 import cairo
 from nbxmpp.const import Affiliation
@@ -28,27 +28,27 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import LocationData
-from nbxmpp.structs import TuneData
 from nbxmpp.structs import MucSubject
+from nbxmpp.structs import TuneData
 
 from gajim.common import app
 from gajim.common import types
 from gajim.common.const import PresenceShowExt
 from gajim.common.const import SimpleClientState
-from gajim.common.setting_values import BoolContactSettings
-from gajim.common.setting_values import StringContactSettings
-from gajim.common.setting_values import BoolGroupChatSettings
-from gajim.common.setting_values import IntGroupChatSettings
-from gajim.common.setting_values import StringGroupChatSettings
-from gajim.common.structs import UNKNOWN_PRESENCE
-from gajim.common.structs import PresenceData
-from gajim.common.structs import UNKNOWN_MUC_PRESENCE
-from gajim.common.structs import MUCPresenceData
-from gajim.common.helpers import Observable
 from gajim.common.helpers import chatstate_to_string
+from gajim.common.helpers import get_groupchat_name
+from gajim.common.helpers import Observable
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import LogAdapter
-from gajim.common.helpers import get_groupchat_name
+from gajim.common.setting_values import BoolContactSettings
+from gajim.common.setting_values import BoolGroupChatSettings
+from gajim.common.setting_values import IntGroupChatSettings
+from gajim.common.setting_values import StringContactSettings
+from gajim.common.setting_values import StringGroupChatSettings
+from gajim.common.structs import MUCPresenceData
+from gajim.common.structs import PresenceData
+from gajim.common.structs import UNKNOWN_MUC_PRESENCE
+from gajim.common.structs import UNKNOWN_PRESENCE
 
 
 class ContactSettings:

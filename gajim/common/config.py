@@ -29,9 +29,10 @@
 
 from typing import Any
 
-import re
 import copy
-from enum import IntEnum, unique
+import re
+from enum import IntEnum
+from enum import unique
 
 from gi.repository import GLib
 

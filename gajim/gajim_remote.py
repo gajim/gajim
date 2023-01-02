@@ -14,13 +14,12 @@
 
 from typing import Any
 
-import sys
 import argparse
 import logging
+import sys
 
-from gi.repository import GLib
 from gi.repository import Gio
-
+from gi.repository import GLib
 
 LOG_FORMAT = '%(asctime)s %(levelname)s %(message)s'
 logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)

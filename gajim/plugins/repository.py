@@ -12,12 +12,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Any, cast
+from typing import Any
+from typing import cast
 from typing import Iterable
 from typing import Optional
 
-import logging
 import json
+import logging
 from io import BytesIO
 from zipfile import ZipFile
 
@@ -27,9 +28,8 @@ from nbxmpp.http import HTTPRequest
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.helpers import Observable
-from gajim.plugins.manifest import PluginManifest
 from gajim.common.util.http import create_http_request
-
+from gajim.plugins.manifest import PluginManifest
 
 log = logging.getLogger('gajim.p.repository')
 

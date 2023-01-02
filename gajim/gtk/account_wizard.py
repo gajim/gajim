@@ -24,34 +24,33 @@ from typing import Union
 import logging
 
 from gi.repository import Gdk
-from gi.repository import GLib
-from gi.repository import Gtk
 from gi.repository import Gio
+from gi.repository import GLib
 from gi.repository import GObject
-
+from gi.repository import Gtk
 from nbxmpp.client import Client
-from nbxmpp.protocol import JID
-from nbxmpp.protocol import validate_domainpart
-from nbxmpp.const import Mode
-from nbxmpp.const import StreamError
 from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
-from nbxmpp.errors import StanzaError
+from nbxmpp.const import Mode
+from nbxmpp.const import StreamError
 from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.errors import RegisterStanzaError
+from nbxmpp.errors import StanzaError
+from nbxmpp.protocol import JID
+from nbxmpp.protocol import validate_domainpart
 from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import helpers
+from gajim.common.const import GIO_TLS_ERRORS
+from gajim.common.const import SASL_ERRORS
 from gajim.common.events import StanzaReceived
 from gajim.common.events import StanzaSent
+from gajim.common.helpers import get_proxy
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import validate_jid
-from gajim.common.helpers import get_proxy
 from gajim.common.i18n import _
-from gajim.common.const import SASL_ERRORS
-from gajim.common.const import GIO_TLS_ERRORS
 
 from .accounts import AccountsWindow
 from .assistant import Assistant
@@ -59,11 +58,11 @@ from .assistant import ErrorPage
 from .assistant import Page
 from .assistant import ProgressPage
 from .assistant import SuccessPage
-from .dataform import DataFormWidget
 from .builder import get_builder
-from .util import open_window
-from .util import get_color_for_account
+from .dataform import DataFormWidget
 from .util import get_app_window
+from .util import get_color_for_account
+from .util import open_window
 
 log = logging.getLogger('gajim.gui.account_wizard')
 

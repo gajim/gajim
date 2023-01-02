@@ -16,31 +16,29 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Callable
+from typing import cast
 from typing import Optional
 from typing import TypeVar
-from typing import cast
 
-import sys
-import math
-import time
-import sqlite3
 import json
 import logging
+import math
+import sqlite3
+import sys
+import time
 from pathlib import Path
 
-from gi.repository import GLib
-
 import nbxmpp.const
-from nbxmpp.protocol import Iq
-from nbxmpp.protocol import JID
-from nbxmpp.structs import RosterItem
-from nbxmpp.structs import DiscoInfo
-from nbxmpp.structs import CommonError
-from nbxmpp.const import Role
+from gi.repository import GLib
 from nbxmpp.const import Affiliation
+from nbxmpp.const import Role
 from nbxmpp.const import StatusCode
 from nbxmpp.modules.discovery import parse_disco_info
-
+from nbxmpp.protocol import Iq
+from nbxmpp.protocol import JID
+from nbxmpp.structs import CommonError
+from nbxmpp.structs import DiscoInfo
+from nbxmpp.structs import RosterItem
 
 _T = TypeVar('_T')
 

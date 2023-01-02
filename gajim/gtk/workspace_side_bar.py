@@ -15,8 +15,8 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 from typing import cast
+from typing import Optional
 
 import logging
 import pickle
@@ -35,7 +35,6 @@ from .menus import get_workspace_menu
 from .structs import ChatListEntryParam
 from .util import GajimPopover
 from .util import open_window
-
 
 log = logging.getLogger('gajim.gui.workspace_sidebar')
 

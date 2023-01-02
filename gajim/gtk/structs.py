@@ -17,14 +17,13 @@ from __future__ import annotations
 from typing import Any
 from typing import Callable
 
-import sys
-import inspect
 import functools
+import inspect
+import sys
 from dataclasses import dataclass
 
 from gi.repository import Gio
 from gi.repository import GLib
-
 from nbxmpp.protocol import JID
 
 from gajim.common.structs import VariantMixin

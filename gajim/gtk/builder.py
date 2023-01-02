@@ -15,16 +15,16 @@
 from typing import Any
 from typing import Optional
 
-import sys
 import functools
+import sys
 import xml.etree.ElementTree as ET
 
-from gi.repository import Gtk
 from gi.repository import Gio
+from gi.repository import Gtk
 
+from gajim.common import configpaths
 from gajim.common import i18n
 from gajim.common.i18n import _
-from gajim.common import configpaths
 
 
 class Builder:

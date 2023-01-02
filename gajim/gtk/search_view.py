@@ -18,17 +18,16 @@ from typing import Any
 from typing import Iterator
 from typing import Optional
 
-from datetime import datetime
-from datetime import timedelta
 import itertools
 import logging
-import time
 import re
+import time
+from datetime import datetime
+from datetime import timedelta
 
+import cairo
 from gi.repository import GObject
 from gi.repository import Gtk
-import cairo
-
 from nbxmpp import JID
 
 from gajim.common import app
@@ -38,8 +37,8 @@ from gajim.common.const import Direction
 from gajim.common.const import KindConstant
 from gajim.common.storage.archive import SearchLogRow
 
-from .conversation.message_widget import MessageWidget
 from .builder import get_builder
+from .conversation.message_widget import MessageWidget
 from .util import gtk_month
 from .util import python_month
 

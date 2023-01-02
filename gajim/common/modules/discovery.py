@@ -20,8 +20,8 @@ from typing import Optional
 from typing import Union
 
 import nbxmpp
-from nbxmpp.errors import StanzaError
 from nbxmpp.errors import is_error
+from nbxmpp.errors import StanzaError
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import Iq
 from nbxmpp.protocol import JID
@@ -32,10 +32,10 @@ from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common import types
-from gajim.common.events import ServerDiscoReceived
 from gajim.common.events import MucDiscoUpdate
-from gajim.common.modules.util import as_task
+from gajim.common.events import ServerDiscoReceived
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.util import as_task
 
 
 class Discovery(BaseModule):

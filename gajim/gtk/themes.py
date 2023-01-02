@@ -15,28 +15,29 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import annotations
+
+from typing import Any
+from typing import cast
 from typing import NamedTuple
 from typing import Optional
-from typing import Any
 from typing import Union
-from typing import cast
 
 from enum import IntEnum
 
-from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import Gtk
 from gi.repository import Pango
 
 from gajim.common import app
-from gajim.common.i18n import _
 from gajim.common.const import StyleAttr
 from gajim.common.events import StyleChanged
 from gajim.common.events import ThemeUpdate
+from gajim.common.i18n import _
 
-from .dialogs import ErrorDialog
-from .dialogs import DialogButton
-from .dialogs import ConfirmationDialog
 from .builder import get_builder
+from .dialogs import ConfirmationDialog
+from .dialogs import DialogButton
+from .dialogs import ErrorDialog
 from .preferences import Preferences
 from .util import get_app_window
 

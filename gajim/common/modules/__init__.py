@@ -18,8 +18,8 @@ import typing
 
 import inspect
 import logging
-from pathlib import Path
 from importlib import import_module
+from pathlib import Path
 
 from nbxmpp.structs import StanzaHandler
 

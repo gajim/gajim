@@ -28,42 +28,42 @@ from __future__ import annotations
 
 import typing
 from typing import Any
-from typing import Optional
 from typing import cast
+from typing import Optional
 
 import gc
-import os
-import sys
 import logging
-import weakref
+import os
 import pprint
+import sys
+import weakref
 from collections import defaultdict
 
-from nbxmpp.idlequeue import IdleQueue
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import GObject
+from nbxmpp.idlequeue import IdleQueue
 
 import gajim
-from gajim.common import types
 from gajim.common import config as c_config
 from gajim.common import configpaths
 from gajim.common import ged as ged_module
-from gajim.common.i18n import LANG
+from gajim.common import types
 from gajim.common.const import Display
+from gajim.common.i18n import LANG
 
 if typing.TYPE_CHECKING:
-    from gajim.gui.main import MainWindow  # noqa: F401
-    from gajim.gui.application import GajimApplication  # noqa: F401
-    from gajim.common.storage.cache import CacheStorage
-    from gajim.common.storage.archive import MessageArchiveStorage
-    from gajim.common.storage.events import EventStorage
-    from gajim.common.storage.draft import DraftStorage
-    from gajim.common.cert_store import CertificateStore
     from gajim.common.call_manager import CallManager
-    from gajim.common.preview import PreviewManager
-    from gajim.common.task_manager import TaskManager
+    from gajim.common.cert_store import CertificateStore
     from gajim.common.commands import ChatCommands  # noqa: F401
+    from gajim.common.preview import PreviewManager
+    from gajim.common.storage.archive import MessageArchiveStorage
+    from gajim.common.storage.cache import CacheStorage
+    from gajim.common.storage.draft import DraftStorage
+    from gajim.common.storage.events import EventStorage
+    from gajim.common.task_manager import TaskManager
+    from gajim.gui.application import GajimApplication  # noqa: F401
+    from gajim.gui.main import MainWindow  # noqa: F401
 
 
 interface = cast(types.InterfaceT, None)

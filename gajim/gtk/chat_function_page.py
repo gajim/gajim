@@ -22,7 +22,6 @@ from pathlib import Path
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
-
 from nbxmpp.protocol import InvalidJid
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import validate_resourcepart

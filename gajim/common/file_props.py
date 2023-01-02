@@ -20,9 +20,9 @@ True
 from __future__ import annotations
 
 from typing import Callable
+from typing import ClassVar
 from typing import Literal
 from typing import Optional
-from typing import ClassVar
 
 
 class FilesProp:

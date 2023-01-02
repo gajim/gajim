@@ -13,7 +13,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from cryptography.hazmat.primitives import hashes
-
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import Gtk

@@ -23,15 +23,15 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import sys
-import re
 import logging
+import os
+import re
+import sys
 from pathlib import Path
-from packaging.version import Version as V
 
 from gi.repository import Gdk
 from nbxmpp.util import text_to_color
+from packaging.version import Version as V
 
 from gajim.common import app
 from gajim.common.i18n import _

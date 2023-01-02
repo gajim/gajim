@@ -32,7 +32,6 @@ from .emoji_data_gtk import get_emoji_data
 from .groupchat_nick_completion import GroupChatNickCompletion
 from .menus import escape_mnemonic
 
-
 EMOJI_NUM_GENDERS = len(['f', 'm', 'n'])
 MENUS_MAX_ENTRIES = 2 * EMOJI_NUM_GENDERS
 

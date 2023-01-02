@@ -14,39 +14,37 @@
 
 from __future__ import annotations
 
-from typing import cast
 from typing import Any
+from typing import cast
 from typing import Optional
 from typing import Union
 
 import logging
 
-from gi.repository import Gtk
 from gi.repository import GObject
-
+from gi.repository import Gtk
 from nbxmpp.const import AdHocAction
-from nbxmpp.modules import dataforms
-from nbxmpp.errors import StanzaError
 from nbxmpp.errors import MalformedStanzaError
-from nbxmpp.modules.dataforms import SimpleDataForm
+from nbxmpp.errors import StanzaError
+from nbxmpp.modules import dataforms
 from nbxmpp.modules.dataforms import MultipleDataForm
+from nbxmpp.modules.dataforms import SimpleDataForm
 from nbxmpp.simplexml import Node
 from nbxmpp.structs import AdHocCommand
 from nbxmpp.structs import AdHocCommandNote
 from nbxmpp.task import Task
 
 from gajim.common import app
-from gajim.common.i18n import _
 from gajim.common.helpers import to_user_string
+from gajim.common.i18n import _
 
 from .assistant import Assistant
-from .assistant import Page
 from .assistant import ErrorPage
+from .assistant import Page
 from .assistant import ProgressPage
 from .dataform import DataFormWidget
-from .util import MultiLineLabel
 from .util import ensure_not_destroyed
-
+from .util import MultiLineLabel
 
 log = logging.getLogger('gajim.gui.adhoc')
 

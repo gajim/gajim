@@ -15,16 +15,15 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import TypeVar
 from typing import NamedTuple
 from typing import Optional
+from typing import TypeVar
 
 import time
 from dataclasses import dataclass
 from dataclasses import fields
 
 from gi.repository import GLib
-
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Chatstate
 from nbxmpp.const import PresenceShow
@@ -36,11 +35,10 @@ from nbxmpp.structs import MucSubject
 from nbxmpp.structs import PresenceProperties
 
 from gajim.common import types
-from gajim.common.const import MUCJoinedState
 from gajim.common.const import KindConstant
+from gajim.common.const import MUCJoinedState
 from gajim.common.const import PresenceShowExt
 from gajim.common.const import URIType
-
 
 _T = TypeVar('_T')
 

@@ -16,47 +16,44 @@
 
 from __future__ import annotations
 
-from typing import Iterator
 from typing import Callable
 from typing import cast
+from typing import Iterator
 from typing import Optional
 
-from datetime import datetime
 import textwrap
+from datetime import datetime
 from urllib.parse import quote
 
-from gi.repository import Gtk
 from gi.repository import Gio
 from gi.repository import GLib
-
+from gi.repository import Gtk
 from nbxmpp import JID
 
 from gajim.common import app
 from gajim.common import types
+from gajim.common.const import URIType
+from gajim.common.const import XmppUriQuery
 from gajim.common.helpers import filesystem_path_from_uri
 from gajim.common.helpers import is_affiliation_change_allowed
 from gajim.common.helpers import is_retraction_allowed
 from gajim.common.helpers import is_role_change_allowed
 from gajim.common.helpers import jid_is_blocked
 from gajim.common.i18n import _
-from gajim.common.i18n import p_
 from gajim.common.i18n import get_short_lang_code
-from gajim.common.const import URIType
-from gajim.common.const import XmppUriQuery
+from gajim.common.i18n import p_
+from gajim.common.modules.contacts import can_add_to_roster
+from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.preview import Preview
 from gajim.common.structs import URI
 from gajim.common.util.text import escape_iri_path_segment
-from gajim.common.modules.contacts import GroupchatContact
-from gajim.common.modules.contacts import can_add_to_roster
-
-from gajim.gui.structs import AddChatActionParams
 from gajim.gui.structs import AccountJidParam
+from gajim.gui.structs import AddChatActionParams
 from gajim.gui.structs import ChatListEntryParam
 from gajim.gui.structs import RemoveHistoryActionParams
 from gajim.gui.structs import RetractMessageParam
 from gajim.gui.util import GajimMenu
 from gajim.gui.util import MenuItemListT
-
 
 UriMenuItemsT = list[tuple[str, list[str], str]]
 UriMenuBuilderT = Callable[[URI, str], UriMenuItemsT]

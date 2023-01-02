@@ -19,17 +19,17 @@ from __future__ import annotations
 from typing import Generator
 from typing import Optional
 
-from nbxmpp.namespaces import Namespace
 from nbxmpp.modules.user_avatar import AvatarData
 from nbxmpp.modules.util import is_error
+from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import Message
 from nbxmpp.structs import MessageProperties
 
 from gajim.common import app
 from gajim.common import types
 from gajim.common.modules.base import BaseModule
-from gajim.common.modules.util import event_node
 from gajim.common.modules.util import as_task
+from gajim.common.modules.util import event_node
 
 
 class UserAvatar(BaseModule):

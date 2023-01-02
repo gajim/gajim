@@ -17,18 +17,17 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Union
-from typing import Optional
 from typing import cast
+from typing import Optional
+from typing import Union
 
+from gi.repository import GLib
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.structs import BookmarkData
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import MessageProperties
 from nbxmpp.task import Task
-
-from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common import types

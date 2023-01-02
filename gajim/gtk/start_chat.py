@@ -14,8 +14,8 @@
 
 from __future__ import annotations
 
-from typing import cast
 from typing import Any
+from typing import cast
 from typing import Optional
 from typing import Union
 
@@ -24,42 +24,42 @@ from enum import IntEnum
 
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
-from gi.repository import Gtk
 from gi.repository import GLib
+from gi.repository import Gtk
 from gi.repository import Pango
-
 from nbxmpp import JID
+from nbxmpp.errors import CancelledError
 from nbxmpp.errors import is_error
 from nbxmpp.errors import StanzaError
 from nbxmpp.errors import TimeoutStanzaError
-from nbxmpp.errors import CancelledError
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import MuclumbusItem
 from nbxmpp.structs import MuclumbusResult
 from nbxmpp.task import Task
 
 from gajim.common import app
+from gajim.common.const import AvatarSize
 from gajim.common.const import Direction
+from gajim.common.const import MUC_DISCO_ERRORS
 from gajim.common.const import URIType
-from gajim.common.helpers import parse_uri
-from gajim.common.helpers import validate_jid
-from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_group_chat_nick
+from gajim.common.helpers import parse_uri
+from gajim.common.helpers import to_user_string
+from gajim.common.helpers import validate_jid
 from gajim.common.i18n import _
 from gajim.common.i18n import get_rfc5646_lang
-from gajim.common.const import AvatarSize
-from gajim.common.const import MUC_DISCO_ERRORS
-from gajim.common.modules.util import as_task
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.util import as_task
 
-from .menus import get_start_chat_row_menu
+from .builder import get_builder
 from .chat_filter import ChatFilter
 from .groupchat_info import GroupChatInfoScrolled
 from .groupchat_nick import NickChooser
-from .builder import get_builder
-from .util import GajimPopover, get_icon_name
+from .menus import get_start_chat_row_menu
 from .util import AccountBadge
+from .util import GajimPopover
+from .util import get_icon_name
 
 ContactT = Union[BareContact, GroupchatContact]
 

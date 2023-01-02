@@ -12,21 +12,20 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import cast
 from typing import Any
+from typing import cast
 from typing import NamedTuple
 from typing import Optional
 
 import logging
 from datetime import timedelta
 
+from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
-from gi.repository import Gdk
 from gi.repository import Pango
-
-from nbxmpp.errors import StanzaError
 from nbxmpp.errors import MalformedStanzaError
+from nbxmpp.errors import StanzaError
 from nbxmpp.modules.dataforms import SimpleDataForm
 from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import LastActivityData

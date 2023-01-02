@@ -34,31 +34,31 @@ import logging
 import sys
 import textwrap
 
-from gi.repository import GLib
-from gi.repository import Gio
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
+from gi.repository import Gio
+from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp.protocol import JID
 
 from gajim.common import app
-from gajim.common import ged
 from gajim.common import events
+from gajim.common import ged
 from gajim.common.client import Client
 from gajim.common.const import AvatarSize
 from gajim.common.const import SimpleClientState
 from gajim.common.const import StyleAttr
-from gajim.common.i18n import _
+from gajim.common.ged import EventHelper
 from gajim.common.helpers import allow_showing_notification
 from gajim.common.helpers import play_sound
-from gajim.common.ged import EventHelper
+from gajim.common.i18n import _
 
 from .builder import get_builder
+from .structs import AccountJidParam
+from .structs import OpenEventActionParams
 from .util import add_css_to_widget
 from .util import get_monitor_scale_factor
 from .util import get_total_screen_geometry
-from .structs import AccountJidParam
-from .structs import OpenEventActionParams
 
 log = logging.getLogger('gajim.gui.notification')
 

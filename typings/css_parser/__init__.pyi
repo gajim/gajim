@@ -8,9 +8,8 @@ from pathlib import Path
 from . import css as css
 from . import serialize as serialize
 from . import stylesheets as stylesheets
-from .stylesheets import MediaList
 from .serialize import CSSSerializer
-
+from .stylesheets import MediaList
 
 ser: CSSSerializer
 

@@ -12,23 +12,21 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+import cairo
 import nbxmpp
-
 from gi.repository import Gdk
-from gi.repository import Gtk
 from gi.repository import GLib
 from gi.repository import GObject
+from gi.repository import Gtk
 from gi.repository import Pango
 
-import cairo
-
 from gajim.common import app
-from gajim.common.helpers import open_uri
-from gajim.common.i18n import _
+from gajim.common.const import ARTISTS
 from gajim.common.const import DEVS_CURRENT
 from gajim.common.const import DEVS_PAST
-from gajim.common.const import ARTISTS
 from gajim.common.const import THANKS
+from gajim.common.helpers import open_uri
+from gajim.common.i18n import _
 
 
 class AboutDialog(Gtk.AboutDialog):

@@ -17,38 +17,38 @@ from __future__ import annotations
 from typing import Optional
 from typing import Union
 
-import logging
-import hashlib
-from math import pi
 import functools
+import hashlib
+import logging
 from collections import defaultdict
+from math import pi
 from pathlib import Path
 
+import cairo
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Pango
 from gi.repository import PangoCairo
-import cairo
 from nbxmpp.protocol import JID
 
-from gajim.common import types
 from gajim.common import app
 from gajim.common import configpaths
-from gajim.common.helpers import get_groupchat_name
+from gajim.common import types
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
+from gajim.common.helpers import get_groupchat_name
 from gajim.common.util.classes import Singleton
 
 from .const import DEFAULT_WORKSPACE_COLOR
+from .util import convert_rgb_string_to_float
 from .util import get_contact_color
+from .util import get_css_show_class
 from .util import get_first_graphemes
 from .util import load_icon_surface
 from .util import load_pixbuf
-from .util import scale_with_ratio
-from .util import get_css_show_class
-from .util import convert_rgb_string_to_float
-from .util import rgba_to_float
 from .util import make_rgba
+from .util import rgba_to_float
+from .util import scale_with_ratio
 
 log = logging.getLogger('gajim.gui.avatar')
 

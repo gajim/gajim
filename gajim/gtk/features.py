@@ -25,8 +25,8 @@ from typing import Optional
 import os
 import sys
 
-from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import passwords

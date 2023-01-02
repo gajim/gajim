@@ -15,8 +15,8 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 from typing import cast
+from typing import Optional
 
 from gi.repository import Gtk
 

@@ -16,9 +16,8 @@ from __future__ import annotations
 
 import logging
 
-from gi.repository import Gtk
 from gi.repository import Gdk
-
+from gi.repository import Gtk
 from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.errors import StanzaError
 from nbxmpp.task import Task
@@ -27,10 +26,10 @@ from gajim.common import app
 from gajim.common.i18n import _
 
 from .builder import get_builder
-from .util import EventHelper
-from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
+from .dialogs import DialogButton
 from .dialogs import InformationDialog
+from .util import EventHelper
 
 log = logging.getLogger('gajim.gui.mam_preferences')
 

@@ -20,16 +20,16 @@ from typing import Any
 from typing import Optional
 
 from nbxmpp.namespaces import Namespace
-from nbxmpp.structs import StanzaHandler
 from nbxmpp.protocol import JID
+from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
 from gajim.common import types
 from gajim.common.events import DisplayedReceived
 from gajim.common.events import ReadStateSync
 from gajim.common.modules.base import BaseModule
-from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.structs import OutgoingMessage
 
 

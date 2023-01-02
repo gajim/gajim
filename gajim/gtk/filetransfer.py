@@ -21,47 +21,46 @@ from __future__ import annotations
 
 from typing import Optional
 
+import logging
 import os
 import time
-import logging
-from functools import partial
-from enum import IntEnum
-from enum import unique
 from datetime import datetime
 from datetime import timezone
+from enum import IntEnum
+from enum import unique
+from functools import partial
 from pathlib import Path
 
-from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import GLib
+from gi.repository import Gtk
 from gi.repository import Pango
-
 from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import helpers
+from gajim.common import types
+from gajim.common.const import KindConstant
 from gajim.common.events import FileRequestSent
 from gajim.common.events import Notification
-from gajim.common.const import KindConstant
-from gajim.common.i18n import _
-from gajim.common.file_props import FilesProp
 from gajim.common.file_props import FileProp
-from gajim.common.helpers import file_is_locked
+from gajim.common.file_props import FilesProp
 from gajim.common.helpers import AdditionalDataDict
+from gajim.common.helpers import file_is_locked
 from gajim.common.helpers import show_in_folder
+from gajim.common.i18n import _
 from gajim.common.modules.bytestream import is_transfer_active
 from gajim.common.modules.bytestream import is_transfer_paused
 from gajim.common.modules.bytestream import is_transfer_stopped
 from gajim.common.modules.contacts import BareContact
-from gajim.common import types
 
-from .dialogs import DialogButton
+from .builder import get_builder
 from .dialogs import ConfirmationDialog
+from .dialogs import DialogButton
 from .dialogs import ErrorDialog
 from .filechoosers import FileSaveDialog
 from .tooltips import FileTransfersTooltip
-from .builder import get_builder
 from .util import format_eta
 
 log = logging.getLogger('gajim.gui.filetransfer')

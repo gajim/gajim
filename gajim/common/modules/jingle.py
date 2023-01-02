@@ -38,19 +38,20 @@ import logging
 import nbxmpp
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import Iq
-from nbxmpp.structs import StanzaHandler
 from nbxmpp.structs import IqProperties
+from nbxmpp.structs import StanzaHandler
 
 from gajim.common import helpers
 from gajim.common import types
 from gajim.common.file_props import FileProp
-from gajim.common.modules.base import BaseModule
+from gajim.common.jingle_ft import JingleFileTransfer
+from gajim.common.jingle_rtp import JingleAudio
+from gajim.common.jingle_rtp import JingleVideo
 from gajim.common.jingle_session import JingleSession
 from gajim.common.jingle_session import JingleStates
-from gajim.common.jingle_ft import JingleFileTransfer
-from gajim.common.jingle_transport import JingleTransportSocks5
 from gajim.common.jingle_transport import JingleTransportIBB
-from gajim.common.jingle_rtp import JingleAudio, JingleVideo
+from gajim.common.jingle_transport import JingleTransportSocks5
+from gajim.common.modules.base import BaseModule
 
 logger = logging.getLogger('gajim.c.m.jingle')
 

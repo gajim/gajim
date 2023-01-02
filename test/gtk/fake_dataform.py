@@ -1,10 +1,10 @@
 from gi.repository import Gtk
 
 from gajim import gui
+
 gui.init('gtk')
 
 from gajim.common.const import CSSPriority
-
 from gajim.gui.dataform import FakeDataFormWidget
 
 from . import util

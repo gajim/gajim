@@ -17,12 +17,12 @@
 from __future__ import annotations
 
 import nbxmpp
-from nbxmpp.structs import StanzaHandler
-from nbxmpp.namespaces import Namespace
 from nbxmpp.modules.receipts import build_receipt
+from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
 from nbxmpp.structs import MessageProperties
+from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
 from gajim.common import types

@@ -20,45 +20,42 @@ from typing import Optional
 import logging
 
 import nbxmpp
-from nbxmpp.client import Client as NBXMPPClient
-from nbxmpp.protocol import JID
-from nbxmpp.const import StreamError
-from nbxmpp.const import ConnectionType
-
-from gi.repository import GLib
 from gi.repository import Gio
+from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
+from nbxmpp.client import Client as NBXMPPClient
+from nbxmpp.const import ConnectionType
+from nbxmpp.const import StreamError
+from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common import helpers
 from gajim.common import modules
 from gajim.common import passwords
+from gajim.common.const import ClientState
+from gajim.common.const import SimpleClientState
 from gajim.common.events import AccountConnected
-from gajim.common.events import MessageSent
 from gajim.common.events import AccountDisconnected
+from gajim.common.events import MessageSent
+from gajim.common.events import Notification
 from gajim.common.events import PasswordRequired
 from gajim.common.events import PlainConnection
 from gajim.common.events import SignedIn
-from gajim.common.events import Notification
 from gajim.common.events import StanzaReceived
 from gajim.common.events import StanzaSent
-from gajim.common.const import ClientState
-from gajim.common.const import SimpleClientState
-from gajim.common.helpers import get_custom_host
 from gajim.common.helpers import get_account_proxy
-from gajim.common.helpers import warn_about_plain_connection
-from gajim.common.helpers import get_resource
+from gajim.common.helpers import get_custom_host
 from gajim.common.helpers import get_idle_status_message
+from gajim.common.helpers import get_resource
 from gajim.common.helpers import Observable
-from gajim.common.idle import Monitor
-from gajim.common.idle import IdleMonitorManager
+from gajim.common.helpers import warn_about_plain_connection
 from gajim.common.i18n import _
+from gajim.common.idle import IdleMonitorManager
+from gajim.common.idle import Monitor
 from gajim.common.structs import OutgoingMessage
 from gajim.common.util.http import create_http_session
-
 from gajim.gui.util import open_window
-
 
 log = logging.getLogger('gajim.client')
 

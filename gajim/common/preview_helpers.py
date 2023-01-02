@@ -17,28 +17,26 @@ from typing import NamedTuple
 from typing import Optional
 from typing import Union
 
-import math
-import logging
 import binascii
 import hashlib
+import logging
+import math
 import mimetypes
 from io import BytesIO
 from pathlib import Path
-from urllib.parse import urlparse
-from urllib.parse import unquote
 from urllib.parse import ParseResult
-
-from gi.repository import GdkPixbuf
-from gi.repository import GLib
-from gi.repository import Gio
-
-from PIL import Image
-from PIL import ImageFile
+from urllib.parse import unquote
+from urllib.parse import urlparse
 
 from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.ciphers import Cipher
 from cryptography.hazmat.primitives.ciphers import algorithms
+from cryptography.hazmat.primitives.ciphers import Cipher
 from cryptography.hazmat.primitives.ciphers.modes import GCM
+from gi.repository import GdkPixbuf
+from gi.repository import Gio
+from gi.repository import GLib
+from PIL import Image
+from PIL import ImageFile
 
 from gajim.common.helpers import sanitize_filename
 from gajim.common.i18n import _

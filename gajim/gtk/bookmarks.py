@@ -14,14 +14,13 @@
 
 import logging
 
-from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common.i18n import _
 
 from .builder import get_builder
-
 
 log = logging.getLogger('gajim.gui.bookmarks')
 

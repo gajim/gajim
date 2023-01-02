@@ -15,20 +15,22 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from types import FrameType
 from typing import Optional
 
 import os
-import sys
+import platform
 import signal
 import sqlite3
-import platform
-from ctypes import CDLL, byref, create_string_buffer
+import sys
+from ctypes import byref
+from ctypes import CDLL
+from ctypes import create_string_buffer
 from ctypes.util import find_library
+from types import FrameType
+
 from packaging.version import Version as V
 
 import gajim.gui
-
 
 _MIN_NBXMPP_VER = '3.2.5'
 _MIN_GTK_VER = '3.24.30'

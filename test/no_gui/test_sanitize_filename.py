@@ -2,6 +2,7 @@
 import sys
 import unittest
 from unittest.mock import patch
+
 from gajim.common.helpers import sanitize_filename
 
 

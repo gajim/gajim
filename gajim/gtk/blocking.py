@@ -16,16 +16,15 @@ from typing import cast
 
 import logging
 
-from gi.repository import Gtk
 from gi.repository import Gdk
-
+from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
 from nbxmpp.protocol import JID
 from nbxmpp.task import Task
 
 from gajim.common import app
-from gajim.common.i18n import _
 from gajim.common.helpers import to_user_string
+from gajim.common.i18n import _
 
 from .builder import get_builder
 from .dialogs import ErrorDialog

@@ -22,11 +22,10 @@ from typing import Union
 import logging
 
 from gi.repository import Gtk
-
 from nbxmpp import JID
 from nbxmpp import Namespace
-from nbxmpp.errors import is_error
 from nbxmpp.errors import BaseError
+from nbxmpp.errors import is_error
 from nbxmpp.errors import StanzaError
 from nbxmpp.structs import DiscoInfo
 
@@ -38,10 +37,10 @@ from gajim.common.i18n import _
 from gajim.common.modules.util import as_task
 
 from .assistant import Assistant
-from .assistant import Page
 from .assistant import ErrorPage
-from .groupchat_info import GroupChatInfoScrolled
+from .assistant import Page
 from .builder import get_builder
+from .groupchat_info import GroupChatInfoScrolled
 from .util import open_window
 
 log = logging.getLogger('gajim.gui.add_contact')

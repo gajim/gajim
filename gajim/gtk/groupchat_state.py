@@ -20,7 +20,6 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.const import SimpleClientState
 from gajim.common.modules.contacts import GroupchatContact
-
 from gajim.gui.builder import get_builder
 
 

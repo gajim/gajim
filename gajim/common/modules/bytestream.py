@@ -29,17 +29,16 @@ from __future__ import annotations
 from typing import Any
 from typing import Optional
 
-import socket
 import logging
+import socket
 
 import nbxmpp
+from gi.repository import GLib
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import Iq
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import IqProperties
 from nbxmpp.structs import StanzaHandler
-
-from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common import helpers
@@ -47,8 +46,8 @@ from gajim.common import types
 from gajim.common.events import FileRequestError
 from gajim.common.file_props import FileProp
 from gajim.common.file_props import FilesProp
-from gajim.common.socks5 import Socks5SenderClient
 from gajim.common.modules.base import BaseModule
+from gajim.common.socks5 import Socks5SenderClient
 
 log = logging.getLogger('gajim.c.m.bytestream')
 

@@ -9,7 +9,6 @@ from io import TextIOWrapper
 from pathlib import Path
 from xml.etree import ElementTree
 
-
 logging.basicConfig(level='INFO', format='%(levelname)s: %(message)s')
 log = logging.getLogger()
 

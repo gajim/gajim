@@ -21,23 +21,24 @@ from typing import TypeVar
 
 import cairo
 
-
 if TYPE_CHECKING:
     from .control import ChatControl  # noqa: F401
     from .conversation.message_widget import MessageWidget  # noqa: F401
-    from .conversation.view import ConversationView  # noqa: F401
     from .conversation.rows.call import CallRow  # noqa: F401
-    from .conversation.rows.command_output import CommandOutputRow  # noqa: F401
+    from .conversation.rows.command_output import \
+        CommandOutputRow  # noqa: F401
     from .conversation.rows.date import DateRow  # noqa: F401
-    from .conversation.rows.file_transfer_jingle import FileTransferJingleRow  # noqa: E501, F401
     from .conversation.rows.file_transfer import FileTransferRow  # noqa: F401
+    from .conversation.rows.file_transfer_jingle import \
+        FileTransferJingleRow  # noqa: E501, F401
     from .conversation.rows.info import InfoMessage  # noqa: F401
     from .conversation.rows.message import MessageRow  # noqa: F401
     from .conversation.rows.muc_join_left import MUCJoinLeft  # noqa: F401
     from .conversation.rows.muc_subject import MUCSubject  # noqa: F401
-    from .conversation.rows.user_status import UserStatus  # noqa: F401
     from .conversation.rows.read_marker import ReadMarkerRow  # noqa: F401
     from .conversation.rows.scroll_hint import ScrollHintRow  # noqa: F401
+    from .conversation.rows.user_status import UserStatus  # noqa: F401
+    from .conversation.view import ConversationView  # noqa: F401
 
 
 SomeSurface = TypeVar('SomeSurface', bound=cairo.Surface)

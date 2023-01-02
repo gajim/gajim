@@ -22,10 +22,9 @@ from typing import overload
 import logging
 
 from gi.repository import Gtk
-
-from nbxmpp.errors import StanzaError
 from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.errors import RegisterStanzaError
+from nbxmpp.errors import StanzaError
 from nbxmpp.protocol import JID
 from nbxmpp.task import Task
 

@@ -20,8 +20,8 @@ from typing import Generator
 from typing import Optional
 
 from nbxmpp.errors import is_error
-from nbxmpp.namespaces import Namespace
 from nbxmpp.modules.security_labels import Catalog
+from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import DiscoInfo
 
 from gajim.common import app

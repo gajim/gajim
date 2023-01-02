@@ -16,10 +16,10 @@
 
 from __future__ import annotations
 
+from typing import cast
 from typing import Iterable
 from typing import Iterator
 from typing import Optional
-from typing import cast
 
 import nbxmpp
 from nbxmpp.namespaces import Namespace
@@ -33,8 +33,8 @@ from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common import types
-from gajim.common.events import RosterReceived
 from gajim.common.events import RosterPush
+from gajim.common.events import RosterReceived
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import BareContact
 

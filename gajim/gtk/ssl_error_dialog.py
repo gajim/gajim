@@ -17,7 +17,6 @@ from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common.client import Client
-
 from gajim.common.const import GIO_TLS_ERRORS
 from gajim.common.i18n import _
 

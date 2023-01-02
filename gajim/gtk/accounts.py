@@ -22,28 +22,28 @@ import locale
 import logging
 from collections import defaultdict
 
-from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import Pango
 from gi.repository import GObject
+from gi.repository import Gtk
+from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common import passwords
+from gajim.common import types
 from gajim.common.const import ClientState
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
 from gajim.common.settings import AllSettingsT
-from gajim.common import types
 
-from .dialogs import DialogButton
-from .dialogs import ConfirmationDialog
 from .const import Setting
 from .const import SettingKind
 from .const import SettingType
+from .dialogs import ConfirmationDialog
+from .dialogs import DialogButton
 from .menus import build_accounts_menu
-from .settings import SettingsDialog
-from .settings import SettingsBox
 from .settings import PopoverSetting
+from .settings import SettingsBox
+from .settings import SettingsDialog
 from .util import get_app_window
 from .util import open_window
 

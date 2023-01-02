@@ -23,16 +23,15 @@ from typing import Callable
 from typing import Iterator
 from typing import Optional
 
-import os
 import logging
+import os
 import socket
 from collections import deque
 from datetime import datetime
 
 import nbxmpp
-from nbxmpp.namespaces import Namespace
-
 from gi.repository import GLib
+from nbxmpp.namespaces import Namespace
 
 try:
     from gi.repository import Farstream
@@ -42,13 +41,13 @@ except Exception:
 
 from gajim.common import app
 from gajim.common.i18n import _
-from gajim.common.jingle_transport import JingleTransportICEUDP
 from gajim.common.jingle_content import contents
 from gajim.common.jingle_content import JingleContent
 from gajim.common.jingle_content import JingleContentSetupException
 from gajim.common.jingle_session import FailedApplication
 from gajim.common.jingle_session import JingleSession
 from gajim.common.jingle_transport import JingleTransport
+from gajim.common.jingle_transport import JingleTransportICEUDP
 
 log = logging.getLogger('gajim.c.jingle_rtp')
 

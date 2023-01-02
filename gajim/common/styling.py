@@ -15,12 +15,12 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Union
 from typing import Match
 from typing import Optional
+from typing import Union
 
-import string
 import re
+import string
 from dataclasses import dataclass
 from dataclasses import field
 

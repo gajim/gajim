@@ -23,12 +23,13 @@ from __future__ import annotations
 from typing import Iterator
 from typing import Optional
 
+import gettext
+import locale
 import os
 import sys
-import locale
-import gettext
 import unicodedata
 from pathlib import Path
+
 from gi.repository import GLib
 
 DOMAIN = 'gajim'
@@ -80,6 +81,7 @@ def get_win32_default_lang() -> str:
 
 def get_darwin_default_lang() -> str:
     from AppKit import NSLocale
+
     # FIXME: This returns a two letter language code (en, de, fr)
     # We need a way to get en_US, de_DE etc.
     return NSLocale.currentLocale().languageCode()

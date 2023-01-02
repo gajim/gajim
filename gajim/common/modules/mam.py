@@ -25,9 +25,10 @@ from datetime import timedelta
 from datetime import timezone
 
 import nbxmpp
-from nbxmpp.errors import StanzaError
-from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.errors import is_error
+from nbxmpp.errors import MalformedStanzaError
+from nbxmpp.errors import StanzaError
+from nbxmpp.modules.util import raise_if_error
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
@@ -37,24 +38,24 @@ from nbxmpp.structs import StanzaHandler
 from nbxmpp.structs import StanzaIDData
 from nbxmpp.task import Task
 from nbxmpp.util import generate_id
-from nbxmpp.modules.util import raise_if_error
 
 from gajim.common import app
 from gajim.common import types
+from gajim.common.const import ArchiveState
+from gajim.common.const import ClientState
+from gajim.common.const import KindConstant
+from gajim.common.const import SyncThreshold
 from gajim.common.events import ArchivingIntervalFinished
 from gajim.common.events import FeatureDiscovered
 from gajim.common.events import MamMessageReceived
 from gajim.common.events import RawMamMessageReceived
-from gajim.common.const import ArchiveState, ClientState
-from gajim.common.const import KindConstant
-from gajim.common.const import SyncThreshold
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_retraction_text
+from gajim.common.modules.base import BaseModule
 from gajim.common.modules.misc import parse_oob
+from gajim.common.modules.util import as_task
 from gajim.common.modules.util import check_if_message_correction
 from gajim.common.modules.util import get_eme_message
-from gajim.common.modules.util import as_task
-from gajim.common.modules.base import BaseModule
 
 
 class MAM(BaseModule):

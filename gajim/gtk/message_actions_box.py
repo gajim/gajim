@@ -17,26 +17,25 @@ from __future__ import annotations
 from typing import Any
 from typing import Optional
 
-from pathlib import Path
-import tempfile
 import logging
+import tempfile
 import uuid
+from pathlib import Path
 
-from gi.repository import GLib
 from gi.repository import Gdk
 from gi.repository import Gio
-from gi.repository import Gtk
+from gi.repository import GLib
 from gi.repository import GObject
-
+from gi.repository import Gtk
 from nbxmpp.const import Chatstate
 from nbxmpp.modules.security_labels import SecurityLabel
 
 from gajim.common import app
-from gajim.common.commands import CommandFailed
-from gajim.common.i18n import _
 from gajim.common.client import Client
-from gajim.common.const import SimpleClientState
+from gajim.common.commands import CommandFailed
 from gajim.common.const import Direction
+from gajim.common.const import SimpleClientState
+from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.types import ChatContactT

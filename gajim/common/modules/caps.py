@@ -31,8 +31,8 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import Presence
 from nbxmpp.structs import DiscoIdentity
-from nbxmpp.structs import StanzaHandler
 from nbxmpp.structs import PresenceProperties
+from nbxmpp.structs import StanzaHandler
 from nbxmpp.task import Task as nbxmpp_Task
 from nbxmpp.util import compute_caps_hash
 
@@ -41,8 +41,8 @@ from gajim.common import types
 from gajim.common.const import COMMON_FEATURES
 from gajim.common.const import Entity
 from gajim.common.helpers import get_optional_features
-from gajim.common.task_manager import Task
 from gajim.common.modules.base import BaseModule
+from gajim.common.task_manager import Task
 
 
 class Caps(BaseModule):

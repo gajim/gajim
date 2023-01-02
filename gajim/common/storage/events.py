@@ -18,19 +18,17 @@ from typing import Any
 from typing import NamedTuple
 
 import dataclasses
-
 import json
-import sqlite3
 import logging
+import sqlite3
 from collections import namedtuple
 
 from nbxmpp.protocol import JID
 
 from gajim.common import events
-from gajim.common.storage.base import SqliteStorage
 from gajim.common.storage.base import Encoder
+from gajim.common.storage.base import SqliteStorage
 from gajim.common.types import ChatContactT
-
 
 EVENTS_SQL_STATEMENT = '''
     CREATE TABLE events (

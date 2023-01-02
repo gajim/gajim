@@ -8,7 +8,6 @@ import re
 import subprocess
 from pathlib import Path
 
-
 TRANS_DIR = Path('po')
 TRANS_TEMPLATE = TRANS_DIR / 'gajim.pot'
 REPO_DIR = Path(__file__).resolve().parent.parent

@@ -20,8 +20,8 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.i18n import _
 
-from .accounts import AccountsWindow
 from .account_wizard import AccountWizard
+from .accounts import AccountsWindow
 from .builder import get_builder
 from .preferences import Preferences
 from .util import get_app_window

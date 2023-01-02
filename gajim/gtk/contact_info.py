@@ -14,46 +14,45 @@
 
 from __future__ import annotations
 
+from typing import cast
 from typing import Optional
 from typing import Union
-from typing import cast
 
 import logging
 from enum import IntEnum
-
 
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GObject
 from gi.repository import Gtk
-
-from nbxmpp.task import Task
 from nbxmpp.errors import StanzaError
-from nbxmpp.structs import AnnotationNote, SoftwareVersionResult
 from nbxmpp.modules.vcard4 import VCard
+from nbxmpp.structs import AnnotationNote
+from nbxmpp.structs import SoftwareVersionResult
+from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.events import SubscribedPresenceReceived
 from gajim.common.events import UnsubscribedPresenceReceived
+from gajim.common.ged import EventHelper
 from gajim.common.helpers import get_uf_affiliation
 from gajim.common.helpers import get_uf_role
 from gajim.common.helpers import get_uf_show
 from gajim.common.i18n import _
-from gajim.common.ged import EventHelper
 from gajim.common.modules.contacts import BareContact
-from gajim.common.modules.contacts import ResourceContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.modules.contacts import ResourceContact
 
+from .builder import get_builder
 from .contact_settings import ContactSettings
 from .dialogs import ConfirmationDialog
 from .dialogs import DialogButton
 from .sidebar_switcher import SideBarSwitcher
-from .builder import get_builder
+from .structs import RemoveHistoryActionParams
 from .util import connect_destroy
 from .vcard_grid import VCardGrid
-from .structs import RemoveHistoryActionParams
 
 log = logging.getLogger('gajim.gui.contact_info')
 

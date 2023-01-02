@@ -19,23 +19,21 @@ import time
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
-
 from nbxmpp import JID
 from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import MucSubject
 
 from gajim.common import app
+from gajim.common.const import AvatarSize
+from gajim.common.const import RFC5646_LANGUAGE_TAGS
+from gajim.common.helpers import get_groupchat_name
+from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
-from gajim.common.helpers import open_uri
-from gajim.common.helpers import get_groupchat_name
-from gajim.common.const import RFC5646_LANGUAGE_TAGS
-from gajim.common.const import AvatarSize
 
 from .builder import get_builder
 from .util import make_href_markup
-
 
 MUC_FEATURES = {
     'muc_open': (

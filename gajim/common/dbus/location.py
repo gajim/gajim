@@ -26,7 +26,6 @@ from datetime import timezone
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
-
 from nbxmpp.structs import LocationData
 
 from gajim.common import app
@@ -35,7 +34,8 @@ from gajim.common.events import LocationChanged
 if app.is_installed('GEOCLUE'):
     import gi
     gi.require_version('Geoclue', '2.0')
-    from gi.repository import Geoclue  # pylint: disable=ungrouped-imports,no-name-in-module  # noqa: E501
+    from gi.repository import \
+        Geoclue  # pylint: disable=ungrouped-imports,no-name-in-module  # noqa: E501
 
 log = logging.getLogger('gajim.c.dbus.location')
 

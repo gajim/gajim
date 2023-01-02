@@ -27,13 +27,13 @@ from nbxmpp.structs import MessageProperties
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import types
-from gajim.common.events import SignedIn
+from gajim.common.dbus.location import LocationListener
 from gajim.common.events import LocationChanged
+from gajim.common.events import SignedIn
+from gajim.common.helpers import event_filter
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import store_publish
-from gajim.common.dbus.location import LocationListener
-from gajim.common.helpers import event_filter
 
 
 class UserLocation(BaseModule):

@@ -19,13 +19,13 @@ from typing import cast
 from typing import NamedTuple
 from typing import Optional
 
-from gi.repository import Gtk
 from gi.repository import GdkPixbuf
+from gi.repository import Gtk
 from gi.repository import Pango
 
 from gajim.common import app
-from gajim.common.i18n import _
 from gajim.common.const import ButtonAction
+from gajim.common.i18n import _
 
 from .builder import get_builder
 from .util import get_thumbnail_size

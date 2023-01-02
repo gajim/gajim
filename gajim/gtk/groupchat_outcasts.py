@@ -14,9 +14,9 @@
 
 from __future__ import annotations
 
+from typing import cast
 from typing import NamedTuple
 from typing import Optional
-from typing import cast
 
 import logging
 from enum import IntEnum
@@ -29,11 +29,9 @@ from nbxmpp.task import Task
 from gajim.common.client import Client
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
-
 from gajim.gui.apply_button_box import ApplyButtonBox
 from gajim.gui.builder import get_builder
 from gajim.gui.dialogs import ErrorDialog
-
 
 log = logging.getLogger('gajim.gui.groupchat_outcasts')
 

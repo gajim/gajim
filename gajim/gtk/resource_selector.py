@@ -13,15 +13,15 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import annotations
-from typing import Optional
+
 from typing import cast
+from typing import Optional
 
 import locale
 import logging
 
 from gi.repository import GObject
 from gi.repository import Gtk
-
 from nbxmpp import JID
 from nbxmpp.structs import DiscoInfo
 

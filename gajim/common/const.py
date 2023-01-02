@@ -15,24 +15,22 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import NamedTuple
 from typing import Optional
 from typing import Union
-from typing import NamedTuple
 
-from enum import IntEnum
 from enum import Enum
+from enum import IntEnum
 from enum import unique
 from functools import total_ordering
 
 from gi.repository import Gio
-
-from nbxmpp.namespaces import Namespace
 from nbxmpp.const import PresenceShow
+from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
-
 
 STOP_EVENT = True
 PROPAGATE_EVENT = False

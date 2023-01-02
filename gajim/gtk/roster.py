@@ -20,15 +20,13 @@ from typing import Optional
 
 import locale
 import logging
-
-from enum import IntEnum
 from collections import defaultdict
+from enum import IntEnum
 
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
-
 from nbxmpp import JID
 from nbxmpp.const import PresenceShow
 from nbxmpp.namespaces import Namespace
@@ -37,21 +35,21 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common import types
 from gajim.common.const import AvatarSize
-from gajim.common.const import StyleAttr
 from gajim.common.const import PresenceShowExt
+from gajim.common.const import StyleAttr
 from gajim.common.events import ApplicationEvent
 from gajim.common.events import RosterPush
 from gajim.common.events import RosterReceived
 from gajim.common.helpers import event_filter
 from gajim.common.i18n import _
 
-from .menus import get_roster_menu
+from .builder import get_builder
 from .dialogs import ConfirmationDialog
 from .dialogs import DialogButton
+from .menus import get_roster_menu
 from .tooltips import RosterTooltip
 from .util import EventHelper
 from .util import GajimPopover
-from .builder import get_builder
 from .util import open_window
 
 log = logging.getLogger('gajim.gui.roster')

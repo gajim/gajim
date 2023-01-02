@@ -2,14 +2,14 @@
 
 from typing import Any
 
-import logging
 import json
+import logging
 import os
-import requests
 import sys
 import time
 from pathlib import Path
 
+import requests
 
 ACCOUNT = 'lovetox'
 PROJECT_SLUG = 'gajim'

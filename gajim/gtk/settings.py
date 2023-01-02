@@ -18,17 +18,16 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Callable
+from typing import cast
 from typing import Optional
 from typing import Union
-from typing import cast
 
 import logging
 
-from gi.repository import Gtk
-from gi.repository import GLib
 from gi.repository import Gdk
+from gi.repository import GLib
+from gi.repository import Gtk
 from gi.repository import Pango
-
 from nbxmpp.protocol import JID
 
 from gajim.common import app
@@ -37,12 +36,12 @@ from gajim.common.i18n import _
 from gajim.common.i18n import p_
 from gajim.common.setting_values import AllSettingsT
 
-from .util import get_image_button
-from .util import MaxWidthComboBoxText
-from .util import open_window
 from .const import Setting
 from .const import SettingKind
 from .const import SettingType
+from .util import get_image_button
+from .util import MaxWidthComboBoxText
+from .util import open_window
 
 log = logging.getLogger('gajim.gui.settings')
 

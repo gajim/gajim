@@ -35,12 +35,12 @@ from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
 from gajim.common import types
-from gajim.common.task_manager import Task
 from gajim.common.modules.base import BaseModule
-from gajim.common.modules.util import as_task
+from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
-from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.util import as_task
+from gajim.common.task_manager import Task
 
 
 class VCardAvatars(BaseModule):

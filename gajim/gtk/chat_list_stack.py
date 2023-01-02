@@ -14,14 +14,13 @@
 
 from __future__ import annotations
 
-from typing import Optional
 from typing import cast
+from typing import Optional
 
-from gi.repository import Gtk
-from gi.repository import GObject
 from gi.repository import Gio
 from gi.repository import GLib
-
+from gi.repository import GObject
+from gi.repository import Gtk
 from nbxmpp import JID
 
 from gajim.common import app
@@ -34,8 +33,8 @@ from . import structs
 from .chat_filter import ChatFilter
 from .chat_list import ChatList
 from .chat_list import ChatListRow
-from .dialogs import DialogButton
 from .dialogs import ConfirmationCheckDialog
+from .dialogs import DialogButton
 
 
 class ChatListStack(Gtk.Stack, EventHelper):

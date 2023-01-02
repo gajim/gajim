@@ -2,21 +2,21 @@ import unittest
 from unittest.mock import MagicMock
 
 from gajim import gui
+
 gui.init('gtk')
 
 from gajim.common import app  # Avoids circular imports from common.helpers
 from gajim.common import styling
+from gajim.common.styling import EmphasisSpan
+from gajim.common.styling import Hyperlink
 from gajim.common.styling import PlainBlock
 from gajim.common.styling import PreBlock
-from gajim.common.styling import QuoteBlock
 from gajim.common.styling import PreTextSpan
-from gajim.common.styling import StrongSpan
-from gajim.common.styling import EmphasisSpan
-from gajim.common.styling import StrikeSpan
-from gajim.common.styling import Hyperlink
 from gajim.common.styling import process_uris
+from gajim.common.styling import QuoteBlock
+from gajim.common.styling import StrikeSpan
+from gajim.common.styling import StrongSpan
 from gajim.common.util.text import escape_iri_query
-
 
 app.settings = MagicMock()
 # additional_uri_schemes

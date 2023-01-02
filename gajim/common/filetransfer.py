@@ -14,8 +14,8 @@
 
 from typing import Optional
 
-from gajim.common.helpers import Observable
 from gajim.common.const import FTState
+from gajim.common.helpers import Observable
 
 
 class FileTransfer(Observable):

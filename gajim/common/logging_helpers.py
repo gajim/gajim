@@ -14,12 +14,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Optional
+
+import logging
 import os
 import sys
 import time
-import logging
 from datetime import datetime
-from typing import Optional
 
 from gajim.common import app
 from gajim.common import configpaths

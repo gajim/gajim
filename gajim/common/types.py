@@ -17,14 +17,13 @@
 from typing import Any
 from typing import Callable
 from typing import Optional
-from typing import Union
 from typing import TYPE_CHECKING
+from typing import Union
 
 import weakref
 
-from gi.repository import GdkPixbuf
-
 import nbxmpp
+from gi.repository import GdkPixbuf
 from nbxmpp.const import PresenceShow
 from nbxmpp.protocol import JID
 from nbxmpp.structs import BookmarkData
@@ -32,18 +31,17 @@ from nbxmpp.structs import BookmarkData
 from gajim.common.const import PresenceShowExt
 
 if TYPE_CHECKING:
-    from gajim.common.client import Client
     from nbxmpp.client import Client as xmppClient  # noqa: F401
-    from gajim.common.modules.contacts import CommonContact  # noqa: F401
+
+    from gajim.common.client import Client
     from gajim.common.modules.contacts import BareContact
-    from gajim.common.modules.contacts import ResourceContact
+    from gajim.common.modules.contacts import CommonContact  # noqa: F401
     from gajim.common.modules.contacts import GroupchatContact
     from gajim.common.modules.contacts import GroupchatParticipant
-
-    from gajim.gui_interface import Interface
+    from gajim.common.modules.contacts import ResourceContact
     from gajim.common.settings import Settings
     from gajim.gtk.css_config import CSSConfig
-
+    from gajim.gui_interface import Interface
     from gajim.plugins.pluginmanager import PluginManager
     from gajim.plugins.repository import PluginRepository
 

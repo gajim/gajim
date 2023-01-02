@@ -13,27 +13,27 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import annotations
+
 from typing import Any
+from typing import cast
 from typing import Optional
 from typing import Union
-from typing import cast
 
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
-
 from nbxmpp import JID
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
-from gajim.common.i18n import _
+from gajim.common.events import MucDecline
+from gajim.common.events import MucInvitation
 from gajim.common.events import Notification
 from gajim.common.events import SubscribePresenceReceived
 from gajim.common.events import UnsubscribedPresenceReceived
-from gajim.common.events import MucInvitation
-from gajim.common.events import MucDecline
 from gajim.common.helpers import get_groupchat_name
+from gajim.common.i18n import _
 
 from .menus import get_subscription_menu
 from .util import open_window

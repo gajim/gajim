@@ -13,12 +13,12 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import annotations
+
 from typing import cast
 from typing import Optional
 
 from gi.repository import Gtk
 from gi.repository import Pango
-
 from nbxmpp.modules.security_labels import SecurityLabel
 from nbxmpp.protocol import JID
 
@@ -27,8 +27,8 @@ from gajim.common import ged
 from gajim.common.client import Client
 from gajim.common.const import SimpleClientState
 from gajim.common.events import SecCatalogReceived
-from gajim.common.types import ChatContactT
 from gajim.common.i18n import _
+from gajim.common.types import ChatContactT
 
 
 class SecurityLabelSelector(Gtk.ComboBox):

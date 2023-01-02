@@ -30,9 +30,9 @@ from nbxmpp.task import Task
 from gajim.common import app
 from gajim.common import types
 from gajim.common.file_props import FileProp
+from gajim.common.file_props import FilesProp
 from gajim.common.helpers import to_user_string
 from gajim.common.modules.base import BaseModule
-from gajim.common.file_props import FilesProp
 
 
 class IBB(BaseModule):

@@ -21,10 +21,11 @@ from typing import Any
 from typing import Optional
 
 import logging
-from collections import defaultdict
 import time
+from collections import defaultdict
 
 import nbxmpp
+from gi.repository import GLib
 from nbxmpp.const import InviteType
 from nbxmpp.const import StatusCode
 from nbxmpp.errors import StanzaError
@@ -41,8 +42,6 @@ from nbxmpp.structs import StanzaHandler
 from nbxmpp.structs import VoiceRequest
 from nbxmpp.task import Task
 
-from gi.repository import GLib
-
 from gajim.common import app
 from gajim.common import events
 from gajim.common import helpers
@@ -55,12 +54,12 @@ from gajim.common.events import MucDecline
 from gajim.common.events import MucInvitation
 from gajim.common.helpers import get_default_muc_config
 from gajim.common.helpers import get_group_chat_nick
-from gajim.common.structs import MUCData
-from gajim.common.structs import MUCPresenceData
-from gajim.common.modules.bits_of_binary import store_bob_data
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.bits_of_binary import store_bob_data
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.structs import MUCData
+from gajim.common.structs import MUCPresenceData
 
 log = logging.getLogger('gajim.c.m.muc')
 

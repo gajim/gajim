@@ -18,7 +18,6 @@ from setuptools import setup
 from setuptools.command.build_py import build_py as _build
 from setuptools.command.install import install as _install
 
-
 DataFilesT = list[tuple[str, list[str]]]
 
 
@@ -100,6 +99,7 @@ def build_man() -> None:
                 continue
 
         import gzip
+
         # Binary io, so open is OK
         with open(filename, 'rb') as f_in,\
                 gzip.open(man_file_gz, 'wb') as f_out:

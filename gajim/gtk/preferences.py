@@ -15,41 +15,41 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 from typing import cast
+from typing import Optional
 
 import logging
 import sys
 
-from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.const import THRESHOLD_OPTIONS
-from gajim.common.i18n import _
+from gajim.common.events import StyleChanged
+from gajim.common.events import ThemeUpdate
 from gajim.common.helpers import open_directory
+from gajim.common.i18n import _
 from gajim.common.multimedia_helpers import AudioInputManager
 from gajim.common.multimedia_helpers import AudioOutputManager
 from gajim.common.multimedia_helpers import VideoInputManager
-from gajim.common.events import StyleChanged
-from gajim.common.events import ThemeUpdate
 from gajim.common.setting_values import BoolSettings
 
+from .builder import get_builder
 from .const import Setting
 from .const import SettingKind
 from .const import SettingType
-from .dialogs import DialogButton
 from .dialogs import ConfirmationDialog
+from .dialogs import DialogButton
+from .preview import PREVIEW_ACTIONS
 from .settings import PopoverSetting
 from .settings import SettingsBox
 from .settings import SettingsDialog
 from .sidebar_switcher import SideBarSwitcher
-from .video_preview import VideoPreview
-from .preview import PREVIEW_ACTIONS
-from .util import open_window
 from .util import get_app_window
-from .builder import get_builder
+from .util import open_window
+from .video_preview import VideoPreview
 
 # if app.is_installed('GSPELL'):
 #     from gi.repository import Gspell  # pylint: disable=ungrouped-imports

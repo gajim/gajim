@@ -1,10 +1,9 @@
 from typing import Any
 
-import unittest
 import re
+import unittest
 
 from gajim.common import regex
-
 
 TEST_URIS = [
     'scheme:',

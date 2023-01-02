@@ -3,7 +3,9 @@
 import os
 import sys
 from argparse import ArgumentParser
-from subprocess import run, check_output, CalledProcessError
+from subprocess import CalledProcessError
+from subprocess import check_output
+from subprocess import run
 
 if __name__ == '__main__':
     if not os.path.isdir('mac'):

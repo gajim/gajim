@@ -21,29 +21,28 @@ from __future__ import annotations
 
 from typing import Any
 
-import sys
 import json
-import traceback
-from types import TracebackType
-import threading
-import webbrowser
 import pprint
+import sys
+import threading
+import traceback
+import webbrowser
 from io import StringIO
+from types import TracebackType
 from urllib.parse import urlencode
 
+import nbxmpp
 from gi.repository import Gdk
 from gi.repository import Gtk
-
-import nbxmpp
 from nbxmpp.http import HTTPRequest
 
 import gajim
 from gajim.common import app
+from gajim.common.helpers import determine_proxy
 from gajim.common.helpers import get_glib_version
 from gajim.common.helpers import get_gobject_version
 from gajim.common.helpers import get_os_name
 from gajim.common.helpers import get_os_version
-from gajim.common.helpers import determine_proxy
 from gajim.common.i18n import _
 from gajim.common.util.http import create_http_request
 

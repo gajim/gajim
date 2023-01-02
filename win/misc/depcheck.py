@@ -9,13 +9,15 @@
 # Deletes unneeded DLLs and checks DLL dependencies.
 
 
-import subprocess
-import os
-import sys
-import logging
 from typing import Optional
 
+import logging
+import os
+import subprocess
+import sys
+
 import gi
+
 gi.require_version('GIRepository', '2.0')
 from gi.repository import GIRepository  # noqa: E402
 

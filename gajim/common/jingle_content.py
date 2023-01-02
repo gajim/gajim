@@ -18,7 +18,8 @@
 
 from __future__ import annotations
 
-from typing import Any, Callable
+from typing import Any
+from typing import Callable
 from typing import Optional
 from typing import TYPE_CHECKING
 
@@ -29,8 +30,8 @@ from gajim.common import app
 from gajim.common.file_props import FileProp
 
 if TYPE_CHECKING:
-    from gajim.common.jingle_transport import JingleTransport
     from gajim.common.jingle_session import JingleSession
+    from gajim.common.jingle_transport import JingleTransport
 
 
 contents: dict[str, Any] = {}

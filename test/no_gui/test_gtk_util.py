@@ -1,6 +1,7 @@
 import unittest
 
 from gajim import gui
+
 gui.init('gtk')
 
 from gajim.gtk.util import get_first_grapheme

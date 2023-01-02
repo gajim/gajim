@@ -25,8 +25,8 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.structs import StanzaHandler
 
-from gajim.common import types
 from gajim.common import app
+from gajim.common import types
 from gajim.common.ged import EventHelper
 from gajim.common.modules.util import LogAdapter
 

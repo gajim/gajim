@@ -4,8 +4,8 @@
 # This is needed for pyright to work correctly with the dynamic gui imports
 
 import logging
-from pathlib import Path
 import sys
+from pathlib import Path
 
 IGNORED_FILES = ['__init__.py']
 IGNORED_DIRS = ['__pycache__']

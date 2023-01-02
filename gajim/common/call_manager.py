@@ -13,12 +13,12 @@ from gajim.common import events
 from gajim.common import ged
 from gajim.common import sound
 from gajim.common import types
-from gajim.common.const import JingleState
 from gajim.common.const import CallType
+from gajim.common.const import JingleState
 from gajim.common.const import KindConstant
 from gajim.common.ged import EventHelper
-from gajim.common.helpers import play_sound
 from gajim.common.helpers import AdditionalDataDict
+from gajim.common.helpers import play_sound
 from gajim.common.i18n import _
 from gajim.common.jingle_rtp import JingleAudio
 from gajim.common.jingle_session import JingleSession

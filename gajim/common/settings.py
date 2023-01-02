@@ -14,24 +14,24 @@
 
 from typing import Any
 from typing import Callable
+from typing import cast
 from typing import Literal
 from typing import NamedTuple
 from typing import Optional
-from typing import Union
 from typing import overload
-from typing import cast
 from typing import TypedDict
+from typing import Union
 
-import sys
+import inspect
 import json
-import uuid
 import logging
 import sqlite3
-import inspect
+import sys
+import uuid
 import weakref
-from pathlib import Path
-from collections import namedtuple
 from collections import defaultdict
+from collections import namedtuple
+from pathlib import Path
 
 from gi.repository import GLib
 from nbxmpp.protocol import JID
@@ -40,41 +40,41 @@ from gajim import IS_PORTABLE
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import optparser
-from gajim.common.storage.base import Encoder
-from gajim.common.storage.base import json_decoder
-from gajim.common.setting_values import WorkspaceSettings
-from gajim.common.setting_values import APP_SETTINGS
+from gajim.common.setting_values import ACCOUNT_SETTINGS
 from gajim.common.setting_values import AllContactSettings
 from gajim.common.setting_values import AllContactSettingsT
-from gajim.common.setting_values import BoolContactSettings
-from gajim.common.setting_values import StringContactSettings
 from gajim.common.setting_values import AllGroupChatSettings
 from gajim.common.setting_values import AllGroupChatSettingsT
-from gajim.common.setting_values import BoolGroupChatSettings
-from gajim.common.setting_values import IntGroupChatSettings
-from gajim.common.setting_values import StringGroupChatSettings
+from gajim.common.setting_values import AllSettingsT
 from gajim.common.setting_values import AllWorkspaceSettings
 from gajim.common.setting_values import AllWorkspaceSettingsT
-from gajim.common.setting_values import OpenChatsSettingT
-from gajim.common.setting_values import StringWorkspaceSettings
-from gajim.common.setting_values import ACCOUNT_SETTINGS
-from gajim.common.setting_values import PROXY_SETTINGS
-from gajim.common.setting_values import PROXY_EXAMPLES
-from gajim.common.setting_values import INITAL_WORKSPACE
-from gajim.common.setting_values import PLUGIN_SETTINGS
-from gajim.common.setting_values import WORKSPACE_SETTINGS
-from gajim.common.setting_values import DEFAULT_SOUNDEVENT_SETTINGS
-from gajim.common.setting_values import STATUS_PRESET_SETTINGS
-from gajim.common.setting_values import STATUS_PRESET_EXAMPLES
-from gajim.common.setting_values import HAS_APP_DEFAULT
-from gajim.common.setting_values import HAS_ACCOUNT_DEFAULT
-from gajim.common.setting_values import AllSettingsT
-from gajim.common.setting_values import IntSettings
-from gajim.common.setting_values import IntAccountSettings
-from gajim.common.setting_values import StringSettings
-from gajim.common.setting_values import StringAccountSettings
-from gajim.common.setting_values import BoolSettings
+from gajim.common.setting_values import APP_SETTINGS
 from gajim.common.setting_values import BoolAccountSettings
+from gajim.common.setting_values import BoolContactSettings
+from gajim.common.setting_values import BoolGroupChatSettings
+from gajim.common.setting_values import BoolSettings
+from gajim.common.setting_values import DEFAULT_SOUNDEVENT_SETTINGS
+from gajim.common.setting_values import HAS_ACCOUNT_DEFAULT
+from gajim.common.setting_values import HAS_APP_DEFAULT
+from gajim.common.setting_values import INITAL_WORKSPACE
+from gajim.common.setting_values import IntAccountSettings
+from gajim.common.setting_values import IntGroupChatSettings
+from gajim.common.setting_values import IntSettings
+from gajim.common.setting_values import OpenChatsSettingT
+from gajim.common.setting_values import PLUGIN_SETTINGS
+from gajim.common.setting_values import PROXY_EXAMPLES
+from gajim.common.setting_values import PROXY_SETTINGS
+from gajim.common.setting_values import STATUS_PRESET_EXAMPLES
+from gajim.common.setting_values import STATUS_PRESET_SETTINGS
+from gajim.common.setting_values import StringAccountSettings
+from gajim.common.setting_values import StringContactSettings
+from gajim.common.setting_values import StringGroupChatSettings
+from gajim.common.setting_values import StringSettings
+from gajim.common.setting_values import StringWorkspaceSettings
+from gajim.common.setting_values import WORKSPACE_SETTINGS
+from gajim.common.setting_values import WorkspaceSettings
+from gajim.common.storage.base import Encoder
+from gajim.common.storage.base import json_decoder
 
 SETTING_TYPE = Union[bool, int, str, object]
 

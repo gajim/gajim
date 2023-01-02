@@ -13,7 +13,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from gi.repository import Gtk
-
 from nbxmpp.protocol import InvalidJid
 from nbxmpp.protocol import validate_resourcepart
 

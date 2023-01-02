@@ -27,7 +27,6 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.events import SearchFormReceivedEvent
 from gajim.common.events import SearchResultReceivedEvent
-
 from gajim.common.modules.base import BaseModule
 
 

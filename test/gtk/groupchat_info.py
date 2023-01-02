@@ -1,15 +1,14 @@
 from unittest.mock import MagicMock
 
-from nbxmpp.protocol import Iq
+from gi.repository import Gtk
 from nbxmpp.modules.discovery import parse_disco_info
+from nbxmpp.protocol import Iq
 from nbxmpp.structs import MucSubject
 
-from gi.repository import Gtk
-
+from gajim import gui
 from gajim.common import app
 from gajim.common.const import CSSPriority
 
-from gajim import gui
 gui.init('gtk')
 
 from gajim.gui.groupchat_info import GroupChatInfoScrolled

@@ -20,14 +20,13 @@ from typing import TYPE_CHECKING
 
 import logging
 import os
-from pathlib import Path
 import shutil
+from pathlib import Path
 
-from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import GLib
 from gi.repository import Gio
-
+from gi.repository import GLib
+from gi.repository import Gtk
 from nbxmpp import JID
 
 from gajim.common import app
@@ -39,11 +38,11 @@ from gajim.common.const import Direction
 from gajim.common.const import Display
 from gajim.common.const import SimpleClientState
 from gajim.common.ged import EventHelper
-from gajim.common.i18n import _
 from gajim.common.helpers import open_file
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import play_sound
 from gajim.common.helpers import show_in_folder
+from gajim.common.i18n import _
 from gajim.common.modules.bytestream import is_transfer_active
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.plugins.manifest import PluginManifest
@@ -51,31 +50,31 @@ from gajim.plugins.repository import PluginRepository
 
 from .account_side_bar import AccountSideBar
 from .app_side_bar import AppSideBar
-from .workspace_side_bar import WorkspaceSideBar
-from .main_stack import MainStack
+from .builder import get_builder
 from .call_window import CallWindow
 from .chat_list import ChatList
 from .chat_list_row import ChatListRow
 from .chat_stack import ChatStack
 from .const import MAIN_WIN_ACTIONS
-from .dialogs import DialogButton
-from .dialogs import ConfirmationDialog
 from .dialogs import ConfirmationCheckDialog
+from .dialogs import ConfirmationDialog
+from .dialogs import DialogButton
 from .dialogs import ErrorDialog
 from .dialogs import InputDialog
-from .builder import get_builder
 from .filechoosers import FileSaveDialog
+from .main_stack import MainStack
+from .structs import AccountJidParam
+from .structs import actionmethod
+from .structs import AddChatActionParams
+from .structs import ChatListEntryParam
+from .structs import RetractMessageParam
 from .util import get_app_window
+from .util import open_window
 from .util import resize_window
 from .util import restore_main_window_position
 from .util import save_main_window_position
-from .util import open_window
 from .util import set_urgency_hint
-from .structs import AccountJidParam
-from .structs import AddChatActionParams
-from .structs import actionmethod
-from .structs import ChatListEntryParam
-from .structs import RetractMessageParam
+from .workspace_side_bar import WorkspaceSideBar
 
 if TYPE_CHECKING:
     from .control import ChatControl
