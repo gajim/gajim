@@ -3,6 +3,8 @@ repos:
     rev: v0.0.206
     hooks:
       - id: ruff
+        exclude: ".githooks/"
+        args: ["--force-exclude"]
 
   - repo: https://github.com/codespell-project/codespell
     rev: v2.2.2
@@ -15,3 +17,15 @@ repos:
     rev: v1.1.286
     hooks:
     - id: pyright
+      pass_filenames: false
+      additional_dependencies:
+        - nbxmpp @ git+https://dev.gajim.org/gajim/python-nbxmpp.git
+        - PyGObject-stubs @ git+https://github.com/pygobject/pygobject-stubs.git
+        - python-gitlab
+        - sentry-sdk
+      stages: [manual]
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.11.4
+    hooks:
+      - id: isort
