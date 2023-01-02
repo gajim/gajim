@@ -289,7 +289,7 @@ class JingleFileTransfer(JingleContent):
             return
         try:
             file_ = open(self.file_props.file_name, 'rb')
-        except IOError:
+        except OSError:
             # can't open file
             return
         h = nbxmpp.Hashes2()

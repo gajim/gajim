@@ -572,7 +572,7 @@ class PluginManager(metaclass=Singleton):
         except zipfile.BadZipfile:
             # it is not zip file
             raise PluginsystemError(_('Archive corrupted'))
-        except IOError:
+        except OSError:
             raise PluginsystemError(_('Archive empty'))
 
         if zip_file.testzip():

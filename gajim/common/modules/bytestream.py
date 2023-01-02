@@ -360,7 +360,7 @@ class Bytestream(BaseModule):
         # check if we are connected with an IPv4 address
         try:
             socket.inet_aton(my_ip)
-        except socket.error:
+        except OSError:
             self._con.connection.send(iq)
             return
 
