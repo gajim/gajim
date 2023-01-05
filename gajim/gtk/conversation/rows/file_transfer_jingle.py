@@ -14,8 +14,8 @@
 
 from __future__ import annotations
 
-from typing import Union
 from typing import Optional
+from typing import Union
 
 import logging
 import time
@@ -30,14 +30,14 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
-from gajim.common.events import FileRequestReceivedEvent
-from gajim.common.events import FileRequestSent
 from gajim.common.events import FileCompleted
-from gajim.common.events import FileProgress
 from gajim.common.events import FileError
 from gajim.common.events import FileHashError
-from gajim.common.events import FileSendError
+from gajim.common.events import FileProgress
 from gajim.common.events import FileRequestError
+from gajim.common.events import FileRequestReceivedEvent
+from gajim.common.events import FileRequestSent
+from gajim.common.events import FileSendError
 from gajim.common.events import JingleErrorReceived
 from gajim.common.events import JingleFtCancelledReceived
 from gajim.common.file_props import FileProp
@@ -48,11 +48,11 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.storage.archive import ConversationRow
 
+from ...builder import get_builder
+from ...util import format_eta
 from .base import BaseRow
 from .widgets import DateTimeLabel
 from .widgets import NicknameLabel
-from ...builder import get_builder
-from ...util import format_eta
 
 TransferEventT = Union[FileRequestReceivedEvent, FileRequestSent]
 

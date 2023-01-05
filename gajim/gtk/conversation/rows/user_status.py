@@ -21,15 +21,15 @@ from datetime import datetime
 
 from gi.repository import Gtk
 
-from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
 from gajim.common.helpers import get_uf_show
+from gajim.common.i18n import _
 
-from .widgets import SimpleLabel
-from .widgets import DateTimeLabel
-from .base import BaseRow
-from ..message_widget import MessageWidget
 from ...avatar import get_show_circle
+from ..message_widget import MessageWidget
+from .base import BaseRow
+from .widgets import DateTimeLabel
+from .widgets import SimpleLabel
 
 
 class UserStatus(BaseRow):

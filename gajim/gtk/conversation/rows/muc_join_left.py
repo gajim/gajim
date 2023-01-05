@@ -19,12 +19,12 @@ from datetime import datetime
 
 from gi.repository import Gtk
 
-from gajim.common.i18n import _
 from gajim.common.const import AvatarSize
+from gajim.common.i18n import _
 
-from .widgets import SimpleLabel
-from .widgets import DateTimeLabel
 from .base import BaseRow
+from .widgets import DateTimeLabel
+from .widgets import SimpleLabel
 
 
 class MUCJoinLeft(BaseRow):

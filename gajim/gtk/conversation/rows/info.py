@@ -23,9 +23,9 @@ from gi.repository import Gtk
 
 from gajim.common.const import AvatarSize
 
+from .base import BaseRow
 from .widgets import DateTimeLabel
 from .widgets import SimpleLabel
-from .base import BaseRow
 
 
 class InfoMessage(BaseRow):

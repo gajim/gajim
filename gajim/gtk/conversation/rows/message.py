@@ -17,17 +17,15 @@ from __future__ import annotations
 from typing import Optional
 from typing import Union
 
+import textwrap
 from datetime import datetime
 from datetime import timedelta
-import textwrap
 
+import cairo
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
-
-import cairo
-
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules.security_labels import Displaymarking
 from nbxmpp.structs import CommonError
@@ -46,16 +44,15 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.types import ChatContactT
 
+from ...preview import PreviewWidget
+from ...util import format_fingerprint
+from ..message_widget import MessageWidget
 from .base import BaseRow
 from .widgets import AvatarBox
 from .widgets import DateTimeLabel
-from .widgets import NicknameLabel
 from .widgets import MessageIcons
 from .widgets import MoreMenuButton
-from ..message_widget import MessageWidget
-from ...preview import PreviewWidget
-from ...util import format_fingerprint
-
+from .widgets import NicknameLabel
 
 MERGE_TIMEFRAME = timedelta(seconds=120)
 

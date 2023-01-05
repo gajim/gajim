@@ -14,16 +14,16 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
 from typing import Optional
+from typing import TYPE_CHECKING
 
 from datetime import datetime
 
-from gi.repository import Gtk
-from gi.repository import Gdk
-from gi.repository import Pango
-from gi.repository import GLib
 import cairo
+from gi.repository import Gdk
+from gi.repository import GLib
+from gi.repository import Gtk
+from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
@@ -36,9 +36,9 @@ if TYPE_CHECKING:
 
 from ...menus import get_chat_row_menu
 from ...menus import get_groupchat_participant_menu
-from ...util import wrap_with_event_box
-from ...util import get_cursor
 from ...util import GajimPopover
+from ...util import get_cursor
+from ...util import wrap_with_event_box
 
 
 class SimpleLabel(Gtk.Label):

@@ -1367,8 +1367,7 @@ class MessageArchiveStorage(SqliteStorage):
             results = cursor.fetchmany(10)
             if not results:
                 break
-            for result in results:
-                yield result
+            yield from results
 
     def remove_history(self, account: str, jid: JID) -> None:
         '''

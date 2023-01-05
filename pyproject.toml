@@ -133,6 +133,8 @@ ignore = [
   "RUF003", # AmbiguousUnicodeCharacterComment
   "RUF100", # Unused `noqa` directive
   "S101",   # Use of `assert` detected
+  "SIM102", # Use a single `if` statement instead of nested `if` statements
+  "SIM105", # Use `contextlib.suppress(Exception)` instead of try-except-pass
   "UP007",  # Use X | Y for type annotations
 ]
 

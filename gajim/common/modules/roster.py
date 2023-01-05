@@ -204,8 +204,7 @@ class Roster(BaseModule):
         self._nbxmpp('Roster').set_item(jid, item.name, groups)
 
     def iter(self) -> Iterator[tuple[JID, RosterItem]]:
-        for jid, data in self._roster.items():
-            yield jid, data
+        yield from self._roster.items()
 
     def iter_contacts(self) -> Iterator[BareContact]:
         for jid in self._roster:

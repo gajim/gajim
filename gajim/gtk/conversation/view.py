@@ -15,53 +15,51 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import cast
+from typing import Generator
 from typing import Literal
 from typing import Optional
 from typing import Union
-from typing import Generator
-from typing import cast
 
 import logging
 import time
-
 from datetime import datetime
 from datetime import timedelta
 
 from gi.repository import Gdk
-from gi.repository import Gtk
-from gi.repository import GObject
 from gi.repository import Gio
-
+from gi.repository import GObject
+from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules.security_labels import Displaymarking
+from nbxmpp.protocol import JID
 from nbxmpp.structs import CommonError
 from nbxmpp.structs import MucSubject
-from nbxmpp.protocol import JID
 
 from gajim.common import app
-from gajim.common import types
 from gajim.common import events
+from gajim.common import types
 from gajim.common.helpers import AdditionalDataDict
-from gajim.common.helpers import to_user_string
 from gajim.common.helpers import get_start_of_day
+from gajim.common.helpers import to_user_string
+from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive import ConversationRow
-from gajim.common.modules.contacts import BareContact
 from gajim.common.types import ChatContactT
 
 from .rows.base import BaseRow
-from .rows.read_marker import ReadMarkerRow
-from .rows.scroll_hint import ScrollHintRow
-from .rows.message import MessageRow
-from .rows.info import InfoMessage
 from .rows.call import CallRow
 from .rows.command_output import CommandOutputRow
 from .rows.date import DateRow
 from .rows.file_transfer import FileTransferRow
 from .rows.file_transfer_jingle import FileTransferJingleRow
-from .rows.muc_subject import MUCSubject
+from .rows.info import InfoMessage
+from .rows.message import MessageRow
 from .rows.muc_join_left import MUCJoinLeft
+from .rows.muc_subject import MUCSubject
+from .rows.read_marker import ReadMarkerRow
+from .rows.scroll_hint import ScrollHintRow
 from .rows.user_status import UserStatus
 
 log = logging.getLogger('gajim.gui.conversation_view')
@@ -701,8 +699,7 @@ class ConversationView(Gtk.ScrolledWindow):
         return None
 
     def iter_rows(self) -> Generator[BaseRow, None, None]:
-        for row in cast(list[BaseRow], self._list_box.get_children()):
-            yield row
+        yield from cast(list[BaseRow], self._list_box.get_children())
 
     def remove_rows_by_type(self, row_type: str) -> None:
         for row in self.iter_rows():

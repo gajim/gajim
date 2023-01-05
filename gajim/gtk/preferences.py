@@ -916,10 +916,7 @@ class Miscellaneous(PreferenceBox):
         popover_row.update_entries(self._get_proxies())
 
     def _check_hints_reset(self) -> bool:
-        for hint in self._hints_list:
-            if app.settings.get(hint) is False:
-                return True
-        return False
+        return any(app.settings.get(hint) is False for hint in self._hints_list)
 
     def _on_reset_hints(self, button: Gtk.Button) -> None:
         for hint in self._hints_list:

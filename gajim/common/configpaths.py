@@ -144,8 +144,7 @@ class ConfigPaths:
         return path
 
     def items(self) -> Generator[tuple[str, PathTupleT], None, None]:
-        for key, value in self._paths.items():
-            yield (key, value)
+        yield from self._paths.items()
 
     def _prepare(self, path: Path, unique: bool) -> Path:
         if os.name == 'nt':

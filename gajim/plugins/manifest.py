@@ -98,10 +98,7 @@ class PluginManifest:
         return cls.from_manifest_json(manifest, manifest_path)
 
     def _check_requirements(self) -> bool:
-        for req in self.requirements:
-            if GAJIM_VERSION in req.specifier:
-                return True
-        return False
+        return any(GAJIM_VERSION in req.specifier for req in self.requirements)
 
     @classmethod
     def from_manifest_json(cls,

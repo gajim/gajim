@@ -26,12 +26,12 @@ from gajim.common.const import FTState
 from gajim.common.i18n import _
 from gajim.common.modules.httpupload import HTTPFileTransfer
 
-from .base import BaseRow
-from .widgets import DateTimeLabel
+from ...builder import get_builder
 from ...dialogs import ErrorDialog
 from ...util import EventHelper
-from ...builder import get_builder
 from ...util import format_eta
+from .base import BaseRow
+from .widgets import DateTimeLabel
 
 
 class FileTransferRow(BaseRow, EventHelper):

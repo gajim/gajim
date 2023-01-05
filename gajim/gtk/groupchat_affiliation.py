@@ -179,10 +179,7 @@ class GroupchatAffiliation(Gtk.Box):
         self._set_remove_button_state(sensitive, selected_affiliations)
 
     def _jid_exists(self, jid: str) -> bool:
-        for row in self._store:
-            if row[Column.JID] == jid:
-                return True
-        return False
+        return any(row[Column.JID] == jid for row in self._store)
 
     @staticmethod
     def _get_selected_affiliations(tree_selection: Gtk.TreeSelection

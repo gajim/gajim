@@ -16,10 +16,10 @@ from __future__ import annotations
 
 import logging
 
-from gi.repository import Gtk
-from gi.repository import Pango
 from gi.repository import Gdk
 from gi.repository import GLib
+from gi.repository import Gtk
+from gi.repository import Pango
 
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import parse_uri

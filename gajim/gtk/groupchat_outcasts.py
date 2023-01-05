@@ -144,10 +144,7 @@ class GroupchatOutcasts(Gtk.Box):
         self._set_remove_button_state(sensitive)
 
     def _jid_exists(self, jid: str) -> bool:
-        for row in self._store:
-            if row[Column.JID] == jid:
-                return True
-        return False
+        return any(row[Column.JID] == jid for row in self._store)
 
     def _set_remove_button_state(self, sensitive: bool) -> None:
         value = self._own_affiliation in ('admin', 'owner')

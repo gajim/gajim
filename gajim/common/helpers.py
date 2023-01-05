@@ -1422,10 +1422,7 @@ def warn_about_plain_connection(account: str,
                                 ) -> bool:
     warn = app.settings.get_account_setting(
         account, 'confirm_unencrypted_connection')
-    for type_ in connection_types:
-        if type_.is_plain and warn:
-            return True
-    return False
+    return any(type_.is_plain and warn for type_ in connection_types)
 
 
 def get_idle_status_message(state: str, status_message: str) -> str:

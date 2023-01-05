@@ -14,22 +14,21 @@
 
 from __future__ import annotations
 
+from typing import cast
 from typing import Optional
 from typing import Union
-from typing import cast
 
 from gi.repository import Gtk
 
-from gajim.common.styling import process
 from gajim.common.styling import ParsingResult
 from gajim.common.styling import PlainBlock
 from gajim.common.styling import PreBlock
+from gajim.common.styling import process
 from gajim.common.styling import QuoteBlock
 
 from .code_widget import CodeWidget
-from .quote_widget import QuoteWidget
 from .plain_widget import PlainWidget
-
+from .quote_widget import QuoteWidget
 
 ContentT = Union[ParsingResult, QuoteBlock]
 

@@ -351,10 +351,8 @@ class BareContact(CommonContact):
         return own_jid == self.jid
 
     def supports(self, requested_feature: str) -> bool:
-        for resource in self.iter_resources():
-            if resource.supports(requested_feature):
-                return True
-        return False
+        return any(resource.supports(requested_feature)
+                   for resource in self.iter_resources())
 
     def supports_audio(self) -> bool:
         if (self.supports(Namespace.JINGLE_ICE_UDP) and
@@ -600,10 +598,8 @@ class ResourceContact(CommonContact):
         if disco_info is None:
             return False
 
-        for identity in disco_info.identities:
-            if identity.type == 'phone':
-                return True
-        return False
+        return any(identity.type == 'phone' for
+                   identity in disco_info.identities)
 
     @property
     def is_available(self) -> bool:

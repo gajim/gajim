@@ -19,10 +19,9 @@ from typing import Union
 from gi.repository import GObject
 from gi.repository import Gtk
 
+from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
-from gajim.common.modules.contacts import BareContact
-
 
 ContactT = Union[BareContact, GroupchatContact, GroupchatParticipant]
 

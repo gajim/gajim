@@ -309,10 +309,8 @@ class ChatListStack(Gtk.Stack, EventHelper):
     def contains_chat(self, account: str, jid: JID,
                       workspace_id: Optional[str] = None) -> bool:
         if workspace_id is None:
-            for chat_list in self._chat_lists.values():
-                if chat_list.contains_chat(account, jid):
-                    return True
-            return False
+            return any(chat_list.contains_chat(account, jid) for
+                       chat_list in self._chat_lists.values())
 
         chat_list = self._chat_lists[workspace_id]
         return chat_list.contains_chat(account, jid)
