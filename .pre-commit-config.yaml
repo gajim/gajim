@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.206
+    rev: v0.0.211
     hooks:
       - id: ruff
         exclude: ".githooks/"
@@ -15,7 +15,7 @@ repos:
         - tomli
 
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.286
+    rev: v1.1.287
     hooks:
     - id: pyright
       pass_filenames: false
