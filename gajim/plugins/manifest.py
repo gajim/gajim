@@ -26,8 +26,9 @@ from packaging.requirements import Requirement
 from packaging.version import Version as V
 
 import gajim
-from gajim.plugins.helpers import is_shipped_plugin
-from gajim.plugins.plugins_i18n import _ as p_
+
+from .helpers import is_shipped_plugin
+from .plugins_i18n import _ as p_
 
 BLOCKED_PLUGINS = [
     'appindicator_integration',

@@ -36,13 +36,14 @@ from gajim.common.client import Client
 from gajim.common.exceptions import PluginsystemError
 from gajim.common.i18n import _
 from gajim.common.util.classes import Singleton
-from gajim.plugins.events import PluginAdded
-from gajim.plugins.events import PluginRemoved
-from gajim.plugins.gajimplugin import GajimPlugin
-from gajim.plugins.gajimplugin import GajimPluginException
-from gajim.plugins.helpers import GajimPluginActivateException
-from gajim.plugins.helpers import is_shipped_plugin
-from gajim.plugins.manifest import PluginManifest
+
+from .events import PluginAdded
+from .events import PluginRemoved
+from .gajimplugin import GajimPlugin
+from .gajimplugin import GajimPluginException
+from .helpers import GajimPluginActivateException
+from .helpers import is_shipped_plugin
+from .manifest import PluginManifest
 
 log = logging.getLogger('gajim.p.manager')
 

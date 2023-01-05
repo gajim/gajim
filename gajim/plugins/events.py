@@ -17,7 +17,8 @@ from dataclasses import dataclass
 from dataclasses import field
 
 from gajim.common.events import ApplicationEvent
-from gajim.plugins.manifest import PluginManifest
+
+from .manifest import PluginManifest
 
 
 @dataclass

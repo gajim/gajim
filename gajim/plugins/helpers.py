@@ -18,7 +18,9 @@ from pathlib import Path
 
 from gajim.common import configpaths
 from gajim.gui.builder import Builder
-from gajim.plugins import plugins_i18n
+
+from .plugins_i18n import _
+from .plugins_i18n import DOMAIN
 
 
 class GajimPluginActivateException(Exception):
@@ -30,8 +32,8 @@ class GajimPluginActivateException(Exception):
 def get_builder(file_name: str, widgets: Optional[list[str]] = None) -> Builder:
     return Builder(file_name,     # pyright: ignore
                    widgets,
-                   domain=plugins_i18n.DOMAIN,
-                   gettext_=plugins_i18n._)
+                   domain=DOMAIN,
+                   gettext_=_)
 
 
 def is_shipped_plugin(path: Path) -> bool:

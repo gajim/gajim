@@ -29,7 +29,8 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.helpers import Observable
 from gajim.common.util.http import create_http_request
-from gajim.plugins.manifest import PluginManifest
+
+from .manifest import PluginManifest
 
 log = logging.getLogger('gajim.p.repository')
 

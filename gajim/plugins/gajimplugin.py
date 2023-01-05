@@ -25,7 +25,8 @@ from gajim.common.events import ApplicationEvent
 from gajim.common.ged import HandlerFuncT
 from gajim.common.modules.base import BaseModule
 from gajim.common.types import PluginExtensionPoints
-from gajim.plugins.manifest import PluginManifest
+
+from .manifest import PluginManifest
 
 log = logging.getLogger('gajim.p.plugin')
 
