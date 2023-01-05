@@ -30,8 +30,6 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import ged
-from gajim.common.events import PluginAdded
-from gajim.common.events import PluginRemoved
 from gajim.common.exceptions import PluginsystemError
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
@@ -43,6 +41,8 @@ from gajim.gui.dialogs import WarningDialog
 from gajim.gui.filechoosers import ArchiveChooserDialog
 from gajim.gui.util import EventHelper
 from gajim.gui.util import load_icon_pixbuf
+from gajim.plugins.events import PluginAdded
+from gajim.plugins.events import PluginRemoved
 from gajim.plugins.helpers import GajimPluginActivateException
 from gajim.plugins.manifest import PluginManifest
 

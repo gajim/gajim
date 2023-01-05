@@ -45,7 +45,6 @@ from gajim.common.helpers import AdditionalDataDict
 if typing.TYPE_CHECKING:
     from gajim.common.client import Client
     from gajim.common.modules.httpupload import HTTPFileTransfer
-    from gajim.plugins.manifest import PluginManifest
 
 ChatListEventT = Union[
     'MessageReceived',
@@ -449,18 +448,6 @@ class RosterPush(ApplicationEvent):
     name: str = field(init=False, default='roster-push')
     account: str
     item: RosterItem
-
-
-@dataclass
-class PluginAdded(ApplicationEvent):
-    name: str = field(init=False, default='plugin-added')
-    manifest: PluginManifest
-
-
-@dataclass
-class PluginRemoved(ApplicationEvent):
-    name: str = field(init=False, default='plugin-removed')
-    manifest: PluginManifest
 
 
 @dataclass
