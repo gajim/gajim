@@ -66,11 +66,11 @@ modules:
   - name: python3-packaging
     buildsystem: simple
     build-commands:
-      - pip3 install packaging-21.3-py3-none-any.whl
+      - pip3 install packaging-22.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/packaging/packaging-21.3-py3-none-any.whl
-        sha256: ef103e05f519cdc783ae24ea4e2e0f508a9c99b2d4969652eed6a2e1ea5bd522
+        url: https://files.pythonhosted.org/packages/py3/p/packaging/packaging-22.0-py3-none-any.whl
+        sha256: 957e2148ba0e1a3b282772e791ef1d8083648bc131c8ab0c1feba110ce1146c3
 
   - name: python3-pycparser
     buildsystem: simple
@@ -113,22 +113,22 @@ modules:
     only-arches:
       - aarch64
     build-commands:
-      - pip3 install cryptography-38.0.4-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+      - pip3 install cryptography-39.0.0-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp36/c/cryptography/cryptography-38.0.4-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
-        sha256: 50a1494ed0c3f5b4d07650a68cd6ca62efe8b596ce743a5c94403e6f11bf06c1
+        url: https://files.pythonhosted.org/packages/cp36/c/cryptography/cryptography-39.0.0-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+        sha256: 6f97109336df5c178ee7c9c711b264c502b905c2d2a29ace99ed761533a3460f
 
   - name: python3-cryptography
     buildsystem: simple
     only-arches:
       - x86_64
     build-commands:
-      - pip3 install cryptography-38.0.4-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+      - pip3 install cryptography-39.0.0-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp36/c/cryptography/cryptography-38.0.4-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-        sha256: a10498349d4c8eab7357a8f9aa3463791292845b79597ad1b98a543686fb1ec8
+        url: https://files.pythonhosted.org/packages/cp36/c/cryptography/cryptography-39.0.0-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+        sha256: 1a6915075c6d3a5e1215eab5d99bcec0da26036ff2102a1038401d6ef5bef25b
 
   - name: python3-dbus-python
     build-options:
@@ -183,11 +183,11 @@ modules:
   - name: python3-importlib-metadata
     buildsystem: simple
     build-commands:
-      - pip3 install importlib_metadata-5.1.0-py3-none-any.whl
+      - pip3 install importlib_metadata-6.0.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/i/importlib_metadata/importlib_metadata-5.1.0-py3-none-any.whl
-        sha256: d84d17e21670ec07990e1044a99efe8d615d860fd176fc29ef5c306068fda313
+        url: https://files.pythonhosted.org/packages/py3/i/importlib_metadata/importlib_metadata-6.0.0-py3-none-any.whl
+        sha256: 7efb448ec9a5e313a57655d35aa54cd3e01b7e1fbcf72dce1bf06119420f5bad
 
   - name: python3-jaraco.classes
     buildsystem: simple
@@ -203,13 +203,13 @@ modules:
   - name: python3-keyring
     buildsystem: simple
     build-commands:
-      - pip3 install keyring-23.11.0-py3-none-any.whl
+      - pip3 install keyring-23.13.1-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/k/keyring/keyring-23.11.0-py3-none-any.whl
-        sha256: 3dd30011d555f1345dec2c262f0153f2f0ca6bca041fb1dc4588349bb4c0ac1e
+        url: https://files.pythonhosted.org/packages/py3/k/keyring/keyring-23.13.1-py3-none-any.whl
+        sha256: 771ed2a91909389ed6148631de678f82ddc73737d85a927f382a8a1b157898cd
 
   - name: python3-css-parser
     buildsystem: simple
@@ -223,11 +223,11 @@ modules:
   - name: python3-precis_i18n
     buildsystem: simple
     build-commands:
-      - pip3 install precis_i18n-1.0.4-py3-none-any.whl
+      - pip3 install precis_i18n-1.0.5-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/precis_i18n/precis_i18n-1.0.4-py3-none-any.whl
-        sha256: 8b4f6100c2f5e44db61081d53c9c07ff92e50d0a7b36eedd2f4fb7d40c48576d
+        url: https://files.pythonhosted.org/packages/py3/p/precis_i18n/precis_i18n-1.0.5-py3-none-any.whl
+        sha256: 14eceeae73dc7bbd1c4a17d2ac7143db87d65ded98eec44c47911270812862a3
 
   # GSound dependency
   - shared-modules/libcanberra/libcanberra.json
@@ -262,8 +262,8 @@ modules:
       - pip3 install .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/p/pillow/Pillow-9.3.0.tar.gz
-        sha256: c935a22a557a560108d780f9a0fc426dd7459940dc54faa49d83249c8d3e760f
+        url: https://files.pythonhosted.org/packages/source/p/pillow/Pillow-9.4.0.tar.gz
+        sha256: a1c2d7780448eb93fbcc3789bf3916aa5720d942e37945f4056680317f1cd23e
 
   # sentry-sdk dependency
   - name: python3-urllib3
@@ -278,20 +278,20 @@ modules:
   - name: python3-certifi
     buildsystem: simple
     build-commands:
-      - pip3 install certifi-2022.9.24-py3-none-any.whl
+      - pip3 install certifi-2022.12.7-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/c/certifi/certifi-2022.9.24-py3-none-any.whl
-        sha256: 90c1a32f1d68f940488354e36370f6cca89f0f106db09518524c88d6ed83f382
+        url: https://files.pythonhosted.org/packages/py3/c/certifi/certifi-2022.12.7-py3-none-any.whl
+        sha256: 4ad3232f5e926d6718ec31cfc1fcadfde020920e278684144551c91769c7bc18
 
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-1.11.1-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-1.12.1-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.11.1-py2.py3-none-any.whl
-        sha256: 8b4ff696c0bdcceb3f70bbb87a57ba84fd3168b1332d493fcd16c137f709578c
+        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.12.1-py2.py3-none-any.whl
+        sha256: 9f0b960694e2d8bb04db4ba6ac2a645040caef4e762c65937998ff06064f10d6
 
   # gssapi dependency
   - name: python3-decorator
