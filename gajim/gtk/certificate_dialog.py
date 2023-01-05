@@ -75,12 +75,10 @@ class CertificateBox(Gtk.Box):
             if dotted_string == '2.5.4.11':
                 self._ib_org_unit = str(attribute.value)
 
-        it_serial_no = str(cert.serial_number)
-        it_serial_no_half = int(len(it_serial_no) / 2)
-        self._it_serial_number = '%s\n%s' % (
-            it_serial_no[:it_serial_no_half],
-            it_serial_no[it_serial_no_half:])
-
+        serial_str =  '0{:02X}'.format(cert.serial_number)
+        serial_str_foratted = ':'.join(
+            map('{}{}'.format, *(serial_str[::2], serial_str[1::2])))
+        self._it_serial_number = serial_str_foratted
         self._ib_common_name = ''
         self._ib_organization = ''
         self._ib_org_unit = ''
