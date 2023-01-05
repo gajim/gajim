@@ -14,8 +14,9 @@
 
 from __future__ import annotations
 
+from typing import Any
+from typing import Callable
 from typing import Optional
-from typing import TYPE_CHECKING
 
 from datetime import datetime
 
@@ -31,10 +32,6 @@ from gajim.common.i18n import p_
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.types import ChatContactT
 
-if TYPE_CHECKING:
-    from .message import MessageRow
-
-from ...menus import get_chat_row_menu
 from ...menus import get_groupchat_participant_menu
 from ...util import GajimPopover
 from ...util import get_cursor
@@ -52,11 +49,7 @@ class SimpleLabel(Gtk.Label):
 
 @wrap_with_event_box
 class MoreMenuButton(Gtk.Button):
-    def __init__(self,
-                 row: MessageRow,
-                 contact: ChatContactT,
-                 name: str
-                 ) -> None:
+    def __init__(self, on_click_handler: Callable[[Gtk.Button], Any]) -> None:
 
         Gtk.Button.__init__(self)
         self.set_valign(Gtk.Align.START)
@@ -66,27 +59,10 @@ class MoreMenuButton(Gtk.Button):
 
         self.get_style_context().add_class('conversation-more-button')
 
-        self._row = row
-        self._contact = contact
-        self._name = name
-
         image = Gtk.Image.new_from_icon_name(
             'feather-more-horizontal-symbolic', Gtk.IconSize.BUTTON)
         self.add(image)
-        self.connect('clicked', self._on_click)
-
-    def _on_click(self, _button: Gtk.Button) -> None:
-        menu = get_chat_row_menu(
-            self._contact,
-            self._name,
-            self._row.get_text(),
-            self._row.timestamp,
-            self._row.message_id,
-            self._row.stanza_id,
-            self._row.log_line_id)
-
-        popover = GajimPopover(menu, relative_to=self)
-        popover.popup()
+        self.connect('clicked', on_click_handler)
 
 
 class DateTimeLabel(Gtk.Label):

@@ -43,9 +43,11 @@ from gajim.common.i18n import is_rtl_text
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.types import ChatContactT
+from gajim.gtk.menus import get_chat_row_menu
 
 from ...preview import PreviewWidget
 from ...util import format_fingerprint
+from ...util import GajimPopover
 from ..message_widget import MessageWidget
 from .base import BaseRow
 from .widgets import AvatarBox
@@ -186,7 +188,7 @@ class MessageRow(BaseRow):
             self._bottom_box.set_halign(Gtk.Align.END)
             self._message_widget.set_direction(Gtk.TextDirection.RTL)
 
-        more_menu_button = MoreMenuButton(self, self._contact, name)
+        more_menu_button = MoreMenuButton(self._on_more_menu_button_clicked)
         self._bottom_box.pack_end(more_menu_button, False, True, 0)
 
         self.grid.attach(self._avatar_box, 0, 0, 1, 2)
@@ -194,6 +196,19 @@ class MessageRow(BaseRow):
         self.grid.attach(self._bottom_box, 1, 1, 1, 1)
 
         self.show_all()
+
+    def _on_more_menu_button_clicked(self, button: Gtk.Button) -> None:
+        menu = get_chat_row_menu(
+            self._contact,
+            self.name,
+            self.get_text(),
+            self.timestamp,
+            self.message_id,
+            self.stanza_id,
+            self.log_line_id)
+
+        popover = GajimPopover(menu, relative_to=button)
+        popover.popup()
 
     def enable_selection_mode(self) -> None:
         if isinstance(self._message_widget, MessageWidget):
