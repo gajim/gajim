@@ -153,6 +153,7 @@ class MessageActionsBox(Gtk.Grid):
 
         elif action_name == 'show-emoji-chooser':
             self.msg_textview.emit('insert-emoji')
+            self._ui.emoticons_button.set_active(False)
 
         elif action_name == 'quote':
             assert param
