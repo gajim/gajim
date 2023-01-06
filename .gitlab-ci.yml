@@ -43,6 +43,16 @@ test-ruff:
     - ruff .
   interruptible: true
 
+test-isort:
+  stage: test
+  rules:
+    - changes:
+      - "**/*.py"
+  script:
+    - pip3 install isort
+    - isort --check .
+  interruptible: true
+
 test-unittest:
   stage: test
   script:
