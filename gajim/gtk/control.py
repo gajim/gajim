@@ -633,8 +633,6 @@ class ChatControl(EventHelper):
 
         self._scrolled_view.block_signals(True)
 
-        rows: list[HistoryRowT] = []
-
         messages = self._request_messages(before)
         event_rows = self._request_events(before)
         rows = self._sort_request_rows(messages, event_rows, before)

@@ -40,7 +40,7 @@ def parse_uri_schemes(content: str) -> list[str]:
 
 
 def generate_output(schemes: list[str],
-                    out_path: Path):
+                    outpath: Path) -> None:
 
     logging.info('Generate output')
     current_date = datetime.utcnow().isoformat()
@@ -68,6 +68,5 @@ if __name__ == '__main__':
 
     scheme_content = download_file(SCHEMES_URL)
     schemes = parse_uri_schemes(scheme_content)
-    output = generate_output(schemes,
-                             outpath)
+    generate_output(schemes, outpath)
     logging.info('Finished !')

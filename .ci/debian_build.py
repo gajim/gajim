@@ -61,7 +61,7 @@ def prepare_package_dir(context: ReleaseContext) -> None:
 
     log.info('Rename dir to: %s', context.release_name)
     folder = list(BUILD_DIR.glob(f'{context.app}-?.?.?'))[0]
-    folder = folder.rename(context.release_dir)
+    folder.rename(context.release_dir)
 
     log.info('Copy debian folder into release directory')
     shutil.copytree(ROOT_DIR / 'debian', context.release_dir / 'debian')

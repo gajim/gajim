@@ -416,7 +416,7 @@ class ServicesCache:
                                         type='im',
                                         name=result.node)]
 
-        self._on_agent_info(str(result.jid), result.node, result.identities,
+        self._on_agent_info(str(result.jid), result.node, identities,
                             result.features, result.dataforms)
 
     def _disco_info_error(self, result):

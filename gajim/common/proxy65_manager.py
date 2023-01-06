@@ -62,9 +62,7 @@ class Proxy65Manager:
         Start
         if testit=False, Gajim won't try to resolve it
         '''
-        if proxy in self.proxies:
-            resolver = self.proxies[proxy]
-        else:
+        if proxy not in self.proxies:
             # proxy is being resolved for the first time
             resolver = ProxyResolver(proxy, sender_jid, testit)
             self.proxies[proxy] = resolver

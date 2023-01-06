@@ -594,7 +594,7 @@ def get_groupchat_mod_menu(self_contact: types.GroupchatParticipant,
             value = GLib.Variant('as', [contact_name, 'participant'])
             menu.add_item(_('Grant Voice'), action, value)
         else:
-            value = value = GLib.Variant('as', [contact_name, 'visitor'])
+            value = GLib.Variant('as', [contact_name, 'visitor'])
             menu.add_item(_('Revoke Voice'), action, value)
 
     if not menu.get_n_items():

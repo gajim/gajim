@@ -597,7 +597,6 @@ class Bytestream(BaseModule):
         id_ = iq_obj.getAttr('id')
         query = iq_obj.getTag('query')
         sid = query.getAttr('sid')
-        file_props = FilesProp.getFileProp(self._account, sid)
         streamhosts: list[dict[str, Any]] = []
         for item in query.getChildren():
             if item.getName() == 'streamhost':

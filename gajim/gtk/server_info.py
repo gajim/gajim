@@ -151,7 +151,6 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         tls_version = TLS_VERSION_STRINGS.get(nbxmpp_client.tls_version)
         self._ui.tls_version.set_text(tls_version or _('Not available'))
 
-        visible = nbxmpp_client.ciphersuite is not None
         self._ui.cipher_suite.set_text(nbxmpp_client.ciphersuite or
                                        _('Not available'))
 

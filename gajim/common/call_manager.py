@@ -106,13 +106,11 @@ class CallManager(EventHelper):
             event.fjid, event.sid)
 
         if event.media == 'audio':
-            content = session.get_content('audio')
             self._set_jingle_state(
                 'audio',
                 JingleState.CONNECTED,
                 event.sid)
         if event.media == 'video':
-            content = session.get_content('video')
             self._set_jingle_state(
                 'video',
                 JingleState.CONNECTED,
