@@ -50,8 +50,11 @@ build_script:
 
         bash "git clone C:/projects/gajim C:/msys64/home/appveyor/gajim"
         bash "C:/msys64/home/appveyor/gajim/win/build.sh $($env:MSYS_ARCH)"
+        if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+
         Push-AppveyorArtifact "$($buildroot)/Gajim.exe" -FileName "$($filename).exe"
         Push-AppveyorArtifact "$($buildroot)/Gajim-Portable.exe" -FileName "$($filename_portable).exe"
+        if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
 
 # on_finish:
 #   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
