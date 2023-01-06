@@ -24,12 +24,17 @@ from gi.repository import GIRepository  # noqa: E402
 logging.basicConfig(level='INFO', format='%(levelname)s: %(message)s')
 log = logging.getLogger()
 
+IGNORED_LIBS = [
+    ('Soup', '2.4')
+]
 
 def get_required_by_typelibs() -> set[str]:
     deps: set[str] = set()
     repo = GIRepository.Repository()
     for tl in os.listdir(repo.get_search_path()[0]):
         namespace, version = os.path.splitext(tl)[0].split('-', 1)
+        if (namespace, version) in IGNORED_LIBS:
+            continue
         repo.require(namespace, version, 0)
         lib = repo.get_shared_library(namespace)
         if lib:
