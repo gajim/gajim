@@ -25,7 +25,8 @@ logging.basicConfig(level='INFO', format='%(levelname)s: %(message)s')
 log = logging.getLogger()
 
 IGNORED_LIBS = [
-    ('Soup', '2.4')
+    ('Soup', '2.4'),
+    ('Gtk', '4.0')
 ]
 
 def get_required_by_typelibs() -> set[str]:
@@ -35,7 +36,12 @@ def get_required_by_typelibs() -> set[str]:
         namespace, version = os.path.splitext(tl)[0].split('-', 1)
         if (namespace, version) in IGNORED_LIBS:
             continue
-        repo.require(namespace, version, 0)
+        try:
+            repo.require(namespace, version, 0)
+        except Exception as error:
+            log.warning('Unable to load %s %s: %s',
+                        namespace, version, error)
+            continue
         lib = repo.get_shared_library(namespace)
         if lib:
             deps.update(lib.split(','))
