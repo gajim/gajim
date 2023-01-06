@@ -39,7 +39,7 @@ test-ruff:
     - changes:
       - "**/*.py"
   script:
-    - pip3 install ruff
+    - pip3 install ruff==0.0.211
     - ruff .
   interruptible: true
 
