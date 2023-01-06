@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-03 08:42+0000\n"
+"POT-Creation-Date: 2022-12-14 18:45+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -195,6 +195,10 @@ msgctxt "negative longitude"
 msgid "%sW"
 msgstr ""
 
+#. Translators:
+#. This should make the string KB/s,
+#. where 'KB' part is taken from %s.
+#. Only the 's' after / (which means second) should be translated.
 #, python-format
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/ש)"
@@ -335,265 +339,6 @@ msgstr "<ריק>"
 msgid "<error>"
 msgstr "שגיאה"
 
-msgid "?Ask (for Subscription):None"
-msgstr "אין"
-
-#, fuzzy
-msgid "?Gender:None"
-msgstr "ממען: "
-
-msgid "?Gender:Other"
-msgstr ""
-
-msgid "?Group Chat Contact Affiliation:None"
-msgstr "ללא"
-
-msgid "?Group Chat Contact Role:None"
-msgstr "אין"
-
-msgid "?Group chat address:family"
-msgstr ""
-
-#, fuzzy
-msgid "?Group chat address:news"
-msgstr "שיחת קבוצה חדשה"
-
-#, fuzzy
-msgid "?Group chat address:repairs"
-msgstr "שיחות קבוצה"
-
-#, fuzzy
-msgid "?Group chat address:team"
-msgstr "שיחות קבוצה"
-
-#, fuzzy
-msgid "?Group chat address:vacation"
-msgstr "הזמנת שיחת קבוצה"
-
-msgid "?Group chat description:Local help group"
-msgstr ""
-
-#, fuzzy
-msgid "?Group chat description:Local news and reports"
-msgstr "יצירת שיחות קבוצה הינה מוגבלת."
-
-msgid "?Group chat description:Project discussion"
-msgstr ""
-
-msgid "?Group chat description:Spring gathering"
-msgstr ""
-
-msgid "?Group chat description:Trip planning"
-msgstr ""
-
-#, fuzzy
-msgid "?Group chat feature:Archiving"
-msgstr "הזמנת שיחת קבוצה"
-
-#, fuzzy
-msgid "?Group chat feature:Hidden"
-msgstr "אין"
-
-#, fuzzy
-msgid "?Group chat feature:Members Only"
-msgstr "הבלטת שיחת קבוצה:"
-
-#, fuzzy
-msgid "?Group chat feature:Moderated"
-msgstr "אין"
-
-#, fuzzy
-msgid "?Group chat feature:No Password Required"
-msgstr "שיחות קבוצה"
-
-#, fuzzy
-msgid "?Group chat feature:Not Anonymous"
-msgstr "שיחות קבוצה"
-
-#, fuzzy
-msgid "?Group chat feature:Not Moderated"
-msgstr "שיחות קבוצה"
-
-#, fuzzy
-msgid "?Group chat feature:Open"
-msgstr "אין"
-
-#, fuzzy
-msgid "?Group chat feature:Password Required"
-msgstr "שיחות קבוצה"
-
-#, fuzzy
-msgid "?Group chat feature:Persistent"
-msgstr "שיחות קבוצה"
-
-#, fuzzy
-msgid "?Group chat feature:Public"
-msgstr "הבלטת שיחת קבוצה:"
-
-#, fuzzy
-msgid "?Group chat feature:Semi-Anonymous"
-msgstr "הבלטת שיחת קבוצה:"
-
-#, fuzzy
-msgid "?Group chat feature:Temporary"
-msgstr "אין"
-
-#, fuzzy
-msgid "?Group chat name:Family"
-msgstr "הבלטת שיחת קבוצה:"
-
-#, fuzzy
-msgid "?Group chat name:News"
-msgstr "אין"
-
-#, fuzzy
-msgid "?Group chat name:Repairs"
-msgstr "שיחות קבוצה"
-
-#, fuzzy
-msgid "?Group chat name:Team"
-msgstr "אין"
-
-#, fuzzy
-msgid "?Group chat name:Vacation"
-msgstr "הזמנת שיחת קבוצה"
-
-#, fuzzy
-msgid "?Message row action:Copy"
-msgstr "cli"
-
-#, fuzzy
-msgid "?Message row action:Correct…"
-msgstr "cli"
-
-msgid "?Message row action:Quote…"
-msgstr ""
-
-#, fuzzy
-msgid "?Message row action:Retract…"
-msgstr "הודעה ראשונה אשר התקבלה"
-
-#, fuzzy
-msgid "?Message row action:Select Messages…"
-msgstr "cli"
-
-#, fuzzy
-msgid "?Message state:Received"
-msgstr "הודעה ראשונה אשר התקבלה"
-
-#, fuzzy
-msgid "?Noun:Download"
-msgstr "הורדה"
-
-#, fuzzy
-msgid "?Noun:Upload"
-msgstr "העלאה"
-
-msgid "?Subscription we already have:None"
-msgstr "ללא"
-
-#, fuzzy
-msgid "?config description:None"
-msgstr "אין"
-
-msgid "?config type:Boolean"
-msgstr ""
-
-msgid "?config type:Integer"
-msgstr ""
-
-msgid "?config type:Text"
-msgstr ""
-
-#, fuzzy
-msgid "?config:Preference Name"
-msgstr "שם העדפה"
-
-msgid "?config:Type"
-msgstr ""
-
-#, fuzzy
-msgid "?config:Value"
-msgstr "תצורה"
-
-#, fuzzy
-msgid "?profile:Address"
-msgstr "_כתובת:"
-
-#, fuzzy
-msgid "?profile:Full Name"
-msgstr "<b>שם מלא</b>"
-
-msgid "?profile:Gender"
-msgstr ""
-
-msgid "?profile:IM Address"
-msgstr ""
-
-#, fuzzy
-msgid "?profile:Note"
-msgstr "cli"
-
-msgid "?profile:Organisation"
-msgstr ""
-
-msgid "?profile:Public Encryption Key"
-msgstr ""
-
-#, fuzzy
-msgid "?profile:Role"
-msgstr "cli"
-
-msgid "?profile:Title"
-msgstr ""
-
-msgid "?switch:Off"
-msgstr ""
-
-msgid "?switch:On"
-msgstr ""
-
-#, fuzzy
-msgid "?transfer status:Aborted"
-msgstr "הושהתה"
-
-#, fuzzy
-msgid "?transfer status:Completed"
-msgstr "הושהתה"
-
-#, fuzzy
-msgid "?transfer status:Not started"
-msgstr "הושהתה"
-
-msgid "?transfer status:Paused"
-msgstr "הושהתה"
-
-#, fuzzy
-msgid "?transfer status:Stalled"
-msgstr "הושהתה"
-
-#, fuzzy
-msgid "?transfer status:Status: "
-msgstr "הושהתה"
-
-#, fuzzy
-msgid "?transfer status:Transferred: "
-msgstr "הושהתה"
-
-#, fuzzy
-msgid "?transfer status:Transferring"
-msgstr "הושהתה"
-
-#, fuzzy
-msgid "?transfer type:Type: "
-msgstr "העברת קובץ נעצרה"
-
-msgid "?user status:Available"
-msgstr "זמין"
-
-msgid "?user status:_Available"
-msgstr "_זמין"
-
 msgid "A Feature Comparison of Various Servers"
 msgstr ""
 
@@ -638,10 +383,16 @@ msgstr "‏ALSA: ‏%s"
 msgid "API Preferences. Possible values: \"http\", \"iq\""
 msgstr ""
 
+#, fuzzy
+msgctxt "User status"
 msgid "A_way"
 msgstr "_נעדר"
 
 msgid "Abort"
+msgstr ""
+
+msgctxt "File transfer state"
+msgid "Aborted"
 msgstr ""
 
 msgid "Abuse"
@@ -815,6 +566,11 @@ msgid "Address"
 msgstr "_כתובת:"
 
 #, fuzzy
+msgctxt "Profile"
+msgid "Address"
+msgstr "_כתובת:"
+
+#, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "‏%s אינו שרת שיחת קבוצה"
 
@@ -834,10 +590,13 @@ msgstr "_מנהל"
 msgid "Administration"
 msgstr "מנהל"
 
+#, fuzzy
+msgctxt "Group chat contact affiliation"
 msgid "Administrator"
 msgstr "מנהל"
 
 #, fuzzy
+msgctxt "Group chat contact affiliation"
 msgid "Administrators"
 msgstr "מנהל"
 
@@ -974,6 +733,11 @@ msgstr "ארכיון ריק"
 
 msgid "Archive is malformed"
 msgstr "ארכיון הינו פגום"
+
+#, fuzzy
+msgctxt "Group chat feature"
+msgid "Archiving"
+msgstr "ארכיון ריק"
 
 #, fuzzy
 msgid "Archiving Preferences"
@@ -1138,11 +902,18 @@ msgstr ""
 msgid "Available"
 msgstr "זמין"
 
+#, fuzzy
+msgctxt "User status"
+msgid "Available"
+msgstr "זמין"
+
 # BUG: File too big
 #, fuzzy
 msgid "Avatar file size too big"
 msgstr "התמונה הינה גדולה מדי"
 
+#, fuzzy
+msgctxt "User status"
 msgid "Away"
 msgstr "נעדר"
 
@@ -1206,6 +977,12 @@ msgstr "_סמן"
 msgid "Bookmarks for %s"
 msgstr "_סמן"
 
+msgctxt "Configuration type"
+msgid "Boolean"
+msgstr ""
+
+#, fuzzy
+msgctxt "Contact subscription"
 msgid "Both"
 msgstr "הדדית"
 
@@ -1220,6 +997,8 @@ msgstr ""
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "עיון בשירותים בכתובת ‫%(address)s באמצעות חשבון ‫%(account)s"
 
+#, fuzzy
+msgctxt "User status"
 msgid "Busy"
 msgstr "עסוק"
 
@@ -1483,6 +1262,9 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(jid)s הוזמן/ה לחדר זה"
 
+msgid "Click to change time display"
+msgstr ""
+
 msgid "Click to view Gajim's wiki page on how to install plugins in Flatpak."
 msgstr ""
 
@@ -1552,6 +1334,11 @@ msgstr "הושלמה"
 msgid "Complete a command or a nickname"
 msgstr "אנא צור מוטיב חדש עם השם הרצוי עליך."
 
+msgid "Completed"
+msgstr "הושלמה"
+
+#, fuzzy
+msgctxt "File transfer state"
 msgid "Completed"
 msgstr "הושלמה"
 
@@ -1731,6 +1518,11 @@ msgid "Copy"
 msgstr "cli"
 
 #, fuzzy
+msgctxt "Message row action"
+msgid "Copy"
+msgstr "cli"
+
+#, fuzzy
 msgid "Copy Address"
 msgstr "ה_עתק כתובת JID/דוא״ל"
 
@@ -1751,8 +1543,8 @@ msgid "Copy Link Location"
 msgstr "ה_עתק מיקום קישור"
 
 #, fuzzy
-msgid "Copy Location"
-msgstr "ה_עתק מיקום קישור"
+msgid "Copy Path"
+msgstr "cli"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1776,6 +1568,10 @@ msgstr "ה_עתק מיקום קישור"
 #, fuzzy
 msgid "Correct the last message"
 msgstr "cli"
+
+msgctxt "Message row action"
+msgid "Correct…"
+msgstr ""
 
 #, fuzzy
 msgid "Could not access file"
@@ -1852,6 +1648,9 @@ msgstr "לא מ_קוון"
 msgid "Decline Invitation"
 msgstr ""
 
+msgid "Decrease playback speed"
+msgstr ""
+
 msgid "Default"
 msgstr "ברירת מחדל"
 
@@ -1923,6 +1722,10 @@ msgstr ""
 #, fuzzy
 msgid "Devices"
 msgstr "שרת"
+
+#, fuzzy
+msgid "Dial Number"
+msgstr "מספר GG:"
 
 #, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
@@ -2021,6 +1824,11 @@ msgid "Don’t show this again"
 msgstr "אל ת_שאל אותי שוב"
 
 #, fuzzy
+msgid "Download"
+msgstr "הורדה"
+
+#, fuzzy
+msgctxt "Noun"
 msgid "Download"
 msgstr "הורדה"
 
@@ -2327,6 +2135,10 @@ msgstr "עזוב שיחות קבוצה"
 msgid "Fake audio output"
 msgstr "פלט שמע מזויף"
 
+msgctxt "Group chat name"
+msgid "Family"
+msgstr ""
+
 #, fuzzy
 msgid "Feature not available on Windows"
 msgstr "תכונה זו לא זמינה תחת Windows."
@@ -2498,7 +2310,12 @@ msgstr "שגיאת תסדיר בשדה notBefore של התעודה"
 msgid "Format your message"
 msgstr "קדם הודעות אשר לא נקראו"
 
+msgid "Forward 10 seconds"
+msgstr ""
+
 # BUG: x2
+#, fuzzy
+msgctxt "User status"
 msgid "Free for Chat"
 msgstr "חופשי לשיחה"
 
@@ -2506,6 +2323,16 @@ msgid "From"
 msgstr "מן"
 
 #, fuzzy
+msgctxt "Contact subscription"
+msgid "From"
+msgstr "מן"
+
+#, fuzzy
+msgid "Full Name"
+msgstr "<b>שם מלא</b>"
+
+#, fuzzy
+msgctxt "Profile"
 msgid "Full Name"
 msgstr "<b>שם מלא</b>"
 
@@ -2573,6 +2400,11 @@ msgid "Gathering information…"
 msgstr "מידע איש קשר"
 
 #, fuzzy
+msgid "Gender"
+msgstr "ממען: "
+
+#, fuzzy
+msgctxt "Profile"
 msgid "Gender"
 msgstr "ממען: "
 
@@ -2707,6 +2539,10 @@ msgstr "שלום, שמי $name."
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
+msgctxt "Group chat feature"
+msgid "Hidden"
+msgstr ""
+
 msgid "Hide"
 msgstr ""
 
@@ -2751,6 +2587,7 @@ msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "תקן IEC אומר KiB‏ = 1024 ביתים, KB‏ = 1000 ביתים."
 
 #, fuzzy
+msgctxt "Profile"
 msgid "IM Address"
 msgstr "_כתובת:"
 
@@ -2856,6 +2693,9 @@ msgstr "צבע שם כינוי נכנס."
 msgid "Incoming Call (Video)"
 msgstr ""
 
+msgid "Increase playback speed"
+msgstr ""
+
 #, fuzzy
 msgid "Information"
 msgstr "_מידע"
@@ -2887,6 +2727,10 @@ msgstr "רישום נכשל"
 
 msgid "Installed"
 msgstr "מותקנים"
+
+msgctxt "Configuration type"
+msgid "Integer"
+msgstr ""
 
 #, fuzzy
 msgid "Invalid Address"
@@ -2993,10 +2837,6 @@ msgid "JID"
 msgstr "‏JID"
 
 #, fuzzy
-msgid "JPEG files"
-msgstr "כל הקבצים"
-
-#, fuzzy
 msgid "Join"
 msgstr "ה_צטרף"
 
@@ -3012,7 +2852,7 @@ msgid "Join Group Chat?"
 msgstr "הצטרף לשיחת קבוצה"
 
 #, fuzzy
-msgid "Join Groupchat"
+msgid "Join Groupchat…"
 msgstr "הצטרף לשיחת קבוצה"
 
 #, fuzzy
@@ -3109,6 +2949,15 @@ msgstr ""
 msgid "Local Time"
 msgstr "‏JID מקומית:"
 
+msgctxt "Group chat description"
+msgid "Local help group"
+msgstr ""
+
+#, fuzzy
+msgctxt "Group chat description"
+msgid "Local news and reports"
+msgstr "יצירת שיחות קבוצה הינה מוגבלת."
+
 #, fuzzy, python-format
 msgid "Location at %s"
 msgstr "מיקום: "
@@ -3196,7 +3045,18 @@ msgid "Member"
 msgstr "חבר"
 
 #, fuzzy
+msgctxt "Group chat contact affiliation"
+msgid "Member"
+msgstr "חבר"
+
+#, fuzzy
+msgctxt "Group chat contact affiliation"
 msgid "Members"
+msgstr "חבר"
+
+#, fuzzy
+msgctxt "Group chat feature"
+msgid "Members Only"
 msgstr "חבר"
 
 #, fuzzy
@@ -3268,12 +3128,21 @@ msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
+msgctxt "Group chat feature"
+msgid "Moderated"
+msgstr "אחראי"
+
+#, fuzzy
 msgid "Moderation"
 msgstr "אחראי"
 
+#, fuzzy
+msgctxt "Group chat contact role"
 msgid "Moderator"
 msgstr "אחראי"
 
+#, fuzzy
+msgctxt "Group chat contact role"
 msgid "Moderators"
 msgstr "אחראים"
 
@@ -3336,6 +3205,10 @@ msgstr "שינוי שם איש קשר"
 msgid "New message from"
 msgstr "הודעה חדשה מאת %(nickname)s"
 
+msgctxt "Group chat name"
+msgid "News"
+msgstr ""
+
 msgid "Next"
 msgstr ""
 
@@ -3356,6 +3229,11 @@ msgstr "העברת קובץ נכשלה"
 #, fuzzy
 msgid "No Notifications"
 msgstr "התראות"
+
+#, fuzzy
+msgctxt "Group chat feature"
+msgid "No Password Required"
+msgstr "נדרשת מילת מעבר"
 
 #, fuzzy
 msgid "No Proxy"
@@ -3410,19 +3288,57 @@ msgstr "אין תנובה"
 msgid "No results found"
 msgstr "אין תנובה"
 
+#, fuzzy, python-format
+msgid "No updates available (last check: %s)"
+msgstr "אין חשבון זמין"
+
 #, fuzzy
-msgid "No updates available"
+msgid "No updates available (last check: never)"
 msgstr "אין חשבון זמין"
 
 msgid "Node"
 msgstr "צומת"
 
+msgctxt "Configuration description"
+msgid "None"
+msgstr ""
+
+msgctxt "Contact subscription"
+msgid "None"
+msgstr ""
+
+msgctxt "Gender"
+msgid "None"
+msgstr ""
+
+msgctxt "Group chat contact affiliation"
+msgid "None"
+msgstr ""
+
+msgctxt "Group chat contact role"
+msgid "None"
+msgstr ""
+
+msgctxt "Group chat feature"
+msgid "Not Anonymous"
+msgstr ""
+
+msgid "Not Available"
+msgstr "לא זמין"
+
+#, fuzzy
+msgctxt "User status"
 msgid "Not Available"
 msgstr "לא זמין"
 
 #, fuzzy
 msgid "Not Connected"
 msgstr "מחובר"
+
+#, fuzzy
+msgctxt "Group chat feature"
+msgid "Not Moderated"
+msgstr "לא הותחלה"
 
 #, fuzzy
 msgid "Not accelerated"
@@ -3435,6 +3351,15 @@ msgstr "לא זמין"
 #, fuzzy
 msgid "Not encrypted"
 msgstr "לא הותחלה"
+
+#, fuzzy
+msgctxt "File transfer state"
+msgid "Not started"
+msgstr "לא הותחלה"
+
+msgctxt "Profile"
+msgid "Note"
+msgstr ""
 
 msgid "Note to myself"
 msgstr ""
@@ -3477,8 +3402,18 @@ msgstr "הודעות מותאמות:"
 msgid "OK"
 msgstr "_אישור"
 
+#, fuzzy
+msgctxt "Switch"
+msgid "Off"
+msgstr "לא מקוון"
+
 msgid "Offline"
 msgstr "לא מקוון"
+
+#, fuzzy
+msgctxt "Switch"
+msgid "On"
+msgstr "‏OpenPGP: "
 
 msgid "One Month"
 msgstr ""
@@ -3501,6 +3436,11 @@ msgid "Open"
 msgstr "‏OpenPGP: "
 
 #, fuzzy
+msgctxt "Group chat feature"
+msgid "Open"
+msgstr "‏OpenPGP: "
+
+#, fuzzy
 msgid "Open Email Composer"
 msgstr "_פתח מלחין דוא״ל"
 
@@ -3509,12 +3449,20 @@ msgid "Open Folder"
 msgstr "_פתח תיקיה מכילה"
 
 #, fuzzy
+msgid "Open Link"
+msgstr "פתח בתור _קישור"
+
+#, fuzzy
 msgid "Open Link in Browser"
 msgstr "_פתח קישור בתוך דפדפן"
 
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_פתח קישור בתוך דפדפן"
+
+#, fuzzy
+msgid "Open Path"
+msgstr "‏OpenPGP: "
 
 #, fuzzy
 msgid "Open Plugins…"
@@ -3542,6 +3490,7 @@ msgid "Operating System"
 msgstr "תעודת לקוח"
 
 #, fuzzy
+msgctxt "Profile"
 msgid "Organisation"
 msgstr "בחופשה"
 
@@ -3559,6 +3508,11 @@ msgstr ""
 
 msgid "Organize your chats with workspaces"
 msgstr ""
+
+#, fuzzy
+msgctxt "Gender"
+msgid "Other"
+msgstr "אחרים"
 
 msgid "Others"
 msgstr "אחרים"
@@ -3581,6 +3535,12 @@ msgid "Owner"
 msgstr "בעלים"
 
 #, fuzzy
+msgctxt "Group chat contact affiliation"
+msgid "Owner"
+msgstr "בעלים"
+
+#, fuzzy
+msgctxt "Group chat contact affiliation"
 msgid "Owners"
 msgstr "בעלים"
 
@@ -3605,10 +3565,6 @@ msgid "PKCS12 Files"
 msgstr "קבצי PKCS12"
 
 #, fuzzy
-msgid "PNG files"
-msgstr "כל הקבצים"
-
-#, fuzzy
 msgid "Pa_use/Resume"
 msgstr "_חזור"
 
@@ -3616,9 +3572,16 @@ msgstr "_חזור"
 msgid "Pango Version: %s"
 msgstr "גרסא:"
 
+#, fuzzy
+msgctxt "Group chat contact role"
 msgid "Participant"
 msgstr "משתתף"
 
+msgid "Participants"
+msgstr "משתתפים"
+
+#, fuzzy
+msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "משתתפים"
 
@@ -3652,6 +3615,11 @@ msgstr "נדרשת מילת מעבר"
 msgid "Password Required"
 msgstr "נדרשת מילת מעבר"
 
+#, fuzzy
+msgctxt "Group chat feature"
+msgid "Password Required"
+msgstr "נדרשת מילת מעבר"
+
 msgid "Passwords do not match"
 msgstr "סיסמאות לא תואמות"
 
@@ -3677,6 +3645,10 @@ msgstr "מגבלת אורך נתיב מוצתה"
 msgid "Pause or resume file transfer"
 msgstr "ביטול העברת קובץ"
 
+msgctxt "File transfer state"
+msgid "Paused"
+msgstr ""
+
 #, fuzzy
 msgid "Pending Event"
 msgstr "הצג _אירועים ממתינים"
@@ -3684,6 +3656,10 @@ msgstr "הצג _אירועים ממתינים"
 #, fuzzy
 msgid "Pending Voice Requests"
 msgstr "בקשה לשיחה קולית"
+
+msgctxt "Group chat feature"
+msgid "Persistent"
+msgstr ""
 
 #, fuzzy
 msgid "Personal notes about this contact"
@@ -3812,6 +3788,11 @@ msgstr "מיקוד דואר"
 msgid "Prefer direct messages in private group chats "
 msgstr "הצג הו_דעות מצב של אנשי קשר ברשימה"
 
+#, fuzzy
+msgctxt "Configuration"
+msgid "Preference Name"
+msgstr "שם העדפה"
+
 msgid "Preferences"
 msgstr "העדפות"
 
@@ -3865,6 +3846,10 @@ msgstr ""
 msgid "Progress"
 msgstr "התקדמות"
 
+msgctxt "Group chat description"
+msgid "Project discussion"
+msgstr ""
+
 #, fuzzy
 msgid "Prox_y"
 msgstr "_פרוקסי:"
@@ -3888,6 +3873,15 @@ msgstr "התאם שם מארח\\פורט"
 
 msgid "Public"
 msgstr ""
+
+msgctxt "Group chat feature"
+msgid "Public"
+msgstr ""
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Public Encryption Key"
+msgstr "בקשת הרשמה"
 
 #, python-format
 msgid "Pulse: %s"
@@ -3915,6 +3909,10 @@ msgstr ""
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "‫Gajim"
+
+msgctxt "Message row action"
+msgid "Quote…"
+msgstr ""
 
 #, fuzzy
 msgid "Re-Login"
@@ -3952,6 +3950,11 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Reason: %s"
 msgstr "סיבה"
+
+#, fuzzy
+msgctxt "Message state"
+msgid "Received"
+msgstr "הודעה ראשונה אשר התקבלה"
 
 # (שנפתחו) לאחרונה
 # (חדרים/ערוצים) אחרונים
@@ -4101,6 +4104,10 @@ msgstr "הס_ר"
 msgid "Removing Account..."
 msgstr "הסרת חשבון ‫%s"
 
+msgctxt "Group chat name"
+msgid "Repairs"
+msgstr ""
+
 #, fuzzy
 msgid "Report"
 msgstr "_דווחו על בעיה"
@@ -4222,6 +4229,10 @@ msgstr "הודעת מצב"
 msgid "Retract message?"
 msgstr "cli"
 
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr ""
+
 #, fuzzy
 msgid "Revoke Member"
 msgstr "חבר"
@@ -4230,6 +4241,14 @@ msgstr "חבר"
 msgid "Revoke Voice"
 msgstr "_בקש ביטוי"
 
+msgid "Rewind 10 seconds"
+msgstr ""
+
+msgid "Role"
+msgstr "תפקיד"
+
+#, fuzzy
+msgctxt "Profile"
 msgid "Role"
 msgstr "תפקיד"
 
@@ -4268,10 +4287,6 @@ msgstr "תוספים"
 #, fuzzy
 msgid "STUN server to use when using Jingle"
 msgstr "שרת STUN אשר ישמש אותך בעת שימוש בטכנולוגיית jingle"
-
-#, fuzzy
-msgid "SVG files"
-msgstr "שליחת קבצים"
 
 msgid "Sales"
 msgstr ""
@@ -4385,6 +4400,11 @@ msgstr "אנשי קשר אשר נשלחו:"
 msgid "Select File…"
 msgstr "שלח _קובץ"
 
+#, fuzzy
+msgctxt "Message row action"
+msgid "Select Messages…"
+msgstr "הודעה שגרתית"
+
 msgid "Select a security label for your message…"
 msgstr ""
 
@@ -4392,6 +4412,9 @@ msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
 msgid "Select an emoji"
+msgstr ""
+
+msgid "Select playback speed"
 msgstr ""
 
 msgid "Select the account with which you want to synchronise"
@@ -4420,6 +4443,10 @@ msgstr "תעודה חתומה באופן עצמי"
 
 msgid "Self signed certificate in certificate chain"
 msgstr "תעודה חתומה באופן עצמי בתוך שרשרת תעודה"
+
+msgctxt "Group chat feature"
+msgid "Semi-Anonymous"
+msgstr ""
 
 # By last state
 #, fuzzy
@@ -4821,11 +4848,20 @@ msgstr "בדיקת איות"
 msgid "Spell Checking"
 msgstr "בדיקת איות"
 
+msgctxt "Group chat description"
+msgid "Spring gathering"
+msgstr ""
+
 msgid "Sta_tus"
 msgstr "_מצב"
 
 msgid "Stage"
 msgstr ""
+
+#, fuzzy
+msgctxt "File transfer state"
+msgid "Stalled"
+msgstr "מותקנים"
 
 #, fuzzy
 msgid "Start / Join Chat"
@@ -4900,6 +4936,11 @@ msgstr "cli"
 msgid "Status message…"
 msgstr "הודעת _מצב:"
 
+#, fuzzy
+msgctxt "File transfer state"
+msgid "Status: "
+msgstr "מצב: "
+
 #, fuzzy, python-format
 msgid "Status: %s"
 msgstr "מצב: "
@@ -4950,6 +4991,8 @@ msgstr "נושא מנפיק לא תואם"
 msgid "Submit"
 msgstr ""
 
+#, fuzzy
+msgctxt "Contact subscription"
 msgid "Subscribe"
 msgstr "הרשמה"
 
@@ -5043,8 +5086,21 @@ msgstr "אימות תעודת SSL עבור %s"
 msgid "Tabbed chat window"
 msgstr ""
 
+msgctxt "Group chat name"
+msgid "Team"
+msgstr ""
+
 msgid "Tell your contacts if you received a message"
 msgstr ""
+
+msgctxt "Group chat feature"
+msgid "Temporary"
+msgstr ""
+
+#, fuzzy
+msgctxt "Configuration type"
+msgid "Text"
+msgstr "cli"
 
 #, fuzzy
 msgid "Text File"
@@ -5286,6 +5342,12 @@ msgstr ""
 msgid "Time Until Not Available"
 msgstr "לא זמין"
 
+msgctxt "Profile"
+msgid "Title"
+msgstr ""
+
+#, fuzzy
+msgctxt "Contact subscription"
 msgid "To"
 msgstr "אל"
 
@@ -5305,6 +5367,16 @@ msgid "Topic"
 msgstr ""
 
 #, fuzzy
+msgctxt "File transfer state"
+msgid "Transferred: "
+msgstr "העברות קבצים"
+
+#, fuzzy
+msgctxt "File transfer state"
+msgid "Transferring"
+msgstr "כעת מעביר"
+
+#, fuzzy
 msgid "Transferring File…"
 msgstr "כעת מעביר"
 
@@ -5317,6 +5389,10 @@ msgstr "מובילים"
 
 msgid "Treat * / _ pairs as possible formatting characters."
 msgstr "התייחסות לצמדים של * / _  בתור תווי עיצוב אפשריים."
+
+msgctxt "Group chat description"
+msgid "Trip planning"
+msgstr ""
 
 msgid "Trust Not Decided"
 msgstr ""
@@ -5353,8 +5429,18 @@ msgstr ""
 msgid "Type"
 msgstr "טיפוס"
 
+#, fuzzy
+msgctxt "Configuration"
+msgid "Type"
+msgstr "טיפוס"
+
 msgid "Type to search for values..."
 msgstr ""
+
+#, fuzzy
+msgctxt "File transfer type"
+msgid "Type: "
+msgstr "טיפוס"
 
 msgid "UPnP-IGD Port Forwarding"
 msgstr ""
@@ -5399,6 +5485,11 @@ msgid "Uninstall Plugin"
 msgstr "הסר"
 
 #, fuzzy
+msgid "Unknown"
+msgstr "לא ידועה"
+
+#, fuzzy
+msgctxt "Contact subscription"
 msgid "Unknown"
 msgstr "לא ידועה"
 
@@ -5475,6 +5566,10 @@ msgstr "בחירת ארכיון"
 msgid "Update available"
 msgstr "אין חשבון זמין"
 
+#, fuzzy
+msgid "Update check disabled in preferences"
+msgstr "ערוך העדפות _ארכיונאות"
+
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5483,6 +5578,11 @@ msgstr ""
 
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
+
+#, fuzzy
+msgctxt "Noun"
+msgid "Upload"
+msgstr "שמור קובץ בשם..."
 
 #, fuzzy
 msgid "Upload Files"
@@ -5560,10 +5660,19 @@ msgstr "משתמשים"
 msgid "V4L2: %s"
 msgstr "‏V4L2: ‏%s"
 
+#, fuzzy
+msgctxt "Group chat name"
+msgid "Vacation"
+msgstr "מיקום: "
+
 msgid "Validity"
 msgstr ""
 
 msgid "Validity\n"
+msgstr ""
+
+msgctxt "Configuration"
+msgid "Value"
 msgstr ""
 
 #, fuzzy
@@ -5607,9 +5716,13 @@ msgstr ""
 msgid "Visit Website"
 msgstr ""
 
+#, fuzzy
+msgctxt "Group chat contact role"
 msgid "Visitor"
 msgstr "מבקר"
 
+#, fuzzy
+msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "מבקרים"
 
@@ -5819,10 +5932,6 @@ msgid ""
 "You do not have the proper permissions to create files in this directory."
 msgstr "אין לך הרשאות ליצור קבצים במדור זה."
 
-#, python-format
-msgid "You dropped something Gajim could not process: %s"
-msgstr ""
-
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
 msgstr ""
@@ -5968,12 +6077,19 @@ msgid "_Advanced Settings"
 msgstr "קיצורי מקש"
 
 #, fuzzy
+msgctxt "User status"
+msgid "_Available"
+msgstr "זמין"
+
+#, fuzzy
 msgid "_Back"
 msgstr "אשוב בקרוב"
 
 msgid "_Block"
 msgstr "_חסום"
 
+#, fuzzy
+msgctxt "User status"
 msgid "_Busy"
 msgstr "_עסוק"
 
@@ -6058,6 +6174,8 @@ msgstr "תכונות"
 msgid "_File Transfer"
 msgstr "העברות קבצים"
 
+#, fuzzy
+msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "_חופשי לשיחה"
 
@@ -6114,6 +6232,8 @@ msgstr "פוסט חדש"
 msgid "_No"
 msgstr "לא"
 
+#, fuzzy
+msgctxt "User status"
 msgid "_Not Available"
 msgstr "_לא זמין"
 
@@ -6285,6 +6405,7 @@ msgstr "בניין"
 msgid "cairo Version: %s"
 msgstr "גרסא:"
 
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #, fuzzy
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "צ'אט;מסרים;מסנג'ר;jabber;xmpp;bonjour;voip"
@@ -6316,6 +6437,10 @@ msgid "error"
 msgstr "שגיאה"
 
 msgid "example.org"
+msgstr ""
+
+msgctxt "Group chat address"
+msgid "family"
 msgstr ""
 
 msgid "file transfers list"
@@ -6369,10 +6494,15 @@ msgstr ""
 msgid "medium-light skin"
 msgstr ""
 
+msgctxt "Group chat address"
+msgid "news"
+msgstr ""
+
 #, fuzzy
 msgid "or"
 msgstr "עבודה"
 
+#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
 msgid "org.gajim.Gajim"
 msgstr ""
 
@@ -6393,6 +6523,10 @@ msgstr ""
 msgid "region"
 msgstr "תחום"
 
+msgctxt "Group chat address"
+msgid "repairs"
+msgstr ""
+
 msgid "room"
 msgstr "חדר"
 
@@ -6405,6 +6539,10 @@ msgstr "רחוב"
 #, fuzzy
 msgid "strike"
 msgstr "קו חוצה"
+
+msgctxt "Group chat address"
+msgid "team"
+msgstr ""
 
 msgid "text"
 msgstr "תמליל"
@@ -6423,6 +6561,11 @@ msgstr ""
 "\n"
 "Rahut Contributors:\n"
 "  Isratine Citizen (genghiskhan AT gmx.ca)"
+
+#, fuzzy
+msgctxt "Group chat address"
+msgid "vacation"
+msgstr "מיקום: "
 
 msgid "video input"
 msgstr "קלט וידאו"
@@ -6467,3 +6610,216 @@ msgstr "%(nick)s מצוי/ה כעת במצב %(status)s "
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "?Ask (for Subscription):None"
+#~ msgstr "אין"
+
+#, fuzzy
+#~ msgid "?Gender:None"
+#~ msgstr "ממען: "
+
+#~ msgid "?Group Chat Contact Affiliation:None"
+#~ msgstr "ללא"
+
+#~ msgid "?Group Chat Contact Role:None"
+#~ msgstr "אין"
+
+#, fuzzy
+#~ msgid "?Group chat address:news"
+#~ msgstr "שיחת קבוצה חדשה"
+
+#, fuzzy
+#~ msgid "?Group chat address:repairs"
+#~ msgstr "שיחות קבוצה"
+
+#, fuzzy
+#~ msgid "?Group chat address:team"
+#~ msgstr "שיחות קבוצה"
+
+#, fuzzy
+#~ msgid "?Group chat address:vacation"
+#~ msgstr "הזמנת שיחת קבוצה"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Archiving"
+#~ msgstr "הזמנת שיחת קבוצה"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Hidden"
+#~ msgstr "אין"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Members Only"
+#~ msgstr "הבלטת שיחת קבוצה:"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Moderated"
+#~ msgstr "אין"
+
+#, fuzzy
+#~ msgid "?Group chat feature:No Password Required"
+#~ msgstr "שיחות קבוצה"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Not Anonymous"
+#~ msgstr "שיחות קבוצה"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Not Moderated"
+#~ msgstr "שיחות קבוצה"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Open"
+#~ msgstr "אין"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Password Required"
+#~ msgstr "שיחות קבוצה"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Persistent"
+#~ msgstr "שיחות קבוצה"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Public"
+#~ msgstr "הבלטת שיחת קבוצה:"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Semi-Anonymous"
+#~ msgstr "הבלטת שיחת קבוצה:"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Temporary"
+#~ msgstr "אין"
+
+#, fuzzy
+#~ msgid "?Group chat name:Family"
+#~ msgstr "הבלטת שיחת קבוצה:"
+
+#, fuzzy
+#~ msgid "?Group chat name:News"
+#~ msgstr "אין"
+
+#, fuzzy
+#~ msgid "?Group chat name:Repairs"
+#~ msgstr "שיחות קבוצה"
+
+#, fuzzy
+#~ msgid "?Group chat name:Team"
+#~ msgstr "אין"
+
+#, fuzzy
+#~ msgid "?Group chat name:Vacation"
+#~ msgstr "הזמנת שיחת קבוצה"
+
+#, fuzzy
+#~ msgid "?Message row action:Copy"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "?Message row action:Correct…"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "?Message row action:Retract…"
+#~ msgstr "הודעה ראשונה אשר התקבלה"
+
+#, fuzzy
+#~ msgid "?Message row action:Select Messages…"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "?Message state:Received"
+#~ msgstr "הודעה ראשונה אשר התקבלה"
+
+#, fuzzy
+#~ msgid "?Noun:Download"
+#~ msgstr "הורדה"
+
+#, fuzzy
+#~ msgid "?Noun:Upload"
+#~ msgstr "העלאה"
+
+#~ msgid "?Subscription we already have:None"
+#~ msgstr "ללא"
+
+#, fuzzy
+#~ msgid "?config description:None"
+#~ msgstr "אין"
+
+#, fuzzy
+#~ msgid "?config:Value"
+#~ msgstr "תצורה"
+
+#, fuzzy
+#~ msgid "?profile:Address"
+#~ msgstr "_כתובת:"
+
+#, fuzzy
+#~ msgid "?profile:Full Name"
+#~ msgstr "<b>שם מלא</b>"
+
+#, fuzzy
+#~ msgid "?profile:Note"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "?profile:Role"
+#~ msgstr "cli"
+
+#, fuzzy
+#~ msgid "?transfer status:Aborted"
+#~ msgstr "הושהתה"
+
+#, fuzzy
+#~ msgid "?transfer status:Completed"
+#~ msgstr "הושהתה"
+
+#, fuzzy
+#~ msgid "?transfer status:Not started"
+#~ msgstr "הושהתה"
+
+#~ msgid "?transfer status:Paused"
+#~ msgstr "הושהתה"
+
+#, fuzzy
+#~ msgid "?transfer status:Stalled"
+#~ msgstr "הושהתה"
+
+#, fuzzy
+#~ msgid "?transfer status:Status: "
+#~ msgstr "הושהתה"
+
+#, fuzzy
+#~ msgid "?transfer status:Transferred: "
+#~ msgstr "הושהתה"
+
+#, fuzzy
+#~ msgid "?transfer status:Transferring"
+#~ msgstr "הושהתה"
+
+#, fuzzy
+#~ msgid "?transfer type:Type: "
+#~ msgstr "העברת קובץ נעצרה"
+
+#~ msgid "?user status:Available"
+#~ msgstr "זמין"
+
+#~ msgid "?user status:_Available"
+#~ msgstr "_זמין"
+
+#, fuzzy
+#~ msgid "Copy Location"
+#~ msgstr "ה_עתק מיקום קישור"
+
+#, fuzzy
+#~ msgid "JPEG files"
+#~ msgstr "כל הקבצים"
+
+#, fuzzy
+#~ msgid "PNG files"
+#~ msgstr "כל הקבצים"
+
+#, fuzzy
+#~ msgid "SVG files"
+#~ msgstr "שליחת קבצים"

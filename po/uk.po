@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-03 08:42+0000\n"
+"POT-Creation-Date: 2022-12-14 18:45+0000\n"
 "PO-Revision-Date: 2022-07-18 19:52+0000\n"
 "Last-Translator: Volodymyr Smoliar <v_2e@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -16,8 +16,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 4.11.2\n"
 
 #, fuzzy
@@ -183,6 +183,10 @@ msgctxt "negative longitude"
 msgid "%sW"
 msgstr ""
 
+#. Translators:
+#. This should make the string KB/s,
+#. where 'KB' part is taken from %s.
+#. Only the 's' after / (which means second) should be translated.
 #, python-format
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
@@ -305,242 +309,6 @@ msgstr "<порожньо>"
 msgid "<error>"
 msgstr "<помилка>"
 
-msgid "?Ask (for Subscription):None"
-msgstr "?Ask (for Subscription):Немає"
-
-msgid "?Gender:None"
-msgstr "?Gender:Не вказано"
-
-msgid "?Gender:Other"
-msgstr "?Gender:Інша"
-
-msgid "?Group Chat Contact Affiliation:None"
-msgstr "?Group Chat Contact Affiliation:Жодного"
-
-msgid "?Group Chat Contact Role:None"
-msgstr "?Group Chat Contact Role:Немає"
-
-msgid "?Group chat address:family"
-msgstr "?Group chat address:сім'я"
-
-msgid "?Group chat address:news"
-msgstr "?Group chat address:новини"
-
-msgid "?Group chat address:repairs"
-msgstr "?Group chat address:ремонт"
-
-msgid "?Group chat address:team"
-msgstr "?Group chat address:команда"
-
-msgid "?Group chat address:vacation"
-msgstr "?Group chat address:відпустка"
-
-msgid "?Group chat description:Local help group"
-msgstr "?Group chat description:Місцева група допомоги"
-
-msgid "?Group chat description:Local news and reports"
-msgstr "?Group chat description:Місцеві новини та повідомлення"
-
-msgid "?Group chat description:Project discussion"
-msgstr "?Group chat description:Обговорення проектів"
-
-msgid "?Group chat description:Spring gathering"
-msgstr "?Group chat description:Весняні збори"
-
-msgid "?Group chat description:Trip planning"
-msgstr "?Group chat description:Планування подорожей"
-
-#, fuzzy
-msgid "?Group chat feature:Archiving"
-msgstr "Запрошення до групової балачки"
-
-#, fuzzy
-msgid "?Group chat feature:Hidden"
-msgstr "?Роль у груповій балачці:Немає"
-
-#, fuzzy
-msgid "?Group chat feature:Members Only"
-msgstr "Виділення повідомлення групової балачки:"
-
-#, fuzzy
-msgid "?Group chat feature:Moderated"
-msgstr "?Роль у груповій балачці:Немає"
-
-#, fuzzy
-msgid "?Group chat feature:No Password Required"
-msgstr "Групові балачки"
-
-#, fuzzy
-msgid "?Group chat feature:Not Anonymous"
-msgstr "Групові балачки"
-
-#, fuzzy
-msgid "?Group chat feature:Not Moderated"
-msgstr "Групові балачки"
-
-#, fuzzy
-msgid "?Group chat feature:Open"
-msgstr "?Роль у груповій балачці:Немає"
-
-#, fuzzy
-msgid "?Group chat feature:Password Required"
-msgstr "Групові балачки"
-
-#, fuzzy
-msgid "?Group chat feature:Persistent"
-msgstr "Групові балачки"
-
-#, fuzzy
-msgid "?Group chat feature:Public"
-msgstr "Виділення повідомлення групової балачки:"
-
-#, fuzzy
-msgid "?Group chat feature:Semi-Anonymous"
-msgstr "Виділення повідомлення групової балачки:"
-
-#, fuzzy
-msgid "?Group chat feature:Temporary"
-msgstr "?Роль у груповій балачці:Немає"
-
-#, fuzzy
-msgid "?Group chat name:Family"
-msgstr "Виділення повідомлення групової балачки:"
-
-#, fuzzy
-msgid "?Group chat name:News"
-msgstr "?Роль у груповій балачці:Немає"
-
-#, fuzzy
-msgid "?Group chat name:Repairs"
-msgstr "_Групова балачка"
-
-#, fuzzy
-msgid "?Group chat name:Team"
-msgstr "?Роль у груповій балачці:Немає"
-
-#, fuzzy
-msgid "?Group chat name:Vacation"
-msgstr "Запрошення до групової балачки"
-
-#, fuzzy
-msgid "?Message row action:Copy"
-msgstr "Вміст повідомлення"
-
-#, fuzzy
-msgid "?Message row action:Correct…"
-msgstr "Вміст повідомлення"
-
-msgid "?Message row action:Quote…"
-msgstr ""
-
-#, fuzzy
-msgid "?Message row action:Retract…"
-msgstr "?Message state:Отримано"
-
-#, fuzzy
-msgid "?Message row action:Select Messages…"
-msgstr "Вміст повідомлення"
-
-msgid "?Message state:Received"
-msgstr "?Message state:Отримано"
-
-msgid "?Noun:Download"
-msgstr "?Noun:Завантажити"
-
-msgid "?Noun:Upload"
-msgstr "?Noun:Вивантажити"
-
-msgid "?Subscription we already have:None"
-msgstr "?Subscription we already have:Жодної"
-
-msgid "?config description:None"
-msgstr "?config description:Немає"
-
-msgid "?config type:Boolean"
-msgstr "?config type:Булове"
-
-msgid "?config type:Integer"
-msgstr "?config type:Ціле число"
-
-msgid "?config type:Text"
-msgstr "?config type:Текст"
-
-msgid "?config:Preference Name"
-msgstr "?config:Назва параметра"
-
-msgid "?config:Type"
-msgstr "?config:Тип"
-
-msgid "?config:Value"
-msgstr "?config:Значення"
-
-msgid "?profile:Address"
-msgstr "?profile:Адреса"
-
-msgid "?profile:Full Name"
-msgstr "?profile:Повне ім'я"
-
-msgid "?profile:Gender"
-msgstr "?profile:Стать"
-
-#, fuzzy
-msgid "?profile:IM Address"
-msgstr "?profile:Адреса IM"
-
-msgid "?profile:Note"
-msgstr "?profile:Примітка"
-
-msgid "?profile:Organisation"
-msgstr "?profile:Організація"
-
-msgid "?profile:Public Encryption Key"
-msgstr "?profile:Відкритий ключ шифрування"
-
-msgid "?profile:Role"
-msgstr "?profile:Роль"
-
-msgid "?profile:Title"
-msgstr "?profile:Посада"
-
-msgid "?switch:Off"
-msgstr "?switch:Вимк."
-
-msgid "?switch:On"
-msgstr "?switch:Увімк."
-
-msgid "?transfer status:Aborted"
-msgstr "?transfer status:Скасовано"
-
-msgid "?transfer status:Completed"
-msgstr "?transfer status:Завершено"
-
-msgid "?transfer status:Not started"
-msgstr "?transfer status:Не розпочато"
-
-msgid "?transfer status:Paused"
-msgstr "?transfer status:Призупинено"
-
-msgid "?transfer status:Stalled"
-msgstr "?transfer status:Застрягло"
-
-msgid "?transfer status:Status: "
-msgstr "?transfer status:Стан: "
-
-msgid "?transfer status:Transferred: "
-msgstr "?transfer status:Передано: "
-
-msgid "?transfer status:Transferring"
-msgstr "?transfer status:Пересилання"
-
-msgid "?transfer type:Type: "
-msgstr "?transfer type:Тип: "
-
-msgid "?user status:Available"
-msgstr "?user status:Доступний"
-
-msgid "?user status:_Available"
-msgstr "?user status:_Доступний"
-
 msgid "A Feature Comparison of Various Servers"
 msgstr "Порівняння можливостей різних серверів"
 
@@ -581,10 +349,17 @@ msgstr "ALSA: %s"
 msgid "API Preferences. Possible values: \"http\", \"iq\""
 msgstr "Властивості API. Можливі значення: 'http', 'iq'"
 
+#, fuzzy
+msgctxt "User status"
 msgid "A_way"
 msgstr "В_ідійшов"
 
 msgid "Abort"
+msgstr "Скасувати"
+
+#, fuzzy
+msgctxt "File transfer state"
+msgid "Aborted"
 msgstr "Скасувати"
 
 msgid "Abuse"
@@ -729,6 +504,11 @@ msgstr[2] "Додано %d контактів"
 msgid "Address"
 msgstr "Адреса"
 
+#, fuzzy
+msgctxt "Profile"
+msgid "Address"
+msgstr "Адреса"
+
 msgid "Address does not belong to a group chat server"
 msgstr "Адреса не належить серверові групових балачок"
 
@@ -745,9 +525,13 @@ msgstr "Адміністратор"
 msgid "Administration"
 msgstr "Адміністрування"
 
+#, fuzzy
+msgctxt "Group chat contact affiliation"
 msgid "Administrator"
 msgstr "Адміністратор"
 
+#, fuzzy
+msgctxt "Group chat contact affiliation"
 msgid "Administrators"
 msgstr "Адміністратори"
 
@@ -865,6 +649,11 @@ msgstr "Архів порожній"
 
 msgid "Archive is malformed"
 msgstr "Архів пошкоджений"
+
+#, fuzzy
+msgctxt "Group chat feature"
+msgid "Archiving"
+msgstr "Архів"
 
 msgid "Archiving Preferences"
 msgstr "Налаштування архівації"
@@ -1005,9 +794,16 @@ msgstr ""
 msgid "Available"
 msgstr "Доступний"
 
+#, fuzzy
+msgctxt "User status"
+msgid "Available"
+msgstr "Доступний"
+
 msgid "Avatar file size too big"
 msgstr "Файл аватари завеликий"
 
+#, fuzzy
+msgctxt "User status"
 msgid "Away"
 msgstr "Далеко"
 
@@ -1064,6 +860,12 @@ msgstr "Закладки"
 msgid "Bookmarks for %s"
 msgstr "Закладки для %s"
 
+msgctxt "Configuration type"
+msgid "Boolean"
+msgstr ""
+
+#, fuzzy
+msgctxt "Contact subscription"
 msgid "Both"
 msgstr "Обидва"
 
@@ -1077,6 +879,8 @@ msgstr "Перегляд історії за датою"
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Перегляд %(address)s з використанням облікового запису %(account)s"
 
+#, fuzzy
+msgctxt "User status"
 msgid "Busy"
 msgstr "Зайнятий"
 
@@ -1309,6 +1113,9 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "Оберіть контакти для запрошення до цієї кімнати."
 
+msgid "Click to change time display"
+msgstr ""
+
 msgid "Click to view Gajim's wiki page on how to install plugins in Flatpak."
 msgstr ""
 "Натисніть для перегляду Gajim wiki про встановлення додатків у Flatpak."
@@ -1372,6 +1179,11 @@ msgstr "Завершено"
 msgid "Complete a command or a nickname"
 msgstr "Завершіть команду або псевдонім"
 
+msgid "Completed"
+msgstr "Завершено"
+
+#, fuzzy
+msgctxt "File transfer state"
 msgid "Completed"
 msgstr "Завершено"
 
@@ -1517,6 +1329,11 @@ msgstr "Розмови зберігатимуться на сервері"
 msgid "Copy"
 msgstr "Копіювати"
 
+#, fuzzy
+msgctxt "Message row action"
+msgid "Copy"
+msgstr "Копіювати"
+
 msgid "Copy Address"
 msgstr "Копіювати адресу"
 
@@ -1533,8 +1350,9 @@ msgstr "_Копіювати посилання"
 msgid "Copy Link Location"
 msgstr "Копіювати посилання"
 
-msgid "Copy Location"
-msgstr "Копіювати місцезнаходження"
+#, fuzzy
+msgid "Copy Path"
+msgstr "Копіювати"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1555,6 +1373,10 @@ msgstr "Копіювати інформацію до буфера обміну"
 #, fuzzy
 msgid "Correct the last message"
 msgstr "повідомлення про стан"
+
+msgctxt "Message row action"
+msgid "Correct…"
+msgstr ""
 
 msgid "Could not access file"
 msgstr "Не вдалося звернутись до файлу"
@@ -1620,6 +1442,9 @@ msgstr "Відхилити"
 msgid "Decline Invitation"
 msgstr ""
 
+msgid "Decrease playback speed"
+msgstr ""
+
 msgid "Default"
 msgstr "Типовий"
 
@@ -1678,6 +1503,10 @@ msgstr "Пристрій «%s»"
 
 msgid "Devices"
 msgstr "Пристрої"
+
+#, fuzzy
+msgid "Dial Number"
+msgstr "Номер GG:"
 
 #, python-format
 msgid "Dictionary URL is missing a \"%s\""
@@ -1766,6 +1595,11 @@ msgstr "Бажаєте також видалити реєстрацію облі
 msgid "Don’t show this again"
 msgstr "Більше не показувати"
 
+msgid "Download"
+msgstr "Завантажити"
+
+#, fuzzy
+msgctxt "Noun"
 msgid "Download"
 msgstr "Завантажити"
 
@@ -2019,6 +1853,10 @@ msgstr "Не вдалося згенерувати аватару."
 msgid "Fake audio output"
 msgstr "Фальшивий вихід аудіо"
 
+msgctxt "Group chat name"
+msgid "Family"
+msgstr ""
+
 #, fuzzy
 msgid "Feature not available on Windows"
 msgstr "Функція недоступна у Windows"
@@ -2186,12 +2024,27 @@ msgstr "Помилка форматування у полі сертифікат
 msgid "Format your message"
 msgstr "Переспрямувати непрочитані повідомлення"
 
+msgid "Forward 10 seconds"
+msgstr ""
+
+#, fuzzy
+msgctxt "User status"
 msgid "Free for Chat"
 msgstr "Вільний для балачки"
 
 msgid "From"
 msgstr "Від"
 
+#, fuzzy
+msgctxt "Contact subscription"
+msgid "From"
+msgstr "Від"
+
+msgid "Full Name"
+msgstr "Повне ім'я"
+
+#, fuzzy
+msgctxt "Profile"
 msgid "Full Name"
 msgstr "Повне ім'я"
 
@@ -2255,6 +2108,11 @@ msgid "Gathering information…"
 msgstr "Контактна інформація"
 
 #, fuzzy
+msgid "Gender"
+msgstr "Відправник:"
+
+#, fuzzy
+msgctxt "Profile"
 msgid "Gender"
 msgstr "Відправник:"
 
@@ -2385,6 +2243,10 @@ msgstr "Привіт, я $name."
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
+msgctxt "Group chat feature"
+msgid "Hidden"
+msgstr ""
+
 msgid "Hide"
 msgstr ""
 
@@ -2428,6 +2290,7 @@ msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "Згідно до стандарту IEC: кіБ = 1024 байтам, кБ = 1000 байтам."
 
 #, fuzzy
+msgctxt "Profile"
 msgid "IM Address"
 msgstr "_Адреса:"
 
@@ -2533,6 +2396,9 @@ msgstr "Колір вхідного псевдоніму"
 msgid "Incoming Call (Video)"
 msgstr ""
 
+msgid "Increase playback speed"
+msgstr ""
+
 #, fuzzy
 msgid "Information"
 msgstr "_Інформація"
@@ -2564,6 +2430,10 @@ msgstr "Спроба з’єднання завершилася невдало"
 
 msgid "Installed"
 msgstr "Встановлено"
+
+msgctxt "Configuration type"
+msgid "Integer"
+msgstr ""
 
 #, fuzzy
 msgid "Invalid Address"
@@ -2668,10 +2538,6 @@ msgid "JID"
 msgstr "JID"
 
 #, fuzzy
-msgid "JPEG files"
-msgstr "Всі файли"
-
-#, fuzzy
 msgid "Join"
 msgstr "При_єднатися"
 
@@ -2687,7 +2553,7 @@ msgid "Join Group Chat?"
 msgstr "Приєднатись до групової балачки"
 
 #, fuzzy
-msgid "Join Groupchat"
+msgid "Join Groupchat…"
 msgstr "Приєднатись до групової балачки"
 
 #, fuzzy
@@ -2782,6 +2648,15 @@ msgstr ""
 msgid "Local Time"
 msgstr "Локальний jid:"
 
+msgctxt "Group chat description"
+msgid "Local help group"
+msgstr ""
+
+#, fuzzy
+msgctxt "Group chat description"
+msgid "Local news and reports"
+msgstr "?Group chat description:Місцеві новини та повідомлення"
+
 #, fuzzy, python-format
 msgid "Location at %s"
 msgstr "Положення:"
@@ -2868,7 +2743,18 @@ msgid "Member"
 msgstr "Учасник"
 
 #, fuzzy
+msgctxt "Group chat contact affiliation"
+msgid "Member"
+msgstr "Учасник"
+
+#, fuzzy
+msgctxt "Group chat contact affiliation"
 msgid "Members"
+msgstr "Учасник"
+
+#, fuzzy
+msgctxt "Group chat feature"
+msgid "Members Only"
 msgstr "Учасник"
 
 #, fuzzy
@@ -2935,12 +2821,21 @@ msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
+msgctxt "Group chat feature"
+msgid "Moderated"
+msgstr "Модератор"
+
+#, fuzzy
 msgid "Moderation"
 msgstr "Модератор"
 
+#, fuzzy
+msgctxt "Group chat contact role"
 msgid "Moderator"
 msgstr "Модератор"
 
+#, fuzzy
+msgctxt "Group chat contact role"
 msgid "Moderators"
 msgstr "Модератори"
 
@@ -3003,6 +2898,10 @@ msgstr "Перейменувати контакт"
 msgid "New message from"
 msgstr "Нове повідомлення від %(nickname)s"
 
+msgctxt "Group chat name"
+msgid "News"
+msgstr ""
+
 msgid "Next"
 msgstr ""
 
@@ -3023,6 +2922,11 @@ msgstr "Перенесення файлу не вдалося"
 #, fuzzy
 msgid "No Notifications"
 msgstr "Сповіщення"
+
+#, fuzzy
+msgctxt "Group chat feature"
+msgid "No Password Required"
+msgstr "Слід ввести пароль"
 
 #, fuzzy
 msgid "No Proxy"
@@ -3077,19 +2981,57 @@ msgstr "Результату немає"
 msgid "No results found"
 msgstr "Результату немає"
 
+#, fuzzy, python-format
+msgid "No updates available (last check: %s)"
+msgstr "Немає жодного облікового запису"
+
 #, fuzzy
-msgid "No updates available"
+msgid "No updates available (last check: never)"
 msgstr "Немає жодного облікового запису"
 
 msgid "Node"
 msgstr "Вузол"
 
+msgctxt "Configuration description"
+msgid "None"
+msgstr ""
+
+msgctxt "Contact subscription"
+msgid "None"
+msgstr ""
+
+msgctxt "Gender"
+msgid "None"
+msgstr ""
+
+msgctxt "Group chat contact affiliation"
+msgid "None"
+msgstr ""
+
+msgctxt "Group chat contact role"
+msgid "None"
+msgstr ""
+
+msgctxt "Group chat feature"
+msgid "Not Anonymous"
+msgstr ""
+
+msgid "Not Available"
+msgstr "Дуже далеко"
+
+#, fuzzy
+msgctxt "User status"
 msgid "Not Available"
 msgstr "Дуже далеко"
 
 #, fuzzy
 msgid "Not Connected"
 msgstr "З'єднано"
+
+#, fuzzy
+msgctxt "Group chat feature"
+msgid "Not Moderated"
+msgstr "Не розпочато"
 
 #, fuzzy
 msgid "Not accelerated"
@@ -3102,6 +3044,15 @@ msgstr "Дуже далеко"
 #, fuzzy
 msgid "Not encrypted"
 msgstr "Не розпочато"
+
+#, fuzzy
+msgctxt "File transfer state"
+msgid "Not started"
+msgstr "Не розпочато"
+
+msgctxt "Profile"
+msgid "Note"
+msgstr ""
 
 msgid "Note to myself"
 msgstr ""
@@ -3144,8 +3095,18 @@ msgstr "Зразки повідомлень:"
 msgid "OK"
 msgstr "_Гаразд"
 
+#, fuzzy
+msgctxt "Switch"
+msgid "Off"
+msgstr "Поза мережею"
+
 msgid "Offline"
 msgstr "Поза мережею"
+
+#, fuzzy
+msgctxt "Switch"
+msgid "On"
+msgstr "OpenPGP: "
 
 msgid "One Month"
 msgstr ""
@@ -3168,6 +3129,11 @@ msgid "Open"
 msgstr "OpenPGP: "
 
 #, fuzzy
+msgctxt "Group chat feature"
+msgid "Open"
+msgstr "OpenPGP: "
+
+#, fuzzy
 msgid "Open Email Composer"
 msgstr "_Відкрити редактор поштових повідомлень"
 
@@ -3176,12 +3142,20 @@ msgid "Open Folder"
 msgstr "В_ідкриту теку, яка містить цей файл"
 
 #, fuzzy
+msgid "Open Link"
+msgstr "Відкрити як _посилання"
+
+#, fuzzy
 msgid "Open Link in Browser"
 msgstr "_Відкрити посилання у веб-переглядачі"
 
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Відкрити посилання у веб-переглядачі"
+
+#, fuzzy
+msgid "Open Path"
+msgstr "OpenPGP: "
 
 #, fuzzy
 msgid "Open Plugins…"
@@ -3209,6 +3183,7 @@ msgid "Operating System"
 msgstr "Клієнтський сертифікат"
 
 #, fuzzy
+msgctxt "Profile"
 msgid "Organisation"
 msgstr "У відпустці"
 
@@ -3226,6 +3201,11 @@ msgstr ""
 
 msgid "Organize your chats with workspaces"
 msgstr ""
+
+#, fuzzy
+msgctxt "Gender"
+msgid "Other"
+msgstr "Інші"
 
 msgid "Others"
 msgstr "Інші"
@@ -3247,6 +3227,12 @@ msgid "Owner"
 msgstr "Власник"
 
 #, fuzzy
+msgctxt "Group chat contact affiliation"
+msgid "Owner"
+msgstr "Власник"
+
+#, fuzzy
+msgctxt "Group chat contact affiliation"
 msgid "Owners"
 msgstr "Власник"
 
@@ -3273,10 +3259,6 @@ msgid "PKCS12 Files"
 msgstr "Файли PKCS12"
 
 #, fuzzy
-msgid "PNG files"
-msgstr "Всі файли"
-
-#, fuzzy
 msgid "Pa_use/Resume"
 msgstr "_Продовжити"
 
@@ -3284,9 +3266,16 @@ msgstr "_Продовжити"
 msgid "Pango Version: %s"
 msgstr "Версія Cairo: %s"
 
+#, fuzzy
+msgctxt "Group chat contact role"
 msgid "Participant"
 msgstr "Учасник"
 
+msgid "Participants"
+msgstr "Учасники"
+
+#, fuzzy
+msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "Учасники"
 
@@ -3320,6 +3309,11 @@ msgstr "Слід ввести пароль"
 msgid "Password Required"
 msgstr "Слід ввести пароль"
 
+#, fuzzy
+msgctxt "Group chat feature"
+msgid "Password Required"
+msgstr "Слід ввести пароль"
+
 msgid "Passwords do not match"
 msgstr "Паролі не збігаються"
 
@@ -3345,6 +3339,10 @@ msgstr "Перевищення обмеження на довжину адрес
 msgid "Pause or resume file transfer"
 msgstr "Скасувати передавання файла"
 
+msgctxt "File transfer state"
+msgid "Paused"
+msgstr ""
+
 #, fuzzy
 msgid "Pending Event"
 msgstr "Показати усі _події з черги"
@@ -3352,6 +3350,10 @@ msgstr "Показати усі _події з черги"
 #, fuzzy
 msgid "Pending Voice Requests"
 msgstr "Запит на голосову розмову"
+
+msgctxt "Group chat feature"
+msgid "Persistent"
+msgstr ""
 
 #, fuzzy
 msgid "Personal notes about this contact"
@@ -3480,6 +3482,11 @@ msgstr "поштовий індекс"
 msgid "Prefer direct messages in private group chats "
 msgstr "Показувати _повідомлення  про стан контактів з реєстру"
 
+#, fuzzy
+msgctxt "Configuration"
+msgid "Preference Name"
+msgstr "?config:Назва параметра"
+
 msgid "Preferences"
 msgstr "Параметри"
 
@@ -3534,6 +3541,11 @@ msgid "Progress"
 msgstr "Поступ"
 
 #, fuzzy
+msgctxt "Group chat description"
+msgid "Project discussion"
+msgstr "?Group chat description:Обговорення проектів"
+
+#, fuzzy
 msgid "Prox_y"
 msgstr "Прокс_і:"
 
@@ -3555,6 +3567,15 @@ msgstr "Використовувати інші вузол/порт"
 
 msgid "Public"
 msgstr ""
+
+msgctxt "Group chat feature"
+msgid "Public"
+msgstr ""
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Public Encryption Key"
+msgstr "?profile:Відкритий ключ шифрування"
 
 #, python-format
 msgid "Pulse: %s"
@@ -3578,6 +3599,10 @@ msgstr ""
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
+
+msgctxt "Message row action"
+msgid "Quote…"
+msgstr ""
 
 #, fuzzy
 msgid "Re-Login"
@@ -3614,6 +3639,11 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Reason: %s"
 msgstr "Підстава"
+
+#, fuzzy
+msgctxt "Message state"
+msgid "Received"
+msgstr "Перше отримане повідомлення"
 
 #, fuzzy
 msgid "Recent history"
@@ -3751,6 +3781,10 @@ msgstr "В_илучити"
 msgid "Removing Account..."
 msgstr "Вилучення облікового запису %s"
 
+msgctxt "Group chat name"
+msgid "Repairs"
+msgstr ""
+
 #, fuzzy
 msgid "Report"
 msgstr "_Повідомити про помилку"
@@ -3870,6 +3904,10 @@ msgstr "Повідомлення про стан"
 msgid "Retract message?"
 msgstr "повідомлення про стан"
 
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr ""
+
 #, fuzzy
 msgid "Revoke Member"
 msgstr "Учасник"
@@ -3878,6 +3916,14 @@ msgstr "Учасник"
 msgid "Revoke Voice"
 msgstr "_Запит голосу"
 
+msgid "Rewind 10 seconds"
+msgstr ""
+
+msgid "Role"
+msgstr "Роль"
+
+#, fuzzy
+msgctxt "Profile"
 msgid "Role"
 msgstr "Роль"
 
@@ -3917,10 +3963,6 @@ msgstr "Додатки"
 #, fuzzy
 msgid "STUN server to use when using Jingle"
 msgstr "Сервер STUN для використання з Jingle"
-
-#, fuzzy
-msgid "SVG files"
-msgstr "Надіслати _файли"
 
 msgid "Sales"
 msgstr ""
@@ -4031,6 +4073,11 @@ msgstr "Надіслати контакти:"
 msgid "Select File…"
 msgstr "Надіслати файл…"
 
+#, fuzzy
+msgctxt "Message row action"
+msgid "Select Messages…"
+msgstr "Прямі повідомлення"
+
 msgid "Select a security label for your message…"
 msgstr ""
 
@@ -4038,6 +4085,9 @@ msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
 msgid "Select an emoji"
+msgstr ""
+
+msgid "Select playback speed"
 msgstr ""
 
 msgid "Select the account with which you want to synchronise"
@@ -4065,6 +4115,10 @@ msgstr "Сертифікат є самопідписаним"
 
 msgid "Self signed certificate in certificate chain"
 msgstr "Самопідписаний сертифікат у ланцюжку сертифікатів"
+
+msgctxt "Group chat feature"
+msgid "Semi-Anonymous"
+msgstr ""
 
 #, fuzzy
 msgid "Send Chat Markers"
@@ -4456,11 +4510,20 @@ msgstr "Перевірка правопису"
 msgid "Spell Checking"
 msgstr "Перевірка правопису"
 
+msgctxt "Group chat description"
+msgid "Spring gathering"
+msgstr ""
+
 msgid "Sta_tus"
 msgstr "Ста_н"
 
 msgid "Stage"
 msgstr ""
+
+#, fuzzy
+msgctxt "File transfer state"
+msgid "Stalled"
+msgstr "Встановлено"
 
 #, fuzzy
 msgid "Start / Join Chat"
@@ -4535,6 +4598,11 @@ msgstr "Змінює стан облікового запису або облі�
 msgid "Status message…"
 msgstr "_Повідомлення про стан:"
 
+#, fuzzy
+msgctxt "File transfer state"
+msgid "Status: "
+msgstr "Стан: "
+
 #, fuzzy, python-format
 msgid "Status: %s"
 msgstr "Стан: "
@@ -4582,6 +4650,8 @@ msgstr "Видано для іншого призначення"
 msgid "Submit"
 msgstr ""
 
+#, fuzzy
+msgctxt "Contact subscription"
 msgid "Subscribe"
 msgstr "Підписатися"
 
@@ -4671,8 +4741,21 @@ msgstr "Перевірка сертифіката SSL для %s"
 msgid "Tabbed chat window"
 msgstr ""
 
+msgctxt "Group chat name"
+msgid "Team"
+msgstr ""
+
 msgid "Tell your contacts if you received a message"
 msgstr ""
+
+msgctxt "Group chat feature"
+msgid "Temporary"
+msgstr ""
+
+#, fuzzy
+msgctxt "Configuration type"
+msgid "Text"
+msgstr "Копіювати"
 
 #, fuzzy
 msgid "Text File"
@@ -4908,6 +4991,12 @@ msgstr ""
 msgid "Time Until Not Available"
 msgstr "Дуже далеко"
 
+msgctxt "Profile"
+msgid "Title"
+msgstr ""
+
+#, fuzzy
+msgctxt "Contact subscription"
 msgid "To"
 msgstr "До"
 
@@ -4929,6 +5018,16 @@ msgid "Topic"
 msgstr ""
 
 #, fuzzy
+msgctxt "File transfer state"
+msgid "Transferred: "
+msgstr "Перенесення файлів"
+
+#, fuzzy
+msgctxt "File transfer state"
+msgid "Transferring"
+msgstr "Перенесення"
+
+#, fuzzy
 msgid "Transferring File…"
 msgstr "Перенесення"
 
@@ -4941,6 +5040,10 @@ msgstr "Транспорти"
 
 msgid "Treat * / _ pairs as possible formatting characters."
 msgstr "Вважати пари символів * / _ символами форматування."
+
+msgctxt "Group chat description"
+msgid "Trip planning"
+msgstr ""
 
 msgid "Trust Not Decided"
 msgstr ""
@@ -4976,8 +5079,18 @@ msgstr ""
 msgid "Type"
 msgstr "Тип"
 
+#, fuzzy
+msgctxt "Configuration"
+msgid "Type"
+msgstr "Тип"
+
 msgid "Type to search for values..."
 msgstr ""
+
+#, fuzzy
+msgctxt "File transfer type"
+msgid "Type: "
+msgstr "Тип"
 
 msgid "UPnP-IGD Port Forwarding"
 msgstr ""
@@ -5022,6 +5135,11 @@ msgid "Uninstall Plugin"
 msgstr "Видалити"
 
 #, fuzzy
+msgid "Unknown"
+msgstr "?ОС:Невідома"
+
+#, fuzzy
+msgctxt "Contact subscription"
 msgid "Unknown"
 msgstr "?ОС:Невідома"
 
@@ -5096,6 +5214,10 @@ msgstr "Вивантажити аватар…"
 msgid "Update available"
 msgstr "Немає жодного облікового запису"
 
+#, fuzzy
+msgid "Update check disabled in preferences"
+msgstr "Вимкнено в налаштуваннях"
+
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5104,6 +5226,11 @@ msgstr ""
 
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
+
+#, fuzzy
+msgctxt "Noun"
+msgid "Upload"
+msgstr "Зберегти файл як..."
 
 #, fuzzy
 msgid "Upload Files"
@@ -5179,10 +5306,19 @@ msgstr "Користувачі"
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
 
+#, fuzzy
+msgctxt "Group chat name"
+msgid "Vacation"
+msgstr "Положення:"
+
 msgid "Validity"
 msgstr ""
 
 msgid "Validity\n"
+msgstr ""
+
+msgctxt "Configuration"
+msgid "Value"
 msgstr ""
 
 #, fuzzy
@@ -5226,9 +5362,13 @@ msgstr ""
 msgid "Visit Website"
 msgstr ""
 
+#, fuzzy
+msgctxt "Group chat contact role"
 msgid "Visitor"
 msgstr "Відвідувач"
 
+#, fuzzy
+msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "Відвідувачі"
 
@@ -5426,10 +5566,6 @@ msgid ""
 "You do not have the proper permissions to create files in this directory."
 msgstr "Ваш користувач не має права на створення файлів у цьому каталозі."
 
-#, python-format
-msgid "You dropped something Gajim could not process: %s"
-msgstr ""
-
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
 msgstr ""
@@ -5573,12 +5709,19 @@ msgid "_Advanced Settings"
 msgstr "Додаткові дії"
 
 #, fuzzy
+msgctxt "User status"
+msgid "_Available"
+msgstr "Доступний"
+
+#, fuzzy
 msgid "_Back"
 msgstr "Скоро повернуся"
 
 msgid "_Block"
 msgstr "_Заблокувати"
 
+#, fuzzy
+msgctxt "User status"
 msgid "_Busy"
 msgstr "_Зайнятий"
 
@@ -5662,6 +5805,8 @@ msgstr "Можливості"
 msgid "_File Transfer"
 msgstr "Перенесення файлів"
 
+#, fuzzy
+msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "_Вільний для балачки"
 
@@ -5717,6 +5862,8 @@ msgstr "Нове повідомлення"
 msgid "_No"
 msgstr "Ні"
 
+#, fuzzy
+msgctxt "User status"
 msgid "_Not Available"
 msgstr "_Не доступний"
 
@@ -5887,6 +6034,7 @@ msgstr "будівля"
 msgid "cairo Version: %s"
 msgstr "Версія Cairo: %s"
 
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #, fuzzy
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "chat;messaging;im;jabber;xmpp;bonjour;voip"
@@ -5917,6 +6065,10 @@ msgid "error"
 msgstr "помилка"
 
 msgid "example.org"
+msgstr ""
+
+msgctxt "Group chat address"
+msgid "family"
 msgstr ""
 
 msgid "file transfers list"
@@ -5969,10 +6121,15 @@ msgstr ""
 msgid "medium-light skin"
 msgstr ""
 
+msgctxt "Group chat address"
+msgid "news"
+msgstr ""
+
 #, fuzzy
 msgid "or"
 msgstr "Tor"
 
+#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
 msgid "org.gajim.Gajim"
 msgstr ""
 
@@ -5993,6 +6150,10 @@ msgstr ""
 msgid "region"
 msgstr "регіон"
 
+msgctxt "Group chat address"
+msgid "repairs"
+msgstr ""
+
 msgid "room"
 msgstr "кімната"
 
@@ -6006,6 +6167,10 @@ msgstr "вулиця"
 msgid "strike"
 msgstr "Перекреслити"
 
+msgctxt "Group chat address"
+msgid "team"
+msgstr ""
+
 msgid "text"
 msgstr "текст"
 
@@ -6014,6 +6179,11 @@ msgstr "мітка часу"
 
 msgid "translator-credits"
 msgstr "Сергій Єгоров"
+
+#, fuzzy
+msgctxt "Group chat address"
+msgid "vacation"
+msgstr "Положення:"
 
 msgid "video input"
 msgstr "відео вхід"
@@ -6058,3 +6228,239 @@ msgstr "{nick} тепер {show} {status}"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "?Ask (for Subscription):None"
+#~ msgstr "?Ask (for Subscription):Немає"
+
+#~ msgid "?Gender:None"
+#~ msgstr "?Gender:Не вказано"
+
+#~ msgid "?Gender:Other"
+#~ msgstr "?Gender:Інша"
+
+#~ msgid "?Group Chat Contact Affiliation:None"
+#~ msgstr "?Group Chat Contact Affiliation:Жодного"
+
+#~ msgid "?Group Chat Contact Role:None"
+#~ msgstr "?Group Chat Contact Role:Немає"
+
+#~ msgid "?Group chat address:family"
+#~ msgstr "?Group chat address:сім'я"
+
+#~ msgid "?Group chat address:news"
+#~ msgstr "?Group chat address:новини"
+
+#~ msgid "?Group chat address:repairs"
+#~ msgstr "?Group chat address:ремонт"
+
+#~ msgid "?Group chat address:team"
+#~ msgstr "?Group chat address:команда"
+
+#~ msgid "?Group chat address:vacation"
+#~ msgstr "?Group chat address:відпустка"
+
+#~ msgid "?Group chat description:Local help group"
+#~ msgstr "?Group chat description:Місцева група допомоги"
+
+#~ msgid "?Group chat description:Spring gathering"
+#~ msgstr "?Group chat description:Весняні збори"
+
+#~ msgid "?Group chat description:Trip planning"
+#~ msgstr "?Group chat description:Планування подорожей"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Archiving"
+#~ msgstr "Запрошення до групової балачки"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Hidden"
+#~ msgstr "?Роль у груповій балачці:Немає"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Members Only"
+#~ msgstr "Виділення повідомлення групової балачки:"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Moderated"
+#~ msgstr "?Роль у груповій балачці:Немає"
+
+#, fuzzy
+#~ msgid "?Group chat feature:No Password Required"
+#~ msgstr "Групові балачки"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Not Anonymous"
+#~ msgstr "Групові балачки"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Not Moderated"
+#~ msgstr "Групові балачки"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Open"
+#~ msgstr "?Роль у груповій балачці:Немає"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Password Required"
+#~ msgstr "Групові балачки"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Persistent"
+#~ msgstr "Групові балачки"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Public"
+#~ msgstr "Виділення повідомлення групової балачки:"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Semi-Anonymous"
+#~ msgstr "Виділення повідомлення групової балачки:"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Temporary"
+#~ msgstr "?Роль у груповій балачці:Немає"
+
+#, fuzzy
+#~ msgid "?Group chat name:Family"
+#~ msgstr "Виділення повідомлення групової балачки:"
+
+#, fuzzy
+#~ msgid "?Group chat name:News"
+#~ msgstr "?Роль у груповій балачці:Немає"
+
+#, fuzzy
+#~ msgid "?Group chat name:Repairs"
+#~ msgstr "_Групова балачка"
+
+#, fuzzy
+#~ msgid "?Group chat name:Team"
+#~ msgstr "?Роль у груповій балачці:Немає"
+
+#, fuzzy
+#~ msgid "?Group chat name:Vacation"
+#~ msgstr "Запрошення до групової балачки"
+
+#, fuzzy
+#~ msgid "?Message row action:Copy"
+#~ msgstr "Вміст повідомлення"
+
+#, fuzzy
+#~ msgid "?Message row action:Correct…"
+#~ msgstr "Вміст повідомлення"
+
+#, fuzzy
+#~ msgid "?Message row action:Retract…"
+#~ msgstr "?Message state:Отримано"
+
+#, fuzzy
+#~ msgid "?Message row action:Select Messages…"
+#~ msgstr "Вміст повідомлення"
+
+#~ msgid "?Message state:Received"
+#~ msgstr "?Message state:Отримано"
+
+#~ msgid "?Noun:Download"
+#~ msgstr "?Noun:Завантажити"
+
+#~ msgid "?Noun:Upload"
+#~ msgstr "?Noun:Вивантажити"
+
+#~ msgid "?Subscription we already have:None"
+#~ msgstr "?Subscription we already have:Жодної"
+
+#~ msgid "?config description:None"
+#~ msgstr "?config description:Немає"
+
+#~ msgid "?config type:Boolean"
+#~ msgstr "?config type:Булове"
+
+#~ msgid "?config type:Integer"
+#~ msgstr "?config type:Ціле число"
+
+#~ msgid "?config type:Text"
+#~ msgstr "?config type:Текст"
+
+#~ msgid "?config:Type"
+#~ msgstr "?config:Тип"
+
+#~ msgid "?config:Value"
+#~ msgstr "?config:Значення"
+
+#~ msgid "?profile:Address"
+#~ msgstr "?profile:Адреса"
+
+#~ msgid "?profile:Full Name"
+#~ msgstr "?profile:Повне ім'я"
+
+#~ msgid "?profile:Gender"
+#~ msgstr "?profile:Стать"
+
+#, fuzzy
+#~ msgid "?profile:IM Address"
+#~ msgstr "?profile:Адреса IM"
+
+#~ msgid "?profile:Note"
+#~ msgstr "?profile:Примітка"
+
+#~ msgid "?profile:Organisation"
+#~ msgstr "?profile:Організація"
+
+#~ msgid "?profile:Role"
+#~ msgstr "?profile:Роль"
+
+#~ msgid "?profile:Title"
+#~ msgstr "?profile:Посада"
+
+#~ msgid "?switch:Off"
+#~ msgstr "?switch:Вимк."
+
+#~ msgid "?switch:On"
+#~ msgstr "?switch:Увімк."
+
+#~ msgid "?transfer status:Aborted"
+#~ msgstr "?transfer status:Скасовано"
+
+#~ msgid "?transfer status:Completed"
+#~ msgstr "?transfer status:Завершено"
+
+#~ msgid "?transfer status:Not started"
+#~ msgstr "?transfer status:Не розпочато"
+
+#~ msgid "?transfer status:Paused"
+#~ msgstr "?transfer status:Призупинено"
+
+#~ msgid "?transfer status:Stalled"
+#~ msgstr "?transfer status:Застрягло"
+
+#~ msgid "?transfer status:Status: "
+#~ msgstr "?transfer status:Стан: "
+
+#~ msgid "?transfer status:Transferred: "
+#~ msgstr "?transfer status:Передано: "
+
+#~ msgid "?transfer status:Transferring"
+#~ msgstr "?transfer status:Пересилання"
+
+#~ msgid "?transfer type:Type: "
+#~ msgstr "?transfer type:Тип: "
+
+#~ msgid "?user status:Available"
+#~ msgstr "?user status:Доступний"
+
+#~ msgid "?user status:_Available"
+#~ msgstr "?user status:_Доступний"
+
+#~ msgid "Copy Location"
+#~ msgstr "Копіювати місцезнаходження"
+
+#, fuzzy
+#~ msgid "JPEG files"
+#~ msgstr "Всі файли"
+
+#, fuzzy
+#~ msgid "PNG files"
+#~ msgstr "Всі файли"
+
+#, fuzzy
+#~ msgid "SVG files"
+#~ msgstr "Надіслати _файли"

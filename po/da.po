@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-03 08:42+0000\n"
+"POT-Creation-Date: 2022-12-14 18:45+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -181,6 +181,10 @@ msgctxt "negative longitude"
 msgid "%sW"
 msgstr ""
 
+#. Translators:
+#. This should make the string KB/s,
+#. where 'KB' part is taken from %s.
+#. Only the 's' after / (which means second) should be translated.
 #, python-format
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
@@ -317,267 +321,6 @@ msgstr ""
 msgid "<error>"
 msgstr "Fejl"
 
-msgid "?Ask (for Subscription):None"
-msgstr "?Ask (for Subscription):Intet"
-
-#, fuzzy
-msgid "?Gender:None"
-msgstr "Afsender: "
-
-msgid "?Gender:Other"
-msgstr ""
-
-msgid "?Group Chat Contact Affiliation:None"
-msgstr "?Group Chat Contact Affiliation:Ingen"
-
-msgid "?Group Chat Contact Role:None"
-msgstr "?Group Chat Contact Role:Ingen"
-
-msgid "?Group chat address:family"
-msgstr ""
-
-#, fuzzy
-msgid "?Group chat address:news"
-msgstr "Ny Gruppe Samtale"
-
-#, fuzzy
-msgid "?Group chat address:repairs"
-msgstr "Gruppesamtaler"
-
-#, fuzzy
-msgid "?Group chat address:team"
-msgstr "Gruppesamtaler"
-
-#, fuzzy
-msgid "?Group chat address:vacation"
-msgstr "Gruppesamtale Invitation"
-
-msgid "?Group chat description:Local help group"
-msgstr ""
-
-#, fuzzy
-msgid "?Group chat description:Local news and reports"
-msgstr "Gruppesamtale oprettelse er begrænset."
-
-msgid "?Group chat description:Project discussion"
-msgstr ""
-
-msgid "?Group chat description:Spring gathering"
-msgstr ""
-
-msgid "?Group chat description:Trip planning"
-msgstr ""
-
-#, fuzzy
-msgid "?Group chat feature:Archiving"
-msgstr "Gruppesamtale Invitation"
-
-#, fuzzy
-msgid "?Group chat feature:Hidden"
-msgstr "?Group Chat Contact Role:Ingen"
-
-#, fuzzy
-msgid "?Group chat feature:Members Only"
-msgstr "Gruppe Samtale Besked Fremhævning"
-
-#, fuzzy
-msgid "?Group chat feature:Moderated"
-msgstr "?Group Chat Contact Role:Ingen"
-
-#, fuzzy
-msgid "?Group chat feature:No Password Required"
-msgstr "Gruppesamtaler"
-
-#, fuzzy
-msgid "?Group chat feature:Not Anonymous"
-msgstr "Gruppesamtaler"
-
-#, fuzzy
-msgid "?Group chat feature:Not Moderated"
-msgstr "Gruppesamtaler"
-
-#, fuzzy
-msgid "?Group chat feature:Open"
-msgstr "?Group Chat Contact Role:Ingen"
-
-#, fuzzy
-msgid "?Group chat feature:Password Required"
-msgstr "Gruppesamtaler"
-
-#, fuzzy
-msgid "?Group chat feature:Persistent"
-msgstr "Gruppesamtaler"
-
-#, fuzzy
-msgid "?Group chat feature:Public"
-msgstr "Gruppe Samtale Besked Fremhævning"
-
-#, fuzzy
-msgid "?Group chat feature:Semi-Anonymous"
-msgstr "Gruppe Samtale Besked Fremhævning"
-
-#, fuzzy
-msgid "?Group chat feature:Temporary"
-msgstr "?Group Chat Contact Role:Ingen"
-
-#, fuzzy
-msgid "?Group chat name:Family"
-msgstr "Gruppe Samtale Besked Fremhævning"
-
-#, fuzzy
-msgid "?Group chat name:News"
-msgstr "?Group Chat Contact Role:Ingen"
-
-#, fuzzy
-msgid "?Group chat name:Repairs"
-msgstr "_Gruppe Chat"
-
-#, fuzzy
-msgid "?Group chat name:Team"
-msgstr "?Group Chat Contact Role:Ingen"
-
-#, fuzzy
-msgid "?Group chat name:Vacation"
-msgstr "Gruppesamtale Invitation"
-
-#, fuzzy
-msgid "?Message row action:Copy"
-msgstr "Besked indhold"
-
-#, fuzzy
-msgid "?Message row action:Correct…"
-msgstr "Besked indhold"
-
-msgid "?Message row action:Quote…"
-msgstr ""
-
-#, fuzzy
-msgid "?Message row action:Retract…"
-msgstr "Første Besked er Modtaget"
-
-#, fuzzy
-msgid "?Message row action:Select Messages…"
-msgstr "Besked indhold"
-
-#, fuzzy
-msgid "?Message state:Received"
-msgstr "Første Besked er Modtaget"
-
-#, fuzzy
-msgid "?Noun:Download"
-msgstr "Hent"
-
-#, fuzzy
-msgid "?Noun:Upload"
-msgstr "Send"
-
-msgid "?Subscription we already have:None"
-msgstr "?Subscription we already have:Intet"
-
-#, fuzzy
-msgid "?config description:None"
-msgstr "?Ask (for Subscription):Intet"
-
-msgid "?config type:Boolean"
-msgstr ""
-
-msgid "?config type:Integer"
-msgstr ""
-
-msgid "?config type:Text"
-msgstr ""
-
-#, fuzzy
-msgid "?config:Preference Name"
-msgstr "Foretrukket Navn"
-
-msgid "?config:Type"
-msgstr ""
-
-#, fuzzy
-msgid "?config:Value"
-msgstr "_Konfigurere"
-
-#, fuzzy
-msgid "?profile:Address"
-msgstr "_Adresse:"
-
-#, fuzzy
-msgid "?profile:Full Name"
-msgstr "<b>Fuldt Navn</b>"
-
-msgid "?profile:Gender"
-msgstr ""
-
-msgid "?profile:IM Address"
-msgstr ""
-
-#, fuzzy
-msgid "?profile:Note"
-msgstr "fil"
-
-msgid "?profile:Organisation"
-msgstr ""
-
-msgid "?profile:Public Encryption Key"
-msgstr ""
-
-#, fuzzy
-msgid "?profile:Role"
-msgstr "fil"
-
-msgid "?profile:Title"
-msgstr ""
-
-msgid "?switch:Off"
-msgstr ""
-
-msgid "?switch:On"
-msgstr ""
-
-#, fuzzy
-msgid "?transfer status:Aborted"
-msgstr "?transfer status:Midlertidig stoppet"
-
-#, fuzzy
-msgid "?transfer status:Completed"
-msgstr "?transfer status:Midlertidig stoppet"
-
-#, fuzzy
-msgid "?transfer status:Not started"
-msgstr "?transfer status:Midlertidig stoppet"
-
-msgid "?transfer status:Paused"
-msgstr "?transfer status:Midlertidig stoppet"
-
-#, fuzzy
-msgid "?transfer status:Stalled"
-msgstr "?transfer status:Midlertidig stoppet"
-
-#, fuzzy
-msgid "?transfer status:Status: "
-msgstr "?transfer status:Midlertidig stoppet"
-
-#, fuzzy
-msgid "?transfer status:Transferred: "
-msgstr "?transfer status:Midlertidig stoppet"
-
-#, fuzzy
-msgid "?transfer status:Transferring"
-msgstr "?transfer status:Midlertidig stoppet"
-
-#, fuzzy
-msgid "?transfer type:Type: "
-msgstr "Filoverførsel stoppede"
-
-#, fuzzy
-msgid "?user status:Available"
-msgstr "?transfer status:Midlertidig stoppet"
-
-#, fuzzy
-msgid "?user status:_Available"
-msgstr "?transfer status:Midlertidig stoppet"
-
 msgid "A Feature Comparison of Various Servers"
 msgstr ""
 
@@ -625,10 +368,16 @@ msgstr "Størrelse: %s"
 msgid "API Preferences. Possible values: \"http\", \"iq\""
 msgstr ""
 
+#, fuzzy
+msgctxt "User status"
 msgid "A_way"
 msgstr "_Væk"
 
 msgid "Abort"
+msgstr ""
+
+msgctxt "File transfer state"
+msgid "Aborted"
 msgstr ""
 
 msgid "Abuse"
@@ -800,6 +549,11 @@ msgid "Address"
 msgstr "_Adresse:"
 
 #, fuzzy
+msgctxt "Profile"
+msgid "Address"
+msgstr "_Adresse:"
+
+#, fuzzy
 msgid "Address does not belong to a group chat server"
 msgstr "Dette er ikke en gruppe samtale"
 
@@ -819,10 +573,13 @@ msgstr "_Administrator"
 msgid "Administration"
 msgstr "Administrator"
 
+#, fuzzy
+msgctxt "Group chat contact affiliation"
 msgid "Administrator"
 msgstr "Administrator"
 
 #, fuzzy
+msgctxt "Group chat contact affiliation"
 msgid "Administrators"
 msgstr "Administrator"
 
@@ -958,6 +715,11 @@ msgstr "Filen er tom"
 #, fuzzy
 msgid "Archive is malformed"
 msgstr "Tjeneste sendte malformeret data"
+
+#, fuzzy
+msgctxt "Group chat feature"
+msgid "Archiving"
+msgstr "Filen er tom"
 
 #, fuzzy
 msgid "Archiving Preferences"
@@ -1120,9 +882,16 @@ msgid "Available"
 msgstr "Ti_lgængelig"
 
 #, fuzzy
+msgctxt "User status"
+msgid "Available"
+msgstr "Ti_lgængelig"
+
+#, fuzzy
 msgid "Avatar file size too big"
 msgstr "Billede er for stort"
 
+#, fuzzy
+msgctxt "User status"
 msgid "Away"
 msgstr "Borte"
 
@@ -1186,6 +955,12 @@ msgstr "_Bogmærke"
 msgid "Bookmarks for %s"
 msgstr "_Bogmærke"
 
+msgctxt "Configuration type"
+msgid "Boolean"
+msgstr ""
+
+#, fuzzy
+msgctxt "Contact subscription"
 msgid "Both"
 msgstr "Begge"
 
@@ -1200,6 +975,8 @@ msgstr ""
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "Gennemse %(address)s med konto %(account)s"
 
+#, fuzzy
+msgctxt "User status"
 msgid "Busy"
 msgstr "Travlt"
 
@@ -1455,6 +1232,9 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "%(nick)s er blevet fjernet fra rummet %(reason)s"
 
+msgid "Click to change time display"
+msgstr ""
+
 msgid "Click to view Gajim's wiki page on how to install plugins in Flatpak."
 msgstr ""
 
@@ -1524,6 +1304,11 @@ msgstr "Fuldført"
 msgid "Complete a command or a nickname"
 msgstr "Opret et nyt tema med dit ønskede navn."
 
+msgid "Completed"
+msgstr "Fuldført"
+
+#, fuzzy
+msgctxt "File transfer state"
 msgid "Completed"
 msgstr "Fuldført"
 
@@ -1699,6 +1484,11 @@ msgid "Copy"
 msgstr "Rum JID"
 
 #, fuzzy
+msgctxt "Message row action"
+msgid "Copy"
+msgstr "Rum JID"
+
+#, fuzzy
 msgid "Copy Address"
 msgstr "_Kopier JID/E-post Adresse"
 
@@ -1719,8 +1509,8 @@ msgid "Copy Link Location"
 msgstr "_Kopier Henvisning"
 
 #, fuzzy
-msgid "Copy Location"
-msgstr "_Kopier Henvisning"
+msgid "Copy Path"
+msgstr "Rum JID"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1744,6 +1534,10 @@ msgstr "_Kopier Henvisning"
 #, fuzzy
 msgid "Correct the last message"
 msgstr "status besked"
+
+msgctxt "Message row action"
+msgid "Correct…"
+msgstr ""
 
 #, fuzzy
 msgid "Could not access file"
@@ -1820,6 +1614,9 @@ msgstr "_Afkoblet"
 msgid "Decline Invitation"
 msgstr ""
 
+msgid "Decrease playback speed"
+msgstr ""
+
 msgid "Default"
 msgstr "Standard"
 
@@ -1888,6 +1685,10 @@ msgstr ""
 #, fuzzy
 msgid "Devices"
 msgstr "Server"
+
+#, fuzzy
+msgid "Dial Number"
+msgstr "GG Nummer:"
 
 #, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
@@ -1986,6 +1787,11 @@ msgid "Don’t show this again"
 msgstr "_Spørg mig ikke igen"
 
 #, fuzzy
+msgid "Download"
+msgstr "Hent"
+
+#, fuzzy
+msgctxt "Noun"
 msgid "Download"
 msgstr "Hent"
 
@@ -2274,6 +2080,10 @@ msgstr "Forlad Gruppesamtaler"
 msgid "Fake audio output"
 msgstr ""
 
+msgctxt "Group chat name"
+msgid "Family"
+msgstr ""
+
 #, fuzzy
 msgid "Feature not available on Windows"
 msgstr "Egenskab ikke tilgængelig under Windows."
@@ -2446,6 +2256,11 @@ msgstr "Formateringsfejl i certifikatets notBefore felt"
 msgid "Format your message"
 msgstr "Videresend ulæste beskeder"
 
+msgid "Forward 10 seconds"
+msgstr ""
+
+#, fuzzy
+msgctxt "User status"
 msgid "Free for Chat"
 msgstr "Tilgængelig for samtale"
 
@@ -2453,6 +2268,16 @@ msgid "From"
 msgstr "Fra"
 
 #, fuzzy
+msgctxt "Contact subscription"
+msgid "From"
+msgstr "Fra"
+
+#, fuzzy
+msgid "Full Name"
+msgstr "<b>Fuldt Navn</b>"
+
+#, fuzzy
+msgctxt "Profile"
 msgid "Full Name"
 msgstr "<b>Fuldt Navn</b>"
 
@@ -2516,6 +2341,11 @@ msgid "Gathering information…"
 msgstr "Kontakt Information"
 
 #, fuzzy
+msgid "Gender"
+msgstr "Afsender: "
+
+#, fuzzy
+msgctxt "Profile"
 msgid "Gender"
 msgstr "Afsender: "
 
@@ -2647,6 +2477,10 @@ msgstr ""
 msgid "Helps to establish calls through firewalls"
 msgstr ""
 
+msgctxt "Group chat feature"
+msgid "Hidden"
+msgstr ""
+
 msgid "Hide"
 msgstr ""
 
@@ -2690,6 +2524,7 @@ msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC standard siger KiB = 1024 byte, KB = 1000 byte."
 
 #, fuzzy
+msgctxt "Profile"
 msgid "IM Address"
 msgstr "_Adresse:"
 
@@ -2784,6 +2619,9 @@ msgstr "_Indkommende besked:"
 msgid "Incoming Call (Video)"
 msgstr ""
 
+msgid "Increase playback speed"
+msgstr ""
+
 #, fuzzy
 msgid "Information"
 msgstr "_Information"
@@ -2814,6 +2652,10 @@ msgstr "Tilslutning fejlede"
 #, fuzzy
 msgid "Installed"
 msgstr "Hænger"
+
+msgctxt "Configuration type"
+msgid "Integer"
+msgstr ""
 
 #, fuzzy
 msgid "Invalid Address"
@@ -2918,10 +2760,6 @@ msgid "JID"
 msgstr "JID"
 
 #, fuzzy
-msgid "JPEG files"
-msgstr "Alle filer"
-
-#, fuzzy
 msgid "Join"
 msgstr "_Bliv med:"
 
@@ -2937,7 +2775,7 @@ msgid "Join Group Chat?"
 msgstr "Bliv med i en Gruppe Samtale"
 
 #, fuzzy
-msgid "Join Groupchat"
+msgid "Join Groupchat…"
 msgstr "Bliv med i en Gruppe Samtale"
 
 #, fuzzy
@@ -3031,6 +2869,15 @@ msgstr ""
 msgid "Local Time"
 msgstr "Lokal jid:"
 
+msgctxt "Group chat description"
+msgid "Local help group"
+msgstr ""
+
+#, fuzzy
+msgctxt "Group chat description"
+msgid "Local news and reports"
+msgstr "Gruppesamtale oprettelse er begrænset."
+
 #, fuzzy, python-format
 msgid "Location at %s"
 msgstr "Påmindelse"
@@ -3117,7 +2964,18 @@ msgid "Member"
 msgstr "Medlem"
 
 #, fuzzy
+msgctxt "Group chat contact affiliation"
+msgid "Member"
+msgstr "Medlem"
+
+#, fuzzy
+msgctxt "Group chat contact affiliation"
 msgid "Members"
+msgstr "Medlem"
+
+#, fuzzy
+msgctxt "Group chat feature"
+msgid "Members Only"
 msgstr "Medlem"
 
 #, fuzzy
@@ -3183,12 +3041,21 @@ msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
+msgctxt "Group chat feature"
+msgid "Moderated"
+msgstr "Moderator"
+
+#, fuzzy
 msgid "Moderation"
 msgstr "Moderator"
 
+#, fuzzy
+msgctxt "Group chat contact role"
 msgid "Moderator"
 msgstr "Moderator"
 
+#, fuzzy
+msgctxt "Group chat contact role"
 msgid "Moderators"
 msgstr "Moderatorer"
 
@@ -3252,6 +3119,10 @@ msgstr "Omdøb Kontakt"
 msgid "New message from"
 msgstr "Ny Besked fra %(nickname)s"
 
+msgctxt "Group chat name"
+msgid "News"
+msgstr ""
+
 msgid "Next"
 msgstr ""
 
@@ -3273,6 +3144,11 @@ msgstr "Filoverførsler"
 #, fuzzy
 msgid "No Notifications"
 msgstr "Påmindelser"
+
+#, fuzzy
+msgctxt "Group chat feature"
+msgid "No Password Required"
+msgstr "Adgangskode er Påkrævet"
 
 #, fuzzy
 msgid "No Proxy"
@@ -3327,19 +3203,57 @@ msgstr "Intet resultat"
 msgid "No results found"
 msgstr "Intet resultat"
 
+#, fuzzy, python-format
+msgid "No updates available (last check: %s)"
+msgstr "Ingen konto tilgængelig"
+
 #, fuzzy
-msgid "No updates available"
+msgid "No updates available (last check: never)"
 msgstr "Ingen konto tilgængelig"
 
 msgid "Node"
 msgstr "Knude"
 
+msgctxt "Configuration description"
+msgid "None"
+msgstr ""
+
+msgctxt "Contact subscription"
+msgid "None"
+msgstr ""
+
+msgctxt "Gender"
+msgid "None"
+msgstr ""
+
+msgctxt "Group chat contact affiliation"
+msgid "None"
+msgstr ""
+
+msgctxt "Group chat contact role"
+msgid "None"
+msgstr ""
+
+msgctxt "Group chat feature"
+msgid "Not Anonymous"
+msgstr ""
+
+msgid "Not Available"
+msgstr "Ikke Tilgængelig"
+
+#, fuzzy
+msgctxt "User status"
 msgid "Not Available"
 msgstr "Ikke Tilgængelig"
 
 #, fuzzy
 msgid "Not Connected"
 msgstr "Tilsluttet"
+
+#, fuzzy
+msgctxt "Group chat feature"
+msgid "Not Moderated"
+msgstr "Ikke startet"
 
 #, fuzzy
 msgid "Not accelerated"
@@ -3352,6 +3266,15 @@ msgstr "Ikke Tilgængelig"
 #, fuzzy
 msgid "Not encrypted"
 msgstr "Ikke startet"
+
+#, fuzzy
+msgctxt "File transfer state"
+msgid "Not started"
+msgstr "Ikke startet"
+
+msgctxt "Profile"
+msgid "Note"
+msgstr ""
 
 msgid "Note to myself"
 msgstr ""
@@ -3395,8 +3318,18 @@ msgstr "Forvalgte beskeder:"
 msgid "OK"
 msgstr "_OK"
 
+#, fuzzy
+msgctxt "Switch"
+msgid "Off"
+msgstr "Afkoblet"
+
 msgid "Offline"
 msgstr "Afkoblet"
+
+#, fuzzy
+msgctxt "Switch"
+msgid "On"
+msgstr "OpenPGP: "
 
 msgid "One Month"
 msgstr ""
@@ -3419,6 +3352,11 @@ msgid "Open"
 msgstr "OpenPGP: "
 
 #, fuzzy
+msgctxt "Group chat feature"
+msgid "Open"
+msgstr "OpenPGP: "
+
+#, fuzzy
 msgid "Open Email Composer"
 msgstr "_Åbn E-post Program"
 
@@ -3427,12 +3365,20 @@ msgid "Open Folder"
 msgstr "_Åbn folderen med filen"
 
 #, fuzzy
+msgid "Open Link"
+msgstr "Åbn som et _Link"
+
+#, fuzzy
 msgid "Open Link in Browser"
 msgstr "_Åbn Henvisning i Netlæser"
 
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Åbn Henvisning i Netlæser"
+
+#, fuzzy
+msgid "Open Path"
+msgstr "OpenPGP: "
 
 #, fuzzy
 msgid "Open Plugins…"
@@ -3460,6 +3406,7 @@ msgid "Operating System"
 msgstr "Selvsigneret certifikat"
 
 #, fuzzy
+msgctxt "Profile"
 msgid "Organisation"
 msgstr "Få Ferie"
 
@@ -3477,6 +3424,11 @@ msgstr ""
 
 msgid "Organize your chats with workspaces"
 msgstr ""
+
+#, fuzzy
+msgctxt "Gender"
+msgid "Other"
+msgstr "Andre"
 
 msgid "Others"
 msgstr "Andre"
@@ -3498,6 +3450,12 @@ msgid "Owner"
 msgstr "Ejer"
 
 #, fuzzy
+msgctxt "Group chat contact affiliation"
+msgid "Owner"
+msgstr "Ejer"
+
+#, fuzzy
+msgctxt "Group chat contact affiliation"
 msgid "Owners"
 msgstr "Ejer"
 
@@ -3521,10 +3479,6 @@ msgstr "PEP knude blev ikke fjernet"
 msgid "PKCS12 Files"
 msgstr ""
 
-#, fuzzy
-msgid "PNG files"
-msgstr "Alle filer"
-
 msgid "Pa_use/Resume"
 msgstr ""
 
@@ -3532,9 +3486,16 @@ msgstr ""
 msgid "Pango Version: %s"
 msgstr "GTK+ Version:"
 
+#, fuzzy
+msgctxt "Group chat contact role"
 msgid "Participant"
 msgstr "Deltager"
 
+msgid "Participants"
+msgstr "Deltagere"
+
+#, fuzzy
+msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "Deltagere"
 
@@ -3568,6 +3529,11 @@ msgstr "Adgangskode er Påkrævet"
 msgid "Password Required"
 msgstr "Adgangskode er Påkrævet"
 
+#, fuzzy
+msgctxt "Group chat feature"
+msgid "Password Required"
+msgstr "Adgangskode er Påkrævet"
+
 msgid "Passwords do not match"
 msgstr "Adgangskoderne er ikke ens"
 
@@ -3593,6 +3559,10 @@ msgstr "Sti længde begrænsning overskredet"
 msgid "Pause or resume file transfer"
 msgstr "Annuller filoverførsel"
 
+msgctxt "File transfer state"
+msgid "Paused"
+msgstr ""
+
 #, fuzzy
 msgid "Pending Event"
 msgstr "Vis Alle Ventende Hænd_elser"
@@ -3600,6 +3570,10 @@ msgstr "Vis Alle Ventende Hænd_elser"
 #, fuzzy
 msgid "Pending Voice Requests"
 msgstr "Filoverførsel Forespørgsel"
+
+msgctxt "Group chat feature"
+msgid "Persistent"
+msgstr ""
 
 #, fuzzy
 msgid "Personal notes about this contact"
@@ -3729,6 +3703,11 @@ msgstr "<b>Postnummer:</b>"
 msgid "Prefer direct messages in private group chats "
 msgstr "Vis status _beskeder for kontakter i kontaktvinduet"
 
+#, fuzzy
+msgctxt "Configuration"
+msgid "Preference Name"
+msgstr "Foretrukket Navn"
+
 msgid "Preferences"
 msgstr "Indstillinger"
 
@@ -3780,6 +3759,10 @@ msgstr ""
 msgid "Progress"
 msgstr "Fremgang"
 
+msgctxt "Group chat description"
+msgid "Project discussion"
+msgstr ""
+
 #, fuzzy
 msgid "Prox_y"
 msgstr "Pro_xy:"
@@ -3802,6 +3785,15 @@ msgstr "Brug tilpasset værtsnavn/port"
 
 msgid "Public"
 msgstr ""
+
+msgctxt "Group chat feature"
+msgid "Public"
+msgstr ""
+
+#, fuzzy
+msgctxt "Profile"
+msgid "Public Encryption Key"
+msgstr "Abonnement forespørgsel"
 
 #, fuzzy, python-format
 msgid "Pulse: %s"
@@ -3826,6 +3818,10 @@ msgstr "_Afslut"
 #, fuzzy
 msgid "Quit Gajim"
 msgstr "Gajim"
+
+msgctxt "Message row action"
+msgid "Quote…"
+msgstr ""
 
 #, fuzzy
 msgid "Re-Login"
@@ -3862,6 +3858,11 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Reason: %s"
 msgstr "Grund"
+
+#, fuzzy
+msgctxt "Message state"
+msgid "Received"
+msgstr "Første Besked er Modtaget"
 
 #, fuzzy
 msgid "Recent history"
@@ -4000,6 +4001,10 @@ msgstr "_Kan fjernes"
 msgid "Removing Account..."
 msgstr "Fjerne kontoen med navnet %s"
 
+msgctxt "Group chat name"
+msgid "Repairs"
+msgstr ""
+
 #, fuzzy
 msgid "Report"
 msgstr "_Rapporter Fejl"
@@ -4121,6 +4126,10 @@ msgstr "Status Besked"
 msgid "Retract message?"
 msgstr "status besked"
 
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr ""
+
 #, fuzzy
 msgid "Revoke Member"
 msgstr "Medlem"
@@ -4129,6 +4138,14 @@ msgstr "Medlem"
 msgid "Revoke Voice"
 msgstr "_Stemme"
 
+msgid "Rewind 10 seconds"
+msgstr ""
+
+msgid "Role"
+msgstr "Rolle"
+
+#, fuzzy
+msgctxt "Profile"
 msgid "Role"
 msgstr "Rolle"
 
@@ -4166,10 +4183,6 @@ msgstr "Tilslutning fejlede"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
-
-#, fuzzy
-msgid "SVG files"
-msgstr "Send _Fil"
 
 msgid "Sales"
 msgstr ""
@@ -4280,6 +4293,11 @@ msgstr "Sendte kontakter:"
 msgid "Select File…"
 msgstr "Send _Fil"
 
+#, fuzzy
+msgctxt "Message row action"
+msgid "Select Messages…"
+msgstr "Standard Besked"
+
 msgid "Select a security label for your message…"
 msgstr ""
 
@@ -4287,6 +4305,9 @@ msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
 msgid "Select an emoji"
+msgstr ""
+
+msgid "Select playback speed"
 msgstr ""
 
 msgid "Select the account with which you want to synchronise"
@@ -4314,6 +4335,10 @@ msgstr "Selvsigneret certifikat"
 
 msgid "Self signed certificate in certificate chain"
 msgstr "Selvsigneret certifikat i certifikats kæden"
+
+msgctxt "Group chat feature"
+msgid "Semi-Anonymous"
+msgstr ""
 
 #, fuzzy
 msgid "Send Chat Markers"
@@ -4709,11 +4734,20 @@ msgstr "Stavekontrol"
 msgid "Spell Checking"
 msgstr "Stavekontrol"
 
+msgctxt "Group chat description"
+msgid "Spring gathering"
+msgstr ""
+
 msgid "Sta_tus"
 msgstr "Sta_tus"
 
 msgid "Stage"
 msgstr ""
+
+#, fuzzy
+msgctxt "File transfer state"
+msgid "Stalled"
+msgstr "Hænger"
 
 #, fuzzy
 msgid "Start / Join Chat"
@@ -4788,6 +4822,11 @@ msgstr "Ændrer status for kontoen eller konti"
 msgid "Status message…"
 msgstr "_Status besked:"
 
+#, fuzzy
+msgctxt "File transfer state"
+msgid "Status: "
+msgstr "Status: "
+
 #, fuzzy, python-format
 msgid "Status: %s"
 msgstr "Status: "
@@ -4835,6 +4874,8 @@ msgstr "Emne udsteder uoverensstemmelse"
 msgid "Submit"
 msgstr ""
 
+#, fuzzy
+msgctxt "Contact subscription"
 msgid "Subscribe"
 msgstr "Abonner"
 
@@ -4926,8 +4967,21 @@ msgstr "SSL certifikat fejl"
 msgid "Tabbed chat window"
 msgstr ""
 
+msgctxt "Group chat name"
+msgid "Team"
+msgstr ""
+
 msgid "Tell your contacts if you received a message"
 msgstr ""
+
+msgctxt "Group chat feature"
+msgid "Temporary"
+msgstr ""
+
+#, fuzzy
+msgctxt "Configuration type"
+msgid "Text"
+msgstr "Rum JID"
 
 #, fuzzy
 msgid "Text File"
@@ -5160,6 +5214,12 @@ msgstr ""
 msgid "Time Until Not Available"
 msgstr "Ikke Tilgængelig"
 
+msgctxt "Profile"
+msgid "Title"
+msgstr ""
+
+#, fuzzy
+msgctxt "Contact subscription"
 msgid "To"
 msgstr "Til"
 
@@ -5180,6 +5240,16 @@ msgid "Topic"
 msgstr ""
 
 #, fuzzy
+msgctxt "File transfer state"
+msgid "Transferred: "
+msgstr "Filoverførsler"
+
+#, fuzzy
+msgctxt "File transfer state"
+msgid "Transferring"
+msgstr "Overfører"
+
+#, fuzzy
 msgid "Transferring File…"
 msgstr "Overfører"
 
@@ -5192,6 +5262,10 @@ msgstr "Transporter"
 
 msgid "Treat * / _ pairs as possible formatting characters."
 msgstr "Behandle * / _ par som mulige formaterings tegn."
+
+msgctxt "Group chat description"
+msgid "Trip planning"
+msgstr ""
 
 msgid "Trust Not Decided"
 msgstr ""
@@ -5227,8 +5301,18 @@ msgstr ""
 msgid "Type"
 msgstr "Type"
 
+#, fuzzy
+msgctxt "Configuration"
+msgid "Type"
+msgstr "Type"
+
 msgid "Type to search for values..."
 msgstr ""
+
+#, fuzzy
+msgctxt "File transfer type"
+msgid "Type: "
+msgstr "Type"
 
 msgid "UPnP-IGD Port Forwarding"
 msgstr ""
@@ -5272,6 +5356,11 @@ msgid "Uninstall Plugin"
 msgstr "Hænger"
 
 #, fuzzy
+msgid "Unknown"
+msgstr "?OS:Ukendt"
+
+#, fuzzy
+msgctxt "Contact subscription"
 msgid "Unknown"
 msgstr "?OS:Ukendt"
 
@@ -5346,6 +5435,10 @@ msgstr "Vælg Billede"
 msgid "Update available"
 msgstr "Ingen konto tilgængelig"
 
+#, fuzzy
+msgid "Update check disabled in preferences"
+msgstr "_Indstillinger"
+
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5354,6 +5447,11 @@ msgstr ""
 
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
+
+#, fuzzy
+msgctxt "Noun"
+msgid "Upload"
+msgstr "Gem Fil som..."
 
 #, fuzzy
 msgid "Upload Files"
@@ -5430,10 +5528,19 @@ msgstr "Brugere"
 msgid "V4L2: %s"
 msgstr ""
 
+#, fuzzy
+msgctxt "Group chat name"
+msgid "Vacation"
+msgstr "Påmindelse"
+
 msgid "Validity"
 msgstr ""
 
 msgid "Validity\n"
+msgstr ""
+
+msgctxt "Configuration"
+msgid "Value"
 msgstr ""
 
 #, fuzzy
@@ -5477,9 +5584,13 @@ msgstr ""
 msgid "Visit Website"
 msgstr ""
 
+#, fuzzy
+msgctxt "Group chat contact role"
 msgid "Visitor"
 msgstr "Besøgende"
 
+#, fuzzy
+msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "Besøgende"
 
@@ -5673,10 +5784,6 @@ msgid ""
 "You do not have the proper permissions to create files in this directory."
 msgstr "Du har ikke rettigheder til at oprette filer i dette katalog."
 
-#, python-format
-msgid "You dropped something Gajim could not process: %s"
-msgstr ""
-
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
 msgstr ""
@@ -5820,12 +5927,19 @@ msgid "_Advanced Settings"
 msgstr "Avancerede Handlinger"
 
 #, fuzzy
+msgctxt "User status"
+msgid "_Available"
+msgstr "Ti_lgængelig"
+
+#, fuzzy
 msgid "_Back"
 msgstr "Snart tilbage"
 
 msgid "_Block"
 msgstr "_Bloker"
 
+#, fuzzy
+msgctxt "User status"
 msgid "_Busy"
 msgstr "_Travlt"
 
@@ -5909,6 +6023,8 @@ msgstr "Egenskaber"
 msgid "_File Transfer"
 msgstr "Filoverførsler"
 
+#, fuzzy
+msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "_Tilgængelig for samtale"
 
@@ -5963,6 +6079,8 @@ msgstr "Ny post"
 msgid "_No"
 msgstr "Ingen"
 
+#, fuzzy
+msgctxt "User status"
 msgid "_Not Available"
 msgstr "_Ikke tilgængelig"
 
@@ -6135,6 +6253,7 @@ msgstr "Skjult"
 msgid "cairo Version: %s"
 msgstr "GTK+ Version:"
 
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr ""
 
@@ -6168,6 +6287,10 @@ msgid "error"
 msgstr "Fejl"
 
 msgid "example.org"
+msgstr ""
+
+msgctxt "Group chat address"
+msgid "family"
 msgstr ""
 
 msgid "file transfers list"
@@ -6221,10 +6344,15 @@ msgstr ""
 msgid "medium-light skin"
 msgstr ""
 
+msgctxt "Group chat address"
+msgid "news"
+msgstr ""
+
 #, fuzzy
 msgid "or"
 msgstr "Til"
 
+#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
 msgid "org.gajim.Gajim"
 msgstr ""
 
@@ -6245,6 +6373,10 @@ msgstr ""
 msgid "region"
 msgstr ""
 
+msgctxt "Group chat address"
+msgid "repairs"
+msgstr ""
+
 msgid "room"
 msgstr "rum"
 
@@ -6258,6 +6390,10 @@ msgstr ""
 msgid "strike"
 msgstr "Streg"
 
+msgctxt "Group chat address"
+msgid "team"
+msgstr ""
+
 msgid "text"
 msgstr ""
 
@@ -6266,6 +6402,11 @@ msgstr ""
 
 msgid "translator-credits"
 msgstr "Niels Felsted Thorsen <felsted@fsfe.org>"
+
+#, fuzzy
+msgctxt "Group chat address"
+msgid "vacation"
+msgstr "Påmindelse"
 
 msgid "video input"
 msgstr ""
@@ -6308,3 +6449,218 @@ msgstr "%(nick)s er nu %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "?Ask (for Subscription):None"
+#~ msgstr "?Ask (for Subscription):Intet"
+
+#, fuzzy
+#~ msgid "?Gender:None"
+#~ msgstr "Afsender: "
+
+#~ msgid "?Group Chat Contact Affiliation:None"
+#~ msgstr "?Group Chat Contact Affiliation:Ingen"
+
+#~ msgid "?Group Chat Contact Role:None"
+#~ msgstr "?Group Chat Contact Role:Ingen"
+
+#, fuzzy
+#~ msgid "?Group chat address:news"
+#~ msgstr "Ny Gruppe Samtale"
+
+#, fuzzy
+#~ msgid "?Group chat address:repairs"
+#~ msgstr "Gruppesamtaler"
+
+#, fuzzy
+#~ msgid "?Group chat address:team"
+#~ msgstr "Gruppesamtaler"
+
+#, fuzzy
+#~ msgid "?Group chat address:vacation"
+#~ msgstr "Gruppesamtale Invitation"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Archiving"
+#~ msgstr "Gruppesamtale Invitation"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Hidden"
+#~ msgstr "?Group Chat Contact Role:Ingen"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Members Only"
+#~ msgstr "Gruppe Samtale Besked Fremhævning"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Moderated"
+#~ msgstr "?Group Chat Contact Role:Ingen"
+
+#, fuzzy
+#~ msgid "?Group chat feature:No Password Required"
+#~ msgstr "Gruppesamtaler"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Not Anonymous"
+#~ msgstr "Gruppesamtaler"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Not Moderated"
+#~ msgstr "Gruppesamtaler"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Open"
+#~ msgstr "?Group Chat Contact Role:Ingen"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Password Required"
+#~ msgstr "Gruppesamtaler"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Persistent"
+#~ msgstr "Gruppesamtaler"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Public"
+#~ msgstr "Gruppe Samtale Besked Fremhævning"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Semi-Anonymous"
+#~ msgstr "Gruppe Samtale Besked Fremhævning"
+
+#, fuzzy
+#~ msgid "?Group chat feature:Temporary"
+#~ msgstr "?Group Chat Contact Role:Ingen"
+
+#, fuzzy
+#~ msgid "?Group chat name:Family"
+#~ msgstr "Gruppe Samtale Besked Fremhævning"
+
+#, fuzzy
+#~ msgid "?Group chat name:News"
+#~ msgstr "?Group Chat Contact Role:Ingen"
+
+#, fuzzy
+#~ msgid "?Group chat name:Repairs"
+#~ msgstr "_Gruppe Chat"
+
+#, fuzzy
+#~ msgid "?Group chat name:Team"
+#~ msgstr "?Group Chat Contact Role:Ingen"
+
+#, fuzzy
+#~ msgid "?Group chat name:Vacation"
+#~ msgstr "Gruppesamtale Invitation"
+
+#, fuzzy
+#~ msgid "?Message row action:Copy"
+#~ msgstr "Besked indhold"
+
+#, fuzzy
+#~ msgid "?Message row action:Correct…"
+#~ msgstr "Besked indhold"
+
+#, fuzzy
+#~ msgid "?Message row action:Retract…"
+#~ msgstr "Første Besked er Modtaget"
+
+#, fuzzy
+#~ msgid "?Message row action:Select Messages…"
+#~ msgstr "Besked indhold"
+
+#, fuzzy
+#~ msgid "?Message state:Received"
+#~ msgstr "Første Besked er Modtaget"
+
+#, fuzzy
+#~ msgid "?Noun:Download"
+#~ msgstr "Hent"
+
+#, fuzzy
+#~ msgid "?Noun:Upload"
+#~ msgstr "Send"
+
+#~ msgid "?Subscription we already have:None"
+#~ msgstr "?Subscription we already have:Intet"
+
+#, fuzzy
+#~ msgid "?config description:None"
+#~ msgstr "?Ask (for Subscription):Intet"
+
+#, fuzzy
+#~ msgid "?config:Value"
+#~ msgstr "_Konfigurere"
+
+#, fuzzy
+#~ msgid "?profile:Address"
+#~ msgstr "_Adresse:"
+
+#, fuzzy
+#~ msgid "?profile:Full Name"
+#~ msgstr "<b>Fuldt Navn</b>"
+
+#, fuzzy
+#~ msgid "?profile:Note"
+#~ msgstr "fil"
+
+#, fuzzy
+#~ msgid "?profile:Role"
+#~ msgstr "fil"
+
+#, fuzzy
+#~ msgid "?transfer status:Aborted"
+#~ msgstr "?transfer status:Midlertidig stoppet"
+
+#, fuzzy
+#~ msgid "?transfer status:Completed"
+#~ msgstr "?transfer status:Midlertidig stoppet"
+
+#, fuzzy
+#~ msgid "?transfer status:Not started"
+#~ msgstr "?transfer status:Midlertidig stoppet"
+
+#~ msgid "?transfer status:Paused"
+#~ msgstr "?transfer status:Midlertidig stoppet"
+
+#, fuzzy
+#~ msgid "?transfer status:Stalled"
+#~ msgstr "?transfer status:Midlertidig stoppet"
+
+#, fuzzy
+#~ msgid "?transfer status:Status: "
+#~ msgstr "?transfer status:Midlertidig stoppet"
+
+#, fuzzy
+#~ msgid "?transfer status:Transferred: "
+#~ msgstr "?transfer status:Midlertidig stoppet"
+
+#, fuzzy
+#~ msgid "?transfer status:Transferring"
+#~ msgstr "?transfer status:Midlertidig stoppet"
+
+#, fuzzy
+#~ msgid "?transfer type:Type: "
+#~ msgstr "Filoverførsel stoppede"
+
+#, fuzzy
+#~ msgid "?user status:Available"
+#~ msgstr "?transfer status:Midlertidig stoppet"
+
+#, fuzzy
+#~ msgid "?user status:_Available"
+#~ msgstr "?transfer status:Midlertidig stoppet"
+
+#, fuzzy
+#~ msgid "Copy Location"
+#~ msgstr "_Kopier Henvisning"
+
+#, fuzzy
+#~ msgid "JPEG files"
+#~ msgstr "Alle filer"
+
+#, fuzzy
+#~ msgid "PNG files"
+#~ msgstr "Alle filer"
+
+#, fuzzy
+#~ msgid "SVG files"
+#~ msgstr "Send _Fil"

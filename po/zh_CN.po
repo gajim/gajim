@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-03 08:42+0000\n"
-"PO-Revision-Date: 2022-12-03 08:31+0000\n"
+"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"PO-Revision-Date: 2022-12-13 18:39+0000\n"
 "Last-Translator: Bob Huang (Ziyan Huang) <bc3104hzy@126.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
 "gajim/master/zh_Hans/>\n"
@@ -182,6 +182,10 @@ msgctxt "negative longitude"
 msgid "%sW"
 msgstr "西经 %s"
 
+#. Translators:
+#. This should make the string KB/s,
+#. where 'KB' part is taken from %s.
+#. Only the 's' after / (which means second) should be translated.
 #, python-format
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
@@ -300,219 +304,6 @@ msgstr "<空白>"
 msgid "<error>"
 msgstr "<错误>"
 
-msgid "?Ask (for Subscription):None"
-msgstr "无"
-
-msgid "?Gender:None"
-msgstr "无"
-
-msgid "?Gender:Other"
-msgstr "其它"
-
-msgid "?Group Chat Contact Affiliation:None"
-msgstr "无"
-
-msgid "?Group Chat Contact Role:None"
-msgstr "无"
-
-msgid "?Group chat address:family"
-msgstr "家庭"
-
-msgid "?Group chat address:news"
-msgstr "新闻"
-
-msgid "?Group chat address:repairs"
-msgstr "维修"
-
-msgid "?Group chat address:team"
-msgstr "团队"
-
-msgid "?Group chat address:vacation"
-msgstr "假期"
-
-msgid "?Group chat description:Local help group"
-msgstr "本地帮助小组"
-
-msgid "?Group chat description:Local news and reports"
-msgstr "本地新闻和报道"
-
-msgid "?Group chat description:Project discussion"
-msgstr "项目描述"
-
-msgid "?Group chat description:Spring gathering"
-msgstr "春季集会"
-
-msgid "?Group chat description:Trip planning"
-msgstr "旅行计划"
-
-msgid "?Group chat feature:Archiving"
-msgstr "归档中"
-
-msgid "?Group chat feature:Hidden"
-msgstr "隐藏"
-
-msgid "?Group chat feature:Members Only"
-msgstr "仅限成员"
-
-msgid "?Group chat feature:Moderated"
-msgstr "已审核"
-
-msgid "?Group chat feature:No Password Required"
-msgstr "无需密码"
-
-msgid "?Group chat feature:Not Anonymous"
-msgstr "非匿名"
-
-msgid "?Group chat feature:Not Moderated"
-msgstr "尚未审核"
-
-msgid "?Group chat feature:Open"
-msgstr "开放"
-
-msgid "?Group chat feature:Password Required"
-msgstr "需要密码"
-
-msgid "?Group chat feature:Persistent"
-msgstr "永久"
-
-msgid "?Group chat feature:Public"
-msgstr "公共"
-
-msgid "?Group chat feature:Semi-Anonymous"
-msgstr "半匿名"
-
-msgid "?Group chat feature:Temporary"
-msgstr "临时"
-
-msgid "?Group chat name:Family"
-msgstr "家庭"
-
-msgid "?Group chat name:News"
-msgstr "新闻"
-
-msgid "?Group chat name:Repairs"
-msgstr "维修"
-
-msgid "?Group chat name:Team"
-msgstr "团队"
-
-msgid "?Group chat name:Vacation"
-msgstr "假期"
-
-msgid "?Message row action:Copy"
-msgstr "复制"
-
-msgid "?Message row action:Correct…"
-msgstr "修订…"
-
-msgid "?Message row action:Quote…"
-msgstr "引用…"
-
-msgid "?Message row action:Retract…"
-msgstr "撤回…"
-
-msgid "?Message row action:Select Messages…"
-msgstr "多选…"
-
-msgid "?Message state:Received"
-msgstr "已收到"
-
-msgid "?Noun:Download"
-msgstr "下载"
-
-msgid "?Noun:Upload"
-msgstr "上传"
-
-msgid "?Subscription we already have:None"
-msgstr "无"
-
-msgid "?config description:None"
-msgstr "无"
-
-msgid "?config type:Boolean"
-msgstr "布尔型"
-
-msgid "?config type:Integer"
-msgstr "整数型"
-
-msgid "?config type:Text"
-msgstr "文本型"
-
-msgid "?config:Preference Name"
-msgstr "首选项名称"
-
-msgid "?config:Type"
-msgstr "类型"
-
-msgid "?config:Value"
-msgstr "值"
-
-msgid "?profile:Address"
-msgstr "地址"
-
-msgid "?profile:Full Name"
-msgstr "全名"
-
-msgid "?profile:Gender"
-msgstr "性别"
-
-msgid "?profile:IM Address"
-msgstr "IM 地址"
-
-msgid "?profile:Note"
-msgstr "备注"
-
-msgid "?profile:Organisation"
-msgstr "组织"
-
-msgid "?profile:Public Encryption Key"
-msgstr "公开加密钥"
-
-msgid "?profile:Role"
-msgstr "角色"
-
-msgid "?profile:Title"
-msgstr "抬头"
-
-msgid "?switch:Off"
-msgstr "关闭"
-
-msgid "?switch:On"
-msgstr "开启"
-
-msgid "?transfer status:Aborted"
-msgstr "中止"
-
-msgid "?transfer status:Completed"
-msgstr "已完成"
-
-msgid "?transfer status:Not started"
-msgstr "未开始"
-
-msgid "?transfer status:Paused"
-msgstr "暂停"
-
-msgid "?transfer status:Stalled"
-msgstr "停滞"
-
-msgid "?transfer status:Status: "
-msgstr "状态: "
-
-msgid "?transfer status:Transferred: "
-msgstr "已传输: "
-
-msgid "?transfer status:Transferring"
-msgstr "正在传输"
-
-msgid "?transfer type:Type: "
-msgstr "类型: "
-
-msgid "?user status:Available"
-msgstr "在线"
-
-msgid "?user status:_Available"
-msgstr "在线(_A)"
-
 msgid "A Feature Comparison of Various Servers"
 msgstr "各个服务器的功能比较"
 
@@ -551,11 +342,16 @@ msgstr "ALSA: %s"
 msgid "API Preferences. Possible values: \"http\", \"iq\""
 msgstr "API 首选项。可能的值：'http', 'iq'"
 
+msgctxt "User status"
 msgid "A_way"
 msgstr "离开(_W)"
 
 msgid "Abort"
 msgstr "中止"
+
+msgctxt "File transfer state"
+msgid "Aborted"
+msgstr "已中止"
 
 msgid "Abuse"
 msgstr "滥用"
@@ -693,6 +489,10 @@ msgstr[0] "已添加 %d 个联系人"
 msgid "Address"
 msgstr "地址"
 
+msgctxt "Profile"
+msgid "Address"
+msgstr "地址"
+
 msgid "Address does not belong to a group chat server"
 msgstr "地址并不属于一个群聊服务器"
 
@@ -708,9 +508,11 @@ msgstr "管理员"
 msgid "Administration"
 msgstr "管理权"
 
+msgctxt "Group chat contact affiliation"
 msgid "Administrator"
 msgstr "管理员"
 
+msgctxt "Group chat contact affiliation"
 msgid "Administrators"
 msgstr "管理员"
 
@@ -825,6 +627,10 @@ msgstr "归档为空"
 
 msgid "Archive is malformed"
 msgstr "归档已畸形"
+
+msgctxt "Group chat feature"
+msgid "Archiving"
+msgstr "归档"
 
 msgid "Archiving Preferences"
 msgstr "归档首选项"
@@ -956,9 +762,14 @@ msgstr "自动接受所有的联系人请求"
 msgid "Available"
 msgstr "在线"
 
+msgctxt "User status"
+msgid "Available"
+msgstr "在线"
+
 msgid "Avatar file size too big"
 msgstr "头像文件尺寸太大"
 
+msgctxt "User status"
 msgid "Away"
 msgstr "离开"
 
@@ -1013,8 +824,13 @@ msgstr "书签"
 msgid "Bookmarks for %s"
 msgstr "用于 %s 的书签"
 
+msgctxt "Configuration type"
+msgid "Boolean"
+msgstr "布尔值"
+
+msgctxt "Contact subscription"
 msgid "Both"
-msgstr "两者"
+msgstr "双向"
 
 msgid "Browse"
 msgstr "浏览"
@@ -1026,6 +842,7 @@ msgstr "按照日期浏览记录"
 msgid "Browsing %(address)s using account %(account)s"
 msgstr "用账户 %(account)s 浏览 %(address)s"
 
+msgctxt "User status"
 msgid "Busy"
 msgstr "忙碌"
 
@@ -1253,6 +1070,9 @@ msgstr ""
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "点击您想要邀请到此群聊的联系人。"
 
+msgid "Click to change time display"
+msgstr "点击切换时间显示"
+
 msgid "Click to view Gajim's wiki page on how to install plugins in Flatpak."
 msgstr "点击查看 Gajim 维基页面来了解如何在 Flatpak 下安装插件。"
 
@@ -1263,6 +1083,8 @@ msgid ""
 "Clickable schemes in addition to the hard-coded list of IANA-registered "
 "ones. Space-separated, lower-case, no colons."
 msgstr ""
+"额外的可点击的 URI 方案列表，除了硬编码的已在 IANA 注册的方案。 用空格分隔，"
+"小写，无冒号。"
 
 msgid "Client Certificate"
 msgstr "客户端证书"
@@ -1313,6 +1135,10 @@ msgstr "完成"
 msgid "Complete a command or a nickname"
 msgstr "补完一条命令或一个昵称"
 
+msgid "Completed"
+msgstr "已完成"
+
+msgctxt "File transfer state"
 msgid "Completed"
 msgstr "已完成"
 
@@ -1455,6 +1281,10 @@ msgstr "通话会保存在服务器上"
 msgid "Copy"
 msgstr "复制"
 
+msgctxt "Message row action"
+msgid "Copy"
+msgstr "复制"
+
 msgid "Copy Address"
 msgstr "复制地址"
 
@@ -1470,8 +1300,8 @@ msgstr "复制链接"
 msgid "Copy Link Location"
 msgstr "复制链接位置"
 
-msgid "Copy Location"
-msgstr "复制位置"
+msgid "Copy Path"
+msgstr "复制路径"
 
 msgid "Copy Text"
 msgstr "复制文本"
@@ -1490,6 +1320,10 @@ msgstr "复制信息到剪贴板"
 
 msgid "Correct the last message"
 msgstr "修订上一条消息"
+
+msgctxt "Message row action"
+msgid "Correct…"
+msgstr "更正…"
 
 msgid "Could not access file"
 msgstr "无法访问文件"
@@ -1552,6 +1386,9 @@ msgstr "拒绝"
 msgid "Decline Invitation"
 msgstr "拒绝邀请"
 
+msgid "Decrease playback speed"
+msgstr "降低播放速度"
+
 msgid "Default"
 msgstr "默认"
 
@@ -1609,6 +1446,9 @@ msgstr "设备 \"%s\""
 
 msgid "Devices"
 msgstr "设备"
+
+msgid "Dial Number"
+msgstr "拨打该号码"
 
 #, python-format
 msgid "Dictionary URL is missing a \"%s\""
@@ -1695,6 +1535,10 @@ msgstr "您确定要注销位于 <b>%s</b> 的账户吗？"
 msgid "Don’t show this again"
 msgstr "不再显示此消息"
 
+msgid "Download"
+msgstr "下载"
+
+msgctxt "Noun"
 msgid "Download"
 msgstr "下载"
 
@@ -1938,6 +1782,10 @@ msgstr "生成头像失败。"
 msgid "Fake audio output"
 msgstr "伪装音频输出"
 
+msgctxt "Group chat name"
+msgid "Family"
+msgstr "家人"
+
 msgid "Feature not available on Windows"
 msgstr "此功能在 Windows 下不可用"
 
@@ -2090,12 +1938,25 @@ msgstr "在证书的 notBefore 字段格式错误"
 msgid "Format your message"
 msgstr "为您的消息应用格式"
 
+msgid "Forward 10 seconds"
+msgstr "快进10秒"
+
+msgctxt "User status"
 msgid "Free for Chat"
 msgstr "和我聊天吧"
 
 msgid "From"
 msgstr "从"
 
+#, fuzzy
+msgctxt "Contact subscription"
+msgid "From"
+msgstr "从"
+
+msgid "Full Name"
+msgstr "全名"
+
+msgctxt "Profile"
 msgid "Full Name"
 msgstr "全名"
 
@@ -2159,6 +2020,10 @@ msgstr "Gajim 即将退出"
 msgid "Gathering information…"
 msgstr "获取信息…"
 
+msgid "Gender"
+msgstr "性别"
+
+msgctxt "Profile"
 msgid "Gender"
 msgstr "性别"
 
@@ -2267,6 +2132,10 @@ msgstr "你好，我是 $name. %s"
 msgid "Helps to establish calls through firewalls"
 msgstr "帮助穿透防火墙以建立通话"
 
+msgctxt "Group chat feature"
+msgid "Hidden"
+msgstr "隐藏"
+
 msgid "Hide"
 msgstr "隐藏"
 
@@ -2303,6 +2172,7 @@ msgstr "我想将您添加到我的花名册。"
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC 标准规定 1 KiB = 1024 bytes(字节), 1 KB = 1000 bytes(字节)。"
 
+msgctxt "Profile"
 msgid "IM Address"
 msgstr "IM 地址"
 
@@ -2392,6 +2262,9 @@ msgstr "来电"
 msgid "Incoming Call (Video)"
 msgstr "来电（视频）"
 
+msgid "Increase playback speed"
+msgstr "增加播放速度"
+
 msgid "Information"
 msgstr "信息"
 
@@ -2418,6 +2291,10 @@ msgstr "安装失败"
 
 msgid "Installed"
 msgstr "已安装"
+
+msgctxt "Configuration type"
+msgid "Integer"
+msgstr "整数值"
 
 msgid "Invalid Address"
 msgstr "无效地址"
@@ -2509,9 +2386,6 @@ msgstr "我正在工作。"
 msgid "JID"
 msgstr "JID"
 
-msgid "JPEG files"
-msgstr "JPEG 文件"
-
 msgid "Join"
 msgstr "加入"
 
@@ -2524,8 +2398,8 @@ msgstr "加入群聊以…"
 msgid "Join Group Chat?"
 msgstr "加入群聊吗？"
 
-msgid "Join Groupchat"
-msgstr "加入群聊"
+msgid "Join Groupchat…"
+msgstr "加入群聊…"
 
 msgid "Join Support Chat"
 msgstr "加入支持聊天"
@@ -2604,6 +2478,14 @@ msgstr "本地系统时间"
 msgid "Local Time"
 msgstr "本地时间"
 
+msgctxt "Group chat description"
+msgid "Local help group"
+msgstr "本地互助组"
+
+msgctxt "Group chat description"
+msgid "Local news and reports"
+msgstr "本地新闻和报道"
+
 #, python-format
 msgid "Location at %s"
 msgstr "位于 %s"
@@ -2679,8 +2561,17 @@ msgstr "媒体回放"
 msgid "Member"
 msgstr "成员"
 
+msgctxt "Group chat contact affiliation"
+msgid "Member"
+msgstr "成员"
+
+msgctxt "Group chat contact affiliation"
 msgid "Members"
 msgstr "成员"
+
+msgctxt "Group chat feature"
+msgid "Members Only"
+msgstr "仅成员可进入"
 
 msgid "Mention: Message Background Color"
 msgstr "提及: 消息背景颜色"
@@ -2736,12 +2627,18 @@ msgstr "缺失音频/视频所需的依赖"
 msgid "Missing necessary encryption plugin"
 msgstr "缺失必要的加密插件"
 
+msgctxt "Group chat feature"
+msgid "Moderated"
+msgstr "有主持人"
+
 msgid "Moderation"
 msgstr "主持"
 
+msgctxt "Group chat contact role"
 msgid "Moderator"
 msgstr "主持人"
 
+msgctxt "Group chat contact role"
 msgid "Moderators"
 msgstr "主持人"
 
@@ -2796,6 +2693,10 @@ msgstr "新工作区"
 msgid "New message from"
 msgstr "新消息来自"
 
+msgctxt "Group chat name"
+msgid "News"
+msgstr "新闻"
+
 msgid "Next"
 msgstr "下一个"
 
@@ -2813,6 +2714,10 @@ msgstr "没有可用的文件传输"
 
 msgid "No Notifications"
 msgstr "没有通知"
+
+msgctxt "Group chat feature"
+msgid "No Password Required"
+msgstr "不需要密码"
 
 msgid "No Proxy"
 msgstr "没有代理服务器"
@@ -2864,17 +2769,53 @@ msgstr "没有结果"
 msgid "No results found"
 msgstr "没有找到结果"
 
-msgid "No updates available"
-msgstr "没有可用的更新"
+#, python-format
+msgid "No updates available (last check: %s)"
+msgstr "没有可用的更新 (上一次检查: %s)"
+
+msgid "No updates available (last check: never)"
+msgstr "没有可用的更新 (上一次检查: 从未)"
 
 msgid "Node"
 msgstr "节点"
 
+msgctxt "Configuration description"
+msgid "None"
+msgstr "无"
+
+msgctxt "Contact subscription"
+msgid "None"
+msgstr "无"
+
+msgctxt "Gender"
+msgid "None"
+msgstr "无"
+
+msgctxt "Group chat contact affiliation"
+msgid "None"
+msgstr "无"
+
+msgctxt "Group chat contact role"
+msgid "None"
+msgstr "无"
+
+msgctxt "Group chat feature"
+msgid "Not Anonymous"
+msgstr "非匿名"
+
 msgid "Not Available"
 msgstr "不可用"
 
+msgctxt "User status"
+msgid "Not Available"
+msgstr "不在"
+
 msgid "Not Connected"
 msgstr "没有连接"
+
+msgctxt "Group chat feature"
+msgid "Not Moderated"
+msgstr "无主持人"
 
 msgid "Not accelerated"
 msgstr "未加速"
@@ -2884,6 +2825,14 @@ msgstr "不可用"
 
 msgid "Not encrypted"
 msgstr "未加密"
+
+msgctxt "File transfer state"
+msgid "Not started"
+msgstr "未开始"
+
+msgctxt "Profile"
+msgid "Note"
+msgstr "备注"
 
 msgid "Note to myself"
 msgstr "给自己的备注"
@@ -2921,8 +2870,16 @@ msgstr "通知所有信息"
 msgid "OK"
 msgstr "确定"
 
+msgctxt "Switch"
+msgid "Off"
+msgstr "关"
+
 msgid "Offline"
 msgstr "离线"
+
+msgctxt "Switch"
+msgid "On"
+msgstr "开"
 
 msgid "One Month"
 msgstr "一个月"
@@ -2942,17 +2899,27 @@ msgstr "只有主持人可以看到您的 XMPP 地址"
 msgid "Open"
 msgstr "打开"
 
+msgctxt "Group chat feature"
+msgid "Open"
+msgstr "开放"
+
 msgid "Open Email Composer"
 msgstr "打开邮件编辑器"
 
 msgid "Open Folder"
 msgstr "打开文件夹"
 
+msgid "Open Link"
+msgstr "打开链接"
+
 msgid "Open Link in Browser"
 msgstr "在浏览器中打开链接"
 
 msgid "Open Link in _Browser"
 msgstr "在浏览器中打开链接(_B)"
+
+msgid "Open Path"
+msgstr "打开路径"
 
 msgid "Open Plugins…"
 msgstr "打开插件…"
@@ -2975,6 +2942,7 @@ msgstr "OpenGL 加速"
 msgid "Operating System"
 msgstr "操作系统"
 
+msgctxt "Profile"
 msgid "Organisation"
 msgstr "组织"
 
@@ -2992,6 +2960,10 @@ msgstr "组织单元 (OU): "
 
 msgid "Organize your chats with workspaces"
 msgstr "用工作区组织您的聊天"
+
+msgctxt "Gender"
+msgid "Other"
+msgstr "其他"
 
 msgid "Others"
 msgstr "其他"
@@ -3011,6 +2983,11 @@ msgstr "覆盖插件？"
 msgid "Owner"
 msgstr "所有者"
 
+msgctxt "Group chat contact affiliation"
+msgid "Owner"
+msgstr "所有者"
+
+msgctxt "Group chat contact affiliation"
 msgid "Owners"
 msgstr "所有者"
 
@@ -3035,9 +3012,6 @@ msgstr "PEP 节点没有被移除"
 msgid "PKCS12 Files"
 msgstr "PKCS12 文件"
 
-msgid "PNG files"
-msgstr "PNG 文件"
-
 msgid "Pa_use/Resume"
 msgstr "暂停 (_U)/继续"
 
@@ -3045,9 +3019,14 @@ msgstr "暂停 (_U)/继续"
 msgid "Pango Version: %s"
 msgstr "Pango 版本: %s"
 
+msgctxt "Group chat contact role"
 msgid "Participant"
 msgstr "参与者"
 
+msgid "Participants"
+msgstr "参与者"
+
+msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "参与者"
 
@@ -3077,6 +3056,10 @@ msgstr "密码已更改"
 msgid "Password Required"
 msgstr "需要密码"
 
+msgctxt "Group chat feature"
+msgid "Password Required"
+msgstr "需要密码"
+
 msgid "Passwords do not match"
 msgstr "密码不匹配"
 
@@ -3098,11 +3081,19 @@ msgstr "超过了路径长度限制"
 msgid "Pause or resume file transfer"
 msgstr "暂停或恢复文件传输"
 
+msgctxt "File transfer state"
+msgid "Paused"
+msgstr "已暂停"
+
 msgid "Pending Event"
 msgstr "待处理事件"
 
 msgid "Pending Voice Requests"
 msgstr "待处理语音请求"
+
+msgctxt "Group chat feature"
+msgid "Persistent"
+msgstr "永久"
 
 msgid "Personal notes about this contact"
 msgstr "关于此联系人的个人备注"
@@ -3216,6 +3207,10 @@ msgstr "邮政编码"
 msgid "Prefer direct messages in private group chats "
 msgstr "在私密群聊中偏好直接消息 "
 
+msgctxt "Configuration"
+msgid "Preference Name"
+msgstr "首选项名称"
+
 msgid "Preferences"
 msgstr "首选项"
 
@@ -3261,6 +3256,10 @@ msgstr "使用 cprofile 的预置文件应用"
 msgid "Progress"
 msgstr "进度"
 
+msgctxt "Group chat description"
+msgid "Project discussion"
+msgstr "项目讨论"
+
 msgid "Prox_y"
 msgstr "代理服务器(_Y)"
 
@@ -3278,6 +3277,14 @@ msgstr "代理服务器，自定义主机名和端口"
 
 msgid "Public"
 msgstr "公开"
+
+msgctxt "Group chat feature"
+msgid "Public"
+msgstr "公开"
+
+msgctxt "Profile"
+msgid "Public Encryption Key"
+msgstr "公钥"
 
 #, python-format
 msgid "Pulse: %s"
@@ -3298,6 +3305,10 @@ msgstr "退出"
 
 msgid "Quit Gajim"
 msgstr "退出 Gajim"
+
+msgctxt "Message row action"
+msgid "Quote…"
+msgstr "引用…"
 
 msgid "Re-Login"
 msgstr "重新登录"
@@ -3329,6 +3340,10 @@ msgstr "销毁的原因"
 #, python-format
 msgid "Reason: %s"
 msgstr "原因：%s"
+
+msgctxt "Message state"
+msgid "Received"
+msgstr "已收到"
 
 msgid "Recent history"
 msgstr "最近的历史记录"
@@ -3441,6 +3456,10 @@ msgstr "移除…"
 msgid "Removing Account..."
 msgstr "移除账户…"
 
+msgctxt "Group chat name"
+msgid "Repairs"
+msgstr "修理"
+
 msgid "Report"
 msgstr "报告"
 
@@ -3541,12 +3560,23 @@ msgstr "撤回消息"
 msgid "Retract message?"
 msgstr "撤回信息？"
 
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr "撤回…"
+
 msgid "Revoke Member"
 msgstr "撤销成员"
 
 msgid "Revoke Voice"
 msgstr "撤销语音"
 
+msgid "Rewind 10 seconds"
+msgstr "回退10秒"
+
+msgid "Role"
+msgstr "角色"
+
+msgctxt "Profile"
 msgid "Role"
 msgstr "角色"
 
@@ -3580,9 +3610,6 @@ msgstr "STUN 服务器设定"
 
 msgid "STUN server to use when using Jingle"
 msgstr "在使用 Jingle 时使用的 STUN 服务器"
-
-msgid "SVG files"
-msgstr "SVG 文件"
 
 msgid "Sales"
 msgstr "销售"
@@ -3676,6 +3703,10 @@ msgstr "选择联系人"
 msgid "Select File…"
 msgstr "选择文件…"
 
+msgctxt "Message row action"
+msgid "Select Messages…"
+msgstr "选择消息…"
+
 msgid "Select a security label for your message…"
 msgstr "为您的消息选择一个安全标签…"
 
@@ -3684,6 +3715,9 @@ msgstr "选择音频输出（比如扬声器、耳机）"
 
 msgid "Select an emoji"
 msgstr "选择表情符号"
+
+msgid "Select playback speed"
+msgstr "选择播放速度"
 
 msgid "Select the account with which you want to synchronise"
 msgstr "选择您想要与之同步的账户"
@@ -3709,6 +3743,10 @@ msgstr "自签名的证书"
 
 msgid "Self signed certificate in certificate chain"
 msgstr "自签名的证书位于在证书链中"
+
+msgctxt "Group chat feature"
+msgid "Semi-Anonymous"
+msgstr "半匿名"
 
 msgid "Send Chat Markers"
 msgstr "发送聊天标记"
@@ -4033,11 +4071,19 @@ msgstr "拼写检查工具"
 msgid "Spell Checking"
 msgstr "拼写检查"
 
+msgctxt "Group chat description"
+msgid "Spring gathering"
+msgstr "春聚"
+
 msgid "Sta_tus"
 msgstr "状态(_T)"
 
 msgid "Stage"
 msgstr "阶段"
+
+msgctxt "File transfer state"
+msgid "Stalled"
+msgstr "已停滞"
 
 msgid "Start / Join Chat"
 msgstr "开始/加入聊天"
@@ -4098,6 +4144,10 @@ msgstr "状态及用于所有账户的状态消息"
 msgid "Status message…"
 msgstr "状态信息…"
 
+msgctxt "File transfer state"
+msgid "Status: "
+msgstr "状态: "
+
 #, python-format
 msgid "Status: %s"
 msgstr "状态: %s"
@@ -4138,6 +4188,7 @@ msgstr "主体发布者不匹配"
 msgid "Submit"
 msgstr "提交"
 
+msgctxt "Contact subscription"
 msgid "Subscribe"
 msgstr "订阅"
 
@@ -4217,8 +4268,20 @@ msgstr "TLS 验证失败: %s"
 msgid "Tabbed chat window"
 msgstr "标签页式聊天窗口"
 
+msgctxt "Group chat name"
+msgid "Team"
+msgstr "队伍"
+
 msgid "Tell your contacts if you received a message"
 msgstr "如果您收到消息的话告诉您的联系人"
+
+msgctxt "Group chat feature"
+msgid "Temporary"
+msgstr "临时"
+
+msgctxt "Configuration type"
+msgid "Text"
+msgstr "文本"
 
 msgid "Text File"
 msgstr "文本文件"
@@ -4433,6 +4496,12 @@ msgstr "直到离开前的时间"
 msgid "Time Until Not Available"
 msgstr "直到不可用前的时间"
 
+msgctxt "Profile"
+msgid "Title"
+msgstr "头衔"
+
+#, fuzzy
+msgctxt "Contact subscription"
 msgid "To"
 msgstr "至"
 
@@ -4448,6 +4517,14 @@ msgstr "切换参与者列表"
 msgid "Topic"
 msgstr "话题"
 
+msgctxt "File transfer state"
+msgid "Transferred: "
+msgstr "已传输: "
+
+msgctxt "File transfer state"
+msgid "Transferring"
+msgstr "传输中"
+
 msgid "Transferring File…"
 msgstr "传输文件中…"
 
@@ -4460,6 +4537,10 @@ msgstr "传输"
 
 msgid "Treat * / _ pairs as possible formatting characters."
 msgstr "将成对出现的 * / _ 视为可能的格式控制字符。"
+
+msgctxt "Group chat description"
+msgid "Trip planning"
+msgstr "旅行计划"
 
 msgid "Trust Not Decided"
 msgstr "待信任"
@@ -4491,8 +4572,16 @@ msgstr "开启摄像头"
 msgid "Type"
 msgstr "输入"
 
+msgctxt "Configuration"
+msgid "Type"
+msgstr "类型"
+
 msgid "Type to search for values..."
 msgstr "输入来搜索值…"
+
+msgctxt "File transfer type"
+msgid "Type: "
+msgstr "类型: "
 
 msgid "UPnP-IGD Port Forwarding"
 msgstr "UPnP-IGD 端口转发"
@@ -4533,6 +4622,10 @@ msgstr "解除屏蔽"
 msgid "Uninstall Plugin"
 msgstr "卸载插件"
 
+msgid "Unknown"
+msgstr "未知"
+
+msgctxt "Contact subscription"
 msgid "Unknown"
 msgstr "未知"
 
@@ -4596,6 +4689,9 @@ msgstr "自动更新"
 msgid "Update available"
 msgstr "有可用的更新"
 
+msgid "Update check disabled in preferences"
+msgstr "更新检查在首选项中被禁用"
+
 msgid "Update plugins automatically"
 msgstr "自动更新插件"
 
@@ -4604,6 +4700,10 @@ msgstr "更新"
 
 msgid "Updates will be installed next time Gajim is started"
 msgstr "更新将在下一次 Gajim 启动时安装"
+
+msgctxt "Noun"
+msgid "Upload"
+msgstr "上传"
 
 msgid "Upload Files"
 msgstr "上传文件"
@@ -4676,11 +4776,19 @@ msgstr "用户"
 msgid "V4L2: %s"
 msgstr "V4L2: %s"
 
+msgctxt "Group chat name"
+msgid "Vacation"
+msgstr "假期"
+
 msgid "Validity"
 msgstr "有效性"
 
 msgid "Validity\n"
 msgstr "有效性\n"
+
+msgctxt "Configuration"
+msgid "Value"
+msgstr "值"
 
 msgid "Verified"
 msgstr "已验证"
@@ -4716,9 +4824,11 @@ msgstr "访问服务器站点"
 msgid "Visit Website"
 msgstr "访问网站"
 
+msgctxt "Group chat contact role"
 msgid "Visitor"
 msgstr "访客"
 
+msgctxt "Group chat contact role"
 msgid "Visitors"
 msgstr "访客"
 
@@ -4890,10 +5000,6 @@ msgid ""
 "You do not have the proper permissions to create files in this directory."
 msgstr "您没有合适的权限在这个目录里创建文件。"
 
-#, python-format
-msgid "You dropped something Gajim could not process: %s"
-msgstr "您拖放了 Gajim 无法处理的对象: %s"
-
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
 msgstr "您已被封禁{actor}{reason}"
@@ -5012,12 +5118,17 @@ msgstr "地址(_A)"
 msgid "_Advanced Settings"
 msgstr "高级设定(_A)"
 
+msgctxt "User status"
+msgid "_Available"
+msgstr "在线(_A)"
+
 msgid "_Back"
 msgstr "返回 (_B)"
 
 msgid "_Block"
 msgstr "屏蔽(_B)"
 
+msgctxt "User status"
 msgid "_Busy"
 msgstr "忙碌(_B)"
 
@@ -5084,6 +5195,7 @@ msgstr "功能(_F)"
 msgid "_File Transfer"
 msgstr "文件传输(_F)"
 
+msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "和我聊天吧(_F)"
 
@@ -5129,8 +5241,9 @@ msgstr "新帖子(_N)"
 msgid "_No"
 msgstr "否(_N)"
 
+msgctxt "User status"
 msgid "_Not Available"
-msgstr "不可用(_N)"
+msgstr "不在(_N)"
 
 msgid "_OK"
 msgstr "确定(_O)"
@@ -5277,6 +5390,7 @@ msgstr "楼宇"
 msgid "cairo Version: %s"
 msgstr "cairo 版本: %s"
 
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 msgid "chat;messaging;im;xmpp;voip;"
 msgstr "chat;messaging;im;xmpp;voip;"
 
@@ -5307,6 +5421,10 @@ msgstr "错误"
 
 msgid "example.org"
 msgstr "example.org"
+
+msgctxt "Group chat address"
+msgid "family"
+msgstr "家人"
 
 msgid "file transfers list"
 msgstr "文件传输列表"
@@ -5357,9 +5475,14 @@ msgstr "中深色皮肤"
 msgid "medium-light skin"
 msgstr "中浅色皮肤"
 
+msgctxt "Group chat address"
+msgid "news"
+msgstr "新闻"
+
 msgid "or"
 msgstr "或者"
 
+#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
 msgid "org.gajim.Gajim"
 msgstr "org.gajim.Gajim"
 
@@ -5380,6 +5503,10 @@ msgstr "python-nbxmpp 版本：%s"
 msgid "region"
 msgstr "地区"
 
+msgctxt "Group chat address"
+msgid "repairs"
+msgstr "修理"
+
 msgid "room"
 msgstr "群聊"
 
@@ -5392,6 +5519,10 @@ msgstr "街道"
 msgid "strike"
 msgstr "划去"
 
+msgctxt "Group chat address"
+msgid "team"
+msgstr "队伍"
+
 msgid "text"
 msgstr "文字"
 
@@ -5402,6 +5533,10 @@ msgid "translator-credits"
 msgstr ""
 "SAIHAZE <saihaze@outlook.com>, 2022\n"
 "Tommy He <lovenemesis@gmail.com>, 2022"
+
+msgctxt "Group chat address"
+msgid "vacation"
+msgstr "假期"
 
 msgid "video input"
 msgstr "视频输入"
@@ -5443,3 +5578,224 @@ msgstr "{nick} 现在状态是 {show}{status}"
 
 msgid "…or drop it here"
 msgstr "或者把图像拖放到这里"
+
+#, fuzzy
+#~ msgctxt "Profile"
+#~ msgid ":Note"
+#~ msgstr "备注"
+
+#~ msgid "?Ask (for Subscription):None"
+#~ msgstr "无"
+
+#~ msgid "?Gender:None"
+#~ msgstr "无"
+
+#~ msgid "?Gender:Other"
+#~ msgstr "其它"
+
+#~ msgid "?Group Chat Contact Affiliation:None"
+#~ msgstr "无"
+
+#~ msgid "?Group Chat Contact Role:None"
+#~ msgstr "无"
+
+#~ msgid "?Group chat address:family"
+#~ msgstr "家庭"
+
+#~ msgid "?Group chat address:news"
+#~ msgstr "新闻"
+
+#~ msgid "?Group chat address:repairs"
+#~ msgstr "维修"
+
+#~ msgid "?Group chat address:team"
+#~ msgstr "团队"
+
+#~ msgid "?Group chat address:vacation"
+#~ msgstr "假期"
+
+#~ msgid "?Group chat description:Local help group"
+#~ msgstr "本地帮助小组"
+
+#~ msgid "?Group chat description:Spring gathering"
+#~ msgstr "春季集会"
+
+#~ msgid "?Group chat description:Trip planning"
+#~ msgstr "旅行计划"
+
+#~ msgid "?Group chat feature:Archiving"
+#~ msgstr "归档中"
+
+#~ msgid "?Group chat feature:Hidden"
+#~ msgstr "隐藏"
+
+#~ msgid "?Group chat feature:Members Only"
+#~ msgstr "仅限成员"
+
+#~ msgid "?Group chat feature:Moderated"
+#~ msgstr "已审核"
+
+#~ msgid "?Group chat feature:No Password Required"
+#~ msgstr "无需密码"
+
+#~ msgid "?Group chat feature:Not Anonymous"
+#~ msgstr "非匿名"
+
+#~ msgid "?Group chat feature:Not Moderated"
+#~ msgstr "尚未审核"
+
+#~ msgid "?Group chat feature:Open"
+#~ msgstr "开放"
+
+#~ msgid "?Group chat feature:Password Required"
+#~ msgstr "需要密码"
+
+#~ msgid "?Group chat feature:Persistent"
+#~ msgstr "永久"
+
+#~ msgid "?Group chat feature:Public"
+#~ msgstr "公共"
+
+#~ msgid "?Group chat feature:Semi-Anonymous"
+#~ msgstr "半匿名"
+
+#~ msgid "?Group chat feature:Temporary"
+#~ msgstr "临时"
+
+#~ msgid "?Group chat name:Family"
+#~ msgstr "家庭"
+
+#~ msgid "?Group chat name:News"
+#~ msgstr "新闻"
+
+#~ msgid "?Group chat name:Repairs"
+#~ msgstr "维修"
+
+#~ msgid "?Group chat name:Team"
+#~ msgstr "团队"
+
+#~ msgid "?Group chat name:Vacation"
+#~ msgstr "假期"
+
+#~ msgid "?Message row action:Copy"
+#~ msgstr "复制"
+
+#~ msgid "?Message row action:Correct…"
+#~ msgstr "修订…"
+
+#~ msgid "?Message row action:Quote…"
+#~ msgstr "引用…"
+
+#~ msgid "?Message row action:Retract…"
+#~ msgstr "撤回…"
+
+#~ msgid "?Message row action:Select Messages…"
+#~ msgstr "多选…"
+
+#~ msgid "?Message state:Received"
+#~ msgstr "已收到"
+
+#~ msgid "?Noun:Download"
+#~ msgstr "下载"
+
+#~ msgid "?Noun:Upload"
+#~ msgstr "上传"
+
+#~ msgid "?Subscription we already have:None"
+#~ msgstr "无"
+
+#~ msgid "?config description:None"
+#~ msgstr "无"
+
+#~ msgid "?config type:Boolean"
+#~ msgstr "布尔型"
+
+#~ msgid "?config type:Integer"
+#~ msgstr "整数型"
+
+#~ msgid "?config type:Text"
+#~ msgstr "文本型"
+
+#~ msgid "?config:Type"
+#~ msgstr "类型"
+
+#~ msgid "?config:Value"
+#~ msgstr "值"
+
+#~ msgid "?profile:Address"
+#~ msgstr "地址"
+
+#~ msgid "?profile:Full Name"
+#~ msgstr "全名"
+
+#~ msgid "?profile:Gender"
+#~ msgstr "性别"
+
+#~ msgid "?profile:IM Address"
+#~ msgstr "IM 地址"
+
+#~ msgid "?profile:Note"
+#~ msgstr "备注"
+
+#~ msgid "?profile:Organisation"
+#~ msgstr "组织"
+
+#~ msgid "?profile:Role"
+#~ msgstr "角色"
+
+#~ msgid "?profile:Title"
+#~ msgstr "抬头"
+
+#~ msgid "?switch:Off"
+#~ msgstr "关闭"
+
+#~ msgid "?switch:On"
+#~ msgstr "开启"
+
+#~ msgid "?transfer status:Aborted"
+#~ msgstr "中止"
+
+#~ msgid "?transfer status:Completed"
+#~ msgstr "已完成"
+
+#~ msgid "?transfer status:Not started"
+#~ msgstr "未开始"
+
+#~ msgid "?transfer status:Paused"
+#~ msgstr "暂停"
+
+#~ msgid "?transfer status:Stalled"
+#~ msgstr "停滞"
+
+#~ msgid "?transfer status:Status: "
+#~ msgstr "状态: "
+
+#~ msgid "?transfer status:Transferred: "
+#~ msgstr "已传输: "
+
+#~ msgid "?transfer status:Transferring"
+#~ msgstr "正在传输"
+
+#~ msgid "?transfer type:Type: "
+#~ msgstr "类型: "
+
+#~ msgid "?user status:Available"
+#~ msgstr "在线"
+
+#~ msgid "?user status:_Available"
+#~ msgstr "在线(_A)"
+
+#~ msgid "Copy Location"
+#~ msgstr "复制位置"
+
+#~ msgid "JPEG files"
+#~ msgstr "JPEG 文件"
+
+#~ msgid "PNG files"
+#~ msgstr "PNG 文件"
+
+#~ msgid "SVG files"
+#~ msgstr "SVG 文件"
+
+#~ msgid "You dropped something Gajim could not process: %s"
+#~ msgstr "您拖放了 Gajim 无法处理的对象: %s"
