@@ -23,6 +23,7 @@ repos:
         - nbxmpp @ git+https://dev.gajim.org/gajim/python-nbxmpp.git
         - PyGObject-stubs @ git+https://github.com/pygobject/pygobject-stubs.git
         - python-gitlab
+        - ruamel.yaml
         - sentry-sdk
       stages: [manual]
 
