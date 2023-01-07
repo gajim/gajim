@@ -34,19 +34,20 @@ from gajim.common.exceptions import PluginsystemError
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 from gajim.common.types import PluginRepositoryT
-from gajim.gui.builder import get_builder
-from gajim.gui.dialogs import ConfirmationDialog
-from gajim.gui.dialogs import DialogButton
-from gajim.gui.dialogs import WarningDialog
-from gajim.gui.filechoosers import ArchiveChooserDialog
-from gajim.gui.util import EventHelper
-from gajim.gui.util import load_icon_pixbuf
 from gajim.plugins.events import PluginAdded
 from gajim.plugins.events import PluginRemoved
 from gajim.plugins.helpers import GajimPluginActivateException
 from gajim.plugins.manifest import PluginManifest
 
-log = logging.getLogger('gajim.gui.plugins')
+from gajim.gtk.builder import get_builder
+from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.dialogs import WarningDialog
+from gajim.gtk.filechoosers import ArchiveChooserDialog
+from gajim.gtk.util import EventHelper
+from gajim.gtk.util import load_icon_pixbuf
+
+log = logging.getLogger('gajim.gtk.plugins')
 
 
 @unique

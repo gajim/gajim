@@ -22,12 +22,12 @@ from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 
-from .avatar import make_workspace_avatar
-from .avatar_selector import AvatarSelector
-from .builder import get_builder
-from .const import DEFAULT_WORKSPACE_COLOR
-from .util import make_rgba
-from .util import rgba_to_float
+from gajim.gtk.avatar import make_workspace_avatar
+from gajim.gtk.avatar_selector import AvatarSelector
+from gajim.gtk.builder import get_builder
+from gajim.gtk.const import DEFAULT_WORKSPACE_COLOR
+from gajim.gtk.util import make_rgba
+from gajim.gtk.util import rgba_to_float
 
 
 class WorkspaceDialog(Gtk.ApplicationWindow):

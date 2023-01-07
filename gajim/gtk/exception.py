@@ -46,8 +46,8 @@ from gajim.common.helpers import get_os_version
 from gajim.common.i18n import _
 from gajim.common.util.http import create_http_request
 
-from .builder import get_builder
-from .util import get_gtk_version
+from gajim.gtk.builder import get_builder
+from gajim.gtk.util import get_gtk_version
 
 try:
     import sentry_sdk

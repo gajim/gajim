@@ -5,13 +5,10 @@ from nbxmpp.modules.discovery import parse_disco_info
 from nbxmpp.protocol import Iq
 from nbxmpp.structs import MucSubject
 
-from gajim import gui
 from gajim.common import app
 from gajim.common.const import CSSPriority
 
-gui.init('gtk')
-
-from gajim.gui.groupchat_info import GroupChatInfoScrolled
+from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 
 from . import util
 

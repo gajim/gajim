@@ -45,16 +45,16 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
 
-from .builder import get_builder
-from .contact_settings import ContactSettings
-from .dialogs import ConfirmationDialog
-from .dialogs import DialogButton
-from .sidebar_switcher import SideBarSwitcher
-from .structs import RemoveHistoryActionParams
-from .util import connect_destroy
-from .vcard_grid import VCardGrid
+from gajim.gtk.builder import get_builder
+from gajim.gtk.contact_settings import ContactSettings
+from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.sidebar_switcher import SideBarSwitcher
+from gajim.gtk.structs import RemoveHistoryActionParams
+from gajim.gtk.util import connect_destroy
+from gajim.gtk.vcard_grid import VCardGrid
 
-log = logging.getLogger('gajim.gui.contact_info')
+log = logging.getLogger('gajim.gtk.contact_info')
 
 
 ContactT = Union[BareContact, GroupchatParticipant]

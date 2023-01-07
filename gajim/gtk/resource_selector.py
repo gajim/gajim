@@ -31,7 +31,7 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ResourceContact
 
-log = logging.getLogger('gajim.gui.resource_selector')
+log = logging.getLogger('gajim.gtk.resource_selector')
 
 
 class ResourceSelector(Gtk.ScrolledWindow):

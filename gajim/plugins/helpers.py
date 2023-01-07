@@ -17,7 +17,8 @@ from typing import Optional
 from pathlib import Path
 
 from gajim.common import configpaths
-from gajim.gui.builder import Builder
+
+from gajim.gtk.builder import Builder
 
 from .plugins_i18n import _
 from .plugins_i18n import DOMAIN

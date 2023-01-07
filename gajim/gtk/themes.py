@@ -34,12 +34,12 @@ from gajim.common.events import StyleChanged
 from gajim.common.events import ThemeUpdate
 from gajim.common.i18n import _
 
-from .builder import get_builder
-from .dialogs import ConfirmationDialog
-from .dialogs import DialogButton
-from .dialogs import ErrorDialog
-from .preferences import Preferences
-from .util import get_app_window
+from gajim.gtk.builder import get_builder
+from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.preferences import Preferences
+from gajim.gtk.util import get_app_window
 
 
 class StyleOption(NamedTuple):

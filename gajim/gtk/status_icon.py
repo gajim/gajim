@@ -40,9 +40,9 @@ from gajim.common.helpers import get_global_show
 from gajim.common.helpers import get_uf_show
 from gajim.common.i18n import _
 
-from .builder import get_builder
-from .util import get_icon_name
-from .util import open_window
+from gajim.gtk.builder import get_builder
+from gajim.gtk.util import get_icon_name
+from gajim.gtk.util import open_window
 
 if app.is_installed('APPINDICATOR'):
     # pylint: disable=ungrouped-imports
@@ -53,7 +53,7 @@ elif app.is_installed('AYATANA_APPINDICATOR'):
     from gi.repository import AyatanaAppIndicator3 as AppIndicator
 
 
-log = logging.getLogger('gajim.gui.statusicon')
+log = logging.getLogger('gajim.gtk.statusicon')
 
 
 class StatusIcon:

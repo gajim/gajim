@@ -5,13 +5,10 @@ from gi.repository import Gtk
 from nbxmpp.modules.dataforms import create_field
 from nbxmpp.modules.dataforms import SimpleDataForm
 
-from gajim import gui
 from gajim.common import app
 from gajim.common.const import CSSPriority
 
-gui.init('gtk')
-
-from gajim.gui.change_password import ChangePassword
+from gajim.gtk.change_password import ChangePassword
 
 from . import util
 

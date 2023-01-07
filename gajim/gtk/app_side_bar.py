@@ -17,8 +17,8 @@ from gi.repository import Gtk
 
 from gajim.common import app
 
-from .app_page import AppPage
-from .util import load_icon_surface
+from gajim.gtk.app_page import AppPage
+from gajim.gtk.util import load_icon_surface
 
 
 class AppSideBar(Gtk.ListBox):

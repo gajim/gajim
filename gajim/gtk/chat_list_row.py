@@ -50,9 +50,9 @@ from gajim.common.storage.draft import DraftStorage
 from gajim.common.types import ChatContactT
 from gajim.common.types import OneOnOneContactT
 
-from .builder import get_builder
-from .menus import get_chat_list_row_menu
-from .util import GajimPopover
+from gajim.gtk.builder import get_builder
+from gajim.gtk.menus import get_chat_list_row_menu
+from gajim.gtk.util import GajimPopover
 
 
 class ChatListRow(Gtk.ListBoxRow):

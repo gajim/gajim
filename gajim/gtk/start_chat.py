@@ -52,14 +52,14 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.util import as_task
 
-from .builder import get_builder
-from .chat_filter import ChatFilter
-from .groupchat_info import GroupChatInfoScrolled
-from .groupchat_nick import NickChooser
-from .menus import get_start_chat_row_menu
-from .util import AccountBadge
-from .util import GajimPopover
-from .util import get_icon_name
+from gajim.gtk.builder import get_builder
+from gajim.gtk.chat_filter import ChatFilter
+from gajim.gtk.groupchat_info import GroupChatInfoScrolled
+from gajim.gtk.groupchat_nick import NickChooser
+from gajim.gtk.menus import get_start_chat_row_menu
+from gajim.gtk.util import AccountBadge
+from gajim.gtk.util import GajimPopover
+from gajim.gtk.util import get_icon_name
 
 ContactT = Union[BareContact, GroupchatContact]
 

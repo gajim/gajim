@@ -53,14 +53,14 @@ from gajim.common.helpers import allow_showing_notification
 from gajim.common.helpers import play_sound
 from gajim.common.i18n import _
 
-from .builder import get_builder
-from .structs import AccountJidParam
-from .structs import OpenEventActionParams
-from .util import add_css_to_widget
-from .util import get_monitor_scale_factor
-from .util import get_total_screen_geometry
+from gajim.gtk.builder import get_builder
+from gajim.gtk.structs import AccountJidParam
+from gajim.gtk.structs import OpenEventActionParams
+from gajim.gtk.util import add_css_to_widget
+from gajim.gtk.util import get_monitor_scale_factor
+from gajim.gtk.util import get_total_screen_geometry
 
-log = logging.getLogger('gajim.gui.notification')
+log = logging.getLogger('gajim.gtk.notification')
 
 
 NOTIFICATION_ICONS: dict[str, str] = {

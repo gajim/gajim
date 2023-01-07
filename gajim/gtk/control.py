@@ -46,18 +46,19 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive import ConversationRow
-from gajim.gui.builder import get_builder
-from gajim.gui.conversation.jump_to_end_button import JumpToEndButton
-from gajim.gui.conversation.message_selection import MessageSelection
-from gajim.gui.conversation.view import ConversationView
-from gajim.gui.groupchat_roster import GroupchatRoster
-from gajim.gui.groupchat_state import GroupchatState
+
+from gajim.gtk.builder import get_builder
+from gajim.gtk.conversation.jump_to_end_button import JumpToEndButton
+from gajim.gtk.conversation.message_selection import MessageSelection
+from gajim.gtk.conversation.view import ConversationView
+from gajim.gtk.groupchat_roster import GroupchatRoster
+from gajim.gtk.groupchat_state import GroupchatState
 
 HistoryRowT = Union[events.ApplicationEvent, ConversationRow]
 
 REQUEST_LINES_COUNT = 20
 
-log = logging.getLogger('gajim.gui.control')
+log = logging.getLogger('gajim.gtk.control')
 
 
 class ChatControl(EventHelper):

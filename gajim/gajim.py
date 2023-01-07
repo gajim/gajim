@@ -30,8 +30,6 @@ from types import FrameType
 
 from packaging.version import Version as V
 
-import gajim.gui
-
 _MIN_NBXMPP_VER = '4.0.0'
 _MIN_GTK_VER = '3.24.30'
 _MIN_CAIRO_VER = '1.16.0'
@@ -115,14 +113,12 @@ def _disable_csd() -> None:
 
 
 def _init_gtk() -> None:
-    gajim.gui.init('gtk')
-
-    from gajim.gui import exception
+    from gajim.gtk import exception
     exception.init()
 
 
 def _run_app() -> None:
-    from gajim.gui.application import GajimApplication
+    from gajim.gtk.application import GajimApplication
     application = GajimApplication()
 
     def sigint_cb(num: int, stack: Optional[FrameType]) -> None:

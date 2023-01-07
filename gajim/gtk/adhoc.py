@@ -38,15 +38,15 @@ from gajim.common import app
 from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
 
-from .assistant import Assistant
-from .assistant import ErrorPage
-from .assistant import Page
-from .assistant import ProgressPage
-from .dataform import DataFormWidget
-from .util import ensure_not_destroyed
-from .util import MultiLineLabel
+from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import ErrorPage
+from gajim.gtk.assistant import Page
+from gajim.gtk.assistant import ProgressPage
+from gajim.gtk.dataform import DataFormWidget
+from gajim.gtk.util import ensure_not_destroyed
+from gajim.gtk.util import MultiLineLabel
 
-log = logging.getLogger('gajim.gui.adhoc')
+log = logging.getLogger('gajim.gtk.adhoc')
 
 
 class AdHocCommands(Assistant):

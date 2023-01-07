@@ -20,9 +20,9 @@ from gajim.common.events import MucInvitation
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.i18n import _
 
-from .groupchat_info import GroupChatInfoScrolled
-from .groupchat_nick import NickChooser
-from .util import AccountBadge
+from gajim.gtk.groupchat_info import GroupChatInfoScrolled
+from gajim.gtk.groupchat_nick import NickChooser
+from gajim.gtk.util import AccountBadge
 
 
 class GroupChatInvitation(Gtk.ApplicationWindow):

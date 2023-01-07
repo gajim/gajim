@@ -34,7 +34,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.i18n import _
 
-from .const import Filter
+from gajim.gtk.const import Filter
 
 AcceptCallbackT = Callable[[list[str]], None]
 

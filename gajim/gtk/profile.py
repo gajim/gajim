@@ -35,15 +35,16 @@ from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
-from gajim.gui.avatar import clip_circle
-from gajim.gui.avatar_selector import AvatarSelector
-from gajim.gui.builder import get_builder
-from gajim.gui.dialogs import ErrorDialog
-from gajim.gui.filechoosers import AvatarChooserDialog
-from gajim.gui.util import scroll_to_end
-from gajim.gui.vcard_grid import VCardGrid
 
-log = logging.getLogger('gajim.gui.profile')
+from gajim.gtk.avatar import clip_circle
+from gajim.gtk.avatar_selector import AvatarSelector
+from gajim.gtk.builder import get_builder
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.filechoosers import AvatarChooserDialog
+from gajim.gtk.util import scroll_to_end
+from gajim.gtk.vcard_grid import VCardGrid
+
+log = logging.getLogger('gajim.gtk.profile')
 
 MENU_DICT = {
     'fn': p_('Profile', 'Full Name'),

@@ -32,14 +32,14 @@ from gajim.common.events import MucInvitation
 from gajim.common.events import SubscribePresenceReceived
 from gajim.common.events import UnsubscribedPresenceReceived
 
-from .builder import get_builder
-from .menus import get_roster_view_menu
-from .notification_manager import NotificationManager
-from .roster import Roster
-from .status_message_selector import StatusMessageSelector
-from .status_selector import StatusSelector
-from .util import EventHelper
-from .util import open_window
+from gajim.gtk.builder import get_builder
+from gajim.gtk.menus import get_roster_view_menu
+from gajim.gtk.notification_manager import NotificationManager
+from gajim.gtk.roster import Roster
+from gajim.gtk.status_message_selector import StatusMessageSelector
+from gajim.gtk.status_selector import StatusSelector
+from gajim.gtk.util import EventHelper
+from gajim.gtk.util import open_window
 
 
 class AccountPage(Gtk.Box, EventHelper):

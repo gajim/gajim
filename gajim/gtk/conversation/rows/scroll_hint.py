@@ -18,7 +18,7 @@ from gi.repository import Gtk
 
 from gajim.common.i18n import _
 
-from .base import BaseRow
+from gajim.gtk.conversation.rows.base import BaseRow
 
 
 class ScrollHintRow(BaseRow):

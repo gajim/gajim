@@ -33,9 +33,9 @@ from gajim.common.const import Direction
 from gajim.common.helpers import validate_jid
 from gajim.common.i18n import _
 
-from .builder import get_builder
-from .contacts_flowbox import ContactsFlowBox
-from .util import AccountBadge
+from gajim.gtk.builder import get_builder
+from gajim.gtk.contacts_flowbox import ContactsFlowBox
+from gajim.gtk.util import AccountBadge
 
 
 class ContactRow(Gtk.ListBoxRow):

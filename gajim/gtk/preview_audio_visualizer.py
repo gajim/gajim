@@ -26,9 +26,9 @@ from gi.repository import Gtk
 
 from gajim.common.preview import AudioSampleT
 
-from .util import rgba_to_float
+from gajim.gtk.util import rgba_to_float
 
-log = logging.getLogger('gajim.gui.preview_audio_visualizer')
+log = logging.getLogger('gajim.gtk.preview_audio_visualizer')
 
 
 class AudioVisualizerWidget(Gtk.DrawingArea):

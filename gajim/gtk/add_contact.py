@@ -36,14 +36,14 @@ from gajim.common.helpers import validate_jid
 from gajim.common.i18n import _
 from gajim.common.modules.util import as_task
 
-from .assistant import Assistant
-from .assistant import ErrorPage
-from .assistant import Page
-from .builder import get_builder
-from .groupchat_info import GroupChatInfoScrolled
-from .util import open_window
+from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import ErrorPage
+from gajim.gtk.assistant import Page
+from gajim.gtk.builder import get_builder
+from gajim.gtk.groupchat_info import GroupChatInfoScrolled
+from gajim.gtk.util import open_window
 
-log = logging.getLogger('gajim.gui.add_contact')
+log = logging.getLogger('gajim.gtk.add_contact')
 
 
 class AddContact(Assistant):

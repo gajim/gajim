@@ -48,38 +48,38 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.plugins.manifest import PluginManifest
 from gajim.plugins.repository import PluginRepository
 
-from .account_side_bar import AccountSideBar
-from .app_side_bar import AppSideBar
-from .builder import get_builder
-from .call_window import CallWindow
-from .chat_list import ChatList
-from .chat_list_row import ChatListRow
-from .chat_stack import ChatStack
-from .const import MAIN_WIN_ACTIONS
-from .dialogs import ConfirmationCheckDialog
-from .dialogs import ConfirmationDialog
-from .dialogs import DialogButton
-from .dialogs import ErrorDialog
-from .dialogs import InputDialog
-from .filechoosers import FileSaveDialog
-from .main_stack import MainStack
-from .structs import AccountJidParam
-from .structs import actionmethod
-from .structs import AddChatActionParams
-from .structs import ChatListEntryParam
-from .structs import RetractMessageParam
-from .util import get_app_window
-from .util import open_window
-from .util import resize_window
-from .util import restore_main_window_position
-from .util import save_main_window_position
-from .util import set_urgency_hint
-from .workspace_side_bar import WorkspaceSideBar
+from gajim.gtk.account_side_bar import AccountSideBar
+from gajim.gtk.app_side_bar import AppSideBar
+from gajim.gtk.builder import get_builder
+from gajim.gtk.call_window import CallWindow
+from gajim.gtk.chat_list import ChatList
+from gajim.gtk.chat_list_row import ChatListRow
+from gajim.gtk.chat_stack import ChatStack
+from gajim.gtk.const import MAIN_WIN_ACTIONS
+from gajim.gtk.dialogs import ConfirmationCheckDialog
+from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import InputDialog
+from gajim.gtk.filechoosers import FileSaveDialog
+from gajim.gtk.main_stack import MainStack
+from gajim.gtk.structs import AccountJidParam
+from gajim.gtk.structs import actionmethod
+from gajim.gtk.structs import AddChatActionParams
+from gajim.gtk.structs import ChatListEntryParam
+from gajim.gtk.structs import RetractMessageParam
+from gajim.gtk.util import get_app_window
+from gajim.gtk.util import open_window
+from gajim.gtk.util import resize_window
+from gajim.gtk.util import restore_main_window_position
+from gajim.gtk.util import save_main_window_position
+from gajim.gtk.util import set_urgency_hint
+from gajim.gtk.workspace_side_bar import WorkspaceSideBar
 
 if TYPE_CHECKING:
-    from .control import ChatControl
+    from gajim.gtk.control import ChatControl
 
-log = logging.getLogger('gajim.gui.main')
+log = logging.getLogger('gajim.gtk.main')
 
 
 class MainWindow(Gtk.ApplicationWindow, EventHelper):

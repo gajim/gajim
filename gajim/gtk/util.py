@@ -59,9 +59,9 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.structs import VariantMixin
 from gajim.common.styling import PlainBlock
 
-from .const import WINDOW_MODULES
+from gajim.gtk.const import WINDOW_MODULES
 
-log = logging.getLogger('gajim.gui.util')
+log = logging.getLogger('gajim.gtk.util')
 
 
 MenuValueT = Union[None, str, GLib.Variant, VariantMixin]

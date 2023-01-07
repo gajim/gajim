@@ -38,9 +38,9 @@ from gajim.common.const import CSSPriority
 from gajim.common.const import StyleAttr
 from gajim.common.dbus.system_style import SystemStyleListener
 
-from .const import Theme
+from gajim.gtk.const import Theme
 
-log = logging.getLogger('gajim.gui.css')
+log = logging.getLogger('gajim.gtk.css')
 settings = Gtk.Settings.get_default()
 
 

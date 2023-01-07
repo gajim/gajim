@@ -36,9 +36,9 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 
-from .builder import get_builder
-from .groupchat_voice_requests_button import VoiceRequestsButton
-from .util import AccountBadge
+from gajim.gtk.builder import get_builder
+from gajim.gtk.groupchat_voice_requests_button import VoiceRequestsButton
+from gajim.gtk.util import AccountBadge
 
 
 class ChatBanner(Gtk.Box, EventHelper):

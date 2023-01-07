@@ -33,12 +33,12 @@ from gajim.common.i18n import _
 from gajim.common.preview import AudioSampleT
 from gajim.common.util.text import format_duration
 
-from .builder import get_builder
-from .preview_audio_analyzer import AudioAnalyzer
-from .preview_audio_visualizer import AudioVisualizerWidget
-from .util import get_cursor
+from gajim.gtk.builder import get_builder
+from gajim.gtk.preview_audio_analyzer import AudioAnalyzer
+from gajim.gtk.preview_audio_visualizer import AudioVisualizerWidget
+from gajim.gtk.util import get_cursor
 
-log = logging.getLogger('gajim.gui.preview_audio')
+log = logging.getLogger('gajim.gtk.preview_audio')
 
 # Padding to align the visualizer drawing with the seekbar
 SEEK_BAR_PADDING = 11

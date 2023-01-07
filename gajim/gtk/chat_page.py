@@ -30,18 +30,18 @@ from nbxmpp import JID
 
 from gajim.common import app
 
-from .builder import get_builder
-from .chat_filter import ChatFilter
-from .chat_list import ChatList
-from .chat_list_stack import ChatListStack
-from .chat_stack import ChatStack
-from .menus import get_start_chat_button_menu
-from .search_view import SearchView
+from gajim.gtk.builder import get_builder
+from gajim.gtk.chat_filter import ChatFilter
+from gajim.gtk.chat_list import ChatList
+from gajim.gtk.chat_list_stack import ChatListStack
+from gajim.gtk.chat_stack import ChatStack
+from gajim.gtk.menus import get_start_chat_button_menu
+from gajim.gtk.search_view import SearchView
 
 if TYPE_CHECKING:
-    from .control import ChatControl
+    from gajim.gtk.control import ChatControl
 
-log = logging.getLogger('gajim.gui.chat_page')
+log = logging.getLogger('gajim.gtk.chat_page')
 
 
 class ChatPage(Gtk.Box):

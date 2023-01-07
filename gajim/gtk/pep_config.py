@@ -32,14 +32,14 @@ from gajim.common import ged
 from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
 
-from .builder import get_builder
-from .dataform import DataFormWidget
-from .dialogs import ErrorDialog
-from .dialogs import WarningDialog
-from .util import EventHelper
-from .util import get_source_view_style_scheme
+from gajim.gtk.builder import get_builder
+from gajim.gtk.dataform import DataFormWidget
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import WarningDialog
+from gajim.gtk.util import EventHelper
+from gajim.gtk.util import get_source_view_style_scheme
 
-log = logging.getLogger('gajim.gui.pep_config')
+log = logging.getLogger('gajim.gtk.pep_config')
 
 
 class PEPConfig(Gtk.ApplicationWindow, EventHelper):

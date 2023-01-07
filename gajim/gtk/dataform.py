@@ -36,10 +36,10 @@ from gajim.common import app
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 
-from .util import make_href_markup
-from .util import MaxWidthComboBoxText
-from .util import MultiLineLabel
-from .util import scale_pixbuf_from_data
+from gajim.gtk.util import make_href_markup
+from gajim.gtk.util import MaxWidthComboBoxText
+from gajim.gtk.util import MultiLineLabel
+from gajim.gtk.util import scale_pixbuf_from_data
 
 # Options
 

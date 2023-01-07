@@ -55,15 +55,15 @@ from gajim.common.modules.bytestream import is_transfer_paused
 from gajim.common.modules.bytestream import is_transfer_stopped
 from gajim.common.modules.contacts import BareContact
 
-from .builder import get_builder
-from .dialogs import ConfirmationDialog
-from .dialogs import DialogButton
-from .dialogs import ErrorDialog
-from .filechoosers import FileSaveDialog
-from .tooltips import FileTransfersTooltip
-from .util import format_eta
+from gajim.gtk.builder import get_builder
+from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.filechoosers import FileSaveDialog
+from gajim.gtk.tooltips import FileTransfersTooltip
+from gajim.gtk.util import format_eta
 
-log = logging.getLogger('gajim.gui.filetransfer')
+log = logging.getLogger('gajim.gtk.filetransfer')
 
 
 @unique

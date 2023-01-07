@@ -36,14 +36,14 @@ from gajim.common.i18n import _
 from gajim.common.i18n import p_
 from gajim.common.setting_values import AllSettingsT
 
-from .const import Setting
-from .const import SettingKind
-from .const import SettingType
-from .util import get_image_button
-from .util import MaxWidthComboBoxText
-from .util import open_window
+from gajim.gtk.const import Setting
+from gajim.gtk.const import SettingKind
+from gajim.gtk.const import SettingType
+from gajim.gtk.util import get_image_button
+from gajim.gtk.util import MaxWidthComboBoxText
+from gajim.gtk.util import open_window
 
-log = logging.getLogger('gajim.gui.settings')
+log = logging.getLogger('gajim.gtk.settings')
 
 
 class SettingsDialog(Gtk.ApplicationWindow):

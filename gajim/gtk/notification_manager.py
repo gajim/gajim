@@ -35,8 +35,8 @@ from gajim.common.events import UnsubscribedPresenceReceived
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.i18n import _
 
-from .menus import get_subscription_menu
-from .util import open_window
+from gajim.gtk.menus import get_subscription_menu
+from gajim.gtk.util import open_window
 
 
 class NotificationManager(Gtk.ListBox):

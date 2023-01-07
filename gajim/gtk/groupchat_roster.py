@@ -38,13 +38,13 @@ from gajim.common.helpers import get_uf_role
 from gajim.common.helpers import jid_is_blocked
 from gajim.common.modules.contacts import GroupchatContact
 
-from .builder import get_builder
-from .menus import get_groupchat_participant_menu
-from .tooltips import GCTooltip
-from .util import EventHelper
-from .util import GajimPopover
+from gajim.gtk.builder import get_builder
+from gajim.gtk.menus import get_groupchat_participant_menu
+from gajim.gtk.tooltips import GCTooltip
+from gajim.gtk.util import EventHelper
+from gajim.gtk.util import GajimPopover
 
-log = logging.getLogger('gajim.gui.groupchat_roster')
+log = logging.getLogger('gajim.gtk.groupchat_roster')
 
 
 AffiliationRoleSortOrder = {

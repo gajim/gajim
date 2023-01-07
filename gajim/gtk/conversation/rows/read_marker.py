@@ -22,7 +22,7 @@ from gi.repository import Gtk
 from gajim.common.i18n import _
 from gajim.common.types import ChatContactT
 
-from .base import BaseRow
+from gajim.gtk.conversation.rows.base import BaseRow
 
 
 class ReadMarkerRow(BaseRow):

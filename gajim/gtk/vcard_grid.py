@@ -30,8 +30,9 @@ from gajim.common.i18n import _
 from gajim.common.i18n import p_
 from gajim.common.structs import URI
 from gajim.common.util.text import escape_iri_path_segment
-from gajim.gui.util import gtk_month
-from gajim.gui.util import python_month
+
+from gajim.gtk.util import gtk_month
+from gajim.gtk.util import python_month
 
 LABEL_DICT = {
     'fn': _('Full Name'),

@@ -39,18 +39,18 @@ from gajim.common.const import StyleAttr
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.util.classes import Singleton
 
-from .const import DEFAULT_WORKSPACE_COLOR
-from .util import convert_rgb_string_to_float
-from .util import get_contact_color
-from .util import get_css_show_class
-from .util import get_first_graphemes
-from .util import load_icon_surface
-from .util import load_pixbuf
-from .util import make_rgba
-from .util import rgba_to_float
-from .util import scale_with_ratio
+from gajim.gtk.const import DEFAULT_WORKSPACE_COLOR
+from gajim.gtk.util import convert_rgb_string_to_float
+from gajim.gtk.util import get_contact_color
+from gajim.gtk.util import get_css_show_class
+from gajim.gtk.util import get_first_graphemes
+from gajim.gtk.util import load_icon_surface
+from gajim.gtk.util import load_pixbuf
+from gajim.gtk.util import make_rgba
+from gajim.gtk.util import rgba_to_float
+from gajim.gtk.util import scale_with_ratio
 
-log = logging.getLogger('gajim.gui.avatar')
+log = logging.getLogger('gajim.gtk.avatar')
 
 
 AvatarCacheT = dict[Union[JID, str], dict[tuple[int, int, Optional[str]],

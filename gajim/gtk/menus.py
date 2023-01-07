@@ -1,3 +1,4 @@
+
 # Copyright (C) 2009-2014 Yann Leboulanger <asterix AT lagaule.org>
 #
 # This file is part of Gajim.
@@ -47,13 +48,14 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.preview import Preview
 from gajim.common.structs import URI
 from gajim.common.util.text import escape_iri_path_segment
-from gajim.gui.structs import AccountJidParam
-from gajim.gui.structs import AddChatActionParams
-from gajim.gui.structs import ChatListEntryParam
-from gajim.gui.structs import RemoveHistoryActionParams
-from gajim.gui.structs import RetractMessageParam
-from gajim.gui.util import GajimMenu
-from gajim.gui.util import MenuItemListT
+
+from gajim.gtk.structs import AccountJidParam
+from gajim.gtk.structs import AddChatActionParams
+from gajim.gtk.structs import ChatListEntryParam
+from gajim.gtk.structs import RemoveHistoryActionParams
+from gajim.gtk.structs import RetractMessageParam
+from gajim.gtk.util import GajimMenu
+from gajim.gtk.util import MenuItemListT
 
 UriMenuItemsT = list[tuple[str, list[str], str]]
 UriMenuBuilderT = Callable[[URI, str], UriMenuItemsT]

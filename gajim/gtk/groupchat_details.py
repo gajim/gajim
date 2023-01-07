@@ -26,16 +26,16 @@ from gajim.common.const import AvatarSize
 from gajim.common.events import MucDiscoUpdate
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
-from gajim.gtk.groupchat_affiliation import GroupchatAffiliation
-from gajim.gtk.groupchat_outcasts import GroupchatOutcasts
 
-from .builder import get_builder
-from .groupchat_config import GroupchatConfig
-from .groupchat_info import GroupChatInfoScrolled
-from .groupchat_manage import GroupchatManage
-from .groupchat_settings import GroupChatSettings
-from .sidebar_switcher import SideBarSwitcher
-from .structs import RemoveHistoryActionParams
+from gajim.gtk.builder import get_builder
+from gajim.gtk.groupchat_affiliation import GroupchatAffiliation
+from gajim.gtk.groupchat_config import GroupchatConfig
+from gajim.gtk.groupchat_info import GroupChatInfoScrolled
+from gajim.gtk.groupchat_manage import GroupchatManage
+from gajim.gtk.groupchat_outcasts import GroupchatOutcasts
+from gajim.gtk.groupchat_settings import GroupChatSettings
+from gajim.gtk.sidebar_switcher import SideBarSwitcher
+from gajim.gtk.structs import RemoveHistoryActionParams
 
 
 class GroupchatDetails(Gtk.ApplicationWindow):

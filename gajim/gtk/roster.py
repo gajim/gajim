@@ -43,16 +43,16 @@ from gajim.common.events import RosterReceived
 from gajim.common.helpers import event_filter
 from gajim.common.i18n import _
 
-from .builder import get_builder
-from .dialogs import ConfirmationDialog
-from .dialogs import DialogButton
-from .menus import get_roster_menu
-from .tooltips import RosterTooltip
-from .util import EventHelper
-from .util import GajimPopover
-from .util import open_window
+from gajim.gtk.builder import get_builder
+from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.menus import get_roster_menu
+from gajim.gtk.tooltips import RosterTooltip
+from gajim.gtk.util import EventHelper
+from gajim.gtk.util import GajimPopover
+from gajim.gtk.util import open_window
 
-log = logging.getLogger('gajim.gui.roster')
+log = logging.getLogger('gajim.gtk.roster')
 
 
 DEFAULT_GROUP = _('Contacts')

@@ -29,11 +29,12 @@ from nbxmpp.task import Task
 from gajim.common.client import Client
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
-from gajim.gui.apply_button_box import ApplyButtonBox
-from gajim.gui.builder import get_builder
-from gajim.gui.dialogs import ErrorDialog
 
-log = logging.getLogger('gajim.gui.groupchat_outcasts')
+from gajim.gtk.apply_button_box import ApplyButtonBox
+from gajim.gtk.builder import get_builder
+from gajim.gtk.dialogs import ErrorDialog
+
+log = logging.getLogger('gajim.gtk.groupchat_outcasts')
 
 
 class OutcastRow(NamedTuple):

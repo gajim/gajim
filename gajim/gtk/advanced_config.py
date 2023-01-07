@@ -34,7 +34,7 @@ from gajim.common.i18n import p_
 from gajim.common.setting_values import ADVANCED_SETTINGS
 from gajim.common.setting_values import APP_SETTINGS
 
-from .builder import get_builder
+from gajim.gtk.builder import get_builder
 
 
 @unique

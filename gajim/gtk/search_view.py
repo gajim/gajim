@@ -37,12 +37,12 @@ from gajim.common.const import Direction
 from gajim.common.const import KindConstant
 from gajim.common.storage.archive import SearchLogRow
 
-from .builder import get_builder
-from .conversation.message_widget import MessageWidget
-from .util import gtk_month
-from .util import python_month
+from gajim.gtk.builder import get_builder
+from gajim.gtk.conversation.message_widget import MessageWidget
+from gajim.gtk.util import gtk_month
+from gajim.gtk.util import python_month
 
-log = logging.getLogger('gajim.gui.search_view')
+log = logging.getLogger('gajim.gtk.search_view')
 
 
 class SearchView(Gtk.Box):

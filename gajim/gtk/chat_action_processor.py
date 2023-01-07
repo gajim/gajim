@@ -28,9 +28,9 @@ from gajim.common import types
 from gajim.common.const import Direction
 from gajim.common.modules.contacts import GroupchatContact
 
-from .emoji_data_gtk import get_emoji_data
-from .groupchat_nick_completion import GroupChatNickCompletion
-from .menus import escape_mnemonic
+from gajim.gtk.emoji_data_gtk import get_emoji_data
+from gajim.gtk.groupchat_nick_completion import GroupChatNickCompletion
+from gajim.gtk.menus import escape_mnemonic
 
 EMOJI_NUM_GENDERS = len(['f', 'm', 'n'])
 MENUS_MAX_ENTRIES = 2 * EMOJI_NUM_GENDERS

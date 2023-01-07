@@ -39,11 +39,11 @@ from gajim.common.events import ServerDiscoReceived
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 
-from .builder import get_builder
-from .certificate_dialog import CertificateBox
-from .util import EventHelper
+from gajim.gtk.builder import get_builder
+from gajim.gtk.certificate_dialog import CertificateBox
+from gajim.gtk.util import EventHelper
 
-log = logging.getLogger('gajim.gui.server_info')
+log = logging.getLogger('gajim.gtk.server_info')
 
 
 class Feature(NamedTuple):

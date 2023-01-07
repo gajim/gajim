@@ -30,7 +30,7 @@ except Exception:
 from gajim.common import app
 from gajim.common.preview import AudioSampleT
 
-log = logging.getLogger('gajim.gui.preview_audio_analyzer')
+log = logging.getLogger('gajim.gtk.preview_audio_analyzer')
 
 
 class AudioAnalyzer:

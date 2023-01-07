@@ -31,10 +31,10 @@ from gajim.common.i18n import _
 from gajim.common.jingle_session import JingleSession
 from gajim.common.storage.archive import ConversationRow
 
-from .base import BaseRow
-from .widgets import DateTimeLabel
-from .widgets import NicknameLabel
-from .widgets import SimpleLabel
+from gajim.gtk.conversation.rows.base import BaseRow
+from gajim.gtk.conversation.rows.widgets import DateTimeLabel
+from gajim.gtk.conversation.rows.widgets import NicknameLabel
+from gajim.gtk.conversation.rows.widgets import SimpleLabel
 
 
 class CallRow(BaseRow):

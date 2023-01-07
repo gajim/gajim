@@ -32,12 +32,12 @@ from gajim.common.helpers import event_filter
 from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
 
-from .assistant import Assistant
-from .assistant import ErrorPage
-from .assistant import Page
-from .assistant import SuccessPage
+from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import ErrorPage
+from gajim.gtk.assistant import Page
+from gajim.gtk.assistant import SuccessPage
 
-log = logging.getLogger('gajim.gui.remove_account')
+log = logging.getLogger('gajim.gtk.remove_account')
 
 
 class RemoveAccount(Assistant):

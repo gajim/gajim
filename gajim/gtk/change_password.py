@@ -32,14 +32,14 @@ from gajim.common import passwords
 from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
 
-from .assistant import Assistant
-from .assistant import ErrorPage
-from .assistant import Page
-from .assistant import SuccessPage
-from .dataform import DataFormWidget
-from .util import ensure_not_destroyed
+from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import ErrorPage
+from gajim.gtk.assistant import Page
+from gajim.gtk.assistant import SuccessPage
+from gajim.gtk.dataform import DataFormWidget
+from gajim.gtk.util import ensure_not_destroyed
 
-log = logging.getLogger('gajim.gui.change_password')
+log = logging.getLogger('gajim.gtk.change_password')
 
 
 class ChangePassword(Assistant):

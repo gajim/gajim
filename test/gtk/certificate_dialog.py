@@ -1,12 +1,9 @@
 from gi.repository import Gio
 from gi.repository import Gtk
 
-from gajim import gui
 from gajim.common.const import CSSPriority
 
-gui.init('gtk')
-
-from gajim.gui.certificate_dialog import CertificateDialog
+from gajim.gtk.certificate_dialog import CertificateDialog
 
 from . import util
 

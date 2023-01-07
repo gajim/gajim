@@ -26,9 +26,9 @@ from gajim.common.styling import PreBlock
 from gajim.common.styling import process
 from gajim.common.styling import QuoteBlock
 
-from .code_widget import CodeWidget
-from .plain_widget import PlainWidget
-from .quote_widget import QuoteWidget
+from gajim.gtk.conversation.code_widget import CodeWidget
+from gajim.gtk.conversation.plain_widget import PlainWidget
+from gajim.gtk.conversation.quote_widget import QuoteWidget
 
 ContentT = Union[ParsingResult, QuoteBlock]
 

@@ -28,11 +28,11 @@ from gajim.common.styling import BaseHyperlink
 from gajim.common.styling import PlainBlock
 from gajim.common.styling import process_uris
 
-from ..menus import get_conv_action_context_menu
-from ..menus import populate_uri_context_menu
-from ..util import make_pango_attributes
+from gajim.gtk.menus import get_conv_action_context_menu
+from gajim.gtk.menus import populate_uri_context_menu
+from gajim.gtk.util import make_pango_attributes
 
-log = logging.getLogger('gajim.gui.conversaion.plain_widget')
+log = logging.getLogger('gajim.gtk.conversaion.plain_widget')
 
 URI_TAGS = ['uri', 'address', 'xmppadr', 'mailadr']
 STYLE_TAGS = ['strong', 'emphasis', 'strike', 'pre']

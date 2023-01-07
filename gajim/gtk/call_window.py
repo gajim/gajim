@@ -32,10 +32,10 @@ from gajim.common.events import CallUpdated
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 
-from .builder import get_builder
-from .gstreamer import create_gtk_widget
+from gajim.gtk.builder import get_builder
+from gajim.gtk.gstreamer import create_gtk_widget
 
-log = logging.getLogger('gajim.gui.call_window')
+log = logging.getLogger('gajim.gtk.call_window')
 
 
 class CallWindow(Gtk.ApplicationWindow, EventHelper):

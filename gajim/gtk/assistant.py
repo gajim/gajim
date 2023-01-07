@@ -27,8 +27,8 @@ from gi.repository import Gtk
 
 from gajim.common import app
 
-from .builder import get_builder
-from .util import EventHelper
+from gajim.gtk.builder import get_builder
+from gajim.gtk.util import EventHelper
 
 
 class Assistant(Gtk.ApplicationWindow, EventHelper):

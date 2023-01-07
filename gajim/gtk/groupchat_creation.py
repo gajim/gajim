@@ -36,11 +36,11 @@ from gajim.common.helpers import to_user_string
 from gajim.common.helpers import validate_jid
 from gajim.common.i18n import _
 
-from .builder import get_builder
-from .dialogs import ErrorDialog
-from .util import ensure_not_destroyed
+from gajim.gtk.builder import get_builder
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.util import ensure_not_destroyed
 
-log = logging.getLogger('gajim.gui.groupchat_creation')
+log = logging.getLogger('gajim.gtk.groupchat_creation')
 
 
 class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):

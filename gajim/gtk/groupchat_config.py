@@ -26,12 +26,12 @@ from nbxmpp.task import Task
 from gajim.common.client import Client
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
+
+from gajim.gtk.apply_button_box import ApplyButtonBox
 from gajim.gtk.builder import get_builder
+from gajim.gtk.dataform import DataFormWidget
 
-from .apply_button_box import ApplyButtonBox
-from .dataform import DataFormWidget
-
-log = logging.getLogger('gajim.gui.groupchat_config')
+log = logging.getLogger('gajim.gtk.groupchat_config')
 
 
 class GroupchatConfig(Gtk.Box):

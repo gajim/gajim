@@ -54,8 +54,9 @@ from gajim.common.events import FileError
 from gajim.common.events import FileHashError
 from gajim.common.events import FileProgress
 from gajim.common.file_props import FileProp
-from gajim.gui.dialogs import ErrorDialog
-from gajim.gui.filetransfer import FileTransfersWindow
+
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.filetransfer import FileTransfersWindow
 
 log = logging.getLogger('gajim.interface')
 

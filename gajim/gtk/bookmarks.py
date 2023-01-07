@@ -20,9 +20,9 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.i18n import _
 
-from .builder import get_builder
+from gajim.gtk.builder import get_builder
 
-log = logging.getLogger('gajim.gui.bookmarks')
+log = logging.getLogger('gajim.gtk.bookmarks')
 
 
 class Bookmarks(Gtk.ApplicationWindow):

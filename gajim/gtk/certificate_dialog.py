@@ -21,7 +21,7 @@ from gajim.common import app
 from gajim.common.helpers import get_x509_cert_from_gio_cert
 from gajim.common.i18n import _
 
-from .builder import get_builder
+from gajim.gtk.builder import get_builder
 
 
 class CertificateDialog(Gtk.ApplicationWindow):

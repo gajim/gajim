@@ -27,8 +27,8 @@ from gajim.common import app
 from gajim.common.const import ButtonAction
 from gajim.common.i18n import _
 
-from .builder import get_builder
-from .util import get_thumbnail_size
+from gajim.gtk.builder import get_builder
+from gajim.gtk.util import get_thumbnail_size
 
 
 class DialogButton(NamedTuple):

@@ -40,13 +40,13 @@ from gajim.common.preview_helpers import get_icon_for_mime_type
 from gajim.common.preview_helpers import guess_mime_type
 from gajim.common.preview_helpers import pixbuf_from_data
 
-from .builder import get_builder
-from .filechoosers import FileChooserDialog
-from .resource_selector import ResourceSelector
+from gajim.gtk.builder import get_builder
+from gajim.gtk.filechoosers import FileChooserDialog
+from gajim.gtk.resource_selector import ResourceSelector
 
 PREVIEW_SIZE = 72
 
-log = logging.getLogger('gajim.gui.file_transfer_selector')
+log = logging.getLogger('gajim.gtk.file_transfer_selector')
 
 
 class FileTransferSelector(Gtk.Box):

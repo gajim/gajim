@@ -1,3 +1,4 @@
+
 # This file is part of Gajim.
 #
 # Gajim is free software; you can redistribute it and/or modify
@@ -30,11 +31,11 @@ from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
 from gajim.common.i18n import get_rfc5646_lang
 
-from .groupchat_info import GroupChatInfoScrolled
-from .groupchat_nick import NickChooser
-from .util import ensure_not_destroyed
+from gajim.gtk.groupchat_info import GroupChatInfoScrolled
+from gajim.gtk.groupchat_nick import NickChooser
+from gajim.gtk.util import ensure_not_destroyed
 
-log = logging.getLogger('gajim.gui.groupchat_join')
+log = logging.getLogger('gajim.gtk.groupchat_join')
 
 
 class GroupchatJoin(Gtk.ApplicationWindow):

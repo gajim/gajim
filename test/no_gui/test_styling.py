@@ -1,10 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
 
-from gajim import gui
-
-gui.init('gtk')
-
 from gajim.common import app  # Avoids circular imports from common.helpers
 from gajim.common import styling
 from gajim.common.styling import EmphasisSpan

@@ -30,12 +30,12 @@ from gajim.common.helpers import validate_jid
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 
-from .avatar_selector import AvatarSelector
-from .builder import get_builder
-from .dialogs import ErrorDialog
-from .filechoosers import AvatarChooserDialog
+from gajim.gtk.avatar_selector import AvatarSelector
+from gajim.gtk.builder import get_builder
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.filechoosers import AvatarChooserDialog
 
-log = logging.getLogger('gajim.gui.groupchat_manage')
+log = logging.getLogger('gajim.gtk.groupchat_manage')
 
 
 class GroupchatManage(Gtk.Box):

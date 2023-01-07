@@ -48,15 +48,15 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.storage.archive import ConversationRow
 
-from ...builder import get_builder
-from ...util import format_eta
-from .base import BaseRow
-from .widgets import DateTimeLabel
-from .widgets import NicknameLabel
+from gajim.gtk.builder import get_builder
+from gajim.gtk.conversation.rows.base import BaseRow
+from gajim.gtk.conversation.rows.widgets import DateTimeLabel
+from gajim.gtk.conversation.rows.widgets import NicknameLabel
+from gajim.gtk.util import format_eta
 
 TransferEventT = Union[FileRequestReceivedEvent, FileRequestSent]
 
-log = logging.getLogger('gajim.gui.conversation.rows.file_transfer_jingle')
+log = logging.getLogger('gajim.gtk.conversation.rows.file_transfer_jingle')
 
 
 class FileTransferJingleRow(BaseRow):

@@ -38,13 +38,13 @@ from gajim.common.events import RawMamMessageReceived
 from gajim.common.helpers import event_filter
 from gajim.common.i18n import _
 
-from .assistant import Assistant
-from .assistant import Page
-from .assistant import SuccessPage
-from .util import EventHelper
-from .util import load_icon_surface
+from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import Page
+from gajim.gtk.assistant import SuccessPage
+from gajim.gtk.util import EventHelper
+from gajim.gtk.util import load_icon_surface
 
-log = logging.getLogger('gajim.gui.history_sync')
+log = logging.getLogger('gajim.gtk.history_sync')
 
 
 class HistorySyncAssistant(Assistant, EventHelper):

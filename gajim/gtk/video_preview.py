@@ -22,8 +22,8 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.i18n import _
 
-from .builder import get_builder
-from .gstreamer import create_gtk_widget
+from gajim.gtk.builder import get_builder
+from gajim.gtk.gstreamer import create_gtk_widget
 
 try:
     from gi.repository import Gst  # pylint: disable=ungrouped-imports
@@ -31,7 +31,7 @@ except Exception:
     pass
 
 
-log = logging.getLogger('gajim.gui.preview')
+log = logging.getLogger('gajim.gtk.preview')
 
 
 class VideoPreview:

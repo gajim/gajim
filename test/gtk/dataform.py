@@ -5,13 +5,10 @@ from gi.repository import Gtk
 from nbxmpp.modules.dataforms import extend_form
 from nbxmpp.simplexml import Node
 
-from gajim import gui
 from gajim.common import app
 from gajim.common.const import CSSPriority
 
-gui.init('gtk')
-
-from gajim.gui.dataform import DataFormWidget
+from gajim.gtk.dataform import DataFormWidget
 
 from . import util
 

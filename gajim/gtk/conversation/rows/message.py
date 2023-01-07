@@ -43,18 +43,18 @@ from gajim.common.i18n import is_rtl_text
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.types import ChatContactT
-from gajim.gtk.menus import get_chat_row_menu
 
-from ...preview import PreviewWidget
-from ...util import format_fingerprint
-from ...util import GajimPopover
-from ..message_widget import MessageWidget
-from .base import BaseRow
-from .widgets import AvatarBox
-from .widgets import DateTimeLabel
-from .widgets import MessageIcons
-from .widgets import MoreMenuButton
-from .widgets import NicknameLabel
+from gajim.gtk.conversation.message_widget import MessageWidget
+from gajim.gtk.conversation.rows.base import BaseRow
+from gajim.gtk.conversation.rows.widgets import AvatarBox
+from gajim.gtk.conversation.rows.widgets import DateTimeLabel
+from gajim.gtk.conversation.rows.widgets import MessageIcons
+from gajim.gtk.conversation.rows.widgets import MoreMenuButton
+from gajim.gtk.conversation.rows.widgets import NicknameLabel
+from gajim.gtk.menus import get_chat_row_menu
+from gajim.gtk.preview import PreviewWidget
+from gajim.gtk.util import format_fingerprint
+from gajim.gtk.util import GajimPopover
 
 MERGE_TIMEFRAME = timedelta(seconds=120)
 

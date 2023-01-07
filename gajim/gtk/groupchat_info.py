@@ -32,8 +32,8 @@ from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
 
-from .builder import get_builder
-from .util import make_href_markup
+from gajim.gtk.builder import get_builder
+from gajim.gtk.util import make_href_markup
 
 MUC_FEATURES = {
     'muc_open': (

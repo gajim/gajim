@@ -36,25 +36,25 @@ from gajim.common.multimedia_helpers import AudioOutputManager
 from gajim.common.multimedia_helpers import VideoInputManager
 from gajim.common.setting_values import BoolSettings
 
-from .builder import get_builder
-from .const import Setting
-from .const import SettingKind
-from .const import SettingType
-from .dialogs import ConfirmationDialog
-from .dialogs import DialogButton
-from .preview import PREVIEW_ACTIONS
-from .settings import PopoverSetting
-from .settings import SettingsBox
-from .settings import SettingsDialog
-from .sidebar_switcher import SideBarSwitcher
-from .util import get_app_window
-from .util import open_window
-from .video_preview import VideoPreview
+from gajim.gtk.builder import get_builder
+from gajim.gtk.const import Setting
+from gajim.gtk.const import SettingKind
+from gajim.gtk.const import SettingType
+from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.preview import PREVIEW_ACTIONS
+from gajim.gtk.settings import PopoverSetting
+from gajim.gtk.settings import SettingsBox
+from gajim.gtk.settings import SettingsDialog
+from gajim.gtk.sidebar_switcher import SideBarSwitcher
+from gajim.gtk.util import get_app_window
+from gajim.gtk.util import open_window
+from gajim.gtk.video_preview import VideoPreview
 
 # if app.is_installed('GSPELL'):
 #     from gi.repository import Gspell  # pylint: disable=ungrouped-imports
 
-log = logging.getLogger('gajim.gui.preferences')
+log = logging.getLogger('gajim.gtk.preferences')
 
 
 class Preferences(Gtk.ApplicationWindow):

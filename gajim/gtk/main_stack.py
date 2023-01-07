@@ -21,10 +21,10 @@ from nbxmpp.protocol import JID
 
 from gajim.common import app
 
-from .account_page import AccountPage
-from .app_page import AppPage
-from .chat_list import ChatList
-from .chat_page import ChatPage
+from gajim.gtk.account_page import AccountPage
+from gajim.gtk.app_page import AppPage
+from gajim.gtk.chat_list import ChatList
+from gajim.gtk.chat_page import ChatPage
 
 PageT = Union[ChatPage, AccountPage, AppPage]
 

@@ -33,17 +33,17 @@ from gajim.common.events import StanzaReceived
 from gajim.common.events import StanzaSent
 from gajim.common.i18n import _
 
-from .builder import get_builder
-from .const import Setting
-from .const import SettingKind
-from .const import SettingType
-from .dialogs import ErrorDialog
-from .settings import SettingsDialog
-from .util import at_the_end
-from .util import EventHelper
-from .util import get_source_view_style_scheme
-from .util import MaxWidthComboBoxText
-from .util import scroll_to_end
+from gajim.gtk.builder import get_builder
+from gajim.gtk.const import Setting
+from gajim.gtk.const import SettingKind
+from gajim.gtk.const import SettingType
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.settings import SettingsDialog
+from gajim.gtk.util import at_the_end
+from gajim.gtk.util import EventHelper
+from gajim.gtk.util import get_source_view_style_scheme
+from gajim.gtk.util import MaxWidthComboBoxText
+from gajim.gtk.util import scroll_to_end
 
 
 class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):

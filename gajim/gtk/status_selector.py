@@ -31,8 +31,8 @@ from gajim.common.helpers import get_uf_show
 from gajim.common.helpers import statuses_unified
 from gajim.common.i18n import _
 
-from .avatar import get_show_circle
-from .util import EventHelper
+from gajim.gtk.avatar import get_show_circle
+from gajim.gtk.util import EventHelper
 
 
 class StatusSelector(Gtk.MenuButton, EventHelper):

@@ -48,21 +48,22 @@ from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive import ConversationRow
 from gajim.common.types import ChatContactT
 
-from .rows.base import BaseRow
-from .rows.call import CallRow
-from .rows.command_output import CommandOutputRow
-from .rows.date import DateRow
-from .rows.file_transfer import FileTransferRow
-from .rows.file_transfer_jingle import FileTransferJingleRow
-from .rows.info import InfoMessage
-from .rows.message import MessageRow
-from .rows.muc_join_left import MUCJoinLeft
-from .rows.muc_subject import MUCSubject
-from .rows.read_marker import ReadMarkerRow
-from .rows.scroll_hint import ScrollHintRow
-from .rows.user_status import UserStatus
+from gajim.gtk.conversation.rows.base import BaseRow
+from gajim.gtk.conversation.rows.call import CallRow
+from gajim.gtk.conversation.rows.command_output import CommandOutputRow
+from gajim.gtk.conversation.rows.date import DateRow
+from gajim.gtk.conversation.rows.file_transfer import FileTransferRow
+from gajim.gtk.conversation.rows.file_transfer_jingle import \
+    FileTransferJingleRow
+from gajim.gtk.conversation.rows.info import InfoMessage
+from gajim.gtk.conversation.rows.message import MessageRow
+from gajim.gtk.conversation.rows.muc_join_left import MUCJoinLeft
+from gajim.gtk.conversation.rows.muc_subject import MUCSubject
+from gajim.gtk.conversation.rows.read_marker import ReadMarkerRow
+from gajim.gtk.conversation.rows.scroll_hint import ScrollHintRow
+from gajim.gtk.conversation.rows.user_status import UserStatus
 
-log = logging.getLogger('gajim.gui.conversation_view')
+log = logging.getLogger('gajim.gtk.conversation_view')
 
 
 class ConversationView(Gtk.ScrolledWindow):

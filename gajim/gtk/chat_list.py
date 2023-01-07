@@ -38,10 +38,10 @@ from gajim.common.helpers import get_retraction_text
 from gajim.common.i18n import _
 from gajim.common.setting_values import OpenChatsSettingT
 
-from .chat_list_row import ChatListRow
-from .util import EventHelper
+from gajim.gtk.chat_list_row import ChatListRow
+from gajim.gtk.util import EventHelper
 
-log = logging.getLogger('gajim.gui.chatlist')
+log = logging.getLogger('gajim.gtk.chatlist')
 
 MessageEventT = Union[events.MessageReceived,
                       events.GcMessageReceived,

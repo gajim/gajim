@@ -37,17 +37,17 @@ from gajim.common.events import SearchFormReceivedEvent
 from gajim.common.events import SearchResultReceivedEvent
 from gajim.common.i18n import _
 
-from .assistant import Assistant
-from .assistant import ErrorPage
-from .assistant import Page
-from .assistant import ProgressPage
-from .dataform import DataFormWidget
-from .menus import get_component_search_menu
-from .util import ensure_not_destroyed
-from .util import EventHelper
-from .util import GajimPopover
+from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import ErrorPage
+from gajim.gtk.assistant import Page
+from gajim.gtk.assistant import ProgressPage
+from gajim.gtk.dataform import DataFormWidget
+from gajim.gtk.menus import get_component_search_menu
+from gajim.gtk.util import ensure_not_destroyed
+from gajim.gtk.util import EventHelper
+from gajim.gtk.util import GajimPopover
 
-log = logging.getLogger('gajim.gui.search')
+log = logging.getLogger('gajim.gtk.search')
 
 
 class ComponentSearch(Assistant, EventHelper):

@@ -20,11 +20,11 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.i18n import _
 
-from .account_wizard import AccountWizard
-from .accounts import AccountsWindow
-from .builder import get_builder
-from .preferences import Preferences
-from .util import get_app_window
+from gajim.gtk.account_wizard import AccountWizard
+from gajim.gtk.accounts import AccountsWindow
+from gajim.gtk.builder import get_builder
+from gajim.gtk.preferences import Preferences
+from gajim.gtk.util import get_app_window
 
 
 class ManageProxies(Gtk.ApplicationWindow):

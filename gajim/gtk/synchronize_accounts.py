@@ -19,9 +19,9 @@ from gajim.common import app
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common.i18n import _
 
-from .builder import get_builder
-from .dialogs import ErrorDialog
-from .util import get_app_window
+from gajim.gtk.builder import get_builder
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.util import get_app_window
 
 
 class SynchronizeAccounts(Gtk.ApplicationWindow):

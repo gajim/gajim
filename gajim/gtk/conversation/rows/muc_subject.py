@@ -25,9 +25,9 @@ from nbxmpp.structs import MucSubject
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 
-from ..message_widget import MessageWidget
-from .base import BaseRow
-from .widgets import DateTimeLabel
+from gajim.gtk.conversation.message_widget import MessageWidget
+from gajim.gtk.conversation.rows.base import BaseRow
+from gajim.gtk.conversation.rows.widgets import DateTimeLabel
 
 
 class MUCSubject(BaseRow):

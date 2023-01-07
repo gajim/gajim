@@ -32,10 +32,10 @@ from gajim.common.i18n import p_
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.types import ChatContactT
 
-from ...menus import get_groupchat_participant_menu
-from ...util import GajimPopover
-from ...util import get_cursor
-from ...util import wrap_with_event_box
+from gajim.gtk.menus import get_groupchat_participant_menu
+from gajim.gtk.util import GajimPopover
+from gajim.gtk.util import get_cursor
+from gajim.gtk.util import wrap_with_event_box
 
 
 class SimpleLabel(Gtk.Label):

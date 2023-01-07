@@ -28,9 +28,9 @@ from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 from gajim.plugins.manifest import PluginManifest
 
-from .builder import get_builder
-from .status_message_selector import StatusMessageSelector
-from .status_selector import StatusSelector
+from gajim.gtk.builder import get_builder
+from gajim.gtk.status_message_selector import StatusMessageSelector
+from gajim.gtk.status_selector import StatusSelector
 
 
 class AppPage(Gtk.Box):

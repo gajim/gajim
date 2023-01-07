@@ -40,8 +40,8 @@ from gajim.common.styling import PlainBlock
 from gajim.common.styling import process
 from gajim.common.types import ChatContactT
 
-from .chat_action_processor import ChatActionProcessor
-from .util import scroll_to_end
+from gajim.gtk.chat_action_processor import ChatActionProcessor
+from gajim.gtk.util import scroll_to_end
 
 if app.is_installed('GSPELL'):
     from gi.repository import Gspell  # pylint: disable=ungrouped-imports
@@ -55,7 +55,7 @@ FORMAT_CHARS: dict[str, str] = {
     'pre': '`',
 }
 
-log = logging.getLogger('gajim.gui.message_input')
+log = logging.getLogger('gajim.gtk.message_input')
 
 
 class MessageInputTextView(Gtk.TextView, EventHelper):

@@ -40,10 +40,11 @@ if TYPE_CHECKING:
     from gajim.common.modules.contacts import GroupchatParticipant
     from gajim.common.modules.contacts import ResourceContact
     from gajim.common.settings import Settings
-    from gajim.gtk.css_config import CSSConfig
     from gajim.gui_interface import Interface
     from gajim.plugins.pluginmanager import PluginManager
     from gajim.plugins.repository import PluginRepository
+
+    from gajim.gtk.css_config import CSSConfig
 
     ContactT = Union[BareContact,
                      ResourceContact,

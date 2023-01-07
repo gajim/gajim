@@ -46,19 +46,19 @@ from gajim.common.structs import OutgoingMessage
 from gajim.common.types import ChatContactT
 from gajim.common.util.text import remove_invalid_xml_chars
 
-from .chat_banner import ChatBanner
-from .chat_function_page import ChatFunctionPage
-from .chat_function_page import FunctionMode
-from .const import TARGET_TYPE_URI_LIST
-from .control import ChatControl
-from .dialogs import ErrorDialog
-from .message_actions_box import MessageActionsBox
-from .message_input import MessageInputTextView
-from .util import EventHelper
-from .util import open_window
-from .util import set_urgency_hint
+from gajim.gtk.chat_banner import ChatBanner
+from gajim.gtk.chat_function_page import ChatFunctionPage
+from gajim.gtk.chat_function_page import FunctionMode
+from gajim.gtk.const import TARGET_TYPE_URI_LIST
+from gajim.gtk.control import ChatControl
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.message_actions_box import MessageActionsBox
+from gajim.gtk.message_input import MessageInputTextView
+from gajim.gtk.util import EventHelper
+from gajim.gtk.util import open_window
+from gajim.gtk.util import set_urgency_hint
 
-log = logging.getLogger('gajim.gui.chatstack')
+log = logging.getLogger('gajim.gtk.chatstack')
 
 
 class ChatStack(Gtk.Stack, EventHelper):

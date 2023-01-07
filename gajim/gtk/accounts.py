@@ -35,19 +35,19 @@ from gajim.common.i18n import _
 from gajim.common.i18n import p_
 from gajim.common.settings import AllSettingsT
 
-from .const import Setting
-from .const import SettingKind
-from .const import SettingType
-from .dialogs import ConfirmationDialog
-from .dialogs import DialogButton
-from .menus import build_accounts_menu
-from .settings import PopoverSetting
-from .settings import SettingsBox
-from .settings import SettingsDialog
-from .util import get_app_window
-from .util import open_window
+from gajim.gtk.const import Setting
+from gajim.gtk.const import SettingKind
+from gajim.gtk.const import SettingType
+from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.menus import build_accounts_menu
+from gajim.gtk.settings import PopoverSetting
+from gajim.gtk.settings import SettingsBox
+from gajim.gtk.settings import SettingsDialog
+from gajim.gtk.util import get_app_window
+from gajim.gtk.util import open_window
 
-log = logging.getLogger('gajim.gui.accounts')
+log = logging.getLogger('gajim.gtk.accounts')
 
 
 class AccountsWindow(Gtk.ApplicationWindow):

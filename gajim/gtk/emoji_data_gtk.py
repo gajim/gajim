@@ -28,7 +28,7 @@ from gajim.common.i18n import get_short_lang_code
 
 FALLBACK_LOCALE = 'en_US'
 
-log = logging.getLogger('gajim.gui.emoji_data_gtk')
+log = logging.getLogger('gajim.gtk.emoji_data_gtk')
 
 REPLACEMENT_CHARACTER = 0xFFFD
 

@@ -20,9 +20,9 @@ from gi.repository import Gtk
 
 from gajim.common.const import AvatarSize
 
-from .base import BaseRow
-from .widgets import DateTimeLabel
-from .widgets import SimpleLabel
+from gajim.gtk.conversation.rows.base import BaseRow
+from gajim.gtk.conversation.rows.widgets import DateTimeLabel
+from gajim.gtk.conversation.rows.widgets import SimpleLabel
 
 
 class CommandOutputRow(BaseRow):

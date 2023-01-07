@@ -52,19 +52,19 @@ from gajim.common.helpers import open_uri
 from gajim.common.helpers import validate_jid
 from gajim.common.i18n import _
 
-from .accounts import AccountsWindow
-from .assistant import Assistant
-from .assistant import ErrorPage
-from .assistant import Page
-from .assistant import ProgressPage
-from .assistant import SuccessPage
-from .builder import get_builder
-from .dataform import DataFormWidget
-from .util import get_app_window
-from .util import get_color_for_account
-from .util import open_window
+from gajim.gtk.accounts import AccountsWindow
+from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import ErrorPage
+from gajim.gtk.assistant import Page
+from gajim.gtk.assistant import ProgressPage
+from gajim.gtk.assistant import SuccessPage
+from gajim.gtk.builder import get_builder
+from gajim.gtk.dataform import DataFormWidget
+from gajim.gtk.util import get_app_window
+from gajim.gtk.util import get_color_for_account
+from gajim.gtk.util import open_window
 
-log = logging.getLogger('gajim.gui.account_wizard')
+log = logging.getLogger('gajim.gtk.account_wizard')
 
 
 class AccountWizard(Assistant):

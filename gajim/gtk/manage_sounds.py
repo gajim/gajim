@@ -28,7 +28,7 @@ from gajim.common.helpers import play_sound
 from gajim.common.helpers import strip_soundfile_path
 from gajim.common.i18n import _
 
-from .builder import get_builder
+from gajim.gtk.builder import get_builder
 
 SOUNDS = {
     'attention_received': _('Attention Message Received'),

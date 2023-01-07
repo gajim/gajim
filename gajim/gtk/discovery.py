@@ -58,11 +58,11 @@ from gajim.common import helpers
 from gajim.common.const import StyleAttr
 from gajim.common.i18n import _
 
-from .builder import get_builder
-from .component_search import ComponentSearch
-from .dialogs import ErrorDialog
-from .util import icon_exists
-from .util import open_window
+from gajim.gtk.builder import get_builder
+from gajim.gtk.component_search import ComponentSearch
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.util import icon_exists
+from gajim.gtk.util import open_window
 
 LABELS = {
     1: _('This service has not yet responded with detailed information'),

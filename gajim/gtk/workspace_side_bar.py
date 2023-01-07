@@ -29,14 +29,14 @@ from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 
-from .chat_list_stack import ChatListStack
-from .chat_page import ChatPage
-from .menus import get_workspace_menu
-from .structs import ChatListEntryParam
-from .util import GajimPopover
-from .util import open_window
+from gajim.gtk.chat_list_stack import ChatListStack
+from gajim.gtk.chat_page import ChatPage
+from gajim.gtk.menus import get_workspace_menu
+from gajim.gtk.structs import ChatListEntryParam
+from gajim.gtk.util import GajimPopover
+from gajim.gtk.util import open_window
 
-log = logging.getLogger('gajim.gui.workspace_sidebar')
+log = logging.getLogger('gajim.gtk.workspace_sidebar')
 
 
 class WorkspaceSideBar(Gtk.ListBox):

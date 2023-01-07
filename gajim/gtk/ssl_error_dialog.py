@@ -20,8 +20,8 @@ from gajim.common.client import Client
 from gajim.common.const import GIO_TLS_ERRORS
 from gajim.common.i18n import _
 
-from .builder import get_builder
-from .util import open_window
+from gajim.gtk.builder import get_builder
+from gajim.gtk.util import open_window
 
 
 class SSLErrorDialog(Gtk.ApplicationWindow):

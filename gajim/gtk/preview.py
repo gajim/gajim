@@ -33,15 +33,15 @@ from gajim.common.preview_helpers import get_icon_for_mime_type
 from gajim.common.preview_helpers import split_geo_uri
 from gajim.common.types import GdkPixbufType
 
-from .builder import get_builder
-from .menus import get_preview_menu
-from .preview_audio import AudioWidget
-from .util import ensure_not_destroyed
-from .util import GajimPopover
-from .util import get_cursor
-from .util import load_icon_pixbuf
+from gajim.gtk.builder import get_builder
+from gajim.gtk.menus import get_preview_menu
+from gajim.gtk.preview_audio import AudioWidget
+from gajim.gtk.util import ensure_not_destroyed
+from gajim.gtk.util import GajimPopover
+from gajim.gtk.util import get_cursor
+from gajim.gtk.util import load_icon_pixbuf
 
-log = logging.getLogger('gajim.gui.preview')
+log = logging.getLogger('gajim.gtk.preview')
 
 PREVIEW_ACTIONS: dict[str, tuple[str, str]] = {
     'open': (_('Open'), 'preview-open'),

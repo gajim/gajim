@@ -26,9 +26,9 @@ from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.styling import PreBlock
 
-from ..util import get_source_view_style_scheme
+from gajim.gtk.util import get_source_view_style_scheme
 
-log = logging.getLogger('gajim.gui.conversation.code_widget')
+log = logging.getLogger('gajim.gtk.conversation.code_widget')
 
 
 class CodeWidget(Gtk.Box):

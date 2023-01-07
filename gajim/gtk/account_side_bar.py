@@ -26,7 +26,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.helpers import get_client_status
 from gajim.common.i18n import _
 
-from .util import EventHelper
+from gajim.gtk.util import EventHelper
 
 
 class AccountSideBar(Gtk.ListBox):

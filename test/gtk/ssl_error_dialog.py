@@ -3,12 +3,10 @@ from unittest.mock import MagicMock
 from gi.repository import Gio
 from gi.repository import Gtk
 
-from gajim import gui
-
-gui.init('gtk')
 from gajim.common import app
 from gajim.common.const import CSSPriority
-from gajim.gui.ssl_error_dialog import SSLErrorDialog
+
+from gajim.gtk.ssl_error_dialog import SSLErrorDialog
 
 from . import util
 

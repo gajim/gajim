@@ -25,13 +25,13 @@ from nbxmpp.task import Task
 from gajim.common import app
 from gajim.common.i18n import _
 
-from .builder import get_builder
-from .dialogs import ConfirmationDialog
-from .dialogs import DialogButton
-from .dialogs import InformationDialog
-from .util import EventHelper
+from gajim.gtk.builder import get_builder
+from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.dialogs import InformationDialog
+from gajim.gtk.util import EventHelper
 
-log = logging.getLogger('gajim.gui.mam_preferences')
+log = logging.getLogger('gajim.gtk.mam_preferences')
 
 
 class MamPreferences(Gtk.ApplicationWindow, EventHelper):

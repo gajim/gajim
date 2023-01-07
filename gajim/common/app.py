@@ -62,8 +62,9 @@ if typing.TYPE_CHECKING:
     from gajim.common.storage.draft import DraftStorage
     from gajim.common.storage.events import EventStorage
     from gajim.common.task_manager import TaskManager
-    from gajim.gui.application import GajimApplication  # noqa: F401
-    from gajim.gui.main import MainWindow  # noqa: F401
+
+    from gajim.gtk.application import GajimApplication  # noqa: F401
+    from gajim.gtk.main import MainWindow  # noqa: F401
 
 
 interface = cast(types.InterfaceT, None)
@@ -204,7 +205,7 @@ def detect_dependencies() -> None:
         if _dependencies['GST'] and _dependencies['FARSTREAM']:
             conference = Gst.ElementFactory.make('fsrtpconference', None)
             conference.new_session(Farstream.MediaType.AUDIO)
-            from gajim.gui.gstreamer import create_gtk_widget
+            from gajim.gtk.gstreamer import create_gtk_widget
             gtk_widget = create_gtk_widget()
             if gtk_widget is not None:
                 _dependencies['AV'] = True
@@ -517,7 +518,7 @@ def log(domain: str) -> logging.Logger:
 
 def load_css_config() -> None:
     global css_config   # pylint: disable=global-statement
-    from gajim.gui.css_config import CSSConfig
+    from gajim.gtk.css_config import CSSConfig
     css_config = CSSConfig()
 
 

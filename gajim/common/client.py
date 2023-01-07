@@ -55,7 +55,8 @@ from gajim.common.idle import IdleMonitorManager
 from gajim.common.idle import Monitor
 from gajim.common.structs import OutgoingMessage
 from gajim.common.util.http import create_http_session
-from gajim.gui.util import open_window
+
+from gajim.gtk.util import open_window
 
 log = logging.getLogger('gajim.client')
 

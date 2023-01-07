@@ -28,7 +28,7 @@ from gajim.common.ged import EventHelper
 from gajim.common.helpers import jid_is_blocked
 from gajim.common.modules.contacts import GroupchatContact
 
-log = logging.getLogger('gajim.gui.groupchat_nick_completion')
+log = logging.getLogger('gajim.gtk.groupchat_nick_completion')
 
 
 class GroupChatNickCompletion(EventHelper):

@@ -18,7 +18,7 @@ from gi.repository import Gtk
 
 from gajim.common import app
 
-from .base import BaseRow
+from gajim.gtk.conversation.rows.base import BaseRow
 
 
 class DateRow(BaseRow):

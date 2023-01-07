@@ -22,9 +22,9 @@ from gajim.common import passwords
 from gajim.common.events import PasswordRequired
 from gajim.common.i18n import _
 
-from .builder import get_builder
+from gajim.gtk.builder import get_builder
 
-log = logging.getLogger('gajim.gui.pass_dialog')
+log = logging.getLogger('gajim.gtk.pass_dialog')
 
 
 class PasswordDialog(Gtk.ApplicationWindow):

@@ -34,12 +34,12 @@ from gajim.common.helpers import make_path_from_jid
 from gajim.common.i18n import _
 from gajim.common.storage.archive import MessageExportRow
 
-from .assistant import Assistant
-from .assistant import ErrorPage
-from .assistant import Page
-from .builder import get_builder
+from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import ErrorPage
+from gajim.gtk.assistant import Page
+from gajim.gtk.builder import get_builder
 
-log = logging.getLogger('gajim.gui.history_export')
+log = logging.getLogger('gajim.gtk.history_export')
 
 
 class HistoryExport(Assistant):

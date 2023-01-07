@@ -39,19 +39,19 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.types import ChatContactT
-from gajim.gui.security_label_selector import SecurityLabelSelector
 
-from .builder import get_builder
-from .dialogs import ErrorDialog
-from .menus import get_encryption_menu
-from .menus import get_format_menu
-from .menus import get_groupchat_menu
-from .menus import get_private_chat_menu
-from .menus import get_self_contact_menu
-from .menus import get_singlechat_menu
-from .message_input import MessageInputTextView
+from gajim.gtk.builder import get_builder
+from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.menus import get_encryption_menu
+from gajim.gtk.menus import get_format_menu
+from gajim.gtk.menus import get_groupchat_menu
+from gajim.gtk.menus import get_private_chat_menu
+from gajim.gtk.menus import get_self_contact_menu
+from gajim.gtk.menus import get_singlechat_menu
+from gajim.gtk.message_input import MessageInputTextView
+from gajim.gtk.security_label_selector import SecurityLabelSelector
 
-log = logging.getLogger('gajim.gui.messageactionsbox')
+log = logging.getLogger('gajim.gtk.messageactionsbox')
 
 
 class MessageActionsBox(Gtk.Grid):

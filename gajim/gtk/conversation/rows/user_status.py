@@ -25,11 +25,11 @@ from gajim.common.const import AvatarSize
 from gajim.common.helpers import get_uf_show
 from gajim.common.i18n import _
 
-from ...avatar import get_show_circle
-from ..message_widget import MessageWidget
-from .base import BaseRow
-from .widgets import DateTimeLabel
-from .widgets import SimpleLabel
+from gajim.gtk.avatar import get_show_circle
+from gajim.gtk.conversation.message_widget import MessageWidget
+from gajim.gtk.conversation.rows.base import BaseRow
+from gajim.gtk.conversation.rows.widgets import DateTimeLabel
+from gajim.gtk.conversation.rows.widgets import SimpleLabel
 
 
 class UserStatus(BaseRow):

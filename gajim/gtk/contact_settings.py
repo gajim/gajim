@@ -17,10 +17,10 @@ from nbxmpp.protocol import JID
 
 from gajim.common.i18n import _
 
-from .const import Setting
-from .const import SettingKind
-from .const import SettingType
-from .settings import SettingsBox
+from gajim.gtk.const import Setting
+from gajim.gtk.const import SettingKind
+from gajim.gtk.const import SettingType
+from gajim.gtk.settings import SettingsBox
 
 
 class ContactSettings(SettingsBox):

@@ -68,26 +68,27 @@ from gajim.common.exceptions import GajimGeneralException
 from gajim.common.helpers import load_json
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
-from gajim.gui import menus
-from gajim.gui import structs
-from gajim.gui.about import AboutDialog
-from gajim.gui.accounts import AccountsWindow
-from gajim.gui.avatar import AvatarStorage
-from gajim.gui.builder import get_builder
-from gajim.gui.const import ACCOUNT_ACTIONS
-from gajim.gui.const import ALWAYS_ACCOUNT_ACTIONS
-from gajim.gui.const import APP_ACTIONS
-from gajim.gui.const import FEATURE_ACCOUNT_ACTIONS
-from gajim.gui.const import ONLINE_ACCOUNT_ACTIONS
-from gajim.gui.dialogs import ConfirmationDialog
-from gajim.gui.dialogs import DialogButton
-from gajim.gui.dialogs import ShortcutsWindow
-from gajim.gui.discovery import ServiceDiscoveryWindow
-from gajim.gui.start_chat import StartChatDialog
-from gajim.gui.util import get_app_window
-from gajim.gui.util import get_app_windows
-from gajim.gui.util import load_user_iconsets
-from gajim.gui.util import open_window
+
+from gajim.gtk import menus
+from gajim.gtk import structs
+from gajim.gtk.about import AboutDialog
+from gajim.gtk.accounts import AccountsWindow
+from gajim.gtk.avatar import AvatarStorage
+from gajim.gtk.builder import get_builder
+from gajim.gtk.const import ACCOUNT_ACTIONS
+from gajim.gtk.const import ALWAYS_ACCOUNT_ACTIONS
+from gajim.gtk.const import APP_ACTIONS
+from gajim.gtk.const import FEATURE_ACCOUNT_ACTIONS
+from gajim.gtk.const import ONLINE_ACCOUNT_ACTIONS
+from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.dialogs import ShortcutsWindow
+from gajim.gtk.discovery import ServiceDiscoveryWindow
+from gajim.gtk.start_chat import StartChatDialog
+from gajim.gtk.util import get_app_window
+from gajim.gtk.util import get_app_windows
+from gajim.gtk.util import load_user_iconsets
+from gajim.gtk.util import open_window
 
 ActionListT = list[tuple[str,
                          Callable[[Gio.SimpleAction, GLib.Variant], Any]]]
@@ -232,7 +233,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
         builder = get_builder('application_menu.ui')
         self.set_menubar(cast(Gio.Menu, builder.get_object('menubar')))
 
-        from gajim.gui import notification
+        from gajim.gtk import notification
         notification.init()
 
         self.avatar_storage = AvatarStorage()
@@ -247,7 +248,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
         self.interface = Interface()
         self.interface.run(self)
 
-        from gajim.gui.status_icon import StatusIcon
+        from gajim.gtk.status_icon import StatusIcon
         self.systray = StatusIcon()
 
         self._add_app_actions()
@@ -263,7 +264,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
                             ged.CORE,
                             self._on_feature_discovered)
 
-        from gajim.gui.main import MainWindow
+        from gajim.gtk.main import MainWindow
         MainWindow()
 
         GLib.timeout_add(100, self._auto_connect)

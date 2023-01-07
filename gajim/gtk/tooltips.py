@@ -45,12 +45,12 @@ from gajim.common.file_props import FileProp
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
 
-from .avatar import get_show_circle
-from .builder import get_builder
-from .util import format_location
-from .util import format_tune
+from gajim.gtk.avatar import get_show_circle
+from gajim.gtk.builder import get_builder
+from gajim.gtk.util import format_location
+from gajim.gtk.util import format_tune
 
-log = logging.getLogger('gajim.gui.tooltips')
+log = logging.getLogger('gajim.gtk.tooltips')
 
 
 class GCTooltip:

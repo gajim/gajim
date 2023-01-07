@@ -32,9 +32,9 @@ from gajim.common.const import SimpleClientState
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 
-from .dataform import DataFormWidget
-from .file_transfer_selector import FileTransferSelector
-from .groupchat_inviter import GroupChatInviter
+from gajim.gtk.dataform import DataFormWidget
+from gajim.gtk.file_transfer_selector import FileTransferSelector
+from gajim.gtk.groupchat_inviter import GroupChatInviter
 
 
 class FunctionMode(Enum):

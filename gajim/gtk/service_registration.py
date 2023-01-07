@@ -31,14 +31,14 @@ from nbxmpp.task import Task
 from gajim.common import app
 from gajim.common.i18n import _
 
-from .assistant import Assistant
-from .assistant import ErrorPage
-from .assistant import Page
-from .assistant import ProgressPage
-from .assistant import SuccessPage
-from .dataform import DataFormWidget
+from gajim.gtk.assistant import Assistant
+from gajim.gtk.assistant import ErrorPage
+from gajim.gtk.assistant import Page
+from gajim.gtk.assistant import ProgressPage
+from gajim.gtk.assistant import SuccessPage
+from gajim.gtk.dataform import DataFormWidget
 
-log = logging.getLogger('gajim.gui.service_registration')
+log = logging.getLogger('gajim.gtk.service_registration')
 
 
 class ServiceRegistration(Assistant):
