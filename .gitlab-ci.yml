@@ -28,7 +28,6 @@ test-pyright:
     - pip3 install git+https://dev.gajim.org/gajim/python-nbxmpp.git
     - PYGOBJECT_STUB_CONFIG=Gtk3,Gdk3 pip3 install git+https://github.com/pygobject/pygobject-stubs.git
     - npm install pyright
-    - python3 .ci/link-gtk.py
     - node_modules/.bin/pyright --version
     - node_modules/.bin/pyright
   interruptible: true
