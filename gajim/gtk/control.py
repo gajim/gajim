@@ -1079,7 +1079,7 @@ class ChatControl(EventHelper):
         reason = event.reason
         reason = '' if reason is None else f': {reason}'
 
-        message = _('Group chat has been destroyed')
+        message = _('Group chat has been destroyed%s') % reason
 
         if event.alternate is not None:
             message += '\n' + _('You can join this group chat instead: '
