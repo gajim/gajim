@@ -1,3 +1,44 @@
+Gajim 1.6.0 (06 Jan 2023)
+
+  New
+
+  * Allow sending files by copy-pasting them from file managers
+  * Preview: Add audio preview controls and visualization
+  * Resurrect URI-specific context menus
+
+  Improvements
+
+  * Highlight the file when opening containing folder
+  * BaseAvatarChooserDialog: Allow all image types (#11328)
+  * Timestamps: Use date/time format preference in more places (#10948)
+  * AppPage: Show date for last update check
+  * Add dedicated context menu for non-specific URI types
+  * Restore ability to manually disambiguate JID-like addresses
+  * Use the unified Start/Join Chat flow for ?join links
+
+  Change
+
+  * Raise required nbxmpp version to 4.0.0
+  * Depend on Python 3.10
+  * Port to libsoup3
+
+  Bug Fixes
+
+  * CertificateBox: Format serial number in hex (#11335)
+  * MessageActionsBox: Restore emoji button behavior (#11350)
+  * Settings: Add migration for global MUC search api endpoint
+  * AccountWizard: Remove subscriptions after successful login (#11342)
+  * Audio Preview: Fix visuals on EOS while seeking
+  * Audio Preview: Don't let seekbar handle jump to end on EOS when user is seeking
+  * Commands: Attempt to parse only if message can have a command (#11341)
+  * Add missing PyGObject dependency to setup.cfg
+  * Notifications: Use correct nickname for /me messages (#11334)
+  * AvatarSelector: Set default crop scale to 1.0 (#11331)
+  * Menus: Don’t use GLib variant text format parsing (#11331)
+  * Fonts: Fix emoji rendering on MacOS
+  * Remember last folder correctly after sending file
+  * Preview: Don't treat multi-line message body as previewable URL
+
 Gajim 1.5.4 (04 Dec 2022)
 
   Improvements
