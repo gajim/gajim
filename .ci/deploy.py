@@ -10,6 +10,7 @@ import logging
 import os
 import sys
 from datetime import date
+from ftplib import error_perm
 from ftplib import FTP_TLS
 from pathlib import Path
 
@@ -70,9 +71,10 @@ def get_dir_list(ftp: FTP_TLS) -> list[str]:
 def create_release_folder(ftp: FTP_TLS, tag: str) -> None:
     ftp.cwd(RELEASE_FOLDER_BASE)
     folder = get_release_folder_from_tag(tag)
-    dir_list = get_dir_list(ftp)
-    if folder not in dir_list:
+    try:
         ftp.mkd(folder)
+    except error_perm:
+        pass
     ftp.cwd(folder)
 
 
