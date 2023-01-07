@@ -134,10 +134,14 @@ deploy-flatpak:
     - eval $(ssh-agent -s)
     - .ci/prepare_git.sh github.com "${FLATHUB_DEPLOY_KEY}"
   script:
+    # extract the current commit hash of the shared-modules submodule
+    - submodule_commit=$(git submodule status flatpak/shared-modules | cut -c 2-41)
     - git clone git@github.com:flathub/org.gajim.Gajim.git
     - cd org.gajim.Gajim
     - mv ../flatpak/org.gajim.Gajim.yaml org.gajim.Gajim.yaml
     - mv ../flatpak/app-overrides.json app-overrides.json
+    # point the shared-modules submodule to the new commit, without fetching the repository
+    - git update-index --cacheinfo 160000,${submodule_commit},shared-modules
     - git diff
     - git add --all
     - git commit -m "$CI_COMMIT_TAG"
