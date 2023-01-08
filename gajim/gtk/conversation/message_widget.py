@@ -18,14 +18,17 @@ from typing import cast
 from typing import Optional
 from typing import Union
 
+from gi.repository import Gdk
 from gi.repository import Gtk
 
+from gajim.common.i18n import _
 from gajim.common.styling import ParsingResult
 from gajim.common.styling import PlainBlock
 from gajim.common.styling import PreBlock
 from gajim.common.styling import process
 from gajim.common.styling import QuoteBlock
 
+from gajim.gtk.const import MAX_MESSAGE_LENGTH
 from gajim.gtk.conversation.code_widget import CodeWidget
 from gajim.gtk.conversation.plain_widget import PlainWidget
 from gajim.gtk.conversation.quote_widget import QuoteWidget
@@ -59,12 +62,20 @@ class MessageWidget(Gtk.Box):
                          text: str,
                          nickname: Optional[str] = None) -> None:
 
+        original_text = text
+        if len(text) > MAX_MESSAGE_LENGTH:
+            text = text[:MAX_MESSAGE_LENGTH]
+
         if text.startswith('/me') and nickname is not None:
             self._add_action_phrase(text, nickname)
+            if len(original_text) > MAX_MESSAGE_LENGTH:
+                self._add_read_more_button(original_text)
             return
 
         result = process(text)
         self.add_content(result)
+        if len(original_text) > MAX_MESSAGE_LENGTH:
+            self._add_read_more_button(original_text)
 
     def _add_action_phrase(self, text: str, nickname: str):
         self.clear()
@@ -101,5 +112,49 @@ class MessageWidget(Gtk.Box):
 
         self.show_all()
 
+    def _add_read_more_button(self, text: str) -> None:
+        link_button = Gtk.LinkButton(label=_('[read more]'))
+        link_button.set_halign(Gtk.Align.START)
+        link_button.connect('activate-link', self._on_read_more, text)
+        self.add(link_button)
+
+    def _on_read_more(self, _button: Gtk.LinkButton, text: str) -> bool:
+        FullMessageWindow(text)
+        return True
+
     def clear(self) -> None:
         self.foreach(self.remove)
+
+
+class FullMessageWindow(Gtk.ApplicationWindow):
+    def __init__(self, text: str) -> None:
+        Gtk.ApplicationWindow.__init__(self)
+        self.set_size_request(800, 800)
+        self.set_title(_('Full Message View'))
+        self.get_style_context().add_class('dialog-margin')
+
+        textview = Gtk.TextView()
+        textview.set_editable(False)
+        textview.set_left_margin(3)
+        textview.set_top_margin(3)
+        textview.get_buffer().set_text(text)
+
+        scrolled = Gtk.ScrolledWindow()
+        scrolled.set_hexpand(True)
+        scrolled.set_shadow_type(Gtk.ShadowType.IN)
+        scrolled.add(textview)
+
+        box = Gtk.Box()
+        box.add(scrolled)
+
+        self.add(box)
+        self.show_all()
+
+        self.connect('key-press-event', self._on_key_press_event)
+
+    def _on_key_press_event(self,
+                            _widget: Gtk.Widget,
+                            event: Gdk.EventKey
+                            ) -> None:
+        if event.keyval == Gdk.KEY_Escape:
+            self.destroy()

@@ -41,6 +41,7 @@ from gajim.common.styling import process
 from gajim.common.types import ChatContactT
 
 from gajim.gtk.chat_action_processor import ChatActionProcessor
+from gajim.gtk.const import MAX_MESSAGE_LENGTH
 from gajim.gtk.util import scroll_to_end
 
 if app.is_installed('GSPELL'):
@@ -311,7 +312,7 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
 
         self._clear_tags()
 
-        if len(text) > 10000:
+        if len(text) > MAX_MESSAGE_LENGTH:
             # Limit message styling processing
             return
 
