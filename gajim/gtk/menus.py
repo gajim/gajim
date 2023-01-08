@@ -141,9 +141,13 @@ def get_groupchat_menu(contact: GroupchatContact) -> GajimMenu:
 
 def get_account_menu(account: str) -> GajimMenu:
 
+    client = app.get_client(account)
+    server_jid = client.get_own_jid().domain
+
     menuitems: MenuItemListT = [
         (_('Profile'), f'app.{account}-profile', account),
         (_('Discover Services…'), f'app.{account}-services', account),
+        (_('Execute Command…'), f'app.{account}-execute-command', server_jid),
         (_('Server Info'), f'app.{account}-server-info', account),
     ]
 
