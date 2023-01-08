@@ -125,10 +125,7 @@ class AudioWidget(Gtk.Box):
         self._ui.speed_bar.add_mark(1.75, Gtk.PositionType.BOTTOM, '')
         self._ui.speed_bar.add_mark(2, Gtk.PositionType.BOTTOM, '2')
 
-        if self._is_LTR:
-            self._ui.progress_label.set_xalign(1.0)
-        else:
-            self._ui.progress_label.set_xalign(0.0)
+        self._ui.progress_label.set_xalign(1.0)
 
         self.connect('destroy', self._on_destroy)
         self.show_all()
@@ -270,20 +267,14 @@ class AudioWidget(Gtk.Box):
         dur = self._state.duration
 
         dur_str = format_duration(dur, dur)
-        ltr_char = '\u202B'
-        pop_char = '\u202C'
+        ltr_char = '\u200E'
 
         if self._state.is_timestamp_positive:
             cur_str = f'{format_duration(cur, dur)}'
             self._ui.progress_label.set_text(f'{cur_str}/{dur_str}')
         else:
             cur_str = f'{format_duration(dur - cur, dur)}'
-            if self._is_LTR:
-                self._ui.progress_label.set_text(f'-{cur_str}/{dur_str}')
-            else:
-                self._ui.progress_label.set_text(
-                    f'{cur_str}{ltr_char}/-{pop_char}{dur_str}'
-                )
+            self._ui.progress_label.set_text(f'{ltr_char}-{cur_str}/{dur_str}')
 
     def _update_seek_bar_and_visualisation(self) -> bool:
         assert self._playbin is not None
