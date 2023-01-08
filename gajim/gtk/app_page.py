@@ -131,17 +131,27 @@ class AppMessageListBox(Gtk.ListBox):
 
     @staticmethod
     def _get_update_text() -> str:
+        gajim = ''
+        plugins = _('Plugins: No updates available')
         if not app.settings.get('check_for_update'):
-            return _('Update check disabled in preferences')
+            gajim = _('Gajim: Update check disabled in preferences')
+
+        if not app.settings.get('plugins_update_check'):
+            plugins = _('Plugins: Update check disabled in preferences')
+
+        if any(gajim and plugins):
+            return f'{gajim}\n{plugins}'
 
         last_check = app.settings.get('last_update_check')
         if not last_check:
-            return _('No updates available (last check: never)')
+            gajim = _('Gajim: No updates available (last check: never)')
+            return f'{gajim}\n{plugins}'
 
         date = datetime.strptime(last_check, '%Y-%m-%d %H:%M')
         format_string = app.settings.get('date_format')
-        return _('No updates available (last check: %s)') % date.strftime(
-            format_string)
+        gajim = _('Gajim: No updates available '
+                  '(last check: %s)') % date.strftime(format_string)
+        return f'{gajim}\n{plugins}'
 
 
 class AppMessageRow(Gtk.ListBoxRow):
