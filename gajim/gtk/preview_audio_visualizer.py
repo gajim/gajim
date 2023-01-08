@@ -26,8 +26,6 @@ from gi.repository import Gtk
 
 from gajim.common.preview import AudioSampleT
 
-from gajim.gtk.util import rgba_to_float
-
 log = logging.getLogger('gajim.gtk.preview_audio_visualizer')
 
 
@@ -40,8 +38,6 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
 
         Gtk.DrawingArea.__init__(self)
 
-        self.set_name('AudioVisualizer')
-        self._update_colors()
         self._x_offset = x_offset
         self._peak_width = 2  # in px
         self._width = width
@@ -56,6 +52,9 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
         self.connect('draw', self._on_drawingarea_draw)
         self.connect('configure-event', self._on_drawingarea_changed)
         self.connect('style-updated', self._on_style_updated)
+
+        self._style_context = self.get_style_context()
+        self._style_context.add_class('audiovisualizer')
 
         self.set_size_request(self._width, self._height)
         self._surface: Optional[cairo.ImageSurface] = None
@@ -77,7 +76,7 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
 
         self._position = position
         self._seek_position = seek_position
-
+        
         self.queue_draw()
 
     def _on_drawingarea_draw(self,
@@ -100,24 +99,7 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
     def _on_style_updated(self,
                           _event: Gdk.EventConfigure
                           ) -> None:
-
-        self._update_colors()
         self.queue_draw()
-
-    def _update_colors(self) -> None:
-        sc = self.get_style_context()
-        self._progress_color = rgba_to_float(
-            sc.get_color(Gtk.StateFlags.NORMAL)
-        )
-        self._default_color = rgba_to_float(
-            sc.get_background_color(Gtk.StateFlags.NORMAL)
-        )
-        self._outline_color = rgba_to_float(
-            sc.get_border_color(Gtk.StateFlags.NORMAL)
-        )
-        self._seek_color = rgba_to_float(
-            sc.get_color(Gtk.StateFlags.SELECTED)
-        )
 
     def _setup_surface(self) -> None:
         if self._surface:
@@ -128,8 +110,10 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
             self._width,
             self._height)
         ctx: cairo.Context[cairo.ImageSurface] = cairo.Context(self._surface)
+        self._cairo_path = ctx.copy_path()
 
         if self._num_samples != 0:
+            self._draw_rms_amplitudes(ctx)
             self._draw_surface(ctx)
 
     def _process_samples(self) -> None:
@@ -164,56 +148,41 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
         else:
             self._samples = samples
 
+    def _pixel_pos(self, pos: float) -> float:
+        return pos * self._width + self._x_offset
+
     def _draw_surface(self, ctx: cairo.Context[cairo.ImageSurface]) -> None:
-        # First draw the progress part from left
-        end = min(round(self._position * self._num_samples), self._num_samples)
-        self._draw_rms_amplitudes(ctx,
-                                  start=0,
-                                  end=end,
-                                  color=self._progress_color
-                                  )
+        ctx.append_path(self._cairo_path)
+        ctx.clip()
 
+        play_pos = self._pixel_pos(self._position)
+        start_pos = self._pixel_pos(0.0)
+        width_pos = play_pos - start_pos
+
+        # Default
+        self._style_context.set_state(Gtk.StateFlags.NORMAL)
+        Gtk.render_background(
+            self._style_context, ctx,
+            start_pos, 0, self._width, self._height)
+
+        # Progress
+        self._style_context.set_state(Gtk.StateFlags.CHECKED)
+        Gtk.render_background(self._style_context, ctx,
+                              start_pos, 0, width_pos, self._height)
+
+        # Seek
         if self._seek_position >= 0:
-            # If state is PLAYING and the user seeks, determine whether the
-            # seek position lies in the past, i.e. on the left side of current
-            # position or in the future, i.e. on the right side.
-            # Highlight the skipped area from seek
-            # to the current position on the determined site.
-            play_pos = min(round(
-                self._position * self._num_samples), self._num_samples)
-            seek_pos = min(round(
-                self._seek_position * self._num_samples), self._num_samples)
-            if play_pos > seek_pos:
-                start = seek_pos
-                end = play_pos
-            else:
-                start = play_pos
-                end = seek_pos
+            seek_pos = self._pixel_pos(self._seek_position)
+            start_seek = min(play_pos, seek_pos)
+            end_seek = max(play_pos, seek_pos)
+            width_seek = end_seek - start_seek
 
-            self._draw_rms_amplitudes(ctx,
-                                      start=start,
-                                      end=end,
-                                      color=self._seek_color
-                                      )
-
-        # Draw the default amplitudes for the rest of the timeline
-        play_pos = min(round(
-            self._position * self._num_samples), self._num_samples)
-        seek_pos = min(round(
-            self._seek_position * self._num_samples), self._num_samples)
-        start_default = max(play_pos, seek_pos)
-
-        self._draw_rms_amplitudes(ctx,
-                                  start=start_default,
-                                  end=self._num_samples,
-                                  color=self._default_color
-                                  )
+            self._style_context.set_state(Gtk.StateFlags.SELECTED)
+            Gtk.render_background(self._style_context, ctx,
+                                  start_seek, 0, width_seek, self._height)
 
     def _draw_rms_amplitudes(self,
-                             ctx: cairo.Context[cairo.ImageSurface],
-                             start: int,
-                             end: int,
-                             color: tuple[float, float, float]
+                             ctx: cairo.Context[cairo.ImageSurface]
                              ) -> None:
         peak_width = self._peak_width
         radius = 1  # radius of the arcs on top and bottom of the amplitudes
@@ -224,12 +193,12 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
         if self._is_LTR:
             # determines the spacing between the amplitudes
             x_shift = (self._width - 2 * peak_width) / self._num_samples
-            x = self._x_offset + x_shift * (start + 1)
+            x = self._x_offset + x_shift
         else:
             x_shift = -(self._width - 2 * peak_width) / self._num_samples
-            x = -x_shift * (self._num_samples - start) + self._x_offset
+            x = -x_shift * (self._num_samples) + self._x_offset
 
-        for i in range(start, end):
+        for i in range(0, self._num_samples):
             if self._is_LTR:
                 sample1 = self._samples[i][0]
                 sample2 = self._samples[i][1]
@@ -247,14 +216,9 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
                 radius,
                 gap,
             )
-
-            ctx.set_source_rgb(*self._outline_color)
-            ctx.stroke_preserve()
-
-            ctx.set_source_rgb(*color)
-            ctx.fill()
-
             x += x_shift
+
+        self._cairo_path = ctx.copy_path()
 
     def _draw_rounded_rec(self,
                           ctx: cairo.Context[cairo.ImageSurface],
@@ -288,6 +252,7 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
 
         # Up
         # A -- B -- C
+        ctx.move_to(x, y + height1)
         ctx.curve_to(x, y + height1,
                      x + m, y + height1 + radius,
                      x + width, y + height1)
@@ -297,6 +262,7 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
         ctx.line_to(x, y + gap_size)
         # F -- A
         ctx.line_to(x, y + height1)
+        ctx.close_path()
 
         # Down
         # C -- D
@@ -310,3 +276,4 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
         ctx.line_to(x, y - gap_size)
         # A -- C
         ctx.line_to(x + width, y - gap_size)
+        ctx.close_path()
