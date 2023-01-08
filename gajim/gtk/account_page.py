@@ -15,24 +15,20 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Union
 
 from gi.repository import Gdk
-from gi.repository import GLib
 from gi.repository import Gtk
-from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
-from gajim.common.events import AccountConnected
-from gajim.common.events import AccountDisconnected
 from gajim.common.events import MucDecline
 from gajim.common.events import MucInvitation
 from gajim.common.events import SubscribePresenceReceived
 from gajim.common.events import UnsubscribedPresenceReceived
 
 from gajim.gtk.builder import get_builder
+from gajim.gtk.menus import get_account_menu
 from gajim.gtk.menus import get_roster_view_menu
 from gajim.gtk.notification_manager import NotificationManager
 from gajim.gtk.roster import Roster
@@ -58,11 +54,11 @@ class AccountPage(Gtk.Box, EventHelper):
 
         self._status_selector = StatusSelector(account=account)
         self._status_selector.set_halign(Gtk.Align.CENTER)
-        self._ui.account_action_box.add(self._status_selector)
+        self._ui.status_box.add(self._status_selector)
 
         self._status_message_selector = StatusMessageSelector(account=account)
         self._status_message_selector.set_halign(Gtk.Align.CENTER)
-        self._ui.status_message_box.add(self._status_message_selector)
+        self._ui.status_box.add(self._status_message_selector)
 
         self._notification_manager = NotificationManager(account)
         self._ui.account_box.add(self._notification_manager)
@@ -74,11 +70,8 @@ class AccountPage(Gtk.Box, EventHelper):
         self._ui.paned.connect('button-release-event', self._on_button_release)
 
         self._ui.roster_menu_button.set_menu_model(get_roster_view_menu())
-
-        self._ui.edit_profile_button.set_action_name(
-            f'app.{self._account}-profile')
-        self._ui.edit_profile_button.set_action_target_value(
-            GLib.Variant('s', self._account))
+        self._ui.account_page_menu_button.set_menu_model(
+            get_account_menu(account))
 
         self._ui.connect_signals(self)
 
@@ -94,8 +87,6 @@ class AccountPage(Gtk.Box, EventHelper):
              ged.GUI1, self._unsubscribed_received),
             ('muc-invitation', ged.GUI1, self._muc_invitation_received),
             ('muc-decline', ged.GUI1, self._muc_invitation_declined),
-            ('account-connected', ged.GUI2, self._on_account_state),
-            ('account-disconnected', ged.GUI2, self._on_account_state),
         ])
         # pylint: enable=line-too-long
 
@@ -115,20 +106,6 @@ class AccountPage(Gtk.Box, EventHelper):
     def _on_account_settings(self, _button: Gtk.Button) -> None:
         window = open_window('AccountsWindow')
         window.select_account(self._account)
-
-    def _on_adhoc_commands(self, _button: Gtk.Button) -> None:
-        server_jid = JID.from_string(self._jid).domain
-        open_window('AdHocCommands', account=self._account, jid=server_jid)
-
-    def _on_account_state(self,
-                          event: Union[AccountConnected, AccountDisconnected]
-                          ) -> None:
-
-        if event.account != self._account:
-            return
-
-        self._ui.adhoc_commands_button.set_sensitive(
-            app.account_is_connected(event.account))
 
     def _on_search_changed(self, widget: Gtk.SearchEntry) -> None:
         text = widget.get_text().lower()

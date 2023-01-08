@@ -6,6 +6,7 @@ from gi.repository import Atk
 from gi.repository import Gtk
 from gi.repository import GtkSource
 
+
 class Builder(Gtk.Builder):
     ...
 
@@ -17,11 +18,9 @@ class AccountPageBuilder(Builder):
     roster_search_entry: Gtk.SearchEntry
     account_box: Gtk.Box
     avatar_image: Gtk.Image
-    edit_profile_button: Gtk.Button
     account_label: Gtk.Label
-    account_action_box: Gtk.Box
-    adhoc_commands_button: Gtk.Button
-    status_message_box: Gtk.Box
+    account_page_menu_button: Gtk.MenuButton
+    status_box: Gtk.Box
 
 
 class AccountWizardBuilder(Builder):
