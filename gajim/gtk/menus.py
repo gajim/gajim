@@ -434,6 +434,7 @@ def get_roster_view_menu() -> GajimMenu:
     menuitems: MenuItemListT = [
         (_('Show Offline Contacts'), 'win.show-offline', None),
         (_('Sort by Status'), 'win.sort-by-show', None),
+        (_('Add Contact…'), 'app.add-contact', ''),
     ]
 
     return GajimMenu.from_list(menuitems)
