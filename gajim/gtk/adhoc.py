@@ -134,7 +134,8 @@ class AdHocCommands(Assistant):
                            button_name: str
                            ) -> None:
         if button_name == 'commands':
-            self.show_page('commands')
+            self._client.get_module('AdHocCommands').request_command_list(
+                self.jid, callback=self._received_command_list)
 
         elif button_name == 'execute':
             self._on_execute()
