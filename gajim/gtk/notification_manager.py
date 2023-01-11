@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import Callable
 from typing import cast
 from typing import Optional
 from typing import Union
@@ -37,6 +38,11 @@ from gajim.common.i18n import _
 
 from gajim.gtk.menus import get_subscription_menu
 from gajim.gtk.util import open_window
+
+NotificationActionListT = list[
+    tuple[str,
+          Callable[[Gio.SimpleAction, GLib.Variant], Any],
+          Optional[str]]]
 
 
 class NotificationManager(Gtk.ListBox):
@@ -64,16 +70,19 @@ class NotificationManager(Gtk.ListBox):
         self._remove_actions()
 
     def _add_actions(self) -> None:
-        actions = [
+        actions: NotificationActionListT = [
             ('subscription-accept', self._on_subscription_accept, 'as'),
             ('subscription-deny', self._on_subscription_deny, 's'),
+            ('subscription-deny-all', self._on_subscription_deny_all, None),
             ('subscription-block', self._on_subscription_block, 's'),
             ('subscription-report', self._on_subscription_report, 's'),
         ]
         for action in actions:
             action_name, func, typ = action
+            if typ is not None:
+                typ = GLib.VariantType.new(typ)
             act = Gio.SimpleAction.new(
-                f'{action_name}-{self._account}', GLib.VariantType.new(typ))
+                f'{action_name}-{self._account}', typ)
             act.connect('activate', func)
             app.window.add_action(act)
 
@@ -91,6 +100,11 @@ class NotificationManager(Gtk.ListBox):
         assert sub_deny is not None
         sub_deny.set_enabled(online)
 
+        sub_deny_all = app.window.lookup_action(
+            f'subscription-deny-all-{self._account}')
+        assert sub_deny_all is not None
+        sub_deny_all.set_enabled(online)
+
         sub_block = app.window.lookup_action(
             f'subscription-block-{self._account}')
         assert sub_block is not None
@@ -105,6 +119,7 @@ class NotificationManager(Gtk.ListBox):
         actions = [
             'subscription-accept',
             'subscription-deny',
+            'subscription-deny-all',
             'subscription-block',
             'subscription-report',
         ]
@@ -163,6 +178,17 @@ class NotificationManager(Gtk.ListBox):
         self._deny_request(jid)
         row = self._get_notification_row(jid)
         if row is not None:
+            row.destroy()
+
+    def _on_subscription_deny_all(self,
+                                  _action: Gio.SimpleAction,
+                                  _param: GLib.Variant
+                                  ) -> None:
+
+        for row in cast(list[NotificationRow], self.get_children()):
+            if row.type != 'subscribe':
+                continue
+            self._deny_request(row.jid)
             row.destroy()
 
     def _deny_request(self, jid: str) -> None:

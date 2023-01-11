@@ -444,6 +444,15 @@ def get_roster_view_menu() -> GajimMenu:
     return GajimMenu.from_list(menuitems)
 
 
+def get_account_notifications_menu(account: str) -> GajimMenu:
+    menuitems: MenuItemListT = [
+        (_('Deny all subscription requests'),
+         f'win.subscription-deny-all-{account}',
+         None),
+    ]
+    return GajimMenu.from_list(menuitems)
+
+
 def get_subscription_menu(account: str, jid: JID) -> GajimMenu:
     params = AddChatActionParams(account=account,
                                  jid=jid,

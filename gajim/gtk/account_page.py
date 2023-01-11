@@ -29,6 +29,7 @@ from gajim.common.events import UnsubscribedPresenceReceived
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.menus import get_account_menu
+from gajim.gtk.menus import get_account_notifications_menu
 from gajim.gtk.menus import get_roster_view_menu
 from gajim.gtk.notification_manager import NotificationManager
 from gajim.gtk.roster import Roster
@@ -62,6 +63,9 @@ class AccountPage(Gtk.Box, EventHelper):
 
         self._notification_manager = NotificationManager(account)
         self._ui.account_box.add(self._notification_manager)
+
+        self._ui.notifications_menu_button.set_menu_model(
+            get_account_notifications_menu(account))
 
         self._roster = Roster(account)
         self._ui.roster_box.add(self._roster)

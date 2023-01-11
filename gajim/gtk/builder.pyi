@@ -20,6 +20,7 @@ class AccountPageBuilder(Builder):
     account_label: Gtk.Label
     account_page_menu_button: Gtk.MenuButton
     status_box: Gtk.Box
+    notifications_menu_button: Gtk.MenuButton
 
 
 class AccountWizardBuilder(Builder):
