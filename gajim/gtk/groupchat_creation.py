@@ -12,6 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
 from typing import Optional
 from typing import Union
 
@@ -204,9 +205,6 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
         self._set_warning(MUC_DISCO_ERRORS[error_code])
 
     def _on_name_entry_changed(self, entry: Gtk.Entry) -> None:
-        if self._ui.private_radio.get_active():
-            return
-
         name = entry.get_text()
         name = name.replace(' ', '-')
         server = self._get_muc_service_jid()
@@ -229,14 +227,12 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
         server = self._get_muc_service_jid()
         model.append([f'{text}@{server}'])
 
-    def _on_public_private_toggled(self, _radiobutton: Gtk.RadioButton) -> None:
-        is_public = self._ui.public_radio.get_active()
-        if is_public:
-            self._validate_jid(self._ui.address_entry.get_text())
+    def _on_toggle_advanced(self, switch: Gtk.Switch, *args: Any) -> None:
+        if switch.get_active():
+            self._ui.advanced_box.set_no_show_all(False)
+            self._ui.advanced_box.show_all()
         else:
-            self._ui.create_button.set_sensitive(True)
-        self._ui.address_label.set_visible(is_public)
-        self._ui.address_entry.set_visible(is_public)
+            self._ui.advanced_box.hide()
 
     def _on_create_clicked(self, _button: Gtk.Button) -> None:
         assert self._account is not None
@@ -246,9 +242,8 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
                 _('You have to be connected to create a group chat.'))
             return
 
-        if self._ui.public_radio.get_active():
-            room_jid = self._ui.address_entry.get_text()
-        else:
+        room_jid = self._ui.address_entry.get_text()
+        if not self._ui.advanced_switch.get_active() or not room_jid:
             server = self._get_muc_service_jid()
             room_jid = f'{get_random_muc_localpart()}@{server}'
 

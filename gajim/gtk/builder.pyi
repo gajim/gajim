@@ -388,10 +388,11 @@ class GroupchatCreationBuilder(Builder):
     description_entry: Gtk.Entry
     account_combo: Gtk.ComboBox
     account_label: Gtk.Label
-    address_entry: Gtk.Entry
-    address_label: Gtk.Label
+    advanced_switch: Gtk.Switch
+    advanced_box: Gtk.Box
     private_radio: Gtk.RadioButton
     public_radio: Gtk.RadioButton
+    address_entry: Gtk.Entry
     spinner: Gtk.Spinner
     create_button: Gtk.Button
 

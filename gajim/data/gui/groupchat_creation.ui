@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
   <object class="GtkListStore" id="account_liststore">
@@ -38,7 +38,7 @@
           </packing>
         </child>
         <child>
-          <!-- n-columns=2 n-rows=6 -->
+          <!-- n-columns=2 n-rows=5 -->
           <object class="GtkGrid" id="grid">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -146,88 +146,25 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="address_entry">
+              <object class="GtkSwitch" id="advanced_switch">
+                <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="no-show-all">True</property>
-                <signal name="changed" handler="_on_address_entry_changed" swapped="no"/>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">5</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="address_label">
-                <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">_Address</property>
-                <property name="use-underline">True</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
+                <property name="margin-top">12</property>
+                <signal name="notify::active" handler="_on_toggle_advanced" swapped="no"/>
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">5</property>
+                <property name="top-attach">3</property>
               </packing>
             </child>
             <child>
-              <object class="GtkRadioButton" id="private_radio">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
                 <property name="margin-top">12</property>
-                <property name="active">True</property>
-                <property name="draw-indicator">True</property>
-                <property name="group">public_radio</property>
-                <signal name="toggled" handler="_on_public_private_toggled" swapped="no"/>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="margin-start">6</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Private</property>
-                        <property name="use-markup">True</property>
-                        <property name="wrap">True</property>
-                        <property name="xalign">0</property>
-                        <style>
-                          <class name="bold"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">You have to invite people so they can join</property>
-                        <property name="wrap">True</property>
-                        <property name="xalign">0</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                </child>
+                <property name="label" translatable="yes">Advanced Settings</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -235,28 +172,147 @@
               </packing>
             </child>
             <child>
-              <object class="GtkRadioButton" id="public_radio">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="draw-indicator">True</property>
-                <property name="group">private_radio</property>
+              <object class="GtkBox" id="advanced_box">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkRadioButton" id="private_radio">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="margin-top">12</property>
+                    <property name="active">True</property>
+                    <property name="draw-indicator">True</property>
+                    <property name="group">public_radio</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="margin-start">6</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Private</property>
+                            <property name="use-markup">True</property>
+                            <property name="wrap">True</property>
+                            <property name="xalign">0</property>
+                            <style>
+                              <class name="bold"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">You have to invite people so they can join</property>
+                            <property name="wrap">True</property>
+                            <property name="xalign">0</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="public_radio">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="draw-indicator">True</property>
+                    <property name="group">private_radio</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-start">6</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Public</property>
+                            <property name="use-markup">True</property>
+                            <property name="xalign">0</property>
+                            <style>
+                              <class name="bold"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Anyone can join</property>
+                            <property name="wrap">True</property>
+                            <property name="xalign">0</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
                 <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="margin-start">6</property>
-                    <property name="orientation">vertical</property>
+                    <property name="halign">end</property>
+                    <property name="spacing">12</property>
                     <child>
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Public</property>
-                        <property name="use-markup">True</property>
-                        <property name="xalign">0</property>
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes">_Address</property>
+                        <property name="use-underline">True</property>
                         <style>
-                          <class name="bold"/>
+                          <class name="dim-label"/>
                         </style>
                       </object>
                       <packing>
@@ -266,16 +322,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel">
+                      <object class="GtkEntry" id="address_entry">
+                        <property name="width-request">250</property>
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Anyone can join</property>
-                        <property name="wrap">True</property>
-                        <property name="xalign">0</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
+                        <property name="can-focus">True</property>
+                        <signal name="changed" handler="_on_address_entry_changed" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -284,18 +335,18 @@
                       </packing>
                     </child>
                   </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
                 </child>
               </object>
               <packing>
-                <property name="left-attach">1</property>
+                <property name="left-attach">0</property>
                 <property name="top-attach">4</property>
+                <property name="width">2</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
           <packing>
