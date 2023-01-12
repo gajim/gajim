@@ -72,6 +72,7 @@ class MUCSubject(BaseRow):
         meta_str = f'{author}{date}'
         meta = Gtk.Label(label=meta_str)
         meta.set_halign(Gtk.Align.START)
+        meta.set_selectable(True)
         meta.get_style_context().add_class('small-label')
         subject_box.add(meta)
 

@@ -158,7 +158,8 @@
                         <child type="center">
                           <object class="GtkLabel" id="account_label">
                             <property name="visible">True</property>
-                            <property name="can-focus">False</property>
+                            <property name="can-focus">True</property>
+                            <property name="selectable">True</property>
                             <property name="label">&lt;name&gt;</property>
                             <style>
                               <class name="large-header"/>

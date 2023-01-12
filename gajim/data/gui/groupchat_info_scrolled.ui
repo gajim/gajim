@@ -92,7 +92,8 @@
     </child>
     <child>
       <object class="GtkLabel" id="author">
-        <property name="can-focus">False</property>
+        <property name="can-focus">True</property>
+        <property name="selectable">True</property>
         <property name="no-show-all">True</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
@@ -255,7 +256,7 @@
     </child>
     <child>
       <object class="GtkLabel" id="name">
-        <property name="can-focus">False</property>
+        <property name="can-focus">True</property>
         <property name="no-show-all">True</property>
         <property name="halign">center</property>
         <property name="valign">start</property>

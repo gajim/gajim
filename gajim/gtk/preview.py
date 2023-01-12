@@ -128,6 +128,7 @@ class PreviewWidget(Gtk.Box):
         if preview.is_geo_uri:
             self._ui.icon_event_box.hide()
             self._ui.file_name.set_text(_('Click to view location'))
+            self._ui.file_name.set_selectable(False)
             self._ui.save_as_button.hide()
             self._ui.open_folder_button.hide()
             self._ui.download_button.hide()

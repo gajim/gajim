@@ -161,8 +161,9 @@
         <child>
           <object class="GtkLabel" id="connection_type">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="halign">start</property>
+            <property name="selectable">True</property>
             <property name="single-line-mode">True</property>
             <property name="xalign">0</property>
           </object>
@@ -189,9 +190,10 @@
         <child>
           <object class="GtkLabel" id="proxy_type">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes">No proxy used</property>
+            <property name="selectable">True</property>
             <property name="xalign">0</property>
           </object>
           <packing>
@@ -217,9 +219,10 @@
         <child>
           <object class="GtkLabel" id="proxy_host">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="halign">start</property>
             <property name="label">-</property>
+            <property name="selectable">True</property>
             <property name="xalign">0</property>
           </object>
           <packing>
@@ -305,8 +308,9 @@
         <child>
           <object class="GtkLabel" id="domain">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="halign">start</property>
+            <property name="selectable">True</property>
             <property name="xalign">0</property>
           </object>
           <packing>
@@ -316,9 +320,10 @@
         </child>
         <child>
           <object class="GtkLabel" id="dns">
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="no-show-all">True</property>
             <property name="halign">start</property>
+            <property name="selectable">True</property>
             <property name="xalign">0</property>
           </object>
           <packing>
@@ -328,7 +333,7 @@
         </child>
         <child>
           <object class="GtkLabel" id="ip_port">
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="no-show-all">True</property>
             <property name="halign">start</property>
             <property name="selectable">True</property>
@@ -341,9 +346,10 @@
         </child>
         <child>
           <object class="GtkLabel" id="websocket">
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="no-show-all">True</property>
             <property name="halign">start</property>
+            <property name="selectable">True</property>
             <property name="xalign">0</property>
           </object>
           <packing>
@@ -384,8 +390,9 @@
         <child>
           <object class="GtkLabel" id="tls_version">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="halign">start</property>
+            <property name="selectable">True</property>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -395,8 +402,9 @@
         <child>
           <object class="GtkLabel" id="cipher_suite">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
             <property name="halign">start</property>
+            <property name="selectable">True</property>
           </object>
           <packing>
             <property name="left-attach">1</property>

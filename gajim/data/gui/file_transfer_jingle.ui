@@ -60,7 +60,8 @@
                 <child>
                   <object class="GtkLabel" id="file_name">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="selectable">True</property>
                     <property name="halign">start</property>
                     <property name="label">&lt;file name&gt;</property>
                     <property name="ellipsize">middle</property>
@@ -78,7 +79,8 @@
                 <child>
                   <object class="GtkLabel" id="file_description">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="selectable">True</property>
                     <property name="halign">start</property>
                     <property name="label">&lt;file description&gt;</property>
                     <property name="ellipsize">end</property>

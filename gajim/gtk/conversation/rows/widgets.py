@@ -74,6 +74,7 @@ class DateTimeLabel(Gtk.Label):
             format_string = app.settings.get('date_time_format')
 
         self.set_text(timestamp.strftime(format_string))
+        self.set_selectable(True)
         self.set_halign(Gtk.Align.START)
         self.set_valign(Gtk.Align.END)
         self.set_margin_start(6)

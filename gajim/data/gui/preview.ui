@@ -293,7 +293,7 @@
                 <child>
                   <object class="GtkLabel" id="file_name">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="can-focus">True</property>
                     <property name="selectable">True</property>
                     <property name="ellipsize">end</property>
                     <property name="single-line-mode">True</property>
@@ -313,7 +313,8 @@
                 <child>
                   <object class="GtkLabel" id="file_size">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="selectable">True</property>
                     <property name="single-line-mode">True</property>
                     <property name="max-width-chars">30</property>
                     <property name="xalign">0</property>
@@ -331,7 +332,8 @@
                 <child>
                   <object class="GtkLabel" id="info_message">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="selectable">True</property>
                     <property name="ellipsize">end</property>
                     <property name="single-line-mode">True</property>
                     <property name="max-width-chars">30</property>
