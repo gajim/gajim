@@ -14,8 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 import logging
 import math
 from statistics import mean
@@ -57,8 +55,13 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
         self._style_context.add_class('audiovisualizer')
 
         self.set_size_request(self._width, self._height)
-        self._surface: Optional[cairo.ImageSurface] = None
-        self._setup_surface()
+        self._surface = cairo.ImageSurface(
+            cairo.FORMAT_ARGB32,
+            self._width,
+            self._height)
+        self._ctx: cairo.Context[cairo.ImageSurface] = cairo.Context(
+            self._surface)
+        self._cairo_path = self._ctx.copy_path()
 
     def update_params(self,
                       samples: AudioSampleT,
@@ -69,6 +72,7 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
         self._position = position
         self._process_samples()
         self._num_samples = len(self._samples)
+        self._render_waveform()
 
     def draw_graph(self, position: float, seek_position: float = -1.0) -> None:
         if self._num_samples == 0:
@@ -76,7 +80,7 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
 
         self._position = position
         self._seek_position = seek_position
-        
+
         self.queue_draw()
 
     def _on_drawingarea_draw(self,
@@ -93,28 +97,13 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
                                 ) -> None:
 
         self._is_LTR = bool(self.get_direction() == Gtk.TextDirection.LTR)
-        self._setup_surface()
+        self._render_waveform()
         self.queue_draw()
 
     def _on_style_updated(self,
                           _event: Gdk.EventConfigure
                           ) -> None:
         self.queue_draw()
-
-    def _setup_surface(self) -> None:
-        if self._surface:
-            self._surface.finish()
-
-        self._surface = cairo.ImageSurface(
-            cairo.FORMAT_ARGB32,
-            self._width,
-            self._height)
-        ctx: cairo.Context[cairo.ImageSurface] = cairo.Context(self._surface)
-        self._cairo_path = ctx.copy_path()
-
-        if self._num_samples != 0:
-            self._draw_rms_amplitudes(ctx)
-            self._draw_surface(ctx)
 
     def _process_samples(self) -> None:
         # Create a subset by taking the average of three samples
@@ -151,7 +140,20 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
     def _pixel_pos(self, pos: float) -> float:
         return pos * self._width + self._x_offset
 
+    def _render_waveform(self) -> None:
+        if self._num_samples != 0:
+            self._draw_rms_amplitudes(self._ctx)
+            self._draw_surface(self._ctx)
+
     def _draw_surface(self, ctx: cairo.Context[cairo.ImageSurface]) -> None:
+        if not self._is_LTR:
+            # rotate 180° around the center
+            ctx.translate(
+                (self._width + self._x_offset * 2) / 2, self._height / 2)
+            ctx.rotate(math.pi)
+            ctx.translate(
+                -(self._width + self._x_offset * 2) / 2, -self._height / 2)
+
         ctx.append_path(self._cairo_path)
         ctx.clip()
 
@@ -184,27 +186,20 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
     def _draw_rms_amplitudes(self,
                              ctx: cairo.Context[cairo.ImageSurface]
                              ) -> None:
+        ctx.new_path()
+
         peak_width = self._peak_width
         radius = 1  # radius of the arcs on top and bottom of the amplitudes
         gap = 0.25  # between upper and lower peak in pixels
         scaling = self._height / 2 - radius - gap / 2  # peak scaling factor
-        ctx.set_line_width(1.0)
 
-        if self._is_LTR:
-            # determines the spacing between the amplitudes
-            x_shift = (self._width - 2 * peak_width) / self._num_samples
-            x = self._x_offset + x_shift
-        else:
-            x_shift = -(self._width - 2 * peak_width) / self._num_samples
-            x = -x_shift * (self._num_samples) + self._x_offset
+        # determines the spacing between the amplitudes
+        x_shift = (self._width - 2 * peak_width) / self._num_samples
+        x = self._x_offset + x_shift
 
         for i in range(0, self._num_samples):
-            if self._is_LTR:
-                sample1 = self._samples[i][0]
-                sample2 = self._samples[i][1]
-            else:
-                sample1 = self._samples[i][1]
-                sample2 = self._samples[i][0]
+            sample1 = self._samples[i][0]
+            sample2 = self._samples[i][1]
 
             self._draw_rounded_rec(
                 ctx,
@@ -242,10 +237,6 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
         # Draws a rectangle of width w and total height of h1+h2
         # The top and bottom edges are curved to the outside
         m = width / 2
-        if not self._is_LTR:
-            m = -m
-            width = -width
-
         # A --- B --- C
         # |           |
         # F --- E --- D
