@@ -673,8 +673,13 @@ class ChatStack(Gtk.Stack, EventHelper):
                         _context: Gdk.DragContext,
                         _x_coord: int,
                         _y_coord: int,
-                        _time: int
+                        time: int
                         ) -> bool:
+
+        if time == 0:
+            # Workaround for https://gitlab.gnome.org/GNOME/gtk/-/issues/5518
+            return False
+
         self._drop_area.set_no_show_all(False)
         self._drop_area.show_all()
         return True
