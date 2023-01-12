@@ -535,7 +535,13 @@ class PreviewManager:
 
         if preview.is_aes_encrypted:
             if preview.key is not None and preview.iv is not None:
-                data = aes_decrypt(preview.key, preview.iv, data)
+                try:
+                    data = aes_decrypt(preview.key, preview.iv, data)
+                except Exception as error:
+                    log.exception('Decryption failed')
+                    preview.info_message = _('Decryption failed')
+                    preview.update_widget()
+                    return
 
         if preview.mime_type == 'application/octet-stream':
             if preview.orig_path is not None:
