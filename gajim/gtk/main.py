@@ -1061,6 +1061,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         last_message = app.storage.archive.get_last_conversation_line(
             account, jid)
+        if last_message is None:
+            return
+
         client = app.get_client(account)
         contact = client.get_module('Contacts').get_contact(jid)
         client.get_module('ChatMarkers').send_displayed_marker(
