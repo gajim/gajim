@@ -377,6 +377,16 @@ class ChatStack(Gtk.Stack, EventHelper):
         if not event.msgtxt or event.properties.is_sent_carbon:
             return
 
+        client = app.get_client(event.account)
+        contact = client.get_module('Contacts').get_contact(event.jid)
+        if isinstance(contact, GroupchatContact):
+            # MUC messages may be received after some delay, so make sure we
+            # don't issue notifications for our own messages.
+            self_contact = contact.get_self()
+            if (self_contact is not None and
+                    self_contact.name == event.properties.muc_nickname):
+                return
+
         if app.window.is_chat_active(event.account, event.jid):
             return
 
