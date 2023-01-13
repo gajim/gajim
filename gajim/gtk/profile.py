@@ -355,7 +355,6 @@ class ProfileWindow(Gtk.ApplicationWindow):
 
         self._new_avatar = Avatar()
         self._new_avatar.add_image_source(data, 'image/png', height, width)  # pyright: ignore  # noqa: E501
-        self._new_avatar = False
 
         scale = self.get_scale_factor()
         surface = app.app.avatar_storage.surface_from_filename(
