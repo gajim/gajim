@@ -17,6 +17,7 @@ from __future__ import annotations
 from typing import Any
 
 import logging
+import sys
 from pathlib import Path
 
 from gi.repository import Gdk
@@ -207,7 +208,15 @@ class AudioWidget(Gtk.Box):
             assert audioconvert is not None
             assert scaletempo is not None
             assert audioresample is not None
-            autoaudiosink.set_property('sync', False)
+
+            # On Windows the first fraction of an audio
+            # would not play if not synced.
+            # On Linux there can be a delay before playback starts with sync,
+            # which is however not the case on Windows.
+            if sys.platform == 'win32':
+                autoaudiosink.set_property('sync', True)
+            else:
+                autoaudiosink.set_property('sync', False)
 
             audio_sink.add(audioconvert)
             audio_sink.add(scaletempo)
