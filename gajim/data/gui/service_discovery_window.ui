@@ -11,7 +11,7 @@
   <object class="GtkWindow" id="service_discovery_window">
     <property name="can_focus">False</property>
     <property name="role">Service Discovery</property>
-    <property name="window_position">center-always</property>
+    <property name="window_position">center</property>
     <property name="default_width">550</property>
     <property name="default_height">550</property>
     <signal name="destroy" handler="_on_service_discovery_window_destroy" swapped="no"/>
