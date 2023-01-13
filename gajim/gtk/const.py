@@ -55,6 +55,8 @@ DEFAULT_WORKSPACE_COLOR = 'rgb(191,15,167)'
 # Drag and drop target type URI list (for dropped files)
 TARGET_TYPE_URI_LIST = 80
 
+MAX_MESSAGE_LENGTH = 5000
+
 
 @unique
 class Theme(IntEnum):

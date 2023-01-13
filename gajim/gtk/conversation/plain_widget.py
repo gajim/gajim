@@ -28,6 +28,7 @@ from gajim.common.styling import BaseHyperlink
 from gajim.common.styling import PlainBlock
 from gajim.common.styling import process_uris
 
+from gajim.gtk.const import MAX_MESSAGE_LENGTH
 from gajim.gtk.menus import get_conv_action_context_menu
 from gajim.gtk.menus import populate_uri_context_menu
 from gajim.gtk.util import make_pango_attributes
@@ -107,7 +108,7 @@ class MessageLabel(Gtk.Label):
         text = self._build_link_markup(block.text, block.uris)
         self.set_markup(text)
 
-        if len(self.get_text()) > 10000:
+        if len(self.get_text()) > MAX_MESSAGE_LENGTH:
             # Limit message styling processing
             return
 
