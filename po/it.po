@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2022-12-20 18:38+0000\n"
 "Last-Translator: pjammo <adrianoghr@hotmail.it>\n"
 "Language-Team: Italian <https://translate.gajim.org/projects/gajim/master/it/"
@@ -1442,6 +1442,10 @@ msgstr "Rifiuta invito"
 msgid "Decrease playback speed"
 msgstr "Riduci velocità riproduzione"
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "Connessione fallita"
+
 msgid "Default"
 msgstr "Predefinito"
 
@@ -1478,6 +1482,10 @@ msgstr "Elimina Tema"
 
 msgid "Deny"
 msgstr "Nega"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Richiesta Iscrizione"
 
 msgid "Description"
 msgstr "Descrizione"
@@ -1649,10 +1657,6 @@ msgstr "Mangio"
 
 msgid "Edit Name…"
 msgstr "Modifica nome…"
-
-#, fuzzy
-msgid "Edit Profile…"
-msgstr "Invio profilo…"
 
 #, fuzzy
 msgid "Edit workspace…"
@@ -2067,6 +2071,10 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "Da"
 
+#, fuzzy
+msgid "Full Message View"
+msgstr "Messaggio Inviato"
+
 msgid "Full Name"
 msgstr "Nome Completo"
 
@@ -2140,6 +2148,18 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Gajim sta per uscire"
 
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Nessun aggiornamento disponibile (ultimo controllo: %s)"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Aggiornamento disponibile"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "Funzione Disattivata nelle Preferenze"
+
 msgid "Gathering information…"
 msgstr "Raccolta informazioni…"
 
@@ -2209,7 +2229,8 @@ msgstr "La conversazione di gruppo può essere trovata tramite ricerca"
 msgid "Group chat does not exist"
 msgstr "La conversazione di gruppo non esiste"
 
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "La conversazione di gruppo è stata distrutta"
 
 msgid "Group chat is closed"
@@ -2530,6 +2551,9 @@ msgstr "Sto lavorando."
 
 msgid "JID"
 msgstr "JID"
+
+msgid "JPEG files"
+msgstr "File JPEG"
 
 msgid "Join"
 msgstr "Unisciti"
@@ -2948,14 +2972,6 @@ msgstr "Nessun risultato"
 msgid "No results found"
 msgstr "Nessun risultato trovato"
 
-#, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Nessun aggiornamento disponibile (ultimo controllo: %s)"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "Aggiornamento disponibile"
-
 msgid "Node"
 msgstr "Nodo"
 
@@ -3215,6 +3231,9 @@ msgstr "Il nodo PEP non è stato rimosso"
 msgid "PKCS12 Files"
 msgstr "File PKCS12"
 
+msgid "PNG files"
+msgstr "File PNG"
+
 msgid "Pa_use/Resume"
 msgstr "Pa_usa/Riprendi"
 
@@ -3413,6 +3432,14 @@ msgstr "Estensioni"
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Plugin fallito"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "Aggiornamento disponibile"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "Funzione Disattivata nelle Preferenze"
 
 msgid "Port"
 msgstr "Porta"
@@ -3871,6 +3898,9 @@ msgstr "Server STUN"
 
 msgid "STUN server to use when using Jingle"
 msgstr "Server STUN da usare per Jingle"
+
+msgid "SVG files"
+msgstr "File SVG"
 
 msgid "Sales"
 msgstr "Vendite"
@@ -5083,10 +5113,6 @@ msgid "Update available"
 msgstr "Aggiornamento disponibile"
 
 #, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "Funzione Disattivata nelle Preferenze"
-
-#, fuzzy
 msgid "Update plugins automatically"
 msgstr "Unisciti Automaticamente"
 
@@ -5516,6 +5542,9 @@ msgstr "File ZIP"
 
 msgid "ZZZZzzzzzZZZZZ"
 msgstr "ZZZZzzzzzZZZZZ"
+
+msgid "[read more]"
+msgstr ""
 
 msgid "_Abort"
 msgstr "_Interrompi"
@@ -6229,11 +6258,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Copy Location"
 #~ msgstr "Copia Posizione"
 
-#~ msgid "JPEG files"
-#~ msgstr "File JPEG"
-
-#~ msgid "PNG files"
-#~ msgstr "File PNG"
-
-#~ msgid "SVG files"
-#~ msgstr "File SVG"
+#, fuzzy
+#~ msgid "Edit Profile…"
+#~ msgstr "Invio profilo…"

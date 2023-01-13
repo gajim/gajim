@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -1651,6 +1651,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "התחברות נכשלה"
+
 msgid "Default"
 msgstr "ברירת מחדל"
 
@@ -1697,6 +1701,10 @@ msgstr "פעיל"
 
 msgid "Deny"
 msgstr "לאסור"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "בקשת הרשמה"
 
 msgid "Description"
 msgstr "תיאור"
@@ -1877,10 +1885,6 @@ msgstr "אוכל"
 #, fuzzy
 msgid "Edit Name…"
 msgstr "שם פרטי:"
-
-#, fuzzy
-msgid "Edit Profile…"
-msgstr "כעת שולח דיוקן..."
 
 #, fuzzy
 msgid "Edit workspace…"
@@ -2328,6 +2332,10 @@ msgid "From"
 msgstr "מן"
 
 #, fuzzy
+msgid "Full Message View"
+msgstr "הודעה נשלחה"
+
+#, fuzzy
 msgid "Full Name"
 msgstr "<b>שם מלא</b>"
 
@@ -2394,6 +2402,18 @@ msgstr ""
 #, fuzzy
 msgid "Gajim will now exit"
 msgstr "cli"
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "אין חשבון זמין"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "אין חשבון זמין"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "ערוך העדפות _ארכיונאות"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2479,8 +2499,8 @@ msgstr ""
 msgid "Group chat does not exist"
 msgstr "שיחת קבוצה <b>%s</b> לא קיימת."
 
-#, fuzzy
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "החדר הוחרב"
 
 #, fuzzy
@@ -2835,6 +2855,10 @@ msgstr "אני בעבודה."
 
 msgid "JID"
 msgstr "‏JID"
+
+#, fuzzy
+msgid "JPEG files"
+msgstr "כל הקבצים"
 
 #, fuzzy
 msgid "Join"
@@ -3288,14 +3312,6 @@ msgstr "אין תנובה"
 msgid "No results found"
 msgstr "אין תנובה"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "אין חשבון זמין"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "אין חשבון זמין"
-
 msgid "Node"
 msgstr "צומת"
 
@@ -3565,6 +3581,10 @@ msgid "PKCS12 Files"
 msgstr "קבצי PKCS12"
 
 #, fuzzy
+msgid "PNG files"
+msgstr "כל הקבצים"
+
+#, fuzzy
 msgid "Pa_use/Resume"
 msgstr "_חזור"
 
@@ -3768,6 +3788,14 @@ msgstr "תוספים"
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "כשל תוסף"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "אין חשבון זמין"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "ערוך העדפות _ארכיונאות"
 
 #, fuzzy
 msgid "Port"
@@ -4287,6 +4315,10 @@ msgstr "תוספים"
 #, fuzzy
 msgid "STUN server to use when using Jingle"
 msgstr "שרת STUN אשר ישמש אותך בעת שימוש בטכנולוגיית jingle"
+
+#, fuzzy
+msgid "SVG files"
+msgstr "שליחת קבצים"
 
 msgid "Sales"
 msgstr ""
@@ -5566,10 +5598,6 @@ msgstr "בחירת ארכיון"
 msgid "Update available"
 msgstr "אין חשבון זמין"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "ערוך העדפות _ארכיונאות"
-
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -6035,6 +6063,9 @@ msgid "ZIP files"
 msgstr "קבצי Zip"
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 msgid "_Abort"
@@ -6813,13 +6844,5 @@ msgstr ""
 #~ msgstr "ה_עתק מיקום קישור"
 
 #, fuzzy
-#~ msgid "JPEG files"
-#~ msgstr "כל הקבצים"
-
-#, fuzzy
-#~ msgid "PNG files"
-#~ msgstr "כל הקבצים"
-
-#, fuzzy
-#~ msgid "SVG files"
-#~ msgstr "שליחת קבצים"
+#~ msgid "Edit Profile…"
+#~ msgstr "כעת שולח דיוקן..."

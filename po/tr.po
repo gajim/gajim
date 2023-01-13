@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2022-01-13 21:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -1602,6 +1602,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "Bağlantı Kurulamıyor"
+
 msgid "Default"
 msgstr "Öntanımlı"
 
@@ -1645,6 +1649,10 @@ msgstr "Aktif"
 
 msgid "Deny"
 msgstr "Reddet"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Üyelik İsteği"
 
 msgid "Description"
 msgstr "Açıklama"
@@ -1821,10 +1829,6 @@ msgstr "Yemelik"
 #, fuzzy
 msgid "Edit Name…"
 msgstr "İlk Ad:"
-
-#, fuzzy
-msgid "Edit Profile…"
-msgstr "Profil gönderiliyor…"
 
 #, fuzzy
 msgid "Edit workspace…"
@@ -2251,6 +2255,10 @@ msgid "From"
 msgstr "Gönderen"
 
 #, fuzzy
+msgid "Full Message View"
+msgstr "Ileti alınıyor"
+
+#, fuzzy
 msgid "Full Name"
 msgstr "<b>Bütün isim</b>"
 
@@ -2315,6 +2323,18 @@ msgstr ""
 #, fuzzy
 msgid "Gajim will now exit"
 msgstr "Gajim'den gerçekten çıkılsın mı?"
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Hiç bir hesap bulunmiyor"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Hiç bir hesap bulunmiyor"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "Tercihler"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2401,8 +2421,8 @@ msgstr ""
 msgid "Group chat does not exist"
 msgstr "grup %s yok - root kullanılacak\n"
 
-#, fuzzy
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "Oda imha edildi"
 
 #, fuzzy
@@ -2730,6 +2750,10 @@ msgstr " Çalışılıyorum"
 
 msgid "JID"
 msgstr "JID"
+
+#, fuzzy
+msgid "JPEG files"
+msgstr "Tüm dosyalar"
 
 #, fuzzy
 msgid "Join"
@@ -3166,14 +3190,6 @@ msgstr "<b>Telefon numara:</b>"
 msgid "No results found"
 msgstr "<b>Telefon numara:</b>"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Hiç bir hesap bulunmiyor"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "Hiç bir hesap bulunmiyor"
-
 #, fuzzy
 msgid "Node"
 msgstr "Ağ Sil"
@@ -3444,6 +3460,10 @@ msgstr ""
 msgid "PKCS12 Files"
 msgstr ""
 
+#, fuzzy
+msgid "PNG files"
+msgstr "Tüm dosyalar"
+
 msgid "Pa_use/Resume"
 msgstr ""
 
@@ -3651,6 +3671,14 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Bağlantı Kurulamıyor"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "Hiç bir hesap bulunmiyor"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "Tercihler"
 
 #, fuzzy
 msgid "Port"
@@ -4149,6 +4177,10 @@ msgstr "Bağlantı Kurulamıyor"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
+
+#, fuzzy
+msgid "SVG files"
+msgstr "Gönder %s"
 
 msgid "Sales"
 msgstr ""
@@ -5395,10 +5427,6 @@ msgstr "Resim seç"
 msgid "Update available"
 msgstr "Hiç bir hesap bulunmiyor"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "Tercihler"
-
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5839,6 +5867,9 @@ msgid "ZIP files"
 msgstr "Tüm dosyalar"
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 msgid "_Abort"
@@ -6609,13 +6640,5 @@ msgstr ""
 #~ msgstr "Yer:"
 
 #, fuzzy
-#~ msgid "JPEG files"
-#~ msgstr "Tüm dosyalar"
-
-#, fuzzy
-#~ msgid "PNG files"
-#~ msgstr "Tüm dosyalar"
-
-#, fuzzy
-#~ msgid "SVG files"
-#~ msgstr "Gönder %s"
+#~ msgid "Edit Profile…"
+#~ msgstr "Profil gönderiliyor…"

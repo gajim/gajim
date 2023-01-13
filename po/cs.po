@@ -11,11 +11,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
-"PO-Revision-Date: 2023-01-02 18:40+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
+"PO-Revision-Date: 2023-01-08 14:46+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
-"Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/>"
-"\n"
+"Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
+">\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1408,6 +1408,10 @@ msgstr "Odmítnout pozvánku"
 msgid "Decrease playback speed"
 msgstr "Snížit rychlost přehrávání"
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "Připojení selhalo"
+
 msgid "Default"
 msgstr "Výchozí"
 
@@ -1443,6 +1447,10 @@ msgstr "Smazat motiv vzhledu"
 
 msgid "Deny"
 msgstr "Odmítnout"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Žádost o autorizaci"
 
 msgid "Description"
 msgstr "Popis"
@@ -1602,9 +1610,6 @@ msgstr "Jím"
 
 msgid "Edit Name…"
 msgstr "Upravit jméno…"
-
-msgid "Edit Profile…"
-msgstr "Upravit profil…"
 
 msgid "Edit workspace…"
 msgstr "Upravit pracovní plochu…"
@@ -1977,6 +1982,10 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "Od"
 
+#, fuzzy
+msgid "Full Message View"
+msgstr "Zpráva odeslána"
+
 msgid "Full Name"
 msgstr "Celé jméno"
 
@@ -2046,6 +2055,18 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Gajim se nyní ukončí"
 
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Nejsou dostupné žádné aktualizace (poslední kontrola: %s)"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Nejsou dostupné žádné aktualizace (poslední kontrola: nikdy)"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "Kontrola aktualizací je vypnuta"
+
 msgid "Gathering information…"
 msgstr "Získávám informace…"
 
@@ -2113,8 +2134,9 @@ msgstr "Skupinové konverzace mohou být nalezeny přes panel vyhledávání"
 msgid "Group chat does not exist"
 msgstr "Skupinová konverzace neexistuje"
 
-msgid "Group chat has been destroyed"
-msgstr "Skupinová konverzace byla odstraněna"
+#, python-format
+msgid "Group chat has been destroyed%s"
+msgstr "Skupinová konverzace byla odstraněna%s"
 
 msgid "Group chat is closed"
 msgstr "Skupinová konverzace je uzavřena"
@@ -2422,11 +2444,14 @@ msgstr "Pracuji."
 msgid "JID"
 msgstr "JID"
 
+msgid "JPEG files"
+msgstr "Soubory JPEG"
+
 msgid "Join"
 msgstr "Připojit se"
 
 msgid "Join Group Chat"
-msgstr "Připojit se do diskuze"
+msgstr "Připojit se do skupinové konverzace"
 
 msgid "Join Group Chat as…"
 msgstr "Připojit se do skupinové konverzace jako…"
@@ -2438,7 +2463,7 @@ msgid "Join Groupchat…"
 msgstr "Připojit se do skupinové konverzace…"
 
 msgid "Join Support Chat"
-msgstr "Připojit se do konverzac"
+msgstr "Hledat pomoc (konverzace)"
 
 msgid "Joining…"
 msgstr "Připojuji se…"
@@ -2808,13 +2833,6 @@ msgstr "Žádné výsledky"
 msgid "No results found"
 msgstr "Nebyly nalezeny žádné výsledky"
 
-#, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Nejsou dostupné žádné aktualizace (poslední kontrola: %s)"
-
-msgid "No updates available (last check: never)"
-msgstr "Nejsou dostupné žádné aktualizace (poslední kontrola: nikdy)"
-
 msgid "Node"
 msgstr "Uzel"
 
@@ -3051,6 +3069,9 @@ msgstr "PEP uzel nebyl smazán"
 msgid "PKCS12 Files"
 msgstr "Soubory PKCS12"
 
+msgid "PNG files"
+msgstr "Soubory PNG"
+
 msgid "Pa_use/Resume"
 msgstr "Pozastavit/Pokračovat"
 
@@ -3233,6 +3254,14 @@ msgstr "Zásuvné moduly"
 
 msgid "Plugins Updated Successfully"
 msgstr "Zásuvné moduly byly úspěšně aktualizovány"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "je dostupná aktualizace"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "Kontrola aktualizací je vypnuta"
 
 msgid "Port"
 msgstr "Port"
@@ -3657,6 +3686,9 @@ msgstr "Nastavení serveru STUN"
 
 msgid "STUN server to use when using Jingle"
 msgstr "STUN server pro použití s Jingle"
+
+msgid "SVG files"
+msgstr "Soubory SVG"
 
 msgid "Sales"
 msgstr "Prodeje"
@@ -4754,9 +4786,6 @@ msgstr "Aktualizovat automaticky"
 msgid "Update available"
 msgstr "je dostupná aktualizace"
 
-msgid "Update check disabled in preferences"
-msgstr "Kontrola aktualizací je vypnuta"
-
 msgid "Update plugins automatically"
 msgstr "Automaticky aktualizovat zásuvné moduly"
 
@@ -5155,6 +5184,9 @@ msgstr "Soubory ZIP"
 
 msgid "ZZZZzzzzzZZZZZ"
 msgstr "ZZZZzzzzzZZZZZ"
+
+msgid "[read more]"
+msgstr ""
 
 msgid "_Abort"
 msgstr "Zrušit"
@@ -5895,14 +5927,8 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Copy Location"
 #~ msgstr "_Kopírovat odkaz"
 
-#~ msgid "JPEG files"
-#~ msgstr "Soubory JPEG"
-
-#~ msgid "PNG files"
-#~ msgstr "Soubory PNG"
-
-#~ msgid "SVG files"
-#~ msgstr "Soubory SVG"
+#~ msgid "Edit Profile…"
+#~ msgstr "Upravit profil…"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Nahráli jste něco, co Gajim nemohl zpracovat: %s"

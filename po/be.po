@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -1594,6 +1594,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "Памылка злучэння"
+
 msgid "Default"
 msgstr "Прадвызначана"
 
@@ -1637,6 +1641,10 @@ msgstr "Актыўны"
 
 msgid "Deny"
 msgstr "Адмовіць"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Запыт падпіскі"
 
 msgid "Description"
 msgstr "Апісанне"
@@ -1820,10 +1828,6 @@ msgstr "Ежа"
 #, fuzzy
 msgid "Edit Name…"
 msgstr "Імя:"
-
-#, fuzzy
-msgid "Edit Profile…"
-msgstr "Адпраўленне профіля..."
 
 #, fuzzy
 msgid "Edit workspace…"
@@ -2254,6 +2258,10 @@ msgid "From"
 msgstr "Ад"
 
 #, fuzzy
+msgid "Full Message View"
+msgstr "Паведамленне адпраўленае"
+
+#, fuzzy
 msgid "Full Name"
 msgstr "<b>Адмысловы</b>"
 
@@ -2317,6 +2325,18 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim сканчвае работу"
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Рахункаў няма"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Рахункаў няма"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "_Настаўленні"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2401,8 +2421,8 @@ msgstr ""
 msgid "Group chat does not exist"
 msgstr "Такой групавой размовы няма."
 
-#, fuzzy
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "Аўтарызацыя забраная"
 
 #, fuzzy
@@ -2741,6 +2761,10 @@ msgstr "Працую."
 
 msgid "JID"
 msgstr "JID"
+
+#, fuzzy
+msgid "JPEG files"
+msgstr "Усе файлы"
 
 #, fuzzy
 msgid "Join"
@@ -3186,14 +3210,6 @@ msgstr "%s не знойдзены"
 msgid "No results found"
 msgstr "%s не знойдзены"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Рахункаў няма"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "Рахункаў няма"
-
 #, fuzzy
 msgid "Node"
 msgstr "Ніякі"
@@ -3464,6 +3480,10 @@ msgstr ""
 msgid "PKCS12 Files"
 msgstr ""
 
+#, fuzzy
+msgid "PNG files"
+msgstr "Усе файлы"
+
 msgid "Pa_use/Resume"
 msgstr ""
 
@@ -3668,6 +3688,14 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Памылка злучэння"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "Рахункаў няма"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "_Настаўленні"
 
 #, fuzzy
 msgid "Port"
@@ -4164,6 +4192,10 @@ msgstr "Памылка злучэння"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
+
+#, fuzzy
+msgid "SVG files"
+msgstr "Адправіць _файл"
 
 msgid "Sales"
 msgstr ""
@@ -5410,10 +5442,6 @@ msgstr "Выберыце малюнак"
 msgid "Update available"
 msgstr "Рахункаў няма"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "_Настаўленні"
-
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5858,6 +5886,9 @@ msgid "ZIP files"
 msgstr "Усе файлы"
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 msgid "_Abort"
@@ -6634,13 +6665,5 @@ msgstr ""
 #~ msgstr "_Скапіяваць адрас спасылкі"
 
 #, fuzzy
-#~ msgid "JPEG files"
-#~ msgstr "Усе файлы"
-
-#, fuzzy
-#~ msgid "PNG files"
-#~ msgstr "Усе файлы"
-
-#, fuzzy
-#~ msgid "SVG files"
-#~ msgstr "Адправіць _файл"
+#~ msgid "Edit Profile…"
+#~ msgstr "Адпраўленне профіля..."

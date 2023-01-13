@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -1573,6 +1573,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "Verbinding mislukt"
+
 msgid "Default"
 msgstr "Standaard"
 
@@ -1614,6 +1618,10 @@ msgstr "Thema verwijderen"
 
 msgid "Deny"
 msgstr "Weigeren"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Abonneringsverzoek"
 
 msgid "Description"
 msgstr "Beschrijving"
@@ -1795,10 +1803,6 @@ msgstr "Eten"
 #, fuzzy
 msgid "Edit Name…"
 msgstr "Voornaam"
-
-#, fuzzy
-msgid "Edit Profile…"
-msgstr "Profiel wordt verzonden…"
 
 #, fuzzy
 msgid "Edit workspace…"
@@ -2227,6 +2231,10 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "Van"
 
+#, fuzzy
+msgid "Full Message View"
+msgstr "Bericht verzonden"
+
 msgid "Full Name"
 msgstr "Volledige naam"
 
@@ -2299,6 +2307,18 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim sluit nu af"
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Geen account beschikbaar"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Geen account beschikbaar"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "Archiefvoorkeuren"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2381,8 +2401,8 @@ msgstr ""
 msgid "Group chat does not exist"
 msgstr "Groepsgesprek <b>%s</b> bestaat niet."
 
-#, fuzzy
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "Groepsgesprek is verwijderd"
 
 #, fuzzy
@@ -2727,6 +2747,9 @@ msgstr "Ik ben aan het werk."
 
 msgid "JID"
 msgstr "JID"
+
+msgid "JPEG files"
+msgstr "JPEG-bestanden"
 
 msgid "Join"
 msgstr "Lid worden"
@@ -3168,14 +3191,6 @@ msgstr "Geen resultaat"
 msgid "No results found"
 msgstr "Geen resultaten gevonden"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Geen account beschikbaar"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "Geen account beschikbaar"
-
 msgid "Node"
 msgstr "Knooppunt"
 
@@ -3445,6 +3460,9 @@ msgstr "PEP-knooppunt niet verwijderd"
 msgid "PKCS12 Files"
 msgstr "PKCS12-bestanden"
 
+msgid "PNG files"
+msgstr "PNG-bestanden"
+
 #, fuzzy
 msgid "Pa_use/Resume"
 msgstr "He_rvatten"
@@ -3643,6 +3661,14 @@ msgstr "Plug-ins"
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Updates voor plug-ins"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "Geen account beschikbaar"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "Archiefvoorkeuren"
 
 msgid "Port"
 msgstr "Poort"
@@ -4138,6 +4164,9 @@ msgstr "Plug-in-instellingen"
 
 msgid "STUN server to use when using Jingle"
 msgstr "Te gebruiken STUN-server bij gebruik van Jingle"
+
+msgid "SVG files"
+msgstr "SVG-bestanden"
 
 msgid "Sales"
 msgstr ""
@@ -5387,10 +5416,6 @@ msgstr "Avatar uploaden…"
 msgid "Update available"
 msgstr "Geen account beschikbaar"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "Archiefvoorkeuren"
-
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5844,6 +5869,9 @@ msgid "ZIP files"
 msgstr "ZIP-bestanden"
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 #, fuzzy
@@ -6602,11 +6630,6 @@ msgstr ""
 #~ msgid "Copy Location"
 #~ msgstr "Verwijzingslocatie kopiëren"
 
-#~ msgid "JPEG files"
-#~ msgstr "JPEG-bestanden"
-
-#~ msgid "PNG files"
-#~ msgstr "PNG-bestanden"
-
-#~ msgid "SVG files"
-#~ msgstr "SVG-bestanden"
+#, fuzzy
+#~ msgid "Edit Profile…"
+#~ msgstr "Profiel wordt verzonden…"

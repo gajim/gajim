@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -1597,6 +1597,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "Konektado malsukcesis"
+
 msgid "Default"
 msgstr "Defaŭlte"
 
@@ -1640,6 +1644,10 @@ msgstr "Aktiva"
 
 msgid "Deny"
 msgstr "Rifuzi"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Mendo de abono"
 
 msgid "Description"
 msgstr "Priskribo"
@@ -1819,10 +1827,6 @@ msgstr "Manĝas"
 #, fuzzy
 msgid "Edit Name…"
 msgstr "Nomo:"
-
-#, fuzzy
-msgid "Edit Profile…"
-msgstr "Publicas vizitkarton..."
 
 #, fuzzy
 msgid "Edit workspace…"
@@ -2251,6 +2255,10 @@ msgid "From"
 msgstr "De"
 
 #, fuzzy
+msgid "Full Message View"
+msgstr "Mesaĝo sendita"
+
+#, fuzzy
 msgid "Full Name"
 msgstr "<b>Propraj</b>"
 
@@ -2315,6 +2323,18 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim fermos tuj"
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Nedisponebla"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Nedisponebla"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "_Agordo"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2399,8 +2419,8 @@ msgstr ""
 msgid "Group chat does not exist"
 msgstr "Tiu babilejo ne ekzistas."
 
-#, fuzzy
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "Permeso estas forigita"
 
 #, fuzzy
@@ -2739,6 +2759,10 @@ msgstr "Mi laboras."
 
 msgid "JID"
 msgstr "JID"
+
+#, fuzzy
+msgid "JPEG files"
+msgstr "Ĉiuj dosieroj"
 
 #, fuzzy
 msgid "Join"
@@ -3182,14 +3206,6 @@ msgstr "%s ne trovitas"
 msgid "No results found"
 msgstr "%s ne trovitas"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Nedisponebla"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "Nedisponebla"
-
 #, fuzzy
 msgid "Node"
 msgstr "Neniu"
@@ -3460,6 +3476,10 @@ msgstr ""
 msgid "PKCS12 Files"
 msgstr ""
 
+#, fuzzy
+msgid "PNG files"
+msgstr "Ĉiuj dosieroj"
+
 msgid "Pa_use/Resume"
 msgstr ""
 
@@ -3664,6 +3684,14 @@ msgstr "Kromaĵoj"
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Konektado malsukcesis"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "Nedisponebla"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "_Agordo"
 
 #, fuzzy
 msgid "Port"
@@ -4162,6 +4190,10 @@ msgstr "Konektado malsukcesis"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
+
+#, fuzzy
+msgid "SVG files"
+msgstr "Sendi dosieron"
 
 msgid "Sales"
 msgstr ""
@@ -5409,10 +5441,6 @@ msgstr "Nedisponebla"
 msgid "Update available"
 msgstr "Nedisponebla"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "_Agordo"
-
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5856,6 +5884,9 @@ msgid "ZIP files"
 msgstr "Ĉiuj dosieroj"
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 msgid "_Abort"
@@ -6628,13 +6659,5 @@ msgstr ""
 #~ msgstr "_Kopii ligilan lokon"
 
 #, fuzzy
-#~ msgid "JPEG files"
-#~ msgstr "Ĉiuj dosieroj"
-
-#, fuzzy
-#~ msgid "PNG files"
-#~ msgstr "Ĉiuj dosieroj"
-
-#, fuzzy
-#~ msgid "SVG files"
-#~ msgstr "Sendi dosieron"
+#~ msgid "Edit Profile…"
+#~ msgstr "Publicas vizitkarton..."

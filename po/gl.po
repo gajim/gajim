@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2009-08-19 23:51+0200\n"
 "Last-Translator: Iván Méndez López <>\n"
 "Language-Team:  <softwarelibre@udc.es>\n"
@@ -1600,6 +1600,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "Fallou a conexión"
+
 msgid "Default"
 msgstr "Por defecto"
 
@@ -1643,6 +1647,10 @@ msgstr "Activo"
 
 msgid "Deny"
 msgstr "Denegar"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Solicitude de subscrición"
 
 msgid "Description"
 msgstr "Descrición"
@@ -1822,10 +1830,6 @@ msgstr "A comer"
 #, fuzzy
 msgid "Edit Name…"
 msgstr "Nome:"
-
-#, fuzzy
-msgid "Edit Profile…"
-msgstr "A enviar o perfil..."
 
 #, fuzzy
 msgid "Edit workspace…"
@@ -2256,6 +2260,10 @@ msgid "From"
 msgstr "De"
 
 #, fuzzy
+msgid "Full Message View"
+msgstr "Enviouse a mensaxe"
+
+#, fuzzy
 msgid "Full Name"
 msgstr "<b>Personalizado</b>"
 
@@ -2319,6 +2327,18 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim pecharase agora"
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "A conta non está dispoñíbel"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "A conta non está dispoñíbel"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "_Preferencias"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2403,8 +2423,8 @@ msgstr ""
 msgid "Group chat does not exist"
 msgstr "Non existe o grupo de charla."
 
-#, fuzzy
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "Eliminouse a autorización"
 
 #, fuzzy
@@ -2743,6 +2763,10 @@ msgstr "Estou a traballar."
 
 msgid "JID"
 msgstr "JID"
+
+#, fuzzy
+msgid "JPEG files"
+msgstr "Todos os ficheiros"
 
 #, fuzzy
 msgid "Join"
@@ -3188,14 +3212,6 @@ msgstr "Non se encontrou %s"
 msgid "No results found"
 msgstr "Non se encontrou %s"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "A conta non está dispoñíbel"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "A conta non está dispoñíbel"
-
 #, fuzzy
 msgid "Node"
 msgstr "Ningún"
@@ -3466,6 +3482,10 @@ msgstr ""
 msgid "PKCS12 Files"
 msgstr ""
 
+#, fuzzy
+msgid "PNG files"
+msgstr "Todos os ficheiros"
+
 msgid "Pa_use/Resume"
 msgstr ""
 
@@ -3670,6 +3690,14 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Fallou a conexión"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "A conta non está dispoñíbel"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "_Preferencias"
 
 #, fuzzy
 msgid "Port"
@@ -4165,6 +4193,10 @@ msgstr "Fallou a conexión"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
+
+#, fuzzy
+msgid "SVG files"
+msgstr "Enviar ficheiro"
 
 msgid "Sales"
 msgstr ""
@@ -5415,10 +5447,6 @@ msgstr "Elixir unha imaxe"
 msgid "Update available"
 msgstr "A conta non está dispoñíbel"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "_Preferencias"
-
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5861,6 +5889,9 @@ msgid "ZIP files"
 msgstr "Todos os ficheiros"
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 msgid "_Abort"
@@ -6638,13 +6669,5 @@ msgstr ""
 #~ msgstr "_Copiar o enderezo da ligazón"
 
 #, fuzzy
-#~ msgid "JPEG files"
-#~ msgstr "Todos os ficheiros"
-
-#, fuzzy
-#~ msgid "PNG files"
-#~ msgstr "Todos os ficheiros"
-
-#, fuzzy
-#~ msgid "SVG files"
-#~ msgstr "Enviar ficheiro"
+#~ msgid "Edit Profile…"
+#~ msgstr "A enviar o perfil..."

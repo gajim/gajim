@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -1600,6 +1600,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "Konexioak huts egin du"
+
 msgid "Default"
 msgstr "Berezkoa"
 
@@ -1643,6 +1647,10 @@ msgstr "Aktibatuta"
 
 msgid "Deny"
 msgstr "Ukatu"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Harpidetza Eskaria"
 
 msgid "Description"
 msgstr "Deskribapena"
@@ -1822,10 +1830,6 @@ msgstr "Jaten"
 #, fuzzy
 msgid "Edit Name…"
 msgstr "Lehen Izena:"
-
-#, fuzzy
-msgid "Edit Profile…"
-msgstr "Profila bidaltzen..."
 
 #, fuzzy
 msgid "Edit workspace…"
@@ -2256,6 +2260,10 @@ msgid "From"
 msgstr "-etik"
 
 #, fuzzy
+msgid "Full Message View"
+msgstr "Mezua Bidaltzean"
+
+#, fuzzy
 msgid "Full Name"
 msgstr "<b>Bezeroak</b>"
 
@@ -2319,6 +2327,18 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim orain badago"
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Ez dago konturik erabilgarri"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Ez dago konturik erabilgarri"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "_Hobespenak"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2403,8 +2423,8 @@ msgstr ""
 msgid "Group chat does not exist"
 msgstr "Honako gela honek ez du existitzen."
 
-#, fuzzy
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "Autorizazioa ezabatua izan da."
 
 #, fuzzy
@@ -2743,6 +2763,10 @@ msgstr "Lanean ari naiz."
 
 msgid "JID"
 msgstr "JID"
+
+#, fuzzy
+msgid "JPEG files"
+msgstr "Fitxategi guztiak"
 
 #, fuzzy
 msgid "Join"
@@ -3186,14 +3210,6 @@ msgstr "%s ez da aurkitu"
 msgid "No results found"
 msgstr "%s ez da aurkitu"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Ez dago konturik erabilgarri"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "Ez dago konturik erabilgarri"
-
 #, fuzzy
 msgid "Node"
 msgstr "Ezer ez"
@@ -3464,6 +3480,10 @@ msgstr ""
 msgid "PKCS12 Files"
 msgstr ""
 
+#, fuzzy
+msgid "PNG files"
+msgstr "Fitxategi guztiak"
+
 msgid "Pa_use/Resume"
 msgstr ""
 
@@ -3668,6 +3688,14 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Konexioak huts egin du"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "Ez dago konturik erabilgarri"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "_Hobespenak"
 
 #, fuzzy
 msgid "Port"
@@ -4166,6 +4194,10 @@ msgstr "Konexioak huts egin du"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
+
+#, fuzzy
+msgid "SVG files"
+msgstr "Bidali _Fitxeroa"
 
 msgid "Sales"
 msgstr ""
@@ -5415,10 +5447,6 @@ msgstr "Aukeratu Irudia"
 msgid "Update available"
 msgstr "Ez dago konturik erabilgarri"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "_Hobespenak"
-
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5862,6 +5890,9 @@ msgid "ZIP files"
 msgstr "Fitxategi guztiak"
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 msgid "_Abort"
@@ -6639,13 +6670,5 @@ msgstr ""
 #~ msgstr "_Lotura kokapena kopiatu"
 
 #, fuzzy
-#~ msgid "JPEG files"
-#~ msgstr "Fitxategi guztiak"
-
-#, fuzzy
-#~ msgid "PNG files"
-#~ msgstr "Fitxategi guztiak"
-
-#, fuzzy
-#~ msgid "SVG files"
-#~ msgstr "Bidali _Fitxeroa"
+#~ msgid "Edit Profile…"
+#~ msgstr "Profila bidaltzen..."

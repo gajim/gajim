@@ -7,13 +7,13 @@
 # SAIHAZE <saihaze@outlook.com>, 2022.
 # Tommy He <lovenemesis@gmail.com>, 2022.
 # andy baker <andy.baker@dismail.de>, 2022.
-# Bob Huang (Ziyan Huang) <bc3104hzy@126.com>, 2022.
+# Bob Huang (Ziyan Huang) <bc3104hzy@126.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
-"PO-Revision-Date: 2022-12-13 18:39+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
+"PO-Revision-Date: 2023-01-13 08:48+0000\n"
 "Last-Translator: Bob Huang (Ziyan Huang) <bc3104hzy@126.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
 "gajim/master/zh_Hans/>\n"
@@ -1389,6 +1389,9 @@ msgstr "拒绝邀请"
 msgid "Decrease playback speed"
 msgstr "降低播放速度"
 
+msgid "Decryption failed"
+msgstr "解密失败"
+
 msgid "Default"
 msgstr "默认"
 
@@ -1424,6 +1427,9 @@ msgstr "删除主题"
 
 msgid "Deny"
 msgstr "拒绝"
+
+msgid "Deny all subscription requests"
+msgstr "拒绝所有订阅请求"
 
 msgid "Description"
 msgstr "描述"
@@ -1580,9 +1586,6 @@ msgstr "用餐中"
 
 msgid "Edit Name…"
 msgstr "编辑名称…"
-
-msgid "Edit Profile…"
-msgstr "编辑简介…"
 
 msgid "Edit workspace…"
 msgstr "编辑工作区…"
@@ -1953,6 +1956,10 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "从"
 
+#, fuzzy
+msgid "Full Message View"
+msgstr "消息已发送"
+
 msgid "Full Name"
 msgstr "全名"
 
@@ -2016,6 +2023,16 @@ msgstr "Gajim 无法访问服务器。请确保您的 XMPP 地址正确无误。
 
 msgid "Gajim will now exit"
 msgstr "Gajim 即将退出"
+
+#, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Gajim: 没有可用的更新 (上一次检查: %s)"
+
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Gajim: 没有可用的更新 (上一次检查: 从未)"
+
+msgid "Gajim: Update check disabled in preferences"
+msgstr "Gajim: 更新检查在首选项中被禁用"
 
 msgid "Gathering information…"
 msgstr "获取信息…"
@@ -2084,7 +2101,8 @@ msgstr "群聊可通过搜索找到"
 msgid "Group chat does not exist"
 msgstr "群聊不存在"
 
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "群聊已被解散"
 
 msgid "Group chat is closed"
@@ -2385,6 +2403,9 @@ msgstr "我正在工作。"
 
 msgid "JID"
 msgstr "JID"
+
+msgid "JPEG files"
+msgstr "JPEG 文件"
 
 msgid "Join"
 msgstr "加入"
@@ -2769,13 +2790,6 @@ msgstr "没有结果"
 msgid "No results found"
 msgstr "没有找到结果"
 
-#, python-format
-msgid "No updates available (last check: %s)"
-msgstr "没有可用的更新 (上一次检查: %s)"
-
-msgid "No updates available (last check: never)"
-msgstr "没有可用的更新 (上一次检查: 从未)"
-
 msgid "Node"
 msgstr "节点"
 
@@ -3012,6 +3026,9 @@ msgstr "PEP 节点没有被移除"
 msgid "PKCS12 Files"
 msgstr "PKCS12 文件"
 
+msgid "PNG files"
+msgstr "PNG 文件"
+
 msgid "Pa_use/Resume"
 msgstr "暂停 (_U)/继续"
 
@@ -3191,6 +3208,12 @@ msgstr "插件"
 
 msgid "Plugins Updated Successfully"
 msgstr "插件已更新成功"
+
+msgid "Plugins: No updates available"
+msgstr "插件: 无可用的更新"
+
+msgid "Plugins: Update check disabled in preferences"
+msgstr "插件: 更新检查在首选项中被禁用"
 
 msgid "Port"
 msgstr "端口"
@@ -3610,6 +3633,9 @@ msgstr "STUN 服务器设定"
 
 msgid "STUN server to use when using Jingle"
 msgstr "在使用 Jingle 时使用的 STUN 服务器"
+
+msgid "SVG files"
+msgstr "SVG 文件"
 
 msgid "Sales"
 msgstr "销售"
@@ -4689,9 +4715,6 @@ msgstr "自动更新"
 msgid "Update available"
 msgstr "有可用的更新"
 
-msgid "Update check disabled in preferences"
-msgstr "更新检查在首选项中被禁用"
-
 msgid "Update plugins automatically"
 msgstr "自动更新插件"
 
@@ -5086,6 +5109,9 @@ msgstr "Zip 文件"
 
 msgid "ZZZZzzzzzZZZZZ"
 msgstr "ZZZZzzzzzZZZZZ"
+
+msgid "[read more]"
+msgstr ""
 
 msgid "_Abort"
 msgstr "中止 (_A)"
@@ -5788,14 +5814,8 @@ msgstr "或者把图像拖放到这里"
 #~ msgid "Copy Location"
 #~ msgstr "复制位置"
 
-#~ msgid "JPEG files"
-#~ msgstr "JPEG 文件"
-
-#~ msgid "PNG files"
-#~ msgstr "PNG 文件"
-
-#~ msgid "SVG files"
-#~ msgstr "SVG 文件"
+#~ msgid "Edit Profile…"
+#~ msgstr "编辑简介…"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "您拖放了 Gajim 无法处理的对象: %s"

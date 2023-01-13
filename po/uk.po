@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2022-07-18 19:52+0000\n"
 "Last-Translator: Volodymyr Smoliar <v_2e@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -1445,6 +1445,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "Спроба з’єднання завершилася невдало"
+
 msgid "Default"
 msgstr "Типовий"
 
@@ -1481,6 +1485,10 @@ msgstr "Видалити тему"
 
 msgid "Deny"
 msgstr "Відмовити"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Запит на підписку"
 
 msgid "Description"
 msgstr "Опис"
@@ -1643,9 +1651,6 @@ msgstr "Їм"
 
 msgid "Edit Name…"
 msgstr "Змінити ім'я…"
-
-msgid "Edit Profile…"
-msgstr "Змінити профіль…"
 
 msgid "Edit workspace…"
 msgstr "Редагувати робочий простір…"
@@ -2040,6 +2045,10 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "Від"
 
+#, fuzzy
+msgid "Full Message View"
+msgstr "Повідомлення надіслано"
+
 msgid "Full Name"
 msgstr "Повне ім'я"
 
@@ -2102,6 +2111,18 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Зараз Gajim завершить роботу"
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Немає жодного облікового запису"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Немає жодного облікового запису"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "Вимкнено в налаштуваннях"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2185,8 +2206,8 @@ msgstr ""
 msgid "Group chat does not exist"
 msgstr "Групової балачки не існує."
 
-#, fuzzy
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "Кімнату було знищено"
 
 #, fuzzy
@@ -2536,6 +2557,10 @@ msgstr "Я працюю."
 
 msgid "JID"
 msgstr "JID"
+
+#, fuzzy
+msgid "JPEG files"
+msgstr "Всі файли"
 
 #, fuzzy
 msgid "Join"
@@ -2981,14 +3006,6 @@ msgstr "Результату немає"
 msgid "No results found"
 msgstr "Результату немає"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Немає жодного облікового запису"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "Немає жодного облікового запису"
-
 msgid "Node"
 msgstr "Вузол"
 
@@ -3259,6 +3276,10 @@ msgid "PKCS12 Files"
 msgstr "Файли PKCS12"
 
 #, fuzzy
+msgid "PNG files"
+msgstr "Всі файли"
+
+#, fuzzy
 msgid "Pa_use/Resume"
 msgstr "_Продовжити"
 
@@ -3462,6 +3483,14 @@ msgstr "Додатки"
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Активація додатка невдалаДодаток"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "Немає жодного облікового запису"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "Вимкнено в налаштуваннях"
 
 #, fuzzy
 msgid "Port"
@@ -3963,6 +3992,10 @@ msgstr "Додатки"
 #, fuzzy
 msgid "STUN server to use when using Jingle"
 msgstr "Сервер STUN для використання з Jingle"
+
+#, fuzzy
+msgid "SVG files"
+msgstr "Надіслати _файли"
 
 msgid "Sales"
 msgstr ""
@@ -5214,10 +5247,6 @@ msgstr "Вивантажити аватар…"
 msgid "Update available"
 msgstr "Немає жодного облікового запису"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "Вимкнено в налаштуваннях"
-
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5667,6 +5696,9 @@ msgid "ZIP files"
 msgstr "Файли ZIP"
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 msgid "_Abort"
@@ -6453,14 +6485,5 @@ msgstr ""
 #~ msgid "Copy Location"
 #~ msgstr "Копіювати місцезнаходження"
 
-#, fuzzy
-#~ msgid "JPEG files"
-#~ msgstr "Всі файли"
-
-#, fuzzy
-#~ msgid "PNG files"
-#~ msgstr "Всі файли"
-
-#, fuzzy
-#~ msgid "SVG files"
-#~ msgstr "Надіслати _файли"
+#~ msgid "Edit Profile…"
+#~ msgstr "Змінити профіль…"

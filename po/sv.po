@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2009-10-29 10:21+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -1611,6 +1611,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "Anslutningsfel"
+
 msgid "Default"
 msgstr "Standard"
 
@@ -1654,6 +1658,10 @@ msgstr "Aktiv"
 
 msgid "Deny"
 msgstr "Neka"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Prenumerationsbegäran"
 
 msgid "Description"
 msgstr "Beskrivning"
@@ -1836,10 +1844,6 @@ msgstr "Äter"
 #, fuzzy
 msgid "Edit Name…"
 msgstr "Förnamn:"
-
-#, fuzzy
-msgid "Edit Profile…"
-msgstr "Skickar profil..."
 
 #, fuzzy
 msgid "Edit workspace…"
@@ -2266,6 +2270,10 @@ msgid "From"
 msgstr "Från"
 
 #, fuzzy
+msgid "Full Message View"
+msgstr "Meddelande skickat"
+
+#, fuzzy
 msgid "Full Name"
 msgstr "<b>Fullständigt namn</b>"
 
@@ -2329,6 +2337,18 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim kommer nu att avslutas"
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Inget konto tillgängligt"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Inget konto tillgängligt"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "_Inställningar"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2413,8 +2433,8 @@ msgstr ""
 msgid "Group chat does not exist"
 msgstr "Gruppchatten %s finns inte."
 
-#, fuzzy
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "Auktorisering har tagits bort"
 
 #, fuzzy
@@ -2748,6 +2768,10 @@ msgstr "Jag arbetar."
 
 msgid "JID"
 msgstr "JID"
+
+#, fuzzy
+msgid "JPEG files"
+msgstr "Alla filer"
 
 #, fuzzy
 msgid "Join"
@@ -3193,14 +3217,6 @@ msgstr "Inga resultat"
 msgid "No results found"
 msgstr "Inga resultat"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Inget konto tillgängligt"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "Inget konto tillgängligt"
-
 msgid "Node"
 msgstr "Nod"
 
@@ -3469,6 +3485,10 @@ msgstr "PEP-noden togs inte bort"
 msgid "PKCS12 Files"
 msgstr ""
 
+#, fuzzy
+msgid "PNG files"
+msgstr "Alla filer"
+
 msgid "Pa_use/Resume"
 msgstr ""
 
@@ -3674,6 +3694,14 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Registreringen misslyckades"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "Inget konto tillgängligt"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "_Inställningar"
 
 #, fuzzy
 msgid "Port"
@@ -4175,6 +4203,10 @@ msgstr "Registreringen misslyckades"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
+
+#, fuzzy
+msgid "SVG files"
+msgstr "Skicka fil"
 
 msgid "Sales"
 msgstr ""
@@ -5423,10 +5455,6 @@ msgstr "Välj Bild"
 msgid "Update available"
 msgstr "Inget konto tillgängligt"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "_Inställningar"
-
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5874,6 +5902,9 @@ msgid "ZIP files"
 msgstr "Alla filer"
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 msgid "_Abort"
@@ -6654,13 +6685,5 @@ msgstr ""
 #~ msgstr "_Kopiera länkplats"
 
 #, fuzzy
-#~ msgid "JPEG files"
-#~ msgstr "Alla filer"
-
-#, fuzzy
-#~ msgid "PNG files"
-#~ msgstr "Alla filer"
-
-#, fuzzy
-#~ msgid "SVG files"
-#~ msgstr "Skicka fil"
+#~ msgid "Edit Profile…"
+#~ msgstr "Skickar profil..."

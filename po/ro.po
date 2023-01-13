@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2022-12-29 22:46+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -1418,6 +1418,10 @@ msgstr "Declinarea invitației"
 msgid "Decrease playback speed"
 msgstr "Reduceți viteza de redare"
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "Conexiunea a eșuat"
+
 msgid "Default"
 msgstr "Implicit"
 
@@ -1453,6 +1457,10 @@ msgstr "Ștergeți tema"
 
 msgid "Deny"
 msgstr "Refuzați"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Cerere de abonament"
 
 msgid "Description"
 msgstr "Descriere"
@@ -1616,9 +1624,6 @@ msgstr "Mâncând"
 
 msgid "Edit Name…"
 msgstr "Editați numele…"
-
-msgid "Edit Profile…"
-msgstr "Editați profilurile…"
 
 msgid "Edit workspace…"
 msgstr "Editați spațiul de lucru…"
@@ -1998,6 +2003,10 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "De la"
 
+#, fuzzy
+msgid "Full Message View"
+msgstr "Mesaj trimis"
+
 msgid "Full Name"
 msgstr "Nume și prenume"
 
@@ -2067,6 +2076,18 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Gajim va ieși acum"
 
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Fără actualizări disponibile (ultima verificare: %s)"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Nu există actualizări disponibile (ultima verificare: niciodată)"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "Verificarea actualizării este dezactivată în preferințe"
+
 msgid "Gathering information…"
 msgstr "Culegerea de informații…"
 
@@ -2134,7 +2155,8 @@ msgstr "Chat-ul de grup poate fi găsit prin căutare"
 msgid "Group chat does not exist"
 msgstr "Grupul de chat nu există"
 
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "Grupul de chat a fost distrus"
 
 msgid "Group chat is closed"
@@ -2447,6 +2469,9 @@ msgstr "Lucrez."
 
 msgid "JID"
 msgstr "JID"
+
+msgid "JPEG files"
+msgstr "Fișiere JPEG"
 
 msgid "Join"
 msgstr "Alăturați-vă"
@@ -2838,13 +2863,6 @@ msgstr "Nu există rezultate"
 msgid "No results found"
 msgstr "Nu s-au găsit rezultate"
 
-#, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Fără actualizări disponibile (ultima verificare: %s)"
-
-msgid "No updates available (last check: never)"
-msgstr "Nu există actualizări disponibile (ultima verificare: niciodată)"
-
 msgid "Node"
 msgstr "Nod"
 
@@ -3081,6 +3099,9 @@ msgstr "Nodul PEP nu a fost îndepărtat"
 msgid "PKCS12 Files"
 msgstr "Fișiere PKCS12"
 
+msgid "PNG files"
+msgstr "Fișiere PNG"
+
 msgid "Pa_use/Resume"
 msgstr "Pa_use/Rezumat"
 
@@ -3265,6 +3286,14 @@ msgstr "Plugin-uri"
 
 msgid "Plugins Updated Successfully"
 msgstr "Plugin-uri actualizate cu succes"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "Actualizare disponibilă"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "Verificarea actualizării este dezactivată în preferințe"
 
 msgid "Port"
 msgstr "Portul"
@@ -3690,6 +3719,9 @@ msgstr "Setări ale serverului STUN"
 
 msgid "STUN server to use when using Jingle"
 msgstr "Serverul STUN care trebuie utilizat atunci când se utilizează Jingle"
+
+msgid "SVG files"
+msgstr "Fișiere SVG"
 
 msgid "Sales"
 msgstr "Vânzări"
@@ -4810,9 +4842,6 @@ msgstr "Actualizare automată"
 msgid "Update available"
 msgstr "Actualizare disponibilă"
 
-msgid "Update check disabled in preferences"
-msgstr "Verificarea actualizării este dezactivată în preferințe"
-
 msgid "Update plugins automatically"
 msgstr "Actualizarea automată a plugin-urilor"
 
@@ -5220,6 +5249,9 @@ msgstr "Fișiere ZIP"
 
 msgid "ZZZZzzzzzZZZZZ"
 msgstr "ZîZîZîZîzîzîzîzîzîZîZîZîZîZ"
+
+msgid "[read more]"
+msgstr ""
 
 msgid "_Abort"
 msgstr "_Abandonați"
@@ -5921,14 +5953,8 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Copy Location"
 #~ msgstr "Copiați locația"
 
-#~ msgid "JPEG files"
-#~ msgstr "Fișiere JPEG"
-
-#~ msgid "PNG files"
-#~ msgstr "Fișiere PNG"
-
-#~ msgid "SVG files"
-#~ msgstr "Fișiere SVG"
+#~ msgid "Edit Profile…"
+#~ msgstr "Editați profilurile…"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Ai pierdut ceva ce Gajim nu a putut procesa: %s"

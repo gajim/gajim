@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -1604,6 +1604,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "連線失敗"
+
 msgid "Default"
 msgstr "預設"
 
@@ -1647,6 +1651,10 @@ msgstr "活動"
 
 msgid "Deny"
 msgstr "拒絕"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "認證請求"
 
 msgid "Description"
 msgstr "描述"
@@ -1825,10 +1833,6 @@ msgstr "吃東西"
 #, fuzzy
 msgid "Edit Name…"
 msgstr "名稱:"
-
-#, fuzzy
-msgid "Edit Profile…"
-msgstr "傳送側寫…"
 
 #, fuzzy
 msgid "Edit workspace…"
@@ -2262,6 +2266,10 @@ msgid "From"
 msgstr "From"
 
 #, fuzzy
+msgid "Full Message View"
+msgstr "訊息已傳送"
+
+#, fuzzy
 msgid "Full Name"
 msgstr "<b>全名稱</b>"
 
@@ -2325,6 +2333,18 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim 即將離開"
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "沒有有效帳號"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "沒有有效帳號"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "編輯存檔偏好設定(_V)"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2409,8 +2429,8 @@ msgstr ""
 msgid "Group chat does not exist"
 msgstr "多人聊天 <b>%s</b> 不存在。"
 
-#, fuzzy
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "聊天室已經被銷毀了"
 
 #, fuzzy
@@ -2751,6 +2771,10 @@ msgstr "我正在工作。"
 
 msgid "JID"
 msgstr "JID"
+
+#, fuzzy
+msgid "JPEG files"
+msgstr "所有檔案"
 
 #, fuzzy
 msgid "Join"
@@ -3194,14 +3218,6 @@ msgstr "無結果"
 msgid "No results found"
 msgstr "無結果"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "沒有有效帳號"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "沒有有效帳號"
-
 msgid "Node"
 msgstr "節點"
 
@@ -3470,6 +3486,10 @@ msgid "PKCS12 Files"
 msgstr "PKCS12 檔案"
 
 #, fuzzy
+msgid "PNG files"
+msgstr "所有檔案"
+
+#, fuzzy
 msgid "Pa_use/Resume"
 msgstr "再續(_R)"
 
@@ -3673,6 +3693,14 @@ msgstr "外掛程式"
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "外掛程式失敗"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "沒有有效帳號"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "編輯存檔偏好設定(_V)"
 
 #, fuzzy
 msgid "Port"
@@ -4172,6 +4200,10 @@ msgstr "外掛程式"
 #, fuzzy
 msgid "STUN server to use when using Jingle"
 msgstr "在使用 jingle 時使用的 STUN 伺服器"
+
+#, fuzzy
+msgid "SVG files"
+msgstr "傳送檔案(_F)"
 
 msgid "Sales"
 msgstr ""
@@ -5416,10 +5448,6 @@ msgstr "選擇歸檔檔案"
 msgid "Update available"
 msgstr "沒有有效帳號"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "編輯存檔偏好設定(_V)"
-
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5863,6 +5891,9 @@ msgid "ZIP files"
 msgstr "Zip 檔案"
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 msgid "_Abort"
@@ -6637,13 +6668,5 @@ msgstr ""
 #~ msgstr "複製連結位置(_C)"
 
 #, fuzzy
-#~ msgid "JPEG files"
-#~ msgstr "所有檔案"
-
-#, fuzzy
-#~ msgid "PNG files"
-#~ msgstr "所有檔案"
-
-#, fuzzy
-#~ msgid "SVG files"
-#~ msgstr "傳送檔案(_F)"
+#~ msgid "Edit Profile…"
+#~ msgstr "傳送側寫…"

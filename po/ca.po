@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1522,6 +1522,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "_No Disponible"
+
 msgid "Default"
 msgstr ""
 
@@ -1562,6 +1566,9 @@ msgid "Delete Theme"
 msgstr "Activa"
 
 msgid "Deny"
+msgstr ""
+
+msgid "Deny all subscription requests"
 msgstr ""
 
 msgid "Description"
@@ -1729,10 +1736,6 @@ msgstr ""
 #, fuzzy
 msgid "Edit Name…"
 msgstr "Nom:"
-
-#, fuzzy
-msgid "Edit Profile…"
-msgstr "Perfil"
 
 msgid "Edit workspace…"
 msgstr ""
@@ -2137,6 +2140,10 @@ msgid "From"
 msgstr ""
 
 #, fuzzy
+msgid "Full Message View"
+msgstr "Envia Missatge Privat"
+
+#, fuzzy
 msgid "Full Name"
 msgstr "Nom:"
 
@@ -2198,6 +2205,18 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Transferència de Fitxers"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Transferència de Fitxers"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "Preferències"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2280,8 +2299,8 @@ msgstr ""
 msgid "Group chat does not exist"
 msgstr "Grups de xat"
 
-#, fuzzy
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "Grups de xat"
 
 #, fuzzy
@@ -2600,6 +2619,10 @@ msgstr ""
 
 msgid "JID"
 msgstr ""
+
+#, fuzzy
+msgid "JPEG files"
+msgstr "Perfil"
 
 msgid "Join"
 msgstr ""
@@ -3018,14 +3041,6 @@ msgstr "Grups de xat"
 msgid "No results found"
 msgstr "Grups de xat"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Transferència de Fitxers"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "Transferència de Fitxers"
-
 msgid "Node"
 msgstr ""
 
@@ -3287,6 +3302,10 @@ msgstr ""
 msgid "PKCS12 Files"
 msgstr ""
 
+#, fuzzy
+msgid "PNG files"
+msgstr "Perfil"
+
 msgid "Pa_use/Resume"
 msgstr ""
 
@@ -3481,6 +3500,14 @@ msgstr "Connectors"
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Connectors"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "Transferència de Fitxers"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "Preferències"
 
 #, fuzzy
 msgid "Port"
@@ -3959,6 +3986,10 @@ msgstr "Connectors"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
+
+#, fuzzy
+msgid "SVG files"
+msgstr "Perfil"
 
 msgid "Sales"
 msgstr ""
@@ -5137,10 +5168,6 @@ msgstr "Esborra"
 msgid "Update available"
 msgstr "Transferència de Fitxers"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "Preferències"
-
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5558,6 +5585,9 @@ msgid "ZIP files"
 msgstr "Perfil"
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 msgid "_Abort"
@@ -6245,5 +6275,5 @@ msgstr ""
 #~ msgstr "?user status:_Disponible"
 
 #, fuzzy
-#~ msgid "PNG files"
+#~ msgid "Edit Profile…"
 #~ msgstr "Perfil"

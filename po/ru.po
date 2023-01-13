@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2023-01-05 11:03+0000\n"
 "Last-Translator: Nikolay Chizhov <admin@kgd.in>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -1012,7 +1012,8 @@ msgid "Chats"
 msgstr "Чаты"
 
 msgid "Chats from this account will use this workspace by default"
-msgstr "Чаты из этой учетной записи будут использовать эту вкладку по умолчанию"
+msgstr ""
+"Чаты из этой учетной записи будут использовать эту вкладку по умолчанию"
 
 msgid "Check For Updates"
 msgstr "Проверить наличие обновлений"
@@ -1408,6 +1409,10 @@ msgstr "Отклонить приглашение"
 msgid "Decrease playback speed"
 msgstr "Уменьшить скорость проигрывания"
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "Ошибка подключения"
+
 msgid "Default"
 msgstr "По умолчанию"
 
@@ -1443,6 +1448,10 @@ msgstr "Удалить тему"
 
 msgid "Deny"
 msgstr "Отклонить"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Запрос подписки"
 
 msgid "Description"
 msgstr "Описание"
@@ -1604,9 +1613,6 @@ msgstr "Ем"
 
 msgid "Edit Name…"
 msgstr "Редактировать имя…"
-
-msgid "Edit Profile…"
-msgstr "Редактировать профиль…"
 
 msgid "Edit workspace…"
 msgstr "Редактировать вкладку…"
@@ -1988,6 +1994,10 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "От"
 
+#, fuzzy
+msgid "Full Message View"
+msgstr "Сообщение отправлено"
+
 msgid "Full Name"
 msgstr "Полное имя"
 
@@ -2057,6 +2067,18 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Закончить работу"
 
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Нет доступных обновлений (последняя проверка: %s)"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Нет доступных обновлений (последняя проверка: никогда)"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "Проверка обновлений отключена в настройках"
+
 msgid "Gathering information…"
 msgstr "Получение информации…"
 
@@ -2124,7 +2146,8 @@ msgstr "Групповой чат можно найти через поиск"
 msgid "Group chat does not exist"
 msgstr "Групповой чат не существует"
 
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "Групповой чат уничтожен"
 
 msgid "Group chat is closed"
@@ -2436,6 +2459,9 @@ msgstr "Я работаю."
 
 msgid "JID"
 msgstr "JID"
+
+msgid "JPEG files"
+msgstr "JPEG файлы"
 
 msgid "Join"
 msgstr "Присоединиться"
@@ -2826,13 +2852,6 @@ msgstr "Ничего не найдено"
 msgid "No results found"
 msgstr "Ничего не найдено"
 
-#, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Нет доступных обновлений (последняя проверка: %s)"
-
-msgid "No updates available (last check: never)"
-msgstr "Нет доступных обновлений (последняя проверка: никогда)"
-
 msgid "Node"
 msgstr "Узел"
 
@@ -3073,6 +3092,9 @@ msgstr "PEP узел не был удален"
 msgid "PKCS12 Files"
 msgstr "Файлы PKCS12"
 
+msgid "PNG files"
+msgstr "PNG файлы"
+
 msgid "Pa_use/Resume"
 msgstr "Па_уза/Продолжить"
 
@@ -3258,6 +3280,14 @@ msgstr "Модули"
 
 msgid "Plugins Updated Successfully"
 msgstr "Модули успешно обновлены"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "Доступно обновление"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "Проверка обновлений отключена в настройках"
 
 msgid "Port"
 msgstr "Порт"
@@ -3682,6 +3712,9 @@ msgstr "Настройки STUN-сервера"
 
 msgid "STUN server to use when using Jingle"
 msgstr "STUN-cервер, используемый для Jingle"
+
+msgid "SVG files"
+msgstr "SVG файлы"
 
 msgid "Sales"
 msgstr "Продажи"
@@ -4800,9 +4833,6 @@ msgstr "Обновлять автоматически"
 msgid "Update available"
 msgstr "Доступно обновление"
 
-msgid "Update check disabled in preferences"
-msgstr "Проверка обновлений отключена в настройках"
-
 msgid "Update plugins automatically"
 msgstr "Обновлять модули автоматически"
 
@@ -5200,6 +5230,9 @@ msgstr "ZIP-файлы"
 
 msgid "ZZZZzzzzzZZZZZ"
 msgstr "ZZZZzzzzzZZZZZ"
+
+msgid "[read more]"
+msgstr ""
 
 msgid "_Abort"
 msgstr "_Прервать"
@@ -5896,11 +5929,5 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Copy Location"
 #~ msgstr "Копировать местоположение"
 
-#~ msgid "JPEG files"
-#~ msgstr "JPEG файлы"
-
-#~ msgid "PNG files"
-#~ msgstr "PNG файлы"
-
-#~ msgid "SVG files"
-#~ msgstr "SVG файлы"
+#~ msgid "Edit Profile…"
+#~ msgstr "Редактировать профиль…"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -1609,6 +1609,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "Spojenie zlyhalo"
+
 msgid "Default"
 msgstr "Predvolené"
 
@@ -1652,6 +1656,10 @@ msgstr "Aktívne"
 
 msgid "Deny"
 msgstr "Zakázať"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Požiadavka o zapísanie"
 
 msgid "Description"
 msgstr "Popis"
@@ -1834,10 +1842,6 @@ msgstr "Jem"
 #, fuzzy
 msgid "Edit Name…"
 msgstr "Prvé meno:"
-
-#, fuzzy
-msgid "Edit Profile…"
-msgstr "Odosielanie profilu..."
 
 #, fuzzy
 msgid "Edit workspace…"
@@ -2265,6 +2269,10 @@ msgid "From"
 msgstr "Od"
 
 #, fuzzy
+msgid "Full Message View"
+msgstr "Správa odoslaná"
+
+#, fuzzy
 msgid "Full Name"
 msgstr "<b>Celé meno</b>"
 
@@ -2328,6 +2336,18 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim bude ukončený"
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Žiadne účty nie sú dostupné"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Žiadne účty nie sú dostupné"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "_Predvoľby"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2412,8 +2432,8 @@ msgstr ""
 msgid "Group chat does not exist"
 msgstr "Diskusná skupina %s neexistuje."
 
-#, fuzzy
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "Miestnosť bola zničená"
 
 #, fuzzy
@@ -2749,6 +2769,10 @@ msgstr "Pracujem."
 
 msgid "JID"
 msgstr "JID"
+
+#, fuzzy
+msgid "JPEG files"
+msgstr "Všetky súbory"
 
 #, fuzzy
 msgid "Join"
@@ -3190,14 +3214,6 @@ msgstr "Žiadny výsledok"
 msgid "No results found"
 msgstr "Žiadny výsledok"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Žiadne účty nie sú dostupné"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "Žiadne účty nie sú dostupné"
-
 msgid "Node"
 msgstr ""
 
@@ -3466,6 +3482,10 @@ msgstr ""
 msgid "PKCS12 Files"
 msgstr ""
 
+#, fuzzy
+msgid "PNG files"
+msgstr "Všetky súbory"
+
 msgid "Pa_use/Resume"
 msgstr ""
 
@@ -3671,6 +3691,14 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Registrácia zlyhala"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "Žiadne účty nie sú dostupné"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "_Predvoľby"
 
 #, fuzzy
 msgid "Port"
@@ -4169,6 +4197,10 @@ msgstr "Registrácia zlyhala"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
+
+#, fuzzy
+msgid "SVG files"
+msgstr "Poslať _súbor"
 
 msgid "Sales"
 msgstr ""
@@ -5424,10 +5456,6 @@ msgstr "Vybrať obrázok"
 msgid "Update available"
 msgstr "Žiadne účty nie sú dostupné"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "_Predvoľby"
-
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5873,6 +5901,9 @@ msgid "ZIP files"
 msgstr "Všetky súbory"
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 msgid "_Abort"
@@ -6645,13 +6676,5 @@ msgstr ""
 #~ msgstr "_Kopírovať umiestnenie odkazu"
 
 #, fuzzy
-#~ msgid "JPEG files"
-#~ msgstr "Všetky súbory"
-
-#, fuzzy
-#~ msgid "PNG files"
-#~ msgstr "Všetky súbory"
-
-#, fuzzy
-#~ msgid "SVG files"
-#~ msgstr "Poslať _súbor"
+#~ msgid "Edit Profile…"
+#~ msgstr "Odosielanie profilu..."

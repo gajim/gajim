@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2009-10-29 23:50+0100\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -1617,6 +1617,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "Veza prekinuta"
+
 msgid "Default"
 msgstr "Podrazumevano"
 
@@ -1660,6 +1664,10 @@ msgstr "Aktivno"
 
 msgid "Deny"
 msgstr "Odbij"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Zahtev za pretplatom"
 
 msgid "Description"
 msgstr "Opis"
@@ -1842,10 +1850,6 @@ msgstr "Jedem"
 #, fuzzy
 msgid "Edit Name…"
 msgstr "Ime:"
-
-#, fuzzy
-msgid "Edit Profile…"
-msgstr "Slanje profila..."
 
 #, fuzzy
 msgid "Edit workspace…"
@@ -2274,6 +2278,10 @@ msgid "From"
 msgstr "Od"
 
 #, fuzzy
+msgid "Full Message View"
+msgstr "Poruka Poslata"
+
+#, fuzzy
 msgid "Full Name"
 msgstr "<b>Puno ime</b>"
 
@@ -2337,6 +2345,18 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim će se sada završiti"
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Nema dostupnih naloga"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Nema dostupnih naloga"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "_Podešavanja"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2421,8 +2441,8 @@ msgstr ""
 msgid "Group chat does not exist"
 msgstr "Grupni razgovor.%s ne postoji."
 
-#, fuzzy
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "Soba grupnog razgovora je uništena"
 
 #, fuzzy
@@ -2760,6 +2780,10 @@ msgstr "Radim."
 
 msgid "JID"
 msgstr "DŽID"
+
+#, fuzzy
+msgid "JPEG files"
+msgstr "Sve datoteke"
 
 #, fuzzy
 msgid "Join"
@@ -3204,14 +3228,6 @@ msgstr "Nema rezultata"
 msgid "No results found"
 msgstr "Nema rezultata"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Nema dostupnih naloga"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "Nema dostupnih naloga"
-
 msgid "Node"
 msgstr "Čvor"
 
@@ -3480,6 +3496,10 @@ msgstr "PEP čvor nije uklonjen"
 msgid "PKCS12 Files"
 msgstr ""
 
+#, fuzzy
+msgid "PNG files"
+msgstr "Sve datoteke"
+
 msgid "Pa_use/Resume"
 msgstr ""
 
@@ -3685,6 +3705,14 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Registracija neuspela"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "Nema dostupnih naloga"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "_Podešavanja"
 
 #, fuzzy
 msgid "Port"
@@ -4186,6 +4214,10 @@ msgstr "Registracija neuspela"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
+
+#, fuzzy
+msgid "SVG files"
+msgstr "Pošalji _datoteku"
 
 msgid "Sales"
 msgstr ""
@@ -5440,10 +5472,6 @@ msgstr "Odaberite sliku"
 msgid "Update available"
 msgstr "Nema dostupnih naloga"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "_Podešavanja"
-
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5888,6 +5916,9 @@ msgid "ZIP files"
 msgstr "Sve datoteke"
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 msgid "_Abort"
@@ -6660,13 +6691,5 @@ msgstr ""
 #~ msgstr "_Kopiraj lokaciju veze"
 
 #, fuzzy
-#~ msgid "JPEG files"
-#~ msgstr "Sve datoteke"
-
-#, fuzzy
-#~ msgid "PNG files"
-#~ msgstr "Sve datoteke"
-
-#, fuzzy
-#~ msgid "SVG files"
-#~ msgstr "Pošalji _datoteku"
+#~ msgid "Edit Profile…"
+#~ msgstr "Slanje profila..."

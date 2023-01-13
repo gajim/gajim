@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -1604,6 +1604,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "Η σύνδεση απέτυχε"
+
 msgid "Default"
 msgstr "Προεπιλογή"
 
@@ -1647,6 +1651,10 @@ msgstr "Ενεργό"
 
 msgid "Deny"
 msgstr "Άρνηση"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Αίτηση εγγραφής"
 
 msgid "Description"
 msgstr "Περιγραφή"
@@ -1830,10 +1838,6 @@ msgstr "Τρώω"
 #, fuzzy
 msgid "Edit Name…"
 msgstr "Όνομα:"
-
-#, fuzzy
-msgid "Edit Profile…"
-msgstr "Όνομα προφίλ:"
 
 #, fuzzy
 msgid "Edit workspace…"
@@ -2265,6 +2269,10 @@ msgid "From"
 msgstr "Από"
 
 #, fuzzy
+msgid "Full Message View"
+msgstr "Το μήνυμα στάλθηκε"
+
+#, fuzzy
 msgid "Full Name"
 msgstr "<b>Ιστορικό</b>"
 
@@ -2328,6 +2336,18 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Το Gajim τώρα θα κλείσει"
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Κανένας λογαριασμός δεν είναι διαθέσιμος"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Κανένας λογαριασμός δεν είναι διαθέσιμος"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "_Προτιμήσεις"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2412,8 +2432,8 @@ msgstr ""
 msgid "Group chat does not exist"
 msgstr "Δεν υπάρχει τέτοια συζήτηση."
 
-#, fuzzy
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "Η εξουσιοδότηση έχει αφαιρεθεί"
 
 #, fuzzy
@@ -2748,6 +2768,10 @@ msgstr "Δουλεύω."
 
 msgid "JID"
 msgstr "JID"
+
+#, fuzzy
+msgid "JPEG files"
+msgstr "Όλα τα αρχεία"
 
 #, fuzzy
 msgid "Join"
@@ -3193,14 +3217,6 @@ msgstr "μη υπαρκτό %s"
 msgid "No results found"
 msgstr "μη υπαρκτό %s"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Κανένας λογαριασμός δεν είναι διαθέσιμος"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "Κανένας λογαριασμός δεν είναι διαθέσιμος"
-
 msgid "Node"
 msgstr "Κόμβος"
 
@@ -3470,6 +3486,10 @@ msgstr ""
 msgid "PKCS12 Files"
 msgstr ""
 
+#, fuzzy
+msgid "PNG files"
+msgstr "Όλα τα αρχεία"
+
 msgid "Pa_use/Resume"
 msgstr ""
 
@@ -3674,6 +3694,14 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Η δημοσιοποίηση της vCard απέτυχε"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "Κανένας λογαριασμός δεν είναι διαθέσιμος"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "_Προτιμήσεις"
 
 #, fuzzy
 msgid "Port"
@@ -4174,6 +4202,10 @@ msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
+
+#, fuzzy
+msgid "SVG files"
+msgstr "Αποστολή αρχείου"
 
 msgid "Sales"
 msgstr ""
@@ -5420,10 +5452,6 @@ msgstr "Επιλογή εικόνας"
 msgid "Update available"
 msgstr "Κανένας λογαριασμός δεν είναι διαθέσιμος"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "_Προτιμήσεις"
-
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5872,6 +5900,9 @@ msgid "ZIP files"
 msgstr "Όλα τα αρχεία"
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 msgid "_Abort"
@@ -6657,13 +6688,5 @@ msgstr ""
 #~ msgstr "_Αντιγραφή τοποθεσίας δεσμού"
 
 #, fuzzy
-#~ msgid "JPEG files"
-#~ msgstr "Όλα τα αρχεία"
-
-#, fuzzy
-#~ msgid "PNG files"
-#~ msgstr "Όλα τα αρχεία"
-
-#, fuzzy
-#~ msgid "SVG files"
-#~ msgstr "Αποστολή αρχείου"
+#~ msgid "Edit Profile…"
+#~ msgstr "Όνομα προφίλ:"

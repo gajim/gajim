@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2022-09-11 09:28+0000\n"
 "Last-Translator: jetli <jetli@dr.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -1449,6 +1449,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "Falha na conexão"
+
 msgid "Default"
 msgstr "Padrão"
 
@@ -1485,6 +1489,10 @@ msgstr "Excluir Tema"
 
 msgid "Deny"
 msgstr "Negar"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Solicitação de inscrição"
 
 msgid "Description"
 msgstr "Descrição"
@@ -1655,9 +1663,6 @@ msgstr "Comendo"
 
 msgid "Edit Name…"
 msgstr "Editar Nome"
-
-msgid "Edit Profile…"
-msgstr "Editar Perfil…"
 
 msgid "Edit workspace…"
 msgstr "Editar area de trabalho…"
@@ -2069,6 +2074,10 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "De"
 
+#, fuzzy
+msgid "Full Message View"
+msgstr "Mensagem enviada"
+
 msgid "Full Name"
 msgstr "Nome completo"
 
@@ -2140,6 +2149,18 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim sairá agora"
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Conta não disponível"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Conta não disponível"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "Desabilitado em Preferências"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2219,7 +2240,8 @@ msgstr "O bate-papo em grupo pode ser encontrado por meio de pesquisa"
 msgid "Group chat does not exist"
 msgstr "A conferência não existe"
 
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "A conversa em grupo foi excluída"
 
 #, fuzzy
@@ -2551,6 +2573,10 @@ msgstr "Estou trabalhando."
 
 msgid "JID"
 msgstr "JID"
+
+#, fuzzy
+msgid "JPEG files"
+msgstr "Todos os arquivos"
 
 msgid "Join"
 msgstr "Junte-se"
@@ -2991,14 +3017,6 @@ msgstr "Sem resultados"
 msgid "No results found"
 msgstr "Nenhum resultado encontrado"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Conta não disponível"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "Conta não disponível"
-
 msgid "Node"
 msgstr "Nó"
 
@@ -3267,6 +3285,10 @@ msgid "PKCS12 Files"
 msgstr "Arquivos PKCS12"
 
 #, fuzzy
+msgid "PNG files"
+msgstr "Todos os arquivos"
+
+#, fuzzy
 msgid "Pa_use/Resume"
 msgstr "Pa_use/Currículo"
 
@@ -3472,6 +3494,14 @@ msgstr "Plugins"
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Falha ao registrar"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "Conta não disponível"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "Desabilitado em Preferências"
 
 msgid "Port"
 msgstr "Porta"
@@ -3966,6 +3996,9 @@ msgstr "Configurações de Acesso"
 #, fuzzy
 msgid "STUN server to use when using Jingle"
 msgstr "STUN servidor para usar ao usar Jingle"
+
+msgid "SVG files"
+msgstr "Arquivos SVG"
 
 msgid "Sales"
 msgstr "Vendas"
@@ -5219,10 +5252,6 @@ msgid "Update available"
 msgstr "Conta não disponível"
 
 #, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "Desabilitado em Preferências"
-
-#, fuzzy
 msgid "Update plugins automatically"
 msgstr "Junte-se automaticamente"
 
@@ -5664,6 +5693,9 @@ msgid "ZIP files"
 msgstr "Ficheiros ZIP"
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 msgid "_Abort"
@@ -6426,13 +6458,5 @@ msgstr ""
 #~ msgid "Copy Location"
 #~ msgstr "Copiar Localização"
 
-#, fuzzy
-#~ msgid "JPEG files"
-#~ msgstr "Todos os arquivos"
-
-#, fuzzy
-#~ msgid "PNG files"
-#~ msgstr "Todos os arquivos"
-
-#~ msgid "SVG files"
-#~ msgstr "Arquivos SVG"
+#~ msgid "Edit Profile…"
+#~ msgstr "Editar Perfil…"

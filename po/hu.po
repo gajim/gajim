@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the Gajim package.
 #
 # Gabriel Papp <gabriel.papp@gmx.com>, 2010.
-# Róbert Somogyvári <cr04ch@disroot.org>, 2022.
+# Róbert Somogyvári <cr04ch@disroot.org>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
-"PO-Revision-Date: 2022-12-13 05:26+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
+"PO-Revision-Date: 2023-01-13 08:48+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -1403,6 +1403,9 @@ msgstr "A meghívás elutasítása"
 msgid "Decrease playback speed"
 msgstr "A lejátszási sebesség csökkentése"
 
+msgid "Decryption failed"
+msgstr "A titkosítás visszafejtése sikertelen"
+
 msgid "Default"
 msgstr "Alapértelmezett"
 
@@ -1439,6 +1442,9 @@ msgstr "Téma törlése"
 
 msgid "Deny"
 msgstr "Elutasítás"
+
+msgid "Deny all subscription requests"
+msgstr "Minden feliratkozási kérelem elutasítása"
 
 msgid "Description"
 msgstr "Leírás"
@@ -1597,9 +1603,6 @@ msgstr "Étkezés"
 
 msgid "Edit Name…"
 msgstr "Név módosítása…"
-
-msgid "Edit Profile…"
-msgstr "Profil szerkesztése…"
 
 msgid "Edit workspace…"
 msgstr "A munkaterület módosítása…"
@@ -1975,6 +1978,10 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "Ő"
 
+#, fuzzy
+msgid "Full Message View"
+msgstr "Üzenet elküldve"
+
 msgid "Full Name"
 msgstr "Teljes név"
 
@@ -2044,6 +2051,16 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "A Gajim most kilép"
 
+#, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Gajim: nincsenek frissítések (legutóbbi keresés: %s)"
+
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Gajim: nincsenek frissítések (legutóbbi keresés: soha)"
+
+msgid "Gajim: Update check disabled in preferences"
+msgstr "Gajim: a frissítések keresése tiltva van a beállításokban"
+
 msgid "Gathering information…"
 msgstr "Információk lekérése…"
 
@@ -2111,8 +2128,9 @@ msgstr "A társalgó kereséssel megtalálható"
 msgid "Group chat does not exist"
 msgstr "A társalgó nem létezik"
 
-msgid "Group chat has been destroyed"
-msgstr "A társalgó megszűnt"
+#, python-format
+msgid "Group chat has been destroyed%s"
+msgstr "A társalgó megszűnt%s"
 
 msgid "Group chat is closed"
 msgstr "A társalgó be van zárva"
@@ -2417,6 +2435,9 @@ msgstr "Dolgozom."
 
 msgid "JID"
 msgstr "JID"
+
+msgid "JPEG files"
+msgstr "JPEG-fájlok"
 
 msgid "Join"
 msgstr "Belépés"
@@ -2803,13 +2824,6 @@ msgstr "Nincs találat"
 msgid "No results found"
 msgstr "Nincs találat"
 
-#, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Nincsenek frissítések (legutóbbi keresés: %s)"
-
-msgid "No updates available (last check: never)"
-msgstr "Nincsenek frissítések (legutóbbi keresés: soha)"
-
 msgid "Node"
 msgstr "Csomópont"
 
@@ -3047,6 +3061,9 @@ msgstr "A PEP-elem nem lett eltávolítva"
 msgid "PKCS12 Files"
 msgstr "PKCS12-fájlok"
 
+msgid "PNG files"
+msgstr "PNG-fájlok"
+
 msgid "Pa_use/Resume"
 msgstr "Szü_net/folytatás"
 
@@ -3226,6 +3243,12 @@ msgstr "Bővítmények"
 
 msgid "Plugins Updated Successfully"
 msgstr "A bővítmények frissítése sikerült"
+
+msgid "Plugins: No updates available"
+msgstr "Bővítmények: nincsenek frissítések"
+
+msgid "Plugins: Update check disabled in preferences"
+msgstr "Bővítmények: a frissítések keresése tiltva van a beállításokban"
 
 msgid "Port"
 msgstr "Port"
@@ -3651,6 +3674,9 @@ msgstr "STUN-kiszolgáló beállításai"
 
 msgid "STUN server to use when using Jingle"
 msgstr "A Jingle használatát segítő STUN-kiszolgáló"
+
+msgid "SVG files"
+msgstr "SVG-fájlok"
 
 msgid "Sales"
 msgstr "Értékesítés"
@@ -4752,9 +4778,6 @@ msgstr "Automatikus frissítés"
 msgid "Update available"
 msgstr "Rendelkezésre áll frissítés"
 
-msgid "Update check disabled in preferences"
-msgstr "A frissítések keresése tiltva van a beállításokban"
-
 msgid "Update plugins automatically"
 msgstr "A bővítmények automatikus frissítése"
 
@@ -5157,6 +5180,9 @@ msgstr "ZIP-fájlok"
 
 msgid "ZZZZzzzzzZZZZZ"
 msgstr "ZZZZzzzzzZZZZZ"
+
+msgid "[read more]"
+msgstr ""
 
 msgid "_Abort"
 msgstr "_Megszakítás"
@@ -5860,14 +5886,8 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Copy Location"
 #~ msgstr "Hely másolása"
 
-#~ msgid "JPEG files"
-#~ msgstr "JPEG-fájlok"
-
-#~ msgid "PNG files"
-#~ msgstr "PNG-fájlok"
-
-#~ msgid "SVG files"
-#~ msgstr "SVG-fájlok"
+#~ msgid "Edit Profile…"
+#~ msgstr "Profil szerkesztése…"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Nem sikerült feldolgozni az ablakba ejtett fájlt: %s"

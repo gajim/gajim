@@ -8,15 +8,15 @@
 # Nico Gulden <cilugnedon@gmx.de>, 2007, 2008, 2009, 2010.
 # Niklas Hambüchen <nh2@deditus.de>, 2009.
 # Dominik George <nik@naturalnet.de>, 2014.
-# Daniel Brötzmann <mailtrash@posteo.de>, 2022.
+# Daniel Brötzmann <mailtrash@posteo.de>, 2022, 2023.
 # Max Muster <c@zp1.net>, 2022.
 # lovetox <philipp@hoerist.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
-"PO-Revision-Date: 2022-12-13 18:39+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
+"PO-Revision-Date: 2023-01-13 12:47+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/"
 ">\n"
@@ -1429,6 +1429,9 @@ msgstr "Einladung ablehnen"
 msgid "Decrease playback speed"
 msgstr "Abspielgeschwindigkeit verringern"
 
+msgid "Decryption failed"
+msgstr "Entschlüsselung fehlgeschlagen"
+
 msgid "Default"
 msgstr "Standard"
 
@@ -1464,6 +1467,9 @@ msgstr "Design löschen"
 
 msgid "Deny"
 msgstr "Ablehnen"
+
+msgid "Deny all subscription requests"
+msgstr "Alle Kontaktanfragen ablehnen"
 
 msgid "Description"
 msgstr "Beschreibung"
@@ -1624,9 +1630,6 @@ msgstr "Essen"
 
 msgid "Edit Name…"
 msgstr "Namen ändern…"
-
-msgid "Edit Profile…"
-msgstr "Profil bearbeiten…"
 
 msgid "Edit workspace…"
 msgstr "Arbeitsbereich bearbeiten…"
@@ -2006,6 +2009,10 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "Von"
 
+#, fuzzy
+msgid "Full Message View"
+msgstr "Nachricht gesendet"
+
 msgid "Full Name"
 msgstr "Vollständiger Name"
 
@@ -2076,6 +2083,16 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Gajim wird nun beendet"
 
+#, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Gajim: Keine Updates verfügbar (letzte Überprüfung: %s)"
+
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Gajim: Keine Updates verfügbar (letzte Überprüfung: nie)"
+
+msgid "Gajim: Update check disabled in preferences"
+msgstr "Gajim: Überprüfung auf Updates in den Einstellungen deaktiviert"
+
 msgid "Gathering information…"
 msgstr "Sammle Informationen…"
 
@@ -2143,8 +2160,9 @@ msgstr "Gruppenchat kann mithilfe einer Suche gefunden werden"
 msgid "Group chat does not exist"
 msgstr "Gruppenchat existiert nicht"
 
-msgid "Group chat has been destroyed"
-msgstr "Gruppenchat wurde aufgelöst"
+#, python-format
+msgid "Group chat has been destroyed%s"
+msgstr "Gruppenchat wurde aufgelöst%s"
 
 msgid "Group chat is closed"
 msgstr "Gruppenchat wurde aufgelöst"
@@ -2459,6 +2477,9 @@ msgstr "Ich arbeite."
 
 msgid "JID"
 msgstr "JID"
+
+msgid "JPEG files"
+msgstr "JPEG-Dateien"
 
 msgid "Join"
 msgstr "Beitreten"
@@ -2849,13 +2870,6 @@ msgstr "Keine Ergebnisse"
 msgid "No results found"
 msgstr "Keine Ergebnisse"
 
-#, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Keine Updates verfügbar (letzte Überprüfung: %s)"
-
-msgid "No updates available (last check: never)"
-msgstr "Keine Updates verfügbar (letzte Überprüfung: nie)"
-
 msgid "Node"
 msgstr "Node"
 
@@ -3093,6 +3107,9 @@ msgstr "PEP-Node wurde nicht entfernt"
 msgid "PKCS12 Files"
 msgstr "PKCS12-Dateien"
 
+msgid "PNG files"
+msgstr "PNG-Dateien"
+
 msgid "Pa_use/Resume"
 msgstr "Pause/Fo_rtsetzen"
 
@@ -3260,7 +3277,7 @@ msgid "Plugin Settings"
 msgstr "Plugin-Konfiguration"
 
 msgid "Plugin Updates"
-msgstr "Plugin-Aktualisierungen"
+msgstr "Plugin-Updates"
 
 msgid "Plugin already exists"
 msgstr "Plugin existiert bereits"
@@ -3276,6 +3293,12 @@ msgstr "Plugins"
 
 msgid "Plugins Updated Successfully"
 msgstr "Plugins wurden aktualisiert"
+
+msgid "Plugins: No updates available"
+msgstr "Plugins: Keine Updates verfügbar"
+
+msgid "Plugins: Update check disabled in preferences"
+msgstr "Plugins: Überprüfung auf Updates in den Einstellungen deaktiviert"
 
 msgid "Port"
 msgstr "Port"
@@ -3701,6 +3724,9 @@ msgstr "STUN-Server Einstellungen"
 msgid "STUN server to use when using Jingle"
 msgstr "Für Jingle zu benutzender STUN-Server"
 
+msgid "SVG files"
+msgstr "SVG-Dateien"
+
 msgid "Sales"
 msgstr "Verkauf"
 
@@ -3795,7 +3821,7 @@ msgstr "Datei auswählen…"
 
 msgctxt "Message row action"
 msgid "Select Messages…"
-msgstr "Nachrichten selektieren…"
+msgstr "Nachrichten auswählen…"
 
 msgid "Select a security label for your message…"
 msgstr "Wähle ein Vertraulichkeitslabel für deine Nachricht…"
@@ -4833,9 +4859,6 @@ msgstr "Automatisch aktualisieren"
 msgid "Update available"
 msgstr "Update verfügbar"
 
-msgid "Update check disabled in preferences"
-msgstr "Überprüfung auf Updates in den Einstellungen deaktiviert"
-
 msgid "Update plugins automatically"
 msgstr "Plugins automatisch aktualisieren"
 
@@ -5247,6 +5270,9 @@ msgstr "ZIP-Dateien"
 
 msgid "ZZZZzzzzzZZZZZ"
 msgstr "ZZZZzzzzzZZZZZ"
+
+msgid "[read more]"
+msgstr ""
 
 msgid "_Abort"
 msgstr "_Abbruch"
@@ -5958,14 +5984,8 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Copy Location"
 #~ msgstr "Link-Adresse kopieren"
 
-#~ msgid "JPEG files"
-#~ msgstr "JPEG-Dateien"
-
-#~ msgid "PNG files"
-#~ msgstr "PNG-Dateien"
-
-#~ msgid "SVG files"
-#~ msgstr "SVG-Dateien"
+#~ msgid "Edit Profile…"
+#~ msgstr "Profil bearbeiten…"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Du hast etwas abgelegt, das Gajim nicht verarbeiten konnte: %s"

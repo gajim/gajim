@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -1366,6 +1366,9 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+msgid "Decryption failed"
+msgstr ""
+
 msgid "Default"
 msgstr ""
 
@@ -1400,6 +1403,9 @@ msgid "Delete Theme"
 msgstr ""
 
 msgid "Deny"
+msgstr ""
+
+msgid "Deny all subscription requests"
 msgstr ""
 
 msgid "Description"
@@ -1553,9 +1559,6 @@ msgid "Eating"
 msgstr ""
 
 msgid "Edit Name…"
-msgstr ""
-
-msgid "Edit Profile…"
 msgstr ""
 
 msgid "Edit workspace…"
@@ -1922,6 +1925,9 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr ""
 
+msgid "Full Message View"
+msgstr ""
+
 msgid "Full Name"
 msgstr ""
 
@@ -1980,6 +1986,16 @@ msgid ""
 msgstr ""
 
 msgid "Gajim will now exit"
+msgstr ""
+
+#, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr ""
+
+msgid "Gajim: No updates available (last check: never)"
+msgstr ""
+
+msgid "Gajim: Update check disabled in preferences"
 msgstr ""
 
 msgid "Gathering information…"
@@ -2049,7 +2065,8 @@ msgstr ""
 msgid "Group chat does not exist"
 msgstr ""
 
-msgid "Group chat has been destroyed"
+#, python-format
+msgid "Group chat has been destroyed%s"
 msgstr ""
 
 msgid "Group chat is closed"
@@ -2336,6 +2353,9 @@ msgid "I’m working."
 msgstr ""
 
 msgid "JID"
+msgstr ""
+
+msgid "JPEG files"
 msgstr ""
 
 msgid "Join"
@@ -2711,13 +2731,6 @@ msgstr ""
 msgid "No results found"
 msgstr ""
 
-#, python-format
-msgid "No updates available (last check: %s)"
-msgstr ""
-
-msgid "No updates available (last check: never)"
-msgstr ""
-
 msgid "Node"
 msgstr ""
 
@@ -2952,6 +2965,9 @@ msgstr ""
 msgid "PKCS12 Files"
 msgstr ""
 
+msgid "PNG files"
+msgstr ""
+
 msgid "Pa_use/Resume"
 msgstr ""
 
@@ -3125,6 +3141,12 @@ msgid "Plugins"
 msgstr ""
 
 msgid "Plugins Updated Successfully"
+msgstr ""
+
+msgid "Plugins: No updates available"
+msgstr ""
+
+msgid "Plugins: Update check disabled in preferences"
 msgstr ""
 
 msgid "Port"
@@ -3543,6 +3565,9 @@ msgid "STUN Server Settings"
 msgstr ""
 
 msgid "STUN server to use when using Jingle"
+msgstr ""
+
+msgid "SVG files"
 msgstr ""
 
 msgid "Sales"
@@ -4607,9 +4632,6 @@ msgstr ""
 msgid "Update available"
 msgstr ""
 
-msgid "Update check disabled in preferences"
-msgstr ""
-
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -4997,6 +5019,9 @@ msgid "ZIP files"
 msgstr ""
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 msgid "_Abort"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -1597,6 +1597,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "Niemahvyma dałučycca"
+
 msgid "Default"
 msgstr "Zmoŭčany"
 
@@ -1640,6 +1644,10 @@ msgstr "Dziejny"
 
 msgid "Deny"
 msgstr "Admoŭ"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Zapyt aŭtaryzacyi"
 
 msgid "Description"
 msgstr "Apisańnie"
@@ -1823,10 +1831,6 @@ msgstr "Jem"
 #, fuzzy
 msgid "Edit Name…"
 msgstr "Imia:"
-
-#, fuzzy
-msgid "Edit Profile…"
-msgstr "Dasyłańnie profilu..."
 
 #, fuzzy
 msgid "Edit workspace…"
@@ -2257,6 +2261,10 @@ msgid "From"
 msgstr "Ad"
 
 #, fuzzy
+msgid "Full Message View"
+msgstr "Paviedamleńnie dasłanaje"
+
+#, fuzzy
 msgid "Full Name"
 msgstr "<b>Asablivy</b>"
 
@@ -2320,6 +2328,18 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim zaviaršaje vykanańnie"
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Konty niedastupnyja"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Konty niedastupnyja"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "_Nałady"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2404,8 +2424,8 @@ msgstr ""
 msgid "Group chat does not exist"
 msgstr "Takoha pakoju niama."
 
-#, fuzzy
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "Aŭtaryzacyja anulavanaja"
 
 #, fuzzy
@@ -2744,6 +2764,10 @@ msgstr "Ja pracuju."
 
 msgid "JID"
 msgstr "JID"
+
+#, fuzzy
+msgid "JPEG files"
+msgstr "Usie fajły"
 
 #, fuzzy
 msgid "Join"
@@ -3189,14 +3213,6 @@ msgstr "%s nia znojdzieny"
 msgid "No results found"
 msgstr "%s nia znojdzieny"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Konty niedastupnyja"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "Konty niedastupnyja"
-
 #, fuzzy
 msgid "Node"
 msgstr "Nijaki"
@@ -3467,6 +3483,10 @@ msgstr ""
 msgid "PKCS12 Files"
 msgstr ""
 
+#, fuzzy
+msgid "PNG files"
+msgstr "Usie fajły"
+
 msgid "Pa_use/Resume"
 msgstr ""
 
@@ -3671,6 +3691,14 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Niemahvyma dałučycca"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "Konty niedastupnyja"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "_Nałady"
 
 #, fuzzy
 msgid "Port"
@@ -4167,6 +4195,10 @@ msgstr "Niemahvyma dałučycca"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
+
+#, fuzzy
+msgid "SVG files"
+msgstr "Vyšli _fajł"
 
 msgid "Sales"
 msgstr ""
@@ -5413,10 +5445,6 @@ msgstr "Abiary vyjavu"
 msgid "Update available"
 msgstr "Konty niedastupnyja"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "_Nałady"
-
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5862,6 +5890,9 @@ msgid "ZIP files"
 msgstr "Usie fajły"
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 msgid "_Abort"
@@ -6636,13 +6667,5 @@ msgstr ""
 #~ msgstr "S_kapijuj adras spasyłki"
 
 #, fuzzy
-#~ msgid "JPEG files"
-#~ msgstr "Usie fajły"
-
-#, fuzzy
-#~ msgid "PNG files"
-#~ msgstr "Usie fajły"
-
-#, fuzzy
-#~ msgid "SVG files"
-#~ msgstr "Vyšli _fajł"
+#~ msgid "Edit Profile…"
+#~ msgstr "Dasyłańnie profilu..."

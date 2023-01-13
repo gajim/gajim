@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -1591,6 +1591,10 @@ msgid "Decrease playback speed"
 msgstr ""
 
 #, fuzzy
+msgid "Decryption failed"
+msgstr "Kevreadenn"
+
+#, fuzzy
 msgid "Default"
 msgstr "Dilemel"
 
@@ -1634,6 +1638,10 @@ msgstr "Oberiant"
 
 msgid "Deny"
 msgstr "Nac'hañ"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Goulenn koumanantiñ"
 
 msgid "Description"
 msgstr "Taolennadur"
@@ -1812,10 +1820,6 @@ msgstr "O tebriñ"
 #, fuzzy
 msgid "Edit Name…"
 msgstr "Anv:"
-
-#, fuzzy
-msgid "Edit Profile…"
-msgstr "Kas ur restr"
 
 #, fuzzy
 msgid "Edit workspace…"
@@ -2245,6 +2249,10 @@ msgid "From"
 msgstr "Digant"
 
 #, fuzzy
+msgid "Full Message View"
+msgstr "Kemennadenn gaset"
+
+#, fuzzy
 msgid "Full Name"
 msgstr "<b>Personelaet</b>"
 
@@ -2308,6 +2316,18 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Emañ Gajim o vont da guitaat diouzhtu"
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Kont ebet hegerz"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Kont ebet hegerz"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "_Penndibaboù"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2392,8 +2412,8 @@ msgstr ""
 msgid "Group chat does not exist"
 msgstr "Ce salon n'existe pas."
 
-#, fuzzy
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "Dilamet eo bet an aotre"
 
 #, fuzzy
@@ -2723,6 +2743,10 @@ msgstr "O labourat 'maon."
 
 msgid "JID"
 msgstr "JID"
+
+#, fuzzy
+msgid "JPEG files"
+msgstr "An holl restroù"
 
 #, fuzzy
 msgid "Join"
@@ -3166,14 +3190,6 @@ msgstr "N'eo ket bet kavet %s"
 msgid "No results found"
 msgstr "N'eo ket bet kavet %s"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Kont ebet hegerz"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "Kont ebet hegerz"
-
 #, fuzzy
 msgid "Node"
 msgstr "Hini ebet"
@@ -3444,6 +3460,10 @@ msgstr ""
 msgid "PKCS12 Files"
 msgstr ""
 
+#, fuzzy
+msgid "PNG files"
+msgstr "An holl restroù"
+
 msgid "Pa_use/Resume"
 msgstr ""
 
@@ -3648,6 +3668,14 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "échec lors de la publication de votre vCard"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "Kont ebet hegerz"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "_Penndibaboù"
 
 #, fuzzy
 msgid "Port"
@@ -4142,6 +4170,10 @@ msgstr "échec lors de la publication de votre vCard"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
+
+#, fuzzy
+msgid "SVG files"
+msgstr "Kas ur restr"
 
 msgid "Sales"
 msgstr ""
@@ -5379,10 +5411,6 @@ msgstr "Dibabit ur skeudenn"
 msgid "Update available"
 msgstr "Kont ebet hegerz"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "_Penndibaboù"
-
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5823,6 +5851,9 @@ msgid "ZIP files"
 msgstr "An holl restroù"
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 msgid "_Abort"
@@ -6600,13 +6631,5 @@ msgstr ""
 #~ msgstr "_Kopiañ chomlec'h an ere"
 
 #, fuzzy
-#~ msgid "JPEG files"
-#~ msgstr "An holl restroù"
-
-#, fuzzy
-#~ msgid "PNG files"
-#~ msgstr "An holl restroù"
-
-#, fuzzy
-#~ msgid "SVG files"
+#~ msgid "Edit Profile…"
 #~ msgstr "Kas ur restr"

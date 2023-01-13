@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -1579,6 +1579,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "Nepavyko prisijungti prie proksi"
+
 msgid "Default"
 msgstr "Default"
 
@@ -1621,6 +1625,10 @@ msgstr "Active"
 
 msgid "Deny"
 msgstr "Atmesti"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Sutikimo užklausimas"
 
 msgid "Description"
 msgstr "Description"
@@ -1799,10 +1807,6 @@ msgstr "Eating"
 #, fuzzy
 msgid "Edit Name…"
 msgstr "Vardas:"
-
-#, fuzzy
-msgid "Edit Profile…"
-msgstr "Sending profile..."
 
 #, fuzzy
 msgid "Edit workspace…"
@@ -2228,6 +2232,10 @@ msgid "From"
 msgstr "Nuo"
 
 #, fuzzy
+msgid "Full Message View"
+msgstr "Message Sent"
+
+#, fuzzy
 msgid "Full Name"
 msgstr "<b>Pilnas Vardas</b>"
 
@@ -2291,6 +2299,18 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim will now exit"
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "No such account available"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "No such account available"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "_Nustatymai"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2375,8 +2395,8 @@ msgstr ""
 msgid "Group chat does not exist"
 msgstr "Tokios grupės pokalbis %s neegzistuoja."
 
-#, fuzzy
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "Kambarys buvo sunaikintas"
 
 #, fuzzy
@@ -2710,6 +2730,10 @@ msgstr "I'm working."
 
 msgid "JID"
 msgstr "JID"
+
+#, fuzzy
+msgid "JPEG files"
+msgstr "All files"
 
 #, fuzzy
 msgid "Join"
@@ -3148,14 +3172,6 @@ msgstr "%s not found"
 msgid "No results found"
 msgstr "%s not found"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "No such account available"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "No such account available"
-
 msgid "Node"
 msgstr ""
 
@@ -3423,6 +3439,10 @@ msgstr ""
 msgid "PKCS12 Files"
 msgstr ""
 
+#, fuzzy
+msgid "PNG files"
+msgstr "All files"
+
 msgid "Pa_use/Resume"
 msgstr ""
 
@@ -3626,6 +3646,14 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Registracija nesėkminga"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "No such account available"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "_Nustatymai"
 
 #, fuzzy
 msgid "Port"
@@ -4119,6 +4147,10 @@ msgstr "Registracija nesėkminga"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
+
+#, fuzzy
+msgid "SVG files"
+msgstr "Siųsti _Failą"
 
 msgid "Sales"
 msgstr ""
@@ -5354,10 +5386,6 @@ msgstr "Choose Image"
 msgid "Update available"
 msgstr "No such account available"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "_Nustatymai"
-
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5796,6 +5824,9 @@ msgid "ZIP files"
 msgstr "All files"
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 msgid "_Abort"
@@ -6562,13 +6593,5 @@ msgstr ""
 #~ msgstr "_Kopijuoti nuorodos adresą"
 
 #, fuzzy
-#~ msgid "JPEG files"
-#~ msgstr "All files"
-
-#, fuzzy
-#~ msgid "PNG files"
-#~ msgstr "All files"
-
-#, fuzzy
-#~ msgid "SVG files"
-#~ msgstr "Siųsti _Failą"
+#~ msgid "Edit Profile…"
+#~ msgstr "Sending profile..."

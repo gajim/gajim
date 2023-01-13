@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2009-10-31 20:49+0100\n"
 "Last-Translator: Adrian C. <anrxc@sysphere.org>\n"
 "Language-Team: Croatian\n"
@@ -1619,6 +1619,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "Veza Prekinuta"
+
 msgid "Default"
 msgstr "Predefinirano"
 
@@ -1662,6 +1666,10 @@ msgstr "Aktivno"
 
 msgid "Deny"
 msgstr "Odbij"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Zahtjev za Pretplatom"
 
 msgid "Description"
 msgstr "Opis"
@@ -1844,10 +1852,6 @@ msgstr "Jedem"
 #, fuzzy
 msgid "Edit Name…"
 msgstr "Ime:"
-
-#, fuzzy
-msgid "Edit Profile…"
-msgstr "Šaljem profil..."
 
 #, fuzzy
 msgid "Edit workspace…"
@@ -2275,6 +2279,10 @@ msgid "From"
 msgstr "Od"
 
 #, fuzzy
+msgid "Full Message View"
+msgstr "Poruka Poslana"
+
+#, fuzzy
 msgid "Full Name"
 msgstr "<b>Puno Ime</b>"
 
@@ -2338,6 +2346,18 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim će se sad isključiti"
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Nema dostupnih računa"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Nema dostupnih računa"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "_Postavke"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2422,8 +2442,8 @@ msgstr ""
 msgid "Group chat does not exist"
 msgstr "Grupni razgovor %s ne postoji."
 
-#, fuzzy
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "Soba je uništena"
 
 #, fuzzy
@@ -2762,6 +2782,10 @@ msgstr "Radim."
 
 msgid "JID"
 msgstr "JID"
+
+#, fuzzy
+msgid "JPEG files"
+msgstr "Sve datoteke"
 
 #, fuzzy
 msgid "Join"
@@ -3207,14 +3231,6 @@ msgstr "Nema rezultata"
 msgid "No results found"
 msgstr "Nema rezultata"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Nema dostupnih računa"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "Nema dostupnih računa"
-
 msgid "Node"
 msgstr "Čvor"
 
@@ -3483,6 +3499,10 @@ msgstr "PEP čvor nije obrisan"
 msgid "PKCS12 Files"
 msgstr ""
 
+#, fuzzy
+msgid "PNG files"
+msgstr "Sve datoteke"
+
 msgid "Pa_use/Resume"
 msgstr ""
 
@@ -3688,6 +3708,14 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Registracija nije uspijela"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "Nema dostupnih računa"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "_Postavke"
 
 #, fuzzy
 msgid "Port"
@@ -4190,6 +4218,10 @@ msgstr "Registracija nije uspijela"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
+
+#, fuzzy
+msgid "SVG files"
+msgstr "Pošalji _Datoteku"
 
 msgid "Sales"
 msgstr ""
@@ -5443,10 +5475,6 @@ msgstr "Odabir Slike"
 msgid "Update available"
 msgstr "Nema dostupnih računa"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "_Postavke"
-
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5891,6 +5919,9 @@ msgid "ZIP files"
 msgstr "Sve datoteke"
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 msgid "_Abort"
@@ -6668,13 +6699,5 @@ msgstr ""
 #~ msgstr "_Kopiraj Lokaciju Linka"
 
 #, fuzzy
-#~ msgid "JPEG files"
-#~ msgstr "Sve datoteke"
-
-#, fuzzy
-#~ msgid "PNG files"
-#~ msgstr "Sve datoteke"
-
-#, fuzzy
-#~ msgid "SVG files"
-#~ msgstr "Pošalji _Datoteku"
+#~ msgid "Edit Profile…"
+#~ msgstr "Šaljem profil..."

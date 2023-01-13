@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2022-05-26 22:21+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -1437,6 +1437,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "接続に失敗しました"
+
 msgid "Default"
 msgstr "デフォルト"
 
@@ -1473,6 +1477,10 @@ msgstr "テーマを削除"
 
 msgid "Deny"
 msgstr "拒否する"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "在席通知の申し込み"
 
 msgid "Description"
 msgstr "説明"
@@ -1636,9 +1644,6 @@ msgstr "食事"
 
 msgid "Edit Name…"
 msgstr "名前を編集…"
-
-msgid "Edit Profile…"
-msgstr "プロフィールを編集…"
 
 msgid "Edit workspace…"
 msgstr "作業空間の編集…"
@@ -2029,6 +2034,10 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "こちらが承認"
 
+#, fuzzy
+msgid "Full Message View"
+msgstr "メッセージを送信した"
+
 msgid "Full Name"
 msgstr "名前(フルネーム)"
 
@@ -2096,6 +2105,18 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim は終了します"
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "有効な更新はありません"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "有効な更新はありません"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "設定で無効化されています"
 
 msgid "Gathering information…"
 msgstr "情報を収集…"
@@ -2165,7 +2186,8 @@ msgstr "談話室は検索で見つけられます"
 msgid "Group chat does not exist"
 msgstr "談話室は存在しません"
 
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "談話室は閉鎖されました"
 
 msgid "Group chat is closed"
@@ -2476,6 +2498,9 @@ msgstr "仕事中です。"
 
 msgid "JID"
 msgstr "JID"
+
+msgid "JPEG files"
+msgstr "JPEG ファイル"
 
 msgid "Join"
 msgstr "参加"
@@ -2882,14 +2907,6 @@ msgstr "結果はありません"
 msgid "No results found"
 msgstr "見つかりません"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "有効な更新はありません"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "有効な更新はありません"
-
 msgid "Node"
 msgstr "ノード"
 
@@ -3148,6 +3165,9 @@ msgstr "PEP ノードは削除されませんでした"
 msgid "PKCS12 Files"
 msgstr "PKCS12 形式のファイル"
 
+msgid "PNG files"
+msgstr "PNG ファイル"
+
 msgid "Pa_use/Resume"
 msgstr "一時中断/再開 (_U)"
 
@@ -3335,6 +3355,14 @@ msgstr "プラグイン"
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "プラグインを更新しました"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "利用可能な更新があります"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "設定で無効化されています"
 
 msgid "Port"
 msgstr "ポート番号"
@@ -3780,6 +3808,9 @@ msgstr "STUN サーバー設定"
 
 msgid "STUN server to use when using Jingle"
 msgstr "Jingle を使う際に利用する STUN サーバー"
+
+msgid "SVG files"
+msgstr "SVG ファイル"
 
 msgid "Sales"
 msgstr "セールス"
@@ -4933,10 +4964,6 @@ msgstr "自動で更新"
 msgid "Update available"
 msgstr "利用可能な更新があります"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "設定で無効化されています"
-
 msgid "Update plugins automatically"
 msgstr "プラグインを自動更新"
 
@@ -5343,6 +5370,9 @@ msgstr "ZIP ファイル"
 
 msgid "ZZZZzzzzzZZZZZ"
 msgstr "ZZZZzzzzzZZZZZ"
+
+msgid "[read more]"
+msgstr ""
 
 msgid "_Abort"
 msgstr "中断 (_A)"
@@ -6059,11 +6089,5 @@ msgstr "…またはここにドロップ"
 #~ msgid "Copy Location"
 #~ msgstr "場所をコピー"
 
-#~ msgid "JPEG files"
-#~ msgstr "JPEG ファイル"
-
-#~ msgid "PNG files"
-#~ msgstr "PNG ファイル"
-
-#~ msgid "SVG files"
-#~ msgstr "SVG ファイル"
+#~ msgid "Edit Profile…"
+#~ msgstr "プロフィールを編集…"

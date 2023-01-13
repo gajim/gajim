@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -1617,6 +1617,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "Tilslutning Fejlede"
+
 msgid "Default"
 msgstr "Standard"
 
@@ -1660,6 +1664,10 @@ msgstr "Aktiv"
 
 msgid "Deny"
 msgstr "Nægt"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Abonnement Forespørgsel"
 
 msgid "Description"
 msgstr "Beskrivelse"
@@ -1840,10 +1848,6 @@ msgstr "Spiser"
 #, fuzzy
 msgid "Edit Name…"
 msgstr "Fornavn:"
-
-#, fuzzy
-msgid "Edit Profile…"
-msgstr "Sender profil..."
 
 #, fuzzy
 msgid "Edit workspace…"
@@ -2273,6 +2277,10 @@ msgid "From"
 msgstr "Fra"
 
 #, fuzzy
+msgid "Full Message View"
+msgstr "Besked er Sendt"
+
+#, fuzzy
 msgid "Full Name"
 msgstr "<b>Fuldt Navn</b>"
 
@@ -2335,6 +2343,18 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim vil nu slutte"
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Ingen konto tilgængelig"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Ingen konto tilgængelig"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "_Indstillinger"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2419,8 +2439,8 @@ msgstr ""
 msgid "Group chat does not exist"
 msgstr "Gruppesamtalen %s eksisterer ikke."
 
-#, fuzzy
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "Rummet er blevet ødelagt"
 
 #, fuzzy
@@ -2758,6 +2778,10 @@ msgstr "Jeg arbejder."
 
 msgid "JID"
 msgstr "JID"
+
+#, fuzzy
+msgid "JPEG files"
+msgstr "Alle filer"
 
 #, fuzzy
 msgid "Join"
@@ -3203,14 +3227,6 @@ msgstr "Intet resultat"
 msgid "No results found"
 msgstr "Intet resultat"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Ingen konto tilgængelig"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "Ingen konto tilgængelig"
-
 msgid "Node"
 msgstr "Knude"
 
@@ -3479,6 +3495,10 @@ msgstr "PEP knude blev ikke fjernet"
 msgid "PKCS12 Files"
 msgstr ""
 
+#, fuzzy
+msgid "PNG files"
+msgstr "Alle filer"
+
 msgid "Pa_use/Resume"
 msgstr ""
 
@@ -3684,6 +3704,14 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Tilslutning fejlede"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "Ingen konto tilgængelig"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "_Indstillinger"
 
 #, fuzzy
 msgid "Port"
@@ -4183,6 +4211,10 @@ msgstr "Tilslutning fejlede"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
+
+#, fuzzy
+msgid "SVG files"
+msgstr "Send _Fil"
 
 msgid "Sales"
 msgstr ""
@@ -5435,10 +5467,6 @@ msgstr "Vælg Billede"
 msgid "Update available"
 msgstr "Ingen konto tilgængelig"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "_Indstillinger"
-
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5885,6 +5913,9 @@ msgid "ZIP files"
 msgstr "Alle filer"
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 msgid "_Abort"
@@ -6654,13 +6685,5 @@ msgstr ""
 #~ msgstr "_Kopier Henvisning"
 
 #, fuzzy
-#~ msgid "JPEG files"
-#~ msgstr "Alle filer"
-
-#, fuzzy
-#~ msgid "PNG files"
-#~ msgstr "Alle filer"
-
-#, fuzzy
-#~ msgid "SVG files"
-#~ msgstr "Send _Fil"
+#~ msgid "Edit Profile…"
+#~ msgstr "Sender profil..."

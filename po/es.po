@@ -1,14 +1,14 @@
 # Copyright (C) Gajim Team
 # This file is distributed under the same license as the Gajim package.
 #
-# El gran Pirujo <boina@disroot.org>, 2022.
+# El gran Pirujo <boina@disroot.org>, 2022, 2023.
 # Juan <jumase@disroot.org>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
-"PO-Revision-Date: 2022-12-12 20:37+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
+"PO-Revision-Date: 2023-01-13 08:48+0000\n"
 "Last-Translator: El gran Pirujo <boina@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
@@ -1415,6 +1415,9 @@ msgstr "Rechazar invitación"
 msgid "Decrease playback speed"
 msgstr "Bajar la velocidad de reproducción"
 
+msgid "Decryption failed"
+msgstr "Descifrado fallido"
+
 msgid "Default"
 msgstr "Por defecto"
 
@@ -1450,6 +1453,9 @@ msgstr "Borrar tema"
 
 msgid "Deny"
 msgstr "Denegar"
+
+msgid "Deny all subscription requests"
+msgstr "Denegar todas la peticiones de suscripción"
 
 msgid "Description"
 msgstr "Descripción"
@@ -1609,9 +1615,6 @@ msgstr "Comiendo"
 
 msgid "Edit Name…"
 msgstr "Editar Nombre…"
-
-msgid "Edit Profile…"
-msgstr "Editar perfil…"
 
 msgid "Edit workspace…"
 msgstr "Editar área de trabajo…"
@@ -1990,6 +1993,10 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "De"
 
+#, fuzzy
+msgid "Full Message View"
+msgstr "Mensaje enviado"
+
 msgid "Full Name"
 msgstr "Nombre completo"
 
@@ -2059,6 +2066,16 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Gajim se cerrará ahora"
 
+#, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Gajim: No hay actualizaciones disponibles (última comprobación: %s)"
+
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Gajim: No hay actualizaciones disponibles (última comprobación: nunca)"
+
+msgid "Gajim: Update check disabled in preferences"
+msgstr "Gajim: Comprobación de actualizaciones deshabilitada en preferencias"
+
 msgid "Gathering information…"
 msgstr "Reuniendo información…"
 
@@ -2126,8 +2143,9 @@ msgstr "El grupo puede ser encontrado vía búsqueda"
 msgid "Group chat does not exist"
 msgstr "El grupo de charla no existe"
 
-msgid "Group chat has been destroyed"
-msgstr "El grupo ha sido destruido"
+#, python-format
+msgid "Group chat has been destroyed%s"
+msgstr "El grupo ha sido destruido %s"
 
 msgid "Group chat is closed"
 msgstr "El grupo está cerrado"
@@ -2434,6 +2452,9 @@ msgstr "Estoy trabajando."
 
 msgid "JID"
 msgstr "JID"
+
+msgid "JPEG files"
+msgstr "Archivos JPEG"
 
 msgid "Join"
 msgstr "Unirse"
@@ -2823,13 +2844,6 @@ msgstr "Sin resultados"
 msgid "No results found"
 msgstr "No se han encontrado resultados"
 
-#, python-format
-msgid "No updates available (last check: %s)"
-msgstr "No hay actualizaciones disponibles (última comprobación: %s)"
-
-msgid "No updates available (last check: never)"
-msgstr "No hay actualizaciones disponibles (última comprobación: nunca)"
-
 msgid "Node"
 msgstr "Nodo"
 
@@ -3066,6 +3080,9 @@ msgstr "El nodo PEP no fue eliminado"
 msgid "PKCS12 Files"
 msgstr "Ficheros PKCS12"
 
+msgid "PNG files"
+msgstr "Archivos PNG"
+
 msgid "Pa_use/Resume"
 msgstr "Pa_usar/Reanudar"
 
@@ -3250,6 +3267,13 @@ msgstr "Extensiones"
 
 msgid "Plugins Updated Successfully"
 msgstr "Complementos actualizados con éxito"
+
+msgid "Plugins: No updates available"
+msgstr "Complementos: No hay actualizaciones disponibles"
+
+msgid "Plugins: Update check disabled in preferences"
+msgstr ""
+"Complementos: Comprobación de actualizaciones deshabilitada en preferencias"
 
 msgid "Port"
 msgstr "Puerto"
@@ -3673,6 +3697,9 @@ msgstr "Preferencias del Servidor STUN"
 
 msgid "STUN server to use when using Jingle"
 msgstr "Servidor STUN cuando se use Jingle"
+
+msgid "SVG files"
+msgstr "Archivos SVG"
 
 msgid "Sales"
 msgstr "Ventas"
@@ -4152,7 +4179,7 @@ msgstr "Corrector ortográfico"
 
 msgctxt "Group chat description"
 msgid "Spring gathering"
-msgstr ""
+msgstr "Reunión de primavera"
 
 msgid "Sta_tus"
 msgstr "Es_tado"
@@ -4592,7 +4619,7 @@ msgstr "Tiempo hasta no disponible"
 
 msgctxt "Profile"
 msgid "Title"
-msgstr ""
+msgstr "Título"
 
 msgctxt "Contact subscription"
 msgid "To"
@@ -4782,9 +4809,6 @@ msgstr "Actualizar automáticamente"
 
 msgid "Update available"
 msgstr "Actualización disponible"
-
-msgid "Update check disabled in preferences"
-msgstr "Comprobación de actualizaciones deshabilitada en preferencias"
 
 msgid "Update plugins automatically"
 msgstr "Actualizar complementos automáticamente"
@@ -5188,6 +5212,9 @@ msgstr "Archivos ZIP"
 
 msgid "ZZZZzzzzzZZZZZ"
 msgstr "ZZZZzzzzzZZZZZ"
+
+msgid "[read more]"
+msgstr ""
 
 msgid "_Abort"
 msgstr "_Abortar"
@@ -5888,14 +5915,8 @@ msgstr "…o soltarla aqui"
 #~ msgid "Copy Location"
 #~ msgstr "Copiar ubicación"
 
-#~ msgid "JPEG files"
-#~ msgstr "Archivos JPEG"
-
-#~ msgid "PNG files"
-#~ msgstr "Archivos PNG"
-
-#~ msgid "SVG files"
-#~ msgstr "Archivos SVG"
+#~ msgid "Edit Profile…"
+#~ msgstr "Editar perfil…"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Has soltado algo que Gajim no pudo procesar: %s"

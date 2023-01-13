@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2022-08-18 18:15+0000\n"
 "Last-Translator: pitchum <pitchum@gramaton.org>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
@@ -1445,6 +1445,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "La connexion a échoué"
+
 msgid "Default"
 msgstr "Par défaut"
 
@@ -1481,6 +1485,10 @@ msgstr "Supprimer le thème"
 
 msgid "Deny"
 msgstr "Refuser"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Requête d’Inscription"
 
 # ccount). Description column
 msgid "Description"
@@ -1650,9 +1658,6 @@ msgstr "Mange"
 
 msgid "Edit Name…"
 msgstr "Éditer le nom…"
-
-msgid "Edit Profile…"
-msgstr "Éditer le profil…"
 
 msgid "Edit workspace…"
 msgstr "Éditer l'espace de travail…"
@@ -2041,6 +2046,10 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "De"
 
+#, fuzzy
+msgid "Full Message View"
+msgstr "Message envoyé"
+
 msgid "Full Name"
 msgstr "Nom complet"
 
@@ -2111,6 +2120,18 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Gajim va maintenant s'arrêter"
 
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "Pas de mises à jour disponibles"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "Pas de mises à jour disponibles"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "Désactivé dans les préférences"
+
 msgid "Gathering information…"
 msgstr "Collecte d'informations…"
 
@@ -2179,7 +2200,8 @@ msgstr "Ce salon peut être trouvé via une recherche"
 msgid "Group chat does not exist"
 msgstr "Le salon n’existe pas"
 
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "Le salon de discussion a été détruit"
 
 msgid "Group chat is closed"
@@ -2495,6 +2517,9 @@ msgstr "Je travaille."
 
 msgid "JID"
 msgstr "Identifiant XMPP"
+
+msgid "JPEG files"
+msgstr "Fichiers JPEG"
 
 msgid "Join"
 msgstr "Rejoindre"
@@ -2896,14 +2921,6 @@ msgstr "Aucun résultat"
 msgid "No results found"
 msgstr "Aucun résultat trouvé"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "Pas de mises à jour disponibles"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "Pas de mises à jour disponibles"
-
 msgid "Node"
 msgstr "Nœud"
 
@@ -3159,6 +3176,9 @@ msgstr "Le nœud PEP n'a pas été supprimé"
 msgid "PKCS12 Files"
 msgstr "Fichier PKCS12"
 
+msgid "PNG files"
+msgstr "Fichiers PNG"
+
 msgid "Pa_use/Resume"
 msgstr "S_uspendre/Reprendre"
 
@@ -3348,6 +3368,14 @@ msgstr "Extensions"
 
 msgid "Plugins Updated Successfully"
 msgstr "Extensions mises à jour avec succès"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "Mise à jour disponible"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "Désactivé dans les préférences"
 
 msgid "Port"
 msgstr "Port"
@@ -3784,6 +3812,9 @@ msgstr "Paramètres du serveur STUN"
 
 msgid "STUN server to use when using Jingle"
 msgstr "Serveur STUN a utiliser avec jingle"
+
+msgid "SVG files"
+msgstr "Fichier SVG"
 
 msgid "Sales"
 msgstr "Ventes"
@@ -4931,10 +4962,6 @@ msgstr "Mettre à jour automatiquement"
 msgid "Update available"
 msgstr "Mise à jour disponible"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "Désactivé dans les préférences"
-
 msgid "Update plugins automatically"
 msgstr "Mettre à jour les extensions automatiquement"
 
@@ -5353,6 +5380,9 @@ msgstr "Fichier ZIP"
 
 msgid "ZZZZzzzzzZZZZZ"
 msgstr "ZZZzzzzz"
+
+msgid "[read more]"
+msgstr ""
 
 msgid "_Abort"
 msgstr "_Abandonner"
@@ -6065,11 +6095,5 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Copy Location"
 #~ msgstr "Copier l'emplacement"
 
-#~ msgid "JPEG files"
-#~ msgstr "Fichiers JPEG"
-
-#~ msgid "PNG files"
-#~ msgstr "Fichiers PNG"
-
-#~ msgid "SVG files"
-#~ msgstr "Fichier SVG"
+#~ msgid "Edit Profile…"
+#~ msgstr "Éditer le profil…"

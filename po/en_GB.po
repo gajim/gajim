@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 18:45+0000\n"
+"POT-Creation-Date: 2023-01-13 22:54+0000\n"
 "PO-Revision-Date: 2009-11-20 20:49+1100\n"
 "Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: English <en_gb@li.org>\n"
@@ -1608,6 +1608,10 @@ msgstr ""
 msgid "Decrease playback speed"
 msgstr ""
 
+#, fuzzy
+msgid "Decryption failed"
+msgstr "Connection Failed"
+
 msgid "Default"
 msgstr "Default"
 
@@ -1651,6 +1655,10 @@ msgstr "Active"
 
 msgid "Deny"
 msgstr "Deny"
+
+#, fuzzy
+msgid "Deny all subscription requests"
+msgstr "Subscription Request"
 
 msgid "Description"
 msgstr "Description"
@@ -1833,10 +1841,6 @@ msgstr "Eating"
 #, fuzzy
 msgid "Edit Name…"
 msgstr "First Name:"
-
-#, fuzzy
-msgid "Edit Profile…"
-msgstr "Sending profile..."
 
 #, fuzzy
 msgid "Edit workspace…"
@@ -2263,6 +2267,10 @@ msgid "From"
 msgstr "From"
 
 #, fuzzy
+msgid "Full Message View"
+msgstr "Message Sent"
+
+#, fuzzy
 msgid "Full Name"
 msgstr "<b>Full Name</b>"
 
@@ -2326,6 +2334,18 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim will now exit"
+
+#, fuzzy, python-format
+msgid "Gajim: No updates available (last check: %s)"
+msgstr "No account available"
+
+#, fuzzy
+msgid "Gajim: No updates available (last check: never)"
+msgstr "No account available"
+
+#, fuzzy
+msgid "Gajim: Update check disabled in preferences"
+msgstr "_Preferences"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2410,8 +2430,8 @@ msgstr ""
 msgid "Group chat does not exist"
 msgstr "Group chat %s does not exist."
 
-#, fuzzy
-msgid "Group chat has been destroyed"
+#, fuzzy, python-format
+msgid "Group chat has been destroyed%s"
 msgstr "Room has been destroyed"
 
 #, fuzzy
@@ -2749,6 +2769,10 @@ msgstr "I'm working."
 
 msgid "JID"
 msgstr "JID"
+
+#, fuzzy
+msgid "JPEG files"
+msgstr "All files"
 
 #, fuzzy
 msgid "Join"
@@ -3194,14 +3218,6 @@ msgstr "No result"
 msgid "No results found"
 msgstr "No result"
 
-#, fuzzy, python-format
-msgid "No updates available (last check: %s)"
-msgstr "No account available"
-
-#, fuzzy
-msgid "No updates available (last check: never)"
-msgstr "No account available"
-
 msgid "Node"
 msgstr "Node"
 
@@ -3470,6 +3486,10 @@ msgstr "PEP node was not removed"
 msgid "PKCS12 Files"
 msgstr ""
 
+#, fuzzy
+msgid "PNG files"
+msgstr "All files"
+
 msgid "Pa_use/Resume"
 msgstr ""
 
@@ -3675,6 +3695,14 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Registration failed"
+
+#, fuzzy
+msgid "Plugins: No updates available"
+msgstr "No account available"
+
+#, fuzzy
+msgid "Plugins: Update check disabled in preferences"
+msgstr "_Preferences"
 
 #, fuzzy
 msgid "Port"
@@ -4173,6 +4201,10 @@ msgstr "Registration failed"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
+
+#, fuzzy
+msgid "SVG files"
+msgstr "Send _File"
 
 msgid "Sales"
 msgstr ""
@@ -5426,10 +5458,6 @@ msgstr "Choose Image"
 msgid "Update available"
 msgstr "No account available"
 
-#, fuzzy
-msgid "Update check disabled in preferences"
-msgstr "_Preferences"
-
 msgid "Update plugins automatically"
 msgstr ""
 
@@ -5875,6 +5903,9 @@ msgid "ZIP files"
 msgstr "All files"
 
 msgid "ZZZZzzzzzZZZZZ"
+msgstr ""
+
+msgid "[read more]"
 msgstr ""
 
 msgid "_Abort"
@@ -6647,13 +6678,5 @@ msgstr ""
 #~ msgstr "_Copy Link Location"
 
 #, fuzzy
-#~ msgid "JPEG files"
-#~ msgstr "All files"
-
-#, fuzzy
-#~ msgid "PNG files"
-#~ msgstr "All files"
-
-#, fuzzy
-#~ msgid "SVG files"
-#~ msgstr "Send _File"
+#~ msgid "Edit Profile…"
+#~ msgstr "Sending profile..."
