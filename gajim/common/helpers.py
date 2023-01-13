@@ -248,29 +248,36 @@ def get_uf_affiliation(affiliation: Union[Affiliation, str],
     return ''
 
 
-def get_uf_relative_time(timestamp: float) -> str:
+def get_uf_relative_time(timestamp: float,
+                         timenow: Optional[float] = None) -> str:
     date_time = datetime.fromtimestamp(timestamp)
-    now = datetime.now()
+    if timenow:  # used by unittest
+        now = datetime.fromtimestamp(timenow)
+    else:
+        now = datetime.now()
     timespan = now - date_time
 
-    if timespan > timedelta(days=365):
-        return str(date_time.year)
-    if timespan > timedelta(days=7):
-        return date_time.strftime('%b %d')
-    if timespan > timedelta(days=2):
-        return date_time.strftime('%a')
-    if date_time.strftime('%d') != now.strftime('%d'):
-        return _('Yesterday')
-    if timespan > timedelta(minutes=15):
-        return date_time.strftime('%H:%M')
-    if timespan > timedelta(minutes=1):
+    if timespan < timedelta(minutes=1):
+        return _('Just now')
+    if timespan < timedelta(minutes=15):
         minutes = int(timespan.seconds / 60)
         return ngettext('%i min ago',
                         '%i mins ago',
                         minutes,
                         minutes,
                         minutes)
-    return _('Just now')
+    today = now.date()
+    if date_time.date() == today:
+        format_string = app.settings.get('time_format')
+        return date_time.strftime(format_string)
+    yesterday = now.date() - timedelta(days=1)
+    if date_time.date() == yesterday:
+        return _('Yesterday')
+    if timespan < timedelta(days=7):  # this week
+        return date_time.strftime('%a')  # weekday
+    if timespan < timedelta(days=365):  # this year
+        return date_time.strftime('%b %d')
+    return str(date_time.year)
 
 
 def to_one_line(msg: str) -> str:

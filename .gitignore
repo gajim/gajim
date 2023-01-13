@@ -33,3 +33,4 @@ node_modules/
 .vscode
 *.sublime-project
 *.sublime-workspace
+.idea
