@@ -13,7 +13,7 @@ log = logging.getLogger()
 
 
 GITLAB_INSTANCE_URL = 'https://dev.gajim.org'
-PROJECT_ID = 31
+PROJECT_ID = 30
 
 
 def adjust_milestones(project: Project, version: str) -> None:
