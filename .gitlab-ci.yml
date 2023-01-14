@@ -146,7 +146,7 @@ deploy-flatpak:
     - git commit -m "$CI_COMMIT_TAG"
     - git push
 
-publish-release:
+publish-website:
   image: git-deploy:latest
   stage: publish
   dependencies: []
@@ -156,7 +156,6 @@ publish-release:
     - eval $(ssh-agent -s)
     - .ci/prepare_git.sh dev.gajim.org "${WEBSITE_DEPLOY_KEY}"
   script:
-    - .ci/make_release.py $CI_COMMIT_TAG "${PROJECT_TOKEN}"
     - git clone git@dev.gajim.org:gajim/website.git
     - cd website
     - git checkout master
@@ -165,3 +164,12 @@ publish-release:
     - git add -u
     - git commit -m "Release Gajim $CI_COMMIT_TAG"
     - git push
+
+publish-release:
+  image: git-deploy:latest
+  stage: publish
+  dependencies: []
+  rules:
+    - if: '$CI_COMMIT_TAG'
+  script:
+    - .ci/make_release.py $CI_COMMIT_TAG "${PROJECT_TOKEN}"
