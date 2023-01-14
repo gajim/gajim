@@ -1,3 +1,37 @@
+Gajim 1.6.1 (14 Jan 2023)
+
+  Improvements
+
+  * AdHocCommands: Refresh commands list after completing command (#11356)
+  * Limit message length and add FullMessageWindow
+  * ChatList: Improve timedelta function
+  * CreateGroupchatWindow: Add Advanced switch and always show address entry (#11310)
+  * UX: Make more text labels selectable/enable can-focus for copying (#11336)
+  * AccountPage: Add menu item to deny all subscription requests (#11367)
+  * Account menu: Add Execute Command… entry for convenience
+  * AccountPage: Make all account menu items available (#11329)
+  * AccountPage: Add menu entry for adding contacts
+
+  Change
+
+  * Raise required nbxmpp version
+
+  Bug Fixes
+
+  * Notifications: Fix rare case where Gajim displays notifications for our own messages (#11305)
+  * ServiceDiscoveryWindow: Fix jumping when resizing window (#11239)
+  * Don't fail in mark_as_unread if there are no messages (#11360)
+  * Profile: Fix setting avatar (#11371)
+  * AvatarChooser: Fix file filter for Windows
+  * Audio Preview: Sync clock to make short files play properly on Win
+  * ChatStack DnD: Add workaround for mis-fired drag-motion signal (#11226)
+  * AudioPreview: Make visualization fully RTL compatible again and ensure graph is always drawn
+  * Preview: Handle exceptions while decrypting
+  * Audio Visualizer: Port deprecated methods
+  * AudioPreview: Always format progress time as LTR
+  * AppPage: Differentiate between updates (Gajim/Plugins) (#11363)
+  * GroupChat: Display reason when group chat is destroyed
+
 Gajim 1.6.0 (06 Jan 2023)
 
   New
