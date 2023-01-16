@@ -101,7 +101,10 @@ def _init_gui(gui: str) -> None:
         _init_gtk()
 
 
-def _disable_csd() -> None:
+def _set_env_vars() -> None:
+    # Disable legacy ciphers in cryptography
+    os.environ['CRYPTOGRAPHY_OPENSSL_NO_LEGACY'] = '1'
+
     if sys.platform != 'win32':
         return
 
@@ -159,6 +162,6 @@ def main() -> None:
 
     _check_required_deps()
     _set_proc_title()
-    _disable_csd()
+    _set_env_vars()
     _init_gui('GTK')
     _run_app()
