@@ -11,7 +11,7 @@ Build-Depends:
     python3-css-parser,
     python3-gi,
     python3-gi-cairo,
-    python3-nbxmpp-nightly (>=20221027),
+    python3-nbxmpp-nightly (>=20230123),
     python3-setuptools,
     python3-packaging,
     python3-cryptography (>=3.4.8),
@@ -35,7 +35,7 @@ Depends:
     python3-gi (>= 3.42.0),
     python3-gi-cairo (>= 1.14.0~),
     python3-idna,
-    python3-nbxmpp-nightly (>=20221027),
+    python3-nbxmpp-nightly (>=20230123),
     python3-cryptography (>= 3.4.8),
     python3-precis-i18n,
     python3-keyring,
@@ -65,6 +65,7 @@ Recommends:
     python3-sentry-sdk,
 Suggests:
     libxss1,
+Breaks: gajim
 Description: Fully-featured XMPP chat client
  Gajim aims to be an easy to use and fully-featured XMPP client.
  Just chat with your friends or family, easily share pictures and 
