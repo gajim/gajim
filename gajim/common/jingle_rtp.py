@@ -440,17 +440,24 @@ class JingleAudio(JingleRTPContent):
         if 'webrtcdsp' in self.available_gst_plugins:
             self.src_bin = self.make_bin_from_config(
                 'audio_input_device',
-                '''%s
+                '''
+                %s
+                ! audioconvert
+                ! audioresample
+                ! audio/x-raw,rate=48000
                 ! webrtcdsp
                     echo-suppression-level=high
                     noise-suppression-level=very-high
                     voice-detection=true
-                ! audioconvert ''',
+                ''',
                 _('audio input'))
         else:
             self.src_bin = self.make_bin_from_config(
                 'audio_input_device',
-                '%s ! audioconvert ',
+                '''
+                %s
+                ! audioconvert
+                ''',
                 _('audio input'))
 
         # setting name=webrtcechoprobe0 is needed because lingering probes
@@ -458,13 +465,23 @@ class JingleAudio(JingleRTPContent):
         if 'webrtcdsp' in self.available_gst_plugins:
             self.sink = self.make_bin_from_config(
                 'audio_output_device',
-                '''audioconvert ! volume name=gajim_out_vol !
-                webrtcechoprobe name=webrtcechoprobe0 ! %s''',
+                '''
+                audioconvert
+                ! audioresample
+                ! audio/x-raw,rate=48000
+                ! volume name=gajim_out_vol
+                ! webrtcechoprobe name=webrtcechoprobe0
+                ! %s
+                ''',
                 _('audio output'))
         else:
             self.sink = self.make_bin_from_config(
                 'audio_output_device',
-                'audioconvert ! volume name=gajim_out_vol ! %s',
+                '''
+                audioconvert
+                ! volume name=gajim_out_vol
+                ! %s
+                ''',
                 _('audio output'))
         self.mic_volume = self.src_bin.get_by_name('gajim_vol')
         self.out_volume = self.sink.get_by_name('gajim_out_vol')
