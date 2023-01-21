@@ -2,7 +2,7 @@ image: gajim-master:latest
 
 workflow:
   rules:
-    - if: $GAJIM_NIGHTLY_BUILD
+    - if: $NIGHTLY_BUILD
     - if: $CI_PIPELINE_SOURCE == "push"
 
 stages:
@@ -69,65 +69,173 @@ test-unittest:
         path: coverage.xml
   interruptible: true
 
-build-linux:
-  image: gajim-deb-build:latest
+build-unix:
+  image: gajim-build:latest
   stage: build
   dependencies: []
   rules:
-    - if: '$GAJIM_NIGHTLY_BUILD'
+    - if: '$NIGHTLY_BUILD'
     - if: '$CI_COMMIT_TAG'
   script:
-    - apt-get update
-    - apt-get install -y python3-nbxmpp-nightly
     - pip3 install build
-    - python3 -m build -s
-    - python3 .ci/debian_build.py "$(find dist/gajim-*)" 1
+    - python3 -m build
 
   artifacts:
     name: "gajim-$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA"
     expire_in: 1 week
     paths:
       - dist/gajim-*.tar.gz
+      - dist/gajim-*.whl
+
+build-debian-nightly:
+  image: gajim-build:latest
+  stage: build
+  needs:
+    - job: build-unix
+      artifacts: true
+  rules:
+    - if: '$NIGHTLY_BUILD'
+  script:
+    - apt-get update
+    - apt-get install -y python3-nbxmpp-nightly
+    - release-helper build-debian-pkg "$(find dist/gajim-*.tar.gz)" 1 --pkgsuffix=nightly
+
+  artifacts:
+    name: "gajim-$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA"
+    expire_in: 1 week
+    paths:
+      - debian_build/*
 
 build-windows:
+  image: gajim-build:latest
   stage: build
   dependencies: []
   rules:
-    - if: '$GAJIM_NIGHTLY_BUILD'
     - if: '$CI_COMMIT_TAG'
   script:
-    - python3 .ci/appveyor_build.py
+    - >
+      release-helper build-windows-pkg \
+        --account=lovetox \
+        --slug=gajim \
+        --branch=master \
+        --tag=$CI_COMMIT_TAG \
+        --commit-sha=$CI_COMMIT_SHA \
+        --api-key=$APPVEYOR_API_KEY \
+        .ci/appveyor.yml
   artifacts:
     expire_in: 1 day
     paths:
-      - build/*.json
+      - windows_build/*.json
 
-deploy-linux:
+build-windows-nightly:
+  image: gajim-build:latest
+  stage: build
+  dependencies: []
+  rules:
+    - if: '$NIGHTLY_BUILD'
+  script:
+    - >
+      release-helper build-windows-pkg \
+        --account=lovetox \
+        --slug=gajim \
+        --branch=master \
+        --tag=Nightly \
+        --commit-sha=$CI_COMMIT_SHA \
+        --api-key=$APPVEYOR_API_KEY \
+        .ci/appveyor.yml
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - windows_build/*.json
+
+deploy-unix:
+  image: gajim-deploy:latest
   stage: deploy
   dependencies:
-    - build-linux
+    - build-unix
   rules:
-    - if: '$GAJIM_NIGHTLY_BUILD'
     - if: '$CI_COMMIT_TAG'
-  variables:
-    DEPLOY_TYPE: "linux"
   script:
-    - python3 .ci/deploy.py dist
+    - >
+      release-helper deploy-to-ftp \
+        --host=$FTP_HOST \
+        --user=$FTP_USER \
+        --password=$FTP_PASS \
+        --directory=downloads/"$(echo $CI_COMMIT_TAG | cut -c 1-3)" \
+        --rename=gajim-$CI_COMMIT_TAG.tar.gz \
+        "$(find dist/gajim-*.tar.gz)"
+
+deploy-unix-nightly:
+  image: gajim-deploy:latest
+  stage: deploy
+  dependencies:
+    - build-unix
+  rules:
+    - if: '$NIGHTLY_BUILD'
+  script:
+    - >
+      release-helper deploy-to-ftp \
+        --host=$FTP_HOST \
+        --user=$FTP_USER \
+        --password=$FTP_PASS \
+        --directory=downloads/snap" \
+        --rename=gajim-"$(date +'%Y-%m-%d')".tar.gz \
+        "$(find dist/gajim-*.tar.gz)"
+
+deploy-debian-nightly:
+  image: gajim-deploy:latest
+  stage: deploy
+  dependencies:
+    - build-debian-nightly
+  rules:
+    - if: '$NIGHTLY_BUILD'
+  script:
+    - >
+      release-helper deploy-to-ftp \
+        --host=$FTP_HOST \
+        --user=$FTP_USER \
+        --password=$FTP_PASS \
+        --directory=debian/gajim/"$(date +'%Y%m%d')" \
+        debian_build
 
 deploy-windows:
+  image: gajim-deploy:latest
   stage: deploy
   dependencies:
     - build-windows
   rules:
-    - if: '$GAJIM_NIGHTLY_BUILD'
     - if: '$CI_COMMIT_TAG'
-  variables:
-    DEPLOY_TYPE: "windows"
   script:
-    - python3 .ci/deploy.py build
+    - release-helper download-appveyor-artifacts "$(find windows_build/*.json)" windows_build
+    - rm windows_build/*.json
+    - >
+      release-helper deploy-to-ftp \
+        --host=$FTP_HOST \
+        --user=$FTP_USER \
+        --password=$FTP_PASS \
+        --directory=downloads/"$(echo $CI_COMMIT_TAG | cut -c 1-3)" \
+        windows_build
+
+deploy-windows-nightly:
+  image: gajim-deploy:latest
+  stage: deploy
+  dependencies:
+    - build-windows-nightly
+  rules:
+    - if: '$NIGHTLY_BUILD'
+  script:
+    - release-helper download-appveyor-artifacts "$(find windows_build/*.json)" windows_build
+    - rm windows_build/*.json
+    - >
+      release-helper deploy-to-ftp \
+        --host=$FTP_HOST \
+        --user=$FTP_USER \
+        --password=$FTP_PASS \
+        --directory=downloads/snap" \
+        windows_build
 
 deploy-flatpak:
-  image: git-deploy:latest
+  image: gajim-deploy:latest
   stage: deploy
   dependencies: []
   rules:
@@ -150,7 +258,7 @@ deploy-flatpak:
     - git push
 
 publish-website:
-  image: git-deploy:latest
+  image: gajim-publish:latest
   stage: publish
   dependencies: []
   rules:
@@ -169,10 +277,10 @@ publish-website:
     - git push
 
 publish-release:
-  image: git-deploy:latest
+  image: gajim-publish:latest
   stage: publish
   dependencies: []
   rules:
     - if: '$CI_COMMIT_TAG'
   script:
-    - .ci/make_release.py $CI_COMMIT_TAG "${PROJECT_TOKEN}"
+    - release-helper make-gitlab-release $CI_COMMIT_TAG "${PROJECT_TOKEN}"

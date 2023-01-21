@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 echo "$2" | tr -d '\r' | ssh-add - > /dev/null
 ssh-add -l
