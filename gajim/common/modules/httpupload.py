@@ -20,7 +20,6 @@ from typing import Callable
 from typing import cast
 from typing import Optional
 
-import functools
 import mimetypes
 import os
 import tempfile
@@ -368,6 +367,7 @@ class HTTPFileTransfer(FileTransfer):
         self._headers: dict[str, str] = {}
 
         self._is_encrypted = False
+        self._temp_path = self._get_temp_path()
 
     @property
     def size(self) -> int:
@@ -407,7 +407,7 @@ class HTTPFileTransfer(FileTransfer):
     @property
     def payload_path(self) -> Path:
         if self._encryption is not None:
-            return self.get_temp_path()
+            return self._temp_path
         return self._path
 
     @property
@@ -427,8 +427,7 @@ class HTTPFileTransfer(FileTransfer):
         return self._path.name
 
     @staticmethod
-    @functools.cache
-    def get_temp_path() -> Path:
+    def _get_temp_path() -> Path:
         tempdir = tempfile.gettempdir()
         return Path(tempdir) / get_random_string(16)
 
@@ -442,8 +441,7 @@ class HTTPFileTransfer(FileTransfer):
         super().set_finished()
 
     def set_encrypted_data(self, data: bytes) -> None:
-        temp_path = self.get_temp_path()
-        temp_path.write_bytes(data)
+        self._temp_path.write_bytes(data)
         self._is_encrypted = True
 
     def get_data(self) -> bytes:
