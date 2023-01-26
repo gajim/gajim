@@ -326,6 +326,8 @@ modules:
     buildsystem: simple
     build-commands:
       - pip3 install --no-build-isolation .
+      - ./pep517build/build_metadata.py
+      - ./pep517build/install_metadata.py dist/metadata --prefix=/app
       - touch /app/share/run-as-flatpak
       - cp -t ${FLATPAK_DEST} app-overrides.json
     sources:
