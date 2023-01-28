@@ -20,57 +20,18 @@
 
 from __future__ import annotations
 
-from typing import Iterator
+from typing import cast
 from typing import Optional
 
 import gettext
+import importlib.resources
 import locale
 import os
 import sys
 import unicodedata
 from pathlib import Path
 
-from gi.repository import GLib
-
 DOMAIN = 'gajim'
-_translation = gettext.NullTranslations()
-
-
-def get_locale_dirs() -> Optional[list[Path]]:
-    if sys.platform == 'win32':
-        return
-
-    path = gettext.find(DOMAIN)
-    if path is not None:
-        # gettext can find the location itself
-        # so we don’t need the localedir
-        return
-
-    if Path('/app/share/run-as-flatpak').exists():
-        # Check if we run as flatpak
-        return [Path('/app/share/')]
-
-    data_dirs = [GLib.get_user_data_dir()] + GLib.get_system_data_dirs()
-    return [Path(dir_) for dir_ in data_dirs]
-
-
-def iter_locale_dirs() -> Iterator[Optional[Path]]:
-    locale_dirs = get_locale_dirs()
-    if locale_dirs is None:
-        yield None
-        return
-
-    # gettext fallback
-    locale_dirs.append(Path(sys.base_prefix) / 'share')
-
-    found_paths: list[Path] = []
-    for path in locale_dirs:
-        locale_dir = path / 'locale'
-        if locale_dir in found_paths:
-            continue
-        found_paths.append(locale_dir)
-        if locale_dir.is_dir():
-            yield locale_dir
 
 
 def get_win32_default_lang() -> str:
@@ -162,19 +123,16 @@ if sys.platform == 'win32':
     # doesn't retain other region settings like LC_TIME
     os.environ['LANGUAGE'] = LANG
 
-# Search for the translation in all locale dirs
-for dir_ in iter_locale_dirs():
-    try:
-        _translation = gettext.translation(DOMAIN, dir_)
-        _ = _translation.gettext
-        if hasattr(locale, 'bindtextdomain'):
-            locale.bindtextdomain(DOMAIN, dir_)
-    except OSError:
-        continue
-    else:
-        break
 
-else:
+package_dir = cast(Path, importlib.resources.files('gajim'))
+locale_dir = package_dir / 'data' / 'locale'
+
+try:
+    _translation = gettext.translation(DOMAIN, locale_dir)
+    _ = _translation.gettext
+    if hasattr(locale, 'bindtextdomain'):
+        locale.bindtextdomain(DOMAIN, locale_dir)
+except OSError:
+    _translation = gettext.NullTranslations()
     _ = _translation.gettext
     print('No translations found for', LANG, file=sys.stderr)
-    print('Dirs searched: %s' % get_locale_dirs(), file=sys.stderr)
