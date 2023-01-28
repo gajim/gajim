@@ -1,0 +1,4 @@
+dist/metadata/org.gajim.Gajim.svg usr/share/icons/hicolor/scalable/apps
+dist/metadata/org.gajim.Gajim-symbolic.svg usr/share/icons/hicolor/scalable/apps
+dist/metadata/org.gajim.Gajim.appdata.xml usr/share/metainfo
+dist/metadata/org.gajim.Gajim.desktop usr/share/applications
