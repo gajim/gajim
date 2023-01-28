@@ -15,8 +15,10 @@ test-other:
   stage: test
   script:
     - codespell gajim
-    - python3 setup.py build
-    - appstream-util validate build/data/org.gajim.Gajim.appdata.xml
+    - pip3 install build
+    - python3 -m build
+    - python3 ./pep517build/build_metadata.py
+    - appstream-util validate dist/metadata/org.gajim.Gajim.appdata.xml
   interruptible: true
 
 test-pyright:
@@ -77,7 +79,8 @@ build-linux:
   script:
     - apt-get update
     - apt-get install -y python3-nbxmpp-nightly
-    - python3 setup.py sdist
+    - pip3 install build
+    - python3 -m build -s
     - python3 .ci/debian_build.py "$(find dist/gajim-*)" 1
 
   artifacts:
