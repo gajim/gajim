@@ -27,6 +27,7 @@ win/_build_root
 venv/
 .venv/
 node_modules/
+.flatpak-builder
 
 # IDE files
 
