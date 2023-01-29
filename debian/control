@@ -28,7 +28,6 @@ Package: gajim-nightly
 Architecture: all
 Depends:
     ${misc:Depends},
-    ${python3:Depends},
     desktop-file-utils,
     python3 (>= 3.10),
     python3-css-parser (>= 1.0.2),
@@ -66,6 +65,7 @@ Recommends:
 Suggests:
     libxss1,
 Breaks: gajim
+Replaces: gajim-default-nightly
 Description: Fully-featured XMPP chat client
  Gajim aims to be an easy to use and fully-featured XMPP client.
  Just chat with your friends or family, easily share pictures and 
