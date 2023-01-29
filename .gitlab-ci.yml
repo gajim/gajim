@@ -178,7 +178,7 @@ deploy-unix-nightly:
         --host=$FTP_HOST \
         --user=$FTP_USER \
         --password=$FTP_PASS \
-        --directory=downloads/snap" \
+        --directory=downloads/snap \
         --rename=gajim-"$(date +'%Y-%m-%d')".tar.gz \
         "$(find dist/gajim-*.tar.gz)"
 
@@ -231,7 +231,7 @@ deploy-windows-nightly:
         --host=$FTP_HOST \
         --user=$FTP_USER \
         --password=$FTP_PASS \
-        --directory=downloads/snap" \
+        --directory=downloads/snap \
         windows_build
 
 deploy-flatpak:
