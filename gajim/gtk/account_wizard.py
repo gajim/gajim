@@ -664,6 +664,16 @@ class Login(Page):
                 Gtk.EntryIconPosition.SECONDARY, _('Invalid Address'))
             return False
 
+        for account in app.settings.get_accounts():
+            name = app.settings.get_account_setting(account, 'name')
+            hostname = app.settings.get_account_setting(account, 'hostname')
+            if address == f'{name}@{hostname}':
+                self._show_icon(True)
+                self._ui.log_in_address_entry.set_icon_tooltip_text(
+                    Gtk.EntryIconPosition.SECONDARY,
+                    _('This account has already been added'))
+                return False
+
         self._show_icon(False)
         return True
 
