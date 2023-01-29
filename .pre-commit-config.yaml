@@ -4,7 +4,6 @@ repos:
     hooks:
       - id: ruff
         exclude: ".githooks/"
-        args: ["--force-exclude"]
 
   - repo: https://github.com/codespell-project/codespell
     rev: v2.2.2
