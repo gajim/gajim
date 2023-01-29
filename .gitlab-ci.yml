@@ -231,7 +231,7 @@ deploy-windows-nightly:
         --host=$FTP_HOST \
         --user=$FTP_USER \
         --password=$FTP_PASS \
-        --directory=downloads/snap \
+        --directory=downloads/snap/win \
         windows_build
 
 deploy-flatpak:
