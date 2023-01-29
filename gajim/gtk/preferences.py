@@ -392,11 +392,13 @@ class GroupChats(PreferenceBox):
 class FilePreview(PreferenceBox):
     def __init__(self, *args: Any) -> None:
         sizes = {
+            0: _('No automatic preview'),
             262144: '256 KiB',
             524288: '512 KiB',
             1048576: '1 MiB',
             5242880: '5 MiB',
             10485760: '10 MiB',
+            26214400: '25 MiB',
         }
 
         preview_actions = {}
