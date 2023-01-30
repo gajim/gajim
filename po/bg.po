@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-13 22:54+0000\n"
+"POT-Creation-Date: 2023-01-29 17:33+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -3200,6 +3200,9 @@ msgstr ""
 msgid "No additional requirements"
 msgstr ""
 
+msgid "No automatic preview"
+msgstr ""
+
 #, fuzzy
 msgid "No commands available"
 msgstr "Няма наличен акаунт"
@@ -5135,6 +5138,10 @@ msgstr ""
 "%(error)s\n"
 "Все още ли искате да се свържете със сървъра?"
 
+#, fuzzy
+msgid "This account has already been added"
+msgstr "Акаунтът беше добавен успешно"
+
 msgid "This account is not connected to the server"
 msgstr "Този акаунт не е свързан към сървъра"
 
@@ -6314,7 +6321,7 @@ msgstr "Акаунт"
 msgid "countrycode"
 msgstr "Акаунт"
 
-msgid "dark skin"
+msgid "dark skin tone"
 msgstr ""
 
 msgid "datum"
@@ -6368,7 +6375,9 @@ msgstr "Курсив"
 msgid "lat"
 msgstr ""
 
-msgid "light skin"
+#. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
+#. You can use the hex value to find the matching string.
+msgid "light skin tone"
 msgstr ""
 
 msgid "locality"
@@ -6384,10 +6393,10 @@ msgstr ""
 msgid "medium skin tone"
 msgstr ""
 
-msgid "medium-dark skin"
+msgid "medium-dark skin tone"
 msgstr ""
 
-msgid "medium-light skin"
+msgid "medium-light skin tone"
 msgstr ""
 
 msgctxt "Group chat address"

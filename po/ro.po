@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-13 22:54+0000\n"
+"POT-Creation-Date: 2023-01-29 17:33+0000\n"
 "PO-Revision-Date: 2022-12-29 22:46+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -2828,6 +2828,10 @@ msgstr "Fără prag"
 msgid "No additional requirements"
 msgstr "Nu există cerințe suplimentare"
 
+#, fuzzy
+msgid "No automatic preview"
+msgstr "Previzualizare automată dezactivată"
+
 msgid "No commands available"
 msgstr "Nu există comenzi disponibile"
 
@@ -4530,6 +4534,10 @@ msgstr ""
 "S-a produs o eroare în timpul încercării de verificare a certificatului SSL "
 "al serverului XMPP (%s)."
 
+#, fuzzy
+msgid "This account has already been added"
+msgstr "Contul a fost adăugat cu succes"
+
 msgid "This account is not connected to the server"
 msgstr "Acest cont nu este conectat la server"
 
@@ -5570,7 +5578,8 @@ msgstr "țară"
 msgid "countrycode"
 msgstr "cod de țară"
 
-msgid "dark skin"
+#, fuzzy
+msgid "dark skin tone"
 msgstr "pielea închisă la culoare"
 
 msgid "datum"
@@ -5621,7 +5630,10 @@ msgstr "Italic"
 msgid "lat"
 msgstr "latid"
 
-msgid "light skin"
+#. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
+#. You can use the hex value to find the matching string.
+#, fuzzy
+msgid "light skin tone"
 msgstr "piele deschisă"
 
 msgid "locality"
@@ -5636,10 +5648,12 @@ msgstr "macOS"
 msgid "medium skin tone"
 msgstr "ton mediu al pielii"
 
-msgid "medium-dark skin"
+#, fuzzy
+msgid "medium-dark skin tone"
 msgstr "ten mediu-închis"
 
-msgid "medium-light skin"
+#, fuzzy
+msgid "medium-light skin tone"
 msgstr "ten mediu deschis"
 
 msgctxt "Group chat address"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-13 22:54+0000\n"
+"POT-Creation-Date: 2023-01-29 17:33+0000\n"
 "PO-Revision-Date: 2023-01-05 11:03+0000\n"
 "Last-Translator: Nikolay Chizhov <admin@kgd.in>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -2817,6 +2817,10 @@ msgstr "Без порога"
 msgid "No additional requirements"
 msgstr "Никаких дополнительных требований"
 
+#, fuzzy
+msgid "No automatic preview"
+msgstr "Автоматический предпросмотр отключен"
+
 msgid "No commands available"
 msgstr "Нет доступных команд"
 
@@ -4518,6 +4522,10 @@ msgid ""
 "XMPP server (%s)."
 msgstr "Ошибка при попытке проверки SSL сертификата вашего XMPP сервера (%s)."
 
+#, fuzzy
+msgid "This account has already been added"
+msgstr "Учетная запись успешно добавлена"
+
 msgid "This account is not connected to the server"
 msgstr "Учётная запись не подключена к серверу"
 
@@ -5552,7 +5560,8 @@ msgstr "страна"
 msgid "countrycode"
 msgstr "код страны"
 
-msgid "dark skin"
+#, fuzzy
+msgid "dark skin tone"
 msgstr "темная тема"
 
 msgid "datum"
@@ -5603,7 +5612,10 @@ msgstr "курсив"
 msgid "lat"
 msgstr "широта"
 
-msgid "light skin"
+#. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
+#. You can use the hex value to find the matching string.
+#, fuzzy
+msgid "light skin tone"
 msgstr "светлая тема"
 
 msgid "locality"
@@ -5618,11 +5630,13 @@ msgstr "macOS"
 msgid "medium skin tone"
 msgstr ""
 
-msgid "medium-dark skin"
-msgstr ""
+#, fuzzy
+msgid "medium-dark skin tone"
+msgstr "темная тема"
 
-msgid "medium-light skin"
-msgstr ""
+#, fuzzy
+msgid "medium-light skin tone"
+msgstr "светлая тема"
 
 msgctxt "Group chat address"
 msgid "news"

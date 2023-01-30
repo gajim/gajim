@@ -2,13 +2,14 @@
 # This file is distributed under the same license as the Gajim package.
 #
 # pitchum <pitchum@gramaton.org>, 2022.
+# André <git@apitzsch.eu>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-13 22:54+0000\n"
-"PO-Revision-Date: 2022-08-18 18:15+0000\n"
-"Last-Translator: pitchum <pitchum@gramaton.org>\n"
+"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"PO-Revision-Date: 2023-01-29 13:51+0000\n"
+"Last-Translator: André <git@apitzsch.eu>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
 ">\n"
 "Language: fr\n"
@@ -2886,6 +2887,10 @@ msgstr "Pas de seuil"
 msgid "No additional requirements"
 msgstr "Pas d'exigences additionnelles"
 
+#, fuzzy
+msgid "No automatic preview"
+msgstr "Aperçu automatique désactivé"
+
 msgid "No commands available"
 msgstr "Aucune commande n'est disponible"
 
@@ -4641,6 +4646,10 @@ msgstr ""
 "Une erreur est survenue lors de la validation du certificat SSL de votre "
 "serveur XMPP (%s)."
 
+#, fuzzy
+msgid "This account has already been added"
+msgstr "Compte ajouté avec succès"
+
 msgid "This account is not connected to the server"
 msgstr "Ce compte est connecté au serveur"
 
@@ -5706,8 +5715,8 @@ msgstr "pays"
 msgid "countrycode"
 msgstr "code du pays"
 
-msgid "dark skin"
-msgstr ""
+msgid "dark skin tone"
+msgstr "peau foncée"
 
 msgid "datum"
 msgstr "donnée"
@@ -5757,8 +5766,10 @@ msgstr "Italique"
 msgid "lat"
 msgstr "lat"
 
-msgid "light skin"
-msgstr ""
+#. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
+#. You can use the hex value to find the matching string.
+msgid "light skin tone"
+msgstr "peau claire"
 
 msgid "locality"
 msgstr "ville"
@@ -5770,13 +5781,13 @@ msgid "macOS"
 msgstr "macOS"
 
 msgid "medium skin tone"
-msgstr ""
+msgstr "peau légèrement mate"
 
-msgid "medium-dark skin"
-msgstr ""
+msgid "medium-dark skin tone"
+msgstr "peau mate"
 
-msgid "medium-light skin"
-msgstr ""
+msgid "medium-light skin tone"
+msgstr "peau moyennement claire"
 
 msgctxt "Group chat address"
 msgid "news"

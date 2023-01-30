@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-13 22:54+0000\n"
-"PO-Revision-Date: 2023-01-13 08:48+0000\n"
+"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"PO-Revision-Date: 2023-01-30 20:41+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -1978,9 +1978,8 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "Ő"
 
-#, fuzzy
 msgid "Full Message View"
-msgstr "Üzenet elküldve"
+msgstr "Teljes üzenet"
 
 msgid "Full Name"
 msgstr "Teljes név"
@@ -2789,6 +2788,9 @@ msgstr "Korlátlan"
 msgid "No additional requirements"
 msgstr "Nincs további követelmény"
 
+msgid "No automatic preview"
+msgstr "Nincs automatikus előnézet"
+
 msgid "No commands available"
 msgstr "Nincsenek parancsok"
 
@@ -3402,7 +3404,7 @@ msgstr "Ok: %s"
 
 msgctxt "Message state"
 msgid "Received"
-msgstr "Kézvesített"
+msgstr "Kézbesítve"
 
 msgid "Recent history"
 msgstr "Legutóbbii üzenetek"
@@ -4467,6 +4469,9 @@ msgid ""
 msgstr ""
 "Hiba történt az XMPP-kiszolgáló (%s) SSL-tanúsítványának ellenőrzése során."
 
+msgid "This account has already been added"
+msgstr "Ez a fiók már be van állítva"
+
 msgid "This account is not connected to the server"
 msgstr "Ez a fiók nem kapcsolódik a kiszolgálóhoz"
 
@@ -5182,7 +5187,7 @@ msgid "ZZZZzzzzzZZZZZ"
 msgstr "ZZZZzzzzzZZZZZ"
 
 msgid "[read more]"
-msgstr ""
+msgstr "[bővebben]"
 
 msgid "_Abort"
 msgstr "_Megszakítás"
@@ -5500,7 +5505,7 @@ msgstr "ország"
 msgid "countrycode"
 msgstr "országkód"
 
-msgid "dark skin"
+msgid "dark skin tone"
 msgstr "fekete bőrű"
 
 msgid "datum"
@@ -5551,7 +5556,9 @@ msgstr "Dőlt"
 msgid "lat"
 msgstr "szélesség"
 
-msgid "light skin"
+#. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
+#. You can use the hex value to find the matching string.
+msgid "light skin tone"
 msgstr "fehér bőrű"
 
 msgid "locality"
@@ -5566,10 +5573,10 @@ msgstr "macOS"
 msgid "medium skin tone"
 msgstr "kreol bőrű"
 
-msgid "medium-dark skin"
+msgid "medium-dark skin tone"
 msgstr "barna bőrű"
 
-msgid "medium-light skin"
+msgid "medium-light skin tone"
 msgstr "világos bőrű"
 
 msgctxt "Group chat address"

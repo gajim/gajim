@@ -11,15 +11,16 @@
 # Daniel Brötzmann <mailtrash@posteo.de>, 2022, 2023.
 # Max Muster <c@zp1.net>, 2022.
 # lovetox <philipp@hoerist.com>, 2022.
+# André <git@apitzsch.eu>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-13 22:54+0000\n"
-"PO-Revision-Date: 2023-01-13 12:47+0000\n"
+"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"PO-Revision-Date: 2023-01-30 20:41+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
-"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/"
-">\n"
+"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
+"\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1847,10 +1848,10 @@ msgid "Feature not available on Windows"
 msgstr "Funktion unter Windows nicht verfügbar"
 
 msgid "Features"
-msgstr "Merkmale"
+msgstr "Features"
 
 msgid "Features:"
-msgstr "Merkmale:"
+msgstr "Features:"
 
 msgid "Feedback"
 msgstr "Rückmeldungen"
@@ -2009,9 +2010,8 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "Von"
 
-#, fuzzy
 msgid "Full Message View"
-msgstr "Nachricht gesendet"
+msgstr "Vollständige Nachricht"
 
 msgid "Full Name"
 msgstr "Vollständiger Name"
@@ -2835,6 +2835,9 @@ msgstr "Keine Begrenzung"
 msgid "No additional requirements"
 msgstr "Keine weiteren Anforderungen"
 
+msgid "No automatic preview"
+msgstr "Keine automatische Vorschau"
+
 msgid "No commands available"
 msgstr "Keine Befehle verfügbar"
 
@@ -3227,7 +3230,7 @@ msgid "Play Sounds"
 msgstr "Klänge abspielen"
 
 msgid "Play sounds even when you are Away, Busy, etc."
-msgstr "Töne abspielen, auch wenn Sie abwesend, beschäftigt usw. sind."
+msgstr "Töne abspielen, auch wenn du abwesend, beschäftigt usw. bist"
 
 msgid "Play sounds to notify about events"
 msgstr "Klänge für die Benachrichtigung über Ereignisse abspielen"
@@ -4102,7 +4105,7 @@ msgstr ""
 
 msgid "Show notifications even if you are Away, Busy, etc."
 msgstr ""
-"Benachrichtigungen anzeigen, auch wenn Sie abwesend, beschäftigt usw. sind."
+"Benachrichtigungen anzeigen, auch wenn du abwesend, beschäftigt usw. bist"
 
 msgid "Show on Startup"
 msgstr "Beim Start anzeigen"
@@ -4534,6 +4537,9 @@ msgid ""
 msgstr ""
 "Bei der Überprüfung des SSL-Zertifikats deines XMPP-Servers (%s) ist ein "
 "Fehler aufgetreten."
+
+msgid "This account has already been added"
+msgstr "Dieses Konto wurde bereits hinzugefügt"
 
 msgid "This account is not connected to the server"
 msgstr "Dieses Konto ist nicht mit dem Server verbunden"
@@ -5272,7 +5278,7 @@ msgid "ZZZZzzzzzZZZZZ"
 msgstr "ZZZZzzzzzZZZZZ"
 
 msgid "[read more]"
-msgstr ""
+msgstr "[mehr lesen]"
 
 msgid "_Abort"
 msgstr "_Abbruch"
@@ -5592,8 +5598,8 @@ msgstr "Land"
 msgid "countrycode"
 msgstr "Landeskürzel"
 
-msgid "dark skin"
-msgstr "dunkle Haut"
+msgid "dark skin tone"
+msgstr "dunkle Hautfarbe"
 
 msgid "datum"
 msgstr "Datum"
@@ -5643,8 +5649,10 @@ msgstr "kursiv"
 msgid "lat"
 msgstr "Breitengrad"
 
-msgid "light skin"
-msgstr "helle Haut"
+#. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
+#. You can use the hex value to find the matching string.
+msgid "light skin tone"
+msgstr "helle Hautfarbe"
 
 msgid "locality"
 msgstr "Ortschaft"
@@ -5656,13 +5664,13 @@ msgid "macOS"
 msgstr "macOS"
 
 msgid "medium skin tone"
-msgstr "mittlerer Hautfarbton"
+msgstr "mittlere Hautfarbe"
 
-msgid "medium-dark skin"
-msgstr "mitteldunkle Haut"
+msgid "medium-dark skin tone"
+msgstr "mitteldunkle Hautfarbe"
 
-msgid "medium-light skin"
-msgstr "mittelhelle Haut"
+msgid "medium-light skin tone"
+msgstr "mittelhelle Hautfarbe"
 
 msgctxt "Group chat address"
 msgid "news"

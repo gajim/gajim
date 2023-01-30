@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-13 22:54+0000\n"
-"PO-Revision-Date: 2023-01-11 17:00+0000\n"
+"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"PO-Revision-Date: 2023-01-14 10:54+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
 ">\n"
@@ -1408,9 +1408,8 @@ msgstr "Шақыруды тайдыру"
 msgid "Decrease playback speed"
 msgstr "Ойнату жылдамдығын азайту"
 
-#, fuzzy
 msgid "Decryption failed"
-msgstr "Байланысу сәтсіз аяқталды"
+msgstr "Дешифрлеу сәтсіз аяқталды"
 
 msgid "Default"
 msgstr "Бастапқысы"
@@ -1448,9 +1447,8 @@ msgstr "Теманы өшіру"
 msgid "Deny"
 msgstr "Тайдыру"
 
-#, fuzzy
 msgid "Deny all subscription requests"
-msgstr "Жазылуға сұраным"
+msgstr "Барлық жазылуға сұранымдарды тайдыру"
 
 msgid "Description"
 msgstr "Сипаттамасы"
@@ -1987,9 +1985,8 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "Бастап"
 
-#, fuzzy
 msgid "Full Message View"
-msgstr "Хабарлама жіберілді"
+msgstr "Толық хабарлама көрінісі"
 
 msgid "Full Name"
 msgstr "Аты-жөні"
@@ -2800,6 +2797,10 @@ msgstr "Табалдырық мәні жоқ"
 
 msgid "No additional requirements"
 msgstr "Қосымша талаптар жоқ"
+
+#, fuzzy
+msgid "No automatic preview"
+msgstr "Автоматты алдын ала қарау сөндірілген"
 
 msgid "No commands available"
 msgstr "Қолжетімді командалар жоқ"
@@ -4484,6 +4485,10 @@ msgid ""
 "XMPP server (%s)."
 msgstr "Сіздің XMPP серверінің SSL сертификатын растауда қате орын алған (%s)."
 
+#, fuzzy
+msgid "This account has already been added"
+msgstr "Тіркелгі сәтті қосылды"
+
 msgid "This account is not connected to the server"
 msgstr "Бұл тіркелгі серверге байланыс орнатылмаған"
 
@@ -5197,7 +5202,7 @@ msgid "ZZZZzzzzzZZZZZ"
 msgstr "ZZZZzzzzzZZZZZ"
 
 msgid "[read more]"
-msgstr ""
+msgstr "[көбірек оқу]"
 
 msgid "_Abort"
 msgstr "Т_оқтату"
@@ -5515,7 +5520,8 @@ msgstr "ел"
 msgid "countrycode"
 msgstr "ел_коды"
 
-msgid "dark skin"
+#, fuzzy
+msgid "dark skin tone"
 msgstr "күңгірт тері"
 
 msgid "datum"
@@ -5566,7 +5572,10 @@ msgstr "курсив"
 msgid "lat"
 msgstr "ендік"
 
-msgid "light skin"
+#. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
+#. You can use the hex value to find the matching string.
+#, fuzzy
+msgid "light skin tone"
 msgstr "ақшыл тері"
 
 msgid "locality"
@@ -5581,10 +5590,12 @@ msgstr "macOS"
 msgid "medium skin tone"
 msgstr "орташа тері реңкі"
 
-msgid "medium-dark skin"
+#, fuzzy
+msgid "medium-dark skin tone"
 msgstr "орташа күңгірт тері"
 
-msgid "medium-light skin"
+#, fuzzy
+msgid "medium-light skin tone"
 msgstr "орташа ақшыл тері"
 
 msgctxt "Group chat address"

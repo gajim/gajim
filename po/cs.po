@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-13 22:54+0000\n"
-"PO-Revision-Date: 2023-01-08 14:46+0000\n"
+"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"PO-Revision-Date: 2023-01-18 14:36+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
 ">\n"
@@ -1408,9 +1408,8 @@ msgstr "Odmítnout pozvánku"
 msgid "Decrease playback speed"
 msgstr "Snížit rychlost přehrávání"
 
-#, fuzzy
 msgid "Decryption failed"
-msgstr "Připojení selhalo"
+msgstr "Dešifrování se nezdařilo"
 
 msgid "Default"
 msgstr "Výchozí"
@@ -1448,9 +1447,8 @@ msgstr "Smazat motiv vzhledu"
 msgid "Deny"
 msgstr "Odmítnout"
 
-#, fuzzy
 msgid "Deny all subscription requests"
-msgstr "Žádost o autorizaci"
+msgstr "Odmítnout všechny žádosti o sledování"
 
 msgid "Description"
 msgstr "Popis"
@@ -1982,9 +1980,8 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "Od"
 
-#, fuzzy
 msgid "Full Message View"
-msgstr "Zpráva odeslána"
+msgstr "Zobrazit celou zprávu"
 
 msgid "Full Name"
 msgstr "Celé jméno"
@@ -2055,17 +2052,15 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Gajim se nyní ukončí"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Gajim: No updates available (last check: %s)"
-msgstr "Nejsou dostupné žádné aktualizace (poslední kontrola: %s)"
+msgstr "Gajim: Nejsou dostupné žádné aktualizace (poslední kontrola: %s)"
 
-#, fuzzy
 msgid "Gajim: No updates available (last check: never)"
-msgstr "Nejsou dostupné žádné aktualizace (poslední kontrola: nikdy)"
+msgstr "Gajim: Nejsou dostupné žádné aktualizace (poslední kontrola: nikdy)"
 
-#, fuzzy
 msgid "Gajim: Update check disabled in preferences"
-msgstr "Kontrola aktualizací je vypnuta"
+msgstr "Gajim: Kontrola aktualizací je vypnuta"
 
 msgid "Gathering information…"
 msgstr "Získávám informace…"
@@ -2798,6 +2793,10 @@ msgstr "Bez prahu"
 msgid "No additional requirements"
 msgstr "Žádné další požadavky"
 
+#, fuzzy
+msgid "No automatic preview"
+msgstr "Automatické náhledy jsou zakázány"
+
 msgid "No commands available"
 msgstr "Žádné příkazy nejsou dostupné"
 
@@ -3255,13 +3254,11 @@ msgstr "Zásuvné moduly"
 msgid "Plugins Updated Successfully"
 msgstr "Zásuvné moduly byly úspěšně aktualizovány"
 
-#, fuzzy
 msgid "Plugins: No updates available"
-msgstr "je dostupná aktualizace"
+msgstr "Zásuvné moduly: Nejsou dostupné žádné aktualizace"
 
-#, fuzzy
 msgid "Plugins: Update check disabled in preferences"
-msgstr "Kontrola aktualizací je vypnuta"
+msgstr "Zásuvné moduly: Kontrola aktualizací je vypnuta"
 
 msgid "Port"
 msgstr "Port"
@@ -4475,6 +4472,10 @@ msgid ""
 "XMPP server (%s)."
 msgstr "Nastala chyba při ověřování SSL certifikátu vašeho XMPP serveru (%s)."
 
+#, fuzzy
+msgid "This account has already been added"
+msgstr "Účet byl úspěšně přidán"
+
 msgid "This account is not connected to the server"
 msgstr "Tento účet není připojen k serveru"
 
@@ -5186,7 +5187,7 @@ msgid "ZZZZzzzzzZZZZZ"
 msgstr "ZZZZzzzzzZZZZZ"
 
 msgid "[read more]"
-msgstr ""
+msgstr "[více]"
 
 msgid "_Abort"
 msgstr "Zrušit"
@@ -5504,7 +5505,8 @@ msgstr "země"
 msgid "countrycode"
 msgstr "kód země"
 
-msgid "dark skin"
+#, fuzzy
+msgid "dark skin tone"
 msgstr "tmavý motiv vzhledu"
 
 msgid "datum"
@@ -5555,7 +5557,10 @@ msgstr "kurzíva"
 msgid "lat"
 msgstr "lat"
 
-msgid "light skin"
+#. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
+#. You can use the hex value to find the matching string.
+#, fuzzy
+msgid "light skin tone"
 msgstr "světlý motiv vzhledu"
 
 msgid "locality"
@@ -5570,10 +5575,12 @@ msgstr "macOS"
 msgid "medium skin tone"
 msgstr "střední motiv vzhledu"
 
-msgid "medium-dark skin"
+#, fuzzy
+msgid "medium-dark skin tone"
 msgstr "středně tmavý motiv vzhledu"
 
-msgid "medium-light skin"
+#, fuzzy
+msgid "medium-light skin tone"
 msgstr "středně světlý motiv vzhledu"
 
 msgctxt "Group chat address"

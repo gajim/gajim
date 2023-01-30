@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-13 22:54+0000\n"
-"PO-Revision-Date: 2023-01-06 09:33+0000\n"
+"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"PO-Revision-Date: 2023-01-30 20:41+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
-"Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/"
-">\n"
+"Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/>"
+"\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1412,9 +1412,8 @@ msgstr "Odrzuć zaproszenie"
 msgid "Decrease playback speed"
 msgstr "Zmniejsz prędkość odtwarzania"
 
-#, fuzzy
 msgid "Decryption failed"
-msgstr "Połączenie nie powiodło się"
+msgstr "Odszyfrowanie nie powiodło się"
 
 msgid "Default"
 msgstr "Domyślny"
@@ -1452,9 +1451,8 @@ msgstr "Usuń motyw"
 msgid "Deny"
 msgstr "Odmów"
 
-#, fuzzy
 msgid "Deny all subscription requests"
-msgstr "Prośba o autoryzację"
+msgstr "Odrzuć wszystkie prośby o autoryzację"
 
 msgid "Description"
 msgstr "Opis"
@@ -1990,9 +1988,8 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "Od"
 
-#, fuzzy
 msgid "Full Message View"
-msgstr "Wiadomość została wysłana"
+msgstr "Widok pełnej wiadomości"
 
 msgid "Full Name"
 msgstr "Pełna nazwa (imię i nazwisko)"
@@ -2064,17 +2061,15 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Gajim zakończy teraz działanie"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Gajim: No updates available (last check: %s)"
-msgstr "Brak dostępnych aktualizacji (ostatnio sprawdzone: %s)"
+msgstr "Gajim: brak dostępnych aktualizacji (ostatnio sprawdzone: %s)"
 
-#, fuzzy
 msgid "Gajim: No updates available (last check: never)"
-msgstr "Brak dostępnych aktualizacji (ostatnio sprawdzone: nigdy)"
+msgstr "Gajim: brak dostępnych aktualizacji (ostatnio sprawdzone: nigdy)"
 
-#, fuzzy
 msgid "Gajim: Update check disabled in preferences"
-msgstr "Sprawdzanie aktualizacji wyłączone w preferencjach"
+msgstr "Gajim: sprawdzanie aktualizacji wyłączone w preferencjach"
 
 msgid "Gathering information…"
 msgstr "Zbieranie informacji…"
@@ -2143,9 +2138,9 @@ msgstr "Rozmowa grupowa może być znaleziona przez wyszukiwanie"
 msgid "Group chat does not exist"
 msgstr "Rozmowa grupowa nie istnieje"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Group chat has been destroyed%s"
-msgstr "Rozmowa grupowa została zniszczona"
+msgstr "Rozmowa grupowa została zniszczona%s"
 
 msgid "Group chat is closed"
 msgstr "Rozmowa grupowa jest zamknięta"
@@ -2811,6 +2806,9 @@ msgstr "Brak progu"
 msgid "No additional requirements"
 msgstr "Brak dodatkowych wymagań"
 
+msgid "No automatic preview"
+msgstr "Brak automatycznego podglądu"
+
 msgid "No commands available"
 msgstr "Żadne polecenia nie są dostępne"
 
@@ -3270,13 +3268,11 @@ msgstr "Wtyczki"
 msgid "Plugins Updated Successfully"
 msgstr "Wtyczki pomyślnie zaktualizowane"
 
-#, fuzzy
 msgid "Plugins: No updates available"
-msgstr "Aktualizacja dostępna"
+msgstr "Wtyczki: brak dostępnych aktualizacji"
 
-#, fuzzy
 msgid "Plugins: Update check disabled in preferences"
-msgstr "Sprawdzanie aktualizacji wyłączone w preferencjach"
+msgstr "Wtyczki: sprawdzanie aktualizacji wyłączone w preferencjach"
 
 msgid "Port"
 msgstr "Port"
@@ -4504,6 +4500,9 @@ msgstr ""
 "Wystąpił błąd podczas weryfikowania certyfikatu SSL Twojego serwera XMPP "
 "(%s)."
 
+msgid "This account has already been added"
+msgstr "To konto już zostało dodane"
+
 msgid "This account is not connected to the server"
 msgstr "To konto nie jest połączone z serwerem"
 
@@ -5229,7 +5228,7 @@ msgid "ZZZZzzzzzZZZZZ"
 msgstr "ZZZZzzzzzZZZZZ"
 
 msgid "[read more]"
-msgstr ""
+msgstr "[czytaj dalej]"
 
 msgid "_Abort"
 msgstr "_Anuluj"
@@ -5547,8 +5546,8 @@ msgstr "kraj"
 msgid "countrycode"
 msgstr "kod kraju"
 
-msgid "dark skin"
-msgstr "ciemna skóra"
+msgid "dark skin tone"
+msgstr "karnacja ciemna"
 
 msgid "datum"
 msgstr "punkt odniesienia"
@@ -5598,8 +5597,10 @@ msgstr "kursywa"
 msgid "lat"
 msgstr "szerokość"
 
-msgid "light skin"
-msgstr "jasna skóra"
+#. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
+#. You can use the hex value to find the matching string.
+msgid "light skin tone"
+msgstr "karnacja jasna"
 
 msgid "locality"
 msgstr "lokalizacja"
@@ -5611,13 +5612,13 @@ msgid "macOS"
 msgstr "macOS"
 
 msgid "medium skin tone"
-msgstr "pośredni odcień skóry"
+msgstr "karnacja średnia"
 
-msgid "medium-dark skin"
-msgstr "średniociemna skóra"
+msgid "medium-dark skin tone"
+msgstr "karnacja średnio ciemna"
 
-msgid "medium-light skin"
-msgstr "średnio-jasna skóra"
+msgid "medium-light skin tone"
+msgstr "karnacja średnio jasna"
 
 msgctxt "Group chat address"
 msgid "news"

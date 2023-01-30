@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-13 22:54+0000\n"
+"POT-Creation-Date: 2023-01-29 17:33+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -3170,6 +3170,9 @@ msgstr ""
 msgid "No additional requirements"
 msgstr ""
 
+msgid "No automatic preview"
+msgstr ""
+
 #, fuzzy
 msgid "No commands available"
 msgstr "Neniu konto disponeblas"
@@ -5100,6 +5103,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "This account has already been added"
+msgstr "Konto estas sukcese aldonita"
+
+#, fuzzy
 msgid "This account is not connected to the server"
 msgstr "Konto \"%s\" estas konektita al la servilo"
 
@@ -6273,7 +6280,7 @@ msgstr "Konto"
 msgid "countrycode"
 msgstr "Konto"
 
-msgid "dark skin"
+msgid "dark skin tone"
 msgstr ""
 
 msgid "datum"
@@ -6327,7 +6334,9 @@ msgstr "Kursiva"
 msgid "lat"
 msgstr "lat"
 
-msgid "light skin"
+#. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
+#. You can use the hex value to find the matching string.
+msgid "light skin tone"
 msgstr ""
 
 msgid "locality"
@@ -6343,10 +6352,10 @@ msgstr "macOS"
 msgid "medium skin tone"
 msgstr ""
 
-msgid "medium-dark skin"
+msgid "medium-dark skin tone"
 msgstr ""
 
-msgid "medium-light skin"
+msgid "medium-light skin tone"
 msgstr ""
 
 msgctxt "Group chat address"

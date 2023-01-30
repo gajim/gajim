@@ -8,13 +8,14 @@
 # Tommy He <lovenemesis@gmail.com>, 2022.
 # andy baker <andy.baker@dismail.de>, 2022.
 # Bob Huang (Ziyan Huang) <bc3104hzy@126.com>, 2022, 2023.
+# André <git@apitzsch.eu>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-13 22:54+0000\n"
-"PO-Revision-Date: 2023-01-13 08:48+0000\n"
-"Last-Translator: Bob Huang (Ziyan Huang) <bc3104hzy@126.com>\n"
+"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"PO-Revision-Date: 2023-01-29 13:51+0000\n"
+"Last-Translator: André <git@apitzsch.eu>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
 "gajim/master/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -2101,9 +2102,9 @@ msgstr "群聊可通过搜索找到"
 msgid "Group chat does not exist"
 msgstr "群聊不存在"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Group chat has been destroyed%s"
-msgstr "群聊已被解散"
+msgstr "群聊已被解散%s"
 
 msgid "Group chat is closed"
 msgstr "群聊已关闭"
@@ -2754,6 +2755,10 @@ msgstr "没有限制"
 
 msgid "No additional requirements"
 msgstr "没有额外的请求"
+
+#, fuzzy
+msgid "No automatic preview"
+msgstr "自动预览已禁用"
 
 msgid "No commands available"
 msgstr "没有可用命令"
@@ -4407,6 +4412,10 @@ msgid ""
 "XMPP server (%s)."
 msgstr "尝试验证 XMPP 服务器的 SSL 证书时发生错误（%s）。"
 
+#, fuzzy
+msgid "This account has already been added"
+msgstr "账户已成功添加"
+
 msgid "This account is not connected to the server"
 msgstr "该账户没有连接到服务器"
 
@@ -5429,8 +5438,8 @@ msgstr "国家"
 msgid "countrycode"
 msgstr "国家代码"
 
-msgid "dark skin"
-msgstr "暗色皮肤"
+msgid "dark skin tone"
+msgstr "较深肤色"
 
 msgid "datum"
 msgstr "数据"
@@ -5480,8 +5489,10 @@ msgstr "斜体"
 msgid "lat"
 msgstr "纬度"
 
-msgid "light skin"
-msgstr "浅色皮肤"
+#. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
+#. You can use the hex value to find the matching string.
+msgid "light skin tone"
+msgstr "较浅肤色"
 
 msgid "locality"
 msgstr "地区"
@@ -5493,13 +5504,13 @@ msgid "macOS"
 msgstr "macOS"
 
 msgid "medium skin tone"
-msgstr "中性皮肤"
+msgstr "中等肤色"
 
-msgid "medium-dark skin"
-msgstr "中深色皮肤"
+msgid "medium-dark skin tone"
+msgstr "中等-深肤色"
 
-msgid "medium-light skin"
-msgstr "中浅色皮肤"
+msgid "medium-light skin tone"
+msgstr "中等-浅肤色"
 
 msgctxt "Group chat address"
 msgid "news"

@@ -3,12 +3,13 @@
 #
 # El gran Pirujo <boina@disroot.org>, 2022, 2023.
 # Juan <jumase@disroot.org>, 2022.
+# André <git@apitzsch.eu>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-13 22:54+0000\n"
-"PO-Revision-Date: 2023-01-13 08:48+0000\n"
+"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"PO-Revision-Date: 2023-01-29 19:13+0000\n"
 "Last-Translator: El gran Pirujo <boina@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
@@ -1993,9 +1994,8 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "De"
 
-#, fuzzy
 msgid "Full Message View"
-msgstr "Mensaje enviado"
+msgstr "Vista de mensaje completo"
 
 msgid "Full Name"
 msgstr "Nombre completo"
@@ -2808,6 +2808,9 @@ msgstr "Sin umbral"
 
 msgid "No additional requirements"
 msgstr "Sin requerimientos adicionales"
+
+msgid "No automatic preview"
+msgstr "Sin previsualización automática"
 
 msgid "No commands available"
 msgstr "No hay comandos disponibles"
@@ -4499,6 +4502,9 @@ msgid ""
 msgstr ""
 "Ocurrió un error verificando el certificado SSL de tu servidor XMPP (%s)."
 
+msgid "This account has already been added"
+msgstr "La cuenta ya ha sido añadida"
+
 msgid "This account is not connected to the server"
 msgstr "Esta cuentano está conectada al servidor"
 
@@ -5214,7 +5220,7 @@ msgid "ZZZZzzzzzZZZZZ"
 msgstr "ZZZZzzzzzZZZZZ"
 
 msgid "[read more]"
-msgstr ""
+msgstr "[leer más]"
 
 msgid "_Abort"
 msgstr "_Abortar"
@@ -5532,8 +5538,8 @@ msgstr "país"
 msgid "countrycode"
 msgstr "código de país"
 
-msgid "dark skin"
-msgstr "aspecto oscuro"
+msgid "dark skin tone"
+msgstr "tono de piel oscuro"
 
 msgid "datum"
 msgstr "referencia"
@@ -5583,8 +5589,10 @@ msgstr "cursiva"
 msgid "lat"
 msgstr "latitud"
 
-msgid "light skin"
-msgstr "aspecto luminoso"
+#. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
+#. You can use the hex value to find the matching string.
+msgid "light skin tone"
+msgstr "tono de piel claro"
 
 msgid "locality"
 msgstr "localidad"
@@ -5596,13 +5604,13 @@ msgid "macOS"
 msgstr "macOS"
 
 msgid "medium skin tone"
-msgstr "aspecto de tono medio"
+msgstr "tono de piel medio"
 
-msgid "medium-dark skin"
-msgstr "aspecto semi oscuro"
+msgid "medium-dark skin tone"
+msgstr "tono de piel oscuro medio"
 
-msgid "medium-light skin"
-msgstr "aspecto semi luminoso"
+msgid "medium-light skin tone"
+msgstr "tono de piel claro medio"
 
 msgctxt "Group chat address"
 msgid "news"
