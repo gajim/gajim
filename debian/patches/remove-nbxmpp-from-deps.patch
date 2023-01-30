@@ -1,0 +1,25 @@
+From 0056a3ef2c5b1f5320795b214aa35b38a6b9caa1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Philipp=20H=C3=B6rist?= <philipp@hoerist.com>
+Date: Mon, 30 Jan 2023 21:33:38 +0100
+Subject: [PATCH] Remove nbxmpp from deps
+
+The debian package depends on python3-nbxmpp-nightly
+---
+ pyproject.toml | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 93c4acbe6..52544a89d 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -27,7 +27,6 @@ classifiers = [
+ dependencies = [
+   "css-parser",
+   "keyring",
+-  "nbxmpp>=4.0.1,<5.0.0",
+   "packaging",
+   "pillow",
+   "precis-i18n>=1.0.0",
+-- 
+2.37.2
+
