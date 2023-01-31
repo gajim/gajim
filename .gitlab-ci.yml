@@ -189,8 +189,6 @@ deploy-unix-nightly:
 deploy-debian-nightly:
   image: gajim-deploy:latest
   stage: deploy
-  variables:
-    REV: "1"
   dependencies:
     - build-debian-nightly
   rules:
@@ -202,7 +200,7 @@ deploy-debian-nightly:
         --host=$FTP_HOST \
         --user=$FTP_USER \
         --password=$FTP_PASS \
-        --directory=debian/gajim/"$(date +'%Y%m%d')"-$REV \
+        --directory=debian/gajim/"$(date +'%Y%m%d')" \
         debian_build
 
 deploy-windows:
