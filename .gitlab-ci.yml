@@ -176,7 +176,11 @@ deploy-unix-nightly:
     - build-unix
   rules:
     - if: '$NIGHTLY_BUILD'
+  allow_failure:
+    exit_codes:
+      - 100
   script:
+    - release-helper nightly-check
     - >
       release-helper deploy-to-ftp \
         --host=$FTP_HOST \
@@ -194,7 +198,11 @@ deploy-debian-nightly:
   rules:
     - if: '$DEBIAN_BUILD'
     - if: '$NIGHTLY_BUILD'
+  allow_failure:
+    exit_codes:
+      - 100
   script:
+    - release-helper nightly-check
     - >
       release-helper deploy-to-ftp \
         --host=$FTP_HOST \
@@ -228,7 +236,11 @@ deploy-windows-nightly:
     - build-windows-nightly
   rules:
     - if: '$NIGHTLY_BUILD'
+  allow_failure:
+    exit_codes:
+      - 100
   script:
+    - release-helper nightly-check
     - release-helper download-appveyor-artifacts "$(find windows_build/*.json)" windows_build
     - rm windows_build/*.json
     - >
