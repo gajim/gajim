@@ -406,7 +406,7 @@ class MessageReceived(ApplicationEvent):
     unique_id: str
     stanza_id: str
     fjid: str
-    resource: str
+    resource: str | None
     delayed: Optional[float]
     msg_log_id: Optional[int]
     displaymarking: Optional[Displaymarking]

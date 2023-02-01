@@ -35,8 +35,8 @@ class CallManager(EventHelper):
         self._jingle_audio_sid: Optional[str] = None
         self._jingle_video_sid: Optional[str] = None
 
-        self._jingle_audio_state = JingleState.NULL
-        self._jingle_video_state = JingleState.NULL
+        self._jingle_audio_state: JingleState = JingleState.NULL
+        self._jingle_video_state: JingleState = JingleState.NULL
 
         # Helper for upgrading voice call to voice + video without
         # having to show a new call row

@@ -372,7 +372,9 @@ class ConversationView(Gtk.ScrolledWindow):
         return self._contact
 
     def _get_row_at_index(self, index: int) -> BaseRow:
-        return cast(BaseRow, self._list_box.get_row_at_index(index))
+        row = self._list_box.get_row_at_index(index)
+        assert row is not None
+        return cast(BaseRow, row)
 
     def get_first_message_row(self) -> Optional[MessageRow]:
         for row in self._list_box.get_children():
@@ -555,7 +557,7 @@ class ConversationView(Gtk.ScrolledWindow):
         self._active_date_rows.add(start_of_day)
         self._list_box.add(date_row)
 
-        row = self._get_row_at_index(date_row.get_index() + 1)
+        row = self._list_box.get_row_at_index(date_row.get_index() + 1)
         if row is None:
             return
 
@@ -582,7 +584,7 @@ class ConversationView(Gtk.ScrolledWindow):
         index = message.get_index()
         while index != 0:
             index -= 1
-            row = self._get_row_at_index(index)
+            row = self._list_box.get_row_at_index(index)
             if row is None:
                 return None
 
@@ -603,7 +605,7 @@ class ConversationView(Gtk.ScrolledWindow):
         index = message.get_index()
         while True:
             index += 1
-            row = self._get_row_at_index(index)
+            row = self._list_box.get_row_at_index(index)
             if row is None:
                 return
 
@@ -713,9 +715,6 @@ class ConversationView(Gtk.ScrolledWindow):
                 row.update()
 
     def set_read_marker(self, id_: str) -> None:
-        if id_ is None:
-            return
-
         row = self._get_row_by_message_id(id_)
         if row is None:
             return

@@ -203,9 +203,7 @@ class SelectAccountDir(Page):
         self._set_complete()
 
     def _set_complete(self) -> None:
-        self.complete = bool(
-            self._account is not None and
-            self._export_directory is not None)
+        self.complete = bool(self._account is not None)
         self.update_page_complete()
 
     def _on_file_set(self, button: Gtk.FileChooserButton) -> None:

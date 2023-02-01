@@ -22,8 +22,8 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import cast
 from typing import Optional
+from typing import TypedDict
 
 import logging
 import sys
@@ -38,6 +38,12 @@ from gajim.common.events import MusicTrackChanged
 log = logging.getLogger('gajim.c.dbus.music_track')
 
 MPRIS_PLAYER_PREFIX = 'org.mpris.MediaPlayer2.'
+
+
+class TrackProperties(TypedDict, total=False):
+    Metadata: dict[str, str]
+    PlaybackStatus: str
+
 
 
 class MusicTrackListener:
@@ -175,8 +181,8 @@ class MusicTrackListener:
         self._get_playing_track(user_data[0])
 
     @staticmethod
-    def _get_music_info(properties: dict[str, str]) -> Optional[TuneData]:
-        meta = cast(dict[str, str], properties.get('Metadata'))
+    def _get_music_info(properties: TrackProperties) -> Optional[TuneData]:
+        meta = properties.get('Metadata')
         if meta is None or not meta:
             return None
 

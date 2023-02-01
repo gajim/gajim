@@ -251,7 +251,7 @@ class SelectTime(Page):
 
     def _on_row_selected(self, _listbox: Gtk.ListBox, row: TimeOption) -> None:
         self._timedelta = row.get_timedelta()
-        self.complete = row is not None
+        self.complete = True
         self.update_page_complete()
 
     def get_timedelta(self) -> Optional[timedelta]:

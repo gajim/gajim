@@ -144,7 +144,7 @@ class ChatList(Gtk.ListBox, EventHelper):
         return None
 
     def get_selected_chat(self) -> Optional[ChatListRow]:
-        row = cast(ChatListRow, self.get_selected_row())
+        row = cast(ChatListRow | None, self.get_selected_row())
         if row is None:
             return None
         return row
@@ -390,7 +390,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             log.debug('Dropped row is not pinned')
             return
 
-        row = cast(ChatListRow, self.get_row_at_y(y_coord))
+        row = cast(ChatListRow | None, self.get_row_at_y(y_coord))
         if row is not None:
             alloc = row.get_allocation()
             hover_row_y = alloc.y
@@ -455,7 +455,7 @@ class ChatList(Gtk.ListBox, EventHelper):
         return text in row.contact_name.lower()
 
     @staticmethod
-    def _header_func(row: ChatListRow, before: ChatListRow) -> None:
+    def _header_func(row: ChatListRow, before: ChatListRow | None) -> None:
         if before is None:
             if row.is_pinned:
                 row.set_header_type(RowHeaderType.PINNED)

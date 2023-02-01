@@ -138,7 +138,7 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
 
         message_row = app.storage.archive.get_last_correctable_message(
             self._contact.account, self._contact.jid, last_message_id)
-        if message_row is None:
+        if message_row is None or message_row.message is None:
             return
 
         self._set_correcting(True)

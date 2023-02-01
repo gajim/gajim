@@ -70,8 +70,7 @@ def generate_avatar(letters: str,
     color_r, color_g, color_b = color
 
     # Set up colors and size
-    if scale is not None:
-        size = size * scale
+    size = size * scale
 
     width = size
     height = size
@@ -510,8 +509,6 @@ class AvatarStorage(metaclass=Singleton):
 
         returns SHA1 value of the avatar or None on error
         '''
-        if data is None:
-            return None
 
         sha = hashlib.sha1(data).hexdigest()
         path = configpaths.get('AVATAR') / sha

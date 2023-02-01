@@ -175,9 +175,6 @@ class ProfileWindow(Gtk.ApplicationWindow):
             log.info('Error loading VCard: %s', error)
             self._current_vcard = VCard()
 
-        if self._current_vcard is None:
-            self._current_vcard = VCard()
-
         self._load_avatar()
         self._vcard_grid.set_vcard(self._current_vcard.copy())
         self._ui.profile_stack.set_visible_child_name('profile')

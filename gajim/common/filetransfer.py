@@ -61,8 +61,6 @@ class FileTransfer(Observable):
         self.update_progress()
 
     def get_state_description(self) -> str:
-        if self._state is None:
-            return ''
         return self._state_descriptions.get(self._state, '')
 
     def set_preparing(self) -> None:

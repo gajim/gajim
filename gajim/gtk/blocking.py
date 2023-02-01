@@ -108,8 +108,6 @@ class BlockingList(Gtk.ApplicationWindow):
 
     def _on_remove(self, _button: Gtk.ToolButton) -> None:
         selected_rows = self._ui.block_view.get_selection().get_selected_rows()
-        if selected_rows is None:
-            return
         mod, paths = selected_rows
         for path in paths:
             iter_ = mod.get_iter(path)

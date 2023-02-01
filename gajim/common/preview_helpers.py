@@ -435,10 +435,11 @@ def get_previewable_mime_types() -> tuple[str, ...]:
     for fmt in GdkPixbuf.Pixbuf.get_formats():
         for mime_type in fmt.get_mime_types():
             previewable_mime_types.add(mime_type.lower())
-    if Image is not None:
-        Image.init()
-        for mime_type in Image.MIME.values():
-            previewable_mime_types.add(mime_type.lower())
+
+    Image.init()
+    for mime_type in Image.MIME.values():
+        previewable_mime_types.add(mime_type.lower())
+
     return tuple(filter(
         lambda mime_type: mime_type.startswith('image'),
         previewable_mime_types

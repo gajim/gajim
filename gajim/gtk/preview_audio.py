@@ -605,8 +605,7 @@ class AudioWidget(Gtk.Box):
         if self._audio_analyzer is not None:
             self._audio_analyzer.destroy()
 
-        if self._ui.speed_popover is not None:
-            self._ui.speed_popover.destroy()
+        self._ui.speed_popover.destroy()
 
         self._remove_seek_bar_update_idle()
 

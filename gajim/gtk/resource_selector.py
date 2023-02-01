@@ -75,7 +75,7 @@ class ResourceSelector(Gtk.ScrolledWindow):
 
     def _on_row_selected(self,
                          _listbox: Gtk.ListBox,
-                         row: ResourceRow
+                         row: ResourceRow | None
                          ) -> None:
         state = bool(row is not None)
         self.emit('selection-changed', state)

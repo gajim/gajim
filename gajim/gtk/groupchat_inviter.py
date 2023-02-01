@@ -69,9 +69,6 @@ class ContactRow(Gtk.ListBoxRow):
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         box.set_hexpand(True)
 
-        if self._name is None:
-            self._name = _('Invite New Contact')
-
         self._name_label = Gtk.Label(label=self._name)
         self._name_label.set_ellipsize(Pango.EllipsizeMode.END)
         self._name_label.set_xalign(0)

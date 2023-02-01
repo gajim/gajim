@@ -257,7 +257,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _on_paste_last(self, *args: Any) -> None:
         buffer_ = self._ui.input_entry.get_buffer()
-        if buffer_ is not None and self.last_stanza is not None:
+        if self.last_stanza is not None:
             buffer_.set_text(self.last_stanza)
         self._ui.input_entry.grab_focus()
 

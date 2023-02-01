@@ -80,6 +80,7 @@ class FileTransferJingleRow(BaseRow):
         self._contact = contact
 
         if db_message is not None:
+            assert db_message.additional_data is not None
             sid = db_message.additional_data.get_value('gajim', 'sid')
             assert sid is not None
             self._file_props = FilesProp.getFilePropBySid(sid)

@@ -523,10 +523,10 @@ class GajimApplication(Gtk.Application, CoreApplication):
                        username: str,
                        domain: str,
                        password: str,
-                       proxy_name: str,
+                       proxy_name: str | None,
                        custom_host: tuple[str,
                                           ConnectionProtocol,
-                                          ConnectionType],
+                                          ConnectionType] | None,
                        anonymous: bool = False
                        ) -> None:
 
@@ -544,7 +544,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
         # Action must be added before account window is updated
         self.add_account_actions(account)
 
-        window = cast(AccountsWindow, get_app_window('AccountsWindow'))
+        window = cast(AccountsWindow | None, get_app_window('AccountsWindow'))
         if window is not None:
             window.add_account(account)
 
@@ -552,7 +552,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
         CoreApplication.enable_account(self, account)
         menus.build_accounts_menu()
         self.update_app_actions_state()
-        window = cast(AccountsWindow, get_app_window('AccountsWindow'))
+        window = cast(AccountsWindow | None, get_app_window('AccountsWindow'))
         if window is not None:
             window.enable_account(account, True)
 
@@ -574,7 +574,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         self.remove_account_actions(account)
 
-        window = cast(AccountsWindow, get_app_window('AccountsWindow'))
+        window = cast(AccountsWindow | None, get_app_window('AccountsWindow'))
         if window is not None:
             window.remove_account(account)
 
@@ -660,7 +660,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
     def _on_add_contact_account_action(_action: Gio.SimpleAction,
                                        param: GLib.Variant) -> None:
         account, jid = param.get_strv()
-        if jid is not None:
+        if jid:
             jid = JID.from_string(jid)
         open_window('AddContact', account=account or None, jid=jid or None)
 
@@ -822,9 +822,9 @@ class GajimApplication(Gtk.Application, CoreApplication):
         def _remove() -> None:
             app.storage.archive.remove_history(params.account, params.jid)
             control = app.window.get_control()
-            if params.jid is not None:
-                if not control.is_loaded(params.account, params.jid):
-                    return
+
+            if not control.is_loaded(params.account, params.jid):
+                return
 
             control.reset_view()
 

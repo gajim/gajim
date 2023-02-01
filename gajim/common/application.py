@@ -337,10 +337,10 @@ class CoreApplication(ged.EventHelper):
                        username: str,
                        domain: str,
                        password: str,
-                       proxy_name: str,
+                       proxy_name: str | None,
                        custom_host: tuple[str,
                                           ConnectionProtocol,
-                                          ConnectionType],
+                                          ConnectionType] | None,
                        anonymous: bool = False
                        ) -> None:
 
@@ -427,8 +427,7 @@ class CoreApplication(ged.EventHelper):
                       account: Optional[str] = None
                       ) -> None:
 
-        if status is None:
-            status = get_global_show()
+        status = get_global_show()
 
         if account is not None:
             self._change_status(account, status)

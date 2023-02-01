@@ -56,7 +56,7 @@ class AccountSideBar(Gtk.ListBox):
         app.window.show_account_page(row.account)
 
     def activate_account_page(self, account: str) -> None:
-        row = cast(Account, self.get_selected_row())
+        row = cast(Account | None, self.get_selected_row())
         if row is not None and row.account == account:
             return
 

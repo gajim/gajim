@@ -14,7 +14,6 @@
 
 from __future__ import annotations
 
-from typing import cast
 from typing import Optional
 from typing import Union
 
@@ -42,10 +41,10 @@ class MessageWidget(Gtk.Box):
         self._account = account
         self._selectable = selectable
 
-        self._content = cast(ContentT, None)
+        self._content: ContentT | None = None
         self._action_phrase_text = ''
 
-    def get_content(self) -> ContentT:
+    def get_content(self) -> ContentT | None:
         return self._content
 
     def get_text(self) -> str:

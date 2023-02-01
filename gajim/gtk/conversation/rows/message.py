@@ -94,7 +94,7 @@ class MessageRow(BaseRow):
         self._contact = contact
 
         self._is_groupchat: bool = False
-        if contact is not None and contact.is_groupchat:
+        if contact.is_groupchat:
             self._is_groupchat = True
 
         self._has_receipt: bool = marker == 'received'
@@ -257,9 +257,6 @@ class MessageRow(BaseRow):
                 'gajim-mention-highlight')
 
     def _get_avatar(self, kind: str, name: str) -> Optional[cairo.ImageSurface]:
-        if self._contact is None:
-            return None
-
         scale = self.get_scale_factor()
         if isinstance(self._contact, GroupchatContact):
             contact = self._contact.get_resource(name)

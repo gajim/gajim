@@ -557,10 +557,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
             name = f'<span strikethrough="true">{name}</span>'
 
         # add status msg, if not empty, under contact name
-        status = contact.status
-        if status is not None:
-            status = status.strip()
-
+        status = contact.status.strip()
         if status and app.settings.get('show_status_msgs_in_roster'):
             # Display only first line
             status = status.split('\n', 1)[0]

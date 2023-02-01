@@ -37,7 +37,7 @@ class DialogButton(NamedTuple):
     callback: Any
     args: Any
     kwargs: Any
-    action: ButtonAction
+    action: ButtonAction | None
     is_default: bool
 
     @classmethod

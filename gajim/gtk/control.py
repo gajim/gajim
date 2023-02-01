@@ -703,6 +703,7 @@ class ChatControl(EventHelper):
         for msg in messages:
             if msg.kind in (KindConstant.FILE_TRANSFER_INCOMING,
                             KindConstant.FILE_TRANSFER_OUTGOING):
+                assert msg.additional_data is not None
                 if msg.additional_data.get_value('gajim', 'type') == 'jingle':
                     self._scrolled_view.add_jingle_file_transfer(
                         db_message=msg)

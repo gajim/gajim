@@ -321,8 +321,7 @@ class Linux(NotificationBackend):
             return
 
         notification = Gio.Notification()
-        if event.title is not None:
-            notification.set_title(event.title)
+        notification.set_title(event.title)
 
         text = event.text
         if 'body-markup' in self._caps:

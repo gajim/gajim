@@ -83,7 +83,7 @@ class SearchView(Gtk.Box):
         self._clear()
 
     @staticmethod
-    def _header_func(row: ResultRow, before: ResultRow) -> None:
+    def _header_func(row: ResultRow, before: ResultRow | None) -> None:
         if before is None:
             row.set_header(RowHeader(row.account, row.jid, row.time))
         else:

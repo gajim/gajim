@@ -769,7 +769,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                        param: GLib.Variant) -> None:
 
         workspace_id = param.get_string()
-        if workspace_id is not None:
+        if workspace_id:
             self.add_workspace(workspace_id)
 
     def add_workspace(self,
@@ -860,7 +860,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                             param: GLib.Variant) -> None:
 
         workspace_id = param.get_string()
-        if workspace_id is not None:
+        if workspace_id:
             self.activate_workspace(workspace_id)
 
     def activate_workspace(self, workspace_id: str) -> None:

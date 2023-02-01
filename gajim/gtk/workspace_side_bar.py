@@ -239,7 +239,7 @@ class WorkspaceSideBar(Gtk.ListBox):
         return None
 
     def activate_workspace(self, workspace_id: str) -> None:
-        row = cast(CommonWorkspace, self.get_selected_row())
+        row = cast(CommonWorkspace | None, self.get_selected_row())
         if row is not None and row.workspace_id == workspace_id:
             return
 
@@ -247,12 +247,12 @@ class WorkspaceSideBar(Gtk.ListBox):
         self.select_row(row)
 
     def activate_workspace_number(self, number: int) -> None:
-        row = cast(CommonWorkspace, self.get_row_at_index(number))
+        row = cast(CommonWorkspace | None, self.get_row_at_index(number))
         if row is not None and row.workspace_id != 'add':
             app.window.activate_workspace(row.workspace_id)
 
     def get_active_workspace(self) -> Optional[str]:
-        row = cast(CommonWorkspace, self.get_selected_row())
+        row = cast(CommonWorkspace | None, self.get_selected_row())
         if row is None:
             return None
         return row.workspace_id

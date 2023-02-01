@@ -217,9 +217,7 @@ class SqliteStorage:
         return con
 
     def _reinit_storage(self) -> None:
-        if self._con is not None:
-            self._con.close()
-
+        self._con.close()
         if self._path is not None:
             self._path.unlink()
         self.init()

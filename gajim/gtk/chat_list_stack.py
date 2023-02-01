@@ -98,8 +98,7 @@ class ChatListStack(Gtk.Stack, EventHelper):
 
         for action in actions:
             action_name, variant, func = action
-            if variant is not None:
-                variant = GLib.VariantType.new(variant)
+            variant = GLib.VariantType.new(variant)
             act = Gio.SimpleAction.new(action_name, variant)
             act.connect('activate', func)
             app.window.add_action(act)

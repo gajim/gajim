@@ -64,6 +64,7 @@ class CallRow(BaseRow):
         self._session: Optional[JingleSession] = None
 
         if db_message is not None:
+            assert db_message.additional_data is not None
             sid = db_message.additional_data.get_value('gajim', 'sid')
             module = self._client.get_module('Jingle')
             self._session = module.get_jingle_session(self._contact.jid, sid)
@@ -127,11 +128,10 @@ class CallRow(BaseRow):
                 is_self = False
 
         if self._event is not None:
-            if self._event is not None:
-                is_self = False
-            else:
-                contact = self._contact
-                is_self = True
+            is_self = False
+        else:
+            contact = self._contact
+            is_self = True
 
         scale = self.get_scale_factor()
         avatar = contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)

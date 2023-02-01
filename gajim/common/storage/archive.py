@@ -106,7 +106,7 @@ class ConversationRow(NamedTuple):
     show: int
     message: str
     subject: str
-    additional_data: AdditionalDataDict
+    additional_data: AdditionalDataDict | None
     log_line_id: int
     message_id: str
     stanza_id: str
@@ -118,8 +118,8 @@ class LastConversationRow(NamedTuple):
     contact_name: str
     time: float
     kind: int
-    message: str
-    additional_data: AdditionalDataDict
+    message: str | None
+    additional_data: AdditionalDataDict | None
     message_id: str
     stanza_id: str
 
@@ -149,7 +149,7 @@ class MessageMetaRow(NamedTuple):
 class LastArchiveMessageRow(NamedTuple):
     id: int
     last_mam_id: str
-    oldest_mam_timestamp: str
+    oldest_mam_timestamp: str | None
     last_muc_timestamp: str
 
 
@@ -404,7 +404,7 @@ class MessageArchiveStorage(SqliteStorage):
     def get_last_conversation_line(self,
                                    account: str,
                                    jid: JID
-                                   ) -> LastConversationRow:
+                                   ) -> LastConversationRow | None:
         '''
         Load the last line of a conversation with jid for account.
         Loads messages, but no status messages or error messages.
@@ -879,8 +879,8 @@ class MessageArchiveStorage(SqliteStorage):
     def find_stanza_id(self,
                        account: str,
                        archive_jid: str,
-                       stanza_id: str,
-                       origin_id: Optional[str] = None,
+                       stanza_id: str | None,
+                       origin_id: str | None = None,
                        groupchat: bool = False
                        ) -> bool:
         '''

@@ -353,7 +353,7 @@ class CacheStorage(SqliteStorage):
         return self._con.execute(sql).fetchall()
 
     @timeit
-    def get_unread_count(self, account: str, jid: JID) -> int:
+    def get_unread_count(self, account: str, jid: JID) -> int | None:
         sql = '''SELECT count, message_id, timestamp FROM unread
                  WHERE account = ? AND jid = ?'''
         return self._con.execute(sql, (account, jid)).fetchone()

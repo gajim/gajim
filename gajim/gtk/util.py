@@ -260,7 +260,9 @@ def get_cursor(name: str) -> Gdk.Cursor:
     cursor = Gdk.Cursor.new_from_name(display, name)
     if cursor is not None:
         return cursor
-    return Gdk.Cursor.new_from_name(display, 'default')
+    cursor = Gdk.Cursor.new_from_name(display, 'default')
+    assert cursor is not None
+    return cursor
 
 
 def scroll_to_end(widget: Gtk.ScrolledWindow) -> bool:
@@ -273,7 +275,7 @@ def scroll_to_end(widget: Gtk.ScrolledWindow) -> bool:
         bool: The return value is False so it can be used with GLib.idle_add.
     '''
     adj_v = widget.get_vadjustment()
-    if adj_v is None:
+    if adj_v is None:  # pyright: ignore
         # This can happen when the Widget is already destroyed when called
         # from GLib.idle_add
         return False
