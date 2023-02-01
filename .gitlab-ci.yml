@@ -29,7 +29,7 @@ test-pyright:
   script:
     - pip3 install git+https://dev.gajim.org/gajim/python-nbxmpp.git
     - pip3 install --config-settings=config=Gtk3,Gdk3,GtkSource4 git+https://github.com/pygobject/pygobject-stubs.git
-    - npm install pyright
+    - npm install pyright@1.1.292
     - node_modules/.bin/pyright --version
     - node_modules/.bin/pyright
   interruptible: true
@@ -50,7 +50,7 @@ test-isort:
     - changes:
       - "**/*.py"
   script:
-    - pip3 install isort
+    - pip3 install isort==5.12.0
     - isort --check .
   interruptible: true
 
