@@ -1,3 +1,26 @@
+Gajim 1.7.0 (03 Feb 2023)
+
+  Improvements
+
+  * Preferences: Add 0 and 25 MiB to preview size settings (#11385)
+  * Account wizard: Don't allow to add account twice
+
+  Change
+
+  * Port to pyproject.toml
+
+  Bug Fixes
+
+  * Fix loading localised emojis
+  * HTTPUpload: Don’t cache temp path (#11373)
+  * JingleAudio: Always resample audio before processing with webrtcdsp (#11023)
+  * Disable legacy ciphers in cryptography
+
+  Notes
+
+  The port to pyproject.toml brings changes about how to package Gajim.
+  Please read the README to find all information about metadata generation.
+
 Gajim 1.6.1 (14 Jan 2023)
 
   Improvements
