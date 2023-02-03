@@ -50,7 +50,6 @@ from gajim.common.events import AllowGajimUpdateCheck
 from gajim.common.events import GajimUpdateAvailable
 from gajim.common.events import SignedIn
 from gajim.common.helpers import from_one_line
-from gajim.common.helpers import get_global_show
 from gajim.common.helpers import get_random_string
 from gajim.common.settings import LegacyConfig
 from gajim.common.settings import Settings
@@ -426,8 +425,6 @@ class CoreApplication(ged.EventHelper):
                       status: str,
                       account: Optional[str] = None
                       ) -> None:
-
-        status = get_global_show()
 
         if account is not None:
             self._change_status(account, status)
