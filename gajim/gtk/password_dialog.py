@@ -78,13 +78,12 @@ class PasswordDialog(Gtk.ApplicationWindow):
 
     def _on_ok(self, _button: Gtk.Button) -> None:
         password = self._ui.pass_entry.get_text()
+        savepass = self._ui.save_pass_checkbutton.get_active()
 
-        app.settings.set_account_setting(
-            self.account,
-            'savepass',
-            self._ui.save_pass_checkbutton.get_active())
+        app.settings.set_account_setting(self.account, 'savepass', savepass)
         passwords.save_password(self.account, password)
-        self._event.on_password(password)
+
+        self._event.on_password()
         self.destroy()
 
     def _on_cancel(self, _button: Gtk.Button) -> None:

@@ -73,7 +73,6 @@ class Client(Observable):
         self._hostname = app.settings.get_account_setting(self._account,
                                                           'hostname')
         self._user = app.settings.get_account_setting(self._account, 'name')
-        self.password = None
 
         self._priority = 0
         self._connect_machine_calls = 0
@@ -165,15 +164,6 @@ class Client(Observable):
         self._client.set_domain(self._hostname)
         self._client.set_username(self._user)
         self._client.set_resource(get_resource(self._account))
-
-        pass_saved = app.settings.get_account_setting(self._account, 'savepass')
-        if pass_saved:
-            # Request password from keyring only if the user chose to save
-            # his password
-            self.password = passwords.get_password(self._account)
-
-        self._client.set_password(self.password)
-
         self._client.set_http_session(create_http_session())
 
         self._client.subscribe('resume-failed', self._on_resume_failed)
@@ -271,9 +261,7 @@ class Client(Observable):
             self._destroy_client = True
 
             if error in ('not-authorized', 'no-password'):
-                def _on_password(password: str) -> None:
-                    self.password = password
-                    self._client.set_password(password)
+                def _on_password() -> None:
                     self._prepare_for_connect()
 
                 app.ged.raise_event(PasswordRequired(client=self,
@@ -534,6 +522,9 @@ class Client(Observable):
         proxy = get_account_proxy(self._account)
         if proxy is not None:
             self._client.set_proxy(proxy)
+
+        password = passwords.get_password(self._account)
+        self._client.set_password(password)
 
         self.connect()
 

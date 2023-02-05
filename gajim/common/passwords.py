@@ -136,6 +136,24 @@ class ConfigPasswordStorage:
         app.settings.set_account_setting(account_name, 'password', '')
 
 
+class MemoryPasswordStorage:
+    '''
+    Store password in memory
+    '''
+
+    _passwords: dict[str, str] = {}
+
+    def get_password(self, account_name: str) -> str:
+        return self._passwords.get(account_name, '')
+
+    def save_password(self, account_name: str, password: str) -> bool:
+        self._passwords[account_name] = password
+        return True
+
+    def delete_password(self, account_name: str) -> None:
+        self._passwords[account_name] = ''
+
+
 def init() -> None:
     _interface.init()
 
@@ -145,17 +163,17 @@ def is_keyring_available() -> bool:
 
 
 def get_password(account_name: str) -> Optional[str]:
+    if not app.settings.get_account_setting(account_name, 'savepass'):
+        return MemoryPasswordStorage().get_password(account_name)
+
     if app.settings.get('use_keyring'):
         return SecretPasswordStorage.get_password(account_name)
     return ConfigPasswordStorage.get_password(account_name)
 
 
 def save_password(account_name: str, password: str) -> bool:
-    if account_name in app.settings.get_active_accounts():
-        app.get_client(account_name).password = password
-
     if not app.settings.get_account_setting(account_name, 'savepass'):
-        return True
+        return MemoryPasswordStorage().save_password(account_name, password)
 
     if app.settings.get('use_keyring'):
         return SecretPasswordStorage.save_password(account_name, password)
@@ -163,9 +181,6 @@ def save_password(account_name: str, password: str) -> bool:
 
 
 def delete_password(account_name: str) -> None:
-    if account_name in app.settings.get_active_accounts():
-        app.get_client(account_name).password = None
-
     if app.settings.get('use_keyring'):
         return SecretPasswordStorage.delete_password(account_name)
     return ConfigPasswordStorage.delete_password(account_name)
