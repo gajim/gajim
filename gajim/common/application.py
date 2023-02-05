@@ -75,10 +75,10 @@ class CoreApplication(ged.EventHelper):
         app.detect_dependencies()
         configpaths.create_paths()
 
-        passwords.init()
-
         app.settings = Settings()
         app.settings.init()
+
+        passwords.init()
 
         app.config = LegacyConfig()
         app.commands = ChatCommands()

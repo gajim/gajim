@@ -37,6 +37,7 @@ import collections
 import copy
 import functools
 import hashlib
+import importlib.metadata
 import inspect
 import json
 import logging
@@ -77,6 +78,7 @@ from nbxmpp.protocol import Iq
 from nbxmpp.protocol import JID
 from nbxmpp.structs import CommonError
 from nbxmpp.structs import ProxyData
+from packaging.requirements import Requirement
 from packaging.version import Version as V
 
 from gajim.common import app
@@ -1508,6 +1510,17 @@ def get_glib_version() -> str:
     return '.'.join(map(str, [GLib.MAJOR_VERSION,
                               GLib.MINOR_VERSION,
                               GLib.MICRO_VERSION]))
+
+
+def package_version(requirement: str) -> bool:
+    req = Requirement(requirement)
+
+    try:
+        installed_version = importlib.metadata.version(req.name)
+    except importlib.metadata.PackageNotFoundError:
+        return False
+
+    return installed_version in req.specifier
 
 
 def make_path_from_jid(base_path: Path, jid: JID) -> Path:

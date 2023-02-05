@@ -30,6 +30,7 @@ from gajim.common.const import THRESHOLD_OPTIONS
 from gajim.common.events import StyleChanged
 from gajim.common.events import ThemeUpdate
 from gajim.common.helpers import open_directory
+from gajim.common.helpers import package_version
 from gajim.common.i18n import _
 from gajim.common.multimedia_helpers import AudioInputManager
 from gajim.common.multimedia_helpers import AudioOutputManager
@@ -887,6 +888,14 @@ class Miscellaneous(PreferenceBox):
                     'use_keyring',
                     desc=_('Use your system’s keyring to store passwords')),
         ]
+
+        if (sys.platform not in ('win32', 'darwin') and
+                package_version('keyring>=23.8.1')):
+            settings.append(
+                Setting(SettingKind.SWITCH,
+                        _('Enable KeepassXC Integration'),
+                        SettingType.CONFIG,
+                        'enable_keepassxc_integration'))
 
         if sys.platform in ('win32', 'darwin'):
             settings.append(

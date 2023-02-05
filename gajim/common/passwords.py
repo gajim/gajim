@@ -30,6 +30,7 @@ import logging
 import keyring
 
 from gajim.common import app
+from gajim.common.helpers import package_version
 
 __all__ = [
     'init',
@@ -56,7 +57,12 @@ class Interface:
         for backend in backends:
             log.info('Found keyring backend: %s', backend)
 
-        self.backend = keyring.get_keyring()
+        if (app.settings.get('enable_keepassxc_integration') and 
+                package_version('keyring>=23.8.1')):
+            _keyring = keyring.get_keyring()
+            self.backend = _keyring.with_properties(scheme='KeePassXC')
+        else:
+            self.backend = keyring.get_keyring()
         log.info('Select %s backend', self.backend)
 
         self._is_keyring_available = keyring.core.recommended(self.backend)
