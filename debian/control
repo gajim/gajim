@@ -12,7 +12,7 @@ Build-Depends:
     python3-css-parser,
     python3-gi,
     python3-gi-cairo,
-    python3-nbxmpp-nightly (>=20230123),
+    python3-nbxmpp-nightly (>=20230206),
     python3-setuptools,
     python3-packaging,
     python3-cryptography (>=3.4.8),
