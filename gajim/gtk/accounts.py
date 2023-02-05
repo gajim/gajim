@@ -26,6 +26,7 @@ from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
+from nbxmpp.stringprep import saslprep
 
 from gajim.common import app
 from gajim.common import passwords
@@ -1141,6 +1142,12 @@ class LoginDialog(SettingsDialog):
         self.connect('destroy', self.on_destroy)
 
     def on_password_change(self, new_password: str, _data: Any) -> None:
+        try:
+            new_password = saslprep(new_password)
+        except Exception:
+            # TODO: Show warning for invalid passwords
+            return
+
         passwords.save_password(self.account, new_password)
 
     def on_destroy(self, *args: Any) -> None:

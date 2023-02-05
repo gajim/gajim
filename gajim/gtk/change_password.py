@@ -25,6 +25,7 @@ from gi.repository import Gtk
 from nbxmpp.errors import ChangePasswordStanzaError
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules.dataforms import SimpleDataForm
+from nbxmpp.stringprep import saslprep
 from nbxmpp.task import Task
 
 from gajim.common import app
@@ -101,6 +102,7 @@ class ChangePassword(Assistant):
 
     def _on_apply(self, next_stage: bool = False) -> None:
         if next_stage:
+            # TODO: Does not apply sasl prep profile
             form = self.get_page('next_stage').get_submit_form()
             self._client.get_module('Register').change_password_with_form(
                 form, callback=self._on_change_password)
@@ -174,32 +176,40 @@ class EnterPassword(Page):
         self.pack_start(label, False, True, 0)
         self.pack_start(self._password1_entry, True, True, 0)
         self.pack_start(self._password2_entry, True, True, 0)
-        self._show_icon(False)
+        self._hide_warning()
         self.show_all()
 
-    def _show_icon(self, show: bool) -> None:
-        if show:
-            self._password2_entry.set_icon_from_icon_name(
-                Gtk.EntryIconPosition.SECONDARY, 'dialog-warning-symbolic')
-            self._password2_entry.set_icon_tooltip_text(
-                Gtk.EntryIconPosition.SECONDARY, _('Passwords do not match'))
-        else:
-            self._password2_entry.set_icon_from_icon_name(
-                Gtk.EntryIconPosition.SECONDARY, None)
+    def _hide_warning(self) -> None:
+        self._password1_entry.set_icon_from_icon_name(
+            Gtk.EntryIconPosition.SECONDARY, None)
+
+    def _show_warning(self, text: str) -> None:
+        self._password1_entry.set_icon_from_icon_name(
+            Gtk.EntryIconPosition.SECONDARY, 'dialog-warning-symbolic')
+        self._password1_entry.set_icon_tooltip_text(
+            Gtk.EntryIconPosition.SECONDARY, text)
 
     def _on_changed(self, _entry: Gtk.Entry) -> None:
         password1 = self._password1_entry.get_text()
         if not password1:
-            self._show_icon(True)
+            self._show_warning(_('Passwords do not match'))
             self._set_complete(False)
             return
 
         password2 = self._password2_entry.get_text()
         if password1 != password2:
-            self._show_icon(True)
+            self._show_warning(_('Passwords do not match'))
             self._set_complete(False)
             return
-        self._show_icon(False)
+
+        try:
+            saslprep(password1)
+        except Exception:
+            self._show_warning(_('Password contains prohibited characters'))
+            self._set_complete(False)
+            return
+
+        self._hide_warning()
         self._set_complete(True)
 
     def _set_complete(self, state: bool) -> None:
@@ -207,7 +217,7 @@ class EnterPassword(Page):
         self.update_page_complete()
 
     def get_password(self) -> str:
-        return self._password1_entry.get_text()
+        return saslprep(self._password1_entry.get_text())
 
     def get_visible_buttons(self) -> list[str]:
         return ['apply']

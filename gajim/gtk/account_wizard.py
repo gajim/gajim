@@ -38,6 +38,7 @@ from nbxmpp.errors import RegisterStanzaError
 from nbxmpp.errors import StanzaError
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import validate_domainpart
+from nbxmpp.stringprep import saslprep
 from nbxmpp.task import Task
 
 from gajim.common import app
@@ -677,9 +678,31 @@ class Login(Page):
         self._show_icon(False)
         return True
 
+    def _hide_password_warning(self) -> None:
+        self._ui.log_in_password_entry.set_icon_from_icon_name(
+            Gtk.EntryIconPosition.SECONDARY, None)
+        self._ui.log_in_password_entry.set_icon_tooltip_text(
+            Gtk.EntryIconPosition.SECONDARY, None)
+
+    def _show_password_warning(self) -> None:
+        self._ui.log_in_password_entry.set_icon_from_icon_name(
+            Gtk.EntryIconPosition.SECONDARY, 'dialog-warning-symbolic')
+        self._ui.log_in_password_entry.set_icon_tooltip_text(
+            Gtk.EntryIconPosition.SECONDARY,
+            _('Password contains prohibited characters'))
+
+    def _validate_password(self, password: str) -> str | None:
+        self._hide_password_warning()
+        try:
+            return saslprep(password)
+        except Exception:
+            self._show_password_warning()
+            return None
+
     def _set_complete(self, *args: Any) -> None:
         address = self._validate_jid(self._ui.log_in_address_entry.get_text())
         password = self._ui.log_in_password_entry.get_text()
+        password = self._validate_password(password)
         self._ui.log_in_button.set_sensitive(bool(address and password))
 
     def is_advanced(self) -> bool:
@@ -687,7 +710,7 @@ class Login(Page):
 
     def get_credentials(self) -> tuple[str, str]:
         data = (self._ui.log_in_address_entry.get_text(),
-                self._ui.log_in_password_entry.get_text())
+                saslprep(self._ui.log_in_password_entry.get_text()))
         return data
 
 
@@ -990,7 +1013,19 @@ class Form(Page):
     def has_form(self) -> bool:
         return self._current_form is not None
 
+    def _validate_password(self, password: str) -> str | None:
+        try:
+            return saslprep(password)
+        except Exception:
+            self._show_password_warning()
+            return None
+
     def _on_is_valid(self, _widget: DataFormWidget, is_valid: bool) -> None:
+        try:
+            self.get_credentials()
+        except Exception:
+            is_valid = False
+
         self.complete = is_valid
         self.update_page_complete()
 
@@ -1008,7 +1043,7 @@ class Form(Page):
     def get_credentials(self) -> tuple[str, str]:
         assert self._current_form is not None
         return (self._current_form.get_form()['username'].value,
-                self._current_form.get_form()['password'].value)
+                saslprep(self._current_form.get_form()['password'].value))
 
     def get_submit_form(self) -> Any:
         assert self._current_form is not None
