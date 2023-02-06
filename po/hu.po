@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
-"PO-Revision-Date: 2023-01-30 20:41+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
+"PO-Revision-Date: 2023-02-06 18:13+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -1627,6 +1627,9 @@ msgstr "Hangulatjelkódok"
 msgid "Enable"
 msgstr "Engedélyez"
 
+msgid "Enable KeepassXC Integration"
+msgstr "Együttműködés a KeepassXC-vel"
+
 msgid "Enabled"
 msgstr "Engedélyezve"
 
@@ -2381,9 +2384,6 @@ msgstr "Ismerősök meghívása"
 msgid "Invite Contacts…"
 msgstr "Ismerősök meghívása…"
 
-msgid "Invite New Contact"
-msgstr "Új ismerős meghívása"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
 "A barátokat meg lehet hívni társalgókba, csatlakozni lehet társalgókhoz"
@@ -3113,6 +3113,9 @@ msgstr "Jelszó szükséges"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Jelszó szükséges"
+
+msgid "Password contains prohibited characters"
+msgstr "A jelszó tiltott karaktereket tartalmaz"
 
 msgid "Passwords do not match"
 msgstr "A jelszavak nem egyeznek"
@@ -5895,6 +5898,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Edit Profile…"
 #~ msgstr "Profil szerkesztése…"
+
+#~ msgid "Invite New Contact"
+#~ msgstr "Új ismerős meghívása"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Nem sikerült feldolgozni az ablakba ejtett fájlt: %s"

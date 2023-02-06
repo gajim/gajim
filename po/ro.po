@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2022-12-29 22:46+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -1648,6 +1648,9 @@ msgstr "Shortcodes Emoji"
 msgid "Enable"
 msgstr "Activați"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 msgid "Enabled"
 msgstr "Activat"
 
@@ -2417,9 +2420,6 @@ msgstr "Invitați contacte"
 msgid "Invite Contacts…"
 msgstr "Invitați contacte…"
 
-msgid "Invite New Contact"
-msgstr "Invitați un nou contact"
-
 msgid "Invite friends to group chats or join one"
 msgstr "Invitați-vă prietenii la discuții de grup sau alăturați-vă la una"
 
@@ -3157,6 +3157,9 @@ msgstr "Parolă necesară"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Parolă Necesară"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Parolele nu se potrivesc"
@@ -5969,6 +5972,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Edit Profile…"
 #~ msgstr "Editați profilurile…"
+
+#~ msgid "Invite New Contact"
+#~ msgstr "Invitați un nou contact"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Ai pierdut ceva ce Gajim nu a putut procesa: %s"

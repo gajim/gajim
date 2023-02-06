@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -1873,6 +1873,9 @@ msgstr ""
 msgid "Enable"
 msgstr "Активиране"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 msgid "Enabled"
 msgstr "Включено"
 
@@ -2730,10 +2733,6 @@ msgstr "Покана на _контакти"
 msgid "Invite Contacts…"
 msgstr "Покана на _контакти"
 
-#, fuzzy
-msgid "Invite New Contact"
-msgstr "Покана на _контакти"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
 
@@ -3565,6 +3564,9 @@ msgstr "Необходима е парола"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Необходима е парола"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Паролите не съвпадат"
@@ -6718,3 +6720,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Изпращане на профила…"
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Покана на _контакти"

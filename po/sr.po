@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1875,6 +1875,9 @@ msgstr ""
 msgid "Enable"
 msgstr "Омогућен"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 msgid "Enabled"
 msgstr "Омогућен"
 
@@ -2721,10 +2724,6 @@ msgstr "Позови контакте"
 msgid "Invite Contacts…"
 msgstr "Позови контакте"
 
-#, fuzzy
-msgid "Invite New Contact"
-msgstr "Позови контакте"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
 
@@ -3554,6 +3553,9 @@ msgstr "Лозинка захтевана"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Лозинка захтевана"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Лозинке се не поклапају"
@@ -6697,3 +6699,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Слање профила..."
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Позови контакте"

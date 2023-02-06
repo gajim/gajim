@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -1913,6 +1913,9 @@ msgstr ""
 msgid "Enable"
 msgstr "מאופשר"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 msgid "Enabled"
 msgstr "מאופשר"
 
@@ -2797,10 +2800,6 @@ msgstr "הזמן _אנשי קשר"
 msgid "Invite Contacts…"
 msgstr "הזמן _אנשי קשר"
 
-#, fuzzy
-msgid "Invite New Contact"
-msgstr "הזמן _אנשי קשר"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
 
@@ -3642,6 +3641,9 @@ msgstr "נדרשת מילת מעבר"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "נדרשת מילת מעבר"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "סיסמאות לא תואמות"
@@ -6855,3 +6857,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "כעת שולח דיוקן..."
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "הזמן _אנשי קשר"

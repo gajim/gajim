@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -1855,6 +1855,9 @@ msgstr ""
 msgid "Enable"
 msgstr "Уключыць"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 #, fuzzy
 msgid "Enabled"
 msgstr "Уключыць"
@@ -2705,10 +2708,6 @@ msgstr "Людзі"
 msgid "Invite Contacts…"
 msgstr "Людзі"
 
-#, fuzzy
-msgid "Invite New Contact"
-msgstr "Людзі"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
 
@@ -3541,6 +3540,9 @@ msgstr "Патрабуецца пароль"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Патрабуецца пароль"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Паролі розняцца"
@@ -6676,3 +6678,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Адпраўленне профіля..."
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Людзі"

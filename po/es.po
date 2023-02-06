@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
-"PO-Revision-Date: 2023-01-29 19:13+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
+"PO-Revision-Date: 2023-02-06 18:13+0000\n"
 "Last-Translator: El gran Pirujo <boina@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
@@ -1640,6 +1640,9 @@ msgstr "Atajos de emoji"
 msgid "Enable"
 msgstr "Activar"
 
+msgid "Enable KeepassXC Integration"
+msgstr "Habilitar integración con KeepassXC"
+
 msgid "Enabled"
 msgstr "Activado"
 
@@ -2400,9 +2403,6 @@ msgstr "Invitar Contactos"
 msgid "Invite Contacts…"
 msgstr "Invitar contactos…"
 
-msgid "Invite New Contact"
-msgstr "Invitar a nuevo contacto"
-
 msgid "Invite friends to group chats or join one"
 msgstr "Invita a amigos a grupos o únete a uno"
 
@@ -3137,6 +3137,9 @@ msgstr "Contraseña requerida"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Contraseña requerida"
+
+msgid "Password contains prohibited characters"
+msgstr "La contraseña contiene caracteres prohibidos"
 
 msgid "Passwords do not match"
 msgstr "Las contraseñas no coinciden"
@@ -5925,6 +5928,9 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "Edit Profile…"
 #~ msgstr "Editar perfil…"
+
+#~ msgid "Invite New Contact"
+#~ msgstr "Invitar a nuevo contacto"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Has soltado algo que Gajim no pudo procesar: %s"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2022-07-18 19:52+0000\n"
 "Last-Translator: Volodymyr Smoliar <v_2e@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -1675,6 +1675,9 @@ msgstr "Коди емодзі"
 msgid "Enable"
 msgstr "Увімкнути"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 msgid "Enabled"
 msgstr "Увімкнено"
 
@@ -2499,10 +2502,6 @@ msgstr "Запросити _контакти"
 
 #, fuzzy
 msgid "Invite Contacts…"
-msgstr "Запросити _контакти"
-
-#, fuzzy
-msgid "Invite New Contact"
 msgstr "Запросити _контакти"
 
 msgid "Invite friends to group chats or join one"
@@ -3337,6 +3336,9 @@ msgstr "Слід ввести пароль"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Слід ввести пароль"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Паролі не збігаються"
@@ -6496,3 +6498,7 @@ msgstr ""
 
 #~ msgid "Edit Profile…"
 #~ msgstr "Змінити профіль…"
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Запросити _контакти"

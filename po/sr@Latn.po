@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2009-10-29 23:50+0100\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -1877,6 +1877,9 @@ msgstr ""
 msgid "Enable"
 msgstr "Omogući"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 msgid "Enabled"
 msgstr "Omogućen"
 
@@ -2724,10 +2727,6 @@ msgstr "Pozovi kontakte"
 msgid "Invite Contacts…"
 msgstr "Pozovi kontakte"
 
-#, fuzzy
-msgid "Invite New Contact"
-msgstr "Pozovi kontakte"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
 
@@ -3557,6 +3556,9 @@ msgstr "Lozinka zahtevana"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Lozinka zahtevana"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Lozinke se ne poklapaju"
@@ -6702,3 +6704,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Slanje profila..."
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Pozovi kontakte"

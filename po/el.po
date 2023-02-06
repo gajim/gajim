@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -1865,6 +1865,9 @@ msgstr ""
 msgid "Enable"
 msgstr "Ενεργοποίηση"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 #, fuzzy
 msgid "Enabled"
 msgstr "Ενεργοποίηση"
@@ -2712,10 +2715,6 @@ msgstr "Επαφές"
 msgid "Invite Contacts…"
 msgstr "Επαφές"
 
-#, fuzzy
-msgid "Invite New Contact"
-msgstr "Επαφές"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
 
@@ -3547,6 +3546,9 @@ msgstr "Απαιτείται κωδικός"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Απαιτείται κωδικός"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Οι κωδικοί δεν ταιριάζουν"
@@ -6699,3 +6701,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Όνομα προφίλ:"
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Επαφές"

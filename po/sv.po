@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2009-10-29 10:21+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -1871,6 +1871,9 @@ msgstr ""
 msgid "Enable"
 msgstr "Aktivera"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 msgid "Enabled"
 msgstr "Aktiverad"
 
@@ -2712,10 +2715,6 @@ msgstr "Bjud in _kontakter"
 msgid "Invite Contacts…"
 msgstr "Bjud in _kontakter"
 
-#, fuzzy
-msgid "Invite New Contact"
-msgstr "Bjud in _kontakter"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
 
@@ -3546,6 +3545,9 @@ msgstr "Lösenord krävs"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Lösenord krävs"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Lösenorden stämmer inte överens"
@@ -6696,3 +6698,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Skickar profil..."
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Bjud in _kontakter"

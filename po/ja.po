@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2023-01-20 22:27+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -1624,6 +1624,9 @@ msgstr "絵文字ショートコード"
 msgid "Enable"
 msgstr "有効"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 msgid "Enabled"
 msgstr "有効"
 
@@ -2385,9 +2388,6 @@ msgstr "相手先を招待"
 msgid "Invite Contacts…"
 msgstr "相手先を招待…"
 
-msgid "Invite New Contact"
-msgstr "新しい相手先を招待"
-
 msgid "Invite friends to group chats or join one"
 msgstr "談話室への招待と参加"
 
@@ -3135,6 +3135,9 @@ msgstr "パスワードが必要です"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "パスワードが必要です"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "パスワードが一致しません"
@@ -5993,3 +5996,6 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Edit Profile…"
 #~ msgstr "プロフィールを編集…"
+
+#~ msgid "Invite New Contact"
+#~ msgstr "新しい相手先を招待"

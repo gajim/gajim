@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2023-01-05 11:03+0000\n"
 "Last-Translator: Nikolay Chizhov <admin@kgd.in>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -1638,6 +1638,9 @@ msgstr "Короткие сочетания клавиш для смайлико
 msgid "Enable"
 msgstr "Включить"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 msgid "Enabled"
 msgstr "Включено"
 
@@ -2407,9 +2410,6 @@ msgstr "Пригласить контакты"
 msgid "Invite Contacts…"
 msgstr "Пригласить контакты…"
 
-msgid "Invite New Contact"
-msgstr "Пригласить новый контакт"
-
 msgid "Invite friends to group chats or join one"
 msgstr "Пригласите друзей в групповые чаты или присоединитесь к ним"
 
@@ -3148,6 +3148,9 @@ msgstr "Требуется пароль"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Требуется пароль"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Пароли не совпадают"
@@ -5945,3 +5948,6 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Edit Profile…"
 #~ msgstr "Редактировать профиль…"
+
+#~ msgid "Invite New Contact"
+#~ msgstr "Пригласить новый контакт"

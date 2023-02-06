@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -1847,6 +1847,9 @@ msgstr ""
 msgid "Enable"
 msgstr "Enaouiñ"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 #, fuzzy
 msgid "Enabled"
 msgstr "Enaouiñ"
@@ -2687,10 +2690,6 @@ msgstr "Darempredoù"
 msgid "Invite Contacts…"
 msgstr "Darempredoù"
 
-#, fuzzy
-msgid "Invite New Contact"
-msgstr "Darempredoù"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
 
@@ -3521,6 +3520,9 @@ msgstr "Ger-kuzh ret"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Ger-kuzh ret"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Ne glot ket ar gerioù-kuzh"
@@ -6642,3 +6644,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Kas ur restr"
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Darempredoù"

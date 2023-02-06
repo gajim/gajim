@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2009-11-18 15:50+0100\n"
 "Last-Translator: Stian B. Barmen <stian@barmen.nu>\n"
 "Language-Team: <>\n"
@@ -1839,6 +1839,9 @@ msgstr ""
 msgid "Enable"
 msgstr "Slå på"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 msgid "Enabled"
 msgstr "Påslått"
 
@@ -2699,10 +2702,6 @@ msgstr "Inviter _kontakter"
 msgid "Invite Contacts…"
 msgstr "Inviter _kontakter"
 
-#, fuzzy
-msgid "Invite New Contact"
-msgstr "Inviter _kontakter"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
 
@@ -3526,6 +3525,9 @@ msgstr "Passord påkrevd"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Passord påkrevd"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Passordene samsvarer ikke"
@@ -6665,3 +6667,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Sender profil…"
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Inviter _kontakter"

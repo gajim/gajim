@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2009-10-31 20:49+0100\n"
 "Last-Translator: Adrian C. <anrxc@sysphere.org>\n"
 "Language-Team: Croatian\n"
@@ -1879,6 +1879,9 @@ msgstr ""
 msgid "Enable"
 msgstr "Omogući"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 msgid "Enabled"
 msgstr "Omogućeno"
 
@@ -2726,10 +2729,6 @@ msgstr "Pozovi _Kontakte"
 msgid "Invite Contacts…"
 msgstr "Pozovi _Kontakte"
 
-#, fuzzy
-msgid "Invite New Contact"
-msgstr "Pozovi _Kontakte"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
 
@@ -3560,6 +3559,9 @@ msgstr "Potrebna Lozinka"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Potrebna Lozinka"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Lozinke se ne podudaraju"
@@ -6710,3 +6712,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Šaljem profil..."
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Pozovi _Kontakte"

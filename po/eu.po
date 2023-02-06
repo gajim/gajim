@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -1857,6 +1857,9 @@ msgstr ""
 msgid "Enable"
 msgstr "Aktibatu"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 #, fuzzy
 msgid "Enabled"
 msgstr "Aktibatu"
@@ -2707,10 +2710,6 @@ msgstr "Kontaktua"
 msgid "Invite Contacts…"
 msgstr "Kontaktua"
 
-#, fuzzy
-msgid "Invite New Contact"
-msgstr "Kontaktua"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
 
@@ -3541,6 +3540,9 @@ msgstr "Pasahitza behar da"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Pasahitza behar da"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Pasahitzak desberdinak dira"
@@ -6681,3 +6683,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Profila bidaltzen..."
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Kontaktua"

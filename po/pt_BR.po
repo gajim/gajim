@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2022-09-11 09:28+0000\n"
 "Last-Translator: jetli <jetli@dr.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -1688,6 +1688,9 @@ msgstr "Atalho para Emojis"
 msgid "Enable"
 msgstr "Habilitar"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 msgid "Enabled"
 msgstr "Habilitado"
 
@@ -2514,10 +2517,6 @@ msgstr "Convidar _contatos"
 
 msgid "Invite Contacts…"
 msgstr "Convidar Contatos…"
-
-#, fuzzy
-msgid "Invite New Contact"
-msgstr "Convidar _contatos"
 
 msgid "Invite friends to group chats or join one"
 msgstr "Convide amigos para conversar em grupo ou participe de um"
@@ -3351,6 +3350,9 @@ msgstr "Senha é obrigatória"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Senha é obrigatória"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Senhas não conferem"
@@ -6470,3 +6472,7 @@ msgstr ""
 
 #~ msgid "Edit Profile…"
 #~ msgstr "Editar Perfil…"
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Convidar _contatos"

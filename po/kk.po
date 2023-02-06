@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
-"PO-Revision-Date: 2023-01-14 10:54+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
+"PO-Revision-Date: 2023-02-06 18:13+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
-"Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
-">\n"
+"Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/>"
+"\n"
 "Language: kk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1631,6 +1631,9 @@ msgstr "Смайликтер үшін қысқа пернелер жарлықт
 msgid "Enable"
 msgstr "Қосу"
 
+msgid "Enable KeepassXC Integration"
+msgstr "KeepassXC интеграциясын іске қосу"
+
 msgid "Enabled"
 msgstr "Қосулы"
 
@@ -2391,9 +2394,6 @@ msgstr "Контакттарды шақыру"
 msgid "Invite Contacts…"
 msgstr "Контакттарды шақыру…"
 
-msgid "Invite New Contact"
-msgstr "Жаңа контактты шақыру"
-
 msgid "Invite friends to group chats or join one"
 msgstr "Достарды топтық чаттарға шақырыңыз немесе біреуіне қосылыңыз"
 
@@ -2798,9 +2798,8 @@ msgstr "Табалдырық мәні жоқ"
 msgid "No additional requirements"
 msgstr "Қосымша талаптар жоқ"
 
-#, fuzzy
 msgid "No automatic preview"
-msgstr "Автоматты алдын ала қарау сөндірілген"
+msgstr "Автоматты алдын ала қарау жоқ"
 
 msgid "No commands available"
 msgstr "Қолжетімді командалар жоқ"
@@ -3125,6 +3124,9 @@ msgstr "Пароль керек"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Пароль керек"
+
+msgid "Password contains prohibited characters"
+msgstr "Парольде рұқсат етілмеген таңбалар бар"
 
 msgid "Passwords do not match"
 msgstr "Парольдер өзара сәйкес келмейді"
@@ -4485,9 +4487,8 @@ msgid ""
 "XMPP server (%s)."
 msgstr "Сіздің XMPP серверінің SSL сертификатын растауда қате орын алған (%s)."
 
-#, fuzzy
 msgid "This account has already been added"
-msgstr "Тіркелгі сәтті қосылды"
+msgstr "Бұл тіркелгі бұрыннан қосылған болып тұр"
 
 msgid "This account is not connected to the server"
 msgstr "Бұл тіркелгі серверге байланыс орнатылмаған"
@@ -5520,7 +5521,6 @@ msgstr "ел"
 msgid "countrycode"
 msgstr "ел_коды"
 
-#, fuzzy
 msgid "dark skin tone"
 msgstr "күңгірт тері"
 
@@ -5574,7 +5574,6 @@ msgstr "ендік"
 
 #. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
 #. You can use the hex value to find the matching string.
-#, fuzzy
 msgid "light skin tone"
 msgstr "ақшыл тері"
 
@@ -5590,11 +5589,9 @@ msgstr "macOS"
 msgid "medium skin tone"
 msgstr "орташа тері реңкі"
 
-#, fuzzy
 msgid "medium-dark skin tone"
 msgstr "орташа күңгірт тері"
 
-#, fuzzy
 msgid "medium-light skin tone"
 msgstr "орташа ақшыл тері"
 
@@ -5890,3 +5887,6 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Edit Profile…"
 #~ msgstr "Профильді түзету…"
+
+#~ msgid "Invite New Contact"
+#~ msgstr "Жаңа контактты шақыру"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -1860,6 +1860,9 @@ msgstr ""
 msgid "Enable"
 msgstr "啟用"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 msgid "Enabled"
 msgstr "啟用"
 
@@ -2715,10 +2718,6 @@ msgstr "邀請聯絡人(_C)"
 msgid "Invite Contacts…"
 msgstr "邀請聯絡人(_C)"
 
-#, fuzzy
-msgid "Invite New Contact"
-msgstr "邀請聯絡人(_C)"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
 
@@ -3547,6 +3546,9 @@ msgstr "需要密碼"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "需要密碼"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "密碼不符"
@@ -6679,3 +6681,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "傳送側寫…"
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "邀請聯絡人(_C)"

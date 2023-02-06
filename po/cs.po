@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2023-01-18 14:36+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -1632,6 +1632,9 @@ msgstr "Zkratky emotikon"
 msgid "Enable"
 msgstr "Povolit"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 msgid "Enabled"
 msgstr "Povolit"
 
@@ -2386,9 +2389,6 @@ msgstr "Pozvat kontakty"
 msgid "Invite Contacts…"
 msgstr "Pozvat kontakty…"
 
-msgid "Invite New Contact"
-msgstr "Pozvat kontakt"
-
 msgid "Invite friends to group chats or join one"
 msgstr "Pozvěte přátele do skupinové konverzace, nebo se k jedné připojte"
 
@@ -3121,6 +3121,9 @@ msgstr "Zadejte heslo"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Je požadováno heslo"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Hesla se neshodují"
@@ -5936,6 +5939,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Edit Profile…"
 #~ msgstr "Upravit profil…"
+
+#~ msgid "Invite New Contact"
+#~ msgstr "Pozvat kontakt"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Nahráli jste něco, co Gajim nemohl zpracovat: %s"

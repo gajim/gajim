@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -1854,6 +1854,9 @@ msgstr ""
 msgid "Enable"
 msgstr "Ebligi"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 #, fuzzy
 msgid "Enabled"
 msgstr "Ebligi"
@@ -2703,10 +2706,6 @@ msgstr "Kontaktoj"
 msgid "Invite Contacts…"
 msgstr "Kontaktoj"
 
-#, fuzzy
-msgid "Invite New Contact"
-msgstr "Kontaktoj"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
 
@@ -3537,6 +3536,9 @@ msgstr "Pasvorto necesas"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Pasvorto necesas"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Pasvortoj diversas"
@@ -6670,3 +6672,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Publicas vizitkarton..."
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Kontaktoj"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -1829,6 +1829,9 @@ msgstr ""
 msgid "Enable"
 msgstr "Inschakelen"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 msgid "Enabled"
 msgstr "Ingeschakeld"
 
@@ -2688,10 +2691,6 @@ msgstr "_Contacten uitnodigen"
 msgid "Invite Contacts…"
 msgstr "Contacten uitnodigen"
 
-#, fuzzy
-msgid "Invite New Contact"
-msgstr "Contacten uitnodigen"
-
 msgid "Invite friends to group chats or join one"
 msgstr "Nodig vrienden uit in groepsgesprekken, of neem eraan deel"
 
@@ -3519,6 +3518,9 @@ msgstr "Wachtwoord vereist"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Wachtwoord vereist"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Wachtwoord komt niet overeen"
@@ -6642,3 +6644,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Profiel wordt verzonden…"
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Contacten uitnodigen"

@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2023-01-30 20:41+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
-"Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/>"
-"\n"
+"Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/"
+">\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1634,6 +1634,9 @@ msgstr "Krótkie kody emoji"
 msgid "Enable"
 msgstr "Włącz"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 msgid "Enabled"
 msgstr "Włączone"
 
@@ -2395,9 +2398,6 @@ msgstr "Zaproś kontakty"
 msgid "Invite Contacts…"
 msgstr "Zaproś kontakty…"
 
-msgid "Invite New Contact"
-msgstr "Zaproś nowy kontakt"
-
 msgid "Invite friends to group chats or join one"
 msgstr "Zaproś znajomych do rozmów grupowych lub dołącz do takich"
 
@@ -3134,6 +3134,9 @@ msgstr "Hasło jest wymagane"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Hasło jest wymagane"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Hasła nie zgadzają się"
@@ -5942,6 +5945,9 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "Edit Profile…"
 #~ msgstr "Edytuj profil…"
+
+#~ msgid "Invite New Contact"
+#~ msgstr "Zaproś nowy kontakt"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Upuściłeś coś, czego Gajim nie potrafi obsłużyć: %s"

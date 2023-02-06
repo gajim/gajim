@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2009-08-19 23:51+0200\n"
 "Last-Translator: Iván Méndez López <>\n"
 "Language-Team:  <softwarelibre@udc.es>\n"
@@ -1857,6 +1857,9 @@ msgstr ""
 msgid "Enable"
 msgstr "Activar"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 #, fuzzy
 msgid "Enabled"
 msgstr "Activar"
@@ -2707,10 +2710,6 @@ msgstr "Contactos"
 msgid "Invite Contacts…"
 msgstr "Contactos"
 
-#, fuzzy
-msgid "Invite New Contact"
-msgstr "Contactos"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
 
@@ -3543,6 +3542,9 @@ msgstr "É necesario o contrasinal"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "É necesario o contrasinal"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Os contrasinais non coinciden"
@@ -6680,3 +6682,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "A enviar o perfil..."
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Contactos"

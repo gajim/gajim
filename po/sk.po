@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -1869,6 +1869,9 @@ msgstr ""
 msgid "Enable"
 msgstr "Povoliť"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 msgid "Enabled"
 msgstr "Povolené"
 
@@ -2713,10 +2716,6 @@ msgstr "Pozvať _kontakty"
 msgid "Invite Contacts…"
 msgstr "Pozvať _kontakty"
 
-#, fuzzy
-msgid "Invite New Contact"
-msgstr "Pozvať _kontakty"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
 
@@ -3543,6 +3542,9 @@ msgstr "Heslo je požadované"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Heslo je požadované"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Heslá sa nezhodujú"
@@ -6687,3 +6689,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Odosielanie profilu..."
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Pozvať _kontakty"

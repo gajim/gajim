@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1759,6 +1759,9 @@ msgstr ""
 msgid "Enable"
 msgstr ""
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 msgid "Enabled"
 msgstr ""
 
@@ -2567,10 +2570,6 @@ msgstr "Convida _Contactes"
 msgid "Invite Contacts…"
 msgstr "Convida _Contactes"
 
-#, fuzzy
-msgid "Invite New Contact"
-msgstr "Convida _Contactes"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
 
@@ -3362,6 +3361,9 @@ msgstr ""
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Contrasenya:"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr ""
@@ -6286,3 +6288,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Perfil"
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Convida _Contactes"

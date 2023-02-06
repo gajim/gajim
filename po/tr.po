@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2022-01-13 21:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -1855,6 +1855,9 @@ msgstr ""
 msgid "Enable"
 msgstr "Etkin"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 #, fuzzy
 msgid "Enabled"
 msgstr "Etkin"
@@ -2694,10 +2697,6 @@ msgstr "Kişi Davet _Et"
 msgid "Invite Contacts…"
 msgstr "Kişi Davet _Et"
 
-#, fuzzy
-msgid "Invite New Contact"
-msgstr "Kişi Davet _Et"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
 
@@ -3522,6 +3521,9 @@ msgstr "Şifre gerekli"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Şifre gerekli"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Parolalar uyuşmuyor"
@@ -6651,3 +6653,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Profil gönderiliyor…"
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Kişi Davet _Et"

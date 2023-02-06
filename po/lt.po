@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -1834,6 +1834,9 @@ msgstr ""
 msgid "Enable"
 msgstr "Įjungti"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 msgid "Enabled"
 msgstr "Įjungtas"
 
@@ -2674,10 +2677,6 @@ msgstr "Kviesti Kontaktus"
 msgid "Invite Contacts…"
 msgstr "Kviesti Kontaktus"
 
-#, fuzzy
-msgid "Invite New Contact"
-msgstr "Kviesti Kontaktus"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
 
@@ -3500,6 +3499,9 @@ msgstr "Password Required"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "Password Required"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "Passwords do not match"
@@ -6604,3 +6606,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Sending profile..."
+
+#, fuzzy
+#~ msgid "Invite New Contact"
+#~ msgstr "Kviesti Kontaktus"

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-29 17:33+0000\n"
+"POT-Creation-Date: 2023-02-05 19:35+0000\n"
 "PO-Revision-Date: 2023-01-29 13:51+0000\n"
 "Last-Translator: André <git@apitzsch.eu>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -1611,6 +1611,9 @@ msgstr "表情符号快捷短语"
 msgid "Enable"
 msgstr "启用"
 
+msgid "Enable KeepassXC Integration"
+msgstr ""
+
 msgid "Enabled"
 msgstr "已启用"
 
@@ -2352,9 +2355,6 @@ msgstr "邀请联系人"
 msgid "Invite Contacts…"
 msgstr "邀请联系人…"
 
-msgid "Invite New Contact"
-msgstr "邀请新联系人"
-
 msgid "Invite friends to group chats or join one"
 msgstr "邀请朋友加入群聊或者加入一个"
 
@@ -3081,6 +3081,9 @@ msgstr "需要密码"
 msgctxt "Group chat feature"
 msgid "Password Required"
 msgstr "需要密码"
+
+msgid "Password contains prohibited characters"
+msgstr ""
 
 msgid "Passwords do not match"
 msgstr "密码不匹配"
@@ -5827,6 +5830,9 @@ msgstr "或者把图像拖放到这里"
 
 #~ msgid "Edit Profile…"
 #~ msgstr "编辑简介…"
+
+#~ msgid "Invite New Contact"
+#~ msgstr "邀请新联系人"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "您拖放了 Gajim 无法处理的对象: %s"
