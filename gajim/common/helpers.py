@@ -1170,6 +1170,7 @@ def get_default_muc_config() -> dict[str, Union[bool, str]]:
         # Ejabberd options
         'allow_voice_requests': False,
         'public_list': False,
+        'mam': True,
 
         # Prosody options
         '{http://prosody.im/protocol/muc}roomconfig_allowmemberinvites': True,
