@@ -161,11 +161,11 @@ modules:
   - name: python3-zipp
     buildsystem: simple
     build-commands:
-      - pip3 install zipp-3.11.0-py3-none-any.whl
+      - pip3 install zipp-3.12.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/z/zipp/zipp-3.11.0-py3-none-any.whl
-        sha256: 83a28fcb75844b5c0cdaf5aa4003c2d728c77e05f5aeabe8e95e56727005fbaa
+        url: https://files.pythonhosted.org/packages/py3/z/zipp/zipp-3.12.1-py3-none-any.whl
+        sha256: 6c4fe274b8f85ec73c37a8e4e3fa00df9fb9335da96fb789e3b96b318e5097b3
 
   # jaraco.classes dependency
   - name: python3-more-itertools
@@ -287,11 +287,11 @@ modules:
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-1.13.0-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-1.15.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.13.0-py2.py3-none-any.whl
-        sha256: b7ff6318183e551145b5c4766eb65b59ad5b63ff234dffddc5fb50340cad6729
+        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.15.0-py2.py3-none-any.whl
+        sha256: 7ad4d37dd093f4a7cb5ad804c6efe9e8fab8873f7ffc06042dc3f3fd700a93ec
 
   # gssapi dependency
   - name: python3-decorator
@@ -319,7 +319,7 @@ modules:
       - pip3 install nbxmpp-4.2.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-4.0.1-py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-4.2.0-py3-none-any.whl
         sha256: afaf513a90adf99444df32008c1c35cc861ff6bd3e586200f9210a991d13b5b1
 
   - name: gajim
