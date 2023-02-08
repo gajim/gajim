@@ -333,7 +333,7 @@ modules:
     sources:
       - type: git
         url: https://dev.gajim.org/gajim/gajim.git
-        tag: 1.7.0
+        tag: 1.7.1
       - type: file
         path: app-overrides.json
     post-install:

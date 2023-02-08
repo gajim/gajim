@@ -1,3 +1,27 @@
+Gajim 1.7.1 (08 Feb 2023)
+
+  New
+
+  * Improve KeepassXC Integration
+
+  Improvements
+
+  * MUC: Enable archiving when creating MUCs on ejabberd
+
+  Change
+
+  * Raise nbxmpp version to 4.2.0
+
+  Bug Fixes
+
+  * Apply SASLprep to passwords
+  * Make switching status work again
+
+  Notes
+
+  If you already used KeepassXC with Gajim, enabling the new
+  integration setting will trigger new entries in the password manager
+
 Gajim 1.7.0 (03 Feb 2023)
 
   Improvements
