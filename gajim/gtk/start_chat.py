@@ -339,6 +339,9 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._ui.listbox.invalidate_filter()
 
     def _start_new_chat(self, row: ContactRow) -> None:
+        if row.jid is None:
+            return
+
         if row.is_new:
             try:
                 validate_jid(row.jid)
@@ -349,7 +352,6 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self._disco_info(row)
             return
 
-        jid = JID.from_string(row.jid)
         if row.groupchat:
             if not app.account_is_available(row.account):
                 self._show_error_page(_('You can not join a group chat '
@@ -357,20 +359,20 @@ class StartChatDialog(Gtk.ApplicationWindow):
                 return
 
             self.ready_to_destroy = True
-            if app.window.chat_exists(row.account, jid):
-                app.window.select_chat(row.account, jid)
+            if app.window.chat_exists(row.account, row.jid):
+                app.window.select_chat(row.account, row.jid)
                 self.destroy()
                 return
 
             self.ready_to_destroy = False
             self._redirected = False
-            self._disco_muc(row.account, jid, request_vcard=row.is_new)
+            self._disco_muc(row.account, row.jid, request_vcard=row.is_new)
 
         else:
-            initial_message = self._initial_message.get(str(jid))
+            initial_message = self._initial_message.get(str(row.jid))
             app.window.add_chat(
                 row.account,
-                jid,
+                row.jid,
                 'contact',
                 select=True,
                 message=initial_message)
