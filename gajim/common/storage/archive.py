@@ -870,7 +870,8 @@ class MessageArchiveStorage(SqliteStorage):
 
         nicknames: list[str] = []
         for row in result:
-            if row.contact_name not in nicknames:
+            if (row.contact_name not in nicknames and
+                    row.contact_name is not None):
                 nicknames.append(row.contact_name)
 
         return nicknames
