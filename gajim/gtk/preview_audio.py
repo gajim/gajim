@@ -268,8 +268,19 @@ class AudioWidget(Gtk.Box):
             height,
             SEEK_BAR_PADDING,
         )
+        self._audio_visualizer.connect(
+            'button-press-event', self._on_visualizer_button_press)
 
         self._ui.drawing_box.add(self._audio_visualizer)
+
+    def _on_visualizer_button_press(self,
+                                    drawing_area: Gtk.DrawingArea,
+                                    event: Gdk.EventButton
+                                    ) -> bool:
+
+        relative_pos = event.x / drawing_area.get_allocation().width
+        self._seek_unconditionally(self._state.duration * relative_pos)
+        return False
 
     def _update_timestamp_label(self) -> None:
         cur = self._state.position

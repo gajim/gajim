@@ -47,6 +47,9 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
         self._seek_position = -1.0
         self._position = 0.0
 
+        # Add EventMask to receive button press events (for skipping)
+        self.add_events(Gdk.EventMask.BUTTON_PRESS_MASK)
+
         self.connect('draw', self._on_drawingarea_draw)
         self.connect('configure-event', self._on_drawingarea_changed)
         self.connect('style-updated', self._on_style_updated)
