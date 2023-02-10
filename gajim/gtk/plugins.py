@@ -353,7 +353,10 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
 
         manifest = model.get_value(iter_, Column.MANIFEST)
         plugin = app.plugin_manager.get_plugin(manifest.short_name)
-        assert plugin is not None
+        if plugin is None:
+            WarningDialog(_('Unable to properly remove the plugin'))
+            return
+
         try:
             app.plugin_manager.uninstall_plugin(plugin)
         except PluginsystemError as error:
