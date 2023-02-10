@@ -584,6 +584,11 @@ PROXY_EXAMPLES = {
         'host': 'localhost',
         'port': 9050
     },
+    'Tor (Browser)': {
+        'type': 'socks5',
+        'host': 'localhost',
+        'port': 9150
+    },
 }
 
 
