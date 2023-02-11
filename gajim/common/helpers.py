@@ -565,6 +565,12 @@ def message_needs_highlight(text: str, nickname: str, own_jid: str) -> bool:
     Check text to see whether any of the words in (muc_highlight_words and
     nick) appear
     '''
+
+    uri = parse_uri(text)
+    if uri.type != URIType.INVALID:
+        # Don't highlight message if it's an URI
+        return False
+
     special_words = app.settings.get('muc_highlight_words').split(';')
     special_words.append(nickname)
     special_words.append(own_jid)
