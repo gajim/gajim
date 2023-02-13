@@ -1011,6 +1011,7 @@ MIME_TYPES = (
     'audio/x-flac',
     'audio/x-m4a',
     'audio/x-matroska',
+    'audio/x-wav',
     # font/*
     'font/ttf',
     'font/woff',
