@@ -562,35 +562,44 @@ def get_os_info() -> str:
 
 def message_needs_highlight(text: str, nickname: str, own_jid: str) -> bool:
     '''
-    Check text to see whether any of the words in (muc_highlight_words and
-    nick) appear
+    Check whether 'text' contains 'nickname', 'own_jid', or any string of the
+    'muc_highlight_words' setting.
     '''
 
-    uri = parse_uri(text)
-    if uri.type != URIType.INVALID:
-        # Don't highlight message if it's an URI
-        return False
+    search_strings = app.settings.get('muc_highlight_words').split(';')
+    search_strings.append(nickname)
+    search_strings.append(own_jid)
 
-    special_words = app.settings.get('muc_highlight_words').split(';')
-    special_words.append(nickname)
-    special_words.append(own_jid)
-    # Strip empties: ''.split(';') == [''] and would highlight everything.
-    # Also lowercase everything for case insensitive compare.
-    special_words = [word.lower() for word in special_words if word]
+    search_strings = [word.lower() for word in search_strings if word]
     text = text.lower()
 
-    for special_word in special_words:
-        found_here = text.find(special_word)
-        while found_here > -1:
-            end_here = found_here + len(special_word)
-            if ((found_here == 0 or not text[found_here - 1].isalpha()) and
-                    (end_here == len(text) or not text[end_here].isalpha())):
-                # It is beginning of text or char before is not alpha AND
-                # it is end of text or char after is not alpha
+    for search_string in search_strings:
+        match = text.find(search_string)
+
+        while match > -1:
+            search_end = match + len(search_string)
+
+            if match == 0 and search_end == len(text):
+                # Text contains search_string only (exact match)
                 return True
-            # continue searching
-            start = found_here + 1
-            found_here = text.find(special_word, start)
+
+            char_before_allowed = bool(
+                not text[match - 1].isalpha() and
+                text[match - 1] not in ('/', '-'))
+
+            if char_before_allowed and search_end == len(text):
+                # search_string found at the end of text and
+                # char before search_string is allowed.
+                return True
+
+            if char_before_allowed and not text[search_end].isalpha():
+                # char_before search_string is allowed and
+                # char_after search_string is not alpha.
+                return True
+
+            start = match + 1
+            match = text.find(search_string, start)
+
     return False
 
 
