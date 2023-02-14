@@ -36,7 +36,6 @@ HAS_ACCOUNT_DEFAULT = _ACCOUNTDEFAULT()
 
 
 BoolSettings = Literal[
-    'additional_uri_schemes',
     'allow_open_file_uris',
     'always_english_wikipedia',
     'always_english_wiktionary',
@@ -129,6 +128,7 @@ IntSettings = Literal[
 
 StringSettings = Literal[
     'action_on_close',
+    'additional_uri_schemes',
     'audio_input_device',
     'audio_output_device',
     'autoaway_message',
