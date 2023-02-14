@@ -848,25 +848,21 @@ class MessageArchiveStorage(SqliteStorage):
         '''
         Queries the last 50 message rows and gathers nicknames in a list
         '''
-        jids = [contact.jid]
         account_id = self.get_account_id(contact.account)
-        kinds = map(str, [KindConstant.STATUS,
-                          KindConstant.GCSTATUS,
-                          KindConstant.ERROR])
 
         sql = '''
             SELECT contact_name
-            FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
-            AND account_id = {account_id}
-            AND kind NOT IN ({kinds})
+            FROM logs NATURAL JOIN jids
+            WHERE +jid = ?
+            AND account_id = ?
+            AND kind = ?
             ORDER BY time DESC
-            '''.format(jids=', '.join('?' * len(jids)),
-                       account_id=account_id,
-                       kinds=', '.join(kinds))
+            '''
 
-        result = self._con.execute(
-            sql,
-            tuple(jids)).fetchmany(50)
+        result = self._con.execute(sql, (contact.jid,
+                                         account_id,
+                                         KindConstant.GC_MSG
+                                         )).fetchmany(50)
 
         nicknames: list[str] = []
         for row in result:
