@@ -1,5 +1,4 @@
 import unittest
-from unittest.mock import MagicMock
 
 from gajim.common import app  # Avoids circular imports from common.helpers
 from gajim.common import styling
@@ -14,9 +13,8 @@ from gajim.common.styling import StrikeSpan
 from gajim.common.styling import StrongSpan
 from gajim.common.util.text import escape_iri_query
 
-app.settings = MagicMock()
-# additional_uri_schemes
-app.settings.get = MagicMock(return_value='a a- a. scheme')
+app.settings.set('additional_uri_schemes', 'a a- a. scheme')
+
 
 STYLING = {
     'pre cannot have children':  {
