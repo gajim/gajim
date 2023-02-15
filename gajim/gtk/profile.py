@@ -32,7 +32,9 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.task import Task
 
 from gajim.common import app
+from gajim.common.client import Client
 from gajim.common.const import AvatarSize
+from gajim.common.const import SimpleClientState
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
 
@@ -79,6 +81,9 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._jid = app.get_jid_from_account(account)
 
         self._client = app.get_client(self.account)
+        self._client.connect_signal(
+            'state-changed', self._on_client_state_changed)
+
         self._contact = self._client.get_module('Contacts').get_contact(
             self._jid)
 
@@ -144,6 +149,16 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._avatar_selector = None
         self._ui.privacy_popover.destroy()
         app.check_finalize(self)
+
+    def _on_client_state_changed(self,
+                                 _client: Client,
+                                 _signal_name: str,
+                                 state: SimpleClientState
+                                 ) -> None:
+
+        self._ui.save_button.set_sensitive(state.is_connected)
+        self._ui.save_button.set_tooltip_text(
+            _('Not connected') if not state.is_connected else '')
 
     def _on_access_model_received(self, task: Task) -> None:
         namespace = task.get_user_data()
