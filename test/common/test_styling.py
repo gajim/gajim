@@ -523,6 +523,7 @@ class Test(unittest.TestCase):
 
     def test_styling(self):
         for _name, params in STYLING.items():
+            assert isinstance(params['input'], str)
             result = styling.process(params['input'])
             self.assertEqual(result.blocks, params['tokens'])
 
