@@ -263,11 +263,11 @@ def get_uf_relative_time(timestamp: float,
         return _('Just now')
     if timespan < timedelta(minutes=15):
         minutes = int(timespan.seconds / 60)
-        return ngettext('%i min ago',
-                        '%i mins ago',
+        return ngettext('%s min ago',
+                        '%s mins ago',
                         minutes,
-                        minutes,
-                        minutes)
+                        str(minutes),
+                        str(minutes))
     today = now.date()
     if date_time.date() == today:
         format_string = app.settings.get('time_format')

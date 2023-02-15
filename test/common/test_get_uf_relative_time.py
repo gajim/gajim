@@ -30,11 +30,11 @@ class GetRelativeTimeTest(unittest.TestCase):
         self.assertEqual(get_uf_relative_time(timestamp1.timestamp(),
                                               timenow.timestamp()),
                                               ngettext(
-                                                '%i min ago',
-                                                '%i mins ago',
+                                                '%s min ago',
+                                                '%s mins ago',
                                                 3,
-                                                3,
-                                                3))
+                                                str(3),
+                                                str(3)))
 
     def test_sub_15_minutes_next_day(self):
         '''Test timedelta less than 15 minutes and it is the next day'''
@@ -43,11 +43,11 @@ class GetRelativeTimeTest(unittest.TestCase):
         self.assertEqual(get_uf_relative_time(timestamp1.timestamp(),
                                               timenow.timestamp()),
                                               ngettext(
-                                                '%i min ago',
-                                                '%i mins ago',
+                                                '%s min ago',
+                                                '%s mins ago',
                                                 10,
-                                                10,
-                                                10))
+                                                str(10),
+                                                str(10)))
 
     def test_today(self):
         '''Test today: same day and more than 15 minutes ago'''
