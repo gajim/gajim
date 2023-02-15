@@ -99,10 +99,17 @@ exclude = [
   "gajim/gtk/groupchat_info.py",
   "gajim/plugins/pluginmanager.py",
   "scripts/update_flatpak_manifest.py",
+  "test/common/test_uri_util.py",
+  "test/dialogs/certificate_dialog.py",
+  "test/dialogs/change_password.py",
+  "test/dialogs/dataform.py",
+  "test/dialogs/groupchat_info.py",
+  "test/dialogs/ssl_error_dialog.py",
+  "test/gui/test_menus.py",
+  "test/gui/test_nick_completion.py",
 ]
 include = [
     "launch.py",
-    "setup.py",
     ".ci/*",
     "mac/*",
     "scripts/*",
@@ -140,6 +147,7 @@ include = [
     "gajim/gajim_remote.py",
     "gajim/gtk/*",
     "gajim/plugins/*",
+    "test/*",
 ]
 
 [tool.ruff]
