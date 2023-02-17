@@ -34,6 +34,8 @@ from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dataform import DataFormWidget
+from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.util import EventHelper
@@ -143,15 +145,26 @@ class PEPConfig(Gtk.ApplicationWindow, EventHelper):
         selection = self._ui.services_treeview.get_selection()
         if not selection:
             return
+
         model, iter_ = selection.get_selected()
         assert isinstance(model, Gtk.ListStore)
         assert iter_
         node = model[iter_][0]
 
-        self._client.get_module('PubSub').delete(
-            node,
-            callback=self._on_node_delete,
-            user_data=node)
+        def _delete():
+            self._client.get_module('PubSub').delete(
+                node,
+                callback=self._on_node_delete,
+                user_data=node)
+
+        ConfirmationDialog(
+            _('Delete'),
+            _('Delete PEP node?'),
+            _('Do you really want to delete this PEP node?'),
+            [DialogButton.make('Cancel'),
+             DialogButton.make('Delete',
+                               callback=_delete)],
+            transient_for=self).show()
 
     def _on_node_delete(self, task: Task) -> None:
         node = task.get_user_data()
