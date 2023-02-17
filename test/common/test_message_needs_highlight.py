@@ -4,7 +4,7 @@ from gajim.common import app
 from gajim.common.helpers import message_needs_highlight
 
 app.settings.set('muc_highlight_words', 'test;gajim')
-JID = 'romemo@xmppserver'
+JID = 'juliet@xmppserver'
 NICK = 'Romeo'
 
 
@@ -20,7 +20,7 @@ class HighlightTest(unittest.TestCase):
         t_text6 = 'Are you using Gajim?'
         t_text7 = 'Did you test this?'
         t_text8 = 'Hi romeo'
-        t_text9 = 'My address is romeo@xmppserver'
+        t_text9 = 'My address is juliet@xmppserver'
 
         f_text1 = 'RomeoDoes this work?'
         f_text2 = ''
