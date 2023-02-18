@@ -125,14 +125,6 @@ class FancyFormatter(logging.Formatter):
         logging.Formatter.__init__(self, fmt, datefmt)
         self.use_color = use_color
 
-    def formatTime(self,
-                   record: logging.LogRecord,
-                   datefmt: Optional[str] = None) -> str:
-        f = logging.Formatter.formatTime(self, record, datefmt)
-        if self.use_color:
-            f = colorize(f, Colors.DARK_GRAY)
-        return f
-
     def format(self, record: logging.LogRecord) -> str:
         level = record.levelname
         record.levelname = '(%s)' % level[0]
