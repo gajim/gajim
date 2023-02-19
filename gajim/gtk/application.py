@@ -471,7 +471,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
     def set_action_state(self, action_name: str, state: bool) -> None:
         action = self.lookup_action(action_name)
-        assert action is not None
+        assert isinstance(action, Gio.SimpleAction)
         action.set_enabled(state)
 
     def set_account_actions_state(self,

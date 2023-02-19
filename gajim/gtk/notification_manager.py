@@ -90,29 +90,24 @@ class NotificationManager(Gtk.ListBox):
         online = app.account_is_connected(self._account)
         blocking_support = self._client.get_module('Blocking').supported
 
-        sub_accept = app.window.lookup_action(
+        sub_accept = app.window.get_action(
             f'subscription-accept-{self._account}')
-        assert sub_accept is not None
         sub_accept.set_enabled(online)
 
-        sub_deny = app.window.lookup_action(
+        sub_deny = app.window.get_action(
             f'subscription-deny-{self._account}')
-        assert sub_deny is not None
         sub_deny.set_enabled(online)
 
-        sub_deny_all = app.window.lookup_action(
+        sub_deny_all = app.window.get_action(
             f'subscription-deny-all-{self._account}')
-        assert sub_deny_all is not None
         sub_deny_all.set_enabled(online)
 
-        sub_block = app.window.lookup_action(
+        sub_block = app.window.get_action(
             f'subscription-block-{self._account}')
-        assert sub_block is not None
         sub_block.set_enabled(online and blocking_support)
 
-        sub_report = app.window.lookup_action(
+        sub_report = app.window.get_action(
             f'subscription-report-{self._account}')
-        assert sub_report is not None
         sub_report.set_enabled(online and blocking_support)
 
     def _remove_actions(self) -> None:

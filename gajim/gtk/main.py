@@ -165,7 +165,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def get_action(self, name: str) -> Gio.SimpleAction:
         action = self.lookup_action(name)
-        assert action is not None
+        assert isinstance(action, Gio.SimpleAction)
         return action
 
     def get_chat_stack(self) -> ChatStack:

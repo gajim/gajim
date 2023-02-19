@@ -276,6 +276,7 @@ class ChatActionProcessor(Gtk.Popover):
     def _on_item_clicked(self, _button: Gtk.MenuButton, index: int) -> None:
         variant = self._menu.get_item_attribute_value(
             index, 'action-data')
+        assert variant is not None
         self._replace_text(variant.get_string())
         self.popdown()
 
@@ -292,6 +293,7 @@ class ChatActionProcessor(Gtk.Popover):
             if self._item_has_focus(item):
                 variant = self._menu.get_item_attribute_value(
                     items.index(item), 'action-data')
+                assert variant is not None
                 return variant.get_string()
         return ''
 
