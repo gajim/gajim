@@ -330,7 +330,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         if self.chat_exists(event.account, event.jid):
             return
 
-        self.add_group_chat(event.account, event.jid)
+        self.add_group_chat(event.account, event.jid, select=event.select_chat)
 
     def _on_message_sent(self, event: events.MessageSent) -> None:
         if not event.play_sound:

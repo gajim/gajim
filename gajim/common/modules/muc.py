@@ -288,11 +288,16 @@ class MUC(BaseModule):
         muc_data = self._create_muc_data(jid, None, None, config)
         self._mucs[jid] = muc_data
         self._create(muc_data)
-        self._push_muc_added_event(jid)
+        self._push_muc_added_event(jid, select_chat=True)
 
-    def _push_muc_added_event(self, jid: str) -> None:
+    def _push_muc_added_event(self,
+                              jid: str,
+                              select_chat: bool = False
+                              ) -> None:
+
         app.ged.raise_event(MucAdded(account=self._account,
-                                     jid=JID.from_string(jid)))
+                                     jid=JID.from_string(jid),
+                                     select_chat=select_chat))
 
     def _on_disco_result(self, task: Task) -> None:
         try:
