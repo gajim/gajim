@@ -158,6 +158,7 @@ class Server:
             if sig == 'h':
                 msg = invocation.get_message()
                 fd_list = msg.get_unix_fd_list()
+                assert fd_list is not None
                 args[i] = fd_list.get(args[i])
 
         result = getattr(self, method_name)(*args)
