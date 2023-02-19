@@ -101,10 +101,7 @@ class LogindListener:
                 -1,
                 None,
                 None)
-            if result is None:
-                log.warning(
-                    'Could not obtain a shutdown delay inhibitor from logind')
-                return
+
             ret, ret_fdlist = result
         except GLib.Error as error:
             log.warning(
