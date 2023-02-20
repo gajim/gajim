@@ -33,6 +33,7 @@ from nbxmpp.const import ConnectionType
 from nbxmpp.http import HTTPRequest
 from packaging.version import Version as V
 
+from gajim import IS_PORTABLE
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import ged
@@ -324,7 +325,9 @@ class CoreApplication(ged.EventHelper):
 
         data = json.loads(request.get_data())
         latest_version = data['current_version']
-        setup_url = data['current_setup_url']
+        setup_url = data['current_win_setup']
+        if IS_PORTABLE:
+            setup_url = data['current_win_portable_setup']
 
         if V(latest_version) > V(app.version):
             app.ged.raise_event(GajimUpdateAvailable(version=latest_version,
