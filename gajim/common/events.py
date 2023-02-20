@@ -681,6 +681,7 @@ class AllowGajimUpdateCheck(ApplicationEvent):
 class GajimUpdateAvailable(ApplicationEvent):
     name: str = field(init=False, default='gajim-update-available')
     version: str
+    setup_url: str
 
 
 @dataclass

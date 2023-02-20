@@ -18,6 +18,7 @@ from typing import Any
 from typing import cast
 from typing import Optional
 
+import sys
 from datetime import datetime
 
 from gi.repository import GObject
@@ -76,9 +77,12 @@ class AppPage(Gtk.Box):
 
     def add_app_message(self,
                         category: str,
-                        message: Optional[str]
+                        new_version: Optional[str] = None,
+                        new_setup_url: Optional[str] = None
                         ) -> None:
-        self._app_message_listbox.add_app_message(category, message)
+
+        self._app_message_listbox.add_app_message(
+            category, new_version, new_setup_url)
         self._unread_count += 1
         self.emit('unread-count-changed', self._unread_count)
 
@@ -111,8 +115,13 @@ class AppMessageListBox(Gtk.ListBox):
 
         self.show_all()
 
-    def add_app_message(self, category: str, message: Optional[str]) -> None:
-        row = AppMessageRow(category, message)
+    def add_app_message(self,
+                        category: str,
+                        new_version: Optional[str] = None,
+                        new_setup_url: Optional[str] = None
+                        ) -> None:
+
+        row = AppMessageRow(category, new_version, new_setup_url)
         self.add(row)
 
     def add_plugin_update_message(self,
@@ -157,11 +166,14 @@ class AppMessageListBox(Gtk.ListBox):
 class AppMessageRow(Gtk.ListBoxRow):
     def __init__(self,
                  category: str,
-                 message: Optional[str] = None,
+                 new_version: Optional[str] = None,
+                 new_setup_url: Optional[str] = None,
                  plugin_manifests: Optional[list[PluginManifest]] = None
                  ) -> None:
+
         Gtk.ListBoxRow.__init__(self)
         self._plugin_manifests = plugin_manifests
+        self._new_setup_url = new_setup_url
 
         self._ui = get_builder('app_page.ui')
 
@@ -170,7 +182,7 @@ class AppMessageRow(Gtk.ListBoxRow):
 
         if category == 'gajim-update-available':
             self.add(self._ui.gajim_update)
-            text = _('Version %s is available') % message
+            text = _('Gajim %s is available') % new_version
             self._ui.update_message.set_text(text)
 
         if category == 'plugin-updates':
@@ -194,8 +206,12 @@ class AppMessageRow(Gtk.ListBoxRow):
         app.settings.set('check_for_update', False)
         self._remove_app_message()
 
-    def _on_visit_website_clicked(self, _button: Gtk.Button) -> None:
-        open_uri('https://gajim.org/download')
+    def _on_download_update_clicked(self, _button: Gtk.Button) -> None:
+        assert self._new_setup_url is not None
+        if sys.platform == 'win32':
+            open_uri(self._new_setup_url)
+        else:
+            open_uri('https://gajim.org/download/')
         self._remove_app_message()
 
     def _on_dismiss_clicked(self, _button: Gtk.Button) -> None:

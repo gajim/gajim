@@ -324,9 +324,11 @@ class CoreApplication(ged.EventHelper):
 
         data = json.loads(request.get_data())
         latest_version = data['current_version']
+        setup_url = data['current_setup_url']
 
         if V(latest_version) > V(app.version):
-            app.ged.raise_event(GajimUpdateAvailable(version=latest_version))
+            app.ged.raise_event(GajimUpdateAvailable(version=latest_version,
+                                                     setup_url=setup_url))
             return
 
         self._log.info('Gajim is up to date')

@@ -36,7 +36,7 @@
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
         <property name="valign">center</property>
-        <signal name="clicked" handler="_on_visit_website_clicked" swapped="no"/>
+        <signal name="clicked" handler="_on_download_update_clicked" swapped="no"/>
         <style>
           <class name="suggested-action"/>
         </style>

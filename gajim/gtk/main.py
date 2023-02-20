@@ -262,8 +262,13 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self.add_app_message(event.name)
 
     def _on_gajim_update_available(self,
-                                   event: events.GajimUpdateAvailable) -> None:
-        self.add_app_message(event.name, event.version)
+                                   event: events.GajimUpdateAvailable
+                                   ) -> None:
+
+        self.add_app_message(
+            event.name,
+            new_version=event.version,
+            new_setup_url=event.setup_url)
 
     @staticmethod
     def _on_roster_item_exchange(event: events.RosterItemExchangeEvent) -> None:
@@ -998,8 +1003,11 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def add_app_message(self,
                         category: str,
-                        message: Optional[str] = None) -> None:
-        self._app_page.add_app_message(category, message)
+                        new_version: Optional[str] = None,
+                        new_setup_url: Optional[str] = None
+                        ) -> None:
+
+        self._app_page.add_app_message(category, new_version, new_setup_url)
 
     def get_control(self) -> ChatControl:
         return self._chat_page.get_control()
