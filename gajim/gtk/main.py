@@ -424,6 +424,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('preview-open-link', self._on_preview_action),
             ('copy-message', self._on_copy_message),
             ('retract-message', self._on_retract_message),
+            ('delete-message-locally', self._on_delete_message_locally),
             ('add-workspace', self._add_workspace),
             ('edit-workspace', self._edit_workspace),
             ('remove-workspace', self._remove_workspace),
@@ -647,6 +648,26 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                text=_('_Retract'),
                                callback=_on_retract)],
             input_str=_('Spam'),
+            transient_for=app.window).show()
+
+    def _on_delete_message_locally(self,
+                                   _action: Gio.SimpleAction,
+                                   param: GLib.Variant
+                                   ) -> None:
+
+        def _on_delete() -> None:
+            log_line_id = param.get_uint32()
+            app.storage.archive.delete_message_from_logs(log_line_id)
+            control = self.get_control()
+            control.remove_message(log_line_id)
+
+        ConfirmationDialog(
+            _('Delete Message'),
+            _('Delete message locally?'),
+            _('This message will be deleted from your local chat history'),
+            [DialogButton.make('Cancel'),
+             DialogButton.make('Delete',
+                               callback=_on_delete)],
             transient_for=app.window).show()
 
     def _on_window_motion_notify(self,

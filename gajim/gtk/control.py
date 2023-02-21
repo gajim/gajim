@@ -570,6 +570,9 @@ class ChatControl(EventHelper):
         else:
             self._jump_to_end_button.add_unread_count()
 
+    def remove_message(self, log_line_id: int) -> None:
+        self._scrolled_view.remove_message(log_line_id)
+
     def reset_view(self) -> None:
         self._scrolled_view.reset()
 

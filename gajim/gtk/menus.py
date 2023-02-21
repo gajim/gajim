@@ -726,6 +726,12 @@ def get_chat_row_menu(contact: types.ChatContactT,
             'win.retract-message',
             param))
 
+    if log_line_id is not None:
+        menu_items.append(
+            (p_('Message row action', 'Delete Message Locally…'),
+            'win.delete-message-locally',
+            GLib.Variant('u', log_line_id or 0)))
+
     return GajimMenu.from_list(menu_items)
 
 

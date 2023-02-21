@@ -664,6 +664,11 @@ class ConversationView(Gtk.ScrolledWindow):
         row = self._get_row_at_index(len(self._list_box.get_children()) - 1)
         row.destroy()
 
+    def remove_message(self, log_line_id: int) -> None:
+        row = self.get_row_by_log_line_id(log_line_id)
+        if row is not None:
+            row.destroy()
+
     def scroll_to_message_and_highlight(self, log_line_id: int) -> None:
         highlight_row = None
         for row in cast(list[BaseRow], self._list_box.get_children()):

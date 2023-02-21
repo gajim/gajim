@@ -1198,6 +1198,19 @@ class MessageArchiveStorage(SqliteStorage):
         return lastrowid
 
     @timeit
+    def delete_message_from_logs(self, log_line_id: int) -> None:
+        '''
+        Delete a message from the `logs` table
+
+        :param log_line_id: The message's log_line_id
+        '''
+        sql = 'DELETE FROM logs WHERE log_line_id = ?'
+        self._con.execute(sql, (log_line_id, ))
+
+        self._delayed_commit()
+        log.info('Deleted message with log_line_id %s', log_line_id)
+
+    @timeit
     def set_message_error(self,
                           account_jid: str,
                           jid: JID,
