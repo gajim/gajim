@@ -566,7 +566,7 @@ class OMEMO(BaseModule):
             message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
 
     def set_devicelist(self, devicelist: Optional[list[int]] = None) -> None:
-        devicelist_: set[int] = set([self.backend.own_device])
+        devicelist_: set[int] = set(self.backend.own_device)
         if devicelist is not None:
             devicelist_.update(devicelist)
         self._log.info('Publishing own devicelist: %s', devicelist_)
@@ -579,7 +579,7 @@ class OMEMO(BaseModule):
 
     @as_task
     def request_devicelist(self, jid: Optional[str] = None):
-        _task = yield  # noqa
+        _task = yield  # noqa: F841
 
         if jid is None:
             jid = self._own_jid
@@ -635,6 +635,6 @@ class OMEMO(BaseModule):
         self._check_for_missing_sessions(jid)
 
     def _debug_print_stanza(self, stanza: Any) -> None:
-        stanzastr = '\n' + stanza.__str__(fancy=True)  # pylint: disable=unnecessary-dunder-call # noqa
+        stanzastr = '\n' + stanza.__str__(fancy=True)
         stanzastr = stanzastr[0:-1]
         self._log.debug(stanzastr)
