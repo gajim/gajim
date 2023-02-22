@@ -322,7 +322,7 @@ modules:
         url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-4.2.2-py3-none-any.whl
         sha256: 807d8bbe19dcc77e23cd2b0420581fecd1168ad5cb88b201a15ec7d0b1f8aff3
 
-  # OMEMO dependenies
+  # OMEMO dependencies
   - name: protobuf
     buildsystem: simple
     build-commands:

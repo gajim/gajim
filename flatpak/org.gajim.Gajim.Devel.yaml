@@ -328,7 +328,7 @@ modules:
       - type: git
         url: https://dev.gajim.org/gajim/python-nbxmpp.git
 
-  # OMEMO dependenies
+  # OMEMO dependencies
   - name: protobuf
     buildsystem: simple
     build-commands:
