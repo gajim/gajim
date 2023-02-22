@@ -21,30 +21,28 @@ from typing import cast
 from typing import Optional
 from typing import Union
 
-import os
-import time
 import locale
 import logging
+import os
 import tempfile
+import time
 
-from omemo_dr.identitykeypair import IdentityKeyPair
-
-from nbxmpp.protocol import JID
-
-from gi.repository import Gtk
 from gi.repository import GdkPixbuf
+from gi.repository import Gtk
+from nbxmpp.protocol import JID
+from omemo_dr.identitykeypair import IdentityKeyPair
 
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import types
 from gajim.common.events import AccountConnected
 from gajim.common.events import AccountDisconnected
-from gajim.common.i18n import _
 from gajim.common.ged import EventHelper
+from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
-from gajim.common.omemo.util import Trust
-from gajim.common.omemo.util import IdentityKeyExtended
 from gajim.common.omemo.util import get_fingerprint
+from gajim.common.omemo.util import IdentityKeyExtended
+from gajim.common.omemo.util import Trust
 
 from .builder import get_builder
 from .dialogs import ConfirmationDialog
@@ -153,11 +151,17 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
         self._load_fingerprints(self._contact)
 
     def _on_destroy(self, *args: Any) -> None:
+        self.unregister_events()
+        self._ui.list.set_filter_func(None)
+        self._ui.search.disconnect_by_func(self._on_search_changed)
         app.check_finalize(self)
 
     def _on_account_state(self,
                           event: Union[AccountConnected, AccountDisconnected]
                           ) -> None:
+
+        if not app.account_is_connected(self._account):
+            return
 
         if isinstance(event, AccountConnected):
             self._update()
@@ -352,7 +356,12 @@ class KeyRow(Gtk.ListBoxRow):
         grid.attach(last_seen_label, 2, 3, 1, 1)
 
         self.add(grid)
+
+        self.connect('destroy', self._on_destroy)
         self.show_all()
+
+    def _on_destroy(self, *args: Any) -> None:
+        app.check_finalize(self)
 
     def delete_fingerprint(self, *args: Any) -> None:
         listbox = cast(Gtk.ListBox, self.get_parent())
@@ -416,9 +425,15 @@ class TrustButton(Gtk.MenuButton):
         Gtk.MenuButton.__init__(self)
         self._row = row
         self._css_class = ''
-        self.set_popover(TrustPopver(row))
+        self._trust_popover = TrustPopver(row)
+        self.set_popover(self._trust_popover)
         self.set_valign(Gtk.Align.CENTER)
         self.update()
+        self.connect('destroy', self._on_destroy)
+
+    def _on_destroy(self, *args: Any) -> None:
+        self._trust_popover.destroy()
+        app.check_finalize(self)
 
     def update(self) -> None:
         icon_name, tooltip, css_class = TRUST_DATA[self._row.trust]
