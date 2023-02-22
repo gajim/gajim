@@ -23,7 +23,6 @@ from enum import IntEnum
 from omemo_dr.identitykey import IdentityKey
 from omemo_dr.identitykeypair import IdentityKeyPair
 
-
 DEFAULT_PREKEY_AMOUNT = 100
 MIN_PREKEY_AMOUNT = 80
 SPK_ARCHIVE_TIME = 86400 * 15  # 15 Days

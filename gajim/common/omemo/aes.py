@@ -17,13 +17,13 @@ from __future__ import annotations
 from typing import NamedTuple
 from typing import Union
 
-import os
 import logging
+import os
 
-from cryptography.hazmat.primitives.ciphers import Cipher
-from cryptography.hazmat.primitives.ciphers import algorithms
-from cryptography.hazmat.primitives.ciphers.modes import GCM
 from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.ciphers import algorithms
+from cryptography.hazmat.primitives.ciphers import Cipher
+from cryptography.hazmat.primitives.ciphers.modes import GCM
 
 log = logging.getLogger('gajim.c.omemo.aes')
 

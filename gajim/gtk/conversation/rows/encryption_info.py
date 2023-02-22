@@ -23,11 +23,10 @@ from gajim.common.events import EncryptionInfo
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 
+from ...util import open_window
 from .base import BaseRow
 from .widgets import DateTimeLabel
 from .widgets import SimpleLabel
-
-from ...util import open_window
 
 
 class EncryptionInfoRow(BaseRow):

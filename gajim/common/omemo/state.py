@@ -26,10 +26,9 @@ from pathlib import Path
 
 from nbxmpp.structs import OMEMOBundle
 from nbxmpp.structs import OMEMOMessage
-
 from omemo_dr.ecc.djbec import CurvePublicKey
+from omemo_dr.exceptions import DuplicateMessageException
 from omemo_dr.identitykey import IdentityKey
-
 from omemo_dr.identitykeypair import IdentityKeyPair
 from omemo_dr.protocol.prekeywhispermessage import PreKeyWhisperMessage
 from omemo_dr.protocol.whispermessage import WhisperMessage
@@ -37,23 +36,22 @@ from omemo_dr.sessionbuilder import SessionBuilder
 from omemo_dr.sessioncipher import SessionCipher
 from omemo_dr.state.prekeybundle import PreKeyBundle
 from omemo_dr.util.keyhelper import KeyHelper
-from omemo_dr.exceptions import DuplicateMessageException
 
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import types
 from gajim.common.omemo.aes import aes_decrypt
 from gajim.common.omemo.aes import aes_encrypt
-from gajim.common.omemo.aes import get_new_key
 from gajim.common.omemo.aes import get_new_iv
-from gajim.common.storage.omemo import OMEMOStorage
-from gajim.common.omemo.util import get_fingerprint
-from gajim.common.omemo.util import Trust
+from gajim.common.omemo.aes import get_new_key
 from gajim.common.omemo.util import DEFAULT_PREKEY_AMOUNT
+from gajim.common.omemo.util import get_fingerprint
 from gajim.common.omemo.util import MIN_PREKEY_AMOUNT
-from gajim.common.omemo.util import SPK_CYCLE_TIME
 from gajim.common.omemo.util import SPK_ARCHIVE_TIME
+from gajim.common.omemo.util import SPK_CYCLE_TIME
+from gajim.common.omemo.util import Trust
 from gajim.common.omemo.util import UNACKNOWLEDGED_COUNT
+from gajim.common.storage.omemo import OMEMOStorage
 
 
 class OmemoState:

@@ -27,8 +27,8 @@ from logging import LoggerAdapter
 
 import nbxmpp
 from nbxmpp.const import MessageType
-from nbxmpp.protocol import JID
 from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
 from nbxmpp.structs import EMEData
 from nbxmpp.structs import MessageProperties

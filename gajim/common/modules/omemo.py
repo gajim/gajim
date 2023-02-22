@@ -25,52 +25,50 @@ from typing import Optional
 import binascii
 import threading
 
+from gi.repository import GLib
+from nbxmpp.const import Affiliation
+from nbxmpp.const import PresenceType
+from nbxmpp.errors import StanzaError
+from nbxmpp.modules.omemo import create_omemo_message
+from nbxmpp.modules.omemo import get_key_transport_message
+from nbxmpp.modules.util import is_error
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
 from nbxmpp.protocol import NodeProcessed
 from nbxmpp.protocol import Presence
-from nbxmpp.errors import StanzaError
-from nbxmpp.const import PresenceType
-from nbxmpp.const import Affiliation
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import OMEMOMessage
 from nbxmpp.structs import PresenceProperties
 from nbxmpp.structs import StanzaHandler
-from nbxmpp.modules.omemo import create_omemo_message
-from nbxmpp.modules.omemo import get_key_transport_message
-from nbxmpp.modules.util import is_error
 from nbxmpp.task import Task
-
-from gi.repository import GLib
 
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import types
-from gajim.common.structs import OutgoingMessage
-from gajim.common.const import EncryptionInfoMsg
 from gajim.common.const import EncryptionData
+from gajim.common.const import EncryptionInfoMsg
 from gajim.common.const import Trust as GajimTrust
-from gajim.common.i18n import _
 from gajim.common.events import EncryptionInfo
 from gajim.common.events import MucAdded
 from gajim.common.events import MucDiscoUpdate
 from gajim.common.events import SignedIn
+from gajim.common.i18n import _
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import GroupchatContact
-from gajim.common.modules.util import event_node
-from gajim.common.modules.util import as_task
 from gajim.common.modules.httpupload import HTTPFileTransfer
+from gajim.common.modules.util import as_task
+from gajim.common.modules.util import event_node
+from gajim.common.modules.util import prepare_stanza
 from gajim.common.omemo.aes import aes_encrypt_file
-from gajim.common.omemo.state import OmemoState
-from gajim.common.omemo.state import KeyExchangeMessage
-from gajim.common.omemo.state import SelfMessage
-from gajim.common.omemo.state import MessageNotForDevice
 from gajim.common.omemo.state import DecryptionFailed
 from gajim.common.omemo.state import DuplicateMessage
+from gajim.common.omemo.state import KeyExchangeMessage
+from gajim.common.omemo.state import MessageNotForDevice
+from gajim.common.omemo.state import OmemoState
+from gajim.common.omemo.state import SelfMessage
 from gajim.common.omemo.util import Trust
-from gajim.common.modules.util import prepare_stanza
-
+from gajim.common.structs import OutgoingMessage
 
 ALLOWED_TAGS = [
     ('request', Namespace.RECEIPTS),

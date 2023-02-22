@@ -21,28 +21,28 @@ from typing import Any
 from typing import NamedTuple
 from typing import Optional
 
-import time
 import sqlite3
+import time
 from collections import namedtuple
 from pathlib import Path
 
-from omemo_dr.state.axolotlstore import AxolotlStore
-from omemo_dr.state.signedprekeyrecord import SignedPreKeyRecord
-from omemo_dr.state.sessionrecord import SessionRecord
-from omemo_dr.state.prekeyrecord import PreKeyRecord
-from omemo_dr.exceptions import InvalidKeyIdException
-from omemo_dr.ecc.djbec import DjbECPrivateKey
 from omemo_dr.ecc.djbec import CurvePublicKey
+from omemo_dr.ecc.djbec import DjbECPrivateKey
+from omemo_dr.exceptions import InvalidKeyIdException
 from omemo_dr.identitykey import IdentityKey
 from omemo_dr.identitykeypair import IdentityKeyPair
-from omemo_dr.util.medium import Medium
+from omemo_dr.state.axolotlstore import AxolotlStore
+from omemo_dr.state.prekeyrecord import PreKeyRecord
+from omemo_dr.state.sessionrecord import SessionRecord
+from omemo_dr.state.signedprekeyrecord import SignedPreKeyRecord
 from omemo_dr.util.keyhelper import KeyHelper
+from omemo_dr.util.medium import Medium
 
 from gajim.common import app
-from gajim.common.omemo.util import Trust
-from gajim.common.omemo.util import IdentityKeyExtended
-from gajim.common.omemo.util import DEFAULT_PREKEY_AMOUNT
 from gajim.common.modules.util import LogAdapter
+from gajim.common.omemo.util import DEFAULT_PREKEY_AMOUNT
+from gajim.common.omemo.util import IdentityKeyExtended
+from gajim.common.omemo.util import Trust
 
 
 def _convert_identity_key(key: bytes) -> Optional[IdentityKeyExtended]:
