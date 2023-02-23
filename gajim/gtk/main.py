@@ -1000,8 +1000,13 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             if chat_list is not None:
                 return chat_list.workspace_id
 
-        default = app.settings.get_account_setting(account, "default_workspace")
         workspaces = app.settings.get_workspaces()
+
+        last_workspace = app.settings.get_contact_setting(account, jid, "workspace")
+        if last_workspace in workspaces:
+            return last_workspace
+
+        default = app.settings.get_account_setting(account, "default_workspace")
         if default in workspaces:
             return default
 
