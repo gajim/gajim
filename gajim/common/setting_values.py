@@ -352,6 +352,7 @@ StringGroupChatSettings = Literal[
     'mute_until',
     'speller_language',
     'send_chatstate',
+    'workspace',
 ]
 
 IntGroupChatSettings = Literal[
@@ -375,6 +376,7 @@ StringContactSettings = Literal[
     'mute_until',
     'speller_language',
     'send_chatstate',
+    'workspace',
 ]
 
 AllContactSettings = Literal[BoolContactSettings,
@@ -455,6 +457,7 @@ ACCOUNT_SETTINGS = {
         'send_chatstate': HAS_ACCOUNT_DEFAULT,
         'send_marker': HAS_ACCOUNT_DEFAULT,
         'speller_language': '',
+        'workspace': '',
     },
 
     'group_chat': {
@@ -467,6 +470,7 @@ ACCOUNT_SETTINGS = {
         'send_marker': HAS_ACCOUNT_DEFAULT,
         'speller_language': '',
         'sync_threshold': HAS_APP_DEFAULT,
+        'workspace': '',
     },
 }
 

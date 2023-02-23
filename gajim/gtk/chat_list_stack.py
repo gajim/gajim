@@ -193,6 +193,11 @@ class ChatListStack(Gtk.Stack, EventHelper):
     def store_open_chats(self, workspace_id: str) -> None:
         chat_list = self._chat_lists[workspace_id]
         open_chats = chat_list.get_open_chats()
+        for chat in open_chats:
+            client = app.get_client(chat["account"])
+            contact = client.get_module("Contacts").get_contact(chat["jid"])
+            contact.settings.set("workspace", workspace_id)
+
         app.settings.set_workspace_setting(workspace_id, "chats", open_chats)
 
     @structs.actionmethod
