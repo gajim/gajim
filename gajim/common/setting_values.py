@@ -368,6 +368,8 @@ AllAccountSettings = Literal[BoolAccountSettings,
 
 BoolGroupChatSettings = Literal[
     'notify_on_all_messages',
+    'opened',
+    'pinned',
     'print_join_left',
     'print_status',
     'send_marker',
@@ -382,6 +384,7 @@ StringGroupChatSettings = Literal[
 ]
 
 IntGroupChatSettings = Literal[
+    'position',
     'sync_threshold',
 ]
 
@@ -394,7 +397,13 @@ AllGroupChatSettingsT = str | int | bool
 
 
 BoolContactSettings = Literal[
+    'opened',
+    'pinned',
     'send_marker',
+]
+
+IntContactSettings = Literal[
+    'position',
 ]
 
 StringContactSettings = Literal[
@@ -406,9 +415,10 @@ StringContactSettings = Literal[
 ]
 
 AllContactSettings = Literal[BoolContactSettings,
+                             IntContactSettings,
                              StringContactSettings]
 
-AllContactSettingsT = str | bool
+AllContactSettingsT = str | int | bool
 
 
 ACCOUNT_SETTINGS = {
@@ -489,6 +499,9 @@ ACCOUNT_SETTINGS = {
         'send_marker': HAS_ACCOUNT_DEFAULT,
         'speller_language': '',
         'workspace': '',
+        'opened': False,
+        'pinned': False,
+        'position': -1,
     },
 
     'group_chat': {
@@ -502,6 +515,9 @@ ACCOUNT_SETTINGS = {
         'speller_language': '',
         'sync_threshold': HAS_APP_DEFAULT,
         'workspace': '',
+        'opened': False,
+        'pinned': False,
+        'position': -1,
     },
 }
 
