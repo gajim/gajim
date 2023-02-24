@@ -584,8 +584,9 @@ def message_needs_highlight(text: str, nickname: str, own_jid: str) -> bool:
                 return True
 
             char_before_allowed = bool(
-                not text[match - 1].isalpha() and
-                text[match - 1] not in ('/', '-'))
+                match == 0 or
+                (not text[match - 1].isalpha() and
+                text[match - 1] not in ('/', '-')))
 
             if char_before_allowed and search_end == len(text):
                 # search_string found at the end of text and
