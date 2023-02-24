@@ -22,7 +22,6 @@ import time
 
 from gi.repository import Gdk
 from gi.repository import GLib
-from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp import JID
 
@@ -47,13 +46,6 @@ MessageEventT = (events.MessageReceived |
 
 
 class ChatList(Gtk.ListBox, EventHelper):
-
-    __gsignals__ = {
-        'chat-order-changed': (GObject.SignalFlags.RUN_LAST,
-                               None,
-                               ()),
-    }
-
     def __init__(self, workspace_id: str) -> None:
         Gtk.ListBox.__init__(self)
         EventHelper.__init__(self)
@@ -170,12 +162,20 @@ class ChatList(Gtk.ListBox, EventHelper):
     def toggle_chat_pinned(self, account: str, jid: JID) -> None:
         row = self._chats[(account, jid)]
 
+        client = app.get_client(account)
+        contact = client.get_module('Contacts').get_contact(jid)
+
         if row.is_pinned:
             self._chat_order.remove(row)
-            row.position = -1
+            contact.settings.set('pinned', False)
+            new_position = -1
         else:
             self._chat_order.append(row)
-            row.position = self._chat_order.index(row)
+            contact.settings.set('pinned', True)
+            new_position = self._chat_order.index(row)
+
+        row.position = new_position
+        contact.settings.set('position', new_position)
 
         row.toggle_pinned()
         self.invalidate_sort()
@@ -287,7 +287,8 @@ class ChatList(Gtk.ListBox, EventHelper):
     def remove_chat(self,
                     account: str,
                     jid: JID,
-                    emit_unread: bool = True
+                    emit_unread: bool = True,
+                    store: bool = True
                     ) -> None:
 
         row = self._chats.pop((account, jid))
@@ -295,6 +296,10 @@ class ChatList(Gtk.ListBox, EventHelper):
             self._chat_order.remove(row)
         self.remove(row)
         row.destroy()
+
+        if store:
+            app.settings.set_contact_setting(account, jid, 'opened', False)
+
         if emit_unread:
             self._emit_unread_changed()
 
@@ -302,7 +307,7 @@ class ChatList(Gtk.ListBox, EventHelper):
         for row_account, jid in list(self._chats.keys()):
             if row_account != account:
                 continue
-            self.remove_chat(account, jid)
+            self.remove_chat(account, jid, store=False)
         self._emit_unread_changed()
 
     def clear_chat_list_row(self, account: str, jid: JID) -> None:
@@ -448,9 +453,10 @@ class ChatList(Gtk.ListBox, EventHelper):
                 row_before.position + offset, self._drag_row)
 
         for row in self._chat_order:
-            row.position = self._chat_order.index(row)
+            new_position = self._chat_order.index(row)
+            row.position = new_position
+            row.contact.settings.set('position', new_position)
 
-        self.emit('chat-order-changed')
         self._pinned_order_change = True
         self.invalidate_sort()
         self._pinned_order_change = False
