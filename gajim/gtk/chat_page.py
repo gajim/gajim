@@ -270,28 +270,35 @@ class ChatPage(Gtk.Box, SignalManager):
         if self._startup_finished:
             if select:
                 self._chat_list_stack.select_chat(account, jid)
-            self._chat_list_stack.store_open_chats(workspace_id)
+
+            contact = client.get_module("Contacts").get_contact(jid)
+            assert isinstance(
+                contact, BareContact | GroupchatContact | GroupchatParticipant
+            )
+            contact.settings.set("opened", True)
+
             if message is not None:
                 message_input = self._chat_stack.get_message_input()
                 message_input.insert_text(message)
 
     def load_workspace_chats(self, workspace_id: str) -> None:
-        open_chats = app.settings.get_workspace_setting(workspace_id, "chats")
-
         active_accounts = app.settings.get_active_accounts()
-        for open_chat in open_chats:
-            account = open_chat["account"]
-            if account not in active_accounts:
-                continue
+        for account in active_accounts:
+            for contact in app.settings.iter_contact_settings(account):
+                if not contact.settings.get("workspace") == workspace_id:
+                    continue
 
-            self.add_chat_for_workspace(
-                workspace_id,
-                account,
-                open_chat["jid"],
-                open_chat["type"],
-                pinned=open_chat["pinned"],
-                position=open_chat["position"],
-            )
+                if not contact.settings.get("opened"):
+                    continue
+
+                self.add_chat_for_workspace(
+                    workspace_id,
+                    account,
+                    contact.jid,
+                    contact.type_string,
+                    pinned=contact.settings.get("pinned"),
+                    position=contact.settings.get("position"),
+                )
 
     def is_chat_selected(self, account: str, jid: JID) -> bool:
         return self._chat_list_stack.is_chat_selected(account, jid)

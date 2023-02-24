@@ -41,6 +41,7 @@ from gajim.common.setting_values import AllGroupChatSettings
 from gajim.common.setting_values import AllGroupChatSettingsT
 from gajim.common.setting_values import BoolContactSettings
 from gajim.common.setting_values import BoolGroupChatSettings
+from gajim.common.setting_values import IntContactSettings
 from gajim.common.setting_values import IntGroupChatSettings
 from gajim.common.setting_values import StringContactSettings
 from gajim.common.setting_values import StringGroupChatSettings
@@ -61,6 +62,8 @@ class ContactSettings:
     def get(self, setting: StringContactSettings) -> str: ...  # noqa: E704
     @overload
     def get(self, setting: BoolContactSettings) -> bool: ...  # noqa: E704
+    @overload
+    def get(self, setting: IntContactSettings) -> int: ...  # noqa: E704
 
     def get(self, setting: AllContactSettings) -> AllContactSettingsT:
         return app.settings.get_contact_setting(
@@ -70,6 +73,8 @@ class ContactSettings:
     def set(self, setting: StringContactSettings, value: str | None) -> None: ...  # noqa: E501, E704
     @overload
     def set(self, setting: BoolContactSettings, value: bool | None) -> None: ...  # noqa: E501, E704
+    @overload
+    def set(self, setting: IntContactSettings, value: int | None) -> None: ...  # noqa: E501, E704
 
     def set(self, setting: Any, value: Any) -> None:
         app.settings.set_contact_setting(

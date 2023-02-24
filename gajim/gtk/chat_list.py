@@ -26,6 +26,8 @@ from gajim.common.const import RowHeaderType
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.message_util import get_nickname_from_message
 from gajim.common.setting_values import OpenChatsSettingT
 from gajim.common.storage.archive.const import ChatDirection
@@ -45,11 +47,6 @@ log = logging.getLogger("gajim.gtk.chatlist")
 
 
 class ChatList(Gtk.ListBox, EventHelper, SignalManager):
-
-    __gsignals__ = {
-        "chat-order-changed": (GObject.SignalFlags.RUN_LAST, None, ()),
-    }
-
     def __init__(self, workspace_id: str) -> None:
         Gtk.ListBox.__init__(self)
         EventHelper.__init__(self)
@@ -183,12 +180,23 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
     def toggle_chat_pinned(self, account: str, jid: JID) -> None:
         row = self._chats[(account, jid)]
 
+        client = app.get_client(account)
+        contact = client.get_module("Contacts").get_contact(jid)
+        assert isinstance(
+            contact, BareContact | GroupchatContact | GroupchatParticipant
+        )
+
         if row.is_pinned:
             self._chat_order.remove(row)
-            row.position = -1
+            contact.settings.set("pinned", False)
+            new_position = -1
         else:
             self._chat_order.append(row)
-            row.position = self._chat_order.index(row)
+            contact.settings.set("pinned", True)
+            new_position = self._chat_order.index(row)
+
+        row.position = new_position
+        contact.settings.set("position", new_position)
 
         row.toggle_pinned()
         self.invalidate_sort(force=True)
@@ -217,6 +225,15 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         row.connect("context-menu-state-changed", self._on_context_menu_state_changed)
 
         self.append(row)
+
+        if type_ == "groupchat":
+            app.settings.set_group_chat_setting(
+                account, jid, "workspace", self._workspace_id
+            )
+        else:
+            app.settings.set_contact_setting(
+                account, jid, "workspace", self._workspace_id
+            )
 
     def select_chat(self, account: str, jid: JID) -> None:
         row = self._chats[(account, jid)]
@@ -292,13 +309,23 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
     def get_chat_list_rows(self) -> list[ChatListRow]:
         return list(self._iterate_rows())
 
-    def remove_chat(self, account: str, jid: JID, emit_unread: bool = True) -> None:
+    def remove_chat(
+        self, account: str, jid: JID, emit_unread: bool = True, store: bool = True
+    ) -> None:
 
         row = self._chats.pop((account, jid))
 
         if row.is_pinned:
             self._chat_order.remove(row)
         self.remove(row)
+
+        if store:
+            client = app.get_client(account)
+            contact = client.get_module("Contacts").get_contact(jid)
+            assert isinstance(
+                contact, BareContact | GroupchatContact | GroupchatParticipant
+            )
+            contact.settings.set("opened", False)
 
         if emit_unread:
             self._emit_unread_changed()
@@ -307,7 +334,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         for row_account, jid in list(self._chats.keys()):
             if row_account != account:
                 continue
-            self.remove_chat(account, jid)
+            self.remove_chat(account, jid, store=False)
         self._emit_unread_changed()
 
     def clear_chat_list_row(self, account: str, jid: JID) -> None:
@@ -413,7 +440,13 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         self._chat_order.insert(target_row.position, drag_row)
 
         for row in self._chat_order:
-            row.position = self._chat_order.index(row)
+            new_position = self._chat_order.index(row)
+            row.position = new_position
+            assert isinstance(
+                row.contact, BareContact | GroupchatContact | GroupchatParticipant
+            )
+
+            row.contact.settings.set("position", new_position)
 
         self.emit("chat-order-changed")
         self.invalidate_sort(force=True)

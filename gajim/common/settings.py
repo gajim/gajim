@@ -19,6 +19,7 @@ import weakref
 from collections import defaultdict
 from collections import namedtuple
 from collections.abc import Callable
+from collections.abc import Generator
 from pathlib import Path
 
 from gi.repository import GLib
@@ -48,6 +49,7 @@ from gajim.common.setting_values import HAS_ACCOUNT_DEFAULT
 from gajim.common.setting_values import HAS_APP_DEFAULT
 from gajim.common.setting_values import INITAL_WORKSPACE
 from gajim.common.setting_values import IntAccountSettings
+from gajim.common.setting_values import IntContactSettings
 from gajim.common.setting_values import IntGroupChatSettings
 from gajim.common.setting_values import IntSettings
 from gajim.common.setting_values import OpenChatsSettingT
@@ -65,6 +67,7 @@ from gajim.common.setting_values import WORKSPACE_SETTINGS
 from gajim.common.setting_values import WorkspaceSettings
 from gajim.common.storage.base import Encoder
 from gajim.common.storage.base import json_decoder
+from gajim.common.types import ChatContactT
 
 SETTING_TYPE = bool | int | str | object
 
@@ -915,6 +918,14 @@ class Settings:
     def get_contact_setting(self,
                             account: str,
                             jid: JID,
+                            setting: IntContactSettings
+                            ) -> int:
+        ...
+
+    @overload
+    def get_contact_setting(self,
+                            account: str,
+                            jid: JID,
                             setting: StringContactSettings
                             ) -> str:
         ...
@@ -949,6 +960,14 @@ class Settings:
                             jid: JID,
                             setting: StringContactSettings,
                             value: str | None) -> None:
+        ...
+
+    @overload
+    def set_contact_setting(self,
+                            account: str,
+                            jid: JID,
+                            setting: IntContactSettings,
+                            value: int) -> None:
         ...
 
     @overload
@@ -1010,6 +1029,19 @@ class Settings:
         for account, acc_settings in self._account_settings.items():
             for jid in acc_settings['contact']:
                 self.set_contact_setting(account, jid, setting, value)
+
+    def iter_contact_settings(self,
+                              account: str
+                              ) -> Generator[ChatContactT, None, None]:
+
+        client = app.get_client(account)
+        chats = self._account_settings[account]['contact']
+        for address in chats:
+            yield client.get_module('Contacts').get_contact(address)
+        group_chats = self._account_settings[account]['group_chat']
+        for address in group_chats:
+            yield client.get_module('Contacts').get_contact(
+                address, groupchat=True)
 
     def set_soundevent_setting(self,
                                event_name: str,

@@ -247,6 +247,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         client.connect_signal("state-changed", self._on_client_state_changed)
         client.connect_signal("resume-successful", self._on_client_resume_successful)
 
+        for workspace_id in app.settings.get_workspaces():
+            self._chat_page.load_workspace_chats(workspace_id)
+
     def _on_account_disabled(self, event: events.AccountDisabled) -> None:
         workspace_id = self._workspace_side_bar.get_first_workspace()
         self.activate_workspace(workspace_id)
