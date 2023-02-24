@@ -21,7 +21,9 @@ from gajim.common import events
 from gajim.common import ged
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 
 from gajim.gtk import structs
 from gajim.gtk.chat_filter import ChatFilter
@@ -135,7 +137,6 @@ class ChatListStack(Gtk.Stack, EventHelper):
     def add_chat_list(self, workspace_id: str) -> ChatList:
         chat_list = ChatList(workspace_id)
         chat_list.connect("row-selected", self._on_row_selected)
-        chat_list.connect("chat-order-changed", self._on_chat_order_changed)
 
         self._chat_lists[workspace_id] = chat_list
         self.add_named(chat_list, workspace_id)
@@ -155,10 +156,6 @@ class ChatListStack(Gtk.Stack, EventHelper):
             return
 
         self.emit("chat-selected", row.workspace_id, row.account, row.jid)
-
-    def _on_chat_order_changed(self, chat_list: ChatList) -> None:
-
-        self.store_open_chats(chat_list.workspace_id)
 
     def show_chat_list(self, workspace_id: str) -> None:
         cur_workspace_id = self.get_visible_child_name()
@@ -190,16 +187,6 @@ class ChatListStack(Gtk.Stack, EventHelper):
         self.show_chat_list(chat_list.workspace_id)
         chat_list.select_chat(account, jid)
 
-    def store_open_chats(self, workspace_id: str) -> None:
-        chat_list = self._chat_lists[workspace_id]
-        open_chats = chat_list.get_open_chats()
-        for chat in open_chats:
-            client = app.get_client(chat["account"])
-            contact = client.get_module("Contacts").get_contact(chat["jid"])
-            contact.settings.set("workspace", workspace_id)
-
-        app.settings.set_workspace_setting(workspace_id, "chats", open_chats)
-
     @structs.actionmethod
     def _toggle_chat_pinned(
         self, _action: Gio.SimpleAction, params: structs.ChatListEntryParam
@@ -207,7 +194,6 @@ class ChatListStack(Gtk.Stack, EventHelper):
 
         chat_list = self._chat_lists[params.workspace_id]
         chat_list.toggle_chat_pinned(params.account, params.jid)
-        self.store_open_chats(params.workspace_id)
 
     @structs.actionmethod
     def _move_chat_to_workspace(
@@ -223,13 +209,18 @@ class ChatListStack(Gtk.Stack, EventHelper):
         if type_ is None:
             return
 
-        source_chatlist.remove_chat(params.account, params.jid)
+        source_chatlist.remove_chat(params.account, params.jid, store=False)
 
         new_chatlist = self.get_chatlist(workspace_id)
         new_chatlist.add_chat(params.account, params.jid, type_, False, -1)
 
-        self.store_open_chats(source_chatlist.workspace_id)
-        self.store_open_chats(workspace_id)
+        client = app.get_client(params.account)
+        contact = client.get_module("Contacts").get_contact(params.jid)
+        assert isinstance(
+            contact, BareContact | GroupchatContact | GroupchatParticipant
+        )
+        contact.settings.set("workspace", workspace_id)
+        contact.settings.set("pinned", False)
 
     @structs.actionmethod
     def _mark_as_read(
@@ -241,6 +232,7 @@ class ChatListStack(Gtk.Stack, EventHelper):
     def remove_chat(self, workspace_id: str, account: str, jid: JID) -> None:
         chat_list = self._chat_lists[workspace_id]
         type_ = chat_list.get_chat_type(account, jid)
+        client = app.get_client(account)
 
         def _leave(not_ask_again: bool, unregister: bool = False) -> None:
             if not_ask_again:
@@ -249,14 +241,16 @@ class ChatListStack(Gtk.Stack, EventHelper):
 
         def _remove(unregister: bool = False) -> None:
             chat_list.remove_chat(account, jid, emit_unread=False)
-            self.store_open_chats(workspace_id)
+            contact = client.get_module("Contacts").get_contact(jid)
+            assert isinstance(contact, GroupchatContact)
+
+            contact.settings.set("opened", False)
             self.emit("chat-removed", account, jid, type_, unregister)
 
         if type_ != "groupchat" or not app.settings.get("confirm_close_muc"):
             _remove()
             return
 
-        client = app.get_client(account)
         contact = client.get_module("Contacts").get_contact(jid)
         assert isinstance(contact, GroupchatContact)
 
@@ -308,9 +302,8 @@ class ChatListStack(Gtk.Stack, EventHelper):
         )
 
     def remove_chats_for_account(self, account: str) -> None:
-        for workspace_id, chat_list in self._chat_lists.items():
+        for chat_list in self._chat_lists.values():
             chat_list.remove_chats_for_account(account)
-            self.store_open_chats(workspace_id)
 
     def find_chat(self, account: str, jid: JID) -> ChatList | None:
         for chat_list in self._chat_lists.values():
