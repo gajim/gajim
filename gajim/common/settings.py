@@ -404,14 +404,70 @@ class Settings:
             for account in self._account_settings:
                 self._commit_account_settings(account)
 
-            self._set_user_version(6)
-
         if version < 7:
             sql = '''INSERT INTO settings(name, settings)
                      VALUES ('window_sizes', '{}')'''
             self._con.execute(sql)
             self._settings['window_sizes'] = {}
             self._set_user_version(7)
+
+        if version < 8:
+            # Migrate workspace chats to contact/group chat contact settings
+            for workspace_id, settings in self._settings['workspaces'].items():
+                workspace_settings = cast(
+                    OpenChatsSettingT, settings.get('chats', []))
+                for chat in workspace_settings:
+                    if chat['type'] in ('contact', 'pm'):
+                        self.set_contact_setting(
+                            chat['account'],
+                            chat['jid'],
+                            'workspace',
+                            workspace_id)
+                        self.set_contact_setting(
+                            chat['account'],
+                            chat['jid'],
+                            'opened',
+                            True)
+                        if chat['pinned']:
+                            self.set_contact_setting(
+                                chat['account'],
+                                chat['jid'],
+                                'pinned',
+                                chat['pinned'])
+                        if chat['position'] != -1:
+                            self.set_contact_setting(
+                                chat['account'],
+                                chat['jid'],
+                                'position',
+                                chat['position'])
+                    elif chat['type'] == 'groupchat':
+                        self.set_group_chat_setting(
+                            chat['account'],
+                            chat['jid'],
+                            'workspace',
+                            workspace_id)
+                        self.set_group_chat_setting(
+                            chat['account'],
+                            chat['jid'],
+                            'opened',
+                            True)
+                        if chat['pinned']:
+                            self.set_group_chat_setting(
+                                chat['account'],
+                                chat['jid'],
+                                'pinned',
+                                chat['pinned'])
+                        if chat['position'] != -1:
+                            self.set_group_chat_setting(
+                                chat['account'],
+                                chat['jid'],
+                                'position',
+                                chat['position'])
+
+            for account in self._account_settings:
+                self._commit_account_settings(account)
+
+            self._set_user_version(8)
 
     def close(self) -> None:
         log.info('Close settings')
