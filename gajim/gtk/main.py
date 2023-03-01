@@ -761,6 +761,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def is_chat_active(self, account: str, jid: JID) -> bool:
         if not self.has_toplevel_focus():
             return False
+        if self._main_stack.get_visible_page_name() != 'chats':
+            return False
         return self._chat_page.is_chat_selected(account, jid)
 
     def highlight_dnd_targets(self, drag_row: Any, highlight: bool) -> None:

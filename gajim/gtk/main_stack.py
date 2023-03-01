@@ -14,6 +14,7 @@
 
 from __future__ import annotations
 
+from typing import Optional
 from typing import Union
 
 from gi.repository import Gtk
@@ -55,6 +56,9 @@ class MainStack(Gtk.Stack):
 
     def remove_chats_for_account(self, account: str) -> None:
         self._chat_page.remove_chats_for_account(account)
+
+    def get_visible_page_name(self) -> Optional[str]:
+        return self.get_visible_child_name()
 
     def show_app_page(self) -> None:
         self.set_visible_child_name('app')
