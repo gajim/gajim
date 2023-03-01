@@ -100,7 +100,7 @@ class JidsTableRow(NamedTuple):
 
 
 class ConversationRow(NamedTuple):
-    contact_name: str
+    contact_name: str | None
     time: float
     kind: int
     show: int

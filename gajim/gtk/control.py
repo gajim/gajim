@@ -730,6 +730,10 @@ class ChatControl(EventHelper):
                 contact_name = self.contact.name
             elif msg.kind == KindConstant.GC_MSG:
                 kind = 'incoming'
+                if contact_name is None:
+                    # Fall back to MUC name if contact name is None
+                    # (may be the case for service messages from the MUC)
+                    contact_name = self.contact.name
             elif msg.kind in (
                     KindConstant.SINGLE_MSG_SENT, KindConstant.CHAT_MSG_SENT):
                 kind = 'outgoing'
@@ -737,6 +741,8 @@ class ChatControl(EventHelper):
             else:
                 log.warning('kind attribute could not be processed'
                             'while adding message')
+
+            assert contact_name is not None
 
             if msg.additional_data is not None:
                 retracted_by = msg.additional_data.get_value('retracted', 'by')
