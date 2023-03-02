@@ -454,6 +454,8 @@ class ChatStack(Gtk.Stack, EventHelper):
                 if isinstance(contact, GroupchatContact):
                     name = event.properties.muc_nickname
                 text = f'* {name} {text[3:]}'
+        else:
+            text = ''
 
         app.ged.raise_event(
             events.Notification(account=contact.account,
