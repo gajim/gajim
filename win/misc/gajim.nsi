@@ -1,4 +1,4 @@
-﻿; File encoding 'UTF-8 with BOM'
+; File encoding 'UTF-8 with BOM'
 
 Unicode true
 !include "MUI2.nsh"
@@ -47,6 +47,7 @@ Var StartMenuFolder
 !define MUI_LANGDLL_ALLLANGUAGES
 
 !insertmacro MUI_LANGUAGE "English"
+!insertmacro MUI_LANGUAGE "Polish"
 !insertmacro MUI_LANGUAGE "French"
 !insertmacro MUI_LANGUAGE "German"
 !insertmacro MUI_LANGUAGE "Italian"
@@ -62,6 +63,15 @@ LangString DESC_SecGajim ${LANG_ENGLISH} "Installs the main Gajim files."
 LangString DESC_SecDesktopIcon ${LANG_ENGLISH} "Creates a shortcut for Gajim on your desktop."
 LangString DESC_SecAutostart ${LANG_ENGLISH} "Starts Gajim automatically when starting Windows."
 LangString DESC_SecURI ${LANG_ENGLISH} "Enables Gajim to open xmpp links (e.g. a group chat linked on a website)."
+
+; Polish
+LangString NAME_SecDesktopIcon ${LANG_POLISH} "Utwórz ikonę na Pulpicie"
+LangString NAME_SecAutostart ${LANG_POLISH} "Uruchamiaj Gajim podczas uruchamiania systemu Windows"
+LangString NAME_SecURI ${LANG_POLISH} "Otwieraj linki XMPP przy pomocy Gajim"
+LangString DESC_SecGajim ${LANG_POLISH} "Zainstaluj główne pliki Gajim"
+LangString DESC_SecDesktopIcon ${LANG_POLISH} "Tworzy skrót do programu Gajim na pulpicie."
+LangString DESC_SecAutostart ${LANG_POLISH} "Pozwala na uruchamianie programu Gajim podczas wczytywania systemu Windows."
+LangString DESC_SecURI ${LANG_POLISH} "Pozwala Gajim otwierać odnośniki XMPP (np. czaty grupowe na stronach www)."
 
 ; French
 LangString NAME_SecDesktopIcon ${LANG_FRENCH} "Créer une icône sur le bureau"

@@ -1,4 +1,4 @@
-﻿; File encoding 'UTF-8 with BOM'
+; File encoding 'UTF-8 with BOM'
 
 Unicode true
 !include "MUI2.nsh"
@@ -40,6 +40,7 @@ BrandingText "Gajim Setup"
 !define MUI_LANGDLL_ALLLANGUAGES
 
 !insertmacro MUI_LANGUAGE "English"
+!insertmacro MUI_LANGUAGE "Polish"
 !insertmacro MUI_LANGUAGE "French"
 !insertmacro MUI_LANGUAGE "German"
 !insertmacro MUI_LANGUAGE "Italian"
@@ -50,6 +51,10 @@ BrandingText "Gajim Setup"
 ; English
 LangString DESC_SecGajim ${LANG_ENGLISH} "Installs the main Gajim files."
 LangString INST_NotEmpty ${LANG_ENGLISH} "It looks like you already installed Gajim in this directory. A cleanup is necessary before installing. Your user data will not be touched. Cleanup now?"
+
+; Polish
+LangString DESC_SecGajim ${LANG_POLISH} "Rozpakuj główne pliki Gajim."
+LangString INST_NotEmpty ${LANG_POLISH} "Wskazany katalog zawiera już pliki Gajim. Wymagane jest ich usunięcie. Dane osobiste nie zostaną skasowane. Czy Chcesz kontynuować ?"
 
 ; French
 LangString DESC_SecGajim ${LANG_FRENCH} "Installer les fichiers principaux de Gajim."
