@@ -1,4 +1,4 @@
-; File encoding 'UTF-8 with BOM'
+﻿; File encoding 'UTF-8 with BOM'
 
 Unicode true
 !include "MUI2.nsh"
@@ -120,107 +120,107 @@ LangString DESC_SecURI ${LANG_HEBREW} "Enables Gajim to open xmpp links (e.g. a 
 
 Section "Gajim" SecGajim
 	SectionIn RO
-	
+
     Var /GLOBAL arch_name
     StrCpy $arch_name "(64-Bit)"
     StrCmp ${ARCH} "mingw64" continue
     StrCpy $arch_name "(32-Bit)"
     continue:
 
-	ReadRegStr $R3 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "UninstallString"
-	${If} ${FileExists} $R3
-		; If Gajim was installed before, run uninstaller (in silent mode)
-		ExecWait '"$R3" /S _?=$INSTDIR'
-	${EndIf}
+    ReadRegStr $R3 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "UninstallString"
+    ${If} ${FileExists} $R3
+        ; If Gajim was installed before, run uninstaller (in silent mode)
+        ExecWait '"$R3" /S _?=$INSTDIR'
+    ${EndIf}
 
-	SetOutPath "$INSTDIR"
-	File /r "${ARCH}\*.*"
+    SetOutPath "$INSTDIR"
+    File /r "${ARCH}\*.*"
 
-	WriteRegStr HKCU "Software\Gajim" "" $INSTDIR
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayName" "Gajim ${VERSION} $arch_name"
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "UninstallString" "$INSTDIR\Uninstall.exe"
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayIcon" "$INSTDIR\bin\Gajim.exe"
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayVersion" "${VERSION}"
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "URLInfoAbout" "https://www.gajim.org/"
-	WriteUninstaller "$INSTDIR\Uninstall.exe"
+    WriteRegStr HKCU "Software\Gajim" "" $INSTDIR
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayName" "Gajim ${VERSION} $arch_name"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "UninstallString" "$INSTDIR\Uninstall.exe"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayIcon" "$INSTDIR\bin\Gajim.exe"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayVersion" "${VERSION}"
+    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "URLInfoAbout" "https://www.gajim.org/"
+    WriteUninstaller "$INSTDIR\Uninstall.exe"
 
-	SetOutPath "$INSTDIR\bin"
-	!insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-		SetShellVarContext current
-		CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
-		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Gajim.lnk" "$INSTDIR\bin\Gajim.exe"
-		SetShellVarContext all
-		CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
-		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Gajim.lnk" "$INSTDIR\bin\Gajim.exe"
-	!insertmacro MUI_STARTMENU_WRITE_END
+    SetOutPath "$INSTDIR\bin"
+    !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+        SetShellVarContext current
+        CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
+        CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Gajim.lnk" "$INSTDIR\bin\Gajim.exe"
+        SetShellVarContext all
+        CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
+        CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Gajim.lnk" "$INSTDIR\bin\Gajim.exe"
+    !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
 Section $(NAME_SecDesktopIcon) SecDesktopIcon
-	SetShellVarContext current
-	SetOutPath "$INSTDIR\bin"
-	CreateShortCut "$DESKTOP\Gajim.lnk" "$INSTDIR\bin\Gajim.exe"
+    SetShellVarContext current
+    SetOutPath "$INSTDIR\bin"
+    CreateShortCut "$DESKTOP\Gajim.lnk" "$INSTDIR\bin\Gajim.exe"
 SectionEnd
 
 Section $(NAME_SecAutostart) SecAutostart
-	SetShellVarContext current
-	SetOutPath "$INSTDIR\bin"
-	CreateShortCut "$SMSTARTUP\Gajim.lnk" "$INSTDIR\bin\Gajim.exe"
+    SetShellVarContext current
+    SetOutPath "$INSTDIR\bin"
+    CreateShortCut "$SMSTARTUP\Gajim.lnk" "$INSTDIR\bin\Gajim.exe"
 SectionEnd
 
 Section $(NAME_SecURI) SecURI
-	WriteRegStr HKCU "Software\Classes\xmpp" "" "URL:xmpp-uri"
-	WriteRegStr HKCU "Software\Classes\xmpp" "URL Protocol" ""
-	WriteRegStr HKCU "Software\Classes\xmpp\DefaultIcon" "" "$INSTDIR\bin\Gajim.exe,1"
-	WriteRegStr HKCU "Software\Classes\xmpp\shell" "" "open"
-	WriteRegStr HKCU "Software\Classes\xmpp\shell\open\" "FriendlyAppName" "${myAppName}"
-	WriteRegStr HKCU "Software\Classes\xmpp\shell\open\command" "" '"$INSTDIR\bin\Gajim.exe" "%1"'
+    WriteRegStr HKCU "Software\Classes\xmpp" "" "URL:xmpp-uri"
+    WriteRegStr HKCU "Software\Classes\xmpp" "URL Protocol" ""
+    WriteRegStr HKCU "Software\Classes\xmpp\DefaultIcon" "" "$INSTDIR\bin\Gajim.exe,1"
+    WriteRegStr HKCU "Software\Classes\xmpp\shell" "" "open"
+    WriteRegStr HKCU "Software\Classes\xmpp\shell\open\" "FriendlyAppName" "${myAppName}"
+    WriteRegStr HKCU "Software\Classes\xmpp\shell\open\command" "" '"$INSTDIR\bin\Gajim.exe" "%1"'
 SectionEnd
 
 Section "Uninstall"
-	; Hint: Gajim setup should not be named gajim.exe, else it will be killed here
-	ExecWait "TaskKill /IM gdbus.exe /F"
-	ExecWait "TaskKill /IM gajim.exe /F"
-	ExecWait "TaskKill /IM gajim-debug.exe /F"
+    ; Hint: Gajim setup should not be named gajim.exe, else it will be killed here
+    ExecWait "TaskKill /IM gdbus.exe /F"
+    ExecWait "TaskKill /IM gajim.exe /F"
+    ExecWait "TaskKill /IM gajim-debug.exe /F"
 
-	RMDir /r "$INSTDIR"
+    RMDir /r "$INSTDIR"
 
-	!insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
+    !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
 
-	SetShellVarContext current
-	Delete "$SMPROGRAMS\$StartMenuFolder\Gajim.lnk"
-	RMDir "$SMPROGRAMS\$StartMenuFolder"
-	Delete "$DESKTOP\Gajim.lnk"
-	Delete "$SMSTARTUP\Gajim.lnk"
-	SetShellVarContext all
-	Delete "$SMPROGRAMS\$StartMenuFolder\Gajim.lnk"
-	RMDir "$SMPROGRAMS\$StartMenuFolder"
+    SetShellVarContext current
+    Delete "$SMPROGRAMS\$StartMenuFolder\Gajim.lnk"
+    RMDir "$SMPROGRAMS\$StartMenuFolder"
+    Delete "$DESKTOP\Gajim.lnk"
+    Delete "$SMSTARTUP\Gajim.lnk"
+    SetShellVarContext all
+    Delete "$SMPROGRAMS\$StartMenuFolder\Gajim.lnk"
+    RMDir "$SMPROGRAMS\$StartMenuFolder"
 
-	DeleteRegKey /ifempty HKCU "Software\Gajim"
-	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim"
+    DeleteRegKey /ifempty HKCU "Software\Gajim"
+    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim"
 SectionEnd
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-	!insertmacro MUI_DESCRIPTION_TEXT ${SecGajim} $(DESC_SecGajim)
-	!insertmacro MUI_DESCRIPTION_TEXT ${SecDesktopIcon} $(DESC_SecDesktopIcon)
-	!insertmacro MUI_DESCRIPTION_TEXT ${SecAutostart} $(DESC_SecAutostart)
-	!insertmacro MUI_DESCRIPTION_TEXT ${SecURI} $(DESC_SecURI)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecGajim} $(DESC_SecGajim)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecDesktopIcon} $(DESC_SecDesktopIcon)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecAutostart} $(DESC_SecAutostart)
+    !insertmacro MUI_DESCRIPTION_TEXT ${SecURI} $(DESC_SecURI)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Function .onInit
-	BringToFront
-	; Check if already running
-	; If so don't open another but bring to front
-	System::Call "kernel32::CreateMutexA(i 0, i 0, t '$(^Name)') i .r0 ?e"
-	Pop $0
-	StrCmp $0 0 StartInstall
-	StrLen $0 "$(^Name)"
-	IntOp $0 $0 + 1
-	FindWindow $1 '#32770' '' 0 $1
-	IntCmp $1 0 +3
-	System::Call "user32::ShowWindow(i r1,i 9) i."         ; If minimized then maximize
-	System::Call "user32::SetForegroundWindow(i r1) i."    ; Bring to front
-	Abort
+    BringToFront
+    ; Check if already running
+    ; If so don't open another but bring to front
+    System::Call "kernel32::CreateMutexA(i 0, i 0, t '$(^Name)') i .r0 ?e"
+    Pop $0
+    StrCmp $0 0 StartInstall
+    StrLen $0 "$(^Name)"
+    IntOp $0 $0 + 1
+    FindWindow $1 '#32770' '' 0 $1
+    IntCmp $1 0 +3
+    System::Call "user32::ShowWindow(i r1,i 9) i."         ; If minimized then maximize
+    System::Call "user32::SetForegroundWindow(i r1) i."    ; Bring to front
+    Abort
 
 StartInstall:
-	!insertmacro MUI_LANGDLL_DISPLAY  ; Open the language selection window
+    !insertmacro MUI_LANGDLL_DISPLAY  ; Open the language selection window
 FunctionEnd

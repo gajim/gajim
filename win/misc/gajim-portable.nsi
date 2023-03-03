@@ -1,9 +1,8 @@
-; File encoding 'UTF-8 with BOM'
+﻿; File encoding 'UTF-8 with BOM'
 
 Unicode true
 !include "MUI2.nsh"
 !include "LogicLib.nsh"
-
 
 Name "Gajim"
 OutFile "Gajim-Portable.exe"
@@ -103,7 +102,6 @@ Section "Gajim" SecGajim
     "" "" "" SW_SHOWNORMAL "" "Gajim Portable Debug"
     FileOpen $0 "is_portable" w
     FileClose $0
-
 SectionEnd
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
