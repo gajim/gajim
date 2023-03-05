@@ -1,6 +1,7 @@
 ﻿; File encoding 'UTF-8 with BOM'
 
 Unicode true
+ManifestDPIAware true
 !include "MUI2.nsh"
 !include "LogicLib.nsh"
 
