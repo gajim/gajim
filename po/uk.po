@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 19:35+0000\n"
+"POT-Creation-Date: 2023-02-21 22:11+0000\n"
 "PO-Revision-Date: 2022-07-18 19:52+0000\n"
 "Last-Translator: Volodymyr Smoliar <v_2e@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -93,13 +93,6 @@ msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "%(type)s шифрування увімкнено %(authenticated)s."
 
 #, python-format
-msgid "%i min ago"
-msgid_plural "%i mins ago"
-msgstr[0] "%i хвилину тому"
-msgstr[1] "%i хвилини тому"
-msgstr[2] "%i хвилин тому"
-
-#, python-format
 msgid "%s (desynced)"
 msgstr "%s (не синхронізовано)"
 
@@ -146,6 +139,13 @@ msgid ""
 msgstr ""
 "%s в мережі на кількох пристроях.\n"
 "Оберіть пристрій, до якого надіслати файл."
+
+#, fuzzy, python-format
+msgid "%s min ago"
+msgid_plural "%s mins ago"
+msgstr[0] "%i хвилину тому"
+msgstr[1] "%i хвилини тому"
+msgstr[2] "%i хвилин тому"
 
 #, python-format
 msgid "%s s"
@@ -494,9 +494,9 @@ msgstr "Додати цей сертифікат до переліку _дові
 msgid "Add to Contact List…"
 msgstr "Додати до реєстру…"
 
-#, python-format
-msgid "Added %d contact"
-msgid_plural "Added %d contacts"
+#, fuzzy, python-format
+msgid "Added %s contact"
+msgid_plural "Added %s contacts"
 msgstr[0] "Додано %d контакт"
 msgstr[1] "Додано %d контакти"
 msgstr[2] "Додано %d контактів"
@@ -1480,8 +1480,23 @@ msgstr "Типово для нових публічних групових ба�
 msgid "Delete"
 msgstr "Вилучити"
 
+#, fuzzy
+msgid "Delete Message"
+msgstr "Прямі повідомлення"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Delete Message Locally…"
+msgstr "Прямі повідомлення"
+
+msgid "Delete PEP node?"
+msgstr ""
+
 msgid "Delete Theme"
 msgstr "Видалити тему"
+
+msgid "Delete message locally?"
+msgstr ""
 
 msgid "Deny"
 msgstr "Відмовити"
@@ -1573,6 +1588,10 @@ msgstr "Чи приймаєте ви запит (обліковий запис: 
 
 msgid "Do you accept this request?"
 msgstr "Чи приймаєте ви цей запит?"
+
+#, fuzzy
+msgid "Do you really want to delete this PEP node?"
+msgstr "Справді бажаєте видалити цю тему?"
 
 #, python-format
 msgid "Do you really want to remove \"%s\"?"
@@ -2073,6 +2092,10 @@ msgstr "Версія GTK+: %s"
 
 msgid "Gajim"
 msgstr "Gajim"
+
+#, fuzzy, python-format
+msgid "Gajim %s is available"
+msgstr "З'єднання недоступне"
 
 #, fuzzy
 msgid "Gajim - Error"
@@ -3061,6 +3084,10 @@ msgid "Not available"
 msgstr "Дуже далеко"
 
 #, fuzzy
+msgid "Not connected"
+msgstr "З'єднано"
+
+#, fuzzy
 msgid "Not encrypted"
 msgstr "Не розпочато"
 
@@ -3800,9 +3827,9 @@ msgstr ""
 msgid "Remove your profile picture"
 msgstr ""
 
-#, python-format
-msgid "Removed %d contact"
-msgid_plural "Removed %d contacts"
+#, fuzzy, python-format
+msgid "Removed %s contact"
+msgid_plural "Removed %s contacts"
 msgstr[0] "Вилучено %d контакт"
 msgstr[1] "Вилучено %d контакти"
 msgstr[2] "Вилучено %d контактів"
@@ -4983,6 +5010,9 @@ msgid ""
 "You can install the OpenPGP plugin to handle those messages."
 msgstr ""
 
+msgid "This message will be deleted from your local chat history"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Ваш сервер не підтримує Vcard"
@@ -5366,10 +5396,6 @@ msgstr "Пере_вірити"
 #, fuzzy
 msgid "Version"
 msgstr "Версія:"
-
-#, fuzzy, python-format
-msgid "Version %s is available"
-msgstr "З'єднання недоступне"
 
 #, fuzzy
 msgid "Video"

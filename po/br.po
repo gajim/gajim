@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 19:35+0000\n"
+"POT-Creation-Date: 2023-02-21 22:11+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -88,12 +88,6 @@ msgstr "Arsavet eo an treuskas eus %(filename)s digant %(name)s."
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr ""
 
-#, python-format
-msgid "%i min ago"
-msgid_plural "%i mins ago"
-msgstr[0] ""
-msgstr[1] ""
-
 #, fuzzy, python-format
 msgid "%s (desynced)"
 msgstr "Dre ar munut"
@@ -139,6 +133,12 @@ msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the files to."
 msgstr ""
+
+#, python-format
+msgid "%s min ago"
+msgid_plural "%s mins ago"
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-format
 msgid "%s s"
@@ -522,8 +522,8 @@ msgid "Add to Contact List…"
 msgstr "_Ouzhpennañ un darempred..."
 
 #, fuzzy, python-format
-msgid "Added %d contact"
-msgid_plural "Added %d contacts"
+msgid "Added %s contact"
+msgid_plural "Added %s contacts"
 msgstr[0] "Ouzhpennañ un _darempred"
 msgstr[1] "Ouzhpennañ un _darempred"
 
@@ -1633,8 +1633,23 @@ msgid "Delete"
 msgstr "Dilemel"
 
 #, fuzzy
+msgid "Delete Message"
+msgstr "Titour-stad"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Delete Message Locally…"
+msgstr "Titour-stad"
+
+msgid "Delete PEP node?"
+msgstr ""
+
+#, fuzzy
 msgid "Delete Theme"
 msgstr "Oberiant"
+
+msgid "Delete message locally?"
+msgstr ""
 
 msgid "Deny"
 msgstr "Nac'hañ"
@@ -1735,6 +1750,10 @@ msgstr "Degemer a rit ar goulenn-mañ?"
 
 msgid "Do you accept this request?"
 msgstr "Degemer a rit ar goulenn-mañ?"
+
+#, fuzzy
+msgid "Do you really want to delete this PEP node?"
+msgstr "Ha fellout a ra deoc'h da vat diverkañ ar gemennadenn ziuzet?"
 
 #, fuzzy, python-format
 msgid "Do you really want to remove \"%s\"?"
@@ -2277,6 +2296,10 @@ msgstr "Taolennadur: %s"
 
 msgid "Gajim"
 msgstr "Gajim"
+
+#, fuzzy, python-format
+msgid "Gajim %s is available"
+msgstr "N'eus ket tu da gevreañ"
 
 #, fuzzy
 msgid "Gajim - Error"
@@ -3246,6 +3269,10 @@ msgid "Not available"
 msgstr "Dihegerz"
 
 #, fuzzy
+msgid "Not connected"
+msgstr "Kevreadenn"
+
+#, fuzzy
 msgid "Not encrypted"
 msgstr "N'eo ket kroget"
 
@@ -3986,8 +4013,8 @@ msgid "Remove your profile picture"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "Removed %d contact"
-msgid_plural "Removed %d contacts"
+msgid "Removed %s contact"
+msgid_plural "Removed %s contacts"
 msgstr[0] "Dilemel an darempred diouzh ar roll"
 msgstr[1] "Dilemel an darempred diouzh ar roll"
 
@@ -5154,6 +5181,9 @@ msgid ""
 "You can install the OpenPGP plugin to handle those messages."
 msgstr ""
 
+msgid "This message will be deleted from your local chat history"
+msgstr ""
+
 msgid "This server does not allow signup."
 msgstr ""
 
@@ -5530,10 +5560,6 @@ msgstr ""
 
 msgid "Version"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "Version %s is available"
-msgstr "N'eus ket tu da gevreañ"
 
 msgid "Video"
 msgstr ""

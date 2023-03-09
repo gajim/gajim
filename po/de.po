@@ -16,9 +16,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 19:35+0000\n"
-"PO-Revision-Date: 2023-02-06 18:13+0000\n"
-"Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
+"POT-Creation-Date: 2023-02-21 22:11+0000\n"
+"PO-Revision-Date: 2023-03-09 19:07+0000\n"
+"Last-Translator: André <git@apitzsch.eu>\n"
 "Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
 "\n"
 "Language: de\n"
@@ -106,12 +106,6 @@ msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "%(type)s Verschlüsselung aktiv %(authenticated)s."
 
 #, python-format
-msgid "%i min ago"
-msgid_plural "%i mins ago"
-msgstr[0] "vor %i min"
-msgstr[1] "vor %i min"
-
-#, python-format
 msgid "%s (desynced)"
 msgstr "%s (nicht synchronisiert)"
 
@@ -158,6 +152,12 @@ msgid ""
 msgstr ""
 "%s ist mit mehreren Geräten online.\n"
 "Wähle das Gerät, an das du die Datei senden willst."
+
+#, python-format
+msgid "%s min ago"
+msgid_plural "%s mins ago"
+msgstr[0] "vor %s min"
+msgstr[1] "vor %s min"
 
 #, python-format
 msgid "%s s"
@@ -507,10 +507,10 @@ msgid "Add to Contact List…"
 msgstr "Kontakt hinzufügen…"
 
 #, python-format
-msgid "Added %d contact"
-msgid_plural "Added %d contacts"
-msgstr[0] "%d Kontakt hinzugefügt"
-msgstr[1] "%d Kontakte hinzugefügt"
+msgid "Added %s contact"
+msgid_plural "Added %s contacts"
+msgstr[0] "%s Kontakt hinzugefügt"
+msgstr[1] "%s Kontakte hinzugefügt"
 
 msgid "Address"
 msgstr "Adresse"
@@ -1040,7 +1040,7 @@ msgid "Check For Updates"
 msgstr "Nach Updates suchen"
 
 msgid "Check for Gajim updates periodically"
-msgstr "Regeläßig nach Updates suchen"
+msgstr "Regelmäßig nach Updates suchen"
 
 msgid "Check for updates"
 msgstr "Nach Updates suchen"
@@ -1463,8 +1463,21 @@ msgstr "Standard für neue öffentliche Gruppenchats"
 msgid "Delete"
 msgstr "Löschen"
 
+msgid "Delete Message"
+msgstr "Nachricht löschen"
+
+msgctxt "Message row action"
+msgid "Delete Message Locally…"
+msgstr "Nachricht lokal löschen…"
+
+msgid "Delete PEP node?"
+msgstr "PEP-Node löschen?"
+
 msgid "Delete Theme"
 msgstr "Design löschen"
+
+msgid "Delete message locally?"
+msgstr "Nachricht lokal löschen?"
 
 msgid "Deny"
 msgstr "Ablehnen"
@@ -1554,6 +1567,9 @@ msgstr "Akzeptierst du diese Anfrage (Konto: %s)?"
 
 msgid "Do you accept this request?"
 msgstr "Akzeptierst du diese Anfrage?"
+
+msgid "Do you really want to delete this PEP node?"
+msgstr "Möchtest du diesen PEP-Node wirklich löschen?"
 
 #, python-format
 msgid "Do you really want to remove \"%s\"?"
@@ -2036,6 +2052,10 @@ msgstr "GTK-Version: %s"
 
 msgid "Gajim"
 msgstr "Gajim"
+
+#, python-format
+msgid "Gajim %s is available"
+msgstr "Gajim %s ist verfügbar"
 
 msgid "Gajim - Error"
 msgstr "Gajim - Fehler"
@@ -2920,6 +2940,9 @@ msgstr "Nicht beschleunigt"
 msgid "Not available"
 msgstr "Nicht verfügbar"
 
+msgid "Not connected"
+msgstr "Nicht verbunden"
+
 msgid "Not encrypted"
 msgstr "Unverschlüsselt"
 
@@ -3564,10 +3587,10 @@ msgid "Remove your profile picture"
 msgstr "Entferne dein Profilbild"
 
 #, python-format
-msgid "Removed %d contact"
-msgid_plural "Removed %d contacts"
-msgstr[0] "%d Kontakt entfernt"
-msgstr[1] "%d Kontakte entfernt"
+msgid "Removed %s contact"
+msgid_plural "Removed %s contacts"
+msgstr[0] "%s Kontakt entfernt"
+msgstr[1] "%s Kontakte entfernt"
 
 msgid "Remove…"
 msgstr "Entfernen…"
@@ -4624,6 +4647,9 @@ msgstr ""
 "entschlüsselt werden. Du kannst das OpenPGP-Plugin installieren, das solche "
 "Nachrichten verarbeiten kann."
 
+msgid "This message will be deleted from your local chat history"
+msgstr "Diese Nachricht wird aus deinem lokalen Unterhaltungsverlauf gelöscht"
+
 msgid "This server does not allow signup."
 msgstr "Dieser Server erlaubt keine Registrierung."
 
@@ -4971,10 +4997,6 @@ msgstr "Überprüft"
 
 msgid "Version"
 msgstr "Version"
-
-#, python-format
-msgid "Version %s is available"
-msgstr "Version %s ist verfügbar"
 
 msgid "Video"
 msgstr "Video"
@@ -5386,7 +5408,7 @@ msgid "_Edit"
 msgstr "Änd_ern"
 
 msgid "_Features"
-msgstr "_Merkmale"
+msgstr "_Features"
 
 msgid "_File Transfer"
 msgstr "Date_iübertragung"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 19:35+0000\n"
+"POT-Creation-Date: 2023-02-21 22:11+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -91,12 +91,6 @@ msgstr "%(received)s van %(max)s"
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "%(type)s-versleuteling is actief %(authenticated)s."
 
-#, python-format
-msgid "%i min ago"
-msgid_plural "%i mins ago"
-msgstr[0] ""
-msgstr[1] ""
-
 #, fuzzy, python-format
 msgid "%s (desynced)"
 msgstr "gedesynchroniseerd"
@@ -142,6 +136,12 @@ msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the files to."
 msgstr ""
+
+#, python-format
+msgid "%s min ago"
+msgid_plural "%s mins ago"
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-format
 msgid "%s s"
@@ -522,9 +522,9 @@ msgstr ""
 msgid "Add to Contact List…"
 msgstr "Contact toevoegen…"
 
-#, python-format
-msgid "Added %d contact"
-msgid_plural "Added %d contacts"
+#, fuzzy, python-format
+msgid "Added %s contact"
+msgid_plural "Added %s contacts"
 msgstr[0] "%d contact toegevoegd"
 msgstr[1] "%d contacten toegevoegd"
 
@@ -1613,8 +1613,23 @@ msgstr "Groepsgesprekken verlaten"
 msgid "Delete"
 msgstr "Verwijderen"
 
+#, fuzzy
+msgid "Delete Message"
+msgstr "Bericht verwijderen"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Delete Message Locally…"
+msgstr "Bericht verwijderen"
+
+msgid "Delete PEP node?"
+msgstr ""
+
 msgid "Delete Theme"
 msgstr "Thema verwijderen"
+
+msgid "Delete message locally?"
+msgstr ""
 
 msgid "Deny"
 msgstr "Weigeren"
@@ -1718,6 +1733,10 @@ msgstr "Accepteer je dit verzoek op account %s?"
 
 msgid "Do you accept this request?"
 msgstr "Accepteer je dit verzoek?"
+
+#, fuzzy
+msgid "Do you really want to delete this PEP node?"
+msgstr "Wil je dit thema voorgoed verwijderen?"
 
 #, fuzzy, python-format
 msgid "Do you really want to remove \"%s\"?"
@@ -2259,6 +2278,10 @@ msgstr "GTK+-versie: %s"
 
 msgid "Gajim"
 msgstr "Gajim"
+
+#, fuzzy, python-format
+msgid "Gajim %s is available"
+msgstr "Er is geen verbinding beschikbaar"
 
 #, fuzzy
 msgid "Gajim - Error"
@@ -3245,6 +3268,10 @@ msgstr "Niet versleuteld"
 msgid "Not available"
 msgstr "Niet beschikbaar"
 
+#, fuzzy
+msgid "Not connected"
+msgstr "Verbonden"
+
 msgid "Not encrypted"
 msgstr "Niet versleuteld"
 
@@ -3970,9 +3997,9 @@ msgstr ""
 msgid "Remove your profile picture"
 msgstr ""
 
-#, python-format
-msgid "Removed %d contact"
-msgid_plural "Removed %d contacts"
+#, fuzzy, python-format
+msgid "Removed %s contact"
+msgid_plural "Removed %s contacts"
 msgstr[0] "%d contact verwijderd"
 msgstr[1] "%d contacten verwijderd"
 
@@ -5157,6 +5184,9 @@ msgstr ""
 "Dit bericht is versleuteld met Legacy OpenPGP en kon niet ontsleuteld "
 "worden. Installeer de PGP-plug-in om deze berichten te verwerken."
 
+msgid "This message will be deleted from your local chat history"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Je server biedt geen ondersteuning voor vCard"
@@ -5534,10 +5564,6 @@ msgstr "Geverifieerd"
 
 msgid "Version"
 msgstr "Versie"
-
-#, fuzzy, python-format
-msgid "Version %s is available"
-msgstr "Er is geen verbinding beschikbaar"
 
 msgid "Video"
 msgstr "Video"

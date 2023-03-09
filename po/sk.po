@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 19:35+0000\n"
+"POT-Creation-Date: 2023-02-21 22:11+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -89,13 +89,6 @@ msgstr "Prenos súboru %(filename)s od %(name)s zastavený."
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr ""
 
-#, python-format
-msgid "%i min ago"
-msgid_plural "%i mins ago"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
 #, fuzzy, python-format
 msgid "%s (desynced)"
 msgstr "Pokročilé"
@@ -141,6 +134,13 @@ msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the files to."
 msgstr ""
+
+#, python-format
+msgid "%s min ago"
+msgid_plural "%s mins ago"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #, python-format
 msgid "%s s"
@@ -530,8 +530,8 @@ msgid "Add to Contact List…"
 msgstr "_Pridať kontakt..."
 
 #, fuzzy, python-format
-msgid "Added %d contact"
-msgid_plural "Added %d contacts"
+msgid "Added %s contact"
+msgid_plural "Added %s contacts"
 msgstr[0] "Pridaných %s kontaktov"
 msgstr[1] "Pridaných %s kontaktov"
 msgstr[2] "Pridaných %s kontaktov"
@@ -1651,8 +1651,23 @@ msgid "Delete"
 msgstr "Odstrániť"
 
 #, fuzzy
+msgid "Delete Message"
+msgstr "Predvolená správa"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Delete Message Locally…"
+msgstr "Predvolená správa"
+
+msgid "Delete PEP node?"
+msgstr ""
+
+#, fuzzy
 msgid "Delete Theme"
 msgstr "Aktívne"
+
+msgid "Delete message locally?"
+msgstr ""
 
 msgid "Deny"
 msgstr "Zakázať"
@@ -1757,6 +1772,10 @@ msgstr "Prijať túto požiadavku?"
 
 msgid "Do you accept this request?"
 msgstr "Prijať túto požiadavku?"
+
+#, fuzzy
+msgid "Do you really want to delete this PEP node?"
+msgstr "Skutočne si želáte zmazať vybraných správ?"
 
 #, fuzzy, python-format
 msgid "Do you really want to remove \"%s\"?"
@@ -2297,6 +2316,10 @@ msgstr "Verzia GTK+:"
 
 msgid "Gajim"
 msgstr "Gajim"
+
+#, fuzzy, python-format
+msgid "Gajim %s is available"
+msgstr "Pripojenie nie je dostupné"
 
 #, fuzzy
 msgid "Gajim - Error"
@@ -3269,6 +3292,10 @@ msgid "Not available"
 msgstr "Neprítomný"
 
 #, fuzzy
+msgid "Not connected"
+msgstr "Pripojený"
+
+#, fuzzy
 msgid "Not encrypted"
 msgstr "Nezačal"
 
@@ -4008,8 +4035,8 @@ msgid "Remove your profile picture"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "Removed %d contact"
-msgid_plural "Removed %d contacts"
+msgid "Removed %s contact"
+msgid_plural "Removed %s contacts"
 msgstr[0] "Odstránených %s kontaktov"
 msgstr[1] "Odstránených %s kontaktov"
 msgstr[2] "Odstránených %s kontaktov"
@@ -5195,6 +5222,9 @@ msgid ""
 "You can install the OpenPGP plugin to handle those messages."
 msgstr ""
 
+msgid "This message will be deleted from your local chat history"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Server nepodporuje Vcard"
@@ -5576,10 +5606,6 @@ msgstr "O_veriť"
 #, fuzzy
 msgid "Version"
 msgstr "Verzia GTK+:"
-
-#, fuzzy, python-format
-msgid "Version %s is available"
-msgstr "Pripojenie nie je dostupné"
 
 #, fuzzy
 msgid "Video"

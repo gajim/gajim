@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 19:35+0000\n"
+"POT-Creation-Date: 2023-02-21 22:11+0000\n"
 "PO-Revision-Date: 2009-10-31 20:49+0100\n"
 "Last-Translator: Adrian C. <anrxc@sysphere.org>\n"
 "Language-Team: Croatian\n"
@@ -94,13 +94,6 @@ msgstr ""
 "%(type)s enkripcija %(status)s aktivna %(authenticated)s.\n"
 "Vaš razgovor %(logged)s biti zapisan."
 
-#, python-format
-msgid "%i min ago"
-msgid_plural "%i mins ago"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
 #, fuzzy, python-format
 msgid "%s (desynced)"
 msgstr "desinkroniziran"
@@ -146,6 +139,13 @@ msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the files to."
 msgstr ""
+
+#, python-format
+msgid "%s min ago"
+msgid_plural "%s mins ago"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #, python-format
 msgid "%s s"
@@ -539,8 +539,8 @@ msgid "Add to Contact List…"
 msgstr "_Dodaj Kontakt..."
 
 #, fuzzy, python-format
-msgid "Added %d contact"
-msgid_plural "Added %d contacts"
+msgid "Added %s contact"
+msgid_plural "Added %s contacts"
 msgstr[0] "_Dodaj kontakt"
 msgstr[1] "_Dodaj kontakt"
 msgstr[2] "_Dodaj kontakt"
@@ -1661,8 +1661,23 @@ msgid "Delete"
 msgstr "Obriši"
 
 #, fuzzy
+msgid "Delete Message"
+msgstr "Predefinirana Poruka"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Delete Message Locally…"
+msgstr "Predefinirana Poruka"
+
+msgid "Delete PEP node?"
+msgstr ""
+
+#, fuzzy
 msgid "Delete Theme"
 msgstr "Aktivno"
+
+msgid "Delete message locally?"
+msgstr ""
 
 msgid "Deny"
 msgstr "Odbij"
@@ -1767,6 +1782,10 @@ msgstr "Prihvaćate li ovaj zahtjev na računu %s?"
 
 msgid "Do you accept this request?"
 msgstr "Prihvaćate li ovaj zahtjev?"
+
+#, fuzzy
+msgid "Do you really want to delete this PEP node?"
+msgstr "Da li zaista želite ukloniti odabranu poruku?"
 
 #, fuzzy, python-format
 msgid "Do you really want to remove \"%s\"?"
@@ -2307,6 +2326,10 @@ msgstr "GTK+ Verzija:"
 
 msgid "Gajim"
 msgstr "Gajim"
+
+#, fuzzy, python-format
+msgid "Gajim %s is available"
+msgstr "Veza nije dostupna"
 
 #, fuzzy
 msgid "Gajim - Error"
@@ -3286,6 +3309,10 @@ msgid "Not available"
 msgstr "Nedostupan"
 
 #, fuzzy
+msgid "Not connected"
+msgstr "Spojen"
+
+#, fuzzy
 msgid "Not encrypted"
 msgstr "Nije početo"
 
@@ -4027,8 +4054,8 @@ msgid "Remove your profile picture"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "Removed %d contact"
-msgid_plural "Removed %d contacts"
+msgid "Removed %s contact"
+msgid_plural "Removed %s contacts"
 msgstr[0] "Uklanja kontakt sa liste"
 msgstr[1] "Uklanja kontakt sa liste"
 msgstr[2] "Uklanja kontakt sa liste"
@@ -5213,6 +5240,9 @@ msgid ""
 "You can install the OpenPGP plugin to handle those messages."
 msgstr ""
 
+msgid "This message will be deleted from your local chat history"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Vaš poslužitelj ne podržava Vcard"
@@ -5595,10 +5625,6 @@ msgstr "_Provjeri"
 #, fuzzy
 msgid "Version"
 msgstr "GTK+ Verzija:"
-
-#, fuzzy, python-format
-msgid "Version %s is available"
-msgstr "Veza nije dostupna"
 
 msgid "Video"
 msgstr ""

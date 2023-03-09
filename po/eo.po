@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 19:35+0000\n"
+"POT-Creation-Date: 2023-02-21 22:11+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -90,12 +90,6 @@ msgstr "Transmeto de dosiero %(filename)s de %(name)s haltitas."
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "%(type)s ĉifrado estas aktiva %(authenticated)s."
 
-#, python-format
-msgid "%i min ago"
-msgid_plural "%i mins ago"
-msgstr[0] ""
-msgstr[1] ""
-
 #, fuzzy, python-format
 msgid "%s (desynced)"
 msgstr "Krome"
@@ -141,6 +135,12 @@ msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the files to."
 msgstr ""
+
+#, python-format
+msgid "%s min ago"
+msgid_plural "%s mins ago"
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-format
 msgid "%s s"
@@ -525,8 +525,8 @@ msgid "Add to Contact List…"
 msgstr "_Aldoni kontakton..."
 
 #, fuzzy, python-format
-msgid "Added %d contact"
-msgid_plural "Added %d contacts"
+msgid "Added %s contact"
+msgid_plural "Added %s contacts"
 msgstr[0] "Aldoni _kontakton"
 msgstr[1] "Aldoni _kontakton"
 
@@ -1639,8 +1639,23 @@ msgid "Delete"
 msgstr "Forigi"
 
 #, fuzzy
+msgid "Delete Message"
+msgstr "Defaŭlta statmesaĝo"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Delete Message Locally…"
+msgstr "Defaŭlta statmesaĝo"
+
+msgid "Delete PEP node?"
+msgstr ""
+
+#, fuzzy
 msgid "Delete Theme"
 msgstr "Aktiva"
+
+msgid "Delete message locally?"
+msgstr ""
 
 msgid "Deny"
 msgstr "Rifuzi"
@@ -1742,6 +1757,10 @@ msgstr "Ĉu vi akceptas tiun peton?"
 
 msgid "Do you accept this request?"
 msgstr "Ĉu vi akceptas tiun peton?"
+
+#, fuzzy
+msgid "Do you really want to delete this PEP node?"
+msgstr "Ĉu vi efektive volas forigi la elektitan mesaĝon?"
 
 #, fuzzy, python-format
 msgid "Do you really want to remove \"%s\"?"
@@ -2283,6 +2302,10 @@ msgstr "Versio de GTK+:"
 
 msgid "Gajim"
 msgstr "Gajim"
+
+#, fuzzy, python-format
+msgid "Gajim %s is available"
+msgstr "Konekto mankas"
 
 #, fuzzy
 msgid "Gajim - Error"
@@ -3262,6 +3285,10 @@ msgid "Not available"
 msgstr "Nedisponebla"
 
 #, fuzzy
+msgid "Not connected"
+msgstr "Konekto"
+
+#, fuzzy
 msgid "Not encrypted"
 msgstr "Ne lanĉitas"
 
@@ -4004,8 +4031,8 @@ msgid "Remove your profile picture"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "Removed %d contact"
-msgid_plural "Removed %d contacts"
+msgid "Removed %s contact"
+msgid_plural "Removed %s contacts"
 msgstr[0] "Forigas kontakton el kontaktlisto"
 msgstr[1] "Forigas kontakton el kontaktlisto"
 
@@ -5182,6 +5209,9 @@ msgid ""
 "You can install the OpenPGP plugin to handle those messages."
 msgstr ""
 
+msgid "This message will be deleted from your local chat history"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Via servilo ne subtenas Vizitkarton"
@@ -5561,10 +5591,6 @@ msgstr ""
 #, fuzzy
 msgid "Version"
 msgstr "Versio de GTK+:"
-
-#, fuzzy, python-format
-msgid "Version %s is available"
-msgstr "Konekto mankas"
 
 msgid "Video"
 msgstr "Video"

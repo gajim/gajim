@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 19:35+0000\n"
+"POT-Creation-Date: 2023-02-21 22:11+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -91,12 +91,6 @@ msgstr ""
 "Шифрирането чрез %(type)s %(status)s включено %(authenticated)s.\n"
 "%(logged)s се запазва дневник за сесията."
 
-#, python-format
-msgid "%i min ago"
-msgid_plural "%i mins ago"
-msgstr[0] ""
-msgstr[1] ""
-
 #, fuzzy, python-format
 msgid "%s (desynced)"
 msgstr "без синхронизация"
@@ -142,6 +136,12 @@ msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the files to."
 msgstr ""
+
+#, python-format
+msgid "%s min ago"
+msgid_plural "%s mins ago"
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-format
 msgid "%s s"
@@ -533,8 +533,8 @@ msgid "Add to Contact List…"
 msgstr "_Добавяне на контакт…"
 
 #, fuzzy, python-format
-msgid "Added %d contact"
-msgid_plural "Added %d contacts"
+msgid "Added %s contact"
+msgid_plural "Added %s contacts"
 msgstr[0] "Добавяне на _контакт"
 msgstr[1] "Добавяне на _контакт"
 
@@ -1655,8 +1655,23 @@ msgid "Delete"
 msgstr "Изтриване"
 
 #, fuzzy
+msgid "Delete Message"
+msgstr "Стандартно съобщение"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Delete Message Locally…"
+msgstr "Стандартно съобщение"
+
+msgid "Delete PEP node?"
+msgstr ""
+
+#, fuzzy
 msgid "Delete Theme"
 msgstr "Активен"
+
+msgid "Delete message locally?"
+msgstr ""
 
 msgid "Deny"
 msgstr "Отказване"
@@ -1761,6 +1776,10 @@ msgstr "Приемате ли това запитване за акаунт %s?"
 
 msgid "Do you accept this request?"
 msgstr "Приемате ли това запитване?"
+
+#, fuzzy
+msgid "Do you really want to delete this PEP node?"
+msgstr "Наистина ли искате да изтриете избраното съобщение?"
 
 #, fuzzy, python-format
 msgid "Do you really want to remove \"%s\"?"
@@ -2310,6 +2329,10 @@ msgstr "Версия на GTK+:"
 
 msgid "Gajim"
 msgstr "Gajim"
+
+#, fuzzy, python-format
+msgid "Gajim %s is available"
+msgstr "В момента няма връзка"
 
 #, fuzzy
 msgid "Gajim - Error"
@@ -3291,6 +3314,10 @@ msgid "Not available"
 msgstr "Не съм на разположение"
 
 #, fuzzy
+msgid "Not connected"
+msgstr "Свързан"
+
+#, fuzzy
 msgid "Not encrypted"
 msgstr "Не е започнал"
 
@@ -4032,8 +4059,8 @@ msgid "Remove your profile picture"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "Removed %d contact"
-msgid_plural "Removed %d contacts"
+msgid "Removed %s contact"
+msgid_plural "Removed %s contacts"
 msgstr[0] "Премахване на контакт от списъка"
 msgstr[1] "Премахване на контакт от списъка"
 
@@ -5218,6 +5245,9 @@ msgid ""
 "You can install the OpenPGP plugin to handle those messages."
 msgstr ""
 
+msgid "This message will be deleted from your local chat history"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Сървърът ви не поддържа визитки"
@@ -5602,10 +5632,6 @@ msgstr "_Проверка"
 #, fuzzy
 msgid "Version"
 msgstr "Версия на GTK+:"
-
-#, fuzzy, python-format
-msgid "Version %s is available"
-msgstr "В момента няма връзка"
 
 msgid "Video"
 msgstr ""

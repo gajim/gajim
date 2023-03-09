@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 19:35+0000\n"
+"POT-Creation-Date: 2023-02-21 22:11+0000\n"
 "PO-Revision-Date: 2009-11-20 20:49+1100\n"
 "Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: English <en_gb@li.org>\n"
@@ -87,12 +87,6 @@ msgstr "File transfer of %(filename)s from %(name)s stopped."
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "%(type)s encryption is active %(authenticated)s."
 
-#, python-format
-msgid "%i min ago"
-msgid_plural "%i mins ago"
-msgstr[0] ""
-msgstr[1] ""
-
 #, fuzzy, python-format
 msgid "%s (desynced)"
 msgstr "desync'ed"
@@ -138,6 +132,12 @@ msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the files to."
 msgstr ""
+
+#, python-format
+msgid "%s min ago"
+msgid_plural "%s mins ago"
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-format
 msgid "%s s"
@@ -530,8 +530,8 @@ msgid "Add to Contact List…"
 msgstr "_Add Contact..."
 
 #, fuzzy, python-format
-msgid "Added %d contact"
-msgid_plural "Added %d contacts"
+msgid "Added %s contact"
+msgid_plural "Added %s contacts"
 msgstr[0] "_Add contact"
 msgstr[1] "_Add contact"
 
@@ -1650,8 +1650,23 @@ msgid "Delete"
 msgstr "Delete"
 
 #, fuzzy
+msgid "Delete Message"
+msgstr "Default Message"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Delete Message Locally…"
+msgstr "Default Message"
+
+msgid "Delete PEP node?"
+msgstr ""
+
+#, fuzzy
 msgid "Delete Theme"
 msgstr "Active"
+
+msgid "Delete message locally?"
+msgstr ""
 
 msgid "Deny"
 msgstr "Deny"
@@ -1756,6 +1771,10 @@ msgstr "Do you accept this request on account %s?"
 
 msgid "Do you accept this request?"
 msgstr "Do you accept this request?"
+
+#, fuzzy
+msgid "Do you really want to delete this PEP node?"
+msgstr "Do you really want to delete the selected message?"
 
 #, fuzzy, python-format
 msgid "Do you really want to remove \"%s\"?"
@@ -2295,6 +2314,10 @@ msgstr "GTK+ Version:"
 
 msgid "Gajim"
 msgstr "Gajim"
+
+#, fuzzy, python-format
+msgid "Gajim %s is available"
+msgstr "A connection is not available"
 
 #, fuzzy
 msgid "Gajim - Error"
@@ -3273,6 +3296,10 @@ msgid "Not available"
 msgstr "Not Available"
 
 #, fuzzy
+msgid "Not connected"
+msgstr "Connected"
+
+#, fuzzy
 msgid "Not encrypted"
 msgstr "Not started"
 
@@ -4013,8 +4040,8 @@ msgid "Remove your profile picture"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "Removed %d contact"
-msgid_plural "Removed %d contacts"
+msgid "Removed %s contact"
+msgid_plural "Removed %s contacts"
 msgstr[0] "Removes contact from roster"
 msgstr[1] "Removes contact from roster"
 
@@ -5197,6 +5224,9 @@ msgid ""
 "You can install the OpenPGP plugin to handle those messages."
 msgstr ""
 
+msgid "This message will be deleted from your local chat history"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "Your server doesn't support Vcard"
@@ -5578,10 +5608,6 @@ msgstr "_Verify"
 #, fuzzy
 msgid "Version"
 msgstr "GTK+ Version:"
-
-#, fuzzy, python-format
-msgid "Version %s is available"
-msgstr "A connection is not available"
 
 msgid "Video"
 msgstr ""

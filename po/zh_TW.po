@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 19:35+0000\n"
+"POT-Creation-Date: 2023-02-21 22:11+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -93,11 +93,6 @@ msgstr ""
 "%(type)s 加密 %(status)s 活動 %(authenticated)s。\n"
 "您的聊天作業階段 %(logged)s 將被記錄。"
 
-#, python-format
-msgid "%i min ago"
-msgid_plural "%i mins ago"
-msgstr[0] ""
-
 #, fuzzy, python-format
 msgid "%s (desynced)"
 msgstr "未同步"
@@ -143,6 +138,11 @@ msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the files to."
 msgstr ""
+
+#, python-format
+msgid "%s min ago"
+msgid_plural "%s mins ago"
+msgstr[0] ""
 
 #, python-format
 msgid "%s s"
@@ -531,8 +531,8 @@ msgid "Add to Contact List…"
 msgstr "加入聯絡人(_A)…"
 
 #, fuzzy, python-format
-msgid "Added %d contact"
-msgid_plural "Added %d contacts"
+msgid "Added %s contact"
+msgid_plural "Added %s contacts"
 msgstr[0] "加入了 %s 聯絡人"
 
 #, fuzzy
@@ -1646,8 +1646,23 @@ msgid "Delete"
 msgstr "刪除"
 
 #, fuzzy
+msgid "Delete Message"
+msgstr "預設訊息"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Delete Message Locally…"
+msgstr "預設訊息"
+
+msgid "Delete PEP node?"
+msgstr ""
+
+#, fuzzy
 msgid "Delete Theme"
 msgstr "活動"
+
+msgid "Delete message locally?"
+msgstr ""
 
 msgid "Deny"
 msgstr "拒絕"
@@ -1748,6 +1763,10 @@ msgstr "是否接受這個對帳號 %s 的請求?"
 
 msgid "Do you accept this request?"
 msgstr "是否接受這個請求?"
+
+#, fuzzy
+msgid "Do you really want to delete this PEP node?"
+msgstr "您確定要刪除所選取的訊息?"
 
 #, fuzzy, python-format
 msgid "Do you really want to remove \"%s\"?"
@@ -2294,6 +2313,10 @@ msgstr "GTK+ 版本:"
 
 msgid "Gajim"
 msgstr "Gajim"
+
+#, fuzzy, python-format
+msgid "Gajim %s is available"
+msgstr "一個連線無法使用"
 
 #, fuzzy
 msgid "Gajim - Error"
@@ -3273,6 +3296,10 @@ msgid "Not available"
 msgstr "離開很久了"
 
 #, fuzzy
+msgid "Not connected"
+msgstr "已連線"
+
+#, fuzzy
 msgid "Not encrypted"
 msgstr "未開始"
 
@@ -4011,8 +4038,8 @@ msgid "Remove your profile picture"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "Removed %d contact"
-msgid_plural "Removed %d contacts"
+msgid "Removed %s contact"
+msgid_plural "Removed %s contacts"
 msgstr[0] "移除了 %s 聯絡人"
 
 #, fuzzy
@@ -5187,6 +5214,9 @@ msgid ""
 "You can install the OpenPGP plugin to handle those messages."
 msgstr ""
 
+msgid "This message will be deleted from your local chat history"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "您的伺服器不支援 Vcard"
@@ -5568,10 +5598,6 @@ msgstr "辨別(_V)"
 #, fuzzy
 msgid "Version"
 msgstr "版本:"
-
-#, fuzzy, python-format
-msgid "Version %s is available"
-msgstr "一個連線無法使用"
 
 #, fuzzy
 msgid "Video"

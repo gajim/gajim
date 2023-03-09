@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 19:35+0000\n"
+"POT-Creation-Date: 2023-02-21 22:11+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -87,12 +87,6 @@ msgstr ""
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr ""
 
-#, python-format
-msgid "%i min ago"
-msgid_plural "%i mins ago"
-msgstr[0] ""
-msgstr[1] ""
-
 #, fuzzy, python-format
 msgid "%s (desynced)"
 msgstr "Avançat"
@@ -138,6 +132,12 @@ msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the files to."
 msgstr ""
+
+#, python-format
+msgid "%s min ago"
+msgid_plural "%s mins ago"
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-format
 msgid "%s s"
@@ -499,11 +499,11 @@ msgstr ""
 msgid "Add to Contact List…"
 msgstr "_Afegeix Contacte..."
 
-#, python-format
-msgid "Added %d contact"
-msgid_plural "Added %d contacts"
-msgstr[0] ""
-msgstr[1] ""
+#, fuzzy, python-format
+msgid "Added %s contact"
+msgid_plural "Added %s contacts"
+msgstr[0] "_Afegeix Contacte..."
+msgstr[1] "_Afegeix Contacte..."
 
 #, fuzzy
 msgid "Address"
@@ -1562,8 +1562,23 @@ msgid "Delete"
 msgstr "Suprimeix"
 
 #, fuzzy
+msgid "Delete Message"
+msgstr "Missatges preconfigurats:"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Delete Message Locally…"
+msgstr "Missatges preconfigurats:"
+
+msgid "Delete PEP node?"
+msgstr ""
+
+#, fuzzy
 msgid "Delete Theme"
 msgstr "Activa"
+
+msgid "Delete message locally?"
+msgstr ""
 
 msgid "Deny"
 msgstr ""
@@ -1658,6 +1673,9 @@ msgid "Do you accept this request (account: %s)?"
 msgstr ""
 
 msgid "Do you accept this request?"
+msgstr ""
+
+msgid "Do you really want to delete this PEP node?"
 msgstr ""
 
 #, python-format
@@ -2168,6 +2186,10 @@ msgstr "Versió:"
 
 msgid "Gajim"
 msgstr "Gajim"
+
+#, fuzzy, python-format
+msgid "Gajim %s is available"
+msgstr "Transferència de Fitxers"
 
 msgid "Gajim - Error"
 msgstr ""
@@ -3096,6 +3118,10 @@ msgid "Not available"
 msgstr "_No Disponible"
 
 #, fuzzy
+msgid "Not connected"
+msgstr "Entrada següent"
+
+#, fuzzy
 msgid "Not encrypted"
 msgstr "Entrada següent"
 
@@ -3802,11 +3828,11 @@ msgstr ""
 msgid "Remove your profile picture"
 msgstr ""
 
-#, python-format
-msgid "Removed %d contact"
-msgid_plural "Removed %d contacts"
-msgstr[0] ""
-msgstr[1] ""
+#, fuzzy, python-format
+msgid "Removed %s contact"
+msgid_plural "Removed %s contacts"
+msgstr[0] "Afegeix un contacte nou"
+msgstr[1] "Afegeix un contacte nou"
 
 #, fuzzy
 msgid "Remove…"
@@ -4920,6 +4946,9 @@ msgid ""
 "You can install the OpenPGP plugin to handle those messages."
 msgstr ""
 
+msgid "This message will be deleted from your local chat history"
+msgstr ""
+
 msgid "This server does not allow signup."
 msgstr ""
 
@@ -5283,10 +5312,6 @@ msgstr "_Verifica"
 #, fuzzy
 msgid "Version"
 msgstr "Versió:"
-
-#, fuzzy, python-format
-msgid "Version %s is available"
-msgstr "Transferència de Fitxers"
 
 msgid "Video"
 msgstr ""

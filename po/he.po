@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 19:35+0000\n"
+"POT-Creation-Date: 2023-02-21 22:11+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -106,12 +106,6 @@ msgstr ""
 "הצפנת %(type)s %(status)s מופעלת %(authenticated)s.\n"
 "סשן שיחתך %(logged)s ברשומות ההיסטוריה."
 
-#, python-format
-msgid "%i min ago"
-msgid_plural "%i mins ago"
-msgstr[0] ""
-msgstr[1] ""
-
 #, fuzzy, python-format
 msgid "%s (desynced)"
 msgstr "לא מסונכרן"
@@ -158,6 +152,12 @@ msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the files to."
 msgstr ""
+
+#, python-format
+msgid "%s min ago"
+msgid_plural "%s mins ago"
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-format
 msgid "%s s"
@@ -555,9 +555,9 @@ msgid "Add to Contact List…"
 msgstr "הוסף _איש קשר..."
 
 # נוספו
-#, python-format
-msgid "Added %d contact"
-msgid_plural "Added %d contacts"
+#, fuzzy, python-format
+msgid "Added %s contact"
+msgid_plural "Added %s contacts"
 msgstr[0] "הוסף איש קשר %d"
 msgstr[1] "הוספו %d אנשי קשר"
 
@@ -1696,8 +1696,23 @@ msgid "Delete"
 msgstr "מחק"
 
 #, fuzzy
+msgid "Delete Message"
+msgstr "הודעה שגרתית"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Delete Message Locally…"
+msgstr "הודעה שגרתית"
+
+msgid "Delete PEP node?"
+msgstr ""
+
+#, fuzzy
 msgid "Delete Theme"
 msgstr "פעיל"
+
+msgid "Delete message locally?"
+msgstr ""
 
 msgid "Deny"
 msgstr "לאסור"
@@ -1800,6 +1815,10 @@ msgstr "האם לקבל את בקשה זו בחשבון %s?"
 
 msgid "Do you accept this request?"
 msgstr "האם לקבל את בקשה זו?"
+
+#, fuzzy
+msgid "Do you really want to delete this PEP node?"
+msgstr "האם אתה בטוח כי ברצונך למחוק את ההודעה הנבחרת?"
 
 #, fuzzy, python-format
 msgid "Do you really want to remove \"%s\"?"
@@ -2361,6 +2380,10 @@ msgstr "גרסא:"
 # In Hebrew: גאג'ים
 msgid "Gajim"
 msgstr "‫Gajim"
+
+#, fuzzy, python-format
+msgid "Gajim %s is available"
+msgstr "חיבור אינו זמין"
 
 #, fuzzy
 msgid "Gajim - Error"
@@ -3367,6 +3390,10 @@ msgid "Not available"
 msgstr "לא זמין"
 
 #, fuzzy
+msgid "Not connected"
+msgstr "מחובר"
+
+#, fuzzy
 msgid "Not encrypted"
 msgstr "לא הותחלה"
 
@@ -4123,9 +4150,9 @@ msgstr ""
 msgid "Remove your profile picture"
 msgstr ""
 
-#, python-format
-msgid "Removed %d contact"
-msgid_plural "Removed %d contacts"
+#, fuzzy, python-format
+msgid "Removed %s contact"
+msgid_plural "Removed %s contacts"
 msgstr[0] "הוסר איש קשר %d"
 msgstr[1] "הוסרו %d אנשי קשר"
 
@@ -5331,6 +5358,9 @@ msgid ""
 "You can install the OpenPGP plugin to handle those messages."
 msgstr ""
 
+msgid "This message will be deleted from your local chat history"
+msgstr ""
+
 #, fuzzy
 msgid "This server does not allow signup."
 msgstr "השרת שלך לא תומך vCard"
@@ -5719,10 +5749,6 @@ msgstr "_אמת"
 #, fuzzy
 msgid "Version"
 msgstr "גרסא:"
-
-#, fuzzy, python-format
-msgid "Version %s is available"
-msgstr "חיבור אינו זמין"
 
 #, fuzzy
 msgid "Video"

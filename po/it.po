@@ -8,13 +8,13 @@
 # Davide Pizzetti <erpizzo@alice.it>, 2014.
 # Max Muster <c@zp1.net>, 2022.
 # sbadux <enricobe@hotmail.com>, 2022.
-# pjammo <adrianoghr@hotmail.it>, 2022.
+# pjammo <adrianoghr@hotmail.it>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 19:35+0000\n"
-"PO-Revision-Date: 2022-12-20 18:38+0000\n"
+"POT-Creation-Date: 2023-02-21 22:11+0000\n"
+"PO-Revision-Date: 2023-02-13 19:00+0000\n"
 "Last-Translator: pjammo <adrianoghr@hotmail.it>\n"
 "Language-Team: Italian <https://translate.gajim.org/projects/gajim/master/it/"
 ">\n"
@@ -104,12 +104,6 @@ msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "la cifratura %(type)s è attiva %(authenticated)s."
 
 #, python-format
-msgid "%i min ago"
-msgid_plural "%i mins ago"
-msgstr[0] "%i min fa"
-msgstr[1] "%i min fa"
-
-#, python-format
 msgid "%s (desynced)"
 msgstr "%s (non sincronizzato)"
 
@@ -156,6 +150,12 @@ msgid ""
 msgstr ""
 "%s è online con più dispositivi.\n"
 "Scegliere il dispositivo a cui inviare il file."
+
+#, fuzzy, python-format
+msgid "%s min ago"
+msgid_plural "%s mins ago"
+msgstr[0] "%i min fa"
+msgstr[1] "%i min fa"
 
 #, python-format
 msgid "%s s"
@@ -504,9 +504,9 @@ msgstr "Aggiungi questo certificato alla lista di quelli _affidabili"
 msgid "Add to Contact List…"
 msgstr "Aggiungi alla Lista Contatti…"
 
-#, python-format
-msgid "Added %d contact"
-msgid_plural "Added %d contacts"
+#, fuzzy, python-format
+msgid "Added %s contact"
+msgid_plural "Added %s contacts"
 msgstr[0] "%d contatto aggiunto"
 msgstr[1] "%d contatti aggiunti"
 
@@ -1477,8 +1477,23 @@ msgstr "Predefinito per conversazioni di gruppo pubbliche"
 msgid "Delete"
 msgstr "Elimina"
 
+#, fuzzy
+msgid "Delete Message"
+msgstr "Messaggi diretti"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Delete Message Locally…"
+msgstr "Seleziona messaggi…"
+
+msgid "Delete PEP node?"
+msgstr ""
+
 msgid "Delete Theme"
 msgstr "Elimina Tema"
+
+msgid "Delete message locally?"
+msgstr ""
 
 msgid "Deny"
 msgstr "Nega"
@@ -1566,7 +1581,7 @@ msgid "Discussion Logs"
 msgstr "Cronologia Discussioni"
 
 msgid "Dismiss"
-msgstr ""
+msgstr "Chiudi"
 
 #, python-format
 msgid "Do you accept this request (account: %s)?"
@@ -1574,6 +1589,10 @@ msgstr "Accettare questa richiesta (account: %s)?"
 
 msgid "Do you accept this request?"
 msgstr "Accettare questa richiesta?"
+
+#, fuzzy
+msgid "Do you really want to delete this PEP node?"
+msgstr "Vuoi eliminare questo tema?"
 
 #, python-format
 msgid "Do you really want to remove \"%s\"?"
@@ -1683,7 +1702,7 @@ msgid "Enable"
 msgstr "Attiva"
 
 msgid "Enable KeepassXC Integration"
-msgstr ""
+msgstr "Attiva integrazione KeepassXC"
 
 msgid "Enabled"
 msgstr "Attivo"
@@ -1920,7 +1939,6 @@ msgstr "Nome File: "
 msgid "File Offered"
 msgstr "Trasferimento File"
 
-#, fuzzy
 msgid "File Offered…"
 msgstr "File offerto…"
 
@@ -2101,6 +2119,10 @@ msgstr "Versione GTK: %s"
 msgid "Gajim"
 msgstr "Gajim"
 
+#, fuzzy, python-format
+msgid "Gajim %s is available"
+msgstr "È disponibile la versione %s"
+
 #, fuzzy
 msgid "Gajim - Error"
 msgstr "Gajim - %s"
@@ -2232,9 +2254,9 @@ msgstr "La conversazione di gruppo può essere trovata tramite ricerca"
 msgid "Group chat does not exist"
 msgstr "La conversazione di gruppo non esiste"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Group chat has been destroyed%s"
-msgstr "La conversazione di gruppo è stata distrutta"
+msgstr "La conversazione di gruppo è stata distrutta%s"
 
 msgid "Group chat is closed"
 msgstr "La conversazione di gruppo è chiusa"
@@ -3028,6 +3050,10 @@ msgstr "Non cifrato"
 msgid "Not available"
 msgstr "Non Disponibile"
 
+#, fuzzy
+msgid "Not connected"
+msgstr "Non Connesso"
+
 msgid "Not encrypted"
 msgstr "Non cifrato"
 
@@ -3294,7 +3320,7 @@ msgid "Password Required"
 msgstr "Password Richiesta"
 
 msgid "Password contains prohibited characters"
-msgstr ""
+msgstr "La password contiene caratteri non consentiti"
 
 msgid "Passwords do not match"
 msgstr "Le password non coincidono"
@@ -3331,7 +3357,6 @@ msgstr "Mostra _Eventi in Attesa"
 msgid "Pending Voice Requests"
 msgstr "Richiesta di Parola"
 
-#, fuzzy
 msgctxt "Group chat feature"
 msgid "Persistent"
 msgstr "Persistente"
@@ -3483,7 +3508,7 @@ msgid "Preview Size"
 msgstr "Dimensione anteprima"
 
 msgid "Preview all Image URLs"
-msgstr ""
+msgstr "Anteprima di tutti gli URL delle immagini"
 
 #, fuzzy
 msgid "Preview in Public Group Chats"
@@ -3512,7 +3537,7 @@ msgid "Profile"
 msgstr "Profilo"
 
 msgid "Profile application with cprofile"
-msgstr ""
+msgstr "Applicazione profilo con cprofile"
 
 msgid "Progress"
 msgstr "Avanzamento"
@@ -3720,9 +3745,9 @@ msgstr "Rimuovi questo spazio di lavoro"
 msgid "Remove your profile picture"
 msgstr "Rimuovi immagine di profilo"
 
-#, python-format
-msgid "Removed %d contact"
-msgid_plural "Removed %d contacts"
+#, fuzzy, python-format
+msgid "Removed %s contact"
+msgid_plural "Removed %s contacts"
 msgstr[0] "%d contatto eliminato"
 msgstr[1] "%d contatti eliminati"
 
@@ -3732,9 +3757,10 @@ msgstr "Rimuovi…"
 msgid "Removing Account..."
 msgstr "Rimozione Account..."
 
+#, fuzzy
 msgctxt "Group chat name"
 msgid "Repairs"
-msgstr ""
+msgstr "Riparazioni"
 
 #, fuzzy
 msgid "Report"
@@ -3854,7 +3880,7 @@ msgstr "Ritirare il messaggio?"
 
 msgctxt "Message row action"
 msgid "Retract…"
-msgstr ""
+msgstr "Ritira…"
 
 msgid "Revoke Member"
 msgstr "Revoca Membro"
@@ -4871,6 +4897,9 @@ msgstr ""
 "decifrato. È possibile installare l'estensione OpenPGP per gestire questi "
 "messaggi."
 
+msgid "This message will be deleted from your local chat history"
+msgstr ""
+
 msgid "This server does not allow signup."
 msgstr "Questo server non consente le iscrizioni."
 
@@ -5233,10 +5262,6 @@ msgstr "Verificata"
 msgid "Version"
 msgstr "Versione"
 
-#, python-format
-msgid "Version %s is available"
-msgstr "È disponibile la versione %s"
-
 msgid "Video"
 msgstr "Video"
 
@@ -5490,7 +5515,6 @@ msgstr "È necessario invitare le persone affinché si uniscano"
 msgid "You left this group chat"
 msgstr "Hai abbandonato il gruppo"
 
-#, fuzzy
 msgid "You need Owner permission to change the configuration"
 msgstr ""
 "Per modificare la configurazione è necessaria l'autorizzazione del "
@@ -5555,7 +5579,7 @@ msgid "ZZZZzzzzzZZZZZ"
 msgstr "ZZZZzzzzzZZZZZ"
 
 msgid "[read more]"
-msgstr ""
+msgstr "[leggi di più]"
 
 msgid "_Abort"
 msgstr "_Interrompi"

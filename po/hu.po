@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 19:35+0000\n"
-"PO-Revision-Date: 2023-02-06 18:13+0000\n"
+"POT-Creation-Date: 2023-02-21 22:11+0000\n"
+"PO-Revision-Date: 2023-02-24 09:31+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -89,12 +89,6 @@ msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "%(authenticated)s %(type)s titkosítás"
 
 #, python-format
-msgid "%i min ago"
-msgid_plural "%i mins ago"
-msgstr[0] "%i perce"
-msgstr[1] "%i perce"
-
-#, python-format
 msgid "%s (desynced)"
 msgstr "%s (nem egységes)"
 
@@ -141,6 +135,12 @@ msgid ""
 msgstr ""
 "%s több eszközön is elérhető.\n"
 "Ki kell választani, hogy melyik eszköz legyen a fájlküldés célja."
+
+#, python-format
+msgid "%s min ago"
+msgid_plural "%s mins ago"
+msgstr[0] "%s perce"
+msgstr[1] "%s perce"
 
 #, python-format
 msgid "%s s"
@@ -479,10 +479,10 @@ msgid "Add to Contact List…"
 msgstr "Hozzáadás a névjegyekhez…"
 
 #, python-format
-msgid "Added %d contact"
-msgid_plural "Added %d contacts"
-msgstr[0] "%d névjegy lett hozzáadva"
-msgstr[1] "%d névjegy lett hozzáadva"
+msgid "Added %s contact"
+msgid_plural "Added %s contacts"
+msgstr[0] "%s névjegy lett hozzáadva"
+msgstr[1] "%s névjegy lett hozzáadva"
 
 msgid "Address"
 msgstr "Cím"
@@ -1437,8 +1437,21 @@ msgstr "Alapértelmezett érték az új nyilvános társalgókban"
 msgid "Delete"
 msgstr "Törlés"
 
+msgid "Delete Message"
+msgstr "Üzenet törlése"
+
+msgctxt "Message row action"
+msgid "Delete Message Locally…"
+msgstr "Üzenet törlése helyben…"
+
+msgid "Delete PEP node?"
+msgstr "PEP-elem törlése"
+
 msgid "Delete Theme"
 msgstr "Téma törlése"
+
+msgid "Delete message locally?"
+msgstr "Törölhető a helyi üzenet?"
 
 msgid "Deny"
 msgstr "Elutasítás"
@@ -1526,6 +1539,9 @@ msgstr "El legyen fogadva a kérés (fiók: %s)?"
 
 msgid "Do you accept this request?"
 msgstr "El legyen fogadva a kérés?"
+
+msgid "Do you really want to delete this PEP node?"
+msgstr "Biztos törölhető ez a PEP-elem?"
 
 #, python-format
 msgid "Do you really want to remove \"%s\"?"
@@ -2005,6 +2021,10 @@ msgstr "GTK verzió: %s"
 msgid "Gajim"
 msgstr "Gajim"
 
+#, python-format
+msgid "Gajim %s is available"
+msgstr "Megjelent a Gajim %s verziója"
+
 msgid "Gajim - Error"
 msgstr "Gajim – Hiba"
 
@@ -2061,7 +2081,7 @@ msgid "Gajim: No updates available (last check: never)"
 msgstr "Gajim: nincsenek frissítések (legutóbbi keresés: soha)"
 
 msgid "Gajim: Update check disabled in preferences"
-msgstr "Gajim: a frissítések keresése tiltva van a beállításokban"
+msgstr "Gajim: a frissítések keresése ki van kapcsolva"
 
 msgid "Gathering information…"
 msgstr "Információk lekérése…"
@@ -2873,6 +2893,9 @@ msgstr "Nincs gyorsítás"
 msgid "Not available"
 msgstr "Nem érhető el"
 
+msgid "Not connected"
+msgstr "Nincs kapcsolat"
+
 msgid "Not encrypted"
 msgstr "Nem titkosított"
 
@@ -3253,7 +3276,7 @@ msgid "Plugins: No updates available"
 msgstr "Bővítmények: nincsenek frissítések"
 
 msgid "Plugins: Update check disabled in preferences"
-msgstr "Bővítmények: a frissítések keresése tiltva van a beállításokban"
+msgstr "Bővítmények: a frissítések keresése ki van kapcsolva"
 
 msgid "Port"
 msgstr "Port"
@@ -3512,10 +3535,10 @@ msgid "Remove your profile picture"
 msgstr "Profilkép törlése"
 
 #, python-format
-msgid "Removed %d contact"
-msgid_plural "Removed %d contacts"
-msgstr[0] "%d névjegy lett törölve"
-msgstr[1] "%d névjegy lett törölve"
+msgid "Removed %s contact"
+msgid_plural "Removed %s contacts"
+msgstr[0] "%s névjegy lett törölve"
+msgstr[1] "%s névjegy lett törölve"
 
 msgid "Remove…"
 msgstr "Eltávolítás…"
@@ -4546,6 +4569,9 @@ msgstr ""
 "Az üzenet az XMPP OpenPGP titkosításával van kódolva, és nem lehet "
 "visszafejteni. Az ilyen üzenetekhez telepíteni kell a PGP bővítményt."
 
+msgid "This message will be deleted from your local chat history"
+msgstr "Az üzenet törölve lesz a helyben tárolt beszélgetési előzményekből"
+
 msgid "This server does not allow signup."
 msgstr "Ez a kiszolgáló nem ad lehetőséget a regisztrációra."
 
@@ -4889,10 +4915,6 @@ msgstr "Ellenőrzött"
 
 msgid "Version"
 msgstr "Verzió"
-
-#, python-format
-msgid "Version %s is available"
-msgstr "Az elérhető verzió: %s"
 
 msgid "Video"
 msgstr "Videó"

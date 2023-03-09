@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 19:35+0000\n"
+"POT-Creation-Date: 2023-02-21 22:11+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -96,12 +96,6 @@ msgstr "Η μεταφορά του αρχείου %(filename)s από τον/τ�
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr ""
 
-#, python-format
-msgid "%i min ago"
-msgid_plural "%i mins ago"
-msgstr[0] ""
-msgstr[1] ""
-
 #, fuzzy, python-format
 msgid "%s (desynced)"
 msgstr "Προχωρημένοι"
@@ -147,6 +141,12 @@ msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the files to."
 msgstr ""
+
+#, python-format
+msgid "%s min ago"
+msgid_plural "%s mins ago"
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-format
 msgid "%s s"
@@ -533,8 +533,8 @@ msgid "Add to Contact List…"
 msgstr "_Προσθήκη επαφής..."
 
 #, fuzzy, python-format
-msgid "Added %d contact"
-msgid_plural "Added %d contacts"
+msgid "Added %s contact"
+msgid_plural "Added %s contacts"
 msgstr[0] "Προσθήκη _επαφής"
 msgstr[1] "Προσθήκη _επαφής"
 
@@ -1646,8 +1646,23 @@ msgid "Delete"
 msgstr "Διαγραφή"
 
 #, fuzzy
+msgid "Delete Message"
+msgstr "Προεπιλεγμένα μηνύματα κατάστασης"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Delete Message Locally…"
+msgstr "Προεπιλεγμένα μηνύματα κατάστασης"
+
+msgid "Delete PEP node?"
+msgstr ""
+
+#, fuzzy
 msgid "Delete Theme"
 msgstr "Ενεργό"
+
+msgid "Delete message locally?"
+msgstr ""
 
 msgid "Deny"
 msgstr "Άρνηση"
@@ -1753,6 +1768,10 @@ msgstr "Δέχεστε αυτό το αίτημα;"
 
 msgid "Do you accept this request?"
 msgstr "Δέχεστε αυτό το αίτημα;"
+
+#, fuzzy
+msgid "Do you really want to delete this PEP node?"
+msgstr "Θέλετε σίγουρα να διαγράψετε το επιλεγμένο μήνυμα;"
 
 #, fuzzy, python-format
 msgid "Do you really want to remove \"%s\"?"
@@ -2297,6 +2316,10 @@ msgstr "Έκδοση GTK+:"
 
 msgid "Gajim"
 msgstr "Gajim"
+
+#, fuzzy, python-format
+msgid "Gajim %s is available"
+msgstr "Μια νέα έκδοση του Gajim είναι διαθέσιμη"
 
 #, fuzzy
 msgid "Gajim - Error"
@@ -3272,6 +3295,10 @@ msgid "Not available"
 msgstr "Μη διαθέσιμος"
 
 #, fuzzy
+msgid "Not connected"
+msgstr "Σύνδεση"
+
+#, fuzzy
 msgid "Not encrypted"
 msgstr "Δεν έχει ξεκινήσει"
 
@@ -4014,8 +4041,8 @@ msgid "Remove your profile picture"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "Removed %d contact"
-msgid_plural "Removed %d contacts"
+msgid "Removed %s contact"
+msgid_plural "Removed %s contacts"
 msgstr[0] "Αφαιρεί μια επαφή από τη λίστα επαφών"
 msgstr[1] "Αφαιρεί μια επαφή από τη λίστα επαφών"
 
@@ -5190,6 +5217,9 @@ msgid ""
 "You can install the OpenPGP plugin to handle those messages."
 msgstr ""
 
+msgid "This message will be deleted from your local chat history"
+msgstr ""
+
 msgid "This server does not allow signup."
 msgstr ""
 
@@ -5572,10 +5602,6 @@ msgstr ""
 #, fuzzy
 msgid "Version"
 msgstr "Έκδοση GTK+:"
-
-#, fuzzy, python-format
-msgid "Version %s is available"
-msgstr "Μια νέα έκδοση του Gajim είναι διαθέσιμη"
 
 msgid "Video"
 msgstr ""

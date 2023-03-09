@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 19:35+0000\n"
-"PO-Revision-Date: 2023-02-06 18:13+0000\n"
+"POT-Creation-Date: 2023-02-21 22:11+0000\n"
+"PO-Revision-Date: 2023-03-02 08:25+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/>"
 "\n"
@@ -95,12 +95,6 @@ msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "%(type)s түрдегі шифрлеу белсенді %(authenticated)s."
 
 #, python-format
-msgid "%i min ago"
-msgid_plural "%i mins ago"
-msgstr[0] "%i мин бұрын"
-msgstr[1] "%i мин бұрын"
-
-#, python-format
 msgid "%s (desynced)"
 msgstr "%s (синхрондалмаған)"
 
@@ -147,6 +141,12 @@ msgid ""
 msgstr ""
 "%s бірнеше құрылғылармен желіде.\n"
 "Файлдарды жібергіңіз келетін құрылғыны таңдаңыз."
+
+#, python-format
+msgid "%s min ago"
+msgid_plural "%s mins ago"
+msgstr[0] "%s мин бұрын"
+msgstr[1] "%s мин бұрын"
 
 #, python-format
 msgid "%s s"
@@ -487,10 +487,10 @@ msgid "Add to Contact List…"
 msgstr "Контакттар тізіміне қосу…"
 
 #, python-format
-msgid "Added %d contact"
-msgid_plural "Added %d contacts"
-msgstr[0] "%d контакт қосылды"
-msgstr[1] "%d контакт қосылды"
+msgid "Added %s contact"
+msgid_plural "Added %s contacts"
+msgstr[0] "%s контакт қосылды"
+msgstr[1] "%s контакт қосылды"
 
 msgid "Address"
 msgstr "Адресі"
@@ -1441,8 +1441,21 @@ msgstr "Жаңа жария топтық чаттар үшін үнсіз кел
 msgid "Delete"
 msgstr "Өшіру"
 
+msgid "Delete Message"
+msgstr "Хабарламаны өшіру"
+
+msgctxt "Message row action"
+msgid "Delete Message Locally…"
+msgstr "Хабарламаны жергілікті түрде өшіру…"
+
+msgid "Delete PEP node?"
+msgstr "PEP торабын өшіру керек пе?"
+
 msgid "Delete Theme"
 msgstr "Теманы өшіру"
+
+msgid "Delete message locally?"
+msgstr "Хабарламаны жергілікті түрде өшіру керек пе?"
 
 msgid "Deny"
 msgstr "Тайдыру"
@@ -1530,6 +1543,9 @@ msgstr "Бұл сұранымды қабылдайсыз ба (тіркелгі:
 
 msgid "Do you accept this request?"
 msgstr "Бұл сұранымды қабылдайсыз ба?"
+
+msgid "Do you really want to delete this PEP node?"
+msgstr "Бұл PEP торабын шынымен өшіргіңіз келе ме?"
 
 #, python-format
 msgid "Do you really want to remove \"%s\"?"
@@ -2011,6 +2027,10 @@ msgstr "GTK нұсқасы: %s"
 
 msgid "Gajim"
 msgstr "Gajim"
+
+#, python-format
+msgid "Gajim %s is available"
+msgstr "Gajim %s нұсқасы қолжетімді"
 
 msgid "Gajim - Error"
 msgstr "Gajim - Қате"
@@ -2883,6 +2903,9 @@ msgstr "Үдетілмеген"
 msgid "Not available"
 msgstr "Қолжетімді емес"
 
+msgid "Not connected"
+msgstr "Байланыспаған"
+
 msgid "Not encrypted"
 msgstr "Шифрленбеген"
 
@@ -3526,10 +3549,10 @@ msgid "Remove your profile picture"
 msgstr "Профиль суретіңізді өшіру"
 
 #, python-format
-msgid "Removed %d contact"
-msgid_plural "Removed %d contacts"
-msgstr[0] "%d контакт өшірілді"
-msgstr[1] "%d контакт өшірілді"
+msgid "Removed %s contact"
+msgid_plural "Removed %s contacts"
+msgstr[0] "%s контакт өшірілді"
+msgstr[1] "%s контакт өшірілді"
 
 msgid "Remove…"
 msgstr "Өшіру…"
@@ -4561,6 +4584,9 @@ msgstr ""
 "Бұл хабарлама XMPP үшін OpenPGP көмегімен шифрленген және шифрын шешу мүмкін "
 "емес. Бұл хабарламаларды өңдеу үшін OpenPGP плагинін орнатуға болады."
 
+msgid "This message will be deleted from your local chat history"
+msgstr "Бұл хабарлама сіздің жергілікті чат тарихынан өшірілетін болады"
+
 msgid "This server does not allow signup."
 msgstr "Бұл сервер тіркелуге рұқсат бермейді."
 
@@ -4903,10 +4929,6 @@ msgstr "Тексерілді"
 
 msgid "Version"
 msgstr "Нұсқасы"
-
-#, python-format
-msgid "Version %s is available"
-msgstr "%s нұсқасы қолжетімді"
 
 msgid "Video"
 msgstr "Видео"

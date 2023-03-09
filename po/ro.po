@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 19:35+0000\n"
+"POT-Creation-Date: 2023-02-21 22:11+0000\n"
 "PO-Revision-Date: 2022-12-29 22:46+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -96,13 +96,6 @@ msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "%(type)s criptarea este activă %(authenticated)s."
 
 #, python-format
-msgid "%i min ago"
-msgid_plural "%i mins ago"
-msgstr[0] "%i min în urmă"
-msgstr[1] "%i minute în urmă"
-msgstr[2] "%i de minute în urmă"
-
-#, python-format
 msgid "%s (desynced)"
 msgstr "%s (desincronizat)"
 
@@ -149,6 +142,13 @@ msgid ""
 msgstr ""
 "%s este online cu mai multe dispozitive.\n"
 "Alegeți dispozitivul la care doriți să trimiteți fișierul."
+
+#, fuzzy, python-format
+msgid "%s min ago"
+msgid_plural "%s mins ago"
+msgstr[0] "%i min în urmă"
+msgstr[1] "%i minute în urmă"
+msgstr[2] "%i de minute în urmă"
 
 #, python-format
 msgid "%s s"
@@ -491,9 +491,9 @@ msgstr "Adăugați acest certificat la lista de certificate de _încredere"
 msgid "Add to Contact List…"
 msgstr "Adăugați la lista de contacte…"
 
-#, python-format
-msgid "Added %d contact"
-msgid_plural "Added %d contacts"
+#, fuzzy, python-format
+msgid "Added %s contact"
+msgid_plural "Added %s contacts"
 msgstr[0] "Adăugat %d contact"
 msgstr[1] "Adăugate %d contacte"
 msgstr[2] "Adăugate %d de contacte"
@@ -1452,8 +1452,23 @@ msgstr "Implicit pentru noile chat-uri de grup publice"
 msgid "Delete"
 msgstr "Ștergeți"
 
+#, fuzzy
+msgid "Delete Message"
+msgstr "Mesaje directe"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Delete Message Locally…"
+msgstr "Selectați Mesaje…"
+
+msgid "Delete PEP node?"
+msgstr ""
+
 msgid "Delete Theme"
 msgstr "Ștergeți tema"
+
+msgid "Delete message locally?"
+msgstr ""
 
 msgid "Deny"
 msgstr "Refuzați"
@@ -1547,6 +1562,10 @@ msgstr "Acceptați această cerere (cont: %s)?"
 
 msgid "Do you accept this request?"
 msgstr "Acceptați această cerere?"
+
+#, fuzzy
+msgid "Do you really want to delete this PEP node?"
+msgstr "Doriți să ștergeți această temă?"
 
 #, python-format
 msgid "Do you really want to remove \"%s\"?"
@@ -2030,6 +2049,10 @@ msgstr "Versiunea GTK: %s"
 
 msgid "Gajim"
 msgstr "Gajim"
+
+#, fuzzy, python-format
+msgid "Gajim %s is available"
+msgstr "Versiunea %s este disponibilă"
 
 msgid "Gajim - Error"
 msgstr "Gajim - Eroare"
@@ -2914,6 +2937,10 @@ msgstr "Neaccelerat"
 msgid "Not available"
 msgstr "Nu este disponibil"
 
+#, fuzzy
+msgid "Not connected"
+msgstr "Nu este conectat"
+
 msgid "Not encrypted"
 msgstr "Necriptat"
 
@@ -3559,9 +3586,9 @@ msgstr "Eliminați acest spațiu de lucru"
 msgid "Remove your profile picture"
 msgstr "Îndepărtați imaginea de profil"
 
-#, python-format
-msgid "Removed %d contact"
-msgid_plural "Removed %d contacts"
+#, fuzzy, python-format
+msgid "Removed %s contact"
+msgid_plural "Removed %s contacts"
 msgstr[0] "A eliminat %d contact"
 msgstr[1] "A eliminat %d contacte"
 msgstr[2] "A eliminat %d de contacte"
@@ -4612,6 +4639,9 @@ msgstr ""
 "Acest mesaj a fost criptat cu OpenPGP pentru XMPP și nu a putut fi "
 "decriptat. Puteți instala extensia OpenPGP pentru a gestiona aceste mesaje."
 
+msgid "This message will be deleted from your local chat history"
+msgstr ""
+
 msgid "This server does not allow signup."
 msgstr "Acest server nu permite înregistrarea."
 
@@ -4957,10 +4987,6 @@ msgstr "Verificat"
 
 msgid "Version"
 msgstr "Versiunea"
-
-#, python-format
-msgid "Version %s is available"
-msgstr "Versiunea %s este disponibilă"
 
 msgid "Video"
 msgstr "Videoclip"
