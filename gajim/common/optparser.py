@@ -219,7 +219,7 @@ class OptionsParser:
                 account_string = '%s@%s' % (username, domain)
                 # We cannot get the preferred theme at this point
                 background = (1, 1, 1)
-                col_r, col_g, col_b = text_to_color(account_string, background)
+                col_r, col_g, col_b = text_to_color(account_string, 100, 40)
                 rgba = Gdk.RGBA(red=col_r, green=col_g, blue=col_b)
                 color = rgba.to_string()
                 app.config.set_per('accounts', account, 'account_color', color)
