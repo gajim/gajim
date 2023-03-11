@@ -66,7 +66,7 @@ class FileTransferSelector(Gtk.Box):
         self._method = method or app.window.get_preferred_ft_method(contact)
 
         client = app.get_client(contact.account)
-        self._max_file_size = client.get_module('HTTPUpload').max_file_size or 0
+        self._max_http_file_size = client.get_module('HTTPUpload').max_file_size
 
         self._ui = get_builder('file_transfer_selector.ui')
         self.add(self._ui.stack)
@@ -104,6 +104,11 @@ class FileTransferSelector(Gtk.Box):
 
         self.show_all()
 
+    def _is_over_max_http_file_size(self, path: Path) -> bool:
+        if self._max_http_file_size is None:
+            return False
+        return path.stat().st_size > self._max_http_file_size
+
     def transfer_resource_required(self) -> bool:
         if not isinstance(self._contact, BareContact):
             # No jingle file transfer for group chats
@@ -116,7 +121,7 @@ class FileTransferSelector(Gtk.Box):
         current_page = self._ui.stack.get_visible_child_name()
         if self._method == 'httpupload':
             for path in self._get_file_paths():
-                if path.stat().st_size > self._max_file_size:
+                if self._is_over_max_http_file_size(path):
                     if current_page == 'resource-selection':
                         return False
 
@@ -139,7 +144,7 @@ class FileTransferSelector(Gtk.Box):
         file_paths = self._get_file_paths()
         for path in file_paths:
             if (self._method == 'jingle' or
-                    path.stat().st_size > self._max_file_size):
+                    self._is_over_max_http_file_size(path)):
                 assert self._resource_selector is not None
                 item = (path, 'jingle', self._resource_selector.get_jid())
             elif self._method == 'httpupload':
@@ -162,7 +167,7 @@ class FileTransferSelector(Gtk.Box):
                 continue
 
             size_warning = bool(self._method == 'httpupload' and
-                                path.stat().st_size > self._max_file_size)
+                                self._is_over_max_http_file_size(path))
             jingle_warning = bool(self._method == 'jingle')
 
             row = FileRow(path, size_warning, jingle_warning)
@@ -208,7 +213,7 @@ class FileTransferSelector(Gtk.Box):
         if self._method == 'httpupload' and self._contact.is_groupchat:
             # Enforce HTTPUpload file size limit for group chats
             for path in file_paths:
-                if path.stat().st_size > self._max_file_size:
+                if self._is_over_max_http_file_size(path):
                     self.emit('changed', False)
                     return
 
