@@ -196,7 +196,8 @@ class Chatstate(BaseModule):
         contact.notify('chatstate-update')
 
     def _remove_remote_composing_timeout(self, contact: types.ContactT):
-        source_id = self._delay_timeout_ids.pop(contact.jid, None)
+        source_id = self._remote_chatstate_composing_timeouts.pop(
+            contact.jid, None)
         if source_id is not None:
             self._log.debug('Removing remote composing timeout of %s', contact)
             GLib.source_remove(source_id)
