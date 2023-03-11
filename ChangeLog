@@ -1,3 +1,38 @@
+Gajim 1.7.2 (09 Mar 2023)
+
+  Improvements
+
+  * Declare that the installer is DPI-aware
+  * Windows installer: Add Polish language
+  * Add message menu entry for deleting messages locally
+  * Proxies: Add 'Tor (Browser)' default proxy setting
+  * Windows: Add direct download for Gajim Portable updates
+  * Windows: Offer direct download of Gajim setup when update is available
+  * Select group chat after creating it (#11304)
+  * Don’t color log timestamps
+  * PEPConfig: Ask for confirmation when deleting nodes
+  * Improve get_recent_muc_nicks query
+  * Improve check for message highlight and add tests
+  * Tests: Use in-memory settings database
+  * Add audio/x-wav to default mime types
+  * Audio preview: Allow skipping by clicking the visualization (#11392)
+
+  Bug Fixes
+
+  * Migration: Don’t fail on color setting migration (#11426)
+  * HTTPUpload: Respect infinite file size limit (#11436)
+  * Chatstates: Remove composing timeout correctly
+  * Show chat notifications when chat page is not visible (#11416)
+  * Don't fail if contact name for MUC message is None (#11417)
+  * Notifications: Honor notification_preview_message setting
+  * Fix nickname highlight in group chats (#11413)
+  * Profile: Don't allow saving profile when not connected (#11401)
+  * GetRelativeTimeTest: Fix comparison of translated strings and off-by timezone errors
+  * Don't highlight message if it's an URI containing our nick (#11387)
+  * Nickname completion: Make sure recent nicknames list does not contain None (#11394)
+  * Plugins: Don't fail hard on uninstall errors (#11389)
+  * Start Chat: Fix wrong JID type in _start_new_chat (#11398)
+
 Gajim 1.7.1 (08 Feb 2023)
 
   New
