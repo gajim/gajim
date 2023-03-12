@@ -3,6 +3,7 @@
 ## Build
 * [ ] Merge translations from Weblate
 * [ ] Update IANA data with `./scripts/get_iana_data.py gajim/common/iana.py`
+* [ ] Run `./scripts/update_flatpak_manifest.py`
 * [ ] Run `./scripts/bump_version.py x.x.x`
 * [ ] Push release tag `x.x.x`
 
