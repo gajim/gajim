@@ -146,11 +146,17 @@ class Contacts(BaseModule):
 
         contact = self._contacts.get(jid)
         if contact is not None:
-            if not isinstance(contact, GroupchatContact):
-                raise ValueError(f'Trying to add GroupchatContact {jid}, '
-                                 f'but contact already exists as {contact} '
-                                 f'(in roster: {contact.is_in_roster})')
-            return contact
+            if isinstance(contact, GroupchatContact):
+                return contact
+
+            self._log.error(f'Trying to add GroupchatContact {jid}, '
+                            f'but contact already exists as {contact} '
+                            f'(in roster: {contact.is_in_roster})')
+            # Most likely a groupchat which has been added to the roster.
+            # Remove jid from roster (if we are online) and delete contact.
+            if self._client.state.is_available:
+                self._client.get_module('Roster').delete_item(jid)
+            self._contacts.pop(jid)
 
         contact = GroupchatContact(self._log, jid, self._account)
 
