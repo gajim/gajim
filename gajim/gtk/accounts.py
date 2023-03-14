@@ -267,6 +267,7 @@ class AccountMenu(Gtk.Box):
             back_row.emit('activate')
         self._accounts_listbox.remove(row)
         sub_menu = self._stack.get_child_by_name(f'{row.account}-menu')
+        assert sub_menu is not None
         self._stack.remove(sub_menu)
         row.destroy()
         sub_menu.destroy()

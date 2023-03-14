@@ -230,6 +230,7 @@ class ConfirmationCheckDialog(ConfirmationDialog):
         self._checkbutton.set_margin_start(30)
         self._checkbutton.set_margin_end(30)
         label = self._checkbutton.get_child()
+        assert isinstance(label, Gtk.Label)
         label.set_line_wrap(True)
         label.set_max_width_chars(50)
         label.set_halign(Gtk.Align.START)

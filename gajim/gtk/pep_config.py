@@ -117,7 +117,7 @@ class PEPConfig(Gtk.ApplicationWindow, EventHelper):
         self.treestore.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         self._ui.services_treeview.set_model(self.treestore)
 
-        col = Gtk.TreeViewColumn(_('Service'))
+        col = Gtk.TreeViewColumn(title=_('Service'))
         col.set_sort_column_id(0)
         self._ui.services_treeview.append_column(col)
 

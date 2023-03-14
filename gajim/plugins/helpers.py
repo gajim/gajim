@@ -31,8 +31,8 @@ class GajimPluginActivateException(Exception):
 
 
 def get_builder(file_name: str, widgets: Optional[list[str]] = None) -> Builder:
-    return Builder(file_name,     # pyright: ignore
-                   widgets,
+    return Builder(file_name,
+                   widgets,  # pyright: ignore
                    domain=DOMAIN,
                    gettext_=_)
 

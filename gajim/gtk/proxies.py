@@ -83,7 +83,7 @@ class ManageProxies(Gtk.ApplicationWindow):
         self._ui.settings_grid.set_sensitive(False)
         model = Gtk.ListStore(str)
         self._ui.proxies_treeview.set_model(model)
-        col = Gtk.TreeViewColumn('Proxies')
+        col = Gtk.TreeViewColumn(title='Proxies')
         self._ui.proxies_treeview.append_column(col)
         renderer = Gtk.CellRendererText()
         col.pack_start(renderer, True)

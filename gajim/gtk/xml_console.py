@@ -189,7 +189,9 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
                           _listbox: Gtk.ListBox,
                           row: Gtk.ListBoxRow
                           ) -> None:
-        text = row.get_child().get_text()
+        child = row.get_child()
+        assert isinstance(child, Gtk.Label)
+        text = child.get_text()
 
         # pylint: disable=line-too-long
         input_text = None
