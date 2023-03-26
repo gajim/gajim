@@ -277,9 +277,6 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
         def _clear():
             self._omemo.clear_devicelist()
 
-        window = self.get_window()
-        assert isinstance(window, Gtk.Window)
-
         ConfirmationDialog(
             _('Clear Devices'),
             _('Clear Devices Now?'),
@@ -288,7 +285,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
              DialogButton.make('Accept',
                                text=_('_Clear Devices'),
                                callback=_clear)],
-            transient_for=window).show()
+            transient_for=cast(Gtk.Window, self.get_toplevel())).show()
 
     def _on_manage_trust_clicked(self, _button: Gtk.Button) -> None:
         assert self._contact is not None
