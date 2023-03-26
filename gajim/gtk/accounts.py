@@ -426,13 +426,13 @@ class PageMenuItem(MenuItem):
         super().__init__(name)
 
         if name == 'general':
-            icon = 'preferences-system-symbolic'
+            icon = 'avatar-default-symbolic'
         elif name == 'privacy':
             icon = 'preferences-system-privacy-symbolic'
         elif name == 'connection':
             icon = 'preferences-system-network-symbolic'
         elif name == 'advanced':
-            icon = 'preferences-other-symbolic'
+            icon = 'preferences-system-symbolic'
         else:
             icon = 'dialog-error-symbolic'
 
