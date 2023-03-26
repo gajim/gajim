@@ -49,6 +49,7 @@ Recommends:
     gir1.2-farstream-0.2,
     gir1.2-gstreamer-1.0,
     gir1.2-gst-plugins-base-1.0,
+    gir1.2-ayatanaappindicator3-0.1,
     gstreamer1.0-plugins-ugly,
     gstreamer1.0-libav,
     gstreamer1.0-gtk3,
