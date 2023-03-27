@@ -57,7 +57,7 @@ class Interface:
         for backend in backends:
             log.info('Found keyring backend: %s', backend)
 
-        if (app.settings.get('enable_keepassxc_integration') and 
+        if (app.settings.get('enable_keepassxc_integration') and
                 package_version('keyring>=23.8.1')):
             _keyring = keyring.get_keyring()
             self.backend = _keyring.with_properties(scheme='KeePassXC')
