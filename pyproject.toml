@@ -198,7 +198,15 @@ ignore = [
   "N806",   # Variable should be lower case
   "N817",   # CamelCase imported as acronym
   "N818",   # Exception name should be named with an Error suffix
+  "PLC1901",# Expression can be simplified to x as an empty string is falsey
+  "PLR0911",# Too many return statements
+  "PLR0912",# Too many branches
+  "PLR0913",# Too many arguments to function call
+  "PLR0915",# Too many statements
   "PLR2004",# Magic value used in comparison, consider replacing x with a constant variable
+  "PLR5501",# Consider using `elif` instead of `else` then `if` to remove one indentation level
+  "PLW0603",# Using the global statement to update `x` is discouraged
+  "PLW2901",# `for` loop variable `x` overwritten by assignment target
   "RUF001", # AmbiguousUnicodeCharacterString
   "RUF002", # AmbiguousUnicodeCharacterDocstring
   "RUF003", # AmbiguousUnicodeCharacterComment
@@ -206,10 +214,17 @@ ignore = [
   "RUF100", # Unused `noqa` directive
   "S101",   # Use of `assert` detected
   "S110",   # `try`-`except`-`pass` detected, consider logging the exception
+  "S301",   # `pickle` and modules that wrap it can be unsafe when used to deserialize untrusted data, possible security issue
+  "S303",   # Use of insecure MD2, MD4, MD5, or SHA1 hash function
+  "S310",   # Audit URL open for permitted schemes
+  "S311",   # Standard pseudo-random generators are not suitable for cryptographic purposes
+  "S314",   # Using `xml` to parse untrusted data is known to be vulnerable to XML attacks; use `defusedxml` equivalents
   "S324",   # Probable use of insecure hash functions
+  "S608",   # Possible SQL injection vector through string-based query construction
   "SIM102", # Use a single `if` statement instead of nested `if` statements
   "SIM105", # Use `contextlib.suppress(Exception)` instead of try-except-pass
   "SIM108", # Use ternary operator
+  "SIM114", # Combine `if` branches using logical `or` operator"
   "SIM115", # Use context handler for opening files
   "SIM201", # Use x instead of not x
   "SIM212", # Use `value if value else ''` instead of `'' if not value else value`
@@ -219,6 +234,9 @@ ignore = [
   "UP031",  # Use format specifiers instead of percent format
   "UP032",  # Use f-string instead of `format` call
   "UP034",  # Avoid extraneous parentheses
+  "UP035",  # Import from `collections.abc` instead: `Callable`
+  "UP038",  # Use `X | Y` in `isinstance` call instead of `(X, Y)`
+  "UP037",  # Remove quotes from type annotation
 ]
 
 exclude = [
