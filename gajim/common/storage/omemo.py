@@ -603,7 +603,7 @@ class OMEMOStorage(AxolotlStore):
         return IdentityKeyPair.new(result.public_key,
                                    DjbECPrivateKey(result.private_key))
 
-    def getLocalRegistrationId(self) -> Optional[int]:
+    def getLocalRegistrationId(self) -> Optional[int]:  # pyright: ignore
         query = 'SELECT device_id FROM secret LIMIT 1'
         result = self._con.execute(query).fetchone()
         return result.device_id if result is not None else None

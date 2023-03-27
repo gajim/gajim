@@ -153,7 +153,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
     def _on_destroy(self, *args: Any) -> None:
         self.unregister_events()
         self._ui.list.set_filter_func(None)
-        self._ui.search.disconnect_by_func(self._on_search_changed)
+        self._ui.search.disconnect_by_func(self._on_search_changed)  # pyright: ignore
         app.check_finalize(self)
 
     def _on_account_state(self,
