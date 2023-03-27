@@ -232,7 +232,7 @@ class OmemoState:
 
         recipients = set(whisper_messages.keys())
         if jid != self._own_jid:
-            recipients -= set([self._own_jid])
+            recipients -= {self._own_jid}
         if not recipients:
             self._log.error('Encrypted keys empty')
             return

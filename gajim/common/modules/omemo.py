@@ -566,7 +566,7 @@ class OMEMO(BaseModule):
             message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
 
     def set_devicelist(self, devicelist: Optional[list[int]] = None) -> None:
-        devicelist_: set[int] = set([self.backend.own_device])
+        devicelist_: set[int] = {self.backend.own_device}
         if devicelist is not None:
             devicelist_.update(devicelist)
         self._log.info('Publishing own devicelist: %s', devicelist_)
