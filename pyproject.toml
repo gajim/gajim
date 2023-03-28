@@ -35,7 +35,7 @@ dependencies = [
   "pycairo>=1.16.0",
   "PyGObject>=3.42.0",
   "qrcode>=7.3.1",
-  "python-axolotl>=0.2.3"
+  "omemo-dr>=0.99.0,<2.0.0",
 ]
 dynamic = ["version"]
 

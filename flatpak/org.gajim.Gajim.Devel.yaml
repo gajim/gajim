@@ -329,6 +329,15 @@ modules:
         url: https://dev.gajim.org/gajim/python-nbxmpp.git
 
   # OMEMO dependencies
+  - name: omemo-dr
+    buildsystem: simple
+    build-commands:
+      - pip3 install .
+    sources:
+      - type: archive
+        url: https://files.pythonhosted.org/packages/source/o/omemo-dr/omemo-dr-0.99.0.tar.gz
+        sha256: 79f9b166b350b3baced2bb0a998a3f8a3cf8756b5b5714d08c5cee5c90e62a8e
+
   - name: protobuf
     buildsystem: simple
     build-commands:
@@ -337,24 +346,6 @@ modules:
       - type: file
         url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-4.21.1-py3-none-any.whl
         sha256: 79cd8d0a269b714f6b32641f86928c718e8d234466919b3f552bfb069dbb159b
-
-  - name: python3-axolotl-curve25519
-    buildsystem: simple
-    build-commands:
-      - pip3 install .
-    sources:
-      - type: archive
-        url: https://files.pythonhosted.org/packages/source/p/python-axolotl-curve25519/python-axolotl-curve25519-0.4.1.post2.tar.gz
-        sha256: 0705a66297ebd2f508a60dc94e22881c754301eb81db93963322f6b3bdcb63a3
-
-  - name: python3-axolotl
-    buildsystem: simple
-    build-commands:
-      - pip3 install --no-deps python_axolotl-0.2.3-py3-none-any.whl
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/0f/b3/4a0b0e664435691bba36fac6e366cece506d002294c293bd3dcb40c2b2ba/python_axolotl-0.2.3-py3-none-any.whl
-        sha256: 6a22acbf646c3b736ea1a4663ab5c52687fce6612e92ae6a7fe63803c212fb9e
 
   - name: python3-qrcode
     buildsystem: simple

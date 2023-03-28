@@ -21,7 +21,7 @@
 - [GtkSourceView](https://gitlab.gnome.org/GNOME/gtksourceview)
 - [Pango](https://gitlab.gnome.org/GNOME/pango) (>=1.50.0)
 - [sqlite](https://www.sqlite.org/) (>=3.33.0)
-- [axolotl](https://pypi.org/project/python-axolotl/) (>=0.2.3)
+- [omemo-dr](https://dev.gajim.org/gajim/omemo-dr) (>=1.0.0)
 - [qrcode](https://pypi.org/project/qrcode/) (>=7.3.1)
 
 ### Optional Runtime Requirements

@@ -44,10 +44,11 @@ function main {
 
     PIP_REQUIREMENTS="\
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
-python-axolotl
+git+https://dev.gajim.org/gajim/omemo-dr.git
 python-gnupg
-css_parser
 qrcode
+css_parser
+sentry-sdk
 "
 pip3 install precis-i18n
 pip3 install $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
