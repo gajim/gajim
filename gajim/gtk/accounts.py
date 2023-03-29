@@ -943,8 +943,7 @@ class EncryptionOMEMOPage(GenericSettingPage):
         btbv_label = Gtk.Label()
         btbv_label.set_xalign(0)
         markup = '<a href="%s">%s</a>' % (
-            'https://dev.gajim.org/gajim/gajim-plugins/-/'
-            'wikis/omemogajimplugin',
+            'https://dev.gajim.org/gajim/gajim/-/wikis/help/OMEMO',
             _('Read more about blind trust'))
         btbv_label.set_markup(markup)
         self.add(btbv_label)
