@@ -323,16 +323,7 @@ modules:
         sha256: 807d8bbe19dcc77e23cd2b0420581fecd1168ad5cb88b201a15ec7d0b1f8aff3
 
   # OMEMO dependencies
-  - name: omemo-dr
-    buildsystem: simple
-    build-commands:
-      - pip3 install .
-    sources:
-      - type: archive
-        url: https://files.pythonhosted.org/packages/source/o/omemo-dr/omemo-dr-0.99.0.tar.gz
-        sha256: 79f9b166b350b3baced2bb0a998a3f8a3cf8756b5b5714d08c5cee5c90e62a8e
-
-  - name: protobuf
+  - name: python3-protobuf
     buildsystem: simple
     build-commands:
       - pip3 install --no-deps protobuf-4.21.1-py3-none-any.whl
@@ -340,6 +331,15 @@ modules:
       - type: file
         url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-4.21.1-py3-none-any.whl
         sha256: 79cd8d0a269b714f6b32641f86928c718e8d234466919b3f552bfb069dbb159b
+
+  - name: python3-omemo-dr
+    buildsystem: simple
+    build-commands:
+      - pip3 install .
+    sources:
+      - type: archive
+        url: https://files.pythonhosted.org/packages/source/o/omemo-dr/omemo-dr-0.99.0.tar.gz
+        sha256: 79f9b166b350b3baced2bb0a998a3f8a3cf8756b5b5714d08c5cee5c90e62a8e
 
   - name: python3-qrcode
     buildsystem: simple
