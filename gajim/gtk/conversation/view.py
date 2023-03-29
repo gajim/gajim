@@ -666,8 +666,17 @@ class ConversationView(Gtk.ScrolledWindow):
 
     def remove_message(self, log_line_id: int) -> None:
         row = self.get_row_by_log_line_id(log_line_id)
-        if row is not None:
-            row.destroy()
+        if row is None:
+            return
+
+        index = row.get_index()
+        row.destroy()
+        decendant_row = self._list_box.get_row_at_index(index)
+        if isinstance(decendant_row, MessageRow):
+            # Unset possible merged state if we delete a 'top level' message.
+            # Checks for same sender etc. are not necessary, since we simply
+            # unset merged state.
+            decendant_row.set_merged(False)
 
     def scroll_to_message_and_highlight(self, log_line_id: int) -> None:
         highlight_row = None
