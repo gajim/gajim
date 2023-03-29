@@ -778,22 +778,16 @@ def get_format_menu() -> GajimMenu:
     return GajimMenu.from_list(menuitems)
 
 
-def get_workspace_menu(workspace_id: str, has_unread: bool) -> GajimMenu:
+def get_workspace_menu(workspace_id: str) -> GajimMenu:
     remove_action = 'win.dummy'
     if app.settings.get_workspace_count() > 1:
         remove_action = 'win.remove-workspace'
 
     menuitems: MenuItemListT = [
+        (_('Mark as read'), 'win.mark-workspace-as-read', workspace_id),
         (_('Edit…'), 'win.edit-workspace', workspace_id),
         (_('Remove'), remove_action, workspace_id),
     ]
-
-    if has_unread:
-        menuitems.insert(
-            0,
-            (_('Mark as read'),
-             'win.mark-workspace-as-read',
-             workspace_id))
 
     return GajimMenu.from_list(menuitems)
 

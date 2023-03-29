@@ -332,8 +332,7 @@ class Workspace(CommonWorkspace):
         if event.button != 3:  # right click
             return
 
-        menu = get_workspace_menu(
-            self.workspace_id, self._unread_label.get_visible())
+        menu = get_workspace_menu(self.workspace_id)
 
         popover = GajimPopover(menu, relative_to=self, event=event)
         popover.popup()
