@@ -324,20 +324,21 @@ class MessageActionsBox(Gtk.Grid):
 
     def _update_encryption_details_button(self) -> None:
         contact = self.get_current_contact()
-        state = contact.settings.get('encryption')
+        encryption = contact.settings.get('encryption')
 
-        encryption_state = {'visible': bool(state),
-                            'enc_type': state,
+        encryption_state = {'visible': bool(encryption),
+                            'enc_type': encryption,
                             'authenticated': False}
 
-        if state:
-            app.plugin_manager.extension_point(
-                f'encryption_state{state}',
-                app.window.get_control(),
-                encryption_state)
-
-        if state == 'OMEMO':
-            encryption_state['authenticated'] = True
+        if encryption:
+            if encryption == 'OMEMO':
+                encryption_state['authenticated'] = True
+            else:
+                # Only fire extension_point for plugins (i.e. not OMEMO)
+                app.plugin_manager.extension_point(
+                    f'encryption_state{encryption}',
+                    app.window.get_control(),
+                    encryption_state)
 
         visible, enc_type, authenticated = encryption_state.values()
         assert isinstance(visible, bool)
