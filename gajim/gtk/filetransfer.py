@@ -1007,7 +1007,7 @@ class FileTransfersWindow:
                                                            int(event.y))[0]
         except TypeError:
             self._ui.transfers_list.get_selection().unselect_all()
-        if event.button == 3:  # Right click
+        if event.button == Gdk.BUTTON_SECONDARY:
             if path:
                 self._ui.transfers_list.get_selection().select_path(path)
                 iter_ = self.model.get_iter(path)

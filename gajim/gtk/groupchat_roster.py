@@ -400,7 +400,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
                                       event: Gdk.EventButton
                                       ) -> None:
 
-        if event.button not in (2, 3):
+        if event.button == Gdk.BUTTON_PRIMARY:
             return
 
         pos = treeview.get_path_at_pos(int(event.x), int(event.y))
@@ -422,10 +422,10 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         if self._contact.nickname == nick:
             return
 
-        if event.button == 3:  # right click
+        if event.button == Gdk.BUTTON_SECONDARY:
             self._show_contact_menu(nick, event)
 
-        # if event.button == 2:  # middle click
+        # if event.button == Gdk.BUTTON_MIDDLE:
             # self.roster.emit('row-activated', nick)
 
     def _show_contact_menu(self, nick: str, event: Gdk.EventButton) -> None:

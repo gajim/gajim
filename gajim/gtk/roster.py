@@ -344,7 +344,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
                                       treeview: Gtk.TreeView,
                                       event: Gdk.EventButton) -> None:
 
-        if event.button not in (2, 3):
+        if event.button == Gdk.BUTTON_PRIMARY:
             return
 
         pos = treeview.get_path_at_pos(int(event.x), int(event.y))
@@ -364,11 +364,11 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
         jid = self._store[iter_][Column.JID_OR_GROUP]
 
-        if event.button == 3:  # right click
+        if event.button == Gdk.BUTTON_SECONDARY:
             self._show_contact_menu(jid, treeview, event)
 
         jid = JID.from_string(jid)
-        if event.button == 2:  # middle click
+        if event.button == Gdk.BUTTON_MIDDLE:
             app.window.add_chat(self._account, jid, 'contact', select=True)
 
     @staticmethod

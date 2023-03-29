@@ -241,7 +241,7 @@ class PopupNotification(Gtk.Window):
                          _widget: Gtk.Widget,
                          event: Gdk.EventButton
                          ) -> None:
-        if event.button == 1:
+        if event.button == Gdk.BUTTON_PRIMARY:
 
             jid = ''
             if self._event.jid is not None:

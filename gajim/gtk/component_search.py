@@ -308,7 +308,8 @@ class Result(Page):
                          treeview: Gtk.TreeView,
                          event: Gdk.EventButton
                          ) -> bool:
-        if event.button != 3:  # Right click
+
+        if event.button != Gdk.BUTTON_SECONDARY:
             return False
 
         path = treeview.get_path_at_pos(int(event.x), int(event.y))

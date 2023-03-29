@@ -192,9 +192,9 @@ class AvatarBox(Gtk.EventBox):
             if not isinstance(self._contact, GroupchatContact):
                 return Gdk.EVENT_STOP
 
-            if event.button == 1:
+            if event.button == Gdk.BUTTON_PRIMARY:
                 app.window.activate_action('mention', GLib.Variant('s', name))
-            elif event.button == 3:
+            elif event.button == Gdk.BUTTON_SECONDARY:
                 self._show_participant_menu(name, event)
 
         return Gdk.EVENT_STOP

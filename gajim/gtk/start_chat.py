@@ -832,7 +832,7 @@ class ContactRow(Gtk.ListBoxRow):
         if not self.groupchat:
             return
 
-        if event.button != 3:  # right click
+        if event.button != Gdk.BUTTON_SECONDARY:
             return
 
         menu = get_start_chat_row_menu(self.account, self.jid)

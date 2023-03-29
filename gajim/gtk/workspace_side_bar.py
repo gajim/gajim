@@ -329,7 +329,7 @@ class Workspace(CommonWorkspace):
         self.show_all()
 
     def _popup_menu(self, _widget: Gtk.Widget, event: Gdk.EventButton) -> None:
-        if event.button != 3:  # right click
+        if event.button != Gdk.BUTTON_SECONDARY:
             return
 
         menu = get_workspace_menu(self.workspace_id)
