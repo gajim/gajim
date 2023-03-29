@@ -18,6 +18,7 @@ from typing import Any
 from typing import Optional
 
 import pickle
+from datetime import datetime
 from urllib.parse import urlparse
 
 import cairo
@@ -324,7 +325,7 @@ class ChatListRow(Gtk.ListBoxRow):
         if self.timestamp == 0:
             return
         self._ui.timestamp_label.set_text(
-            get_uf_relative_time(self.timestamp))
+            get_uf_relative_time(datetime.fromtimestamp(self.timestamp)))
 
     def add_unread(self, text: str) -> None:
         self._unread_count += 1

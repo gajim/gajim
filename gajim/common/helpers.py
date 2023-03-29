@@ -250,12 +250,11 @@ def get_uf_affiliation(affiliation: Union[Affiliation, str],
     return ''
 
 
-def get_uf_relative_time(timestamp: float,
-                         timenow: Optional[float] = None) -> str:
-    date_time = datetime.fromtimestamp(timestamp)
-    if timenow:  # used by unittest
-        now = datetime.fromtimestamp(timenow)
-    else:
+def get_uf_relative_time(date_time: datetime,
+                         now: Optional[datetime] = None
+                         ) -> str:
+
+    if now is None:  # used by unittest
         now = datetime.now()
     timespan = now - date_time
 
