@@ -229,6 +229,7 @@
         <property name="overlay-scrolling">False</property>
         <property name="max-content-height">100</property>
         <property name="propagate-natural-height">True</property>
+        <property name="hscrollbar-policy">GTK_POLICY_EXTERNAL</property>
         <child>
           <placeholder/>
         </child>
