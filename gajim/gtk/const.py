@@ -182,6 +182,7 @@ APP_ACTIONS = [
     ('show', None),
     ('start-chat', 'as'),
     ('open-chat', 'as'),
+    ('mute-chat', 'a{sv}'),
     ('xml-console', None),
 ]
 

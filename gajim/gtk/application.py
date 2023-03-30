@@ -42,6 +42,9 @@ from typing import Optional
 
 import os
 import sys
+from datetime import datetime
+from datetime import timedelta
+from datetime import timezone
 from urllib.parse import unquote
 
 from gi.repository import Gdk
@@ -418,6 +421,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
             ('create-groupchat', self._on_create_groupchat_action),
             ('forget-groupchat', self._on_forget_groupchat_action),
             ('open-chat', self._on_open_chat_action),
+            ('mute-chat', self._on_mute_chat_action),
             ('show', self._on_show),
         ]
 
@@ -813,6 +817,29 @@ class GajimApplication(Gtk.Application, CoreApplication):
                              param: GLib.Variant) -> None:
         account, jid = param.get_strv()
         app.window.start_chat_from_jid(account, jid)
+
+    @staticmethod
+    @structs.actionfunction
+    def _on_mute_chat_action(_action: Gio.SimpleAction,
+                             params: structs.MuteContactParam
+                             ) -> None:
+
+        client = app.get_client(params.account)
+        contact = client.get_module('Contacts').get_contact(params.jid)
+
+        #   0: unmute
+        #  -1: permanently
+        # int: minutes
+        if params.minutes == 0:
+            contact.settings.set('mute_until', '')
+            return
+
+        if params.minutes == -1:
+            contact.settings.set('mute_until', 'permanently')
+            return
+
+        until = datetime.now(timezone.utc) + timedelta(minutes=params.minutes)
+        contact.settings.set('mute_until', until.astimezone().isoformat())
 
     @staticmethod
     @structs.actionfunction

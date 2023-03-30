@@ -24,6 +24,7 @@ from typing import Optional
 
 import textwrap
 from datetime import datetime
+from datetime import timezone
 from urllib.parse import quote
 
 from gi.repository import Gio
@@ -52,6 +53,7 @@ from gajim.common.util.text import escape_iri_path_segment
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import AddChatActionParams
 from gajim.gtk.structs import ChatListEntryParam
+from gajim.gtk.structs import MuteContactParam
 from gajim.gtk.structs import RemoveHistoryActionParams
 from gajim.gtk.structs import RetractMessageParam
 from gajim.gtk.util import GajimMenu
@@ -60,6 +62,13 @@ from gajim.gtk.util import MenuItemListT
 UriMenuItemsT = list[tuple[str, list[str], str]]
 UriMenuBuilderT = Callable[[URI, str], UriMenuItemsT]
 
+MUTE_CHAT_ITEMS = [
+    (_('30 min'), 30),
+    (_('1 hour'), 60),
+    (_('2 hours'), 120),
+    (_('8 hours'), 480),
+    (_('Permanently'), -1),
+]
 
 def get_self_contact_menu(contact: types.BareContact) -> GajimMenu:
     account = contact.account
@@ -531,6 +540,29 @@ def get_chat_list_row_menu(workspace_id: str,
     if app.window.get_chat_unread_count(account, jid, include_silent=True):
         params = AccountJidParam(account=account, jid=jid)
         menu.add_item(_('Mark as read'), 'win.mark-as-read', params)
+
+    contact_muted = False
+    mute_until = contact.settings.get('mute_until')
+    if mute_until:
+        if mute_until == 'permanently':
+            contact_muted = True
+        else:
+            until = datetime.fromisoformat(mute_until)
+            if until > datetime.now(timezone.utc).astimezone():
+                contact_muted = True
+
+    if contact_muted:
+        menu.add_item(
+            _('Unmute Chat'),
+            'app.mute-chat',
+            MuteContactParam(account=account, jid=jid, minutes=0))
+    else:
+        submenu = menu.add_submenu(_('Mute Chat'))
+        for label, amount in MUTE_CHAT_ITEMS:
+            submenu.add_item(
+                label,
+                'app.mute-chat',
+                MuteContactParam(account=account, jid=jid, minutes=amount))
 
     return menu
 
