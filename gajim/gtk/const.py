@@ -71,14 +71,14 @@ class MuteState(IntEnum):
 
     @classmethod
     def iter(cls) -> Iterator[tuple[int, str]]:
-        for key, val in cls._labels.items():  # pyright: ignore
-            yield key, val
+        yield from cls._labels.items()  # pyright: ignore
 
 MuteState._labels = {  # pyright: ignore
-        MuteState.MIN_30: _('30 min'),
+        MuteState.MIN_30: _('30 minutes'),
         MuteState.MIN_60: _('1 hour'),
         MuteState.MIN_120: _('2 hours'),
         MuteState.MIN_480: _('8 hours'),
+        MuteState.PERM: _('Permanently'),
     }
 
 
