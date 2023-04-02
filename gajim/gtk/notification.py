@@ -33,8 +33,6 @@ from typing import Union
 import logging
 import sys
 import textwrap
-from datetime import datetime
-from datetime import timezone
 
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
@@ -96,23 +94,10 @@ class NotificationBackend(EventHelper):
         if event.account and event.jid:
             client = app.get_client(event.account)
             contact = client.get_module('Contacts').get_contact(event.jid)
-            mute_until = contact.settings.get('mute_until')
 
-            #  '': not muted
-            # int: minutes
-            if mute_until == 'permanently':
-                log.debug('Not issuing notification (chat is muted '
-                          'permanently) %s', contact)
+            if contact.is_muted:
+                log.debug('Notifications muted for %s', contact)
                 return
-
-            if mute_until:
-                until = datetime.fromisoformat(mute_until)
-                if until > datetime.now(timezone.utc).astimezone():
-                    log.debug(
-                        'Not issuing notification (chat is muted until %s) %s',
-                        until.isoformat(),
-                        contact)
-                    return
 
         if event.sound is not None:
             play_sound(event.sound, event.account)

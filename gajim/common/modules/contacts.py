@@ -20,6 +20,9 @@ from typing import Optional
 from typing import overload
 from typing import Union
 
+from datetime import datetime
+from datetime import timezone
+
 import cairo
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Chatstate
@@ -332,6 +335,20 @@ class CommonContact(Observable):
     def chatstate_string(self) -> str:
         return chatstate_to_string(self.chatstate)
 
+    @property
+    def is_muted(self) -> bool:
+        mute_until = self.settings.get('mute_until')
+        if not mute_until:
+            return False
+
+        if mute_until == 'permanently':
+            return True
+
+        until = datetime.fromisoformat(mute_until)
+        if until > datetime.now(timezone.utc):
+            return True
+        return False
+
     def __repr__(self) -> str:
         return f'{self.jid} ({self._account})'
 
@@ -637,6 +654,10 @@ class ResourceContact(CommonContact):
 
     @property
     def type_string(self) -> str:
+        raise NotImplementedError
+
+    @property
+    def is_muted(self) -> bool:
         raise NotImplementedError
 
 

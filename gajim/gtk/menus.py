@@ -24,7 +24,6 @@ from typing import Optional
 
 import textwrap
 from datetime import datetime
-from datetime import timezone
 from urllib.parse import quote
 
 from gi.repository import Gio
@@ -541,17 +540,7 @@ def get_chat_list_row_menu(workspace_id: str,
         params = AccountJidParam(account=account, jid=jid)
         menu.add_item(_('Mark as read'), 'win.mark-as-read', params)
 
-    contact_muted = False
-    mute_until = contact.settings.get('mute_until')
-    if mute_until:
-        if mute_until == 'permanently':
-            contact_muted = True
-        else:
-            until = datetime.fromisoformat(mute_until)
-            if until > datetime.now(timezone.utc).astimezone():
-                contact_muted = True
-
-    if contact_muted:
+    if contact.is_muted:
         menu.add_item(
             _('Unmute Chat'),
             'app.mute-chat',
