@@ -6,7 +6,6 @@ from gi.repository import Atk
 from gi.repository import Gtk
 from gi.repository import GtkSource
 
-
 class Builder(Gtk.Builder):
     ...
 
