@@ -6,6 +6,7 @@ from gi.repository import Atk
 from gi.repository import Gtk
 from gi.repository import GtkSource
 
+
 class Builder(Gtk.Builder):
     ...
 
@@ -211,6 +212,7 @@ class ChatListRowBuilder(Builder):
     group_chat_indicator: Gtk.Image
     name_label: Gtk.Label
     chatstate_image: Gtk.Image
+    mute_image: Gtk.Image
     timestamp_label: Gtk.Label
     nick_label: Gtk.Label
     message_icon: Gtk.Image
