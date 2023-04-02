@@ -342,9 +342,7 @@ class CommonContact(Observable):
             return False
 
         until = datetime.fromisoformat(mute_until)
-        if until > datetime.now(timezone.utc):
-            return True
-        return False
+        return until > datetime.now(timezone.utc)
 
     def __repr__(self) -> str:
         return f'{self.jid} ({self._account})'
