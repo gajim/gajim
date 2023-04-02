@@ -62,7 +62,7 @@ MAX_MESSAGE_LENGTH = 5000
 
 @unique
 class MuteState(IntEnum):
-    NOT_MUTED = 0
+    UNMUTE = 0
     MIN_30 = 30
     MIN_60 = 60
     MIN_120 = 120

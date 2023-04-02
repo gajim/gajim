@@ -828,7 +828,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
         client = app.get_client(params.account)
         contact = client.get_module('Contacts').get_contact(params.jid)
 
-        if params.state == MuteState.NOT_MUTED:
+        if params.state == MuteState.UNMUTE:
             contact.settings.set('mute_until', None)
             return
 

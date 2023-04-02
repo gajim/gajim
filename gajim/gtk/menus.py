@@ -540,7 +540,7 @@ def get_chat_list_row_menu(workspace_id: str,
             'app.mute-chat',
             MuteContactParam(account=account,
                              jid=jid,
-                             state=MuteState.NOT_MUTED))
+                             state=MuteState.UNMUTE))
     else:
         submenu = menu.add_submenu(_('Mute Chat'))
         for state, label in MuteState.iter():
