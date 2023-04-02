@@ -951,6 +951,11 @@ GAJIM_WIKI_URI = 'https://dev.gajim.org/gajim/gajim/wikis'
 GAJIM_SUPPORT_JID = 'gajim@conference.gajim.org'
 
 
+# Clickable URI schemes not (yet) registered with IANA (see ./iana.py)
+NONREGISTERED_URI_SCHEMES = {
+    'gemini',
+}
+
 # This is an excerpt of Media Types from
 # https://www.iana.org/assignments/media-types/media-types.xhtml
 # plus some additions

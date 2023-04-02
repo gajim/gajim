@@ -87,6 +87,7 @@ from gajim.common import iana
 from gajim.common import types
 from gajim.common.const import CONSONANTS
 from gajim.common.const import GIO_TLS_ERRORS
+from gajim.common.const import NONREGISTERED_URI_SCHEMES
 from gajim.common.const import SHOW_LIST
 from gajim.common.const import SHOW_STRING
 from gajim.common.const import SHOW_STRING_MNEMONIC
@@ -870,8 +871,13 @@ def catch_exceptions(func):
     return func_wrapper
 
 
-def is_registered_uri_scheme(scheme: str) -> bool:
+def is_known_uri_scheme(scheme: str) -> bool:
+    '''
+    `scheme` is lower-case
+    '''
     if scheme in iana.URI_SCHEMES:
+        return True
+    if scheme in NONREGISTERED_URI_SCHEMES:
         return True
     return scheme in app.settings.get('additional_uri_schemes').split()
 
@@ -913,8 +919,8 @@ def parse_uri(uri: str) -> URI:
 
     scheme = urlparts.scheme  # urlparse is expected to return it in lower case
 
-    if not is_registered_uri_scheme(scheme):
-        return URI(URIType.INVALID, uri, data={'error': 'Unregistered scheme'})
+    if not is_known_uri_scheme(scheme):
+        return URI(URIType.INVALID, uri, data={'error': 'Unknown scheme'})
 
     if scheme in ('https', 'http'):
         if not urlparts.netloc:
