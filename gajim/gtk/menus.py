@@ -49,6 +49,7 @@ from gajim.common.preview import Preview
 from gajim.common.structs import URI
 from gajim.common.util.text import escape_iri_path_segment
 
+from gajim.gtk.const import MuteState
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import AddChatActionParams
 from gajim.gtk.structs import ChatListEntryParam
@@ -61,13 +62,6 @@ from gajim.gtk.util import MenuItemListT
 UriMenuItemsT = list[tuple[str, list[str], str]]
 UriMenuBuilderT = Callable[[URI, str], UriMenuItemsT]
 
-MUTE_CHAT_ITEMS = [
-    (_('30 min'), 30),
-    (_('1 hour'), 60),
-    (_('2 hours'), 120),
-    (_('8 hours'), 480),
-    (_('Permanently'), -1),
-]
 
 def get_self_contact_menu(contact: types.BareContact) -> GajimMenu:
     account = contact.account
@@ -544,14 +538,16 @@ def get_chat_list_row_menu(workspace_id: str,
         menu.add_item(
             _('Unmute Chat'),
             'app.mute-chat',
-            MuteContactParam(account=account, jid=jid, minutes=0))
+            MuteContactParam(account=account,
+                             jid=jid,
+                             state=MuteState.NOT_MUTED))
     else:
         submenu = menu.add_submenu(_('Mute Chat'))
-        for label, amount in MUTE_CHAT_ITEMS:
+        for state, label in MuteState.iter():
             submenu.add_item(
                 label,
                 'app.mute-chat',
-                MuteContactParam(account=account, jid=jid, minutes=amount))
+                MuteContactParam(account=account, jid=jid, state=state))
 
     return menu
 

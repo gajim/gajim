@@ -65,7 +65,7 @@ class ChatListEntryParam(VariantMixin):
 class MuteContactParam(VariantMixin):
     account: str
     jid: JID
-    minutes: int
+    state: int
 
 
 @dataclass

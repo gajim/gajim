@@ -82,6 +82,7 @@ from gajim.gtk.const import ACCOUNT_ACTIONS
 from gajim.gtk.const import ALWAYS_ACCOUNT_ACTIONS
 from gajim.gtk.const import APP_ACTIONS
 from gajim.gtk.const import FEATURE_ACCOUNT_ACTIONS
+from gajim.gtk.const import MuteState
 from gajim.gtk.const import ONLINE_ACCOUNT_ACTIONS
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
@@ -827,19 +828,12 @@ class GajimApplication(Gtk.Application, CoreApplication):
         client = app.get_client(params.account)
         contact = client.get_module('Contacts').get_contact(params.jid)
 
-        #   0: unmute
-        #  -1: permanently
-        # int: minutes
-        if params.minutes == 0:
-            contact.settings.set('mute_until', '')
+        if params.state == MuteState.NOT_MUTED:
+            contact.settings.set('mute_until', None)
             return
 
-        if params.minutes == -1:
-            contact.settings.set('mute_until', 'permanently')
-            return
-
-        until = datetime.now(timezone.utc) + timedelta(minutes=params.minutes)
-        contact.settings.set('mute_until', until.astimezone().isoformat())
+        until = datetime.now(timezone.utc) + timedelta(minutes=params.state)
+        contact.settings.set('mute_until', until.isoformat())
 
     @staticmethod
     @structs.actionfunction

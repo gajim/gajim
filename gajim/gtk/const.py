@@ -18,6 +18,7 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Callable
+from typing import Iterator
 from typing import NamedTuple
 from typing import Optional
 from typing import Union
@@ -26,6 +27,7 @@ from enum import Enum
 from enum import IntEnum
 from enum import unique
 
+from gajim.common.i18n import _
 from gajim.common.setting_values import AllSettingsT
 
 
@@ -56,6 +58,28 @@ DEFAULT_WORKSPACE_COLOR = 'rgb(191,15,167)'
 TARGET_TYPE_URI_LIST = 80
 
 MAX_MESSAGE_LENGTH = 5000
+
+
+@unique
+class MuteState(IntEnum):
+    NOT_MUTED = 0
+    MIN_30 = 30
+    MIN_60 = 60
+    MIN_120 = 120
+    MIN_480 = 480
+    PERM = 100000000
+
+    @classmethod
+    def iter(cls) -> Iterator[tuple[int, str]]:
+        for key, val in cls._labels.items():  # pyright: ignore
+            yield key, val
+
+MuteState._labels = {  # pyright: ignore
+        MuteState.MIN_30: _('30 min'),
+        MuteState.MIN_60: _('1 hour'),
+        MuteState.MIN_120: _('2 hours'),
+        MuteState.MIN_480: _('8 hours'),
+    }
 
 
 @unique

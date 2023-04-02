@@ -341,9 +341,6 @@ class CommonContact(Observable):
         if not mute_until:
             return False
 
-        if mute_until == 'permanently':
-            return True
-
         until = datetime.fromisoformat(mute_until)
         if until > datetime.now(timezone.utc):
             return True
