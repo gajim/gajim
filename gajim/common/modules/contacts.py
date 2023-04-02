@@ -20,7 +20,11 @@ from typing import Optional
 from typing import overload
 from typing import Union
 
+from datetime import datetime
+from datetime import timezone
+
 import cairo
+from gi.repository import GLib
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Chatstate
 from nbxmpp.const import Role
@@ -332,6 +336,19 @@ class CommonContact(Observable):
     def chatstate_string(self) -> str:
         return chatstate_to_string(self.chatstate)
 
+    @property
+    def is_muted(self) -> bool:
+        mute_until = self.settings.get('mute_until')
+        if not mute_until:
+            return False
+
+        until = datetime.fromisoformat(mute_until)
+        is_muted = until > datetime.now(timezone.utc)
+        if not is_muted:
+            # Reset the setting to default
+            GLib.idle_add(self.settings.set, 'mute_until', None)
+        return is_muted
+
     def __repr__(self) -> str:
         return f'{self.jid} ({self._account})'
 
@@ -637,6 +654,10 @@ class ResourceContact(CommonContact):
 
     @property
     def type_string(self) -> str:
+        raise NotImplementedError
+
+    @property
+    def is_muted(self) -> bool:
         raise NotImplementedError
 
 

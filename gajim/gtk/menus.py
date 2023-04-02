@@ -49,9 +49,11 @@ from gajim.common.preview import Preview
 from gajim.common.structs import URI
 from gajim.common.util.text import escape_iri_path_segment
 
+from gajim.gtk.const import MuteState
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import AddChatActionParams
 from gajim.gtk.structs import ChatListEntryParam
+from gajim.gtk.structs import MuteContactParam
 from gajim.gtk.structs import RemoveHistoryActionParams
 from gajim.gtk.structs import RetractMessageParam
 from gajim.gtk.util import GajimMenu
@@ -531,6 +533,21 @@ def get_chat_list_row_menu(workspace_id: str,
     if app.window.get_chat_unread_count(account, jid, include_silent=True):
         params = AccountJidParam(account=account, jid=jid)
         menu.add_item(_('Mark as read'), 'win.mark-as-read', params)
+
+    if contact.is_muted:
+        menu.add_item(
+            _('Unmute Chat'),
+            'app.mute-chat',
+            MuteContactParam(account=account,
+                             jid=jid,
+                             state=MuteState.UNMUTE))
+    else:
+        submenu = menu.add_submenu(_('Mute Chat'))
+        for state, label in MuteState.iter():
+            submenu.add_item(
+                label,
+                'app.mute-chat',
+                MuteContactParam(account=account, jid=jid, state=state))
 
     return menu
 

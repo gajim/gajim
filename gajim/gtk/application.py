@@ -42,6 +42,9 @@ from typing import Optional
 
 import os
 import sys
+from datetime import datetime
+from datetime import timedelta
+from datetime import timezone
 from urllib.parse import unquote
 
 from gi.repository import Gdk
@@ -79,6 +82,7 @@ from gajim.gtk.const import ACCOUNT_ACTIONS
 from gajim.gtk.const import ALWAYS_ACCOUNT_ACTIONS
 from gajim.gtk.const import APP_ACTIONS
 from gajim.gtk.const import FEATURE_ACCOUNT_ACTIONS
+from gajim.gtk.const import MuteState
 from gajim.gtk.const import ONLINE_ACCOUNT_ACTIONS
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
@@ -418,6 +422,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
             ('create-groupchat', self._on_create_groupchat_action),
             ('forget-groupchat', self._on_forget_groupchat_action),
             ('open-chat', self._on_open_chat_action),
+            ('mute-chat', self._on_mute_chat_action),
             ('show', self._on_show),
         ]
 
@@ -813,6 +818,22 @@ class GajimApplication(Gtk.Application, CoreApplication):
                              param: GLib.Variant) -> None:
         account, jid = param.get_strv()
         app.window.start_chat_from_jid(account, jid)
+
+    @staticmethod
+    @structs.actionfunction
+    def _on_mute_chat_action(_action: Gio.SimpleAction,
+                             params: structs.MuteContactParam
+                             ) -> None:
+
+        client = app.get_client(params.account)
+        contact = client.get_module('Contacts').get_contact(params.jid)
+
+        if params.state == MuteState.UNMUTE:
+            contact.settings.set('mute_until', None)
+            return
+
+        until = datetime.now(timezone.utc) + timedelta(minutes=params.state)
+        contact.settings.set('mute_until', until.isoformat())
 
     @staticmethod
     @structs.actionfunction

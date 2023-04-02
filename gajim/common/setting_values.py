@@ -375,6 +375,7 @@ BoolGroupChatSettings = Literal[
 
 StringGroupChatSettings = Literal[
     'encryption',
+    'mute_until',
     'speller_language',
     'send_chatstate',
 ]
@@ -397,6 +398,7 @@ BoolContactSettings = Literal[
 
 StringContactSettings = Literal[
     'encryption',
+    'mute_until',
     'speller_language',
     'send_chatstate',
 ]
@@ -478,6 +480,7 @@ ACCOUNT_SETTINGS = {
 
     'contact': {
         'encryption': '',
+        'mute_until': '',
         'send_chatstate': HAS_ACCOUNT_DEFAULT,
         'send_marker': HAS_ACCOUNT_DEFAULT,
         'speller_language': '',
@@ -485,6 +488,7 @@ ACCOUNT_SETTINGS = {
 
     'group_chat': {
         'encryption': '',
+        'mute_until': '',
         'notify_on_all_messages': HAS_APP_DEFAULT,
         'print_join_left': HAS_APP_DEFAULT,
         'print_status': HAS_APP_DEFAULT,

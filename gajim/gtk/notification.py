@@ -91,6 +91,14 @@ class NotificationBackend(EventHelper):
                                   self._on_client_state_changed)
 
     def _on_notification(self, event: events.Notification) -> None:
+        if event.account and event.jid:
+            client = app.get_client(event.account)
+            contact = client.get_module('Contacts').get_contact(event.jid)
+
+            if contact.is_muted:
+                log.debug('Notifications muted for %s', contact)
+                return
+
         if event.sound is not None:
             play_sound(event.sound, event.account)
 

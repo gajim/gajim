@@ -108,6 +108,13 @@ class ChatListRow(Gtk.ListBoxRow):
         self.connect('state-flags-changed', self._on_state_flags_changed)
         self.connect('destroy', self._on_destroy)
 
+        app.settings.connect_signal(
+            'mute_until',
+            self._on_mute_setting_changed,
+            self.contact.account,
+            self.contact.jid)
+        self._on_mute_setting_changed()
+
         # Drag and Drop
         entries = [Gtk.TargetEntry.new(
             'CHAT_LIST_ITEM',
@@ -376,6 +383,9 @@ class ChatListRow(Gtk.ListBoxRow):
             return str(count)
         return '999+'
 
+    def _on_mute_setting_changed(self, *args: Any) -> None:
+        self._ui.mute_image.set_visible(self.contact.is_muted)
+
     def _on_draft_update(self,
                          _draft_storage: DraftStorage,
                          _signal_name: str,
@@ -409,6 +419,7 @@ class ChatListRow(Gtk.ListBoxRow):
             self._ui.revealer.set_reveal_child(False)
 
     def _on_destroy(self, _row: ChatListRow) -> None:
+        app.settings.disconnect_signals(self)
         self.contact.disconnect_all_from_obj(self)
         if isinstance(self.contact, GroupchatParticipant):
             self.contact.room.disconnect_all_from_obj(self)

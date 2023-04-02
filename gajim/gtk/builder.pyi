@@ -211,6 +211,7 @@ class ChatListRowBuilder(Builder):
     group_chat_indicator: Gtk.Image
     name_label: Gtk.Label
     chatstate_image: Gtk.Image
+    mute_image: Gtk.Image
     timestamp_label: Gtk.Label
     nick_label: Gtk.Label
     message_icon: Gtk.Image
