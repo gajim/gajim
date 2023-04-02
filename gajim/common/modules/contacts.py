@@ -24,6 +24,7 @@ from datetime import datetime
 from datetime import timezone
 
 import cairo
+from gi.repository import GLib
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Chatstate
 from nbxmpp.const import Role
@@ -342,7 +343,11 @@ class CommonContact(Observable):
             return False
 
         until = datetime.fromisoformat(mute_until)
-        return until > datetime.now(timezone.utc)
+        is_muted = until > datetime.now(timezone.utc)
+        if not is_muted:
+            # Reset the setting to default
+            GLib.idle_add(self.settings.set, 'mute_until', None)
+        return is_muted
 
     def __repr__(self) -> str:
         return f'{self.jid} ({self._account})'
