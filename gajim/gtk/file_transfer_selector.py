@@ -41,6 +41,7 @@ from gajim.common.preview_helpers import guess_mime_type
 from gajim.common.preview_helpers import pixbuf_from_data
 
 from gajim.gtk.builder import get_builder
+from gajim.gtk.const import TARGET_TYPE_URI_LIST
 from gajim.gtk.filechoosers import FileChooserDialog
 from gajim.gtk.resource_selector import ResourceSelector
 
@@ -90,8 +91,13 @@ class FileTransferSelector(Gtk.Box):
                   'Choose the device you would like to send the '
                   'files to.') % self._contact.name)
 
+        if app.is_flatpak():
+            target = 'application/vnd.portal.files'
+        else:
+            target = 'text/uri-list'
+
         uri_entry = Gtk.TargetEntry.new(
-            'text/uri-list', Gtk.TargetFlags.OTHER_APP, 80)
+            target, Gtk.TargetFlags.OTHER_APP, TARGET_TYPE_URI_LIST)
         dst_targets = Gtk.TargetList.new([uri_entry])
 
         self._ui.listbox.drag_dest_set(
@@ -201,7 +207,7 @@ class FileTransferSelector(Gtk.Box):
         if not selection.get_data():
             return
 
-        if target_type == 80:
+        if target_type == TARGET_TYPE_URI_LIST:
             self.add_files(selection.get_uris())
 
     def _on_files_changed(self, _listbox: Gtk.ListBox, _row: FileRow) -> None:

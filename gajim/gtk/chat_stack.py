@@ -125,8 +125,13 @@ class ChatStack(Gtk.Stack, EventHelper):
         overlay.connect('drag-motion', self._on_drag_motion)
         overlay.connect('drag-leave', self._on_drag_leave)
 
+        if app.is_flatpak():
+            target = 'application/vnd.portal.files'
+        else:
+            target = 'text/uri-list'
+
         uri_entry = Gtk.TargetEntry.new(
-            'text/uri-list',
+            target,
             Gtk.TargetFlags.OTHER_APP,
             TARGET_TYPE_URI_LIST)
         dnd_list = [uri_entry,

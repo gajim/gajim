@@ -37,6 +37,7 @@ from gajim.common.helpers import get_file_path_from_dnd_dropped_uri
 from gajim.common.i18n import _
 
 from gajim.gtk import types
+from gajim.gtk.const import TARGET_TYPE_URI_LIST
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.filechoosers import AvatarChooserDialog
 from gajim.gtk.util import scale_with_ratio
@@ -73,8 +74,13 @@ class AvatarSelector(Gtk.Box):
                          spacing=12)
         self.get_style_context().add_class('avatar-selector')
 
+        if app.is_flatpak():
+            target = 'application/vnd.portal.files'
+        else:
+            target = 'text/uri-list'
+
         uri_entry = Gtk.TargetEntry.new(
-            'text/uri-list', Gtk.TargetFlags.OTHER_APP, 80)
+            target, Gtk.TargetFlags.OTHER_APP, TARGET_TYPE_URI_LIST)
         dst_targets = Gtk.TargetList.new([uri_entry])
 
         self.drag_dest_set(
@@ -147,7 +153,7 @@ class AvatarSelector(Gtk.Box):
         if not selection.get_data():
             return
 
-        if target_type == 80:
+        if target_type == TARGET_TYPE_URI_LIST:
             uri_split = selection.get_uris()  # Might be more than one
             path = get_file_path_from_dnd_dropped_uri(uri_split[0])
             if not path or not path.is_file():
