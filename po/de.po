@@ -16,9 +16,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-21 22:11+0000\n"
-"PO-Revision-Date: 2023-03-09 19:07+0000\n"
-"Last-Translator: André <git@apitzsch.eu>\n"
+"POT-Creation-Date: 2023-04-02 15:53+0000\n"
+"PO-Revision-Date: 2023-04-03 17:55+0000\n"
+"Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
 "\n"
 "Language: de\n"
@@ -235,14 +235,26 @@ msgstr "1 Woche"
 msgid "1 Year"
 msgstr "1 Jahr"
 
+msgid "1 hour"
+msgstr "1 Stunde"
+
 msgid "2 Days"
 msgstr "2 Tage"
+
+msgid "2 hours"
+msgstr "2 Stunden"
 
 msgid "3 Months"
 msgstr "3 Monate"
 
+msgid "30 minutes"
+msgstr "30 Minuten"
+
 msgid "6 Months"
 msgstr "6 Monate"
+
+msgid "8 hours"
+msgstr "8 Stunden"
 
 msgid ": Affiliation changed"
 msgstr ": Gruppenzugehörigkeit geändert"
@@ -2778,6 +2790,9 @@ msgstr "Film"
 msgid "Must be a port number"
 msgstr "Muss eine gültige Portnummer sein"
 
+msgid "Mute Chat"
+msgstr "Chat stummschalten"
+
 msgid "Mute Sounds"
 msgstr "Klänge stummschalten"
 
@@ -3220,6 +3235,9 @@ msgstr "Neues Ereignis"
 
 msgid "Pending Voice Requests"
 msgstr "Ausstehende Anfragen für Schreibberechtigung"
+
+msgid "Permanently"
+msgstr "Dauerhaft"
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -4860,6 +4878,9 @@ msgstr "Unbekannte Sprache"
 
 msgid "Unknown validation error"
 msgstr "Unbekannter Fehler bei der Überprüfung"
+
+msgid "Unmute Chat"
+msgstr "Stummschaltung aufheben"
 
 msgid "Unpin Chat"
 msgstr "Chat abpinnen"

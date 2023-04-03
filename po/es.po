@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-21 22:11+0000\n"
-"PO-Revision-Date: 2023-02-24 09:31+0000\n"
+"POT-Creation-Date: 2023-04-02 15:53+0000\n"
+"PO-Revision-Date: 2023-04-03 17:55+0000\n"
 "Last-Translator: El gran Pirujo <boina@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
@@ -222,14 +222,26 @@ msgstr "1 Semana"
 msgid "1 Year"
 msgstr "1 año"
 
+msgid "1 hour"
+msgstr "1 hora"
+
 msgid "2 Days"
 msgstr "2 Días"
+
+msgid "2 hours"
+msgstr "2 horas"
 
 msgid "3 Months"
 msgstr "3 meses"
 
+msgid "30 minutes"
+msgstr "30 minutos"
+
 msgid "6 Months"
 msgstr "6 meses"
+
+msgid "8 hours"
+msgstr "8 horas"
 
 msgid ": Affiliation changed"
 msgstr ": Afiliación cambiada"
@@ -2751,6 +2763,9 @@ msgstr "Película"
 msgid "Must be a port number"
 msgstr "Debe ser un número de puerto"
 
+msgid "Mute Chat"
+msgstr "Silenciar chat"
+
 msgid "Mute Sounds"
 msgstr "Silenciar sonidos"
 
@@ -3194,6 +3209,9 @@ msgstr "Evento Pendiente"
 
 msgid "Pending Voice Requests"
 msgstr "Peticiones de voz pendientes"
+
+msgid "Permanently"
+msgstr "Permanentemente"
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -4811,6 +4829,9 @@ msgstr "Idioma desconocido"
 
 msgid "Unknown validation error"
 msgstr "Error de validación desconocido"
+
+msgid "Unmute Chat"
+msgstr "Activar chat"
 
 msgid "Unpin Chat"
 msgstr "Desanclar charla"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-21 22:11+0000\n"
+"POT-Creation-Date: 2023-04-02 15:53+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -213,13 +213,25 @@ msgstr ""
 msgid "1 Year"
 msgstr ""
 
+msgid "1 hour"
+msgstr ""
+
 msgid "2 Days"
+msgstr ""
+
+msgid "2 hours"
 msgstr ""
 
 msgid "3 Months"
 msgstr ""
 
+msgid "30 minutes"
+msgstr ""
+
 msgid "6 Months"
+msgstr ""
+
+msgid "8 hours"
 msgstr ""
 
 #, fuzzy
@@ -3107,6 +3119,10 @@ msgstr "Фільм"
 msgid "Must be a port number"
 msgstr "Адмысловы порт павінны быць нумарам порта."
 
+#, fuzzy
+msgid "Mute Chat"
+msgstr "Запыт на перадачу файла"
+
 msgid "Mute Sounds"
 msgstr "Адключыць гукі"
 
@@ -3607,6 +3623,9 @@ msgstr "Паказаць нягледжаныя _падзеі"
 #, fuzzy
 msgid "Pending Voice Requests"
 msgstr "Запыт на перадачу файла"
+
+msgid "Permanently"
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -5439,6 +5458,10 @@ msgstr "_Пасля мянушкі:"
 #, fuzzy
 msgid "Unknown validation error"
 msgstr "Настаўленні пакоя"
+
+#, fuzzy
+msgid "Unmute Chat"
+msgstr "Запыт на перадачу файла"
 
 #, fuzzy
 msgid "Unpin Chat"

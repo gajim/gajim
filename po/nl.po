@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-21 22:11+0000\n"
+"POT-Creation-Date: 2023-04-02 15:53+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -217,16 +217,28 @@ msgstr ""
 msgid "1 Year"
 msgstr "Een jaar"
 
+msgid "1 hour"
+msgstr ""
+
 msgid "2 Days"
+msgstr ""
+
+msgid "2 hours"
 msgstr ""
 
 #, fuzzy
 msgid "3 Months"
 msgstr "Een maand"
 
+msgid "30 minutes"
+msgstr ""
+
 #, fuzzy
 msgid "6 Months"
 msgstr "Een maand"
+
+msgid "8 hours"
+msgstr ""
 
 msgid ": Affiliation changed"
 msgstr ": aansluiting veranderd"
@@ -3092,6 +3104,10 @@ msgstr "Film"
 msgid "Must be a port number"
 msgstr "Aangepaste poort moet een geldig poortnummer zijn."
 
+#, fuzzy
+msgid "Mute Chat"
+msgstr "Audiogespreksverzoek"
+
 msgid "Mute Sounds"
 msgstr "Geluiden dempen"
 
@@ -3584,6 +3600,9 @@ msgstr "Toon alle wachtende gebeurt_enissen"
 #, fuzzy
 msgid "Pending Voice Requests"
 msgstr "Audiogespreksverzoek"
+
+msgid "Permanently"
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -5413,6 +5432,10 @@ msgstr "Onbekend nummer"
 #, fuzzy
 msgid "Unknown validation error"
 msgstr "Onbekende SSL-fout: %d"
+
+#, fuzzy
+msgid "Unmute Chat"
+msgstr "Audiogespreksverzoek"
 
 #, fuzzy
 msgid "Unpin Chat"

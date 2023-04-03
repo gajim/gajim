@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the Gajim package.
 # Max Muster <c@zp1.net>, 2022.
-# Simona Iacob <s@zp1.net>, 2022.
+# Simona Iacob <s@zp1.net>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-21 22:11+0000\n"
-"PO-Revision-Date: 2022-12-29 22:46+0000\n"
+"POT-Creation-Date: 2023-04-02 15:53+0000\n"
+"PO-Revision-Date: 2023-03-26 13:49+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
 "ro/>\n"
@@ -143,12 +143,12 @@ msgstr ""
 "%s este online cu mai multe dispozitive.\n"
 "Alegeți dispozitivul la care doriți să trimiteți fișierul."
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
-msgstr[0] "%i min în urmă"
-msgstr[1] "%i minute în urmă"
-msgstr[2] "%i de minute în urmă"
+msgstr[0] "%s min în urmă"
+msgstr[1] "%s minute în urmă"
+msgstr[2] "%s de minute în urmă"
 
 #, python-format
 msgid "%s s"
@@ -222,14 +222,26 @@ msgstr "1 Săptămâna"
 msgid "1 Year"
 msgstr "1 An"
 
+msgid "1 hour"
+msgstr ""
+
 msgid "2 Days"
 msgstr "2 Zile"
+
+msgid "2 hours"
+msgstr ""
 
 msgid "3 Months"
 msgstr "3 Luni"
 
+msgid "30 minutes"
+msgstr ""
+
 msgid "6 Months"
 msgstr "6 Luni"
+
+msgid "8 hours"
+msgstr ""
 
 msgid ": Affiliation changed"
 msgstr ": Afilierea s-a schimbat"
@@ -491,12 +503,12 @@ msgstr "Adăugați acest certificat la lista de certificate de _încredere"
 msgid "Add to Contact List…"
 msgstr "Adăugați la lista de contacte…"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Added %s contact"
 msgid_plural "Added %s contacts"
-msgstr[0] "Adăugat %d contact"
-msgstr[1] "Adăugate %d contacte"
-msgstr[2] "Adăugate %d de contacte"
+msgstr[0] "Adăugat %s contact"
+msgstr[1] "Adăugate %s contacte"
+msgstr[2] "Adăugate %s de contacte"
 
 msgid "Address"
 msgstr "Adresă"
@@ -1418,9 +1430,8 @@ msgstr "Declinarea invitației"
 msgid "Decrease playback speed"
 msgstr "Reduceți viteza de redare"
 
-#, fuzzy
 msgid "Decryption failed"
-msgstr "Conexiunea a eșuat"
+msgstr "Decriptarea a eșuat"
 
 msgid "Default"
 msgstr "Implicit"
@@ -1452,30 +1463,27 @@ msgstr "Implicit pentru noile chat-uri de grup publice"
 msgid "Delete"
 msgstr "Ștergeți"
 
-#, fuzzy
 msgid "Delete Message"
-msgstr "Mesaje directe"
+msgstr "Ștergeți mesajul"
 
-#, fuzzy
 msgctxt "Message row action"
 msgid "Delete Message Locally…"
-msgstr "Selectați Mesaje…"
+msgstr "Ștergeți mesajul local…"
 
 msgid "Delete PEP node?"
-msgstr ""
+msgstr "Ștergeți nodul PEP?"
 
 msgid "Delete Theme"
 msgstr "Ștergeți tema"
 
 msgid "Delete message locally?"
-msgstr ""
+msgstr "Ștergeți mesajul local?"
 
 msgid "Deny"
 msgstr "Refuzați"
 
-#, fuzzy
 msgid "Deny all subscription requests"
-msgstr "Cerere de abonament"
+msgstr "Refuzați toate cererile de abonament"
 
 msgid "Description"
 msgstr "Descriere"
@@ -1563,9 +1571,8 @@ msgstr "Acceptați această cerere (cont: %s)?"
 msgid "Do you accept this request?"
 msgstr "Acceptați această cerere?"
 
-#, fuzzy
 msgid "Do you really want to delete this PEP node?"
-msgstr "Doriți să ștergeți această temă?"
+msgstr "Chiar doriți să ștergeți acest nod PEP?"
 
 #, python-format
 msgid "Do you really want to remove \"%s\"?"
@@ -1668,7 +1675,7 @@ msgid "Enable"
 msgstr "Activați"
 
 msgid "Enable KeepassXC Integration"
-msgstr ""
+msgstr "Activați integrarea KeepassXC"
 
 msgid "Enabled"
 msgstr "Activat"
@@ -2025,9 +2032,8 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "De la"
 
-#, fuzzy
 msgid "Full Message View"
-msgstr "Mesaj trimis"
+msgstr "Vizualizare completă a mesajului"
 
 msgid "Full Name"
 msgstr "Nume și prenume"
@@ -2050,9 +2056,9 @@ msgstr "Versiunea GTK: %s"
 msgid "Gajim"
 msgstr "Gajim"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Gajim %s is available"
-msgstr "Versiunea %s este disponibilă"
+msgstr "Gajim %s este disponibil"
 
 msgid "Gajim - Error"
 msgstr "Gajim - Eroare"
@@ -2102,17 +2108,16 @@ msgstr ""
 msgid "Gajim will now exit"
 msgstr "Gajim va ieși acum"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Gajim: No updates available (last check: %s)"
-msgstr "Fără actualizări disponibile (ultima verificare: %s)"
+msgstr "Gajim: Nu există actualizări disponibile (ultima verificare: %s)"
 
-#, fuzzy
 msgid "Gajim: No updates available (last check: never)"
-msgstr "Nu există actualizări disponibile (ultima verificare: niciodată)"
+msgstr ""
+"Gajim: Nu există actualizări disponibile (ultima verificare: niciodată)"
 
-#, fuzzy
 msgid "Gajim: Update check disabled in preferences"
-msgstr "Verificarea actualizării este dezactivată în preferințe"
+msgstr "Gajim: Verificarea actualizărilor este dezactivată în preferințe"
 
 msgid "Gathering information…"
 msgstr "Culegerea de informații…"
@@ -2181,9 +2186,9 @@ msgstr "Chat-ul de grup poate fi găsit prin căutare"
 msgid "Group chat does not exist"
 msgstr "Grupul de chat nu există"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Group chat has been destroyed%s"
-msgstr "Grupul de chat a fost distrus"
+msgstr "Chat-ul de grup a fost distrus%s"
 
 msgid "Group chat is closed"
 msgstr "Grupul de chat este închis"
@@ -2773,6 +2778,10 @@ msgstr "Film"
 msgid "Must be a port number"
 msgstr "Trebuie să fie un număr de port"
 
+#, fuzzy
+msgid "Mute Chat"
+msgstr "Mutați chat-ul"
+
 msgid "Mute Sounds"
 msgstr "Sunete silențioase"
 
@@ -2851,9 +2860,8 @@ msgstr "Fără prag"
 msgid "No additional requirements"
 msgstr "Nu există cerințe suplimentare"
 
-#, fuzzy
 msgid "No automatic preview"
-msgstr "Previzualizare automată dezactivată"
+msgstr "Nu există previzualizare automată"
 
 msgid "No commands available"
 msgstr "Nu există comenzi disponibile"
@@ -2937,9 +2945,8 @@ msgstr "Neaccelerat"
 msgid "Not available"
 msgstr "Nu este disponibil"
 
-#, fuzzy
 msgid "Not connected"
-msgstr "Nu este conectat"
+msgstr "Neconectat"
 
 msgid "Not encrypted"
 msgstr "Necriptat"
@@ -3186,7 +3193,7 @@ msgid "Password Required"
 msgstr "Parolă Necesară"
 
 msgid "Password contains prohibited characters"
-msgstr ""
+msgstr "Parola conține caractere interzise"
 
 msgid "Passwords do not match"
 msgstr "Parolele nu se potrivesc"
@@ -3218,6 +3225,9 @@ msgstr "Eveniment în așteptare"
 
 msgid "Pending Voice Requests"
 msgstr "Solicitări vocale în așteptare"
+
+msgid "Permanently"
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -3321,13 +3331,11 @@ msgstr "Plugin-uri"
 msgid "Plugins Updated Successfully"
 msgstr "Plugin-uri actualizate cu succes"
 
-#, fuzzy
 msgid "Plugins: No updates available"
-msgstr "Actualizare disponibilă"
+msgstr "Plugin-uri: Nu există actualizări disponibile"
 
-#, fuzzy
 msgid "Plugins: Update check disabled in preferences"
-msgstr "Verificarea actualizării este dezactivată în preferințe"
+msgstr "Plugin-uri: Verificarea actualizării este dezactivată în preferințe"
 
 msgid "Port"
 msgstr "Portul"
@@ -3586,12 +3594,12 @@ msgstr "Eliminați acest spațiu de lucru"
 msgid "Remove your profile picture"
 msgstr "Îndepărtați imaginea de profil"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Removed %s contact"
 msgid_plural "Removed %s contacts"
-msgstr[0] "A eliminat %d contact"
-msgstr[1] "A eliminat %d contacte"
-msgstr[2] "A eliminat %d de contacte"
+msgstr[0] "A eliminat %s contact"
+msgstr[1] "A eliminat %s contacte"
+msgstr[2] "A eliminat %s de contacte"
 
 msgid "Remove…"
 msgstr "Eliminați…"
@@ -4564,9 +4572,8 @@ msgstr ""
 "S-a produs o eroare în timpul încercării de verificare a certificatului SSL "
 "al serverului XMPP (%s)."
 
-#, fuzzy
 msgid "This account has already been added"
-msgstr "Contul a fost adăugat cu succes"
+msgstr "Acest cont a fost deja adăugat"
 
 msgid "This account is not connected to the server"
 msgstr "Acest cont nu este conectat la server"
@@ -4640,7 +4647,7 @@ msgstr ""
 "decriptat. Puteți instala extensia OpenPGP pentru a gestiona aceste mesaje."
 
 msgid "This message will be deleted from your local chat history"
-msgstr ""
+msgstr "Acest mesaj va fi șters din istoricul de chat local"
 
 msgid "This server does not allow signup."
 msgstr "Acest server nu permite înregistrarea."
@@ -4849,6 +4856,10 @@ msgstr "Limbă necunoscută"
 
 msgid "Unknown validation error"
 msgstr "Eroare de validare necunoscută"
+
+#, fuzzy
+msgid "Unmute Chat"
+msgstr "Desprindeți Chat"
 
 msgid "Unpin Chat"
 msgstr "Desprindeți Chat"
@@ -5288,7 +5299,7 @@ msgid "ZZZZzzzzzZZZZZ"
 msgstr "ZîZîZîZîzîzîzîzîzîZîZîZîZîZ"
 
 msgid "[read more]"
-msgstr ""
+msgstr "[citește mai mult]"
 
 msgid "_Abort"
 msgstr "_Abandonați"
@@ -5607,9 +5618,8 @@ msgstr "țară"
 msgid "countrycode"
 msgstr "cod de țară"
 
-#, fuzzy
 msgid "dark skin tone"
-msgstr "pielea închisă la culoare"
+msgstr "tonul închis al pielii"
 
 msgid "datum"
 msgstr "data"
@@ -5661,9 +5671,8 @@ msgstr "latid"
 
 #. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
 #. You can use the hex value to find the matching string.
-#, fuzzy
 msgid "light skin tone"
-msgstr "piele deschisă"
+msgstr "ton deschis al pielii"
 
 msgid "locality"
 msgstr "localitate"
@@ -5677,13 +5686,11 @@ msgstr "macOS"
 msgid "medium skin tone"
 msgstr "ton mediu al pielii"
 
-#, fuzzy
 msgid "medium-dark skin tone"
-msgstr "ten mediu-închis"
+msgstr "ton mediu-închis al pielii"
 
-#, fuzzy
 msgid "medium-light skin tone"
-msgstr "ten mediu deschis"
+msgstr "ton mediu deschis al pielii"
 
 msgctxt "Group chat address"
 msgid "news"

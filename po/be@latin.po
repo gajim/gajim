@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-21 22:11+0000\n"
+"POT-Creation-Date: 2023-04-02 15:53+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -213,13 +213,25 @@ msgstr ""
 msgid "1 Year"
 msgstr ""
 
+msgid "1 hour"
+msgstr ""
+
 msgid "2 Days"
+msgstr ""
+
+msgid "2 hours"
 msgstr ""
 
 msgid "3 Months"
 msgstr ""
 
+msgid "30 minutes"
+msgstr ""
+
 msgid "6 Months"
+msgstr ""
+
+msgid "8 hours"
 msgstr ""
 
 #, fuzzy
@@ -3110,6 +3122,10 @@ msgstr "Film"
 msgid "Must be a port number"
 msgstr "Abrany port musić być numeram portu."
 
+#, fuzzy
+msgid "Mute Chat"
+msgstr "Zapyt na pieradaču fajłu"
+
 msgid "Mute Sounds"
 msgstr "Ściš huki"
 
@@ -3610,6 +3626,9 @@ msgstr "Pakažy ŭsie niahledžanyja _padzieji"
 #, fuzzy
 msgid "Pending Voice Requests"
 msgstr "Zapyt na pieradaču fajłu"
+
+msgid "Permanently"
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -5442,6 +5461,10 @@ msgstr "_Пасля мянушкі:"
 #, fuzzy
 msgid "Unknown validation error"
 msgstr "Kanfihuracyja pakoju"
+
+#, fuzzy
+msgid "Unmute Chat"
+msgstr "Zapyt na pieradaču fajłu"
 
 #, fuzzy
 msgid "Unpin Chat"

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-21 22:11+0000\n"
+"POT-Creation-Date: 2023-04-02 15:53+0000\n"
 "PO-Revision-Date: 2023-02-24 09:31+0000\n"
 "Last-Translator: Bob Huang (Ziyan Huang) <bc3104hzy@126.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -219,14 +219,26 @@ msgstr "一周"
 msgid "1 Year"
 msgstr "一年"
 
+msgid "1 hour"
+msgstr ""
+
 msgid "2 Days"
 msgstr "两天"
+
+msgid "2 hours"
+msgstr ""
 
 msgid "3 Months"
 msgstr "三个月"
 
+msgid "30 minutes"
+msgstr ""
+
 msgid "6 Months"
 msgstr "六个月"
+
+msgid "8 hours"
+msgstr ""
 
 msgid ": Affiliation changed"
 msgstr ": 从属关系已变更"
@@ -2699,6 +2711,10 @@ msgstr "电影"
 msgid "Must be a port number"
 msgstr "必须为端口号"
 
+#, fuzzy
+msgid "Mute Chat"
+msgstr "移动聊天"
+
 msgid "Mute Sounds"
 msgstr "静音"
 
@@ -3138,6 +3154,9 @@ msgstr "待处理事件"
 
 msgid "Pending Voice Requests"
 msgstr "待处理语音请求"
+
+msgid "Permanently"
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -4718,6 +4737,10 @@ msgstr "未知语言"
 
 msgid "Unknown validation error"
 msgstr "未知的验证错误"
+
+#, fuzzy
+msgid "Unmute Chat"
+msgstr "取消置顶聊天"
 
 msgid "Unpin Chat"
 msgstr "取消置顶聊天"

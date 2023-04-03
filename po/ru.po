@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-21 22:11+0000\n"
+"POT-Creation-Date: 2023-04-02 15:53+0000\n"
 "PO-Revision-Date: 2023-01-05 11:03+0000\n"
 "Last-Translator: Nikolay Chizhov <admin@kgd.in>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -219,14 +219,26 @@ msgstr "1 неделя"
 msgid "1 Year"
 msgstr "1 год"
 
+msgid "1 hour"
+msgstr ""
+
 msgid "2 Days"
 msgstr "2 дня"
+
+msgid "2 hours"
+msgstr ""
 
 msgid "3 Months"
 msgstr "3 месяца"
 
+msgid "30 minutes"
+msgstr ""
+
 msgid "6 Months"
 msgstr "6 месяцев"
+
+msgid "8 hours"
+msgstr ""
 
 msgid ": Affiliation changed"
 msgstr ": Роль изменена"
@@ -2763,6 +2775,10 @@ msgstr "Кино"
 msgid "Must be a port number"
 msgstr "Должен быть номер порта"
 
+#, fuzzy
+msgid "Mute Chat"
+msgstr "Переместить чат"
+
 msgid "Mute Sounds"
 msgstr "Выключить звук"
 
@@ -3211,6 +3227,9 @@ msgstr "Показать непросмотренные _события"
 #, fuzzy
 msgid "Pending Voice Requests"
 msgstr "Запрос голоса"
+
+msgid "Permanently"
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -4840,6 +4859,10 @@ msgstr "Неизвестный язык"
 
 msgid "Unknown validation error"
 msgstr "Неизвестная ошибка при проверке"
+
+#, fuzzy
+msgid "Unmute Chat"
+msgstr "Открепить чат"
 
 msgid "Unpin Chat"
 msgstr "Открепить чат"

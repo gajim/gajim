@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-21 22:11+0000\n"
-"PO-Revision-Date: 2023-01-30 20:41+0000\n"
+"POT-Creation-Date: 2023-04-02 15:53+0000\n"
+"PO-Revision-Date: 2023-04-02 15:46+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/"
 ">\n"
@@ -141,12 +141,12 @@ msgstr ""
 "%s jest dostępny na wielu urządzeniach.\n"
 "Wybierz urządzenie, na które chcesz wysłać pliki."
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
-msgstr[0] "%i minutę temu"
-msgstr[1] "%i minuty temu"
-msgstr[2] "%i minut temu"
+msgstr[0] "%s minutę temu"
+msgstr[1] "%s minuty temu"
+msgstr[2] "%s minut temu"
 
 #, python-format
 msgid "%s s"
@@ -223,14 +223,26 @@ msgstr "1 tydzień"
 msgid "1 Year"
 msgstr "1 rok"
 
+msgid "1 hour"
+msgstr ""
+
 msgid "2 Days"
 msgstr "2 dni"
+
+msgid "2 hours"
+msgstr ""
 
 msgid "3 Months"
 msgstr "3 miesiące"
 
+msgid "30 minutes"
+msgstr ""
+
 msgid "6 Months"
 msgstr "6 miesięcy"
+
+msgid "8 hours"
+msgstr ""
 
 msgid ": Affiliation changed"
 msgstr ": Przynależność została zmieniona"
@@ -491,12 +503,12 @@ msgstr "Dodaj ten certyfikat do listy _zaufanych certyfikatów"
 msgid "Add to Contact List…"
 msgstr "Dodaj do listy kontaktów…"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Added %s contact"
 msgid_plural "Added %s contacts"
-msgstr[0] "Dodano %d kontakt"
-msgstr[1] "Dodano %d kontakty"
-msgstr[2] "Dodano %d kontaktów"
+msgstr[0] "Dodano %s kontakt"
+msgstr[1] "Dodano %s kontakty"
+msgstr[2] "Dodano %s kontaktów"
 
 msgid "Address"
 msgstr "Adres"
@@ -1445,23 +1457,21 @@ msgstr "Domyślne dla nowych publicznych rozmów grupowych"
 msgid "Delete"
 msgstr "Usuń"
 
-#, fuzzy
 msgid "Delete Message"
-msgstr "Wiadomości bezpośrednie"
+msgstr "Usuń wiadomość"
 
-#, fuzzy
 msgctxt "Message row action"
 msgid "Delete Message Locally…"
-msgstr "Wybierz wiadomości…"
+msgstr "Usuń wiadomość lokalnie…"
 
 msgid "Delete PEP node?"
-msgstr ""
+msgstr "Usunąć węzeł PEP?"
 
 msgid "Delete Theme"
 msgstr "Usuń motyw"
 
 msgid "Delete message locally?"
-msgstr ""
+msgstr "Usunąć wiadomość lokalnie?"
 
 msgid "Deny"
 msgstr "Odmów"
@@ -1551,9 +1561,8 @@ msgstr "Akceptujesz tę prośbę (konto: %s)?"
 msgid "Do you accept this request?"
 msgstr "Akceptujesz tę prośbę?"
 
-#, fuzzy
 msgid "Do you really want to delete this PEP node?"
-msgstr "Czy chcesz usunąć ten motyw?"
+msgstr "Czy na pewno chcesz ten węzeł PEP?"
 
 #, python-format
 msgid "Do you really want to remove \"%s\"?"
@@ -1654,7 +1663,7 @@ msgid "Enable"
 msgstr "Włącz"
 
 msgid "Enable KeepassXC Integration"
-msgstr ""
+msgstr "Włącz integrację z KeepassXC"
 
 msgid "Enabled"
 msgstr "Włączone"
@@ -2034,9 +2043,9 @@ msgstr "Wersja GTK: %s"
 msgid "Gajim"
 msgstr "Gajim"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Gajim %s is available"
-msgstr "Wersja %s jest dostępna"
+msgstr "Gajim %s jest dostępny"
 
 msgid "Gajim - Error"
 msgstr "Gajim — błąd"
@@ -2750,6 +2759,10 @@ msgstr "Film"
 msgid "Must be a port number"
 msgstr "Musi być numerem portu"
 
+#, fuzzy
+msgid "Mute Chat"
+msgstr "Przenieś rozmowę"
+
 msgid "Mute Sounds"
 msgstr "Wyłącz dźwięki"
 
@@ -2914,9 +2927,8 @@ msgstr "Brak przyspieszenia"
 msgid "Not available"
 msgstr "Nieobecny"
 
-#, fuzzy
 msgid "Not connected"
-msgstr "Niepołączony"
+msgstr "Niepodłączony"
 
 msgid "Not encrypted"
 msgstr "Nieszyfrowane"
@@ -3163,7 +3175,7 @@ msgid "Password Required"
 msgstr "Hasło jest wymagane"
 
 msgid "Password contains prohibited characters"
-msgstr ""
+msgstr "Hasło zawiera niedozwolone znaki"
 
 msgid "Passwords do not match"
 msgstr "Hasła nie zgadzają się"
@@ -3195,6 +3207,9 @@ msgstr "Oczekujące zdarzenie"
 
 msgid "Pending Voice Requests"
 msgstr "Trwające prośby o prawo głosu"
+
+msgid "Permanently"
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -3559,12 +3574,12 @@ msgstr "Usuń ten obszar roboczy"
 msgid "Remove your profile picture"
 msgstr "Usuń swój obrazek profilowy"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Removed %s contact"
 msgid_plural "Removed %s contacts"
-msgstr[0] "Usunięto %d kontakt"
-msgstr[1] "Usunięto %d kontakty"
-msgstr[2] "Usunięto %d kontaktów"
+msgstr[0] "Usunięto %s kontakt"
+msgstr[1] "Usunięto %s kontakty"
+msgstr[2] "Usunięto %s kontaktów"
 
 msgid "Remove…"
 msgstr "Usuń…"
@@ -4611,7 +4626,7 @@ msgstr ""
 "wiadomości."
 
 msgid "This message will be deleted from your local chat history"
-msgstr ""
+msgstr "Ta wiadomość zostanie usunięta z Twojej lokalnej historii rozmowy"
 
 msgid "This server does not allow signup."
 msgstr "Ten serwer nie pozwala na rejestrację."
@@ -4819,6 +4834,10 @@ msgstr "Nieznany język"
 
 msgid "Unknown validation error"
 msgstr "Nieznany błąd walidacyjny"
+
+#, fuzzy
+msgid "Unmute Chat"
+msgstr "Odepnij rozmowę"
 
 msgid "Unpin Chat"
 msgstr "Odepnij rozmowę"

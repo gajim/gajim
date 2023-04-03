@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-21 22:11+0000\n"
+"POT-Creation-Date: 2023-04-02 15:53+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -215,13 +215,25 @@ msgstr ""
 msgid "1 Year"
 msgstr ""
 
+msgid "1 hour"
+msgstr ""
+
 msgid "2 Days"
+msgstr ""
+
+msgid "2 hours"
 msgstr ""
 
 msgid "3 Months"
 msgstr ""
 
+msgid "30 minutes"
+msgstr ""
+
 msgid "6 Months"
+msgstr ""
+
+msgid "8 hours"
 msgstr ""
 
 #, fuzzy
@@ -3132,6 +3144,10 @@ msgstr "Филм"
 msgid "Must be a port number"
 msgstr "Портът по избор трябва все пак да е номер на порт."
 
+#, fuzzy
+msgid "Mute Chat"
+msgstr "Запитване за файлов трансфер"
+
 msgid "Mute Sounds"
 msgstr "Изключване на звука"
 
@@ -3631,6 +3647,9 @@ msgstr "Показване на всички _чакащи събития"
 #, fuzzy
 msgid "Pending Voice Requests"
 msgstr "Запитване за файлов трансфер"
+
+msgid "Permanently"
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -5477,6 +5496,10 @@ msgstr "Неизвестно заглавие"
 #, fuzzy
 msgid "Unknown validation error"
 msgstr "Неизвестна грешка на SSL: %d"
+
+#, fuzzy
+msgid "Unmute Chat"
+msgstr "Запитване за файлов трансфер"
 
 #, fuzzy
 msgid "Unpin Chat"

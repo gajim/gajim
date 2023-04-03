@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-21 22:11+0000\n"
+"POT-Creation-Date: 2023-04-02 15:53+0000\n"
 "PO-Revision-Date: 2023-02-21 22:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -228,14 +228,26 @@ msgstr "1 Semana"
 msgid "1 Year"
 msgstr "1 Ano"
 
+msgid "1 hour"
+msgstr ""
+
 msgid "2 Days"
 msgstr "2 Dias"
+
+msgid "2 hours"
+msgstr ""
 
 msgid "3 Months"
 msgstr "3 Meses"
 
+msgid "30 minutes"
+msgstr ""
+
 msgid "6 Months"
 msgstr "6 Meses"
+
+msgid "8 hours"
+msgstr ""
 
 msgid ": Affiliation changed"
 msgstr ": Filiação modificada"
@@ -2914,6 +2926,10 @@ msgstr "Filme"
 msgid "Must be a port number"
 msgstr "Precisa ser um número de porta"
 
+#, fuzzy
+msgid "Mute Chat"
+msgstr "Chat por Voz"
+
 msgid "Mute Sounds"
 msgstr "Sons mudos"
 
@@ -3418,6 +3434,9 @@ msgstr "Exibir todos _eventos pendentes"
 #, fuzzy
 msgid "Pending Voice Requests"
 msgstr "Pedido de Voz"
+
+msgid "Permanently"
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -5251,6 +5270,10 @@ msgstr "Título desconhecido"
 
 msgid "Unknown validation error"
 msgstr "Erro desconhecido de validação"
+
+#, fuzzy
+msgid "Unmute Chat"
+msgstr "Chat por Voz"
 
 #, fuzzy
 msgid "Unpin Chat"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-21 22:11+0000\n"
-"PO-Revision-Date: 2023-02-24 09:31+0000\n"
+"POT-Creation-Date: 2023-04-02 15:53+0000\n"
+"PO-Revision-Date: 2023-04-03 17:56+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -214,14 +214,26 @@ msgstr "1 hét"
 msgid "1 Year"
 msgstr "1 év"
 
+msgid "1 hour"
+msgstr "1 óra"
+
 msgid "2 Days"
 msgstr "2 nap"
+
+msgid "2 hours"
+msgstr "2 óra"
 
 msgid "3 Months"
 msgstr "3 hónap"
 
+msgid "30 minutes"
+msgstr "30 perc"
+
 msgid "6 Months"
 msgstr "6 hónap"
+
+msgid "8 hours"
+msgstr "8 óra"
 
 msgid ": Affiliation changed"
 msgstr ": a tagság elvétele"
@@ -2731,6 +2743,9 @@ msgstr "Filmnézés"
 msgid "Must be a port number"
 msgstr "A port számát kell megadni"
 
+msgid "Mute Chat"
+msgstr "Némítás"
+
 msgid "Mute Sounds"
 msgstr "Hangok némítása"
 
@@ -3170,6 +3185,9 @@ msgstr "Várakozó események"
 
 msgid "Pending Voice Requests"
 msgstr "Várakozó szólási kérelmek"
+
+msgid "Permanently"
+msgstr "Állandó"
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -4778,6 +4796,9 @@ msgstr "Ismeretlen nyelv"
 
 msgid "Unknown validation error"
 msgstr "Ismeretlen érvényesítési hiba"
+
+msgid "Unmute Chat"
+msgstr "Némítás vége"
 
 msgid "Unpin Chat"
 msgstr "Kitűzés megszüntetése"

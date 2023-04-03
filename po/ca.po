@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-21 22:11+0000\n"
+"POT-Creation-Date: 2023-04-02 15:53+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -211,13 +211,25 @@ msgstr ""
 msgid "1 Year"
 msgstr ""
 
+msgid "1 hour"
+msgstr ""
+
 msgid "2 Days"
+msgstr ""
+
+msgid "2 hours"
 msgstr ""
 
 msgid "3 Months"
 msgstr ""
 
+msgid "30 minutes"
+msgstr ""
+
 msgid "6 Months"
+msgstr ""
+
+msgid "8 hours"
 msgstr ""
 
 #, fuzzy
@@ -2940,6 +2952,10 @@ msgstr ""
 msgid "Must be a port number"
 msgstr ""
 
+#, fuzzy
+msgid "Mute Chat"
+msgstr "_Veu"
+
 msgid "Mute Sounds"
 msgstr ""
 
@@ -3424,6 +3440,9 @@ msgstr "Events _Personals"
 #, fuzzy
 msgid "Pending Voice Requests"
 msgstr "_Veu"
+
+msgid "Permanently"
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -5166,6 +5185,10 @@ msgstr "Sobrenom:"
 
 msgid "Unknown validation error"
 msgstr ""
+
+#, fuzzy
+msgid "Unmute Chat"
+msgstr "_Veu"
 
 #, fuzzy
 msgid "Unpin Chat"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-21 22:11+0000\n"
+"POT-Creation-Date: 2023-04-02 15:53+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -216,13 +216,25 @@ msgstr ""
 msgid "1 Year"
 msgstr ""
 
+msgid "1 hour"
+msgstr ""
+
 msgid "2 Days"
+msgstr ""
+
+msgid "2 hours"
 msgstr ""
 
 msgid "3 Months"
 msgstr ""
 
+msgid "30 minutes"
+msgstr ""
+
 msgid "6 Months"
+msgstr ""
+
+msgid "8 hours"
 msgstr ""
 
 #, fuzzy
@@ -3116,6 +3128,10 @@ msgstr "電影"
 msgid "Must be a port number"
 msgstr "自訂連接埠必須為連接埠號碼。"
 
+#, fuzzy
+msgid "Mute Chat"
+msgstr "語音聊天請求"
+
 msgid "Mute Sounds"
 msgstr "靜音"
 
@@ -3613,6 +3629,9 @@ msgstr "顯示所有未處理事件(_E)"
 #, fuzzy
 msgid "Pending Voice Requests"
 msgstr "語音聊天請求"
+
+msgid "Permanently"
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -5444,6 +5463,10 @@ msgstr "不明標題"
 #, fuzzy
 msgid "Unknown validation error"
 msgstr "不明的 SSL 錯誤: %d"
+
+#, fuzzy
+msgid "Unmute Chat"
+msgstr "語音聊天請求"
 
 #, fuzzy
 msgid "Unpin Chat"

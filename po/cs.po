@@ -11,11 +11,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-21 22:11+0000\n"
+"POT-Creation-Date: 2023-04-02 15:53+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
-"Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/>"
-"\n"
+"Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
+">\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -225,14 +225,26 @@ msgstr "1 týden"
 msgid "1 Year"
 msgstr "1 rok"
 
+msgid "1 hour"
+msgstr ""
+
 msgid "2 Days"
 msgstr "2 dny"
+
+msgid "2 hours"
+msgstr ""
 
 msgid "3 Months"
 msgstr "3 měsíce"
 
+msgid "30 minutes"
+msgstr ""
+
 msgid "6 Months"
 msgstr "6 měsíců"
+
+msgid "8 hours"
+msgstr ""
 
 msgid ": Affiliation changed"
 msgstr ": Příslušnost byla změněna"
@@ -2735,6 +2747,10 @@ msgstr "Film"
 msgid "Must be a port number"
 msgstr "Musí být číslo portu"
 
+#, fuzzy
+msgid "Mute Chat"
+msgstr "Přesunout konverzaci"
+
 msgid "Mute Sounds"
 msgstr "Vypnout zvuky"
 
@@ -3177,6 +3193,9 @@ msgstr "Čekající událost"
 
 msgid "Pending Voice Requests"
 msgstr "Žádosti o hlasový rozhovor"
+
+msgid "Permanently"
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -4780,6 +4799,10 @@ msgstr "Neznámý jazyk"
 
 msgid "Unknown validation error"
 msgstr "Neznámá chyba ověření"
+
+#, fuzzy
+msgid "Unmute Chat"
+msgstr "Odepnout konverzaci"
 
 msgid "Unpin Chat"
 msgstr "Odepnout konverzaci"

@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-21 22:11+0000\n"
+"POT-Creation-Date: 2023-04-02 15:53+0000\n"
 "PO-Revision-Date: 2023-03-02 08:25+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
-"Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/>"
-"\n"
+"Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
+">\n"
 "Language: kk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -221,14 +221,26 @@ msgstr "1 апта"
 msgid "1 Year"
 msgstr "1 жыл"
 
+msgid "1 hour"
+msgstr ""
+
 msgid "2 Days"
 msgstr "2 күн"
+
+msgid "2 hours"
+msgstr ""
 
 msgid "3 Months"
 msgstr "3 ай"
 
+msgid "30 minutes"
+msgstr ""
+
 msgid "6 Months"
 msgstr "6 ай"
+
+msgid "8 hours"
+msgstr ""
 
 msgid ": Affiliation changed"
 msgstr ": Қатысуы өзгертілген"
@@ -2740,6 +2752,10 @@ msgstr "Кино"
 msgid "Must be a port number"
 msgstr "Порт нөмірі болуы тиіс"
 
+#, fuzzy
+msgid "Mute Chat"
+msgstr "Чатты жылжыту"
+
 msgid "Mute Sounds"
 msgstr "Дыбыстарды сөндіру"
 
@@ -3181,6 +3197,9 @@ msgstr "Оқылмаған оқиға"
 
 msgid "Pending Voice Requests"
 msgstr "Кезектегі дыбыс чатына сұраным"
+
+msgid "Permanently"
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -4792,6 +4811,10 @@ msgstr "Белгісіз тіл"
 
 msgid "Unknown validation error"
 msgstr "Белгісіз растау қатесі"
+
+#, fuzzy
+msgid "Unmute Chat"
+msgstr "Чатты босату"
 
 msgid "Unpin Chat"
 msgstr "Чатты босату"

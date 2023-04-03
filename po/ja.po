@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-21 22:11+0000\n"
+"POT-Creation-Date: 2023-04-02 15:53+0000\n"
 "PO-Revision-Date: 2023-03-06 08:56+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -225,14 +225,26 @@ msgstr "1週間"
 msgid "1 Year"
 msgstr "1年"
 
+msgid "1 hour"
+msgstr ""
+
 msgid "2 Days"
 msgstr "2日"
+
+msgid "2 hours"
+msgstr ""
 
 msgid "3 Months"
 msgstr "3か月"
 
+msgid "30 minutes"
+msgstr ""
+
 msgid "6 Months"
 msgstr "6か月"
+
+msgid "8 hours"
+msgstr ""
 
 msgid ": Affiliation changed"
 msgstr "分掌を変更しました"
@@ -565,8 +577,9 @@ msgstr "談話室のすべての参加者があなたの XMPP アドレスを見
 msgid ""
 "Allow Gajim to broadcast useful information via D-Bus. It also allows other "
 "applications to control Gajim remotely."
-msgstr "有用な情報をD-Bus で同報します。それはまた別のアプリケーションに Gajim "
-"を遠隔操作することを許します。"
+msgstr ""
+"有用な情報をD-Bus で同報します。それはまた別のアプリケーションに Gajim を遠隔"
+"操作することを許します。"
 
 msgid "Allows opening file:/ URIs when clicked."
 msgstr "URI file:/ をクリックしたとき開くことを許可します。"
@@ -1095,8 +1108,9 @@ msgstr "クリックして位置情報を見る"
 msgid ""
 "Clickable schemes in addition to the hard-coded list of IANA-registered "
 "ones. Space-separated, lower-case, no colons."
-msgstr "ハードコードされている IANA 登録の一覧のほかに追加する、"
-"クリック可能なスキーム (スペース区切り、小文字、コロンなし)。"
+msgstr ""
+"ハードコードされている IANA 登録の一覧のほかに追加する、クリック可能なスキー"
+"ム (スペース区切り、小文字、コロンなし)。"
 
 msgid "Client Certificate"
 msgstr "クライアント証明書"
@@ -2262,8 +2276,9 @@ msgstr ""
 "いのウィンドウマネージャのデフォルトの挙動です)。"
 
 msgid "If enabled, Gajim offers to download plugins hosted on gajim.org"
-msgstr "有効にすると、Gajim は gajim.org "
-"でホストされているプラグインをダウンロードしようとします"
+msgstr ""
+"有効にすると、Gajim は gajim.org でホストされているプラグインをダウンロードし"
+"ようとします"
 
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr "有効の場合、Gajim は受信する注目メッセージを無視します (\"wizz\")。"
@@ -2734,6 +2749,10 @@ msgstr "映画"
 msgid "Must be a port number"
 msgstr "ポート番号が必要です"
 
+#, fuzzy
+msgid "Mute Chat"
+msgstr "チャットを移動"
+
 msgid "Mute Sounds"
 msgstr "サウンドのミュート"
 
@@ -3179,6 +3198,9 @@ msgstr "保留中のイベント"
 
 msgid "Pending Voice Requests"
 msgstr "発言権を保留"
+
+msgid "Permanently"
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -4093,8 +4115,9 @@ msgstr "深刻なエラーのみ表示"
 
 msgid ""
 "Show previews automatically in public group chats (may disclose your data)"
-msgstr "公開談話室で自動的にプレビューを表示します "
-"(あなたのデータを開示する可能性があります)"
+msgstr ""
+"公開談話室で自動的にプレビューを表示します (あなたのデータを開示する可能性が"
+"あります)"
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
 msgstr "画像を含む URL のプレビューを表示します(安全でない可能性があります)"
@@ -4614,7 +4637,8 @@ msgstr "すべての紹介ヒントがリセットされます"
 msgid ""
 "This workspace contains chats. All chats will be moved to the next "
 "workspace. Remove anyway?"
-msgstr "この作業空間にはチャットがあります。すべてのチャットは次の作業空間に移されま"
+msgstr ""
+"この作業空間にはチャットがあります。すべてのチャットは次の作業空間に移されま"
 "す。それでも削除しますか ?"
 
 msgid "Three Months"
@@ -4789,6 +4813,10 @@ msgstr "未知の言語"
 
 msgid "Unknown validation error"
 msgstr "未知の検証エラー"
+
+#, fuzzy
+msgid "Unmute Chat"
+msgstr "チャットをピン止めしない"
 
 msgid "Unpin Chat"
 msgstr "チャットをピン止めしない"
@@ -4994,8 +5022,9 @@ msgstr "参加者が向かうべきは"
 msgid ""
 "Whether to check for a valid certificate before downloading (not safe to "
 "disable)"
-msgstr "ダウンロード前に正しい証明書を確認するかどうか "
-"(無効にすると安全ではありません)"
+msgstr ""
+"ダウンロード前に正しい証明書を確認するかどうか (無効にすると安全ではありませ"
+"ん)"
 
 msgid "Which server should I choose?"
 msgstr "どのサーバーを選びますか ?"

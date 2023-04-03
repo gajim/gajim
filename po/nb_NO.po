@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-21 22:11+0000\n"
+"POT-Creation-Date: 2023-04-02 15:53+0000\n"
 "PO-Revision-Date: 2009-11-18 15:50+0100\n"
 "Last-Translator: Stian B. Barmen <stian@barmen.nu>\n"
 "Language-Team: <>\n"
@@ -220,16 +220,28 @@ msgstr ""
 msgid "1 Year"
 msgstr "Ett år"
 
+msgid "1 hour"
+msgstr ""
+
 msgid "2 Days"
+msgstr ""
+
+msgid "2 hours"
 msgstr ""
 
 #, fuzzy
 msgid "3 Months"
 msgstr "Én måned"
 
+msgid "30 minutes"
+msgstr ""
+
 #, fuzzy
 msgid "6 Months"
 msgstr "Én måned"
+
+msgid "8 hours"
+msgstr ""
 
 #, fuzzy
 msgid ": Affiliation changed"
@@ -3099,6 +3111,10 @@ msgstr "Film"
 msgid "Must be a port number"
 msgstr "Egendefinert port må være et portnummer"
 
+#, fuzzy
+msgid "Mute Chat"
+msgstr "Forespørsel om lydsamtale"
+
 msgid "Mute Sounds"
 msgstr "Slå av lyder"
 
@@ -3591,6 +3607,9 @@ msgstr "Vis alle _handlinger på vent"
 #, fuzzy
 msgid "Pending Voice Requests"
 msgstr "Forespørsel om lydsamtale"
+
+msgid "Permanently"
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -5438,6 +5457,10 @@ msgstr "Ukjent tittel"
 #, fuzzy
 msgid "Unknown validation error"
 msgstr "Ukjent SSL-feil: %d"
+
+#, fuzzy
+msgid "Unmute Chat"
+msgstr "Forespørsel om lydsamtale"
 
 #, fuzzy
 msgid "Unpin Chat"

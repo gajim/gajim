@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-21 22:11+0000\n"
+"POT-Creation-Date: 2023-04-02 15:53+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -219,13 +219,25 @@ msgstr ""
 msgid "1 Year"
 msgstr ""
 
+msgid "1 hour"
+msgstr ""
+
 msgid "2 Days"
+msgstr ""
+
+msgid "2 hours"
 msgstr ""
 
 msgid "3 Months"
 msgstr ""
 
+msgid "30 minutes"
+msgstr ""
+
 msgid "6 Months"
+msgstr ""
+
+msgid "8 hours"
 msgstr ""
 
 #, fuzzy
@@ -3123,6 +3135,10 @@ msgstr "Film"
 msgid "Must be a port number"
 msgstr "Personlig port må være et port nummer."
 
+#, fuzzy
+msgid "Mute Chat"
+msgstr "Filoverførsel Forespørgsel"
+
 msgid "Mute Sounds"
 msgstr "Slå lyden af"
 
@@ -3622,6 +3638,9 @@ msgstr "Vis Alle Ventende Hænd_elser"
 #, fuzzy
 msgid "Pending Voice Requests"
 msgstr "Filoverførsel Forespørgsel"
+
+msgid "Permanently"
+msgstr ""
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -5463,6 +5482,10 @@ msgstr "Ukendt Titel"
 #, fuzzy
 msgid "Unknown validation error"
 msgstr "Ukendt SSL fejl: %d"
+
+#, fuzzy
+msgid "Unmute Chat"
+msgstr "Filoverførsel Forespørgsel"
 
 #, fuzzy
 msgid "Unpin Chat"
