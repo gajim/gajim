@@ -287,11 +287,11 @@ modules:
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-1.18.0-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-1.19.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.18.0-py2.py3-none-any.whl
-        sha256: 714203a9adcac4a4a35e348dc9d3e294ad0200a66cdca26c068967d728f34fcb
+        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.19.0-py2.py3-none-any.whl
+        sha256: 8dcffbbb963963567384d6eb49c76b8fb05753540715cbee5e5ca5bc8327ded4
 
   # gssapi dependency
   - name: python3-decorator
