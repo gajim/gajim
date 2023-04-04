@@ -55,6 +55,7 @@ class AudioWidget(Gtk.Box):
         self._playbin = Gst.ElementFactory.make('playbin', 'bin')
         self._bus_watch_id: int = 0
         self._timeout_id: int = -1
+        self._timeout_delay: int = 50  # in ms
 
         if self._playbin is None:
             log.warning('Could not create GST playbin')
@@ -74,6 +75,7 @@ class AudioWidget(Gtk.Box):
         self._pause_seek = False
         self._is_ready = True
         self._next_state_is_playing = False
+        self._pause_on_eos_delay = 100  # in ms
 
         # Constants which define player's behaviour
         self._speed_min = 0.25
@@ -309,10 +311,13 @@ class AudioWidget(Gtk.Box):
                 self._state.position = position
                 self._ui.seek_bar.set_value(self._state.position)
 
-            if not self._get_ready() and not self._get_paused():
-                self._audio_visualizer.draw_graph(
-                    position / self._state.duration,
-                    self._seek_pos / self._state.duration)
+            self._audio_visualizer.draw_graph(
+                position / self._state.duration,
+                self._seek_pos / self._state.duration)
+
+            if self._state.is_eos:
+                self._remove_seek_bar_update_idle()
+
         return True
 
     def _add_seek_bar_update_idle(self) -> None:
@@ -320,7 +325,8 @@ class AudioWidget(Gtk.Box):
             return
 
         self._timeout_id = \
-            GLib.timeout_add(80, self._update_seek_bar_and_visualisation)
+            GLib.timeout_add(self._timeout_delay,
+                             self._update_seek_bar_and_visualisation)
 
     def _remove_seek_bar_update_idle(self) -> None:
         if self._timeout_id != -1:
@@ -366,6 +372,17 @@ class AudioWidget(Gtk.Box):
         _, state, _ = self._playbin.get_state(timeout=40)
         return state == Gst.State.READY
 
+    def _pause_on_eos(self) -> bool:
+        assert self._playbin is not None
+        self._ui.play_icon.set_from_icon_name(
+            'media-playback-start-symbolic',
+            Gtk.IconSize.BUTTON)
+
+        self._state.position = self._state.duration
+        self._playbin.set_state(Gst.State.PAUSED)
+
+        return False
+
     def _set_pause(self, paused: bool) -> None:
         assert self._playbin is not None
         if paused:
@@ -405,7 +422,7 @@ class AudioWidget(Gtk.Box):
         assert self._playbin is not None
 
         self._state.position = self._get_constrained_position(position)
-        self._state.is_eos = self._state.position >= self._state.duration
+        self._state.is_eos = False
 
         if self._pause_seek:
             return
@@ -418,6 +435,7 @@ class AudioWidget(Gtk.Box):
                            )
 
         if self._state.position >= self._state.duration:
+            self._state.is_eos = True
             self._playbin.send_event(Gst.Event.new_eos())
 
     def _seek_unconditionally(self, position: float) -> None:
@@ -450,11 +468,7 @@ class AudioWidget(Gtk.Box):
 
         if message.type == Gst.MessageType.EOS:
             self._state.is_eos = True
-            self._set_pause(True)
-            if not self._pause_seek:
-                self._ui.seek_bar.set_value(self._state.duration)
-                self._audio_visualizer.draw_graph(1.0)
-
+            GLib.timeout_add(self._pause_on_eos_delay, self._pause_on_eos)
         elif message.type == Gst.MessageType.STATE_CHANGED:
             is_paused = self._get_paused()
 
@@ -470,12 +484,12 @@ class AudioWidget(Gtk.Box):
                                    0)
                 self._ui.seek_bar.set_value(self._state.position)
 
-                if self._next_state_is_playing:
-                    # Continue from state PAUSED --> PLAYING
-                    self._set_pause(False)
-                    self._next_state_is_playing = False
+                if not self._next_state_is_playing:
+                    return
 
-                return
+                # Continue from state PAUSED --> PLAYING
+                self._set_pause(False)
+                self._next_state_is_playing = False
 
     def _on_speed_change(self,
                          _range: Gtk.Range,
