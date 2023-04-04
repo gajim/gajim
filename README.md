@@ -8,7 +8,7 @@
 - [PyGObject](https://pypi.org/project/PyGObject/) (>=3.42.0)
 - [pycairo](https://pypi.org/project/pycairo/)
 - [cairo](https://gitlab.freedesktop.org/cairo/cairo) (>=1.16.0)
-- [nbxmpp](https://pypi.org/project/nbxmpp/) (>=4.2.0)
+- [nbxmpp](https://pypi.org/project/nbxmpp/) (>=4.2.2)
 - [cryptography](https://pypi.org/project/cryptography/) (>=3.4.8)
 - [css-parser](https://pypi.org/project/css-parser/)
 - [keyring](https://pypi.org/project/keyring/)
