@@ -270,19 +270,21 @@ class AudioWidget(Gtk.Box):
             height,
             SEEK_BAR_PADDING,
         )
-        self._audio_visualizer.connect(
-            'button-press-event', self._on_visualizer_button_press)
-
         self._ui.drawing_box.add(self._audio_visualizer)
 
-    def _on_visualizer_button_press(self,
+    def _on_visualizer_button_press_event(self,
                                     drawing_area: Gtk.DrawingArea,
                                     event: Gdk.EventButton
-                                    ) -> bool:
+                                    ) -> None:
+        width = drawing_area.get_allocation().width - 2 * SEEK_BAR_PADDING
 
-        relative_pos = event.x / drawing_area.get_allocation().width
-        self._seek_unconditionally(self._state.duration * relative_pos)
-        return False
+        if self._is_LTR:
+            x = event.x - SEEK_BAR_PADDING
+        else:
+            x = width - (event.x - SEEK_BAR_PADDING)
+
+        new_pos = self._state.duration * x / width
+        self._seek_unconditionally(new_pos)
 
     def _update_timestamp_label(self) -> None:
         cur = self._state.position
@@ -302,10 +304,6 @@ class AudioWidget(Gtk.Box):
         assert self._playbin is not None
         if self._playbin.query(self._query):
             _fmt, position = self._query.parse_position()
-
-            if position is None:
-                self._timeout_id = -1
-                return False
 
             if not self._pause_seek:
                 self._state.position = position

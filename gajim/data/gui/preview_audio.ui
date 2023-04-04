@@ -33,6 +33,7 @@
             <property name="can-focus">False</property>
             <property name="valign">center</property>
             <property name="orientation">vertical</property>
+            <signal name="button-press-event" handler="_on_visualizer_button_press_event" swapped="no"/>
             <child>
               <placeholder/>
             </child>
