@@ -1,3 +1,29 @@
+Gajim 1.7.3 (03 Apr 2023)
+
+  New
+
+  * Allow muting chat notifications
+
+  Improvements
+
+  * Make `gemini` URIs clickable
+  * Workspace menu: Always show Mark as read action
+
+  Change
+
+  * Raise nbxmpp version
+
+  Bug Fixes
+
+  * Audio Preview: Set correct pos when clicking into visualizer
+  * Audio Preview: Add delay before pausing on EOS (#11423)
+  * Flatpak: Fix drag and drop (#10370)
+  * GroupChatDetails: Adapt to changed icons
+  * Message input: Fix height for single line messages
+  * Update message merged state after deleting a message (#11438)
+  * ChatActionProcessor: Fix inserting emojis by click (#11445)
+  * Account preferences: Adapt to changed icons
+
 Gajim 1.7.2 (09 Mar 2023)
 
   Improvements
