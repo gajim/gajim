@@ -89,8 +89,6 @@ class MessageActionsBox(Gtk.Grid):
         self._ui.formattings_button.set_menu_model(get_format_menu())
         self._ui.encryption_menu_button.set_menu_model(get_encryption_menu())
 
-        self._ui.quick_invite_button.set_action_name('win.muc-invite')
-
         self.show_all()
         self._ui.connect_signals(self)
 
@@ -177,21 +175,17 @@ class MessageActionsBox(Gtk.Grid):
         self._contact = contact
 
         if isinstance(self._contact, GroupchatContact):
-            self._ui.quick_invite_button.show()
             self._contact.multi_connect({
                 'state-changed': self._on_muc_state_changed,
                 'user-role-changed': self._on_muc_state_changed,
             })
         elif isinstance(self._contact, GroupchatParticipant):
-            self._ui.quick_invite_button.hide()
             self._contact.multi_connect({
                 'user-joined': self._on_user_state_changed,
                 'user-left': self._on_user_state_changed,
                 'room-joined': self._on_user_state_changed,
                 'room-left': self._on_user_state_changed,
             })
-        else:
-            self._ui.quick_invite_button.hide()
 
         self._update_encryption_button()
         self._update_encryption_details_button()

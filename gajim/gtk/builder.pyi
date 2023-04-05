@@ -486,13 +486,15 @@ class GroupchatOutcastBuilder(Builder):
 
 
 class GroupchatRosterBuilder(Builder):
-    participant_store: Gtk.TreeStore
+    box: Gtk.Box
+    search_entry: Gtk.SearchEntry
     scrolled: Gtk.ScrolledWindow
     roster_treeview: Gtk.TreeView
     contact_column: Gtk.TreeViewColumn
     avatar_renderer: Gtk.CellRendererPixbuf
     text_renderer: Gtk.CellRendererText
     expander: Gtk.TreeViewColumn
+    participant_store: Gtk.TreeStore
 
 
 class GroupchatRosterTooltipBuilder(Builder):
@@ -573,8 +575,6 @@ class ManageSoundsBuilder(Builder):
 
 class MessageActionsBoxBuilder(Builder):
     box: Gtk.Box
-    quick_invite_button: Gtk.Button
-    settings_menu: Gtk.MenuButton
     encryption_details_button: Gtk.Button
     encryption_details_image: Gtk.Image
     encryption_menu_button: Gtk.MenuButton

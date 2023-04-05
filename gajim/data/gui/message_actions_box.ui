@@ -12,33 +12,6 @@
       <placeholder/>
     </child>
     <child>
-      <object class="GtkButton" id="quick_invite_button">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="receives-default">True</property>
-        <property name="tooltip-text" translatable="yes">Invite Contacts…</property>
-        <property name="action-name">win.invite</property>
-        <property name="relief">none</property>
-        <child>
-          <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="icon-name">list-add-symbolic</property>
-          </object>
-        </child>
-        <style>
-          <class name="message-actions-box-button"/>
-          <class name="flat"/>
-        </style>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="pack-type">end</property>
-        <property name="position">0</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkButton" id="encryption_details_button">
         <property name="can-focus">True</property>
         <property name="focus-on-click">False</property>
