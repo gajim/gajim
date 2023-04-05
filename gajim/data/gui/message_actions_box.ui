@@ -9,6 +9,9 @@
     <property name="hexpand">True</property>
     <property name="spacing">2</property>
     <child>
+      <placeholder/>
+    </child>
+    <child>
       <object class="GtkButton" id="quick_invite_button">
         <property name="visible">True</property>
         <property name="can-focus">True</property>
@@ -26,30 +29,6 @@
         <style>
           <class name="message-actions-box-button"/>
           <class name="flat"/>
-        </style>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="pack-type">end</property>
-        <property name="position">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkMenuButton" id="settings_menu">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="receives-default">True</property>
-        <property name="relief">none</property>
-        <child>
-          <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="icon-name">open-menu-symbolic</property>
-          </object>
-        </child>
-        <style>
-          <class name="message-actions-box-button"/>
         </style>
       </object>
       <packing>
@@ -217,19 +196,16 @@
       </packing>
     </child>
     <child>
-      <placeholder/>
-    </child>
-    <child>
       <object class="GtkScrolledWindow" id="input_scrolled">
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="margin-start">3</property>
         <property name="margin-end">3</property>
+        <property name="hscrollbar-policy">external</property>
         <property name="shadow-type">in</property>
         <property name="overlay-scrolling">False</property>
         <property name="max-content-height">100</property>
         <property name="propagate-natural-height">True</property>
-        <property name="hscrollbar-policy">GTK_POLICY_EXTERNAL</property>
         <child>
           <placeholder/>
         </child>

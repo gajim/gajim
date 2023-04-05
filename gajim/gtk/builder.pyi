@@ -188,10 +188,11 @@ class CertificateBuilder(Builder):
 class ChatBannerBuilder(Builder):
     banner_box: Gtk.Box
     avatar_image: Gtk.Image
-    name_label: Gtk.Label
-    phone_image: Gtk.Image
+    chat_menu_button: Gtk.MenuButton
     toggle_roster_button: Gtk.Button
     toggle_roster_image: Gtk.Image
+    name_label: Gtk.Label
+    phone_image: Gtk.Image
     additional_items_box: Gtk.Box
     visitor_box: Gtk.Box
     visitor_menu_button: Gtk.MenuButton

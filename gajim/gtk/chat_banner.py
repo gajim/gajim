@@ -38,6 +38,10 @@ from gajim.common.modules.contacts import GroupchatParticipant
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.groupchat_voice_requests_button import VoiceRequestsButton
+from gajim.gtk.menus import get_groupchat_menu
+from gajim.gtk.menus import get_private_chat_menu
+from gajim.gtk.menus import get_self_contact_menu
+from gajim.gtk.menus import get_singlechat_menu
 from gajim.gtk.util import AccountBadge
 
 
@@ -93,6 +97,7 @@ class ChatBanner(Gtk.Box, EventHelper):
 
         self._voice_requests_button.switch_contact(self._contact)
 
+        self._set_chat_menu(contact)
         self._update_phone_image()
         self._update_roster_button()
         self._update_avatar()
@@ -231,6 +236,17 @@ class ChatBanner(Gtk.Box, EventHelper):
             self._last_message_from_phone.discard(self._contact)
 
         self._update_phone_image()
+
+    def _set_chat_menu(self, contact: types.ChatContactT) -> None:
+        if isinstance(contact, GroupchatContact):
+            menu = get_groupchat_menu(contact)
+        elif isinstance(contact, GroupchatParticipant):
+            menu = get_private_chat_menu(contact)
+        elif contact.is_self:
+            menu = get_self_contact_menu(contact)
+        else:
+            menu = get_singlechat_menu(contact)
+        self._ui.chat_menu_button.set_menu_model(menu)
 
     def _update_phone_image(self) -> None:
         self._ui.phone_image.set_visible(
