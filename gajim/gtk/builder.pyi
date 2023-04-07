@@ -197,6 +197,7 @@ class ChatBannerBuilder(Builder):
     share_menu_button: Gtk.MenuButton
     name_label: Gtk.Label
     phone_image: Gtk.Image
+    description_label: Gtk.Label
     additional_items_box: Gtk.Box
     visitor_box: Gtk.Box
     visitor_menu_button: Gtk.MenuButton

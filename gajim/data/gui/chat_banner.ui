@@ -247,7 +247,6 @@
             <property name="can-focus">False</property>
             <property name="valign">center</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">3</property>
             <child>
               <object class="GtkLabel" id="name_label">
                 <property name="visible">True</property>
@@ -269,13 +268,43 @@
               </packing>
             </child>
             <child>
-              <object class="GtkImage" id="phone_image">
+              <object class="GtkBox">
+                <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="tooltip-text" translatable="yes">The last message was written on a mobile client</property>
-                <property name="halign">start</property>
-                <property name="margin-end">4</property>
-                <property name="icon-name">phone-apple-iphone-symbolic</property>
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkImage" id="phone_image">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="tooltip-text" translatable="yes">The last message was written on a mobile client</property>
+                    <property name="halign">start</property>
+                    <property name="margin-end">4</property>
+                    <property name="icon-name">phone-apple-iphone-symbolic</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="description_label">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="ellipsize">end</property>
+                    <property name="single-line-mode">True</property>
+                    <property name="max-width-chars">30</property>
+                    <property name="xalign">0</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>

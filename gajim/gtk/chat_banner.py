@@ -104,6 +104,7 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._update_avatar()
         self._update_visitor_button()
         self._update_name_label()
+        self._update_description_label()
         self._update_account_badge()
         self._update_share_box()
 
@@ -219,6 +220,7 @@ class ChatBanner(Gtk.Box, EventHelper):
             return
 
         self._update_name_label()
+        self._update_description_label()
 
     def _on_account_changed(self, event: AccountEnabled) -> None:
         self._update_account_badge()
@@ -300,6 +302,17 @@ class ChatBanner(Gtk.Box, EventHelper):
             tooltip_text = f'{name} {chatstate}'
 
         self._ui.name_label.set_tooltip_text(tooltip_text)
+
+    def _update_description_label(self) -> None:
+        assert self._contact is not None
+        text = ''
+        if self._contact.is_groupchat:
+            disco_info = app.storage.cache.get_last_disco_info(
+                self._contact.jid)
+            if disco_info is not None:
+                text = disco_info.muc_description or ''
+        self._ui.description_label.set_text(text)
+        self._ui.description_label.set_visible(bool(text))
 
     def _update_account_badge(self) -> None:
         if self._contact is None:
