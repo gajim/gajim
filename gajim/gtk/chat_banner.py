@@ -18,6 +18,7 @@ from typing import Any
 from typing import Optional
 
 import cairo
+from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 
@@ -104,6 +105,7 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._update_visitor_button()
         self._update_name_label()
         self._update_account_badge()
+        self._update_share_box()
 
     def _connect_signals(self) -> None:
         assert self._contact is not None
@@ -309,6 +311,20 @@ class ChatBanner(Gtk.Box, EventHelper):
             self._account_badge.set_account(self._contact.account)
 
         self._account_badge.set_visible(visible)
+
+    def _update_share_box(self) -> None:
+        assert self._contact is not None
+        self._ui.share_menu_button.set_sensitive(True)
+        self._ui.jid_label.set_text(str(self._contact.jid))
+
+    def _on_copy_jid_clicked(self, _button: Gtk.Button) -> None:
+        assert self._contact is not None
+        text = f'xmpp:{self._contact.jid}'
+        if self._contact.is_groupchat:
+            text = f'{text}?join'
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        clipboard.set_text(text, -1)
+        self._ui.share_popover.popdown()
 
     def _on_request_voice_clicked(self, _button: Gtk.Button) -> None:
         self._ui.visitor_popover.popdown()
