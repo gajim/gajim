@@ -206,7 +206,7 @@ class ChatBannerBuilder(Builder):
 
 class ChatControlBuilder(Builder):
     control_box: Gtk.Box
-    conv_view_box: Gtk.Box
+    conv_view_paned: Gtk.Paned
     conv_view_overlay: Gtk.Overlay
 
 

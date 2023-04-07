@@ -968,10 +968,6 @@ popover.combo scrollbar.vertical {
 .start-chat-row:focus { outline: none; }
 
 /* GroupChatRoster */
-.groupchat-roster {
-    border-left: 1px solid;
-    border-color: @borders;
-}
 .groupchat-roster treeview { padding-left: 4px; }
 
 /* GroupchatConfig */
