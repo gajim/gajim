@@ -178,6 +178,29 @@
           </packing>
         </child>
         <child>
+          <object class="GtkButton" id="contact_info_button">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Contact Details and Settings</property>
+            <property name="valign">center</property>
+            <property name="action-name">win.show-contact-info</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">user-info-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack-type">end</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkMenuButton" id="share_menu_button">
             <property name="visible">True</property>
             <property name="sensitive">False</property>
@@ -199,7 +222,7 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="pack-type">end</property>
-            <property name="position">3</property>
+            <property name="position">4</property>
           </packing>
         </child>
         <child>
@@ -248,7 +271,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">4</property>
+            <property name="position">5</property>
           </packing>
         </child>
         <child>
@@ -267,7 +290,7 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="pack-type">end</property>
-            <property name="position">4</property>
+            <property name="position">5</property>
           </packing>
         </child>
         <child>
@@ -318,7 +341,7 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="pack-type">end</property>
-            <property name="position">5</property>
+            <property name="position">6</property>
           </packing>
         </child>
       </object>

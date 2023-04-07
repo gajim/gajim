@@ -83,7 +83,6 @@ def get_singlechat_menu(contact: types.BareContact) -> GajimMenu:
     account = contact.account
 
     menu = GajimMenu()
-    menu.add_item(_('Details'), 'win.show-contact-info')
     menu.add_item(_('Block Contact…'),
                   f'app.{account}-block-contact',
                   str(contact.jid))
@@ -108,7 +107,6 @@ def get_private_chat_menu(contact: types.GroupchatParticipant) -> GajimMenu:
 
     value = GLib.Variant('as', [''])
 
-    menu.add_item(_('Details'), 'win.show-contact-info')
     menu.add_item(_('Upload File…'), 'win.send-file-httpupload', value)
     menu.add_item(_('Search…'), 'win.search-history')
 
@@ -131,7 +129,6 @@ def get_send_file_submenu() -> GajimMenu:
 
 def get_groupchat_menu(contact: GroupchatContact) -> GajimMenu:
     menuitems: MenuItemListT = [
-        (_('Details'), 'win.show-contact-info', None),
         (_('Change Nickname…'), 'win.muc-change-nickname', None),
         (_('Request Voice'), 'win.muc-request-voice', None),
         (_('Execute Command…'), 'win.muc-execute-command', ''),
