@@ -75,7 +75,6 @@ def get_self_contact_menu(contact: types.BareContact) -> GajimMenu:
 
     params = RemoveHistoryActionParams(account=account, jid=jid)
     menu.add_item(_('Remove History…'), 'app.remove-history', params)
-    menu.add_item(_('Search…'), 'win.search-history', None)
     return menu
 
 
@@ -93,8 +92,6 @@ def get_singlechat_menu(contact: types.BareContact) -> GajimMenu:
     menu.add_item(_('Start Voice Call…'), 'win.start-voice-call')
     menu.add_item(_('Start Video Call…'), 'win.start-video-call')
 
-    menu.add_item(_('Search…'), 'win.search-history', None)
-
     if can_add_to_roster(contact):
         params = AccountJidParam(account=account, jid=contact.jid)
         menu.add_item(_('Add to Contact List…'), 'win.add-to-roster', params)
@@ -108,7 +105,6 @@ def get_private_chat_menu(contact: types.GroupchatParticipant) -> GajimMenu:
     value = GLib.Variant('as', [''])
 
     menu.add_item(_('Upload File…'), 'win.send-file-httpupload', value)
-    menu.add_item(_('Search…'), 'win.search-history')
 
     if can_add_to_roster(contact):
         params = AccountJidParam(account=contact.account, jid=contact.jid)
@@ -132,7 +128,6 @@ def get_groupchat_menu(contact: GroupchatContact) -> GajimMenu:
         (_('Change Nickname…'), 'win.muc-change-nickname', None),
         (_('Request Voice'), 'win.muc-request-voice', None),
         (_('Execute Command…'), 'win.muc-execute-command', ''),
-        (_('Search…'), 'win.search-history', None)
     ]
 
     return GajimMenu.from_list(menuitems)
