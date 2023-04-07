@@ -130,7 +130,6 @@
             <property name="no-show-all">True</property>
             <property name="tooltip-text" translatable="yes">Toggle participants list</property>
             <property name="valign">center</property>
-            <property name="relief">none</property>
             <signal name="clicked" handler="_on_toggle_roster_clicked" swapped="no"/>
             <child>
               <object class="GtkBox">
@@ -161,14 +160,8 @@
                     <property name="position">1</property>
                   </packing>
                 </child>
-                <style>
-                  <class name="dim-label"/>
-                </style>
               </object>
             </child>
-            <style>
-              <class name="flat"/>
-            </style>
           </object>
           <packing>
             <property name="expand">False</property>
