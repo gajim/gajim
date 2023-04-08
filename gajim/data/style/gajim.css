@@ -969,7 +969,7 @@ popover.combo scrollbar.vertical {
 
 /* GroupChatRoster */
 .groupchat-roster treeview { padding-left: 4px; }
-.groupchat-roster { padding: 0 10 0 10px;  }
+.groupchat-roster { padding: 0 18px 0 18px; }
 
 /* GroupchatConfig */
 #GroupchatConfig stack { border-bottom: 1px solid; border-color: @borders;}
