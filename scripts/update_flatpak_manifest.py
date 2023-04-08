@@ -24,17 +24,21 @@ def get_package_type(module: ruamel.yaml.comments.CommentedMap) -> str:
     return 'sdist'
 
 def get_current_version(module: ruamel.yaml.comments.CommentedMap
-                        ) -> Optional[str]:
+                        ) -> tuple[Optional[str], Optional[str]]:
     name = module['name'].replace('python3-','')
     url = module['sources'][0]['url']
     if url.endswith('.git'):
-        return None
+        return None, None
     file_name = url.split('/')[-1]
     file_name = file_name.replace(name, '')
-    return file_name.split('-')[1].replace('.tar.gz', '')
+    parts = file_name.split('-')
+    pkg_version = parts[1].replace('.tar.gz', '')
+    py_version = parts[2] if '.tar.gz' not in parts[1] else None
+    return pkg_version, py_version
 
 def get_latest_version(package_name: str,
-                       package_type: str
+                       package_type: str,
+                       py_version: Optional[str]
                        ) -> tuple[str, Optional[str]]:
     with urlopen(f'{PYPI_INDEX}/{package_name}/json') as f:
         data = f.read()
@@ -42,10 +46,13 @@ def get_latest_version(package_name: str,
         version = d['info']['version']
         sha = None
         for entry in d['releases'][version]:
-            if entry['packagetype'] == package_type:
-                if sha is not None:
-                    return version, None
-                sha = entry['digests']['sha256']
+            if entry['packagetype'] != package_type:
+                continue
+            if py_version is not None and entry['python_version'] != py_version:
+                continue
+            if sha is not None:
+                return version, None
+            sha = entry['digests']['sha256']
         return version, sha
 
 def update_module(module: ruamel.yaml.comments.CommentedMap) -> None:
@@ -54,12 +61,12 @@ def update_module(module: ruamel.yaml.comments.CommentedMap) -> None:
         return
 
     package_type = get_package_type(module)
-    current_version = get_current_version(module)
+    current_version, py_version = get_current_version(module)
     if current_version is None:
         return
 
     name = module['name'].replace('python3-','')
-    latest_version, sha = get_latest_version(name, package_type)
+    latest_version, sha = get_latest_version(name, package_type, py_version)
 
     if current_version == latest_version:
         return
