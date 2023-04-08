@@ -343,9 +343,8 @@ modules:
     build-commands:
       - pip3 install --no-build-isolation .
     sources:
-      - type: archive
-        url: https://files.pythonhosted.org/packages/source/o/omemo-dr/omemo-dr-0.99.0.tar.gz
-        sha256: 79f9b166b350b3baced2bb0a998a3f8a3cf8756b5b5714d08c5cee5c90e62a8e
+      - type: git
+        url: https://dev.gajim.org/gajim/omemo-dr.git
 
   - name: python3-qrcode
     buildsystem: simple
