@@ -335,7 +335,7 @@ modules:
   - name: python3-omemo-dr
     buildsystem: simple
     build-commands:
-      - pip3 install .
+      - pip3 install --no-build-isolation .
     sources:
       - type: archive
         url: https://files.pythonhosted.org/packages/source/o/omemo-dr/omemo-dr-0.99.0.tar.gz
