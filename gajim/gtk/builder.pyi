@@ -186,12 +186,18 @@ class CertificateBuilder(Builder):
 
 
 class ChatBannerBuilder(Builder):
+    share_popover: Gtk.Popover
+    jid_label: Gtk.Label
     banner_box: Gtk.Box
     avatar_image: Gtk.Image
-    name_label: Gtk.Label
-    phone_image: Gtk.Image
+    chat_menu_button: Gtk.MenuButton
     toggle_roster_button: Gtk.Button
     toggle_roster_image: Gtk.Image
+    contact_info_button: Gtk.Button
+    share_menu_button: Gtk.MenuButton
+    name_label: Gtk.Label
+    phone_image: Gtk.Image
+    description_label: Gtk.Label
     additional_items_box: Gtk.Box
     visitor_box: Gtk.Box
     visitor_menu_button: Gtk.MenuButton
@@ -200,7 +206,7 @@ class ChatBannerBuilder(Builder):
 
 class ChatControlBuilder(Builder):
     control_box: Gtk.Box
-    conv_view_box: Gtk.Box
+    conv_view_paned: Gtk.Paned
     conv_view_overlay: Gtk.Overlay
 
 
@@ -485,13 +491,15 @@ class GroupchatOutcastBuilder(Builder):
 
 
 class GroupchatRosterBuilder(Builder):
-    participant_store: Gtk.TreeStore
+    box: Gtk.Box
+    search_entry: Gtk.SearchEntry
     scrolled: Gtk.ScrolledWindow
     roster_treeview: Gtk.TreeView
     contact_column: Gtk.TreeViewColumn
     avatar_renderer: Gtk.CellRendererPixbuf
     text_renderer: Gtk.CellRendererText
     expander: Gtk.TreeViewColumn
+    participant_store: Gtk.TreeStore
 
 
 class GroupchatRosterTooltipBuilder(Builder):
@@ -572,8 +580,6 @@ class ManageSoundsBuilder(Builder):
 
 class MessageActionsBoxBuilder(Builder):
     box: Gtk.Box
-    quick_invite_button: Gtk.Button
-    settings_menu: Gtk.MenuButton
     encryption_details_button: Gtk.Button
     encryption_details_image: Gtk.Image
     encryption_menu_button: Gtk.MenuButton

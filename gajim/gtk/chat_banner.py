@@ -18,6 +18,7 @@ from typing import Any
 from typing import Optional
 
 import cairo
+from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 
@@ -38,6 +39,10 @@ from gajim.common.modules.contacts import GroupchatParticipant
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.groupchat_voice_requests_button import VoiceRequestsButton
+from gajim.gtk.menus import get_groupchat_menu
+from gajim.gtk.menus import get_private_chat_menu
+from gajim.gtk.menus import get_self_contact_menu
+from gajim.gtk.menus import get_singlechat_menu
 from gajim.gtk.util import AccountBadge
 
 
@@ -93,12 +98,15 @@ class ChatBanner(Gtk.Box, EventHelper):
 
         self._voice_requests_button.switch_contact(self._contact)
 
+        self._set_chat_menu(contact)
         self._update_phone_image()
         self._update_roster_button()
         self._update_avatar()
         self._update_visitor_button()
         self._update_name_label()
+        self._update_description_label()
         self._update_account_badge()
+        self._update_share_box()
 
     def _connect_signals(self) -> None:
         assert self._contact is not None
@@ -212,6 +220,7 @@ class ChatBanner(Gtk.Box, EventHelper):
             return
 
         self._update_name_label()
+        self._update_description_label()
 
     def _on_account_changed(self, event: AccountEnabled) -> None:
         self._update_account_badge()
@@ -231,6 +240,17 @@ class ChatBanner(Gtk.Box, EventHelper):
             self._last_message_from_phone.discard(self._contact)
 
         self._update_phone_image()
+
+    def _set_chat_menu(self, contact: types.ChatContactT) -> None:
+        if isinstance(contact, GroupchatContact):
+            menu = get_groupchat_menu(contact)
+        elif isinstance(contact, GroupchatParticipant):
+            menu = get_private_chat_menu(contact)
+        elif contact.is_self:
+            menu = get_self_contact_menu(contact)
+        else:
+            menu = get_singlechat_menu(contact)
+        self._ui.chat_menu_button.set_menu_model(menu)
 
     def _update_phone_image(self) -> None:
         self._ui.phone_image.set_visible(
@@ -283,6 +303,17 @@ class ChatBanner(Gtk.Box, EventHelper):
 
         self._ui.name_label.set_tooltip_text(tooltip_text)
 
+    def _update_description_label(self) -> None:
+        assert self._contact is not None
+        text = ''
+        if self._contact.is_groupchat:
+            disco_info = app.storage.cache.get_last_disco_info(
+                self._contact.jid)
+            if disco_info is not None:
+                text = disco_info.muc_description or ''
+        self._ui.description_label.set_text(text)
+        self._ui.description_label.set_visible(bool(text))
+
     def _update_account_badge(self) -> None:
         if self._contact is None:
             self._account_badge.set_visible(False)
@@ -293,6 +324,20 @@ class ChatBanner(Gtk.Box, EventHelper):
             self._account_badge.set_account(self._contact.account)
 
         self._account_badge.set_visible(visible)
+
+    def _update_share_box(self) -> None:
+        assert self._contact is not None
+        self._ui.share_menu_button.set_sensitive(True)
+        self._ui.jid_label.set_text(str(self._contact.jid))
+
+    def _on_copy_jid_clicked(self, _button: Gtk.Button) -> None:
+        assert self._contact is not None
+        text = f'xmpp:{self._contact.jid}'
+        if self._contact.is_groupchat:
+            text = f'{text}?join'
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        clipboard.set_text(text, -1)
+        self._ui.share_popover.popdown()
 
     def _on_request_voice_clicked(self, _button: Gtk.Button) -> None:
         self._ui.visitor_popover.popdown()

@@ -84,7 +84,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         self._tooltip = GCTooltip()
 
         self._ui = get_builder('groupchat_roster.ui')
-        self.add(self._ui.scrolled)
+        self.add(self._ui.box)
 
         self._contact_refs: dict[str, Gtk.TreeRowReference] = {}
         self._group_refs: dict[str, Gtk.TreeRowReference] = {}
@@ -93,7 +93,10 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         self._store.set_sort_func(Column.TEXT, self._tree_compare_iters)
 
         self._roster = self._ui.roster_treeview
-        self._roster.set_search_equal_func(self._search_func)
+
+        self._filter_string = ''
+        self._modelfilter = self._store.filter_new()
+        self._modelfilter.set_visible_func(self._visible_func)
         self._roster.set_has_tooltip(True)
 
         self._ui.contact_column.set_fixed_width(
@@ -201,14 +204,24 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         tooltip.set_custom(widget)
         return value
 
-    @staticmethod
-    def _search_func(model: Gtk.TreeModel,
-                     _column: int,
-                     search_text: str,
-                     iter_: Gtk.TreeIter
-                     ) -> bool:
+    def _on_search_changed(self, widget: Gtk.SearchEntry) -> None:
+        self._filter_string = widget.get_text().lower()
+        self._modelfilter.refilter()
+        self._roster.expand_all()
 
-        return search_text.lower() not in model[iter_][1].lower()
+    def _visible_func(self,
+                      model: Gtk.TreeModelFilter,
+                      iter_: Gtk.TreeIter,
+                      *_data: Any
+                      ) -> bool:
+
+        if not self._filter_string:
+            return True
+
+        if not model[iter_][Column.IS_CONTACT]:
+            return True
+
+        return self._filter_string in model[iter_][Column.TEXT].lower()
 
     def _get_group_iter(self, group_name: str) -> Optional[Gtk.TreeIter]:
         try:
@@ -512,7 +525,9 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
             self._add_contact(participant)
 
         self.enable_sort(True)
-        self._roster.set_model(self._store)
+        self._roster.set_model(self._modelfilter)
+
+        self._ui.search_entry.set_text('')
         self._roster.expand_all()
 
     def _unload_roster(self) -> None:

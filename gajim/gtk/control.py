@@ -90,8 +90,7 @@ class ChatControl(EventHelper):
         self._ui.conv_view_overlay.add_overlay(self._jump_to_end_button)
 
         self._roster = GroupchatRoster()
-
-        self._ui.conv_view_box.add(self._roster)
+        self._ui.conv_view_paned.pack2(self._roster, False, False)
 
         # Used with encryption plugins
         self.sendmessage = False

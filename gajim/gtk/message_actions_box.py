@@ -44,10 +44,6 @@ from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.menus import get_encryption_menu
 from gajim.gtk.menus import get_format_menu
-from gajim.gtk.menus import get_groupchat_menu
-from gajim.gtk.menus import get_private_chat_menu
-from gajim.gtk.menus import get_self_contact_menu
-from gajim.gtk.menus import get_singlechat_menu
 from gajim.gtk.message_input import MessageInputTextView
 from gajim.gtk.security_label_selector import SecurityLabelSelector
 
@@ -92,8 +88,6 @@ class MessageActionsBox(Gtk.Grid):
             _('No File Transfer available'))
         self._ui.formattings_button.set_menu_model(get_format_menu())
         self._ui.encryption_menu_button.set_menu_model(get_encryption_menu())
-
-        self._ui.quick_invite_button.set_action_name('win.muc-invite')
 
         self.show_all()
         self._ui.connect_signals(self)
@@ -181,23 +175,17 @@ class MessageActionsBox(Gtk.Grid):
         self._contact = contact
 
         if isinstance(self._contact, GroupchatContact):
-            self._ui.quick_invite_button.show()
             self._contact.multi_connect({
                 'state-changed': self._on_muc_state_changed,
                 'user-role-changed': self._on_muc_state_changed,
             })
         elif isinstance(self._contact, GroupchatParticipant):
-            self._ui.quick_invite_button.hide()
             self._contact.multi_connect({
                 'user-joined': self._on_user_state_changed,
                 'user-left': self._on_user_state_changed,
                 'room-joined': self._on_user_state_changed,
                 'room-left': self._on_user_state_changed,
             })
-        else:
-            self._ui.quick_invite_button.hide()
-
-        self._set_settings_menu(contact)
 
         self._update_encryption_button()
         self._update_encryption_details_button()
@@ -373,17 +361,6 @@ class MessageActionsBox(Gtk.Grid):
         encryption = contact.settings.get('encryption')
         app.plugin_manager.extension_point(
             f'encryption_dialog{encryption}', app.window.get_control())
-
-    def _set_settings_menu(self, contact: ChatContactT) -> None:
-        if isinstance(contact, GroupchatContact):
-            menu = get_groupchat_menu(contact)
-        elif isinstance(contact, GroupchatParticipant):
-            menu = get_private_chat_menu(contact)
-        elif contact.is_self:
-            menu = get_self_contact_menu(contact)
-        else:
-            menu = get_singlechat_menu(contact)
-        self._ui.settings_menu.set_menu_model(menu)
 
     def _on_format(self, name: str) -> None:
         name = name.removeprefix('input-')

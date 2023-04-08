@@ -208,7 +208,7 @@ APP_SETTINGS = {
     'gc_sync_threshold_private_default': 0,
     'gc_sync_threshold_public_default': 1,
     'global_proxy': '',
-    'groupchat_roster_width': 210,
+    'groupchat_roster_width': 250,
     'hide_groupchat_occupants_list': False,
     'ignore_incoming_attention': False,
     'is_window_visible': True,
