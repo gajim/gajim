@@ -10,26 +10,20 @@ set -e
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 cd "${DIR}"
 
-# CONFIG START
 MAJOR_PY_VERSION="3"
 MINOR_PY_VERSION="10"
 PYTHON_VERSION="${MAJOR_PY_VERSION}.${MINOR_PY_VERSION}"
 BUILD_VERSION="0"
 
-# CONFIG END
-
 MISC="${DIR}"/misc
 PYTHON_ID="python${MAJOR_PY_VERSION}"
-MINGW="mingw32"
+MINGW="mingw64"
 
 QL_VERSION="0.0.0"
 QL_VERSION_DESC="UNKNOWN"
 
 function set_arch {
     ARCH="$1"
-    if [ "$1" == "x86_64" ]; then
-        MINGW="mingw64"
-    fi
 }
 
 function set_build_root {
