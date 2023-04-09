@@ -76,39 +76,40 @@ function create_root {
 }
 
 function install_deps {
-    build_pacman --noconfirm -S mingw-w64-"${ARCH}"-python \
+    build_pacman --noconfirm -S \
+        mingw-w64-"${ARCH}"-python \
+        mingw-w64-"${ARCH}"-python-pip \
         mingw-w64-"${ARCH}"-python-gobject \
+        mingw-w64-"${ARCH}"-python-certifi \
+        mingw-w64-"${ARCH}"-python-cryptography \
+        mingw-w64-"${ARCH}"-python-gssapi \
+        mingw-w64-"${ARCH}"-python-idna \
+        mingw-w64-"${ARCH}"-python-keyring \
+        mingw-w64-"${ARCH}"-python-packaging \
+        mingw-w64-"${ARCH}"-python-pillow \
+        mingw-w64-"${ARCH}"-python-pygments \
+        mingw-w64-"${ARCH}"-python-setuptools \
+        mingw-w64-"${ARCH}"-python-setuptools-scm \
+        mingw-w64-"${ARCH}"-python-six \
+        mingw-w64-"${ARCH}"-gtk3 \
         mingw-w64-"${ARCH}"-gtksourceview4 \
         mingw-w64-"${ARCH}"-gstreamer \
         mingw-w64-"${ARCH}"-gst-plugins-base \
         mingw-w64-"${ARCH}"-gst-plugins-good \
         mingw-w64-"${ARCH}"-gst-libav \
         mingw-w64-"${ARCH}"-gst-python \
-        mingw-w64-"${ARCH}"-farstream \
-        mingw-w64-"${ARCH}"-libnice \
-        mingw-w64-"${ARCH}"-python-pip \
         mingw-w64-"${ARCH}"-adwaita-icon-theme \
-        mingw-w64-"${ARCH}"-libwebp \
-        mingw-w64-"${ARCH}"-libheif \
-        mingw-w64-"${ARCH}"-sqlite3 \
-        mingw-w64-"${ARCH}"-goocanvas \
+        mingw-w64-"${ARCH}"-farstream \
         mingw-w64-"${ARCH}"-gspell \
         mingw-w64-"${ARCH}"-hunspell \
+        mingw-w64-"${ARCH}"-libheif \
+        mingw-w64-"${ARCH}"-libnice \
         mingw-w64-"${ARCH}"-libsoup3 \
-        mingw-w64-"${ARCH}"-python-setuptools \
-        mingw-w64-"${ARCH}"-python-pillow \
-        mingw-w64-"${ARCH}"-python-setuptools-scm \
-        mingw-w64-"${ARCH}"-python-cryptography \
-        mingw-w64-"${ARCH}"-python-certifi \
-        mingw-w64-"${ARCH}"-python-six \
-        mingw-w64-"${ARCH}"-python-pygments \
-        mingw-w64-"${ARCH}"-python-gssapi
-
-        build_pip install precis-i18n
+        mingw-w64-"${ARCH}"-libwebp \
+        mingw-w64-"${ARCH}"-sqlite3
 
     PIP_REQUIREMENTS="\
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
-keyring
 python-gnupg
 python-axolotl
 qrcode
@@ -116,6 +117,7 @@ css_parser
 sentry-sdk
 "
 
+    build_pip install precis-i18n
     build_pip install $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
 
     # remove the large png icons, they should be used rarely and svg works fine
