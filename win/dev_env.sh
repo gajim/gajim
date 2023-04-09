@@ -5,24 +5,24 @@ set -e
 function main {
     pacman --noconfirm -S --needed \
         git \
-        mingw-w64-x86_64-python \
-        mingw-w64-x86_64-python-gobject \
-        mingw-w64-x86_64-python-pip \
-        mingw-w64-x86_64-toolchain \
-        mingw-w64-x86_64-adwaita-icon-theme \
-        mingw-w64-x86_64-gtk3 \
-        mingw-w64-x86_64-gtksourceview4 \
-        mingw-w64-x86_64-python-setuptools-scm \
-        mingw-w64-x86_64-python-cryptography \
-        mingw-w64-x86_64-python-certifi \
-        mingw-w64-x86_64-python-pillow \
-        mingw-w64-x86_64-python-six \
-        mingw-w64-x86_64-python-pygments \
-        mingw-w64-x86_64-libwebp \
-        mingw-w64-x86_64-goocanvas \
-        mingw-w64-x86_64-gspell \
-        mingw-w64-x86_64-hunspell \
-        mingw-w64-x86_64-libsoup3 \
+        ${MINGW_PACKAGE_PREFIX}-python \
+        ${MINGW_PACKAGE_PREFIX}-python-gobject \
+        ${MINGW_PACKAGE_PREFIX}-python-pip \
+        ${MINGW_PACKAGE_PREFIX}-toolchain \
+        ${MINGW_PACKAGE_PREFIX}-adwaita-icon-theme \
+        ${MINGW_PACKAGE_PREFIX}-gtk3 \
+        ${MINGW_PACKAGE_PREFIX}-gtksourceview4 \
+        ${MINGW_PACKAGE_PREFIX}-python-setuptools-scm \
+        ${MINGW_PACKAGE_PREFIX}-python-cryptography \
+        ${MINGW_PACKAGE_PREFIX}-python-certifi \
+        ${MINGW_PACKAGE_PREFIX}-python-pillow \
+        ${MINGW_PACKAGE_PREFIX}-python-six \
+        ${MINGW_PACKAGE_PREFIX}-python-pygments \
+        ${MINGW_PACKAGE_PREFIX}-libwebp \
+        ${MINGW_PACKAGE_PREFIX}-goocanvas \
+        ${MINGW_PACKAGE_PREFIX}-gspell \
+        ${MINGW_PACKAGE_PREFIX}-hunspell \
+        ${MINGW_PACKAGE_PREFIX}-libsoup3 \
 
     PIP_REQUIREMENTS="\
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
