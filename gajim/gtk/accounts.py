@@ -42,6 +42,7 @@ from gajim.gtk.const import SettingType
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.menus import build_accounts_menu
+from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
 from gajim.gtk.settings import PopoverSetting
 from gajim.gtk.settings import SettingsBox
 from gajim.gtk.settings import SettingsDialog
@@ -327,6 +328,7 @@ class AccountSubMenu(Gtk.ListBox):
         self.add(BackMenuItem())
         self.add(PageMenuItem('general', _('General')))
         self.add(PageMenuItem('privacy', _('Privacy')))
+        self.add(PageMenuItem('encryption-omemo', _('Encryption (OMEMO)')))
         self.add(PageMenuItem('connection', _('Connection')))
         self.add(PageMenuItem('advanced', _('Advanced')))
         self.add(RemoveMenuItem())
@@ -429,6 +431,8 @@ class PageMenuItem(MenuItem):
             icon = 'avatar-default-symbolic'
         elif name == 'privacy':
             icon = 'preferences-system-privacy-symbolic'
+        elif name == 'encryption-omemo':
+            icon = 'channel-secure-symbolic'
         elif name == 'connection':
             icon = 'preferences-system-network-symbolic'
         elif name == 'advanced':
@@ -454,8 +458,9 @@ class Account:
         self._settings = settings
 
         self._settings.add_page(GeneralPage(account))
-        self._settings.add_page(ConnectionPage(account))
         self._settings.add_page(PrivacyPage(account))
+        self._settings.add_page(EncryptionOMEMOPage(account))
+        self._settings.add_page(ConnectionPage(account))
         self._settings.add_page(AdvancedPage(account))
 
         self._account_row = AccountRow(account)
@@ -639,6 +644,7 @@ class GenericSettingPage(Gtk.Box):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=12)
         self.set_valign(Gtk.Align.START)
         self.set_vexpand(True)
+        self.get_style_context().add_class('settings-page')
         self.account = account
 
         self.listbox = SettingsBox(account)
@@ -913,6 +919,39 @@ class PrivacyPage(GenericSettingPage):
         app.settings.set_contact_settings('send_marker', None)
         app.settings.set_group_chat_settings(
             'send_marker', None, context='private')
+
+
+class EncryptionOMEMOPage(GenericSettingPage):
+
+    name = 'encryption-omemo'
+
+    def __init__(self, account: str) -> None:
+        settings = [
+            Setting(SettingKind.SWITCH,
+                    _('Blind Trust'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'omemo_blind_trust',
+                    desc=_('Blindly trust new devices until you verify them'))
+        ]
+        GenericSettingPage.__init__(self, account, settings)
+
+        heading = Gtk.Label(label=_('Trust Management'))
+        heading.get_style_context().add_class('bold')
+        heading.set_xalign(0)
+        self.add(heading)
+
+        btbv_label = Gtk.Label()
+        btbv_label.set_xalign(0)
+        markup = '<a href="%s">%s</a>' % (
+            'https://dev.gajim.org/gajim/gajim/-/wikis/help/OMEMO',
+            _('Read more about blind trust'))
+        btbv_label.set_markup(markup)
+        self.add(btbv_label)
+
+        omemo_trust_manager = OMEMOTrustManager(account)
+        omemo_trust_manager.set_margin_top(18)
+        self.pack_end(omemo_trust_manager, True, True, 0)
+        self.reorder_child(omemo_trust_manager, 0)
 
 
 class ConnectionPage(GenericSettingPage):

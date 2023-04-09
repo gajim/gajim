@@ -81,6 +81,7 @@ function install_deps {
         mingw-w64-"${ARCH}"-python-keyring \
         mingw-w64-"${ARCH}"-python-packaging \
         mingw-w64-"${ARCH}"-python-pillow \
+        mingw-w64-"${ARCH}"-python-protobuf \
         mingw-w64-"${ARCH}"-python-pygments \
         mingw-w64-"${ARCH}"-python-setuptools \
         mingw-w64-"${ARCH}"-python-setuptools-scm \
@@ -104,8 +105,8 @@ function install_deps {
 
     PIP_REQUIREMENTS="\
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
+git+https://dev.gajim.org/gajim/omemo-dr.git
 python-gnupg
-python-axolotl
 qrcode
 css_parser
 sentry-sdk
@@ -144,10 +145,6 @@ function install_gajim {
     # Create launchers
     build_python "${MISC}"/create-launcher.py \
         "${QL_VERSION}" "${MINGW_ROOT}"/bin
-
-    # Install omemo plugin
-    curl -o "${BUILD_ROOT}"/omemo.zip https://ftp.gajim.org/plugins/master/omemo/omemo_2.9.0.zip
-    7z x -o"${PACKAGE_DIR}"/gajim/data/plugins/omemo "${BUILD_ROOT}"/omemo.zip
 
     # Install language dicts
     curl -o "${BUILD_ROOT}"/speller_dicts.zip https://gajim.org/downloads/snap/win/build/speller_dicts.zip

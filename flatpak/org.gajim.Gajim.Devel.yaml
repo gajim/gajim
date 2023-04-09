@@ -328,6 +328,33 @@ modules:
       - type: git
         url: https://dev.gajim.org/gajim/python-nbxmpp.git
 
+  # OMEMO dependencies
+  - name: python3-protobuf
+    buildsystem: simple
+    build-commands:
+      - pip3 install --no-deps protobuf-4.21.1-py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-4.21.1-py3-none-any.whl
+        sha256: 79cd8d0a269b714f6b32641f86928c718e8d234466919b3f552bfb069dbb159b
+
+  - name: python3-omemo-dr
+    buildsystem: simple
+    build-commands:
+      - pip3 install --no-build-isolation .
+    sources:
+      - type: git
+        url: https://dev.gajim.org/gajim/omemo-dr.git
+
+  - name: python3-qrcode
+    buildsystem: simple
+    build-commands:
+      - pip3 install .
+    sources:
+      - type: archive
+        url: https://files.pythonhosted.org/packages/source/q/qrcode/qrcode-7.3.1.tar.gz
+        sha256: 375a6ff240ca9bd41adc070428b5dfc1dcfbb0f2507f1ac848f6cded38956578
+
   - name: gajim
     buildsystem: simple
     build-commands:

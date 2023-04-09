@@ -212,6 +212,11 @@ class HTTPUpload(BaseModule):
     def _start_transfer(self, transfer: HTTPFileTransfer) -> None:
         if transfer.encryption is not None and not transfer.is_encrypted:
             transfer.set_encrypting()
+            if transfer.encryption == 'OMEMO':
+                self._client.get_module('OMEMO').encrypt_file(
+                    transfer, self._start_transfer)
+                return
+
             plugin = app.plugin_manager.encryption_plugins[transfer.encryption]
             if hasattr(plugin, 'encrypt_file'):
                 plugin.encrypt_file(transfer,

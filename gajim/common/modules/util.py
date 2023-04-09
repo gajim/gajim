@@ -17,6 +17,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import Optional
 from typing import Union
 
 import logging
@@ -26,6 +27,7 @@ from logging import LoggerAdapter
 
 import nbxmpp
 from nbxmpp.const import MessageType
+from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
 from nbxmpp.structs import EMEData
@@ -184,3 +186,19 @@ def check_if_message_correction(properties: MessageProperties,
 
     app.ged.raise_event(event)
     return True
+
+
+def prepare_stanza(stanza: Message, plaintext: str) -> None:
+    delete_nodes(stanza, 'encrypted', Namespace.OMEMO_TEMP)
+    delete_nodes(stanza, 'body')
+    stanza.setBody(plaintext)
+
+
+def delete_nodes(stanza: Message,
+                 name: str,
+                 namespace: Optional[str] = None
+                 ) -> None:
+
+    nodes = stanza.getTags(name, namespace=namespace)
+    for node in nodes:
+        stanza.delChild(node)

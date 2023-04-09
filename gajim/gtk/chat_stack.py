@@ -742,8 +742,14 @@ class ChatStack(Gtk.Stack, EventHelper):
         contact = self._current_contact
         assert contact is not None
 
+        client = app.get_client(contact.account)
+
         encryption = contact.settings.get('encryption')
-        if encryption:
+        if encryption == 'OMEMO':
+            if not client.get_module('OMEMO').check_send_preconditions(contact):
+                return
+
+        elif encryption:
             if encryption not in app.plugin_manager.encryption_plugins:
                 ErrorDialog(_('Encryption error'),
                             _('Missing necessary encryption plugin'))
@@ -755,8 +761,6 @@ class ChatStack(Gtk.Stack, EventHelper):
                 self._chat_control)
             if not self._chat_control.sendmessage:
                 return
-
-        client = app.get_client(contact.account)
 
         message = remove_invalid_xml_chars(message)
         if message in ('', '\n'):

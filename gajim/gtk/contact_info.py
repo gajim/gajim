@@ -49,6 +49,7 @@ from gajim.gtk.builder import get_builder
 from gajim.gtk.contact_settings import ContactSettings
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
 from gajim.gtk.sidebar_switcher import SideBarSwitcher
 from gajim.gtk.structs import RemoveHistoryActionParams
 from gajim.gtk.util import connect_destroy
@@ -108,6 +109,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
 
         if isinstance(self.contact, BareContact):
             self._fill_settings_page(self.contact)
+            self._fill_encryption_page(self.contact)
             self._fill_device_info(self.contact)
             self._fill_groups_page(self.contact)
             self._fill_note_page(self.contact)
@@ -119,7 +121,6 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         self.connect('key-press-event', self._on_key_press)
         self.connect('destroy', self._on_destroy)
 
-        # pylint: disable=line-too-long
         connect_destroy(self._ui.tree_selection,
                         'changed', self._on_group_selection_changed)
         connect_destroy(self._ui.toggle_renderer,
@@ -133,7 +134,6 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
             ('unsubscribed-presence-received', ged.GUI1,
              self._on_unsubscribed_presence_received),
         ])
-        # pylint: enable=line-too-long
 
         self.add(self._ui.main_grid)
         self.show_all()
@@ -183,6 +183,11 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
             self._ui.group_chat_grid.show()
 
         self._switcher.set_row_visible('information', True)
+
+    def _fill_encryption_page(self, contact: ContactT) -> None:
+        self._ui.encryption_box.add(
+            OMEMOTrustManager(self.contact.account, self.contact))
+        self._switcher.set_row_visible('encryption-omemo', True)
 
     def _fill_note_page(self, contact: BareContact) -> None:
         if not contact.is_in_roster:

@@ -314,7 +314,8 @@ BoolAccountSettings = Literal[
     'test_ft_proxies_on_startup',
     'use_custom_host',
     'use_ft_proxies',
-    'use_plain_connection'
+    'use_plain_connection',
+    'omemo_blind_trust'
 ]
 
 
@@ -476,6 +477,7 @@ ACCOUNT_SETTINGS = {
         'zeroconf_first_name': '',
         'zeroconf_jabber_id': '',
         'zeroconf_last_name': '',
+        'omemo_blind_trust': True,
     },
 
     'contact': {
