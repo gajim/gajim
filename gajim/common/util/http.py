@@ -16,19 +16,24 @@ from typing import Optional
 
 from nbxmpp.http import HTTPRequest
 from nbxmpp.http import HTTPSession
+from nbxmpp.structs import ProxyData
 
 from gajim.common import app
 from gajim.common.helpers import determine_proxy
 from gajim.common.helpers import get_account_proxy
 
 
-def create_http_session(account: Optional[str] = None) -> HTTPSession:
+def create_http_session(account: Optional[str] = None,
+                        proxy: Optional[ProxyData] = None
+                        ) -> HTTPSession:
+
     session = HTTPSession(user_agent=f'Gajim {app.version}')
 
-    if account is None:
-        proxy = determine_proxy()
-    else:
-        proxy = get_account_proxy(account)
+    if proxy is None:
+        if account is not None:
+            proxy = get_account_proxy(account)
+        else:
+            proxy = determine_proxy()
 
     if proxy is not None:
         session.set_proxy_resolver(proxy.get_resolver())
