@@ -92,10 +92,12 @@ function install_deps {
         "${MINGW_PACKAGE_PREFIX}"-farstream \
         "${MINGW_PACKAGE_PREFIX}"-gspell \
         "${MINGW_PACKAGE_PREFIX}"-hunspell \
+        "${MINGW_PACKAGE_PREFIX}"-libavif \
         "${MINGW_PACKAGE_PREFIX}"-libheif \
         "${MINGW_PACKAGE_PREFIX}"-libnice \
         "${MINGW_PACKAGE_PREFIX}"-libsoup3 \
         "${MINGW_PACKAGE_PREFIX}"-libwebp \
+        "${MINGW_PACKAGE_PREFIX}"-webp-pixbuf-loader \
         "${MINGW_PACKAGE_PREFIX}"-sqlite3
 
     PIP_REQUIREMENTS="\
