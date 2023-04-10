@@ -361,7 +361,7 @@ class CoreApplication(ged.EventHelper):
             'anonymous_auth': anonymous,
         }
 
-        if proxy_name is not None:
+        if proxy_name:
             config['proxy'] = proxy_name
 
         use_custom_host = custom_host is not None

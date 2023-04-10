@@ -39,6 +39,7 @@ from nbxmpp.errors import StanzaError
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import validate_domainpart
 from nbxmpp.stringprep import saslprep
+from nbxmpp.structs import ProxyData
 from nbxmpp.task import Task
 
 from gajim.common import app
@@ -48,10 +49,12 @@ from gajim.common.const import GIO_TLS_ERRORS
 from gajim.common.const import SASL_ERRORS
 from gajim.common.events import StanzaReceived
 from gajim.common.events import StanzaSent
+from gajim.common.helpers import get_global_proxy
 from gajim.common.helpers import get_proxy
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import validate_jid
 from gajim.common.i18n import _
+from gajim.common.util.http import create_http_session
 
 from gajim.gtk.accounts import AccountsWindow
 from gajim.gtk.assistant import Assistant
@@ -64,6 +67,8 @@ from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.util import get_app_window
 from gajim.gtk.util import get_color_for_account
 from gajim.gtk.util import open_window
+
+CustomHostT = tuple[str, ConnectionProtocol, ConnectionType]
 
 log = logging.getLogger('gajim.gtk.account_wizard')
 
@@ -259,6 +264,15 @@ class AccountWizard(Assistant):
     def update_proxy_list(self) -> None:
         self.get_page('advanced').update_proxy_list()
 
+    def _get_proxy_data(self, advanced: bool) -> Optional[ProxyData]:
+        if advanced:
+            proxy_name = self.get_page('advanced').get_proxy()
+            proxy_data = get_proxy(proxy_name)
+            if proxy_data is not None:
+                return proxy_data
+
+        return get_global_proxy()
+
     def _get_base_client(self,
                          domain: str,
                          username: Optional[str],
@@ -280,11 +294,9 @@ class AccountWizard(Assistant):
             if custom_host is not None:
                 client.set_custom_host(*custom_host)
 
-            proxy_name = self.get_page('advanced').get_proxy()
-            proxy_data = get_proxy(proxy_name)
-            if proxy_data is not None:
-                client.set_proxy(proxy_data)
-
+        proxy_data = self._get_proxy_data(advanced)
+        client.set_proxy(proxy_data)
+        client.set_http_session(create_http_session(proxy=proxy_data))
         client.subscribe('disconnected', self._on_disconnected)
         client.subscribe('connection-failed', self._on_connection_failed)
         client.subscribe('stanza-sent', self._on_stanza_sent)
@@ -830,9 +842,7 @@ class AdvancedSettings(Page):
         active = self._ui.proxies_combobox.get_active()
         return self._ui.proxies_combobox.get_model()[active][0]
 
-    def get_custom_host(self) -> Optional[tuple[str,
-                                                ConnectionProtocol,
-                                                ConnectionType]]:
+    def get_custom_host(self) -> Optional[CustomHostT]:
         host = self._ui.custom_host_entry.get_text()
         port = self._ui.custom_port_entry.get_text()
         if not host or not port:
