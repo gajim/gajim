@@ -54,7 +54,7 @@ def _check_config_settings(config_settings: dict[str, str]) -> None:
         raise ValueError('Unknown config setting %s' % settings)
 
 
-def get_requires_for_build_sdist(*args: Any, **kwargs: Any) -> str:
+def get_requires_for_build_sdist(*args: Any, **kwargs: Any) -> list[str]:
     return _orig.get_requires_for_build_sdist(*args, **kwargs)
 
 
@@ -62,7 +62,7 @@ def build_sdist(*args: Any, **kwargs: Any) -> str:
     return _orig.build_sdist(*args, **kwargs)
 
 
-def get_requires_for_build_wheel(*args: Any, **kwargs: Any) -> str:
+def get_requires_for_build_wheel(*args: Any, **kwargs: Any) -> list[str]:
     return _orig.get_requires_for_build_wheel(*args, **kwargs)
 
 
