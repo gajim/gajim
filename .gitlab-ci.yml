@@ -3,6 +3,7 @@ image: gajim-master:latest
 workflow:
   rules:
     - if: $NIGHTLY_BUILD
+    - if: $DEBIAN_BUILD
     - if: $CI_PIPELINE_SOURCE == "push"
 
 stages:
