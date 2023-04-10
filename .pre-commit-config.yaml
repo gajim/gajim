@@ -14,7 +14,7 @@ repos:
         - tomli
 
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.292
+    rev: v1.1.302
     hooks:
     - id: pyright
       pass_filenames: false

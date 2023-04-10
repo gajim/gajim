@@ -31,7 +31,7 @@ test-pyright:
     - pip3 install git+https://dev.gajim.org/gajim/python-nbxmpp.git
     - pip3 install git+https://dev.gajim.org/gajim/omemo-dr.git
     - pip3 install --config-settings=config=Gtk3,Gdk3,GtkSource4 git+https://github.com/pygobject/pygobject-stubs.git
-    - npm install pyright@1.1.292
+    - npm install pyright@1.1.302
     - node_modules/.bin/pyright --version
     - node_modules/.bin/pyright
   interruptible: true
