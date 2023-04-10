@@ -103,6 +103,7 @@ build-debian-nightly:
   script:
     - apt-get update
     - apt-get install -y python3-nbxmpp-nightly
+    - apt-get install -y python3-omemo-dr
     - release-helper build-debian-pkg "$(find dist/gajim-*.tar.gz)" $REV --pkgsuffix=nightly
 
   artifacts:
