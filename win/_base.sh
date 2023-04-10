@@ -105,7 +105,6 @@ function install_deps {
 
     PIP_REQUIREMENTS="\
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
-git+https://dev.gajim.org/gajim/omemo-dr.git
 python-gnupg
 qrcode
 css_parser
@@ -113,6 +112,7 @@ sentry-sdk
 "
 
     build_pip install precis-i18n
+    SETUPTOOLS_USE_DISTUTILS=stdlib build_pip git+https://dev.gajim.org/gajim/omemo-dr.git
     build_pip install $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
 
     # remove the large png icons, they should be used rarely and svg works fine
