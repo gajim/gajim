@@ -69,11 +69,11 @@ class CertificateBox(Gtk.Box):
             # See https://datatracker.ietf.org/doc/html/rfc4514.html
             dotted_string = attribute.oid.dotted_string
             if dotted_string == '2.5.4.3':
-                self._ib_common_name = str(attribute.value)
+                self._it_common_name = str(attribute.value)
             if dotted_string == '2.5.4.10':
-                self._ib_organization = str(attribute.value)
+                self._it_organization = str(attribute.value)
             if dotted_string == '2.5.4.11':
-                self._ib_org_unit = str(attribute.value)
+                self._it_org_unit = str(attribute.value)
 
         serial_str =  '0{:02X}'.format(cert.serial_number)
         serial_str_foratted = ':'.join(
