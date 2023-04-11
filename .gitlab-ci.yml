@@ -177,6 +177,8 @@ deploy-unix-nightly:
   stage: deploy
   dependencies:
     - build-unix
+  needs:
+    - build-unix
   rules:
     - if: '$NIGHTLY_BUILD'
   allow_failure:
@@ -197,6 +199,8 @@ deploy-debian-nightly:
   image: gajim-deploy:latest
   stage: deploy
   dependencies:
+    - build-debian-nightly
+  needs:
     - build-debian-nightly
   rules:
     - if: '$DEBIAN_BUILD'
@@ -236,6 +240,8 @@ deploy-windows-nightly:
   image: gajim-deploy:latest
   stage: deploy
   dependencies:
+    - build-windows-nightly
+  needs:
     - build-windows-nightly
   rules:
     - if: '$NIGHTLY_BUILD'
