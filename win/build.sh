@@ -10,7 +10,6 @@ DIR="$( cd "$( dirname "$0" )" && pwd )"
 source "$DIR"/_base.sh
 
 function main {
-    set_arch "$1"
     set_build_root
     install_pre_deps
     create_root

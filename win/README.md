@@ -30,6 +30,6 @@ Afterwards press CTRL + SHIFT + I, to  activate GtkInspector
 
 ## Build Gajim / Create an Installer
 
-Follow the steps in the Development section, but instead of `./dev_env.sh` execute `./build.sh i686` or `./build.sh x86_64`.
+Follow the steps in the Development section, but instead of `./dev_env.sh` execute `./build.sh`.
 
 Both the installer and the portable installer should appear in `C:\msys64\home\USER\gajim\win\_build_root`.

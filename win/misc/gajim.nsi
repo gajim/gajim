@@ -124,7 +124,7 @@ Section "Gajim" SecGajim
 
     Var /GLOBAL arch_name
     StrCpy $arch_name "(64-Bit)"
-    StrCmp ${ARCH} "mingw64" continue
+    StrCmp ${ARCH} "x86_64" continue
     StrCpy $arch_name "(32-Bit)"
     continue:
 
@@ -135,7 +135,7 @@ Section "Gajim" SecGajim
     ${EndIf}
 
     SetOutPath "$INSTDIR"
-    File /r "${ARCH}\*.*"
+    File /r "${PREFIX}\*.*"
 
     WriteRegStr HKCU "Software\Gajim" "" $INSTDIR
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Gajim" "DisplayName" "Gajim ${VERSION} $arch_name"

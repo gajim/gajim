@@ -8,7 +8,6 @@ function main {
         p7zip \
         wget \
         intltool \
-        ${MINGW_PACKAGE_PREFIX}-nsis \
         ${MINGW_PACKAGE_PREFIX}-toolchain \
         ${MINGW_PACKAGE_PREFIX}-python \
         ${MINGW_PACKAGE_PREFIX}-python-pip \

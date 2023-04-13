@@ -17,20 +17,15 @@ BUILD_VERSION="0"
 
 MISC="${DIR}"/misc
 PYTHON_ID="python${MAJOR_PY_VERSION}"
-MINGW="mingw64"
 
 QL_VERSION="0.0.0"
 QL_VERSION_DESC="UNKNOWN"
 
-function set_arch {
-    ARCH="$1"
-}
-
 function set_build_root {
     BUILD_ROOT="${DIR}/_build_root"
-    REPO_CLONE="${BUILD_ROOT}/${MINGW}"/gajim
-    MINGW_ROOT="${BUILD_ROOT}/${MINGW}"
-    PACKAGE_DIR="${BUILD_ROOT}/${MINGW}/lib/python${PYTHON_VERSION}/site-packages"
+    REPO_CLONE="${BUILD_ROOT}/${MSYSTEM_PREFIX:1}"/gajim
+    MINGW_ROOT="${BUILD_ROOT}/${MSYSTEM_PREFIX:1}"
+    PACKAGE_DIR="${BUILD_ROOT}/${MSYSTEM_PREFIX:1}/lib/python${PYTHON_VERSION}/site-packages"
 }
 
 function build_pacman {
@@ -38,11 +33,11 @@ function build_pacman {
 }
 
 function build_pip {
-    "${BUILD_ROOT}"/"${MINGW}"/bin/"${PYTHON_ID}".exe -m pip "$@"
+    "${BUILD_ROOT}"/"${MSYSTEM_PREFIX:1}"/bin/"${PYTHON_ID}".exe -m pip "$@"
 }
 
 function build_python {
-    "${BUILD_ROOT}"/"${MINGW}"/bin/"${PYTHON_ID}".exe "$@"
+    "${BUILD_ROOT}"/"${MSYSTEM_PREFIX:1}"/bin/"${PYTHON_ID}".exe "$@"
 }
 
 function build_compileall {
@@ -53,9 +48,9 @@ function install_pre_deps {
     pacman -S --needed --noconfirm p7zip \
         wget \
         intltool \
-        mingw-w64-"${ARCH}"-nsis \
-        mingw-w64-"${ARCH}"-toolchain \
-        mingw-w64-"${ARCH}"-python
+        mingw-w64-x86_64-nsis \
+        "${MINGW_PACKAGE_PREFIX}"-toolchain \
+        "${MINGW_PACKAGE_PREFIX}"-python
 }
 
 function create_root {
@@ -71,37 +66,37 @@ function create_root {
 
 function install_deps {
     build_pacman --noconfirm -S \
-        mingw-w64-"${ARCH}"-python \
-        mingw-w64-"${ARCH}"-python-pip \
-        mingw-w64-"${ARCH}"-python-gobject \
-        mingw-w64-"${ARCH}"-python-certifi \
-        mingw-w64-"${ARCH}"-python-cryptography \
-        mingw-w64-"${ARCH}"-python-gssapi \
-        mingw-w64-"${ARCH}"-python-idna \
-        mingw-w64-"${ARCH}"-python-keyring \
-        mingw-w64-"${ARCH}"-python-packaging \
-        mingw-w64-"${ARCH}"-python-pillow \
-        mingw-w64-"${ARCH}"-python-protobuf \
-        mingw-w64-"${ARCH}"-python-pygments \
-        mingw-w64-"${ARCH}"-python-setuptools \
-        mingw-w64-"${ARCH}"-python-setuptools-scm \
-        mingw-w64-"${ARCH}"-python-six \
-        mingw-w64-"${ARCH}"-gtk3 \
-        mingw-w64-"${ARCH}"-gtksourceview4 \
-        mingw-w64-"${ARCH}"-gstreamer \
-        mingw-w64-"${ARCH}"-gst-plugins-base \
-        mingw-w64-"${ARCH}"-gst-plugins-good \
-        mingw-w64-"${ARCH}"-gst-libav \
-        mingw-w64-"${ARCH}"-gst-python \
-        mingw-w64-"${ARCH}"-adwaita-icon-theme \
-        mingw-w64-"${ARCH}"-farstream \
-        mingw-w64-"${ARCH}"-gspell \
-        mingw-w64-"${ARCH}"-hunspell \
-        mingw-w64-"${ARCH}"-libheif \
-        mingw-w64-"${ARCH}"-libnice \
-        mingw-w64-"${ARCH}"-libsoup3 \
-        mingw-w64-"${ARCH}"-libwebp \
-        mingw-w64-"${ARCH}"-sqlite3
+        "${MINGW_PACKAGE_PREFIX}"-python \
+        "${MINGW_PACKAGE_PREFIX}"-python-pip \
+        "${MINGW_PACKAGE_PREFIX}"-python-gobject \
+        "${MINGW_PACKAGE_PREFIX}"-python-certifi \
+        "${MINGW_PACKAGE_PREFIX}"-python-cryptography \
+        "${MINGW_PACKAGE_PREFIX}"-python-gssapi \
+        "${MINGW_PACKAGE_PREFIX}"-python-idna \
+        "${MINGW_PACKAGE_PREFIX}"-python-keyring \
+        "${MINGW_PACKAGE_PREFIX}"-python-packaging \
+        "${MINGW_PACKAGE_PREFIX}"-python-pillow \
+        "${MINGW_PACKAGE_PREFIX}"-python-protobuf \
+        "${MINGW_PACKAGE_PREFIX}"-python-pygments \
+        "${MINGW_PACKAGE_PREFIX}"-python-setuptools \
+        "${MINGW_PACKAGE_PREFIX}"-python-setuptools-scm \
+        "${MINGW_PACKAGE_PREFIX}"-python-six \
+        "${MINGW_PACKAGE_PREFIX}"-gtk3 \
+        "${MINGW_PACKAGE_PREFIX}"-gtksourceview4 \
+        "${MINGW_PACKAGE_PREFIX}"-gstreamer \
+        "${MINGW_PACKAGE_PREFIX}"-gst-plugins-base \
+        "${MINGW_PACKAGE_PREFIX}"-gst-plugins-good \
+        "${MINGW_PACKAGE_PREFIX}"-gst-libav \
+        "${MINGW_PACKAGE_PREFIX}"-gst-python \
+        "${MINGW_PACKAGE_PREFIX}"-adwaita-icon-theme \
+        "${MINGW_PACKAGE_PREFIX}"-farstream \
+        "${MINGW_PACKAGE_PREFIX}"-gspell \
+        "${MINGW_PACKAGE_PREFIX}"-hunspell \
+        "${MINGW_PACKAGE_PREFIX}"-libheif \
+        "${MINGW_PACKAGE_PREFIX}"-libnice \
+        "${MINGW_PACKAGE_PREFIX}"-libsoup3 \
+        "${MINGW_PACKAGE_PREFIX}"-libwebp \
+        "${MINGW_PACKAGE_PREFIX}"-sqlite3
 
     PIP_REQUIREMENTS="\
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
@@ -168,10 +163,10 @@ function install_gajim {
 
 function cleanup_install {
 
-    build_pacman --noconfirm -Rdd mingw-w64-"${ARCH}"-shared-mime-info \
-        mingw-w64-"${ARCH}"-python-pip mingw-w64-"${ARCH}"-ncurses || true
-    build_pacman --noconfirm -Rdd mingw-w64-"${ARCH}"-tk || true
-    build_pacman --noconfirm -Rdd mingw-w64-"${ARCH}"-tcl || true
+    build_pacman --noconfirm -Rdd "${MINGW_PACKAGE_PREFIX}"-shared-mime-info \
+        "${MINGW_PACKAGE_PREFIX}"-python-pip "${MINGW_PACKAGE_PREFIX}"-ncurses || true
+    build_pacman --noconfirm -Rdd "${MINGW_PACKAGE_PREFIX}"-tk || true
+    build_pacman --noconfirm -Rdd "${MINGW_PACKAGE_PREFIX}"-tcl || true
 
     #delete translations we don't support
     for d in "${MINGW_ROOT}"/share/locale/*/LC_MESSAGES; do
@@ -317,6 +312,6 @@ function cleanup_install {
 }
 
 function build_installer {
-    (cd "$BUILD_ROOT" && makensis -NOCD -DVERSION="$QL_VERSION_DESC" -DARCH="${MINGW}" "${MISC}"/gajim.nsi)
-    (cd "$BUILD_ROOT" && makensis -NOCD -DVERSION="$QL_VERSION_DESC" -DARCH="${MINGW}" "${MISC}"/gajim-portable.nsi)
+    (cd "$BUILD_ROOT" && MSYSTEM='MINGW64' /usr/bin/bash -lc "makensis -NOCD -DVERSION=\"$QL_VERSION_DESC\" -DARCH=\"${MSYSTEM_CARCH}\" -DPREFIX=\"${MSYSTEM_PREFIX:1}\" ${MISC}/gajim.nsi")
+    (cd "$BUILD_ROOT" && MSYSTEM='MINGW64' /usr/bin/bash -lc "makensis -NOCD -DVERSION=\"$QL_VERSION_DESC\" -DARCH=\"${MSYSTEM_CARCH}\" -DPREFIX=\"${MSYSTEM_PREFIX:1}\" ${MISC}/gajim-portable.nsi")
 }

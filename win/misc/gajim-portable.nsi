@@ -94,7 +94,7 @@ Section "Gajim" SecGajim
         RMDir /r "$InstDir\ssl"
     ${EndIf}
 
-    File /r "${ARCH}\*.*"
+    File /r "${PREFIX}\*.*"
 
     SetOutPath "$INSTDIR\bin"
     CreateShortCut "$INSTDIR\Gajim-Portable.lnk" "$INSTDIR\bin\Gajim.exe" \
