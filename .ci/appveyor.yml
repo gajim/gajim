@@ -3,18 +3,8 @@ version: 1.1.{build}
 image: Visual Studio 2019
 
 environment:
-  # matrix:
-    MSYSTEM: MINGW64
-    MSYS_ARCH: "x86_64"
-    ARCH: "64bit"
-
-  #  - MSYSTEM: MINGW32
-  #    MSYS_ARCH: "i686"
-  #    ARCH: "32bit"
-
-branches:
-  only:
-    - master
+  MSYSTEM: MINGW64
+  ARCH: "64bit"
 
 clone_depth: 1
 
@@ -30,7 +20,6 @@ install:
   - bash -lc "pacman --needed --noconfirm -Su"
 
 build_script:
-
   - ps: |
         $filename = "Gajim-$($env:GAJIM_VERSION)-$($env:ARCH)"
         $filename_portable = "Gajim-Portable-$($env:GAJIM_VERSION)-$($env:ARCH)"
@@ -48,8 +37,8 @@ build_script:
           C:\msys64\usr\bin\sh.exe --login -c $command
         }
 
-        bash "git clone C:/projects/gajim C:/msys64/home/appveyor/gajim"
-        bash "C:/msys64/home/appveyor/gajim/win/build.sh $($env:MSYS_ARCH)"
+        git clone "$env:APPVEYOR_BUILD_FOLDER" "C:\msys64\home\appveyor\gajim"
+        bash "C:/msys64/home/appveyor/gajim/win/build.sh"
         if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
 
         Push-AppveyorArtifact "$($buildroot)/Gajim.exe" -FileName "$($filename).exe"
