@@ -312,6 +312,6 @@ function cleanup_install {
 }
 
 function build_installer {
-    (cd "$BUILD_ROOT" && MSYSTEM='MINGW64' /usr/bin/bash -lc "makensis -NOCD -DVERSION=\"$QL_VERSION_DESC\" -DARCH=\"${MSYSTEM_CARCH}\" -DPREFIX=\"${MSYSTEM_PREFIX:1}\" ${MISC}/gajim.nsi")
-    (cd "$BUILD_ROOT" && MSYSTEM='MINGW64' /usr/bin/bash -lc "makensis -NOCD -DVERSION=\"$QL_VERSION_DESC\" -DARCH=\"${MSYSTEM_CARCH}\" -DPREFIX=\"${MSYSTEM_PREFIX:1}\" ${MISC}/gajim-portable.nsi")
+    MSYSTEM='MINGW64' /usr/bin/bash -lc "cd ${BUILD_ROOT} && makensis -NOCD -DVERSION=\"$QL_VERSION_DESC\" -DARCH=\"${MSYSTEM_CARCH}\" -DPREFIX=\"${MSYSTEM_PREFIX:1}\" ${MISC}/gajim.nsi"
+    MSYSTEM='MINGW64' /usr/bin/bash -lc "cd ${BUILD_ROOT} && makensis -NOCD -DVERSION=\"$QL_VERSION_DESC\" -DARCH=\"${MSYSTEM_CARCH}\" -DPREFIX=\"${MSYSTEM_PREFIX:1}\" ${MISC}/gajim-portable.nsi"
 }
