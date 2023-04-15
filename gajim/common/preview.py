@@ -225,6 +225,9 @@ class PreviewManager:
         # to stop previews by preview_id, see stop_audio_except(preview_id)
         self._audio_stop_functions: dict[int, Callable[..., None]] = {}
 
+        log.info('Supported mime types for preview')
+        log.info(sorted(list(PREVIEWABLE_MIME_TYPES)))
+
     def get_preview(self, preview_id: str) -> Optional[Preview]:
         return self._previews.get(preview_id)
 
@@ -280,6 +283,7 @@ class PreviewManager:
             if app.settings.get('preview_allow_all_images'):
                 mime_type = guess_mime_type(uri)
                 if mime_type not in MIME_TYPES:
+                    log.info('%s not in allowed mime types', mime_type)
                     return False
 
                 if mime_type == 'application/octet-stream' and uri != oob_url:
