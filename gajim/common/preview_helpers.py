@@ -430,7 +430,7 @@ def contains_audio_streams(file_path: Path) -> bool:
     return has_audio
 
 
-def get_previewable_mime_types() -> tuple[str, ...]:
+def get_previewable_mime_types() -> set[str]:
     previewable_mime_types: set[str] = set()
     for fmt in GdkPixbuf.Pixbuf.get_formats():
         for mime_type in fmt.get_mime_types():
@@ -440,7 +440,7 @@ def get_previewable_mime_types() -> tuple[str, ...]:
     for mime_type in Image.MIME.values():
         previewable_mime_types.add(mime_type.lower())
 
-    return tuple(filter(
+    return set(filter(
         lambda mime_type: mime_type.startswith('image'),
         previewable_mime_types
     ))
