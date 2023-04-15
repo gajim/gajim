@@ -226,7 +226,7 @@ class PreviewManager:
         self._audio_stop_functions: dict[int, Callable[..., None]] = {}
 
         log.info('Supported mime types for preview')
-        log.info(sorted(list(PREVIEWABLE_MIME_TYPES)))
+        log.info(sorted(PREVIEWABLE_MIME_TYPES))
 
     def get_preview(self, preview_id: str) -> Optional[Preview]:
         return self._previews.get(preview_id)
