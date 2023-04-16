@@ -37,6 +37,7 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.util.text import jid_to_iri
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.groupchat_voice_requests_button import VoiceRequestsButton
@@ -334,7 +335,7 @@ class ChatBanner(Gtk.Box, EventHelper):
     def _on_share_clicked(self, _button: Gtk.Button) -> None:
         # Generate QR code on demand (i.e. not when switching chats)
         assert self._contact is not None
-        text = f'xmpp:{self._contact.jid}'
+        text = jid_to_iri(str(self._contact.jid))
         if self._contact.is_groupchat:
             text = f'{text}?join'
         self._ui.qr_code_image.set_from_pixbuf(generate_qr_code(text))
