@@ -9,7 +9,24 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkImage" id="qr_code_image">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">center</property>
+            <property name="icon_size">6</property>
+            <style>
+              <class name="border"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack-type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
@@ -226,6 +243,7 @@
             <property name="tooltip-text" translatable="yes">Share Contact…</property>
             <property name="valign">center</property>
             <property name="popover">share_popover</property>
+            <signal name="clicked" handler="_on_share_clicked" swapped="no"/>
             <child>
               <object class="GtkImage">
                 <property name="visible">True</property>

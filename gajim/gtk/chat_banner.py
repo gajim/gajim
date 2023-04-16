@@ -32,6 +32,7 @@ from gajim.common.events import BookmarksReceived
 from gajim.common.events import MessageReceived
 from gajim.common.events import MucDiscoUpdate
 from gajim.common.ged import EventHelper
+from gajim.common.helpers import generate_qr_code
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -329,6 +330,14 @@ class ChatBanner(Gtk.Box, EventHelper):
         assert self._contact is not None
         self._ui.share_menu_button.set_sensitive(True)
         self._ui.jid_label.set_text(str(self._contact.jid))
+
+    def _on_share_clicked(self, _button: Gtk.Button) -> None:
+        # Generate QR code on demand (i.e. not when switching chats)
+        assert self._contact is not None
+        text = f'xmpp:{self._contact.jid}'
+        if self._contact.is_groupchat:
+            text = f'{text}?join'
+        self._ui.qr_code_image.set_from_pixbuf(generate_qr_code(text))
 
     def _on_copy_jid_clicked(self, _button: Gtk.Button) -> None:
         assert self._contact is not None
