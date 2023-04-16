@@ -23,8 +23,6 @@ from typing import Union
 
 import locale
 import logging
-import os
-import tempfile
 import time
 
 from gi.repository import GdkPixbuf
@@ -38,6 +36,7 @@ from gajim.common import types
 from gajim.common.events import AccountConnected
 from gajim.common.events import AccountDisconnected
 from gajim.common.ged import EventHelper
+from gajim.common.helpers import generate_qr_code
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.omemo.util import get_fingerprint
@@ -235,39 +234,22 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
             self._ui.list.add(row)
 
     @staticmethod
-    def _get_qrcode(jid: str, sid: int, identity_key: IdentityKeyPair) -> str:
-        fingerprint = get_fingerprint(identity_key)
-        path = os.path.join(tempfile.gettempdir(),
-                            'omemo_{}.png'.format(jid))
+    def _get_qrcode(jid: str,
+                    sid: int,
+                    identity_key: IdentityKeyPair
+                    ) -> GdkPixbuf.Pixbuf | None:
 
+        fingerprint = get_fingerprint(identity_key)
         ver_string = 'xmpp:{}?omemo-sid-{}={}'.format(jid, sid, fingerprint)
         log.debug('Verification String: %s', ver_string)
-
-        import qrcode
-        qr = qrcode.QRCode(version=None,
-                           error_correction=qrcode.constants.ERROR_CORRECT_L,
-                           box_size=6,
-                           border=4)
-        qr.add_data(ver_string)
-        qr.make(fit=True)
-
-        img = qr.make_image(fill_color='black', back_color='white')
-        img.save(path)
-        return path
+        return generate_qr_code(ver_string)
 
     def _load_qrcode(self) -> None:
-        try:
-            client = app.get_client(self._account)
-            path = self._get_qrcode(client.get_own_jid().bare,
-                                    self._omemo.backend.own_device,
-                                    self._identity_key)
-        except ImportError:
-            log.exception('Failed to generate QR code')
-            self._ui.qr_code_image.hide()
-        else:
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
-            self._ui.qr_code_image.set_from_pixbuf(pixbuf)
-            self._ui.qr_code_image.show()
+        client = app.get_client(self._account)
+        pixbuf = self._get_qrcode(client.get_own_jid().bare,
+                                  self._omemo.backend.own_device,
+                                  self._identity_key)
+        self._ui.qr_code_image.set_from_pixbuf(pixbuf)
 
     def _on_show_inactive(self, switch: Gtk.Switch, _param: Any) -> None:
         self._ui.list.invalidate_filter()

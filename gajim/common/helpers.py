@@ -48,6 +48,7 @@ import re
 import socket
 import string
 import sys
+import tempfile
 import unicodedata
 import weakref
 import webbrowser
@@ -61,8 +62,10 @@ from urllib.parse import unquote
 from urllib.parse import urlparse
 
 import precis_i18n.codec  # noqa: F401
+import qrcode
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
+from gi.repository import GdkPixbuf
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
@@ -364,6 +367,22 @@ def get_contact_dict_for_account(account: str) -> dict[str, types.BareContact]:
     for contact in client.get_module('Roster').iter_contacts():
         contacts_dict[str(contact.jid)] = contact
     return contacts_dict
+
+
+def generate_qr_code(content: str) -> GdkPixbuf.Pixbuf | None:
+    image_path = os.path.join(
+        tempfile.gettempdir(),
+        f'{get_random_string()}.png')
+    qr = qrcode.QRCode(version=None,
+                       error_correction=qrcode.constants.ERROR_CORRECT_L,
+                       box_size=6,
+                       border=4)
+    qr.add_data(content)
+    qr.make(fit=True)
+
+    img = qr.make_image(fill_color='black', back_color='white')
+    img.save(image_path)
+    return GdkPixbuf.Pixbuf.new_from_file(image_path)
 
 
 def play_sound(sound_event: str,
