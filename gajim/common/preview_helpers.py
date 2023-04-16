@@ -450,12 +450,24 @@ def guess_mime_type(file_path: Union[Path, str],
                     data: Optional[bytes] = None
                     ) -> str:
     file_path = str(file_path)
+
+    if not mimetypes.inited:
+        # On Windows both mime types are only available
+        # with python 3.11, so this can be removed once
+        # the Windows build uses python 3.11
+        mimetypes.add_type('image/webp', '.webp')
+        mimetypes.add_type('image/avif', '.avif')
+
+    # The mimetypes module maps extensions to mime types
+    # it does no guessing based on file content
     mime_type, _ = mimetypes.guess_type(file_path)
     if mime_type is None:
-        # Try to guess MIME type by file name
-        mime_type, _ = Gio.content_type_guess(file_path, data)
+        # Gio does also guess based on file content
+        extension, _ = Gio.content_type_guess(file_path, data)
+        mime_type = Gio.content_type_get_mime_type(extension)
+
     log.debug('Guessed MIME type: %s', mime_type)
-    return mime_type
+    return mime_type or ''
 
 
 def guess_simple_file_type(file_path: str,
