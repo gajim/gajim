@@ -119,8 +119,6 @@ class ContactRow(Gtk.ListBoxRow):
     def get_search_text(self):
         if self._contact is None:
             return str(self.jid)
-        if self._show_account:
-            return f'{self._name} {self.jid} {self._account_label}'
         return f'{self._name} {self.jid}'
 
 
