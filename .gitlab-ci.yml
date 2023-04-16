@@ -65,9 +65,9 @@ test-unittest:
   stage: test
   script:
     - pip install git+https://dev.gajim.org/gajim/python-nbxmpp.git
-    - python3-coverage run --source=gajim -m unittest discover -s test -v
-    - python3-coverage report -mi
-    - python3-coverage xml -i
+    - coverage run --source=gajim -m unittest discover -s test -v
+    - coverage report -mi
+    - coverage xml -i
   coverage: "/TOTAL.+ ([0-9]{1,3}%)/"
   artifacts:
     reports:
