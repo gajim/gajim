@@ -54,7 +54,10 @@ def bump_appdata(new_version: str) -> None:
         lines = f.readlines()
 
     date = datetime.today().strftime('%Y-%m-%d')
-    release_string = f'    <release version="{new_version}" date="{date}" />'
+    release_url = 'https://dev.gajim.org/gajim/gajim/-/releases'
+    release_string = (f'    <release version="{new_version}" date="{date}">\n'
+                      f'      <url>{release_url}/{new_version}</url>\n'
+                       '    </release>')
 
     with APPDATA.open('w', encoding='utf8') as f:
         for line in lines:
