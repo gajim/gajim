@@ -176,6 +176,12 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self._ui.settings_box.add(scrolled_window)
 
     def _add_groupchat_encryption(self) -> None:
+        if (self._contact.is_groupchat and
+                self._contact.muc_context == 'public'):
+            # OMEMO is not available for public group chats
+            self._switcher.set_row_visible('encryption-omemo', False)
+            return
+
         self._ui.encryption_box.add(
             OMEMOTrustManager(self._contact.account, self._contact))
 
