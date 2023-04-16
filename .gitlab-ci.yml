@@ -1,5 +1,3 @@
-image: gajim-master:latest
-
 workflow:
   rules:
     - if: $NIGHTLY_BUILD
@@ -14,16 +12,23 @@ stages:
   - publish
 
 test-other:
+  image: gajim-test
   stage: test
   script:
-    - codespell gajim
-    - pip3 install build
     - python3 -m build
     - python3 ./pep517build/build_metadata.py
     - appstream-util validate dist/metadata/org.gajim.Gajim.appdata.xml
   interruptible: true
 
+test-codespell:
+  image: gajim-test
+  stage: test
+  script:
+    - codespell gajim
+  interruptible: true
+
 test-pyright:
+  image: gajim-test
   stage: test
   rules:
     - changes:
@@ -32,32 +37,31 @@ test-pyright:
     - pip3 install git+https://dev.gajim.org/gajim/python-nbxmpp.git
     - pip3 install git+https://dev.gajim.org/gajim/omemo-dr.git
     - pip3 install --config-settings=config=Gtk3,Gdk3,GtkSource4 git+https://github.com/pygobject/pygobject-stubs.git
-    - npm install pyright@1.1.302
-    - node_modules/.bin/pyright --version
-    - node_modules/.bin/pyright
+    - pyright
   interruptible: true
 
 test-ruff:
+  image: gajim-test
   stage: test
   rules:
     - changes:
       - "**/*.py"
   script:
-    - pip3 install ruff==0.0.259
     - ruff .
   interruptible: true
 
 test-isort:
+  image: gajim-test
   stage: test
   rules:
     - changes:
       - "**/*.py"
   script:
-    - pip3 install isort==5.12.0
     - isort --check .
   interruptible: true
 
 test-unittest:
+  image: gajim-test
   stage: test
   script:
     - pip3 install -I git+https://dev.gajim.org/gajim/python-nbxmpp.git
@@ -73,7 +77,7 @@ test-unittest:
   interruptible: true
 
 build-unix:
-  image: gajim-build:latest
+  image: gajim-build
   stage: build
   dependencies: []
   rules:
@@ -91,7 +95,7 @@ build-unix:
       - dist/gajim-*.whl
 
 build-debian-nightly:
-  image: gajim-build:latest
+  image: gajim-build
   stage: build
   variables:
     REV: "1"
@@ -114,7 +118,7 @@ build-debian-nightly:
       - debian_build/*
 
 build-windows:
-  image: gajim-build:latest
+  image: gajim-build
   stage: build
   dependencies: []
   rules:
@@ -135,7 +139,7 @@ build-windows:
       - windows_build/*.json
 
 build-windows-nightly:
-  image: gajim-build:latest
+  image: gajim-build
   stage: build
   dependencies: []
   rules:
@@ -157,7 +161,7 @@ build-windows-nightly:
       - windows_build/*.json
 
 deploy-unix:
-  image: gajim-deploy:latest
+  image: gajim-deploy
   stage: deploy
   dependencies:
     - build-unix
@@ -174,7 +178,7 @@ deploy-unix:
         "$(find dist/gajim-*.tar.gz)"
 
 deploy-unix-nightly:
-  image: gajim-deploy:latest
+  image: gajim-deploy
   stage: deploy
   dependencies:
     - build-unix
@@ -197,7 +201,7 @@ deploy-unix-nightly:
         "$(find dist/gajim-*.tar.gz)"
 
 deploy-debian-nightly:
-  image: gajim-deploy:latest
+  image: gajim-deploy
   stage: deploy
   dependencies:
     - build-debian-nightly
@@ -220,7 +224,7 @@ deploy-debian-nightly:
         debian_build
 
 deploy-windows:
-  image: gajim-deploy:latest
+  image: gajim-deploy
   stage: deploy
   dependencies:
     - build-windows
@@ -238,7 +242,7 @@ deploy-windows:
         windows_build
 
 deploy-windows-nightly:
-  image: gajim-deploy:latest
+  image: gajim-deploy
   stage: deploy
   dependencies:
     - build-windows-nightly
@@ -263,7 +267,7 @@ deploy-windows-nightly:
         windows_build
 
 deploy-flatpak:
-  image: gajim-deploy:latest
+  image: gajim-deploy
   stage: deploy
   dependencies: []
   rules:
@@ -286,7 +290,7 @@ deploy-flatpak:
     - git push
 
 publish-website:
-  image: gajim-publish:latest
+  image: gajim-publish
   stage: publish
   dependencies: []
   rules:
@@ -305,7 +309,7 @@ publish-website:
     - git push
 
 publish-release:
-  image: gajim-publish:latest
+  image: gajim-publish
   stage: publish
   dependencies: []
   rules:
