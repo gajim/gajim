@@ -191,6 +191,7 @@ class MessageActionsBox(Gtk.Grid):
 
         self._update_encryption_button()
         self._update_encryption_details_button()
+        self._update_send_file_button_tooltip()
 
         self._set_chatstate(True)
 
