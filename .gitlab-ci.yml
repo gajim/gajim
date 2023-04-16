@@ -15,8 +15,8 @@ test-other:
   image: gajim-test
   stage: test
   script:
-    - python3 -m build
-    - python3 ./pep517build/build_metadata.py
+    - pyproject-build
+    - python ./pep517build/build_metadata.py
     - appstream-util validate dist/metadata/org.gajim.Gajim.appdata.xml
   interruptible: true
 
@@ -65,9 +65,9 @@ test-unittest:
   stage: test
   script:
     - pip install git+https://dev.gajim.org/gajim/python-nbxmpp.git
-    - coverage run --source=gajim -m unittest discover -s test -v
-    - coverage report -mi
-    - coverage xml -i
+    - python-coverage run --source=gajim -m unittest discover -s test -v
+    - python-coverage report -mi
+    - python-coverage xml -i
   coverage: "/TOTAL.+ ([0-9]{1,3}%)/"
   artifacts:
     reports:
@@ -85,7 +85,7 @@ build-unix:
     - if: '$NIGHTLY_BUILD'
     - if: '$CI_COMMIT_TAG'
   script:
-    - python -m build
+    - pyproject-build
 
   artifacts:
     name: "gajim-$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA"
