@@ -12,7 +12,16 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import cast
+
 from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric.dsa import DSAPublicKey
+from cryptography.hazmat.primitives.asymmetric.ec import EllipticCurvePublicKey
+from cryptography.hazmat.primitives.asymmetric.ed448 import Ed448PublicKey
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
+from cryptography.hazmat.primitives.asymmetric.rsa import RSAPublicKey
+from cryptography.x509 import DNSName
+from cryptography.x509.oid import ExtensionOID
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import Gtk
@@ -64,7 +73,6 @@ class CertificateBox(Gtk.Box):
 
         self._it_common_name = ''
         self._it_organization = ''
-        self._it_org_unit = ''
         for attribute in cert.subject:
             # See https://datatracker.ietf.org/doc/html/rfc4514.html
             dotted_string = attribute.oid.dotted_string
@@ -72,16 +80,23 @@ class CertificateBox(Gtk.Box):
                 self._it_common_name = str(attribute.value)
             if dotted_string == '2.5.4.10':
                 self._it_organization = str(attribute.value)
-            if dotted_string == '2.5.4.11':
-                self._it_org_unit = str(attribute.value)
 
-        serial_str =  '0{:02X}'.format(cert.serial_number)
+        # Get the subjectAltName extension from the certificate
+        subject_ext = cert.extensions.get_extension_for_oid(
+            ExtensionOID.SUBJECT_ALTERNATIVE_NAME)
+        # Get the DNSName entries from the SAN extension
+        alt_names = cast(
+            list[str],
+            subject_ext.value.get_values_for_type(DNSName))  # pyright: ignore
+        self._it_subject_alt_names = '\n'.join(alt_names)
+
+        serial_str = '0{:02X}'.format(cert.serial_number)
         serial_str_foratted = ':'.join(
             map('{}{}'.format, *(serial_str[::2], serial_str[1::2])))
         self._it_serial_number = serial_str_foratted
+
         self._ib_common_name = ''
         self._ib_organization = ''
-        self._ib_org_unit = ''
         for attribute in cert.issuer:
             # See https://datatracker.ietf.org/doc/html/rfc4514.html
             dotted_string = attribute.oid.dotted_string
@@ -89,8 +104,6 @@ class CertificateBox(Gtk.Box):
                 self._ib_common_name = str(attribute.value)
             if dotted_string == '2.5.4.10':
                 self._ib_organization = str(attribute.value)
-            if dotted_string == '2.5.4.11':
-                self._ib_org_unit = str(attribute.value)
 
         self._issued = cert.not_valid_before.strftime('%c %Z')
         self._expires = cert.not_valid_after.strftime('%c %Z')
@@ -104,14 +117,35 @@ class CertificateBox(Gtk.Box):
         self._sha256 = '%s\n%s\n%s\n%s' % (
             sha256[:23], sha256[24:47], sha256[48:71], sha256[72:])
 
+        public_key = cert.public_key()
+        self._pk_algorithm = ''
+        if isinstance(public_key, RSAPublicKey):
+            self._pk_algorithm = 'RSA'
+        elif isinstance(public_key, DSAPublicKey):
+            self._pk_algorithm = 'DSA'
+        elif isinstance(public_key, EllipticCurvePublicKey):
+            self._pk_algorithm = 'Elliptic Curve'
+        elif isinstance(public_key, Ed25519PublicKey):
+            self._pk_algorithm = 'ED25519'
+        elif isinstance(public_key, Ed448PublicKey):
+            self._pk_algorithm = 'ED448'
+
+        self._pk_size = _('Unknown')
+        if isinstance(public_key,
+                      (RSAPublicKey, DSAPublicKey, EllipticCurvePublicKey)):
+            self._pk_size = f'{public_key.key_size} Bit'
+
+        self._ui.public_key_algorithm.set_text(self._pk_algorithm)
+        self._ui.public_key_size.set_text(self._pk_size)
+
         self._ui.label_cert_for_account.set_text(self._headline)
         self._ui.data_it_common_name.set_text(self._it_common_name)
         self._ui.data_it_organization.set_text(self._it_organization)
-        self._ui.data_it_organizational_unit.set_text(self._it_org_unit)
+        self._ui.data_it_subject_alt_names.set_text(
+            self._it_subject_alt_names)
         self._ui.data_it_serial_number.set_text(self._it_serial_number)
         self._ui.data_ib_common_name.set_text(self._ib_common_name)
         self._ui.data_ib_organization.set_text(self._ib_organization)
-        self._ui.data_ib_organizational_unit.set_text(self._ib_org_unit)
         self._ui.data_issued_on.set_text(self._issued)
         self._ui.data_expires_on.set_text(self._expires)
         self._ui.data_sha1.set_text(self._sha1)
@@ -127,19 +161,19 @@ class CertificateBox(Gtk.Box):
             _('Issued to\n') + \
             _('Common Name (CN): ') + self._it_common_name + '\n' + \
             _('Organization (O): ') + self._it_organization + '\n' + \
-            _('Organizational Unit (OU): ') + self._it_org_unit + '\n' + \
+            _('Subject Alt Names: ') + self._it_subject_alt_names + '\n' + \
             _('Serial Number: ') + self._it_serial_number + '\n\n' + \
             _('Issued by\n') + \
             _('Common Name (CN): ') + self._ib_common_name + '\n' + \
             _('Organization (O): ') + self._ib_organization + '\n' + \
-            _('Organizational Unit (OU): ') + self._ib_org_unit + '\n\n' + \
             _('Validity\n') + \
             _('Issued on: ') + self._issued + '\n' + \
             _('Expires on: ') + self._expires + '\n\n' + \
             _('SHA-1:') + '\n' + \
             self._sha1 + '\n' + \
             _('SHA-256:') + '\n' + \
-            self._sha256 + '\n'
+            self._sha256 + '\n\n' + \
+            _('Public Key: ') + self._pk_algorithm + ' ' + self._pk_size
 
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         clipboard.set_text(clipboard_text, -1)

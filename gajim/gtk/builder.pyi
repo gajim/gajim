@@ -172,17 +172,18 @@ class CertificateBuilder(Builder):
     label_cert_for_account: Gtk.Label
     data_it_common_name: Gtk.Label
     data_it_organization: Gtk.Label
-    data_it_organizational_unit: Gtk.Label
+    data_it_subject_alt_names: Gtk.Label
     data_it_serial_number: Gtk.Label
     data_ib_common_name: Gtk.Label
     data_ib_organization: Gtk.Label
-    data_ib_organizational_unit: Gtk.Label
     data_issued_on: Gtk.Label
     data_expires_on: Gtk.Label
     data_sha1: Gtk.Label
     data_sha256: Gtk.Label
     copy_cert_info_button: Gtk.Button
     image1: Gtk.Image
+    public_key_algorithm: Gtk.Label
+    public_key_size: Gtk.Label
 
 
 class ChatBannerBuilder(Builder):
