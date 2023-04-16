@@ -91,25 +91,6 @@
             <property name="position">3</property>
           </packing>
         </child>
-        <child>
-          <object class="GtkLabel" id="qr_dependency_missing">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">For verification via QR-Code you have to install &lt;tt&gt;python-qrcode&lt;/tt&gt;.</property>
-            <property name="use-markup">True</property>
-            <property name="wrap">True</property>
-            <property name="max-width-chars">42</property>
-            <property name="xalign">0</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">4</property>
-          </packing>
-        </child>
         <style>
           <class name="padding-18"/>
         </style>

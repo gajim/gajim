@@ -264,12 +264,10 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
         except ImportError:
             log.exception('Failed to generate QR code')
             self._ui.qr_code_image.hide()
-            self._ui.qr_dependency_missing.show()
         else:
             pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
             self._ui.qr_code_image.set_from_pixbuf(pixbuf)
             self._ui.qr_code_image.show()
-            self._ui.qr_dependency_missing.hide()
 
     def _on_show_inactive(self, switch: Gtk.Switch, _param: Any) -> None:
         self._ui.list.invalidate_filter()
