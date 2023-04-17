@@ -39,7 +39,6 @@ from gajim.common.const import KindConstant
 from gajim.common.ged import EventHelper
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_retraction_text
-from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -1077,8 +1076,7 @@ class ChatControl(EventHelper):
                                          event: events.MUCRoomPresenceError
                                          ) -> None:
 
-        error_message = to_user_string(event.error)
-        self.add_info_message(_('Error: %s') % error_message)
+        self.add_info_message(_('Error: %s') % event.error)
 
     def _on_room_destroyed(self,
                            _contact: GroupchatContact,

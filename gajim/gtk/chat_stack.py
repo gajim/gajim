@@ -26,9 +26,7 @@ from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
-from nbxmpp.errors import StanzaError
 from nbxmpp.protocol import JID
-from nbxmpp.structs import MessageProperties
 
 from gajim.common import app
 from gajim.common import events
@@ -266,16 +264,14 @@ class ChatStack(Gtk.Stack, EventHelper):
 
     def _on_room_password_required(self,
                                    _contact: GroupchatContact,
-                                   _signal_name: str,
-                                   _properties: MessageProperties
+                                   _signal_name: str
                                    ) -> None:
 
         self._show_chat_function_page(FunctionMode.PASSWORD_REQUEST)
 
     def _on_room_captcha_challenge(self,
                                    contact: GroupchatContact,
-                                   _signal_name: str,
-                                   _properties: MessageProperties
+                                   _signal_name: str
                                    ) -> None:
 
         self._show_chat_function_page(FunctionMode.CAPTCHA_REQUEST)
@@ -283,39 +279,34 @@ class ChatStack(Gtk.Stack, EventHelper):
     def _on_room_captcha_error(self,
                                _contact: GroupchatContact,
                                _signal_name: str,
-                               error: StanzaError
+                               error: str
                                ) -> None:
 
-        error_text = helpers.to_user_string(error)
-        self._show_chat_function_page(FunctionMode.CAPTCHA_ERROR, error_text)
+        self._show_chat_function_page(FunctionMode.CAPTCHA_ERROR, error)
 
     def _on_room_creation_failed(self,
                                  _contact: GroupchatContact,
                                  _signal_name: str,
-                                 properties: MessageProperties
+                                 error: str
                                  ) -> None:
 
-        assert properties.error is not None
-        error_text = helpers.to_user_string(properties.error)
-        self._show_chat_function_page(FunctionMode.CREATION_FAILED, error_text)
+        self._show_chat_function_page(FunctionMode.CREATION_FAILED, error)
 
     def _on_room_join_failed(self,
                              _contact: GroupchatContact,
                              _signal_name: str,
-                             error: StanzaError
+                             error: str
                              ) -> None:
 
-        self._show_chat_function_page(
-            FunctionMode.JOIN_FAILED, helpers.to_user_string(error))
+        self._show_chat_function_page(FunctionMode.JOIN_FAILED, error)
 
     def _on_room_config_failed(self,
                                _contact: GroupchatContact,
                                _signal_name: str,
-                               error: StanzaError
+                               error: str
                                ) -> None:
 
-        self._show_chat_function_page(
-            FunctionMode.CONFIG_FAILED, helpers.to_user_string(error))
+        self._show_chat_function_page(FunctionMode.CONFIG_FAILED)
 
     def _on_muc_state_changed(self,
                               contact: GroupchatContact,

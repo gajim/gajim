@@ -306,7 +306,8 @@ class MUC(BaseModule):
             self._log.info('Disco %s failed: %s', error.jid, error.get_text())
 
             room = self._get_contact(error.jid.bare)
-            room.notify('room-join-failed', error)
+            error_text = helpers.to_user_string(error)
+            room.notify('room-join-failed', error_text)
             return
 
         muc_data = self._mucs.get(result.info.jid)
@@ -400,7 +401,8 @@ class MUC(BaseModule):
             self._log.info(error)
 
             room = self._get_contact(error.jid.bare)
-            room.notfiy('room-config-failed', error)
+            error_text = helpers.to_user_string(error)
+            room.notfiy('room-config-failed', error_text)
             return
 
         self._log.info('Configure room: %s', result.jid)
@@ -433,7 +435,8 @@ class MUC(BaseModule):
             self._log.info(error)
 
             room = self._get_contact(error.jid.bare)
-            room.notfiy('room-config-failed', error)
+            error_text = helpers.to_user_string(error)
+            room.notfiy('room-config-failed', error_text)
             return
 
         self._con.get_module('Discovery').disco_muc(
@@ -507,7 +510,7 @@ class MUC(BaseModule):
             elif properties.error.condition == 'not-authorized':
                 self._remove_rejoin_timeout(room_jid)
                 self._set_muc_state(room_jid, MUCJoinedState.PASSWORD_REQUEST)
-                room.notify('room-password-required', properties)
+                room.notify('room-password-required')
 
             else:
                 self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
@@ -516,14 +519,14 @@ class MUC(BaseModule):
                     assert isinstance(properties.error, CommonError)
                     muc_data.error_text = helpers.to_user_string(
                         properties.error)
-                    room.notify('room-join-failed', properties.error)
+                    room.notify('room-join-failed', muc_data.error_text)
 
         elif muc_data.state == MUCJoinedState.CREATING:
             self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
             muc_data.error = 'creation-failed'
             assert isinstance(properties.error, CommonError)
             muc_data.error_text = helpers.to_user_string(properties.error)
-            room.notify('room-creation-failed', properties)
+            room.notify('room-creation-failed', muc_data.error_text)
 
         elif muc_data.state == MUCJoinedState.CAPTCHA_REQUEST:
             self._set_muc_state(room_jid, MUCJoinedState.CAPTCHA_FAILED)
@@ -531,18 +534,19 @@ class MUC(BaseModule):
             muc_data.error = 'captcha-failed'
             assert isinstance(properties.error, CommonError)
             muc_data.error_text = helpers.to_user_string(properties.error)
-            room.notify('room-captcha-error', properties.error)
+            room.notify('room-captcha-error', muc_data.error_text)
 
         elif muc_data.state == MUCJoinedState.CAPTCHA_FAILED:
             self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
 
         else:
+            error = helpers.to_user_string(properties.error)
             event = events.MUCRoomPresenceError(
                 timestamp=time.time(),
-                error=properties.error)
+                error=error)
             assert isinstance(room, GroupchatContact)
             app.storage.events.store(room, event)
-            room.notify('room-presence-error', properties)
+            room.notify('room-presence-error', event)
 
     def _on_muc_user_presence(self,
                               _con: types.xmppClient,
@@ -940,7 +944,7 @@ class MUC(BaseModule):
         self._remove_rejoin_timeout(properties.jid)
 
         room = self._get_contact(properties.jid.bare)
-        room.notify('room-captcha-challenge', properties)
+        room.notify('room-captcha-challenge')
 
         raise nbxmpp.NodeProcessed
 
@@ -974,7 +978,8 @@ class MUC(BaseModule):
                 return
             self._set_muc_state(error.jid, MUCJoinedState.CAPTCHA_FAILED)
             room = self._get_contact(error.jid)
-            room.notify('room-captcha-error', error)
+            error_text = helpers.to_user_string(error)
+            room.notify('room-captcha-error', error_text)
 
     def _on_config_change(self,
                           _con: types.xmppClient,

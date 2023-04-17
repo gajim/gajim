@@ -711,7 +711,7 @@ class MUCRoomConfigFinished(ApplicationEvent):
 class MUCRoomPresenceError(ApplicationEvent):
     name: str = field(init=False, default='muc-room-presence-error')
     timestamp: float
-    error: Any
+    error: str
 
 
 @dataclass
