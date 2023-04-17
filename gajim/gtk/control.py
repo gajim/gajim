@@ -36,6 +36,7 @@ from gajim.common import ged
 from gajim.common import helpers
 from gajim.common import types
 from gajim.common.const import KindConstant
+from gajim.common.const import XmppUriQuery
 from gajim.common.ged import EventHelper
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_retraction_text
@@ -1096,8 +1097,8 @@ class ChatControl(EventHelper):
         message = _('Group chat has been destroyed%s') % reason
 
         if event.alternate is not None:
-            message += '\n' + _('You can join this group chat instead: '
-                                'xmpp:%s?join') % str(event.alternate)
+            message += '\n' + _('You can join this group chat instead: %s') % (
+                event.alternate.to_iri(XmppUriQuery.JOIN.value))
 
         self.add_info_message(message, event.timestamp)
 

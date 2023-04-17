@@ -33,6 +33,7 @@ from omemo_dr.identitykeypair import IdentityKeyPair
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import types
+from gajim.common.const import XmppUriQuery
 from gajim.common.events import AccountConnected
 from gajim.common.events import AccountDisconnected
 from gajim.common.ged import EventHelper
@@ -234,20 +235,20 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
             self._ui.list.add(row)
 
     @staticmethod
-    def _get_qrcode(jid: str,
+    def _get_qrcode(jid: JID,
                     sid: int,
                     identity_key: IdentityKeyPair
                     ) -> GdkPixbuf.Pixbuf | None:
 
         fingerprint = get_fingerprint(identity_key)
-        ver_string = 'xmpp:{}?message;omemo-sid-{}={}'.format(
-            jid, sid, fingerprint)
+        qry = (XmppUriQuery.MESSAGE.value, [(f'omemo-sid-{sid}', fingerprint)])
+        ver_string = jid.new_as_bare().to_iri(qry)
         log.debug('Verification String: %s', ver_string)
         return generate_qr_code(ver_string)
 
     def _load_qrcode(self) -> None:
         client = app.get_client(self._account)
-        pixbuf = self._get_qrcode(client.get_own_jid().bare,
+        pixbuf = self._get_qrcode(client.get_own_jid(),
                                   self._omemo.backend.own_device,
                                   self._identity_key)
         self._ui.qr_code_image.set_from_pixbuf(pixbuf)

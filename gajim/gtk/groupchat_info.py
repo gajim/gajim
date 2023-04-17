@@ -14,6 +14,7 @@
 
 from typing import Optional
 
+import logging
 import time
 
 from gi.repository import Gdk
@@ -27,6 +28,7 @@ from nbxmpp.structs import MucSubject
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.const import RFC5646_LANGUAGE_TAGS
+from gajim.common.const import XmppUriQuery
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
@@ -34,6 +36,8 @@ from gajim.common.i18n import p_
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.util import make_href_markup
+
+log = logging.getLogger('gajim.gtk.groupchat_info')
 
 MUC_FEATURES = {
     'muc_open': (
@@ -200,7 +204,12 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         has_contacts = bool(info.muc_contacts)
         if has_contacts:
             for contact in info.muc_contacts:
-                self._ui.contact_box.add(self._get_contact_button(contact))
+                try:
+                    jid = JID.from_string(contact).new_as_bare()
+                except Exception as e:
+                    log.debug('Bad MUC contact address %s: %s', contact, str(e))
+                else:
+                    self._ui.contact_box.add(self._get_contact_button(jid))
 
         self._ui.contact_box.set_visible(has_contacts)
         self._ui.contact_label.set_visible(has_contacts)
@@ -250,7 +259,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
 
     def _on_copy_address(self, _button: Gtk.Button) -> None:
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clipboard.set_text(f'xmpp:{self._info.jid}?join', -1)
+        clipboard.set_text(self._info.jid.to_iri(XmppUriQuery.JOIN.value), -1)
 
     @staticmethod
     def _on_activate_log_link(button: Gtk.LinkButton) -> int:
@@ -258,7 +267,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         return Gdk.EVENT_STOP
 
     def _on_activate_contact_link(self, button: Gtk.LinkButton) -> int:
-        open_uri(f'xmpp:{button.get_uri()}?message', account=self._account)
+        open_uri(button.get_uri(), account=self._account)
         return Gdk.EVENT_STOP
 
     @staticmethod
@@ -283,8 +292,9 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         label.set_valign(Gtk.Align.START)
         return label
 
-    def _get_contact_button(self, contact: str) -> Gtk.Button:
-        button = Gtk.LinkButton(label=contact)
+    def _get_contact_button(self, contact: JID) -> Gtk.Button:
+        button = Gtk.LinkButton(contact.to_iri(XmppUriQuery.MESSAGE.value),
+                                label=str(contact))
         button.set_halign(Gtk.Align.START)
         button.get_style_context().add_class('link-button')
         button.connect('activate-link', self._on_activate_contact_link)
