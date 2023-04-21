@@ -72,6 +72,7 @@ class ChatList(Gtk.ListBox, EventHelper):
         self._set_placeholder()
 
         self._mouseover: bool = False
+        self._pinned_order_change = False
         self.connect('enter-notify-event', self._on_mouse_focus_changed)
         self.connect('leave-notify-event', self._on_mouse_focus_changed)
 
@@ -434,7 +435,9 @@ class ChatList(Gtk.ListBox, EventHelper):
             row.position = self._chat_order.index(row)
 
         self.emit('chat-order-changed')
+        self._pinned_order_change = True
         self.invalidate_sort()
+        self._pinned_order_change = False
 
     def _update_time(self) -> bool:
         for _key, row in self._chats.items():
@@ -474,7 +477,7 @@ class ChatList(Gtk.ListBox, EventHelper):
                     row.set_header_type(None)
 
     def _sort_func(self, row1: ChatListRow, row2: ChatListRow) -> int:
-        if self._mouseover:
+        if self._mouseover and not self._pinned_order_change:
             log.debug('Mouseover active, don’t sort rows')
             return 0
 
