@@ -678,7 +678,7 @@ class ChatStack(Gtk.Stack, EventHelper):
 
     def _on_drag_motion(self,
                         _widget: Gtk.Widget,
-                        _context: Gdk.DragContext,
+                        context: Gdk.DragContext,
                         _x_coord: int,
                         _y_coord: int,
                         time: int
@@ -688,9 +688,13 @@ class ChatStack(Gtk.Stack, EventHelper):
             # Workaround for https://gitlab.gnome.org/GNOME/gtk/-/issues/5518
             return False
 
-        self._drop_area.set_no_show_all(False)
-        self._drop_area.show_all()
-        return True
+        for targ in context.list_targets():
+            if targ.name() in {'text/uri-list', 'application/vnd.portal.files'}:
+                self._drop_area.set_no_show_all(False)
+                self._drop_area.show_all()
+                return True
+
+        return False
 
     def _show_chat_function_page(self,
                                  function_mode: FunctionMode,
