@@ -36,7 +36,11 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.const import CSSPriority
 from gajim.common.const import StyleAttr
-from gajim.common.dbus.system_style import SystemStyleListener
+
+if sys.platform == 'win32':
+    from gajim.common.winapi.system_style import SystemStyleListener
+else:
+    from gajim.common.dbus.system_style import SystemStyleListener
 
 from gajim.gtk.const import Theme
 

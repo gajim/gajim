@@ -23,6 +23,7 @@
 - [sqlite](https://www.sqlite.org/) (>=3.33.0)
 - [omemo-dr](https://dev.gajim.org/gajim/omemo-dr) (>=1.0.0)
 - [qrcode](https://pypi.org/project/qrcode/) (>=7.3.1)
+- [winsdk](https://pypi.org/project/winsdk/) (Only on Windows)
 
 ### Optional Runtime Requirements
 

@@ -81,6 +81,7 @@ function install_deps {
         "${MINGW_PACKAGE_PREFIX}"-python-setuptools \
         "${MINGW_PACKAGE_PREFIX}"-python-setuptools-scm \
         "${MINGW_PACKAGE_PREFIX}"-python-six \
+        "${MINGW_PACKAGE_PREFIX}"-python-winsdk \
         "${MINGW_PACKAGE_PREFIX}"-gtk3 \
         "${MINGW_PACKAGE_PREFIX}"-gtksourceview4 \
         "${MINGW_PACKAGE_PREFIX}"-gstreamer \
