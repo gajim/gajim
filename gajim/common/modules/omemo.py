@@ -50,6 +50,7 @@ from omemo_dr.exceptions import DuplicateMessage
 from omemo_dr.exceptions import KeyExchangeMessage
 from omemo_dr.exceptions import MessageNotForDevice
 from omemo_dr.exceptions import SelfMessage
+from omemo_dr.identitykey import IdentityKey
 from omemo_dr.session_manager import OMEMOSessionManager
 from omemo_dr.structs import OMEMOBundle
 from omemo_dr.structs import OMEMOConfig
@@ -61,6 +62,7 @@ from gajim.common import types
 from gajim.common.const import EncryptionData
 from gajim.common.const import EncryptionInfoMsg
 from gajim.common.const import Trust as GajimTrust
+from gajim.common.const import XmppUriQuery
 from gajim.common.events import EncryptionInfo
 from gajim.common.events import MucAdded
 from gajim.common.events import MucDiscoUpdate
@@ -92,6 +94,8 @@ ALLOWED_TAGS = [
     ('origin-id', Namespace.SID),
 ]
 
+DeviceIdT = int
+IdentityT = tuple[DeviceIdT, IdentityKey]
 
 class OMEMO(BaseModule):
 
@@ -646,6 +650,25 @@ class OMEMO(BaseModule):
         stanzastr = stanzastr[0:-1]
         self._log.debug(stanzastr)
 
+    def compose_trust_uri(self, jid: JID) -> str:
+        verified_identities = [
+            (info.device_id, info.public_key)
+            for info in self._backend.get_identity_infos(
+                jid.bare, only_active=True, trust=OMEMOTrust.VERIFIED)
+        ]
+        if self._client.is_own_jid(jid):
+            verified_identities.insert(0, self._backend.get_our_identity())
+        return compose_trust_uri(jid, verified_identities)
+
     def cleanup(self) -> None:
         self._backend.destroy()
         del self._backend
+
+
+def compose_trust_uri(jid: JID, devices: list[IdentityT]) -> str:
+    query = (
+        XmppUriQuery.MESSAGE.value,
+        [(f'omemo-sid-{sid}', ik.get_fingerprint()) for sid, ik in devices]
+    ) if devices else None
+    uri = jid.new_as_bare().to_iri(query)
+    return uri

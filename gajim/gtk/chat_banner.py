@@ -334,13 +334,13 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._ui.jid_label.set_text(str(self._contact.jid))
 
     def _get_share_uri(self) -> str:
+        assert self._client is not None
         assert self._contact is not None
         jid = self._contact.get_address()
         if self._contact.is_groupchat:
             return jid.to_iri(XmppUriQuery.JOIN.value)
         else:
-            # TODO: add verified OMEMO FPs
-            return jid.to_iri()
+            return self._client.get_module('OMEMO').compose_trust_uri(jid)
 
     def _on_share_clicked(self, _button: Gtk.Button) -> None:
         # Generate QR code on demand (i.e. not when switching chats)

@@ -25,22 +25,20 @@ import locale
 import logging
 import time
 
-from gi.repository import GdkPixbuf
 from gi.repository import Gtk
-from nbxmpp.protocol import JID
 from omemo_dr.const import OMEMOTrust
 from omemo_dr.structs import IdentityInfo
 
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import types
-from gajim.common.const import XmppUriQuery
 from gajim.common.events import AccountConnected
 from gajim.common.events import AccountDisconnected
 from gajim.common.ged import EventHelper
 from gajim.common.helpers import generate_qr_code
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.omemo import compose_trust_uri
 
 from .builder import get_builder
 from .dialogs import ConfirmationDialog
@@ -196,25 +194,12 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
                 str(contact.jid)):
             self._ui.list.add(KeyRow(contact, identity_info))
 
-    @staticmethod
-    def _get_qrcode(jid: JID,
-                    sid: int,
-                    fingerprint: str
-                    ) -> GdkPixbuf.Pixbuf | None:
-
-        qry = (XmppUriQuery.MESSAGE.value, [(f'omemo-sid-{sid}', fingerprint)])
-        ver_string = jid.new_as_bare().to_iri(qry)
-        log.debug('Verification String: %s', ver_string)
-        return generate_qr_code(ver_string)
-
     def _load_qrcode(self) -> None:
-        client = app.get_client(self._account)
-        our_device_id, our_identity_key =\
-            self._omemo.backend.get_our_identity()
-        pixbuf = self._get_qrcode(client.get_own_jid(),
-                                  our_device_id,
-                                  our_identity_key.get_fingerprint())
-        self._ui.qr_code_image.set_from_pixbuf(pixbuf)
+        uri = compose_trust_uri(
+            app.get_client(self._account).get_own_jid(),
+            [self._omemo.backend.get_our_identity()])
+        log.debug('Trust URI: %s', uri)
+        self._ui.qr_code_image.set_from_pixbuf(generate_qr_code(uri))
 
     def _on_show_inactive(self, switch: Gtk.Switch, _param: Any) -> None:
         self._ui.list.invalidate_filter()
