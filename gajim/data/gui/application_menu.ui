@@ -56,6 +56,10 @@
           <attribute name="action">app.faq</attribute>
         </item>
         <item>
+          <attribute name="label" translatable="yes">_Privacy Policy (Online)</attribute>
+          <attribute name="action">app.privacy-policy</attribute>
+        </item>
+        <item>
           <attribute name="label" translatable="yes">Join Support Chat</attribute>
           <attribute name="action">app.join-support-chat</attribute>
         </item>

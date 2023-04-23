@@ -960,6 +960,7 @@ SHOW_STRING_MNEMONIC = {
 }
 
 GAJIM_FAQ_URI = 'https://dev.gajim.org/gajim/gajim/wikis/help/gajimfaq'
+GAJIM_PRIVACY_POLICY_URI = 'https://gajim.org/privacy/'
 GAJIM_WIKI_URI = 'https://dev.gajim.org/gajim/gajim/wikis'
 GAJIM_SUPPORT_JID = 'gajim@conference.gajim.org'
 

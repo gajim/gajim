@@ -192,6 +192,7 @@ APP_ACTIONS = [
     ('copy-text', 's'),
     ('create-groupchat', 's'),
     ('faq', None),
+    ('privacy-policy', None),
     ('features', None),
     ('file-transfer', None),
     ('forget-groupchat', 'a{sv}'),

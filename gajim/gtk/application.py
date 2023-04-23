@@ -65,6 +65,7 @@ from gajim.common import ged
 from gajim.common import idle
 from gajim.common.application import CoreApplication
 from gajim.common.const import GAJIM_FAQ_URI
+from gajim.common.const import GAJIM_PRIVACY_POLICY_URI
 from gajim.common.const import GAJIM_SUPPORT_JID
 from gajim.common.const import GAJIM_WIKI_URI
 from gajim.common.exceptions import GajimGeneralException
@@ -416,6 +417,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
             ('join-support-chat', self._on_join_support_chat),
             ('about', self._on_about_action),
             ('faq', self._on_faq_action),
+            ('privacy-policy', self._on_privacy_policy_action),
             ('start-chat', self._on_new_chat_action),
             ('accounts', self._on_accounts_action),
             ('add-contact', self._on_add_contact_action),
@@ -746,6 +748,11 @@ class GajimApplication(Gtk.Application, CoreApplication):
     def _on_faq_action(_action: Gio.SimpleAction,
                        _param: Optional[GLib.Variant]) -> None:
         open_uri(GAJIM_FAQ_URI)
+
+    @staticmethod
+    def _on_privacy_policy_action(_action: Gio.SimpleAction,
+                                  _param: Optional[GLib.Variant]) -> None:
+        open_uri(GAJIM_PRIVACY_POLICY_URI)
 
     @staticmethod
     def _on_shortcuts_action(_action: Gio.SimpleAction,
