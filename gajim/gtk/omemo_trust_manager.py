@@ -240,7 +240,8 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
                     ) -> GdkPixbuf.Pixbuf | None:
 
         fingerprint = get_fingerprint(identity_key)
-        ver_string = 'xmpp:{}?omemo-sid-{}={}'.format(jid, sid, fingerprint)
+        ver_string = 'xmpp:{}?message;omemo-sid-{}={}'.format(
+            jid, sid, fingerprint)
         log.debug('Verification String: %s', ver_string)
         return generate_qr_code(ver_string)
 
