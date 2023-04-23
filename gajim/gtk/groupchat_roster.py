@@ -184,6 +184,11 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
             self._tooltip.clear_tooltip()
             return False
 
+        path = self._modelfilter.convert_path_to_child_path(path)
+        if path is None:
+            self._tooltip.clear_tooltip()
+            return False
+
         iter_ = None
         try:
             iter_ = self._store.get_iter(path)
@@ -421,6 +426,10 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
             return
 
         path, _, _, _ = pos
+        if path is None:
+            return
+
+        path = self._modelfilter.convert_path_to_child_path(path)
         if path is None:
             return
 
