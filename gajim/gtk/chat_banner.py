@@ -329,7 +329,8 @@ class ChatBanner(Gtk.Box, EventHelper):
 
     def _update_share_box(self) -> None:
         assert self._contact is not None
-        self._ui.share_menu_button.set_sensitive(True)
+        self._ui.share_menu_button.set_sensitive(
+            not self._contact.is_pm_contact)
         self._ui.jid_label.set_text(str(self._contact.jid))
 
     def _on_share_clicked(self, _button: Gtk.Button) -> None:
