@@ -36,6 +36,7 @@ from gajim.common.events import MUCNicknameChanged
 from gajim.common.helpers import get_uf_affiliation
 from gajim.common.helpers import get_uf_role
 from gajim.common.helpers import jid_is_blocked
+from gajim.common.i18n import p_
 from gajim.common.modules.contacts import GroupchatContact
 
 from gajim.gtk.builder import get_builder
@@ -488,10 +489,15 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
             nick1 = model[iter1][Column.NICK_OR_GROUP]
             nick2 = model[iter2][Column.NICK_OR_GROUP]
 
+            assert self._contact is not None
+            our_nick = self._contact.nickname
+            if our_nick in (nick1, nick2):
+                # Always show our nickname at the top
+                return -1 if our_nick == nick1 else 1
+
             if not app.settings.get('sort_by_show_in_muc'):
                 return locale.strcoll(nick1.lower(), nick2.lower())
 
-            assert self._contact is not None
             contact1 = self._contact.get_resource(nick1)
             contact2 = self._contact.get_resource(nick2)
 
@@ -574,6 +580,9 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         self._draw_avatar(contact)
 
         name = GLib.markup_escape_text(contact.name)
+        self_contact = self._contact.get_self()
+        if self_contact is not None and self_contact.name == nick:
+            name = p_('own nickname in group chat', '%s (You)' % nick)
 
         # Strike name if blocked
         fjid = f'{self._contact.jid}/{nick}'
