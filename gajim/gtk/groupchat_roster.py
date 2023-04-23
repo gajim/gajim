@@ -100,6 +100,8 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         self._modelfilter.set_visible_func(self._visible_func)
         self._roster.set_has_tooltip(True)
 
+        self._is_big_roster = False
+
         self._ui.contact_column.set_fixed_width(
             app.settings.get('groupchat_roster_width'))
         self._ui.contact_column.set_cell_data_func(self._ui.text_renderer,
@@ -222,6 +224,17 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
                       ) -> bool:
 
         if not self._filter_string:
+            if not self._is_big_roster:
+                return True
+
+            if not model[iter_][Column.IS_CONTACT]:
+                return True
+
+            group_iter = model.iter_parent(iter_)
+            assert group_iter is not None
+            group_name = model[group_iter][Column.NICK_OR_GROUP]
+            if group_name in ('participant', 'visitor'):
+                return False
             return True
 
         if not model[iter_][Column.IS_CONTACT]:
@@ -539,10 +552,13 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         for participant in self._contact.get_participants():
             self._add_contact(participant)
 
+        self._is_big_roster = self._get_total_user_count() > 100
+
+        self._ui.search_entry.set_text('')
+        self._modelfilter.refilter()
         self.enable_sort(True)
         self._roster.set_model(self._modelfilter)
 
-        self._ui.search_entry.set_text('')
         self._roster.expand_all()
 
     def _unload_roster(self) -> None:
@@ -557,6 +573,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         self._store.clear()
         self.enable_sort(False)
 
+        self._is_big_roster = False
         self._contact_refs = {}
         self._group_refs = {}
 
