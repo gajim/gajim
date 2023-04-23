@@ -69,9 +69,6 @@ protocol see https://xmpp.org/about/.
 `--start-chat`
 : Start a new chat
 
-`--show`
-: Show Gajim
-
 # FILES
 
 $XDG_CACHE_HOME/gajim/

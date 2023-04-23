@@ -193,14 +193,9 @@ class GajimApplication(Gtk.Application, CoreApplication):
             GLib.OptionArg.NONE,
             _('Start a new chat'))
 
-        self.add_main_option(
-            'show', 0,
-            GLib.OptionFlags.NONE,
-            GLib.OptionArg.NONE,
-            _('Show Gajim'))
-
         self.add_main_option_entries(self._get_remaining_entry())
 
+        self.connect('activate', self._on_activate)
         self.connect('handle-local-options', self._handle_local_options)
         self.connect('command-line', self._command_line)
         self.connect('shutdown', self._shutdown)
@@ -343,20 +338,24 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         remote_commands = [
             ('start-chat', GLib.Variant('as', ['', ''])),
-            ('show', None)
         ]
-
-        remaining = options.lookup_value(GLib.OPTION_REMAINING,
-                                         GLib.VariantType.new('as'))
 
         for cmd, parameter in remote_commands:
             if options.contains(cmd):
                 self.activate_action(cmd, parameter)
                 return 0
 
+        remaining = options.lookup_value(GLib.OPTION_REMAINING,
+                                         GLib.VariantType.new('as'))
+
         if remaining is not None:
             self._open_uris(remaining.unpack())
             return 0
+
+        if not options.contains('is-first-startup'):
+            # If no commands have been handled and it's not the first
+            # startup, raise the application.
+            self.activate()
 
         return 0
 
@@ -383,9 +382,13 @@ class GajimApplication(Gtk.Application, CoreApplication):
                   'The primary instance will handle remote commands')
             return -1
 
+        options.insert_value('is-first-startup',  GLib.Variant('b', True))
         self._core_command_line(options)
         self._startup()
         return -1
+
+    def _on_activate(self, _application: Gtk.Application) -> None:
+        app.window.show()
 
     def _add_app_actions(self) -> None:
         for action in APP_ACTIONS:
@@ -423,7 +426,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
             ('forget-groupchat', self._on_forget_groupchat_action),
             ('open-chat', self._on_open_chat_action),
             ('mute-chat', self._on_mute_chat_action),
-            ('show', self._on_show),
         ]
 
         for action in actions:
@@ -872,7 +874,3 @@ class GajimApplication(Gtk.Application, CoreApplication):
         client.get_module('Bookmarks').remove(params.jid)
 
         app.storage.archive.remove_history(params.account, params.jid)
-
-    @staticmethod
-    def _on_show(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
-        app.window.show()
