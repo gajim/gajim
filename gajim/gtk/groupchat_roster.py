@@ -386,7 +386,10 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
                                  _column: Gtk.TreeViewColumn
                                  ) -> None:
 
-        iter_ = self._store.get_iter(path)
+        child_path = self._modelfilter.convert_path_to_child_path(path)
+        assert child_path is not None
+
+        iter_ = self._store.get_iter(child_path)
         if self._store.iter_parent(iter_) is None:
             # This is a group row
             return
