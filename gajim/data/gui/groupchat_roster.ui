@@ -67,8 +67,6 @@
           <object class="GtkSearchEntry" id="search_entry">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
-            <property name="margin-start">18</property>
-            <property name="margin-end">18</property>
             <property name="primary-icon-name">edit-find-symbolic</property>
             <property name="primary-icon-activatable">False</property>
             <property name="primary-icon-sensitive">False</property>
@@ -97,54 +95,51 @@
         <property name="can-focus">True</property>
         <property name="hscrollbar-policy">never</property>
         <child>
-          <object class="GtkViewport">
+          <object class="GtkTreeView" id="roster_treeview">
             <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="can-focus">True</property>
+            <property name="headers-visible">False</property>
+            <property name="expander-column">expander</property>
+            <property name="enable-search">False</property>
+            <signal name="button-press-event" handler="_on_roster_button_press_event" swapped="no"/>
+            <signal name="focus-out-event" handler="_on_focus_out" swapped="no"/>
+            <signal name="query-tooltip" handler="_query_tooltip" swapped="no"/>
+            <signal name="row-activated" handler="_on_roster_row_activated" swapped="no"/>
+            <child internal-child="selection">
+              <object class="GtkTreeSelection"/>
+            </child>
             <child>
-              <object class="GtkTreeView" id="roster_treeview">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="headers-visible">False</property>
-                <property name="expander-column">expander</property>
-                <property name="enable-search">False</property>
-                <signal name="button-press-event" handler="_on_roster_button_press_event" swapped="no"/>
-                <signal name="focus-out-event" handler="_on_focus_out" swapped="no"/>
-                <signal name="query-tooltip" handler="_query_tooltip" swapped="no"/>
-                <signal name="row-activated" handler="_on_roster_row_activated" swapped="no"/>
+              <object class="GtkTreeViewColumn" id="contact_column">
+                <property name="sizing">fixed</property>
+                <property name="fixed-width">210</property>
+                <property name="title">avatar</property>
+                <property name="expand">True</property>
                 <child>
-                  <object class="GtkTreeViewColumn" id="contact_column">
-                    <property name="sizing">fixed</property>
-                    <property name="fixed-width">210</property>
-                    <property name="title">avatar</property>
-                    <property name="expand">True</property>
-                    <child>
-                      <object class="GtkCellRendererPixbuf" id="avatar_renderer">
-                        <property name="width">40</property>
-                        <property name="ypad">3</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <attributes>
-                        <attribute name="visible">2</attribute>
-                        <attribute name="surface">0</attribute>
-                      </attributes>
-                    </child>
-                    <child>
-                      <object class="GtkCellRendererText" id="text_renderer">
-                        <property name="ellipsize">end</property>
-                      </object>
-                      <attributes>
-                        <attribute name="markup">1</attribute>
-                      </attributes>
-                    </child>
+                  <object class="GtkCellRendererPixbuf" id="avatar_renderer">
+                    <property name="width">40</property>
+                    <property name="ypad">3</property>
+                    <property name="xalign">0</property>
                   </object>
+                  <attributes>
+                    <attribute name="visible">2</attribute>
+                    <attribute name="surface">0</attribute>
+                  </attributes>
                 </child>
                 <child>
-                  <object class="GtkTreeViewColumn" id="expander">
-                    <property name="visible">False</property>
-                    <property name="sizing">fixed</property>
-                    <property name="title">expander</property>
+                  <object class="GtkCellRendererText" id="text_renderer">
+                    <property name="ellipsize">end</property>
                   </object>
+                  <attributes>
+                    <attribute name="markup">1</attribute>
+                  </attributes>
                 </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="expander">
+                <property name="visible">False</property>
+                <property name="sizing">fixed</property>
+                <property name="title">expander</property>
               </object>
             </child>
           </object>
