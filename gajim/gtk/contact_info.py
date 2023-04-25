@@ -33,7 +33,9 @@ from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common import types
 from gajim.common.const import AvatarSize
+from gajim.common.const import SimpleClientState
 from gajim.common.events import SubscribedPresenceReceived
 from gajim.common.events import UnsubscribedPresenceReceived
 from gajim.common.ged import EventHelper
@@ -87,6 +89,8 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         self.account = account
         self.contact = contact
         self._client = app.get_client(account)
+        self._client.connect_signal(
+            'state-changed', self._on_client_state_changed)
 
         self._ui = get_builder('contact_info.ui')
 
@@ -142,6 +146,17 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
+    def _on_client_state_changed(self,
+                                 _client: types.Client,
+                                 _signal_name: str,
+                                 state: SimpleClientState
+                                 ) -> None:
+
+        self._ui.edit_name_button.set_sensitive(state.is_connected)
+        self._ui.edit_name_button.set_tooltip_text(
+            _('Not connected') if not state.is_connected else _('Edit Name…'))
+        self._ui.subscription_listbox.set_sensitive(state.is_connected)
+
     def _on_stack_child_changed(self,
                                 _widget: Gtk.Stack,
                                 _pspec: GObject.ParamSpec) -> None:
@@ -166,13 +181,17 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
     def _fill_information_page(self, contact: ContactT) -> None:
         self._vcard_grid = VCardGrid(self.account)
         self._ui.vcard_box.add(self._vcard_grid)
-        self._client.get_module('VCard4').request_vcard(
-            jid=self.contact.jid,
-            callback=self._on_vcard_received)
+        if self._client.state.is_available:
+            self._client.get_module('VCard4').request_vcard(
+                jid=self.contact.jid,
+                callback=self._on_vcard_received)
 
         jid = str(contact.get_address())
 
         self._ui.contact_name_label.set_text(contact.name)
+        self._ui.edit_name_button.set_sensitive(
+            self._client.state.is_available)
+
         self._ui.contact_jid_label.set_text(jid)
         self._ui.contact_jid_label.set_tooltip_text(jid)
 
@@ -210,6 +229,9 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
 
         self._ui.from_subscription_switch.set_state(contact.is_subscribed)
 
+        self._ui.subscription_listbox.set_sensitive(
+            self._client.state.is_available)
+
         if contact.subscription in ('to', 'both'):
             self._ui.to_subscription_stack.set_visible_child_name('checkmark')
 
@@ -231,7 +253,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
             params.to_variant())
 
     def _fill_groups_page(self, contact: BareContact) -> None:
-        if not contact.is_in_roster:
+        if not contact.is_in_roster or not self._client.state.is_available:
             return
 
         model = self._ui.groups_treeview.get_model()
