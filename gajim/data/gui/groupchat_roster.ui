@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.40.0 -->
 <interface>
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.24"/>
   <object class="GtkBox" id="box">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -11,8 +11,8 @@
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="margin-start">6</property>
-        <property name="margin-end">6</property>
+        <property name="margin-start">18</property>
+        <property name="margin-end">18</property>
         <property name="margin-top">12</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
@@ -98,6 +98,8 @@
           <object class="GtkTreeView" id="roster_treeview">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
+            <property name="margin-start">18</property>
+            <property name="margin-end">18</property>
             <property name="headers-visible">False</property>
             <property name="expander-column">expander</property>
             <property name="enable-search">False</property>
