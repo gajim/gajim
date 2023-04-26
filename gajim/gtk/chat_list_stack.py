@@ -278,7 +278,8 @@ class ChatListStack(Gtk.Stack, EventHelper):
         client = app.get_client(account)
         contact = client.get_module('Contacts').get_contact(jid, groupchat=True)
 
-        if contact.is_not_joined:
+        if contact.is_not_joined and client.state.is_available:
+            # For example a chat opened from the search bar
             _remove()
             return
 
