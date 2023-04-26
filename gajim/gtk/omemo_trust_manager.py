@@ -113,7 +113,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
                                 'contact’s screen to ensure the safety of '
                                 'your end-to-end encrypted chat.')
         else:
-            header_text = _('Devices connected with %s') % self._contact.name
+            header_text = _('Devices connected with "%s"') % self._contact.name
             popover_qr_text = _('Compare this code with the one shown on your '
                                 'contact’s screen to ensure the safety of '
                                 'your end-to-end encrypted chat '
