@@ -342,8 +342,6 @@ class KeyRow(Gtk.ListBoxRow):
         app.check_finalize(self)
 
     def delete_fingerprint(self, *args: Any) -> None:
-        listbox = cast(Gtk.ListBox, self.get_parent())
-        window = cast(Gtk.Window, listbox.get_window())
 
         def _remove():
             self._omemo.backend.remove_device(str(self.jid), self.device_id)
@@ -352,6 +350,7 @@ class KeyRow(Gtk.ListBoxRow):
             self._omemo.backend.storage.deleteIdentity(
                 str(self.jid), self._identity_key)
 
+            listbox = cast(Gtk.ListBox, self.get_parent())
             listbox.remove(self)
             self.destroy()
 
@@ -363,7 +362,7 @@ class KeyRow(Gtk.ListBoxRow):
              DialogButton.make('Remove',
                                text=_('Delete'),
                                callback=_remove)],
-            transient_for=window).show()
+            transient_for=cast(Gtk.Window, self.get_toplevel())).show()
 
     def set_trust(self) -> None:
         icon_name, tooltip, css_class = TRUST_DATA[self.trust]
