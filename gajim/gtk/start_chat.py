@@ -863,8 +863,7 @@ class ContactRow(Gtk.ListBoxRow):
     def get_search_text(self) -> str:
         if self.contact is None and not self.groupchat:
             return str(self.jid)
-        if self.show_account:
-            return f'{self.name} {self.jid} {self.account_label}'
+
         return f'{self.name} {self.jid}'
 
 
