@@ -157,6 +157,13 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
             _('Not connected') if not state.is_connected else _('Edit Name…'))
         self._ui.subscription_listbox.set_sensitive(state.is_connected)
 
+        if state.is_connected:
+            self._ui.groups_page_stack.set_visible_child_name('groups')
+            self._ui.notes_page_stack.set_visible_child_name('notes')
+        else:
+            self._ui.groups_page_stack.set_visible_child_name('offline')
+            self._ui.notes_page_stack.set_visible_child_name('offline')
+
     def _on_stack_child_changed(self,
                                 _widget: Gtk.Stack,
                                 _pspec: GObject.ParamSpec) -> None:
@@ -168,7 +175,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         for task in self._tasks:
             task.cancel()
 
-        if self.contact.is_in_roster:
+        if self.contact.is_in_roster and self._client.state.is_available:
             self._save_annotation()
 
         for device_grid in self._devices.values():

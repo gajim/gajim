@@ -303,8 +303,8 @@
                           <object class="GtkLabel" id="contact_name_label">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
-                            <property name="selectable">True</property>
                             <property name="halign">center</property>
+                            <property name="selectable">True</property>
                             <property name="ellipsize">end</property>
                             <property name="single-line-mode">True</property>
                             <property name="max-width-chars">20</property>
@@ -760,134 +760,146 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="groups_page_box">
+              <object class="GtkStack" id="groups_page_stack">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="margin-start">18</property>
-                <property name="margin-end">18</property>
-                <property name="margin-top">24</property>
-                <property name="margin-bottom">36</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">12</property>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Choose the contact's groups</property>
-                    <property name="wrap">True</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
+                <property name="transition-type">crossfade</property>
                 <child>
                   <object class="GtkBox">
-                    <property name="width-request">400</property>
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="halign">center</property>
+                    <property name="no-show-all">True</property>
+                    <property name="margin-start">18</property>
+                    <property name="margin-end">18</property>
+                    <property name="margin-top">24</property>
+                    <property name="margin-bottom">36</property>
                     <property name="orientation">vertical</property>
+                    <property name="spacing">12</property>
                     <child>
-                      <object class="GtkScrolledWindow">
-                        <property name="height-request">250</property>
+                      <object class="GtkLabel">
                         <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="shadow-type">in</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes">Choose the contact's groups</property>
+                        <property name="wrap">True</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="width-request">400</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">center</property>
+                        <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkViewport">
+                          <object class="GtkScrolledWindow">
+                            <property name="height-request">250</property>
                             <property name="visible">True</property>
-                            <property name="can-focus">False</property>
+                            <property name="can-focus">True</property>
+                            <property name="vexpand">True</property>
+                            <property name="shadow-type">in</property>
                             <child>
-                              <object class="GtkTreeView" id="groups_treeview">
+                              <object class="GtkViewport">
                                 <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="model">groups_model</property>
-                                <property name="headers-visible">False</property>
-                                <child internal-child="selection">
-                                  <object class="GtkTreeSelection" id="tree_selection"/>
-                                </child>
+                                <property name="can-focus">False</property>
                                 <child>
-                                  <object class="GtkTreeViewColumn">
-                                    <child>
-                                      <object class="GtkCellRendererToggle" id="toggle_renderer">
-                                        <property name="xpad">12</property>
-                                      </object>
-                                      <attributes>
-                                        <attribute name="active">0</attribute>
-                                      </attributes>
+                                  <object class="GtkTreeView" id="groups_treeview">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="model">groups_model</property>
+                                    <property name="headers-visible">False</property>
+                                    <child internal-child="selection">
+                                      <object class="GtkTreeSelection" id="tree_selection"/>
                                     </child>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkTreeViewColumn">
-                                    <property name="title" translatable="yes">column</property>
-                                    <property name="sort-column-id">1</property>
                                     <child>
-                                      <object class="GtkCellRendererText" id="text_renderer">
-                                        <property name="height">42</property>
-                                        <property name="editable">True</property>
+                                      <object class="GtkTreeViewColumn">
+                                        <child>
+                                          <object class="GtkCellRendererToggle" id="toggle_renderer">
+                                            <property name="xpad">12</property>
+                                          </object>
+                                          <attributes>
+                                            <attribute name="active">0</attribute>
+                                          </attributes>
+                                        </child>
                                       </object>
-                                      <attributes>
-                                        <attribute name="text">1</attribute>
-                                      </attributes>
+                                    </child>
+                                    <child>
+                                      <object class="GtkTreeViewColumn">
+                                        <property name="title" translatable="yes">column</property>
+                                        <property name="sort-column-id">1</property>
+                                        <child>
+                                          <object class="GtkCellRendererText" id="text_renderer">
+                                            <property name="height">42</property>
+                                            <property name="editable">True</property>
+                                          </object>
+                                          <attributes>
+                                            <attribute name="text">1</attribute>
+                                          </attributes>
+                                        </child>
+                                      </object>
                                     </child>
                                   </object>
                                 </child>
                               </object>
                             </child>
                           </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkToolbar">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="icon_size">1</property>
-                        <child>
-                          <object class="GtkToolButton" id="group_add_button">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="tooltip-text" translatable="yes">Add Group…</property>
-                            <property name="use-underline">True</property>
-                            <property name="icon-name">list-add-symbolic</property>
-                            <signal name="clicked" handler="_on_group_add_button_clicked" swapped="no"/>
-                          </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogeneous">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkToolButton" id="group_remove_button">
+                          <object class="GtkToolbar">
                             <property name="visible">True</property>
-                            <property name="sensitive">False</property>
                             <property name="can-focus">False</property>
-                            <property name="tooltip-text" translatable="yes">Remove Group...</property>
-                            <property name="use-underline">True</property>
-                            <property name="icon-name">list-remove-symbolic</property>
-                            <signal name="clicked" handler="_on_group_remove_button_clicked" swapped="no"/>
+                            <property name="icon_size">1</property>
+                            <child>
+                              <object class="GtkToolButton" id="group_add_button">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="tooltip-text" translatable="yes">Add Group…</property>
+                                <property name="use-underline">True</property>
+                                <property name="icon-name">list-add-symbolic</property>
+                                <signal name="clicked" handler="_on_group_add_button_clicked" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="group_remove_button">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can-focus">False</property>
+                                <property name="tooltip-text" translatable="yes">Remove Group...</property>
+                                <property name="use-underline">True</property>
+                                <property name="icon-name">list-remove-symbolic</property>
+                                <signal name="clicked" handler="_on_group_remove_button_clicked" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">False</property>
+                              </packing>
+                            </child>
+                            <style>
+                              <class name="inline-toolbar"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogeneous">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
-                        <style>
-                          <class name="inline-toolbar"/>
-                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -897,9 +909,21 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="name">groups</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">You are offline.</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="name">offline</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
@@ -911,56 +935,80 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="notes_page_box">
+              <object class="GtkStack" id="notes_page_stack">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="margin-start">18</property>
-                <property name="margin-end">18</property>
-                <property name="margin-top">24</property>
-                <property name="margin-bottom">36</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">12</property>
+                <property name="transition-type">crossfade</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="margin-start">18</property>
+                    <property name="margin-end">18</property>
+                    <property name="margin-top">24</property>
+                    <property name="margin-bottom">36</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">12</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes">Personal notes about this contact</property>
+                        <property name="wrap">True</property>
+                        <property name="max-width-chars">42</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="scrolledwindow_annotation">
+                        <property name="height-request">70</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="shadow-type">in</property>
+                        <child>
+                          <object class="GtkTextView" id="textview_annotation">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="wrap-mode">word</property>
+                            <property name="left-margin">6</property>
+                            <property name="right-margin">6</property>
+                            <property name="top-margin">6</property>
+                            <property name="bottom-margin">6</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="name">notes</property>
+                  </packing>
+                </child>
                 <child>
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Personal notes about this contact</property>
-                    <property name="wrap">True</property>
-                    <property name="max-width-chars">42</property>
+                    <property name="label" translatable="yes">You are offline.</property>
                     <style>
                       <class name="dim-label"/>
                     </style>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkScrolledWindow" id="scrolledwindow_annotation">
-                    <property name="height-request">70</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="shadow-type">in</property>
-                    <child>
-                      <object class="GtkTextView" id="textview_annotation">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="wrap-mode">word</property>
-                        <property name="left-margin">6</property>
-                        <property name="right-margin">6</property>
-                        <property name="top-margin">6</property>
-                        <property name="bottom-margin">6</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="name">offline</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>

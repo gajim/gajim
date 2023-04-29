@@ -284,14 +284,13 @@ class ContactInfoBuilder(Builder):
     remove_history_button: Gtk.Button
     encryption_scrolled: Gtk.ScrolledWindow
     encryption_box: Gtk.Box
-    groups_page_box: Gtk.Box
+    groups_page_stack: Gtk.Stack
     groups_treeview: Gtk.TreeView
-    tree_selection: Gtk.TreeSelection
     toggle_renderer: Gtk.CellRendererToggle
     text_renderer: Gtk.CellRendererText
     group_add_button: Gtk.ToolButton
     group_remove_button: Gtk.ToolButton
-    notes_page_box: Gtk.Box
+    notes_page_stack: Gtk.Stack
     scrolledwindow_annotation: Gtk.ScrolledWindow
     textview_annotation: Gtk.TextView
     devices_stack: Gtk.Stack
