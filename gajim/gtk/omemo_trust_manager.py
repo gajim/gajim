@@ -323,7 +323,7 @@ class KeyRow(Gtk.ListBoxRow):
         grid.attach(self.fingerprint, 2, 2, 1, 1)
 
         if last_seen is not None:
-            last_seen_str = time.strftime('%d-%m-%Y %H:%M:%S',
+            last_seen_str = time.strftime(app.settings.get('date_time_format'),
                                           time.localtime(last_seen))
         else:
             last_seen_str = _('Never')
