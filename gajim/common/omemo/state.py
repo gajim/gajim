@@ -26,6 +26,10 @@ from pathlib import Path
 
 from nbxmpp.structs import OMEMOBundle
 from nbxmpp.structs import OMEMOMessage
+from omemo_dr.aes import aes_decrypt
+from omemo_dr.aes import aes_encrypt
+from omemo_dr.aes import get_new_iv
+from omemo_dr.aes import get_new_key
 from omemo_dr.ecc.djbec import CurvePublicKey
 from omemo_dr.exceptions import DuplicateMessageException
 from omemo_dr.identitykey import IdentityKey
@@ -40,10 +44,6 @@ from omemo_dr.util.keyhelper import KeyHelper
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import types
-from gajim.common.omemo.aes import aes_decrypt
-from gajim.common.omemo.aes import aes_encrypt
-from gajim.common.omemo.aes import get_new_iv
-from gajim.common.omemo.aes import get_new_key
 from gajim.common.omemo.util import DEFAULT_PREKEY_AMOUNT
 from gajim.common.omemo.util import get_fingerprint
 from gajim.common.omemo.util import MIN_PREKEY_AMOUNT

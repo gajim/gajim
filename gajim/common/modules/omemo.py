@@ -42,6 +42,7 @@ from nbxmpp.structs import OMEMOMessage
 from nbxmpp.structs import PresenceProperties
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.task import Task
+from omemo_dr.aes import aes_encrypt_file
 
 from gajim.common import app
 from gajim.common import ged
@@ -60,7 +61,6 @@ from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.modules.util import as_task
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import prepare_stanza
-from gajim.common.omemo.aes import aes_encrypt_file
 from gajim.common.omemo.state import DecryptionFailed
 from gajim.common.omemo.state import DuplicateMessage
 from gajim.common.omemo.state import KeyExchangeMessage
