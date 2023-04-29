@@ -23,6 +23,7 @@ finish-args:
   - --talk-name=org.kde.StatusNotifierWatcher
   # GnuPG
   - --filesystem=~/.gnupg
+  - --filesystem=xdg-run/gnupg
   # camera access
   - --device=all
   # extensions
