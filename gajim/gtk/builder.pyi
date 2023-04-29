@@ -286,6 +286,7 @@ class ContactInfoBuilder(Builder):
     encryption_box: Gtk.Box
     groups_page_stack: Gtk.Stack
     groups_treeview: Gtk.TreeView
+    tree_selection: Gtk.TreeSelection
     toggle_renderer: Gtk.CellRendererToggle
     text_renderer: Gtk.CellRendererText
     group_add_button: Gtk.ToolButton
