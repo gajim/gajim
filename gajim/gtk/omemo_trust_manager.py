@@ -28,7 +28,10 @@ import time
 from gi.repository import GdkPixbuf
 from gi.repository import Gtk
 from nbxmpp.protocol import JID
+from omemo_dr.const import OMEMOTrust
 from omemo_dr.identitykeypair import IdentityKeyPair
+from omemo_dr.util.keyhelper import get_fingerprint
+from omemo_dr.util.keyhelper import IdentityKeyExtended
 
 from gajim.common import app
 from gajim.common import ged
@@ -40,9 +43,6 @@ from gajim.common.ged import EventHelper
 from gajim.common.helpers import generate_qr_code
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
-from gajim.common.omemo.util import get_fingerprint
-from gajim.common.omemo.util import IdentityKeyExtended
-from gajim.common.omemo.util import Trust
 
 from .builder import get_builder
 from .dialogs import ConfirmationDialog
@@ -53,16 +53,16 @@ log = logging.getLogger('gajim.gui.omemo_trust_dialog')
 
 
 TRUST_DATA = {
-    Trust.UNTRUSTED: ('dialog-error-symbolic',
+    OMEMOTrust.UNTRUSTED: ('dialog-error-symbolic',
                       _('Untrusted'),
                       'error-color'),
-    Trust.UNDECIDED: ('security-low-symbolic',
+    OMEMOTrust.UNDECIDED: ('security-low-symbolic',
                       _('Not Decided'),
                       'warning-color'),
-    Trust.VERIFIED: ('security-high-symbolic',
+    OMEMOTrust.VERIFIED: ('security-high-symbolic',
                      _('Verified'),
                      'encrypted-color'),
-    Trust.BLIND: ('security-medium-symbolic',
+    OMEMOTrust.BLIND: ('security-medium-symbolic',
                   _('Blind Trust'),
                   'encrypted-color')
 }
@@ -281,7 +281,7 @@ class KeyRow(Gtk.ListBoxRow):
                  contact: types.ChatContactT,
                  jid: JID,
                  identity_key: IdentityKeyExtended,
-                 trust: Trust,
+                 trust: OMEMOTrust,
                  last_seen: Optional[float]
                  ) -> None:
 
@@ -454,11 +454,11 @@ class TrustPopver(Gtk.Popover):
 
     def update(self) -> None:
         self._listbox.foreach(self._listbox.remove)
-        if self._row.trust != Trust.VERIFIED:
+        if self._row.trust != OMEMOTrust.VERIFIED:
             self._listbox.add(VerifiedOption())
-        if self._row.trust != Trust.BLIND:
+        if self._row.trust != OMEMOTrust.BLIND:
             self._listbox.add(BlindOption())
-        if self._row.trust != Trust.UNTRUSTED:
+        if self._row.trust != OMEMOTrust.UNTRUSTED:
             self._listbox.add(NotTrustedOption())
         self._listbox.add(DeleteOption())
 
@@ -468,7 +468,7 @@ class MenuOption(Gtk.ListBoxRow):
                  icon: str,
                  label_text: str,
                  color: str,
-                 type_: Optional[Trust] = None
+                 type_: Optional[OMEMOTrust] = None
                  ) -> None:
 
         Gtk.ListBoxRow.__init__(self)
@@ -497,7 +497,7 @@ class BlindOption(MenuOption):
                             'security-medium-symbolic',
                             _('Blind Trust'),
                             'encrypted-color',
-                            Trust.BLIND)
+                            OMEMOTrust.BLIND)
 
 
 class VerifiedOption(MenuOption):
@@ -506,7 +506,7 @@ class VerifiedOption(MenuOption):
                             'security-high-symbolic',
                             _('Verified'),
                             'encrypted-color',
-                            Trust.VERIFIED)
+                            OMEMOTrust.VERIFIED)
 
 
 class NotTrustedOption(MenuOption):
@@ -515,7 +515,7 @@ class NotTrustedOption(MenuOption):
                             'dialog-error-symbolic',
                             _('Untrusted'),
                             'error-color',
-                            Trust.UNTRUSTED)
+                            OMEMOTrust.UNTRUSTED)
 
 
 class DeleteOption(MenuOption):

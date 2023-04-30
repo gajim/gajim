@@ -26,6 +26,8 @@ import time
 from collections import namedtuple
 from pathlib import Path
 
+from omemo_dr.const import DEFAULT_PREKEY_AMOUNT
+from omemo_dr.const import OMEMOTrust
 from omemo_dr.ecc.djbec import CurvePublicKey
 from omemo_dr.ecc.djbec import DjbECPrivateKey
 from omemo_dr.exceptions import InvalidKeyIdException
@@ -35,14 +37,12 @@ from omemo_dr.state.axolotlstore import AxolotlStore
 from omemo_dr.state.prekeyrecord import PreKeyRecord
 from omemo_dr.state.sessionrecord import SessionRecord
 from omemo_dr.state.signedprekeyrecord import SignedPreKeyRecord
+from omemo_dr.util.keyhelper import IdentityKeyExtended
 from omemo_dr.util.keyhelper import KeyHelper
 from omemo_dr.util.medium import Medium
 
 from gajim.common import app
 from gajim.common.modules.util import LogAdapter
-from gajim.common.omemo.util import DEFAULT_PREKEY_AMOUNT
-from gajim.common.omemo.util import IdentityKeyExtended
-from gajim.common.omemo.util import Trust
 
 
 def _convert_identity_key(key: bytes) -> Optional[IdentityKeyExtended]:
@@ -637,7 +637,7 @@ class OMEMOStorage(AxolotlStore):
             self._con.execute(query, (recipientId,
                                       identityKey.getPublicKey().serialize(),
                                       trust,
-                                      1 if trust == Trust.BLIND else 0))
+                                      1 if trust == OMEMOTrust.BLIND else 0))
             self._con.commit()
 
     def containsIdentity(self,
@@ -675,7 +675,7 @@ class OMEMOStorage(AxolotlStore):
     def getTrustForIdentity(self,
                             recipientId: str,
                             identityKey: IdentityKey
-                            ) -> Optional[Trust]:
+                            ) -> Optional[OMEMOTrust]:
 
         query = '''SELECT trust FROM identities WHERE recipient_id = ?
                    AND public_key = ?'''
@@ -707,23 +707,24 @@ class OMEMOStorage(AxolotlStore):
     def hasUndecidedFingerprints(self, jid: str) -> bool:
         query = '''SELECT public_key as "public_key [pk]" FROM identities
                    WHERE recipient_id = ? AND trust = ?'''
-        result = self._con.execute(query, (jid, Trust.UNDECIDED)).fetchall()
+        result = self._con.execute(query,
+                                   (jid, OMEMOTrust.UNDECIDED)).fetchall()
         undecided = [row.public_key for row in result]
 
         inactive = self.getInactiveSessionsKeys(jid)
         undecided = set(undecided) - set(inactive)
         return bool(undecided)
 
-    def getDefaultTrust(self, jid: str) -> Trust:
+    def getDefaultTrust(self, jid: str) -> OMEMOTrust:
         if not self._is_blind_trust_enabled():
-            return Trust.UNDECIDED
+            return OMEMOTrust.UNDECIDED
 
         query = '''SELECT * FROM identities
                    WHERE recipient_id = ? AND trust IN (0, 1)'''
         result = self._con.execute(query, (jid,)).fetchone()
         if result is None:
-            return Trust.BLIND
-        return Trust.UNDECIDED
+            return OMEMOTrust.BLIND
+        return OMEMOTrust.UNDECIDED
 
     def getTrustedFingerprints(self, jid: str) -> list[IdentityKeyExtended]:
         query = '''SELECT public_key as "public_key [pk]" FROM identities
@@ -747,7 +748,7 @@ class OMEMOStorage(AxolotlStore):
     def setTrust(self,
                  recipient_id: str,
                  identityKey: IdentityKey,
-                 trust: Trust
+                 trust: OMEMOTrust
                  ) -> None:
 
         query = '''UPDATE identities SET trust = ? WHERE public_key = ?
@@ -762,7 +763,8 @@ class OMEMOStorage(AxolotlStore):
             return False
         identity_key = record.getSessionState().getRemoteIdentityKey()
         return self.getTrustForIdentity(
-            recipient_id, identity_key) in (Trust.VERIFIED, Trust.BLIND)
+            recipient_id, identity_key) in (OMEMOTrust.VERIFIED,
+                                            OMEMOTrust.BLIND)
 
     def getIdentityLastSeen(self,
                             recipient_id: str,

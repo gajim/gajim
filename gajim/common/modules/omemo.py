@@ -24,6 +24,7 @@ from typing import Optional
 
 import binascii
 import threading
+from pathlib import Path
 
 from gi.repository import GLib
 from nbxmpp.const import Affiliation
@@ -43,8 +44,16 @@ from nbxmpp.structs import PresenceProperties
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.task import Task
 from omemo_dr.aes import aes_encrypt_file
+from omemo_dr.const import OMEMOTrust
+from omemo_dr.exceptions import DecryptionFailed
+from omemo_dr.exceptions import DuplicateMessage
+from omemo_dr.exceptions import KeyExchangeMessage
+from omemo_dr.exceptions import MessageNotForDevice
+from omemo_dr.exceptions import SelfMessage
+from omemo_dr.session import OMEMOSession
 
 from gajim.common import app
+from gajim.common import configpaths
 from gajim.common import ged
 from gajim.common import types
 from gajim.common.const import EncryptionData
@@ -61,13 +70,7 @@ from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.modules.util import as_task
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import prepare_stanza
-from gajim.common.omemo.state import DecryptionFailed
-from gajim.common.omemo.state import DuplicateMessage
-from gajim.common.omemo.state import KeyExchangeMessage
-from gajim.common.omemo.state import MessageNotForDevice
-from gajim.common.omemo.state import OmemoState
-from gajim.common.omemo.state import SelfMessage
-from gajim.common.omemo.util import Trust
+from gajim.common.storage.omemo import OMEMOStorage
 from gajim.common.structs import OutgoingMessage
 
 ALLOWED_TAGS = [
@@ -122,7 +125,12 @@ class OMEMO(BaseModule):
         self.allow_groupchat = True
 
         self._own_jid = self._client.get_own_jid().bare
-        self._backend = OmemoState(self._account, self._own_jid, self)
+
+        data_dir = Path(configpaths.get('MY_DATA'))
+        db_path = data_dir / f'omemo_{self._own_jid}.db'
+        storage = OMEMOStorage(self._account, db_path, self._log)
+
+        self._backend = OMEMOSession(self._own_jid, storage, self)
 
         self._omemo_groupchats: set[str] = set()
         self._muc_temp_store: dict[bytes, str] = {}
@@ -161,7 +169,7 @@ class OMEMO(BaseModule):
             self.get_affiliation_list(jid)
 
     @property
-    def backend(self) -> OmemoState:
+    def backend(self) -> OMEMOSession:
         return self._backend
 
     def check_send_preconditions(self, contact: types.ChatContactT) -> bool:
@@ -245,7 +253,12 @@ class OMEMO(BaseModule):
         if not event.message:
             return False
 
-        omemo_message = self.backend.encrypt(str(event.jid), event.message)
+        client = app.get_client(self._account)
+        contact = client.get_module('Contacts').get_contact(event.jid)
+
+        omemo_message = self.backend.encrypt(str(event.jid),
+                                             event.message,
+                                             groupchat=contact.is_groupchat)
         if omemo_message is None:
             raise Exception('Encryption error')
 
@@ -258,7 +271,7 @@ class OMEMO(BaseModule):
             event.xhtml = None
             event.additional_data['encrypted'] = {
                 'name': 'OMEMO',
-                'trust': GajimTrust[Trust.VERIFIED.name]}
+                'trust': GajimTrust[OMEMOTrust.VERIFIED.name]}
 
         self._debug_print_stanza(event.stanza)
         return True
@@ -347,7 +360,7 @@ class OMEMO(BaseModule):
 
             plaintext = self._muc_temp_store[properties.omemo.payload]
             fingerprint = self.backend.own_fingerprint
-            trust = Trust.VERIFIED
+            trust = OMEMOTrust.VERIFIED
             del self._muc_temp_store[properties.omemo.payload]
 
         except DecryptionFailed:
@@ -362,7 +375,7 @@ class OMEMO(BaseModule):
                           'but not for your device.')
             # Neither trust nor fingerprint can be verified if we didn't
             # successfully decrypt the message
-            trust = Trust.UNTRUSTED
+            trust = OMEMOTrust.UNTRUSTED
             fingerprint = None
 
         prepare_stanza(stanza, plaintext)
@@ -638,3 +651,7 @@ class OMEMO(BaseModule):
         stanzastr = '\n' + stanza.__str__(fancy=True)
         stanzastr = stanzastr[0:-1]
         self._log.debug(stanzastr)
+
+    def cleanup(self) -> None:
+        self._backend.destroy()
+        del self._backend
