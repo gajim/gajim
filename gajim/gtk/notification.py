@@ -83,7 +83,8 @@ class NotificationBackend(EventHelper):
 
         self.register_events([
             ('notification', ged.GUI2, self._on_notification),
-            ('account-enabled', ged.GUI2, self._on_account_enabled)
+            ('account-enabled', ged.GUI2, self._on_account_enabled),
+            ('chat-read', ged.GUI2, self._on_chat_read)
         ])
 
         for client in app.get_clients():
@@ -110,6 +111,9 @@ class NotificationBackend(EventHelper):
     def _on_account_enabled(self, event: events.AccountEnabled) -> None:
         client = app.get_client(event.account)
         client.connect_signal('state-changed', self._on_client_state_changed)
+
+    def _on_chat_read(self, event: events.ChatRead) -> None:
+        self._withdraw(['new-message', event.account, event.jid])
 
     def _on_client_state_changed(self,
                                  client: Client,

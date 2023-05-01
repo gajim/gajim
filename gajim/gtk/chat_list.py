@@ -163,8 +163,9 @@ class ChatList(Gtk.ListBox, EventHelper):
 
     def mark_as_read(self, account: str, jid: JID) -> None:
         chat = self._chats.get((account, jid))
-        if chat is not None:
+        if chat is not None and chat.get_real_unread_count() > 0:
             chat.reset_unread()
+            app.ged.raise_event(events.ChatRead(account=account, jid=jid))
 
     def toggle_chat_pinned(self, account: str, jid: JID) -> None:
         row = self._chats[(account, jid)]

@@ -123,6 +123,13 @@ class Notification(ApplicationEvent):
 
 
 @dataclass
+class ChatRead(ApplicationEvent):
+    name: str = field(init=False, default='chat-read')
+    account: str
+    jid: JID
+
+
+@dataclass
 class StanzaSent(ApplicationEvent):
     name: str = field(init=False, default='stanza-sent')
     account: str
