@@ -29,9 +29,7 @@ from gi.repository import GdkPixbuf
 from gi.repository import Gtk
 from nbxmpp.protocol import JID
 from omemo_dr.const import OMEMOTrust
-from omemo_dr.identitykeypair import IdentityKeyPair
-from omemo_dr.util.keyhelper import get_fingerprint
-from omemo_dr.util.keyhelper import IdentityKeyExtended
+from omemo_dr.identitykey import IdentityKey
 
 from gajim.common import app
 from gajim.common import ged
@@ -125,9 +123,8 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
 
         self._omemo = client.get_module('OMEMO')
 
-        self._identity_key = cast(
-            IdentityKeyPair, self._omemo.backend.storage.getIdentityKeyPair())
-        our_fpr_formatted = get_fingerprint(self._identity_key, formatted=True)
+        our_fpr_formatted = self._omemo.backend.get_own_fingerprint(
+            formatted=True)
         self._ui.our_fingerprint_1.set_text(our_fpr_formatted)
         self._ui.our_fingerprint_2.set_text(our_fpr_formatted)
 
@@ -198,15 +195,16 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
         if contact.is_groupchat:
             members = list(self._omemo.backend.get_muc_members(
                 str(contact.jid)))
-            sessions = self._omemo.backend.storage.getSessionsFromJids(members)
-            results = self._omemo.backend.storage.getMucFingerprints(members)
+            sessions = self._omemo.backend.storage.get_sessions_from_jids(
+                members)
+            results = self._omemo.backend.storage.get_muc_fingerprints(members)
         else:
-            sessions = self._omemo.backend.storage.getSessionsFromJid(
+            sessions = self._omemo.backend.storage.get_sessions_from_jid(
                 str(contact.jid))
-            results = self._omemo.backend.storage.getFingerprints(
+            results = self._omemo.backend.storage.get_fingerprints(
                 str(contact.jid))
 
-        rows: dict[IdentityKeyExtended, KeyRow] = {}
+        rows: dict[IdentityKey, KeyRow] = {}
         for result in results:
             rows[result.public_key] = KeyRow(contact,
                                              result.recipient_id,
@@ -215,16 +213,17 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
                                              result.timestamp)
 
         for item in sessions:
-            if item.record.isFresh():
+            if item.record.is_fresh():
                 return
-            identity_key = item.record.getSessionState().getRemoteIdentityKey()
-            identity_key = IdentityKeyExtended(identity_key.getPublicKey())
+            identity_key = item.record.get_session_state().\
+                get_remote_identity_key()
+            identity_key = IdentityKey(identity_key.get_public_key())
             try:
                 key_row = rows[identity_key]
             except KeyError:
                 log.warning('Could not find session identitykey %s',
                             item.device_id)
-                self._omemo.backend.storage.deleteSession(item.recipient_id,
+                self._omemo.backend.storage.delete_session(item.recipient_id,
                                                           item.device_id)
                 continue
 
@@ -237,10 +236,9 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
     @staticmethod
     def _get_qrcode(jid: JID,
                     sid: int,
-                    identity_key: IdentityKeyPair
+                    fingerprint: str
                     ) -> GdkPixbuf.Pixbuf | None:
 
-        fingerprint = get_fingerprint(identity_key)
         qry = (XmppUriQuery.MESSAGE.value, [(f'omemo-sid-{sid}', fingerprint)])
         ver_string = jid.new_as_bare().to_iri(qry)
         log.debug('Verification String: %s', ver_string)
@@ -249,8 +247,8 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
     def _load_qrcode(self) -> None:
         client = app.get_client(self._account)
         pixbuf = self._get_qrcode(client.get_own_jid(),
-                                  self._omemo.backend.own_device,
-                                  self._identity_key)
+                                  self._omemo.backend.get_own_device(),
+                                  self._omemo.backend.get_own_fingerprint())
         self._ui.qr_code_image.set_from_pixbuf(pixbuf)
 
     def _on_show_inactive(self, switch: Gtk.Switch, _param: Any) -> None:
@@ -280,7 +278,7 @@ class KeyRow(Gtk.ListBoxRow):
     def __init__(self,
                  contact: types.ChatContactT,
                  jid: JID,
-                 identity_key: IdentityKeyExtended,
+                 identity_key: IdentityKey,
                  trust: OMEMOTrust,
                  last_seen: Optional[float]
                  ) -> None:
@@ -347,9 +345,9 @@ class KeyRow(Gtk.ListBoxRow):
 
         def _remove():
             self._omemo.backend.remove_device(str(self.jid), self.device_id)
-            self._omemo.backend.storage.deleteSession(
+            self._omemo.backend.storage.delete_session(
                 str(self.jid), self.device_id)
-            self._omemo.backend.storage.deleteIdentity(
+            self._omemo.backend.storage.delete_identity(
                 str(self.jid), self._identity_key)
 
             listbox = cast(Gtk.ListBox, self.get_parent())
@@ -373,7 +371,7 @@ class KeyRow(Gtk.ListBoxRow):
         image.get_style_context().add_class(css_class)
         image.set_tooltip_text(tooltip)
 
-        self._omemo.backend.storage.setTrust(
+        self._omemo.backend.storage.set_trust(
             str(self.jid), self._identity_key, self.trust)
 
     @property

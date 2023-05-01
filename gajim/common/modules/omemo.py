@@ -51,6 +51,8 @@ from omemo_dr.exceptions import KeyExchangeMessage
 from omemo_dr.exceptions import MessageNotForDevice
 from omemo_dr.exceptions import SelfMessage
 from omemo_dr.session import OMEMOSession
+from omemo_dr.structs import OMEMOBundle
+from omemo_dr.structs import OMEMOConfig
 
 from gajim.common import app
 from gajim.common import configpaths
@@ -130,7 +132,15 @@ class OMEMO(BaseModule):
         db_path = data_dir / f'omemo_{self._own_jid}.db'
         storage = OMEMOStorage(self._account, db_path, self._log)
 
-        self._backend = OMEMOSession(self._own_jid, storage, self)
+        omemo_config = OMEMOConfig(default_prekey_amount=100,
+                                   min_prekey_amount=80,
+                                   spk_archive_seconds=86400 * 15,
+                                   spk_cycle_seconds=86400,
+                                   unacknowledged_count=2000)
+
+        self._backend = OMEMOSession(self._own_jid, storage, omemo_config)
+        self._backend.register_signal('republish-bundle',
+                                      self._on_republish_bundle)
 
         self._omemo_groupchats: set[str] = set()
         self._muc_temp_store: dict[bytes, str] = {}
@@ -168,6 +178,14 @@ class OMEMO(BaseModule):
         if self.is_omemo_groupchat(jid):
             self.get_affiliation_list(jid)
 
+    def _on_republish_bundle(self,
+                             _session: OMEMOSession,
+                             _signal_name: str,
+                             bundle: OMEMOBundle
+                             ) -> None:
+
+        self.set_bundle(bundle=bundle)
+
     @property
     def backend(self) -> OMEMOSession:
         return self._backend
@@ -183,7 +201,7 @@ class OMEMO(BaseModule):
                 return False
 
             missing = True
-            for member_jid in self.backend.get_muc_members(jid):
+            for member_jid in self.backend.get_group_members(jid):
                 if not self.are_keys_missing(member_jid):
                     missing = False
             if missing:
@@ -205,7 +223,7 @@ class OMEMO(BaseModule):
                 return False
 
             # check if bundles are missing for some devices
-            if self.backend.storage.hasUndecidedFingerprints(jid):
+            if self.backend.storage.has_undecided_fingerprints(jid):
                 self._log.info('%s => Undecided Fingerprints for %s',
                                contact.account, jid)
                 app.ged.raise_event(EncryptionInfo(
@@ -225,15 +243,15 @@ class OMEMO(BaseModule):
     def _new_fingerprints_available(self, contact: types.ChatContactT) -> bool:
         fingerprints: list[int] = []
         if contact.is_groupchat:
-            for member_jid in self.backend.get_muc_members(str(contact.jid),
+            for member_jid in self.backend.get_group_members(str(contact.jid),
                                                            without_self=False):
-                fingerprints = self.backend.storage.getNewFingerprints(
+                fingerprints = self.backend.storage.get_new_fingerprints(
                     member_jid)
                 if fingerprints:
                     break
 
         else:
-            fingerprints = self.backend.storage.getNewFingerprints(
+            fingerprints = self.backend.storage.get_new_fingerprints(
                 str(contact.jid))
 
         if not fingerprints:
@@ -359,7 +377,7 @@ class OMEMO(BaseModule):
                 return
 
             plaintext = self._muc_temp_store[properties.omemo.payload]
-            fingerprint = self.backend.own_fingerprint
+            fingerprint = self.backend.get_own_fingerprint()
             trust = OMEMOTrust.VERIFIED
             del self._muc_temp_store[properties.omemo.payload]
 
@@ -401,7 +419,8 @@ class OMEMO(BaseModule):
 
         assert isinstance(properties.omemo, OMEMOMessage)
         self._log.info('Groupchat: Last resort trying to find SID in DB')
-        from_jid = self.backend.storage.getJidFromDevice(properties.omemo.sid)
+        from_jid = self.backend.storage.get_jid_from_device(
+            properties.omemo.sid)
         if not from_jid:
             self._log.error(
                 "Can't decrypt GroupChat Message from %s", resource)
@@ -443,9 +462,9 @@ class OMEMO(BaseModule):
         jid = properties.muc_user.jid.bare
         if properties.muc_user.affiliation in (Affiliation.OUTCAST,
                                                Affiliation.NONE):
-            self.backend.remove_muc_member(room, jid)
+            self.backend.remove_group_member(room, jid)
         else:
-            self.backend.add_muc_member(room, jid)
+            self.backend.add_group_member(room, jid)
 
         if self.is_omemo_groupchat(room):
             if not self.is_contact_in_roster(jid):
@@ -471,7 +490,7 @@ class OMEMO(BaseModule):
 
         for user_jid in result.users:
             jid = str(user_jid)
-            self.backend.add_muc_member(room_jid, jid)
+            self.backend.add_group_member(room_jid, jid)
 
             if not self.is_contact_in_roster(jid):
                 # Query Devicelists from JIDs not in our Roster
@@ -499,7 +518,7 @@ class OMEMO(BaseModule):
             self._omemo_groupchats.discard(jid)
 
     def _check_for_missing_sessions(self, jid: str) -> None:
-        devices_without_session = self.backend.devices_without_sessions(jid)
+        devices_without_session = self.backend.get_devices_without_sessions(jid)
         for device_id in devices_without_session:
             if device_id in self._device_bundle_querys:
                 continue
@@ -524,7 +543,7 @@ class OMEMO(BaseModule):
         # Fetch Bundles of own other Devices
         if self._own_jid not in self._query_for_bundles:
 
-            devices_without_session = self.backend.devices_without_sessions(
+            devices_without_session = self.backend.get_devices_without_sessions(
                 self._own_jid)
 
             self._query_for_bundles.append(self._own_jid)
@@ -536,7 +555,7 @@ class OMEMO(BaseModule):
         # Fetch Bundles of contacts devices
         if contact_jid not in self._query_for_bundles:
 
-            devices_without_session = self.backend.devices_without_sessions(
+            devices_without_session = self.backend.get_devices_without_sessions(
                 contact_jid)
 
             self._query_for_bundles.append(contact_jid)
@@ -549,9 +568,11 @@ class OMEMO(BaseModule):
             return False
         return True
 
-    def set_bundle(self) -> None:
-        self._nbxmpp('OMEMO').set_bundle(self.backend.bundle,
-                                         self.backend.own_device)
+    def set_bundle(self, bundle: OMEMOBundle | None = None) -> None:
+        if bundle is None:
+            bundle = self.backend.get_bundle()
+        self._nbxmpp('OMEMO').set_bundle(bundle,
+                                         self.backend.get_own_device())
 
     @as_task
     def request_bundle(self, jid: str, device_id: int):
@@ -579,7 +600,7 @@ class OMEMO(BaseModule):
             message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
 
     def set_devicelist(self, devicelist: Optional[list[int]] = None) -> None:
-        devicelist_: set[int] = {self.backend.own_device}
+        devicelist_: set[int] = {self.backend.get_own_device()}
         if devicelist is not None:
             devicelist_.update(devicelist)
         self._log.info('Publishing own devicelist: %s', devicelist_)
@@ -587,7 +608,7 @@ class OMEMO(BaseModule):
 
     def clear_devicelist(self) -> None:
         self.backend.update_devicelist(
-            self._own_jid, [self.backend.own_device])
+            self._own_jid, [self.backend.get_own_device()])
         self.set_devicelist()
 
     @as_task
@@ -640,7 +661,7 @@ class OMEMO(BaseModule):
             self._query_for_bundles.remove(jid)
 
         if own_devices:
-            if not self.backend.is_own_device_published:
+            if not self.backend.is_own_device_published():
                 # Our own device_id is not in the list, it could be
                 # overwritten by some other client
                 self.set_devicelist(devicelist)

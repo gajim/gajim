@@ -26,29 +26,26 @@ import time
 from collections import namedtuple
 from pathlib import Path
 
-from omemo_dr.const import DEFAULT_PREKEY_AMOUNT
 from omemo_dr.const import OMEMOTrust
 from omemo_dr.ecc.djbec import CurvePublicKey
 from omemo_dr.ecc.djbec import DjbECPrivateKey
 from omemo_dr.exceptions import InvalidKeyIdException
 from omemo_dr.identitykey import IdentityKey
 from omemo_dr.identitykeypair import IdentityKeyPair
-from omemo_dr.state.axolotlstore import AxolotlStore
 from omemo_dr.state.prekeyrecord import PreKeyRecord
 from omemo_dr.state.sessionrecord import SessionRecord
 from omemo_dr.state.signedprekeyrecord import SignedPreKeyRecord
-from omemo_dr.util.keyhelper import IdentityKeyExtended
-from omemo_dr.util.keyhelper import KeyHelper
+from omemo_dr.state.store import Store
 from omemo_dr.util.medium import Medium
 
 from gajim.common import app
 from gajim.common.modules.util import LogAdapter
 
 
-def _convert_identity_key(key: bytes) -> Optional[IdentityKeyExtended]:
+def _convert_identity_key(key: bytes) -> Optional[IdentityKey]:
     if not key:
         return
-    return IdentityKeyExtended(CurvePublicKey(key[1:]))
+    return IdentityKey(CurvePublicKey(key[1:]))
 
 
 def _convert_record(record: bytes) -> SessionRecord:
@@ -59,15 +56,15 @@ sqlite3.register_converter('pk', _convert_identity_key)
 sqlite3.register_converter('session_record', _convert_record)
 
 
-class OMEMOStorage(AxolotlStore):
+class OMEMOStorage(Store):
     def __init__(self, account: str, db_path: Path, log: LogAdapter) -> None:
         self._log = log
         self._account = account
         self._con = sqlite3.connect(db_path,
                                     detect_types=sqlite3.PARSE_COLNAMES)
         self._con.row_factory = self._namedtuple_factory
-        self.createDb()
-        self.migrateDb()
+        self.create_db()
+        self.migrate_db()
 
         self._con.execute('PRAGMA secure_delete=1')
         self._con.execute('PRAGMA synchronous=NORMAL;')
@@ -77,10 +74,6 @@ class OMEMOStorage(AxolotlStore):
         if mode != 'wal':
             self._con.execute('PRAGMA journal_mode=MEMORY;')
         self._con.commit()
-
-        if not self.getLocalRegistrationId():
-            self._log.info('Generating OMEMO keys')
-            self._generate_axolotl_keys()
 
     def _is_blind_trust_enabled(self) -> bool:
         return app.settings.get_account_setting(self._account,
@@ -105,26 +98,10 @@ class OMEMOStorage(AxolotlStore):
                 fields.append(col[0])
         return namedtuple('Row', fields)(*row)  # pyright: ignore
 
-    def _generate_axolotl_keys(self) -> None:
-        identity_key_pair = KeyHelper.generateIdentityKeyPair()
-        registration_id = KeyHelper.getRandomSequence(2147483647)
-        pre_keys = KeyHelper.generatePreKeys(
-            KeyHelper.getRandomSequence(4294967296),
-            DEFAULT_PREKEY_AMOUNT)
-        self.storeLocalData(registration_id, identity_key_pair)
-
-        signed_pre_key = KeyHelper.generateSignedPreKey(
-            identity_key_pair, KeyHelper.getRandomSequence(65536))
-
-        self.storeSignedPreKey(signed_pre_key.getId(), signed_pre_key)
-
-        for pre_key in pre_keys:
-            self.storePreKey(pre_key.getId(), pre_key)
-
     def user_version(self) -> int:
         return self._con.execute('PRAGMA user_version').fetchone()[0]
 
-    def createDb(self) -> None:
+    def create_db(self) -> None:
         if self.user_version() == 0:
 
             create_tables = '''
@@ -166,7 +143,7 @@ class OMEMOStorage(AxolotlStore):
                 ''' % (create_tables)
             self._con.executescript(create_db_sql)
 
-    def migrateDb(self) -> None:
+    def migrate_db(self) -> None:
         ''' Migrates the DB
         '''
 
@@ -384,131 +361,130 @@ class OMEMOStorage(AxolotlStore):
             self._con.execute('PRAGMA user_version=12')
             self._con.commit()
 
-    def loadSignedPreKey(self, signedPreKeyId: int) -> SignedPreKeyRecord:
+    def load_signed_pre_key(self, signed_pre_key_id: int) -> SignedPreKeyRecord:
         query = 'SELECT record FROM signed_prekeys WHERE prekey_id = ?'
-        result = self._con.execute(query, (signedPreKeyId, )).fetchone()
+        result = self._con.execute(query, (signed_pre_key_id, )).fetchone()
         if result is None:
             raise InvalidKeyIdException('No such signedprekeyrecord! %s ' %
-                                        signedPreKeyId)
+                                        signed_pre_key_id)
         return SignedPreKeyRecord.from_bytes(result.record)
 
-    def loadSignedPreKeys(self) -> list[SignedPreKeyRecord]:
+    def load_signed_pre_keys(self) -> list[SignedPreKeyRecord]:
         query = 'SELECT record FROM signed_prekeys'
         results = self._con.execute(query).fetchall()
         return [SignedPreKeyRecord.from_bytes(row.record) for row in results]
 
-    def storeSignedPreKey(self,
-                          signedPreKeyId: int,
-                          signedPreKeyRecord: SignedPreKeyRecord
-                          ) -> None:
+    def store_signed_pre_key(self,
+                             signed_pre_key_id: int,
+                             signed_pre_key_record: SignedPreKeyRecord
+                             ) -> None:
 
         query = 'INSERT INTO signed_prekeys (prekey_id, record) VALUES(?,?)'
-        self._con.execute(query, (signedPreKeyId,
-                                  signedPreKeyRecord.serialize()))
+        self._con.execute(query, (signed_pre_key_id,
+                                  signed_pre_key_record.serialize()))
         self._con.commit()
 
-    def containsSignedPreKey(self, signedPreKeyId: int) -> bool:
+    def contains_signed_pre_key(self, signed_pre_key_id: int) -> bool:
         query = 'SELECT record FROM signed_prekeys WHERE prekey_id = ?'
-        result = self._con.execute(query, (signedPreKeyId,)).fetchone()
+        result = self._con.execute(query, (signed_pre_key_id,)).fetchone()
         return result is not None
 
-    def removeSignedPreKey(self, signedPreKeyId: int) -> None:
+    def remove_signed_pre_key(self, signed_pre_key_id: int) -> None:
         query = 'DELETE FROM signed_prekeys WHERE prekey_id = ?'
-        self._con.execute(query, (signedPreKeyId,))
+        self._con.execute(query, (signed_pre_key_id,))
         self._con.commit()
 
-    def getNextSignedPreKeyId(self) -> int:
-        result = self.getCurrentSignedPreKeyId()
-        if result is None:
-            return 1  # StartId if no SignedPreKeys exist
+    def get_next_signed_pre_key_id(self) -> int:
+        result = self.get_current_signed_pre_key_id()
         return (result % (Medium.MAX_VALUE - 1)) + 1
 
-    def getCurrentSignedPreKeyId(self) -> Optional[int]:
+    def get_current_signed_pre_key_id(self) -> int:
         query = 'SELECT MAX(prekey_id) FROM signed_prekeys'
         result = self._con.execute(query).fetchone()
-        return result.max_prekey_id if result is not None else None
+        assert result is not None
+        return result.max_prekey_id
 
-    def getSignedPreKeyTimestamp(self, signedPreKeyId: int) -> int:
+    def get_signed_pre_key_timestamp(self, signed_pre_key_id: int) -> int:
         query = '''SELECT strftime('%s', timestamp) FROM
                    signed_prekeys WHERE prekey_id = ?'''
 
-        result = self._con.execute(query, (signedPreKeyId,)).fetchone()
+        result = self._con.execute(query, (signed_pre_key_id,)).fetchone()
         if result is None:
             raise InvalidKeyIdException('No such signedprekeyrecord! %s' %
-                                        signedPreKeyId)
+                                        signed_pre_key_id)
 
         return result.formated_time
 
-    def removeOldSignedPreKeys(self, timestamp: int) -> None:
+    def remove_old_signed_pre_keys(self, timestamp: int) -> None:
         query = '''DELETE FROM signed_prekeys
                    WHERE timestamp < datetime(?, "unixepoch")'''
         self._con.execute(query, (timestamp,))
         self._con.commit()
 
-    def loadSession(self, recipientId: str, deviceId: int) -> SessionRecord:
+    def load_session(self, recipient_id: str, device_id: int) -> SessionRecord:
         query = '''SELECT record as "record [session_record]"
                    FROM sessions WHERE recipient_id = ? AND device_id = ?'''
-        result = self._con.execute(query, (recipientId, deviceId)).fetchone()
+        result = self._con.execute(query, (recipient_id, device_id)).fetchone()
         return result.record if result is not None else SessionRecord()
 
-    def getJidFromDevice(self, device_id: int) -> Optional[str]:
+    def get_jid_from_device(self, device_id: int) -> Optional[str]:
         query = '''SELECT recipient_id
                    FROM sessions WHERE device_id = ?'''
         result = self._con.execute(query, (device_id, )).fetchone()
         return result.recipient_id if result is not None else None
 
-    def getActiveDeviceTuples(self):
+    def get_active_device_tuples(self):
         query = '''SELECT recipient_id, device_id
                    FROM sessions WHERE active = 1'''
         return self._con.execute(query).fetchall()
 
-    def storeSession(self,
-                     recipientId: str,
-                     deviceId: int,
-                     sessionRecord: SessionRecord
-                     ) -> None:
+    def store_session(self,
+                      recipient_id: str,
+                      device_id: int,
+                      session_record: SessionRecord
+                      ) -> None:
 
         query = '''INSERT INTO sessions(recipient_id, device_id, record)
                    VALUES(?,?,?)'''
         try:
-            self._con.execute(query, (recipientId,
-                                      deviceId,
-                                      sessionRecord.serialize()))
+            self._con.execute(query, (recipient_id,
+                                      device_id,
+                                      session_record.serialize()))
         except sqlite3.IntegrityError:
             query = '''UPDATE sessions SET record = ?
                        WHERE recipient_id = ? AND device_id = ?'''
-            self._con.execute(query, (sessionRecord.serialize(),
-                                      recipientId,
-                                      deviceId))
+            self._con.execute(query, (session_record.serialize(),
+                                      recipient_id,
+                                      device_id))
 
         self._con.commit()
 
-    def containsSession(self, recipientId: str, deviceId: int) -> bool:
+    def contains_session(self, recipient_id: str, device_id: int) -> bool:
         query = '''SELECT record FROM sessions
                    WHERE recipient_id = ? AND device_id = ?'''
-        result = self._con.execute(query, (recipientId, deviceId)).fetchone()
+        result = self._con.execute(query, (recipient_id, device_id)).fetchone()
         return result is not None
 
-    def deleteSession(self, recipientId: str, deviceId: int) -> None:
-        self._log.info('Delete session for %s %s', recipientId, deviceId)
+    def delete_session(self, recipient_id: str, device_id: int) -> None:
+        self._log.info('Delete session for %s %s', recipient_id, device_id)
         query = 'DELETE FROM sessions WHERE recipient_id = ? AND device_id = ?'
-        self._con.execute(query, (recipientId, deviceId))
+        self._con.execute(query, (recipient_id, device_id))
         self._con.commit()
 
-    def deleteAllSessions(self, recipientId: str) -> None:
+    def delete_all_sessions(self, recipient_id: str) -> None:
         query = 'DELETE FROM sessions WHERE recipient_id = ?'
-        self._con.execute(query, (recipientId,))
+        self._con.execute(query, (recipient_id,))
         self._con.commit()
 
-    def getSessionsFromJid(self, recipientId: str):
+    def get_sessions_from_jid(self, recipient_id: str):
         query = '''SELECT recipient_id,
                           device_id,
                           record as "record [session_record]",
                           active
                    FROM sessions WHERE recipient_id = ?'''
-        return self._con.execute(query, (recipientId,)).fetchall()
+        return self._con.execute(query, (recipient_id,)).fetchall()
 
-    def getSessionsFromJids(self, recipientIds: list[str]):
+    def get_sessions_from_jids(self, recipient_ids: list[str]):
         query = '''
         SELECT recipient_id,
                device_id,
@@ -516,86 +492,84 @@ class OMEMOStorage(AxolotlStore):
                active
         FROM sessions
         WHERE recipient_id IN ({})'''.format(
-            ', '.join(['?'] * len(recipientIds)))
-        return self._con.execute(query, recipientIds).fetchall()
+            ', '.join(['?'] * len(recipient_ids)))
+        return self._con.execute(query, recipient_ids).fetchall()
 
-    def setActiveState(self, jid: str, devicelist: list[int]) -> None:
+    def set_active_state(self, address: str, devicelist: list[int]) -> None:
         query = '''
         UPDATE sessions SET active = 1
         WHERE recipient_id = ? AND device_id IN ({})'''.format(
             ', '.join(['?'] * len(devicelist)))
-        self._con.execute(query, (jid,) + tuple(devicelist))
+        self._con.execute(query, (address,) + tuple(devicelist))
 
         query = '''
         UPDATE sessions SET active = 0
         WHERE recipient_id = ? AND device_id NOT IN ({})'''.format(
             ', '.join(['?'] * len(devicelist)))
-        self._con.execute(query, (jid,) + tuple(devicelist))
+        self._con.execute(query, (address,) + tuple(devicelist))
         self._con.commit()
 
-    def setInactive(self, jid: str, device_id: int) -> None:
+    def set_inactive(self, address: str, device_id: int) -> None:
         query = '''UPDATE sessions SET active = 0
                    WHERE recipient_id = ? AND device_id = ?'''
-        self._con.execute(query, (jid, device_id))
+        self._con.execute(query, (address, device_id))
         self._con.commit()
 
-    def getInactiveSessionsKeys(self,
-                                recipientId: str
-                                ) -> list[IdentityKeyExtended]:
+    def get_inactive_sessions_keys(self,
+                                   recipient_id: str
+                                   ) -> list[IdentityKey]:
 
         query = '''SELECT record as "record [session_record]" FROM sessions
                    WHERE active = 0 AND recipient_id = ?'''
-        results = self._con.execute(query, (recipientId,)).fetchall()
+        results = self._con.execute(query, (recipient_id,)).fetchall()
 
-        keys: list[IdentityKeyExtended] = []
+        keys: list[IdentityKey] = []
         for result in results:
-            key = result.record.getSessionState().getRemoteIdentityKey()
-            keys.append(IdentityKeyExtended(key.getPublicKey()))
+            key = result.record.get_session_state().get_remote_identity_key()
+            keys.append(IdentityKey(key.get_public_key()))
         return keys
 
-    def loadPreKey(self, preKeyId: int) -> PreKeyRecord:
+    def load_pre_key(self, pre_key_id: int) -> PreKeyRecord:
         query = '''SELECT record FROM prekeys WHERE prekey_id = ?'''
 
-        result = self._con.execute(query, (preKeyId,)).fetchone()
+        result = self._con.execute(query, (pre_key_id,)).fetchone()
         if result is None:
             raise Exception('No such prekeyRecord!')
         return PreKeyRecord.from_bytes(result.record)
 
-    def loadPendingPreKeys(self) -> list[PreKeyRecord]:
+    def load_pending_pre_keys(self) -> list[PreKeyRecord]:
         query = '''SELECT record FROM prekeys'''
         result = self._con.execute(query).fetchall()
         return [PreKeyRecord.from_bytes(row.record) for row in result]
 
-    def storePreKey(self, preKeyId: int, preKeyRecord: PreKeyRecord) -> None:
+    def store_pre_key(self,
+                      pre_key_id: int,
+                      pre_key_record: PreKeyRecord
+                      ) -> None:
         query = 'INSERT INTO prekeys (prekey_id, record) VALUES(?,?)'
-        self._con.execute(query, (preKeyId, preKeyRecord.serialize()))
+        self._con.execute(query, (pre_key_id, pre_key_record.serialize()))
         self._con.commit()
 
-    def containsPreKey(self, preKeyId: int) -> bool:
+    def contains_pre_key(self, pre_key_id: int) -> bool:
         query = 'SELECT record FROM prekeys WHERE prekey_id = ?'
-        result = self._con.execute(query, (preKeyId,)).fetchone()
+        result = self._con.execute(query, (pre_key_id,)).fetchone()
         return result is not None
 
-    def removePreKey(self, preKeyId: int) -> None:
+    def remove_pre_key(self, pre_key_id: int) -> None:
         query = 'DELETE FROM prekeys WHERE prekey_id = ?'
-        self._con.execute(query, (preKeyId,))
+        self._con.execute(query, (pre_key_id,))
         self._con.commit()
 
-    def getCurrentPreKeyId(self) -> int:
+    def get_current_pre_key_id(self) -> Optional[int]:
         query = 'SELECT MAX(prekey_id) FROM prekeys'
-        return self._con.execute(query).fetchone().max_prekey_id
+        result = self._con.execute(query).fetchone()
+        return result.max_prekey_id if result is not None else None
 
-    def getPreKeyCount(self) -> int:
+    def get_pre_key_count(self) -> int:
         query = 'SELECT COUNT(prekey_id) FROM prekeys'
         return self._con.execute(query).fetchone().count_prekey_id
 
-    def generateNewPreKeys(self, count: int) -> None:
-        prekey_id = self.getCurrentPreKeyId() or 0
-        pre_keys = KeyHelper.generatePreKeys(prekey_id + 1, count)
-        for pre_key in pre_keys:
-            self.storePreKey(pre_key.getId(), pre_key)
-
-    def getIdentityKeyPair(self) -> IdentityKeyPair:
+    def get_identity_key_pair(self) -> IdentityKeyPair:
         query = '''SELECT public_key as "public_key [pk]", private_key
                    FROM secret LIMIT 1'''
         result = self._con.execute(query).fetchone()
@@ -603,15 +577,16 @@ class OMEMOStorage(AxolotlStore):
         return IdentityKeyPair.new(result.public_key,
                                    DjbECPrivateKey(result.private_key))
 
-    def getLocalRegistrationId(self) -> Optional[int]:  # pyright: ignore
+    def get_local_registration_id(self) -> int:
         query = 'SELECT device_id FROM secret LIMIT 1'
         result = self._con.execute(query).fetchone()
-        return result.device_id if result is not None else None
+        assert result is not None
+        return result.device_id
 
-    def storeLocalData(self,
-                       device_id: int,
-                       identityKeyPair: IdentityKeyPair
-                       ) -> None:
+    def store_own_identity(self,
+                           device_id: int,
+                           identity_key_pair: IdentityKeyPair
+                           ) -> None:
 
         query = 'SELECT * FROM secret'
         result = self._con.execute(query).fetchone()
@@ -623,67 +598,71 @@ class OMEMOStorage(AxolotlStore):
         query = '''INSERT INTO secret(device_id, public_key, private_key)
                    VALUES(?, ?, ?)'''
 
-        public_key = identityKeyPair.getPublicKey().getPublicKey().serialize()
-        private_key = identityKeyPair.getPrivateKey().serialize()
+        public_key = identity_key_pair.get_public_key().get_public_key().\
+            serialize()
+        private_key = identity_key_pair.get_private_key().serialize()
         self._con.execute(query, (device_id, public_key, private_key))
         self._con.commit()
 
-    def saveIdentity(self, recipientId: str, identityKey: IdentityKey) -> None:
+    def save_identity(self,
+                      recipient_id: str,
+                      identity_key: IdentityKey
+                      ) -> None:
         query = '''INSERT INTO identities
                    (recipient_id, public_key, trust, shown)
                    VALUES(?, ?, ?, ?)'''
-        if not self.containsIdentity(recipientId, identityKey):
-            trust = self.getDefaultTrust(recipientId)
-            self._con.execute(query, (recipientId,
-                                      identityKey.getPublicKey().serialize(),
+        if not self.contains_identity(recipient_id, identity_key):
+            trust = self.get_default_trust(recipient_id)
+            self._con.execute(query, (recipient_id,
+                                      identity_key.get_public_key().serialize(),
                                       trust,
                                       1 if trust == OMEMOTrust.BLIND else 0))
             self._con.commit()
 
-    def containsIdentity(self,
-                         recipientId: str,
-                         identityKey: IdentityKey
-                         ) -> bool:
+    def contains_identity(self,
+                          recipient_id: str,
+                          identity_key: IdentityKey
+                          ) -> bool:
 
         query = '''SELECT * FROM identities WHERE recipient_id = ?
                    AND public_key = ?'''
 
-        public_key = identityKey.getPublicKey().serialize()
-        result = self._con.execute(query, (recipientId,
+        public_key = identity_key.get_public_key().serialize()
+        result = self._con.execute(query, (recipient_id,
                                            public_key)).fetchone()
 
         return result is not None
 
-    def deleteIdentity(self,
-                       recipientId: str,
-                       identityKey: IdentityKey
-                       ) -> None:
+    def delete_identity(self,
+                        recipient_id: str,
+                        identity_key: IdentityKey
+                        ) -> None:
 
         query = '''DELETE FROM identities
                    WHERE recipient_id = ? AND public_key = ?'''
-        public_key = identityKey.getPublicKey().serialize()
-        self._con.execute(query, (recipientId, public_key))
+        public_key = identity_key.get_public_key().serialize()
+        self._con.execute(query, (recipient_id, public_key))
         self._con.commit()
 
-    def isTrustedIdentity(self,
-                          recipientId: str,
-                          identityKey: IdentityKey
-                          ) -> bool:
+    def is_trusted_identity(self,
+                            recipient_id: str,
+                            identity_key: IdentityKey
+                            ) -> bool:
 
         return True
 
-    def getTrustForIdentity(self,
-                            recipientId: str,
-                            identityKey: IdentityKey
-                            ) -> Optional[OMEMOTrust]:
+    def get_trust_for_identity(self,
+                               recipient_id: str,
+                               identity_key: IdentityKey
+                               ) -> Optional[OMEMOTrust]:
 
         query = '''SELECT trust FROM identities WHERE recipient_id = ?
                    AND public_key = ?'''
-        public_key = identityKey.getPublicKey().serialize()
-        result = self._con.execute(query, (recipientId, public_key)).fetchone()
+        public_key = identity_key.get_public_key().serialize()
+        result = self._con.execute(query, (recipient_id, public_key)).fetchone()
         return result.trust if result is not None else None
 
-    def getFingerprints(self, jid: str):
+    def get_fingerprints(self, jid: str):
         query = '''SELECT recipient_id,
                           public_key as "public_key [pk]",
                           trust,
@@ -692,7 +671,7 @@ class OMEMOStorage(AxolotlStore):
                    WHERE recipient_id = ? ORDER BY trust ASC'''
         return self._con.execute(query, (jid,)).fetchall()
 
-    def getMucFingerprints(self, jids: list[str]):
+    def get_muc_fingerprints(self, jids: list[str]):
         query = '''
             SELECT recipient_id,
                    public_key as "public_key [pk]",
@@ -704,18 +683,18 @@ class OMEMOStorage(AxolotlStore):
 
         return self._con.execute(query, jids).fetchall()
 
-    def hasUndecidedFingerprints(self, jid: str) -> bool:
+    def has_undecided_fingerprints(self, jid: str) -> bool:
         query = '''SELECT public_key as "public_key [pk]" FROM identities
                    WHERE recipient_id = ? AND trust = ?'''
         result = self._con.execute(query,
                                    (jid, OMEMOTrust.UNDECIDED)).fetchall()
         undecided = [row.public_key for row in result]
 
-        inactive = self.getInactiveSessionsKeys(jid)
+        inactive = self.get_inactive_sessions_keys(jid)
         undecided = set(undecided) - set(inactive)
         return bool(undecided)
 
-    def getDefaultTrust(self, jid: str) -> OMEMOTrust:
+    def get_default_trust(self, jid: str) -> OMEMOTrust:
         if not self._is_blind_trust_enabled():
             return OMEMOTrust.UNDECIDED
 
@@ -726,78 +705,84 @@ class OMEMOStorage(AxolotlStore):
             return OMEMOTrust.BLIND
         return OMEMOTrust.UNDECIDED
 
-    def getTrustedFingerprints(self, jid: str) -> list[IdentityKeyExtended]:
+    def get_trusted_fingerprints(self, address: str) -> list[IdentityKey]:
         query = '''SELECT public_key as "public_key [pk]" FROM identities
                    WHERE recipient_id = ? AND trust IN(1, 3)'''
-        result = self._con.execute(query, (jid,)).fetchall()
+        result = self._con.execute(query, (address,)).fetchall()
         return [row.public_key for row in result]
 
-    def getNewFingerprints(self, jid: str) -> list[int]:
+    def get_new_fingerprints(self, jid: str) -> list[int]:
         query = '''SELECT _id FROM identities WHERE shown = 0
                    AND recipient_id = ?'''
 
         result = self._con.execute(query, (jid,)).fetchall()
         return [row.id for row in result]
 
-    def setShownFingerprints(self, fingerprints: list[int]) -> None:
+    def set_shown_fingerprints(self, fingerprints: list[int]) -> None:
         query = 'UPDATE identities SET shown = 1 WHERE _id IN ({})'.format(
             ', '.join(['?'] * len(fingerprints)))
         self._con.execute(query, fingerprints)
         self._con.commit()
 
-    def setTrust(self,
-                 recipient_id: str,
-                 identityKey: IdentityKey,
-                 trust: OMEMOTrust
-                 ) -> None:
+    def set_trust(self,
+                  recipient_id: str,
+                  identity_key: IdentityKey,
+                  trust: OMEMOTrust
+                  ) -> None:
 
         query = '''UPDATE identities SET trust = ? WHERE public_key = ?
                    AND recipient_id = ?'''
-        public_key = identityKey.getPublicKey().serialize()
+        public_key = identity_key.get_public_key().serialize()
         self._con.execute(query, (trust, public_key, recipient_id))
         self._con.commit()
 
-    def isTrusted(self, recipient_id: str, device_id: int) -> bool:
-        record = self.loadSession(recipient_id, device_id)
-        if record.isFresh():
+    def is_trusted(self, recipient_id: str, device_id: int) -> bool:
+        record = self.load_session(recipient_id, device_id)
+        if record.is_fresh():
             return False
-        identity_key = record.getSessionState().getRemoteIdentityKey()
-        return self.getTrustForIdentity(
+        identity_key = record.get_session_state().get_remote_identity_key()
+        return self.get_trust_for_identity(
             recipient_id, identity_key) in (OMEMOTrust.VERIFIED,
                                             OMEMOTrust.BLIND)
 
-    def getIdentityLastSeen(self,
-                            recipient_id: str,
-                            identity_key: IdentityKey
-                            ) -> Optional[int]:
+    def get_identity_last_seen(self,
+                               recipient_id: str,
+                               identity_key: IdentityKey
+                               ) -> Optional[int]:
 
-        serialized = identity_key.getPublicKey().serialize()
+        serialized = identity_key.get_public_key().serialize()
         query = '''SELECT timestamp FROM identities
                    WHERE recipient_id = ? AND public_key = ?'''
         result = self._con.execute(query, (recipient_id,
                                            serialized)).fetchone()
         return result.timestamp if result is not None else None
 
-    def setIdentityLastSeen(self,
-                            recipient_id: str,
-                            identity_key: IdentityKey
-                            ) -> None:
+    def set_identity_last_seen(self,
+                               recipient_id: str,
+                               identity_key: IdentityKey
+                               ) -> None:
 
         timestamp = int(time.time())
-        serialized = identity_key.getPublicKey().serialize()
+        serialized = identity_key.get_public_key().serialize()
         self._log.info('Set last seen for %s %s', recipient_id, timestamp)
         query = '''UPDATE identities SET timestamp = ?
                    WHERE recipient_id = ? AND public_key = ?'''
         self._con.execute(query, (timestamp, recipient_id, serialized))
         self._con.commit()
 
-    def getUnacknowledgedCount(self, recipient_id: str, device_id: int) -> int:
-        record = self.loadSession(recipient_id, device_id)
-        if record.isFresh():
+    def get_unacknowledged_count(self,
+                                 recipient_id: str,
+                                 device_id: int
+                                 ) -> int:
+        record = self.load_session(recipient_id, device_id)
+        if record.is_fresh():
             return 0
-        state = record.getSessionState()
-        return state.getSenderChainKey().getIndex()
+        state = record.get_session_state()
+        return state.get_sender_chain_key().get_index()
 
-    def getSubDeviceSessions(self, recipientId: str) -> list[int]:
-        # Not used
-        return []
+    def needs_init(self) -> bool:
+        try:
+            self.get_local_registration_id()
+        except AssertionError:
+            return True
+        return False
