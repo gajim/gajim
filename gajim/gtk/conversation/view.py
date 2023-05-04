@@ -244,7 +244,6 @@ class ConversationView(Gtk.ScrolledWindow):
 
         self._block_signals = False
         self._enable_signal_handlers(True)
-        self._emit('request-history', True)
 
     def get_autoscroll(self) -> bool:
         return self._autoscroll

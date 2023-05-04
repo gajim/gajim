@@ -161,6 +161,7 @@ class ChatControl(EventHelper):
 
         self._jump_to_end_button.switch_contact(contact)
         self._scrolled_view.switch_contact(contact)
+        self._request_history(None, True)
         self._groupchat_state.switch_contact(contact)
         self._roster.switch_contact(contact)
 
@@ -590,17 +591,18 @@ class ChatControl(EventHelper):
         row = self._scrolled_view.get_row_by_log_line_id(log_line_id)
         if row is None:
             # Clear view and reload conversation around timestamp
+            self._scrolled_view.reset()
             self._scrolled_view.block_signals(True)
-            self.reset_view()
             before, at_after = app.storage.archive.get_conversation_around(
                 self.contact.account, self.contact.jid, timestamp)
             self.add_messages(before)
             self.add_messages(at_after)
+            self._scrolled_view.set_history_complete(False, False)
 
+        GLib.idle_add(self._scrolled_view.block_signals, False)
         GLib.idle_add(
             self._scrolled_view.scroll_to_message_and_highlight,
             log_line_id)
-        GLib.idle_add(self._scrolled_view.block_signals, False)
 
     def _request_messages(self, before: bool) -> list[ConversationRow]:
         if before:
@@ -638,7 +640,7 @@ class ChatControl(EventHelper):
                                        REQUEST_LINES_COUNT)
 
     def _request_history(self,
-                         _scrolled: Gtk.ScrolledWindow,
+                         _widget: Any,
                          before: bool
                          ) -> None:
 

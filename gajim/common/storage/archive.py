@@ -457,7 +457,7 @@ class MessageArchiveStorage(SqliteStorage):
         jids = [jid]
         account_id = self.get_account_id(account)
         kinds = map(str, [KindConstant.ERROR])
-        n_lines = 20
+        n_lines = 50
 
         sql_before = '''
             SELECT contact_name, time, kind, show, message, subject,
