@@ -162,10 +162,11 @@ class MessageExportRow(NamedTuple):
 
 
 class MessageArchiveStorage(SqliteStorage):
-    def __init__(self):
+    def __init__(self, in_memory: bool = False):
+        path = None if in_memory else configpaths.get('LOG_DB')
         SqliteStorage.__init__(self,
                                log,
-                               configpaths.get('LOG_DB'),
+                               path,
                                ARCHIVE_SQL_STATEMENT)
 
         self._jid_ids: dict[JID, JidsTableRow] = {}
