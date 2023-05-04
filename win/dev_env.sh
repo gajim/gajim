@@ -44,7 +44,6 @@ function main {
 
     PIP_REQUIREMENTS="\
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
-git+https://dev.gajim.org/gajim/omemo-dr.git
 python-gnupg
 qrcode
 css_parser
@@ -52,6 +51,8 @@ sentry-sdk
 "
 pip3 install precis-i18n
 pip3 install $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
+# Workaround for https://dev.gajim.org/gajim/gajim/-/issues/11490
+SETUPTOOLS_USE_DISTUTILS=stdlib pip3 install git+https://dev.gajim.org/gajim/omemo-dr.git
 
 }
 
