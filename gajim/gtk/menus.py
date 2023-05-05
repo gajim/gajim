@@ -681,7 +681,13 @@ def get_chat_row_menu(contact: types.ChatContactT,
 
     format_string = app.settings.get('date_time_format')
     timestamp_formatted = timestamp.strftime(format_string)
-    copy_text = f'{timestamp_formatted} - {name}: {text}'
+
+    copy_text = f'{timestamp_formatted} - {name}: '
+    if text.startswith(('```', '> ')):
+        # Prepend a line break in order to keep code block/quotes rendering
+        copy_text += '\n'
+    copy_text += text
+
     menu_items.append(
         (p_('Message row action', 'Copy'),
          'win.copy-message',
