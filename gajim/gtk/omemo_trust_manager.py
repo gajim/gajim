@@ -307,13 +307,13 @@ class KeyRow(Gtk.ListBoxRow):
             jid_label.set_halign(Gtk.Align.START)
             jid_label.set_valign(Gtk.Align.START)
             jid_label.set_hexpand(True)
+            jid_label.get_style_context().add_class('bold')
             grid.attach(jid_label, 2, 1, 1, 1)
 
         self.fingerprint = Gtk.Label(
             label=self._identity_key.get_fingerprint(formatted=True))
         self.fingerprint.get_style_context().add_class('monospace')
         self.fingerprint.get_style_context().add_class('small-label')
-        self.fingerprint.get_style_context().add_class('dim-label')
         self.fingerprint.set_selectable(True)
         self.fingerprint.set_halign(Gtk.Align.START)
         self.fingerprint.set_valign(Gtk.Align.START)
