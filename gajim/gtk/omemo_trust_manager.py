@@ -193,7 +193,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
 
     def _load_fingerprints(self, contact: types.ChatContactT) -> None:
         if contact.is_groupchat:
-            members = list(self._omemo.backend.get_muc_members(
+            members = list(self._omemo.backend.get_group_members(
                 str(contact.jid)))
             sessions = self._omemo.backend.storage.get_sessions_from_jids(
                 members)
