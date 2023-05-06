@@ -36,6 +36,7 @@ from omemo_dr.state.prekeyrecord import PreKeyRecord
 from omemo_dr.state.sessionrecord import SessionRecord
 from omemo_dr.state.signedprekeyrecord import SignedPreKeyRecord
 from omemo_dr.state.store import Store
+from omemo_dr.structs import IdentityInfo
 from omemo_dr.util.medium import Medium
 
 from gajim.common import app
@@ -476,24 +477,52 @@ class OMEMOStorage(Store):
         self._con.execute(query, (recipient_id,))
         self._con.commit()
 
-    def get_sessions_from_jid(self, recipient_id: str):
+    def get_identity_infos(self,
+                           recipient_ids: str | list[str]
+                           ) -> list[IdentityInfo]:
+
+        if isinstance(recipient_ids, str):
+            recipient_ids = [recipient_ids]
+
         query = '''SELECT recipient_id,
-                          device_id,
+                          public_key as "public_key [pk]",
+                          trust,
+                          timestamp
+                   FROM identities
+                   WHERE recipient_id IN ({})'''.format(
+                    ', '.join(['?'] * len(recipient_ids)))
+        i_results = self._con.execute(query, recipient_ids).fetchall()
+
+        query = '''SELECT device_id,
                           record as "record [session_record]",
                           active
-                   FROM sessions WHERE recipient_id = ?'''
-        return self._con.execute(query, (recipient_id,)).fetchall()
+                   FROM sessions WHERE recipient_id IN ({})'''.format(
+                    ', '.join(['?'] * len(recipient_ids)))
+        s_results = self._con.execute(query, recipient_ids).fetchall()
 
-    def get_sessions_from_jids(self, recipient_ids: list[str]):
-        query = '''
-        SELECT recipient_id,
-               device_id,
-               record as "record [session_record]",
-               active
-        FROM sessions
-        WHERE recipient_id IN ({})'''.format(
-            ', '.join(['?'] * len(recipient_ids)))
-        return self._con.execute(query, recipient_ids).fetchall()
+        sessions: dict[IdentityKey, Any] = {}
+        for s_result in s_results:
+            if s_result.record.is_fresh():
+                continue
+            ik = s_result.record.get_session_state().get_remote_identity_key()
+            sessions[ik] = s_result
+
+        identity_infos: list[IdentityInfo] = []
+        for i_result in i_results:
+            session = sessions.get(i_result.public_key)
+            if session is None:
+                continue
+
+            info = IdentityInfo(active=session.active,
+                                address=i_result.recipient_id,
+                                device_id=session.device_id,
+                                public_key=i_result.public_key,
+                                label='',
+                                last_seen=i_result.timestamp,
+                                trust=OMEMOTrust(i_result.trust))
+            identity_infos.append(info)
+
+        return identity_infos
 
     def set_active_state(self, address: str, devicelist: list[int]) -> None:
         query = '''

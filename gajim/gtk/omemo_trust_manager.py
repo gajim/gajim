@@ -29,7 +29,7 @@ from gi.repository import GdkPixbuf
 from gi.repository import Gtk
 from nbxmpp.protocol import JID
 from omemo_dr.const import OMEMOTrust
-from omemo_dr.identitykey import IdentityKey
+from omemo_dr.structs import IdentityInfo
 
 from gajim.common import app
 from gajim.common import ged
@@ -169,7 +169,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
 
     def _filter_func(self, row: KeyRow, _user_data: Any) -> bool:
         search_text = self._ui.search.get_text()
-        if search_text and search_text.lower() not in str(row.jid):
+        if search_text and search_text.lower() not in row.address:
             return False
         if self._ui.show_inactive_switch.get_active():
             return True
@@ -177,7 +177,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
 
     @staticmethod
     def _sort_func(row1: KeyRow, row2: KeyRow, _user_data: Any) -> int:
-        result = locale.strcoll(str(row1.jid), str(row2.jid))
+        result = locale.strcoll(row1.address, row2.address)
         if result != 0:
             return result
 
@@ -192,46 +192,9 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
         self._ui.list.invalidate_filter()
 
     def _load_fingerprints(self, contact: types.ChatContactT) -> None:
-        if contact.is_groupchat:
-            members = list(self._omemo.backend.get_group_members(
-                str(contact.jid)))
-            sessions = self._omemo.backend.storage.get_sessions_from_jids(
-                members)
-            results = self._omemo.backend.storage.get_muc_fingerprints(members)
-        else:
-            sessions = self._omemo.backend.storage.get_sessions_from_jid(
-                str(contact.jid))
-            results = self._omemo.backend.storage.get_fingerprints(
-                str(contact.jid))
-
-        rows: dict[IdentityKey, KeyRow] = {}
-        for result in results:
-            rows[result.public_key] = KeyRow(contact,
-                                             result.recipient_id,
-                                             result.public_key,
-                                             result.trust,
-                                             result.timestamp)
-
-        for item in sessions:
-            if item.record.is_fresh():
-                return
-            identity_key = item.record.get_session_state().\
-                get_remote_identity_key()
-            identity_key = IdentityKey(identity_key.get_public_key())
-            try:
-                key_row = rows[identity_key]
-            except KeyError:
-                log.warning('Could not find session identitykey %s',
-                            item.device_id)
-                self._omemo.backend.storage.delete_session(item.recipient_id,
-                                                          item.device_id)
-                continue
-
-            key_row.active = item.active
-            key_row.device_id = item.device_id
-
-        for row in rows.values():
-            self._ui.list.add(row)
+        for identity_info in self._omemo.backend.get_identity_infos(
+                str(contact.jid)):
+            self._ui.list.add(KeyRow(contact, identity_info))
 
     @staticmethod
     def _get_qrcode(jid: JID,
@@ -277,20 +240,16 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
 class KeyRow(Gtk.ListBoxRow):
     def __init__(self,
                  contact: types.ChatContactT,
-                 jid: JID,
-                 identity_key: IdentityKey,
-                 trust: OMEMOTrust,
-                 last_seen: Optional[float]
+                 identity_info: IdentityInfo
                  ) -> None:
 
         Gtk.ListBoxRow.__init__(self)
         self.set_activatable(False)
 
-        self._active = False
-        self._device_id: Optional[int] = None
-        self._identity_key = identity_key
-        self.trust = trust
-        self.jid = jid
+        self._contact = contact
+        self._address = str(self._contact.jid)
+        self._identity_info = identity_info
+        self._trust = identity_info.trust
 
         client = app.get_client(contact.account)
         self._omemo = client.get_module('OMEMO')
@@ -302,7 +261,7 @@ class KeyRow(Gtk.ListBoxRow):
         grid.attach(self._trust_button, 1, 1, 1, 3)
 
         if contact.is_groupchat:
-            jid_label = Gtk.Label(label=str(jid))
+            jid_label = Gtk.Label(label=self._address)
             jid_label.set_selectable(False)
             jid_label.set_halign(Gtk.Align.START)
             jid_label.set_valign(Gtk.Align.START)
@@ -311,7 +270,7 @@ class KeyRow(Gtk.ListBoxRow):
             grid.attach(jid_label, 2, 1, 1, 1)
 
         self.fingerprint = Gtk.Label(
-            label=self._identity_key.get_fingerprint(formatted=True))
+            label=self._identity_info.public_key.get_fingerprint(formatted=True))
         self.fingerprint.get_style_context().add_class('monospace')
         self.fingerprint.get_style_context().add_class('small-label')
         self.fingerprint.set_selectable(True)
@@ -320,9 +279,10 @@ class KeyRow(Gtk.ListBoxRow):
         self.fingerprint.set_hexpand(True)
         grid.attach(self.fingerprint, 2, 2, 1, 1)
 
-        if last_seen is not None:
-            last_seen_str = time.strftime(app.settings.get('date_time_format'),
-                                          time.localtime(last_seen))
+        if self._identity_info.last_seen is not None:
+            last_seen_str = time.strftime(
+                app.settings.get('date_time_format'),
+                time.localtime(self._identity_info.last_seen))
         else:
             last_seen_str = _('Never')
         last_seen_label = Gtk.Label(label=_('Last seen: %s') % last_seen_str)
@@ -344,11 +304,13 @@ class KeyRow(Gtk.ListBoxRow):
     def delete_fingerprint(self, *args: Any) -> None:
 
         def _remove():
-            self._omemo.backend.remove_device(str(self.jid), self.device_id)
-            self._omemo.backend.storage.delete_session(
-                str(self.jid), self.device_id)
+            device_id = self._identity_info.device_id
+
+            self._omemo.backend.remove_device(self._address, device_id)
+            self._omemo.backend.storage.delete_session(self._address,
+                                                       device_id)
             self._omemo.backend.storage.delete_identity(
-                str(self.jid), self._identity_key)
+                self._address, self._identity_info.public_key)
 
             listbox = cast(Gtk.ListBox, self.get_parent())
             listbox.remove(self)
@@ -364,37 +326,28 @@ class KeyRow(Gtk.ListBoxRow):
                                callback=_remove)],
             transient_for=cast(Gtk.Window, self.get_toplevel())).show()
 
-    def set_trust(self) -> None:
-        icon_name, tooltip, css_class = TRUST_DATA[self.trust]
+    def set_trust(self, trust: OMEMOTrust) -> None:
+        self._trust = trust
+        icon_name, tooltip, css_class = TRUST_DATA[trust]
         image = cast(Gtk.Image, self._trust_button.get_child())
         image.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
         image.get_style_context().add_class(css_class)
         image.set_tooltip_text(tooltip)
 
         self._omemo.backend.storage.set_trust(
-            str(self.jid), self._identity_key, self.trust)
+            self._address, self._identity_info.public_key, trust)
+
+    @property
+    def trust(self) -> OMEMOTrust:
+        return self._trust
 
     @property
     def active(self) -> bool:
-        return self._active
-
-    @active.setter
-    def active(self, active: bool) -> None:
-        context = self.fingerprint.get_style_context()
-        self._active = bool(active)
-        if self._active:
-            context.remove_class('omemo-inactive-color')
-        else:
-            context.add_class('omemo-inactive-color')
-        self._trust_button.update()
+        return self._identity_info.active
 
     @property
-    def device_id(self) -> Optional[int]:
-        return self._device_id
-
-    @device_id.setter
-    def device_id(self, device_id: int) -> None:
-        self._device_id = device_id
+    def address(self) -> str:
+        return self._address
 
 
 class TrustButton(Gtk.MenuButton):
@@ -444,8 +397,7 @@ class TrustPopver(Gtk.Popover):
         if row.type_ is None:
             self._row.delete_fingerprint()
         else:
-            self._row.trust = row.type_
-            self._row.set_trust()
+            self._row.set_trust(row.type_)
             trust_button = cast(TrustButton, self.get_relative_to())
             trust_button.update()
             self.update()
