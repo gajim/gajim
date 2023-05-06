@@ -130,6 +130,15 @@ infobar.error > revealer > box {
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
 }
+@keyframes spin {
+    to { -gtk-icon-transform: rotate(1turn); }
+}
+.spin {
+    animation-name: spin;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
 
 /* General purpose classes ================================================= */
 .dialog-margin > box { margin: 18px;}

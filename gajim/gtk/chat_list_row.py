@@ -546,8 +546,26 @@ class ChatListRow(Gtk.ListBoxRow):
         self._update_joined_state()
 
     def _update_joined_state(self) -> None:
-        self._ui.spinner.set_visible(
-            self.contact.is_joining and self._client.state.is_available)
+        self._ui.connection_icon.get_style_context().remove_class('spin')
+        self._ui.connection_icon.get_style_context().remove_class(
+            'warning-color')
+
+        if self.contact.is_joining:
+            self._ui.connection_icon.set_from_icon_name(
+                'feather-refresh-cw-symbolic', Gtk.IconSize.MENU)
+            self._ui.connection_icon.get_style_context().add_class('spin')
+            self._ui.connection_icon.set_tooltip_text(_('Joining Group Chat…'))
+            self._ui.connection_icon.show()
+        elif (self.contact.is_not_joined or
+                not self._client.state.is_available):
+            self._ui.connection_icon.set_from_icon_name(
+                'feather-zap-symbolic', Gtk.IconSize.MENU)
+            self._ui.connection_icon.get_style_context().add_class(
+                'warning-color')
+            self._ui.connection_icon.set_tooltip_text(_('Not connected'))
+            self._ui.connection_icon.show()
+        else:
+            self._ui.connection_icon.hide()
 
     def _on_muc_user_update(self,
                             _contact: GroupchatParticipant,
