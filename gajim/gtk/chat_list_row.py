@@ -507,6 +507,10 @@ class ChatListRow(Gtk.ListBoxRow):
 
         elif isinstance(self.contact, GroupchatContact):
             self.contact.connect('avatar-update', self._on_avatar_update)
+            self.contact.connect('state-changed', self._on_muc_state_changed)
+
+            self._client.connect_signal('state-changed',
+                                        self._on_client_state_changed)
 
         elif isinstance(self.contact, GroupchatParticipant):
             self.contact.connect('chatstate-update', self._on_chatstate_update)
@@ -534,6 +538,16 @@ class ChatListRow(Gtk.ListBoxRow):
                           _signal_name: str
                           ) -> None:
         self.update_avatar()
+
+    def _on_client_state_changed(self, *args: Any) -> None:
+        self._update_joined_state()
+
+    def _on_muc_state_changed(self, *args: Any) -> None:
+        self._update_joined_state()
+
+    def _update_joined_state(self) -> None:
+        self._ui.spinner.set_visible(
+            self.contact.is_joining and self._client.state.is_available)
 
     def _on_muc_user_update(self,
                             _contact: GroupchatParticipant,

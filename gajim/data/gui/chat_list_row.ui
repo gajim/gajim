@@ -87,7 +87,22 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
+                        <property name="pack-type">end</property>
                         <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinner" id="spinner">
+                        <property name="can-focus">False</property>
+                        <property name="no-show-all">True</property>
+                        <property name="tooltip-text" translatable="yes">Joining Group Chat…</property>
+                        <property name="opacity">0.60</property>
+                        <property name="active">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                   </object>

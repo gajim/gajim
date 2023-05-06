@@ -433,6 +433,9 @@ infobar.error > revealer > box {
 .chatlist-row:selected image {
 	color: @theme_fg_color;
 }
+.chatlist-row:selected spinner {
+    color: @theme_fg_color;
+}
 .dnd-target-chatlist {
     animation-name: pulse-opacity;
     animation-duration: 2.0s;
