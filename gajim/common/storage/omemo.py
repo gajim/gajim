@@ -606,16 +606,16 @@ class OMEMOStorage(Store):
         return IdentityKeyPair.new(result.public_key,
                                    DjbECPrivateKey(result.private_key))
 
-    def get_local_registration_id(self) -> int:
+    def get_our_device_id(self) -> int:
         query = 'SELECT device_id FROM secret LIMIT 1'
         result = self._con.execute(query).fetchone()
         assert result is not None
         return result.device_id
 
-    def store_own_identity(self,
-                           device_id: int,
-                           identity_key_pair: IdentityKeyPair
-                           ) -> None:
+    def set_our_identity(self,
+                         device_id: int,
+                         identity_key_pair: IdentityKeyPair
+                         ) -> None:
 
         query = 'SELECT * FROM secret'
         result = self._con.execute(query).fetchone()
@@ -811,7 +811,7 @@ class OMEMOStorage(Store):
 
     def needs_init(self) -> bool:
         try:
-            self.get_local_registration_id()
+            self.get_our_device_id()
         except AssertionError:
             return True
         return False

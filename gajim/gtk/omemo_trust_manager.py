@@ -123,7 +123,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
 
         self._omemo = client.get_module('OMEMO')
 
-        our_fpr_formatted = self._omemo.backend.get_own_fingerprint(
+        our_fpr_formatted = self._omemo.backend.get_our_fingerprint(
             formatted=True)
         self._ui.our_fingerprint_1.set_text(our_fpr_formatted)
         self._ui.our_fingerprint_2.set_text(our_fpr_formatted)
@@ -209,9 +209,11 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
 
     def _load_qrcode(self) -> None:
         client = app.get_client(self._account)
+        our_device_id, our_identity_key =\
+            self._omemo.backend.get_our_identity()
         pixbuf = self._get_qrcode(client.get_own_jid(),
-                                  self._omemo.backend.get_own_device(),
-                                  self._omemo.backend.get_own_fingerprint())
+                                  our_device_id,
+                                  our_identity_key.get_fingerprint())
         self._ui.qr_code_image.set_from_pixbuf(pixbuf)
 
     def _on_show_inactive(self, switch: Gtk.Switch, _param: Any) -> None:

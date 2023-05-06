@@ -377,7 +377,7 @@ class OMEMO(BaseModule):
                 return
 
             plaintext = self._muc_temp_store[properties.omemo.payload]
-            fingerprint = self.backend.get_own_fingerprint()
+            fingerprint = self.backend.get_our_fingerprint()
             trust = OMEMOTrust.VERIFIED
             del self._muc_temp_store[properties.omemo.payload]
 
@@ -572,7 +572,7 @@ class OMEMO(BaseModule):
         if bundle is None:
             bundle = self.backend.get_bundle()
         self._nbxmpp('OMEMO').set_bundle(bundle,
-                                         self.backend.get_own_device())
+                                         self.backend.get_our_device())
 
     @as_task
     def request_bundle(self, jid: str, device_id: int):
@@ -600,7 +600,7 @@ class OMEMO(BaseModule):
             message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
 
     def set_devicelist(self, devicelist: Optional[list[int]] = None) -> None:
-        devicelist_: set[int] = {self.backend.get_own_device()}
+        devicelist_: set[int] = {self.backend.get_our_device()}
         if devicelist is not None:
             devicelist_.update(devicelist)
         self._log.info('Publishing own devicelist: %s', devicelist_)
@@ -608,7 +608,7 @@ class OMEMO(BaseModule):
 
     def clear_devicelist(self) -> None:
         self.backend.update_devicelist(
-            self._own_jid, [self.backend.get_own_device()])
+            self._own_jid, [self.backend.get_our_device()])
         self.set_devicelist()
 
     @as_task
@@ -661,7 +661,7 @@ class OMEMO(BaseModule):
             self._query_for_bundles.remove(jid)
 
         if own_devices:
-            if not self.backend.is_own_device_published():
+            if not self.backend.is_our_device_published():
                 # Our own device_id is not in the list, it could be
                 # overwritten by some other client
                 self.set_devicelist(devicelist)
