@@ -48,7 +48,6 @@ import re
 import socket
 import string
 import sys
-import tempfile
 import unicodedata
 import weakref
 import webbrowser
@@ -83,6 +82,7 @@ from nbxmpp.structs import CommonError
 from nbxmpp.structs import ProxyData
 from packaging.requirements import Requirement
 from packaging.version import Version as V
+from qrcode.image.pil import PilImage as QrcPilImage
 
 from gajim.common import app
 from gajim.common import configpaths
@@ -370,9 +370,6 @@ def get_contact_dict_for_account(account: str) -> dict[str, types.BareContact]:
 
 
 def generate_qr_code(content: str) -> GdkPixbuf.Pixbuf | None:
-    image_path = os.path.join(
-        tempfile.gettempdir(),
-        f'{get_random_string()}.png')
     qr = qrcode.QRCode(version=None,
                        error_correction=qrcode.constants.ERROR_CORRECT_L,
                        box_size=6,
@@ -380,9 +377,11 @@ def generate_qr_code(content: str) -> GdkPixbuf.Pixbuf | None:
     qr.add_data(content)
     qr.make(fit=True)
 
-    img = qr.make_image(fill_color='black', back_color='white')
-    img.save(image_path)
-    return GdkPixbuf.Pixbuf.new_from_file(image_path)
+    img = qr.make_image(image_factory=QrcPilImage).convert('RGB')
+    return GdkPixbuf.Pixbuf.new_from_bytes(
+        GLib.Bytes.new(img.tobytes()),
+        GdkPixbuf.Colorspace.RGB, False, 8,
+        img.width, img.height, img.width*3)
 
 
 def play_sound(sound_event: str,
