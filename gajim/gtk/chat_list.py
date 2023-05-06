@@ -59,7 +59,7 @@ class ChatList(Gtk.ListBox, EventHelper):
         EventHelper.__init__(self)
         self._workspace_id = workspace_id
 
-        self._chats: dict[tuple[str, JID], Any] = {}
+        self._chats: dict[tuple[str, JID], ChatListRow] = {}
         self._current_filter: str = 'all'
         self._current_filter_text: str = ''
 
@@ -98,7 +98,7 @@ class ChatList(Gtk.ListBox, EventHelper):
         self.connect('drag-data-received', self._on_drag_data_received)
         self.connect('destroy', self._on_destroy)
 
-        self._timer_id = GLib.timeout_add_seconds(60, self._update_time)
+        self._timer_id = GLib.timeout_add_seconds(60, self._update_row_state)
 
         self.show_all()
 
@@ -455,9 +455,9 @@ class ChatList(Gtk.ListBox, EventHelper):
         self.invalidate_sort()
         self._pinned_order_change = False
 
-    def _update_time(self) -> bool:
+    def _update_row_state(self) -> bool:
         for row in self._chats.values():
-            row.update_time()
+            row.update_state()
         return True
 
     def _filter_func(self, row: ChatListRow) -> bool:

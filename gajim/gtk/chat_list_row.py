@@ -357,6 +357,10 @@ class ChatListRow(Gtk.ListBoxRow):
         self._ui.timestamp_label.set_text(
             get_uf_relative_time(datetime.fromtimestamp(self.timestamp)))
 
+    def update_state(self) -> None:
+        self.update_time()
+        self._ui.mute_image.set_visible(self.contact.is_muted)
+
     def add_unread(self, text: str) -> None:
         self._unread_count += 1
         self._update_unread()
