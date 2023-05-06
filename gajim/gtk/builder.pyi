@@ -963,10 +963,11 @@ class XmlConsoleBuilder(Builder):
     sourceview: GtkSource.View
     scrolled_input: Gtk.ScrolledWindow
     input_entry: GtkSource.View
-    actionbar: Gtk.ActionBar
+    actionbox: Gtk.Box
+    send: Gtk.Button
+    account_label: Gtk.Label
     paste: Gtk.Button
     menubutton: Gtk.MenuButton
-    send: Gtk.Button
 
 
 @overload

@@ -84,9 +84,13 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._combo.set_no_show_all(True)
         self._combo.set_visible(False)
         self._combo.connect('changed', self._on_value_change)
-        for account, label in self._get_accounts():
+        available_accounts = self._get_accounts()
+        for account, label in available_accounts:
             self._combo.append(account, label)
-        self._ui.actionbar.pack_end(self._combo)
+        if available_accounts:
+            self._combo.set_active(0)
+        self._ui.actionbox.pack_end(self._combo, False, False, 0)
+        self._ui.actionbox.reorder_child(self._combo, 1)
 
         self._create_tags()
 
@@ -270,6 +274,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
             child2.show()
             self._ui.send.show()
             self._ui.paste.show()
+            self._ui.account_label.show()
             self._combo.show()
             self._ui.menubutton.show()
             self._ui.input_entry.grab_focus()
@@ -277,6 +282,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
             child2.hide()
             self._ui.send.hide()
             self._ui.paste.hide()
+            self._ui.account_label.hide()
             self._combo.hide()
             self._ui.menubutton.hide()
 

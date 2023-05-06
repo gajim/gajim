@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.40.0 -->
 <interface>
-  <requires lib="gtk+" version="3.22"/>
+  <requires lib="gtk+" version="3.24"/>
   <requires lib="gtksourceview" version="4.0"/>
   <object class="GtkHeaderBar" id="headerbar">
     <property name="visible">True</property>
@@ -251,10 +251,42 @@
       </packing>
     </child>
     <child>
-      <object class="GtkActionBar" id="actionbar">
-        <property name="name">actionbar</property>
+      <object class="GtkBox" id="actionbox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkButton" id="send">
+            <property name="label" translatable="yes">_Send</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="no-show-all">True</property>
+            <property name="use-underline">True</property>
+            <signal name="clicked" handler="_on_send" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack-type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="account_label">
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="label" translatable="yes">Account</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack-type">end</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
         <child>
           <object class="GtkButton">
             <property name="visible">True</property>
@@ -271,7 +303,9 @@
             </child>
           </object>
           <packing>
-            <property name="position">0</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
@@ -290,7 +324,9 @@
             </child>
           </object>
           <packing>
-            <property name="position">2</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
           </packing>
         </child>
         <child>
@@ -308,7 +344,9 @@
             </child>
           </object>
           <packing>
-            <property name="position">3</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">4</property>
           </packing>
         </child>
         <child>
@@ -327,7 +365,9 @@
             </child>
           </object>
           <packing>
-            <property name="position">3</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">5</property>
           </packing>
         </child>
         <child>
@@ -342,34 +382,18 @@
             </child>
           </object>
           <packing>
-            <property name="position">5</property>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">6</property>
           </packing>
         </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <object class="GtkButton" id="send">
-            <property name="label" translatable="yes">_Send</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="no-show-all">True</property>
-            <property name="use-underline">True</property>
-            <signal name="clicked" handler="_on_send" swapped="no"/>
-          </object>
-          <packing>
-            <property name="pack-type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
+        <style>
+          <class name="padding-6"/>
+        </style>
       </object>
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="pack-type">end</property>
         <property name="position">1</property>
       </packing>
     </child>
