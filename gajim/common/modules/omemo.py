@@ -233,35 +233,8 @@ class OMEMO(BaseModule):
                     message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
                 return False
 
-        if self._new_fingerprints_available(contact):
-            return False
-
         self._log.debug('%s => Sending Message to %s',
                         contact.account, jid)
-
-        return True
-
-    def _new_fingerprints_available(self, contact: types.ChatContactT) -> bool:
-        fingerprints: list[int] = []
-        if contact.is_groupchat:
-            for member_jid in self.backend.get_group_members(str(contact.jid),
-                                                           without_self=False):
-                fingerprints = self.backend.storage.get_new_fingerprints(
-                    member_jid)
-                if fingerprints:
-                    break
-
-        else:
-            fingerprints = self.backend.storage.get_new_fingerprints(
-                str(contact.jid))
-
-        if not fingerprints:
-            return False
-
-        app.ged.raise_event(EncryptionInfo(
-            account=contact.account,
-            jid=contact.jid,
-            message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
 
         return True
 

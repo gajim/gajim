@@ -734,25 +734,6 @@ class OMEMOStorage(Store):
             return OMEMOTrust.BLIND
         return OMEMOTrust.UNDECIDED
 
-    def get_trusted_fingerprints(self, address: str) -> list[IdentityKey]:
-        query = '''SELECT public_key as "public_key [pk]" FROM identities
-                   WHERE recipient_id = ? AND trust IN(1, 3)'''
-        result = self._con.execute(query, (address,)).fetchall()
-        return [row.public_key for row in result]
-
-    def get_new_fingerprints(self, jid: str) -> list[int]:
-        query = '''SELECT _id FROM identities WHERE shown = 0
-                   AND recipient_id = ?'''
-
-        result = self._con.execute(query, (jid,)).fetchall()
-        return [row.id for row in result]
-
-    def set_shown_fingerprints(self, fingerprints: list[int]) -> None:
-        query = 'UPDATE identities SET shown = 1 WHERE _id IN ({})'.format(
-            ', '.join(['?'] * len(fingerprints)))
-        self._con.execute(query, fingerprints)
-        self._con.commit()
-
     def set_trust(self,
                   recipient_id: str,
                   identity_key: IdentityKey,
