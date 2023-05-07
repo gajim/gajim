@@ -223,15 +223,16 @@ class OMEMO(BaseModule):
                     message=EncryptionInfoMsg.QUERY_DEVICES))
                 return False
 
-            # check if bundles are missing for some devices
-            if self.backend.storage.has_undecided_fingerprints(jid):
-                self._log.info('%s => Undecided Fingerprints for %s',
-                               contact.account, jid)
-                app.ged.raise_event(EncryptionInfo(
-                    account=contact.account,
-                    jid=contact.jid,
-                    message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
-                return False
+        if self.backend.get_identity_infos(jid,
+                                           only_active=True,
+                                           trust=OMEMOTrust.UNDECIDED):
+            self._log.info('%s => Undecided Fingerprints for %s',
+                           contact.account, jid)
+            app.ged.raise_event(EncryptionInfo(
+                account=contact.account,
+                jid=contact.jid,
+                message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
+            return False
 
         self._log.debug('%s => Sending Message to %s',
                         contact.account, jid)
@@ -532,8 +533,12 @@ class OMEMO(BaseModule):
                 for device_id in devices_without_session:
                     self.request_bundle(contact_jid, device_id)
 
-        if self.backend.has_trusted_keys(contact_jid):
+        if self.backend.get_identity_infos(
+                contact_jid,
+                only_active=True,
+                trust=[OMEMOTrust.VERIFIED, OMEMOTrust.BLIND]):
             return False
+
         return True
 
     def set_bundle(self, bundle: OMEMOBundle | None = None) -> None:

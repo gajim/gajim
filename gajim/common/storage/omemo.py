@@ -712,17 +712,6 @@ class OMEMOStorage(Store):
 
         return self._con.execute(query, jids).fetchall()
 
-    def has_undecided_fingerprints(self, jid: str) -> bool:
-        query = '''SELECT public_key as "public_key [pk]" FROM identities
-                   WHERE recipient_id = ? AND trust = ?'''
-        result = self._con.execute(query,
-                                   (jid, OMEMOTrust.UNDECIDED)).fetchall()
-        undecided = [row.public_key for row in result]
-
-        inactive = self.get_inactive_sessions_keys(jid)
-        undecided = set(undecided) - set(inactive)
-        return bool(undecided)
-
     def get_default_trust(self, jid: str) -> OMEMOTrust:
         if not self._is_blind_trust_enabled():
             return OMEMOTrust.UNDECIDED
