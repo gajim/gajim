@@ -827,6 +827,11 @@ class ProfileBuilder(Builder):
     back_button: Gtk.Button
 
 
+class QuitDialogBuilder(Builder):
+    box: Gtk.Box
+    remember_checkbutton: Gtk.CheckButton
+
+
 class RosterBuilder(Builder):
     contact_store: Gtk.TreeStore
     roster_treeview: Gtk.TreeView
@@ -1132,6 +1137,8 @@ def get_builder(file_name: Literal['preview.ui'], widgets: list[str] = ...) -> P
 def get_builder(file_name: Literal['preview_audio.ui'], widgets: list[str] = ...) -> PreviewAudioBuilder: ...  # noqa
 @overload
 def get_builder(file_name: Literal['profile.ui'], widgets: list[str] = ...) -> ProfileBuilder: ...  # noqa
+@overload
+def get_builder(file_name: Literal['quit_dialog.ui'], widgets: list[str] = ...) -> QuitDialogBuilder: ...  # noqa
 @overload
 def get_builder(file_name: Literal['roster.ui'], widgets: list[str] = ...) -> RosterBuilder: ...  # noqa
 @overload

@@ -48,7 +48,6 @@ from gajim.gtk.chat_list import ChatList
 from gajim.gtk.chat_list_row import ChatListRow
 from gajim.gtk.chat_stack import ChatStack
 from gajim.gtk.const import MAIN_WIN_ACTIONS
-from gajim.gtk.dialogs import ConfirmationCheckDialog
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import ErrorDialog
@@ -803,33 +802,17 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                           _event: Gdk.Event
                           ) -> int:
 
+        if app.settings.get('confirm_on_window_delete'):
+            open_window('QuitDialog')
+            return Gdk.EVENT_STOP
+
         action = app.settings.get('action_on_close')
         if action == 'hide':
             self.hide()
-            return Gdk.EVENT_STOP
-
-        if action == 'minimize':
+        elif action == 'minimize':
             self.minimize()
-            return Gdk.EVENT_STOP
-
-        if not app.settings.get('confirm_on_window_delete'):
+        else:
             self.quit()
-            return Gdk.EVENT_STOP
-
-        def _on_ok(is_checked: bool) -> None:
-            if is_checked:
-                app.settings.set('confirm_on_window_delete', False)
-            self.quit()
-
-        ConfirmationCheckDialog(
-            _('Quit Gajim'),
-            _('You are about to quit Gajim'),
-            _('Are you sure you want to quit Gajim?'),
-            _('_Don’t ask again'),
-            [DialogButton.make('Cancel'),
-             DialogButton.make('Remove',
-                               text=_('_Quit'),
-                               callback=_on_ok)]).show()
 
         return Gdk.EVENT_STOP
 

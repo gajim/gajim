@@ -8,6 +8,7 @@ from typing import Any
 from typing import cast
 from typing import NamedTuple
 
+from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -314,6 +315,48 @@ class InputDialog(ConfirmationDialog):
         if button is not None:
             button.args.insert(0, self._entry.get_text())
         super()._on_response(_dialog, response)
+
+
+class QuitDialog(Gtk.ApplicationWindow):
+    def __init__(self) -> None:
+        Gtk.ApplicationWindow.__init__(
+            self,
+            application=app.app,
+            window_position=Gtk.WindowPosition.CENTER,
+            show_menubar=False,
+            type_hint=Gdk.WindowTypeHint.DIALOG,
+            modal=True,
+            transient_for=app.window,
+            title=_('Quit Gajim')
+        )
+
+        self._ui = get_builder('quit_dialog.ui')
+        self._ui.connect_signals(self)
+        self.add(self._ui.box)
+
+        self.connect('key-press-event', self._on_key_press)
+
+        self.show_all()
+
+    def _on_key_press(self, _widget: QuitDialog, event: Gdk.EventKey) -> None:
+        if event.keyval == Gdk.KEY_Escape:
+            self.destroy()
+
+    def _on_button_clicked(self, button: Gtk.Button) -> None:
+        action = button.get_name()
+
+        if self._ui.remember_checkbutton.get_active():
+            app.settings.set('confirm_on_window_delete', False)
+            app.settings.set('action_on_close', action)
+
+        if action == 'minimize':
+            app.window.minimize()
+        elif action == 'hide':
+            app.window.hide()
+        elif action == 'quit':
+            app.window.quit()
+
+        self.destroy()
 
 
 class ShortcutsWindow:
