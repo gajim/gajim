@@ -275,7 +275,7 @@ APP_SETTINGS = {
     'use_keyring': True,
     'use_kib_mib': False,
     'use_libappindicator': True,
-    'use_speller': False,
+    'use_speller': True,
     'use_stun_server': False,
     'use_urgency_hint': True,
     'video_framerate': '',
