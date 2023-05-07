@@ -139,7 +139,7 @@ class OMEMO(BaseModule):
                                    unacknowledged_count=2000)
 
         self._backend = OMEMOSessionManager(
-            self._own_jid, storage, omemo_config)
+            self._own_jid, storage, omemo_config, self._account)
         self._backend.register_signal('republish-bundle',
                                       self._on_republish_bundle)
 

@@ -176,6 +176,11 @@ def init() -> None:
     root_log.addHandler(consoleloghandler)
     root_log.propagate = False
 
+    root_log = logging.getLogger('omemo_dr')
+    root_log.setLevel(logging.WARNING)
+    root_log.addHandler(consoleloghandler)
+    root_log.propagate = False
+
     # GAJIM_DEBUG is set only on Windows when using Gajim-Debug.exe
     # Gajim-Debug.exe shows a command line prompt and we want to redirect
     # log output to it
@@ -190,11 +195,13 @@ def set_loglevels(loglevels_string: str) -> None:
 def set_verbose() -> None:
     parseAndSetLogLevels('gajim=DEBUG')
     parseAndSetLogLevels('.nbxmpp=INFO')
+    parseAndSetLogLevels('.omemo_dr=DEBUG')
 
 
 def set_quiet() -> None:
     parseAndSetLogLevels('gajim=CRITICAL')
     parseAndSetLogLevels('.nbxmpp=CRITICAL')
+    parseAndSetLogLevels('.omemo_dr=CRITICAL')
 
 
 def _redirect_output() -> None:
