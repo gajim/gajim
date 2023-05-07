@@ -549,11 +549,14 @@ class ChatListRow(Gtk.ListBoxRow):
         self._ui.connection_icon.get_style_context().remove_class('spin')
         self._ui.connection_icon.get_style_context().remove_class(
             'warning-color')
+        self._ui.connection_icon.get_style_context().remove_class(
+            'dim-label')
 
         if self.contact.is_joining:
             self._ui.connection_icon.set_from_icon_name(
                 'feather-refresh-cw-symbolic', Gtk.IconSize.MENU)
             self._ui.connection_icon.get_style_context().add_class('spin')
+            self._ui.connection_icon.get_style_context().add_class('dim-label')
             self._ui.connection_icon.set_tooltip_text(_('Joining Group Chat…'))
             self._ui.connection_icon.show()
         elif (self.contact.is_not_joined or
