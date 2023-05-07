@@ -306,13 +306,10 @@ class KeyRow(Gtk.ListBoxRow):
     def delete_fingerprint(self, *args: Any) -> None:
 
         def _remove():
-            device_id = self._identity_info.device_id
-
-            self._omemo.backend.remove_device(self._address, device_id)
-            self._omemo.backend.storage.delete_session(self._address,
-                                                       device_id)
-            self._omemo.backend.storage.delete_identity(
-                self._address, self._identity_info.public_key)
+            self._omemo.backend.delete_session(
+                self._address,
+                self._identity_info.device_id,
+                delete_identity=True)
 
             listbox = cast(Gtk.ListBox, self.get_parent())
             listbox.remove(self)
