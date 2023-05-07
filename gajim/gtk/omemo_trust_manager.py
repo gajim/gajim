@@ -333,7 +333,7 @@ class KeyRow(Gtk.ListBoxRow):
         image.get_style_context().add_class(css_class)
         image.set_tooltip_text(tooltip)
 
-        self._omemo.backend.storage.set_trust(
+        self._omemo.backend.set_trust(
             self._address, self._identity_info.public_key, trust)
 
     @property
