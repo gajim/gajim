@@ -418,15 +418,9 @@ class OMEMO(BaseModule):
         if contact.real_jid is not None:
             return contact.real_jid.bare
 
-        assert isinstance(properties.omemo, OMEMOMessage)
-        self._log.info('Groupchat: Last resort trying to find SID in DB')
-        from_jid = self.backend.storage.get_jid_from_device(
-            properties.omemo.sid)
-        if not from_jid:
-            self._log.error(
-                "Can't decrypt GroupChat Message from %s", resource)
-            return None
-        return from_jid
+        self._log.error(
+            'Unable to find JID for group chat message from %s', resource)
+        return None
 
     def _process_mam_message(self,
                              properties: MessageProperties
