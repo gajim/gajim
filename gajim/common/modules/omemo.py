@@ -50,7 +50,7 @@ from omemo_dr.exceptions import DuplicateMessage
 from omemo_dr.exceptions import KeyExchangeMessage
 from omemo_dr.exceptions import MessageNotForDevice
 from omemo_dr.exceptions import SelfMessage
-from omemo_dr.session import OMEMOSession
+from omemo_dr.session_manager import OMEMOSessionManager
 from omemo_dr.structs import OMEMOBundle
 from omemo_dr.structs import OMEMOConfig
 
@@ -138,7 +138,8 @@ class OMEMO(BaseModule):
                                    spk_cycle_seconds=86400,
                                    unacknowledged_count=2000)
 
-        self._backend = OMEMOSession(self._own_jid, storage, omemo_config)
+        self._backend = OMEMOSessionManager(
+            self._own_jid, storage, omemo_config)
         self._backend.register_signal('republish-bundle',
                                       self._on_republish_bundle)
 
@@ -179,7 +180,7 @@ class OMEMO(BaseModule):
             self.get_affiliation_list(jid)
 
     def _on_republish_bundle(self,
-                             _session: OMEMOSession,
+                             _session: OMEMOSessionManager,
                              _signal_name: str,
                              bundle: OMEMOBundle
                              ) -> None:
@@ -187,7 +188,7 @@ class OMEMO(BaseModule):
         self.set_bundle(bundle=bundle)
 
     @property
-    def backend(self) -> OMEMOSession:
+    def backend(self) -> OMEMOSessionManager:
         return self._backend
 
     def check_send_preconditions(self, contact: types.ChatContactT) -> bool:
