@@ -331,8 +331,8 @@ class Client(Observable):
                                            stanza=stanza))
 
     def is_own_jid(self, jid: JID | str) -> bool:
-        jid = self.get_own_jid()
-        return jid.bare_match(jid)
+        own_jid = self.get_own_jid()
+        return own_jid.bare_match(jid)
 
     def get_own_jid(self) -> JID:
         '''
