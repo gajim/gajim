@@ -88,8 +88,10 @@ class Chatstate(BaseModule):
         self._blocked: list[JID] = []
         self._enabled = False
 
-        self._con.connect_signal('state-changed', self._on_client_state_changed)
-        self._con.connect_signal('resume-failed', self._on_client_resume_failed)
+        self._client.connect_signal('state-changed',
+                                    self._on_client_state_changed)
+        self._client.connect_signal('resume-failed',
+                                    self._on_client_resume_failed)
 
     def _on_client_resume_failed(self,
                                  _client: types.Client,
@@ -120,7 +122,7 @@ class Chatstate(BaseModule):
                 2, self._check_last_interaction)
         else:
             self.cleanup()
-            self._con.get_module('Contacts').force_chatstate_update()
+            self._client.get_module('Contacts').force_chatstate_update()
 
     @ensure_enabled
     def _presence_received(self,
@@ -251,7 +253,7 @@ class Chatstate(BaseModule):
 
         if not contact.is_groupchat:
             # Don’t send chatstates to ourself
-            if self._con.get_own_jid().bare_match(contact.jid):
+            if self._client.is_own_jid(contact.jid):
                 return None
 
             if not contact.supports(Namespace.CHATSTATES):
@@ -284,7 +286,7 @@ class Chatstate(BaseModule):
         # User starts writing again.
 
         # Don’t send chatstates to ourself
-        if self._con.get_own_jid().bare_match(contact.jid):
+        if self._client.is_own_jid(contact.jid):
             return
 
         self.remove_delay_timeout(contact)
@@ -294,7 +296,7 @@ class Chatstate(BaseModule):
     @ensure_enabled
     def set_chatstate(self, contact: types.ChatContactT, state: State) -> None:
         # Don’t send chatstates to ourself
-        if self._con.get_own_jid().bare_match(contact.jid):
+        if self._client.is_own_jid(contact.jid):
             return
 
         if contact.jid in self._blocked:
@@ -364,7 +366,7 @@ class Chatstate(BaseModule):
                                   chatstate=chatstate.value,
                                   play_sound=False)
 
-        self._con.send_message(message)
+        self._client.send_message(message)
 
     @ensure_enabled
     def set_mouse_activity(self,
