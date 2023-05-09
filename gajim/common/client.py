@@ -330,6 +330,10 @@ class Client(Observable):
         app.ged.raise_event(StanzaReceived(account=self._account,
                                            stanza=stanza))
 
+    def is_own_jid(self, jid: JID | str) -> bool:
+        jid = self.get_own_jid()
+        return jid.bare_match(jid)
+
     def get_own_jid(self) -> JID:
         '''
         Return the last full JID we received on a bind event.
