@@ -547,7 +547,7 @@ class OMEMO(BaseModule):
 
     def set_bundle(self, bundle: OMEMOBundle | None = None) -> None:
         if bundle is None:
-            bundle = self.backend.get_bundle()
+            bundle = self.backend.get_bundle(Namespace.OMEMO_TEMP)
         self._nbxmpp('OMEMO').set_bundle(bundle,
                                          self.backend.get_our_device())
 
@@ -564,7 +564,7 @@ class OMEMO(BaseModule):
                            jid, device_id, bundle)
             return
 
-        self.backend.build_session(jid, device_id, bundle)
+        self.backend.build_session(jid, bundle)
         self._log.info('Session created for: %s', jid)
         # TODO: In MUC we should send a groupchat message
         self._send_key_transport_message('chat', jid, [device_id])
