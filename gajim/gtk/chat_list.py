@@ -71,7 +71,9 @@ class ChatList(Gtk.ListBox, EventHelper):
         self.set_sort_func(self._sort_func)
         self._set_placeholder()
 
-        self._mouseover: bool = False
+        self._rows_need_sort = False
+        self._context_menu_visible = False
+        self._mouseover = False
         self._pinned_order_change = False
         self.connect('enter-notify-event', self._on_mouse_focus_changed)
         self.connect('leave-notify-event', self._on_mouse_focus_changed)
@@ -206,6 +208,8 @@ class ChatList(Gtk.ListBox, EventHelper):
 
         row.connect('drag-begin', self._on_row_drag_begin)
         row.connect('unread-changed', self._on_row_unread_changed)
+        row.connect('context-menu-state-changed',
+                    self._on_context_menu_state_changed)
 
         self.add(row)
 
@@ -371,6 +375,14 @@ class ChatList(Gtk.ListBox, EventHelper):
     def _on_row_unread_changed(self, row: ChatListRow) -> None:
         self._emit_unread_changed()
 
+    def _on_context_menu_state_changed(self,
+                                       row: ChatListRow,
+                                       menu_is_visible: bool
+                                       ) -> None:
+
+        self._context_menu_visible = menu_is_visible
+        self._schedule_check_sort_inhibit()
+
     def _on_drag_data_received(self,
                                _widget: Gtk.Widget,
                                _drag_context: Gdk.DragContext,
@@ -478,8 +490,9 @@ class ChatList(Gtk.ListBox, EventHelper):
                     row.set_header_type(None)
 
     def _sort_func(self, row1: ChatListRow, row2: ChatListRow) -> int:
-        if self._mouseover and not self._pinned_order_change:
-            log.debug('Mouseover active, don’t sort rows')
+        if self._is_sort_inhibited():
+            self._rows_need_sort = True
+            log.debug('Sort inhibited')
             return 0
 
         # Sort pinned rows according to stored order
@@ -497,6 +510,33 @@ class ChatList(Gtk.ListBox, EventHelper):
         # Sort by timestamp
         return -1 if row1.timestamp > row2.timestamp else 1
 
+    def invalidate_sort(self) -> None:
+        if self._is_sort_inhibited():
+            return
+
+        self._rows_need_sort = False
+        log.debug('Sort Chatlist')
+        Gtk.ListBox.invalidate_sort(self)
+
+    def _is_sort_inhibited(self) -> bool:
+        if self._pinned_order_change:
+            return False
+        return self._mouseover or self._context_menu_visible
+
+    def _schedule_check_sort_inhibit(self) -> None:
+        if self._is_sort_inhibited():
+            return
+        GLib.timeout_add(100, self._check_sort_inhibit)
+
+    def _check_sort_inhibit(self) -> None:
+        if self._is_sort_inhibited():
+            return
+
+        if not self._rows_need_sort:
+            return
+
+        self.invalidate_sort()
+
     def _on_mouse_focus_changed(self,
                                 _widget: Gtk.ListBox,
                                 event: Gdk.EventCrossing
@@ -509,6 +549,8 @@ class ChatList(Gtk.ListBox, EventHelper):
             if event.detail != Gdk.NotifyType.INFERIOR:
                 # Not hovering a Gtk.ListBoxRow (row is INFERIOR)
                 self._mouseover = False
+
+        self._schedule_check_sort_inhibit()
 
     @staticmethod
     def _on_start_chat_clicked(_button: Gtk.Button) -> None:

@@ -63,6 +63,10 @@ class ChatListRow(Gtk.ListBoxRow):
             GObject.SignalFlags.RUN_LAST,
             None,
             ()),
+        'context-menu-state-changed': (
+            GObject.SignalFlags.RUN_LAST,
+            None,
+            (bool,)),
     }
 
     def __init__(self,
@@ -437,14 +441,14 @@ class ChatListRow(Gtk.ListBoxRow):
                                    ) -> None:
 
         if event.button == Gdk.BUTTON_SECONDARY:
-            self._popup_menu(event)
+            self._raise_context_popover(event)
 
         elif event.button == Gdk.BUTTON_MIDDLE:
             app.window.activate_action(
                 'remove-chat',
                 GLib.Variant('as', [self.account, str(self.jid)]))
 
-    def _popup_menu(self, event: Gdk.EventButton):
+    def _raise_context_popover(self, event: Gdk.EventButton):
         menu = get_chat_list_row_menu(
             self.workspace_id, self.account, self.jid, self._pinned)
 
@@ -460,7 +464,12 @@ class ChatListRow(Gtk.ListBoxRow):
 
         popover = GajimPopover(menu, relative_to=self)
         popover.set_pointing_to_coord(x=x, y=event.y)
+        popover.connect('closed', self._on_context_popover_closed)
+        self.emit('context-menu-state-changed', True)
         popover.popup()
+
+    def _on_context_popover_closed(self, _popover: Gtk.Popover) -> None:
+        self.emit('context-menu-state-changed', False)
 
     def _on_drag_begin(self,
                        row: ChatListRow,
