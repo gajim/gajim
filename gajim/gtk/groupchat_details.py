@@ -22,7 +22,9 @@ from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common import types
 from gajim.common.const import AvatarSize
+from gajim.common.const import SimpleClientState
 from gajim.common.events import MucDiscoUpdate
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
@@ -55,6 +57,9 @@ class GroupchatDetails(Gtk.ApplicationWindow):
 
         self.account = contact.account
         self._client = app.get_client(contact.account)
+        self._client.connect_signal(
+            'state-changed', self._on_client_state_changed)
+
         self._contact = contact
         self._contact.connect('avatar-update', self._on_avatar_update)
 
@@ -62,7 +67,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self._ui.connect_signals(self)
 
         self._switcher = SideBarSwitcher(width=250)
-        self._switcher.set_stack(self._ui.main_stack)
+        self._switcher.set_stack(self._ui.main_stack, rows_visible=False)
         self._ui.main_grid.attach(self._switcher, 0, 0, 1, 1)
         self._ui.main_stack.connect('notify::visible-child-name',
                                     self._on_stack_child_changed)
@@ -73,10 +78,14 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self._add_groupchat_info()
         self._add_groupchat_settings()
         self._add_groupchat_encryption()
-        self._add_groupchat_manage()
-        self._add_affiliations()
-        self._add_outcasts()
-        self._add_configuration()
+
+        if self._client.state.is_available:
+            self._ui.edit_name_button.set_sensitive(True)
+            self._ui.edit_name_button.set_tooltip_text(_('Edit Name…'))
+            self._add_groupchat_manage()
+            self._add_affiliations()
+            self._add_outcasts()
+            self._add_configuration()
 
         self._load_avatar()
         self._ui.name_entry.set_text(contact.name)
@@ -91,6 +100,16 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self.connect('destroy', self._on_destroy)
 
         self.show_all()
+
+    def _on_client_state_changed(self,
+                                 _client: types.Client,
+                                 _signal_name: str,
+                                 state: SimpleClientState
+                                 ) -> None:
+
+        self._ui.edit_name_button.set_sensitive(state.is_connected)
+        self._ui.edit_name_button.set_tooltip_text(
+            _('Not connected') if not state.is_connected else _('Edit Name…'))
 
     def _on_muc_disco_update(self, event: MucDiscoUpdate) -> None:
         if event.jid != self._contact.jid:
@@ -138,6 +157,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self._groupchat_manage = GroupchatManage(self.account,
                                                  self._contact)
         self._ui.manage_box.add(self._groupchat_manage)
+        self._switcher.set_row_visible('manage', True)
 
     def _add_groupchat_info(self) -> None:
         self._groupchat_info = GroupChatInfoScrolled(
@@ -148,6 +168,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self._groupchat_info.set_from_disco_info(disco_info)
         self._groupchat_info.set_subject(self._contact.subject)
         self._ui.info_box.add(self._groupchat_info)
+        self._switcher.set_row_visible('information', True)
 
     def _add_groupchat_settings(self) -> None:
         main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=24)
@@ -174,6 +195,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         scrolled_window.add(main_box)
 
         self._ui.settings_box.add(scrolled_window)
+        self._switcher.set_row_visible('settings', True)
 
     def _add_groupchat_encryption(self) -> None:
         if (self._contact.is_groupchat and
@@ -184,18 +206,22 @@ class GroupchatDetails(Gtk.ApplicationWindow):
 
         self._ui.encryption_box.add(
             OMEMOTrustManager(self._contact.account, self._contact))
+        self._switcher.set_row_visible('encryption-omemo', True)
 
     def _add_affiliations(self) -> None:
         affiliations = GroupchatAffiliation(self._client, self._contact)
         self._ui.affiliation_box.add(affiliations)
+        self._switcher.set_row_visible('affiliations', True)
 
     def _add_outcasts(self) -> None:
         affiliations = GroupchatOutcasts(self._client, self._contact)
         self._ui.outcasts_box.add(affiliations)
+        self._switcher.set_row_visible('outcasts', True)
 
     def _add_configuration(self) -> None:
         config = GroupchatConfig(self._client, self._contact)
         self._ui.configuration_box.add(config)
+        self._switcher.set_row_visible('config', True)
 
     def _on_key_press(self,
                       _widget: GroupchatDetails,

@@ -55,9 +55,10 @@
                 <child>
                   <object class="GtkToggleButton" id="edit_name_button">
                     <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="tooltip-text" translatable="yes">Edit Name…</property>
+                    <property name="tooltip-text" translatable="yes">Not connected</property>
                     <property name="valign">center</property>
                     <signal name="toggled" handler="_on_edit_name_toggled" swapped="no"/>
                     <child>

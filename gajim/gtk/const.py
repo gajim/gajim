@@ -232,7 +232,7 @@ MAIN_WIN_ACTIONS = [
     ('add-to-roster', None, True),
     ('start-voice-call', None, False),
     ('start-video-call', None, False),
-    ('show-contact-info', None, False),
+    ('show-contact-info', None, True),
     ('send-message', None, False),
     ('muc-change-nickname', None, False),
     ('muc-invite', None, False),

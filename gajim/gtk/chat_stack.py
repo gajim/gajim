@@ -507,7 +507,6 @@ class ChatStack(Gtk.Stack, EventHelper):
             jingle.get_enabled() or
             httpupload.get_enabled())
 
-        app.window.get_action('show-contact-info').set_enabled(online)
         app.window.get_action('correct-message').set_enabled(online)
 
     def _update_chat_actions(self, contact: BareContact) -> None:
