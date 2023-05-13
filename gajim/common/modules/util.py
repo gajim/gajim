@@ -36,6 +36,7 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.const import EME_MESSAGES
 from gajim.common.const import KindConstant
+from gajim.common.events import MessageRetractionReceived
 from gajim.common.events import MessageUpdated
 from gajim.common.modules.misc import parse_correction
 
@@ -128,6 +129,43 @@ def as_task(func):
         task_.start()
         return task_
     return func_wrapper
+
+
+def check_if_message_retraction(properties: MessageProperties,
+                                account: str,
+                                jid: JID,
+                                kind: KindConstant,
+                                logger: LoggerAdapter[logging.Logger]
+                                ) -> bool:
+
+    if properties.message_retraction is None:
+        return False
+
+    if properties.type.is_error:
+        return False
+
+    # TODO: make sure to use correct jid here
+    #jid = properties.jid
+    assert jid is not None
+
+    successful = app.storage.archive.try_message_retraction(
+        account,
+        jid,
+        properties.message_retraction.origin_id,
+        properties.is_mam_message,
+        properties.from_muc,
+        properties.occupant_id)
+
+    if not successful:
+        logger.warning(
+            'Received invalid message retraction request from %s', jid)
+        return False
+
+    app.ged.raise_event(MessageRetractionReceived(
+        account=account,
+        jid=jid,
+        origin_id=properties.message_retraction.origin_id))
+    return True
 
 
 def check_if_message_correction(properties: MessageProperties,

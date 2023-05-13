@@ -54,6 +54,7 @@ from gajim.common.modules.base import BaseModule
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.util import as_task
 from gajim.common.modules.util import check_if_message_correction
+from gajim.common.modules.util import check_if_message_retraction
 from gajim.common.modules.util import get_eme_message
 
 
@@ -322,6 +323,13 @@ class MAM(BaseModule):
                                        properties.body,
                                        kind,
                                        properties.mam.timestamp,
+                                       self._log):
+            return
+
+        if check_if_message_retraction(properties,
+                                       self._account,
+                                       properties.jid,
+                                       kind,
                                        self._log):
             return
 

@@ -40,6 +40,7 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_xhtml
 from gajim.common.modules.util import check_if_message_correction
+from gajim.common.modules.util import check_if_message_retraction
 from gajim.common.modules.util import get_eme_message
 from gajim.common.structs import OutgoingMessage
 
@@ -187,6 +188,13 @@ class Message(BaseModule):
                                        msgtxt,
                                        kind,
                                        properties.timestamp,
+                                       self._log):
+            return
+
+        if check_if_message_retraction(properties,
+                                       self._account,
+                                       from_,
+                                       kind,
                                        self._log):
             return
 

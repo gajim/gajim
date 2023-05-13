@@ -440,6 +440,14 @@ class MessageError(ApplicationEvent):
 
 
 @dataclass
+class MessageRetractionReceived(ApplicationEvent):
+    name: str = field(init=False, default='message-retraction-received')
+    account: str
+    jid: JID
+    origin_id: str
+
+
+@dataclass
 class RosterItemExchangeEvent(ApplicationEvent):
     name: str = field(init=False, default='roster-item-exchange')
     client: 'Client'

@@ -1049,6 +1049,93 @@ class MessageArchiveStorage(SqliteStorage):
         return True
 
     @timeit
+    def try_message_retraction(self,
+                               account: str,
+                               jid: JID,
+                               origin_id: str,
+                               is_mam_message: bool,
+                               is_groupchat: bool,
+                               occupant_id: Optional[str]
+                               ) -> bool:
+
+        '''Try to retract a message (XEP-0424)
+
+        :param jid:  This can be a full jid or bare jid.
+        '''
+
+        account_id = self.get_account_id(account)
+
+        self._log.debug(
+            'Check if message is retractable, parameters: %s %s %s %s',
+            jid, account_id, origin_id, occupant_id)
+
+        if is_groupchat and occupant_id is None:
+            # Group chat messages without occupant ID cannot be retracted
+            self._log.warning(
+                'Message retraction in MUC (%s) failed: no occupant ID', jid)
+            return False
+
+        if is_groupchat:
+            sql = '''SELECT log_line_id, message, additional_data
+                FROM logs
+                NATURAL JOIN jids jid_id
+                WHERE +jid = ?
+                AND account_id = ?
+                AND message_id = ?
+                AND occupant_id = ?
+            '''
+            rows = self._con.execute(
+                sql,
+                (jid,
+                 account_id,
+                 origin_id,
+                 occupant_id)).fetchall()
+        else:
+            sql = '''SELECT log_line_id, message, additional_data
+                FROM logs
+                NATURAL JOIN jids jid_id
+                WHERE +jid = ?
+                AND account_id = ?
+                AND message_id = ?
+            '''
+            rows = self._con.execute(
+                sql,
+                (jid,
+                 account_id,
+                 origin_id)).fetchall()
+
+        if not rows:
+            self._log.debug('No retractable messages found')
+            return False
+
+        if len(rows) != 1:
+            self._log.warning('More than one retractable message found')
+            return False
+
+        row = rows[0]
+
+        if row.additional_data is None:
+            additional_data = AdditionalDataDict()
+        else:
+            additional_data = row.additional_data
+
+        additional_data.set_value(
+            'retracted', 'by', str(jid))
+        additional_data.set_value(
+            'retracted', 'timestamp', '1')
+        serialized_dict = json.dumps(additional_data.data)
+
+        sql = '''
+            UPDATE logs SET message = ?, additional_data = ?
+            WHERE log_line_id = ?
+            '''
+        self._con.execute(
+            sql,
+            ('TODO: retracted placeholder', serialized_dict, row.log_line_id))
+
+        return True
+
+    @timeit
     def update_additional_data(self,
                                account: str,
                                stanza_id: str,
