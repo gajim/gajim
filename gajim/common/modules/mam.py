@@ -464,12 +464,16 @@ class MAM(BaseModule):
         if threshold == SyncThreshold.NO_SYNC:
             return
 
+        contact = self._get_contact(jid, groupchat=True)
+        contact.notify('mam-sync-started')
+
         mam_id, start_date = self._get_muc_query_params(jid, threshold)
 
         result = yield self._execute_query(jid, mam_id, start_date)
         if is_error(result):
             if result.condition != 'item-not-found':
                 self._log.warning(result)
+                contact.notify('mam-sync-error', result.get_text())
                 return
 
             app.storage.archive.reset_archive_infos(result.jid)
@@ -477,6 +481,7 @@ class MAM(BaseModule):
             result = yield self._execute_query(result.jid, None, start_date)
             if is_error(result):
                 self._log.warning(result)
+                contact.notify('mam-sync-error', result.get_text())
                 return
 
         if result.rsm.last is not None:
@@ -487,6 +492,8 @@ class MAM(BaseModule):
                 result.jid,
                 last_mam_id=result.rsm.last,
                 last_muc_timestamp=time.time())
+
+        contact.notify('mam-sync-finished')
 
     @as_task
     def _execute_query(self,
