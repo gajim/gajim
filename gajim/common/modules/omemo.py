@@ -76,6 +76,7 @@ from gajim.common.modules.util import event_node
 from gajim.common.modules.util import prepare_stanza
 from gajim.common.storage.omemo import OMEMOStorage
 from gajim.common.structs import OutgoingMessage
+from gajim.common.util.decorators import lru_cache_with_ttl
 
 ALLOWED_TAGS = [
     ('request', Namespace.RECEIPTS),
@@ -149,13 +150,9 @@ class OMEMO(BaseModule):
 
         self._omemo_groupchats: set[str] = set()
         self._muc_temp_store: dict[bytes, str] = {}
-        self._query_for_bundles: list[str] = []
-        self._device_bundle_querys: list[int] = []
-        self._query_for_devicelists: list[str] = []
 
     def _on_signed_in(self, _event: SignedIn) -> None:
         self._log.info('Announce Support after Sign In')
-        self._query_for_bundles = []
         self.set_bundle()
         self.request_devicelist()
 
@@ -180,8 +177,8 @@ class OMEMO(BaseModule):
 
         jid = str(contact.jid)
         self._check_if_omemo_capable(jid)
-        if self.is_omemo_groupchat(jid):
-            self.get_affiliation_list(jid)
+        if self._is_omemo_groupchat(jid):
+            self._get_affiliation_list(jid)
 
     def _on_republish_bundle(self,
                              _session: OMEMOSessionManager,
@@ -198,33 +195,11 @@ class OMEMO(BaseModule):
     def check_send_preconditions(self, contact: types.ChatContactT) -> bool:
         jid = str(contact.jid)
         if contact.is_groupchat:
-            if not self.is_omemo_groupchat(jid):
-                app.ged.raise_event(EncryptionInfo(
-                    account=contact.account,
-                    jid=contact.jid,
-                    message=EncryptionInfoMsg.BAD_OMEMO_CONFIG))
+            if not self._groupchat_pre_conditions_satisfied(contact):
                 return False
 
-            missing = True
-            for member_jid in self.backend.get_group_members(jid):
-                if not self.are_keys_missing(member_jid):
-                    missing = False
-            if missing:
-                self._log.info('%s => No Trusted Fingerprints for %s',
-                               contact.account, jid)
-                app.ged.raise_event(EncryptionInfo(
-                    account=contact.account,
-                    jid=contact.jid,
-                    message=EncryptionInfoMsg.NO_FINGERPRINTS))
-                return False
         else:
-            # check if we have devices for the contact
-            if not self.backend.get_devices(jid, without_self=True):
-                self.request_devicelist(jid)
-                app.ged.raise_event(EncryptionInfo(
-                    account=contact.account,
-                    jid=contact.jid,
-                    message=EncryptionInfoMsg.QUERY_DEVICES))
+            if not self._chat_pre_conditions_satisfied(contact):
                 return False
 
         if self.backend.get_identity_infos(jid,
@@ -243,7 +218,60 @@ class OMEMO(BaseModule):
 
         return True
 
-    def is_omemo_groupchat(self, room_jid: str) -> bool:
+    def _groupchat_pre_conditions_satisfied(
+            self,
+            contact: types.GroupchatContactT
+        ) -> bool:
+
+        jid = str(contact.jid)
+        if not self._is_omemo_groupchat(jid):
+            app.ged.raise_event(EncryptionInfo(
+                account=contact.account,
+                jid=contact.jid,
+                message=EncryptionInfoMsg.BAD_OMEMO_CONFIG))
+            return False
+
+        has_trusted_keys = False
+        for member_jid in self.backend.get_group_members(jid):
+            self._request_bundles_for_new_devices(member_jid)
+            if self._has_trusted_keys(member_jid):
+                has_trusted_keys = True
+
+        if not has_trusted_keys:
+            self._log.info('%s => No Trusted Fingerprints for %s',
+                           contact.account, jid)
+            app.ged.raise_event(EncryptionInfo(
+                account=contact.account,
+                jid=contact.jid,
+                message=EncryptionInfoMsg.NO_FINGERPRINTS))
+            return False
+        return True
+
+    def _chat_pre_conditions_satisfied(
+            self,
+            contact: types.ChatContactT
+        ) -> bool:
+
+        jid = str(contact.jid)
+        if not self.backend.get_devices(jid, without_self=True):
+            self.request_devicelist(jid)
+            app.ged.raise_event(EncryptionInfo(
+                account=contact.account,
+                jid=contact.jid,
+                message=EncryptionInfoMsg.QUERY_DEVICES))
+            return False
+
+        if not self._has_trusted_keys(jid):
+            self._log.info('%s => No Trusted Fingerprints for %s',
+                           contact.account, jid)
+            app.ged.raise_event(EncryptionInfo(
+                account=contact.account,
+                jid=contact.jid,
+                message=EncryptionInfoMsg.NO_FINGERPRINTS))
+            return False
+        return True
+
+    def _is_omemo_groupchat(self, room_jid: str) -> bool:
         return room_jid in self._omemo_groupchats
 
     def encrypt_message(self, event: OutgoingMessage) -> bool:
@@ -439,13 +467,13 @@ class OMEMO(BaseModule):
         else:
             self.backend.add_group_member(room, jid)
 
-        if self.is_omemo_groupchat(room):
-            if not self.is_contact_in_roster(jid):
+        if self._is_omemo_groupchat(room):
+            if not self._is_contact_in_roster(jid):
                 # Query Devicelists from JIDs not in our Roster
                 self._log.info('%s not in Roster, query devicelist...', jid)
-                self.request_devicelist(jid)
+                self._request_device_list_ttl(jid)
 
-    def get_affiliation_list(self, room_jid: str) -> None:
+    def _get_affiliation_list(self, room_jid: str) -> None:
         for affiliation in ('owner', 'admin', 'member'):
             self._nbxmpp('MUC').get_affiliation(
                 room_jid,
@@ -465,12 +493,12 @@ class OMEMO(BaseModule):
             jid = str(user_jid)
             self.backend.add_group_member(room_jid, jid)
 
-            if not self.is_contact_in_roster(jid):
+            if not self._is_contact_in_roster(jid):
                 # Query Devicelists from JIDs not in our Roster
                 self._log.info('%s not in Roster, query devicelist...', jid)
-                self.request_devicelist(jid)
+                self._request_device_list_ttl(jid)
 
-    def is_contact_in_roster(self, jid: str) -> bool:
+    def _is_contact_in_roster(self, jid: str) -> bool:
         if jid == self._own_jid:
             return True
 
@@ -490,66 +518,29 @@ class OMEMO(BaseModule):
             self._log.info('OMEMO room removed due to config change: %s', jid)
             self._omemo_groupchats.discard(jid)
 
-    def _check_for_missing_sessions(self, jid: str) -> None:
-        devices_without_session = self.backend.get_devices_without_sessions(jid)
-        for device_id in devices_without_session:
-            if device_id in self._device_bundle_querys:
-                continue
-            self._device_bundle_querys.append(device_id)
-            self.request_bundle(jid, device_id)
+    def _request_bundles_for_new_devices(self, jid_: str) -> None:
+        for jid in [jid_, self._own_jid]:
+            device_ids = self.backend.get_devices_without_sessions(jid)
+            for device_id in device_ids:
+                self._request_bundle_ttl(jid, device_id)
 
-    def are_keys_missing(self, contact_jid: str) -> bool:
-        ''' Checks if devicekeys are missing and queries the
-            bundles
-
-            Parameters
-            ----------
-            contact_jid : str
-                bare jid of the contact
-
-            Returns
-            -------
-            bool
-                Returns True if there are no trusted Fingerprints
-        '''
-
-        # Fetch Bundles of own other Devices
-        if self._own_jid not in self._query_for_bundles:
-
-            devices_without_session = self.backend.get_devices_without_sessions(
-                self._own_jid)
-
-            self._query_for_bundles.append(self._own_jid)
-
-            if devices_without_session:
-                for device_id in devices_without_session:
-                    self.request_bundle(self._own_jid, device_id)
-
-        # Fetch Bundles of contacts devices
-        if contact_jid not in self._query_for_bundles:
-
-            devices_without_session = self.backend.get_devices_without_sessions(
-                contact_jid)
-
-            self._query_for_bundles.append(contact_jid)
-
-            if devices_without_session:
-                for device_id in devices_without_session:
-                    self.request_bundle(contact_jid, device_id)
-
+    def _has_trusted_keys(self, jid: str) -> bool:
         if self.backend.get_identity_infos(
-                contact_jid,
+                jid,
                 only_active=True,
                 trust=[OMEMOTrust.VERIFIED, OMEMOTrust.BLIND]):
-            return False
-
-        return True
+            return True
+        return False
 
     def set_bundle(self, bundle: OMEMOBundle | None = None) -> None:
         if bundle is None:
             bundle = self.backend.get_bundle(Namespace.OMEMO_TEMP)
         self._nbxmpp('OMEMO').set_bundle(bundle,
                                          self.backend.get_our_device())
+
+    @lru_cache_with_ttl(maxsize=512, ttl=7200)
+    def _request_bundle_ttl(self, jid: str, device_id: int) -> None:
+        self.request_bundle(jid, device_id)
 
     @as_task
     def request_bundle(self, jid: str, device_id: int):
@@ -588,17 +579,16 @@ class OMEMO(BaseModule):
             self._own_jid, [self.backend.get_our_device()])
         self.set_devicelist()
 
+    @lru_cache_with_ttl(maxsize=512, ttl=7200)
+    def _request_device_list_ttl(self, jid: str) -> None:
+        self.request_devicelist(jid)
+
     @as_task
     def request_devicelist(self, jid: Optional[str] = None):
         _task = yield  # noqa: F841
 
         if jid is None:
             jid = self._own_jid
-
-        if jid in self._query_for_devicelists:
-            return
-
-        self._query_for_devicelists.append(jid)
 
         devicelist = yield self._nbxmpp('OMEMO').request_devicelist(jid=jid)
         if is_error(devicelist) or devicelist is None:
@@ -634,16 +624,13 @@ class OMEMO(BaseModule):
         # Pass a copy, we need the full list for potential set_devicelist()
         self.backend.update_devicelist(jid, list(devicelist))
 
-        if jid in self._query_for_devicelists:
-            self._query_for_devicelists.remove(jid)
-
         if own_devices:
             if not self.backend.is_our_device_published():
                 # Our own device_id is not in the list, it could be
                 # overwritten by some other client
                 self.set_devicelist(devicelist)
 
-        self._check_for_missing_sessions(jid)
+        self._request_bundles_for_new_devices(jid)
 
     def _debug_print_stanza(self, stanza: Any) -> None:
         stanzastr = '\n' + stanza.__str__(fancy=True)
