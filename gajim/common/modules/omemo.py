@@ -152,7 +152,7 @@ class OMEMO(BaseModule):
         self._muc_temp_store: dict[bytes, str] = {}
 
     def _on_signed_in(self, _event: SignedIn) -> None:
-        self._log.info('Announce Support after Sign In')
+        self._log.info('Publish our bundle after sign in')
         self.set_bundle()
         self.request_devicelist()
 
@@ -205,16 +205,14 @@ class OMEMO(BaseModule):
         if self.backend.get_identity_infos(jid,
                                            only_active=True,
                                            trust=OMEMOTrust.UNDECIDED):
-            self._log.info('%s => Undecided Fingerprints for %s',
-                           contact.account, jid)
+            self._log.info('Undecided keys for %s', jid)
             app.ged.raise_event(EncryptionInfo(
                 account=contact.account,
                 jid=contact.jid,
                 message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
             return False
 
-        self._log.debug('%s => Sending Message to %s',
-                        contact.account, jid)
+        self._log.debug('Sending message to %s', jid)
 
         return True
 
@@ -238,8 +236,7 @@ class OMEMO(BaseModule):
                 has_trusted_keys = True
 
         if not has_trusted_keys:
-            self._log.info('%s => No Trusted Fingerprints for %s',
-                           contact.account, jid)
+            self._log.info('No trusted keys for %s', jid)
             app.ged.raise_event(EncryptionInfo(
                 account=contact.account,
                 jid=contact.jid,
@@ -262,8 +259,7 @@ class OMEMO(BaseModule):
             return False
 
         if not self._has_trusted_keys(jid):
-            self._log.info('%s => No Trusted Fingerprints for %s',
-                           contact.account, jid)
+            self._log.info('No trusted keys for %s', jid)
             app.ged.raise_event(EncryptionInfo(
                 account=contact.account,
                 jid=contact.jid,
@@ -339,7 +335,7 @@ class OMEMO(BaseModule):
             return
 
         transport_message = get_key_transport_message(typ, jid, omemo_message)
-        self._log.info('Send key transport message %s (%s)', jid, devices)
+        self._log.info('Send key transport message to %s (%s)', jid, devices)
         self._client.send_stanza(transport_message)
 
     def _message_received(self,
@@ -380,7 +376,7 @@ class OMEMO(BaseModule):
                 raise NodeProcessed
 
             if properties.omemo.payload not in self._muc_temp_store:
-                self._log.warning("Can't decrypt own GroupChat Message")
+                self._log.warning("Can't decrypt own group chat message")
                 return
 
             plaintext = self._muc_temp_store[properties.omemo.payload]
@@ -425,7 +421,7 @@ class OMEMO(BaseModule):
             return contact.real_jid.bare
 
         self._log.error(
-            'Unable to find JID for group chat message from %s', resource)
+            'Unable to find jid for group chat message from %s', resource)
         return None
 
     def _process_mam_message(self,
@@ -436,7 +432,7 @@ class OMEMO(BaseModule):
         if properties.from_muc:
             self._log.info('MUC MAM Message received')
             if properties.muc_user is None or properties.muc_user.jid is None:
-                self._log.warning('Received MAM Message which can '
+                self._log.warning('Received MAM message which can '
                                   'not be mapped to a real jid')
                 return None
             return properties.muc_user.jid.bare
@@ -470,7 +466,7 @@ class OMEMO(BaseModule):
         if self._is_omemo_groupchat(room):
             if not self._is_contact_in_roster(jid):
                 # Query Devicelists from JIDs not in our Roster
-                self._log.info('%s not in Roster, query devicelist...', jid)
+                self._log.info('%s not in roster, query devicelist...', jid)
                 self._request_device_list_ttl(jid)
 
     def _get_affiliation_list(self, room_jid: str) -> None:
@@ -494,8 +490,7 @@ class OMEMO(BaseModule):
             self.backend.add_group_member(room_jid, jid)
 
             if not self._is_contact_in_roster(jid):
-                # Query Devicelists from JIDs not in our Roster
-                self._log.info('%s not in Roster, query devicelist...', jid)
+                self._log.info('%s not in roster, query devicelist...', jid)
                 self._request_device_list_ttl(jid)
 
     def _is_contact_in_roster(self, jid: str) -> bool:
@@ -546,7 +541,7 @@ class OMEMO(BaseModule):
     def request_bundle(self, jid: str, device_id: int):
         _task = yield  # noqa: F841
 
-        self._log.info('Fetch device bundle %s %s', device_id, jid)
+        self._log.info('Request device bundle %s %s', device_id, jid)
 
         bundle = yield self._nbxmpp('OMEMO').request_bundle(jid, device_id)
 
@@ -589,6 +584,8 @@ class OMEMO(BaseModule):
 
         if jid is None:
             jid = self._own_jid
+
+        self._log.info('Request devicelist for %s', jid)
 
         devicelist = yield self._nbxmpp('OMEMO').request_devicelist(jid=jid)
         if is_error(devicelist) or devicelist is None:
