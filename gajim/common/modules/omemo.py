@@ -634,8 +634,8 @@ class OMEMO(BaseModule):
         # Pass a copy, we need the full list for potential set_devicelist()
         self.backend.update_devicelist(jid, list(devicelist))
 
-        if jid in self._query_for_bundles:
-            self._query_for_bundles.remove(jid)
+        if jid in self._query_for_devicelists:
+            self._query_for_devicelists.remove(jid)
 
         if own_devices:
             if not self.backend.is_our_device_published():
