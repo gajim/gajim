@@ -99,9 +99,6 @@ class DBusFreedesktop(IdleMonitor):
 
         return self.last_idle_time
 
-    def is_extended_away(self) -> bool:
-        return self._extended_away
-
 
 class DBusGnome(IdleMonitor):
 
