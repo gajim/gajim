@@ -59,10 +59,10 @@ class DBusFreedesktop(IdleMonitor):
 
     def __init__(self) -> None:
         IdleMonitor.__init__(self)
-        self.last_idle_time = 0
+        self._last_idle_time = 0
 
         log.debug('Connecting to org.freedesktop.ScreenSaver')
-        self.dbus_proxy = Gio.DBusProxy.new_for_bus_sync(
+        self._dbus_proxy = Gio.DBusProxy.new_for_bus_sync(
             Gio.BusType.SESSION,
             Gio.DBusProxyFlags.NONE,
             None,
@@ -80,7 +80,7 @@ class DBusFreedesktop(IdleMonitor):
         log.debug('Test successful')
 
     def _get_idle_sec_fail(self) -> int:
-        (idle_time,) = cast(tuple[int], self.dbus_proxy.call_sync(
+        (idle_time,) = cast(tuple[int], self._dbus_proxy.call_sync(
             'GetSessionIdleTime',
             None,
             Gio.DBusCallFlags.NO_AUTO_START,
@@ -91,23 +91,23 @@ class DBusFreedesktop(IdleMonitor):
 
     def get_idle_sec(self) -> int:
         try:
-            self.last_idle_time = self._get_idle_sec_fail()
+            self._last_idle_time = self._get_idle_sec_fail()
         except GLib.Error as error:
             log.warning(
                 'org.freedesktop.ScreenSaver.GetSessionIdleTime() failed: %s',
                 error)
 
-        return self.last_idle_time
+        return self._last_idle_time
 
 
 class DBusGnome(IdleMonitor):
 
     def __init__(self) -> None:
         IdleMonitor.__init__(self)
-        self.last_idle_time = 0
+        self._last_idle_time = 0
 
         log.debug('Connecting to org.gnome.Mutter.IdleMonitor')
-        self.dbus_gnome_proxy = Gio.DBusProxy.new_for_bus_sync(
+        self._dbus_proxy = Gio.DBusProxy.new_for_bus_sync(
             Gio.BusType.SESSION,
             Gio.DBusProxyFlags.NONE,
             None,
@@ -125,7 +125,7 @@ class DBusGnome(IdleMonitor):
         log.debug('Test successful')
 
     def _get_idle_sec_fail(self) -> int:
-        (idle_time,) = cast(tuple[int], self.dbus_gnome_proxy.call_sync(
+        (idle_time,) = cast(tuple[int], self._dbus_proxy.call_sync(
             'GetIdletime',
             None,
             Gio.DBusCallFlags.NO_AUTO_START,
@@ -136,13 +136,13 @@ class DBusGnome(IdleMonitor):
 
     def get_idle_sec(self) -> int:
         try:
-            self.last_idle_time = self._get_idle_sec_fail()
+            self._last_idle_time = self._get_idle_sec_fail()
         except GLib.Error as error:
             log.warning(
                 'org.gnome.Mutter.IdleMonitor.GetIdletime() failed: %s',
                 error)
 
-        return self.last_idle_time
+        return self._last_idle_time
 
 
 class Xss(IdleMonitor):
@@ -165,59 +165,60 @@ class Xss(IdleMonitor):
         xid = ctypes.c_ulong
         c_int_p = ctypes.POINTER(ctypes.c_int)
 
-        libX11path = ctypes.util.find_library('X11')
-        if libX11path is None:
+        lib_x11_path = ctypes.util.find_library('X11')
+        if lib_x11_path is None:
             raise OSError('libX11 could not be found.')
-        libX11 = ctypes.cdll.LoadLibrary(libX11path)
-        libX11.XOpenDisplay.restype = display_p
-        libX11.XOpenDisplay.argtypes = (ctypes.c_char_p,)
-        libX11.XDefaultRootWindow.restype = xid
-        libX11.XDefaultRootWindow.argtypes = (display_p,)
 
-        libXsspath = ctypes.util.find_library('Xss')
-        if libXsspath is None:
+        lib_x11 = ctypes.cdll.LoadLibrary(lib_x11_path)
+        lib_x11.XOpenDisplay.restype = display_p
+        lib_x11.XOpenDisplay.argtypes = (ctypes.c_char_p,)
+        lib_x11.XDefaultRootWindow.restype = xid
+        lib_x11.XDefaultRootWindow.argtypes = (display_p,)
+
+        lib_xss_path = ctypes.util.find_library('Xss')
+        if lib_xss_path is None:
             raise OSError('libXss could not be found.')
-        self.libXss = ctypes.cdll.LoadLibrary(libXsspath)
-        self.libXss.XScreenSaverQueryExtension.argtypes = (display_p,
-                                                           c_int_p,
-                                                           c_int_p)
-        self.libXss.XScreenSaverAllocInfo.restype = XScreenSaverInfo_p
-        self.libXss.XScreenSaverQueryInfo.argtypes = (
+
+        self._lib_xss = ctypes.cdll.LoadLibrary(lib_xss_path)
+        self._lib_xss.XScreenSaverQueryExtension.argtypes = (
+            display_p, c_int_p, c_int_p)
+        self._lib_xss.XScreenSaverAllocInfo.restype = XScreenSaverInfo_p
+        self._lib_xss.XScreenSaverQueryInfo.argtypes = (
             display_p, xid, XScreenSaverInfo_p)
 
-        self.dpy_p = libX11.XOpenDisplay(None)
-        if self.dpy_p is None:
+        self._dpy_p = lib_x11.XOpenDisplay(None)
+        if self._dpy_p is None:
             raise OSError('Could not open X Display.')
 
         _event_basep = ctypes.c_int()
         _error_basep = ctypes.c_int()
-        extension = self.libXss.XScreenSaverQueryExtension(
-            self.dpy_p, ctypes.byref(_event_basep), ctypes.byref(_error_basep))
+        extension = self._lib_xss.XScreenSaverQueryExtension(
+            self._dpy_p, ctypes.byref(_event_basep), ctypes.byref(_error_basep))
         if extension == 0:
             raise OSError('XScreenSaver Extension not available on display.')
 
-        self.xss_info_p = self.libXss.XScreenSaverAllocInfo()
-        if self.xss_info_p is None:
+        self._xss_info_p = self._lib_xss.XScreenSaverAllocInfo()
+        if self._xss_info_p is None:
             raise OSError('XScreenSaverAllocInfo: Out of Memory.')
 
-        self.rootwindow = libX11.XDefaultRootWindow(self.dpy_p)
+        self.root_window = lib_x11.XDefaultRootWindow(self._dpy_p)
 
     def get_idle_sec(self) -> int:
-        info = self.libXss.XScreenSaverQueryInfo(
-            self.dpy_p, self.rootwindow, self.xss_info_p)
+        info = self._lib_xss.XScreenSaverQueryInfo(
+            self._dpy_p, self.root_window, self._xss_info_p)
         if info == 0:
             return info
-        return self.xss_info_p.contents.idle // 1000
+        return self._xss_info_p.contents.idle // 1000
 
 
 class Windows(IdleMonitor):
     def __init__(self) -> None:
         IdleMonitor.__init__(self)
-        self.OpenInputDesktop = ctypes.windll.user32.OpenInputDesktop
-        self.CloseDesktop = ctypes.windll.user32.CloseDesktop
-        self.SystemParametersInfo = ctypes.windll.user32.SystemParametersInfoW
-        self.GetTickCount = ctypes.windll.kernel32.GetTickCount
-        self.GetLastInputInfo = ctypes.windll.user32.GetLastInputInfo
+        self._OpenInputDesktop = ctypes.windll.user32.OpenInputDesktop
+        self._CloseDesktop = ctypes.windll.user32.CloseDesktop
+        self._SystemParametersInfo = ctypes.windll.user32.SystemParametersInfoW
+        self._GetTickCount = ctypes.windll.kernel32.GetTickCount
+        self._GetLastInputInfo = ctypes.windll.user32.GetLastInputInfo
 
         self._locked_time = None
 
@@ -227,12 +228,12 @@ class Windows(IdleMonitor):
                 ('dwTime', ctypes.c_uint)
             ]
 
-        self.lastInputInfo = LastInputInfo()
-        self.lastInputInfo.cbSize = ctypes.sizeof(self.lastInputInfo)
+        self._lastInputInfo = LastInputInfo()
+        self._lastInputInfo.cbSize = ctypes.sizeof(self._lastInputInfo)
 
     def get_idle_sec(self) -> int:
-        self.GetLastInputInfo(ctypes.byref(self.lastInputInfo))
-        return int(self.GetTickCount() - self.lastInputInfo.dwTime) // 1000
+        self._GetLastInputInfo(ctypes.byref(self._lastInputInfo))
+        return int(self._GetTickCount() - self._lastInputInfo.dwTime) // 1000
 
     def set_extended_away(self, state: bool) -> None:
         raise NotImplementedError
@@ -241,7 +242,7 @@ class Windows(IdleMonitor):
         # Check if Screen Saver is running
         # 0x72 is SPI_GETSCREENSAVERRUNNING
         saver_runing = ctypes.c_int(0)
-        info = self.SystemParametersInfo(
+        info = self._SystemParametersInfo(
             0x72, 0, ctypes.byref(saver_runing), 0)
         if info and saver_runing.value:
             return True
@@ -249,9 +250,9 @@ class Windows(IdleMonitor):
         # Check if Screen is locked
         # Also a UAC prompt counts as locked
         # So just return True if we are more than 10 seconds locked
-        desk = self.OpenInputDesktop(0, False, 0)
+        desk = self._OpenInputDesktop(0, False, 0)
         unlocked = bool(desk)
-        self.CloseDesktop(desk)
+        self._CloseDesktop(desk)
 
         if unlocked:
             self._locked_time = None
