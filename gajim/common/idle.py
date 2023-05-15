@@ -212,9 +212,6 @@ class Xss(IdleMonitor):
             return info
         return self.xss_info_p.contents.idle // 1000
 
-    def set_extended_away(self, state: bool) -> None:
-        raise NotImplementedError
-
 
 class Windows(IdleMonitor):
     def __init__(self) -> None:
