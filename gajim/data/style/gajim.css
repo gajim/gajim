@@ -95,6 +95,7 @@ infobar.error > revealer > box {
 .success-color { color: @success_color; }
 .error-color { color: @error_color; }
 .warning-color { color: @warning_color; }
+.info-color { color: rgb(75, 150, 200); }
 .selected-color { color: @theme_selected_bg_color; }
 .insensitive-fg-color {color: @insensitive_fg_color;}
 .encrypted-color { color: rgb(75, 181, 67); }

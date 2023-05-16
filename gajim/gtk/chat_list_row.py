@@ -517,6 +517,9 @@ class ChatListRow(Gtk.ListBoxRow):
         elif isinstance(self.contact, GroupchatContact):
             self.contact.connect('avatar-update', self._on_avatar_update)
             self.contact.connect('state-changed', self._on_muc_state_changed)
+            self.contact.connect('mam-sync-started', self._on_mam_sync_changed)
+            self.contact.connect('mam-sync-finished', self._on_mam_sync_changed)
+            self.contact.connect('mam-sync-error', self._on_mam_sync_changed)
 
             self._client.connect_signal('state-changed',
                                         self._on_client_state_changed)
@@ -555,29 +558,55 @@ class ChatListRow(Gtk.ListBoxRow):
         self._update_joined_state()
 
     def _update_joined_state(self) -> None:
-        self._ui.connection_icon.get_style_context().remove_class('spin')
-        self._ui.connection_icon.get_style_context().remove_class(
-            'warning-color')
-        self._ui.connection_icon.get_style_context().remove_class(
-            'dim-label')
+        self._reset_connection_icon()
+        context = self._ui.connection_icon.get_style_context()
 
         if self.contact.is_joining:
             self._ui.connection_icon.set_from_icon_name(
                 'feather-refresh-cw-symbolic', Gtk.IconSize.MENU)
-            self._ui.connection_icon.get_style_context().add_class('spin')
-            self._ui.connection_icon.get_style_context().add_class('dim-label')
+            context.add_class('spin')
+            context.add_class('dim-label')
             self._ui.connection_icon.set_tooltip_text(_('Joining Group Chat…'))
             self._ui.connection_icon.show()
         elif (self.contact.is_not_joined or
                 not self._client.state.is_available):
             self._ui.connection_icon.set_from_icon_name(
                 'feather-zap-symbolic', Gtk.IconSize.MENU)
-            self._ui.connection_icon.get_style_context().add_class(
-                'warning-color')
+            context.add_class('warning-color')
             self._ui.connection_icon.set_tooltip_text(_('Not connected'))
             self._ui.connection_icon.show()
-        else:
-            self._ui.connection_icon.hide()
+
+    def _on_mam_sync_changed(self,
+                             _contact: GroupchatContact,
+                             signal_name: str
+                             ) -> None:
+
+        self._reset_connection_icon()
+        context = self._ui.connection_icon.get_style_context()
+
+        if signal_name == 'mam-sync-started':
+            self._ui.connection_icon.set_from_icon_name(
+                'feather-refresh-cw-symbolic', Gtk.IconSize.MENU)
+            context.add_class('spin')
+            context.add_class('info-color')
+            self._ui.connection_icon.set_tooltip_text(_('Fetching messages…'))
+            self._ui.connection_icon.show()
+        elif signal_name == 'mam-sync-error':
+            self._ui.connection_icon.set_from_icon_name(
+                'feather-zap-symbolic', Gtk.IconSize.MENU)
+            context.add_class('error-color')
+            self._ui.connection_icon.set_tooltip_text(
+                _('There has been an error while trying to fetch messages.'))
+            self._ui.connection_icon.show()
+
+    def _reset_connection_icon(self) -> None:
+        self._ui.connection_icon.hide()
+        context = self._ui.connection_icon.get_style_context()
+        context.remove_class('spin')
+        context.remove_class('dim-label')
+        context.remove_class('info-color')
+        context.remove_class('warning-color')
+        context.remove_class('error-color')
 
     def _on_muc_user_update(self,
                             _contact: GroupchatParticipant,

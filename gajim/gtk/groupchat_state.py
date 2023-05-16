@@ -59,6 +59,9 @@ class GroupchatState(Gtk.Box):
 
         self._contact = contact
         self._contact.connect('state-changed', self._on_muc_state_changed)
+        self._contact.connect('mam-sync-started', self._on_mam_sync_changed)
+        self._contact.connect('mam-sync-finished', self._on_mam_sync_changed)
+        self._contact.connect('mam-sync-error', self._on_mam_sync_changed)
 
         self._client = app.get_client(contact.account)
         self._client.connect_signal('state-changed',
@@ -92,8 +95,20 @@ class GroupchatState(Gtk.Box):
         self.set_visible(self._client.state.is_available and
                          not contact.is_joined)
 
-    def set_fetching(self) -> None:
-        self._ui.groupchat_state.set_visible_child_name('fetching')
+    def _on_mam_sync_changed(self,
+                             _contact: GroupchatContact,
+                             signal_name: str
+                             ) -> None:
+
+        if signal_name in ('mam-sync-started', 'mam-sync-error'):
+            self.set_visible(True)
+            self._ui.groupchat_state.set_visible_child_name(signal_name)
+            return
+
+        self.hide()
+
+    def _on_close_clicked(self, _button: Gtk.Button) -> None:
+        self.hide()
 
     def _on_join_clicked(self, _button: Gtk.Button) -> None:
         assert self._contact is not None

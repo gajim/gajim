@@ -115,6 +115,7 @@
           <object class="GtkSpinner">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="active">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -139,8 +140,74 @@
         </style>
       </object>
       <packing>
-        <property name="name">fetching</property>
+        <property name="name">mam-sync-started</property>
         <property name="position">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="icon-name">dialog-error-symbolic</property>
+            <style>
+              <class name="error-color"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">There has been an error while trying to fetch messages.</property>
+            <property name="wrap">True</property>
+            <property name="max-width-chars">50</property>
+            <property name="xalign">0</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Close</property>
+            <property name="valign">center</property>
+            <signal name="clicked" handler="_on_close_clicked" swapped="no"/>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">window-close-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <style>
+          <class name="floating-overlay-box"/>
+        </style>
+      </object>
+      <packing>
+        <property name="name">mam-sync-error</property>
+        <property name="position">3</property>
       </packing>
     </child>
   </object>
