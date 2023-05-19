@@ -19,6 +19,7 @@ from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
+from gi.repository import Soup
 
 from gajim.common import app
 from gajim.common.const import ARTISTS
@@ -50,6 +51,10 @@ class AboutDialog(Gtk.AboutDialog):
         cairo_ver = cairo.cairo_version_string()
         python_cairo_ver = cairo.version
 
+        soup_ver = '.'.join(map(str, [Soup.get_major_version(),
+                                      Soup.get_minor_version(),
+                                      Soup.get_micro_version()]))
+
         comments: list[str] = []
         comments.append(_('A fully-featured XMPP chat client'))
         comments.append('')
@@ -60,6 +65,7 @@ class AboutDialog(Gtk.AboutDialog):
         comments.append(_('cairo Version: %s') % cairo_ver)
         comments.append(_('pycairo Version: %s') % python_cairo_ver)
         comments.append(_('python-nbxmpp Version: %s') % nbxmpp.__version__)
+        comments.append(_('libsoup Version: %s') % soup_ver)
 
         self.set_comments('\n'.join(comments))
 
