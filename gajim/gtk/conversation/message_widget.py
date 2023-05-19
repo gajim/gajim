@@ -42,6 +42,7 @@ class MessageWidget(Gtk.Box):
         self._selectable = selectable
 
         self._content: ContentT | None = None
+        self._original_text = ''
         self._action_phrase_text = ''
 
     def get_content(self) -> ContentT | None:
@@ -49,7 +50,7 @@ class MessageWidget(Gtk.Box):
 
     def get_text(self) -> str:
         if self._content is not None:
-            return self._content.text
+            return self._original_text
         return self._action_phrase_text
 
     def set_selectable(self, selectable: bool) -> None:
@@ -61,20 +62,20 @@ class MessageWidget(Gtk.Box):
                          text: str,
                          nickname: Optional[str] = None) -> None:
 
-        original_text = text
+        self._original_text = text
         if len(text) > MAX_MESSAGE_LENGTH:
             text = text[:MAX_MESSAGE_LENGTH]
 
         if text.startswith('/me') and nickname is not None:
             self._add_action_phrase(text, nickname)
-            if len(original_text) > MAX_MESSAGE_LENGTH:
-                self._add_read_more_button(original_text)
+            if len(self._original_text) > MAX_MESSAGE_LENGTH:
+                self._add_read_more_button(self._original_text)
             return
 
         result = process(text)
         self.add_content(result)
-        if len(original_text) > MAX_MESSAGE_LENGTH:
-            self._add_read_more_button(original_text)
+        if len(self._original_text) > MAX_MESSAGE_LENGTH:
+            self._add_read_more_button(self._original_text)
 
     def _add_action_phrase(self, text: str, nickname: str):
         self.clear()
