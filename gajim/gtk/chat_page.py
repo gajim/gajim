@@ -60,7 +60,7 @@ class ChatPage(Gtk.Box):
         self._ui.connect_signals(self)
 
         self._chat_stack = ChatStack()
-        self._ui.right_grid_overlay.add(self._chat_stack)
+        self._ui.right_grid.attach(self._chat_stack, 0, 0, 1, 1)
 
         self._chat_control = self._chat_stack.get_chat_control()
 
@@ -69,11 +69,12 @@ class ChatPage(Gtk.Box):
 
         self._search_revealer = Gtk.Revealer()
         self._search_revealer.set_reveal_child(False)
+        self._search_revealer.set_hexpand(False)
+        self._search_revealer.set_hexpand_set(True)
         self._search_revealer.set_transition_type(
             Gtk.RevealerTransitionType.SLIDE_LEFT)
-        self._search_revealer.set_halign(Gtk.Align.END)
         self._search_revealer.add(self._search_view)
-        self._ui.right_grid_overlay.add_overlay(self._search_revealer)
+        self._ui.right_grid.attach(self._search_revealer, 1, 0, 1, 1)
 
         self._chat_filter = ChatFilter(icons=True)
         self._ui.filter_bar.add(self._chat_filter)

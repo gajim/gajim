@@ -242,7 +242,6 @@ class ChatPanedBuilder(Builder):
     filter_bar: Gtk.Box
     chat_list_scrolled: Gtk.ScrolledWindow
     right_grid: Gtk.Grid
-    right_grid_overlay: Gtk.Overlay
 
 
 class ContactInfoBuilder(Builder):
