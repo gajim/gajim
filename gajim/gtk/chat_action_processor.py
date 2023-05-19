@@ -107,9 +107,18 @@ class ChatActionProcessor(Gtk.Popover):
         return False
 
     def _on_focus_out(self, *args: Any) -> bool:
-        # Add 100 ms timeout in order to process potential menu item click
-        # events (which will emit focus-out-event on the message input)
-        GLib.timeout_add(100, self.popdown)
+        win = self.get_window()
+        default_display = Gdk.Display.get_default()
+        if default_display is not None:
+            pointer = default_display.get_default_seat().get_pointer()
+            if win is not None and pointer is not None:
+                _win, x_pos, y_pos, _mod = win.get_device_position(pointer)
+                rect = self.get_allocation()
+                if (x_pos not in range(0, rect.width) or
+                        y_pos not in range(0, rect.height)):
+                    # Only popdown if click is outside of Popover's Rectangle
+                    self.popdown()
+
         return False
 
     def _on_popover_closed(self, _popover: Gtk.Popover) -> None:
