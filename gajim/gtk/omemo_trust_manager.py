@@ -234,7 +234,7 @@ class KeyRow(Gtk.ListBoxRow):
         self.set_activatable(False)
 
         self._contact = contact
-        self._address = str(self._contact.jid)
+        self._address = identity_info.address
         self._identity_info = identity_info
         self._trust = identity_info.trust
 
