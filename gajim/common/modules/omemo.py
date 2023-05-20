@@ -550,7 +550,12 @@ class OMEMO(BaseModule):
                            jid, device_id, bundle)
             return
 
-        self.backend.build_session(jid, bundle)
+        try:
+            self.backend.build_session(jid, bundle)
+        except Exception as error:
+            self._log.error('Building session failed: %s', error)
+            return
+
         self._log.info('Session created for: %s', jid)
         # TODO: In MUC we should send a groupchat message
         self._send_key_transport_message('chat', jid, [device_id])
