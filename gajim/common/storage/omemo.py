@@ -37,7 +37,6 @@ from omemo_dr.state.sessionrecord import SessionRecord
 from omemo_dr.state.signedprekeyrecord import SignedPreKeyRecord
 from omemo_dr.state.store import Store
 from omemo_dr.structs import IdentityInfo
-from omemo_dr.util.medium import Medium
 
 from gajim.common import app
 from gajim.common.modules.util import LogAdapter
@@ -394,10 +393,6 @@ class OMEMOStorage(Store):
         query = 'DELETE FROM signed_prekeys WHERE prekey_id = ?'
         self._con.execute(query, (signed_pre_key_id,))
         self._con.commit()
-
-    def get_next_signed_pre_key_id(self) -> int:
-        result = self.get_current_signed_pre_key_id()
-        return (result % (Medium.MAX_VALUE - 1)) + 1
 
     def get_current_signed_pre_key_id(self) -> int:
         query = 'SELECT MAX(prekey_id) FROM signed_prekeys'
