@@ -106,6 +106,16 @@ def colorize(text: str, color: str) -> str:
     return color + text + Colors.NONE
 
 
+class CustomStreamHandler(logging.StreamHandler):  # pyright: ignore
+    def __init__(self) -> None:
+        super().__init__()  # pyright: ignore
+
+    def emit(self, record: logging.LogRecord) -> None:
+        if record.levelno >= logging.WARNING:
+            app.logging_records.append(record)
+        super().emit(record)
+
+
 class FancyFormatter(logging.Formatter):
     '''
     An eye-candy formatter with Colors
@@ -152,7 +162,7 @@ def init() -> None:
     if os.name != 'nt':
         use_color = sys.stderr.isatty()
 
-    consoleloghandler = logging.StreamHandler()
+    consoleloghandler = CustomStreamHandler()
     consoleloghandler.setFormatter(
         FancyFormatter(
             '%(asctime)s %(levelname)s %(name)-35s %(message)s',
