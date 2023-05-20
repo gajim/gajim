@@ -68,6 +68,7 @@ from gi.repository import GdkPixbuf
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
+from gi.repository import Soup
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Chatstate
 from nbxmpp.const import ConnectionProtocol
@@ -1550,6 +1551,12 @@ def get_glib_version() -> str:
     return '.'.join(map(str, [GLib.MAJOR_VERSION,
                               GLib.MINOR_VERSION,
                               GLib.MICRO_VERSION]))
+
+
+def get_soup_version() -> str:
+    return '.'.join(map(str, [Soup.get_major_version(),
+                              Soup.get_minor_version(),
+                              Soup.get_micro_version()]))
 
 
 def package_version(requirement: str) -> bool:
