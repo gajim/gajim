@@ -27,7 +27,7 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.i18n import _
 
-LogCallback = Callable[[logging.LogRecord], None]
+LogCallback = Callable[[str], None]
 
 
 def parseLogLevel(arg: str) -> int:
@@ -109,18 +109,19 @@ def colorize(text: str, color: str) -> str:
     return color + text + Colors.NONE
 
 
-class CustomStreamHandler(logging.StreamHandler):  # pyright: ignore
+class LogConsoleHandler(logging.StreamHandler):  # pyright: ignore
     def __init__(self) -> None:
         super().__init__()  # pyright: ignore
         self._callback: LogCallback | None = None
 
     def emit(self, record: logging.LogRecord) -> None:
-        super().emit(record)
+        if record.levelno < logging.WARNING:
+            return
 
-        if record.levelno >= logging.WARNING:
-            app.logging_records.append(record)
-            if self._callback is not None:
-                self._callback(record)
+        msg = self.format(record)
+        app.logging_records.append(msg)
+        if self._callback is not None:
+            self._callback(msg)
 
     def set_callback(self,
                      func: LogCallback | None
@@ -174,7 +175,8 @@ def init() -> None:
     if os.name != 'nt':
         use_color = sys.stderr.isatty()
 
-    _custom_stream_handler.setFormatter(
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(
         FancyFormatter(
             '%(asctime)s %(levelname)s %(name)-35s %(message)s',
             '%x %H:%M:%S',
@@ -184,22 +186,26 @@ def init() -> None:
 
     root_log = logging.getLogger('gajim')
     root_log.setLevel(logging.WARNING)
-    root_log.addHandler(_custom_stream_handler)
+    root_log.addHandler(_log_console_handler)
+    root_log.addHandler(stream_handler)
     root_log.propagate = False
 
     root_log = logging.getLogger('nbxmpp')
     root_log.setLevel(logging.ERROR)
-    root_log.addHandler(_custom_stream_handler)
+    root_log.addHandler(_log_console_handler)
+    root_log.addHandler(stream_handler)
     root_log.propagate = False
 
     root_log = logging.getLogger('gnupg')
     root_log.setLevel(logging.WARNING)
-    root_log.addHandler(_custom_stream_handler)
+    root_log.addHandler(_log_console_handler)
+    root_log.addHandler(stream_handler)
     root_log.propagate = False
 
     root_log = logging.getLogger('omemo_dr')
     root_log.setLevel(logging.WARNING)
-    root_log.addHandler(_custom_stream_handler)
+    root_log.addHandler(_log_console_handler)
+    root_log.addHandler(stream_handler)
     root_log.propagate = False
 
     # GAJIM_DEBUG is set only on Windows when using Gajim-Debug.exe
@@ -225,8 +231,8 @@ def set_quiet() -> None:
     parseAndSetLogLevels('.omemo_dr=CRITICAL')
 
 
-def get_stream_handler() -> CustomStreamHandler:
-    return _custom_stream_handler
+def get_log_console_handler() -> LogConsoleHandler:
+    return _log_console_handler
 
 
 def _redirect_output() -> None:
@@ -247,7 +253,13 @@ def _cleanup_debug_logs() -> None:
             file.unlink()
 
 
-_custom_stream_handler = CustomStreamHandler()
+_log_console_handler = LogConsoleHandler()
+_log_console_handler.setFormatter(
+    logging.Formatter(
+        '%(asctime)s (%(levelname).1s) %(name)-35s | %(message)s\n',
+        '%x %H:%M:%S'
+    )
+)
 
 
 if __name__ == '__main__':

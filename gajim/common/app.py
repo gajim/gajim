@@ -77,7 +77,7 @@ bob_cache: dict[str, bytes] = {}
 app = None  # type: GajimApplication
 window = None  # type: MainWindow
 commands = None  # type: ChatCommands
-logging_records: list[logging.LogRecord] = []
+logging_records: list[str] = []
 
 ged = ged_module.GlobalEventsDispatcher()  # Global Events Dispatcher
 plugin_manager = cast(types.PluginManagerT, None)  # Plugins Manager

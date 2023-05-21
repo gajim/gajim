@@ -16,7 +16,6 @@ from typing import Any
 from typing import Optional
 from typing import Union
 
-import logging
 import time
 
 import nbxmpp
@@ -34,7 +33,7 @@ from gajim.common.events import AccountEnabled
 from gajim.common.events import StanzaReceived
 from gajim.common.events import StanzaSent
 from gajim.common.i18n import _
-from gajim.common.logging_helpers import get_stream_handler
+from gajim.common.logging_helpers import get_log_console_handler
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.const import Setting
@@ -112,7 +111,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         for record in app.logging_records:
             self._add_log_record(record)
 
-        log_handler = get_stream_handler()
+        log_handler = get_log_console_handler()
         log_handler.set_callback(self._add_log_record)
 
         self._ui.stack.connect('notify::visible-child-name',
@@ -132,7 +131,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         ])
 
     def _on_destroy(self, *args: Any) -> None:
-        get_stream_handler().set_callback(None)
+        get_log_console_handler().set_callback(None)
         self._ui.popover.destroy()
         app.check_finalize(self)
 
@@ -185,12 +184,10 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         for tag_name in tags:
             self._ui.protocol_view.get_buffer().create_tag(tag_name)
 
-    def _add_log_record(self, record: logging.LogRecord) -> None:
+    def _add_log_record(self, message: str) -> None:
         buf = self._ui.log_view.get_buffer()
-        msg = (f'{record.asctime} {record.levelname} {record.name} '
-               f'{record.getMessage()}\n')
         end_iter = buf.get_end_iter()
-        buf.insert(end_iter, msg)
+        buf.insert(end_iter, message)
 
     def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
