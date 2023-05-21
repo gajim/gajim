@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Callable
 from typing import Optional
 
 import logging
@@ -25,6 +26,8 @@ from datetime import datetime
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.i18n import _
+
+LogCallback = Callable[[logging.LogRecord], None]
 
 
 def parseLogLevel(arg: str) -> int:
@@ -109,11 +112,20 @@ def colorize(text: str, color: str) -> str:
 class CustomStreamHandler(logging.StreamHandler):  # pyright: ignore
     def __init__(self) -> None:
         super().__init__()  # pyright: ignore
+        self._callback: LogCallback | None = None
 
     def emit(self, record: logging.LogRecord) -> None:
         if record.levelno >= logging.WARNING:
             app.logging_records.append(record)
+            if self._callback is not None:
+                self._callback(record)
+
         super().emit(record)
+
+    def set_callback(self,
+                     func: LogCallback | None
+                     ) -> None:
+        self._callback = func
 
 
 class FancyFormatter(logging.Formatter):
