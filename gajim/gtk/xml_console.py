@@ -187,7 +187,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _add_log_record(self, record: logging.LogRecord) -> None:
         buf = self._ui.log_view.get_buffer()
-        msg = (f'{record.asctime} {record.levelname} {record.name}: '
+        msg = (f'{record.asctime} {record.levelname} {record.name} '
                f'{record.getMessage()}\n')
         end_iter = buf.get_end_iter()
         buf.insert(end_iter, msg)
