@@ -169,6 +169,9 @@ class ChatPage(Gtk.Box):
             self._search_view.set_context(self._chat_control.contact.account,
                                           self._chat_control.contact.jid)
 
+        # Hide group chat roster in order to make some space horizontally
+        app.settings.set('hide_groupchat_occupants_list', True)
+
         self._search_revealer.set_reveal_child(True)
         self._search_view.set_focus()
 
