@@ -462,7 +462,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
                 tag.set_property('invisible', account != value)
 
     def _on_setting(self, value: bool, data: str) -> None:
-        setattr(self, data, value)
+        setattr(self, f'_{data}', value)
         value = not value
         table = self._ui.protocol_view.get_buffer().get_tag_table()
         tag = table.lookup(data)
@@ -515,13 +515,13 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         elif stanza.startswith('<r') or stanza.startswith('<a'):
             type_ = 'stream'
 
-        stanza = '<!-- {kind} {time} ({account}) -->\n{stanza}\n\n'.format(
+        text = '<!-- {kind} {time} ({account}) -->\n{stanza}\n\n'.format(
             kind=kind.capitalize(),
             time=time.strftime('%c'),
             account=account_label,
             stanza=stanza)
         buffer_.insert_with_tags_by_name(
-            end_iter, stanza, type_, kind, event.account)
+            end_iter, text, type_, kind, event.account)
 
         if is_at_the_end:
             GLib.idle_add(scroll_to_end, self._ui.scrolled)
