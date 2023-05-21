@@ -163,7 +163,7 @@ class FancyFormatter(logging.Formatter):
 
 def init() -> None:
     '''
-    Iinitialize the logging system
+    Initialize the logging system
     '''
 
     if app.get_debug_mode():
