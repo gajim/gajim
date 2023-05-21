@@ -115,12 +115,12 @@ class CustomStreamHandler(logging.StreamHandler):  # pyright: ignore
         self._callback: LogCallback | None = None
 
     def emit(self, record: logging.LogRecord) -> None:
+        super().emit(record)
+
         if record.levelno >= logging.WARNING:
             app.logging_records.append(record)
             if self._callback is not None:
                 self._callback(record)
-
-        super().emit(record)
 
     def set_callback(self,
                      func: LogCallback | None
