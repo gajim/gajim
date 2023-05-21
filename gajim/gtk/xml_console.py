@@ -41,7 +41,6 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.util import at_the_end
 from gajim.gtk.util import EventHelper
-from gajim.gtk.util import get_source_view_style_scheme
 from gajim.gtk.util import MaxWidthComboBoxText
 from gajim.gtk.util import scroll_to_end
 
@@ -99,7 +98,8 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.sourceview.get_buffer().set_language(lang)
         self._ui.input_entry.get_buffer().set_language(lang)
 
-        style_scheme = get_source_view_style_scheme()
+        style_scheme_manager = GtkSource.StyleSchemeManager.get_default()
+        style_scheme = style_scheme_manager.get_scheme('solarized-dark')
         if style_scheme is not None:
             self._ui.sourceview.get_buffer().set_style_scheme(style_scheme)
             self._ui.input_entry.get_buffer().set_style_scheme(style_scheme)
@@ -113,7 +113,6 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self.register_events([
             ('stanza-received', ged.GUI1, self._on_stanza_received),
             ('stanza-sent', ged.GUI1, self._on_stanza_sent),
-            ('style-changed', ged.GUI1, self._on_style_changed),
             ('account-enabled', ged.GUI1, self._on_account_changed),
             ('account-disabled', ged.GUI1, self._on_account_changed)
         ])
@@ -121,12 +120,6 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
     def _on_destroy(self, *args: Any) -> None:
         self._ui.popover.destroy()
         app.check_finalize(self)
-
-    def _on_style_changed(self, *args: Any) -> None:
-        style_scheme = get_source_view_style_scheme()
-        if style_scheme is not None:
-            self._ui.sourceview.get_buffer().set_style_scheme(style_scheme)
-            self._ui.input_entry.get_buffer().set_style_scheme(style_scheme)
 
     def _on_value_change(self, combo: Gtk.ComboBox) -> None:
         self._selected_send_account = combo.get_active_id()
