@@ -58,15 +58,16 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._selected_account = 'AllAccounts'
         self._selected_send_account: Optional[str] = None
-        self.presence = True
-        self.message = True
-        self.iq = True
-        self.stream = True
-        self.incoming = True
-        self.outgoing = True
-        self.filter_dialog = None
-        self.last_stanza = None
-        self.last_search = ''
+        self._filter_dialog: Optional[SettingsDialog] = None
+        self._last_stanza: Optional[str] = None
+        self._last_search: str = ''
+
+        self._presence = True
+        self._message = True
+        self._iq = True
+        self._stream = True
+        self._incoming = True
+        self._outgoing = True
 
         self._ui = get_builder('xml_console.ui')
         self.set_titlebar(self._ui.headerbar)
@@ -190,7 +191,6 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         assert isinstance(child, Gtk.Label)
         text = child.get_text()
 
-        # pylint: disable=line-too-long
         input_text = None
         if text == 'Presence':
             input_text = (
@@ -214,7 +214,6 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
                 '<iq to="" type="get" xmlns="jabber:client">\n'
                 '<query xmlns="http://jabber.org/protocol/disco#info">'
                 '</query>\n</iq>')
-        # pylint: enable=line-too-long
 
         if input_text is not None:
             buffer_ = self._ui.input_entry.get_buffer()
@@ -251,13 +250,13 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
             client = app.get_client(self._selected_send_account)
             assert isinstance(node, nbxmpp.Protocol)
             client.connection.send_stanza(node)
-            self.last_stanza = stanza
+            self._last_stanza = stanza
             buffer_.set_text('')
 
     def _on_paste_last(self, *args: Any) -> None:
         buffer_ = self._ui.input_entry.get_buffer()
-        if self.last_stanza is not None:
-            buffer_.set_text(self.last_stanza)
+        if self._last_stanza is not None:
+            buffer_.set_text(self._last_stanza)
         self._ui.input_entry.grab_focus()
 
     def _on_input(self, button: Gtk.ToggleButton) -> None:
@@ -306,7 +305,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         if last_pos_mark is not None:
             current_pos = textbuffer.get_iter_at_mark(last_pos_mark)
 
-        if search_str != self.last_search:
+        if search_str != self._last_search:
             current_pos = textbuffer.get_start_iter()
 
         if direction == Direction.NEXT:
@@ -328,7 +327,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
             textbuffer.select_range(match_start, match_end)
             mark = textbuffer.create_mark('last_pos', match_end, True)
             self._ui.sourceview.scroll_to_mark(mark, 0, True, 0.5, 0.5)
-        self.last_search = search_str
+        self._last_search = search_str
 
     @staticmethod
     def _get_accounts() -> list[tuple[Optional[str], str]]:
@@ -341,51 +340,73 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         return combo_accounts
 
     def _on_filter_options(self, _button: Gtk.Button) -> None:
-        if self.filter_dialog is not None:
-            self.filter_dialog.present()
+        if self._filter_dialog is not None:
+            self._filter_dialog.present()
             return
 
         combo_accounts = self._get_accounts()
         combo_accounts.insert(0, ('AllAccounts', _('All Accounts')))
 
         settings = [
-            Setting(SettingKind.COMBO, _('Account'),
-                    SettingType.VALUE, self._selected_account,
+            Setting(SettingKind.COMBO,
+                    _('Account'),
+                    SettingType.VALUE,
+                    self._selected_account,
                     callback=self._set_account,
                     props={'combo_items': combo_accounts}),
 
-            Setting(SettingKind.SWITCH, 'Presence',
-                    SettingType.VALUE, self.presence,
-                    callback=self._on_setting, data='presence'),
+            Setting(SettingKind.SWITCH,
+                    'Presence',
+                    SettingType.VALUE,
+                    self._presence,
+                    callback=self._on_setting,
+                    data='presence'),
 
-            Setting(SettingKind.SWITCH, 'Message',
-                    SettingType.VALUE, self.message,
-                    callback=self._on_setting, data='message'),
+            Setting(SettingKind.SWITCH,
+                    'Message',
+                    SettingType.VALUE,
+                    self._message,
+                    callback=self._on_setting,
+                    data='message'),
 
-            Setting(SettingKind.SWITCH, 'IQ', SettingType.VALUE, self.iq,
-                    callback=self._on_setting, data='iq'),
+            Setting(SettingKind.SWITCH,
+                    'IQ', SettingType.VALUE,
+                    self._iq,
+                    callback=self._on_setting,
+                    data='iq'),
 
-            Setting(SettingKind.SWITCH, 'Stream Management',
-                    SettingType.VALUE, self.stream,
-                    callback=self._on_setting, data='stream'),
+            Setting(SettingKind.SWITCH,
+                    'Stream Management',
+                    SettingType.VALUE,
+                    self._stream,
+                    callback=self._on_setting,
+                    data='stream'),
 
-            Setting(SettingKind.SWITCH, 'In', SettingType.VALUE, self.incoming,
-                    callback=self._on_setting, data='incoming'),
+            Setting(SettingKind.SWITCH,
+                    'In',
+                    SettingType.VALUE,
+                    self._incoming,
+                    callback=self._on_setting,
+                    data='incoming'),
 
-            Setting(SettingKind.SWITCH, 'Out', SettingType.VALUE, self.outgoing,
-                    callback=self._on_setting, data='outgoing'),
+            Setting(SettingKind.SWITCH,
+                    'Out',
+                    SettingType.VALUE,
+                    self._outgoing,
+                    callback=self._on_setting,
+                    data='outgoing'),
         ]
 
-        self.filter_dialog = SettingsDialog(
+        self._filter_dialog = SettingsDialog(
             self,
             _('Filter'),
             Gtk.DialogFlags.DESTROY_WITH_PARENT,
             settings,
             self._selected_account or 'AllAccounts')
-        self.filter_dialog.connect('destroy', self._on_filter_destroyed)
+        self._filter_dialog.connect('destroy', self._on_filter_destroyed)
 
     def _on_filter_destroyed(self, _widget: Gtk.Widget) -> None:
-        self.filter_dialog = None
+        self._filter_dialog = None
 
     def _on_clear(self, _button: Gtk.Button) -> None:
         self._ui.sourceview.get_buffer().set_text('')
