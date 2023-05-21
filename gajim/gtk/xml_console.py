@@ -132,6 +132,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         ])
 
     def _on_destroy(self, *args: Any) -> None:
+        get_stream_handler().set_callback(None)
         self._ui.popover.destroy()
         app.check_finalize(self)
 
