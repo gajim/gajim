@@ -60,7 +60,6 @@ class SearchView(Gtk.Box):
         self._account: Optional[str] = None
         self._jid: Optional[JID] = None
         self._results_iterator: Optional[Iterator[SearchLogRow]] = None
-        self._scope: str = 'everywhere'
 
         self._first_date: Optional[datetime] = None
         self._last_date: Optional[datetime] = None
@@ -155,16 +154,17 @@ class SearchView(Gtk.Box):
 
         everywhere = self._ui.search_checkbutton.get_active()
         context = self._account is not None and self._jid is not None
+        if not context:
+            # Started search without context -> show in UI
+            self._ui.search_checkbutton.set_active(True)
 
         if not context or everywhere:
-            self._scope = 'everywhere'
             self._results_iterator = app.storage.archive.search_all_logs(
                 text,
                 from_users=from_filters,
                 before=before_filters,
                 after=after_filters)
         else:
-            self._scope = 'contact'
             self._results_iterator = app.storage.archive.search_log(
                 self._account,
                 self._jid,
@@ -193,18 +193,13 @@ class SearchView(Gtk.Box):
         accounts = self._get_accounts()
         assert self._results_iterator is not None
         for msg in itertools.islice(self._results_iterator, 25):
-            if self._scope == 'everywhere':
-                archive_jid = app.storage.archive.get_jid_from_id(msg.jid_id)
-                if archive_jid is None:
-                    continue
-                result_row = ResultRow(
-                    msg,
-                    accounts[msg.account_id],
-                    JID.from_string(archive_jid.jid))
-            else:
-                assert self._account is not None
-                assert self._jid is not None
-                result_row = ResultRow(msg, self._account, self._jid)
+            archive_jid = app.storage.archive.get_jid_from_id(msg.jid_id)
+            if archive_jid is None:
+                continue
+            result_row = ResultRow(
+                msg,
+                accounts[msg.account_id],
+                JID.from_string(archive_jid.jid))
 
             self._ui.results_listbox.add(result_row)
 
@@ -217,24 +212,24 @@ class SearchView(Gtk.Box):
         self._add_results()
 
     def _update_calendar(self) -> None:
-        if self._scope == 'everywhere':
+        if self._account is None and self._jid is None:
             self._ui.calendar_button.set_sensitive(False)
-        else:
-            self._ui.calendar_button.set_sensitive(True)
+            return
 
-            first_log = app.storage.archive.get_first_history_timestamp(
-                self._account, self._jid)
-            if first_log is None:
-                return
-            self._first_date = self._get_date_from_timestamp(first_log)
-            last_log = app.storage.archive.get_last_history_timestamp(
-                self._account, self._jid)
-            if last_log is None:
-                return
-            self._last_date = self._get_date_from_timestamp(last_log)
+        self._ui.calendar_button.set_sensitive(True)
 
-            month = gtk_month(self._last_date.month)
-            self._ui.calendar.select_month(month, self._last_date.year)
+        first_log = app.storage.archive.get_first_history_timestamp(
+            self._account, self._jid)
+        if first_log is None:
+            return
+        self._first_date = self._get_date_from_timestamp(first_log)
+        last_log = app.storage.archive.get_last_history_timestamp(
+            self._account, self._jid)
+        if last_log is None:
+            return
+        self._last_date = self._get_date_from_timestamp(last_log)
+        month = gtk_month(self._last_date.month)
+        self._ui.calendar.select_month(month, self._last_date.year)
 
     def _on_month_changed(self, calendar: Gtk.Calendar) -> None:
         # Mark days with history in calendar
@@ -361,13 +356,6 @@ class SearchView(Gtk.Box):
     def set_context(self, account: Optional[str], jid: Optional[JID]) -> None:
         self._account = account
         self._jid = jid
-        everywhere = bool(jid is None)
-        self._ui.search_checkbutton.set_active(everywhere)
-        context = account is not None and jid is not None
-        if not context or everywhere:
-            self._scope = 'everywhere'
-        else:
-            self._scope = 'contact'
         self._update_calendar()
 
 

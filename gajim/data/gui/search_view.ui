@@ -235,7 +235,7 @@ after:yyyy-mm-dd</property>
         <property name="can-focus">True</property>
         <property name="receives-default">False</property>
         <property name="halign">center</property>
-        <property name="active">True</property>
+        <property name="active">False</property>
         <property name="draw-indicator">True</property>
       </object>
       <packing>
