@@ -949,17 +949,15 @@ class WorkspaceDialogBuilder(Builder):
 
 
 class XmlConsoleBuilder(Builder):
-    headerbar: Gtk.HeaderBar
-    search_toggle: Gtk.ToggleButton
     popover: Gtk.Popover
-    box: Gtk.Box
+    stack: Gtk.Stack
     paned: Gtk.Paned
     search_revealer: Gtk.Revealer
     search_entry: Gtk.SearchEntry
     search_forward: Gtk.ToolButton
     search_backward: Gtk.ToolButton
     scrolled: Gtk.ScrolledWindow
-    sourceview: GtkSource.View
+    protocol_view: GtkSource.View
     scrolled_input: Gtk.ScrolledWindow
     input_entry: GtkSource.View
     actionbox: Gtk.Box
@@ -967,6 +965,9 @@ class XmlConsoleBuilder(Builder):
     account_label: Gtk.Label
     paste: Gtk.Button
     menubutton: Gtk.MenuButton
+    log_view: GtkSource.View
+    headerbar: Gtk.HeaderBar
+    search_toggle: Gtk.ToggleButton
 
 
 @overload

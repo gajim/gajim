@@ -16,11 +16,13 @@ from typing import Any
 from typing import Optional
 from typing import Union
 
+import logging
 import time
 
 import nbxmpp
 from gi.repository import Gdk
 from gi.repository import GLib
+from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import GtkSource
 
@@ -32,6 +34,7 @@ from gajim.common.events import AccountEnabled
 from gajim.common.events import StanzaReceived
 from gajim.common.events import StanzaSent
 from gajim.common.i18n import _
+from gajim.common.logging_helpers import get_stream_handler
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.const import Setting
@@ -72,7 +75,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui = get_builder('xml_console.ui')
         self.set_titlebar(self._ui.headerbar)
         self._set_titlebar()
-        self.add(self._ui.box)
+        self.add(self._ui.stack)
 
         self._ui.paned.set_position(
             self._ui.paned.get_property('max-position'))
@@ -96,14 +99,24 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
 
         source_manager = GtkSource.LanguageManager.get_default()
         lang = source_manager.get_language('xml')
-        self._ui.sourceview.get_buffer().set_language(lang)
+        self._ui.protocol_view.get_buffer().set_language(lang)
         self._ui.input_entry.get_buffer().set_language(lang)
 
         style_scheme_manager = GtkSource.StyleSchemeManager.get_default()
         style_scheme = style_scheme_manager.get_scheme('solarized-dark')
         if style_scheme is not None:
-            self._ui.sourceview.get_buffer().set_style_scheme(style_scheme)
+            self._ui.protocol_view.get_buffer().set_style_scheme(style_scheme)
             self._ui.input_entry.get_buffer().set_style_scheme(style_scheme)
+            self._ui.log_view.get_buffer().set_style_scheme(style_scheme)
+
+        for record in app.logging_records:
+            self._add_log_record(record)
+
+        log_handler = get_stream_handler()
+        log_handler.set_callback(self._add_log_record)
+
+        self._ui.stack.connect('notify::visible-child-name',
+                               self._on_stack_child_changed)
 
         self.show_all()
 
@@ -137,13 +150,21 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
     def _on_account_changed(self,
                             event: Union[AccountEnabled, AccountDisabled]
                             ) -> None:
-        buf = self._ui.sourceview.get_buffer()
+        buf = self._ui.protocol_view.get_buffer()
 
         if isinstance(event, AccountEnabled):
             buf.create_tag(event.account)
         else:
             start, end = buf.get_bounds()
             buf.remove_tag_by_name(event.account, start, end)
+
+    def _on_stack_child_changed(self,
+                                _widget: Gtk.Stack,
+                                _pspec: GObject.ParamSpec
+                                ) -> None:
+
+        name = self._ui.stack.get_visible_child_name()
+        self._ui.search_toggle.set_sensitive(name == 'protocol')
 
     def _create_tags(self) -> None:
         tags = [
@@ -161,7 +182,14 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         tags.append('AccountWizard')
 
         for tag_name in tags:
-            self._ui.sourceview.get_buffer().create_tag(tag_name)
+            self._ui.protocol_view.get_buffer().create_tag(tag_name)
+
+    def _add_log_record(self, record: logging.LogRecord) -> None:
+        buf = self._ui.log_view.get_buffer()
+        msg = (f'{record.asctime} {record.levelname} {record.name}: '
+               f'{record.getMessage()}\n')
+        end_iter = buf.get_end_iter()
+        buf.insert(end_iter, msg)
 
     def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
@@ -294,7 +322,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _find(self, direction: Direction) -> None:
         search_str = self._ui.search_entry.get_text()
-        textbuffer = self._ui.sourceview.get_buffer()
+        textbuffer = self._ui.protocol_view.get_buffer()
         cursor_mark = textbuffer.get_insert()
         current_pos = textbuffer.get_iter_at_mark(cursor_mark)
 
@@ -326,7 +354,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
             match_start, match_end = match
             textbuffer.select_range(match_start, match_end)
             mark = textbuffer.create_mark('last_pos', match_end, True)
-            self._ui.sourceview.scroll_to_mark(mark, 0, True, 0.5, 0.5)
+            self._ui.protocol_view.scroll_to_mark(mark, 0, True, 0.5, 0.5)
         self._last_search = search_str
 
     @staticmethod
@@ -409,7 +437,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._filter_dialog = None
 
     def _on_clear(self, _button: Gtk.Button) -> None:
-        self._ui.sourceview.get_buffer().set_text('')
+        self._ui.protocol_view.get_buffer().set_text('')
 
     def _set_account(self, value: str, _data: Any) -> None:
         self._selected_account = value
@@ -418,7 +446,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         active_accounts = app.settings.get_active_accounts()
         active_accounts.append('AccountWizard')
 
-        table = self._ui.sourceview.get_buffer().get_tag_table()
+        table = self._ui.protocol_view.get_buffer().get_tag_table()
 
         if value == 'AllAccounts':
             for account in active_accounts:
@@ -435,7 +463,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
     def _on_setting(self, value: bool, data: str) -> None:
         setattr(self, data, value)
         value = not value
-        table = self._ui.sourceview.get_buffer().get_tag_table()
+        table = self._ui.protocol_view.get_buffer().get_tag_table()
         tag = table.lookup(data)
         if tag is None:
             return
@@ -473,7 +501,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
 
         is_at_the_end = at_the_end(self._ui.scrolled)
 
-        buffer_ = self._ui.sourceview.get_buffer()
+        buffer_ = self._ui.protocol_view.get_buffer()
         end_iter = buffer_.get_end_iter()
 
         type_ = kind
