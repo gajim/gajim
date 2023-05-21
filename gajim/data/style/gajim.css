@@ -489,7 +489,7 @@ infobar.error > revealer > box {
 
 /* SearchView */
 .search-view {
-    padding: 12px;
+    padding: 13px 12px 12px 12px;
     border-left: 1px solid @borders;
     background-color: @theme_base_color;
 }
