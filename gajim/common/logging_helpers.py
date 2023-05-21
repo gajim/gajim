@@ -174,8 +174,7 @@ def init() -> None:
     if os.name != 'nt':
         use_color = sys.stderr.isatty()
 
-    consoleloghandler = CustomStreamHandler()
-    consoleloghandler.setFormatter(
+    _custom_stream_handler.setFormatter(
         FancyFormatter(
             '%(asctime)s %(levelname)s %(name)-35s %(message)s',
             '%x %H:%M:%S',
@@ -185,22 +184,22 @@ def init() -> None:
 
     root_log = logging.getLogger('gajim')
     root_log.setLevel(logging.WARNING)
-    root_log.addHandler(consoleloghandler)
+    root_log.addHandler(_custom_stream_handler)
     root_log.propagate = False
 
     root_log = logging.getLogger('nbxmpp')
     root_log.setLevel(logging.ERROR)
-    root_log.addHandler(consoleloghandler)
+    root_log.addHandler(_custom_stream_handler)
     root_log.propagate = False
 
     root_log = logging.getLogger('gnupg')
     root_log.setLevel(logging.WARNING)
-    root_log.addHandler(consoleloghandler)
+    root_log.addHandler(_custom_stream_handler)
     root_log.propagate = False
 
     root_log = logging.getLogger('omemo_dr')
     root_log.setLevel(logging.WARNING)
-    root_log.addHandler(consoleloghandler)
+    root_log.addHandler(_custom_stream_handler)
     root_log.propagate = False
 
     # GAJIM_DEBUG is set only on Windows when using Gajim-Debug.exe
@@ -226,6 +225,10 @@ def set_quiet() -> None:
     parseAndSetLogLevels('.omemo_dr=CRITICAL')
 
 
+def get_stream_handler() -> CustomStreamHandler:
+    return _custom_stream_handler
+
+
 def _redirect_output() -> None:
     debug_folder = configpaths.get('DEBUG')
     date = datetime.today().strftime('%d%m%Y-%H%M%S')
@@ -242,6 +245,9 @@ def _cleanup_debug_logs() -> None:
         # Delete everything older than 3 days
         if file.stat().st_ctime < now - 259200:
             file.unlink()
+
+
+_custom_stream_handler = CustomStreamHandler()
 
 
 if __name__ == '__main__':
