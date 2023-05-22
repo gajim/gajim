@@ -25,9 +25,7 @@ from nbxmpp.structs import MucSubject
 from nbxmpp.task import Task
 
 from gajim.common import app
-from gajim.common import ged
 from gajim.common.const import AvatarSize
-from gajim.common.events import MucDiscoUpdate
 from gajim.common.helpers import validate_jid
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
@@ -51,9 +49,6 @@ class GroupchatManage(Gtk.Box):
         self._contact = contact
         self._contact.connect('room-subject', self._on_room_subject)
 
-        app.ged.register_event_handler(
-            'muc-disco-update', ged.GUI1, self._on_muc_disco_update)
-
         self._room_config_form = None
 
         self._ui = get_builder('groupchat_manage.ui')
@@ -75,20 +70,11 @@ class GroupchatManage(Gtk.Box):
 
     def _on_destroy(self, *args: Any) -> None:
         del self._avatar_selector
-        app.ged.remove_event_handler('muc-disco-update',
-                                     ged.GUI1,
-                                     self._on_muc_disco_update)
         app.check_finalize(self)
 
     @property
     def disco_info(self):
         return app.storage.cache.get_last_disco_info(self._contact.jid)
-
-    def _on_muc_disco_update(self, event: MucDiscoUpdate) -> None:
-        if event.jid != self._contact.jid:
-            return
-
-        self.update_avatar()
 
     def _prepare_subject(self) -> None:
         text = ''

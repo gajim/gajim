@@ -221,7 +221,6 @@ class ChatBanner(Gtk.Box, EventHelper):
         if event.jid != self._contact.jid:
             return
 
-        self._update_avatar()
         self._update_name_label()
         self._update_description_label()
 
