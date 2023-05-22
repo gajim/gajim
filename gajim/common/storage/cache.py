@@ -35,7 +35,9 @@ from gajim.common.storage.base import json_decoder
 from gajim.common.storage.base import SqliteStorage
 from gajim.common.storage.base import timeit
 
-CURRENT_USER_VERSION = 9
+ContactCacheDictT = dict[tuple[str, JID], dict[str, Any]]
+
+CURRENT_USER_VERSION = 10
 
 CACHE_SQL_STATEMENT = '''
     CREATE TABLE caps_cache (
@@ -54,15 +56,19 @@ CACHE_SQL_STATEMENT = '''
             roster TEXT
     );
     CREATE TABLE muc(
-             jid TEXT PRIMARY KEY UNIQUE,
-             avatar TEXT
+            account TEXT,
+            jid TEXT,
+            avatar TEXT,
+            PRIMARY KEY (account, jid)
     );
     CREATE TABLE contact(
-            jid TEXT PRIMARY KEY UNIQUE,
+            account TEXT,
+            jid TEXT,
             avatar TEXT,
             avatar_ts INTEGER,
             nickname TEXT,
-            nickname_ts INTEGER
+            nickname_ts INTEGER,
+            PRIMARY KEY (account, jid)
     );
     CREATE TABLE unread(
             account TEXT,
@@ -101,8 +107,8 @@ class CacheStorage(SqliteStorage):
 
         self._entity_caps_cache: dict[tuple[str, str], DiscoInfo] = {}
         self._disco_info_cache: dict[JID, DiscoInfo] = {}
-        self._muc_cache: dict[JID, dict[str, Any]] = defaultdict(dict)
-        self._contact_cache: dict[JID, dict[str, Any]] = defaultdict(dict)
+        self._muc_cache: ContactCacheDictT = defaultdict(dict)
+        self._contact_cache: ContactCacheDictT = defaultdict(dict)
 
     def init(self, **kwargs: Any) -> None:
         SqliteStorage.init(self,
@@ -136,7 +142,7 @@ class CacheStorage(SqliteStorage):
             self._reinit_storage()
             return
 
-        if user_version < 9:
+        if user_version < 10:
             self._reinit_storage()
             return
 
@@ -287,60 +293,74 @@ class CacheStorage(SqliteStorage):
         self._commit()
 
     @timeit
-    def set_muc(self, jid: JID, prop: str, value: Any) -> None:
-        sql = f'''INSERT INTO muc (jid, {prop}) VALUES (?, ?)'''
+    def set_muc(self,
+                account: str,
+                jid: JID,
+                prop: str,
+                value: Any
+                ) -> None:
+
+        sql = f'''INSERT INTO muc (account, jid, {prop}) VALUES (?, ?, ?)'''
 
         try:
-            self._con.execute(sql, (jid, value))
+            self._con.execute(sql, (account, jid, value))
         except sqlite3.IntegrityError:
-            sql = f'UPDATE muc SET {prop} = ? WHERE jid = ?'
-            self._con.execute(sql, (value, jid))
+            sql = f'UPDATE muc SET {prop} = ? WHERE account = ? AND jid = ?'
+            self._con.execute(sql, (value, account, jid))
 
-        self._muc_cache[jid][prop] = value
+        self._muc_cache[(account, jid)][prop] = value
 
         self._delayed_commit()
 
     @timeit
-    def get_muc(self, jid: JID, prop: str) -> Any:
+    def get_muc(self, account: str, jid: JID, prop: str) -> Any:
         try:
-            return self._muc_cache[jid][prop]
+            return self._muc_cache[(account, jid)][prop]
         except KeyError:
             sql = f'''SELECT jid as "jid [jid]", {prop}
-                      FROM muc WHERE jid = ?'''
-            row = self._con.execute(sql, (jid,)).fetchone()
+                      FROM muc WHERE account = ? AND jid = ?'''
+            row = self._con.execute(sql, (account, jid)).fetchone()
             value = None if row is None else getattr(row, prop)
 
-            self._muc_cache[jid][prop] = value
+            self._muc_cache[(account, jid)][prop] = value
             return value
 
     @timeit
-    def set_contact(self, jid: JID, prop: str, value: Any) -> None:
-        sql = f'INSERT INTO contact (jid, {prop}, {prop}_ts) VALUES (?, ?, ?)'
+    def set_contact(self,
+                    account: str,
+                    jid: JID,
+                    prop: str,
+                    value: Any
+                    ) -> None:
+
+        sql = f'''INSERT INTO contact (account, jid, {prop}, {prop}_ts)
+                  VALUES (?, ?, ?, ?)'''
 
         prop_ts = time.time()
 
         try:
-            self._con.execute(sql, (jid, value, prop_ts))
+            self._con.execute(sql, (account, jid, value, prop_ts))
         except sqlite3.IntegrityError:
-            sql = f'UPDATE contact SET {prop} = ?, {prop}_ts = ? WHERE jid = ?'
-            self._con.execute(sql, (value, prop_ts, jid))
+            sql = f'''UPDATE contact SET {prop} = ?, {prop}_ts = ?
+                      WHERE account = ? AND jid = ?'''
+            self._con.execute(sql, (value, prop_ts, account, jid))
 
-        self._contact_cache[jid][prop] = (value, prop_ts)
+        self._contact_cache[(account, jid)][prop] = (value, prop_ts)
 
         self._delayed_commit()
 
     @timeit
-    def get_contact(self, jid: JID, prop: str) -> Any:
+    def get_contact(self, account: str, jid: JID, prop: str) -> Any:
         try:
-            value, prop_ts = self._contact_cache[jid][prop]
+            value, prop_ts = self._contact_cache[(account, jid)][prop]
         except KeyError:
             sql = f'''SELECT jid as "jid [jid]", {prop}, {prop}_ts
-                      FROM contact WHERE jid = ?'''
-            row = self._con.execute(sql, (jid,)).fetchone()
+                      FROM contact WHERE account = ? AND jid = ?'''
+            row = self._con.execute(sql, (account, jid)).fetchone()
             value = None if row is None else getattr(row, prop)
             prop_ts = 0 if row is None else getattr(row, f'{prop}_ts')
 
-            self._contact_cache[jid][prop] = (value, prop_ts)
+            self._contact_cache[(account, jid)][prop] = (value, prop_ts)
             return value
 
         else:

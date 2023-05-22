@@ -432,7 +432,7 @@ class AvatarStorage(metaclass=Singleton):
             if surface is not None:
                 return surface
 
-            avatar_sha = app.storage.cache.get_muc(jid, 'avatar')
+            avatar_sha = app.storage.cache.get_muc(account, jid, 'avatar')
             if avatar_sha is not None:
                 surface = self.surface_from_filename(avatar_sha, size, scale)
                 if surface is not None:
@@ -442,7 +442,7 @@ class AvatarStorage(metaclass=Singleton):
 
                 # avatar_sha set, but image is missing
                 # (e.g. avatar cache deleted)
-                app.storage.cache.set_muc(jid, 'avatar', None)
+                app.storage.cache.set_muc(account, jid, 'avatar', None)
 
         client = app.get_client(account)
         contact = client.get_module('Contacts').get_bare_contact(jid)

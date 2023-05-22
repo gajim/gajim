@@ -235,7 +235,8 @@ class Discovery(BaseModule):
                 if not app.app.avatar_storage.avatar_exists(avatar_sha):
                     app.app.avatar_storage.save_avatar(avatar)
 
-                app.storage.cache.set_muc(result.info.jid, 'avatar', avatar_sha)
+                app.storage.cache.set_muc(
+                    self._account, result.info.jid, 'avatar', avatar_sha)
                 app.app.avatar_storage.invalidate_cache(result.info.jid)
 
         self._con.get_module('VCardAvatars').muc_disco_info_update(result.info)

@@ -360,7 +360,8 @@ class BareContact(CommonContact):
         self.settings = ContactSettings(account, jid)
         self._resources: dict[str, ResourceContact] = {}
 
-        self._avatar_sha = app.storage.cache.get_contact(jid, 'avatar')
+        self._avatar_sha = app.storage.cache.get_contact(
+            account, jid, 'avatar')
 
     @property
     def is_self(self):
@@ -448,7 +449,8 @@ class BareContact(CommonContact):
         if item is not None and item.name:
             return item.name
 
-        nickname = app.storage.cache.get_contact(self._jid, 'nickname')
+        nickname = app.storage.cache.get_contact(
+            self._account, self._jid, 'nickname')
         if nickname:
             return nickname
         if self._jid.is_domain:
@@ -466,7 +468,11 @@ class BareContact(CommonContact):
 
     @property
     def avatar_sha(self) -> Optional[str]:
-        return app.storage.cache.get_contact(self._jid, 'avatar')
+        return app.storage.cache.get_contact(
+            self._account, self._jid, 'avatar')
+
+    def set_avatar_sha(self, sha: str) -> None:
+        app.storage.cache.set_contact(self._account, self._jid, 'avatar', sha)
 
     def get_avatar(self,
                    size: int,
@@ -514,7 +520,7 @@ class BareContact(CommonContact):
 
         self._avatar_sha = sha
 
-        app.storage.cache.set_contact(self._jid, 'avatar', sha)
+        app.storage.cache.set_contact(self._account, self._jid, 'avatar', sha)
         app.app.avatar_storage.invalidate_cache(self._jid)
         self.notify('avatar-update')
 
@@ -743,7 +749,10 @@ class GroupchatContact(CommonContact):
 
     @property
     def avatar_sha(self) -> Optional[str]:
-        return app.storage.cache.get_muc(self._jid, 'avatar')
+        return app.storage.cache.get_muc(self._account, self._jid, 'avatar')
+
+    def set_avatar_sha(self, sha: str) -> None:
+        app.storage.cache.set_muc(self._account, self._jid, 'avatar', sha)
 
     def get_avatar(self, size: int, scale: int) -> Optional[cairo.ImageSurface]:
         transport_icon = None

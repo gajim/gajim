@@ -55,7 +55,8 @@ class UserNickname(BaseModule):
             app.nicks[self._account] = nick
             return
 
-        app.storage.cache.set_contact(properties.jid, 'nickname', nick)
+        app.storage.cache.set_contact(
+            self._account, properties.jid, 'nickname', nick)
 
         self._log.info('Nickname for %s: %s', properties.jid, nick)
 
