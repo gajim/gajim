@@ -307,6 +307,11 @@ class ChatList(Gtk.ListBox, EventHelper):
             self.remove_chat(account, jid)
         self._emit_unread_changed()
 
+    def clear_chat_list_row(self, account: str, jid: JID) -> None:
+        chat = self._chats.get((account, jid))
+        if chat is not None:
+            chat.clear()
+
     def contains_chat(self, account: str, jid: JID) -> bool:
         return self._chats.get((account, jid)) is not None
 

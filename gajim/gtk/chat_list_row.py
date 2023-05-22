@@ -248,6 +248,13 @@ class ChatListRow(Gtk.ListBoxRow):
         else:
             self.set_header(self._conversations_header)
 
+    def clear(self) -> None:
+        self.timestamp = 0
+        self.stanza_id = None
+        self.message_id = None
+        self.set_message_text('')
+        self.set_nick('')
+
     def set_message_id(self, message_id: str) -> None:
         self.message_id = message_id
 

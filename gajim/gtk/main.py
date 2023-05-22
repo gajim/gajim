@@ -993,6 +993,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                                'pm',
                                                select=select)
 
+    def clear_chat_list_row(self, account: str, jid: JID) -> None:
+        chat_list_stack = self._chat_page.get_chat_list_stack()
+        chat_list = chat_list_stack.find_chat(account, jid)
+        if chat_list is not None:
+            chat_list.clear_chat_list_row(account, jid)
+
     def select_chat(self, account: str, jid: JID) -> None:
         self._app_side_bar.unselect_all()
         self._account_side_bar.unselect_all()

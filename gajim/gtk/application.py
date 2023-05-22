@@ -851,8 +851,9 @@ class GajimApplication(Gtk.Application, CoreApplication):
                                   ) -> None:
         def _remove() -> None:
             app.storage.archive.remove_history(params.account, params.jid)
-            control = app.window.get_control()
 
+            app.window.clear_chat_list_row(params.account, params.jid)
+            control = app.window.get_control()
             if not control.is_loaded(params.account, params.jid):
                 return
 
