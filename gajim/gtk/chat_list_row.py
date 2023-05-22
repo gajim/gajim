@@ -30,11 +30,9 @@ from gi.repository import Gtk
 from nbxmpp import JID
 
 from gajim.common import app
-from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.const import KindConstant
 from gajim.common.const import RowHeaderType
-from gajim.common.events import MucDiscoUpdate
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_groupchat_name
@@ -135,8 +133,6 @@ class ChatListRow(Gtk.ListBoxRow):
         self.connect('drag-data-get', self._on_drag_data_get)
 
         if self.type == 'groupchat':
-            app.ged.register_event_handler(
-                'muc-disco-update', ged.GUI1, self._on_muc_disco_update)
             self._ui.group_chat_indicator.show()
 
         self.update_avatar()
@@ -433,21 +429,12 @@ class ChatListRow(Gtk.ListBoxRow):
         else:
             self._ui.revealer.set_reveal_child(False)
 
-    def _on_muc_disco_update(self, event: MucDiscoUpdate) -> None:
-        if event.jid != self.contact.jid:
-            return
-
-        self.update_avatar()
-
     def _on_destroy(self, _row: ChatListRow) -> None:
         app.settings.disconnect_signals(self)
         self.contact.disconnect_all_from_obj(self)
         if isinstance(self.contact, GroupchatParticipant):
             self.contact.room.disconnect_all_from_obj(self)
 
-        app.ged.remove_event_handler('muc-disco-update',
-                                     ged.GUI1,
-                                     self._on_muc_disco_update)
         app.check_finalize(self)
 
     def _on_close_button_clicked(self, _button: Gtk.Button) -> None:
