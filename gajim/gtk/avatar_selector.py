@@ -121,6 +121,7 @@ class AvatarSelector(Gtk.Box):
         self._load_button.show()
         self._helper_label.show()
         self._crop_area.hide()
+        self._crop_area.set_pixbuf(None)
 
     def prepare_crop_area(self, path: str) -> None:
         pixbuf = self._get_pixbuf_from_path(path)
@@ -277,6 +278,8 @@ class CropArea(Gtk.DrawingArea):
         self._image.y = 0
         self._image.width = 0
         self._image.height = 0
+
+        self._update_pixbufs()
 
         self.queue_draw()
 
