@@ -114,6 +114,8 @@ class GroupchatDetails(Gtk.ApplicationWindow):
     def _on_muc_disco_update(self, event: MucDiscoUpdate) -> None:
         if event.jid != self._contact.jid:
             return
+
+        self._load_avatar()
         self._ui.name_entry.set_text(self._contact.name)
         disco_info = self._contact.get_disco()
         assert disco_info is not None
