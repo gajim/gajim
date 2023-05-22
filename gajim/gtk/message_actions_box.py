@@ -318,6 +318,12 @@ class MessageActionsBox(Gtk.Grid):
                             'Encryption is not available.')
                 icon_name = 'channel-insecure-symbolic'
 
+                # Disable encryption if chat was encrypted before, but due to
+                # changed circumstances, encryption is not applicable anymore
+                # (i.e. group chat configuration changed).
+                contact.settings.set('encryption', '')
+                action.set_state(GLib.Variant('s', ''))
+
         self._ui.encryption_menu_button.set_sensitive(sensitive)
         self._ui.encryption_menu_button.set_tooltip_text(tooltip)
         self._ui.encryption_image.set_from_icon_name(
