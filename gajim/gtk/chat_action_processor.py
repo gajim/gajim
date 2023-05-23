@@ -18,6 +18,8 @@ from typing import Any
 from typing import cast
 from typing import Optional
 
+import logging
+
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
@@ -34,6 +36,8 @@ from gajim.gtk.menus import escape_mnemonic
 
 EMOJI_NUM_GENDERS = len(['f', 'm', 'n'])
 MENUS_MAX_ENTRIES = 2 * EMOJI_NUM_GENDERS
+
+log = logging.getLogger('gajim.gtk.chat_action_processor')
 
 
 class ChatActionProcessor(Gtk.Popover):
@@ -249,21 +253,34 @@ class ChatActionProcessor(Gtk.Popover):
         self._menu.remove_all()
         emoji_data = get_emoji_data()
 
+        sn_matches: dict[str, str] = {}
+        kw_matches: dict[str, str] = {}
+
         for keyword, entries in emoji_data.items():
-            for short_name in entries:
-                if not keyword.startswith(action_text):
-                    continue
-                emoji = entries[short_name]
+            if not keyword.startswith(action_text):
+                continue
+            for short_name, emoji in entries.items():
                 label = f'{emoji} {short_name}'
-                if keyword != short_name:
-                    label += f'  [{keyword}]'
-                action_data = GLib.Variant('s', emoji)
-                menu_item = Gio.MenuItem()
-                menu_item.set_label(escape_mnemonic(label))
-                menu_item.set_attribute_value('action-data', action_data)
-                self._menu.append_item(menu_item)
-                if self._menu.get_n_items() >= MENUS_MAX_ENTRIES:
-                    break
+                if keyword == short_name:
+                    # Replace a possible keyword match with the shortname match:
+                    sn_matches[emoji] = label
+                    if kw_matches.get(emoji) is not None:
+                        del kw_matches[emoji]
+                else:
+                    # Only add a keyword match if no shortname match:
+                    if sn_matches.get(emoji) is None:
+                        kw_matches[emoji] = f'{label}  [{keyword}]'
+
+        log.debug('Found %d "%s…" emoji by short name, %d more by keyword',
+                  len(sn_matches), action_text, len(kw_matches))
+
+        # Put all shortname matches before keyword matches:
+        for emoji, label in list(sn_matches.items()) + list(kw_matches.items()):
+            action_data = GLib.Variant('s', emoji)
+            menu_item = Gio.MenuItem()
+            menu_item.set_label(escape_mnemonic(label))
+            menu_item.set_attribute_value('action-data', action_data)
+            self._menu.append_item(menu_item)
             if self._menu.get_n_items() >= MENUS_MAX_ENTRIES:
                 break
 
