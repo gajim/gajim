@@ -138,7 +138,7 @@ class ExceptionDialog(Gtk.ApplicationWindow):
             self.destroy()
 
     def _on_report_clicked(self, _button: Gtk.Button) -> None:
-        if self._sentry_available and determine_proxy() is not None:
+        if self._sentry_available and determine_proxy() is None:
             # sentry-sdk supports a http-proxy arg but for now only use
             # sentry when no proxy is set, because we never tested if this
             # works. It's not worth it to potentially leak users identity just
