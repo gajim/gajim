@@ -343,6 +343,13 @@ class ChatBanner(Gtk.Box, EventHelper):
             return self._client.get_module('OMEMO').compose_trust_uri(jid)
 
     def _on_share_clicked(self, _button: Gtk.Button) -> None:
+        assert self._contact is not None
+        if self._contact.is_groupchat:
+            share_text = _('Scan this QR code to join %s.')
+        else:
+            share_text = _('Scan this QR code to add %s to your contact list.')
+        self._ui.share_instructions.set_text(share_text % self._contact.name)
+
         # Generate QR code on demand (i.e. not when switching chats)
         self._ui.qr_code_image.set_from_pixbuf(
             generate_qr_code(self._get_share_uri()))

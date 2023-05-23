@@ -188,8 +188,9 @@ class CertificateBuilder(Builder):
 
 class ChatBannerBuilder(Builder):
     share_popover: Gtk.Popover
-    qr_code_image: Gtk.Image
     jid_label: Gtk.Label
+    share_instructions: Gtk.Label
+    qr_code_image: Gtk.Image
     banner_box: Gtk.Box
     avatar_image: Gtk.Image
     chat_menu_button: Gtk.MenuButton
