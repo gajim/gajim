@@ -347,7 +347,7 @@ class ChatBanner(Gtk.Box, EventHelper):
         if self._contact.is_groupchat:
             share_text = _('Scan this QR code to join %s.')
         else:
-            share_text = _('Scan this QR code to add %s to your contact list.')
+            share_text = _('Scan this QR code to start a chat with %s.')
         self._ui.share_instructions.set_text(share_text % self._contact.name)
 
         # Generate QR code on demand (i.e. not when switching chats)
