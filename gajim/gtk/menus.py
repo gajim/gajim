@@ -730,8 +730,7 @@ def get_chat_row_menu(contact: types.ChatContactT,
 
         if disco_info.has_message_moderation and is_allowed:
             show_retract = True
-    if show_retract:
-        assert stanza_id is not None
+    if show_retract and stanza_id is not None:
         param = RetractMessageParam(
             account=contact.account,
             jid=contact.jid,
