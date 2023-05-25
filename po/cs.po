@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-02 15:53+0000\n"
+"POT-Creation-Date: 2023-05-23 19:40+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -96,6 +96,11 @@ msgstr "%(received)s z %(max)s"
 #, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "%(type)s šifrování je aktivní %(authenticated)s."
+
+#, python-format
+msgctxt "own nickname in group chat"
+msgid "%s (You)"
+msgstr ""
 
 # FIXME: mozna nejak lepe? :/
 #, python-format
@@ -420,6 +425,10 @@ msgstr "Účet musí být připken"
 msgid "Account is being created"
 msgstr "Účet se vytváří"
 
+#, fuzzy
+msgid "Account is not connected."
+msgstr "Účet %s je stále připojen"
+
 #, python-format
 msgid "Account: %s"
 msgstr "Účet: %s"
@@ -561,6 +570,9 @@ msgstr "Vztah"
 
 msgid "Affiliations"
 msgstr "Vztahy"
+
+msgid "Algorithm"
+msgstr ""
 
 msgid "All"
 msgstr "Vše"
@@ -825,6 +837,12 @@ msgstr "Chování okna aplikace"
 msgid "Birthday"
 msgstr "Narozeniny"
 
+msgid "Blind Trust"
+msgstr ""
+
+msgid "Blindly trust new devices until you verify them"
+msgstr ""
+
 msgid "Block"
 msgstr "Blokovat"
 
@@ -1082,6 +1100,18 @@ msgstr "Město"
 msgid "Clear"
 msgstr "Vyčistit"
 
+#, fuzzy
+msgid "Clear Devices"
+msgstr "Zařízení"
+
+msgid "Clear Devices Now?"
+msgstr ""
+
+# FIXME: chtelo by to cesky vyraz pro service discovery
+#, fuzzy
+msgid "Clear Devices…"
+msgstr "Objevit služby…"
+
 msgid "Clear File"
 msgstr "Smazat soubor"
 
@@ -1159,6 +1189,17 @@ msgstr "Common Name (CN)"
 
 msgid "Common Name (CN): "
 msgstr "Common Name (CN): "
+
+#, python-format
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat with %s."
+msgstr ""
+
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat."
+msgstr ""
 
 msgid "Complete"
 msgstr "Dokončeno"
@@ -1239,6 +1280,10 @@ msgstr "Adresy kontaktu"
 
 msgid "Contact Connected"
 msgstr "Kontakt se připojil"
+
+#, fuzzy
+msgid "Contact Details and Settings"
+msgstr "Nastavení připojení"
 
 msgid "Contact Disconnected"
 msgstr "Kontakt se odpojil"
@@ -1349,6 +1394,10 @@ msgstr "Kopírovat útržek kódu"
 msgid "Copy info to clipboard"
 msgstr "Kopírovat informace do schránky"
 
+#, fuzzy
+msgid "Copy to clipboard"
+msgstr "Kopírovat informace do schránky"
+
 msgid "Correct the last message"
 msgstr "Opravit poslední zprávu"
 
@@ -1453,6 +1502,10 @@ msgstr "Výchozí pro nové veřejné skupinové konverzace"
 msgid "Delete"
 msgstr "Smazat"
 
+#, fuzzy
+msgid "Delete Fingerprint"
+msgstr "Otisky"
+
 msgid "Delete Message"
 msgstr "Odstranit zprávu"
 
@@ -1496,6 +1549,10 @@ msgstr "Zařízení \"%s\""
 
 msgid "Devices"
 msgstr "Zařízení"
+
+#, fuzzy, python-format
+msgid "Devices connected with \"%s\""
+msgstr "Ujistěte se prosím, že jste propojeni s účtem \"%s\"."
 
 msgid "Dial Number"
 msgstr "Vytočit číslo"
@@ -1587,6 +1644,9 @@ msgstr "Přejete si přepsat nainstalovanou verzi?"
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr "Chcete také zrušit registraci svého účtu <b>%s</b>?"
+
+msgid "Doing so will permanently delete this Fingerprint"
+msgstr ""
 
 msgid "Don’t show this again"
 msgstr "Příště nezobrazovat"
@@ -1709,6 +1769,10 @@ msgstr "Šifrovaný certifikát"
 
 msgid "Encrypting file…"
 msgstr "Šifrování souboru…"
+
+#, fuzzy
+msgid "Encryption (OMEMO)"
+msgstr "Chyba šifrování"
 
 msgid "Encryption error"
 msgstr "Chyba šifrování"
@@ -1952,6 +2016,10 @@ msgstr "Filtrovat konverzace"
 
 msgid "Filter Chats…"
 msgstr "Filtrovat konverzace…"
+
+#, fuzzy
+msgid "Fingerprint for this Device"
+msgstr "Otisky"
 
 msgid "Fingerprints"
 msgstr "Otisky"
@@ -2344,6 +2412,10 @@ msgstr ""
 "Chcete-li v této konverzaci psát zprávy, musíte nejprve požádat o svolení.\n"
 "Váš požadavek zpracuje moderátor."
 
+#, fuzzy
+msgid "Inactive"
+msgstr "Aktivní"
+
 msgid "Incoming Call"
 msgstr "Příchozí hovor"
 
@@ -2418,11 +2490,12 @@ msgstr "Pozvat"
 msgid "Invite Contacts"
 msgstr "Pozvat kontakty"
 
-msgid "Invite Contacts…"
-msgstr "Pozvat kontakty…"
-
 msgid "Invite friends to group chats or join one"
 msgstr "Pozvěte přátele do skupinové konverzace, nebo se k jedné připojte"
+
+#, fuzzy
+msgid "Invite to this chat"
+msgstr "Přepnout na předchozí konverzaci"
 
 msgid "Invitees"
 msgstr "Pozvaní"
@@ -2492,6 +2565,10 @@ msgstr "Připojit se do skupinové konverzace…"
 msgid "Join Support Chat"
 msgstr "Hledat pomoc (konverzace)"
 
+#, fuzzy
+msgid "Joining Group Chat…"
+msgstr "Připojit se do skupinové konverzace jako…"
+
 msgid "Joining…"
 msgstr "Připojuji se…"
 
@@ -2506,6 +2583,10 @@ msgstr "Ponechat historii konverzace"
 
 msgid "Keep and manage all your chat history"
 msgstr "Uchovávejte a spravujte celou historii konverzace"
+
+#, fuzzy
+msgid "Key Size"
+msgstr "Velikost náhledu"
 
 msgid "Key usage does not include certificate signing"
 msgstr "Použítý klíč neobsahuje podpis certifikátu"
@@ -2525,6 +2606,10 @@ msgstr "Označení"
 
 msgid "Last but not least"
 msgstr "V neposlední řadě"
+
+#, fuzzy, python-format
+msgid "Last seen: %s"
+msgstr "Důvod: %s"
 
 msgid "Leave Group Chat"
 msgstr "Opustit skupinovou konverzaci"
@@ -2581,6 +2666,10 @@ msgstr "Pozice na %s"
 msgid "Location:"
 msgstr "Místo:"
 
+#, fuzzy
+msgid "Log"
+msgstr "Přihlásit se"
+
 msgid "Log In"
 msgstr "Přihlásit se"
 
@@ -2629,6 +2718,14 @@ msgstr "Spravovat profily proxy..."
 
 msgid "Manage Sounds"
 msgstr "Spravovat zvuky"
+
+#, fuzzy
+msgid "Manage Trust"
+msgstr "Spravovat zvuky"
+
+#, fuzzy
+msgid "Manage your Devices…"
+msgstr "Spravovat profily proxy"
 
 msgid "Manually set the hostname for the server"
 msgstr "Ručně nastavte název hostitele pro server"
@@ -2852,6 +2949,9 @@ msgstr ""
 "Nezůstaly žádné kontakty.\n"
 "Můžete také přímo zadat adresu XMPP."
 
+msgid "No devices found to encypt this message to. Querying for devices now…"
+msgstr ""
+
 msgid "No devices online"
 msgstr "Žádná zařízení online"
 
@@ -2903,6 +3003,10 @@ msgstr "Nedostupný/á"
 
 msgid "Not Connected"
 msgstr "Nepřipojeno"
+
+#, fuzzy
+msgid "Not Decided"
+msgstr "O důvěře nebylo rozhodnuto"
 
 msgctxt "Group chat feature"
 msgid "Not Moderated"
@@ -3046,18 +3150,15 @@ msgstr "Organizace (O)"
 msgid "Organization (O): "
 msgstr "Organizace (O): "
 
-msgid "Organizational Unit (OU)"
-msgstr "Organizační jednotka (OJ)"
-
-msgid "Organizational Unit (OU): "
-msgstr "Organizační jednotka (OJ): "
-
 msgid "Organize your chats with workspaces"
 msgstr "Organizujte své konverzace pomocí pracovních ploch"
 
 msgctxt "Gender"
 msgid "Other"
 msgstr "Ostatní"
+
+msgid "Other devices connected with your account"
+msgstr ""
 
 msgid "Others"
 msgstr "Ostatní"
@@ -3374,6 +3475,9 @@ msgctxt "Group chat description"
 msgid "Project discussion"
 msgstr "Diskuze o projektu"
 
+msgid "Protocol"
+msgstr ""
+
 msgid "Prox_y"
 msgstr "Proxy"
 
@@ -3399,6 +3503,14 @@ msgstr "Veřejné"
 msgctxt "Profile"
 msgid "Public Encryption Key"
 msgstr "Veřejný šifrovací klíč"
+
+#, fuzzy
+msgid "Public Key Information"
+msgstr "Informace"
+
+#, fuzzy
+msgid "Public Key: "
+msgstr "Veřejné"
 
 #, python-format
 msgid "Pulse: %s"
@@ -3435,6 +3547,9 @@ msgstr "Re_gistrace"
 
 msgid "Read _Wikipedia Article"
 msgstr "Číst článkek na _Wikipedia"
+
+msgid "Read more about blind trust"
+msgstr ""
 
 msgid "Really block this contact?"
 msgstr "Opravdu si přejete zablokovat tento kontakt?"
@@ -3758,6 +3873,17 @@ msgstr "Ukládání profilového obrázku selhalo"
 msgid "Say hi to your new contact…"
 msgstr "Pozdravte svůj nový kontakt…"
 
+msgid "Scan QR Code"
+msgstr ""
+
+#, python-format
+msgid "Scan this QR code to join %s."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Scan this QR code to start a chat with %s."
+msgstr "Nemůžete přidat sami sebe do seznamu kontaktů."
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Skenuji %(current)d / %(total)d.."
@@ -3773,6 +3899,10 @@ msgstr "Posuňte nahoru pro načtení další historie chatu…"
 
 msgid "Search"
 msgstr "Najít"
+
+#, fuzzy
+msgid "Search Participants…"
+msgstr "Účastníci"
 
 msgid "Search Result"
 msgstr "Výsledky hledání"
@@ -3993,6 +4123,10 @@ msgstr "Nastavení je uzamčeno systémem"
 msgid "Settings"
 msgstr "Nastavení"
 
+#, fuzzy
+msgid "Share Contact…"
+msgstr "Přidat kontakt…"
+
 msgid "Share Status"
 msgstr "Sdílet stav"
 
@@ -4014,8 +4148,9 @@ msgstr "Zobrazit informace o kontaktech"
 msgid "Show Content"
 msgstr "Zobrazit obsah"
 
-msgid "Show Gajim"
-msgstr "Zobrazit Gajim"
+#, fuzzy
+msgid "Show Inactive Devices"
+msgstr "Vstupní zařízení audio"
 
 msgid "Show Invitation"
 msgstr "Zobrazit pozvánku"
@@ -4311,6 +4446,12 @@ msgstr "Styl"
 msgid "Subject"
 msgstr "Předmět"
 
+msgid "Subject Alt Names"
+msgstr ""
+
+msgid "Subject Alt Names: "
+msgstr ""
+
 msgid "Subject issuer mismatch"
 msgstr "Neshoduje se název vydavatele"
 
@@ -4485,6 +4626,9 @@ msgstr "Motiv vzhledu"
 msgid "Themes"
 msgstr "Motivy vzhledu"
 
+msgid "There are devices for which you have not made a trust decision yet."
+msgstr ""
+
 msgid ""
 "There are plenty of servers to choose from.\n"
 "Creating an account on one server allows you to communicate with contacts "
@@ -4496,6 +4640,9 @@ msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
 msgstr "Jsou k dispozici aktualizace pro zásuvné moduly Gajimu"
+
+msgid "There has been an error while trying to fetch messages."
+msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr "Pro zvolené šifrování není k dispozici žádná metoda."
@@ -4516,6 +4663,10 @@ msgid ""
 "XMPP server (%s)."
 msgstr "Nastala chyba při ověřování SSL certifikátu vašeho XMPP serveru (%s)."
 
+#, fuzzy
+msgid "This Device"
+msgstr "Vyberte zařízení"
+
 msgid "This account has already been added"
 msgstr "Tento účet byl již přidán"
 
@@ -4527,6 +4678,11 @@ msgstr "Tato adresa nejspíš nenabízí žádnou bránu."
 
 msgid "This address is not reachable."
 msgstr "Tato adresa není dostupná."
+
+msgid ""
+"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
+"OMEMO in this chat, it should be non-anonymous and members-only."
+msgstr ""
 
 msgid "This device is not compatible."
 msgstr "Toto zařízení není kompatibilní."
@@ -4581,6 +4737,10 @@ msgstr ""
 "dešifrovat. Pro zpracování těchto zpráv můžete nainstalovat zásuvný modul "
 "PGP."
 
+#, fuzzy
+msgid "This message was encrypted with OMEMO, but not for your device."
+msgstr "Tato zpráva byla zašifrována pomocí OTR a nebylo možné ji dešifrovat."
+
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr "Tato zpráva byla zašifrována pomocí OTR a nebylo možné ji dešifrovat."
 
@@ -4615,6 +4775,10 @@ msgstr "Tato služba dosud neodpověděla s detaily"
 
 msgid "This type of service does not contain any items to browse."
 msgstr "Tento typ služby neobsahuje žádné položky, které je možné prohlížet."
+
+#, fuzzy
+msgid "This will clear the devices store for your account."
+msgstr "Odstraní váš účet z Gajimu."
 
 msgid "This will remove your account from Gajim."
 msgstr "Odstraní váš účet z Gajimu."
@@ -4652,6 +4816,11 @@ msgstr "Příjemce"
 msgid "To apply all changes instantly, you have to re-login."
 msgstr "Pokud chcete, aby se změny projevily, musíte se znovu přihlásit."
 
+msgid ""
+"To send an encrypted message, you have to decide whether to trust the device "
+"of your contact."
+msgstr ""
+
 msgid "Toggle Chat List"
 msgstr "Přepnout seznam konverzací"
 
@@ -4685,6 +4854,9 @@ msgstr "Ber * / _ páry jako možné formátovací znaky."
 msgctxt "Group chat description"
 msgid "Trip planning"
 msgstr "Plánování výletu"
+
+msgid "Trust Management"
+msgstr ""
 
 msgid "Trust Not Decided"
 msgstr "O důvěře nebylo rozhodnuto"
@@ -5114,8 +5286,8 @@ msgstr "Jste nyní {show}{status}"
 msgid "You are offline."
 msgstr "Jste offline."
 
-#, python-format
-msgid "You can join this group chat instead: xmpp:%s?join"
+#, fuzzy, python-format
+msgid "You can join this group chat instead: %s"
 msgstr "Můžete se připojit k této skupinové konverzaci: xmpp:%s?join"
 
 msgid "You can not join a group chat unless you are connected."
@@ -5286,6 +5458,10 @@ msgstr "_Zrušit"
 msgid "_Clear"
 msgstr "Vyčistit"
 
+#, fuzzy
+msgid "_Clear Devices"
+msgstr "Vyberte zařízení"
+
 msgid "_Close"
 msgstr "Zavřít"
 
@@ -5416,6 +5592,10 @@ msgstr "Port"
 
 msgid "_Preferences"
 msgstr "Nastavení"
+
+#, fuzzy
+msgid "_Privacy Policy (Online)"
+msgstr "Wiki (online)"
 
 msgid "_Purge"
 msgstr "Vymazat"
@@ -5601,6 +5781,10 @@ msgstr "kurzíva"
 
 msgid "lat"
 msgstr "lat"
+
+#, fuzzy, python-format
+msgid "libsoup Version: %s"
+msgstr "Verze GLib: %s"
 
 #. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
 #. You can use the hex value to find the matching string.
@@ -5979,8 +6163,20 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Edit Profile…"
 #~ msgstr "Upravit profil…"
 
+#~ msgid "Invite Contacts…"
+#~ msgstr "Pozvat kontakty…"
+
 #~ msgid "Invite New Contact"
 #~ msgstr "Pozvat kontakt"
+
+#~ msgid "Organizational Unit (OU)"
+#~ msgstr "Organizační jednotka (OJ)"
+
+#~ msgid "Organizational Unit (OU): "
+#~ msgstr "Organizační jednotka (OJ): "
+
+#~ msgid "Show Gajim"
+#~ msgstr "Zobrazit Gajim"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Nahráli jste něco, co Gajim nemohl zpracovat: %s"

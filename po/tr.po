@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-02 15:53+0000\n"
+"POT-Creation-Date: 2023-05-23 19:40+0000\n"
 "PO-Revision-Date: 2022-01-13 21:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -89,6 +89,11 @@ msgstr ""
 
 #, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
+msgstr ""
+
+#, python-format
+msgctxt "own nickname in group chat"
+msgid "%s (You)"
 msgstr ""
 
 #, fuzzy, python-format
@@ -428,6 +433,10 @@ msgstr "ping:  Bağlanılan sunucuya PING at."
 msgid "Account is being created"
 msgstr "ping:  Bağlanılan sunucuya PING at."
 
+#, fuzzy
+msgid "Account is not connected."
+msgstr "ping:  Bağlanılan sunucuya PING at."
+
 #, fuzzy, python-format
 msgid "Account: %s"
 msgstr "Hesaplar"
@@ -600,6 +609,9 @@ msgstr "üyelik değişti"
 #, fuzzy
 msgid "Affiliations"
 msgstr "<b>Uygulamalar</b>"
+
+msgid "Algorithm"
+msgstr ""
 
 msgid "All"
 msgstr "Hepsi"
@@ -914,6 +926,12 @@ msgstr ""
 msgid "Birthday"
 msgstr "<b>Doğumgünü:</b>"
 
+msgid "Blind Trust"
+msgstr ""
+
+msgid "Blindly trust new devices until you verify them"
+msgstr ""
+
 #, fuzzy
 msgid "Block"
 msgstr "_Engelle"
@@ -1210,6 +1228,17 @@ msgid "Clear"
 msgstr "Temizleniyor"
 
 #, fuzzy
+msgid "Clear Devices"
+msgstr "_Sunuc:"
+
+msgid "Clear Devices Now?"
+msgstr ""
+
+#, fuzzy
+msgid "Clear Devices…"
+msgstr "Çevrimiçi Servisler"
+
+#, fuzzy
 msgid "Clear File"
 msgstr "Temizleniyor"
 
@@ -1292,6 +1321,17 @@ msgid "Common Name (CN)"
 msgstr ""
 
 msgid "Common Name (CN): "
+msgstr ""
+
+#, python-format
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat with %s."
+msgstr ""
+
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat."
 msgstr ""
 
 #, fuzzy
@@ -1392,6 +1432,10 @@ msgstr "Kişinin İleti:"
 #, fuzzy
 msgid "Contact Connected"
 msgstr "Kişinin bağlantısı kesildi"
+
+#, fuzzy
+msgid "Contact Details and Settings"
+msgstr "Bağlantı"
 
 #, fuzzy
 msgid "Contact Disconnected"
@@ -1529,6 +1573,10 @@ msgid "Copy info to clipboard"
 msgstr ""
 
 #, fuzzy
+msgid "Copy to clipboard"
+msgstr "Yer:"
+
+#, fuzzy
 msgid "Correct the last message"
 msgstr "durum ileti"
 
@@ -1655,6 +1703,9 @@ msgstr "Tam-Ekrandan Çık"
 msgid "Delete"
 msgstr "Sil"
 
+msgid "Delete Fingerprint"
+msgstr ""
+
 #, fuzzy
 msgid "Delete Message"
 msgstr "Öntanımlı İlet"
@@ -1705,6 +1756,10 @@ msgstr ""
 #, fuzzy
 msgid "Devices"
 msgstr "_Sunuc:"
+
+#, python-format
+msgid "Devices connected with \"%s\""
+msgstr ""
 
 #, fuzzy
 msgid "Dial Number"
@@ -1800,6 +1855,9 @@ msgstr "%s grupu kişi listesinden silmek istiyor musun?"
 
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
+msgstr ""
+
+msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
 #, fuzzy
@@ -1936,6 +1994,10 @@ msgstr "sertifika hükümsüz kılınmış"
 #, fuzzy
 msgid "Encrypting file…"
 msgstr "  Spam engelleme etkin değil\n"
+
+#, fuzzy
+msgid "Encryption (OMEMO)"
+msgstr "Üyelik isteği"
 
 #, fuzzy
 msgid "Encryption error"
@@ -2223,6 +2285,9 @@ msgstr "Kişisel Sohbetler"
 #, fuzzy
 msgid "Filter Chats…"
 msgstr "Kişisel Sohbetler"
+
+msgid "Fingerprint for this Device"
+msgstr ""
 
 msgid "Fingerprints"
 msgstr ""
@@ -2642,6 +2707,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Inactive"
+msgstr "Aktif"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "Kullanıcak takma ad"
 
@@ -2728,12 +2797,12 @@ msgstr "Davet _et"
 msgid "Invite Contacts"
 msgstr "Kişi Davet _Et"
 
-#, fuzzy
-msgid "Invite Contacts…"
-msgstr "Kişi Davet _Et"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
+
+#, fuzzy
+msgid "Invite to this chat"
+msgstr "Kişi Davet _Et"
 
 #, fuzzy
 msgid "Invitees"
@@ -2812,6 +2881,10 @@ msgstr "Grup Sohbete Katıl"
 msgid "Join Support Chat"
 msgstr "Grup Sohbete Katıl"
 
+#, fuzzy
+msgid "Joining Group Chat…"
+msgstr "Grup Sohbete Katıl"
+
 msgid "Joining…"
 msgstr ""
 
@@ -2827,6 +2900,9 @@ msgid "Keep Chat History"
 msgstr "Son Kullanılan:"
 
 msgid "Keep and manage all your chat history"
+msgstr ""
+
+msgid "Key Size"
 msgstr ""
 
 msgid "Key usage does not include certificate signing"
@@ -2848,6 +2924,10 @@ msgstr "etiket"
 
 msgid "Last but not least"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Last seen: %s"
+msgstr "Neden"
 
 #, fuzzy
 msgid "Leave Group Chat"
@@ -2910,6 +2990,10 @@ msgstr "Yer:"
 msgid "Location:"
 msgstr "Yer:"
 
+#, fuzzy
+msgid "Log"
+msgstr "%(nick)s durumu şimdi %(status)s"
+
 msgid "Log In"
 msgstr ""
 
@@ -2964,6 +3048,14 @@ msgstr "Vekil Sunuc Profili İşlet"
 #, fuzzy
 msgid "Manage Sounds"
 msgstr "Kişileri eşzamana getir"
+
+#, fuzzy
+msgid "Manage Trust"
+msgstr "Kişileri eşzamana getir"
+
+#, fuzzy
+msgid "Manage your Devices…"
+msgstr "Vekil Sunuc Profili İşlet"
 
 msgid "Manually set the hostname for the server"
 msgstr ""
@@ -3212,6 +3304,9 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
+msgid "No devices found to encypt this message to. Querying for devices now…"
+msgstr ""
+
 msgid "No devices online"
 msgstr ""
 
@@ -3269,6 +3364,10 @@ msgstr "Mevcut Değil"
 
 #, fuzzy
 msgid "Not Connected"
+msgstr "Bağlantılı"
+
+#, fuzzy
+msgid "Not Decided"
 msgstr "Bağlantılı"
 
 #, fuzzy
@@ -3441,12 +3540,6 @@ msgstr ""
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organizational Unit (OU)"
-msgstr ""
-
-msgid "Organizational Unit (OU): "
-msgstr ""
-
 msgid "Organize your chats with workspaces"
 msgstr ""
 
@@ -3454,6 +3547,9 @@ msgstr ""
 msgctxt "Gender"
 msgid "Other"
 msgstr "Diğer"
+
+msgid "Other devices connected with your account"
+msgstr ""
 
 msgid "Others"
 msgstr "Diğer"
@@ -3811,6 +3907,9 @@ msgctxt "Group chat description"
 msgid "Project discussion"
 msgstr ""
 
+msgid "Protocol"
+msgstr ""
+
 #, fuzzy
 msgid "Prox_y"
 msgstr "Prox_y:"
@@ -3841,6 +3940,14 @@ msgstr ""
 #, fuzzy
 msgctxt "Profile"
 msgid "Public Encryption Key"
+msgstr "Üyelik isteği"
+
+#, fuzzy
+msgid "Public Key Information"
+msgstr "_Bilgi"
+
+#, fuzzy
+msgid "Public Key: "
 msgstr "Üyelik isteği"
 
 #, fuzzy, python-format
@@ -3885,6 +3992,9 @@ msgstr "_Kaydol"
 #, fuzzy
 msgid "Read _Wikipedia Article"
 msgstr "Makale okunmuş"
+
+msgid "Read more about blind trust"
+msgstr ""
 
 #, fuzzy
 msgid "Really block this contact?"
@@ -4268,6 +4378,17 @@ msgstr "Kişisel ilet gönderimi başarısız"
 msgid "Say hi to your new contact…"
 msgstr "Dosyayı bir kişiye gönderir"
 
+msgid "Scan QR Code"
+msgstr ""
+
+#, python-format
+msgid "Scan this QR code to join %s."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Scan this QR code to start a chat with %s."
+msgstr "Seni kişi listeme eklemek isterdim"
+
 #, fuzzy, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "İndirilen dosya: %(current)li  / %(total)li"
@@ -4283,6 +4404,10 @@ msgstr ""
 
 msgid "Search"
 msgstr "Ara"
+
+#, fuzzy
+msgid "Search Participants…"
+msgstr "Katılanlar"
 
 #, fuzzy
 msgid "Search Result"
@@ -4542,6 +4667,10 @@ msgid "Settings"
 msgstr "Bağlantı Kurulamıyor"
 
 #, fuzzy
+msgid "Share Contact…"
+msgstr "Kişi _ekle"
+
+#, fuzzy
 msgid "Share Status"
 msgstr "Durum"
 
@@ -4569,8 +4698,8 @@ msgid "Show Content"
 msgstr "Sadece _Çecredeki Kişileri Göster"
 
 #, fuzzy
-msgid "Show Gajim"
-msgstr "Gajim"
+msgid "Show Inactive Devices"
+msgstr "Ses giriş aygıtı"
 
 #, fuzzy
 msgid "Show Invitation"
@@ -4916,6 +5045,12 @@ msgstr "Biçem"
 msgid "Subject"
 msgstr "Konu"
 
+msgid "Subject Alt Names"
+msgstr ""
+
+msgid "Subject Alt Names: "
+msgstr ""
+
 #, fuzzy
 msgid "Subject issuer mismatch"
 msgstr "ifade yığıtı uyumsuzluğu"
@@ -5109,6 +5244,9 @@ msgstr "Temalar"
 msgid "Themes"
 msgstr "Temalar"
 
+msgid "There are devices for which you have not made a trust decision yet."
+msgstr ""
+
 msgid ""
 "There are plenty of servers to choose from.\n"
 "Creating an account on one server allows you to communicate with contacts "
@@ -5116,6 +5254,9 @@ msgid ""
 msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
+msgstr ""
+
+msgid "There has been an error while trying to fetch messages."
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5137,6 +5278,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "This Device"
+msgstr "Resim seç"
+
+#, fuzzy
 msgid "This account has already been added"
 msgstr "'%s' (%d) öğesi zaten bir görüntüye eklenmiş"
 
@@ -5150,6 +5295,11 @@ msgstr "%s mevcut bir grubun ismi değil"
 #, fuzzy
 msgid "This address is not reachable."
 msgstr "Bu hizmet gözatılabilir değil"
+
+msgid ""
+"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
+"OMEMO in this chat, it should be non-anonymous and members-only."
+msgstr ""
 
 #, fuzzy
 msgid "This device is not compatible."
@@ -5202,6 +5352,9 @@ msgid ""
 "You can install the PGP plugin to handle those messages."
 msgstr ""
 
+msgid "This message was encrypted with OMEMO, but not for your device."
+msgstr ""
+
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr ""
 
@@ -5234,6 +5387,10 @@ msgstr ""
 
 msgid "This type of service does not contain any items to browse."
 msgstr ""
+
+#, fuzzy
+msgid "This will clear the devices store for your account."
+msgstr "İstemciyi hesap yöneticisi kontrolünden çıkarır."
 
 #, fuzzy
 msgid "This will remove your account from Gajim."
@@ -5270,6 +5427,11 @@ msgid "To"
 msgstr "Kime"
 
 msgid "To apply all changes instantly, you have to re-login."
+msgstr ""
+
+msgid ""
+"To send an encrypted message, you have to decide whether to trust the device "
+"of your contact."
 msgstr ""
 
 #, fuzzy
@@ -5309,6 +5471,9 @@ msgstr ""
 
 msgctxt "Group chat description"
 msgid "Trip planning"
+msgstr ""
+
+msgid "Trust Management"
 msgstr ""
 
 msgid "Trust Not Decided"
@@ -5795,7 +5960,7 @@ msgid "You are offline."
 msgstr ""
 
 #, fuzzy, python-format
-msgid "You can join this group chat instead: xmpp:%s?join"
+msgid "You can join this group chat instead: %s"
 msgstr "%s grup sohbete katıldı"
 
 msgid "You can not join a group chat unless you are connected."
@@ -5993,6 +6158,10 @@ msgid "_Clear"
 msgstr "_Temizle"
 
 #, fuzzy
+msgid "_Clear Devices"
+msgstr "Resim seç"
+
+#, fuzzy
 msgid "_Close"
 msgstr "_Gönder & Kapat"
 
@@ -6156,6 +6325,10 @@ msgstr "_Porta:"
 #, fuzzy
 msgid "_Preferences"
 msgstr "Tercihler"
+
+#, fuzzy
+msgid "_Privacy Policy (Online)"
+msgstr "Çevrimiçi"
 
 msgid "_Purge"
 msgstr ""
@@ -6366,6 +6539,10 @@ msgstr "Italik"
 
 msgid "lat"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "libsoup Version: %s"
+msgstr "GTK+ Runtime Sürümü"
 
 #. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
 #. You can use the hex value to find the matching string.
@@ -6696,13 +6873,17 @@ msgstr ""
 #~ msgstr "?transfer status:Duraklanıldı"
 
 #, fuzzy
-#~ msgid "Copy Location"
-#~ msgstr "Yer:"
-
-#, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Profil gönderiliyor…"
 
 #, fuzzy
+#~ msgid "Invite Contacts…"
+#~ msgstr "Kişi Davet _Et"
+
+#, fuzzy
 #~ msgid "Invite New Contact"
 #~ msgstr "Kişi Davet _Et"
+
+#, fuzzy
+#~ msgid "Show Gajim"
+#~ msgstr "Gajim"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-02 15:53+0000\n"
+"POT-Creation-Date: 2023-05-23 19:40+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -92,6 +92,11 @@ msgid "%(type)s encryption is active %(authenticated)s."
 msgstr ""
 "%(type)s 加密 %(status)s 活動 %(authenticated)s。\n"
 "您的聊天作業階段 %(logged)s 將被記錄。"
+
+#, python-format
+msgctxt "own nickname in group chat"
+msgid "%s (You)"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%s (desynced)"
@@ -441,6 +446,10 @@ msgstr "帳號 \"%s\" 已連線到伺服器"
 msgid "Account is being created"
 msgstr "帳號 \"%s\" 已連線到伺服器"
 
+#, fuzzy
+msgid "Account is not connected."
+msgstr "帳號 \"%s\" 已連線到伺服器"
+
 #, fuzzy, python-format
 msgid "Account: %s"
 msgstr "帳號"
@@ -612,6 +621,9 @@ msgstr "<b>歸屬:</b>"
 #, fuzzy
 msgid "Affiliations"
 msgstr "<b>應用程式</b>"
+
+msgid "Algorithm"
+msgstr ""
 
 msgid "All"
 msgstr "全部"
@@ -923,6 +935,12 @@ msgstr ""
 msgid "Birthday"
 msgstr "<b>生日:</b>"
 
+msgid "Blind Trust"
+msgstr ""
+
+msgid "Blindly trust new devices until you verify them"
+msgstr ""
+
 #, fuzzy
 msgid "Block"
 msgstr "阻斷(_B)"
@@ -1212,6 +1230,17 @@ msgid "Clear"
 msgstr "清潔"
 
 #, fuzzy
+msgid "Clear Devices"
+msgstr "伺服器"
+
+msgid "Clear Devices Now?"
+msgstr ""
+
+#, fuzzy
+msgid "Clear Devices…"
+msgstr "探索服務(_D)"
+
+#, fuzzy
 msgid "Clear File"
 msgstr "清潔"
 
@@ -1294,6 +1323,17 @@ msgid "Common Name (CN)"
 msgstr ""
 
 msgid "Common Name (CN): "
+msgstr ""
+
+#, python-format
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat with %s."
+msgstr ""
+
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat."
 msgstr ""
 
 #, fuzzy
@@ -1391,6 +1431,10 @@ msgstr "聯絡人訊息:"
 
 msgid "Contact Connected"
 msgstr "已連線的聯絡人"
+
+#, fuzzy
+msgid "Contact Details and Settings"
+msgstr "連線"
 
 msgid "Contact Disconnected"
 msgstr "聯絡人已中斷連線"
@@ -1531,6 +1575,10 @@ msgid "Copy info to clipboard"
 msgstr "複製連結位置(_C)"
 
 #, fuzzy
+msgid "Copy to clipboard"
+msgstr "複製連結位置(_C)"
+
+#, fuzzy
 msgid "Correct the last message"
 msgstr "狀態訊息"
 
@@ -1657,6 +1705,9 @@ msgstr "離開聊天室"
 msgid "Delete"
 msgstr "刪除"
 
+msgid "Delete Fingerprint"
+msgstr ""
+
 #, fuzzy
 msgid "Delete Message"
 msgstr "預設訊息"
@@ -1707,6 +1758,10 @@ msgstr ""
 #, fuzzy
 msgid "Devices"
 msgstr "伺服器"
+
+#, fuzzy, python-format
+msgid "Devices connected with \"%s\""
+msgstr "請確認您已經連線到 \"%s\"。"
 
 #, fuzzy
 msgid "Dial Number"
@@ -1804,6 +1859,9 @@ msgstr "您是否接受邀請?"
 
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
+msgstr ""
+
+msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
 #, fuzzy
@@ -1947,6 +2005,10 @@ msgstr "客戶端證書"
 #, fuzzy
 msgid "Encrypting file…"
 msgstr "E2E 加密被停用"
+
+#, fuzzy
+msgid "Encryption (OMEMO)"
+msgstr "認證請求"
 
 #, fuzzy
 msgid "Encryption error"
@@ -2234,6 +2296,9 @@ msgstr "私人聊天"
 #, fuzzy
 msgid "Filter Chats…"
 msgstr "私人聊天"
+
+msgid "Fingerprint for this Device"
+msgstr ""
 
 msgid "Fingerprints"
 msgstr ""
@@ -2663,6 +2728,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Inactive"
+msgstr "活動"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "收到訊息的暱稱顏色。"
 
@@ -2749,12 +2818,12 @@ msgstr "邀請(_V)"
 msgid "Invite Contacts"
 msgstr "邀請聯絡人(_C)"
 
-#, fuzzy
-msgid "Invite Contacts…"
-msgstr "邀請聯絡人(_C)"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
+
+#, fuzzy
+msgid "Invite to this chat"
+msgstr "邀請聯絡人(_C)"
 
 #, fuzzy
 msgid "Invitees"
@@ -2834,6 +2903,10 @@ msgid "Join Support Chat"
 msgstr "加入多人聊天"
 
 #, fuzzy
+msgid "Joining Group Chat…"
+msgstr "加入多人聊天"
+
+#, fuzzy
 msgid "Joining…"
 msgstr "封禁…"
 
@@ -2849,6 +2922,9 @@ msgid "Keep Chat History"
 msgstr "最近:"
 
 msgid "Keep and manage all your chat history"
+msgstr ""
+
+msgid "Key Size"
 msgstr ""
 
 msgid "Key usage does not include certificate signing"
@@ -2872,6 +2948,10 @@ msgstr "標籤"
 
 msgid "Last but not least"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Last seen: %s"
+msgstr "原因"
 
 #, fuzzy
 msgid "Leave Group Chat"
@@ -2937,6 +3017,10 @@ msgstr "位置: %s"
 msgid "Location:"
 msgstr "位置: %s"
 
+#, fuzzy
+msgid "Log"
+msgstr "現在重新登入?"
+
 msgid "Log In"
 msgstr ""
 
@@ -2991,6 +3075,14 @@ msgstr "管理代理伺服器設定"
 #, fuzzy
 msgid "Manage Sounds"
 msgstr "管理聯絡人(_M)"
+
+#, fuzzy
+msgid "Manage Trust"
+msgstr "管理聯絡人(_M)"
+
+#, fuzzy
+msgid "Manage your Devices…"
+msgstr "管理代理伺服器設定"
 
 msgid "Manually set the hostname for the server"
 msgstr ""
@@ -3240,6 +3332,9 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
+msgid "No devices found to encypt this message to. Querying for devices now…"
+msgstr ""
+
 msgid "No devices online"
 msgstr ""
 
@@ -3296,6 +3391,10 @@ msgstr "離開很久了"
 
 #, fuzzy
 msgid "Not Connected"
+msgstr "已連線"
+
+#, fuzzy
+msgid "Not Decided"
 msgstr "已連線"
 
 #, fuzzy
@@ -3467,12 +3566,6 @@ msgstr ""
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organizational Unit (OU)"
-msgstr ""
-
-msgid "Organizational Unit (OU): "
-msgstr ""
-
 msgid "Organize your chats with workspaces"
 msgstr ""
 
@@ -3480,6 +3573,9 @@ msgstr ""
 msgctxt "Gender"
 msgid "Other"
 msgstr "其他"
+
+msgid "Other devices connected with your account"
+msgstr ""
 
 msgid "Others"
 msgstr "其他"
@@ -3833,6 +3929,9 @@ msgctxt "Group chat description"
 msgid "Project discussion"
 msgstr ""
 
+msgid "Protocol"
+msgstr ""
+
 #, fuzzy
 msgid "Prox_y"
 msgstr "代理伺服器(_Y):"
@@ -3863,6 +3962,14 @@ msgstr ""
 #, fuzzy
 msgctxt "Profile"
 msgid "Public Encryption Key"
+msgstr "認證請求"
+
+#, fuzzy
+msgid "Public Key Information"
+msgstr "資訊(_I)"
+
+#, fuzzy
+msgid "Public Key: "
 msgstr "認證請求"
 
 #, python-format
@@ -3905,6 +4012,9 @@ msgstr "註冊(_G)"
 
 msgid "Read _Wikipedia Article"
 msgstr "檢視 Wikipedia 文章(_W)"
+
+msgid "Read more about blind trust"
+msgstr ""
 
 #, fuzzy
 msgid "Really block this contact?"
@@ -4291,6 +4401,17 @@ msgstr "傳送私有訊息失敗"
 msgid "Say hi to your new contact…"
 msgstr "向聯絡人傳送檔案"
 
+msgid "Scan QR Code"
+msgstr ""
+
+#, python-format
+msgid "Scan this QR code to join %s."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Scan this QR code to start a chat with %s."
+msgstr "您不能將您自己加入到您的聯絡人清單中。"
+
 #, fuzzy, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "已掃描 %(current)d / %(total)d.."
@@ -4306,6 +4427,10 @@ msgstr ""
 
 msgid "Search"
 msgstr "搜尋"
+
+#, fuzzy
+msgid "Search Participants…"
+msgstr "參與者"
 
 #, fuzzy
 msgid "Search Result"
@@ -4561,6 +4686,10 @@ msgid "Settings"
 msgstr "外掛程式"
 
 #, fuzzy
+msgid "Share Contact…"
+msgstr "加入聯絡人(_A)…"
+
+#, fuzzy
 msgid "Share Status"
 msgstr "狀態"
 
@@ -4588,8 +4717,8 @@ msgid "Show Content"
 msgstr "只顯示活動的聯絡人(_A)"
 
 #, fuzzy
-msgid "Show Gajim"
-msgstr "Gajim"
+msgid "Show Inactive Devices"
+msgstr "音訊輸入裝置"
 
 #, fuzzy
 msgid "Show Invitation"
@@ -4935,6 +5064,12 @@ msgstr "風格"
 msgid "Subject"
 msgstr "主題"
 
+msgid "Subject Alt Names"
+msgstr ""
+
+msgid "Subject Alt Names: "
+msgstr ""
+
 msgid "Subject issuer mismatch"
 msgstr "Subject 與 發行者 不匹配"
 
@@ -5127,6 +5262,9 @@ msgstr "主題"
 msgid "Themes"
 msgstr "主題"
 
+msgid "There are devices for which you have not made a trust decision yet."
+msgstr ""
+
 msgid ""
 "There are plenty of servers to choose from.\n"
 "Creating an account on one server allows you to communicate with contacts "
@@ -5134,6 +5272,9 @@ msgid ""
 msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
+msgstr ""
+
+msgid "There has been an error while trying to fetch messages."
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5158,6 +5299,10 @@ msgstr ""
 "您仍然想要連線這個伺服器嗎?"
 
 #, fuzzy
+msgid "This Device"
+msgstr "選擇歸檔檔案"
+
+#, fuzzy
 msgid "This account has already been added"
 msgstr "帳號已成功加入"
 
@@ -5171,6 +5316,11 @@ msgstr "這不是一個聊天室"
 #, fuzzy
 msgid "This address is not reachable."
 msgstr "該服務無法瀏覽"
+
+msgid ""
+"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
+"OMEMO in this chat, it should be non-anonymous and members-only."
+msgstr ""
 
 #, fuzzy
 msgid "This device is not compatible."
@@ -5225,6 +5375,9 @@ msgid ""
 "You can install the PGP plugin to handle those messages."
 msgstr ""
 
+msgid "This message was encrypted with OMEMO, but not for your device."
+msgstr ""
+
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr ""
 
@@ -5260,6 +5413,10 @@ msgstr "服務還沒有詳細的資訊應答"
 
 msgid "This type of service does not contain any items to browse."
 msgstr "此服務沒有項目可瀏覽。"
+
+#, fuzzy
+msgid "This will clear the devices store for your account."
+msgstr "僅從 Gajim 移除帳號(_O)"
 
 #, fuzzy
 msgid "This will remove your account from Gajim."
@@ -5299,6 +5456,11 @@ msgstr "To"
 msgid "To apply all changes instantly, you have to re-login."
 msgstr "如果想使所有調整立即生效，您必須重新登入。"
 
+msgid ""
+"To send an encrypted message, you have to decide whether to trust the device "
+"of your contact."
+msgstr ""
+
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "切換視訊作業階段"
@@ -5336,6 +5498,9 @@ msgstr "將成對出現的 * / _ 視為可能的格式控制字元。"
 
 msgctxt "Group chat description"
 msgid "Trip planning"
+msgstr ""
+
+msgid "Trust Management"
 msgstr ""
 
 msgid "Trust Not Decided"
@@ -5816,7 +5981,7 @@ msgid "You are offline."
 msgstr ""
 
 #, fuzzy, python-format
-msgid "You can join this group chat instead: xmpp:%s?join"
+msgid "You can join this group chat instead: %s"
 msgstr "做為替代，您可以加入這個聊天室: %s"
 
 msgid "You can not join a group chat unless you are connected."
@@ -6017,6 +6182,10 @@ msgid "_Clear"
 msgstr ""
 
 #, fuzzy
+msgid "_Clear Devices"
+msgstr "選擇歸檔檔案"
+
+#, fuzzy
 msgid "_Close"
 msgstr "傳送並關閉(_S)"
 
@@ -6180,6 +6349,10 @@ msgstr "連接埠(_P):"
 #, fuzzy
 msgid "_Preferences"
 msgstr "參數"
+
+#, fuzzy
+msgid "_Privacy Policy (Online)"
+msgstr "線上"
 
 msgid "_Purge"
 msgstr ""
@@ -6389,6 +6562,10 @@ msgstr "斜體"
 
 msgid "lat"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "libsoup Version: %s"
+msgstr "GTK+ 版本:"
 
 #. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
 #. You can use the hex value to find the matching string.
@@ -6732,5 +6909,13 @@ msgstr ""
 #~ msgstr "傳送側寫…"
 
 #, fuzzy
+#~ msgid "Invite Contacts…"
+#~ msgstr "邀請聯絡人(_C)"
+
+#, fuzzy
 #~ msgid "Invite New Contact"
 #~ msgstr "邀請聯絡人(_C)"
+
+#, fuzzy
+#~ msgid "Show Gajim"
+#~ msgstr "Gajim"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-02 15:53+0000\n"
+"POT-Creation-Date: 2023-05-23 19:40+0000\n"
 "PO-Revision-Date: 2023-01-05 11:03+0000\n"
 "Last-Translator: Nikolay Chizhov <admin@kgd.in>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -93,6 +93,11 @@ msgstr "%(received)s из %(max)s"
 #, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "%(type)s шифрование активно %(authenticated)s."
+
+#, python-format
+msgctxt "own nickname in group chat"
+msgid "%s (You)"
+msgstr ""
 
 #, python-format
 msgid "%s (desynced)"
@@ -417,6 +422,10 @@ msgstr "Учетная запись должна быть подключена"
 msgid "Account is being created"
 msgstr "Создается учетная запись"
 
+#, fuzzy
+msgid "Account is not connected."
+msgstr "Учетная запись %s все еще подключена"
+
 #, python-format
 msgid "Account: %s"
 msgstr "Учетная запись: %s"
@@ -557,6 +566,9 @@ msgstr "Роль"
 
 msgid "Affiliations"
 msgstr "Роли"
+
+msgid "Algorithm"
+msgstr ""
 
 msgid "All"
 msgstr "Все"
@@ -822,6 +834,12 @@ msgstr "Поведение окна приложения"
 msgid "Birthday"
 msgstr "День рождения"
 
+msgid "Blind Trust"
+msgstr ""
+
+msgid "Blindly trust new devices until you verify them"
+msgstr ""
+
 msgid "Block"
 msgstr "Заблокировать"
 
@@ -1081,6 +1099,17 @@ msgstr "Город"
 msgid "Clear"
 msgstr "Очистить"
 
+#, fuzzy
+msgid "Clear Devices"
+msgstr "Устройства"
+
+msgid "Clear Devices Now?"
+msgstr ""
+
+#, fuzzy
+msgid "Clear Devices…"
+msgstr "Обзор сервисов…"
+
 msgid "Clear File"
 msgstr "Очистить файл"
 
@@ -1159,6 +1188,17 @@ msgstr "Общее имя (CN)"
 
 msgid "Common Name (CN): "
 msgstr "Общее имя (CN): "
+
+#, python-format
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat with %s."
+msgstr ""
+
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat."
+msgstr ""
 
 msgid "Complete"
 msgstr "Завершить"
@@ -1240,6 +1280,10 @@ msgstr "Контактные адреса"
 
 msgid "Contact Connected"
 msgstr "Контакт подключился"
+
+#, fuzzy
+msgid "Contact Details and Settings"
+msgstr "Настройки подключения"
 
 msgid "Contact Disconnected"
 msgstr "Контакт отключился"
@@ -1350,6 +1394,10 @@ msgstr "Копировать фрагмент кода"
 msgid "Copy info to clipboard"
 msgstr "Копировать информацию в буфер обмена"
 
+#, fuzzy
+msgid "Copy to clipboard"
+msgstr "Копировать информацию в буфер обмена"
+
 msgid "Correct the last message"
 msgstr "Изменить последнее сообщение"
 
@@ -1456,6 +1504,10 @@ msgid "Delete"
 msgstr "Удалить"
 
 #, fuzzy
+msgid "Delete Fingerprint"
+msgstr "Отпечатки"
+
+#, fuzzy
 msgid "Delete Message"
 msgstr "Прямые сообщения"
 
@@ -1501,6 +1553,10 @@ msgstr "Устройство '%s'"
 
 msgid "Devices"
 msgstr "Устройства"
+
+#, fuzzy, python-format
+msgid "Devices connected with \"%s\""
+msgstr "Пожалуйста, убедитесь, что Вы подключены к '%s'."
 
 msgid "Dial Number"
 msgstr "Номер для набора"
@@ -1595,6 +1651,9 @@ msgstr "Вы хотите перезаписать текущую установ
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr "Вы хотите отменить регистрацию своей учетной записи на <b>%s</b>?"
+
+msgid "Doing so will permanently delete this Fingerprint"
+msgstr ""
 
 msgid "Don’t show this again"
 msgstr "Не показывать снова"
@@ -1724,6 +1783,10 @@ msgstr "Шифрованный сертификат"
 
 msgid "Encrypting file…"
 msgstr "Шифруем файл…"
+
+#, fuzzy
+msgid "Encryption (OMEMO)"
+msgstr "Ошибка шифрования"
 
 msgid "Encryption error"
 msgstr "Ошибка шифрования"
@@ -1969,6 +2032,10 @@ msgstr "Фильтр чатов"
 
 msgid "Filter Chats…"
 msgstr "Фильтр чатов…"
+
+#, fuzzy
+msgid "Fingerprint for this Device"
+msgstr "Отпечатки"
 
 msgid "Fingerprints"
 msgstr "Отпечатки"
@@ -2367,6 +2434,10 @@ msgstr ""
 "запрос.\n"
 "Модератор обработает ваш запрос."
 
+#, fuzzy
+msgid "Inactive"
+msgstr "Активен"
+
 msgid "Incoming Call"
 msgstr "Входящий звонок"
 
@@ -2442,11 +2513,12 @@ msgstr "Пригласить"
 msgid "Invite Contacts"
 msgstr "Пригласить контакты"
 
-msgid "Invite Contacts…"
-msgstr "Пригласить контакты…"
-
 msgid "Invite friends to group chats or join one"
 msgstr "Пригласите друзей в групповые чаты или присоединитесь к ним"
+
+#, fuzzy
+msgid "Invite to this chat"
+msgstr "Перейти к предыдущему чату"
 
 msgid "Invitees"
 msgstr "Приглашенные"
@@ -2516,6 +2588,10 @@ msgstr "Вход в групповой чат…"
 msgid "Join Support Chat"
 msgstr "Присоединиться к чату поддержки"
 
+#, fuzzy
+msgid "Joining Group Chat…"
+msgstr "Присоединиться к групповому чату как…"
+
 msgid "Joining…"
 msgstr "Присоединение…"
 
@@ -2530,6 +2606,10 @@ msgstr "Хранить историю чата"
 
 msgid "Keep and manage all your chat history"
 msgstr "Храните и управляйте всей своей историей чатов"
+
+#, fuzzy
+msgid "Key Size"
+msgstr "Размер превью"
 
 msgid "Key usage does not include certificate signing"
 msgstr "Назначение ключа не включает подписывание сертификата"
@@ -2549,6 +2629,10 @@ msgstr "Метка"
 
 msgid "Last but not least"
 msgstr "Последний, но тем не менее важный"
+
+#, fuzzy, python-format
+msgid "Last seen: %s"
+msgstr "Причина: %s"
 
 msgid "Leave Group Chat"
 msgstr "Покинуть групповой чат"
@@ -2608,6 +2692,10 @@ msgstr "Местоположение:"
 msgid "Location:"
 msgstr "Местоположение:"
 
+#, fuzzy
+msgid "Log"
+msgstr "Авторизация"
+
 msgid "Log In"
 msgstr "Вход"
 
@@ -2656,6 +2744,14 @@ msgstr "Управление прокси..."
 
 msgid "Manage Sounds"
 msgstr "Управление звуками"
+
+#, fuzzy
+msgid "Manage Trust"
+msgstr "Управление звуками"
+
+#, fuzzy
+msgid "Manage your Devices…"
+msgstr "Управление профилями прокси"
 
 msgid "Manually set the hostname for the server"
 msgstr "Ручной ввод имени сервера"
@@ -2880,6 +2976,9 @@ msgstr ""
 "Не осталось контактов.\n"
 "Вы также можете ввести XMPP-адрес."
 
+msgid "No devices found to encypt this message to. Querying for devices now…"
+msgstr ""
+
 msgid "No devices online"
 msgstr ""
 
@@ -2931,6 +3030,10 @@ msgstr "Недоступен"
 
 msgid "Not Connected"
 msgstr "Нет соединения"
+
+#, fuzzy
+msgid "Not Decided"
+msgstr "Доверие не определено"
 
 msgctxt "Group chat feature"
 msgid "Not Moderated"
@@ -3079,18 +3182,15 @@ msgstr "Организация"
 msgid "Organization (O): "
 msgstr "Организация (O): "
 
-msgid "Organizational Unit (OU)"
-msgstr "Подразделение организации (OU)"
-
-msgid "Organizational Unit (OU): "
-msgstr "Подразделение организации (OU): "
-
 msgid "Organize your chats with workspaces"
 msgstr "Организуйте свои чаты с помощью вкладок"
 
 msgctxt "Gender"
 msgid "Other"
 msgstr "Другое"
+
+msgid "Other devices connected with your account"
+msgstr ""
 
 msgid "Others"
 msgstr "Другие"
@@ -3412,6 +3512,9 @@ msgctxt "Group chat description"
 msgid "Project discussion"
 msgstr "Обсуждение проекта"
 
+msgid "Protocol"
+msgstr ""
+
 msgid "Prox_y"
 msgstr "Про_кси"
 
@@ -3437,6 +3540,14 @@ msgstr "Публичный"
 msgctxt "Profile"
 msgid "Public Encryption Key"
 msgstr "Публичный ключ шифрования"
+
+#, fuzzy
+msgid "Public Key Information"
+msgstr "Информация"
+
+#, fuzzy
+msgid "Public Key: "
+msgstr "Публичный"
 
 #, python-format
 msgid "Pulse: %s"
@@ -3473,6 +3584,9 @@ msgstr "За_регистрироваться"
 
 msgid "Read _Wikipedia Article"
 msgstr "Смотреть статью в _Wikipedia"
+
+msgid "Read more about blind trust"
+msgstr ""
 
 msgid "Really block this contact?"
 msgstr "Вы действительно хотите заблокировать этот контакт?"
@@ -3796,6 +3910,17 @@ msgstr "Ошибка сохранения изображения аватара"
 msgid "Say hi to your new contact…"
 msgstr "Скажите \"Привет\" Вашему новому контакту…"
 
+msgid "Scan QR Code"
+msgstr ""
+
+#, python-format
+msgid "Scan this QR code to join %s."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Scan this QR code to start a chat with %s."
+msgstr "Вы не можете добавить себя в свой список контактов."
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Сканирование %(current)d / %(total)d ..."
@@ -3811,6 +3936,10 @@ msgstr "Прокрутите вверх, чтобы подгрузить ост�
 
 msgid "Search"
 msgstr "Поиск"
+
+#, fuzzy
+msgid "Search Participants…"
+msgstr "Участники"
 
 msgid "Search Result"
 msgstr "Результаты поиска"
@@ -4031,6 +4160,10 @@ msgstr "Настройка заблокирована системой"
 msgid "Settings"
 msgstr "Настройки"
 
+#, fuzzy
+msgid "Share Contact…"
+msgstr "Добавить контакт…"
+
 msgid "Share Status"
 msgstr "Поделиться статусом"
 
@@ -4057,8 +4190,8 @@ msgid "Show Content"
 msgstr "Показать только активных"
 
 #, fuzzy
-msgid "Show Gajim"
-msgstr "Gajim"
+msgid "Show Inactive Devices"
+msgstr "Устройство аудиовхода"
 
 #, fuzzy
 msgid "Show Invitation"
@@ -4367,6 +4500,12 @@ msgstr "Стиль"
 msgid "Subject"
 msgstr "Тема"
 
+msgid "Subject Alt Names"
+msgstr ""
+
+msgid "Subject Alt Names: "
+msgstr ""
+
 msgid "Subject issuer mismatch"
 msgstr "Несоответствие поставщика сертификата"
 
@@ -4540,6 +4679,9 @@ msgstr "Тема"
 msgid "Themes"
 msgstr "Темы"
 
+msgid "There are devices for which you have not made a trust decision yet."
+msgstr ""
+
 msgid ""
 "There are plenty of servers to choose from.\n"
 "Creating an account on one server allows you to communicate with contacts "
@@ -4551,6 +4693,9 @@ msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
 msgstr "Есть обновления для модулей Gajim"
+
+msgid "There has been an error while trying to fetch messages."
+msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr "Для выбранного метода шифрования не существует способа шифрования."
@@ -4572,6 +4717,10 @@ msgid ""
 msgstr "Ошибка при попытке проверки SSL сертификата вашего XMPP сервера (%s)."
 
 #, fuzzy
+msgid "This Device"
+msgstr "Выберите устройство"
+
+#, fuzzy
 msgid "This account has already been added"
 msgstr "Учетная запись успешно добавлена"
 
@@ -4583,6 +4732,11 @@ msgstr "Этот адрес не предоставляет никаких шл�
 
 msgid "This address is not reachable."
 msgstr "Этот адрес недоступен."
+
+msgid ""
+"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
+"OMEMO in this chat, it should be non-anonymous and members-only."
+msgstr ""
 
 msgid "This device is not compatible."
 msgstr "Это устройство несовместимо."
@@ -4637,6 +4791,11 @@ msgstr ""
 "Это сообщение было зашифровано с помощью устаревшего OpenPGP и не может быть "
 "расшифровано. Вы можете установить плагин PGP для обработки этих сообщений."
 
+#, fuzzy
+msgid "This message was encrypted with OMEMO, but not for your device."
+msgstr ""
+"Это сообщение было зашифровано с помощью OTR и не может быть расшифровано."
+
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr ""
 "Это сообщение было зашифровано с помощью OTR и не может быть расшифровано."
@@ -4673,6 +4832,10 @@ msgstr "Этот сервис еще не сообщил информацию о
 
 msgid "This type of service does not contain any items to browse."
 msgstr "Этот сервис не содержит ничего, что можно было бы просмотреть."
+
+#, fuzzy
+msgid "This will clear the devices store for your account."
+msgstr "Это приведет к удалению вашей учетной записи из Gajim."
 
 msgid "This will remove your account from Gajim."
 msgstr "Это приведет к удалению вашей учетной записи из Gajim."
@@ -4712,6 +4875,11 @@ msgid "To apply all changes instantly, you have to re-login."
 msgstr ""
 "Чтобы мгновенно применить все изменения, вам необходимо перелогиниться."
 
+msgid ""
+"To send an encrypted message, you have to decide whether to trust the device "
+"of your contact."
+msgstr ""
+
 msgid "Toggle Chat List"
 msgstr "Переключить список чатов"
 
@@ -4744,6 +4912,9 @@ msgstr "Обрабатывать пары * / _ как возможные фор
 
 msgctxt "Group chat description"
 msgid "Trip planning"
+msgstr ""
+
+msgid "Trust Management"
 msgstr ""
 
 msgid "Trust Not Decided"
@@ -5172,8 +5343,8 @@ msgstr "Вы теперь {show} {status}"
 msgid "You are offline."
 msgstr "Вы не в сети."
 
-#, python-format
-msgid "You can join this group chat instead: xmpp:%s?join"
+#, fuzzy, python-format
+msgid "You can join this group chat instead: %s"
 msgstr "Взамен, Вы можете присоединиться к этому групповому чату: xmpp:%s?join"
 
 msgid "You can not join a group chat unless you are connected."
@@ -5345,6 +5516,10 @@ msgstr "О_тменить"
 msgid "_Clear"
 msgstr "_Очистить"
 
+#, fuzzy
+msgid "_Clear Devices"
+msgstr "Выберите устройство"
+
 msgid "_Close"
 msgstr "_Закрыть"
 
@@ -5476,6 +5651,10 @@ msgstr "_Порт"
 
 msgid "_Preferences"
 msgstr "_Настройки"
+
+#, fuzzy
+msgid "_Privacy Policy (Online)"
+msgstr "_Wiki (В сети)"
 
 msgid "_Purge"
 msgstr "_Очистить"
@@ -5663,6 +5842,10 @@ msgstr "курсив"
 
 msgid "lat"
 msgstr "широта"
+
+#, fuzzy, python-format
+msgid "libsoup Version: %s"
+msgstr "Версия GLib: %s"
 
 #. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
 #. You can use the hex value to find the matching string.
@@ -5998,5 +6181,18 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Edit Profile…"
 #~ msgstr "Редактировать профиль…"
 
+#~ msgid "Invite Contacts…"
+#~ msgstr "Пригласить контакты…"
+
 #~ msgid "Invite New Contact"
 #~ msgstr "Пригласить новый контакт"
+
+#~ msgid "Organizational Unit (OU)"
+#~ msgstr "Подразделение организации (OU)"
+
+#~ msgid "Organizational Unit (OU): "
+#~ msgstr "Подразделение организации (OU): "
+
+#, fuzzy
+#~ msgid "Show Gajim"
+#~ msgstr "Gajim"

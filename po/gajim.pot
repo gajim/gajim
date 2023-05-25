@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-02 15:53+0000\n"
+"POT-Creation-Date: 2023-05-23 19:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -85,6 +85,11 @@ msgstr ""
 
 #, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
+msgstr ""
+
+#, python-format
+msgctxt "own nickname in group chat"
+msgid "%s (You)"
 msgstr ""
 
 #, python-format
@@ -396,6 +401,9 @@ msgstr ""
 msgid "Account is being created"
 msgstr ""
 
+msgid "Account is not connected."
+msgstr ""
+
 #, python-format
 msgid "Account: %s"
 msgstr ""
@@ -533,6 +541,9 @@ msgid "Affiliation"
 msgstr ""
 
 msgid "Affiliations"
+msgstr ""
+
+msgid "Algorithm"
 msgstr ""
 
 msgid "All"
@@ -795,6 +806,12 @@ msgstr ""
 msgid "Birthday"
 msgstr ""
 
+msgid "Blind Trust"
+msgstr ""
+
+msgid "Blindly trust new devices until you verify them"
+msgstr ""
+
 msgid "Block"
 msgstr ""
 
@@ -1046,6 +1063,15 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
+msgid "Clear Devices"
+msgstr ""
+
+msgid "Clear Devices Now?"
+msgstr ""
+
+msgid "Clear Devices…"
+msgstr ""
+
 msgid "Clear File"
 msgstr ""
 
@@ -1118,6 +1144,17 @@ msgid "Common Name (CN)"
 msgstr ""
 
 msgid "Common Name (CN): "
+msgstr ""
+
+#, python-format
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat with %s."
+msgstr ""
+
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat."
 msgstr ""
 
 msgid "Complete"
@@ -1198,6 +1235,9 @@ msgid "Contact Addresses"
 msgstr ""
 
 msgid "Contact Connected"
+msgstr ""
+
+msgid "Contact Details and Settings"
 msgstr ""
 
 msgid "Contact Disconnected"
@@ -1309,6 +1349,9 @@ msgstr ""
 msgid "Copy info to clipboard"
 msgstr ""
 
+msgid "Copy to clipboard"
+msgstr ""
+
 msgid "Correct the last message"
 msgstr ""
 
@@ -1413,6 +1456,9 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
+msgid "Delete Fingerprint"
+msgstr ""
+
 msgid "Delete Message"
 msgstr ""
 
@@ -1455,6 +1501,10 @@ msgid "Device \"%s\""
 msgstr ""
 
 msgid "Devices"
+msgstr ""
+
+#, python-format
+msgid "Devices connected with \"%s\""
 msgstr ""
 
 msgid "Dial Number"
@@ -1540,6 +1590,9 @@ msgstr ""
 
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
+msgstr ""
+
+msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
 msgid "Don’t show this again"
@@ -1658,6 +1711,9 @@ msgid "Encrypted Certificate"
 msgstr ""
 
 msgid "Encrypting file…"
+msgstr ""
+
+msgid "Encryption (OMEMO)"
 msgstr ""
 
 msgid "Encryption error"
@@ -1900,6 +1956,9 @@ msgid "Filter Chats"
 msgstr ""
 
 msgid "Filter Chats…"
+msgstr ""
+
+msgid "Fingerprint for this Device"
 msgstr ""
 
 msgid "Fingerprints"
@@ -2264,6 +2323,9 @@ msgid ""
 "A moderator will process your request."
 msgstr ""
 
+msgid "Inactive"
+msgstr ""
+
 msgid "Incoming Call"
 msgstr ""
 
@@ -2338,10 +2400,10 @@ msgstr ""
 msgid "Invite Contacts"
 msgstr ""
 
-msgid "Invite Contacts…"
+msgid "Invite friends to group chats or join one"
 msgstr ""
 
-msgid "Invite friends to group chats or join one"
+msgid "Invite to this chat"
 msgstr ""
 
 msgid "Invitees"
@@ -2410,6 +2472,9 @@ msgstr ""
 msgid "Join Support Chat"
 msgstr ""
 
+msgid "Joining Group Chat…"
+msgstr ""
+
 msgid "Joining…"
 msgstr ""
 
@@ -2423,6 +2488,9 @@ msgid "Keep Chat History"
 msgstr ""
 
 msgid "Keep and manage all your chat history"
+msgstr ""
+
+msgid "Key Size"
 msgstr ""
 
 msgid "Key usage does not include certificate signing"
@@ -2442,6 +2510,10 @@ msgid "Label"
 msgstr ""
 
 msgid "Last but not least"
+msgstr ""
+
+#, python-format
+msgid "Last seen: %s"
 msgstr ""
 
 msgid "Leave Group Chat"
@@ -2497,6 +2569,9 @@ msgstr ""
 msgid "Location:"
 msgstr ""
 
+msgid "Log"
+msgstr ""
+
 msgid "Log In"
 msgstr ""
 
@@ -2542,6 +2617,12 @@ msgid "Manage Proxies..."
 msgstr ""
 
 msgid "Manage Sounds"
+msgstr ""
+
+msgid "Manage Trust"
+msgstr ""
+
+msgid "Manage your Devices…"
 msgstr ""
 
 msgid "Manually set the hostname for the server"
@@ -2756,6 +2837,9 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
+msgid "No devices found to encypt this message to. Querying for devices now…"
+msgstr ""
+
 msgid "No devices online"
 msgstr ""
 
@@ -2806,6 +2890,9 @@ msgid "Not Available"
 msgstr ""
 
 msgid "Not Connected"
+msgstr ""
+
+msgid "Not Decided"
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -2950,17 +3037,14 @@ msgstr ""
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organizational Unit (OU)"
-msgstr ""
-
-msgid "Organizational Unit (OU): "
-msgstr ""
-
 msgid "Organize your chats with workspaces"
 msgstr ""
 
 msgctxt "Gender"
 msgid "Other"
+msgstr ""
+
+msgid "Other devices connected with your account"
 msgstr ""
 
 msgid "Others"
@@ -3266,6 +3350,9 @@ msgctxt "Group chat description"
 msgid "Project discussion"
 msgstr ""
 
+msgid "Protocol"
+msgstr ""
+
 msgid "Prox_y"
 msgstr ""
 
@@ -3290,6 +3377,12 @@ msgstr ""
 
 msgctxt "Profile"
 msgid "Public Encryption Key"
+msgstr ""
+
+msgid "Public Key Information"
+msgstr ""
+
+msgid "Public Key: "
 msgstr ""
 
 #, python-format
@@ -3326,6 +3419,9 @@ msgid "Re_gister"
 msgstr ""
 
 msgid "Read _Wikipedia Article"
+msgstr ""
+
+msgid "Read more about blind trust"
 msgstr ""
 
 msgid "Really block this contact?"
@@ -3646,6 +3742,17 @@ msgstr ""
 msgid "Say hi to your new contact…"
 msgstr ""
 
+msgid "Scan QR Code"
+msgstr ""
+
+#, python-format
+msgid "Scan this QR code to join %s."
+msgstr ""
+
+#, python-format
+msgid "Scan this QR code to start a chat with %s."
+msgstr ""
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr ""
@@ -3660,6 +3767,9 @@ msgid "Scroll up to load more chat history…"
 msgstr ""
 
 msgid "Search"
+msgstr ""
+
+msgid "Search Participants…"
 msgstr ""
 
 msgid "Search Result"
@@ -3875,6 +3985,9 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
+msgid "Share Contact…"
+msgstr ""
+
 msgid "Share Status"
 msgstr ""
 
@@ -3896,7 +4009,7 @@ msgstr ""
 msgid "Show Content"
 msgstr ""
 
-msgid "Show Gajim"
+msgid "Show Inactive Devices"
 msgstr ""
 
 msgid "Show Invitation"
@@ -4186,6 +4299,12 @@ msgstr ""
 msgid "Subject"
 msgstr ""
 
+msgid "Subject Alt Names"
+msgstr ""
+
+msgid "Subject Alt Names: "
+msgstr ""
+
 msgid "Subject issuer mismatch"
 msgstr ""
 
@@ -4355,6 +4474,9 @@ msgstr ""
 msgid "Themes"
 msgstr ""
 
+msgid "There are devices for which you have not made a trust decision yet."
+msgstr ""
+
 msgid ""
 "There are plenty of servers to choose from.\n"
 "Creating an account on one server allows you to communicate with contacts "
@@ -4362,6 +4484,9 @@ msgid ""
 msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
+msgstr ""
+
+msgid "There has been an error while trying to fetch messages."
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -4381,6 +4506,9 @@ msgid ""
 "XMPP server (%s)."
 msgstr ""
 
+msgid "This Device"
+msgstr ""
+
 msgid "This account has already been added"
 msgstr ""
 
@@ -4391,6 +4519,11 @@ msgid "This address does not seem to offer any gateway service."
 msgstr ""
 
 msgid "This address is not reachable."
+msgstr ""
+
+msgid ""
+"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
+"OMEMO in this chat, it should be non-anonymous and members-only."
 msgstr ""
 
 msgid "This device is not compatible."
@@ -4441,6 +4574,9 @@ msgid ""
 "You can install the PGP plugin to handle those messages."
 msgstr ""
 
+msgid "This message was encrypted with OMEMO, but not for your device."
+msgstr ""
+
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr ""
 
@@ -4470,6 +4606,9 @@ msgid "This service has not yet responded with detailed information"
 msgstr ""
 
 msgid "This type of service does not contain any items to browse."
+msgstr ""
+
+msgid "This will clear the devices store for your account."
 msgstr ""
 
 msgid "This will remove your account from Gajim."
@@ -4506,6 +4645,11 @@ msgstr ""
 msgid "To apply all changes instantly, you have to re-login."
 msgstr ""
 
+msgid ""
+"To send an encrypted message, you have to decide whether to trust the device "
+"of your contact."
+msgstr ""
+
 msgid "Toggle Chat List"
 msgstr ""
 
@@ -4538,6 +4682,9 @@ msgstr ""
 
 msgctxt "Group chat description"
 msgid "Trip planning"
+msgstr ""
+
+msgid "Trust Management"
 msgstr ""
 
 msgid "Trust Not Decided"
@@ -4960,7 +5107,7 @@ msgid "You are offline."
 msgstr ""
 
 #, python-format
-msgid "You can join this group chat instead: xmpp:%s?join"
+msgid "You can join this group chat instead: %s"
 msgstr ""
 
 msgid "You can not join a group chat unless you are connected."
@@ -5129,6 +5276,9 @@ msgstr ""
 msgid "_Clear"
 msgstr ""
 
+msgid "_Clear Devices"
+msgstr ""
+
 msgid "_Close"
 msgstr ""
 
@@ -5258,6 +5408,9 @@ msgid "_Port"
 msgstr ""
 
 msgid "_Preferences"
+msgstr ""
+
+msgid "_Privacy Policy (Online)"
 msgstr ""
 
 msgid "_Purge"
@@ -5441,6 +5594,10 @@ msgid "italic"
 msgstr ""
 
 msgid "lat"
+msgstr ""
+
+#, python-format
+msgid "libsoup Version: %s"
 msgstr ""
 
 #. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json

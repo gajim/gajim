@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-02 15:53+0000\n"
+"POT-Creation-Date: 2023-05-23 19:40+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -88,6 +88,11 @@ msgstr ""
 
 #, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
+msgstr ""
+
+#, python-format
+msgctxt "own nickname in group chat"
+msgid "%s (You)"
 msgstr ""
 
 #, fuzzy, python-format
@@ -440,6 +445,10 @@ msgstr "\"%s\"  kontua zerbitzarira konektatu da"
 msgid "Account is being created"
 msgstr "\"%s\"  kontua zerbitzarira konektatu da"
 
+#, fuzzy
+msgid "Account is not connected."
+msgstr "\"%s\"  kontua zerbitzarira konektatu da"
+
 #, fuzzy, python-format
 msgid "Account: %s"
 msgstr "Kontuak"
@@ -608,6 +617,9 @@ msgstr "Afizioak: "
 #, fuzzy
 msgid "Affiliations"
 msgstr "Afizioak: "
+
+msgid "Algorithm"
+msgstr ""
 
 msgid "All"
 msgstr "Dena"
@@ -915,6 +927,12 @@ msgstr ""
 msgid "Birthday"
 msgstr "Urtebetetzea:"
 
+msgid "Blind Trust"
+msgstr ""
+
+msgid "Blindly trust new devices until you verify them"
+msgstr ""
+
 msgid "Block"
 msgstr ""
 
@@ -1206,6 +1224,17 @@ msgid "Clear"
 msgstr "Arratsaldea"
 
 #, fuzzy
+msgid "Clear Devices"
+msgstr "Zerbitzaria"
+
+msgid "Clear Devices Now?"
+msgstr ""
+
+#, fuzzy
+msgid "Clear Devices…"
+msgstr "_Zerbitzuak Aurkitu"
+
+#, fuzzy
 msgid "Clear File"
 msgstr "Arratsaldea"
 
@@ -1288,6 +1317,17 @@ msgid "Common Name (CN)"
 msgstr ""
 
 msgid "Common Name (CN): "
+msgstr ""
+
+#, python-format
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat with %s."
+msgstr ""
+
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat."
 msgstr ""
 
 #, fuzzy
@@ -1386,6 +1426,10 @@ msgstr "Egoera mezua:"
 
 msgid "Contact Connected"
 msgstr "Kontaktua Konektatuta"
+
+#, fuzzy
+msgid "Contact Details and Settings"
+msgstr "Konektatu"
 
 msgid "Contact Disconnected"
 msgstr "Kontaktua Deskonektatuta"
@@ -1526,6 +1570,10 @@ msgid "Copy info to clipboard"
 msgstr "_Lotura kokapena kopiatu"
 
 #, fuzzy
+msgid "Copy to clipboard"
+msgstr "_Lotura kokapena kopiatu"
+
+#, fuzzy
 msgid "Correct the last message"
 msgstr "egoera mezua"
 
@@ -1653,6 +1701,9 @@ msgstr "Txat Taldea Berria"
 msgid "Delete"
 msgstr "Ezabatu"
 
+msgid "Delete Fingerprint"
+msgstr ""
+
 #, fuzzy
 msgid "Delete Message"
 msgstr "Berezko Egoera Mezuak"
@@ -1704,6 +1755,10 @@ msgstr ""
 #, fuzzy
 msgid "Devices"
 msgstr "Zerbitzaria"
+
+#, fuzzy, python-format
+msgid "Devices connected with \"%s\""
+msgstr "Mesedez begiratu \"%s\" -rekin konektatuta zauden."
 
 #, fuzzy
 msgid "Dial Number"
@@ -1801,6 +1856,9 @@ msgstr "Ezabatu nahi al duzu %s taldea zerrendatik?"
 
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
+msgstr ""
+
+msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
 #, fuzzy
@@ -1938,6 +1996,10 @@ msgstr "Baliogabeko izena"
 #, fuzzy
 msgid "Encrypting file…"
 msgstr "Enkriptazioa desaktibatuta"
+
+#, fuzzy
+msgid "Encryption (OMEMO)"
+msgstr "Enkriptazioa aktibatuta"
 
 #, fuzzy
 msgid "Encryption error"
@@ -2228,6 +2290,9 @@ msgstr "Txat Pribatuak"
 #, fuzzy
 msgid "Filter Chats…"
 msgstr "Txat Pribatuak"
+
+msgid "Fingerprint for this Device"
+msgstr ""
 
 msgid "Fingerprints"
 msgstr ""
@@ -2654,6 +2719,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Inactive"
+msgstr "Aktibatuta"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "Baliogabeko izena"
 
@@ -2741,12 +2810,12 @@ msgstr "Honera gonbidatu"
 msgid "Invite Contacts"
 msgstr "Kontaktua"
 
-#, fuzzy
-msgid "Invite Contacts…"
-msgstr "Kontaktua"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
+
+#, fuzzy
+msgid "Invite to this chat"
+msgstr "Kontaktua"
 
 #, fuzzy
 msgid "Invitees"
@@ -2826,6 +2895,10 @@ msgid "Join Support Chat"
 msgstr "Txat Taldean Sartu"
 
 #, fuzzy
+msgid "Joining Group Chat…"
+msgstr "Txat Taldean Sartu"
+
+#, fuzzy
 msgid "Joining…"
 msgstr "Debekatzen..."
 
@@ -2841,6 +2914,9 @@ msgid "Keep Chat History"
 msgstr "Berriki:"
 
 msgid "Keep and manage all your chat history"
+msgstr ""
+
+msgid "Key Size"
 msgstr ""
 
 msgid "Key usage does not include certificate signing"
@@ -2863,6 +2939,10 @@ msgstr ""
 
 msgid "Last but not least"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Last seen: %s"
+msgstr "Arrazoia"
 
 #, fuzzy
 msgid "Leave Group Chat"
@@ -2929,6 +3009,10 @@ msgid "Location:"
 msgstr "Kontu Eraldaketa"
 
 #, fuzzy
+msgid "Log"
+msgstr "_Log aktibatua"
+
+#, fuzzy
 msgid "Log In"
 msgstr "_Log aktibatua"
 
@@ -2983,6 +3067,14 @@ msgstr "Proxy Profila Moldatu"
 #, fuzzy
 msgid "Manage Sounds"
 msgstr "Kontuak moldatu"
+
+#, fuzzy
+msgid "Manage Trust"
+msgstr "Kontuak moldatu"
+
+#, fuzzy
+msgid "Manage your Devices…"
+msgstr "Proxy Profila Moldatu"
 
 msgid "Manually set the hostname for the server"
 msgstr ""
@@ -3232,6 +3324,9 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
+msgid "No devices found to encypt this message to. Querying for devices now…"
+msgstr ""
+
 msgid "No devices online"
 msgstr ""
 
@@ -3289,6 +3384,10 @@ msgstr "Ez Erabilgarri"
 
 #, fuzzy
 msgid "Not Connected"
+msgstr "Konektatu"
+
+#, fuzzy
+msgid "Not Decided"
 msgstr "Konektatu"
 
 #, fuzzy
@@ -3462,12 +3561,6 @@ msgstr ""
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organizational Unit (OU)"
-msgstr ""
-
-msgid "Organizational Unit (OU): "
-msgstr ""
-
 msgid "Organize your chats with workspaces"
 msgstr ""
 
@@ -3475,6 +3568,9 @@ msgstr ""
 msgctxt "Gender"
 msgid "Other"
 msgstr "Besteak"
+
+msgid "Other devices connected with your account"
+msgstr ""
 
 msgid "Others"
 msgstr "Besteak"
@@ -3826,6 +3922,9 @@ msgctxt "Group chat description"
 msgid "Project discussion"
 msgstr ""
 
+msgid "Protocol"
+msgstr ""
+
 #, fuzzy
 msgid "Prox_y"
 msgstr "Proxy:"
@@ -3856,6 +3955,14 @@ msgstr ""
 #, fuzzy
 msgctxt "Profile"
 msgid "Public Encryption Key"
+msgstr "Enkriptazioa aktibatuta"
+
+#, fuzzy
+msgid "Public Key Information"
+msgstr "Kontaktuaren Informazioa"
+
+#, fuzzy
+msgid "Public Key: "
 msgstr "Enkriptazioa aktibatuta"
 
 #, fuzzy, python-format
@@ -3899,6 +4006,9 @@ msgstr "Erre_gistratu"
 
 msgid "Read _Wikipedia Article"
 msgstr "Irakurri _Wikipedia Artikuloa"
+
+msgid "Read more about blind trust"
+msgstr ""
 
 #, fuzzy
 msgid "Really block this contact?"
@@ -4285,6 +4395,17 @@ msgstr "Mezu pribatua bidaltzeak huts egin du"
 msgid "Say hi to your new contact…"
 msgstr "Fitxero bat bidali kontaktu bati"
 
+msgid "Scan QR Code"
+msgstr ""
+
+#, python-format
+msgid "Scan this QR code to join %s."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Scan this QR code to start a chat with %s."
+msgstr "Nire zerrendara gehitu nahi zaitut."
+
 #, fuzzy, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Eskaneatzen  %d / %d.."
@@ -4300,6 +4421,10 @@ msgstr ""
 
 msgid "Search"
 msgstr "Bilatu"
+
+#, fuzzy
+msgid "Search Participants…"
+msgstr "Partaideak"
 
 #, fuzzy
 msgid "Search Result"
@@ -4560,6 +4685,10 @@ msgid "Settings"
 msgstr "Konexioak huts egin du"
 
 #, fuzzy
+msgid "Share Contact…"
+msgstr "_Kontaktua Gehitu..."
+
+#, fuzzy
 msgid "Share Status"
 msgstr "Egoera"
 
@@ -4586,8 +4715,8 @@ msgid "Show Content"
 msgstr "Ikusi _Deskonektatutako Kontaktuak"
 
 #, fuzzy
-msgid "Show Gajim"
-msgstr "Gajim"
+msgid "Show Inactive Devices"
+msgstr "Berezko Egoera Mezuak"
 
 #, fuzzy
 msgid "Show Invitation"
@@ -4937,6 +5066,12 @@ msgstr "Stalled"
 msgid "Subject"
 msgstr "Gaia"
 
+msgid "Subject Alt Names"
+msgstr ""
+
+msgid "Subject Alt Names: "
+msgstr ""
+
 msgid "Subject issuer mismatch"
 msgstr ""
 
@@ -5126,6 +5261,9 @@ msgstr "Gaia"
 msgid "Themes"
 msgstr "Gaia"
 
+msgid "There are devices for which you have not made a trust decision yet."
+msgstr ""
+
 msgid ""
 "There are plenty of servers to choose from.\n"
 "Creating an account on one server allows you to communicate with contacts "
@@ -5133,6 +5271,9 @@ msgid ""
 msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
+msgstr ""
+
+msgid "There has been an error while trying to fetch messages."
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5155,6 +5296,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "This Device"
+msgstr "Aukeratu Irudia"
+
+#, fuzzy
 msgid "This account has already been added"
 msgstr "Kontua egoki sartua izan da"
 
@@ -5169,6 +5314,11 @@ msgstr "Hau ez da txat talde bat"
 #, fuzzy
 msgid "This address is not reachable."
 msgstr "Zerbitzua erabilezina"
+
+msgid ""
+"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
+"OMEMO in this chat, it should be non-anonymous and members-only."
+msgstr ""
 
 #, fuzzy
 msgid "This device is not compatible."
@@ -5225,6 +5375,9 @@ msgid ""
 "You can install the PGP plugin to handle those messages."
 msgstr ""
 
+msgid "This message was encrypted with OMEMO, but not for your device."
+msgstr ""
+
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr ""
 
@@ -5260,6 +5413,10 @@ msgstr "Zerbitzu honek ez du oraindik erantzun informazio zehaztuz."
 
 msgid "This type of service does not contain any items to browse."
 msgstr "Zerbitzari honek ez du menurik begiratzeko."
+
+#, fuzzy
+msgid "This will clear the devices store for your account."
+msgstr "Ezabatu k_ontua Gajim-etik bakarrik"
 
 #, fuzzy
 msgid "This will remove your account from Gajim."
@@ -5300,6 +5457,11 @@ msgid "To apply all changes instantly, you have to re-login."
 msgstr ""
 "Momentuan aldaturiko aukerak ezarri nahi badituzu, birkargatu beharko duzu."
 
+msgid ""
+"To send an encrypted message, you have to decide whether to trust the device "
+"of your contact."
+msgstr ""
+
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Partaidea"
@@ -5337,6 +5499,9 @@ msgstr "Treat * / _ pairs as possible formatting characters."
 
 msgctxt "Group chat description"
 msgid "Trip planning"
+msgstr ""
+
+msgid "Trust Management"
 msgstr ""
 
 msgid "Trust Not Decided"
@@ -5812,7 +5977,7 @@ msgid "You are offline."
 msgstr "deskonektatuta"
 
 #, fuzzy, python-format
-msgid "You can join this group chat instead: xmpp:%s?join"
+msgid "You can join this group chat instead: %s"
 msgstr "%s gelan sartu da"
 
 msgid "You can not join a group chat unless you are connected."
@@ -6016,6 +6181,10 @@ msgid "_Clear"
 msgstr ""
 
 #, fuzzy
+msgid "_Clear Devices"
+msgstr "Aukeratu Irudia"
+
+#, fuzzy
 msgid "_Close"
 msgstr "_Bidali eta Itxi"
 
@@ -6180,6 +6349,10 @@ msgstr "_Portua:"
 #, fuzzy
 msgid "_Preferences"
 msgstr "Hobespenak"
+
+#, fuzzy
+msgid "_Privacy Policy (Online)"
+msgstr "bederatzi"
 
 msgid "_Purge"
 msgstr ""
@@ -6392,6 +6565,10 @@ msgstr "Etzana"
 
 msgid "lat"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "libsoup Version: %s"
+msgstr "GTK+ Bertsioa:"
 
 #. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
 #. You can use the hex value to find the matching string.
@@ -6734,5 +6911,13 @@ msgstr ""
 #~ msgstr "Profila bidaltzen..."
 
 #, fuzzy
+#~ msgid "Invite Contacts…"
+#~ msgstr "Kontaktua"
+
+#, fuzzy
 #~ msgid "Invite New Contact"
 #~ msgstr "Kontaktua"
+
+#, fuzzy
+#~ msgid "Show Gajim"
+#~ msgstr "Gajim"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-02 15:53+0000\n"
-"PO-Revision-Date: 2023-03-26 13:49+0000\n"
+"POT-Creation-Date: 2023-05-23 19:40+0000\n"
+"PO-Revision-Date: 2023-04-23 10:01+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
 "ro/>\n"
@@ -94,6 +94,11 @@ msgstr "%(received)s de %(max)s"
 #, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "%(type)s criptarea este activă %(authenticated)s."
+
+#, python-format
+msgctxt "own nickname in group chat"
+msgid "%s (You)"
+msgstr ""
 
 #, python-format
 msgid "%s (desynced)"
@@ -223,25 +228,25 @@ msgid "1 Year"
 msgstr "1 An"
 
 msgid "1 hour"
-msgstr ""
+msgstr "1 oră"
 
 msgid "2 Days"
 msgstr "2 Zile"
 
 msgid "2 hours"
-msgstr ""
+msgstr "2 ore"
 
 msgid "3 Months"
 msgstr "3 Luni"
 
 msgid "30 minutes"
-msgstr ""
+msgstr "30 minute"
 
 msgid "6 Months"
 msgstr "6 Luni"
 
 msgid "8 hours"
-msgstr ""
+msgstr "8 ore"
 
 msgid ": Affiliation changed"
 msgstr ": Afilierea s-a schimbat"
@@ -421,6 +426,9 @@ msgstr "Contul trebuie să fie conectat"
 msgid "Account is being created"
 msgstr "Contul este în curs de creare"
 
+msgid "Account is not connected."
+msgstr "Contul nu este conectat."
+
 #, python-format
 msgid "Account: %s"
 msgstr "Cont: %s"
@@ -560,6 +568,9 @@ msgstr "Afiliere"
 
 msgid "Affiliations"
 msgstr "Afilieri"
+
+msgid "Algorithm"
+msgstr "Algoritm"
 
 msgid "All"
 msgstr "Toate"
@@ -827,6 +838,12 @@ msgstr "Comportamentul ferestrei aplicației"
 msgid "Birthday"
 msgstr "Zi de naștere"
 
+msgid "Blind Trust"
+msgstr "Încredere oarbă"
+
+msgid "Blindly trust new devices until you verify them"
+msgstr "Aveți încredere oarbă în noile dispozitive până când le verificați"
+
 msgid "Block"
 msgstr "Blochează"
 
@@ -1086,6 +1103,15 @@ msgstr "Orașul"
 msgid "Clear"
 msgstr "Clar"
 
+msgid "Clear Devices"
+msgstr "Dispozitive Șterse"
+
+msgid "Clear Devices Now?"
+msgstr "Ștergeți dispozitivele acum?"
+
+msgid "Clear Devices…"
+msgstr "Ștergeți Dispozitivele…"
+
 msgid "Clear File"
 msgstr "Ștergeți fișierul"
 
@@ -1168,6 +1194,22 @@ msgstr "Denumire comună (NC)"
 msgid "Common Name (CN): "
 msgstr "Denumire comună (NC): "
 
+#, python-format
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat with %s."
+msgstr ""
+"Comparați acest cod cu cel afișat pe ecranul contactului dumneavoastră "
+"pentru a vă asigura de siguranța chat-ului criptat de la un capăt la altul "
+"cu %s."
+
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat."
+msgstr ""
+"Comparați acest cod cu cel afișat pe ecranul contactului dumneavoastră "
+"pentru a vă asigura de siguranța chat-ului criptat de la un capăt la altul."
+
 msgid "Complete"
 msgstr "Complet"
 
@@ -1249,6 +1291,9 @@ msgstr "Adrese de contact"
 
 msgid "Contact Connected"
 msgstr "Contact conectat"
+
+msgid "Contact Details and Settings"
+msgstr "Detalii de Contact și Setări"
 
 msgid "Contact Disconnected"
 msgstr "Contact deconectat"
@@ -1359,6 +1404,9 @@ msgstr "Copiați fragmentul de cod"
 msgid "Copy info to clipboard"
 msgstr "Copierea informațiilor în clipboard"
 
+msgid "Copy to clipboard"
+msgstr "Copiați în clipboard"
+
 msgid "Correct the last message"
 msgstr "Corectați ultimul mesaj"
 
@@ -1463,6 +1511,9 @@ msgstr "Implicit pentru noile chat-uri de grup publice"
 msgid "Delete"
 msgstr "Ștergeți"
 
+msgid "Delete Fingerprint"
+msgstr "Ștergeți amprenta digitală"
+
 msgid "Delete Message"
 msgstr "Ștergeți mesajul"
 
@@ -1506,6 +1557,10 @@ msgstr "Dispozitiv \"%s\""
 
 msgid "Devices"
 msgstr "Dispozitive"
+
+#, fuzzy, python-format
+msgid "Devices connected with \"%s\""
+msgstr "Dispozitive conectate cu %s"
 
 msgid "Dial Number"
 msgstr "Numărul de apelare"
@@ -1599,6 +1654,9 @@ msgstr "Doriți să suprascrieți versiunea instalată în prezent?"
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr "Doriți să vă dezînregistrați contul și pe <b>%s</b>?"
+
+msgid "Doing so will permanently delete this Fingerprint"
+msgstr "În acest fel, această amprentă digitală va fi ștearsă definitiv"
 
 msgid "Don’t show this again"
 msgstr "Nu mai aratați asta din nou"
@@ -1729,6 +1787,9 @@ msgstr "Certificat criptat"
 
 msgid "Encrypting file…"
 msgstr "Criptarea fișierului…"
+
+msgid "Encryption (OMEMO)"
+msgstr "Criptare (OMEMO)"
 
 msgid "Encryption error"
 msgstr "Eroare de criptare"
@@ -1973,6 +2034,9 @@ msgstr "Filtrați chat-urile"
 
 msgid "Filter Chats…"
 msgstr "Filtrați chat-urile…"
+
+msgid "Fingerprint for this Device"
+msgstr "Amprenta digitală pentru acest dispozitiv"
 
 msgid "Fingerprints"
 msgstr "Amprentele digitale"
@@ -2370,6 +2434,9 @@ msgstr ""
 "Pentru a scrie mesaje în acest chat, trebuie să solicitați mai întâi voce.\n"
 "Un moderator vă va procesa cererea."
 
+msgid "Inactive"
+msgstr "Inactiv"
+
 msgid "Incoming Call"
 msgstr "Apel primit"
 
@@ -2445,11 +2512,11 @@ msgstr "Invitați"
 msgid "Invite Contacts"
 msgstr "Invitați contacte"
 
-msgid "Invite Contacts…"
-msgstr "Invitați contacte…"
-
 msgid "Invite friends to group chats or join one"
 msgstr "Invitați-vă prietenii la discuții de grup sau alăturați-vă la una"
+
+msgid "Invite to this chat"
+msgstr "Invitați la acest chat"
 
 msgid "Invitees"
 msgstr "Invitați"
@@ -2519,6 +2586,10 @@ msgstr "Alăturați-vă Grupului de chat…"
 msgid "Join Support Chat"
 msgstr "Alăturați-vă chat-ului de asistență"
 
+#, fuzzy
+msgid "Joining Group Chat…"
+msgstr "Alăturați-vă grupului de chat ca…"
+
 msgid "Joining…"
 msgstr "Se alătură…"
 
@@ -2533,6 +2604,9 @@ msgstr "Păstrați istoricul chat-ului"
 
 msgid "Keep and manage all your chat history"
 msgstr "Păstrați și gestionați tot istoricul de chat"
+
+msgid "Key Size"
+msgstr "Dimensiune Cheie"
 
 msgid "Key usage does not include certificate signing"
 msgstr "Utilizarea cheilor nu include semnarea certificatelor"
@@ -2552,6 +2626,10 @@ msgstr "Etichetă"
 
 msgid "Last but not least"
 msgstr "Nu în ultimul rând"
+
+#, python-format
+msgid "Last seen: %s"
+msgstr "Ultima vizualizare: %s"
 
 msgid "Leave Group Chat"
 msgstr "Părăsiți grupul de chat"
@@ -2609,6 +2687,10 @@ msgstr "Locația la %s"
 msgid "Location:"
 msgstr "Locație:"
 
+#, fuzzy
+msgid "Log"
+msgstr "Autentificare"
+
 msgid "Log In"
 msgstr "Autentificare"
 
@@ -2659,6 +2741,12 @@ msgstr "Gestionați proxy-urile..."
 
 msgid "Manage Sounds"
 msgstr "Gestionați sunetele"
+
+msgid "Manage Trust"
+msgstr "Gestionați Încrederea"
+
+msgid "Manage your Devices…"
+msgstr "Gestionați-vă Dispozitivele…"
 
 msgid "Manually set the hostname for the server"
 msgstr "Setați manual numele de gazdă pentru server"
@@ -2778,9 +2866,8 @@ msgstr "Film"
 msgid "Must be a port number"
 msgstr "Trebuie să fie un număr de port"
 
-#, fuzzy
 msgid "Mute Chat"
-msgstr "Mutați chat-ul"
+msgstr "Chat Silențios"
 
 msgid "Mute Sounds"
 msgstr "Sunete silențioase"
@@ -2883,6 +2970,11 @@ msgstr ""
 "Nu au mai rămas contacte.\n"
 "De asemenea, puteți introduce o adresă XMPP."
 
+msgid "No devices found to encypt this message to. Querying for devices now…"
+msgstr ""
+"Nu s-au găsit dispozitive pe care să fie criptat acest mesaj. Se caută "
+"dispozitive acum…"
+
 msgid "No devices online"
 msgstr "Nu există dispozitive online"
 
@@ -2934,6 +3026,9 @@ msgstr "Nu este disponibil"
 
 msgid "Not Connected"
 msgstr "Nu este conectat"
+
+msgid "Not Decided"
+msgstr "Nu s-a decis"
 
 msgctxt "Group chat feature"
 msgid "Not Moderated"
@@ -3077,18 +3172,15 @@ msgstr "Organizație (O)"
 msgid "Organization (O): "
 msgstr "Organizație (O): "
 
-msgid "Organizational Unit (OU)"
-msgstr "Unitatea organizațională (OU)"
-
-msgid "Organizational Unit (OU): "
-msgstr "Unitatea organizațională (OU): "
-
 msgid "Organize your chats with workspaces"
 msgstr "Organizați-vă chat-urile cu spații de lucru"
 
 msgctxt "Gender"
 msgid "Other"
 msgstr "Altele"
+
+msgid "Other devices connected with your account"
+msgstr "Alte dispozitive conectate cu contul dumneavoastră"
 
 msgid "Others"
 msgstr "Alții"
@@ -3227,7 +3319,7 @@ msgid "Pending Voice Requests"
 msgstr "Solicitări vocale în așteptare"
 
 msgid "Permanently"
-msgstr ""
+msgstr "Permanent"
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -3407,6 +3499,9 @@ msgctxt "Group chat description"
 msgid "Project discussion"
 msgstr "Discuția proiectului"
 
+msgid "Protocol"
+msgstr ""
+
 msgid "Prox_y"
 msgstr "Prox_i"
 
@@ -3432,6 +3527,12 @@ msgstr "Publică"
 msgctxt "Profile"
 msgid "Public Encryption Key"
 msgstr "Cheia publică de criptare"
+
+msgid "Public Key Information"
+msgstr "Informații despre Cheia Publică"
+
+msgid "Public Key: "
+msgstr "Cheia Publică: "
 
 #, python-format
 msgid "Pulse: %s"
@@ -3468,6 +3569,9 @@ msgstr "Re_gistrare"
 
 msgid "Read _Wikipedia Article"
 msgstr "Citiți articolul _Wikipedia"
+
+msgid "Read more about blind trust"
+msgstr "Citiți mai multe despre blind trust"
 
 msgid "Really block this contact?"
 msgstr "Chiar blochezi acest contact?"
@@ -3792,6 +3896,17 @@ msgstr "Salvarea imaginii avatar a eșuat"
 msgid "Say hi to your new contact…"
 msgstr "Salută-l pe noul tău contact…"
 
+msgid "Scan QR Code"
+msgstr "Scanați codul QR"
+
+#, python-format
+msgid "Scan this QR code to join %s."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Scan this QR code to start a chat with %s."
+msgstr "Nu vă puteți adăuga la lista de contacte."
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Scanare %(current)d / %(total)d ..."
@@ -3807,6 +3922,9 @@ msgstr "Derulează în sus pentru a încărca mai mult istoric de chat…"
 
 msgid "Search"
 msgstr "Căutare"
+
+msgid "Search Participants…"
+msgstr "Căutare Participanți…"
 
 msgid "Search Result"
 msgstr "Rezultatul căutării"
@@ -4031,6 +4149,9 @@ msgstr "Setarea este blocată de sistem"
 msgid "Settings"
 msgstr "Setări"
 
+msgid "Share Contact…"
+msgstr "Distribuie Contact…"
+
 msgid "Share Status"
 msgstr "Distribuie Starea"
 
@@ -4052,8 +4173,8 @@ msgstr "Afișați informațiile de contact"
 msgid "Show Content"
 msgstr "Arată conținutul"
 
-msgid "Show Gajim"
-msgstr "Afișați Gajim"
+msgid "Show Inactive Devices"
+msgstr "Afișarea Dispozitivelor Inactive"
 
 msgid "Show Invitation"
 msgstr "Invitație la spectacol"
@@ -4359,6 +4480,12 @@ msgstr "Stil"
 msgid "Subject"
 msgstr "Subiect"
 
+msgid "Subject Alt Names"
+msgstr "Subiectul Alt Nume"
+
+msgid "Subject Alt Names: "
+msgstr "Subiect Nume Alternativ "
+
 msgid "Subject issuer mismatch"
 msgstr "Necorelări între emitentul subiectului"
 
@@ -4539,6 +4666,10 @@ msgstr "Tema"
 msgid "Themes"
 msgstr "Teme"
 
+msgid "There are devices for which you have not made a trust decision yet."
+msgstr ""
+"Există dispozitive pentru care nu ați luat încă o decizie de încredere."
+
 msgid ""
 "There are plenty of servers to choose from.\n"
 "Creating an account on one server allows you to communicate with contacts "
@@ -4550,6 +4681,9 @@ msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
 msgstr "Există actualizări pentru plugin-urile lui Gajim"
+
+msgid "There has been an error while trying to fetch messages."
+msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr "Nu există o metodă de criptare disponibilă pentru criptarea aleasă."
@@ -4572,6 +4706,9 @@ msgstr ""
 "S-a produs o eroare în timpul încercării de verificare a certificatului SSL "
 "al serverului XMPP (%s)."
 
+msgid "This Device"
+msgstr "Acest Dispozitiv"
+
 msgid "This account has already been added"
 msgstr "Acest cont a fost deja adăugat"
 
@@ -4583,6 +4720,14 @@ msgstr "Această adresă nu pare să ofere niciun serviciu de gateway."
 
 msgid "This address is not reachable."
 msgstr "Această adresă nu este accesibilă."
+
+msgid ""
+"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
+"OMEMO in this chat, it should be non-anonymous and members-only."
+msgstr ""
+"Configurația acestui chat nu este potrivită pentru criptarea cu OMEMO. "
+"Pentru a utiliza OMEMO în acest chat, acesta trebuie să fie non-anonim și "
+"destinat exclusiv membrilor."
 
 msgid "This device is not compatible."
 msgstr "Acest dispozitiv nu este compatibil."
@@ -4636,6 +4781,11 @@ msgstr ""
 "Acest mesaj a fost criptat cu Legacy OpenPGP și nu a putut fi decriptat. "
 "Puteți instala extensia PGP pentru a gestiona aceste mesaje."
 
+msgid "This message was encrypted with OMEMO, but not for your device."
+msgstr ""
+"Acest mesaj a fost criptat cu OMEMO, dar nu și pentru dispozitivul "
+"dumneavoastră."
+
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr "Acest mesaj a fost criptat cu OTR și nu a putut fi decriptat."
 
@@ -4670,6 +4820,10 @@ msgstr "Acest serviciu nu a răspuns încă cu informații detaliate"
 
 msgid "This type of service does not contain any items to browse."
 msgstr "Acest tip de serviciu nu conține elemente de răsfoit."
+
+msgid "This will clear the devices store for your account."
+msgstr ""
+"Acest lucru va șterge stocul de dispozitive pentru contul dumneavoastră."
 
 msgid "This will remove your account from Gajim."
 msgstr "Acest lucru vă va elimina contul din Gajim."
@@ -4709,6 +4863,13 @@ msgstr ""
 "Pentru a aplica toate modificările instantaneu, trebuie să vă autentificați "
 "din nou."
 
+msgid ""
+"To send an encrypted message, you have to decide whether to trust the device "
+"of your contact."
+msgstr ""
+"Pentru a trimite un mesaj criptat, trebuie să decideți dacă aveți încredere "
+"în dispozitivul persoanei de contact."
+
 msgid "Toggle Chat List"
 msgstr "Schimbă lista de chat-uri"
 
@@ -4742,6 +4903,9 @@ msgstr "Tratați perechile * / _ ca posibile caractere de formatare."
 msgctxt "Group chat description"
 msgid "Trip planning"
 msgstr "Planificarea călătoriei"
+
+msgid "Trust Management"
+msgstr "Managementul încrederii"
 
 msgid "Trust Not Decided"
 msgstr "Încredere nehotărâtă"
@@ -4857,9 +5021,8 @@ msgstr "Limbă necunoscută"
 msgid "Unknown validation error"
 msgstr "Eroare de validare necunoscută"
 
-#, fuzzy
 msgid "Unmute Chat"
-msgstr "Desprindeți Chat"
+msgstr "Dezactivați modul Silențios pentru Chat"
 
 msgid "Unpin Chat"
 msgstr "Desprindeți Chat"
@@ -5176,8 +5339,8 @@ msgstr "Sunteți acum {show}{status}"
 msgid "You are offline."
 msgstr "Sunteți offline."
 
-#, python-format
-msgid "You can join this group chat instead: xmpp:%s?join"
+#, fuzzy, python-format
+msgid "You can join this group chat instead: %s"
 msgstr "În schimb, vă puteți alătura acestui grup de chat: xmpp:%s?join"
 
 msgid "You can not join a group chat unless you are connected."
@@ -5352,6 +5515,9 @@ msgstr "_Anulează"
 msgid "_Clear"
 msgstr "_Curăță"
 
+msgid "_Clear Devices"
+msgstr ":Ștergeți Dispozitivul"
+
 msgid "_Close"
 msgstr "_Închideți"
 
@@ -5482,6 +5648,10 @@ msgstr "_Portul"
 
 msgid "_Preferences"
 msgstr "_Preferințe"
+
+#, fuzzy
+msgid "_Privacy Policy (Online)"
+msgstr "_Wiki (online)"
 
 msgid "_Purge"
 msgstr "_Purjare"
@@ -5668,6 +5838,10 @@ msgstr "Italic"
 
 msgid "lat"
 msgstr "latid"
+
+#, fuzzy, python-format
+msgid "libsoup Version: %s"
+msgstr "Versiunea GLib: %s"
 
 #. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
 #. You can use the hex value to find the matching string.
@@ -6006,8 +6180,20 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Edit Profile…"
 #~ msgstr "Editați profilurile…"
 
+#~ msgid "Invite Contacts…"
+#~ msgstr "Invitați contacte…"
+
 #~ msgid "Invite New Contact"
 #~ msgstr "Invitați un nou contact"
+
+#~ msgid "Organizational Unit (OU)"
+#~ msgstr "Unitatea organizațională (OU)"
+
+#~ msgid "Organizational Unit (OU): "
+#~ msgstr "Unitatea organizațională (OU): "
+
+#~ msgid "Show Gajim"
+#~ msgstr "Afișați Gajim"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Ai pierdut ceva ce Gajim nu a putut procesa: %s"

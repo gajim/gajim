@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-02 15:53+0000\n"
+"POT-Creation-Date: 2023-05-23 19:40+0000\n"
 "PO-Revision-Date: 2009-11-20 20:49+1100\n"
 "Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: English <en_gb@li.org>\n"
@@ -86,6 +86,11 @@ msgstr "File transfer of %(filename)s from %(name)s stopped."
 #, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "%(type)s encryption is active %(authenticated)s."
+
+#, python-format
+msgctxt "own nickname in group chat"
+msgid "%s (You)"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%s (desynced)"
@@ -440,6 +445,10 @@ msgstr "Account \"%s\" is connected to the server"
 msgid "Account is being created"
 msgstr "Account \"%s\" is connected to the server"
 
+#, fuzzy
+msgid "Account is not connected."
+msgstr "Account \"%s\" is connected to the server"
+
 #, fuzzy, python-format
 msgid "Account: %s"
 msgstr "Accounts"
@@ -612,6 +621,9 @@ msgstr "<b>Affiliation:</b>"
 #, fuzzy
 msgid "Affiliations"
 msgstr "<b>Applications</b>"
+
+msgid "Algorithm"
+msgstr ""
 
 msgid "All"
 msgstr "All"
@@ -924,6 +936,12 @@ msgstr ""
 msgid "Birthday"
 msgstr "<b>Birthday:</b>"
 
+msgid "Blind Trust"
+msgstr ""
+
+msgid "Blindly trust new devices until you verify them"
+msgstr ""
+
 #, fuzzy
 msgid "Block"
 msgstr "_Block"
@@ -1215,6 +1233,17 @@ msgid "Clear"
 msgstr "Cleaning"
 
 #, fuzzy
+msgid "Clear Devices"
+msgstr "Server"
+
+msgid "Clear Devices Now?"
+msgstr ""
+
+#, fuzzy
+msgid "Clear Devices…"
+msgstr "_Discover Services"
+
+#, fuzzy
 msgid "Clear File"
 msgstr "Cleaning"
 
@@ -1297,6 +1326,17 @@ msgid "Common Name (CN)"
 msgstr ""
 
 msgid "Common Name (CN): "
+msgstr ""
+
+#, python-format
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat with %s."
+msgstr ""
+
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat."
 msgstr ""
 
 #, fuzzy
@@ -1395,6 +1435,10 @@ msgstr "Chat message:"
 
 msgid "Contact Connected"
 msgstr "Contact Connected"
+
+#, fuzzy
+msgid "Contact Details and Settings"
+msgstr "Connection"
 
 msgid "Contact Disconnected"
 msgstr "Contact Disconnected"
@@ -1535,6 +1579,10 @@ msgid "Copy info to clipboard"
 msgstr "_Copy Link Location"
 
 #, fuzzy
+msgid "Copy to clipboard"
+msgstr "_Copy Link Location"
+
+#, fuzzy
 msgid "Correct the last message"
 msgstr "status message"
 
@@ -1661,6 +1709,9 @@ msgstr "Leave Groupchats"
 msgid "Delete"
 msgstr "Delete"
 
+msgid "Delete Fingerprint"
+msgstr ""
+
 #, fuzzy
 msgid "Delete Message"
 msgstr "Default Message"
@@ -1711,6 +1762,10 @@ msgstr ""
 #, fuzzy
 msgid "Devices"
 msgstr "Server"
+
+#, fuzzy, python-format
+msgid "Devices connected with \"%s\""
+msgstr "Please make sure you are connected with \"%s\"."
 
 #, fuzzy
 msgid "Dial Number"
@@ -1812,6 +1867,9 @@ msgstr "Do you want to accept the invitation?"
 
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
+msgstr ""
+
+msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
 #, fuzzy
@@ -1950,6 +2008,10 @@ msgstr "Self signed certificate"
 #, fuzzy
 msgid "Encrypting file…"
 msgstr "E2E encryption disabled"
+
+#, fuzzy
+msgid "Encryption (OMEMO)"
+msgstr "E2E encryption enabled"
 
 #, fuzzy
 msgid "Encryption error"
@@ -2235,6 +2297,9 @@ msgstr "Private Chats"
 #, fuzzy
 msgid "Filter Chats…"
 msgstr "Private Chats"
+
+msgid "Fingerprint for this Device"
+msgstr ""
 
 msgid "Fingerprints"
 msgstr ""
@@ -2662,6 +2727,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Inactive"
+msgstr "Active"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "_Incoming message:"
 
@@ -2747,12 +2816,12 @@ msgstr "In_vite"
 msgid "Invite Contacts"
 msgstr "Invite _Contacts"
 
-#, fuzzy
-msgid "Invite Contacts…"
-msgstr "Invite _Contacts"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
+
+#, fuzzy
+msgid "Invite to this chat"
+msgstr "Invite _Contacts"
 
 #, fuzzy
 msgid "Invitees"
@@ -2832,6 +2901,10 @@ msgid "Join Support Chat"
 msgstr "Join Group Chat"
 
 #, fuzzy
+msgid "Joining Group Chat…"
+msgstr "Join Group Chat"
+
+#, fuzzy
 msgid "Joining…"
 msgstr "Banning..."
 
@@ -2847,6 +2920,9 @@ msgid "Keep Chat History"
 msgstr "Recently:"
 
 msgid "Keep and manage all your chat history"
+msgstr ""
+
+msgid "Key Size"
 msgstr ""
 
 msgid "Key usage does not include certificate signing"
@@ -2869,6 +2945,10 @@ msgstr ""
 
 msgid "Last but not least"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Last seen: %s"
+msgstr "Reason"
 
 #, fuzzy
 msgid "Leave Group Chat"
@@ -2935,6 +3015,10 @@ msgid "Location:"
 msgstr "Notification"
 
 #, fuzzy
+msgid "Log"
+msgstr "_Log on"
+
+#, fuzzy
 msgid "Log In"
 msgstr "_Log on"
 
@@ -2989,6 +3073,14 @@ msgstr "Manage Proxy Profiles"
 #, fuzzy
 msgid "Manage Sounds"
 msgstr "Manage Accounts"
+
+#, fuzzy
+msgid "Manage Trust"
+msgstr "Manage Accounts"
+
+#, fuzzy
+msgid "Manage your Devices…"
+msgstr "Manage Proxy Profiles"
 
 msgid "Manually set the hostname for the server"
 msgstr ""
@@ -3240,6 +3332,9 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
+msgid "No devices found to encypt this message to. Querying for devices now…"
+msgstr ""
+
 msgid "No devices online"
 msgstr ""
 
@@ -3296,6 +3391,10 @@ msgstr "Not Available"
 
 #, fuzzy
 msgid "Not Connected"
+msgstr "Connected"
+
+#, fuzzy
+msgid "Not Decided"
 msgstr "Connected"
 
 #, fuzzy
@@ -3468,12 +3567,6 @@ msgstr ""
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organizational Unit (OU)"
-msgstr ""
-
-msgid "Organizational Unit (OU): "
-msgstr ""
-
 msgid "Organize your chats with workspaces"
 msgstr ""
 
@@ -3481,6 +3574,9 @@ msgstr ""
 msgctxt "Gender"
 msgid "Other"
 msgstr "Others"
+
+msgid "Other devices connected with your account"
+msgstr ""
 
 msgid "Others"
 msgstr "Others"
@@ -3834,6 +3930,9 @@ msgctxt "Group chat description"
 msgid "Project discussion"
 msgstr ""
 
+msgid "Protocol"
+msgstr ""
+
 #, fuzzy
 msgid "Prox_y"
 msgstr "Prox_y:"
@@ -3864,6 +3963,14 @@ msgstr ""
 #, fuzzy
 msgctxt "Profile"
 msgid "Public Encryption Key"
+msgstr "E2E encryption enabled"
+
+#, fuzzy
+msgid "Public Key Information"
+msgstr "_Information"
+
+#, fuzzy
+msgid "Public Key: "
 msgstr "E2E encryption enabled"
 
 #, fuzzy, python-format
@@ -3907,6 +4014,9 @@ msgstr "Re_gister"
 
 msgid "Read _Wikipedia Article"
 msgstr "Read _Wikipedia Article"
+
+msgid "Read more about blind trust"
+msgstr ""
 
 #, fuzzy
 msgid "Really block this contact?"
@@ -4292,6 +4402,17 @@ msgstr "Sending private message failed"
 msgid "Say hi to your new contact…"
 msgstr "Usage: /%s, sends a ping to the contact"
 
+msgid "Scan QR Code"
+msgstr ""
+
+#, python-format
+msgid "Scan this QR code to join %s."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Scan this QR code to start a chat with %s."
+msgstr "You cannot add yourself to your roster."
+
 #, fuzzy, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Scanning %(current)d / %(total)d.."
@@ -4307,6 +4428,10 @@ msgstr ""
 
 msgid "Search"
 msgstr "Search"
+
+#, fuzzy
+msgid "Search Participants…"
+msgstr "Participants"
 
 #, fuzzy
 msgid "Search Result"
@@ -4565,6 +4690,10 @@ msgid "Settings"
 msgstr "Registration failed"
 
 #, fuzzy
+msgid "Share Contact…"
+msgstr "_Add Contact..."
+
+#, fuzzy
 msgid "Share Status"
 msgstr "Status"
 
@@ -4591,8 +4720,8 @@ msgid "Show Content"
 msgstr "Show Only _Active Contacts"
 
 #, fuzzy
-msgid "Show Gajim"
-msgstr "Gajim"
+msgid "Show Inactive Devices"
+msgstr "Default Message"
 
 #, fuzzy
 msgid "Show Invitation"
@@ -4943,6 +5072,12 @@ msgstr "Style"
 msgid "Subject"
 msgstr "Subject"
 
+msgid "Subject Alt Names"
+msgstr ""
+
+msgid "Subject Alt Names: "
+msgstr ""
+
 msgid "Subject issuer mismatch"
 msgstr "Subject issuer mismatch"
 
@@ -5134,6 +5269,9 @@ msgstr "Theme"
 msgid "Themes"
 msgstr "Theme"
 
+msgid "There are devices for which you have not made a trust decision yet."
+msgstr ""
+
 msgid ""
 "There are plenty of servers to choose from.\n"
 "Creating an account on one server allows you to communicate with contacts "
@@ -5141,6 +5279,9 @@ msgid ""
 msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
+msgstr ""
+
+msgid "There has been an error while trying to fetch messages."
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5167,6 +5308,10 @@ msgstr ""
 "Do you still want to connect to this server?"
 
 #, fuzzy
+msgid "This Device"
+msgstr "Choose Image"
+
+#, fuzzy
 msgid "This account has already been added"
 msgstr "Account has been added successfully"
 
@@ -5180,6 +5325,11 @@ msgstr "This is not a group chat"
 #, fuzzy
 msgid "This address is not reachable."
 msgstr "The service is not browsable"
+
+msgid ""
+"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
+"OMEMO in this chat, it should be non-anonymous and members-only."
+msgstr ""
 
 #, fuzzy
 msgid "This device is not compatible."
@@ -5235,6 +5385,9 @@ msgid ""
 "You can install the PGP plugin to handle those messages."
 msgstr ""
 
+msgid "This message was encrypted with OMEMO, but not for your device."
+msgstr ""
+
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr ""
 
@@ -5270,6 +5423,10 @@ msgstr "This service has not yet responded with detailed information"
 
 msgid "This type of service does not contain any items to browse."
 msgstr "This type of service does not contain any items to browse."
+
+#, fuzzy
+msgid "This will clear the devices store for your account."
+msgstr "Remove account _only from Gajim"
 
 #, fuzzy
 msgid "This will remove your account from Gajim."
@@ -5309,6 +5466,11 @@ msgstr "To"
 msgid "To apply all changes instantly, you have to re-login."
 msgstr "If you want all the changes to apply instantly, you must relogin."
 
+msgid ""
+"To send an encrypted message, you have to decide whether to trust the device "
+"of your contact."
+msgstr ""
+
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Participant"
@@ -5346,6 +5508,9 @@ msgstr "Treat * / _ pairs as possible formatting characters."
 
 msgctxt "Group chat description"
 msgid "Trip planning"
+msgstr ""
+
+msgid "Trust Management"
 msgstr ""
 
 msgid "Trust Not Decided"
@@ -5826,7 +5991,7 @@ msgid "You are offline."
 msgstr "offline"
 
 #, fuzzy, python-format
-msgid "You can join this group chat instead: xmpp:%s?join"
+msgid "You can join this group chat instead: %s"
 msgstr "You can join this room instead: %s"
 
 msgid "You can not join a group chat unless you are connected."
@@ -6029,6 +6194,10 @@ msgid "_Clear"
 msgstr ""
 
 #, fuzzy
+msgid "_Clear Devices"
+msgstr "Choose Image"
+
+#, fuzzy
 msgid "_Close"
 msgstr "_Send & Close"
 
@@ -6193,6 +6362,10 @@ msgstr "_Port:"
 #, fuzzy
 msgid "_Preferences"
 msgstr "Preferences"
+
+#, fuzzy
+msgid "_Privacy Policy (Online)"
+msgstr "Online"
 
 msgid "_Purge"
 msgstr ""
@@ -6402,6 +6575,10 @@ msgstr "Italic"
 
 msgid "lat"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "libsoup Version: %s"
+msgstr "GTK+ Version:"
 
 #. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
 #. You can use the hex value to find the matching string.
@@ -6742,5 +6919,13 @@ msgstr ""
 #~ msgstr "Sending profile..."
 
 #, fuzzy
+#~ msgid "Invite Contacts…"
+#~ msgstr "Invite _Contacts"
+
+#, fuzzy
 #~ msgid "Invite New Contact"
 #~ msgstr "Invite _Contacts"
+
+#, fuzzy
+#~ msgid "Show Gajim"
+#~ msgstr "Gajim"

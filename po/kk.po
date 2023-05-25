@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-02 15:53+0000\n"
+"POT-Creation-Date: 2023-05-23 19:40+0000\n"
 "PO-Revision-Date: 2023-03-02 08:25+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -93,6 +93,11 @@ msgstr "%(received)s алынды, барлығы %(max)s"
 #, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "%(type)s түрдегі шифрлеу белсенді %(authenticated)s."
+
+#, python-format
+msgctxt "own nickname in group chat"
+msgid "%s (You)"
+msgstr ""
 
 #, python-format
 msgid "%s (desynced)"
@@ -416,6 +421,10 @@ msgstr "Тіркелгі байланысқан болуы керек"
 msgid "Account is being created"
 msgstr "Тіркелгі жасалуда"
 
+#, fuzzy
+msgid "Account is not connected."
+msgstr "%s тіркелгісі әлі байланысқан"
+
 #, python-format
 msgid "Account: %s"
 msgstr "Тіркелгі: %s"
@@ -554,6 +563,9 @@ msgstr "Қатысуы"
 
 msgid "Affiliations"
 msgstr "Қатысулар"
+
+msgid "Algorithm"
+msgstr ""
 
 msgid "All"
 msgstr "Барлығы"
@@ -822,6 +834,12 @@ msgstr "Қолданба терезесінің мінез-құлығы"
 msgid "Birthday"
 msgstr "Туған күні"
 
+msgid "Blind Trust"
+msgstr ""
+
+msgid "Blindly trust new devices until you verify them"
+msgstr ""
+
 msgid "Block"
 msgstr "Блоктау"
 
@@ -1081,6 +1099,17 @@ msgstr "Қала"
 msgid "Clear"
 msgstr "Тазарту"
 
+#, fuzzy
+msgid "Clear Devices"
+msgstr "Құрылғылар"
+
+msgid "Clear Devices Now?"
+msgstr ""
+
+#, fuzzy
+msgid "Clear Devices…"
+msgstr "Қызметтерді қарап шығу…"
+
 msgid "Clear File"
 msgstr "Файлды тазарту"
 
@@ -1159,6 +1188,17 @@ msgstr "Ортақ аты (CN)"
 
 msgid "Common Name (CN): "
 msgstr "Ортақ аты (CN): "
+
+#, python-format
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat with %s."
+msgstr ""
+
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat."
+msgstr ""
 
 msgid "Complete"
 msgstr "Аяқталған"
@@ -1239,6 +1279,10 @@ msgstr "Контакт адрестері"
 
 msgid "Contact Connected"
 msgstr "Контакт байланысқан"
+
+#, fuzzy
+msgid "Contact Details and Settings"
+msgstr "Байланыс баптаулары"
 
 msgid "Contact Disconnected"
 msgstr "Контакт байланыспаған"
@@ -1349,6 +1393,10 @@ msgstr "Код үзіндісін көшіріп алу"
 msgid "Copy info to clipboard"
 msgstr "Ақпаратты алмасу буферіне көшіріп алу"
 
+#, fuzzy
+msgid "Copy to clipboard"
+msgstr "Ақпаратты алмасу буферіне көшіріп алу"
+
 msgid "Correct the last message"
 msgstr "Соңғы хабарламаны түзету"
 
@@ -1453,6 +1501,10 @@ msgstr "Жаңа жария топтық чаттар үшін үнсіз кел
 msgid "Delete"
 msgstr "Өшіру"
 
+#, fuzzy
+msgid "Delete Fingerprint"
+msgstr "Баспалар"
+
 msgid "Delete Message"
 msgstr "Хабарламаны өшіру"
 
@@ -1496,6 +1548,10 @@ msgstr "Құрылғы \"%s\""
 
 msgid "Devices"
 msgstr "Құрылғылар"
+
+#, fuzzy, python-format
+msgid "Devices connected with \"%s\""
+msgstr "\"%s\" үшін байланыс орнатылғанына көз жеткізіңіз."
 
 msgid "Dial Number"
 msgstr "Нөмірді теру"
@@ -1584,6 +1640,9 @@ msgstr "Ағымдағы орнатылған нұсқаны үстінен жа
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr "<b>%s</b> жүйесінде тіркелгіңізді тіркеуден шығарғыңыз келе ме?"
+
+msgid "Doing so will permanently delete this Fingerprint"
+msgstr ""
 
 msgid "Don’t show this again"
 msgstr "Бұны келесіде көрсетпеу"
@@ -1714,6 +1773,10 @@ msgstr "Шифрленген сертификат"
 
 msgid "Encrypting file…"
 msgstr "Файлды шифрлеу…"
+
+#, fuzzy
+msgid "Encryption (OMEMO)"
+msgstr "Шифрлеу қатесі"
 
 msgid "Encryption error"
 msgstr "Шифрлеу қатесі"
@@ -1957,6 +2020,10 @@ msgstr "Чаттарды сүзгілеу"
 
 msgid "Filter Chats…"
 msgstr "Чаттарды сүзгілеу…"
+
+#, fuzzy
+msgid "Fingerprint for this Device"
+msgstr "Баспалар"
 
 msgid "Fingerprints"
 msgstr "Баспалар"
@@ -2347,6 +2414,10 @@ msgstr ""
 "Бұл чатта хабарлама жазу үшін алдымен дауысты сұрау керек.\n"
 "Модератор сұрауыңызды өңдейді."
 
+#, fuzzy
+msgid "Inactive"
+msgstr "Белсенді"
+
 msgid "Incoming Call"
 msgstr "Кіріс қоңырау"
 
@@ -2423,11 +2494,12 @@ msgstr "Шақыру"
 msgid "Invite Contacts"
 msgstr "Контакттарды шақыру"
 
-msgid "Invite Contacts…"
-msgstr "Контакттарды шақыру…"
-
 msgid "Invite friends to group chats or join one"
 msgstr "Достарды топтық чаттарға шақырыңыз немесе біреуіне қосылыңыз"
+
+#, fuzzy
+msgid "Invite to this chat"
+msgstr "Алдыңғы чатқа ауысу"
 
 msgid "Invitees"
 msgstr "Шақырылғандар"
@@ -2497,6 +2569,10 @@ msgstr "Топтық чатқа қосылу…"
 msgid "Join Support Chat"
 msgstr "Қолдау чатына қосылу"
 
+#, fuzzy
+msgid "Joining Group Chat…"
+msgstr "Топтық чатқа келесі ретінде қосылу…"
+
 msgid "Joining…"
 msgstr "Кіру…"
 
@@ -2511,6 +2587,10 @@ msgstr "Чат тарихын сақтау"
 
 msgid "Keep and manage all your chat history"
 msgstr "Барлық сөйлесу тарихын сақтау және басқару"
+
+#, fuzzy
+msgid "Key Size"
+msgstr "Алдын ала қарау өлшемі"
 
 msgid "Key usage does not include certificate signing"
 msgstr "Кілтті қолдану сертификаттарға қолтаңбаны қою қамтымайды"
@@ -2530,6 +2610,10 @@ msgstr "Белгі"
 
 msgid "Last but not least"
 msgstr "Соңғысы, бірақ ол да маңызды"
+
+#, fuzzy, python-format
+msgid "Last seen: %s"
+msgstr "Себебі: %s"
 
 msgid "Leave Group Chat"
 msgstr "Топтық чаттан шығу"
@@ -2586,6 +2670,10 @@ msgstr "%s ішіндегі орнласу"
 msgid "Location:"
 msgstr "Орналасу:"
 
+#, fuzzy
+msgid "Log"
+msgstr "Авторизация"
+
 msgid "Log In"
 msgstr "Кіру"
 
@@ -2634,6 +2722,14 @@ msgstr "Проксилерді басқару..."
 
 msgid "Manage Sounds"
 msgstr "Дыбыстарды басқару"
+
+#, fuzzy
+msgid "Manage Trust"
+msgstr "Дыбыстарды басқару"
+
+#, fuzzy
+msgid "Manage your Devices…"
+msgstr "Проксилерді басқару"
 
 msgid "Manually set the hostname for the server"
 msgstr "Сервердің хост атын қолмен орнату"
@@ -2857,6 +2953,9 @@ msgstr ""
 "Ешбір контакт қалмады.\n"
 "Сондай-ақ, XMPP адресін теруге болады."
 
+msgid "No devices found to encypt this message to. Querying for devices now…"
+msgstr ""
+
 msgid "No devices online"
 msgstr "Желіде құрылғылар жоқ"
 
@@ -2908,6 +3007,10 @@ msgstr "Қолжетімді емес"
 
 msgid "Not Connected"
 msgstr "Байланыспаған"
+
+#, fuzzy
+msgid "Not Decided"
+msgstr "Сенім шешімі әлі қабылдандаған"
 
 msgctxt "Group chat feature"
 msgid "Not Moderated"
@@ -3051,18 +3154,15 @@ msgstr "Ұйым (O)"
 msgid "Organization (O): "
 msgstr "Ұйым (O): "
 
-msgid "Organizational Unit (OU)"
-msgstr "Ұйым бөлімі (OU)"
-
-msgid "Organizational Unit (OU): "
-msgstr "Ұйым бөлімі (OU): "
-
 msgid "Organize your chats with workspaces"
 msgstr "Чаттарыңызды жұмыс кеңістіктері арқылы ұйымдастырыңыз"
 
 msgctxt "Gender"
 msgid "Other"
 msgstr "Басқа"
+
+msgid "Other devices connected with your account"
+msgstr ""
 
 msgid "Others"
 msgstr "Басқалар"
@@ -3381,6 +3481,9 @@ msgctxt "Group chat description"
 msgid "Project discussion"
 msgstr "Жобаны талқылау"
 
+msgid "Protocol"
+msgstr ""
+
 msgid "Prox_y"
 msgstr "Прокс_и"
 
@@ -3406,6 +3509,14 @@ msgstr "Жария"
 msgctxt "Profile"
 msgid "Public Encryption Key"
 msgstr "Жария шифрлеу кілті"
+
+#, fuzzy
+msgid "Public Key Information"
+msgstr "Ақпарат"
+
+#, fuzzy
+msgid "Public Key: "
+msgstr "Жария"
 
 #, python-format
 msgid "Pulse: %s"
@@ -3442,6 +3553,9 @@ msgstr "_Тіркелу"
 
 msgid "Read _Wikipedia Article"
 msgstr "_Википедия мақаласын оқу"
+
+msgid "Read more about blind trust"
+msgstr ""
 
 msgid "Really block this contact?"
 msgstr "Бұл контактты шынымен блоктау керек пе?"
@@ -3764,6 +3878,17 @@ msgstr "Аватар суретін сақтау сәтсіз аяқталды"
 msgid "Say hi to your new contact…"
 msgstr "Жаңа контактыңызға сәлем айтыңыз…"
 
+msgid "Scan QR Code"
+msgstr ""
+
+#, python-format
+msgid "Scan this QR code to join %s."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Scan this QR code to start a chat with %s."
+msgstr "Өзіңізді өз контакттар тізіміңізге қоса алмайсыз."
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Сканерлеуде %(current)d / %(total)d ..."
@@ -3779,6 +3904,10 @@ msgstr "Қосымша сөйлесу тарихын жүктеу үшін жо�
 
 msgid "Search"
 msgstr "Іздеу"
+
+#, fuzzy
+msgid "Search Participants…"
+msgstr "Қатысушылар"
 
 msgid "Search Result"
 msgstr "Іздеу нәтижесі"
@@ -3997,6 +4126,10 @@ msgstr "Параметр жүйемен бұғатталған"
 msgid "Settings"
 msgstr "Баптаулар"
 
+#, fuzzy
+msgid "Share Contact…"
+msgstr "Контактты қосу…"
+
 msgid "Share Status"
 msgstr "Қалып-күймен бөлісу"
 
@@ -4018,8 +4151,9 @@ msgstr "Контакт ақпараттарын көрсету"
 msgid "Show Content"
 msgstr "Мазмұнды көрсету"
 
-msgid "Show Gajim"
-msgstr "Gajim-ді көрсету"
+#, fuzzy
+msgid "Show Inactive Devices"
+msgstr "Аудио енгізу құрылғысы"
 
 msgid "Show Invitation"
 msgstr "Шақыруды көрсету"
@@ -4323,6 +4457,12 @@ msgstr "Стиль"
 msgid "Subject"
 msgstr "Тақырып"
 
+msgid "Subject Alt Names"
+msgstr ""
+
+msgid "Subject Alt Names: "
+msgstr ""
+
 msgid "Subject issuer mismatch"
 msgstr "Сертификатты ұсынушының сәйкес еместігі"
 
@@ -4498,6 +4638,9 @@ msgstr "Тема"
 msgid "Themes"
 msgstr "Темалар"
 
+msgid "There are devices for which you have not made a trust decision yet."
+msgstr ""
+
 msgid ""
 "There are plenty of servers to choose from.\n"
 "Creating an account on one server allows you to communicate with contacts "
@@ -4509,6 +4652,9 @@ msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
 msgstr "Gajim плагин модульдеріне арналған жаңартулар бар"
+
+msgid "There has been an error while trying to fetch messages."
+msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr "Таңдалған шифрлеу үшін қол жетімді шифрлеу әдісі жоқ."
@@ -4529,6 +4675,10 @@ msgid ""
 "XMPP server (%s)."
 msgstr "Сіздің XMPP серверінің SSL сертификатын растауда қате орын алған (%s)."
 
+#, fuzzy
+msgid "This Device"
+msgstr "Құрылғыны таңдау"
+
 msgid "This account has already been added"
 msgstr "Бұл тіркелгі бұрыннан қосылған болып тұр"
 
@@ -4540,6 +4690,11 @@ msgstr "Бұл адрес ешқандай шлюз қызметін ұсынб�
 
 msgid "This address is not reachable."
 msgstr "Бұл адрес қолжетімді емес."
+
+msgid ""
+"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
+"OMEMO in this chat, it should be non-anonymous and members-only."
+msgstr ""
 
 msgid "This device is not compatible."
 msgstr "Бұл құрылғы үйлесімді емес."
@@ -4593,6 +4748,10 @@ msgstr ""
 "Бұл хабарлама ескірген OpenPGP көмегімен шифрленген және шифрын шешу мүмкін "
 "емес. Бұл хабарламаларды өңдеу үшін PGP плагинін орнатуға болады."
 
+#, fuzzy
+msgid "This message was encrypted with OMEMO, but not for your device."
+msgstr "Бұл хабарлама OTR арқылы шифрленген және шифрын шешу мүмкін емес."
+
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr "Бұл хабарлама OTR арқылы шифрленген және шифрын шешу мүмкін емес."
 
@@ -4627,6 +4786,10 @@ msgstr "Бұл қызмет әлі толық ақпаратпен жауап б
 
 msgid "This type of service does not contain any items to browse."
 msgstr "Қызметтің осы түрінде қарауға болатын ешнәрсе жоқ."
+
+#, fuzzy
+msgid "This will clear the devices store for your account."
+msgstr "Бұл сіздің тіркелгіңізді Gajim ішінен өшіреді."
 
 msgid "This will remove your account from Gajim."
 msgstr "Бұл сіздің тіркелгіңізді Gajim ішінен өшіреді."
@@ -4664,6 +4827,11 @@ msgstr "Кімге"
 msgid "To apply all changes instantly, you have to re-login."
 msgstr "Өзгерістерді дәл қазір іске асыруды қаласаңыз, қайта кіруіңіз керек."
 
+msgid ""
+"To send an encrypted message, you have to decide whether to trust the device "
+"of your contact."
+msgstr ""
+
 msgid "Toggle Chat List"
 msgstr "Чаттар тізімін көрсету/жасыру"
 
@@ -4697,6 +4865,9 @@ msgstr "* / _ жұптарын мүмкін пішімдеу таңбалары 
 msgctxt "Group chat description"
 msgid "Trip planning"
 msgstr "Сапарды жоспарлау"
+
+msgid "Trust Management"
+msgstr ""
 
 msgid "Trust Not Decided"
 msgstr "Сенім шешімі әлі қабылдандаған"
@@ -5127,8 +5298,8 @@ msgstr "Сіз енді {show}{status} ретінде белгілі болас�
 msgid "You are offline."
 msgstr "Сіз желіде емессіз."
 
-#, python-format
-msgid "You can join this group chat instead: xmpp:%s?join"
+#, fuzzy, python-format
+msgid "You can join this group chat instead: %s"
 msgstr "Оның орнына мына топтық чатқа кіре аласыз: xmpp:%s?join"
 
 msgid "You can not join a group chat unless you are connected."
@@ -5301,6 +5472,10 @@ msgstr "_Бас тарту"
 msgid "_Clear"
 msgstr "Та_зарту"
 
+#, fuzzy
+msgid "_Clear Devices"
+msgstr "Құрылғыны таңдау"
+
 msgid "_Close"
 msgstr "Жа_бу"
 
@@ -5431,6 +5606,10 @@ msgstr "_Порт"
 
 msgid "_Preferences"
 msgstr "Ба_птаулар"
+
+#, fuzzy
+msgid "_Privacy Policy (Online)"
+msgstr "_Вики (Онлайн)"
 
 msgid "_Purge"
 msgstr "Та_зарту"
@@ -5616,6 +5795,10 @@ msgstr "курсив"
 
 msgid "lat"
 msgstr "ендік"
+
+#, fuzzy, python-format
+msgid "libsoup Version: %s"
+msgstr "GLib нұсқасы: %s"
 
 #. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
 #. You can use the hex value to find the matching string.
@@ -5933,5 +6116,17 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Edit Profile…"
 #~ msgstr "Профильді түзету…"
 
+#~ msgid "Invite Contacts…"
+#~ msgstr "Контакттарды шақыру…"
+
 #~ msgid "Invite New Contact"
 #~ msgstr "Жаңа контактты шақыру"
+
+#~ msgid "Organizational Unit (OU)"
+#~ msgstr "Ұйым бөлімі (OU)"
+
+#~ msgid "Organizational Unit (OU): "
+#~ msgstr "Ұйым бөлімі (OU): "
+
+#~ msgid "Show Gajim"
+#~ msgstr "Gajim-ді көрсету"

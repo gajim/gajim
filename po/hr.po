@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-02 15:53+0000\n"
+"POT-Creation-Date: 2023-05-23 19:40+0000\n"
 "PO-Revision-Date: 2009-10-31 20:49+0100\n"
 "Last-Translator: Adrian C. <anrxc@sysphere.org>\n"
 "Language-Team: Croatian\n"
@@ -93,6 +93,11 @@ msgid "%(type)s encryption is active %(authenticated)s."
 msgstr ""
 "%(type)s enkripcija %(status)s aktivna %(authenticated)s.\n"
 "Vaš razgovor %(logged)s biti zapisan."
+
+#, python-format
+msgctxt "own nickname in group chat"
+msgid "%s (You)"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%s (desynced)"
@@ -449,6 +454,10 @@ msgstr "Račun \"%s\" je spojen na poslužitelj"
 msgid "Account is being created"
 msgstr "Račun \"%s\" je spojen na poslužitelj"
 
+#, fuzzy
+msgid "Account is not connected."
+msgstr "Račun \"%s\" je spojen na poslužitelj"
+
 #, fuzzy, python-format
 msgid "Account: %s"
 msgstr "Korisnički Račun"
@@ -622,6 +631,9 @@ msgstr "<b>Pripadnost:</b>"
 #, fuzzy
 msgid "Affiliations"
 msgstr "<b>Aplikacije</b>"
+
+msgid "Algorithm"
+msgstr ""
 
 msgid "All"
 msgstr "Svi"
@@ -935,6 +947,12 @@ msgstr ""
 msgid "Birthday"
 msgstr "<b>Rođendan:</b>"
 
+msgid "Blind Trust"
+msgstr ""
+
+msgid "Blindly trust new devices until you verify them"
+msgstr ""
+
 #, fuzzy
 msgid "Block"
 msgstr "_Blokiraj"
@@ -1226,6 +1244,17 @@ msgid "Clear"
 msgstr "Čistim"
 
 #, fuzzy
+msgid "Clear Devices"
+msgstr "Poslužitelj"
+
+msgid "Clear Devices Now?"
+msgstr ""
+
+#, fuzzy
+msgid "Clear Devices…"
+msgstr "_Otkrivanje Usluga"
+
+#, fuzzy
 msgid "Clear File"
 msgstr "Čistim"
 
@@ -1308,6 +1337,17 @@ msgid "Common Name (CN)"
 msgstr ""
 
 msgid "Common Name (CN): "
+msgstr ""
+
+#, python-format
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat with %s."
+msgstr ""
+
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat."
 msgstr ""
 
 #, fuzzy
@@ -1406,6 +1446,10 @@ msgstr "Poruka:"
 
 msgid "Contact Connected"
 msgstr "Kontakt Spojen"
+
+#, fuzzy
+msgid "Contact Details and Settings"
+msgstr "Veza"
 
 msgid "Contact Disconnected"
 msgstr "Kontakt Odspojen"
@@ -1546,6 +1590,10 @@ msgid "Copy info to clipboard"
 msgstr "_Kopiraj Lokaciju Linka"
 
 #, fuzzy
+msgid "Copy to clipboard"
+msgstr "_Kopiraj Lokaciju Linka"
+
+#, fuzzy
 msgid "Correct the last message"
 msgstr "statusna poruka"
 
@@ -1672,6 +1720,9 @@ msgstr "Novi Grupni Razgovor"
 msgid "Delete"
 msgstr "Obriši"
 
+msgid "Delete Fingerprint"
+msgstr ""
+
 #, fuzzy
 msgid "Delete Message"
 msgstr "Predefinirana Poruka"
@@ -1722,6 +1773,10 @@ msgstr ""
 #, fuzzy
 msgid "Devices"
 msgstr "Poslužitelj"
+
+#, fuzzy, python-format
+msgid "Devices connected with \"%s\""
+msgstr "Molim potvrdite da ste spojeni na \"%s\"."
 
 #, fuzzy
 msgid "Dial Number"
@@ -1823,6 +1878,9 @@ msgstr "Želite li prihvatiti poziv?"
 
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
+msgstr ""
+
+msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
 #, fuzzy
@@ -1962,6 +2020,10 @@ msgstr "Osobno potpisan certifikat"
 #, fuzzy
 msgid "Encrypting file…"
 msgstr "Enkripcija onemogućena"
+
+#, fuzzy
+msgid "Encryption (OMEMO)"
+msgstr "Enkripcija omogućena"
 
 #, fuzzy
 msgid "Encryption error"
@@ -2247,6 +2309,9 @@ msgstr "Privanti Razgovori"
 #, fuzzy
 msgid "Filter Chats…"
 msgstr "Privanti Razgovori"
+
+msgid "Fingerprint for this Device"
+msgstr ""
 
 msgid "Fingerprints"
 msgstr ""
@@ -2675,6 +2740,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Inactive"
+msgstr "Aktivno"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "_Dolazna poruka:"
 
@@ -2760,12 +2829,12 @@ msgstr "Po_zovi"
 msgid "Invite Contacts"
 msgstr "Pozovi _Kontakte"
 
-#, fuzzy
-msgid "Invite Contacts…"
-msgstr "Pozovi _Kontakte"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
+
+#, fuzzy
+msgid "Invite to this chat"
+msgstr "Pozovi _Kontakte"
 
 #, fuzzy
 msgid "Invitees"
@@ -2845,6 +2914,10 @@ msgid "Join Support Chat"
 msgstr "Pridružiti se Grupnom Razgovoru"
 
 #, fuzzy
+msgid "Joining Group Chat…"
+msgstr "Pridružiti se Grupnom Razgovoru"
+
+#, fuzzy
 msgid "Joining…"
 msgstr "Zabranjivanje..."
 
@@ -2860,6 +2933,9 @@ msgid "Keep Chat History"
 msgstr "Nedavno:"
 
 msgid "Keep and manage all your chat history"
+msgstr ""
+
+msgid "Key Size"
 msgstr ""
 
 msgid "Key usage does not include certificate signing"
@@ -2882,6 +2958,10 @@ msgstr ""
 
 msgid "Last but not least"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Last seen: %s"
+msgstr "Razlog"
 
 #, fuzzy
 msgid "Leave Group Chat"
@@ -2948,6 +3028,10 @@ msgid "Location:"
 msgstr "Obavijest"
 
 #, fuzzy
+msgid "Log"
+msgstr "_Prijava"
+
+#, fuzzy
 msgid "Log In"
 msgstr "_Prijava"
 
@@ -3002,6 +3086,14 @@ msgstr "Podešavanje Proxy Profila"
 #, fuzzy
 msgid "Manage Sounds"
 msgstr "Podešavanje Računa"
+
+#, fuzzy
+msgid "Manage Trust"
+msgstr "Podešavanje Računa"
+
+#, fuzzy
+msgid "Manage your Devices…"
+msgstr "Podešavanje Proxy Profila"
 
 msgid "Manually set the hostname for the server"
 msgstr ""
@@ -3253,6 +3345,9 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
+msgid "No devices found to encypt this message to. Querying for devices now…"
+msgstr ""
+
 msgid "No devices online"
 msgstr ""
 
@@ -3309,6 +3404,10 @@ msgstr "Nedostupan"
 
 #, fuzzy
 msgid "Not Connected"
+msgstr "Spojen"
+
+#, fuzzy
+msgid "Not Decided"
 msgstr "Spojen"
 
 #, fuzzy
@@ -3481,12 +3580,6 @@ msgstr ""
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organizational Unit (OU)"
-msgstr ""
-
-msgid "Organizational Unit (OU): "
-msgstr ""
-
 msgid "Organize your chats with workspaces"
 msgstr ""
 
@@ -3494,6 +3587,9 @@ msgstr ""
 msgctxt "Gender"
 msgid "Other"
 msgstr "Ostali"
+
+msgid "Other devices connected with your account"
+msgstr ""
 
 msgid "Others"
 msgstr "Ostali"
@@ -3847,6 +3943,9 @@ msgctxt "Group chat description"
 msgid "Project discussion"
 msgstr ""
 
+msgid "Protocol"
+msgstr ""
+
 #, fuzzy
 msgid "Prox_y"
 msgstr "Prox_y:"
@@ -3877,6 +3976,14 @@ msgstr ""
 #, fuzzy
 msgctxt "Profile"
 msgid "Public Encryption Key"
+msgstr "Enkripcija omogućena"
+
+#, fuzzy
+msgid "Public Key Information"
+msgstr "_Informacije"
+
+#, fuzzy
+msgid "Public Key: "
 msgstr "Enkripcija omogućena"
 
 #, fuzzy, python-format
@@ -3920,6 +4027,9 @@ msgstr "Re_gistracija"
 
 msgid "Read _Wikipedia Article"
 msgstr "Pročitajte članak na _Wikipedii"
+
+msgid "Read more about blind trust"
+msgstr ""
 
 #, fuzzy
 msgid "Really block this contact?"
@@ -4309,6 +4419,17 @@ msgstr "Slanje privatne poruke neuspješno"
 msgid "Say hi to your new contact…"
 msgstr "Uporaba: /%s, šalje ping kontaktu"
 
+msgid "Scan QR Code"
+msgstr ""
+
+#, python-format
+msgid "Scan this QR code to join %s."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Scan this QR code to start a chat with %s."
+msgstr "Nemoguće dodati samog sebe na vlastitu listu."
+
 #, fuzzy, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Skeniranje %(current)d / %(total)d.."
@@ -4324,6 +4445,10 @@ msgstr ""
 
 msgid "Search"
 msgstr "Pretraga"
+
+#, fuzzy
+msgid "Search Participants…"
+msgstr "Sudionici"
 
 #, fuzzy
 msgid "Search Result"
@@ -4582,6 +4707,10 @@ msgid "Settings"
 msgstr "Registracija nije uspijela"
 
 #, fuzzy
+msgid "Share Contact…"
+msgstr "_Dodaj Kontakt..."
+
+#, fuzzy
 msgid "Share Status"
 msgstr "Status"
 
@@ -4608,8 +4737,8 @@ msgid "Show Content"
 msgstr "Prikaži Samo _Aktivne Kontakte"
 
 #, fuzzy
-msgid "Show Gajim"
-msgstr "Gajim"
+msgid "Show Inactive Devices"
+msgstr "Predefinirana Poruka"
 
 #, fuzzy
 msgid "Show Invitation"
@@ -4960,6 +5089,12 @@ msgstr "Izgled"
 msgid "Subject"
 msgstr "Tema"
 
+msgid "Subject Alt Names"
+msgstr ""
+
+msgid "Subject Alt Names: "
+msgstr ""
+
 msgid "Subject issuer mismatch"
 msgstr "Subject issuer mismatch"
 
@@ -5151,6 +5286,9 @@ msgstr "Tema"
 msgid "Themes"
 msgstr "Tema"
 
+msgid "There are devices for which you have not made a trust decision yet."
+msgstr ""
+
 msgid ""
 "There are plenty of servers to choose from.\n"
 "Creating an account on one server allows you to communicate with contacts "
@@ -5158,6 +5296,9 @@ msgid ""
 msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
+msgstr ""
+
+msgid "There has been an error while trying to fetch messages."
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5184,6 +5325,10 @@ msgstr ""
 "Još uvijek se želite povezati na ovaj poslužitelj?"
 
 #, fuzzy
+msgid "This Device"
+msgstr "Odabir Slike"
+
+#, fuzzy
 msgid "This account has already been added"
 msgstr "Račun je uspješno dodan"
 
@@ -5197,6 +5342,11 @@ msgstr "Ovo nije grupni razgovor"
 #, fuzzy
 msgid "This address is not reachable."
 msgstr "Uslugu nije moguće pretražiti"
+
+msgid ""
+"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
+"OMEMO in this chat, it should be non-anonymous and members-only."
+msgstr ""
 
 #, fuzzy
 msgid "This device is not compatible."
@@ -5251,6 +5401,9 @@ msgid ""
 "You can install the PGP plugin to handle those messages."
 msgstr ""
 
+msgid "This message was encrypted with OMEMO, but not for your device."
+msgstr ""
+
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr ""
 
@@ -5286,6 +5439,10 @@ msgstr "Ovaj servis nije još pružio detaljnije informacije"
 
 msgid "This type of service does not contain any items to browse."
 msgstr "Ovakav tip usluge ne sadrži stvari za pretraživanje"
+
+#, fuzzy
+msgid "This will clear the devices store for your account."
+msgstr "Ukloni račun sam_o iz Gajima"
 
 #, fuzzy
 msgid "This will remove your account from Gajim."
@@ -5326,6 +5483,11 @@ msgid "To apply all changes instantly, you have to re-login."
 msgstr ""
 "Ako želite da se sve promjene odmah primjene, morate se ponovo prijaviti."
 
+msgid ""
+"To send an encrypted message, you have to decide whether to trust the device "
+"of your contact."
+msgstr ""
+
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Sudionik"
@@ -5363,6 +5525,9 @@ msgstr "Koristi * / _ parove kao znakove za formatiranje."
 
 msgctxt "Group chat description"
 msgid "Trip planning"
+msgstr ""
+
+msgid "Trust Management"
 msgstr ""
 
 msgid "Trust Not Decided"
@@ -5842,7 +6007,7 @@ msgid "You are offline."
 msgstr ""
 
 #, fuzzy, python-format
-msgid "You can join this group chat instead: xmpp:%s?join"
+msgid "You can join this group chat instead: %s"
 msgstr "Možete se pridružiti ovoj sobi umjesto: %s"
 
 msgid "You can not join a group chat unless you are connected."
@@ -6045,6 +6210,10 @@ msgid "_Clear"
 msgstr ""
 
 #, fuzzy
+msgid "_Clear Devices"
+msgstr "Odabir Slike"
+
+#, fuzzy
 msgid "_Close"
 msgstr "_Pošalji i Zatvori"
 
@@ -6209,6 +6378,10 @@ msgstr "_Port:"
 #, fuzzy
 msgid "_Preferences"
 msgstr "Postavke"
+
+#, fuzzy
+msgid "_Privacy Policy (Online)"
+msgstr "Spojen"
 
 msgid "_Purge"
 msgstr ""
@@ -6418,6 +6591,10 @@ msgstr "Ukošeno"
 
 msgid "lat"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "libsoup Version: %s"
+msgstr "GTK+ Verzija:"
 
 #. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
 #. You can use the hex value to find the matching string.
@@ -6763,5 +6940,13 @@ msgstr ""
 #~ msgstr "Šaljem profil..."
 
 #, fuzzy
+#~ msgid "Invite Contacts…"
+#~ msgstr "Pozovi _Kontakte"
+
+#, fuzzy
 #~ msgid "Invite New Contact"
 #~ msgstr "Pozovi _Kontakte"
+
+#, fuzzy
+#~ msgid "Show Gajim"
+#~ msgstr "Gajim"

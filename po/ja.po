@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-02 15:53+0000\n"
-"PO-Revision-Date: 2023-03-06 08:56+0000\n"
+"POT-Creation-Date: 2023-05-23 19:40+0000\n"
+"PO-Revision-Date: 2023-04-07 19:08+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
 "ja/>\n"
@@ -95,6 +95,11 @@ msgstr "%(max)s のうち %(received)s"
 #, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "%(type)s の暗号化は有効 %(authenticated)s。"
+
+#, python-format
+msgctxt "own nickname in group chat"
+msgid "%s (You)"
+msgstr ""
 
 #, python-format
 msgid "%s (desynced)"
@@ -226,25 +231,25 @@ msgid "1 Year"
 msgstr "1年"
 
 msgid "1 hour"
-msgstr ""
+msgstr "1時間"
 
 msgid "2 Days"
 msgstr "2日"
 
 msgid "2 hours"
-msgstr ""
+msgstr "2時間"
 
 msgid "3 Months"
 msgstr "3か月"
 
 msgid "30 minutes"
-msgstr ""
+msgstr "30分"
 
 msgid "6 Months"
 msgstr "6か月"
 
 msgid "8 hours"
-msgstr ""
+msgstr "8時間"
 
 msgid ": Affiliation changed"
 msgstr "分掌を変更しました"
@@ -418,6 +423,10 @@ msgstr "アカウントはサーバーに接続されている必要がありま
 msgid "Account is being created"
 msgstr "アカウントを作成しています"
 
+#, fuzzy
+msgid "Account is not connected."
+msgstr "アカウント %s はまだサーバーに接続中です"
+
 #, python-format
 msgid "Account: %s"
 msgstr "アカウント: %s"
@@ -555,6 +564,9 @@ msgstr "分掌"
 
 msgid "Affiliations"
 msgstr "分掌"
+
+msgid "Algorithm"
+msgstr ""
 
 msgid "All"
 msgstr "すべて"
@@ -820,6 +832,12 @@ msgstr "アプリケーションウィンドウの挙動"
 msgid "Birthday"
 msgstr "誕生日"
 
+msgid "Blind Trust"
+msgstr ""
+
+msgid "Blindly trust new devices until you verify them"
+msgstr ""
+
 msgid "Block"
 msgstr "遮断"
 
@@ -1075,6 +1093,17 @@ msgstr "市(区町村)"
 msgid "Clear"
 msgstr "消去"
 
+#, fuzzy
+msgid "Clear Devices"
+msgstr "デバイス"
+
+msgid "Clear Devices Now?"
+msgstr ""
+
+#, fuzzy
+msgid "Clear Devices…"
+msgstr "サービスを探索…"
+
 msgid "Clear File"
 msgstr "ファイルを消去"
 
@@ -1155,6 +1184,17 @@ msgstr "一般名 (CN)"
 msgid "Common Name (CN): "
 msgstr "一般名 (CN): "
 
+#, python-format
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat with %s."
+msgstr ""
+
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat."
+msgstr ""
+
 msgid "Complete"
 msgstr "完了"
 
@@ -1234,6 +1274,10 @@ msgstr "連絡先アドレス"
 
 msgid "Contact Connected"
 msgstr "相手先が接続した"
+
+#, fuzzy
+msgid "Contact Details and Settings"
+msgstr "接続設定"
 
 msgid "Contact Disconnected"
 msgstr "相手先が切断した"
@@ -1347,6 +1391,10 @@ msgstr "コードスニペットをコピー"
 msgid "Copy info to clipboard"
 msgstr "情報をクリップボードにコピー"
 
+#, fuzzy
+msgid "Copy to clipboard"
+msgstr "情報をクリップボードにコピー"
+
 msgid "Correct the last message"
 msgstr "最後のメッセージを修正"
 
@@ -1451,6 +1499,10 @@ msgstr "新しい談話室のデフォルト"
 msgid "Delete"
 msgstr "削除"
 
+#, fuzzy
+msgid "Delete Fingerprint"
+msgstr "指紋"
+
 msgid "Delete Message"
 msgstr "メッセージを削除"
 
@@ -1494,6 +1546,10 @@ msgstr "デバイス \"%s\""
 
 msgid "Devices"
 msgstr "デバイス"
+
+#, fuzzy, python-format
+msgid "Devices connected with \"%s\""
+msgstr "\"%s\" に接続していることを確認してください。"
 
 msgid "Dial Number"
 msgstr "電話番号"
@@ -1582,6 +1638,9 @@ msgstr "現在インストールされているバージョンを上書きしま
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr "<b>%s</b> でもアカウントを登録抹消しますか ?"
+
+msgid "Doing so will permanently delete this Fingerprint"
+msgstr ""
 
 msgid "Don’t show this again"
 msgstr "次回からこのメッセージを表示しない"
@@ -1703,6 +1762,10 @@ msgstr "暗号化された証明書"
 
 msgid "Encrypting file…"
 msgstr "ファイルを暗号化…"
+
+#, fuzzy
+msgid "Encryption (OMEMO)"
+msgstr "暗号化のエラー"
 
 msgid "Encryption error"
 msgstr "暗号化のエラー"
@@ -1945,6 +2008,10 @@ msgstr "チャットを絞り込む"
 
 msgid "Filter Chats…"
 msgstr "チャットを絞り込む…"
+
+#, fuzzy
+msgid "Fingerprint for this Device"
+msgstr "指紋"
 
 msgid "Fingerprints"
 msgstr "指紋"
@@ -2340,6 +2407,10 @@ msgstr ""
 "この談話室に書き込むには発言権が必要です。\n"
 "司会者が要求を処理します。"
 
+#, fuzzy
+msgid "Inactive"
+msgstr "有効"
+
 msgid "Incoming Call"
 msgstr "着信通話"
 
@@ -2416,11 +2487,12 @@ msgstr "招待"
 msgid "Invite Contacts"
 msgstr "相手先を招待"
 
-msgid "Invite Contacts…"
-msgstr "相手先を招待…"
-
 msgid "Invite friends to group chats or join one"
 msgstr "談話室への招待と参加"
+
+#, fuzzy
+msgid "Invite to this chat"
+msgstr "前のチャットへ切替"
 
 msgid "Invitees"
 msgstr "招待者"
@@ -2490,6 +2562,10 @@ msgstr "談話室に参加…"
 msgid "Join Support Chat"
 msgstr "サポートチャットに参加"
 
+#, fuzzy
+msgid "Joining Group Chat…"
+msgstr "談話室に参加…"
+
 msgid "Joining…"
 msgstr "参加中…"
 
@@ -2504,6 +2580,10 @@ msgstr "会話の履歴を保存"
 
 msgid "Keep and manage all your chat history"
 msgstr "すべての会話履歴の保存と管理"
+
+#, fuzzy
+msgid "Key Size"
+msgstr "プレビューのサイズ"
 
 msgid "Key usage does not include certificate signing"
 msgstr "証明書署名に鍵の使い方が含まれていません"
@@ -2523,6 +2603,10 @@ msgstr "ラベル"
 
 msgid "Last but not least"
 msgstr "最後に大切なことを付け加えますと、"
+
+#, fuzzy, python-format
+msgid "Last seen: %s"
+msgstr "理由: %s"
 
 msgid "Leave Group Chat"
 msgstr "談話室から退出"
@@ -2579,6 +2663,10 @@ msgstr "位置 %s"
 msgid "Location:"
 msgstr "位置:"
 
+#, fuzzy
+msgid "Log"
+msgstr "ログイン"
+
 msgid "Log In"
 msgstr "ログイン"
 
@@ -2627,6 +2715,14 @@ msgstr "プロキシを管理..."
 
 msgid "Manage Sounds"
 msgstr "サウンドを管理"
+
+#, fuzzy
+msgid "Manage Trust"
+msgstr "サウンドを管理"
+
+#, fuzzy
+msgid "Manage your Devices…"
+msgstr "プロキシを管理"
 
 msgid "Manually set the hostname for the server"
 msgstr "サーバーのホスト名を手動で設定する"
@@ -2749,9 +2845,8 @@ msgstr "映画"
 msgid "Must be a port number"
 msgstr "ポート番号が必要です"
 
-#, fuzzy
 msgid "Mute Chat"
-msgstr "チャットを移動"
+msgstr "チャットをミュート"
 
 msgid "Mute Sounds"
 msgstr "サウンドのミュート"
@@ -2855,6 +2950,9 @@ msgstr ""
 "相手先がありません。\n"
 "XMPP アドレスを入力できます。"
 
+msgid "No devices found to encypt this message to. Querying for devices now…"
+msgstr ""
+
 msgid "No devices online"
 msgstr "オンラインのデバイスがありません"
 
@@ -2906,6 +3004,10 @@ msgstr "不在"
 
 msgid "Not Connected"
 msgstr "接続されていません"
+
+#, fuzzy
+msgid "Not Decided"
+msgstr "未定の信用"
 
 msgctxt "Group chat feature"
 msgid "Not Moderated"
@@ -3053,18 +3155,15 @@ msgstr "組織 (O)"
 msgid "Organization (O): "
 msgstr "組織 (O): "
 
-msgid "Organizational Unit (OU)"
-msgstr "部門 (OU)"
-
-msgid "Organizational Unit (OU): "
-msgstr "部門 (OU): "
-
 msgid "Organize your chats with workspaces"
 msgstr "チャットを作業空間にまとめる"
 
 msgctxt "Gender"
 msgid "Other"
 msgstr "その他"
+
+msgid "Other devices connected with your account"
+msgstr ""
 
 msgid "Others"
 msgstr "その他"
@@ -3200,7 +3299,7 @@ msgid "Pending Voice Requests"
 msgstr "発言権を保留"
 
 msgid "Permanently"
-msgstr ""
+msgstr "永久に"
 
 msgctxt "Group chat feature"
 msgid "Persistent"
@@ -3380,6 +3479,9 @@ msgctxt "Group chat description"
 msgid "Project discussion"
 msgstr "プロジェクトについての議論"
 
+msgid "Protocol"
+msgstr ""
+
 msgid "Prox_y"
 msgstr "プロキシ (_Y)"
 
@@ -3405,6 +3507,14 @@ msgstr "公開"
 msgctxt "Profile"
 msgid "Public Encryption Key"
 msgstr "公開鍵"
+
+#, fuzzy
+msgid "Public Key Information"
+msgstr "情報"
+
+#, fuzzy
+msgid "Public Key: "
+msgstr "公開"
 
 #, python-format
 msgid "Pulse: %s"
@@ -3441,6 +3551,9 @@ msgstr "登録 (_G)"
 
 msgid "Read _Wikipedia Article"
 msgstr "_Wikipedia の項を読む (_W)"
+
+msgid "Read more about blind trust"
+msgstr ""
 
 msgid "Really block this contact?"
 msgstr "本当にこの相手先を遮断しますか ?"
@@ -3767,6 +3880,17 @@ msgstr "アバター画像の保存に失敗しました"
 msgid "Say hi to your new contact…"
 msgstr "新しい相手先に挨拶を送信…"
 
+msgid "Scan QR Code"
+msgstr ""
+
+#, python-format
+msgid "Scan this QR code to join %s."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Scan this QR code to start a chat with %s."
+msgstr "自分自身を相手先一覧に追加することはできません。"
+
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "走査中 %(current)d / %(total)d..."
@@ -3782,6 +3906,10 @@ msgstr "スクロールアップしてさらに会話履歴を読み込む…"
 
 msgid "Search"
 msgstr "検索"
+
+#, fuzzy
+msgid "Search Participants…"
+msgstr "参加者"
 
 msgid "Search Result"
 msgstr "検索結果"
@@ -3999,6 +4127,10 @@ msgstr "設定はシステムによって制限されています"
 msgid "Settings"
 msgstr "設定"
 
+#, fuzzy
+msgid "Share Contact…"
+msgstr "相手先を追加…"
+
 msgid "Share Status"
 msgstr "在席状況を通知"
 
@@ -4020,8 +4152,9 @@ msgstr "相手先の情報を表示"
 msgid "Show Content"
 msgstr "内容を表示"
 
-msgid "Show Gajim"
-msgstr "Gajim を表示"
+#, fuzzy
+msgid "Show Inactive Devices"
+msgstr "音声入力デバイス"
 
 msgid "Show Invitation"
 msgstr "招待を表示"
@@ -4323,6 +4456,12 @@ msgstr "スタイル"
 msgid "Subject"
 msgstr "題"
 
+msgid "Subject Alt Names"
+msgstr ""
+
+msgid "Subject Alt Names: "
+msgstr ""
+
 msgid "Subject issuer mismatch"
 msgstr "サブジェクトの発行者が合致しません"
 
@@ -4497,6 +4636,9 @@ msgstr "テーマ"
 msgid "Themes"
 msgstr "テーマ"
 
+msgid "There are devices for which you have not made a trust decision yet."
+msgstr ""
+
 msgid ""
 "There are plenty of servers to choose from.\n"
 "Creating an account on one server allows you to communicate with contacts "
@@ -4508,6 +4650,9 @@ msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
 msgstr "Gajim プラグインの更新があります"
+
+msgid "There has been an error while trying to fetch messages."
+msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr "選択した暗号化に適用できる暗号化方式がありません。"
@@ -4528,6 +4673,10 @@ msgid ""
 "XMPP server (%s)."
 msgstr "XMPP サーバー (%s) の SSL 証明書を検証する際にエラーがありました。"
 
+#, fuzzy
+msgid "This Device"
+msgstr "デバイスを選択"
+
 msgid "This account has already been added"
 msgstr "このアカウントは既に追加されています"
 
@@ -4539,6 +4688,11 @@ msgstr "このアドレスは中継サービスを提供していないようで
 
 msgid "This address is not reachable."
 msgstr "このアドレスには到達できません。"
+
+msgid ""
+"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
+"OMEMO in this chat, it should be non-anonymous and members-only."
+msgstr ""
 
 msgid "This device is not compatible."
 msgstr "このデバイスは互換性がありません。"
@@ -4592,6 +4746,10 @@ msgstr ""
 "このメッセージは伝統的な OpenPGP で暗号化されており、復号することができませ"
 "ん。このようなメッセージを扱うには PGP プラグインをインストールしてください。"
 
+#, fuzzy
+msgid "This message was encrypted with OMEMO, but not for your device."
+msgstr "このメッセージは OTR で暗号化されており、復号することができません。"
+
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr "このメッセージは OTR で暗号化されており、復号することができません。"
 
@@ -4627,6 +4785,10 @@ msgstr "このサービスは、詳細情報の返答がありません"
 
 msgid "This type of service does not contain any items to browse."
 msgstr "このサービスのタイプには表示する項目がありません。"
+
+#, fuzzy
+msgid "This will clear the devices store for your account."
+msgstr "アカウントを Gajim からします。"
 
 msgid "This will remove your account from Gajim."
 msgstr "アカウントを Gajim からします。"
@@ -4665,6 +4827,11 @@ msgstr "相手先が承認"
 msgid "To apply all changes instantly, you have to re-login."
 msgstr "すべての変更を直ちに有効にするには、再ログインしてください。"
 
+msgid ""
+"To send an encrypted message, you have to decide whether to trust the device "
+"of your contact."
+msgstr ""
+
 msgid "Toggle Chat List"
 msgstr "チャット一覧を表示する/しない"
 
@@ -4698,6 +4865,9 @@ msgstr "* / _ の組を、書式指定の文字として扱います。"
 msgctxt "Group chat description"
 msgid "Trip planning"
 msgstr "旅行の計画"
+
+msgid "Trust Management"
+msgstr ""
 
 msgid "Trust Not Decided"
 msgstr "未定の信用"
@@ -4814,9 +4984,8 @@ msgstr "未知の言語"
 msgid "Unknown validation error"
 msgstr "未知の検証エラー"
 
-#, fuzzy
 msgid "Unmute Chat"
-msgstr "チャットをピン止めしない"
+msgstr "チャットのミュートを解除"
 
 msgid "Unpin Chat"
 msgstr "チャットをピン止めしない"
@@ -5131,8 +5300,8 @@ msgstr "あなたは現在 {show}{status}"
 msgid "You are offline."
 msgstr "オフラインです。"
 
-#, python-format
-msgid "You can join this group chat instead: xmpp:%s?join"
+#, fuzzy, python-format
+msgid "You can join this group chat instead: %s"
 msgstr "代わりに次の談話室に参加できます: xmpp:%s?join"
 
 msgid "You can not join a group chat unless you are connected."
@@ -5304,6 +5473,10 @@ msgstr "中止 (_C)"
 msgid "_Clear"
 msgstr "消去 (_C)"
 
+#, fuzzy
+msgid "_Clear Devices"
+msgstr "デバイスを選択"
+
 msgid "_Close"
 msgstr "閉じる (_C)"
 
@@ -5438,6 +5611,10 @@ msgstr "ポート番号 (_P)"
 
 msgid "_Preferences"
 msgstr "設定 (_P)"
+
+#, fuzzy
+msgid "_Privacy Policy (Online)"
+msgstr "Wiki (オンライン) (_W)"
 
 msgid "_Purge"
 msgstr "削除 (_P)"
@@ -5624,6 +5801,10 @@ msgstr "イタリック"
 
 msgid "lat"
 msgstr "緯度"
+
+#, fuzzy, python-format
+msgid "libsoup Version: %s"
+msgstr "GLib バージョン: %s"
 
 #. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
 #. You can use the hex value to find the matching string.
@@ -5964,5 +6145,17 @@ msgstr "…またはここにドロップ"
 #~ msgid "Edit Profile…"
 #~ msgstr "プロフィールを編集…"
 
+#~ msgid "Invite Contacts…"
+#~ msgstr "相手先を招待…"
+
 #~ msgid "Invite New Contact"
 #~ msgstr "新しい相手先を招待"
+
+#~ msgid "Organizational Unit (OU)"
+#~ msgstr "部門 (OU)"
+
+#~ msgid "Organizational Unit (OU): "
+#~ msgstr "部門 (OU): "
+
+#~ msgid "Show Gajim"
+#~ msgstr "Gajim を表示"

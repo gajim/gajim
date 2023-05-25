@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-02 15:53+0000\n"
+"POT-Creation-Date: 2023-05-23 19:40+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -105,6 +105,11 @@ msgid "%(type)s encryption is active %(authenticated)s."
 msgstr ""
 "הצפנת %(type)s %(status)s מופעלת %(authenticated)s.\n"
 "סשן שיחתך %(logged)s ברשומות ההיסטוריה."
+
+#, python-format
+msgctxt "own nickname in group chat"
+msgid "%s (You)"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%s (desynced)"
@@ -464,6 +469,10 @@ msgstr "חשבון \"%s\" מחובר כעת לשרת"
 msgid "Account is being created"
 msgstr "חשבון \"%s\" מחובר כעת לשרת"
 
+#, fuzzy
+msgid "Account is not connected."
+msgstr "חשבון \"%s\" מחובר כעת לשרת"
+
 #, fuzzy, python-format
 msgid "Account: %s"
 msgstr "חשבונות"
@@ -639,6 +648,9 @@ msgstr "<b>השתייכות:</b>"
 #, fuzzy
 msgid "Affiliations"
 msgstr "<b>יישומים</b>"
+
+msgid "Algorithm"
+msgstr ""
 
 msgid "All"
 msgstr "הכל"
@@ -957,6 +969,12 @@ msgstr ""
 msgid "Birthday"
 msgstr "<b>יום הולדת:</b>"
 
+msgid "Blind Trust"
+msgstr ""
+
+msgid "Blindly trust new devices until you verify them"
+msgstr ""
+
 #, fuzzy
 msgid "Block"
 msgstr "_חסום"
@@ -1253,6 +1271,18 @@ msgid "Clear"
 msgstr "מנקה"
 
 #, fuzzy
+msgid "Clear Devices"
+msgstr "שרת"
+
+msgid "Clear Devices Now?"
+msgstr ""
+
+# איתור
+#, fuzzy
+msgid "Clear Devices…"
+msgstr "מצא _שירותים"
+
+#, fuzzy
 msgid "Clear File"
 msgstr "מנקה"
 
@@ -1336,6 +1366,17 @@ msgid "Common Name (CN)"
 msgstr ""
 
 msgid "Common Name (CN): "
+msgstr ""
+
+#, python-format
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat with %s."
+msgstr ""
+
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat."
 msgstr ""
 
 #, fuzzy
@@ -1433,6 +1474,10 @@ msgstr "הודעת איש קשר:"
 
 msgid "Contact Connected"
 msgstr "איש קשר מחובר"
+
+#, fuzzy
+msgid "Contact Details and Settings"
+msgstr "חיבור"
 
 msgid "Contact Disconnected"
 msgstr "איש קשר מנותק"
@@ -1578,6 +1623,10 @@ msgid "Copy info to clipboard"
 msgstr "ה_עתק מיקום קישור"
 
 #, fuzzy
+msgid "Copy to clipboard"
+msgstr "ה_עתק מיקום קישור"
+
+#, fuzzy
 msgid "Correct the last message"
 msgstr "cli"
 
@@ -1707,6 +1756,9 @@ msgstr "עזוב שיחות קבוצה"
 msgid "Delete"
 msgstr "מחק"
 
+msgid "Delete Fingerprint"
+msgstr ""
+
 #, fuzzy
 msgid "Delete Message"
 msgstr "הודעה שגרתית"
@@ -1757,6 +1809,10 @@ msgstr ""
 #, fuzzy
 msgid "Devices"
 msgstr "שרת"
+
+#, fuzzy, python-format
+msgid "Devices connected with \"%s\""
+msgstr "אנא ודא כי אתה מחובר בעזרת \"%s\"."
 
 #, fuzzy
 msgid "Dial Number"
@@ -1856,6 +1912,9 @@ msgstr "האם ברצונך לקבל את ההזמנה?"
 
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
+msgstr ""
+
+msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
 #, fuzzy
@@ -2008,6 +2067,10 @@ msgstr "תעודת לקוח"
 #, fuzzy
 msgid "Encrypting file…"
 msgstr "הצפנת E2E מנוטרלת כעת"
+
+#, fuzzy
+msgid "Encryption (OMEMO)"
+msgstr "בקשת הרשמה"
 
 #, fuzzy
 msgid "Encryption error"
@@ -2299,6 +2362,9 @@ msgstr "שיחות פרטיות"
 #, fuzzy
 msgid "Filter Chats…"
 msgstr "שיחות פרטיות"
+
+msgid "Fingerprint for this Device"
+msgstr ""
 
 msgid "Fingerprints"
 msgstr ""
@@ -2745,6 +2811,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Inactive"
+msgstr "פעיל"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "צבע שם כינוי נכנס."
 
@@ -2831,12 +2901,12 @@ msgstr "ה_זמן"
 msgid "Invite Contacts"
 msgstr "הזמן _אנשי קשר"
 
-#, fuzzy
-msgid "Invite Contacts…"
-msgstr "הזמן _אנשי קשר"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
+
+#, fuzzy
+msgid "Invite to this chat"
+msgstr "הזמן _אנשי קשר"
 
 #, fuzzy
 msgid "Invitees"
@@ -2918,6 +2988,10 @@ msgid "Join Support Chat"
 msgstr "הצטרף לשיחת קבוצה"
 
 #, fuzzy
+msgid "Joining Group Chat…"
+msgstr "הצטרף לשיחת קבוצה"
+
+#, fuzzy
 msgid "Joining…"
 msgstr "אסירה..."
 
@@ -2936,6 +3010,9 @@ msgid "Keep Chat History"
 msgstr "אחרונים:"
 
 msgid "Keep and manage all your chat history"
+msgstr ""
+
+msgid "Key Size"
 msgstr ""
 
 msgid "Key usage does not include certificate signing"
@@ -2958,6 +3035,10 @@ msgstr ""
 
 msgid "Last but not least"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Last seen: %s"
+msgstr "סיבה"
 
 #, fuzzy
 msgid "Leave Group Chat"
@@ -3024,6 +3105,10 @@ msgstr "מיקום: "
 msgid "Location:"
 msgstr "מיקום: "
 
+#, fuzzy
+msgid "Log"
+msgstr "להתחבר מחדש עכשיו?"
+
 msgid "Log In"
 msgstr ""
 
@@ -3079,6 +3164,14 @@ msgstr "ניהול דיוקני Proxy"
 #, fuzzy
 msgid "Manage Sounds"
 msgstr "ניהול צלילים"
+
+#, fuzzy
+msgid "Manage Trust"
+msgstr "ניהול צלילים"
+
+#, fuzzy
+msgid "Manage your Devices…"
+msgstr "ניהול דיוקני Proxy"
 
 msgid "Manually set the hostname for the server"
 msgstr ""
@@ -3334,6 +3427,9 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
+msgid "No devices found to encypt this message to. Querying for devices now…"
+msgstr ""
+
 msgid "No devices online"
 msgstr ""
 
@@ -3390,6 +3486,10 @@ msgstr "לא זמין"
 
 #, fuzzy
 msgid "Not Connected"
+msgstr "מחובר"
+
+#, fuzzy
+msgid "Not Decided"
 msgstr "מחובר"
 
 #, fuzzy
@@ -3561,12 +3661,6 @@ msgstr ""
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organizational Unit (OU)"
-msgstr ""
-
-msgid "Organizational Unit (OU): "
-msgstr ""
-
 msgid "Organize your chats with workspaces"
 msgstr ""
 
@@ -3574,6 +3668,9 @@ msgstr ""
 msgctxt "Gender"
 msgid "Other"
 msgstr "אחרים"
+
+msgid "Other devices connected with your account"
+msgstr ""
 
 msgid "Others"
 msgstr "אחרים"
@@ -3929,6 +4026,9 @@ msgctxt "Group chat description"
 msgid "Project discussion"
 msgstr ""
 
+msgid "Protocol"
+msgstr ""
+
 #, fuzzy
 msgid "Prox_y"
 msgstr "_פרוקסי:"
@@ -3960,6 +4060,14 @@ msgstr ""
 #, fuzzy
 msgctxt "Profile"
 msgid "Public Encryption Key"
+msgstr "בקשת הרשמה"
+
+#, fuzzy
+msgid "Public Key Information"
+msgstr "_מידע"
+
+#, fuzzy
+msgid "Public Key: "
 msgstr "בקשת הרשמה"
 
 #, python-format
@@ -4006,6 +4114,9 @@ msgstr "ה_רשמה"
 
 msgid "Read _Wikipedia Article"
 msgstr "עיין ערך _ויקיפדיה"
+
+msgid "Read more about blind trust"
+msgstr ""
 
 #, fuzzy
 msgid "Really block this contact?"
@@ -4406,6 +4517,17 @@ msgstr "מסירת הודעה פרטית נכשלה"
 msgid "Say hi to your new contact…"
 msgstr "מסירת פינג לאיש קשר"
 
+msgid "Scan QR Code"
+msgstr ""
+
+#, python-format
+msgid "Scan this QR code to join %s."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Scan this QR code to start a chat with %s."
+msgstr "אין באפשרותך להוסיף את עצמך לרשימה שלך."
+
 # Scanned/Identified/Detected/Discovered/Found %(current)d out of %(total)d..
 # אותרו, זוהו, נמצאו
 #, fuzzy, python-format
@@ -4423,6 +4545,10 @@ msgstr ""
 
 msgid "Search"
 msgstr "חיפוש"
+
+#, fuzzy
+msgid "Search Participants…"
+msgstr "משתתפים"
 
 #, fuzzy
 msgid "Search Result"
@@ -4684,6 +4810,10 @@ msgid "Settings"
 msgstr "קיצורי מקש"
 
 #, fuzzy
+msgid "Share Contact…"
+msgstr "הוסף _איש קשר..."
+
+#, fuzzy
 msgid "Share Status"
 msgstr "מצב"
 
@@ -4710,10 +4840,9 @@ msgstr "הצג אנשי קשר _פעילים בלבד"
 msgid "Show Content"
 msgstr "הצג אנשי קשר _פעילים בלבד"
 
-# In Hebrew: גאג'ים
 #, fuzzy
-msgid "Show Gajim"
-msgstr "‫Gajim"
+msgid "Show Inactive Devices"
+msgstr "התקן קלט שמע"
 
 #, fuzzy
 msgid "Show Invitation"
@@ -5065,6 +5194,12 @@ msgstr "סגנון"
 msgid "Subject"
 msgstr "נושא"
 
+msgid "Subject Alt Names"
+msgstr ""
+
+msgid "Subject Alt Names: "
+msgstr ""
+
 # התניית המנפיק אינה תואמת
 # תוכן/נושא מנפיק אינו תואם
 # קיימת אי תיאום עם/ב
@@ -5269,6 +5404,9 @@ msgstr "ערכת נושא"
 msgid "Themes"
 msgstr "ערכת נושא"
 
+msgid "There are devices for which you have not made a trust decision yet."
+msgstr ""
+
 msgid ""
 "There are plenty of servers to choose from.\n"
 "Creating an account on one server allows you to communicate with contacts "
@@ -5276,6 +5414,9 @@ msgid ""
 msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
+msgstr ""
+
+msgid "There has been an error while trying to fetch messages."
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5299,6 +5440,10 @@ msgstr ""
 "האם עדיין יש ברצונך להתחבר לשרת זה?"
 
 #, fuzzy
+msgid "This Device"
+msgstr "בחירת ארכיון"
+
+#, fuzzy
 msgid "This account has already been added"
 msgstr "חשבון הוסף בהצלחה"
 
@@ -5314,6 +5459,11 @@ msgstr "‏%s אינו שרת שיחת קבוצה"
 #, fuzzy
 msgid "This address is not reachable."
 msgstr "השירות אינו בר עיון"
+
+msgid ""
+"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
+"OMEMO in this chat, it should be non-anonymous and members-only."
+msgstr ""
 
 #, fuzzy
 msgid "This device is not compatible."
@@ -5369,6 +5519,9 @@ msgid ""
 "You can install the PGP plugin to handle those messages."
 msgstr ""
 
+msgid "This message was encrypted with OMEMO, but not for your device."
+msgstr ""
+
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr ""
 
@@ -5408,6 +5561,10 @@ msgid "This type of service does not contain any items to browse."
 msgstr "טיפוס זה של שירות לא מכיל פריטים לעיון."
 
 #, fuzzy
+msgid "This will clear the devices store for your account."
+msgstr "להסיר חשבון מתוך _Gajim בלבד"
+
+#, fuzzy
 msgid "This will remove your account from Gajim."
 msgstr "להסיר חשבון מתוך _Gajim בלבד"
 
@@ -5444,6 +5601,11 @@ msgstr "אל"
 #, fuzzy
 msgid "To apply all changes instantly, you have to re-login."
 msgstr "אם ברצונך כי השינויים יחולו באופן מידי, עליך להתחבר מחדש."
+
+msgid ""
+"To send an encrypted message, you have to decide whether to trust the device "
+"of your contact."
+msgstr ""
 
 #, fuzzy
 msgid "Toggle Chat List"
@@ -5482,6 +5644,9 @@ msgstr "התייחסות לצמדים של * / _  בתור תווי עיצוב �
 
 msgctxt "Group chat description"
 msgid "Trip planning"
+msgstr ""
+
+msgid "Trust Management"
 msgstr ""
 
 msgid "Trust Not Decided"
@@ -5982,7 +6147,7 @@ msgid "You are offline."
 msgstr ""
 
 #, fuzzy, python-format
-msgid "You can join this group chat instead: xmpp:%s?join"
+msgid "You can join this group chat instead: %s"
 msgstr "באפשרותך להצטרף לחדר זה במקום: %s"
 
 msgid "You can not join a group chat unless you are connected."
@@ -6189,6 +6354,10 @@ msgid "_Clear"
 msgstr ""
 
 #, fuzzy
+msgid "_Clear Devices"
+msgstr "בחירת ארכיון"
+
+#, fuzzy
 msgid "_Close"
 msgstr "_שלח וסגור"
 
@@ -6355,6 +6524,10 @@ msgstr "_פורט:"
 #, fuzzy
 msgid "_Preferences"
 msgstr "העדפות"
+
+#, fuzzy
+msgid "_Privacy Policy (Online)"
+msgstr "מקוון"
 
 msgid "_Purge"
 msgstr ""
@@ -6561,6 +6734,10 @@ msgstr "נטוי"
 
 msgid "lat"
 msgstr "קו רוחב"
+
+#, fuzzy, python-format
+msgid "libsoup Version: %s"
+msgstr "גרסא:"
 
 #. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
 #. You can use the hex value to find the matching string.
@@ -6908,5 +7085,14 @@ msgstr ""
 #~ msgstr "כעת שולח דיוקן..."
 
 #, fuzzy
+#~ msgid "Invite Contacts…"
+#~ msgstr "הזמן _אנשי קשר"
+
+#, fuzzy
 #~ msgid "Invite New Contact"
 #~ msgstr "הזמן _אנשי קשר"
+
+# In Hebrew: גאג'ים
+#, fuzzy
+#~ msgid "Show Gajim"
+#~ msgstr "‫Gajim"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-02 15:53+0000\n"
+"POT-Creation-Date: 2023-05-23 19:40+0000\n"
 "PO-Revision-Date: 2009-08-19 23:51+0200\n"
 "Last-Translator: Iván Méndez López <>\n"
 "Language-Team:  <softwarelibre@udc.es>\n"
@@ -86,6 +86,11 @@ msgstr "Detívose a transferencia do ficheiro %(filename)s de %(name)s."
 
 #, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
+msgstr ""
+
+#, python-format
+msgctxt "own nickname in group chat"
+msgid "%s (You)"
 msgstr ""
 
 #, fuzzy, python-format
@@ -438,6 +443,10 @@ msgstr "A conta \"%s\" está conectada ao servidor"
 msgid "Account is being created"
 msgstr "A conta \"%s\" está conectada ao servidor"
 
+#, fuzzy
+msgid "Account is not connected."
+msgstr "A conta \"%s\" está conectada ao servidor"
+
 #, fuzzy, python-format
 msgid "Account: %s"
 msgstr "Contas"
@@ -608,6 +617,9 @@ msgstr "<b>Programas</b>"
 #, fuzzy
 msgid "Affiliations"
 msgstr "<b>Programas</b>"
+
+msgid "Algorithm"
+msgstr ""
 
 msgid "All"
 msgstr "Todos"
@@ -915,6 +927,12 @@ msgstr ""
 msgid "Birthday"
 msgstr "Aniversario:"
 
+msgid "Blind Trust"
+msgstr ""
+
+msgid "Blindly trust new devices until you verify them"
+msgstr ""
+
 msgid "Block"
 msgstr ""
 
@@ -1206,6 +1224,17 @@ msgid "Clear"
 msgstr "Serán"
 
 #, fuzzy
+msgid "Clear Devices"
+msgstr "Servidor"
+
+msgid "Clear Devices Now?"
+msgstr ""
+
+#, fuzzy
+msgid "Clear Devices…"
+msgstr "_Descubrir os servizos"
+
+#, fuzzy
 msgid "Clear File"
 msgstr "Serán"
 
@@ -1288,6 +1317,17 @@ msgid "Common Name (CN)"
 msgstr ""
 
 msgid "Common Name (CN): "
+msgstr ""
+
+#, python-format
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat with %s."
+msgstr ""
+
+msgid ""
+"Compare this code with the one shown on your contact’s screen to ensure the "
+"safety of your end-to-end encrypted chat."
 msgstr ""
 
 #, fuzzy
@@ -1386,6 +1426,10 @@ msgstr "Men_saxe de estado:"
 
 msgid "Contact Connected"
 msgstr "Nome de contacto"
+
+#, fuzzy
+msgid "Contact Details and Settings"
+msgstr "Conexión"
 
 msgid "Contact Disconnected"
 msgstr "Contacto desconectado"
@@ -1526,6 +1570,10 @@ msgid "Copy info to clipboard"
 msgstr "_Copiar o enderezo da ligazón"
 
 #, fuzzy
+msgid "Copy to clipboard"
+msgstr "_Copiar o enderezo da ligazón"
+
+#, fuzzy
 msgid "Correct the last message"
 msgstr "mensaxe de estado"
 
@@ -1653,6 +1701,9 @@ msgstr "Novo grupo de charla"
 msgid "Delete"
 msgstr "Eliminar"
 
+msgid "Delete Fingerprint"
+msgstr ""
+
 #, fuzzy
 msgid "Delete Message"
 msgstr "Mensaxes de estado por defecto"
@@ -1704,6 +1755,10 @@ msgstr ""
 #, fuzzy
 msgid "Devices"
 msgstr "Servidor"
+
+#, fuzzy, python-format
+msgid "Devices connected with \"%s\""
+msgstr "Por favor, asegúrese de estar conectado con \"%s\"."
 
 #, fuzzy
 msgid "Dial Number"
@@ -1801,6 +1856,9 @@ msgstr "Quere eliminar o grupo %s da listaxe?"
 
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
+msgstr ""
+
+msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
 #, fuzzy
@@ -1938,6 +1996,10 @@ msgstr "O nome de usuario non é válido"
 #, fuzzy
 msgid "Encrypting file…"
 msgstr "Cifrado desactivado"
+
+#, fuzzy
+msgid "Encryption (OMEMO)"
+msgstr "Cifrado activado"
 
 #, fuzzy
 msgid "Encryption error"
@@ -2228,6 +2290,9 @@ msgstr "Charlas privadas"
 #, fuzzy
 msgid "Filter Chats…"
 msgstr "Charlas privadas"
+
+msgid "Fingerprint for this Device"
+msgstr ""
 
 msgid "Fingerprints"
 msgstr ""
@@ -2654,6 +2719,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Inactive"
+msgstr "Activo"
+
+#, fuzzy
 msgid "Incoming Call"
 msgstr "O nome de usuario non é válido"
 
@@ -2741,12 +2810,12 @@ msgstr "Con_vidar"
 msgid "Invite Contacts"
 msgstr "Contactos"
 
-#, fuzzy
-msgid "Invite Contacts…"
-msgstr "Contactos"
-
 msgid "Invite friends to group chats or join one"
 msgstr ""
+
+#, fuzzy
+msgid "Invite to this chat"
+msgstr "Contactos"
 
 #, fuzzy
 msgid "Invitees"
@@ -2826,6 +2895,10 @@ msgid "Join Support Chat"
 msgstr "Entrar nunha sala de charlas"
 
 #, fuzzy
+msgid "Joining Group Chat…"
+msgstr "Entrar nunha sala de charlas"
+
+#, fuzzy
 msgid "Joining…"
 msgstr "A expulsar..."
 
@@ -2841,6 +2914,9 @@ msgid "Keep Chat History"
 msgstr "Recentemente:"
 
 msgid "Keep and manage all your chat history"
+msgstr ""
+
+msgid "Key Size"
 msgstr ""
 
 msgid "Key usage does not include certificate signing"
@@ -2863,6 +2939,10 @@ msgstr ""
 
 msgid "Last but not least"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Last seen: %s"
+msgstr "Motivo"
 
 #, fuzzy
 msgid "Leave Group Chat"
@@ -2929,6 +3009,10 @@ msgid "Location:"
 msgstr "Modificar a conta"
 
 #, fuzzy
+msgid "Log"
+msgstr "_Conectar"
+
+#, fuzzy
 msgid "Log In"
 msgstr "_Conectar"
 
@@ -2983,6 +3067,14 @@ msgstr "Xestionar os perfís do proxy"
 #, fuzzy
 msgid "Manage Sounds"
 msgstr "Xestionar as contas"
+
+#, fuzzy
+msgid "Manage Trust"
+msgstr "Xestionar as contas"
+
+#, fuzzy
+msgid "Manage your Devices…"
+msgstr "Xestionar os perfís do proxy"
 
 msgid "Manually set the hostname for the server"
 msgstr ""
@@ -3234,6 +3326,9 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
+msgid "No devices found to encypt this message to. Querying for devices now…"
+msgstr ""
+
 msgid "No devices online"
 msgstr ""
 
@@ -3291,6 +3386,10 @@ msgstr "Non dispoñíbel"
 
 #, fuzzy
 msgid "Not Connected"
+msgstr "Conexión"
+
+#, fuzzy
+msgid "Not Decided"
 msgstr "Conexión"
 
 #, fuzzy
@@ -3464,12 +3563,6 @@ msgstr ""
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organizational Unit (OU)"
-msgstr ""
-
-msgid "Organizational Unit (OU): "
-msgstr ""
-
 msgid "Organize your chats with workspaces"
 msgstr ""
 
@@ -3477,6 +3570,9 @@ msgstr ""
 msgctxt "Gender"
 msgid "Other"
 msgstr "Outros"
+
+msgid "Other devices connected with your account"
+msgstr ""
 
 msgid "Others"
 msgstr "Outros"
@@ -3828,6 +3924,9 @@ msgctxt "Group chat description"
 msgid "Project discussion"
 msgstr ""
 
+msgid "Protocol"
+msgstr ""
+
 #, fuzzy
 msgid "Prox_y"
 msgstr "Proxy"
@@ -3858,6 +3957,14 @@ msgstr ""
 #, fuzzy
 msgctxt "Profile"
 msgid "Public Encryption Key"
+msgstr "Cifrado activado"
+
+#, fuzzy
+msgid "Public Key Information"
+msgstr "Información"
+
+#, fuzzy
+msgid "Public Key: "
 msgstr "Cifrado activado"
 
 #, fuzzy, python-format
@@ -3901,6 +4008,9 @@ msgstr "_Subscribir"
 
 msgid "Read _Wikipedia Article"
 msgstr "Ler artigo da _Wikipedia"
+
+msgid "Read more about blind trust"
+msgstr ""
 
 #, fuzzy
 msgid "Really block this contact?"
@@ -4284,6 +4394,17 @@ msgstr "O envío da mensaxe privada fallou"
 msgid "Say hi to your new contact…"
 msgstr "Enviarlle un ficheiro a un contacto"
 
+msgid "Scan QR Code"
+msgstr ""
+
+#, python-format
+msgid "Scan this QR code to join %s."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Scan this QR code to start a chat with %s."
+msgstr "Gustaríame engadilo á miña listaxe de contactos"
+
 #, fuzzy, python-format
 msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Escaneando %d / %d.."
@@ -4299,6 +4420,10 @@ msgstr ""
 
 msgid "Search"
 msgstr "Buscar"
+
+#, fuzzy
+msgid "Search Participants…"
+msgstr "Participantes"
 
 #, fuzzy
 msgid "Search Result"
@@ -4559,6 +4684,10 @@ msgid "Settings"
 msgstr "Fallou a conexión"
 
 #, fuzzy
+msgid "Share Contact…"
+msgstr "_Engadir un contacto..."
+
+#, fuzzy
 msgid "Share Status"
 msgstr "Estado"
 
@@ -4585,8 +4714,8 @@ msgid "Show Content"
 msgstr "Amosar os contactos desconectados"
 
 #, fuzzy
-msgid "Show Gajim"
-msgstr "Gajim"
+msgid "Show Inactive Devices"
+msgstr "Mensaxes de estado por defecto"
 
 #, fuzzy
 msgid "Show Invitation"
@@ -4936,6 +5065,12 @@ msgstr "Atascado"
 msgid "Subject"
 msgstr "Asunto"
 
+msgid "Subject Alt Names"
+msgstr ""
+
+msgid "Subject Alt Names: "
+msgstr ""
+
 msgid "Subject issuer mismatch"
 msgstr ""
 
@@ -5125,6 +5260,9 @@ msgstr "Tema"
 msgid "Themes"
 msgstr "Tema"
 
+msgid "There are devices for which you have not made a trust decision yet."
+msgstr ""
+
 msgid ""
 "There are plenty of servers to choose from.\n"
 "Creating an account on one server allows you to communicate with contacts "
@@ -5132,6 +5270,9 @@ msgid ""
 msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
+msgstr ""
+
+msgid "There has been an error while trying to fetch messages."
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5154,6 +5295,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "This Device"
+msgstr "Elixir unha imaxe"
+
+#, fuzzy
 msgid "This account has already been added"
 msgstr "A conta engadiuse con éxito"
 
@@ -5168,6 +5313,11 @@ msgstr "Isto non é un grupo de charla"
 #, fuzzy
 msgid "This address is not reachable."
 msgstr "O servizo non é navegábel"
+
+msgid ""
+"This chat’s configuration is unsuitable for encryption with OMEMO. To use "
+"OMEMO in this chat, it should be non-anonymous and members-only."
+msgstr ""
 
 #, fuzzy
 msgid "This device is not compatible."
@@ -5224,6 +5374,9 @@ msgid ""
 "You can install the PGP plugin to handle those messages."
 msgstr ""
 
+msgid "This message was encrypted with OMEMO, but not for your device."
+msgstr ""
+
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr ""
 
@@ -5259,6 +5412,10 @@ msgstr "Este servizo non respondeu aínda con información detallada"
 
 msgid "This type of service does not contain any items to browse."
 msgstr "Este tipo de servizo non contén ningún elemento para navegar."
+
+#, fuzzy
+msgid "This will clear the devices store for your account."
+msgstr "Eliminar a _conta unicamente do Gajim"
 
 #, fuzzy
 msgid "This will remove your account from Gajim."
@@ -5300,6 +5457,11 @@ msgstr ""
 "Se quere que se apliquen todos os cambios instantaneamente, debe "
 "reconectarse."
 
+msgid ""
+"To send an encrypted message, you have to decide whether to trust the device "
+"of your contact."
+msgstr ""
+
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Participante"
@@ -5337,6 +5499,9 @@ msgstr "Tratar os pares de * / _ como posíbeis caracteres de formato."
 
 msgctxt "Group chat description"
 msgid "Trip planning"
+msgstr ""
+
+msgid "Trust Management"
 msgstr ""
 
 msgid "Trust Not Decided"
@@ -5812,7 +5977,7 @@ msgid "You are offline."
 msgstr "desconectado"
 
 #, fuzzy, python-format
-msgid "You can join this group chat instead: xmpp:%s?join"
+msgid "You can join this group chat instead: %s"
 msgstr "%s entrou no grupo de charla"
 
 msgid "You can not join a group chat unless you are connected."
@@ -6015,6 +6180,10 @@ msgid "_Clear"
 msgstr ""
 
 #, fuzzy
+msgid "_Clear Devices"
+msgstr "Elixir unha imaxe"
+
+#, fuzzy
 msgid "_Close"
 msgstr "_Enviar e pechar"
 
@@ -6179,6 +6348,10 @@ msgstr "_Porto:"
 #, fuzzy
 msgid "_Preferences"
 msgstr "Preferencias"
+
+#, fuzzy
+msgid "_Privacy Policy (Online)"
+msgstr "nove"
 
 msgid "_Purge"
 msgstr ""
@@ -6391,6 +6564,10 @@ msgstr "Itálica"
 
 msgid "lat"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "libsoup Version: %s"
+msgstr "Versión de GTK+:"
 
 #. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
 #. You can use the hex value to find the matching string.
@@ -6733,5 +6910,13 @@ msgstr ""
 #~ msgstr "A enviar o perfil..."
 
 #, fuzzy
+#~ msgid "Invite Contacts…"
+#~ msgstr "Contactos"
+
+#, fuzzy
 #~ msgid "Invite New Contact"
 #~ msgstr "Contactos"
+
+#, fuzzy
+#~ msgid "Show Gajim"
+#~ msgstr "Gajim"
