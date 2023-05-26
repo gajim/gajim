@@ -67,11 +67,11 @@ modules:
   - name: python3-packaging
     buildsystem: simple
     build-commands:
-      - pip3 install packaging-23.0-py3-none-any.whl
+      - pip3 install packaging-23.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/packaging/packaging-23.0-py3-none-any.whl
-        sha256: 714ac14496c3e68c99c29b00845f7a2b85f3bb6f1078fd9f72fd20f0570002b2
+        url: https://files.pythonhosted.org/packages/py3/p/packaging/packaging-23.1-py3-none-any.whl
+        sha256: 994793af429502c4ea2ebf6bf664629d07c1a9fe974af92966e4b8d2df7edc61
 
   - name: python3-pycparser
     buildsystem: simple
@@ -184,11 +184,11 @@ modules:
   - name: python3-importlib-metadata
     buildsystem: simple
     build-commands:
-      - pip3 install importlib_metadata-6.1.0-py3-none-any.whl
+      - pip3 install importlib_metadata-6.6.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/i/importlib_metadata/importlib_metadata-6.1.0-py3-none-any.whl
-        sha256: ff80f3b5394912eb1b108fcfd444dc78b7f1f3e16b16188054bd01cb9cb86f09
+        url: https://files.pythonhosted.org/packages/py3/i/importlib_metadata/importlib_metadata-6.6.0-py3-none-any.whl
+        sha256: 43dd286a2cd8995d5eaef7fee2066340423b818ed3fd70adf0bad5f1fac53fed
 
   - name: python3-jaraco.classes
     buildsystem: simple
@@ -215,11 +215,11 @@ modules:
   - name: python3-css-parser
     buildsystem: simple
     build-commands:
-      - pip3 install css_parser-1.0.8-py2.py3-none-any.whl
+      - pip3 install css_parser-1.0.9-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/c/css_parser/css_parser-1.0.8-py2.py3-none-any.whl
-        sha256: 8f227506d21e2236f328781d41e055b5665ed2016137567841449035298ce439
+        url: https://files.pythonhosted.org/packages/py2.py3/c/css_parser/css_parser-1.0.9-py2.py3-none-any.whl
+        sha256: e18f66961103b61df25aa6df0dc808ab61c23e65ae6c1a8c149fe71911190495
 
   - name: python3-precis_i18n
     buildsystem: simple
@@ -279,20 +279,20 @@ modules:
   - name: python3-certifi
     buildsystem: simple
     build-commands:
-      - pip3 install certifi-2022.12.7-py3-none-any.whl
+      - pip3 install certifi-2023.5.7-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/c/certifi/certifi-2022.12.7-py3-none-any.whl
-        sha256: 4ad3232f5e926d6718ec31cfc1fcadfde020920e278684144551c91769c7bc18
+        url: https://files.pythonhosted.org/packages/py3/c/certifi/certifi-2023.5.7-py3-none-any.whl
+        sha256: c6c2e98f5c7869efca1f8916fed228dd91539f9f1b444c314c06eef02980c716
 
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-1.19.0-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-1.24.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.19.0-py2.py3-none-any.whl
-        sha256: 8dcffbbb963963567384d6eb49c76b8fb05753540715cbee5e5ca5bc8327ded4
+        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.24.0-py2.py3-none-any.whl
+        sha256: 56d6d9d194c898d853a7c1dd99bed92ce82334ee1282292c15bcc967ff1a49b5
 
   # gssapi dependency
   - name: python3-decorator
@@ -327,11 +327,11 @@ modules:
   - name: python3-protobuf
     buildsystem: simple
     build-commands:
-      - pip3 install --no-deps protobuf-4.21.1-py3-none-any.whl
+      - pip3 install --no-deps protobuf-4.23.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-4.21.1-py3-none-any.whl
-        sha256: 79cd8d0a269b714f6b32641f86928c718e8d234466919b3f552bfb069dbb159b
+        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-4.23.2-py3-none-any.whl
+        sha256: 8da6070310d634c99c0db7df48f10da495cc283fd9e9234877f0cd182d43ab7f
 
   - name: python3-omemo-dr
     buildsystem: simple
@@ -348,8 +348,8 @@ modules:
       - pip3 install .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/q/qrcode/qrcode-7.3.1.tar.gz
-        sha256: 375a6ff240ca9bd41adc070428b5dfc1dcfbb0f2507f1ac848f6cded38956578
+        url: https://files.pythonhosted.org/packages/source/q/qrcode/qrcode-7.4.2.tar.gz
+        sha256: 9dd969454827e127dbd93696b20747239e6d540e082937c90f14ac95b30f5845
 
   - name: gajim
     buildsystem: simple
