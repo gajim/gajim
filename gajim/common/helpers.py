@@ -1533,7 +1533,7 @@ def get_os_name() -> str:
 
 def get_os_version() -> str:
     if sys.platform in ('win32', 'darwin'):
-        return platform.release()
+        return platform.version()
     if os.name == 'posix':
         try:
             import distro
