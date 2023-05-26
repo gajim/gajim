@@ -317,11 +317,11 @@ modules:
   - name: python3-nbxmpp
     buildsystem: simple
     build-commands:
-      - pip3 install nbxmpp-4.2.2-py3-none-any.whl
+      - pip3 install nbxmpp-4.3.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-4.2.2-py3-none-any.whl
-        sha256: 807d8bbe19dcc77e23cd2b0420581fecd1168ad5cb88b201a15ec7d0b1f8aff3
+        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-4.3.0-py3-none-any.whl
+        sha256: dcbf5cec51ddc3ac7aeaa2d5fca02e2b004b92fc1622cb0d7f1e18c33e593b1e
 
   # OMEMO dependencies
   - name: python3-protobuf
