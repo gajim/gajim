@@ -315,4 +315,16 @@ publish-release:
   rules:
     - if: '$CI_COMMIT_TAG'
   script:
-    - release-helper make-gitlab-release $CI_COMMIT_TAG "${PROJECT_TOKEN}"
+    - >
+      release-helper finish-milestone \
+        $CI_PROJECT_ID \
+        $PROJECT_TOKEN \
+        --version=$CI_COMMIT_TAG \
+        --title="Next Release"
+    - >
+      release-helper create-release \
+        $CI_PROJECT_ID \
+        $PROJECT_TOKEN \
+        --version=$CI_COMMIT_TAG \
+        --tag=$CI_COMMIT_TAG \
+        --milestone=$CI_COMMIT_TAG
