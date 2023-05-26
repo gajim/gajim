@@ -35,7 +35,7 @@ dependencies = [
   "pycairo>=1.16.0",
   "PyGObject>=3.42.0",
   "qrcode>=7.3.1",
-  "omemo-dr>=0.99.1,<2.0.0",
+  "omemo-dr>=1.0.0,<2.0.0",
   "winsdk ; platform_system == 'Windows'",
 ]
 dynamic = ["version"]
