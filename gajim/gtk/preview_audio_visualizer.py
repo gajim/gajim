@@ -126,8 +126,8 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
             samples = self._samples
 
         # Normalize both channels using the same scale
-        max_elem = max(max(samples))
-        min_elem = min(min(samples))
+        max_elem = max(max(samples))  # noqa: PLW3301
+        min_elem = min(min(samples))  # noqa: PLW3301
         delta = max_elem - min_elem
         if delta > 0:
             self._samples = [
