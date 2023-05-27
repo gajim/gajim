@@ -201,6 +201,7 @@ ignore = [
   "N806",   # Variable should be lower case
   "N817",   # CamelCase imported as acronym
   "N818",   # Exception name should be named with an Error suffix
+  "PGH003", # Use specific rule codes when ignoring type issues
   "PLC1901",# Expression can be simplified to x as an empty string is falsey
   "PLR0911",# Too many return statements
   "PLR0912",# Too many branches
@@ -267,6 +268,10 @@ target-version = "py310"
 "test/*" = ["E402"]
 "test/common/test_styling.py" = ["RUF001", "E501"]
 "test/common/test_regex.py" = ["RUF001"]
+"pep517build/*" = ["S603", "S607"]
+"mac/*" = ["S603", "S607"]
+"win/*" = ["S603", "S607"]
+"scripts/*" = ["S603", "S607"]
 
 [tool.ruff.mccabe]
 max-complexity = 15
