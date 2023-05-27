@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import Generator
 
 import logging
 import os
@@ -146,7 +147,7 @@ class GajimPluginConfig:
     def __contains__(self, key: str) -> bool:
         return key in self.data
 
-    def __iter__(self):
+    def __iter__(self) -> Generator[str, Any, None]:
         yield from self.data
 
     def keys(self):
