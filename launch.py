@@ -2,16 +2,14 @@
 
 import subprocess
 
-from gajim import gajim
+import gajim
+from gajim.gajim import main
 
 try:
-    p = subprocess.Popen('git rev-parse --short=12 HEAD', shell=True,
-                         stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
-    node = p.communicate()[0]
-    if node:
-        import gajim as g
-        g.__version__ += '+' + node.decode('utf-8').strip()
+    res = subprocess.check_output(
+        ['git', 'rev-parse', '--short=12', 'HEAD'])  # noqa: S603, S607
+    gajim.__version__ += f'+{res.decode().strip()}'
 except Exception:
     pass
 
-gajim.main()
+main()
