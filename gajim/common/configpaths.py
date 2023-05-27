@@ -113,7 +113,7 @@ class ConfigPaths:
             else:
                 # Documents and Settings\[User Name]\Application Data\Gajim
                 self.config_root = self.cache_root = self.data_root = \
-                    Path(os.environ['appdata']) / 'Gajim'
+                    Path(os.environ['APPDATA']) / 'Gajim'
         else:
             self.config_root = Path(GLib.get_user_config_dir()) / 'gajim'
             self.cache_root = Path(GLib.get_user_cache_dir()) / 'gajim'
