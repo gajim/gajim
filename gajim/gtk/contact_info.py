@@ -303,9 +303,12 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
 
     def _on_vcard_received(self, task: Task) -> None:
         try:
-            vcard = cast(VCard, task.finish())
+            vcard = cast(VCard | None, task.finish())
         except StanzaError as err:
             log.info('Error loading VCard: %s', err)
+            vcard = None
+
+        if vcard is None:
             vcard = VCard()
 
         self._vcard_grid.set_vcard(vcard)
