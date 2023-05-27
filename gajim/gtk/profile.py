@@ -185,9 +185,12 @@ class ProfileWindow(Gtk.ApplicationWindow):
 
     def _on_vcard_received(self, task: Task):
         try:
-            self._current_vcard = cast(VCard, task.finish())
+            self._current_vcard = cast(VCard | None, task.finish())
         except StanzaError as error:
             log.info('Error loading VCard: %s', error)
+            self._current_vcard = None
+
+        if self._current_vcard is None:
             self._current_vcard = VCard()
 
         self._load_avatar()
