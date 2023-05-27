@@ -24,7 +24,6 @@ from typing import Iterator
 from typing import Optional
 
 import logging
-import os
 import socket
 from collections import deque
 from datetime import datetime
@@ -40,6 +39,7 @@ except Exception:
     pass
 
 from gajim.common import app
+from gajim.common import configpaths
 from gajim.common.i18n import _
 from gajim.common.jingle_content import contents
 from gajim.common.jingle_content import JingleContent
@@ -571,20 +571,11 @@ class JingleVideo(JingleRTPContent):
         self.pipeline.set_state(Gst.State.PLAYING)
 
         if log.getEffectiveLevel() == logging.DEBUG:
-            # Use 'export GST_DEBUG_DUMP_DOT_DIR=/tmp/' before starting Gajim
             timestamp = datetime.now().strftime('%m-%d-%Y-%H-%M-%S')
             name = f'video-graph-{timestamp}'
-            debug_dir = os.environ.get('GST_DEBUG_DUMP_DOT_DIR')
-            name_dot = f'{debug_dir}/{name}.dot'
-            name_png = f'{debug_dir}/{name}.png'
+            filename = configpaths.get('DEBUG') / f'{name}.dot'
             Gst.debug_bin_to_dot_file(
-                self.pipeline, Gst.DebugGraphDetails.ALL, name)
-            if debug_dir:
-                try:
-                    os.system(f'dot -Tpng {name_dot} > {name_png}')
-                except Exception:
-                    log.debug('Could not save pipeline graph. Make sure '
-                              'graphviz is installed.')
+                self.pipeline, Gst.DebugGraphDetails.ALL, str(filename))
 
     @staticmethod
     def get_fallback_src() -> Optional[Gst.Bin]:
