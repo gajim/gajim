@@ -74,6 +74,9 @@
     <control>pointing</control>
   </recommends>
   <releases>
+    <release version="1.8.0" date="2023-05-27">
+      <url>https://dev.gajim.org/gajim/gajim/-/releases/1.8.0</url>
+    </release>
     <release version="1.7.3" date="2023-04-04">
       <url>https://dev.gajim.org/gajim/gajim/-/releases/1.7.3</url>
     </release>

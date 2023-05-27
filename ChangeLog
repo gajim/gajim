@@ -1,3 +1,81 @@
+Gajim 1.8.0 (27 May 2023)
+
+  New
+
+  * XMLConsole: Add logging view
+  * JID sharing: Include verified OMEMO fingerprints
+  * Detect dark theme on Windows
+  * Integrate OMEMO plugin
+  * Redesign Group Chat actions (#10362)
+
+  Improvements
+
+  * Audio preview: Support more mime types
+  * ChatBanner: Add share instructions
+  * ChatList: Clear row content when removing history (#11420)
+  * XMLConsole: Always use dark theme
+  * AboutDialog: Show libsoup version
+  * GroupchatState: Show MAM sync
+  * ChatList: Improve sorting
+  * Make contact details/settings available when offline
+  * ACE: Make descriptions selectable and copyable
+  * Notifications: Withdraw all when a corresponding chat is read (#11030)
+  * ChatList: Show indicator if group chat is not connected
+  * ChatList: Show indicator when joining group chat
+  * StartChat: Don't filter for account labels (#11494)
+  * ChatStack: Only respond to supported drag-n-drop types while dragging
+  * App menu: Add menu entry for privacy policy
+  * GroupchatRoster: Highlight own nick and sort it to the top (#11431)
+  * CertificateDialog: Add additional infos and remove org unit field (#11461)
+  * GroupchatDetails: Hide OMEMO page in public MUCs
+  * ChatBanner: Add QR code for sharing JIDs (#11429)
+  * Windows: Package pixbuf loaders for avif and webp
+
+  Change
+
+  * Raise nbxmpp version
+  * Remove "escape_key_closes" from ACE
+  * Enable spell checker by default
+  * OMEMO verification: Generate URIs with pedantically correct query
+  * Raise gajim when no cmdline options are provided (#11482)
+
+  Performance
+
+  * QR codes: Avoid roundtrip to PNG in storage and back
+
+  Bug Fixes
+
+  * ProfileWindow: Don't fail when no vcard is set
+  * ContactInfo: Don’t fail when no vcard is set
+  * Message menu: Fix issue with chats not supplying correct ID
+  * Exceptions: Fix sending reports via sentry in conjunction with proxy settings
+  * ChatActionProcessor: De-duplicate emojis
+  * Fix encryption deadlock with changed MUC configurations (#11421)
+  * UI: Update avatar on muc-disco-update
+  * AvatarSelector: Fix that images don't display after repeated loading
+  * SearchView: Don't change search context when switching chats (#11533)
+  * SearchView: Remove overlay (#11412)
+  * ChatActionProcessor: Allow to click items with mouse cursor (#11445)
+  * MessageWidget: Don't return truncated text for message actions Fixes [#11526](https://dev.gajim.org/gajim/gajim/issues/11526) (#11526)
+  * Idle: Use default xa implementation for XSS backend (#11522)
+  * ConversationView: Fix loading messages going forward from specific point (#11201)
+  * ACE: Handle invalid numeric values gracefully
+  * XMLConsole: Select first account by default (#11498)
+  * Fix rendering of copied code blocks and quotes (#11499)
+  * ContactInfo: Improve behavior for connection changes
+  * Fix access to GnuPG keys on flatpak (#621)
+  * Fix showing status icon on flatpak
+  * Escape JIDs for xmpp URIs everywhere
+  * Ask for confirmation when leaving a MUC while offline (#11487)
+  * ContactInfo: Improve behavior for connection changes (#11439)
+  * Make manually changing the pinned chat sort order work again
+  * MessageActionsBox: Update send file button tooltip when switching chats (#11473)
+  * GroupChatRoster: Make scrollbar the right-most widget (#11290)
+  * GroupChatInviter: Don't filter by account name (#11474)
+  * Preview: Display webp and avif images on Windows correctly
+  * CertificateDialog: Display issued-to information correctly
+  * AccountWizard: Respect global proxy (#11452)
+
 Gajim 1.7.3 (03 Apr 2023)
 
   New
