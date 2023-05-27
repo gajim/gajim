@@ -51,6 +51,7 @@ Prefixes for development
 - refactor  (code was changed, but the end user will not notice)
 - chore     (reoccuring tasks which need to be done)
 - release   (only used for release commits)
+- revert    (used when a commit needs to be reverted)
 - other
 
 Further the first letter after the tag must be upper case
