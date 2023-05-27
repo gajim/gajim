@@ -121,22 +121,22 @@ modules:
     only-arches:
       - aarch64
     build-commands:
-      - pip3 install cryptography-40.0.1-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+      - pip3 install cryptography-40.0.2-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp36/c/cryptography/cryptography-40.0.1-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
-        sha256: 3a4805a4ca729d65570a1b7cac84eac1e431085d40387b7d3bbaa47e39890b88
+        url: https://files.pythonhosted.org/packages/cp36/c/cryptography/cryptography-40.0.2-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+        sha256: 4df2af28d7bedc84fe45bd49bc35d710aede676e2a4cb7fc6d103a2adc8afe4d
 
   - name: python3-cryptography
     buildsystem: simple
     only-arches:
       - x86_64
     build-commands:
-      - pip3 install cryptography-40.0.1-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+      - pip3 install cryptography-40.0.2-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp36/c/cryptography/cryptography-40.0.1-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-        sha256: 63dac2d25c47f12a7b8aa60e528bfb3c51c5a6c5a9f7c86987909c6c79765554
+        url: https://files.pythonhosted.org/packages/cp36/c/cryptography/cryptography-40.0.2-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+        sha256: 0dcca15d3a19a66e63662dc8d30f8036b07be851a8680eda92d079868f106288
 
   - name: python3-dbus-python
     build-options:
@@ -252,8 +252,8 @@ modules:
       - /bin
     sources:
       - type: archive
-        url: https://download.gnome.org/sources/gspell/1.12/gspell-1.12.0.tar.xz
-        sha256: 40d2850f1bb6e8775246fa1e39438b36caafbdbada1d28a19fa1ca07e1ff82ad
+        url: https://download.gnome.org/sources/gspell/1.12/gspell-1.12.1.tar.xz
+        sha256: 8ec44f32052e896fcdd4926eb814a326e39a5047e251eec7b9056fbd9444b0f1
 
   - name: farstream
     rm-configure: true
@@ -277,11 +277,11 @@ modules:
   - name: python3-urllib3
     buildsystem: simple
     build-commands:
-      - pip3 install urllib3-1.26.15-py2.py3-none-any.whl
+      - pip3 install urllib3-1.26.16-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/u/urllib3/urllib3-1.26.15-py2.py3-none-any.whl
-        sha256: aa751d169e23c7479ce47a0cb0da579e3ede798f994f5816a74e4f4500dcea42
+        url: https://files.pythonhosted.org/packages/py2.py3/u/urllib3/urllib3-1.26.16-py2.py3-none-any.whl
+        sha256: 8d36afa7616d8ab714608411b4a3b13e58f463aee519024578e062e141dce20f
 
   - name: python3-certifi
     buildsystem: simple
@@ -311,25 +311,35 @@ modules:
         url: https://files.pythonhosted.org/packages/py3/d/decorator/decorator-5.1.1-py3-none-any.whl
         sha256: b8c3f85900b9dc423225913c5aace94729fe1fa9763b38939a95226f02d37186
 
-  # nbxmpp dependency (optional)
-  - name: python3-gssapi
+  # qrcode dependencies
+  - name: python3-pypng
     buildsystem: simple
     build-commands:
-      - pip3 install -v --no-build-isolation .
+      - pip3 install pypng-0.20220715.0-py3-none-any.whl
     sources:
-      - type: archive
-        url: https://files.pythonhosted.org/packages/source/g/gssapi/gssapi-1.8.2.tar.gz
-        sha256: b78e0a021cc91158660e4c5cc9263e07c719346c35a9c0f66725e914b235c89a
+      - type: file
+        url: https://files.pythonhosted.org/packages/py3/p/pypng/pypng-0.20220715.0-py3-none-any.whl
+        sha256: 4a43e969b8f5aaafb2a415536c1a8ec7e341cd6a3f957fd5b5f32a4cfeed902c
 
-  - name: python3-nbxmpp
+  - name: python3-typing-extensions
+    buildsystem: simple
+    build-commands:
+      - pip3 install typing_extensions-4.6.2-py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/py3/t/typing_extensions/typing_extensions-4.6.2-py3-none-any.whl
+        sha256: 3a8b36f13dd5fdc5d1b16fe317f5668545de77fa0b8e02006381fd49d731ab98
+
+  # OMEMO dependencies
+  - name: python3-qrcode
     buildsystem: simple
     build-commands:
       - pip3 install --no-build-isolation .
     sources:
-      - type: git
-        url: https://dev.gajim.org/gajim/python-nbxmpp.git
+      - type: archive
+        url: https://files.pythonhosted.org/packages/source/q/qrcode/qrcode-7.4.2.tar.gz
+        sha256: 9dd969454827e127dbd93696b20747239e6d540e082937c90f14ac95b30f5845
 
-  # OMEMO dependencies
   - name: python3-protobuf
     buildsystem: simple
     build-commands:
@@ -347,14 +357,23 @@ modules:
       - type: git
         url: https://dev.gajim.org/gajim/omemo-dr.git
 
-  - name: python3-qrcode
+  # nbxmpp dependency (optional)
+  - name: python3-gssapi
     buildsystem: simple
     build-commands:
-      - pip3 install .
+      - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/q/qrcode/qrcode-7.4.2.tar.gz
-        sha256: 9dd969454827e127dbd93696b20747239e6d540e082937c90f14ac95b30f5845
+        url: https://files.pythonhosted.org/packages/source/g/gssapi/gssapi-1.8.2.tar.gz
+        sha256: b78e0a021cc91158660e4c5cc9263e07c719346c35a9c0f66725e914b235c89a
+
+  - name: python3-nbxmpp
+    buildsystem: simple
+    build-commands:
+      - pip3 install --no-build-isolation .
+    sources:
+      - type: git
+        url: https://dev.gajim.org/gajim/python-nbxmpp.git
 
   - name: gajim
     buildsystem: simple
