@@ -25,7 +25,7 @@ if __name__ == '__main__':
             version = version.decode().strip()
         except CalledProcessError:
             version = 'unknown'
-    dmg_name = 'gajim-{}.dmg'.format(version)
+    dmg_name = f'gajim-{version}.dmg'
 
     # the .spec has to be in the project root
     run(['cp', 'mac/gajim.spec', 'gajim.spec'], check=True)

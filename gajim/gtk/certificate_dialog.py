@@ -91,7 +91,7 @@ class CertificateBox(Gtk.Box):
             subject_ext.value.get_values_for_type(DNSName))  # pyright: ignore
         self._it_subject_alt_names = '\n'.join(alt_names)
 
-        serial_str = '0{:02X}'.format(cert.serial_number)
+        serial_str = f'{cert.serial_number:02X}'
         serial_str_foratted = ':'.join(
             map('{}{}'.format, *(serial_str[::2], serial_str[1::2])))
         self._it_serial_number = serial_str_foratted

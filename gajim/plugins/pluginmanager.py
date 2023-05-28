@@ -233,7 +233,7 @@ class PluginManager(metaclass=Singleton):
         # name to avoid name problems (removing module_abc if base_package is
         # module_ab)
         modules_to_remove = [module for module in sys.modules
-                             if module.startswith('{}.'.format(base_package))]
+                             if module.startswith(f'{base_package}.')]
         # remove the base_package itself
         if base_package in sys.modules:
             modules_to_remove.append(base_package)

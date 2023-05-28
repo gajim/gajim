@@ -16,8 +16,8 @@ def create_icns(icon_path: str) -> None:
     for size_pt in [16, 32, 128, 256, 512]:
         for scale in [1, 2]:
             size_px = scale * size_pt
-            scale_txt = '@{}'.format(scale) if scale != 1 else ''
-            png_fn = 'icon_{}x{}{}.png'.format(size_pt, size_pt, scale_txt)
+            scale_txt = f'@{scale}' if scale != 1 else ''
+            png_fn = f'icon_{size_pt}x{size_pt}{scale_txt}.png'
             png_path = os.path.join(tmpdir, png_fn)
             run(['inkscape', '-z', '-e', png_path,
                  '-w', str(size_px), '-h', str(size_px), '-y', '0',
