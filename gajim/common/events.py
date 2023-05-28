@@ -16,9 +16,9 @@ from __future__ import annotations
 
 import typing
 from typing import Any
-from typing import Callable
 from typing import Union
 
+from collections.abc import Callable
 from dataclasses import dataclass
 from dataclasses import field
 

@@ -17,9 +17,9 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Callable
 
 import logging
+from collections.abc import Callable
 
 from winsdk.windows.ui import Color
 from winsdk.windows.ui.viewmanagement import UIColorType

@@ -17,8 +17,9 @@
 from __future__ import annotations
 
 from typing import cast
-from typing import Iterable
-from typing import Iterator
+
+from collections.abc import Iterable
+from collections.abc import Iterator
 
 import nbxmpp
 from nbxmpp.namespaces import Namespace

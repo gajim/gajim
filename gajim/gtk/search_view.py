@@ -15,12 +15,12 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Iterator
 
 import itertools
 import logging
 import re
 import time
+from collections.abc import Iterator
 from datetime import datetime
 from datetime import timedelta
 

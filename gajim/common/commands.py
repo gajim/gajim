@@ -13,13 +13,13 @@
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
-from typing import Callable
 from typing import NoReturn
 
 import argparse
 import io
 import operator
 import shlex
+from collections.abc import Callable
 
 from nbxmpp.protocol import JID
 

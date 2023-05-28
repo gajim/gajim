@@ -17,10 +17,10 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Callable
-from typing import Generator
 
 import weakref
+from collections.abc import Callable
+from collections.abc import Generator
 
 from nbxmpp.const import AvatarState
 from nbxmpp.modules.util import is_error

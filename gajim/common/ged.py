@@ -15,12 +15,12 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Callable
 
 import inspect
 import logging
 import operator
 import traceback
+from collections.abc import Callable
 
 from nbxmpp import NodeProcessed
 

@@ -16,9 +16,8 @@
 
 from __future__ import annotations
 
-from typing import Generator
-
 import time
+from collections.abc import Generator
 
 from nbxmpp.errors import is_error
 from nbxmpp.structs import CommonResult

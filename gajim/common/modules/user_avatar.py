@@ -16,7 +16,7 @@
 
 from __future__ import annotations
 
-from typing import Generator
+from collections.abc import Generator
 
 from nbxmpp.modules.user_avatar import AvatarData
 from nbxmpp.modules.util import is_error

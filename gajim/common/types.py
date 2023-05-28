@@ -15,11 +15,11 @@
 # Types for typechecking
 
 from typing import Any
-from typing import Callable
 from typing import TYPE_CHECKING
 from typing import Union
 
 import weakref
+from collections.abc import Callable
 
 import nbxmpp
 from gi.repository import GdkPixbuf

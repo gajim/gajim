@@ -15,12 +15,12 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Match
 
 import re
 import string
 from dataclasses import dataclass
 from dataclasses import field
+from re import Match
 
 from gi.repository import GLib
 

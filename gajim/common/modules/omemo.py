@@ -19,10 +19,10 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Callable
 
 import binascii
 import threading
+from collections.abc import Callable
 from pathlib import Path
 
 from gi.repository import GLib

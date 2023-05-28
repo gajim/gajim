@@ -16,13 +16,13 @@
 
 from __future__ import annotations
 
-from typing import Callable
 from typing import cast
 
 import mimetypes
 import os
 import tempfile
 from collections import defaultdict
+from collections.abc import Callable
 from pathlib import Path
 from urllib.parse import urlparse
 

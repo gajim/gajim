@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Callable
 from typing import cast
 from typing import TypeVar
 
@@ -25,6 +24,7 @@ import math
 import sqlite3
 import sys
 import time
+from collections.abc import Callable
 from pathlib import Path
 
 import nbxmpp.const

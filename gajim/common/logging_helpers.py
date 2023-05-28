@@ -14,12 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Callable
-
 import logging
 import os
 import sys
 import time
+from collections.abc import Callable
 from datetime import datetime
 
 from gajim.common import app

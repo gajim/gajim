@@ -15,11 +15,11 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Generator
 
 import logging
 import os
 import pickle
+from collections.abc import Generator
 
 from gajim.common import configpaths
 from gajim.common.events import ApplicationEvent

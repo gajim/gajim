@@ -16,11 +16,11 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
-from typing import Generator
 from typing import Literal
 
 import logging
 import time
+from collections.abc import Generator
 from datetime import datetime
 from datetime import timedelta
 

@@ -14,11 +14,11 @@
 
 from __future__ import annotations
 
-from typing import Callable
 from typing import cast
 
 import logging
 import math
+from collections.abc import Callable
 from pathlib import Path
 
 try:

@@ -15,13 +15,13 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Callable
 from typing import cast
 
 import logging
 import os
 import re
 import uuid
+from collections.abc import Callable
 from dataclasses import dataclass
 from dataclasses import field
 from pathlib import Path

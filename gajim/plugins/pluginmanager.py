@@ -15,12 +15,12 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Callable
 
 import logging
 import os
 import sys
 import zipfile
+from collections.abc import Callable
 from importlib.util import module_from_spec
 from importlib.util import spec_from_file_location
 from pathlib import Path

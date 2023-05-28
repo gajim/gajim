@@ -15,10 +15,10 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Callable
 
 import logging
 import sys
+from collections.abc import Callable
 
 from gi.repository import Gio
 from gi.repository import GLib

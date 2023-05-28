@@ -17,11 +17,11 @@
 
 from __future__ import annotations
 
-from typing import Callable
 from typing import cast
-from typing import Iterator
 
 import textwrap
+from collections.abc import Callable
+from collections.abc import Iterator
 from datetime import datetime
 from urllib.parse import quote
 

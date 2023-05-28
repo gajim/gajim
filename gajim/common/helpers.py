@@ -28,7 +28,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Callable
 from typing import TYPE_CHECKING
 
 import collections
@@ -50,6 +49,7 @@ import unicodedata
 import weakref
 import webbrowser
 from collections import defaultdict
+from collections.abc import Callable
 from datetime import datetime
 from datetime import timedelta
 from functools import wraps

@@ -14,10 +14,10 @@
 
 from typing import Any
 from typing import cast
-from typing import Iterable
 
 import json
 import logging
+from collections.abc import Iterable
 from io import BytesIO
 from zipfile import ZipFile
 

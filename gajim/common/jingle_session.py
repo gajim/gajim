@@ -29,11 +29,11 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Callable
 from typing import TYPE_CHECKING
 
 import logging
 import time
+from collections.abc import Callable
 from enum import Enum
 from enum import unique
 

@@ -13,7 +13,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
-from typing import Callable
 from typing import cast
 from typing import Literal
 from typing import NamedTuple
@@ -29,6 +28,7 @@ import uuid
 import weakref
 from collections import defaultdict
 from collections import namedtuple
+from collections.abc import Callable
 from pathlib import Path
 
 from gi.repository import GLib

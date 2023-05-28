@@ -15,10 +15,11 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Callable
 from typing import cast
 from typing import Literal
 from typing import overload
+
+from collections.abc import Callable
 
 from gi.repository import Gdk
 from gi.repository import GObject

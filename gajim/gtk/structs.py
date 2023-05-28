@@ -15,11 +15,11 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Callable
 
 import functools
 import inspect
 import sys
+from collections.abc import Callable
 from dataclasses import dataclass
 
 from gi.repository import Gio

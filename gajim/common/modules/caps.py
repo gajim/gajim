@@ -20,10 +20,10 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Callable
 
 import weakref
 from collections import defaultdict
+from collections.abc import Callable
 
 from nbxmpp.errors import StanzaError
 from nbxmpp.namespaces import Namespace

@@ -19,12 +19,12 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Callable
-from typing import Iterator
 
 import logging
 import socket
 from collections import deque
+from collections.abc import Callable
+from collections.abc import Iterator
 from datetime import datetime
 
 import nbxmpp

@@ -22,8 +22,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
-from typing import Iterator
-from typing import KeysView
 from typing import Literal
 from typing import NamedTuple
 
@@ -34,6 +32,8 @@ import logging
 import sqlite3 as sqlite
 import time
 from collections import namedtuple
+from collections.abc import Iterator
+from collections.abc import KeysView
 
 from nbxmpp import JID
 from nbxmpp.structs import CommonError
