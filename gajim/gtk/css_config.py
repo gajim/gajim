@@ -640,7 +640,7 @@ class CSSConfig:
         for index, account in enumerate(accounts):
             color = app.settings.get_account_setting(account, 'account_color')
             css_class = f'gajim_class_{index}'
-            css += '.%s { background-color: %s }\n' % (css_class, color)
+            css += f'.{css_class} {{ background-color: {color} }}\n'
             self._dynamic_dict[account] = css_class
 
         self._dynamic_provider.load_from_data(css.encode())

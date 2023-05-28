@@ -391,7 +391,7 @@ def format_geo_coords(lat: float, lon: float) -> str:
         slon = p_('positive longitude', '%sE') % fmt(lon)
     else:
         slon = p_('negative longitude', '%sW') % fmt(-lon)
-    return '%s %s' % (slat, slon)
+    return f'{slat} {slon}'
 
 
 def filename_from_uri(uri: str) -> str:

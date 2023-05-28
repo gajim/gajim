@@ -731,8 +731,7 @@ class JingleSession:
             name = content['name']
             creator = content['creator']
             if (creator, name) not in self.contents:
-                text = 'Content %s (created by %s) does not exist' % (name,
-                                                                      creator)
+                text = f'Content {name} (created by {creator}) does not exist'
                 self.__send_error(stanza,
                                   'bad-request',
                                   text=text,
@@ -753,7 +752,7 @@ class JingleSession:
         if reason not in ('success', 'cancel', 'decline'):
             self.__dispatch_error(reason, text)
         if text:
-            text = '%s (%s)' % (reason, text)
+            text = f'{reason} ({text})'
         else:
             # TODO
             text = reason
@@ -828,7 +827,7 @@ class JingleSession:
                          type_: str | None = None
                          ) -> None:
         if text:
-            text = '%s (%s)' % (error, text)
+            text = '{error} ({text})'
         if type_ != 'modify':
             self._raise_event('jingle-error-received', reason=text or error)
 
@@ -877,7 +876,7 @@ class JingleSession:
                      text: str | None = None,
                      type_: str | None = None
                      ) -> None:
-        err_stanza = nbxmpp.Error(stanza, '%s %s' % (Namespace.STANZAS, error))
+        err_stanza = nbxmpp.Error(stanza, f'{Namespace.STANZAS} {error}')
         err = err_stanza.getTag('error')
         if type_:
             err.setAttr('type', type_)

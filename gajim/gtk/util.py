@@ -323,7 +323,7 @@ def convert_rgba_to_hex(rgba: Gdk.RGBA) -> str:
     red = int(rgba.red * 255)
     green = int(rgba.green * 255)
     blue = int(rgba.blue * 255)
-    return '#%02x%02x%02x' % (red, green, blue)
+    return f'#{red:02x}{green:02x}{blue:02x}'
 
 
 def convert_rgb_to_hex(rgb_string: str) -> str:
@@ -428,8 +428,7 @@ def format_location(location: LocationData) -> str:
         tag = LOCATION_DATA.get(attr)
         if tag is None:
             continue
-        location_string += '\n<b>%(tag)s</b>: %(text)s' % {
-            'tag': tag.capitalize(), 'text': text}
+        location_string += f'\n<b>{tag.capitalize()}</b>: {text}'
 
     return location_string.strip()
 
@@ -456,7 +455,7 @@ def format_fingerprint(fingerprint: str) -> str:
     wordsize = fplen // 8
     buf = ''
     for char in range(0, fplen, wordsize):
-        buf += '{0} '.format(fingerprint[char:char + wordsize])
+        buf += f'{fingerprint[char:char + wordsize]} '
     buf = textwrap.fill(buf, width=36)
     return buf.rstrip().upper()
 
@@ -670,8 +669,8 @@ def make_href_markup(string: str) -> str:
         url = match.group()
         if '://' not in url:
             url = 'https://' + url
-        return '<a href="%s"><span foreground="%s">%s</span></a>' % (
-            url, color, match.group())
+        return (f'<a href="{url}"><span foreground="{color}">'
+                f'{match.group()}</span></a>')
 
     return URL_REGEX.sub(_to_href, string)
 

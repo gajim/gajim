@@ -208,7 +208,7 @@ def get_agent_address(jid, node=None):
     Get an agent's address for displaying in the GUI
     '''
     if node:
-        return '%s@%s' % (node, str(jid))
+        return f'{node}@{str(jid)}'
     return str(jid)
 
 
@@ -301,7 +301,7 @@ class ServicesCache:
             service_name = addr.split('.')[0]
 
         # Or load it
-        icon_name = 'gajim-agent-%s' % service_name
+        icon_name = f'gajim-agent-{service_name}'
         if icon_exists(icon_name):
             return icon_name
         return 'gajim-agent-jabber'
@@ -1139,7 +1139,7 @@ class ToplevelAgentBrowser(AgentBrowser):
 
     def add_self_line(self):
         addr = get_agent_address(self.jid, self.node)
-        descr = '<b>%s</b>' % addr
+        descr = f'<b>{addr}</b>'
         # Guess which kind of service this is
         identities = []
         type_ = app.get_transport_name_from_jid(self.jid,
@@ -1541,9 +1541,9 @@ class ToplevelAgentBrowser(AgentBrowser):
         # Row text
         addr = get_agent_address(jid, node)
         if 'name' in item:
-            descr = '<b>%s</b>\n%s' % (item['name'], addr)
+            descr = f'<b>{item["name"]}</b>\n{addr}'
         else:
-            descr = '<b>%s</b>' % addr
+            descr = f'<b>{addr}</b>'
         # Guess which kind of service this is
         identities = []
         type_ = app.get_transport_name_from_jid(
@@ -1570,21 +1570,21 @@ class ToplevelAgentBrowser(AgentBrowser):
     def _update_item(self, iter_, jid, node, item):
         addr = get_agent_address(jid, node)
         if 'name' in item:
-            descr = '<b>%s</b>\n%s' % (item['name'], addr)
+            descr = f'<b>{item["name"]}</b>\n{addr}'
         else:
-            descr = '<b>%s</b>' % addr
+            descr = f'<b>{addr}</b>'
         self.model[iter_][3] = descr
 
     def _update_info(self, iter_, jid, node, identities, features, data):
         addr = get_agent_address(jid, node)
         if not identities:
-            descr = '<b>%s</b>' % addr
+            descr = '<b>{addr}</b>'
         else:
             name = identities[0].name or ''
             if name:
-                descr = '<b>%s</b>\n%s' % (name, addr)
+                descr = f'<b>{name}</b>\n{addr}'
             else:
-                descr = '<b>%s</b>' % addr
+                descr = f'<b>{addr}</b>'
 
         # Update progress
         self._progress += 1

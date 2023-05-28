@@ -65,9 +65,9 @@ class BaseModule(EventHelper):
     def __getattr__(self, key: str) -> Any:
         if key not in self._nbxmpp_methods:
             raise AttributeError(
-                "attribute '%s' is neither part of object '%s' "
-                " nor declared in '_nbxmpp_methods'" % (
-                    key, self.__class__.__name__))
+                f'attribute "{key}" is neither part of object '
+                f'"{self.__class__.__name__}" nor declared in '
+                '"_nbxmpp_methods"')
 
         if not app.account_is_connected(self._account):
             self._log.warning('Account not connected, can’t use %s', key)

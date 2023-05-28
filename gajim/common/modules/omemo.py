@@ -317,7 +317,7 @@ class OMEMO(BaseModule):
         transfer.size = len(result.payload)
         fragment = binascii.hexlify(result.iv + result.key).decode()
         transfer.set_uri_transform_func(
-            lambda uri: 'aesgcm%s#%s' % (uri[5:], fragment))
+            lambda uri: f'aesgcm{uri[5:]}#{fragment}')
         transfer.set_encrypted_data(result.payload)
         GLib.idle_add(callback, transfer)
 

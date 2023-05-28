@@ -233,8 +233,6 @@ ignore = [
   "SIM201", # Use x instead of not x
   "SIM212", # Use `value if value else ''` instead of `'' if not value else value`
   "SIM300", # Yoda conditions are discouraged use x instead
-  "UP030",  # Use implicit references for positional format fields
-  "UP031",  # Use format specifiers instead of percent format
   "UP032",  # Use f-string instead of `format` call
   "UP034",  # Avoid extraneous parentheses
   "UP035",  # Import from `collections.abc` instead: `Callable`

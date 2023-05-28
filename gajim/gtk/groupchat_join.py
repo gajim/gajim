@@ -142,7 +142,7 @@ class GroupchatJoin(Gtk.ApplicationWindow):
         if error.condition == 'gone':
             reason = error.get_text(get_rfc5646_lang())
             if reason:
-                text = '%s:\n%s' % (text, reason)
+                text = f'{text}:\n{reason}'
         self._show_error_page(text)
 
     def _set_error_from_code(self, error_code: str) -> None:

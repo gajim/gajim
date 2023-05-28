@@ -106,7 +106,7 @@ class OutgoingMessage:
                  ) -> None:
 
         if type_ not in ('chat', 'groupchat', 'normal', 'headline'):
-            raise ValueError('Unknown message type: %s' % type_)
+            raise ValueError(f'Unknown message type: {type_}')
 
         if not message and chatstate is None and marker is None:
             raise ValueError('Trying to send message without content')
@@ -286,7 +286,7 @@ class VariantMixin:
         if 'JID' in field_type:
             return JID, f'{variant_str}s'
 
-        raise ValueError('unknown type: %s' % field_type)
+        raise ValueError(f'unknown type: {field_type}')
 
     def to_variant(self) -> GLib.Variant:
         __types = {}
@@ -299,8 +299,7 @@ class VariantMixin:
                 continue
 
             if not isinstance(value, field_t):
-                raise ValueError('invalid type: %s is not a %s' % (value,
-                                                                   field_t))
+                raise ValueError(f'invalid type: {value} is not a {field_t}')
 
             conversion_func = self._type_to_variant_funcs.get(field_t)
             if conversion_func is not None:
@@ -322,6 +321,6 @@ class VariantMixin:
                 value = vdict[field_name]
                 conversion_func = cls._variant_to_type_funcs.get(value_t_name)
                 if conversion_func is None:
-                    raise ValueError('no conversion for: %s' % value_t_name)
+                    raise ValueError(f'no conversion for: {value_t_name}')
                 vdict[field_name] = conversion_func(value)
         return cls(**vdict)

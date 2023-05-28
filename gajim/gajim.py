@@ -40,22 +40,22 @@ _MIN_SQLITE_VER = '3.33.0'
 
 def check_version(dep_name: str, current_ver: str, min_ver: str) -> None:
     if V(current_ver) < V(min_ver):
-        sys.exit('Gajim needs %s >= %s (found %s) to run. '
-                 'Quitting...' % (dep_name, min_ver, current_ver))
+        sys.exit(f'Gajim needs {dep_name} >= {min_ver} '
+                 f'(found {current_ver}) to run. Quitting...')
 
 
 def _check_required_deps() -> None:
-    error_message = 'Gajim needs %s to run. Quitting… (Error: %s)'
+    error_message = 'Gajim needs {lib} to run. Quitting… (Error: {error})'
 
     try:
         import nbxmpp
     except ImportError as error:
-        sys.exit(error_message % ('python-nbxmpp', error))
+        sys.exit(error_message.format('python-nbxmpp', error))
 
     try:
         import gi
     except ImportError as error:
-        sys.exit(error_message % ('pygobject', error))
+        sys.exit(error_message.format('pygobject', error))
 
     try:
         gi.require_versions({'GLib': '2.0',
@@ -66,17 +66,17 @@ def _check_required_deps() -> None:
                              'Pango': '1.0',
                              'PangoCairo': '1.0'})
     except ValueError as error:
-        sys.exit('Missing dependency: %s' % error)
+        sys.exit(f'Missing dependency: {error}')
 
     try:
         import cairo
     except ImportError as error:
-        sys.exit(error_message % ('pycairo', error))
+        sys.exit(error_message.format('pycairo', error))
 
     from gi.repository import Gtk
-    gtk_ver = '%s.%s.%s' % (Gtk.get_major_version(),
-                            Gtk.get_minor_version(),
-                            Gtk.get_micro_version())
+    gtk_ver = '.'.join(map(str, [Gtk.get_major_version(),
+                                 Gtk.get_minor_version(),
+                                 Gtk.get_micro_version()]))
 
     from gi.repository import GLib
     glib_ver = '.'.join(map(str, [GLib.MAJOR_VERSION,

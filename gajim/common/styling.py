@@ -185,7 +185,7 @@ def find_byte_index(text: str, index: int):
         if index == index_:
             return byte_index
 
-    raise ValueError('index not in string: %s, %s' % (text, index))
+    raise ValueError(f'index not in string: {text}, {index}')
 
 
 def process(text: str | bytes, level: int = 0) -> ParsingResult:

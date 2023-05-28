@@ -92,18 +92,18 @@ CREATE_SQL = '''
             settings TEXT
     );
 
-    INSERT INTO settings(name, settings) VALUES ('app', '{}');
-    INSERT INTO settings(name, settings) VALUES ('soundevents', '{}');
-    INSERT INTO settings(name, settings) VALUES ('status_presets', '%s');
-    INSERT INTO settings(name, settings) VALUES ('proxies', '%s');
-    INSERT INTO settings(name, settings) VALUES ('plugins', '{}');
-    INSERT INTO settings(name, settings) VALUES ('workspaces', '%s');
+    INSERT INTO settings(name, settings) VALUES ('app', '{{}}');
+    INSERT INTO settings(name, settings) VALUES ('soundevents', '{{}}');
+    INSERT INTO settings(name, settings) VALUES ('status_presets', '{status}');
+    INSERT INTO settings(name, settings) VALUES ('proxies', '{proxies}');
+    INSERT INTO settings(name, settings) VALUES ('plugins', '{{}}');
+    INSERT INTO settings(name, settings) VALUES ('workspaces', '{workspaces}');
 
-    PRAGMA user_version=%s;
-    ''' % (json.dumps(STATUS_PRESET_EXAMPLES),
-           json.dumps(PROXY_EXAMPLES),
-           json.dumps(INITAL_WORKSPACE),
-           CURRENT_USER_VERSION)
+    PRAGMA user_version={version};
+    '''.format(status=json.dumps(STATUS_PRESET_EXAMPLES),
+               proxies=json.dumps(PROXY_EXAMPLES),
+               workspaces=json.dumps(INITAL_WORKSPACE),
+               version=CURRENT_USER_VERSION)
 
 
 _SignalCallable = Callable[[Any, str, str | None, JID | None], Any]

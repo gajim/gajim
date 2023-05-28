@@ -355,7 +355,7 @@ class TrustButton(Gtk.MenuButton):
 
         if not self._row.active:
             css_class = 'omemo-inactive-color'
-            tooltip = '%s - %s' % (_('Inactive'), tooltip)
+            tooltip = f'{_("Inactive")} - {tooltip}'
 
         image.get_style_context().add_class(css_class)
         self._css_class = css_class

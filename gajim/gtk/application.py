@@ -372,7 +372,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
             # Incorporate profile name into application id
             # to have a single app instance for each profile.
             profile = profile.get_string()
-            app_id = '%s.%s' % (self.get_application_id(), profile)
+            app_id = f'{self.get_application_id()}.{profile}'
             self.set_application_id(app_id)
             configpaths.set_profile(profile)
 

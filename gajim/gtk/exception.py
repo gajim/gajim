@@ -190,13 +190,13 @@ class ExceptionDialog(Gtk.ApplicationWindow):
 
     def _parse_endpoint(self, request: HTTPRequest) -> str:
         if not request.is_complete():
-            raise ValueError('Failed to retrieve sentry endpoint: %s %s' % (
-                request.get_status(), request.get_error()))
+            raise ValueError('Failed to retrieve sentry endpoint: '
+                             f'{request.get_status()} {request.get_error()}')
 
         try:
             data = json.loads(request.get_data())
         except Exception as error:
-            raise ValueError('Json parsing error: %s' % error)
+            raise ValueError(f'Json parsing error: {error}')
 
         endpoint = data.get('sentry_endpoint')
         if endpoint is None:
