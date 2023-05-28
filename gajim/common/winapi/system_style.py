@@ -35,7 +35,12 @@ class SystemStyleListener:
         self._prefer_dark: bool | None = None
         self._callback = callback
 
-        self._ui_settings = UISettings()
+        try:
+            self._ui_settings = UISettings()
+        except OSError as err:
+            log.warning('winsdk UISettings not available:%s', err)
+            return
+
         self._ui_settings.add_color_values_changed(
             self._signal_color_values_changed)
         foreground_color = self._ui_settings.get_color_value(
