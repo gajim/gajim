@@ -702,6 +702,7 @@ class PreferencesBuilder(Builder):
 
 class PreviewBuilder(Builder):
     preview_stack: Gtk.Stack
+    preview_box: Gtk.Box
     icon_event_box: Gtk.EventBox
     icon_button: Gtk.Button
     right_box: Gtk.Box
