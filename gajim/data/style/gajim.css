@@ -644,7 +644,7 @@ infobar.error > revealer > box {
 }
 
 /* PreviewWidget */
-.preview-box {
+.preview-stack > box {
     border: 1px solid;
     border-color: @borders;
     border-radius: 4px;

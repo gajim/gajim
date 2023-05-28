@@ -67,7 +67,7 @@ class PreviewWidget(Gtk.Box):
 
         self._ui = get_builder('preview.ui')
         self._ui.connect_signals(self)
-        self.add(self._ui.preview_box)
+        self.add(self._ui.preview_stack)
 
         leftclick_action = app.settings.get('preview_leftclick_action')
         self._ui.icon_button.set_tooltip_text(
@@ -93,6 +93,7 @@ class PreviewWidget(Gtk.Box):
 
     @ensure_not_destroyed
     def update_progress(self, _preview: Preview, progress: float) -> None:
+        self._ui.preview_stack.set_visible_child_name('preview')
         self._ui.download_button.hide()
 
         self._ui.progress_box.show()
@@ -105,6 +106,7 @@ class PreviewWidget(Gtk.Box):
     def update(self, preview: Preview, data: GdkPixbufType | None) -> None:
         self._preview = preview
 
+        self._ui.preview_stack.set_visible_child_name('preview')
         self._ui.progress_box.hide()
         self._ui.info_message.hide()
 
