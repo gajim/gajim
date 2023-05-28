@@ -649,12 +649,12 @@ def get_thumbnail_size(pixbuf: GdkPixbuf.Pixbuf, size: int) -> tuple[int, int]:
     if image_width > image_height:
         if image_width > size:
             image_height = math.ceil(
-                (size / float(image_width) * image_height))
+                size / float(image_width) * image_height)
             image_width = int(size)
     else:
         if image_height > size:
             image_width = math.ceil(
-                (size / float(image_height) * image_width))
+                size / float(image_height) * image_width)
             image_height = int(size)
 
     return image_width, image_height

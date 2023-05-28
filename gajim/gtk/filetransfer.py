@@ -879,7 +879,7 @@ class FileTransfersWindow:
     def _on_cleanup_button_clicked(self, widget):
         i = len(self.model) - 1
         while i >= 0:
-            iter_ = self.model.get_iter((i))
+            iter_ = self.model.get_iter(i)
             sid = self.model[iter_][Column.SID]
             file_props = FilesProp.getFilePropByType(sid[0], sid[1:])
             if is_transfer_stopped(file_props):
