@@ -18,6 +18,7 @@ class AccountPageBuilder(Builder):
     account_box: Gtk.Box
     avatar_image: Gtk.Image
     account_label: Gtk.Label
+    our_jid_label: Gtk.Label
     account_page_menu_button: Gtk.MenuButton
     status_box: Gtk.Box
     notifications_menu_button: Gtk.MenuButton
@@ -188,9 +189,9 @@ class CertificateBuilder(Builder):
 
 class ChatBannerBuilder(Builder):
     share_popover: Gtk.Popover
-    jid_label: Gtk.Label
     share_instructions: Gtk.Label
     qr_code_image: Gtk.Image
+    jid_label: Gtk.Label
     banner_box: Gtk.Box
     avatar_image: Gtk.Image
     chat_menu_button: Gtk.MenuButton

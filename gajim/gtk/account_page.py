@@ -53,6 +53,8 @@ class AccountPage(Gtk.Box, EventHelper):
         self._ui = get_builder('account_page.ui')
         self.add(self._ui.paned)
 
+        self._ui.our_jid_label.set_text(self._jid)
+
         self._status_selector = StatusSelector(account=account)
         self._status_selector.set_halign(Gtk.Align.CENTER)
         self._ui.status_box.add(self._status_selector)
