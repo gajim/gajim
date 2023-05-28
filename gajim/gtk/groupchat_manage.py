@@ -82,17 +82,18 @@ class GroupchatManage(Gtk.Box):
             text = self._contact.subject.text
 
         self._ui.subject_textview.get_buffer().set_text(text)
-
-        joined = self._contact.is_joined
-        change_allowed = self._is_subject_change_allowed()
-        self._ui.subject_textview.set_sensitive(joined and change_allowed)
+        self._ui.subject_textview.set_sensitive(
+            self._is_subject_change_allowed())
 
     def _is_subject_change_allowed(self) -> bool:
-        contact = self._contact.get_self()
-        if contact is None:
+        if not self._contact.is_joined:
             return False
 
-        if contact.affiliation in (Affiliation.OWNER, Affiliation.ADMIN):
+        self_contact = self._contact.get_self()
+        if self_contact is None:
+            return False
+
+        if self_contact.affiliation in (Affiliation.OWNER, Affiliation.ADMIN):
             return True
 
         if self.disco_info is None:
@@ -131,8 +132,6 @@ class GroupchatManage(Gtk.Box):
     def _prepare_manage(self) -> None:
         joined = self._contact.is_joined
         vcard_support = False
-        self_contact = self._contact.get_self()
-        assert self_contact
 
         if self.disco_info is not None:
             vcard_support = self.disco_info.supports(Namespace.VCARD)
@@ -141,11 +140,14 @@ class GroupchatManage(Gtk.Box):
             self._ui.muc_description_entry.set_text(
                 self.disco_info.muc_description or '')
 
-        if (joined and vcard_support and
-                self_contact.affiliation.is_owner):
-            self._ui.avatar_select_button.show()
-
         self.update_avatar()
+
+        self_contact = self._contact.get_self()
+        if not joined or self_contact is None:
+            return
+
+        if vcard_support and self_contact.affiliation.is_owner:
+            self._ui.avatar_select_button.show()
 
         if self_contact.affiliation.is_owner:
             self._client.get_module('MUC').request_config(
