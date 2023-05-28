@@ -171,7 +171,8 @@ class ChatPage(Gtk.Box):
                                           self._chat_control.contact.jid)
 
         if not app.settings.get('hide_groupchat_occupants_list'):
-            # Hide group chat roster in order to make some space horizontally
+            # Hide group chat roster in order to make some space horizontally.
+            # Store state to be able to restore it when hiding search.
             self._restore_occupants_list = True
             app.settings.set('hide_groupchat_occupants_list', True)
 
@@ -179,11 +180,7 @@ class ChatPage(Gtk.Box):
         self._search_view.set_focus()
 
     def _on_search_hide(self, *args: Any) -> None:
-        if self._restore_occupants_list:
-            app.settings.set('hide_groupchat_occupants_list', False)
-            self._restore_occupants_list = False
-
-        self._search_revealer.set_reveal_child(False)
+        self.hide_search()
 
     def _on_chat_list_changed(self,
                               chat_list_stack: ChatListStack,
@@ -344,6 +341,11 @@ class ChatPage(Gtk.Box):
     def hide_search(self) -> bool:
         if self._search_revealer.get_reveal_child():
             self._search_revealer.set_reveal_child(False)
+
+            if self._restore_occupants_list:
+                app.settings.set('hide_groupchat_occupants_list', False)
+                self._restore_occupants_list = False
+
             return True
         return False
 
