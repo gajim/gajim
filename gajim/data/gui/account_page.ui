@@ -181,7 +181,7 @@
                             <child>
                               <object class="GtkLabel" id="our_jid_label">
                                 <property name="visible">True</property>
-                                <property name="can-focus">False</property>
+                                <property name="can-focus">True</property>
                                 <property name="tooltip-text" translatable="yes">This is your XMPP address</property>
                                 <property name="wrap">True</property>
                                 <property name="wrap-mode">word-char</property>
