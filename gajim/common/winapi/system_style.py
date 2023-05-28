@@ -16,6 +16,7 @@
 
 from __future__ import annotations
 
+from typing import Any
 from typing import Callable
 
 import logging
@@ -37,25 +38,31 @@ class SystemStyleListener:
 
         try:
             self._ui_settings = UISettings()
-        except OSError as err:
-            log.warning('winsdk UISettings not available:%s', err)
+            self._ui_settings.add_color_values_changed(
+                self._signal_color_values_changed)
+            self._prefer_dark = self._get_prefer_dark()
+        except Exception as error:
+            log.warning('Failed to init winsdk.UISettings: %s', error)
             return
 
-        self._ui_settings.add_color_values_changed(
-            self._signal_color_values_changed)
+    def _get_prefer_dark(self) -> bool:
         foreground_color = self._ui_settings.get_color_value(
             UIColorType.FOREGROUND)
-        self._prefer_dark = self._is_color_light(foreground_color)
+        return self._is_color_light(foreground_color)
 
     @staticmethod
     def _is_color_light(clr: Color) -> bool:
         return ((5 * clr.g) + (2 * clr.r) + clr.b) > (8 * 128)
 
-    def _signal_color_values_changed(self, ui_settings: UISettings, _) -> None:
-        foreground_color = ui_settings.get_color_value(UIColorType.FOREGROUND)
-        dark_theme = self._is_color_light(foreground_color)
-        if dark_theme != self._prefer_dark:
-            self._prefer_dark = dark_theme
+    def _signal_color_values_changed(
+        self,
+        _ui_settings: UISettings | None,
+        *args: Any
+    ) -> None:
+
+        prefer_dark = self._get_prefer_dark()
+        if prefer_dark != self._prefer_dark:
+            self._prefer_dark = prefer_dark
             self._callback()
             app.ged.raise_event(StyleChanged())
 
