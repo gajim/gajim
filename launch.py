@@ -3,7 +3,7 @@
 import subprocess
 
 import gajim
-from gajim.gajim import main
+import gajim.main
 
 try:
     res = subprocess.check_output(
@@ -12,4 +12,4 @@ try:
 except Exception:
     pass
 
-main()
+gajim.main.run()

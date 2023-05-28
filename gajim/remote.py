@@ -133,7 +133,7 @@ def create_arg_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main() -> None:
+def run() -> None:
     args = create_arg_parser().parse_args()
     try:
         result = call_method(args)

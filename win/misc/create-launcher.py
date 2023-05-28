@@ -98,8 +98,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         "root_path = Path(sys.executable).parents[1];"
         "from ctypes import windll;"
         "windll.kernel32.SetDllDirectoryW(str(root_path / 'bin'));"
-        "from gajim import gajim;"
-        "gajim.main();");
+        "import gajim.main;"
+        "gajim.main.run();");
     Py_Finalize();
     return result;
 }

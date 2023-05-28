@@ -55,10 +55,10 @@ dev = [
 ]
 
 [project.scripts]
-gajim-remote = "gajim.gajim_remote:main"
+gajim-remote = "gajim.remote:run"
 
 [project.gui-scripts]
-gajim = "gajim.gajim:main"
+gajim = "gajim.main:run"
 
 [tool.setuptools.packages.find]
 include = ["gajim*"]
@@ -146,8 +146,8 @@ include = [
     "gajim/common/styling.py",
     "gajim/common/task_manager.py",
     "gajim/common/util/*",
-    "gajim/gajim.py",
-    "gajim/gajim_remote.py",
+    "gajim/main.py",
+    "gajim/remote.py",
     "gajim/gtk/*",
     "gajim/plugins/*",
     "test/*",

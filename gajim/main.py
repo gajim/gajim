@@ -154,7 +154,7 @@ def _set_proc_title() -> None:
             libc.setproctitle('gajim')
 
 
-def main() -> None:
+def run() -> None:
     if sys.platform != 'win32':
         if os.geteuid() == 0:
             sys.exit('You must not launch gajim as root, it is insecure.')
