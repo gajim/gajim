@@ -14,6 +14,8 @@
 
 from __future__ import annotations
 
+from typing import Literal
+
 import re
 
 from gi.repository import GLib
@@ -70,3 +72,18 @@ def format_duration(ns: float, total_ns: float) -> str:
         return (f'%0{width}d' % i_minutes) + f':{i_seconds:02d}'
 
     return f'0:{i_seconds:02d}'
+
+
+def format_sha_bytes(algo: Literal['sha1', 'sha256'], sha_bytes: bytes) -> str:
+    if algo == 'sha1':
+        stop, step = 20, 10
+    elif algo == 'sha256':
+        stop, step = 32, 8
+    else:
+        raise ValueError(f'Unknown algo: {algo}')
+
+    lines: list[str] = []
+    hex_list = [f'{b:02X}' for b in sha_bytes]
+    for pos in range(0, stop, step):
+        lines.append(':'.join(hex_list[pos:pos + step]))
+    return '\n'.join(lines)

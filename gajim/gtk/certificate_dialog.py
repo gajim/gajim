@@ -29,6 +29,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.helpers import get_x509_cert_from_gio_cert
 from gajim.common.i18n import _
+from gajim.common.util.text import format_sha_bytes
 
 from gajim.gtk.builder import get_builder
 
@@ -109,13 +110,10 @@ class CertificateBox(Gtk.Box):
         self._expires = cert.not_valid_after.strftime('%c %Z')
 
         sha1_bytes = cert.fingerprint(hashes.SHA1())
-        sha1 = ':'.join(f'{b:02X}' for b in sha1_bytes)
-        self._sha1 = '%s\n%s' % (sha1[:29], sha1[30:])
+        self._sha1 = format_sha_bytes('sha1', sha1_bytes)
 
         sha256_bytes = cert.fingerprint(hashes.SHA256())
-        sha256 = ':'.join(f'{b:02X}' for b in sha256_bytes)
-        self._sha256 = '%s\n%s\n%s\n%s' % (
-            sha256[:23], sha256[24:47], sha256[48:71], sha256[72:])
+        self._sha256 = format_sha_bytes('sha256', sha256_bytes)
 
         public_key = cert.public_key()
         self._pk_algorithm = ''
