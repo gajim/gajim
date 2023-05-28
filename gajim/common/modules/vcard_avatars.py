@@ -96,7 +96,7 @@ class VCardAvatars(BaseModule):
         self._log.info('Received: %s %s', contact.jid, avatar_sha)
         app.app.avatar_storage.save_avatar(avatar)
 
-        if isinstance(contact, (BareContact, GroupchatContact)):
+        if isinstance(contact, BareContact | GroupchatContact):
             contact.set_avatar_sha(avatar_sha)
 
         else:

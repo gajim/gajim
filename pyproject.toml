@@ -234,7 +234,6 @@ ignore = [
   "SIM212", # Use `value if value else ''` instead of `'' if not value else value`
   "SIM300", # Yoda conditions are discouraged use x instead
   "UP032",  # Use f-string instead of `format` call
-  "UP038",  # Use `X | Y` in `isinstance` call instead of `(X, Y)`
   "UP037",  # Remove quotes from type annotation
 ]
 

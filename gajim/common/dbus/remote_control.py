@@ -112,7 +112,7 @@ def get_dbus_struct(obj: Any) -> GLib.Variant:
         return GLib.Variant('d', obj)
     if isinstance(obj, bool):
         return GLib.Variant('b', obj)
-    if isinstance(obj, (list, tuple)):
+    if isinstance(obj, list | tuple):
         lst = [get_dbus_struct(i) for i in obj  # pyright: ignore
                if i is not None]
         result = GLib.Variant('av', lst)

@@ -390,7 +390,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
     def get_first_event_row(self) -> InfoMessage | MUCJoinLeft | None:
         for row in self._list_box.get_children():
-            if isinstance(row, (InfoMessage, MUCJoinLeft)):
+            if isinstance(row, InfoMessage | MUCJoinLeft):
                 return row
         return None
 
@@ -398,7 +398,7 @@ class ConversationView(Gtk.ScrolledWindow):
         children = self._list_box.get_children()
         children.reverse()
         for row in children:
-            if isinstance(row, (InfoMessage, MUCJoinLeft)):
+            if isinstance(row, InfoMessage | MUCJoinLeft):
                 return row
         return None
 

@@ -130,7 +130,7 @@ class CertificateBox(Gtk.Box):
 
         self._pk_size = _('Unknown')
         if isinstance(public_key,
-                      (RSAPublicKey, DSAPublicKey, EllipticCurvePublicKey)):
+                      RSAPublicKey | DSAPublicKey | EllipticCurvePublicKey):
             self._pk_size = f'{public_key.key_size} Bit'
 
         self._ui.public_key_algorithm.set_text(self._pk_algorithm)

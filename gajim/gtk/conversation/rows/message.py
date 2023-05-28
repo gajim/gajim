@@ -115,7 +115,7 @@ class MessageRow(BaseRow):
         if is_previewable:
             muc_context = None
             if isinstance(self._contact,
-                          (GroupchatContact, GroupchatParticipant)):
+                          GroupchatContact | GroupchatParticipant):
                 muc_context = self._contact.muc_context
             self._message_widget = PreviewWidget(account)
             app.preview_manager.create_preview(

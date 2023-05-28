@@ -119,7 +119,7 @@ class Encoder(json.JSONEncoder):
             dct['__type'] = 'RosterItem'
             return dct
 
-        if isinstance(o, (Affiliation, Role, StatusCode)):
+        if isinstance(o, Affiliation | Role | StatusCode):
             return {'value': o.value,
                     '__type': o.__class__.__name__}
 

@@ -314,8 +314,8 @@ class ChatList(Gtk.ListBox, EventHelper):
         return self._chats.get((account, jid)) is not None
 
     def process_event(self, event: events.ChatListEventT) -> None:
-        if isinstance(event, (events.MessageReceived,
-                              events.MamMessageReceived,
+        if isinstance(event, (events.MessageReceived |
+                              events.MamMessageReceived |
                               events.GcMessageReceived)):
             self._on_message_received(event)
         elif isinstance(event, events.MessageUpdated):
